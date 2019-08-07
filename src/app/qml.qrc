@@ -1,5 +1,19 @@
 <RCC>
     <qresource prefix="/">
-        <file>main.qml</file>
+        <file alias="DesignSystem.qml">ui/DesignSystem.qml</file>
+    </qresource>
+    <qresource prefix="/components">
+        <file alias="FadeStackView.qml">ui/components/FadeStackView.qml</file>
+    </qresource>
+    <qresource prefix="/views">
+        <file alias="ApplicationView.qml">ui/views/ApplicationView.qml</file>
+        <file alias="splash/SplashToolBar.qml">ui/views/splash/SplashToolBar.qml</file>
+        <file alias="splash/SplashNavigator.qml">ui/views/splash/SplashNavigator.qml</file>
+        <file alias="splash/SplashView.qml">ui/views/splash/SplashView.qml</file>
+        <file alias="onboarding/OnboardingToolBar.qml">ui/views/onboarding/OnboardingToolBar.qml</file>
+        <file alias="onboarding/OnboardingNavigator.qml">ui/views/onboarding/OnboardingNavigator.qml</file>
+        <file alias="onboarding/OnboardingStep.qml">ui/views/onboarding/OnboardingStep.qml</file>
+        <file alias="onboarding/OnboardingView.qml">ui/views/onboarding/OnboardingView.qml</file>
+        <file alias="projects/ProjectsView.qml">ui/views/projects/ProjectsView.qml</file>
     </qresource>
 </RCC>

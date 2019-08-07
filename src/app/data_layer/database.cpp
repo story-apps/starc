@@ -57,7 +57,7 @@ bool Database::canOpenFile(const QString& _databaseFileName)
             canOpen = false;
             s_openFileError =
                     QApplication::translate("DatabaseLayer::Database",
-                                            "Project was modified in higher version. You need update application to latest version for open it.");
+                        "Project was modified in higher version. You need update application to latest version for open it.");
         }
     }
 
@@ -292,8 +292,8 @@ void Database::createTables(QSqlDatabase& _database)
                "id INTEGER PRIMARY KEY AUTOINCREMENT, "
                "fk_item_id INTEGER NOT NULL, "
                "uuid TEXT NOT NULL, "
-               "undo_patch TEXT NOT NULL, " // отмена изменения
-               "redo_patch TEXT NOT NULL, " // повтор изменения
+               "undo_patch BLOB NOT NULL, " // отмена изменения
+               "redo_patch BLOB NOT NULL, " // повтор изменения
                "date_time TEXT NOT NULL, " // yyyy.mm.dd.hh.mm.ss.zzz
                "user_email TEXT DEFAULT(NULL), "
                "user_name TEXT NOT NULL "

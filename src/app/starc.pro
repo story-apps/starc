@@ -1,4 +1,4 @@
-QT += quick sql widgets
+QT += quick sql widgets quickcontrols2
 CONFIG += c++11
 
 # The following define makes your compiler emit warnings if you use
@@ -14,9 +14,16 @@ DEFINES += QT_DEPRECATED_WARNINGS
 
 SOURCES += \
         main.cpp \
-    data_layer/database.cpp
+    data_layer/database.cpp \
+    management_layer/application_manager.cpp \
+    management_layer/content/onboarding/onboarding_manager.cpp \
+    management_layer/content/projects/projects_manager.cpp \
+    ui/models/application_view_model.cpp \
+    management_layer/content/splash/splash_manager.cpp \
+    ui/models/onboarding_view_model.cpp
 
-RESOURCES += qml.qrc
+RESOURCES += qml.qrc \
+    resources.qrc
 
 # Additional import path used to resolve QML modules in Qt Creator's code model
 QML_IMPORT_PATH =
@@ -30,4 +37,10 @@ else: unix:!android: target.path = /opt/$${TARGET}/bin
 !isEmpty(target.path): INSTALLS += target
 
 HEADERS += \
-    data_layer/database.h
+    data_layer/database.h \
+    management_layer/application_manager.h \
+    management_layer/content/onboarding/onboarding_manager.h \
+    management_layer/content/projects/projects_manager.h \
+    ui/models/application_view_model.h \
+    management_layer/content/splash/splash_manager.h \
+    ui/models/onboarding_view_model.h
