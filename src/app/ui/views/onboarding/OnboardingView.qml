@@ -18,10 +18,12 @@ Item {
 
         anchors.fill: parent
         anchors.margins: DesignSystem.layout.padding
-        initialItem: languageView
+        initialItem: languagePage
     }
 
     RowLayout {
+        id: navigationButtons
+
         anchors {
             left: parent.left
             right: parent.right
@@ -35,6 +37,8 @@ Item {
         }
 
         Button {
+            id: goToNext
+
             font: DesignSystem.font.button
             highlighted: true
             text: qsTr("Continue")
@@ -45,6 +49,8 @@ Item {
         }
 
         Button {
+            id: goToEnd
+
             font: DesignSystem.font.button
             text: qsTr("Skip onboarding")
 
@@ -63,7 +69,7 @@ Item {
     }
 
     Item {
-        id: languageView
+        id: languagePage
 
         visible: false
 
@@ -109,7 +115,7 @@ Item {
     }
 
     Item {
-        id: themeView
+        id: themePage
 
         visible: false
 
@@ -148,26 +154,47 @@ Item {
     }
 
     //
+    // Страница завершения посадки
+    //
+
+    Item {
+        id: lastPage
+
+        visible: false
+
+        Column {
+            spacing: DesignSystem.layout.spacing
+
+            Text {
+                font: DesignSystem.font.h5
+                text: qsTr("Starting application...")
+            }
+        }
+
+        BusyIndicator {
+            anchors.centerIn: parent
+            running: true
+        }
+    }
+
+    //
     // Реакция на изменение текущего шага посадки
     //
     Connections {
         target: OnboardingViewModel
         onStepIndexChanged: {
-            let isFinalStep = false;
             switch (_index) {
             case 0:
-                content.replace(languageView);
+                content.replace(languagePage);
                 break;
 
             case 1:
-                content.replace(themeView);
-                break;
-
-            case 2:
+                content.replace(themePage);
                 break;
 
             default:
-                isFinalStep = true;
+                content.replace(lastPage);
+                navigationButtons.visible = false;
                 break;
             }
         }

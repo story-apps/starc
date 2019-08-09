@@ -50,24 +50,6 @@ Item {
         index: "2"
         text: "Choose application theme"
         pathAtTop: true
-        pathAtBottom: true
-
-        onClicked: {
-            updateStepIndex(index);
-        }
-    }
-
-    OnboardingStep {
-        id: modulesStep
-
-        anchors {
-            left: parent.left
-            top: themeStep.bottom
-            right: parent.right
-        }
-        index: "3"
-        text: "Choose modules"
-        pathAtTop: true
 
         onClicked: {
             updateStepIndex(index);
@@ -86,8 +68,6 @@ Item {
                 languageStep.finished = false;
                 themeStep.checked = false;
                 themeStep.finished = false;
-                modulesStep.checked = false;
-                modulesStep.finished = false;
                 break;
 
             case 1:
@@ -95,17 +75,6 @@ Item {
                 languageStep.finished = true;
                 themeStep.checked = true;
                 themeStep.finished = false;
-                modulesStep.checked = false;
-                modulesStep.finished = false;
-                break;
-
-            case 2:
-                languageStep.checked = false;
-                languageStep.finished = true;
-                themeStep.checked = false;
-                themeStep.finished = true;
-                modulesStep.checked = true;
-                modulesStep.finished = false;
                 break;
 
             default:
@@ -113,8 +82,6 @@ Item {
                 languageStep.finished = true;
                 themeStep.checked = false;
                 themeStep.finished = true;
-                modulesStep.checked = false;
-                modulesStep.finished = true;
                 break;
             }
         }
