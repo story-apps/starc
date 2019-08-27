@@ -1,1 +1,3 @@
-# kitscenarist2
+# STARC
+
+## Story Architect application is the best writers friend
