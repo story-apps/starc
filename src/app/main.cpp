@@ -10,36 +10,20 @@ using ManagementLayer::IApplicationManager;
 /**
  * @brief Загрузить менеджер приложения
  */
-IApplicationManager* loadApplicationManager();
-
-
-/**
- * @brief Погнали!
- */
-int main(int argc, char *argv[])
-{
-    QApplication a(argc, argv);
-    a.setApplicationName("starc");
-    a.setOrganizationName("DimkaNovikov labs.");
-    a.setOrganizationDomain("dimkanovikov.pro");
-
-    IApplicationManager* applicationManager = loadApplicationManager();
-    if (applicationManager == nullptr) {
-        return 1;
-    }
-
-    applicationManager->exec();
-    return a.exec();
-}
-
 IApplicationManager* loadApplicationManager()
 {
     //
     // Смотрим папку с данными приложения на компе
+    // NOTE: В Debug-режим работает с папкой сборки приложения
     //
     const QString pluginsDirName = "plugins";
-    auto s = QStandardPaths::writableLocation(QStandardPaths::DataLocation);
-    QDir pluginsDir(QStandardPaths::writableLocation(QStandardPaths::DataLocation));
+    QDir pluginsDir(
+#ifndef QT_NO_DEBUG
+                QApplication::applicationDirPath()
+#else
+                QStandardPaths::writableLocation(QStandardPaths::DataLocation)
+#endif
+                );
 
     //
     // Если там нет плагинов приложения
@@ -54,7 +38,7 @@ IApplicationManager* loadApplicationManager()
         // ... и копируем туда все плагины из папки, в которую установлено приложение
         //
         QDir installedPluginsDir(QApplication::applicationDirPath());
-        installedPluginsDir.cd("plugins");
+        installedPluginsDir.cd(pluginsDirName);
         for (const auto& file : installedPluginsDir.entryList(QDir::Files)) {
             QFile::copy(installedPluginsDir.absoluteFilePath(file), pluginsDir.absoluteFilePath(file));
         }
@@ -84,4 +68,23 @@ IApplicationManager* loadApplicationManager()
     }
 
     return nullptr;
+}
+
+/**
+ * @brief Погнали!
+ */
+int main(int argc, char *argv[])
+{
+    QApplication a(argc, argv);
+    a.setApplicationName("starc");
+    a.setOrganizationName("DimkaNovikov labs.");
+    a.setOrganizationDomain("dimkanovikov.pro");
+
+    IApplicationManager* applicationManager = loadApplicationManager();
+    if (applicationManager == nullptr) {
+        return 1;
+    }
+
+    applicationManager->exec();
+    return a.exec();
 }
