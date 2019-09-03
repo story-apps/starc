@@ -58,8 +58,8 @@ IApplicationManager* loadApplicationManager()
     //
     // Подгружаем плагин
     //
-    const QStringList lidCorePluginEntries = pluginsDir.entryList({ "libcoreplugin.*" }, QDir::Files);
-    for (const QString &fileName : lidCorePluginEntries) {
+    const QStringList libCorePluginEntries = pluginsDir.entryList({ "libcoreplugin.*" }, QDir::Files);
+    for (const QString &fileName : libCorePluginEntries) {
         QPluginLoader pluginLoader(pluginsDir.absoluteFilePath(fileName));
         QObject *plugin = pluginLoader.instance();
         if (plugin) {
@@ -75,10 +75,10 @@ IApplicationManager* loadApplicationManager()
  */
 int main(int argc, char *argv[])
 {
-    QApplication a(argc, argv);
-    a.setApplicationName("starc");
-    a.setOrganizationName("DimkaNovikov labs.");
-    a.setOrganizationDomain("dimkanovikov.pro");
+    QApplication application(argc, argv);
+    application.setApplicationName("starc");
+    application.setOrganizationName("DimkaNovikov labs.");
+    application.setOrganizationDomain("dimkanovikov.pro");
 
     IApplicationManager* applicationManager = loadApplicationManager();
     if (applicationManager == nullptr) {
@@ -86,5 +86,5 @@ int main(int argc, char *argv[])
     }
 
     applicationManager->exec();
-    return a.exec();
+    return application.exec();
 }

@@ -29,8 +29,8 @@ public:
     void exec() final;
 
 private:
-    class ApplicationManagerPrivate;
-    QScopedPointer<ApplicationManagerPrivate> d;
+    class Implementation;
+    QScopedPointer<Implementation> d;
 };
 
 } // namespace ManagementLayer
