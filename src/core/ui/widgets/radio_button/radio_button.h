@@ -43,12 +43,6 @@ protected:
     void paintEvent(QPaintEvent* _event) override;
 
     /**
-     * @brief Реализуем hover-эффект
-     */
-    void enterEvent(QEvent* _event) override;
-    void leaveEvent(QEvent* _event) override;
-
-    /**
      * @brief Реализуем включение переключателя при клике на нём
      */
     void mouseReleaseEvent(QMouseEvent* _event) override;

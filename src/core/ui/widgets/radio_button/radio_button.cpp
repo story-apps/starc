@@ -4,14 +4,49 @@
 
 #include <QPainter>
 #include <QPaintEvent>
+#include <QTimer>
+#include <QVariantAnimation>
 
 
 class RadioButton::Implementation
 {
 public:
+    Implementation();
+
+    /**
+     * @brief Анимировать клик
+     */
+    void animateClick();
+
     bool isChecked = false;
     QString text;
+
+    /**
+     * @brief  Декорации переключателя при клике
+     */
+    QVariantAnimation decorationRadiusAnimation;
+    QVariantAnimation decorationOpacityAnimation;
 };
+
+RadioButton::Implementation::Implementation()
+{
+    decorationOpacityAnimation.setEasingCurve(QEasingCurve::OutQuad);
+    decorationRadiusAnimation.setStartValue(Ui::DesignSystem::radioButton().iconSize().height() / 2.0);
+    decorationRadiusAnimation.setEndValue(Ui::DesignSystem::radioButton().height() / 2.5);
+    decorationRadiusAnimation.setDuration(160);
+
+    decorationOpacityAnimation.setEasingCurve(QEasingCurve::InQuad);
+    decorationOpacityAnimation.setStartValue(0.5);
+    decorationOpacityAnimation.setEndValue(0.0);
+    decorationOpacityAnimation.setDuration(160);
+}
+
+void RadioButton::Implementation::animateClick()
+{
+    decorationOpacityAnimation.setCurrentTime(0);
+    decorationRadiusAnimation.start();
+    decorationOpacityAnimation.start();
+}
 
 
 // ****
@@ -21,6 +56,8 @@ RadioButton::RadioButton(QWidget* _parent)
     : Widget(_parent),
       d(new Implementation)
 {
+    connect(&d->decorationRadiusAnimation, &QVariantAnimation::valueChanged, this, [this] { update(); });
+    connect(&d->decorationOpacityAnimation, &QVariantAnimation::valueChanged, this, [this] { update(); });
 }
 
 RadioButton::~RadioButton() = default;
@@ -64,6 +101,7 @@ QSize RadioButton::sizeHint() const
 void RadioButton::paintEvent(QPaintEvent* _event)
 {
     QPainter painter(this);
+    painter.setRenderHint(QPainter::Antialiasing);
 
     //
     // Заливаем фон
@@ -71,13 +109,26 @@ void RadioButton::paintEvent(QPaintEvent* _event)
     painter.fillRect(_event->rect(), backgroundColor());
 
     //
+    // Рисуем декорацию переключателя
+    //
+    const QRectF iconRect(QPointF(Ui::DesignSystem::radioButton().margins().left(),
+                                  Ui::DesignSystem::radioButton().margins().top()),
+                          Ui::DesignSystem::radioButton().iconSize());
+    if (d->decorationRadiusAnimation.state() == QVariantAnimation::Running
+        || d->decorationOpacityAnimation.state() == QVariantAnimation::Running) {
+        painter.setPen(Ui::DesignSystem::color().secondary());
+        painter.setBrush(Ui::DesignSystem::color().secondary());
+        painter.setOpacity(d->decorationOpacityAnimation.currentValue().toReal());
+        painter.drawEllipse(iconRect.center(), d->decorationRadiusAnimation.currentValue().toReal(),
+                            d->decorationRadiusAnimation.currentValue().toReal());
+        painter.setOpacity(1.0);
+    }
+
+    //
     // Рисуем сам переключатель
     //
     painter.setFont(Ui::DesignSystem::font().iconsMid());
     painter.setPen(d->isChecked ? Ui::DesignSystem::color().secondary() : textColor());
-    const QRectF iconRect(QPointF(Ui::DesignSystem::radioButton().margins().left(),
-                                  Ui::DesignSystem::radioButton().margins().top()),
-                          Ui::DesignSystem::radioButton().iconSize());
     painter.drawText(iconRect, Qt::AlignCenter, d->isChecked ? "\uf43e" : "\uf43d");
 
     //
@@ -90,20 +141,10 @@ void RadioButton::paintEvent(QPaintEvent* _event)
     painter.drawText(textRect, Qt::AlignLeft | Qt::AlignVCenter, d->text);
 }
 
-void RadioButton::enterEvent(QEvent* _event)
-{
-    Q_UNUSED(_event);
-}
-
-void RadioButton::leaveEvent(QEvent* _event)
-{
-    Q_UNUSED(_event);
-
-}
-
 void RadioButton::mouseReleaseEvent(QMouseEvent* _event)
 {
     Q_UNUSED(_event);
 
     setChecked(true);
+    d->animateClick();
 }

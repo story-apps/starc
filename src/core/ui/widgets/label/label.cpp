@@ -21,6 +21,7 @@ AbstractLabel::AbstractLabel(QWidget* _parent)
     : Widget(_parent),
       d(new Implementation)
 {
+    setContentsMargins(24, 24, 24, 24);
 }
 
 AbstractLabel::~AbstractLabel() = default;

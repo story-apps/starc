@@ -162,7 +162,9 @@ void Stepper::paintEvent(QPaintEvent* _event)
         //
         // Текст
         //
-        painter.setPen(textColor());
+        painter.setPen(!d->isFinished && stepIndex > d->currentStepIndex
+                       ? d->inactiveStepNumberBackgroundColor
+                       : textColor());
         QFont textFont = Ui::DesignSystem::font().subtitle2();
         textFont.setWeight(stepIndex == d->currentStepIndex ? QFont::Medium : QFont::Normal);
         painter.setFont(textFont);

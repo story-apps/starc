@@ -13,7 +13,7 @@ OnboardingNavigator::OnboardingNavigator(QWidget* _parent)
 
     setBackgroundColor(DesignSystem::color().primary());
     setTextColor(DesignSystem::color().onPrimary());
-    setInactiveStepNumberBackgroundColor(DesignSystem::color().primary().lighter());
+    setInactiveStepNumberBackgroundColor(DesignSystem::color().primary().lighter(300));
 
     addStep("Choose preffered language");
     addStep("Setup application theme");

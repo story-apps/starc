@@ -42,8 +42,8 @@ public:
 
 DesignSystem::ColorPrivate::ColorPrivate()
 {
-    primary = QColor("#795548");
-    primaryDark = QColor("#5D4037");
+    primary = QColor("#323740");
+    primaryDark = QColor("#22252b");
     secondary = QColor("#448AFF");
     background = QColor("#FFFFFF");
     surface = QColor("#FFFFFF");
