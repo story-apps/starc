@@ -103,7 +103,7 @@ void Stepper::paintEvent(QPaintEvent* _event)
     //
     // Определим полную область отрисовки шагов
     //
-    const QRectF stepsRect(0, 0, width(), Ui::DesignSystem::stepper().stepHeight() * d->steps.size());
+    const QRectF stepsRect(0, 0, width(), Ui::DesignSystem::stepper().height() * d->steps.size());
     //
     // ... и проверим есть ли в требуемой к перерисовке области шаги
     //
@@ -115,8 +115,8 @@ void Stepper::paintEvent(QPaintEvent* _event)
     // Отрисовываем шаги
     //
     for (int stepIndex = 0; stepIndex < d->steps.size(); ++stepIndex) {
-        const QRectF stepRect(0, stepIndex * Ui::DesignSystem::stepper().stepHeight(),
-                              width(), Ui::DesignSystem::stepper().stepHeight());
+        const QRectF stepRect(0, stepIndex * Ui::DesignSystem::stepper().height(),
+                              width(), Ui::DesignSystem::stepper().height());
 
         //
         // Проверяем нужно ли рисовать текущий шаг
@@ -157,14 +157,16 @@ void Stepper::paintEvent(QPaintEvent* _event)
         else {
             painter.setFont(Ui::DesignSystem::font().iconsSmall());
             painter.drawText(stepNumberBackgroundRect, Qt::AlignCenter, "\uf12c");
-            painter.setFont(Ui::DesignSystem::font().subtitle2());
         }
 
         //
         // Текст
         //
         painter.setPen(textColor());
-        const qreal stepTextRectX = stepNumberBackgroundRect.right() + Ui::DesignSystem::stepper().textSpacing();
+        QFont textFont = Ui::DesignSystem::font().subtitle2();
+        textFont.setWeight(stepIndex == d->currentStepIndex ? QFont::Medium : QFont::Normal);
+        painter.setFont(textFont);
+        const qreal stepTextRectX = stepNumberBackgroundRect.right() + Ui::DesignSystem::stepper().spacing();
         const QRectF stepTextRect(stepTextRectX, stepRect.top(), stepRect.right() - stepTextRectX, stepRect.height());
         painter.drawText(stepTextRect, Qt::AlignVCenter, d->steps.at(stepIndex));
 
@@ -192,8 +194,8 @@ void Stepper::paintEvent(QPaintEvent* _event)
 void Stepper::mouseReleaseEvent(QMouseEvent* _event)
 {
     for (int stepIndex = 0; stepIndex < d->steps.size(); ++stepIndex) {
-        const QRectF stepRect(0, stepIndex * Ui::DesignSystem::stepper().stepHeight(),
-                              width(), Ui::DesignSystem::stepper().stepHeight());
+        const QRectF stepRect(0, stepIndex * Ui::DesignSystem::stepper().height(),
+                              width(), Ui::DesignSystem::stepper().height());
         if (stepRect.contains(_event->pos())) {
             setCurrentStep(stepIndex);
             return;

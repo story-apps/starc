@@ -682,9 +682,46 @@ public:
 
         // Cheat sheet - https://cdn.materialdesignicons.com/3.8.95/
         const QFont& iconsSmall() const;
+        const QFont& iconsMid() const;
 
     private:
         explicit Font(qreal _scaleFactor);
+        friend class DesignSystemPrivate;
+        //
+        class Implementation;
+        QScopedPointer<Implementation> d;
+    };
+
+    /**
+     * @brief Параметры виджета переключателя
+     */
+    class RadioButton
+    {
+    public:
+        ~RadioButton();
+
+        /**
+         * @brief Высота переключателя
+         */
+        qreal height() const;
+
+        /**
+         * @brief Отступы контента
+         */
+        const QMarginsF& margins() const;
+
+        /**
+         * @brief Размер иконки переключателя
+         */
+        const QSizeF& iconSize() const;
+
+        /**
+         * @brief Отступ между иконкой и текстом
+         */
+        qreal spacing() const;
+
+    private:
+        explicit RadioButton(qreal _scaleFactor);
         friend class DesignSystemPrivate;
         //
         class Implementation;
@@ -699,16 +736,34 @@ public:
     public:
         ~Stepper();
 
-        qreal stepHeight() const;
+        /**
+         * @brief Высота шага
+         */
+        qreal height() const;
 
+        /**
+         * @brief Отступы контента
+         */
         QMarginsF margins() const;
 
-        qreal textSpacing() const;
-
-        qreal pathSpacing() const;
-
+        /**
+         * @brief Размер иконки
+         */
         QSizeF iconSize() const;
 
+        /**
+         * @brief Отступ между иконкой и текстом
+         */
+        qreal spacing() const;
+
+        /**
+         * @brief Отступ между иконкой и путём соединяющим несколько шагов
+         */
+        qreal pathSpacing() const;
+
+        /**
+         * @brief Ширина пути, соединяющиего несколько шагов
+         */
         qreal pathWidth() const;
 
     private:
@@ -827,6 +882,11 @@ public:
      * @brief Параметры шрифтов
      */
     static const Font& font();
+
+    /**
+     * @brief Параметры кнопки-переключателя
+     */
+    static const RadioButton& radioButton();
 
     /**
      * @brief Параметры виджета пошагового движения

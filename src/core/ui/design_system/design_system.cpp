@@ -1125,6 +1125,7 @@ public:
     QFont overline = QFont("Roboto");
 
     QFont iconsSmall = QFont("Material Design Icons");
+    QFont iconsMid = QFont("Material Design Icons");
 };
 
 DesignSystem::Font::Implementation::Implementation(qreal _scaleFactor)
@@ -1152,6 +1153,7 @@ DesignSystem::Font::Implementation::Implementation(qreal _scaleFactor)
     initFont(QFont::Normal, QFont::Capitalization::AllUppercase, 10, 1.5, overline);
 
     iconsSmall.setPixelSize(static_cast<int>(16 * _scaleFactor));
+    iconsMid.setPixelSize(static_cast<int>(24 * _scaleFactor));
 }
 
 // **
@@ -1228,7 +1230,65 @@ const QFont& DesignSystem::Font::iconsSmall() const
     return d->iconsSmall;
 }
 
+const QFont& DesignSystem::Font::iconsMid() const
+{
+    return d->iconsMid;
+}
+
 DesignSystem::Font::Font(qreal _scaleFactor)
+    : d(new Implementation(_scaleFactor))
+{
+}
+
+
+// ****
+
+
+class DesignSystem::RadioButton::Implementation
+{
+public:
+    explicit Implementation(qreal _scaleFactor);
+
+    qreal height = 48.0;
+    QMarginsF margins = {24.0, 13.0, 24.0, 13.0};
+    QSizeF iconSize = {22.0, 22.0};
+    qreal spacing = 16.0;
+
+};
+
+DesignSystem::RadioButton::Implementation::Implementation(qreal _scaleFactor)
+{
+    height *= _scaleFactor;
+    margins *= _scaleFactor;
+    iconSize *= _scaleFactor;
+    spacing *= _scaleFactor;
+}
+
+// **
+
+DesignSystem::RadioButton::~RadioButton() = default;
+
+qreal DesignSystem::RadioButton::height() const
+{
+    return d->height;
+}
+
+const QMarginsF& DesignSystem::RadioButton::margins() const
+{
+    return d->margins;
+}
+
+const QSizeF& DesignSystem::RadioButton::iconSize() const
+{
+    return d->iconSize;
+}
+
+qreal DesignSystem::RadioButton::spacing() const
+{
+    return d->spacing;
+}
+
+DesignSystem::RadioButton::RadioButton(qreal _scaleFactor)
     : d(new Implementation(_scaleFactor))
 {
 }
@@ -1244,9 +1304,9 @@ public:
 
     qreal stepHeight = 72.0;
     QMarginsF margins = {24.0, 24.0, 24.0, 24.0};
-    qreal textSpacing = 12.0;
-    qreal pathSpacing = 8.0;
     QSizeF iconSize = {24.0, 24.0};
+    qreal spacing = 12.0;
+    qreal pathSpacing = 8.0;
     qreal pathWidth = 2.0;
 };
 
@@ -1254,9 +1314,9 @@ DesignSystem::Stepper::Implementation::Implementation(qreal _scaleFactor)
 {
     stepHeight *= _scaleFactor;
     margins *= _scaleFactor;
-    textSpacing *= _scaleFactor;
-    pathSpacing *= _scaleFactor;
     iconSize *= _scaleFactor;
+    spacing *= _scaleFactor;
+    pathSpacing *= _scaleFactor;
     pathWidth *= _scaleFactor;
 }
 
@@ -1264,7 +1324,7 @@ DesignSystem::Stepper::Implementation::Implementation(qreal _scaleFactor)
 
 DesignSystem::Stepper::~Stepper() = default;
 
-qreal DesignSystem::Stepper::stepHeight() const
+qreal DesignSystem::Stepper::height() const
 {
     return d->stepHeight;
 }
@@ -1274,19 +1334,19 @@ QMarginsF DesignSystem::Stepper::margins() const
     return d->margins;
 }
 
-qreal DesignSystem::Stepper::textSpacing() const
+QSizeF DesignSystem::Stepper::iconSize() const
 {
-    return d->textSpacing;
+    return d->iconSize;
+}
+
+qreal DesignSystem::Stepper::spacing() const
+{
+    return d->spacing;
 }
 
 qreal DesignSystem::Stepper::pathSpacing() const
 {
     return d->pathSpacing;
-}
-
-QSizeF DesignSystem::Stepper::iconSize() const
-{
-    return d->iconSize;
 }
 
 qreal DesignSystem::Stepper::pathWidth() const
@@ -1329,7 +1389,9 @@ public:
     DesignSystem::ListTwoLineItem listTwoLineItem;
     DesignSystem::List list;
     DesignSystem::Dialog dialog;
+
     DesignSystem::Font font;
+    DesignSystem::RadioButton radioButton;
     DesignSystem::Stepper stepper;
 };
 
@@ -1348,6 +1410,7 @@ DesignSystemPrivate::DesignSystemPrivate(qreal _scaleFactor, const DesignSystem:
       list(_scaleFactor),
       dialog(_scaleFactor),
       font(_scaleFactor),
+      radioButton(_scaleFactor),
       stepper(_scaleFactor)
 {
     pageMargins *= _scaleFactor;
@@ -1464,6 +1527,11 @@ const DesignSystem::Dialog& DesignSystem::dialog()
 const DesignSystem::Font& DesignSystem::font()
 {
     return instance()->d->font;
+}
+
+const DesignSystem::RadioButton&DesignSystem::radioButton()
+{
+    return instance()->d->radioButton;
 }
 
 const DesignSystem::Stepper& DesignSystem::stepper()

@@ -17,6 +17,12 @@ public:
     explicit OnboardingView(QWidget* _parent = nullptr);
     ~OnboardingView() override;
 
+    void showLanguagePage();
+
+    void showThemePage();
+
+    void showFinalPage();
+
 private:
     class Implementation;
     QScopedPointer<Implementation> d;

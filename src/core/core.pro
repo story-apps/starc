@@ -36,7 +36,11 @@ SOURCES += \
     ui/onboarding/onboarding_navigator.cpp \
     ui/onboarding/onboarding_tool_bar.cpp \
     ui/onboarding/onboarding_view.cpp \
-    ui/widgets/stepper/stepper.cpp
+    ui/widgets/stepper/stepper.cpp \
+    ui/widgets/button/button.cpp \
+    ui/widgets/label/label.cpp \
+    ui/widgets/radio_button/radio_button.cpp \
+    ui/widgets/radio_button/radio_button_group.cpp
 
 HEADERS += \
         core_global.h \
@@ -58,7 +62,11 @@ HEADERS += \
     ui/onboarding/onboarding_tool_bar.h \
     ui/onboarding/onboarding_view.h \
     ui/widgets/stepper/stepper.h \
-    custom_events.h
+    custom_events.h \
+    ui/widgets/button/button.h \
+    ui/widgets/label/label.h \
+    ui/widgets/radio_button/radio_button.h \
+    ui/widgets/radio_button/radio_button_group.h
 
 unix {
     target.path = /usr/lib

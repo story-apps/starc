@@ -23,6 +23,7 @@ OnboardingManager::Implementation::Implementation(QWidget* _parent)
     toolBar->hide();
     navigator->hide();
     view->hide();
+
 }
 
 
@@ -33,6 +34,19 @@ OnboardingManager::OnboardingManager(QObject* _parent, QWidget* _parentWidget)
     : QObject(_parent),
       d(new Implementation(_parentWidget))
 {
+    connect(d->navigator, &Ui::OnboardingNavigator::currentIndexChanged, this, [this] (int _currentIndex) {
+        switch (_currentIndex) {
+            case 0: {
+                d->view->showLanguagePage();
+                break;
+            }
+
+            case 1: {
+                d->view->showThemePage();
+                break;
+            }
+        }
+    });
 }
 
 QWidget* OnboardingManager::toolBar() const

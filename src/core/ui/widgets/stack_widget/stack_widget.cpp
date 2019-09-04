@@ -4,15 +4,14 @@
 #include <QResizeEvent>
 #include <QVariantAnimation>
 
-
 class StackWidget::Implementation
 {
 public:
     explicit Implementation();
 
-    QVector<QWidget*> widgets;
-    QWidget* previousWidget = nullptr;
-    QWidget* currentWidget = nullptr;
+    QVector<QWidget *> widgets;
+    QWidget *previousWidget = nullptr;
+    QWidget *currentWidget = nullptr;
 
     QPixmap previousWidgetImage;
     QPixmap currentWidgetImage;
@@ -27,13 +26,11 @@ StackWidget::Implementation::Implementation()
     fadeAnimation.setEndValue(1.0);
 }
 
-
 // ****
 
-
-StackWidget::StackWidget(QWidget* _parent)
-    : Widget(_parent),
-      d(new Implementation)
+StackWidget::StackWidget(QWidget *_parent)
+    : Widget(_parent)
+    , d(new Implementation)
 {
     connect(&d->fadeAnimation, &QVariantAnimation::valueChanged, this, [this] { update(); });
     connect(&d->fadeAnimation, &QVariantAnimation::finished, this, [this] {
@@ -45,19 +42,18 @@ StackWidget::StackWidget(QWidget* _parent)
 
 StackWidget::~StackWidget() = default;
 
-void StackWidget::setCurrentWidget(QWidget* widget)
+void StackWidget::setCurrentWidget(QWidget *widget)
 {
     if (d->currentWidget == widget) {
         return;
     }
-
 
     //
     // Сделать снимок текущего виджета
     //
     if (d->currentWidget != nullptr) {
         d->previousWidget = d->currentWidget;
-        d->previousWidgetImage = d->previousWidget->grab(rect());
+        d->previousWidgetImage = d->previousWidget->grab();
         d->previousWidget->hide();
     }
 
@@ -70,7 +66,7 @@ void StackWidget::setCurrentWidget(QWidget* widget)
         d->currentWidget->resize(size());
         d->widgets.append(d->currentWidget);
     }
-    d->currentWidgetImage = d->currentWidget->grab(rect());
+    d->currentWidgetImage = d->currentWidget->grab();
     d->currentWidget->hide();
 
     //
@@ -79,7 +75,7 @@ void StackWidget::setCurrentWidget(QWidget* widget)
     d->fadeAnimation.start();
 }
 
-void StackWidget::paintEvent(QPaintEvent* _event)
+void StackWidget::paintEvent(QPaintEvent *_event)
 {
     Widget::paintEvent(_event);
 
@@ -103,11 +99,17 @@ void StackWidget::paintEvent(QPaintEvent* _event)
     }
 }
 
-void StackWidget::resizeEvent(QResizeEvent* _event)
+void StackWidget::resizeEvent(QResizeEvent *_event)
 {
     if (d->currentWidget == nullptr) {
         return;
     }
+
+    if (d->currentWidget->size() == _event->size()) {
+        return;
+    }
+
+    d->currentWidget->resize(_event->size());
 
     //
     // Если изменение размера виджета происходит в момент анимации,
@@ -117,12 +119,6 @@ void StackWidget::resizeEvent(QResizeEvent* _event)
         if (d->previousWidget != nullptr) {
             d->previousWidgetImage = d->previousWidget->grab(QRect({}, _event->size()));
         }
-        d->currentWidgetImage = d->currentWidget->grab(QRect({}, _event->size()));
-    }
-    //
-    // В противном случае, корректируем размер отображаемого виджета
-    //
-    else {
-        d->currentWidget->resize(_event->size());
+        d->currentWidgetImage = d->currentWidget->grab();
     }
 }
