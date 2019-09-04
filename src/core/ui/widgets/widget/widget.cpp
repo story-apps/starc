@@ -2,6 +2,7 @@
 
 #include <custom_events.h>
 
+#include <QEvent>
 #include <QPaintEvent>
 #include <QPainter>
 
@@ -66,6 +67,21 @@ bool Widget::event(QEvent* _event)
 
         default: {
             return QWidget::event(_event);
+        }
+    }
+}
+
+void Widget::changeEvent(QEvent* _event)
+{
+    switch (_event->type()) {
+        case QEvent::LanguageChange: {
+            updateTranslations();
+            break;
+        }
+
+        default: {
+            QWidget::changeEvent(_event);
+            break;
         }
     }
 }

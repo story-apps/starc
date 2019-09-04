@@ -74,4 +74,5 @@ unix {
 }
 
 RESOURCES += \
-    resources.qrc
+    resources.qrc \
+    translations.qrc

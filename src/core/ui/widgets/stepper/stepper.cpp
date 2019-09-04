@@ -46,6 +46,17 @@ void Stepper::addStep(const QString& _stepName)
     update();
 }
 
+void Stepper::setStepName(int _index, const QString& _name)
+{
+    if (0 > _index || _index >= d->steps.size()
+        || d->steps[_index] == _name) {
+        return;
+    }
+
+    d->steps[_index] = _name;
+    update();
+}
+
 void Stepper::setCurrentStep(int _index)
 {
     if (0 > _index || _index >= d->steps.size()

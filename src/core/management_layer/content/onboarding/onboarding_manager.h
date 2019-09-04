@@ -1,5 +1,6 @@
 #pragma once
 
+#include <QLocale>
 #include <QObject>
 
 
@@ -17,6 +18,12 @@ public:
     QWidget* toolBar() const;
     QWidget* navigator() const;
     QWidget* view() const;
+
+signals:
+    /**
+     * @brief Пользователь выбрал язык приложения
+     */
+    void languageChanged(QLocale::Language _language);
 
 private:
     class Implementation;

@@ -16,9 +16,11 @@ class OnboardingNavigator : public Stepper
 public:
     explicit OnboardingNavigator(QWidget* _parent = nullptr);
 
-signals:
-
-public slots:
+protected:
+    /**
+     * @brief Обновить перевод
+     */
+    void updateTranslations() override;
 };
 
 } // namespace Ui

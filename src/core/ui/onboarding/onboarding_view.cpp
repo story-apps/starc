@@ -15,20 +15,26 @@ namespace Ui
 class OnboardingView::Implementation
 {
 public:
-    explicit Implementation(QWidget* _parent);
+    explicit Implementation(OnboardingView* _parent);
 
     /**
      * @brief Настроить страницу выбора языка
      */
     void initLanguagePage();
 
+    OnboardingView* q = nullptr;
+
     Widget* languagePage = nullptr;
+    H5Label* languageTitle = nullptr;
+    RadioButton* systemLanguage = nullptr;
+
     Widget* themePage = nullptr;
     Widget* finalPage = nullptr;
 };
 
-OnboardingView::Implementation::Implementation(QWidget* _parent)
-    : languagePage(new Widget(_parent)),
+OnboardingView::Implementation::Implementation(OnboardingView* _parent)
+    : q(_parent),
+      languagePage(new Widget(_parent)),
       themePage(new Widget(_parent)),
       finalPage(new Widget(_parent))
 {
@@ -45,25 +51,28 @@ void OnboardingView::Implementation::initLanguagePage()
 {
     languagePage->setBackgroundColor(DesignSystem::color().surface());
 
-    H5Label* languageTitle = new H5Label(languagePage);
+    languageTitle = new H5Label(languagePage);
     languageTitle->setBackgroundColor(DesignSystem::color().surface());
     languageTitle->setTextColor(DesignSystem::color().onSurface());
-    languageTitle->setText("Choose preferred language");
 
-    RadioButton* systemLanguage = new RadioButton(languagePage);
-    systemLanguage->setBackgroundColor(DesignSystem::color().surface());
-    systemLanguage->setTextColor(DesignSystem::color().onSurface());
-    systemLanguage->setText("Detect language from system");
-
-    RadioButton* englishLanguage = new RadioButton(languagePage);
-    englishLanguage->setBackgroundColor(DesignSystem::color().surface());
-    englishLanguage->setTextColor(DesignSystem::color().onSurface());
-    englishLanguage->setText("English");
-
-    RadioButton* russianLanguage = new RadioButton(languagePage);
-    russianLanguage->setBackgroundColor(DesignSystem::color().surface());
-    russianLanguage->setTextColor(DesignSystem::color().onSurface());
-    russianLanguage->setText("Русский");
+    auto initLanguage = [this] (const QString& _name, QLocale::Language _language) {
+        RadioButton* radioButton = new RadioButton(languagePage);
+        radioButton->setBackgroundColor(DesignSystem::color().surface());
+        radioButton->setTextColor(DesignSystem::color().onSurface());
+        radioButton->setText(_name);
+        QObject::connect(radioButton, &RadioButton::checkedChanged, q,
+            [this, _language] (bool _checked)
+        {
+            if (_checked) {
+                emit q->languageChanged(_language);
+            }
+        });
+        return radioButton;
+    };
+    systemLanguage = initLanguage("System", QLocale::AnyLanguage);
+    systemLanguage->setChecked(true);
+    RadioButton* englishLanguage = initLanguage("English", QLocale::English);
+    RadioButton* russianLanguage = initLanguage("Русский", QLocale::Russian);
 
     RadioButtonGroup* languagesGroup = new RadioButtonGroup(languagePage);
     languagesGroup->add(systemLanguage);
@@ -90,6 +99,8 @@ OnboardingView::OnboardingView(QWidget* _parent)
     setBackgroundColor(DesignSystem::color().surface());
 
     showLanguagePage();
+
+    updateTranslations();
 }
 
 void OnboardingView::showLanguagePage()
@@ -104,7 +115,13 @@ void OnboardingView::showThemePage()
 
 void OnboardingView::showFinalPage()
 {
+    setCurrentWidget(d->finalPage);
+}
 
+void OnboardingView::updateTranslations()
+{
+    d->languageTitle->setText(tr("Choose preferred language"));
+    d->systemLanguage->setText(tr("Use system locale settings"));
 }
 
 OnboardingView::~OnboardingView() = default;

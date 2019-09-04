@@ -29,6 +29,12 @@ public:
     void exec() final;
 
 private:
+    /**
+     * @brief Настроить соединнеия
+     */
+    void initConnections();
+
+private:
     class Implementation;
     QScopedPointer<Implementation> d;
 };

@@ -23,7 +23,6 @@ OnboardingManager::Implementation::Implementation(QWidget* _parent)
     toolBar->hide();
     navigator->hide();
     view->hide();
-
 }
 
 
@@ -47,6 +46,7 @@ OnboardingManager::OnboardingManager(QObject* _parent, QWidget* _parentWidget)
             }
         }
     });
+    connect(d->view, &Ui::OnboardingView::languageChanged, this, &OnboardingManager::languageChanged);
 }
 
 QWidget* OnboardingManager::toolBar() const

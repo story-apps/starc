@@ -25,6 +25,11 @@ public:
     void addStep(const QString& _stepName);
 
     /**
+     * @brief Задать имя для заданного шага
+     */
+    void setStepName(int _index, const QString& _name);
+
+    /**
      * @brief Задать индекс текущего шага
      */
     void setCurrentStep(int _index);

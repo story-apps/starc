@@ -35,6 +35,16 @@ protected:
     bool event(QEvent* _event) override;
 
     /**
+     * @brief Переопределяем, чтобы обратать событие смены языка приложения
+     */
+    void changeEvent(QEvent* _event) override;
+
+    /**
+     * @brief Предоставляем интерфейс для наследников, чтобы обновить перевод
+     */
+    virtual void updateTranslations() {}
+
+    /**
      * @brief Переопределяем для собственной реализации отрисовки - по сути заливаем цветом фона
      */
     void paintEvent(QPaintEvent* _event) override;

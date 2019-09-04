@@ -8,7 +8,6 @@
 #include <QVBoxLayout>
 
 
-#include <QTimer>
 namespace Ui
 {
 

@@ -2,6 +2,8 @@
 
 #include <ui/widgets/stack_widget/stack_widget.h>
 
+#include <QLocale>
+
 
 namespace Ui
 {
@@ -22,6 +24,18 @@ public:
     void showThemePage();
 
     void showFinalPage();
+
+signals:
+    /**
+     * @brief Пользователь выбрал язык приложения
+     */
+    void languageChanged(QLocale::Language _language);
+
+protected:
+    /**
+     * @brief Обновить переводы
+     */
+    void updateTranslations() override;
 
 private:
     class Implementation;

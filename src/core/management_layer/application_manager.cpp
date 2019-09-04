@@ -5,8 +5,11 @@
 
 #include <ui/application_view.h>
 
+#include <QApplication>
 #include <QFontDatabase>
+#include <QLocale>
 #include <QTimer>
+#include <QTranslator>
 #include <QWidget>
 
 
@@ -21,6 +24,11 @@ public:
      * @brief Показать контент приложения
      */
     void showContent();
+
+    /**
+     * @brief Обновить перевод
+     */
+    void updateTranslation(QLocale::Language _language);
 
     QScopedPointer<Ui::ApplicationView> applicationView;
 
@@ -48,6 +56,49 @@ void ApplicationManager::Implementation::showContent()
     //
 }
 
+void ApplicationManager::Implementation::updateTranslation(QLocale::Language _language)
+{
+    //
+    // Определим файл перевода
+    //
+    const QLocale::Language currentLanguage = _language != QLocale::AnyLanguage
+                                        ? _language
+                                        : QLocale::system().language();
+    QString translation;
+    switch (currentLanguage) {
+        default:
+        case QLocale::English: {
+            translation = "en_EN";
+            break;
+        }
+
+        case QLocale::Russian: {
+            translation = "ru_RU";
+            break;
+        }
+    }
+
+    QLocale::setDefault(QLocale(currentLanguage));
+
+    //
+    // Подключим файл переводов программы
+    //
+    static QTranslator* appTranslator = new QTranslator;
+    QApplication::removeTranslator(appTranslator);
+    appTranslator->load(":/translations/" + translation + ".qm");
+    QApplication::installTranslator(appTranslator);
+
+    //
+    // Для языков, которые пишутся справа-налево настроим соответствующее выравнивание интерфейса
+    //
+    if (currentLanguage == QLocale::Persian
+        || currentLanguage == QLocale::Hebrew) {
+        QApplication::setLayoutDirection(Qt::RightToLeft);
+    } else {
+        QApplication::setLayoutDirection(Qt::LeftToRight);
+    }
+}
+
 
 // ****
 
@@ -62,6 +113,8 @@ ApplicationManager::ApplicationManager(QObject* _parent)
     //
     QFontDatabase fontDatabase;
     fontDatabase.addApplicationFont(":/fonts/materialdesignicons.ttf");
+
+    initConnections();
 }
 
 ApplicationManager::~ApplicationManager() = default;
@@ -76,6 +129,12 @@ void ApplicationManager::exec()
     // чтобы у пользователя возник эффект моментального запуска
     //
     QTimer::singleShot(0, this, [this] { d->showContent(); });
+}
+
+void ApplicationManager::initConnections()
+{
+    connect(d->onboardingManager.data(), &OnboardingManager::languageChanged, this,
+            [this] (QLocale::Language _language) { d->updateTranslation(_language); });
 }
 
 } // namespace ManagementLayer
