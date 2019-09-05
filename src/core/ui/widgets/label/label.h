@@ -33,18 +33,37 @@ protected:
      */
     void paintEvent(QPaintEvent* _event) override;
 
+    /**
+     * @brief Переопределяем событие изменения дизайн системы для корректировки своих параметров
+     */
+    void designSysemChangeEvent(DesignSystemChangeEvent* _event) override;
+
 private:
     class Implementation;
     QScopedPointer<Implementation> d;
 };
 
+
 /**
- * @brief Текстовые метка заголовка пятого уровня
+ * @brief Текстовая метка заголовка пятого уровня
  */
 class H5Label : public AbstractLabel
 {
 public:
     explicit H5Label(QWidget* _parent = nullptr);
+
+protected:
+    const QFont& textFont() const override;
+};
+
+
+/**
+ * @brief Текстовая метка со шрифтом body1
+ */
+class Body1Label : public AbstractLabel
+{
+public:
+    explicit Body1Label(QWidget* _parent = nullptr);
 
 protected:
     const QFont& textFont() const override;

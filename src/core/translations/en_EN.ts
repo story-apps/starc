@@ -25,13 +25,28 @@
 <context>
     <name>Ui::OnboardingView</name>
     <message>
-        <location filename="../ui/onboarding/onboarding_view.cpp" line="123"/>
+        <location filename="../ui/onboarding/onboarding_view.cpp" line="147"/>
         <source>Choose preferred language</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/onboarding/onboarding_view.cpp" line="124"/>
+        <location filename="../ui/onboarding/onboarding_view.cpp" line="148"/>
         <source>Use system locale settings</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ui/onboarding/onboarding_view.cpp" line="149"/>
+        <source>Did not find your preffered language? Read how you can add it yourself.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ui/onboarding/onboarding_view.cpp" line="150"/>
+        <source>Continue</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ui/onboarding/onboarding_view.cpp" line="151"/>
+        <source>Skip onboarding</source>
         <translation type="unfinished"></translation>
     </message>
 </context>

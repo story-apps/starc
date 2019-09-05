@@ -1244,6 +1244,121 @@ DesignSystem::Font::Font(qreal _scaleFactor)
 // ****
 
 
+class DesignSystem::Label::Implementation
+{
+public:
+    explicit Implementation(qreal _scaleFactor);
+
+    QMarginsF margins = {24.0, 24.0, 24.0, 24.0};
+};
+
+DesignSystem::Label::Implementation::Implementation(qreal _scaleFactor)
+{
+    margins *= _scaleFactor;
+}
+
+
+// **
+
+
+DesignSystem::Label::~Label() = default;
+
+const QMarginsF& DesignSystem::Label::margins() const
+{
+    return d->margins;
+}
+
+DesignSystem::Label::Label(qreal _scaleFactor)
+    : d(new Implementation(_scaleFactor))
+{
+}
+
+
+// ****
+
+
+class DesignSystem::Button::Implementation
+{
+public:
+    explicit Implementation(qreal _scaleFactor);
+
+    qreal height = 56.0;
+    qreal minimumWidth = 64.0;
+    QMarginsF margins = {16.0, 0.0, 16.0, 0.0};
+    QMarginsF shadowMargins = {2.0, 2.0, 2.0, 16.0};
+    qreal minimumShadowHeight = 8.0;
+    qreal maximumShadowHeight = 16.0;
+    qreal borderRadius = 2.0;
+    qreal shadowBlurRadius = 8;
+};
+
+DesignSystem::Button::Implementation::Implementation(qreal _scaleFactor)
+{
+    height *= _scaleFactor;
+    minimumWidth *= _scaleFactor;
+    margins *= _scaleFactor;
+    shadowMargins *= _scaleFactor;
+    minimumShadowHeight *= _scaleFactor;
+    maximumShadowHeight *= _scaleFactor;
+    borderRadius *= _scaleFactor;
+    shadowBlurRadius *= _scaleFactor;
+}
+
+
+// **
+
+
+DesignSystem::Button::~Button() = default;
+
+qreal DesignSystem::Button::height() const
+{
+    return d->height;
+}
+
+qreal DesignSystem::Button::minimumWidth() const
+{
+    return d->minimumWidth;
+}
+
+const QMarginsF& DesignSystem::Button::margins() const
+{
+    return d->margins;
+}
+
+const QMarginsF& DesignSystem::Button::shadowMargins() const
+{
+    return d->shadowMargins;
+}
+
+qreal DesignSystem::Button::minimumShadowHeight() const
+{
+    return  d->minimumShadowHeight;
+}
+
+qreal DesignSystem::Button::maximumShadowHeight() const
+{
+    return d->maximumShadowHeight;
+}
+
+qreal DesignSystem::Button::shadowBlurRadius() const
+{
+    return d->shadowBlurRadius;
+}
+
+qreal DesignSystem::Button::borderRadius() const
+{
+    return d->borderRadius;
+}
+
+DesignSystem::Button::Button(qreal _scaleFactor)
+    : d(new Implementation(_scaleFactor))
+{
+}
+
+
+// ****
+
+
 class DesignSystem::RadioButton::Implementation
 {
 public:
@@ -1391,6 +1506,8 @@ public:
     DesignSystem::Dialog dialog;
 
     DesignSystem::Font font;
+    DesignSystem::Label label;
+    DesignSystem::Button button;
     DesignSystem::RadioButton radioButton;
     DesignSystem::Stepper stepper;
 };
@@ -1410,6 +1527,8 @@ DesignSystemPrivate::DesignSystemPrivate(qreal _scaleFactor, const DesignSystem:
       list(_scaleFactor),
       dialog(_scaleFactor),
       font(_scaleFactor),
+      label(_scaleFactor),
+      button(_scaleFactor),
       radioButton(_scaleFactor),
       stepper(_scaleFactor)
 {
@@ -1529,7 +1648,17 @@ const DesignSystem::Font& DesignSystem::font()
     return instance()->d->font;
 }
 
-const DesignSystem::RadioButton&DesignSystem::radioButton()
+const DesignSystem::Label& DesignSystem::label()
+{
+    return instance()->d->label;
+}
+
+const DesignSystem::Button&DesignSystem::button()
+{
+    return instance()->d->button;
+}
+
+const DesignSystem::RadioButton& DesignSystem::radioButton()
 {
     return instance()->d->radioButton;
 }

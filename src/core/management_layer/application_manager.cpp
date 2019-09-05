@@ -121,7 +121,7 @@ ApplicationManager::~ApplicationManager() = default;
 
 void ApplicationManager::exec()
 {
-    d->applicationView->resize(400, 400);
+    d->applicationView->resize(600, 400);
     d->applicationView->show();
 
     //

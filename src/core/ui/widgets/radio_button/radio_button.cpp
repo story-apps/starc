@@ -85,6 +85,7 @@ void RadioButton::setText(const QString& _text)
     }
 
     d->text = _text;
+    updateGeometry();
     update();
 }
 

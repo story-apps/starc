@@ -40,7 +40,8 @@ SOURCES += \
     ui/widgets/button/button.cpp \
     ui/widgets/label/label.cpp \
     ui/widgets/radio_button/radio_button.cpp \
-    ui/widgets/radio_button/radio_button_group.cpp
+    ui/widgets/radio_button/radio_button_group.cpp \
+    ui/widgets/label/link_label.cpp
 
 HEADERS += \
         core_global.h \
@@ -66,7 +67,8 @@ HEADERS += \
     ui/widgets/button/button.h \
     ui/widgets/label/label.h \
     ui/widgets/radio_button/radio_button.h \
-    ui/widgets/radio_button/radio_button_group.h
+    ui/widgets/radio_button/radio_button_group.h \
+    ui/widgets/label/link_label.h
 
 unix {
     target.path = /usr/lib

@@ -3,10 +3,12 @@
 #include <ui/design_system/design_system.h>
 #include <ui/widgets/button/button.h>
 #include <ui/widgets/label/label.h>
+#include <ui/widgets/label/link_label.h>
 #include <ui/widgets/radio_button/radio_button.h>
 #include <ui/widgets/radio_button/radio_button_group.h>
 
 #include <QGridLayout>
+#include <QUrl>
 
 
 namespace Ui
@@ -27,6 +29,9 @@ public:
     Widget* languagePage = nullptr;
     H5Label* languageTitle = nullptr;
     RadioButton* systemLanguage = nullptr;
+    Body1LinkLabel* languageHowToAdd = nullptr;
+    Button* continueOnboarding = nullptr;
+    Button* skipOnboarding = nullptr;
 
     Widget* themePage = nullptr;
     Widget* finalPage = nullptr;
@@ -69,7 +74,7 @@ void OnboardingView::Implementation::initLanguagePage()
         });
         return radioButton;
     };
-    systemLanguage = initLanguage("System", QLocale::AnyLanguage);
+    systemLanguage = initLanguage("Use system locale settings", QLocale::AnyLanguage);
     systemLanguage->setChecked(true);
     RadioButton* englishLanguage = initLanguage("English", QLocale::English);
     RadioButton* russianLanguage = initLanguage("Русский", QLocale::Russian);
@@ -79,12 +84,35 @@ void OnboardingView::Implementation::initLanguagePage()
     languagesGroup->add(englishLanguage);
     languagesGroup->add(russianLanguage);
 
+    languageHowToAdd = new Body1LinkLabel(languagePage);
+    languageHowToAdd->setBackgroundColor(DesignSystem::color().surface());
+    languageHowToAdd->setTextColor(DesignSystem::color().secondary());
+    languageHowToAdd->setLink(QUrl("https://github.com/dimkanovikov/KITScenarist/wiki/How-to-add-the-translation-of-KIT-Scenarist-to-your-native-language-or-improve-one-of-existing%3F"));
+
+    continueOnboarding = new Button(languagePage);
+    continueOnboarding->setBackgroundColor(DesignSystem::color().secondary());
+    continueOnboarding->setTextColor(DesignSystem::color().surface());
+    continueOnboarding->setContained(true);
+    skipOnboarding = new Button(languagePage);
+    skipOnboarding->setTextColor(DesignSystem::color().secondary());
+    QHBoxLayout* buttonsLayout = new QHBoxLayout;
+    buttonsLayout->setSpacing(0);
+    buttonsLayout->setContentsMargins({});
+    buttonsLayout->addStretch();
+    buttonsLayout->addWidget(continueOnboarding);
+    buttonsLayout->addWidget(skipOnboarding);
+
+
     QGridLayout* languagePageLayout = new QGridLayout(languagePage);
+    languagePageLayout->setSpacing(0);
+    languagePageLayout->setContentsMargins({});
     languagePageLayout->addWidget(languageTitle, 0, 0, 1, 3);
     languagePageLayout->addWidget(systemLanguage, 1, 0, 1, 3);
     languagePageLayout->addWidget(englishLanguage, 2, 0, 1, 1);
     languagePageLayout->addWidget(russianLanguage, 3, 0, 1, 1);
     languagePageLayout->setRowStretch(4, 1);
+    languagePageLayout->addWidget(languageHowToAdd, 5, 0, 1, 3);
+    languagePageLayout->addLayout(buttonsLayout, 6, 0, 1, 3);
     languagePage->hide();
 }
 
@@ -122,6 +150,9 @@ void OnboardingView::updateTranslations()
 {
     d->languageTitle->setText(tr("Choose preferred language"));
     d->systemLanguage->setText(tr("Use system locale settings"));
+    d->languageHowToAdd->setText(tr("Did not find your preffered language? Read how you can add it yourself."));
+    d->continueOnboarding->setText(tr("Continue"));
+    d->skipOnboarding->setText(tr("Skip onboarding"));
 }
 
 OnboardingView::~OnboardingView() = default;

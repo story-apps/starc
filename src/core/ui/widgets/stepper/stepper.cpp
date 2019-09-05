@@ -54,6 +54,7 @@ void Stepper::setStepName(int _index, const QString& _name)
     }
 
     d->steps[_index] = _name;
+    updateGeometry();
     update();
 }
 

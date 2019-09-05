@@ -289,24 +289,24 @@ QT_BEGIN_NAMESPACE
 extern void qt_blurImage(QPainter *p, QImage &blurImage, qreal radius, bool quality, bool alphaOnly, int transposed = 0);
 QT_END_NAMESPACE
 
-QPixmap ImageHelper::dropShadow(const QPixmap& _pixmap, qreal _radius, const QColor& _color)
+QPixmap ImageHelper::dropShadow(const QPixmap& _sourcePixmap, const QMarginsF& _shadowMargins, qreal _blurRadius, const QColor& _color)
 {
-    if (_pixmap.isNull()) {
+    if (_sourcePixmap.isNull()) {
         return QPixmap();
     }
 
     //
     // Подготовим расширенное изображение с дополнительным местом под тень
     //
-    QImage shadowedImage(_pixmap.size() + QSizeF(_radius * 2, _radius * 2).toSize(),
-                         QImage::Format_ARGB32_Premultiplied);
+    const QSizeF deltaSize(_shadowMargins.left() + _shadowMargins.right(),
+                           _shadowMargins.top() + _shadowMargins.bottom());
+    QImage shadowedImage(_sourcePixmap.size() + deltaSize.toSize(), QImage::Format_ARGB32_Premultiplied);
     shadowedImage.fill(0);
+    //
+    // ...  рисуем исходное изображение
+    //
     QPainter painter(&shadowedImage);
-    painter.setCompositionMode(QPainter::CompositionMode_Source);
-    //
-    // ...  рисуем исходное изображение по центру
-    //
-    painter.drawPixmap(QPointF(_radius, _radius), _pixmap);
+    painter.drawPixmap(QPointF(deltaSize.width() / 2.0, deltaSize.height() / 2.0), _sourcePixmap);
     painter.end();
 
     //
@@ -315,13 +315,13 @@ QPixmap ImageHelper::dropShadow(const QPixmap& _pixmap, qreal _radius, const QCo
     QImage blurredImage(shadowedImage.size(), QImage::Format_ARGB32_Premultiplied);
     blurredImage.fill(0);
     QPainter blurPainter(&blurredImage);
-    blurPainter.setRenderHint(QPainter::Antialiasing);
-    qt_blurImage(&blurPainter, shadowedImage, _radius, false, true);
+    qt_blurImage(&blurPainter, shadowedImage, _blurRadius, true, false);
     blurPainter.end();
-    //
-    // ... а если нужна цветная тень, то покрасим её
-    //
     shadowedImage = blurredImage;
+
+    //
+    // Покрасим тень
+    //
     painter.begin(&shadowedImage);
     painter.setCompositionMode(QPainter::CompositionMode_SourceIn);
     painter.fillRect(shadowedImage.rect(), _color);

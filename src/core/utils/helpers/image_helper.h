@@ -7,6 +7,7 @@ class QByteArray;
 class QColor;
 class QFont;
 class QIcon;
+class QMarginsF;
 class QPixmap;
 class QSize;
 class QString;
@@ -66,7 +67,7 @@ public:
     /**
      * @brief Получить изображение тени для заданного изображения и параметров
      */
-    static QPixmap dropShadow(const QPixmap& _px, qreal _radius, const QColor& _color);
+    static QPixmap dropShadow(const QPixmap& _sourcePixmap, const QMarginsF& _shadowMargins, qreal _blurRadius, const QColor& _color);
 };
 
 #endif // IMAGEHELPER_H

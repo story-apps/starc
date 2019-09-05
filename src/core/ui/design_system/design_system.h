@@ -693,6 +693,83 @@ public:
     };
 
     /**
+     * @brief Параметры виджета текстовой метки
+     */
+    class Label
+    {
+    public:
+        ~Label();
+
+        /**
+         * @brief Отступы контента
+         */
+        const QMarginsF& margins() const;
+
+    private:
+        explicit Label(qreal _scaleFactor);
+        friend class DesignSystemPrivate;
+        //
+        class Implementation;
+        QScopedPointer<Implementation> d;
+    };
+
+    /**
+     * @brief Параметры виджета кнопки
+     */
+    class Button
+    {
+    public:
+        ~Button();
+
+        /**
+         * @brief Высота кнопки
+         */
+        qreal height() const;
+
+        /**
+         * @brief Минимальная ширина
+         */
+        qreal minimumWidth() const;
+
+        /**
+         * @brief Отступы контента
+         */
+        const QMarginsF& margins() const;
+
+        /**
+         * @brief Отступы вокруг кнопки, для отрисовки тени
+         */
+        const QMarginsF& shadowMargins() const;
+
+        /**
+         * @brief Минимальная высота тени
+         */
+        qreal minimumShadowHeight() const;
+
+        /**
+         * @brief Максимальная высота тени
+         */
+        qreal maximumShadowHeight() const;
+
+        /**
+         * @brief Радиус эффекта размытия фона
+         */
+        qreal shadowBlurRadius() const;
+
+        /**
+         * @brief Радиус рамки кнопки
+         */
+        qreal borderRadius() const;
+
+    private:
+        explicit Button(qreal _scaleFactor);
+        friend class DesignSystemPrivate;
+        //
+        class Implementation;
+        QScopedPointer<Implementation> d;
+    };
+
+    /**
      * @brief Параметры виджета переключателя
      */
     class RadioButton
@@ -882,6 +959,16 @@ public:
      * @brief Параметры шрифтов
      */
     static const Font& font();
+
+    /**
+     * @brief Параметры текстовой метки
+     */
+    static const Label& label();
+
+    /**
+     * @brief Параметры кнопки
+     */
+    static const Button& button();
 
     /**
      * @brief Параметры кнопки-переключателя

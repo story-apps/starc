@@ -15,6 +15,16 @@ public:
      */
     void setText(const QString& _text);
 
+    /**
+     * @brief Установить необходимость залить фон кнопки
+     */
+    void setContained(bool _contained);
+
+    /**
+     * @brief Переопределяем размер для правильного размещения в компоновщиках
+     */
+    QSize sizeHint() const override;
+
 signals:
     /**
      * @brief Кнопка была нажата
@@ -31,6 +41,11 @@ protected:
      * @brief Реализуем испускание сигнала, при нажатии на кнопке
      */
     void mouseReleaseEvent(QMouseEvent* _event) override;
+
+    /**
+     * @brief Переопределяем для корректировки собственных размеров
+     */
+    void designSysemChangeEvent(DesignSystemChangeEvent* _event) override;
 
 private:
     class Implementation;
