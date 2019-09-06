@@ -51,6 +51,11 @@ protected:
      */
     void updateTranslations() override;
 
+    /**
+     * @brief Обновляем лейаут, когда обновилась дизайн система
+     */
+    void designSysemChangeEvent(DesignSystemChangeEvent* _event) override;
+
 private:
     class Implementation;
     QScopedPointer<Implementation> d;

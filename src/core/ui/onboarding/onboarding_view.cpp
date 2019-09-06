@@ -24,6 +24,11 @@ public:
      */
     void initLanguagePage();
 
+    /**
+     * @brief Настроить страницу настройки темы
+     */
+    void initThemePage();
+
     OnboardingView* q = nullptr;
 
     Widget* languagePage = nullptr;
@@ -32,8 +37,11 @@ public:
     Body1LinkLabel* languageHowToAddLink = nullptr;
     Button* goToThemeButton = nullptr;
     Button* skipOnboardingButton = nullptr;
+    QHBoxLayout* languagePageButtonsLayout = nullptr;
 
     Widget* themePage = nullptr;
+    H5Label* themeTitleButton = nullptr;
+
     Widget* finalPage = nullptr;
 };
 
@@ -44,9 +52,7 @@ OnboardingView::Implementation::Implementation(OnboardingView* _parent)
       finalPage(new Widget(_parent))
 {
     initLanguagePage();
-
-    themePage->setBackgroundColor(DesignSystem::color().surface());
-    themePage->hide();
+    initThemePage();
 
     finalPage->setBackgroundColor(DesignSystem::color().surface());
     finalPage->hide();
@@ -97,13 +103,12 @@ void OnboardingView::Implementation::initLanguagePage()
     skipOnboardingButton = new Button(languagePage);
     skipOnboardingButton->setBackgroundColor(DesignSystem::color().secondary());
     skipOnboardingButton->setTextColor(DesignSystem::color().secondary());
-    QHBoxLayout* buttonsLayout = new QHBoxLayout;
-    buttonsLayout->setSpacing(static_cast<int>(Ui::DesignSystem::layout().buttonsSpacing()));
-    buttonsLayout->setContentsMargins({0, 0, static_cast<int>(Ui::DesignSystem::layout().px24()),
-                                       static_cast<int>(Ui::DesignSystem::layout().px12())});
-    buttonsLayout->addStretch();
-    buttonsLayout->addWidget(goToThemeButton);
-    buttonsLayout->addWidget(skipOnboardingButton);
+    languagePageButtonsLayout = new QHBoxLayout;
+    languagePageButtonsLayout->setSpacing(0);
+    languagePageButtonsLayout->setContentsMargins({});
+    languagePageButtonsLayout->addStretch();
+    languagePageButtonsLayout->addWidget(goToThemeButton);
+    languagePageButtonsLayout->addWidget(skipOnboardingButton);
 
 
     QGridLayout* languagePageLayout = new QGridLayout(languagePage);
@@ -115,8 +120,30 @@ void OnboardingView::Implementation::initLanguagePage()
     languagePageLayout->addWidget(russianLanguage, 3, 0, 1, 1);
     languagePageLayout->setRowStretch(4, 1);
     languagePageLayout->addWidget(languageHowToAddLink, 5, 0, 1, 3);
-    languagePageLayout->addLayout(buttonsLayout, 6, 0, 1, 3);
+    languagePageLayout->addLayout(languagePageButtonsLayout, 6, 0, 1, 3);
     languagePage->hide();
+}
+
+void OnboardingView::Implementation::initThemePage()
+{
+    themePage->setBackgroundColor(DesignSystem::color().surface());
+
+    themeTitleButton = new H5Label(languagePage);
+    themeTitleButton->setBackgroundColor(DesignSystem::color().surface());
+    themeTitleButton->setTextColor(DesignSystem::color().onSurface());
+
+
+    QGridLayout* themePageLayout = new QGridLayout(themePage);
+    themePageLayout->setSpacing(0);
+    themePageLayout->setContentsMargins({});
+    themePageLayout->addWidget(themeTitleButton, 0, 0, 1, 3);
+//    themePageLayout->addWidget(systemLanguageButton, 1, 0, 1, 3);
+//    languagePageLayout->addWidget(englishLanguage, 2, 0, 1, 1);
+//    languagePageLayout->addWidget(russianLanguage, 3, 0, 1, 1);
+//    themePageLayout->setRowStretch(4, 1);
+//    themePageLayout->addWidget(languageHowToAddLink, 5, 0, 1, 3);
+//    themePageLayout->addLayout(languagePageButtonsLayout, 6, 0, 1, 3);
+    themePage->hide();
 }
 
 
@@ -132,6 +159,7 @@ OnboardingView::OnboardingView(QWidget* _parent)
     showLanguagePage();
 
     updateTranslations();
+    designSysemChangeEvent(nullptr);
 }
 
 void OnboardingView::showLanguagePage()
@@ -156,6 +184,17 @@ void OnboardingView::updateTranslations()
     d->languageHowToAddLink->setText(tr("Did not find your preffered language? Read how you can add it yourself."));
     d->goToThemeButton->setText(tr("Continue"));
     d->skipOnboardingButton->setText(tr("Skip onboarding"));
+
+    d->themeTitleButton->setText(tr("Choose application theme"));
+}
+
+void OnboardingView::designSysemChangeEvent(DesignSystemChangeEvent* _event)
+{
+    Q_UNUSED(_event);
+
+    d->languagePageButtonsLayout->setSpacing(static_cast<int>(Ui::DesignSystem::layout().buttonsSpacing()));
+    d->languagePageButtonsLayout->setContentsMargins({0, 0, static_cast<int>(Ui::DesignSystem::layout().px24()),
+                                       static_cast<int>(Ui::DesignSystem::layout().px12())});
 }
 
 OnboardingView::~OnboardingView() = default;
