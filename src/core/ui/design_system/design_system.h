@@ -692,6 +692,34 @@ public:
         QScopedPointer<Implementation> d;
     };
 
+    class Layout
+    {
+    public:
+        ~Layout();
+
+        /**
+         * @brief Отступ в 24 пикселя
+         */
+        qreal px12() const;
+
+        /**
+         * @brief Отступ в 24 пикселя
+         */
+        qreal px24() const;
+
+        /**
+         * @brief Отступы между кнопками
+         */
+        qreal buttonsSpacing() const;
+
+    private:
+        explicit Layout(qreal _scaleFactor);
+        friend class DesignSystemPrivate;
+        //
+        class Implementation;
+        QScopedPointer<Implementation> d;
+    };
+
     /**
      * @brief Параметры виджета текстовой метки
      */
@@ -959,6 +987,11 @@ public:
      * @brief Параметры шрифтов
      */
     static const Font& font();
+
+    /**
+     * @brief Параметры компоновки
+     */
+    static const Layout& layout();
 
     /**
      * @brief Параметры текстовой метки

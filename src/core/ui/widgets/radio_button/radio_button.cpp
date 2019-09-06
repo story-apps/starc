@@ -30,7 +30,7 @@ public:
 
 RadioButton::Implementation::Implementation()
 {
-    decorationOpacityAnimation.setEasingCurve(QEasingCurve::OutQuad);
+    decorationRadiusAnimation.setEasingCurve(QEasingCurve::OutQuad);
     decorationRadiusAnimation.setStartValue(Ui::DesignSystem::radioButton().iconSize().height() / 2.0);
     decorationRadiusAnimation.setEndValue(Ui::DesignSystem::radioButton().height() / 2.5);
     decorationRadiusAnimation.setDuration(160);
@@ -145,6 +145,10 @@ void RadioButton::paintEvent(QPaintEvent* _event)
 void RadioButton::mouseReleaseEvent(QMouseEvent* _event)
 {
     Q_UNUSED(_event);
+
+    if (!rect().contains(_event->pos())) {
+        return;
+    }
 
     setChecked(true);
     d->animateClick();

@@ -49,7 +49,7 @@ DesignSystem::ColorPrivate::ColorPrivate()
     surface = QColor("#FFFFFF");
     error = QColor("#B00020");
     shadow = QColor("#000000");
-    shadow.setAlphaF(0.56);
+    shadow.setAlphaF(0.3);
     onPrimary = QColor("#FFFFFF");
     onSecondary = QColor("#FFFFFF");
     onBackground = QColor("#000000");
@@ -1243,6 +1243,52 @@ DesignSystem::Font::Font(qreal _scaleFactor)
 
 // ****
 
+class DesignSystem::Layout::Implementation
+{
+public:
+    explicit Implementation(qreal _scaleFactor);
+
+    qreal px12 = 12.0;
+    qreal px24 = 24.0;
+    qreal buttonsSpacing = 8.0;
+};
+
+DesignSystem::Layout::Implementation::Implementation(qreal _scaleFactor)
+{
+    px12 *= _scaleFactor;
+    px24 *= _scaleFactor;
+    buttonsSpacing *= _scaleFactor;
+}
+
+
+// **
+
+
+DesignSystem::Layout::~Layout() = default;
+
+qreal DesignSystem::Layout::px12() const
+{
+    return d->px12;
+}
+
+qreal DesignSystem::Layout::px24() const
+{
+    return d->px24;
+}
+
+qreal DesignSystem::Layout::buttonsSpacing() const
+{
+    return d->buttonsSpacing;
+}
+
+DesignSystem::Layout::Layout(qreal _scaleFactor)
+    : d(new Implementation(_scaleFactor))
+{
+}
+
+
+// ****
+
 
 class DesignSystem::Label::Implementation
 {
@@ -1282,7 +1328,7 @@ class DesignSystem::Button::Implementation
 public:
     explicit Implementation(qreal _scaleFactor);
 
-    qreal height = 56.0;
+    qreal height = 38.0;
     qreal minimumWidth = 64.0;
     QMarginsF margins = {16.0, 0.0, 16.0, 0.0};
     QMarginsF shadowMargins = {2.0, 2.0, 2.0, 16.0};
@@ -1506,6 +1552,7 @@ public:
     DesignSystem::Dialog dialog;
 
     DesignSystem::Font font;
+    DesignSystem::Layout layout;
     DesignSystem::Label label;
     DesignSystem::Button button;
     DesignSystem::RadioButton radioButton;
@@ -1527,6 +1574,7 @@ DesignSystemPrivate::DesignSystemPrivate(qreal _scaleFactor, const DesignSystem:
       list(_scaleFactor),
       dialog(_scaleFactor),
       font(_scaleFactor),
+      layout(_scaleFactor),
       label(_scaleFactor),
       button(_scaleFactor),
       radioButton(_scaleFactor),
@@ -1646,6 +1694,11 @@ const DesignSystem::Dialog& DesignSystem::dialog()
 const DesignSystem::Font& DesignSystem::font()
 {
     return instance()->d->font;
+}
+
+const DesignSystem::Layout& DesignSystem::layout()
+{
+    return instance()->d->layout;
 }
 
 const DesignSystem::Label& DesignSystem::label()

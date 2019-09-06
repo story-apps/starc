@@ -47,6 +47,7 @@ OnboardingManager::OnboardingManager(QObject* _parent, QWidget* _parentWidget)
         }
     });
     connect(d->view, &Ui::OnboardingView::languageChanged, this, &OnboardingManager::languageChanged);
+    connect(d->view, &Ui::OnboardingView::showThemePageRequested, d->navigator, &Ui::OnboardingNavigator::showThemeStep);
 }
 
 QWidget* OnboardingManager::toolBar() const

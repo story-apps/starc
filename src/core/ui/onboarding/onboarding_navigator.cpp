@@ -2,6 +2,11 @@
 
 #include <ui/design_system/design_system.h>
 
+namespace {
+    const int kLanguageStepIndex = 0;
+    const int kThemeStepIndex = 1;
+}
+
 
 namespace Ui
 {
@@ -20,10 +25,15 @@ OnboardingNavigator::OnboardingNavigator(QWidget* _parent)
     updateTranslations();
 }
 
+void OnboardingNavigator::showThemeStep()
+{
+    setCurrentStep(kThemeStepIndex);
+}
+
 void OnboardingNavigator::updateTranslations()
 {
-    setStepName(0, tr("Choose language"));
-    setStepName(1, tr("Setup user interface"));
+    setStepName(kLanguageStepIndex, tr("Choose language"));
+    setStepName(kThemeStepIndex, tr("Setup user interface"));
 }
 
 } // namespace Ui

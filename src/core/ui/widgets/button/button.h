@@ -38,6 +38,11 @@ protected:
     void paintEvent(QPaintEvent* _event) override;
 
     /**
+     * @brief Анимируем клик на кнопке
+     */
+    void mousePressEvent(QMouseEvent* _event) override;
+
+    /**
      * @brief Реализуем испускание сигнала, при нажатии на кнопке
      */
     void mouseReleaseEvent(QMouseEvent* _event) override;

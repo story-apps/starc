@@ -19,10 +19,19 @@ public:
     explicit OnboardingView(QWidget* _parent = nullptr);
     ~OnboardingView() override;
 
+    /**
+     * @brief Показать страницу настройки языка
+     */
     void showLanguagePage();
 
+    /**
+     * @brief Показать страницу настройки темы
+     */
     void showThemePage();
 
+    /**
+     * @brief Показать финальную страницу настроек
+     */
     void showFinalPage();
 
 signals:
@@ -30,6 +39,11 @@ signals:
      * @brief Пользователь выбрал язык приложения
      */
     void languageChanged(QLocale::Language _language);
+
+    /**
+     * @brief Пользователь хочет перейти к настройке темы
+     */
+    void showThemePageRequested();
 
 protected:
     /**

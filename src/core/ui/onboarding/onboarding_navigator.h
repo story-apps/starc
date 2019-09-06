@@ -16,6 +16,11 @@ class OnboardingNavigator : public Stepper
 public:
     explicit OnboardingNavigator(QWidget* _parent = nullptr);
 
+    /**
+     * @brief Перейти к шагу настройки темы
+     */
+    void showThemeStep();
+
 protected:
     /**
      * @brief Обновить перевод

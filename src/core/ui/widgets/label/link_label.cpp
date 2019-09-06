@@ -3,6 +3,7 @@
 #include <ui/design_system/design_system.h>
 
 #include <QDesktopServices>
+#include <QMouseEvent>
 #include <QUrl>
 
 
@@ -39,6 +40,10 @@ void AbstractLinkLabel::mouseReleaseEvent(QMouseEvent* _event)
     Q_UNUSED(_event);
 
     if (d->link.isEmpty()) {
+        return;
+    }
+
+    if (!rect().contains(_event->pos())) {
         return;
     }
 

@@ -27,11 +27,11 @@ public:
     OnboardingView* q = nullptr;
 
     Widget* languagePage = nullptr;
-    H5Label* languageTitle = nullptr;
-    RadioButton* systemLanguage = nullptr;
-    Body1LinkLabel* languageHowToAdd = nullptr;
-    Button* continueOnboarding = nullptr;
-    Button* skipOnboarding = nullptr;
+    H5Label* languageTitleButton = nullptr;
+    RadioButton* systemLanguageButton = nullptr;
+    Body1LinkLabel* languageHowToAddLink = nullptr;
+    Button* goToThemeButton = nullptr;
+    Button* skipOnboardingButton = nullptr;
 
     Widget* themePage = nullptr;
     Widget* finalPage = nullptr;
@@ -56,9 +56,9 @@ void OnboardingView::Implementation::initLanguagePage()
 {
     languagePage->setBackgroundColor(DesignSystem::color().surface());
 
-    languageTitle = new H5Label(languagePage);
-    languageTitle->setBackgroundColor(DesignSystem::color().surface());
-    languageTitle->setTextColor(DesignSystem::color().onSurface());
+    languageTitleButton = new H5Label(languagePage);
+    languageTitleButton->setBackgroundColor(DesignSystem::color().surface());
+    languageTitleButton->setTextColor(DesignSystem::color().onSurface());
 
     auto initLanguage = [this] (const QString& _name, QLocale::Language _language) {
         RadioButton* radioButton = new RadioButton(languagePage);
@@ -74,44 +74,47 @@ void OnboardingView::Implementation::initLanguagePage()
         });
         return radioButton;
     };
-    systemLanguage = initLanguage("Use system locale settings", QLocale::AnyLanguage);
-    systemLanguage->setChecked(true);
+    systemLanguageButton = initLanguage("Use system locale settings", QLocale::AnyLanguage);
+    systemLanguageButton->setChecked(true);
     RadioButton* englishLanguage = initLanguage("English", QLocale::English);
     RadioButton* russianLanguage = initLanguage("Русский", QLocale::Russian);
 
     RadioButtonGroup* languagesGroup = new RadioButtonGroup(languagePage);
-    languagesGroup->add(systemLanguage);
+    languagesGroup->add(systemLanguageButton);
     languagesGroup->add(englishLanguage);
     languagesGroup->add(russianLanguage);
 
-    languageHowToAdd = new Body1LinkLabel(languagePage);
-    languageHowToAdd->setBackgroundColor(DesignSystem::color().surface());
-    languageHowToAdd->setTextColor(DesignSystem::color().secondary());
-    languageHowToAdd->setLink(QUrl("https://github.com/dimkanovikov/KITScenarist/wiki/How-to-add-the-translation-of-KIT-Scenarist-to-your-native-language-or-improve-one-of-existing%3F"));
+    languageHowToAddLink = new Body1LinkLabel(languagePage);
+    languageHowToAddLink->setBackgroundColor(DesignSystem::color().surface());
+    languageHowToAddLink->setTextColor(DesignSystem::color().secondary());
+    languageHowToAddLink->setLink(QUrl("https://github.com/dimkanovikov/KITScenarist/wiki/How-to-add-the-translation-of-KIT-Scenarist-to-your-native-language-or-improve-one-of-existing%3F"));
 
-    continueOnboarding = new Button(languagePage);
-    continueOnboarding->setBackgroundColor(DesignSystem::color().secondary());
-    continueOnboarding->setTextColor(DesignSystem::color().surface());
-    continueOnboarding->setContained(true);
-    skipOnboarding = new Button(languagePage);
-    skipOnboarding->setTextColor(DesignSystem::color().secondary());
+    goToThemeButton = new Button(languagePage);
+    goToThemeButton->setBackgroundColor(DesignSystem::color().secondary());
+    goToThemeButton->setTextColor(DesignSystem::color().onSecondary());
+    goToThemeButton->setContained(true);
+    QObject::connect(goToThemeButton, &Button::clicked, q, &OnboardingView::showThemePageRequested);
+    skipOnboardingButton = new Button(languagePage);
+    skipOnboardingButton->setBackgroundColor(DesignSystem::color().secondary());
+    skipOnboardingButton->setTextColor(DesignSystem::color().secondary());
     QHBoxLayout* buttonsLayout = new QHBoxLayout;
-    buttonsLayout->setSpacing(0);
-    buttonsLayout->setContentsMargins({});
+    buttonsLayout->setSpacing(static_cast<int>(Ui::DesignSystem::layout().buttonsSpacing()));
+    buttonsLayout->setContentsMargins({0, 0, static_cast<int>(Ui::DesignSystem::layout().px24()),
+                                       static_cast<int>(Ui::DesignSystem::layout().px12())});
     buttonsLayout->addStretch();
-    buttonsLayout->addWidget(continueOnboarding);
-    buttonsLayout->addWidget(skipOnboarding);
+    buttonsLayout->addWidget(goToThemeButton);
+    buttonsLayout->addWidget(skipOnboardingButton);
 
 
     QGridLayout* languagePageLayout = new QGridLayout(languagePage);
     languagePageLayout->setSpacing(0);
     languagePageLayout->setContentsMargins({});
-    languagePageLayout->addWidget(languageTitle, 0, 0, 1, 3);
-    languagePageLayout->addWidget(systemLanguage, 1, 0, 1, 3);
+    languagePageLayout->addWidget(languageTitleButton, 0, 0, 1, 3);
+    languagePageLayout->addWidget(systemLanguageButton, 1, 0, 1, 3);
     languagePageLayout->addWidget(englishLanguage, 2, 0, 1, 1);
     languagePageLayout->addWidget(russianLanguage, 3, 0, 1, 1);
     languagePageLayout->setRowStretch(4, 1);
-    languagePageLayout->addWidget(languageHowToAdd, 5, 0, 1, 3);
+    languagePageLayout->addWidget(languageHowToAddLink, 5, 0, 1, 3);
     languagePageLayout->addLayout(buttonsLayout, 6, 0, 1, 3);
     languagePage->hide();
 }
@@ -148,11 +151,11 @@ void OnboardingView::showFinalPage()
 
 void OnboardingView::updateTranslations()
 {
-    d->languageTitle->setText(tr("Choose preferred language"));
-    d->systemLanguage->setText(tr("Use system locale settings"));
-    d->languageHowToAdd->setText(tr("Did not find your preffered language? Read how you can add it yourself."));
-    d->continueOnboarding->setText(tr("Continue"));
-    d->skipOnboarding->setText(tr("Skip onboarding"));
+    d->languageTitleButton->setText(tr("Choose preferred language"));
+    d->systemLanguageButton->setText(tr("Use system locale settings"));
+    d->languageHowToAddLink->setText(tr("Did not find your preffered language? Read how you can add it yourself."));
+    d->goToThemeButton->setText(tr("Continue"));
+    d->skipOnboardingButton->setText(tr("Skip onboarding"));
 }
 
 OnboardingView::~OnboardingView() = default;
