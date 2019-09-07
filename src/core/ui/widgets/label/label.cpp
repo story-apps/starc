@@ -21,7 +21,6 @@ AbstractLabel::AbstractLabel(QWidget* _parent)
     : Widget(_parent),
       d(new Implementation)
 {
-    designSysemChangeEvent(nullptr);
 }
 
 AbstractLabel::~AbstractLabel() = default;
@@ -59,15 +58,6 @@ void AbstractLabel::paintEvent(QPaintEvent* _event)
     painter.drawText(contentsRect(), Qt::AlignTop | Qt::AlignLeft, d->text);
 }
 
-void AbstractLabel::designSysemChangeEvent(DesignSystemChangeEvent* _event)
-{
-    Q_UNUSED(_event);
-
-    setContentsMargins(Ui::DesignSystem::label().margins().toMargins());
-    updateGeometry();
-    update();
-}
-
 
 // ****
 
@@ -94,4 +84,18 @@ Body1Label::Body1Label(QWidget* _parent)
 const QFont&Body1Label::textFont() const
 {
     return Ui::DesignSystem::font().body1();
+}
+
+
+// ****
+
+
+Body2Label::Body2Label(QWidget* _parent)
+    : AbstractLabel(_parent)
+{
+}
+
+const QFont& Body2Label::textFont() const
+{
+    return Ui::DesignSystem::font().body2();
 }

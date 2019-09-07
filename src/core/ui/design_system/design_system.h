@@ -13,6 +13,17 @@ class QSizeF;
 namespace Ui
 {
 /**
+ * @brief Тема приложения
+ */
+enum class ApplicationTheme
+{
+    Dark,
+    Light,
+    DarkAndLight,
+    Custom
+};
+
+/**
  * @brief Дизайн система приложения
  */
 class DesignSystemPrivate;
@@ -698,7 +709,17 @@ public:
         ~Layout();
 
         /**
-         * @brief Отступ в 24 пикселя
+         * @brief Отступ в 4 пикселя
+         */
+        qreal px4() const;
+
+        /**
+         * @brief Отступ в 8 пикселей
+         */
+        qreal px8() const;
+
+        /**
+         * @brief Отступ в 12 пикселей
          */
         qreal px12() const;
 
@@ -706,6 +727,11 @@ public:
          * @brief Отступ в 24 пикселя
          */
         qreal px24() const;
+
+        /**
+         * @brief Отступ в 62 пикселя
+         */
+        qreal px62() const;
 
         /**
          * @brief Отступы между кнопками

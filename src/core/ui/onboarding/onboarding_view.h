@@ -7,6 +7,7 @@
 
 namespace Ui
 {
+enum class ApplicationTheme;
 
 /**
  * @brief Контентные страницы посадочного экрана
@@ -39,6 +40,11 @@ signals:
      * @brief Пользователь выбрал язык приложения
      */
     void languageChanged(QLocale::Language _language);
+
+    /**
+     * @brief Пользователь выбрал тему приложения
+     */
+    void themeChanged(ApplicationTheme _theme);
 
     /**
      * @brief Пользователь хочет перейти к настройке темы

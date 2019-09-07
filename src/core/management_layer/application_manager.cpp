@@ -128,7 +128,10 @@ void ApplicationManager::exec()
     // Показываем содержимое, после того, как на экране отображится приложения,
     // чтобы у пользователя возник эффект моментального запуска
     //
-    QTimer::singleShot(0, this, [this] { d->showContent(); });
+    QTimer::singleShot(0, this, [this] {
+        d->updateTranslation(QLocale::AnyLanguage);
+        d->showContent();
+    });
 }
 
 void ApplicationManager::initConnections()

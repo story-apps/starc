@@ -33,11 +33,6 @@ protected:
      */
     void paintEvent(QPaintEvent* _event) override;
 
-    /**
-     * @brief Переопределяем событие изменения дизайн системы для корректировки своих параметров
-     */
-    void designSysemChangeEvent(DesignSystemChangeEvent* _event) override;
-
 private:
     class Implementation;
     QScopedPointer<Implementation> d;
@@ -64,6 +59,19 @@ class Body1Label : public AbstractLabel
 {
 public:
     explicit Body1Label(QWidget* _parent = nullptr);
+
+protected:
+    const QFont& textFont() const override;
+};
+
+
+/**
+ * @brief Текстовая метка со шрифтом body2
+ */
+class Body2Label : public AbstractLabel
+{
+public:
+    explicit Body2Label(QWidget* _parent = nullptr);
 
 protected:
     const QFont& textFont() const override;

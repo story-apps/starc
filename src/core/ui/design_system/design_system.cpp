@@ -1248,15 +1248,21 @@ class DesignSystem::Layout::Implementation
 public:
     explicit Implementation(qreal _scaleFactor);
 
+    qreal px4 = 4.0;
+    qreal px8 = 8.0;
     qreal px12 = 12.0;
     qreal px24 = 24.0;
+    qreal px62 = 62.0;
     qreal buttonsSpacing = 8.0;
 };
 
 DesignSystem::Layout::Implementation::Implementation(qreal _scaleFactor)
 {
+    px4 *= _scaleFactor;
+    px8 *= _scaleFactor;
     px12 *= _scaleFactor;
     px24 *= _scaleFactor;
+    px62 *= _scaleFactor;
     buttonsSpacing *= _scaleFactor;
 }
 
@@ -1266,6 +1272,16 @@ DesignSystem::Layout::Implementation::Implementation(qreal _scaleFactor)
 
 DesignSystem::Layout::~Layout() = default;
 
+qreal DesignSystem::Layout::px4() const
+{
+    return d->px4;
+}
+
+qreal DesignSystem::Layout::px8() const
+{
+    return d->px8;
+}
+
 qreal DesignSystem::Layout::px12() const
 {
     return d->px12;
@@ -1274,6 +1290,11 @@ qreal DesignSystem::Layout::px12() const
 qreal DesignSystem::Layout::px24() const
 {
     return d->px24;
+}
+
+qreal DesignSystem::Layout::px62() const
+{
+    return d->px62;
 }
 
 qreal DesignSystem::Layout::buttonsSpacing() const

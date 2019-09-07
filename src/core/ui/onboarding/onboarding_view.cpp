@@ -8,6 +8,7 @@
 #include <ui/widgets/radio_button/radio_button_group.h>
 
 #include <QGridLayout>
+#include <QTimer>
 #include <QUrl>
 
 
@@ -32,7 +33,7 @@ public:
     OnboardingView* q = nullptr;
 
     Widget* languagePage = nullptr;
-    H5Label* languageTitleButton = nullptr;
+    H5Label* languageTitleLabel = nullptr;
     RadioButton* systemLanguageButton = nullptr;
     Body1LinkLabel* languageHowToAddLink = nullptr;
     Button* goToThemeButton = nullptr;
@@ -40,7 +41,13 @@ public:
     QHBoxLayout* languagePageButtonsLayout = nullptr;
 
     Widget* themePage = nullptr;
-    H5Label* themeTitleButton = nullptr;
+    H5Label* themeTitleLabel = nullptr;
+    RadioButton* darkAndLightThemeButton = nullptr;
+    Body2Label* darkAndLightThemeInfoLabel = nullptr;
+    RadioButton* darkThemeButton = nullptr;
+    Body2Label* darkThemeInfoLabel = nullptr;
+    RadioButton* lightThemeButton = nullptr;
+    Body2Label* lightThemeInfoLabel = nullptr;
 
     Widget* finalPage = nullptr;
 };
@@ -62,11 +69,11 @@ void OnboardingView::Implementation::initLanguagePage()
 {
     languagePage->setBackgroundColor(DesignSystem::color().surface());
 
-    languageTitleButton = new H5Label(languagePage);
-    languageTitleButton->setBackgroundColor(DesignSystem::color().surface());
-    languageTitleButton->setTextColor(DesignSystem::color().onSurface());
+    languageTitleLabel = new H5Label(languagePage);
+    languageTitleLabel->setBackgroundColor(DesignSystem::color().surface());
+    languageTitleLabel->setTextColor(DesignSystem::color().onSurface());
 
-    auto initLanguage = [this] (const QString& _name, QLocale::Language _language) {
+    auto initLanguageButton = [this] (const QString& _name, QLocale::Language _language) {
         RadioButton* radioButton = new RadioButton(languagePage);
         radioButton->setBackgroundColor(DesignSystem::color().surface());
         radioButton->setTextColor(DesignSystem::color().onSurface());
@@ -80,10 +87,10 @@ void OnboardingView::Implementation::initLanguagePage()
         });
         return radioButton;
     };
-    systemLanguageButton = initLanguage("Use system locale settings", QLocale::AnyLanguage);
+    systemLanguageButton = initLanguageButton("Use system locale settings", QLocale::AnyLanguage);
     systemLanguageButton->setChecked(true);
-    RadioButton* englishLanguage = initLanguage("English", QLocale::English);
-    RadioButton* russianLanguage = initLanguage("Русский", QLocale::Russian);
+    RadioButton* englishLanguage = initLanguageButton("English", QLocale::English);
+    RadioButton* russianLanguage = initLanguageButton("Русский", QLocale::Russian);
 
     RadioButtonGroup* languagesGroup = new RadioButtonGroup(languagePage);
     languagesGroup->add(systemLanguageButton);
@@ -114,7 +121,7 @@ void OnboardingView::Implementation::initLanguagePage()
     QGridLayout* languagePageLayout = new QGridLayout(languagePage);
     languagePageLayout->setSpacing(0);
     languagePageLayout->setContentsMargins({});
-    languagePageLayout->addWidget(languageTitleButton, 0, 0, 1, 3);
+    languagePageLayout->addWidget(languageTitleLabel, 0, 0, 1, 3);
     languagePageLayout->addWidget(systemLanguageButton, 1, 0, 1, 3);
     languagePageLayout->addWidget(englishLanguage, 2, 0, 1, 1);
     languagePageLayout->addWidget(russianLanguage, 3, 0, 1, 1);
@@ -128,19 +135,57 @@ void OnboardingView::Implementation::initThemePage()
 {
     themePage->setBackgroundColor(DesignSystem::color().surface());
 
-    themeTitleButton = new H5Label(languagePage);
-    themeTitleButton->setBackgroundColor(DesignSystem::color().surface());
-    themeTitleButton->setTextColor(DesignSystem::color().onSurface());
+    themeTitleLabel = new H5Label(themePage);
+    themeTitleLabel->setBackgroundColor(DesignSystem::color().surface());
+    themeTitleLabel->setTextColor(DesignSystem::color().onSurface());
+
+    auto initThemeButton = [this] (ApplicationTheme _theme) {
+        RadioButton* radioButton = new RadioButton(themePage);
+        radioButton->setBackgroundColor(DesignSystem::color().surface());
+        radioButton->setTextColor(DesignSystem::color().onSurface());
+        QObject::connect(radioButton, &RadioButton::checkedChanged, q,
+            [this, _theme] (bool _checked)
+        {
+            if (_checked) {
+                emit q->themeChanged(_theme);
+            }
+        });
+        return radioButton;
+    };
+    darkAndLightThemeButton = initThemeButton(ApplicationTheme::DarkAndLight);
+    darkAndLightThemeButton->setChecked(true);
+    darkThemeButton = initThemeButton(ApplicationTheme::Dark);
+    lightThemeButton = initThemeButton(ApplicationTheme::Light);
+
+    RadioButtonGroup* themesGroup = new RadioButtonGroup(languagePage);
+    themesGroup->add(darkAndLightThemeButton);
+    themesGroup->add(darkThemeButton);
+    themesGroup->add(lightThemeButton);
+
+    auto initThemeInfoLabel = [this] {
+        Body2Label* label = new Body2Label(themePage);
+        label->setBackgroundColor(DesignSystem::color().surface());
+        QColor textColor = DesignSystem::color().onSurface();
+        textColor.setAlphaF(Ui::DesignSystem::disabledTextOpacity());
+        label->setTextColor(textColor);
+        return label;
+    };
+    darkAndLightThemeInfoLabel = initThemeInfoLabel();
+    darkThemeInfoLabel = initThemeInfoLabel();
+    lightThemeInfoLabel = initThemeInfoLabel();
 
 
     QGridLayout* themePageLayout = new QGridLayout(themePage);
     themePageLayout->setSpacing(0);
     themePageLayout->setContentsMargins({});
-    themePageLayout->addWidget(themeTitleButton, 0, 0, 1, 3);
-//    themePageLayout->addWidget(systemLanguageButton, 1, 0, 1, 3);
-//    languagePageLayout->addWidget(englishLanguage, 2, 0, 1, 1);
-//    languagePageLayout->addWidget(russianLanguage, 3, 0, 1, 1);
-//    themePageLayout->setRowStretch(4, 1);
+    themePageLayout->addWidget(themeTitleLabel, 0, 0, 1, 3);
+    themePageLayout->addWidget(darkAndLightThemeButton, 1, 0, 1, 3);
+    themePageLayout->addWidget(darkAndLightThemeInfoLabel, 2, 0, 1, 3);
+    themePageLayout->addWidget(darkThemeButton, 3, 0, 1, 3);
+    themePageLayout->addWidget(darkThemeInfoLabel, 4, 0, 1, 3);
+    themePageLayout->addWidget(lightThemeButton, 5, 0, 1, 3);
+    themePageLayout->addWidget(lightThemeInfoLabel, 6, 0, 1, 3);
+    themePageLayout->setRowStretch(7, 1);
 //    themePageLayout->addWidget(languageHowToAddLink, 5, 0, 1, 3);
 //    themePageLayout->addLayout(languagePageButtonsLayout, 6, 0, 1, 3);
     themePage->hide();
@@ -179,13 +224,19 @@ void OnboardingView::showFinalPage()
 
 void OnboardingView::updateTranslations()
 {
-    d->languageTitleButton->setText(tr("Choose preferred language"));
+    d->languageTitleLabel->setText(tr("Choose preferred language"));
     d->systemLanguageButton->setText(tr("Use system locale settings"));
     d->languageHowToAddLink->setText(tr("Did not find your preffered language? Read how you can add it yourself."));
     d->goToThemeButton->setText(tr("Continue"));
     d->skipOnboardingButton->setText(tr("Skip onboarding"));
 
-    d->themeTitleButton->setText(tr("Choose application theme"));
+    d->themeTitleLabel->setText(tr("Choose application theme"));
+    d->darkAndLightThemeButton->setText(tr("Dark & light theme"));
+    d->darkAndLightThemeInfoLabel->setText(tr("Modern theme which combines dark and light colors for better concentration on the documents you work."));
+    d->darkThemeButton->setText(tr("Dark theme"));
+    d->darkThemeInfoLabel->setText(tr("Theme is more suitable for work in dimly lit rooms, and also in the evening or night."));
+    d->lightThemeButton->setText(tr("Light theme"));
+    d->lightThemeInfoLabel->setText(tr("Theme is convenient for work with sufficient light."));
 }
 
 void OnboardingView::designSysemChangeEvent(DesignSystemChangeEvent* _event)
@@ -195,6 +246,17 @@ void OnboardingView::designSysemChangeEvent(DesignSystemChangeEvent* _event)
     d->languagePageButtonsLayout->setSpacing(static_cast<int>(Ui::DesignSystem::layout().buttonsSpacing()));
     d->languagePageButtonsLayout->setContentsMargins({0, 0, static_cast<int>(Ui::DesignSystem::layout().px24()),
                                        static_cast<int>(Ui::DesignSystem::layout().px12())});
+
+    d->languageTitleLabel->setContentsMargins(Ui::DesignSystem::label().margins().toMargins());
+    d->languageHowToAddLink->setContentsMargins(Ui::DesignSystem::label().margins().toMargins());
+
+    d->themeTitleLabel->setContentsMargins(Ui::DesignSystem::label().margins().toMargins());
+    QMarginsF themeInfoLabelMargins = Ui::DesignSystem::label().margins();
+    themeInfoLabelMargins.setLeft(Ui::DesignSystem::layout().px62());
+    themeInfoLabelMargins.setTop(Ui::DesignSystem::layout().px4());
+    d->darkAndLightThemeInfoLabel->setContentsMargins(themeInfoLabelMargins.toMargins());
+    d->darkThemeInfoLabel->setContentsMargins(themeInfoLabelMargins.toMargins());
+    d->lightThemeInfoLabel->setContentsMargins(themeInfoLabelMargins.toMargins());
 }
 
 OnboardingView::~OnboardingView() = default;
