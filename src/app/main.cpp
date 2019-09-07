@@ -4,6 +4,7 @@
 #include <QDir>
 #include <QPluginLoader>
 #include <QStandardPaths>
+#include <QDebug>
 
 using ManagementLayer::IApplicationManager;
 
@@ -24,6 +25,12 @@ IApplicationManager* loadApplicationManager()
                 QStandardPaths::writableLocation(QStandardPaths::DataLocation)
 #endif
                 );
+
+#if !defined(QT_NO_DEBUG) && defined(Q_OS_MAC)
+    pluginsDir.cdUp();
+    pluginsDir.cdUp();
+    pluginsDir.cdUp();
+#endif
 
     //
     // Если там нет плагинов приложения
@@ -58,7 +65,7 @@ IApplicationManager* loadApplicationManager()
     //
     // Подгружаем плагин
     //
-    const QStringList libCorePluginEntries = pluginsDir.entryList({ "libcoreplugin.*" }, QDir::Files);
+    const QStringList libCorePluginEntries = pluginsDir.entryList({ "libcoreplugin*.*" }, QDir::Files);
     for (const QString &fileName : libCorePluginEntries) {
         QPluginLoader pluginLoader(pluginsDir.absoluteFilePath(fileName));
         QObject *plugin = pluginLoader.instance();
