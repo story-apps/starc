@@ -53,6 +53,19 @@ protected:
 
 
 /**
+ * @brief Текстовая метка заголовка шестого уровня
+ */
+class H6Label : public AbstractLabel
+{
+public:
+    explicit H6Label(QWidget* _parent = nullptr);
+
+protected:
+    const QFont& textFont() const override;
+};
+
+
+/**
  * @brief Текстовая метка со шрифтом body1
  */
 class Body1Label : public AbstractLabel

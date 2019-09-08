@@ -1479,6 +1479,53 @@ DesignSystem::RadioButton::RadioButton(qreal _scaleFactor)
 // ****
 
 
+class DesignSystem::Slider::Implementation
+{
+public:
+    explicit Implementation(qreal _scaleFactor);
+
+    qreal height = 48.0;
+    qreal thumbRadius = 6.0;
+    qreal trackHeight = 2.0;
+};
+
+DesignSystem::Slider::Implementation::Implementation(qreal _scaleFactor)
+{
+    height *= _scaleFactor;
+    thumbRadius *= _scaleFactor;
+    trackHeight *= _scaleFactor;
+}
+
+
+// **
+
+
+DesignSystem::Slider::~Slider() = default;
+
+qreal DesignSystem::Slider::height() const
+{
+    return d->height;
+}
+
+qreal DesignSystem::Slider::thumbRadius() const
+{
+    return d->thumbRadius;
+}
+
+qreal DesignSystem::Slider::trackHeight() const
+{
+    return d->trackHeight;
+}
+
+DesignSystem::Slider::Slider(qreal _scaleFactor)
+    : d(new Implementation(_scaleFactor))
+{
+}
+
+
+// ****
+
+
 class DesignSystem::Stepper::Implementation
 {
 public:
@@ -1577,6 +1624,7 @@ public:
     DesignSystem::Label label;
     DesignSystem::Button button;
     DesignSystem::RadioButton radioButton;
+    DesignSystem::Slider slider;
     DesignSystem::Stepper stepper;
 };
 
@@ -1599,6 +1647,7 @@ DesignSystemPrivate::DesignSystemPrivate(qreal _scaleFactor, const DesignSystem:
       label(_scaleFactor),
       button(_scaleFactor),
       radioButton(_scaleFactor),
+      slider(_scaleFactor),
       stepper(_scaleFactor)
 {
     pageMargins *= _scaleFactor;
@@ -1735,6 +1784,11 @@ const DesignSystem::Button&DesignSystem::button()
 const DesignSystem::RadioButton& DesignSystem::radioButton()
 {
     return instance()->d->radioButton;
+}
+
+const DesignSystem::Slider& DesignSystem::slider()
+{
+    return instance()->d->slider;
 }
 
 const DesignSystem::Stepper& DesignSystem::stepper()

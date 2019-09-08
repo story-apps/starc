@@ -6,6 +6,7 @@
 #include <ui/widgets/label/link_label.h>
 #include <ui/widgets/radio_button/radio_button.h>
 #include <ui/widgets/radio_button/radio_button_group.h>
+#include <ui/widgets/slider/slider.h>
 
 #include <QGridLayout>
 #include <QSlider>
@@ -60,6 +61,10 @@ public:
     Body2Label* darkThemeInfoLabel = nullptr;
     RadioButton* lightThemeButton = nullptr;
     Body2Label* lightThemeInfoLabel = nullptr;
+    H6Label* scaleFactorTitleLabel = nullptr;
+    Slider* scaleFactorSlider = nullptr;
+    Body2Label* scaleFactorSmallInfoLabel = nullptr;
+    Body2Label* scaleFactorBigInfoLabel = nullptr;
     Button* finishOnboardingButton = nullptr;
     QHBoxLayout* themePageButtonsLayout = nullptr;
 
@@ -184,12 +189,15 @@ void OnboardingView::Implementation::initThemePage()
     darkThemeInfoLabel = new Body2Label(themePage);
     lightThemeInfoLabel = new Body2Label(themePage);
 
-    QSlider* slider = new QSlider(Qt::Horizontal);
-    slider->setRange(1, 400);
-    slider->setValue(100);
-    QObject::connect(slider, &QSlider::valueChanged, q, [this] (int _value) {
-        emit q->scaleFactorChanged(static_cast<qreal>(_value) / 100.0);
+    scaleFactorTitleLabel = new H6Label(themePage);
+    scaleFactorSlider = new Slider(themePage);
+    scaleFactorSlider->setMaximumValue(4000);
+    scaleFactorSlider->setValue(1000);
+    QObject::connect(scaleFactorSlider, &Slider::valueChanged, q, [this] (int _value) {
+        emit q->scaleFactorChanged(static_cast<qreal>(qMax(1, _value)) / 1000.0);
     });
+    scaleFactorSmallInfoLabel = new Body2Label(themePage);
+    scaleFactorBigInfoLabel = new Body2Label(themePage);
 
     finishOnboardingButton = new Button(themePage);
     finishOnboardingButton->setContained(true);
@@ -209,9 +217,13 @@ void OnboardingView::Implementation::initThemePage()
     themePageLayout->addWidget(darkThemeInfoLabel, 4, 0, 1, 3);
     themePageLayout->addWidget(lightThemeButton, 5, 0, 1, 3);
     themePageLayout->addWidget(lightThemeInfoLabel, 6, 0, 1, 3);
-    themePageLayout->addWidget(slider, 7, 0, 1, 3);
-    themePageLayout->setRowStretch(8, 1);
-    themePageLayout->addLayout(themePageButtonsLayout, 9, 0, 1, 3);
+    themePageLayout->addWidget(scaleFactorTitleLabel, 7, 0, 1, 3);
+    themePageLayout->addWidget(scaleFactorSlider, 8, 0, 1, 3);
+    themePageLayout->addWidget(scaleFactorSmallInfoLabel, 9, 0, 1, 1);
+    themePageLayout->setColumnStretch(1, 1);
+    themePageLayout->addWidget(scaleFactorBigInfoLabel, 9, 2, 1, 1);
+    themePageLayout->setRowStretch(10, 1);
+    themePageLayout->addLayout(themePageButtonsLayout, 11, 0, 1, 3);
     themePage->hide();
 }
 
@@ -232,6 +244,19 @@ void OnboardingView::Implementation::updateThemePageUi()
     themeInfoLabelTextColor.setAlphaF(Ui::DesignSystem::disabledTextOpacity());
     for (auto label : {darkAndLightThemeInfoLabel, darkThemeInfoLabel, lightThemeInfoLabel}) {
         label->setContentsMargins(themeInfoLabelMargins.toMargins());
+        label->setBackgroundColor(DesignSystem::color().surface());
+        label->setTextColor(themeInfoLabelTextColor);
+    }
+    scaleFactorTitleLabel->setContentsMargins(Ui::DesignSystem::label().margins().toMargins());
+    scaleFactorTitleLabel->setBackgroundColor(DesignSystem::color().surface());
+    scaleFactorTitleLabel->setTextColor(DesignSystem::color().onSurface());
+    scaleFactorSlider->setBackgroundColor(DesignSystem::color().surface());
+    scaleFactorSlider->setContentsMargins({static_cast<int>(Ui::DesignSystem::layout().px24()), 0,
+                                           static_cast<int>(Ui::DesignSystem::layout().px24()), 0});
+    QMarginsF themeScaleFactorInfoLabelMargins = Ui::DesignSystem::label().margins();
+    themeScaleFactorInfoLabelMargins.setTop(Ui::DesignSystem::layout().px4());
+    for (auto label : {scaleFactorSmallInfoLabel, scaleFactorBigInfoLabel}) {
+        label->setContentsMargins(themeScaleFactorInfoLabelMargins.toMargins());
         label->setBackgroundColor(DesignSystem::color().surface());
         label->setTextColor(themeInfoLabelTextColor);
     }
@@ -287,6 +312,9 @@ void OnboardingView::updateTranslations()
     d->darkThemeInfoLabel->setText(tr("Theme is more suitable for work in dimly lit rooms, and also in the evening or night."));
     d->lightThemeButton->setText(tr("Light theme"));
     d->lightThemeInfoLabel->setText(tr("Theme is convenient for work with sufficient light."));
+    d->scaleFactorTitleLabel->setText(tr("Setup size of the user interface elements"));
+    d->scaleFactorSmallInfoLabel->setText(tr("small"));
+    d->scaleFactorBigInfoLabel->setText(tr("big"));
     d->finishOnboardingButton->setText(tr("Start writing"));
 }
 

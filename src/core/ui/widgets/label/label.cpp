@@ -90,6 +90,20 @@ const QFont&Body1Label::textFont() const
 // ****
 
 
+H6Label::H6Label(QWidget* _parent)
+    : AbstractLabel(_parent)
+{
+}
+
+const QFont& H6Label::textFont() const
+{
+    return Ui::DesignSystem::font().h6();
+}
+
+
+// ****
+
+
 Body2Label::Body2Label(QWidget* _parent)
     : AbstractLabel(_parent)
 {

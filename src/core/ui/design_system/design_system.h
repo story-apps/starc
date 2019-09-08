@@ -860,6 +860,37 @@ public:
     };
 
     /**
+     * @brief Параметры виджета слайдера
+     */
+    class Slider
+    {
+    public:
+        ~Slider();
+
+        /**
+         * @brief Высота всего слайдера
+         */
+        qreal height() const;
+
+        /**
+         * @brief Размер пипки
+         */
+        qreal thumbRadius() const;
+
+        /**
+         * @brief Высота полосы по которой движется пипка
+         */
+        qreal trackHeight() const;
+
+    private:
+        explicit Slider(qreal _scaleFactor);
+        friend class DesignSystemPrivate;
+        //
+        class Implementation;
+        QScopedPointer<Implementation> d;
+    };
+
+    /**
      * @brief Параметры виджета пошагового переключения
      */
     class Stepper
@@ -1033,6 +1064,11 @@ public:
      * @brief Параметры кнопки-переключателя
      */
     static const RadioButton& radioButton();
+
+    /**
+     * @brief Параметры слайдера
+     */
+    static const Slider& slider();
 
     /**
      * @brief Параметры виджета пошагового движения

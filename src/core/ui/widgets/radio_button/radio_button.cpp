@@ -117,7 +117,7 @@ void RadioButton::paintEvent(QPaintEvent* _event)
                           Ui::DesignSystem::radioButton().iconSize());
     if (d->decorationRadiusAnimation.state() == QVariantAnimation::Running
         || d->decorationOpacityAnimation.state() == QVariantAnimation::Running) {
-        painter.setPen(Ui::DesignSystem::color().secondary());
+        painter.setPen(Qt::NoPen);
         painter.setBrush(Ui::DesignSystem::color().secondary());
         painter.setOpacity(d->decorationOpacityAnimation.currentValue().toReal());
         painter.drawEllipse(iconRect.center(), d->decorationRadiusAnimation.currentValue().toReal(),

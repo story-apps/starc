@@ -20,7 +20,6 @@ OnboardingNavigator::OnboardingNavigator(QWidget* _parent)
 
     addStep({});
     addStep({});
-    addStep("dklsjhf");
 
     designSystemChangeEvent(nullptr);
 }
