@@ -59,7 +59,7 @@ Button::Button(QWidget* _parent)
 {
     setAttribute(Qt::WA_Hover);
 
-    designSysemChangeEvent(nullptr);
+    designSystemChangeEvent(nullptr);
 
     connect(&d->decorationRadiusAnimation, &QVariantAnimation::valueChanged, this, [this] { update(); });
     connect(&d->decorationOpacityAnimation, &QVariantAnimation::valueChanged, this, [this] { update(); });
@@ -93,7 +93,7 @@ QSize Button::sizeHint() const
     const qreal width = Ui::DesignSystem::button().shadowMargins().top()
                         + std::max(Ui::DesignSystem::button().minimumWidth(),
                                    Ui::DesignSystem::button().margins().left()
-                                   + QFontMetrics(Ui::DesignSystem::font().button()).horizontalAdvance(d->text)
+                                   + QFontMetrics(Ui::DesignSystem::font().button()).width(d->text)
                                    + Ui::DesignSystem::button().margins().right())
                         + Ui::DesignSystem::button().shadowMargins().bottom();
     const qreal height = Ui::DesignSystem::button().shadowMargins().top()
@@ -191,7 +191,7 @@ void Button::mouseReleaseEvent(QMouseEvent* _event)
     emit clicked();
 }
 
-void Button::designSysemChangeEvent(DesignSystemChangeEvent* _event)
+void Button::designSystemChangeEvent(DesignSystemChangeEvent* _event)
 {
     Q_UNUSED(_event);
 

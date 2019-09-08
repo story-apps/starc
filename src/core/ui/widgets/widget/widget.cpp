@@ -61,7 +61,7 @@ bool Widget::event(QEvent* _event)
     switch (static_cast<int>(_event->type())) {
         case static_cast<int>(EventType::DesignSystemChangeEvent): {
             DesignSystemChangeEvent* event = static_cast<DesignSystemChangeEvent*>(_event);
-            designSysemChangeEvent(event);
+            designSystemChangeEvent(event);
             return false;
         }
 
@@ -92,8 +92,10 @@ void Widget::paintEvent(QPaintEvent* _event)
     painter.fillRect(_event->rect(), d->backgroundColor);
 }
 
-void Widget::designSysemChangeEvent(DesignSystemChangeEvent* _event)
+void Widget::designSystemChangeEvent(DesignSystemChangeEvent* _event)
 {
     Q_UNUSED(_event);
+
+    updateGeometry();
     update();
 }

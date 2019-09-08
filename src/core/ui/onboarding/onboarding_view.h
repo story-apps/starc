@@ -42,14 +42,29 @@ signals:
     void languageChanged(QLocale::Language _language);
 
     /**
+     * @brief Пользователь хочет перейти к настройке темы
+     */
+    void showThemePageRequested();
+
+    /**
      * @brief Пользователь выбрал тему приложения
      */
     void themeChanged(ApplicationTheme _theme);
 
     /**
-     * @brief Пользователь хочет перейти к настройке темы
+     * @brief Пользователь изменил масштаб интерфейса
      */
-    void showThemePageRequested();
+    void scaleFactorChanged(qreal _scaleFactor);
+
+    /**
+     * @brief Пользователь хочет пропустить настройку
+     */
+    void skipOnboardingRequested();
+
+    /**
+     * @brief Пользователь хочет завершить настройку
+     */
+    void finishOnboardingRequested();
 
 protected:
     /**
@@ -58,9 +73,9 @@ protected:
     void updateTranslations() override;
 
     /**
-     * @brief Обновляем лейаут, когда обновилась дизайн система
+     * @brief Обновляем внешний вид, когда обновилась дизайн система
      */
-    void designSysemChangeEvent(DesignSystemChangeEvent* _event) override;
+    void designSystemChangeEvent(DesignSystemChangeEvent* _event) override;
 
 private:
     class Implementation;

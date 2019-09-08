@@ -15,6 +15,12 @@ class OnboardingToolBar : public Widget
 
 public:
     explicit OnboardingToolBar(QWidget *_parent = nullptr);
+
+protected:
+    /**
+     * @brief Обновляем навигатор при изменении дизайн системы
+     */
+    void designSystemChangeEvent(DesignSystemChangeEvent* _event) override;
 };
 
 } // namespace Ui

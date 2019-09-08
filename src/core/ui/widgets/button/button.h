@@ -50,7 +50,7 @@ protected:
     /**
      * @brief Переопределяем для корректировки собственных размеров
      */
-    void designSysemChangeEvent(DesignSystemChangeEvent* _event) override;
+    void designSystemChangeEvent(DesignSystemChangeEvent* _event) override;
 
 private:
     class Implementation;

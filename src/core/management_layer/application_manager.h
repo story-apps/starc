@@ -28,6 +28,12 @@ public:
      */
     void exec() final;
 
+protected:
+    /**
+     * @brief Переопределяем для обработки кастомных событий
+     */
+    bool event(QEvent* _event) override;
+
 private:
     /**
      * @brief Настроить соединнеия

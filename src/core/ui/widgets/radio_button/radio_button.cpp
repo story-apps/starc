@@ -31,8 +31,6 @@ public:
 RadioButton::Implementation::Implementation()
 {
     decorationRadiusAnimation.setEasingCurve(QEasingCurve::OutQuad);
-    decorationRadiusAnimation.setStartValue(Ui::DesignSystem::radioButton().iconSize().height() / 2.0);
-    decorationRadiusAnimation.setEndValue(Ui::DesignSystem::radioButton().height() / 2.5);
     decorationRadiusAnimation.setDuration(160);
 
     decorationOpacityAnimation.setEasingCurve(QEasingCurve::InQuad);
@@ -58,6 +56,8 @@ RadioButton::RadioButton(QWidget* _parent)
 {
     connect(&d->decorationRadiusAnimation, &QVariantAnimation::valueChanged, this, [this] { update(); });
     connect(&d->decorationOpacityAnimation, &QVariantAnimation::valueChanged, this, [this] { update(); });
+
+    designSystemChangeEvent(nullptr);
 }
 
 RadioButton::~RadioButton() = default;
@@ -94,7 +94,7 @@ QSize RadioButton::sizeHint() const
     return QSize(static_cast<int>(Ui::DesignSystem::radioButton().margins().left()
                                   + Ui::DesignSystem::radioButton().iconSize().width()
                                   + Ui::DesignSystem::radioButton().spacing()
-                                  + QFontMetrics(Ui::DesignSystem::font().subtitle1()).horizontalAdvance(d->text)
+                                  + QFontMetrics(Ui::DesignSystem::font().subtitle1()).width(d->text)
                                   + Ui::DesignSystem::radioButton().margins().right()),
                  static_cast<int>(Ui::DesignSystem::radioButton().height()));
 }
@@ -152,4 +152,15 @@ void RadioButton::mouseReleaseEvent(QMouseEvent* _event)
 
     setChecked(true);
     d->animateClick();
+}
+
+void RadioButton::designSystemChangeEvent(DesignSystemChangeEvent* _event)
+{
+    Q_UNUSED(_event);
+
+    d->decorationRadiusAnimation.setStartValue(Ui::DesignSystem::radioButton().iconSize().height() / 2.0);
+    d->decorationRadiusAnimation.setEndValue(Ui::DesignSystem::radioButton().height() / 2.5);
+
+    updateGeometry();
+    update();
 }

@@ -53,7 +53,7 @@ protected:
      * @brief Событие реакция на изменение дизайн системы
      * @note Реализация по-умолчание просто обновляет весь виджет
      */
-    virtual void designSysemChangeEvent(DesignSystemChangeEvent* _event);
+    virtual void designSystemChangeEvent(DesignSystemChangeEvent* _event);
 
 private:
     class Implementation;

@@ -36,6 +36,8 @@ void Splitter::setHandleColor(const QColor& _color)
 
         handle->setBackgroundColor(d->handleColor);
     }
+
+    update();
 }
 
 QSplitterHandle* Splitter::createHandle()

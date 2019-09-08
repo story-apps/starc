@@ -1,5 +1,4 @@
-#ifndef IMAGEHELPER_H
-#define IMAGEHELPER_H
+#pragma once
 
 #include <QtGlobal>
 
@@ -69,5 +68,3 @@ public:
      */
     static QPixmap dropShadow(const QPixmap& _sourcePixmap, const QMarginsF& _shadowMargins, qreal _blurRadius, const QColor& _color);
 };
-
-#endif // IMAGEHELPER_H

@@ -1,6 +1,6 @@
 #pragma once
 
-#include <QWidget>
+#include <ui/widgets/widget/widget.h>
 
 
 namespace Ui
@@ -9,7 +9,7 @@ namespace Ui
 /**
  * @brief Представление приложения
  */
-class ApplicationView : public QWidget
+class ApplicationView : public Widget
 {
     Q_OBJECT
 
@@ -21,6 +21,12 @@ public:
      * @brief Показать заданный контент
      */
     void showContent(QWidget* _toolbar, QWidget* _navigator, QWidget* _view);
+
+protected:
+    /**
+     * @brief Обновляем навигатор при изменении дизайн системы
+     */
+    void designSystemChangeEvent(DesignSystemChangeEvent* _event) override;
 
 private:
     class Implementation;

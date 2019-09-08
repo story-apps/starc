@@ -2,6 +2,8 @@
 
 #include <ui/design_system/design_system.h>
 
+#include <utils/helpers/color_helper.h>
+
 namespace {
     const int kLanguageStepIndex = 0;
     const int kThemeStepIndex = 1;
@@ -16,13 +18,11 @@ OnboardingNavigator::OnboardingNavigator(QWidget* _parent)
 {
     setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
 
-    setBackgroundColor(DesignSystem::color().primary());
-    setTextColor(DesignSystem::color().onPrimary());
-    setInactiveStepNumberBackgroundColor(DesignSystem::color().primary().lighter(300));
+    addStep({});
+    addStep({});
+    addStep("dklsjhf");
 
-    addStep({});
-    addStep({});
-    updateTranslations();
+    designSystemChangeEvent(nullptr);
 }
 
 void OnboardingNavigator::showThemeStep()
@@ -34,6 +34,17 @@ void OnboardingNavigator::updateTranslations()
 {
     setStepName(kLanguageStepIndex, tr("Choose language"));
     setStepName(kThemeStepIndex, tr("Setup user interface"));
+}
+
+void OnboardingNavigator::designSystemChangeEvent(DesignSystemChangeEvent* _event)
+{
+    Q_UNUSED(_event);
+
+    setBackgroundColor(DesignSystem::color().primary());
+    setTextColor(DesignSystem::color().onPrimary());
+    setInactiveStepNumberBackgroundColor(
+                ColorHelper::colorBetween(DesignSystem::color().primary(), DesignSystem::color().onPrimary()));
+//    setInactiveStepNumberBackgroundColor(DesignSystem::color().shadow().lighter(300));
 }
 
 } // namespace Ui

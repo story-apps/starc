@@ -29,14 +29,6 @@ ApplicationView::Implementation::Implementation(QWidget* _parent)
       view(new StackWidget(_parent)),
       splitter(new Splitter(_parent))
 {
-    toolBar->setBackgroundColor(DesignSystem::color().primary());
-    toolBar->setFixedHeight(static_cast<int>(DesignSystem::appBar().heightRegular()));
-
-    navigator->setBackgroundColor(DesignSystem::color().primary());
-
-    view->setBackgroundColor(DesignSystem::color().surface());
-
-    splitter->setHandleColor(DesignSystem::color().primary());
 }
 
 
@@ -44,7 +36,7 @@ ApplicationView::Implementation::Implementation(QWidget* _parent)
 
 
 ApplicationView::ApplicationView(QWidget* _parent)
-    : QWidget(_parent),
+    : Widget(_parent),
       d(new Implementation(this))
 {
     Widget* navigation = new Widget;
@@ -56,13 +48,17 @@ ApplicationView::ApplicationView(QWidget* _parent)
 
     d->splitter->addWidget(navigation);
     d->splitter->addWidget(d->view);
-    d->splitter->setSizes({1, 1});
+    d->splitter->setSizes({1, 4});
 
     QVBoxLayout* layout = new QVBoxLayout(this);
     layout->setContentsMargins({});
     layout->setSpacing(0);
     layout->addWidget(d->splitter);
+
+    designSystemChangeEvent(nullptr);
 }
+
+ApplicationView::~ApplicationView() = default;
 
 void ApplicationView::showContent(QWidget* _toolbar, QWidget* _navigator, QWidget* _view)
 {
@@ -71,6 +67,18 @@ void ApplicationView::showContent(QWidget* _toolbar, QWidget* _navigator, QWidge
     d->view->setCurrentWidget(_view);
 }
 
-ApplicationView::~ApplicationView() = default;
+void ApplicationView::designSystemChangeEvent(DesignSystemChangeEvent* _event)
+{
+    Q_UNUSED(_event);
+
+    d->toolBar->setBackgroundColor(DesignSystem::color().primary());
+    d->toolBar->setFixedHeight(static_cast<int>(DesignSystem::appBar().heightRegular()));
+
+    d->navigator->setBackgroundColor(DesignSystem::color().primary());
+
+    d->view->setBackgroundColor(DesignSystem::color().surface());
+
+    d->splitter->setHandleColor(DesignSystem::color().primary());
+}
 
 } // namespace Ui

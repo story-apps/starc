@@ -30,6 +30,7 @@ SOURCES += \
     ui/widgets/stack_widget/stack_widget.cpp \
     ui/widgets/widget/widget.cpp \
     ui/design_system/design_system.cpp \
+    utils/helpers/color_helper.cpp \
     utils/helpers/image_helper.cpp \
     ui/widgets/splitter/splitter.cpp \
     ui/widgets/splitter/splitter_handle.cpp \
@@ -56,6 +57,7 @@ HEADERS += \
     ui/widgets/stack_widget/stack_widget.h \
     ui/widgets/widget/widget.h \
     ui/design_system/design_system.h \
+    utils/helpers/color_helper.h \
     utils/helpers/image_helper.h \
     ui/widgets/splitter/splitter.h \
     ui/widgets/splitter/splitter_handle.h \

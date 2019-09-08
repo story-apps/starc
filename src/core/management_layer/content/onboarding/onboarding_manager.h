@@ -3,6 +3,10 @@
 #include <QLocale>
 #include <QObject>
 
+namespace Ui {
+    enum class ApplicationTheme;
+}
+
 
 /**
  * @brief Менеджер посадочного экрана
@@ -24,6 +28,16 @@ signals:
      * @brief Пользователь выбрал язык приложения
      */
     void languageChanged(QLocale::Language _language);
+
+    /**
+     * @brief Пользователь выбрал тему приложения
+     */
+    void themeChanged(Ui::ApplicationTheme _theme);
+
+    /**
+     * @brief Пользователь изменил масштаб интерфейса
+     */
+    void scaleFactorChanged(qreal _scaleFactor);
 
 private:
     class Implementation;

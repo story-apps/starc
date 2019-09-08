@@ -26,6 +26,11 @@ protected:
      * @brief Обновить перевод
      */
     void updateTranslations() override;
+
+    /**
+     * @brief Обновляем навигатор при изменении дизайн системы
+     */
+    void designSystemChangeEvent(DesignSystemChangeEvent* _event) override;
 };
 
 } // namespace Ui
