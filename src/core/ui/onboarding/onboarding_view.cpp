@@ -239,7 +239,7 @@ void OnboardingView::Implementation::updateThemePageUi()
     }
     QMarginsF themeInfoLabelMargins = Ui::DesignSystem::label().margins();
     themeInfoLabelMargins.setLeft(Ui::DesignSystem::layout().px62());
-    themeInfoLabelMargins.setTop(Ui::DesignSystem::layout().px4());
+    themeInfoLabelMargins.setTop(0);
     QColor themeInfoLabelTextColor = DesignSystem::color().onSurface();
     themeInfoLabelTextColor.setAlphaF(Ui::DesignSystem::disabledTextOpacity());
     for (auto label : {darkAndLightThemeInfoLabel, darkThemeInfoLabel, lightThemeInfoLabel}) {
@@ -254,7 +254,7 @@ void OnboardingView::Implementation::updateThemePageUi()
     scaleFactorSlider->setContentsMargins({static_cast<int>(Ui::DesignSystem::layout().px24()), 0,
                                            static_cast<int>(Ui::DesignSystem::layout().px24()), 0});
     QMarginsF themeScaleFactorInfoLabelMargins = Ui::DesignSystem::label().margins();
-    themeScaleFactorInfoLabelMargins.setTop(Ui::DesignSystem::layout().px4());
+    themeScaleFactorInfoLabelMargins.setTop(0);
     for (auto label : {scaleFactorSmallInfoLabel, scaleFactorBigInfoLabel}) {
         label->setContentsMargins(themeScaleFactorInfoLabelMargins.toMargins());
         label->setBackgroundColor(DesignSystem::color().surface());
