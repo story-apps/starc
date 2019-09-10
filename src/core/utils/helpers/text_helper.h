@@ -15,6 +15,11 @@ class TextHelper
 {
 public:
     /**
+     * @brief Определить оптимальную ширину текста
+     */
+    static int fineTextWidth(const QString& _text, const QFont& _font);
+
+    /**
      * Возвращает высоту текста
      * @param text Текст
      * @param font Шрифт, которым рисуется текст
@@ -22,5 +27,5 @@ public:
      * @param option Параметры отображения
      * @return Размер прямоугольника.
      */
-    static qreal heightForWidth(const QString &_text, const QFont &_font, int _width);
+    static qreal heightForWidth(const QString& _text, const QFont& _font, int _width);
 };

@@ -5,6 +5,15 @@
 #include <QTextLayout>
 
 
+int TextHelper::fineTextWidth(const QString& _text, const QFont& _font)
+{
+    const QFontMetricsF metrics(_font);
+    // Чтобы корректно разместить текст нужна максимальная ширина, которую текст может занимать
+    // используемые методы реализуют разные механизмы определения ширины, поэтому выбираем больший
+    // и не забываем прибавить волшебную единичку, а то так не работает :)
+    return qCeil(qMax(metrics.boundingRect(_text).width(), metrics.horizontalAdvance(_text))) + 1;
+}
+
 qreal TextHelper::heightForWidth(const QString& _text, const QFont& _font, int _width)
 {
     const QFontMetricsF metrics(_font);

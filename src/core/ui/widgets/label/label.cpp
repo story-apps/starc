@@ -43,7 +43,9 @@ void AbstractLabel::setText(const QString& _text)
 
 QSize AbstractLabel::sizeHint() const
 {
-    return QFontMetrics(textFont()).boundingRect(d->text).marginsAdded(contentsMargins()).size();
+    const int width = TextHelper::fineTextWidth(d->text, textFont());
+    const int height = QFontMetrics(textFont()).lineSpacing();
+    return QRect(QPoint(0,0), QSize(width, height)).marginsAdded(contentsMargins()).size();
 }
 
 int AbstractLabel::heightForWidth(int width) const
