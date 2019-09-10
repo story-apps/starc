@@ -5,6 +5,9 @@
 #include <ui/onboarding/onboarding_view.h>
 
 
+namespace ManagementLayer
+{
+
 class OnboardingManager::Implementation
 {
 public:
@@ -68,3 +71,5 @@ QWidget* OnboardingManager::view() const
 }
 
 OnboardingManager::~OnboardingManager() = default;
+
+} // namespace ManagementLayer

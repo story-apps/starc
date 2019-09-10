@@ -8,6 +8,9 @@ namespace Ui {
 }
 
 
+namespace ManagementLayer
+{
+
 /**
  * @brief Менеджер посадочного экрана
  */
@@ -43,3 +46,5 @@ private:
     class Implementation;
     QScopedPointer<Implementation> d;
 };
+
+} // namespace ManagementLayer

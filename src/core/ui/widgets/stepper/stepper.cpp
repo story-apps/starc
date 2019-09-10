@@ -181,8 +181,11 @@ void Stepper::paintEvent(QPaintEvent* _event)
         textFont.setWeight(stepIndex == d->currentStepIndex ? QFont::Medium : QFont::Normal);
         painter.setFont(textFont);
         const qreal stepTextRectX = stepNumberBackgroundRect.right() + Ui::DesignSystem::stepper().spacing();
-        const QRectF stepTextRect(stepTextRectX, stepRect.top(), stepRect.right() - stepTextRectX, stepRect.height());
-        painter.drawText(stepTextRect, Qt::AlignVCenter, d->steps.at(stepIndex));
+        const QRectF stepTextRect(stepTextRectX, stepRect.top(),
+                                  stepRect.right() - stepTextRectX - Ui::DesignSystem::stepper().margins().right(),
+                                  stepRect.height());
+        const QString stepText = QFontMetricsF(textFont).elidedText(d->steps.at(stepIndex), Qt::ElideRight, stepTextRect.width());
+        painter.drawText(stepTextRect, Qt::AlignVCenter, stepText);
 
         //
         // декорации

@@ -25,7 +25,6 @@ SOURCES += \
     domain/identifier.cpp \
     management_layer/content/onboarding/onboarding_manager.cpp \
     management_layer/content/projects/projects_manager.cpp \
-    management_layer/content/splash/splash_manager.cpp \
     ui/application_view.cpp \
     ui/widgets/stack_widget/stack_widget.cpp \
     ui/widgets/widget/widget.cpp \
@@ -43,7 +42,8 @@ SOURCES += \
     ui/widgets/radio_button/radio_button.cpp \
     ui/widgets/radio_button/radio_button_group.cpp \
     ui/widgets/label/link_label.cpp \
-    ui/widgets/slider/slider.cpp
+    ui/widgets/slider/slider.cpp \
+    utils/helpers/text_helper.cpp
 
 HEADERS += \
         core_global.h \
@@ -53,7 +53,6 @@ HEADERS += \
         domain/identifier.h \
         management_layer/content/onboarding/onboarding_manager.h \
         management_layer/content/projects/projects_manager.h \
-        management_layer/content/splash/splash_manager.h \
         ui/application_view.h \
     ui/widgets/stack_widget/stack_widget.h \
     ui/widgets/widget/widget.h \
@@ -72,7 +71,8 @@ HEADERS += \
     ui/widgets/radio_button/radio_button.h \
     ui/widgets/radio_button/radio_button_group.h \
     ui/widgets/label/link_label.h \
-    ui/widgets/slider/slider.h
+    ui/widgets/slider/slider.h \
+    utils/helpers/text_helper.h
 
 unix {
     target.path = /usr/lib

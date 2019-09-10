@@ -3,7 +3,6 @@
 #include "custom_events.h"
 
 #include "content/onboarding/onboarding_manager.h"
-#include "content/splash/splash_manager.h"
 
 #include <ui/application_view.h>
 #include <ui/design_system/design_system.h>
@@ -91,7 +90,15 @@ void ApplicationManager::Implementation::updateTranslation(QLocale::Language _la
     //
     // Подключим файл переводов программы
     //
-    static QTranslator* appTranslator = new QTranslator;
+    static QTranslator* appTranslator = [] {
+        //
+        // ... небольшой workaround для того, чтобы при запуске приложения кинуть событие о смене языка
+        //
+        QTranslator* translator = new QTranslator;
+        QApplication::installTranslator(translator);
+        return translator;
+    } ();
+    //
     QApplication::removeTranslator(appTranslator);
     appTranslator->load(":/translations/" + translation + ".qm");
     QApplication::installTranslator(appTranslator);

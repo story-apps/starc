@@ -49,7 +49,7 @@ ApplicationView::ApplicationView(QWidget* _parent)
 
     d->splitter->addWidget(d->navigationWidget);
     d->splitter->addWidget(d->view);
-    d->splitter->setSizes({1, 4});
+    d->splitter->setSizes({2, 7});
 
     QVBoxLayout* layout = new QVBoxLayout(this);
     layout->setContentsMargins({});

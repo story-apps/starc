@@ -2,6 +2,8 @@
 
 #include <ui/design_system/design_system.h>
 
+#include <utils/helpers/text_helper.h>
+
 #include <QFontMetrics>
 #include <QPainter>
 #include <QPaintEvent>
@@ -21,6 +23,9 @@ AbstractLabel::AbstractLabel(QWidget* _parent)
     : Widget(_parent),
       d(new Implementation)
 {
+    QSizePolicy sizePolicy(QSizePolicy::Preferred, QSizePolicy::Preferred);
+    sizePolicy.setHeightForWidth(true);
+    setSizePolicy(sizePolicy);
 }
 
 AbstractLabel::~AbstractLabel() = default;
@@ -41,6 +46,13 @@ QSize AbstractLabel::sizeHint() const
     return QFontMetrics(textFont()).boundingRect(d->text).marginsAdded(contentsMargins()).size();
 }
 
+int AbstractLabel::heightForWidth(int width) const
+{
+    const int textWidth = width - contentsMargins().left() - contentsMargins().right();
+    const int textHeight  = static_cast<int>(TextHelper::heightForWidth(d->text, textFont(), textWidth));
+    return contentsMargins().top() + textHeight + contentsMargins().bottom();
+}
+
 void AbstractLabel::paintEvent(QPaintEvent* _event)
 {
     QPainter painter(this);
@@ -55,7 +67,7 @@ void AbstractLabel::paintEvent(QPaintEvent* _event)
     //
     painter.setFont(textFont());
     painter.setPen(textColor());
-    painter.drawText(contentsRect(), Qt::AlignTop | Qt::AlignLeft, d->text);
+    painter.drawText(contentsRect(), Qt::AlignTop | Qt::AlignLeft | Qt::TextWordWrap, d->text);
 }
 
 
