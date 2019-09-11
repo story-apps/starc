@@ -8,24 +8,26 @@
 namespace DataStorageLayer
 {
 
-const QString kApplicationGroupKey = "application/";
-const QString kSystemGroupKey = "system/";
+const QString kApplicationGroupKey = "application";
+const QString kSystemGroupKey = "system";
 
 // первый запуск приложения (false) или оно уже сконфигурировано (true)
-const QString kApplicationConfiguredKey = kApplicationGroupKey + "configured";
+const QString kApplicationConfiguredKey = kApplicationGroupKey + "/configured";
 // язык приложения
-const QString kApplicationLanguagedKey = kApplicationGroupKey + "language";
+const QString kApplicationLanguagedKey = kApplicationGroupKey + "/language";
 // тема приложения
-const QString kApplicationThemeKey = kApplicationGroupKey + "theme";
+const QString kApplicationThemeKey = kApplicationGroupKey + "/theme";
 // масштаб приложения
-const QString kApplicationScaleFactorKey = kApplicationGroupKey + "scale-factor";
+const QString kApplicationScaleFactorKey = kApplicationGroupKey + "/scale-factor";
+// состояние и геометрия основного окна приложения
+const QString kApplicationViewStateKey = kApplicationGroupKey + "-view/";
 // включено ли автосохранение
-const QString kApplicationAutosaveKey = kApplicationGroupKey + "autosave";
+const QString kApplicationAutosaveKey = kApplicationGroupKey + "/autosave";
 // интервал автосохранения в минутах
-const QString kApplicationAutosaveIntervalKey = kApplicationGroupKey + "autosave-interval";
+const QString kApplicationAutosaveIntervalKey = kApplicationGroupKey + "/autosave-interval";
 
 // системное имя пользователя
-const QString kSystemUsernameKey = kSystemGroupKey + "username";
+const QString kSystemUsernameKey = kSystemGroupKey + "/username";
 
 /**
  * @brief Хранилище настроек
@@ -49,7 +51,7 @@ public:
     /**
      * @brief Сохранить карту параметров
      */
-    void setValues(const QVariantMap& _values, const QString& _valuesGroup, SettingsPlace _settingsPlace);
+    void setValues(const QString& _valuesGroup, const QVariantMap& _values, SettingsPlace _settingsPlace);
 
     /**
      * @brief Получить значение по ключу

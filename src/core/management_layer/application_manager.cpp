@@ -180,7 +180,18 @@ ApplicationManager::~ApplicationManager() = default;
 
 void ApplicationManager::exec()
 {
-    d->applicationView->resize(1024, 640);
+    //
+    // Загружаем состояние приложения
+    //
+    d->applicationView->resize(1024, 640);    
+    d->applicationView->restoreState(
+        DataStorageLayer::StorageFacade::settingsStorage()->values(
+                    DataStorageLayer::kApplicationViewStateKey,
+                    DataStorageLayer::SettingsStorage::SettingsPlace::Application));
+
+    //
+    // Покажем интерфейс
+    //
     d->applicationView->show();
 
     //
@@ -230,10 +241,22 @@ void ApplicationManager::initConnections()
     //
     // Представление приложения
     //
-    connect(d->applicationView, &Ui::ApplicationView::closeRequested, this, []
+    connect(d->applicationView, &Ui::ApplicationView::closeRequested, this, [this]
     {
         //
         // TODO: Сохранение, все дела
+        //
+
+        //
+        // Сохраняем состояние приложения
+        //
+        DataStorageLayer::StorageFacade::settingsStorage()->setValues(
+                    DataStorageLayer::kApplicationViewStateKey,
+                    d->applicationView->saveState(),
+                    DataStorageLayer::SettingsStorage::SettingsPlace::Application);
+
+        //
+        // Выходим
         //
         QApplication::processEvents();
         QApplication::quit();

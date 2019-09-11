@@ -18,6 +18,16 @@ public:
     ~ApplicationView() override;
 
     /**
+     * @brief Сохранить состояние
+     */
+    QVariantMap saveState() const;
+
+    /**
+     * @brief Восстановить состояние
+     */
+    void restoreState(const QVariantMap& _state);
+
+    /**
      * @brief Показать заданный контент
      */
     void showContent(QWidget* _toolbar, QWidget* _navigator, QWidget* _view);

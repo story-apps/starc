@@ -12,6 +12,11 @@
 namespace Ui
 {
 
+namespace {
+    const QString kSplitterState = "splitter/state";
+    const QString kViewGeometry = "view/geometry";
+}
+
 class ApplicationView::Implementation
 {
 public:
@@ -58,6 +63,24 @@ ApplicationView::ApplicationView(QWidget* _parent)
     layout->addWidget(d->splitter);
 
     designSystemChangeEvent(nullptr);
+}
+
+QVariantMap ApplicationView::saveState() const
+{
+    QVariantMap state;
+    state[kSplitterState] = d->splitter->saveState();
+    state[kViewGeometry] = saveGeometry();
+    return state;
+}
+
+void ApplicationView::restoreState(const QVariantMap& _state)
+{
+    if (_state.contains(kSplitterState)) {
+        d->splitter->restoreState(_state[kSplitterState].toByteArray());
+    }
+    if (_state.contains(kViewGeometry)) {
+        restoreGeometry(_state[kViewGeometry].toByteArray());
+    }
 }
 
 ApplicationView::~ApplicationView() = default;

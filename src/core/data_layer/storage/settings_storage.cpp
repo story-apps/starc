@@ -126,7 +126,7 @@ void SettingsStorage::setValue(const QString& _key, const QVariant& _value,
     }
 }
 
-void SettingsStorage::setValues(const QVariantMap& _values, const QString& _valuesGroup,
+void SettingsStorage::setValues(const QString& _valuesGroup, const QVariantMap& _values,
     SettingsStorage::SettingsPlace _settingsPlace)
 {
     //
@@ -258,7 +258,7 @@ QVariantMap SettingsStorage::values(const QString& _valuesGroup, SettingsStorage
         // Получим все значения
         //
         for (const QString& key : keys) {
-             values.insert(QByteArray::fromHex(key.toUtf8()), d->appSettings.value(key).toString());
+             values.insert(QByteArray::fromHex(key.toUtf8()), d->appSettings.value(key));
         }
 
         //
