@@ -47,7 +47,10 @@ SOURCES += \
     data_layer/mapper/mapper_facade.cpp \
     data_layer/mapper/settings_mapper.cpp \
     data_layer/storage/storage_facade.cpp \
-    data_layer/storage/settings_storage.cpp
+    data_layer/storage/settings_storage.cpp \
+    ui/projects/projects_navigator.cpp \
+    ui/projects/projects_tool_bar.cpp \
+    ui/projects/projects_view.cpp
 
 HEADERS += \
         core_global.h \
@@ -80,7 +83,10 @@ HEADERS += \
     data_layer/mapper/mapper_facade.h \
     data_layer/mapper/settings_mapper.h \
     data_layer/storage/storage_facade.h \
-    data_layer/storage/settings_storage.h
+    data_layer/storage/settings_storage.h \
+    ui/projects/projects_navigator.h \
+    ui/projects/projects_tool_bar.h \
+    ui/projects/projects_view.h
 
 unix {
     target.path = /usr/lib

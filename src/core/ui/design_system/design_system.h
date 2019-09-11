@@ -724,6 +724,11 @@ public:
         qreal px12() const;
 
         /**
+         * @brief Отступ в 16 пикселей
+         */
+        qreal px16() const;
+
+        /**
          * @brief Отступ в 24 пикселя
          */
         qreal px24() const;
@@ -791,6 +796,11 @@ public:
         const QMarginsF& margins() const;
 
         /**
+         * @brief Отступ от иконки до текста
+         */
+        qreal spacing() const;
+
+        /**
          * @brief Отступы вокруг кнопки, для отрисовки тени
          */
         const QMarginsF& shadowMargins() const;
@@ -814,6 +824,11 @@ public:
          * @brief Радиус рамки кнопки
          */
         qreal borderRadius() const;
+
+        /**
+         * @brief Размер иконки
+         */
+        const QSizeF& iconSize() const;
 
     private:
         explicit Button(qreal _scaleFactor);

@@ -3,6 +3,7 @@
 #include <ui/design_system/design_system.h>
 
 #include <utils/helpers/image_helper.h>
+#include <utils/helpers/text_helper.h>
 
 #include <QPainter>
 #include <QPaintEvent>
@@ -19,6 +20,8 @@ public:
      */
     void animateClick();
 
+
+    QString icon;
     QString text;
     bool isContained = false;
 
@@ -67,6 +70,17 @@ Button::Button(QWidget* _parent)
 
 Button::~Button() = default;
 
+void Button::setIcon(const QString& _icon)
+{
+    if (d->icon == _icon) {
+        return;
+    }
+
+    d->icon = _icon;
+    updateGeometry();
+    update();
+}
+
 void Button::setText(const QString& _text)
 {
     if (d->text == _text) {
@@ -93,7 +107,7 @@ QSize Button::sizeHint() const
     const qreal width = Ui::DesignSystem::button().shadowMargins().top()
                         + std::max(Ui::DesignSystem::button().minimumWidth(),
                                    Ui::DesignSystem::button().margins().left()
-                                   + QFontMetrics(Ui::DesignSystem::font().button()).width(d->text)
+                                   + QFontMetrics(Ui::DesignSystem::font().button()).horizontalAdvance(d->text)
                                    + Ui::DesignSystem::button().margins().right())
                         + Ui::DesignSystem::button().shadowMargins().bottom();
     const qreal height = Ui::DesignSystem::button().shadowMargins().top()
@@ -168,9 +182,41 @@ void Button::paintEvent(QPaintEvent* _event)
     //
     // Рисуем текст
     //
-    painter.setFont(Ui::DesignSystem::font().button());
     painter.setPen(textColor());
-    painter.drawText(contentsRect(), Qt::AlignCenter, d->text);
+    //
+    QRectF buttonInnerRect = contentsRect().marginsRemoved(Ui::DesignSystem::button().margins().toMargins());
+    const qreal textWidth = TextHelper::fineTextWidth(d->text, Ui::DesignSystem::font().button());
+    //
+    // ... если иконка задана, рисуем иконку и корректируем область отрисовки текста
+    //
+    if (!d->icon.isEmpty()) {
+        const QSizeF iconSize = Ui::DesignSystem::button().iconSize();
+        const qreal textWithIconWidth = iconSize.width() + Ui::DesignSystem::button().spacing() + textWidth;
+        const qreal iconX = buttonInnerRect.x()
+                            + (d->isContained
+                               ? ((buttonInnerRect.width() - textWithIconWidth) / 2.0)
+                               : 0.0);
+        const QRectF iconRect(QPointF(iconX, buttonInnerRect.top()), QSizeF(iconSize.width(), buttonInnerRect.height()));
+        painter.setFont(Ui::DesignSystem::font().iconsMid());
+        painter.drawText(iconRect, Qt::AlignCenter, d->icon);
+
+        buttonInnerRect.setX(iconRect.right() + Ui::DesignSystem::button().spacing());
+        buttonInnerRect.setWidth(textWidth);
+    }
+    //
+    // ... а если иконки нет, то просто корректируем область в которой будет рисоваться текст
+    //
+    else {
+        const qreal textX = buttonInnerRect.x()
+                            + (d->isContained
+                               ? ((buttonInnerRect.width() - textWidth) / 2.0)
+                               : 0.0);
+        buttonInnerRect.setX(textX);
+        buttonInnerRect.setWidth(textWidth);
+    }
+    //
+    painter.setFont(Ui::DesignSystem::font().button());
+    painter.drawText(buttonInnerRect, Qt::AlignCenter, d->text);
 }
 
 void Button::mousePressEvent(QMouseEvent* _event)

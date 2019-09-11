@@ -84,7 +84,7 @@ void ApplicationManager::Implementation::showContent()
     //
     else {
         setTranslation(settingsValue(DataStorageLayer::kApplicationLanguagedKey).value<QLocale::Language>());
-        setTheme(static_cast<Ui::ApplicationTheme>(settingsValue(DataStorageLayer::kApplicationLanguagedKey).toInt()));
+        setTheme(static_cast<Ui::ApplicationTheme>(settingsValue(DataStorageLayer::kApplicationThemeKey).toInt()));
         setScaleFactor(settingsValue(DataStorageLayer::kApplicationScaleFactorKey).toReal());
 
         applicationView->showContent(projectsManager->toolBar(),
@@ -181,9 +181,12 @@ ApplicationManager::~ApplicationManager() = default;
 void ApplicationManager::exec()
 {
     //
-    // Загружаем состояние приложения
+    // Установим размер экрана по-умолчанию, на случай, если это первый запуск
     //
-    d->applicationView->resize(1024, 640);    
+    d->applicationView->resize(1024, 640);
+    //
+    // ... затем пробуем загрузить геометрию и состояние приложения
+    //
     d->applicationView->restoreState(
         DataStorageLayer::StorageFacade::settingsStorage()->values(
                     DataStorageLayer::kApplicationViewStateKey,

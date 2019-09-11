@@ -11,6 +11,11 @@ public:
     ~Button() override;
 
     /**
+     * @brief Задать иконку
+     */
+    void setIcon(const QString& _icon);
+
+    /**
      * @brief Задать текст кнопки
      */
     void setText(const QString& _text);

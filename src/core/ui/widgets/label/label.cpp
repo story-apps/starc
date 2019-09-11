@@ -127,3 +127,17 @@ const QFont& Body2Label::textFont() const
 {
     return Ui::DesignSystem::font().body2();
 }
+
+
+// ****
+
+
+OverlineLabel::OverlineLabel(QWidget* _parent)
+    : AbstractLabel(_parent)
+{
+}
+
+const QFont& OverlineLabel::textFont() const
+{
+    return Ui::DesignSystem::font().overline();
+}

@@ -1251,6 +1251,7 @@ public:
     qreal px4 = 4.0;
     qreal px8 = 8.0;
     qreal px12 = 12.0;
+    qreal px16 = 16.0;
     qreal px24 = 24.0;
     qreal px62 = 62.0;
     qreal buttonsSpacing = 8.0;
@@ -1261,6 +1262,7 @@ DesignSystem::Layout::Implementation::Implementation(qreal _scaleFactor)
     px4 *= _scaleFactor;
     px8 *= _scaleFactor;
     px12 *= _scaleFactor;
+    px16 *= _scaleFactor;
     px24 *= _scaleFactor;
     px62 *= _scaleFactor;
     buttonsSpacing *= _scaleFactor;
@@ -1285,6 +1287,11 @@ qreal DesignSystem::Layout::px8() const
 qreal DesignSystem::Layout::px12() const
 {
     return d->px12;
+}
+
+qreal DesignSystem::Layout::px16() const
+{
+    return d->px16;
 }
 
 qreal DesignSystem::Layout::px24() const
@@ -1352,11 +1359,13 @@ public:
     qreal height = 38.0;
     qreal minimumWidth = 64.0;
     QMarginsF margins = {16.0, 0.0, 16.0, 0.0};
+    qreal spacing = 16.0;
     QMarginsF shadowMargins = {2.0, 2.0, 2.0, 16.0};
     qreal minimumShadowHeight = 8.0;
     qreal maximumShadowHeight = 16.0;
-    qreal borderRadius = 2.0;
-    qreal shadowBlurRadius = 8;
+    qreal borderRadius = 4.0;
+    qreal shadowBlurRadius = 8.0;
+    QSizeF iconSize = {22.0, 22.0};
 };
 
 DesignSystem::Button::Implementation::Implementation(qreal _scaleFactor)
@@ -1364,11 +1373,13 @@ DesignSystem::Button::Implementation::Implementation(qreal _scaleFactor)
     height *= _scaleFactor;
     minimumWidth *= _scaleFactor;
     margins *= _scaleFactor;
+    spacing *= _scaleFactor;
     shadowMargins *= _scaleFactor;
     minimumShadowHeight *= _scaleFactor;
     maximumShadowHeight *= _scaleFactor;
     borderRadius *= _scaleFactor;
     shadowBlurRadius *= _scaleFactor;
+    iconSize *= _scaleFactor;
 }
 
 
@@ -1390,6 +1401,11 @@ qreal DesignSystem::Button::minimumWidth() const
 const QMarginsF& DesignSystem::Button::margins() const
 {
     return d->margins;
+}
+
+qreal DesignSystem::Button::spacing() const
+{
+    return d->spacing;
 }
 
 const QMarginsF& DesignSystem::Button::shadowMargins() const
@@ -1415,6 +1431,11 @@ qreal DesignSystem::Button::shadowBlurRadius() const
 qreal DesignSystem::Button::borderRadius() const
 {
     return d->borderRadius;
+}
+
+const QSizeF& DesignSystem::Button::iconSize() const
+{
+    return d->iconSize;
 }
 
 DesignSystem::Button::Button(qreal _scaleFactor)

@@ -90,3 +90,16 @@ public:
 protected:
     const QFont& textFont() const override;
 };
+
+
+/**
+ * @brief Текстовая метка со шрифтом overline
+ */
+class OverlineLabel : public AbstractLabel
+{
+public:
+    explicit OverlineLabel(QWidget* _parent = nullptr);
+
+protected:
+    const QFont& textFont() const override;
+};

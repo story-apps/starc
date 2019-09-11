@@ -95,7 +95,7 @@ void ApplicationView::showContent(QWidget* _toolbar, QWidget* _navigator, QWidge
 void ApplicationView::closeEvent(QCloseEvent* _event)
 {
     //
-    // Вместо реального закрытия формы испускаем сигнал сигнализирующий об этом намерении
+    // Вместо реального закрытия формы сигнализируем об этом намерении
     //
 
     _event->ignore();

@@ -1,5 +1,9 @@
 #include "projects_manager.h"
 
+#include <ui/projects/projects_navigator.h>
+#include <ui/projects/projects_tool_bar.h>
+#include <ui/projects/projects_view.h>
+
 #include <QWidget>
 
 
@@ -11,15 +15,15 @@ class ProjectsManager::Implementation
 public:
     explicit Implementation(QWidget* _parent);
 
-    QWidget* toolBar = nullptr;
-    QWidget* navigator = nullptr;
-    QWidget* view = nullptr;
+    Ui::ProjectsToolBar* toolBar = nullptr;
+    Ui::ProjectsNavigator* navigator = nullptr;
+    Ui::ProjectsView* view = nullptr;
 };
 
 ProjectsManager::Implementation::Implementation(QWidget* _parent)
-    : toolBar(new QWidget(_parent)),
-      navigator(new QWidget(_parent)),
-      view(new QWidget(_parent))
+    : toolBar(new Ui::ProjectsToolBar(_parent)),
+      navigator(new Ui::ProjectsNavigator(_parent)),
+      view(new Ui::ProjectsView(_parent))
 {
     toolBar->hide();
     navigator->hide();
