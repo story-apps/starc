@@ -43,7 +43,11 @@ SOURCES += \
     ui/widgets/radio_button/radio_button_group.cpp \
     ui/widgets/label/link_label.cpp \
     ui/widgets/slider/slider.cpp \
-    utils/helpers/text_helper.cpp
+    utils/helpers/text_helper.cpp \
+    data_layer/mapper/mapper_facade.cpp \
+    data_layer/mapper/settings_mapper.cpp \
+    data_layer/storage/storage_facade.cpp \
+    data_layer/storage/settings_storage.cpp
 
 HEADERS += \
         core_global.h \
@@ -72,7 +76,11 @@ HEADERS += \
     ui/widgets/radio_button/radio_button_group.h \
     ui/widgets/label/link_label.h \
     ui/widgets/slider/slider.h \
-    utils/helpers/text_helper.h
+    utils/helpers/text_helper.h \
+    data_layer/mapper/mapper_facade.h \
+    data_layer/mapper/settings_mapper.h \
+    data_layer/storage/storage_facade.h \
+    data_layer/storage/settings_storage.h
 
 unix {
     target.path = /usr/lib
