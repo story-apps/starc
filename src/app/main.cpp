@@ -1,10 +1,10 @@
 #include <interfaces/management_layer/i_application_manager.h>
 
 #include <QApplication>
+#include <QDebug>
 #include <QDir>
 #include <QPluginLoader>
 #include <QStandardPaths>
-#include <QDebug>
 
 using ManagementLayer::IApplicationManager;
 
@@ -71,6 +71,8 @@ IApplicationManager* loadApplicationManager()
         QObject *plugin = pluginLoader.instance();
         if (plugin) {
             return qobject_cast<ManagementLayer::IApplicationManager *>(plugin);
+        } else {
+            qDebug() << pluginLoader.errorString();
         }
     }
 

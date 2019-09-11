@@ -8,6 +8,25 @@
 namespace DataStorageLayer
 {
 
+namespace {
+    const QString kApplicationGroupKey = "application/";
+}
+
+// первый запуск приложения (false) или оно уже сконфигурировано (true)
+const QString kApplicationConfiguredKey = kApplicationGroupKey + "configured";
+// язык приложения
+const QString kApplicationLanguagedKey = kApplicationGroupKey + "language";
+// тема приложения
+const QString kApplicationThemeKey = kApplicationGroupKey + "theme";
+// масштаб приложения
+const QString kApplicationScaleFactorKey = kApplicationGroupKey + "scale-factor";
+// системное имя пользователя
+const QString kApplicationUsernameKey = kApplicationGroupKey + "username";
+// включено ли автосохранение
+const QString kApplicationAutosaveKey = kApplicationGroupKey + "autosave";
+// интервал автосохранения в минутах
+const QString kApplicationAutosaveIntervalKey = kApplicationGroupKey + "autosave-interval";
+
 /**
  * @brief Хранилище настроек
  */
@@ -35,7 +54,7 @@ public:
     /**
      * @brief Получить значение по ключу
      */
-    QVariant value(const QString& _key, SettingsPlace _settingsPlace) const;
+    QVariant value(const QString& _key, SettingsPlace _settingsPlace, const QVariant& _defaultValue = {}) const;
 
     /**
      * @brief Получить группу значений

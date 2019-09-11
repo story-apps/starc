@@ -3,6 +3,10 @@
 #include "custom_events.h"
 
 #include "content/onboarding/onboarding_manager.h"
+#include "content/projects/projects_manager.h"
+
+#include <data_layer/storage/settings_storage.h>
+#include <data_layer/storage/storage_facade.h>
 
 #include <ui/application_view.h>
 #include <ui/design_system/design_system.h>
@@ -12,6 +16,7 @@
 #include <QLocale>
 #include <QTimer>
 #include <QTranslator>
+#include <QVariant>
 #include <QWidget>
 
 
@@ -37,30 +42,41 @@ public:
      */
     void updateTheme(Ui::ApplicationTheme _theme);
 
+
     QScopedPointer<Ui::ApplicationView> applicationView;
 
     QScopedPointer<OnboardingManager> onboardingManager;
+    QScopedPointer<ProjectsManager> projectsManager;
 };
 
 ApplicationManager::Implementation::Implementation()
     : applicationView(new Ui::ApplicationView),
-      onboardingManager(new OnboardingManager(nullptr, applicationView.data()))
+      onboardingManager(new OnboardingManager(nullptr, applicationView.data())),
+      projectsManager(new ProjectsManager(nullptr, applicationView.data()))
 {
 }
 
 void ApplicationManager::Implementation::showContent()
 {
     //
-    // TODO: Если это первый запуск приложения, то покажем онбординг
+    // Если это первый запуск приложения, то покажем онбординг
     //
-
-    applicationView->showContent(onboardingManager->toolBar(),
-                                 onboardingManager->navigator(),
-                                 onboardingManager->view());
-
+    if (DataStorageLayer::StorageFacade::settingsStorage()->value(
+                DataStorageLayer::kApplicationConfiguredKey,
+                DataStorageLayer::SettingsStorage::SettingsPlace::Application)
+            .toBool() == false) {
+        applicationView->showContent(onboardingManager->toolBar(),
+                                     onboardingManager->navigator(),
+                                     onboardingManager->view());
+    }
     //
-    // TODO: В противном случае показываем недавние проекты
+    // В противном случае показываем недавние проекты
     //
+    else {
+        applicationView->showContent(projectsManager->toolBar(),
+                                     projectsManager->navigator(),
+                                     projectsManager->view());
+    }
 }
 
 void ApplicationManager::Implementation::updateTranslation(QLocale::Language _language)
@@ -279,6 +295,9 @@ bool ApplicationManager::event(QEvent* _event)
 
 void ApplicationManager::initConnections()
 {
+    //
+    // Посадка
+    //
     connect(d->onboardingManager.data(), &OnboardingManager::languageChanged, this,
             [this] (QLocale::Language _language) { d->updateTranslation(_language); });
     connect(d->onboardingManager.data(), &OnboardingManager::themeChanged, this,
@@ -293,6 +312,16 @@ void ApplicationManager::initConnections()
         Ui::DesignSystem::setScaleFactor(_scaleFactor);
         QApplication::postEvent(this, new DesignSystemChangeEvent);
     });
+    connect(d->onboardingManager.data(), &OnboardingManager::finished, this,
+            [this]
+    {
+        DataStorageLayer::StorageFacade::settingsStorage()->setValue(
+                    DataStorageLayer::kApplicationConfiguredKey,
+                    true,
+                    DataStorageLayer::SettingsStorage::SettingsPlace::Application);
+        d->showContent();
+    });
+
 }
 
 } // namespace ManagementLayer

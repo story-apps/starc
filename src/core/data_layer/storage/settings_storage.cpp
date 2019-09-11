@@ -74,21 +74,13 @@ SettingsStorage::Implememntation::Implememntation()
     //
     // Настроим значения параметров по умолчанию
     //
-
-    // первый запуск приложения (false) или оно уже сконфигурировано (true)
-    defaultValues.insert("application/configured", false);
-    // язык приложения
-    defaultValues.insert("application/language", QLocale::AnyLanguage);
-    // тема приложения
-    defaultValues.insert("application/theme", static_cast<int>(Ui::ApplicationTheme::DarkAndLight));
-    // масштаб приложения
-    defaultValues.insert("application/scale-factor", 1.0);
-    // системное имя пользователя
-    defaultValues.insert("application/username", systemUserName());
-    // включено ли автосохранение
-    defaultValues.insert("application/autosave", true);
-    // интервал автосохранения в минутах
-    defaultValues.insert("application/autosave-interval", 5);
+    defaultValues.insert(kApplicationConfiguredKey, false);
+    defaultValues.insert(kApplicationLanguagedKey, QLocale::AnyLanguage);
+    defaultValues.insert(kApplicationThemeKey, static_cast<int>(Ui::ApplicationTheme::DarkAndLight));
+    defaultValues.insert(kApplicationScaleFactorKey, 1.0);
+    defaultValues.insert(kApplicationUsernameKey, systemUserName());
+    defaultValues.insert(kApplicationAutosaveKey, true);
+    defaultValues.insert(kApplicationAutosaveIntervalKey, 5);
 }
 
 QVariant SettingsStorage::Implememntation::cachedValue(const QString& _key,
@@ -186,7 +178,7 @@ void SettingsStorage::setValues(const QVariantMap& _values, const QString& _valu
 
 }
 
-QVariant SettingsStorage::value(const QString& _key, SettingsStorage::SettingsPlace _settingsPlace) const
+QVariant SettingsStorage::value(const QString& _key, SettingsStorage::SettingsPlace _settingsPlace, const QVariant& _defaultValue) const
 {
     //
     // Пробуем получить значение из кэша
@@ -211,11 +203,28 @@ QVariant SettingsStorage::value(const QString& _key, SettingsStorage::SettingsPl
     }
 
     //
-    // Сохраняем значение в кэш
+    // Если удалось загрузить
     //
-    d->cacheValue(_key, value, _settingsPlace);
+    if (!value.isNull()) {
+        //
+        // Сохраняем значение в кэш
+        //
+        d->cacheValue(_key, value, _settingsPlace);
 
-    return value;
+        return value;
+    }
+
+    //
+    // Если параметр не задан, то используем заданное значение по умолчанию
+    //
+    if (!_defaultValue.isNull()) {
+        return _defaultValue;
+    }
+
+    //
+    // В конце концов пробуем вытащить что-нибудь из предустановленных умолчальных значений
+    //
+    return d->defaultValues.value(_key);
 }
 
 QVariantMap SettingsStorage::values(const QString& _valuesGroup, SettingsStorage::SettingsPlace _settingsPlace)

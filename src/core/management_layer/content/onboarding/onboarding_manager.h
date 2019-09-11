@@ -42,6 +42,11 @@ signals:
      */
     void scaleFactorChanged(qreal _scaleFactor);
 
+    /**
+     * @brief Посадка окончена
+     */
+    void finished();
+
 private:
     class Implementation;
     QScopedPointer<Implementation> d;

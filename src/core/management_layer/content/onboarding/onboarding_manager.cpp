@@ -53,6 +53,8 @@ OnboardingManager::OnboardingManager(QObject* _parent, QWidget* _parentWidget)
     connect(d->view, &Ui::OnboardingView::showThemePageRequested, d->navigator, &Ui::OnboardingNavigator::showThemeStep);
     connect(d->view, &Ui::OnboardingView::themeChanged, this, &OnboardingManager::themeChanged);
     connect(d->view, &Ui::OnboardingView::scaleFactorChanged, this, &OnboardingManager::scaleFactorChanged);
+    connect(d->view, &Ui::OnboardingView::skipOnboardingRequested, this, &OnboardingManager::finished);
+    connect(d->view, &Ui::OnboardingView::finishOnboardingRequested, this, &OnboardingManager::finished);
 }
 
 QWidget* OnboardingManager::toolBar() const

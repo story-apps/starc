@@ -1,11 +1,29 @@
-#ifndef PROJECTS_MANAGER_H
-#define PROJECTS_MANAGER_H
+#pragma once
+
+#include <QObject>
 
 
-class ProjectsManager
+namespace ManagementLayer
 {
+
+/**
+ * @brief Менеджер экрана со списком проектов
+ */
+class ProjectsManager : public QObject
+{
+    Q_OBJECT
+
 public:
-    ProjectsManager();
+    explicit ProjectsManager(QObject* _parent, QWidget* _parentWidget);
+    ~ProjectsManager() override;
+
+    QWidget* toolBar() const;
+    QWidget* navigator() const;
+    QWidget* view() const;
+
+private:
+    class Implementation;
+    QScopedPointer<Implementation> d;
 };
 
-#endif // PROJECTS_MANAGER_H
+} // namespace ManagementLayer
