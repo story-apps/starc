@@ -78,9 +78,10 @@ SettingsStorage::Implememntation::Implememntation()
     defaultValues.insert(kApplicationLanguagedKey, QLocale::AnyLanguage);
     defaultValues.insert(kApplicationThemeKey, static_cast<int>(Ui::ApplicationTheme::DarkAndLight));
     defaultValues.insert(kApplicationScaleFactorKey, 1.0);
-    defaultValues.insert(kApplicationUsernameKey, systemUserName());
     defaultValues.insert(kApplicationAutosaveKey, true);
     defaultValues.insert(kApplicationAutosaveIntervalKey, 5);
+
+    defaultValues.insert(kSystemUsernameKey, systemUserName());
 }
 
 QVariant SettingsStorage::Implememntation::cachedValue(const QString& _key,

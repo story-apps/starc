@@ -938,6 +938,16 @@ public:
 
 public:
     /**
+     * @brief Текущая тема
+     */
+    static ApplicationTheme theme();
+
+    /**
+     * @brief Задать тему приложения
+     */
+    static void setTheme(ApplicationTheme _theme);
+
+    /**
      * @brief Текущий индекс масштабирования
      */
     static qreal scaleFactor();

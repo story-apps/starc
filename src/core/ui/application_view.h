@@ -22,7 +22,18 @@ public:
      */
     void showContent(QWidget* _toolbar, QWidget* _navigator, QWidget* _view);
 
+signals:
+    /**
+     * @brief Запрос на закрытие приложения
+     */
+    void closeRequested();
+
 protected:
+    /**
+     * @brief Переопределяем, чтобы вместо реального закрытия испустить сигнал о данном намерении
+     */
+    void closeEvent(QCloseEvent* _event) override;
+
     /**
      * @brief Обновляем навигатор при изменении дизайн системы
      */

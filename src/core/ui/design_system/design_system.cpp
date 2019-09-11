@@ -1595,8 +1595,10 @@ DesignSystem::Stepper::Stepper(qreal _scaleFactor)
 class DesignSystemPrivate
 {
 public:
-    explicit DesignSystemPrivate(qreal _scaleFactor = 1.0, const DesignSystem::Color& _color = {});
+    explicit DesignSystemPrivate(ApplicationTheme _theme = ApplicationTheme::DarkAndLight,
+        qreal _scaleFactor = 1.0, const DesignSystem::Color& _color = {});
 
+    ApplicationTheme theme = ApplicationTheme::DarkAndLight;
     qreal scaleFactor = 1.0;
 
     QMarginsF pageMargins = {16.0, 26.0, 16.0, 16.0};
@@ -1628,8 +1630,10 @@ public:
     DesignSystem::Stepper stepper;
 };
 
-DesignSystemPrivate::DesignSystemPrivate(qreal _scaleFactor, const DesignSystem::Color& _color)
-    : scaleFactor(_scaleFactor),
+DesignSystemPrivate::DesignSystemPrivate(ApplicationTheme _theme, qreal _scaleFactor,
+    const DesignSystem::Color& _color)
+    : theme(_theme),
+      scaleFactor(_scaleFactor),
       color(_color),
       appBar(_scaleFactor),
       drawer(_scaleFactor, _color),
@@ -1656,6 +1660,111 @@ DesignSystemPrivate::DesignSystemPrivate(qreal _scaleFactor, const DesignSystem:
 
 // **
 
+ApplicationTheme DesignSystem::theme()
+{
+    return instance()->d->theme;
+}
+
+void DesignSystem::setTheme(ApplicationTheme _theme)
+{
+    if (instance()->d->theme == _theme) {
+        return;
+    }
+
+    instance()->d->theme = _theme;
+
+    QColor primary;
+    QColor primaryDark;
+    QColor secondary;
+    QColor background;
+    QColor surface;
+    QColor error;
+    QColor shadow;
+    QColor onPrimary;
+    QColor onSecondary;
+    QColor onBackground;
+    QColor onSurface;
+    QColor onError;
+
+    switch (_theme) {
+        case Ui::ApplicationTheme::DarkAndLight: {
+            primary = "#323740";
+            primaryDark = "#22252b";
+            secondary = "#448AFF";
+            background = "#FFFFFF";
+            surface = "#FFFFFF";
+            error = "#B00020";
+            shadow = [] { QColor color = "#000000";
+                          color.setAlphaF(0.3);
+                          return color; } ();
+            onPrimary = "#FFFFFF";
+            onSecondary = "#FFFFFF";
+            onBackground = "#000000";
+            onSurface = "#000000";
+            onError = "#FFFFFF";
+            break;
+        }
+
+        case Ui::ApplicationTheme::Dark: {
+            primary = "#1F1F1F";
+            primaryDark = "#0A0A0A";
+            secondary = "#448AFF";
+            background = "#121212";
+            surface = "#121212";
+            error = "#CF6679";
+            shadow = [] { QColor color = "#000000";
+                          color.setAlphaF(0.68);
+                          return color; } ();
+            onPrimary = "#FFFFFF";
+            onSecondary = "#FFFFFF";
+            onBackground = "#FFFFFF";
+            onSurface = "#FFFFFF";
+            onError = "#000000";
+            break;
+        }
+
+        case Ui::ApplicationTheme::Light: {
+            primary = "#E4E4E4";
+            primaryDark = "#C8C8C8";
+            secondary = "#448AFF";
+            background = "#FFFFFF";
+            surface = "#FFFFFF";
+            error = "#B00020";
+            shadow = [] { QColor color = "#000000";
+                          color.setAlphaF(0.36);
+                          return color; } ();
+            onPrimary = "#38393A";
+            onSecondary = "#FFFFFF";
+            onBackground = "#000000";
+            onSurface = "#000000";
+            onError = "#FFFFFF";
+            break;
+        }
+
+        case Ui::ApplicationTheme::Custom: {
+            //
+            // TODO:
+            //
+            break;
+        }
+    }
+
+    auto newColor(instance()->d->color);
+    newColor.setPrimary(primary);
+    newColor.setPrimaryDark(primaryDark);
+    newColor.setSecondary(secondary);
+    newColor.setBackground(background);
+    newColor.setSurface(surface);
+    newColor.setError(error);
+    newColor.setShadow(shadow);
+    newColor.setOnPrimary(onPrimary);
+    newColor.setOnSecondary(onSecondary);
+    newColor.setOnBackground(onBackground);
+    newColor.setOnSurface(onSurface);
+    newColor.setOnError(onError);
+    setColor(newColor);
+}
+
 qreal DesignSystem::scaleFactor()
 {
     return instance()->d->scaleFactor;
@@ -1663,7 +1772,11 @@ qreal DesignSystem::scaleFactor()
 
 void DesignSystem::setScaleFactor(qreal _scaleFactor)
 {
-    instance()->d.reset(new DesignSystemPrivate(_scaleFactor, instance()->d->color));
+    if (qFuzzyCompare(instance()->d->scaleFactor, _scaleFactor)) {
+        return;
+    }
+
+    instance()->d.reset(new DesignSystemPrivate(theme(), _scaleFactor, color()));
 }
 
 QMarginsF DesignSystem::pageMargins()
@@ -1703,7 +1816,7 @@ const DesignSystem::Color& DesignSystem::color()
 
 void DesignSystem::setColor(const DesignSystem::Color& _color)
 {
-    instance()->d.reset(new DesignSystemPrivate(scaleFactor(), _color));
+    instance()->d.reset(new DesignSystemPrivate(theme(), scaleFactor(), _color));
 }
 
 const DesignSystem::AppBar& DesignSystem::appBar()

@@ -25,7 +25,7 @@ namespace ManagementLayer {
 class ApplicationManager::Implementation
 {
 public:
-    Implementation();
+    explicit Implementation(ApplicationManager* _q);
 
     /**
      * @brief Показать контент приложения
@@ -33,38 +33,48 @@ public:
     void showContent();
 
     /**
-     * @brief Обновить перевод
+     * @brief Установить перевод
      */
-    void updateTranslation(QLocale::Language _language);
+    void setTranslation(QLocale::Language _language);
 
     /**
-     * @brief Обновить тему
+     * @brief Установить тему
      */
-    void updateTheme(Ui::ApplicationTheme _theme);
+    void setTheme(Ui::ApplicationTheme _theme);
+
+    /**
+     * @brief Установить коэффициент масштабирования
+     */
+    void setScaleFactor(qreal _scaleFactor);
 
 
-    QScopedPointer<Ui::ApplicationView> applicationView;
+    ApplicationManager* q = nullptr;
+
+    Ui::ApplicationView* applicationView = nullptr;
 
     QScopedPointer<OnboardingManager> onboardingManager;
     QScopedPointer<ProjectsManager> projectsManager;
 };
 
-ApplicationManager::Implementation::Implementation()
-    : applicationView(new Ui::ApplicationView),
-      onboardingManager(new OnboardingManager(nullptr, applicationView.data())),
-      projectsManager(new ProjectsManager(nullptr, applicationView.data()))
+ApplicationManager::Implementation::Implementation(ApplicationManager* _q)
+    : q(_q),
+      applicationView(new Ui::ApplicationView),
+      onboardingManager(new OnboardingManager(nullptr, applicationView)),
+      projectsManager(new ProjectsManager(nullptr, applicationView))
 {
 }
 
 void ApplicationManager::Implementation::showContent()
 {
+    auto settingsValue = [] (const QString& _key) {
+        return DataStorageLayer::StorageFacade::settingsStorage()->value(
+                    _key, DataStorageLayer::SettingsStorage::SettingsPlace::Application);
+    };
+
     //
     // Если это первый запуск приложения, то покажем онбординг
     //
-    if (DataStorageLayer::StorageFacade::settingsStorage()->value(
-                DataStorageLayer::kApplicationConfiguredKey,
-                DataStorageLayer::SettingsStorage::SettingsPlace::Application)
-            .toBool() == false) {
+    if (settingsValue(DataStorageLayer::kApplicationConfiguredKey).toBool() == false) {
         applicationView->showContent(onboardingManager->toolBar(),
                                      onboardingManager->navigator(),
                                      onboardingManager->view());
@@ -73,13 +83,17 @@ void ApplicationManager::Implementation::showContent()
     // В противном случае показываем недавние проекты
     //
     else {
+        setTranslation(settingsValue(DataStorageLayer::kApplicationLanguagedKey).value<QLocale::Language>());
+        setTheme(static_cast<Ui::ApplicationTheme>(settingsValue(DataStorageLayer::kApplicationLanguagedKey).toInt()));
+        setScaleFactor(settingsValue(DataStorageLayer::kApplicationScaleFactorKey).toReal());
+
         applicationView->showContent(projectsManager->toolBar(),
                                      projectsManager->navigator(),
                                      projectsManager->view());
     }
 }
 
-void ApplicationManager::Implementation::updateTranslation(QLocale::Language _language)
+void ApplicationManager::Implementation::setTranslation(QLocale::Language _language)
 {
     //
     // Определим файл перевода
@@ -130,100 +144,18 @@ void ApplicationManager::Implementation::updateTranslation(QLocale::Language _la
     }
 }
 
-void ApplicationManager::Implementation::updateTheme(Ui::ApplicationTheme _theme)
+void ApplicationManager::Implementation::setTheme(Ui::ApplicationTheme _theme)
+{
+    Ui::DesignSystem::setTheme(_theme);
+    QApplication::postEvent(q, new DesignSystemChangeEvent);
+}
+
+void ApplicationManager::Implementation::setScaleFactor(qreal _scaleFactor)
 {
 
-    QColor primary;
-    QColor primaryDark;
-    QColor secondary;
-    QColor background;
-    QColor surface;
-    QColor error;
-    QColor shadow;
-    QColor onPrimary;
-    QColor onSecondary;
-    QColor onBackground;
-    QColor onSurface;
-    QColor onError;
+    Ui::DesignSystem::setScaleFactor(_scaleFactor);
+    QApplication::postEvent(q, new DesignSystemChangeEvent);
 
-    switch (_theme) {
-        case Ui::ApplicationTheme::DarkAndLight: {
-            primary = "#323740";
-            primaryDark = "#22252b";
-            secondary = "#448AFF";
-            background = "#FFFFFF";
-            surface = "#FFFFFF";
-            error = "#B00020";
-            shadow = [] { QColor color = "#000000";
-                          color.setAlphaF(0.3);
-                          return color; } ();
-            onPrimary = "#FFFFFF";
-            onSecondary = "#FFFFFF";
-            onBackground = "#000000";
-            onSurface = "#000000";
-            onError = "#FFFFFF";
-            break;
-        }
-
-        case Ui::ApplicationTheme::Dark: {
-            primary = "#1F1F1F";
-            primaryDark = "#0A0A0A";
-            secondary = "#448AFF";
-            background = "#121212";
-            surface = "#121212";
-            error = "#CF6679";
-            shadow = [] { QColor color = "#000000";
-                          color.setAlphaF(0.68);
-                          return color; } ();
-            onPrimary = "#FFFFFF";
-            onSecondary = "#FFFFFF";
-            onBackground = "#FFFFFF";
-            onSurface = "#FFFFFF";
-            onError = "#000000";
-            break;
-        }
-
-        case Ui::ApplicationTheme::Light: {
-            primary = "#E4E4E4";
-            primaryDark = "#C8C8C8";
-            secondary = "#448AFF";
-            background = "#FFFFFF";
-            surface = "#FFFFFF";
-            error = "#B00020";
-            shadow = [] { QColor color = "#000000";
-                          color.setAlphaF(0.36);
-                          return color; } ();
-            onPrimary = "#38393A";
-            onSecondary = "#FFFFFF";
-            onBackground = "#000000";
-            onSurface = "#000000";
-            onError = "#FFFFFF";
-            break;
-        }
-
-        case Ui::ApplicationTheme::Custom: {
-            //
-            // TODO:
-            //
-            break;
-        }
-    }
-
-
-    auto color(Ui::DesignSystem::color());
-    color.setPrimary(primary);
-    color.setPrimaryDark(primaryDark);
-    color.setSecondary(secondary);
-    color.setBackground(background);
-    color.setSurface(surface);
-    color.setError(error);
-    color.setShadow(shadow);
-    color.setOnPrimary(onPrimary);
-    color.setOnSecondary(onSecondary);
-    color.setOnBackground(onBackground);
-    color.setOnSurface(onSurface);
-    color.setOnError(onError);
-    Ui::DesignSystem::setColor(color);
 }
 
 
@@ -233,7 +165,7 @@ void ApplicationManager::Implementation::updateTheme(Ui::ApplicationTheme _theme
 ApplicationManager::ApplicationManager(QObject* _parent)
     : QObject(_parent),
       IApplicationManager(),
-      d(new Implementation)
+      d(new Implementation(this))
 {
     //
     // Загрузим шрифты в базу шрифтов программы, если их там ещё нет
@@ -256,7 +188,7 @@ void ApplicationManager::exec()
     // чтобы у пользователя возник эффект моментального запуска
     //
     QTimer::singleShot(0, this, [this] {
-        d->updateTranslation(QLocale::AnyLanguage);
+        d->setTranslation(QLocale::AnyLanguage);
         d->showContent();
     });
 }
@@ -281,7 +213,7 @@ bool ApplicationManager::event(QEvent* _event)
             for (auto widget : d->applicationView->findChildren<QWidget*>()) {
                 QApplication::sendEvent(widget, _event);
             }
-            QApplication::sendEvent(d->applicationView.data(), _event);
+            QApplication::sendEvent(d->applicationView, _event);
 
             _event->accept();
             return true;
@@ -296,29 +228,39 @@ bool ApplicationManager::event(QEvent* _event)
 void ApplicationManager::initConnections()
 {
     //
-    // Посадка
+    // Представление приложения
+    //
+    connect(d->applicationView, &Ui::ApplicationView::closeRequested, this, []
+    {
+        //
+        // TODO: Сохранение, все дела
+        //
+        QApplication::processEvents();
+        QApplication::quit();
+    });
+
+    //
+    // Менеджер посадки
     //
     connect(d->onboardingManager.data(), &OnboardingManager::languageChanged, this,
-            [this] (QLocale::Language _language) { d->updateTranslation(_language); });
+            [this] (QLocale::Language _language) { d->setTranslation(_language); });
     connect(d->onboardingManager.data(), &OnboardingManager::themeChanged, this,
-            [this] (Ui::ApplicationTheme _theme)
-    {
-        d->updateTheme(_theme);
-        QApplication::postEvent(this, new DesignSystemChangeEvent);
-    });
+            [this] (Ui::ApplicationTheme _theme) { d->setTheme(_theme); });
     connect(d->onboardingManager.data(), &OnboardingManager::scaleFactorChanged, this,
-            [this] (qreal _scaleFactor)
-    {
-        Ui::DesignSystem::setScaleFactor(_scaleFactor);
-        QApplication::postEvent(this, new DesignSystemChangeEvent);
-    });
+            [this] (qreal _scaleFactor) { d->setScaleFactor(_scaleFactor); });
     connect(d->onboardingManager.data(), &OnboardingManager::finished, this,
             [this]
     {
-        DataStorageLayer::StorageFacade::settingsStorage()->setValue(
-                    DataStorageLayer::kApplicationConfiguredKey,
-                    true,
-                    DataStorageLayer::SettingsStorage::SettingsPlace::Application);
+        auto setSettingsValue = [] (const QString& _key, const QVariant& _value) {
+            DataStorageLayer::StorageFacade::settingsStorage()->setValue(
+                        _key,
+                        _value,
+                        DataStorageLayer::SettingsStorage::SettingsPlace::Application);
+        };
+        setSettingsValue(DataStorageLayer::kApplicationConfiguredKey, true);
+        setSettingsValue(DataStorageLayer::kApplicationLanguagedKey, QLocale::system().language());
+        setSettingsValue(DataStorageLayer::kApplicationThemeKey, static_cast<int>(Ui::DesignSystem::theme()));
+        setSettingsValue(DataStorageLayer::kApplicationScaleFactorKey, Ui::DesignSystem::scaleFactor());
         d->showContent();
     });
 

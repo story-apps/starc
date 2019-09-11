@@ -5,6 +5,7 @@
 #include <ui/widgets/splitter/splitter.h>
 #include <ui/widgets/stack_widget/stack_widget.h>
 
+#include <QCloseEvent>
 #include <QVBoxLayout>
 
 
@@ -66,6 +67,16 @@ void ApplicationView::showContent(QWidget* _toolbar, QWidget* _navigator, QWidge
     d->toolBar->setCurrentWidget(_toolbar);
     d->navigator->setCurrentWidget(_navigator);
     d->view->setCurrentWidget(_view);
+}
+
+void ApplicationView::closeEvent(QCloseEvent* _event)
+{
+    //
+    // Вместо реального закрытия формы испускаем сигнал сигнализирующий об этом намерении
+    //
+
+    _event->ignore();
+    emit closeRequested();
 }
 
 void ApplicationView::designSystemChangeEvent(DesignSystemChangeEvent* _event)
