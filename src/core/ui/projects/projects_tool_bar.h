@@ -1,6 +1,6 @@
 #pragma once
 
-#include <ui/widgets/widget/widget.h>
+#include <ui/widgets/app_bar/app_bar.h>
 
 
 namespace Ui
@@ -9,12 +9,18 @@ namespace Ui
 /**
  * @brief Панель инструментов списка проектов
  */
-class ProjectsToolBar : public Widget
+class ProjectsToolBar : public AppBar
 {
     Q_OBJECT
 
 public:
     explicit ProjectsToolBar(QWidget* _parent = nullptr);
+
+signals:
+    /**
+     * @brief Пользователь хочет открыть меню
+     */
+    void menuPressed();
 
 protected:
     /**

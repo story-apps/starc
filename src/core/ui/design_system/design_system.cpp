@@ -215,7 +215,7 @@ public:
     qreal heightRegular = 56.0;
     QSizeF iconSize = {24.0, 24.0};
     QSizeF bigIconSize = {40.0, 40.0};
-    qreal iconsMargin = 24.0;
+    qreal iconsSpacing = 24.0;
     qreal leftTitleMargin = 72.0;
     qreal shadowRadius = 12.0;
     QPointF shadowOffset = {0.0, 3.0};
@@ -229,7 +229,7 @@ DesignSystem::AppBarPrivate::AppBarPrivate(qreal _scaleFactor)
     heightRegular *= _scaleFactor;
     iconSize *= _scaleFactor;
     bigIconSize *= _scaleFactor;
-    iconsMargin *= _scaleFactor;
+    iconsSpacing *= _scaleFactor;
     leftTitleMargin *= _scaleFactor;
     shadowRadius *= _scaleFactor;
     shadowOffset *= _scaleFactor;
@@ -267,9 +267,9 @@ QSizeF DesignSystem::AppBar::bigIconSize() const
     return d->bigIconSize;
 }
 
-qreal DesignSystem::AppBar::iconsMargin() const
+qreal DesignSystem::AppBar::iconsSpacing() const
 {
-    return d->iconsMargin;
+    return d->iconsSpacing;
 }
 
 qreal DesignSystem::AppBar::leftTitleMargin() const

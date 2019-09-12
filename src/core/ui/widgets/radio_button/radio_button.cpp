@@ -18,6 +18,7 @@ public:
      */
     void animateClick();
 
+
     bool isChecked = false;
     QString text;
 

@@ -113,7 +113,7 @@ public:
         /**
          * @brief Отступ между иконками
          */
-        qreal iconsMargin() const;
+        qreal iconsSpacing() const;
 
         /**
          * @brief Левый отступ текста

@@ -50,7 +50,8 @@ SOURCES += \
     data_layer/storage/settings_storage.cpp \
     ui/projects/projects_navigator.cpp \
     ui/projects/projects_tool_bar.cpp \
-    ui/projects/projects_view.cpp
+    ui/projects/projects_view.cpp \
+    ui/widgets/app_bar/app_bar.cpp
 
 HEADERS += \
         core_global.h \
@@ -86,7 +87,8 @@ HEADERS += \
     data_layer/storage/settings_storage.h \
     ui/projects/projects_navigator.h \
     ui/projects/projects_tool_bar.h \
-    ui/projects/projects_view.h
+    ui/projects/projects_view.h \
+    ui/widgets/app_bar/app_bar.h
 
 unix {
     target.path = /usr/lib

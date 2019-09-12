@@ -28,6 +28,12 @@ public:
     explicit Implementation(ApplicationManager* _q);
 
     /**
+     * @brief Получить значение параметра настроек
+     */
+    QVariant settingsValue(const QString& _key) const;
+    QVariantMap settingsValues(const QString& _key) const;
+
+    /**
      * @brief Показать контент приложения
      */
     void showContent();
@@ -64,13 +70,20 @@ ApplicationManager::Implementation::Implementation(ApplicationManager* _q)
 {
 }
 
+QVariant ApplicationManager::Implementation::settingsValue(const QString& _key) const
+{
+    return DataStorageLayer::StorageFacade::settingsStorage()->value(
+                _key, DataStorageLayer::SettingsStorage::SettingsPlace::Application);
+}
+
+QVariantMap ApplicationManager::Implementation::settingsValues(const QString& _key) const
+{
+    return DataStorageLayer::StorageFacade::settingsStorage()->values(
+                _key, DataStorageLayer::SettingsStorage::SettingsPlace::Application);
+}
+
 void ApplicationManager::Implementation::showContent()
 {
-    auto settingsValue = [] (const QString& _key) {
-        return DataStorageLayer::StorageFacade::settingsStorage()->value(
-                    _key, DataStorageLayer::SettingsStorage::SettingsPlace::Application);
-    };
-
     //
     // Если это первый запуск приложения, то покажем онбординг
     //
@@ -83,10 +96,6 @@ void ApplicationManager::Implementation::showContent()
     // В противном случае показываем недавние проекты
     //
     else {
-        setTranslation(settingsValue(DataStorageLayer::kApplicationLanguagedKey).value<QLocale::Language>());
-        setTheme(static_cast<Ui::ApplicationTheme>(settingsValue(DataStorageLayer::kApplicationThemeKey).toInt()));
-        setScaleFactor(settingsValue(DataStorageLayer::kApplicationScaleFactorKey).toReal());
-
         applicationView->showContent(projectsManager->toolBar(),
                                      projectsManager->navigator(),
                                      projectsManager->view());
@@ -187,10 +196,10 @@ void ApplicationManager::exec()
     //
     // ... затем пробуем загрузить геометрию и состояние приложения
     //
-    d->applicationView->restoreState(
-        DataStorageLayer::StorageFacade::settingsStorage()->values(
-                    DataStorageLayer::kApplicationViewStateKey,
-                    DataStorageLayer::SettingsStorage::SettingsPlace::Application));
+    d->setTranslation(d->settingsValue(DataStorageLayer::kApplicationLanguagedKey).value<QLocale::Language>());
+    d->setTheme(static_cast<Ui::ApplicationTheme>(d->settingsValue(DataStorageLayer::kApplicationThemeKey).toInt()));
+    d->setScaleFactor(d->settingsValue(DataStorageLayer::kApplicationScaleFactorKey).toReal());
+    d->applicationView->restoreState(d->settingsValues(DataStorageLayer::kApplicationViewStateKey));
 
     //
     // Покажем интерфейс
