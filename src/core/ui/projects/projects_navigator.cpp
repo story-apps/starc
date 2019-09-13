@@ -5,6 +5,7 @@
 #include <ui/widgets/label/label.h>
 
 #include <utils/helpers/color_helper.h>
+#include <utils/helpers/quotes_helper.h>
 
 #include <QVBoxLayout>
 
@@ -12,35 +13,13 @@
 namespace Ui
 {
 
-/**
-
-https://screencraft.org/2013/01/23/50-great-screenwriting-quotes/
-https://www.brainyquote.com/topics/screenwriter-quotes
-https://scriptlarva.wordpress.com/inspiration-for-writers/
-https://www.writersdigest.com/editor-blogs/there-are-no-rules/72-of-the-best-quotes-about-writing
-https://gointothestory.blcklst.com/free-screenwriting-resource-writers-on-writing-quotes-e2f6f0d1f710
-https://www.la-screenwriter.com/screenwriting-quotes/
-
- */
-
 class ProjectsNavigator::Implementation
 {
 public:
     explicit Implementation(QWidget* _parent);
 
-    /**
-     * @brief Цитата известного автора
-     */
-    struct Quote {
-        QString text;
-        QString author;
-    };
 
-    /**
-     * @brief Сформировать цитату
-     */
-    Quote generateQuote() const;
-
+    QuotesHelper::Quote quote;
 
     QVBoxLayout* layout = nullptr;
     H6Label* quoteLabel = nullptr;
@@ -61,12 +40,6 @@ ProjectsNavigator::Implementation::Implementation(QWidget* _parent)
     createStoryButton->setIcon("\uf415");
     openStoryButton->setIcon("\uf256");
     helpButton->setIcon("\uf2d7");
-}
-
-ProjectsNavigator::Implementation::Quote ProjectsNavigator::Implementation::generateQuote() const
-{
-    return { "Let the world burn through you. Throw the prism light, white hot, on paper.",
-             "Ray Bradbury" };
 }
 
 
@@ -92,9 +65,9 @@ ProjectsNavigator::ProjectsNavigator(QWidget* _parent)
 
 void ProjectsNavigator::updateTranslations()
 {
-    const auto quote = d->generateQuote();
-    d->quoteLabel->setText(quote.text);
-    d->quoteAuthorLabel->setText(quote.author);
+    d->quote = QuotesHelper::generateQuote(d->quote.index);
+    d->quoteLabel->setText(d->quote.text);
+    d->quoteAuthorLabel->setText(d->quote.author);
 
     d->createStoryButton->setText(tr("Create story"));
     d->openStoryButton->setText(tr("Open story"));

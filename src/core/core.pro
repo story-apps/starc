@@ -51,7 +51,8 @@ SOURCES += \
     ui/projects/projects_navigator.cpp \
     ui/projects/projects_tool_bar.cpp \
     ui/projects/projects_view.cpp \
-    ui/widgets/app_bar/app_bar.cpp
+    ui/widgets/app_bar/app_bar.cpp \
+    utils/helpers/quotes_helper.cpp
 
 HEADERS += \
         core_global.h \
@@ -88,7 +89,8 @@ HEADERS += \
     ui/projects/projects_navigator.h \
     ui/projects/projects_tool_bar.h \
     ui/projects/projects_view.h \
-    ui/widgets/app_bar/app_bar.h
+    ui/widgets/app_bar/app_bar.h \
+    utils/helpers/quotes_helper.h
 
 unix {
     target.path = /usr/lib
