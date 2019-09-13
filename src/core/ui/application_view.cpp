@@ -1,11 +1,12 @@
 #include "application_view.h"
 
 #include <ui/design_system/design_system.h>
-
+#include <ui/widgets/shadow/shadow.h>
 #include <ui/widgets/splitter/splitter.h>
 #include <ui/widgets/stack_widget/stack_widget.h>
 
 #include <QCloseEvent>
+#include <QPainter>
 #include <QVBoxLayout>
 
 
@@ -28,6 +29,7 @@ public:
     StackWidget* view = nullptr;
 
     Splitter* splitter = nullptr;
+    Shadow* splitterShadow = nullptr;
 };
 
 ApplicationView::Implementation::Implementation(QWidget* _parent)
@@ -35,7 +37,8 @@ ApplicationView::Implementation::Implementation(QWidget* _parent)
       toolBar(new StackWidget(_parent)),
       navigator(new StackWidget(_parent)),
       view(new StackWidget(_parent)),
-      splitter(new Splitter(_parent))
+      splitter(new Splitter(_parent)),
+      splitterShadow(new Shadow(view))
 {
 }
 
@@ -90,6 +93,8 @@ void ApplicationView::showContent(QWidget* _toolbar, QWidget* _navigator, QWidge
     d->toolBar->setCurrentWidget(_toolbar);
     d->navigator->setCurrentWidget(_navigator);
     d->view->setCurrentWidget(_view);
+
+    d->splitterShadow->raise();
 }
 
 void ApplicationView::closeEvent(QCloseEvent* _event)
@@ -100,6 +105,14 @@ void ApplicationView::closeEvent(QCloseEvent* _event)
 
     _event->ignore();
     emit closeRequested();
+}
+
+void ApplicationView::resizeEvent(QResizeEvent* _event)
+{
+    Widget::resizeEvent(_event);
+
+    d->splitterShadow->resize(static_cast<int>(Ui::DesignSystem::layout().px24()),
+                              _event->size().height());
 }
 
 void ApplicationView::designSystemChangeEvent(DesignSystemChangeEvent* _event)
@@ -116,6 +129,8 @@ void ApplicationView::designSystemChangeEvent(DesignSystemChangeEvent* _event)
     d->view->setBackgroundColor(DesignSystem::color().surface());
 
     d->splitter->setHandleColor(DesignSystem::color().primary());
+
+    d->splitterShadow->move(-1 * d->splitterShadow->width() * 2 / 3, 0);
 }
 
 } // namespace Ui

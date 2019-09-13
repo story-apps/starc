@@ -44,6 +44,8 @@ protected:
      */
     void closeEvent(QCloseEvent* _event) override;
 
+    void resizeEvent(QResizeEvent* _event) override;
+
     /**
      * @brief Обновляем навигатор при изменении дизайн системы
      */

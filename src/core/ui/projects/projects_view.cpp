@@ -59,8 +59,6 @@ ProjectsView::Implementation::Implementation(ProjectsView* _parent)
 
 void ProjectsView::Implementation::initEmptyPage()
 {
-    emptyPage->hide();
-
     emptyPageTitleLabel = new H6Label(emptyPage);
     emptyPageCreateStoryButton = new Button(emptyPage);
 
@@ -72,6 +70,8 @@ void ProjectsView::Implementation::initEmptyPage()
     layout->addWidget(emptyPageTitleLabel, 0, Qt::AlignHCenter);
     layout->addWidget(emptyPageCreateStoryButton, 0, Qt::AlignHCenter);
     layout->addStretch();
+
+    emptyPage->hide();
 }
 
 void ProjectsView::Implementation::updateToolBarsUi()
@@ -140,6 +140,8 @@ void ProjectsView::showProjectsPage()
 
 void ProjectsView::resizeEvent(QResizeEvent* _event)
 {
+    StackWidget::resizeEvent(_event);
+
     d->toolBar->move(QPointF(Ui::DesignSystem::layout().px24(),
                              Ui::DesignSystem::layout().px24()).toPoint());
     d->accountBar->move(QPointF(_event->size().width()

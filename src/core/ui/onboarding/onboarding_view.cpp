@@ -129,6 +129,7 @@ void OnboardingView::Implementation::initLanguagePage()
     languagePageLayout->setRowStretch(4, 1);
     languagePageLayout->addWidget(languageHowToAddLink, 5, 0, 1, 3);
     languagePageLayout->addLayout(languagePageButtonsLayout, 6, 0, 1, 3);
+
     languagePage->hide();
 }
 
@@ -218,6 +219,7 @@ void OnboardingView::Implementation::initThemePage()
     themePageLayout->addWidget(scaleFactorBigInfoLabel, 9, 2, 1, 1);
     themePageLayout->setRowStretch(10, 1);
     themePageLayout->addLayout(themePageButtonsLayout, 11, 0, 1, 3);
+
     themePage->hide();
 }
 
