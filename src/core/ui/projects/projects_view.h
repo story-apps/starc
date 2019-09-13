@@ -27,7 +27,25 @@ public:
      */
     void showProjectsPage();
 
+signals:
+    /**
+     * @brief Пользователь нажал кнопку создания истории
+     */
+    void createStoryPressed();
+
+    /**
+     * @brief Пользователь нажал кнопку открытия истории
+     */
+    void openStoryPressed();
+
+    /**
+     * @brief Пользователь нажал кнопку информации об аккаунте
+     */
+    void accountPressed();
+
 protected:
+    void resizeEvent(QResizeEvent* _event) override;
+
     /**
      * @brief Обновить переводы
      */

@@ -21,190 +21,6 @@
 namespace Ui
 {
 
-class DesignSystem::ColorPrivate
-{
-public:
-    ColorPrivate();
-
-    QColor primary;
-    QColor primaryDark;
-    QColor secondary;
-    QColor background;
-    QColor surface;
-    QColor error;
-    QColor shadow;
-    QColor onPrimary;
-    QColor onSecondary;
-    QColor onBackground;
-    QColor onSurface;
-    QColor onError;
-};
-
-DesignSystem::ColorPrivate::ColorPrivate()
-{
-    primary = QColor("#323740");
-    primaryDark = QColor("#22252b");
-    secondary = QColor("#448AFF");
-    background = QColor("#FFFFFF");
-    surface = QColor("#FFFFFF");
-    error = QColor("#B00020");
-    shadow = QColor("#000000");
-    shadow.setAlphaF(0.3);
-    onPrimary = QColor("#FFFFFF");
-    onSecondary = QColor("#FFFFFF");
-    onBackground = QColor("#000000");
-    onSurface = QColor("#000000");
-    onError = QColor("#FFFFFF");
-}
-
-// **
-
-DesignSystem::Color::Color(const DesignSystem::Color& _rhs)
-    : d(new ColorPrivate(*_rhs.d))
-{
-}
-
-DesignSystem::Color& DesignSystem::Color::operator=(const DesignSystem::Color& _rhs)
-{
-    if (&_rhs == this) {
-        return *this;
-    }
-
-    d.reset(new ColorPrivate(*_rhs.d));
-    return *this;
-}
-
-DesignSystem::Color::~Color() = default;
-
-QColor DesignSystem::Color::primary() const
-{
-    return d->primary;
-}
-
-QColor DesignSystem::Color::primaryDark() const
-{
-    return d->primaryDark;
-}
-
-QColor DesignSystem::Color::secondary() const
-{
-    return d->secondary;
-}
-
-QColor DesignSystem::Color::background() const
-{
-    return d->background;
-}
-
-QColor DesignSystem::Color::surface() const
-{
-    return d->surface;
-}
-
-QColor DesignSystem::Color::error() const
-{
-    return d->error;
-}
-
-QColor DesignSystem::Color::shadow() const
-{
-    return d->shadow;
-}
-
-QColor DesignSystem::Color::onPrimary() const
-{
-    return d->onPrimary;
-}
-
-QColor DesignSystem::Color::onSecondary() const
-{
-    return d->onSecondary;
-}
-
-QColor DesignSystem::Color::onBackground() const
-{
-    return d->onBackground;
-}
-
-QColor DesignSystem::Color::onSurface() const
-{
-    return d->onSurface;
-}
-
-QColor DesignSystem::Color::onError() const
-{
-    return d->onError;
-}
-
-void DesignSystem::Color::setPrimary(const QColor& _color)
-{
-    d->primary = _color;
-}
-
-void DesignSystem::Color::setPrimaryDark(const QColor& _color)
-{
-    d->primaryDark = _color;
-}
-
-void DesignSystem::Color::setSecondary(const QColor& _color)
-{
-    d->secondary = _color;
-}
-
-void DesignSystem::Color::setBackground(const QColor& _color)
-{
-    d->background = _color;
-}
-
-void DesignSystem::Color::setSurface(const QColor& _color)
-{
-    d->surface = _color;
-}
-
-void DesignSystem::Color::setError(const QColor& _color)
-{
-    d->error = _color;
-}
-
-void DesignSystem::Color::setShadow(const QColor& _color)
-{
-    d->shadow = _color;
-}
-
-void DesignSystem::Color::setOnPrimary(const QColor& _color)
-{
-    d->onPrimary = _color;
-}
-
-void DesignSystem::Color::setOnSecondary(const QColor& _color)
-{
-    d->onSecondary = _color;
-}
-
-void DesignSystem::Color::setOnBackground(const QColor& _color)
-{
-    d->onBackground = _color;
-}
-
-void DesignSystem::Color::setOnSurface(const QColor& _color)
-{
-    d->onSurface = _color;
-}
-
-void DesignSystem::Color::setOnError(const QColor& _color)
-{
-    d->onError = _color;
-}
-
-DesignSystem::Color::Color()
-    : d(new ColorPrivate)
-{
-}
-
-
-// ****
-
-
 class DesignSystem::AppBarPrivate
 {
 public:
@@ -1105,6 +921,192 @@ DesignSystem::Dialog::Dialog(qreal _scaleFactor)
 // ****
 
 
+class DesignSystem::Color::Implementation
+{
+public:
+    Implementation();
+
+    QColor primary;
+    QColor primaryDark;
+    QColor secondary;
+    QColor background;
+    QColor surface;
+    QColor error;
+    QColor shadow;
+    QColor onPrimary;
+    QColor onSecondary;
+    QColor onBackground;
+    QColor onSurface;
+    QColor onError;
+};
+
+DesignSystem::Color::Implementation::Implementation()
+{
+    primary = QColor("#323740");
+    primaryDark = QColor("#22252b");
+    secondary = QColor("#448AFF");
+    background = QColor("#FFFFFF");
+    surface = QColor("#FFFFFF");
+    error = QColor("#B00020");
+    shadow = QColor("#000000");
+    shadow.setAlphaF(0.3);
+    onPrimary = QColor("#FFFFFF");
+    onSecondary = QColor("#FFFFFF");
+    onBackground = QColor("#000000");
+    onSurface = QColor("#000000");
+    onError = QColor("#FFFFFF");
+}
+
+
+// **
+
+
+DesignSystem::Color::Color(const DesignSystem::Color& _rhs)
+    : d(new Implementation(*_rhs.d))
+{
+}
+
+DesignSystem::Color& DesignSystem::Color::operator=(const DesignSystem::Color& _rhs)
+{
+    if (&_rhs == this) {
+        return *this;
+    }
+
+    d.reset(new Implementation(*_rhs.d));
+    return *this;
+}
+
+DesignSystem::Color::~Color() = default;
+
+const QColor& DesignSystem::Color::primary() const
+{
+    return d->primary;
+}
+
+const QColor& DesignSystem::Color::primaryDark() const
+{
+    return d->primaryDark;
+}
+
+const QColor& DesignSystem::Color::secondary() const
+{
+    return d->secondary;
+}
+
+const QColor& DesignSystem::Color::background() const
+{
+    return d->background;
+}
+
+const QColor& DesignSystem::Color::surface() const
+{
+    return d->surface;
+}
+
+const QColor& DesignSystem::Color::error() const
+{
+    return d->error;
+}
+
+const QColor& DesignSystem::Color::shadow() const
+{
+    return d->shadow;
+}
+
+const QColor& DesignSystem::Color::onPrimary() const
+{
+    return d->onPrimary;
+}
+
+const QColor& DesignSystem::Color::onSecondary() const
+{
+    return d->onSecondary;
+}
+
+const QColor& DesignSystem::Color::onBackground() const
+{
+    return d->onBackground;
+}
+
+const QColor& DesignSystem::Color::onSurface() const
+{
+    return d->onSurface;
+}
+
+const QColor& DesignSystem::Color::onError() const
+{
+    return d->onError;
+}
+
+void DesignSystem::Color::setPrimary(const QColor& _color)
+{
+    d->primary = _color;
+}
+
+void DesignSystem::Color::setPrimaryDark(const QColor& _color)
+{
+    d->primaryDark = _color;
+}
+
+void DesignSystem::Color::setSecondary(const QColor& _color)
+{
+    d->secondary = _color;
+}
+
+void DesignSystem::Color::setBackground(const QColor& _color)
+{
+    d->background = _color;
+}
+
+void DesignSystem::Color::setSurface(const QColor& _color)
+{
+    d->surface = _color;
+}
+
+void DesignSystem::Color::setError(const QColor& _color)
+{
+    d->error = _color;
+}
+
+void DesignSystem::Color::setShadow(const QColor& _color)
+{
+    d->shadow = _color;
+}
+
+void DesignSystem::Color::setOnPrimary(const QColor& _color)
+{
+    d->onPrimary = _color;
+}
+
+void DesignSystem::Color::setOnSecondary(const QColor& _color)
+{
+    d->onSecondary = _color;
+}
+
+void DesignSystem::Color::setOnBackground(const QColor& _color)
+{
+    d->onBackground = _color;
+}
+
+void DesignSystem::Color::setOnSurface(const QColor& _color)
+{
+    d->onSurface = _color;
+}
+
+void DesignSystem::Color::setOnError(const QColor& _color)
+{
+    d->onError = _color;
+}
+
+DesignSystem::Color::Color()
+    : d(new Implementation)
+{
+}
+
+
+// ****
+
+
 class DesignSystem::Font::Implementation
 {
 public:
@@ -1242,6 +1244,7 @@ DesignSystem::Font::Font(qreal _scaleFactor)
 
 
 // ****
+
 
 class DesignSystem::Layout::Implementation
 {
@@ -1547,6 +1550,89 @@ DesignSystem::Slider::Slider(qreal _scaleFactor)
 // ****
 
 
+class DesignSystem::FloatingToolBar::Implementation
+{
+public:
+    explicit Implementation(qreal _scaleFactor);
+
+    QMarginsF margins = {16.0, 16.0, 16.0, 16.0};
+    QMarginsF shadowMargins = {2.0, 2.0, 2.0, 16.0};
+    qreal minimumShadowHeight = 8.0;
+    qreal maximumShadowHeight = 16.0;
+    qreal borderRadius = 4.0;
+    qreal height = 56.0;
+    QSizeF iconSize = {24.0, 24.0};
+    qreal spacing = 24.0;
+    qreal shadowBlurRadius = 8.0;
+};
+
+DesignSystem::FloatingToolBar::Implementation::Implementation(qreal _scaleFactor)
+{
+    margins *= _scaleFactor;
+    shadowMargins *= _scaleFactor;
+    minimumShadowHeight *= _scaleFactor;
+    maximumShadowHeight *= _scaleFactor;
+    height *= _scaleFactor;
+    iconSize *= _scaleFactor;
+    spacing *= _scaleFactor;
+    shadowBlurRadius *= _scaleFactor;
+}
+
+
+// **
+
+
+DesignSystem::FloatingToolBar::~FloatingToolBar() = default;
+
+const QMarginsF& DesignSystem::FloatingToolBar::margins() const
+{
+    return d->margins;
+}
+
+const QMarginsF& DesignSystem::FloatingToolBar::shadowMargins() const
+{
+    return d->shadowMargins;
+}
+
+qreal DesignSystem::FloatingToolBar::minimumShadowHeight() const
+{
+    return d->minimumShadowHeight;
+}
+
+qreal DesignSystem::FloatingToolBar::maximumShadowHeight() const
+{
+    return d->maximumShadowHeight;
+}
+
+qreal DesignSystem::FloatingToolBar::height() const
+{
+    return d->height;
+}
+
+const QSizeF& DesignSystem::FloatingToolBar::iconSize() const
+{
+    return d->iconSize;
+}
+
+qreal DesignSystem::FloatingToolBar::spacing() const
+{
+    return d->spacing;
+}
+
+qreal DesignSystem::FloatingToolBar::shadowBlurRadius() const
+{
+    return d->shadowBlurRadius;
+}
+
+DesignSystem::FloatingToolBar::FloatingToolBar(qreal _scaleFactor)
+    : d(new Implementation(_scaleFactor))
+{
+}
+
+
+// ****
+
+
 class DesignSystem::Stepper::Implementation
 {
 public:
@@ -1648,6 +1734,7 @@ public:
     DesignSystem::Button button;
     DesignSystem::RadioButton radioButton;
     DesignSystem::Slider slider;
+    DesignSystem::FloatingToolBar floatingAppBar;
     DesignSystem::Stepper stepper;
 };
 
@@ -1673,6 +1760,7 @@ DesignSystemPrivate::DesignSystemPrivate(ApplicationTheme _theme, qreal _scaleFa
       button(_scaleFactor),
       radioButton(_scaleFactor),
       slider(_scaleFactor),
+      floatingAppBar(_scaleFactor),
       stepper(_scaleFactor)
 {
     pageMargins *= _scaleFactor;
@@ -1830,16 +1918,6 @@ qreal DesignSystem::elevationEndOpacity()
     return instance()->d->elevationEndOpacity;
 }
 
-const DesignSystem::Color& DesignSystem::color()
-{
-    return instance()->d->color;
-}
-
-void DesignSystem::setColor(const DesignSystem::Color& _color)
-{
-    instance()->d.reset(new DesignSystemPrivate(theme(), scaleFactor(), _color));
-}
-
 const DesignSystem::AppBar& DesignSystem::appBar()
 {
     return instance()->d->appBar;
@@ -1895,6 +1973,16 @@ const DesignSystem::Dialog& DesignSystem::dialog()
     return instance()->d->dialog;
 }
 
+const DesignSystem::Color& DesignSystem::color()
+{
+    return instance()->d->color;
+}
+
+void DesignSystem::setColor(const DesignSystem::Color& _color)
+{
+    instance()->d.reset(new DesignSystemPrivate(theme(), scaleFactor(), _color));
+}
+
 const DesignSystem::Font& DesignSystem::font()
 {
     return instance()->d->font;
@@ -1923,6 +2011,11 @@ const DesignSystem::RadioButton& DesignSystem::radioButton()
 const DesignSystem::Slider& DesignSystem::slider()
 {
     return instance()->d->slider;
+}
+
+const DesignSystem::FloatingToolBar& DesignSystem::floatingToolBar()
+{
+    return instance()->d->floatingAppBar;
 }
 
 const DesignSystem::Stepper& DesignSystem::stepper()

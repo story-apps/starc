@@ -35,7 +35,6 @@ StackWidget::StackWidget(QWidget *_parent)
     connect(&d->fadeAnimation, &QVariantAnimation::valueChanged, this, [this] { update(); });
     connect(&d->fadeAnimation, &QVariantAnimation::finished, this, [this] {
         d->currentWidget->resize(size());
-        d->currentWidget->raise();
         d->currentWidget->show();
     });
 }

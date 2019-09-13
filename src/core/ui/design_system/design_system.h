@@ -30,51 +30,8 @@ class DesignSystemPrivate;
 class DesignSystem
 {
 public:
-    /**
-     * @brief Параметры цвета приложения
-     * @link https://material.io/design/color/the-color-system.html
-     * @link https://material.io/design/color/applying-color-to-ui.html
-     * @line https://www.materialpalette.com/brown/blue
-     */
-    class ColorPrivate;
-    class Color
-    {
-    public:
-        explicit Color(const Color& _rhs);
-        ~Color();
-        Color& operator=(const Color& _rhs);
+    class Color;
 
-        QColor primary() const;
-        QColor primaryDark() const;
-        QColor secondary() const;
-        QColor background() const;
-        QColor surface() const;
-        QColor error() const;
-        QColor shadow() const;
-        QColor onPrimary() const;
-        QColor onSecondary() const;
-        QColor onBackground() const;
-        QColor onSurface() const;
-        QColor onError() const;
-
-        void setPrimary(const QColor& _color);
-        void setPrimaryDark(const QColor& _color);
-        void setSecondary(const QColor& _color);
-        void setBackground(const QColor& _color);
-        void setSurface(const QColor& _color);
-        void setError(const QColor& _color);
-        void setShadow(const QColor& _color);
-        void setOnPrimary(const QColor& _color);
-        void setOnSecondary(const QColor& _color);
-        void setOnBackground(const QColor& _color);
-        void setOnSurface(const QColor& _color);
-        void setOnError(const QColor& _color);
-
-    private:
-        Color();
-        QScopedPointer<ColorPrivate> d;
-        friend class DesignSystemPrivate;
-    };
 
     /**
      * @brief Параметры панели иструментов приложения
@@ -669,6 +626,57 @@ public:
         friend class DesignSystemPrivate;
     };
 
+
+
+
+
+    /**
+     * @brief Параметры цвета приложения
+     * @link https://material.io/design/color/the-color-system.html
+     * @link https://material.io/design/color/applying-color-to-ui.html
+     * @line https://www.materialpalette.com/brown/blue
+     */
+    class Color
+    {
+    public:
+        explicit Color(const Color& _rhs);
+        ~Color();
+        Color& operator=(const Color& _rhs);
+
+        const QColor& primary() const;
+        const QColor& primaryDark() const;
+        const QColor& secondary() const;
+        const QColor& background() const;
+        const QColor& surface() const;
+        const QColor& error() const;
+        const QColor& shadow() const;
+        const QColor& onPrimary() const;
+        const QColor& onSecondary() const;
+        const QColor& onBackground() const;
+        const QColor& onSurface() const;
+        const QColor& onError() const;
+
+        void setPrimary(const QColor& _color);
+        void setPrimaryDark(const QColor& _color);
+        void setSecondary(const QColor& _color);
+        void setBackground(const QColor& _color);
+        void setSurface(const QColor& _color);
+        void setError(const QColor& _color);
+        void setShadow(const QColor& _color);
+        void setOnPrimary(const QColor& _color);
+        void setOnSecondary(const QColor& _color);
+        void setOnBackground(const QColor& _color);
+        void setOnSurface(const QColor& _color);
+        void setOnError(const QColor& _color);
+
+    private:
+        Color();
+        friend class DesignSystemPrivate;
+        //
+        class Implementation;
+        QScopedPointer<Implementation> d;
+    };
+
     /**
      * @brief Параметры шрифтов
      */
@@ -906,6 +914,62 @@ public:
     };
 
     /**
+     * @brief Параметры панели иструментов приложения
+     */
+    class FloatingToolBar
+    {
+    public:
+        ~FloatingToolBar();
+
+        /**
+         * @brief Отступы
+         */
+        const QMarginsF& margins() const;
+
+        /**
+         * @brief Отступы тени
+         */
+        const QMarginsF& shadowMargins() const;
+
+        /**
+         * @brief Минимальная высота тени
+         */
+        qreal minimumShadowHeight() const;
+
+        /**
+         * @brief Максимальная высота тени
+         */
+        qreal maximumShadowHeight() const;
+
+        /**
+         * @brief Высота в обычном варианте
+         */
+        qreal height() const;
+
+        /**
+         * @brief Размер иконки
+         */
+        const QSizeF& iconSize() const;
+
+        /**
+         * @brief Отступ между иконками
+         */
+        qreal spacing() const;
+
+        /**
+         * @brief Радиус размытия тени
+         */
+        qreal shadowBlurRadius() const;
+
+    private:
+        explicit FloatingToolBar(qreal _scaleFactor);
+        friend class DesignSystemPrivate;
+        //
+        class Implementation;
+        QScopedPointer<Implementation> d;
+    };
+
+    /**
      * @brief Параметры виджета пошагового переключения
      */
     class Stepper
@@ -1001,12 +1065,6 @@ public:
     /** @} */
 
     /**
-     * @brief Параметры цвета приложения
-     */
-    static const Color& color();
-    static void setColor(const Color& _color);
-
-    /**
      * @brief Параметры панели инструментов приложения
      */
     static const AppBar& appBar();
@@ -1066,6 +1124,12 @@ public:
 
 
     /**
+     * @brief Параметры цвета приложения
+     */
+    static const Color& color();
+    static void setColor(const Color& _color);
+
+    /**
      * @brief Параметры шрифтов
      */
     static const Font& font();
@@ -1094,6 +1158,11 @@ public:
      * @brief Параметры слайдера
      */
     static const Slider& slider();
+
+    /**
+     * @brief Параметры плавающей панели инструментов
+     */
+    static const FloatingToolBar& floatingToolBar();
 
     /**
      * @brief Параметры виджета пошагового движения

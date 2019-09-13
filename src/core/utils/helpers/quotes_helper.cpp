@@ -71,7 +71,7 @@ QuotesHelper::Quote QuotesHelper::generateQuote(int _index)
                  QApplication::translate("QuotesHelper", "Tom Clancy") },
                { index++, QApplication::translate("QuotesHelper", "The first sentence can’t be written until the final sentence is written."),
                  QApplication::translate("QuotesHelper", "Joyce Carol Oates") },
-               { index++, QApplication::translate("QuotesHelper", "Long patience and application saturated with your heart’s blood—you will either write or you will not—and the only way to find out whether you will or not is to try."),
+               { index++, QApplication::translate("QuotesHelper", "Long patience and application saturated with your heart’s blood — you will either write or you will not — and the only way to find out whether you will or not is to try."),
                  QApplication::translate("QuotesHelper", "Jim Tully, WD") },
                { index++, QApplication::translate("QuotesHelper", "Beware of advice — even this."),
                  QApplication::translate("QuotesHelper", "Carl Sandburg") },

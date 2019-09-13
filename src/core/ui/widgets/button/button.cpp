@@ -20,6 +20,12 @@ public:
      */
     void animateClick();
 
+    /**
+     * @brief Анимировать тень
+     */
+    void animateHoverIn();
+    void animateHoverOut();
+
 
     QString icon;
     QString text;
@@ -31,6 +37,11 @@ public:
     QPointF decorationCenterPosition;
     QVariantAnimation decorationRadiusAnimation;
     QVariantAnimation decorationOpacityAnimation;
+
+    /**
+     * @brief  Декорации тени при наведении
+     */
+    QVariantAnimation shadowHeightAnimation;
 };
 
 Button::Implementation::Implementation()
@@ -43,6 +54,9 @@ Button::Implementation::Implementation()
     decorationOpacityAnimation.setStartValue(0.5);
     decorationOpacityAnimation.setEndValue(0.0);
     decorationOpacityAnimation.setDuration(420);
+
+    shadowHeightAnimation.setEasingCurve(QEasingCurve::OutQuad);
+    shadowHeightAnimation.setDuration(160);
 }
 
 void Button::Implementation::animateClick()
@@ -50,6 +64,18 @@ void Button::Implementation::animateClick()
     decorationOpacityAnimation.setCurrentTime(0);
     decorationRadiusAnimation.start();
     decorationOpacityAnimation.start();
+}
+
+void Button::Implementation::animateHoverIn()
+{
+    shadowHeightAnimation.setDirection(QVariantAnimation::Forward);
+    shadowHeightAnimation.start();
+}
+
+void Button::Implementation::animateHoverOut()
+{
+    shadowHeightAnimation.setDirection(QVariantAnimation::Backward);
+    shadowHeightAnimation.start();
 }
 
 
@@ -62,10 +88,11 @@ Button::Button(QWidget* _parent)
 {
     setAttribute(Qt::WA_Hover);
 
-    designSystemChangeEvent(nullptr);
-
     connect(&d->decorationRadiusAnimation, &QVariantAnimation::valueChanged, this, [this] { update(); });
     connect(&d->decorationOpacityAnimation, &QVariantAnimation::valueChanged, this, [this] { update(); });
+    connect(&d->shadowHeightAnimation, &QVariantAnimation::valueChanged, this, [this] { update(); });
+
+    designSystemChangeEvent(nullptr);
 }
 
 Button::~Button() = default;
@@ -139,29 +166,31 @@ void Button::paintEvent(QPaintEvent* _event)
         backgroundColor.setAlphaF(0.2);
     }
     if (backgroundColor.isValid()) {
-        QPixmap image(backgroundRect.size());
-        image.fill(Qt::transparent);
-        QPainter imagePainter(&image);
-        imagePainter.setPen(Qt::NoPen);
-        imagePainter.setBrush(backgroundColor);
-        imagePainter.drawRoundedRect(QRect({0,0}, image.size()),
+        QPixmap backgroundImage(backgroundRect.size());
+        backgroundImage.fill(Qt::transparent);
+        QPainter backgroundImagePainter(&backgroundImage);
+        backgroundImagePainter.setPen(Qt::NoPen);
+        backgroundImagePainter.setBrush(backgroundColor);
+        backgroundImagePainter.drawRoundedRect(QRect({0,0}, backgroundImage.size()),
                                      Ui::DesignSystem::button().borderRadius(),
                                      Ui::DesignSystem::button().borderRadius());
         //
         // Тень рисуем только в случае, если кнопка имеет установленный фон
         //
         if (d->isContained) {
+            const qreal shadowHeight = std::max(Ui::DesignSystem::button().minimumShadowHeight(),
+                                                d->shadowHeightAnimation.currentValue().toReal());
             const QPixmap shadow
-                    = ImageHelper::dropShadow(image,
+                    = ImageHelper::dropShadow(backgroundImage,
                                               QMarginsF(Ui::DesignSystem::button().shadowMargins().left(),
                                                         Ui::DesignSystem::button().shadowMargins().top(),
                                                         Ui::DesignSystem::button().shadowMargins().right(),
-                                                        Ui::DesignSystem::button().minimumShadowHeight()),
-                                              Ui::DesignSystem::button().shadowBlurRadius(),
+                                                        shadowHeight),
+                                              Ui::DesignSystem::button().shadowBlurRadius() + shadowHeight,
                                               Ui::DesignSystem::color().shadow());
             painter.drawPixmap(0, 0, shadow);
         }
-        painter.drawPixmap(backgroundRect.topLeft(), image);
+        painter.drawPixmap(backgroundRect.topLeft(), backgroundImage);
     }
 
     //
@@ -219,6 +248,18 @@ void Button::paintEvent(QPaintEvent* _event)
     painter.drawText(buttonInnerRect, Qt::AlignCenter, d->text);
 }
 
+void Button::enterEvent(QEvent* _event)
+{
+    Q_UNUSED(_event);
+    d->animateHoverIn();
+}
+
+void Button::leaveEvent(QEvent* _event)
+{
+    Q_UNUSED(_event);
+    d->animateHoverOut();
+}
+
 void Button::mousePressEvent(QMouseEvent* _event)
 {
     d->decorationCenterPosition = _event->pos();
@@ -242,6 +283,9 @@ void Button::designSystemChangeEvent(DesignSystemChangeEvent* _event)
     Q_UNUSED(_event);
 
     setContentsMargins(Ui::DesignSystem::button().shadowMargins().toMargins());
+    d->shadowHeightAnimation.setStartValue(Ui::DesignSystem::floatingToolBar().minimumShadowHeight());
+    d->shadowHeightAnimation.setEndValue(Ui::DesignSystem::floatingToolBar().maximumShadowHeight());
+
     updateGeometry();
     update();
 }

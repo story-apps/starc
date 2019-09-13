@@ -122,8 +122,9 @@ void AppBar::paintEvent(QPaintEvent* _event)
         //
         // ... декорация
         //
-        if (d->decorationRadiusAnimation.state() == QVariantAnimation::Running
-            || d->decorationOpacityAnimation.state() == QVariantAnimation::Running) {
+        if (action == d->lastPressedAction
+            && (d->decorationRadiusAnimation.state() == QVariantAnimation::Running
+                || d->decorationOpacityAnimation.state() == QVariantAnimation::Running)) {
             painter.setPen(Qt::NoPen);
             painter.setBrush(Ui::DesignSystem::color().secondary());
             painter.setOpacity(d->decorationOpacityAnimation.currentValue().toReal());

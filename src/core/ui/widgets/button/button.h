@@ -43,6 +43,12 @@ protected:
     void paintEvent(QPaintEvent* _event) override;
 
     /**
+     * @brief Переопределяем для реализации эффекта поднятия виджета при ховере
+     */
+    void enterEvent(QEvent* _event) override;
+    void leaveEvent(QEvent* _event) override;
+
+    /**
      * @brief Анимируем клик на кнопке
      */
     void mousePressEvent(QMouseEvent* _event) override;

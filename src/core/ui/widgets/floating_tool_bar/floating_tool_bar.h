@@ -4,15 +4,20 @@
 
 
 /**
- * @brief Виджет панели инструментов приложения
+ * @brief Виджет плавающей панели инструментов
  */
-class AppBar : public Widget
+class FloatingToolBar : public Widget
 {
     Q_OBJECT
 
 public:
-    explicit AppBar(QWidget* _parent = nullptr);
-    ~AppBar() override;
+    explicit FloatingToolBar(QWidget* _parent = nullptr);
+    ~FloatingToolBar() override;
+
+    /**
+     * @brief Переопределяем, чтобы знать лучший размер
+     */
+    QSize sizeHint() const override;
 
 signals:
 
@@ -21,6 +26,12 @@ protected:
      * @brief Реализуем собственное рисование
      */
     void paintEvent(QPaintEvent* _event) override;
+
+    /**
+     * @brief Переопределяем для реализации эффекта поднятия виджета при ховере
+     */
+    void enterEvent(QEvent* _event) override;
+    void leaveEvent(QEvent* _event) override;
 
     /**
      * @brief Переопределяем, для анимации нажатия мыши на кнопке
