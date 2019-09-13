@@ -15,12 +15,32 @@ class ProjectsView : public StackWidget
 
 public:
     explicit ProjectsView(QWidget* _parent = nullptr);
+    ~ProjectsView() override;
+
+    /**
+     * @brief Показать страницу без проектов
+     */
+    void showEmptyPage();
+
+    /**
+     * @brief Показать страницу со списком проектов
+     */
+    void showProjectsPage();
 
 protected:
+    /**
+     * @brief Обновить переводы
+     */
+    void updateTranslations() override;
+
     /**
      * @brief Обновляем навигатор при изменении дизайн системы
      */
     void designSystemChangeEvent(DesignSystemChangeEvent* _event) override;
+
+private:
+    class Implementation;
+    QScopedPointer<Implementation> d;
 };
 
 } // namespace Ui

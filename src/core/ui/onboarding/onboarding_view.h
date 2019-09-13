@@ -30,11 +30,6 @@ public:
      */
     void showThemePage();
 
-    /**
-     * @brief Показать финальную страницу настроек
-     */
-    void showFinalPage();
-
 signals:
     /**
      * @brief Пользователь выбрал язык приложения

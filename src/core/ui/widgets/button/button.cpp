@@ -104,12 +104,12 @@ void Button::setContained(bool _contained)
 
 QSize Button::sizeHint() const
 {
-    const qreal width = Ui::DesignSystem::button().shadowMargins().top()
+    const qreal width = Ui::DesignSystem::button().shadowMargins().left()
                         + std::max(Ui::DesignSystem::button().minimumWidth(),
                                    Ui::DesignSystem::button().margins().left()
-                                   + QFontMetrics(Ui::DesignSystem::font().button()).horizontalAdvance(d->text)
+                                   + TextHelper::fineTextWidth(d->text, Ui::DesignSystem::font().button())
                                    + Ui::DesignSystem::button().margins().right())
-                        + Ui::DesignSystem::button().shadowMargins().bottom();
+                        + Ui::DesignSystem::button().shadowMargins().right();
     const qreal height = Ui::DesignSystem::button().shadowMargins().top()
                          + Ui::DesignSystem::button().height()
                          + Ui::DesignSystem::button().shadowMargins().bottom();

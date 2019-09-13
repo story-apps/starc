@@ -67,25 +67,19 @@ public:
     Body2Label* scaleFactorBigInfoLabel = nullptr;
     Button* finishOnboardingButton = nullptr;
     QHBoxLayout* themePageButtonsLayout = nullptr;
-
-    Widget* finalPage = nullptr;
 };
 
 OnboardingView::Implementation::Implementation(OnboardingView* _parent)
     : q(_parent),
       languagePage(new Widget(_parent)),
-      themePage(new Widget(_parent)),
-      finalPage(new Widget(_parent))
+      themePage(new Widget(_parent))
 {
     initLanguagePage();
     initThemePage();
-
-    finalPage->hide();
 }
 
 void OnboardingView::Implementation::initLanguagePage()
 {
-
     languageTitleLabel = new H5Label(languagePage);
 
     auto initLanguageButton = [this] (const QString& _name, QLocale::Language _language) {
@@ -275,8 +269,6 @@ OnboardingView::OnboardingView(QWidget* _parent)
     : StackWidget(_parent),
       d(new Implementation(this))
 {
-    setBackgroundColor(DesignSystem::color().surface());
-
     showLanguagePage();
 
     designSystemChangeEvent(nullptr);
@@ -290,11 +282,6 @@ void OnboardingView::showLanguagePage()
 void OnboardingView::showThemePage()
 {
     setCurrentWidget(d->themePage);
-}
-
-void OnboardingView::showFinalPage()
-{
-    setCurrentWidget(d->finalPage);
 }
 
 void OnboardingView::updateTranslations()
@@ -322,10 +309,10 @@ void OnboardingView::designSystemChangeEvent(DesignSystemChangeEvent* _event)
 {
     Q_UNUSED(_event);
 
+    setBackgroundColor(DesignSystem::color().surface());
+
     d->updateLanguagePageUi();
     d->updateThemePageUi();
-
-    d->finalPage->setBackgroundColor(DesignSystem::color().surface());
 }
 
 OnboardingView::~OnboardingView() = default;

@@ -67,6 +67,19 @@ protected:
 
 
 /**
+ * @brief Текстовая метка со шрифтом subtitle1
+ */
+class Subtitle1Label : public AbstractLabel
+{
+public:
+    explicit Subtitle1Label(QWidget* _parent = nullptr);
+
+protected:
+    const QFont& textFont() const override;
+};
+
+
+/**
  * @brief Текстовая метка со шрифтом body1
  */
 class Body1Label : public AbstractLabel
