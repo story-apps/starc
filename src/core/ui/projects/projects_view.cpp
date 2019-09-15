@@ -1,5 +1,7 @@
 #include "projects_view.h"
 
+#include "projects_cards.h"
+
 #include <ui/design_system/design_system.h>
 #include <ui/widgets/button/button.h>
 #include <ui/widgets/floating_tool_bar/floating_tool_bar.h>
@@ -24,14 +26,24 @@ public:
     void initEmptyPage();
 
     /**
-     * @brief Обновить настройки UI панели инструментов
-     */
-    void updateToolBarsUi();
-
-    /**
      * @brief Обновить настройки UI страницы без проктов
      */
     void updateEmptyPageUi();
+
+    /**
+     * @brief Настроить страницу со списом проектов
+     */
+    void initProjectsPage();
+
+    /**
+     * @brief Обновить настройки UI страницы со списком проектов
+     */
+    void updateProjectsPageUi();
+
+    /**
+     * @brief Обновить настройки UI панели инструментов
+     */
+    void updateToolBarsUi();
 
 
     ProjectsView* q = nullptr;
@@ -43,7 +55,7 @@ public:
     H6Label* emptyPageTitleLabel = nullptr;
     Button* emptyPageCreateStoryButton = nullptr;
 
-    Widget* projectsPage = nullptr;
+    ProjectsCards* projectsPage = nullptr;
 };
 
 ProjectsView::Implementation::Implementation(ProjectsView* _parent)
@@ -51,10 +63,10 @@ ProjectsView::Implementation::Implementation(ProjectsView* _parent)
       toolBar(new FloatingToolBar(_parent)),
       accountBar(new FloatingToolBar(_parent)),
       emptyPage(new Widget(_parent)),
-      projectsPage(new Widget(_parent))
+      projectsPage(new ProjectsCards(_parent))
 {
     initEmptyPage();
-    projectsPage->hide();
+    initProjectsPage();
 }
 
 void ProjectsView::Implementation::initEmptyPage()
@@ -72,6 +84,27 @@ void ProjectsView::Implementation::initEmptyPage()
     layout->addStretch();
 
     emptyPage->hide();
+}
+
+void ProjectsView::Implementation::updateEmptyPageUi()
+{
+    emptyPage->setBackgroundColor(DesignSystem::color().surface());
+
+    emptyPageTitleLabel->setContentsMargins(Ui::DesignSystem::label().margins().toMargins());
+    emptyPageTitleLabel->setBackgroundColor(DesignSystem::color().surface());
+    emptyPageTitleLabel->setTextColor(DesignSystem::color().onSurface());
+    emptyPageCreateStoryButton->setBackgroundColor(DesignSystem::color().secondary());
+    emptyPageCreateStoryButton->setTextColor(DesignSystem::color().secondary());
+}
+
+void ProjectsView::Implementation::initProjectsPage()
+{
+    projectsPage->hide();
+}
+
+void ProjectsView::Implementation::updateProjectsPageUi()
+{
+
 }
 
 void ProjectsView::Implementation::updateToolBarsUi()
@@ -93,17 +126,6 @@ void ProjectsView::Implementation::updateToolBarsUi()
     accountBar->raise();
 }
 
-void ProjectsView::Implementation::updateEmptyPageUi()
-{
-    emptyPage->setBackgroundColor(DesignSystem::color().surface());
-
-    emptyPageTitleLabel->setContentsMargins(Ui::DesignSystem::label().margins().toMargins());
-    emptyPageTitleLabel->setBackgroundColor(DesignSystem::color().surface());
-    emptyPageTitleLabel->setTextColor(DesignSystem::color().onSurface());
-    emptyPageCreateStoryButton->setBackgroundColor(DesignSystem::color().secondary());
-    emptyPageCreateStoryButton->setTextColor(DesignSystem::color().secondary());
-}
-
 
 // ****
 
@@ -123,7 +145,8 @@ ProjectsView::ProjectsView(QWidget* _parent)
     d->accountBar->addAction(accountAction);
     connect(accountAction, &QAction::triggered, this, &ProjectsView::accountPressed);
 
-    showEmptyPage();
+//    showEmptyPage();
+    showProjectsPage();
 
     designSystemChangeEvent(nullptr);
 }
@@ -164,8 +187,9 @@ void ProjectsView::designSystemChangeEvent(DesignSystemChangeEvent* _event)
 
     setBackgroundColor(DesignSystem::color().surface());
 
-    d->updateToolBarsUi();
     d->updateEmptyPageUi();
+    d->updateProjectsPageUi();
+    d->updateToolBarsUi();
 }
 
 } // namespace Ui

@@ -2,6 +2,8 @@
 
 #include <ui/design_system/design_system.h>
 
+#include <utils/helpers/text_helper.h>
+
 #include <QPainter>
 #include <QPaintEvent>
 #include <QTimer>
@@ -95,7 +97,7 @@ QSize RadioButton::sizeHint() const
     return QSize(static_cast<int>(Ui::DesignSystem::radioButton().margins().left()
                                   + Ui::DesignSystem::radioButton().iconSize().width()
                                   + Ui::DesignSystem::radioButton().spacing()
-                                  + QFontMetrics(Ui::DesignSystem::font().subtitle1()).horizontalAdvance(d->text)
+                                  + TextHelper::fineTextWidth(d->text, Ui::DesignSystem::font().subtitle1())
                                   + Ui::DesignSystem::radioButton().margins().right()),
                  static_cast<int>(Ui::DesignSystem::radioButton().height()));
 }

@@ -4,6 +4,7 @@
 #include <QResizeEvent>
 #include <QVariantAnimation>
 
+
 class StackWidget::Implementation
 {
 public:
@@ -34,7 +35,6 @@ StackWidget::StackWidget(QWidget *_parent)
 {
     connect(&d->fadeAnimation, &QVariantAnimation::valueChanged, this, [this] { update(); });
     connect(&d->fadeAnimation, &QVariantAnimation::finished, this, [this] {
-        d->currentWidget->resize(size());
         d->currentWidget->show();
     });
 }
@@ -69,9 +69,17 @@ void StackWidget::setCurrentWidget(QWidget *widget)
     d->currentWidget->hide();
 
     //
-    // Запускаем анимацию отображения виджета, который теперь будет текущим
+    // Если виджет виден на экране, запускаем анимацию отображения нового текущего виджета
     //
-    d->fadeAnimation.start();
+    if (isVisible()) {
+        d->fadeAnimation.start();
+    }
+    //
+    // В противном случае, просто отображаем новый текущий виджет
+    //
+    else {
+        d->currentWidget->show();
+    }
 }
 
 void StackWidget::paintEvent(QPaintEvent *_event)

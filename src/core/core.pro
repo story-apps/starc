@@ -54,7 +54,8 @@ SOURCES += \
     ui/widgets/app_bar/app_bar.cpp \
     utils/helpers/quotes_helper.cpp \
     ui/widgets/floating_tool_bar/floating_tool_bar.cpp \
-    ui/widgets/shadow/shadow.cpp
+    ui/widgets/shadow/shadow.cpp \
+    ui/projects/projects_cards.cpp
 
 HEADERS += \
         core_global.h \
@@ -94,7 +95,8 @@ HEADERS += \
     ui/widgets/app_bar/app_bar.h \
     utils/helpers/quotes_helper.h \
     ui/widgets/floating_tool_bar/floating_tool_bar.h \
-    ui/widgets/shadow/shadow.h
+    ui/widgets/shadow/shadow.h \
+    ui/projects/projects_cards.h
 
 unix {
     target.path = /usr/lib
