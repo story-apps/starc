@@ -949,7 +949,7 @@ DesignSystem::Color::Implementation::Implementation()
     surface = QColor("#FFFFFF");
     error = QColor("#B00020");
     shadow = QColor("#000000");
-    shadow.setAlphaF(0.3);
+    shadow.setAlphaF(0.5);
     onPrimary = QColor("#FFFFFF");
     onSecondary = QColor("#FFFFFF");
     onBackground = QColor("#000000");
@@ -1363,11 +1363,10 @@ public:
     qreal minimumWidth = 64.0;
     QMarginsF margins = {16.0, 0.0, 16.0, 0.0};
     qreal spacing = 16.0;
-    QMarginsF shadowMargins = {2.0, 2.0, 2.0, 16.0};
-    qreal minimumShadowHeight = 8.0;
-    qreal maximumShadowHeight = 16.0;
+    QMarginsF shadowMargins = {14.0, 14.0, 14.0, 16.0};
+    qreal minimumShadowBlurRadius = 8.0;
+    qreal maximumShadowBlurRadius = 32.0;
     qreal borderRadius = 4.0;
-    qreal shadowBlurRadius = 8.0;
     QSizeF iconSize = {22.0, 22.0};
 };
 
@@ -1378,10 +1377,9 @@ DesignSystem::Button::Implementation::Implementation(qreal _scaleFactor)
     margins *= _scaleFactor;
     spacing *= _scaleFactor;
     shadowMargins *= _scaleFactor;
-    minimumShadowHeight *= _scaleFactor;
-    maximumShadowHeight *= _scaleFactor;
+    minimumShadowBlurRadius *= _scaleFactor;
+    maximumShadowBlurRadius *= _scaleFactor;
     borderRadius *= _scaleFactor;
-    shadowBlurRadius *= _scaleFactor;
     iconSize *= _scaleFactor;
 }
 
@@ -1416,19 +1414,14 @@ const QMarginsF& DesignSystem::Button::shadowMargins() const
     return d->shadowMargins;
 }
 
-qreal DesignSystem::Button::minimumShadowHeight() const
+qreal DesignSystem::Button::minimumShadowBlurRadius() const
 {
-    return  d->minimumShadowHeight;
+    return  d->minimumShadowBlurRadius;
 }
 
-qreal DesignSystem::Button::maximumShadowHeight() const
+qreal DesignSystem::Button::maximumShadowBlurRadius() const
 {
-    return d->maximumShadowHeight;
-}
-
-qreal DesignSystem::Button::shadowBlurRadius() const
-{
-    return d->shadowBlurRadius;
+    return d->maximumShadowBlurRadius;
 }
 
 qreal DesignSystem::Button::borderRadius() const
@@ -1556,26 +1549,24 @@ public:
     explicit Implementation(qreal _scaleFactor);
 
     QMarginsF margins = {16.0, 16.0, 16.0, 16.0};
-    QMarginsF shadowMargins = {2.0, 2.0, 2.0, 16.0};
-    qreal minimumShadowHeight = 8.0;
-    qreal maximumShadowHeight = 16.0;
+    QMarginsF shadowMargins = {14.0, 14.0, 14.0, 16.0};
+    qreal minimumShadowBlurRadius = 8.0;
+    qreal maximumShadowBlurRadius = 32.0;
     qreal borderRadius = 4.0;
     qreal height = 56.0;
     QSizeF iconSize = {24.0, 24.0};
     qreal spacing = 24.0;
-    qreal shadowBlurRadius = 8.0;
 };
 
 DesignSystem::FloatingToolBar::Implementation::Implementation(qreal _scaleFactor)
 {
     margins *= _scaleFactor;
     shadowMargins *= _scaleFactor;
-    minimumShadowHeight *= _scaleFactor;
-    maximumShadowHeight *= _scaleFactor;
+    minimumShadowBlurRadius *= _scaleFactor;
+    maximumShadowBlurRadius *= _scaleFactor;
     height *= _scaleFactor;
     iconSize *= _scaleFactor;
     spacing *= _scaleFactor;
-    shadowBlurRadius *= _scaleFactor;
 }
 
 
@@ -1594,14 +1585,14 @@ const QMarginsF& DesignSystem::FloatingToolBar::shadowMargins() const
     return d->shadowMargins;
 }
 
-qreal DesignSystem::FloatingToolBar::minimumShadowHeight() const
+qreal DesignSystem::FloatingToolBar::minimumShadowBlurRadius() const
 {
-    return d->minimumShadowHeight;
+    return d->minimumShadowBlurRadius;
 }
 
-qreal DesignSystem::FloatingToolBar::maximumShadowHeight() const
+qreal DesignSystem::FloatingToolBar::maximumShadowBlurRadius() const
 {
-    return d->maximumShadowHeight;
+    return d->maximumShadowBlurRadius;
 }
 
 qreal DesignSystem::FloatingToolBar::height() const
@@ -1617,11 +1608,6 @@ const QSizeF& DesignSystem::FloatingToolBar::iconSize() const
 qreal DesignSystem::FloatingToolBar::spacing() const
 {
     return d->spacing;
-}
-
-qreal DesignSystem::FloatingToolBar::shadowBlurRadius() const
-{
-    return d->shadowBlurRadius;
 }
 
 DesignSystem::FloatingToolBar::FloatingToolBar(qreal _scaleFactor)
@@ -1699,6 +1685,60 @@ DesignSystem::Stepper::Stepper(qreal _scaleFactor)
 // ****
 
 
+class DesignSystem::Card::Implementation
+{
+public:
+    explicit Implementation(qreal _scaleFactor);
+
+    qreal borderRadius = 4.0;
+    QMarginsF shadowMargins = {14.0, 14.0, 14.0, 16.0};
+    qreal minimumShadowBlurRadius = 8.0;
+    qreal maximumShadowBlurRadius = 32.0;
+};
+
+DesignSystem::Card::Implementation::Implementation(qreal _scaleFactor)
+{
+    borderRadius *= _scaleFactor;
+    shadowMargins *= _scaleFactor;
+    minimumShadowBlurRadius *= _scaleFactor;
+    maximumShadowBlurRadius *= _scaleFactor;
+}
+
+
+// **
+
+
+DesignSystem::Card::~Card() = default;
+
+qreal DesignSystem::Card::borderRadius() const
+{
+    return d->borderRadius;
+}
+
+const QMarginsF& DesignSystem::Card::shadowMargins() const
+{
+    return d->shadowMargins;
+}
+
+qreal DesignSystem::Card::minimumShadowBlurRadius() const
+{
+    return d->minimumShadowBlurRadius;
+}
+
+qreal DesignSystem::Card::maximumShadowBlurRadius() const
+{
+    return d->maximumShadowBlurRadius;
+}
+
+DesignSystem::Card::Card(qreal _scaleFactor)
+    : d(new Implementation(_scaleFactor))
+{
+}
+
+
+// ****
+
+
 class DesignSystemPrivate
 {
 public:
@@ -1736,6 +1776,7 @@ public:
     DesignSystem::Slider slider;
     DesignSystem::FloatingToolBar floatingAppBar;
     DesignSystem::Stepper stepper;
+    DesignSystem::Card card;
 };
 
 DesignSystemPrivate::DesignSystemPrivate(ApplicationTheme _theme, qreal _scaleFactor,
@@ -1761,7 +1802,8 @@ DesignSystemPrivate::DesignSystemPrivate(ApplicationTheme _theme, qreal _scaleFa
       radioButton(_scaleFactor),
       slider(_scaleFactor),
       floatingAppBar(_scaleFactor),
-      stepper(_scaleFactor)
+      stepper(_scaleFactor),
+      card(_scaleFactor)
 {
     pageMargins *= _scaleFactor;
     pageSpacing *= _scaleFactor;
@@ -2021,6 +2063,11 @@ const DesignSystem::FloatingToolBar& DesignSystem::floatingToolBar()
 const DesignSystem::Stepper& DesignSystem::stepper()
 {
     return instance()->d->stepper;
+}
+
+const DesignSystem::Card& DesignSystem::card()
+{
+    return instance()->d->card;
 }
 
 DesignSystem::~DesignSystem() = default;

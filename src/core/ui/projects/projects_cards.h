@@ -1,6 +1,6 @@
 #pragma once
 
-#include <ui/widgets/widget/widget.h>
+#include <QGraphicsView>
 
 
 namespace Ui
@@ -9,7 +9,7 @@ namespace Ui
 /**
  * @brief Представление модели со списком проектов
  */
-class ProjectsCards : public Widget
+class ProjectsCards : public QGraphicsView
 {
     Q_OBJECT
 
@@ -24,5 +24,7 @@ private:
     class Implementation;
     QScopedPointer<Implementation> d;
 };
+
+
 
 } // namespace Ui

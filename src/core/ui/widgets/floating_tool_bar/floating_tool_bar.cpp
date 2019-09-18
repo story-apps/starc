@@ -46,7 +46,7 @@ public:
     /**
      * @brief  Декорации тени при наведении
      */
-    QVariantAnimation shadowHeightAnimation;
+    QVariantAnimation shadowBlurRadiusAnimation;
 };
 
 FloatingToolBar::Implementation::Implementation()
@@ -59,8 +59,8 @@ FloatingToolBar::Implementation::Implementation()
     decorationOpacityAnimation.setEndValue(0.0);
     decorationOpacityAnimation.setDuration(160);
 
-    shadowHeightAnimation.setEasingCurve(QEasingCurve::OutQuad);
-    shadowHeightAnimation.setDuration(160);
+    shadowBlurRadiusAnimation.setEasingCurve(QEasingCurve::OutQuad);
+    shadowBlurRadiusAnimation.setDuration(160);
 }
 
 void FloatingToolBar::Implementation::animateClick()
@@ -72,14 +72,14 @@ void FloatingToolBar::Implementation::animateClick()
 
 void FloatingToolBar::Implementation::animateHoverIn()
 {
-    shadowHeightAnimation.setDirection(QVariantAnimation::Forward);
-    shadowHeightAnimation.start();
+    shadowBlurRadiusAnimation.setDirection(QVariantAnimation::Forward);
+    shadowBlurRadiusAnimation.start();
 }
 
 void FloatingToolBar::Implementation::animateHoverOut()
 {
-    shadowHeightAnimation.setDirection(QVariantAnimation::Backward);
-    shadowHeightAnimation.start();
+    shadowBlurRadiusAnimation.setDirection(QVariantAnimation::Backward);
+    shadowBlurRadiusAnimation.start();
 }
 
 QAction* FloatingToolBar::Implementation::pressedAction(const QPoint& _coordinate, const QList<QAction*>& _actions) const
@@ -115,7 +115,7 @@ FloatingToolBar::FloatingToolBar(QWidget* _parent)
 {
     connect(&d->decorationRadiusAnimation, &QVariantAnimation::valueChanged, this, [this] { update(); });
     connect(&d->decorationOpacityAnimation, &QVariantAnimation::valueChanged, this, [this] { update(); });
-    connect(&d->shadowHeightAnimation, &QVariantAnimation::valueChanged, this, [this] { update(); });
+    connect(&d->shadowBlurRadiusAnimation, &QVariantAnimation::valueChanged, this, [this] { update(); });
 
     designSystemChangeEvent(nullptr);
 }
@@ -161,15 +161,12 @@ void FloatingToolBar::paintEvent(QPaintEvent* _event)
     //
     // ... рисуем тень
     //
-    const qreal shadowHeight = std::max(Ui::DesignSystem::floatingToolBar().minimumShadowHeight(),
-                                        d->shadowHeightAnimation.currentValue().toReal());
+    const qreal shadowBlurRadius = std::max(Ui::DesignSystem::floatingToolBar().minimumShadowBlurRadius(),
+                                            d->shadowBlurRadiusAnimation.currentValue().toReal());
     const QPixmap shadow
             = ImageHelper::dropShadow(backgroundImage,
-                                      QMarginsF(Ui::DesignSystem::floatingToolBar().shadowMargins().left(),
-                                                Ui::DesignSystem::floatingToolBar().shadowMargins().top(),
-                                                Ui::DesignSystem::floatingToolBar().shadowMargins().right(),
-                                                shadowHeight),
-                                      Ui::DesignSystem::floatingToolBar().shadowBlurRadius() + shadowHeight,
+                                      Ui::DesignSystem::floatingToolBar().shadowMargins(),
+                                      shadowBlurRadius,
                                       Ui::DesignSystem::color().shadow());
     painter.drawPixmap(0, 0, shadow);
     //
@@ -178,7 +175,6 @@ void FloatingToolBar::paintEvent(QPaintEvent* _event)
     painter.setPen(Qt::NoPen);
     painter.setBrush(backgroundColor());
     painter.drawRoundedRect(backgroundRect, radius, radius);
-    painter.drawPixmap(backgroundRect.topLeft(), backgroundImage);
 
     //
     // Рисуем иконки
@@ -269,8 +265,8 @@ void FloatingToolBar::designSystemChangeEvent(DesignSystemChangeEvent* _event)
 
     d->decorationRadiusAnimation.setStartValue(Ui::DesignSystem::floatingToolBar().iconSize().height() / 2.0);
     d->decorationRadiusAnimation.setEndValue(Ui::DesignSystem::floatingToolBar().height() / 2.5);
-    d->shadowHeightAnimation.setStartValue(Ui::DesignSystem::floatingToolBar().minimumShadowHeight());
-    d->shadowHeightAnimation.setEndValue(Ui::DesignSystem::floatingToolBar().maximumShadowHeight());
+    d->shadowBlurRadiusAnimation.setStartValue(Ui::DesignSystem::floatingToolBar().minimumShadowBlurRadius());
+    d->shadowBlurRadiusAnimation.setEndValue(Ui::DesignSystem::floatingToolBar().maximumShadowBlurRadius());
 
     updateGeometry();
     update();

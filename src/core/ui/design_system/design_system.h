@@ -814,19 +814,14 @@ public:
         const QMarginsF& shadowMargins() const;
 
         /**
-         * @brief Минимальная высота тени
+         * @brief Минимальный радиус размытия тени
          */
-        qreal minimumShadowHeight() const;
+        qreal minimumShadowBlurRadius() const;
 
         /**
-         * @brief Максимальная высота тени
+         * @brief Максимальный радиус размытия тени
          */
-        qreal maximumShadowHeight() const;
-
-        /**
-         * @brief Радиус эффекта размытия фона
-         */
-        qreal shadowBlurRadius() const;
+        qreal maximumShadowBlurRadius() const;
 
         /**
          * @brief Радиус рамки кнопки
@@ -932,14 +927,14 @@ public:
         const QMarginsF& shadowMargins() const;
 
         /**
-         * @brief Минимальная высота тени
+         * @brief Минимальный радиус размытия тени
          */
-        qreal minimumShadowHeight() const;
+        qreal minimumShadowBlurRadius() const;
 
         /**
-         * @brief Максимальная высота тени
+         * @brief Максимальный радиус размытия тени
          */
-        qreal maximumShadowHeight() const;
+        qreal maximumShadowBlurRadius() const;
 
         /**
          * @brief Высота в обычном варианте
@@ -955,11 +950,6 @@ public:
          * @brief Отступ между иконками
          */
         qreal spacing() const;
-
-        /**
-         * @brief Радиус размытия тени
-         */
-        qreal shadowBlurRadius() const;
 
     private:
         explicit FloatingToolBar(qreal _scaleFactor);
@@ -1009,6 +999,42 @@ public:
 
     private:
         explicit Stepper(qreal _scaleFactor);
+        friend class DesignSystemPrivate;
+        //
+        class Implementation;
+        QScopedPointer<Implementation> d;
+    };
+
+    /**
+     * @brief Параметры виджета карточки
+     */
+    class Card
+    {
+    public:
+        ~Card();
+
+        /**
+         * @brief Радиус скругления рамки карточки
+         */
+        qreal borderRadius() const;
+
+        /**
+         * @brief Отступы тени
+         */
+        const QMarginsF& shadowMargins() const;
+
+        /**
+         * @brief Минимальный радиус размытия тени
+         */
+        qreal minimumShadowBlurRadius() const;
+
+        /**
+         * @brief Максимальный радиус размытия тени
+         */
+        qreal maximumShadowBlurRadius() const;
+
+    private:
+        explicit Card(qreal _scaleFactor);
         friend class DesignSystemPrivate;
         //
         class Implementation;
@@ -1168,6 +1194,11 @@ public:
      * @brief Параметры виджета пошагового движения
      */
     static const Stepper& stepper();
+
+    /**
+     * @brief Параметры виджета карточки
+     */
+    static const Card& card();
 
 public:
     ~DesignSystem();

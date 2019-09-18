@@ -23,7 +23,7 @@ void Shadow::paintEvent(QPaintEvent* _event)
     const QPixmap shadow
             = ImageHelper::dropShadow(backgroundImage,
                                       {sideMargin, 0, sideMargin, 0},
-                                      Ui::DesignSystem::button().shadowBlurRadius() + sideMargin,
+                                      Ui::DesignSystem::button().minimumShadowBlurRadius() + sideMargin,
                                       Ui::DesignSystem::color().shadow());
 
     QPainter painter(this);

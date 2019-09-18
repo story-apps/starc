@@ -41,7 +41,7 @@ public:
     /**
      * @brief  Декорации тени при наведении
      */
-    QVariantAnimation shadowHeightAnimation;
+    QVariantAnimation shadowBlurRadiusAnimation;
 };
 
 Button::Implementation::Implementation()
@@ -55,8 +55,8 @@ Button::Implementation::Implementation()
     decorationOpacityAnimation.setEndValue(0.0);
     decorationOpacityAnimation.setDuration(420);
 
-    shadowHeightAnimation.setEasingCurve(QEasingCurve::OutQuad);
-    shadowHeightAnimation.setDuration(160);
+    shadowBlurRadiusAnimation.setEasingCurve(QEasingCurve::OutQuad);
+    shadowBlurRadiusAnimation.setDuration(160);
 }
 
 void Button::Implementation::animateClick()
@@ -68,14 +68,14 @@ void Button::Implementation::animateClick()
 
 void Button::Implementation::animateHoverIn()
 {
-    shadowHeightAnimation.setDirection(QVariantAnimation::Forward);
-    shadowHeightAnimation.start();
+    shadowBlurRadiusAnimation.setDirection(QVariantAnimation::Forward);
+    shadowBlurRadiusAnimation.start();
 }
 
 void Button::Implementation::animateHoverOut()
 {
-    shadowHeightAnimation.setDirection(QVariantAnimation::Backward);
-    shadowHeightAnimation.start();
+    shadowBlurRadiusAnimation.setDirection(QVariantAnimation::Backward);
+    shadowBlurRadiusAnimation.start();
 }
 
 
@@ -90,7 +90,7 @@ Button::Button(QWidget* _parent)
 
     connect(&d->decorationRadiusAnimation, &QVariantAnimation::valueChanged, this, [this] { update(); });
     connect(&d->decorationOpacityAnimation, &QVariantAnimation::valueChanged, this, [this] { update(); });
-    connect(&d->shadowHeightAnimation, &QVariantAnimation::valueChanged, this, [this] { update(); });
+    connect(&d->shadowBlurRadiusAnimation, &QVariantAnimation::valueChanged, this, [this] { update(); });
 
     designSystemChangeEvent(nullptr);
 }
@@ -178,19 +178,23 @@ void Button::paintEvent(QPaintEvent* _event)
         // Тень рисуем только в случае, если кнопка имеет установленный фон
         //
         if (d->isContained) {
-            const qreal shadowHeight = std::max(Ui::DesignSystem::button().minimumShadowHeight(),
-                                                d->shadowHeightAnimation.currentValue().toReal());
+            const qreal shadowBlurRadius = std::max(Ui::DesignSystem::button().minimumShadowBlurRadius(),
+                                                    d->shadowBlurRadiusAnimation.currentValue().toReal());
             const QPixmap shadow
                     = ImageHelper::dropShadow(backgroundImage,
-                                              QMarginsF(Ui::DesignSystem::button().shadowMargins().left(),
-                                                        Ui::DesignSystem::button().shadowMargins().top(),
-                                                        Ui::DesignSystem::button().shadowMargins().right(),
-                                                        shadowHeight),
-                                              Ui::DesignSystem::button().shadowBlurRadius() + shadowHeight,
+                                              Ui::DesignSystem::button().shadowMargins(),
+                                              shadowBlurRadius,
                                               Ui::DesignSystem::color().shadow());
             painter.drawPixmap(0, 0, shadow);
         }
-        painter.drawPixmap(backgroundRect.topLeft(), backgroundImage);
+        //
+        // ... собственно отрисовка фона
+        //
+        painter.setPen(Qt::NoPen);
+        painter.setBrush(backgroundColor);
+        painter.drawRoundedRect(backgroundRect,
+                                Ui::DesignSystem::button().borderRadius(),
+                                Ui::DesignSystem::button().borderRadius());
     }
 
     //
@@ -283,8 +287,8 @@ void Button::designSystemChangeEvent(DesignSystemChangeEvent* _event)
     Q_UNUSED(_event);
 
     setContentsMargins(Ui::DesignSystem::button().shadowMargins().toMargins());
-    d->shadowHeightAnimation.setStartValue(Ui::DesignSystem::floatingToolBar().minimumShadowHeight());
-    d->shadowHeightAnimation.setEndValue(Ui::DesignSystem::floatingToolBar().maximumShadowHeight());
+    d->shadowBlurRadiusAnimation.setStartValue(Ui::DesignSystem::floatingToolBar().minimumShadowBlurRadius());
+    d->shadowBlurRadiusAnimation.setEndValue(Ui::DesignSystem::floatingToolBar().maximumShadowBlurRadius());
 
     updateGeometry();
     update();
