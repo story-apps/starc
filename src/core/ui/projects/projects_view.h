@@ -2,6 +2,10 @@
 
 #include <ui/widgets/stack_widget/stack_widget.h>
 
+namespace Domain {
+    class ProjectsModel;
+}
+
 
 namespace Ui
 {
@@ -16,6 +20,11 @@ class ProjectsView : public StackWidget
 public:
     explicit ProjectsView(QWidget* _parent = nullptr);
     ~ProjectsView() override;
+
+    /**
+     * @brief Задать список проектов
+     */
+    void setProjects(Domain::ProjectsModel* _projects);
 
     /**
      * @brief Показать страницу без проектов

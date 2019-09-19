@@ -17,6 +17,22 @@ public:
     explicit ProjectsNavigator(QWidget* _parent = nullptr);
     ~ProjectsNavigator() override;
 
+signals:
+    /**
+     * @brief Пользователь нажал кнопку создания истории
+     */
+    void createStoryPressed();
+
+    /**
+     * @brief Пользователь нажал кнопку открытия истории
+     */
+    void openStoryPressed();
+
+    /**
+     * @brief Пользователь нажал кнопку отображения справки
+     */
+    void helpPressed();
+
 protected:
     /**
      * @brief Обновить переводы

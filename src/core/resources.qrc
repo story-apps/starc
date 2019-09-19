@@ -1,5 +1,8 @@
 <RCC>
     <qresource prefix="/fonts">
-        <file alias="materialdesignicons.ttf">resources/fonts/materialdesignicons-webfont.ttf</file>
+        <file alias="materialdesignicons">resources/fonts/materialdesignicons-webfont.ttf</file>
+    </qresource>
+    <qresource prefix="/images">
+        <file alias="movie-poster">resources/images/movie-poster.jpg</file>
     </qresource>
 </RCC>

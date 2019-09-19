@@ -180,7 +180,7 @@ ApplicationManager::ApplicationManager(QObject* _parent)
     // Загрузим шрифты в базу шрифтов программы, если их там ещё нет
     //
     QFontDatabase fontDatabase;
-    fontDatabase.addApplicationFont(":/fonts/materialdesignicons.ttf");
+    fontDatabase.addApplicationFont(":/fonts/materialdesignicons");
 
     initConnections();
 }

@@ -1860,7 +1860,7 @@ void DesignSystem::setTheme(ApplicationTheme _theme)
             primary = "#1F1F1F";
             primaryDark = "#0A0A0A";
             secondary = "#448AFF";
-            background = "#121212";
+            background = "#1F1F1F";
             surface = "#121212";
             error = "#CF6679";
             shadow = [] { QColor color = "#000000";

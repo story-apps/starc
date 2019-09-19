@@ -40,6 +40,15 @@ ProjectsNavigator::Implementation::Implementation(QWidget* _parent)
     createStoryButton->setIcon("\uf415");
     openStoryButton->setIcon("\uf256");
     helpButton->setIcon("\uf2d7");
+
+    layout->setContentsMargins({});
+    layout->setSpacing(0);
+    layout->addWidget(quoteLabel);
+    layout->addWidget(quoteAuthorLabel);
+    layout->addWidget(createStoryButton);
+    layout->addWidget(openStoryButton);
+    layout->addWidget(helpButton);
+    layout->addStretch();
 }
 
 
@@ -50,15 +59,9 @@ ProjectsNavigator::ProjectsNavigator(QWidget* _parent)
     : Widget(_parent),
       d(new Implementation(this))
 {
-    d->layout->setContentsMargins({});
-    d->layout->setSpacing(0);
-    d->layout->addWidget(d->quoteLabel);
-    d->layout->addWidget(d->quoteAuthorLabel);
-    d->layout->addWidget(d->createStoryButton);
-    d->layout->addWidget(d->openStoryButton);
-    d->layout->addWidget(d->helpButton);
-    d->layout->addStretch();
-
+    connect(d->createStoryButton, &Button::clicked, this, &ProjectsNavigator::createStoryPressed);
+    connect(d->openStoryButton, &Button::clicked, this, &ProjectsNavigator::openStoryPressed);
+    connect(d->helpButton, &Button::clicked, this, &ProjectsNavigator::helpPressed);
 
     designSystemChangeEvent(nullptr);
 }

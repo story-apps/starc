@@ -104,7 +104,7 @@ void ProjectsView::Implementation::initProjectsPage()
 
 void ProjectsView::Implementation::updateProjectsPageUi()
 {
-
+    projectsPage->setBackgroundColor(Ui::DesignSystem::color().surface());
 }
 
 void ProjectsView::Implementation::updateToolBarsUi()
@@ -149,6 +149,11 @@ ProjectsView::ProjectsView(QWidget* _parent)
     showProjectsPage();
 
     designSystemChangeEvent(nullptr);
+}
+
+void ProjectsView::setProjects(Domain::ProjectsModel* _projects)
+{
+    d->projectsPage->setProjects(_projects);
 }
 
 void ProjectsView::showEmptyPage()
