@@ -1,6 +1,6 @@
 #pragma once
 
-#include <QWidget>
+#include <ui/widgets/widget/widget.h>
 
 class QGridLayout;
 
@@ -8,7 +8,7 @@ class QGridLayout;
 /**
  * @brief Абстрактный диалог
  */
-class AbstractDialog : public QWidget
+class AbstractDialog : public Widget
 {
     Q_OBJECT
 
@@ -54,11 +54,19 @@ protected:
     QGridLayout* contentsLayout() const;
 
     /**
+     * @brief Весим фильтр на родительский виджет, чтобы корректировать свои размеры в соответствии с ним
+     */
+    bool eventFilter(QObject* _watched, QEvent* _event) override;
+
+    /**
      * @brief Переопределяем отрисовку
      */
     void paintEvent(QPaintEvent* _event) override;
 
-    bool eventFilter(QObject* _watched, QEvent* _event) override;
+    /**
+     * @brief Обновляем навигатор при изменении дизайн системы
+     */
+    void designSystemChangeEvent(DesignSystemChangeEvent* _event) override;
 
 private:
     /**

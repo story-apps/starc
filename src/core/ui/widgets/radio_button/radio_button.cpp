@@ -57,6 +57,8 @@ RadioButton::RadioButton(QWidget* _parent)
     : Widget(_parent),
       d(new Implementation)
 {
+    setFocusPolicy(Qt::StrongFocus);
+
     connect(&d->decorationRadiusAnimation, &QVariantAnimation::valueChanged, this, [this] { update(); });
     connect(&d->decorationOpacityAnimation, &QVariantAnimation::valueChanged, this, [this] { update(); });
 

@@ -29,6 +29,7 @@ public:
     void animateHide();
 
 
+    QVBoxLayout* layout = nullptr;
     DialogContent* content = nullptr;
     H6Label* title = nullptr;
     QGridLayout* contentsLayout = nullptr;
@@ -43,13 +44,7 @@ AbstractDialog::Implementation::Implementation(QWidget* _parent)
       title(new H6Label(_parent)),
       contentsLayout(new QGridLayout)
 {
-    content->setBackgroundColor(Qt::white);
-    content->setTextColor(Qt::black);
-
-    title->setBackgroundColor(Qt::white);
-    title->setTextColor(Qt::black);
-
-    QVBoxLayout* layout = new QVBoxLayout(content);
+    layout = new QVBoxLayout(content);
     layout->setContentsMargins({});
     layout->setSpacing(0);
     layout->addWidget(title);
@@ -91,7 +86,7 @@ void AbstractDialog::Implementation::animateHide()
 
 
 AbstractDialog::AbstractDialog(QWidget* _parent)
-    : QWidget(_parent),
+    : Widget(_parent),
       d(new Implementation(this))
 {
     Q_ASSERT(_parent);
@@ -110,6 +105,8 @@ AbstractDialog::AbstractDialog(QWidget* _parent)
     connect(&d->opacityAnimation, &QVariantAnimation::valueChanged, this, [this] { update(); });
     connect(&d->contentPosAnimation, &QVariantAnimation::valueChanged, this, [this] { update(); });
     connect(&d->contentPosAnimation, &QVariantAnimation::finished, d->content, &DialogContent::show);
+
+    designSystemChangeEvent(nullptr);
 }
 
 void AbstractDialog::showDialog()
@@ -127,7 +124,7 @@ void AbstractDialog::showDialog()
     //
     // Сохраняем изображение контента и прячем сам виджет
     //
-    d->contentPixmap = d->content->grab(QRect({0, 0}, d->content->sizeHint()));
+    d->contentPixmap = d->content->grab(QRect({0, 0}, QSize(d->content->minimumWidth(), d->content->sizeHint().height())));
     d->content->hide();
 
     //
@@ -155,17 +152,6 @@ QGridLayout* AbstractDialog::contentsLayout() const
     return d->contentsLayout;
 }
 
-void AbstractDialog::paintEvent(QPaintEvent* _event)
-{
-    QPainter painter(this);
-    painter.setOpacity(d->opacityAnimation.currentValue().toReal());
-    painter.fillRect(_event->rect(), Ui::DesignSystem::color().shadow());
-
-    if (!d->content->isVisible()) {
-        painter.drawPixmap(d->contentPosAnimation.currentValue().toPoint(), d->contentPixmap);
-    }
-}
-
 bool AbstractDialog::eventFilter(QObject* _watched, QEvent* _event)
 {
     if (_watched == parentWidget()
@@ -175,6 +161,36 @@ bool AbstractDialog::eventFilter(QObject* _watched, QEvent* _event)
     }
 
     return QWidget::eventFilter(_watched, _event);
+}
+
+void AbstractDialog::paintEvent(QPaintEvent* _event)
+{
+    QPainter painter(this);
+    painter.setOpacity(d->opacityAnimation.currentValue().toReal());
+
+    //
+    // Заливаем фон
+    //
+    painter.fillRect(_event->rect(), Ui::DesignSystem::color().shadow());
+
+    //
+    // Если надо рисуем образ контента
+    //
+    if (!d->content->isVisible()) {
+        painter.drawPixmap(d->contentPosAnimation.currentValue().toPoint(), d->contentPixmap);
+    }
+}
+
+void AbstractDialog::designSystemChangeEvent(DesignSystemChangeEvent* _event)
+{
+    Q_UNUSED(_event);
+
+    d->layout->setContentsMargins(Ui::DesignSystem::dialog().margins().toMargins());
+    d->content->setMinimumWidth(static_cast<int>(Ui::DesignSystem::dialog().minimumWidth()));
+    d->content->setBackgroundColor(Ui::DesignSystem::color().background());
+    d->title->setBackgroundColor(Ui::DesignSystem::color().background());
+    d->title->setTextColor(Ui::DesignSystem::color().onBackground());
+    d->title->setContentsMargins(0, 0, 0, static_cast<int>(Ui::DesignSystem::label().margins().bottom()));
 }
 
 void AbstractDialog::show()

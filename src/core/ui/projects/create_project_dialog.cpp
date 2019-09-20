@@ -1,5 +1,8 @@
 #include "create_project_dialog.h"
 
+#include <ui/design_system/design_system.h>
+
+#include <ui/widgets/text_field/text_field.h>
 #include <ui/widgets/radio_button/radio_button.h>
 
 #include <QGridLayout>
@@ -13,12 +16,14 @@ class CreateProjectDialog::Implementation
 public:
     explicit Implementation(QWidget* _parent);
 
+    TextField* projectName = nullptr;
     RadioButton* localProjectButton = nullptr;
     RadioButton* remoteProjectButton = nullptr;
 };
 
 CreateProjectDialog::Implementation::Implementation(QWidget* _parent)
-    : localProjectButton(new RadioButton(_parent)),
+    : projectName(new TextField(_parent)),
+      localProjectButton(new RadioButton(_parent)),
       remoteProjectButton(new RadioButton(_parent))
 {
 }
@@ -31,21 +36,34 @@ CreateProjectDialog::CreateProjectDialog(QWidget* _parent)
     : AbstractDialog(_parent),
       d(new Implementation(this))
 {
-    setTitle(tr("Create new story df asd fas fds fa s!"));
-    d->localProjectButton->setText(tr("Local project"));
-    d->localProjectButton->setBackgroundColor(Qt::white);
-    d->localProjectButton->setTextColor(Qt::black);
-    d->remoteProjectButton->setText(tr("Remote project"));
-    d->remoteProjectButton->setBackgroundColor(Qt::white);
-    d->remoteProjectButton->setTextColor(Qt::black);
     d->remoteProjectButton->hide();
 
+    contentsLayout()->addWidget(d->projectName);
     contentsLayout()->addWidget(d->localProjectButton);
     contentsLayout()->addWidget(d->remoteProjectButton);
-    contentsLayout()->setRowStretch(2, 1);
+    contentsLayout()->setRowStretch(3, 1);
 
-    QTimer::singleShot(1000, d->remoteProjectButton, &RadioButton::show);
-    QTimer::singleShot(2000, d->remoteProjectButton, &RadioButton::hide);
+    updateTranslations();
+    designSystemChangeEvent(nullptr);
+}
+
+void CreateProjectDialog::updateTranslations()
+{
+    setTitle(tr("Create new story"));
+
+    d->projectName->setLabel(tr("Enter the name of new story"));
+    d->localProjectButton->setText(tr("Local project"));
+    d->remoteProjectButton->setText(tr("Remote project"));
+}
+
+void CreateProjectDialog::designSystemChangeEvent(DesignSystemChangeEvent* _event)
+{
+    Q_UNUSED(_event);
+
+    d->localProjectButton->setBackgroundColor(Ui::DesignSystem::color().background());
+    d->localProjectButton->setTextColor(Ui::DesignSystem::color().onBackground());
+    d->remoteProjectButton->setBackgroundColor(Ui::DesignSystem::color().background());
+    d->remoteProjectButton->setTextColor(Ui::DesignSystem::color().onBackground());
 }
 
 CreateProjectDialog::~CreateProjectDialog() = default;

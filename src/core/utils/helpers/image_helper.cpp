@@ -121,11 +121,7 @@ void ImageHelper::setPixmapColor(QPixmap& _pixmap, const QColor& _color)
 
 bool ImageHelper::isImagesEqual(const QPixmap& _lhs, const QPixmap& _rhs)
 {
-#if QT_VERSION >= 0x051200
-    return _lhs == _rhs;
-#else
     return bytesFromImage(_lhs) == bytesFromImage(_rhs);
-#endif
 }
 
 QPixmap ImageHelper::makeAvatar(const QString& _text, const QFont& _font, const QSize& _size, const QColor& _color)

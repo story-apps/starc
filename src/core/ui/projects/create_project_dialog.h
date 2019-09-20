@@ -17,6 +17,17 @@ public:
     explicit CreateProjectDialog(QWidget* _parent = nullptr);
     ~CreateProjectDialog() override;
 
+protected:
+    /**
+     * @brief Обновить переводы
+     */
+    void updateTranslations() override;
+
+    /**
+     * @brief Обновляем навигатор при изменении дизайн системы
+     */
+    void designSystemChangeEvent(DesignSystemChangeEvent* _event) override;
+
 private:
     class Implementation;
     QScopedPointer<Implementation> d;

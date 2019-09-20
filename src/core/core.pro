@@ -59,7 +59,8 @@ SOURCES += \
     domain/project.cpp \
     ui/widgets/dialog/abstract_dialog.cpp \
     ui/projects/create_project_dialog.cpp \
-    ui/widgets/dialog/dialog_content.cpp
+    ui/widgets/dialog/dialog_content.cpp \
+    ui/widgets/text_field/text_field.cpp
 
 HEADERS += \
         core_global.h \
@@ -104,7 +105,8 @@ HEADERS += \
     domain/project.h \
     ui/widgets/dialog/abstract_dialog.h \
     ui/projects/create_project_dialog.h \
-    ui/widgets/dialog/dialog_content.h
+    ui/widgets/dialog/dialog_content.h \
+    ui/widgets/text_field/text_field.h
 
 unix {
     target.path = /usr/lib

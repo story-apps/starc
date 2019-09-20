@@ -291,21 +291,6 @@ public:
         QColor foregroundColor() const;
 
         /**
-         * @brief Шрифт для лейбла
-         */
-        QFont labelFont() const;
-
-        /**
-         * @brief Шрифт для текста
-         */
-        QFont textFont() const;
-
-        /**
-         * @brief Шрифт для вспомогательного текста
-         */
-        QFont helperFont() const;
-
-        /**
          * @brief Отступы вокруг
          */
         QMarginsF margins() const;
@@ -558,71 +543,6 @@ public:
     private:
         explicit List(qreal _scaleFactor);
         QScopedPointer<ListPrivate> d;
-        friend class DesignSystemPrivate;
-    };
-
-    /**
-     * @brief Параметры виджета диалога
-     */
-    class DialogPrivate;
-    class Dialog
-    {
-    public:
-        ~Dialog();
-
-        /**
-         * @brief Отступы до контента
-         */
-        QMarginsF margins() const;
-
-        /**
-         * @brief Отступы до кнопок
-         */
-        QMarginsF buttonsMargins() const;
-
-        /**
-         * @brief Ширина диалога
-         */
-        qreal width() const;
-
-        /**
-         * @brief Отступ между заголовком и описанием
-         */
-        qreal textSpacing() const;
-
-        /**
-         * @brief Высота области, в которой располагаются кнопки
-         */
-        qreal buttonsHeight() const;
-
-        /**
-         * @brief Расстояние между кнопками
-         */
-        qreal buttonsSpacing() const;
-
-        /**
-         * @brief Радиус тени
-         */
-        qreal shadowRadius() const;
-
-        /**
-         * @brief Шрифт заголовка
-         */
-        QFont titleFont() const;
-
-        /**
-         * @brief Шрифт поясняющего текста
-         */
-        QFont supportingTextFont() const;
-
-        /**
-         * @brief Шрифт кнопок
-         */
-        QFont buttonsFont() const;
-
-    private:
-        explicit Dialog(qreal _scaleFactor);
-        QScopedPointer<DialogPrivate> d;
         friend class DesignSystemPrivate;
     };
 
@@ -1041,6 +961,32 @@ public:
         QScopedPointer<Implementation> d;
     };
 
+    /**
+     * @brief Параметры виджета диалога
+     */
+    class Dialog
+    {
+    public:
+        ~Dialog();
+
+        /**
+         * @brief Отступы до контента
+         */
+        QMarginsF margins() const;
+
+        /**
+         * @brief Минимальная ширина диалога
+         */
+        qreal minimumWidth() const;
+
+    private:
+        explicit Dialog(qreal _scaleFactor);
+        friend class DesignSystemPrivate;
+        //
+        class Implementation;
+        QScopedPointer<Implementation> d;
+    };
+
 public:
     /**
      * @brief Текущая тема
@@ -1140,11 +1086,6 @@ public:
      */
     static const List& list();
 
-    /**
-     * @brief Параметры виджета диалога
-     */
-    static const Dialog& dialog();
-
 
 
 
@@ -1199,6 +1140,11 @@ public:
      * @brief Параметры виджета карточки
      */
     static const Card& card();
+
+    /**
+     * @brief Параметры виджета диалога
+     */
+    static const Dialog& dialog();
 
 public:
     ~DesignSystem();

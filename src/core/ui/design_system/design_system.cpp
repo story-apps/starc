@@ -380,10 +380,7 @@ public:
 
     QColor backgroundInactiveColor;
     QColor backgroundActiveColor;
-    QColor helperColor;
-    QFont labelFont;
-    QFont textFont;
-    QFont helperFont;
+    QColor foregroundColor;
     QMarginsF margins = {12.0, 26.0, 12.0, 12.0};
     QPointF labelTopLeft = {12.0, 6.0};
     qreal iconTop = 16.0;
@@ -399,17 +396,8 @@ DesignSystem::TextFieldPrivate::TextFieldPrivate(qreal _scaleFactor, const Color
     backgroundInactiveColor.setAlphaF(0.06);
     backgroundActiveColor = _color.onSurface();
     backgroundActiveColor.setAlphaF(0.10);
-    helperColor = _color.onSurface();
-    helperColor.setAlphaF(0.4);
-    labelFont = QFont("Roboto");
-    labelFont.setPixelSize(static_cast<int>(12.0 * _scaleFactor));
-    labelFont.setWeight(QFont::Normal);
-    textFont = QFont("Roboto");
-    textFont.setPixelSize(static_cast<int>(16.0 * _scaleFactor));
-    textFont.setWeight(QFont::Normal);
-    helperFont = QFont("Roboto");
-    helperFont.setPixelSize(static_cast<int>(12.0 * _scaleFactor));
-    helperFont.setWeight(QFont::Normal);
+    foregroundColor = _color.onSurface();
+    foregroundColor.setAlphaF(0.4);
     margins *= _scaleFactor;
     labelTopLeft *= _scaleFactor;
     iconTop *= _scaleFactor;
@@ -435,22 +423,7 @@ QColor DesignSystem::TextField::backgroundActiveColor() const
 
 QColor DesignSystem::TextField::foregroundColor() const
 {
-    return d->helperColor;
-}
-
-QFont DesignSystem::TextField::labelFont() const
-{
-    return d->labelFont;
-}
-
-QFont DesignSystem::TextField::textFont() const
-{
-    return d->textFont;
-}
-
-QFont DesignSystem::TextField::helperFont() const
-{
-    return d->helperFont;
+    return d->foregroundColor;
 }
 
 QMarginsF DesignSystem::TextField::margins() const
@@ -821,106 +794,6 @@ DesignSystem::List::List(qreal _scaleFactor)
 // ****
 
 
-class DesignSystem::DialogPrivate
-{
-public:
-    explicit DialogPrivate(qreal _scaleFactor);
-
-    QMarginsF margins = {24.0, 24.0, 24.0, 28.0};
-    QMarginsF buttonsMargins = {8.0, 8.0, 8.0, 8.0};
-    qreal width = 280.0;
-    qreal textSpacing = 24.0;
-    qreal buttonsHeight = 52.0;
-    qreal buttonsSpacing = 8.0;
-    qreal shadowRadius = 64.0;
-    QFont titleFont;
-    QFont supportingTextFont;
-    QFont buttonsFont;
-};
-
-DesignSystem::DialogPrivate::DialogPrivate(qreal _scaleFactor)
-{
-    margins *= _scaleFactor;
-    buttonsMargins *= _scaleFactor;
-    width *= _scaleFactor;
-    textSpacing *= _scaleFactor;
-    buttonsHeight *= _scaleFactor;
-    buttonsSpacing *= _scaleFactor;
-    shadowRadius *= _scaleFactor;
-    titleFont = QFont("Roboto");
-    titleFont.setPixelSize(static_cast<int>(20.0 * _scaleFactor));
-    titleFont.setWeight(QFont::Normal);
-    supportingTextFont = QFont("Roboto");
-    supportingTextFont.setPixelSize(static_cast<int>(16.0 * _scaleFactor));
-    supportingTextFont.setWeight(QFont::Normal);
-    buttonsFont = QFont("Roboto");
-    buttonsFont.setPixelSize(static_cast<int>(14.0 * _scaleFactor));
-    buttonsFont.setWeight(QFont::Bold);
-}
-
-// **
-
-DesignSystem::Dialog::~Dialog() = default;
-
-QMarginsF DesignSystem::Dialog::margins() const
-{
-    return d->margins;
-}
-
-QMarginsF DesignSystem::Dialog::buttonsMargins() const
-{
-    return d->buttonsMargins;
-}
-
-qreal DesignSystem::Dialog::width() const
-{
-    return d->width;
-}
-
-qreal DesignSystem::Dialog::textSpacing() const
-{
-    return d->textSpacing;
-}
-
-qreal DesignSystem::Dialog::buttonsHeight() const
-{
-    return d->buttonsHeight;
-}
-
-qreal DesignSystem::Dialog::buttonsSpacing() const
-{
-    return d->buttonsSpacing;
-}
-
-qreal DesignSystem::Dialog::shadowRadius() const
-{
-    return d->shadowRadius;
-}
-
-QFont DesignSystem::Dialog::titleFont() const
-{
-    return d->titleFont;
-}
-
-QFont DesignSystem::Dialog::supportingTextFont() const
-{
-    return d->supportingTextFont;
-}
-
-QFont DesignSystem::Dialog::buttonsFont() const
-{
-    return d->buttonsFont;
-}
-
-DesignSystem::Dialog::Dialog(qreal _scaleFactor)
-    : d(new DialogPrivate(_scaleFactor))
-{
-}
-
-
-// ****
-
-
 class DesignSystem::Color::Implementation
 {
 public:
@@ -949,7 +822,7 @@ DesignSystem::Color::Implementation::Implementation()
     surface = QColor("#FFFFFF");
     error = QColor("#B00020");
     shadow = QColor("#000000");
-    shadow.setAlphaF(0.5);
+    shadow.setAlphaF(0.6);
     onPrimary = QColor("#FFFFFF");
     onSecondary = QColor("#FFFFFF");
     onBackground = QColor("#000000");
@@ -1739,6 +1612,44 @@ DesignSystem::Card::Card(qreal _scaleFactor)
 // ****
 
 
+class DesignSystem::Dialog::Implementation
+{
+public:
+    explicit Implementation(qreal _scaleFactor);
+
+    QMarginsF margins = {24.0, 24.0, 24.0, 28.0};
+    qreal minimumWidth = 280.0;
+};
+
+DesignSystem::Dialog::Implementation::Implementation(qreal _scaleFactor)
+{
+    margins *= _scaleFactor;
+    minimumWidth *= _scaleFactor;
+}
+
+// **
+
+DesignSystem::Dialog::~Dialog() = default;
+
+QMarginsF DesignSystem::Dialog::margins() const
+{
+    return d->margins;
+}
+
+qreal DesignSystem::Dialog::minimumWidth() const
+{
+    return d->minimumWidth;
+}
+
+DesignSystem::Dialog::Dialog(qreal _scaleFactor)
+    : d(new Implementation(_scaleFactor))
+{
+}
+
+
+// ****
+
+
 class DesignSystemPrivate
 {
 public:
@@ -1755,7 +1666,6 @@ public:
     qreal elevationStartOpacity = 0.04;
     qreal elevationEndOpacity = 0.08;
 
-    DesignSystem::Color color;
     DesignSystem::AppBar appBar;
     DesignSystem::Drawer drawer;
     DesignSystem::Tab tab;
@@ -1766,8 +1676,10 @@ public:
     DesignSystem::ScrollBar scrollBar;
     DesignSystem::ListTwoLineItem listTwoLineItem;
     DesignSystem::List list;
-    DesignSystem::Dialog dialog;
 
+
+
+    DesignSystem::Color color;
     DesignSystem::Font font;
     DesignSystem::Layout layout;
     DesignSystem::Label label;
@@ -1777,13 +1689,13 @@ public:
     DesignSystem::FloatingToolBar floatingAppBar;
     DesignSystem::Stepper stepper;
     DesignSystem::Card card;
+    DesignSystem::Dialog dialog;
 };
 
 DesignSystemPrivate::DesignSystemPrivate(ApplicationTheme _theme, qreal _scaleFactor,
     const DesignSystem::Color& _color)
     : theme(_theme),
       scaleFactor(_scaleFactor),
-      color(_color),
       appBar(_scaleFactor),
       drawer(_scaleFactor, _color),
       tab(_scaleFactor),
@@ -1794,7 +1706,7 @@ DesignSystemPrivate::DesignSystemPrivate(ApplicationTheme _theme, qreal _scaleFa
       scrollBar(_scaleFactor, _color),
       listTwoLineItem(_scaleFactor, _color),
       list(_scaleFactor),
-      dialog(_scaleFactor),
+      color(_color),
       font(_scaleFactor),
       layout(_scaleFactor),
       label(_scaleFactor),
@@ -1803,7 +1715,8 @@ DesignSystemPrivate::DesignSystemPrivate(ApplicationTheme _theme, qreal _scaleFa
       slider(_scaleFactor),
       floatingAppBar(_scaleFactor),
       stepper(_scaleFactor),
-      card(_scaleFactor)
+      card(_scaleFactor),
+      dialog(_scaleFactor)
 {
     pageMargins *= _scaleFactor;
     pageSpacing *= _scaleFactor;
@@ -2010,11 +1923,6 @@ const DesignSystem::List&DesignSystem::list()
     return instance()->d->list;
 }
 
-const DesignSystem::Dialog& DesignSystem::dialog()
-{
-    return instance()->d->dialog;
-}
-
 const DesignSystem::Color& DesignSystem::color()
 {
     return instance()->d->color;
@@ -2068,6 +1976,11 @@ const DesignSystem::Stepper& DesignSystem::stepper()
 const DesignSystem::Card& DesignSystem::card()
 {
     return instance()->d->card;
+}
+
+const DesignSystem::Dialog& DesignSystem::dialog()
+{
+    return instance()->d->dialog;
 }
 
 DesignSystem::~DesignSystem() = default;
