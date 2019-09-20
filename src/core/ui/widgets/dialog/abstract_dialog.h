@@ -23,13 +23,18 @@ public:
     };
 
 public:
-    explicit AbstractDialog(QWidget* _parent = nullptr);
+    explicit AbstractDialog(QWidget* _parent);
     ~AbstractDialog() override;
 
     /**
      * @brief Отобразить диалог
      */
     void showDialog();
+
+    /**
+     * @brief Скрыть диалог
+     */
+    void hideDialog();
 
 signals:
     /**
@@ -47,6 +52,20 @@ protected:
      * @brief Получить компоновщик контента
      */
     QGridLayout* contentsLayout() const;
+
+    /**
+     * @brief Переопределяем отрисовку
+     */
+    void paintEvent(QPaintEvent* _event) override;
+
+    bool eventFilter(QObject* _watched, QEvent* _event) override;
+
+private:
+    /**
+     * @brief Скрываем эти методы, чтобы пользователь их случайно не использовал
+     */
+    void show();
+    void hide();
 
 private:
     class Implementation;
