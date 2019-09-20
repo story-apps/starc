@@ -2,6 +2,7 @@
 
 #include <domain/project.h>
 
+#include <ui/projects/create_project_dialog.h>
 #include <ui/projects/projects_navigator.h>
 #include <ui/projects/projects_tool_bar.h>
 #include <ui/projects/projects_view.h>
@@ -31,6 +32,7 @@ ProjectsManager::Implementation::Implementation(QWidget* _parent)
       view(new Ui::ProjectsView(_parent))
 {
     toolBar->hide();
+
     navigator->hide();
 
     view->setProjects(projects);
@@ -45,7 +47,11 @@ ProjectsManager::ProjectsManager(QObject* _parent, QWidget* _parentWidget)
     : QObject(_parent),
       d(new Implementation(_parentWidget))
 {
-    connect(d->view, &Ui::ProjectsView::createStoryPressed, this, [this] {d->projects->addProject("test");});
+    connect(d->view, &Ui::ProjectsView::createStoryPressed, this, [this] {
+        Ui::CreateProjectDialog* dlg = new Ui::CreateProjectDialog(d->view);
+        dlg->showDialog();
+//        d->projects->addProject("test");
+    });
 }
 
 ProjectsManager::~ProjectsManager() = default;

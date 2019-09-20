@@ -56,7 +56,10 @@ SOURCES += \
     ui/widgets/floating_tool_bar/floating_tool_bar.cpp \
     ui/widgets/shadow/shadow.cpp \
     ui/projects/projects_cards.cpp \
-    domain/project.cpp
+    domain/project.cpp \
+    ui/widgets/dialog/abstract_dialog.cpp \
+    ui/projects/create_project_dialog.cpp \
+    ui/widgets/dialog/dialog_content.cpp
 
 HEADERS += \
         core_global.h \
@@ -98,7 +101,10 @@ HEADERS += \
     ui/widgets/floating_tool_bar/floating_tool_bar.h \
     ui/widgets/shadow/shadow.h \
     ui/projects/projects_cards.h \
-    domain/project.h
+    domain/project.h \
+    ui/widgets/dialog/abstract_dialog.h \
+    ui/projects/create_project_dialog.h \
+    ui/widgets/dialog/dialog_content.h
 
 unix {
     target.path = /usr/lib

@@ -32,6 +32,9 @@ public:
     void setProjects(Domain::ProjectsModel* _projects);
 
 protected:
+    /**
+     * @brief Переопределяем, чтобы корректировать область сцены, в зависимости от размера
+     */
     void resizeEvent(QResizeEvent* _event) override;
 
 private:

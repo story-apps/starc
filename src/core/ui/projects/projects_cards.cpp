@@ -185,6 +185,12 @@ public:
      */
     void reorderCards();
 
+    /**
+     * @brief Обновить область сцены, куда можно положить карточки
+     */
+    void updateSceneRect(const QRect& _rect);
+
+
     QGraphicsScene* scene = nullptr;
     Domain::ProjectsModel* projects = nullptr;
 };
@@ -197,6 +203,11 @@ ProjectsCards::Implementation::Implementation(QGraphicsView* _parent)
 void ProjectsCards::Implementation::reorderCards()
 {
 
+}
+
+void ProjectsCards::Implementation::updateSceneRect(const QRect& _rect)
+{
+    scene->setSceneRect(_rect);
 }
 
 
@@ -252,11 +263,17 @@ void ProjectsCards::setProjects(Domain::ProjectsModel* _projects)
             auto projectCard = new ProjectCard;
             projectCard->setProject(d->projects->projectAt(_first));
             d->scene->addItem(projectCard);
+            projectCard->setPos(-projectCard->rect().width(), -projectCard->rect().height());
 
             //
             // Корректируем расположение карточек в соответствии с новыми реалиями
             //
             d->reorderCards();
+
+            //
+            // Корректируем размер вьюпорта в зависимости от количества карточек
+            //
+            d->updateSceneRect(rect());
         }
     });
 }
@@ -266,6 +283,8 @@ ProjectsCards::~ProjectsCards() = default;
 void ProjectsCards::resizeEvent(QResizeEvent* _event)
 {
     QGraphicsView::resizeEvent(_event);
+
+    d->updateSceneRect(rect());
 }
 
 }
