@@ -26,7 +26,7 @@ public:
     /**
      * @brief Анимировать скрытие
      */
-    void animateHide();
+    void animateHide(const QPoint& _pos);
 
 
     QVBoxLayout* layout = nullptr;
@@ -74,8 +74,10 @@ void AbstractDialog::Implementation::animateShow(const QPoint& _pos)
     contentPosAnimation.start();
 }
 
-void AbstractDialog::Implementation::animateHide()
+void AbstractDialog::Implementation::animateHide(const QPoint& _pos)
 {
+    contentPosAnimation.setEndValue(_pos);
+
     opacityAnimation.setStartValue(1.0);
     opacityAnimation.setEndValue(0.0);
     opacityAnimation.start();
@@ -104,7 +106,10 @@ AbstractDialog::AbstractDialog(QWidget* _parent)
 
     connect(&d->opacityAnimation, &QVariantAnimation::valueChanged, this, [this] { update(); });
     connect(&d->contentPosAnimation, &QVariantAnimation::valueChanged, this, [this] { update(); });
-    connect(&d->contentPosAnimation, &QVariantAnimation::finished, d->content, &DialogContent::show);
+    connect(&d->contentPosAnimation, &QVariantAnimation::finished, this, [this] {
+        d->content->show();
+        focusedWidgetAfterShow()->setFocus();
+    });
 
     designSystemChangeEvent(nullptr);
 }
@@ -137,8 +142,9 @@ void AbstractDialog::showDialog()
 
 void AbstractDialog::hideDialog()
 {
+    d->contentPixmap = d->content->grab();
     d->content->hide();
-    d->animateHide();
+    d->animateHide(d->content->pos());
     QTimer::singleShot(d->opacityAnimation.duration(), this, &AbstractDialog::hide);
 }
 

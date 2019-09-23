@@ -19,6 +19,11 @@ public:
 
 protected:
     /**
+     * @brief Определим виджет, который необходимо сфокусировать после отображения диалога
+     */
+    QWidget* focusedWidgetAfterShow() const override;
+
+    /**
      * @brief Обновить переводы
      */
     void updateTranslations() override;

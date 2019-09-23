@@ -145,8 +145,10 @@ ProjectsView::ProjectsView(QWidget* _parent)
     d->accountBar->addAction(accountAction);
     connect(accountAction, &QAction::triggered, this, &ProjectsView::accountPressed);
 
-//    showEmptyPage();
-    showProjectsPage();
+    connect(d->emptyPageCreateStoryButton, &Button::clicked, this, &ProjectsView::createStoryPressed);
+
+    showEmptyPage();
+//    showProjectsPage();
 
     designSystemChangeEvent(nullptr);
 }

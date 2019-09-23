@@ -38,6 +38,11 @@ protected:
     QGridLayout* contentsLayout() const;
 
     /**
+     * @brief Заданный виджет будет сфокусирован после завершения отображения диалога
+     */
+    virtual QWidget* focusedWidgetAfterShow() const = 0;
+
+    /**
      * @brief Весим фильтр на родительский виджет, чтобы корректировать свои размеры в соответствии с ним
      */
     bool eventFilter(QObject* _watched, QEvent* _event) override;
