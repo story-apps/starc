@@ -19,13 +19,17 @@ public:
     TextField* projectName = nullptr;
     RadioButton* localProjectButton = nullptr;
     RadioButton* remoteProjectButton = nullptr;
+    TextField* projectFilePath = nullptr;
+    TextField* importFilePath = nullptr;
 };
 
 CreateProjectDialog::Implementation::Implementation(QWidget* _parent)
     : projectName(new TextField(_parent)),
       localProjectButton(new RadioButton(_parent)),
-      remoteProjectButton(new RadioButton(_parent))
+      remoteProjectButton(new RadioButton(_parent)),
+      projectFilePath(new TextField(_parent))
 {
+    projectFilePath->setTrailingIcon("\uf256");
 }
 
 
@@ -41,7 +45,8 @@ CreateProjectDialog::CreateProjectDialog(QWidget* _parent)
     contentsLayout()->addWidget(d->projectName);
     contentsLayout()->addWidget(d->localProjectButton);
     contentsLayout()->addWidget(d->remoteProjectButton);
-    contentsLayout()->setRowStretch(3, 1);
+    contentsLayout()->addWidget(d->projectFilePath);
+    contentsLayout()->setRowStretch(4, 1);
 
     updateTranslations();
     designSystemChangeEvent(nullptr);
@@ -54,6 +59,7 @@ void CreateProjectDialog::updateTranslations()
     d->projectName->setLabel(tr("Enter the name of new story"));
     d->localProjectButton->setText(tr("Local project"));
     d->remoteProjectButton->setText(tr("Remote project"));
+    d->projectName->setLabel(tr("Location of the new story file"));
 }
 
 void CreateProjectDialog::designSystemChangeEvent(DesignSystemChangeEvent* _event)

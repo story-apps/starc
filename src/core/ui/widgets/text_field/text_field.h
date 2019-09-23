@@ -42,7 +42,7 @@ public:
     /**
      * @brief Задать иконку действия в редакторе
      */
-    void setTrailingIcon(const QPixmap& _icon);
+    void setTrailingIcon(const QString& _icon);
 
     /**
      * @brief Перекрываем реализацию очистки своей, чтобы не ломался документ

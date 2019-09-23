@@ -266,70 +266,7 @@ public:
 
     // ****
 
-    /**
-     * @brief Параметры виджета текстового поля
-     */
-    class TextFieldPrivate;
-    class TextField
-    {
-    public:
-        ~TextField();
 
-        /**
-         * @brief Цвет фона в неактивном состоянии
-         */
-        QColor backgroundInactiveColor() const;
-
-        /**
-         * @brief Цвет фона в активном состоянии
-         */
-        QColor backgroundActiveColor() const;
-
-        /**
-         * @brief Цвет обычных элементов
-         */
-        QColor foregroundColor() const;
-
-        /**
-         * @brief Отступы вокруг
-         */
-        QMarginsF margins() const;
-
-        /**
-         * @brief Координата отрисовки лейбла
-         */
-        QPointF labelTopLeft() const;
-
-        /**
-         * @brief Координата верха иконки
-         */
-        qreal iconTop() const;
-
-        /**
-         * @brief Размер иконки
-         */
-        QSizeF iconSize() const;
-
-        /**
-         * @brief Высота полоски под редактором не в фокусе
-         */
-        qreal underlineHeight() const;
-
-        /**
-         * @brief Высота полоски под редактором в фокусе
-         */
-        qreal underlineHeightInFocus() const;
-
-        /**
-         * @brief Высота вспомогательного текста под редактором
-         */
-        qreal helperHeight() const;
-
-    private:
-        explicit TextField(qreal _scaleFactor, const Color& _color);
-        QScopedPointer<TextFieldPrivate> d;
-        friend class DesignSystemPrivate;
-    };
 
     /**
      * @brief Параметры виджета выбора цвета
@@ -829,6 +766,72 @@ public:
     };
 
     /**
+     * @brief Параметры виджета текстового поля
+     */
+    class TextField
+    {
+    public:
+        ~TextField();
+
+        /**
+         * @brief Цвет фона в неактивном состоянии
+         */
+        QColor backgroundInactiveColor() const;
+
+        /**
+         * @brief Цвет фона в активном состоянии
+         */
+        QColor backgroundActiveColor() const;
+
+        /**
+         * @brief Цвет обычных элементов
+         */
+        QColor foregroundColor() const;
+
+        /**
+         * @brief Отступы вокруг
+         */
+        QMarginsF margins() const;
+
+        /**
+         * @brief Координата отрисовки лейбла
+         */
+        QPointF labelTopLeft() const;
+
+        /**
+         * @brief Координата верха иконки
+         */
+        qreal iconTop() const;
+
+        /**
+         * @brief Размер иконки
+         */
+        QSizeF iconSize() const;
+
+        /**
+         * @brief Высота полоски под редактором не в фокусе
+         */
+        qreal underlineHeight() const;
+
+        /**
+         * @brief Высота полоски под редактором в фокусе
+         */
+        qreal underlineHeightInFocus() const;
+
+        /**
+         * @brief Высота вспомогательного текста под редактором
+         */
+        qreal helperHeight() const;
+
+    private:
+        explicit TextField(qreal _scaleFactor, const Color& _color);
+        friend class DesignSystemPrivate;
+        //
+        class Implementation;
+        QScopedPointer<Implementation> d;
+    };
+
+    /**
      * @brief Параметры панели иструментов приложения
      */
     class FloatingToolBar
@@ -1057,11 +1060,6 @@ public:
     static const Tabs& tabs();
 
     /**
-     * @brief Параметры виджета текстового поля
-     */
-    static const TextField& textField();
-
-    /**
      * @brief Параметры виджета выбора цвета
      */
     static const ColorPicker& colorPicker();
@@ -1125,6 +1123,11 @@ public:
      * @brief Параметры слайдера
      */
     static const Slider& slider();
+
+    /**
+     * @brief Параметры виджета текстового поля
+     */
+    static const TextField& textField();
 
     /**
      * @brief Параметры плавающей панели инструментов

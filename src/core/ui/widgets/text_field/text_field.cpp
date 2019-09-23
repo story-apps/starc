@@ -48,7 +48,7 @@ public:
     QString helper;
     QString error;
 
-    QPixmap trailingIcon;
+    QString trailingIcon;
 
     QVariantAnimation labelColorAnimation;
     QVariantAnimation labelFontSizeAnimation;
@@ -231,9 +231,9 @@ void TextField::setText(const QString& _text)
     }
 }
 
-void TextField::setTrailingIcon(const QPixmap& _icon)
+void TextField::setTrailingIcon(const QString& _icon)
 {
-    if (ImageHelper::isImagesEqual(d->trailingIcon, _icon)) {
+    if (d->trailingIcon == _icon) {
         return;
     }
 
@@ -315,7 +315,7 @@ void TextField::paintEvent(QPaintEvent* _event)
     }
     painter.fillRect(backgroundRect,
                      hasFocus() || underMouse()
-                     ? Ui::DesignSystem::color().background()
+                     ? Ui::DesignSystem::textField().backgroundActiveColor()
                      : Ui::DesignSystem::textField().backgroundInactiveColor());
     painter.end();
 
@@ -361,13 +361,15 @@ void TextField::paintEvent(QPaintEvent* _event)
     //
     // ... иконка действия
     //
-    if (!d->trailingIcon.isNull()) {
+    if (!d->trailingIcon.isEmpty()) {
+        painter.setFont(Ui::DesignSystem::font().iconsMid());
+        painter.setPen(Ui::DesignSystem::color().onBackground());
         const QRectF iconRect(QPointF(width()
                                       - Ui::DesignSystem::textField().margins().right()
                                       - Ui::DesignSystem::textField().iconSize().width(),
                                       Ui::DesignSystem::textField().iconTop()),
                               Ui::DesignSystem::textField().iconSize());
-        painter.drawPixmap(iconRect.toRect(), d->trailingIcon);
+        painter.drawText(iconRect.toRect(), Qt::AlignCenter, d->trailingIcon);
     }
     //
     // ... подчёркивание

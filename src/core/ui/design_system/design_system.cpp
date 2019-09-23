@@ -373,103 +373,6 @@ DesignSystem::Tabs::Tabs(qreal _scaleFactor)
 // ****
 
 
-class DesignSystem::TextFieldPrivate
-{
-public:
-    explicit TextFieldPrivate(qreal _scaleFactor, const Color& _color);
-
-    QColor backgroundInactiveColor;
-    QColor backgroundActiveColor;
-    QColor foregroundColor;
-    QMarginsF margins = {12.0, 26.0, 12.0, 12.0};
-    QPointF labelTopLeft = {12.0, 6.0};
-    qreal iconTop = 16.0;
-    QSizeF iconSize = {24.0, 24.0};
-    qreal underlineHeight = 1.0;
-    qreal underlineHeightInFocus = 2.0;
-    qreal helperHeight = 20.0;
-};
-
-DesignSystem::TextFieldPrivate::TextFieldPrivate(qreal _scaleFactor, const Color& _color)
-{
-    backgroundInactiveColor = _color.onSurface();
-    backgroundInactiveColor.setAlphaF(0.06);
-    backgroundActiveColor = _color.onSurface();
-    backgroundActiveColor.setAlphaF(0.10);
-    foregroundColor = _color.onSurface();
-    foregroundColor.setAlphaF(0.4);
-    margins *= _scaleFactor;
-    labelTopLeft *= _scaleFactor;
-    iconTop *= _scaleFactor;
-    iconSize *= _scaleFactor;
-    underlineHeight *= _scaleFactor;
-    underlineHeightInFocus *= _scaleFactor;
-    helperHeight *= _scaleFactor;
-}
-
-// **
-
-DesignSystem::TextField::~TextField() = default;
-
-QColor DesignSystem::TextField::backgroundInactiveColor() const
-{
-    return d->backgroundInactiveColor;
-}
-
-QColor DesignSystem::TextField::backgroundActiveColor() const
-{
-    return d->backgroundActiveColor;
-}
-
-QColor DesignSystem::TextField::foregroundColor() const
-{
-    return d->foregroundColor;
-}
-
-QMarginsF DesignSystem::TextField::margins() const
-{
-    return d->margins;
-}
-
-QPointF DesignSystem::TextField::labelTopLeft() const
-{
-    return d->labelTopLeft;
-}
-
-qreal DesignSystem::TextField::iconTop() const
-{
-    return d->iconTop;
-}
-
-QSizeF DesignSystem::TextField::iconSize() const
-{
-    return d->iconSize;
-}
-
-qreal DesignSystem::TextField::underlineHeight() const
-{
-    return d->underlineHeight;
-}
-
-qreal DesignSystem::TextField::underlineHeightInFocus() const
-{
-    return d->underlineHeightInFocus;
-}
-
-qreal DesignSystem::TextField::helperHeight() const
-{
-    return d->helperHeight;
-}
-
-DesignSystem::TextField::TextField(qreal _scaleFactor, const Color& _color)
-    : d(new TextFieldPrivate(_scaleFactor, _color))
-{
-}
-
-
-// ****
-
-
 class DesignSystem::ColorPickerPrivate
 {
 public:
@@ -1416,6 +1319,103 @@ DesignSystem::Slider::Slider(qreal _scaleFactor)
 // ****
 
 
+class DesignSystem::TextField::Implementation
+{
+public:
+    explicit Implementation(qreal _scaleFactor, const Color& _color);
+
+    QColor backgroundInactiveColor;
+    QColor backgroundActiveColor;
+    QColor foregroundColor;
+    QMarginsF margins = {12.0, 26.0, 12.0, 12.0};
+    QPointF labelTopLeft = {12.0, 6.0};
+    qreal iconTop = 16.0;
+    QSizeF iconSize = {24.0, 24.0};
+    qreal underlineHeight = 1.0;
+    qreal underlineHeightInFocus = 2.0;
+    qreal helperHeight = 20.0;
+};
+
+DesignSystem::TextField::Implementation::Implementation(qreal _scaleFactor, const Color& _color)
+{
+    backgroundInactiveColor = _color.onSurface();
+    backgroundInactiveColor.setAlphaF(0.06);
+    backgroundActiveColor = _color.onSurface();
+    backgroundActiveColor.setAlphaF(0.10);
+    foregroundColor = _color.onSurface();
+    foregroundColor.setAlphaF(0.4);
+    margins *= _scaleFactor;
+    labelTopLeft *= _scaleFactor;
+    iconTop *= _scaleFactor;
+    iconSize *= _scaleFactor;
+    underlineHeight *= _scaleFactor;
+    underlineHeightInFocus *= _scaleFactor;
+    helperHeight *= _scaleFactor;
+}
+
+// **
+
+DesignSystem::TextField::~TextField() = default;
+
+QColor DesignSystem::TextField::backgroundInactiveColor() const
+{
+    return d->backgroundInactiveColor;
+}
+
+QColor DesignSystem::TextField::backgroundActiveColor() const
+{
+    return d->backgroundActiveColor;
+}
+
+QColor DesignSystem::TextField::foregroundColor() const
+{
+    return d->foregroundColor;
+}
+
+QMarginsF DesignSystem::TextField::margins() const
+{
+    return d->margins;
+}
+
+QPointF DesignSystem::TextField::labelTopLeft() const
+{
+    return d->labelTopLeft;
+}
+
+qreal DesignSystem::TextField::iconTop() const
+{
+    return d->iconTop;
+}
+
+QSizeF DesignSystem::TextField::iconSize() const
+{
+    return d->iconSize;
+}
+
+qreal DesignSystem::TextField::underlineHeight() const
+{
+    return d->underlineHeight;
+}
+
+qreal DesignSystem::TextField::underlineHeightInFocus() const
+{
+    return d->underlineHeightInFocus;
+}
+
+qreal DesignSystem::TextField::helperHeight() const
+{
+    return d->helperHeight;
+}
+
+DesignSystem::TextField::TextField(qreal _scaleFactor, const Color& _color)
+    : d(new Implementation(_scaleFactor, _color))
+{
+}
+
+
+// ****
+
+
 class DesignSystem::FloatingToolBar::Implementation
 {
 public:
@@ -1618,7 +1618,7 @@ public:
     explicit Implementation(qreal _scaleFactor);
 
     QMarginsF margins = {24.0, 24.0, 24.0, 28.0};
-    qreal minimumWidth = 280.0;
+    qreal minimumWidth = 420.0;
 };
 
 DesignSystem::Dialog::Implementation::Implementation(qreal _scaleFactor)
@@ -1670,7 +1670,6 @@ public:
     DesignSystem::Drawer drawer;
     DesignSystem::Tab tab;
     DesignSystem::Tabs tabs;
-    DesignSystem::TextField textField;
     DesignSystem::ColorPicker colorPicker;
     DesignSystem::TextToggle textToggle;
     DesignSystem::ScrollBar scrollBar;
@@ -1686,6 +1685,7 @@ public:
     DesignSystem::Button button;
     DesignSystem::RadioButton radioButton;
     DesignSystem::Slider slider;
+    DesignSystem::TextField textField;
     DesignSystem::FloatingToolBar floatingAppBar;
     DesignSystem::Stepper stepper;
     DesignSystem::Card card;
@@ -1700,7 +1700,6 @@ DesignSystemPrivate::DesignSystemPrivate(ApplicationTheme _theme, qreal _scaleFa
       drawer(_scaleFactor, _color),
       tab(_scaleFactor),
       tabs(_scaleFactor),
-      textField(_scaleFactor, _color),
       colorPicker(_scaleFactor),
       textToggle(_scaleFactor),
       scrollBar(_scaleFactor, _color),
@@ -1713,6 +1712,7 @@ DesignSystemPrivate::DesignSystemPrivate(ApplicationTheme _theme, qreal _scaleFa
       button(_scaleFactor),
       radioButton(_scaleFactor),
       slider(_scaleFactor),
+      textField(_scaleFactor, _color),
       floatingAppBar(_scaleFactor),
       stepper(_scaleFactor),
       card(_scaleFactor),
@@ -1893,11 +1893,6 @@ const DesignSystem::Tabs& DesignSystem::tabs()
     return instance()->d->tabs;
 }
 
-const DesignSystem::TextField& DesignSystem::textField()
-{
-    return instance()->d->textField;
-}
-
 const DesignSystem::ColorPicker& DesignSystem::colorPicker()
 {
     return instance()->d->colorPicker;
@@ -1961,6 +1956,11 @@ const DesignSystem::RadioButton& DesignSystem::radioButton()
 const DesignSystem::Slider& DesignSystem::slider()
 {
     return instance()->d->slider;
+}
+
+const DesignSystem::TextField& DesignSystem::textField()
+{
+    return instance()->d->textField;
 }
 
 const DesignSystem::FloatingToolBar& DesignSystem::floatingToolBar()
