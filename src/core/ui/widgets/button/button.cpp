@@ -287,8 +287,8 @@ void Button::designSystemChangeEvent(DesignSystemChangeEvent* _event)
     Q_UNUSED(_event);
 
     setContentsMargins(Ui::DesignSystem::button().shadowMargins().toMargins());
-    d->shadowBlurRadiusAnimation.setStartValue(Ui::DesignSystem::floatingToolBar().minimumShadowBlurRadius());
-    d->shadowBlurRadiusAnimation.setEndValue(Ui::DesignSystem::floatingToolBar().maximumShadowBlurRadius());
+    d->shadowBlurRadiusAnimation.setStartValue(Ui::DesignSystem::button().minimumShadowBlurRadius());
+    d->shadowBlurRadiusAnimation.setEndValue(Ui::DesignSystem::button().maximumShadowBlurRadius());
 
     updateGeometry();
     update();

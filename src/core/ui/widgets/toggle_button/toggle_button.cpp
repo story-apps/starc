@@ -1,15 +1,13 @@
-#include "radio_button.h"
+#include "toggle_button.h"
 
 #include <ui/design_system/design_system.h>
-
-#include <utils/helpers/text_helper.h>
 
 #include <QPainter>
 #include <QPaintEvent>
 #include <QVariantAnimation>
 
 
-class RadioButton::Implementation
+class ToggleButton::Implementation
 {
 public:
     Implementation();
@@ -21,7 +19,7 @@ public:
 
 
     bool isChecked = false;
-    QString text;
+    QString icon;
 
     /**
      * @brief  Декорации переключателя при клике
@@ -30,7 +28,7 @@ public:
     QVariantAnimation decorationOpacityAnimation;
 };
 
-RadioButton::Implementation::Implementation()
+ToggleButton::Implementation::Implementation()
 {
     decorationRadiusAnimation.setEasingCurve(QEasingCurve::OutQuad);
     decorationRadiusAnimation.setDuration(160);
@@ -41,7 +39,7 @@ RadioButton::Implementation::Implementation()
     decorationOpacityAnimation.setDuration(160);
 }
 
-void RadioButton::Implementation::animateClick()
+void ToggleButton::Implementation::animateClick()
 {
     decorationOpacityAnimation.setCurrentTime(0);
     decorationRadiusAnimation.start();
@@ -51,12 +49,12 @@ void RadioButton::Implementation::animateClick()
 
 // ****
 
-
-RadioButton::RadioButton(QWidget* _parent)
+ToggleButton::ToggleButton(QWidget* _parent)
     : Widget(_parent),
       d(new Implementation)
 {
     setFocusPolicy(Qt::StrongFocus);
+    setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed);
 
     connect(&d->decorationRadiusAnimation, &QVariantAnimation::valueChanged, this, [this] { update(); });
     connect(&d->decorationOpacityAnimation, &QVariantAnimation::valueChanged, this, [this] { update(); });
@@ -64,14 +62,14 @@ RadioButton::RadioButton(QWidget* _parent)
     designSystemChangeEvent(nullptr);
 }
 
-RadioButton::~RadioButton() = default;
+ToggleButton::~ToggleButton() = default;
 
-bool RadioButton::isChecked() const
+bool ToggleButton::isChecked() const
 {
     return d->isChecked;
 }
 
-void RadioButton::setChecked(bool _checked)
+void ToggleButton::setChecked(bool _checked)
 {
     if (d->isChecked == _checked) {
         return;
@@ -82,28 +80,22 @@ void RadioButton::setChecked(bool _checked)
     update();
 }
 
-void RadioButton::setText(const QString& _text)
+void ToggleButton::setIcon(const QString& _icon)
 {
-    if (d->text == _text) {
+    if (d->icon == _icon) {
         return;
     }
 
-    d->text = _text;
-    updateGeometry();
+    d->icon = _icon;
     update();
 }
 
-QSize RadioButton::sizeHint() const
+QSize ToggleButton::sizeHint() const
 {
-    return QSize(static_cast<int>(Ui::DesignSystem::radioButton().margins().left()
-                                  + Ui::DesignSystem::radioButton().iconSize().width()
-                                  + Ui::DesignSystem::radioButton().spacing()
-                                  + TextHelper::fineTextWidth(d->text, Ui::DesignSystem::font().subtitle1())
-                                  + Ui::DesignSystem::radioButton().margins().right()),
-                 static_cast<int>(Ui::DesignSystem::radioButton().height()));
+    return Ui::DesignSystem::toggleButton().size().toSize();
 }
 
-void RadioButton::paintEvent(QPaintEvent* _event)
+void ToggleButton::paintEvent(QPaintEvent* _event)
 {
     QPainter painter(this);
     painter.setRenderHint(QPainter::Antialiasing);
@@ -114,11 +106,11 @@ void RadioButton::paintEvent(QPaintEvent* _event)
     painter.fillRect(_event->rect(), backgroundColor());
 
     //
-    // Рисуем декорацию переключателя
+    // Рисуем декорацию кнопки
     //
-    const QRectF iconRect(QPointF(Ui::DesignSystem::radioButton().margins().left(),
-                                  Ui::DesignSystem::radioButton().margins().top()),
-                          Ui::DesignSystem::radioButton().iconSize());
+    const QRectF iconRect(QPointF(Ui::DesignSystem::toggleButton().margins().left(),
+                                  Ui::DesignSystem::toggleButton().margins().top()),
+                          Ui::DesignSystem::toggleButton().iconSize());
     if (d->decorationRadiusAnimation.state() == QVariantAnimation::Running
         || d->decorationOpacityAnimation.state() == QVariantAnimation::Running) {
         painter.setPen(Qt::NoPen);
@@ -130,23 +122,14 @@ void RadioButton::paintEvent(QPaintEvent* _event)
     }
 
     //
-    // Рисуем сам переключатель
+    // Рисуем иконку
     //
     painter.setFont(Ui::DesignSystem::font().iconsMid());
     painter.setPen(d->isChecked ? Ui::DesignSystem::color().secondary() : textColor());
-    painter.drawText(iconRect, Qt::AlignCenter, d->isChecked ? "\uf43e" : "\uf43d");
-
-    //
-    // Рисуем текст
-    //
-    painter.setFont(Ui::DesignSystem::font().subtitle1());
-    painter.setPen(textColor());
-    const qreal textRectX = iconRect.right() + Ui::DesignSystem::radioButton().spacing();
-    const QRectF textRect(textRectX, 0, width() - textRectX, sizeHint().height());
-    painter.drawText(textRect, Qt::AlignLeft | Qt::AlignVCenter, d->text);
+    painter.drawText(iconRect, Qt::AlignCenter, d->icon);
 }
 
-void RadioButton::mouseReleaseEvent(QMouseEvent* _event)
+void ToggleButton::mouseReleaseEvent(QMouseEvent* _event)
 {
     Q_UNUSED(_event);
 
@@ -154,16 +137,16 @@ void RadioButton::mouseReleaseEvent(QMouseEvent* _event)
         return;
     }
 
-    setChecked(true);
+    setChecked(!d->isChecked);
     d->animateClick();
 }
 
-void RadioButton::designSystemChangeEvent(DesignSystemChangeEvent* _event)
+void ToggleButton::designSystemChangeEvent(DesignSystemChangeEvent* _event)
 {
     Q_UNUSED(_event);
 
-    d->decorationRadiusAnimation.setStartValue(Ui::DesignSystem::radioButton().iconSize().height() / 2.0);
-    d->decorationRadiusAnimation.setEndValue(Ui::DesignSystem::radioButton().height() / 2.5);
+    d->decorationRadiusAnimation.setStartValue(Ui::DesignSystem::toggleButton().iconSize().height() / 2.0);
+    d->decorationRadiusAnimation.setEndValue(Ui::DesignSystem::toggleButton().size().height() / 2.5);
 
     updateGeometry();
     update();

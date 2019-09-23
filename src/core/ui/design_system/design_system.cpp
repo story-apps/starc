@@ -1139,9 +1139,9 @@ public:
     qreal minimumWidth = 64.0;
     QMarginsF margins = {16.0, 0.0, 16.0, 0.0};
     qreal spacing = 16.0;
-    QMarginsF shadowMargins = {14.0, 14.0, 14.0, 16.0};
+    QMarginsF shadowMargins = {8.0, 8.0, 8.0, 10.0};
     qreal minimumShadowBlurRadius = 8.0;
-    qreal maximumShadowBlurRadius = 32.0;
+    qreal maximumShadowBlurRadius = 22.0;
     qreal borderRadius = 4.0;
     QSizeF iconSize = {22.0, 22.0};
 };
@@ -1211,6 +1211,53 @@ const QSizeF& DesignSystem::Button::iconSize() const
 }
 
 DesignSystem::Button::Button(qreal _scaleFactor)
+    : d(new Implementation(_scaleFactor))
+{
+}
+
+
+// ****
+
+
+class DesignSystem::ToggleButton::Implementation
+{
+public:
+    explicit Implementation(qreal _scaleFactor);
+
+    QSizeF size = {48.0, 48.0};
+    QMarginsF margins = {12.0, 12.0, 12.0, 12.0};
+    QSizeF iconSize = {24.0, 24.0};
+};
+
+DesignSystem::ToggleButton::Implementation::Implementation(qreal _scaleFactor)
+{
+    size *= _scaleFactor;
+    margins *= _scaleFactor;
+    iconSize *= _scaleFactor;
+}
+
+
+// **
+
+
+DesignSystem::ToggleButton::~ToggleButton() = default;
+
+const QSizeF& DesignSystem::ToggleButton::size() const
+{
+    return d->size;
+}
+
+const QMarginsF& DesignSystem::ToggleButton::margins() const
+{
+    return d->margins;
+}
+
+const QSizeF& DesignSystem::ToggleButton::iconSize() const
+{
+    return d->iconSize;
+}
+
+DesignSystem::ToggleButton::ToggleButton(qreal _scaleFactor)
     : d(new Implementation(_scaleFactor))
 {
 }
@@ -1327,6 +1374,7 @@ public:
     QColor backgroundInactiveColor;
     QColor backgroundActiveColor;
     QColor foregroundColor;
+    QMarginsF contentsMargins = {24.0, 0.0, 24.0, 0.0};
     QMarginsF margins = {12.0, 26.0, 12.0, 12.0};
     QPointF labelTopLeft = {12.0, 6.0};
     qreal iconTop = 16.0;
@@ -1344,6 +1392,7 @@ DesignSystem::TextField::Implementation::Implementation(qreal _scaleFactor, cons
     backgroundActiveColor.setAlphaF(0.10);
     foregroundColor = _color.onSurface();
     foregroundColor.setAlphaF(0.4);
+    contentsMargins *= _scaleFactor;
     margins *= _scaleFactor;
     labelTopLeft *= _scaleFactor;
     iconTop *= _scaleFactor;
@@ -1370,6 +1419,11 @@ QColor DesignSystem::TextField::backgroundActiveColor() const
 QColor DesignSystem::TextField::foregroundColor() const
 {
     return d->foregroundColor;
+}
+
+QMarginsF DesignSystem::TextField::contentsMargins() const
+{
+    return d->contentsMargins;
 }
 
 QMarginsF DesignSystem::TextField::margins() const
@@ -1617,7 +1671,7 @@ class DesignSystem::Dialog::Implementation
 public:
     explicit Implementation(qreal _scaleFactor);
 
-    QMarginsF margins = {24.0, 24.0, 24.0, 28.0};
+    QMarginsF margins = {24.0, 24.0, 24.0, 12.0};
     qreal minimumWidth = 420.0;
 };
 
@@ -1683,6 +1737,7 @@ public:
     DesignSystem::Layout layout;
     DesignSystem::Label label;
     DesignSystem::Button button;
+    DesignSystem::ToggleButton toggleButton;
     DesignSystem::RadioButton radioButton;
     DesignSystem::Slider slider;
     DesignSystem::TextField textField;
@@ -1710,6 +1765,7 @@ DesignSystemPrivate::DesignSystemPrivate(ApplicationTheme _theme, qreal _scaleFa
       layout(_scaleFactor),
       label(_scaleFactor),
       button(_scaleFactor),
+      toggleButton(_scaleFactor),
       radioButton(_scaleFactor),
       slider(_scaleFactor),
       textField(_scaleFactor, _color),
@@ -1946,6 +2002,11 @@ const DesignSystem::Label& DesignSystem::label()
 const DesignSystem::Button&DesignSystem::button()
 {
     return instance()->d->button;
+}
+
+const DesignSystem::ToggleButton& DesignSystem::toggleButton()
+{
+    return instance()->d->toggleButton;
 }
 
 const DesignSystem::RadioButton& DesignSystem::radioButton()

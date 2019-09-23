@@ -80,10 +80,14 @@ void TextField::Implementation::reconfigure(TextField* _textField) const
     _textField->setPalette(palette);
 
     QTextFrameFormat frameFormat = _textField->document()->rootFrame()->frameFormat();
-    frameFormat.setLeftMargin(Ui::DesignSystem::textField().margins().left());
-    frameFormat.setTopMargin(Ui::DesignSystem::textField().margins().top());
-    frameFormat.setRightMargin(Ui::DesignSystem::textField().margins().right());
-    frameFormat.setBottomMargin(Ui::DesignSystem::textField().margins().bottom());
+    frameFormat.setLeftMargin(Ui::DesignSystem::textField().contentsMargins().left()
+                              + Ui::DesignSystem::textField().margins().left());
+    frameFormat.setTopMargin(Ui::DesignSystem::textField().contentsMargins().top()
+                             + Ui::DesignSystem::textField().margins().top());
+    frameFormat.setRightMargin(Ui::DesignSystem::textField().contentsMargins().right()
+                               + Ui::DesignSystem::textField().margins().right());
+    frameFormat.setBottomMargin(Ui::DesignSystem::textField().contentsMargins().bottom()
+                                + Ui::DesignSystem::textField().margins().bottom());
     _textField->document()->rootFrame()->setFrameFormat(frameFormat);
 }
 
@@ -94,8 +98,12 @@ void TextField::Implementation::animateLabelToTop()
     labelFontSizeAnimation.start();
 
     labelTopLeftAnimation.stop();
-    const QPointF labelNewTopLeft = Ui::DesignSystem::textField().labelTopLeft();
-    const QPointF labelCurrentTopLeft(labelNewTopLeft.x(), Ui::DesignSystem::textField().margins().top());
+    const QPointF labelNewTopLeft = Ui::DesignSystem::textField().labelTopLeft()
+                                    + QPointF(Ui::DesignSystem::textField().contentsMargins().left(),
+                                              Ui::DesignSystem::textField().contentsMargins().top());
+    const QPointF labelCurrentTopLeft(labelNewTopLeft.x(),
+                                      Ui::DesignSystem::textField().contentsMargins().top()
+                                      + Ui::DesignSystem::textField().margins().top());
     labelTopLeftAnimation.setStartValue(labelCurrentTopLeft);
     labelTopLeftAnimation.setEndValue(labelNewTopLeft);
     labelTopLeftAnimation.start();
@@ -107,8 +115,12 @@ void TextField::Implementation::animateLabelToBottom()
     labelFontSizeAnimation.setEndValue(Ui::DesignSystem::font().body1().pixelSize());
     labelFontSizeAnimation.start();
 
-    const QPointF labelCurrentTopLeft = Ui::DesignSystem::textField().labelTopLeft();
-    const QPointF labelNewTopLeft(labelCurrentTopLeft.x(), Ui::DesignSystem::textField().margins().top());
+    const QPointF labelCurrentTopLeft = Ui::DesignSystem::textField().labelTopLeft()
+                                        + QPointF(Ui::DesignSystem::textField().contentsMargins().left(),
+                                                  Ui::DesignSystem::textField().contentsMargins().top());
+    const QPointF labelNewTopLeft(labelCurrentTopLeft.x(),
+                                  Ui::DesignSystem::textField().contentsMargins().top()
+                                  + Ui::DesignSystem::textField().margins().top());
     labelTopLeftAnimation.setStartValue(labelCurrentTopLeft);
     labelTopLeftAnimation.setEndValue(labelNewTopLeft);
     labelTopLeftAnimation.start();
@@ -127,20 +139,36 @@ void TextField::Implementation::finishAnimationIfInvisible(TextField* _textField
 
 QRectF TextField::Implementation::decorationRect(const QSize& _textFieldSize) const
 {
-    qreal top = _textFieldSize.height() - Ui::DesignSystem::textField().underlineHeight();
+    qreal top = _textFieldSize.height()
+                - Ui::DesignSystem::textField().underlineHeight()
+                - Ui::DesignSystem::textField().contentsMargins().top()
+                - Ui::DesignSystem::textField().contentsMargins().bottom();
     if (!helper.isEmpty() || !error.isEmpty()) {
         top -= Ui::DesignSystem::textField().helperHeight();
     }
-    return QRectF(0, top, _textFieldSize.width(), Ui::DesignSystem::textField().underlineHeight());
+    return QRectF(Ui::DesignSystem::textField().contentsMargins().left(),
+                  top,
+                  _textFieldSize.width()
+                  - Ui::DesignSystem::textField().contentsMargins().left()
+                  - Ui::DesignSystem::textField().contentsMargins().right(),
+                  Ui::DesignSystem::textField().underlineHeight());
 }
 
 QRectF TextField::Implementation::decorationRectInFocus(const QSize& _textFieldSize) const
 {
-    qreal top = _textFieldSize.height() - Ui::DesignSystem::textField().underlineHeightInFocus();
+    qreal top = _textFieldSize.height()
+                - Ui::DesignSystem::textField().underlineHeight()
+                - Ui::DesignSystem::textField().contentsMargins().top()
+                - Ui::DesignSystem::textField().contentsMargins().bottom();
     if (!helper.isEmpty() || !error.isEmpty()) {
         top -= Ui::DesignSystem::textField().helperHeight();
     }
-    return QRectF(0, top, _textFieldSize.width(), Ui::DesignSystem::textField().underlineHeightInFocus());
+    return QRectF(Ui::DesignSystem::textField().contentsMargins().left(),
+                  top,
+                  _textFieldSize.width()
+                  - Ui::DesignSystem::textField().contentsMargins().left()
+                  - Ui::DesignSystem::textField().contentsMargins().right(),
+                  Ui::DesignSystem::textField().underlineHeightInFocus());
 }
 
 
@@ -269,6 +297,10 @@ QSize TextField::sizeHint() const
                    + Ui::DesignSystem::textField().margins().right(),
                    Ui::DesignSystem::textField().margins().top()
                    + Ui::DesignSystem::textField().margins().bottom()).toSize();
+    size += QSizeF(Ui::DesignSystem::textField().contentsMargins().left()
+                   + Ui::DesignSystem::textField().contentsMargins().right(),
+                   Ui::DesignSystem::textField().contentsMargins().top()
+                   + Ui::DesignSystem::textField().contentsMargins().bottom()).toSize();
     return size;
 }
 
@@ -280,6 +312,8 @@ int TextField::heightForWidth(int _width) const
     qreal height = TextHelper::heightForWidth(text(), Ui::DesignSystem::font().body1(), static_cast<int>(width));
     height += Ui::DesignSystem::textField().margins().top()
               + Ui::DesignSystem::textField().margins().bottom();
+    height += Ui::DesignSystem::textField().contentsMargins().top()
+              + Ui::DesignSystem::textField().contentsMargins().bottom();
     if (!d->helper.isEmpty() || !d->error.isEmpty()) {
         height += Ui::DesignSystem::textField().helperHeight();
     }
@@ -308,7 +342,7 @@ void TextField::paintEvent(QPaintEvent* _event)
     // Рисуем фон
     //
     painter.begin(viewport());
-    QRectF backgroundRect = rect();
+    QRectF backgroundRect = rect().marginsRemoved(Ui::DesignSystem::textField().contentsMargins().toMargins());
     if (!d->helper.isEmpty() || !d->error.isEmpty()) {
         backgroundRect.moveBottom(backgroundRect.bottom()
                                   - Ui::DesignSystem::textField().helperHeight());
@@ -349,7 +383,9 @@ void TextField::paintEvent(QPaintEvent* _event)
         }
         painter.setPen(labelColor);
 
-        QPointF labelTopLeft = Ui::DesignSystem::textField().labelTopLeft();
+        QPointF labelTopLeft = Ui::DesignSystem::textField().labelTopLeft()
+                               + QPointF(Ui::DesignSystem::textField().contentsMargins().left(),
+                                         Ui::DesignSystem::textField().contentsMargins().top());
         if (!d->labelTopLeftAnimation.currentValue().isNull()) {
             labelTopLeft = d->labelTopLeftAnimation.currentValue().toPointF();
         } else if (!hasFocus() && text().isEmpty() && placeholderText().isEmpty()) {
@@ -365,6 +401,7 @@ void TextField::paintEvent(QPaintEvent* _event)
         painter.setFont(Ui::DesignSystem::font().iconsMid());
         painter.setPen(Ui::DesignSystem::color().onBackground());
         const QRectF iconRect(QPointF(width()
+                                      - Ui::DesignSystem::textField().contentsMargins().right()
                                       - Ui::DesignSystem::textField().margins().right()
                                       - Ui::DesignSystem::textField().iconSize().width(),
                                       Ui::DesignSystem::textField().iconTop()),
@@ -399,11 +436,14 @@ void TextField::paintEvent(QPaintEvent* _event)
         const QColor color = !d->error.isEmpty() ? Ui::DesignSystem::color().error()
                                                  : Ui::DesignSystem::textField().foregroundColor();
         painter.setPen(color);
-        const QRectF textRect(Ui::DesignSystem::textField().margins().left(),
+        const QRectF textRect(Ui::DesignSystem::textField().contentsMargins().left()
+                              + Ui::DesignSystem::textField().margins().left(),
                               height() - Ui::DesignSystem::textField().helperHeight(),
                               width()
+                              - Ui::DesignSystem::textField().contentsMargins().left()
                               - Ui::DesignSystem::textField().margins().left()
-                              - Ui::DesignSystem::textField().margins().right(),
+                              - Ui::DesignSystem::textField().margins().right()
+                              - Ui::DesignSystem::textField().contentsMargins().right(),
                               Ui::DesignSystem::textField().helperHeight());
         const QString text = !d->error.isEmpty() ? d->error : d->helper;
         painter.drawText(textRect, Qt::AlignLeft | Qt::AlignVCenter, text);

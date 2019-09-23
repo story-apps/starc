@@ -13,16 +13,6 @@ class AbstractDialog : public Widget
     Q_OBJECT
 
 public:
-    /**
-     * @brief Структура для описания кнопок в диалоге
-     */
-    struct Button
-    {
-        int id;
-        QString text;
-    };
-
-public:
     explicit AbstractDialog(QWidget* _parent);
     ~AbstractDialog() override;
 
@@ -35,12 +25,6 @@ public:
      * @brief Скрыть диалог
      */
     void hideDialog();
-
-signals:
-    /**
-     * @brief Диалог завершился с установленным выбором пользователя
-     */
-    void finished(const Button& _pressedButton);
 
 protected:
     /**

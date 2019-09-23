@@ -699,6 +699,37 @@ public:
     };
 
     /**
+     * @brief Параметры виджета кнопки-тумблера
+     */
+    class ToggleButton
+    {
+    public:
+        ~ToggleButton();
+
+        /**
+         * @brief Размер
+         */
+        const QSizeF& size() const;
+
+        /**
+         * @brief Отступы контента
+         */
+        const QMarginsF& margins() const;
+
+        /**
+         * @brief Размер иконки переключателя
+         */
+        const QSizeF& iconSize() const;
+
+    private:
+        explicit ToggleButton(qreal _scaleFactor);
+        friend class DesignSystemPrivate;
+        //
+        class Implementation;
+        QScopedPointer<Implementation> d;
+    };
+
+    /**
      * @brief Параметры виджета переключателя
      */
     class RadioButton
@@ -789,7 +820,12 @@ public:
         QColor foregroundColor() const;
 
         /**
-         * @brief Отступы вокруг
+         * @brief Отступы вокруг контента
+         */
+        QMarginsF contentsMargins() const;
+
+        /**
+         * @brief Отступы вокруг текста
          */
         QMarginsF margins() const;
 
@@ -1113,6 +1149,11 @@ public:
      * @brief Параметры кнопки
      */
     static const Button& button();
+
+    /**
+     * @brief Параметры кнопки-тумблера
+     */
+    static const ToggleButton& toggleButton();
 
     /**
      * @brief Параметры кнопки-переключателя

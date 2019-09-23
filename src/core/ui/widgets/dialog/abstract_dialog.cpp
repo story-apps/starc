@@ -185,12 +185,11 @@ void AbstractDialog::designSystemChangeEvent(DesignSystemChangeEvent* _event)
 {
     Q_UNUSED(_event);
 
-    d->layout->setContentsMargins(Ui::DesignSystem::dialog().margins().toMargins());
     d->content->setMinimumWidth(static_cast<int>(Ui::DesignSystem::dialog().minimumWidth()));
     d->content->setBackgroundColor(Ui::DesignSystem::color().background());
     d->title->setBackgroundColor(Ui::DesignSystem::color().background());
     d->title->setTextColor(Ui::DesignSystem::color().onBackground());
-    d->title->setContentsMargins(0, 0, 0, static_cast<int>(Ui::DesignSystem::label().margins().bottom()));
+    d->title->setContentsMargins(Ui::DesignSystem::label().margins().toMargins());
 }
 
 void AbstractDialog::show()
