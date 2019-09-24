@@ -52,7 +52,7 @@ AbstractDialog::Implementation::Implementation(QWidget* _parent)
 
     opacityAnimation.setDuration(220);
     opacityAnimation.setEasingCurve(QEasingCurve::OutQuad);
-    contentPosAnimation.setDuration(160);
+    contentPosAnimation.setDuration(220);
     contentPosAnimation.setEasingCurve(QEasingCurve::OutQuad);
 }
 

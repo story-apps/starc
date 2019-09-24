@@ -477,7 +477,10 @@ void TextField::focusInEvent(QFocusEvent* _event)
     }
 
     const QRectF decorationRect = d->decorationRectInFocus(size());
-    d->decorationAnimation.setStartValue(decorationRect.adjusted(width() / 2, 0, -1 * (width() / 2), 0));
+    const qreal contentsWidth = (width()
+                                 - Ui::DesignSystem::textField().contentsMargins().left()
+                                 - Ui::DesignSystem::textField().contentsMargins().right()) / 2;
+    d->decorationAnimation.setStartValue(decorationRect.adjusted(contentsWidth, 0, -1 * contentsWidth, 0));
     d->decorationAnimation.setEndValue(decorationRect);
     d->decorationAnimation.start();
 }
@@ -496,7 +499,10 @@ void TextField::focusOutEvent(QFocusEvent* _event)
 
     const QRectF decorationRect = d->decorationRectInFocus(size());
     d->decorationAnimation.setStartValue(decorationRect);
-    d->decorationAnimation.setEndValue(decorationRect.adjusted(width() / 2, 0, -1 * (width() / 2), 0));
+    const qreal contentsWidth = (width()
+                                 - Ui::DesignSystem::textField().contentsMargins().left()
+                                 - Ui::DesignSystem::textField().contentsMargins().right()) / 2;
+    d->decorationAnimation.setEndValue(decorationRect.adjusted(contentsWidth, 0, -1 * contentsWidth, 0));
     d->decorationAnimation.start();
 }
 

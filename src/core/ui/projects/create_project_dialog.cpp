@@ -98,7 +98,7 @@ void CreateProjectDialog::updateTranslations()
 {
     setTitle(tr("Create new story"));
 
-    d->projectName->setLabel(tr("Enter the name of new story"));
+    d->projectName->setLabel(tr("Enter name of the new story"));
     d->localProjectButton->setText(tr("Local project"));
     d->remoteProjectButton->setText(tr("Remote project"));
     d->projectFilePath->setLabel(tr("Location of the new story file"));
