@@ -1,6 +1,8 @@
 #include "project.h"
 
+#include <QApplication>
 #include <QDateTime>
+#include <QPixmap>
 
 
 namespace Domain
@@ -10,12 +12,13 @@ class Project::Implementation
 {
 public:
     ProjectType type = ProjectType::Invalid;
-    QString path;
+    QString path = "/home/lucas/screenplays/tlj.starc";
 
+    mutable QPixmap poster;
     QString posterPath;
-    QString name;
-    QString logline;
-    QDateTime lastEditTime;
+    QString name = "Star Wars";
+    QString logline = "Rey develops her newly discovered abilities with the guidance of Luke Skywalker, who is unsettled by the strength of her powers. Meanwhile, the Resistance prepares for battle with the First Order. ";
+    QDateTime lastEditTime = QDateTime::fromString("2019-10-01 22:48:56", "yyyy-MM-dd hh:mm:ss");
 };
 
 
@@ -80,6 +83,23 @@ void Project::setLogline(const QString& _logline)
     d->logline = _logline;
 }
 
+QString Project::displayLastEditDate() const
+{
+    switch (d->lastEditTime.daysTo(QDateTime::currentDateTime())) {
+        case 0: {
+            return QApplication::translate("Domain::Project", "today at") + d->lastEditTime.toString(" hh:mm");
+        }
+
+        case 1: {
+            return QApplication::translate("Domain::Project", "tomorrow at") + d->lastEditTime.toString(" hh:mm");
+        }
+
+        default: {
+            return d->lastEditTime.toString("dd.MM.yyyy hh:mm");
+        }
+    }
+}
+
 QString Project::displayPath() const
 {
     //
@@ -96,6 +116,18 @@ QString Project::path() const
 void Project::setPath(const QString& _path)
 {
     d->path = _path;
+}
+
+const QPixmap& Project::poster() const
+{
+    if (d->poster.isNull()) {
+        if (!d->poster.load(d->posterPath)) {
+            static const QPixmap kDefaultPoster(":/images/movie-poster");
+            d->poster = kDefaultPoster;
+        }
+    }
+
+    return d->poster;
 }
 
 QString Project::posterPath() const

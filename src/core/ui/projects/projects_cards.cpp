@@ -4,7 +4,9 @@
 
 #include <ui/design_system/design_system.h>
 
+#include <utils/helpers/color_helper.h>
 #include <utils/helpers/image_helper.h>
+#include <utils/helpers/text_helper.h>
 
 #include <QAbstractItemModel>
 #include <QGraphicsRectItem>
@@ -61,7 +63,7 @@ private:
 ProjectCard::ProjectCard(QGraphicsItem* _parent)
     : QGraphicsRectItem(_parent)
 {
-    setRect(0, 0, 400, 210);
+    setRect(0, 0, 410, 230);
     setAcceptHoverEvents(true);
 
     setFlag(QGraphicsItem::ItemIsMovable, true);
@@ -130,33 +132,63 @@ void ProjectCard::paint(QPainter* _painter, const QStyleOptionGraphicsItem* _opt
     //
     // TODO: Постер
     //
-    static QPixmap poster;
-    if (poster.height() != backgroundRect.size().toSize().height()) {
-        poster = QPixmap(":/images/movie-poster").scaled(backgroundRect.size().toSize(),
-                                                         Qt::KeepAspectRatio,
-                                                         Qt::SmoothTransformation);
-    }
-    _painter->drawPixmap(backgroundRect.topLeft(), poster);
+    const QPixmap& poster = m_project.poster();
+    const QRectF posterRect(backgroundRect.topLeft(),
+                            poster.size().scaled(backgroundRect.size().toSize(), Qt::KeepAspectRatio));
+    _painter->drawPixmap(posterRect, poster, poster.rect());
 
     //
     // Заголовок
     //
+    _painter->setPen(Ui::DesignSystem::color().onBackground());
+    _painter->setFont(Ui::DesignSystem::font().h6());
+    const QFontMetricsF textFontMetrics(Ui::DesignSystem::font().h6());
+    const QRectF textRect(posterRect.right() + Ui::DesignSystem::layout().px16(),
+                          backgroundRect.top() + Ui::DesignSystem::layout().px8(),
+                          backgroundRect.width() - posterRect.width() - Ui::DesignSystem::layout().px12() * 2,
+                          textFontMetrics.lineSpacing());
+    _painter->drawText(textRect, Qt::AlignLeft | Qt::AlignVCenter, textFontMetrics.elidedText(m_project.name(), Qt::ElideRight, textRect.width()));
 
     //
     // Путь
     //
+    const QColor betweenBackgroundColor = ColorHelper::colorBetween(Ui::DesignSystem::color().onBackground(),
+                                                                    Ui::DesignSystem::color().background());
+    _painter->setPen(betweenBackgroundColor);
+    _painter->setFont(Ui::DesignSystem::font().body2());
+    const QRectF pathRect(textRect.left(), textRect.bottom() + Ui::DesignSystem::layout().px4(),
+                          textRect.width(), _painter->fontMetrics().lineSpacing());
+    _painter->drawText(pathRect, Qt::AlignLeft | Qt::AlignVCenter, _painter->fontMetrics().elidedText(m_project.path(), Qt::ElideLeft, pathRect.width()));
 
     //
     // Логлайн
     //
+    _painter->setPen(Ui::DesignSystem::color().onBackground());
+    const QRectF loglineRect(pathRect.left(), pathRect.bottom() + Ui::DesignSystem::layout().px4(),
+                             pathRect.width(), _painter->fontMetrics().lineSpacing() * 5);
+    _painter->drawText(loglineRect, Qt::AlignLeft | Qt::AlignTop | Qt::TextWordWrap, m_project.logline());
 
     //
     // Дата последнего изменения
     //
+    _painter->setPen(betweenBackgroundColor);
+    const qreal lastDateHeight = _painter->fontMetrics().lineSpacing() + Ui::DesignSystem::layout().px8() * 2;
+    const QRectF lastDateRect(loglineRect.left(), backgroundRect.bottom() - lastDateHeight,
+                             pathRect.width(), lastDateHeight);
+    _painter->drawText(lastDateRect, Qt::AlignLeft | Qt::AlignTop, m_project.displayLastEditDate());
 
     //
     // Иконки действий
     //
+    // TODO: иконки в зависимости от того, наведена ли мышь, локальный или облачный
+    //
+    _painter->setPen(Ui::DesignSystem::color().onBackground());
+    _painter->setFont(Ui::DesignSystem::font().iconsMid());
+    const QRectF iconRect(backgroundRect.right() - Ui::DesignSystem::layout().px24() * 2,
+                          backgroundRect.bottom() - Ui::DesignSystem::layout().px24() * 2,
+                          Ui::DesignSystem::layout().px24() * 2,
+                          Ui::DesignSystem::layout().px24() * 2);
+    _painter->drawText(iconRect, Qt::AlignCenter, "\uf379");
 }
 
 void ProjectCard::hoverEnterEvent(QGraphicsSceneHoverEvent* _event)
@@ -220,6 +252,7 @@ ProjectsCards::ProjectsCards(QWidget* _parent)
 {
     setFrameShape(QFrame::NoFrame);
     setScene(d->scene);
+    d->scene->addItem(new ProjectCard);
 }
 
 void ProjectsCards::setBackgroundColor(const QColor& _color)

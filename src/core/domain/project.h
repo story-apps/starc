@@ -52,6 +52,7 @@ public:
     /**
      * @brief Путь к постеру проекта
      */
+    const QPixmap& poster() const;
     QString posterPath() const;
     void setPosterPath(const QString& _path);
 
@@ -70,6 +71,7 @@ public:
     /**
      * @brief Дата и время последнего изменения проекта
      */
+    QString displayLastEditDate() const;
     QDateTime lastEditTime() const;
     void setLastEditTime(const QDateTime& _time);
 
