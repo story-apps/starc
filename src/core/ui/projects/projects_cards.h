@@ -3,12 +3,30 @@
 #include <QGraphicsView>
 
 namespace Domain {
+    class Project;
     class ProjectsModel;
 }
 
 
 namespace Ui
 {
+
+/**
+ * @brief Сцена для отображения списка проектов
+ */
+class ProjectsScene : public QGraphicsScene
+{
+    Q_OBJECT
+
+public:
+    explicit ProjectsScene(QObject* _parent = nullptr);
+
+signals:
+    /**
+     * @brief Пользователь выбрал проект
+     */
+    void projectPressed(const Domain::Project& _project);
+};
 
 /**
  * @brief Представление модели со списком проектов
