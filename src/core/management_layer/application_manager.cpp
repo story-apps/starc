@@ -8,12 +8,14 @@
 #include <data_layer/storage/settings_storage.h>
 #include <data_layer/storage/storage_facade.h>
 
+#include <ui/application_style.h>
 #include <ui/application_view.h>
 #include <ui/design_system/design_system.h>
 
 #include <QApplication>
 #include <QFontDatabase>
 #include <QLocale>
+#include <QStyleFactory>
 #include <QTimer>
 #include <QTranslator>
 #include <QVariant>
@@ -176,6 +178,8 @@ ApplicationManager::ApplicationManager(QObject* _parent)
       IApplicationManager(),
       d(new Implementation(this))
 {
+    QApplication::setStyle(new ApplicationStyle(QStyleFactory::create("Fusion")));
+
     //
     // Загрузим шрифты в базу шрифтов программы, если их там ещё нет
     //

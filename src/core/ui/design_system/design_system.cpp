@@ -499,67 +499,6 @@ DesignSystem::TextToggle::TextToggle(qreal _scaleFactor)
 // ****
 
 
-class DesignSystem::ScrollBarPrivate
-{
-public:
-    explicit ScrollBarPrivate(qreal _scaleFactor, const Color& _color);
-
-    QColor backgroundColor;
-    QColor handleColor;
-    QMarginsF margins = {2.0, 2.0, 2.0, 2.0};
-    qreal verticalWidth = 4.0;
-    qreal horizontalHeight = 4.0;
-};
-
-DesignSystem::ScrollBarPrivate::ScrollBarPrivate(qreal _scaleFactor, const Color& _color)
-{
-    backgroundColor = _color.onSurface();
-    backgroundColor.setAlphaF(0.08);
-    handleColor = _color.onSurface();
-    handleColor.setAlphaF(0.24);
-    margins *= _scaleFactor;
-    verticalWidth *= _scaleFactor;
-    horizontalHeight *= _scaleFactor;
-}
-
-// **
-
-DesignSystem::ScrollBar::~ScrollBar() = default;
-
-QColor DesignSystem::ScrollBar::backgroundColor() const
-{
-    return d->backgroundColor;
-}
-
-QColor DesignSystem::ScrollBar::handleColor() const
-{
-    return d->handleColor;
-}
-
-QMarginsF DesignSystem::ScrollBar::margins() const
-{
-    return d->margins;
-}
-
-qreal DesignSystem::ScrollBar::verticalWidth() const
-{
-    return d->verticalWidth;
-}
-
-qreal DesignSystem::ScrollBar::horizontalHeight() const
-{
-    return d->horizontalHeight;
-}
-
-DesignSystem::ScrollBar::ScrollBar(qreal _scaleFactor, const Color& _color)
-    : d(new ScrollBarPrivate(_scaleFactor, _color))
-{
-}
-
-
-// ****
-
-
 class DesignSystem::ListTwoLineItemPrivate
 {
 public:
@@ -1470,6 +1409,73 @@ DesignSystem::TextField::TextField(qreal _scaleFactor, const Color& _color)
 // ****
 
 
+class DesignSystem::ScrollBar::Implementation
+{
+public:
+    explicit Implementation(qreal _scaleFactor, const Color& _color);
+
+    QColor backgroundColor;
+    QColor handleColor;
+    QMarginsF margins = {2.0, 2.0, 2.0, 2.0};
+    qreal minimumSize = 6.0;
+    qreal maximumSize = 18.0;
+    qreal minimumHandleLength = 26.0;
+};
+
+DesignSystem::ScrollBar::Implementation::Implementation(qreal _scaleFactor, const Color& _color)
+{
+    backgroundColor = _color.onSurface();
+    backgroundColor.setAlphaF(0.08);
+    handleColor = _color.onSurface();
+    handleColor.setAlphaF(0.24);
+    margins *= _scaleFactor;
+    minimumSize *= _scaleFactor;
+    maximumSize *= _scaleFactor;
+}
+
+// **
+
+DesignSystem::ScrollBar::~ScrollBar() = default;
+
+QColor DesignSystem::ScrollBar::backgroundColor() const
+{
+    return d->backgroundColor;
+}
+
+QColor DesignSystem::ScrollBar::handleColor() const
+{
+    return d->handleColor;
+}
+
+QMarginsF DesignSystem::ScrollBar::margins() const
+{
+    return d->margins;
+}
+
+qreal DesignSystem::ScrollBar::minimumSize() const
+{
+    return d->minimumSize;
+}
+
+qreal DesignSystem::ScrollBar::maximumSize() const
+{
+    return d->maximumSize;
+}
+
+qreal DesignSystem::ScrollBar::minimumHandleLength() const
+{
+    return d->minimumHandleLength;
+}
+
+DesignSystem::ScrollBar::ScrollBar(qreal _scaleFactor, const Color& _color)
+    : d(new Implementation(_scaleFactor, _color))
+{
+}
+
+
+// ****
+
+
 class DesignSystem::FloatingToolBar::Implementation
 {
 public:
@@ -1685,7 +1691,7 @@ DesignSystem::Dialog::Implementation::Implementation(qreal _scaleFactor)
 
 DesignSystem::Dialog::~Dialog() = default;
 
-QMarginsF DesignSystem::Dialog::margins() const
+const QMarginsF& DesignSystem::Dialog::margins() const
 {
     return d->margins;
 }
@@ -1696,6 +1702,52 @@ qreal DesignSystem::Dialog::minimumWidth() const
 }
 
 DesignSystem::Dialog::Dialog(qreal _scaleFactor)
+    : d(new Implementation(_scaleFactor))
+{
+}
+
+
+// ****
+
+class DesignSystem::ProjectCard::Implementation
+{
+public:
+    explicit Implementation(qreal _scaleFactor);
+
+    QSizeF size = {401, 230};
+    QMarginsF margins = {24, 116, 24, 24};
+    qreal spacing = 10;
+};
+
+DesignSystem::ProjectCard::Implementation::Implementation(qreal _scaleFactor)
+{
+    size *= _scaleFactor;
+    spacing *= _scaleFactor;
+    margins *= _scaleFactor;
+}
+
+
+// **
+
+
+DesignSystem::ProjectCard::~ProjectCard() = default;
+
+const QSizeF& DesignSystem::ProjectCard::size() const
+{
+    return d->size;
+}
+
+const QMarginsF& DesignSystem::ProjectCard::margins() const
+{
+    return d->margins;
+}
+
+qreal DesignSystem::ProjectCard::spacing() const
+{
+    return d->spacing;
+}
+
+DesignSystem::ProjectCard::ProjectCard(qreal _scaleFactor)
     : d(new Implementation(_scaleFactor))
 {
 }
@@ -1726,7 +1778,6 @@ public:
     DesignSystem::Tabs tabs;
     DesignSystem::ColorPicker colorPicker;
     DesignSystem::TextToggle textToggle;
-    DesignSystem::ScrollBar scrollBar;
     DesignSystem::ListTwoLineItem listTwoLineItem;
     DesignSystem::List list;
 
@@ -1741,10 +1792,12 @@ public:
     DesignSystem::RadioButton radioButton;
     DesignSystem::Slider slider;
     DesignSystem::TextField textField;
+    DesignSystem::ScrollBar scrollBar;
     DesignSystem::FloatingToolBar floatingAppBar;
     DesignSystem::Stepper stepper;
     DesignSystem::Card card;
     DesignSystem::Dialog dialog;
+    DesignSystem::ProjectCard projectCard;
 };
 
 DesignSystemPrivate::DesignSystemPrivate(ApplicationTheme _theme, qreal _scaleFactor,
@@ -1757,7 +1810,6 @@ DesignSystemPrivate::DesignSystemPrivate(ApplicationTheme _theme, qreal _scaleFa
       tabs(_scaleFactor),
       colorPicker(_scaleFactor),
       textToggle(_scaleFactor),
-      scrollBar(_scaleFactor, _color),
       listTwoLineItem(_scaleFactor, _color),
       list(_scaleFactor),
       color(_color),
@@ -1769,10 +1821,12 @@ DesignSystemPrivate::DesignSystemPrivate(ApplicationTheme _theme, qreal _scaleFa
       radioButton(_scaleFactor),
       slider(_scaleFactor),
       textField(_scaleFactor, _color),
+      scrollBar(_scaleFactor, _color),
       floatingAppBar(_scaleFactor),
       stepper(_scaleFactor),
       card(_scaleFactor),
-      dialog(_scaleFactor)
+      dialog(_scaleFactor),
+      projectCard(_scaleFactor)
 {
     pageMargins *= _scaleFactor;
     pageSpacing *= _scaleFactor;
@@ -1959,11 +2013,6 @@ const DesignSystem::TextToggle&DesignSystem::textToggle()
     return instance()->d->textToggle;
 }
 
-const DesignSystem::ScrollBar& DesignSystem::scrollBar()
-{
-    return instance()->d->scrollBar;
-}
-
 const DesignSystem::ListTwoLineItem&DesignSystem::listTwoLineItem()
 {
     return instance()->d->listTwoLineItem;
@@ -2024,6 +2073,11 @@ const DesignSystem::TextField& DesignSystem::textField()
     return instance()->d->textField;
 }
 
+const DesignSystem::ScrollBar& DesignSystem::scrollBar()
+{
+    return instance()->d->scrollBar;
+}
+
 const DesignSystem::FloatingToolBar& DesignSystem::floatingToolBar()
 {
     return instance()->d->floatingAppBar;
@@ -2042,6 +2096,11 @@ const DesignSystem::Card& DesignSystem::card()
 const DesignSystem::Dialog& DesignSystem::dialog()
 {
     return instance()->d->dialog;
+}
+
+const DesignSystem::ProjectCard& DesignSystem::projectCard()
+{
+    return instance()->d->projectCard;
 }
 
 DesignSystem::~DesignSystem() = default;

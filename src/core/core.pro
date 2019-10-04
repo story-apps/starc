@@ -6,7 +6,7 @@
 
 TEMPLATE = lib
 
-CONFIG += plugin c++11
+CONFIG += plugin c++1z
 QT += widgets sql
 
 TARGET = $$qtLibraryTarget(coreplugin)
@@ -61,7 +61,9 @@ SOURCES += \
     ui/projects/create_project_dialog.cpp \
     ui/widgets/dialog/dialog_content.cpp \
     ui/widgets/text_field/text_field.cpp \
-    ui/widgets/toggle_button/toggle_button.cpp
+    ui/widgets/toggle_button/toggle_button.cpp \
+    ui/widgets/scroll_bar/scroll_bar.cpp \
+    ui/application_style.cpp
 
 HEADERS += \
         core_global.h \
@@ -108,7 +110,9 @@ HEADERS += \
     ui/projects/create_project_dialog.h \
     ui/widgets/dialog/dialog_content.h \
     ui/widgets/text_field/text_field.h \
-    ui/widgets/toggle_button/toggle_button.h
+    ui/widgets/toggle_button/toggle_button.h \
+    ui/widgets/scroll_bar/scroll_bar.h \
+    ui/application_style.h
 
 unix {
     target.path = /usr/lib

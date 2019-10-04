@@ -354,46 +354,6 @@ public:
     };
 
     /**
-     * @brief Параметры виджета полосы прокрутки
-     */
-    class ScrollBarPrivate;
-    class ScrollBar
-    {
-    public:
-        ~ScrollBar();
-
-        /**
-         * @brief Цвет фона
-         */
-        QColor backgroundColor() const;
-
-        /**
-         * @brief Цвет хэндла
-         */
-        QColor handleColor() const;
-
-        /**
-         * @brief Отступы
-         */
-        QMarginsF margins() const;
-
-        /**
-         * @brief Ширина вертикального скролбара
-         */
-        qreal verticalWidth() const;
-
-        /**
-         * @brief Высота горизонтального скролбара
-         */
-        qreal horizontalHeight() const;
-
-    private:
-        explicit ScrollBar(qreal _scaleFactor, const Color& _color);
-        QScopedPointer<ScrollBarPrivate> d;
-        friend class DesignSystemPrivate;
-    };
-
-    /**
      * @brief Параметры двустрочного элемента в списке
      */
     class ListTwoLineItemPrivate;
@@ -868,6 +828,52 @@ public:
     };
 
     /**
+     * @brief Параметры виджета полосы прокрутки
+     */
+    class ScrollBar
+    {
+    public:
+        ~ScrollBar();
+
+        /**
+         * @brief Цвет фона
+         */
+        QColor backgroundColor() const;
+
+        /**
+         * @brief Цвет хэндла
+         */
+        QColor handleColor() const;
+
+        /**
+         * @brief Отступы
+         */
+        QMarginsF margins() const;
+
+        /**
+         * @brief Минимальный размер (вышины/ширины)
+         */
+        qreal minimumSize() const;
+
+        /**
+         * @brief Максимальный размер (вышины/ширины)
+         */
+        qreal maximumSize() const;
+
+        /**
+         * @brief Минимальная длина скроллера
+         */
+        qreal minimumHandleLength() const;
+
+    private:
+        explicit ScrollBar(qreal _scaleFactor, const Color& _color);
+        friend class DesignSystemPrivate;
+        //
+        class Implementation;
+        QScopedPointer<Implementation> d;
+    };
+
+    /**
      * @brief Параметры панели иструментов приложения
      */
     class FloatingToolBar
@@ -1011,7 +1017,7 @@ public:
         /**
          * @brief Отступы до контента
          */
-        QMarginsF margins() const;
+        const QMarginsF& margins() const;
 
         /**
          * @brief Минимальная ширина диалога
@@ -1020,6 +1026,37 @@ public:
 
     private:
         explicit Dialog(qreal _scaleFactor);
+        friend class DesignSystemPrivate;
+        //
+        class Implementation;
+        QScopedPointer<Implementation> d;
+    };
+
+    /**
+     * @brief Параметры карточки проекта
+     */
+    class ProjectCard
+    {
+    public:
+        ~ProjectCard();
+
+        /**
+         * @brief Получить размер карточки
+         */
+        const QSizeF& size() const;
+
+        /**
+         * @brief Отступы по краям
+         */
+        const QMarginsF& margins() const;
+
+        /**
+         * @brief Расстояние между карточками
+         */
+        qreal spacing() const;
+
+    private:
+        explicit ProjectCard(qreal _scaleFactor);
         friend class DesignSystemPrivate;
         //
         class Implementation;
@@ -1106,11 +1143,6 @@ public:
     static const TextToggle& textToggle();
 
     /**
-     * @brief Параметры виджета полосы прокрутки
-     */
-    static const ScrollBar& scrollBar();
-
-    /**
      * @brief Параметры двухстрочного элемента списка
      */
     static const ListTwoLineItem& listTwoLineItem();
@@ -1171,6 +1203,11 @@ public:
     static const TextField& textField();
 
     /**
+     * @brief Параметры виджета полосы прокрутки
+     */
+    static const ScrollBar& scrollBar();
+
+    /**
      * @brief Параметры плавающей панели инструментов
      */
     static const FloatingToolBar& floatingToolBar();
@@ -1189,6 +1226,11 @@ public:
      * @brief Параметры виджета диалога
      */
     static const Dialog& dialog();
+
+    /**
+     * @brief Параметры карточки проекта
+     */
+    static const ProjectCard& projectCard();
 
 public:
     ~DesignSystem();

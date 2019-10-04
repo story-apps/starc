@@ -3,6 +3,7 @@
 #include <domain/project.h>
 
 #include <ui/design_system/design_system.h>
+#include <ui/widgets/scroll_bar/scroll_bar.h>
 
 #include <utils/helpers/color_helper.h>
 #include <utils/helpers/image_helper.h>
@@ -13,6 +14,7 @@
 #include <QGraphicsSceneMouseEvent>
 #include <QGraphicsRectItem>
 #include <QResizeEvent>
+#include <QtMath>
 #include <QVariantAnimation>
 
 
@@ -58,6 +60,11 @@ public:
 
 private:
     /**
+     * @brief Получить следующее z-значение для позиционирования карточки
+     */
+    qreal nextZValue() const;
+
+    /**
      * @brief Проект для отображения на карточке
      */
     Domain::Project m_project;
@@ -78,7 +85,7 @@ private:
 ProjectCard::ProjectCard(QGraphicsItem* _parent)
     : QGraphicsRectItem(_parent)
 {
-    setRect(0, 0, 410, 230);
+    setRect(QRectF({0, 0}, Ui::DesignSystem::projectCard().size()));
     setAcceptHoverEvents(true);
 
     setFlag(QGraphicsItem::ItemIsMovable, true);
@@ -246,6 +253,8 @@ void ProjectCard::hoverLeaveEvent(QGraphicsSceneHoverEvent* _event)
 
 void ProjectCard::mousePressEvent(QGraphicsSceneMouseEvent* _event)
 {
+    setZValue(nextZValue());
+
     m_decorationCenterPosition = _event->pos();
     m_decorationRadiusAnimation.setEndValue(rect().width());
     m_decorationOpacityAnimation.setCurrentTime(0);
@@ -259,19 +268,28 @@ void ProjectCard::mousePressEvent(QGraphicsSceneMouseEvent* _event)
 
 void ProjectCard::mouseReleaseEvent(QGraphicsSceneMouseEvent* _event)
 {
-    m_decorationOpacityAnimation.setStartValue(0.15);
-    m_decorationOpacityAnimation.setEndValue(0.0);
-    m_decorationOpacityAnimation.start();
+    if (m_decorationOpacityAnimation.state() == QVariantAnimation::Running) {
+        ProjectsScene* projectsScene = qobject_cast<ProjectsScene*>(scene());
+        Q_ASSERT(projectsScene);
+        emit projectsScene->projectPressed(m_project);
 
-    QGraphicsRectItem::mouseReleaseEvent(_event);
-
-    if (!rect().contains(_event->pos())) {
-        return;
+        m_decorationOpacityAnimation.pause();
+        m_decorationOpacityAnimation.setEndValue(0.0);
+        m_decorationOpacityAnimation.resume();
+    } else {
+        m_decorationOpacityAnimation.setStartValue(0.15);
+        m_decorationOpacityAnimation.setEndValue(0.0);
+        m_decorationOpacityAnimation.start();
     }
 
-    ProjectsScene* projectsScene = qobject_cast<ProjectsScene*>(scene());
-    Q_ASSERT(projectsScene);
-    emit projectsScene->projectPressed(m_project);
+    QGraphicsRectItem::mouseReleaseEvent(_event);
+}
+
+qreal ProjectCard::nextZValue() const
+{
+    static qreal z = 0.0;
+    z += 0.001;
+    return z;
 }
 
 } // namespace
@@ -296,11 +314,6 @@ public:
      */
     void reorderCards();
 
-    /**
-     * @brief Обновить область сцены, куда можно положить карточки
-     */
-    void updateSceneRect(const QRect& _rect);
-
 
     ProjectsScene* scene = nullptr;
     Domain::ProjectsModel* projects = nullptr;
@@ -313,12 +326,106 @@ ProjectsCards::Implementation::Implementation(QGraphicsView* _parent)
 
 void ProjectsCards::Implementation::reorderCards()
 {
+    //
+    // Определим размер окна
+    //
+    const QSizeF viewSize = [this] {
+        if (scene->views().isEmpty()) {
+            return QSizeF();
+        }
 
-}
+        const QGraphicsView* view = scene->views().first();
+        return QSizeF(view->size());
+    }();
 
-void ProjectsCards::Implementation::updateSceneRect(const QRect& _rect)
-{
-    scene->setSceneRect(_rect);
+    //
+    // Определим количество карточек в ряду
+    //
+    const int cardsInRowCount = [width = viewSize.width()] () mutable {
+        int count = 0;
+        width -= Ui::DesignSystem::projectCard().margins().left();
+        width -= Ui::DesignSystem::projectCard().margins().right();
+        forever {
+            width -= count > 0 ? Ui::DesignSystem::projectCard().spacing() : 0;
+            width -= Ui::DesignSystem::projectCard().size().width();
+
+            if (width > 0) {
+                ++count;
+            } else {
+                break;
+            }
+        }
+        return std::max(1, count);
+    }();
+
+    const bool isLtr = QLocale().textDirection() == Qt::LeftToRight;
+    const qreal sceneRectWidth = Ui::DesignSystem::projectCard().margins().left()
+                                 + Ui::DesignSystem::projectCard().size().width() * cardsInRowCount
+                                 + Ui::DesignSystem::projectCard().spacing() * (cardsInRowCount - 1)
+                                 + Ui::DesignSystem::projectCard().margins().right();
+    auto firstCardInRowX = [isLtr, sceneRectWidth] {
+        return isLtr
+                ? Ui::DesignSystem::projectCard().margins().left()
+                : sceneRectWidth
+                  - Ui::DesignSystem::projectCard().margins().right()
+                  - Ui::DesignSystem::projectCard().size().width();
+    };
+
+    //
+    // Проходим все элементы (они упорядочены так, как должны идти элементы в сценарии
+    //
+    qreal x = firstCardInRowX();
+    qreal y = Ui::DesignSystem::projectCard().margins().top();
+    qreal maxY = 0.0;
+    qreal lastItemHeight = 0.0;
+    int currentCardInRow = 0;
+    for (QGraphicsItem* item : scene->items()) {
+        //
+        // ... корректируем позицию в соответствии с позицией карточки в ряду,
+        //     или если предыдущая была вложена, а текущая нет
+        //
+        if (currentCardInRow == cardsInRowCount) {
+            currentCardInRow = 0;
+            x = firstCardInRowX();
+            y += lastItemHeight + Ui::DesignSystem::projectCard().spacing();
+        }
+        //
+        // ... позиционируем карточку
+        //
+        QVariantAnimation* moveAnimation = new QVariantAnimation(scene);
+        moveAnimation->setDuration(160);
+        moveAnimation->setStartValue(item->pos());
+        moveAnimation->setEndValue(QPointF(x, y));
+        QObject::connect(moveAnimation, &QVariantAnimation::valueChanged, scene,
+                         [item] (const QVariant& _value)
+        {
+            item->setPos(_value.toPointF());
+        });
+        moveAnimation->start(QAbstractAnimation::DeleteWhenStopped);
+        //
+        // ... и корректируем координаты для позиционирования следующих элементов
+        //
+        x += (isLtr ? 1 : -1) * (Ui::DesignSystem::projectCard().size().width()
+                                 + Ui::DesignSystem::projectCard().spacing());
+        lastItemHeight = Ui::DesignSystem::projectCard().size().height();
+
+        if (maxY < y) {
+            maxY = y;
+        }
+
+        ++currentCardInRow;
+    }
+
+    //
+    // Обновляем размер сцены
+    //
+    QRectF newSceneRect = scene->sceneRect();
+    newSceneRect.setRight(std::max(viewSize.width(), sceneRectWidth));
+    newSceneRect.setBottom(std::max(viewSize.height(),
+                                    maxY
+                                    + Ui::DesignSystem::projectCard().size().height()
+                                    + Ui::DesignSystem::projectCard().margins().bottom()));
+    scene->setSceneRect(newSceneRect);
 }
 
 
@@ -331,7 +438,13 @@ ProjectsCards::ProjectsCards(QWidget* _parent)
 {
     setFrameShape(QFrame::NoFrame);
     setScene(d->scene);
-    d->scene->addItem(new ProjectCard);
+    setVerticalScrollBar(new ScrollBar(this));
+    setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
+
+
+    for (int i = 0; i < 5; ++i) {
+        d->scene->addItem(new ProjectCard);
+    }
 }
 
 void ProjectsCards::setBackgroundColor(const QColor& _color)
@@ -385,7 +498,7 @@ void ProjectsCards::setProjects(Domain::ProjectsModel* _projects)
             //
             // Корректируем размер вьюпорта в зависимости от количества карточек
             //
-            d->updateSceneRect(rect());
+            d->reorderCards();
         }
     });
 }
@@ -396,7 +509,7 @@ void ProjectsCards::resizeEvent(QResizeEvent* _event)
 {
     QGraphicsView::resizeEvent(_event);
 
-    d->updateSceneRect(rect());
+    d->reorderCards();
 }
 
 } // namespace Ui
