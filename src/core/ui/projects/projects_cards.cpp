@@ -13,6 +13,7 @@
 #include <QApplication>
 #include <QGraphicsSceneMouseEvent>
 #include <QGraphicsRectItem>
+#include <QPointer>
 #include <QResizeEvent>
 #include <QtMath>
 #include <QVariantAnimation>
@@ -317,6 +318,7 @@ public:
 
     ProjectsScene* scene = nullptr;
     Domain::ProjectsModel* projects = nullptr;
+    QHash<QGraphicsItem*, QPointer<QVariantAnimation>> itemsAnimations;
 };
 
 ProjectsCards::Implementation::Implementation(QGraphicsView* _parent)
@@ -358,6 +360,19 @@ void ProjectsCards::Implementation::reorderCards()
         return std::max(1, count);
     }();
 
+    //
+    // Определим видимую область экрана
+    //
+    const QRectF viewportRect = [this] {
+        if (scene->views().isEmpty()) {
+            return QRectF();
+        }
+
+        const QGraphicsView* view = scene->views().first();
+        return view->mapToScene(view->viewport()->geometry()).boundingRect();
+    }();
+
+
     const bool isLtr = QLocale().textDirection() == Qt::LeftToRight;
     const qreal sceneRectWidth = Ui::DesignSystem::projectCard().margins().left()
                                  + Ui::DesignSystem::projectCard().size().width() * cardsInRowCount
@@ -392,16 +407,35 @@ void ProjectsCards::Implementation::reorderCards()
         //
         // ... позиционируем карточку
         //
-        QVariantAnimation* moveAnimation = new QVariantAnimation(scene);
-        moveAnimation->setDuration(160);
-        moveAnimation->setStartValue(item->pos());
-        moveAnimation->setEndValue(QPointF(x, y));
-        QObject::connect(moveAnimation, &QVariantAnimation::valueChanged, scene,
-                         [item] (const QVariant& _value)
-        {
-            item->setPos(_value.toPointF());
-        });
-        moveAnimation->start(QAbstractAnimation::DeleteWhenStopped);
+        const QPointF newItemPosition(x, y);
+        if (item->pos() != newItemPosition) {
+            const QRectF itemRect(newItemPosition, item->boundingRect().size());
+            if (viewportRect.intersects(itemRect)) {
+                //
+                // ... анимируем смещение
+                //
+                QPointer<QVariantAnimation>& moveAnimation = itemsAnimations[item];
+                if (moveAnimation.isNull()) {
+                    moveAnimation = new QVariantAnimation(scene);
+                    moveAnimation->setDuration(160);
+                    QObject::connect(moveAnimation.data(), &QVariantAnimation::valueChanged, scene,
+                                     [item] (const QVariant& _value) { item->setPos(_value.toPointF()); });
+                }
+                //
+                // ... при необходимости анимируем положение карточки
+                //
+                if (moveAnimation->endValue().toPointF() != newItemPosition) {
+                    if (moveAnimation->state() == QVariantAnimation::Running) {
+                        moveAnimation->stop();
+                    }
+                    moveAnimation->setStartValue(item->pos());
+                    moveAnimation->setEndValue(newItemPosition);
+                    moveAnimation->start(QAbstractAnimation::DeleteWhenStopped);
+                }
+            } else {
+                item->setPos(newItemPosition);
+            }
+        }
         //
         // ... и корректируем координаты для позиционирования следующих элементов
         //
@@ -442,7 +476,7 @@ ProjectsCards::ProjectsCards(QWidget* _parent)
     setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
 
 
-    for (int i = 0; i < 5; ++i) {
+    for (int i = 0; i < 5000; ++i) {
         d->scene->addItem(new ProjectCard);
     }
 }
