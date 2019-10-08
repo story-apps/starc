@@ -139,6 +139,7 @@ void MenuView::setStoryActionsVisible(bool _visible)
 {
     d->story->setVisible(_visible);
     d->saveStory->setVisible(_visible);
+    d->saveStoryAs->setVisible(_visible);
     d->exportStory->setVisible(_visible);
     d->importStory->setVisible(_visible);
 }

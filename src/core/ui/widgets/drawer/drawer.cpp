@@ -154,7 +154,8 @@ void Drawer::paintEvent(QPaintEvent* _event)
                                       actionRect.top()
                                       + Ui::DesignSystem::drawer().actionMargins().top()),
                               Ui::DesignSystem::drawer().iconSize());
-        if (!action->iconText().isEmpty()) {
+        if (action->iconText().length() == 1) {
+            auto it = action->iconText(), t = action->text();
             painter.setFont(Ui::DesignSystem::font().iconsMid());
             painter.drawText(iconRect, Qt::AlignCenter, action->iconText());
         }
