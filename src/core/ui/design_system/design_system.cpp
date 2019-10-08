@@ -117,149 +117,6 @@ DesignSystem::AppBar::AppBar(qreal _scaleFactor)
 // ****
 
 
-class DesignSystem::DrawerPrivate
-{
-public:
-    explicit DrawerPrivate(qreal _scaleFactor, const Color& _color);
-
-    QMarginsF margins = {16.0, 16.0, 16.0, 16.0};
-    QMarginsF actionMargins = {16.0, 12.0, 12.0, 12.0};
-    QMarginsF selectionMargins = {8.0, 4.0, 8.0, 4.0};
-    qreal subtitleBottomMargin = 18.0;
-    qreal iconRightMargin = 32.0;
-    qreal width = 304.0;
-    qreal titleHeight = 26.0;
-    qreal subtitleHeight = 20.0;
-    qreal actionHeight = 48.0;
-    QSizeF iconSize = {24.0, 24.0};
-    qreal separatorHeight = 0.5;
-    qreal separatorSpacing = 8.0;
-    QColor selectionColor;
-    QFont titleFont;
-    QFont subtitleFont;
-    QFont actionFont;
-};
-
-DesignSystem::DrawerPrivate::DrawerPrivate(qreal _scaleFactor, const Color& _color)
-{
-    margins *= _scaleFactor;
-    actionMargins *= _scaleFactor;
-    selectionMargins *= _scaleFactor;
-    subtitleBottomMargin *= _scaleFactor;
-    iconRightMargin *= _scaleFactor;
-    width *= _scaleFactor;
-    titleHeight *= _scaleFactor;
-    subtitleHeight *= _scaleFactor;
-    actionHeight *= _scaleFactor;
-    iconSize *= _scaleFactor;
-    separatorHeight *= _scaleFactor;
-    separatorSpacing *= _scaleFactor;
-    selectionColor = _color.secondary();
-    selectionColor.setAlphaF(0.14);
-    titleFont = QFont("Roboto");
-    titleFont.setPixelSize(static_cast<int>(20.0 * _scaleFactor));
-    titleFont.setWeight(QFont::Medium);
-    subtitleFont = QFont("Roboto");
-    subtitleFont.setPixelSize(static_cast<int>(13.0 * _scaleFactor));
-    subtitleFont.setWeight(QFont::Normal);
-    actionFont = QFont("Roboto");
-    actionFont.setPixelSize(static_cast<int>(14.0 * _scaleFactor));
-    actionFont.setWeight(QFont::Medium);
-}
-
-// **
-
-DesignSystem::Drawer::~Drawer() = default;
-
-QMarginsF DesignSystem::Drawer::margins() const
-{
-    return d->margins;
-}
-
-QMarginsF DesignSystem::Drawer::actionMargins() const
-{
-    return d->actionMargins;
-}
-
-QMarginsF DesignSystem::Drawer::selectionMargins() const
-{
-    return d->selectionMargins;
-}
-
-qreal DesignSystem::Drawer::subtitleBottomMargin() const
-{
-    return d->subtitleBottomMargin;
-}
-
-qreal DesignSystem::Drawer::iconRightMargin() const
-{
-    return d->iconRightMargin;
-}
-
-qreal DesignSystem::Drawer::width() const
-{
-    return d->width;
-}
-
-qreal DesignSystem::Drawer::titleHeight() const
-{
-    return d->titleHeight;
-}
-
-qreal DesignSystem::Drawer::subtitleHeight() const
-{
-    return d->subtitleHeight;
-}
-
-qreal DesignSystem::Drawer::actionHeight() const
-{
-    return d->actionHeight;
-}
-
-QSizeF DesignSystem::Drawer::iconSize() const
-{
-    return d->iconSize;
-}
-
-qreal DesignSystem::Drawer::separatorHeight() const
-{
-    return d->separatorHeight;
-}
-
-qreal DesignSystem::Drawer::separatorSpacing() const
-{
-    return d->separatorSpacing;
-}
-
-QColor DesignSystem::Drawer::selectionColor() const
-{
-    return d->selectionColor;
-}
-
-QFont DesignSystem::Drawer::titleFont() const
-{
-    return d->titleFont;
-}
-
-QFont DesignSystem::Drawer::subtitleFont() const
-{
-    return d->subtitleFont;
-}
-
-QFont DesignSystem::Drawer::actionFont() const
-{
-    return d->actionFont;
-}
-
-DesignSystem::Drawer::Drawer(qreal _scaleFactor, const Color& _color)
-    : d(new DrawerPrivate(_scaleFactor, _color))
-{
-}
-
-
-// ****
-
-
 class DesignSystem::TabPrivate
 {
 public:
@@ -1618,6 +1475,122 @@ DesignSystem::Stepper::Stepper(qreal _scaleFactor)
 // ****
 
 
+class DesignSystem::Drawer::Implementation
+{
+public:
+    explicit Implementation(qreal _scaleFactor, const Color& _color);
+
+    QMarginsF margins = {16.0, 16.0, 16.0, 16.0};
+    QMarginsF actionMargins = {16.0, 12.0, 12.0, 12.0};
+    QMarginsF selectionMargins = {8.0, 4.0, 8.0, 4.0};
+    qreal subtitleBottomMargin = 18.0;
+    qreal iconRightMargin = 32.0;
+    qreal width = 304.0;
+    qreal titleHeight = 26.0;
+    qreal subtitleHeight = 20.0;
+    qreal actionHeight = 48.0;
+    QSizeF iconSize = {24.0, 24.0};
+    qreal separatorHeight = 0.5;
+    qreal separatorSpacing = 8.0;
+    QColor selectionColor;
+};
+
+DesignSystem::Drawer::Implementation::Implementation(qreal _scaleFactor, const Color& _color)
+{
+    margins *= _scaleFactor;
+    actionMargins *= _scaleFactor;
+    selectionMargins *= _scaleFactor;
+    subtitleBottomMargin *= _scaleFactor;
+    iconRightMargin *= _scaleFactor;
+    width *= _scaleFactor;
+    titleHeight *= _scaleFactor;
+    subtitleHeight *= _scaleFactor;
+    actionHeight *= _scaleFactor;
+    iconSize *= _scaleFactor;
+    separatorHeight *= _scaleFactor;
+    separatorSpacing *= _scaleFactor;
+    selectionColor = _color.secondary();
+    selectionColor.setAlphaF(0.14);
+}
+
+// **
+
+DesignSystem::Drawer::~Drawer() = default;
+
+QMarginsF DesignSystem::Drawer::margins() const
+{
+    return d->margins;
+}
+
+QMarginsF DesignSystem::Drawer::actionMargins() const
+{
+    return d->actionMargins;
+}
+
+QMarginsF DesignSystem::Drawer::selectionMargins() const
+{
+    return d->selectionMargins;
+}
+
+qreal DesignSystem::Drawer::subtitleBottomMargin() const
+{
+    return d->subtitleBottomMargin;
+}
+
+qreal DesignSystem::Drawer::iconRightMargin() const
+{
+    return d->iconRightMargin;
+}
+
+qreal DesignSystem::Drawer::width() const
+{
+    return d->width;
+}
+
+qreal DesignSystem::Drawer::titleHeight() const
+{
+    return d->titleHeight;
+}
+
+qreal DesignSystem::Drawer::subtitleHeight() const
+{
+    return d->subtitleHeight;
+}
+
+qreal DesignSystem::Drawer::actionHeight() const
+{
+    return d->actionHeight;
+}
+
+QSizeF DesignSystem::Drawer::iconSize() const
+{
+    return d->iconSize;
+}
+
+qreal DesignSystem::Drawer::separatorHeight() const
+{
+    return d->separatorHeight;
+}
+
+qreal DesignSystem::Drawer::separatorSpacing() const
+{
+    return d->separatorSpacing;
+}
+
+QColor DesignSystem::Drawer::selectionColor() const
+{
+    return d->selectionColor;
+}
+
+DesignSystem::Drawer::Drawer(qreal _scaleFactor, const Color& _color)
+    : d(new Implementation(_scaleFactor, _color))
+{
+}
+
+
+// ****
+
+
 class DesignSystem::Card::Implementation
 {
 public:
@@ -1773,7 +1746,6 @@ public:
     qreal elevationEndOpacity = 0.08;
 
     DesignSystem::AppBar appBar;
-    DesignSystem::Drawer drawer;
     DesignSystem::Tab tab;
     DesignSystem::Tabs tabs;
     DesignSystem::ColorPicker colorPicker;
@@ -1795,6 +1767,7 @@ public:
     DesignSystem::ScrollBar scrollBar;
     DesignSystem::FloatingToolBar floatingAppBar;
     DesignSystem::Stepper stepper;
+    DesignSystem::Drawer drawer;
     DesignSystem::Card card;
     DesignSystem::Dialog dialog;
     DesignSystem::ProjectCard projectCard;
@@ -1805,7 +1778,6 @@ DesignSystemPrivate::DesignSystemPrivate(ApplicationTheme _theme, qreal _scaleFa
     : theme(_theme),
       scaleFactor(_scaleFactor),
       appBar(_scaleFactor),
-      drawer(_scaleFactor, _color),
       tab(_scaleFactor),
       tabs(_scaleFactor),
       colorPicker(_scaleFactor),
@@ -1824,6 +1796,7 @@ DesignSystemPrivate::DesignSystemPrivate(ApplicationTheme _theme, qreal _scaleFa
       scrollBar(_scaleFactor, _color),
       floatingAppBar(_scaleFactor),
       stepper(_scaleFactor),
+      drawer(_scaleFactor, _color),
       card(_scaleFactor),
       dialog(_scaleFactor),
       projectCard(_scaleFactor)
@@ -1988,11 +1961,6 @@ const DesignSystem::AppBar& DesignSystem::appBar()
     return instance()->d->appBar;
 }
 
-const DesignSystem::Drawer& DesignSystem::drawer()
-{
-    return instance()->d->drawer;
-}
-
 const DesignSystem::Tab& DesignSystem::tab()
 {
     return instance()->d->tab;
@@ -2086,6 +2054,11 @@ const DesignSystem::FloatingToolBar& DesignSystem::floatingToolBar()
 const DesignSystem::Stepper& DesignSystem::stepper()
 {
     return instance()->d->stepper;
+}
+
+const DesignSystem::Drawer& DesignSystem::drawer()
+{
+    return instance()->d->drawer;
 }
 
 const DesignSystem::Card& DesignSystem::card()

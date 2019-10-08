@@ -26,9 +26,20 @@ SOURCES += \
     management_layer/content/onboarding/onboarding_manager.cpp \
     management_layer/content/projects/projects_manager.cpp \
     ui/application_view.cpp \
+    ui/menu_view.cpp \
+    ui/widgets/drawer/drawer.cpp \
     ui/widgets/stack_widget/stack_widget.cpp \
     ui/widgets/widget/widget.cpp \
     ui/design_system/design_system.cpp \
+    utils/3rd_party/WAF/Animation/Animation.cpp \
+    utils/3rd_party/WAF/Animation/CircleFill/CircleFillAnimator.cpp \
+    utils/3rd_party/WAF/Animation/CircleFill/CircleFillDecorator.cpp \
+    utils/3rd_party/WAF/Animation/Expand/ExpandAnimator.cpp \
+    utils/3rd_party/WAF/Animation/Expand/ExpandDecorator.cpp \
+    utils/3rd_party/WAF/Animation/SideSlide/SideSlideAnimator.cpp \
+    utils/3rd_party/WAF/Animation/SideSlide/SideSlideDecorator.cpp \
+    utils/3rd_party/WAF/Animation/Slide/SlideAnimator.cpp \
+    utils/3rd_party/WAF/Animation/Slide/SlideForegroundDecorator.cpp \
     utils/helpers/color_helper.cpp \
     utils/helpers/image_helper.cpp \
     ui/widgets/splitter/splitter.cpp \
@@ -74,9 +85,23 @@ HEADERS += \
         management_layer/content/onboarding/onboarding_manager.h \
         management_layer/content/projects/projects_manager.h \
         ui/application_view.h \
+    ui/menu_view.h \
+    ui/widgets/drawer/drawer.h \
     ui/widgets/stack_widget/stack_widget.h \
     ui/widgets/widget/widget.h \
     ui/design_system/design_system.h \
+    utils/3rd_party/WAF/AbstractAnimator.h \
+    utils/3rd_party/WAF/Animation/Animation.h \
+    utils/3rd_party/WAF/Animation/AnimationPrivate.h \
+    utils/3rd_party/WAF/Animation/CircleFill/CircleFillAnimator.h \
+    utils/3rd_party/WAF/Animation/CircleFill/CircleFillDecorator.h \
+    utils/3rd_party/WAF/Animation/Expand/ExpandAnimator.h \
+    utils/3rd_party/WAF/Animation/Expand/ExpandDecorator.h \
+    utils/3rd_party/WAF/Animation/SideSlide/SideSlideAnimator.h \
+    utils/3rd_party/WAF/Animation/SideSlide/SideSlideDecorator.h \
+    utils/3rd_party/WAF/Animation/Slide/SlideAnimator.h \
+    utils/3rd_party/WAF/Animation/Slide/SlideForegroundDecorator.h \
+    utils/3rd_party/WAF/WAF.h \
     utils/helpers/color_helper.h \
     utils/helpers/image_helper.h \
     ui/widgets/splitter/splitter.h \

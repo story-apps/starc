@@ -47,14 +47,9 @@ ProjectsManager::ProjectsManager(QObject* _parent, QWidget* _parentWidget)
     : QObject(_parent),
       d(new Implementation(_parentWidget))
 {
-    connect(d->view, &Ui::ProjectsView::createStoryPressed, this, [this, _parentWidget] {
-        Ui::CreateProjectDialog* dlg = new Ui::CreateProjectDialog(_parentWidget);
-        dlg->showDialog();
-//        QTimer::singleShot(3000, dlg, [dlg] {
-//            dlg->hideDialog();
-//        });
-//        d->projects->addProject("test");
-    });
+    connect(d->toolBar, &Ui::ProjectsToolBar::menuPressed, this, &ProjectsManager::menuRequested);
+    connect(d->navigator, &Ui::ProjectsNavigator::createStoryPressed, this, &ProjectsManager::createStoryRequested);
+    connect(d->view, &Ui::ProjectsView::createStoryPressed, this, &ProjectsManager::createStoryRequested);
 }
 
 ProjectsManager::~ProjectsManager() = default;

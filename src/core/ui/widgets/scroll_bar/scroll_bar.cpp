@@ -7,10 +7,10 @@
 #include <QVariantAnimation>
 
 
-class ScrollBarPrivate
+class ScrollBar::Implementation
 {
 public:
-    ScrollBarPrivate();
+    Implementation();
 
     void maximizeScrollbar();
     void minimizeScrollbar();
@@ -18,7 +18,7 @@ public:
     QVariantAnimation widthAnimation;
 };
 
-ScrollBarPrivate::ScrollBarPrivate()
+ScrollBar::Implementation::Implementation()
 {
     widthAnimation.setDuration(120);
     widthAnimation.setStartValue(Ui::DesignSystem::scrollBar().minimumSize());
@@ -26,14 +26,14 @@ ScrollBarPrivate::ScrollBarPrivate()
     widthAnimation.setEasingCurve(QEasingCurve::OutQuad);
 }
 
-void ScrollBarPrivate::maximizeScrollbar()
+void ScrollBar::Implementation::maximizeScrollbar()
 {
     widthAnimation.stop();
     widthAnimation.setDirection(QVariantAnimation::Forward);
     widthAnimation.start();
 }
 
-void ScrollBarPrivate::minimizeScrollbar()
+void ScrollBar::Implementation::minimizeScrollbar()
 {
     widthAnimation.stop();
     widthAnimation.setDirection(QVariantAnimation::Backward);
@@ -46,8 +46,11 @@ void ScrollBarPrivate::minimizeScrollbar()
 
 ScrollBar::ScrollBar(QWidget* _parent)
     : QScrollBar(_parent),
-      d(new ScrollBarPrivate)
+      d(new Implementation)
 {
+    setAutoFillBackground(false);
+    setAttribute(Qt::WA_NoSystemBackground);
+
     connect(&d->widthAnimation, &QVariantAnimation::valueChanged, this, [this] { updateGeometry(); });
 }
 
@@ -70,7 +73,7 @@ QSize ScrollBar::sizeHint() const
 
 void ScrollBar::paintEvent(QPaintEvent* _event)
 {
-    Q_UNUSED(_event);
+    Q_UNUSED(_event)
 
     QPainter painter(this);
     painter.fillRect(rect(), Qt::transparent);
@@ -115,12 +118,12 @@ void ScrollBar::paintEvent(QPaintEvent* _event)
 
 void ScrollBar::enterEvent(QEvent* _event)
 {
-    Q_UNUSED(_event);
+    Q_UNUSED(_event)
     d->maximizeScrollbar();
 }
 
 void ScrollBar::leaveEvent(QEvent* _event)
 {
-    Q_UNUSED(_event);
+    Q_UNUSED(_event)
     d->minimizeScrollbar();
 }

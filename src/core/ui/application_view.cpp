@@ -97,6 +97,11 @@ void ApplicationView::showContent(QWidget* _toolbar, QWidget* _navigator, QWidge
     d->splitterShadow->raise();
 }
 
+int ApplicationView::navigationPanelWidth() const
+{
+    return d->toolBar->width() + d->splitter->handleWidth();
+}
+
 void ApplicationView::closeEvent(QCloseEvent* _event)
 {
     //
@@ -117,7 +122,7 @@ void ApplicationView::resizeEvent(QResizeEvent* _event)
 
 void ApplicationView::designSystemChangeEvent(DesignSystemChangeEvent* _event)
 {
-    Q_UNUSED(_event);
+    Q_UNUSED(_event)
 
     d->navigationWidget->setBackgroundColor(DesignSystem::color().primary());
 

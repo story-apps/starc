@@ -32,6 +32,11 @@ public:
      */
     void showContent(QWidget* _toolbar, QWidget* _navigator, QWidget* _view);
 
+    /**
+     * @brief Ширина навигационной панели
+     */
+    int navigationPanelWidth() const;
+
 signals:
     /**
      * @brief Запрос на закрытие приложения
@@ -44,6 +49,9 @@ protected:
      */
     void closeEvent(QCloseEvent* _event) override;
 
+    /**
+     * @brief Переопределяем, чтобы корректировать положение тени от сплитера
+     */
     void resizeEvent(QResizeEvent* _event) override;
 
     /**

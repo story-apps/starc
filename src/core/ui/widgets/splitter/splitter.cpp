@@ -17,6 +17,8 @@ Splitter::Splitter(QWidget* _parent)
     : QSplitter(_parent),
       d(new Implementation)
 {
+    setAutoFillBackground(false);
+    setAttribute(Qt::WA_NoSystemBackground);
 }
 
 Splitter::~Splitter() = default;

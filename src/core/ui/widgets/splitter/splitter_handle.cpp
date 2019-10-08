@@ -18,6 +18,8 @@ SplitterHandle::SplitterHandle(Qt::Orientation _orientation, QSplitter* _parent)
     : QSplitterHandle(_orientation, _parent),
       d(new Implementation)
 {
+    setAutoFillBackground(false);
+    setAttribute(Qt::WA_NoSystemBackground);
 }
 
 SplitterHandle::~SplitterHandle() = default;

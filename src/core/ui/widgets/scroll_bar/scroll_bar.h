@@ -3,8 +3,6 @@
 #include <QScrollBar>
 
 
-class ScrollBarPrivate;
-
 /**
  * @brief Виджет полосы прокрутки
  */
@@ -27,12 +25,13 @@ protected:
      */
     void paintEvent(QPaintEvent* _event) override;
 
+    /**
+     * @brief Переопределяем для анимирования ширины/высоты
+     */
     void enterEvent(QEvent* _event) override;
     void leaveEvent(QEvent* _event) override;
 
 private:
-    /**
-     * @brief Данные класса
-     */
-    QScopedPointer<ScrollBarPrivate> d;
+    class Implementation;
+    QScopedPointer<Implementation> d;
 };

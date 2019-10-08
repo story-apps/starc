@@ -15,7 +15,7 @@ ProjectsToolBar::ProjectsToolBar(QWidget* _parent)
     QAction* menuAction = new QAction(this);
     menuAction->setText("\uf35c");
     addAction(menuAction);
-    connect(menuAction, &QAction::toggled, this, &ProjectsToolBar::menuPressed);
+    connect(menuAction, &QAction::triggered, this, &ProjectsToolBar::menuPressed);
 
     designSystemChangeEvent(nullptr);
 }

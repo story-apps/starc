@@ -22,6 +22,8 @@ Widget::Widget(QWidget *_parent)
     : QWidget(_parent),
       d(new Implementation)
 {
+    setAutoFillBackground(false);
+    setAttribute(Qt::WA_NoSystemBackground);
 }
 
 Widget::~Widget() = default;

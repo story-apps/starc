@@ -10,7 +10,12 @@
 
 #include <ui/application_style.h>
 #include <ui/application_view.h>
+#include <ui/projects/create_project_dialog.h>
+#include <ui/menu_view.h>
+
 #include <ui/design_system/design_system.h>
+
+#include <utils/3rd_party/WAF/Animation/Animation.h>
 
 #include <QApplication>
 #include <QFontDatabase>
@@ -41,6 +46,11 @@ public:
     void showContent();
 
     /**
+     * @brief Показать меню приложения
+     */
+    void showMenu();
+
+    /**
      * @brief Установить перевод
      */
     void setTranslation(QLocale::Language _language);
@@ -55,10 +65,16 @@ public:
      */
     void setScaleFactor(qreal _scaleFactor);
 
+    /**
+     * @brief Создать новый проект
+     */
+    void createStory();
+
 
     ApplicationManager* q = nullptr;
 
     Ui::ApplicationView* applicationView = nullptr;
+    Ui::MenuView* menuView = nullptr;
 
     QScopedPointer<OnboardingManager> onboardingManager;
     QScopedPointer<ProjectsManager> projectsManager;
@@ -67,6 +83,7 @@ public:
 ApplicationManager::Implementation::Implementation(ApplicationManager* _q)
     : q(_q),
       applicationView(new Ui::ApplicationView),
+      menuView(new Ui::MenuView(applicationView)),
       onboardingManager(new OnboardingManager(nullptr, applicationView)),
       projectsManager(new ProjectsManager(nullptr, applicationView))
 {
@@ -102,6 +119,13 @@ void ApplicationManager::Implementation::showContent()
                                      projectsManager->navigator(),
                                      projectsManager->view());
     }
+}
+
+void ApplicationManager::Implementation::showMenu()
+{
+    menuView->setFixedWidth(std::max(applicationView->navigationPanelWidth(),
+                                     static_cast<int>(Ui::DesignSystem::drawer().width())));
+    WAF::Animation::sideSlideIn(menuView);
 }
 
 void ApplicationManager::Implementation::setTranslation(QLocale::Language _language)
@@ -163,10 +187,14 @@ void ApplicationManager::Implementation::setTheme(Ui::ApplicationTheme _theme)
 
 void ApplicationManager::Implementation::setScaleFactor(qreal _scaleFactor)
 {
-
     Ui::DesignSystem::setScaleFactor(_scaleFactor);
     QApplication::postEvent(q, new DesignSystemChangeEvent);
+}
 
+void ApplicationManager::Implementation::createStory()
+{
+    Ui::CreateProjectDialog* dlg = new Ui::CreateProjectDialog(applicationView);
+    dlg->showDialog();
 }
 
 
@@ -303,6 +331,11 @@ void ApplicationManager::initConnections()
         d->showContent();
     });
 
+    //
+    // Менеджер проектов
+    //
+    connect(d->projectsManager.data(), &ProjectsManager::menuRequested, this, [this] { d->showMenu(); });
+    connect(d->projectsManager.data(), &ProjectsManager::createStoryRequested, this, [this] { d->createStory(); });
 }
 
 } // namespace ManagementLayer

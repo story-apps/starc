@@ -21,6 +21,17 @@ public:
     QWidget* navigator() const;
     QWidget* view() const;
 
+signals:
+    /**
+     * @brief Запрос на отображение меню
+     */
+    void menuRequested();
+
+    /**
+     * @brief Запрос на создание нового проекта
+     */
+    void createStoryRequested();
+
 private:
     class Implementation;
     QScopedPointer<Implementation> d;

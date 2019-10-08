@@ -69,14 +69,14 @@ void AbstractDialog::Implementation::animateShow(const QPoint& _pos)
     // Позиция контента
     //
     const qreal movementDelta = 40;
-    contentPosAnimation.setStartValue(_pos - QPoint(0, static_cast<int>(movementDelta)));
-    contentPosAnimation.setEndValue(_pos);
+    contentPosAnimation.setStartValue(QPointF(_pos - QPoint(0, static_cast<int>(movementDelta))));
+    contentPosAnimation.setEndValue(QPointF(_pos));
     contentPosAnimation.start();
 }
 
 void AbstractDialog::Implementation::animateHide(const QPoint& _pos)
 {
-    contentPosAnimation.setEndValue(_pos);
+    contentPosAnimation.setEndValue(QPointF(_pos));
 
     opacityAnimation.setStartValue(1.0);
     opacityAnimation.setEndValue(0.0);
@@ -183,7 +183,7 @@ void AbstractDialog::paintEvent(QPaintEvent* _event)
     // Если надо рисуем образ контента
     //
     if (!d->content->isVisible()) {
-        painter.drawPixmap(d->contentPosAnimation.currentValue().toPoint(), d->contentPixmap);
+        painter.drawPixmap(d->contentPosAnimation.currentValue().toPointF(), d->contentPixmap);
     }
 }
 

@@ -99,101 +99,6 @@ public:
     };
 
     /**
-     * @brief Параметры виджета выезжающего меню
-     */
-    class DrawerPrivate;
-    class Drawer
-    {
-    public:
-        ~Drawer();
-
-        /**
-         * @brief Отступы
-         */
-        QMarginsF margins() const;
-
-        /**
-         * @brief Отступы пункта меню
-         */
-        QMarginsF actionMargins() const;
-
-        /**
-         * @brief Отступы выделения
-         */
-        QMarginsF selectionMargins() const;
-
-        /**
-         * @brief Отступ от подзаголовка до первого пункта меню
-         */
-        qreal subtitleBottomMargin() const;
-
-        /**
-         * @brief Отступ от иконки до текста пункта меню
-         */
-        qreal iconRightMargin() const;
-
-        /**
-         * @brief Ширина
-         */
-        qreal width() const;
-
-        /**
-         * @brief Высота заголовка
-         */
-        qreal titleHeight() const;
-
-        /**
-         * @brief Высота подзаголовка
-         */
-        qreal subtitleHeight() const;
-
-        /**
-         * @brief Высота пункта меню
-         */
-        qreal actionHeight() const;
-
-        /**
-         * @brief Размер иконки
-         */
-        QSizeF iconSize() const;
-
-        /**
-         * @brief Высота разделительной полосы
-         */
-        qreal separatorHeight() const;
-
-        /**
-         * @brief Отступы до разделительной полосы
-         */
-        qreal separatorSpacing() const;
-
-        /**
-         * @brief Цвет выделения
-         */
-        QColor selectionColor() const;
-
-        /**
-         * @brief Шрифт заголовка
-         */
-        QFont titleFont() const;
-
-        /**
-         * @brief Шрифт подзаголовка
-         */
-        QFont subtitleFont() const;
-
-        /**
-         * @brief Шрифт пунктов меню
-         */
-        QFont actionFont() const;
-
-    private:
-        explicit Drawer(qreal _scaleFactor, const Color& _color);
-        QScopedPointer<DrawerPrivate> d;
-        friend class DesignSystemPrivate;
-    };
-
-    /**
      * @brief Параметры виджета таба
      */
     class TabPrivate;
@@ -971,6 +876,87 @@ public:
     };
 
     /**
+     * @brief Параметры виджета выезжающего меню
+     */
+    class Drawer
+    {
+    public:
+        ~Drawer();
+
+        /**
+         * @brief Отступы
+         */
+        QMarginsF margins() const;
+
+        /**
+         * @brief Отступы пункта меню
+         */
+        QMarginsF actionMargins() const;
+
+        /**
+         * @brief Отступы выделения
+         */
+        QMarginsF selectionMargins() const;
+
+        /**
+         * @brief Отступ от подзаголовка до первого пункта меню
+         */
+        qreal subtitleBottomMargin() const;
+
+        /**
+         * @brief Отступ от иконки до текста пункта меню
+         */
+        qreal iconRightMargin() const;
+
+        /**
+         * @brief Ширина
+         */
+        qreal width() const;
+
+        /**
+         * @brief Высота заголовка
+         */
+        qreal titleHeight() const;
+
+        /**
+         * @brief Высота подзаголовка
+         */
+        qreal subtitleHeight() const;
+
+        /**
+         * @brief Высота пункта меню
+         */
+        qreal actionHeight() const;
+
+        /**
+         * @brief Размер иконки
+         */
+        QSizeF iconSize() const;
+
+        /**
+         * @brief Высота разделительной полосы
+         */
+        qreal separatorHeight() const;
+
+        /**
+         * @brief Отступы до разделительной полосы
+         */
+        qreal separatorSpacing() const;
+
+        /**
+         * @brief Цвет выделения
+         */
+        QColor selectionColor() const;
+
+    private:
+        explicit Drawer(qreal _scaleFactor, const Color& _color);
+        friend class DesignSystemPrivate;
+        //
+        class Implementation;
+        QScopedPointer<Implementation> d;
+    };
+
+    /**
      * @brief Параметры виджета карточки
      */
     class Card
@@ -1118,11 +1104,6 @@ public:
     static const AppBar& appBar();
 
     /**
-     * @brief Параметры выезжающего меню
-     */
-    static const Drawer& drawer();
-
-    /**
      * @brief Параметры виджета вкладки
      */
     static const Tab& tab();
@@ -1216,6 +1197,11 @@ public:
      * @brief Параметры виджета пошагового движения
      */
     static const Stepper& stepper();
+
+    /**
+     * @brief Параметры выезжающего меню
+     */
+    static const Drawer& drawer();
 
     /**
      * @brief Параметры виджета карточки

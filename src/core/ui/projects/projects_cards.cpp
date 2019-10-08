@@ -125,8 +125,8 @@ int ProjectCard::type() const
 
 void ProjectCard::paint(QPainter* _painter, const QStyleOptionGraphicsItem* _option, QWidget* _widget)
 {
-    Q_UNUSED(_option);
-    Q_UNUSED(_widget);
+    Q_UNUSED(_option)
+    Q_UNUSED(_widget)
 
     const QRectF backgroundRect = rect().marginsRemoved(Ui::DesignSystem::card().shadowMargins());
     if (!backgroundRect.isValid()) {
@@ -417,7 +417,8 @@ void ProjectsCards::Implementation::reorderCards()
                 QPointer<QVariantAnimation>& moveAnimation = itemsAnimations[item];
                 if (moveAnimation.isNull()) {
                     moveAnimation = new QVariantAnimation(scene);
-                    moveAnimation->setDuration(160);
+                    moveAnimation->setDuration(220);
+                    moveAnimation->setEasingCurve(QEasingCurve::OutQuad);
                     QObject::connect(moveAnimation.data(), &QVariantAnimation::valueChanged, scene,
                                      [item] (const QVariant& _value) { item->setPos(_value.toPointF()); });
                 }
@@ -476,7 +477,7 @@ ProjectsCards::ProjectsCards(QWidget* _parent)
     setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
 
 
-    for (int i = 0; i < 5000; ++i) {
+    for (int i = 0; i < 100; ++i) {
         d->scene->addItem(new ProjectCard);
     }
 }
@@ -505,7 +506,7 @@ void ProjectsCards::setProjects(Domain::ProjectsModel* _projects)
     connect(d->projects, &QAbstractListModel::rowsInserted, this,
             [this] (const QModelIndex& _parent, int _first, int _last)
     {
-        Q_UNUSED(_parent);
+        Q_UNUSED(_parent)
 
         //
         // Ожидаем вставку только наверху
