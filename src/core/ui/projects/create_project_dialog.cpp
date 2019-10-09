@@ -109,7 +109,7 @@ void CreateProjectDialog::updateTranslations()
 
 void CreateProjectDialog::designSystemChangeEvent(DesignSystemChangeEvent* _event)
 {
-    Q_UNUSED(_event);
+    Q_UNUSED(_event)
 
     d->localProjectButton->setBackgroundColor(Ui::DesignSystem::color().background());
     d->localProjectButton->setTextColor(Ui::DesignSystem::color().onBackground());

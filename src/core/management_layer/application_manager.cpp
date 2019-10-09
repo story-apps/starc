@@ -2,6 +2,7 @@
 
 #include "custom_events.h"
 
+#include "content/account/account_manager.h"
 #include "content/onboarding/onboarding_manager.h"
 #include "content/projects/projects_manager.h"
 
@@ -76,6 +77,7 @@ public:
     Ui::ApplicationView* applicationView = nullptr;
     Ui::MenuView* menuView = nullptr;
 
+    QScopedPointer<AccountManager> accountManager;
     QScopedPointer<OnboardingManager> onboardingManager;
     QScopedPointer<ProjectsManager> projectsManager;
 };
@@ -84,6 +86,7 @@ ApplicationManager::Implementation::Implementation(ApplicationManager* _q)
     : q(_q),
       applicationView(new Ui::ApplicationView),
       menuView(new Ui::MenuView(applicationView)),
+      accountManager(new AccountManager(nullptr, applicationView)),
       onboardingManager(new OnboardingManager(nullptr, applicationView)),
       projectsManager(new ProjectsManager(nullptr, applicationView))
 {
@@ -107,6 +110,7 @@ void ApplicationManager::Implementation::showContent()
     // Если это первый запуск приложения, то покажем онбординг
     //
     if (settingsValue(DataStorageLayer::kApplicationConfiguredKey).toBool() == false) {
+        applicationView->setAccountVisible(false);
         applicationView->showContent(onboardingManager->toolBar(),
                                      onboardingManager->navigator(),
                                      onboardingManager->view());
@@ -118,6 +122,7 @@ void ApplicationManager::Implementation::showContent()
         applicationView->showContent(projectsManager->toolBar(),
                                      projectsManager->navigator(),
                                      projectsManager->view());
+        applicationView->setAccountVisible(true);
     }
 }
 
@@ -213,6 +218,11 @@ ApplicationManager::ApplicationManager(QObject* _parent)
     //
     QFontDatabase fontDatabase;
     fontDatabase.addApplicationFont(":/fonts/materialdesignicons");
+    fontDatabase.addApplicationFont(":/fonts/roboto-black");
+    fontDatabase.addApplicationFont(":/fonts/roboto-bold");
+    fontDatabase.addApplicationFont(":/fonts/roboto-medium");
+    fontDatabase.addApplicationFont(":/fonts/roboto-regular");
+    fontDatabase.addApplicationFont(":/fonts/roboto-thin");
 
     initConnections();
 }
@@ -285,6 +295,8 @@ void ApplicationManager::initConnections()
     //
     // Представление приложения
     //
+    connect(d->applicationView, &Ui::ApplicationView::accountPressed,
+            d->accountManager.data(), &AccountManager::authorize);
     connect(d->applicationView, &Ui::ApplicationView::closeRequested, this, [this]
     {
         //

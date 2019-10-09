@@ -47,11 +47,6 @@ signals:
      */
     void openStoryPressed();
 
-    /**
-     * @brief Пользователь нажал кнопку информации об аккаунте
-     */
-    void accountPressed();
-
 protected:
     void resizeEvent(QResizeEvent* _event) override;
 

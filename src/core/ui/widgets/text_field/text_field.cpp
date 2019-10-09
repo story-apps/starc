@@ -50,6 +50,8 @@ public:
 
     QString trailingIcon;
 
+    bool isPasswordModeEnabled = false;
+
     QVariantAnimation labelColorAnimation;
     QVariantAnimation labelFontSizeAnimation;
     QVariantAnimation labelTopLeftAnimation;
@@ -269,6 +271,21 @@ void TextField::setTrailingIcon(const QString& _icon)
     update();
 }
 
+void TextField::setPasswordModeEnabled(bool _enable)
+{
+    if (d->isPasswordModeEnabled == _enable) {
+        return;
+    }
+
+    d->isPasswordModeEnabled = _enable;
+    update();
+}
+
+bool TextField::isPasswordModeEnabled() const
+{
+    return d->isPasswordModeEnabled;
+}
+
 void TextField::clear()
 {
     if (text().isEmpty()) {
@@ -354,9 +371,30 @@ void TextField::paintEvent(QPaintEvent* _event)
     painter.end();
 
     //
-    // Отрисовкой текста и курсора занимается сам QTextEdit
+    // Если не включён режим отображения пароля, то отрисовкой текста и курсора занимается сам QTextEdit
     //
-    QTextEdit::paintEvent(_event);
+    if (!d->isPasswordModeEnabled) {
+        QTextEdit::paintEvent(_event);
+    }
+    //
+    // В противном случае, самостоятельно рисуем звёздочки вместо букв
+    //
+    else if (!text().isEmpty()) {
+        painter.begin(viewport());
+        painter.setFont(Ui::DesignSystem::font().body1());
+        painter.setPen(Ui::DesignSystem::color().onSurface());
+
+        QPointF labelTopLeft = Ui::DesignSystem::textField().labelTopLeft()
+                               + QPointF(Ui::DesignSystem::textField().contentsMargins().left(),
+                                         Ui::DesignSystem::textField().contentsMargins().top());
+        labelTopLeft.setY(Ui::DesignSystem::textField().margins().top());
+        const QRectF labelRect(labelTopLeft,
+                               QSizeF(width() - labelTopLeft.x(),
+                                      QFontMetricsF(Ui::DesignSystem::font().body1()).lineSpacing()));
+        painter.drawText(labelRect, Qt::AlignLeft | Qt::AlignBottom,
+                         QString(text().length(), QString("●").front()));
+        painter.end();
+    }
 
 
     //
@@ -509,6 +547,7 @@ void TextField::focusOutEvent(QFocusEvent* _event)
 void TextField::mouseReleaseEvent(QMouseEvent* _event)
 {
     const QRectF iconRect(QPointF(width()
+                                  - Ui::DesignSystem::textField().contentsMargins().right()
                                   - Ui::DesignSystem::textField().margins().right()
                                   - Ui::DesignSystem::textField().iconSize().width(),
                                   Ui::DesignSystem::textField().iconTop()),

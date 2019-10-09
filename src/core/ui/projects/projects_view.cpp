@@ -49,7 +49,6 @@ public:
     ProjectsView* q = nullptr;
 
     FloatingToolBar* toolBar = nullptr;
-    FloatingToolBar* accountBar = nullptr;
 
     Widget* emptyPage = nullptr;
     H6Label* emptyPageTitleLabel = nullptr;
@@ -61,7 +60,6 @@ public:
 ProjectsView::Implementation::Implementation(ProjectsView* _parent)
     : q(_parent),
       toolBar(new FloatingToolBar(_parent)),
-      accountBar(new FloatingToolBar(_parent)),
       emptyPage(new Widget(_parent)),
       projectsPage(new ProjectsCards(_parent))
 {
@@ -115,15 +113,6 @@ void ProjectsView::Implementation::updateToolBarsUi()
     toolBar->setBackgroundColor(Ui::DesignSystem::color().primary());
     toolBar->setTextColor(Ui::DesignSystem::color().onPrimary());
     toolBar->raise();
-
-    accountBar->resize(accountBar->sizeHint());
-    accountBar->move(QPointF(q->size().width()
-                             - accountBar->width()
-                             - Ui::DesignSystem::layout().px24(),
-                             Ui::DesignSystem::layout().px24()).toPoint());
-    accountBar->setBackgroundColor(Ui::DesignSystem::color().primary());
-    accountBar->setTextColor(Ui::DesignSystem::color().onPrimary());
-    accountBar->raise();
 }
 
 
@@ -140,10 +129,6 @@ ProjectsView::ProjectsView(QWidget* _parent)
     QAction* openStoryAction = new QAction("\uf256");
     d->toolBar->addAction(openStoryAction);
     connect(openStoryAction, &QAction::triggered, this, &ProjectsView::openStoryPressed);
-
-    QAction* accountAction = new QAction("\uf004");
-    d->accountBar->addAction(accountAction);
-    connect(accountAction, &QAction::triggered, this, &ProjectsView::accountPressed);
 
     connect(d->emptyPageCreateStoryButton, &Button::clicked, this, &ProjectsView::createStoryPressed);
 
@@ -174,10 +159,6 @@ void ProjectsView::resizeEvent(QResizeEvent* _event)
 
     d->toolBar->move(QPointF(Ui::DesignSystem::layout().px24(),
                              Ui::DesignSystem::layout().px24()).toPoint());
-    d->accountBar->move(QPointF(_event->size().width()
-                                - d->accountBar->width()
-                                - Ui::DesignSystem::layout().px24(),
-                                Ui::DesignSystem::layout().px24()).toPoint());
 }
 
 void ProjectsView::updateTranslations()

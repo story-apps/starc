@@ -175,7 +175,7 @@ void AppBar::mouseReleaseEvent(QMouseEvent* _event)
 
 void AppBar::designSystemChangeEvent(DesignSystemChangeEvent* _event)
 {
-    Q_UNUSED(_event);
+    Q_UNUSED(_event)
 
     d->decorationRadiusAnimation.setStartValue(Ui::DesignSystem::appBar().iconSize().height() / 2.0);
     d->decorationRadiusAnimation.setEndValue(Ui::DesignSystem::appBar().heightRegular() / 2.5);

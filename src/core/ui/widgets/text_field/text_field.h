@@ -45,6 +45,12 @@ public:
     void setTrailingIcon(const QString& _icon);
 
     /**
+     * @brief Включить/отключить режим ввода пароля
+     */
+    void setPasswordModeEnabled(bool _enable);
+    bool isPasswordModeEnabled() const;
+
+    /**
      * @brief Перекрываем реализацию очистки своей, чтобы не ломался документ
      */
     void clear();

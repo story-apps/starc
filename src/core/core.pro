@@ -23,8 +23,10 @@ SOURCES += \
     data_layer/database.cpp \
     domain/domain_object.cpp \
     domain/identifier.cpp \
+    management_layer/content/account/account_manager.cpp \
     management_layer/content/onboarding/onboarding_manager.cpp \
     management_layer/content/projects/projects_manager.cpp \
+    ui/account/login_dialog.cpp \
     ui/application_view.cpp \
     ui/menu_view.cpp \
     ui/widgets/drawer/drawer.cpp \
@@ -82,8 +84,10 @@ HEADERS += \
         data_layer/database.h \
         domain/domain_object.h \
         domain/identifier.h \
+    management_layer/content/account/account_manager.h \
         management_layer/content/onboarding/onboarding_manager.h \
         management_layer/content/projects/projects_manager.h \
+    ui/account/login_dialog.h \
         ui/application_view.h \
     ui/menu_view.h \
     ui/widgets/drawer/drawer.h \

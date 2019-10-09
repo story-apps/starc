@@ -37,13 +37,28 @@ public:
      */
     int navigationPanelWidth() const;
 
+    /**
+     * @brief Установить видимость панели личного кабинета
+     */
+    void setAccountVisible(bool _visible);
+
 signals:
+    /**
+     * @brief Пользователь нажал кнопку информации об аккаунте
+     */
+    void accountPressed();
+
     /**
      * @brief Запрос на закрытие приложения
      */
     void closeRequested();
 
 protected:
+    /**
+     * @brief Корректируем расположение виджета личного кабинета внутри виджета представления
+     */
+    bool eventFilter(QObject* _target, QEvent* _event) override;
+
     /**
      * @brief Переопределяем, чтобы вместо реального закрытия испустить сигнал о данном намерении
      */

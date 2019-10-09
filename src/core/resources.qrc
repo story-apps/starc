@@ -1,6 +1,11 @@
 <RCC>
     <qresource prefix="/fonts">
         <file alias="materialdesignicons">resources/fonts/materialdesignicons-webfont.ttf</file>
+        <file alias="roboto-black">resources/fonts/roboto-black.ttf</file>
+        <file alias="roboto-bold">resources/fonts/roboto-bold.ttf</file>
+        <file alias="roboto-medium">resources/fonts/roboto-medium.ttf</file>
+        <file alias="roboto-regular">resources/fonts/roboto-regular.ttf</file>
+        <file alias="roboto-thin">resources/fonts/roboto-thin.ttf</file>
     </qresource>
     <qresource prefix="/images">
         <file alias="movie-poster">resources/images/movie-poster.jpg</file>

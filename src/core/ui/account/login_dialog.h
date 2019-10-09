@@ -7,15 +7,15 @@ namespace Ui
 {
 
 /**
- * @brief Диалог создания нового проекта
+ * @brief Диалог регистрации/авторизации в личном кабинете пользователя
  */
-class CreateProjectDialog : public AbstractDialog
+class LoginDialog : public AbstractDialog
 {
     Q_OBJECT
 
 public:
-    explicit CreateProjectDialog(QWidget* _parent = nullptr);
-    ~CreateProjectDialog() override;
+    explicit LoginDialog(QWidget* _parent = nullptr);
+    ~LoginDialog() override;
 
 protected:
     /**
