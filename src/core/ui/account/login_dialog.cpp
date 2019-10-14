@@ -5,6 +5,7 @@
 #include <ui/widgets/button/button.h>
 #include <ui/widgets/text_field/text_field.h>
 
+#include <QEvent>
 #include <QGridLayout>
 #include <QTimer>
 
@@ -32,6 +33,9 @@ LoginDialog::Implementation::Implementation(QWidget* _parent)
       loginButton(new Button(_parent)),
       cancelButton(new Button(_parent))
 {
+    email->setTabChangesFocus(true);
+
+    password->setTabChangesFocus(true);
     password->setPasswordModeEnabled(true);
     password->setTrailingIcon("\uf6d0");
 
@@ -54,6 +58,8 @@ LoginDialog::LoginDialog(QWidget* _parent)
     : AbstractDialog(_parent),
       d(new Implementation(this))
 {
+    d->cancelButton->installEventFilter(this);
+
     contentsLayout()->addWidget(d->email, 0, 0);
     contentsLayout()->addWidget(d->password, 1, 0);
     contentsLayout()->addWidget(d->confirmationCode, 2, 0);
@@ -69,6 +75,8 @@ LoginDialog::LoginDialog(QWidget* _parent)
     updateTranslations();
     designSystemChangeEvent(nullptr);
 }
+
+LoginDialog::~LoginDialog() = default;
 
 QWidget* LoginDialog::focusedWidgetAfterShow() const
 {
@@ -102,6 +110,17 @@ void LoginDialog::designSystemChangeEvent(DesignSystemChangeEvent* _event)
                                                    Ui::DesignSystem::layout().px8()).toMargins());
 }
 
-LoginDialog::~LoginDialog() = default;
+bool LoginDialog::eventFilter(QObject* _watched, QEvent* _event)
+{
+    //
+    // Зацикливаем фокус, чтобы он всегда оставался внутри диалога
+    //
+    if (_watched == d->cancelButton
+        && _event->type() == QEvent::FocusOut) {
+        d->email->setFocus();
+    }
+
+    return AbstractDialog::eventFilter(_watched, _event);
+}
 
 }

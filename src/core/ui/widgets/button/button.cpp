@@ -87,6 +87,7 @@ Button::Button(QWidget* _parent)
       d(new Implementation)
 {
     setAttribute(Qt::WA_Hover);
+    setFocusPolicy(Qt::StrongFocus);
 
     connect(&d->decorationRadiusAnimation, &QVariantAnimation::valueChanged, this, [this] { update(); });
     connect(&d->decorationOpacityAnimation, &QVariantAnimation::valueChanged, this, [this] { update(); });
@@ -161,7 +162,7 @@ void Button::paintEvent(QPaintEvent* _event)
     QColor backgroundColor;
     if (d->isContained) {
         backgroundColor = this->backgroundColor();
-    } else if (underMouse()) {
+    } else if (underMouse() || hasFocus()) {
         backgroundColor = this->backgroundColor();
         backgroundColor.setAlphaF(0.2);
     }

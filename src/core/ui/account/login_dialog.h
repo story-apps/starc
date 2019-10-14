@@ -33,6 +33,11 @@ protected:
      */
     void designSystemChangeEvent(DesignSystemChangeEvent* _event) override;
 
+    /**
+     * @brief Переопределяем, для ручной корректировки цепочки фокусирования виджетов
+     */
+    bool eventFilter(QObject* _watched, QEvent* _event) override;
+
 private:
     class Implementation;
     QScopedPointer<Implementation> d;

@@ -8,8 +8,9 @@
 #include <utils/helpers/text_helper.h>
 
 #include <QEvent>
-#include <QTextFrame>
+#include <QKeyEvent>
 #include <QPainter>
+#include <QTextFrame>
 #include <QVariantAnimation>
 
 
@@ -51,6 +52,7 @@ public:
     QString trailingIcon;
 
     bool isPasswordModeEnabled = false;
+    bool isEnterMakesNewLine = false;
 
     QVariantAnimation labelColorAnimation;
     QVariantAnimation labelFontSizeAnimation;
@@ -284,6 +286,15 @@ void TextField::setPasswordModeEnabled(bool _enable)
 bool TextField::isPasswordModeEnabled() const
 {
     return d->isPasswordModeEnabled;
+}
+
+void TextField::setEnterMakesNewLine(bool _make)
+{
+    if (d->isEnterMakesNewLine == _make) {
+        return;
+    }
+
+    d->isEnterMakesNewLine = _make;
 }
 
 void TextField::clear()
@@ -558,6 +569,18 @@ void TextField::mouseReleaseEvent(QMouseEvent* _event)
     } else {
         QTextEdit::mouseReleaseEvent(_event);
     }
+}
+
+void TextField::keyPressEvent(QKeyEvent* _event)
+{
+    if ((_event->key() == Qt::Key_Enter
+            || _event->key() == Qt::Key_Return)
+            && !d->isEnterMakesNewLine) {
+        _event->ignore();
+        return;
+    }
+
+    QTextEdit::keyPressEvent(_event);
 }
 
 TextField::~TextField() = default;

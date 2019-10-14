@@ -51,6 +51,11 @@ public:
     bool isPasswordModeEnabled() const;
 
     /**
+     * @brief Установить необходимость добавления новых строк при нажатии Enter'а
+     */
+    void setEnterMakesNewLine(bool _make);
+
+    /**
      * @brief Перекрываем реализацию очистки своей, чтобы не ломался документ
      */
     void clear();
@@ -101,6 +106,11 @@ protected:
      * @brief Переопределяем для обработки нажатия на иконке вспомогательного действия
      */
     void mouseReleaseEvent(QMouseEvent* _event) override;
+
+    /**
+     * @brief Переопределяем для ручной обработки некоторых клавиш
+     */
+    void keyPressEvent(QKeyEvent* _event) override;
 
 private:
     class Implementation;
