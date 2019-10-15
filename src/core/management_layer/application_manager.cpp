@@ -6,6 +6,10 @@
 #include "content/onboarding/onboarding_manager.h"
 #include "content/projects/projects_manager.h"
 
+#ifdef CLOUD_SERVICE_MANAGER
+#include <shredder/starc/cloud_service_manager.h>
+#endif
+
 #include <data_layer/storage/settings_storage.h>
 #include <data_layer/storage/storage_facade.h>
 
@@ -80,6 +84,9 @@ public:
     QScopedPointer<AccountManager> accountManager;
     QScopedPointer<OnboardingManager> onboardingManager;
     QScopedPointer<ProjectsManager> projectsManager;
+#ifdef CLOUD_SERVICE_MANAGER
+    QScopedPointer<CloudServiceManager> cloudServiceManager;
+#endif
 };
 
 ApplicationManager::Implementation::Implementation(ApplicationManager* _q)
@@ -89,6 +96,9 @@ ApplicationManager::Implementation::Implementation(ApplicationManager* _q)
       accountManager(new AccountManager(nullptr, applicationView)),
       onboardingManager(new OnboardingManager(nullptr, applicationView)),
       projectsManager(new ProjectsManager(nullptr, applicationView))
+#ifdef CLOUD_SERVICE_MANAGER
+    , cloudServiceManager(new CloudServiceManager)
+#endif
 {
 }
 
@@ -110,7 +120,6 @@ void ApplicationManager::Implementation::showContent()
     // Если это первый запуск приложения, то покажем онбординг
     //
     if (settingsValue(DataStorageLayer::kApplicationConfiguredKey).toBool() == false) {
-        applicationView->setAccountVisible(false);
         applicationView->showContent(onboardingManager->toolBar(),
                                      onboardingManager->navigator(),
                                      onboardingManager->view());
@@ -122,7 +131,9 @@ void ApplicationManager::Implementation::showContent()
         applicationView->showContent(projectsManager->toolBar(),
                                      projectsManager->navigator(),
                                      projectsManager->view());
+#ifdef CLOUD_SERVICE_MANAGER
         applicationView->setAccountVisible(true);
+#endif
     }
 }
 

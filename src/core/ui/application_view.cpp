@@ -74,6 +74,7 @@ ApplicationView::ApplicationView(QWidget* _parent)
 
     QAction* accountAction = new QAction("\uf004");
     d->accountBar->addAction(accountAction);
+    d->accountBar->hide();
     connect(accountAction, &QAction::triggered, this, &ApplicationView::accountPressed);
 
     designSystemChangeEvent(nullptr);

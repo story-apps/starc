@@ -11,6 +11,8 @@ QT += widgets sql
 
 TARGET = $$qtLibraryTarget(coreplugin)
 
+include(../shredder/starc/shredder.pri)
+
 DEFINES += CORE_LIBRARY
 DEFINES += QT_DEPRECATED_WARNINGS
 
@@ -141,7 +143,8 @@ HEADERS += \
     ui/widgets/text_field/text_field.h \
     ui/widgets/toggle_button/toggle_button.h \
     ui/widgets/scroll_bar/scroll_bar.h \
-    ui/application_style.h
+    ui/application_style.h \
+    utils/validators/email_validator.h
 
 unix {
     target.path = /usr/lib
