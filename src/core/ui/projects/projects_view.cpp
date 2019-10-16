@@ -123,17 +123,19 @@ ProjectsView::ProjectsView(QWidget* _parent)
     : StackWidget(_parent),
       d(new Implementation(this))
 {
-    QAction* createStoryAction = new QAction("\uf415");
+    QAction* createStoryAction = new QAction;
+    createStoryAction->setIconText("\uf415");
     d->toolBar->addAction(createStoryAction);
     connect(createStoryAction, &QAction::triggered, this, &ProjectsView::createStoryPressed);
-    QAction* openStoryAction = new QAction("\uf256");
+    QAction* openStoryAction = new QAction;
+    openStoryAction->setIconText("\uf256");
     d->toolBar->addAction(openStoryAction);
     connect(openStoryAction, &QAction::triggered, this, &ProjectsView::openStoryPressed);
 
     connect(d->emptyPageCreateStoryButton, &Button::clicked, this, &ProjectsView::createStoryPressed);
 
-//    showEmptyPage();
-    showProjectsPage();
+    showEmptyPage();
+//    showProjectsPage();
 
     designSystemChangeEvent(nullptr);
 }

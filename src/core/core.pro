@@ -28,6 +28,7 @@ SOURCES += \
     management_layer/content/account/account_manager.cpp \
     management_layer/content/onboarding/onboarding_manager.cpp \
     management_layer/content/projects/projects_manager.cpp \
+    ui/account/account_bar.cpp \
     ui/account/login_dialog.cpp \
     ui/application_view.cpp \
     ui/menu_view.cpp \
@@ -78,7 +79,8 @@ SOURCES += \
     ui/widgets/text_field/text_field.cpp \
     ui/widgets/toggle_button/toggle_button.cpp \
     ui/widgets/scroll_bar/scroll_bar.cpp \
-    ui/application_style.cpp
+    ui/application_style.cpp \
+    utils/tools/debouncer.cpp
 
 HEADERS += \
         core_global.h \
@@ -89,6 +91,7 @@ HEADERS += \
     management_layer/content/account/account_manager.h \
         management_layer/content/onboarding/onboarding_manager.h \
         management_layer/content/projects/projects_manager.h \
+    ui/account/account_bar.h \
     ui/account/login_dialog.h \
         ui/application_view.h \
     ui/menu_view.h \
@@ -144,6 +147,7 @@ HEADERS += \
     ui/widgets/toggle_button/toggle_button.h \
     ui/widgets/scroll_bar/scroll_bar.h \
     ui/application_style.h \
+    utils/tools/debouncer.h \
     utils/validators/email_validator.h
 
 unix {

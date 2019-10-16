@@ -28,6 +28,22 @@ public:
     QColor textColor() const;
     void setTextColor(const QColor& _color);
 
+    /**
+     * @brief Переопределяем для испускания сигналов моментах, когда виджет стал показан или скрыт
+     */
+    void setVisible(bool _visible) override;
+
+signals:
+    /**
+     * @brief Виджет был показан
+     */
+    void appeared();
+
+    /**
+     * @brief Виджет был скрыт
+     */
+    void disappeared();
+
 protected:
     /**
      * @brief Переопределяем для обработки события обновления дизайн системы

@@ -100,6 +100,7 @@ ApplicationManager::Implementation::Implementation(ApplicationManager* _q)
     , cloudServiceManager(new CloudServiceManager)
 #endif
 {
+    applicationView->setAccountBar(accountManager->accountBar());
 }
 
 QVariant ApplicationManager::Implementation::settingsValue(const QString& _key) const
@@ -132,7 +133,7 @@ void ApplicationManager::Implementation::showContent()
                                      projectsManager->navigator(),
                                      projectsManager->view());
 #ifdef CLOUD_SERVICE_MANAGER
-        applicationView->setAccountVisible(true);
+        accountManager->accountBar()->show();
 #endif
     }
 }
@@ -306,8 +307,6 @@ void ApplicationManager::initConnections()
     //
     // Представление приложения
     //
-    connect(d->applicationView, &Ui::ApplicationView::accountPressed,
-            d->accountManager.data(), &AccountManager::authorize);
     connect(d->applicationView, &Ui::ApplicationView::closeRequested, this, [this]
     {
         //
@@ -359,6 +358,45 @@ void ApplicationManager::initConnections()
     //
     connect(d->projectsManager.data(), &ProjectsManager::menuRequested, this, [this] { d->showMenu(); });
     connect(d->projectsManager.data(), &ProjectsManager::createStoryRequested, this, [this] { d->createStory(); });
+
+#ifdef CLOUD_SERVICE_MANAGER
+    //
+    // Менеджер облака
+    //
+    // ... поймали/потеряли связь
+    //
+    connect(d->cloudServiceManager.data(), &CloudServiceManager::connected,
+            d->accountManager.data(), &AccountManager::notifyConnected);
+    connect(d->cloudServiceManager.data(), &CloudServiceManager::disconnected,
+            d->accountManager.data(), &AccountManager::notifyDisconnected);
+    //
+    // ... авторизация/регистрация
+    //
+    connect(d->accountManager.data(), &AccountManager::emailEntered,
+            d->cloudServiceManager.data(), &CloudServiceManager::canLogin);
+    connect(d->accountManager.data(), &AccountManager::registrationRequired,
+            d->cloudServiceManager.data(), &CloudServiceManager::registerAccount);
+    connect(d->accountManager.data(), &AccountManager::registrationConfirmationCodeEntered,
+            d->cloudServiceManager.data(), &CloudServiceManager::confirmRegistration);
+    connect(d->accountManager.data(), &AccountManager::loginRequired,
+            d->cloudServiceManager.data(), &CloudServiceManager::login);
+    connect(d->cloudServiceManager.data(), &CloudServiceManager::registrationAllowed,
+            d->accountManager.data(), &AccountManager::allowRegistration);
+    connect(d->cloudServiceManager.data(), &CloudServiceManager::registrationConfiramtionCodeSended,
+            d->accountManager.data(), &AccountManager::prepareToEnterRegistrationConfirmationCode);
+    connect(d->cloudServiceManager.data(), &CloudServiceManager::registrationConfirmationError,
+            d->accountManager.data(), &AccountManager::setRegistrationConfirmationError);
+    connect(d->cloudServiceManager.data(), &CloudServiceManager::registrationCompleted,
+            d->accountManager.data(), &AccountManager::login);
+    connect(d->cloudServiceManager.data(), &CloudServiceManager::loginAllowed,
+            d->accountManager.data(), &AccountManager::allowLogin);
+    connect(d->cloudServiceManager.data(), &CloudServiceManager::loginPasswordError,
+            d->accountManager.data(), &AccountManager::setLoginPasswordError);
+    connect(d->cloudServiceManager.data(), &CloudServiceManager::loginCompleted,
+            d->accountManager.data(), &AccountManager::completeLogin);
+    connect(d->cloudServiceManager.data(), &CloudServiceManager::accountParametersLoaded,
+            d->accountManager.data(), &AccountManager::setAccountParameters);
+#endif
 }
 
 } // namespace ManagementLayer

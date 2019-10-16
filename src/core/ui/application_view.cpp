@@ -1,7 +1,6 @@
 #include "application_view.h"
 
 #include <ui/design_system/design_system.h>
-#include <ui/widgets/floating_tool_bar/floating_tool_bar.h>
 #include <ui/widgets/shadow/shadow.h>
 #include <ui/widgets/splitter/splitter.h>
 #include <ui/widgets/stack_widget/stack_widget.h>
@@ -33,7 +32,7 @@ public:
     Splitter* splitter = nullptr;
     Shadow* splitterShadow = nullptr;
 
-    FloatingToolBar* accountBar = nullptr;
+    Widget* accountBar = nullptr;
 };
 
 ApplicationView::Implementation::Implementation(QWidget* _parent)
@@ -42,8 +41,7 @@ ApplicationView::Implementation::Implementation(QWidget* _parent)
       navigator(new StackWidget(_parent)),
       view(new StackWidget(_parent)),
       splitter(new Splitter(_parent)),
-      splitterShadow(new Shadow(view)),
-      accountBar(new FloatingToolBar(_parent))
+      splitterShadow(new Shadow(view))
 {
 }
 
@@ -71,11 +69,6 @@ ApplicationView::ApplicationView(QWidget* _parent)
     layout->setContentsMargins({});
     layout->setSpacing(0);
     layout->addWidget(d->splitter);
-
-    QAction* accountAction = new QAction("\uf004");
-    d->accountBar->addAction(accountAction);
-    d->accountBar->hide();
-    connect(accountAction, &QAction::triggered, this, &ApplicationView::accountPressed);
 
     designSystemChangeEvent(nullptr);
 }
@@ -109,19 +102,20 @@ void ApplicationView::showContent(QWidget* _toolbar, QWidget* _navigator, QWidge
     d->splitterShadow->raise();
 }
 
+void ApplicationView::setAccountBar(Widget* _accountBar)
+{
+    d->accountBar = _accountBar;
+}
+
 int ApplicationView::navigationPanelWidth() const
 {
     return d->toolBar->width() + d->splitter->handleWidth();
 }
 
-void ApplicationView::setAccountVisible(bool _visible)
-{
-    d->accountBar->setVisible(_visible);
-}
-
 bool ApplicationView::eventFilter(QObject* _target, QEvent* _event)
 {
-    if (_target == d->view
+    if (d->accountBar != nullptr
+        && _target == d->view
         && _event->type() == QEvent::Resize) {
         QResizeEvent* event = static_cast<QResizeEvent*>(_event);
         d->accountBar->move(d->view->mapTo(this, QPoint())
@@ -169,14 +163,16 @@ void ApplicationView::designSystemChangeEvent(DesignSystemChangeEvent* _event)
 
     d->splitterShadow->move(-1 * d->splitterShadow->width() * 2 / 3, 0);
 
-    d->accountBar->resize(d->accountBar->sizeHint());
-    d->accountBar->move(QPointF(size().width()
-                                  - d->accountBar->width()
-                                  - Ui::DesignSystem::layout().px24(),
-                                  Ui::DesignSystem::layout().px24()).toPoint());
-    d->accountBar->setBackgroundColor(Ui::DesignSystem::color().primary());
-    d->accountBar->setTextColor(Ui::DesignSystem::color().onPrimary());
-    d->accountBar->raise();
+    if (d->accountBar != nullptr) {
+        d->accountBar->resize(d->accountBar->sizeHint());
+        d->accountBar->move(QPointF(size().width()
+                                    - d->accountBar->width()
+                                    - Ui::DesignSystem::layout().px24(),
+                                    Ui::DesignSystem::layout().px24()).toPoint());
+        d->accountBar->setBackgroundColor(Ui::DesignSystem::color().primary());
+        d->accountBar->setTextColor(Ui::DesignSystem::color().onPrimary());
+        d->accountBar->raise();
+    }
 }
 
 } // namespace Ui

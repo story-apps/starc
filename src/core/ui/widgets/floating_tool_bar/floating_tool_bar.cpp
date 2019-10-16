@@ -191,7 +191,11 @@ void FloatingToolBar::paintEvent(QPaintEvent* _event)
         //
         const QRectF actionRect(QPointF(actionX, actionY), actionSize);
         painter.setPen(action->isChecked() ? Ui::DesignSystem::color().secondary() : textColor());
-        painter.drawText(actionRect, Qt::AlignCenter, action->text());
+        if (action->icon().isNull()) {
+            painter.drawText(actionRect, Qt::AlignCenter, action->iconText());
+        } else {
+            painter.drawPixmap(actionRect.topLeft(), action->icon().pixmap(actionSize.toSize()));
+        }
 
         //
         // ... декорация

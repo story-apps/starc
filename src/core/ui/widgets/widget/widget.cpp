@@ -58,6 +58,17 @@ void Widget::setTextColor(const QColor& _color)
     update();
 }
 
+void Widget::setVisible(bool _visible)
+{
+    QWidget::setVisible(_visible);
+
+    if (_visible) {
+        emit appeared();
+    } else {
+        emit disappeared();
+    }
+}
+
 bool Widget::event(QEvent* _event)
 {
     switch (static_cast<int>(_event->type())) {

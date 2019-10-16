@@ -33,21 +33,16 @@ public:
     void showContent(QWidget* _toolbar, QWidget* _navigator, QWidget* _view);
 
     /**
+     * @brief Установить панель инструментов для работы с аккаунтом
+     */
+    void setAccountBar(Widget* _accountBar);
+
+    /**
      * @brief Ширина навигационной панели
      */
     int navigationPanelWidth() const;
 
-    /**
-     * @brief Установить видимость панели личного кабинета
-     */
-    void setAccountVisible(bool _visible);
-
 signals:
-    /**
-     * @brief Пользователь нажал кнопку информации об аккаунте
-     */
-    void accountPressed();
-
     /**
      * @brief Запрос на закрытие приложения
      */
