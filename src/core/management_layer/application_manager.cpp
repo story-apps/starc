@@ -129,6 +129,13 @@ void ApplicationManager::Implementation::showContent()
     // В противном случае показываем недавние проекты
     //
     else {
+        //
+        // Сперва проекты нужно загрузить
+        //
+        projectsManager->loadProjects();
+        //
+        // ... а затем уже отобразить
+        //
         applicationView->showContent(projectsManager->toolBar(),
                                      projectsManager->navigator(),
                                      projectsManager->view());
@@ -265,7 +272,6 @@ void ApplicationManager::exec()
     // чтобы у пользователя возник эффект моментального запуска
     //
     QTimer::singleShot(0, this, [this] {
-        d->setTranslation(QLocale::AnyLanguage);
         d->showContent();
     });
 }
@@ -312,6 +318,7 @@ void ApplicationManager::initConnections()
         //
         // TODO: Сохранение, все дела
         //
+        d->projectsManager->saveProjects();
 
         //
         // Сохраняем состояние приложения

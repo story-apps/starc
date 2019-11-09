@@ -52,8 +52,8 @@ CreateProjectDialog::Implementation::Implementation(QWidget* _parent)
     buttonsLayout->setSpacing(0);
     buttonsLayout->addWidget(advancedSettingsButton, Qt::AlignVCenter);
     buttonsLayout->addStretch();
-    buttonsLayout->addWidget(cancelButton);
     buttonsLayout->addWidget(createButton);
+    buttonsLayout->addWidget(cancelButton);
 
     RadioButtonGroup* projectLocationGroup = new RadioButtonGroup(_parent);
     projectLocationGroup->add(localProjectButton);

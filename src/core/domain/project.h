@@ -71,7 +71,7 @@ public:
     /**
      * @brief Дата и время последнего изменения проекта
      */
-    QString displayLastEditDate() const;
+    QString displayLastEditTime() const;
     QDateTime lastEditTime() const;
     void setLastEditTime(const QDateTime& _time);
 
@@ -97,13 +97,27 @@ public:
     /**
      * @brief Получить проект по заданному индексу
      */
-    Project projectAt(int _row) const;
+    const Project& projectAt(int _row) const;
 
     /**
-     * @brief Добавить новый проект
-     * @note Новый проект всегда добавляется в начало списка
+     * @brief Добавить новый проект в конец списка
      */
-    void addProject(const QString& _name);
+    void append(const Project& _project);
+
+    /**
+     * @brief Добавить группу проектов в конец списка
+     */
+    void append(const QVector<Project>& _projects);
+
+    /**
+     * @brief Добавить новый проект в начало списка
+     */
+    void prepend(const Project& _project);
+
+    /**
+     * @brief Пуста ли модель
+     */
+    bool isEmpty() const;
 
     /**
      * @brief Переопределяем методы для собственной реализации модели

@@ -1687,7 +1687,7 @@ class DesignSystem::ProjectCard::Implementation
 public:
     explicit Implementation(qreal _scaleFactor);
 
-    QSizeF size = {401, 230};
+    QSizeF size = {400, 230};
     QMarginsF margins = {24, 116, 24, 24};
     qreal spacing = 10;
 };
@@ -1695,8 +1695,8 @@ public:
 DesignSystem::ProjectCard::Implementation::Implementation(qreal _scaleFactor)
 {
     size *= _scaleFactor;
-    spacing *= _scaleFactor;
     margins *= _scaleFactor;
+    spacing *= _scaleFactor;
 }
 
 

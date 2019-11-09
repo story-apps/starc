@@ -8,26 +8,29 @@
 namespace DataStorageLayer
 {
 
-const QString kApplicationGroupKey = "application";
-const QString kSystemGroupKey = "system";
+namespace {
+    // верхнеуровневые ключи
+    const QString kApplicationGroupKey = "application";
+    const QString kSystemGroupKey = "system";
 
-// первый запуск приложения (false) или оно уже сконфигурировано (true)
-const QString kApplicationConfiguredKey = kApplicationGroupKey + "/configured";
-// язык приложения
-const QString kApplicationLanguagedKey = kApplicationGroupKey + "/language";
-// тема приложения
-const QString kApplicationThemeKey = kApplicationGroupKey + "/theme";
-// масштаб приложения
-const QString kApplicationScaleFactorKey = kApplicationGroupKey + "/scale-factor";
-// состояние и геометрия основного окна приложения
-const QString kApplicationViewStateKey = kApplicationGroupKey + "-view/";
-// включено ли автосохранение
-const QString kApplicationAutosaveKey = kApplicationGroupKey + "/autosave";
-// интервал автосохранения в минутах
-const QString kApplicationAutosaveIntervalKey = kApplicationGroupKey + "/autosave-interval";
+    // первый запуск приложения (false) или оно уже сконфигурировано (true)
+    const QString kApplicationConfiguredKey = kApplicationGroupKey + "/configured";
+    // язык приложения
+    const QString kApplicationLanguagedKey = kApplicationGroupKey + "/language";
+    // тема приложения
+    const QString kApplicationThemeKey = kApplicationGroupKey + "/theme";
+    // масштаб приложения
+    const QString kApplicationScaleFactorKey = kApplicationGroupKey + "/scale-factor";
+    // состояние и геометрия основного окна приложения
+    const QString kApplicationViewStateKey = kApplicationGroupKey + "-view/";
+    // включено ли автосохранение
+    const QString kApplicationAutosaveKey = kApplicationGroupKey + "/autosave";
+    // интервал автосохранения в минутах
+    const QString kApplicationAutosaveIntervalKey = kApplicationGroupKey + "/autosave-interval";
 
-// системное имя пользователя
-const QString kSystemUsernameKey = kSystemGroupKey + "/username";
+    // системное имя пользователя
+    const QString kSystemUsernameKey = kSystemGroupKey + "/username";
+}
 
 /**
  * @brief Хранилище настроек

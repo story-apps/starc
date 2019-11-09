@@ -1,4 +1,8 @@
 #include "projects_manager.h"
+
+#include <data_layer/storage/settings_storage.h>
+#include <data_layer/storage/storage_facade.h>
+
 #include <domain/project.h>
 
 #include <ui/projects/create_project_dialog.h>
@@ -6,12 +10,24 @@
 #include <ui/projects/projects_tool_bar.h>
 #include <ui/projects/projects_view.h>
 
+#include <QDateTime>
+#include <QJsonArray>
+#include <QJsonDocument>
+#include <QJsonObject>
 #include <QTimer>
 #include <QWidget>
 
 
 namespace ManagementLayer
 {
+
+namespace {
+    // верхнеуровневые ключи
+    const QString kApplicationGroupKey = "application";
+
+    // список недавних проектов
+    const QString kApplicationProjectsKey = kApplicationGroupKey + "/projects";
+}
 
 class ProjectsManager::Implementation
 {
@@ -67,6 +83,52 @@ QWidget* ProjectsManager::navigator() const
 QWidget* ProjectsManager::view() const
 {
     return d->view;
+}
+
+void ProjectsManager::loadProjects()
+{
+    const auto projectsData
+        = DataStorageLayer::StorageFacade::settingsStorage()->value(
+            kApplicationProjectsKey, DataStorageLayer::SettingsStorage::SettingsPlace::Application);
+    const auto projectsJson = QJsonDocument::fromBinaryData(QByteArray::fromHex(projectsData.toByteArray()));
+    QVector<Domain::Project> projects;
+    for (const auto projectJsonValue : projectsJson.array()) {
+        const auto projectJson = projectJsonValue.toObject();
+        Domain::Project project;
+        project.setType(static_cast<Domain::ProjectType>(projectJson["type"].toInt()));
+        project.setName(projectJson["name"].toString());
+        project.setLogline(projectJson["logline"].toString());
+        project.setPath(projectJson["path"].toString());
+        project.setPosterPath(projectJson["poster_path"].toString());
+        project.setLastEditTime(QDateTime::fromString(projectJson["last_edit_time"].toString(), Qt::ISODateWithMs));
+        projects.append(project);
+    }
+    d->projects->append(projects);
+
+//    for (int i=0;i<10;++i) {
+//        Domain::Project p;
+//        p.setName("test" + QString::number(i));
+//        d->projects->prepend(p);
+//    }
+}
+
+void ProjectsManager::saveProjects()
+{
+    QJsonArray projectsJson;
+    for (int projectIndex = 0; projectIndex < d->projects->rowCount(); ++projectIndex) {
+        const auto& project = d->projects->projectAt(projectIndex);
+        QJsonObject projectJson;
+        projectJson["type"] = static_cast<int>(project.type());
+        projectJson["name"] = project.name();
+        projectJson["logline"] = project.logline();
+        projectJson["path"] = project.path();
+        projectJson["poster_path"] = project.posterPath();
+        projectJson["last_edit_time"] = project.lastEditTime().toString(Qt::ISODateWithMs);
+        projectsJson.append(projectJson);
+    }
+    DataStorageLayer::StorageFacade::settingsStorage()->setValue(
+        kApplicationProjectsKey, QJsonDocument(projectsJson).toBinaryData().toHex(),
+        DataStorageLayer::SettingsStorage::SettingsPlace::Application);
 }
 
 } // namespace ManagementLayer

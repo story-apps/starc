@@ -49,11 +49,33 @@ public:
      */
     void setProjects(Domain::ProjectsModel* _projects);
 
+signals:
+    /**
+     * @brief Запрос на отображение (когда появились проекты)
+     */
+    void showRequested();
+
+    /**
+     * @brief Запрос на скрытие (когда не осталось проектов)
+     */
+    void hideRequested();
+
 protected:
+    /**
+     * @brief Перенастраиваем виджет при обновлении дизайн системы
+     */
+    bool event(QEvent* _event) override;
+
     /**
      * @brief Переопределяем, чтобы корректировать область сцены, в зависимости от размера
      */
     void resizeEvent(QResizeEvent* _event) override;
+
+private:
+    /**
+     * @brief Уведомить клиентов, если нужно изменить видимость списка проектов
+     */
+    void notifyVisibleChange();
 
 private:
     class Implementation;

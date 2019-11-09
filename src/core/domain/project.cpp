@@ -83,23 +83,6 @@ void Project::setLogline(const QString& _logline)
     d->logline = _logline;
 }
 
-QString Project::displayLastEditDate() const
-{
-    switch (d->lastEditTime.daysTo(QDateTime::currentDateTime())) {
-        case 0: {
-            return QApplication::translate("Domain::Project", "today at") + d->lastEditTime.toString(" hh:mm");
-        }
-
-        case 1: {
-            return QApplication::translate("Domain::Project", "tomorrow at") + d->lastEditTime.toString(" hh:mm");
-        }
-
-        default: {
-            return d->lastEditTime.toString("dd.MM.yyyy hh:mm");
-        }
-    }
-}
-
 QString Project::displayPath() const
 {
     //
@@ -137,7 +120,33 @@ QString Project::posterPath() const
 
 void Project::setPosterPath(const QString& _path)
 {
+    if (d->posterPath == _path) {
+        return;
+    }
+
     d->posterPath = _path;
+
+    //
+    // Обнуляем постер, чтобы он потом извлёкся по заданному пути
+    //
+    d->poster = {};
+}
+
+QString Project::displayLastEditTime() const
+{
+    switch (d->lastEditTime.daysTo(QDateTime::currentDateTime())) {
+        case 0: {
+            return QApplication::translate("Domain::Project", "today at") + d->lastEditTime.toString(" hh:mm");
+        }
+
+        case 1: {
+            return QApplication::translate("Domain::Project", "tomorrow at") + d->lastEditTime.toString(" hh:mm");
+        }
+
+        default: {
+            return d->lastEditTime.toString("dd.MM.yyyy hh:mm");
+        }
+    }
 }
 
 QDateTime Project::lastEditTime() const
@@ -203,30 +212,43 @@ ProjectsModel::ProjectsModel(QObject* _parent)
 {
 }
 
-Project ProjectsModel::projectAt(int _row) const
+const Project& ProjectsModel::projectAt(int _row) const
 {
-    if (_row < 0
-        || _row >= d->projects.size()) {
-        return {};
-    }
-
+    Q_ASSERT(_row >= 0 && _row < d->projects.size());
     return d->projects.at(_row);
 }
 
 ProjectsModel::~ProjectsModel() = default;
 
-void ProjectsModel::addProject(const QString& _name)
+void ProjectsModel::append(const Project &_project)
+{
+    beginInsertRows({}, d->projects.size(), d->projects.size());
+    d->projects.append(_project);
+    endInsertRows();
+}
+
+void ProjectsModel::append(const QVector<Project>& _projects)
+{
+    beginInsertRows({}, d->projects.size(), d->projects.size() + _projects.size() - 1);
+    d->projects.append(_projects);
+    endInsertRows();
+}
+
+void ProjectsModel::prepend(const Project& _project)
 {
     beginInsertRows({}, 0, 0);
-    Project project;
-    project.setName(_name);
-    d->projects.prepend(project);
+    d->projects.prepend(_project);
     endInsertRows();
+}
+
+bool ProjectsModel::isEmpty() const
+{
+    return d->projects.isEmpty();
 }
 
 int ProjectsModel::rowCount(const QModelIndex& _parent) const
 {
-    Q_UNUSED(_parent);
+    Q_UNUSED(_parent)
     return d->projects.size();
 }
 

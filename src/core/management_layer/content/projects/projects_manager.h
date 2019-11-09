@@ -21,6 +21,16 @@ public:
     QWidget* navigator() const;
     QWidget* view() const;
 
+    /**
+     * @brief Загрузить список проектов
+     */
+    void loadProjects();
+
+    /**
+     * @brief Сохранить список проектов
+     */
+    void saveProjects();
+
 signals:
     /**
      * @brief Запрос на отображение меню

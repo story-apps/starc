@@ -134,8 +134,10 @@ ProjectsView::ProjectsView(QWidget* _parent)
 
     connect(d->emptyPageCreateStoryButton, &Button::clicked, this, &ProjectsView::createStoryPressed);
 
+    connect(d->projectsPage, &ProjectsCards::hideRequested, this, &ProjectsView::showEmptyPage);
+    connect(d->projectsPage, &ProjectsCards::showRequested, this, &ProjectsView::showProjectsPage);
+
     showEmptyPage();
-//    showProjectsPage();
 
     designSystemChangeEvent(nullptr);
 }
