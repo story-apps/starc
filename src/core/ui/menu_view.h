@@ -79,6 +79,11 @@ signals:
     void saveChangesPressed();
 
     /**
+     * @brief Нажат пункт меню "Сохранить проект как"
+     */
+    void saveStoryAsPressed();
+
+    /**
      * @brief Нажат пункт меню "Экспортировать"
      */
     void exportPressed();

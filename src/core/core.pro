@@ -28,10 +28,14 @@ SOURCES += \
     management_layer/content/account/account_manager.cpp \
     management_layer/content/onboarding/onboarding_manager.cpp \
     management_layer/content/projects/projects_manager.cpp \
+    management_layer/content/settings/settings_manager.cpp \
     ui/account/account_bar.cpp \
     ui/account/login_dialog.cpp \
     ui/application_view.cpp \
     ui/menu_view.cpp \
+    ui/settings/settings_navigator.cpp \
+    ui/settings/settings_tool_bar.cpp \
+    ui/settings/settings_view.cpp \
     ui/widgets/drawer/drawer.cpp \
     ui/widgets/stack_widget/stack_widget.cpp \
     ui/widgets/widget/widget.cpp \
@@ -91,10 +95,14 @@ HEADERS += \
     management_layer/content/account/account_manager.h \
         management_layer/content/onboarding/onboarding_manager.h \
         management_layer/content/projects/projects_manager.h \
+    management_layer/content/settings/settings_manager.h \
     ui/account/account_bar.h \
     ui/account/login_dialog.h \
         ui/application_view.h \
     ui/menu_view.h \
+    ui/settings/settings_navigator.h \
+    ui/settings/settings_tool_bar.h \
+    ui/settings/settings_view.h \
     ui/widgets/drawer/drawer.h \
     ui/widgets/stack_widget/stack_widget.h \
     ui/widgets/widget/widget.h \

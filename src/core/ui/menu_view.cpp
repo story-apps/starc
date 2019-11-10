@@ -114,17 +114,26 @@ MenuView::MenuView(QWidget* _parent)
     addAction(d->help);
 
     connect(d->stories, &QAction::triggered, this, &MenuView::storiesPressed);
+    connect(d->createStory, &QAction::triggered, this, &MenuView::createStoryPressed);
+    connect(d->openStory, &QAction::triggered, this, &MenuView::openStoryPressed);
     connect(d->story, &QAction::triggered, this, &MenuView::storyPressed);
     connect(d->saveStory, &QAction::triggered, this, &MenuView::saveChangesPressed);
-    connect(d->exportStory, &QAction::triggered, this, &MenuView::exportPressed);
+    connect(d->saveStoryAs, &QAction::triggered, this, &MenuView::saveStoryAsPressed);
     connect(d->importStory, &QAction::triggered, this, &MenuView::importPressed);
+    connect(d->exportStory, &QAction::triggered, this, &MenuView::exportPressed);
     connect(d->settings, &QAction::triggered, this, &MenuView::settingsPressed);
     connect(d->help, &QAction::triggered, this, &MenuView::helpPressed);
 
     auto closeMenu = [this] { WAF::Animation::sideSlideOut(this); };
     connect(this, &MenuView::storiesPressed, this, closeMenu);
+    connect(this, &MenuView::createStoryPressed, this, closeMenu);
+    connect(this, &MenuView::openStoryPressed, this, closeMenu);
     connect(this, &MenuView::storyPressed, this, closeMenu);
+    connect(this, &MenuView::saveStoryAsPressed, this, closeMenu);
     connect(this, &MenuView::importPressed, this, closeMenu);
+    connect(this, &MenuView::exportPressed, this, closeMenu);
+    connect(this, &MenuView::settingsPressed, this, closeMenu);
+    connect(this, &MenuView::helpPressed, this, closeMenu);
 
     setVisible(false);
 }

@@ -5,6 +5,7 @@
 #include "content/account/account_manager.h"
 #include "content/onboarding/onboarding_manager.h"
 #include "content/projects/projects_manager.h"
+#include "content/settings/settings_manager.h"
 
 #ifdef CLOUD_SERVICE_MANAGER
 #include <shredder/starc/cloud_service_manager.h>
@@ -56,6 +57,16 @@ public:
     void showMenu();
 
     /**
+     * @brief Показать страницу проектов
+     */
+    void showProjects();
+
+    /**
+     * @brief Показать страницу настроек
+     */
+    void showSettings();
+
+    /**
      * @brief Установить перевод
      */
     void setTranslation(QLocale::Language _language);
@@ -84,6 +95,7 @@ public:
     QScopedPointer<AccountManager> accountManager;
     QScopedPointer<OnboardingManager> onboardingManager;
     QScopedPointer<ProjectsManager> projectsManager;
+    QScopedPointer<SettingsManager> settingsManager;
 #ifdef CLOUD_SERVICE_MANAGER
     QScopedPointer<CloudServiceManager> cloudServiceManager;
 #endif
@@ -95,7 +107,8 @@ ApplicationManager::Implementation::Implementation(ApplicationManager* _q)
       menuView(new Ui::MenuView(applicationView)),
       accountManager(new AccountManager(nullptr, applicationView)),
       onboardingManager(new OnboardingManager(nullptr, applicationView)),
-      projectsManager(new ProjectsManager(nullptr, applicationView))
+      projectsManager(new ProjectsManager(nullptr, applicationView)),
+      settingsManager(new SettingsManager(nullptr, applicationView))
 #ifdef CLOUD_SERVICE_MANAGER
     , cloudServiceManager(new CloudServiceManager)
 #endif
@@ -136,10 +149,12 @@ void ApplicationManager::Implementation::showContent()
         //
         // ... а затем уже отобразить
         //
-        applicationView->showContent(projectsManager->toolBar(),
-                                     projectsManager->navigator(),
-                                     projectsManager->view());
+        showProjects();
+
 #ifdef CLOUD_SERVICE_MANAGER
+        //
+        // Если менеджер облака доступен, отобржаем панель для работы с личным кабинетом
+        //
         accountManager->accountBar()->show();
 #endif
     }
@@ -150,6 +165,20 @@ void ApplicationManager::Implementation::showMenu()
     menuView->setFixedWidth(std::max(applicationView->navigationPanelWidth(),
                                      static_cast<int>(Ui::DesignSystem::drawer().width())));
     WAF::Animation::sideSlideIn(menuView);
+}
+
+void ApplicationManager::Implementation::showProjects()
+{
+    applicationView->showContent(projectsManager->toolBar(),
+                                 projectsManager->navigator(),
+                                 projectsManager->view());
+}
+
+void ApplicationManager::Implementation::showSettings()
+{
+    applicationView->showContent(settingsManager->toolBar(),
+                                 settingsManager->navigator(),
+                                 settingsManager->view());
 }
 
 void ApplicationManager::Implementation::setTranslation(QLocale::Language _language)
@@ -334,6 +363,9 @@ void ApplicationManager::initConnections()
         QApplication::processEvents();
         QApplication::quit();
     });
+    connect(d->menuView, &Ui::MenuView::storiesPressed, this, [this] { d->showProjects(); });
+    connect(d->menuView, &Ui::MenuView::createStoryPressed, d->projectsManager.data(), &ProjectsManager::createStoryRequested);
+    connect(d->menuView, &Ui::MenuView::settingsPressed, this, [this] { d->showSettings(); });
 
     //
     // Менеджер посадки
