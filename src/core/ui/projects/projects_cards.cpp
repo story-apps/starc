@@ -119,8 +119,6 @@ ProjectCard::ProjectCard(QGraphicsItem* _parent)
     m_actionsOpacityAnimation.setDuration(220);
     QObject::connect(&m_actionsOpacityAnimation, &QVariantAnimation::valueChanged, [this] { update(); });
 
-    m_decorationRadiusAnimation.setEasingCurve(QEasingCurve::InQuad);
-    m_decorationRadiusAnimation.setStartValue(1.0);
     m_decorationRadiusAnimation.setDuration(240);
     QObject::connect(&m_decorationRadiusAnimation, &QVariantAnimation::valueChanged, [this] { update(); });
 
@@ -233,44 +231,41 @@ void ProjectCard::paint(QPainter* _painter, const QStyleOptionGraphicsItem* _opt
     // Нижняя строка формируется в зависимости от того, наведена ли мышь на проект
     // и разруливается это всё за счёт прозрачности
     //
-    {
-        _painter->setOpacity(1.0 - m_actionsOpacityAnimation.currentValue().toReal());
 
-        //
-        // Дата последнего изменения
-        //
-        _painter->setPen(betweenBackgroundColor);
-        const qreal lastDateHeight = fontMetrics.lineSpacing() + Ui::DesignSystem::layout().px8() * 2;
-        const QRectF lastDateRect(loglineRect.left(), backgroundRect.bottom() - lastDateHeight,
-                                 pathRect.width(), lastDateHeight);
-        _painter->drawText(lastDateRect, Qt::AlignLeft | Qt::AlignTop, m_project.displayLastEditTime());
+    //
+    // Дата последнего изменения
+    //
+    _painter->setOpacity(1.0 - m_actionsOpacityAnimation.currentValue().toReal());
+    _painter->setPen(betweenBackgroundColor);
+    const qreal lastDateHeight = fontMetrics.lineSpacing() + Ui::DesignSystem::layout().px8() * 2;
+    const QRectF lastDateRect(loglineRect.left(), backgroundRect.bottom() - lastDateHeight,
+                             pathRect.width(), lastDateHeight);
+    _painter->drawText(lastDateRect, Qt::AlignLeft | Qt::AlignTop, m_project.displayLastEditTime());
 
-        //
-        // Иконка расположения проекта
-        //
-        _painter->setPen(Ui::DesignSystem::color().onBackground());
-        _painter->setFont(Ui::DesignSystem::font().iconsMid());
-        const QRectF iconRect(backgroundRect.right() - Ui::DesignSystem::layout().px24() * 2,
-                              backgroundRect.bottom() - Ui::DesignSystem::layout().px24() * 2,
-                              Ui::DesignSystem::layout().px24() * 2,
-                              Ui::DesignSystem::layout().px24() * 2);
-        _painter->drawText(iconRect, Qt::AlignCenter,
-                           m_project.type() == Domain::ProjectType::Local ? "\uf379" : "\uf163");
-    }
-    {
-        //
-        // Иконки действий
-        //
-        _painter->setOpacity(m_actionsOpacityAnimation.currentValue().toReal());
-        const auto iconsRects = actionsRects();
-        if (m_project.type() == Domain::ProjectType::Local) {
-            _painter->drawText(iconsRects[0], Qt::AlignCenter, "\uf6d0"); // hide
-            _painter->drawText(iconsRects[1], Qt::AlignCenter, "\uf167"); // move to cloud
+    //
+    // Иконка расположения проекта
+    //
+    _painter->setOpacity(1.0);
+    _painter->setPen(Ui::DesignSystem::color().onBackground());
+    _painter->setFont(Ui::DesignSystem::font().iconsMid());
+    const QRectF iconRect(backgroundRect.right() - Ui::DesignSystem::layout().px24() * 2,
+                          backgroundRect.bottom() - Ui::DesignSystem::layout().px24() * 2,
+                          Ui::DesignSystem::layout().px24() * 2,
+                          Ui::DesignSystem::layout().px24() * 2);
+    _painter->drawText(iconRect, Qt::AlignCenter,
+                       m_project.type() == Domain::ProjectType::Local ? "\uf379" : "\uf163");
 
-        } else {
-            _painter->drawText(iconsRects[0], Qt::AlignCenter, "\uf1c0"); // delete
-            _painter->drawText(iconsRects[1], Qt::AlignCenter, "\uf3eb"); // pencil
-        }
+    //
+    // Иконки действий
+    //
+    _painter->setOpacity(m_actionsOpacityAnimation.currentValue().toReal());
+    const auto iconsRects = actionsRects();
+    if (m_project.type() == Domain::ProjectType::Local) {
+        _painter->drawText(iconsRects[0], Qt::AlignCenter, "\uf167"); // move to cloud
+        _painter->drawText(iconsRects[1], Qt::AlignCenter, "\uf6d0"); // hide
+    } else {
+        _painter->drawText(iconsRects[0], Qt::AlignCenter, "\uf3eb"); // pencil
+        _painter->drawText(iconsRects[1], Qt::AlignCenter, "\uf1c0"); // delete
     }
 
     //
@@ -313,11 +308,15 @@ void ProjectCard::mousePressEvent(QGraphicsSceneMouseEvent* _event)
     setZValue(nextZValue());
 
     m_decorationCenterPosition = _event->pos();
+    m_decorationRadiusAnimation.setEasingCurve(QEasingCurve::InQuad);
+    m_decorationRadiusAnimation.setStartValue(1.0);
     m_decorationRadiusAnimation.setEndValue(rect().width());
     for (const auto& rect : actionsRects()) {
         if (rect.contains(_event->pos())) {
             m_decorationCenterPosition = rect.center();
-            m_decorationRadiusAnimation.setEndValue(rect.width());
+            m_decorationRadiusAnimation.setEasingCurve(QEasingCurve::OutQuad);
+            m_decorationRadiusAnimation.setStartValue(rect.width() / 2);
+            m_decorationRadiusAnimation.setEndValue(rect.height() * 2 / 3);
             break;
         }
     }
@@ -340,18 +339,18 @@ void ProjectCard::mouseReleaseEvent(QGraphicsSceneMouseEvent* _event)
         const auto iconsRects = actionsRects();
         if (m_project.type() == Domain::ProjectType::Local) {
             if (iconsRects[0].contains(_event->pos())) {
-                emit projectsScene()->hideProjectRequested(m_project);
+                emit projectsScene()->moveProjectToCloudRequested(m_project);
                 return;
             } else if (iconsRects[1].contains(_event->pos())) {
-                emit projectsScene()->moveProjectToCloudRequested(m_project);
+                emit projectsScene()->hideProjectRequested(m_project);
                 return;
             }
         } else {
             if (iconsRects[0].contains(_event->pos())) {
-                emit projectsScene()->removeProjectRequested(m_project);
+                emit projectsScene()->changeProjectNameRequested(m_project);
                 return;
             } else if (iconsRects[1].contains(_event->pos())) {
-                emit projectsScene()->changeProjectNameRequested(m_project);
+                emit projectsScene()->removeProjectRequested(m_project);
                 return;
             }
         }
@@ -382,16 +381,19 @@ qreal ProjectCard::nextZValue() const
 QVector<QRectF> ProjectCard::actionsRects() const
 {
     const QRectF backgroundRect = rect().marginsRemoved(Ui::DesignSystem::card().shadowMargins());
-    QRectF iconRect(backgroundRect.right() - Ui::DesignSystem::layout().px24() * 2,
+    const QPixmap& poster = m_project.poster();
+    const QRectF posterRect(backgroundRect.topLeft(),
+                            poster.size().scaled(backgroundRect.size().toSize(), Qt::KeepAspectRatio));
+    QRectF iconRect(posterRect.right() + Ui::DesignSystem::layout().px12(),
                     backgroundRect.bottom() - Ui::DesignSystem::layout().px24() * 2,
-                    Ui::DesignSystem::layout().px24() * 2,
+                    Ui::DesignSystem::layout().px24(),
                     Ui::DesignSystem::layout().px24() * 2);
 
     QVector<QRectF> rects;
     const int kRepeats = m_project.type() == Domain::ProjectType::Local ? 2 : 2;
     for (int repeat = 0; repeat < kRepeats; ++repeat) {
         rects.append(iconRect);
-        iconRect.moveLeft(iconRect.left() - Ui::DesignSystem::layout().px8() * 5);
+        iconRect.moveLeft(iconRect.left() + Ui::DesignSystem::layout().px8() * 5);
     }
 
     return rects;

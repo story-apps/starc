@@ -115,7 +115,7 @@ void ProjectsManager::loadProjects()
 //    for (int i=0;i<10;++i) {
 //        Domain::Project p;
 //        p.setName("test" + QString::number(i));
-//        p.setType(Domain::ProjectType::Local);
+//        p.setType(i%2 ? Domain::ProjectType::Remote : Domain::ProjectType::Local);
 //        d->projects->prepend(p);
 //    }
 }
