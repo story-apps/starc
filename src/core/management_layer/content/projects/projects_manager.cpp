@@ -65,7 +65,14 @@ ProjectsManager::ProjectsManager(QObject* _parent, QWidget* _parentWidget)
 {
     connect(d->toolBar, &Ui::ProjectsToolBar::menuPressed, this, &ProjectsManager::menuRequested);
     connect(d->navigator, &Ui::ProjectsNavigator::createStoryPressed, this, &ProjectsManager::createStoryRequested);
+
     connect(d->view, &Ui::ProjectsView::createStoryPressed, this, &ProjectsManager::createStoryRequested);
+    connect(d->view, &Ui::ProjectsView::hideProjectRequested, this, [this] (const Domain::Project& _project) {
+        d->projects->remove(_project);
+    });
+    connect(d->view, &Ui::ProjectsView::removeProjectRequested, this, [this] (const Domain::Project& _project) {
+        d->projects->remove(_project);
+    });
 }
 
 ProjectsManager::~ProjectsManager() = default;
@@ -108,6 +115,7 @@ void ProjectsManager::loadProjects()
 //    for (int i=0;i<10;++i) {
 //        Domain::Project p;
 //        p.setName("test" + QString::number(i));
+//        p.setType(Domain::ProjectType::Local);
 //        d->projects->prepend(p);
 //    }
 }

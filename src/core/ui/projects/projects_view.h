@@ -3,6 +3,7 @@
 #include <ui/widgets/stack_widget/stack_widget.h>
 
 namespace Domain {
+    class Project;
     class ProjectsModel;
 }
 
@@ -47,7 +48,30 @@ signals:
      */
     void openStoryPressed();
 
+    /**
+     * @brief Пользователь хочет перенести проект в облако
+     */
+    void moveProjectToCloudRequested(const Domain::Project& _project);
+
+    /**
+     * @brief Пользователь хочет скрыть проект
+     */
+    void hideProjectRequested(const Domain::Project& _project);
+
+    /**
+     * @brief Пользователь хочет изменить название проекта
+     */
+    void changeProjectNameRequested(const Domain::Project& _project);
+
+    /**
+     * @brief Пользователь хочет удалить проект
+     */
+    void removeProjectRequested(const Domain::Project& _project);
+
 protected:
+    /**
+     * @brief Переопределяем для корректировки положения панели инструментов
+     */
     void resizeEvent(QResizeEvent* _event) override;
 
     /**

@@ -26,6 +26,26 @@ signals:
      * @brief Пользователь выбрал проект
      */
     void projectPressed(const Domain::Project& _project);
+
+    /**
+     * @brief Пользователь хочет перенести проект в облако
+     */
+    void moveProjectToCloudRequested(const Domain::Project& _project);
+
+    /**
+     * @brief Пользователь хочет скрыть проект
+     */
+    void hideProjectRequested(const Domain::Project& _project);
+
+    /**
+     * @brief Пользователь хочет изменить название проекта
+     */
+    void changeProjectNameRequested(const Domain::Project& _project);
+
+    /**
+     * @brief Пользователь хочет удалить проект
+     */
+    void removeProjectRequested(const Domain::Project& _project);
 };
 
 /**
@@ -59,6 +79,26 @@ signals:
      * @brief Запрос на скрытие (когда не осталось проектов)
      */
     void hideRequested();
+
+    /**
+     * @brief Пользователь хочет перенести проект в облако
+     */
+    void moveProjectToCloudRequested(const Domain::Project& _project);
+
+    /**
+     * @brief Пользователь хочет скрыть проект
+     */
+    void hideProjectRequested(const Domain::Project& _project);
+
+    /**
+     * @brief Пользователь хочет изменить название проекта
+     */
+    void changeProjectNameRequested(const Domain::Project& _project);
+
+    /**
+     * @brief Пользователь хочет удалить проект
+     */
+    void removeProjectRequested(const Domain::Project& _project);
 
 protected:
     /**

@@ -241,6 +241,19 @@ void ProjectsModel::prepend(const Project& _project)
     endInsertRows();
 }
 
+void ProjectsModel::remove(const Project &_project)
+{
+    const int kInvalidIndex = -1;
+    const int projectIndex = d->projects.indexOf(_project);
+    if (projectIndex == kInvalidIndex) {
+        return;
+    }
+
+    beginRemoveRows({}, projectIndex, projectIndex);
+    d->projects.removeAt(projectIndex);
+    endRemoveRows();
+}
+
 bool ProjectsModel::isEmpty() const
 {
     return d->projects.isEmpty();

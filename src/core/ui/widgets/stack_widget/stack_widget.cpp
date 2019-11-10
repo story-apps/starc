@@ -61,10 +61,10 @@ void StackWidget::setCurrentWidget(QWidget *widget)
     //
     d->currentWidget = widget;
     if (!d->widgets.contains(d->currentWidget)) {
-        d->currentWidget->setParent(this);
-        d->currentWidget->resize(size());
         d->widgets.append(d->currentWidget);
     }
+    d->currentWidget->setParent(this);
+    d->currentWidget->resize(size());
     d->currentWidgetImage = d->currentWidget->grab();
     d->currentWidget->hide();
 

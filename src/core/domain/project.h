@@ -115,6 +115,11 @@ public:
     void prepend(const Project& _project);
 
     /**
+     * @brief Удалить проект
+     */
+    void remove(const Project& _project);
+
+    /**
      * @brief Пуста ли модель
      */
     bool isEmpty() const;
