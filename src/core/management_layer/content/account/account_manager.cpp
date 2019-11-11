@@ -63,10 +63,6 @@ AccountManager::AccountManager(QObject* _parent, QWidget* _parentWidget)
       d(new Implementation(_parentWidget))
 {
     connect(d->accountBar, &Ui::AccountBar::accountPressed, this, [this] {
-        emit showAccountRequired();
-        return;
-
-
         //
         // Если авторизованы
         //
@@ -89,8 +85,10 @@ AccountManager::AccountManager(QObject* _parent, QWidget* _parentWidget)
             d->loginDialog = new Ui::LoginDialog(d->topLevelWidget);
             connect(d->loginDialog, &Ui::LoginDialog::emailEntered, this, &AccountManager::emailEntered);
             connect(d->loginDialog, &Ui::LoginDialog::restorePasswordRequired, this, &AccountManager::restorePasswordRequired);
+            connect(d->loginDialog, &Ui::LoginDialog::passwordRestoringConfirmationCodeEntered, this, &AccountManager::passwordRestoringConfirmationCodeEntered);
+            connect(d->loginDialog, &Ui::LoginDialog::changePasswordRequested, this, &AccountManager::changePasswordRequested);
             connect(d->loginDialog, &Ui::LoginDialog::registrationRequired, this, &AccountManager::registrationRequired);
-            connect(d->loginDialog, &Ui::LoginDialog::loginConfirmationCodeEntered,
+            connect(d->loginDialog, &Ui::LoginDialog::registrationConfirmationCodeEntered,
                     this, &AccountManager::registrationConfirmationCodeEntered);
             connect(d->loginDialog, &Ui::LoginDialog::loginRequired, this, &AccountManager::loginRequired);
             connect(d->loginDialog, &Ui::LoginDialog::canceled, d->loginDialog, &Ui::LoginDialog::hideDialog);
@@ -143,19 +141,37 @@ void AccountManager::allowRegistration()
 void AccountManager::prepareToEnterRegistrationConfirmationCode()
 {
     Q_ASSERT(d->loginDialog);
-    d->loginDialog->showConfirmationCodeField();
+    d->loginDialog->showRegistrationConfirmationCodeField();
 }
 
 void AccountManager::setRegistrationConfirmationError(const QString& _error)
 {
     Q_ASSERT(d->loginDialog);
-    d->loginDialog->setConfirmationError(_error);
+    d->loginDialog->setRegistrationConfirmationError(_error);
 }
 
 void AccountManager::allowLogin()
 {
     Q_ASSERT(d->loginDialog);
-    d->loginDialog->showLoginButton();
+    d->loginDialog->showLoginButtons();
+}
+
+void AccountManager::prepareToEnterRestorePasswordConfirmationCode()
+{
+    Q_ASSERT(d->loginDialog);
+    d->loginDialog->showRestorePasswordConfirmationCodeField();
+}
+
+void AccountManager::allowChangePassword()
+{
+    Q_ASSERT(d->loginDialog);
+    d->loginDialog->showChangePasswordFiledAndButton();
+}
+
+void AccountManager::setRestorePasswordConfirmationError(const QString& _error)
+{
+    Q_ASSERT(d->loginDialog);
+    d->loginDialog->setRestorePasswordConfirmationError(_error);
 }
 
 void AccountManager::setLoginPasswordError(const QString& _error)

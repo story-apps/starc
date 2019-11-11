@@ -29,10 +29,13 @@ public:
 
     TextField* email = nullptr;
     TextField* password = nullptr;
-    TextField* confirmationCode = nullptr;
+    TextField* registrationConfirmationCode = nullptr;
+    TextField* restorePasswordConfirmationCode = nullptr;
 
     QHBoxLayout* buttonsLayout = nullptr;
     Button* registrationButton = nullptr;
+    Button* restorePasswordButton = nullptr;
+    Button* changePasswordButton = nullptr;
     Button* loginButton = nullptr;
     Button* cancelButton = nullptr;
 };
@@ -40,8 +43,11 @@ public:
 LoginDialog::Implementation::Implementation(QWidget* _parent)
     : email(new TextField(_parent)),
       password(new TextField(_parent)),
-      confirmationCode(new TextField(_parent)),
+      registrationConfirmationCode(new TextField(_parent)),
+      restorePasswordConfirmationCode(new TextField(_parent)),
       registrationButton(new Button(_parent)),
+      restorePasswordButton(new Button(_parent)),
+      changePasswordButton(new Button(_parent)),
       loginButton(new Button(_parent)),
       cancelButton(new Button(_parent))
 {
@@ -51,17 +57,22 @@ LoginDialog::Implementation::Implementation(QWidget* _parent)
     password->setPasswordModeEnabled(true);
     password->setTrailingIcon("\uf6d0");
 
-    confirmationCode->setTabChangesFocus(true);
+    registrationConfirmationCode->setTabChangesFocus(true);
 
     buttonsLayout = new QHBoxLayout;
     buttonsLayout->setContentsMargins({});
     buttonsLayout->setSpacing(0);
     buttonsLayout->addStretch();
     buttonsLayout->addWidget(registrationButton);
+    buttonsLayout->addWidget(restorePasswordButton);
+    buttonsLayout->addWidget(changePasswordButton);
     buttonsLayout->addWidget(loginButton);
     buttonsLayout->addWidget(cancelButton);
 
-    confirmationCode->hide();
+    registrationConfirmationCode->hide();
+    restorePasswordConfirmationCode->hide();
+    restorePasswordButton->hide();
+    changePasswordButton->hide();
     registrationButton->hide();
     loginButton->hide();
 }
@@ -101,10 +112,11 @@ LoginDialog::LoginDialog(QWidget* _parent)
     d->cancelButton->installEventFilter(this);
 
     contentsLayout()->addWidget(d->email, 0, 0);
-    contentsLayout()->addWidget(d->password, 1, 0);
-    contentsLayout()->addWidget(d->confirmationCode, 2, 0);
-    contentsLayout()->setRowStretch(3, 1);
-    contentsLayout()->addLayout(d->buttonsLayout, 4, 0);
+    contentsLayout()->addWidget(d->restorePasswordConfirmationCode, 1, 0);
+    contentsLayout()->addWidget(d->password, 2, 0);
+    contentsLayout()->addWidget(d->registrationConfirmationCode, 3, 0);
+    contentsLayout()->setRowStretch(4, 1);
+    contentsLayout()->addLayout(d->buttonsLayout, 5, 0);
 
     connect(d->email, &TextField::textChanged, &d->checkEmailDebouncer, &Debouncer::orderWork);
     connect(&d->checkEmailDebouncer, &Debouncer::gotWork, this, [this] { d->checkEmail(); });
@@ -116,8 +128,17 @@ LoginDialog::LoginDialog(QWidget* _parent)
         password->setPasswordModeEnabled(!password->isPasswordModeEnabled());
         password->setTrailingIcon(password->isPasswordModeEnabled() ? "\uf6d0" : "\uf6cf");
     });
-    connect(d->confirmationCode, &TextField::textChanged, this, [this] {
-        emit confirmationCodeEntered(d->email->text(), d->confirmationCode->text());
+    connect(d->registrationConfirmationCode, &TextField::textChanged, this, [this] {
+        emit registrationConfirmationCodeEntered(d->email->text(), d->registrationConfirmationCode->text());
+    });
+    connect(d->restorePasswordConfirmationCode, &TextField::textChanged, this, [this] {
+        emit passwordRestoringConfirmationCodeEntered(d->email->text(), d->restorePasswordConfirmationCode->text());
+    });
+    connect(d->restorePasswordButton, &Button::clicked, this, [this] {
+        emit restorePasswordRequired(d->email->text());
+    });
+    connect(d->changePasswordButton, &Button::clicked, this, [this] {
+        emit changePasswordRequested(d->email->text(), d->restorePasswordConfirmationCode->text(), d->password->text());
     });
     connect(d->registrationButton, &Button::clicked, this, [this] {
         emit registrationRequired(d->email->text(), d->password->text());
@@ -143,30 +164,59 @@ QString LoginDialog::password() const
 
 void LoginDialog::showRegistrationButton()
 {
+    d->restorePasswordButton->hide();
     d->loginButton->hide();
     d->registrationButton->show();
 }
 
-void LoginDialog::showConfirmationCodeField()
+void LoginDialog::showRegistrationConfirmationCodeField()
 {
-    d->confirmationCode->show();
-    d->confirmationCode->setFocus();
+    d->registrationConfirmationCode->show();
+    d->registrationConfirmationCode->setFocus();
 
     d->email->setEnabled(false);
     d->password->setEnabled(false);
     d->registrationButton->setEnabled(false);
 }
 
-void LoginDialog::setConfirmationError(const QString& _error)
+void LoginDialog::setRegistrationConfirmationError(const QString& _error)
 {
-    d->confirmationCode->setError(_error);
-    d->confirmationCode->setFocus();
+    d->registrationConfirmationCode->setError(_error);
+    d->registrationConfirmationCode->setFocus();
 }
 
-void LoginDialog::showLoginButton()
+void LoginDialog::showLoginButtons()
 {
     d->registrationButton->hide();
+    d->restorePasswordButton->show();
     d->loginButton->show();
+}
+
+void LoginDialog::showRestorePasswordConfirmationCodeField()
+{
+    d->password->hide();
+    d->restorePasswordConfirmationCode->show();
+    d->restorePasswordConfirmationCode->setFocus();
+    d->restorePasswordButton->hide();
+    d->loginButton->hide();
+
+    d->email->setEnabled(false);
+}
+
+void LoginDialog::setRestorePasswordConfirmationError(const QString& _error)
+{
+    d->restorePasswordConfirmationCode->setError(_error);
+    d->restorePasswordConfirmationCode->setFocus();
+}
+
+void LoginDialog::showChangePasswordFiledAndButton()
+{
+    d->password->setLabel(tr("New password"));
+    d->password->show();
+    d->password->setFocus();
+    d->changePasswordButton->show();
+
+    d->restorePasswordConfirmationCode->setEnabled(false);
 }
 
 void LoginDialog::setPasswordError(const QString& _error)
@@ -188,8 +238,11 @@ void LoginDialog::updateTranslations()
 
     d->email->setLabel(tr("Email"));
     d->password->setLabel(tr("Password"));
-    d->confirmationCode->setLabel(tr("Confirmation code"));
+    d->registrationConfirmationCode->setLabel(tr("Confirmation code"));
+    d->restorePasswordConfirmationCode->setLabel(tr("Confirmation code"));
     d->registrationButton->setText(tr("Sign up"));
+    d->restorePasswordButton->setText(tr("Restore password"));
+    d->changePasswordButton->setText(tr("Change password"));
     d->loginButton->setText(tr("Sign in"));
     d->cancelButton->setText(tr("Cancel"));
 }
@@ -198,12 +251,14 @@ void LoginDialog::designSystemChangeEvent(DesignSystemChangeEvent* _event)
 {
     Q_UNUSED(_event)
 
-    d->registrationButton->setBackgroundColor(Ui::DesignSystem::color().secondary());
-    d->registrationButton->setTextColor(Ui::DesignSystem::color().secondary());
-    d->loginButton->setBackgroundColor(Ui::DesignSystem::color().secondary());
-    d->loginButton->setTextColor(Ui::DesignSystem::color().secondary());
-    d->cancelButton->setBackgroundColor(Ui::DesignSystem::color().secondary());
-    d->cancelButton->setTextColor(Ui::DesignSystem::color().secondary());
+    for (auto button : { d->registrationButton,
+                         d->restorePasswordButton,
+                         d->changePasswordButton,
+                         d->loginButton,
+                         d->cancelButton }) {
+        button->setBackgroundColor(Ui::DesignSystem::color().secondary());
+        button->setTextColor(Ui::DesignSystem::color().secondary());
+    }
 
     contentsLayout()->setSpacing(static_cast<int>(Ui::DesignSystem::layout().px8()));
     d->buttonsLayout->setContentsMargins(QMarginsF(Ui::DesignSystem::layout().px12(),

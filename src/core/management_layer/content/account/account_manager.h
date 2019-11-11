@@ -35,7 +35,7 @@ public:
     void allowRegistration();
 
     /**
-     * @brief Подготовить диалог авторизации ко вводу кода подтверждения
+     * @brief Подготовить диалог авторизации ко вводу кода подтверждения регистрации
      */
     void prepareToEnterRegistrationConfirmationCode();
 
@@ -48,6 +48,21 @@ public:
      * @brief Разрешить пользователю авторизоваться
      */
     void allowLogin();
+
+    /**
+     * @brief Подготовить диалог авторизации ко вводу кода подтверждения смены пароля
+     */
+    void prepareToEnterRestorePasswordConfirmationCode();
+
+    /**
+     * @brief Разрешить сменить пароль
+     */
+    void allowChangePassword();
+
+    /**
+     * @brief Задать ошибку ввода проверочного кода при сбросе пароля
+     */
+    void setRestorePasswordConfirmationError(const QString& _error);
 
     /**
      * @brief Задать ошибку ввода пароля при авторизации
@@ -80,6 +95,21 @@ signals:
      * @brief Email для авторизации был введён пользователем
      */
     void emailEntered(const QString& _email);
+
+    /**
+     * @brief Пользователь хочет восстановить пароль
+     */
+    void restorePasswordRequired(const QString& _email);
+
+    /**
+     * @brief Введён код подтверждения восстановления пароля
+     */
+    void passwordRestoringConfirmationCodeEntered(const QString& email, const QString& _code);
+
+    /**
+     * @brief Пользователь хочет сменить пароль
+     */
+    void changePasswordRequested(const QString& _email, const QString& _code, const QString& _password);
 
     /**
      * @brief Пользователь хочет зарегистрироваться

@@ -35,17 +35,32 @@ public:
     /**
      * @brief Показать поле для ввода кода подтвержения регистрации
      */
-    void showConfirmationCodeField();
+    void showRegistrationConfirmationCodeField();
 
     /**
-     * @brief Задать ошибку ввода проверочного кода
+     * @brief Задать ошибку ввода проверочного кода для регистрации
      */
-    void setConfirmationError(const QString& _error);
+    void setRegistrationConfirmationError(const QString& _error);
 
     /**
-     * @brief Показать кнопку авторизации
+     * @brief Показать кнопки авторизации
      */
-    void showLoginButton();
+    void showLoginButtons();
+
+    /**
+     * @brief Показать поле ввода кода подтврждения смены пароля
+     */
+    void showRestorePasswordConfirmationCodeField();
+
+    /**
+     * @brief Задать ошибку ввода проверочного кода для смены пароля
+     */
+    void setRestorePasswordConfirmationError(const QString& _error);
+
+    /**
+     * @brief Показать поле ввода нового пароля и кнопку смены пароля
+     */
+    void showChangePasswordFiledAndButton();
 
     /**
      * @brief Задать ошибку ввода пароля
@@ -59,6 +74,21 @@ signals:
     void emailEntered(const QString& _email);
 
     /**
+     * @brief Пользователь хочет восстановить пароль
+     */
+    void restorePasswordRequired(const QString& _email);
+
+    /**
+     * @brief Введён код подтверждения регистрации
+     */
+    void passwordRestoringConfirmationCodeEntered(const QString& _email, const QString& _code);
+
+    /**
+     * @brief Пользователь хочет сменить пароль
+     */
+    void changePasswordRequested(const QString& _email, const QString& _code, const QString& _password);
+
+    /**
      * @brief Пользователь хочет зарегистрироваться
      */
     void registrationRequired(const QString& _email, const QString& _password);
@@ -66,7 +96,7 @@ signals:
     /**
      * @brief Введён код подтверждения регистрации
      */
-    void confirmationCodeEntered(const QString& _email, const QString& _code);
+    void registrationConfirmationCodeEntered(const QString& _email, const QString& _code);
 
     /**
      * @brief Пользователь хочет авторизоваться

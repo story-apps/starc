@@ -483,28 +483,63 @@ void ApplicationManager::initConnections()
     //
     // ... авторизация/регистрация
     //
-    connect(d->accountManager.data(), &AccountManager::emailEntered,
-            d->cloudServiceManager.data(), &CloudServiceManager::canLogin);
-    connect(d->accountManager.data(), &AccountManager::registrationRequired,
-            d->cloudServiceManager.data(), &CloudServiceManager::registerAccount);
-    connect(d->accountManager.data(), &AccountManager::registrationConfirmationCodeEntered,
-            d->cloudServiceManager.data(), &CloudServiceManager::confirmRegistration);
-    connect(d->accountManager.data(), &AccountManager::loginRequired,
-            d->cloudServiceManager.data(), &CloudServiceManager::login);
-    connect(d->cloudServiceManager.data(), &CloudServiceManager::registrationAllowed,
-            d->accountManager.data(), &AccountManager::allowRegistration);
-    connect(d->cloudServiceManager.data(), &CloudServiceManager::registrationConfiramtionCodeSended,
-            d->accountManager.data(), &AccountManager::prepareToEnterRegistrationConfirmationCode);
-    connect(d->cloudServiceManager.data(), &CloudServiceManager::registrationConfirmationError,
-            d->accountManager.data(), &AccountManager::setRegistrationConfirmationError);
-    connect(d->cloudServiceManager.data(), &CloudServiceManager::registrationCompleted,
-            d->accountManager.data(), &AccountManager::login);
-    connect(d->cloudServiceManager.data(), &CloudServiceManager::loginAllowed,
-            d->accountManager.data(), &AccountManager::allowLogin);
-    connect(d->cloudServiceManager.data(), &CloudServiceManager::loginPasswordError,
-            d->accountManager.data(), &AccountManager::setLoginPasswordError);
-    connect(d->cloudServiceManager.data(), &CloudServiceManager::loginCompleted,
-            d->accountManager.data(), &AccountManager::completeLogin);
+    {
+        //
+        // проверка регистрация или вход
+        //
+        connect(d->accountManager.data(), &AccountManager::emailEntered,
+                d->cloudServiceManager.data(), &CloudServiceManager::canLogin);
+        connect(d->cloudServiceManager.data(), &CloudServiceManager::registrationAllowed,
+                d->accountManager.data(), &AccountManager::allowRegistration);
+        connect(d->cloudServiceManager.data(), &CloudServiceManager::loginAllowed,
+                d->accountManager.data(), &AccountManager::allowLogin);
+
+        //
+        // регистрация
+        //
+        connect(d->accountManager.data(), &AccountManager::registrationRequired,
+                d->cloudServiceManager.data(), &CloudServiceManager::registerAccount);
+        connect(d->accountManager.data(), &AccountManager::registrationConfirmationCodeEntered,
+                d->cloudServiceManager.data(), &CloudServiceManager::confirmRegistration);
+        connect(d->cloudServiceManager.data(), &CloudServiceManager::registrationConfiramtionCodeSended,
+                d->accountManager.data(), &AccountManager::prepareToEnterRegistrationConfirmationCode);
+        connect(d->cloudServiceManager.data(), &CloudServiceManager::registrationConfirmationError,
+                d->accountManager.data(), &AccountManager::setRegistrationConfirmationError);
+        connect(d->cloudServiceManager.data(), &CloudServiceManager::registrationCompleted,
+                d->accountManager.data(), &AccountManager::login);
+
+        //
+        // восстановление пароля
+        //
+        connect(d->accountManager.data(), &AccountManager::restorePasswordRequired,
+                d->cloudServiceManager.data(), &CloudServiceManager::restorePassword);
+        connect(d->accountManager.data(), &AccountManager::passwordRestoringConfirmationCodeEntered,
+                d->cloudServiceManager.data(), &CloudServiceManager::confirmPasswordRestoring);
+        connect(d->accountManager.data(), &AccountManager::changePasswordRequested,
+                d->cloudServiceManager.data(), &CloudServiceManager::changePassword);
+        connect(d->cloudServiceManager.data(), &CloudServiceManager::passwordRestoringConfirmationCodeSended,
+                d->accountManager.data(), &AccountManager::prepareToEnterRestorePasswordConfirmationCode);
+        connect(d->cloudServiceManager.data(), &CloudServiceManager::passwordRestoringConfirmationSucceed,
+                d->accountManager.data(), &AccountManager::allowChangePassword);
+        connect(d->cloudServiceManager.data(), &CloudServiceManager::registrationConfirmationError,
+                d->accountManager.data(), &AccountManager::setRestorePasswordConfirmationError);
+        connect(d->cloudServiceManager.data(), &CloudServiceManager::passwordChanged,
+                d->accountManager.data(), &AccountManager::login);
+
+        //
+        // авторизация
+        //
+        connect(d->accountManager.data(), &AccountManager::loginRequired,
+                d->cloudServiceManager.data(), &CloudServiceManager::login);
+        connect(d->cloudServiceManager.data(), &CloudServiceManager::loginPasswordError,
+                d->accountManager.data(), &AccountManager::setLoginPasswordError);
+        connect(d->cloudServiceManager.data(), &CloudServiceManager::loginCompleted,
+                d->accountManager.data(), &AccountManager::completeLogin);
+    }
+
+    //
+    // Получены параметры об аккаунте
+    //
     connect(d->cloudServiceManager.data(), &CloudServiceManager::accountParametersLoaded,
             d->accountManager.data(), &AccountManager::setAccountParameters);
 #endif
