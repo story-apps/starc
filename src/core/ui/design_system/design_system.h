@@ -469,6 +469,11 @@ public:
         qreal px62() const;
 
         /**
+         * @brief Верхний отступ контента
+         */
+        qreal topContentMargin() const;
+
+        /**
          * @brief Отступы между кнопками
          */
         qreal buttonsSpacing() const;

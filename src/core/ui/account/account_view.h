@@ -15,6 +15,7 @@ class AccountView : public Widget
 
 public:
     explicit AccountView(QWidget* _parent = nullptr);
+    ~AccountView() override;
 
 protected:
     /**
@@ -31,6 +32,10 @@ protected:
      * @brief Обновляем навигатор при изменении дизайн системы
      */
     void designSystemChangeEvent(DesignSystemChangeEvent* _event) override;
+
+private:
+    class Implementation;
+    QScopedPointer<Implementation> d;
 };
 
 } // namespace Ui

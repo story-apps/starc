@@ -39,6 +39,7 @@ SOURCES += \
     ui/settings/settings_navigator.cpp \
     ui/settings/settings_tool_bar.cpp \
     ui/settings/settings_view.cpp \
+    ui/widgets/card/card.cpp \
     ui/widgets/circular_progress_bar/circular_progress_bar.cpp \
     ui/widgets/drawer/drawer.cpp \
     ui/widgets/stack_widget/stack_widget.cpp \
@@ -110,6 +111,7 @@ HEADERS += \
     ui/settings/settings_navigator.h \
     ui/settings/settings_tool_bar.h \
     ui/settings/settings_view.h \
+    ui/widgets/card/card.h \
     ui/widgets/circular_progress_bar/circular_progress_bar.h \
     ui/widgets/drawer/drawer.h \
     ui/widgets/stack_widget/stack_widget.h \
