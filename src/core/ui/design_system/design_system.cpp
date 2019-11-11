@@ -1123,6 +1123,7 @@ public:
     qreal height = 48.0;
     qreal thumbRadius = 6.0;
     qreal trackHeight = 2.0;
+    qreal unfilledPartOpacity = 0.24;
 };
 
 DesignSystem::Slider::Implementation::Implementation(qreal _scaleFactor)
@@ -1153,7 +1154,58 @@ qreal DesignSystem::Slider::trackHeight() const
     return d->trackHeight;
 }
 
+qreal DesignSystem::Slider::unfilledPartOpacity() const
+{
+    return d->unfilledPartOpacity;
+}
+
 DesignSystem::Slider::Slider(qreal _scaleFactor)
+    : d(new Implementation(_scaleFactor))
+{
+}
+
+
+// ****
+
+
+class DesignSystem::ProgressBar::Implementation
+{
+public:
+    explicit Implementation(qreal _scaleFactor);
+
+    qreal linearTrackHeight = 2.0;
+    qreal circularTrackHeight = 8.0;
+    qreal unfilledPartOpacity = 0.24;
+};
+
+DesignSystem::ProgressBar::Implementation::Implementation(qreal _scaleFactor)
+{
+    linearTrackHeight *= _scaleFactor;
+    circularTrackHeight *= _scaleFactor;
+}
+
+
+// **
+
+
+DesignSystem::ProgressBar::~ProgressBar() = default;
+
+qreal DesignSystem::ProgressBar::linearTrackHeight() const
+{
+    return d->linearTrackHeight;
+}
+
+qreal DesignSystem::ProgressBar::circularTrackHeight() const
+{
+    return d->circularTrackHeight;
+}
+
+qreal DesignSystem::ProgressBar::unfilledPartOpacity() const
+{
+    return d->unfilledPartOpacity;
+}
+
+DesignSystem::ProgressBar::ProgressBar(qreal _scaleFactor)
     : d(new Implementation(_scaleFactor))
 {
 }
@@ -1763,6 +1815,7 @@ public:
     DesignSystem::ToggleButton toggleButton;
     DesignSystem::RadioButton radioButton;
     DesignSystem::Slider slider;
+    DesignSystem::ProgressBar progressBar;
     DesignSystem::TextField textField;
     DesignSystem::ScrollBar scrollBar;
     DesignSystem::FloatingToolBar floatingAppBar;
@@ -1792,6 +1845,7 @@ DesignSystemPrivate::DesignSystemPrivate(ApplicationTheme _theme, qreal _scaleFa
       toggleButton(_scaleFactor),
       radioButton(_scaleFactor),
       slider(_scaleFactor),
+      progressBar(_scaleFactor),
       textField(_scaleFactor, _color),
       scrollBar(_scaleFactor, _color),
       floatingAppBar(_scaleFactor),
@@ -2034,6 +2088,11 @@ const DesignSystem::RadioButton& DesignSystem::radioButton()
 const DesignSystem::Slider& DesignSystem::slider()
 {
     return instance()->d->slider;
+}
+
+const DesignSystem::ProgressBar& DesignSystem::progressBar()
+{
+    return instance()->d->progressBar;
 }
 
 const DesignSystem::TextField& DesignSystem::textField()

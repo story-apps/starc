@@ -3,7 +3,6 @@
 #include <ui/design_system/design_system.h>
 
 #include <QAction>
-#include <QDebug>
 
 
 namespace Ui

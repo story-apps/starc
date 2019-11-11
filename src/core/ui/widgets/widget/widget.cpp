@@ -107,7 +107,7 @@ void Widget::paintEvent(QPaintEvent* _event)
 
 void Widget::designSystemChangeEvent(DesignSystemChangeEvent* _event)
 {
-    Q_UNUSED(_event);
+    Q_UNUSED(_event)
 
     updateGeometry();
     update();

@@ -19,8 +19,6 @@ public:
      */
     QSize sizeHint() const override;
 
-signals:
-
 protected:
     /**
      * @brief Реализуем собственное рисование

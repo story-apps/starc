@@ -7,7 +7,7 @@ namespace Ui
 {
 
 /**
- * @brief Виджет панели инструментов аккаунта
+ * @brief Виджет панели инструментов аккаунта (вход в личный кабинет + чаты)
  */
 class AccountBar : public FloatingToolBar
 {

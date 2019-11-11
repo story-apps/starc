@@ -48,9 +48,9 @@ QSize AbstractLabel::sizeHint() const
     return QRect(QPoint(0,0), QSize(width, height)).marginsAdded(contentsMargins()).size();
 }
 
-int AbstractLabel::heightForWidth(int width) const
+int AbstractLabel::heightForWidth(int _width) const
 {
-    const int textWidth = width - contentsMargins().left() - contentsMargins().right();
+    const int textWidth = _width - contentsMargins().left() - contentsMargins().right();
     const int textHeight  = static_cast<int>(TextHelper::heightForWidth(d->text, textFont(), textWidth));
     return contentsMargins().top() + textHeight + contentsMargins().bottom();
 }

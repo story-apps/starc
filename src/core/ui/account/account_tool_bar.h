@@ -7,20 +7,20 @@ namespace Ui
 {
 
 /**
- * @brief Панель инструментов списка проектов
+ * @brief Панель инструментов личного кабинета
  */
-class ProjectsToolBar : public AppBar
+class AccountToolBar : public AppBar
 {
     Q_OBJECT
 
 public:
-    explicit ProjectsToolBar(QWidget* _parent = nullptr);
+    explicit AccountToolBar(QWidget* _parent = nullptr);
 
 signals:
     /**
-     * @brief Пользователь хочет открыть меню
+     * @brief Пользователь хочет выйти из личного кабинета
      */
-    void menuPressed();
+    void backPressed();
 
 protected:
     /**

@@ -653,8 +653,44 @@ public:
          */
         qreal trackHeight() const;
 
+        /**
+         * @brief Прозрачность незаполненной части
+         */
+        qreal unfilledPartOpacity() const;
+
     private:
         explicit Slider(qreal _scaleFactor);
+        friend class DesignSystemPrivate;
+        //
+        class Implementation;
+        QScopedPointer<Implementation> d;
+    };
+
+    /**
+     * @brief Параметры виджета прогрессбара
+     */
+    class ProgressBar
+    {
+    public:
+        ~ProgressBar();
+
+        /**
+         * @brief Высота прямого прогрессбара
+         */
+        qreal linearTrackHeight() const;
+
+        /**
+         * @brief Высота круглого прогрессбара
+         */
+        qreal circularTrackHeight() const;
+
+        /**
+         * @brief Прозрачность незаполненной части
+         */
+        qreal unfilledPartOpacity() const;
+
+    private:
+        explicit ProgressBar(qreal _scaleFactor);
         friend class DesignSystemPrivate;
         //
         class Implementation;
@@ -1177,6 +1213,11 @@ public:
      * @brief Параметры слайдера
      */
     static const Slider& slider();
+
+    /**
+     * @brief Параметры прогрессбара
+     */
+    static const ProgressBar& progressBar();
 
     /**
      * @brief Параметры виджета текстового поля

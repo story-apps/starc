@@ -81,7 +81,7 @@ ProjectsNavigator::~ProjectsNavigator() = default;
 
 void ProjectsNavigator::designSystemChangeEvent(DesignSystemChangeEvent* _event)
 {
-    Q_UNUSED(_event);
+    Q_UNUSED(_event)
 
     setBackgroundColor(DesignSystem::color().primary());
 

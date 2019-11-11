@@ -20,6 +20,7 @@ public:
     QAction* accountAction = nullptr;
 
     QColor notificationColor;
+    bool keepNotificationVisible = false;
     QVariantAnimation notificationAngleAnimation;
     QVariantAnimation notificationOpacityAnimation;
 };
@@ -69,6 +70,10 @@ void AccountBar::setAvatar(const QPixmap& _avatar)
 
 void AccountBar::notify(const QColor& _color)
 {
+    if (d->notificationColor == _color) {
+        return;
+    }
+
     d->notificationColor = _color;
     d->notificationOpacityAnimation.setCurrentTime(0);
     d->notificationAngleAnimation.start();
@@ -78,12 +83,14 @@ void AccountBar::paintEvent(QPaintEvent* _event)
 {
     FloatingToolBar::paintEvent(_event);
 
-    if (d->notificationAngleAnimation.state() == QVariantAnimation::Running
+    if (d->keepNotificationVisible
+        || d->notificationAngleAnimation.state() == QVariantAnimation::Running
         || d->notificationOpacityAnimation.state() == QVariantAnimation::Running) {
         QPainter painter(this);
         painter.setRenderHint(QPainter::Antialiasing);
 
-        if (d->notificationOpacityAnimation.currentValue().isValid()) {
+        if (d->notificationOpacityAnimation.currentValue().isValid()
+            && !d->keepNotificationVisible) {
             painter.setOpacity(d->notificationOpacityAnimation.currentValue().toReal());
         }
 

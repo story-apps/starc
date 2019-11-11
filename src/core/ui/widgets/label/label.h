@@ -21,7 +21,7 @@ public:
      * @brief Переопределяем для корректного подсчёта размера в компоновщиках
      */
     QSize sizeHint() const override;
-    int heightForWidth(int width) const override;
+    int heightForWidth(int _width) const override;
 
 protected:
     /**

@@ -3,6 +3,9 @@
 #include <ui/design_system/design_system.h>
 
 #include <ui/account/account_bar.h>
+#include <ui/account/account_navigator.h>
+#include <ui/account/account_tool_bar.h>
+#include <ui/account/account_view.h>
 #include <ui/account/login_dialog.h>
 
 #include <QWidget>
@@ -22,20 +25,33 @@ public:
     Ui::AccountBar* accountBar = nullptr;
     Ui::LoginDialog* loginDialog = nullptr;
 
-    QWidget* toolBar = nullptr;
-    QWidget* navigator = nullptr;
-    QWidget* view = nullptr;
+    Ui::AccountToolBar* toolBar = nullptr;
+    Ui::AccountNavigator* navigator = nullptr;
+    Ui::AccountView* view = nullptr;
 
+    /**
+     * @biref Данные о пользователе
+     */
+    /** @{ */
+    QString username;
+    QString email;
+    qint64 availableSpace = 0;
+    qint64 monthPrice = 0;
+    bool needNotify = true;
     QPixmap avatar;
+    /** @} */
 };
 
 AccountManager::Implementation::Implementation(QWidget* _parent)
     : topLevelWidget(_parent),
       accountBar(new Ui::AccountBar(topLevelWidget)),
-      toolBar(new QWidget(topLevelWidget)),
-      navigator(new QWidget(topLevelWidget)),
-      view(new QWidget(topLevelWidget))
+      toolBar(new Ui::AccountToolBar(topLevelWidget)),
+      navigator(new Ui::AccountNavigator(topLevelWidget)),
+      view(new Ui::AccountView(topLevelWidget))
 {
+    toolBar->hide();
+    navigator->hide();
+    view->hide();
 }
 
 
@@ -47,11 +63,34 @@ AccountManager::AccountManager(QObject* _parent, QWidget* _parentWidget)
       d(new Implementation(_parentWidget))
 {
     connect(d->accountBar, &Ui::AccountBar::accountPressed, this, [this] {
+        emit showAccountRequired();
+        return;
+
+
+        //
+        // Если авторизованы
+        //
+        if (!d->email.isEmpty()) {
+            //
+            // Перейти в личный кабинет
+            //
+            emit showAccountRequired();
+            return;
+        }
+
+        //
+        // TODO: Если нет связи с сервером, показать сообщение, что авторизация временно недоступна
+        //
+
+        //
+        // В противном случае, авторизоваться
+        //
         if (d->loginDialog == nullptr) {
             d->loginDialog = new Ui::LoginDialog(d->topLevelWidget);
             connect(d->loginDialog, &Ui::LoginDialog::emailEntered, this, &AccountManager::emailEntered);
+            connect(d->loginDialog, &Ui::LoginDialog::restorePasswordRequired, this, &AccountManager::restorePasswordRequired);
             connect(d->loginDialog, &Ui::LoginDialog::registrationRequired, this, &AccountManager::registrationRequired);
-            connect(d->loginDialog, &Ui::LoginDialog::confirmationCodeEntered,
+            connect(d->loginDialog, &Ui::LoginDialog::loginConfirmationCodeEntered,
                     this, &AccountManager::registrationConfirmationCodeEntered);
             connect(d->loginDialog, &Ui::LoginDialog::loginRequired, this, &AccountManager::loginRequired);
             connect(d->loginDialog, &Ui::LoginDialog::canceled, d->loginDialog, &Ui::LoginDialog::hideDialog);
@@ -63,6 +102,8 @@ AccountManager::AccountManager(QObject* _parent, QWidget* _parentWidget)
 
         d->loginDialog->showDialog();
     });
+
+    connect(d->toolBar, &Ui::AccountToolBar::backPressed, this, &AccountManager::closeAccountRequired);
 }
 
 Widget* AccountManager::accountBar() const
@@ -135,6 +176,11 @@ void AccountManager::completeLogin()
 void AccountManager::setAccountParameters(qint64 _availableSpace, const QString& _email,
     qint64 _monthPrice, bool _needNotify, const QString& _username, const QByteArray& _avatar)
 {
+    d->availableSpace = _availableSpace;
+    d->email = _email;
+    d->monthPrice = _monthPrice;
+    d->needNotify = _needNotify;
+    d->username = _username;
     d->avatar.loadFromData(_avatar);
 
     if (!d->avatar.isNull()) {

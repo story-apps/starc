@@ -119,7 +119,7 @@ void Slider::paintEvent(QPaintEvent* _event)
     const QRectF rightTrackRect(leftTrackRect.topRight(),
                                 QSizeF(trackWidth - leftTrackWidth, leftTrackRect.height()));
     QColor rightTrackColor = Ui::DesignSystem::color().secondary();
-    rightTrackColor.setAlphaF(0.24);
+    rightTrackColor.setAlphaF(Ui::DesignSystem::slider().unfilledPartOpacity());
     painter.fillRect(rightTrackRect, rightTrackColor);
 
     //

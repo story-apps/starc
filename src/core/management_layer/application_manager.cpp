@@ -39,6 +39,7 @@ class ApplicationManager::Implementation
 {
 public:
     explicit Implementation(ApplicationManager* _q);
+    ~Implementation();
 
     /**
      * @brief Получить значение параметра настроек
@@ -57,6 +58,11 @@ public:
     void showMenu();
 
     /**
+     * @brief Показать личный кабинет
+     */
+    void showAccount();
+
+    /**
      * @brief Показать страницу проектов
      */
     void showProjects();
@@ -65,6 +71,11 @@ public:
      * @brief Показать страницу настроек
      */
     void showSettings();
+
+    /**
+     * @brief Показать предыдущий контент
+     */
+    void showLastContent();
 
     /**
      * @brief Установить перевод
@@ -91,6 +102,11 @@ public:
 
     Ui::ApplicationView* applicationView = nullptr;
     Ui::MenuView* menuView = nullptr;
+    struct LastContent {
+        QWidget* toolBar = nullptr;
+        QWidget* navigator = nullptr;
+        QWidget* view = nullptr;
+    } lastContent;
 
     QScopedPointer<AccountManager> accountManager;
     QScopedPointer<OnboardingManager> onboardingManager;
@@ -99,6 +115,10 @@ public:
 #ifdef CLOUD_SERVICE_MANAGER
     QScopedPointer<CloudServiceManager> cloudServiceManager;
 #endif
+
+private:
+    template<typename Manager>
+    void saveLastContent(Manager* _manager);
 };
 
 ApplicationManager::Implementation::Implementation(ApplicationManager* _q)
@@ -114,6 +134,18 @@ ApplicationManager::Implementation::Implementation(ApplicationManager* _q)
 #endif
 {
     applicationView->setAccountBar(accountManager->accountBar());
+}
+
+ApplicationManager::Implementation::~Implementation()
+{
+    applicationView->disconnect();
+    menuView->disconnect();
+    accountManager->disconnect();
+    onboardingManager->disconnect();
+    projectsManager->disconnect();
+#ifdef CLOUD_SERVICE_MANAGER
+    cloudServiceManager->disconnect();
+#endif
 }
 
 QVariant ApplicationManager::Implementation::settingsValue(const QString& _key) const
@@ -151,6 +183,11 @@ void ApplicationManager::Implementation::showContent()
         //
         showProjects();
 
+        //
+        // Сохраняем последнее отображаемое представление, чтобы можно было вернуться к нему
+        //
+        saveLastContent(projectsManager.data());
+
 #ifdef CLOUD_SERVICE_MANAGER
         //
         // Если менеджер облака доступен, отобржаем панель для работы с личным кабинетом
@@ -167,6 +204,13 @@ void ApplicationManager::Implementation::showMenu()
     WAF::Animation::sideSlideIn(menuView);
 }
 
+void ApplicationManager::Implementation::showAccount()
+{
+    applicationView->showContent(accountManager->toolBar(),
+                                 accountManager->navigator(),
+                                 accountManager->view());
+}
+
 void ApplicationManager::Implementation::showProjects()
 {
     applicationView->showContent(projectsManager->toolBar(),
@@ -179,6 +223,17 @@ void ApplicationManager::Implementation::showSettings()
     applicationView->showContent(settingsManager->toolBar(),
                                  settingsManager->navigator(),
                                  settingsManager->view());
+}
+
+void ApplicationManager::Implementation::showLastContent()
+{
+    if (lastContent.toolBar == nullptr
+        || lastContent.navigator == nullptr
+        || lastContent.view == nullptr) {
+        return;
+    }
+
+    applicationView->showContent(lastContent.toolBar, lastContent.navigator, lastContent.view);
 }
 
 void ApplicationManager::Implementation::setTranslation(QLocale::Language _language)
@@ -250,6 +305,14 @@ void ApplicationManager::Implementation::createStory()
     dlg->showDialog();
 }
 
+template<typename Manager>
+void ApplicationManager::Implementation::saveLastContent(Manager* _manager)
+{
+    lastContent.toolBar = _manager->toolBar();
+    lastContent.navigator = _manager->navigator();
+    lastContent.view = _manager->view();
+}
+
 
 // ****
 
@@ -302,6 +365,9 @@ void ApplicationManager::exec()
     //
     QTimer::singleShot(0, this, [this] {
         d->showContent();
+#ifdef CLOUD_SERVICE_MANAGER
+        d->cloudServiceManager->start();
+#endif
     });
 }
 
@@ -391,6 +457,12 @@ void ApplicationManager::initConnections()
         setSettingsValue(DataStorageLayer::kApplicationScaleFactorKey, Ui::DesignSystem::scaleFactor());
         d->showContent();
     });
+
+    //
+    // Менеджер аккаунта
+    //
+    connect(d->accountManager.data(), &AccountManager::showAccountRequired, this, [this] { d->showAccount(); });
+    connect(d->accountManager.data(), &AccountManager::closeAccountRequired, this, [this] { d->showLastContent(); });
 
     //
     // Менеджер проектов

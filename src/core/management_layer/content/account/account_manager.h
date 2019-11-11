@@ -96,6 +96,16 @@ signals:
      */
     void loginRequired(const QString& _email, const QString& _password);
 
+    /**
+     * @brief Пользователь хочет перейти в личный кабинет
+     */
+    void showAccountRequired();
+
+    /**
+     * @brief Пользователь хочет закрыть личный кабинет
+     */
+    void closeAccountRequired();
+
 private:
     class Implementation;
     QScopedPointer<Implementation> d;
