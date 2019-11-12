@@ -11,7 +11,7 @@ QT += widgets sql
 
 TARGET = $$qtLibraryTarget(coreplugin)
 
-include(../shredder/starc/shredder.pri)
+include(../cloud/cloud.pri)
 
 DEFINES += CORE_LIBRARY
 DEFINES += QT_DEPRECATED_WARNINGS
