@@ -58,6 +58,8 @@ AccountNavigator::AccountNavigator(QWidget* _parent)
     : Widget(_parent),
       d(new Implementation(this))
 {
+    connect(d->renewSubscriptionButton, &Button::clicked, this, &AccountNavigator::renewSubscriptionPressed);
+
     designSystemChangeEvent(nullptr);
 }
 

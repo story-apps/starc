@@ -7,6 +7,7 @@
 #include <ui/account/account_tool_bar.h>
 #include <ui/account/account_view.h>
 #include <ui/account/login_dialog.h>
+#include <ui/account/renew_subscription_dialog.h>
 
 #include <utils/helpers/image_helper.h>
 
@@ -27,6 +28,7 @@ public:
 
     Ui::AccountBar* accountBar = nullptr;
     Ui::LoginDialog* loginDialog = nullptr;
+    Ui::RenewSubscriptionDialog* renewSubscriptionDialog = nullptr;
 
     Ui::AccountToolBar* toolBar = nullptr;
     Ui::AccountNavigator* navigator = nullptr;
@@ -105,6 +107,19 @@ AccountManager::AccountManager(QObject* _parent, QWidget* _parentWidget)
     });
 
     connect(d->toolBar, &Ui::AccountToolBar::backPressed, this, &AccountManager::closeAccountRequired);
+
+    connect(d->navigator, &Ui::AccountNavigator::renewSubscriptionPressed, this, [this] {
+        if (d->renewSubscriptionDialog == nullptr) {
+            d->renewSubscriptionDialog = new Ui::RenewSubscriptionDialog(d->topLevelWidget);
+            connect(d->renewSubscriptionDialog, &Ui::RenewSubscriptionDialog::canceled, d->renewSubscriptionDialog, &Ui::RenewSubscriptionDialog::hideDialog);
+            connect(d->renewSubscriptionDialog, &Ui::RenewSubscriptionDialog::disappeared, this, [this] {
+                d->renewSubscriptionDialog->deleteLater();
+                d->renewSubscriptionDialog = nullptr;
+            });
+        }
+
+        d->renewSubscriptionDialog->showDialog();
+    });
 
     connect(d->view, &Ui::AccountView::userNameChanged, this, &AccountManager::changeUserNameRequested);
     connect(d->view, &Ui::AccountView::receiveEmailNotificationsChanged,

@@ -17,6 +17,12 @@ public:
     explicit AccountNavigator(QWidget* _parent = nullptr);
     ~AccountNavigator() override;
 
+signals:
+    /**
+     * @brief Пользователь хочет продлить подписку
+     */
+    void renewSubscriptionPressed();
+
 protected:
     /**
      * @brief Обновить переводы
