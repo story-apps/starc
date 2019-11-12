@@ -8,6 +8,9 @@
 #include <ui/account/account_view.h>
 #include <ui/account/login_dialog.h>
 
+#include <utils/helpers/image_helper.h>
+
+#include <QFileDialog>
 #include <QWidget>
 
 
@@ -33,11 +36,11 @@ public:
      * @biref Данные о пользователе
      */
     /** @{ */
-    QString username;
-    QString email;
     qint64 availableSpace = 0;
     qint64 monthPrice = 0;
-    bool needNotify = true;
+    QString email;
+    QString userName;
+    bool receiveEmailNotifications = true;
     QPixmap avatar;
     /** @} */
 };
@@ -63,8 +66,6 @@ AccountManager::AccountManager(QObject* _parent, QWidget* _parentWidget)
       d(new Implementation(_parentWidget))
 {
     connect(d->accountBar, &Ui::AccountBar::accountPressed, this, [this] {
-        emit showAccountRequired();
-        return;
         //
         // Если авторизованы
         //
@@ -104,6 +105,25 @@ AccountManager::AccountManager(QObject* _parent, QWidget* _parentWidget)
     });
 
     connect(d->toolBar, &Ui::AccountToolBar::backPressed, this, &AccountManager::closeAccountRequired);
+
+    connect(d->view, &Ui::AccountView::userNameChanged, this, &AccountManager::changeUserNameRequested);
+    connect(d->view, &Ui::AccountView::receiveEmailNotificationsChanged,
+            this, &AccountManager::changeReceiveEmailNotificationsRequested);
+    connect(d->view, &Ui::AccountView::avatarChoosePressed, this, [this] {
+        const QString avatarPath = QFileDialog::getOpenFileName(d->view, tr("Choose avatar"), {}, "");
+        if (avatarPath.isEmpty()) {
+            return;
+        }
+
+        QPixmap avatar(avatarPath);
+        if (avatar.isNull()) {
+            return;
+        }
+
+        setAvatar(avatar.scaled(150, 150, Qt::IgnoreAspectRatio, Qt::SmoothTransformation));
+
+        emit changeAvatarRequested(ImageHelper::bytesFromImage(d->avatar));
+    });
 }
 
 Widget* AccountManager::accountBar() const
@@ -192,22 +212,42 @@ void AccountManager::completeLogin()
 }
 
 void AccountManager::setAccountParameters(qint64 _availableSpace, const QString& _email,
-    qint64 _monthPrice, bool _needNotify, const QString& _username, const QByteArray& _avatar)
+    qint64 _monthPrice, bool _receiveEmailNotifications, const QString& _userName, const QByteArray& _avatar)
 {
+    d->monthPrice = _monthPrice;
     d->availableSpace = _availableSpace;
     d->email = _email;
-    d->monthPrice = _monthPrice;
-    d->needNotify = _needNotify;
-    d->username = _username;
-    d->avatar.loadFromData(_avatar);
+    d->view->setEmail(d->email);
+    setUserName(_userName);
+    setReceiveEmailNotifications(_receiveEmailNotifications);
+    setAvatar(_avatar);
+}
+
+void AccountManager::setUserName(const QString& _userName)
+{
+    d->userName = _userName;
+    d->view->setUserName(d->userName);
+}
+
+void AccountManager::setReceiveEmailNotifications(bool _receive)
+{
+    d->receiveEmailNotifications = _receive;
+    d->view->setReceiveEmailNotifications(d->receiveEmailNotifications);
+}
+
+void AccountManager::setAvatar(const QByteArray& _avatar)
+{
+    setAvatar(ImageHelper::imageFromBytes(_avatar));
+}
+
+void AccountManager::setAvatar(const QPixmap& _avatar)
+{
+    d->avatar = _avatar;
     if (d->avatar.isNull()) {
         d->avatar = QPixmap(":/images/default-avatar");
     }
 
     d->accountBar->setAvatar(d->avatar);
-    d->view->setEmail(d->email);
-    d->view->setUsername(d->username);
-    d->view->setReceiveEmailNotifications(d->needNotify);
     d->view->setAvatar(d->avatar);
 }
 

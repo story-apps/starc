@@ -78,7 +78,11 @@ public:
      * @brief Установить параметры аккаунта
      */
     void setAccountParameters(qint64 _availableSpace, const QString& _email, qint64 _monthPrice,
-        bool _needNotify, const QString& _username, const QByteArray& _avatar);
+        bool _receiveEmailNotifications, const QString& _userName, const QByteArray& _avatar);
+    void setUserName(const QString& _userName);
+    void setReceiveEmailNotifications(bool _receive);
+    void setAvatar(const QByteArray& _avatar);
+    void setAvatar(const QPixmap& _avatar);
 
     /**
      * @brief Уведомить о появившемся сетевом соединении
@@ -135,6 +139,21 @@ signals:
      * @brief Пользователь хочет закрыть личный кабинет
      */
     void closeAccountRequired();
+
+    /**
+     * @brief Пользователь хочет сменить имя пользователя
+     */
+    void changeUserNameRequested(const QString& _userName);
+
+    /**
+     * @brief Пользователь хочет отключить/включить получение уведомлений по почте
+     */
+    void changeReceiveEmailNotificationsRequested(bool _receive);
+
+    /**
+     * @brief Пользователь хочет сменить аватар
+     */
+    void changeAvatarRequested(const QByteArray& _avatar);
 
 private:
     class Implementation;

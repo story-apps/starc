@@ -25,7 +25,7 @@ public:
     /**
      * @brief Установить имя пользователя
      */
-    void setUsername(const QString& _username);
+    void setUserName(const QString& _userName);
 
     /**
      * @brief Установить необходимость получать уведомления по почте
@@ -47,6 +47,21 @@ signals:
      * @brief Пользователь хочет выйти из аккаунта
      */
     void logoutPressed();
+
+    /**
+     * @brief Пользователь изменил своё имя
+     */
+    void userNameChanged(const QString& _userName);
+
+    /**
+     * @brief Пользователь изменил желание получать уведомления по почте
+     */
+    void receiveEmailNotificationsChanged(bool _receive);
+
+    /**
+     * @brief Пользователь хочет сменить аватарку
+     */
+    void avatarChoosePressed();
 
 protected:
     /**

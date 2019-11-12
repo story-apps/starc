@@ -9,6 +9,8 @@
 #include <ui/widgets/label/label.h>
 #include <ui/widgets/text_field/text_field.h>
 
+#include <utils/tools/debouncer.h>
+
 #include <QAction>
 #include <QGridLayout>
 
@@ -21,12 +23,14 @@ class AccountView::Implementation
 public:
     explicit Implementation(QWidget* _parent);
 
+    Debouncer changeNameDebouncer{500};
+
     FloatingToolBar* toolBar = nullptr;
 
     Card* userInfo = nullptr;
     QGridLayout* userInfoLayout = nullptr;
     H6Label* email = nullptr;
-    TextField* username = nullptr;
+    TextField* userName = nullptr;
     CheckBox* receiveEmailNotifications = nullptr;
     Avatar* avatar = nullptr;
 };
@@ -36,14 +40,14 @@ AccountView::Implementation::Implementation(QWidget* _parent)
       userInfo(new Card(_parent)),
       userInfoLayout(new QGridLayout),
       email(new H6Label(userInfo)),
-      username(new TextField(userInfo)),
+      userName(new TextField(userInfo)),
       receiveEmailNotifications(new CheckBox(userInfo)),
       avatar(new Avatar(userInfo))
 {
     userInfoLayout->setContentsMargins({});
     userInfoLayout->setSpacing(0);
     userInfoLayout->addWidget(email, 0, 0);
-    userInfoLayout->addWidget(username, 1, 0);
+    userInfoLayout->addWidget(userName, 1, 0);
     userInfoLayout->addWidget(receiveEmailNotifications, 2, 0);
     userInfoLayout->setRowMinimumHeight(3, 1); // добавляем пустую строку, вместо отступа снизу
     userInfoLayout->addWidget(avatar, 0, 1, 4, 1);
@@ -74,6 +78,19 @@ AccountView::AccountView(QWidget* _parent)
     layout->addWidget(d->userInfo);
     layout->addStretch();
     setLayout(layout);
+
+    connect(d->userName, &TextField::textChanged, &d->changeNameDebouncer, &Debouncer::orderWork);
+    connect(&d->changeNameDebouncer, &Debouncer::gotWork, this, [this] {
+        if (d->userName->text().isEmpty()) {
+            d->userName->setError(tr("Username can't be empty, please fill it"));
+            return;
+        }
+
+        d->userName->setError({});
+        emit userNameChanged(d->userName->text());
+    });
+    connect(d->receiveEmailNotifications, &CheckBox::checkedChanged, this, &AccountView::receiveEmailNotificationsChanged);
+    connect(d->avatar, &Avatar::clicked, this, &AccountView::avatarChoosePressed);
 }
 
 void AccountView::setEmail(const QString& _email)
@@ -81,13 +98,15 @@ void AccountView::setEmail(const QString& _email)
     d->email->setText(_email);
 }
 
-void AccountView::setUsername(const QString& _username)
+void AccountView::setUserName(const QString& _userName)
 {
-    d->username->setText(_username);
+    QSignalBlocker blocker(d->userName);
+    d->userName->setText(_userName);
 }
 
 void AccountView::setReceiveEmailNotifications(bool _receive)
 {
+    QSignalBlocker blocker(d->receiveEmailNotifications);
     d->receiveEmailNotifications->setChecked(_receive);
 }
 
@@ -107,7 +126,7 @@ void AccountView::resizeEvent(QResizeEvent* _event)
 
 void AccountView::updateTranslations()
 {
-    d->username->setLabel(tr("User name"));
+    d->userName->setLabel(tr("User name"));
     d->receiveEmailNotifications->setText(tr("Receive email notifications"));
 }
 

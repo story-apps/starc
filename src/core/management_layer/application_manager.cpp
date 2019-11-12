@@ -546,6 +546,22 @@ void ApplicationManager::initConnections()
     //
     connect(d->cloudServiceManager.data(), &CloudServiceManager::accountParametersLoaded,
             d->accountManager.data(), &AccountManager::setAccountParameters);
+
+    //
+    // Изменение параметров аккаунта
+    //
+    connect(d->accountManager.data(), &AccountManager::changeUserNameRequested,
+            d->cloudServiceManager.data(), &CloudServiceManager::setUserName);
+    connect(d->accountManager.data(), &AccountManager::changeReceiveEmailNotificationsRequested,
+            d->cloudServiceManager.data(), &CloudServiceManager::setNeedNotify);
+    connect(d->accountManager.data(), &AccountManager::changeAvatarRequested,
+            d->cloudServiceManager.data(), &CloudServiceManager::setAvatar);
+    connect(d->cloudServiceManager.data(), &CloudServiceManager::userNameChanged,
+            d->accountManager.data(), &AccountManager::setUserName);
+    connect(d->cloudServiceManager.data(), &CloudServiceManager::receiveEmailNotificationsChanged,
+            d->accountManager.data(), &AccountManager::setReceiveEmailNotifications);
+    connect(d->cloudServiceManager.data(), &CloudServiceManager::avatarChanged,
+            d->accountManager.data(), qOverload<const QByteArray&>(&AccountManager::setAvatar));
 #endif
 }
 
