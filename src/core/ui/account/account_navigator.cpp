@@ -80,17 +80,17 @@ void AccountNavigator::designSystemChangeEvent(DesignSystemChangeEvent* _event)
     setBackgroundColor(DesignSystem::color().primary());
 
     d->layout->setContentsMargins(
-                QMarginsF(Ui::DesignSystem::layout().px12(),
-                          Ui::DesignSystem::layout().px12(),
-                          Ui::DesignSystem::layout().px12(),
-                          Ui::DesignSystem::layout().px12()).toMargins());
-    const QMarginsF titleMargins(Ui::DesignSystem::layout().px16(), Ui::DesignSystem::layout().px4(),
-                                 Ui::DesignSystem::layout().px16(), 0.0);
+                QMarginsF(Ui::DesignSystem::layout().px2(),
+                          Ui::DesignSystem::layout().px2(),
+                          Ui::DesignSystem::layout().px2(),
+                          Ui::DesignSystem::layout().px2()).toMargins());
+    const QMarginsF titleMargins(Ui::DesignSystem::layout().px24(), Ui::DesignSystem::layout().px4(),
+                                 Ui::DesignSystem::layout().px24(), 0.0);
     d->titleLabel->setContentsMargins(titleMargins.toMargins());
     d->titleLabel->setBackgroundColor(DesignSystem::color().primary());
     d->titleLabel->setTextColor(DesignSystem::color().onPrimary());
-    const QMarginsF subtitleMargins(Ui::DesignSystem::layout().px16(), 0.0,
-                                       Ui::DesignSystem::layout().px16(), Ui::DesignSystem::layout().px4());
+    const QMarginsF subtitleMargins(Ui::DesignSystem::layout().px24(), 0.0,
+                                       Ui::DesignSystem::layout().px24(), Ui::DesignSystem::layout().px4());
     d->subtitleLabel->setContentsMargins(subtitleMargins.toMargins());
     d->subtitleLabel->setBackgroundColor(DesignSystem::color().primary());
     d->subtitleLabel->setTextColor(

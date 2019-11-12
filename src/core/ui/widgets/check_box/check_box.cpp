@@ -1,4 +1,4 @@
-#include "radio_button.h"
+#include "check_box.h"
 
 #include <ui/design_system/design_system.h>
 
@@ -9,7 +9,7 @@
 #include <QVariantAnimation>
 
 
-class RadioButton::Implementation
+class CheckBox::Implementation
 {
 public:
     Implementation();
@@ -30,7 +30,7 @@ public:
     QVariantAnimation decorationOpacityAnimation;
 };
 
-RadioButton::Implementation::Implementation()
+CheckBox::Implementation::Implementation()
 {
     decorationRadiusAnimation.setEasingCurve(QEasingCurve::OutQuad);
     decorationRadiusAnimation.setDuration(160);
@@ -41,7 +41,7 @@ RadioButton::Implementation::Implementation()
     decorationOpacityAnimation.setDuration(160);
 }
 
-void RadioButton::Implementation::animateClick()
+void CheckBox::Implementation::animateClick()
 {
     decorationOpacityAnimation.setCurrentTime(0);
     decorationRadiusAnimation.start();
@@ -52,7 +52,7 @@ void RadioButton::Implementation::animateClick()
 // ****
 
 
-RadioButton::RadioButton(QWidget* _parent)
+CheckBox::CheckBox(QWidget* _parent)
     : Widget(_parent),
       d(new Implementation)
 {
@@ -64,14 +64,14 @@ RadioButton::RadioButton(QWidget* _parent)
     designSystemChangeEvent(nullptr);
 }
 
-RadioButton::~RadioButton() = default;
+CheckBox::~CheckBox() = default;
 
-bool RadioButton::isChecked() const
+bool CheckBox::isChecked() const
 {
     return d->isChecked;
 }
 
-void RadioButton::setChecked(bool _checked)
+void CheckBox::setChecked(bool _checked)
 {
     if (d->isChecked == _checked) {
         return;
@@ -82,7 +82,7 @@ void RadioButton::setChecked(bool _checked)
     update();
 }
 
-void RadioButton::setText(const QString& _text)
+void CheckBox::setText(const QString& _text)
 {
     if (d->text == _text) {
         return;
@@ -93,17 +93,17 @@ void RadioButton::setText(const QString& _text)
     update();
 }
 
-QSize RadioButton::sizeHint() const
+QSize CheckBox::sizeHint() const
 {
-    return QSize(static_cast<int>(Ui::DesignSystem::radioButton().margins().left()
-                                  + Ui::DesignSystem::radioButton().iconSize().width()
-                                  + Ui::DesignSystem::radioButton().spacing()
+    return QSize(static_cast<int>(Ui::DesignSystem::checkBox().margins().left()
+                                  + Ui::DesignSystem::checkBox().iconSize().width()
+                                  + Ui::DesignSystem::checkBox().spacing()
                                   + TextHelper::fineTextWidth(d->text, Ui::DesignSystem::font().subtitle1())
-                                  + Ui::DesignSystem::radioButton().margins().right()),
-                 static_cast<int>(Ui::DesignSystem::radioButton().height()));
+                                  + Ui::DesignSystem::checkBox().margins().right()),
+                 static_cast<int>(Ui::DesignSystem::checkBox().height()));
 }
 
-void RadioButton::paintEvent(QPaintEvent* _event)
+void CheckBox::paintEvent(QPaintEvent* _event)
 {
     QPainter painter(this);
     painter.setRenderHint(QPainter::Antialiasing);
@@ -116,9 +116,9 @@ void RadioButton::paintEvent(QPaintEvent* _event)
     //
     // Рисуем декорацию переключателя
     //
-    const QRectF iconRect(QPointF(Ui::DesignSystem::radioButton().margins().left(),
-                                  Ui::DesignSystem::radioButton().margins().top()),
-                          Ui::DesignSystem::radioButton().iconSize());
+    const QRectF iconRect(QPointF(Ui::DesignSystem::checkBox().margins().left(),
+                                  Ui::DesignSystem::checkBox().margins().top()),
+                          Ui::DesignSystem::checkBox().iconSize());
     if (d->decorationRadiusAnimation.state() == QVariantAnimation::Running
         || d->decorationOpacityAnimation.state() == QVariantAnimation::Running) {
         painter.setPen(Qt::NoPen);
@@ -134,19 +134,19 @@ void RadioButton::paintEvent(QPaintEvent* _event)
     //
     painter.setFont(Ui::DesignSystem::font().iconsMid());
     painter.setPen(d->isChecked ? Ui::DesignSystem::color().secondary() : textColor());
-    painter.drawText(iconRect, Qt::AlignCenter, d->isChecked ? "\uf43e" : "\uf43d");
+    painter.drawText(iconRect, Qt::AlignCenter, d->isChecked ? "\ufc2e" : "\uf131");
 
     //
     // Рисуем текст
     //
     painter.setFont(Ui::DesignSystem::font().subtitle1());
     painter.setPen(textColor());
-    const qreal textRectX = iconRect.right() + Ui::DesignSystem::radioButton().spacing();
+    const qreal textRectX = iconRect.right() + Ui::DesignSystem::checkBox().spacing();
     const QRectF textRect(textRectX, 0, width() - textRectX, sizeHint().height());
     painter.drawText(textRect, Qt::AlignLeft | Qt::AlignVCenter, d->text);
 }
 
-void RadioButton::mouseReleaseEvent(QMouseEvent* _event)
+void CheckBox::mouseReleaseEvent(QMouseEvent* _event)
 {
     Q_UNUSED(_event)
 
@@ -154,16 +154,16 @@ void RadioButton::mouseReleaseEvent(QMouseEvent* _event)
         return;
     }
 
-    setChecked(true);
+    setChecked(!d->isChecked);
     d->animateClick();
 }
 
-void RadioButton::designSystemChangeEvent(DesignSystemChangeEvent* _event)
+void CheckBox::designSystemChangeEvent(DesignSystemChangeEvent* _event)
 {
     Q_UNUSED(_event)
 
-    d->decorationRadiusAnimation.setStartValue(Ui::DesignSystem::radioButton().iconSize().height() / 2.0);
-    d->decorationRadiusAnimation.setEndValue(Ui::DesignSystem::radioButton().height() / 2.5);
+    d->decorationRadiusAnimation.setStartValue(Ui::DesignSystem::checkBox().iconSize().height() / 2.0);
+    d->decorationRadiusAnimation.setEndValue(Ui::DesignSystem::checkBox().height() / 2.5);
 
     updateGeometry();
     update();

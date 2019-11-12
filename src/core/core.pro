@@ -33,6 +33,7 @@ SOURCES += \
     ui/account/account_navigator.cpp \
     ui/account/account_tool_bar.cpp \
     ui/account/account_view.cpp \
+    ui/account/avatar.cpp \
     ui/account/login_dialog.cpp \
     ui/application_view.cpp \
     ui/menu_view.cpp \
@@ -40,6 +41,7 @@ SOURCES += \
     ui/settings/settings_tool_bar.cpp \
     ui/settings/settings_view.cpp \
     ui/widgets/card/card.cpp \
+    ui/widgets/check_box/check_box.cpp \
     ui/widgets/circular_progress_bar/circular_progress_bar.cpp \
     ui/widgets/drawer/drawer.cpp \
     ui/widgets/stack_widget/stack_widget.cpp \
@@ -105,6 +107,7 @@ HEADERS += \
     ui/account/account_navigator.h \
     ui/account/account_tool_bar.h \
     ui/account/account_view.h \
+    ui/account/avatar.h \
     ui/account/login_dialog.h \
         ui/application_view.h \
     ui/menu_view.h \
@@ -112,6 +115,7 @@ HEADERS += \
     ui/settings/settings_tool_bar.h \
     ui/settings/settings_view.h \
     ui/widgets/card/card.h \
+    ui/widgets/check_box/check_box.h \
     ui/widgets/circular_progress_bar/circular_progress_bar.h \
     ui/widgets/drawer/drawer.h \
     ui/widgets/stack_widget/stack_widget.h \

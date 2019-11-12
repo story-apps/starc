@@ -9,5 +9,6 @@
     </qresource>
     <qresource prefix="/images">
         <file alias="movie-poster">resources/images/movie-poster.jpg</file>
+        <file alias="default-avatar">resources/images/default-avatar.png</file>
     </qresource>
 </RCC>

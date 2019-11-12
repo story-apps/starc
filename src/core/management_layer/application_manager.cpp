@@ -209,6 +209,7 @@ void ApplicationManager::Implementation::showAccount()
     applicationView->showContent(accountManager->toolBar(),
                                  accountManager->navigator(),
                                  accountManager->view());
+    accountManager->accountBar()->hide();
 }
 
 void ApplicationManager::Implementation::showProjects()
@@ -462,7 +463,10 @@ void ApplicationManager::initConnections()
     // Менеджер аккаунта
     //
     connect(d->accountManager.data(), &AccountManager::showAccountRequired, this, [this] { d->showAccount(); });
-    connect(d->accountManager.data(), &AccountManager::closeAccountRequired, this, [this] { d->showLastContent(); });
+    connect(d->accountManager.data(), &AccountManager::closeAccountRequired, this, [this] {
+        d->accountManager->accountBar()->show();
+        d->showLastContent();
+    });
 
     //
     // Менеджер проектов

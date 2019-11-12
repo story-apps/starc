@@ -17,6 +17,37 @@ public:
     explicit AccountView(QWidget* _parent = nullptr);
     ~AccountView() override;
 
+    /**
+     * @brief Установить имейл пользователя
+     */
+    void setEmail(const QString& _email);
+
+    /**
+     * @brief Установить имя пользователя
+     */
+    void setUsername(const QString& _username);
+
+    /**
+     * @brief Установить необходимость получать уведомления по почте
+     */
+    void setReceiveEmailNotifications(bool _receive);
+
+    /**
+     * @brief Установить аватар пользователя
+     */
+    void setAvatar(const QPixmap& _avatar);
+
+signals:
+    /**
+     * @brief Пользователь хочет сменить пароль
+     */
+    void changePasswordPressed();
+
+    /**
+     * @brief Пользователь хочет выйти из аккаунта
+     */
+    void logoutPressed();
+
 protected:
     /**
      * @brief Переопределяем для корректировки положения тулбара действий над проектами

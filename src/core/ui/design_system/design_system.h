@@ -439,6 +439,11 @@ public:
         ~Layout();
 
         /**
+         * @brief Отступ в 2 пикселя
+         */
+        qreal px2() const;
+
+        /**
          * @brief Отступ в 4 пикселя
          */
         qreal px4() const;
@@ -629,6 +634,42 @@ public:
 
     private:
         explicit RadioButton(qreal _scaleFactor);
+        friend class DesignSystemPrivate;
+        //
+        class Implementation;
+        QScopedPointer<Implementation> d;
+    };
+
+    /**
+     * @brief Параметры виджета флажка
+     */
+    class CheckBox
+    {
+    public:
+        ~CheckBox();
+
+        /**
+         * @brief Высота переключателя
+         */
+        qreal height() const;
+
+        /**
+         * @brief Отступы контента
+         */
+        const QMarginsF& margins() const;
+
+        /**
+         * @brief Размер иконки переключателя
+         */
+        const QSizeF& iconSize() const;
+
+        /**
+         * @brief Отступ между иконкой и текстом
+         */
+        qreal spacing() const;
+
+    private:
+        explicit CheckBox(qreal _scaleFactor);
         friend class DesignSystemPrivate;
         //
         class Implementation;
@@ -1213,6 +1254,11 @@ public:
      * @brief Параметры кнопки-переключателя
      */
     static const RadioButton& radioButton();
+
+    /**
+     * @brief Параметры флажка
+     */
+    static const CheckBox& checkBox();
 
     /**
      * @brief Параметры слайдера

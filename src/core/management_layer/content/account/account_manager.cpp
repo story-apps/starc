@@ -63,6 +63,8 @@ AccountManager::AccountManager(QObject* _parent, QWidget* _parentWidget)
       d(new Implementation(_parentWidget))
 {
     connect(d->accountBar, &Ui::AccountBar::accountPressed, this, [this] {
+        emit showAccountRequired();
+        return;
         //
         // Если авторизованы
         //

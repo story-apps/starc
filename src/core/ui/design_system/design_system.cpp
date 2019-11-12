@@ -823,18 +823,20 @@ class DesignSystem::Layout::Implementation
 public:
     explicit Implementation(qreal _scaleFactor);
 
+    qreal px2 = 2.0;
     qreal px4 = 4.0;
     qreal px8 = 8.0;
     qreal px12 = 12.0;
     qreal px16 = 16.0;
     qreal px24 = 24.0;
     qreal px62 = 62.0;
-    qreal topContentMargin = 62.0;
+    qreal topContentMargin = 116.0;
     qreal buttonsSpacing = 8.0;
 };
 
 DesignSystem::Layout::Implementation::Implementation(qreal _scaleFactor)
 {
+    px2 *= _scaleFactor;
     px4 *= _scaleFactor;
     px8 *= _scaleFactor;
     px12 *= _scaleFactor;
@@ -850,6 +852,11 @@ DesignSystem::Layout::Implementation::Implementation(qreal _scaleFactor)
 
 
 DesignSystem::Layout::~Layout() = default;
+
+qreal DesignSystem::Layout::px2() const
+{
+    return d->px2;
+}
 
 qreal DesignSystem::Layout::px4() const
 {
@@ -1114,6 +1121,59 @@ qreal DesignSystem::RadioButton::spacing() const
 }
 
 DesignSystem::RadioButton::RadioButton(qreal _scaleFactor)
+    : d(new Implementation(_scaleFactor))
+{
+}
+
+
+// ****
+
+
+class DesignSystem::CheckBox::Implementation
+{
+public:
+    explicit Implementation(qreal _scaleFactor);
+
+    qreal height = 48.0;
+    QMarginsF margins = {24.0, 13.0, 24.0, 13.0};
+    QSizeF iconSize = {22.0, 22.0};
+    qreal spacing = 16.0;
+
+};
+
+DesignSystem::CheckBox::Implementation::Implementation(qreal _scaleFactor)
+{
+    height *= _scaleFactor;
+    margins *= _scaleFactor;
+    iconSize *= _scaleFactor;
+    spacing *= _scaleFactor;
+}
+
+// **
+
+DesignSystem::CheckBox::~CheckBox() = default;
+
+qreal DesignSystem::CheckBox::height() const
+{
+    return d->height;
+}
+
+const QMarginsF& DesignSystem::CheckBox::margins() const
+{
+    return d->margins;
+}
+
+const QSizeF& DesignSystem::CheckBox::iconSize() const
+{
+    return d->iconSize;
+}
+
+qreal DesignSystem::CheckBox::spacing() const
+{
+    return d->spacing;
+}
+
+DesignSystem::CheckBox::CheckBox(qreal _scaleFactor)
     : d(new Implementation(_scaleFactor))
 {
 }
@@ -1821,6 +1881,7 @@ public:
     DesignSystem::Button button;
     DesignSystem::ToggleButton toggleButton;
     DesignSystem::RadioButton radioButton;
+    DesignSystem::CheckBox checkBox;
     DesignSystem::Slider slider;
     DesignSystem::ProgressBar progressBar;
     DesignSystem::TextField textField;
@@ -1851,6 +1912,7 @@ DesignSystemPrivate::DesignSystemPrivate(ApplicationTheme _theme, qreal _scaleFa
       button(_scaleFactor),
       toggleButton(_scaleFactor),
       radioButton(_scaleFactor),
+      checkBox(_scaleFactor),
       slider(_scaleFactor),
       progressBar(_scaleFactor),
       textField(_scaleFactor, _color),
@@ -2090,6 +2152,11 @@ const DesignSystem::ToggleButton& DesignSystem::toggleButton()
 const DesignSystem::RadioButton& DesignSystem::radioButton()
 {
     return instance()->d->radioButton;
+}
+
+const DesignSystem::CheckBox& DesignSystem::checkBox()
+{
+    return instance()->d->checkBox;
 }
 
 const DesignSystem::Slider& DesignSystem::slider()

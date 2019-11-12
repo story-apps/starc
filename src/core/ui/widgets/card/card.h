@@ -11,6 +11,11 @@ public:
     explicit Card(QWidget* _parent = nullptr);
     ~Card() override;
 
+    /**
+     * @brief Собственная реализация метода установки компоновщика
+     */
+    void setLayoutReimpl(QLayout* _layout) const;
+
 protected:
     /**
      * @brief Переопределяем для реализации отрисовки
@@ -22,6 +27,11 @@ protected:
      */
     void enterEvent(QEvent* _event) override;
     void leaveEvent(QEvent* _event) override;
+
+    /**
+     * @brief Переопределяем для настройки отступов лейаута
+     */
+    void designSystemChangeEvent(DesignSystemChangeEvent *_event) override;
 
 private:
     class Implementation;

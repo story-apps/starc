@@ -6,6 +6,7 @@
 
 #include <QPainter>
 #include <QVariantAnimation>
+#include <QVBoxLayout>
 
 
 class Card::Implementation
@@ -17,10 +18,19 @@ public:
      * @brief  Декорации тени при наведении
      */
     QVariantAnimation m_shadowHeightAnimation;
+
+    /**
+     * @brief Компоновщик карточки
+     */
+    QVBoxLayout* layout = nullptr;
 };
 
 Card::Implementation::Implementation()
+    : layout(new QVBoxLayout)
 {
+    layout->setSpacing(0);
+    layout->setContentsMargins({});
+
     m_shadowHeightAnimation.setStartValue(Ui::DesignSystem::card().minimumShadowBlurRadius());
     m_shadowHeightAnimation.setEndValue(Ui::DesignSystem::card().maximumShadowBlurRadius());
     m_shadowHeightAnimation.setEasingCurve(QEasingCurve::OutQuad);
@@ -34,7 +44,18 @@ Card::Card(QWidget* _parent)
 {
     setAttribute(Qt::WA_Hover);
 
+    setLayout(d->layout);
+
     connect(&d->m_shadowHeightAnimation, &QVariantAnimation::valueChanged, [this] { update(); });
+
+    designSystemChangeEvent(nullptr);
+}
+
+void Card::setLayoutReimpl(QLayout* _layout) const
+{
+    Q_ASSERT_X(d->layout->count() == 0, Q_FUNC_INFO, "Widget already contains layout");
+
+    d->layout->addLayout(_layout);
 }
 
 Card::~Card() = default;
@@ -93,4 +114,11 @@ void Card::leaveEvent(QEvent* _event)
 
     d->m_shadowHeightAnimation.setDirection(QVariantAnimation::Backward);
     d->m_shadowHeightAnimation.start();
+}
+
+void Card::designSystemChangeEvent(DesignSystemChangeEvent* _event)
+{
+    Q_UNUSED(_event)
+
+    d->layout->setContentsMargins(Ui::DesignSystem::card().shadowMargins().toMargins());
 }
