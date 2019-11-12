@@ -22,7 +22,11 @@ public:
      */
     void setAvatar(const QPixmap& _avatar);
 
-    QSize sizeHint() const override;
+signals:
+    /**
+     * @brief Пользователь кликнул на аватарке
+     */
+    void clicked();
 
 protected:
     /**
@@ -34,6 +38,22 @@ protected:
      * @brief Переопределяем для подготовки аватарки к отрисовке
      */
     void resizeEvent(QResizeEvent* _event) override;
+
+    /**
+     * @brief Реализуем эффекст отображения оверлея при наведении мыши
+     */
+    void enterEvent(QEvent* _event) override;
+    void leaveEvent(QEvent* _event) override;
+
+    /**
+     * @brief Испускаем сигнал о клике пользователя
+     */
+    void mousePressEvent(QMouseEvent* _event) override;
+
+    /**
+     * @brief Определяем переводы
+     */
+    void updateTranslations() override;
 
 private:
     class Implementation;

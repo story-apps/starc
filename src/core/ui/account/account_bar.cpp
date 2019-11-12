@@ -65,7 +65,7 @@ void AccountBar::setAvatar(const QPixmap& _avatar)
     const int maxAvatarSideSize = std::max(_avatar.width(), _avatar.height());
     const QSize maxAvatarSize(maxAvatarSideSize, maxAvatarSideSize);
     QPixmap avatar = ImageHelper::makeAvatar(_avatar, maxAvatarSize);
-    d->accountAction->setIcon(QIcon(_avatar));
+    d->accountAction->setIcon(QIcon(avatar));
 }
 
 void AccountBar::notify(const QColor& _color)

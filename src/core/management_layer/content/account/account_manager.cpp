@@ -200,10 +200,15 @@ void AccountManager::setAccountParameters(qint64 _availableSpace, const QString&
     d->needNotify = _needNotify;
     d->username = _username;
     d->avatar.loadFromData(_avatar);
-
-    if (!d->avatar.isNull()) {
-        d->accountBar->setAvatar(d->avatar);
+    if (d->avatar.isNull()) {
+        d->avatar = QPixmap(":/images/default-avatar");
     }
+
+    d->accountBar->setAvatar(d->avatar);
+    d->view->setEmail(d->email);
+    d->view->setUsername(d->username);
+    d->view->setReceiveEmailNotifications(d->needNotify);
+    d->view->setAvatar(d->avatar);
 }
 
 void AccountManager::notifyConnected()

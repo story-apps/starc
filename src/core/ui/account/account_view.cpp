@@ -59,9 +59,6 @@ AccountView::AccountView(QWidget* _parent)
     : Widget(_parent),
       d(new Implementation(this))
 {
-    d->email->setText("dimka@starc.app");
-    d->username->setText("dimka");
-
     QAction* changePasswordAction = new QAction;
     changePasswordAction->setIconText("\uf772");
     d->toolBar->addAction(changePasswordAction);
