@@ -8,7 +8,7 @@
 #include "content/settings/settings_manager.h"
 
 #ifdef CLOUD_SERVICE_MANAGER
-#include <shredder/starc/cloud_service_manager.h>
+#include <cloud/cloud_service_manager.h>
 #endif
 
 #include <data_layer/storage/settings_storage.h>
