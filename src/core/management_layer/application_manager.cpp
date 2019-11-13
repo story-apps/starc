@@ -462,8 +462,8 @@ void ApplicationManager::initConnections()
     //
     // Менеджер аккаунта
     //
-    connect(d->accountManager.data(), &AccountManager::showAccountRequired, this, [this] { d->showAccount(); });
-    connect(d->accountManager.data(), &AccountManager::closeAccountRequired, this, [this] {
+    connect(d->accountManager.data(), &AccountManager::showAccountRequested, this, [this] { d->showAccount(); });
+    connect(d->accountManager.data(), &AccountManager::closeAccountRequested, this, [this] {
         d->accountManager->accountBar()->show();
         d->showLastContent();
     });
@@ -501,7 +501,7 @@ void ApplicationManager::initConnections()
         //
         // регистрация
         //
-        connect(d->accountManager.data(), &AccountManager::registrationRequired,
+        connect(d->accountManager.data(), &AccountManager::registrationRequested,
                 d->cloudServiceManager.data(), &CloudServiceManager::registerAccount);
         connect(d->accountManager.data(), &AccountManager::registrationConfirmationCodeEntered,
                 d->cloudServiceManager.data(), &CloudServiceManager::confirmRegistration);
@@ -515,7 +515,7 @@ void ApplicationManager::initConnections()
         //
         // восстановление пароля
         //
-        connect(d->accountManager.data(), &AccountManager::restorePasswordRequired,
+        connect(d->accountManager.data(), &AccountManager::restorePasswordRequested,
                 d->cloudServiceManager.data(), &CloudServiceManager::restorePassword);
         connect(d->accountManager.data(), &AccountManager::passwordRestoringConfirmationCodeEntered,
                 d->cloudServiceManager.data(), &CloudServiceManager::confirmPasswordRestoring);
@@ -533,7 +533,7 @@ void ApplicationManager::initConnections()
         //
         // авторизация
         //
-        connect(d->accountManager.data(), &AccountManager::loginRequired,
+        connect(d->accountManager.data(), &AccountManager::loginRequested,
                 d->cloudServiceManager.data(), &CloudServiceManager::login);
         connect(d->cloudServiceManager.data(), &CloudServiceManager::loginPasswordError,
                 d->accountManager.data(), &AccountManager::setLoginPasswordError);

@@ -76,7 +76,7 @@ signals:
     /**
      * @brief Пользователь хочет восстановить пароль
      */
-    void restorePasswordRequired(const QString& _email);
+    void restorePasswordRequested(const QString& _email);
 
     /**
      * @brief Введён код подтверждения регистрации
@@ -91,7 +91,7 @@ signals:
     /**
      * @brief Пользователь хочет зарегистрироваться
      */
-    void registrationRequired(const QString& _email, const QString& _password);
+    void registrationRequested(const QString& _email, const QString& _password);
 
     /**
      * @brief Введён код подтверждения регистрации
@@ -101,7 +101,7 @@ signals:
     /**
      * @brief Пользователь хочет авторизоваться
      */
-    void loginRequired(const QString& _email, const QString& _password);
+    void loginRequested(const QString& _email, const QString& _password);
 
     /**
      * @brief Пользователь передумал авторизовываться

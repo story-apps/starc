@@ -99,7 +99,7 @@ QWidget* AccountManager::view() const
 void AccountManager::login()
 {
     Q_ASSERT(d->loginDialog);
-    emit loginRequired(d->loginDialog->email(), d->loginDialog->password());
+    emit loginRequested(d->loginDialog->email(), d->loginDialog->password());
 }
 
 void AccountManager::allowRegistration()
@@ -234,7 +234,7 @@ void AccountManager::initAccountBarConnections()
             //
             // Перейти в личный кабинет
             //
-            emit showAccountRequired();
+            emit showAccountRequested();
             return;
         }
 
@@ -248,13 +248,13 @@ void AccountManager::initAccountBarConnections()
         if (d->loginDialog == nullptr) {
             d->loginDialog = new Ui::LoginDialog(d->topLevelWidget);
             connect(d->loginDialog, &Ui::LoginDialog::emailEntered, this, &AccountManager::emailEntered);
-            connect(d->loginDialog, &Ui::LoginDialog::restorePasswordRequired, this, &AccountManager::restorePasswordRequired);
+            connect(d->loginDialog, &Ui::LoginDialog::restorePasswordRequested, this, &AccountManager::restorePasswordRequested);
             connect(d->loginDialog, &Ui::LoginDialog::passwordRestoringConfirmationCodeEntered, this, &AccountManager::passwordRestoringConfirmationCodeEntered);
             connect(d->loginDialog, &Ui::LoginDialog::changePasswordRequested, this, &AccountManager::changePasswordRequested);
-            connect(d->loginDialog, &Ui::LoginDialog::registrationRequired, this, &AccountManager::registrationRequired);
+            connect(d->loginDialog, &Ui::LoginDialog::registrationRequested, this, &AccountManager::registrationRequested);
             connect(d->loginDialog, &Ui::LoginDialog::registrationConfirmationCodeEntered,
                     this, &AccountManager::registrationConfirmationCodeEntered);
-            connect(d->loginDialog, &Ui::LoginDialog::loginRequired, this, &AccountManager::loginRequired);
+            connect(d->loginDialog, &Ui::LoginDialog::loginRequested, this, &AccountManager::loginRequested);
             connect(d->loginDialog, &Ui::LoginDialog::canceled, d->loginDialog, &Ui::LoginDialog::hideDialog);
             connect(d->loginDialog, &Ui::LoginDialog::disappeared, this, [this] {
                 d->loginDialog->deleteLater();
@@ -268,7 +268,7 @@ void AccountManager::initAccountBarConnections()
 
 void AccountManager::initToolBarConnections()
 {
-    connect(d->toolBar, &Ui::AccountToolBar::backPressed, this, &AccountManager::closeAccountRequired);
+    connect(d->toolBar, &Ui::AccountToolBar::backPressed, this, &AccountManager::closeAccountRequested);
 }
 
 void AccountManager::initNavigatorConnections()

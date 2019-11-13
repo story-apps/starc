@@ -135,16 +135,16 @@ LoginDialog::LoginDialog(QWidget* _parent)
         emit passwordRestoringConfirmationCodeEntered(d->email->text(), d->restorePasswordConfirmationCode->text());
     });
     connect(d->restorePasswordButton, &Button::clicked, this, [this] {
-        emit restorePasswordRequired(d->email->text());
+        emit restorePasswordRequested(d->email->text());
     });
     connect(d->changePasswordButton, &Button::clicked, this, [this] {
         emit changePasswordRequested(d->email->text(), d->restorePasswordConfirmationCode->text(), d->password->text());
     });
     connect(d->registrationButton, &Button::clicked, this, [this] {
-        emit registrationRequired(d->email->text(), d->password->text());
+        emit registrationRequested(d->email->text(), d->password->text());
     });
     connect(d->loginButton, &Button::clicked, this, [this] {
-        emit loginRequired(d->email->text(), d->password->text());
+        emit loginRequested(d->email->text(), d->password->text());
     });
     connect(d->cancelButton, &Button::clicked, this, &LoginDialog::canceled);
 
