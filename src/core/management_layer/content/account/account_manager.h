@@ -81,6 +81,7 @@ public:
     void setAccountParameters(qint64 _availableSpace, const QString& _email, qint64 _monthPrice,
         bool _receiveEmailNotifications, const QString& _userName, const QByteArray& _avatar);
     void setPaymentInfo(const PaymentInfo& _info);
+    void setSubscriptionEnd(const QString& _subscriptionEnd);
     void setUserName(const QString& _userName);
     void setReceiveEmailNotifications(bool _receive);
     void setAvatar(const QByteArray& _avatar);
@@ -97,6 +98,10 @@ public:
     void notifyDisconnected();
 
 signals:
+    //
+    // Диалог авторизации
+    //
+
     /**
      * @brief Email для авторизации был введён пользователем
      */
@@ -132,6 +137,10 @@ signals:
      */
     void loginRequired(const QString& _email, const QString& _password);
 
+    //
+    // Отображение/скрытие личного кабинета
+    //
+
     /**
      * @brief Пользователь хочет перейти в личный кабинет
      */
@@ -141,6 +150,19 @@ signals:
      * @brief Пользователь хочет закрыть личный кабинет
      */
     void closeAccountRequired();
+
+    //
+    // Оплата услуг
+    //
+
+    /**
+     * @brief Пользователь хочет продлить подписку на облако
+     */
+    void renewSubscriptionRequested(int _month, int _paymentType);
+
+    //
+    // Настройка аккаунта
+    //
 
     /**
      * @brief Пользователь хочет сменить имя пользователя
@@ -156,6 +178,15 @@ signals:
      * @brief Пользователь хочет сменить аватар
      */
     void changeAvatarRequested(const QByteArray& _avatar);
+
+private:
+    /**
+     * @brief Настроить соединения зависящие от действий пользователя в интерфейсе
+     */
+    void initAccountBarConnections();
+    void initToolBarConnections();
+    void initNavigatorConnections();
+    void initViewConnections();
 
 private:
     class Implementation;

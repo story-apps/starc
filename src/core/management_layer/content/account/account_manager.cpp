@@ -40,6 +40,7 @@ public:
     /** @{ */
     qint64 availableSpace = 0;
     qint64 monthPrice = 0;
+    QString subscriptionEnd;
     QString email;
     QString userName;
     bool receiveEmailNotifications = true;
@@ -67,78 +68,10 @@ AccountManager::AccountManager(QObject* _parent, QWidget* _parentWidget)
     : QObject(_parent),
       d(new Implementation(_parentWidget))
 {
-    connect(d->accountBar, &Ui::AccountBar::accountPressed, this, [this] {
-        //
-        // Если авторизованы
-        //
-        if (!d->email.isEmpty()) {
-            //
-            // Перейти в личный кабинет
-            //
-            emit showAccountRequired();
-            return;
-        }
-
-        //
-        // TODO: Если нет связи с сервером, показать сообщение, что авторизация временно недоступна
-        //
-
-        //
-        // В противном случае, авторизоваться
-        //
-        if (d->loginDialog == nullptr) {
-            d->loginDialog = new Ui::LoginDialog(d->topLevelWidget);
-            connect(d->loginDialog, &Ui::LoginDialog::emailEntered, this, &AccountManager::emailEntered);
-            connect(d->loginDialog, &Ui::LoginDialog::restorePasswordRequired, this, &AccountManager::restorePasswordRequired);
-            connect(d->loginDialog, &Ui::LoginDialog::passwordRestoringConfirmationCodeEntered, this, &AccountManager::passwordRestoringConfirmationCodeEntered);
-            connect(d->loginDialog, &Ui::LoginDialog::changePasswordRequested, this, &AccountManager::changePasswordRequested);
-            connect(d->loginDialog, &Ui::LoginDialog::registrationRequired, this, &AccountManager::registrationRequired);
-            connect(d->loginDialog, &Ui::LoginDialog::registrationConfirmationCodeEntered,
-                    this, &AccountManager::registrationConfirmationCodeEntered);
-            connect(d->loginDialog, &Ui::LoginDialog::loginRequired, this, &AccountManager::loginRequired);
-            connect(d->loginDialog, &Ui::LoginDialog::canceled, d->loginDialog, &Ui::LoginDialog::hideDialog);
-            connect(d->loginDialog, &Ui::LoginDialog::disappeared, this, [this] {
-                d->loginDialog->deleteLater();
-                d->loginDialog = nullptr;
-            });
-        }
-
-        d->loginDialog->showDialog();
-    });
-
-    connect(d->toolBar, &Ui::AccountToolBar::backPressed, this, &AccountManager::closeAccountRequired);
-
-    connect(d->navigator, &Ui::AccountNavigator::renewSubscriptionPressed, this, [this] {
-        if (d->renewSubscriptionDialog == nullptr) {
-            d->renewSubscriptionDialog = new Ui::RenewSubscriptionDialog(d->topLevelWidget);
-            connect(d->renewSubscriptionDialog, &Ui::RenewSubscriptionDialog::canceled, d->renewSubscriptionDialog, &Ui::RenewSubscriptionDialog::hideDialog);
-            connect(d->renewSubscriptionDialog, &Ui::RenewSubscriptionDialog::disappeared, this, [this] {
-                d->renewSubscriptionDialog->deleteLater();
-                d->renewSubscriptionDialog = nullptr;
-            });
-        }
-
-        d->renewSubscriptionDialog->showDialog();
-    });
-
-    connect(d->view, &Ui::AccountView::userNameChanged, this, &AccountManager::changeUserNameRequested);
-    connect(d->view, &Ui::AccountView::receiveEmailNotificationsChanged,
-            this, &AccountManager::changeReceiveEmailNotificationsRequested);
-    connect(d->view, &Ui::AccountView::avatarChoosePressed, this, [this] {
-        const QString avatarPath = QFileDialog::getOpenFileName(d->view, tr("Choose avatar"), {}, "");
-        if (avatarPath.isEmpty()) {
-            return;
-        }
-
-        QPixmap avatar(avatarPath);
-        if (avatar.isNull()) {
-            return;
-        }
-
-        setAvatar(avatar.scaled(150, 150, Qt::IgnoreAspectRatio, Qt::SmoothTransformation));
-
-        emit changeAvatarRequested(ImageHelper::bytesFromImage(d->avatar));
-    });
+    initAccountBarConnections();
+    initToolBarConnections();
+    initNavigatorConnections();
+    initViewConnections();
 }
 
 Widget* AccountManager::accountBar() const
@@ -240,7 +173,17 @@ void AccountManager::setAccountParameters(qint64 _availableSpace, const QString&
 
 void AccountManager::setPaymentInfo(const PaymentInfo& _info)
 {
+    Q_UNUSED(_info)
 
+    //
+    // TODO: ждём реализацию валют, а пока просто не используем эту тему
+    //
+}
+
+void AccountManager::setSubscriptionEnd(const QString& _subscriptionEnd)
+{
+    d->subscriptionEnd = _subscriptionEnd;
+    d->navigator->setSubscriptionEnd(d->subscriptionEnd);
 }
 
 void AccountManager::setUserName(const QString& _userName)
@@ -279,6 +222,96 @@ void AccountManager::notifyConnected()
 void AccountManager::notifyDisconnected()
 {
     d->accountBar->notify(Ui::DesignSystem::color().error());
+}
+
+void AccountManager::initAccountBarConnections()
+{
+    connect(d->accountBar, &Ui::AccountBar::accountPressed, this, [this] {
+        //
+        // Если авторизованы
+        //
+        if (!d->email.isEmpty()) {
+            //
+            // Перейти в личный кабинет
+            //
+            emit showAccountRequired();
+            return;
+        }
+
+        //
+        // TODO: Если нет связи с сервером, показать сообщение, что авторизация временно недоступна
+        //
+
+        //
+        // В противном случае, авторизоваться
+        //
+        if (d->loginDialog == nullptr) {
+            d->loginDialog = new Ui::LoginDialog(d->topLevelWidget);
+            connect(d->loginDialog, &Ui::LoginDialog::emailEntered, this, &AccountManager::emailEntered);
+            connect(d->loginDialog, &Ui::LoginDialog::restorePasswordRequired, this, &AccountManager::restorePasswordRequired);
+            connect(d->loginDialog, &Ui::LoginDialog::passwordRestoringConfirmationCodeEntered, this, &AccountManager::passwordRestoringConfirmationCodeEntered);
+            connect(d->loginDialog, &Ui::LoginDialog::changePasswordRequested, this, &AccountManager::changePasswordRequested);
+            connect(d->loginDialog, &Ui::LoginDialog::registrationRequired, this, &AccountManager::registrationRequired);
+            connect(d->loginDialog, &Ui::LoginDialog::registrationConfirmationCodeEntered,
+                    this, &AccountManager::registrationConfirmationCodeEntered);
+            connect(d->loginDialog, &Ui::LoginDialog::loginRequired, this, &AccountManager::loginRequired);
+            connect(d->loginDialog, &Ui::LoginDialog::canceled, d->loginDialog, &Ui::LoginDialog::hideDialog);
+            connect(d->loginDialog, &Ui::LoginDialog::disappeared, this, [this] {
+                d->loginDialog->deleteLater();
+                d->loginDialog = nullptr;
+            });
+        }
+
+        d->loginDialog->showDialog();
+    });
+}
+
+void AccountManager::initToolBarConnections()
+{
+    connect(d->toolBar, &Ui::AccountToolBar::backPressed, this, &AccountManager::closeAccountRequired);
+}
+
+void AccountManager::initNavigatorConnections()
+{
+    connect(d->navigator, &Ui::AccountNavigator::renewSubscriptionPressed, this, [this] {
+        if (d->renewSubscriptionDialog == nullptr) {
+            d->renewSubscriptionDialog = new Ui::RenewSubscriptionDialog(d->topLevelWidget);
+            connect(d->renewSubscriptionDialog, &Ui::RenewSubscriptionDialog::renewPressed, this, [this] {
+               emit renewSubscriptionRequested(d->renewSubscriptionDialog->monthCount(),
+                                               d->renewSubscriptionDialog->paymentType());
+                d->renewSubscriptionDialog->hideDialog();
+            });
+            connect(d->renewSubscriptionDialog, &Ui::RenewSubscriptionDialog::canceled, d->renewSubscriptionDialog, &Ui::RenewSubscriptionDialog::hideDialog);
+            connect(d->renewSubscriptionDialog, &Ui::RenewSubscriptionDialog::disappeared, this, [this] {
+                d->renewSubscriptionDialog->deleteLater();
+                d->renewSubscriptionDialog = nullptr;
+            });
+        }
+
+        d->renewSubscriptionDialog->showDialog();
+    });
+}
+
+void AccountManager::initViewConnections()
+{
+    connect(d->view, &Ui::AccountView::userNameChanged, this, &AccountManager::changeUserNameRequested);
+    connect(d->view, &Ui::AccountView::receiveEmailNotificationsChanged,
+            this, &AccountManager::changeReceiveEmailNotificationsRequested);
+    connect(d->view, &Ui::AccountView::avatarChoosePressed, this, [this] {
+        const QString avatarPath = QFileDialog::getOpenFileName(d->view, tr("Choose avatar"), {}, "");
+        if (avatarPath.isEmpty()) {
+            return;
+        }
+
+        QPixmap avatar(avatarPath);
+        if (avatar.isNull()) {
+            return;
+        }
+
+        setAvatar(avatar.scaled(150, 150, Qt::IgnoreAspectRatio, Qt::SmoothTransformation));
+
+        emit changeAvatarRequested(ImageHelper::bytesFromImage(d->avatar));
+    });
 }
 
 } // namespace ManagementLayer

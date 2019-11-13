@@ -68,8 +68,12 @@ RenewSubscriptionDialog::Implementation::Implementation(QWidget* _parent)
     buttonsLayout->addWidget(restoreButton);
     buttonsLayout->addWidget(cancelButton);
 
-#ifndef Q_OS_MAC
-    renewButton->hide();
+#ifdef Q_OS_MAC
+    paypal->hide();
+    bankCard->hide();
+    yandexMoney->hide();
+#else
+    restoreButton->hide();
 #endif
 }
 
@@ -86,16 +90,43 @@ RenewSubscriptionDialog::RenewSubscriptionDialog(QWidget* _parent)
     contentsLayout()->addWidget(d->renew3Month, 2, 0);
     contentsLayout()->addWidget(d->renew6Month, 3, 0);
     contentsLayout()->addWidget(d->renew12Month, 4, 0);
-    contentsLayout()->setRowMinimumHeight(5, 1); // отступ между месяцами и способами оплаты
+    contentsLayout()->setRowMinimumHeight(5, 0); // отступ между месяцами и способами оплаты
     contentsLayout()->addWidget(d->paypal, 6, 0);
     contentsLayout()->addWidget(d->bankCard, 7, 0);
     contentsLayout()->addWidget(d->yandexMoney, 8, 0);
     contentsLayout()->addLayout(d->buttonsLayout, 9, 0);
 
+    connect(d->renewButton, &Button::clicked, this, &RenewSubscriptionDialog::renewPressed);
     connect(d->cancelButton, &Button::clicked, this, &RenewSubscriptionDialog::canceled);
 
     updateTranslations();
     designSystemChangeEvent(nullptr);
+}
+
+int RenewSubscriptionDialog::monthCount() const
+{
+    if (d->renew1Month->isChecked()) {
+        return 1;
+    } else if (d->renew2Month->isChecked()) {
+        return 2;
+    } else if (d->renew3Month->isChecked()) {
+        return 3;
+    } else if (d->renew6Month->isChecked()) {
+        return 6;
+    } else {
+        return 12;
+    }
+}
+
+int RenewSubscriptionDialog::paymentType() const
+{
+    if (d->paypal->isChecked()) {
+        return 0;
+    } else if (d->bankCard->isChecked()) {
+        return 1;
+    } else {
+        return 2;
+    }
 }
 
 RenewSubscriptionDialog::~RenewSubscriptionDialog() = default;
@@ -108,11 +139,11 @@ QWidget* RenewSubscriptionDialog::focusedWidgetAfterShow() const
 void RenewSubscriptionDialog::updateTranslations()
 {
     setTitle(tr("Renew cloud service subscription for"));
-    d->renew1Month->setText(tr("1 month by 5$"));
-    d->renew2Month->setText(tr("2 month by 10$"));
-    d->renew3Month->setText(tr("3 month by 15$"));
-    d->renew6Month->setText(tr("6 month by 30$ (discount 6%)"));
-    d->renew12Month->setText(tr("12 month by 60$ (discount 12%)"));
+    d->renew1Month->setText(tr("1 month by $3.99"));
+    d->renew2Month->setText(tr("2 month by $7.99"));
+    d->renew3Month->setText(tr("3 month by $11.99"));
+    d->renew6Month->setText(tr("6 month by $21.99"));
+    d->renew12Month->setText(tr("12 month by $41.99"));
     d->paypal->setText(tr("via PayPal"));
     d->bankCard->setText(tr("via bank card"));
     d->yandexMoney->setText(tr("via Yandex.Money"));
@@ -131,12 +162,20 @@ void RenewSubscriptionDialog::designSystemChangeEvent(DesignSystemChangeEvent* _
         radioButton->setTextColor(Ui::DesignSystem::color().onSurface());
     }
 
+#ifndef Q_OS_MAC
     contentsLayout()->setRowMinimumHeight(5, static_cast<int>(Ui::DesignSystem::layout().px16()));
+#endif
 
     for (auto button : { d->renewButton, d->restoreButton, d->cancelButton }) {
         button->setBackgroundColor(Ui::DesignSystem::color().secondary());
         button->setTextColor(Ui::DesignSystem::color().secondary());
     }
+
+    contentsLayout()->setSpacing(static_cast<int>(Ui::DesignSystem::layout().px8()));
+    d->buttonsLayout->setContentsMargins(QMarginsF(Ui::DesignSystem::layout().px12(),
+                                                   Ui::DesignSystem::layout().px12(),
+                                                   Ui::DesignSystem::layout().px16(),
+                                                   Ui::DesignSystem::layout().px8()).toMargins());
 }
 
 } // namespace Ui

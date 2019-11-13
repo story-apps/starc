@@ -7,6 +7,7 @@
 
 #include <utils/helpers/color_helper.h>
 
+#include <QDate>
 #include <QVBoxLayout>
 
 
@@ -18,6 +19,7 @@ class AccountNavigator::Implementation
 public:
     explicit Implementation(QWidget* _parent);
 
+    QString subscriptionEnd;
 
     QVBoxLayout* layout = nullptr;
     H6Label* titleLabel = nullptr;
@@ -63,6 +65,12 @@ AccountNavigator::AccountNavigator(QWidget* _parent)
     designSystemChangeEvent(nullptr);
 }
 
+void AccountNavigator::setSubscriptionEnd(const QString& _subscriptionEnd)
+{
+    d->subscriptionEnd = _subscriptionEnd;
+    updateTranslations();
+}
+
 AccountNavigator::~AccountNavigator() = default;
 
 void AccountNavigator::updateTranslations()
@@ -71,7 +79,11 @@ void AccountNavigator::updateTranslations()
     d->subtitleLabel->setText("Story Architect " + tr("free version"));
     d->upgradeToProButton->setText(tr("Upgrade to pro"));
     d->cloudSpaceBar->setText(tr("Used 0.34 Gb \nfrom 2 Gb"));
-    d->subscriptionAvailabilityLabel->setText(tr("Cloud service subscription available to 12.12.2019"));
+    d->subscriptionAvailabilityLabel->setText(
+                d->subscriptionEnd.isEmpty()
+                ? tr("Information about subscription not loaded")
+                : tr("Cloud service subscription available to") + " "
+                  + QDate::fromString(d->subscriptionEnd, "yyyy-MM-dd").toString(Qt::SystemLocaleShortDate));
     d->renewSubscriptionButton->setText(tr("Renew subscription"));
 }
 

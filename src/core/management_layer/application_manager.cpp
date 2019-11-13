@@ -550,6 +550,14 @@ void ApplicationManager::initConnections()
             d->accountManager.data(), &AccountManager::setPaymentInfo);
 
     //
+    // Оплата услуг
+    //
+    connect(d->accountManager.data(), &AccountManager::renewSubscriptionRequested,
+            d->cloudServiceManager.data(), &CloudServiceManager::renewSubscription);
+    connect(d->cloudServiceManager.data(), &CloudServiceManager::subscriptionRenewed,
+            d->accountManager.data(), &AccountManager::setSubscriptionEnd);
+
+    //
     // Изменение параметров аккаунта
     //
     connect(d->accountManager.data(), &AccountManager::changeUserNameRequested,

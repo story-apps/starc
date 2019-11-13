@@ -17,6 +17,11 @@ public:
     explicit AccountNavigator(QWidget* _parent = nullptr);
     ~AccountNavigator() override;
 
+    /**
+     * @brief Задать дату окончания подписки
+     */
+    void setSubscriptionEnd(const QString& _subscriptionEnd);
+
 signals:
     /**
      * @brief Пользователь хочет продлить подписку

@@ -13,7 +13,22 @@ public:
     explicit RenewSubscriptionDialog(QWidget* _parent = nullptr);
     ~RenewSubscriptionDialog() override;
 
+    /**
+     * @brief Выбранное количество месяцев подписки для продления
+     */
+    int monthCount() const;
+
+    /**
+     * @brief Выбранный способ оплаты
+     */
+    int paymentType() const;
+
 signals:
+    /**
+     * @brief Пользователь нажал кнопку продлить подписку
+     */
+    void renewPressed();
+
     /**
      * @brief Пользователь передумал авторизовываться
      */
