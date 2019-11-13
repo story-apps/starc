@@ -26,6 +26,8 @@ public:
     Debouncer changeNameDebouncer{500};
 
     FloatingToolBar* toolBar = nullptr;
+    QAction* changePasswordAction = nullptr;
+    QAction* logoutAction = nullptr;
 
     Card* userInfo = nullptr;
     QGridLayout* userInfoLayout = nullptr;
@@ -37,6 +39,8 @@ public:
 
 AccountView::Implementation::Implementation(QWidget* _parent)
     : toolBar(new FloatingToolBar(_parent)),
+      changePasswordAction(new QAction(toolBar)),
+      logoutAction(new QAction(toolBar)),
       userInfo(new Card(_parent)),
       userInfoLayout(new QGridLayout),
       email(new H6Label(userInfo)),
@@ -44,6 +48,11 @@ AccountView::Implementation::Implementation(QWidget* _parent)
       receiveEmailNotifications(new CheckBox(userInfo)),
       avatar(new Avatar(userInfo))
 {
+    changePasswordAction->setIconText("\uf772");
+    toolBar->addAction(changePasswordAction);
+    logoutAction->setIconText("\uf343");
+    toolBar->addAction(logoutAction);
+
     userInfoLayout->setContentsMargins({});
     userInfoLayout->setSpacing(0);
     userInfoLayout->addWidget(email, 0, 0);
@@ -63,21 +72,15 @@ AccountView::AccountView(QWidget* _parent)
     : Widget(_parent),
       d(new Implementation(this))
 {
-    QAction* changePasswordAction = new QAction;
-    changePasswordAction->setIconText("\uf772");
-    d->toolBar->addAction(changePasswordAction);
-    connect(changePasswordAction, &QAction::triggered, this, &AccountView::changePasswordPressed);
-    QAction* logoutAction = new QAction;
-    logoutAction->setIconText("\uf343");
-    d->toolBar->addAction(logoutAction);
-    connect(logoutAction, &QAction::triggered, this, &AccountView::logoutPressed);
-
     QVBoxLayout* layout = new QVBoxLayout;
     layout->setContentsMargins({});
     layout->setSpacing(0);
     layout->addWidget(d->userInfo);
     layout->addStretch();
     setLayout(layout);
+
+    connect(d->changePasswordAction, &QAction::triggered, this, &AccountView::changePasswordPressed);
+    connect(d->logoutAction, &QAction::triggered, this, &AccountView::logoutPressed);
 
     connect(d->userName, &TextField::textChanged, &d->changeNameDebouncer, &Debouncer::orderWork);
     connect(&d->changeNameDebouncer, &Debouncer::gotWork, this, [this] {
@@ -144,6 +147,8 @@ void AccountView::designSystemChangeEvent(DesignSystemChangeEvent* _event)
     d->toolBar->setBackgroundColor(Ui::DesignSystem::color().primary());
     d->toolBar->setTextColor(Ui::DesignSystem::color().onPrimary());
     d->toolBar->raise();
+    d->changePasswordAction->setToolTip(tr("Change password"));
+    d->logoutAction->setToolTip(tr("Log out"));
 
     d->userInfo->setBackgroundColor(DesignSystem::color().surface());
     d->email->setBackgroundColor(DesignSystem::color().surface());

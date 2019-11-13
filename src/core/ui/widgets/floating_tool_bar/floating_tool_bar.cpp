@@ -7,6 +7,7 @@
 #include <QAction>
 #include <QPainter>
 #include <QPaintEvent>
+#include <QToolTip>
 #include <QVariantAnimation>
 
 
@@ -134,11 +135,28 @@ QSize FloatingToolBar::sizeHint() const
     return QSize(static_cast<int>(width), static_cast<int>(height));
 }
 
+bool FloatingToolBar::event(QEvent* _event)
+{
+    if (_event->type() == QEvent::ToolTip) {
+        QHelpEvent* event = static_cast<QHelpEvent*>(_event);
+        QAction* action = d->pressedAction(event->pos(), actions());
+        if (action != nullptr) {
+            auto c = action->toolTip();
+            QToolTip::showText(event->globalPos(), action->toolTip());
+        } else {
+            QToolTip::hideText();
+        }
+        return true;
+    }
+
+    return Widget::event(_event);
+}
+
 FloatingToolBar::~FloatingToolBar() = default;
 
 void FloatingToolBar::paintEvent(QPaintEvent* _event)
 {
-    Q_UNUSED(_event);
+    Q_UNUSED(_event)
 
     QPainter painter(this);
     painter.setRenderHint(QPainter::Antialiasing);
