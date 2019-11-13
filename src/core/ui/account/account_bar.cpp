@@ -62,6 +62,11 @@ AccountBar::~AccountBar() = default;
 
 void AccountBar::setAvatar(const QPixmap& _avatar)
 {
+    if (_avatar.isNull()) {
+        d->accountAction->setIcon({});
+        return;
+    }
+
     const int maxAvatarSideSize = std::max(_avatar.width(), _avatar.height());
     const QSize maxAvatarSize(maxAvatarSideSize, maxAvatarSideSize);
     QPixmap avatar = ImageHelper::makeAvatar(_avatar, maxAvatarSize);

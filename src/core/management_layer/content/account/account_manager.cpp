@@ -159,6 +159,14 @@ void AccountManager::completeLogin()
     notifyConnected();
 }
 
+void AccountManager::completeLogout()
+{
+    setAccountParameters(0, {}, 0, true, {}, {});
+    removeAvatar();
+
+    emit closeAccountRequested();
+}
+
 void AccountManager::setAccountParameters(qint64 _availableSpace, const QString& _email,
     qint64 _monthPrice, bool _receiveEmailNotifications, const QString& _userName, const QByteArray& _avatar)
 {
@@ -212,6 +220,13 @@ void AccountManager::setAvatar(const QPixmap& _avatar)
 
     d->accountBar->setAvatar(d->avatar);
     d->view->setAvatar(d->avatar);
+}
+
+void AccountManager::removeAvatar()
+{
+    d->avatar = {};
+    d->accountBar->setAvatar({});
+    d->view->setAvatar({});
 }
 
 void AccountManager::notifyConnected()
@@ -294,6 +309,7 @@ void AccountManager::initNavigatorConnections()
 
 void AccountManager::initViewConnections()
 {
+    connect(d->view, &Ui::AccountView::logoutPressed, this, &AccountManager::logoutRequested);
     connect(d->view, &Ui::AccountView::userNameChanged, this, &AccountManager::changeUserNameRequested);
     connect(d->view, &Ui::AccountView::receiveEmailNotificationsChanged,
             this, &AccountManager::changeReceiveEmailNotificationsRequested);

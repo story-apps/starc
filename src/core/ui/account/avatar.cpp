@@ -68,6 +68,7 @@ void Avatar::setAvatar(const QPixmap& _avatar)
     }
 
     d->avatar = _avatar;
+    d->preparedAvatar = {};
     d->prepreAvatarForPainting(size());
     updateGeometry();
     update();

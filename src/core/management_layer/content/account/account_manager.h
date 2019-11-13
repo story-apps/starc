@@ -76,6 +76,11 @@ public:
     void completeLogin();
 
     /**
+     * @brief Завершить выход из аккаунта
+     */
+    void completeLogout();
+
+    /**
      * @brief Установить параметры аккаунта
      */
     void setAccountParameters(qint64 _availableSpace, const QString& _email, qint64 _monthPrice,
@@ -86,6 +91,7 @@ public:
     void setReceiveEmailNotifications(bool _receive);
     void setAvatar(const QByteArray& _avatar);
     void setAvatar(const QPixmap& _avatar);
+    void removeAvatar();
 
     /**
      * @brief Уведомить о появившемся сетевом соединении
@@ -161,8 +167,13 @@ signals:
     void renewSubscriptionRequested(int _month, int _paymentType);
 
     //
-    // Настройка аккаунта
+    // Работа с аккаунтом
     //
+
+    /**
+     * @brief Пользователь хочет выйти из аккаунта
+     */
+    void logoutRequested();
 
     /**
      * @brief Пользователь хочет сменить имя пользователя

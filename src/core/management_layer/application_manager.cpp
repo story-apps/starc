@@ -539,6 +539,14 @@ void ApplicationManager::initConnections()
                 d->accountManager.data(), &AccountManager::setLoginPasswordError);
         connect(d->cloudServiceManager.data(), &CloudServiceManager::loginCompleted,
                 d->accountManager.data(), &AccountManager::completeLogin);
+
+        //
+        // Выход из аккаунта
+        //
+        connect(d->accountManager.data(), &AccountManager::logoutRequested,
+                d->cloudServiceManager.data(), &CloudServiceManager::logout);
+        connect(d->cloudServiceManager.data(), &CloudServiceManager::logoutCompleted,
+                d->accountManager.data(), &AccountManager::completeLogout);
     }
 
     //
