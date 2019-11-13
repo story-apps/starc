@@ -2,6 +2,7 @@
 
 #include <QObject>
 
+class PaymentInfo;
 class Widget;
 
 
@@ -79,6 +80,7 @@ public:
      */
     void setAccountParameters(qint64 _availableSpace, const QString& _email, qint64 _monthPrice,
         bool _receiveEmailNotifications, const QString& _userName, const QByteArray& _avatar);
+    void setPaymentInfo(const PaymentInfo& _info);
     void setUserName(const QString& _userName);
     void setReceiveEmailNotifications(bool _receive);
     void setAvatar(const QByteArray& _avatar);

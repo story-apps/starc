@@ -238,6 +238,11 @@ void AccountManager::setAccountParameters(qint64 _availableSpace, const QString&
     setAvatar(_avatar);
 }
 
+void AccountManager::setPaymentInfo(const PaymentInfo& _info)
+{
+
+}
+
 void AccountManager::setUserName(const QString& _userName)
 {
     d->userName = _userName;

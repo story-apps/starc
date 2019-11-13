@@ -23,6 +23,7 @@ public:
     RadioButton* renew12Month = nullptr;
 
     RadioButton* paypal = nullptr;
+    RadioButton* bankCard = nullptr;
     RadioButton* yandexMoney = nullptr;
 
     QHBoxLayout* buttonsLayout = nullptr;
@@ -38,6 +39,7 @@ RenewSubscriptionDialog::Implementation::Implementation(QWidget* _parent)
       renew6Month(new RadioButton(_parent)),
       renew12Month(new RadioButton(_parent)),
       paypal(new RadioButton(_parent)),
+      bankCard(new RadioButton(_parent)),
       yandexMoney(new RadioButton(_parent)),
       renewButton(new Button(_parent)),
       restoreButton(new Button(_parent)),
@@ -55,6 +57,7 @@ RenewSubscriptionDialog::Implementation::Implementation(QWidget* _parent)
 
     RadioButtonGroup* paymentGroup = new RadioButtonGroup(_parent);
     paymentGroup->add(paypal);
+    paymentGroup->add(bankCard);
     paymentGroup->add(yandexMoney);
 
     buttonsLayout = new QHBoxLayout;
@@ -85,8 +88,9 @@ RenewSubscriptionDialog::RenewSubscriptionDialog(QWidget* _parent)
     contentsLayout()->addWidget(d->renew12Month, 4, 0);
     contentsLayout()->setRowMinimumHeight(5, 1); // отступ между месяцами и способами оплаты
     contentsLayout()->addWidget(d->paypal, 6, 0);
-    contentsLayout()->addWidget(d->yandexMoney, 7, 0);
-    contentsLayout()->addLayout(d->buttonsLayout, 8, 0);
+    contentsLayout()->addWidget(d->bankCard, 7, 0);
+    contentsLayout()->addWidget(d->yandexMoney, 8, 0);
+    contentsLayout()->addLayout(d->buttonsLayout, 9, 0);
 
     connect(d->cancelButton, &Button::clicked, this, &RenewSubscriptionDialog::canceled);
 
@@ -110,6 +114,7 @@ void RenewSubscriptionDialog::updateTranslations()
     d->renew6Month->setText(tr("6 month by 30$ (discount 6%)"));
     d->renew12Month->setText(tr("12 month by 60$ (discount 12%)"));
     d->paypal->setText(tr("via PayPal"));
+    d->bankCard->setText(tr("via bank card"));
     d->yandexMoney->setText(tr("via Yandex.Money"));
     d->renewButton->setText(tr("Renew"));
     d->restoreButton->setText(tr("Restore"));
@@ -121,7 +126,7 @@ void RenewSubscriptionDialog::designSystemChangeEvent(DesignSystemChangeEvent* _
     Q_UNUSED(_event)
 
     for (auto radioButton : { d->renew1Month, d->renew2Month, d->renew3Month, d->renew6Month, d->renew12Month,
-                              d->paypal, d->yandexMoney }) {
+                              d->paypal, d->bankCard, d->yandexMoney }) {
         radioButton->setBackgroundColor(Ui::DesignSystem::color().surface());
         radioButton->setTextColor(Ui::DesignSystem::color().onSurface());
     }

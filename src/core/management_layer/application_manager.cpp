@@ -546,6 +546,8 @@ void ApplicationManager::initConnections()
     //
     connect(d->cloudServiceManager.data(), &CloudServiceManager::accountParametersLoaded,
             d->accountManager.data(), &AccountManager::setAccountParameters);
+    connect(d->cloudServiceManager.data(), &CloudServiceManager::paymentInfoLoaded,
+            d->accountManager.data(), &AccountManager::setPaymentInfo);
 
     //
     // Изменение параметров аккаунта
