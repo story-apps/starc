@@ -129,6 +129,8 @@ void AccountView::resizeEvent(QResizeEvent* _event)
 
 void AccountView::updateTranslations()
 {
+    d->changePasswordAction->setToolTip(tr("Change password"));
+    d->logoutAction->setToolTip(tr("Log out"));
     d->userName->setLabel(tr("User name"));
     d->receiveEmailNotifications->setText(tr("Receive email notifications"));
 }
@@ -147,16 +149,14 @@ void AccountView::designSystemChangeEvent(DesignSystemChangeEvent* _event)
     d->toolBar->setBackgroundColor(Ui::DesignSystem::color().primary());
     d->toolBar->setTextColor(Ui::DesignSystem::color().onPrimary());
     d->toolBar->raise();
-    d->changePasswordAction->setToolTip(tr("Change password"));
-    d->logoutAction->setToolTip(tr("Log out"));
 
-    d->userInfo->setBackgroundColor(DesignSystem::color().surface());
-    d->email->setBackgroundColor(DesignSystem::color().surface());
-    d->email->setTextColor(DesignSystem::color().onSurface());
+    d->userInfo->setBackgroundColor(DesignSystem::color().background());
+    d->email->setBackgroundColor(DesignSystem::color().background());
+    d->email->setTextColor(DesignSystem::color().onBackground());
     d->email->setContentsMargins(Ui::DesignSystem::label().margins().toMargins());
     d->userInfoLayout->setRowMinimumHeight(3, static_cast<int>(Ui::DesignSystem::layout().px8()));
-    d->receiveEmailNotifications->setBackgroundColor(DesignSystem::color().surface());
-    d->receiveEmailNotifications->setTextColor(DesignSystem::color().onSurface());
+    d->receiveEmailNotifications->setBackgroundColor(DesignSystem::color().background());
+    d->receiveEmailNotifications->setTextColor(DesignSystem::color().onBackground());
 }
 
 } // namespace Ui

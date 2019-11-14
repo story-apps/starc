@@ -152,8 +152,8 @@ void RenewSubscriptionDialog::designSystemChangeEvent(DesignSystemChangeEvent* _
 
     for (auto radioButton : { d->renew1Month, d->renew2Month, d->renew3Month, d->renew6Month, d->renew12Month,
                               d->paypal, d->bankCard, d->yandexMoney }) {
-        radioButton->setBackgroundColor(Ui::DesignSystem::color().surface());
-        radioButton->setTextColor(Ui::DesignSystem::color().onSurface());
+        radioButton->setBackgroundColor(Ui::DesignSystem::color().background());
+        radioButton->setTextColor(Ui::DesignSystem::color().onBackground());
     }
 
 #ifndef Q_OS_MAC

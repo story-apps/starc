@@ -6,9 +6,10 @@
 #include <ui/account/account_navigator.h>
 #include <ui/account/account_tool_bar.h>
 #include <ui/account/account_view.h>
-#include <ui/account/upgrade_to_pro_dialog.h>
+#include <ui/account/change_password_dialog.h>
 #include <ui/account/login_dialog.h>
 #include <ui/account/renew_subscription_dialog.h>
+#include <ui/account/upgrade_to_pro_dialog.h>
 
 #include <utils/helpers/image_helper.h>
 
@@ -31,6 +32,7 @@ public:
     Ui::LoginDialog* loginDialog = nullptr;
     Ui::UpgradeToProDialog* upgradeToProDialog = nullptr;
     Ui::RenewSubscriptionDialog* renewSubscriptionDialog = nullptr;
+    Ui::ChangePasswordDialog* changePasswordDialog = nullptr;
 
     Ui::AccountToolBar* toolBar = nullptr;
     Ui::AccountNavigator* navigator = nullptr;
@@ -100,8 +102,12 @@ QWidget* AccountManager::view() const
 
 void AccountManager::login()
 {
-    Q_ASSERT(d->loginDialog);
-    emit loginRequested(d->loginDialog->email(), d->loginDialog->password());
+    Q_ASSERT(d->loginDialog || d->changePasswordDialog);
+    if (d->loginDialog != nullptr) {
+        emit loginRequested(d->loginDialog->email(), d->loginDialog->password());
+    } else if (d->changePasswordDialog != nullptr) {
+        emit loginRequested(d->email, d->changePasswordDialog->password());
+    }
 }
 
 void AccountManager::allowRegistration()
@@ -130,20 +136,30 @@ void AccountManager::allowLogin()
 
 void AccountManager::prepareToEnterRestorePasswordConfirmationCode()
 {
-    Q_ASSERT(d->loginDialog);
-    d->loginDialog->showRestorePasswordConfirmationCodeField();
+    Q_ASSERT(d->loginDialog || d->changePasswordDialog);
+    if (d->loginDialog != nullptr) {
+        d->loginDialog->showRestorePasswordConfirmationCodeField();
+    }
 }
 
 void AccountManager::allowChangePassword()
 {
-    Q_ASSERT(d->loginDialog);
-    d->loginDialog->showChangePasswordFiledAndButton();
+    Q_ASSERT(d->loginDialog || d->changePasswordDialog);
+    if (d->loginDialog != nullptr) {
+        d->loginDialog->showChangePasswordFieldAndButton();
+    } else if (d->changePasswordDialog != nullptr) {
+        d->changePasswordDialog->showChangePasswordFieldAndButton();
+    }
 }
 
 void AccountManager::setRestorePasswordConfirmationError(const QString& _error)
 {
-    Q_ASSERT(d->loginDialog);
-    d->loginDialog->setRestorePasswordConfirmationError(_error);
+    Q_ASSERT(d->loginDialog || d->changePasswordDialog);
+    if (d->loginDialog != nullptr) {
+        d->loginDialog->setRestorePasswordConfirmationError(_error);
+    } else if (d->changePasswordDialog != nullptr) {
+        d->changePasswordDialog->setConfirmationError(_error);
+    }
 }
 
 void AccountManager::setLoginPasswordError(const QString& _error)
@@ -156,6 +172,9 @@ void AccountManager::completeLogin()
 {
     if (d->loginDialog != nullptr) {
         d->loginDialog->hideDialog();
+    }
+    if (d->changePasswordDialog != nullptr) {
+        d->changePasswordDialog->hideDialog();
     }
 
     notifyConnected();
@@ -295,8 +314,8 @@ void AccountManager::initNavigatorConnections()
             d->upgradeToProDialog = new Ui::UpgradeToProDialog(d->topLevelWidget);
             connect(d->upgradeToProDialog, &Ui::UpgradeToProDialog::canceled, d->upgradeToProDialog, &Ui::UpgradeToProDialog::hideDialog);
             connect(d->upgradeToProDialog, &Ui::UpgradeToProDialog::disappeared, this, [this] {
-                d->renewSubscriptionDialog->deleteLater();
-                d->renewSubscriptionDialog = nullptr;
+                d->upgradeToProDialog->deleteLater();
+                d->upgradeToProDialog = nullptr;
             });
         }
 
@@ -323,6 +342,26 @@ void AccountManager::initNavigatorConnections()
 
 void AccountManager::initViewConnections()
 {
+    connect(d->view, &Ui::AccountView::changePasswordPressed, this, [this] {
+        if (d->changePasswordDialog == nullptr) {
+            d->changePasswordDialog = new Ui::ChangePasswordDialog(d->topLevelWidget);
+            connect(d->changePasswordDialog, &Ui::ChangePasswordDialog::confirmationCodeEntered, this, [this] {
+                emit passwordRestoringConfirmationCodeEntered(d->email, d->changePasswordDialog->code());
+            });
+            connect(d->changePasswordDialog, &Ui::ChangePasswordDialog::changePasswordRequested, this, [this] {
+                emit changePasswordRequested(d->email, d->changePasswordDialog->code(), d->changePasswordDialog->password());
+            });
+            connect(d->changePasswordDialog, &Ui::ChangePasswordDialog::canceled, d->changePasswordDialog, &Ui::ChangePasswordDialog::hideDialog);
+            connect(d->changePasswordDialog, &Ui::ChangePasswordDialog::disappeared, this, [this] {
+                d->changePasswordDialog->deleteLater();
+                d->changePasswordDialog = nullptr;
+            });
+        }
+
+        d->changePasswordDialog->showDialog();
+
+        emit restorePasswordRequested(d->email);
+    });
     connect(d->view, &Ui::AccountView::logoutPressed, this, &AccountManager::logoutRequested);
     connect(d->view, &Ui::AccountView::userNameChanged, this, &AccountManager::changeUserNameRequested);
     connect(d->view, &Ui::AccountView::receiveEmailNotificationsChanged,

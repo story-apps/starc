@@ -95,8 +95,8 @@ void UpgradeToProDialog::designSystemChangeEvent(DesignSystemChangeEvent* _event
     Q_UNUSED(_event)
 
     for (auto radioButton : { d->paypal, d->bankCard, d->yandexMoney }) {
-        radioButton->setBackgroundColor(Ui::DesignSystem::color().surface());
-        radioButton->setTextColor(Ui::DesignSystem::color().onSurface());
+        radioButton->setBackgroundColor(Ui::DesignSystem::color().background());
+        radioButton->setTextColor(Ui::DesignSystem::color().onBackground());
     }
 
     for (auto button : { d->upgradeButton, d->cancelButton }) {

@@ -60,7 +60,7 @@ public:
     /**
      * @brief Показать поле ввода нового пароля и кнопку смены пароля
      */
-    void showChangePasswordFiledAndButton();
+    void showChangePasswordFieldAndButton();
 
     /**
      * @brief Задать ошибку ввода пароля

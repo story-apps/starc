@@ -11,7 +11,6 @@
 
 #include <QEvent>
 #include <QGridLayout>
-#include <QTimer>
 
 namespace Ui
 {
@@ -45,6 +44,7 @@ LoginDialog::Implementation::Implementation(QWidget* _parent)
       password(new TextField(_parent)),
       registrationConfirmationCode(new TextField(_parent)),
       restorePasswordConfirmationCode(new TextField(_parent)),
+      buttonsLayout(new QHBoxLayout),
       registrationButton(new Button(_parent)),
       restorePasswordButton(new Button(_parent)),
       changePasswordButton(new Button(_parent)),
@@ -58,8 +58,8 @@ LoginDialog::Implementation::Implementation(QWidget* _parent)
     password->setTrailingIcon("\uf6d0");
 
     registrationConfirmationCode->setTabChangesFocus(true);
+    restorePasswordConfirmationCode->setTabChangesFocus(true);
 
-    buttonsLayout = new QHBoxLayout;
     buttonsLayout->setContentsMargins({});
     buttonsLayout->setSpacing(0);
     buttonsLayout->addStretch();
@@ -115,8 +115,7 @@ LoginDialog::LoginDialog(QWidget* _parent)
     contentsLayout()->addWidget(d->restorePasswordConfirmationCode, 1, 0);
     contentsLayout()->addWidget(d->password, 2, 0);
     contentsLayout()->addWidget(d->registrationConfirmationCode, 3, 0);
-    contentsLayout()->setRowStretch(4, 1);
-    contentsLayout()->addLayout(d->buttonsLayout, 5, 0);
+    contentsLayout()->addLayout(d->buttonsLayout, 4, 0);
 
     connect(d->email, &TextField::textChanged, &d->checkEmailDebouncer, &Debouncer::orderWork);
     connect(&d->checkEmailDebouncer, &Debouncer::gotWork, this, [this] { d->checkEmail(); });
@@ -209,7 +208,7 @@ void LoginDialog::setRestorePasswordConfirmationError(const QString& _error)
     d->restorePasswordConfirmationCode->setFocus();
 }
 
-void LoginDialog::showChangePasswordFiledAndButton()
+void LoginDialog::showChangePasswordFieldAndButton()
 {
     d->password->setLabel(tr("New password"));
     d->password->show();
