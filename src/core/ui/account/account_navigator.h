@@ -24,6 +24,11 @@ public:
 
 signals:
     /**
+     * @brief Пользователь хочет купить лицензию
+     */
+    void upgradeToProPressed();
+
+    /**
      * @brief Пользователь хочет продлить подписку
      */
     void renewSubscriptionPressed();

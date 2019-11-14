@@ -36,6 +36,7 @@ SOURCES += \
     ui/account/avatar.cpp \
     ui/account/login_dialog.cpp \
     ui/account/renew_subscription_dialog.cpp \
+    ui/account/upgrade_to_pro_dialog.cpp \
     ui/application_view.cpp \
     ui/menu_view.cpp \
     ui/settings/settings_navigator.cpp \
@@ -111,6 +112,7 @@ HEADERS += \
     ui/account/avatar.h \
     ui/account/login_dialog.h \
     ui/account/renew_subscription_dialog.h \
+    ui/account/upgrade_to_pro_dialog.h \
         ui/application_view.h \
     ui/menu_view.h \
     ui/settings/settings_navigator.h \

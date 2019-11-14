@@ -6,6 +6,7 @@
 #include <ui/account/account_navigator.h>
 #include <ui/account/account_tool_bar.h>
 #include <ui/account/account_view.h>
+#include <ui/account/upgrade_to_pro_dialog.h>
 #include <ui/account/login_dialog.h>
 #include <ui/account/renew_subscription_dialog.h>
 
@@ -28,6 +29,7 @@ public:
 
     Ui::AccountBar* accountBar = nullptr;
     Ui::LoginDialog* loginDialog = nullptr;
+    Ui::UpgradeToProDialog* upgradeToProDialog = nullptr;
     Ui::RenewSubscriptionDialog* renewSubscriptionDialog = nullptr;
 
     Ui::AccountToolBar* toolBar = nullptr;
@@ -288,6 +290,18 @@ void AccountManager::initToolBarConnections()
 
 void AccountManager::initNavigatorConnections()
 {
+    connect(d->navigator, &Ui::AccountNavigator::upgradeToProPressed, this, [this] {
+        if (d->upgradeToProDialog == nullptr) {
+            d->upgradeToProDialog = new Ui::UpgradeToProDialog(d->topLevelWidget);
+            connect(d->upgradeToProDialog, &Ui::UpgradeToProDialog::canceled, d->upgradeToProDialog, &Ui::UpgradeToProDialog::hideDialog);
+            connect(d->upgradeToProDialog, &Ui::UpgradeToProDialog::disappeared, this, [this] {
+                d->renewSubscriptionDialog->deleteLater();
+                d->renewSubscriptionDialog = nullptr;
+            });
+        }
+
+        d->upgradeToProDialog->showDialog();
+    });
     connect(d->navigator, &Ui::AccountNavigator::renewSubscriptionPressed, this, [this] {
         if (d->renewSubscriptionDialog == nullptr) {
             d->renewSubscriptionDialog = new Ui::RenewSubscriptionDialog(d->topLevelWidget);

@@ -60,6 +60,7 @@ AccountNavigator::AccountNavigator(QWidget* _parent)
     : Widget(_parent),
       d(new Implementation(this))
 {
+    connect(d->upgradeToProButton, &Button::clicked, this, &AccountNavigator::upgradeToProPressed);
     connect(d->renewSubscriptionButton, &Button::clicked, this, &AccountNavigator::renewSubscriptionPressed);
 
     designSystemChangeEvent(nullptr);

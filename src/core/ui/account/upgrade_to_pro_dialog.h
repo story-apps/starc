@@ -6,31 +6,26 @@
 namespace Ui {
 
 /**
- * @brief Диалог продления подписки на облачный сервис
+ * @brief Диалог покупки лицензии
  */
-class RenewSubscriptionDialog : public AbstractDialog
+class UpgradeToProDialog : public AbstractDialog
 {
     Q_OBJECT
 
 public:
-    explicit RenewSubscriptionDialog(QWidget* _parent = nullptr);
-    ~RenewSubscriptionDialog() override;
-
-    /**
-     * @brief Выбранное количество месяцев подписки для продления
-     */
-    int monthCount() const;
-
-    /**
-     * @brief Выбранный способ оплаты
-     */
-    int paymentType() const;
+    explicit UpgradeToProDialog(QWidget* _parent = nullptr);
+    ~UpgradeToProDialog() override;
 
 signals:
     /**
      * @brief Пользователь нажал кнопку продлить подписку
      */
-    void renewPressed();
+    void upgradePressed();
+
+    /**
+     * @brief Пользователь нажал кнопку восстановления платежа
+     */
+    void restorePressed();
 
     /**
      * @brief Пользователь передумал авторизовываться

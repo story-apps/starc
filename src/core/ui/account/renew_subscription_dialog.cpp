@@ -28,7 +28,6 @@ public:
 
     QHBoxLayout* buttonsLayout = nullptr;
     Button* renewButton = nullptr;
-    Button* restoreButton = nullptr;
     Button* cancelButton = nullptr;
 };
 
@@ -41,8 +40,8 @@ RenewSubscriptionDialog::Implementation::Implementation(QWidget* _parent)
       paypal(new RadioButton(_parent)),
       bankCard(new RadioButton(_parent)),
       yandexMoney(new RadioButton(_parent)),
+      buttonsLayout(new QHBoxLayout),
       renewButton(new Button(_parent)),
-      restoreButton(new Button(_parent)),
       cancelButton(new Button(_parent))
 {
     renew1Month->setChecked(true);
@@ -60,20 +59,16 @@ RenewSubscriptionDialog::Implementation::Implementation(QWidget* _parent)
     paymentGroup->add(bankCard);
     paymentGroup->add(yandexMoney);
 
-    buttonsLayout = new QHBoxLayout;
     buttonsLayout->setContentsMargins({});
     buttonsLayout->setSpacing(0);
     buttonsLayout->addStretch();
     buttonsLayout->addWidget(renewButton);
-    buttonsLayout->addWidget(restoreButton);
     buttonsLayout->addWidget(cancelButton);
 
 #ifdef Q_OS_MAC
     paypal->hide();
     bankCard->hide();
     yandexMoney->hide();
-#else
-    restoreButton->hide();
 #endif
 }
 
@@ -148,7 +143,6 @@ void RenewSubscriptionDialog::updateTranslations()
     d->bankCard->setText(tr("via bank card"));
     d->yandexMoney->setText(tr("via Yandex.Money"));
     d->renewButton->setText(tr("Renew"));
-    d->restoreButton->setText(tr("Restore"));
     d->cancelButton->setText(tr("Cancel"));
 }
 
@@ -166,7 +160,7 @@ void RenewSubscriptionDialog::designSystemChangeEvent(DesignSystemChangeEvent* _
     contentsLayout()->setRowMinimumHeight(5, static_cast<int>(Ui::DesignSystem::layout().px16()));
 #endif
 
-    for (auto button : { d->renewButton, d->restoreButton, d->cancelButton }) {
+    for (auto button : { d->renewButton, d->cancelButton }) {
         button->setBackgroundColor(Ui::DesignSystem::color().secondary());
         button->setTextColor(Ui::DesignSystem::color().secondary());
     }
