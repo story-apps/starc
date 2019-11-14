@@ -28,6 +28,16 @@ public:
     QString password() const;
 
     /**
+     * @brief Код подтверждения для регистрации
+     */
+    QString registractionConfirmationCode() const;
+
+    /**
+     * @brief Код подтверждения для смены пароля
+     */
+    QString restorePasswordConfirmationCode() const;
+
+    /**
      * @brief Показать кнопку регистрации пользователя
      */
     void showRegistrationButton();
@@ -71,37 +81,37 @@ signals:
     /**
      * @brief Пользователь ввёл свой email
      */
-    void emailEntered(const QString& _email);
+    void emailEntered();
 
     /**
      * @brief Пользователь хочет восстановить пароль
      */
-    void restorePasswordRequested(const QString& _email);
+    void restorePasswordRequested();
 
     /**
      * @brief Введён код подтверждения регистрации
      */
-    void passwordRestoringConfirmationCodeEntered(const QString& _email, const QString& _code);
+    void passwordRestoringConfirmationCodeEntered();
 
     /**
      * @brief Пользователь хочет сменить пароль
      */
-    void changePasswordRequested(const QString& _email, const QString& _code, const QString& _password);
+    void changePasswordRequested();
 
     /**
      * @brief Пользователь хочет зарегистрироваться
      */
-    void registrationRequested(const QString& _email, const QString& _password);
+    void registrationRequested();
 
     /**
      * @brief Введён код подтверждения регистрации
      */
-    void registrationConfirmationCodeEntered(const QString& _email, const QString& _code);
+    void registrationConfirmationCodeEntered();
 
     /**
      * @brief Пользователь хочет авторизоваться
      */
-    void loginRequested(const QString& _email, const QString& _password);
+    void loginRequested();
 
     /**
      * @brief Пользователь передумал авторизовываться

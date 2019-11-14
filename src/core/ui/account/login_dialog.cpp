@@ -119,32 +119,17 @@ LoginDialog::LoginDialog(QWidget* _parent)
 
     connect(d->email, &TextField::textChanged, &d->checkEmailDebouncer, &Debouncer::orderWork);
     connect(&d->checkEmailDebouncer, &Debouncer::gotWork, this, [this] { d->checkEmail(); });
-    connect(&d->notifyEmailDebouncer, &Debouncer::gotWork, this, [this] {
-        const QString email = d->email->text();
-        emit emailEntered(email);
-    });
+    connect(&d->notifyEmailDebouncer, &Debouncer::gotWork, this, &LoginDialog::emailEntered);
     connect(d->password, &TextField::trailingIconPressed, d->password, [password = d->password] {
         password->setPasswordModeEnabled(!password->isPasswordModeEnabled());
         password->setTrailingIcon(password->isPasswordModeEnabled() ? "\uf6d0" : "\uf6cf");
     });
-    connect(d->registrationConfirmationCode, &TextField::textChanged, this, [this] {
-        emit registrationConfirmationCodeEntered(d->email->text(), d->registrationConfirmationCode->text());
-    });
-    connect(d->restorePasswordConfirmationCode, &TextField::textChanged, this, [this] {
-        emit passwordRestoringConfirmationCodeEntered(d->email->text(), d->restorePasswordConfirmationCode->text());
-    });
-    connect(d->restorePasswordButton, &Button::clicked, this, [this] {
-        emit restorePasswordRequested(d->email->text());
-    });
-    connect(d->changePasswordButton, &Button::clicked, this, [this] {
-        emit changePasswordRequested(d->email->text(), d->restorePasswordConfirmationCode->text(), d->password->text());
-    });
-    connect(d->registrationButton, &Button::clicked, this, [this] {
-        emit registrationRequested(d->email->text(), d->password->text());
-    });
-    connect(d->loginButton, &Button::clicked, this, [this] {
-        emit loginRequested(d->email->text(), d->password->text());
-    });
+    connect(d->registrationConfirmationCode, &TextField::textChanged, this, &LoginDialog::registrationConfirmationCodeEntered);
+    connect(d->restorePasswordConfirmationCode, &TextField::textChanged, this, &LoginDialog::passwordRestoringConfirmationCodeEntered);
+    connect(d->restorePasswordButton, &Button::clicked, this, &LoginDialog::restorePasswordRequested);
+    connect(d->changePasswordButton, &Button::clicked, this, &LoginDialog::changePasswordRequested);
+    connect(d->registrationButton, &Button::clicked, this, &LoginDialog::registrationRequested);
+    connect(d->loginButton, &Button::clicked, this, &LoginDialog::loginRequested);
     connect(d->cancelButton, &Button::clicked, this, &LoginDialog::canceled);
 
     updateTranslations();
@@ -159,6 +144,16 @@ QString LoginDialog::email() const
 QString LoginDialog::password() const
 {
     return d->password->text();
+}
+
+QString LoginDialog::registractionConfirmationCode() const
+{
+    return d->registrationConfirmationCode->text();
+}
+
+QString LoginDialog::restorePasswordConfirmationCode() const
+{
+    return d->restorePasswordConfirmationCode->text();
 }
 
 void LoginDialog::showRegistrationButton()

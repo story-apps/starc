@@ -283,14 +283,27 @@ void AccountManager::initAccountBarConnections()
         //
         if (d->loginDialog == nullptr) {
             d->loginDialog = new Ui::LoginDialog(d->topLevelWidget);
-            connect(d->loginDialog, &Ui::LoginDialog::emailEntered, this, &AccountManager::emailEntered);
-            connect(d->loginDialog, &Ui::LoginDialog::restorePasswordRequested, this, &AccountManager::restorePasswordRequested);
-            connect(d->loginDialog, &Ui::LoginDialog::passwordRestoringConfirmationCodeEntered, this, &AccountManager::passwordRestoringConfirmationCodeEntered);
-            connect(d->loginDialog, &Ui::LoginDialog::changePasswordRequested, this, &AccountManager::changePasswordRequested);
-            connect(d->loginDialog, &Ui::LoginDialog::registrationRequested, this, &AccountManager::registrationRequested);
-            connect(d->loginDialog, &Ui::LoginDialog::registrationConfirmationCodeEntered,
-                    this, &AccountManager::registrationConfirmationCodeEntered);
-            connect(d->loginDialog, &Ui::LoginDialog::loginRequested, this, &AccountManager::loginRequested);
+            connect(d->loginDialog, &Ui::LoginDialog::emailEntered, this, [this] {
+                emit emailEntered(d->loginDialog->email());
+            });
+            connect(d->loginDialog, &Ui::LoginDialog::restorePasswordRequested, this, [this] {
+                emit restorePasswordRequested(d->loginDialog->email());
+            });
+            connect(d->loginDialog, &Ui::LoginDialog::passwordRestoringConfirmationCodeEntered, this, [this] {
+                emit passwordRestoringConfirmationCodeEntered(d->loginDialog->email(), d->loginDialog->restorePasswordConfirmationCode());
+            });
+            connect(d->loginDialog, &Ui::LoginDialog::changePasswordRequested, this, [this] {
+                emit changePasswordRequested(d->loginDialog->email(), d->loginDialog->restorePasswordConfirmationCode(), d->loginDialog->password());
+            });
+            connect(d->loginDialog, &Ui::LoginDialog::registrationRequested, this, [this] {
+                emit registrationRequested(d->loginDialog->email(), d->loginDialog->password());
+            });
+            connect(d->loginDialog, &Ui::LoginDialog::registrationConfirmationCodeEntered, this, [this] {
+                emit registrationConfirmationCodeEntered(d->loginDialog->email(), d->loginDialog->registractionConfirmationCode());
+            });
+            connect(d->loginDialog, &Ui::LoginDialog::loginRequested, this, [this] {
+                emit loginRequested(d->loginDialog->email(), d->loginDialog->password());
+            });
             connect(d->loginDialog, &Ui::LoginDialog::canceled, d->loginDialog, &Ui::LoginDialog::hideDialog);
             connect(d->loginDialog, &Ui::LoginDialog::disappeared, this, [this] {
                 d->loginDialog->deleteLater();
