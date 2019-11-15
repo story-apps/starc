@@ -430,6 +430,7 @@ public:
     ProjectsScene* scene = nullptr;
     Domain::ProjectsModel* projects = nullptr;
     QVector<ProjectCard*> projectsCards;
+    bool cardsAnimationsAvailable = true;
     QHash<ProjectCard*, QPointer<QVariantAnimation>> projectsCardsAnimations;
 };
 
@@ -531,7 +532,7 @@ void ProjectsCards::Implementation::reorderCards()
         if (card->pos() != newItemPosition) {
             const QRectF itemRect(card->pos(), card->boundingRect().size());
             const QRectF newItemRect(newItemPosition, card->boundingRect().size());
-            if (viewportRect.intersects(itemRect.united(newItemRect))) {
+            if (cardsAnimationsAvailable && viewportRect.intersects(itemRect.united(newItemRect))) {
                 //
                 // ... анимируем смещение
                 //
@@ -705,7 +706,9 @@ void ProjectsCards::resizeEvent(QResizeEvent* _event)
 {
     QGraphicsView::resizeEvent(_event);
 
+    d->cardsAnimationsAvailable = false;
     d->reorderCards();
+    d->cardsAnimationsAvailable = true;
 }
 
 void ProjectsCards::notifyVisibleChange()

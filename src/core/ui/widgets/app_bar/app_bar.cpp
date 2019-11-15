@@ -116,7 +116,7 @@ void AppBar::paintEvent(QPaintEvent* _event)
         // ... сама иконка
         //
         const QRectF actionRect(QPointF(actionX, actionY), actionSize);
-        painter.setPen(action->isChecked() ? textColor() : iconInactiveColor);
+        painter.setPen((!action->isCheckable() || action->isChecked()) ? textColor() : iconInactiveColor);
         painter.drawText(actionRect, Qt::AlignCenter, action->text());
 
         //
