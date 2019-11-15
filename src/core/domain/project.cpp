@@ -41,16 +41,6 @@ const Project& Project::operator=(const Project& _other)
     return *this;
 }
 
-bool Project::operator==(const Project& _other)
-{
-    return type() == _other.type()
-            && path() == _other.path()
-            && posterPath() == _other.posterPath()
-            && name() == _other.name()
-            && logline() == _other.logline()
-            && lastEditTime() == _other.lastEditTime();
-}
-
 Project::~Project() = default;
 
 ProjectType Project::type() const
@@ -192,6 +182,16 @@ QVariant Project::data(int _role) const
     }
 }
 
+bool operator==(const Project& _lhs, const Project& _rhs)
+{
+    return _lhs.type() == _rhs.type()
+            && _lhs.path() == _rhs.path()
+            && _lhs.posterPath() == _rhs.posterPath()
+            && _lhs.name() == _rhs.name()
+            && _lhs.logline() == _rhs.logline()
+            && _lhs.lastEditTime() == _rhs.lastEditTime();
+}
+
 
 // ****
 
@@ -212,7 +212,7 @@ ProjectsModel::ProjectsModel(QObject* _parent)
 {
 }
 
-const Project& ProjectsModel::projectAt(int _row) const
+Project ProjectsModel::projectAt(int _row) const
 {
     Q_ASSERT(_row >= 0 && _row < d->projects.size());
     return d->projects.at(_row);
@@ -252,6 +252,74 @@ void ProjectsModel::remove(const Project &_project)
     beginRemoveRows({}, projectIndex, projectIndex);
     d->projects.removeAt(projectIndex);
     endRemoveRows();
+}
+
+bool ProjectsModel::moveProject(const Project& _moved, const Project& _insertAfter)
+{
+    //
+    // Попытка переметить тот же самый проект
+    //
+    if (_moved == _insertAfter) {
+        return false;
+    }
+
+    const int kInvalidIndex = -1;
+
+    //
+    // Перемещаемого проекта нет в списке
+    //
+    const int movedProjectIndex = d->projects.indexOf(_moved);
+    if (movedProjectIndex == kInvalidIndex) {
+        return false;
+    }
+
+    //
+    // Проект перемещается в самое начало
+    //
+    if (_insertAfter == Project()) {
+        //
+        // Проект и так уже самый первый
+        //
+        if (movedProjectIndex == 0) {
+            return false;
+        }
+
+        beginMoveRows({}, movedProjectIndex, movedProjectIndex, {}, 0);
+        d->projects.move(movedProjectIndex, 0);
+        endMoveRows();
+        return true;
+    }
+
+    //
+    // Проект перемещается внутри списка
+    //
+    const int insertAfterProjectIndex = d->projects.indexOf(_insertAfter);
+
+    //
+    // Проекта, после которого нужно вставить, нет в в списке
+    //
+    if (insertAfterProjectIndex == kInvalidIndex) {
+        return false;
+    }
+
+    //
+    // Проекты и так уже идут друг за другом
+    //
+    if ((movedProjectIndex - 1) == insertAfterProjectIndex) {
+        return false;
+    }
+
+    //
+    // Определим скорректированный индекс, как того требует Qt
+    //
+    const int insertAfterProjectIndexCorrected = movedProjectIndex < insertAfterProjectIndex
+                                                 ? insertAfterProjectIndex + 1
+                                                 : insertAfterProjectIndex;
+
+    beginMoveRows({}, movedProjectIndex, movedProjectIndex, {}, insertAfterProjectIndexCorrected);
+    d->projects.move(movedProjectIndex, insertAfterProjectIndex);
+    endMoveRows();
+    return true;
 }
 
 bool ProjectsModel::isEmpty() const

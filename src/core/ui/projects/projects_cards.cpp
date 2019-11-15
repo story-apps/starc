@@ -17,6 +17,7 @@
 #include <QGraphicsRectItem>
 #include <QPointer>
 #include <QResizeEvent>
+#include <QTimer>
 #include <QtMath>
 #include <QVariantAnimation>
 
@@ -39,6 +40,11 @@ public:
      * @brief Задать проект для отображения на карточке
      */
     void setProject(const Domain::Project& _project);
+
+    /**
+     * @brief Получить проект, который отображается на карточке
+     */
+    Domain::Project project() const;
 
     /**
      * @brief Отрисовка карточки
@@ -147,6 +153,11 @@ void ProjectCard::setProject(const Domain::Project& _project)
 
     m_project = _project;
     update();
+}
+
+Domain::Project ProjectCard::project() const
+{
+    return m_project;
 }
 
 void ProjectCard::paint(QPainter* _painter, const QStyleOptionGraphicsItem* _option, QWidget* _widget)
@@ -340,27 +351,31 @@ void ProjectCard::mouseReleaseEvent(QGraphicsSceneMouseEvent* _event)
         if (m_project.type() == Domain::ProjectType::Local) {
             if (iconsRects[0].contains(_event->pos())) {
                 emit projectsScene()->moveProjectToCloudRequested(m_project);
-                return;
             } else if (iconsRects[1].contains(_event->pos())) {
                 emit projectsScene()->hideProjectRequested(m_project);
-                return;
+            } else {
+                emit projectsScene()->projectPressed(m_project);
             }
         } else {
             if (iconsRects[0].contains(_event->pos())) {
                 emit projectsScene()->changeProjectNameRequested(m_project);
-                return;
             } else if (iconsRects[1].contains(_event->pos())) {
                 emit projectsScene()->removeProjectRequested(m_project);
-                return;
+            } else {
+                emit projectsScene()->projectPressed(m_project);
             }
         }
-
-        emit projectsScene()->projectPressed(m_project);
-        return;
     } else {
         m_decorationOpacityAnimation.setStartValue(0.15);
         m_decorationOpacityAnimation.setEndValue(0.0);
         m_decorationOpacityAnimation.start();
+
+        //
+        // Делаем отложенный вызов, чтобы mouseGrabber сцены освободился
+        //
+        QTimer::singleShot(0, projectsScene(), [this] {
+            emit projectsScene()->reorderProjectCardRequested(this);
+        });
     }
 }
 
@@ -407,6 +422,15 @@ ProjectsScene::ProjectsScene(QObject* _parent)
 {
 }
 
+void ProjectsScene::mouseMoveEvent(QGraphicsSceneMouseEvent* _event)
+{
+    QGraphicsScene::mouseMoveEvent(_event);
+
+    if (mouseGrabberItem() != nullptr) {
+        emit reorderProjectCardRequested(mouseGrabberItem());
+    }
+}
+
 
 // ****
 
@@ -425,6 +449,11 @@ public:
      * @brief Упорядочить карточки проектов
      */
     void reorderCards();
+
+    /**
+     * @brief Определить новую позицию карточки, т.к. она была перенесена
+     */
+    void reorderCard(QGraphicsItem* _cardItem);
 
 
     ProjectsScene* scene = nullptr;
@@ -526,10 +555,12 @@ void ProjectsCards::Implementation::reorderCards()
             y += lastItemHeight + Ui::DesignSystem::projectCard().spacing();
         }
         //
-        // ... позиционируем карточку
+        // ... позиционируем карточку, если она не перемещается в данный момент
+        //     и новая позиция отличается от текущей
         //
         const QPointF newItemPosition(x, y);
-        if (card->pos() != newItemPosition) {
+        if (card != scene->mouseGrabberItem()
+            && card->pos() != newItemPosition) {
             const QRectF itemRect(card->pos(), card->boundingRect().size());
             const QRectF newItemRect(newItemPosition, card->boundingRect().size());
             if (cardsAnimationsAvailable && viewportRect.intersects(itemRect.united(newItemRect))) {
@@ -549,11 +580,14 @@ void ProjectsCards::Implementation::reorderCards()
                 //
                 if (moveAnimation->endValue().toPointF() != newItemPosition) {
                     if (moveAnimation->state() == QVariantAnimation::Running) {
-                        moveAnimation->stop();
+                        moveAnimation->pause();
+                        moveAnimation->setEndValue(newItemPosition);
+                        moveAnimation->resume();
+                    } else {
+                        moveAnimation->setStartValue(card->pos());
+                        moveAnimation->setEndValue(newItemPosition);
+                        moveAnimation->start(QAbstractAnimation::DeleteWhenStopped);
                     }
-                    moveAnimation->setStartValue(card->pos());
-                    moveAnimation->setEndValue(newItemPosition);
-                    moveAnimation->start(QAbstractAnimation::DeleteWhenStopped);
                 }
             } else {
                 card->setPos(newItemPosition);
@@ -585,6 +619,94 @@ void ProjectsCards::Implementation::reorderCards()
     scene->setSceneRect(newSceneRect);
 }
 
+void ProjectsCards::Implementation::reorderCard(QGraphicsItem* _cardItem)
+{
+    //
+    // Если есть незавершённые анимации по перемещению карточек, не переупорядочиваем
+    //
+    for (auto animation : projectsCardsAnimations) {
+        if (!animation.isNull() && animation->state() == QVariantAnimation::Running) {
+            return;
+        }
+    }
+
+    //
+    // Определим карточку, которая перемещена
+    //
+    ProjectCard* movedCard = nullptr;
+    for (auto card : projectsCards) {
+        if (card == _cardItem) {
+            movedCard = card;
+            break;
+        }
+    }
+    if (movedCard == nullptr) {
+        return;
+    }
+
+    //
+    // Определим место, куда перемещена карточка
+    //
+    const QPointF movedCardPosition = movedCard->pos();
+    const QRectF movedCardRect = movedCard->boundingRect();
+    const qreal movedCardLeft = movedCardPosition.x();
+    const qreal movedCardTop = movedCardPosition.y();
+    const qreal movedCardBottom = movedCardTop + movedCardRect.height();
+
+    //
+    // Ищем элемент, который будет последним перед карточкой в её новом месте
+    //
+    ProjectCard* previousCard = nullptr;
+    for (auto card : projectsCards) {
+        if (card == movedCard) {
+            continue;
+        }
+
+        const QPointF cardPosition = card->pos();
+        const QRectF cardRect = card->boundingRect();
+        const qreal cardLeft = cardPosition.x();
+        const qreal cardTop = cardPosition.y();
+        const qreal cardBottom = cardTop + cardRect.height();
+
+        if (// на разных линиях
+            (movedCardTop > cardTop
+            && fabs(movedCardTop - cardTop) >= movedCardRect.height()/2.)
+            // на одной линии, но левее для письменности слева-направо
+            || (QLocale().textDirection() == Qt::LeftToRight
+                && movedCardTop < cardBottom
+                && movedCardBottom > cardTop
+                && fabs(movedCardTop - cardTop) < movedCardRect.height()/2.
+                && movedCardLeft > cardLeft)
+             // на одной линии, но правее для письменности справа-налево
+             || (QLocale().textDirection() == Qt::RightToLeft
+                 && movedCardTop < cardBottom
+                 && movedCardBottom > cardTop
+                 && fabs(movedCardTop - cardTop) < movedCardRect.height()/2.
+                 && movedCardLeft < cardLeft)) {
+            previousCard = card;
+        }
+        //
+        // Если не после данного элемента, то прерываем поиск
+        //
+        else {
+            break;
+        }
+    }
+
+    //
+    // Перемещаем проект
+    //
+    const bool isProjectMoved
+            = projects->moveProject(movedCard->project(),
+                    previousCard != nullptr ? previousCard->project() : Domain::Project());
+    //
+    // В случае, сли проект не был перемещён, нужно вернуть его на место на доске
+    //
+    if (!isProjectMoved) {
+        reorderCards();
+    }
+}
+
 
 // ****
 
@@ -602,6 +724,8 @@ ProjectsCards::ProjectsCards(QWidget* _parent)
     connect(d->scene, &ProjectsScene::hideProjectRequested, this, &ProjectsCards::hideProjectRequested);
     connect(d->scene, &ProjectsScene::changeProjectNameRequested, this, &ProjectsCards::changeProjectNameRequested);
     connect(d->scene, &ProjectsScene::removeProjectRequested, this, &ProjectsCards::removeProjectRequested);
+    connect(d->scene, &ProjectsScene::reorderProjectCardRequested, this,
+            [this] (QGraphicsItem* _projectCard) { d->reorderCard(_projectCard); });
 }
 
 void ProjectsCards::setBackgroundColor(const QColor& _color)
@@ -680,6 +804,30 @@ void ProjectsCards::setProjects(Domain::ProjectsModel* _projects)
         // При необходимости посылаем запрос на скрытие
         //
         notifyVisibleChange();
+    });
+    connect(d->projects, &Domain::ProjectsModel::rowsMoved, this,
+            [this] (const QModelIndex& _sourceParent, int _sourceStart, int _sourceEnd,
+                    const QModelIndex& _destinationParent, int _destination) {
+
+        Q_UNUSED(_sourceParent)
+        Q_UNUSED(_destinationParent)
+
+        //
+        // Ожидаем перемещение только одной карточки
+        //
+        Q_ASSERT(_sourceStart == _sourceEnd);
+
+        //
+        // Перемещаем карточки
+        //
+        const int destinationCorrected = _sourceStart < _destination
+                                         ? _destination - 1
+                                         : _destination;
+        d->projectsCards.move(_sourceStart, destinationCorrected);
+        //
+        // и обновляем представление
+        //
+        d->reorderCards();
     });
 
     notifyVisibleChange();

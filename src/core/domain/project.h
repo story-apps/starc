@@ -33,7 +33,6 @@ public:
     Project();
     Project(const Project& _other);
     const Project& operator=(const Project& _other);
-    bool operator==(const Project& _other);
     ~Project();
 
     /**
@@ -85,6 +84,8 @@ private:
     QScopedPointer<Implementation> d;
 };
 
+bool operator==(const Project& _lhs, const Project& _rhs);
+
 /**
  * @brief Модель списка проектов
  */
@@ -97,7 +98,7 @@ public:
     /**
      * @brief Получить проект по заданному индексу
      */
-    const Project& projectAt(int _row) const;
+    Project projectAt(int _row) const;
 
     /**
      * @brief Добавить новый проект в конец списка
@@ -118,6 +119,11 @@ public:
      * @brief Удалить проект
      */
     void remove(const Project& _project);
+
+    /**
+     * @brief Перенести @p _moved проект после @p _insertAfter
+     */
+    bool moveProject(const Project& _moved, const Project& _insertAfter);
 
     /**
      * @brief Пуста ли модель

@@ -46,6 +46,17 @@ signals:
      * @brief Пользователь хочет удалить проект
      */
     void removeProjectRequested(const Domain::Project& _project);
+
+    /**
+     * @brief Требуется переупорядочить карточки проектов, т.к. заданная карточка была перенесена
+     */
+    void reorderProjectCardRequested(QGraphicsItem* _movedCard);
+
+protected:
+    /**
+     * @brief Реализуем переупорядочивание при перетаскивании карточки
+     */
+    void mouseMoveEvent(QGraphicsSceneMouseEvent* _event) override;
 };
 
 /**
