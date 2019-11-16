@@ -171,32 +171,50 @@ void ProjectCard::paint(QPainter* _painter, const QStyleOptionGraphicsItem* _opt
     }
 
     //
-    // Заливаем фон
+    // Готовим фон (кэшируем его, чтобы использовать во всех карточках)
     //
-    QPixmap backgroundImage(backgroundRect.size().toSize());
-    backgroundImage.fill(Qt::transparent);
-    QPainter backgroundImagePainter(&backgroundImage);
-    backgroundImagePainter.setPen(Qt::NoPen);
-    backgroundImagePainter.setBrush(Ui::DesignSystem::color().background());
-    const qreal borderRadius = Ui::DesignSystem::card().borderRadius();
-    backgroundImagePainter.drawRoundedRect(QRect({0,0}, backgroundImage.size()), borderRadius, borderRadius);
+    static QPixmap backgroundPixmapCache;
+    if (backgroundPixmapCache.size() != backgroundRect.size()) {
+        backgroundPixmapCache = QPixmap(backgroundRect.size().toSize());
+        backgroundPixmapCache.fill(Qt::transparent);
+        QPainter backgroundImagePainter(&backgroundPixmapCache);
+        backgroundImagePainter.setRenderHint(QPainter::Antialiasing);
+        backgroundImagePainter.setPen(Qt::NoPen);
+        backgroundImagePainter.setBrush(Ui::DesignSystem::color().background());
+        const qreal borderRadius = Ui::DesignSystem::card().borderRadius();
+        backgroundImagePainter.drawRoundedRect(QRect({0,0}, backgroundPixmapCache.size()), borderRadius, borderRadius);
+    }
     //
     // ... рисуем тень
     //
     const qreal shadowHeight = std::max(Ui::DesignSystem::floatingToolBar().minimumShadowBlurRadius(),
                                         m_shadowHeightAnimation.currentValue().toReal());
-    const QPixmap shadow
-            = ImageHelper::dropShadow(backgroundImage,
-                                      Ui::DesignSystem::floatingToolBar().shadowMargins(),
-                                      shadowHeight,
-                                      Ui::DesignSystem::color().shadow());
-    _painter->drawPixmap(0, 0, shadow);
+    if (qFuzzyCompare(shadowHeight, Ui::DesignSystem::floatingToolBar().minimumShadowBlurRadius())) {
+        //
+        // кэшируем только вариант тени по-умолчанию, который используется для всех карточек,
+        // кроме той, на которую наведён курсор
+        //
+        static QPixmap shadowPixmapCache;
+        if (shadowPixmapCache.size() != rect().size()) {
+            shadowPixmapCache
+                    = ImageHelper::dropShadow(backgroundPixmapCache,
+                                              Ui::DesignSystem::floatingToolBar().shadowMargins(),
+                                              shadowHeight,
+                                              Ui::DesignSystem::color().shadow());
+        }
+        _painter->drawPixmap(0, 0, shadowPixmapCache);
+    } else {
+        const QPixmap shadow
+                = ImageHelper::dropShadow(backgroundPixmapCache,
+                                          Ui::DesignSystem::floatingToolBar().shadowMargins(),
+                                          shadowHeight,
+                                          Ui::DesignSystem::color().shadow());
+        _painter->drawPixmap(0, 0, shadow);
+    }
     //
     // ... рисуем сам фон
     //
-    _painter->setPen(Qt::NoPen);
-    _painter->setBrush(Ui::DesignSystem::color().background());
-    _painter->drawRoundedRect(backgroundRect, borderRadius, borderRadius);
+    _painter->drawPixmap(backgroundRect, backgroundPixmapCache, backgroundPixmapCache.rect());
 
     //
     // Постер
