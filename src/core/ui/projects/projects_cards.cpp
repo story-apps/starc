@@ -580,14 +580,11 @@ void ProjectsCards::Implementation::reorderCards()
                 //
                 if (moveAnimation->endValue().toPointF() != newItemPosition) {
                     if (moveAnimation->state() == QVariantAnimation::Running) {
-                        moveAnimation->pause();
-                        moveAnimation->setEndValue(newItemPosition);
-                        moveAnimation->resume();
-                    } else {
-                        moveAnimation->setStartValue(card->pos());
-                        moveAnimation->setEndValue(newItemPosition);
-                        moveAnimation->start(QAbstractAnimation::DeleteWhenStopped);
+                        moveAnimation->stop();
                     }
+                    moveAnimation->setStartValue(card->pos());
+                    moveAnimation->setEndValue(newItemPosition);
+                    moveAnimation->start(QAbstractAnimation::DeleteWhenStopped);
                 }
             } else {
                 card->setPos(newItemPosition);
@@ -622,24 +619,9 @@ void ProjectsCards::Implementation::reorderCards()
 void ProjectsCards::Implementation::reorderCard(QGraphicsItem* _cardItem)
 {
     //
-    // Если есть незавершённые анимации по перемещению карточек, не переупорядочиваем
-    //
-    for (auto animation : projectsCardsAnimations) {
-        if (!animation.isNull() && animation->state() == QVariantAnimation::Running) {
-            return;
-        }
-    }
-
-    //
     // Определим карточку, которая перемещена
     //
-    ProjectCard* movedCard = nullptr;
-    for (auto card : projectsCards) {
-        if (card == _cardItem) {
-            movedCard = card;
-            break;
-        }
-    }
+    ProjectCard* movedCard = static_cast<ProjectCard*>(_cardItem);
     if (movedCard == nullptr) {
         return;
     }
@@ -662,7 +644,8 @@ void ProjectsCards::Implementation::reorderCard(QGraphicsItem* _cardItem)
             continue;
         }
 
-        const QPointF cardPosition = card->pos();
+        const auto cardAnimation = projectsCardsAnimations[card];
+        const QPointF cardPosition = cardAnimation.isNull() ? card->pos() : cardAnimation->endValue().toPointF();
         const QRectF cardRect = card->boundingRect();
         const qreal cardLeft = cardPosition.x();
         const qreal cardTop = cardPosition.y();
@@ -820,10 +803,7 @@ void ProjectsCards::setProjects(Domain::ProjectsModel* _projects)
         //
         // Перемещаем карточки
         //
-        const int destinationCorrected = _sourceStart < _destination
-                                         ? _destination - 1
-                                         : _destination;
-        d->projectsCards.move(_sourceStart, destinationCorrected);
+        d->projectsCards.move(_sourceStart, _sourceStart > _destination ? _destination : _destination - 1);
         //
         // и обновляем представление
         //

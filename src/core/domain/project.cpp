@@ -310,14 +310,12 @@ bool ProjectsModel::moveProject(const Project& _moved, const Project& _insertAft
     }
 
     //
-    // Определим скорректированный индекс, как того требует Qt
+    // Перемещаем
     //
-    const int insertAfterProjectIndexCorrected = movedProjectIndex < insertAfterProjectIndex
-                                                 ? insertAfterProjectIndex + 1
-                                                 : insertAfterProjectIndex;
-
-    beginMoveRows({}, movedProjectIndex, movedProjectIndex, {}, insertAfterProjectIndexCorrected);
-    d->projects.move(movedProjectIndex, insertAfterProjectIndex);
+    beginMoveRows({}, movedProjectIndex, movedProjectIndex, {}, insertAfterProjectIndex + 1);
+    d->projects.move(movedProjectIndex, movedProjectIndex > insertAfterProjectIndex
+                                        ? insertAfterProjectIndex + 1
+                                        : insertAfterProjectIndex);
     endMoveRows();
     return true;
 }
