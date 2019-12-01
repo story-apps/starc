@@ -101,7 +101,7 @@ QuotesHelper::Quote QuotesHelper::generateQuote(int _index)
                  QApplication::translate("QuotesHelper", "Roger Corman") },
                { index++, QApplication::translate("QuotesHelper", "A lot of times you get credit for stuff in your movies you didn’t intend to be there."),
                  QApplication::translate("QuotesHelper", "Spike Lee") },
-               { index++, QApplication::translate("QuotesHelper", "First get your facts, then distort them at your leisure."),
+               { index++, QApplication::translate("QuotesHelper", "Get your facts first, then you can distort them as you please."),
                  QApplication::translate("QuotesHelper", "Mark Twain") },
                { index++, QApplication::translate("QuotesHelper", "Feydeau’s one rule of playwriting: Character A: My life is perfect as long as I don’t see Character B. Knock Knock. Enter Character B."),
                  QApplication::translate("QuotesHelper", "John Guare") }};
