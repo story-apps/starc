@@ -19,7 +19,12 @@ public:
      */
     QStyle::SubControl hitTestComplexControl(QStyle::ComplexControl _control,
         const QStyleOptionComplex* _option, const QPoint& _pos, const QWidget* _widget) const override;
-
     int pixelMetric(PixelMetric _metric, const QStyleOption* _option = nullptr,
+        const QWidget* _widget = nullptr) const override;
+
+    /**
+     * @brief Переопределяем для улучшенной отрисовки элементов дерева
+     */
+    void drawPrimitive(PrimitiveElement _element, const QStyleOption* _option, QPainter* _painter,
         const QWidget* _widget = nullptr) const override;
 };

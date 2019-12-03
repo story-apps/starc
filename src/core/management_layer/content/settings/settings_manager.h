@@ -18,6 +18,12 @@ public:
     QWidget* navigator() const;
     QWidget* view() const;
 
+signals:
+    /**
+     * @brief Пользователь хочет закрыть настройки
+     */
+    void closeSettingsRequested();
+
 private:
     class Implementation;
     QScopedPointer<Implementation> d;

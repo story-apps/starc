@@ -181,7 +181,8 @@ void ApplicationManager::Implementation::showContent()
         //
         // ... а затем уже отобразить
         //
-        showProjects();
+//        showProjects();
+        showSettings();
 
         //
         // Сохраняем последнее отображаемое представление, чтобы можно было вернуться к нему
@@ -473,6 +474,13 @@ void ApplicationManager::initConnections()
     //
     connect(d->projectsManager.data(), &ProjectsManager::menuRequested, this, [this] { d->showMenu(); });
     connect(d->projectsManager.data(), &ProjectsManager::createStoryRequested, this, [this] { d->createStory(); });
+
+    //
+    //
+    //
+    connect(d->settingsManager.data(), &SettingsManager::closeSettingsRequested, this, [this] {
+        d->showLastContent();
+    });
 
 #ifdef CLOUD_SERVICE_MANAGER
     //

@@ -356,143 +356,6 @@ DesignSystem::TextToggle::TextToggle(qreal _scaleFactor)
 // ****
 
 
-class DesignSystem::ListTwoLineItemPrivate
-{
-public:
-    ListTwoLineItemPrivate(qreal _scaleFactor, const Color& _color);
-
-    QMarginsF margins = {16.0, 16.0, 16.0, 16.0};
-    qreal secondaryIconTopMargin = 24.0;
-    qreal iconsSpacing = 16.0;
-    qreal height = 64.0;
-    qreal heightWithMainIcon = 72.0;
-    qreal shadowHeight = 6.0;
-    QSizeF mainIconSize = {40.0, 40.0};
-    QSizeF secondaryIconSize = {24.0, 24.0};
-    QColor currentItemColor;
-    QFont firstLineFont;
-    QFont secondLineFont;
-};
-
-DesignSystem::ListTwoLineItemPrivate::ListTwoLineItemPrivate(qreal _scaleFactor, const Color& _color)
-{
-    margins *= _scaleFactor;
-    secondaryIconTopMargin *= _scaleFactor;
-    iconsSpacing *= _scaleFactor;
-    height *= _scaleFactor;
-    heightWithMainIcon *= _scaleFactor;
-    shadowHeight *= _scaleFactor;
-    mainIconSize *= _scaleFactor;
-    secondaryIconSize *= _scaleFactor;
-    currentItemColor = _color.onBackground();
-    currentItemColor.setAlphaF(0.12);
-    firstLineFont = QFont("Roboto");
-    firstLineFont.setPixelSize(static_cast<int>(16.0 * _scaleFactor));
-    firstLineFont.setWeight(QFont::Normal);
-    secondLineFont = QFont("Roboto");
-    secondLineFont.setPixelSize(static_cast<int>(14.0 * _scaleFactor));
-    secondLineFont.setWeight(QFont::Normal);
-}
-
-// **
-
-DesignSystem::ListTwoLineItem::~ListTwoLineItem() = default;
-
-QMarginsF DesignSystem::ListTwoLineItem::margins() const
-{
-    return d->margins;
-}
-
-qreal DesignSystem::ListTwoLineItem::secondaryIconTopMargin() const
-{
-    return d->secondaryIconTopMargin;
-}
-
-qreal DesignSystem::ListTwoLineItem::iconsSpacing() const
-{
-    return d->iconsSpacing;
-}
-
-qreal DesignSystem::ListTwoLineItem::height() const
-{
-    return d->height;
-}
-
-qreal DesignSystem::ListTwoLineItem::heightWithMainIcon() const
-{
-    return d->heightWithMainIcon;
-}
-
-qreal DesignSystem::ListTwoLineItem::shadowHeight() const
-{
-    return d->shadowHeight;
-}
-
-QSizeF DesignSystem::ListTwoLineItem::mainIconSize() const
-{
-    return d->mainIconSize;
-}
-
-QSizeF DesignSystem::ListTwoLineItem::secondaryIconSize() const
-{
-    return d->secondaryIconSize;
-}
-
-QColor DesignSystem::ListTwoLineItem::currentItemColor() const
-{
-    return d->currentItemColor;
-}
-
-QFont DesignSystem::ListTwoLineItem::firstLineFont() const
-{
-    return d->firstLineFont;
-}
-
-QFont DesignSystem::ListTwoLineItem::secondLineFont() const
-{
-    return d->secondLineFont;
-}
-
-DesignSystem::ListTwoLineItem::ListTwoLineItem(qreal _scaleFactor, const Color& _color)
-    : d(new ListTwoLineItemPrivate(_scaleFactor, _color))
-{
-}
-
-
-// ****
-
-
-class DesignSystem::ListPrivate
-{
-public:
-    ListPrivate(qreal _scaleFactor);
-
-    QMarginsF margins = {0.0, 24.0, 0.0, 24.0};
-};
-
-DesignSystem::ListPrivate::ListPrivate(qreal _scaleFactor)
-{
-    margins *= _scaleFactor;
-}
-
-// **
-
-DesignSystem::List::~List() = default;
-
-QMarginsF DesignSystem::List::margins() const
-{
-    return d->margins;
-}
-
-DesignSystem::List::List(qreal _scaleFactor)
-    : d(new ListPrivate(_scaleFactor))
-{
-}
-
-
-// ****
-
-
 class DesignSystem::Color::Implementation
 {
 public:
@@ -1710,6 +1573,98 @@ DesignSystem::Drawer::Drawer(qreal _scaleFactor, const Color& _color)
 // ****
 
 
+class DesignSystem::TreeOneLineItem::Implementation
+{
+public:
+    explicit Implementation(qreal _scaleFactor);
+
+    QMarginsF margins = {16.0, 16.0, 16.0, 16.0};
+    qreal height = 64.0;
+    qreal spacing = 16.0;
+    QSizeF iconSize = {24.0, 24.0};
+};
+
+DesignSystem::TreeOneLineItem::Implementation::Implementation(qreal _scaleFactor)
+{
+    margins *= _scaleFactor;
+    height *= _scaleFactor;
+    spacing *= _scaleFactor;
+    iconSize *= _scaleFactor;
+}
+
+
+// **
+
+
+DesignSystem::TreeOneLineItem::~TreeOneLineItem() = default;
+
+const QMarginsF& DesignSystem::TreeOneLineItem::margins() const
+{
+    return d->margins;
+}
+
+qreal DesignSystem::TreeOneLineItem::height() const
+{
+    return d->height;
+}
+
+qreal DesignSystem::TreeOneLineItem::spacing() const
+{
+    return d->spacing;
+}
+
+const QSizeF& DesignSystem::TreeOneLineItem::iconSize() const
+{
+    return d->iconSize;
+}
+
+DesignSystem::TreeOneLineItem::TreeOneLineItem(qreal _scaleFactor)
+    : d(new Implementation(_scaleFactor))
+{
+}
+
+
+// ****
+
+
+class DesignSystem::Tree::Implementation
+{
+public:
+    explicit Implementation(qreal _scaleFactor);
+
+    QMarginsF margins = {0.0, 24.0, 0.0, 24.0};
+    qreal indicatorWidth = 30.0;
+};
+
+DesignSystem::Tree::Implementation::Implementation(qreal _scaleFactor)
+{
+    margins *= _scaleFactor;
+    indicatorWidth *= _scaleFactor;
+}
+
+// **
+
+DesignSystem::Tree::~Tree() = default;
+
+const QMarginsF& DesignSystem::Tree::margins() const
+{
+    return d->margins;
+}
+
+qreal DesignSystem::Tree::indicatorWidth() const
+{
+    return d->indicatorWidth;
+}
+
+DesignSystem::Tree::Tree(qreal _scaleFactor)
+    : d(new Implementation(_scaleFactor))
+{
+}
+
+
+// ****
+
+
 class DesignSystem::Card::Implementation
 {
 public:
@@ -1869,8 +1824,6 @@ public:
     DesignSystem::Tabs tabs;
     DesignSystem::ColorPicker colorPicker;
     DesignSystem::TextToggle textToggle;
-    DesignSystem::ListTwoLineItem listTwoLineItem;
-    DesignSystem::List list;
 
 
 
@@ -1889,6 +1842,8 @@ public:
     DesignSystem::FloatingToolBar floatingAppBar;
     DesignSystem::Stepper stepper;
     DesignSystem::Drawer drawer;
+    DesignSystem::TreeOneLineItem treeOneLineItem;
+    DesignSystem::Tree tree;
     DesignSystem::Card card;
     DesignSystem::Dialog dialog;
     DesignSystem::ProjectCard projectCard;
@@ -1903,8 +1858,6 @@ DesignSystemPrivate::DesignSystemPrivate(ApplicationTheme _theme, qreal _scaleFa
       tabs(_scaleFactor),
       colorPicker(_scaleFactor),
       textToggle(_scaleFactor),
-      listTwoLineItem(_scaleFactor, _color),
-      list(_scaleFactor),
       color(_color),
       font(_scaleFactor),
       layout(_scaleFactor),
@@ -1920,6 +1873,8 @@ DesignSystemPrivate::DesignSystemPrivate(ApplicationTheme _theme, qreal _scaleFa
       floatingAppBar(_scaleFactor),
       stepper(_scaleFactor),
       drawer(_scaleFactor, _color),
+      treeOneLineItem(_scaleFactor),
+      tree(_scaleFactor),
       card(_scaleFactor),
       dialog(_scaleFactor),
       projectCard(_scaleFactor)
@@ -2104,16 +2059,6 @@ const DesignSystem::TextToggle&DesignSystem::textToggle()
     return instance()->d->textToggle;
 }
 
-const DesignSystem::ListTwoLineItem&DesignSystem::listTwoLineItem()
-{
-    return instance()->d->listTwoLineItem;
-}
-
-const DesignSystem::List&DesignSystem::list()
-{
-    return instance()->d->list;
-}
-
 const DesignSystem::Color& DesignSystem::color()
 {
     return instance()->d->color;
@@ -2192,6 +2137,16 @@ const DesignSystem::Stepper& DesignSystem::stepper()
 const DesignSystem::Drawer& DesignSystem::drawer()
 {
     return instance()->d->drawer;
+}
+
+const DesignSystem::TreeOneLineItem& DesignSystem::treeOneLineItem()
+{
+    return instance()->d->treeOneLineItem;
+}
+
+const DesignSystem::Tree& DesignSystem::tree()
+{
+    return instance()->d->tree;
 }
 
 const DesignSystem::Card& DesignSystem::card()

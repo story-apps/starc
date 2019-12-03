@@ -1,12 +1,15 @@
 #pragma once
 
-#include <ui/widgets/widget/widget.h>
+#include <ui/widgets/app_bar/app_bar.h>
 
 
 namespace Ui
 {
 
-class SettingsToolBar : public Widget
+/**
+ * @brief Панель инструментов настроек
+ */
+class SettingsToolBar : public AppBar
 {
     Q_OBJECT
 
@@ -14,8 +17,16 @@ public:
     explicit SettingsToolBar(QWidget* _parent = nullptr);
 
 signals:
+    /**
+     * @brief Пользователь хочет выйти из личного кабинета
+     */
+    void backPressed();
 
-public slots:
+protected:
+    /**
+     * @brief Обновляем виджет при изменении дизайн системы
+     */
+    void designSystemChangeEvent(DesignSystemChangeEvent* _event) override;
 };
 
 } // namespace Ui

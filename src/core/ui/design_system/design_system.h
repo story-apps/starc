@@ -258,96 +258,6 @@ public:
         friend class DesignSystemPrivate;
     };
 
-    /**
-     * @brief Параметры двустрочного элемента в списке
-     */
-    class ListTwoLineItemPrivate;
-    class ListTwoLineItem
-    {
-    public:
-        ~ListTwoLineItem();
-
-        /**
-         * @brief Отступы вокруг элемента
-         */
-        QMarginsF margins() const;
-
-        /**
-         * @brief Верхний отступ для вспомогательной иконки
-         */
-        qreal secondaryIconTopMargin() const;
-
-        /**
-         * @brief Отступы между иконками
-         */
-        qreal iconsSpacing() const;
-
-        /**
-         * @brief Высота элемента без основной иконки
-         */
-        qreal height() const;
-
-        /**
-         * @brief Высота элемента, когда есть основная иконка
-         */
-        qreal heightWithMainIcon() const;
-
-        /**
-         * @brief Высота тени
-         */
-        qreal shadowHeight() const;
-
-        /**
-         * @brief Размер основной иконки
-         */
-        QSizeF mainIconSize() const;
-
-        /**
-         * @brief Размер дополнительной иконки
-         */
-        QSizeF secondaryIconSize() const;
-
-        /**
-         * @brief Цвет текущего элемента
-         */
-        QColor currentItemColor() const;
-
-        /**
-         * @brief Шрифт первой строки текста
-         */
-        QFont firstLineFont() const;
-
-        /**
-         * @brief Шрифт второй строки текста
-         */
-        QFont secondLineFont() const;
-
-    private:
-        explicit ListTwoLineItem(qreal _scaleFactor, const Color& _colors);
-        QScopedPointer<ListTwoLineItemPrivate> d;
-        friend class DesignSystemPrivate;
-    };
-
-    /**
-     * @brief Параметры виджета списка
-     */
-    class ListPrivate;
-    class List
-    {
-    public:
-        ~List();
-
-        /**
-         * @brief Отступы до контента
-         */
-        QMarginsF margins() const;
-
-    private:
-        explicit List(qreal _scaleFactor);
-        QScopedPointer<ListPrivate> d;
-        friend class DesignSystemPrivate;
-    };
-
 
 
 
@@ -1039,6 +949,68 @@ public:
     };
 
     /**
+     * @brief Параметры однострочного элемента в списке
+     */
+    class TreeOneLineItem
+    {
+    public:
+        ~TreeOneLineItem();
+
+        /**
+         * @brief Отступы вокруг элемента
+         */
+        const QMarginsF& margins() const;
+
+        /**
+         * @brief Высота элемента без основной иконки
+         */
+        qreal height() const;
+
+        /**
+         * @brief Отступ между иконкой и текстом
+         */
+        qreal spacing() const;
+
+        /**
+         * @brief Размер иконки
+         */
+        const QSizeF& iconSize() const;
+
+    private:
+        explicit TreeOneLineItem(qreal _scaleFactor);
+        friend class DesignSystemPrivate;
+        //
+        class Implementation;
+        QScopedPointer<Implementation> d;
+    };
+
+    /**
+     * @brief Параметры виджета списка (используем дерево как базу)
+     */
+    class Tree
+    {
+    public:
+        ~Tree();
+
+        /**
+         * @brief Отступы до контента
+         */
+        const QMarginsF& margins() const;
+
+        /**
+         * @brief Ширина индикатора раскрывающего элементы
+         */
+        qreal indicatorWidth() const;
+
+    private:
+        explicit Tree(qreal _scaleFactor);
+        friend class DesignSystemPrivate;
+        //
+        class Implementation;
+        QScopedPointer<Implementation> d;
+    };
+
+    /**
      * @brief Параметры виджета карточки
      */
     class Card
@@ -1206,14 +1178,9 @@ public:
     static const TextToggle& textToggle();
 
     /**
-     * @brief Параметры двухстрочного элемента списка
-     */
-    static const ListTwoLineItem& listTwoLineItem();
-
-    /**
      * @brief Параметры виджета списка
      */
-    static const List& list();
+    static const Tree& tree();
 
 
 
@@ -1294,6 +1261,11 @@ public:
      * @brief Параметры выезжающего меню
      */
     static const Drawer& drawer();
+
+    /**
+     * @brief Параметры однострочного элемента списка
+     */
+    static const TreeOneLineItem& treeOneLineItem();
 
     /**
      * @brief Параметры виджета карточки

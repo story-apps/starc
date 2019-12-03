@@ -48,6 +48,8 @@ SOURCES += \
     ui/widgets/circular_progress_bar/circular_progress_bar.cpp \
     ui/widgets/drawer/drawer.cpp \
     ui/widgets/stack_widget/stack_widget.cpp \
+    ui/widgets/tree/tree.cpp \
+    ui/widgets/tree/tree_delegate.cpp \
     ui/widgets/widget/widget.cpp \
     ui/design_system/design_system.cpp \
     utils/3rd_party/WAF/Animation/Animation.cpp \
@@ -125,6 +127,8 @@ HEADERS += \
     ui/widgets/circular_progress_bar/circular_progress_bar.h \
     ui/widgets/drawer/drawer.h \
     ui/widgets/stack_widget/stack_widget.h \
+    ui/widgets/tree/tree.h \
+    ui/widgets/tree/tree_delegate.h \
     ui/widgets/widget/widget.h \
     ui/design_system/design_system.h \
     utils/3rd_party/WAF/AbstractAnimator.h \

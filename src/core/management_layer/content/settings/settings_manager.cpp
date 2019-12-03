@@ -36,6 +36,7 @@ SettingsManager::SettingsManager(QObject* _parent, QWidget* _parentWidget)
     : QObject(_parent),
       d(new Implementation(_parentWidget))
 {
+    connect(d->toolBar, &Ui::SettingsToolBar::backPressed, this, &SettingsManager::closeSettingsRequested);
 }
 
 SettingsManager::~SettingsManager() = default;

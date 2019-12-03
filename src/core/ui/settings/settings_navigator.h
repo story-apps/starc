@@ -12,10 +12,17 @@ class SettingsNavigator : public Widget
 
 public:
     explicit SettingsNavigator(QWidget* _parent = nullptr);
+    ~SettingsNavigator() override;
 
-signals:
+protected:
+    /**
+     * @brief Обновляем виджет при изменении дизайн системы
+     */
+    void designSystemChangeEvent(DesignSystemChangeEvent* _event) override;
 
-public slots:
+private:
+    class Implementation;
+    QScopedPointer<Implementation> d;
 };
 
 } // namespace Ui
