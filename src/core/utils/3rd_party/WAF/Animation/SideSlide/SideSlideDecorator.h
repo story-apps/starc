@@ -23,11 +23,6 @@ namespace WAF
         explicit SideSlideDecorator(QWidget* _parent);
 
         /**
-         * @brief Сохранить изображение выкатываемого виджета
-         */
-        void grabSlideWidget(QWidget* _slideWidget);
-
-        /**
          * @brief Сохранить изображение родительского виджета
          */
         void grabParentSize();
@@ -69,11 +64,6 @@ namespace WAF
          * @brief Позиция выкатываемого виджета
          */
         QPoint m_slidePos;
-
-        /**
-         * @brief Изображение выкатываемого виджета
-         */
-        QPixmap m_slideWidgetPixmap;
 
         /**
          * @brief Таймлайн для реализации анимированного декорирования

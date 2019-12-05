@@ -7,19 +7,53 @@
 #include <QAction>
 #include <QPainter>
 #include <QMouseEvent>
+#include <QVariantAnimation>
 
 
 class Drawer::Implementation
 {
 public:
+    Implementation();
+
     /**
      * @brief Получить пункт меню по координате
      */
     QAction* pressedAction(const QPoint& _coordinate, const QList<QAction*>& _actions) const;
 
+    /**
+     * @brief Определить область действия
+     */
+    QRectF actionRect(const QAction* _action, const QList<QAction*>& _actions, int _width) const;
+
+    /**
+     * @brief Анимировать клик
+     */
+    void animateClick();
+
+
     QString title;
     QString subtitle;
+
+    /**
+     * @brief  Декорации кнопки при клике
+     */
+    QPointF decorationCenterPosition;
+    QRectF decorationRect;
+    QVariantAnimation decorationRadiusAnimation;
+    QVariantAnimation decorationOpacityAnimation;
 };
+
+Drawer::Implementation::Implementation()
+{
+    decorationRadiusAnimation.setEasingCurve(QEasingCurve::InQuad);
+    decorationRadiusAnimation.setStartValue(1.0);
+    decorationRadiusAnimation.setDuration(240);
+
+    decorationOpacityAnimation.setEasingCurve(QEasingCurve::InQuad);
+    decorationOpacityAnimation.setStartValue(0.5);
+    decorationOpacityAnimation.setEndValue(0.0);
+    decorationOpacityAnimation.setDuration(420);
+}
 
 QAction* Drawer::Implementation::pressedAction(const QPoint& _coordinate, const QList<QAction*>& _actions) const
 {
@@ -47,6 +81,39 @@ QAction* Drawer::Implementation::pressedAction(const QPoint& _coordinate, const 
     return nullptr;
 }
 
+QRectF Drawer::Implementation::actionRect(const QAction* _action, const QList<QAction*>& _actions, int _width) const
+{
+    qreal actionTop = Ui::DesignSystem::drawer().margins().top()
+                      + Ui::DesignSystem::drawer().titleHeight()
+                      + Ui::DesignSystem::drawer().subtitleHeight()
+                      + Ui::DesignSystem::drawer().subtitleBottomMargin();
+    for (QAction* action : _actions) {
+        if (!action->isVisible()) {
+            continue;
+        }
+
+        if (action->isSeparator()) {
+            actionTop += Ui::DesignSystem::drawer().separatorSpacing() * 2;
+        }
+
+        const qreal actionBottom = actionTop + Ui::DesignSystem::drawer().actionHeight();
+        if (action == _action) {
+            return QRectF(0.0, actionTop, _width, Ui::DesignSystem::drawer().actionHeight());
+        }
+
+        actionTop = actionBottom;
+    }
+
+    return {};
+}
+
+void Drawer::Implementation::animateClick()
+{
+    decorationOpacityAnimation.setCurrentTime(0);
+    decorationRadiusAnimation.start();
+    decorationOpacityAnimation.start();
+}
+
 
 // ****
 
@@ -56,6 +123,9 @@ Drawer::Drawer(QWidget* _parent)
       d(new Implementation)
 {
     setFixedWidth(static_cast<int>(Ui::DesignSystem::drawer().width()));
+
+    connect(&d->decorationRadiusAnimation, &QVariantAnimation::valueChanged, this, [this] { update(); });
+    connect(&d->decorationOpacityAnimation, &QVariantAnimation::valueChanged, this, [this] { update(); });
 }
 
 void Drawer::setTitle(const QString& _title)
@@ -184,6 +254,34 @@ void Drawer::paintEvent(QPaintEvent* _event)
 
         actionY += Ui::DesignSystem::drawer().actionHeight();
     }
+
+    //
+    // Если необходимо, рисуем декорацию
+    //
+    if (d->decorationRadiusAnimation.state() == QVariantAnimation::Running
+        || d->decorationOpacityAnimation.state() == QVariantAnimation::Running) {
+        painter.setClipRect(d->decorationRect);
+        painter.setPen(Qt::NoPen);
+        painter.setBrush(Ui::DesignSystem::color().secondary());
+        painter.setOpacity(d->decorationOpacityAnimation.currentValue().toReal());
+        painter.drawEllipse(d->decorationCenterPosition, d->decorationRadiusAnimation.currentValue().toReal(),
+                            d->decorationRadiusAnimation.currentValue().toReal());
+        painter.setOpacity(1.0);
+        painter.setClipRect(QRect(), Qt::NoClip);
+    }
+}
+
+void Drawer::mousePressEvent(QMouseEvent* _event)
+{
+    QAction* pressedAction = d->pressedAction(_event->pos(), actions());
+    if (pressedAction == nullptr) {
+        return;
+    }
+
+    d->decorationCenterPosition = _event->pos();
+    d->decorationRect = d->actionRect(pressedAction, actions(), width());
+    d->decorationRadiusAnimation.setEndValue(d->decorationRect.width());
+    d->animateClick();
 }
 
 void Drawer::mouseReleaseEvent(QMouseEvent* _event)

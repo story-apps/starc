@@ -30,7 +30,7 @@ SideSlideAnimator::SideSlideAnimator(QWidget* _widgetForSlide) :
     AbstractAnimator(_widgetForSlide),
     m_decorateBackground(true),
     m_decorator(new SideSlideDecorator(_widgetForSlide->parentWidget())),
-    m_animation(new QPropertyAnimation(m_decorator, "slidePos"))
+    m_animation(new QPropertyAnimation(_widgetForSlide, "pos"))
 {
     Q_ASSERT(_widgetForSlide);
     _widgetForSlide->parentWidget()->installEventFilter(this);
@@ -42,11 +42,7 @@ SideSlideAnimator::SideSlideAnimator(QWidget* _widgetForSlide) :
 
     connect(m_animation, &QPropertyAnimation::finished, [=] {
         setAnimatedStopped();
-        if (isAnimatedForward()) {
-            widgetForSlide()->move(m_decorator->slidePos());
-            widgetForSlide()->raise();
-            widgetForSlide()->show();
-        } else {
+        if (isAnimatedBackward()) {
             m_decorator->hide();
         }
     });
@@ -164,12 +160,8 @@ void SideSlideAnimator::slideIn()
     //
     widgetForSlide()->move(startPosition);
     widgetForSlide()->resize(finalSize);
+    widgetForSlide()->show();
     widgetForSlide()->raise();
-
-    //
-    // Сохраним изображение выкатываемого виджета в декораторе
-    //
-    m_decorator->grabSlideWidget(widgetForSlide());
 
     //
     // Выкатываем виджет
@@ -230,11 +222,6 @@ void SideSlideAnimator::slideOut()
         }
 
         //
-        // Прячем анимируемый виджет
-        //
-        widgetForSlide()->hide();
-
-        //
         // Определяем позиции прокатывания
         //
         const QSize finalSize = widgetForSlide()->size();
@@ -264,11 +251,6 @@ void SideSlideAnimator::slideOut()
                 break;
             }
         }
-
-        //
-        // Сохраним изображение выкатываемого виджета в декораторе
-        //
-        m_decorator->grabSlideWidget(widgetForSlide());
 
         //
         // Анимируем закатывание виджета
@@ -331,11 +313,6 @@ bool SideSlideAnimator::eventFilter(QObject* _object, QEvent* _event)
                 break;
             }
         }
-
-        //
-        // Сохраним картинку изменённого выкатываемого виджета
-        //
-        m_decorator->grabSlideWidget(widgetForSlide());
 
         //
         // Обновим размер декоратора

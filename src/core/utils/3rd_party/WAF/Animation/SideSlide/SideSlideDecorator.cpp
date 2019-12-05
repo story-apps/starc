@@ -43,11 +43,6 @@ SideSlideDecorator::SideSlideDecorator(QWidget* _parent) :
     });
 }
 
-void SideSlideDecorator::grabSlideWidget(QWidget* _slideWidget)
-{
-    m_slideWidgetPixmap = _slideWidget->grab();
-}
-
 void SideSlideDecorator::grabParentSize()
 {
     resize(parentWidget()->size());
@@ -81,7 +76,6 @@ void SideSlideDecorator::paintEvent(QPaintEvent* _event)
     QPainter painter(this);
     painter.drawPixmap(0, 0, m_backgroundPixmap);
     painter.fillRect(rect(), m_decorationColor);
-    painter.drawPixmap(m_slidePos, m_slideWidgetPixmap);
 
     QWidget::paintEvent(_event);
 }

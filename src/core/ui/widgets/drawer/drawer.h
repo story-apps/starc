@@ -33,6 +33,7 @@ protected:
     /**
      * @brief Переопределяем для обработки нажатий пунктов меню
      */
+    void mousePressEvent(QMouseEvent* _event) override;
     void mouseReleaseEvent(QMouseEvent* _event) override;
 
 private:
