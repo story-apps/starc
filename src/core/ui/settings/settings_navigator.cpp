@@ -68,9 +68,9 @@ SettingsNavigator::SettingsNavigator(QWidget* _parent)
 void SettingsNavigator::updateTranslations()
 {
     auto model = qobject_cast<QStandardItemModel*>(d->tree->model());
-    model->item(kApplicationIndex)->setText(tr("Application"));
+    model->item(kApplicationIndex)->setText(tr("Application settings"));
     model->item(kApplicationIndex)->child(kApplicationUserInterfaceIndex)->setText(tr("User interface"));
-    model->item(kApplicationIndex)->child(kApplicationSaveAndBackupIndex)->setText(tr("Save changes/backups"));
+    model->item(kApplicationIndex)->child(kApplicationSaveAndBackupIndex)->setText(tr("Save changes & backups"));
     model->item(kComponentsIndex)->setText(tr("Components"));
     model->item(kShortcutsIndex)->setText(tr("Shortcuts"));
 }

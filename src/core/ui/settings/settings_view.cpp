@@ -42,16 +42,16 @@ QString currentLanguage() {
 QString currentTheme() {
     switch (Ui::DesignSystem::theme()) {
         case Ui::ApplicationTheme::Dark: {
-            return SettingsView::tr("dark");
+            return SettingsView::tr("Dark");
         }
         case Ui::ApplicationTheme::Light: {
-            return SettingsView::tr("light");
+            return SettingsView::tr("Light");
         }
         case Ui::ApplicationTheme::DarkAndLight: {
-            return SettingsView::tr("dark and light");
+            return SettingsView::tr("Dark and light");
         }
         default: {
-            return SettingsView::tr("custom");
+            return SettingsView::tr("Custom");
         }
     }
 }
@@ -75,16 +75,31 @@ public:
     H6Label* applicationUserInterfaceTitle = nullptr;
     Body1Label* theme = nullptr;
     Button* changeTheme = nullptr;
-    Body1Label* scaleFactorTitleLabel = nullptr;
-    Slider* scaleFactorSlider = nullptr;
-    Body2Label* scaleFactorSmallInfoLabel = nullptr;
-    Body2Label* scaleFactorBigInfoLabel = nullptr;
+    Body1Label* scaleFactorTitle = nullptr;
+    Slider* scaleFactor = nullptr;
+    Body2Label* scaleFactorSmallInfo = nullptr;
+    Body2Label* scaleFactorBigInfo = nullptr;
     //
     H6Label* applicationSaveAndBackupTitle = nullptr;
+    CheckBox* autoSave = nullptr;
     CheckBox* saveBackups = nullptr;
     TextField* backupsFolderPath = nullptr;
     //
     int applicationCardBottomSpacerIndex = 0;
+
+    Card* componentsCard = nullptr;
+    QGridLayout* componentsCardLayout = nullptr;
+    //
+    H5Label* componentsTitle = nullptr;
+    //
+    int componentsCardBottomSpacerIndex = 0;
+
+    Card* shortcutsCard = nullptr;
+    QGridLayout* shortcutsCardLayout = nullptr;
+    //
+    H5Label* shortcutsTitle = nullptr;
+    //
+    int shortcutsCardBottomSpacerIndex = 0;
 };
 
 SettingsView::Implementation::Implementation(QWidget* _parent)
@@ -98,9 +113,20 @@ SettingsView::Implementation::Implementation(QWidget* _parent)
       applicationUserInterfaceTitle(new H6Label(applicationCard)),
       theme(new Body1Label(applicationCard)),
       changeTheme(new Button(applicationCard)),
+      scaleFactorTitle(new Body1Label(applicationCard)),
+      scaleFactor(new Slider(applicationCard)),
+      scaleFactorSmallInfo(new Body2Label(applicationCard)),
+      scaleFactorBigInfo(new Body2Label(applicationCard)),
       applicationSaveAndBackupTitle(new H6Label(applicationCard)),
+      autoSave(new CheckBox(applicationCard)),
       saveBackups(new CheckBox(applicationCard)),
-      backupsFolderPath(new TextField(applicationCard))
+      backupsFolderPath(new TextField(applicationCard)),
+      componentsCard(new Card(content)),
+      componentsCardLayout(new QGridLayout),
+      componentsTitle(new H5Label(applicationCard)),
+      shortcutsCard(new Card(content)),
+      shortcutsCardLayout(new QGridLayout),
+      shortcutsTitle(new H5Label(applicationCard))
 {
     QPalette palette;
     palette.setColor(QPalette::Base, Qt::transparent);
@@ -109,6 +135,10 @@ SettingsView::Implementation::Implementation(QWidget* _parent)
     content->setVerticalScrollBar(new ScrollBar);
     content->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
 
+    scaleFactor->setMaximumValue(4000);
+    scaleFactor->setValue(1000);
+    backupsFolderPath->setTrailingIcon("\uf256");
+
     auto makeLayout = [] {
         auto layout = new QHBoxLayout;
         layout->setContentsMargins({});
@@ -116,12 +146,12 @@ SettingsView::Implementation::Implementation(QWidget* _parent)
         return layout;
     };
 
-    applicationCardLayout->setContentsMargins({});
-    applicationCardLayout->setSpacing(0);
-    int itemIndex = 0;
     //
     // Приложение
     //
+    applicationCardLayout->setContentsMargins({});
+    applicationCardLayout->setSpacing(0);
+    int itemIndex = 0;
     applicationCardLayout->addWidget(applicationTitle, itemIndex++, 0);
     {
         auto layout = makeLayout();
@@ -147,20 +177,50 @@ SettingsView::Implementation::Implementation(QWidget* _parent)
         layout->addStretch();
         applicationCardLayout->addLayout(layout, itemIndex++, 0);
     }
+    applicationCardLayout->addWidget(scaleFactorTitle, itemIndex++, 0);
+    applicationCardLayout->addWidget(scaleFactor, itemIndex++, 0);
+    {
+        auto layout = makeLayout();
+        layout->addWidget(scaleFactorSmallInfo);
+        layout->addStretch();
+        layout->addWidget(scaleFactorBigInfo);
+        applicationCardLayout->addLayout(layout, itemIndex++, 0);
+    }
     //
     // ... сохранение и бэкапы
     //
     applicationCardLayout->addWidget(applicationSaveAndBackupTitle, itemIndex++, 0);
+    applicationCardLayout->addWidget(autoSave, itemIndex++, 0);
     {
         backupsFolderPath->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Preferred);
 
         auto layout = makeLayout();
-        layout->addWidget(saveBackups, 0, Qt::AlignCenter);
+        layout->addWidget(saveBackups, 0, Qt::AlignBottom);
         layout->addWidget(backupsFolderPath);
         applicationCardLayout->addLayout(layout, itemIndex++, 0);
     }
     applicationCardBottomSpacerIndex = itemIndex;
     applicationCard->setLayoutReimpl(applicationCardLayout);
+
+    //
+    //  Компоненты
+    //
+    componentsCardLayout->setContentsMargins({});
+    componentsCardLayout->setSpacing(0);
+    itemIndex = 0;
+    componentsCardLayout->addWidget(componentsTitle, itemIndex++, 0);
+    componentsCardBottomSpacerIndex = itemIndex;
+    componentsCard->setLayoutReimpl(componentsCardLayout);
+
+    //
+    // Горячие клавиши
+    //
+    shortcutsCardLayout->setContentsMargins({});
+    shortcutsCardLayout->setSpacing(0);
+    itemIndex = 0;
+    shortcutsCardLayout->addWidget(shortcutsTitle, itemIndex++, 0);
+    shortcutsCardBottomSpacerIndex = itemIndex;
+    shortcutsCard->setLayoutReimpl(shortcutsCardLayout);
 
     QWidget* contentWidget = new QWidget;
     content->setWidget(contentWidget);
@@ -169,6 +229,8 @@ SettingsView::Implementation::Implementation(QWidget* _parent)
     layout->setContentsMargins({});
     layout->setSpacing(0);
     layout->addWidget(applicationCard);
+    layout->addWidget(componentsCard);
+    layout->addWidget(shortcutsCard);
     layout->addStretch();
     contentWidget->setLayout(layout);
 }
@@ -199,9 +261,20 @@ void SettingsView::updateTranslations()
     d->applicationUserInterfaceTitle->setText(tr("User interface"));
     d->theme->setText(QString("%1: %2").arg(tr("Theme")).arg(currentTheme()));
     d->changeTheme->setText(tr("Change theme"));
-    d->applicationSaveAndBackupTitle->setText(tr("Save changes/backups"));
+    d->scaleFactorTitle->setText(tr("Size of the user interface elements:"));
+    d->scaleFactorSmallInfo->setText(tr("small"));
+    d->scaleFactorBigInfo->setText(tr("big"));
+    d->applicationSaveAndBackupTitle->setText(tr("Save changes & backups"));
+    d->autoSave->setText(tr("Automatically save changes as soon as possible"));
+    d->autoSave->setToolTip(tr("Autosave works very accurately.\n"
+                               "It saves the project every 3 seconds if you do not use your mouse or keyboard.\n"
+                               "If you work with no interruptions it saves the project every 3 minutes."));
     d->saveBackups->setText(tr("Save backups"));
     d->backupsFolderPath->setLabel(tr("Backups folder path"));
+
+    d->componentsTitle->setText(tr("Components"));
+
+    d->shortcutsTitle->setText(tr("Shortcuts"));
 }
 
 SettingsView::~SettingsView() = default;
@@ -222,23 +295,27 @@ void SettingsView::designSystemChangeEvent(DesignSystemChangeEvent* _event)
     titleColor.setAlphaF(DesignSystem::inactiveTextOpacity());
     for (auto title : QVector<Widget*>{ d->applicationTitle,
                                         d->applicationUserInterfaceTitle,
-                                        d->applicationSaveAndBackupTitle }) {
+                                        d->applicationSaveAndBackupTitle,
+                                        d->componentsTitle,
+                                        d->shortcutsTitle }) {
         title->setBackgroundColor(DesignSystem::color().background());
         title->setTextColor(titleColor);
         title->setContentsMargins(Ui::DesignSystem::label().margins().toMargins());
     }
 
     auto labelMargins = Ui::DesignSystem::label().margins().toMargins();
-    labelMargins.setTop(0);
-    labelMargins.setBottom(0);
-    for (auto label : { d->language,
-                        d->theme }) {
+    labelMargins.setTop(static_cast<int>(Ui::DesignSystem::button().shadowMargins().top()));
+    labelMargins.setBottom(static_cast<int>(Ui::DesignSystem::button().shadowMargins().bottom()));
+    for (auto label : QVector<Widget*>{ d->language,
+                                        d->theme,
+                                        d->scaleFactorTitle, d->scaleFactorSmallInfo, d->scaleFactorBigInfo }) {
         label->setBackgroundColor(DesignSystem::color().background());
         label->setTextColor(DesignSystem::color().onBackground());
         label->setContentsMargins(labelMargins);
     }
 
     for (auto checkBox : { d->useSpellChecker,
+                           d->autoSave,
                            d->saveBackups }) {
         checkBox->setBackgroundColor(DesignSystem::color().background());
         checkBox->setTextColor(DesignSystem::color().onBackground());
@@ -249,6 +326,10 @@ void SettingsView::designSystemChangeEvent(DesignSystemChangeEvent* _event)
         button->setBackgroundColor(DesignSystem::color().secondary());
         button->setTextColor(DesignSystem::color().secondary());
     }
+
+    d->scaleFactor->setBackgroundColor(DesignSystem::color().surface());
+    d->scaleFactor->setContentsMargins({static_cast<int>(Ui::DesignSystem::layout().px24()), 0,
+                                           static_cast<int>(Ui::DesignSystem::layout().px24()), 0});
 
     d->applicationCardLayout->setRowMinimumHeight(d->applicationCardBottomSpacerIndex,
                                                   static_cast<int>(Ui::DesignSystem::layout().px24()));
