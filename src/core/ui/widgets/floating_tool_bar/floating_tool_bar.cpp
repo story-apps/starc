@@ -140,8 +140,8 @@ bool FloatingToolBar::event(QEvent* _event)
     if (_event->type() == QEvent::ToolTip) {
         QHelpEvent* event = static_cast<QHelpEvent*>(_event);
         QAction* action = d->pressedAction(event->pos(), actions());
-        if (action != nullptr) {
-            auto c = action->toolTip();
+        if (action != nullptr
+            && action->toolTip() != action->iconText()) {
             QToolTip::showText(event->globalPos(), action->toolTip());
         } else {
             QToolTip::hideText();

@@ -8,6 +8,7 @@
 #include <QAction>
 #include <QCloseEvent>
 #include <QPainter>
+#include <QToolTip>
 #include <QVBoxLayout>
 
 
@@ -149,6 +150,12 @@ void ApplicationView::resizeEvent(QResizeEvent* _event)
 void ApplicationView::designSystemChangeEvent(DesignSystemChangeEvent* _event)
 {
     Q_UNUSED(_event)
+
+    QPalette toolTipPalette;
+    toolTipPalette.setColor(QPalette::ToolTipBase, Ui::DesignSystem::color().onSurface());
+    toolTipPalette.setColor(QPalette::ToolTipText, Ui::DesignSystem::color().surface());
+    QToolTip::setPalette(toolTipPalette);
+    QToolTip::setFont(Ui::DesignSystem::font().subtitle2());
 
     d->navigationWidget->setBackgroundColor(DesignSystem::color().primary());
 

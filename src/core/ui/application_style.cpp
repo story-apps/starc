@@ -36,11 +36,17 @@ QStyle::SubControl ApplicationStyle::hitTestComplexControl(QStyle::ComplexContro
 int ApplicationStyle::pixelMetric(QStyle::PixelMetric _metric, const QStyleOption* _option,
     const QWidget* _widget) const
 {
-    if (_metric == PM_ScrollBarExtent) {
-        return 0;
+    switch (_metric) {
+        case PM_ScrollBarExtent: {
+            return 0;
+        }
+        case PM_ToolTipLabelFrameWidth: {
+            return static_cast<int>(Ui::DesignSystem::layout().px8());
+        }
+        default: {
+            return QProxyStyle::pixelMetric(_metric, _option, _widget);
+        }
     }
-
-    return QProxyStyle::pixelMetric(_metric, _option, _widget);
 }
 
 void ApplicationStyle::drawPrimitive(QStyle::PrimitiveElement _element, const QStyleOption* _option,
@@ -195,4 +201,27 @@ void ApplicationStyle::drawPrimitive(QStyle::PrimitiveElement _element, const QS
     else {
         QProxyStyle::drawPrimitive(_element, _option, _painter, _widget);
     }
+}
+
+int ApplicationStyle::styleHint(QStyle::StyleHint _hint, const QStyleOption* _option,
+    const QWidget* _widget, QStyleHintReturn* _returnData) const
+{
+    if (_hint == QStyle::SH_ToolTip_Mask) {
+        if (auto mask = qstyleoption_cast<QStyleHintReturnMask*>(_returnData)) {
+            //
+            // Обрезаем регион на единичку, чтобы не рисовалась рамка,
+            // и срезаем края, чтобы получить эффект закруглённых углов
+            //
+            int x, y, w, h;
+            _option->rect.adjusted(1, 1, -1, -1).getRect(&x, &y, &w, &h);
+            QRegion toolTipRegion(x + 4, y + 0, w - 4*2, h - 0*2);
+            toolTipRegion += QRegion(x + 0, y + 4, w - 0*2, h - 4*2);
+            toolTipRegion += QRegion(x + 2, y + 1, w - 2*2, h - 1*2);
+            toolTipRegion += QRegion(x + 1, y + 2, w - 1*2, h - 2*2);
+            mask->region = toolTipRegion;
+        }
+        return true;
+    }
+
+    return QProxyStyle::styleHint(_hint, _option, _widget, _returnData);
 }

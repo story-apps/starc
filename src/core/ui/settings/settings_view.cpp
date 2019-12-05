@@ -218,11 +218,13 @@ void SettingsView::designSystemChangeEvent(DesignSystemChangeEvent* _event)
         card->setBackgroundColor(DesignSystem::color().background());
     }
 
+    auto titleColor = DesignSystem::color().onBackground();
+    titleColor.setAlphaF(DesignSystem::inactiveTextOpacity());
     for (auto title : QVector<Widget*>{ d->applicationTitle,
                                         d->applicationUserInterfaceTitle,
                                         d->applicationSaveAndBackupTitle }) {
         title->setBackgroundColor(DesignSystem::color().background());
-        title->setTextColor(DesignSystem::color().onBackground());
+        title->setTextColor(titleColor);
         title->setContentsMargins(Ui::DesignSystem::label().margins().toMargins());
     }
 

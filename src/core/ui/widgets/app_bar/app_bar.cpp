@@ -7,6 +7,7 @@
 #include <QAction>
 #include <QPainter>
 #include <QPaintEvent>
+#include <QToolTip>
 #include <QVariantAnimation>
 
 
@@ -93,6 +94,23 @@ AppBar::AppBar(QWidget* _parent)
 }
 
 AppBar::~AppBar() = default;
+
+bool AppBar::event(QEvent* _event)
+{
+    if (_event->type() == QEvent::ToolTip) {
+        QHelpEvent* event = static_cast<QHelpEvent*>(_event);
+        QAction* action = d->pressedAction(event->pos(), actions());
+        if (action != nullptr
+            && action->toolTip() != action->iconText()) {
+            QToolTip::showText(event->globalPos(), action->toolTip());
+        } else {
+            QToolTip::hideText();
+        }
+        return true;
+    }
+
+    return Widget::event(_event);
+}
 
 void AppBar::paintEvent(QPaintEvent* _event)
 {
