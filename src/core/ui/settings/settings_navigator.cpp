@@ -10,6 +10,15 @@
 namespace Ui
 {
 
+namespace {
+    const int kApplicationIndex = 0;
+    const int kApplicationUserInterfaceIndex = 0;
+    const int kApplicationSaveAndBackupIndex = 1;
+    const int kComponentsIndex = 1;
+    const int kShortcutsIndex = 2;
+}
+
+
 class SettingsNavigator::Implementation
 {
 public:
@@ -38,22 +47,32 @@ SettingsNavigator::SettingsNavigator(QWidget* _parent)
     layout->addWidget(d->tree);
 
 
-    auto createItem = [] (const QString& _name, const QString& _icon) {
-        auto item = new QStandardItem(_name);
+    auto createItem = [] (const QString& _icon) {
+        auto item = new QStandardItem;
         item->setData(_icon, Qt::DecorationRole);
         item->setEditable(false);
         return item;
     };
     QStandardItemModel* model = new QStandardItemModel(this);
-    auto applicationItem = createItem("Application", "\uF614");
-    applicationItem->appendRow(createItem("User interface", "\uf62e"));
-    applicationItem->appendRow(createItem("Save changes/backups", "\uf61b"));
+    auto applicationItem = createItem("\uF614");
+    applicationItem->appendRow(createItem("\uf62e"));
+    applicationItem->appendRow(createItem("\uf61b"));
     model->appendRow(applicationItem);
-    model->appendRow(createItem("Components", "\uf9ab"));
-    model->appendRow(createItem("Shortcuts", "\uf30c"));
+    model->appendRow(createItem("\uf9ab"));
+    model->appendRow(createItem("\uf30c"));
     d->tree->setModel(model);
 
     designSystemChangeEvent(nullptr);
+}
+
+void SettingsNavigator::updateTranslations()
+{
+    auto model = qobject_cast<QStandardItemModel*>(d->tree->model());
+    model->item(kApplicationIndex)->setText(tr("Application"));
+    model->item(kApplicationIndex)->child(kApplicationUserInterfaceIndex)->setText(tr("User interface"));
+    model->item(kApplicationIndex)->child(kApplicationSaveAndBackupIndex)->setText(tr("Save changes/backups"));
+    model->item(kComponentsIndex)->setText(tr("Components"));
+    model->item(kShortcutsIndex)->setText(tr("Shortcuts"));
 }
 
 void SettingsNavigator::designSystemChangeEvent(DesignSystemChangeEvent* _event)

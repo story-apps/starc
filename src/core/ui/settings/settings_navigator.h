@@ -6,6 +6,9 @@
 namespace Ui
 {
 
+/**
+ * @brief Навигатор списка настроек
+ */
 class SettingsNavigator : public Widget
 {
     Q_OBJECT
@@ -15,6 +18,11 @@ public:
     ~SettingsNavigator() override;
 
 protected:
+    /**
+     * @brief Обновить переводы
+     */
+    void updateTranslations() override;
+
     /**
      * @brief Обновляем виджет при изменении дизайн системы
      */

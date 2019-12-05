@@ -27,6 +27,7 @@ Tree::Implementation::Implementation(QWidget* _parent)
     tree->setFrameShape(QFrame::NoFrame);
     tree->setVerticalScrollMode(QAbstractItemView::ScrollPerPixel);
     tree->setSelectionMode(QAbstractItemView::SingleSelection);
+    tree->setSelectionBehavior(QAbstractItemView::SelectRows);
     tree->setVerticalScrollBar(new ScrollBar(tree));
     tree->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
     tree->setItemDelegate(delegate);
@@ -40,7 +41,6 @@ Tree::Tree(QWidget* _parent)
     : Widget(_parent),
       d(new Implementation(this))
 {
-
     QVBoxLayout* layout = new QVBoxLayout(this);
     layout->setContentsMargins({});
     layout->setSpacing(0);
@@ -54,6 +54,11 @@ Tree::~Tree() = default;
 void Tree::setModel(QAbstractItemModel* _model)
 {
     d->tree->setModel(_model);
+}
+
+QAbstractItemModel* Tree::model() const
+{
+    return d->tree->model();
 }
 
 void Tree::designSystemChangeEvent(DesignSystemChangeEvent* _event)

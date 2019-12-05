@@ -21,6 +21,11 @@ public:
      */
     void setModel(QAbstractItemModel* _model);
 
+    /**
+     * @brief Получить установленную модель
+     */
+    QAbstractItemModel* model() const;
+
 protected:
     /**
      * @brief Корректируем внешний вид виджета дерева и его делегата
