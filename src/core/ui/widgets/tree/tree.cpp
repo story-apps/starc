@@ -1,9 +1,10 @@
 #include "tree.h"
 #include "tree_delegate.h"
+#include "tree_view.h"
 
 #include <ui/design_system/design_system.h>
+#include <ui/widgets/scroll_bar/scroll_bar.h>
 
-#include <QTreeView>
 #include <QVBoxLayout>
 
 
@@ -12,16 +13,22 @@ class Tree::Implementation
 public:
     explicit Implementation(QWidget* _parent);
 
-    QTreeView* tree = nullptr;
+    TreeView* tree = nullptr;
     TreeDelegate* delegate = nullptr;
 };
 
 Tree::Implementation::Implementation(QWidget* _parent)
-    : tree(new QTreeView(_parent)),
+    : tree(new TreeView(_parent)),
       delegate(new TreeDelegate(_parent))
 {
     tree->setHeaderHidden(true);
+    tree->setAnimated(true);
+    tree->setMouseTracking(true);
     tree->setFrameShape(QFrame::NoFrame);
+    tree->setVerticalScrollMode(QAbstractItemView::ScrollPerPixel);
+    tree->setSelectionMode(QAbstractItemView::SingleSelection);
+    tree->setVerticalScrollBar(new ScrollBar(tree));
+    tree->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
     tree->setItemDelegate(delegate);
 }
 
@@ -33,6 +40,7 @@ Tree::Tree(QWidget* _parent)
     : Widget(_parent),
       d(new Implementation(this))
 {
+
     QVBoxLayout* layout = new QVBoxLayout(this);
     layout->setContentsMargins({});
     layout->setSpacing(0);
@@ -40,6 +48,8 @@ Tree::Tree(QWidget* _parent)
 
     designSystemChangeEvent(nullptr);
 }
+
+Tree::~Tree() = default;
 
 void Tree::setModel(QAbstractItemModel* _model)
 {
@@ -52,10 +62,12 @@ void Tree::designSystemChangeEvent(DesignSystemChangeEvent* _event)
 
     QPalette palette = d->tree->palette();
     palette.setColor(QPalette::Base, backgroundColor());
+    auto alternateBaseColor = textColor();
+    alternateBaseColor.setAlphaF(Ui::DesignSystem::hoverBackgroundOpacity());
+    palette.setColor(QPalette::AlternateBase, alternateBaseColor);
     palette.setColor(QPalette::Text, textColor());
-    palette.setColor(QPalette::Highlight, Qt::transparent);
+    palette.setColor(QPalette::Highlight, Ui::DesignSystem::tree().selectionColor());
+    palette.setColor(QPalette::HighlightedText, Ui::DesignSystem::color().secondary());
     d->tree->setPalette(palette);
     d->tree->setIndentation(static_cast<int>(Ui::DesignSystem::tree().indicatorWidth()));
 }
-
-Tree::~Tree() = default;

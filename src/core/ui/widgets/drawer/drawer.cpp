@@ -137,7 +137,15 @@ void Drawer::paintEvent(QPaintEvent* _event)
             actionY += Ui::DesignSystem::drawer().separatorSpacing();
         }
 
+        //
+        // ... обводка
+        //
         const QRectF actionRect(0.0, actionY, width(), Ui::DesignSystem::drawer().actionHeight());
+        if (action->isChecked()) {
+            painter.fillRect(actionRect.marginsRemoved(Ui::DesignSystem::drawer().selectionMargins()),
+                             Ui::DesignSystem::drawer().selectionColor());
+        }
+
         painter.setPen(action->isChecked() ? Ui::DesignSystem::color().secondary()
                                            : Ui::DesignSystem::color().onPrimary());
         if (action->isChecked()) {
@@ -173,14 +181,6 @@ void Drawer::paintEvent(QPaintEvent* _event)
                               - Ui::DesignSystem::drawer().actionMargins().top()
                               - Ui::DesignSystem::drawer().actionMargins().bottom());
         painter.drawText(textRect, Qt::AlignLeft | Qt::AlignVCenter, action->text());
-
-        //
-        // ... обводка
-        //
-        if (action->isChecked()) {
-            painter.fillRect(actionRect.marginsRemoved(Ui::DesignSystem::drawer().selectionMargins()),
-                             Ui::DesignSystem::drawer().selectionColor());
-        }
 
         actionY += Ui::DesignSystem::drawer().actionHeight();
     }

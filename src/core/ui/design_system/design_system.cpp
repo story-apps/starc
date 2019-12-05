@@ -1579,7 +1579,7 @@ public:
     explicit Implementation(qreal _scaleFactor);
 
     QMarginsF margins = {16.0, 16.0, 16.0, 16.0};
-    qreal height = 64.0;
+    qreal height = 48.0;
     qreal spacing = 16.0;
     QSizeF iconSize = {24.0, 24.0};
 };
@@ -1630,16 +1630,23 @@ DesignSystem::TreeOneLineItem::TreeOneLineItem(qreal _scaleFactor)
 class DesignSystem::Tree::Implementation
 {
 public:
-    explicit Implementation(qreal _scaleFactor);
+    explicit Implementation(qreal _scaleFactor, const Color& _color);
 
     QMarginsF margins = {0.0, 24.0, 0.0, 24.0};
-    qreal indicatorWidth = 30.0;
+    qreal indicatorWidth = 40.0;
+    qreal arrowHeight = 5.0;
+    qreal arrowHalfWidth = 4.0;
+    QColor selectionColor;
 };
 
-DesignSystem::Tree::Implementation::Implementation(qreal _scaleFactor)
+DesignSystem::Tree::Implementation::Implementation(qreal _scaleFactor, const Color& _color)
 {
     margins *= _scaleFactor;
     indicatorWidth *= _scaleFactor;
+    arrowHeight *= _scaleFactor;
+    arrowHalfWidth *= _scaleFactor;
+    selectionColor = _color.secondary();
+    selectionColor.setAlphaF(0.14);
 }
 
 // **
@@ -1656,8 +1663,23 @@ qreal DesignSystem::Tree::indicatorWidth() const
     return d->indicatorWidth;
 }
 
-DesignSystem::Tree::Tree(qreal _scaleFactor)
-    : d(new Implementation(_scaleFactor))
+qreal DesignSystem::Tree::arrowHeight() const
+{
+    return d->arrowHeight;
+}
+
+qreal DesignSystem::Tree::arrowHalfWidth() const
+{
+    return d->arrowHalfWidth;
+}
+
+QColor DesignSystem::Tree::selectionColor() const
+{
+    return d->selectionColor;
+}
+
+DesignSystem::Tree::Tree(qreal _scaleFactor, const Color& _color)
+    : d(new Implementation(_scaleFactor, _color))
 {
 }
 
@@ -1816,6 +1838,7 @@ public:
     qreal pageSpacing = 16.0;
     qreal inactiveTextOpacity = 0.68;
     qreal disabledTextOpacity = 0.46;
+    qreal hoverBackgroundOpacity = 0.06;
     qreal elevationStartOpacity = 0.04;
     qreal elevationEndOpacity = 0.08;
 
@@ -1874,7 +1897,7 @@ DesignSystemPrivate::DesignSystemPrivate(ApplicationTheme _theme, qreal _scaleFa
       stepper(_scaleFactor),
       drawer(_scaleFactor, _color),
       treeOneLineItem(_scaleFactor),
-      tree(_scaleFactor),
+      tree(_scaleFactor, _color),
       card(_scaleFactor),
       dialog(_scaleFactor),
       projectCard(_scaleFactor)
@@ -2022,6 +2045,11 @@ qreal DesignSystem::inactiveTextOpacity()
 qreal DesignSystem::disabledTextOpacity()
 {
     return instance()->d->disabledTextOpacity;
+}
+
+qreal DesignSystem::hoverBackgroundOpacity()
+{
+    return instance()->d->hoverBackgroundOpacity;
 }
 
 qreal DesignSystem::elevationStartOpacity()

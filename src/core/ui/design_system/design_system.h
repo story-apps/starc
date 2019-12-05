@@ -1002,8 +1002,23 @@ public:
          */
         qreal indicatorWidth() const;
 
+        /**
+         * @brief Высота стрелочки
+         */
+        qreal arrowHeight() const;
+
+        /**
+         * @brief Половина ширины стрелочки
+         */
+        qreal arrowHalfWidth() const;
+
+        /**
+         * @brief Цвет выделения
+         */
+        QColor selectionColor() const;
+
     private:
-        explicit Tree(qreal _scaleFactor);
+        explicit Tree(qreal _scaleFactor, const Color& _color);
         friend class DesignSystemPrivate;
         //
         class Implementation;
@@ -1143,6 +1158,11 @@ public:
      * @brief Прозрачность недоступного текста
      */
     static qreal disabledTextOpacity();
+
+    /**
+     * @brief Прозрачность фона элемента под курсором
+     */
+    static qreal hoverBackgroundOpacity();
 
     /**
      * @brief Прозрачность залития эффекта выделения

@@ -37,14 +37,20 @@ SettingsNavigator::SettingsNavigator(QWidget* _parent)
     layout->setSpacing(0);
     layout->addWidget(d->tree);
 
+
+    auto createItem = [] (const QString& _name, const QString& _icon) {
+        auto item = new QStandardItem(_name);
+        item->setData(_icon, Qt::DecorationRole);
+        item->setEditable(false);
+        return item;
+    };
     QStandardItemModel* model = new QStandardItemModel(this);
-    auto row = new QStandardItem("some text 1");
-    row->setData("\uF614", Qt::DecorationRole);
-    row->appendRow(new QStandardItem("child 1"));
-    model->appendRow(row);
-    model->appendRow(new QStandardItem("some text 2"));
-    model->appendRow(new QStandardItem("some text 3"));
-    model->appendRow(new QStandardItem("some text 4"));
+    auto applicationItem = createItem("Application", "\uF614");
+    applicationItem->appendRow(createItem("User interface", "\uf62e"));
+    applicationItem->appendRow(createItem("Save changes/backups", "\uf61b"));
+    model->appendRow(applicationItem);
+    model->appendRow(createItem("Components", "\uf9ab"));
+    model->appendRow(createItem("Shortcuts", "\uf30c"));
     d->tree->setModel(model);
 
     designSystemChangeEvent(nullptr);

@@ -1,5 +1,7 @@
 #include "application_style.h"
 
+#include <ui/design_system/design_system.h>
+
 #include <QPainter>
 #include <QStyleOption>
 
@@ -44,7 +46,7 @@ int ApplicationStyle::pixelMetric(QStyle::PixelMetric _metric, const QStyleOptio
 void ApplicationStyle::drawPrimitive(QStyle::PrimitiveElement _element, const QStyleOption* _option,
     QPainter* _painter, const QWidget* _widget) const
 {
-    if (_element == QStyle::PE_IndicatorItemViewItemDrop) {
+    if (_element == PE_IndicatorItemViewItemDrop) {
         _painter->setRenderHint(QPainter::Antialiasing, true);
 
         QColor indicatorColor(_widget->palette().text().color());
@@ -116,61 +118,75 @@ void ApplicationStyle::drawPrimitive(QStyle::PrimitiveElement _element, const QS
         }
     }
     //
-    // Рисуем индикатор элемента, если у него есть дети
+    // Рисуем индикатор элемента
     //
-    else if (_element == QStyle::PE_IndicatorBranch
-               && _option->state & QStyle::State_Children) {
+    else if (_element == PE_IndicatorBranch) {
         _painter->setRenderHint(QPainter::Antialiasing, true);
 
-        QColor indicatorColor(_widget->palette().text().color());
-
         //
-        // Кисть для рисования линий
+        // Заливаем фон индикатора, если элемент под курсором, но не выделен
         //
-        QPen pen(indicatorColor);
-        pen.setWidth(1);
-        pen.setJoinStyle(Qt::MiterJoin);
-        QBrush brush(indicatorColor);
-
-        //
-        // Настраиваем рисовальщика
-        //
-        _painter->setPen(pen);
-        _painter->setBrush(brush);
-        //
-        // FIXME:
-        //
-        const int arrowHeight = 5;
-        const int arrowHalfWidth = 4;
-        //
-        // ... открытый
-        //
-        if (_option->state & QStyle::State_Open) {
-            int x = _option->rect.center().x();
-            int y = _option->rect.center().y() + arrowHeight/2;
-            QPolygon treangle;
-            treangle << QPoint(x, y)
-                     << QPoint(x - arrowHalfWidth,  y - arrowHeight)
-                     << QPoint(x + arrowHalfWidth,  y - arrowHeight);
-            _painter->drawPolygon(treangle);
+        if (_option->state & State_MouseOver && !(_option->state & State_Selected)) {
+            _painter->fillRect(_option->rect, _widget->palette().color(QPalette::AlternateBase));
         }
+
         //
-        // ... закрытый
+        // Если у элемента есть дети, рисуем сам индикатор
         //
-        else {
-            int x = _option->rect.center().x() + arrowHeight/2;
-            int y = _option->rect.center().y();
-            QPolygon treangle;
-            if (QLocale().textDirection() == Qt::LeftToRight) {
-                treangle << QPoint(x, y)
-                         << QPoint(x - arrowHeight,  y - arrowHalfWidth)
-                         << QPoint(x - arrowHeight,  y + arrowHalfWidth);
-            } else {
-                treangle << QPoint(x,  y - arrowHalfWidth)
-                         << QPoint(x, y + arrowHalfWidth)
-                         << QPoint(x - arrowHeight,  y);
+        if (_option->state & State_Children) {
+            //
+            // Кисть для рисования треугольника
+            //
+            auto indicatorColor(_option->state & State_Selected
+                                ? _widget->palette().highlightedText().color()
+                                : _widget->palette().text().color());
+            if (!(_option->state & State_Selected) && !(_option->state & State_MouseOver)) {
+                indicatorColor.setAlphaF(Ui::DesignSystem::inactiveTextOpacity());
             }
-            _painter->drawPolygon(treangle);
+            _painter->setBrush(indicatorColor);
+
+            //
+            // Ручка для рисования линий
+            //
+            QPen pen(indicatorColor, 1.0);
+            pen.setJoinStyle(Qt::MiterJoin);
+            _painter->setPen(pen);
+
+            //
+            // Определим координаты треугольника в зависимости от состояния
+            //
+            QPolygonF triangle;
+            const auto arrowHeight = Ui::DesignSystem::tree().arrowHeight();
+            const auto arrowHalfWidth = Ui::DesignSystem::tree().arrowHalfWidth();
+            //
+            // ... открытый
+            //
+            if (_option->state & QStyle::State_Open) {
+                triangle << QPointF(0.0, 0.0)
+                         << QPointF(-arrowHalfWidth, -arrowHeight)
+                         << QPointF(arrowHalfWidth, -arrowHeight);
+            }
+            //
+            // ... закрытый
+            //
+            else {
+                if (QLocale().textDirection() == Qt::LeftToRight) {
+                    triangle << QPointF(0.0, 0.0)
+                             << QPointF(-arrowHeight, -arrowHalfWidth)
+                             << QPointF(-arrowHeight, arrowHalfWidth);
+                } else {
+                    triangle << QPointF(0.0, -arrowHalfWidth)
+                             << QPointF(0.0, arrowHalfWidth)
+                             << QPointF(-arrowHeight, 0.0);
+                }
+            }
+            const QPointF distance = _option->rect.center() - triangle.boundingRect().center();
+            triangle.translate(distance);
+
+            //
+            // Рисуем
+            //
+            _painter->drawPolygon(triangle);
         }
     }
     //

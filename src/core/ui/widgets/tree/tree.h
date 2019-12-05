@@ -16,6 +16,9 @@ public:
     explicit Tree(QWidget* _parent = nullptr);
     ~Tree() override;
 
+    /**
+     * @brief Установить модель для отображения
+     */
     void setModel(QAbstractItemModel* _model);
 
 protected:

@@ -146,7 +146,7 @@ QSize Button::sizeHint() const
 
 void Button::paintEvent(QPaintEvent* _event)
 {
-    Q_UNUSED(_event);
+    Q_UNUSED(_event)
 
     const QRect backgroundRect = rect().marginsRemoved(Ui::DesignSystem::button().shadowMargins().toMargins());
     if (!backgroundRect.isValid()) {
