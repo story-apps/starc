@@ -23,8 +23,8 @@ void TreeDelegate::paint(QPainter* _painter, const QStyleOptionViewItem& _option
     //
     _painter->setRenderHint(QPainter::Antialiasing, true);
 
-    auto backgroundColor = Ui::DesignSystem::color().primary();
-    auto textColor = Ui::DesignSystem::color().onPrimary();
+    auto backgroundColor = opt.palette.color(QPalette::Base);
+    auto textColor = opt.palette.color(QPalette::Text);
 
     //
     // Рисуем
@@ -38,14 +38,13 @@ void TreeDelegate::paint(QPainter* _painter, const QStyleOptionViewItem& _option
         //
         // ... для выделенных элементов
         //
-        backgroundColor = Ui::DesignSystem::tree().selectionColor();
-        textColor = Ui::DesignSystem::color().secondary();
+        backgroundColor = opt.palette.color(QPalette::Highlight);
+        textColor = opt.palette.color(QPalette::HighlightedText);
     } else if (opt.state.testFlag(QStyle::State_MouseOver)) {
         //
         // ... для элементов на которые наведена мышь
         //
-        backgroundColor = textColor;
-        backgroundColor.setAlphaF(Ui::DesignSystem::hoverBackgroundOpacity());
+        backgroundColor = opt.palette.color(QPalette::AlternateBase);
     } else {
         //
         // ... для остальных элементов

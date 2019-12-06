@@ -53,12 +53,30 @@ Tree::~Tree() = default;
 
 void Tree::setModel(QAbstractItemModel* _model)
 {
+    if (model() != nullptr) {
+        disconnect(d->tree->selectionModel(), &QItemSelectionModel::currentChanged, this, &Tree::currentIndexChanged);
+    }
+
     d->tree->setModel(_model);
+
+    if (model() != nullptr) {
+        connect(d->tree->selectionModel(), &QItemSelectionModel::currentChanged, this, &Tree::currentIndexChanged);
+    }
 }
 
 QAbstractItemModel* Tree::model() const
 {
     return d->tree->model();
+}
+
+void Tree::setRootIsDecorated(bool _decorated)
+{
+    d->tree->setRootIsDecorated(_decorated);
+}
+
+void Tree::setCurrentIndex(const QModelIndex& _index)
+{
+    d->tree->setCurrentIndex(_index);
 }
 
 void Tree::designSystemChangeEvent(DesignSystemChangeEvent* _event)

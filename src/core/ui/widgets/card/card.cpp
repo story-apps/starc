@@ -4,6 +4,7 @@
 
 #include <utils/helpers/image_helper.h>
 
+#include <QApplication>
 #include <QPainter>
 #include <QVariantAnimation>
 #include <QVBoxLayout>
@@ -17,7 +18,7 @@ public:
     /**
      * @brief  Декорации тени при наведении
      */
-    QVariantAnimation m_shadowHeightAnimation;
+    QVariantAnimation shadowHeightAnimation;
 
     /**
      * @brief Компоновщик карточки
@@ -31,10 +32,10 @@ Card::Implementation::Implementation()
     layout->setSpacing(0);
     layout->setContentsMargins({});
 
-    m_shadowHeightAnimation.setStartValue(Ui::DesignSystem::card().minimumShadowBlurRadius());
-    m_shadowHeightAnimation.setEndValue(Ui::DesignSystem::card().maximumShadowBlurRadius());
-    m_shadowHeightAnimation.setEasingCurve(QEasingCurve::OutQuad);
-    m_shadowHeightAnimation.setDuration(160);
+    shadowHeightAnimation.setStartValue(Ui::DesignSystem::card().minimumShadowBlurRadius());
+    shadowHeightAnimation.setEndValue(Ui::DesignSystem::card().maximumShadowBlurRadius());
+    shadowHeightAnimation.setEasingCurve(QEasingCurve::OutQuad);
+    shadowHeightAnimation.setDuration(160);
 }
 
 
@@ -46,7 +47,7 @@ Card::Card(QWidget* _parent)
 
     setLayout(d->layout);
 
-    connect(&d->m_shadowHeightAnimation, &QVariantAnimation::valueChanged, [this] { update(); });
+    connect(&d->shadowHeightAnimation, &QVariantAnimation::valueChanged, [this] { update(); });
 
     designSystemChangeEvent(nullptr);
 }
@@ -83,7 +84,7 @@ void Card::paintEvent(QPaintEvent* _event)
     // ... рисуем тень
     //
     const qreal shadowHeight = std::max(Ui::DesignSystem::floatingToolBar().minimumShadowBlurRadius(),
-                                        d->m_shadowHeightAnimation.currentValue().toReal());
+                                        d->shadowHeightAnimation.currentValue().toReal());
     const QPixmap shadow
             = ImageHelper::dropShadow(backgroundImage,
                                       Ui::DesignSystem::floatingToolBar().shadowMargins(),
@@ -104,16 +105,35 @@ void Card::enterEvent(QEvent* _event)
 {
     Widget::enterEvent(_event);
 
-    d->m_shadowHeightAnimation.setDirection(QVariantAnimation::Forward);
-    d->m_shadowHeightAnimation.start();
+    //
+    // Если карточка и так уже выла поднята, нет необходимости делать это повторно
+    //
+    if (d->shadowHeightAnimation.direction() == QVariantAnimation::Forward
+        && d->shadowHeightAnimation.currentValue() == d->shadowHeightAnimation.endValue()) {
+        return;
+    }
+
+    if (testAttribute(Qt::WA_Hover)) {
+        d->shadowHeightAnimation.setDirection(QVariantAnimation::Forward);
+        d->shadowHeightAnimation.start();
+    }
 }
 
 void Card::leaveEvent(QEvent* _event)
 {
     Widget::leaveEvent(_event);
 
-    d->m_shadowHeightAnimation.setDirection(QVariantAnimation::Backward);
-    d->m_shadowHeightAnimation.start();
+    //
+    // Если фокус получил один из дочерних виджетов, то не нужно опускать карточку
+    //
+    if (findChildren<QWidget*>().contains(QApplication::focusWidget())) {
+        return;
+    }
+
+    if (testAttribute(Qt::WA_Hover)) {
+        d->shadowHeightAnimation.setDirection(QVariantAnimation::Backward);
+        d->shadowHeightAnimation.start();
+    }
 }
 
 void Card::designSystemChangeEvent(DesignSystemChangeEvent* _event)

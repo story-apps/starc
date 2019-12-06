@@ -26,6 +26,22 @@ public:
      */
     QAbstractItemModel* model() const;
 
+    /**
+     * @brief Задать необходимость отображения декорации у корневых элементов
+     */
+    void setRootIsDecorated(bool _decorated);
+
+    /**
+     * @brief Задать текущий индекс
+     */
+    void setCurrentIndex(const QModelIndex& _index);
+
+signals:
+    /**
+     * @brief Изменился текущий индекс
+     */
+    void currentIndexChanged(const QModelIndex& _index);
+
 protected:
     /**
      * @brief Корректируем внешний вид виджета дерева и его делегата

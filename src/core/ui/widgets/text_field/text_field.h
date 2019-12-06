@@ -77,6 +77,11 @@ signals:
 
 protected:
     /**
+     * @brief Задать цвет иконки вспомогательного действия
+     */
+    void setTrailingIconColor(const QColor& _color);
+
+    /**
      * @brief Перенастраиваем виджет при обновлении дизайн системы
      */
     bool event(QEvent* _event) override;

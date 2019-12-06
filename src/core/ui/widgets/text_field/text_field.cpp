@@ -50,6 +50,7 @@ public:
     QString error;
 
     QString trailingIcon;
+    QColor trailingIconColor;
 
     bool isPasswordModeEnabled = false;
     bool isEnterMakesNewLine = false;
@@ -334,7 +335,7 @@ QSize TextField::sizeHint() const
 
 int TextField::heightForWidth(int _width) const
 {
-    int width = _width;
+    qreal width = _width;
     width -= Ui::DesignSystem::textField().margins().left()
              + Ui::DesignSystem::textField().margins().right();
     qreal height = TextHelper::heightForWidth(text(), Ui::DesignSystem::font().body1(), static_cast<int>(width));
@@ -346,6 +347,16 @@ int TextField::heightForWidth(int _width) const
         height += Ui::DesignSystem::textField().helperHeight();
     }
     return static_cast<int>(height);
+}
+
+void TextField::setTrailingIconColor(const QColor& _color)
+{
+    if (d->trailingIconColor == _color) {
+        return;
+    }
+
+    d->trailingIconColor = _color;
+    update();
 }
 
 bool TextField::event(QEvent* _event)
@@ -448,7 +459,9 @@ void TextField::paintEvent(QPaintEvent* _event)
     //
     if (!d->trailingIcon.isEmpty()) {
         painter.setFont(Ui::DesignSystem::font().iconsMid());
-        painter.setPen(Ui::DesignSystem::color().onBackground());
+        painter.setPen(d->trailingIconColor.isValid()
+                       ? d->trailingIconColor
+                       : Ui::DesignSystem::color().onBackground());
         const QRectF iconRect(QPointF(width()
                                       - Ui::DesignSystem::textField().contentsMargins().right()
                                       - Ui::DesignSystem::textField().margins().right()

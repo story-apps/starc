@@ -4,6 +4,7 @@
 #include <ui/widgets/button/button.h>
 #include <ui/widgets/card/card.h>
 #include <ui/widgets/check_box/check_box.h>
+#include <ui/widgets/combo_box/combo_box.h>
 #include <ui/widgets/label/label.h>
 #include <ui/widgets/scroll_bar/scroll_bar.h>
 #include <ui/widgets/slider/slider.h>
@@ -12,6 +13,7 @@
 #include <QGridLayout>
 #include <QLocale>
 #include <QScrollArea>
+#include <QStringListModel>
 
 
 namespace Ui
@@ -71,6 +73,7 @@ public:
     Body1Label* language = nullptr;
     Button* changeLanuage = nullptr;
     CheckBox* useSpellChecker = nullptr;
+    ComboBox* spellCheckerLanguage = nullptr;
     //
     H6Label* applicationUserInterfaceTitle = nullptr;
     Body1Label* theme = nullptr;
@@ -110,6 +113,7 @@ SettingsView::Implementation::Implementation(QWidget* _parent)
       language(new Body1Label(applicationCard)),
       changeLanuage(new Button(applicationCard)),
       useSpellChecker(new CheckBox(applicationCard)),
+      spellCheckerLanguage(new ComboBox(applicationCard)),
       applicationUserInterfaceTitle(new H6Label(applicationCard)),
       theme(new Body1Label(applicationCard)),
       changeTheme(new Button(applicationCard)),
@@ -161,9 +165,11 @@ SettingsView::Implementation::Implementation(QWidget* _parent)
         applicationCardLayout->addLayout(layout, itemIndex++, 0);
     }
     {
+        spellCheckerLanguage->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Preferred);
+
         auto layout = makeLayout();
-        layout->addWidget(useSpellChecker);
-        layout->addStretch();
+        layout->addWidget(useSpellChecker, 0, Qt::AlignBottom);
+        layout->addWidget(spellCheckerLanguage);
         applicationCardLayout->addLayout(layout, itemIndex++, 0);
     }
     //
@@ -254,13 +260,14 @@ SettingsView::SettingsView(QWidget* _parent)
 
 void SettingsView::updateTranslations()
 {
-    d->applicationTitle->setText(tr("Application"));
-    d->language->setText(QString("%1: %2").arg(tr("Language")).arg(currentLanguage()));
-    d->changeLanuage->setText(tr("Select language"));
+    d->applicationTitle->setText(tr("Application settings"));
+    d->language->setText(tr("Language"));
+    d->changeLanuage->setText(currentLanguage());
     d->useSpellChecker->setText(tr("Spell check"));
+    d->spellCheckerLanguage->setLabel(tr("Spelling dictionary"));
     d->applicationUserInterfaceTitle->setText(tr("User interface"));
-    d->theme->setText(QString("%1: %2").arg(tr("Theme")).arg(currentTheme()));
-    d->changeTheme->setText(tr("Change theme"));
+    d->theme->setText(tr("Theme"));
+    d->changeTheme->setText(currentTheme());
     d->scaleFactorTitle->setText(tr("Size of the user interface elements:"));
     d->scaleFactorSmallInfo->setText(tr("small"));
     d->scaleFactorBigInfo->setText(tr("big"));
@@ -327,7 +334,7 @@ void SettingsView::designSystemChangeEvent(DesignSystemChangeEvent* _event)
         button->setTextColor(DesignSystem::color().secondary());
     }
 
-    d->scaleFactor->setBackgroundColor(DesignSystem::color().surface());
+    d->scaleFactor->setBackgroundColor(DesignSystem::color().background());
     d->scaleFactor->setContentsMargins({static_cast<int>(Ui::DesignSystem::layout().px24()), 0,
                                            static_cast<int>(Ui::DesignSystem::layout().px24()), 0});
 
