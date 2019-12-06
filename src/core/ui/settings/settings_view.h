@@ -19,11 +19,25 @@ public:
     explicit SettingsView(QWidget* _parent = nullptr);
     ~SettingsView() override;
 
+    /**
+     * @brief По возможности сфокусировать на экране заданный виджет
+     */
     void showApplication();
     void showApplicationUserInterface();
     void showApplicationSaveAndBackups();
     void showComponents();
     void showShortcuts();
+
+signals:
+    /**
+     * @brief Пользователь нажал кнопку выборя языка
+     */
+    void languagePressed();
+
+    /**
+     * @brief Пользователь нажал кнопку выбора темы
+     */
+    void themePressed();
 
 protected:
     /**

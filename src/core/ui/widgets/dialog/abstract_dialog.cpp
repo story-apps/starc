@@ -129,7 +129,10 @@ void AbstractDialog::showDialog()
     //
     // Сохраняем изображение контента и прячем сам виджет
     //
-    d->contentPixmap = d->content->grab(QRect({0, 0}, QSize(d->content->minimumWidth(), d->content->sizeHint().height())));
+    d->contentPixmap = d->content->grab(QRect({0, 0},
+                                              QSize(std::max(d->content->minimumWidth(),
+                                                             d->content->sizeHint().width()),
+                                                    d->content->sizeHint().height())));
     d->content->hide();
 
     //
@@ -189,7 +192,7 @@ void AbstractDialog::paintEvent(QPaintEvent* _event)
 
 void AbstractDialog::designSystemChangeEvent(DesignSystemChangeEvent* _event)
 {
-    Q_UNUSED(_event);
+    Q_UNUSED(_event)
 
     d->content->setMinimumWidth(static_cast<int>(Ui::DesignSystem::dialog().minimumWidth()));
     d->content->setBackgroundColor(Ui::DesignSystem::color().background());

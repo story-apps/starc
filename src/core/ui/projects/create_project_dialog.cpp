@@ -1,7 +1,6 @@
 #include "create_project_dialog.h"
 
 #include <ui/design_system/design_system.h>
-
 #include <ui/widgets/button/button.h>
 #include <ui/widgets/radio_button/radio_button.h>
 #include <ui/widgets/radio_button/radio_button_group.h>
@@ -10,6 +9,7 @@
 
 #include <QGridLayout>
 #include <QTimer>
+
 
 namespace Ui
 {
@@ -89,6 +89,8 @@ CreateProjectDialog::CreateProjectDialog(QWidget* _parent)
     designSystemChangeEvent(nullptr);
 }
 
+CreateProjectDialog::~CreateProjectDialog() = default;
+
 QWidget* CreateProjectDialog::focusedWidgetAfterShow() const
 {
     return d->projectName;
@@ -129,6 +131,4 @@ void CreateProjectDialog::designSystemChangeEvent(DesignSystemChangeEvent* _even
                                                    Ui::DesignSystem::layout().px8()).toMargins());
 }
 
-CreateProjectDialog::~CreateProjectDialog() = default;
-
-}
+} // namespace Ui

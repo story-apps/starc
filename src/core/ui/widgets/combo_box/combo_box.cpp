@@ -102,6 +102,7 @@ ComboBox::ComboBox(QWidget* _parent)
 {
     setReadOnly(true);
     setTrailingIcon("\uf35d");
+    setCursor(Qt::ArrowCursor);
 
     connect(&d->popupHeightAnimation, &QVariantAnimation::valueChanged, this, [this] (const QVariant& _value) {
         const auto height = _value.toInt();
@@ -115,6 +116,7 @@ ComboBox::ComboBox(QWidget* _parent)
 
     connect(d->popupContent, &Tree::currentIndexChanged, this, [this] (const QModelIndex& _index) {
         setText(_index.data().toString());
+        d->hidePopup();
     });
 }
 

@@ -55,6 +55,7 @@ SOURCES += \
     ui/projects/projects_navigator.cpp \
     ui/projects/projects_tool_bar.cpp \
     ui/projects/projects_view.cpp \
+    ui/settings/language_dialog.cpp \
     ui/settings/settings_navigator.cpp \
     ui/settings/settings_tool_bar.cpp \
     ui/settings/settings_view.cpp \
@@ -137,6 +138,7 @@ HEADERS += \
     ui/projects/projects_navigator.h \
     ui/projects/projects_tool_bar.h \
     ui/projects/projects_view.h \
+    ui/settings/language_dialog.h \
     ui/settings/settings_navigator.h \
     ui/settings/settings_tool_bar.h \
     ui/settings/settings_view.h \

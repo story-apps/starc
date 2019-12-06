@@ -305,6 +305,7 @@ void ApplicationManager::Implementation::createStory()
 {
     Ui::CreateProjectDialog* dlg = new Ui::CreateProjectDialog(applicationView);
     dlg->showDialog();
+    connect(dlg, &Ui::CreateProjectDialog::disappeared, dlg, &Ui::CreateProjectDialog::deleteLater);
 }
 
 template<typename Manager>
@@ -476,11 +477,13 @@ void ApplicationManager::initConnections()
     connect(d->projectsManager.data(), &ProjectsManager::createStoryRequested, this, [this] { d->createStory(); });
 
     //
-    //
+    // Менеджер настроек
     //
     connect(d->settingsManager.data(), &SettingsManager::closeSettingsRequested, this, [this] {
         d->showLastContent();
     });
+    connect(d->settingsManager.data(), &SettingsManager::languageChanged, this,
+            [this] (QLocale::Language _language) { d->setTranslation(_language); });
 
 #ifdef CLOUD_SERVICE_MANAGER
     //

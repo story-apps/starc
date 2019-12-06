@@ -65,16 +65,16 @@ QAbstractItemModel* buildSpellCheckerLanguagesModel() {
 QString currentTheme() {
     switch (Ui::DesignSystem::theme()) {
         case Ui::ApplicationTheme::Dark: {
-            return SettingsView::tr("Dark");
+            return SettingsView::tr("Dark", "Theme, will be used in case \"Theme: Dark\"");
         }
         case Ui::ApplicationTheme::Light: {
-            return SettingsView::tr("Light");
+            return SettingsView::tr("Light", "Theme, will be used in case \"Theme: Light\"");
         }
         case Ui::ApplicationTheme::DarkAndLight: {
-            return SettingsView::tr("Dark and light");
+            return SettingsView::tr("Dark and light", "Theme, will be used in case \"Theme: Dark and light\"");
         }
         default: {
-            return SettingsView::tr("Custom");
+            return SettingsView::tr("Custom", "Theme, will be used in case \"Theme: Custom\"");
         }
     }
 }
@@ -339,7 +339,9 @@ SettingsView::SettingsView(QWidget* _parent)
     connect(&d->scrollAnimation, &QVariantAnimation::valueChanged, this, [this] (const QVariant& _value) {
         d->content->verticalScrollBar()->setValue(_value.toInt());
     });
+    connect(d->changeLanuage, &Button::clicked, this, &SettingsView::languagePressed);
     connect(d->useSpellChecker, &CheckBox::checkedChanged, d->spellCheckerLanguage, &ComboBox::setEnabled);
+    connect(d->changeTheme, &Button::clicked, this, &SettingsView::themePressed);
     connect(d->saveBackups, &CheckBox::checkedChanged, d->backupsFolderPath, &ComboBox::setEnabled);
 
     designSystemChangeEvent(nullptr);

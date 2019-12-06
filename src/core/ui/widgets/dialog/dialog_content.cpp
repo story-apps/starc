@@ -5,7 +5,7 @@
 #include <QTimer>
 #include <QVariantAnimation>
 
-#include <QDebug>
+
 class DialogContent::Implementation
 {
 public:

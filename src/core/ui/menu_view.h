@@ -103,6 +103,12 @@ signals:
      */
     void helpPressed();
 
+protected:
+    /**
+     * @brief Обновить переводы
+     */
+    void updateTranslations() override;
+
 private:
     class Implementation;
     QScopedPointer<Implementation> d;

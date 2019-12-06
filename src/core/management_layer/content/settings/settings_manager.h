@@ -1,5 +1,6 @@
 #pragma once
 
+#include <QLocale>
 #include <QObject>
 
 
@@ -23,6 +24,11 @@ signals:
      * @brief Пользователь хочет закрыть настройки
      */
     void closeSettingsRequested();
+
+    /**
+     * @brief Пользователь изменил язык
+     */
+    void languageChanged(QLocale::Language _language);
 
 private:
     class Implementation;

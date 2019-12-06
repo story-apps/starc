@@ -79,6 +79,11 @@ void Tree::setCurrentIndex(const QModelIndex& _index)
     d->tree->setCurrentIndex(_index);
 }
 
+void Tree::expandAll()
+{
+    d->tree->expandAll();
+}
+
 void Tree::designSystemChangeEvent(DesignSystemChangeEvent* _event)
 {
     Widget::designSystemChangeEvent(_event);

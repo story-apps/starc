@@ -31,16 +31,16 @@ public:
 
 MenuView::Implementation::Implementation(QWidget* _parent)
 {
-    stories = new QAction(_parent->tr("Stories"));
+    stories = new QAction;
     stories->setIconText("\uf24b");
     stories->setCheckable(true);
     stories->setChecked(true);
     //
-    createStory = new QAction(_parent->tr("Create story"));
+    createStory = new QAction;
     createStory->setIconText("\uf415");
     createStory->setCheckable(false);
     //
-    openStory = new QAction(_parent->tr("Open story"));
+    openStory = new QAction;
     openStory->setIconText("\uf76f");
     openStory->setCheckable(false);
     //
@@ -50,35 +50,35 @@ MenuView::Implementation::Implementation(QWidget* _parent)
     story->setVisible(false);
     story->setSeparator(true);
     //
-    saveStory = new QAction(_parent->tr("Save current story"));
+    saveStory = new QAction;
     saveStory->setIconText("\uf193");
     saveStory->setCheckable(false);
     saveStory->setEnabled(false);
     saveStory->setVisible(false);
     //
-    saveStoryAs = new QAction(_parent->tr("Save current story as..."));
+    saveStoryAs = new QAction;
     saveStoryAs->setIconText({});
     saveStoryAs->setCheckable(false);
     saveStoryAs->setEnabled(false);
     saveStoryAs->setVisible(false);
     //
-    importStory = new QAction(_parent->tr("Import..."));
+    importStory = new QAction;
     importStory->setIconText("\uf2fa");
     importStory->setCheckable(true);
     importStory->setVisible(false);
     //
-    exportStory = new QAction(_parent->tr("Export..."));
+    exportStory = new QAction;
     exportStory->setIconText("\uf207");
     exportStory->setCheckable(false);
     exportStory->setVisible(false);
     //
-    settings = new QAction(_parent->tr("Application settings"));
+    settings = new QAction;
     settings->setIconText("\uf493");
     settings->setCheckable(false);
     settings->setVisible(true);
     settings->setSeparator(true);
     //
-    help = new QAction(_parent->tr("How to use the application"));
+    help = new QAction;
     help->setIconText("\uf2d7");
     help->setCheckable(false);
     help->setChecked(false);
@@ -181,6 +181,19 @@ void MenuView::setProVersion(bool _isPro)
     setSubtitle(QString("Story Architect %1 version")
                 .arg(_isPro ? "Pro" : "Free"));
     d->help->setVisible(!_isPro);
+}
+
+void MenuView::updateTranslations()
+{
+    d->stories->setText(tr("Stories"));
+    d->createStory->setText(tr("Create story"));
+    d->openStory->setText(tr("Open story"));
+    d->saveStory->setText(tr("Save current story"));
+    d->saveStoryAs->setText(d->saveStory->isEnabled() ? tr("Save changes") : tr("All changes saved"));
+    d->importStory->setText(tr("Import..."));
+    d->exportStory->setText(tr("Export..."));
+    d->settings->setText(tr("Application settings"));
+    d->help->setText(tr("How to use the application"));
 }
 
 MenuView::~MenuView() = default;

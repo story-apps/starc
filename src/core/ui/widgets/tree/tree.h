@@ -36,6 +36,11 @@ public:
      */
     void setCurrentIndex(const QModelIndex& _index);
 
+    /**
+     * @brief Развернуть все элементы
+     */
+    void expandAll();
+
 signals:
     /**
      * @brief Изменился текущий индекс

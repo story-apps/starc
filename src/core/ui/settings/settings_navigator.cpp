@@ -61,6 +61,8 @@ SettingsNavigator::SettingsNavigator(QWidget* _parent)
     model->appendRow(createItem("\uf9ab"));
     model->appendRow(createItem("\uf30c"));
     d->tree->setModel(model);
+    d->tree->setCurrentIndex(model->index(0, 0));
+    d->tree->expandAll();
 
     connect(d->tree, &Tree::currentIndexChanged, this, [this] (const QModelIndex& _index) {
         if (_index.parent().isValid()) {
