@@ -2,6 +2,8 @@
 
 #include <ui/widgets/widget/widget.h>
 
+class QAbstractItemModel;
+
 
 namespace Ui
 {

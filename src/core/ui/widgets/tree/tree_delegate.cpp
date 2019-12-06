@@ -57,18 +57,23 @@ void TreeDelegate::paint(QPainter* _painter, const QStyleOptionViewItem& _option
     // ... иконка
     //
     _painter->setPen(textColor);
-    const QRectF iconRect(QPointF(backgroundRect.left(),
+    QRectF iconRect;
+    if (_index.data(Qt::DecorationRole).isValid()) {
+        iconRect = QRectF(QPointF(backgroundRect.left(),
                                   backgroundRect.top()),
                           QSizeF(Ui::DesignSystem::treeOneLineItem().iconSize().width(),
                                  backgroundRect.height()));
-    _painter->setFont(Ui::DesignSystem::font().iconsMid());
-    _painter->drawText(iconRect, Qt::AlignCenter, _index.data(Qt::DecorationRole).toString());
+        _painter->setFont(Ui::DesignSystem::font().iconsMid());
+        _painter->drawText(iconRect, Qt::AlignCenter, _index.data(Qt::DecorationRole).toString());
+    }
 
     //
     // ... текст
     //
     _painter->setFont(Ui::DesignSystem::font().subtitle2());
-    const qreal textLeft = iconRect.right() + Ui::DesignSystem::treeOneLineItem().spacing();
+    const qreal textLeft = iconRect.isValid()
+                           ? iconRect.right() + Ui::DesignSystem::treeOneLineItem().spacing()
+                           : Ui::DesignSystem::treeOneLineItem().margins().left();
     const QRectF textRect(QPointF(textLeft,
                                   backgroundRect.top()),
                           QSizeF(backgroundRect.right() - textLeft - Ui::DesignSystem::treeOneLineItem().margins().right(),

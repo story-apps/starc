@@ -13,13 +13,23 @@
 #include <QGridLayout>
 #include <QLocale>
 #include <QScrollArea>
-#include <QStringListModel>
+#include <QStandardItemModel>
 
 
 namespace Ui
 {
 
 namespace {
+
+/**
+ * @brief Сформиовать компоновщик для строки настроек
+ */
+QHBoxLayout* makeLayout() {
+    auto layout = new QHBoxLayout;
+    layout->setContentsMargins({});
+    layout->setSpacing(0);
+    return layout;
+};
 
 /**
  * @brief Получить название языка установленной локали
@@ -36,6 +46,16 @@ QString currentLanguage() {
             return QLocale::languageToString(QLocale().language());
         }
     }
+}
+
+QAbstractItemModel* buildSpellCheckerLanguagesModel() {
+    auto model = new QStandardItemModel;
+    model->appendRow(new QStandardItem("English AU"));
+    model->appendRow(new QStandardItem("English UK"));
+    model->appendRow(new QStandardItem("English US"));
+    model->appendRow(new QStandardItem("Russian"));
+    model->appendRow(new QStandardItem("Russian with Yo"));
+    return model;
 }
 
 /**
@@ -64,6 +84,22 @@ class SettingsView::Implementation
 public:
     explicit Implementation(QWidget* _parent);
 
+    /**
+     * @brief Настроить карточку параметров приложения
+     */
+    void initApplicationCard();
+
+    /**
+     * @brief Настроить карточку параметров компонентов
+     */
+    void initComponentsCard();
+
+    /**
+     * @brief Настроить карточку горячих клавиш
+     */
+    void initShortcutsCard();
+
+
     QScrollArea* content = nullptr;
 
     Card* applicationCard = nullptr;
@@ -74,6 +110,7 @@ public:
     Button* changeLanuage = nullptr;
     CheckBox* useSpellChecker = nullptr;
     ComboBox* spellCheckerLanguage = nullptr;
+    QAbstractItemModel* spellCheckerLanguagesModel = nullptr;
     //
     H6Label* applicationUserInterfaceTitle = nullptr;
     Body1Label* theme = nullptr;
@@ -114,6 +151,7 @@ SettingsView::Implementation::Implementation(QWidget* _parent)
       changeLanuage(new Button(applicationCard)),
       useSpellChecker(new CheckBox(applicationCard)),
       spellCheckerLanguage(new ComboBox(applicationCard)),
+      spellCheckerLanguagesModel(buildSpellCheckerLanguagesModel()),
       applicationUserInterfaceTitle(new H6Label(applicationCard)),
       theme(new Body1Label(applicationCard)),
       changeTheme(new Button(applicationCard)),
@@ -139,19 +177,34 @@ SettingsView::Implementation::Implementation(QWidget* _parent)
     content->setVerticalScrollBar(new ScrollBar);
     content->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
 
+    initApplicationCard();
+    initComponentsCard();
+    initShortcutsCard();
+
+    QWidget* contentWidget = new QWidget;
+    content->setWidget(contentWidget);
+    content->setWidgetResizable(true);
+    QVBoxLayout* layout = new QVBoxLayout;
+    layout->setContentsMargins({});
+    layout->setSpacing(0);
+    layout->addWidget(applicationCard);
+    layout->addWidget(componentsCard);
+    layout->addWidget(shortcutsCard);
+    layout->addStretch();
+    contentWidget->setLayout(layout);
+}
+
+void SettingsView::Implementation::initApplicationCard()
+{
+    spellCheckerLanguage->setEnabled(false);
+    spellCheckerLanguage->setModel(spellCheckerLanguagesModel);
     scaleFactor->setMaximumValue(4000);
     scaleFactor->setValue(1000);
+    backupsFolderPath->setEnabled(false);
     backupsFolderPath->setTrailingIcon("\uf256");
 
-    auto makeLayout = [] {
-        auto layout = new QHBoxLayout;
-        layout->setContentsMargins({});
-        layout->setSpacing(0);
-        return layout;
-    };
-
     //
-    // Приложение
+    // Компоновка
     //
     applicationCardLayout->setContentsMargins({});
     applicationCardLayout->setSpacing(0);
@@ -168,7 +221,7 @@ SettingsView::Implementation::Implementation(QWidget* _parent)
         spellCheckerLanguage->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Preferred);
 
         auto layout = makeLayout();
-        layout->addWidget(useSpellChecker, 0, Qt::AlignBottom);
+        layout->addWidget(useSpellChecker, 0, Qt::AlignCenter);
         layout->addWidget(spellCheckerLanguage);
         applicationCardLayout->addLayout(layout, itemIndex++, 0);
     }
@@ -201,44 +254,32 @@ SettingsView::Implementation::Implementation(QWidget* _parent)
         backupsFolderPath->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Preferred);
 
         auto layout = makeLayout();
-        layout->addWidget(saveBackups, 0, Qt::AlignBottom);
+        layout->addWidget(saveBackups, 0, Qt::AlignCenter);
         layout->addWidget(backupsFolderPath);
         applicationCardLayout->addLayout(layout, itemIndex++, 0);
     }
     applicationCardBottomSpacerIndex = itemIndex;
     applicationCard->setLayoutReimpl(applicationCardLayout);
+}
 
-    //
-    //  Компоненты
-    //
+void SettingsView::Implementation::initComponentsCard()
+{
     componentsCardLayout->setContentsMargins({});
     componentsCardLayout->setSpacing(0);
-    itemIndex = 0;
+    int itemIndex = 0;
     componentsCardLayout->addWidget(componentsTitle, itemIndex++, 0);
     componentsCardBottomSpacerIndex = itemIndex;
     componentsCard->setLayoutReimpl(componentsCardLayout);
+}
 
-    //
-    // Горячие клавиши
-    //
+void SettingsView::Implementation::initShortcutsCard()
+{
     shortcutsCardLayout->setContentsMargins({});
     shortcutsCardLayout->setSpacing(0);
-    itemIndex = 0;
+    int itemIndex = 0;
     shortcutsCardLayout->addWidget(shortcutsTitle, itemIndex++, 0);
     shortcutsCardBottomSpacerIndex = itemIndex;
     shortcutsCard->setLayoutReimpl(shortcutsCardLayout);
-
-    QWidget* contentWidget = new QWidget;
-    content->setWidget(contentWidget);
-    content->setWidgetResizable(true);
-    QVBoxLayout* layout = new QVBoxLayout;
-    layout->setContentsMargins({});
-    layout->setSpacing(0);
-    layout->addWidget(applicationCard);
-    layout->addWidget(componentsCard);
-    layout->addWidget(shortcutsCard);
-    layout->addStretch();
-    contentWidget->setLayout(layout);
 }
 
 
@@ -254,6 +295,9 @@ SettingsView::SettingsView(QWidget* _parent)
     layout->setSpacing(0);
     layout->addWidget(d->content);
     setLayout(layout);
+
+    connect(d->useSpellChecker, &CheckBox::checkedChanged, d->spellCheckerLanguage, &ComboBox::setEnabled);
+    connect(d->saveBackups, &CheckBox::checkedChanged, d->backupsFolderPath, &ComboBox::setEnabled);
 
     designSystemChangeEvent(nullptr);
 }

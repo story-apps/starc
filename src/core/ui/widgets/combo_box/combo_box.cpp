@@ -53,12 +53,17 @@ ComboBox::Implementation::Implementation(QWidget* _parent)
     popup->setLayoutReimpl(popupLayout);
 
     popupHeightAnimation.setEasingCurve(QEasingCurve::OutQuint);
-    popupHeightAnimation.setDuration(160);
+    popupHeightAnimation.setDuration(240);
     popupHeightAnimation.setStartValue(0);
+    popupHeightAnimation.setEndValue(0);
 }
 
 void ComboBox::Implementation::showPopup(QWidget* _parent)
 {
+    if (popupContent->model() == nullptr) {
+        return;
+    }
+
     isPopupShown = true;
 
     auto width = _parent->width()

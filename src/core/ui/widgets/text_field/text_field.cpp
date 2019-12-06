@@ -81,7 +81,10 @@ void TextField::Implementation::reconfigure(TextField* _textField) const
 
     QPalette palette = _textField->palette();
     palette.setColor(QPalette::Base, Qt::transparent);
-    palette.setColor(QPalette::Text, Ui::DesignSystem::color().onSurface());
+    QColor textColor = Ui::DesignSystem::color().onSurface();
+    palette.setColor(QPalette::Normal, QPalette::Text, textColor);
+    textColor.setAlphaF(Ui::DesignSystem::disabledTextOpacity());
+    palette.setColor(QPalette::Disabled, QPalette::Text, textColor);
     _textField->setPalette(palette);
 
     QTextFrameFormat frameFormat = _textField->document()->rootFrame()->frameFormat();
@@ -461,7 +464,7 @@ void TextField::paintEvent(QPaintEvent* _event)
         painter.setFont(Ui::DesignSystem::font().iconsMid());
         painter.setPen(d->trailingIconColor.isValid()
                        ? d->trailingIconColor
-                       : Ui::DesignSystem::color().onBackground());
+                       : palette().color(QPalette::Text));
         const QRectF iconRect(QPointF(width()
                                       - Ui::DesignSystem::textField().contentsMargins().right()
                                       - Ui::DesignSystem::textField().margins().right()
