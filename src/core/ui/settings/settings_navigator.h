@@ -18,6 +18,9 @@ public:
     ~SettingsNavigator() override;
 
 signals:
+    /**
+     * @brief Пользователь хочет перейти в отображению заданных настроек
+     */
     void applicationPressed();
     void applicationUserInterfacePressed();
     void applicationSaveAndBackupsPressed();

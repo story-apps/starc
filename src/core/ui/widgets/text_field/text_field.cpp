@@ -22,7 +22,7 @@ public:
     /**
      * @brief Переконфигурировать виджет при смене параметров дизайн системы
      */
-    void reconfigure(TextField* _textField) const;
+    void reconfigure(TextField* _textField);
 
     /**
      * @brief Анимировать лейбл
@@ -73,7 +73,7 @@ TextField::Implementation::Implementation()
     decorationAnimation.setEasingCurve(QEasingCurve::OutQuad);
 }
 
-void TextField::Implementation::reconfigure(TextField* _textField) const
+void TextField::Implementation::reconfigure(TextField* _textField)
 {
     QSignalBlocker signalBlocker(_textField);
 
@@ -97,6 +97,14 @@ void TextField::Implementation::reconfigure(TextField* _textField) const
     frameFormat.setBottomMargin(Ui::DesignSystem::textField().contentsMargins().bottom()
                                 + Ui::DesignSystem::textField().margins().bottom());
     _textField->document()->rootFrame()->setFrameFormat(frameFormat);
+
+    if (_textField->text().isEmpty()) {
+        animateLabelToBottom();
+    } else {
+        animateLabelToTop();
+    }
+    labelFontSizeAnimation.setCurrentTime(labelFontSizeAnimation.duration());
+    labelTopLeftAnimation.setCurrentTime(labelTopLeftAnimation.duration());
 }
 
 void TextField::Implementation::animateLabelToTop()
@@ -367,6 +375,8 @@ bool TextField::event(QEvent* _event)
     switch (static_cast<int>(_event->type())) {
         case static_cast<QEvent::Type>(EventType::DesignSystemChangeEvent): {
             d->reconfigure(this);
+            updateGeometry();
+            update();
             return true;
         }
 

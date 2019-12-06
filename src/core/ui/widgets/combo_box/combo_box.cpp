@@ -117,6 +117,7 @@ ComboBox::ComboBox(QWidget* _parent)
     connect(d->popupContent, &Tree::currentIndexChanged, this, [this] (const QModelIndex& _index) {
         setText(_index.data().toString());
         d->hidePopup();
+        emit currentIndexChanged(_index);
     });
 }
 

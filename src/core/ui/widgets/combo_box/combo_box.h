@@ -21,6 +21,12 @@ public:
      */
     void setModel(QAbstractItemModel* _model);
 
+signals:
+    /**
+     * @brief Изменился текущий индекс
+     */
+    void currentIndexChanged(const QModelIndex& _index);
+
 protected:
     /**
      * @brief Перенастраиваем виджет при обновлении дизайн системы

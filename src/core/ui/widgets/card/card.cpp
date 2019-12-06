@@ -32,8 +32,6 @@ Card::Implementation::Implementation()
     layout->setSpacing(0);
     layout->setContentsMargins({});
 
-    shadowHeightAnimation.setStartValue(Ui::DesignSystem::card().minimumShadowBlurRadius());
-    shadowHeightAnimation.setEndValue(Ui::DesignSystem::card().maximumShadowBlurRadius());
     shadowHeightAnimation.setEasingCurve(QEasingCurve::OutQuad);
     shadowHeightAnimation.setDuration(160);
 }
@@ -136,6 +134,9 @@ void Card::leaveEvent(QEvent* _event)
 void Card::designSystemChangeEvent(DesignSystemChangeEvent* _event)
 {
     Q_UNUSED(_event)
+
+    d->shadowHeightAnimation.setStartValue(Ui::DesignSystem::card().minimumShadowBlurRadius());
+    d->shadowHeightAnimation.setEndValue(Ui::DesignSystem::card().maximumShadowBlurRadius());
 
     d->layout->setContentsMargins(Ui::DesignSystem::card().shadowMargins().toMargins());
 }

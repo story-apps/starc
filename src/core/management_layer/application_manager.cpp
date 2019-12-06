@@ -440,11 +440,23 @@ void ApplicationManager::initConnections()
     // Менеджер посадки
     //
     connect(d->onboardingManager.data(), &OnboardingManager::languageChanged, this,
-            [this] (QLocale::Language _language) { d->setTranslation(_language); });
+            [this] (QLocale::Language _language)
+    {
+        d->setTranslation(_language);
+        d->settingsManager->updateLanguage();
+    });
     connect(d->onboardingManager.data(), &OnboardingManager::themeChanged, this,
-            [this] (Ui::ApplicationTheme _theme) { d->setTheme(_theme); });
+            [this] (Ui::ApplicationTheme _theme)
+    {
+        d->setTheme(_theme);
+        d->settingsManager->updateTheme();
+    });
     connect(d->onboardingManager.data(), &OnboardingManager::scaleFactorChanged, this,
-            [this] (qreal _scaleFactor) { d->setScaleFactor(_scaleFactor); });
+            [this] (qreal _scaleFactor)
+    {
+        d->setScaleFactor(_scaleFactor);
+        d->settingsManager->updateScaleFactor();
+    });
     connect(d->onboardingManager.data(), &OnboardingManager::finished, this,
             [this]
     {
@@ -484,6 +496,10 @@ void ApplicationManager::initConnections()
     });
     connect(d->settingsManager.data(), &SettingsManager::languageChanged, this,
             [this] (QLocale::Language _language) { d->setTranslation(_language); });
+    connect(d->settingsManager.data(), &SettingsManager::themeChanged, this,
+            [this] (Ui::ApplicationTheme _theme) { d->setTheme(_theme); });
+    connect(d->settingsManager.data(), &SettingsManager::scaleFactorChanged, this,
+            [this] (qreal _scaleFactor) { d->setScaleFactor(_scaleFactor); });
 
 #ifdef CLOUD_SERVICE_MANAGER
     //

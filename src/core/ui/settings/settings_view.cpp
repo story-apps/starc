@@ -10,6 +10,7 @@
 #include <ui/widgets/slider/slider.h>
 #include <ui/widgets/text_field/text_field.h>
 
+#include <QFileDialog>
 #include <QGridLayout>
 #include <QLocale>
 #include <QScrollArea>
@@ -32,23 +33,6 @@ QHBoxLayout* makeLayout() {
     return layout;
 };
 
-/**
- * @brief Получить название языка установленной локали
- */
-QString currentLanguage() {
-    switch (QLocale().language()) {
-        case QLocale::English: {
-            return "English";
-        }
-        case QLocale::Russian: {
-            return "Русский";
-        }
-        default: {
-            return QLocale::languageToString(QLocale().language());
-        }
-    }
-}
-
 QAbstractItemModel* buildSpellCheckerLanguagesModel() {
     auto model = new QStandardItemModel;
     model->appendRow(new QStandardItem("English AU"));
@@ -59,25 +43,6 @@ QAbstractItemModel* buildSpellCheckerLanguagesModel() {
     return model;
 }
 
-/**
- * @brief Получить название текущей темы
- */
-QString currentTheme() {
-    switch (Ui::DesignSystem::theme()) {
-        case Ui::ApplicationTheme::Dark: {
-            return SettingsView::tr("Dark", "Theme, will be used in case \"Theme: Dark\"");
-        }
-        case Ui::ApplicationTheme::Light: {
-            return SettingsView::tr("Light", "Theme, will be used in case \"Theme: Light\"");
-        }
-        case Ui::ApplicationTheme::DarkAndLight: {
-            return SettingsView::tr("Dark and light", "Theme, will be used in case \"Theme: Dark and light\"");
-        }
-        default: {
-            return SettingsView::tr("Custom", "Theme, will be used in case \"Theme: Custom\"");
-        }
-    }
-}
 }
 
 class SettingsView::Implementation
@@ -339,10 +304,30 @@ SettingsView::SettingsView(QWidget* _parent)
     connect(&d->scrollAnimation, &QVariantAnimation::valueChanged, this, [this] (const QVariant& _value) {
         d->content->verticalScrollBar()->setValue(_value.toInt());
     });
-    connect(d->changeLanuage, &Button::clicked, this, &SettingsView::languagePressed);
+
     connect(d->useSpellChecker, &CheckBox::checkedChanged, d->spellCheckerLanguage, &ComboBox::setEnabled);
-    connect(d->changeTheme, &Button::clicked, this, &SettingsView::themePressed);
     connect(d->saveBackups, &CheckBox::checkedChanged, d->backupsFolderPath, &ComboBox::setEnabled);
+    connect(d->backupsFolderPath, &TextField::trailingIconPressed, this, [this] {
+        const auto path =
+                QFileDialog::getExistingDirectory(
+                    this, tr("Choose the folder where backups will be saved"), d->backupsFolderPath->text());
+        if (!path.isEmpty()) {
+            d->backupsFolderPath->setText(path);
+        }
+    });
+
+    connect(d->changeLanuage, &Button::clicked, this, &SettingsView::applicationLanguagePressed);
+    connect(d->useSpellChecker, &CheckBox::checkedChanged, this, &SettingsView::applicationUseSpellCheckerChanged);
+    connect(d->spellCheckerLanguage, &ComboBox::currentIndexChanged, this, [this] (const QModelIndex& _index) {}); // TODO
+    connect(d->changeTheme, &Button::clicked, this, &SettingsView::applicationThemePressed);
+    connect(d->scaleFactor, &Slider::valueChanged, this, [this] (int _value) {
+        emit applicationScaleFactorChanged(static_cast<qreal>(std::max(1, _value)) / 1000.0);
+    });
+    connect(d->autoSave, &CheckBox::checkedChanged, this, &SettingsView::applicationUseAutoSaveChanged);
+    connect(d->saveBackups, &CheckBox::checkedChanged, this, &SettingsView::applicationSaveBackupsChanged);
+    connect(d->backupsFolderPath, &TextField::textChanged, this, [this] {
+        emit applicationBackupsFolderChanged(d->backupsFolderPath->text());
+    });
 
     designSystemChangeEvent(nullptr);
 }
@@ -372,16 +357,85 @@ void SettingsView::showShortcuts()
     d->scrollToWidget(d->shortcutsTitle);
 }
 
+void SettingsView::setApplicationLanguage(int _language)
+{
+    auto languageString = [_language] () -> QString {
+        switch (_language) {
+            case QLocale::English: {
+                return "English";
+            }
+            case QLocale::Russian: {
+                return "Русский";
+            }
+            default: {
+                return QLocale::languageToString(static_cast<QLocale::Language>(_language));
+            }
+        }
+    };
+    d->changeLanuage->setText(languageString());
+}
+
+void SettingsView::setApplicationUseSpellChecker(bool _use)
+{
+    d->useSpellChecker->setChecked(_use);
+}
+
+void SettingsView::setApplicationSpellCheckerLanguage(const QString& _languageCode)
+{
+    //
+    // TODO
+    //
+}
+
+void SettingsView::setApplicationTheme(int _theme)
+{
+    auto themeString = [_theme] {
+        switch (static_cast<Ui::ApplicationTheme>(_theme)) {
+            case Ui::ApplicationTheme::Dark: {
+                return tr("Dark", "Theme, will be used in case \"Theme: Dark\"");
+            }
+            case Ui::ApplicationTheme::Light: {
+                return tr("Light", "Theme, will be used in case \"Theme: Light\"");
+            }
+            case Ui::ApplicationTheme::DarkAndLight: {
+                return tr("Dark and light", "Theme, will be used in case \"Theme: Dark and light\"");
+            }
+            default: {
+                return tr("Custom", "Theme, will be used in case \"Theme: Custom\"");
+            }
+        }
+    };
+    d->changeTheme->setText(themeString());
+}
+
+void SettingsView::setApplicationScaleFactor(qreal _scaleFactor)
+{
+    d->scaleFactor->setValue(std::max(1, static_cast<int>(_scaleFactor * 1000)));
+}
+
+void SettingsView::setApplicationUseAutoSave(bool _use)
+{
+    d->autoSave->setChecked(_use);
+}
+
+void SettingsView::setApplicationSaveBackups(bool _save)
+{
+    d->saveBackups->setChecked(_save);
+}
+
+void SettingsView::setApplicationBackupsFolder(const QString& _path)
+{
+    d->backupsFolderPath->setText(_path);
+}
+
 void SettingsView::updateTranslations()
 {
     d->applicationTitle->setText(tr("Application settings"));
     d->language->setText(tr("Language"));
-    d->changeLanuage->setText(currentLanguage());
     d->useSpellChecker->setText(tr("Spell check"));
     d->spellCheckerLanguage->setLabel(tr("Spelling dictionary"));
     d->applicationUserInterfaceTitle->setText(tr("User interface"));
     d->theme->setText(tr("Theme"));
-    d->changeTheme->setText(currentTheme());
     d->scaleFactorTitle->setText(tr("Size of the user interface elements:"));
     d->scaleFactorSmallInfo->setText(tr("small"));
     d->scaleFactorBigInfo->setText(tr("big"));

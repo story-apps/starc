@@ -98,4 +98,6 @@ void Tree::designSystemChangeEvent(DesignSystemChangeEvent* _event)
     palette.setColor(QPalette::HighlightedText, Ui::DesignSystem::color().secondary());
     d->tree->setPalette(palette);
     d->tree->setIndentation(static_cast<int>(Ui::DesignSystem::tree().indicatorWidth()));
+    d->tree->setItemDelegate(nullptr);
+    d->tree->setItemDelegate(d->delegate);
 }

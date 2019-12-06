@@ -23,10 +23,16 @@ namespace {
     const QString kApplicationScaleFactorKey = kApplicationGroupKey + "/scale-factor";
     // состояние и геометрия основного окна приложения
     const QString kApplicationViewStateKey = kApplicationGroupKey + "-view/";
+    // включена ли проверка орфографии
+    const QString kApplicationUseSpellCheckerKey = kApplicationGroupKey + "/use-spell-checker";
+    // словарь для проверки орфографии
+    const QString kApplicationSpellCheckerLanguageKey = kApplicationGroupKey + "/use-spell-checker";
     // включено ли автосохранение
-    const QString kApplicationAutosaveKey = kApplicationGroupKey + "/autosave";
-    // интервал автосохранения в минутах
-    const QString kApplicationAutosaveIntervalKey = kApplicationGroupKey + "/autosave-interval";
+    const QString kApplicationUseAutoSaveKey = kApplicationGroupKey + "/autosave";
+    // включено ли сохранение резервных копий
+    const QString kApplicationSaveBackupsKey = kApplicationGroupKey + "/save-backups";
+    // папка в которую будут сохраняться резервные копии
+    const QString kApplicationBackupsFolderKey = kApplicationGroupKey + "/backups-folder";
 
     // системное имя пользователя
     const QString kSystemUsernameKey = kSystemGroupKey + "/username";
