@@ -44,7 +44,6 @@ ComboBox::Implementation::Implementation(QWidget* _parent)
     popup->hide();
 
     popupContent->setRootIsDecorated(false);
-    popupContent->setFocusProxy(_parent);
 
     QHBoxLayout* popupLayout = new QHBoxLayout;
     popupLayout->setMargin({});

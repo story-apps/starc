@@ -14,6 +14,7 @@
 #include <QLocale>
 #include <QScrollArea>
 #include <QStandardItemModel>
+#include <QVariantAnimation>
 
 
 namespace Ui
@@ -99,8 +100,11 @@ public:
      */
     void initShortcutsCard();
 
+    void scrollToWidget(QWidget* _widget);
+
 
     QScrollArea* content = nullptr;
+    QVariantAnimation scrollAnimation;
 
     Card* applicationCard = nullptr;
     QGridLayout* applicationCardLayout = nullptr;
@@ -176,6 +180,8 @@ SettingsView::Implementation::Implementation(QWidget* _parent)
     content->setPalette(palette);
     content->setVerticalScrollBar(new ScrollBar);
     content->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
+    scrollAnimation.setEasingCurve(QEasingCurve::OutQuad);
+    scrollAnimation.setDuration(180);
 
     initApplicationCard();
     initComponentsCard();
@@ -282,6 +288,40 @@ void SettingsView::Implementation::initShortcutsCard()
     shortcutsCard->setLayoutReimpl(shortcutsCardLayout);
 }
 
+void SettingsView::Implementation::scrollToWidget(QWidget* childWidget)
+{
+    const QRect microFocus = childWidget->inputMethodQuery(Qt::ImCursorRectangle).toRect();
+    const QRect defaultMicroFocus =
+        childWidget->QWidget::inputMethodQuery(Qt::ImCursorRectangle).toRect();
+    QRect focusRect = (microFocus != defaultMicroFocus)
+        ? QRect(childWidget->mapTo(content->widget(), microFocus.topLeft()), microFocus.size())
+        : QRect(childWidget->mapTo(content->widget(), QPoint(0,0)), childWidget->size());
+    const QRect visibleRect(-content->widget()->pos(), content->viewport()->size());
+
+    if (visibleRect.contains(focusRect))
+        return;
+
+    focusRect.adjust(-50, -50, 50, 50);
+
+    const int kInvalidValue = -1;
+    int finalValue = kInvalidValue;
+    if (focusRect.height() > visibleRect.height()) {
+        finalValue = focusRect.center().y() - content->viewport()->height() / 2;
+    } else if (focusRect.bottom() > visibleRect.bottom()) {
+        finalValue = focusRect.bottom() - content->viewport()->height();
+    } else if (focusRect.top() < visibleRect.top()) {
+        finalValue = focusRect.top();
+    }
+
+    if (finalValue == kInvalidValue) {
+        return;
+    }
+
+    scrollAnimation.setStartValue(content->verticalScrollBar()->value());
+    scrollAnimation.setEndValue(finalValue);
+    scrollAnimation.start();
+}
+
 
 // ****
 
@@ -296,10 +336,38 @@ SettingsView::SettingsView(QWidget* _parent)
     layout->addWidget(d->content);
     setLayout(layout);
 
+    connect(&d->scrollAnimation, &QVariantAnimation::valueChanged, this, [this] (const QVariant& _value) {
+        d->content->verticalScrollBar()->setValue(_value.toInt());
+    });
     connect(d->useSpellChecker, &CheckBox::checkedChanged, d->spellCheckerLanguage, &ComboBox::setEnabled);
     connect(d->saveBackups, &CheckBox::checkedChanged, d->backupsFolderPath, &ComboBox::setEnabled);
 
     designSystemChangeEvent(nullptr);
+}
+
+void SettingsView::showApplication()
+{
+    d->scrollToWidget(d->applicationTitle);
+}
+
+void SettingsView::showApplicationUserInterface()
+{
+    d->scrollToWidget(d->applicationUserInterfaceTitle);
+}
+
+void SettingsView::showApplicationSaveAndBackups()
+{
+    d->scrollToWidget(d->applicationSaveAndBackupTitle);
+}
+
+void SettingsView::showComponents()
+{
+    d->scrollToWidget(d->componentsTitle);
+}
+
+void SettingsView::showShortcuts()
+{
+    d->scrollToWidget(d->shortcutsTitle);
 }
 
 void SettingsView::updateTranslations()

@@ -17,6 +17,13 @@ public:
     explicit SettingsNavigator(QWidget* _parent = nullptr);
     ~SettingsNavigator() override;
 
+signals:
+    void applicationPressed();
+    void applicationUserInterfacePressed();
+    void applicationSaveAndBackupsPressed();
+    void componentsPressed();
+    void shortcutsPressed();
+
 protected:
     /**
      * @brief Обновить переводы

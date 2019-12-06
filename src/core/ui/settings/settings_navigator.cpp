@@ -62,6 +62,51 @@ SettingsNavigator::SettingsNavigator(QWidget* _parent)
     model->appendRow(createItem("\uf30c"));
     d->tree->setModel(model);
 
+    connect(d->tree, &Tree::currentIndexChanged, this, [this] (const QModelIndex& _index) {
+        if (_index.parent().isValid()) {
+            switch (_index.parent().row()) {
+                case kApplicationIndex: {
+                    switch (_index.row()) {
+                        case kApplicationUserInterfaceIndex: {
+                            emit applicationUserInterfacePressed();
+                            break;
+                        }
+                        case kApplicationSaveAndBackupIndex: {
+                            emit applicationSaveAndBackupsPressed();
+                            break;
+                        }
+                        default: {
+                            break;
+                        }
+                    }
+                    break;
+                }
+                default: {
+                    break;
+                }
+            }
+        } else {
+            switch (_index.row()) {
+                case kApplicationIndex: {
+                    emit applicationPressed();
+                    break;
+                }
+                case kComponentsIndex: {
+                    emit componentsPressed();
+                    break;
+                }
+                case kShortcutsIndex: {
+                    emit shortcutsPressed();
+                    break;
+                }
+                default: {
+                    break;
+                }
+            }
+        }
+
+    });
+
     designSystemChangeEvent(nullptr);
 }
 

@@ -123,10 +123,7 @@ void Card::leaveEvent(QEvent* _event)
 {
     Widget::leaveEvent(_event);
 
-    //
-    // Если фокус получил один из дочерних виджетов, то не нужно опускать карточку
-    //
-    if (findChildren<QWidget*>().contains(QApplication::focusWidget())) {
+    if (rect().contains(mapFromGlobal(QCursor::pos()))) {
         return;
     }
 

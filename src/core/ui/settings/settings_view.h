@@ -19,6 +19,12 @@ public:
     explicit SettingsView(QWidget* _parent = nullptr);
     ~SettingsView() override;
 
+    void showApplication();
+    void showApplicationUserInterface();
+    void showApplicationSaveAndBackups();
+    void showComponents();
+    void showShortcuts();
+
 protected:
     /**
      * @brief Обновить переводы
