@@ -287,6 +287,10 @@ QT_END_NAMESPACE
 
 QPixmap ImageHelper::dropShadow(const QPixmap& _sourcePixmap, const QMarginsF& _shadowMargins, qreal _blurRadius, const QColor& _color)
 {
+    //
+    // TODO: сделать кэш теней, т.к. это довольно долгая операция
+    //
+
     if (_sourcePixmap.isNull()) {
         return QPixmap();
     }

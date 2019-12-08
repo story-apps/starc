@@ -9,6 +9,8 @@
 #include <ui/settings/settings_view.h>
 #include <ui/settings/theme_dialog.h>
 
+#include <QEvent>
+
 
 namespace ManagementLayer
 {
@@ -82,6 +84,7 @@ SettingsManager::SettingsManager(QObject* _parent, QWidget* _parentWidget)
       d(new Implementation(_parentWidget))
 {
     d->loadApplicationSettings();
+    d->view->installEventFilter(this);
 
     connect(d->toolBar, &Ui::SettingsToolBar::backPressed, this, &SettingsManager::closeSettingsRequested);
 
@@ -97,7 +100,6 @@ SettingsManager::SettingsManager(QObject* _parent, QWidget* _parentWidget)
         dialog->showDialog();
         connect(dialog, &Ui::LanguageDialog::languageChanged, this, &SettingsManager::languageChanged);
         connect(dialog, &Ui::LanguageDialog::languageChanged, this, &SettingsManager::setApplicationLanguage);
-        connect(dialog, &Ui::LanguageDialog::languageChanged, this, &SettingsManager::updateLanguage);
         connect(dialog, &Ui::LanguageDialog::disappeared, dialog, &Ui::LanguageDialog::deleteLater);
     });
     connect(d->view, &Ui::SettingsView::applicationThemePressed, this, [this, _parentWidget] {
@@ -106,7 +108,6 @@ SettingsManager::SettingsManager(QObject* _parent, QWidget* _parentWidget)
         dialog->showDialog();
         connect(dialog, &Ui::ThemeDialog::themeChanged, this, &SettingsManager::themeChanged);
         connect(dialog, &Ui::ThemeDialog::themeChanged, this, &SettingsManager::setApplicationTheme);
-        connect(dialog, &Ui::ThemeDialog::themeChanged, this, &SettingsManager::updateTheme);
         connect(dialog, &Ui::ThemeDialog::customThemeColorsChanged, this, &SettingsManager::customThemeColorsChanged);
         connect(dialog, &Ui::ThemeDialog::customThemeColorsChanged, this, &SettingsManager::setApplicationCustomThemeColors);
         connect(dialog, &Ui::ThemeDialog::disappeared, dialog, &Ui::ThemeDialog::deleteLater);
@@ -137,19 +138,20 @@ QWidget* SettingsManager::view() const
     return d->view;
 }
 
-void SettingsManager::updateLanguage()
-{
-    d->view->setApplicationLanguage(d->settingsValue(DataStorageLayer::kApplicationLanguagedKey).toInt());
-}
-
-void SettingsManager::updateTheme()
-{
-    d->view->setApplicationTheme(d->settingsValue(DataStorageLayer::kApplicationThemeKey).toInt());
-}
-
 void SettingsManager::updateScaleFactor()
 {
     d->view->setApplicationScaleFactor(d->settingsValue(DataStorageLayer::kApplicationScaleFactorKey).toReal());
+}
+
+bool SettingsManager::eventFilter(QObject* _watched, QEvent* _event)
+{
+    if (_event->type() == QEvent::LanguageChange
+        && _watched == d->view) {
+        d->view->setApplicationLanguage(d->settingsValue(DataStorageLayer::kApplicationLanguagedKey).toInt());
+        d->view->setApplicationTheme(d->settingsValue(DataStorageLayer::kApplicationThemeKey).toInt());
+    }
+
+    return QObject::eventFilter(_watched, _event);
 }
 
 void SettingsManager::setApplicationLanguage(int _language)

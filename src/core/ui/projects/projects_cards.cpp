@@ -189,28 +189,12 @@ void ProjectCard::paint(QPainter* _painter, const QStyleOptionGraphicsItem* _opt
     //
     const qreal shadowHeight = std::max(Ui::DesignSystem::floatingToolBar().minimumShadowBlurRadius(),
                                         m_shadowHeightAnimation.currentValue().toReal());
-    if (qFuzzyCompare(shadowHeight, Ui::DesignSystem::floatingToolBar().minimumShadowBlurRadius())) {
-        //
-        // кэшируем только вариант тени по-умолчанию, который используется для всех карточек,
-        // кроме той, на которую наведён курсор
-        //
-        static QPixmap shadowPixmapCache;
-        if (shadowPixmapCache.size() != rect().size()) {
-            shadowPixmapCache
-                    = ImageHelper::dropShadow(backgroundPixmapCache,
-                                              Ui::DesignSystem::floatingToolBar().shadowMargins(),
-                                              shadowHeight,
-                                              Ui::DesignSystem::color().shadow());
-        }
-        _painter->drawPixmap(0, 0, shadowPixmapCache);
-    } else {
-        const QPixmap shadow
-                = ImageHelper::dropShadow(backgroundPixmapCache,
-                                          Ui::DesignSystem::floatingToolBar().shadowMargins(),
-                                          shadowHeight,
-                                          Ui::DesignSystem::color().shadow());
-        _painter->drawPixmap(0, 0, shadow);
-    }
+    const QPixmap shadow
+            = ImageHelper::dropShadow(backgroundPixmapCache,
+                                      Ui::DesignSystem::floatingToolBar().shadowMargins(),
+                                      shadowHeight,
+                                      Ui::DesignSystem::color().shadow());
+    _painter->drawPixmap(0, 0, shadow);
     //
     // ... рисуем сам фон
     //

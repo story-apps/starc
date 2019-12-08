@@ -26,16 +26,6 @@ public:
     QWidget* view() const;
 
     /**
-     * @brief Обновить используемый язык в представлении
-     */
-    void updateLanguage();
-
-    /**
-     * @brief Обновить используемую тему в представлении
-     */
-    void updateTheme();
-
-    /**
      * @brief Обновить используемый коэффициент масштабирования в представлении
      */
     void updateScaleFactor();
@@ -65,6 +55,12 @@ signals:
      * @brief Пользователь изменил масштаб интерфейса
      */
     void scaleFactorChanged(qreal _scaleFactor);
+
+protected:
+    /**
+     * @brief Реализуем фильтр на событие смены языка, чтобы обновить значения в представлении
+     */
+    bool eventFilter(QObject* _watched, QEvent* _event) override;
 
 private:
     //

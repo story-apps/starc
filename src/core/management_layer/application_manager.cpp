@@ -186,8 +186,7 @@ void ApplicationManager::Implementation::showContent()
         //
         // ... а затем уже отобразить
         //
-//        showProjects();
-        showSettings();
+        showProjects();
 
         //
         // Сохраняем последнее отображаемое представление, чтобы можно было вернуться к нему
@@ -456,17 +455,9 @@ void ApplicationManager::initConnections()
     // Менеджер посадки
     //
     connect(d->onboardingManager.data(), &OnboardingManager::languageChanged, this,
-            [this] (QLocale::Language _language)
-    {
-        d->setTranslation(_language);
-        d->settingsManager->updateLanguage();
-    });
+            [this] (QLocale::Language _language) { d->setTranslation(_language); });
     connect(d->onboardingManager.data(), &OnboardingManager::themeChanged, this,
-            [this] (Ui::ApplicationTheme _theme)
-    {
-        d->setTheme(_theme);
-        d->settingsManager->updateTheme();
-    });
+            [this] (Ui::ApplicationTheme _theme) { d->setTheme(_theme); });
     connect(d->onboardingManager.data(), &OnboardingManager::scaleFactorChanged, this,
             [this] (qreal _scaleFactor)
     {
@@ -511,14 +502,7 @@ void ApplicationManager::initConnections()
         d->showLastContent();
     });
     connect(d->settingsManager.data(), &SettingsManager::languageChanged, this,
-            [this] (QLocale::Language _language)
-    {
-        d->setTranslation(_language);
-        //
-        // ... при смене языка нужно обновить текст темы, т.к. он был установлен вручную
-        //
-        d->settingsManager->updateTheme();
-    });
+            [this] (QLocale::Language _language) { d->setTranslation(_language); });
     connect(d->settingsManager.data(), &SettingsManager::themeChanged, this,
             [this] (Ui::ApplicationTheme _theme)
     {
