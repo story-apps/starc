@@ -13,6 +13,7 @@ class AbstractLabel::Implementation
 {
 public:
     QString text;
+    Qt::Alignment alignment = Qt::AlignTop | Qt::AlignLeft;
 };
 
 
@@ -38,6 +39,16 @@ void AbstractLabel::setText(const QString& _text)
 
     d->text = _text;
     updateGeometry();
+    update();
+}
+
+void AbstractLabel::setAlignment(Qt::Alignment _alignment)
+{
+    if (d->alignment == _alignment) {
+        return;
+    }
+
+    d->alignment = _alignment;
     update();
 }
 
@@ -69,7 +80,14 @@ void AbstractLabel::paintEvent(QPaintEvent* _event)
     //
     painter.setFont(textFont());
     painter.setPen(textColor());
-    painter.drawText(contentsRect(), Qt::AlignTop | Qt::AlignLeft | Qt::TextWordWrap, d->text);
+    painter.drawText(contentsRect(), d->alignment | Qt::TextWordWrap, d->text);
+}
+
+void AbstractLabel::mouseReleaseEvent(QMouseEvent* _event)
+{
+    Widget::mouseReleaseEvent(_event);
+
+    emit clicked();
 }
 
 
@@ -107,12 +125,25 @@ const QFont& H6Label::textFont() const
 Subtitle1Label::Subtitle1Label(QWidget* _parent)
     : AbstractLabel(_parent)
 {
-
 }
 
 const QFont& Subtitle1Label::textFont() const
 {
     return Ui::DesignSystem::font().subtitle1();
+}
+
+
+// ****
+
+
+Subtitle2Label::Subtitle2Label(QWidget* _parent)
+    : AbstractLabel(_parent)
+{
+}
+
+const QFont& Subtitle2Label::textFont() const
+{
+    return Ui::DesignSystem::font().subtitle2();
 }
 
 

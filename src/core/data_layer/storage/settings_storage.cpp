@@ -34,10 +34,10 @@ namespace {
     }
 }
 
-class SettingsStorage::Implememntation
+class SettingsStorage::Implementation
 {
 public:
-    Implememntation();
+    Implementation();
 
     /**
      * @brief Загрузить параметр из кэша
@@ -69,7 +69,7 @@ public:
     /** @} */
 };
 
-SettingsStorage::Implememntation::Implememntation()
+SettingsStorage::Implementation::Implementation()
 {
     //
     // Настроим значения параметров по умолчанию
@@ -77,6 +77,8 @@ SettingsStorage::Implememntation::Implememntation()
     defaultValues.insert(kApplicationConfiguredKey, false);
     defaultValues.insert(kApplicationLanguagedKey, QLocale::AnyLanguage);
     defaultValues.insert(kApplicationThemeKey, static_cast<int>(Ui::ApplicationTheme::DarkAndLight));
+    defaultValues.insert(kApplicationCustomThemeColorsKey,
+                         "e4e4e438393a448affffffffffffff000000ffffff000000b00020ffffff000000c8c8c8");
     defaultValues.insert(kApplicationScaleFactorKey, 1.0);
     defaultValues.insert(kApplicationUseAutoSaveKey, true);
     defaultValues.insert(kApplicationSaveBackupsKey, true);
@@ -86,7 +88,7 @@ SettingsStorage::Implememntation::Implememntation()
     defaultValues.insert(kSystemUsernameKey, systemUserName());
 }
 
-QVariant SettingsStorage::Implememntation::cachedValue(const QString& _key,
+QVariant SettingsStorage::Implementation::cachedValue(const QString& _key,
     SettingsStorage::SettingsPlace _settingsPlace, bool& _ok) const
 {
     const QVariantMap& cachedValues
@@ -95,7 +97,7 @@ QVariant SettingsStorage::Implememntation::cachedValue(const QString& _key,
     return cachedValuesApp.value(_key);
 }
 
-void SettingsStorage::Implememntation::cacheValue(const QString& _key, const QVariant& _value,
+void SettingsStorage::Implementation::cacheValue(const QString& _key, const QVariant& _value,
     SettingsStorage::SettingsPlace _settingsPlace)
 {
     QVariantMap& cachedValues
@@ -304,7 +306,7 @@ void SettingsStorage::setDocumentFolderPath(const QString& _key, const QString& 
 }
 
 SettingsStorage::SettingsStorage()
-    : d(new Implememntation)
+    : d(new Implementation)
 {
 }
 

@@ -1,10 +1,14 @@
 #include "design_system.h"
 
+#include <utils/helpers/color_helper.h>
+
 #include <QApplication>
 #include <QColor>
 #include <QEvent>
 #include <QFont>
 #include <QFontMetricsF>
+#include <QJsonDocument>
+#include <QJsonObject>
 #include <QIcon>
 #include <QMarginsF>
 #include <QPixmap>
@@ -377,19 +381,6 @@ public:
 
 DesignSystem::Color::Implementation::Implementation()
 {
-    primary = QColor("#323740");
-    primaryDark = QColor("#22252b");
-    secondary = QColor("#448AFF");
-    background = QColor("#FFFFFF");
-    surface = QColor("#FFFFFF");
-    error = QColor("#B00020");
-    shadow = QColor("#000000");
-    shadow.setAlphaF(0.6);
-    onPrimary = QColor("#FFFFFF");
-    onSecondary = QColor("#FFFFFF");
-    onBackground = QColor("#000000");
-    onSurface = QColor("#000000");
-    onError = QColor("#FFFFFF");
 }
 
 
@@ -401,6 +392,31 @@ DesignSystem::Color::Color(const DesignSystem::Color& _rhs)
 {
 }
 
+DesignSystem::Color::Color(const QString& _color)
+    : d(new Implementation)
+{
+    const auto colorJson = _color;
+    int startIndex = 0;
+    auto nextColor = [_color, &startIndex] {
+        const int length = 6;
+        const auto color = _color.mid(startIndex, length);
+        startIndex += length;
+        return "#" + color;
+    };
+    setPrimary(nextColor());
+    setOnPrimary(nextColor());
+    setSecondary(nextColor());
+    setOnSecondary(nextColor());
+    setBackground(nextColor());
+    setOnBackground(nextColor());
+    setSurface(nextColor());
+    setOnSurface(nextColor());
+    setError(nextColor());
+    setOnError(nextColor());
+    setShadow(nextColor());
+    setPrimaryDark(nextColor());
+}
+
 DesignSystem::Color& DesignSystem::Color::operator=(const DesignSystem::Color& _rhs)
 {
     if (&_rhs == this) {
@@ -409,6 +425,24 @@ DesignSystem::Color& DesignSystem::Color::operator=(const DesignSystem::Color& _
 
     d.reset(new Implementation(*_rhs.d));
     return *this;
+}
+
+QString DesignSystem::Color::toString() const
+{
+    QString  colorsString;
+    colorsString += d->primary.name();
+    colorsString += d->onPrimary.name();
+    colorsString += d->secondary.name();
+    colorsString += d->onSecondary.name();
+    colorsString += d->background.name();
+    colorsString += d->onBackground.name();
+    colorsString += d->surface.name();
+    colorsString += d->onSurface.name();
+    colorsString += d->error.name();
+    colorsString += d->onError.name();
+    colorsString += d->shadow.name();
+    colorsString += d->primaryDark.name();
+    return colorsString.remove('#');
 }
 
 DesignSystem::Color::~Color() = default;
@@ -506,6 +540,15 @@ void DesignSystem::Color::setError(const QColor& _color)
 void DesignSystem::Color::setShadow(const QColor& _color)
 {
     d->shadow = _color;
+
+    if (d->shadow.alphaF() < 1.0) {
+        return;
+    }
+
+    //
+    // Если прозрачность не задана, настроим её вручную в зависимости от цвета фона темы
+    //
+    d->shadow.setAlphaF(ColorHelper::isColorLight(d->surface) ? 0.36 : 0.68);
 }
 
 void DesignSystem::Color::setOnPrimary(const QColor& _color)
@@ -1943,7 +1986,7 @@ void DesignSystem::setTheme(ApplicationTheme _theme)
             surface = "#FFFFFF";
             error = "#B00020";
             shadow = [] { QColor color = "#000000";
-                          color.setAlphaF(0.3);
+                          color.setAlphaF(0.36);
                           return color; } ();
             onPrimary = "#FFFFFF";
             onSecondary = "#FFFFFF";
@@ -1991,9 +2034,9 @@ void DesignSystem::setTheme(ApplicationTheme _theme)
 
         case Ui::ApplicationTheme::Custom: {
             //
-            // TODO:
+            // Кастомная палитра должна следом загрузиться из параметров приложения
             //
-            break;
+            return;
         }
     }
 

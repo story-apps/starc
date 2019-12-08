@@ -59,6 +59,7 @@ SOURCES += \
     ui/settings/settings_navigator.cpp \
     ui/settings/settings_tool_bar.cpp \
     ui/settings/settings_view.cpp \
+    ui/settings/theme_dialog.cpp \
     ui/widgets/app_bar/app_bar.cpp \
     ui/widgets/button/button.cpp \
     ui/widgets/card/card.cpp \
@@ -142,6 +143,7 @@ HEADERS += \
     ui/settings/settings_navigator.h \
     ui/settings/settings_tool_bar.h \
     ui/settings/settings_view.h \
+    ui/settings/theme_dialog.h \
     ui/widgets/app_bar/app_bar.h \
     ui/widgets/button/button.h \
     ui/widgets/card/card.h \

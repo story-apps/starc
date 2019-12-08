@@ -263,27 +263,10 @@ void SettingsView::Implementation::scrollToWidget(QWidget* childWidget)
         : QRect(childWidget->mapTo(content->widget(), QPoint(0,0)), childWidget->size());
     const QRect visibleRect(-content->widget()->pos(), content->viewport()->size());
 
-    if (visibleRect.contains(focusRect))
-        return;
-
     focusRect.adjust(-50, -50, 50, 50);
 
-    const int kInvalidValue = -1;
-    int finalValue = kInvalidValue;
-    if (focusRect.height() > visibleRect.height()) {
-        finalValue = focusRect.center().y() - content->viewport()->height() / 2;
-    } else if (focusRect.bottom() > visibleRect.bottom()) {
-        finalValue = focusRect.bottom() - content->viewport()->height();
-    } else if (focusRect.top() < visibleRect.top()) {
-        finalValue = focusRect.top();
-    }
-
-    if (finalValue == kInvalidValue) {
-        return;
-    }
-
     scrollAnimation.setStartValue(content->verticalScrollBar()->value());
-    scrollAnimation.setEndValue(finalValue);
+    scrollAnimation.setEndValue(focusRect.top());
     scrollAnimation.start();
 }
 

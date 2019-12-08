@@ -272,8 +272,11 @@ public:
     {
     public:
         explicit Color(const Color& _rhs);
+        explicit Color(const QString& _color);
         ~Color();
         Color& operator=(const Color& _rhs);
+
+        QString toString() const;
 
         const QColor& primary() const;
         const QColor& primaryDark() const;

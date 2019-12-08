@@ -1,31 +1,37 @@
 #pragma once
 
+#include <ui/design_system/design_system.h>
 #include <ui/widgets/dialog/abstract_dialog.h>
-
-#include <QLocale>
 
 
 namespace Ui
 {
 
-class LanguageDialog : public AbstractDialog
+enum class ApplicationTheme;
+
+class ThemeDialog : public AbstractDialog
 {
     Q_OBJECT
 
 public:
-    explicit LanguageDialog(QWidget* _parent = nullptr);
-    ~LanguageDialog() override;
+    explicit ThemeDialog(QWidget* _parent = nullptr);
+    ~ThemeDialog() override;
 
     /**
-     * @brief Задать текущий язык приложения
+     * @brief Задать текущую тему приложения
      */
-    void setCurrentLanguage(QLocale::Language _language);
+    void setCurrentTheme(ApplicationTheme _theme);
 
 signals:
     /**
-     * @brief Пользователь изменил язык
+     * @brief Пользователь изменил тему
      */
-    void languageChanged(QLocale::Language _language);
+    void themeChanged(ApplicationTheme _theme);
+
+    /**
+     * @brief Пользователь изменил цвета кастомной темы
+     */
+    void customThemeColorsChanged(const DesignSystem::Color& _color);
 
 protected:
     /**

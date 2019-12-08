@@ -7,6 +7,7 @@
 #include <ui/settings/settings_navigator.h>
 #include <ui/settings/settings_tool_bar.h>
 #include <ui/settings/settings_view.h>
+#include <ui/settings/theme_dialog.h>
 
 
 namespace ManagementLayer
@@ -100,13 +101,15 @@ SettingsManager::SettingsManager(QObject* _parent, QWidget* _parentWidget)
         connect(dialog, &Ui::LanguageDialog::disappeared, dialog, &Ui::LanguageDialog::deleteLater);
     });
     connect(d->view, &Ui::SettingsView::applicationThemePressed, this, [this, _parentWidget] {
-//        auto dialog = new Ui::ThemeDialog(_parentWidget);
-//        dialog->setCurrentLanguage(QLocale().language());
-//        dialog->showDialog();
-//        connect(dialog, &Ui::LanguageDialog::languageChanged, this, &SettingsManager::languageChanged);
-//        connect(dialog, &Ui::LanguageDialog::languageChanged, this, &SettingsManager::setApplicationLanguage);
-//        connect(dialog, &Ui::LanguageDialog::languageChanged, this, &SettingsManager::updateLanguage);
-//        connect(dialog, &Ui::LanguageDialog::disappeared, dialog, &Ui::LanguageDialog::deleteLater);
+        auto dialog = new Ui::ThemeDialog(_parentWidget);
+        dialog->setCurrentTheme(Ui::DesignSystem::theme());
+        dialog->showDialog();
+        connect(dialog, &Ui::ThemeDialog::themeChanged, this, &SettingsManager::themeChanged);
+        connect(dialog, &Ui::ThemeDialog::themeChanged, this, &SettingsManager::setApplicationTheme);
+        connect(dialog, &Ui::ThemeDialog::themeChanged, this, &SettingsManager::updateTheme);
+        connect(dialog, &Ui::ThemeDialog::customThemeColorsChanged, this, &SettingsManager::customThemeColorsChanged);
+        connect(dialog, &Ui::ThemeDialog::customThemeColorsChanged, this, &SettingsManager::setApplicationCustomThemeColors);
+        connect(dialog, &Ui::ThemeDialog::disappeared, dialog, &Ui::ThemeDialog::deleteLater);
     });
     connect(d->view, &Ui::SettingsView::applicationUseSpellCheckerChanged, this, &SettingsManager::setApplicationUseSpellChecker);
     connect(d->view, &Ui::SettingsView::applicationSpellCheckerLanguageChanged, this, &SettingsManager::setApplicationSpellCheckerLanguage);
@@ -164,9 +167,14 @@ void SettingsManager::setApplicationSpellCheckerLanguage(const QString& _languag
     d->setSettingsValue(DataStorageLayer::kApplicationSpellCheckerLanguageKey, _languageCode);
 }
 
-void SettingsManager::setApplicationTheme(int _theme)
+void SettingsManager::setApplicationTheme(Ui::ApplicationTheme _theme)
 {
-    d->setSettingsValue(DataStorageLayer::kApplicationThemeKey, _theme);
+    d->setSettingsValue(DataStorageLayer::kApplicationThemeKey, static_cast<int>(_theme));
+}
+
+void SettingsManager::setApplicationCustomThemeColors(const Ui::DesignSystem::Color& _color)
+{
+    d->setSettingsValue(DataStorageLayer::kApplicationCustomThemeColorsKey, _color.toString());
 }
 
 void SettingsManager::setApplicationScaleFactor(qreal _scaleFactor)

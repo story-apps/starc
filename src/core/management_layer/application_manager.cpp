@@ -88,6 +88,11 @@ public:
     void setTheme(Ui::ApplicationTheme _theme);
 
     /**
+     * @brief Установить цвета кастомной темы
+     */
+    void setCustomThemeColors(const Ui::DesignSystem::Color& _color);
+
+    /**
      * @brief Установить коэффициент масштабирования
      */
     void setScaleFactor(qreal _scaleFactor);
@@ -295,6 +300,16 @@ void ApplicationManager::Implementation::setTheme(Ui::ApplicationTheme _theme)
     QApplication::postEvent(q, new DesignSystemChangeEvent);
 }
 
+void ApplicationManager::Implementation::setCustomThemeColors(const Ui::DesignSystem::Color& _color)
+{
+    if (Ui::DesignSystem::theme() != Ui::ApplicationTheme::Custom) {
+        return;
+    }
+
+    Ui::DesignSystem::setColor(_color);
+    QApplication::postEvent(q, new DesignSystemChangeEvent);
+}
+
 void ApplicationManager::Implementation::setScaleFactor(qreal _scaleFactor)
 {
     Ui::DesignSystem::setScaleFactor(_scaleFactor);
@@ -354,6 +369,7 @@ void ApplicationManager::exec()
     //
     d->setTranslation(d->settingsValue(DataStorageLayer::kApplicationLanguagedKey).value<QLocale::Language>());
     d->setTheme(static_cast<Ui::ApplicationTheme>(d->settingsValue(DataStorageLayer::kApplicationThemeKey).toInt()));
+    d->setCustomThemeColors(Ui::DesignSystem::Color(d->settingsValue(DataStorageLayer::kApplicationCustomThemeColorsKey).toString()));
     d->setScaleFactor(d->settingsValue(DataStorageLayer::kApplicationScaleFactorKey).toReal());
     d->applicationView->restoreState(d->settingsValues(DataStorageLayer::kApplicationViewStateKey));
 
@@ -495,9 +511,27 @@ void ApplicationManager::initConnections()
         d->showLastContent();
     });
     connect(d->settingsManager.data(), &SettingsManager::languageChanged, this,
-            [this] (QLocale::Language _language) { d->setTranslation(_language); });
+            [this] (QLocale::Language _language)
+    {
+        d->setTranslation(_language);
+        //
+        // ... при смене языка нужно обновить текст темы, т.к. он был установлен вручную
+        //
+        d->settingsManager->updateTheme();
+    });
     connect(d->settingsManager.data(), &SettingsManager::themeChanged, this,
-            [this] (Ui::ApplicationTheme _theme) { d->setTheme(_theme); });
+            [this] (Ui::ApplicationTheme _theme)
+    {
+        d->setTheme(_theme);
+        //
+        // ... если применяется кастомная тема, то нужно загрузить её цвета
+        //
+        if (_theme == Ui::ApplicationTheme::Custom) {
+            d->setCustomThemeColors(Ui::DesignSystem::Color(d->settingsValue(DataStorageLayer::kApplicationCustomThemeColorsKey).toString()));
+        }
+    });
+    connect(d->settingsManager.data(), &SettingsManager::customThemeColorsChanged, this,
+            [this] (const Ui::DesignSystem::Color& _color) { d->setCustomThemeColors(_color); });
     connect(d->settingsManager.data(), &SettingsManager::scaleFactorChanged, this,
             [this] (qreal _scaleFactor) { d->setScaleFactor(_scaleFactor); });
 

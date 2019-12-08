@@ -1,5 +1,7 @@
 #pragma once
 
+#include <ui/design_system/design_system.h>
+
 #include <QLocale>
 #include <QObject>
 
@@ -55,6 +57,11 @@ signals:
     void themeChanged(Ui::ApplicationTheme _theme);
 
     /**
+     * @brief Пользователь изменил цвета кастомной темы
+     */
+    void customThemeColorsChanged(const Ui::DesignSystem::Color& _color);
+
+    /**
      * @brief Пользователь изменил масштаб интерфейса
      */
     void scaleFactorChanged(qreal _scaleFactor);
@@ -66,7 +73,8 @@ private:
     void setApplicationLanguage(int _language);
     void setApplicationUseSpellChecker(bool _use);
     void setApplicationSpellCheckerLanguage(const QString& _languageCode);
-    void setApplicationTheme(int _theme);
+    void setApplicationTheme(Ui::ApplicationTheme _theme);
+    void setApplicationCustomThemeColors(const Ui::DesignSystem::Color& _color);
     void setApplicationScaleFactor(qreal _scaleFactor);
     void setApplicationUseAutoSave(bool _use);
     void setApplicationSaveBackups(bool _save);

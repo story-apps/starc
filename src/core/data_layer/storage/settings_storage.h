@@ -19,6 +19,8 @@ namespace {
     const QString kApplicationLanguagedKey = kApplicationGroupKey + "/language";
     // тема приложения
     const QString kApplicationThemeKey = kApplicationGroupKey + "/theme";
+    // параметры кастомной тема приложения
+    const QString kApplicationCustomThemeColorsKey = kApplicationGroupKey + "/custom-theme";
     // масштаб приложения
     const QString kApplicationScaleFactorKey = kApplicationGroupKey + "/scale-factor";
     // состояние и геометрия основного окна приложения
@@ -96,8 +98,8 @@ private:
     SettingsStorage();
     friend class StorageFacade;
     //
-    class Implememntation;
-    QScopedPointer<Implememntation> d;
+    class Implementation;
+    QScopedPointer<Implementation> d;
 };
 
 } // namespace DataStorageLayer

@@ -8,6 +8,8 @@
  */
 class AbstractLabel : public Widget
 {
+    Q_OBJECT
+
 public:
     explicit AbstractLabel(QWidget *_parent = nullptr);
     ~AbstractLabel() override;
@@ -18,10 +20,21 @@ public:
     void setText(const QString& _text);
 
     /**
+     * @brief Задать выравнивание текста
+     */
+    void setAlignment(Qt::Alignment _alignment);
+
+    /**
      * @brief Переопределяем для корректного подсчёта размера в компоновщиках
      */
     QSize sizeHint() const override;
     int heightForWidth(int _width) const override;
+
+signals:
+    /**
+     * @brief Пользователь кликнул на виджете
+     */
+    void clicked();
 
 protected:
     /**
@@ -33,6 +46,11 @@ protected:
      * @brief Переопределяем для собственной отрисовки
      */
     void paintEvent(QPaintEvent* _event) override;
+
+    /**
+     * @brief Переопределяем для открытия ссылки при клике на виджет
+     */
+    void mouseReleaseEvent(QMouseEvent* _event) override;
 
 private:
     class Implementation;
@@ -73,6 +91,19 @@ class Subtitle1Label : public AbstractLabel
 {
 public:
     explicit Subtitle1Label(QWidget* _parent = nullptr);
+
+protected:
+    const QFont& textFont() const override;
+};
+
+
+/**
+ * @brief Текстовая метка со шрифтом subtitle2
+ */
+class Subtitle2Label : public AbstractLabel
+{
+public:
+    explicit Subtitle2Label(QWidget* _parent = nullptr);
 
 protected:
     const QFont& textFont() const override;

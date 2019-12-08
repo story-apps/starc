@@ -124,7 +124,7 @@ void LanguageDialog::updateTranslations()
 
 void LanguageDialog::designSystemChangeEvent(DesignSystemChangeEvent* _event)
 {
-    Q_UNUSED(_event)
+    AbstractDialog::designSystemChangeEvent(_event);
 
     for (auto radioButton : d->languages()) {
         radioButton->setBackgroundColor(Ui::DesignSystem::color().background());
@@ -132,7 +132,7 @@ void LanguageDialog::designSystemChangeEvent(DesignSystemChangeEvent* _event)
     }
 
     d->languageHowToAddLink->setContentsMargins(Ui::DesignSystem::label().margins().toMargins());
-    d->languageHowToAddLink->setBackgroundColor(DesignSystem::color().surface());
+    d->languageHowToAddLink->setBackgroundColor(DesignSystem::color().background());
     d->languageHowToAddLink->setTextColor(DesignSystem::color().secondary());
 
     d->okButton->setBackgroundColor(Ui::DesignSystem::color().secondary());

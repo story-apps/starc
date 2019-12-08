@@ -85,6 +85,8 @@ void TextField::Implementation::reconfigure(TextField* _textField)
     palette.setColor(QPalette::Normal, QPalette::Text, textColor);
     textColor.setAlphaF(Ui::DesignSystem::disabledTextOpacity());
     palette.setColor(QPalette::Disabled, QPalette::Text, textColor);
+    palette.setColor(QPalette::Highlight, Ui::DesignSystem::color().secondary());
+    palette.setColor(QPalette::HighlightedText, Ui::DesignSystem::color().onSecondary());
     _textField->setPalette(palette);
 
     QTextFrameFormat frameFormat = _textField->document()->rootFrame()->frameFormat();
@@ -98,6 +100,14 @@ void TextField::Implementation::reconfigure(TextField* _textField)
                                 + Ui::DesignSystem::textField().margins().bottom());
     _textField->document()->rootFrame()->setFrameFormat(frameFormat);
 
+    //
+    // Переконфигурируем цвет и размер лейблов
+    //
+    if (_textField->hasFocus()) {
+        labelColorAnimation.setEndValue(Ui::DesignSystem::color().secondary());
+    } else {
+        labelColorAnimation.setEndValue(Ui::DesignSystem::textField().foregroundColor());
+    }
     if (_textField->text().isEmpty()) {
         animateLabelToBottom();
     } else {

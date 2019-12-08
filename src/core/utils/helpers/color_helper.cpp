@@ -12,3 +12,14 @@ QColor ColorHelper::colorBetween(const QColor& _lhs, const QColor& _rhs)
                   mid(_lhs.green(), _rhs.green()),
                   mid(_rhs.blue(), _lhs.blue()));
 }
+
+bool ColorHelper::isColorLight(const QColor& _color)
+{
+    return (_color.redF() + _color.greenF() + _color.blueF()) / 3 > 0.5;
+}
+
+QColor ColorHelper::contrast(const QColor& _color)
+{
+    const auto value = isColorLight(_color) ? 0 : 255;
+    return QColor(value, value, value);
+}
