@@ -201,9 +201,31 @@ ThemeDialog::ThemeDialog(QWidget* _parent)
     connect(d->customThemeHash, &TextField::textChanged, this, [this] {
         const auto hash = d->customThemeHash->text().trimmed();
         if (hash.length() != 72) {
+            d->customThemeHash->setError(tr("Entered HASH has incorrect length"));
             return;
         }
 
+        QVector<QColor> colors;
+        int startIndex = 0;
+        for (int colorIndex = 0; colorIndex < 12; ++colorIndex) {
+            const int length = 6;
+            const QColor color = "#" + hash.mid(startIndex, length);
+            if (!color.isValid()) {
+                d->customThemeHash->setError(tr("Entered HASH has invalid colors"));
+                return;
+            }
+
+            startIndex += length;
+            colors.append(color);
+        }
+        for (auto color : colors) {
+            if (colors.count(color) > 6) {
+                d->customThemeHash->setError(tr("Entered HASH has too much equal colors"));
+                return;
+            }
+        }
+
+        d->customThemeHash->setError({});
         emit customThemeColorsChanged(Ui::DesignSystem::Color(hash));
     });
     connect(d->okButton, &Button::clicked, this, &ThemeDialog::hideDialog);
