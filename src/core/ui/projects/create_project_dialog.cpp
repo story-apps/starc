@@ -8,6 +8,7 @@
 #include <ui/widgets/toggle_button/toggle_button.h>
 
 #include <QGridLayout>
+#include <QFileDialog>
 #include <QTimer>
 
 
@@ -79,9 +80,20 @@ CreateProjectDialog::CreateProjectDialog(QWidget* _parent)
     contentsLayout()->setRowStretch(5, 1);
     contentsLayout()->addLayout(d->buttonsLayout, 6, 0);
 
+    connect(d->localProjectButton, &RadioButton::checkedChanged, this, [this] (bool _checked) {
+        d->projectFilePath->setVisible(_checked && d->advancedSettingsButton->isChecked());
+    });
     connect(d->advancedSettingsButton, &ToggleButton::checkedChanged, this, [this] (bool _checked) {
-        d->projectFilePath->setVisible(_checked);
+        d->projectFilePath->setVisible(_checked && d->localProjectButton->isChecked());
         d->importFilePath->setVisible(_checked);
+    });
+    connect(d->projectFilePath, &TextField::trailingIconPressed, this, [this] {
+       const auto path
+               = QFileDialog::getExistingDirectory(this,
+                    tr("Choose the folder where new story will be saved"), d->projectFilePath->text());
+       if (!path.isEmpty()) {
+           d->projectFilePath->setText(path);
+       }
     });
     connect(d->cancelButton, &Button::clicked, this, &CreateProjectDialog::hideDialog);
 
@@ -101,8 +113,8 @@ void CreateProjectDialog::updateTranslations()
     setTitle(tr("Create new story"));
 
     d->projectName->setLabel(tr("Enter name of the new story"));
-    d->localProjectButton->setText(tr("Local project"));
-    d->remoteProjectButton->setText(tr("Remote project"));
+    d->localProjectButton->setText(tr("Place story on the local computer"));
+    d->remoteProjectButton->setText(tr("Place story on the cloud"));
     d->projectFilePath->setLabel(tr("Location of the new story file"));
     d->importFilePath->setLabel(tr("Choose file with story to import"));
     d->createButton->setText(tr("Create"));

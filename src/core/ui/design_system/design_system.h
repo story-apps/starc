@@ -705,6 +705,11 @@ public:
         QSizeF iconSize() const;
 
         /**
+         * @brief Отступ от текста до иконки
+         */
+        qreal spacing() const;
+
+        /**
          * @brief Высота полоски под редактором не в фокусе
          */
         qreal underlineHeight() const;

@@ -222,7 +222,9 @@ void SettingsView::Implementation::initApplicationCard()
     applicationCardLayout->addWidget(applicationSaveAndBackupTitle, itemIndex++, 0);
     applicationCardLayout->addWidget(autoSave, itemIndex++, 0);
     {
-        backupsFolderPath->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Preferred);
+        QSizePolicy policy(QSizePolicy::Expanding, QSizePolicy::Preferred);
+        policy.setHeightForWidth(true);
+        backupsFolderPath->setSizePolicy(policy);
 
         auto layout = makeLayout();
         layout->addWidget(saveBackups, 0, Qt::AlignCenter);

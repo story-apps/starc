@@ -92,12 +92,9 @@ protected:
     void paintEvent(QPaintEvent* _event) override;
 
     /**
-     * @brief Переопределяем, чтобы в момент входа/выхода курсора обновить отрисовку
+     * @brief Корректируем размер полосы декорации, при необходимости
      */
-    /** @{ */
-    void enterEvent(QEvent* _event) override;
-    void leaveEvent(QEvent* _event) override;
-    /** @} */
+    void resizeEvent(QResizeEvent* _event) override;
 
     /**
      * @brief Переопределяем для запуска анимании декорирования

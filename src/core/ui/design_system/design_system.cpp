@@ -1200,6 +1200,7 @@ public:
     QPointF labelTopLeft = {12.0, 6.0};
     qreal iconTop = 16.0;
     QSizeF iconSize = {24.0, 24.0};
+    qreal spacing = 12.0;
     qreal underlineHeight = 1.0;
     qreal underlineHeightInFocus = 2.0;
     qreal helperHeight = 20.0;
@@ -1218,6 +1219,7 @@ DesignSystem::TextField::Implementation::Implementation(qreal _scaleFactor, cons
     labelTopLeft *= _scaleFactor;
     iconTop *= _scaleFactor;
     iconSize *= _scaleFactor;
+    spacing *= _scaleFactor;
     underlineHeight *= _scaleFactor;
     underlineHeightInFocus *= _scaleFactor;
     helperHeight *= _scaleFactor;
@@ -1265,6 +1267,11 @@ qreal DesignSystem::TextField::iconTop() const
 QSizeF DesignSystem::TextField::iconSize() const
 {
     return d->iconSize;
+}
+
+qreal DesignSystem::TextField::spacing() const
+{
+    return d->spacing;
 }
 
 qreal DesignSystem::TextField::underlineHeight() const

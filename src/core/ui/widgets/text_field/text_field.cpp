@@ -95,7 +95,11 @@ void TextField::Implementation::reconfigure(TextField* _textField)
     frameFormat.setTopMargin(Ui::DesignSystem::textField().contentsMargins().top()
                              + Ui::DesignSystem::textField().margins().top());
     frameFormat.setRightMargin(Ui::DesignSystem::textField().contentsMargins().right()
-                               + Ui::DesignSystem::textField().margins().right());
+                               + Ui::DesignSystem::textField().margins().right()
+                               + (trailingIcon.isEmpty()
+                                  ? 0
+                                  : Ui::DesignSystem::textField().iconSize().width()
+                                    + Ui::DesignSystem::textField().spacing()));
     frameFormat.setBottomMargin(Ui::DesignSystem::textField().contentsMargins().bottom()
                                 + Ui::DesignSystem::textField().margins().bottom());
     _textField->document()->rootFrame()->setFrameFormat(frameFormat);
@@ -205,6 +209,7 @@ TextField::TextField(QWidget* _parent)
     : QTextEdit(_parent),
       d(new Implementation)
 {
+    setAttribute(Qt::WA_Hover);
     setFrameShape(QFrame::NoFrame);
     setWordWrapMode(QTextOption::WordWrap);
     setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
@@ -292,6 +297,7 @@ void TextField::setTrailingIcon(const QString& _icon)
     }
 
     d->trailingIcon = _icon;
+    d->reconfigure(this);
     update();
 }
 
@@ -351,6 +357,11 @@ QSize TextField::sizeHint() const
                    + Ui::DesignSystem::textField().contentsMargins().right(),
                    Ui::DesignSystem::textField().contentsMargins().top()
                    + Ui::DesignSystem::textField().contentsMargins().bottom()).toSize();
+    if (!d->trailingIcon.isEmpty()) {
+        size += QSizeF(Ui::DesignSystem::textField().iconSize().width()
+                       + Ui::DesignSystem::textField().spacing(),
+                       0.0).toSize();
+    }
     return size;
 }
 
@@ -358,7 +369,14 @@ int TextField::heightForWidth(int _width) const
 {
     qreal width = _width;
     width -= Ui::DesignSystem::textField().margins().left()
+             + Ui::DesignSystem::textField().contentsMargins().right();
+    width -= Ui::DesignSystem::textField().contentsMargins().left()
              + Ui::DesignSystem::textField().margins().right();
+    if (!d->trailingIcon.isEmpty()) {
+        width -= Ui::DesignSystem::textField().iconSize().width()
+                + Ui::DesignSystem::textField().spacing();
+    }
+
     qreal height = TextHelper::heightForWidth(text(), Ui::DesignSystem::font().body1(), static_cast<int>(width));
     height += Ui::DesignSystem::textField().margins().top()
               + Ui::DesignSystem::textField().margins().bottom();
@@ -537,16 +555,17 @@ void TextField::paintEvent(QPaintEvent* _event)
     painter.end();
 }
 
-void TextField::enterEvent(QEvent* _event)
+void TextField::resizeEvent(QResizeEvent* _event)
 {
-    QTextEdit::enterEvent(_event);
-    update();
-}
+    QTextEdit::resizeEvent(_event);
 
-void TextField::leaveEvent(QEvent* _event)
-{
-    QTextEdit::leaveEvent(_event);
-    update();
+    //
+    // Если виджет в фокусе, корректируем размер полосы декорации под текстом
+    //
+    if (hasFocus()) {
+        const QRectF decorationRect = d->decorationRectInFocus(size());
+        d->decorationAnimation.setEndValue(decorationRect);
+    }
 }
 
 void TextField::focusInEvent(QFocusEvent* _event)
