@@ -58,8 +58,9 @@ LanguageDialog::Implementation::Implementation(QWidget* _parent)
     buttonsLayout->addWidget(okButton);
 
     RadioButtonGroup* projectLocationGroup = new RadioButtonGroup(_parent);
-    projectLocationGroup->add(english);
-    projectLocationGroup->add(russian);
+    for (auto language : languages()) {
+        projectLocationGroup->add(language);
+    }
 }
 
 QVector<RadioButton*> LanguageDialog::Implementation::languages() const
@@ -126,9 +127,9 @@ void LanguageDialog::designSystemChangeEvent(DesignSystemChangeEvent* _event)
 {
     AbstractDialog::designSystemChangeEvent(_event);
 
-    for (auto radioButton : d->languages()) {
-        radioButton->setBackgroundColor(Ui::DesignSystem::color().background());
-        radioButton->setTextColor(Ui::DesignSystem::color().onBackground());
+    for (auto languge : d->languages()) {
+        languge->setBackgroundColor(Ui::DesignSystem::color().background());
+        languge->setTextColor(Ui::DesignSystem::color().onBackground());
     }
 
     d->languageHowToAddLink->setContentsMargins(Ui::DesignSystem::label().margins().toMargins());

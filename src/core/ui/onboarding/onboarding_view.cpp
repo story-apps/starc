@@ -46,7 +46,6 @@ public:
 
     Widget* languagePage = nullptr;
     H5Label* languageTitleLabel = nullptr;
-    RadioButton* systemLanguageButton = nullptr;
     QVector<RadioButton*> languageButtons;
     Body1LinkLabel* languageHowToAddLink = nullptr;
     Button* goToThemeButton = nullptr;
@@ -85,6 +84,7 @@ void OnboardingView::Implementation::initLanguagePage()
     auto initLanguageButton = [this] (const QString& _name, QLocale::Language _language) {
         RadioButton* languageButton = new RadioButton(languagePage);
         languageButton->setText(_name);
+        languageButton->setChecked(QLocale().system().language() == _language);
         QObject::connect(languageButton, &RadioButton::checkedChanged, q,
             [this, _language] (bool _checked)
         {
@@ -95,13 +95,26 @@ void OnboardingView::Implementation::initLanguagePage()
         languageButtons.append(languageButton);
         return languageButton;
     };
-    systemLanguageButton = initLanguageButton("Use system locale settings", QLocale::AnyLanguage);
-    systemLanguageButton->setChecked(true);
     RadioButton* englishLanguage = initLanguageButton("English", QLocale::English);
     RadioButton* russianLanguage = initLanguageButton("Русский", QLocale::Russian);
+    //
+    // Если мы умеем в язык системы, то оставляем выбранным его
+    //
+    bool isSystemLanguageSupported = false;
+    for (auto language : languageButtons) {
+        if (language->isChecked()) {
+            isSystemLanguageSupported = true;
+            break;
+        }
+    }
+    //
+    // ... а если не умеем, то выбираем английский
+    //
+    if (!isSystemLanguageSupported) {
+        englishLanguage->setChecked(true);
+    }
 
     RadioButtonGroup* languagesGroup = new RadioButtonGroup(languagePage);
-    languagesGroup->add(systemLanguageButton);
     languagesGroup->add(englishLanguage);
     languagesGroup->add(russianLanguage);
 
@@ -123,12 +136,11 @@ void OnboardingView::Implementation::initLanguagePage()
     languagePageLayout->setSpacing(0);
     languagePageLayout->setContentsMargins({});
     languagePageLayout->addWidget(languageTitleLabel, 0, 0, 1, 3);
-    languagePageLayout->addWidget(systemLanguageButton, 1, 0, 1, 3);
-    languagePageLayout->addWidget(englishLanguage, 2, 0, 1, 1);
-    languagePageLayout->addWidget(russianLanguage, 3, 0, 1, 1);
-    languagePageLayout->setRowStretch(4, 1);
-    languagePageLayout->addWidget(languageHowToAddLink, 5, 0, 1, 3);
-    languagePageLayout->addLayout(languagePageButtonsLayout, 6, 0, 1, 3);
+    languagePageLayout->addWidget(englishLanguage, 1, 0, 1, 1);
+    languagePageLayout->addWidget(russianLanguage, 2, 0, 1, 1);
+    languagePageLayout->setRowStretch(3, 1);
+    languagePageLayout->addWidget(languageHowToAddLink, 4, 0, 1, 3);
+    languagePageLayout->addLayout(languagePageButtonsLayout, 5, 0, 1, 3);
 
     languagePage->hide();
 }
@@ -289,7 +301,6 @@ void OnboardingView::showThemePage()
 void OnboardingView::updateTranslations()
 {
     d->languageTitleLabel->setText(tr("Choose preferred language"));
-    d->systemLanguageButton->setText(tr("Use system locale settings"));
     d->languageHowToAddLink->setText(tr("Did not find your preffered language? Read how you can add it yourself."));
     d->goToThemeButton->setText(tr("Continue"));
     d->skipOnboardingButton->setText(tr("Skip onboarding"));
