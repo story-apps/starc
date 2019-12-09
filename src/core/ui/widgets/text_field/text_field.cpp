@@ -45,6 +45,12 @@ public:
     QRectF decorationRectInFocus(const QSize& _textFieldSize) const;
     /** @} */
 
+    /**
+     * @brief Определить область для отрисовки иконки
+     */
+    QRectF iconRect(int _width) const;
+
+
     QString label;
     QString helper;
     QString error;
@@ -201,6 +207,16 @@ QRectF TextField::Implementation::decorationRectInFocus(const QSize& _textFieldS
                   Ui::DesignSystem::textField().underlineHeightInFocus());
 }
 
+QRectF TextField::Implementation::iconRect(int _width) const
+{
+    return QRectF(QPointF(_width
+                          - Ui::DesignSystem::textField().contentsMargins().right()
+                          - Ui::DesignSystem::textField().margins().right()
+                          - Ui::DesignSystem::textField().iconSize().width(),
+                          Ui::DesignSystem::textField().iconTop()),
+                  Ui::DesignSystem::textField().iconSize());
+}
+
 
 // ****
 
@@ -215,6 +231,7 @@ TextField::TextField(QWidget* _parent)
     setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
     setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
     setTabChangesFocus(true);
+    viewport()->setMouseTracking(true);
 
     QSizePolicy policy(QSizePolicy::Preferred, QSizePolicy::Preferred);
     policy.setHeightForWidth(true);
@@ -503,12 +520,7 @@ void TextField::paintEvent(QPaintEvent* _event)
         painter.setPen(d->trailingIconColor.isValid()
                        ? d->trailingIconColor
                        : palette().color(QPalette::Text));
-        const QRectF iconRect(QPointF(width()
-                                      - Ui::DesignSystem::textField().contentsMargins().right()
-                                      - Ui::DesignSystem::textField().margins().right()
-                                      - Ui::DesignSystem::textField().iconSize().width(),
-                                      Ui::DesignSystem::textField().iconTop()),
-                              Ui::DesignSystem::textField().iconSize());
+        const QRectF iconRect = d->iconRect(width());
         painter.drawText(iconRect.toRect(), Qt::AlignCenter, d->trailingIcon);
     }
     //
@@ -612,17 +624,28 @@ void TextField::focusOutEvent(QFocusEvent* _event)
 
 void TextField::mouseReleaseEvent(QMouseEvent* _event)
 {
-    const QRectF iconRect(QPointF(width()
-                                  - Ui::DesignSystem::textField().contentsMargins().right()
-                                  - Ui::DesignSystem::textField().margins().right()
-                                  - Ui::DesignSystem::textField().iconSize().width(),
-                                  Ui::DesignSystem::textField().iconTop()),
-                          Ui::DesignSystem::textField().iconSize());
+    const QRectF iconRect = d->iconRect(width());
     if (iconRect.contains(_event->pos())) {
         emit trailingIconPressed();
         _event->accept();
     } else {
         QTextEdit::mouseReleaseEvent(_event);
+    }
+}
+
+void TextField::mouseMoveEvent(QMouseEvent* _event)
+{
+    QTextEdit::mouseMoveEvent(_event);
+
+    if (d->trailingIcon.isEmpty()) {
+        return;
+    }
+
+    const QRectF iconRect = d->iconRect(width());
+    if (iconRect.contains(_event->pos())) {
+        viewport()->setCursor(Qt::ArrowCursor);
+    } else {
+        viewport()->setCursor(Qt::IBeamCursor);
     }
 }
 

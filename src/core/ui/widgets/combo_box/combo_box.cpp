@@ -102,7 +102,8 @@ ComboBox::ComboBox(QWidget* _parent)
 {
     setReadOnly(true);
     setTrailingIcon("\uf35d");
-    setCursor(Qt::ArrowCursor);
+    viewport()->setCursor(Qt::ArrowCursor);
+    viewport()->setMouseTracking(false);
 
     connect(&d->popupHeightAnimation, &QVariantAnimation::valueChanged, this, [this] (const QVariant& _value) {
         const auto height = _value.toInt();
@@ -147,6 +148,15 @@ bool ComboBox::event(QEvent* _event)
     }
 }
 
+void ComboBox::focusOutEvent(QFocusEvent* _event)
+{
+    TextField::focusOutEvent(_event);
+
+    setTrailingIcon("\uf35d");
+    setTrailingIconColor({});
+    d->hidePopup();
+}
+
 void ComboBox::mousePressEvent(QMouseEvent* _event)
 {
     TextField::mousePressEvent(_event);
@@ -162,13 +172,9 @@ void ComboBox::mousePressEvent(QMouseEvent* _event)
     }
 }
 
-void ComboBox::focusOutEvent(QFocusEvent* _event)
+void ComboBox::mouseMoveEvent(QMouseEvent* _event)
 {
-    TextField::focusOutEvent(_event);
-
-    setTrailingIcon("\uf35d");
-    setTrailingIconColor({});
-    d->hidePopup();
+    QTextEdit::mouseMoveEvent(_event);
 }
 
 ComboBox::~ComboBox() = default;

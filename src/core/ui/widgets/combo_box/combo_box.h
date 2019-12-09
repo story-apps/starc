@@ -34,14 +34,19 @@ protected:
     bool event(QEvent* _event) override;
 
     /**
+     * @brief Скрываем попап, когда фокус ушёл из виджета
+     */
+    void focusOutEvent(QFocusEvent* _event) override;
+
+    /**
      * @brief Реализуем отображение/скрытие попапа
      */
     void mousePressEvent(QMouseEvent* _event) override;
 
     /**
-     * @brief Скрываем попап, когда фокус ушёл из виджета
+     * @brief Переопределяем, чтобы пропустить обработку связанную с курсором редактора TextField'а
      */
-    void focusOutEvent(QFocusEvent* _event) override;
+    void mouseMoveEvent(QMouseEvent *_event) override;
 
 private:
     class Implementation;

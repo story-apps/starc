@@ -110,6 +110,11 @@ protected:
     void mouseReleaseEvent(QMouseEvent* _event) override;
 
     /**
+     * @brief Корректируем курсор при наведении на иконку
+     */
+    void mouseMoveEvent(QMouseEvent* _event) override;
+
+    /**
      * @brief Переопределяем для ручной обработки некоторых клавиш
      */
     void keyPressEvent(QKeyEvent* _event) override;
