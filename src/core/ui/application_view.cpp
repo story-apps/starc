@@ -167,6 +167,7 @@ void ApplicationView::designSystemChangeEvent(DesignSystemChangeEvent* _event)
     d->view->setBackgroundColor(DesignSystem::color().surface());
 
     d->splitter->setHandleColor(DesignSystem::color().primary());
+    d->splitter->setHandleWidth(1);
 
     d->splitterShadow->move(-1 * d->splitterShadow->width() * 2 / 3, 0);
 

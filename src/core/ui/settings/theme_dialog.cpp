@@ -11,6 +11,7 @@
 
 #include <QColorDialog>
 #include <QGridLayout>
+#include <QTimer>
 #include <QUrl>
 #include <QVariant>
 
@@ -160,13 +161,31 @@ ThemeDialog::ThemeDialog(QWidget* _parent)
 
     for (auto radioButton : d->themes()) {
         connect(radioButton, &RadioButton::checkedChanged, this, [this, radioButton] (bool _checked) {
-            if (_checked) {
-                const auto theme = radioButton->property(kThemeKey).toInt();
-                emit themeChanged(static_cast<ApplicationTheme>(theme));
+            if (!_checked) {
+                return;
             }
+
+            const auto theme = radioButton->property(kThemeKey).toInt();
+            emit themeChanged(static_cast<ApplicationTheme>(theme));
         });
     }
-    connect(d->custom, &RadioButton::checkedChanged, d->customPalette, &Widget::setVisible);
+    connect(d->custom, &RadioButton::checkedChanged, this, [this] (bool _checked) {
+        //
+        // Если это настройка перед отображением диалога, то покажем панель с цветами сразу
+        //
+        if (!isVisible()) {
+            d->customPalette->setVisible(_checked);
+        }
+        //
+        // А если же это изменение темы, то ставим событие на отображение панели с цветами
+        // в очередь, чтобы не происходило дёргание при анимировании её появления
+        //
+        else {
+            QTimer::singleShot(0, this, [this, _checked] {
+                d->customPalette->setVisible(_checked);
+            });
+        }
+    });
     auto updateColorLabel = [this] {
         auto colorLabel = qobject_cast<Widget*>(sender());
         if (colorLabel == nullptr) {

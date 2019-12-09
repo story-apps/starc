@@ -1,5 +1,7 @@
 #include "settings_manager.h"
 
+#include <custom_events.h>
+
 #include <data_layer/storage/settings_storage.h>
 #include <data_layer/storage/storage_facade.h>
 
@@ -148,6 +150,8 @@ bool SettingsManager::eventFilter(QObject* _watched, QEvent* _event)
     if (_event->type() == QEvent::LanguageChange
         && _watched == d->view) {
         d->view->setApplicationLanguage(d->settingsValue(DataStorageLayer::kApplicationLanguagedKey).toInt());
+        d->view->setApplicationTheme(d->settingsValue(DataStorageLayer::kApplicationThemeKey).toInt());
+    } else if (static_cast<EventType>(_event->type()) == EventType::DesignSystemChangeEvent) {
         d->view->setApplicationTheme(d->settingsValue(DataStorageLayer::kApplicationThemeKey).toInt());
     }
 

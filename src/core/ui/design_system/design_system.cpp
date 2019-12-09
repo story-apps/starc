@@ -381,6 +381,19 @@ public:
 
 DesignSystem::Color::Implementation::Implementation()
 {
+    primary = QColor("#323740");
+    primaryDark = QColor("#22252b");
+    secondary = QColor("#448AFF");
+    background = QColor("#FFFFFF");
+    surface = QColor("#FFFFFF");
+    error = QColor("#B00020");
+    shadow = QColor("#000000");
+    shadow.setAlphaF(0.6);
+    onPrimary = QColor("#FFFFFF");
+    onSecondary = QColor("#FFFFFF");
+    onBackground = QColor("#000000");
+    onSurface = QColor("#000000");
+    onError = QColor("#FFFFFF");
 }
 
 
