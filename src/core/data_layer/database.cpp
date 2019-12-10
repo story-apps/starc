@@ -2,42 +2,42 @@
 
 #include <QApplication>
 #include <QDateTime>
-#include <QStringList>
 #include <QSqlDatabase>
 #include <QSqlQuery>
 #include <QSqlRecord>
+#include <QStringList>
 #include <QVariant>
 
-namespace DatabaseLayer
-{
+namespace DatabaseLayer {
 
 namespace {
-    /**
-     * @brief Получить ключ хранения номера версии приложения
-     */
-    static QString applicationVersionKey() {
-        return
+/**
+ * @brief Получить ключ хранения номера версии приложения
+ */
+static QString applicationVersionKey()
+{
+    return
 #ifdef MOBILE_OS
-                "application-version-mobile";
+        "application-version-mobile";
 #else
-                "application-version";
+        "application-version";
 #endif
-    }
-    /**
-     * @brief Инвертированный ключ хранения номера версии, для проверок
-     */
-    static QString invertedApplicationVersionKey() {
-        return
-#ifdef MOBILE_OS
-                "application-version";
-#else
-                "application-version-mobile";
-#endif
-    }
 }
+/**
+ * @brief Инвертированный ключ хранения номера версии, для проверок
+ */
+static QString invertedApplicationVersionKey()
+{
+    return
+#ifdef MOBILE_OS
+        "application-version";
+#else
+        "application-version-mobile";
+#endif
+}
+} // namespace
 
-
-bool Database::canOpenFile(const QString& _databaseFileName)
+bool Database::canOpenFile(const QString &_databaseFileName)
 {
     bool canOpen = true;
 
@@ -51,13 +51,16 @@ bool Database::canOpenFile(const QString& _databaseFileName)
         //
         // 1. Если файл был создан в более поздней версии приложения, его нельзя открывать
         //
-        if (q_checker.exec("SELECT value FROM system_variables WHERE variable = 'application-version' ")
+        if (q_checker.exec(
+                "SELECT value FROM system_variables WHERE variable = 'application-version' ")
             && q_checker.next()
-            && q_checker.value("value").toString().split(" ").first() > QApplication::applicationVersion()) {
+            && q_checker.value("value").toString().split(" ").first()
+                > QApplication::applicationVersion()) {
             canOpen = false;
-            s_openFileError =
-                    QApplication::translate("DatabaseLayer::Database",
-                        "Project was modified in higher version. You need update application to latest version for open it.");
+            s_openFileError
+                = QApplication::translate("DatabaseLayer::Database",
+                                          "Project was modified in higher version. You need update "
+                                          "application to latest version for open it.");
         }
     }
 
@@ -81,14 +84,14 @@ QString Database::lastError()
     return s_lastError;
 }
 
-void Database::setLastError(const QString& _error)
+void Database::setLastError(const QString &_error)
 {
-    if (s_lastError != _error)   {
+    if (s_lastError != _error) {
         s_lastError = _error;
     }
 }
 
-void Database::setCurrentFile(const QString& _databaseFileName)
+void Database::setCurrentFile(const QString &_databaseFileName)
 {
     //
     // Если использовалась база данных, то удалим старое соединение
@@ -156,9 +159,7 @@ void Database::commit()
     }
 }
 
-
 // ****
-
 
 QString Database::s_connectionName = "local_database";
 QString Database::s_sqlDriver = "QSQLITE";
@@ -181,7 +182,8 @@ QSqlDatabase Database::instanse()
     return database;
 }
 
-void Database::open(QSqlDatabase& _database, const QString& _connectionName, const QString& _databaseName)
+void Database::open(QSqlDatabase &_database, const QString &_connectionName,
+                    const QString &_databaseName)
 {
     s_lastError.clear();
 
@@ -208,7 +210,7 @@ void Database::open(QSqlDatabase& _database, const QString& _connectionName, con
 // - БД имеет старую версию
 // - БД имеет последнюю версию
 // - и т.д.
-Database::States Database::checkState(QSqlDatabase& _database)
+Database::States Database::checkState(QSqlDatabase &_database)
 {
     QSqlQuery q_checker(_database);
     Database::States states = Database::EmptyFlag;
@@ -216,9 +218,8 @@ Database::States Database::checkState(QSqlDatabase& _database)
     //
     // Созданы ли таблицы
     //
-    if (q_checker.exec("SELECT COUNT(*) as size FROM sqlite_master WHERE type = 'table' ") &&
-        q_checker.next() &&
-        q_checker.record().value("size").toInt()) {
+    if (q_checker.exec("SELECT COUNT(*) as size FROM sqlite_master WHERE type = 'table' ")
+        && q_checker.next() && q_checker.record().value("size").toInt()) {
         //
         // Все остальные проверки имеют смысл, только если проходит данная проверка
         //
@@ -227,9 +228,8 @@ Database::States Database::checkState(QSqlDatabase& _database)
         //
         // Созданы ли индексы
         //
-        if (q_checker.exec("SELECT COUNT(*) as size FROM sqlite_master WHERE type = 'index' ") &&
-            q_checker.next() &&
-            q_checker.record().value("size").toInt()) {
+        if (q_checker.exec("SELECT COUNT(*) as size FROM sqlite_master WHERE type = 'index' ")
+            && q_checker.next() && q_checker.record().value("size").toInt()) {
             states = states | Database::IndexesFlag;
         }
 
@@ -238,12 +238,13 @@ Database::States Database::checkState(QSqlDatabase& _database)
         //
         if (q_checker.exec(
                 QString("SELECT value as version FROM system_variables WHERE variable = '%1' ")
-                .arg(applicationVersionKey()))) {
+                    .arg(applicationVersionKey()))) {
             //
             // Если версия не задана, или она не соответствует текущей, то надо обновить файл
             //
             if (!q_checker.next()
-                || q_checker.record().value("version").toString() != QApplication::applicationVersion()) {
+                || q_checker.record().value("version").toString()
+                    != QApplication::applicationVersion()) {
                 states = states | Database::OldVersionFlag;
             }
         }
@@ -252,7 +253,7 @@ Database::States Database::checkState(QSqlDatabase& _database)
     return states;
 }
 
-void Database::createTables(QSqlDatabase& _database)
+void Database::createTables(QSqlDatabase &_database)
 {
     QSqlQuery query(_database);
     _database.transaction();
@@ -264,8 +265,28 @@ void Database::createTables(QSqlDatabase& _database)
                "( "
                "variable TEXT PRIMARY KEY ON CONFLICT REPLACE, "
                "value TEXT NOT NULL "
-               "); "
-               );
+               "); ");
+
+    //
+    // Таблица с информацие о проекте
+    //
+    query.exec("CREATE TABLE project "
+               "( "
+               "name TEXT NOT NULL, "
+               "logline TEXT DEFAULT(NULL), "
+               "image BLOB DEFAULT(NULL), "
+               "date_time TEXT NOT NULL " // yyyy.mm.dd.hh.mm.ss.zzz
+               "); ");
+
+    //
+    // Таблица со словарями
+    //
+    query.exec("CREATE TABLE dictionaries "
+               "("
+               "id INTEGER PRIMARY KEY AUTOINCREMENT, "
+               "type INTEGER NOT NULL DEFAULT(0), "
+               "name TEXT NOT NULL "
+               ")");
 
     //
     // Таблица с документами
@@ -273,16 +294,16 @@ void Database::createTables(QSqlDatabase& _database)
     query.exec("CREATE TABLE items "
                "("
                "id INTEGER PRIMARY KEY AUTOINCREMENT, "
-               "parent_id INTEGER DEFAULT(NULL), "
+               "uuid TEXT NOT NULL, "
+               "parent_uuid TEXT DEFAULT(NULL), "
                "type INTEGER NOT NULL DEFAULT(0), "
                "name TEXT DEFAULT(NULL), "
                "content TEXT DEFAULT(NULL), "
                "image BLOB DEFAULT(NULL), "
                "color TEXT DEFAULT(NULL), "
                "sort_order INTEGER NOT NULL DEFAULT(0), "
-               "is_deleted INTEGER NOT NULL DEFAULT(0) "
-               ")"
-               );
+               "is_deleted INTEGER NOT NULL DEFAULT(0) " // помещён ли элемент в корзину?
+               ")");
 
     //
     // Таблица с изменениями документов
@@ -290,15 +311,14 @@ void Database::createTables(QSqlDatabase& _database)
     query.exec("CREATE TABLE items_changes "
                "("
                "id INTEGER PRIMARY KEY AUTOINCREMENT, "
-               "fk_item_id INTEGER NOT NULL, "
+               "fk_item_uuid TEXT NOT NULL, "
                "uuid TEXT NOT NULL, "
                "undo_patch BLOB NOT NULL, " // отмена изменения
                "redo_patch BLOB NOT NULL, " // повтор изменения
                "date_time TEXT NOT NULL, " // yyyy.mm.dd.hh.mm.ss.zzz
                "user_email TEXT DEFAULT(NULL), "
                "user_name TEXT NOT NULL "
-               ")"
-               );
+               ")");
 
     //
     // Таблица с версиями документов
@@ -314,23 +334,22 @@ void Database::createTables(QSqlDatabase& _database)
                "date_time TEXT NOT NULL, " // yyyy.mm.dd.hh.mm.ss.zzz
                "user_email TEXT DEFAULT(NULL), "
                "user_name TEXT NOT NULL "
-               "); "
-               );
+               "); ");
 
     _database.commit();
 }
 
-void Database::createIndexes(QSqlDatabase& _database)
+void Database::createIndexes(QSqlDatabase &_database)
 {
     Q_UNUSED(_database);
 }
 
-void Database::createEnums(QSqlDatabase& _database)
+void Database::createEnums(QSqlDatabase &_database)
 {
     Q_UNUSED(_database);
 }
 
-void Database::updateDatabase(QSqlDatabase& _database)
+void Database::updateDatabase(QSqlDatabase &_database)
 {
     QSqlQuery query(_database);
 
@@ -356,11 +375,11 @@ void Database::updateDatabase(QSqlDatabase& _database)
     // Некоторые версии выходили с ошибками, их заменяем на предыдущие
     //
     {
-//        if (databaseVersion.startsWith("X.X.X beta")) {
-//            databaseVersion = "Y.Y.Y";
-//        }
+        //        if (databaseVersion.startsWith("X.X.X beta")) {
+        //            databaseVersion = "Y.Y.Y";
+        //        }
     }
-    const QStringList& versionParts = databaseVersion.split(".");
+    const QStringList &versionParts = databaseVersion.split(".");
     const int versionMajor = versionParts.value(0, "0").toInt();
     const int versionMinor = versionParts.value(1, "0").toInt();
     const int versionBuild = versionParts.value(2, "1").split(" ").value(0, "1").toInt();
@@ -375,22 +394,19 @@ void Database::updateDatabase(QSqlDatabase& _database)
         // 0.0.X
         //
         if (versionMinor <= 0) {
-            if (versionMinor < 0
-                || versionBuild <= 1) {
-//                updateDatabaseTo_0_0_2(_database);
+            if (versionMinor < 0 || versionBuild <= 1) {
+                //                updateDatabaseTo_0_0_2(_database);
             }
-            if (versionMinor < 0
-                || versionBuild <= 4) {
-//                updateDatabaseTo_0_0_5(_database);
+            if (versionMinor < 0 || versionBuild <= 4) {
+                //                updateDatabaseTo_0_0_5(_database);
             }
         }
         //
         // 0.1.X
         //
         if (versionMinor <= 1) {
-            if (versionMinor < 1
-                || versionBuild <= 0) {
-//                updateDatabaseTo_0_1_0(_database);
+            if (versionMinor < 1 || versionBuild <= 0) {
+                //                updateDatabaseTo_0_1_0(_database);
             }
         }
     }
@@ -400,18 +416,15 @@ void Database::updateDatabase(QSqlDatabase& _database)
     //
     query.exec(
         QString("INSERT INTO system_variables VALUES ('application-updated-to-version-%1', '%2')")
-               .arg(QApplication::applicationVersion())
-               .arg(QDateTime::currentDateTime().toString(Qt::ISODate))
-        );
+            .arg(QApplication::applicationVersion())
+            .arg(QDateTime::currentDateTime().toString(Qt::ISODate)));
 
     //
     // Обновляется версия программы
     //
-    query.exec(
-        QString("INSERT INTO system_variables VALUES ('%1', '%2')")
-                .arg(applicationVersionKey())
-                .arg(QApplication::applicationVersion())
-        );
+    query.exec(QString("INSERT INTO system_variables VALUES ('%1', '%2')")
+                   .arg(applicationVersionKey())
+                   .arg(QApplication::applicationVersion()));
 }
 
 } // namespace DatabaseLayer
