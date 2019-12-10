@@ -52,7 +52,7 @@ public:
 
     Widget* emptyPage = nullptr;
     H6Label* emptyPageTitleLabel = nullptr;
-    Button* emptyPageCreateStoryButton = nullptr;
+    Button* emptyPageCreateProjectButton = nullptr;
 
     ProjectsCards* projectsPage = nullptr;
 };
@@ -70,7 +70,7 @@ ProjectsView::Implementation::Implementation(ProjectsView* _parent)
 void ProjectsView::Implementation::initEmptyPage()
 {
     emptyPageTitleLabel = new H6Label(emptyPage);
-    emptyPageCreateStoryButton = new Button(emptyPage);
+    emptyPageCreateProjectButton = new Button(emptyPage);
 
 
     QVBoxLayout* layout = new QVBoxLayout(emptyPage);
@@ -78,7 +78,7 @@ void ProjectsView::Implementation::initEmptyPage()
     layout->setSpacing(0);
     layout->addStretch();
     layout->addWidget(emptyPageTitleLabel, 0, Qt::AlignHCenter);
-    layout->addWidget(emptyPageCreateStoryButton, 0, Qt::AlignHCenter);
+    layout->addWidget(emptyPageCreateProjectButton, 0, Qt::AlignHCenter);
     layout->addStretch();
 
     emptyPage->hide();
@@ -91,8 +91,8 @@ void ProjectsView::Implementation::updateEmptyPageUi()
     emptyPageTitleLabel->setContentsMargins(Ui::DesignSystem::label().margins().toMargins());
     emptyPageTitleLabel->setBackgroundColor(DesignSystem::color().surface());
     emptyPageTitleLabel->setTextColor(DesignSystem::color().onSurface());
-    emptyPageCreateStoryButton->setBackgroundColor(DesignSystem::color().secondary());
-    emptyPageCreateStoryButton->setTextColor(DesignSystem::color().secondary());
+    emptyPageCreateProjectButton->setBackgroundColor(DesignSystem::color().secondary());
+    emptyPageCreateProjectButton->setTextColor(DesignSystem::color().secondary());
 }
 
 void ProjectsView::Implementation::initProjectsPage()
@@ -123,16 +123,16 @@ ProjectsView::ProjectsView(QWidget* _parent)
     : StackWidget(_parent),
       d(new Implementation(this))
 {
-    QAction* createStoryAction = new QAction;
-    createStoryAction->setIconText("\uf415");
-    d->toolBar->addAction(createStoryAction);
-    connect(createStoryAction, &QAction::triggered, this, &ProjectsView::createStoryPressed);
-    QAction* openStoryAction = new QAction;
-    openStoryAction->setIconText("\uf256");
-    d->toolBar->addAction(openStoryAction);
-    connect(openStoryAction, &QAction::triggered, this, &ProjectsView::openStoryPressed);
+    QAction* createProjectAction = new QAction;
+    createProjectAction->setIconText("\uf415");
+    d->toolBar->addAction(createProjectAction);
+    connect(createProjectAction, &QAction::triggered, this, &ProjectsView::createProjectPressed);
+    QAction* openProjectAction = new QAction;
+    openProjectAction->setIconText("\uf256");
+    d->toolBar->addAction(openProjectAction);
+    connect(openProjectAction, &QAction::triggered, this, &ProjectsView::openProjectPressed);
 
-    connect(d->emptyPageCreateStoryButton, &Button::clicked, this, &ProjectsView::createStoryPressed);
+    connect(d->emptyPageCreateProjectButton, &Button::clicked, this, &ProjectsView::createProjectPressed);
 
     connect(d->projectsPage, &ProjectsCards::hideRequested, this, &ProjectsView::showEmptyPage);
     connect(d->projectsPage, &ProjectsCards::showRequested, this, &ProjectsView::showProjectsPage);
@@ -172,7 +172,7 @@ void ProjectsView::resizeEvent(QResizeEvent* _event)
 void ProjectsView::updateTranslations()
 {
     d->emptyPageTitleLabel->setText(tr("Here will be a list of your stories."));
-    d->emptyPageCreateStoryButton->setText(tr("It's time to create the first story!"));
+    d->emptyPageCreateProjectButton->setText(tr("It's time to create the first story!"));
 }
 
 ProjectsView::~ProjectsView() = default;

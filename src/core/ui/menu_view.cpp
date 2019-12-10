@@ -17,60 +17,60 @@ class MenuView::Implementation
 public:
     explicit Implementation(QWidget* _parent);
 
-    QAction* stories = nullptr;
-    QAction* createStory = nullptr;
-    QAction* openStory = nullptr;
-    QAction* story = nullptr;
-    QAction* saveStory = nullptr;
-    QAction* saveStoryAs = nullptr;
-    QAction* exportStory = nullptr;
-    QAction* importStory = nullptr;
+    QAction* projects = nullptr;
+    QAction* createProject = nullptr;
+    QAction* openProject = nullptr;
+    QAction* project = nullptr;
+    QAction* saveProject = nullptr;
+    QAction* saveProjectAs = nullptr;
+    QAction* exportProject = nullptr;
+    QAction* importProject = nullptr;
     QAction* settings = nullptr;
     QAction* help = nullptr;
 };
 
 MenuView::Implementation::Implementation(QWidget* _parent)
 {
-    stories = new QAction;
-    stories->setIconText("\uf24b");
-    stories->setCheckable(true);
-    stories->setChecked(true);
+    projects = new QAction;
+    projects->setIconText("\uf24b");
+    projects->setCheckable(true);
+    projects->setChecked(true);
     //
-    createStory = new QAction;
-    createStory->setIconText("\uf415");
-    createStory->setCheckable(false);
+    createProject = new QAction;
+    createProject->setIconText("\uf415");
+    createProject->setCheckable(false);
     //
-    openStory = new QAction;
-    openStory->setIconText("\uf76f");
-    openStory->setCheckable(false);
+    openProject = new QAction;
+    openProject->setIconText("\uf76f");
+    openProject->setCheckable(false);
     //
-    story = new QAction;
-    story->setIconText("\uf0be");
-    story->setCheckable(true);
-    story->setVisible(false);
-    story->setSeparator(true);
+    project = new QAction;
+    project->setIconText("\uf0be");
+    project->setCheckable(true);
+    project->setVisible(false);
+    project->setSeparator(true);
     //
-    saveStory = new QAction;
-    saveStory->setIconText("\uf193");
-    saveStory->setCheckable(false);
-    saveStory->setEnabled(false);
-    saveStory->setVisible(false);
+    saveProject = new QAction;
+    saveProject->setIconText("\uf193");
+    saveProject->setCheckable(false);
+    saveProject->setEnabled(false);
+    saveProject->setVisible(false);
     //
-    saveStoryAs = new QAction;
-    saveStoryAs->setIconText({});
-    saveStoryAs->setCheckable(false);
-    saveStoryAs->setEnabled(false);
-    saveStoryAs->setVisible(false);
+    saveProjectAs = new QAction;
+    saveProjectAs->setIconText({});
+    saveProjectAs->setCheckable(false);
+    saveProjectAs->setEnabled(false);
+    saveProjectAs->setVisible(false);
     //
-    importStory = new QAction;
-    importStory->setIconText("\uf2fa");
-    importStory->setCheckable(true);
-    importStory->setVisible(false);
+    importProject = new QAction;
+    importProject->setIconText("\uf2fa");
+    importProject->setCheckable(true);
+    importProject->setVisible(false);
     //
-    exportStory = new QAction;
-    exportStory->setIconText("\uf207");
-    exportStory->setCheckable(false);
-    exportStory->setVisible(false);
+    exportProject = new QAction;
+    exportProject->setIconText("\uf207");
+    exportProject->setCheckable(false);
+    exportProject->setVisible(false);
     //
     settings = new QAction;
     settings->setIconText("\uf493");
@@ -85,8 +85,8 @@ MenuView::Implementation::Implementation(QWidget* _parent)
     help->setSeparator(true);
 
     QActionGroup* actions = new QActionGroup(_parent);
-    actions->addAction(stories);
-    actions->addAction(story);
+    actions->addAction(projects);
+    actions->addAction(project);
     actions->addAction(settings);
     actions->addAction(help);
 }
@@ -102,34 +102,34 @@ MenuView::MenuView(QWidget* _parent)
     setTitle("STARC");
     setProVersion(false);
 
-    addAction(d->stories);
-    addAction(d->createStory);
-    addAction(d->openStory);
-    addAction(d->story);
-    addAction(d->saveStory);
-    addAction(d->saveStoryAs);
-    addAction(d->importStory);
-    addAction(d->exportStory);
+    addAction(d->projects);
+    addAction(d->createProject);
+    addAction(d->openProject);
+    addAction(d->project);
+    addAction(d->saveProject);
+    addAction(d->saveProjectAs);
+    addAction(d->importProject);
+    addAction(d->exportProject);
     addAction(d->settings);
     addAction(d->help);
 
-    connect(d->stories, &QAction::triggered, this, &MenuView::storiesPressed);
-    connect(d->createStory, &QAction::triggered, this, &MenuView::createStoryPressed);
-    connect(d->openStory, &QAction::triggered, this, &MenuView::openStoryPressed);
-    connect(d->story, &QAction::triggered, this, &MenuView::storyPressed);
-    connect(d->saveStory, &QAction::triggered, this, &MenuView::saveChangesPressed);
-    connect(d->saveStoryAs, &QAction::triggered, this, &MenuView::saveStoryAsPressed);
-    connect(d->importStory, &QAction::triggered, this, &MenuView::importPressed);
-    connect(d->exportStory, &QAction::triggered, this, &MenuView::exportPressed);
+    connect(d->projects, &QAction::triggered, this, &MenuView::projectsPressed);
+    connect(d->createProject, &QAction::triggered, this, &MenuView::createProjectPressed);
+    connect(d->openProject, &QAction::triggered, this, &MenuView::openProjectPressed);
+    connect(d->project, &QAction::triggered, this, &MenuView::projectPressed);
+    connect(d->saveProject, &QAction::triggered, this, &MenuView::saveChangesPressed);
+    connect(d->saveProjectAs, &QAction::triggered, this, &MenuView::saveProjectAsPressed);
+    connect(d->importProject, &QAction::triggered, this, &MenuView::importPressed);
+    connect(d->exportProject, &QAction::triggered, this, &MenuView::exportPressed);
     connect(d->settings, &QAction::triggered, this, &MenuView::settingsPressed);
     connect(d->help, &QAction::triggered, this, &MenuView::helpPressed);
 
     auto closeMenu = [this] { WAF::Animation::sideSlideOut(this); };
-    connect(this, &MenuView::storiesPressed, this, closeMenu);
-    connect(this, &MenuView::createStoryPressed, this, closeMenu);
-    connect(this, &MenuView::openStoryPressed, this, closeMenu);
-    connect(this, &MenuView::storyPressed, this, closeMenu);
-    connect(this, &MenuView::saveStoryAsPressed, this, closeMenu);
+    connect(this, &MenuView::projectsPressed, this, closeMenu);
+    connect(this, &MenuView::createProjectPressed, this, closeMenu);
+    connect(this, &MenuView::openProjectPressed, this, closeMenu);
+    connect(this, &MenuView::projectPressed, this, closeMenu);
+    connect(this, &MenuView::saveProjectAsPressed, this, closeMenu);
     connect(this, &MenuView::importPressed, this, closeMenu);
     connect(this, &MenuView::exportPressed, this, closeMenu);
     connect(this, &MenuView::settingsPressed, this, closeMenu);
@@ -141,39 +141,39 @@ MenuView::MenuView(QWidget* _parent)
 void MenuView::checkStories()
 {
     QSignalBlocker signalBlocker(this);
-    d->stories->setChecked(true);
+    d->projects->setChecked(true);
 }
 
-void MenuView::setStoryActionsVisible(bool _visible)
+void MenuView::setProjectActionsVisible(bool _visible)
 {
-    d->story->setVisible(_visible);
-    d->saveStory->setVisible(_visible);
-    d->saveStoryAs->setVisible(_visible);
-    d->exportStory->setVisible(_visible);
-    d->importStory->setVisible(_visible);
+    d->project->setVisible(_visible);
+    d->saveProject->setVisible(_visible);
+    d->saveProjectAs->setVisible(_visible);
+    d->exportProject->setVisible(_visible);
+    d->importProject->setVisible(_visible);
 }
 
-void MenuView::checkStory()
+void MenuView::checkProject()
 {
     QSignalBlocker signalBlocker(this);
-    d->story->setChecked(true);
+    d->project->setChecked(true);
 }
 
-void MenuView::setStoryTitle(const QString& _title)
+void MenuView::setProjectTitle(const QString& _title)
 {
-    d->story->setText(_title);
+    d->project->setText(_title);
 }
 
 void MenuView::checkSettings()
 {
     QSignalBlocker signalBlocker(this);
-    d->importStory->setChecked(true);
+    d->importProject->setChecked(true);
 }
 
 void MenuView::markChangesSaved(bool _saved)
 {
-    d->saveStory->setEnabled(!_saved);
-    d->saveStory->setText(_saved ? tr("All changes saved") : tr("Save changes"));
+    d->saveProject->setEnabled(!_saved);
+    d->saveProject->setText(_saved ? tr("All changes saved") : tr("Save changes"));
 }
 
 void MenuView::setProVersion(bool _isPro)
@@ -185,13 +185,13 @@ void MenuView::setProVersion(bool _isPro)
 
 void MenuView::updateTranslations()
 {
-    d->stories->setText(tr("Stories"));
-    d->createStory->setText(tr("Create story"));
-    d->openStory->setText(tr("Open story"));
-    d->saveStory->setText(tr("Save current story"));
-    d->saveStoryAs->setText(d->saveStory->isEnabled() ? tr("Save changes") : tr("All changes saved"));
-    d->importStory->setText(tr("Import..."));
-    d->exportStory->setText(tr("Export..."));
+    d->projects->setText(tr("Stories"));
+    d->createProject->setText(tr("Create story"));
+    d->openProject->setText(tr("Open story"));
+    d->saveProject->setText(tr("Save current story"));
+    d->saveProjectAs->setText(d->saveProject->isEnabled() ? tr("Save changes") : tr("All changes saved"));
+    d->importProject->setText(tr("Import..."));
+    d->exportProject->setText(tr("Export..."));
     d->settings->setText(tr("Application settings"));
     d->help->setText(tr("How to use the application"));
 }

@@ -34,7 +34,10 @@ class ProjectsManager::Implementation
 public:
     explicit Implementation(QWidget* _parent);
 
+
     Domain::ProjectsModel* projects = nullptr;
+
+    QWidget* topLevelWidget = nullptr;
 
     Ui::ProjectsToolBar* toolBar = nullptr;
     Ui::ProjectsNavigator* navigator = nullptr;
@@ -43,6 +46,7 @@ public:
 
 ProjectsManager::Implementation::Implementation(QWidget* _parent)
     : projects(new Domain::ProjectsModel(_parent)),
+      topLevelWidget(_parent),
       toolBar(new Ui::ProjectsToolBar(_parent)),
       navigator(new Ui::ProjectsNavigator(_parent)),
       view(new Ui::ProjectsView(_parent))
@@ -64,9 +68,9 @@ ProjectsManager::ProjectsManager(QObject* _parent, QWidget* _parentWidget)
       d(new Implementation(_parentWidget))
 {
     connect(d->toolBar, &Ui::ProjectsToolBar::menuPressed, this, &ProjectsManager::menuRequested);
-    connect(d->navigator, &Ui::ProjectsNavigator::createStoryPressed, this, &ProjectsManager::createStoryRequested);
+    connect(d->navigator, &Ui::ProjectsNavigator::createProjectPressed, this, &ProjectsManager::createProject);
 
-    connect(d->view, &Ui::ProjectsView::createStoryPressed, this, &ProjectsManager::createStoryRequested);
+    connect(d->view, &Ui::ProjectsView::createProjectPressed, this, &ProjectsManager::createProject);
     connect(d->view, &Ui::ProjectsView::hideProjectRequested, this, [this] (const Domain::Project& _project) {
         d->projects->remove(_project);
     });
@@ -136,7 +140,14 @@ void ProjectsManager::saveProjects()
     }
     DataStorageLayer::StorageFacade::settingsStorage()->setValue(
         kApplicationProjectsKey, QJsonDocument(projectsJson).toBinaryData().toHex(),
-        DataStorageLayer::SettingsStorage::SettingsPlace::Application);
+                DataStorageLayer::SettingsStorage::SettingsPlace::Application);
+}
+
+void ProjectsManager::createProject()
+{
+    Ui::CreateProjectDialog* dlg = new Ui::CreateProjectDialog(d->topLevelWidget);
+    dlg->showDialog();
+    connect(dlg, &Ui::CreateProjectDialog::disappeared, dlg, &Ui::CreateProjectDialog::deleteLater);
 }
 
 } // namespace ManagementLayer

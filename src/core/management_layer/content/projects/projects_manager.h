@@ -31,16 +31,16 @@ public:
      */
     void saveProjects();
 
+    /**
+     * @brief Создать проект
+     */
+    void createProject();
+
 signals:
     /**
      * @brief Запрос на отображение меню
      */
     void menuRequested();
-
-    /**
-     * @brief Запрос на создание нового проекта
-     */
-    void createStoryRequested();
 
 private:
     class Implementation;

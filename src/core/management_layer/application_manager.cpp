@@ -16,7 +16,6 @@
 
 #include <ui/application_style.h>
 #include <ui/application_view.h>
-#include <ui/projects/create_project_dialog.h>
 #include <ui/menu_view.h>
 
 #include <ui/design_system/design_system.h>
@@ -96,11 +95,6 @@ public:
      * @brief Установить коэффициент масштабирования
      */
     void setScaleFactor(qreal _scaleFactor);
-
-    /**
-     * @brief Создать новый проект
-     */
-    void createStory();
 
 
     ApplicationManager* q = nullptr;
@@ -315,13 +309,6 @@ void ApplicationManager::Implementation::setScaleFactor(qreal _scaleFactor)
     QApplication::postEvent(q, new DesignSystemChangeEvent);
 }
 
-void ApplicationManager::Implementation::createStory()
-{
-    Ui::CreateProjectDialog* dlg = new Ui::CreateProjectDialog(applicationView);
-    dlg->showDialog();
-    connect(dlg, &Ui::CreateProjectDialog::disappeared, dlg, &Ui::CreateProjectDialog::deleteLater);
-}
-
 template<typename Manager>
 void ApplicationManager::Implementation::saveLastContent(Manager* _manager)
 {
@@ -447,8 +434,8 @@ void ApplicationManager::initConnections()
         QApplication::processEvents();
         QApplication::quit();
     });
-    connect(d->menuView, &Ui::MenuView::storiesPressed, this, [this] { d->showProjects(); });
-    connect(d->menuView, &Ui::MenuView::createStoryPressed, d->projectsManager.data(), &ProjectsManager::createStoryRequested);
+    connect(d->menuView, &Ui::MenuView::projectsPressed, this, [this] { d->showProjects(); });
+    connect(d->menuView, &Ui::MenuView::createProjectPressed, d->projectsManager.data(), &ProjectsManager::createProject);
     connect(d->menuView, &Ui::MenuView::settingsPressed, this, [this] { d->showSettings(); });
 
     //
@@ -493,7 +480,6 @@ void ApplicationManager::initConnections()
     // Менеджер проектов
     //
     connect(d->projectsManager.data(), &ProjectsManager::menuRequested, this, [this] { d->showMenu(); });
-    connect(d->projectsManager.data(), &ProjectsManager::createStoryRequested, this, [this] { d->createStory(); });
 
     //
     // Менеджер настроек

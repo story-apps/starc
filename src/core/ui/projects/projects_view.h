@@ -41,12 +41,12 @@ signals:
     /**
      * @brief Пользователь нажал кнопку создания истории
      */
-    void createStoryPressed();
+    void createProjectPressed();
 
     /**
      * @brief Пользователь нажал кнопку открытия истории
      */
-    void openStoryPressed();
+    void openProjectPressed();
 
     /**
      * @brief Пользователь хочет перенести проект в облако

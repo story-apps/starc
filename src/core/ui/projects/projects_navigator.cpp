@@ -24,8 +24,8 @@ public:
     QVBoxLayout* layout = nullptr;
     H6Label* quoteLabel = nullptr;
     OverlineLabel* quoteAuthorLabel = nullptr;
-    Button* createStoryButton = nullptr;
-    Button* openStoryButton = nullptr;
+    Button* createProjectButton = nullptr;
+    Button* openProjectButton = nullptr;
     Button* helpButton = nullptr;
 };
 
@@ -33,20 +33,20 @@ ProjectsNavigator::Implementation::Implementation(QWidget* _parent)
     : layout(new QVBoxLayout(_parent)),
       quoteLabel(new H6Label(_parent)),
       quoteAuthorLabel(new OverlineLabel(_parent)),
-      createStoryButton(new Button(_parent)),
-      openStoryButton(new Button(_parent)),
+      createProjectButton(new Button(_parent)),
+      openProjectButton(new Button(_parent)),
       helpButton(new Button(_parent))
 {
-    createStoryButton->setIcon("\uf415");
-    openStoryButton->setIcon("\uf256");
+    createProjectButton->setIcon("\uf415");
+    openProjectButton->setIcon("\uf256");
     helpButton->setIcon("\uf2d7");
 
     layout->setContentsMargins({});
     layout->setSpacing(0);
     layout->addWidget(quoteLabel);
     layout->addWidget(quoteAuthorLabel);
-    layout->addWidget(createStoryButton);
-    layout->addWidget(openStoryButton);
+    layout->addWidget(createProjectButton);
+    layout->addWidget(openProjectButton);
     layout->addWidget(helpButton);
     layout->addStretch();
 }
@@ -59,8 +59,8 @@ ProjectsNavigator::ProjectsNavigator(QWidget* _parent)
     : Widget(_parent),
       d(new Implementation(this))
 {
-    connect(d->createStoryButton, &Button::clicked, this, &ProjectsNavigator::createStoryPressed);
-    connect(d->openStoryButton, &Button::clicked, this, &ProjectsNavigator::openStoryPressed);
+    connect(d->createProjectButton, &Button::clicked, this, &ProjectsNavigator::createProjectPressed);
+    connect(d->openProjectButton, &Button::clicked, this, &ProjectsNavigator::openProjectPressed);
     connect(d->helpButton, &Button::clicked, this, &ProjectsNavigator::helpPressed);
 
     designSystemChangeEvent(nullptr);
@@ -72,8 +72,8 @@ void ProjectsNavigator::updateTranslations()
     d->quoteLabel->setText(d->quote.text);
     d->quoteAuthorLabel->setText(d->quote.author);
 
-    d->createStoryButton->setText(tr("Create story"));
-    d->openStoryButton->setText(tr("Open story"));
+    d->createProjectButton->setText(tr("Create story"));
+    d->openProjectButton->setText(tr("Open story"));
     d->helpButton->setText(tr("How to use application?"));
 }
 
@@ -102,7 +102,7 @@ void ProjectsNavigator::designSystemChangeEvent(DesignSystemChangeEvent* _event)
     d->quoteAuthorLabel->setTextColor(
                 ColorHelper::colorBetween(DesignSystem::color().primary(),
                                           DesignSystem::color().onPrimary()));
-    for (auto button : {d->createStoryButton, d->openStoryButton, d->helpButton}) {
+    for (auto button : {d->createProjectButton, d->openProjectButton, d->helpButton}) {
         button->setBackgroundColor(DesignSystem::color().secondary());
         button->setTextColor(DesignSystem::color().secondary());
     }

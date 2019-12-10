@@ -25,17 +25,17 @@ public:
     /**
      * @brief Установить видимость пунктов меню, относящихся к проекту
      */
-    void setStoryActionsVisible(bool _visible);
+    void setProjectActionsVisible(bool _visible);
 
     /**
      * @brief Пометить пункт меню текущего проекта выделенным
      */
-    void checkStory();
+    void checkProject();
 
     /**
      * @brief Установить название текущего проекта
      */
-    void setStoryTitle(const QString& _title);
+    void setProjectTitle(const QString& _title);
 
     /**
      * @brief Пометить пункт меню настройки выделенным
@@ -56,22 +56,22 @@ signals:
     /**
      * @brief Нажат пункт меню "Проекты"
      */
-    void storiesPressed();
+    void projectsPressed();
 
     /**
      * @brief Нажат пункт меню "Создать проект"
      */
-    void createStoryPressed();
+    void createProjectPressed();
 
     /**
      * @brief Нажат пункт меню "Открыть проект"
      */
-    void openStoryPressed();
+    void openProjectPressed();
 
     /**
      * @brief Нажат пункт меню "Проект"
      */
-    void storyPressed();
+    void projectPressed();
 
     /**
      * @brief Нажат пункт меню "Сохранить изменения"
@@ -81,7 +81,7 @@ signals:
     /**
      * @brief Нажат пункт меню "Сохранить проект как"
      */
-    void saveStoryAsPressed();
+    void saveProjectAsPressed();
 
     /**
      * @brief Нажат пункт меню "Экспортировать"
