@@ -3,6 +3,13 @@
 #include <QColor>
 
 
+QColor ColorHelper::transparent(const QColor& _color, qreal _alphaF)
+{
+    QColor transparentColor = _color;
+    transparentColor.setAlphaF(_alphaF);
+    return transparentColor;
+}
+
 QColor ColorHelper::colorBetween(const QColor& _lhs, const QColor& _rhs)
 {
     auto mid = [] (int _lhs, int _rhs) {

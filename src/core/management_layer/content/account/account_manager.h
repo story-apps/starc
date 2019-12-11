@@ -190,6 +190,17 @@ signals:
      */
     void changeAvatarRequested(const QByteArray& _avatar);
 
+    //
+    // Информирование о параметрах аккаунта
+    //
+
+    /**
+     * @brief Изменилась возможность создания проектов в облаке
+     * @param _authorized - авторизован ли пользователь
+     * @param _ableToCreate - может ли пользователь создавать новые проекты (активна ли подписка)
+     */
+    void cloudProjectsCreationAvailabilityChanged(bool _authorized, bool _ableToCreate);
+
 private:
     /**
      * @brief Настроить соединения зависящие от действий пользователя в интерфейсе

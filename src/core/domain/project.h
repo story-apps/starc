@@ -15,6 +15,9 @@ enum class ProjectType {
     Remote
 };
 
+/**
+ * @brief Роли для данных проекта в модели
+ */
 enum ProjectDataRole {
     Type,
     Path,

@@ -151,8 +151,14 @@ void AbstractDialog::hideDialog()
     QTimer::singleShot(d->opacityAnimation.duration(), this, &AbstractDialog::hide);
 }
 
+void AbstractDialog::setContentMaximumWidth(int _width)
+{
+    d->content->setMaximumWidth(_width);
+}
+
 void AbstractDialog::setTitle(const QString& _title)
 {
+    d->title->setVisible(!_title.isEmpty());
     d->title->setText(_title);
 }
 

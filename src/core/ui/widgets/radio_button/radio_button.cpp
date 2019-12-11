@@ -2,6 +2,7 @@
 
 #include <ui/design_system/design_system.h>
 
+#include <utils/helpers/color_helper.h>
 #include <utils/helpers/text_helper.h>
 
 #include <QPainter>
@@ -133,14 +134,20 @@ void RadioButton::paintEvent(QPaintEvent* _event)
     // Рисуем сам переключатель
     //
     painter.setFont(Ui::DesignSystem::font().iconsMid());
-    painter.setPen(d->isChecked ? Ui::DesignSystem::color().secondary() : textColor());
+    painter.setPen(d->isChecked
+                   ? Ui::DesignSystem::color().secondary()
+                   : isEnabled()
+                     ? textColor()
+                     : ColorHelper::transparent(textColor(), Ui::DesignSystem::disabledTextOpacity()));
     painter.drawText(iconRect, Qt::AlignCenter, d->isChecked ? "\uf43e" : "\uf43d");
 
     //
     // Рисуем текст
     //
     painter.setFont(Ui::DesignSystem::font().subtitle1());
-    painter.setPen(textColor());
+    painter.setPen(isEnabled()
+                   ? textColor()
+                   : ColorHelper::transparent(textColor(), Ui::DesignSystem::disabledTextOpacity()));
     const qreal textRectX = iconRect.right() + Ui::DesignSystem::radioButton().spacing();
     const QRectF textRect(textRectX, 0, width() - textRectX, sizeHint().height());
     painter.drawText(textRect, Qt::AlignLeft | Qt::AlignVCenter, d->text);

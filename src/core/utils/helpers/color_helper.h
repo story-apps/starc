@@ -1,11 +1,18 @@
 #pragma once
 
+#include <QtGlobal>
+
 class QColor;
 
 
 class ColorHelper
 {
 public:
+    /**
+     * @brief Получить полупрозрачный цвет
+     */
+    static QColor transparent(const QColor& _color, qreal _alphaF);
+
     /**
      * @brief Получить промежуточный цвет между заданными
      */

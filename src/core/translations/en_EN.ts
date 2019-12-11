@@ -2,9 +2,62 @@
 <!DOCTYPE TS>
 <TS version="2.1" language="en_US">
 <context>
+    <name>BusinessLogic::AbstractImporter</name>
+    <message>
+        <location filename="../business_layer/import/abstract_importer.cpp" line="12"/>
+        <source>All supported files</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../business_layer/import/abstract_importer.cpp" line="15"/>
+        <source>Story Architect project</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../business_layer/import/abstract_importer.cpp" line="18"/>
+        <source>KIT Scenarist project</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../business_layer/import/abstract_importer.cpp" line="21"/>
+        <source>Final Draft screenplay</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../business_layer/import/abstract_importer.cpp" line="24"/>
+        <source>Final Draft template</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../business_layer/import/abstract_importer.cpp" line="27"/>
+        <source>Trelby screenplay</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../business_layer/import/abstract_importer.cpp" line="30"/>
+        <source>Office Open XML</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../business_layer/import/abstract_importer.cpp" line="33"/>
+        <source>OpenDocument text</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../business_layer/import/abstract_importer.cpp" line="36"/>
+        <source>Fountain text</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../business_layer/import/abstract_importer.cpp" line="39"/>
+        <source>Celtx project</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
     <name>DatabaseLayer::Database</name>
     <message>
-        <location filename="../data_layer/database.cpp" line="59"/>
+        <location filename="../data_layer/database.cpp" line="61"/>
         <source>Project was modified in higher version. You need update application to latest version for open it.</source>
         <translation></translation>
     </message>
@@ -25,9 +78,37 @@
 <context>
     <name>ManagementLayer::AccountManager</name>
     <message>
-        <location filename="../management_layer/content/account/account_manager.cpp" line="383"/>
+        <location filename="../management_layer/content/account/account_manager.cpp" line="390"/>
         <source>Choose avatar</source>
         <translation></translation>
+    </message>
+</context>
+<context>
+    <name>ManagementLayer::ApplicationManager</name>
+    <message>
+        <location filename="../management_layer/application_manager.cpp" line="352"/>
+        <source> - changed</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../management_layer/application_manager.cpp" line="386"/>
+        <source>Project was modified. Save changes?</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../management_layer/application_manager.cpp" line="387"/>
+        <source>Cancel</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../management_layer/application_manager.cpp" line="388"/>
+        <source>Don&apos;t save</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../management_layer/application_manager.cpp" line="389"/>
+        <source>Save</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -494,6 +575,69 @@
     </message>
 </context>
 <context>
+    <name>StandardDialog</name>
+    <message>
+        <location filename="../ui/widgets/dialog/standard_dialog.cpp" line="11"/>
+        <source>Got it</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ui/widgets/dialog/standard_dialog.cpp" line="12"/>
+        <source>Ah, perfect</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ui/widgets/dialog/standard_dialog.cpp" line="13"/>
+        <source>This is fine</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ui/widgets/dialog/standard_dialog.cpp" line="14"/>
+        <source>Not bad</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ui/widgets/dialog/standard_dialog.cpp" line="15"/>
+        <source>I see</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ui/widgets/dialog/standard_dialog.cpp" line="16"/>
+        <source>Wonderful</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ui/widgets/dialog/standard_dialog.cpp" line="17"/>
+        <source>Alright</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ui/widgets/dialog/standard_dialog.cpp" line="18"/>
+        <source>So-so</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ui/widgets/dialog/standard_dialog.cpp" line="19"/>
+        <source>Amaizing</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ui/widgets/dialog/standard_dialog.cpp" line="20"/>
+        <source>Cool</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ui/widgets/dialog/standard_dialog.cpp" line="21"/>
+        <source>Gorgeous</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ui/widgets/dialog/standard_dialog.cpp" line="22"/>
+        <source>Fine</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
     <name>Ui::AccountNavigator</name>
     <message>
         <location filename="../ui/account/account_navigator.cpp" line="80"/>
@@ -590,42 +734,82 @@ from 2 Gb</source>
 <context>
     <name>Ui::CreateProjectDialog</name>
     <message>
-        <location filename="../ui/projects/create_project_dialog.cpp" line="101"/>
+        <location filename="../ui/projects/create_project_dialog.cpp" line="196"/>
         <source>Create new story</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../ui/projects/create_project_dialog.cpp" line="103"/>
+        <location filename="../ui/projects/create_project_dialog.cpp" line="198"/>
         <source>Enter name of the new story</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../ui/projects/create_project_dialog.cpp" line="104"/>
-        <source>Local project</source>
-        <translation></translation>
+        <location filename="../ui/projects/create_project_dialog.cpp" line="111"/>
+        <source>Choose the folder where new story will be saved</source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/projects/create_project_dialog.cpp" line="105"/>
-        <source>Remote project</source>
-        <translation></translation>
+        <location filename="../ui/projects/create_project_dialog.cpp" line="118"/>
+        <source>Choose the file to import</source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/projects/create_project_dialog.cpp" line="106"/>
+        <location filename="../ui/projects/create_project_dialog.cpp" line="128"/>
+        <source>File format not supported</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ui/projects/create_project_dialog.cpp" line="129"/>
+        <source>Importing from DOC files is not supported. You need to save the file in DOCX format and repeat the import.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ui/projects/create_project_dialog.cpp" line="174"/>
+        <source>The story will be created on the local computer.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ui/projects/create_project_dialog.cpp" line="175"/>
+        <source>to create stories on the cloud.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ui/projects/create_project_dialog.cpp" line="177"/>
+        <source>Renew subscription</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ui/projects/create_project_dialog.cpp" line="181"/>
+        <source>Sign in</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ui/projects/create_project_dialog.cpp" line="199"/>
+        <source>Place story on the local computer</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ui/projects/create_project_dialog.cpp" line="200"/>
+        <source>Place story on the cloud</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ui/projects/create_project_dialog.cpp" line="201"/>
         <source>Location of the new story file</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../ui/projects/create_project_dialog.cpp" line="107"/>
+        <location filename="../ui/projects/create_project_dialog.cpp" line="202"/>
         <source>Choose file with story to import</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../ui/projects/create_project_dialog.cpp" line="108"/>
+        <location filename="../ui/projects/create_project_dialog.cpp" line="204"/>
         <source>Create</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../ui/projects/create_project_dialog.cpp" line="109"/>
+        <location filename="../ui/projects/create_project_dialog.cpp" line="203"/>
         <source>Cancel</source>
         <translation></translation>
     </message>
@@ -633,17 +817,17 @@ from 2 Gb</source>
 <context>
     <name>Ui::LanguageDialog</name>
     <message>
-        <location filename="../ui/settings/language_dialog.cpp" line="118"/>
+        <location filename="../ui/settings/language_dialog.cpp" line="119"/>
         <source>Change application language</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../ui/settings/language_dialog.cpp" line="120"/>
+        <location filename="../ui/settings/language_dialog.cpp" line="121"/>
         <source>Did not find your preffered language? Read how you can add it yourself.</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../ui/settings/language_dialog.cpp" line="122"/>
+        <location filename="../ui/settings/language_dialog.cpp" line="123"/>
         <source>Close</source>
         <translation></translation>
     </message>
@@ -778,82 +962,77 @@ from 2 Gb</source>
 <context>
     <name>Ui::OnboardingView</name>
     <message>
-        <location filename="../ui/onboarding/onboarding_view.cpp" line="291"/>
+        <location filename="../ui/onboarding/onboarding_view.cpp" line="303"/>
         <source>Choose preferred language</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../ui/onboarding/onboarding_view.cpp" line="292"/>
-        <source>Use system locale settings</source>
-        <translation></translation>
-    </message>
-    <message>
-        <location filename="../ui/onboarding/onboarding_view.cpp" line="293"/>
+        <location filename="../ui/onboarding/onboarding_view.cpp" line="304"/>
         <source>Did not find your preffered language? Read how you can add it yourself.</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../ui/onboarding/onboarding_view.cpp" line="294"/>
+        <location filename="../ui/onboarding/onboarding_view.cpp" line="305"/>
         <source>Continue</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../ui/onboarding/onboarding_view.cpp" line="295"/>
+        <location filename="../ui/onboarding/onboarding_view.cpp" line="306"/>
         <source>Skip onboarding</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../ui/onboarding/onboarding_view.cpp" line="297"/>
+        <location filename="../ui/onboarding/onboarding_view.cpp" line="308"/>
         <source>Choose application theme</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../ui/onboarding/onboarding_view.cpp" line="298"/>
+        <location filename="../ui/onboarding/onboarding_view.cpp" line="309"/>
         <source>Dark &amp; light theme</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../ui/onboarding/onboarding_view.cpp" line="299"/>
+        <location filename="../ui/onboarding/onboarding_view.cpp" line="310"/>
         <source>Modern theme which combines dark and light colors for better concentration on the documents you work.</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../ui/onboarding/onboarding_view.cpp" line="300"/>
+        <location filename="../ui/onboarding/onboarding_view.cpp" line="311"/>
         <source>Dark theme</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../ui/onboarding/onboarding_view.cpp" line="301"/>
+        <location filename="../ui/onboarding/onboarding_view.cpp" line="312"/>
         <source>Theme is more suitable for work in dimly lit rooms, and also in the evening or night.</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../ui/onboarding/onboarding_view.cpp" line="302"/>
+        <location filename="../ui/onboarding/onboarding_view.cpp" line="313"/>
         <source>Light theme</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../ui/onboarding/onboarding_view.cpp" line="303"/>
+        <location filename="../ui/onboarding/onboarding_view.cpp" line="314"/>
         <source>Theme is convenient for work with sufficient light.</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../ui/onboarding/onboarding_view.cpp" line="304"/>
+        <location filename="../ui/onboarding/onboarding_view.cpp" line="315"/>
         <source>Setup size of the user interface elements</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../ui/onboarding/onboarding_view.cpp" line="305"/>
+        <location filename="../ui/onboarding/onboarding_view.cpp" line="316"/>
         <source>small</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../ui/onboarding/onboarding_view.cpp" line="306"/>
+        <location filename="../ui/onboarding/onboarding_view.cpp" line="317"/>
         <source>big</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../ui/onboarding/onboarding_view.cpp" line="307"/>
+        <location filename="../ui/onboarding/onboarding_view.cpp" line="318"/>
         <source>Start writing</source>
         <translation></translation>
     </message>
@@ -978,106 +1157,233 @@ from 2 Gb</source>
 <context>
     <name>Ui::SettingsView</name>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="68"/>
+        <location filename="../ui/settings/settings_view.cpp" line="298"/>
+        <source>Choose the folder where backups will be saved</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ui/settings/settings_view.cpp" line="380"/>
         <source>Dark</source>
-        <translation></translation>
+        <comment>Theme, will be used in case &quot;Theme: Dark&quot;</comment>
+        <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="71"/>
+        <location filename="../ui/settings/settings_view.cpp" line="383"/>
         <source>Light</source>
-        <translation></translation>
+        <comment>Theme, will be used in case &quot;Theme: Light&quot;</comment>
+        <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="74"/>
+        <location filename="../ui/settings/settings_view.cpp" line="386"/>
         <source>Dark and light</source>
-        <translation></translation>
+        <comment>Theme, will be used in case &quot;Theme: Dark and light&quot;</comment>
+        <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="77"/>
+        <location filename="../ui/settings/settings_view.cpp" line="389"/>
         <source>Custom</source>
-        <translation></translation>
+        <comment>Theme, will be used in case &quot;Theme: Custom&quot;</comment>
+        <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="377"/>
+        <location filename="../ui/settings/settings_view.cpp" line="418"/>
         <source>Application settings</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="378"/>
+        <location filename="../ui/settings/settings_view.cpp" line="419"/>
         <source>Language</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="380"/>
+        <location filename="../ui/settings/settings_view.cpp" line="420"/>
         <source>Spell check</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="381"/>
+        <location filename="../ui/settings/settings_view.cpp" line="421"/>
         <source>Spelling dictionary</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="382"/>
+        <location filename="../ui/settings/settings_view.cpp" line="422"/>
         <source>User interface</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="383"/>
+        <location filename="../ui/settings/settings_view.cpp" line="423"/>
         <source>Theme</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="385"/>
+        <location filename="../ui/settings/settings_view.cpp" line="424"/>
         <source>Size of the user interface elements:</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="386"/>
+        <location filename="../ui/settings/settings_view.cpp" line="425"/>
         <source>small</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="387"/>
+        <location filename="../ui/settings/settings_view.cpp" line="426"/>
         <source>big</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="388"/>
+        <location filename="../ui/settings/settings_view.cpp" line="427"/>
         <source>Save changes &amp; backups</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="389"/>
+        <location filename="../ui/settings/settings_view.cpp" line="428"/>
         <source>Automatically save changes as soon as possible</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="390"/>
+        <location filename="../ui/settings/settings_view.cpp" line="429"/>
         <source>Autosave works very accurately.
 It saves the project every 3 seconds if you do not use your mouse or keyboard.
 If you work with no interruptions it saves the project every 3 minutes.</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="393"/>
+        <location filename="../ui/settings/settings_view.cpp" line="432"/>
         <source>Save backups</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="394"/>
+        <location filename="../ui/settings/settings_view.cpp" line="433"/>
         <source>Backups folder path</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="396"/>
+        <location filename="../ui/settings/settings_view.cpp" line="435"/>
         <source>Components</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="398"/>
+        <location filename="../ui/settings/settings_view.cpp" line="437"/>
         <source>Shortcuts</source>
         <translation></translation>
+    </message>
+</context>
+<context>
+    <name>Ui::ThemeDialog</name>
+    <message>
+        <location filename="../ui/settings/theme_dialog.cpp" line="223"/>
+        <source>Entered HASH has incorrect length</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ui/settings/theme_dialog.cpp" line="233"/>
+        <source>Entered HASH has invalid colors</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ui/settings/theme_dialog.cpp" line="242"/>
+        <source>Entered HASH has too much equal colors</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ui/settings/theme_dialog.cpp" line="275"/>
+        <source>Change application theme</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ui/settings/theme_dialog.cpp" line="277"/>
+        <source>Dark and light</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ui/settings/theme_dialog.cpp" line="278"/>
+        <source>Dark</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ui/settings/theme_dialog.cpp" line="279"/>
+        <source>Light</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ui/settings/theme_dialog.cpp" line="280"/>
+        <source>Create your own color theme of the application</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ui/settings/theme_dialog.cpp" line="281"/>
+        <source>primary</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ui/settings/theme_dialog.cpp" line="282"/>
+        <source>on primary</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ui/settings/theme_dialog.cpp" line="283"/>
+        <source>secondary</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ui/settings/theme_dialog.cpp" line="284"/>
+        <source>on secondary</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ui/settings/theme_dialog.cpp" line="285"/>
+        <source>background</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ui/settings/theme_dialog.cpp" line="286"/>
+        <source>on background</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ui/settings/theme_dialog.cpp" line="287"/>
+        <source>surface</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ui/settings/theme_dialog.cpp" line="288"/>
+        <source>on surface</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ui/settings/theme_dialog.cpp" line="289"/>
+        <source>error</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ui/settings/theme_dialog.cpp" line="290"/>
+        <source>on error</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ui/settings/theme_dialog.cpp" line="291"/>
+        <source>shadow</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ui/settings/theme_dialog.cpp" line="292"/>
+        <source>primary dark</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ui/settings/theme_dialog.cpp" line="294"/>
+        <source>Theme HASH</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ui/settings/theme_dialog.cpp" line="295"/>
+        <source>Copy theme HASH to share your custom theme with others, or paste HASH here to apply it</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ui/settings/theme_dialog.cpp" line="297"/>
+        <source>Close</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>

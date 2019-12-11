@@ -185,6 +185,7 @@ void AccountManager::completeLogout()
     setAccountParameters(0, {}, 0, true, {}, {});
     removeAvatar();
 
+    emit cloudProjectsCreationAvailabilityChanged(false, false);
     emit closeAccountRequested();
 }
 
@@ -198,6 +199,12 @@ void AccountManager::setAccountParameters(qint64 _availableSpace, const QString&
     setUserName(_userName);
     setReceiveEmailNotifications(_receiveEmailNotifications);
     setAvatar(_avatar);
+
+    //
+    // TODO
+    //
+    bool _subscriptionIsActive = false;
+    emit cloudProjectsCreationAvailabilityChanged(true, _subscriptionIsActive);
 }
 
 void AccountManager::setPaymentInfo(const PaymentInfo& _info)

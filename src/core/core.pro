@@ -7,7 +7,7 @@
 TEMPLATE = lib
 
 CONFIG += plugin c++1z
-QT += widgets sql
+QT += widgets sql xml
 
 TARGET = $$qtLibraryTarget(coreplugin)
 
@@ -21,6 +21,7 @@ DESTDIR = ../_build/plugins
 INCLUDEPATH += ..
 
 SOURCES += \
+    business_layer/import/abstract_importer.cpp \
     data_layer/database.cpp \
     data_layer/mapper/mapper_facade.cpp \
     data_layer/mapper/settings_mapper.cpp \
@@ -28,6 +29,8 @@ SOURCES += \
     data_layer/storage/storage_facade.cpp \
     domain/domain_object.cpp \
     domain/identifier.cpp \
+    domain/item_object.cpp \
+    domain/items_builder.cpp \
     domain/project.cpp \
     management_layer/application_manager.cpp \
     management_layer/content/account/account_manager.cpp \
@@ -67,7 +70,9 @@ SOURCES += \
     ui/widgets/circular_progress_bar/circular_progress_bar.cpp \
     ui/widgets/combo_box/combo_box.cpp \
     ui/widgets/dialog/abstract_dialog.cpp \
+    ui/widgets/dialog/dialog.cpp \
     ui/widgets/dialog/dialog_content.cpp \
+    ui/widgets/dialog/standard_dialog.cpp \
     ui/widgets/drawer/drawer.cpp \
     ui/widgets/floating_tool_bar/floating_tool_bar.cpp \
     ui/widgets/label/label.cpp \
@@ -103,6 +108,7 @@ SOURCES += \
     utils/tools/debouncer.cpp
 
 HEADERS += \
+    business_layer/import/abstract_importer.h \
     core_global.h \
     custom_events.h \
     data_layer/database.h \
@@ -112,6 +118,8 @@ HEADERS += \
     data_layer/storage/storage_facade.h \
     domain/domain_object.h \
     domain/identifier.h \
+    domain/item_object.h \
+    domain/items_builder.h \
     domain/project.h \
     management_layer/application_manager.h \
     management_layer/content/account/account_manager.h \
@@ -151,7 +159,9 @@ HEADERS += \
     ui/widgets/circular_progress_bar/circular_progress_bar.h \
     ui/widgets/combo_box/combo_box.h \
     ui/widgets/dialog/abstract_dialog.h \
+    ui/widgets/dialog/dialog.h \
     ui/widgets/dialog/dialog_content.h \
+    ui/widgets/dialog/standard_dialog.h \
     ui/widgets/drawer/drawer.h \
     ui/widgets/floating_tool_bar/floating_tool_bar.h \
     ui/widgets/label/label.h \

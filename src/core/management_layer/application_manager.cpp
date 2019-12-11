@@ -19,6 +19,7 @@
 #include <ui/menu_view.h>
 
 #include <ui/design_system/design_system.h>
+#include <ui/widgets/dialog/dialog.h>
 
 #include <utils/3rd_party/WAF/Animation/Animation.h>
 
@@ -96,6 +97,43 @@ public:
      */
     void setScaleFactor(qreal _scaleFactor);
 
+    //
+    // Работа с проектом
+    //
+
+    /**
+     * @brief Настроить состояние приложения сохранены ли все изменения или нет
+     */
+    void markChangesSaved(bool _saved);
+
+    /**
+     * @brief Сохранить изменения проекта
+     */
+    void saveChanges();
+
+    /**
+     * @brief Если проект был изменён, но не сохранён предложить пользователю сохранить его
+     * @param _callback - метод, который будет вызван, если пользователь хочет (Да),
+     *        или не хочет (Нет) сохранять и не будет вызван, если пользователь передумал (Отмена)
+     */
+    void saveIfNeeded(std::function<void()> _callback);
+
+    /**
+     * @brief Создать проект
+     */
+    void createProject();
+
+    //
+
+    /**
+     * @brief Выйти из приложения
+     */
+    void exit();
+
+
+    //
+    // Данные
+    //
 
     ApplicationManager* q = nullptr;
 
@@ -309,6 +347,98 @@ void ApplicationManager::Implementation::setScaleFactor(qreal _scaleFactor)
     QApplication::postEvent(q, new DesignSystemChangeEvent);
 }
 
+void ApplicationManager::Implementation::markChangesSaved(bool _saved)
+{
+    const QString suffix = QApplication::translate("ManagementLayer::ApplicationManager", " - changed");
+    if (_saved
+        && applicationView->windowTitle().endsWith(suffix)) {
+        applicationView->setWindowTitle(applicationView->windowTitle().remove(suffix));
+    } else if (!_saved
+               && !applicationView->windowTitle().endsWith(suffix)) {
+        applicationView->setWindowTitle(applicationView->windowTitle() + suffix);
+    }
+
+    applicationView->setWindowModified(!_saved);
+}
+
+void ApplicationManager::Implementation::saveChanges()
+{
+    //
+    // TODO: Сохранение, все дела
+    //
+    projectsManager->saveProjects();
+
+    markChangesSaved(true);
+}
+
+void ApplicationManager::Implementation::saveIfNeeded(std::function<void()> _callback)
+{
+    if (!applicationView->isWindowModified()) {
+        _callback();
+        return;
+    }
+
+    const int kCancelButtonId = 0;
+    const int kNoButtonId = 1;
+    const int kYesButtonId = 2;
+    auto dialog = new Dialog(applicationView);
+    dialog->showDialog({},
+                       tr("Project was modified. Save changes?"),
+                       {{ kCancelButtonId, tr("Cancel") },
+                        { kNoButtonId, tr("Don't save") },
+                        { kYesButtonId, tr("Save") }});
+    QObject::connect(dialog, &Dialog::finished,
+                     [this, dialog, _callback] (const Dialog::ButtonInfo& _buttonInfo)
+    {
+        dialog->hideDialog();
+
+        //
+        // Пользователь передумал сохранять
+        //
+        if (_buttonInfo.id == kCancelButtonId) {
+            return;
+        }
+
+        //
+        // Пользователь не хочет сохранять изменения
+        //
+        if (_buttonInfo.id == kNoButtonId) {
+            markChangesSaved(true);
+        }
+        //
+        // ... пользователь хочет сохранить изменения перед следующим действием
+        //
+        else {
+            saveChanges();
+        }
+
+        _callback();
+    });
+    QObject::connect(dialog, &Dialog::disappeared, dialog, &Dialog::deleteLater);
+}
+
+void ApplicationManager::Implementation::createProject()
+{
+    saveIfNeeded(std::bind(&ProjectsManager::createProject, projectsManager.data()));
+}
+
+void ApplicationManager::Implementation::exit()
+{
+    //
+    // Сохраняем состояние приложения
+    //
+    DataStorageLayer::StorageFacade::settingsStorage()->setValues(
+                DataStorageLayer::kApplicationViewStateKey,
+                applicationView->saveState(),
+                DataStorageLayer::SettingsStorage::SettingsPlace::Application);
+
+    //
+    // Выходим
+    //
+    QApplication::processEvents();
+    QApplication::quit();
+}
+
 template<typename Manager>
 void ApplicationManager::Implementation::saveLastContent(Manager* _manager)
 {
@@ -415,27 +545,10 @@ void ApplicationManager::initConnections()
     //
     connect(d->applicationView, &Ui::ApplicationView::closeRequested, this, [this]
     {
-        //
-        // TODO: Сохранение, все дела
-        //
-        d->projectsManager->saveProjects();
-
-        //
-        // Сохраняем состояние приложения
-        //
-        DataStorageLayer::StorageFacade::settingsStorage()->setValues(
-                    DataStorageLayer::kApplicationViewStateKey,
-                    d->applicationView->saveState(),
-                    DataStorageLayer::SettingsStorage::SettingsPlace::Application);
-
-        //
-        // Выходим
-        //
-        QApplication::processEvents();
-        QApplication::quit();
+        d->saveIfNeeded(std::bind(&ApplicationManager::Implementation::exit, d.get()));
     });
     connect(d->menuView, &Ui::MenuView::projectsPressed, this, [this] { d->showProjects(); });
-    connect(d->menuView, &Ui::MenuView::createProjectPressed, d->projectsManager.data(), &ProjectsManager::createProject);
+    connect(d->menuView, &Ui::MenuView::createProjectPressed, this, [this] { d->createProject(); });
     connect(d->menuView, &Ui::MenuView::settingsPressed, this, [this] { d->showSettings(); });
 
     //
@@ -475,11 +588,14 @@ void ApplicationManager::initConnections()
         d->accountManager->accountBar()->show();
         d->showLastContent();
     });
+    connect(d->accountManager.data(), &AccountManager::cloudProjectsCreationAvailabilityChanged,
+            d->projectsManager.data(), &ProjectsManager::setProjectsInCloudCanBeCreated);
 
     //
     // Менеджер проектов
     //
     connect(d->projectsManager.data(), &ProjectsManager::menuRequested, this, [this] { d->showMenu(); });
+    connect(d->projectsManager.data(), &ProjectsManager::createProjectRequested, this, [this] { d->createProject(); });
 
     //
     // Менеджер настроек

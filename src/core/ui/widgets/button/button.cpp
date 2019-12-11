@@ -255,13 +255,13 @@ void Button::paintEvent(QPaintEvent* _event)
 
 void Button::enterEvent(QEvent* _event)
 {
-    Q_UNUSED(_event);
+    Q_UNUSED(_event)
     d->animateHoverIn();
 }
 
 void Button::leaveEvent(QEvent* _event)
 {
-    Q_UNUSED(_event);
+    Q_UNUSED(_event)
     d->animateHoverOut();
 }
 
@@ -274,7 +274,7 @@ void Button::mousePressEvent(QMouseEvent* _event)
 
 void Button::mouseReleaseEvent(QMouseEvent* _event)
 {
-    Q_UNUSED(_event);
+    Q_UNUSED(_event)
 
     if (!rect().contains(_event->pos())) {
         return;

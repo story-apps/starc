@@ -32,6 +32,11 @@ public:
     void saveProjects();
 
     /**
+     * @brief Можно ли создавать проекты в облаке
+     */
+    void setProjectsInCloudCanBeCreated(bool _authorized, bool _ableToCreate);
+
+    /**
      * @brief Создать проект
      */
     void createProject();
@@ -41,6 +46,11 @@ signals:
      * @brief Запрос на отображение меню
      */
     void menuRequested();
+
+    /**
+     * @brief Пользователь хочет создать проект
+     */
+    void createProjectRequested();
 
 private:
     class Implementation;

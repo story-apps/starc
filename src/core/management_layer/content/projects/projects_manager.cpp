@@ -42,6 +42,9 @@ public:
     Ui::ProjectsToolBar* toolBar = nullptr;
     Ui::ProjectsNavigator* navigator = nullptr;
     Ui::ProjectsView* view = nullptr;
+
+    bool isUserAuthorized = false;
+    bool canCreateCloudProject = false;
 };
 
 ProjectsManager::Implementation::Implementation(QWidget* _parent)
@@ -68,9 +71,9 @@ ProjectsManager::ProjectsManager(QObject* _parent, QWidget* _parentWidget)
       d(new Implementation(_parentWidget))
 {
     connect(d->toolBar, &Ui::ProjectsToolBar::menuPressed, this, &ProjectsManager::menuRequested);
-    connect(d->navigator, &Ui::ProjectsNavigator::createProjectPressed, this, &ProjectsManager::createProject);
+    connect(d->navigator, &Ui::ProjectsNavigator::createProjectPressed, this, &ProjectsManager::createProjectRequested);
 
-    connect(d->view, &Ui::ProjectsView::createProjectPressed, this, &ProjectsManager::createProject);
+    connect(d->view, &Ui::ProjectsView::createProjectPressed, this, &ProjectsManager::createProjectRequested);
     connect(d->view, &Ui::ProjectsView::hideProjectRequested, this, [this] (const Domain::Project& _project) {
         d->projects->remove(_project);
     });
@@ -143,9 +146,16 @@ void ProjectsManager::saveProjects()
                 DataStorageLayer::SettingsStorage::SettingsPlace::Application);
 }
 
+void ProjectsManager::setProjectsInCloudCanBeCreated(bool _authorized, bool _ableToCreate)
+{
+    d->isUserAuthorized = _authorized;
+    d->canCreateCloudProject = _ableToCreate;
+}
+
 void ProjectsManager::createProject()
 {
     Ui::CreateProjectDialog* dlg = new Ui::CreateProjectDialog(d->topLevelWidget);
+    dlg->configureCloudProjectCreationAbility(d->isUserAuthorized, d->canCreateCloudProject);
     dlg->showDialog();
     connect(dlg, &Ui::CreateProjectDialog::disappeared, dlg, &Ui::CreateProjectDialog::deleteLater);
 }

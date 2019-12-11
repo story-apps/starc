@@ -26,6 +26,11 @@ public:
      */
     void hideDialog();
 
+    /**
+     * @brief Задать максимальную ширину контента диалога
+     */
+    void setContentMaximumWidth(int _width);
+
 protected:
     /**
      * @brief Установить заголовок диалога
