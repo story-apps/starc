@@ -84,6 +84,10 @@ SettingsStorage::Implementation::Implementation()
     defaultValues.insert(kApplicationSaveBackupsKey, true);
     defaultValues.insert(kApplicationBackupsFolderKey,
         QStandardPaths::writableLocation(QStandardPaths::DocumentsLocation) + "/starc/backups");
+    defaultValues.insert(kProjectSaveFolderKey,
+        QStandardPaths::writableLocation(QStandardPaths::DocumentsLocation) + "/starc/projects");
+    defaultValues.insert(kProjectImportFolderKey,
+        QStandardPaths::writableLocation(QStandardPaths::DownloadLocation));
 
     defaultValues.insert(kSystemUsernameKey, systemUserName());
 }

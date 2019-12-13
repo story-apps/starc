@@ -26,7 +26,12 @@ public:
     /**
      * @brief Запуск приложения
      */
-    void exec() final;
+    void exec(const QString& _fileToOpenPath) override final;
+
+    /**
+     * @brief Открытие файла
+     */
+    void openProject(const QString& _path) override final;
 
 protected:
     /**

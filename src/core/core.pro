@@ -105,7 +105,8 @@ SOURCES += \
     utils/helpers/image_helper.cpp \
     utils/helpers/text_helper.cpp \
     utils/helpers/quotes_helper.cpp \
-    utils/tools/debouncer.cpp
+    utils/tools/debouncer.cpp \
+    utils/tools/run_once.cpp
 
 HEADERS += \
     business_layer/import/abstract_importer.h \
@@ -198,6 +199,7 @@ HEADERS += \
     utils/helpers/text_helper.h \
     utils/helpers/quotes_helper.h \
     utils/tools/debouncer.h \
+    utils/tools/run_once.h \
     utils/validators/email_validator.h
 
 unix {

@@ -1,7 +1,5 @@
 #include "application_manager.h"
 
-#include "custom_events.h"
-
 #include "content/account/account_manager.h"
 #include "content/onboarding/onboarding_manager.h"
 #include "content/projects/projects_manager.h"
@@ -10,6 +8,8 @@
 #ifdef CLOUD_SERVICE_MANAGER
 #include <cloud/cloud_service_manager.h>
 #endif
+
+#include <include/custom_events.h>
 
 #include <data_layer/storage/settings_storage.h>
 #include <data_layer/storage/storage_facade.h>
@@ -46,6 +46,11 @@ public:
      */
     QVariant settingsValue(const QString& _key) const;
     QVariantMap settingsValues(const QString& _key) const;
+
+    /**
+     * @brief Настроить параметры автосохранения
+     */
+    void configureAutoSave();
 
     /**
      * @brief Показать контент приложения
@@ -153,6 +158,8 @@ public:
     QScopedPointer<CloudServiceManager> cloudServiceManager;
 #endif
 
+    QTimer autosaveTimer;
+
 private:
     template<typename Manager>
     void saveLastContent(Manager* _manager);
@@ -195,6 +202,17 @@ QVariantMap ApplicationManager::Implementation::settingsValues(const QString& _k
 {
     return DataStorageLayer::StorageFacade::settingsStorage()->values(
                 _key, DataStorageLayer::SettingsStorage::SettingsPlace::Application);
+}
+
+void ApplicationManager::Implementation::configureAutoSave()
+{
+    autosaveTimer.stop();
+    autosaveTimer.disconnect();
+
+    if (settingsValue(DataStorageLayer::kApplicationUseAutoSaveKey).toBool()) {
+        QObject::connect(&autosaveTimer, &QTimer::timeout, [this] { saveChanges(); });
+        autosaveTimer.start(std::chrono::minutes{3});
+    }
 }
 
 void ApplicationManager::Implementation::showContent()
@@ -474,7 +492,7 @@ ApplicationManager::ApplicationManager(QObject* _parent)
 
 ApplicationManager::~ApplicationManager() = default;
 
-void ApplicationManager::exec()
+void ApplicationManager::exec(const QString& _fileToOpenPath)
 {
     //
     // Установим размер экрана по-умолчанию, на случай, если это первый запуск
@@ -495,15 +513,39 @@ void ApplicationManager::exec()
     d->applicationView->show();
 
     //
-    // Показываем содержимое, после того, как на экране отображится приложения,
-    // чтобы у пользователя возник эффект моментального запуска
+    // Осуществляем остальную настройку и показываем содержимое, после того, как на экране
+    // отобразится приложение, чтобы у пользователя возник эффект моментального запуска
     //
-    QTimer::singleShot(0, this, [this] {
+    QTimer::singleShot(0, this, [this, _fileToOpenPath] {
+        //
+        // Настройка
+        //
+        d->configureAutoSave();
+
+        //
+        // Отображение
+        //
         d->showContent();
+
 #ifdef CLOUD_SERVICE_MANAGER
+        //
+        // Запуск облачного сервиса
+        //
         d->cloudServiceManager->start();
 #endif
+
+        //
+        // Открыть заданный проект
+        //
+        openProject(_fileToOpenPath);
     });
+}
+
+void ApplicationManager::openProject(const QString& _path)
+{
+    if (_path.isEmpty()) {
+        return;
+    }
 }
 
 bool ApplicationManager::event(QEvent* _event)
@@ -511,9 +553,11 @@ bool ApplicationManager::event(QEvent* _event)
     switch (static_cast<int>(_event->type())) {
         case static_cast<QEvent::Type>(EventType::IdleEvent): {
             //
-            // Этот слот нельзя вызывать напрямую, иначе падаем с assert на iOS
+            // Сохраняем только если пользователь желает делать это автоматически
             //
-//            QTimer::singleShot(0, this, &ApplicationManager::saveCurrentProject);
+            if (d->autosaveTimer.isActive()) {
+                d->saveChanges();
+            }
 
             _event->accept();
             return true;
@@ -603,9 +647,9 @@ void ApplicationManager::initConnections()
     connect(d->settingsManager.data(), &SettingsManager::closeSettingsRequested, this, [this] {
         d->showLastContent();
     });
-    connect(d->settingsManager.data(), &SettingsManager::languageChanged, this,
+    connect(d->settingsManager.data(), &SettingsManager::applicationLanguageChanged, this,
             [this] (QLocale::Language _language) { d->setTranslation(_language); });
-    connect(d->settingsManager.data(), &SettingsManager::themeChanged, this,
+    connect(d->settingsManager.data(), &SettingsManager::applicationThemeChanged, this,
             [this] (Ui::ApplicationTheme _theme)
     {
         d->setTheme(_theme);
@@ -616,10 +660,12 @@ void ApplicationManager::initConnections()
             d->setCustomThemeColors(Ui::DesignSystem::Color(d->settingsValue(DataStorageLayer::kApplicationCustomThemeColorsKey).toString()));
         }
     });
-    connect(d->settingsManager.data(), &SettingsManager::customThemeColorsChanged, this,
+    connect(d->settingsManager.data(), &SettingsManager::applicationCustomThemeColorsChanged, this,
             [this] (const Ui::DesignSystem::Color& _color) { d->setCustomThemeColors(_color); });
-    connect(d->settingsManager.data(), &SettingsManager::scaleFactorChanged, this,
+    connect(d->settingsManager.data(), &SettingsManager::applicationScaleFactorChanged, this,
             [this] (qreal _scaleFactor) { d->setScaleFactor(_scaleFactor); });
+    connect(d->settingsManager.data(), &SettingsManager::applicationUseAutoSaveChanged, this,
+            [this] { d->configureAutoSave(); });
 
 #ifdef CLOUD_SERVICE_MANAGER
     //

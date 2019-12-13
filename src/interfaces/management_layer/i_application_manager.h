@@ -2,6 +2,8 @@
 
 #include <QtPlugin>
 
+class QString;
+
 namespace ManagementLayer
 {
 
@@ -16,7 +18,12 @@ public:
     /**
      * @brief Запустить приложение
      */
-    virtual void exec() = 0;
+    virtual void exec(const QString& _fileToOpenPath) = 0;
+
+    /**
+     * @brief Открыть проект по заданному пути
+     */
+    virtual void openProject(const QString& _path) = 0;
 };
 
 } // namespace ManagementLayer

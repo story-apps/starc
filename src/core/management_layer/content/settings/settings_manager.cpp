@@ -1,6 +1,6 @@
 #include "settings_manager.h"
 
-#include <custom_events.h>
+#include <include/custom_events.h>
 
 #include <data_layer/storage/settings_storage.h>
 #include <data_layer/storage/storage_facade.h>
@@ -100,7 +100,7 @@ SettingsManager::SettingsManager(QObject* _parent, QWidget* _parentWidget)
         auto dialog = new Ui::LanguageDialog(_parentWidget);
         dialog->setCurrentLanguage(QLocale().language());
         dialog->showDialog();
-        connect(dialog, &Ui::LanguageDialog::languageChanged, this, &SettingsManager::languageChanged);
+        connect(dialog, &Ui::LanguageDialog::languageChanged, this, &SettingsManager::applicationLanguageChanged);
         connect(dialog, &Ui::LanguageDialog::languageChanged, this, &SettingsManager::setApplicationLanguage);
         connect(dialog, &Ui::LanguageDialog::disappeared, dialog, &Ui::LanguageDialog::deleteLater);
     });
@@ -108,19 +108,26 @@ SettingsManager::SettingsManager(QObject* _parent, QWidget* _parentWidget)
         auto dialog = new Ui::ThemeDialog(_parentWidget);
         dialog->setCurrentTheme(Ui::DesignSystem::theme());
         dialog->showDialog();
-        connect(dialog, &Ui::ThemeDialog::themeChanged, this, &SettingsManager::themeChanged);
+        connect(dialog, &Ui::ThemeDialog::themeChanged, this, &SettingsManager::applicationThemeChanged);
         connect(dialog, &Ui::ThemeDialog::themeChanged, this, &SettingsManager::setApplicationTheme);
-        connect(dialog, &Ui::ThemeDialog::customThemeColorsChanged, this, &SettingsManager::customThemeColorsChanged);
+        connect(dialog, &Ui::ThemeDialog::customThemeColorsChanged, this, &SettingsManager::applicationCustomThemeColorsChanged);
         connect(dialog, &Ui::ThemeDialog::customThemeColorsChanged, this, &SettingsManager::setApplicationCustomThemeColors);
         connect(dialog, &Ui::ThemeDialog::disappeared, dialog, &Ui::ThemeDialog::deleteLater);
     });
     connect(d->view, &Ui::SettingsView::applicationUseSpellCheckerChanged, this, &SettingsManager::setApplicationUseSpellChecker);
     connect(d->view, &Ui::SettingsView::applicationSpellCheckerLanguageChanged, this, &SettingsManager::setApplicationSpellCheckerLanguage);
-    connect(d->view, &Ui::SettingsView::applicationScaleFactorChanged, this, &SettingsManager::scaleFactorChanged);
     connect(d->view, &Ui::SettingsView::applicationScaleFactorChanged, this, &SettingsManager::setApplicationScaleFactor);
     connect(d->view, &Ui::SettingsView::applicationUseAutoSaveChanged, this, &SettingsManager::setApplicationUseAutoSave);
     connect(d->view, &Ui::SettingsView::applicationSaveBackupsChanged, this, &SettingsManager::setApplicationSaveBackups);
     connect(d->view, &Ui::SettingsView::applicationBackupsFolderChanged, this, &SettingsManager::setApplicationBackupsFolder);
+
+    //
+    // Нотификации об изменении параметров
+    //
+    connect(d->view, &Ui::SettingsView::applicationScaleFactorChanged, this, &SettingsManager::applicationScaleFactorChanged);
+    connect(d->view, &Ui::SettingsView::applicationUseAutoSaveChanged, this, &SettingsManager::applicationUseAutoSaveChanged);
+    connect(d->view, &Ui::SettingsView::applicationSaveBackupsChanged, this, &SettingsManager::applicationSaveBackupsChanged);
+    connect(d->view, &Ui::SettingsView::applicationBackupsFolderChanged, this, &SettingsManager::applicationBackupsFolderChanged);
 }
 
 SettingsManager::~SettingsManager() = default;

@@ -9,10 +9,11 @@ namespace DataStorageLayer
 {
 
 namespace {
-    // верхнеуровневые ключи
+    //
+    // Приложение
+    //
     const QString kApplicationGroupKey = "application";
-    const QString kSystemGroupKey = "system";
-
+    //
     // первый запуск приложения (false) или оно уже сконфигурировано (true)
     const QString kApplicationConfiguredKey = kApplicationGroupKey + "/configured";
     // язык приложения
@@ -35,7 +36,24 @@ namespace {
     const QString kApplicationSaveBackupsKey = kApplicationGroupKey + "/save-backups";
     // папка в которую будут сохраняться резервные копии
     const QString kApplicationBackupsFolderKey = kApplicationGroupKey + "/backups-folder";
+    // список недавних проектов
+    const QString kApplicationProjectsKey = kApplicationGroupKey + "/projects";
 
+    //
+    // Проект
+    //
+    const QString kProjectKey = "project";
+    //
+    // папка сохранения проектов
+    const QString kProjectSaveFolderKey = kProjectKey + "/save-folder";
+    // папка импорта проектов
+    const QString kProjectImportFolderKey = kProjectKey + "/import-folder";
+
+    //
+    // Система
+    //
+    const QString kSystemGroupKey = "system";
+    //
     // системное имя пользователя
     const QString kSystemUsernameKey = kSystemGroupKey + "/username";
 }

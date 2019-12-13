@@ -26,12 +26,12 @@ public:
     explicit Implementation(QWidget* _parent);
 
     TextField* projectName = nullptr;
-    RadioButton* localProjectButton = nullptr;
-    RadioButton* cloudProjectButton = nullptr;
+    RadioButton* localProject = nullptr;
+    RadioButton* cloudProject = nullptr;
     Body1Label* cloudProjectCreationNote = nullptr;
     Body1LinkLabel* cloudProjectCreationAction = nullptr;
     Body1Label* cloudProjectCreationActionNote = nullptr;
-    TextField* projectFilePath = nullptr;
+    TextField* projectFolder = nullptr;
     TextField* importFilePath = nullptr;
     QString importFolder;
 
@@ -43,20 +43,20 @@ public:
 
 CreateProjectDialog::Implementation::Implementation(QWidget* _parent)
     : projectName(new TextField(_parent)),
-      localProjectButton(new RadioButton(_parent)),
-      cloudProjectButton(new RadioButton(_parent)),
+      localProject(new RadioButton(_parent)),
+      cloudProject(new RadioButton(_parent)),
       cloudProjectCreationNote(new Body1Label(_parent)),
       cloudProjectCreationAction(new Body1LinkLabel(_parent)),
       cloudProjectCreationActionNote(new Body1Label(_parent)),
-      projectFilePath(new TextField(_parent)),
+      projectFolder(new TextField(_parent)),
       importFilePath(new TextField(_parent)),
       advancedSettingsButton(new ToggleButton(_parent)),
       cancelButton(new Button(_parent)),
       createButton(new Button(_parent))
 {
-    localProjectButton->setChecked(true);
+    localProject->setChecked(true);
 
-    projectFilePath->setTrailingIcon("\uf256");
+    projectFolder->setTrailingIcon("\uf256");
     importFilePath->setTrailingIcon("\uf256");
     advancedSettingsButton->setIcon("\uf493");
 
@@ -69,10 +69,10 @@ CreateProjectDialog::Implementation::Implementation(QWidget* _parent)
     buttonsLayout->addWidget(createButton);
 
     RadioButtonGroup* projectLocationGroup = new RadioButtonGroup(_parent);
-    projectLocationGroup->add(localProjectButton);
-    projectLocationGroup->add(cloudProjectButton);
+    projectLocationGroup->add(localProject);
+    projectLocationGroup->add(cloudProject);
 
-    projectFilePath->hide();
+    projectFolder->hide();
     importFilePath->hide();
 }
 
@@ -87,30 +87,33 @@ CreateProjectDialog::CreateProjectDialog(QWidget* _parent)
     contentsLayout()->setContentsMargins({});
     contentsLayout()->setSpacing(0);
     contentsLayout()->addWidget(d->projectName, 0, 0, 1, 2);
-    contentsLayout()->addWidget(d->localProjectButton, 1, 0, 1, 2);
-    contentsLayout()->addWidget(d->cloudProjectButton, 2, 0, 1, 2);
+    contentsLayout()->addWidget(d->localProject, 1, 0, 1, 2);
+    contentsLayout()->addWidget(d->cloudProject, 2, 0, 1, 2);
     contentsLayout()->addWidget(d->cloudProjectCreationNote, 3, 0, 1, 2);
     contentsLayout()->addWidget(d->cloudProjectCreationActionNote, 4, 1);
     contentsLayout()->addWidget(d->cloudProjectCreationAction, 4, 0);
     contentsLayout()->setColumnStretch(1, 1);
-    contentsLayout()->addWidget(d->projectFilePath, 5, 0, 1, 2);
+    contentsLayout()->addWidget(d->projectFolder, 5, 0, 1, 2);
     contentsLayout()->addWidget(d->importFilePath, 6, 0, 1, 2);
     contentsLayout()->setRowStretch(7, 1);
     contentsLayout()->addLayout(d->buttonsLayout, 8, 0, 1, 2);
 
-    connect(d->localProjectButton, &RadioButton::checkedChanged, this, [this] (bool _checked) {
-        d->projectFilePath->setVisible(_checked && d->advancedSettingsButton->isChecked());
+    connect(d->projectName, &TextField::textChanged, this, [this] {
+        d->projectName->setError({});
+    });
+    connect(d->localProject, &RadioButton::checkedChanged, this, [this] (bool _checked) {
+        d->projectFolder->setVisible(_checked && d->advancedSettingsButton->isChecked());
     });
     connect(d->advancedSettingsButton, &ToggleButton::checkedChanged, this, [this] (bool _checked) {
-        d->projectFilePath->setVisible(_checked && d->localProjectButton->isChecked());
+        d->projectFolder->setVisible(_checked && d->localProject->isChecked());
         d->importFilePath->setVisible(_checked);
     });
-    connect(d->projectFilePath, &TextField::trailingIconPressed, this, [this] {
+    connect(d->projectFolder, &TextField::trailingIconPressed, this, [this] {
        const auto path
                = QFileDialog::getExistingDirectory(this,
-                    tr("Choose the folder where new story will be saved"), d->projectFilePath->text());
+                    tr("Choose the folder where new story will be saved"), d->projectFolder->text());
        if (!path.isEmpty()) {
-           d->projectFilePath->setText(path);
+           d->projectFolder->setText(path);
        }
     });
     connect(d->importFilePath, &TextField::trailingIconPressed, this, [this] {
@@ -135,8 +138,16 @@ CreateProjectDialog::CreateProjectDialog(QWidget* _parent)
        //
        d->importFilePath->setText(path);
     });
-    connect(d->createButton, &Button::clicked, this, &CreateProjectDialog::createProjectPressed);
     connect(d->cancelButton, &Button::clicked, this, &CreateProjectDialog::hideDialog);
+    connect(d->createButton, &Button::clicked, this, [this] {
+        if (d->projectName->text().isEmpty()) {
+            d->projectName->setError(tr("The story's name can't be empty. Fill it, please."));
+            d->projectName->setFocus();
+            return;
+        }
+
+        emit createProjectPressed();
+    });
 
     updateTranslations();
     designSystemChangeEvent(nullptr);
@@ -165,8 +176,8 @@ void CreateProjectDialog::configureCloudProjectCreationAbility(bool _isLogged, b
     //
     // Если пользователь не может создавать проект в облаке скроем переключатели хранения
     //
-    d->localProjectButton->hide();
-    d->cloudProjectButton->hide();
+    d->localProject->hide();
+    d->cloudProject->hide();
     //
     // ... и настроим подсказки
     //
@@ -184,6 +195,40 @@ void CreateProjectDialog::configureCloudProjectCreationAbility(bool _isLogged, b
     }
 }
 
+void CreateProjectDialog::setProjectFolder(const QString& _path)
+{
+    if (_path.isEmpty()) {
+        return;
+    }
+
+    d->projectFolder->setText(_path);
+}
+
+void CreateProjectDialog::setImportFolder(const QString& _path)
+{
+    d->importFolder = _path;
+}
+
+QString CreateProjectDialog::projectName() const
+{
+    return d->projectName->text();
+}
+
+bool CreateProjectDialog::isLocal() const
+{
+    return d->localProject->isChecked();
+}
+
+QString CreateProjectDialog::projectFolder() const
+{
+    return d->projectFolder->text();
+}
+
+QString CreateProjectDialog::importFilePath() const
+{
+    return d->importFilePath->text();
+}
+
 CreateProjectDialog::~CreateProjectDialog() = default;
 
 QWidget* CreateProjectDialog::focusedWidgetAfterShow() const
@@ -196,9 +241,9 @@ void CreateProjectDialog::updateTranslations()
     setTitle(tr("Create new story"));
 
     d->projectName->setLabel(tr("Enter name of the new story"));
-    d->localProjectButton->setText(tr("Place story on the local computer"));
-    d->cloudProjectButton->setText(tr("Place story on the cloud"));
-    d->projectFilePath->setLabel(tr("Location of the new story file"));
+    d->localProject->setText(tr("Place story on the local computer"));
+    d->cloudProject->setText(tr("Place story on the cloud"));
+    d->projectFolder->setLabel(tr("Location of the new story file"));
     d->importFilePath->setLabel(tr("Choose file with story to import"));
     d->cancelButton->setText(tr("Cancel"));
     d->createButton->setText(tr("Create"));
@@ -208,7 +253,7 @@ void CreateProjectDialog::designSystemChangeEvent(DesignSystemChangeEvent* _even
 {
     Q_UNUSED(_event)
 
-    for (auto widget : QVector<Widget*>{ d->localProjectButton, d->cloudProjectCreationNote, d->cloudProjectButton,
+    for (auto widget : QVector<Widget*>{ d->localProject, d->cloudProjectCreationNote, d->cloudProject,
                                          d->cloudProjectCreationAction,
                                          d->cloudProjectCreationActionNote,
                                          d->advancedSettingsButton}) {

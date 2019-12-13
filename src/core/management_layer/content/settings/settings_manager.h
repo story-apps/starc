@@ -37,24 +37,15 @@ signals:
     void closeSettingsRequested();
 
     /**
-     * @brief Пользователь изменил язык
+     * @brief Изменились параметры приложения
      */
-    void languageChanged(QLocale::Language _language);
-
-    /**
-     * @brief Пользователь выбрал тему приложения
-     */
-    void themeChanged(Ui::ApplicationTheme _theme);
-
-    /**
-     * @brief Пользователь изменил цвета кастомной темы
-     */
-    void customThemeColorsChanged(const Ui::DesignSystem::Color& _color);
-
-    /**
-     * @brief Пользователь изменил масштаб интерфейса
-     */
-    void scaleFactorChanged(qreal _scaleFactor);
+    void applicationLanguageChanged(QLocale::Language _language);
+    void applicationThemeChanged(Ui::ApplicationTheme _theme);
+    void applicationCustomThemeColorsChanged(const Ui::DesignSystem::Color& _color);
+    void applicationScaleFactorChanged(qreal _scaleFactor);
+    void applicationUseAutoSaveChanged(bool _use);
+    void applicationSaveBackupsChanged(bool _save);
+    void applicationBackupsFolderChanged(const QString& _path);
 
 protected:
     /**

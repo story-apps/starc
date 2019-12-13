@@ -1811,12 +1811,14 @@ public:
 
     QMarginsF margins = {24.0, 24.0, 24.0, 12.0};
     qreal minimumWidth = 420.0;
+    qreal infoMaximumWidth = 500.0;
 };
 
 DesignSystem::Dialog::Implementation::Implementation(qreal _scaleFactor)
 {
     margins *= _scaleFactor;
     minimumWidth *= _scaleFactor;
+    infoMaximumWidth *= _scaleFactor;
 }
 
 // **
@@ -1831,6 +1833,11 @@ const QMarginsF& DesignSystem::Dialog::margins() const
 qreal DesignSystem::Dialog::minimumWidth() const
 {
     return d->minimumWidth;
+}
+
+qreal DesignSystem::Dialog::infoMaximumWidth() const
+{
+    return d->infoMaximumWidth;
 }
 
 DesignSystem::Dialog::Dialog(qreal _scaleFactor)

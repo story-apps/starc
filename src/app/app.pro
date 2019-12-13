@@ -18,9 +18,11 @@ DESTDIR = ../_build/
 INCLUDEPATH += ..
 
 SOURCES += \
+        application.cpp \
         main.cpp
 
-HEADERS +=
+HEADERS += \
+    application.h
 
 # Default rules for deployment.
 qnx: target.path = /tmp/$${TARGET}/bin

@@ -21,13 +21,68 @@
 namespace ManagementLayer
 {
 
-namespace {
-    // верхнеуровневые ключи
-    const QString kApplicationGroupKey = "application";
-
-    // список недавних проектов
-    const QString kApplicationProjectsKey = kApplicationGroupKey + "/projects";
+QString Project::extension()
+{
+    return ".starc";
 }
+
+Project::Project(const QString& _name, const QString& _path, const QString& _lastEditDatetime) :
+    m_name(_name),
+    m_path(_path),
+    m_lastEditDatetime(_lastEditDatetime)
+{
+}
+
+bool Project::isValid() const
+{
+    return !m_name.isEmpty() && !m_path.isEmpty();
+}
+
+QString Project::name() const
+{
+    return m_name;
+}
+
+void Project::setName(const QString& _name)
+{
+    if (m_name != _name) {
+        m_name = _name;
+    }
+}
+
+QString Project::path() const
+{
+    return m_path;
+}
+
+void Project::setPath(const QString& _path)
+{
+    if (m_path != _path) {
+        m_path = _path;
+    }
+}
+
+QString Project::lastEditDatetime() const
+{
+    return m_lastEditDatetime;
+}
+
+void Project::setLastEditDatetime(const QString& _datetime)
+{
+    if (m_lastEditDatetime != _datetime) {
+        m_lastEditDatetime = _datetime;
+    }
+}
+
+
+bool operator==(const Project& _lhs, const Project& _rhs)
+{
+    return _lhs.path() == _rhs.path();
+}
+
+
+// ****
+
 
 class ProjectsManager::Implementation
 {
@@ -63,7 +118,7 @@ ProjectsManager::Implementation::Implementation(QWidget* _parent)
 }
 
 
-// ****
+// **
 
 
 ProjectsManager::ProjectsManager(QObject* _parent, QWidget* _parentWidget)
@@ -103,7 +158,8 @@ void ProjectsManager::loadProjects()
 {
     const auto projectsData
         = DataStorageLayer::StorageFacade::settingsStorage()->value(
-            kApplicationProjectsKey, DataStorageLayer::SettingsStorage::SettingsPlace::Application);
+              DataStorageLayer::kApplicationProjectsKey,
+              DataStorageLayer::SettingsStorage::SettingsPlace::Application);
     const auto projectsJson = QJsonDocument::fromBinaryData(QByteArray::fromHex(projectsData.toByteArray()));
     QVector<Domain::Project> projects;
     for (const auto projectJsonValue : projectsJson.array()) {
@@ -142,7 +198,8 @@ void ProjectsManager::saveProjects()
         projectsJson.append(projectJson);
     }
     DataStorageLayer::StorageFacade::settingsStorage()->setValue(
-        kApplicationProjectsKey, QJsonDocument(projectsJson).toBinaryData().toHex(),
+                DataStorageLayer::kApplicationProjectsKey,
+                QJsonDocument(projectsJson).toBinaryData().toHex(),
                 DataStorageLayer::SettingsStorage::SettingsPlace::Application);
 }
 
@@ -154,10 +211,37 @@ void ProjectsManager::setProjectsInCloudCanBeCreated(bool _authorized, bool _abl
 
 void ProjectsManager::createProject()
 {
-    Ui::CreateProjectDialog* dlg = new Ui::CreateProjectDialog(d->topLevelWidget);
-    dlg->configureCloudProjectCreationAbility(d->isUserAuthorized, d->canCreateCloudProject);
-    dlg->showDialog();
-    connect(dlg, &Ui::CreateProjectDialog::disappeared, dlg, &Ui::CreateProjectDialog::deleteLater);
+    Ui::CreateProjectDialog* dialog = new Ui::CreateProjectDialog(d->topLevelWidget);
+    dialog->configureCloudProjectCreationAbility(d->isUserAuthorized, d->canCreateCloudProject);
+    dialog->setProjectFolder(
+                DataStorageLayer::StorageFacade::settingsStorage()->value(
+                    DataStorageLayer::kProjectSaveFolderKey,
+                    DataStorageLayer::SettingsStorage::SettingsPlace::Application)
+                .toString());
+    dialog->setImportFolder(
+                DataStorageLayer::StorageFacade::settingsStorage()->value(
+                    DataStorageLayer::kProjectImportFolderKey,
+                    DataStorageLayer::SettingsStorage::SettingsPlace::Application)
+                .toString());
+    dialog->showDialog();
+    connect(dialog, &Ui::CreateProjectDialog::createProjectPressed, this, [this, dialog] {
+        DataStorageLayer::StorageFacade::settingsStorage()->setValue(
+                    DataStorageLayer::kProjectSaveFolderKey,
+                    dialog->projectFolder(),
+                    DataStorageLayer::SettingsStorage::SettingsPlace::Application);
+        DataStorageLayer::StorageFacade::settingsStorage()->setValue(
+                    DataStorageLayer::kProjectImportFolderKey,
+                    dialog->importFilePath(),
+                    DataStorageLayer::SettingsStorage::SettingsPlace::Application);
+
+        if (dialog->isLocal()) {
+            const QString projectPath = dialog->projectFolder() + "/" + dialog->projectName() + Project::extension();
+            emit createLocalProjectRequested(projectPath, dialog->importFilePath());
+        } else {
+            emit createCloudProjectRequested(dialog->projectName(), dialog->importFilePath());
+        }
+    });
+    connect(dialog, &Ui::CreateProjectDialog::disappeared, dialog, &Ui::CreateProjectDialog::deleteLater);
 }
 
 } // namespace ManagementLayer

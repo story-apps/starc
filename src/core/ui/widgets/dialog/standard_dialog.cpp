@@ -2,6 +2,8 @@
 
 #include "dialog.h"
 
+#include <ui/design_system/design_system.h>
+
 #include <QApplication>
 #include <QRandomGenerator>
 
@@ -29,7 +31,7 @@ namespace {
 void StandardDialog::information(QWidget* _parent, const QString& _title, const QString& _text)
 {
     auto dialog = new Dialog(_parent);
-    dialog->setContentMaximumWidth(500);
+    dialog->setContentMaximumWidth(static_cast<int>(Ui::DesignSystem::dialog().infoMaximumWidth()));
     dialog->showDialog(_title, _text, {{0, generateOkTerm()}});
     QObject::connect(dialog, &Dialog::finished, dialog, &Dialog::hideDialog);
     QObject::connect(dialog, &Dialog::disappeared, dialog, &Dialog::deleteLater);

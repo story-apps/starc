@@ -22,6 +22,36 @@ public:
      */
     void configureCloudProjectCreationAbility(bool _isLogged, bool _isSubscriptionActive);
 
+    /**
+     * @brief Задать папку, куда будет сохраняться новый проект
+     */
+    void setProjectFolder(const QString& _path);
+
+    /**
+     * @brief Задать папку из которой будут выбираться проекты для импорта
+     */
+    void setImportFolder(const QString& _path);
+
+    /**
+     * @brief Название нового проекта
+     */
+    QString projectName() const;
+
+    /**
+     * @brief Где пользователь хочет разместить проект true - локально, false - в облаке
+     */
+    bool isLocal() const;
+
+    /**
+     * @brief Папка для размещения нового проекта
+     */
+    QString projectFolder() const;
+
+    /**
+     * @brief Путь до файла для импорта
+     */
+    QString importFilePath() const;
+
 signals:
     /**
      * @brief Пользователь нажал ссылку для авторизации

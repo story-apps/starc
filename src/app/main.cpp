@@ -1,6 +1,7 @@
+#include "application.h"
+
 #include <interfaces/management_layer/i_application_manager.h>
 
-#include <QApplication>
 #include <QDebug>
 #include <QDir>
 #include <QPluginLoader>
@@ -11,7 +12,7 @@ using ManagementLayer::IApplicationManager;
 /**
  * @brief Загрузить менеджер приложения
  */
-IApplicationManager* loadApplicationManager()
+QObject* loadApplicationManager()
 {
     //
     // Смотрим папку с данными приложения на компе
@@ -66,17 +67,23 @@ IApplicationManager* loadApplicationManager()
     // Подгружаем плагин
     //
     const QStringList libCorePluginEntries = pluginsDir.entryList({ "libcoreplugin*.*" }, QDir::Files);
-    for (const QString &fileName : libCorePluginEntries) {
-        QPluginLoader pluginLoader(pluginsDir.absoluteFilePath(fileName));
-        QObject *plugin = pluginLoader.instance();
-        if (plugin) {
-            return qobject_cast<ManagementLayer::IApplicationManager *>(plugin);
-        } else {
-            qDebug() << pluginLoader.errorString();
-        }
+    if (libCorePluginEntries.isEmpty()) {
+        qCritical() << "Core plugin isn't found";
+        return nullptr;
+    }
+    if (libCorePluginEntries.size() > 1) {
+        qCritical() << "Found more than 1 core plugins";
+        return nullptr;
     }
 
-    return nullptr;
+    const auto pluginPath = libCorePluginEntries.first();
+    QPluginLoader pluginLoader(pluginsDir.absoluteFilePath(pluginPath));
+    QObject *plugin = pluginLoader.instance();
+    if (plugin == nullptr) {
+        qDebug() << pluginLoader.errorString();
+    }
+
+    return plugin;
 }
 
 /**
@@ -84,16 +91,15 @@ IApplicationManager* loadApplicationManager()
  */
 int main(int argc, char *argv[])
 {
-    QApplication application(argc, argv);
-    application.setApplicationName("starc");
-    application.setOrganizationName("DimkaNovikov labs.");
-    application.setOrganizationDomain("dimkanovikov.pro");
+    Application application(argc, argv);
 
-    IApplicationManager* applicationManager = loadApplicationManager();
+
+    auto applicationManager = loadApplicationManager();
     if (applicationManager == nullptr) {
         return 1;
     }
 
-    applicationManager->exec();
+    application.setApplicationManager(applicationManager);
+    application.startUp();
     return application.exec();
 }

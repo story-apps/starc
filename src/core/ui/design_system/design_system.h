@@ -1087,6 +1087,11 @@ public:
          */
         qreal minimumWidth() const;
 
+        /**
+         * @brief Максимальная ширина информационного диалога
+         */
+        qreal infoMaximumWidth() const;
+
     private:
         explicit Dialog(qreal _scaleFactor);
         friend class DesignSystemPrivate;

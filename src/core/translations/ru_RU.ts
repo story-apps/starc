@@ -584,7 +584,7 @@
     <message>
         <location filename="../ui/widgets/dialog/standard_dialog.cpp" line="12"/>
         <source>Ah, perfect</source>
-        <translation>Восхитительно</translation>
+        <translation>Я в шоке</translation>
     </message>
     <message>
         <location filename="../ui/widgets/dialog/standard_dialog.cpp" line="13"/>
