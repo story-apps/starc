@@ -146,7 +146,7 @@ ProjectsView::ProjectsView(QWidget* _parent)
     designSystemChangeEvent(nullptr);
 }
 
-void ProjectsView::setProjects(Domain::ProjectsModel* _projects)
+void ProjectsView::setProjects(ManagementLayer::ProjectsModel* _projects)
 {
     d->projectsPage->setProjects(_projects);
 }

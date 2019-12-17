@@ -7,73 +7,6 @@ namespace ManagementLayer
 {
 
 /**
- * @brief Проект
- */
-class Project
-{
-public:
-    /**
-     * @brief Разрешение файла проекта
-     */
-    static QString extension();
-
-public:
-    Project();
-    Project(const QString& _name, const QString& _path, const QString& _lastEditDatetime);
-
-    /**
-     * @brief Валиден ли проект
-     */
-    bool isValid() const;
-
-    /**
-     * @brief Название проекта
-     */
-    /** @{ */
-    QString name() const;
-    void setName(const QString& _name);
-    /** @} */
-
-    /**
-     * @brief Путь к проекту
-     */
-    /** @{ */
-    QString path() const;
-    void setPath(const QString& _path);
-    /** @} */
-
-    /**
-     * @brief Дата и время последнего изменения проекта
-     */
-    /** @{ */
-    QString lastEditDatetime() const;
-    void setLastEditDatetime(const QString& _datetime);
-    /** @} */
-
-private:
-    /**
-     * @brief Название проекта
-     */
-    QString m_name;
-
-    /**
-     * @brief Путь к файлу проекта
-     */
-    QString m_path;
-
-    /**
-     * @brief Дата и время последнего изменения проекта
-     */
-    QString m_lastEditDatetime;
-};
-
-
-/**
- * @brief Сравнить два проекта
- */
-bool operator==(const Project& _lhs, const Project& _rhs);
-
-/**
  * @brief Менеджер экрана со списком проектов
  */
 class ProjectsManager : public QObject
@@ -94,11 +27,6 @@ public:
     void loadProjects();
 
     /**
-     * @brief Сохранить список проектов
-     */
-    void saveProjects();
-
-    /**
      * @brief Можно ли создавать проекты в облаке
      */
     void setProjectsInCloudCanBeCreated(bool _authorized, bool _ableToCreate);
@@ -107,6 +35,16 @@ public:
      * @brief Создать проект
      */
     void createProject();
+
+    /**
+     * @brief Установить текущий проект
+     */
+    void setCurrentProject(const QString& _path);
+
+    /**
+     * @brief Скрыть проект
+     */
+    void hideProject(const QString& _path);
 
 signals:
     /**

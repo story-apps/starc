@@ -1,16 +1,21 @@
 #include "projects_manager.h"
 
+#include "project.h"
+
+#include <data_layer/database.h>
 #include <data_layer/storage/settings_storage.h>
 #include <data_layer/storage/storage_facade.h>
-
-#include <domain/project.h>
 
 #include <ui/projects/create_project_dialog.h>
 #include <ui/projects/projects_navigator.h>
 #include <ui/projects/projects_tool_bar.h>
 #include <ui/projects/projects_view.h>
 
+#include <ui/widgets/dialog/dialog.h>
+
 #include <QDateTime>
+#include <QDir>
+#include <QFileInfo>
 #include <QJsonArray>
 #include <QJsonDocument>
 #include <QJsonObject>
@@ -21,76 +26,19 @@
 namespace ManagementLayer
 {
 
-QString Project::extension()
-{
-    return ".starc";
-}
-
-Project::Project(const QString& _name, const QString& _path, const QString& _lastEditDatetime) :
-    m_name(_name),
-    m_path(_path),
-    m_lastEditDatetime(_lastEditDatetime)
-{
-}
-
-bool Project::isValid() const
-{
-    return !m_name.isEmpty() && !m_path.isEmpty();
-}
-
-QString Project::name() const
-{
-    return m_name;
-}
-
-void Project::setName(const QString& _name)
-{
-    if (m_name != _name) {
-        m_name = _name;
-    }
-}
-
-QString Project::path() const
-{
-    return m_path;
-}
-
-void Project::setPath(const QString& _path)
-{
-    if (m_path != _path) {
-        m_path = _path;
-    }
-}
-
-QString Project::lastEditDatetime() const
-{
-    return m_lastEditDatetime;
-}
-
-void Project::setLastEditDatetime(const QString& _datetime)
-{
-    if (m_lastEditDatetime != _datetime) {
-        m_lastEditDatetime = _datetime;
-    }
-}
-
-
-bool operator==(const Project& _lhs, const Project& _rhs)
-{
-    return _lhs.path() == _rhs.path();
-}
-
-
-// ****
-
-
 class ProjectsManager::Implementation
 {
 public:
     explicit Implementation(QWidget* _parent);
 
+    /**
+     * @brief Сохранить список проектов
+     */
+    void saveProjects();
 
-    Domain::ProjectsModel* projects = nullptr;
+
+    ProjectsModel* projects = nullptr;
+    Project currentProject;
 
     QWidget* topLevelWidget = nullptr;
 
@@ -103,7 +51,7 @@ public:
 };
 
 ProjectsManager::Implementation::Implementation(QWidget* _parent)
-    : projects(new Domain::ProjectsModel(_parent)),
+    : projects(new ProjectsModel(_parent)),
       topLevelWidget(_parent),
       toolBar(new Ui::ProjectsToolBar(_parent)),
       navigator(new Ui::ProjectsNavigator(_parent)),
@@ -115,6 +63,26 @@ ProjectsManager::Implementation::Implementation(QWidget* _parent)
 
     view->setProjects(projects);
     view->hide();
+}
+
+void ProjectsManager::Implementation::saveProjects()
+{
+    QJsonArray projectsJson;
+    for (int projectIndex = 0; projectIndex < projects->rowCount(); ++projectIndex) {
+        const auto& project = projects->projectAt(projectIndex);
+        QJsonObject projectJson;
+        projectJson["type"] = static_cast<int>(project.type());
+        projectJson["name"] = project.name();
+        projectJson["logline"] = project.logline();
+        projectJson["path"] = project.path();
+        projectJson["poster_path"] = project.posterPath();
+        projectJson["last_edit_time"] = project.lastEditTime().toString(Qt::ISODateWithMs);
+        projectsJson.append(projectJson);
+    }
+    DataStorageLayer::StorageFacade::settingsStorage()->setValue(
+                DataStorageLayer::kApplicationProjectsKey,
+                QJsonDocument(projectsJson).toBinaryData().toHex(),
+                DataStorageLayer::SettingsStorage::SettingsPlace::Application);
 }
 
 
@@ -129,10 +97,10 @@ ProjectsManager::ProjectsManager(QObject* _parent, QWidget* _parentWidget)
     connect(d->navigator, &Ui::ProjectsNavigator::createProjectPressed, this, &ProjectsManager::createProjectRequested);
 
     connect(d->view, &Ui::ProjectsView::createProjectPressed, this, &ProjectsManager::createProjectRequested);
-    connect(d->view, &Ui::ProjectsView::hideProjectRequested, this, [this] (const Domain::Project& _project) {
+    connect(d->view, &Ui::ProjectsView::hideProjectRequested, this, [this] (const Project& _project) {
         d->projects->remove(_project);
     });
-    connect(d->view, &Ui::ProjectsView::removeProjectRequested, this, [this] (const Domain::Project& _project) {
+    connect(d->view, &Ui::ProjectsView::removeProjectRequested, this, [this] (const Project& _project) {
         d->projects->remove(_project);
     });
 }
@@ -161,46 +129,28 @@ void ProjectsManager::loadProjects()
               DataStorageLayer::kApplicationProjectsKey,
               DataStorageLayer::SettingsStorage::SettingsPlace::Application);
     const auto projectsJson = QJsonDocument::fromBinaryData(QByteArray::fromHex(projectsData.toByteArray()));
-    QVector<Domain::Project> projects;
+    QVector<Project> projects;
     for (const auto projectJsonValue : projectsJson.array()) {
         const auto projectJson = projectJsonValue.toObject();
-        Domain::Project project;
-        project.setType(static_cast<Domain::ProjectType>(projectJson["type"].toInt()));
+
+        //
+        // Если файл проекта удалили, то не пропускаем его
+        //
+        const auto projectPath = projectJson["path"].toString();
+        if (!QFileInfo::exists(projectPath)) {
+            continue;
+        }
+
+        Project project;
+        project.setType(static_cast<ProjectType>(projectJson["type"].toInt()));
         project.setName(projectJson["name"].toString());
         project.setLogline(projectJson["logline"].toString());
         project.setPath(projectJson["path"].toString());
-        project.setPosterPath(projectJson["poster_path"].toString());
+        project.setPosterPath(projectPath);
         project.setLastEditTime(QDateTime::fromString(projectJson["last_edit_time"].toString(), Qt::ISODateWithMs));
         projects.append(project);
     }
     d->projects->append(projects);
-
-//    for (int i=0;i<10;++i) {
-//        Domain::Project p;
-//        p.setName("test" + QString::number(i));
-//        p.setType(i%2 ? Domain::ProjectType::Remote : Domain::ProjectType::Local);
-//        d->projects->prepend(p);
-//    }
-}
-
-void ProjectsManager::saveProjects()
-{
-    QJsonArray projectsJson;
-    for (int projectIndex = 0; projectIndex < d->projects->rowCount(); ++projectIndex) {
-        const auto& project = d->projects->projectAt(projectIndex);
-        QJsonObject projectJson;
-        projectJson["type"] = static_cast<int>(project.type());
-        projectJson["name"] = project.name();
-        projectJson["logline"] = project.logline();
-        projectJson["path"] = project.path();
-        projectJson["poster_path"] = project.posterPath();
-        projectJson["last_edit_time"] = project.lastEditTime().toString(Qt::ISODateWithMs);
-        projectsJson.append(projectJson);
-    }
-    DataStorageLayer::StorageFacade::settingsStorage()->setValue(
-                DataStorageLayer::kApplicationProjectsKey,
-                QJsonDocument(projectsJson).toBinaryData().toHex(),
-                DataStorageLayer::SettingsStorage::SettingsPlace::Application);
 }
 
 void ProjectsManager::setProjectsInCloudCanBeCreated(bool _authorized, bool _ableToCreate)
@@ -211,7 +161,10 @@ void ProjectsManager::setProjectsInCloudCanBeCreated(bool _authorized, bool _abl
 
 void ProjectsManager::createProject()
 {
-    Ui::CreateProjectDialog* dialog = new Ui::CreateProjectDialog(d->topLevelWidget);
+    //
+    // Создаём и настраиваем диалог
+    //
+    auto dialog = new Ui::CreateProjectDialog(d->topLevelWidget);
     dialog->configureCloudProjectCreationAbility(d->isUserAuthorized, d->canCreateCloudProject);
     dialog->setProjectFolder(
                 DataStorageLayer::StorageFacade::settingsStorage()->value(
@@ -223,8 +176,13 @@ void ProjectsManager::createProject()
                     DataStorageLayer::kProjectImportFolderKey,
                     DataStorageLayer::SettingsStorage::SettingsPlace::Application)
                 .toString());
-    dialog->showDialog();
-    connect(dialog, &Ui::CreateProjectDialog::createProjectPressed, this, [this, dialog] {
+
+    //
+    // Настраиваем соединения диалога
+    //
+    connect(dialog, &Ui::CreateProjectDialog::createProjectPressed, this,
+            [this, dialog]
+    {
         DataStorageLayer::StorageFacade::settingsStorage()->setValue(
                     DataStorageLayer::kProjectSaveFolderKey,
                     dialog->projectFolder(),
@@ -235,13 +193,110 @@ void ProjectsManager::createProject()
                     DataStorageLayer::SettingsStorage::SettingsPlace::Application);
 
         if (dialog->isLocal()) {
-            const QString projectPath = dialog->projectFolder() + "/" + dialog->projectName() + Project::extension();
+            auto projectPath = dialog->projectFolder() + "/" + dialog->projectName() + Project::extension();
+            //
+            // Ситуация, что файл с таким названием уже существует крайне редка, хотя и гипотетически возможна
+            //
+            if (QFileInfo::exists(projectPath)) {
+                //
+                // ... в таком случае добавляем метку с датой и временем создания файла, чтобы имена не пересекались
+                //
+                projectPath = dialog->projectFolder() + "/" + dialog->projectName() + "_"
+                              + QDateTime::currentDateTime().toString("yyyy_MM_dd_hh_mm_ss")
+                              + Project::extension();
+            }
             emit createLocalProjectRequested(projectPath, dialog->importFilePath());
         } else {
             emit createCloudProjectRequested(dialog->projectName(), dialog->importFilePath());
         }
+        dialog->hideDialog();
     });
     connect(dialog, &Ui::CreateProjectDialog::disappeared, dialog, &Ui::CreateProjectDialog::deleteLater);
+
+    //
+    // Отображаем диалог
+    //
+    dialog->showDialog();
+}
+
+void ProjectsManager::setCurrentProject(const QString& _path)
+{
+    //
+    // Приведём путь к нативному виду
+    //
+    const QString projectPath = QDir::toNativeSeparators(_path);
+
+    //
+    // Делаем проект текущим и загружаем из него БД
+    // или создаём, если ранее его не существовало
+    //
+    DatabaseLayer::Database::setCurrentFile(projectPath);
+
+    //
+    // Определим, находится ли устанавливаемый проект уже в списке, или это новый
+    //
+    Project newCurrentProject;
+
+    //
+    // Проверяем находится ли проект в списке недавно используемых
+    //
+    for (int projectRow = 0 ; projectRow < d->projects->rowCount(); ++projectRow) {
+        const auto& project = d->projects->projectAt(projectRow);
+        if (project.path() == projectPath) {
+            newCurrentProject = project;
+            break;
+        }
+    }
+
+    //
+    // Если проект не нашёлся в списке недавних, добавляем в начало
+    //
+    if (newCurrentProject.type() == ProjectType::Invalid) {
+        //
+        // Определим название проекта
+        //
+        QFileInfo fileInfo(projectPath);
+        QString projectName = fileInfo.completeBaseName();
+        newCurrentProject.setName(projectName);
+        //
+        // ... определим остальные параметры проекта
+        //
+        newCurrentProject.setType(ProjectType::Local);
+        newCurrentProject.setPath(projectPath);
+        newCurrentProject.setLastEditTime(QDateTime::currentDateTime());
+
+        //
+        // Добавляем проект в список
+        //
+        d->projects->prepend(newCurrentProject);
+    }
+    //
+    // А если проект был в списке, обновим его дату и время последнего использования
+    //
+    else {
+        newCurrentProject.setLastEditTime(QDateTime::currentDateTime());
+        d->projects->updateProject(newCurrentProject);
+    }
+
+    //
+    // Сохраняем обновлённый список проектов
+    //
+    d->saveProjects();
+
+    //
+    // Запоминаем проект, как текущий
+    //
+    d->currentProject = newCurrentProject;
+}
+
+void ProjectsManager::hideProject(const QString& _path)
+{
+    for (int projectRow = 0; d->projects->rowCount(); ++projectRow) {
+        if (d->projects->projectAt(projectRow).path() == _path) {
+            d->projects->removeRow(projectRow);
+            break;
+        }
+    }
 }
 
 } // namespace ManagementLayer

@@ -20,10 +20,12 @@
 
 #include <ui/design_system/design_system.h>
 #include <ui/widgets/dialog/dialog.h>
+#include <ui/widgets/dialog/standard_dialog.h>
 
 #include <utils/3rd_party/WAF/Animation/Animation.h>
 
 #include <QApplication>
+#include <QDir>
 #include <QFontDatabase>
 #include <QLocale>
 #include <QStyleFactory>
@@ -127,6 +129,12 @@ public:
      * @brief Создать проект
      */
     void createProject();
+    void createLocalProject(const QString& _projectPath, const QString& _importFilePath);
+
+    /**
+     * @brief Закрыть текущий проект
+     */
+    void closeCurrentProject();
 
     //
 
@@ -384,7 +392,6 @@ void ApplicationManager::Implementation::saveChanges()
     //
     // TODO: Сохранение, все дела
     //
-    projectsManager->saveProjects();
 
     markChangesSaved(true);
 }
@@ -438,6 +445,71 @@ void ApplicationManager::Implementation::saveIfNeeded(std::function<void()> _cal
 void ApplicationManager::Implementation::createProject()
 {
     saveIfNeeded(std::bind(&ProjectsManager::createProject, projectsManager.data()));
+}
+
+void ApplicationManager::Implementation::createLocalProject(const QString& _projectPath, const QString& _importFilePath)
+{
+    if (_projectPath.isEmpty()) {
+        return;
+    }
+
+    //
+    // Закроем текущий проект
+    //
+    closeCurrentProject();
+
+    //
+    // Папки, в которую пользователь хочет писать может и не быть,
+    // создадим на всякий случай, чтобы его не мучать
+    //
+    QDir::root().mkpath(QFileInfo(_projectPath).absolutePath());
+
+    //
+    // Проверяем, можем ли мы писать в выбранный файл
+    //
+    QFile file(_projectPath);
+    const bool canWrite = file.open(QIODevice::WriteOnly);
+    file.close();
+
+    //
+    // Если невозможно записать в файл, предупреждаем пользователя и отваливаемся
+    //
+    if (!canWrite) {
+        const QFileInfo fileInfo(_projectPath);
+        QString errorMessage;
+        if (!fileInfo.dir().exists()) {
+            errorMessage =
+                tr("You try to create a project in nonexistent folder %1. "
+                   "Please, choose another location for the new project.")
+                .arg(fileInfo.dir().absolutePath());
+        } else if (fileInfo.exists()) {
+            errorMessage =
+                tr("The file can't be written. Looks like it is opened by another application. "
+                   "Please close it and retry to create a new project.");
+        } else {
+            errorMessage =
+                tr("The file can't be written. Please, check and give permissions to the app "
+                   "to write into the selected folder, or choose another folder for saving a new project.");
+        }
+        StandardDialog::information(applicationView, tr("Create project error"), errorMessage);
+        return;
+    }
+
+    //
+    // Если возможна запись в файл
+    //
+    // ... создаём новую базу данных в файле и делаем её текущим проектом
+    //
+    projectsManager->setCurrentProject(_projectPath);
+    //
+    // ... перейдём к редактированию
+    //
+//    goToEditCurrentProject(_importFilePath);
+}
+
+void ApplicationManager::Implementation::closeCurrentProject()
+{
+
 }
 
 void ApplicationManager::Implementation::exit()
@@ -546,6 +618,11 @@ void ApplicationManager::openProject(const QString& _path)
     if (_path.isEmpty()) {
         return;
     }
+
+    if (!QFileInfo::exists(_path)) {
+        d->projectsManager->hideProject(_path);
+        return;
+    }
 }
 
 bool ApplicationManager::event(QEvent* _event)
@@ -638,8 +715,15 @@ void ApplicationManager::initConnections()
     //
     // Менеджер проектов
     //
-    connect(d->projectsManager.data(), &ProjectsManager::menuRequested, this, [this] { d->showMenu(); });
-    connect(d->projectsManager.data(), &ProjectsManager::createProjectRequested, this, [this] { d->createProject(); });
+    connect(d->projectsManager.data(), &ProjectsManager::menuRequested, this,
+            [this] { d->showMenu(); });
+    connect(d->projectsManager.data(), &ProjectsManager::createProjectRequested, this,
+            [this] { d->createProject(); });
+    connect(d->projectsManager.data(), &ProjectsManager::createLocalProjectRequested, this,
+            [this] (const QString& _projectPath, const QString& _importFilePath)
+    {
+        d->createLocalProject(_projectPath, _importFilePath);
+    });
 
     //
     // Менеджер настроек

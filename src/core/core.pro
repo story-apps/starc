@@ -31,10 +31,10 @@ SOURCES += \
     domain/identifier.cpp \
     domain/item_object.cpp \
     domain/items_builder.cpp \
-    domain/project.cpp \
     management_layer/application_manager.cpp \
     management_layer/content/account/account_manager.cpp \
     management_layer/content/onboarding/onboarding_manager.cpp \
+    management_layer/content/projects/project.cpp \
     management_layer/content/projects/projects_manager.cpp \
     management_layer/content/settings/settings_manager.cpp \
     ui/account/account_bar.cpp \
@@ -121,10 +121,10 @@ HEADERS += \
     domain/identifier.h \
     domain/item_object.h \
     domain/items_builder.h \
-    domain/project.h \
     management_layer/application_manager.h \
     management_layer/content/account/account_manager.h \
     management_layer/content/onboarding/onboarding_manager.h \
+    management_layer/content/projects/project.h \
     management_layer/content/projects/projects_manager.h \
     management_layer/content/settings/settings_manager.h \
     ui/account/account_bar.h \

@@ -2,6 +2,7 @@
 
 #include <ui/design_system/design_system.h>
 
+#include <utils/helpers/color_helper.h>
 #include <utils/helpers/image_helper.h>
 #include <utils/helpers/text_helper.h>
 
@@ -216,7 +217,9 @@ void Button::paintEvent(QPaintEvent* _event)
     //
     // Рисуем текст
     //
-    painter.setPen(textColor());
+    painter.setPen(isEnabled()
+                   ? textColor()
+                   : ColorHelper::transparent(textColor(), Ui::DesignSystem::disabledTextOpacity()));
     //
     QRectF buttonInnerRect = contentsRect().marginsRemoved(Ui::DesignSystem::button().margins().toMargins());
     const qreal textWidth = TextHelper::fineTextWidth(d->text, Ui::DesignSystem::font().button());

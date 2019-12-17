@@ -5,24 +5,29 @@
 #include <QPixmap>
 
 
-namespace Domain
+namespace ManagementLayer
 {
 
 class Project::Implementation
 {
 public:
     ProjectType type = ProjectType::Invalid;
-    QString path = "/home/lucas/screenplays/tlj.starc";
+    QString path;
 
     mutable QPixmap poster;
     QString posterPath;
-    QString name = "Star Wars";
-    QString logline = "Rey develops her newly discovered abilities with the guidance of Luke Skywalker, who is unsettled by the strength of her powers. Meanwhile, the Resistance prepares for battle with the First Order. ";
-    QDateTime lastEditTime = QDateTime::fromString("2019-10-01 22:48:56", "yyyy-MM-dd hh:mm:ss");
+    QString name;
+    QString logline;
+    QDateTime lastEditTime;
 };
 
 
 // **
+
+QString Project::extension()
+{
+    return ".starc";
+}
 
 
 Project::Project()
@@ -212,7 +217,7 @@ ProjectsModel::ProjectsModel(QObject* _parent)
 {
 }
 
-Project ProjectsModel::projectAt(int _row) const
+const Project& ProjectsModel::projectAt(int _row) const
 {
     Q_ASSERT(_row >= 0 && _row < d->projects.size());
     return d->projects.at(_row);
@@ -320,6 +325,16 @@ bool ProjectsModel::moveProject(const Project& _moved, const Project& _insertAft
     return true;
 }
 
+void ProjectsModel::updateProject(const Project& _project)
+{
+    for (int projectIndex = 0; projectIndex < d->projects.size(); ++projectIndex) {
+        if (projectAt(projectIndex) == _project) {
+            emit dataChanged(index(projectIndex), index(projectIndex));
+            break;
+        }
+    }
+}
+
 bool ProjectsModel::isEmpty() const
 {
     return d->projects.isEmpty();
@@ -347,4 +362,4 @@ QVariant ProjectsModel::data(const QModelIndex& _index, int _role) const
     return project.data(_role);
 }
 
-} // namespace Domain
+} // namespace ManagementLayer

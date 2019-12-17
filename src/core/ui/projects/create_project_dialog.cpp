@@ -140,6 +140,9 @@ CreateProjectDialog::CreateProjectDialog(QWidget* _parent)
     });
     connect(d->cancelButton, &Button::clicked, this, &CreateProjectDialog::hideDialog);
     connect(d->createButton, &Button::clicked, this, [this] {
+        //
+        // Запрещаем создавать проект с пустым названием
+        //
         if (d->projectName->text().isEmpty()) {
             d->projectName->setError(tr("The story's name can't be empty. Fill it, please."));
             d->projectName->setFocus();
@@ -241,8 +244,8 @@ void CreateProjectDialog::updateTranslations()
     setTitle(tr("Create new story"));
 
     d->projectName->setLabel(tr("Enter name of the new story"));
-    d->localProject->setText(tr("Place story on the local computer"));
-    d->cloudProject->setText(tr("Place story on the cloud"));
+    d->localProject->setText(tr("Save story in the local computer"));
+    d->cloudProject->setText(tr("Save story in the cloud"));
     d->projectFolder->setLabel(tr("Location of the new story file"));
     d->importFilePath->setLabel(tr("Choose file with story to import"));
     d->cancelButton->setText(tr("Cancel"));
@@ -280,10 +283,11 @@ void CreateProjectDialog::designSystemChangeEvent(DesignSystemChangeEvent* _even
                           Ui::DesignSystem::layout().px24(),
                           Ui::DesignSystem::layout().px12())
                 .toMargins());
-    d->cancelButton->setBackgroundColor(Ui::DesignSystem::color().secondary());
-    d->cancelButton->setTextColor(Ui::DesignSystem::color().secondary());
-    d->createButton->setBackgroundColor(Ui::DesignSystem::color().secondary());
-    d->createButton->setTextColor(Ui::DesignSystem::color().secondary());
+    for (auto button : { d->cancelButton,
+                         d->createButton }) {
+        button->setBackgroundColor(Ui::DesignSystem::color().secondary());
+        button->setTextColor(Ui::DesignSystem::color().secondary());
+    }
 
     contentsLayout()->setSpacing(static_cast<int>(Ui::DesignSystem::layout().px8()));
     d->buttonsLayout->setContentsMargins(QMarginsF(Ui::DesignSystem::layout().px12(),

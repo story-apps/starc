@@ -1,8 +1,8 @@
 #include "projects_cards.h"
 
-#include <custom_events.h>
+#include <include/custom_events.h>
 
-#include <domain/project.h>
+#include <management_layer/content/projects/project.h>
 
 #include <ui/design_system/design_system.h>
 #include <ui/widgets/scroll_bar/scroll_bar.h>
@@ -39,12 +39,12 @@ public:
     /**
      * @brief Задать проект для отображения на карточке
      */
-    void setProject(const Domain::Project& _project);
+    void setProject(const ManagementLayer::Project& _project);
 
     /**
      * @brief Получить проект, который отображается на карточке
      */
-    Domain::Project project() const;
+    ManagementLayer::Project project() const;
 
     /**
      * @brief Отрисовка карточки
@@ -84,7 +84,7 @@ private:
     /**
      * @brief Проект для отображения на карточке
      */
-    Domain::Project m_project;
+    ManagementLayer::Project m_project;
 
     /**
      * @brief  Декорации тени при наведении
@@ -145,7 +145,7 @@ ProjectCard::~ProjectCard()
     m_decorationOpacityAnimation.stop();
 }
 
-void ProjectCard::setProject(const Domain::Project& _project)
+void ProjectCard::setProject(const ManagementLayer::Project& _project)
 {
     if (m_project == _project) {
         return;
@@ -155,7 +155,7 @@ void ProjectCard::setProject(const Domain::Project& _project)
     update();
 }
 
-Domain::Project ProjectCard::project() const
+ManagementLayer::Project ProjectCard::project() const
 {
     return m_project;
 }
@@ -266,14 +266,14 @@ void ProjectCard::paint(QPainter* _painter, const QStyleOptionGraphicsItem* _opt
                           Ui::DesignSystem::layout().px24() * 2,
                           Ui::DesignSystem::layout().px24() * 2);
     _painter->drawText(iconRect, Qt::AlignCenter,
-                       m_project.type() == Domain::ProjectType::Local ? "\uf379" : "\uf163");
+                       m_project.type() == ManagementLayer::ProjectType::Local ? "\uf379" : "\uf163");
 
     //
     // Иконки действий
     //
     _painter->setOpacity(m_actionsOpacityAnimation.currentValue().toReal());
     const auto iconsRects = actionsRects();
-    if (m_project.type() == Domain::ProjectType::Local) {
+    if (m_project.type() == ManagementLayer::ProjectType::Local) {
         _painter->drawText(iconsRects[0], Qt::AlignCenter, "\uf167"); // move to cloud
         _painter->drawText(iconsRects[1], Qt::AlignCenter, "\uf6d0"); // hide
     } else {
@@ -350,7 +350,7 @@ void ProjectCard::mouseReleaseEvent(QGraphicsSceneMouseEvent* _event)
         m_decorationOpacityAnimation.resume();
 
         const auto iconsRects = actionsRects();
-        if (m_project.type() == Domain::ProjectType::Local) {
+        if (m_project.type() == ManagementLayer::ProjectType::Local) {
             if (iconsRects[0].contains(_event->pos())) {
                 emit projectsScene()->moveProjectToCloudRequested(m_project);
             } else if (iconsRects[1].contains(_event->pos())) {
@@ -407,7 +407,7 @@ QVector<QRectF> ProjectCard::actionsRects() const
                     Ui::DesignSystem::layout().px24() * 2);
 
     QVector<QRectF> rects;
-    const int kRepeats = m_project.type() == Domain::ProjectType::Local ? 2 : 2;
+    const int kRepeats = m_project.type() == ManagementLayer::ProjectType::Local ? 2 : 2;
     for (int repeat = 0; repeat < kRepeats; ++repeat) {
         rects.append(iconRect);
         iconRect.moveLeft(iconRect.left() + Ui::DesignSystem::layout().px8() * 5);
@@ -459,7 +459,7 @@ public:
 
 
     ProjectsScene* scene = nullptr;
-    Domain::ProjectsModel* projects = nullptr;
+    ManagementLayer::ProjectsModel* projects = nullptr;
     QVector<ProjectCard*> projectsCards;
     bool cardsAnimationsAvailable = true;
     QHash<ProjectCard*, QPointer<QVariantAnimation>> projectsCardsAnimations;
@@ -683,7 +683,7 @@ void ProjectsCards::Implementation::reorderCard(QGraphicsItem* _cardItem)
     //
     const bool isProjectMoved
             = projects->moveProject(movedCard->project(),
-                    previousCard != nullptr ? previousCard->project() : Domain::Project());
+                    previousCard != nullptr ? previousCard->project() : ManagementLayer::Project());
     //
     // В случае, сли проект не был перемещён, нужно вернуть его на место на доске
     //
@@ -718,7 +718,7 @@ void ProjectsCards::setBackgroundColor(const QColor& _color)
     scene()->setBackgroundBrush(_color);
 }
 
-void ProjectsCards::setProjects(Domain::ProjectsModel* _projects)
+void ProjectsCards::setProjects(ManagementLayer::ProjectsModel* _projects)
 {
     if (d->projects == _projects) {
         return;
@@ -734,7 +734,7 @@ void ProjectsCards::setProjects(Domain::ProjectsModel* _projects)
         return;
     }
 
-    connect(d->projects, &Domain::ProjectsModel::rowsInserted, this,
+    connect(d->projects, &ManagementLayer::ProjectsModel::rowsInserted, this,
             [this] (const QModelIndex& _parent, int _first, int _last)
     {
         Q_UNUSED(_parent)
@@ -765,7 +765,7 @@ void ProjectsCards::setProjects(Domain::ProjectsModel* _projects)
         //
         notifyVisibleChange();
     });
-    connect(d->projects, &Domain::ProjectsModel::rowsRemoved, this,
+    connect(d->projects, &ManagementLayer::ProjectsModel::rowsRemoved, this,
             [this] (const QModelIndex& _parent, int _first, int _last) {
 
         Q_UNUSED(_parent)
@@ -790,7 +790,7 @@ void ProjectsCards::setProjects(Domain::ProjectsModel* _projects)
         //
         notifyVisibleChange();
     });
-    connect(d->projects, &Domain::ProjectsModel::rowsMoved, this,
+    connect(d->projects, &ManagementLayer::ProjectsModel::rowsMoved, this,
             [this] (const QModelIndex& _sourceParent, int _sourceStart, int _sourceEnd,
                     const QModelIndex& _destinationParent, int _destination) {
 

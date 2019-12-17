@@ -3,7 +3,7 @@
 #include <QAbstractListModel>
 
 
-namespace Domain
+namespace ManagementLayer
 {
 
 /**
@@ -32,6 +32,12 @@ enum ProjectDataRole {
  */
 class Project
 {
+public:
+    /**
+     * @brief Разрешение файла проекта
+     */
+    static QString extension();
+
 public:
     Project();
     Project(const Project& _other);
@@ -101,7 +107,7 @@ public:
     /**
      * @brief Получить проект по заданному индексу
      */
-    Project projectAt(int _row) const;
+    const Project& projectAt(int _row) const;
 
     /**
      * @brief Добавить новый проект в конец списка
@@ -129,6 +135,11 @@ public:
     bool moveProject(const Project& _moved, const Project& _insertAfter);
 
     /**
+     * @brief Уведомить клиентов о том, что проект изменился
+     */
+    void updateProject(const Project& _project);
+
+    /**
      * @brief Пуста ли модель
      */
     bool isEmpty() const;
@@ -144,4 +155,4 @@ private:
     QScopedPointer<Implementation> d;
 };
 
-} // namespace Domain
+} // namespace ManagementLayer

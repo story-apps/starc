@@ -151,6 +151,11 @@ void AbstractDialog::hideDialog()
     QTimer::singleShot(d->opacityAnimation.duration(), this, &AbstractDialog::hide);
 }
 
+void AbstractDialog::setContentMinimumWidth(int _width)
+{
+    d->content->setMinimumWidth(_width);
+}
+
 void AbstractDialog::setContentMaximumWidth(int _width)
 {
     d->content->setMaximumWidth(_width);

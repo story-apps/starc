@@ -1,6 +1,6 @@
 #include "widget.h"
 
-#include <custom_events.h>
+#include <include/custom_events.h>
 
 #include <QEvent>
 #include <QPaintEvent>

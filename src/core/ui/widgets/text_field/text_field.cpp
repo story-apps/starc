@@ -1,6 +1,6 @@
 #include "text_field.h"
 
-#include <custom_events.h>
+#include <include/custom_events.h>
 
 #include <ui/design_system/design_system.h>
 
@@ -366,6 +366,13 @@ QSize TextField::sizeHint() const
     const QFontMetrics fontMetrics(Ui::DesignSystem::font().body1());
     QSize size(TextHelper::fineTextWidth(text(), Ui::DesignSystem::font().body1()),
                fontMetrics.height());
+    if (!d->error.isEmpty()) {
+        const auto errorWidth = TextHelper::fineTextWidth(d->error, Ui::DesignSystem::font().caption());
+        size = size.expandedTo({errorWidth, 1});
+    } else if (!d->helper.isEmpty()) {
+        const auto helperWidth = TextHelper::fineTextWidth(d->helper, Ui::DesignSystem::font().caption());
+        size = size.expandedTo({helperWidth, 1});
+    }
     size += QSizeF(Ui::DesignSystem::textField().margins().left()
                    + Ui::DesignSystem::textField().margins().right(),
                    Ui::DesignSystem::textField().margins().top()

@@ -263,7 +263,7 @@ void Database::createTables(QSqlDatabase &_database)
     //
     query.exec("CREATE TABLE system_variables "
                "( "
-               "variable TEXT PRIMARY KEY ON CONFLICT REPLACE, "
+               "variable TEXT NOT NULL, "
                "value TEXT NOT NULL "
                "); ");
 
@@ -341,12 +341,12 @@ void Database::createTables(QSqlDatabase &_database)
 
 void Database::createIndexes(QSqlDatabase &_database)
 {
-    Q_UNUSED(_database);
+    Q_UNUSED(_database)
 }
 
 void Database::createEnums(QSqlDatabase &_database)
 {
-    Q_UNUSED(_database);
+    Q_UNUSED(_database)
 }
 
 void Database::updateDatabase(QSqlDatabase &_database)
