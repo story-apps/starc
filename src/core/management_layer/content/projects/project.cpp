@@ -328,7 +328,8 @@ bool ProjectsModel::moveProject(const Project& _moved, const Project& _insertAft
 void ProjectsModel::updateProject(const Project& _project)
 {
     for (int projectIndex = 0; projectIndex < d->projects.size(); ++projectIndex) {
-        if (projectAt(projectIndex) == _project) {
+        if (projectAt(projectIndex).path() == _project.path()) {
+            d->projects[projectIndex] = _project;
             emit dataChanged(index(projectIndex), index(projectIndex));
             break;
         }

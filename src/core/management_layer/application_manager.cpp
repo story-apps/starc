@@ -134,6 +134,7 @@ public:
     /**
      * @brief Открыть проект по заданному пути
      */
+    void openProject();
     void openProject(const QString& _path);
 
     /**
@@ -518,6 +519,12 @@ void ApplicationManager::Implementation::createLocalProject(const QString& _proj
     goToEditCurrentProject(_importFilePath);
 }
 
+void ApplicationManager::Implementation::openProject()
+{
+    auto callback = [this] { projectsManager->openProject(); };
+    saveIfNeeded(callback);
+}
+
 void ApplicationManager::Implementation::openProject(const QString& _path)
 {
     if (_path.isEmpty()) {
@@ -712,6 +719,7 @@ void ApplicationManager::initConnections()
     });
     connect(d->menuView, &Ui::MenuView::projectsPressed, this, [this] { d->showProjects(); });
     connect(d->menuView, &Ui::MenuView::createProjectPressed, this, [this] { d->createProject(); });
+    connect(d->menuView, &Ui::MenuView::openProjectPressed, this, [this] { d->openProject(); });
     connect(d->menuView, &Ui::MenuView::settingsPressed, this, [this] { d->showSettings(); });
 
     //
@@ -767,11 +775,7 @@ void ApplicationManager::initConnections()
         d->createLocalProject(_projectPath, _importFilePath);
     });
     connect(d->projectsManager.data(), &ProjectsManager::openProjectRequested, this,
-            [this]
-    {
-        auto callback = [this] { d->projectsManager->openProject(); };
-        d->saveIfNeeded(callback);
-    });
+            [this] { d->openProject(); });
     connect(d->projectsManager.data(), &ProjectsManager::openChoosedProjectRequested, this,
             [this] (const QString& _path)
     {

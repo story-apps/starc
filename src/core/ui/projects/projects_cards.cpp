@@ -767,7 +767,8 @@ void ProjectsCards::setProjects(ManagementLayer::ProjectsModel* _projects)
         notifyVisibleChange();
     });
     connect(d->projects, &ManagementLayer::ProjectsModel::rowsRemoved, this,
-            [this] (const QModelIndex& _parent, int _first, int _last) {
+            [this] (const QModelIndex& _parent, int _first, int _last)
+    {
 
         Q_UNUSED(_parent)
 
@@ -793,7 +794,8 @@ void ProjectsCards::setProjects(ManagementLayer::ProjectsModel* _projects)
     });
     connect(d->projects, &ManagementLayer::ProjectsModel::rowsMoved, this,
             [this] (const QModelIndex& _sourceParent, int _sourceStart, int _sourceEnd,
-                    const QModelIndex& _destinationParent, int _destination) {
+                    const QModelIndex& _destinationParent, int _destination)
+    {
 
         Q_UNUSED(_sourceParent)
         Q_UNUSED(_destinationParent)
@@ -811,6 +813,21 @@ void ProjectsCards::setProjects(ManagementLayer::ProjectsModel* _projects)
         // и обновляем представление
         //
         d->reorderCards();
+    });
+    connect(d->projects, &ManagementLayer::ProjectsModel::dataChanged, this,
+            [this] (const QModelIndex& _from, const QModelIndex& _to)
+    {
+        //
+        // Ожидаем изменение только одной карточки
+        //
+        Q_ASSERT(_from == _to);
+
+        //
+        // Обновляем проект карточки
+        //
+        auto card = d->projectsCards.at(_from.row());
+        const auto cardProject = d->projects->projectAt(_from.row());
+        card->setProject(cardProject);
     });
 
     notifyVisibleChange();
