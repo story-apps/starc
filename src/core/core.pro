@@ -101,6 +101,8 @@ SOURCES += \
     utils/3rd_party/WAF/Animation/SideSlide/SideSlideDecorator.cpp \
     utils/3rd_party/WAF/Animation/Slide/SlideAnimator.cpp \
     utils/3rd_party/WAF/Animation/Slide/SlideForegroundDecorator.cpp \
+    utils/diff_match_patch/diff_match_patch.cpp \
+    utils/diff_match_patch/diff_match_patch_controller.cpp \
     utils/helpers/color_helper.cpp \
     utils/helpers/dialog_helper.cpp \
     utils/helpers/image_helper.cpp \
@@ -195,6 +197,8 @@ HEADERS += \
     utils/3rd_party/WAF/Animation/Slide/SlideAnimator.h \
     utils/3rd_party/WAF/Animation/Slide/SlideForegroundDecorator.h \
     utils/3rd_party/WAF/WAF.h \
+    utils/diff_match_patch/diff_match_patch.h \
+    utils/diff_match_patch/diff_match_patch_controller.h \
     utils/helpers/color_helper.h \
     utils/helpers/dialog_helper.h \
     utils/helpers/image_helper.h \

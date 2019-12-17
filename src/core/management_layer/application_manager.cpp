@@ -577,6 +577,11 @@ void ApplicationManager::Implementation::exit()
                 DataStorageLayer::SettingsStorage::SettingsPlace::Application);
 
     //
+    // Сохраним расположение проектов
+    //
+    projectsManager->saveProjects();
+
+    //
     // Выходим
     //
     QApplication::processEvents();

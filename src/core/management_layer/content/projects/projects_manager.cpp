@@ -34,11 +34,6 @@ class ProjectsManager::Implementation
 public:
     explicit Implementation(QWidget* _parent);
 
-    /**
-     * @brief Сохранить список проектов
-     */
-    void saveProjects();
-
 
     ProjectsModel* projects = nullptr;
     Project currentProject;
@@ -66,26 +61,6 @@ ProjectsManager::Implementation::Implementation(QWidget* _parent)
 
     view->setProjects(projects);
     view->hide();
-}
-
-void ProjectsManager::Implementation::saveProjects()
-{
-    QJsonArray projectsJson;
-    for (int projectIndex = 0; projectIndex < projects->rowCount(); ++projectIndex) {
-        const auto& project = projects->projectAt(projectIndex);
-        QJsonObject projectJson;
-        projectJson["type"] = static_cast<int>(project.type());
-        projectJson["name"] = project.name();
-        projectJson["logline"] = project.logline();
-        projectJson["path"] = project.path();
-        projectJson["poster_path"] = project.posterPath();
-        projectJson["last_edit_time"] = project.lastEditTime().toString(Qt::ISODateWithMs);
-        projectsJson.append(projectJson);
-    }
-    DataStorageLayer::StorageFacade::settingsStorage()->setValue(
-                DataStorageLayer::kApplicationProjectsKey,
-                QJsonDocument(projectsJson).toBinaryData().toHex(),
-                DataStorageLayer::SettingsStorage::SettingsPlace::Application);
 }
 
 
@@ -161,6 +136,26 @@ void ProjectsManager::loadProjects()
         projects.append(project);
     }
     d->projects->append(projects);
+}
+
+void ProjectsManager::saveProjects()
+{
+    QJsonArray projectsJson;
+    for (int projectIndex = 0; projectIndex < d->projects->rowCount(); ++projectIndex) {
+        const auto& project = d->projects->projectAt(projectIndex);
+        QJsonObject projectJson;
+        projectJson["type"] = static_cast<int>(project.type());
+        projectJson["name"] = project.name();
+        projectJson["logline"] = project.logline();
+        projectJson["path"] = project.path();
+        projectJson["poster_path"] = project.posterPath();
+        projectJson["last_edit_time"] = project.lastEditTime().toString(Qt::ISODateWithMs);
+        projectsJson.append(projectJson);
+    }
+    DataStorageLayer::StorageFacade::settingsStorage()->setValue(
+                DataStorageLayer::kApplicationProjectsKey,
+                QJsonDocument(projectsJson).toBinaryData().toHex(),
+                DataStorageLayer::SettingsStorage::SettingsPlace::Application);
 }
 
 void ProjectsManager::setProjectsInCloudCanBeCreated(bool _authorized, bool _ableToCreate)
@@ -319,11 +314,6 @@ void ProjectsManager::setCurrentProject(const QString& _path)
         newCurrentProject.setLastEditTime(QDateTime::currentDateTime());
         d->projects->updateProject(newCurrentProject);
     }
-
-    //
-    // Сохраняем обновлённый список проектов
-    //
-    d->saveProjects();
 
     //
     // Запоминаем проект, как текущий

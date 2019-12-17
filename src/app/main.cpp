@@ -93,7 +93,6 @@ int main(int argc, char *argv[])
 {
     Application application(argc, argv);
 
-
     auto applicationManager = loadApplicationManager();
     if (applicationManager == nullptr) {
         return 1;

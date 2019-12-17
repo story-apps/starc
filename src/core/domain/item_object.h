@@ -15,7 +15,18 @@ namespace Domain
  */
 enum class ItemObjectType {
     Undefined = 0,
-    Project = 1,
+
+    //
+    // Служебные для обслуживания работы с проектом
+    //
+
+    Structure = 1,
+
+    //
+    // Собственно данные
+    //
+
+    Project = 101,
 
 //    Text,
 //    Image,

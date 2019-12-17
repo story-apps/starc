@@ -27,6 +27,11 @@ public:
     void loadProjects();
 
     /**
+     * @brief Сохранить список проектов
+     */
+    void saveProjects();
+
+    /**
      * @brief Можно ли создавать проекты в облаке
      */
     void setProjectsInCloudCanBeCreated(bool _authorized, bool _ableToCreate);
