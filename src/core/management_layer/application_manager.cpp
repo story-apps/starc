@@ -132,6 +132,16 @@ public:
     void createLocalProject(const QString& _projectPath, const QString& _importFilePath);
 
     /**
+     * @brief Открыть проект по заданному пути
+     */
+    void openProject(const QString& _path);
+
+    /**
+      * @brief Перейти к редактированию текущего проекта
+      */
+    void goToEditCurrentProject(const QString& _importFilePath = {});
+
+    /**
      * @brief Закрыть текущий проект
      */
     void closeCurrentProject();
@@ -409,9 +419,9 @@ void ApplicationManager::Implementation::saveIfNeeded(std::function<void()> _cal
     auto dialog = new Dialog(applicationView);
     dialog->showDialog({},
                        tr("Project was modified. Save changes?"),
-                       {{ kCancelButtonId, tr("Cancel") },
-                        { kNoButtonId, tr("Don't save") },
-                        { kYesButtonId, tr("Save") }});
+                       {{ kCancelButtonId, tr("Cancel"), Dialog::RejectButton },
+                        { kNoButtonId, tr("Don't save"), Dialog::NormalButton },
+                        { kYesButtonId, tr("Save"), Dialog::AcceptButton }});
     QObject::connect(dialog, &Dialog::finished,
                      [this, dialog, _callback] (const Dialog::ButtonInfo& _buttonInfo)
     {
@@ -444,7 +454,8 @@ void ApplicationManager::Implementation::saveIfNeeded(std::function<void()> _cal
 
 void ApplicationManager::Implementation::createProject()
 {
-    saveIfNeeded(std::bind(&ProjectsManager::createProject, projectsManager.data()));
+    auto callback = [this] { projectsManager->createProject(); };
+    saveIfNeeded(callback);
 }
 
 void ApplicationManager::Implementation::createLocalProject(const QString& _projectPath, const QString& _importFilePath)
@@ -504,12 +515,48 @@ void ApplicationManager::Implementation::createLocalProject(const QString& _proj
     //
     // ... перейдём к редактированию
     //
-//    goToEditCurrentProject(_importFilePath);
+    goToEditCurrentProject(_importFilePath);
+}
+
+void ApplicationManager::Implementation::openProject(const QString& _path)
+{
+    if (_path.isEmpty()) {
+        return;
+    }
+
+    if (!QFileInfo::exists(_path)) {
+        projectsManager->hideProject(_path);
+        return;
+    }
+
+    //
+    // ... закроем текущий проект
+    //
+    closeCurrentProject();
+
+    //
+    // ... переключаемся на работу с выбранным файлом
+    //
+    projectsManager->setCurrentProject(_path);
+
+    //
+    // ... перейдём к редактированию
+    //
+    goToEditCurrentProject();
+}
+
+void ApplicationManager::Implementation::goToEditCurrentProject(const QString& _importFilePath)
+{
+    //
+    // TODO:
+    //
 }
 
 void ApplicationManager::Implementation::closeCurrentProject()
 {
-
+    //
+    // TODO:
+    //
 }
 
 void ApplicationManager::Implementation::exit()
@@ -615,14 +662,7 @@ void ApplicationManager::exec(const QString& _fileToOpenPath)
 
 void ApplicationManager::openProject(const QString& _path)
 {
-    if (_path.isEmpty()) {
-        return;
-    }
-
-    if (!QFileInfo::exists(_path)) {
-        d->projectsManager->hideProject(_path);
-        return;
-    }
+    d->openProject(_path);
 }
 
 bool ApplicationManager::event(QEvent* _event)
@@ -664,9 +704,11 @@ void ApplicationManager::initConnections()
     //
     // Представление приложения
     //
-    connect(d->applicationView, &Ui::ApplicationView::closeRequested, this, [this]
+    connect(d->applicationView, &Ui::ApplicationView::closeRequested, this,
+            [this]
     {
-        d->saveIfNeeded(std::bind(&ApplicationManager::Implementation::exit, d.get()));
+        auto callback = [this] { d->exit(); };
+        d->saveIfNeeded(callback);
     });
     connect(d->menuView, &Ui::MenuView::projectsPressed, this, [this] { d->showProjects(); });
     connect(d->menuView, &Ui::MenuView::createProjectPressed, this, [this] { d->createProject(); });
@@ -723,6 +765,18 @@ void ApplicationManager::initConnections()
             [this] (const QString& _projectPath, const QString& _importFilePath)
     {
         d->createLocalProject(_projectPath, _importFilePath);
+    });
+    connect(d->projectsManager.data(), &ProjectsManager::openProjectRequested, this,
+            [this]
+    {
+        auto callback = [this] { d->projectsManager->openProject(); };
+        d->saveIfNeeded(callback);
+    });
+    connect(d->projectsManager.data(), &ProjectsManager::openChoosedProjectRequested, this,
+            [this] (const QString& _path)
+    {
+        auto callback = [this, _path] { openProject(_path); };
+        d->saveIfNeeded(callback);
     });
 
     //

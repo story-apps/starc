@@ -1,7 +1,5 @@
 #include "create_project_dialog.h"
 
-#include <business_layer/import/abstract_importer.h>
-
 #include <ui/design_system/design_system.h>
 #include <ui/widgets/button/button.h>
 #include <ui/widgets/dialog/standard_dialog.h>
@@ -11,6 +9,8 @@
 #include <ui/widgets/radio_button/radio_button_group.h>
 #include <ui/widgets/text_field/text_field.h>
 #include <ui/widgets/toggle_button/toggle_button.h>
+
+#include <utils/helpers/dialog_helper.h>
 
 #include <QGridLayout>
 #include <QFileDialog>
@@ -84,6 +84,9 @@ CreateProjectDialog::CreateProjectDialog(QWidget* _parent)
     : AbstractDialog(_parent),
       d(new Implementation(this))
 {
+    setAcceptButton(d->createButton);
+    setRejectButton(d->cancelButton);
+
     contentsLayout()->setContentsMargins({});
     contentsLayout()->setSpacing(0);
     contentsLayout()->addWidget(d->projectName, 0, 0, 1, 2);
@@ -119,7 +122,7 @@ CreateProjectDialog::CreateProjectDialog(QWidget* _parent)
     connect(d->importFilePath, &TextField::trailingIconPressed, this, [this] {
        const auto path
                = QFileDialog::getOpenFileName(this, tr("Choose the file to import"),
-                        d->importFolder, BusinessLayer::AbstractImporter::filters());
+                        d->importFolder, DialogHelper::importFilters());
        if (path.isEmpty()) {
            return;
        }

@@ -2,6 +2,7 @@
 
 #include <ui/widgets/widget/widget.h>
 
+class Button;
 class QGridLayout;
 
 
@@ -36,6 +37,16 @@ public:
      */
     void setContentMaximumWidth(int _width);
 
+    /**
+     * @brief Задать кнопку, для нажатия при нажатии Enter в диалоге
+     */
+    void setAcceptButton(Button* _button);
+
+    /**
+     * @brief Задать кнопку, для нажатия при нажатии Escape в диалоге
+     */
+    void setRejectButton(Button* _button);
+
 protected:
     /**
      * @brief Установить заголовок диалога
@@ -56,6 +67,11 @@ protected:
      * @brief Весим фильтр на родительский виджет, чтобы корректировать свои размеры в соответствии с ним
      */
     bool eventFilter(QObject* _watched, QEvent* _event) override;
+
+    /**
+     * @brief Переопределяем для реализации реакции нажатия на кнопки Enter & Escape
+     */
+    bool event(QEvent* _event) override;
 
     /**
      * @brief Переопределяем отрисовку

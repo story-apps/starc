@@ -52,6 +52,11 @@ void Dialog::showDialog(const QString& _title, const QString& _supportingText,
         d->buttons.append(button);
         d->buttonsLayout->addWidget(button);
         connect(button, &Button::clicked,  this, [this, buttonInfo] { emit finished(buttonInfo); });
+        if (buttonInfo.type == Dialog::AcceptButton) {
+            setAcceptButton(button);
+        } else if (buttonInfo.type == Dialog::RejectButton) {
+            setRejectButton(button);
+        }
     }
 
     designSystemChangeEvent(nullptr);

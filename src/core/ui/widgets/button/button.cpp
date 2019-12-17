@@ -131,6 +131,11 @@ void Button::setContained(bool _contained)
     update();
 }
 
+void Button::click()
+{
+    emit clicked();
+}
+
 QSize Button::sizeHint() const
 {
     const qreal width = Ui::DesignSystem::button().shadowMargins().left()
@@ -288,7 +293,7 @@ void Button::mouseReleaseEvent(QMouseEvent* _event)
 
 void Button::designSystemChangeEvent(DesignSystemChangeEvent* _event)
 {
-    Q_UNUSED(_event);
+    Q_UNUSED(_event)
 
     setContentsMargins(Ui::DesignSystem::button().shadowMargins().toMargins());
     d->shadowBlurRadiusAnimation.setStartValue(Ui::DesignSystem::button().minimumShadowBlurRadius());

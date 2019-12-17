@@ -46,6 +46,8 @@ namespace {
     //
     // папка сохранения проектов
     const QString kProjectSaveFolderKey = kProjectKey + "/save-folder";
+    // папка открытия проектов
+    const QString kProjectOpenFolderKey = kProjectKey + "/open-folder";
     // папка импорта проектов
     const QString kProjectImportFolderKey = kProjectKey + "/import-folder";
 

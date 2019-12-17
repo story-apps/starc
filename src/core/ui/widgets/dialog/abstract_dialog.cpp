@@ -4,6 +4,7 @@
 
 #include <ui/design_system/design_system.h>
 
+#include <ui/widgets/button/button.h>
 #include <ui/widgets/label/label.h>
 
 #include <QGridLayout>
@@ -33,6 +34,8 @@ public:
     DialogContent* content = nullptr;
     H6Label* title = nullptr;
     QGridLayout* contentsLayout = nullptr;
+    Button* acceptButton = nullptr;
+    Button* rejectButton = nullptr;
 
     QVariantAnimation opacityAnimation;
     QVariantAnimation contentPosAnimation;
@@ -161,6 +164,16 @@ void AbstractDialog::setContentMaximumWidth(int _width)
     d->content->setMaximumWidth(_width);
 }
 
+void AbstractDialog::setAcceptButton(Button* _button)
+{
+    d->acceptButton = _button;
+}
+
+void AbstractDialog::setRejectButton(Button* _button)
+{
+    d->rejectButton = _button;
+}
+
 void AbstractDialog::setTitle(const QString& _title)
 {
     d->title->setVisible(!_title.isEmpty());
@@ -181,6 +194,27 @@ bool AbstractDialog::eventFilter(QObject* _watched, QEvent* _event)
     }
 
     return QWidget::eventFilter(_watched, _event);
+}
+
+bool AbstractDialog::event(QEvent* _event)
+{
+    if (_event->type() == QEvent::KeyPress) {
+        const auto keyEvent = static_cast<QKeyEvent*>(_event);
+        if (d->acceptButton != nullptr
+            && d->acceptButton->isEnabled()
+            && (keyEvent->key() == Qt::Key_Enter
+                || keyEvent->key() == Qt::Key_Return)) {
+            d->acceptButton->click();
+            return true;
+        } else if (d->rejectButton != nullptr
+                   && d->rejectButton->isEnabled()
+                   && keyEvent->key() == Qt::Key_Escape) {
+            d->rejectButton->click();
+            return true;
+        }
+    }
+
+    return Widget::event(_event);
 }
 
 void AbstractDialog::paintEvent(QPaintEvent* _event)

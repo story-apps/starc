@@ -26,6 +26,11 @@ public:
     void setContained(bool _contained);
 
     /**
+     * @brief Имитировать клик пользователя на кнопке для испускания сигнала
+     */
+    void click();
+
+    /**
      * @brief Переопределяем размер для правильного размещения в компоновщиках
      */
     QSize sizeHint() const override;

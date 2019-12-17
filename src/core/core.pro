@@ -102,6 +102,7 @@ SOURCES += \
     utils/3rd_party/WAF/Animation/Slide/SlideAnimator.cpp \
     utils/3rd_party/WAF/Animation/Slide/SlideForegroundDecorator.cpp \
     utils/helpers/color_helper.cpp \
+    utils/helpers/dialog_helper.cpp \
     utils/helpers/image_helper.cpp \
     utils/helpers/text_helper.cpp \
     utils/helpers/quotes_helper.cpp \
@@ -195,6 +196,7 @@ HEADERS += \
     utils/3rd_party/WAF/Animation/Slide/SlideForegroundDecorator.h \
     utils/3rd_party/WAF/WAF.h \
     utils/helpers/color_helper.h \
+    utils/helpers/dialog_helper.h \
     utils/helpers/image_helper.h \
     utils/helpers/text_helper.h \
     utils/helpers/quotes_helper.h \

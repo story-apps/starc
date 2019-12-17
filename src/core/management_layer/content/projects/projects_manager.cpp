@@ -13,8 +13,11 @@
 
 #include <ui/widgets/dialog/dialog.h>
 
+#include <utils/helpers/dialog_helper.h>
+
 #include <QDateTime>
 #include <QDir>
+#include <QFileDialog>
 #include <QFileInfo>
 #include <QJsonArray>
 #include <QJsonDocument>
@@ -94,9 +97,16 @@ ProjectsManager::ProjectsManager(QObject* _parent, QWidget* _parentWidget)
       d(new Implementation(_parentWidget))
 {
     connect(d->toolBar, &Ui::ProjectsToolBar::menuPressed, this, &ProjectsManager::menuRequested);
-    connect(d->navigator, &Ui::ProjectsNavigator::createProjectPressed, this, &ProjectsManager::createProjectRequested);
 
+    connect(d->navigator, &Ui::ProjectsNavigator::createProjectPressed, this, &ProjectsManager::createProjectRequested);
     connect(d->view, &Ui::ProjectsView::createProjectPressed, this, &ProjectsManager::createProjectRequested);
+
+    connect(d->navigator, &Ui::ProjectsNavigator::openProjectPressed, this, &ProjectsManager::openProjectRequested);
+    connect(d->view, &Ui::ProjectsView::openProjectPressed, this, &ProjectsManager::openProjectRequested);
+    connect(d->view, &Ui::ProjectsView::openProjectRequested, this, [this] (const Project& _project) {
+        emit openChoosedProjectRequested(_project.path());
+    });
+
     connect(d->view, &Ui::ProjectsView::hideProjectRequested, this, [this] (const Project& _project) {
         d->projects->remove(_project);
     });
@@ -219,6 +229,38 @@ void ProjectsManager::createProject()
     dialog->showDialog();
 }
 
+void ProjectsManager::openProject()
+{
+    //
+    // Предоставим пользователю возможность выбрать файл, который он хочет открыть
+    //
+    const auto projectOpenFolder
+            = DataStorageLayer::StorageFacade::settingsStorage()->value(
+                  DataStorageLayer::kProjectOpenFolderKey,
+                  DataStorageLayer::SettingsStorage::SettingsPlace::Application)
+              .toString();
+    const auto projectPath
+            = QFileDialog::getOpenFileName(d->topLevelWidget, tr("Choose the file to open"),
+                    projectOpenFolder, DialogHelper::starcProjectFilter());
+    if (projectPath.isEmpty()) {
+        return;
+    }
+
+    //
+    // Если файл был выбран
+    //
+    // ... обновим папку, откуда в следующий раз он предположительно опять будет открывать проекты
+    //
+    DataStorageLayer::StorageFacade::settingsStorage()->setValue(
+                DataStorageLayer::kProjectOpenFolderKey,
+                projectPath,
+                DataStorageLayer::SettingsStorage::SettingsPlace::Application);
+    //
+    // ... и сигнализируем о том, что файл выбран для открытия
+    //
+    emit openChoosedProjectRequested(projectPath);
+}
+
 void ProjectsManager::setCurrentProject(const QString& _path)
 {
     //
@@ -291,9 +333,10 @@ void ProjectsManager::setCurrentProject(const QString& _path)
 
 void ProjectsManager::hideProject(const QString& _path)
 {
-    for (int projectRow = 0; d->projects->rowCount(); ++projectRow) {
-        if (d->projects->projectAt(projectRow).path() == _path) {
-            d->projects->removeRow(projectRow);
+    for (int projectRow = 0 ; projectRow < d->projects->rowCount(); ++projectRow) {
+        const auto& project = d->projects->projectAt(projectRow);
+        if (project.path() == _path) {
+            d->projects->remove(project);
             break;
         }
     }

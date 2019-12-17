@@ -37,6 +37,11 @@ public:
     void createProject();
 
     /**
+     * @brief Выбрать проект для открытия
+     */
+    void openProject();
+
+    /**
      * @brief Установить текущий проект
      */
     void setCurrentProject(const QString& _path);
@@ -66,6 +71,16 @@ signals:
      * @brief Пользователь хочет создать проект в облаке
      */
     void createCloudProjectRequested(const QString& _projectName, const QString& _importFilePath);
+
+    /**
+     * @brief Пользователь хочет открыть проект
+     */
+    void openProjectRequested();
+
+    /**
+     * @brief Пользователь хочет открыть проект по заданному пути
+     */
+    void openChoosedProjectRequested(const QString& _path);
 
 private:
     class Implementation;

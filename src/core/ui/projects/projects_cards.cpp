@@ -705,6 +705,7 @@ ProjectsCards::ProjectsCards(QWidget* _parent)
     setVerticalScrollBar(new ScrollBar(this));
     setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
 
+    connect(d->scene, &ProjectsScene::projectPressed, this, &ProjectsCards::openProjectRequested);
     connect(d->scene, &ProjectsScene::moveProjectToCloudRequested, this, &ProjectsCards::moveProjectToCloudRequested);
     connect(d->scene, &ProjectsScene::hideProjectRequested, this, &ProjectsCards::hideProjectRequested);
     connect(d->scene, &ProjectsScene::changeProjectNameRequested, this, &ProjectsCards::changeProjectNameRequested);

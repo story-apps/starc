@@ -32,7 +32,7 @@ void StandardDialog::information(QWidget* _parent, const QString& _title, const 
 {
     auto dialog = new Dialog(_parent);
     dialog->setContentMaximumWidth(static_cast<int>(Ui::DesignSystem::dialog().infoMaximumWidth()));
-    dialog->showDialog(_title, _text, {{0, generateOkTerm()}});
+    dialog->showDialog(_title, _text, {{ 0, generateOkTerm(), Dialog::RejectButton }});
     QObject::connect(dialog, &Dialog::finished, dialog, &Dialog::hideDialog);
     QObject::connect(dialog, &Dialog::disappeared, dialog, &Dialog::deleteLater);
 }

@@ -11,13 +11,19 @@ class Dialog : public AbstractDialog
     Q_OBJECT
 
 public:
+    enum ButtonType {
+        NormalButton,
+        AcceptButton,
+        RejectButton
+    };
+
     /**
      * @brief Структура для описания кнопок в диалоге
      */
-    struct ButtonInfo
-    {
+    struct ButtonInfo {
         int id;
         QString text;
+        ButtonType type;
     };
 
 public:

@@ -92,6 +92,11 @@ signals:
     void hideRequested();
 
     /**
+     * @brief Пользователь хочет открыть выбранный проект
+     */
+    void openProjectRequested(const ManagementLayer::Project& _project);
+
+    /**
      * @brief Пользователь хочет перенести проект в облако
      */
     void moveProjectToCloudRequested(const ManagementLayer::Project& _project);
