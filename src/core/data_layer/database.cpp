@@ -268,17 +268,6 @@ void Database::createTables(QSqlDatabase &_database)
                "); ");
 
     //
-    // Таблица с информацие о проекте
-    //
-    query.exec("CREATE TABLE project "
-               "( "
-               "name TEXT NOT NULL, "
-               "logline TEXT DEFAULT(NULL), "
-               "image BLOB DEFAULT(NULL), "
-               "date_time TEXT NOT NULL " // yyyy.mm.dd.hh.mm.ss.zzz
-               "); ");
-
-    //
     // Таблица со словарями
     //
     query.exec("CREATE TABLE dictionaries "
@@ -291,27 +280,21 @@ void Database::createTables(QSqlDatabase &_database)
     //
     // Таблица с документами
     //
-    query.exec("CREATE TABLE items "
+    query.exec("CREATE TABLE documents "
                "("
                "id INTEGER PRIMARY KEY AUTOINCREMENT, "
                "uuid TEXT NOT NULL, "
-               "parent_uuid TEXT DEFAULT(NULL), "
                "type INTEGER NOT NULL DEFAULT(0), "
-               "name TEXT DEFAULT(NULL), "
-               "content TEXT DEFAULT(NULL), "
-               "image BLOB DEFAULT(NULL), "
-               "color TEXT DEFAULT(NULL), "
-               "sort_order INTEGER NOT NULL DEFAULT(0), "
-               "is_deleted INTEGER NOT NULL DEFAULT(0) " // помещён ли элемент в корзину?
+               "content BLOB DEFAULT(NULL) "
                ")");
 
     //
     // Таблица с изменениями документов
     //
-    query.exec("CREATE TABLE items_changes "
+    query.exec("CREATE TABLE documents_changes "
                "("
                "id INTEGER PRIMARY KEY AUTOINCREMENT, "
-               "fk_item_uuid TEXT NOT NULL, "
+               "fk_document_uuid TEXT NOT NULL, "
                "uuid TEXT NOT NULL, "
                "undo_patch BLOB NOT NULL, " // отмена изменения
                "redo_patch BLOB NOT NULL, " // повтор изменения
@@ -319,22 +302,6 @@ void Database::createTables(QSqlDatabase &_database)
                "user_email TEXT DEFAULT(NULL), "
                "user_name TEXT NOT NULL "
                ")");
-
-    //
-    // Таблица с версиями документов
-    //
-    query.exec("CREATE TABLE items_versions "
-               "( "
-               "id INTEGER PRIMARY KEY AUTOINCREMENT, "
-               "fk_item_id INTEGER NOT NULL, "
-               "color TEXT DEFAULT(NULL), "
-               "name TEXT UNIQUE NOT NULL, "
-               "description TEXT DEFAULT(NULL), "
-               "item_content TEXT NOT NULL"
-               "date_time TEXT NOT NULL, " // yyyy.mm.dd.hh.mm.ss.zzz
-               "user_email TEXT DEFAULT(NULL), "
-               "user_name TEXT NOT NULL "
-               "); ");
 
     _database.commit();
 }

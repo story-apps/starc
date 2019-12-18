@@ -3,7 +3,7 @@
 
 namespace DataMappingLayer
 {
-class ItemsMapper;
+class DocumentsMapper;
 class SettingsMapper;
 
 /**
@@ -12,11 +12,11 @@ class SettingsMapper;
 class MapperFacade
 {
 public:
-//    static ItemsMapper* itemsMapper();
+    static DocumentsMapper* documentsMapper();
     static SettingsMapper* settingsMapper();
 
 private:
-//    static ItemsMapper* s_itemsMapper;
+    static DocumentsMapper* s_documentsMapper;
     static SettingsMapper* s_settingsMapper;
 };
 

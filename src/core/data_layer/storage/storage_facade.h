@@ -4,7 +4,7 @@
 namespace DataStorageLayer
 {
 
-class ItemsStorage;
+class DocumentsStorage;
 class SettingsStorage;
 
 /**
@@ -18,10 +18,10 @@ public:
      */
     static void clearStorages();
 
-//    /**
-//     * @brief Получить хранилище элементов проекта
-//     */
-//    static ItemsStorage* itemsStorage();
+    /**
+     * @brief Получить хранилище документов проекта
+     */
+    static DocumentsStorage* documentsStorage();
 
     /**
      * @brief Получить хранилище настроек
@@ -29,7 +29,7 @@ public:
     static SettingsStorage* settingsStorage();
 
 private:
-//    static ItemsStorage* s_itemsStorage;
+    static DocumentsStorage* s_documentsStorage;
     static SettingsStorage* s_settingsStorage;
 };
 

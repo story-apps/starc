@@ -23,14 +23,17 @@ INCLUDEPATH += ..
 SOURCES += \
     business_layer/import/abstract_importer.cpp \
     data_layer/database.cpp \
+    data_layer/mapper/abstract_mapper.cpp \
+    data_layer/mapper/documents_mapper.cpp \
     data_layer/mapper/mapper_facade.cpp \
     data_layer/mapper/settings_mapper.cpp \
+    data_layer/storage/documents_storage.cpp \
     data_layer/storage/settings_storage.cpp \
     data_layer/storage/storage_facade.cpp \
+    domain/document_object.cpp \
     domain/domain_object.cpp \
     domain/identifier.cpp \
-    domain/item_object.cpp \
-    domain/items_builder.cpp \
+    domain/objects_builder.cpp \
     management_layer/application_manager.cpp \
     management_layer/content/account/account_manager.cpp \
     management_layer/content/onboarding/onboarding_manager.cpp \
@@ -121,14 +124,17 @@ HEADERS += \
     core_global.h \
     custom_events.h \
     data_layer/database.h \
+    data_layer/mapper/abstract_mapper.h \
+    data_layer/mapper/documents_mapper.h \
     data_layer/mapper/mapper_facade.h \
     data_layer/mapper/settings_mapper.h \
+    data_layer/storage/documents_storage.h \
     data_layer/storage/settings_storage.h \
     data_layer/storage/storage_facade.h \
+    domain/document_object.h \
     domain/domain_object.h \
     domain/identifier.h \
-    domain/item_object.h \
-    domain/items_builder.h \
+    domain/objects_builder.h \
     management_layer/application_manager.h \
     management_layer/content/account/account_manager.h \
     management_layer/content/onboarding/onboarding_manager.h \

@@ -1,20 +1,20 @@
 #include "mapper_facade.h"
 
-//#include "ItemsMapper.h"
+#include "documents_mapper.h"
 #include "settings_mapper.h"
 
 
 namespace DataMappingLayer
 {
 
-//ItemsMapper*MapperFacade::itemsMapper()
-//{
-//    if (s_itemsMapper == nullptr) {
-//        s_itemsMapper = new ItemsMapper;
-//    }
+DocumentsMapper* MapperFacade::documentsMapper()
+{
+    if (s_documentsMapper == nullptr) {
+        s_documentsMapper = new DocumentsMapper;
+    }
 
-//    return s_itemsMapper;
-//}
+    return s_documentsMapper;
+}
 
 SettingsMapper* MapperFacade::settingsMapper()
 {
@@ -24,7 +24,7 @@ SettingsMapper* MapperFacade::settingsMapper()
     return s_settingsMapper;
 }
 
-//ItemsMapper* MapperFacade::s_itemsMapper = nullptr;
+DocumentsMapper* MapperFacade::s_documentsMapper = nullptr;
 SettingsMapper* MapperFacade::s_settingsMapper = nullptr;
 
 }

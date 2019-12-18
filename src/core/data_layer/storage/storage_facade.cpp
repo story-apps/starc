@@ -1,6 +1,6 @@
 #include "storage_facade.h"
 
-//#include "ItemsStorage.h"
+#include "documents_storage.h"
 #include "settings_storage.h"
 
 
@@ -9,17 +9,17 @@ namespace DataStorageLayer
 
 void StorageFacade::clearStorages()
 {
-//    itemsStorage()->clear();
+    documentsStorage()->clear();
 }
 
-//ItemsStorage*StorageFacade::itemsStorage()
-//{
-//    if (s_itemsStorage == nullptr) {
-//        s_itemsStorage = new ItemsStorage;
-//    }
+DocumentsStorage* StorageFacade::documentsStorage()
+{
+    if (s_documentsStorage == nullptr) {
+        s_documentsStorage = new DocumentsStorage;
+    }
 
-//    return s_itemsStorage;
-//}
+    return s_documentsStorage;
+}
 
 SettingsStorage* StorageFacade::settingsStorage()
 {
@@ -29,7 +29,7 @@ SettingsStorage* StorageFacade::settingsStorage()
     return s_settingsStorage;
 }
 
-//ItemsStorage* StorageFacade::s_itemsStorage = nullptr;
+DocumentsStorage* StorageFacade::s_documentsStorage = nullptr;
 SettingsStorage* StorageFacade::s_settingsStorage = nullptr;
 
 } // namespace DataStorageLayer
