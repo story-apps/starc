@@ -6,6 +6,8 @@
 namespace ManagementLayer
 {
 
+class Project;
+
 /**
  * @brief Менеджер экрана со списком проектов
  */
@@ -32,6 +34,11 @@ public:
     void saveProjects();
 
     /**
+     * @brief Обновить дату последнего изменения проекта
+     */
+    void saveChanges();
+
+    /**
      * @brief Можно ли создавать проекты в облаке
      */
     void setProjectsInCloudCanBeCreated(bool _authorized, bool _ableToCreate);
@@ -55,6 +62,11 @@ public:
      * @brief Скрыть проект
      */
     void hideProject(const QString& _path);
+
+    /**
+     * @brief Получить текущий проект
+     */
+    const Project& currentProject() const;
 
 signals:
     /**

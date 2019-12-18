@@ -45,8 +45,15 @@ public:
     ~Project();
 
     /**
+     * @brief Валиден ли проект
+     */
+    bool isValid() const;
+
+    /**
      * @brief Тип проекта
      */
+    bool isLocal() const;
+    bool isRemote() const;
     ProjectType type() const;
     void setType(ProjectType _type);
 
@@ -82,6 +89,12 @@ public:
     QString displayLastEditTime() const;
     QDateTime lastEditTime() const;
     void setLastEditTime(const QDateTime& _time);
+
+    /**
+     * @brief Идентификатор проекта
+     */
+    int id() const;
+    void setId(int _id);
 
     /**
      * @brief Получить данные по роли из модели

@@ -2,6 +2,8 @@
 
 #include "content/account/account_manager.h"
 #include "content/onboarding/onboarding_manager.h"
+#include "content/project/project_manager.h"
+#include "content/projects/project.h"
 #include "content/projects/projects_manager.h"
 #include "content/settings/settings_manager.h"
 
@@ -11,6 +13,7 @@
 
 #include <include/custom_events.h>
 
+#include <data_layer/database.h>
 #include <data_layer/storage/settings_storage.h>
 #include <data_layer/storage/storage_facade.h>
 
@@ -23,12 +26,15 @@
 #include <ui/widgets/dialog/standard_dialog.h>
 
 #include <utils/3rd_party/WAF/Animation/Animation.h>
+#include <utils/tools/backup_builder.h>
+#include <utils/tools/run_once.h>
 
 #include <QApplication>
 #include <QDir>
 #include <QFontDatabase>
 #include <QLocale>
 #include <QStyleFactory>
+#include <QtConcurrentRun>
 #include <QTimer>
 #include <QTranslator>
 #include <QVariant>
@@ -36,6 +42,30 @@
 
 
 namespace ManagementLayer {
+
+namespace  {
+    /**
+     * @brief Состояние приложения
+     */
+    enum class ApplicationState {
+        /**
+         * @brief Инициализация после запуска
+         */
+        Initializing,
+        /**
+         * @brief Загрузка проекта
+         */
+        ProjectLoading,
+        /**
+         * @brief Рабочее состояние
+         */
+        Working,
+        /**
+         * @brief Импортирование
+         */
+        Importing
+    };
+}
 
 class ApplicationManager::Implementation
 {
@@ -73,6 +103,11 @@ public:
      * @brief Показать страницу проектов
      */
     void showProjects();
+
+    /**
+     * @brief Показать страницу проекта
+     */
+    void showProject();
 
     /**
      * @brief Показать страницу настроек
@@ -161,6 +196,9 @@ public:
 
     ApplicationManager* q = nullptr;
 
+    /**
+     * @brief Интерфейс приложения
+     */
     Ui::ApplicationView* applicationView = nullptr;
     Ui::MenuView* menuView = nullptr;
     struct LastContent {
@@ -169,17 +207,32 @@ public:
         QWidget* view = nullptr;
     } lastContent;
 
+    /**
+     * @brief Менеджеры управляющие конкретными частями приложения
+     */
     QScopedPointer<AccountManager> accountManager;
     QScopedPointer<OnboardingManager> onboardingManager;
     QScopedPointer<ProjectsManager> projectsManager;
+    QScopedPointer<ProjectManager> projectManager;
     QScopedPointer<SettingsManager> settingsManager;
 #ifdef CLOUD_SERVICE_MANAGER
     QScopedPointer<CloudServiceManager> cloudServiceManager;
 #endif
 
+    /**
+     * @brief Таймер автосохранения проекта
+     */
     QTimer autosaveTimer;
 
+    /**
+     * @brief Состояние приложения в данный момент
+     */
+    ApplicationState state = ApplicationState::Initializing;
+
 private:
+    template<typename Manager>
+    void showContent(Manager* _manager);
+
     template<typename Manager>
     void saveLastContent(Manager* _manager);
 };
@@ -191,6 +244,7 @@ ApplicationManager::Implementation::Implementation(ApplicationManager* _q)
       accountManager(new AccountManager(nullptr, applicationView)),
       onboardingManager(new OnboardingManager(nullptr, applicationView)),
       projectsManager(new ProjectsManager(nullptr, applicationView)),
+      projectManager(new ProjectManager(nullptr, applicationView)),
       settingsManager(new SettingsManager(nullptr, applicationView))
 #ifdef CLOUD_SERVICE_MANAGER
     , cloudServiceManager(new CloudServiceManager)
@@ -206,6 +260,7 @@ ApplicationManager::Implementation::~Implementation()
     accountManager->disconnect();
     onboardingManager->disconnect();
     projectsManager->disconnect();
+    projectManager->disconnect();
 #ifdef CLOUD_SERVICE_MANAGER
     cloudServiceManager->disconnect();
 #endif
@@ -240,9 +295,7 @@ void ApplicationManager::Implementation::showContent()
     // Если это первый запуск приложения, то покажем онбординг
     //
     if (settingsValue(DataStorageLayer::kApplicationConfiguredKey).toBool() == false) {
-        applicationView->showContent(onboardingManager->toolBar(),
-                                     onboardingManager->navigator(),
-                                     onboardingManager->view());
+        showContent(onboardingManager.data());
     }
     //
     // В противном случае показываем недавние проекты
@@ -280,24 +333,23 @@ void ApplicationManager::Implementation::showMenu()
 
 void ApplicationManager::Implementation::showAccount()
 {
-    applicationView->showContent(accountManager->toolBar(),
-                                 accountManager->navigator(),
-                                 accountManager->view());
+    showContent(accountManager.data());
     accountManager->accountBar()->hide();
 }
 
 void ApplicationManager::Implementation::showProjects()
 {
-    applicationView->showContent(projectsManager->toolBar(),
-                                 projectsManager->navigator(),
-                                 projectsManager->view());
+    showContent(projectsManager.data());
+}
+
+void ApplicationManager::Implementation::showProject()
+{
+    showContent(projectManager.data());
 }
 
 void ApplicationManager::Implementation::showSettings()
 {
-    applicationView->showContent(settingsManager->toolBar(),
-                                 settingsManager->navigator(),
-                                 settingsManager->view());
+    showContent(settingsManager.data());
 }
 
 void ApplicationManager::Implementation::showLastContent()
@@ -401,10 +453,103 @@ void ApplicationManager::Implementation::markChangesSaved(bool _saved)
 void ApplicationManager::Implementation::saveChanges()
 {
     //
-    // TODO: Сохранение, все дела
+    // Избегаем рекурсии
     //
+    const auto canRun = RunOnce::tryRun(Q_FUNC_INFO);
+    if (!canRun) {
+        return;
+    }
 
+    //
+    // Сохраняем только, если приложение находится в рабочем состоянии
+    //
+    if (state != ApplicationState::Working) {
+        return;
+    }
+
+    //
+    // Сохраняем только, если есть какие-либо изменения
+    //
+    if (!applicationView->isWindowModified()) {
+        return;
+    }
+
+    //
+    // Управляющие должны сохранить все изменения
+    //
+    DatabaseLayer::Database::transaction();
+    projectsManager->saveChanges();
+    projectManager->saveChanges();
+    DatabaseLayer::Database::commit();
+
+#ifdef CLOUD_SERVICE_MANAGER
+    //
+    // Для проекта из облака синхронизируем данные
+    //
+    if (projectsManager->currentProject().isRemote()) {
+        cloudServiceManager->saveChanges();
+    }
+#endif
+
+    //
+    // Если произошла ошибка сохранения, то делаем дополнительные проверки и работаем с пользователем
+    //
+    if (DatabaseLayer::Database::hasError()) {
+        //
+        // Если файл, в который мы пробуем сохранять изменения существует
+        //
+        if (QFile::exists(DatabaseLayer::Database::currentFile())) {
+            //
+            // ... то у нас случилась какая-то внутренняя ошибка базы данных
+            //
+            StandardDialog::information(
+                        applicationView, tr("Saving error"),
+                        tr("Changes can't be written. There is an internal database error: \"%1\" "
+                           "Please check, if your file exists and if you have permission to write.")
+                        .arg(DatabaseLayer::Database::lastError()));
+
+            //
+            // TODO: пока хер знает, как реагировать на данную проблему...
+            //       нужны реальные кейсы и пробовать что-то предпринимать
+            //
+        }
+        //
+        // Файла с базой данных не найдено
+        //
+        else {
+            //
+            // ... возможно файл был на флешке, а она отошла, или файл был переименован во время работы программы
+            //
+            StandardDialog::information(
+                        applicationView, tr("Saving error"),
+                        tr("Changes can't be written because the story located at \"%1\" doesn't exist. "
+                           "Please move the file back and retry saving.")
+                        .arg(DatabaseLayer::Database::currentFile()));
+        }
+        return;
+    }
+
+
+    //
+    // Если изменения сохранились без ошибок, то изменим статус окна на сохранение изменений
+    //
     markChangesSaved(true);
+
+    //
+    // И, если необходимо создадим резервную копию закрываемого файла
+    //
+    if (settingsValue(DataStorageLayer::kApplicationSaveBackupsKey).toBool()) {
+        QString baseBackupName;
+        const auto& currentProject = projectsManager->currentProject();
+        if (currentProject.isRemote()) {
+            //
+            // Для удаленных проектов имя бекапа - имя проекта + id проекта
+            // В случае, если имя удаленного проекта изменилось, то бэкапы со старым именем останутся навсегда
+            //
+            baseBackupName = QString("%1 [%2]").arg(currentProject.name()).arg(currentProject.id());
+        }
+        QtConcurrent::run(&BackupBuilder::save, projectsManager->currentProject().path(), baseBackupName);
+    }
 }
 
 void ApplicationManager::Implementation::saveIfNeeded(std::function<void()> _callback)
@@ -589,6 +734,14 @@ void ApplicationManager::Implementation::exit()
 }
 
 template<typename Manager>
+void ApplicationManager::Implementation::showContent(Manager* _manager)
+{
+    applicationView->showContent(_manager->toolBar(),
+                                 _manager->navigator(),
+                                 _manager->view());
+}
+
+template<typename Manager>
 void ApplicationManager::Implementation::saveLastContent(Manager* _manager)
 {
     lastContent.toolBar = _manager->toolBar();
@@ -625,6 +778,7 @@ ApplicationManager::~ApplicationManager() = default;
 
 void ApplicationManager::exec(const QString& _fileToOpenPath)
 {
+
     //
     // Установим размер экрана по-умолчанию, на случай, если это первый запуск
     //
@@ -669,6 +823,11 @@ void ApplicationManager::exec(const QString& _fileToOpenPath)
         // Открыть заданный проект
         //
         openProject(_fileToOpenPath);
+
+        //
+        // Переводим состояние приложение в рабочий режим
+        //
+        d->state = ApplicationState::Working;
     });
 }
 

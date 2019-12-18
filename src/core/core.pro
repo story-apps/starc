@@ -7,7 +7,7 @@
 TEMPLATE = lib
 
 CONFIG += plugin c++1z
-QT += widgets sql xml
+QT += widgets sql xml concurrent
 
 TARGET = $$qtLibraryTarget(coreplugin)
 
@@ -34,6 +34,7 @@ SOURCES += \
     management_layer/application_manager.cpp \
     management_layer/content/account/account_manager.cpp \
     management_layer/content/onboarding/onboarding_manager.cpp \
+    management_layer/content/project/project_manager.cpp \
     management_layer/content/projects/project.cpp \
     management_layer/content/projects/projects_manager.cpp \
     management_layer/content/settings/settings_manager.cpp \
@@ -53,6 +54,9 @@ SOURCES += \
     ui/onboarding/onboarding_navigator.cpp \
     ui/onboarding/onboarding_tool_bar.cpp \
     ui/onboarding/onboarding_view.cpp \
+    ui/project/project_navigator.cpp \
+    ui/project/project_tool_bar.cpp \
+    ui/project/project_view.cpp \
     ui/projects/create_project_dialog.cpp \
     ui/projects/projects_cards.cpp \
     ui/projects/projects_navigator.cpp \
@@ -108,6 +112,7 @@ SOURCES += \
     utils/helpers/image_helper.cpp \
     utils/helpers/text_helper.cpp \
     utils/helpers/quotes_helper.cpp \
+    utils/tools/backup_builder.cpp \
     utils/tools/debouncer.cpp \
     utils/tools/run_once.cpp
 
@@ -127,6 +132,7 @@ HEADERS += \
     management_layer/application_manager.h \
     management_layer/content/account/account_manager.h \
     management_layer/content/onboarding/onboarding_manager.h \
+    management_layer/content/project/project_manager.h \
     management_layer/content/projects/project.h \
     management_layer/content/projects/projects_manager.h \
     management_layer/content/settings/settings_manager.h \
@@ -146,6 +152,9 @@ HEADERS += \
     ui/onboarding/onboarding_navigator.h \
     ui/onboarding/onboarding_tool_bar.h \
     ui/onboarding/onboarding_view.h \
+    ui/project/project_navigator.h \
+    ui/project/project_tool_bar.h \
+    ui/project/project_view.h \
     ui/projects/create_project_dialog.h \
     ui/projects/projects_cards.h \
     ui/projects/projects_navigator.h \
@@ -204,6 +213,7 @@ HEADERS += \
     utils/helpers/image_helper.h \
     utils/helpers/text_helper.h \
     utils/helpers/quotes_helper.h \
+    utils/tools/backup_builder.h \
     utils/tools/debouncer.h \
     utils/tools/run_once.h \
     utils/validators/email_validator.h

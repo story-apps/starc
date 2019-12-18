@@ -158,6 +158,16 @@ void ProjectsManager::saveProjects()
                 DataStorageLayer::SettingsStorage::SettingsPlace::Application);
 }
 
+void ProjectsManager::saveChanges()
+{
+    if (!d->currentProject.isValid()) {
+        return;
+    }
+
+    d->currentProject.setLastEditTime(QDateTime::currentDateTime());
+    d->projects->updateProject(d->currentProject);
+}
+
 void ProjectsManager::setProjectsInCloudCanBeCreated(bool _authorized, bool _ableToCreate)
 {
     d->isUserAuthorized = _authorized;
@@ -289,30 +299,20 @@ void ProjectsManager::setCurrentProject(const QString& _path)
     // Если проект не нашёлся в списке недавних, добавляем в начало
     //
     if (newCurrentProject.type() == ProjectType::Invalid) {
-        //
-        // Определим название проекта
-        //
         QFileInfo fileInfo(projectPath);
-        QString projectName = fileInfo.completeBaseName();
-        newCurrentProject.setName(projectName);
+
         //
-        // ... определим остальные параметры проекта
+        // Определим параметры проекта
         //
+        newCurrentProject.setName(fileInfo.completeBaseName());
         newCurrentProject.setType(ProjectType::Local);
         newCurrentProject.setPath(projectPath);
-        newCurrentProject.setLastEditTime(QDateTime::currentDateTime());
+        newCurrentProject.setLastEditTime(fileInfo.lastModified());
 
         //
         // Добавляем проект в список
         //
         d->projects->prepend(newCurrentProject);
-    }
-    //
-    // А если проект был в списке, обновим его дату и время последнего использования
-    //
-    else {
-        newCurrentProject.setLastEditTime(QDateTime::currentDateTime());
-        d->projects->updateProject(newCurrentProject);
     }
 
     //
@@ -330,6 +330,11 @@ void ProjectsManager::hideProject(const QString& _path)
             break;
         }
     }
+}
+
+const Project& ProjectsManager::currentProject() const
+{
+    return d->currentProject;
 }
 
 } // namespace ManagementLayer

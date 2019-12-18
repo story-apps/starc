@@ -19,6 +19,7 @@ public:
     QString name;
     QString logline;
     QDateTime lastEditTime;
+    int id = -1;
 };
 
 
@@ -44,6 +45,21 @@ const Project& Project::operator=(const Project& _other)
 {
     d.reset(new Implementation(*_other.d));
     return *this;
+}
+
+bool Project::isValid() const
+{
+    return d->type != ProjectType::Invalid;
+}
+
+bool Project::isLocal() const
+{
+    return d->type == ProjectType::Local;
+}
+
+bool Project::isRemote() const
+{
+    return d->type == ProjectType::Remote;
 }
 
 Project::~Project() = default;
@@ -152,6 +168,16 @@ QDateTime Project::lastEditTime() const
 void Project::setLastEditTime(const QDateTime& _time)
 {
     d->lastEditTime = _time;
+}
+
+int Project::id() const
+{
+    return d->id;
+}
+
+void Project::setId(int _id)
+{
+    d->id = _id;
 }
 
 QVariant Project::data(int _role) const
