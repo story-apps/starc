@@ -144,6 +144,11 @@ public:
     //
 
     /**
+     * @brief Обновить заголовок приложения
+     */
+    void updateWindowTitle();
+
+    /**
      * @brief Настроить состояние приложения сохранены ли все изменения или нет
      */
     void markChangesSaved(bool _saved);
@@ -310,11 +315,6 @@ void ApplicationManager::Implementation::showContent()
         //
         showProjects();
 
-        //
-        // Сохраняем последнее отображаемое представление, чтобы можно было вернуться к нему
-        //
-        saveLastContent(projectsManager.data());
-
 #ifdef CLOUD_SERVICE_MANAGER
         //
         // Если менеджер облака доступен, отобржаем панель для работы с личным кабинетом
@@ -339,12 +339,16 @@ void ApplicationManager::Implementation::showAccount()
 
 void ApplicationManager::Implementation::showProjects()
 {
+    menuView->checkProjects();
     showContent(projectsManager.data());
+    saveLastContent(projectsManager.data());
 }
 
 void ApplicationManager::Implementation::showProject()
 {
+    menuView->checkProject();
     showContent(projectManager.data());
+    saveLastContent(projectManager.data());
 }
 
 void ApplicationManager::Implementation::showSettings()
@@ -434,6 +438,18 @@ void ApplicationManager::Implementation::setScaleFactor(qreal _scaleFactor)
 {
     Ui::DesignSystem::setScaleFactor(_scaleFactor);
     QApplication::postEvent(q, new DesignSystemChangeEvent);
+}
+
+void ApplicationManager::Implementation::updateWindowTitle()
+{
+    if (!projectsManager->currentProject().isValid()) {
+        applicationView->setWindowTitle("Story Architect");
+        return;
+    }
+
+    applicationView->setWindowTitle(
+                QString("%1 - Story Architect")
+                .arg(projectsManager->currentProject().name()));
 }
 
 void ApplicationManager::Implementation::markChangesSaved(bool _saved)
@@ -699,9 +715,113 @@ void ApplicationManager::Implementation::openProject(const QString& _path)
 
 void ApplicationManager::Implementation::goToEditCurrentProject(const QString& _importFilePath)
 {
+    state = ApplicationState::ProjectLoading;
+
     //
-    // TODO:
+    // Установим заголовок
     //
+    updateWindowTitle();
+
+    //
+    // Настроим меню
+    //
+    menuView->setProjectTitle(projectsManager->currentProject().name());
+    menuView->setProjectActionsVisible(true);
+
+//    //
+//    // Настроим режим работы со сценарием
+//    //
+//    const bool isCommentOnly = ProjectsManager::currentProject().isCommentOnly();
+//    m_menuManager->setMenuItemEnabled(kStartNewVersionMenuIndex, !isCommentOnly);
+//    m_menuManager->setMenuItemEnabled(kImportMenuIndex, !isCommentOnly);
+//    m_menuManager->setMenuItemEnabled(kExportMenuIndex, !isCommentOnly);
+//    m_researchManager->setCommentOnly(isCommentOnly);
+//    m_scenarioManager->setCommentOnly(isCommentOnly);
+
+//    //
+//    // Если открываемый файл доступен только для чтения, то блокируем изменения, но оставляем возможность экспорта
+//    //
+//    if (!ProjectsManager::currentProject().isWritable()) {
+//        m_menuManager->setMenuItemEnabled(kStartNewVersionMenuIndex, false);
+//        m_menuManager->setMenuItemEnabled(kImportMenuIndex, false);
+//        m_researchManager->setCommentOnly(true);
+//        m_scenarioManager->setCommentOnly(true);
+//    }
+
+//    //
+//    // FIXME: Сделать загрузку сценария  сразу в БД, это заодно позволит избавиться
+//    //		  и от необходимости сохранять проект после синхронизации
+//    //
+//    // Загружаем текст сценария
+//    // Это нужно делать перед синхронизацией текста
+//    //
+//    m_scenarioManager->loadCurrentProject();
+
+//    //
+//    // Синхронизируем проекты из облака
+//    //
+//    if (m_projectsManager->currentProject().isRemote()) {
+//        progress.setProgressText(QString::null, tr("Sync scenario with cloud service."));
+//        m_synchronizationManager->aboutFullSyncScenario();
+//        m_synchronizationManager->aboutFullSyncData();
+//    }
+
+//    //
+//    // FIXME: Если были изменения связанные с текстом сценария перестраиваем карточки
+//    //        т.к. там нет пока синхронизации
+//    //
+//    m_scenarioManager->rebuildCardsFromScript();
+
+//    //
+//    // Загрузить данные из файла
+//    // Делать это нужно после того, как все данные синхронизировались
+//    //
+//    m_researchManager->loadCurrentProject();
+//    m_statisticsManager->loadCurrentProject();
+
+//    //
+//    // Затем импортируем данные из указанного файла, если необходимо
+//    //
+//    if (!_importFilePath.isEmpty()) {
+//        progress.setProgressText(tr("Import"), tr("Please wait. Import can take few minutes."));
+//        m_importManager->importScenario(m_scenarioManager->scenario(), _importFilePath);
+//        m_researchManager->loadScenarioData();
+//    }
+
+//    //
+//    // Запускаем обработку изменений сценария
+//    //
+//    m_scenarioManager->startChangesHandling();
+
+//    //
+//    // Загрузить настройки файла
+//    // Порядок загрузки важен - сначала настройки каждого модуля, потом активные вкладки
+//    //
+//    m_researchManager->loadCurrentProjectSettings(ProjectsManager::currentProject().path());
+//    m_scenarioManager->loadCurrentProjectSettings(ProjectsManager::currentProject().path());
+//    m_exportManager->loadCurrentProjectSettings(ProjectsManager::currentProject().path());
+//    m_toolsManager->loadCurrentProjectSettings();
+//    loadCurrentProjectSettings(ProjectsManager::currentProject().path());
+
+//    //
+//    // Обновим название текущего проекта, т.к. данные о проекте теперь загружены
+//    //
+//    updateWindowTitle();
+
+//    //
+//    // Установим параметры между менеджерами
+//    //
+//    m_scenarioManager->setScriptHeader(m_researchManager->scriptHeader());
+//    m_scenarioManager->setScriptFooter(m_researchManager->scriptFooter());
+//    m_scenarioManager->setSceneNumbersPrefix(m_researchManager->sceneNumbersPrefix());
+//    m_scenarioManager->setSceneStartNumber(m_researchManager->sceneStartNumber());
+
+    //
+    // Отобразить страницу самого проекта
+    //
+    showProject();
+
+    state = ApplicationState::Working;
 }
 
 void ApplicationManager::Implementation::closeCurrentProject()
@@ -778,6 +898,10 @@ ApplicationManager::~ApplicationManager() = default;
 
 void ApplicationManager::exec(const QString& _fileToOpenPath)
 {
+    //
+    // Самое главное - настроить заголовок!
+    //
+    d->updateWindowTitle();
 
     //
     // Установим размер экрана по-умолчанию, на случай, если это первый запуск
@@ -884,6 +1008,7 @@ void ApplicationManager::initConnections()
     connect(d->menuView, &Ui::MenuView::projectsPressed, this, [this] { d->showProjects(); });
     connect(d->menuView, &Ui::MenuView::createProjectPressed, this, [this] { d->createProject(); });
     connect(d->menuView, &Ui::MenuView::openProjectPressed, this, [this] { d->openProject(); });
+    connect(d->menuView, &Ui::MenuView::projectPressed, this, [this] { d->showProject(); });
     connect(d->menuView, &Ui::MenuView::settingsPressed, this, [this] { d->showSettings(); });
 
     //
@@ -948,11 +1073,16 @@ void ApplicationManager::initConnections()
     });
 
     //
+    // Менеджер проекта
+    //
+    connect(d->projectManager.data(), &ProjectManager::menuRequested, this,
+            [this] { d->showMenu(); });
+
+    //
     // Менеджер настроек
     //
-    connect(d->settingsManager.data(), &SettingsManager::closeSettingsRequested, this, [this] {
-        d->showLastContent();
-    });
+    connect(d->settingsManager.data(), &SettingsManager::closeSettingsRequested, this,
+            [this] { d->showLastContent(); });
     connect(d->settingsManager.data(), &SettingsManager::applicationLanguageChanged, this,
             [this] (QLocale::Language _language) { d->setTranslation(_language); });
     connect(d->settingsManager.data(), &SettingsManager::applicationThemeChanged, this,

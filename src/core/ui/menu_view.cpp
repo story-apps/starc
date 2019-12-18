@@ -64,7 +64,7 @@ MenuView::Implementation::Implementation(QWidget* _parent)
     //
     importProject = new QAction;
     importProject->setIconText("\uf2fa");
-    importProject->setCheckable(true);
+    importProject->setCheckable(false);
     importProject->setVisible(false);
     //
     exportProject = new QAction;
@@ -138,7 +138,7 @@ MenuView::MenuView(QWidget* _parent)
     setVisible(false);
 }
 
-void MenuView::checkStories()
+void MenuView::checkProjects()
 {
     QSignalBlocker signalBlocker(this);
     d->projects->setChecked(true);
@@ -188,8 +188,8 @@ void MenuView::updateTranslations()
     d->projects->setText(tr("Stories"));
     d->createProject->setText(tr("Create story"));
     d->openProject->setText(tr("Open story"));
-    d->saveProject->setText(tr("Save current story"));
-    d->saveProjectAs->setText(d->saveProject->isEnabled() ? tr("Save changes") : tr("All changes saved"));
+    d->saveProject->setText(d->saveProject->isEnabled() ? tr("Save changes") : tr("All changes saved"));
+    d->saveProjectAs->setText(tr("Save current story as..."));
     d->importProject->setText(tr("Import..."));
     d->exportProject->setText(tr("Export..."));
     d->settings->setText(tr("Application settings"));

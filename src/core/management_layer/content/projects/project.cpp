@@ -151,7 +151,7 @@ QString Project::displayLastEditTime() const
         }
 
         case 1: {
-            return QApplication::translate("Domain::Project", "tomorrow at") + d->lastEditTime.toString(" hh:mm");
+            return QApplication::translate("Domain::Project", "yesterday at") + d->lastEditTime.toString(" hh:mm");
         }
 
         default: {

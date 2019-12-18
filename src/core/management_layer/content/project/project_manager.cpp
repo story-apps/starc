@@ -39,6 +39,7 @@ ProjectManager::ProjectManager(QObject* _parent, QWidget* _parentWidget)
     : QObject(_parent),
       d(new Implementation(_parentWidget))
 {
+    connect(d->toolBar, &Ui::ProjectToolBar::menuPressed, this, &ProjectManager::menuRequested);
 }
 
 ProjectManager::~ProjectManager() = default;

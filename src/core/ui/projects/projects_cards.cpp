@@ -174,13 +174,16 @@ void ProjectCard::paint(QPainter* _painter, const QStyleOptionGraphicsItem* _opt
     // Готовим фон (кэшируем его, чтобы использовать во всех карточках)
     //
     static QPixmap backgroundPixmapCache;
-    if (backgroundPixmapCache.size() != backgroundRect.size()) {
+    static QColor backgroundPixmapColor;
+    if (backgroundPixmapCache.size() != backgroundRect.size()
+        || backgroundPixmapColor != Ui::DesignSystem::color().background()) {
         backgroundPixmapCache = QPixmap(backgroundRect.size().toSize());
         backgroundPixmapCache.fill(Qt::transparent);
         QPainter backgroundImagePainter(&backgroundPixmapCache);
         backgroundImagePainter.setRenderHint(QPainter::Antialiasing);
         backgroundImagePainter.setPen(Qt::NoPen);
-        backgroundImagePainter.setBrush(Ui::DesignSystem::color().background());
+        backgroundPixmapColor = Ui::DesignSystem::color().background();
+        backgroundImagePainter.setBrush(backgroundPixmapColor);
         const qreal borderRadius = Ui::DesignSystem::card().borderRadius();
         backgroundImagePainter.drawRoundedRect(QRect({0,0}, backgroundPixmapCache.size()), borderRadius, borderRadius);
     }
@@ -344,6 +347,7 @@ void ProjectCard::mouseReleaseEvent(QGraphicsSceneMouseEvent* _event)
 {
     QGraphicsRectItem::mouseReleaseEvent(_event);
 
+    bool needReorderCards = true;
     if (m_decorationOpacityAnimation.state() == QVariantAnimation::Running) {
         m_decorationOpacityAnimation.pause();
         m_decorationOpacityAnimation.setEndValue(0.0);
@@ -355,6 +359,7 @@ void ProjectCard::mouseReleaseEvent(QGraphicsSceneMouseEvent* _event)
                 emit projectsScene()->moveProjectToCloudRequested(m_project);
             } else if (iconsRects[1].contains(_event->pos())) {
                 emit projectsScene()->hideProjectRequested(m_project);
+                needReorderCards = false;
             } else {
                 emit projectsScene()->projectPressed(m_project);
             }
@@ -363,6 +368,7 @@ void ProjectCard::mouseReleaseEvent(QGraphicsSceneMouseEvent* _event)
                 emit projectsScene()->changeProjectNameRequested(m_project);
             } else if (iconsRects[1].contains(_event->pos())) {
                 emit projectsScene()->removeProjectRequested(m_project);
+                needReorderCards = false;
             } else {
                 emit projectsScene()->projectPressed(m_project);
             }
@@ -372,6 +378,12 @@ void ProjectCard::mouseReleaseEvent(QGraphicsSceneMouseEvent* _event)
         m_decorationOpacityAnimation.setEndValue(0.0);
         m_decorationOpacityAnimation.start();
 
+    }
+
+    //
+    // Если карточка не была удалена, возвращаем её на место
+    //
+    if (needReorderCards) {
         //
         // Делаем отложенный вызов, чтобы mouseGrabber сцены освободился
         //
