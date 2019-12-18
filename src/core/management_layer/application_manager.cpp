@@ -728,93 +728,10 @@ void ApplicationManager::Implementation::goToEditCurrentProject(const QString& _
     menuView->setProjectTitle(projectsManager->currentProject().name());
     menuView->setProjectActionsVisible(true);
 
-//    //
-//    // Настроим режим работы со сценарием
-//    //
-//    const bool isCommentOnly = ProjectsManager::currentProject().isCommentOnly();
-//    m_menuManager->setMenuItemEnabled(kStartNewVersionMenuIndex, !isCommentOnly);
-//    m_menuManager->setMenuItemEnabled(kImportMenuIndex, !isCommentOnly);
-//    m_menuManager->setMenuItemEnabled(kExportMenuIndex, !isCommentOnly);
-//    m_researchManager->setCommentOnly(isCommentOnly);
-//    m_scenarioManager->setCommentOnly(isCommentOnly);
-
-//    //
-//    // Если открываемый файл доступен только для чтения, то блокируем изменения, но оставляем возможность экспорта
-//    //
-//    if (!ProjectsManager::currentProject().isWritable()) {
-//        m_menuManager->setMenuItemEnabled(kStartNewVersionMenuIndex, false);
-//        m_menuManager->setMenuItemEnabled(kImportMenuIndex, false);
-//        m_researchManager->setCommentOnly(true);
-//        m_scenarioManager->setCommentOnly(true);
-//    }
-
-//    //
-//    // FIXME: Сделать загрузку сценария  сразу в БД, это заодно позволит избавиться
-//    //		  и от необходимости сохранять проект после синхронизации
-//    //
-//    // Загружаем текст сценария
-//    // Это нужно делать перед синхронизацией текста
-//    //
-//    m_scenarioManager->loadCurrentProject();
-
-//    //
-//    // Синхронизируем проекты из облака
-//    //
-//    if (m_projectsManager->currentProject().isRemote()) {
-//        progress.setProgressText(QString::null, tr("Sync scenario with cloud service."));
-//        m_synchronizationManager->aboutFullSyncScenario();
-//        m_synchronizationManager->aboutFullSyncData();
-//    }
-
-//    //
-//    // FIXME: Если были изменения связанные с текстом сценария перестраиваем карточки
-//    //        т.к. там нет пока синхронизации
-//    //
-//    m_scenarioManager->rebuildCardsFromScript();
-
-//    //
-//    // Загрузить данные из файла
-//    // Делать это нужно после того, как все данные синхронизировались
-//    //
-//    m_researchManager->loadCurrentProject();
-//    m_statisticsManager->loadCurrentProject();
-
-//    //
-//    // Затем импортируем данные из указанного файла, если необходимо
-//    //
-//    if (!_importFilePath.isEmpty()) {
-//        progress.setProgressText(tr("Import"), tr("Please wait. Import can take few minutes."));
-//        m_importManager->importScenario(m_scenarioManager->scenario(), _importFilePath);
-//        m_researchManager->loadScenarioData();
-//    }
-
-//    //
-//    // Запускаем обработку изменений сценария
-//    //
-//    m_scenarioManager->startChangesHandling();
-
-//    //
-//    // Загрузить настройки файла
-//    // Порядок загрузки важен - сначала настройки каждого модуля, потом активные вкладки
-//    //
-//    m_researchManager->loadCurrentProjectSettings(ProjectsManager::currentProject().path());
-//    m_scenarioManager->loadCurrentProjectSettings(ProjectsManager::currentProject().path());
-//    m_exportManager->loadCurrentProjectSettings(ProjectsManager::currentProject().path());
-//    m_toolsManager->loadCurrentProjectSettings();
-//    loadCurrentProjectSettings(ProjectsManager::currentProject().path());
-
-//    //
-//    // Обновим название текущего проекта, т.к. данные о проекте теперь загружены
-//    //
-//    updateWindowTitle();
-
-//    //
-//    // Установим параметры между менеджерами
-//    //
-//    m_scenarioManager->setScriptHeader(m_researchManager->scriptHeader());
-//    m_scenarioManager->setScriptFooter(m_researchManager->scriptFooter());
-//    m_scenarioManager->setSceneNumbersPrefix(m_researchManager->sceneNumbersPrefix());
-//    m_scenarioManager->setSceneStartNumber(m_researchManager->sceneStartNumber());
+    //
+    // Загрузим данные текущего проекта
+    //
+    projectManager->loadCurrentProject();
 
     //
     // Отобразить страницу самого проекта

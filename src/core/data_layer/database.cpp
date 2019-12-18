@@ -283,7 +283,7 @@ void Database::createTables(QSqlDatabase &_database)
     query.exec("CREATE TABLE documents "
                "("
                "id INTEGER PRIMARY KEY AUTOINCREMENT, "
-               "uuid TEXT NOT NULL, "
+               "uuid TEXT UNIQUE NOT NULL, "
                "type INTEGER NOT NULL DEFAULT(0), "
                "content BLOB DEFAULT(NULL) "
                ")");
@@ -295,7 +295,7 @@ void Database::createTables(QSqlDatabase &_database)
                "("
                "id INTEGER PRIMARY KEY AUTOINCREMENT, "
                "fk_document_uuid TEXT NOT NULL, "
-               "uuid TEXT NOT NULL, "
+               "uuid TEXT UNIQUE NOT NULL, "
                "undo_patch BLOB NOT NULL, " // отмена изменения
                "redo_patch BLOB NOT NULL, " // повтор изменения
                "date_time TEXT NOT NULL, " // yyyy.mm.dd.hh.mm.ss.zzz

@@ -18,6 +18,11 @@ class DocumentsStorage
 {
 public:
     /**
+     * @brief Получить документ структуры проекта
+     */
+    Domain::DocumentObject* structure();
+
+    /**
      * @brief Получить документ по uuid'у
      */
     Domain::DocumentObject* document(const QUuid& _uuid);

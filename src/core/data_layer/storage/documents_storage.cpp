@@ -10,6 +10,20 @@
 namespace DataStorageLayer
 {
 
+Domain::DocumentObject* DocumentsStorage::structure()
+{
+    auto structure = DataMappingLayer::MapperFacade::documentsMapper()->findStructure();
+
+    //
+    // Создаём структуру, если ещё не была создана
+    //
+    if (structure == nullptr) {
+        structure = storeDocument({}, Domain::DocumentObjectType::Structure);
+    }
+
+    return structure;
+}
+
 Domain::DocumentObject* DocumentsStorage::document(const QUuid& _uuid)
 {
     return DataMappingLayer::MapperFacade::documentsMapper()->find(_uuid);

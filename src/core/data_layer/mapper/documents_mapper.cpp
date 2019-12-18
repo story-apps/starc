@@ -33,7 +33,10 @@ DocumentObject* DocumentsMapper::find(const Identifier& _id)
 DocumentObject* DocumentsMapper::find(const QUuid& _uuid)
 {
     const auto domainObjects = abstractFind(uuidFilter(_uuid));
-    Q_ASSERT(domainObjects.size() == 0);
+    if (domainObjects.isEmpty()) {
+        return nullptr;
+    }
+
     return dynamic_cast<DocumentObject*>(domainObjects.first());
 }
 

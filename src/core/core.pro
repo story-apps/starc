@@ -22,6 +22,8 @@ INCLUDEPATH += ..
 
 SOURCES += \
     business_layer/import/abstract_importer.cpp \
+    business_layer/structure_model.cpp \
+    business_layer/structure_model_item.cpp \
     data_layer/database.cpp \
     data_layer/mapper/abstract_mapper.cpp \
     data_layer/mapper/documents_mapper.cpp \
@@ -121,6 +123,8 @@ SOURCES += \
 
 HEADERS += \
     business_layer/import/abstract_importer.h \
+    business_layer/structure_model.h \
+    business_layer/structure_model_item.h \
     core_global.h \
     custom_events.h \
     data_layer/database.h \

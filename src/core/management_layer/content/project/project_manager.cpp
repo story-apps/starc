@@ -1,5 +1,8 @@
 #include "project_manager.h"
 
+#include <data_layer/storage/documents_storage.h>
+#include <data_layer/storage/storage_facade.h>
+
 #include <ui/project/project_navigator.h>
 #include <ui/project/project_tool_bar.h>
 #include <ui/project/project_view.h>
@@ -57,6 +60,34 @@ QWidget* ProjectManager::navigator() const
 QWidget* ProjectManager::view() const
 {
     return d->view;
+}
+
+void ProjectManager::loadCurrentProject()
+{
+    auto st = DataStorageLayer::StorageFacade::documentsStorage()->structure();
+    qDebug("bbb");
+
+
+
+    //
+    // Синхронизировать структуру с облаком
+    //
+
+    //
+    // Открыть структуру
+    //
+
+    //
+    // Восстановить последнее состояние дерева, если возможно
+    //
+
+    //
+    // Синхронизировать выбранный документ
+    //
+
+    //
+    // Синхрониировать все остальные изменения
+    //
 }
 
 void ProjectManager::saveChanges()

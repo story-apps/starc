@@ -22,6 +22,11 @@ public:
     QWidget* view() const;
 
     /**
+     * @brief Загрузить данные текущего проекта
+     */
+    void loadCurrentProject();
+
+    /**
      * @brief Сохранить изменения проекта
      */
     void saveChanges();
