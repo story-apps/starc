@@ -69,6 +69,11 @@ public:
     void removeItem(StructureModelItem* _item);
 
     /**
+     * @brief Извлечь элемент не удаляя его
+     */
+    void takeItem(StructureModelItem* _item);
+
+    /**
      * @brief Имеет ли элемент родительский элемент
      */
     bool hasParent() const;

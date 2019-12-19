@@ -76,6 +76,7 @@ void Tree::setRootIsDecorated(bool _decorated)
 
 void Tree::setDragDropEnabled(bool _enabled)
 {
+    d->tree->setAcceptDrops(_enabled);
     d->tree->setDragEnabled(_enabled);
     d->tree->setDragDropMode(_enabled ? QAbstractItemView::DragDrop : QAbstractItemView::NoDragDrop);
     d->tree->setDropIndicatorShown(_enabled);

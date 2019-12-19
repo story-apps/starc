@@ -111,6 +111,11 @@ void StructureModelItem::removeItem(StructureModelItem* _item)
     _item = nullptr;
 }
 
+void StructureModelItem::takeItem(StructureModelItem* _item)
+{
+    d->children.removeOne(_item);
+}
+
 bool StructureModelItem::hasParent() const
 {
     return d->parent != nullptr;

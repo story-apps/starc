@@ -8,7 +8,6 @@
 #include <QDataStream>
 #include <QMimeData>
 
-
 namespace BusinessLayer
 {
 
@@ -242,7 +241,7 @@ int StructureModel::rowCount(const QModelIndex& _parent) const
 Qt::ItemFlags StructureModel::flags(const QModelIndex& _index) const
 {
     if (!_index.isValid()) {
-        return Qt::NoItemFlags;
+        return Qt::ItemIsDropEnabled;
     }
 
     //
@@ -323,8 +322,7 @@ bool StructureModel::canDropMimeData(const QMimeData* _data, Qt::DropAction _act
 bool StructureModel::dropMimeData(const QMimeData* _data, Qt::DropAction _action, int _row,
     int _column, const QModelIndex& _parent)
 {
-    if (!canDropMimeData(_data, _action, _row, _column, _parent)
-        || !_parent.isValid()) {
+    if (!canDropMimeData(_data, _action, _row, _column, _parent)) {
         return false;
     }
 
@@ -354,17 +352,39 @@ bool StructureModel::dropMimeData(const QMimeData* _data, Qt::DropAction _action
     //
     // Если с данными всё окей, то перемещаем все элементы по очереди
     //
-    const int insertBeforeItemRow = _row - 1; // -1, т.к. нужно вставить перед _row
-    const QModelIndex insertBeforeItemIndex = index(insertBeforeItemRow, _column, _parent);
-    auto insertBeforeItem = itemForIndex(insertBeforeItemIndex);
-    while (!d->m_lastMimeItems.isEmpty()) {
-        auto item = d->m_lastMimeItems.takeLast();
-        auto itemIndex = indexForItem(item);
-        emit beginMoveRows(itemIndex.parent(), itemIndex.row(), itemIndex.row(),
-                           insertBeforeItemIndex.parent(), insertBeforeItemRow);
-        removeItem(item);
-        insertItem(item, insertBeforeItem);
-        emit endMoveRows();
+
+    auto parentItem = itemForIndex(_parent);
+
+    //
+    // Добавляем после всех элементов выбранного
+    //
+    if (_row == -1
+        || _row == parentItem->childCount()) {
+        while (!d->m_lastMimeItems.isEmpty()) {
+            auto item = d->m_lastMimeItems.takeFirst();
+            auto itemIndex = indexForItem(item);
+            emit beginMoveRows(itemIndex.parent(), itemIndex.row(), itemIndex.row(),
+                               _parent, parentItem->childCount());
+            item->parent()->takeItem(item);
+            parentItem->appendItem(item);
+            emit endMoveRows();
+        }
+    }
+    //
+    // Вставляем между элементами
+    //
+    else {
+        const QModelIndex insertBeforeItemIndex = index(_row, _column, _parent);
+        auto insertBeforeItem = itemForIndex(insertBeforeItemIndex);
+        while (!d->m_lastMimeItems.isEmpty()) {
+            auto item = d->m_lastMimeItems.takeLast();
+            auto itemIndex = indexForItem(item);
+            emit beginMoveRows(itemIndex.parent(), itemIndex.row(), itemIndex.row(),
+                               insertBeforeItemIndex.parent(), _row);
+            item->parent()->takeItem(item);
+            parentItem->insertItem(parentItem->rowOfChild(insertBeforeItem), item);
+            emit endMoveRows();
+        }
     }
 
     return true;
