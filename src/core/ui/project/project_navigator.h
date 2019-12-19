@@ -15,10 +15,17 @@ class ProjectNavigator : public Widget
 
 public:
     explicit ProjectNavigator(QWidget* _parent = nullptr);
+    ~ProjectNavigator() override;
 
-signals:
+protected:
+    /**
+     * @brief Обновляем виджет при изменении дизайн системы
+     */
+    void designSystemChangeEvent(DesignSystemChangeEvent* _event) override;
 
-public slots:
+private:
+    class Implementation;
+    QScopedPointer<Implementation> d;
 };
 
 }

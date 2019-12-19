@@ -32,6 +32,11 @@ public:
     void setRootIsDecorated(bool _decorated);
 
     /**
+     * @brief Включить/отключить возможность перетаскивания элементов
+     */
+    void setDragDropEnabled(bool _enabled);
+
+    /**
      * @brief Задать текущий индекс
      */
     void setCurrentIndex(const QModelIndex& _index);

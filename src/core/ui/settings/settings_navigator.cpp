@@ -30,7 +30,6 @@ public:
 SettingsNavigator::Implementation::Implementation(QWidget* _parent)
     : tree(new Tree(_parent))
 {
-
 }
 
 

@@ -42,6 +42,11 @@ StructureModelItem::StructureModelItem(const QUuid& _uuid, Domain::DocumentObjec
 {
 }
 
+StructureModelItem::StructureModelItem(const StructureModelItem& _other)
+    : d(new Implementation(_other.d->uuid, _other.d->type, _other.d->name, _other.d->color))
+{
+}
+
 QUuid StructureModelItem::uuid() const
 {
     return d->uuid;
@@ -101,10 +106,8 @@ void StructureModelItem::insertItem(int _index, StructureModelItem* _item)
 
 void StructureModelItem::removeItem(StructureModelItem* _item)
 {
-    //
-    // removeOne - удаляет объект при помощи delete, так что потом самому удалять не нужно
-    //
     d->children.removeOne(_item);
+    delete _item;
     _item = nullptr;
 }
 
@@ -118,14 +121,9 @@ StructureModelItem* StructureModelItem::parent() const
     return d->parent;
 }
 
-StructureModelItem* StructureModelItem::childAt(int _index) const
+bool StructureModelItem::hasChildren() const
 {
-    return d->children.value(_index, nullptr);
-}
-
-int StructureModelItem::rowOfChild(StructureModelItem* _child) const
-{
-    return d->children.indexOf(_child);
+    return !d->children.isEmpty();
 }
 
 int StructureModelItem::childCount() const
@@ -133,9 +131,19 @@ int StructureModelItem::childCount() const
     return d->children.count();
 }
 
-bool StructureModelItem::hasChildren() const
+bool StructureModelItem::hasChild(StructureModelItem* _child) const
 {
-    return !d->children.isEmpty();
+    return d->children.contains(_child);
+}
+
+int StructureModelItem::rowOfChild(StructureModelItem* _child) const
+{
+    return d->children.indexOf(_child);
+}
+
+StructureModelItem* StructureModelItem::childAt(int _index) const
+{
+    return d->children.value(_index, nullptr);
 }
 
 } // namespace BusinessLayer

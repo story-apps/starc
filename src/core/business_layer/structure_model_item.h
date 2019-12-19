@@ -19,8 +19,9 @@ namespace BusinessLayer
 class StructureModelItem
 {
 public:
-    explicit StructureModelItem(const QUuid& _uuid, Domain::DocumentObjectType _type, const QString& _name,
-        const QColor& _color);
+    explicit StructureModelItem(const QUuid& _uuid, Domain::DocumentObjectType _type,
+         const QString& _name, const QColor& _color);
+    explicit StructureModelItem(const StructureModelItem& _other);
 
     /**
      * @brief Уникальный идентификатор элемента
@@ -78,14 +79,9 @@ public:
     StructureModelItem* parent() const;
 
     /**
-     * @brief Дочерний элемент по индексу
+     * @brief Имеет ли элемент детей
      */
-    StructureModelItem* childAt(int _index) const;
-
-    /**
-     * @brief Индекс дочернего элемента
-     */
-    int rowOfChild(StructureModelItem* _child) const;
+    bool hasChildren() const;
 
     /**
      * @brief Количество дочерних элементов
@@ -93,9 +89,19 @@ public:
     int childCount() const;
 
     /**
-     * @brief Имеет ли элемент детей
+     * @brief Является ли заданный элемент дочерним текущему
      */
-    bool hasChildren() const;
+    bool hasChild(StructureModelItem* _child) const;
+
+    /**
+     * @brief Индекс дочернего элемента
+     */
+    int rowOfChild(StructureModelItem* _child) const;
+
+    /**
+     * @brief Дочерний элемент по индексу
+     */
+    StructureModelItem* childAt(int _index) const;
 
 private:
     class Implementation;

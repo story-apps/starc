@@ -74,6 +74,13 @@ void Tree::setRootIsDecorated(bool _decorated)
     d->tree->setRootIsDecorated(_decorated);
 }
 
+void Tree::setDragDropEnabled(bool _enabled)
+{
+    d->tree->setDragEnabled(_enabled);
+    d->tree->setDragDropMode(_enabled ? QAbstractItemView::DragDrop : QAbstractItemView::NoDragDrop);
+    d->tree->setDropIndicatorShown(_enabled);
+}
+
 void Tree::setCurrentIndex(const QModelIndex& _index)
 {
     d->tree->setCurrentIndex(_index);
