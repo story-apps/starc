@@ -39,7 +39,7 @@ public:
     /**
      * @brief Последние положенные в майм элементы
      */
-    mutable QList<StructureModelItem*> m_lastMimeItems;
+    mutable QVector<StructureModelItem*> m_lastMimeItems;
 };
 
 StructureModel::Implementation::Implementation()
@@ -376,9 +376,24 @@ bool StructureModel::dropMimeData(const QMimeData* _data, Qt::DropAction _action
     else {
         const QModelIndex insertBeforeItemIndex = index(_row, _column, _parent);
         auto insertBeforeItem = itemForIndex(insertBeforeItemIndex);
+
+        if (d->m_lastMimeItems.contains(insertBeforeItem)) {
+            return false;
+        }
+
         while (!d->m_lastMimeItems.isEmpty()) {
-            auto item = d->m_lastMimeItems.takeLast();
+            auto item = d->m_lastMimeItems.takeFirst();
             auto itemIndex = indexForItem(item);
+
+            //
+            // Нет смысла перемещать элемент на то же самое место
+            //
+            if (itemIndex.parent() == insertBeforeItemIndex.parent()
+                && (itemIndex.row() == insertBeforeItemIndex.row()
+                    || itemIndex.row() == insertBeforeItemIndex.row() - 1)) {
+                continue;
+            }
+
             emit beginMoveRows(itemIndex.parent(), itemIndex.row(), itemIndex.row(),
                                insertBeforeItemIndex.parent(), _row);
             item->parent()->takeItem(item);
@@ -398,16 +413,50 @@ QMimeData* StructureModel::mimeData(const QModelIndexList& _indexes) const
         return nullptr;
     }
 
-    QByteArray encodedData;
-    QDataStream stream(&encodedData, QIODevice::WriteOnly);
+    //
+    // Формируем список элементов для перемещения
+    //
     for (const QModelIndex& index : _indexes) {
-        if (!index.isValid()) {
-            continue;
+        if (index.isValid()) {
+            d->m_lastMimeItems << itemForIndex(index);
+        }
+    }
+    //
+    // ... и упорядочиваем его
+    //
+    std::sort(d->m_lastMimeItems.begin(), d->m_lastMimeItems.end(),
+              [] (StructureModelItem* _lhs, StructureModelItem* _rhs) {
+        //
+        // Для элементов находящихся на одном уровне сравниваем их позиции
+        //
+        if (_lhs->parent() == _rhs->parent()) {
+            return _lhs->parent()->rowOfChild(_lhs) < _rhs->parent()->rowOfChild(_rhs);
         }
 
-        auto item = itemForIndex(index);
+        //
+        // Для разноуровневых элементов определяем путь до верха и сравниваем пути
+        //
+        auto buildPath = [] (StructureModelItem* _item) {
+            QString path;
+            auto child = _item;
+            auto parent = child->parent();
+            while (parent != nullptr) {
+                path.prepend(QString("0000%1").arg(parent->rowOfChild(child)).right(5));
+                child = parent;
+                parent = child->parent();
+            }
+            return path;
+        };
+        return buildPath(_lhs) < buildPath(_rhs);
+    });
+
+    //
+    // Помещаем индексы перемещаемых элементов в майм
+    //
+    QByteArray encodedData;
+    QDataStream stream(&encodedData, QIODevice::WriteOnly);
+    for (const auto& item : d->m_lastMimeItems) {
         stream << item->uuid();
-        d->m_lastMimeItems << item;
     }
 
     QMimeData *mimeData = new QMimeData();

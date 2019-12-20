@@ -25,6 +25,11 @@ protected:
      */
     void paintEvent(QPaintEvent* _event) override;
 
+    /**
+     * @brief Переопределяем, чтобы раскрывать элемент в который кидаются данные, если элемент свёрнут
+     */
+    void dropEvent(QDropEvent* _event) override;
+
 private:
     class Implementation;
     QScopedPointer<Implementation> d;

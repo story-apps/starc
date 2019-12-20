@@ -95,3 +95,13 @@ void TreeView::paintEvent(QPaintEvent* _event)
         painter.setClipRect(QRect(), Qt::NoClip);
     }
 }
+
+void TreeView::dropEvent(QDropEvent* _event)
+{
+    const auto index = indexAt(_event->pos());
+    if (index.isValid()) {
+        expand(index);
+    }
+
+    QTreeView::dropEvent(_event);
+}
