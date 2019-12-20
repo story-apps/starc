@@ -4,6 +4,8 @@
 
 #include <domain/document_object.h>
 
+#include <utils/diff_match_patch/diff_match_patch_controller.h>
+
 #include <QColor>
 #include <QDataStream>
 #include <QMimeData>
@@ -60,6 +62,10 @@ StructureModel::StructureModel(QObject* _parent)
     : QAbstractItemModel(_parent),
       d(new Implementation)
 {
+    connect(this, &StructureModel::rowsInserted, this, &StructureModel::contentChanged);
+    connect(this, &StructureModel::rowsRemoved, this, &StructureModel::contentChanged);
+    connect(this, &StructureModel::rowsMoved, this, &StructureModel::contentChanged);
+    connect(this, &StructureModel::dataChanged, this, &StructureModel::contentChanged);
 }
 
 StructureModel::~StructureModel() = default;
@@ -71,6 +77,14 @@ void StructureModel::setDocument(Domain::DocumentObject* _document)
     }
 
     d->structure = _document;
+
+    //
+    // Если документ пустой, создаём первоначальную структуру
+    //
+    if (d->structure->content().isEmpty()) {
+        d->structure->setContent(Domain::DocumentObject::kDefaultStructureContent);
+    }
+
     d->rebuildModel();
 }
 

@@ -41,12 +41,11 @@ ProjectNavigator::ProjectNavigator(QWidget* _parent)
     layout->setContentsMargins({});
     layout->setSpacing(0);
     layout->addWidget(d->tree);
+}
 
-    auto model = new BusinessLayer::StructureModel(this);
-    for (int i = 0; i < 10; ++i) {
-        model->appendItem(new BusinessLayer::StructureModelItem(QUuid::createUuid(), Domain::DocumentObjectType::Project, "name" + QString::number(i), {}));
-    }
-    d->tree->setModel(model);
+void ProjectNavigator::setModel(QAbstractItemModel* _model)
+{
+    d->tree->setModel(_model);
 }
 
 ProjectNavigator::~ProjectNavigator() = default;

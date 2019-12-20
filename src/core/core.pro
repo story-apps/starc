@@ -32,6 +32,7 @@ SOURCES += \
     data_layer/storage/documents_storage.cpp \
     data_layer/storage/settings_storage.cpp \
     data_layer/storage/storage_facade.cpp \
+    domain/document_change_object.cpp \
     domain/document_object.cpp \
     domain/domain_object.cpp \
     domain/identifier.cpp \
@@ -135,6 +136,7 @@ HEADERS += \
     data_layer/storage/documents_storage.h \
     data_layer/storage/settings_storage.h \
     data_layer/storage/storage_facade.h \
+    domain/document_change_object.h \
     domain/document_object.h \
     domain/domain_object.h \
     domain/identifier.h \

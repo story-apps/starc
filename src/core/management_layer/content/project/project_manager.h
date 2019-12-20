@@ -27,6 +27,11 @@ public:
     void loadCurrentProject();
 
     /**
+     * @brief Закрыть текущий проект
+     */
+    void closeCurrentProject();
+
+    /**
      * @brief Сохранить изменения проекта
      */
     void saveChanges();

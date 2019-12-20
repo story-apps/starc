@@ -82,6 +82,12 @@ public:
      */
     StructureModelItem* itemForIndex(const QModelIndex& _index) const;
 
+signals:
+    /**
+     * @brief Данные изменились
+     */
+    void contentChanged();
+
 private:
     /**
      * @brief Получить индекс заданного элемента

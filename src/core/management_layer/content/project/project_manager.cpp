@@ -1,5 +1,7 @@
 #include "project_manager.h"
 
+#include <business_layer/structure_model.h>
+
 #include <data_layer/storage/documents_storage.h>
 #include <data_layer/storage/storage_facade.h>
 
@@ -21,17 +23,22 @@ public:
     Ui::ProjectToolBar* toolBar = nullptr;
     Ui::ProjectNavigator* navigator = nullptr;
     Ui::ProjectView* view = nullptr;
+
+    BusinessLayer::StructureModel* projectStructure = nullptr;
 };
 
 ProjectManager::Implementation::Implementation(QWidget* _parent)
     : topLevelWidget(_parent),
       toolBar(new Ui::ProjectToolBar(_parent)),
       navigator(new Ui::ProjectNavigator(_parent)),
-      view(new Ui::ProjectView(_parent))
+      view(new Ui::ProjectView(_parent)),
+      projectStructure(new BusinessLayer::StructureModel(navigator))
 {
     toolBar->hide();
     navigator->hide();
     view->hide();
+
+    navigator->setModel(projectStructure);
 }
 
 
@@ -64,8 +71,7 @@ QWidget* ProjectManager::view() const
 
 void ProjectManager::loadCurrentProject()
 {
-    auto st = DataStorageLayer::StorageFacade::documentsStorage()->structure();
-    qDebug("bbb");
+    d->projectStructure->setDocument(DataStorageLayer::StorageFacade::documentsStorage()->structure());
 
 
 
@@ -88,6 +94,11 @@ void ProjectManager::loadCurrentProject()
     //
     // Синхрониировать все остальные изменения
     //
+}
+
+void ProjectManager::closeCurrentProject()
+{
+    d->projectStructure->clear();
 }
 
 void ProjectManager::saveChanges()

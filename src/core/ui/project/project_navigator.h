@@ -2,6 +2,8 @@
 
 #include <ui/widgets/widget/widget.h>
 
+class QAbstractItemModel;
+
 
 namespace Ui
 {
@@ -16,6 +18,11 @@ class ProjectNavigator : public Widget
 public:
     explicit ProjectNavigator(QWidget* _parent = nullptr);
     ~ProjectNavigator() override;
+
+    /**
+     * @brief Задать модель документов проекта
+     */
+    void setModel(QAbstractItemModel* _model);
 
 protected:
     /**

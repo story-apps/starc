@@ -69,6 +69,12 @@ class DocumentObject : public DomainObject
 {
 public:
     /**
+     * @brief Дефолтная структура проекта
+     */
+    static const QByteArray kDefaultStructureContent;
+
+public:
+    /**
      * @brief Уникальный идентификатор
      */
     QUuid uuid() const;

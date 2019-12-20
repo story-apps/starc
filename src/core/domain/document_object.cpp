@@ -4,6 +4,8 @@
 namespace Domain
 {
 
+const QByteArray DocumentObject::kDefaultStructureContent = "";
+
 QUuid DocumentObject::uuid() const
 {
     return m_uuid;
