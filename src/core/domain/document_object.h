@@ -77,7 +77,7 @@ public:
     /**
      * @brief Уникальный идентификатор
      */
-    QUuid uuid() const;
+    const QUuid& uuid() const;
     void setUuid(const QUuid& _uuid);
 
     /**
@@ -89,11 +89,12 @@ public:
     /**
      * @brief Содержимое документа
      */
-    QByteArray content() const;
+    const QByteArray& content() const;
     void setContent(const QByteArray& _content);
 
 private:
-    DocumentObject(const Identifier& _id, const QUuid& _uuid, DocumentObjectType _type, const QByteArray& _content);
+    explicit DocumentObject(const Identifier& _id, const QUuid& _uuid, DocumentObjectType _type,
+                   const QByteArray& _content);
     friend class ObjectsBuilder;
 
     /**

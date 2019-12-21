@@ -268,16 +268,6 @@ void Database::createTables(QSqlDatabase &_database)
                "); ");
 
     //
-    // Таблица со словарями
-    //
-    query.exec("CREATE TABLE dictionaries "
-               "("
-               "id INTEGER PRIMARY KEY AUTOINCREMENT, "
-               "type INTEGER NOT NULL DEFAULT(0), "
-               "name TEXT NOT NULL "
-               ")");
-
-    //
     // Таблица с документами
     //
     query.exec("CREATE TABLE documents "
@@ -308,7 +298,18 @@ void Database::createTables(QSqlDatabase &_database)
 
 void Database::createIndexes(QSqlDatabase &_database)
 {
-    Q_UNUSED(_database)
+    QSqlQuery query(_database);
+    _database.transaction();
+
+    //
+    // Таблица с изменениями документов
+    //
+    query.exec("CREATE INDEX documents_changes_fk_document_uuid_idx "
+               "ON documents_changes (fk_document_uuid)");
+    query.exec("CREATE INDEX documents_changes_date_time_idx "
+               "ON documents_changes (date_time)");
+
+    _database.commit();
 }
 
 void Database::createEnums(QSqlDatabase &_database)

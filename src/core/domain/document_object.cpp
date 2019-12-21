@@ -6,7 +6,7 @@ namespace Domain
 
 const QByteArray DocumentObject::kDefaultStructureContent = "";
 
-QUuid DocumentObject::uuid() const
+const QUuid& DocumentObject::uuid() const
 {
     return m_uuid;
 }
@@ -36,7 +36,7 @@ void DocumentObject::setType(DocumentObjectType _type)
     markChangesNotStored();
 }
 
-QByteArray DocumentObject::content() const
+const QByteArray& DocumentObject::content() const
 {
     return m_content;
 }
