@@ -268,6 +268,16 @@ void Database::createTables(QSqlDatabase &_database)
                "); ");
 
     //
+    // Таблица со словарями
+    //
+    query.exec("CREATE TABLE dictionaries "
+               "("
+               "id INTEGER PRIMARY KEY AUTOINCREMENT, "
+               "type INTEGER NOT NULL DEFAULT(0), "
+               "name TEXT NOT NULL "
+               ")");
+
+    //
     // Таблица с документами
     //
     query.exec("CREATE TABLE documents "

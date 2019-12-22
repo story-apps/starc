@@ -31,7 +31,7 @@ public:
     /**
      * @brief Иконка элемента
      */
-    QString icon() const;
+    Domain::DocumentObjectType type() const;
 
     /**
      * @brief Название элемента

@@ -4,7 +4,29 @@
 namespace Domain
 {
 
-const QByteArray DocumentObject::kDefaultStructureContent = "";
+namespace {
+
+const QHash<DocumentObjectType, QByteArray> kDocumentObjectTypeToMimeType
+    = {{ DocumentObjectType::Undefined, "application/x-starc/document/undefined" },
+       { DocumentObjectType::Structure, "application/x-starc/document/structure" },
+       { DocumentObjectType::Project, "application/x-starc/document/project" },
+       { DocumentObjectType::Screenplay, "application/x-starc/document/screenplay" }};
+const QHash<DocumentObjectType, QString> kDocumentObjectTypeToIcon
+    = {{ DocumentObjectType::Undefined, "\uf78a" },
+       { DocumentObjectType::Structure, "\uf78a" },
+       { DocumentObjectType::Project, "\ufab6" },
+       { DocumentObjectType::Screenplay, "\uf21a" }};
+}
+
+QByteArray mimeTypeFor(DocumentObjectType _type)
+{
+    return kDocumentObjectTypeToMimeType.value(_type);
+}
+
+QString iconForType(DocumentObjectType _type)
+{
+    return kDocumentObjectTypeToIcon.value(_type);
+}
 
 const QUuid& DocumentObject::uuid() const
 {

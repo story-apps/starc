@@ -12,19 +12,20 @@ namespace Domain
  * @brief Типы элементов
  */
 enum class DocumentObjectType {
-    Undefined = 0,
+    Undefined,
 
     //
     // Служебные для обслуживания работы с проектом
     //
 
-    Structure = 1,
+    Structure,
 
     //
     // Собственно данные
     //
 
-    Project = 101,
+    Project,
+    Screenplay,
 
 /**
 //    Text,
@@ -63,16 +64,28 @@ enum class DocumentObjectType {
 };
 
 /**
+ * @brief Определим метод для возможности использовать типы объектов в виде ключей в словарях
+ */
+inline uint qHash(DocumentObjectType _type)
+{
+    return qHash(static_cast<int>(_type));
+}
+
+/**
+ * @brief Получить майм-тип по типу объекта
+ */
+QByteArray mimeTypeFor(DocumentObjectType _type);
+
+/**
+ * @brief Получить иконку по типу объекта
+ */
+QString iconForType(DocumentObjectType _type);
+
+/**
  * @brief Класс данных документа
  */
 class DocumentObject : public DomainObject
 {
-public:
-    /**
-     * @brief Дефолтная структура проекта
-     */
-    static const QByteArray kDefaultStructureContent;
-
 public:
     /**
      * @brief Уникальный идентификатор
@@ -94,7 +107,7 @@ public:
 
 private:
     explicit DocumentObject(const Identifier& _id, const QUuid& _uuid, DocumentObjectType _type,
-                   const QByteArray& _content);
+                            const QByteArray& _content);
     friend class ObjectsBuilder;
 
     /**

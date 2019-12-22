@@ -86,13 +86,18 @@ signals:
     /**
      * @brief Данные изменились
      */
-    void contentChanged();
+    void contentChanged(const QByteArray& _undo, const QByteArray& _redo);
 
 private:
     /**
      * @brief Получить индекс заданного элемента
      */
     QModelIndex indexForItem(StructureModelItem* _item) const;
+
+    /**
+     * @brief Установить данные в документ
+     */
+    void updateDocumentContent();
 
 private:
     class Implementation;

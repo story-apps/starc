@@ -125,12 +125,12 @@ DiffMatchPatchController::DiffMatchPatchController(const QVector<QString>& _tags
 
 DiffMatchPatchController::~DiffMatchPatchController() = default;
 
-QString DiffMatchPatchController::makePatch(const QString& _lhs, const QString& _rhs)
+QByteArray DiffMatchPatchController::makePatch(const QString& _lhs, const QString& _rhs)
 {
-    return d->makePatchXml(_lhs, _rhs);
+    return d->makePatchXml(_lhs, _rhs).toUtf8();
 }
 
-QString DiffMatchPatchController::applyPatch(const QString& _content, const QString& _patch)
+QByteArray DiffMatchPatchController::applyPatch(const QString& _content, const QString& _patch)
 {
-    return d->applyPatchXml(_content, _patch);
+    return d->applyPatchXml(_content, _patch).toUtf8();
 }

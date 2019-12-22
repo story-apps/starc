@@ -23,9 +23,14 @@ public:
     Implementation();
 
     /**
-     * @brief Перестроить модель структуры
+     * @brief Построить модель структуры из xml хранящегося в документе
      */
-    void rebuildModel();
+    void buildModel();
+
+    /**
+     * @brief Сформировать xml из данных модели
+     */
+    QByteArray toXml() const;
 
 
     /**
@@ -42,6 +47,11 @@ public:
      * @brief Последние положенные в майм элементы
      */
     mutable QVector<StructureModelItem*> m_lastMimeItems;
+
+    /**
+     * @brief Контроллер для формирования патчей изменений структуры
+     */
+    DiffMatchPatchController dmpController = DiffMatchPatchController({});
 };
 
 StructureModel::Implementation::Implementation()
@@ -49,9 +59,46 @@ StructureModel::Implementation::Implementation()
 {
 }
 
-void StructureModel::Implementation::rebuildModel()
+void StructureModel::Implementation::buildModel()
 {
 
+}
+
+QByteArray StructureModel::Implementation::toXml() const
+{
+    if (structure == nullptr) {
+        return {};
+    }
+
+    //
+    // TODO: Продумать, как оптимизировать формирование xml
+    //
+
+    QByteArray xml = "<?xml version=\"1.0\"?>\n";
+    xml += "<document mime-type=\"" + Domain::mimeTypeFor(structure->type()) + "\" version=\"1.0\">\n";
+    std::function<void(StructureModelItem*)> writeItemXml;
+    writeItemXml = [&xml, &writeItemXml] (StructureModelItem* _item) {
+        xml += "<item ";
+        xml += " uuid=\"" + _item->uuid().toString() + "\" ";
+        xml += " type=\"" + Domain::mimeTypeFor(_item->type()) + "\" ";
+        xml += " color=\"" + _item->color().name() + "\" ";
+        xml += " name=\"" + _item->name() + "\" ";
+        if (!_item->hasChildren()) {
+            xml += "/>\n";
+            return;
+        }
+
+        xml += ">\n";
+        for (int childIndex = 0; childIndex < _item->childCount(); ++childIndex) {
+            writeItemXml(_item->childAt(childIndex));
+        }
+        xml += "</item>\n";
+    };
+    for (int childIndex = 0; childIndex < rootItem->childCount(); ++childIndex) {
+        writeItemXml(rootItem->childAt(childIndex));
+    }
+    xml += "</document>";
+    return xml;
 }
 
 
@@ -62,10 +109,10 @@ StructureModel::StructureModel(QObject* _parent)
     : QAbstractItemModel(_parent),
       d(new Implementation)
 {
-    connect(this, &StructureModel::rowsInserted, this, &StructureModel::contentChanged);
-    connect(this, &StructureModel::rowsRemoved, this, &StructureModel::contentChanged);
-    connect(this, &StructureModel::rowsMoved, this, &StructureModel::contentChanged);
-    connect(this, &StructureModel::dataChanged, this, &StructureModel::contentChanged);
+    connect(this, &StructureModel::rowsInserted, this, &StructureModel::updateDocumentContent);
+    connect(this, &StructureModel::rowsRemoved, this, &StructureModel::updateDocumentContent);
+    connect(this, &StructureModel::rowsMoved, this, &StructureModel::updateDocumentContent);
+    connect(this, &StructureModel::dataChanged, this, &StructureModel::updateDocumentContent);
 }
 
 StructureModel::~StructureModel() = default;
@@ -82,10 +129,16 @@ void StructureModel::setDocument(Domain::DocumentObject* _document)
     // Если документ пустой, создаём первоначальную структуру
     //
     if (d->structure->content().isEmpty()) {
-        d->structure->setContent(Domain::DocumentObject::kDefaultStructureContent);
+        appendItem(new StructureModelItem(QUuid::createUuid(), Domain::DocumentObjectType::Project, tr("Project"), {}));
+        appendItem(new StructureModelItem(QUuid::createUuid(), Domain::DocumentObjectType::Screenplay, tr("Screenplay"), {}));
+        updateDocumentContent();
     }
-
-    d->rebuildModel();
+    //
+    // А если данные есть, то загрузим их из документа
+    //
+    else {
+        d->buildModel();
+    }
 }
 
 void StructureModel::clear()
@@ -282,7 +335,7 @@ QVariant StructureModel::data(const QModelIndex& _index, int _role) const
         }
 
         case Qt::DecorationRole: {
-            return item->icon();
+            return Domain::iconForType(item->type());
         }
 
         case Qt::BackgroundRole: {
@@ -377,6 +430,12 @@ bool StructureModel::dropMimeData(const QMimeData* _data, Qt::DropAction _action
         while (!d->m_lastMimeItems.isEmpty()) {
             auto item = d->m_lastMimeItems.takeFirst();
             auto itemIndex = indexForItem(item);
+
+            if (item->parent() == parentItem
+                && parentItem->childCount() == 1) {
+                continue;
+            }
+
             emit beginMoveRows(itemIndex.parent(), itemIndex.row(), itemIndex.row(),
                                _parent, parentItem->childCount());
             item->parent()->takeItem(item);
@@ -510,6 +569,29 @@ QModelIndex StructureModel::indexForItem(StructureModelItem* _item) const
     }
 
     return index(row, 0, parent);
+}
+
+void StructureModel::updateDocumentContent()
+{
+    if (d->structure == nullptr) {
+        return;
+    }
+
+    const auto content = d->toXml();
+
+    const QByteArray undoPatch = d->dmpController.makePatch(content, d->structure->content());
+    if (undoPatch.isEmpty()) {
+        return;
+    }
+
+    const QByteArray redoPatch = d->dmpController.makePatch(d->structure->content(), content);
+    if (redoPatch.isEmpty()) {
+        return;
+    }
+
+    d->structure->setContent(content);
+
+    emit contentChanged(undoPatch, redoPatch);
 }
 
 } // namespace BusinessLayer

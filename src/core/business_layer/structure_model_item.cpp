@@ -52,9 +52,9 @@ QUuid StructureModelItem::uuid() const
     return d->uuid;
 }
 
-QString StructureModelItem::icon() const
+Domain::DocumentObjectType StructureModelItem::type() const
 {
-    return {};
+    return d->type;
 }
 
 QString StructureModelItem::name() const
