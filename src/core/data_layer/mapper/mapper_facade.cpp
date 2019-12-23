@@ -1,19 +1,29 @@
 #include "mapper_facade.h"
 
-#include "documents_mapper.h"
+#include "document_change_mapper.h"
+#include "document_mapper.h"
 #include "settings_mapper.h"
 
 
 namespace DataMappingLayer
 {
 
-DocumentsMapper* MapperFacade::documentsMapper()
+DocumentChangeMapper* MapperFacade::documentChangeMapper()
 {
-    if (s_documentsMapper == nullptr) {
-        s_documentsMapper = new DocumentsMapper;
+    if (s_documentChangeMapper == nullptr) {
+        s_documentChangeMapper = new DocumentChangeMapper;
     }
 
-    return s_documentsMapper;
+    return s_documentChangeMapper;
+}
+
+DocumentMapper* MapperFacade::documentMapper()
+{
+    if (s_documentMapper == nullptr) {
+        s_documentMapper = new DocumentMapper;
+    }
+
+    return s_documentMapper;
 }
 
 SettingsMapper* MapperFacade::settingsMapper()
@@ -24,7 +34,8 @@ SettingsMapper* MapperFacade::settingsMapper()
     return s_settingsMapper;
 }
 
-DocumentsMapper* MapperFacade::s_documentsMapper = nullptr;
+DocumentChangeMapper* MapperFacade::s_documentChangeMapper = nullptr;
+DocumentMapper* MapperFacade::s_documentMapper = nullptr;
 SettingsMapper* MapperFacade::s_settingsMapper = nullptr;
 
 }

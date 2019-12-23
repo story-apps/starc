@@ -19,6 +19,21 @@ void DocumentChangeObject::setDocumentUuid(const QUuid& _uuid)
     markChangesNotStored();
 }
 
+const QUuid& DocumentChangeObject::uuid() const
+{
+    return m_uuid;
+}
+
+void DocumentChangeObject::setUuid(const QUuid& _uuid)
+{
+    if (m_uuid == _uuid) {
+        m_uuid = _uuid;
+    }
+
+    m_uuid = _uuid;
+    markChangesNotStored();
+}
+
 const QByteArray& DocumentChangeObject::undoPatch() const
 {
     return m_undoPatch;
@@ -64,21 +79,6 @@ void DocumentChangeObject::setDateTime(const QDateTime& _dateTime)
     markChangesNotStored();
 }
 
-const QString& DocumentChangeObject::userEmail() const
-{
-    return m_userEmail;
-}
-
-void DocumentChangeObject::setUserEmail(const QString& _email)
-{
-    if (m_userEmail == _email) {
-        return;
-    }
-
-    m_userEmail = _email;
-    markChangesNotStored();
-}
-
 const QString& DocumentChangeObject::userName() const
 {
     return  m_userName;
@@ -94,15 +94,32 @@ void DocumentChangeObject::setUserName(const QString& _name)
     markChangesNotStored();
 }
 
+const QString& DocumentChangeObject::userEmail() const
+{
+    return m_userEmail;
+}
+
+void DocumentChangeObject::setUserEmail(const QString& _email)
+{
+    if (m_userEmail == _email) {
+        return;
+    }
+
+    m_userEmail = _email;
+    markChangesNotStored();
+}
+
 DocumentChangeObject::DocumentChangeObject(const Identifier& _id, const QUuid& _documentUuid,
-    const QByteArray& _undoPatch, const QByteArray& _redoPatch, const QDateTime& _dateTime, const QString& _userEmail, const QString& _userName)
+    const QUuid& _uuid, const QByteArray& _undoPatch, const QByteArray& _redoPatch,
+    const QDateTime& _dateTime, const QString& _userName, const QString& _userEmail)
     : DomainObject(_id),
       m_documentUuid(_documentUuid),
+      m_uuid(_uuid),
       m_undoPatch(_undoPatch),
       m_redoPatch(_redoPatch),
       m_dateTime(_dateTime),
-      m_userEmail(_userEmail),
-      m_userName(_userName)
+      m_userName(_userName),
+      m_userEmail(_userEmail)
 {
 }
 

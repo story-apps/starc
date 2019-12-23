@@ -1,4 +1,4 @@
-#include "documents_mapper.h"
+#include "document_mapper.h"
 
 #include <data_layer/database.h>
 
@@ -25,12 +25,12 @@ namespace {
 }
 
 
-DocumentObject* DocumentsMapper::find(const Identifier& _id)
+DocumentObject* DocumentMapper::find(const Identifier& _id)
 {
     return dynamic_cast<DocumentObject*>(abstractFind(_id));
 }
 
-DocumentObject* DocumentsMapper::find(const QUuid& _uuid)
+DocumentObject* DocumentMapper::find(const QUuid& _uuid)
 {
     const auto domainObjects = abstractFind(uuidFilter(_uuid));
     if (domainObjects.isEmpty()) {
@@ -40,27 +40,27 @@ DocumentObject* DocumentsMapper::find(const QUuid& _uuid)
     return dynamic_cast<DocumentObject*>(domainObjects.first());
 }
 
-DocumentObject* DocumentsMapper::findStructure()
+DocumentObject* DocumentMapper::findStructure()
 {
     return find(QUuid());
 }
 
-void DocumentsMapper::insert(DocumentObject* _object)
+void DocumentMapper::insert(DocumentObject* _object)
 {
     abstractInsert(_object);
 }
 
-bool DocumentsMapper::update(DocumentObject* _object)
+bool DocumentMapper::update(DocumentObject* _object)
 {
     return abstractUpdate(_object);
 }
 
-void DocumentsMapper::remove(DocumentObject* _object)
+void DocumentMapper::remove(DocumentObject* _object)
 {
     abstractDelete(_object);
 }
 
-QString DocumentsMapper::findStatement(const Identifier& _id) const
+QString DocumentMapper::findStatement(const Identifier& _id) const
 {
     QString findStatement =
             QString("SELECT " + kColumns +
@@ -71,12 +71,12 @@ QString DocumentsMapper::findStatement(const Identifier& _id) const
     return findStatement;
 }
 
-QString DocumentsMapper::findAllStatement() const
+QString DocumentMapper::findAllStatement() const
 {
     return "SELECT " + kColumns + " FROM  " + kTableName;
 }
 
-QString DocumentsMapper::insertStatement(DomainObject* _object, QVariantList& _insertValues) const
+QString DocumentMapper::insertStatement(DomainObject* _object, QVariantList& _insertValues) const
 {
     const QString insertStatement
             = QString("INSERT INTO " + kTableName +
@@ -94,7 +94,7 @@ QString DocumentsMapper::insertStatement(DomainObject* _object, QVariantList& _i
     return insertStatement;
 }
 
-QString DocumentsMapper::updateStatement(DomainObject* _object, QVariantList& _updateValues) const
+QString DocumentMapper::updateStatement(DomainObject* _object, QVariantList& _updateValues) const
 {
     const QString updateStatement
             = QString("UPDATE " + kTableName +
@@ -114,7 +114,7 @@ QString DocumentsMapper::updateStatement(DomainObject* _object, QVariantList& _u
     return updateStatement;
 }
 
-QString DocumentsMapper::deleteStatement(DomainObject* _object, QVariantList& _deleteValues) const
+QString DocumentMapper::deleteStatement(DomainObject* _object, QVariantList& _deleteValues) const
 {
     QString deleteStatement = "DELETE FROM " + kTableName + " WHERE id = ?";
 
@@ -124,16 +124,16 @@ QString DocumentsMapper::deleteStatement(DomainObject* _object, QVariantList& _d
     return deleteStatement;
 }
 
-DomainObject* DocumentsMapper::doLoad(const Identifier& _id, const QSqlRecord& _record)
+DomainObject* DocumentMapper::doLoad(const Identifier& _id, const QSqlRecord& _record)
 {
     const QUuid uuid = _record.value("uuid").toString();
     const auto type = static_cast<DocumentObjectType>(_record.value("type").toInt());
     const auto content = _record.value("content").toByteArray();
 
-    return Domain::ObjectsBuilder::create(_id, uuid, type, content);
+    return Domain::ObjectsBuilder::createDocument(_id, uuid, type, content);
 }
 
-void DocumentsMapper::doLoad(DomainObject* _object, const QSqlRecord& _record)
+void DocumentMapper::doLoad(DomainObject* _object, const QSqlRecord& _record)
 {
     auto documentObject = dynamic_cast<DocumentObject*>(_object);
     if (documentObject == nullptr) {

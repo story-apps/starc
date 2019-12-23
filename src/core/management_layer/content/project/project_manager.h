@@ -42,6 +42,11 @@ signals:
      */
     void menuRequested();
 
+    /**
+     * @brief Изменились данные
+     */
+    void contentsChanged();
+
 private:
     class Implementation;
     QScopedPointer<Implementation> d;

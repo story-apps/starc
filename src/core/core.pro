@@ -26,10 +26,12 @@ SOURCES += \
     business_layer/structure_model_item.cpp \
     data_layer/database.cpp \
     data_layer/mapper/abstract_mapper.cpp \
-    data_layer/mapper/documents_mapper.cpp \
+    data_layer/mapper/document_change_mapper.cpp \
+    data_layer/mapper/document_mapper.cpp \
     data_layer/mapper/mapper_facade.cpp \
     data_layer/mapper/settings_mapper.cpp \
-    data_layer/storage/documents_storage.cpp \
+    data_layer/storage/document_change_storage.cpp \
+    data_layer/storage/document_storage.cpp \
     data_layer/storage/settings_storage.cpp \
     data_layer/storage/storage_facade.cpp \
     domain/document_change_object.cpp \
@@ -130,10 +132,12 @@ HEADERS += \
     custom_events.h \
     data_layer/database.h \
     data_layer/mapper/abstract_mapper.h \
-    data_layer/mapper/documents_mapper.h \
+    data_layer/mapper/document_change_mapper.h \
+    data_layer/mapper/document_mapper.h \
     data_layer/mapper/mapper_facade.h \
     data_layer/mapper/settings_mapper.h \
-    data_layer/storage/documents_storage.h \
+    data_layer/storage/document_change_storage.h \
+    data_layer/storage/document_storage.h \
     data_layer/storage/settings_storage.h \
     data_layer/storage/storage_facade.h \
     domain/document_change_object.h \

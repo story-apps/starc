@@ -3,7 +3,8 @@
 
 namespace DataMappingLayer
 {
-class DocumentsMapper;
+class DocumentChangeMapper;
+class DocumentMapper;
 class SettingsMapper;
 
 /**
@@ -12,11 +13,13 @@ class SettingsMapper;
 class MapperFacade
 {
 public:
-    static DocumentsMapper* documentsMapper();
+    static DocumentChangeMapper* documentChangeMapper();
+    static DocumentMapper* documentMapper();
     static SettingsMapper* settingsMapper();
 
 private:
-    static DocumentsMapper* s_documentsMapper;
+    static DocumentChangeMapper* s_documentChangeMapper;
+    static DocumentMapper* s_documentMapper;
     static SettingsMapper* s_settingsMapper;
 };
 

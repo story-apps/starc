@@ -26,6 +26,11 @@ enum class DocumentObjectType {
 
     Project,
     Screenplay,
+    ScreenplayTitlePage,
+    ScreenplayLogline,
+    ScreenplaySynopsis,
+    ScreenplayOutline,
+    ScreenplayText,
 
 /**
 //    Text,

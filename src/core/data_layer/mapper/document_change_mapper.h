@@ -3,7 +3,7 @@
 #include "abstract_mapper.h"
 
 namespace Domain {
-    class DocumentObject;
+    class DocumentChangeObject;
 }
 
 
@@ -11,18 +11,17 @@ namespace DataMappingLayer
 {
 
 /**
- * @brief Отображатель данных документов из БД в объекты
+ * @brief Отображатель данных изменений документов из БД в объекты
  */
-class DocumentsMapper : public AbstractMapper
+class DocumentChangeMapper : public AbstractMapper
 {
 public:
-    Domain::DocumentObject* find(const Domain::Identifier& _id);
-    Domain::DocumentObject* find(const QUuid& _uuid);
-    Domain::DocumentObject* findStructure();
+    Domain::DocumentChangeObject* find(const Domain::Identifier& _id);
+    Domain::DocumentChangeObject* find(const QUuid& _uuid);
 
-    void insert(Domain::DocumentObject* _object);
-    bool update(Domain::DocumentObject* _object);
-    void remove(Domain::DocumentObject* _object);
+    void insert(Domain::DocumentChangeObject* _object);
+    bool update(Domain::DocumentChangeObject* _object);
+    void remove(Domain::DocumentChangeObject* _object);
 
 protected:
     QString findStatement(const Domain::Identifier& _id) const override;
@@ -36,8 +35,9 @@ protected:
     void doLoad(Domain::DomainObject* _object, const QSqlRecord& _record) override;
 
 private:
-    DocumentsMapper() = default;
+    DocumentChangeMapper() = default;
     friend class MapperFacade;
 };
 
 } // namespace DataMappingLayer
+

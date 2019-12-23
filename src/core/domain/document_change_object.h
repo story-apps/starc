@@ -22,6 +22,12 @@ public:
     void setDocumentUuid(const QUuid& _uuid);
 
     /**
+     * @brief Получить уникальный идентификатор изменения
+     */
+    const QUuid& uuid() const;
+    void setUuid(const QUuid& _uuid);
+
+    /**
      * @brief Патч отменяющий изменение
      */
     const QByteArray& undoPatch() const;
@@ -40,29 +46,30 @@ public:
     void setDateTime(const QDateTime& _dateTime);
 
     /**
-     * @brief Email пользователя создавшего изменение
-     */
-    const QString& userEmail() const;
-    void setUserEmail(const QString& _email);
-
-    /**
      * @brief Имя пользователя создавшего изменение
      */
     const QString& userName() const;
     void setUserName(const QString& _name);
 
+    /**
+     * @brief Email пользователя создавшего изменение
+     */
+    const QString& userEmail() const;
+    void setUserEmail(const QString& _email);
+
 private:
     explicit DocumentChangeObject(const Identifier& _id, const QUuid& _documentUuid,
-        const QByteArray& _undoPatch, const QByteArray& _redoPatch, const QDateTime& _dateTime,
-        const QString& _userEmail, const QString& _userName);
+        const QUuid& _uuid, const QByteArray& _undoPatch, const QByteArray& _redoPatch,
+        const QDateTime& _dateTime, const QString& _userEmail, const QString& _userName);
     friend class ObjectsBuilder;
 
     QUuid m_documentUuid;
+    QUuid m_uuid;
     QByteArray m_undoPatch;
     QByteArray m_redoPatch;
     QDateTime m_dateTime;
-    QString m_userEmail;
     QString m_userName;
+    QString m_userEmail;
 };
 
 } // namespace Domain

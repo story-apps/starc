@@ -1,5 +1,6 @@
 #pragma once
 
+class QByteArray;
 class QUuid;
 
 namespace Domain {
@@ -14,7 +15,7 @@ namespace DataStorageLayer
 /**
  * @brief Хранилище документов
  */
-class DocumentsStorage
+class DocumentStorage
 {
 public:
     /**
@@ -30,7 +31,8 @@ public:
     /**
      * @brief Сохранить документ
      */
-    Domain::DocumentObject* storeDocument(const QUuid& _uuid, Domain::DocumentObjectType _type);
+    Domain::DocumentObject* storeDocument(const QUuid& _uuid, Domain::DocumentObjectType _type,
+        const QByteArray& _content);
 
     /**
      * @brief Обновить документ
@@ -48,7 +50,7 @@ public:
     void clear();
 
 private:
-    DocumentsStorage() = default;
+    DocumentStorage() = default;
     friend class StorageFacade;
 };
 

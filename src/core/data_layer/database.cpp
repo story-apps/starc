@@ -299,8 +299,8 @@ void Database::createTables(QSqlDatabase &_database)
                "undo_patch BLOB NOT NULL, " // отмена изменения
                "redo_patch BLOB NOT NULL, " // повтор изменения
                "date_time TEXT NOT NULL, " // yyyy.mm.dd.hh.mm.ss.zzz
-               "user_email TEXT DEFAULT(NULL), "
-               "user_name TEXT NOT NULL "
+               "user_name TEXT NOT NULL, "
+               "user_email TEXT DEFAULT(NULL) "
                ")");
 
     _database.commit();

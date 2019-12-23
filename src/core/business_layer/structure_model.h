@@ -86,7 +86,7 @@ signals:
     /**
      * @brief Данные изменились
      */
-    void contentChanged(const QByteArray& _undo, const QByteArray& _redo);
+    void contentsChanged(const QByteArray& _undo, const QByteArray& _redo);
 
 private:
     /**

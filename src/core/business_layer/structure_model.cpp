@@ -129,9 +129,17 @@ void StructureModel::setDocument(Domain::DocumentObject* _document)
     // Если документ пустой, создаём первоначальную структуру
     //
     if (d->structure->content().isEmpty()) {
-        appendItem(new StructureModelItem(QUuid::createUuid(), Domain::DocumentObjectType::Project, tr("Project"), {}));
-        appendItem(new StructureModelItem(QUuid::createUuid(), Domain::DocumentObjectType::Screenplay, tr("Screenplay"), {}));
-        updateDocumentContent();
+        auto createItem = [] (Domain::DocumentObjectType _type, const QString& _name) {
+            return new StructureModelItem(QUuid::createUuid(), _type, _name, {});
+        };
+        appendItem(createItem(Domain::DocumentObjectType::Project, tr("Project")));
+        auto screenplayItem = createItem(Domain::DocumentObjectType::Screenplay, tr("Screenplay"));
+        appendItem(screenplayItem);
+        appendItem(createItem(Domain::DocumentObjectType::ScreenplayTitlePage, tr("Title page")), screenplayItem);
+        appendItem(createItem(Domain::DocumentObjectType::ScreenplayLogline, tr("Logline")), screenplayItem);
+        appendItem(createItem(Domain::DocumentObjectType::ScreenplaySynopsis, tr("Synopsis")), screenplayItem);
+        appendItem(createItem(Domain::DocumentObjectType::ScreenplayOutline, tr("Outline")), screenplayItem);
+        appendItem(createItem(Domain::DocumentObjectType::ScreenplayText, tr("Screenplay")), screenplayItem);
     }
     //
     // А если данные есть, то загрузим их из документа
@@ -432,7 +440,7 @@ bool StructureModel::dropMimeData(const QMimeData* _data, Qt::DropAction _action
             auto itemIndex = indexForItem(item);
 
             if (item->parent() == parentItem
-                && parentItem->childCount() == 1) {
+                && itemIndex.row() == (parentItem->childCount() - 1)) {
                 continue;
             }
 
@@ -591,7 +599,7 @@ void StructureModel::updateDocumentContent()
 
     d->structure->setContent(content);
 
-    emit contentChanged(undoPatch, redoPatch);
+    emit contentsChanged(undoPatch, redoPatch);
 }
 
 } // namespace BusinessLayer

@@ -2,12 +2,19 @@
 
 #include <business_layer/structure_model.h>
 
-#include <data_layer/storage/documents_storage.h>
+#include <data_layer/storage/document_change_storage.h>
+#include <data_layer/storage/document_storage.h>
+#include <data_layer/storage/settings_storage.h>
 #include <data_layer/storage/storage_facade.h>
+
+#include <domain/document_object.h>
 
 #include <ui/project/project_navigator.h>
 #include <ui/project/project_tool_bar.h>
 #include <ui/project/project_view.h>
+
+#include <QDateTime>
+#include <QUuid>
 
 
 namespace ManagementLayer
@@ -50,6 +57,17 @@ ProjectManager::ProjectManager(QObject* _parent, QWidget* _parentWidget)
       d(new Implementation(_parentWidget))
 {
     connect(d->toolBar, &Ui::ProjectToolBar::menuPressed, this, &ProjectManager::menuRequested);
+    connect(d->projectStructure, &BusinessLayer::StructureModel::contentsChanged, this,
+            [this] (const QByteArray& _undo, const QByteArray& _redo)
+    {
+        const auto structure = DataStorageLayer::StorageFacade::documentStorage()->structure();
+        DataStorageLayer::StorageFacade::documentChangeStorage()->appendDocumentChange(
+            structure->uuid(), QUuid::createUuid(), _undo, _redo,
+            DataStorageLayer::StorageFacade::settingsStorage()->userName(),
+            DataStorageLayer::StorageFacade::settingsStorage()->userEmail());
+
+        emit contentsChanged();
+    });
 }
 
 ProjectManager::~ProjectManager() = default;
@@ -71,7 +89,7 @@ QWidget* ProjectManager::view() const
 
 void ProjectManager::loadCurrentProject()
 {
-    d->projectStructure->setDocument(DataStorageLayer::StorageFacade::documentsStorage()->structure());
+    d->projectStructure->setDocument(DataStorageLayer::StorageFacade::documentStorage()->structure());
 
 
 
@@ -104,8 +122,15 @@ void ProjectManager::closeCurrentProject()
 void ProjectManager::saveChanges()
 {
     //
-    // TODO:
+    // Сохраняем изменения структуры
     //
+    const auto structure = DataStorageLayer::StorageFacade::documentStorage()->structure();
+    DataStorageLayer::StorageFacade::documentStorage()->updateDocument(structure);
+
+    //
+    // Сохраняем все изменения документов
+    //
+    DataStorageLayer::StorageFacade::documentChangeStorage()->store();
 }
 
 }

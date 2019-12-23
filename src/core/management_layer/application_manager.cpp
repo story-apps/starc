@@ -994,6 +994,8 @@ void ApplicationManager::initConnections()
     //
     connect(d->projectManager.data(), &ProjectManager::menuRequested, this,
             [this] { d->showMenu(); });
+    connect(d->projectManager.data(), &ProjectManager::contentsChanged, this,
+            [this] { d->markChangesSaved(false); });
 
     //
     // Менеджер настроек

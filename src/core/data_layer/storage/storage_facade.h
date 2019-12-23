@@ -4,7 +4,8 @@
 namespace DataStorageLayer
 {
 
-class DocumentsStorage;
+class DocumentChangeStorage;
+class DocumentStorage;
 class SettingsStorage;
 
 /**
@@ -21,7 +22,12 @@ public:
     /**
      * @brief Получить хранилище документов проекта
      */
-    static DocumentsStorage* documentsStorage();
+    static DocumentChangeStorage* documentChangeStorage();
+
+    /**
+     * @brief Получить хранилище документов проекта
+     */
+    static DocumentStorage* documentStorage();
 
     /**
      * @brief Получить хранилище настроек
@@ -29,7 +35,8 @@ public:
     static SettingsStorage* settingsStorage();
 
 private:
-    static DocumentsStorage* s_documentsStorage;
+    static DocumentChangeStorage* s_documentChangeStorage;
+    static DocumentStorage* s_documentStorage;
     static SettingsStorage* s_settingsStorage;
 };
 
