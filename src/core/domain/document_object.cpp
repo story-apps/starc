@@ -21,7 +21,7 @@ const QHash<DocumentObjectType, QString> kDocumentObjectTypeToIcon
        { DocumentObjectType::Structure, "\uf78a" },
        { DocumentObjectType::Project, "\ufab6" },
        { DocumentObjectType::Screenplay, "\ufb9e" },
-       { DocumentObjectType::ScreenplayTitlePage, "\uf21a" },
+       { DocumentObjectType::ScreenplayTitlePage, "\uf0be" },
        { DocumentObjectType::ScreenplayLogline, "\uf21a" },
        { DocumentObjectType::ScreenplaySynopsis, "\uf21a" },
        { DocumentObjectType::ScreenplayOutline, "\uf21a" },

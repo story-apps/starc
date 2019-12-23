@@ -731,7 +731,7 @@ void ApplicationManager::Implementation::goToEditCurrentProject(const QString& _
     //
     // Загрузим данные текущего проекта
     //
-    projectManager->loadCurrentProject();
+    projectManager->loadCurrentProject(projectsManager->currentProject().path());
 
     //
     // Отобразить страницу самого проекта
@@ -746,10 +746,24 @@ void ApplicationManager::Implementation::closeCurrentProject()
     //
     // TODO:
     //
+
+    if (!projectsManager->currentProject().isValid()) {
+        return;
+    }
+
+    //
+    // Закроем текущий проект
+    //
+    projectManager->closeCurrentProject(projectsManager->currentProject().path());
 }
 
 void ApplicationManager::Implementation::exit()
 {
+    //
+    // Закрываем текущий открытый проект
+    //
+    closeCurrentProject();
+
     //
     // Сохраняем состояние приложения
     //

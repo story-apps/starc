@@ -1,5 +1,6 @@
 #include "tree_view.h"
 
+#include <QDomDocument>
 #include <QMouseEvent>
 #include <QPainter>
 #include <QVariantAnimation>
@@ -56,6 +57,62 @@ TreeView::TreeView(QWidget* _parent)
 
     connect(&d->decorationRadiusAnimation, &QVariantAnimation::valueChanged, this, [this] { update(); viewport()->update(); });
     connect(&d->decorationOpacityAnimation, &QVariantAnimation::valueChanged, this, [this] { update(); viewport()->update(); });
+}
+
+void TreeView::restoreState(const QVariant& _state)
+{
+    std::function<void(const QDomElement&, const QModelIndex&)> readItem;
+    readItem = [this, &readItem] (const QDomElement& _node, const QModelIndex& _parent) {
+        const auto index = model()->index(_node.attribute("row").toInt(), 0, _parent);
+        if (_node.hasAttribute("current")) {
+            setCurrentIndex(index);
+        }
+
+        if (!_node.hasChildNodes()) {
+            return;
+        }
+
+        expand(index);
+        auto child = _node.firstChildElement();
+        while (!child.isNull()) {
+            readItem(child, index);
+            child = child.nextSiblingElement();
+        }
+    };
+
+    QDomDocument domDocument;
+    domDocument.setContent(QByteArray::fromHex(_state.toByteArray()));
+    auto itemsNode = domDocument.firstChildElement("items");
+    auto itemNode = itemsNode.firstChildElement();
+    while (!itemNode.isNull()) {
+        readItem(itemNode, {});
+        itemNode = itemNode.nextSiblingElement();
+    }
+}
+
+QVariant TreeView::saveState() const
+{
+    QByteArray state;
+    state += "<items>";
+    std::function<void(int, const QModelIndex&)> writeRow;
+    writeRow = [this, &state, &writeRow] (int _row, const QModelIndex& _parent) {
+        const auto index = model()->index(_row, 0, _parent);
+        const auto attributes = " row=\"" + QString::number(_row) + "\"" + (index == currentIndex() ? " current=\"true\"" : "");
+        if (isExpanded(index)) {
+            state += "<item" + attributes + ">";
+            for (int row = 0; row < model()->rowCount(index); ++row) {
+                writeRow(row, index);
+            }
+            state += "</item>";
+        } else {
+            state += "<item" + attributes + "/>";
+        }
+    };
+    for (int row = 0; row < model()->rowCount(); ++row) {
+        writeRow(row, {});
+    }
+    state += "</items>";
+    return state.toHex();
 }
 
 TreeView::~TreeView() = default;

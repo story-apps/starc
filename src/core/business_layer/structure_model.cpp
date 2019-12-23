@@ -180,7 +180,9 @@ void StructureModel::setDocument(Domain::DocumentObject* _document)
 
 void StructureModel::clear()
 {
-    if (!d->rootItem->hasChildren())
+    if (!d->rootItem->hasChildren()) {
+        return;
+    }
 
     emit beginRemoveRows({}, 0, d->rootItem->childCount() - 1);
     while (d->rootItem->childCount() > 0) {

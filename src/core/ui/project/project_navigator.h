@@ -24,6 +24,16 @@ public:
      */
     void setModel(QAbstractItemModel* _model);
 
+    /**
+     * @brief Сохранить состояние
+     */
+    QVariant saveState() const;
+
+    /**
+     * @brief Восстановить состояние
+     */
+    void restoreState(const QVariant& _state);
+
 protected:
     /**
      * @brief Обновляем виджет при изменении дизайн системы

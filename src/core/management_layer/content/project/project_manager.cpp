@@ -87,7 +87,7 @@ QWidget* ProjectManager::view() const
     return d->view;
 }
 
-void ProjectManager::loadCurrentProject()
+void ProjectManager::loadCurrentProject(const QString& _path)
 {
     d->projectStructure->setDocument(DataStorageLayer::StorageFacade::documentStorage()->structure());
 
@@ -102,6 +102,13 @@ void ProjectManager::loadCurrentProject()
     //
 
     //
+    // Загрузить состояние дерева
+    //
+    d->navigator->restoreState(DataStorageLayer::StorageFacade::settingsStorage()->value(
+                                   DataStorageLayer::projectStructureKey(_path),
+                                   DataStorageLayer::SettingsStorage::SettingsPlace::Application));
+
+    //
     // Восстановить последнее состояние дерева, если возможно
     //
 
@@ -114,8 +121,19 @@ void ProjectManager::loadCurrentProject()
     //
 }
 
-void ProjectManager::closeCurrentProject()
+void ProjectManager::closeCurrentProject(const QString& _path)
 {
+    //
+    // Сохранить состояние дерева
+    //
+    DataStorageLayer::StorageFacade::settingsStorage()->setValue(
+                DataStorageLayer::projectStructureKey(_path),
+                d->navigator->saveState(),
+                DataStorageLayer::SettingsStorage::SettingsPlace::Application);
+
+    //
+    // Очищаем структуру
+    //
     d->projectStructure->clear();
 }
 

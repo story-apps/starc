@@ -93,6 +93,16 @@ void Tree::expandAll()
     d->tree->expandAll();
 }
 
+void Tree::restoreState(const QVariant& _state)
+{
+    d->tree->restoreState(_state);
+}
+
+QVariant Tree::saveState() const
+{
+    return d->tree->saveState();
+}
+
 void Tree::designSystemChangeEvent(DesignSystemChangeEvent* _event)
 {
     Widget::designSystemChangeEvent(_event);

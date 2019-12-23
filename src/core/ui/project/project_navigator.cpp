@@ -48,6 +48,16 @@ void ProjectNavigator::setModel(QAbstractItemModel* _model)
     d->tree->setModel(_model);
 }
 
+QVariant ProjectNavigator::saveState() const
+{
+    return d->tree->saveState();
+}
+
+void ProjectNavigator::restoreState(const QVariant& _state)
+{
+    d->tree->restoreState(_state);
+}
+
 ProjectNavigator::~ProjectNavigator() = default;
 
 void ProjectNavigator::designSystemChangeEvent(DesignSystemChangeEvent* _event)

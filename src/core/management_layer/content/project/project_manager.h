@@ -24,12 +24,12 @@ public:
     /**
      * @brief Загрузить данные текущего проекта
      */
-    void loadCurrentProject();
+    void loadCurrentProject(const QString& _path);
 
     /**
      * @brief Закрыть текущий проект
      */
-    void closeCurrentProject();
+    void closeCurrentProject(const QString& _path);
 
     /**
      * @brief Сохранить изменения проекта

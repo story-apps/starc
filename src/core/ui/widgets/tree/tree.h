@@ -46,6 +46,16 @@ public:
      */
     void expandAll();
 
+    /**
+     * @brief Загрузить состояние дерева
+     */
+    void restoreState(const QVariant& _state);
+
+    /**
+     * @brief Сохранить состояние дерева
+     */
+    QVariant saveState() const;
+
 signals:
     /**
      * @brief Изменился текущий индекс

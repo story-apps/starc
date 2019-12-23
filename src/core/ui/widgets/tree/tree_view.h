@@ -14,6 +14,16 @@ public:
     explicit TreeView(QWidget* _parent = nullptr);
     ~TreeView() override;
 
+    /**
+     * @brief Загрузить состояние дерева
+     */
+    void restoreState(const QVariant& _state);
+
+    /**
+     * @brief Сохранить состояние дерева
+     */
+    QVariant saveState() const;
+
 protected:
     /**
      * @brief Фильтруем события клика вьюпорта, чтобы анимировать их
