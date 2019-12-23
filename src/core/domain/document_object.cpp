@@ -33,6 +33,11 @@ QByteArray mimeTypeFor(DocumentObjectType _type)
     return kDocumentObjectTypeToMimeType.value(_type);
 }
 
+DocumentObjectType typeFor(const QByteArray& _mime)
+{
+    return kDocumentObjectTypeToMimeType.key(_mime);
+}
+
 QString iconForType(DocumentObjectType _type)
 {
     return kDocumentObjectTypeToIcon.value(_type);

@@ -8,6 +8,7 @@
 
 #include <QColor>
 #include <QDataStream>
+#include <QDomDocument>
 #include <QMimeData>
 
 namespace BusinessLayer
@@ -61,7 +62,33 @@ StructureModel::Implementation::Implementation()
 
 void StructureModel::Implementation::buildModel()
 {
+    if (structure == nullptr) {
+        return;
+    }
 
+    std::function<void(const QDomElement&, StructureModelItem*)> buildItem;
+    buildItem = [&buildItem] (const QDomElement& _node, StructureModelItem* _parent) {
+        auto item = new StructureModelItem(_node.attribute("uuid"),
+                                           Domain::typeFor(_node.attribute("type").toUtf8()),
+                                           _node.attribute("name"),
+                                           _node.attribute("color"));
+        _parent->appendItem(item);
+
+        auto child = _node.firstChildElement();
+        while (!child.isNull()) {
+            buildItem(child, item);
+            child = child.nextSiblingElement();
+        }
+    };
+
+    QDomDocument domDocument;
+    domDocument.setContent(structure->content());
+    auto documentNode = domDocument.firstChildElement("document");
+    auto itemNode = documentNode.firstChildElement();
+    while (!itemNode.isNull()) {
+        buildItem(itemNode, rootItem);
+        itemNode = itemNode.nextSiblingElement();
+    }
 }
 
 QByteArray StructureModel::Implementation::toXml() const
@@ -81,8 +108,8 @@ QByteArray StructureModel::Implementation::toXml() const
         xml += "<item ";
         xml += " uuid=\"" + _item->uuid().toString() + "\" ";
         xml += " type=\"" + Domain::mimeTypeFor(_item->type()) + "\" ";
-        xml += " color=\"" + _item->color().name() + "\" ";
         xml += " name=\"" + _item->name() + "\" ";
+        xml += " color=\"" + _item->color().name() + "\" ";
         if (!_item->hasChildren()) {
             xml += "/>\n";
             return;
@@ -145,7 +172,9 @@ void StructureModel::setDocument(Domain::DocumentObject* _document)
     // А если данные есть, то загрузим их из документа
     //
     else {
+        beginResetModel();
         d->buildModel();
+        endResetModel();
     }
 }
 

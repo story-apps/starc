@@ -82,6 +82,11 @@ inline uint qHash(DocumentObjectType _type)
 QByteArray mimeTypeFor(DocumentObjectType _type);
 
 /**
+ * @brief Получить тип объекта по майм-типу
+ */
+DocumentObjectType typeFor(const QByteArray& _mime);
+
+/**
  * @brief Получить иконку по типу объекта
  */
 QString iconForType(DocumentObjectType _type);
