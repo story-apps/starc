@@ -564,7 +564,10 @@ void ApplicationManager::Implementation::saveChanges()
             //
             baseBackupName = QString("%1 [%2]").arg(currentProject.name()).arg(currentProject.id());
         }
-        QtConcurrent::run(&BackupBuilder::save, projectsManager->currentProject().path(), baseBackupName);
+        QtConcurrent::run(&BackupBuilder::save,
+                          projectsManager->currentProject().path(),
+                          settingsValue(DataStorageLayer::kApplicationBackupsFolderKey).toString(),
+                          baseBackupName);
     }
 }
 
