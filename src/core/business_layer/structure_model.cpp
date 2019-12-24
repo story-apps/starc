@@ -346,15 +346,25 @@ int StructureModel::rowCount(const QModelIndex& _parent) const
 
 Qt::ItemFlags StructureModel::flags(const QModelIndex& _index) const
 {
-    if (!_index.isValid()) {
-        return Qt::ItemIsDropEnabled;
+    const auto item = itemForIndex(_index);
+    switch (item->type()) {
+        case Domain::DocumentObjectType::Project:
+        case Domain::DocumentObjectType::Screenplay: {
+            return Qt::ItemIsEnabled | Qt::ItemIsSelectable | Qt::ItemIsDragEnabled | Qt::ItemIsDropEnabled;
+        }
+
+        case Domain::DocumentObjectType::ScreenplayTitlePage:
+        case Domain::DocumentObjectType::ScreenplayLogline:
+        case Domain::DocumentObjectType::ScreenplaySynopsis:
+        case Domain::DocumentObjectType::ScreenplayOutline:
+        case Domain::DocumentObjectType::ScreenplayText: {
+            return Qt::ItemIsEnabled | Qt::ItemIsSelectable;
+        }
+
+        default: {
+            return Qt::ItemIsDropEnabled;
+        }
     }
-
-    //
-    // TODO: Разные варианты
-    //
-
-    return Qt::ItemIsEnabled | Qt::ItemIsSelectable | Qt::ItemIsDragEnabled | Qt::ItemIsDropEnabled;
 }
 
 QVariant StructureModel::data(const QModelIndex& _index, int _role) const
@@ -387,20 +397,6 @@ QVariant StructureModel::data(const QModelIndex& _index, int _role) const
     }
 }
 
-StructureModelItem* StructureModel::itemForIndex(const QModelIndex& _index) const
-{
-    if (!_index.isValid()) {
-        return d->rootItem;
-    }
-
-    auto item = static_cast<StructureModelItem*>(_index.internalPointer());
-    if (item == nullptr) {
-        return d->rootItem;
-    }
-
-    return item;
-}
-
 bool StructureModel::canDropMimeData(const QMimeData* _data, Qt::DropAction _action, int _row,
     int _column, const QModelIndex& _parent) const
 {
@@ -416,13 +412,21 @@ bool StructureModel::canDropMimeData(const QMimeData* _data, Qt::DropAction _act
     }
 
     //
-    // TODO: Обработка конкретных случаев что куда можно бросать
+    // Обработка конкретных случаев что куда можно бросать
     //
+    const auto dropTarget = itemForIndex(_parent);
+    switch (dropTarget->type()) {
+        case Domain::DocumentObjectType::Screenplay: {
+            return false;
+        }
 
-    //
-    // Во всех остальных случаях можно
-    //
-    return true;
+        //
+        // Во всех остальных случаях можно
+        //
+        default: {
+            return true;
+        }
+    }
 }
 
 bool StructureModel::dropMimeData(const QMimeData* _data, Qt::DropAction _action, int _row,
@@ -589,6 +593,20 @@ Qt::DropActions StructureModel::supportedDragActions() const
 Qt::DropActions StructureModel::supportedDropActions() const
 {
     return Qt::MoveAction;
+}
+
+StructureModelItem* StructureModel::itemForIndex(const QModelIndex& _index) const
+{
+    if (!_index.isValid()) {
+        return d->rootItem;
+    }
+
+    auto item = static_cast<StructureModelItem*>(_index.internalPointer());
+    if (item == nullptr) {
+        return d->rootItem;
+    }
+
+    return item;
 }
 
 QModelIndex StructureModel::indexForItem(StructureModelItem* _item) const
