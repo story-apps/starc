@@ -675,6 +675,10 @@ void ApplicationManager::Implementation::createLocalProject(const QString& _proj
     //
     projectsManager->setCurrentProject(_projectPath);
     //
+    // ... сохраняем новый проект в списке недавних
+    //
+    projectsManager->saveProjects();
+    //
     // ... перейдём к редактированию
     //
     goToEditCurrentProject(_importFilePath);
