@@ -23,6 +23,9 @@ namespace {
     QString uuidFilter(const QUuid& _uuid) {
         return QString(" WHERE uuid = '%1' ").arg(_uuid.toString());
     }
+    QString lastItemsFilter(int _size) {
+        return QString("WHERE id IN (SELECT id FROM %1 ORDER BY id DESC LIMIT %2)").arg(kTableName).arg(_size);
+    }
 }
 
 DocumentChangeObject* DocumentChangeMapper::find(const Domain::Identifier& _id)
@@ -33,6 +36,16 @@ DocumentChangeObject* DocumentChangeMapper::find(const Domain::Identifier& _id)
 DocumentChangeObject* DocumentChangeMapper::find(const QUuid& _uuid)
 {
     const auto domainObjects = abstractFind(uuidFilter(_uuid));
+    if (domainObjects.isEmpty()) {
+        return nullptr;
+    }
+
+    return dynamic_cast<DocumentChangeObject*>(domainObjects.first());
+}
+
+Domain::DocumentChangeObject* DocumentChangeMapper::findLast(int _size)
+{
+    const auto domainObjects = abstractFind(lastItemsFilter(_size));
     if (domainObjects.isEmpty()) {
         return nullptr;
     }
