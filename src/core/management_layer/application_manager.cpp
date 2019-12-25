@@ -48,21 +48,10 @@ namespace  {
      * @brief Состояние приложения
      */
     enum class ApplicationState {
-        /**
-         * @brief Инициализация после запуска
-         */
         Initializing,
-        /**
-         * @brief Загрузка проекта
-         */
         ProjectLoading,
-        /**
-         * @brief Рабочее состояние
-         */
+        ProjectClosing,
         Working,
-        /**
-         * @brief Импортирование
-         */
         Importing
     };
 }
@@ -704,6 +693,11 @@ void ApplicationManager::Implementation::openProject(const QString& _path)
         return;
     }
 
+    if (projectsManager->currentProject().path() == _path) {
+        showProject();
+        return;
+    }
+
     //
     // ... закроем текущий проект
     //
@@ -750,18 +744,19 @@ void ApplicationManager::Implementation::goToEditCurrentProject(const QString& _
 
 void ApplicationManager::Implementation::closeCurrentProject()
 {
-    //
-    // TODO:
-    //
-
     if (!projectsManager->currentProject().isValid()) {
         return;
     }
 
+    state = ApplicationState::ProjectClosing;
+
     //
-    // Закроем текущий проект
+    // Порядок важен
     //
     projectManager->closeCurrentProject(projectsManager->currentProject().path());
+    projectsManager->closeCurrentProject();
+
+    state = ApplicationState::Working;
 }
 
 void ApplicationManager::Implementation::exit()
@@ -1006,6 +1001,11 @@ void ApplicationManager::initConnections()
     connect(d->projectsManager.data(), &ProjectsManager::openChoosedProjectRequested, this,
             [this] (const QString& _path)
     {
+        if (d->projectsManager->currentProject().path() == _path) {
+            d->showProject();
+            return;
+        }
+
         auto callback = [this, _path] { openProject(_path); };
         d->saveIfNeeded(callback);
     });

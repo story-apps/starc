@@ -321,6 +321,24 @@ void ProjectsManager::setCurrentProject(const QString& _path)
     d->currentProject = newCurrentProject;
 }
 
+void ProjectsManager::closeCurrentProject()
+{
+    //
+    // Закрываем сам файл с базой данных
+    //
+    DatabaseLayer::Database::closeCurrentFile();
+
+    //
+    // Очищаем хранилища
+    //
+    DataStorageLayer::StorageFacade::clearStorages();
+
+    //
+    // Очищаем текущий проект
+    //
+    d->currentProject = {};
+}
+
 void ProjectsManager::hideProject(const QString& _path)
 {
     for (int projectRow = 0 ; projectRow < d->projects->rowCount(); ++projectRow) {

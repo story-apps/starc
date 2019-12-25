@@ -59,6 +59,11 @@ public:
     void setCurrentProject(const QString& _path);
 
     /**
+     * @brief Закрыть текущий проект
+     */
+    void closeCurrentProject();
+
+    /**
      * @brief Скрыть проект
      */
     void hideProject(const QString& _path);

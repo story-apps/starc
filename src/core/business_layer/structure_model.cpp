@@ -180,6 +180,8 @@ void StructureModel::setDocument(Domain::DocumentObject* _document)
 
 void StructureModel::clear()
 {
+    d->structure = nullptr;
+
     if (!d->rootItem->hasChildren()) {
         return;
     }
