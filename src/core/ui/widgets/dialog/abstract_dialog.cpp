@@ -47,6 +47,8 @@ AbstractDialog::Implementation::Implementation(QWidget* _parent)
       title(new H6Label(_parent)),
       contentsLayout(new QGridLayout)
 {
+    title->hide();
+
     layout = new QVBoxLayout(content);
     layout->setContentsMargins({});
     layout->setSpacing(0);
@@ -174,10 +176,20 @@ void AbstractDialog::setRejectButton(Button* _button)
     d->rejectButton = _button;
 }
 
+QString AbstractDialog::title() const
+{
+    return d->title->text();
+}
+
 void AbstractDialog::setTitle(const QString& _title)
 {
     d->title->setVisible(!_title.isEmpty());
     d->title->setText(_title);
+
+    //
+    // Нужно обновить отступ между заголовком и поясняющим текстом
+    //
+    designSystemChangeEvent(nullptr);
 }
 
 QGridLayout* AbstractDialog::contentsLayout() const

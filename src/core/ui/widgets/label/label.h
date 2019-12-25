@@ -15,6 +15,11 @@ public:
     ~AbstractLabel() override;
 
     /**
+     * @brief Получить текст
+     */
+    QString text() const;
+
+    /**
      * @brief Задать текст
      */
     void setText(const QString& _text);

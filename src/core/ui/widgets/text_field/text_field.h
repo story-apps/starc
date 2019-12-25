@@ -15,6 +15,16 @@ public:
     ~TextField() override;
 
     /**
+     * @brief Цвет фона виджета
+     */
+    void setBackgroundColor(const QColor& _color);
+
+    /**
+     * @brief Цвет текста виджета
+     */
+    void setTextColor(const QColor& _color);
+
+    /**
      * @brief Установить тект поясняющей метки
      */
     void setLabel(const QString& _text);

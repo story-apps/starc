@@ -51,6 +51,11 @@ public:
     QRectF iconRect(int _width) const;
 
 
+    QColor backgroundInactiveColor = Qt::red;
+    QColor backgroundActiveColor = Qt::red;
+    QColor textColor = Qt::red;
+    QColor textDisabledColor = Qt::red;
+
     QString label;
     QString helper;
     QString error;
@@ -87,10 +92,8 @@ void TextField::Implementation::reconfigure(TextField* _textField)
 
     QPalette palette = _textField->palette();
     palette.setColor(QPalette::Base, Qt::transparent);
-    QColor textColor = Ui::DesignSystem::color().onSurface();
     palette.setColor(QPalette::Normal, QPalette::Text, textColor);
-    textColor.setAlphaF(Ui::DesignSystem::disabledTextOpacity());
-    palette.setColor(QPalette::Disabled, QPalette::Text, textColor);
+    palette.setColor(QPalette::Disabled, QPalette::Text, textDisabledColor);
     palette.setColor(QPalette::Highlight, Ui::DesignSystem::color().secondary());
     palette.setColor(QPalette::HighlightedText, Ui::DesignSystem::color().onSecondary());
     _textField->setPalette(palette);
@@ -116,7 +119,7 @@ void TextField::Implementation::reconfigure(TextField* _textField)
     if (_textField->hasFocus()) {
         labelColorAnimation.setEndValue(Ui::DesignSystem::color().secondary());
     } else {
-        labelColorAnimation.setEndValue(Ui::DesignSystem::textField().foregroundColor());
+        labelColorAnimation.setEndValue(textDisabledColor);
     }
     if (_textField->text().isEmpty()) {
         animateLabelToBottom();
@@ -244,6 +247,31 @@ TextField::TextField(QWidget* _parent)
     connect(&d->labelTopLeftAnimation, &QVariantAnimation::valueChanged, this, [this] { update(); });
     connect(&d->decorationAnimation, &QVariantAnimation::valueChanged, this, [this] { update(); });
     connect(document(), &QTextDocument::contentsChange, this, &TextField::updateGeometry);
+}
+
+void TextField::setBackgroundColor(const QColor& _color)
+{
+    if (d->backgroundInactiveColor == _color) {
+        return;
+    }
+
+    d->backgroundInactiveColor = _color;
+    d->backgroundInactiveColor.setAlphaF(Ui::DesignSystem::textField().backgroundInactiveColorOpacity());
+    d->backgroundActiveColor = _color;
+    d->backgroundActiveColor.setAlphaF(Ui::DesignSystem::textField().backgroundActiveColorOpacity());
+    d->reconfigure(this);
+}
+
+void TextField::setTextColor(const QColor& _color)
+{
+    if (d->textColor == _color) {
+        return;
+    }
+
+    d->textColor = _color;
+    d->textDisabledColor = d->textColor;
+    d->textDisabledColor.setAlphaF(Ui::DesignSystem::disabledTextOpacity());
+    d->reconfigure(this);
 }
 
 void TextField::setLabel(const QString& _text)
@@ -453,8 +481,8 @@ void TextField::paintEvent(QPaintEvent* _event)
     }
     painter.fillRect(backgroundRect,
                      hasFocus() || underMouse()
-                     ? Ui::DesignSystem::textField().backgroundActiveColor()
-                     : Ui::DesignSystem::textField().backgroundInactiveColor());
+                     ? d->backgroundActiveColor
+                     : d->backgroundInactiveColor);
     painter.end();
 
     //
@@ -469,7 +497,7 @@ void TextField::paintEvent(QPaintEvent* _event)
     else if (!text().isEmpty()) {
         painter.begin(viewport());
         painter.setFont(Ui::DesignSystem::font().body1());
-        painter.setPen(Ui::DesignSystem::color().onSurface());
+        painter.setPen(d->textColor);
 
         QPointF labelTopLeft = Ui::DesignSystem::textField().labelTopLeft()
                                + QPointF(Ui::DesignSystem::textField().contentsMargins().left(),
@@ -500,7 +528,7 @@ void TextField::paintEvent(QPaintEvent* _event)
         }
         painter.setFont(labelFont);
 
-        QColor labelColor = Ui::DesignSystem::textField().foregroundColor();
+        QColor labelColor = d->textDisabledColor;
         if (!d->error.isEmpty()) {
             labelColor = Ui::DesignSystem::color().error();
         } else if (!d->labelColorAnimation.currentValue().isNull()) {
@@ -537,7 +565,7 @@ void TextField::paintEvent(QPaintEvent* _event)
     {
         const QRectF decorationRect = d->decorationRect(size());
         const QColor decorationColor = !d->error.isEmpty() ? Ui::DesignSystem::color().error()
-                                                           : Ui::DesignSystem::textField().foregroundColor();
+                                                           : d->textColor;
         painter.fillRect(decorationRect, decorationColor);
     }
     //
@@ -556,7 +584,7 @@ void TextField::paintEvent(QPaintEvent* _event)
     if (!d->error.isEmpty() || !d->helper.isEmpty()) {
         painter.setFont(Ui::DesignSystem::font().caption());
         const QColor color = !d->error.isEmpty() ? Ui::DesignSystem::color().error()
-                                                 : Ui::DesignSystem::textField().foregroundColor();
+                                                 : d->textDisabledColor;
         painter.setPen(color);
         const QRectF textRect(Ui::DesignSystem::textField().contentsMargins().left()
                               + Ui::DesignSystem::textField().margins().left(),
@@ -591,7 +619,7 @@ void TextField::focusInEvent(QFocusEvent* _event)
 {
     QTextEdit::focusInEvent(_event);
 
-    d->labelColorAnimation.setStartValue(Ui::DesignSystem::textField().foregroundColor());
+    d->labelColorAnimation.setStartValue(d->textDisabledColor);
     d->labelColorAnimation.setEndValue(Ui::DesignSystem::color().secondary());
     d->labelColorAnimation.start();
 
@@ -613,7 +641,7 @@ void TextField::focusOutEvent(QFocusEvent* _event)
     QTextEdit::focusOutEvent(_event);
 
     d->labelColorAnimation.setStartValue(Ui::DesignSystem::color().secondary());
-    d->labelColorAnimation.setEndValue(Ui::DesignSystem::textField().foregroundColor());
+    d->labelColorAnimation.setEndValue(d->textDisabledColor);
     d->labelColorAnimation.start();
 
     if (text().isEmpty() && placeholderText().isEmpty()) {

@@ -1203,11 +1203,11 @@ DesignSystem::ProgressBar::ProgressBar(qreal _scaleFactor)
 class DesignSystem::TextField::Implementation
 {
 public:
-    explicit Implementation(qreal _scaleFactor, const Color& _color);
+    explicit Implementation(qreal _scaleFactor);
 
-    QColor backgroundInactiveColor;
-    QColor backgroundActiveColor;
-    QColor foregroundColor;
+    qreal backgroundInactiveColorOpacity = 0.06;
+    qreal backgroundActiveColorOpacity = 0.1;
+    qreal textColorOpacity = 0.4;
     QMarginsF contentsMargins = {24.0, 0.0, 24.0, 0.0};
     QMarginsF margins = {12.0, 26.0, 12.0, 12.0};
     QPointF labelTopLeft = {12.0, 6.0};
@@ -1219,14 +1219,8 @@ public:
     qreal helperHeight = 20.0;
 };
 
-DesignSystem::TextField::Implementation::Implementation(qreal _scaleFactor, const Color& _color)
+DesignSystem::TextField::Implementation::Implementation(qreal _scaleFactor)
 {
-    backgroundInactiveColor = _color.onSurface();
-    backgroundInactiveColor.setAlphaF(0.06);
-    backgroundActiveColor = _color.onSurface();
-    backgroundActiveColor.setAlphaF(0.10);
-    foregroundColor = _color.onSurface();
-    foregroundColor.setAlphaF(0.4);
     contentsMargins *= _scaleFactor;
     margins *= _scaleFactor;
     labelTopLeft *= _scaleFactor;
@@ -1242,19 +1236,19 @@ DesignSystem::TextField::Implementation::Implementation(qreal _scaleFactor, cons
 
 DesignSystem::TextField::~TextField() = default;
 
-QColor DesignSystem::TextField::backgroundInactiveColor() const
+qreal DesignSystem::TextField::backgroundInactiveColorOpacity() const
 {
-    return d->backgroundInactiveColor;
+    return d->backgroundInactiveColorOpacity;
 }
 
-QColor DesignSystem::TextField::backgroundActiveColor() const
+qreal DesignSystem::TextField::backgroundActiveColorOpacity() const
 {
-    return d->backgroundActiveColor;
+    return d->backgroundActiveColorOpacity;
 }
 
-QColor DesignSystem::TextField::foregroundColor() const
+qreal DesignSystem::TextField::textColorOpacity() const
 {
-    return d->foregroundColor;
+    return d->textColorOpacity;
 }
 
 QMarginsF DesignSystem::TextField::contentsMargins() const
@@ -1302,8 +1296,8 @@ qreal DesignSystem::TextField::helperHeight() const
     return d->helperHeight;
 }
 
-DesignSystem::TextField::TextField(qreal _scaleFactor, const Color& _color)
-    : d(new Implementation(_scaleFactor, _color))
+DesignSystem::TextField::TextField(qreal _scaleFactor)
+    : d(new Implementation(_scaleFactor))
 {
 }
 
@@ -1961,7 +1955,7 @@ DesignSystemPrivate::DesignSystemPrivate(ApplicationTheme _theme, qreal _scaleFa
       checkBox(_scaleFactor),
       slider(_scaleFactor),
       progressBar(_scaleFactor),
-      textField(_scaleFactor, _color),
+      textField(_scaleFactor),
       scrollBar(_scaleFactor, _color),
       floatingAppBar(_scaleFactor),
       stepper(_scaleFactor),

@@ -75,7 +75,7 @@ void Dialog::designSystemChangeEvent(DesignSystemChangeEvent* _event)
 
     d->supportingText->setContentsMargins(
                 QMarginsF(Ui::DesignSystem::layout().px24(),
-                          Ui::DesignSystem::layout().px12(),
+                          title().isEmpty() ? Ui::DesignSystem::layout().px24() : 0,
                           Ui::DesignSystem::layout().px24(),
                           0)
                 .toMargins());

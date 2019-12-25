@@ -14,7 +14,10 @@ public:
     explicit AppBar(QWidget* _parent = nullptr);
     ~AppBar() override;
 
-signals:
+    /**
+     * @brief Сами определяем минимальный размер
+     */
+    QSize minimumSizeHint() const override;
 
 protected:
     /**

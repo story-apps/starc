@@ -667,17 +667,17 @@ public:
         /**
          * @brief Цвет фона в неактивном состоянии
          */
-        QColor backgroundInactiveColor() const;
+        qreal backgroundInactiveColorOpacity() const;
 
         /**
          * @brief Цвет фона в активном состоянии
          */
-        QColor backgroundActiveColor() const;
+        qreal backgroundActiveColorOpacity() const;
 
         /**
          * @brief Цвет обычных элементов
          */
-        QColor foregroundColor() const;
+        qreal textColorOpacity() const;
 
         /**
          * @brief Отступы вокруг контента
@@ -725,7 +725,7 @@ public:
         qreal helperHeight() const;
 
     private:
-        explicit TextField(qreal _scaleFactor, const Color& _color);
+        explicit TextField(qreal _scaleFactor);
         friend class DesignSystemPrivate;
         //
         class Implementation;

@@ -36,6 +36,11 @@ public:
 
 protected:
     /**
+     * @brief Обновить переводы
+     */
+    void updateTranslations() override;
+
+    /**
      * @brief Обновляем виджет при изменении дизайн системы
      */
     void designSystemChangeEvent(DesignSystemChangeEvent* _event) override;

@@ -93,6 +93,18 @@ AppBar::AppBar(QWidget* _parent)
     designSystemChangeEvent(nullptr);
 }
 
+QSize AppBar::minimumSizeHint() const
+{
+    const qreal width = Ui::DesignSystem::appBar().margins().left()
+                        + Ui::DesignSystem::appBar().iconSize().width() * actions().size()
+                        + Ui::DesignSystem::appBar().iconsSpacing() * (actions().size() - 1)
+                        + Ui::DesignSystem::appBar().margins().right();
+    const qreal height = Ui::DesignSystem::appBar().margins().top()
+                         + Ui::DesignSystem::appBar().iconSize().height()
+                         + Ui::DesignSystem::appBar().margins().bottom();
+    return QSizeF(width, height).toSize();
+}
+
 AppBar::~AppBar() = default;
 
 bool AppBar::event(QEvent* _event)

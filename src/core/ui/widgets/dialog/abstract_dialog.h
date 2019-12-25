@@ -49,6 +49,11 @@ public:
 
 protected:
     /**
+     * @brief Получить текст заголовка окна
+     */
+    QString title() const;
+
+    /**
      * @brief Установить заголовок диалога
      */
     void setTitle(const QString& _title);

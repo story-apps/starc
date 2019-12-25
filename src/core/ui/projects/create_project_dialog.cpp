@@ -262,9 +262,14 @@ void CreateProjectDialog::designSystemChangeEvent(DesignSystemChangeEvent* _even
     for (auto widget : QVector<Widget*>{ d->localProject, d->cloudProjectCreationNote, d->cloudProject,
                                          d->cloudProjectCreationAction,
                                          d->cloudProjectCreationActionNote,
-                                         d->advancedSettingsButton}) {
+                                         d->advancedSettingsButton }) {
         widget->setTextColor(Ui::DesignSystem::color().onBackground());
         widget->setBackgroundColor(Ui::DesignSystem::color().background());
+    }
+
+    for (auto textField : { d->projectName, d->projectFolder, d->importFilePath }) {
+        textField->setTextColor(Ui::DesignSystem::color().onBackground());
+        textField->setBackgroundColor(Ui::DesignSystem::color().background());
     }
 
     d->cloudProjectCreationNote->setContentsMargins(

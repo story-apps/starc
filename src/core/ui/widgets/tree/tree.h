@@ -42,6 +42,11 @@ public:
     void setCurrentIndex(const QModelIndex& _index);
 
     /**
+     * @brief Получить индекс элемента в заданной позиции
+     */
+    QModelIndex indexAt(const QPoint& _pos) const;
+
+    /**
      * @brief Развернуть все элементы
      */
     void expandAll();

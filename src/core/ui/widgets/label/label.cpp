@@ -29,6 +29,11 @@ AbstractLabel::AbstractLabel(QWidget* _parent)
     setSizePolicy(sizePolicy);
 }
 
+QString AbstractLabel::text() const
+{
+    return d->text;
+}
+
 AbstractLabel::~AbstractLabel() = default;
 
 void AbstractLabel::setText(const QString& _text)

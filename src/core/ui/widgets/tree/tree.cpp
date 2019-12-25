@@ -88,6 +88,11 @@ void Tree::setCurrentIndex(const QModelIndex& _index)
     d->tree->setCurrentIndex(_index);
 }
 
+QModelIndex Tree::indexAt(const QPoint& _pos) const
+{
+    return d->tree->indexAt(_pos);
+}
+
 void Tree::expandAll()
 {
     d->tree->expandAll();
