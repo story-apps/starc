@@ -15,11 +15,26 @@ class ProjectToolBar : public AppBar
 public:
     explicit ProjectToolBar(QWidget* _parent = nullptr);
 
+    /**
+     * @brief Очистить представления
+     */
+    void clearViews();
+
+    /**
+     * @brief Добавить представление
+     */
+    void addView(const QString& _mimeType, const QString& _icon);
+
 signals:
     /**
      * @brief Пользователь хочет открыть меню
      */
     void menuPressed();
+
+    /**
+     * @brief Пользователь хочет открыть выбранное представление
+     */
+    void viewPressed(const QString& _mimeType);
 
 protected:
     /**

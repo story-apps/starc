@@ -74,6 +74,8 @@ ApplicationView::ApplicationView(QWidget* _parent)
     designSystemChangeEvent(nullptr);
 }
 
+ApplicationView::~ApplicationView() = default;
+
 QVariantMap ApplicationView::saveState() const
 {
     QVariantMap state;
@@ -91,8 +93,6 @@ void ApplicationView::restoreState(const QVariantMap& _state)
         restoreGeometry(_state[kViewGeometry].toByteArray());
     }
 }
-
-ApplicationView::~ApplicationView() = default;
 
 void ApplicationView::showContent(QWidget* _toolbar, QWidget* _navigator, QWidget* _view)
 {

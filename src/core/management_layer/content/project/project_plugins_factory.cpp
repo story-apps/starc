@@ -1,5 +1,7 @@
 #include "project_plugins_factory.h"
 
+#include <interfaces/ui/i_document_plugin.h>
+
 #include <QApplication>
 #include <QDebug>
 #include <QDir>
@@ -53,7 +55,7 @@ public:
     /**
      * @brief Загруженные плагины
      */
-    mutable QHash<QString, QWidget*> loadedPlugins;
+    mutable QHash<QString, Ui::IDocumentPlugin*> loadedPlugins;
 };
 
 QWidget* ProjectPluginsFactory::Implementation::plugin(const QString& _mimeType) const
@@ -94,25 +96,31 @@ QWidget* ProjectPluginsFactory::Implementation::plugin(const QString& _mimeType)
         //
         const QStringList libCorePluginEntries = pluginsDir.entryList({ kMimeToPlugin.value(_mimeType) }, QDir::Files);
         if (libCorePluginEntries.isEmpty()) {
-            qCritical() << "Core plugin isn't found";
+            qCritical() << "Plugin isn't found for mime-type:" << _mimeType;
             return nullptr;
         }
         if (libCorePluginEntries.size() > 1) {
-            qCritical() << "Found more than 1 core plugins";
+            qCritical() << "Found more than 1 plugins for mime-type:" << _mimeType;
             return nullptr;
         }
 
         const auto pluginPath = libCorePluginEntries.first();
         QPluginLoader pluginLoader(pluginsDir.absoluteFilePath(pluginPath));
-        QObject *plugin = pluginLoader.instance();
-        if (plugin == nullptr) {
+        QObject *pluginObject = pluginLoader.instance();
+        if (pluginObject == nullptr) {
             qDebug() << pluginLoader.errorString();
         }
 
-        loadedPlugins.insert(_mimeType, qobject_cast<QWidget*>(plugin));
+        Ui::IDocumentPlugin* plugin = qobject_cast<Ui::IDocumentPlugin*>(pluginObject);
+        loadedPlugins.insert(_mimeType, plugin);
     }
 
-    return loadedPlugins.value(_mimeType);
+    auto plugin = loadedPlugins.value(_mimeType);
+    if (plugin == nullptr) {
+        return nullptr;
+    }
+
+    return plugin->createWidget();
 }
 
 

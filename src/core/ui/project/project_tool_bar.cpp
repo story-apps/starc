@@ -19,6 +19,34 @@ ProjectToolBar::ProjectToolBar(QWidget* _parent)
     designSystemChangeEvent(nullptr);
 }
 
+void ProjectToolBar::clearViews()
+{
+    //
+    // Оставляем только кнопку меню
+    //
+
+    while (actions().size() > 1) {
+        auto action = actions().last();
+        removeAction(action);
+        action->deleteLater();
+    }
+
+    update();
+}
+
+void ProjectToolBar::addView(const QString& _mimeType, const QString& _icon)
+{
+    QAction* viewAction = new QAction(this);
+    viewAction->setText(_icon);
+    viewAction->setCheckable(true);
+    addAction(viewAction);
+    connect(viewAction, &QAction::triggered, this, [this, _mimeType] {
+        emit viewPressed(_mimeType);
+    });
+
+    update();
+}
+
 void ProjectToolBar::designSystemChangeEvent(DesignSystemChangeEvent* _event)
 {
     AppBar::designSystemChangeEvent(_event);

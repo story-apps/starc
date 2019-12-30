@@ -76,8 +76,11 @@ ProjectManager::ProjectManager(QObject* _parent, QWidget* _parentWidget)
         //
         // ... настроим иконки представлений
         //
+        d->toolBar->clearViews();
         const auto views = d->pluginFactory.viewsFor(documentMimeType);
-
+        for (auto view : views) {
+            d->toolBar->addView(view.mimeType, view.icon);
+        }
         //
         // ... настроим возможность перехода в навигатор
         //
@@ -91,10 +94,16 @@ ProjectManager::ProjectManager(QObject* _parent, QWidget* _parentWidget)
             //
             return;
         }
-        auto editor = d->pluginFactory.view(views.first().mimeType);
+        auto view = d->pluginFactory.view(views.first().mimeType);
+        if (view == nullptr) {
+            //
+            // TODO: показать заглушку
+            //
+            return;
+        }
         auto document = DataStorageLayer::StorageFacade::documentStorage()->document(item->uuid());
-//        editor->setDocument(document);
-        d->view->setCurrentWidget(editor);
+//        view->setDocument(document);
+        d->view->setCurrentWidget(view);
     });
 
     connect(d->projectStructure, &BusinessLayer::StructureModel::contentsChanged, this,
