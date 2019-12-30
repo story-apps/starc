@@ -2,7 +2,9 @@ TEMPLATE = subdirs
 
 SUBDIRS += \
     app \
-    core
+    core \
+    corelib \
+    core/ui/project/views/project_information
 
 HEADERS += \
     interfaces/management_layer/i_application_manager.h \

@@ -5,7 +5,7 @@ namespace Ui
 {
 
 ProjectView::ProjectView(QWidget* _parent)
-    : Widget(_parent)
+    : StackWidget(_parent)
 {
 
 }

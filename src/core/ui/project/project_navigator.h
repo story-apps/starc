@@ -34,6 +34,12 @@ public:
      */
     void restoreState(const QVariant& _state);
 
+signals:
+    /**
+     * @brief Пользователь выбрал заданный элемент структуры
+     */
+    void itemSelected(const QModelIndex& _index);
+
 protected:
     /**
      * @brief Обновить переводы

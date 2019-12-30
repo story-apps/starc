@@ -2,11 +2,6 @@
 
 #include <ui/widgets/stack_widget/stack_widget.h>
 
-namespace ManagementLayer {
-    class Project;
-    class ProjectsModel;
-}
-
 
 namespace Ui
 {
@@ -14,7 +9,7 @@ namespace Ui
 /**
  * @brief Представление проекта
  */
-class ProjectView : public Widget
+class ProjectView : public StackWidget
 {
     Q_OBJECT
 public:

@@ -1,3 +1,6 @@
 [submodule "src/cloud"]
 	path = src/cloud
 	url = https://github.com/dimkanovikov/starcloud
+[submodule "src/core/ui/project/views/project_information"]
+	path = src/core/ui/project/views/project_information
+	url = https://github.com/dimkanovikov/starc-project-information-view

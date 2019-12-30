@@ -52,6 +52,7 @@ ProjectNavigator::ProjectNavigator(QWidget* _parent)
     layout->addWidget(d->tree);
     layout->addWidget(d->filterText);
 
+    connect(d->tree, &Tree::currentIndexChanged, this, &ProjectNavigator::itemSelected);
     connect(d->tree, &Tree::customContextMenuRequested, this, [this] (const QPoint& _pos) {
         //
         // TODO:

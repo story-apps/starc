@@ -1,6 +1,9 @@
 #include "project_manager.h"
 
+#include "project_plugins_factory.h"
+
 #include <business_layer/structure_model.h>
+#include <business_layer/structure_model_item.h>
 
 #include <data_layer/storage/document_change_storage.h>
 #include <data_layer/storage/document_storage.h>
@@ -32,6 +35,8 @@ public:
     Ui::ProjectView* view = nullptr;
 
     BusinessLayer::StructureModel* projectStructure = nullptr;
+
+    ProjectPluginsFactory pluginFactory;
 };
 
 ProjectManager::Implementation::Implementation(QWidget* _parent)
@@ -57,6 +62,41 @@ ProjectManager::ProjectManager(QObject* _parent, QWidget* _parentWidget)
       d(new Implementation(_parentWidget))
 {
     connect(d->toolBar, &Ui::ProjectToolBar::menuPressed, this, &ProjectManager::menuRequested);
+
+    connect(d->navigator, &Ui::ProjectNavigator::itemSelected, this, [this] (const QModelIndex& _index) {
+        if (!_index.isValid()) {
+            return;
+        }
+
+        //
+        // Определим выделенный элемент и скорректируем интерфейс
+        //
+        const auto item = d->projectStructure->itemForIndex(_index);
+        const auto documentMimeType = Domain::mimeTypeFor(item->type());
+        //
+        // ... настроим иконки представлений
+        //
+        const auto views = d->pluginFactory.viewsFor(documentMimeType);
+
+        //
+        // ... настроим возможность перехода в навигатор
+        //
+
+        //
+        // Откроем документ на редактирование в первом из представлений
+        //
+        if (views.isEmpty()) {
+            //
+            // TODO: показать заглушку
+            //
+            return;
+        }
+        auto editor = d->pluginFactory.view(views.first().mimeType);
+        auto document = DataStorageLayer::StorageFacade::documentStorage()->document(item->uuid());
+//        editor->setDocument(document);
+        d->view->setCurrentWidget(editor);
+    });
+
     connect(d->projectStructure, &BusinessLayer::StructureModel::contentsChanged, this,
             [this] (const QByteArray& _undo, const QByteArray& _redo)
     {
