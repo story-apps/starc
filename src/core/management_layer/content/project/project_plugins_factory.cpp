@@ -26,7 +26,12 @@ namespace {
      * @brief Карта соответствия майм-типов документа к редакторам
      */
     const QHash<QString, QVector<ProjectPluginsFactory::EditorInfo>> kDocumentToEditors
-    = {{ "application/x-starc/document/project", {{ "application/x-starc/editor/project/information", "\uf2fc" }}},
+    = {{ "application/x-starc/document/project", {{ "application/x-starc/editor/project/information", "\uf2fd" },
+                                                  { "application/x-starc/editor/project/collaborators", "\ufb34" }}},
+       { "application/x-starc/document/screenplay", {{ "application/x-starc/editor/screenplay", "" }}},
+       { "application/x-starc/document/screenplay/title-page", {{ "application/x-starc/editor/screenplay/title-page", "" }}},
+       { "application/x-starc/document/screenplay/logline", {{ "application/x-starc/editor/screenplay/logline", "" }}},
+       { "application/x-starc/document/screenplay/synopsis", {{ "application/x-starc/editor/text", "" }}},
        { "application/x-starc/document/screenplay/text", {{ "application/x-starc/editor/screenplay/text", "\uf9ec" },
                                                           { "application/x-starc/editor/screenplay/cards", "\uf554" }}},
        { "application/x-starc/document/screenplay/outline", {{ "application/x-starc/editor/screenplay/text", "\uf9ec" },
@@ -40,6 +45,10 @@ namespace {
     const QHash<QString, QString> kMimeToPlugin
     = {{ "application/x-starc/editor/project/information", "libprojectinformationplugin*.*" },
        { "application/x-starc/navigator/screenplay/structure", "libscreenplaystructureplugin*.*" },
+       { "application/x-starc/editor/screenplay", "libscreenplayplugin*.*" },
+       { "application/x-starc/editor/screenplay/title-page", "libscreenplaytitlepageplugin*.*" },
+       { "application/x-starc/editor/screenplay/logline", "libscreenplayloglineplugin*.*" },
+       { "application/x-starc/editor/screenplay/synopsis", "libtextplugin*.*" },
        { "application/x-starc/editor/screenplay/text", "libscreenplaytextplugin*.*" },
        { "application/x-starc/editor/screenplay/cards", "libscreenplaycardsplugin*.*" }};
 }
@@ -50,15 +59,21 @@ public:
     /**
      * @brief Получить виджет плагина по заданному типу
      */
-    QWidget* plugin(const QString& _mimeType) const;
+    QWidget* plugin(const QString& _mimeType, bool _fromCache = true) const;
+
 
     /**
      * @brief Загруженные плагины
      */
     mutable QHash<QString, Ui::IDocumentPlugin*> loadedPlugins;
+
+    /**
+     * @brief Загруженные виджеты
+     */
+    mutable QHash<QString, QWidget*> loadedWidgets;
 };
 
-QWidget* ProjectPluginsFactory::Implementation::plugin(const QString& _mimeType) const
+QWidget* ProjectPluginsFactory::Implementation::plugin(const QString& _mimeType, bool _fromCache) const
 {
     if (!loadedPlugins.contains(_mimeType)) {
         //
@@ -120,7 +135,26 @@ QWidget* ProjectPluginsFactory::Implementation::plugin(const QString& _mimeType)
         return nullptr;
     }
 
-    return plugin->createWidget();
+    //
+    // Если нужен не из кэша, то просто создаём новый
+    //
+    if (!_fromCache) {
+        return plugin->createWidget();
+    }
+
+    //
+    // А если нужен из кэша, то проверяем если он там,
+    //
+    if (!loadedWidgets.contains(_mimeType)) {
+        //
+        // ... если нет, добавляем
+        //
+        loadedWidgets.insert(_mimeType, plugin->createWidget());
+    }
+    //
+    // ... и возвращаем его
+    //
+    return loadedWidgets.value(_mimeType);
 }
 
 

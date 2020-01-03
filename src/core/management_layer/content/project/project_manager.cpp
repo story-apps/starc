@@ -65,6 +65,7 @@ ProjectManager::ProjectManager(QObject* _parent, QWidget* _parentWidget)
 
     connect(d->navigator, &Ui::ProjectNavigator::itemSelected, this, [this] (const QModelIndex& _index) {
         if (!_index.isValid()) {
+            d->view->showDefaultPage();
             return;
         }
 
@@ -79,7 +80,8 @@ ProjectManager::ProjectManager(QObject* _parent, QWidget* _parentWidget)
         d->toolBar->clearViews();
         const auto views = d->pluginFactory.viewsFor(documentMimeType);
         for (auto view : views) {
-            d->toolBar->addView(view.mimeType, view.icon);
+            const bool isActive = view.mimeType == views.first().mimeType;
+            d->toolBar->addView(view.mimeType, view.icon, isActive);
         }
         //
         // ... настроим возможность перехода в навигатор
@@ -89,16 +91,12 @@ ProjectManager::ProjectManager(QObject* _parent, QWidget* _parentWidget)
         // Откроем документ на редактирование в первом из представлений
         //
         if (views.isEmpty()) {
-            //
-            // TODO: показать заглушку
-            //
+            d->view->showDefaultPage();
             return;
         }
         auto view = d->pluginFactory.view(views.first().mimeType);
         if (view == nullptr) {
-            //
-            // TODO: показать заглушку
-            //
+            d->view->showDefaultPage();
             return;
         }
         auto document = DataStorageLayer::StorageFacade::documentStorage()->document(item->uuid());

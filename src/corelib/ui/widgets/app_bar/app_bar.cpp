@@ -175,6 +175,10 @@ void AppBar::mousePressEvent(QMouseEvent* _event)
     }
 
     d->lastPressedAction = pressedAction;
+    if (d->lastPressedAction->text().isEmpty()) {
+        return;
+    }
+
     d->animateClick();
 }
 

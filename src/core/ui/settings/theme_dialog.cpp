@@ -56,7 +56,7 @@ public:
     Subtitle2Label* error = nullptr;
     Subtitle2Label* onError = nullptr;
     Subtitle2Label* shadow = nullptr;
-    Subtitle2Label* primaryDark = nullptr;
+    Subtitle2Label* onShadow = nullptr;
     TextField* customThemeHash = nullptr;
 
     QHBoxLayout* buttonsLayout = nullptr;
@@ -80,7 +80,7 @@ ThemeDialog::Implementation::Implementation(QWidget* _parent)
       error(new Subtitle2Label(_parent)),
       onError(new Subtitle2Label(_parent)),
       shadow(new Subtitle2Label(_parent)),
-      primaryDark(new Subtitle2Label(_parent)),
+      onShadow(new Subtitle2Label(_parent)),
       customThemeHash(new TextField(_parent)),
       okButton(new Button(_parent))
 {
@@ -104,7 +104,7 @@ ThemeDialog::Implementation::Implementation(QWidget* _parent)
     customPaletteLayout->addWidget(error, 2, 0);
     customPaletteLayout->addWidget(onError, 2, 1);
     customPaletteLayout->addWidget(shadow, 2, 2);
-    customPaletteLayout->addWidget(primaryDark, 2, 3);
+    customPaletteLayout->addWidget(onShadow, 2, 3);
     customPaletteLayout->setRowMinimumHeight(3, 1); // добавляем отступ между цветами и полем хэша
     customPaletteLayout->addWidget(customThemeHash, 4, 0, 1, 4);
     customPalette->setLayout(customPaletteLayout);
@@ -139,7 +139,7 @@ QVector<Subtitle2Label*> ThemeDialog::Implementation::colors() const
 {
     return { primary, onPrimary, secondary, onSecondary,
              background, onBackground, surface, onSurface,
-             error, onError, shadow, primaryDark };
+             error, onError, shadow, onShadow };
 }
 
 
@@ -211,7 +211,7 @@ ThemeDialog::ThemeDialog(QWidget* _parent)
         color.setError(d->error->backgroundColor());
         color.setOnError(d->onError->backgroundColor());
         color.setShadow(d->shadow->backgroundColor());
-        color.setPrimaryDark(d->primaryDark->backgroundColor());
+        color.setOnShadow(d->onShadow->backgroundColor());
         emit customThemeColorsChanged(color);
     };
     for (auto color : d->colors()) {
@@ -289,7 +289,7 @@ void ThemeDialog::updateTranslations()
     d->error->setText(tr("error"));
     d->onError->setText(tr("on error"));
     d->shadow->setText(tr("shadow"));
-    d->primaryDark->setText(tr("primary dark"));
+    d->onShadow->setText(tr("on shadow"));
 
     d->customThemeHash->setLabel(tr("Theme HASH"));
     d->customThemeHash->setHelper(tr("Copy theme HASH to share your custom theme with others, or paste HASH here to apply it"));
@@ -323,7 +323,7 @@ void ThemeDialog::designSystemChangeEvent(DesignSystemChangeEvent* _event)
     initColorLabel(Ui::DesignSystem::color().error(), d->error);
     initColorLabel(Ui::DesignSystem::color().onError(), d->onError);
     initColorLabel(Ui::DesignSystem::color().shadow(), d->shadow);
-    initColorLabel(Ui::DesignSystem::color().primaryDark(), d->primaryDark);
+    initColorLabel(Ui::DesignSystem::color().onShadow(), d->onShadow);
 
     const auto minimumSize = static_cast<int>(Ui::DesignSystem::layout().px24() * 4);
     for (auto color : d->colors()) {

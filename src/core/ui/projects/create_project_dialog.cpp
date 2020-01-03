@@ -281,7 +281,7 @@ void CreateProjectDialog::designSystemChangeEvent(DesignSystemChangeEvent* _even
     d->cloudProjectCreationAction->setContentsMargins(
                 QMarginsF(Ui::DesignSystem::layout().px24(),
                           Ui::DesignSystem::layout().px2(),
-                          0,
+                          Ui::DesignSystem::layout().px4(),
                           Ui::DesignSystem::layout().px12())
                 .toMargins());
     d->cloudProjectCreationAction->setTextColor(Ui::DesignSystem::color().secondary());
@@ -297,7 +297,7 @@ void CreateProjectDialog::designSystemChangeEvent(DesignSystemChangeEvent* _even
         button->setTextColor(Ui::DesignSystem::color().secondary());
     }
 
-    contentsLayout()->setSpacing(static_cast<int>(Ui::DesignSystem::layout().px8()));
+    contentsLayout()->setVerticalSpacing(static_cast<int>(Ui::DesignSystem::layout().px8()));
     d->buttonsLayout->setContentsMargins(QMarginsF(Ui::DesignSystem::layout().px12(),
                                                    Ui::DesignSystem::layout().px12(),
                                                    Ui::DesignSystem::layout().px16(),

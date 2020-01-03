@@ -366,7 +366,6 @@ public:
     Implementation();
 
     QColor primary;
-    QColor primaryDark;
     QColor secondary;
     QColor background;
     QColor surface;
@@ -377,12 +376,12 @@ public:
     QColor onBackground;
     QColor onSurface;
     QColor onError;
+    QColor onShadow;
 };
 
 DesignSystem::Color::Implementation::Implementation()
 {
     primary = QColor("#323740");
-    primaryDark = QColor("#22252b");
     secondary = QColor("#448AFF");
     background = QColor("#FFFFFF");
     surface = QColor("#FFFFFF");
@@ -394,6 +393,7 @@ DesignSystem::Color::Implementation::Implementation()
     onBackground = QColor("#000000");
     onSurface = QColor("#000000");
     onError = QColor("#FFFFFF");
+    onShadow = QColor("#FFFFFF");
 }
 
 
@@ -427,7 +427,7 @@ DesignSystem::Color::Color(const QString& _color)
     setError(nextColor());
     setOnError(nextColor());
     setShadow(nextColor());
-    setPrimaryDark(nextColor());
+    setOnShadow(nextColor());
 }
 
 DesignSystem::Color& DesignSystem::Color::operator=(const DesignSystem::Color& _rhs)
@@ -454,7 +454,7 @@ QString DesignSystem::Color::toString() const
     colorsString += d->error.name();
     colorsString += d->onError.name();
     colorsString += d->shadow.name();
-    colorsString += d->primaryDark.name();
+    colorsString += d->onShadow.name();
     return colorsString.remove('#');
 }
 
@@ -463,11 +463,6 @@ DesignSystem::Color::~Color() = default;
 const QColor& DesignSystem::Color::primary() const
 {
     return d->primary;
-}
-
-const QColor& DesignSystem::Color::primaryDark() const
-{
-    return d->primaryDark;
 }
 
 const QColor& DesignSystem::Color::secondary() const
@@ -520,14 +515,14 @@ const QColor& DesignSystem::Color::onError() const
     return d->onError;
 }
 
+const QColor& DesignSystem::Color::onShadow() const
+{
+    return d->onShadow;
+}
+
 void DesignSystem::Color::setPrimary(const QColor& _color)
 {
     d->primary = _color;
-}
-
-void DesignSystem::Color::setPrimaryDark(const QColor& _color)
-{
-    d->primaryDark = _color;
 }
 
 void DesignSystem::Color::setSecondary(const QColor& _color)
@@ -587,6 +582,11 @@ void DesignSystem::Color::setOnSurface(const QColor& _color)
 void DesignSystem::Color::setOnError(const QColor& _color)
 {
     d->onError = _color;
+}
+
+void DesignSystem::Color::setOnShadow(const QColor& _color)
+{
+    d->onShadow = _color;
 }
 
 DesignSystem::Color::Color()
@@ -1986,7 +1986,7 @@ void DesignSystem::setTheme(ApplicationTheme _theme)
     instance()->d->theme = _theme;
 
     QColor primary;
-    QColor primaryDark;
+    QColor onShadow;
     QColor secondary;
     QColor background;
     QColor surface;
@@ -2001,7 +2001,6 @@ void DesignSystem::setTheme(ApplicationTheme _theme)
     switch (_theme) {
         case Ui::ApplicationTheme::DarkAndLight: {
             primary = "#323740";
-            primaryDark = "#22252b";
             secondary = "#448AFF";
             background = "#FFFFFF";
             surface = "#FFFFFF";
@@ -2014,12 +2013,12 @@ void DesignSystem::setTheme(ApplicationTheme _theme)
             onBackground = "#000000";
             onSurface = "#000000";
             onError = "#FFFFFF";
+            onShadow = "#FFFFFF";
             break;
         }
 
         case Ui::ApplicationTheme::Dark: {
             primary = "#1F1F1F";
-            primaryDark = "#0A0A0A";
             secondary = "#448AFF";
             background = "#1F1F1F";
             surface = "#121212";
@@ -2032,12 +2031,12 @@ void DesignSystem::setTheme(ApplicationTheme _theme)
             onBackground = "#FFFFFF";
             onSurface = "#FFFFFF";
             onError = "#000000";
+            onShadow = "#FFFFFF";
             break;
         }
 
         case Ui::ApplicationTheme::Light: {
             primary = "#E4E4E4";
-            primaryDark = "#C8C8C8";
             secondary = "#448AFF";
             background = "#FFFFFF";
             surface = "#FFFFFF";
@@ -2050,6 +2049,7 @@ void DesignSystem::setTheme(ApplicationTheme _theme)
             onBackground = "#000000";
             onSurface = "#000000";
             onError = "#FFFFFF";
+            onShadow = "#FFFFFF";
             break;
         }
 
@@ -2063,7 +2063,6 @@ void DesignSystem::setTheme(ApplicationTheme _theme)
 
     auto newColor(instance()->d->color);
     newColor.setPrimary(primary);
-    newColor.setPrimaryDark(primaryDark);
     newColor.setSecondary(secondary);
     newColor.setBackground(background);
     newColor.setSurface(surface);
@@ -2074,6 +2073,7 @@ void DesignSystem::setTheme(ApplicationTheme _theme)
     newColor.setOnBackground(onBackground);
     newColor.setOnSurface(onSurface);
     newColor.setOnError(onError);
+    newColor.setOnShadow(onShadow);
     setColor(newColor);
 }
 

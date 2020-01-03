@@ -91,7 +91,7 @@ void Avatar::paintEvent(QPaintEvent* _event)
         painter.fillRect(rect(), Ui::DesignSystem::color().shadow());
 
         painter.setFont(Ui::DesignSystem::font().button());
-        painter.setPen(Ui::DesignSystem::color().onSecondary());
+        painter.setPen(Ui::DesignSystem::color().onShadow());
         painter.drawText(rect(), Qt::AlignCenter, d->overlayText);
     }
 }

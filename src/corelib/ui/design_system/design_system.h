@@ -279,7 +279,6 @@ public:
         QString toString() const;
 
         const QColor& primary() const;
-        const QColor& primaryDark() const;
         const QColor& secondary() const;
         const QColor& background() const;
         const QColor& surface() const;
@@ -290,9 +289,9 @@ public:
         const QColor& onBackground() const;
         const QColor& onSurface() const;
         const QColor& onError() const;
+        const QColor& onShadow() const;
 
         void setPrimary(const QColor& _color);
-        void setPrimaryDark(const QColor& _color);
         void setSecondary(const QColor& _color);
         void setBackground(const QColor& _color);
         void setSurface(const QColor& _color);
@@ -303,6 +302,7 @@ public:
         void setOnBackground(const QColor& _color);
         void setOnSurface(const QColor& _color);
         void setOnError(const QColor& _color);
+        void setOnShadow(const QColor& _color);
 
     private:
         Color();

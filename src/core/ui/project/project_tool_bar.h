@@ -23,7 +23,7 @@ public:
     /**
      * @brief Добавить представление
      */
-    void addView(const QString& _mimeType, const QString& _icon);
+    void addView(const QString& _mimeType, const QString& _icon, bool _isActive = false);
 
 signals:
     /**
