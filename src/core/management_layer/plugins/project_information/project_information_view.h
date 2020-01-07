@@ -1,16 +1,12 @@
 #pragma once
 
-#include "../view_plugin_global.h"
-
 #include <ui/widgets/widget/widget.h>
-
-#include <interfaces/ui/i_document_plugin.h>
 
 
 namespace Ui
 {
 
-class VIEW_PLUGIN_EXPORT ProjectInformationView : public Widget
+class ProjectInformationView : public Widget
 {
     Q_OBJECT
 

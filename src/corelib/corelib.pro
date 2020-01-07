@@ -20,6 +20,7 @@ INCLUDEPATH += ..
 
 SOURCES += \
     business_layer/import/abstract_importer.cpp \
+    business_layer/model/abstract_model.cpp \
     business_layer/structure_model.cpp \
     business_layer/structure_model_item.cpp \
     data_layer/database.cpp \
@@ -89,6 +90,7 @@ SOURCES += \
 
 HEADERS += \
     business_layer/import/abstract_importer.h \
+    business_layer/model/abstract_model.h \
     business_layer/structure_model.h \
     business_layer/structure_model_item.h \
     corelib_global.h \

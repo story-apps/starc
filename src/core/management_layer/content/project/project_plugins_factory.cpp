@@ -1,6 +1,6 @@
 #include "project_plugins_factory.h"
 
-#include <interfaces/ui/i_document_plugin.h>
+#include <interfaces/management_layer/i_document_manager.h>
 
 #include <QApplication>
 #include <QDebug>
@@ -65,7 +65,7 @@ public:
     /**
      * @brief Загруженные плагины
      */
-    mutable QHash<QString, Ui::IDocumentPlugin*> loadedPlugins;
+    mutable QHash<QString, ManagementLayer::IDocumentManager*> loadedPlugins;
 
     /**
      * @brief Загруженные виджеты
@@ -126,7 +126,7 @@ QWidget* ProjectPluginsFactory::Implementation::plugin(const QString& _mimeType,
             qDebug() << pluginLoader.errorString();
         }
 
-        Ui::IDocumentPlugin* plugin = qobject_cast<Ui::IDocumentPlugin*>(pluginObject);
+        auto plugin = qobject_cast<ManagementLayer::IDocumentManager*>(pluginObject);
         loadedPlugins.insert(_mimeType, plugin);
     }
 
@@ -139,7 +139,7 @@ QWidget* ProjectPluginsFactory::Implementation::plugin(const QString& _mimeType,
     // Если нужен не из кэша, то просто создаём новый
     //
     if (!_fromCache) {
-        return plugin->createWidget();
+        return plugin->view();
     }
 
     //
@@ -149,7 +149,7 @@ QWidget* ProjectPluginsFactory::Implementation::plugin(const QString& _mimeType,
         //
         // ... если нет, добавляем
         //
-        loadedWidgets.insert(_mimeType, plugin->createWidget());
+        loadedWidgets.insert(_mimeType, plugin->createView());
     }
     //
     // ... и возвращаем его

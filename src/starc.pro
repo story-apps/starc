@@ -3,13 +3,12 @@ TEMPLATE = subdirs
 SUBDIRS += \
     app \
     core \
-    corelib \
-    core/ui/project/views/project_information
+    core/management_layer/plugins/project_information \
+    corelib
 
 HEADERS += \
     interfaces/management_layer/i_application_manager.h \
-    interfaces/ui/i_document_navigator.h \
-    interfaces/ui/i_document_plugin.h
+    interfaces/management_layer/i_document_manager.h
 
 TRANSLATIONS += \
     core/translations/en_EN.ts \
