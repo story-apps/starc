@@ -12,16 +12,12 @@
 namespace BusinessLayer
 {
 
-namespace {
-const QString kDefaultCoverPath = ":/images/movie-poster";
-}
-
 class ProjectInformationModel::Implementation
 {
 public:
     QString name;
     QString logline;
-    QPixmap cover = { kDefaultCoverPath };
+    QPixmap cover;
 };
 
 
@@ -90,18 +86,18 @@ void ProjectInformationModel::initDocument()
     domDocument.setContent(document()->content());
     auto documentNode = domDocument.firstChildElement("document");
     auto nameNode = documentNode.firstChildElement();
-    setName(nameNode.text());
+    d->name = nameNode.text();
     auto loglineNode = nameNode.nextSiblingElement();
-    setLogline(loglineNode.text());
+    d->logline = loglineNode.text();
     auto coverNode = loglineNode.nextSiblingElement();
-    setCover(ImageHelper::imageFromBytes(QByteArray::fromBase64(coverNode.text().toUtf8())));
+    d->cover = ImageHelper::imageFromBytes(QByteArray::fromBase64(coverNode.text().toUtf8()));
 }
 
 void ProjectInformationModel::clearDocument()
 {
     setName({});
     setLogline({});
-    setCover({ kDefaultCoverPath });
+    setCover({});
 }
 
 QByteArray ProjectInformationModel::toXml() const

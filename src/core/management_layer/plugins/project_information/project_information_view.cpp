@@ -105,7 +105,9 @@ void ProjectInformationView::setLogline(const QString& _logline)
 
 void ProjectInformationView::setCover(const QPixmap& _cover)
 {
-    d->projectCover->setCover(_cover);
+    d->projectCover->setCover(_cover.isNull()
+                              ? QPixmap(":/images/movie-poster")
+                              : _cover);
 }
 
 void ProjectInformationView::updateTranslations()

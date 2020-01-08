@@ -85,15 +85,20 @@ void ProjectInformationManager::setModel(BusinessLayer::AbstractModel* _model)
     if (d->model != nullptr) {
         d->view->setName(d->model->name());
         d->view->setLogline(d->model->logline());
+        d->view->setCover(d->model->cover());
 
         connect(d->model, &BusinessLayer::ProjectInformationModel::nameChanged,
                 d->view, &Ui::ProjectInformationView::setName);
         connect(d->model, &BusinessLayer::ProjectInformationModel::loglineChanged,
                 d->view, &Ui::ProjectInformationView::setLogline);
+        connect(d->model, &BusinessLayer::ProjectInformationModel::coverChanged,
+                d->view, &Ui::ProjectInformationView::setCover);
         connect(d->view, &Ui::ProjectInformationView::nameChanged,
                 d->model, &BusinessLayer::ProjectInformationModel::setName);
         connect(d->view, &Ui::ProjectInformationView::loglineChanged,
                 d->model, &BusinessLayer::ProjectInformationModel::setLogline);
+        connect(d->view, &Ui::ProjectInformationView::coverChanged,
+                d->model, &BusinessLayer::ProjectInformationModel::setCover);
     }
 }
 

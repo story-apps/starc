@@ -24,6 +24,10 @@ namespace {
 
 QByteArray ImageHelper::bytesFromImage(const QPixmap& _image)
 {
+    if (_image.isNull()) {
+        return {};
+    }
+
     //
     // Если необходимо корректируем размер изображения
     //
