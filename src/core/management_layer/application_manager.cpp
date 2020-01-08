@@ -1017,6 +1017,8 @@ void ApplicationManager::initConnections()
             [this] { d->showMenu(); });
     connect(d->projectManager.data(), &ProjectManager::contentsChanged, this,
             [this] { d->markChangesSaved(false); });
+    connect(d->projectManager.data(), &ProjectManager::projectNameChanged,
+            d->projectsManager.data(), &ProjectsManager::setCurrentProjectName);
 
     //
     // Менеджер настроек

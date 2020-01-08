@@ -31,6 +31,7 @@ ProjectModelsFactory::~ProjectModelsFactory()
 void ProjectModelsFactory::clear()
 {
     for (auto model : d->documentsToModels.values()) {
+        model->disconnect();
         model->clear();
     }
 

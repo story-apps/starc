@@ -59,6 +59,11 @@ public:
     void setCurrentProject(const QString& _path);
 
     /**
+     * @brief Установить название текущего проекта
+     */
+    void setCurrentProjectName(const QString& _name);
+
+    /**
      * @brief Закрыть текущий проект
      */
     void closeCurrentProject();

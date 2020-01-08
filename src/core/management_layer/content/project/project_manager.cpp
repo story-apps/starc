@@ -3,6 +3,7 @@
 #include "project_models_factory.h"
 #include "project_plugins_factory.h"
 
+#include <business_layer/model/project_information/project_information_model.h>
 #include <business_layer/model/structure/structure_model.h>
 #include <business_layer/model/structure/structure_model_item.h>
 
@@ -28,6 +29,7 @@ class ProjectManager::Implementation
 {
 public:
     explicit Implementation(QWidget* _parent);
+
 
     QWidget* topLevelWidget = nullptr;
 
@@ -65,6 +67,9 @@ ProjectManager::ProjectManager(QObject* _parent, QWidget* _parentWidget)
 {
     connect(d->toolBar, &Ui::ProjectToolBar::menuPressed, this, &ProjectManager::menuRequested);
 
+    //
+    // Отображаем необходимый редактор при выборе документа в списке
+    //
     connect(d->navigator, &Ui::ProjectNavigator::itemSelected, this,
             [this] (const QModelIndex& _index)
     {
@@ -98,36 +103,12 @@ ProjectManager::ProjectManager(QObject* _parent, QWidget* _parentWidget)
             d->view->showDefaultPage();
             return;
         }
-        //
-        // ... определим модель и при необходимости настроим её
-        //
-        auto document = DataStorageLayer::StorageFacade::documentStorage()->document(item->uuid());
-        auto model = d->modelFactory.modelFor(document);
-        if (model == nullptr) {
-            d->view->showDefaultPage();
-            return;
-        }
-        connect(model, &BusinessLayer::AbstractModel::contentsChanged, this,
-                [this, model] (const QByteArray& _undo, const QByteArray& _redo)
-        {
-            DataStorageLayer::StorageFacade::documentChangeStorage()->appendDocumentChange(
-                model->document()->uuid(), QUuid::createUuid(), _undo, _redo,
-                DataStorageLayer::StorageFacade::settingsStorage()->userName(),
-                DataStorageLayer::StorageFacade::settingsStorage()->userEmail());
-
-            emit contentsChanged();
-        }, Qt::UniqueConnection);
-        //
-        // ... определим представление и отобразим
-        //
-        auto view = d->pluginFactory.activateView(views.first().mimeType, model);
-        if (view == nullptr) {
-            d->view->showDefaultPage();
-            return;
-        }
-        d->view->setCurrentWidget(view);
+        showView(_index, views.first().mimeType);
     });
 
+    //
+    // Соединения с моделью структуры проекта
+    //
     connect(d->projectStructure, &BusinessLayer::StructureModel::documentAdded,
             [] (const QUuid& _uuid, Domain::DocumentObjectType _type)
     {
@@ -136,9 +117,8 @@ ProjectManager::ProjectManager(QObject* _parent, QWidget* _parentWidget)
     connect(d->projectStructure, &BusinessLayer::StructureModel::contentsChanged, this,
             [this] (const QByteArray& _undo, const QByteArray& _redo)
     {
-        const auto structure = DataStorageLayer::StorageFacade::documentStorage()->structure();
         DataStorageLayer::StorageFacade::documentChangeStorage()->appendDocumentChange(
-            structure->uuid(), QUuid::createUuid(), _undo, _redo,
+            d->projectStructure->document()->uuid(), QUuid::createUuid(), _undo, _redo,
             DataStorageLayer::StorageFacade::settingsStorage()->userName(),
             DataStorageLayer::StorageFacade::settingsStorage()->userEmail());
 
@@ -237,6 +217,55 @@ void ProjectManager::saveChanges()
     // Сохраняем все изменения документов
     //
     DataStorageLayer::StorageFacade::documentChangeStorage()->store();
+}
+
+void ProjectManager::showView(const QModelIndex& _itemIndex, const QString& _viewMimeType)
+{
+    const auto item = d->projectStructure->itemForIndex(_itemIndex);
+
+    //
+    // Определим модель
+    //
+    auto document = DataStorageLayer::StorageFacade::documentStorage()->document(item->uuid());
+    auto model = d->modelFactory.modelFor(document);
+    if (model == nullptr) {
+        d->view->showDefaultPage();
+        return;
+    }
+    //
+    // ... и при необходимости настроим её
+    //
+    connect(model, &BusinessLayer::AbstractModel::contentsChanged, this,
+            [this, model] (const QByteArray& _undo, const QByteArray& _redo) {
+                DataStorageLayer::StorageFacade::documentChangeStorage()->appendDocumentChange(
+                    model->document()->uuid(), QUuid::createUuid(), _undo, _redo,
+                    DataStorageLayer::StorageFacade::settingsStorage()->userName(),
+                    DataStorageLayer::StorageFacade::settingsStorage()->userEmail());
+
+                emit contentsChanged();
+            },
+            Qt::UniqueConnection);
+    //
+    // ... если это модель параметров проекта, дополнительно прокинем некоторые из её сигналов
+    //
+    if (auto projectInformationModel = qobject_cast<BusinessLayer::ProjectInformationModel*>(model)) {
+        connect(projectInformationModel, &BusinessLayer::ProjectInformationModel::nameChanged,
+                this, &ProjectManager::projectNameChanged, Qt::UniqueConnection);
+        connect(projectInformationModel, &BusinessLayer::ProjectInformationModel::loglineChanged,
+                this, &ProjectManager::projectLoglineChanged, Qt::UniqueConnection);
+        connect(projectInformationModel, &BusinessLayer::ProjectInformationModel::coverChanged,
+                this, &ProjectManager::projectCoverChanged, Qt::UniqueConnection);
+    }
+
+    //
+    // Определим представление и отобразим
+    //
+    auto view = d->pluginFactory.activateView(_viewMimeType, model);
+    if (view == nullptr) {
+        d->view->showDefaultPage();
+        return;
+    }
+    d->view->setCurrentWidget(view);
 }
 
 }

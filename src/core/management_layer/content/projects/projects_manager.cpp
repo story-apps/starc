@@ -321,6 +321,12 @@ void ProjectsManager::setCurrentProject(const QString& _path)
     d->currentProject = newCurrentProject;
 }
 
+void ProjectsManager::setCurrentProjectName(const QString& _name)
+{
+    d->currentProject.setName(_name);
+    d->projects->updateProject(d->currentProject);
+}
+
 void ProjectsManager::closeCurrentProject()
 {
     //

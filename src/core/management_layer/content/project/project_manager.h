@@ -47,6 +47,27 @@ signals:
      */
     void contentsChanged();
 
+    /**
+     * @brief Изменилось название проекта
+     */
+    void projectNameChanged(const QString& _name);
+
+    /**
+     * @brief Изменилось короткое описание проекта
+     */
+    void projectLoglineChanged(const QString& _logline);
+
+    /**
+     * @brief Изменилась обложка проекта
+     */
+    void projectCoverChanged(const QPixmap& _cover);
+
+private:
+    /**
+     * @brief Отобразить представление заданного типа для заданного элемента
+     */
+    void showView(const QModelIndex& _itemIndex, const QString& _viewMimeType);
+
 private:
     class Implementation;
     QScopedPointer<Implementation> d;
