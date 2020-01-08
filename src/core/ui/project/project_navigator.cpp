@@ -1,7 +1,7 @@
 #include "project_navigator.h"
 
-#include <business_layer/structure_model.h>
-#include <business_layer/structure_model_item.h>
+#include <business_layer/model/structure/structure_model.h>
+#include <business_layer/model/structure/structure_model_item.h>
 
 #include <domain/document_object.h>
 

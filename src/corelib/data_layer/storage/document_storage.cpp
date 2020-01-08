@@ -18,7 +18,7 @@ Domain::DocumentObject* DocumentStorage::structure()
     // Создаём структуру, если ещё не была создана
     //
     if (structure == nullptr) {
-        structure = storeDocument({}, Domain::DocumentObjectType::Structure, {});
+        structure = storeDocument({}, Domain::DocumentObjectType::Structure);
     }
 
     return structure;
@@ -29,9 +29,9 @@ Domain::DocumentObject* DocumentStorage::document(const QUuid& _uuid)
     return DataMappingLayer::MapperFacade::documentMapper()->find(_uuid);
 }
 
-Domain::DocumentObject* DocumentStorage::storeDocument(const QUuid& _uuid, Domain::DocumentObjectType _type, const QByteArray& _content)
+Domain::DocumentObject* DocumentStorage::storeDocument(const QUuid& _uuid, Domain::DocumentObjectType _type)
 {
-    auto newDocument = Domain::ObjectsBuilder::createDocument({}, _uuid, _type, _content);
+    auto newDocument = Domain::ObjectsBuilder::createDocument({}, _uuid, _type, {});
     DataMappingLayer::MapperFacade::documentMapper()->insert(newDocument);
     return newDocument;
 }

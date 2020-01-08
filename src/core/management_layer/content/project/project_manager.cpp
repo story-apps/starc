@@ -1,9 +1,10 @@
 #include "project_manager.h"
 
+#include "project_models_factory.h"
 #include "project_plugins_factory.h"
 
-#include <business_layer/structure_model.h>
-#include <business_layer/structure_model_item.h>
+#include <business_layer/model/structure/structure_model.h>
+#include <business_layer/model/structure/structure_model_item.h>
 
 #include <data_layer/storage/document_change_storage.h>
 #include <data_layer/storage/document_storage.h>
@@ -36,6 +37,7 @@ public:
 
     BusinessLayer::StructureModel* projectStructure = nullptr;
 
+    ProjectModelsFactory modelFactory;
     ProjectPluginsFactory pluginFactory;
 };
 
@@ -63,7 +65,9 @@ ProjectManager::ProjectManager(QObject* _parent, QWidget* _parentWidget)
 {
     connect(d->toolBar, &Ui::ProjectToolBar::menuPressed, this, &ProjectManager::menuRequested);
 
-    connect(d->navigator, &Ui::ProjectNavigator::itemSelected, this, [this] (const QModelIndex& _index) {
+    connect(d->navigator, &Ui::ProjectNavigator::itemSelected, this,
+            [this] (const QModelIndex& _index)
+    {
         if (!_index.isValid()) {
             d->view->showDefaultPage();
             return;
@@ -78,13 +82,13 @@ ProjectManager::ProjectManager(QObject* _parent, QWidget* _parentWidget)
         // ... настроим иконки представлений
         //
         d->toolBar->clearViews();
-        const auto views = d->pluginFactory.viewsFor(documentMimeType);
+        const auto views = d->pluginFactory.editorsInfoFor(documentMimeType);
         for (auto view : views) {
             const bool isActive = view.mimeType == views.first().mimeType;
             d->toolBar->addView(view.mimeType, view.icon, isActive);
         }
         //
-        // ... настроим возможность перехода в навигатор
+        // ... TODO: настроим возможность перехода в навигатор
         //
 
         //
@@ -94,16 +98,41 @@ ProjectManager::ProjectManager(QObject* _parent, QWidget* _parentWidget)
             d->view->showDefaultPage();
             return;
         }
-        auto view = d->pluginFactory.view(views.first().mimeType);
+        //
+        // ... определим модель и при необходимости настроим её
+        //
+        auto document = DataStorageLayer::StorageFacade::documentStorage()->document(item->uuid());
+        auto model = d->modelFactory.modelFor(document);
+        if (model == nullptr) {
+            d->view->showDefaultPage();
+            return;
+        }
+        connect(model, &BusinessLayer::AbstractModel::contentsChanged, this,
+                [this, model] (const QByteArray& _undo, const QByteArray& _redo)
+        {
+            DataStorageLayer::StorageFacade::documentChangeStorage()->appendDocumentChange(
+                model->document()->uuid(), QUuid::createUuid(), _undo, _redo,
+                DataStorageLayer::StorageFacade::settingsStorage()->userName(),
+                DataStorageLayer::StorageFacade::settingsStorage()->userEmail());
+
+            emit contentsChanged();
+        }, Qt::UniqueConnection);
+        //
+        // ... определим представление и отобразим
+        //
+        auto view = d->pluginFactory.activateView(views.first().mimeType, model);
         if (view == nullptr) {
             d->view->showDefaultPage();
             return;
         }
-        auto document = DataStorageLayer::StorageFacade::documentStorage()->document(item->uuid());
-//        view->setDocument(document);
         d->view->setCurrentWidget(view);
     });
 
+    connect(d->projectStructure, &BusinessLayer::StructureModel::documentAdded,
+            [] (const QUuid& _uuid, Domain::DocumentObjectType _type)
+    {
+        DataStorageLayer::StorageFacade::documentStorage()->storeDocument(_uuid, _type);
+    });
     connect(d->projectStructure, &BusinessLayer::StructureModel::contentsChanged, this,
             [this] (const QByteArray& _undo, const QByteArray& _redo)
     {
@@ -182,6 +211,11 @@ void ProjectManager::closeCurrentProject(const QString& _path)
     // Очищаем структуру
     //
     d->projectStructure->clear();
+
+    //
+    // Очищаем все загруженные модели документов
+    //
+    d->modelFactory.clear();
 }
 
 void ProjectManager::saveChanges()
@@ -191,6 +225,13 @@ void ProjectManager::saveChanges()
     //
     const auto structure = DataStorageLayer::StorageFacade::documentStorage()->structure();
     DataStorageLayer::StorageFacade::documentStorage()->updateDocument(structure);
+
+    //
+    // Сохраняем изменения остальных документов
+    //
+    for (auto model : d->modelFactory.models()) {
+        DataStorageLayer::StorageFacade::documentStorage()->updateDocument(model->document());
+    }
 
     //
     // Сохраняем все изменения документов

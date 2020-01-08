@@ -31,8 +31,7 @@ public:
     /**
      * @brief Сохранить документ
      */
-    Domain::DocumentObject* storeDocument(const QUuid& _uuid, Domain::DocumentObjectType _type,
-        const QByteArray& _content);
+    Domain::DocumentObject* storeDocument(const QUuid& _uuid, Domain::DocumentObjectType _type);
 
     /**
      * @brief Обновить документ

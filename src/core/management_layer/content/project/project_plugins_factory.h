@@ -3,6 +3,10 @@
 #include <QScopedPointer>
 #include <QVector>
 
+namespace BusinessLayer {
+class AbstractModel;
+}
+
 class QWidget;
 
 
@@ -19,17 +23,6 @@ public:
     ~ProjectPluginsFactory();
 
     /**
-     * @brief Получить майм-тип навигатора для заданного редактора
-     * @note Если такого не существует, возвращается пустая строка
-     */
-    QString navigatorFor(const QString& _editorMimeType) const;
-
-    /**
-     * @brief Получить навигатор заданного типа
-     */
-    QWidget* navigator(const QString& _mimeType) const;
-
-    /**
      * @brief Вспомогательная структура с информацией о плагине редактора
      */
     struct EditorInfo {
@@ -40,12 +33,18 @@ public:
     /**
      * @brief Получить списком инфорацию о доступных редакторах для заданного типа документа
      */
-    QVector<EditorInfo> viewsFor(const QString& _documentMimeType) const;
+    QVector<EditorInfo> editorsInfoFor(const QString& _documentMimeType) const;
 
     /**
-     * @brief Получить редактор заданного типа
+     * @brief Получить майм-тип навигатора для заданного редактора
+     * @note Если такого не существует, возвращается пустая строка
      */
-    QWidget* view(const QString& _mimeType) const;
+    QString navigatorMimeTypeFor(const QString& _editorMimeType) const;
+
+    /**
+     * @brief Активировать представление заданного типа заданной моделью
+     */
+    QWidget* activateView(const QString& _viewMimeType, BusinessLayer::AbstractModel* _model);
 
 private:
     class Implementation;

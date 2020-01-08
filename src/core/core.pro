@@ -35,6 +35,7 @@ SOURCES += \
     management_layer/content/account/account_manager.cpp \
     management_layer/content/onboarding/onboarding_manager.cpp \
     management_layer/content/project/project_manager.cpp \
+    management_layer/content/project/project_models_factory.cpp \
     management_layer/content/project/project_plugins_factory.cpp \
     management_layer/content/projects/project.cpp \
     management_layer/content/projects/projects_manager.cpp \
@@ -74,6 +75,7 @@ HEADERS += \
     management_layer/content/account/account_manager.h \
     management_layer/content/onboarding/onboarding_manager.h \
     management_layer/content/project/project_manager.h \
+    management_layer/content/project/project_models_factory.h \
     management_layer/content/project/project_plugins_factory.h \
     management_layer/content/projects/project.h \
     management_layer/content/projects/projects_manager.h \

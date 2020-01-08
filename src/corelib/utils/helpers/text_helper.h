@@ -28,4 +28,14 @@ public:
      * @return Размер прямоугольника.
      */
     static qreal heightForWidth(const QString& _text, const QFont& _font, int _width);
+
+    /**
+     * @brief Преобразовать специфичные символы к html-виду
+     */
+    static QString toHtmlEscaped(const QString& _text);
+
+    /**
+     * @brief Преобразовать html-специфичные символы к обычному виду
+     */
+    static QString fromHtmlEscaped(const QString& _escaped);
 };

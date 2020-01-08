@@ -57,6 +57,11 @@ class ProjectPluginsFactory::Implementation
 {
 public:
     /**
+     * @brief Активировать плагин заданного типа указанной моделью
+     */
+    QWidget* activatePlugin(const QString& _mimeType, BusinessLayer::AbstractModel* _model);
+
+    /**
      * @brief Получить виджет плагина по заданному типу
      */
     QWidget* plugin(const QString& _mimeType, bool _fromCache = true) const;
@@ -65,21 +70,13 @@ public:
     /**
      * @brief Загруженные плагины
      */
-    mutable QHash<QString, ManagementLayer::IDocumentManager*> loadedPlugins;
-
-    /**
-     * @brief Загруженные виджеты
-     */
-    mutable QHash<QString, QWidget*> loadedWidgets;
+    mutable QHash<QString, ManagementLayer::IDocumentManager*> plugins;
 };
 
-QWidget* ProjectPluginsFactory::Implementation::plugin(const QString& _mimeType, bool _fromCache) const
+QWidget* ProjectPluginsFactory::Implementation::activatePlugin(const QString& _mimeType,
+    BusinessLayer::AbstractModel* _model)
 {
-    if (!loadedPlugins.contains(_mimeType)) {
-        //
-        // TODO: загрузка и соединение
-        //
-
+    if (!plugins.contains(_mimeType)) {
         //
         // Смотрим папку с данными приложения на компе
         // NOTE: В Debug-режим работает с папкой сборки приложения
@@ -127,34 +124,17 @@ QWidget* ProjectPluginsFactory::Implementation::plugin(const QString& _mimeType,
         }
 
         auto plugin = qobject_cast<ManagementLayer::IDocumentManager*>(pluginObject);
-        loadedPlugins.insert(_mimeType, plugin);
+        plugins.insert(_mimeType, plugin);
     }
 
-    auto plugin = loadedPlugins.value(_mimeType);
+    auto plugin = plugins.value(_mimeType);
     if (plugin == nullptr) {
         return nullptr;
     }
 
-    //
-    // Если нужен не из кэша, то просто создаём новый
-    //
-    if (!_fromCache) {
-        return plugin->view();
-    }
+    plugin->setModel(_model);
 
-    //
-    // А если нужен из кэша, то проверяем если он там,
-    //
-    if (!loadedWidgets.contains(_mimeType)) {
-        //
-        // ... если нет, добавляем
-        //
-        loadedWidgets.insert(_mimeType, plugin->createView());
-    }
-    //
-    // ... и возвращаем его
-    //
-    return loadedWidgets.value(_mimeType);
+    return plugin->view();
 }
 
 
@@ -168,24 +148,19 @@ ProjectPluginsFactory::ProjectPluginsFactory()
 
 ProjectPluginsFactory::~ProjectPluginsFactory() = default;
 
-QString ProjectPluginsFactory::navigatorFor(const QString& _editorMimeType) const
-{
-    return kEditorToNavigator.value(_editorMimeType);
-}
-
-QWidget* ProjectPluginsFactory::navigator(const QString& _mimeType) const
-{
-    return d->plugin(_mimeType);
-}
-
-QVector<ProjectPluginsFactory::EditorInfo> ProjectPluginsFactory::viewsFor(const QString& _documentMimeType) const
+QVector<ProjectPluginsFactory::EditorInfo> ProjectPluginsFactory::editorsInfoFor(const QString& _documentMimeType) const
 {
     return kDocumentToEditors.value(_documentMimeType);
 }
 
-QWidget* ProjectPluginsFactory::view(const QString& _mimeType) const
+QString ProjectPluginsFactory::navigatorMimeTypeFor(const QString& _editorMimeType) const
 {
-    return d->plugin(_mimeType);
+    return kEditorToNavigator.value(_editorMimeType);
+}
+
+QWidget* ProjectPluginsFactory::activateView(const QString& _viewMimeType, BusinessLayer::AbstractModel* _model)
+{
+    return d->activatePlugin(_viewMimeType, _model);
 }
 
 } // namespace ManagementLayer

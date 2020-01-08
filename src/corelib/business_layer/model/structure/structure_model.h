@@ -1,11 +1,11 @@
 #pragma once
 
-#include <QAbstractItemModel>
+#include "../abstract_model.h"
+
 
 namespace Domain {
-    class DocumentObject;
+enum class DocumentObjectType;
 }
-
 
 namespace BusinessLayer
 {
@@ -15,23 +15,13 @@ class StructureModelItem;
 /**
  * @brief Модель структуры документов проекта
  */
-class StructureModel : public QAbstractItemModel
+class StructureModel : public AbstractModel
 {
     Q_OBJECT
 
 public:
     explicit StructureModel(QObject* _parent = nullptr);
     ~StructureModel() override;
-
-    /**
-     * @brief Задать документ со структурой
-     */
-    void setDocument(Domain::DocumentObject* _document);
-
-    /**
-     * @brief Очистить все загруженные данные
-     */
-    void clear();
 
     /**
      * @brief Добавить элемент в начало
@@ -84,20 +74,25 @@ public:
 
 signals:
     /**
-     * @brief Данные изменились
+     * @brief Был добавлен документ с заданным идентификатором и типом
      */
-    void contentsChanged(const QByteArray& _undo, const QByteArray& _redo);
+    void documentAdded(const QUuid& _uuid, Domain::DocumentObjectType _type);
+
+protected:
+    /**
+     * @brief Реализация модели для работы с документами
+     */
+    /** @{ */
+    void initDocument() override;
+    void clearDocument() override;
+    QByteArray toXml() const override;
+    /** @} */
 
 private:
     /**
      * @brief Получить индекс заданного элемента
      */
     QModelIndex indexForItem(StructureModelItem* _item) const;
-
-    /**
-     * @brief Установить данные в документ
-     */
-    void updateDocumentContent();
 
 private:
     class Implementation;

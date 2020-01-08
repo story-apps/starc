@@ -22,20 +22,20 @@ public:
 
     QScrollArea* content = nullptr;
 
-    Card* userInfo = nullptr;
-    QGridLayout* userInfoLayout = nullptr;
-    TextField* userName = nullptr;
-    TextField* userLogline = nullptr;
-    Cover* avatar = nullptr;
+    Card* projectInfo = nullptr;
+    QGridLayout* projectInfoLayout = nullptr;
+    TextField* projectName = nullptr;
+    TextField* projectLogline = nullptr;
+    Cover* projectCover = nullptr;
 };
 
 ProjectInformationView::Implementation::Implementation(QWidget* _parent)
     : content(new QScrollArea(_parent)),
-      userInfo(new Card(_parent)),
-      userInfoLayout(new QGridLayout),
-      userName(new TextField(userInfo)),
-      userLogline(new TextField(userInfo)),
-      avatar(new Cover(userInfo))
+      projectInfo(new Card(_parent)),
+      projectInfoLayout(new QGridLayout),
+      projectName(new TextField(projectInfo)),
+      projectLogline(new TextField(projectInfo)),
+      projectCover(new Cover(projectInfo))
 {
     QPalette palette;
     palette.setColor(QPalette::Base, Qt::transparent);
@@ -44,16 +44,16 @@ ProjectInformationView::Implementation::Implementation(QWidget* _parent)
     content->setVerticalScrollBar(new ScrollBar);
     content->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
 
-    userInfoLayout->setContentsMargins({});
-    userInfoLayout->setSpacing(0);
-    userInfoLayout->setRowMinimumHeight(0, 1); // добавляем пустую строку над названием
-    userInfoLayout->addWidget(userName, 1, 0);
-    userInfoLayout->addWidget(userLogline, 2, 0);
-    userInfoLayout->setRowMinimumHeight(3, 1); // добавляем пустую строку под логлайном
-    userInfoLayout->setRowStretch(3, 1);
-    userInfoLayout->addWidget(avatar, 0, 1, 4, 1, Qt::AlignTop);
-    userInfoLayout->setColumnStretch(0, 1);
-    userInfo->setLayoutReimpl(userInfoLayout);
+    projectInfoLayout->setContentsMargins({});
+    projectInfoLayout->setSpacing(0);
+    projectInfoLayout->setRowMinimumHeight(0, 1); // добавляем пустую строку над названием
+    projectInfoLayout->addWidget(projectName, 1, 0);
+    projectInfoLayout->addWidget(projectLogline, 2, 0);
+    projectInfoLayout->setRowMinimumHeight(3, 1); // добавляем пустую строку под логлайном
+    projectInfoLayout->setRowStretch(3, 1);
+    projectInfoLayout->addWidget(projectCover, 0, 1, 4, 1, Qt::AlignTop);
+    projectInfoLayout->setColumnStretch(0, 1);
+    projectInfo->setLayoutReimpl(projectInfoLayout);
 
     QWidget* contentWidget = new QWidget;
     content->setWidget(contentWidget);
@@ -61,7 +61,7 @@ ProjectInformationView::Implementation::Implementation(QWidget* _parent)
     QVBoxLayout* layout = new QVBoxLayout;
     layout->setContentsMargins({});
     layout->setSpacing(0);
-    layout->addWidget(userInfo);
+    layout->addWidget(projectInfo);
     layout->addStretch();
     contentWidget->setLayout(layout);
 }
@@ -73,12 +73,19 @@ ProjectInformationView::Implementation::Implementation(QWidget* _parent)
 ProjectInformationView::ProjectInformationView(QWidget* _parent)
     : Widget(_parent),
       d(new Implementation(this))
-{d->avatar->setCover(QPixmap(":/images/movie-poster"));
+{
     QVBoxLayout* layout = new QVBoxLayout;
     layout->setContentsMargins({});
     layout->setSpacing(0);
     layout->addWidget(d->content);
     setLayout(layout);
+
+    connect(d->projectName, &TextField::textChanged, this, [this] {
+        emit nameChanged(d->projectName->text());
+    });
+    connect(d->projectLogline, &TextField::textChanged, this, [this] {
+        emit loglineChanged(d->projectLogline->text());
+    });
 
     updateTranslations();
     designSystemChangeEvent(nullptr);
@@ -86,11 +93,26 @@ ProjectInformationView::ProjectInformationView(QWidget* _parent)
 
 ProjectInformationView::~ProjectInformationView() = default;
 
+void ProjectInformationView::setName(const QString& _name)
+{
+    d->projectName->setText(_name);
+}
+
+void ProjectInformationView::setLogline(const QString& _logline)
+{
+    d->projectLogline->setText(_logline);
+}
+
+void ProjectInformationView::setCover(const QPixmap& _cover)
+{
+    d->projectCover->setCover(_cover);
+}
+
 void ProjectInformationView::updateTranslations()
 {
-    d->userName->setLabel(tr("Project name"));
-    d->userLogline->setLabel(tr("Short description"));
-    d->userLogline->setHelper(tr("Tagline, logline or something similar"));
+    d->projectName->setLabel(tr("Project name"));
+    d->projectLogline->setLabel(tr("Short description"));
+    d->projectLogline->setHelper(tr("Tagline, logline or something similar"));
 }
 
 void ProjectInformationView::designSystemChangeEvent(DesignSystemChangeEvent* _event)
@@ -106,14 +128,14 @@ void ProjectInformationView::designSystemChangeEvent(DesignSystemChangeEvent* _e
                           Ui::DesignSystem::layout().px24())
                 .toMargins());
 
-    d->userInfo->setBackgroundColor(DesignSystem::color().background());
-    for (auto textField : { d->userName, d->userLogline }) {
+    d->projectInfo->setBackgroundColor(DesignSystem::color().background());
+    for (auto textField : { d->projectName, d->projectLogline }) {
         textField->setBackgroundColor(Ui::DesignSystem::color().background());
         textField->setTextColor(Ui::DesignSystem::color().onBackground());
     }
-    d->userInfoLayout->setVerticalSpacing(static_cast<int>(Ui::DesignSystem::layout().px8()));
-    d->userInfoLayout->setRowMinimumHeight(0, static_cast<int>(Ui::DesignSystem::layout().px8()));
-    d->userInfoLayout->setRowMinimumHeight(3, static_cast<int>(Ui::DesignSystem::layout().px8()));
+    d->projectInfoLayout->setVerticalSpacing(static_cast<int>(Ui::DesignSystem::layout().px8()));
+    d->projectInfoLayout->setRowMinimumHeight(0, static_cast<int>(Ui::DesignSystem::layout().px8()));
+    d->projectInfoLayout->setRowMinimumHeight(3, static_cast<int>(Ui::DesignSystem::layout().px8()));
 }
 
 } // namespace Ui

@@ -23,12 +23,14 @@ public:
     explicit ProjectInformationManager(QObject* _parent = nullptr);
     ~ProjectInformationManager() override;
 
-    //
-    // Реализуем интерфейс
-    //
-    void setModel(BusinessLayer::AbstractModel *_model) override;
-    QWidget * view() override;
-    QWidget * createView() override;
+    /**
+     * @brief Реализуем интерфейс менеджера документа
+     */
+    /** @{ */
+    void setModel(BusinessLayer::AbstractModel* _model) override;
+    QWidget* view() override;
+    QWidget* createView() override;
+    /** @} */
 
 private:
     class Implementation;

@@ -21,8 +21,9 @@ INCLUDEPATH += ..
 SOURCES += \
     business_layer/import/abstract_importer.cpp \
     business_layer/model/abstract_model.cpp \
-    business_layer/structure_model.cpp \
-    business_layer/structure_model_item.cpp \
+    business_layer/model/project_information/project_information_model.cpp \
+    business_layer/model/structure/structure_model.cpp \
+    business_layer/model/structure/structure_model_item.cpp \
     data_layer/database.cpp \
     data_layer/mapper/abstract_mapper.cpp \
     data_layer/mapper/document_change_mapper.cpp \
@@ -91,8 +92,9 @@ SOURCES += \
 HEADERS += \
     business_layer/import/abstract_importer.h \
     business_layer/model/abstract_model.h \
-    business_layer/structure_model.h \
-    business_layer/structure_model_item.h \
+    business_layer/model/project_information/project_information_model.h \
+    business_layer/model/structure/structure_model.h \
+    business_layer/model/structure/structure_model_item.h \
     corelib_global.h \
     data_layer/database.h \
     data_layer/mapper/abstract_mapper.h \

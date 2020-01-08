@@ -4,12 +4,13 @@
 
 #include <domain/document_object.h>
 
-#include <utils/diff_match_patch/diff_match_patch_controller.h>
+#include <utils/helpers/text_helper.h>
 
 #include <QColor>
 #include <QDataStream>
 #include <QDomDocument>
 #include <QMimeData>
+
 
 namespace BusinessLayer
 {
@@ -26,12 +27,12 @@ public:
     /**
      * @brief Построить модель структуры из xml хранящегося в документе
      */
-    void buildModel();
+    void buildModel(Domain::DocumentObject* _structure);
 
     /**
      * @brief Сформировать xml из данных модели
      */
-    QByteArray toXml() const;
+    QByteArray toXml(Domain::DocumentObject* _structure) const;
 
 
     /**
@@ -40,19 +41,9 @@ public:
     StructureModelItem* rootItem = nullptr;
 
     /**
-     * @brief Документ содержащий структуру
-     */
-    Domain::DocumentObject* structure = nullptr;
-
-    /**
      * @brief Последние положенные в майм элементы
      */
     mutable QVector<StructureModelItem*> m_lastMimeItems;
-
-    /**
-     * @brief Контроллер для формирования патчей изменений структуры
-     */
-    DiffMatchPatchController dmpController = DiffMatchPatchController({});
 };
 
 StructureModel::Implementation::Implementation()
@@ -60,9 +51,9 @@ StructureModel::Implementation::Implementation()
 {
 }
 
-void StructureModel::Implementation::buildModel()
+void StructureModel::Implementation::buildModel(Domain::DocumentObject* _structure)
 {
-    if (structure == nullptr) {
+    if (_structure == nullptr) {
         return;
     }
 
@@ -82,7 +73,7 @@ void StructureModel::Implementation::buildModel()
     };
 
     QDomDocument domDocument;
-    domDocument.setContent(structure->content());
+    domDocument.setContent(_structure->content());
     auto documentNode = domDocument.firstChildElement("document");
     auto itemNode = documentNode.firstChildElement();
     while (!itemNode.isNull()) {
@@ -91,9 +82,9 @@ void StructureModel::Implementation::buildModel()
     }
 }
 
-QByteArray StructureModel::Implementation::toXml() const
+QByteArray StructureModel::Implementation::toXml(Domain::DocumentObject* _structure) const
 {
-    if (structure == nullptr) {
+    if (_structure == nullptr) {
         return {};
     }
 
@@ -102,13 +93,13 @@ QByteArray StructureModel::Implementation::toXml() const
     //
 
     QByteArray xml = "<?xml version=\"1.0\"?>\n";
-    xml += "<document mime-type=\"" + Domain::mimeTypeFor(structure->type()) + "\" version=\"1.0\">\n";
+    xml += "<document mime-type=\"" + Domain::mimeTypeFor(_structure->type()) + "\" version=\"1.0\">\n";
     std::function<void(StructureModelItem*)> writeItemXml;
     writeItemXml = [&xml, &writeItemXml] (StructureModelItem* _item) {
         xml += "<item ";
         xml += " uuid=\"" + _item->uuid().toString() + "\" ";
         xml += " type=\"" + Domain::mimeTypeFor(_item->type()) + "\" ";
-        xml += " name=\"" + _item->name() + "\" ";
+        xml += " name=\"" + TextHelper::toHtmlEscaped(_item->name()) + "\" ";
         xml += " color=\"" + _item->color().name() + "\" ";
         if (!_item->hasChildren()) {
             xml += "/>\n";
@@ -133,7 +124,7 @@ QByteArray StructureModel::Implementation::toXml() const
 
 
 StructureModel::StructureModel(QObject* _parent)
-    : QAbstractItemModel(_parent),
+    : AbstractModel({}, _parent),
       d(new Implementation)
 {
     connect(this, &StructureModel::rowsInserted, this, &StructureModel::updateDocumentContent);
@@ -143,55 +134,6 @@ StructureModel::StructureModel(QObject* _parent)
 }
 
 StructureModel::~StructureModel() = default;
-
-void StructureModel::setDocument(Domain::DocumentObject* _document)
-{
-    if (d->structure == _document) {
-        return;
-    }
-
-    d->structure = _document;
-
-    //
-    // Если документ пустой, создаём первоначальную структуру
-    //
-    if (d->structure->content().isEmpty()) {
-        auto createItem = [] (Domain::DocumentObjectType _type, const QString& _name) {
-            return new StructureModelItem(QUuid::createUuid(), _type, _name, {});
-        };
-        appendItem(createItem(Domain::DocumentObjectType::Project, tr("Project")));
-        auto screenplayItem = createItem(Domain::DocumentObjectType::Screenplay, tr("Screenplay"));
-        appendItem(screenplayItem);
-        appendItem(createItem(Domain::DocumentObjectType::ScreenplayTitlePage, tr("Title page")), screenplayItem);
-        appendItem(createItem(Domain::DocumentObjectType::ScreenplayLogline, tr("Logline")), screenplayItem);
-        appendItem(createItem(Domain::DocumentObjectType::ScreenplaySynopsis, tr("Synopsis")), screenplayItem);
-        appendItem(createItem(Domain::DocumentObjectType::ScreenplayOutline, tr("Outline")), screenplayItem);
-        appendItem(createItem(Domain::DocumentObjectType::ScreenplayText, tr("Screenplay")), screenplayItem);
-    }
-    //
-    // А если данные есть, то загрузим их из документа
-    //
-    else {
-        beginResetModel();
-        d->buildModel();
-        endResetModel();
-    }
-}
-
-void StructureModel::clear()
-{
-    d->structure = nullptr;
-
-    if (!d->rootItem->hasChildren()) {
-        return;
-    }
-
-    emit beginRemoveRows({}, 0, d->rootItem->childCount() - 1);
-    while (d->rootItem->childCount() > 0) {
-        d->rootItem->removeItem(d->rootItem->childAt(0));
-    }
-    emit endRemoveRows();
-}
 
 void StructureModel::prependItem(StructureModelItem* _item, StructureModelItem* _parentItem)
 {
@@ -233,6 +175,8 @@ void StructureModel::appendItem(StructureModelItem* _item, StructureModelItem* _
     beginInsertRows(parentIndex, itemRowIndex, itemRowIndex);
     _parentItem->insertItem(itemRowIndex, _item);
     endInsertRows();
+
+    emit documentAdded(_item->uuid(), _item->type());
 }
 
 void StructureModel::insertItem(StructureModelItem* _item, StructureModelItem* _afterSiblingItem)
@@ -611,6 +555,53 @@ StructureModelItem* StructureModel::itemForIndex(const QModelIndex& _index) cons
     return item;
 }
 
+void StructureModel::initDocument()
+{
+    //
+    // Если документ пустой, создаём первоначальную структуру
+    //
+    if (document()->content().isEmpty()) {
+        auto createItem = [] (Domain::DocumentObjectType _type, const QString& _name) {
+            auto uuid = QUuid::createUuid();
+            return new StructureModelItem(uuid, _type, _name, {});
+        };
+        appendItem(createItem(Domain::DocumentObjectType::Project, tr("Project")));
+        auto screenplayItem = createItem(Domain::DocumentObjectType::Screenplay, tr("Screenplay"));
+        appendItem(screenplayItem);
+        appendItem(createItem(Domain::DocumentObjectType::ScreenplayTitlePage, tr("Title page")), screenplayItem);
+        appendItem(createItem(Domain::DocumentObjectType::ScreenplayLogline, tr("Logline")), screenplayItem);
+        appendItem(createItem(Domain::DocumentObjectType::ScreenplaySynopsis, tr("Synopsis")), screenplayItem);
+        appendItem(createItem(Domain::DocumentObjectType::ScreenplayOutline, tr("Outline")), screenplayItem);
+        appendItem(createItem(Domain::DocumentObjectType::ScreenplayText, tr("Screenplay")), screenplayItem);
+    }
+    //
+    // А если данные есть, то загрузим их из документа
+    //
+    else {
+        beginResetModel();
+        d->buildModel(document());
+        endResetModel();
+    }
+}
+
+void StructureModel::clearDocument()
+{
+    if (!d->rootItem->hasChildren()) {
+        return;
+    }
+
+    emit beginRemoveRows({}, 0, d->rootItem->childCount() - 1);
+    while (d->rootItem->childCount() > 0) {
+        d->rootItem->removeItem(d->rootItem->childAt(0));
+    }
+    emit endRemoveRows();
+}
+
+QByteArray StructureModel::toXml() const
+{
+    return d->toXml(document());
+}
+
 QModelIndex StructureModel::indexForItem(StructureModelItem* _item) const
 {
     if (_item == nullptr) {
@@ -628,29 +619,6 @@ QModelIndex StructureModel::indexForItem(StructureModelItem* _item) const
     }
 
     return index(row, 0, parent);
-}
-
-void StructureModel::updateDocumentContent()
-{
-    if (d->structure == nullptr) {
-        return;
-    }
-
-    const auto content = d->toXml();
-
-    const QByteArray undoPatch = d->dmpController.makePatch(content, d->structure->content());
-    if (undoPatch.isEmpty()) {
-        return;
-    }
-
-    const QByteArray redoPatch = d->dmpController.makePatch(d->structure->content(), content);
-    if (redoPatch.isEmpty()) {
-        return;
-    }
-
-    d->structure->setContent(content);
-
-    emit contentsChanged(undoPatch, redoPatch);
 }
 
 } // namespace BusinessLayer
