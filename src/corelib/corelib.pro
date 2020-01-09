@@ -52,6 +52,7 @@ SOURCES += \
     ui/widgets/dialog/standard_dialog.cpp \
     ui/widgets/drawer/drawer.cpp \
     ui/widgets/floating_tool_bar/floating_tool_bar.cpp \
+    ui/widgets/image_cropper/image_cropper.cpp \
     ui/widgets/label/label.cpp \
     ui/widgets/label/link_label.cpp \
     ui/widgets/radio_button/radio_button.cpp \
@@ -124,6 +125,7 @@ HEADERS += \
     ui/widgets/dialog/standard_dialog.h \
     ui/widgets/drawer/drawer.h \
     ui/widgets/floating_tool_bar/floating_tool_bar.h \
+    ui/widgets/image_cropper/image_cropper.h \
     ui/widgets/label/label.h \
     ui/widgets/label/link_label.h \
     ui/widgets/radio_button/radio_button.h \

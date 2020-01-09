@@ -1,8 +1,12 @@
 #include "project_information_manager.h"
 
+#include "cover_dialog.h"
 #include "project_information_view.h"
 
 #include <business_layer/model/project_information/project_information_model.h>
+
+#include <QApplication>
+#include <QFileDialog>
 
 
 namespace ManagementLayer
@@ -11,10 +15,7 @@ namespace ManagementLayer
 class ProjectInformationManager::Implementation
 {
 public:
-    /**
-     * @brief Создать представление для основного окна
-     */
-    void initView();
+    explicit Implementation();
 
     /**
      * @brief Создать представление
@@ -38,11 +39,9 @@ public:
     QVector<Ui::ProjectInformationView*> allViews;
 };
 
-void ProjectInformationManager::Implementation::initView()
+ProjectInformationManager::Implementation::Implementation()
+    : view(createView())
 {
-    if (view == nullptr) {
-        view = createView();
-    }
 }
 
 Ui::ProjectInformationView* ProjectInformationManager::Implementation::createView()
@@ -59,14 +58,28 @@ ProjectInformationManager::ProjectInformationManager(QObject* _parent)
     : QObject(_parent),
       d(new Implementation)
 {
+    connect(d->view, &Ui::ProjectInformationView::selectCoverPressed, this, [this] {
+        const QString coverPath = QFileDialog::getOpenFileName(d->view, tr("Choose cover"));
+        if (coverPath.isEmpty()) {
+            return;
+        }
+
+        QPixmap cover(coverPath);
+        if (cover.isNull()) {
+            return;
+        }
+
+        auto dlg = new Ui::CoverDialog(QApplication::topLevelAt(d->view->mapToGlobal({})));
+        dlg->setCover(cover);
+        dlg->showDialog();
+        connect(dlg, &Ui::CoverDialog::disappeared, dlg, &Ui::CoverDialog::deleteLater);
+    });
 }
 
 ProjectInformationManager::~ProjectInformationManager() = default;
 
 void ProjectInformationManager::setModel(BusinessLayer::AbstractModel* _model)
 {
-    d->initView();
-
     //
     // Разрываем соединения со старой моделью
     //
@@ -97,14 +110,11 @@ void ProjectInformationManager::setModel(BusinessLayer::AbstractModel* _model)
                 d->model, &BusinessLayer::ProjectInformationModel::setName);
         connect(d->view, &Ui::ProjectInformationView::loglineChanged,
                 d->model, &BusinessLayer::ProjectInformationModel::setLogline);
-        connect(d->view, &Ui::ProjectInformationView::coverChanged,
-                d->model, &BusinessLayer::ProjectInformationModel::setCover);
     }
 }
 
 QWidget* ProjectInformationManager::view()
 {
-    d->initView();
     return d->view;
 }
 

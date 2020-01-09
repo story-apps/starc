@@ -86,6 +86,7 @@ ProjectInformationView::ProjectInformationView(QWidget* _parent)
     connect(d->projectLogline, &TextField::textChanged, this, [this] {
         emit loglineChanged(d->projectLogline->text());
     });
+    connect(d->projectCover, &Cover::clicked, this, &ProjectInformationView::selectCoverPressed);
 
     updateTranslations();
     designSystemChangeEvent(nullptr);
