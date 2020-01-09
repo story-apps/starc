@@ -64,6 +64,16 @@ public:
     void setCurrentProjectName(const QString& _name);
 
     /**
+     * @brief Установить короткое описание текущего проекта
+     */
+    void setCurrentProjectLogline(const QString& _logline);
+
+    /**
+     * @brief Установить обложку текущего проекта
+     */
+    void setCurrentProjectCover(const QPixmap& _cover);
+
+    /**
      * @brief Закрыть текущий проект
      */
     void closeCurrentProject();

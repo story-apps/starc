@@ -439,6 +439,10 @@ void ApplicationManager::Implementation::updateWindowTitle()
     applicationView->setWindowTitle(
                 QString("%1 - Story Architect")
                 .arg(projectsManager->currentProject().name()));
+
+    if (applicationView->isWindowModified()) {
+        markChangesSaved(false);
+    }
 }
 
 void ApplicationManager::Implementation::markChangesSaved(bool _saved)
@@ -1017,8 +1021,17 @@ void ApplicationManager::initConnections()
             [this] { d->showMenu(); });
     connect(d->projectManager.data(), &ProjectManager::contentsChanged, this,
             [this] { d->markChangesSaved(false); });
-    connect(d->projectManager.data(), &ProjectManager::projectNameChanged,
-            d->projectsManager.data(), &ProjectsManager::setCurrentProjectName);
+    connect(d->projectManager.data(), &ProjectManager::projectNameChanged, this,
+            [this] (const QString& _name)
+    {
+        d->projectsManager->setCurrentProjectName(_name);
+        d->menuView->setProjectTitle(_name);
+        d->updateWindowTitle();
+    });
+    connect(d->projectManager.data(), &ProjectManager::projectLoglineChanged,
+            d->projectsManager.data(), &ProjectsManager::setCurrentProjectLogline);
+    connect(d->projectManager.data(), &ProjectManager::projectCoverChanged,
+            d->projectsManager.data(), &ProjectsManager::setCurrentProjectCover);
 
     //
     // Менеджер настроек

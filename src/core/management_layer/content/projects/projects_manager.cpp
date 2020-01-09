@@ -22,6 +22,7 @@
 #include <QJsonArray>
 #include <QJsonDocument>
 #include <QJsonObject>
+#include <QStandardPaths>
 #include <QTimer>
 #include <QWidget>
 
@@ -324,6 +325,28 @@ void ProjectsManager::setCurrentProject(const QString& _path)
 void ProjectsManager::setCurrentProjectName(const QString& _name)
 {
     d->currentProject.setName(_name);
+    d->projects->updateProject(d->currentProject);
+}
+
+void ProjectsManager::setCurrentProjectLogline(const QString& _logline)
+{
+    d->currentProject.setLogline(_logline);
+    d->projects->updateProject(d->currentProject);
+}
+
+void ProjectsManager::setCurrentProjectCover(const QPixmap& _cover)
+{
+    const QString posterDir
+            = QStandardPaths::writableLocation(QStandardPaths::DataLocation)
+              + "/thumbnails/projects/";
+    QDir::root().mkpath(posterDir);
+
+    const QString posterPath
+            = posterDir
+              + d->currentProject.path().toUtf8().toHex();
+    _cover.save(posterPath);
+
+    d->currentProject.setPosterPath(posterPath);
     d->projects->updateProject(d->currentProject);
 }
 
