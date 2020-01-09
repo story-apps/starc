@@ -22,6 +22,12 @@ public:
      */
     void setCover(const QPixmap& _cover);
 
+signals:
+    /**
+     * @brief Обложка выбрана
+     */
+    void coverSelected(const QPixmap& _cover);
+
 protected:
     /**
      * @brief Определим виджет, который необходимо сфокусировать после отображения диалога

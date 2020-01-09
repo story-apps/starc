@@ -54,6 +54,12 @@ CoverDialog::CoverDialog(QWidget* _parent)
     contentsLayout()->addWidget(d->imageCroppingNote, 1, 0);
     contentsLayout()->addLayout(d->buttonsLayout, 2, 0);
 
+    connect(d->cancelButton, &Button::clicked, this, &CoverDialog::hideDialog);
+    connect(d->selectButton, &Button::clicked, this, [this] {
+        emit coverSelected(d->imageCropper->croppedImage());
+        hideDialog();
+    });
+
     updateTranslations();
     designSystemChangeEvent(nullptr);
 }

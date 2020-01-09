@@ -380,8 +380,7 @@ const QPixmap ImageCropper::croppedImage()
     //
     // Получим размер отображаемого изображения
     //
-    const QSize scaledImageSize
-            = d->sourceImage.scaled(size(), Qt::KeepAspectRatio, Qt::FastTransformation).size();
+    const QSizeF scaledImageSize = d->sourceImage.size().scaled(size(), Qt::KeepAspectRatio);
 
     //
     // Определим расстояние от левого и верхнего краёв

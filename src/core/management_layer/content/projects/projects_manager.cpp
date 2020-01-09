@@ -15,6 +15,7 @@
 
 #include <utils/helpers/dialog_helper.h>
 
+#include <QCryptographicHash>
 #include <QDateTime>
 #include <QDir>
 #include <QFileDialog>
@@ -132,7 +133,7 @@ void ProjectsManager::loadProjects()
         project.setName(projectJson["name"].toString());
         project.setLogline(projectJson["logline"].toString());
         project.setPath(projectJson["path"].toString());
-        project.setPosterPath(projectPath);
+        project.setPosterPath(projectJson["poster_path"].toString());
         project.setLastEditTime(QDateTime::fromString(projectJson["last_edit_time"].toString(), Qt::ISODateWithMs));
         projects.append(project);
     }
@@ -341,10 +342,9 @@ void ProjectsManager::setCurrentProjectCover(const QPixmap& _cover)
               + "/thumbnails/projects/";
     QDir::root().mkpath(posterDir);
 
-    const QString posterPath
-            = posterDir
-              + d->currentProject.path().toUtf8().toHex();
-    _cover.save(posterPath);
+    const QString posterName = QCryptographicHash::hash(d->currentProject.path().toUtf8(), QCryptographicHash::Md5).toHex();
+    const QString posterPath = posterDir + posterName;
+    _cover.save(posterPath, "PNG");
 
     d->currentProject.setPosterPath(posterPath);
     d->projects->updateProject(d->currentProject);

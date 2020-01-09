@@ -73,6 +73,7 @@ ProjectInformationManager::ProjectInformationManager(QObject* _parent)
         dlg->setCover(cover);
         dlg->showDialog();
         connect(dlg, &Ui::CoverDialog::disappeared, dlg, &Ui::CoverDialog::deleteLater);
+        connect(dlg, &Ui::CoverDialog::coverSelected, d->model, &BusinessLayer::ProjectInformationModel::setCover);
     });
 }
 

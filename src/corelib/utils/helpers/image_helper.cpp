@@ -33,7 +33,7 @@ QByteArray ImageHelper::bytesFromImage(const QPixmap& _image)
     //
     QPixmap imageScaled = _image;
     if (imageScaled.width() > kImageMaxWidth
-            || imageScaled.height() > kImageMaxHeight) {
+        || imageScaled.height() > kImageMaxHeight) {
         imageScaled = imageScaled.scaled(kImageMaxWidth, kImageMaxHeight, Qt::KeepAspectRatio, Qt::SmoothTransformation);
     }
 
