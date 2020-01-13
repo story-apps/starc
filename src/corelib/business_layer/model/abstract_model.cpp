@@ -3,6 +3,7 @@
 #include <domain/document_object.h>
 
 #include <utils/diff_match_patch/diff_match_patch_controller.h>
+#include <utils/tools/debouncer.h>
 
 
 namespace BusinessLayer
@@ -23,10 +24,16 @@ public:
      * @brief Контроллер для формирования патчей изменений документа
      */
     DiffMatchPatchController dmpController;
+
+    /**
+     * @brief Дебаунсер на изменение контента документа
+     */
+    Debouncer updateDocumentContentDebouncer;
 };
 
 AbstractModel::Implementation::Implementation(const QVector<QString>& _tags)
-    : dmpController(_tags)
+    : dmpController(_tags),
+      updateDocumentContentDebouncer(300)
 {
 }
 
@@ -38,7 +45,27 @@ AbstractModel::AbstractModel(const QVector<QString>& _tags, QObject* _parent)
     : QAbstractItemModel(_parent),
       d(new Implementation(_tags))
 {
+    connect(&d->updateDocumentContentDebouncer, &Debouncer::gotWork, this, [this] {
+        if (d->document == nullptr) {
+            return;
+        }
 
+        const auto content = toXml();
+
+        const QByteArray undoPatch = d->dmpController.makePatch(content, d->document->content());
+        if (undoPatch.isEmpty()) {
+            return;
+        }
+
+        const QByteArray redoPatch = d->dmpController.makePatch(d->document->content(), content);
+        if (redoPatch.isEmpty()) {
+            return;
+        }
+
+        d->document->setContent(content);
+
+        emit contentsChanged(undoPatch, redoPatch);
+    });
 }
 
 AbstractModel::~AbstractModel() = default;
@@ -61,6 +88,7 @@ void AbstractModel::setDocument(Domain::DocumentObject* _document)
 
 void AbstractModel::clear()
 {
+    d->updateDocumentContentDebouncer.abortWork();
     d->document = nullptr;
 
     clearDocument();
@@ -106,25 +134,7 @@ QVariant AbstractModel::data(const QModelIndex& _index, int _role) const
 
 void AbstractModel::updateDocumentContent()
 {
-    if (d->document == nullptr) {
-        return;
-    }
-
-    const auto content = toXml();
-
-    const QByteArray undoPatch = d->dmpController.makePatch(content, d->document->content());
-    if (undoPatch.isEmpty()) {
-        return;
-    }
-
-    const QByteArray redoPatch = d->dmpController.makePatch(d->document->content(), content);
-    if (redoPatch.isEmpty()) {
-        return;
-    }
-
-    d->document->setContent(content);
-
-    emit contentsChanged(undoPatch, redoPatch);
+    d->updateDocumentContentDebouncer.orderWork();
 }
 
 } // namespace BusinessLayer

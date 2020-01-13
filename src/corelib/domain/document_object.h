@@ -12,25 +12,31 @@ namespace Domain
  * @brief Типы элементов
  */
 enum class DocumentObjectType {
-    Undefined,
+    Undefined = 0,
 
     //
     // Служебные для обслуживания работы с проектом
     //
 
-    Structure,
+    Structure = 1,
+
+    //
+    // Сырые данные
+    //
+
+    ImageData = 101,
 
     //
     // Собственно данные
     //
 
-    Project,
-    Screenplay,
-    ScreenplayTitlePage,
-    ScreenplayLogline,
-    ScreenplaySynopsis,
-    ScreenplayOutline,
-    ScreenplayText,
+    Project = 10000,
+    Screenplay = 10100,
+    ScreenplayTitlePage = 10101,
+    ScreenplayLogline = 10102,
+    ScreenplaySynopsis = 10103,
+    ScreenplayOutline = 10104,
+    ScreenplayText = 10105,
 
 /**
 //    Text,
