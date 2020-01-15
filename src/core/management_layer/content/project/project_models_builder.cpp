@@ -1,4 +1,4 @@
-#include "project_models_factory.h"
+#include "project_models_builder.h"
 
 #include <business_layer/model/project_information/project_information_model.h>
 
@@ -8,27 +8,35 @@
 namespace ManagementLayer
 {
 
-class ProjectModelsFactory::Implementation
+class ProjectModelsBuilder::Implementation
 {
 public:
+    explicit Implementation(BusinessLayer::AbstractImageWrapper* _imageWrapper);
+
     QHash<Domain::DocumentObject*, BusinessLayer::AbstractModel*> documentsToModels;
+    BusinessLayer::AbstractImageWrapper* imageWrapper = nullptr;
 };
+
+ProjectModelsBuilder::Implementation::Implementation(BusinessLayer::AbstractImageWrapper* _imageWrapper)
+    : imageWrapper(_imageWrapper)
+{
+}
 
 
 // ****
 
 
-ProjectModelsFactory::ProjectModelsFactory()
-    : d(new Implementation)
+ProjectModelsBuilder::ProjectModelsBuilder(BusinessLayer::AbstractImageWrapper* _imageWrapper)
+    : d(new Implementation(_imageWrapper))
 {
 }
 
-ProjectModelsFactory::~ProjectModelsFactory()
+ProjectModelsBuilder::~ProjectModelsBuilder()
 {
     clear();
 }
 
-void ProjectModelsFactory::clear()
+void ProjectModelsBuilder::clear()
 {
     for (auto model : d->documentsToModels.values()) {
         model->disconnect();
@@ -39,7 +47,7 @@ void ProjectModelsFactory::clear()
     d->documentsToModels.clear();
 }
 
-BusinessLayer::AbstractModel* ProjectModelsFactory::modelFor(Domain::DocumentObject* _document)
+BusinessLayer::AbstractModel* ProjectModelsBuilder::modelFor(Domain::DocumentObject* _document)
 {
     if (_document == nullptr) {
         return nullptr;
@@ -50,6 +58,7 @@ BusinessLayer::AbstractModel* ProjectModelsFactory::modelFor(Domain::DocumentObj
         switch (_document->type()) {
             case Domain::DocumentObjectType::Project: {
                 model = new BusinessLayer::ProjectInformationModel;
+                model->setImageWrapper(d->imageWrapper);
                 break;
             }
 
@@ -65,7 +74,7 @@ BusinessLayer::AbstractModel* ProjectModelsFactory::modelFor(Domain::DocumentObj
     return d->documentsToModels.value(_document);
 }
 
-QVector<BusinessLayer::AbstractModel*> ProjectModelsFactory::models() const
+QVector<BusinessLayer::AbstractModel*> ProjectModelsBuilder::models() const
 {
     return d->documentsToModels.values().toVector();
 }

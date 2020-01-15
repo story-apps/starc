@@ -1,5 +1,7 @@
 #include "abstract_model.h"
 
+#include "abstract_image_wrapper.h"
+
 #include <domain/document_object.h>
 
 #include <utils/diff_match_patch/diff_match_patch_controller.h>
@@ -19,6 +21,11 @@ public:
      * @brief Документ на основе которого строится модель
      */
     Domain::DocumentObject* document = nullptr;
+
+    /**
+     * @brief Загрузчик фотографий
+     */
+    AbstractImageWrapper* image = nullptr;
 
     /**
      * @brief Контроллер для формирования патчей изменений документа
@@ -86,6 +93,11 @@ void AbstractModel::setDocument(Domain::DocumentObject* _document)
     initDocument();
 }
 
+void AbstractModel::setImageWrapper(AbstractImageWrapper* _image)
+{
+    d->image = _image;
+}
+
 void AbstractModel::clear()
 {
     d->updateDocumentContentDebouncer.abortWork();
@@ -130,6 +142,11 @@ QVariant AbstractModel::data(const QModelIndex& _index, int _role) const
     Q_UNUSED(_role)
 
     return {};
+}
+
+AbstractImageWrapper* AbstractModel::imageWrapper() const
+{
+    return d->image;
 }
 
 void AbstractModel::updateDocumentContent()

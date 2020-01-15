@@ -14,7 +14,6 @@ namespace DataStorageLayer
 class DocumentChangeStorage::Implementation
 {
 public:
-    bool isLastIdentifierLoaded = false;
     QVector<Domain::DocumentChangeObject*> newDocumentChanges;
 };
 
@@ -37,14 +36,6 @@ Domain::DocumentChangeObject* DocumentChangeStorage::appendDocumentChange(const 
 
 void DocumentChangeStorage::store()
 {
-    if (!d->isLastIdentifierLoaded) {
-        //
-        // Перед сохранением, нужно извлечь индекс последнего изменения, чтобы продолжить со следующего
-        //
-        d->isLastIdentifierLoaded = true;
-        DataMappingLayer::MapperFacade::documentChangeMapper()->findLast(1);
-    }
-
     DatabaseLayer::Database::transaction();
     while (!d->newDocumentChanges.isEmpty()) {
         DataMappingLayer::MapperFacade::documentChangeMapper()->insert(d->newDocumentChanges.takeFirst());
@@ -54,7 +45,6 @@ void DocumentChangeStorage::store()
 
 void DocumentChangeStorage::clear()
 {
-    d->isLastIdentifierLoaded = false;
     DataMappingLayer::MapperFacade::documentChangeMapper()->clear();
 }
 

@@ -9,6 +9,8 @@ namespace Domain {
 
 namespace BusinessLayer {
 
+class AbstractImageWrapper;
+
 /**
  * @brief Абстрактная модель для работы над документами
  */
@@ -29,6 +31,11 @@ public:
      * @brief Задать документ со структурой
      */
     void setDocument(Domain::DocumentObject* _document);
+
+    /**
+     * @brief Установить загрузчик изображений
+     */
+    void setImageWrapper(AbstractImageWrapper* _image);
 
     /**
      * @brief Очистить все загруженные данные
@@ -67,6 +74,11 @@ protected:
      * @brief Сформировать xml-содержимое документа
      */
     virtual QByteArray toXml() const = 0;
+
+    /**
+     * @brief Получить обёртку для работы с изображениями
+     */
+    AbstractImageWrapper* imageWrapper() const;
 
     /**
      * @brief Установить данные в документ

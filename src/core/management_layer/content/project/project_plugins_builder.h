@@ -14,13 +14,13 @@ namespace ManagementLayer
 {
 
 /**
- * @brief Фабрика управляющая созданием плагинов редакторов
+ * @brief Билдер управляющая созданием плагинов редакторов
  */
-class ProjectPluginsFactory final
+class ProjectPluginsBuilder final
 {
 public:
-    ProjectPluginsFactory();
-    ~ProjectPluginsFactory();
+    ProjectPluginsBuilder();
+    ~ProjectPluginsBuilder();
 
     /**
      * @brief Вспомогательная структура с информацией о плагине редактора

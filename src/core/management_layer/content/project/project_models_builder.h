@@ -3,6 +3,7 @@
 #include <QScopedPointer>
 
 namespace BusinessLayer {
+class AbstractImageWrapper;
 class AbstractModel;
 }
 
@@ -15,13 +16,13 @@ namespace ManagementLayer
 {
 
 /**
- * @brief Фабрика для работы с моделями документов проекта
+ * @brief Билдер для работы с моделями документов проекта
  */
-class ProjectModelsFactory
+class ProjectModelsBuilder
 {
 public:
-    ProjectModelsFactory();
-    ~ProjectModelsFactory();
+    explicit ProjectModelsBuilder(BusinessLayer::AbstractImageWrapper* _imageWrapper);
+    ~ProjectModelsBuilder();
 
     /**
      * @brief Сбросить все загруженные модели

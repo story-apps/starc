@@ -1,13 +1,14 @@
 #include "project_manager.h"
 
-#include "project_models_factory.h"
-#include "project_plugins_factory.h"
+#include "project_models_builder.h"
+#include "project_plugins_builder.h"
 
 #include <business_layer/model/project_information/project_information_model.h>
 #include <business_layer/model/structure/structure_model.h>
 #include <business_layer/model/structure/structure_model_item.h>
 
 #include <data_layer/storage/document_change_storage.h>
+#include <data_layer/storage/document_data_storage.h>
 #include <data_layer/storage/document_storage.h>
 #include <data_layer/storage/settings_storage.h>
 #include <data_layer/storage/storage_facade.h>
@@ -39,8 +40,10 @@ public:
 
     BusinessLayer::StructureModel* projectStructure = nullptr;
 
-    ProjectModelsFactory modelFactory;
-    ProjectPluginsFactory pluginFactory;
+    DataStorageLayer::DocumentDataStorage documentDataStorage;
+
+    ProjectModelsBuilder modelFactory;
+    ProjectPluginsBuilder pluginFactory;
 };
 
 ProjectManager::Implementation::Implementation(QWidget* _parent)
@@ -48,7 +51,8 @@ ProjectManager::Implementation::Implementation(QWidget* _parent)
       toolBar(new Ui::ProjectToolBar(_parent)),
       navigator(new Ui::ProjectNavigator(_parent)),
       view(new Ui::ProjectView(_parent)),
-      projectStructure(new BusinessLayer::StructureModel(navigator))
+      projectStructure(new BusinessLayer::StructureModel(navigator)),
+      modelFactory(&documentDataStorage)
 {
     toolBar->hide();
     navigator->hide();
@@ -196,22 +200,32 @@ void ProjectManager::closeCurrentProject(const QString& _path)
     // Очищаем все загруженные модели документов
     //
     d->modelFactory.clear();
+
+    //
+    // Сбрасываем загруженные изображения
+    //
+    d->documentDataStorage.clear();
 }
 
 void ProjectManager::saveChanges()
 {
     //
-    // Сохраняем изменения структуры
+    // Сохраняем структуру
     //
     const auto structure = DataStorageLayer::StorageFacade::documentStorage()->structure();
     DataStorageLayer::StorageFacade::documentStorage()->updateDocument(structure);
 
     //
-    // Сохраняем изменения остальных документов
+    // Сохраняем остальные документы
     //
     for (auto model : d->modelFactory.models()) {
         DataStorageLayer::StorageFacade::documentStorage()->updateDocument(model->document());
     }
+
+    //
+    // Сохраняем изображения
+    //
+    d->documentDataStorage.saveChanges();
 
     //
     // Сохраняем все изменения документов

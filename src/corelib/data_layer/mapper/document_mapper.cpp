@@ -76,6 +76,12 @@ QString DocumentMapper::findAllStatement() const
     return "SELECT " + kColumns + " FROM  " + kTableName;
 }
 
+QString DocumentMapper::findLastOneStatement() const
+{
+    return findAllStatement()
+            + QString("WHERE id IN (SELECT id FROM %1 ORDER BY id DESC LIMIT %2)").arg(kTableName).arg(1);
+}
+
 QString DocumentMapper::insertStatement(DomainObject* _object, QVariantList& _insertValues) const
 {
     const QString insertStatement

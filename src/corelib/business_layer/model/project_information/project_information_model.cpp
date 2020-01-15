@@ -1,5 +1,7 @@
 #include "project_information_model.h"
 
+#include <business_layer/model/abstract_image_wrapper.h>
+
 #include <domain/document_object.h>
 
 #include <utils/helpers/image_helper.h>
@@ -17,7 +19,10 @@ class ProjectInformationModel::Implementation
 public:
     QString name;
     QString logline;
-    QPixmap cover;
+    struct {
+        QUuid uuid;
+        QPixmap image;
+    } cover;
 };
 
 
@@ -67,13 +72,14 @@ void ProjectInformationModel::setLogline(const QString& _logline)
 
 const QPixmap& ProjectInformationModel::cover() const
 {
-    return d->cover;
+    return d->cover.image;
 }
 
 void ProjectInformationModel::setCover(const QPixmap& _cover)
 {
-    d->cover = _cover;
-    emit coverChanged(d->cover);
+    d->cover.image = _cover;
+    d->cover.uuid = imageWrapper()->save(d->cover.image);
+    emit coverChanged(d->cover.image);
 }
 
 void ProjectInformationModel::initDocument()
@@ -90,7 +96,8 @@ void ProjectInformationModel::initDocument()
     auto loglineNode = nameNode.nextSiblingElement();
     d->logline = loglineNode.text();
     auto coverNode = loglineNode.nextSiblingElement();
-    d->cover = ImageHelper::imageFromBytes(QByteArray::fromBase64(coverNode.text().toUtf8()));
+    d->cover.uuid = coverNode.text();
+    d->cover.image = imageWrapper()->load(d->cover.uuid);
 }
 
 void ProjectInformationModel::clearDocument()
@@ -110,7 +117,7 @@ QByteArray ProjectInformationModel::toXml() const
     xml += "<document mime-type=\"" + Domain::mimeTypeFor(document()->type()) + "\" version=\"1.0\">\n";
     xml += "<name><![CDATA[" + TextHelper::toHtmlEscaped(d->name) + "]]></name>\n";
     xml += "<logline><![CDATA[" + TextHelper::toHtmlEscaped(d->logline) + "]]></logline>\n";
-    xml += "<cover><![CDATA[" + ImageHelper::bytesFromImage(d->cover).toBase64() + "]]></cover>\n";
+    xml += "<cover><![CDATA[" + d->cover.uuid.toString() + "]]></cover>\n";
     xml += "</document>";
     return xml;
 }

@@ -21,6 +21,7 @@ namespace DataMappingLayer
 
 void AbstractMapper::clear()
 {
+    m_isLastIdentifierLoaded = false;
     qDeleteAll(m_loadedObjectsMap);
     m_loadedObjectsMap.clear();
 }
@@ -183,6 +184,20 @@ DomainObject* AbstractMapper::loadObjectFromDatabase(const Identifier& _id)
 
 Identifier AbstractMapper::findNextIdentifier()
 {
+    if (!m_isLastIdentifierLoaded) {
+        //
+        // Если нет ещё последнего индекса по таблице, загрузим его
+        //
+        QSqlQuery query = Database::query();
+        query.prepare(findLastOneStatement());
+        query.exec();
+        query.next();
+        const QSqlRecord record = query.record();
+        load(record);
+
+        m_isLastIdentifierLoaded = true;
+    }
+
     Identifier maxId(0);
     if (!m_loadedObjectsMap.isEmpty()) {
         QMap<Identifier, DomainObject*>::const_iterator iter = m_loadedObjectsMap.end();

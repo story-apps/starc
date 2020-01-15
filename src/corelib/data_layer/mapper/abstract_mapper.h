@@ -31,6 +31,7 @@ public:
 protected:
     virtual QString findStatement(const Domain::Identifier& _id) const = 0;
     virtual QString findAllStatement() const = 0;
+    virtual QString findLastOneStatement() const = 0;
     virtual QString insertStatement(Domain::DomainObject* _object, QVariantList& _values) const = 0;
     virtual QString updateStatement(Domain::DomainObject* _object, QVariantList& _values) const = 0;
     virtual QString deleteStatement(Domain::DomainObject* _object, QVariantList& _values) const = 0;
@@ -81,6 +82,11 @@ private:
     Domain::DomainObject* load(const QSqlRecord& _record);
 
 private:
+    /**
+     * @brief Был ли загружен идентификатор последнего элемента
+     */
+    bool m_isLastIdentifierLoaded = false;
+
     /**
      * @brief Загруженные объекты из базы данных
      */

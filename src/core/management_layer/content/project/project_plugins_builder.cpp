@@ -1,4 +1,4 @@
-#include "project_plugins_factory.h"
+#include "project_plugins_builder.h"
 
 #include <interfaces/management_layer/i_document_manager.h>
 
@@ -25,7 +25,7 @@ namespace {
     /**
      * @brief Карта соответствия майм-типов документа к редакторам
      */
-    const QHash<QString, QVector<ProjectPluginsFactory::EditorInfo>> kDocumentToEditors
+    const QHash<QString, QVector<ProjectPluginsBuilder::EditorInfo>> kDocumentToEditors
     = {{ "application/x-starc/document/project", {{ "application/x-starc/editor/project/information", "\uf2fd" },
                                                   { "application/x-starc/editor/project/collaborators", "\ufb34" }}},
        { "application/x-starc/document/screenplay", {{ "application/x-starc/editor/screenplay", "" }}},
@@ -53,7 +53,7 @@ namespace {
        { "application/x-starc/editor/screenplay/cards", "libscreenplaycardsplugin*.*" }};
 }
 
-class ProjectPluginsFactory::Implementation
+class ProjectPluginsBuilder::Implementation
 {
 public:
     /**
@@ -73,7 +73,7 @@ public:
     mutable QHash<QString, ManagementLayer::IDocumentManager*> plugins;
 };
 
-QWidget* ProjectPluginsFactory::Implementation::activatePlugin(const QString& _mimeType,
+QWidget* ProjectPluginsBuilder::Implementation::activatePlugin(const QString& _mimeType,
     BusinessLayer::AbstractModel* _model)
 {
     if (!plugins.contains(_mimeType)) {
@@ -141,24 +141,24 @@ QWidget* ProjectPluginsFactory::Implementation::activatePlugin(const QString& _m
 // ****
 
 
-ProjectPluginsFactory::ProjectPluginsFactory()
+ProjectPluginsBuilder::ProjectPluginsBuilder()
     : d(new Implementation)
 {
 }
 
 ProjectPluginsFactory::~ProjectPluginsFactory() = default;
 
-QVector<ProjectPluginsFactory::EditorInfo> ProjectPluginsFactory::editorsInfoFor(const QString& _documentMimeType) const
+QVector<ProjectPluginsBuilder::EditorInfo> ProjectPluginsBuilder::editorsInfoFor(const QString& _documentMimeType) const
 {
     return kDocumentToEditors.value(_documentMimeType);
 }
 
-QString ProjectPluginsFactory::navigatorMimeTypeFor(const QString& _editorMimeType) const
+QString ProjectPluginsBuilder::navigatorMimeTypeFor(const QString& _editorMimeType) const
 {
     return kEditorToNavigator.value(_editorMimeType);
 }
 
-QWidget* ProjectPluginsFactory::activateView(const QString& _viewMimeType, BusinessLayer::AbstractModel* _model)
+QWidget* ProjectPluginsBuilder::activateView(const QString& _viewMimeType, BusinessLayer::AbstractModel* _model)
 {
     return d->activatePlugin(_viewMimeType, _model);
 }

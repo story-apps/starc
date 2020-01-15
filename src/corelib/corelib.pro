@@ -31,6 +31,7 @@ SOURCES += \
     data_layer/mapper/mapper_facade.cpp \
     data_layer/mapper/settings_mapper.cpp \
     data_layer/storage/document_change_storage.cpp \
+    data_layer/storage/document_data_storage.cpp \
     data_layer/storage/document_storage.cpp \
     data_layer/storage/settings_storage.cpp \
     data_layer/storage/storage_facade.cpp \
@@ -92,6 +93,7 @@ SOURCES += \
 
 HEADERS += \
     business_layer/import/abstract_importer.h \
+    business_layer/model/abstract_image_wrapper.h \
     business_layer/model/abstract_model.h \
     business_layer/model/project_information/project_information_model.h \
     business_layer/model/structure/structure_model.h \
@@ -104,6 +106,7 @@ HEADERS += \
     data_layer/mapper/mapper_facade.h \
     data_layer/mapper/settings_mapper.h \
     data_layer/storage/document_change_storage.h \
+    data_layer/storage/document_data_storage.h \
     data_layer/storage/document_storage.h \
     data_layer/storage/settings_storage.h \
     data_layer/storage/storage_facade.h \
