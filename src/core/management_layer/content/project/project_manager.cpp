@@ -249,6 +249,11 @@ void ProjectManager::showView(const QModelIndex& _itemIndex, const QString& _vie
     //
     // ... и при необходимости настроим её
     //
+    connect(model, &BusinessLayer::AbstractModel::documentNameChanged, this,
+            [this, _itemIndex] (const QString& _name) {
+            d->projectStructure->setItemName(_itemIndex, _name);
+        },
+        Qt::UniqueConnection);
     connect(model, &BusinessLayer::AbstractModel::contentsChanged, this,
             [this, model] (const QByteArray& _undo, const QByteArray& _redo) {
                 DataStorageLayer::StorageFacade::documentChangeStorage()->appendDocumentChange(

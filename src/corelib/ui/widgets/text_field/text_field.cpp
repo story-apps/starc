@@ -9,6 +9,7 @@
 
 #include <QEvent>
 #include <QKeyEvent>
+#include <QMimeData>
 #include <QPainter>
 #include <QTextFrame>
 #include <QVariantAnimation>
@@ -694,6 +695,13 @@ void TextField::keyPressEvent(QKeyEvent* _event)
     }
 
     QTextEdit::keyPressEvent(_event);
+}
+
+void TextField::insertFromMimeData(const QMimeData* _source)
+{
+    if (_source->hasText()) {
+        insertPlainText(_source->text());
+    }
 }
 
 TextField::~TextField() = default;

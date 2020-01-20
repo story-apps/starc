@@ -555,6 +555,17 @@ StructureModelItem* StructureModel::itemForIndex(const QModelIndex& _index) cons
     return item;
 }
 
+void StructureModel::setItemName(const QModelIndex& _index, const QString& _name)
+{
+    auto item = itemForIndex(_index);
+    if (item == d->rootItem) {
+        return;
+    }
+
+    item->setName(_name);
+    emit dataChanged(_index, _index);
+}
+
 void StructureModel::initDocument()
 {
     //

@@ -4,6 +4,7 @@ SUBDIRS += \
     app \
     core \
     core/management_layer/plugins/project_information \
+    core/management_layer/plugins/screenplay_information \
     corelib
 
 HEADERS += \

@@ -62,6 +62,15 @@ QString StructureModelItem::name() const
     return d->name;
 }
 
+void StructureModelItem::setName(const QString& _name)
+{
+    if (d->name == _name) {
+        return;
+    }
+
+    d->name = _name;
+}
+
 QColor StructureModelItem::color() const
 {
     return d->color;

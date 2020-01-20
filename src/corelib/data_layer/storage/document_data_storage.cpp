@@ -38,6 +38,10 @@ DocumentDataStorage::~DocumentDataStorage() = default;
 
 QPixmap DocumentDataStorage::load(const QUuid& _uuid) const
 {
+    if (_uuid.isNull()) {
+        return {};
+    }
+
     if (auto imageIter = d->newImages.find(_uuid);
         imageIter != d->newImages.end()) {
         return imageIter.value();

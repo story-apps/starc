@@ -28,10 +28,10 @@ namespace {
     const QHash<QString, QVector<ProjectPluginsBuilder::EditorInfo>> kDocumentToEditors
     = {{ "application/x-starc/document/project", {{ "application/x-starc/editor/project/information", "\uf2fd" },
                                                   { "application/x-starc/editor/project/collaborators", "\ufb34" }}},
-       { "application/x-starc/document/screenplay", {{ "application/x-starc/editor/screenplay", "" }}},
-       { "application/x-starc/document/screenplay/title-page", {{ "application/x-starc/editor/screenplay/title-page", "" }}},
-       { "application/x-starc/document/screenplay/logline", {{ "application/x-starc/editor/screenplay/logline", "" }}},
-       { "application/x-starc/document/screenplay/synopsis", {{ "application/x-starc/editor/text", "" }}},
+       { "application/x-starc/document/screenplay", {{ "application/x-starc/editor/screenplay/information", "\uf2fd" }}},
+       { "application/x-starc/document/screenplay/title-page", {{ "application/x-starc/editor/screenplay/title-page", "\uf9ec" }}},
+       { "application/x-starc/document/screenplay/logline", {{ "application/x-starc/editor/screenplay/logline", "\uf9ec" }}},
+       { "application/x-starc/document/screenplay/synopsis", {{ "application/x-starc/editor/text", "\uf9ec" }}},
        { "application/x-starc/document/screenplay/text", {{ "application/x-starc/editor/screenplay/text", "\uf9ec" },
                                                           { "application/x-starc/editor/screenplay/cards", "\uf554" }}},
        { "application/x-starc/document/screenplay/outline", {{ "application/x-starc/editor/screenplay/text", "\uf9ec" },
@@ -44,8 +44,9 @@ namespace {
       */
     const QHash<QString, QString> kMimeToPlugin
     = {{ "application/x-starc/editor/project/information", "libprojectinformationplugin*.*" },
+       //
        { "application/x-starc/navigator/screenplay/structure", "libscreenplaystructureplugin*.*" },
-       { "application/x-starc/editor/screenplay", "libscreenplayplugin*.*" },
+       { "application/x-starc/editor/screenplay/information", "libscreenplayinformationplugin*.*" },
        { "application/x-starc/editor/screenplay/title-page", "libscreenplaytitlepageplugin*.*" },
        { "application/x-starc/editor/screenplay/logline", "libscreenplayloglineplugin*.*" },
        { "application/x-starc/editor/screenplay/synopsis", "libtextplugin*.*" },
@@ -146,7 +147,7 @@ ProjectPluginsBuilder::ProjectPluginsBuilder()
 {
 }
 
-ProjectPluginsFactory::~ProjectPluginsFactory() = default;
+ProjectPluginsBuilder::~ProjectPluginsBuilder() = default;
 
 QVector<ProjectPluginsBuilder::EditorInfo> ProjectPluginsBuilder::editorsInfoFor(const QString& _documentMimeType) const
 {

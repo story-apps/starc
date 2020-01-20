@@ -40,8 +40,8 @@ public:
 };
 
 ProjectInformationManager::Implementation::Implementation()
-    : view(createView())
 {
+    view = createView();
 }
 
 Ui::ProjectInformationView* ProjectInformationManager::Implementation::createView()

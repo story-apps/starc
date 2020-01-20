@@ -129,6 +129,11 @@ protected:
      */
     void keyPressEvent(QKeyEvent* _event) override;
 
+    /**
+     * @brief Разрешаем вставлять только плоский текст
+     */
+    void insertFromMimeData(const QMimeData* _source) override;
+
 private:
     class Implementation;
     QScopedPointer<Implementation> d;

@@ -55,6 +55,11 @@ public:
 
 signals:
     /**
+     * @brief Изменилось название документа модели
+     */
+    void documentNameChanged(const QString& _name);
+
+    /**
      * @brief Данные изменились
      */
     void contentsChanged(const QByteArray& _undo, const QByteArray& _redo);

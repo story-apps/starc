@@ -72,6 +72,11 @@ public:
      */
     StructureModelItem* itemForIndex(const QModelIndex& _index) const;
 
+    /**
+     * @brief Задать имя элемента
+     */
+    void setItemName(const QModelIndex& _index, const QString& _name);
+
 signals:
     /**
      * @brief Был добавлен документ с заданным идентификатором и типом

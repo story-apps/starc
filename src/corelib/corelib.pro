@@ -22,6 +22,7 @@ SOURCES += \
     business_layer/import/abstract_importer.cpp \
     business_layer/model/abstract_model.cpp \
     business_layer/model/project_information/project_information_model.cpp \
+    business_layer/model/screenplay/screenplay_information_model.cpp \
     business_layer/model/structure/structure_model.cpp \
     business_layer/model/structure/structure_model_item.cpp \
     data_layer/database.cpp \
@@ -96,6 +97,7 @@ HEADERS += \
     business_layer/model/abstract_image_wrapper.h \
     business_layer/model/abstract_model.h \
     business_layer/model/project_information/project_information_model.h \
+    business_layer/model/screenplay/screenplay_information_model.h \
     business_layer/model/structure/structure_model.h \
     business_layer/model/structure/structure_model_item.h \
     corelib_global.h \

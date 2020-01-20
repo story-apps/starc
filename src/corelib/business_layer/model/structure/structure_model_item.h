@@ -37,6 +37,7 @@ public:
      * @brief Название элемента
      */
     QString name() const;
+    void setName(const QString& _name);
 
     /**
      * @brief Цвет элемента
