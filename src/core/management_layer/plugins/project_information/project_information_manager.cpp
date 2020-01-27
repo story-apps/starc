@@ -3,7 +3,7 @@
 #include "cover_dialog.h"
 #include "project_information_view.h"
 
-#include <business_layer/model/project_information/project_information_model.h>
+#include <business_layer/model/project/project_information_model.h>
 
 #include <QApplication>
 #include <QFileDialog>

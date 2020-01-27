@@ -127,13 +127,13 @@ void ScreenplayInformationModel::initDocument()
     domDocument.setContent(document()->content());
     auto documentNode = domDocument.firstChildElement("document");
     auto nameNode = documentNode.firstChildElement();
-    d->name = nameNode.text();
+    d->name = TextHelper::fromHtmlEscaped(nameNode.text());
     auto headerNode = nameNode.nextSiblingElement();
-    d->header = headerNode.text();
+    d->header = TextHelper::fromHtmlEscaped(headerNode.text());
     auto footerNode = headerNode.nextSiblingElement();
-    d->footer = footerNode.text();
+    d->footer = TextHelper::fromHtmlEscaped(footerNode.text());
     auto scenesNumbersPrefixNode = footerNode.nextSiblingElement();
-    d->scenesNumbersPrefix = scenesNumbersPrefixNode.text();
+    d->scenesNumbersPrefix = TextHelper::fromHtmlEscaped(scenesNumbersPrefixNode.text());
     auto scenesNumberingStartAtNode = scenesNumbersPrefixNode.nextSiblingElement();
     if (!scenesNumberingStartAtNode.isNull()) {
         d->scenesNumberingStartAt = scenesNumberingStartAtNode.text().toInt();

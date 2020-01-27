@@ -1,7 +1,8 @@
 #include "project_models_builder.h"
 
-#include <business_layer/model/project_information/project_information_model.h>
+#include <business_layer/model/project/project_information_model.h>
 #include <business_layer/model/screenplay/screenplay_information_model.h>
+#include <business_layer/model/text/text_model.h>
 
 #include <domain/document_object.h>
 
@@ -67,6 +68,11 @@ BusinessLayer::AbstractModel* ProjectModelsBuilder::modelFor(Domain::DocumentObj
                 break;
             }
 
+            case Domain::DocumentObjectType::ScreenplayTitlePage: {
+                model = new BusinessLayer::TextModel;
+                break;
+            }
+
             default: {
                 return nullptr;
             }
@@ -74,6 +80,7 @@ BusinessLayer::AbstractModel* ProjectModelsBuilder::modelFor(Domain::DocumentObj
         model->setImageWrapper(d->imageWrapper);
 
         model->setDocument(_document);
+
         d->documentsToModels.insert(_document, model);
     }
 

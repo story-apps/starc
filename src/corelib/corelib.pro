@@ -7,7 +7,7 @@
 TEMPLATE = lib
 
 CONFIG += c++1z
-QT += widgets sql xml
+QT += widgets widgets-private sql xml
 
 TARGET = corelib
 
@@ -21,10 +21,11 @@ INCLUDEPATH += ..
 SOURCES += \
     business_layer/import/abstract_importer.cpp \
     business_layer/model/abstract_model.cpp \
-    business_layer/model/project_information/project_information_model.cpp \
+    business_layer/model/project/project_information_model.cpp \
     business_layer/model/screenplay/screenplay_information_model.cpp \
     business_layer/model/structure/structure_model.cpp \
     business_layer/model/structure/structure_model_item.cpp \
+    business_layer/model/text/text_model.cpp \
     data_layer/database.cpp \
     data_layer/mapper/abstract_mapper.cpp \
     data_layer/mapper/document_change_mapper.cpp \
@@ -66,6 +67,8 @@ SOURCES += \
     ui/widgets/splitter/splitter_handle.cpp \
     ui/widgets/stack_widget/stack_widget.cpp \
     ui/widgets/stepper/stepper.cpp \
+    ui/widgets/text_edit/page/page_metrics.cpp \
+    ui/widgets/text_edit/page/page_text_edit.cpp \
     ui/widgets/text_field/text_field.cpp \
     ui/widgets/toggle_button/toggle_button.cpp \
     ui/widgets/tree/tree.cpp \
@@ -96,10 +99,11 @@ HEADERS += \
     business_layer/import/abstract_importer.h \
     business_layer/model/abstract_image_wrapper.h \
     business_layer/model/abstract_model.h \
-    business_layer/model/project_information/project_information_model.h \
+    business_layer/model/project/project_information_model.h \
     business_layer/model/screenplay/screenplay_information_model.h \
     business_layer/model/structure/structure_model.h \
     business_layer/model/structure/structure_model_item.h \
+    business_layer/model/text/text_model.h \
     corelib_global.h \
     data_layer/database.h \
     data_layer/mapper/abstract_mapper.h \
@@ -142,6 +146,9 @@ HEADERS += \
     ui/widgets/splitter/splitter_handle.h \
     ui/widgets/stack_widget/stack_widget.h \
     ui/widgets/stepper/stepper.h \
+    ui/widgets/text_edit/page/page_metrics.h \
+    ui/widgets/text_edit/page/page_text_edit.h \
+    ui/widgets/text_edit/page/page_text_edit_p.h \
     ui/widgets/text_field/text_field.h \
     ui/widgets/toggle_button/toggle_button.h \
     ui/widgets/tree/tree.h \

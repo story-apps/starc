@@ -3,7 +3,7 @@
 #include "project_models_builder.h"
 #include "project_plugins_builder.h"
 
-#include <business_layer/model/project_information/project_information_model.h>
+#include <business_layer/model/project/project_information_model.h>
 #include <business_layer/model/structure/structure_model.h>
 #include <business_layer/model/structure/structure_model_item.h>
 

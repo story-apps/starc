@@ -47,8 +47,8 @@ namespace {
        //
        { "application/x-starc/navigator/screenplay/structure", "libscreenplaystructureplugin*.*" },
        { "application/x-starc/editor/screenplay/information", "libscreenplayinformationplugin*.*" },
-       { "application/x-starc/editor/screenplay/title-page", "libscreenplaytitlepageplugin*.*" },
-       { "application/x-starc/editor/screenplay/logline", "libscreenplayloglineplugin*.*" },
+       { "application/x-starc/editor/screenplay/title-page", "libtextplugin*.*" },
+       { "application/x-starc/editor/screenplay/logline", "libtextplugin*.*" },
        { "application/x-starc/editor/screenplay/synopsis", "libtextplugin*.*" },
        { "application/x-starc/editor/screenplay/text", "libscreenplaytextplugin*.*" },
        { "application/x-starc/editor/screenplay/cards", "libscreenplaycardsplugin*.*" }};

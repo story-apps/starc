@@ -92,9 +92,9 @@ void ProjectInformationModel::initDocument()
     domDocument.setContent(document()->content());
     auto documentNode = domDocument.firstChildElement("document");
     auto nameNode = documentNode.firstChildElement();
-    d->name = nameNode.text();
+    d->name = TextHelper::fromHtmlEscaped(nameNode.text());
     auto loglineNode = nameNode.nextSiblingElement();
-    d->logline = loglineNode.text();
+    d->logline = TextHelper::fromHtmlEscaped(loglineNode.text());
     auto coverNode = loglineNode.nextSiblingElement();
     d->cover.uuid = coverNode.text();
     d->cover.image = imageWrapper()->load(d->cover.uuid);

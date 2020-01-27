@@ -150,7 +150,7 @@ QPixmap ImageHelper::makeAvatar(const QString& _text, const QFont& _font, const 
     QImage avatar(_size, QImage::Format_ARGB32_Premultiplied);
     avatar.fill(Qt::transparent);
     QPainter painter(&avatar);
-    painter.setRenderHint(QPainter::HighQualityAntialiasing);
+    painter.setRenderHint(QPainter::Antialiasing);
 
     //
     // Формируем цвет для подложки заданного текста
@@ -258,7 +258,7 @@ QPixmap ImageHelper::makeAvatar(const QPixmap& _pixmap, const QSize& _size, cons
     QImage avatar(_size, QImage::Format_ARGB32_Premultiplied);
     avatar.fill(Qt::transparent);
     QPainter painter(&avatar);
-    painter.setRenderHint(QPainter::HighQualityAntialiasing);
+    painter.setRenderHint(QPainter::Antialiasing);
 
     //
     // Рисуем фон авки

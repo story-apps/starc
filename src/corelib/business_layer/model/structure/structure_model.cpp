@@ -61,7 +61,7 @@ void StructureModel::Implementation::buildModel(Domain::DocumentObject* _structu
     buildItem = [&buildItem] (const QDomElement& _node, StructureModelItem* _parent) {
         auto item = new StructureModelItem(_node.attribute("uuid"),
                                            Domain::typeFor(_node.attribute("type").toUtf8()),
-                                           _node.attribute("name"),
+                                           TextHelper::fromHtmlEscaped(_node.attribute("name")),
                                            _node.attribute("color"));
         _parent->appendItem(item);
 
