@@ -81,11 +81,11 @@ void Card::paintEvent(QPaintEvent* _event)
     //
     // ... рисуем тень
     //
-    const qreal shadowHeight = std::max(Ui::DesignSystem::floatingToolBar().minimumShadowBlurRadius(),
+    const qreal shadowHeight = std::max(Ui::DesignSystem::card().minimumShadowBlurRadius(),
                                         d->shadowHeightAnimation.currentValue().toReal());
     const QPixmap shadow
             = ImageHelper::dropShadow(backgroundImage,
-                                      Ui::DesignSystem::floatingToolBar().shadowMargins(),
+                                      Ui::DesignSystem::card().shadowMargins(),
                                       shadowHeight,
                                       Ui::DesignSystem::color().shadow());
 

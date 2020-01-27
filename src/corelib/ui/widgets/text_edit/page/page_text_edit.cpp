@@ -38,6 +38,10 @@
 #include <qscopedpointer.h>
 #include <qpropertyanimation.h>
 
+#include <ui/design_system/design_system.h>
+
+#include <utils/helpers/image_helper.h>
+
 static inline bool shouldEnableInputMethod(PageTextEdit *textedit)
 {
     return !textedit->isReadOnly();
@@ -1751,11 +1755,36 @@ void PageTextEditPrivate::paintPagesView(QPainter *_painter)
     //
     auto currentPageTop = firstVisiblePageBottom - pageHeight;
     while (currentPageTop <= q->height()) {
-        QRectF pageRect(0 - horizontalDelta, currentPageTop, pageWidth, pageHeight);
-        pageRect.adjust(0, 0, 0, -m_pageSpacing);
+        const QRectF pageRect(0 - horizontalDelta, currentPageTop, pageWidth, pageHeight - m_pageSpacing);
+        const QRectF backgroundRect = pageRect.marginsRemoved(Ui::DesignSystem::card().shadowMargins().toMargins());
+
+        //
+        // Заливаем фон
+        //
+        QPixmap backgroundImage(backgroundRect.size().toSize());
+        backgroundImage.fill(Qt::transparent);
+        QPainter backgroundImagePainter(&backgroundImage);
+        backgroundImagePainter.setPen(Qt::NoPen);
+        backgroundImagePainter.setBrush(Ui::DesignSystem::color().background());
+        const qreal borderRadius = Ui::DesignSystem::card().borderRadius();
+        backgroundImagePainter.drawRoundedRect(QRect({0,0}, backgroundImage.size()), borderRadius, borderRadius);
+        //
+        // ... рисуем тень
+        //
+        const qreal shadowHeight = Ui::DesignSystem::card().minimumShadowBlurRadius();
+        const QPixmap shadow
+                = ImageHelper::dropShadow(backgroundImage,
+                                          Ui::DesignSystem::card().shadowMargins(),
+                                          shadowHeight,
+                                          Ui::DesignSystem::color().shadow());
+
+        _painter->drawPixmap(pageRect.topLeft(), shadow);
+        //
+        // ... рисуем сам фон
+        //
         _painter->setPen(Qt::NoPen);
         _painter->setBrush(q->palette().base());
-        _painter->drawRoundedRect(pageRect, 6, 6);
+        _painter->drawRoundedRect(backgroundRect, borderRadius, borderRadius);
 
         currentPageTop += pageHeight;
     }
