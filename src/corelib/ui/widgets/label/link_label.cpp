@@ -39,15 +39,15 @@ void AbstractLinkLabel::mouseReleaseEvent(QMouseEvent* _event)
 {
     Q_UNUSED(_event);
 
-    if (d->link.isEmpty()) {
-        return;
-    }
-
     if (!rect().contains(_event->pos())) {
         return;
     }
 
-    QDesktopServices::openUrl(d->link);
+    if (!d->link.isEmpty()) {
+        QDesktopServices::openUrl(d->link);
+    } else {
+        emit clicked();
+    }
 }
 
 

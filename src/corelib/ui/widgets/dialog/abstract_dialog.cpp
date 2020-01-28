@@ -134,10 +134,7 @@ void AbstractDialog::showDialog()
     //
     // Сохраняем изображение контента и прячем сам виджет
     //
-    d->contentPixmap = d->content->grab(QRect({0, 0},
-                                              QSize(std::max(d->content->minimumWidth(),
-                                                             d->content->sizeHint().width()),
-                                                    d->content->sizeHint().height())));
+    d->contentPixmap = d->content->grab();
     d->content->hide();
 
     //

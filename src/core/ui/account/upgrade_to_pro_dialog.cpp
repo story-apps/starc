@@ -92,7 +92,7 @@ void UpgradeToProDialog::updateTranslations()
 
 void UpgradeToProDialog::designSystemChangeEvent(DesignSystemChangeEvent* _event)
 {
-    Q_UNUSED(_event)
+    AbstractDialog::designSystemChangeEvent(_event);
 
     for (auto radioButton : { d->paypal, d->bankCard, d->yandexMoney }) {
         radioButton->setBackgroundColor(Ui::DesignSystem::color().background());

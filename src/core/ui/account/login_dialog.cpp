@@ -243,7 +243,7 @@ void LoginDialog::updateTranslations()
 
 void LoginDialog::designSystemChangeEvent(DesignSystemChangeEvent* _event)
 {
-    Q_UNUSED(_event)
+    AbstractDialog::designSystemChangeEvent(_event);
 
     for (auto button : { d->registrationButton,
                          d->restorePasswordButton,

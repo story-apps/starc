@@ -257,7 +257,7 @@ void CreateProjectDialog::updateTranslations()
 
 void CreateProjectDialog::designSystemChangeEvent(DesignSystemChangeEvent* _event)
 {
-    Q_UNUSED(_event)
+    AbstractDialog::designSystemChangeEvent(_event);
 
     for (auto widget : QVector<Widget*>{ d->localProject, d->cloudProjectCreationNote, d->cloudProject,
                                          d->cloudProjectCreationAction,

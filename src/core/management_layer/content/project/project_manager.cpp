@@ -15,6 +15,7 @@
 
 #include <domain/document_object.h>
 
+#include <ui/project/create_document_dialog.h>
 #include <ui/project/project_navigator.h>
 #include <ui/project/project_tool_bar.h>
 #include <ui/project/project_view.h>
@@ -127,6 +128,14 @@ ProjectManager::ProjectManager(QObject* _parent, QWidget* _parentWidget)
             DataStorageLayer::StorageFacade::settingsStorage()->userEmail());
 
         emit contentsChanged();
+    });
+
+    connect(d->view, &Ui::ProjectView::createNewItemPressed, this, [this] {
+        auto dialog = new Ui::CreateDocumentDialog(d->topLevelWidget);
+
+        connect(dialog, &Ui::CreateDocumentDialog::disappeared, dialog, &Ui::CreateDocumentDialog::deleteLater);
+
+        dialog->showDialog();
     });
 }
 

@@ -430,7 +430,6 @@ QSize ImageCropper::sizeHint() const
 
     if (maximumSize().width() < d->sourceImage.size().width()
         || maximumSize().height() < d->sourceImage.size().height()) {
-        auto v = d->sourceImage.size().scaled(maximumSize(), Qt::KeepAspectRatio);
         return d->sourceImage.size().scaled(maximumSize(), Qt::KeepAspectRatio);
     }
 

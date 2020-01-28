@@ -148,7 +148,7 @@ void RenewSubscriptionDialog::updateTranslations()
 
 void RenewSubscriptionDialog::designSystemChangeEvent(DesignSystemChangeEvent* _event)
 {
-    Q_UNUSED(_event)
+    AbstractDialog::designSystemChangeEvent(_event);
 
     for (auto radioButton : { d->renew1Month, d->renew2Month, d->renew3Month, d->renew6Month, d->renew12Month,
                               d->paypal, d->bankCard, d->yandexMoney }) {

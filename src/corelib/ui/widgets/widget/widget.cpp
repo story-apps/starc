@@ -40,6 +40,7 @@ void Widget::setBackgroundColor(const QColor& _color)
     }
 
     d->backgroundColor = _color;
+    processBackgroundColorChange();
     update();
 }
 
@@ -55,6 +56,7 @@ void Widget::setTextColor(const QColor& _color)
     }
 
     d->textColor = _color;
+    processTextColorChange();
     update();
 }
 

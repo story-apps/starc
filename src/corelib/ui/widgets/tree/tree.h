@@ -42,6 +42,11 @@ public:
     void setCurrentIndex(const QModelIndex& _index);
 
     /**
+     * @brief Получить текущий индекс дерева
+     */
+    QModelIndex currentIndex() const;
+
+    /**
      * @brief Получить индекс элемента в заданной позиции
      */
     QModelIndex indexAt(const QPoint& _pos) const;
@@ -68,6 +73,12 @@ signals:
     void currentIndexChanged(const QModelIndex& _index);
 
 protected:
+    /**
+     * @brief После смены цвета фона или цвета, нужно перенастроить палитру дерева
+     */
+    void processBackgroundColorChange() override;
+    void processTextColorChange() override;
+
     /**
      * @brief Корректируем внешний вид виджета дерева и его делегата
      */

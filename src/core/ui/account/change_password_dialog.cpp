@@ -116,7 +116,7 @@ void ChangePasswordDialog::updateTranslations()
 
 void ChangePasswordDialog::designSystemChangeEvent(DesignSystemChangeEvent* _event)
 {
-    Q_UNUSED(_event)
+    AbstractDialog::designSystemChangeEvent(_event);
 
     for (auto button : { d->changePasswordButton, d->cancelButton }) {
         button->setBackgroundColor(Ui::DesignSystem::color().secondary());

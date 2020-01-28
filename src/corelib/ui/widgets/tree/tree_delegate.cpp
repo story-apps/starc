@@ -73,7 +73,7 @@ void TreeDelegate::paint(QPainter* _painter, const QStyleOptionViewItem& _option
     _painter->setFont(Ui::DesignSystem::font().subtitle2());
     const qreal textLeft = iconRect.isValid()
                            ? iconRect.right() + Ui::DesignSystem::treeOneLineItem().spacing()
-                           : Ui::DesignSystem::treeOneLineItem().margins().left();
+                           : backgroundRect.left() + Ui::DesignSystem::treeOneLineItem().margins().left();
     const QRectF textRect(QPointF(textLeft,
                                   backgroundRect.top()),
                           QSizeF(backgroundRect.right() - textLeft - Ui::DesignSystem::treeOneLineItem().margins().right(),

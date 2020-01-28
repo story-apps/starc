@@ -1635,7 +1635,7 @@ class DesignSystem::TreeOneLineItem::Implementation
 public:
     explicit Implementation(qreal _scaleFactor);
 
-    QMarginsF margins = {16.0, 16.0, 16.0, 16.0};
+    QMarginsF margins = {12.0, 12.0, 12.0, 12.0};
     qreal height = 48.0;
     qreal spacing = 16.0;
     QSizeF iconSize = {24.0, 24.0};

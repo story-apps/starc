@@ -46,6 +46,12 @@ signals:
 
 protected:
     /**
+     * @brief Интерфейс для наследников, чтобы можно было отреагировать на смену цвета
+     */
+    virtual void processBackgroundColorChange() {}
+    virtual void processTextColorChange() {}
+
+    /**
      * @brief Переопределяем для обработки события обновления дизайн системы
      */
     bool event(QEvent* _event) override;

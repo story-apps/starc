@@ -88,6 +88,11 @@ void Tree::setCurrentIndex(const QModelIndex& _index)
     d->tree->setCurrentIndex(_index);
 }
 
+QModelIndex Tree::currentIndex() const
+{
+    return d->tree->currentIndex();
+}
+
 QModelIndex Tree::indexAt(const QPoint& _pos) const
 {
     return d->tree->indexAt(_pos);
@@ -106,6 +111,16 @@ void Tree::restoreState(const QVariant& _state)
 QVariant Tree::saveState() const
 {
     return d->tree->saveState();
+}
+
+void Tree::processBackgroundColorChange()
+{
+    designSystemChangeEvent(nullptr);
+}
+
+void Tree::processTextColorChange()
+{
+    designSystemChangeEvent(nullptr);
 }
 
 void Tree::designSystemChangeEvent(DesignSystemChangeEvent* _event)

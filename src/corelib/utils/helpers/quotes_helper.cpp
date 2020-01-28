@@ -7,7 +7,7 @@
 QuotesHelper::Quote QuotesHelper::generateQuote(int _index)
 {
     int index = 0;
-    QVector<Quote> quotes
+    const QVector<Quote> quotes
               //
               // https://screencraft.org/2013/01/23/50-great-screenwriting-quotes/
               //

@@ -85,7 +85,7 @@ void CoverDialog::updateTranslations()
 
 void CoverDialog::designSystemChangeEvent(DesignSystemChangeEvent* _event)
 {
-    Q_UNUSED(_event)
+    AbstractDialog::designSystemChangeEvent(_event);
 
     d->imageCropper->setMaximumSize(500, 500);
 
