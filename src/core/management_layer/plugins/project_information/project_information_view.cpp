@@ -96,11 +96,19 @@ ProjectInformationView::~ProjectInformationView() = default;
 
 void ProjectInformationView::setName(const QString& _name)
 {
+    if (d->projectName->text() == _name) {
+        return;
+    }
+
     d->projectName->setText(_name);
 }
 
 void ProjectInformationView::setLogline(const QString& _logline)
 {
+    if (d->projectLogline->text() == _logline) {
+        return;
+    }
+
     d->projectLogline->setText(_logline);
 }
 

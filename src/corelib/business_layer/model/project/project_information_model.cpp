@@ -102,6 +102,8 @@ void ProjectInformationModel::initDocument()
 
 void ProjectInformationModel::clearDocument()
 {
+    QSignalBlocker signalBlocker(this);
+
     setName({});
     setLogline({});
     setCover({});

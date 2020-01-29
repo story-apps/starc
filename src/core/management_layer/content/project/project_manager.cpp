@@ -175,7 +175,14 @@ QWidget* ProjectManager::view() const
 
 void ProjectManager::loadCurrentProject(const QString& _name, const QString& _path)
 {
+    //
+    // Загружаем структуру
+    //
     d->projectStructure->setDocument(DataStorageLayer::StorageFacade::documentStorage()->structure());
+
+    //
+    // Загружаем информацию о проекте
+    //
     d->projectInformationModel->setDocument(
         DataStorageLayer::StorageFacade::documentStorage()->document(Domain::DocumentObjectType::Project));
     if (d->projectInformationModel->name().isEmpty()) {
@@ -229,6 +236,10 @@ void ProjectManager::closeCurrentProject(const QString& _path)
     // Очищаем структуру
     //
     d->projectStructure->clear();
+
+    //
+    // Очищаем данные о проекте
+    //
     d->projectInformationModel->clear();
 
     //
