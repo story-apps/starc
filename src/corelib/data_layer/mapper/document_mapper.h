@@ -4,6 +4,7 @@
 
 namespace Domain {
     class DocumentObject;
+    enum class DocumentObjectType;
 }
 
 
@@ -18,6 +19,7 @@ class DocumentMapper : public AbstractMapper
 public:
     Domain::DocumentObject* find(const Domain::Identifier& _id);
     Domain::DocumentObject* find(const QUuid& _uuid);
+    Domain::DocumentObject* find(Domain::DocumentObjectType _type);
     Domain::DocumentObject* findStructure();
 
     void insert(Domain::DocumentObject* _object);

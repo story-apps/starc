@@ -22,6 +22,9 @@ namespace {
     QString uuidFilter(const QUuid& _uuid) {
         return QString(" WHERE uuid = '%1' ").arg(_uuid.toString());
     }
+    QString typeFilter(Domain::DocumentObjectType _type) {
+        return QString(" WHERE type = %1 ").arg(static_cast<int>(_type));
+    }
 }
 
 
@@ -33,6 +36,16 @@ DocumentObject* DocumentMapper::find(const Identifier& _id)
 DocumentObject* DocumentMapper::find(const QUuid& _uuid)
 {
     const auto domainObjects = abstractFind(uuidFilter(_uuid));
+    if (domainObjects.isEmpty()) {
+        return nullptr;
+    }
+
+    return dynamic_cast<DocumentObject*>(domainObjects.first());
+}
+
+Domain::DocumentObject* DocumentMapper::find(Domain::DocumentObjectType _type)
+{
+    const auto domainObjects = abstractFind(typeFilter(_type));
     if (domainObjects.isEmpty()) {
         return nullptr;
     }

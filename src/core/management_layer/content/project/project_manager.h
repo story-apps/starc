@@ -24,7 +24,7 @@ public:
     /**
      * @brief Загрузить данные текущего проекта
      */
-    void loadCurrentProject(const QString& _path);
+    void loadCurrentProject(const QString& _name, const QString& _path);
 
     /**
      * @brief Закрыть текущий проект

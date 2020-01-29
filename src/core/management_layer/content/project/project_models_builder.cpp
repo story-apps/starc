@@ -59,8 +59,11 @@ BusinessLayer::AbstractModel* ProjectModelsBuilder::modelFor(Domain::DocumentObj
         BusinessLayer::AbstractModel* model = nullptr;
         switch (_document->type()) {
             case Domain::DocumentObjectType::Project: {
-                model = new BusinessLayer::ProjectInformationModel;
-                break;
+                //
+                // Модель параметров проекта находится в самом менеджере проекта, отсюда она не должна браться
+                //
+                Q_ASSERT(false);
+                return nullptr;
             }
 
             case Domain::DocumentObjectType::Screenplay: {

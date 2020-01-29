@@ -29,6 +29,11 @@ public:
     Domain::DocumentObject* document(const QUuid& _uuid);
 
     /**
+     * @brief Получить документ по типу
+     */
+    Domain::DocumentObject* document(Domain::DocumentObjectType _type);
+
+    /**
      * @brief Сохранить документ
      */
     Domain::DocumentObject* storeDocument(const QUuid& _uuid, Domain::DocumentObjectType _type);

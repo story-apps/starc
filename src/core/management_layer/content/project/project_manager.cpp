@@ -40,11 +40,12 @@ public:
     Ui::ProjectView* view = nullptr;
 
     BusinessLayer::StructureModel* projectStructure = nullptr;
+    BusinessLayer::ProjectInformationModel* projectInformationModel = nullptr;
 
     DataStorageLayer::DocumentDataStorage documentDataStorage;
 
-    ProjectModelsBuilder modelFactory;
-    ProjectPluginsBuilder pluginFactory;
+    ProjectModelsBuilder modelBuilder;
+    ProjectPluginsBuilder pluginBuilder;
 };
 
 ProjectManager::Implementation::Implementation(QWidget* _parent)
@@ -53,13 +54,16 @@ ProjectManager::Implementation::Implementation(QWidget* _parent)
       navigator(new Ui::ProjectNavigator(_parent)),
       view(new Ui::ProjectView(_parent)),
       projectStructure(new BusinessLayer::StructureModel(navigator)),
-      modelFactory(&documentDataStorage)
+      projectInformationModel(new BusinessLayer::ProjectInformationModel(navigator)),
+      modelBuilder(&documentDataStorage)
 {
     toolBar->hide();
     navigator->hide();
     view->hide();
 
     navigator->setModel(projectStructure);
+
+    projectInformationModel->setImageWrapper(&documentDataStorage);
 }
 
 
@@ -92,7 +96,7 @@ ProjectManager::ProjectManager(QObject* _parent, QWidget* _parentWidget)
         // ... настроим иконки представлений
         //
         d->toolBar->clearViews();
-        const auto views = d->pluginFactory.editorsInfoFor(documentMimeType);
+        const auto views = d->pluginBuilder.editorsInfoFor(documentMimeType);
         for (auto view : views) {
             const bool isActive = view.mimeType == views.first().mimeType;
             d->toolBar->addView(view.mimeType, view.icon, isActive);
@@ -130,6 +134,19 @@ ProjectManager::ProjectManager(QObject* _parent, QWidget* _parentWidget)
         emit contentsChanged();
     });
 
+    //
+    // Соединения с моделью данных о проекте
+    //
+    connect(d->projectInformationModel, &BusinessLayer::ProjectInformationModel::nameChanged,
+            this, &ProjectManager::projectNameChanged, Qt::UniqueConnection);
+    connect(d->projectInformationModel, &BusinessLayer::ProjectInformationModel::loglineChanged,
+            this, &ProjectManager::projectLoglineChanged, Qt::UniqueConnection);
+    connect(d->projectInformationModel, &BusinessLayer::ProjectInformationModel::coverChanged,
+            this, &ProjectManager::projectCoverChanged, Qt::UniqueConnection);
+
+    //
+    // Соединения представления
+    //
     connect(d->view, &Ui::ProjectView::createNewItemPressed, this, [this] {
         auto dialog = new Ui::CreateDocumentDialog(d->topLevelWidget);
 
@@ -156,10 +173,18 @@ QWidget* ProjectManager::view() const
     return d->view;
 }
 
-void ProjectManager::loadCurrentProject(const QString& _path)
+void ProjectManager::loadCurrentProject(const QString& _name, const QString& _path)
 {
     d->projectStructure->setDocument(DataStorageLayer::StorageFacade::documentStorage()->structure());
-
+    d->projectInformationModel->setDocument(
+        DataStorageLayer::StorageFacade::documentStorage()->document(Domain::DocumentObjectType::Project));
+    if (d->projectInformationModel->name().isEmpty()) {
+        d->projectInformationModel->setName(_name);
+    } else {
+        emit projectNameChanged(d->projectInformationModel->name());
+        emit projectLoglineChanged(d->projectInformationModel->logline());
+        emit projectCoverChanged(d->projectInformationModel->cover());
+    }
 
 
     //
@@ -204,11 +229,12 @@ void ProjectManager::closeCurrentProject(const QString& _path)
     // Очищаем структуру
     //
     d->projectStructure->clear();
+    d->projectInformationModel->clear();
 
     //
     // Очищаем все загруженные модели документов
     //
-    d->modelFactory.clear();
+    d->modelBuilder.clear();
 
     //
     // Сбрасываем загруженные изображения
@@ -227,7 +253,7 @@ void ProjectManager::saveChanges()
     //
     // Сохраняем остальные документы
     //
-    for (auto model : d->modelFactory.models()) {
+    for (auto model : d->modelBuilder.models()) {
         DataStorageLayer::StorageFacade::documentStorage()->updateDocument(model->document());
     }
 
@@ -250,7 +276,10 @@ void ProjectManager::showView(const QModelIndex& _itemIndex, const QString& _vie
     // Определим модель
     //
     auto document = DataStorageLayer::StorageFacade::documentStorage()->document(item->uuid());
-    auto model = d->modelFactory.modelFor(document);
+    auto model =
+            document->type() == Domain::DocumentObjectType::Project
+            ? d->projectInformationModel
+            : d->modelBuilder.modelFor(document);
     if (model == nullptr) {
         d->view->showDefaultPage();
         return;
@@ -273,22 +302,11 @@ void ProjectManager::showView(const QModelIndex& _itemIndex, const QString& _vie
                 emit contentsChanged();
             },
             Qt::UniqueConnection);
-    //
-    // ... если это модель параметров проекта, дополнительно прокинем некоторые из её сигналов
-    //
-    if (auto projectInformationModel = qobject_cast<BusinessLayer::ProjectInformationModel*>(model)) {
-        connect(projectInformationModel, &BusinessLayer::ProjectInformationModel::nameChanged,
-                this, &ProjectManager::projectNameChanged, Qt::UniqueConnection);
-        connect(projectInformationModel, &BusinessLayer::ProjectInformationModel::loglineChanged,
-                this, &ProjectManager::projectLoglineChanged, Qt::UniqueConnection);
-        connect(projectInformationModel, &BusinessLayer::ProjectInformationModel::coverChanged,
-                this, &ProjectManager::projectCoverChanged, Qt::UniqueConnection);
-    }
 
     //
     // Определим представление и отобразим
     //
-    auto view = d->pluginFactory.activateView(_viewMimeType, model);
+    auto view = d->pluginBuilder.activateView(_viewMimeType, model);
     if (view == nullptr) {
         d->view->showDefaultPage();
         return;

@@ -158,7 +158,7 @@ public:
      * @brief Создать проект
      */
     void createProject();
-    void createLocalProject(const QString& _projectPath, const QString& _importFilePath);
+    void createLocalProject(const QString& _projectName, const QString& _projectPath, const QString& _importFilePath);
 
     /**
      * @brief Открыть проект по заданному пути
@@ -616,7 +616,8 @@ void ApplicationManager::Implementation::createProject()
     saveIfNeeded(callback);
 }
 
-void ApplicationManager::Implementation::createLocalProject(const QString& _projectPath, const QString& _importFilePath)
+void ApplicationManager::Implementation::createLocalProject(const QString& _projectName,
+    const QString& _projectPath, const QString& _importFilePath)
 {
     if (_projectPath.isEmpty()) {
         return;
@@ -670,6 +671,7 @@ void ApplicationManager::Implementation::createLocalProject(const QString& _proj
     // ... создаём новую базу данных в файле и делаем её текущим проектом
     //
     projectsManager->setCurrentProject(_projectPath);
+    projectsManager->setCurrentProjectName(_projectName);
     //
     // ... сохраняем новый проект в списке недавних
     //
@@ -736,7 +738,8 @@ void ApplicationManager::Implementation::goToEditCurrentProject(const QString& _
     //
     // Загрузим данные текущего проекта
     //
-    projectManager->loadCurrentProject(projectsManager->currentProject().path());
+    projectManager->loadCurrentProject(projectsManager->currentProject().name(),
+                                       projectsManager->currentProject().path());
 
     //
     // Отобразить страницу самого проекта
@@ -996,9 +999,9 @@ void ApplicationManager::initConnections()
     connect(d->projectsManager.data(), &ProjectsManager::createProjectRequested, this,
             [this] { d->createProject(); });
     connect(d->projectsManager.data(), &ProjectsManager::createLocalProjectRequested, this,
-            [this] (const QString& _projectPath, const QString& _importFilePath)
+            [this] (const QString& _projectName,const QString& _projectPath, const QString& _importFilePath)
     {
-        d->createLocalProject(_projectPath, _importFilePath);
+        d->createLocalProject(_projectName, _projectPath, _importFilePath);
     });
     connect(d->projectsManager.data(), &ProjectsManager::openProjectRequested, this,
             [this] { d->openProject(); });

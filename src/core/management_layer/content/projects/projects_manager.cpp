@@ -222,7 +222,7 @@ void ProjectsManager::createProject()
                               + QDateTime::currentDateTime().toString("yyyy_MM_dd_hh_mm_ss")
                               + Project::extension();
             }
-            emit createLocalProjectRequested(projectPath, dialog->importFilePath());
+            emit createLocalProjectRequested(dialog->projectName(), projectPath, dialog->importFilePath());
         } else {
             emit createCloudProjectRequested(dialog->projectName(), dialog->importFilePath());
         }

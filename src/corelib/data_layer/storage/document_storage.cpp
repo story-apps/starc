@@ -29,6 +29,11 @@ Domain::DocumentObject* DocumentStorage::document(const QUuid& _uuid)
     return DataMappingLayer::MapperFacade::documentMapper()->find(_uuid);
 }
 
+Domain::DocumentObject* DocumentStorage::document(Domain::DocumentObjectType _type)
+{
+    return DataMappingLayer::MapperFacade::documentMapper()->find(_type);
+}
+
 Domain::DocumentObject* DocumentStorage::storeDocument(const QUuid& _uuid, Domain::DocumentObjectType _type)
 {
     auto newDocument = Domain::ObjectsBuilder::createDocument({}, _uuid, _type, {});
