@@ -18,6 +18,11 @@ public:
 
 
     /**
+     * @brief Индекс элемента на который наведена мышь
+     */
+    QModelIndex hoverIndex;
+
+    /**
      * @brief  Декорации кнопки при клике
      */
     QPointF decorationCenterPosition;
@@ -161,4 +166,17 @@ void TreeView::dropEvent(QDropEvent* _event)
     }
 
     QTreeView::dropEvent(_event);
+}
+
+void TreeView::mouseMoveEvent(QMouseEvent* _event)
+{
+    QTreeView::mouseMoveEvent(_event);
+
+    const auto hoverIndex = indexAt(_event->pos());
+    if (d->hoverIndex == hoverIndex) {
+        return;
+    }
+
+    d->hoverIndex = hoverIndex;
+    emit hoverIndexChanged(d->hoverIndex);
 }

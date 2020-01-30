@@ -75,7 +75,7 @@ void Card::paintEvent(QPaintEvent* _event)
     backgroundImage.fill(Qt::transparent);
     QPainter backgroundImagePainter(&backgroundImage);
     backgroundImagePainter.setPen(Qt::NoPen);
-    backgroundImagePainter.setBrush(Ui::DesignSystem::color().background());
+    backgroundImagePainter.setBrush(backgroundColor());
     const qreal borderRadius = Ui::DesignSystem::card().borderRadius();
     backgroundImagePainter.drawRoundedRect(QRect({0,0}, backgroundImage.size()), borderRadius, borderRadius);
     //
@@ -95,7 +95,7 @@ void Card::paintEvent(QPaintEvent* _event)
     // ... рисуем сам фон
     //
     painter.setPen(Qt::NoPen);
-    painter.setBrush(Ui::DesignSystem::color().background());
+    painter.setBrush(backgroundColor());
     painter.drawRoundedRect(backgroundRect, borderRadius, borderRadius);
 }
 

@@ -6,10 +6,12 @@
 #include <domain/document_object.h>
 
 #include <ui/design_system/design_system.h>
+#include <ui/widgets/context_menu/context_menu.h>
 #include <ui/widgets/text_field/text_field.h>
 #include <ui/widgets/tree/tree.h>
 
 #include <QAction>
+#include <QContextMenuEvent>
 #include <QUuid>
 #include <QVBoxLayout>
 
@@ -23,11 +25,13 @@ public:
     explicit Implementation(QWidget* _parent);
 
     Tree* tree = nullptr;
+    ContextMenu* contexMenu = nullptr;
     TextField* filterText = nullptr;
 };
 
 ProjectNavigator::Implementation::Implementation(QWidget* _parent)
     : tree(new Tree(_parent)),
+      contexMenu(new ContextMenu(tree)),
       filterText(new TextField(_parent))
 {
     tree->setDragDropEnabled(true);
@@ -55,15 +59,25 @@ ProjectNavigator::ProjectNavigator(QWidget* _parent)
     connect(d->tree, &Tree::currentIndexChanged, this, &ProjectNavigator::itemSelected);
     connect(d->tree, &Tree::customContextMenuRequested, this, [this] (const QPoint& _pos) {
         //
-        // TODO:
+        // Уведомляем менеджер, что необходимо обновить модель контекстного меню
         //
-        d->tree->indexAt(_pos);
+        emit contextMenuUpdateRequested(d->tree->indexAt(_pos));
+
+        //
+        // Отображаем контекстное меню с обновлённой моделью
+        //
+        d->contexMenu->showContextMenu(d->tree->mapToGlobal(_pos));
     });
 }
 
 void ProjectNavigator::setModel(QAbstractItemModel* _model)
 {
     d->tree->setModel(_model);
+}
+
+void ProjectNavigator::setContextMenuModel(QAbstractItemModel* _model)
+{
+    d->contexMenu->setModel(_model);
 }
 
 QVariant ProjectNavigator::saveState() const
@@ -93,6 +107,8 @@ void ProjectNavigator::designSystemChangeEvent(DesignSystemChangeEvent* _event)
     setBackgroundColor(DesignSystem::color().primary());
     d->tree->setBackgroundColor(DesignSystem::color().primary());
     d->tree->setTextColor(DesignSystem::color().onPrimary());
+    d->contexMenu->setBackgroundColor(DesignSystem::color().background());
+    d->contexMenu->setTextColor(DesignSystem::color().onBackground());
     d->filterText->setBackgroundColor(DesignSystem::color().primary());
     d->filterText->setTextColor(DesignSystem::color().onPrimary());
 }

@@ -49,6 +49,7 @@ SOURCES += \
     ui/widgets/check_box/check_box.cpp \
     ui/widgets/circular_progress_bar/circular_progress_bar.cpp \
     ui/widgets/combo_box/combo_box.cpp \
+    ui/widgets/context_menu/context_menu.cpp \
     ui/widgets/dialog/abstract_dialog.cpp \
     ui/widgets/dialog/dialog.cpp \
     ui/widgets/dialog/dialog_content.cpp \
@@ -128,6 +129,7 @@ HEADERS += \
     ui/widgets/check_box/check_box.h \
     ui/widgets/circular_progress_bar/circular_progress_bar.h \
     ui/widgets/combo_box/combo_box.h \
+    ui/widgets/context_menu/context_menu.h \
     ui/widgets/dialog/abstract_dialog.h \
     ui/widgets/dialog/dialog.h \
     ui/widgets/dialog/dialog_content.h \

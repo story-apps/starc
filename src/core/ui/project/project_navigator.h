@@ -25,6 +25,11 @@ public:
     void setModel(QAbstractItemModel* _model);
 
     /**
+     * @brief Задать модель контекстного меню навигатора
+     */
+    void setContextMenuModel(QAbstractItemModel* _model);
+
+    /**
      * @brief Сохранить состояние
      */
     QVariant saveState() const;
@@ -39,6 +44,11 @@ signals:
      * @brief Пользователь выбрал заданный элемент структуры
      */
     void itemSelected(const QModelIndex& _index);
+
+    /**
+     * @brief Пользователь хочет открыть контекстное меню
+     */
+    void contextMenuUpdateRequested(const QModelIndex& _index);
 
 protected:
     /**

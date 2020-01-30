@@ -4,6 +4,7 @@
 
 #include <ui/design_system/design_system.h>
 #include <ui/widgets/button/button.h>
+#include <ui/widgets/check_box/check_box.h>
 #include <ui/widgets/label/label.h>
 #include <ui/widgets/text_field/text_field.h>
 #include <ui/widgets/tree/tree.h>
@@ -31,6 +32,7 @@ public:
     Tree* documentType = nullptr;
     TextField* documentName = nullptr;
     Body1Label* documentInfo = nullptr;
+    CheckBox* insertIntoParent = nullptr;
 
     QHBoxLayout* buttonsLayout = nullptr;
     Button* cancelButton = nullptr;
@@ -42,6 +44,7 @@ CreateDocumentDialog::Implementation::Implementation(QWidget* _parent)
       documentType(new Tree(_parent)),
       documentName(new TextField(_parent)),
       documentInfo(new Body1Label(_parent)),
+      insertIntoParent(new CheckBox(_parent)),
       cancelButton(new Button(_parent)),
       createButton(new Button(_parent))
 {
@@ -53,6 +56,7 @@ CreateDocumentDialog::Implementation::Implementation(QWidget* _parent)
     };
 
     typesModel->appendRow(makeItem(Domain::DocumentObjectType::Screenplay));
+
     documentType->setModel(typesModel);
     documentType->setCurrentIndex(typesModel->index(0, 0));
 
@@ -84,11 +88,12 @@ CreateDocumentDialog::CreateDocumentDialog(QWidget *_parent)
 
     contentsLayout()->setContentsMargins({});
     contentsLayout()->setSpacing(0);
-    contentsLayout()->addWidget(d->documentType, 0, 0, 3, 1);
+    contentsLayout()->addWidget(d->documentType, 0, 0, 4, 1);
     contentsLayout()->addWidget(d->documentName, 0, 1, 1, 1);
     contentsLayout()->addWidget(d->documentInfo, 1, 1, 1, 1);
     contentsLayout()->setRowStretch(2, 1);
-    contentsLayout()->addLayout(d->buttonsLayout, 3, 0, 1, 2);
+    contentsLayout()->addWidget(d->insertIntoParent, 3, 1, 1, 1);
+    contentsLayout()->addLayout(d->buttonsLayout, 4, 0, 1, 2);
     contentsLayout()->setColumnStretch(0, 1);
     contentsLayout()->setColumnStretch(1, 2);
 
@@ -114,6 +119,7 @@ void CreateDocumentDialog::updateTranslations()
 
     d->documentName->setLabel(tr("Name"));
     d->updateDocumentInfo();
+    d->insertIntoParent->setText(tr("Insert into parent"));
     d->cancelButton->setText(tr("Cancel"));
     d->createButton->setText(tr("Create"));
 }
@@ -125,12 +131,15 @@ void CreateDocumentDialog::designSystemChangeEvent(DesignSystemChangeEvent* _eve
     d->documentType->setBackgroundColor(DesignSystem::color().background());
     d->documentType->setTextColor(DesignSystem::color().onPrimary());
 
+    d->documentName->setTextColor(Ui::DesignSystem::color().onBackground());
+    d->documentName->setBackgroundColor(Ui::DesignSystem::color().background());
+
     d->documentInfo->setContentsMargins(Ui::DesignSystem::label().margins().toMargins());
     d->documentInfo->setTextColor(Ui::DesignSystem::color().onBackground());
     d->documentInfo->setBackgroundColor(Ui::DesignSystem::color().background());
 
-    d->documentName->setTextColor(Ui::DesignSystem::color().onBackground());
-    d->documentName->setBackgroundColor(Ui::DesignSystem::color().background());
+    d->insertIntoParent->setTextColor(Ui::DesignSystem::color().onBackground());
+    d->insertIntoParent->setBackgroundColor(Ui::DesignSystem::color().background());
 
     for (auto button : { d->cancelButton,
                          d->createButton }) {

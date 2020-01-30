@@ -142,6 +142,8 @@ void ScreenplayInformationModel::initDocument()
 
 void ScreenplayInformationModel::clearDocument()
 {
+    QSignalBlocker signalBlocker(this);
+
     setName({});
     setHeader({});
 }

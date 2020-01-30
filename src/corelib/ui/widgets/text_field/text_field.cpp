@@ -197,7 +197,7 @@ QRectF TextField::Implementation::decorationRect(const QSize& _textFieldSize) co
 QRectF TextField::Implementation::decorationRectInFocus(const QSize& _textFieldSize) const
 {
     qreal top = _textFieldSize.height()
-                - Ui::DesignSystem::textField().underlineHeight()
+                - Ui::DesignSystem::textField().underlineHeightInFocus()
                 - Ui::DesignSystem::textField().contentsMargins().top()
                 - Ui::DesignSystem::textField().contentsMargins().bottom();
     if (!helper.isEmpty() || !error.isEmpty()) {

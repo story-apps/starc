@@ -32,6 +32,11 @@ public:
     void setRootIsDecorated(bool _decorated);
 
     /**
+     * @brief Установить видимость полос прокрутки
+     */
+    void setScrollBarVisible(bool _visible);
+
+    /**
      * @brief Включить/отключить возможность перетаскивания элементов
      */
     void setDragDropEnabled(bool _enabled);

@@ -15,13 +15,18 @@
 
 #include <domain/document_object.h>
 
+#include <ui/design_system/design_system.h>
 #include <ui/project/create_document_dialog.h>
 #include <ui/project/project_navigator.h>
 #include <ui/project/project_tool_bar.h>
 #include <ui/project/project_view.h>
+#include <ui/widgets/context_menu/context_menu.h>
 
 #include <QDateTime>
+#include <QHBoxLayout>
+#include <QStandardItemModel>
 #include <QUuid>
+#include <QVariantAnimation>
 
 
 namespace ManagementLayer
@@ -32,11 +37,19 @@ class ProjectManager::Implementation
 public:
     explicit Implementation(QWidget* _parent);
 
+    /**
+     * @brief Обновить модель действий контекстного меню навигатора
+     */
+    void updateNavigatorContextMenu(const QModelIndex& _index);
+
 
     QWidget* topLevelWidget = nullptr;
 
     Ui::ProjectToolBar* toolBar = nullptr;
+
     Ui::ProjectNavigator* navigator = nullptr;
+    QStandardItemModel* navigatorContextMenuModel = nullptr;
+
     Ui::ProjectView* view = nullptr;
 
     BusinessLayer::StructureModel* projectStructure = nullptr;
@@ -52,6 +65,7 @@ ProjectManager::Implementation::Implementation(QWidget* _parent)
     : topLevelWidget(_parent),
       toolBar(new Ui::ProjectToolBar(_parent)),
       navigator(new Ui::ProjectNavigator(_parent)),
+      navigatorContextMenuModel(new QStandardItemModel(navigator)),
       view(new Ui::ProjectView(_parent)),
       projectStructure(new BusinessLayer::StructureModel(navigator)),
       projectInformationModel(new BusinessLayer::ProjectInformationModel(navigator)),
@@ -62,8 +76,15 @@ ProjectManager::Implementation::Implementation(QWidget* _parent)
     view->hide();
 
     navigator->setModel(projectStructure);
+    navigator->setContextMenuModel(navigatorContextMenuModel);
 
     projectInformationModel->setImageWrapper(&documentDataStorage);
+}
+
+void ProjectManager::Implementation::updateNavigatorContextMenu(const QModelIndex& _index)
+{
+    navigatorContextMenuModel->clear();
+    navigatorContextMenuModel->appendRow(new QStandardItem(tr("Add document")));
 }
 
 
@@ -114,6 +135,8 @@ ProjectManager::ProjectManager(QObject* _parent, QWidget* _parentWidget)
         }
         showView(_index, views.first().mimeType);
     });
+    connect(d->navigator, &Ui::ProjectNavigator::contextMenuUpdateRequested, this,
+            [this] (const QModelIndex& _index) { d->updateNavigatorContextMenu(_index); });
 
     //
     // Соединения с моделью структуры проекта

@@ -75,13 +75,17 @@ void ComboBox::Implementation::showPopup(QWidget* _parent)
     popup->move(pos.toPoint());
     popup->show();
 
+    const int maxPopupItems = 5;
+    popupContent->setScrollBarVisible(popupContent->model()->rowCount() > maxPopupItems);
+
     popupHeightAnimation.setDirection(QVariantAnimation::Forward);
-    const auto itemsCount = std::min(popupContent->model()->rowCount(), 5);
+    const auto itemsCount = std::min(popupContent->model()->rowCount(), maxPopupItems);
     const auto height = Ui::DesignSystem::treeOneLineItem().height() * itemsCount
                         + Ui::DesignSystem::card().shadowMargins().top()
                         + Ui::DesignSystem::card().shadowMargins().bottom();
     popupHeightAnimation.setEndValue(static_cast<int>(height));
     popupHeightAnimation.start();
+
 }
 
 void ComboBox::Implementation::hidePopup()

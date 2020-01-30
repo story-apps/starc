@@ -74,6 +74,11 @@ void Tree::setRootIsDecorated(bool _decorated)
     d->tree->setRootIsDecorated(_decorated);
 }
 
+void Tree::setScrollBarVisible(bool _visible)
+{
+    d->tree->setVerticalScrollBarPolicy(_visible ? Qt::ScrollBarAsNeeded : Qt::ScrollBarAlwaysOff);
+}
+
 void Tree::setDragDropEnabled(bool _enabled)
 {
     d->tree->setAcceptDrops(_enabled);

@@ -24,6 +24,12 @@ public:
      */
     QVariant saveState() const;
 
+signals:
+    /**
+     * @brief Пользователь навёл мышь на элемент с заданным индексом
+     */
+    void hoverIndexChanged(const QModelIndex& _index);
+
 protected:
     /**
      * @brief Фильтруем события клика вьюпорта, чтобы анимировать их
@@ -39,6 +45,11 @@ protected:
      * @brief Переопределяем, чтобы раскрывать элемент в который кидаются данные, если элемент свёрнут
      */
     void dropEvent(QDropEvent* _event) override;
+
+    /**
+     * @brief Переопределяем для реализации уведомлений об изменении элемента под курсором
+     */
+    void mouseMoveEvent(QMouseEvent* _event) override;
 
 private:
     class Implementation;
