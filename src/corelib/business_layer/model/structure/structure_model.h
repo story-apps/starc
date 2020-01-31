@@ -24,6 +24,11 @@ public:
     ~StructureModel() override;
 
     /**
+     * @brief Добавить документ
+     */
+    void addDocument(Domain::DocumentObjectType _type, const QString& _name, const QModelIndex& _parent = {});
+
+    /**
      * @brief Добавить элемент в начало
      */
     void prependItem(StructureModelItem* _item, StructureModelItem* _parentItem = nullptr);
@@ -81,7 +86,7 @@ signals:
     /**
      * @brief Был добавлен документ с заданным идентификатором и типом
      */
-    void documentAdded(const QUuid& _uuid, Domain::DocumentObjectType _type);
+    void documentAdded(const QUuid& _uuid, Domain::DocumentObjectType _type, const QString& _name);
 
 protected:
     /**

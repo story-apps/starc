@@ -113,27 +113,48 @@ ScreenplayInformationView::~ScreenplayInformationView() = default;
 
 void ScreenplayInformationView::setName(const QString& _name)
 {
+    if (d->screenplayName->text() == _name) {
+        return;
+    }
+
     d->screenplayName->setText(_name);
 }
 
 void ScreenplayInformationView::setHeader(const QString& _header)
 {
+    if (d->screenplayHeader->text() == _header) {
+        return;
+    }
+
     d->screenplayHeader->setText(_header);
 }
 
 void ScreenplayInformationView::setFooter(const QString& _footer)
 {
+    if (d->screenplayFooter->text() == _footer) {
+        return;
+    }
+
     d->screenplayFooter->setText(_footer);
 }
 
 void ScreenplayInformationView::setScenesNumbersPrefix(const QString& _prefix)
 {
+    if (d->scenesNumbersPrefix->text() == _prefix) {
+        return;
+    }
+
     d->scenesNumbersPrefix->setText(_prefix);
 }
 
 void ScreenplayInformationView::setScenesNumbersingStartAt(int _startNumber)
 {
-    d->scenesNumberingStartAt->setText(QString::number(_startNumber));
+    const auto startNumberText = QString::number(_startNumber);
+    if (d->scenesNumberingStartAt->text() == startNumberText) {
+        return;
+    }
+
+    d->scenesNumberingStartAt->setText(startNumberText);
 }
 
 void ScreenplayInformationView::updateTranslations()

@@ -57,6 +57,11 @@ void ScreenplayInformationModel::setName(const QString& _name)
     emit documentNameChanged(d->name);
 }
 
+void ScreenplayInformationModel::setDocumentName(const QString& _name)
+{
+    setName(_name);
+}
+
 const QString& ScreenplayInformationModel::header() const
 {
     return d->header;

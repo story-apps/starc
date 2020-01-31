@@ -33,6 +33,11 @@ public:
     void setDocument(Domain::DocumentObject* _document);
 
     /**
+     * @brief Задать название документа
+     */
+    virtual void setDocumentName(const QString& _name);
+
+    /**
      * @brief Установить загрузчик изображений
      */
     void setImageWrapper(AbstractImageWrapper* _image);

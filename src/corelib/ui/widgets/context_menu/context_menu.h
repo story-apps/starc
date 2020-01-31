@@ -31,6 +31,12 @@ public:
      */
     void hideContextMenu();
 
+signals:
+    /**
+     * @brief Пользователь кликнул на пункт контекстного меню
+     */
+    void clicked(const QModelIndex& _index);
+
 protected:
     /**
      * @brief Обновляем цвет фона списка действий меню при смене

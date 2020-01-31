@@ -84,18 +84,18 @@ QWidget* ProjectPluginsBuilder::Implementation::activatePlugin(const QString& _m
         //
         const QString pluginsDirName = "plugins";
         QDir pluginsDir(
-    #ifndef QT_NO_DEBUG
+#ifndef QT_NO_DEBUG
                     QApplication::applicationDirPath()
-    #else
+#else
                     QStandardPaths::writableLocation(QStandardPaths::DataLocation)
-    #endif
+#endif
                     );
 
-    #if !defined(QT_NO_DEBUG) && defined(Q_OS_MAC)
+#if !defined(QT_NO_DEBUG) && defined(Q_OS_MAC)
         pluginsDir.cdUp();
         pluginsDir.cdUp();
         pluginsDir.cdUp();
-    #endif
+#endif
 
         //
         // Если папки с плагинами нет, идём лесом

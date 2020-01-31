@@ -51,7 +51,7 @@ CreateDocumentDialog::Implementation::Implementation(QWidget* _parent)
     auto makeItem = [] (Domain::DocumentObjectType _type) {
         auto item = new QStandardItem;
         item->setData(Domain::iconForType(_type), Qt::DecorationRole);
-        item->setData(Domain::mimeTypeFor(_type), kMimeTypeRole);
+        item->setData(static_cast<int>(_type), kMimeTypeRole);
         return item;
     };
 
@@ -59,6 +59,8 @@ CreateDocumentDialog::Implementation::Implementation(QWidget* _parent)
 
     documentType->setModel(typesModel);
     documentType->setCurrentIndex(typesModel->index(0, 0));
+
+    insertIntoParent->hide();
 
     buttonsLayout = new QHBoxLayout;
     buttonsLayout->setContentsMargins({});
@@ -69,10 +71,12 @@ CreateDocumentDialog::Implementation::Implementation(QWidget* _parent)
 
 void CreateDocumentDialog::Implementation::updateDocumentInfo()
 {
-    const QHash<QString, QString> documenTypeToInfo
-            = {{ Domain::mimeTypeFor(Domain::DocumentObjectType::Screenplay),
+    const QHash<Domain::DocumentObjectType, QString> documenTypeToInfo
+            = {{ Domain::DocumentObjectType::Screenplay,
                  tr("Some description of the screenplay document") }};
-    documentInfo->setText(documenTypeToInfo.value(documentType->currentIndex().data(kMimeTypeRole).toString()));
+
+    const auto documentTypeData = documentType->currentIndex().data(kMimeTypeRole).toInt();
+    documentInfo->setText(documenTypeToInfo.value(static_cast<Domain::DocumentObjectType>(documentTypeData)));
 }
 
 
@@ -98,6 +102,12 @@ CreateDocumentDialog::CreateDocumentDialog(QWidget *_parent)
     contentsLayout()->setColumnStretch(1, 2);
 
     connect(d->documentType, &Tree::currentIndexChanged, this, [this] { d->updateDocumentInfo(); });
+    connect(d->createButton, &Button::clicked, this, [this] {
+        const auto documentTypeData = d->documentType->currentIndex().data(kMimeTypeRole);
+        Q_ASSERT(documentTypeData.isValid());
+        const auto documentType = static_cast<Domain::DocumentObjectType>(documentTypeData.toInt());
+        emit createPressed(documentType, d->documentName->text());
+    });
     connect(d->cancelButton, &Button::clicked, this, &CreateDocumentDialog::hideDialog);
 
     updateTranslations();

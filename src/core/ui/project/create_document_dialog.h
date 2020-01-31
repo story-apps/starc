@@ -3,6 +3,10 @@
 #include <ui/widgets/dialog/abstract_dialog.h>
 
 
+namespace Domain {
+    enum class DocumentObjectType;
+}
+
 namespace Ui
 {
 
@@ -16,6 +20,12 @@ class CreateDocumentDialog : public AbstractDialog
 public:
     explicit CreateDocumentDialog(QWidget* _parent = nullptr);
     ~CreateDocumentDialog() override;
+
+signals:
+    /**
+     * @brief Пользователь хочет создать документ заданного типа с заданным именем
+     */
+    void createPressed(Domain::DocumentObjectType _type, const QString& _name);
 
 protected:
     /**

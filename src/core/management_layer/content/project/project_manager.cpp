@@ -38,9 +38,26 @@ public:
     explicit Implementation(QWidget* _parent);
 
     /**
+     * @brief Действия контекстного меню
+     */
+    enum class ContextMenuAction {
+        AddDocument
+    };
+
+    /**
      * @brief Обновить модель действий контекстного меню навигатора
      */
     void updateNavigatorContextMenu(const QModelIndex& _index);
+
+    /**
+     * @brief Выполнить заданное действие контекстного меню
+     */
+    void executeContextMenuAction(const QModelIndex& _contextMenuIndex);
+
+    /**
+     * @brief Добавить документ в проект
+     */
+    void addDocument();
 
 
     QWidget* topLevelWidget = nullptr;
@@ -84,7 +101,49 @@ ProjectManager::Implementation::Implementation(QWidget* _parent)
 void ProjectManager::Implementation::updateNavigatorContextMenu(const QModelIndex& _index)
 {
     navigatorContextMenuModel->clear();
-    navigatorContextMenuModel->appendRow(new QStandardItem(tr("Add document")));
+    auto addDocument = new QStandardItem(tr("Add document"));
+    addDocument->setData("\uf415", Qt::DecorationRole);
+    addDocument->setData(static_cast<int>(ContextMenuAction::AddDocument), Qt::UserRole);
+    navigatorContextMenuModel->appendRow(addDocument);
+}
+
+void ProjectManager::Implementation::executeContextMenuAction(const QModelIndex& _contextMenuIndex)
+{
+    if (!_contextMenuIndex.isValid()) {
+        return;
+    }
+
+    const auto actionData = _contextMenuIndex.data(Qt::UserRole);
+    if (actionData.isNull()) {
+        return;
+    }
+
+    const auto action = static_cast<ContextMenuAction>(actionData.toInt());
+    switch (action) {
+        case ContextMenuAction::AddDocument: {
+            addDocument();
+            break;
+        }
+    }
+}
+
+void ProjectManager::Implementation::addDocument()
+{
+    //
+    // TODO: вложение в выделенный в дереве элемент
+    //
+
+    auto dialog = new Ui::CreateDocumentDialog(topLevelWidget);
+
+    connect(dialog, &Ui::CreateDocumentDialog::createPressed, navigator,
+            [this, dialog] (Domain::DocumentObjectType _type, const QString& _name)
+    {
+        projectStructure->addDocument(_type, _name);
+        dialog->hideDialog();
+    });
+    connect(dialog, &Ui::CreateDocumentDialog::disappeared, dialog, &Ui::CreateDocumentDialog::deleteLater);
+
+    dialog->showDialog();
 }
 
 
@@ -137,14 +196,26 @@ ProjectManager::ProjectManager(QObject* _parent, QWidget* _parentWidget)
     });
     connect(d->navigator, &Ui::ProjectNavigator::contextMenuUpdateRequested, this,
             [this] (const QModelIndex& _index) { d->updateNavigatorContextMenu(_index); });
+    connect(d->navigator, &Ui::ProjectNavigator::contextMenuClicked, this,
+            [this] (const QModelIndex& _contextMenuIndex)
+    {
+        d->executeContextMenuAction(_contextMenuIndex);
+    });
 
     //
     // Соединения с моделью структуры проекта
     //
     connect(d->projectStructure, &BusinessLayer::StructureModel::documentAdded,
-            [] (const QUuid& _uuid, Domain::DocumentObjectType _type)
+            [this] (const QUuid& _uuid, Domain::DocumentObjectType _type, const QString& _name)
     {
-        DataStorageLayer::StorageFacade::documentStorage()->storeDocument(_uuid, _type);
+        auto document = DataStorageLayer::StorageFacade::documentStorage()->storeDocument(_uuid, _type);
+        auto documentModel = d->modelBuilder.modelFor(document);
+        //
+        // FIXME: пока всех моделей нет, оставляем такую проверку
+        //
+        if (documentModel != nullptr) {
+            documentModel->setDocumentName(_name);
+        }
     });
     connect(d->projectStructure, &BusinessLayer::StructureModel::contentsChanged, this,
             [this] (const QByteArray& _undo, const QByteArray& _redo)
@@ -171,11 +242,7 @@ ProjectManager::ProjectManager(QObject* _parent, QWidget* _parentWidget)
     // Соединения представления
     //
     connect(d->view, &Ui::ProjectView::createNewItemPressed, this, [this] {
-        auto dialog = new Ui::CreateDocumentDialog(d->topLevelWidget);
-
-        connect(dialog, &Ui::CreateDocumentDialog::disappeared, dialog, &Ui::CreateDocumentDialog::deleteLater);
-
-        dialog->showDialog();
+        d->addDocument();
     });
 }
 

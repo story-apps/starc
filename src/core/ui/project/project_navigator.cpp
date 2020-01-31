@@ -26,16 +26,17 @@ public:
 
     Tree* tree = nullptr;
     ContextMenu* contexMenu = nullptr;
-    TextField* filterText = nullptr;
+    TextField* filter = nullptr;
 };
 
 ProjectNavigator::Implementation::Implementation(QWidget* _parent)
     : tree(new Tree(_parent)),
       contexMenu(new ContextMenu(tree)),
-      filterText(new TextField(_parent))
+      filter(new TextField(_parent))
 {
     tree->setDragDropEnabled(true);
     tree->setContextMenuPolicy(Qt::ContextMenuPolicy::CustomContextMenu);
+    filter->hide();
 }
 
 
@@ -54,7 +55,7 @@ ProjectNavigator::ProjectNavigator(QWidget* _parent)
     layout->setContentsMargins({});
     layout->setSpacing(0);
     layout->addWidget(d->tree);
-    layout->addWidget(d->filterText);
+    layout->addWidget(d->filter);
 
     connect(d->tree, &Tree::currentIndexChanged, this, &ProjectNavigator::itemSelected);
     connect(d->tree, &Tree::customContextMenuRequested, this, [this] (const QPoint& _pos) {
@@ -68,6 +69,9 @@ ProjectNavigator::ProjectNavigator(QWidget* _parent)
         //
         d->contexMenu->showContextMenu(d->tree->mapToGlobal(_pos));
     });
+
+    connect(d->contexMenu, &ContextMenu::clicked, d->contexMenu, &ContextMenu::hide);
+    connect(d->contexMenu, &ContextMenu::clicked, this, &ProjectNavigator::contextMenuClicked);
 }
 
 void ProjectNavigator::setModel(QAbstractItemModel* _model)
@@ -92,7 +96,7 @@ void ProjectNavigator::restoreState(const QVariant& _state)
 
 void ProjectNavigator::updateTranslations()
 {
-    d->filterText->setLabel(tr("Filter"));
+    d->filter->setLabel(tr("Filter"));
 }
 
 ProjectNavigator::~ProjectNavigator() = default;
@@ -109,8 +113,8 @@ void ProjectNavigator::designSystemChangeEvent(DesignSystemChangeEvent* _event)
     d->tree->setTextColor(DesignSystem::color().onPrimary());
     d->contexMenu->setBackgroundColor(DesignSystem::color().background());
     d->contexMenu->setTextColor(DesignSystem::color().onBackground());
-    d->filterText->setBackgroundColor(DesignSystem::color().primary());
-    d->filterText->setTextColor(DesignSystem::color().onPrimary());
+    d->filter->setBackgroundColor(DesignSystem::color().primary());
+    d->filter->setTextColor(DesignSystem::color().onPrimary());
 }
 
 } // namespace Ui

@@ -59,7 +59,8 @@ void TreeDelegate::paint(QPainter* _painter, const QStyleOptionViewItem& _option
     _painter->setPen(textColor);
     QRectF iconRect;
     if (_index.data(Qt::DecorationRole).isValid()) {
-        iconRect = QRectF(QPointF(backgroundRect.left(),
+        iconRect = QRectF(QPointF(std::max(backgroundRect.left(),
+                                           Ui::DesignSystem::treeOneLineItem().margins().left()),
                                   backgroundRect.top()),
                           QSizeF(Ui::DesignSystem::treeOneLineItem().iconSize().width(),
                                  backgroundRect.height()));

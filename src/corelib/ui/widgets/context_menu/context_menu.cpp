@@ -56,15 +56,37 @@ ContextMenu::ContextMenu(QWidget* _parent)
     popupLayout->addWidget(d->content);
     setLayoutReimpl(popupLayout);
 
+    connect(d->content, &Tree::currentIndexChanged, this, &ContextMenu::clicked);
+
     connect(&d->sizeAnimation, &QVariantAnimation::valueChanged, this, [this] (const QVariant& _value) {
         resize(_value.toSize());
     });
     connect(&d->sizeAnimation, &QVariantAnimation::finished, this, [this] {
-        if (d->sizeAnimation.direction() == QAbstractAnimation::Backward) {
-            hide();
-        } else {
+        //
+        // После завершении анимации отображения активируем виджет контекстного меню
+        //
+        if (d->sizeAnimation.direction() == QAbstractAnimation::Forward) {
+            //
+            // Блокируем сигналы дерева, чтобы оно не активировало свои элементы при отображении
+            //
+            QSignalBlocker signalBlocker(d->content);
+
+            //
+            // Активируем виджет
+            //
             QApplication::setActiveWindow(this);
             setFocus();
+
+            //
+            // Установим невалидный текущий элемент
+            //
+            d->content->setCurrentIndex({});
+        }
+        //
+        // После завершении анимации скрытия скрываем сам виджет контекстного меню
+        //
+        else {
+            hide();
         }
     });
 }

@@ -93,6 +93,11 @@ void AbstractModel::setDocument(Domain::DocumentObject* _document)
     initDocument();
 }
 
+void AbstractModel::setDocumentName(const QString& _name)
+{
+    Q_UNUSED(_name);
+}
+
 void AbstractModel::setImageWrapper(AbstractImageWrapper* _image)
 {
     d->image = _image;

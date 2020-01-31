@@ -133,6 +133,41 @@ StructureModel::StructureModel(QObject* _parent)
     connect(this, &StructureModel::dataChanged, this, &StructureModel::updateDocumentContent);
 }
 
+void StructureModel::addDocument(Domain::DocumentObjectType _type, const QString& _name, const QModelIndex& _parent)
+{
+    using namespace Domain;
+
+    auto createItem = [] (DocumentObjectType _type, const QString& _name) {
+        auto uuid = QUuid::createUuid();
+        return new StructureModelItem(uuid, _type, _name, {});
+    };
+
+    auto parentItem = itemForIndex(_parent);
+
+    switch (_type) {
+        case DocumentObjectType::Project: {
+            appendItem(createItem(DocumentObjectType::Project, !_name.isEmpty() ? _name : tr("Project")), parentItem);
+            break;
+        }
+
+        case DocumentObjectType::Screenplay: {
+            auto screenplayItem = createItem(DocumentObjectType::Screenplay, !_name.isEmpty() ? _name : tr("Screenplay"));
+            appendItem(screenplayItem, parentItem);
+            appendItem(createItem(DocumentObjectType::ScreenplayTitlePage, tr("Title page")), screenplayItem);
+            appendItem(createItem(DocumentObjectType::ScreenplayLogline, tr("Logline")), screenplayItem);
+            appendItem(createItem(DocumentObjectType::ScreenplaySynopsis, tr("Synopsis")), screenplayItem);
+            appendItem(createItem(DocumentObjectType::ScreenplayOutline, tr("Outline")), screenplayItem);
+            appendItem(createItem(DocumentObjectType::ScreenplayText, tr("Screenplay")), screenplayItem);
+            break;
+        }
+
+        default: {
+            Q_ASSERT(false);
+            break;
+        }
+    }
+}
+
 StructureModel::~StructureModel() = default;
 
 void StructureModel::prependItem(StructureModelItem* _item, StructureModelItem* _parentItem)
@@ -176,7 +211,7 @@ void StructureModel::appendItem(StructureModelItem* _item, StructureModelItem* _
     _parentItem->insertItem(itemRowIndex, _item);
     endInsertRows();
 
-    emit documentAdded(_item->uuid(), _item->type());
+    emit documentAdded(_item->uuid(), _item->type(), _item->name());
 }
 
 void StructureModel::insertItem(StructureModelItem* _item, StructureModelItem* _afterSiblingItem)
@@ -572,18 +607,8 @@ void StructureModel::initDocument()
     // Если документ пустой, создаём первоначальную структуру
     //
     if (document()->content().isEmpty()) {
-        auto createItem = [] (Domain::DocumentObjectType _type, const QString& _name) {
-            auto uuid = QUuid::createUuid();
-            return new StructureModelItem(uuid, _type, _name, {});
-        };
-        appendItem(createItem(Domain::DocumentObjectType::Project, tr("Project")));
-        auto screenplayItem = createItem(Domain::DocumentObjectType::Screenplay, tr("Screenplay"));
-        appendItem(screenplayItem);
-        appendItem(createItem(Domain::DocumentObjectType::ScreenplayTitlePage, tr("Title page")), screenplayItem);
-        appendItem(createItem(Domain::DocumentObjectType::ScreenplayLogline, tr("Logline")), screenplayItem);
-        appendItem(createItem(Domain::DocumentObjectType::ScreenplaySynopsis, tr("Synopsis")), screenplayItem);
-        appendItem(createItem(Domain::DocumentObjectType::ScreenplayOutline, tr("Outline")), screenplayItem);
-        appendItem(createItem(Domain::DocumentObjectType::ScreenplayText, tr("Screenplay")), screenplayItem);
+        addDocument(Domain::DocumentObjectType::Project, {});
+        addDocument(Domain::DocumentObjectType::Screenplay, {});
     }
     //
     // А если данные есть, то загрузим их из документа

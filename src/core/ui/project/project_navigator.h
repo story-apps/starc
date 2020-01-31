@@ -50,6 +50,11 @@ signals:
      */
     void contextMenuUpdateRequested(const QModelIndex& _index);
 
+    /**
+     * @brief Пользователь выбрал пункт контекстного меню
+     */
+    void contextMenuClicked(const QModelIndex& _contextMenuIndex);
+
 protected:
     /**
      * @brief Обновить переводы
