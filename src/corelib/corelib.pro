@@ -79,6 +79,8 @@ SOURCES += \
     utils/3rd_party/WAF/Animation/Animation.cpp \
     utils/3rd_party/WAF/Animation/CircleFill/CircleFillAnimator.cpp \
     utils/3rd_party/WAF/Animation/CircleFill/CircleFillDecorator.cpp \
+    utils/3rd_party/WAF/Animation/CircleTransparent/CircleTransparentAnimator.cpp \
+    utils/3rd_party/WAF/Animation/CircleTransparent/CircleTransparentDecorator.cpp \
     utils/3rd_party/WAF/Animation/Expand/ExpandAnimator.cpp \
     utils/3rd_party/WAF/Animation/Expand/ExpandDecorator.cpp \
     utils/3rd_party/WAF/Animation/SideSlide/SideSlideAnimator.cpp \
@@ -162,6 +164,8 @@ HEADERS += \
     utils/3rd_party/WAF/Animation/AnimationPrivate.h \
     utils/3rd_party/WAF/Animation/CircleFill/CircleFillAnimator.h \
     utils/3rd_party/WAF/Animation/CircleFill/CircleFillDecorator.h \
+    utils/3rd_party/WAF/Animation/CircleTransparent/CircleTransparentAnimator.h \
+    utils/3rd_party/WAF/Animation/CircleTransparent/CircleTransparentDecorator.h \
     utils/3rd_party/WAF/Animation/Expand/ExpandAnimator.h \
     utils/3rd_party/WAF/Animation/Expand/ExpandDecorator.h \
     utils/3rd_party/WAF/Animation/SideSlide/SideSlideAnimator.h \

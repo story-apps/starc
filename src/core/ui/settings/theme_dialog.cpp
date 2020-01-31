@@ -279,17 +279,17 @@ void ThemeDialog::updateTranslations()
     d->light->setText(tr("Light"));
     d->custom->setText(tr("Create your own color theme of the application"));
     d->primary->setText(tr("primary"));
-    d->onPrimary->setText(tr("on primary"));
-    d->secondary->setText(tr("secondary"));
-    d->onSecondary->setText(tr("on secondary"));
+    d->onPrimary->setText(tr("text on primary"));
+    d->secondary->setText(tr("accent"));
+    d->onSecondary->setText(tr("text on accent"));
     d->background->setText(tr("background"));
-    d->onBackground->setText(tr("on background"));
+    d->onBackground->setText(tr("text on background"));
     d->surface->setText(tr("surface"));
-    d->onSurface->setText(tr("on surface"));
+    d->onSurface->setText(tr("text on surface"));
     d->error->setText(tr("error"));
-    d->onError->setText(tr("on error"));
+    d->onError->setText(tr("text on error"));
     d->shadow->setText(tr("shadow"));
-    d->onShadow->setText(tr("on shadow"));
+    d->onShadow->setText(tr("text on shadow"));
 
     d->customThemeHash->setLabel(tr("Theme HASH"));
     d->customThemeHash->setHelper(tr("Copy theme HASH to share your custom theme with others, or paste HASH here to apply it"));

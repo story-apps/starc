@@ -179,7 +179,6 @@ void ApplicationView::designSystemChangeEvent(DesignSystemChangeEvent* _event)
                                     Ui::DesignSystem::layout().px24()).toPoint());
         d->accountBar->setBackgroundColor(Ui::DesignSystem::color().primary());
         d->accountBar->setTextColor(Ui::DesignSystem::color().onPrimary());
-        d->accountBar->raise();
     }
 }
 

@@ -19,10 +19,11 @@
 
 #include "../AbstractAnimator.h"
 
+#include "CircleFill/CircleFillAnimator.h"
+#include "CircleTransparent/CircleTransparentAnimator.h"
+#include "Expand/ExpandAnimator.h"
 #include "SideSlide/SideSlideAnimator.h"
 #include "Slide/SlideAnimator.h"
-#include "CircleFill/CircleFillAnimator.h"
-#include "Expand/ExpandAnimator.h"
 
 using WAF::Animation;
 using WAF::AnimationPrivate;
@@ -132,6 +133,42 @@ int Animation::circleFill(QWidget* _widget, const QPoint& _startPoint, const QCo
         circleFillAnimator->setFillColor(_fillColor);
         circleFillAnimator->setHideAfterFinish(_hideAfterFinish);
         animator = circleFillAnimator;
+
+        pimpl()->saveAnimator(_widget, animator, animatorType);
+    }
+
+    return runAnimation(animator, _in);
+}
+
+int Animation::circleTransparentIn(QWidget* _widget, const QPoint& _startPoint, const QPixmap& _fillImage, bool _hideAfterFinish)
+{
+    const bool IN = true;
+    return circleTransparent(_widget, _startPoint, _fillImage, _hideAfterFinish, IN);
+}
+
+int Animation::circleTransparentOut(QWidget* _widget, const QPoint& _startPoint, const QPixmap& _fillImage, bool _hideAfterFinish)
+{
+    const bool OUT = false;
+    return circleTransparent(_widget, _startPoint, _fillImage, _hideAfterFinish, OUT);
+}
+
+int Animation::circleTransparent(QWidget* _widget, const QPoint& _startPoint, const QPixmap& _fillImage, bool _hideAfterFinish, bool _in)
+{
+    const AnimationPrivate::AnimatorType animatorType = AnimationPrivate::CircleTransparent;
+    AbstractAnimator* animator = 0;
+    if (pimpl()->hasAnimator(_widget, animatorType)) {
+        animator = pimpl()->animator(_widget, animatorType);
+        if (auto circleTransparentAnimator = qobject_cast<CircleTransparentAnimator*>(animator)) {
+            circleTransparentAnimator->setStartPoint(_startPoint);
+            circleTransparentAnimator->setFillImage(_fillImage);
+            circleTransparentAnimator->setHideAfterFinish(_hideAfterFinish);
+        }
+    } else {
+        auto circleTransparentAnimator = new CircleTransparentAnimator(_widget);
+        circleTransparentAnimator->setStartPoint(_startPoint);
+        circleTransparentAnimator->setFillImage(_fillImage);
+        circleTransparentAnimator->setHideAfterFinish(_hideAfterFinish);
+        animator = circleTransparentAnimator;
 
         pimpl()->saveAnimator(_widget, animator, animatorType);
     }

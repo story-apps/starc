@@ -20,6 +20,7 @@
 #include "../WAF.h"
 
 class QColor;
+class QPixmap;
 class QPoint;
 class QRect;
 class QWidget;
@@ -74,12 +75,12 @@ namespace WAF
         /****/
 
         /**
-         * @brief Заполнить/очистить цветовым кругом
+         * @brief Заполнить цветовым кругом
          */
         static int circleFillIn(QWidget* _widget, const QPoint& _startPoint, const QColor& _fillColor, bool _hideAfterFinish = true);
 
         /**
-         * @brief Заполнить/очистить цветовым кругом
+         * @brief Очистить цветовым кругом
          */
         static int circleFillOut(QWidget* _widget, const QPoint& _startPoint, const QColor& _fillColor, bool _hideAfterFinish = true);
 
@@ -87,6 +88,23 @@ namespace WAF
          * @brief Заполнить/очистить цветовым кругом
          */
         static int circleFill(QWidget* _widget, const QPoint& _startPoint, const QColor& _fillColor, bool _hideAfterFinish = true, bool _in = true);
+
+        /****/
+
+        /**
+         * @brief Очистить кругом изображения
+         */
+        static int circleTransparentIn(QWidget* _widget, const QPoint& _startPoint, const QPixmap& _fillImage, bool _hideAfterFinish = true);
+
+        /**
+         * @brief Заполнить кругом изображения
+         */
+        static int circleTransparentOut(QWidget* _widget, const QPoint& _startPoint, const QPixmap& _fillImage, bool _hideAfterFinish = true);
+
+        /**
+         * @brief Заполнить/очистить кругом изображения
+         */
+        static int circleTransparent(QWidget* _widget, const QPoint& _startPoint, const QPixmap& _fillImage, bool _hideAfterFinish = true, bool _in = true);
 
         /****/
 

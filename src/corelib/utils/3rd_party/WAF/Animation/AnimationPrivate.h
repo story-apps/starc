@@ -43,6 +43,7 @@ namespace WAF
 			Slide,
 			Popup,
 			CircleFill,
+            CircleTransparent,
 			Expand
 		};
 

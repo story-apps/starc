@@ -481,6 +481,12 @@ void SettingsView::designSystemChangeEvent(DesignSystemChangeEvent* _event)
         checkBox->setTextColor(DesignSystem::color().onBackground());
     }
 
+    for (auto textField : QVector<TextField*>{ d->spellCheckerLanguage,
+                                               d->backupsFolderPath }) {
+        textField->setBackgroundColor(DesignSystem::color().background());
+        textField->setTextColor(DesignSystem::color().onBackground());
+    }
+
     for (auto button : { d->changeLanuage,
                          d->changeTheme }) {
         button->setBackgroundColor(DesignSystem::color().secondary());
