@@ -41,7 +41,8 @@ public:
      * @brief Действия контекстного меню
      */
     enum class ContextMenuAction {
-        AddDocument
+        AddDocument,
+        RemoveDocument
     };
 
     /**
@@ -101,10 +102,18 @@ ProjectManager::Implementation::Implementation(QWidget* _parent)
 void ProjectManager::Implementation::updateNavigatorContextMenu(const QModelIndex& _index)
 {
     navigatorContextMenuModel->clear();
+
     auto addDocument = new QStandardItem(tr("Add document"));
     addDocument->setData("\uf415", Qt::DecorationRole);
     addDocument->setData(static_cast<int>(ContextMenuAction::AddDocument), Qt::UserRole);
     navigatorContextMenuModel->appendRow(addDocument);
+
+    if (_index.isValid()) {
+        auto removeDocument = new QStandardItem(tr("Remove document"));
+        removeDocument->setData("\uf1c0", Qt::DecorationRole);
+        removeDocument->setData(static_cast<int>(ContextMenuAction::RemoveDocument), Qt::UserRole);
+        navigatorContextMenuModel->appendRow(removeDocument);
+    }
 }
 
 void ProjectManager::Implementation::executeContextMenuAction(const QModelIndex& _contextMenuIndex)

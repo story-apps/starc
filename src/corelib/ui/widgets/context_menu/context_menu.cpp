@@ -63,29 +63,9 @@ ContextMenu::ContextMenu(QWidget* _parent)
     });
     connect(&d->sizeAnimation, &QVariantAnimation::finished, this, [this] {
         //
-        // После завершении анимации отображения активируем виджет контекстного меню
-        //
-        if (d->sizeAnimation.direction() == QAbstractAnimation::Forward) {
-            //
-            // Блокируем сигналы дерева, чтобы оно не активировало свои элементы при отображении
-            //
-            QSignalBlocker signalBlocker(d->content);
-
-            //
-            // Активируем виджет
-            //
-            QApplication::setActiveWindow(this);
-            setFocus();
-
-            //
-            // Установим невалидный текущий элемент
-            //
-            d->content->setCurrentIndex({});
-        }
-        //
         // После завершении анимации скрытия скрываем сам виджет контекстного меню
         //
-        else {
+        if (d->sizeAnimation.direction() == QAbstractAnimation::Backward) {
             hide();
         }
     });
@@ -109,6 +89,22 @@ void ContextMenu::showContextMenu(const QPoint& _pos)
                                    Ui::DesignSystem::card().shadowMargins().top());
     move(pos);
     show();
+
+    //
+    // Блокируем сигналы дерева, чтобы оно не активировало свои элементы при отображении
+    //
+    QSignalBlocker signalBlocker(d->content);
+
+    //
+    // Активируем виджет
+    //
+    QApplication::setActiveWindow(this);
+    setFocus();
+
+    //
+    // Установим невалидный текущий элемент
+    //
+    d->content->setCurrentIndex({});
 
     d->sizeAnimation.stop();
     d->sizeAnimation.setDirection(QVariantAnimation::Forward);
