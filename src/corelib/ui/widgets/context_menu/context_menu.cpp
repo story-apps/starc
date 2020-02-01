@@ -43,7 +43,7 @@ ContextMenu::ContextMenu(QWidget* _parent)
     : Card(_parent),
       d(new Implementation(this))
 {
-    setWindowFlag(Qt::SplashScreen);
+    setWindowFlag(Qt::Popup);
     setAttribute(Qt::WA_Hover, false);
     setAttribute(Qt::WA_TranslucentBackground);
     setAttribute(Qt::WA_ShowWithoutActivating);
@@ -85,10 +85,9 @@ void ContextMenu::showContextMenu(const QPoint& _pos)
     }
 
     resize(0, 0);
-    const auto pos = _pos - QPoint(Ui::DesignSystem::card().shadowMargins().left(),
-                                   Ui::DesignSystem::card().shadowMargins().top());
-    move(pos);
-    show();
+    const auto pos = _pos - QPointF(Ui::DesignSystem::card().shadowMargins().left(),
+                                    Ui::DesignSystem::card().shadowMargins().top());
+    move(pos.toPoint());
 
     //
     // Блокируем сигналы дерева, чтобы оно не активировало свои элементы при отображении
@@ -96,10 +95,9 @@ void ContextMenu::showContextMenu(const QPoint& _pos)
     QSignalBlocker signalBlocker(d->content);
 
     //
-    // Активируем виджет
+    // Отображаем контекстное меню
     //
-    QApplication::setActiveWindow(this);
-    setFocus();
+    show();
 
     //
     // Установим невалидный текущий элемент
@@ -135,13 +133,4 @@ void ContextMenu::processTextColorChange()
     Card::processTextColorChange();
 
     d->content->setTextColor(textColor());
-}
-
-bool ContextMenu::event(QEvent* _event)
-{
-    if (_event->type() == QEvent::WindowDeactivate) {
-        hideContextMenu();
-    }
-
-    return Card::event(_event);
 }

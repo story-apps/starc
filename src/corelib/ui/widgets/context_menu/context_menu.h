@@ -48,11 +48,6 @@ protected:
      */
     void processTextColorChange() override;
 
-    /**
-     * @brief Переопределяем, чтобы скрывать контекстное меню при деактивации виджета
-     */
-    bool event(QEvent* _event) override;
-
 private:
     class Implementation;
     QScopedPointer<Implementation> d;
