@@ -72,7 +72,7 @@ ProjectNavigator::ProjectNavigator(QWidget* _parent)
 
     connect(d->contexMenu, &ContextMenu::clicked, d->contexMenu, &ContextMenu::hide);
     connect(d->contexMenu, &ContextMenu::clicked, this, [this] (const QModelIndex& _contextMenuIndex) {
-        emit contextMenuItemClicked(d->tree->currentIndex(), _contextMenuIndex);
+        emit contextMenuItemClicked(_contextMenuIndex);
     });
 }
 
@@ -94,6 +94,11 @@ QVariant ProjectNavigator::saveState() const
 void ProjectNavigator::restoreState(const QVariant& _state)
 {
     d->tree->restoreState(_state);
+}
+
+QModelIndex ProjectNavigator::currentIndex() const
+{
+    return d->tree->currentIndex();
 }
 
 void ProjectNavigator::updateTranslations()

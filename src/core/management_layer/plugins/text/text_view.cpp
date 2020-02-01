@@ -67,6 +67,7 @@ TextView::Implementation::Implementation(QWidget* _parent)
     documentText->setPageNumbersAlignment(Qt::AlignBottom | Qt::AlignRight);
     documentText->setHeader("Header text");
     documentText->setFooter("Footer text");
+    documentText->setCursorWidth(4);
 }
 
 

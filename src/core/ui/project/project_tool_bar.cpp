@@ -41,7 +41,7 @@ void ProjectToolBar::addView(const QString& _mimeType, const QString& _icon, boo
     viewAction->setCheckable(true);
     viewAction->setChecked(_isActive);
     addAction(viewAction);
-    connect(viewAction, &QAction::triggered, this, [this, _mimeType] {
+    connect(viewAction, &QAction::toggled, this, [this, _mimeType] {
         emit viewPressed(_mimeType);
     });
 

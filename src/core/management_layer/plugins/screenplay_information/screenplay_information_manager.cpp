@@ -80,32 +80,17 @@ void ScreenplayInformationManager::setModel(BusinessLayer::AbstractModel* _model
     //
     if (d->model != nullptr) {
         d->view->setName(d->model->name());
-        d->view->setHeader(d->model->header());
-        d->view->setFooter(d->model->footer());
-        d->view->setScenesNumbersPrefix(d->model->scenesNumbersPrefix());
-        d->view->setScenesNumbersingStartAt(d->model->scenesNumberingStartAt());
+        d->view->setLogline(d->model->logline());
 
         connect(d->model, &BusinessLayer::ScreenplayInformationModel::nameChanged,
                 d->view, &Ui::ScreenplayInformationView::setName);
-        connect(d->model, &BusinessLayer::ScreenplayInformationModel::headerChanged,
-                d->view, &Ui::ScreenplayInformationView::setHeader);
-        connect(d->model, &BusinessLayer::ScreenplayInformationModel::footerChanged,
-                d->view, &Ui::ScreenplayInformationView::setFooter);
-        connect(d->model, &BusinessLayer::ScreenplayInformationModel::scenesNumbersPrefixChanged,
-                d->view, &Ui::ScreenplayInformationView::setScenesNumbersPrefix);
-        connect(d->model, &BusinessLayer::ScreenplayInformationModel::scenesNumberingStartAtChanged,
-                d->view, &Ui::ScreenplayInformationView::setScenesNumbersingStartAt);
+        connect(d->model, &BusinessLayer::ScreenplayInformationModel::loglineChanged,
+                d->view, &Ui::ScreenplayInformationView::setLogline);
         //
         connect(d->view, &Ui::ScreenplayInformationView::nameChanged,
                 d->model, &BusinessLayer::ScreenplayInformationModel::setName);
-        connect(d->view, &Ui::ScreenplayInformationView::headerChanged,
-                d->model, &BusinessLayer::ScreenplayInformationModel::setHeader);
-        connect(d->view, &Ui::ScreenplayInformationView::footerChanged,
-                d->model, &BusinessLayer::ScreenplayInformationModel::setFooter);
-        connect(d->view, &Ui::ScreenplayInformationView::scenesNumbersPrefixChanged,
-                d->model, &BusinessLayer::ScreenplayInformationModel::setScenesNumbersPrefix);
-        connect(d->view, &Ui::ScreenplayInformationView::scenesNumberingStartAtChanged,
-                d->model, &BusinessLayer::ScreenplayInformationModel::setScenesNumberingStartAt);
+        connect(d->view, &Ui::ScreenplayInformationView::loglineChanged,
+                d->model, &BusinessLayer::ScreenplayInformationModel::setLogline);
     }
 }
 

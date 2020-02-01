@@ -39,6 +39,11 @@ public:
      */
     void restoreState(const QVariant& _state);
 
+    /**
+     * @brief Получить индекс выделенного элемента в дереве
+     */
+    QModelIndex currentIndex() const;
+
 signals:
     /**
      * @brief Пользователь выбрал заданный элемент структуры
@@ -53,7 +58,7 @@ signals:
     /**
      * @brief Пользователь выбрал пункт контекстного меню
      */
-    void contextMenuItemClicked(const QModelIndex& _itemIndex, const QModelIndex& _contextMenuIndex);
+    void contextMenuItemClicked(const QModelIndex& _contextMenuIndex);
 
 protected:
     /**

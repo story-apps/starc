@@ -14,6 +14,13 @@
 namespace BusinessLayer
 {
 
+namespace {
+    const QString kDocumentKey = QStringLiteral("document");
+    const QString kNameKey = QStringLiteral("name");
+    const QString kLoglineKey = QStringLiteral("logline");
+    const QString kCoverKey = QStringLiteral("cover");
+}
+
 class ProjectInformationModel::Implementation
 {
 public:
@@ -30,7 +37,8 @@ public:
 
 
 ProjectInformationModel::ProjectInformationModel(QObject* _parent)
-    : AbstractModel({}, _parent),
+    : AbstractModel({ kDocumentKey, kNameKey, kLoglineKey, kCoverKey },
+                    _parent),
       d(new Implementation)
 {
     connect(this, &ProjectInformationModel::nameChanged, this, &ProjectInformationModel::updateDocumentContent);
@@ -95,12 +103,12 @@ void ProjectInformationModel::initDocument()
 
     QDomDocument domDocument;
     domDocument.setContent(document()->content());
-    auto documentNode = domDocument.firstChildElement("document");
-    auto nameNode = documentNode.firstChildElement();
-    d->name = TextHelper::fromHtmlEscaped(nameNode.text());
-    auto loglineNode = nameNode.nextSiblingElement();
-    d->logline = TextHelper::fromHtmlEscaped(loglineNode.text());
-    auto coverNode = loglineNode.nextSiblingElement();
+    const auto documentNode = domDocument.firstChildElement(kDocumentKey);
+    const auto nameNode = documentNode.firstChildElement(kNameKey);
+    d->name = nameNode.text();
+    const auto loglineNode = documentNode.firstChildElement(kLoglineKey);
+    d->logline = loglineNode.text();
+    const auto coverNode = documentNode.firstChildElement(kCoverKey);
     d->cover.uuid = coverNode.text();
     d->cover.image = imageWrapper()->load(d->cover.uuid);
 }
@@ -121,11 +129,11 @@ QByteArray ProjectInformationModel::toXml() const
     }
 
     QByteArray xml = "<?xml version=\"1.0\"?>\n";
-    xml += "<document mime-type=\"" + Domain::mimeTypeFor(document()->type()) + "\" version=\"1.0\">\n";
-    xml += "<name><![CDATA[" + TextHelper::toHtmlEscaped(d->name) + "]]></name>\n";
-    xml += "<logline><![CDATA[" + TextHelper::toHtmlEscaped(d->logline) + "]]></logline>\n";
-    xml += "<cover><![CDATA[" + d->cover.uuid.toString() + "]]></cover>\n";
-    xml += "</document>";
+    xml += QString("<%1 mime-type=\"%2\" version=\"1.0\">\n").arg(kDocumentKey, Domain::mimeTypeFor(document()->type()));
+    xml += QString("<%1><![CDATA[%2]]></%1>\n").arg(kNameKey, d->name);
+    xml += QString("<%1><![CDATA[%2]]></%1>\n").arg(kLoglineKey, d->logline);
+    xml += QString("<%1><![CDATA[%2]]></%1>\n").arg(kCoverKey, d->cover.uuid.toString());
+    xml += QString("</%1>").arg(kDocumentKey);
     return xml;
 }
 

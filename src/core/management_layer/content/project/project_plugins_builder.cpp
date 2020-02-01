@@ -28,7 +28,8 @@ namespace {
     const QHash<QString, QVector<ProjectPluginsBuilder::EditorInfo>> kDocumentToEditors
     = {{ "application/x-starc/document/project", {{ "application/x-starc/editor/project/information", "\uf2fd" },
                                                   { "application/x-starc/editor/project/collaborators", "\ufb34" }}},
-       { "application/x-starc/document/screenplay", {{ "application/x-starc/editor/screenplay/information", "\uf2fd" }}},
+       { "application/x-starc/document/screenplay", {{ "application/x-starc/editor/screenplay/information", "\uf2fd" },
+                                                     { "application/x-starc/editor/screenplay/parameters", "\uf493" }}},
        { "application/x-starc/document/screenplay/title-page", {{ "application/x-starc/editor/screenplay/title-page", "\uf9ec" }}},
        { "application/x-starc/document/screenplay/logline", {{ "application/x-starc/editor/screenplay/logline", "\uf9ec" }}},
        { "application/x-starc/document/screenplay/synopsis", {{ "application/x-starc/editor/text", "\uf9ec" }}},
@@ -47,6 +48,7 @@ namespace {
        //
        { "application/x-starc/navigator/screenplay/structure", "libscreenplaystructureplugin*.*" },
        { "application/x-starc/editor/screenplay/information", "libscreenplayinformationplugin*.*" },
+       { "application/x-starc/editor/screenplay/parameters", "libscreenplayparametersplugin*.*" },
        { "application/x-starc/editor/screenplay/title-page", "libtextplugin*.*" },
        { "application/x-starc/editor/screenplay/logline", "libtextplugin*.*" },
        { "application/x-starc/editor/screenplay/synopsis", "libtextplugin*.*" },

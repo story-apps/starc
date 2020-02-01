@@ -13,7 +13,6 @@ const QHash<DocumentObjectType, QByteArray> kDocumentObjectTypeToMimeType
        { DocumentObjectType::RecycleBin, "application/x-starc/document/recycle-bin" },
        { DocumentObjectType::Screenplay, "application/x-starc/document/screenplay" },
        { DocumentObjectType::ScreenplayTitlePage, "application/x-starc/document/screenplay/title-page" },
-       { DocumentObjectType::ScreenplayLogline, "application/x-starc/document/screenplay/logline" },
        { DocumentObjectType::ScreenplaySynopsis, "application/x-starc/document/screenplay/synopsis" },
        { DocumentObjectType::ScreenplayOutline, "application/x-starc/document/screenplay/outline" },
        { DocumentObjectType::ScreenplayText, "application/x-starc/document/screenplay/text" }};
@@ -24,7 +23,6 @@ const QHash<DocumentObjectType, QString> kDocumentObjectTypeToIcon
        { DocumentObjectType::RecycleBin, "\uf1c0" },
        { DocumentObjectType::Screenplay, "\ufb9e" },
        { DocumentObjectType::ScreenplayTitlePage, "\uf0be" },
-       { DocumentObjectType::ScreenplayLogline, "\uf21a" },
        { DocumentObjectType::ScreenplaySynopsis, "\uf21a" },
        { DocumentObjectType::ScreenplayOutline, "\uf21a" },
        { DocumentObjectType::ScreenplayText, "\uf21a" }};

@@ -133,6 +133,8 @@ StructureModel::StructureModel(QObject* _parent)
     connect(this, &StructureModel::dataChanged, this, &StructureModel::updateDocumentContent);
 }
 
+StructureModel::~StructureModel() = default;
+
 void StructureModel::addDocument(Domain::DocumentObjectType _type, const QString& _name, const QModelIndex& _parent)
 {
     using namespace Domain;
@@ -159,7 +161,6 @@ void StructureModel::addDocument(Domain::DocumentObjectType _type, const QString
             auto screenplayItem = createItem(DocumentObjectType::Screenplay, !_name.isEmpty() ? _name : tr("Screenplay"));
             appendItem(screenplayItem, parentItem);
             appendItem(createItem(DocumentObjectType::ScreenplayTitlePage, tr("Title page")), screenplayItem);
-            appendItem(createItem(DocumentObjectType::ScreenplayLogline, tr("Logline")), screenplayItem);
             appendItem(createItem(DocumentObjectType::ScreenplaySynopsis, tr("Synopsis")), screenplayItem);
             appendItem(createItem(DocumentObjectType::ScreenplayOutline, tr("Outline")), screenplayItem);
             appendItem(createItem(DocumentObjectType::ScreenplayText, tr("Screenplay")), screenplayItem);
@@ -172,8 +173,6 @@ void StructureModel::addDocument(Domain::DocumentObjectType _type, const QString
         }
     }
 }
-
-StructureModel::~StructureModel() = default;
 
 void StructureModel::prependItem(StructureModelItem* _item, StructureModelItem* _parentItem)
 {
@@ -365,7 +364,6 @@ Qt::ItemFlags StructureModel::flags(const QModelIndex& _index) const
         }
 
         case Domain::DocumentObjectType::ScreenplayTitlePage:
-        case Domain::DocumentObjectType::ScreenplayLogline:
         case Domain::DocumentObjectType::ScreenplaySynopsis:
         case Domain::DocumentObjectType::ScreenplayOutline:
         case Domain::DocumentObjectType::ScreenplayText: {

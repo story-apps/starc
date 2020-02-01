@@ -237,6 +237,9 @@ ProjectManager::ProjectManager(QObject* _parent, QWidget* _parentWidget)
       d(new Implementation(_parentWidget))
 {
     connect(d->toolBar, &Ui::ProjectToolBar::menuPressed, this, &ProjectManager::menuRequested);
+    connect(d->toolBar, &Ui::ProjectToolBar::viewPressed, this, [this] (const QString& _mimeType) {
+        showView(d->navigator->currentIndex(), _mimeType);
+    });
 
     //
     // Отображаем необходимый редактор при выборе документа в списке
@@ -279,9 +282,9 @@ ProjectManager::ProjectManager(QObject* _parent, QWidget* _parentWidget)
     connect(d->navigator, &Ui::ProjectNavigator::contextMenuUpdateRequested, this,
             [this] (const QModelIndex& _index) { d->updateNavigatorContextMenu(_index); });
     connect(d->navigator, &Ui::ProjectNavigator::contextMenuItemClicked, this,
-            [this] (const QModelIndex& _itemIndex, const QModelIndex& _contextMenuIndex)
+            [this] (const QModelIndex& _contextMenuIndex)
     {
-        d->executeContextMenuAction(_itemIndex, _contextMenuIndex);
+        d->executeContextMenuAction(d->navigator->currentIndex(), _contextMenuIndex);
     });
 
     //
@@ -428,8 +431,14 @@ void ProjectManager::saveChanges()
     //
     // Сохраняем структуру
     //
-    const auto structure = DataStorageLayer::StorageFacade::documentStorage()->structure();
+    const auto structure = d->projectStructureModel->document();
     DataStorageLayer::StorageFacade::documentStorage()->updateDocument(structure);
+
+    //
+    // Сохраняем проект
+    //
+    const auto project = d->projectInformationModel->document();
+    DataStorageLayer::StorageFacade::documentStorage()->updateDocument(project);
 
     //
     // Сохраняем остальные документы
@@ -468,11 +477,6 @@ void ProjectManager::showView(const QModelIndex& _itemIndex, const QString& _vie
     //
     // ... и при необходимости настроим её
     //
-    connect(model, &BusinessLayer::AbstractModel::documentNameChanged, this,
-            [this, _itemIndex] (const QString& _name) {
-            d->projectStructureModel->setItemName(_itemIndex, _name);
-        },
-        Qt::UniqueConnection);
     connect(model, &BusinessLayer::AbstractModel::contentsChanged, this,
             [this, model] (const QByteArray& _undo, const QByteArray& _redo) {
                 DataStorageLayer::StorageFacade::documentChangeStorage()->appendDocumentChange(

@@ -4,7 +4,6 @@
 #include <business_layer/model/recycle_bin/recycle_bin_model.h>
 #include <business_layer/model/screenplay/screenplay_information_model.h>
 #include <business_layer/model/screenplay/screenplay_title_page_model.h>
-#include <business_layer/model/screenplay/screenplay_logline_model.h>
 #include <business_layer/model/screenplay/screenplay_synopsis_model.h>
 #include <business_layer/model/screenplay/screenplay_outline_model.h>
 #include <business_layer/model/screenplay/screenplay_text_model.h>
@@ -84,11 +83,6 @@ BusinessLayer::AbstractModel* ProjectModelsBuilder::modelFor(Domain::DocumentObj
 
             case Domain::DocumentObjectType::ScreenplayTitlePage: {
                 model = new BusinessLayer::ScreenplayTitlePageModel;
-                break;
-            }
-
-            case Domain::DocumentObjectType::ScreenplayLogline: {
-                model = new BusinessLayer::ScreenplayLoglineModel;
                 break;
             }
 

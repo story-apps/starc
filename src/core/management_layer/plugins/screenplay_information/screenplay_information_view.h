@@ -17,17 +17,8 @@ public:
     void setName(const QString& _name);
     Q_SIGNAL void nameChanged(const QString& _name);
 
-    void setHeader(const QString& _header);
-    Q_SIGNAL void headerChanged(const QString& _header);
-
-    void setFooter(const QString& _footer);
-    Q_SIGNAL void footerChanged(const QString& _footer);
-
-    void setScenesNumbersPrefix(const QString& _prefix);
-    Q_SIGNAL void scenesNumbersPrefixChanged(const QString& _prefix);
-
-    void setScenesNumbersingStartAt(int _startNumber);
-    Q_SIGNAL void scenesNumberingStartAtChanged(int _startNumber);
+    void setLogline(const QString& _logline);
+    Q_SIGNAL void loglineChanged(const QString& _logline);
 
 protected:
     /**

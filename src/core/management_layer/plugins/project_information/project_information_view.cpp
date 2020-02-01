@@ -141,10 +141,10 @@ void ProjectInformationView::designSystemChangeEvent(DesignSystemChangeEvent* _e
 
     d->projectInfo->setBackgroundColor(DesignSystem::color().background());
     for (auto textField : { d->projectName, d->projectLogline }) {
-        textField->setBackgroundColor(Ui::DesignSystem::color().background());
+        textField->setBackgroundColor(Ui::DesignSystem::color().onBackground());
         textField->setTextColor(Ui::DesignSystem::color().onBackground());
     }
-    d->projectInfoLayout->setVerticalSpacing(static_cast<int>(Ui::DesignSystem::layout().px8()));
+    d->projectInfoLayout->setVerticalSpacing(static_cast<int>(Ui::DesignSystem::layout().px16()));
     d->projectInfoLayout->setRowMinimumHeight(0, static_cast<int>(Ui::DesignSystem::layout().px8()));
     d->projectInfoLayout->setRowMinimumHeight(3, static_cast<int>(Ui::DesignSystem::layout().px8()));
 }
