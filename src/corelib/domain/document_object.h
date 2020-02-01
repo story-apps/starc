@@ -31,6 +31,7 @@ enum class DocumentObjectType {
     //
 
     Project = 10000,
+    RecycleBin = 10001,
     //
     Screenplay = 10100,
     ScreenplayTitlePage = 10101,

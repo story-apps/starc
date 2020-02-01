@@ -26,7 +26,7 @@ public:
     /**
      * @brief Добавить документ
      */
-    void addDocument(Domain::DocumentObjectType _type, const QString& _name, const QModelIndex& _parent = {});
+    void addDocument(Domain::DocumentObjectType _type, const QString& _name = {}, const QModelIndex& _parent = {});
 
     /**
      * @brief Добавить элемент в начало
@@ -42,6 +42,11 @@ public:
      * @brief Вставить элемент после родственика
      */
     void insertItem(StructureModelItem* _item, StructureModelItem* _afterSiblingItem);
+
+    /**
+     * @brief Перенести элемент в заданного родителя
+     */
+    void moveItem(StructureModelItem* _item, StructureModelItem* _parentItem);
 
     /**
      * @brief Удалить элемент
@@ -76,6 +81,11 @@ public:
      * @brief Получить элемент находящийся в заданном индексе
      */
     StructureModelItem* itemForIndex(const QModelIndex& _index) const;
+
+    /**
+     * @brief Получить элемент корзины
+     */
+    void moveItemToRecycleBin(StructureModelItem* _item);
 
     /**
      * @brief Задать имя элемента

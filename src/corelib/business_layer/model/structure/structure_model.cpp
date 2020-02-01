@@ -146,7 +146,12 @@ void StructureModel::addDocument(Domain::DocumentObjectType _type, const QString
 
     switch (_type) {
         case DocumentObjectType::Project: {
-            appendItem(createItem(DocumentObjectType::Project, !_name.isEmpty() ? _name : tr("Project")), parentItem);
+            appendItem(createItem(_type, tr("Project")), parentItem);
+            break;
+        }
+
+        case DocumentObjectType::RecycleBin: {
+            appendItem(createItem(_type, tr("Recicle bin")), parentItem);
             break;
         }
 
@@ -233,6 +238,27 @@ void StructureModel::insertItem(StructureModelItem* _item, StructureModelItem* _
     beginInsertRows(parentIndex, itemRowIndex, itemRowIndex);
     parent->insertItem(itemRowIndex, _item);
     endInsertRows();
+}
+
+void StructureModel::moveItem(StructureModelItem* _item, StructureModelItem* _parentItem)
+{
+    if (_item == nullptr
+        || _parentItem == nullptr) {
+        return;
+    }
+
+    auto sourceParent = _item->parent();
+    if (sourceParent == nullptr) {
+        return;
+    }
+
+    const auto itemIndex = indexForItem(_item);
+    const auto sourceParentIndex = indexForItem(sourceParent);
+    const auto destinationIndex = indexForItem(_parentItem);
+    beginMoveRows(sourceParentIndex, itemIndex.row(), itemIndex.row(), destinationIndex, _parentItem->childCount());
+    sourceParent->takeItem(_item);
+    _parentItem->appendItem(_item);
+    endMoveRows();
 }
 
 void StructureModel::removeItem(StructureModelItem* _item)
@@ -330,6 +356,10 @@ Qt::ItemFlags StructureModel::flags(const QModelIndex& _index) const
     const auto item = itemForIndex(_index);
     switch (item->type()) {
         case Domain::DocumentObjectType::Project:
+        case Domain::DocumentObjectType::RecycleBin: {
+            return Qt::ItemIsEnabled | Qt::ItemIsSelectable | Qt::ItemIsDropEnabled;
+        }
+
         case Domain::DocumentObjectType::Screenplay: {
             return Qt::ItemIsEnabled | Qt::ItemIsSelectable | Qt::ItemIsDragEnabled | Qt::ItemIsDropEnabled;
         }
@@ -590,6 +620,30 @@ StructureModelItem* StructureModel::itemForIndex(const QModelIndex& _index) cons
     return item;
 }
 
+void StructureModel::moveItemToRecycleBin(StructureModelItem* _item)
+{
+    if (_item == nullptr) {
+        return;
+    }
+
+    //
+    // Идём снизу, т.к. обычно корзина находится внизу
+    //
+    StructureModelItem* recycleBin = nullptr;
+    for (int itemIndex = d->rootItem->childCount() - 1; itemIndex >= 0; --itemIndex) {
+        auto item = d->rootItem->childAt(itemIndex);
+        if (item->type() == Domain::DocumentObjectType::RecycleBin) {
+            recycleBin = item;
+            break;
+        }
+    }
+
+    //
+    // Собственно перемещаем элемент в корзину
+    //
+    moveItem(_item, recycleBin);
+}
+
 void StructureModel::setItemName(const QModelIndex& _index, const QString& _name)
 {
     auto item = itemForIndex(_index);
@@ -607,8 +661,13 @@ void StructureModel::initDocument()
     // Если документ пустой, создаём первоначальную структуру
     //
     if (document()->content().isEmpty()) {
-        addDocument(Domain::DocumentObjectType::Project, {});
-        addDocument(Domain::DocumentObjectType::Screenplay, {});
+        //
+        // TODO: сделать зависимо от предустановленного типа проекта
+        //
+
+        addDocument(Domain::DocumentObjectType::Project);
+        addDocument(Domain::DocumentObjectType::Screenplay);
+        addDocument(Domain::DocumentObjectType::RecycleBin);
     }
     //
     // А если данные есть, то загрузим их из документа

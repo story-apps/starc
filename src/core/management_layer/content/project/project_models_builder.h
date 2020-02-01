@@ -35,6 +35,11 @@ public:
     BusinessLayer::AbstractModel* modelFor(Domain::DocumentObject* _document);
 
     /**
+     * @brief Удалить модель для заданного документа
+     */
+    void removeModelFor(Domain::DocumentObject* _document);
+
+    /**
      * @brief Получить список загруженных моделей документов
      */
     QVector<BusinessLayer::AbstractModel*> models()  const;

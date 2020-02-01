@@ -53,7 +53,7 @@ signals:
     /**
      * @brief Пользователь выбрал пункт контекстного меню
      */
-    void contextMenuClicked(const QModelIndex& _contextMenuIndex);
+    void contextMenuItemClicked(const QModelIndex& _itemIndex, const QModelIndex& _contextMenuIndex);
 
 protected:
     /**

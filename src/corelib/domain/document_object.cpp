@@ -10,6 +10,7 @@ const QHash<DocumentObjectType, QByteArray> kDocumentObjectTypeToMimeType
     = {{ DocumentObjectType::Undefined, "application/x-starc/document/undefined" },
        { DocumentObjectType::Structure, "application/x-starc/document/structure" },
        { DocumentObjectType::Project, "application/x-starc/document/project" },
+       { DocumentObjectType::RecycleBin, "application/x-starc/document/recycle-bin" },
        { DocumentObjectType::Screenplay, "application/x-starc/document/screenplay" },
        { DocumentObjectType::ScreenplayTitlePage, "application/x-starc/document/screenplay/title-page" },
        { DocumentObjectType::ScreenplayLogline, "application/x-starc/document/screenplay/logline" },
@@ -20,6 +21,7 @@ const QHash<DocumentObjectType, QString> kDocumentObjectTypeToIcon
     = {{ DocumentObjectType::Undefined, "\uf78a" },
        { DocumentObjectType::Structure, "\uf78a" },
        { DocumentObjectType::Project, "\ufab6" },
+       { DocumentObjectType::RecycleBin, "\uf1c0" },
        { DocumentObjectType::Screenplay, "\ufb9e" },
        { DocumentObjectType::ScreenplayTitlePage, "\uf0be" },
        { DocumentObjectType::ScreenplayLogline, "\uf21a" },
@@ -35,7 +37,7 @@ QByteArray mimeTypeFor(DocumentObjectType _type)
 
 DocumentObjectType typeFor(const QByteArray& _mime)
 {
-    return kDocumentObjectTypeToMimeType.key(_mime);
+    return static_cast<DocumentObjectType>(kDocumentObjectTypeToMimeType.key(_mime));
 }
 
 QString iconForType(DocumentObjectType _type)

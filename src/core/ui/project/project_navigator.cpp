@@ -71,7 +71,9 @@ ProjectNavigator::ProjectNavigator(QWidget* _parent)
     });
 
     connect(d->contexMenu, &ContextMenu::clicked, d->contexMenu, &ContextMenu::hide);
-    connect(d->contexMenu, &ContextMenu::clicked, this, &ProjectNavigator::contextMenuClicked);
+    connect(d->contexMenu, &ContextMenu::clicked, this, [this] (const QModelIndex& _contextMenuIndex) {
+        emit contextMenuItemClicked(d->tree->currentIndex(), _contextMenuIndex);
+    });
 }
 
 void ProjectNavigator::setModel(QAbstractItemModel* _model)

@@ -21,6 +21,7 @@
 #include <ui/project/project_tool_bar.h>
 #include <ui/project/project_view.h>
 #include <ui/widgets/context_menu/context_menu.h>
+#include <ui/widgets/dialog/dialog.h>
 
 #include <QDateTime>
 #include <QHBoxLayout>
@@ -53,12 +54,17 @@ public:
     /**
      * @brief Выполнить заданное действие контекстного меню
      */
-    void executeContextMenuAction(const QModelIndex& _contextMenuIndex);
+    void executeContextMenuAction(const QModelIndex& _itemIndex, const QModelIndex& _contextMenuIndex);
 
     /**
      * @brief Добавить документ в проект
      */
-    void addDocument();
+    void addDocument(const QModelIndex& _itemIndex);
+
+    /**
+     * @brief Удалить документ
+     */
+    void removeDocument(const QModelIndex& _itemIndex);
 
 
     QWidget* topLevelWidget = nullptr;
@@ -70,7 +76,7 @@ public:
 
     Ui::ProjectView* view = nullptr;
 
-    BusinessLayer::StructureModel* projectStructure = nullptr;
+    BusinessLayer::StructureModel* projectStructureModel = nullptr;
     BusinessLayer::ProjectInformationModel* projectInformationModel = nullptr;
 
     DataStorageLayer::DocumentDataStorage documentDataStorage;
@@ -85,7 +91,7 @@ ProjectManager::Implementation::Implementation(QWidget* _parent)
       navigator(new Ui::ProjectNavigator(_parent)),
       navigatorContextMenuModel(new QStandardItemModel(navigator)),
       view(new Ui::ProjectView(_parent)),
-      projectStructure(new BusinessLayer::StructureModel(navigator)),
+      projectStructureModel(new BusinessLayer::StructureModel(navigator)),
       projectInformationModel(new BusinessLayer::ProjectInformationModel(navigator)),
       modelBuilder(&documentDataStorage)
 {
@@ -93,7 +99,7 @@ ProjectManager::Implementation::Implementation(QWidget* _parent)
     navigator->hide();
     view->hide();
 
-    navigator->setModel(projectStructure);
+    navigator->setModel(projectStructureModel);
     navigator->setContextMenuModel(navigatorContextMenuModel);
 
     projectInformationModel->setImageWrapper(&documentDataStorage);
@@ -116,7 +122,8 @@ void ProjectManager::Implementation::updateNavigatorContextMenu(const QModelInde
     }
 }
 
-void ProjectManager::Implementation::executeContextMenuAction(const QModelIndex& _contextMenuIndex)
+void ProjectManager::Implementation::executeContextMenuAction(const QModelIndex& _itemIndex,
+    const QModelIndex& _contextMenuIndex)
 {
     if (!_contextMenuIndex.isValid()) {
         return;
@@ -130,13 +137,18 @@ void ProjectManager::Implementation::executeContextMenuAction(const QModelIndex&
     const auto action = static_cast<ContextMenuAction>(actionData.toInt());
     switch (action) {
         case ContextMenuAction::AddDocument: {
-            addDocument();
+            addDocument(_itemIndex);
+            break;
+        }
+
+        case ContextMenuAction::RemoveDocument: {
+            removeDocument(_itemIndex);
             break;
         }
     }
 }
 
-void ProjectManager::Implementation::addDocument()
+void ProjectManager::Implementation::addDocument(const QModelIndex& _itemIndex)
 {
     //
     // TODO: вложение в выделенный в дереве элемент
@@ -147,12 +159,73 @@ void ProjectManager::Implementation::addDocument()
     connect(dialog, &Ui::CreateDocumentDialog::createPressed, navigator,
             [this, dialog] (Domain::DocumentObjectType _type, const QString& _name)
     {
-        projectStructure->addDocument(_type, _name);
+        projectStructureModel->addDocument(_type, _name);
         dialog->hideDialog();
     });
     connect(dialog, &Ui::CreateDocumentDialog::disappeared, dialog, &Ui::CreateDocumentDialog::deleteLater);
 
     dialog->showDialog();
+}
+
+void ProjectManager::Implementation::removeDocument(const QModelIndex& _itemIndex)
+{
+    auto item = projectStructureModel->itemForIndex(_itemIndex);
+    if (item == nullptr) {
+        return;
+    }
+
+    auto itemTopLevelParent = item->parent();
+    if (itemTopLevelParent == nullptr) {
+        return;
+    }
+    while (itemTopLevelParent->parent()
+           && itemTopLevelParent->parent()->type() != Domain::DocumentObjectType::Undefined) {
+        itemTopLevelParent = itemTopLevelParent->parent();
+    }
+
+    //
+    // Если документ в корзине
+    //
+    if (itemTopLevelParent->type() == Domain::DocumentObjectType::RecycleBin) {
+        //
+        // ... то спросим действительно ли пользователь хочет его удалить
+        //
+        const int kCancelButtonId = 0;
+        const int kRemoveButtonId = 1;
+        auto dialog = new Dialog(topLevelWidget);
+        dialog->showDialog({},
+                           tr("Do you really want to permanently remove document?"),
+                           {{ kCancelButtonId, tr("No"), Dialog::RejectButton },
+                            { kRemoveButtonId, tr("Remove"), Dialog::NormalButton }});
+        QObject::connect(dialog, &Dialog::finished,
+                         [this, dialog, item] (const Dialog::ButtonInfo& _buttonInfo)
+        {
+            dialog->hideDialog();
+
+            //
+            // Пользователь передумал удалять
+            //
+            if (_buttonInfo.id == kCancelButtonId) {
+                return;
+            }
+
+            //
+            // Если таки хочет, то удаляем документ
+            // NOTE: порядок удаления важен
+            //
+            auto document = DataStorageLayer::StorageFacade::documentStorage()->document(item->uuid());
+            modelBuilder.removeModelFor(document);
+            DataStorageLayer::StorageFacade::documentStorage()->removeDocument(document);
+            projectStructureModel->removeItem(item);
+        });
+        QObject::connect(dialog, &Dialog::disappeared, dialog, &Dialog::deleteLater);
+    }
+    //
+    // Если документ ещё не в корзине, то переносим его в корзину
+    //
+    else {
+        projectStructureModel->moveItemToRecycleBin(item);
+    }
 }
 
 
@@ -179,7 +252,7 @@ ProjectManager::ProjectManager(QObject* _parent, QWidget* _parentWidget)
         //
         // Определим выделенный элемент и скорректируем интерфейс
         //
-        const auto item = d->projectStructure->itemForIndex(_index);
+        const auto item = d->projectStructureModel->itemForIndex(_index);
         const auto documentMimeType = Domain::mimeTypeFor(item->type());
         //
         // ... настроим иконки представлений
@@ -205,32 +278,30 @@ ProjectManager::ProjectManager(QObject* _parent, QWidget* _parentWidget)
     });
     connect(d->navigator, &Ui::ProjectNavigator::contextMenuUpdateRequested, this,
             [this] (const QModelIndex& _index) { d->updateNavigatorContextMenu(_index); });
-    connect(d->navigator, &Ui::ProjectNavigator::contextMenuClicked, this,
-            [this] (const QModelIndex& _contextMenuIndex)
+    connect(d->navigator, &Ui::ProjectNavigator::contextMenuItemClicked, this,
+            [this] (const QModelIndex& _itemIndex, const QModelIndex& _contextMenuIndex)
     {
-        d->executeContextMenuAction(_contextMenuIndex);
+        d->executeContextMenuAction(_itemIndex, _contextMenuIndex);
     });
 
     //
     // Соединения с моделью структуры проекта
     //
-    connect(d->projectStructure, &BusinessLayer::StructureModel::documentAdded,
+    connect(d->projectStructureModel, &BusinessLayer::StructureModel::documentAdded,
             [this] (const QUuid& _uuid, Domain::DocumentObjectType _type, const QString& _name)
     {
         auto document = DataStorageLayer::StorageFacade::documentStorage()->storeDocument(_uuid, _type);
-        auto documentModel = d->modelBuilder.modelFor(document);
-        //
-        // FIXME: пока всех моделей нет, оставляем такую проверку
-        //
-        if (documentModel != nullptr) {
-            documentModel->setDocumentName(_name);
-        }
+        auto documentModel
+                = _type == Domain::DocumentObjectType::Project
+                  ? d->projectInformationModel
+                  : d->modelBuilder.modelFor(document);
+        documentModel->setDocumentName(_name);
     });
-    connect(d->projectStructure, &BusinessLayer::StructureModel::contentsChanged, this,
+    connect(d->projectStructureModel, &BusinessLayer::StructureModel::contentsChanged, this,
             [this] (const QByteArray& _undo, const QByteArray& _redo)
     {
         DataStorageLayer::StorageFacade::documentChangeStorage()->appendDocumentChange(
-            d->projectStructure->document()->uuid(), QUuid::createUuid(), _undo, _redo,
+            d->projectStructureModel->document()->uuid(), QUuid::createUuid(), _undo, _redo,
             DataStorageLayer::StorageFacade::settingsStorage()->userName(),
             DataStorageLayer::StorageFacade::settingsStorage()->userEmail());
 
@@ -251,7 +322,7 @@ ProjectManager::ProjectManager(QObject* _parent, QWidget* _parentWidget)
     // Соединения представления
     //
     connect(d->view, &Ui::ProjectView::createNewItemPressed, this, [this] {
-        d->addDocument();
+        d->addDocument({});
     });
 }
 
@@ -277,7 +348,7 @@ void ProjectManager::loadCurrentProject(const QString& _name, const QString& _pa
     //
     // Загружаем структуру
     //
-    d->projectStructure->setDocument(DataStorageLayer::StorageFacade::documentStorage()->structure());
+    d->projectStructureModel->setDocument(DataStorageLayer::StorageFacade::documentStorage()->structure());
 
     //
     // Загружаем информацию о проекте
@@ -334,7 +405,7 @@ void ProjectManager::closeCurrentProject(const QString& _path)
     //
     // Очищаем структуру
     //
-    d->projectStructure->clear();
+    d->projectStructureModel->clear();
 
     //
     // Очищаем данные о проекте
@@ -380,7 +451,7 @@ void ProjectManager::saveChanges()
 
 void ProjectManager::showView(const QModelIndex& _itemIndex, const QString& _viewMimeType)
 {
-    const auto item = d->projectStructure->itemForIndex(_itemIndex);
+    const auto item = d->projectStructureModel->itemForIndex(_itemIndex);
 
     //
     // Определим модель
@@ -399,7 +470,7 @@ void ProjectManager::showView(const QModelIndex& _itemIndex, const QString& _vie
     //
     connect(model, &BusinessLayer::AbstractModel::documentNameChanged, this,
             [this, _itemIndex] (const QString& _name) {
-            d->projectStructure->setItemName(_itemIndex, _name);
+            d->projectStructureModel->setItemName(_itemIndex, _name);
         },
         Qt::UniqueConnection);
     connect(model, &BusinessLayer::AbstractModel::contentsChanged, this,

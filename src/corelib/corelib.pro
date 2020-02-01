@@ -22,7 +22,13 @@ SOURCES += \
     business_layer/import/abstract_importer.cpp \
     business_layer/model/abstract_model.cpp \
     business_layer/model/project/project_information_model.cpp \
+    business_layer/model/recycle_bin/recycle_bin_model.cpp \
     business_layer/model/screenplay/screenplay_information_model.cpp \
+    business_layer/model/screenplay/screenplay_logline_model.cpp \
+    business_layer/model/screenplay/screenplay_outline_model.cpp \
+    business_layer/model/screenplay/screenplay_synopsis_model.cpp \
+    business_layer/model/screenplay/screenplay_text_model.cpp \
+    business_layer/model/screenplay/screenplay_title_page_model.cpp \
     business_layer/model/structure/structure_model.cpp \
     business_layer/model/structure/structure_model_item.cpp \
     business_layer/model/text/text_model.cpp \
@@ -103,7 +109,13 @@ HEADERS += \
     business_layer/model/abstract_image_wrapper.h \
     business_layer/model/abstract_model.h \
     business_layer/model/project/project_information_model.h \
+    business_layer/model/recycle_bin/recycle_bin_model.h \
     business_layer/model/screenplay/screenplay_information_model.h \
+    business_layer/model/screenplay/screenplay_logline_model.h \
+    business_layer/model/screenplay/screenplay_outline_model.h \
+    business_layer/model/screenplay/screenplay_synopsis_model.h \
+    business_layer/model/screenplay/screenplay_text_model.h \
+    business_layer/model/screenplay/screenplay_title_page_model.h \
     business_layer/model/structure/structure_model.h \
     business_layer/model/structure/structure_model_item.h \
     business_layer/model/text/text_model.h \
