@@ -1,15 +1,9 @@
-#-------------------------------------------------
-#
-# Project created by QtCreator 2019-08-27T08:23:46
-#
-#-------------------------------------------------
-
+TARGET = corelib
 TEMPLATE = lib
 
 CONFIG += c++1z
 QT += widgets widgets-private sql xml
 
-TARGET = corelib
 
 DEFINES += CORE_LIBRARY
 DEFINES += QT_DEPRECATED_WARNINGS
@@ -17,6 +11,16 @@ DEFINES += QT_DEPRECATED_WARNINGS
 DESTDIR = ../_build
 
 INCLUDEPATH += ..
+
+#
+# Подключаем библиотеку HUNSPELL
+#
+LIBS += -L$$DESTDIR/libs/ -lhunspell
+
+INCLUDEPATH += $$PWD/../3rd_party/hunspell/src
+DEPENDPATH += $$PWD/../3rd_party/hunspell
+PRE_TARGETDEPS += $$PWD/../3rd_party/hunspell
+#
 
 SOURCES += \
     business_layer/import/abstract_importer.cpp \
@@ -75,6 +79,10 @@ SOURCES += \
     ui/widgets/stepper/stepper.cpp \
     ui/widgets/text_edit/page/page_metrics.cpp \
     ui/widgets/text_edit/page/page_text_edit.cpp \
+    ui/widgets/text_edit/spell_check/spell_check_highlighter.cpp \
+    ui/widgets/text_edit/spell_check/spell_check_text_edit.cpp \
+    ui/widgets/text_edit/spell_check/spell_checker.cpp \
+    ui/widgets/text_edit/spell_check/syntax_highlighter.cpp \
     ui/widgets/text_field/text_field.cpp \
     ui/widgets/toggle_button/toggle_button.cpp \
     ui/widgets/tree/tree.cpp \
@@ -163,6 +171,10 @@ HEADERS += \
     ui/widgets/text_edit/page/page_metrics.h \
     ui/widgets/text_edit/page/page_text_edit.h \
     ui/widgets/text_edit/page/page_text_edit_p.h \
+    ui/widgets/text_edit/spell_check/spell_check_highlighter.h \
+    ui/widgets/text_edit/spell_check/spell_check_text_edit.h \
+    ui/widgets/text_edit/spell_check/spell_checker.h \
+    ui/widgets/text_edit/spell_check/syntax_highlighter.h \
     ui/widgets/text_field/text_field.h \
     ui/widgets/toggle_button/toggle_button.h \
     ui/widgets/tree/tree.h \

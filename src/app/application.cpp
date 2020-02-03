@@ -48,7 +48,7 @@ Application::Application(int& _argc, char** _argv)
     // FIXME:
     //
     setOrganizationName("DimkaNovikov labs.");
-    setOrganizationDomain("dimkanovikov.pro");
+    setOrganizationDomain("starc.app");
 
     //
     // Настроим таймер определения простоя приложения

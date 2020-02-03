@@ -232,6 +232,7 @@ public Q_SLOTS:
     void undo();
     void redo();
 
+    virtual void prepareToClear();
     void clear();
     void selectAll();
 

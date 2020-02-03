@@ -73,7 +73,8 @@ void CreateDocumentDialog::Implementation::updateDocumentInfo()
 {
     const QHash<Domain::DocumentObjectType, QString> documenTypeToInfo
             = {{ Domain::DocumentObjectType::Screenplay,
-                 tr("Some description of the screenplay document") }};
+                 tr("Create a document that will provide abilities for working "
+                    "on the script of the feature film, series or animation") }};
 
     const auto documentTypeData = documentType->currentIndex().data(kMimeTypeRole).toInt();
     documentInfo->setText(documenTypeToInfo.value(static_cast<Domain::DocumentObjectType>(documentTypeData)));

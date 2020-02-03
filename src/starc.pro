@@ -3,11 +3,9 @@ TEMPLATE = subdirs
 SUBDIRS += \
     app \
     core \
-    core/management_layer/plugins/project_information \
-    core/management_layer/plugins/screenplay_information \
-    core/management_layer/plugins/screenplay_parameters \
-    core/management_layer/plugins/text \
-    corelib
+    core/management_layer/plugins \
+    corelib \
+    3rd_party
 
 HEADERS += \
     interfaces/management_layer/i_application_manager.h \

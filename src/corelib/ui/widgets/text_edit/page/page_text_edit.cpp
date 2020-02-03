@@ -1061,8 +1061,15 @@ void PageTextEdit::paste()
 void PageTextEdit::clear()
 {
     Q_D(PageTextEdit);
+
+    prepareToClear();
+
     // clears and sets empty content
     d->control->clear();
+}
+
+void PageTextEdit::prepareToClear()
+{
 }
 
 

@@ -4,7 +4,8 @@
 #include <ui/widgets/card/card.h>
 #include <ui/widgets/scroll_bar/scroll_bar.h>
 #include <ui/widgets/text_field/text_field.h>
-#include <ui/widgets/text_edit/page/page_text_edit.h>
+#include <ui/widgets/text_edit/spell_check/spell_check_text_edit.h>
+#include <ui/widgets/text_edit/spell_check/spell_checker.h>
 
 #include <QGridLayout>
 #include <QScrollArea>
@@ -24,7 +25,7 @@ public:
     Card* screenplayInfo = nullptr;
     QGridLayout* screenplayInfoLayout = nullptr;
     TextField* documentName = nullptr;
-    PageTextEdit* documentText = nullptr;
+    SpellCheckTextEdit* documentText = nullptr;
 };
 
 TextView::Implementation::Implementation(QWidget* _parent)
@@ -32,7 +33,7 @@ TextView::Implementation::Implementation(QWidget* _parent)
       screenplayInfo(new Card(_parent)),
       screenplayInfoLayout(new QGridLayout),
       documentName(new TextField(screenplayInfo)),
-      documentText(new PageTextEdit(screenplayInfo))
+      documentText(new SpellCheckTextEdit(screenplayInfo))
 {
     QPalette palette;
     palette.setColor(QPalette::Base, Qt::transparent);
@@ -68,6 +69,8 @@ TextView::Implementation::Implementation(QWidget* _parent)
     documentText->setHeader("Header text");
     documentText->setFooter("Footer text");
     documentText->setCursorWidth(4);
+    documentText->setUseSpellChecker(true);
+    documentText->setSpellCheckLanguage(SpellCheckerLanguage::EnglishUS);
 }
 
 

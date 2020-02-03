@@ -196,7 +196,7 @@ void ProjectManager::Implementation::removeDocument(const QModelIndex& _itemInde
         dialog->showDialog({},
                            tr("Do you really want to permanently remove document?"),
                            {{ kCancelButtonId, tr("No"), Dialog::RejectButton },
-                            { kRemoveButtonId, tr("Remove"), Dialog::NormalButton }});
+                            { kRemoveButtonId, tr("Yes, remove"), Dialog::NormalButton }});
         QObject::connect(dialog, &Dialog::finished,
                          [this, dialog, item] (const Dialog::ButtonInfo& _buttonInfo)
         {
