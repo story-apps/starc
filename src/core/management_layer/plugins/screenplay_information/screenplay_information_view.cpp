@@ -49,6 +49,8 @@ ScreenplayInformationView::Implementation::Implementation(QWidget* _parent)
     screenplayInfoLayout->setColumnStretch(0, 1);
     screenplayInfo->setLayoutReimpl(screenplayInfoLayout);
 
+    screenplayLogline->setEnterMakesNewLine(true);
+
     QWidget* contentWidget = new QWidget;
     content->setWidget(contentWidget);
     content->setWidgetResizable(true);

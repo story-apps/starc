@@ -82,11 +82,6 @@ namespace WAF
         void finalize();
 
         /**
-         * @brief Скрыть декоратор
-         */
-        void hideDecorator();
-
-        /**
          * @brief Получить виджет, который нужно заполнить
          */
         QWidget* widgetForFill() const;

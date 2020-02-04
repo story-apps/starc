@@ -18,7 +18,7 @@ CircleTransparentAnimator::CircleTransparentAnimator(QWidget* _widgetForFill) :
     Q_ASSERT(_widgetForFill);
 
     m_animation->setEasingCurve(QEasingCurve::OutQuart);
-    m_animation->setDuration(600);
+    m_animation->setDuration(420);
 
     m_decorator->setAttribute(Qt::WA_TransparentForMouseEvents);
     m_decorator->hide();
@@ -75,6 +75,10 @@ void CircleTransparentAnimator::fillIn()
     m_decorator->move(0, 0);
     m_decorator->show();
     m_decorator->raise();
+    //
+    // ... и принудительно его рисуем, чтобы отрисовка декоратора произошла как можно раньше
+    //
+    m_decorator->repaint();
 
     //
     // Анимируем виджет
@@ -151,29 +155,8 @@ void CircleTransparentAnimator::finalize()
 {
     setAnimatedStopped();
     if (m_hideAfterFinish) {
-        hideDecorator();
-    }
-}
-
-void CircleTransparentAnimator::hideDecorator()
-{
-    QGraphicsOpacityEffect* hideEffect = qobject_cast<QGraphicsOpacityEffect*>(m_decorator->graphicsEffect());
-    if (hideEffect == nullptr) {
-        hideEffect = new QGraphicsOpacityEffect(m_decorator);
-        m_decorator->setGraphicsEffect(hideEffect);
-    }
-    hideEffect->setOpacity(1.);
-
-    QPropertyAnimation* hideAnimation = new QPropertyAnimation(hideEffect, "opacity", m_decorator);
-    hideAnimation->setDuration(200);
-    hideAnimation->setStartValue(1.);
-    hideAnimation->setEndValue(0.);
-    connect(hideAnimation, &QPropertyAnimation::finished, [=] {
         m_decorator->hide();
-        hideEffect->setOpacity(1.);
-    });
-
-    hideAnimation->start(QAbstractAnimation::DeleteWhenStopped);
+    }
 }
 
 QWidget* CircleTransparentAnimator::widgetForFill() const

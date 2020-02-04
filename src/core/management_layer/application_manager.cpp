@@ -409,10 +409,10 @@ void ApplicationManager::Implementation::setTranslation(QLocale::Language _langu
 
 void ApplicationManager::Implementation::setTheme(Ui::ApplicationTheme _theme)
 {
-    Ui::DesignSystem::setTheme(_theme);
     if (state == ApplicationState::Working) {
         WAF::Animation::circleTransparentIn(applicationView, QCursor::pos(), applicationView->grab());
     }
+    Ui::DesignSystem::setTheme(_theme);
     QApplication::postEvent(q, new DesignSystemChangeEvent);
 }
 
@@ -422,10 +422,10 @@ void ApplicationManager::Implementation::setCustomThemeColors(const Ui::DesignSy
         return;
     }
 
-    Ui::DesignSystem::setColor(_color);
     if (state == ApplicationState::Working) {
         WAF::Animation::circleTransparentIn(applicationView, QCursor::pos(), applicationView->grab());
     }
+    Ui::DesignSystem::setColor(_color);
     QApplication::postEvent(q, new DesignSystemChangeEvent);
 }
 

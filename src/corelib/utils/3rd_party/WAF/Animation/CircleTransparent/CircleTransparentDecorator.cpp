@@ -31,11 +31,12 @@ int CircleTransparentDecorator::radius() const
 
 void CircleTransparentDecorator::setRadius(int _radius)
 {
-    if (m_radius != _radius) {
-        m_radius = _radius;
-
-        update();
+    if (m_radius == _radius) {
+        return;
     }
+
+    m_radius = _radius;
+    update();
 }
 
 void CircleTransparentDecorator::setFillImage(const QPixmap& _fillImage)
@@ -50,6 +51,10 @@ void CircleTransparentDecorator::paintEvent(QPaintEvent* _event)
 
     if (size() != parentWidget()->size()) {
         resize(parentWidget()->size());
+        return;
+    }
+
+    if (m_fillImage.isNull()) {
         return;
     }
 
