@@ -6,6 +6,7 @@
 
 #include <QElapsedTimer>
 #include <QEvent>
+#include <QTimer>
 #include <QVariantAnimation>
 
 
@@ -28,6 +29,11 @@ public:
     QColor textColor = Qt::red;
     /** @} */
 
+    /**
+     * @brief Таймер отображения попапа, нужен чтобы аккуратно визуализировать ситуацию
+     *        повторного отображения выпадающего списка в момент, когда поисковая фраза
+     *        уточняется и модель фильтруется на лету
+     */
     QElapsedTimer popupTimer;
 
     /**
@@ -117,11 +123,15 @@ Completer::~Completer() = default;
 
 void Completer::showCompleter(const QRect& _rect)
 {
-    if (d->popupTimer.elapsed() > 100) {
-        d->popupTimer.invalidate();
+    //
+    // Если попап был давно скрыт, его нужно будет анимировано отобразить с самого начала
+    //
+    const int popupTimerMaxDelay = 50;
+    if (d->popupTimer.hasExpired(popupTimerMaxDelay)) {
         d->popupHeightAnimation.setStartValue(0);
         d->popupHeightAnimation.setEndValue(0);
     }
+    d->popupTimer.invalidate();
 
     //
     // Нужно сбросить делегат перед отображением
@@ -137,7 +147,8 @@ void Completer::showCompleter(const QRect& _rect)
     //
     // Анимируем размер попапа
     //
-    const int finalHeight = completionCount() * Ui::DesignSystem::treeOneLineItem().height();
+    const int finalHeight = std::min(maxVisibleItems(), completionCount())
+                            * Ui::DesignSystem::treeOneLineItem().height();
     if (d->popupHeightAnimation.state() == QVariantAnimation::Stopped) {
         d->popup->resize(d->popup->width() + Ui::DesignSystem::treeOneLineItem().margins().right(),
                          d->popupHeightAnimation.startValue().toInt());
@@ -166,7 +177,19 @@ void Completer::closeCompleter()
 bool Completer::eventFilter(QObject* _target, QEvent* _event)
 {
     if (_target == d->popup && _event->type() == QEvent::Hide) {
+        //
+        // При скрытии попапа, взводим таймер следующего отображения
+        //
         d->popupTimer.start();
+
+        //
+        // При протухании таймера отображения, сбрасываем его
+        //
+        QTimer::singleShot(d->popupHeightAnimation.duration(), this, [this] {
+            if (d->popupTimer.isValid()) {
+                d->popupTimer.invalidate();
+            }
+        });
     }
 
     return QCompleter::eventFilter(_target, _event);

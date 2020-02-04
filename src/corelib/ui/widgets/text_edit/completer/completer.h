@@ -34,6 +34,9 @@ public:
     void closeCompleter();
 
 protected:
+    /**
+     * @brief Переопределяем, чтобы отлавливать события попапа
+     */
     bool eventFilter(QObject* _target, QEvent* _event) override;
 
 private:
