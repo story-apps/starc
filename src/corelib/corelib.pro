@@ -77,6 +77,8 @@ SOURCES += \
     ui/widgets/splitter/splitter_handle.cpp \
     ui/widgets/stack_widget/stack_widget.cpp \
     ui/widgets/stepper/stepper.cpp \
+    ui/widgets/text_edit/completer/completer.cpp \
+    ui/widgets/text_edit/completer/completer_text_edit.cpp \
     ui/widgets/text_edit/page/page_metrics.cpp \
     ui/widgets/text_edit/page/page_text_edit.cpp \
     ui/widgets/text_edit/spell_check/spell_check_highlighter.cpp \
@@ -168,6 +170,8 @@ HEADERS += \
     ui/widgets/splitter/splitter_handle.h \
     ui/widgets/stack_widget/stack_widget.h \
     ui/widgets/stepper/stepper.h \
+    ui/widgets/text_edit/completer/completer.h \
+    ui/widgets/text_edit/completer/completer_text_edit.h \
     ui/widgets/text_edit/page/page_metrics.h \
     ui/widgets/text_edit/page/page_text_edit.h \
     ui/widgets/text_edit/page/page_text_edit_p.h \

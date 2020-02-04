@@ -4,11 +4,13 @@
 #include <ui/widgets/card/card.h>
 #include <ui/widgets/scroll_bar/scroll_bar.h>
 #include <ui/widgets/text_field/text_field.h>
-#include <ui/widgets/text_edit/spell_check/spell_check_text_edit.h>
 #include <ui/widgets/text_edit/spell_check/spell_checker.h>
+#include <ui/widgets/text_edit/completer/completer_text_edit.h>
+#include <ui/widgets/text_edit/completer/completer.h>
 
 #include <QGridLayout>
 #include <QScrollArea>
+#include <QStringListModel>
 
 
 namespace Ui
@@ -25,7 +27,7 @@ public:
     Card* screenplayInfo = nullptr;
     QGridLayout* screenplayInfoLayout = nullptr;
     TextField* documentName = nullptr;
-    SpellCheckTextEdit* documentText = nullptr;
+    CompleterTextEdit* documentText = nullptr;
 };
 
 TextView::Implementation::Implementation(QWidget* _parent)
@@ -33,7 +35,7 @@ TextView::Implementation::Implementation(QWidget* _parent)
       screenplayInfo(new Card(_parent)),
       screenplayInfoLayout(new QGridLayout),
       documentName(new TextField(screenplayInfo)),
-      documentText(new SpellCheckTextEdit(screenplayInfo))
+      documentText(new CompleterTextEdit(screenplayInfo))
 {
     QPalette palette;
     palette.setColor(QPalette::Base, Qt::transparent);
@@ -71,6 +73,11 @@ TextView::Implementation::Implementation(QWidget* _parent)
     documentText->setCursorWidth(4);
     documentText->setUseSpellChecker(true);
     documentText->setSpellCheckLanguage(SpellCheckerLanguage::EnglishUS);
+
+    connect(documentText, &CompleterTextEdit::textChanged, [this] {
+        static QStringListModel* model = new QStringListModel({"АНТОН", "АДМИРАЛ", "АДМИНИСТРАТОР", "АПОСТОЛ", "АДЛЕН", "АМИР"}, documentText);
+        documentText->complete(model, documentText->toPlainText());
+    });
 }
 
 
@@ -134,8 +141,7 @@ void TextView::designSystemChangeEvent(DesignSystemChangeEvent* _event)
                 .toMargins());
 
     d->screenplayInfo->setBackgroundColor(DesignSystem::color().background());
-    for (auto textField : { d->documentName/*,
-                            d->documentText*/ }) {
+    for (auto textField : { d->documentName }) {
         textField->setBackgroundColor(Ui::DesignSystem::color().background());
         textField->setTextColor(Ui::DesignSystem::color().onBackground());
     }
@@ -152,6 +158,8 @@ void TextView::designSystemChangeEvent(DesignSystemChangeEvent* _event)
     palette.setColor(QPalette::Highlight, Ui::DesignSystem::color().secondary());
     palette.setColor(QPalette::HighlightedText, Ui::DesignSystem::color().onSecondary());
     d->documentText->setPalette(palette);
+    d->documentText->completer()->setTextColor(Ui::DesignSystem::color().onBackground());
+    d->documentText->completer()->setBackgroundColor(Ui::DesignSystem::color().background());
 }
 
 } // namespace Ui
