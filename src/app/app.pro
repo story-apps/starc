@@ -6,7 +6,7 @@
 
 TEMPLATE = app
 
-CONFIG += c++11
+CONFIG += c++1z
 QT += core gui widgets
 
 TARGET = starcapp

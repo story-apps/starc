@@ -31,12 +31,11 @@ namespace {
        { "application/x-starc/document/screenplay", {{ "application/x-starc/editor/screenplay/information", "\uf2fd" },
                                                      { "application/x-starc/editor/screenplay/parameters", "\uf493" }}},
        { "application/x-starc/document/screenplay/title-page", {{ "application/x-starc/editor/screenplay/title-page", "\uf9ec" }}},
-       { "application/x-starc/document/screenplay/logline", {{ "application/x-starc/editor/screenplay/logline", "\uf9ec" }}},
        { "application/x-starc/document/screenplay/synopsis", {{ "application/x-starc/editor/text", "\uf9ec" }}},
+       { "application/x-starc/document/screenplay/outline", {{ "application/x-starc/editor/screenplay/outline", "\uf9ec" },
+                                                             { "application/x-starc/editor/screenplay/cards", "\uf554" }}},
        { "application/x-starc/document/screenplay/text", {{ "application/x-starc/editor/screenplay/text", "\uf9ec" },
-                                                          { "application/x-starc/editor/screenplay/cards", "\uf554" }}},
-       { "application/x-starc/document/screenplay/outline", {{ "application/x-starc/editor/screenplay/text", "\uf9ec" },
-                                                             { "application/x-starc/editor/screenplay/cards", "\uf554" }}}};
+                                                          { "application/x-starc/editor/screenplay/cards", "\uf554" }}}};
 
     /**
       * @brief Карта соответсвий майм-типов навигаторов/редакторов к названиям библиотек с плагинами
@@ -50,10 +49,11 @@ namespace {
        { "application/x-starc/editor/screenplay/information", "libscreenplayinformationplugin*.*" },
        { "application/x-starc/editor/screenplay/parameters", "libscreenplayparametersplugin*.*" },
        { "application/x-starc/editor/screenplay/title-page", "libtextplugin*.*" },
-       { "application/x-starc/editor/screenplay/logline", "libtextplugin*.*" },
        { "application/x-starc/editor/screenplay/synopsis", "libtextplugin*.*" },
+       { "application/x-starc/editor/screenplay/outline", "libscreenplayoutlineplugin*.*" },
+       { "application/x-starc/editor/screenplay/outline-cards", "libscreenplayoutlinecardsplugin*.*" },
        { "application/x-starc/editor/screenplay/text", "libscreenplaytextplugin*.*" },
-       { "application/x-starc/editor/screenplay/cards", "libscreenplaycardsplugin*.*" }};
+       { "application/x-starc/editor/screenplay/cards", "libscreenplaytextcardsplugin*.*" }};
 }
 
 class ProjectPluginsBuilder::Implementation

@@ -329,7 +329,7 @@ public:
     void setPageFormat(QPageSize::PageSizeId _pageFormat);
 
     /**
-     * @brief Настроить поля страницы
+     * @brief Настроить поля страницы, мм
      */
     void setPageMargins(const QMarginsF& _margins);
 

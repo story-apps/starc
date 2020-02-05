@@ -143,6 +143,7 @@ void Completer::showCompleter(const QRect& _rect)
     // Отобразим
     //
     complete(_rect);
+    d->popup->move(_rect.topLeft());
 
     //
     // Анимируем размер попапа

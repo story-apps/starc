@@ -81,6 +81,7 @@ SOURCES += \
     ui/widgets/text_edit/completer/completer_text_edit.cpp \
     ui/widgets/text_edit/page/page_metrics.cpp \
     ui/widgets/text_edit/page/page_text_edit.cpp \
+    ui/widgets/text_edit/scalable_wrapper/scalable_wrapper.cpp \
     ui/widgets/text_edit/spell_check/spell_check_highlighter.cpp \
     ui/widgets/text_edit/spell_check/spell_check_text_edit.cpp \
     ui/widgets/text_edit/spell_check/spell_checker.cpp \
@@ -175,6 +176,7 @@ HEADERS += \
     ui/widgets/text_edit/page/page_metrics.h \
     ui/widgets/text_edit/page/page_text_edit.h \
     ui/widgets/text_edit/page/page_text_edit_p.h \
+    ui/widgets/text_edit/scalable_wrapper/scalable_wrapper.h \
     ui/widgets/text_edit/spell_check/spell_check_highlighter.h \
     ui/widgets/text_edit/spell_check/spell_check_text_edit.h \
     ui/widgets/text_edit/spell_check/spell_checker.h \

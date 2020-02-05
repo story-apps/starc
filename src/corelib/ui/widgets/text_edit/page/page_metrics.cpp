@@ -2,6 +2,33 @@
 
 #include <QApplication>
 #include <QScreen>
+#include <QSizeF>
+#include <QString>
+
+
+class PageMetrics::Implementation
+{
+public:
+    /**
+     * @brief Формат страницы
+     */
+    QPageSize::PageSizeId pageFormat;
+
+    /**
+     * @brief Размеры в миллиметрах
+     */
+    QSizeF mmPageSize;
+    QMarginsF mmPageMargins;
+
+    /**
+     * @brief Размеры в пикселах
+     */
+    QSizeF pxPageSize;
+    QMarginsF pxPageMargins;
+};
+
+
+// ****
 
 
 qreal PageMetrics::mmToPx(qreal _mm, bool _x)
@@ -75,50 +102,53 @@ QString PageMetrics::stringFromPageSizeId(QPageSize::PageSizeId _pageSize)
 }
 
 PageMetrics::PageMetrics(QPageSize::PageSizeId _pageFormat, const QMarginsF& _mmPageMargins)
+    : d(new Implementation)
 {
     update(_pageFormat, _mmPageMargins);
 }
 
+PageMetrics::~PageMetrics() = default;
+
 void PageMetrics::update(QPageSize::PageSizeId _pageFormat, const QMarginsF& _mmPageMargins)
 {
-    m_pageFormat = _pageFormat;
+    d->pageFormat = _pageFormat;
 
-    m_mmPageSize = QPageSize(m_pageFormat).rect(QPageSize::Millimeter).size();
-    m_mmPageMargins = _mmPageMargins;
+    d->mmPageSize = QPageSize(d->pageFormat).rect(QPageSize::Millimeter).size();
+    d->mmPageMargins = _mmPageMargins;
 
     //
     // Рассчитываем значения в пикселах
     //
     const bool x = true, y = false;
-    m_pxPageSize = QSizeF(mmToPx(m_mmPageSize.width(), x),
-                          mmToPx(m_mmPageSize.height(), y));
-    m_pxPageMargins = QMarginsF(mmToPx(m_mmPageMargins.left(), x),
-                                mmToPx(m_mmPageMargins.top(), y),
-                                mmToPx(m_mmPageMargins.right(), x),
-                                mmToPx(m_mmPageMargins.bottom(), y));
+    d->pxPageSize = QSizeF(mmToPx(d->mmPageSize.width(), x),
+                          mmToPx(d->mmPageSize.height(), y));
+    d->pxPageMargins = QMarginsF(mmToPx(d->mmPageMargins.left(), x),
+                                mmToPx(d->mmPageMargins.top(), y),
+                                mmToPx(d->mmPageMargins.right(), x),
+                                mmToPx(d->mmPageMargins.bottom(), y));
 }
 
 QPageSize::PageSizeId PageMetrics::pageFormat() const
 {
-    return m_pageFormat;
+    return d->pageFormat;
 }
 
-QSizeF PageMetrics::mmPageSize() const
+const QSizeF& PageMetrics::mmPageSize() const
 {
-    return m_mmPageSize;
+    return d->mmPageSize;
 }
 
-QMarginsF PageMetrics::mmPageMargins() const
+const QMarginsF& PageMetrics::mmPageMargins() const
 {
-    return m_mmPageMargins;
+    return d->mmPageMargins;
 }
 
-QSizeF PageMetrics::pxPageSize() const
+const QSizeF& PageMetrics::pxPageSize() const
 {
-    return m_pxPageSize;
+    return d->pxPageSize;
 }
 
-QMarginsF PageMetrics::pxPageMargins() const
+const QMarginsF& PageMetrics::pxPageMargins() const
 {
-    return m_pxPageMargins;
+    return d->pxPageMargins;
 }
