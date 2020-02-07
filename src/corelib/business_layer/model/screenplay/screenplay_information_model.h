@@ -6,6 +6,9 @@
 namespace BusinessLayer
 {
 
+/**
+ * @brief Модель информации о сценарии
+ */
 class ScreenplayInformationModel : public AbstractModel
 {
     Q_OBJECT

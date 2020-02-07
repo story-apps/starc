@@ -127,10 +127,6 @@ StructureModel::StructureModel(QObject* _parent)
     : AbstractModel({}, _parent),
       d(new Implementation)
 {
-    connect(this, &StructureModel::rowsInserted, this, &StructureModel::updateDocumentContent);
-    connect(this, &StructureModel::rowsRemoved, this, &StructureModel::updateDocumentContent);
-    connect(this, &StructureModel::rowsMoved, this, &StructureModel::updateDocumentContent);
-    connect(this, &StructureModel::dataChanged, this, &StructureModel::updateDocumentContent);
 }
 
 StructureModel::~StructureModel() = default;
@@ -387,23 +383,7 @@ QVariant StructureModel::data(const QModelIndex& _index, int _role) const
         return {};
     }
 
-    switch (_role) {
-        case Qt::DisplayRole: {
-            return item->name();
-        }
-
-        case Qt::DecorationRole: {
-            return Domain::iconForType(item->type());
-        }
-
-        case Qt::BackgroundRole: {
-            return item->color();
-        }
-
-        default: {
-            return {};
-        }
-    }
+    return item->data(_role);
 }
 
 bool StructureModel::canDropMimeData(const QMimeData* _data, Qt::DropAction _action, int _row,

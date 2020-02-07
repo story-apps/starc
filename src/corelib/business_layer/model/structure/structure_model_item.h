@@ -1,6 +1,6 @@
 #pragma once
 
-#include <QScopedPointer>
+#include <business_layer/model/abstract_model_item.h>
 
 class QColor;
 class QUuid;
@@ -16,7 +16,7 @@ namespace BusinessLayer
 /**
  * @brief Элемент структуры проекта
  */
-class StructureModelItem
+class StructureModelItem : public AbstractModelItem
 {
 public:
     explicit StructureModelItem(const QUuid& _uuid, Domain::DocumentObjectType _type,
@@ -44,70 +44,16 @@ public:
      */
     QColor color() const;
 
-
-    //
-    // Вспомогательные методы для организации работы модели
-    //
+    /**
+     * @brief Переопределяем интерфейс для получения данных модели по роли
+     */
+    QVariant data(int _role) const override;
 
     /**
-     * @brief Добавить элемент в начало
+     * @brief Переопределяем интерфейс для возврата элемента собственного класса
      */
-    void prependItem(StructureModelItem* _item);
-
-    /**
-     * @brief Добавить элемент в конец
-     */
-    void appendItem(StructureModelItem* _item);
-
-    /**
-     * @brief Вставить элемент в указанное место
-     */
-    void insertItem(int _index, StructureModelItem* _item);
-
-    /**
-     * @brief Удалить элемент
-     */
-    void removeItem(StructureModelItem* _item);
-
-    /**
-     * @brief Извлечь элемент не удаляя его
-     */
-    void takeItem(StructureModelItem* _item);
-
-    /**
-     * @brief Имеет ли элемент родительский элемент
-     */
-    bool hasParent() const;
-
-    /**
-     * @brief Родительский элемент
-     */
-    StructureModelItem* parent() const;
-
-    /**
-     * @brief Имеет ли элемент детей
-     */
-    bool hasChildren() const;
-
-    /**
-     * @brief Количество дочерних элементов
-     */
-    int childCount() const;
-
-    /**
-     * @brief Является ли заданный элемент дочерним текущему
-     */
-    bool hasChild(StructureModelItem* _child) const;
-
-    /**
-     * @brief Индекс дочернего элемента
-     */
-    int rowOfChild(StructureModelItem* _child) const;
-
-    /**
-     * @brief Дочерний элемент по индексу
-     */
-    StructureModelItem* childAt(int _index) const;
+    StructureModelItem* parent() const override;
+    StructureModelItem* childAt(int _index) const override;
 
 private:
     class Implementation;

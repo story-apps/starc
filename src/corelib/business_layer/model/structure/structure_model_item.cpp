@@ -1,7 +1,10 @@
 #include "structure_model_item.h"
 
+#include <domain/document_object.h>
+
 #include <QColor>
 #include <QUuid>
+#include <QVariant>
 #include <QVector>
 
 
@@ -18,9 +21,6 @@ public:
     Domain::DocumentObjectType type;
     QString name;
     QColor color;
-
-    StructureModelItem* parent = nullptr;
-    QVector<StructureModelItem*> children;
 };
 
 StructureModelItem::Implementation::Implementation(const QUuid& _uuid, Domain::DocumentObjectType _type,
@@ -38,12 +38,14 @@ StructureModelItem::Implementation::Implementation(const QUuid& _uuid, Domain::D
 
 StructureModelItem::StructureModelItem(const QUuid& _uuid, Domain::DocumentObjectType _type,
     const QString& _name, const QColor& _color)
-    : d(new Implementation(_uuid, _type, _name, _color))
+    : AbstractModelItem(),
+      d(new Implementation(_uuid, _type, _name, _color))
 {
 }
 
 StructureModelItem::StructureModelItem(const StructureModelItem& _other)
-    : d(new Implementation(_other.d->uuid, _other.d->type, _other.d->name, _other.d->color))
+    : AbstractModelItem(),
+      d(new Implementation(_other.d->uuid, _other.d->type, _other.d->name, _other.d->color))
 {
 }
 
@@ -76,88 +78,35 @@ QColor StructureModelItem::color() const
     return d->color;
 }
 
-
-//
-// Вспомогательные методы для организации работы модели
-//
-
-void StructureModelItem::prependItem(StructureModelItem* _item)
+QVariant StructureModelItem::data(int _role) const
 {
-    //
-    // Устанавливаем себя родителем
-    //
-    _item->d->parent = this;
+    switch (_role) {
+        case Qt::DisplayRole: {
+            return name();
+        }
 
-    //
-    // Добавляем элемент в список детей
-    //
-    d->children.prepend(_item);
-}
+        case Qt::DecorationRole: {
+            return Domain::iconForType(type());
+        }
 
-void StructureModelItem::appendItem(StructureModelItem* _item)
-{
-    //
-    // Устанавливаем себя родителем
-    //
-    _item->d->parent = this;
+        case Qt::BackgroundRole: {
+            return color();
+        }
 
-    //
-    // Добавляем элемент в список детей
-    //
-    d->children.append(_item);
-}
-
-void StructureModelItem::insertItem(int _index, StructureModelItem* _item)
-{
-    _item->d->parent = this;
-    d->children.insert(_index, _item);
-}
-
-void StructureModelItem::removeItem(StructureModelItem* _item)
-{
-    d->children.removeOne(_item);
-    delete _item;
-    _item = nullptr;
-}
-
-void StructureModelItem::takeItem(StructureModelItem* _item)
-{
-    d->children.removeOne(_item);
-}
-
-bool StructureModelItem::hasParent() const
-{
-    return d->parent != nullptr;
+        default: {
+            return {};
+        }
+    }
 }
 
 StructureModelItem* StructureModelItem::parent() const
 {
-    return d->parent;
-}
-
-bool StructureModelItem::hasChildren() const
-{
-    return !d->children.isEmpty();
-}
-
-int StructureModelItem::childCount() const
-{
-    return d->children.count();
-}
-
-bool StructureModelItem::hasChild(StructureModelItem* _child) const
-{
-    return d->children.contains(_child);
-}
-
-int StructureModelItem::rowOfChild(StructureModelItem* _child) const
-{
-    return d->children.indexOf(_child);
+    return static_cast<StructureModelItem*>(AbstractModelItem::parent());
 }
 
 StructureModelItem* StructureModelItem::childAt(int _index) const
 {
-    return d->children.value(_index, nullptr);
+    return static_cast<StructureModelItem*>(AbstractModelItem::childAt(_index));
 }
 
 } // namespace BusinessLayer

@@ -7,7 +7,7 @@ namespace BusinessLayer
 {
 
 /**
- * @brief Модель корзины с удалёнными документами
+ * @brief Модель
  */
 class ScreenplayTitlePageModel : public AbstractModel
 {

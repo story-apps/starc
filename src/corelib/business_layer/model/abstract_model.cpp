@@ -73,6 +73,11 @@ AbstractModel::AbstractModel(const QVector<QString>& _tags, QObject* _parent)
 
         emit contentsChanged(undoPatch, redoPatch);
     });
+
+    connect(this, &AbstractModel::rowsInserted, this, &AbstractModel::updateDocumentContent);
+    connect(this, &AbstractModel::rowsRemoved, this, &AbstractModel::updateDocumentContent);
+    connect(this, &AbstractModel::rowsMoved, this, &AbstractModel::updateDocumentContent);
+    connect(this, &AbstractModel::dataChanged, this, &AbstractModel::updateDocumentContent);
 }
 
 AbstractModel::~AbstractModel() = default;
