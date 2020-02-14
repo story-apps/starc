@@ -122,7 +122,7 @@ public:
 ScreenplayTextModelTextItem::Implementation::Implementation(const QDomElement& _node)
 {
     type = screenplayParagraphTypeFromString(_node.tagName());
-    Q_ASSERT(type == ScreenplayParagraphType::Undefined);
+    Q_ASSERT(type != ScreenplayParagraphType::Undefined);
 
     if (_node.hasAttribute(kAlignAttribute)) {
         alignment = alignmentFromString(_node.attribute(kAlignAttribute));
@@ -284,7 +284,7 @@ void ScreenplayTextModelTextItem::Implementation::updateXml()
         }
         xml += QString("</%1>").arg(kRevisionsTag);
     }
-    xml += QString("</%1>").arg(toString(type));
+    xml += QString("</%1>\n").arg(toString(type));
 }
 
 
@@ -295,12 +295,14 @@ ScreenplayTextModelTextItem::ScreenplayTextModelTextItem()
     : ScreenplayTextModelItem(ScreenplayTextModelItemType::Text),
       d(new Implementation)
 {
+    d->updateXml();
 }
 
 ScreenplayTextModelTextItem::ScreenplayTextModelTextItem(const QDomElement& _node)
     : ScreenplayTextModelItem(ScreenplayTextModelItemType::Text),
       d(new Implementation(_node))
 {
+    d->updateXml();
 }
 
 ScreenplayTextModelTextItem::~ScreenplayTextModelTextItem() = default;

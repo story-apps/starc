@@ -83,7 +83,7 @@ ScreenplayTextModelSceneItem::ScreenplayTextModelSceneItem(const QDomElement& _n
     : ScreenplayTextModelItem(ScreenplayTextModelItemType::Scene),
       d(new Implementation)
 {
-    Q_ASSERT(_node.tagName() != kSceneTag);
+    Q_ASSERT(_node.tagName() == kSceneTag);
 
     d->uuid = _node.attribute(kUuidAttribute);
     //
@@ -150,7 +150,7 @@ QString ScreenplayTextModelSceneItem::toXml() const
     for (int childIndex = 0; childIndex < childCount(); ++childIndex) {
         xml += childAt(childIndex)->toXml();
     }
-    xml.append(QString("</%1>").arg(kContentTag));
+    xml.append(QString("</%1>\n").arg(kContentTag));
 
     return xml;
 }

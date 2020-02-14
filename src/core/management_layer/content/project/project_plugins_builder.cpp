@@ -19,8 +19,8 @@ namespace {
      * @brief Карта соотвествия майм-типов редактора к навигатору
      */
     const QHash<QString, QString> kEditorToNavigator
-    = {{ "application/x-starc/editor/screenplay/text", "application/x-starc/navigator/screenplay/structure" },
-       { "application/x-starc/editor/screenplay/cards", "application/x-starc/navigator/screenplay/structure" }};
+    = {{ "application/x-starc/editor/screenplay/text", "application/x-starc/navigator/screenplay/text-structure" },
+       { "application/x-starc/editor/screenplay/cards", "application/x-starc/navigator/screenplay/text-structure" }};
 
     /**
      * @brief Карта соответствия майм-типов документа к редакторам
@@ -45,7 +45,7 @@ namespace {
     const QHash<QString, QString> kMimeToPlugin
     = {{ "application/x-starc/editor/project/information", "libprojectinformationplugin*.*" },
        //
-       { "application/x-starc/navigator/screenplay/structure", "libscreenplaystructureplugin*.*" },
+       { "application/x-starc/navigator/screenplay/text-structure", "libscreenplaytextstructureplugin*.*" },
        { "application/x-starc/editor/screenplay/information", "libscreenplayinformationplugin*.*" },
        { "application/x-starc/editor/screenplay/parameters", "libscreenplayparametersplugin*.*" },
        { "application/x-starc/editor/screenplay/title-page", "libtextplugin*.*" },

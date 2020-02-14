@@ -1,4 +1,4 @@
-#include "screenplay_text_view.h"
+#include "screenplay_text_structure_view.h"
 
 #include <ui/design_system/design_system.h>
 #include <ui/widgets/scroll_bar/scroll_bar.h>
@@ -15,7 +15,7 @@
 namespace Ui
 {
 
-class ScreenplayTextView::Implementation
+class ScreenplayTextStructureView::Implementation
 {
 public:
     explicit Implementation(QWidget* _parent);
@@ -25,7 +25,7 @@ public:
     ScalableWrapper* scalableWrapper = nullptr;
 };
 
-ScreenplayTextView::Implementation::Implementation(QWidget* _parent)
+ScreenplayTextStructureView::Implementation::Implementation(QWidget* _parent)
     : screenplayText(new CompleterTextEdit(_parent)),
       scalableWrapper(new ScalableWrapper(screenplayText, _parent))
 {
@@ -60,7 +60,7 @@ ScreenplayTextView::Implementation::Implementation(QWidget* _parent)
 // ****
 
 
-ScreenplayTextView::ScreenplayTextView(QWidget* _parent)
+ScreenplayTextStructureView::ScreenplayTextStructureView(QWidget* _parent)
     : Widget(_parent),
       d(new Implementation(this))
 {
@@ -70,27 +70,19 @@ ScreenplayTextView::ScreenplayTextView(QWidget* _parent)
     layout->addWidget(d->scalableWrapper);
     setLayout(layout);
 
-    connect(d->screenplayText, &PageTextEdit::textChanged, this, [this] {
-        emit textChanged(d->screenplayText->toHtml());
-    });
 
     updateTranslations();
     designSystemChangeEvent(nullptr);
 }
 
-void ScreenplayTextView::setText(const QString& _text)
+ScreenplayTextStructureView::~ScreenplayTextStructureView() = default;
+
+void ScreenplayTextStructureView::updateTranslations()
 {
 
 }
 
-ScreenplayTextView::~ScreenplayTextView() = default;
-
-void ScreenplayTextView::updateTranslations()
-{
-
-}
-
-void ScreenplayTextView::designSystemChangeEvent(DesignSystemChangeEvent* _event)
+void ScreenplayTextStructureView::designSystemChangeEvent(DesignSystemChangeEvent* _event)
 {
     Widget::designSystemChangeEvent(_event);
 

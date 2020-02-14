@@ -6,16 +6,13 @@
 namespace Ui
 {
 
-class ScreenplayTextView : public Widget
+class ScreenplayTextStructureView : public Widget
 {
     Q_OBJECT
 
 public:
-    explicit ScreenplayTextView(QWidget* _parent = nullptr);
-    ~ScreenplayTextView() override;
-
-    void setText(const QString& _text);
-    Q_SIGNAL void textChanged(const QString& _text);
+    explicit ScreenplayTextStructureView(QWidget* _parent = nullptr);
+    ~ScreenplayTextStructureView() override;
 
 protected:
     /**
