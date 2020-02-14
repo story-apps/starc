@@ -5,6 +5,9 @@
 class QVariant;
 
 
+namespace BusinessLayer
+{
+
 /**
  * @brief Абстрактный класс элемента древовидной модели
  */
@@ -84,3 +87,5 @@ private:
     class Implementation;
     QScopedPointer<Implementation> d;
 };
+
+} // namespace BusinessLayer

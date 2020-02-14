@@ -31,6 +31,17 @@ public:
      */
     ScreenplayTextModelItemType type() const;
 
+    /**
+     * @brief Переопределяем интерфейс для возврата элемента собственного класса
+     */
+    ScreenplayTextModelItem* parent() const override;
+    ScreenplayTextModelItem* childAt(int _index) const override;
+
+    /**
+     * @brief Сформировать xml блока
+     */
+    virtual QString toXml() const = 0;
+
 private:
     class Implementation;
     QScopedPointer<Implementation> d;

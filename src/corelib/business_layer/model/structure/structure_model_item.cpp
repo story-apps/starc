@@ -49,7 +49,7 @@ StructureModelItem::StructureModelItem(const StructureModelItem& _other)
 {
 }
 
-QUuid StructureModelItem::uuid() const
+const QUuid& StructureModelItem::uuid() const
 {
     return d->uuid;
 }
@@ -59,7 +59,7 @@ Domain::DocumentObjectType StructureModelItem::type() const
     return d->type;
 }
 
-QString StructureModelItem::name() const
+const QString& StructureModelItem::name() const
 {
     return d->name;
 }
@@ -73,7 +73,7 @@ void StructureModelItem::setName(const QString& _name)
     d->name = _name;
 }
 
-QColor StructureModelItem::color() const
+const QColor& StructureModelItem::color() const
 {
     return d->color;
 }

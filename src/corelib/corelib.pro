@@ -31,11 +31,11 @@ SOURCES += \
     business_layer/model/screenplay/screenplay_information_model.cpp \
     business_layer/model/screenplay/screenplay_outline_model.cpp \
     business_layer/model/screenplay/screenplay_synopsis_model.cpp \
-    business_layer/model/screenplay/screenplay_text_model.cpp \
-    business_layer/model/screenplay/screenplay_text_model_item.cpp \
-    business_layer/model/screenplay/screenplay_text_model_scene_item.cpp \
-    business_layer/model/screenplay/screenplay_text_model_splitter_item.cpp \
-    business_layer/model/screenplay/screenplay_text_model_text_item.cpp \
+    business_layer/model/screenplay/text/screenplay_text_model.cpp \
+    business_layer/model/screenplay/text/screenplay_text_model_item.cpp \
+    business_layer/model/screenplay/text/screenplay_text_model_scene_item.cpp \
+    business_layer/model/screenplay/text/screenplay_text_model_splitter_item.cpp \
+    business_layer/model/screenplay/text/screenplay_text_model_text_item.cpp \
     business_layer/model/screenplay/screenplay_title_page_model.cpp \
     business_layer/model/structure/structure_model.cpp \
     business_layer/model/structure/structure_model_item.cpp \
@@ -114,6 +114,7 @@ SOURCES += \
     utils/helpers/color_helper.cpp \
     utils/helpers/dialog_helper.cpp \
     utils/helpers/image_helper.cpp \
+    utils/helpers/string_helper.cpp \
     utils/helpers/text_helper.cpp \
     utils/helpers/quotes_helper.cpp \
     utils/tools/backup_builder.cpp \
@@ -130,11 +131,11 @@ HEADERS += \
     business_layer/model/screenplay/screenplay_information_model.h \
     business_layer/model/screenplay/screenplay_outline_model.h \
     business_layer/model/screenplay/screenplay_synopsis_model.h \
-    business_layer/model/screenplay/screenplay_text_model.h \
-    business_layer/model/screenplay/screenplay_text_model_item.h \
-    business_layer/model/screenplay/screenplay_text_model_scene_item.h \
-    business_layer/model/screenplay/screenplay_text_model_splitter_item.h \
-    business_layer/model/screenplay/screenplay_text_model_text_item.h \
+    business_layer/model/screenplay/text/screenplay_text_model.h \
+    business_layer/model/screenplay/text/screenplay_text_model_item.h \
+    business_layer/model/screenplay/text/screenplay_text_model_scene_item.h \
+    business_layer/model/screenplay/text/screenplay_text_model_splitter_item.h \
+    business_layer/model/screenplay/text/screenplay_text_model_text_item.h \
     business_layer/model/screenplay/screenplay_title_page_model.h \
     business_layer/model/structure/structure_model.h \
     business_layer/model/structure/structure_model_item.h \
@@ -218,6 +219,7 @@ HEADERS += \
     utils/helpers/color_helper.h \
     utils/helpers/dialog_helper.h \
     utils/helpers/image_helper.h \
+    utils/helpers/string_helper.h \
     utils/helpers/text_helper.h \
     utils/helpers/quotes_helper.h \
     utils/tools/backup_builder.h \

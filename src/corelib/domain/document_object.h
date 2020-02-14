@@ -87,7 +87,7 @@ enum class DocumentObjectType {
  */
 inline uint qHash(DocumentObjectType _type)
 {
-    return qHash(static_cast<int>(_type));
+    return ::qHash(static_cast<int>(_type));
 }
 
 /**

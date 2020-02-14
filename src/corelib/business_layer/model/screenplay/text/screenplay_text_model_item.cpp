@@ -33,4 +33,14 @@ ScreenplayTextModelItemType ScreenplayTextModelItem::type() const
     return d->type;
 }
 
+ScreenplayTextModelItem* ScreenplayTextModelItem::parent() const
+{
+    return static_cast<ScreenplayTextModelItem*>(AbstractModelItem::parent());
+}
+
+ScreenplayTextModelItem* ScreenplayTextModelItem::childAt(int _index) const
+{
+    return static_cast<ScreenplayTextModelItem*>(AbstractModelItem::childAt(_index));
+}
+
 } // namespace BusinessLayer

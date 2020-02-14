@@ -2,7 +2,7 @@
 
 #include "ui/screenplay_text_view.h"
 
-#include <business_layer/model/screenplay/screenplay_text_model.h>
+#include <business_layer/model/screenplay/text/screenplay_text_model.h>
 
 #include <QApplication>
 #include <QFileDialog>

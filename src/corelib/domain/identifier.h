@@ -14,7 +14,7 @@ class Identifier
 {
 public:
     Identifier();
-    Identifier(int _id, int _version = 0);
+    explicit Identifier(int _id, int _version = 0);
 
 public:
     /**

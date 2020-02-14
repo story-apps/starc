@@ -3,6 +3,9 @@
 #include <QVector>
 
 
+namespace BusinessLayer
+{
+
 class AbstractModelItem::Implementation
 {
 public:
@@ -99,3 +102,5 @@ AbstractModelItem* AbstractModelItem::childAt(int _index) const
 {
     return d->children.value(_index, nullptr);
 }
+
+} // namespace BusinessLayer

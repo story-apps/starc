@@ -26,7 +26,7 @@ public:
     /**
      * @brief Уникальный идентификатор элемента
      */
-    QUuid uuid() const;
+    const QUuid& uuid() const;
 
     /**
      * @brief Иконка элемента
@@ -36,13 +36,13 @@ public:
     /**
      * @brief Название элемента
      */
-    QString name() const;
+    const QString& name() const;
     void setName(const QString& _name);
 
     /**
      * @brief Цвет элемента
      */
-    QColor color() const;
+    const QColor& color() const;
 
     /**
      * @brief Переопределяем интерфейс для получения данных модели по роли

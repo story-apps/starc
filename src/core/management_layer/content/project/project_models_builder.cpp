@@ -6,7 +6,7 @@
 #include <business_layer/model/screenplay/screenplay_title_page_model.h>
 #include <business_layer/model/screenplay/screenplay_synopsis_model.h>
 #include <business_layer/model/screenplay/screenplay_outline_model.h>
-#include <business_layer/model/screenplay/screenplay_text_model.h>
+#include <business_layer/model/screenplay/text/screenplay_text_model.h>
 #include <business_layer/model/text/text_model.h>
 
 #include <domain/document_object.h>
