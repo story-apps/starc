@@ -72,7 +72,7 @@ bool CompleterTextEdit::complete(QAbstractItemModel* _model, const QString& _com
     //
     const bool isNewModel = d->completer->model() != _model;
     const bool isOldModelChanged = !isNewModel
-                                   && d->completer->model()->rowCount() == _model->rowCount();
+                                   && d->completer->model()->rowCount() != _model->rowCount();
     if (isNewModel || isOldModelChanged) {
         d->completer->setModel(_model);
         d->completer->setModelSorting(QCompleter::UnsortedModel);
@@ -101,10 +101,9 @@ bool CompleterTextEdit::complete(QAbstractItemModel* _model, const QString& _com
     cursor.movePosition(QTextCursor::PreviousCharacter, QTextCursor::MoveAnchor, _completionPrefix.length());
     QRect rect = cursorRect(cursor);
     rect.moveLeft(rect.left() + verticalScrollBar()->width() + viewportMargins().left());
-    rect.moveTop(rect.top() + QFontMetricsF(currentCharFormat().font()).height());
-    rect.setWidth(
-                d->completer->popup()->sizeHintForColumn(0)
-                + d->completer->popup()->verticalScrollBar()->sizeHint().width());
+    rect.moveTop(rect.top() + static_cast<int>(cursor.block().layout()->boundingRect().height()));
+    rect.setWidth(d->completer->popup()->sizeHintForColumn(0)
+                  + d->completer->popup()->verticalScrollBar()->sizeHint().width());
     d->completer->showCompleter(rect);
     emit popupShowed();
     return true;

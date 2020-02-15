@@ -48,6 +48,7 @@ ScreenplayTextView::Implementation::Implementation(QWidget* _parent)
 
     connect(screenplayText, &CompleterTextEdit::textChanged, [this] {
         if (screenplayText->toPlainText().isEmpty()) {
+            screenplayText->closeCompleter();
             return;
         }
 

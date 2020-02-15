@@ -144,7 +144,7 @@ QString ScreenplayTextModelSceneItem::toXml() const
         xml += QString("<%1><![CDATA[%2]]></%1>").arg(kStampTag, TextHelper::toHtmlEscaped(d->stamp));
     }
     if (d->plannedDuration.has_value()) {
-        xml += QString("<%1>%2</%1>").arg(kPlannedDurationTag, QString::number(d->plannedDuration.value()));
+        xml += QString("<%1>%2</%1>").arg(kPlannedDurationTag, QString::number(*d->plannedDuration));
     }
     xml.append(QString("<%1>").arg(kContentTag));
     for (int childIndex = 0; childIndex < childCount(); ++childIndex) {

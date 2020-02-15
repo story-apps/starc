@@ -2,6 +2,8 @@
 
 #include <ui/design_system/design_system.h>
 
+#include <utils/helpers/text_helper.h>
+
 #include <QPainter>
 
 
@@ -88,5 +90,8 @@ QSize TreeDelegate::sizeHint(const QStyleOptionViewItem& _option, const QModelIn
     Q_UNUSED(_option)
     Q_UNUSED(_index)
 
-    return {50, static_cast<int>(Ui::DesignSystem::treeOneLineItem().height())};
+    return { static_cast<int>(Ui::DesignSystem::treeOneLineItem().margins().left())
+                + TextHelper::fineTextWidth(_index.data().toString(), Ui::DesignSystem::font().subtitle2())
+                + static_cast<int>(Ui::DesignSystem::treeOneLineItem().margins().right()),
+             static_cast<int>(Ui::DesignSystem::treeOneLineItem().height()) };
 }

@@ -16,13 +16,13 @@ void SyntaxHighlighterPrivate::applyFormatChanges()
 
     QTextLayout *layout = currentBlock.layout();
 
-    QList<QTextLayout::FormatRange> ranges = layout->additionalFormats();
+    QVector<QTextLayout::FormatRange> ranges = layout->formats();
 
     const int preeditAreaStart = layout->preeditAreaPosition();
     const int preeditAreaLength = layout->preeditAreaText().length();
 
     if (preeditAreaLength != 0) {
-        QList<QTextLayout::FormatRange>::Iterator it = ranges.begin();
+        auto it = ranges.begin();
         while (it != ranges.end()) {
             if (it->start >= preeditAreaStart
                 && it->start + it->length <= preeditAreaStart + preeditAreaLength) {
@@ -68,7 +68,7 @@ void SyntaxHighlighterPrivate::applyFormatChanges()
     }
 
     if (formatsChanged) {
-        layout->setAdditionalFormats(ranges);
+        layout->setFormats(ranges);
         doc->markContentsDirty(currentBlock.position(), currentBlock.length());
     }
 }
@@ -135,19 +135,7 @@ void SyntaxHighlighterPrivate::reformatBlocks(int from, int charsRemoved, int ch
 
     bool forceHighlightOfNextBlock = false;
 
-    int processEventsCounter = 0;
-    const int COUNTER_LIMIT = 3;
     while (block.isValid() && (block.position() < endPosition || forceHighlightOfNextBlock)) {
-        //
-        // Даём выполниться накопившимсяы событиям через каждые COUNTER_LIMIT абзацев
-        //
-        if (processEventsCounter == COUNTER_LIMIT) {
-            QApplication::processEvents();
-            processEventsCounter = 0;
-        } else {
-            ++processEventsCounter;
-        }
-
         const int stateBeforeHighlight = block.userState();
 
         reformatBlock(block);

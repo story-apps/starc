@@ -208,7 +208,7 @@ void ScreenplayTextModelTextItem::Implementation::updateXml()
     xml += QString("<%1%2>")
            .arg(toString(type),
                 (alignment.has_value() && alignment->testFlag(Qt::AlignHorizontal_Mask)
-                 ? QString(" %1=\"%2\"").arg(kAlignAttribute, toString(alignment.value()))
+                 ? QString(" %1=\"%2\"").arg(kAlignAttribute, toString(*alignment))
                  : ""));
     if (bookmark.has_value()) {
         xml += QString("<%1 %2=\"%3\"><![CDATA[%4]]></%1>")

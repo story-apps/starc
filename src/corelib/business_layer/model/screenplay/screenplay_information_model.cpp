@@ -54,9 +54,9 @@ ScreenplayInformationModel::ScreenplayInformationModel(QObject* _parent)
     connect(this, &ScreenplayInformationModel::nameChanged, this, &ScreenplayInformationModel::updateDocumentContent);
     connect(this, &ScreenplayInformationModel::loglineChanged, this, &ScreenplayInformationModel::updateDocumentContent);
     connect(this, &ScreenplayInformationModel::headerChanged, this, &ScreenplayInformationModel::updateDocumentContent);
-    connect(this, &ScreenplayInformationModel::printHeaderOnTitlePage, this, &ScreenplayInformationModel::updateDocumentContent);
+    connect(this, &ScreenplayInformationModel::printHeaderOnTitlePageChanged, this, &ScreenplayInformationModel::updateDocumentContent);
     connect(this, &ScreenplayInformationModel::footerChanged, this, &ScreenplayInformationModel::updateDocumentContent);
-    connect(this, &ScreenplayInformationModel::printFooterOnTitlePage, this, &ScreenplayInformationModel::updateDocumentContent);
+    connect(this, &ScreenplayInformationModel::printFooterOnTitlePageChanged, this, &ScreenplayInformationModel::updateDocumentContent);
     connect(this, &ScreenplayInformationModel::scenesNumbersPrefixChanged, this, &ScreenplayInformationModel::updateDocumentContent);
     connect(this, &ScreenplayInformationModel::scenesNumberingStartAtChanged, this, &ScreenplayInformationModel::updateDocumentContent);
 }

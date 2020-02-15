@@ -143,21 +143,21 @@ void Completer::showCompleter(const QRect& _rect)
     // Отобразим
     //
     complete(_rect);
-    d->popup->move(_rect.topLeft());
+    popup()->move(_rect.topLeft());
 
     //
     // Анимируем размер попапа
+    // FIXME: разобраться с проблемами backing store в маке
     //
-    const int finalHeight = std::min(maxVisibleItems(), completionCount())
-                            * Ui::DesignSystem::treeOneLineItem().height();
+#ifndef Q_OS_MAC
+    const int finalHeight = static_cast<int>(std::min(maxVisibleItems(), completionCount())
+                                             * Ui::DesignSystem::treeOneLineItem().height());
     if (d->popupHeightAnimation.state() == QVariantAnimation::Stopped) {
-        d->popup->resize(d->popup->width() + Ui::DesignSystem::treeOneLineItem().margins().right(),
-                         d->popupHeightAnimation.startValue().toInt());
+        d->popup->resize(d->popup->width(), d->popupHeightAnimation.startValue().toInt());
         d->popupHeightAnimation.setEndValue(finalHeight);
         d->popupHeightAnimation.start();
     } else {
-        d->popup->resize(d->popup->width() + Ui::DesignSystem::treeOneLineItem().margins().right(),
-                         d->popupHeightAnimation.currentValue().toInt());
+        d->popup->resize(d->popup->width(), d->popupHeightAnimation.currentValue().toInt());
         if (d->popupHeightAnimation.endValue().toInt() != finalHeight) {
             d->popupHeightAnimation.stop();
             d->popupHeightAnimation.setStartValue(d->popupHeightAnimation.currentValue());
@@ -165,6 +165,7 @@ void Completer::showCompleter(const QRect& _rect)
             d->popupHeightAnimation.start();
         }
     }
+#endif
 }
 
 void Completer::closeCompleter()
