@@ -32,7 +32,7 @@ StackWidget::Implementation::Implementation()
     fadeAnimation.setStartValue(0.0);
     fadeAnimation.setEndValue(1.0);
 
-    slideAnimation.setDuration(240);
+    slideAnimation.setDuration(180);
     slideAnimation.setEasingCurve(QEasingCurve::InOutQuad);
 }
 

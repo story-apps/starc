@@ -2,6 +2,8 @@
 
 #include <ui/abstract_navigator.h>
 
+class QAbstractItemModel;
+
 
 namespace Ui
 {
@@ -13,6 +15,16 @@ class ScreenplayTextStructureView : public AbstractNavigator
 public:
     explicit ScreenplayTextStructureView(QWidget* _parent = nullptr);
     ~ScreenplayTextStructureView() override;
+
+    /**
+     * @brief Задать заголовок навигатора
+     */
+    void setTitle(const QString& _title) override;
+
+    /**
+     * @brief Задать модель сцен сценария
+     */
+    void setModel(QAbstractItemModel* _model);
 
 protected:
     /**

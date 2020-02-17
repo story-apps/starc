@@ -305,6 +305,11 @@ ScreenplayTextModelTextItem::ScreenplayTextModelTextItem(const QDomElement& _nod
     d->updateXml();
 }
 
+const QString& ScreenplayTextModelTextItem::text() const
+{
+    return d->text;
+}
+
 ScreenplayTextModelTextItem::~ScreenplayTextModelTextItem() = default;
 
 QVariant ScreenplayTextModelTextItem::data(int _role) const

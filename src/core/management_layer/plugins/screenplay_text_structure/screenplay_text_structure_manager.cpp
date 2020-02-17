@@ -79,6 +79,7 @@ void ScreenplayTextStructureManager::setModel(BusinessLayer::AbstractModel* _mod
     // Настраиваем соединения с новой моделью
     //
     if (d->model != nullptr) {
+        d->view->setModel(d->model);
 //        d->view->setName(d->model->name());
 //        d->view->setText(d->model->text());
 

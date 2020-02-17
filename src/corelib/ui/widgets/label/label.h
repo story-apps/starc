@@ -168,12 +168,12 @@ protected:
 
 
 /**
- * @brief Текстовая метка со шрифтом iconSmall
+ * @brief Текстовая метка со шрифтом iconMid
  */
-class IconsSmallLabel : public AbstractLabel
+class IconsMidLabel : public AbstractLabel
 {
 public:
-    explicit IconsSmallLabel(QWidget* _parent = nullptr);
+    explicit IconsMidLabel(QWidget* _parent = nullptr);
 
 protected:
     const QFont& textFont() const override;

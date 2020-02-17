@@ -119,6 +119,25 @@ ScreenplayTextModelSceneItem::~ScreenplayTextModelSceneItem() = default;
 
 QVariant ScreenplayTextModelSceneItem::data(int _role) const
 {
+    switch (_role) {
+        case Qt::DisplayRole: {
+            for (int childIndex = 0; childIndex < childCount(); ++childIndex) {
+                auto child = childAt(childIndex);
+                if (child->type() != ScreenplayTextModelItemType::Text) {
+                    continue;
+                }
+
+                auto childTextItem = static_cast<ScreenplayTextModelTextItem*>(child);
+//                if (childTextItem->textType() )
+                return childTextItem->text();
+            }
+        }
+
+        case Qt::DecorationRole: {
+            return "\uf21a";
+        }
+    }
+
     return {};
 }
 

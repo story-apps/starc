@@ -211,12 +211,12 @@ const QFont& OverlineLabel::textFont() const
 // ****
 
 
-IconsSmallLabel::IconsSmallLabel(QWidget* _parent)
+IconsMidLabel::IconsMidLabel(QWidget* _parent)
     : AbstractLabel(_parent)
 {
 }
 
-const QFont& IconsSmallLabel::textFont() const
+const QFont& IconsMidLabel::textFont() const
 {
-    return Ui::DesignSystem::font().iconsSmall();
+    return Ui::DesignSystem::font().iconsMid();
 }

@@ -16,6 +16,11 @@ class AbstractNavigator : public Widget
 public:
     explicit AbstractNavigator(QWidget* _parent = nullptr) : Widget(_parent) {}
 
+    /**
+     * @brief Задать заголовок навигатора
+     */
+    virtual void setTitle(const QString& _title) = 0;
+
 signals:
     /**
      * @brief Пользователь хочет выйти из навигатора

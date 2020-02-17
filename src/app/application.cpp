@@ -43,11 +43,8 @@ Application::Application(int& _argc, char** _argv)
     : QApplication(_argc, _argv),
       d(new Implementation)
 {
-    setApplicationName("starc");
-    //
-    // FIXME:
-    //
-    setOrganizationName("DimkaNovikov labs.");
+    setApplicationName("Starc");
+    setOrganizationName("Story Architect");
     setOrganizationDomain("starc.app");
 
     //

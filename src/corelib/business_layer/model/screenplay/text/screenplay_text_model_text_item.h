@@ -19,6 +19,11 @@ public:
     ~ScreenplayTextModelTextItem() override;
 
     /**
+     * @brief Получить текст элемента
+     */
+    const QString& text() const;
+
+    /**
      * @brief Определяем интерфейс получения данных сцены
      */
     QVariant data(int _role) const override;

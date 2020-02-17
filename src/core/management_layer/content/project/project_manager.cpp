@@ -559,6 +559,10 @@ void ProjectManager::showNavigator(const QModelIndex& _itemIndex, const QString&
     }
 
     auto navigatorView = qobject_cast<Ui::AbstractNavigator*>(view);
+    //
+    // FIXME: Надо как-то более универсально сделать этот момент
+    //
+    navigatorView->setTitle(item->parent()->name());
     connect(navigatorView, &Ui::AbstractNavigator::backPressed,
             d->navigator, &Ui::ProjectNavigator::showProjectNavigator,
             Qt::UniqueConnection);
