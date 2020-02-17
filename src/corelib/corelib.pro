@@ -40,7 +40,8 @@ SOURCES += \
     business_layer/model/structure/structure_model.cpp \
     business_layer/model/structure/structure_model_item.cpp \
     business_layer/model/text/text_model.cpp \
-    business_layer/templates/screenplay_template.cpp \
+    business_layer/templates/script_template.cpp \
+    business_layer/templates/script_template_facade.cpp \
     data_layer/database.cpp \
     data_layer/mapper/abstract_mapper.cpp \
     data_layer/mapper/document_change_mapper.cpp \
@@ -140,7 +141,8 @@ HEADERS += \
     business_layer/model/structure/structure_model.h \
     business_layer/model/structure/structure_model_item.h \
     business_layer/model/text/text_model.h \
-    business_layer/templates/screenplay_template.h \
+    business_layer/templates/script_template.h \
+    business_layer/templates/script_template_facade.h \
     corelib_global.h \
     data_layer/database.h \
     data_layer/mapper/abstract_mapper.h \

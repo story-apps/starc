@@ -20,13 +20,13 @@ public:
 
 
     IconsMidLabel* backIcon = nullptr;
-    Subtitle1Label* backText = nullptr;
+    Subtitle2Label* backText = nullptr;
     Tree* content = nullptr;
 };
 
 ScreenplayTextStructureView::Implementation::Implementation(QWidget* _parent)
     : backIcon(new IconsMidLabel(_parent)),
-      backText(new Subtitle1Label(_parent)),
+      backText(new Subtitle2Label(_parent)),
       content(new Tree(_parent))
 {
     backIcon->setText("\uf141");
@@ -82,12 +82,16 @@ void ScreenplayTextStructureView::designSystemChangeEvent(DesignSystemChangeEven
     Widget::designSystemChangeEvent(_event);
 
     setBackgroundColor(DesignSystem::color().primary());
-    for (auto widget : QVector<Widget*>{d->backIcon, d->backText, d->content}) {
+    auto backTextColor = DesignSystem::color().onPrimary();
+    backTextColor.setAlphaF(Ui::DesignSystem::inactiveTextOpacity());
+    for (auto widget : QVector<Widget*>{ d->backIcon, d->backText }) {
         widget->setBackgroundColor(DesignSystem::color().primary());
-        widget->setTextColor(DesignSystem::color().onPrimary());
+        widget->setTextColor(backTextColor);
     }
+    d->content->setBackgroundColor(DesignSystem::color().primary());
+    d->content->setTextColor(DesignSystem::color().onPrimary());
 
-    d->backIcon->setContentsMargins(Ui::DesignSystem::layout().px16(),
+    d->backIcon->setContentsMargins(Ui::DesignSystem::layout().px12(),
                                     Ui::DesignSystem::layout().px8(),
                                     Ui::DesignSystem::layout().px4(),
                                     Ui::DesignSystem::layout().px8());

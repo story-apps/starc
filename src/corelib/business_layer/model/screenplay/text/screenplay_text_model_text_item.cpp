@@ -1,6 +1,6 @@
 #include "screenplay_text_model_text_item.h"
 
-#include <business_layer/templates/screenplay_template.h>
+#include <business_layer/templates/script_template.h>
 
 #include <utils/helpers/string_helper.h>
 #include <utils/helpers/text_helper.h>
@@ -57,7 +57,7 @@ public:
     /**
      * @brief Тип параграфа
      */
-    ScreenplayParagraphType type = ScreenplayParagraphType::UnformattedText;
+    ScriptParagraphType type = ScriptParagraphType::UnformattedText;
 
     /**
      * @brief Выравнивание текста в блоке
@@ -121,8 +121,8 @@ public:
 
 ScreenplayTextModelTextItem::Implementation::Implementation(const QDomElement& _node)
 {
-    type = screenplayParagraphTypeFromString(_node.tagName());
-    Q_ASSERT(type != ScreenplayParagraphType::Undefined);
+    type = scriptParagraphTypeFromString(_node.tagName());
+    Q_ASSERT(type != ScriptParagraphType::Undefined);
 
     if (_node.hasAttribute(kAlignAttribute)) {
         alignment = alignmentFromString(_node.attribute(kAlignAttribute));
