@@ -2,6 +2,8 @@
 
 #include "completer.h"
 
+#include <ui/design_system/design_system.h>
+
 #include <QAbstractItemView>
 #include <QScrollBar>
 
@@ -68,16 +70,11 @@ bool CompleterTextEdit::complete(QAbstractItemModel* _model, const QString& _com
     }
 
     //
-    // Настроим завершателя, если необходимо
+    // Настроим завершателя
     //
-    const bool isNewModel = d->completer->model() != _model;
-    const bool isOldModelChanged = !isNewModel
-                                   && d->completer->model()->rowCount() != _model->rowCount();
-    if (isNewModel || isOldModelChanged) {
-        d->completer->setModel(_model);
-        d->completer->setModelSorting(QCompleter::UnsortedModel);
-        d->completer->setCaseSensitivity(Qt::CaseInsensitive);
-    }
+    d->completer->setModel(_model);
+    d->completer->setModelSorting(QCompleter::UnsortedModel);
+    d->completer->setCaseSensitivity(Qt::CaseInsensitive);
     d->completer->setCompletionPrefix(_completionPrefix);
 
     //
@@ -101,9 +98,12 @@ bool CompleterTextEdit::complete(QAbstractItemModel* _model, const QString& _com
     cursor.movePosition(QTextCursor::PreviousCharacter, QTextCursor::MoveAnchor, _completionPrefix.length());
     QRect rect = cursorRect(cursor);
     rect.moveLeft(rect.left() + verticalScrollBar()->width() + viewportMargins().left());
-    rect.moveTop(rect.top() + static_cast<int>(cursor.block().layout()->boundingRect().height()));
-    rect.setWidth(d->completer->popup()->sizeHintForColumn(0)
-                  + d->completer->popup()->verticalScrollBar()->sizeHint().width());
+    rect.moveTop(rect.top()
+                 + static_cast<int>(cursor.block().layout()->boundingRect().height())
+                 + Ui::DesignSystem::layout().px16());
+    rect.setWidth(static_cast<int>(Ui::DesignSystem::treeOneLineItem().margins().left())
+                  + d->completer->popup()->sizeHintForColumn(0)
+                  + static_cast<int>(Ui::DesignSystem::treeOneLineItem().margins().right()));
     d->completer->showCompleter(rect);
     emit popupShowed();
     return true;
