@@ -11,8 +11,22 @@ class StackWidget : public Widget
     Q_OBJECT
 
 public:
+    /**
+     * @brief Тип анимации контента
+     */
+    enum class AnimationType {
+        Fade,
+        Slide
+    };
+
+public:
     explicit StackWidget(QWidget* _parent = nullptr);
     ~StackWidget() override;
+
+    /**
+      * @brief Установить тип анимации виджета
+      */
+    void setAnimationType(AnimationType _type);
 
     /**
      * @brief Сделать заданный виджет текущим

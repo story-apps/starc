@@ -53,6 +53,8 @@ ProjectNavigator::ProjectNavigator(QWidget* _parent)
     : StackWidget(_parent),
       d(new Implementation(this))
 {
+    setAnimationType(AnimationType::Slide);
+
     QHBoxLayout* filterLayout = new QHBoxLayout;
     filterLayout->setSpacing(0);
     filterLayout->setContentsMargins({});
