@@ -1,5 +1,7 @@
 #include "project_navigator.h"
 
+#include "project_tree_delegate.h"
+
 #include <business_layer/model/structure/structure_model.h>
 #include <business_layer/model/structure/structure_model_item.h>
 
@@ -24,13 +26,17 @@ class ProjectNavigator::Implementation
 public:
     explicit Implementation(QWidget* _parent);
 
+    Widget* navigatorPage = nullptr;
     Tree* tree = nullptr;
+    ProjectTreeDelegate* treeDelegate = nullptr;
     ContextMenu* contexMenu = nullptr;
     TextField* filter = nullptr;
 };
 
 ProjectNavigator::Implementation::Implementation(QWidget* _parent)
-    : tree(new Tree(_parent)),
+    : navigatorPage(new Widget(_parent)),
+      tree(new Tree(_parent)),
+      treeDelegate(new ProjectTreeDelegate(tree)),
       contexMenu(new ContextMenu(tree)),
       filter(new TextField(_parent))
 {
@@ -44,20 +50,23 @@ ProjectNavigator::Implementation::Implementation(QWidget* _parent)
 
 
 ProjectNavigator::ProjectNavigator(QWidget* _parent)
-    : Widget(_parent),
+    : StackWidget(_parent),
       d(new Implementation(this))
 {
     QHBoxLayout* filterLayout = new QHBoxLayout;
     filterLayout->setSpacing(0);
     filterLayout->setContentsMargins({});
 
-    QVBoxLayout* layout = new QVBoxLayout(this);
+    QVBoxLayout* layout = new QVBoxLayout;
     layout->setContentsMargins({});
     layout->setSpacing(0);
     layout->addWidget(d->tree);
     layout->addWidget(d->filter);
+    d->navigatorPage->setLayout(layout);
+    showProjectNavigator();
 
     connect(d->tree, &Tree::currentIndexChanged, this, &ProjectNavigator::itemSelected);
+    connect(d->tree, &Tree::doubleClicked, this, &ProjectNavigator::itemDoubleClicked);
     connect(d->tree, &Tree::customContextMenuRequested, this, [this] (const QPoint& _pos) {
         //
         // Уведомляем менеджер, что необходимо обновить модель контекстного меню
@@ -101,6 +110,16 @@ QModelIndex ProjectNavigator::currentIndex() const
     return d->tree->currentIndex();
 }
 
+void ProjectNavigator::showProjectNavigator()
+{
+    setCurrentWidget(d->navigatorPage);
+}
+
+bool ProjectNavigator::isProjectNavigatorShown() const
+{
+    return currentWidget() == d->navigatorPage;
+}
+
 void ProjectNavigator::updateTranslations()
 {
     d->filter->setLabel(tr("Filter"));
@@ -112,12 +131,11 @@ void ProjectNavigator::designSystemChangeEvent(DesignSystemChangeEvent* _event)
 {
     Widget::designSystemChangeEvent(_event);
 
-    auto layout = this->layout();
-    layout->setContentsMargins(0, 0, 0, static_cast<int>(Ui::DesignSystem::layout().px24()));
-
     setBackgroundColor(DesignSystem::color().primary());
+    d->navigatorPage->setBackgroundColor(DesignSystem::color().primary());
     d->tree->setBackgroundColor(DesignSystem::color().primary());
     d->tree->setTextColor(DesignSystem::color().onPrimary());
+    d->tree->setItemDelegate(d->treeDelegate);
     d->contexMenu->setBackgroundColor(DesignSystem::color().background());
     d->contexMenu->setTextColor(DesignSystem::color().onBackground());
     d->filter->setBackgroundColor(DesignSystem::color().primary());

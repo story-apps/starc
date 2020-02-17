@@ -15,6 +15,7 @@
 
 #include <domain/document_object.h>
 
+#include <ui/abstract_navigator.h>
 #include <ui/design_system/design_system.h>
 #include <ui/project/create_document_dialog.h>
 #include <ui/project/project_navigator.h>
@@ -266,9 +267,6 @@ ProjectManager::ProjectManager(QObject* _parent, QWidget* _parentWidget)
             const bool isActive = view.mimeType == views.first().mimeType;
             d->toolBar->addView(view.mimeType, view.icon, isActive);
         }
-        //
-        // ... TODO: настроим возможность перехода в навигатор
-        //
 
         //
         // Откроем документ на редактирование в первом из представлений
@@ -278,6 +276,19 @@ ProjectManager::ProjectManager(QObject* _parent, QWidget* _parentWidget)
             return;
         }
         showView(_index, views.first().mimeType);
+    });
+    //
+    // Отображаем навигатор выбранного элемента
+    //
+    connect(d->navigator, &Ui::ProjectNavigator::itemDoubleClicked, this,
+            [this] (const QModelIndex& _index)
+    {
+        if (!d->projectStructureModel->data(
+                _index, static_cast<int>(BusinessLayer::StructureModelDataRole::IsNavigatorAvailable)).toBool()) {
+            return;
+        }
+
+        showNavigator(_index);
     });
     connect(d->navigator, &Ui::ProjectNavigator::contextMenuUpdateRequested, this,
             [this] (const QModelIndex& _index) { d->updateNavigatorContextMenu(_index); });
@@ -497,6 +508,61 @@ void ProjectManager::showView(const QModelIndex& _itemIndex, const QString& _vie
         return;
     }
     d->view->setCurrentWidget(view);
+
+    //
+    // Настроим возможность перехода в навигатор
+    //
+    const auto navigator = d->pluginBuilder.navigatorMimeTypeFor(_viewMimeType);
+    d->projectStructureModel->setNavigatorAvailableFor(_itemIndex, !navigator.isEmpty());
+
+    //
+    // Если в данный момент отображён кастомный навигатов, откроем навигатор соответствующий редактору
+    //
+    if (!d->navigator->isProjectNavigatorShown()) {
+        showNavigator(_itemIndex, _viewMimeType);
+    }
 }
 
+void ProjectManager::showNavigator(const QModelIndex& _itemIndex, const QString& _viewMimeType)
+{
+    if (!_itemIndex.isValid()) {
+        d->navigator->showProjectNavigator();
+        return;
+    }
+
+    const auto item = d->projectStructureModel->itemForIndex(_itemIndex);
+
+    //
+    // Определим модель
+    //
+    auto document = DataStorageLayer::StorageFacade::documentStorage()->document(item->uuid());
+    auto model =
+            document->type() == Domain::DocumentObjectType::Project
+            ? d->projectInformationModel
+            : d->modelBuilder.modelFor(document);
+    if (model == nullptr) {
+        d->navigator->showProjectNavigator();
+        return;
+    }
+
+    //
+    // Определим представление и отобразим
+    //
+    const auto viewMimeType = !_viewMimeType.isEmpty()
+                              ? _viewMimeType
+                              : d->toolBar->currentViewMimeType();
+    const auto navigatorMimeType = d->pluginBuilder.navigatorMimeTypeFor(viewMimeType);
+    auto view = d->pluginBuilder.activateView(navigatorMimeType, model);
+    if (view == nullptr) {
+        d->navigator->showProjectNavigator();
+        return;
+    }
+
+    auto navigatorView = qobject_cast<Ui::AbstractNavigator*>(view);
+    connect(navigatorView, &Ui::AbstractNavigator::backPressed,
+            d->navigator, &Ui::ProjectNavigator::showProjectNavigator,
+            Qt::UniqueConnection);
+    d->navigator->setCurrentWidget(view);
 }
+
+} // namespace ManagementLayer

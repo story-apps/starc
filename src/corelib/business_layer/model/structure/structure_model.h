@@ -12,6 +12,15 @@ namespace BusinessLayer
 
 class StructureModelItem;
 
+
+/**
+ * @brief Список ролей дополнительных данных для навигатора
+ */
+enum class StructureModelDataRole {
+    IsNavigatorAvailable = Qt::UserRole + 1
+};
+
+
 /**
  * @brief Модель структуры документов проекта
  */
@@ -65,9 +74,9 @@ public:
     QModelIndex index(int _row, int _column, const QModelIndex& _parent = {}) const override;
     QModelIndex parent(const QModelIndex& _child) const override;
     int columnCount( const QModelIndex& _parent = {}) const override;
-    int rowCount(const QModelIndex &_parent = {}) const override;
-    Qt::ItemFlags flags(const QModelIndex &_index) const override;
-    QVariant data(const QModelIndex &_index, int _role) const override;
+    int rowCount(const QModelIndex& _parent = {}) const override;
+    Qt::ItemFlags flags(const QModelIndex& _index) const override;
+    QVariant data(const QModelIndex& _index, int _role) const override;
     //! Реализация перетаскивания элементов
     bool canDropMimeData(const QMimeData* _data, Qt::DropAction _action, int _row, int _column, const QModelIndex& _parent = {}) const override;
     bool dropMimeData(const QMimeData* _data, Qt::DropAction _action, int _row, int _column, const QModelIndex& _parent = {}) override;
@@ -91,6 +100,11 @@ public:
      * @brief Задать имя элемента
      */
     void setItemName(const QModelIndex& _index, const QString& _name);
+
+    /**
+     * @brief Задать возможность перехода в навигатор для заданного индекса
+     */
+    void setNavigatorAvailableFor(const QModelIndex& _index, bool isAvailable);
 
 signals:
     /**

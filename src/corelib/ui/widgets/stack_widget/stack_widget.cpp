@@ -82,6 +82,11 @@ void StackWidget::setCurrentWidget(QWidget *widget)
     }
 }
 
+QWidget* StackWidget::currentWidget() const
+{
+    return d->currentWidget;
+}
+
 void StackWidget::paintEvent(QPaintEvent *_event)
 {
     Widget::paintEvent(_event);

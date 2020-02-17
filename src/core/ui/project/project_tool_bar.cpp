@@ -40,12 +40,25 @@ void ProjectToolBar::addView(const QString& _mimeType, const QString& _icon, boo
     viewAction->setText(_icon);
     viewAction->setCheckable(true);
     viewAction->setChecked(_isActive);
+    viewAction->setData(_mimeType);
     addAction(viewAction);
     connect(viewAction, &QAction::toggled, this, [this, _mimeType] {
         emit viewPressed(_mimeType);
     });
 
     update();
+}
+
+QString ProjectToolBar::currentViewMimeType() const
+{
+    for (int actionIndex = 1; actionIndex < actions().size(); ++actionIndex) {
+        const auto action = actions().at(actionIndex);
+        if (action->isChecked()) {
+            return action->data().toString();
+        }
+    }
+
+    return {};
 }
 
 void ProjectToolBar::designSystemChangeEvent(DesignSystemChangeEvent* _event)

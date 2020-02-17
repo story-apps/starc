@@ -25,6 +25,11 @@ public:
      */
     void addView(const QString& _mimeType, const QString& _icon, bool _isActive = false);
 
+    /**
+     * @brief Получить майм-тип текущего представления
+     */
+    QString currentViewMimeType() const;
+
 signals:
     /**
      * @brief Пользователь хочет открыть меню

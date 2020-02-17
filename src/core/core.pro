@@ -58,6 +58,7 @@ SOURCES += \
     ui/project/create_document_dialog.cpp \
     ui/project/project_navigator.cpp \
     ui/project/project_tool_bar.cpp \
+    ui/project/project_tree_delegate.cpp \
     ui/project/project_view.cpp \
     ui/projects/create_project_dialog.cpp \
     ui/projects/projects_cards.cpp \
@@ -99,6 +100,7 @@ HEADERS += \
     ui/project/create_document_dialog.h \
     ui/project/project_navigator.h \
     ui/project/project_tool_bar.h \
+    ui/project/project_tree_delegate.h \
     ui/project/project_view.h \
     ui/projects/create_project_dialog.h \
     ui/projects/projects_cards.h \

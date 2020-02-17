@@ -46,6 +46,8 @@ Tree::Tree(QWidget* _parent)
     layout->setSpacing(0);
     layout->addWidget(d->tree);
 
+    connect(d->tree, &QTreeView::doubleClicked, this, &Tree::doubleClicked);
+
     designSystemChangeEvent(nullptr);
 }
 
@@ -86,6 +88,11 @@ void Tree::setDragDropEnabled(bool _enabled)
     d->tree->setDragDropMode(_enabled ? QAbstractItemView::DragDrop : QAbstractItemView::NoDragDrop);
     d->tree->setDropIndicatorShown(_enabled);
     d->tree->setSelectionMode(_enabled ? QAbstractItemView::ExtendedSelection : QAbstractItemView::SingleSelection);
+}
+
+void Tree::setItemDelegate(QAbstractItemDelegate* _delegate)
+{
+    d->tree->setItemDelegate(_delegate);
 }
 
 void Tree::setCurrentIndex(const QModelIndex& _index)
@@ -142,6 +149,7 @@ void Tree::designSystemChangeEvent(DesignSystemChangeEvent* _event)
     palette.setColor(QPalette::HighlightedText, Ui::DesignSystem::color().secondary());
     d->tree->setPalette(palette);
     d->tree->setIndentation(static_cast<int>(Ui::DesignSystem::tree().indicatorWidth()));
+    auto lastDelegate = d->tree->itemDelegate();
     d->tree->setItemDelegate(nullptr);
-    d->tree->setItemDelegate(d->delegate);
+    d->tree->setItemDelegate(lastDelegate);
 }

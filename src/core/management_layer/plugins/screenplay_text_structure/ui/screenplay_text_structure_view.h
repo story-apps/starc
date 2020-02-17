@@ -1,12 +1,12 @@
 #pragma once
 
-#include <ui/widgets/widget/widget.h>
+#include <ui/abstract_navigator.h>
 
 
 namespace Ui
 {
 
-class ScreenplayTextStructureView : public Widget
+class ScreenplayTextStructureView : public AbstractNavigator
 {
     Q_OBJECT
 

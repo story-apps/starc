@@ -1,6 +1,6 @@
 #pragma once
 
-#include <ui/widgets/widget/widget.h>
+#include <ui/widgets/stack_widget/stack_widget.h>
 
 class QAbstractItemModel;
 
@@ -11,7 +11,7 @@ namespace Ui
 /**
  * @brief Навигатор по структуре проекта
  */
-class ProjectNavigator : public Widget
+class ProjectNavigator : public StackWidget
 {
     Q_OBJECT
 
@@ -44,11 +44,26 @@ public:
      */
     QModelIndex currentIndex() const;
 
+    /**
+     * @brief Отобразить навигатор проекта
+     */
+    void showProjectNavigator();
+
+    /**
+     * @brief Показан ли в данный момент навигатор проекта
+     */
+    bool isProjectNavigatorShown() const;
+
 signals:
     /**
      * @brief Пользователь выбрал заданный элемент структуры
      */
     void itemSelected(const QModelIndex& _index);
+
+    /**
+     * @brief Пользователь сделал двойной клик на элементе структуры
+     */
+    void itemDoubleClicked(const QModelIndex& _index);
 
     /**
      * @brief Пользователь хочет открыть контекстное меню

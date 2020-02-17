@@ -142,12 +142,38 @@ protected:
 
 
 /**
+ * @brief Текстовая метка со шрифтом caption
+ */
+class CaptionLabel : public AbstractLabel
+{
+public:
+    explicit CaptionLabel(QWidget* _parent = nullptr);
+
+protected:
+    const QFont& textFont() const override;
+};
+
+
+/**
  * @brief Текстовая метка со шрифтом overline
  */
 class OverlineLabel : public AbstractLabel
 {
 public:
     explicit OverlineLabel(QWidget* _parent = nullptr);
+
+protected:
+    const QFont& textFont() const override;
+};
+
+
+/**
+ * @brief Текстовая метка со шрифтом iconSmall
+ */
+class IconsSmallLabel : public AbstractLabel
+{
+public:
+    explicit IconsSmallLabel(QWidget* _parent = nullptr);
 
 protected:
     const QFont& textFont() const override;

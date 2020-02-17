@@ -19,6 +19,11 @@ public:
      */
     void setCurrentWidget(QWidget* widget);
 
+    /**
+     * @brief Получить текущий виджет
+     */
+    QWidget* currentWidget() const;
+
 protected:
     /**
      * @brief Реализуем собственную отрисовку для реализации эффекста смены текущего виджета

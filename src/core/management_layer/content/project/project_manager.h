@@ -68,6 +68,12 @@ private:
      */
     void showView(const QModelIndex& _itemIndex, const QString& _viewMimeType);
 
+    /**
+     * @brief Отобразить навигатор для заданного индекса
+     * @note Если индекс невалидный, то отображается навигатор по проекту
+     */
+    void showNavigator(const QModelIndex& _itemIndex, const QString& _viewMimeType = {});
+
 private:
     class Implementation;
     QScopedPointer<Implementation> d;

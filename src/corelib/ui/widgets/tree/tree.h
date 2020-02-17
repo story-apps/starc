@@ -3,6 +3,7 @@
 #include <ui/widgets/widget/widget.h>
 
 class QAbstractItemModel;
+class QAbstractItemDelegate;
 
 
 /**
@@ -42,6 +43,11 @@ public:
     void setDragDropEnabled(bool _enabled);
 
     /**
+     * @brief Задать делегат для отрисовки элементов
+     */
+    void setItemDelegate(QAbstractItemDelegate* _delegate);
+
+    /**
      * @brief Задать текущий индекс
      */
     void setCurrentIndex(const QModelIndex& _index);
@@ -76,6 +82,11 @@ signals:
      * @brief Изменился текущий индекс
      */
     void currentIndexChanged(const QModelIndex& _index);
+
+    /**
+     * @brief Пользователь сделал двойной клик на элемента
+     */
+    void doubleClicked(const QModelIndex& _index);
 
 protected:
     /**

@@ -10,6 +10,7 @@
 #include <QDataStream>
 #include <QDomDocument>
 #include <QMimeData>
+#include <QSet>
 
 
 namespace BusinessLayer
@@ -43,7 +44,12 @@ public:
     /**
      * @brief Последние положенные в майм элементы
      */
-    mutable QVector<StructureModelItem*> m_lastMimeItems;
+    mutable QVector<StructureModelItem*> lastMimeItems;
+
+    /**
+     * @brief Список индексов для которых доступен навигатор
+     */
+    QSet<QModelIndex> navigatorAvailableIndexes;
 };
 
 StructureModel::Implementation::Implementation()
@@ -378,6 +384,17 @@ QVariant StructureModel::data(const QModelIndex& _index, int _role) const
         return {};
     }
 
+    //
+    // Кастомные данные модели
+    //
+    if (static_cast<StructureModelDataRole>(_role) == StructureModelDataRole::IsNavigatorAvailable) {
+        return d->navigatorAvailableIndexes.contains(_index);
+    }
+
+    //
+    // Данные непосредственно элемента модели
+    //
+
     auto item = itemForIndex(_index);
     if (item == nullptr) {
         return {};
@@ -438,7 +455,7 @@ bool StructureModel::dropMimeData(const QMimeData* _data, Qt::DropAction _action
     while (!stream.atEnd()) {
         QUuid itemUuid;
         stream >> itemUuid;
-        if (itemUuid != d->m_lastMimeItems[row]->uuid()) {
+        if (itemUuid != d->lastMimeItems[row]->uuid()) {
             //
             // ... если это какие-то внешние данные, то ничего не делаем
             //
@@ -459,8 +476,8 @@ bool StructureModel::dropMimeData(const QMimeData* _data, Qt::DropAction _action
     //
     if (_row == -1
         || _row == parentItem->childCount()) {
-        while (!d->m_lastMimeItems.isEmpty()) {
-            auto item = d->m_lastMimeItems.takeFirst();
+        while (!d->lastMimeItems.isEmpty()) {
+            auto item = d->lastMimeItems.takeFirst();
             auto itemIndex = indexForItem(item);
 
             if (item->parent() == parentItem
@@ -482,12 +499,12 @@ bool StructureModel::dropMimeData(const QMimeData* _data, Qt::DropAction _action
         const QModelIndex insertBeforeItemIndex = index(_row, _column, _parent);
         auto insertBeforeItem = itemForIndex(insertBeforeItemIndex);
 
-        if (d->m_lastMimeItems.contains(insertBeforeItem)) {
+        if (d->lastMimeItems.contains(insertBeforeItem)) {
             return false;
         }
 
-        while (!d->m_lastMimeItems.isEmpty()) {
-            auto item = d->m_lastMimeItems.takeFirst();
+        while (!d->lastMimeItems.isEmpty()) {
+            auto item = d->lastMimeItems.takeFirst();
             auto itemIndex = indexForItem(item);
 
             //
@@ -512,7 +529,7 @@ bool StructureModel::dropMimeData(const QMimeData* _data, Qt::DropAction _action
 
 QMimeData* StructureModel::mimeData(const QModelIndexList& _indexes) const
 {
-    d->m_lastMimeItems.clear();
+    d->lastMimeItems.clear();
 
     if (_indexes.isEmpty()) {
         return nullptr;
@@ -523,13 +540,13 @@ QMimeData* StructureModel::mimeData(const QModelIndexList& _indexes) const
     //
     for (const QModelIndex& index : _indexes) {
         if (index.isValid()) {
-            d->m_lastMimeItems << itemForIndex(index);
+            d->lastMimeItems << itemForIndex(index);
         }
     }
     //
     // ... и упорядочиваем его
     //
-    std::sort(d->m_lastMimeItems.begin(), d->m_lastMimeItems.end(),
+    std::sort(d->lastMimeItems.begin(), d->lastMimeItems.end(),
               [] (StructureModelItem* _lhs, StructureModelItem* _rhs) {
         //
         // Для элементов находящихся на одном уровне сравниваем их позиции
@@ -560,7 +577,7 @@ QMimeData* StructureModel::mimeData(const QModelIndexList& _indexes) const
     //
     QByteArray encodedData;
     QDataStream stream(&encodedData, QIODevice::WriteOnly);
-    for (const auto& item : d->m_lastMimeItems) {
+    for (const auto& item : d->lastMimeItems) {
         stream << item->uuid();
     }
 
@@ -631,6 +648,15 @@ void StructureModel::setItemName(const QModelIndex& _index, const QString& _name
 
     item->setName(_name);
     emit dataChanged(_index, _index);
+}
+
+void StructureModel::setNavigatorAvailableFor(const QModelIndex& _index, bool isAvailable)
+{
+    if (isAvailable) {
+        d->navigatorAvailableIndexes.insert(_index);
+    } else {
+        d->navigatorAvailableIndexes.remove(_index);
+    }
 }
 
 void StructureModel::initDocument()
