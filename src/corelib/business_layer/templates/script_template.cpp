@@ -29,7 +29,7 @@ namespace {
        { ScriptParagraphType::Dialogue, QLatin1String("dialogue") },
        { ScriptParagraphType::Lyrics, QLatin1String("lyrics") },
        { ScriptParagraphType::Transition, QLatin1String("transition") },
-       { ScriptParagraphType::Shot, QLatin1String("show") },
+       { ScriptParagraphType::Shot, QLatin1String("shot") },
        { ScriptParagraphType::InlineNote, QLatin1String("inline_note") },
        { ScriptParagraphType::FolderHeader, QLatin1String("folder_header") },
        { ScriptParagraphType::FolderFooter, QLatin1String("folder_footer") }};
@@ -502,6 +502,10 @@ void ScriptTemplate::saveToFile(const QString& _filePath) const
     writer.writeAttribute("page_margins", toString(m_pageMargins));
     writer.writeAttribute("numbering_alignment", toString(m_numberingAlignment));
     for (const auto& blockStyle : m_blockStyles.values()) {
+        if (toString(blockStyle.type()).isEmpty()) {
+            continue;
+        }
+
         writer.writeStartElement("block");
         writer.writeAttribute("id", toString(blockStyle.type()));
         writer.writeAttribute("active", ::toString(blockStyle.isActive()));
