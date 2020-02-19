@@ -18,6 +18,7 @@
 namespace BusinessLayer
 {
 
+class ScreenplayDictionariesModel;
 class ScreenplayTextModelItem;
 
 /**
@@ -59,6 +60,12 @@ public:
      * @brief Получить элемент находящийся в заданном индексе
      */
     ScreenplayTextModelItem* itemForIndex(const QModelIndex& _index) const;
+
+    /**
+     * @brief Задать модель справочников сценария
+     */
+    void setDictionariesModel(ScreenplayDictionariesModel* _model);
+    ScreenplayDictionariesModel* dictionariesModel() const;
 
 protected:
     /**

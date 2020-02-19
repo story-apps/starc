@@ -36,6 +36,11 @@ public:
      * @brief Корневой элемент дерева
      */
     ScreenplayTextModelItem* rootItem = nullptr;
+
+    /**
+     * @brief Модель справочников
+     */
+    ScreenplayDictionariesModel* dictionariesModel = nullptr;
 };
 
 ScreenplayTextModel::Implementation::Implementation()
@@ -234,6 +239,16 @@ ScreenplayTextModelItem* ScreenplayTextModel::itemForIndex(const QModelIndex& _i
     }
 
     return item;
+}
+
+void ScreenplayTextModel::setDictionariesModel(ScreenplayDictionariesModel* _model)
+{
+    d->dictionariesModel = _model;
+}
+
+ScreenplayDictionariesModel* ScreenplayTextModel::dictionariesModel() const
+{
+    return d->dictionariesModel;
 }
 
 void ScreenplayTextModel::initDocument()

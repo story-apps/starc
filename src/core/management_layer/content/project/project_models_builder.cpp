@@ -2,12 +2,16 @@
 
 #include <business_layer/model/project/project_information_model.h>
 #include <business_layer/model/recycle_bin/recycle_bin_model.h>
+#include <business_layer/model/screenplay/screenplay_dictionaries_model.h>
 #include <business_layer/model/screenplay/screenplay_information_model.h>
-#include <business_layer/model/screenplay/screenplay_title_page_model.h>
-#include <business_layer/model/screenplay/screenplay_synopsis_model.h>
 #include <business_layer/model/screenplay/screenplay_outline_model.h>
+#include <business_layer/model/screenplay/screenplay_synopsis_model.h>
+#include <business_layer/model/screenplay/screenplay_title_page_model.h>
 #include <business_layer/model/screenplay/text/screenplay_text_model.h>
 #include <business_layer/model/text/text_model.h>
+
+#include <data_layer/storage/document_storage.h>
+#include <data_layer/storage/storage_facade.h>
 
 #include <domain/document_object.h>
 
@@ -97,7 +101,20 @@ BusinessLayer::AbstractModel* ProjectModelsBuilder::modelFor(Domain::DocumentObj
             }
 
             case Domain::DocumentObjectType::ScreenplayText: {
-                model = new BusinessLayer::ScreenplayTextModel;
+                auto screenplayModel = new BusinessLayer::ScreenplayTextModel;
+                auto dictionariesDocument
+                        = DataStorageLayer::StorageFacade::documentStorage()->document(
+                              Domain::DocumentObjectType::ScreenplayDictionaries);
+                auto dictionariesModel
+                        = qobject_cast<BusinessLayer::ScreenplayDictionariesModel*>(
+                              modelFor(dictionariesDocument));
+                screenplayModel->setDictionariesModel(dictionariesModel);
+                model = screenplayModel;
+                break;
+            }
+
+            case Domain::DocumentObjectType::ScreenplayDictionaries: {
+                model = new BusinessLayer::ScreenplayDictionariesModel;
                 break;
             }
 

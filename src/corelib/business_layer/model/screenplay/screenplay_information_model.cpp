@@ -15,16 +15,15 @@ namespace BusinessLayer
 {
 
 namespace {
-    const QString kDocumentKey = QStringLiteral("document");
-    const QString kNameKey = QStringLiteral("name");
-    const QString kLoglineKey = QStringLiteral("logline");
-    const QString kHeaderKey = QStringLiteral("header");
-    const QString kPrintHeaderOnTitlePageKey = QStringLiteral("print_header_on_title");
-    const QString kFooterKey = QStringLiteral("footer");
-    const QString kPrintFooterOnTitlePageKey = QStringLiteral("print_footer_on_title");
-    const QString kScenesNumbersPrefixKey = QStringLiteral("scenes_numbers_prefix");
-    const QString kScenesNumberingStartAtKey = QStringLiteral("scenes_numbering_start_at");
-
+    const QString kDocumentKey = "document";
+    const QString kNameKey = "name";
+    const QString kLoglineKey = "logline";
+    const QString kHeaderKey = "header";
+    const QString kPrintHeaderOnTitlePageKey = "print_header_on_title";
+    const QString kFooterKey = "footer";
+    const QString kPrintFooterOnTitlePageKey = "print_footer_on_title";
+    const QString kScenesNumbersPrefixKey = "scenes_numbers_prefix";
+    const QString kScenesNumberingStartAtKey = "scenes_numbering_start_at";
 }
 
 class ScreenplayInformationModel::Implementation
@@ -92,7 +91,7 @@ const QString& ScreenplayInformationModel::logline() const
 void ScreenplayInformationModel::setLogline(const QString& _logline)
 {
     if (d->logline == _logline) {
-            return;
+        return;
     }
 
     d->logline = _logline;
@@ -216,7 +215,13 @@ void ScreenplayInformationModel::clearDocument()
     QSignalBlocker signalBlocker(this);
 
     setName({});
+    setLogline({});
     setHeader({});
+    setPrintHeaderOnTitlePage({});
+    setFooter({});
+    setPrintFooterOnTitlePage({});
+    setScenesNumbersPrefix({});
+    setScenesNumberingStartAt({});
 }
 
 QByteArray ScreenplayInformationModel::toXml() const
