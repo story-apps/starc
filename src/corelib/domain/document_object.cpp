@@ -15,7 +15,8 @@ const QHash<DocumentObjectType, QByteArray> kDocumentObjectTypeToMimeType
        { DocumentObjectType::ScreenplayTitlePage, "application/x-starc/document/screenplay/title-page" },
        { DocumentObjectType::ScreenplaySynopsis, "application/x-starc/document/screenplay/synopsis" },
        { DocumentObjectType::ScreenplayOutline, "application/x-starc/document/screenplay/outline" },
-       { DocumentObjectType::ScreenplayText, "application/x-starc/document/screenplay/text" }};
+       { DocumentObjectType::ScreenplayText, "application/x-starc/document/screenplay/text" },
+       { DocumentObjectType::ScreenplayDictionaries, "application/x-starc/document/screenplay/dictionaries" }};
 const QHash<DocumentObjectType, QString> kDocumentObjectTypeToIcon
     = {{ DocumentObjectType::Undefined, "\uf78a" },
        { DocumentObjectType::Structure, "\uf78a" },

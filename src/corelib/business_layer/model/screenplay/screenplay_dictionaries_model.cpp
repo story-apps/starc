@@ -79,7 +79,7 @@ const QVector<QString>& ScreenplayDictionariesModel::characterExtensions() const
     return d->characterExtensions;
 }
 
-void ScreenplayDictionariesModel::addCharacterExtensionTime(const QString& _extension)
+void ScreenplayDictionariesModel::addCharacterExtension(const QString& _extension)
 {
     const auto extensionCorrected = TextHelper::smartToUpper(_extension);
     if (d->characterExtensions.contains(extensionCorrected)) {

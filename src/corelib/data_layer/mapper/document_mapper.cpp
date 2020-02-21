@@ -43,7 +43,7 @@ DocumentObject* DocumentMapper::find(const QUuid& _uuid)
     return dynamic_cast<DocumentObject*>(domainObjects.first());
 }
 
-Domain::DocumentObject* DocumentMapper::find(Domain::DocumentObjectType _type)
+Domain::DocumentObject* DocumentMapper::findFirst(Domain::DocumentObjectType _type)
 {
     const auto domainObjects = abstractFind(typeFilter(_type));
     if (domainObjects.isEmpty()) {
@@ -51,6 +51,20 @@ Domain::DocumentObject* DocumentMapper::find(Domain::DocumentObjectType _type)
     }
 
     return dynamic_cast<DocumentObject*>(domainObjects.first());
+}
+
+QVector<Domain::DocumentObject*> DocumentMapper::findAll(Domain::DocumentObjectType _type)
+{
+    const auto domainObjects = abstractFind(typeFilter(_type));
+    if (domainObjects.isEmpty()) {
+        return {};
+    }
+
+    QVector<Domain::DocumentObject*> documentObjects;
+    for (auto domainObject : domainObjects) {
+        documentObjects.append(dynamic_cast<DocumentObject*>(domainObject));
+    }
+    return documentObjects;
 }
 
 DocumentObject* DocumentMapper::findStructure()

@@ -2,6 +2,7 @@
 
 #include <QtGlobal>
 
+class QChar;
 class QFont;
 class QSizeF;
 class QString;
@@ -38,4 +39,10 @@ public:
      * @brief Преобразовать html-специфичные символы к обычному виду
      */
     static QString fromHtmlEscaped(const QString& _escaped);
+
+    /**
+     * @brief Продвинутый toUpper с учётом некоторых специфичных юникод-символов
+     */
+    static QString smartToUpper(const QString& _string);
+    static QChar smartToUpper(const QChar& _char);
 };

@@ -95,3 +95,20 @@ QString TextHelper::fromHtmlEscaped(const QString& _escaped)
     text.squeeze();
     return text;
 }
+
+QString TextHelper::smartToUpper(const QString& _text)
+{
+    QString result = _text;
+    result = result.replace("ß", "ẞ");
+    result = result.toUpper();
+    return result;
+}
+QChar TextHelper::smartToUpper(const QChar& _char)
+{
+    if (_char == QString("ß")[0]) {
+        return QString("ẞ")[0];
+    }
+
+    return _char.toUpper();
+}
+

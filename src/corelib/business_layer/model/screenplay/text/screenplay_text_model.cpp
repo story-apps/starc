@@ -41,6 +41,16 @@ public:
      * @brief Модель справочников
      */
     ScreenplayDictionariesModel* dictionariesModel = nullptr;
+
+    /**
+     * @brief Модель персонажей
+     */
+    CharactersModel* charactersModel = nullptr;
+
+    /**
+     * @brief Модель локаций
+     */
+    LocationsModel* locationModel = nullptr;
 };
 
 ScreenplayTextModel::Implementation::Implementation()
@@ -249,6 +259,26 @@ void ScreenplayTextModel::setDictionariesModel(ScreenplayDictionariesModel* _mod
 ScreenplayDictionariesModel* ScreenplayTextModel::dictionariesModel() const
 {
     return d->dictionariesModel;
+}
+
+void ScreenplayTextModel::setCharactersModel(CharactersModel* _model)
+{
+    d->charactersModel = _model;
+}
+
+CharactersModel* ScreenplayTextModel::charactersModel() const
+{
+    return d->charactersModel;
+}
+
+void ScreenplayTextModel::setLocationsModel(LocationsModel* _model)
+{
+    d->locationModel = _model;
+}
+
+LocationsModel* ScreenplayTextModel::locationsModel() const
+{
+    return d->locationModel;
 }
 
 void ScreenplayTextModel::initDocument()

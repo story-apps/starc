@@ -4,9 +4,7 @@
 
 #include <QUuid>
 
-
-namespace Domain
-{
+namespace Domain {
 
 /**
  * @brief Типы элементов
@@ -38,9 +36,10 @@ enum class DocumentObjectType {
     ScreenplaySynopsis = 10102,
     ScreenplayOutline = 10103,
     ScreenplayText = 10104,
-    ScreenplayReport = 10105,
-    ScreenplayChart = 10106,
-    ScreenplaySeries = 10107,
+    ScreenplayDictionaries = 10105,
+    ScreenplayReport = 10106,
+    ScreenplayChart = 10107,
+    ScreenplaySeries = 10108,
     //
     ComicBook = 10200,
     //
@@ -98,7 +97,7 @@ QByteArray mimeTypeFor(DocumentObjectType _type);
 /**
  * @brief Получить тип объекта по майм-типу
  */
-DocumentObjectType typeFor(const QByteArray& _mime);
+DocumentObjectType typeFor(const QByteArray &_mime);
 
 /**
  * @brief Получить иконку по типу объекта
@@ -114,8 +113,8 @@ public:
     /**
      * @brief Уникальный идентификатор
      */
-    const QUuid& uuid() const;
-    void setUuid(const QUuid& _uuid);
+    const QUuid &uuid() const;
+    void setUuid(const QUuid &_uuid);
 
     /**
      * @brief Тип документа
@@ -126,12 +125,12 @@ public:
     /**
      * @brief Содержимое документа
      */
-    const QByteArray& content() const;
-    void setContent(const QByteArray& _content);
+    const QByteArray &content() const;
+    void setContent(const QByteArray &_content);
 
 private:
-    explicit DocumentObject(const Identifier& _id, const QUuid& _uuid, DocumentObjectType _type,
-        const QByteArray& _content);
+    explicit DocumentObject(const Identifier &_id, const QUuid &_uuid, DocumentObjectType _type,
+                            const QByteArray &_content);
     friend class ObjectsBuilder;
 
     /**

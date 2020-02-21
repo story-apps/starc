@@ -6,25 +6,20 @@
 namespace BusinessLayer
 {
 
-class CharacterModel;
+class LocationModel;
 
-class CharactersModel : public AbstractModel
+class LocationsModel : public AbstractModel
 {
     Q_OBJECT
 
 public:
-    explicit CharactersModel(QObject* _parent = nullptr);
-    ~CharactersModel() override;
+    explicit LocationsModel(QObject* _parent = nullptr);
+    ~LocationsModel() override;
 
     /**
      * @brief Добавить модель персонажа
      */
-    void addCharacterModel(CharacterModel* _characterModel);
-
-    /**
-     * @brief Создать персонажа с заданным именем
-     */
-    void createCharacter(const QString& _name);
+    void addLocationModel(LocationModel* _LocationModel);
 
     /**
      * @brief Реализация древовидной модели

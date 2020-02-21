@@ -1,0 +1,7 @@
+<RCC>
+    <qresource prefix="/templates/screenplay">
+        <file alias="fd_a4">resources/final_draft_a4.kitss</file>
+        <file alias="fd_letter">resources/final_draft_letter.kitss</file>
+        <file alias="ru">resources/russian.kitss</file>
+    </qresource>
+</RCC>

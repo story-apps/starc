@@ -3,6 +3,9 @@
 class QByteArray;
 class QUuid;
 
+template <typename T>
+class QVector;
+
 namespace Domain {
     class DocumentObject;
     enum class DocumentObjectType;
@@ -32,6 +35,11 @@ public:
      * @brief Получить документ по типу
      */
     Domain::DocumentObject* document(Domain::DocumentObjectType _type);
+
+    /**
+     * @brief Получить список докуметов заданного типа
+     */
+    QVector<Domain::DocumentObject*> documents(Domain::DocumentObjectType _type);
 
     /**
      * @brief Сохранить документ

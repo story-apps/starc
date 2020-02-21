@@ -18,6 +18,8 @@
 namespace BusinessLayer
 {
 
+class CharactersModel;
+class LocationsModel;
 class ScreenplayDictionariesModel;
 class ScreenplayTextModelItem;
 
@@ -66,6 +68,18 @@ public:
      */
     void setDictionariesModel(ScreenplayDictionariesModel* _model);
     ScreenplayDictionariesModel* dictionariesModel() const;
+
+    /**
+     * @brief Задать модель персонажей проекта
+     */
+    void setCharactersModel(CharactersModel* _model);
+    CharactersModel* charactersModel() const;
+
+    /**
+     * @brief Задать модель локаций проекта
+     */
+    void setLocationsModel(LocationsModel* _model);
+    LocationsModel* locationsModel() const;
 
 protected:
     /**

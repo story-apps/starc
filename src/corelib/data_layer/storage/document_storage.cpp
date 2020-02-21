@@ -31,7 +31,12 @@ Domain::DocumentObject* DocumentStorage::document(const QUuid& _uuid)
 
 Domain::DocumentObject* DocumentStorage::document(Domain::DocumentObjectType _type)
 {
-    return DataMappingLayer::MapperFacade::documentMapper()->find(_type);
+    return DataMappingLayer::MapperFacade::documentMapper()->findFirst(_type);
+}
+
+QVector<Domain::DocumentObject*> DocumentStorage::documents(Domain::DocumentObjectType _type)
+{
+    return DataMappingLayer::MapperFacade::documentMapper()->findAll(_type);
 }
 
 Domain::DocumentObject* DocumentStorage::storeDocument(const QUuid& _uuid, Domain::DocumentObjectType _type)

@@ -23,7 +23,7 @@ public:
     Q_SIGNAL void sceneTimesChanged();
 
     const QVector<QString>& characterExtensions() const;
-    void addCharacterExtensionTime(const QString& _extension);
+    void addCharacterExtension(const QString& _extension);
     Q_SIGNAL void charactersExtensionsChanged();
 
     const QVector<QString>& transitions() const;
