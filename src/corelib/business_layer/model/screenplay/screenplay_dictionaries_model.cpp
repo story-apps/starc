@@ -36,6 +36,10 @@ ScreenplayDictionariesModel::ScreenplayDictionariesModel(QObject* _parent)
     : AbstractModel({}, _parent),
       d(new Implementation)
 {
+    connect(this, &ScreenplayDictionariesModel::sceneIntrosChanged, this, &ScreenplayDictionariesModel::updateDocumentContent);
+    connect(this, &ScreenplayDictionariesModel::sceneTimesChanged, this, &ScreenplayDictionariesModel::updateDocumentContent);
+    connect(this, &ScreenplayDictionariesModel::charactersExtensionsChanged, this, &ScreenplayDictionariesModel::updateDocumentContent);
+    connect(this, &ScreenplayDictionariesModel::transitionsChanged, this, &ScreenplayDictionariesModel::updateDocumentContent);
 }
 
 const QVector<QString>& ScreenplayDictionariesModel::sceneIntros() const
@@ -45,12 +49,13 @@ const QVector<QString>& ScreenplayDictionariesModel::sceneIntros() const
 
 void ScreenplayDictionariesModel::addSceneIntro(const QString& _intro)
 {
-    const auto introCorrected = _intro.toUpper();
+    const auto introCorrected = TextHelper::smartToUpper(_intro);
     if (d->sceneIntros.contains(introCorrected)) {
         return;
     }
 
     d->sceneIntros.append(introCorrected);
+    emit sceneIntrosChanged();
 }
 
 const QVector<QString>& ScreenplayDictionariesModel::sceneTimes() const
@@ -60,12 +65,13 @@ const QVector<QString>& ScreenplayDictionariesModel::sceneTimes() const
 
 void ScreenplayDictionariesModel::addSceneTime(const QString& _time)
 {
-    const auto timeCorrected = _time.toUpper();
+    const auto timeCorrected = TextHelper::smartToUpper(_time);
     if (d->sceneTimes.contains(timeCorrected)) {
         return;
     }
 
     d->sceneTimes.append(timeCorrected);
+    emit sceneTimesChanged();
 }
 
 const QVector<QString>& ScreenplayDictionariesModel::characterExtensions() const
@@ -75,12 +81,13 @@ const QVector<QString>& ScreenplayDictionariesModel::characterExtensions() const
 
 void ScreenplayDictionariesModel::addCharacterExtensionTime(const QString& _extension)
 {
-    const auto extensionCorrected = _extension.toUpper();
+    const auto extensionCorrected = TextHelper::smartToUpper(_extension);
     if (d->characterExtensions.contains(extensionCorrected)) {
         return;
     }
 
     d->characterExtensions.append(extensionCorrected);
+    emit charactersExtensionsChanged();
 }
 
 const QVector<QString>& ScreenplayDictionariesModel::transitions() const
@@ -90,12 +97,13 @@ const QVector<QString>& ScreenplayDictionariesModel::transitions() const
 
 void ScreenplayDictionariesModel::addTransition(const QString& _transition)
 {
-    const auto transitionsCorrected = _transition.toUpper();
+    const auto transitionsCorrected = TextHelper::smartToUpper(_transition);
     if (d->transitions.contains(transitionsCorrected)) {
         return;
     }
 
     d->transitions.append(transitionsCorrected);
+    emit transitionsChanged();
 }
 
 ScreenplayDictionariesModel::~ScreenplayDictionariesModel() = default;

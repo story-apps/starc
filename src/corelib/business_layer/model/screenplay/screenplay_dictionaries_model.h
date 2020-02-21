@@ -16,15 +16,19 @@ public:
 
     const QVector<QString>& sceneIntros() const;
     void addSceneIntro(const QString& _intro);
+    Q_SIGNAL void sceneIntrosChanged();
 
     const QVector<QString>& sceneTimes() const;
     void addSceneTime(const QString& _time);
+    Q_SIGNAL void sceneTimesChanged();
 
     const QVector<QString>& characterExtensions() const;
     void addCharacterExtensionTime(const QString& _extension);
+    Q_SIGNAL void charactersExtensionsChanged();
 
     const QVector<QString>& transitions() const;
     void addTransition(const QString& _transition);
+    Q_SIGNAL void transitionsChanged();
 
 protected:
     /**
