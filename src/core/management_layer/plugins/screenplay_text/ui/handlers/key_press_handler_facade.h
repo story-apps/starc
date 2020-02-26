@@ -18,23 +18,6 @@ namespace KeyProcessingLayer
 {
 
 class AbstractKeyHandler;
-class PrepareHandler;
-class PreHandler;
-class SceneHeadingHandler;
-class SceneCharactersHandler;
-class ActionHandler;
-class CharacterHandler;
-class ParentheticalHandler;
-class DialogHandler;
-class TransitionHandler;
-class NoteHandler;
-class TitleHeaderHandler;
-class TitleHandler;
-class InlineNoteHandler;
-class FolderHeaderHandler;
-class FolderFooterHandler;
-class SceneDescriptionHandler;
-class LyricsHandler;
 
 /**
  * @brief Класс обработчика нажатия клавиш в текстовом редакторе

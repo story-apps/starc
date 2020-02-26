@@ -1,23 +1,24 @@
 #include "transition_handler.h"
 
-#include "../ScenarioTextEdit.h"
+#include <business_layer/model/screenplay/screenplay_dictionaries_model.h>
+#include <business_layer/templates/screenplay_template.h>
 
-#include <Domain/Transition.h>
-
-#include <DataLayer/DataStorageLayer/StorageFacade.h>
-#include <DataLayer/DataStorageLayer/TransitionStorage.h>
+#include <ui/screenplay_text_edit.h>
 
 #include <QKeyEvent>
+#include <QStringListModel>
 #include <QTextBlock>
 
-using namespace KeyProcessingLayer;
-using namespace DataStorageLayer;
-using namespace BusinessLogic;
-using UserInterface::ScenarioTextEdit;
+using BusinessLayer::ScreenplayParagraphType;
+using Ui::ScreenplayTextEdit;
 
 
-TransitionHandler::TransitionHandler(ScenarioTextEdit* _editor) :
-    StandardKeyHandler(_editor)
+namespace KeyProcessingLayer
+{
+
+TransitionHandler::TransitionHandler(Ui::ScreenplayTextEdit* _editor)
+    : StandardKeyHandler(_editor),
+      m_completerModel(new QStringListModel(_editor))
 {
 }
 
@@ -59,7 +60,7 @@ void TransitionHandler::handleEnter(QKeyEvent* _event)
             && autoJumpToNextBlock()) {
             cursor.movePosition(QTextCursor::EndOfBlock);
             editor()->setTextCursor(cursor);
-            editor()->addScenarioBlock(jumpForEnter(ScenarioBlockStyle::Transition));
+            editor()->addParagraph(jumpForEnter(ScreenplayParagraphType::Transition));
         }
     } else {
         //! Подстановщик закрыт
@@ -70,7 +71,7 @@ void TransitionHandler::handleEnter(QKeyEvent* _event)
             //
             // Удаляем всё, но оставляем стилем блока текущий
             //
-            editor()->addScenarioBlock(ScenarioBlockStyle::Transition);
+            editor()->addParagraph(ScreenplayParagraphType::Transition);
         } else {
             //! Нет выделения
 
@@ -81,7 +82,7 @@ void TransitionHandler::handleEnter(QKeyEvent* _event)
                 //
                 // Сменить стиль
                 //
-                editor()->changeScenarioBlockType(changeForEnter(ScenarioBlockStyle::Transition));
+                editor()->setCurrentParagraphType(changeForEnter(ScreenplayParagraphType::Transition));
             } else {
                 //! Текст не пуст
 
@@ -96,21 +97,21 @@ void TransitionHandler::handleEnter(QKeyEvent* _event)
                     //
                     // Вставим блок перехода перед собой
                     //
-                    editor()->addScenarioBlock(ScenarioBlockStyle::Transition);
+                    editor()->addParagraph(ScreenplayParagraphType::Transition);
                 } else if (cursorForwardText.isEmpty()) {
                     //! В конце блока
 
                     //
                     // Вставляем блок и применяем ему стиль время и место
                     //
-                    editor()->addScenarioBlock(jumpForEnter(ScenarioBlockStyle::Transition));
+                    editor()->addParagraph(jumpForEnter(ScreenplayParagraphType::Transition));
                 } else {
                     //! Внутри блока
 
                     //
                     // Вставляем блок и применяем ему стиль время и место
                     //
-                    editor()->addScenarioBlock(ScenarioBlockStyle::SceneHeading);
+                    editor()->addParagraph(ScreenplayParagraphType::SceneHeading);
                 }
             }
         }
@@ -161,7 +162,7 @@ void TransitionHandler::handleTab(QKeyEvent*)
                 //
                 // Сменить стиль
                 //
-                editor()->changeScenarioBlockType(changeForTab(ScenarioBlockStyle::Transition));
+                editor()->setCurrentParagraphType(changeForTab(ScreenplayParagraphType::Transition));
             } else {
                 //! Текст не пуст
 
@@ -182,7 +183,7 @@ void TransitionHandler::handleTab(QKeyEvent*)
                     //
                     // Вставить блок
                     //
-                    editor()->addScenarioBlock(jumpForTab(ScenarioBlockStyle::Transition));
+                    editor()->addParagraph(jumpForTab(ScreenplayParagraphType::Transition));
                 } else {
                     //! Внутри блока
 
@@ -217,9 +218,8 @@ void TransitionHandler::handleOther(QKeyEvent*)
 
 void TransitionHandler::handleInput(QInputMethodEvent* _event)
 {
-#ifndef Q_OS_ANDROID
     Q_UNUSED(_event)
-#endif
+
     //
     // Получим необходимые значения
     //
@@ -230,16 +230,6 @@ void TransitionHandler::handleInput(QInputMethodEvent* _event)
     const QTextBlock currentBlock = cursor.block();
     // ... текст блока
     QString currentBlockText = currentBlock.text();
-#ifdef Q_OS_ANDROID
-    QString stringForInsert;
-    if (!_event->preeditString().isEmpty()) {
-        stringForInsert = _event->preeditString();
-    } else {
-        stringForInsert = _event->commitString();
-    }
-    currentBlockText.insert(cursorPosition, stringForInsert);
-    cursorPosition += stringForInsert.length();
-#endif
     // ... текст до курсора
     const QString cursorBackwardText = currentBlockText.left(cursorPosition);
 
@@ -256,29 +246,30 @@ void TransitionHandler::complete(const QString& _currentBlockText, const QString
     //
     // Дополним текст
     //
-    editor()->complete(StorageFacade::transitionStorage()->all(), _currentBlockText);
+    m_completerModel->setStringList(editor()->dictionaries()->transitions().toList());
+    editor()->complete(m_completerModel, _currentBlockText);
 }
 
 void TransitionHandler::storeTransition() const
 {
-    if (editor()->storeDataWhenEditing()) {
-        //
-        // Получим необходимые значения
-        //
-        // ... курсор в текущем положении
-        const QTextCursor cursor = editor()->textCursor();
-        // ... блок текста в котором находится курсор
-        const QTextBlock currentBlock = cursor.block();
-        // ... текст блока
-        const QString currentBlockText = currentBlock.text();
-        // ... текст до курсора
-        const QString cursorBackwardText = currentBlockText.left(cursor.positionInBlock());
-        // ... переход
-        const QString transition = cursorBackwardText;
+    //
+    // Получим необходимые значения
+    //
+    // ... курсор в текущем положении
+    const QTextCursor cursor = editor()->textCursor();
+    // ... блок текста в котором находится курсор
+    const QTextBlock currentBlock = cursor.block();
+    // ... текст блока
+    const QString currentBlockText = currentBlock.text();
+    // ... текст до курсора
+    const QString cursorBackwardText = currentBlockText.left(cursor.positionInBlock());
+    // ... переход
+    const QString transition = cursorBackwardText;
 
-        //
-        // Сохраняем персонажа
-        //
-        StorageFacade::transitionStorage()->storeTransition(transition);
-    }
+    //
+    // Сохраняем персонажа
+    //
+    editor()->dictionaries()->addTransition(transition);
 }
+
+} // namespace KeyProcessingLayer

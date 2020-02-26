@@ -55,7 +55,7 @@ void LyricsHandler::handleEnter(QKeyEvent*)
             //
             // Удаляем всё, но оставляем стилем блока текущий
             //
-            editor()->addScenarioBlock(ScreenplayParagraphType::Lyrics);
+            editor()->addParagraph(ScreenplayParagraphType::Lyrics);
         } else {
             //! Нет выделения
 
@@ -66,7 +66,7 @@ void LyricsHandler::handleEnter(QKeyEvent*)
                 //
                 // Меняем стиль блока на описание действия
                 //
-                editor()->changeScenarioBlockType(changeForEnter(ScreenplayParagraphType::Lyrics));
+                editor()->setCurrentParagraphType(changeForEnter(ScreenplayParagraphType::Lyrics));
             } else {
                 //! Текст не пуст
 
@@ -82,7 +82,7 @@ void LyricsHandler::handleEnter(QKeyEvent*)
                     //
                     // Перейдём к блоку персонажа
                     //
-                    editor()->addScenarioBlock(jumpForEnter(ScreenplayParagraphType::Lyrics));
+                    editor()->addParagraph(jumpForEnter(ScreenplayParagraphType::Lyrics));
                 } else {
                     //! Внутри блока
 
@@ -114,13 +114,13 @@ void LyricsHandler::handleEnter(QKeyEvent*)
                         //
                         // Вставляем блок "герой" и добавляем имя
                         //
-                        editor()->addScenarioBlock(ScreenplayParagraphType::Character);
+                        editor()->addParagraph(ScreenplayParagraphType::Character);
                         editor()->insertPlainText(characterName);
 
                         //
                         // Оставшийся текст форматируем, как "лирика"
                         //
-                        editor()->addScenarioBlock(ScreenplayParagraphType::Lyrics);
+                        editor()->addParagraph(ScreenplayParagraphType::Lyrics);
                     }
                 }
             }
@@ -171,7 +171,7 @@ void LyricsHandler::handleTab(QKeyEvent*)
                 //
                 // Меняем стиль на ремарку
                 //
-                editor()->changeScenarioBlockType(changeForTab(ScreenplayParagraphType::Lyrics));
+                editor()->setCurrentParagraphType(changeForTab(ScreenplayParagraphType::Lyrics));
             } else {
                 //! Текст не пуст
 
@@ -187,7 +187,7 @@ void LyricsHandler::handleTab(QKeyEvent*)
                     //
                     // Вставляем блок ремарки
                     //
-                    editor()->addScenarioBlock(jumpForTab(ScreenplayParagraphType::Lyrics));
+                    editor()->addParagraph(jumpForTab(ScreenplayParagraphType::Lyrics));
                 } else {
                     //! Внутри блока
 
@@ -198,8 +198,8 @@ void LyricsHandler::handleTab(QKeyEvent*)
                     //
                     // ... оставляем пустой блок лирики
                     //
-                    editor()->addScenarioBlock(ScreenplayParagraphType::Lyrics);
-                    editor()->addScenarioBlock(ScreenplayParagraphType::Lyrics);
+                    editor()->addParagraph(ScreenplayParagraphType::Lyrics);
+                    editor()->addParagraph(ScreenplayParagraphType::Lyrics);
 
                     //
                     // ... возвращаем курсор к пустому блоку
@@ -211,7 +211,7 @@ void LyricsHandler::handleTab(QKeyEvent*)
                     //
                     // ... делаем блок под курсором ремаркой
                     //
-                    editor()->changeScenarioBlockType(ScreenplayParagraphType::Parenthetical);
+                    editor()->setCurrentParagraphType(ScreenplayParagraphType::Parenthetical);
                 }
             }
         }
@@ -253,7 +253,7 @@ void LyricsHandler::handleOther(QKeyEvent* _event)
             //
             // Cменить стиль на ремарку
             //
-            editor()->changeScenarioBlockType(ScreenplayParagraphType::Parenthetical);
+            editor()->setCurrentParagraphType(ScreenplayParagraphType::Parenthetical);
         } else {
             //! Если текст не пуст
 
@@ -267,13 +267,13 @@ void LyricsHandler::handleOther(QKeyEvent* _event)
             // если скобка нажата в начале строки, то делаем лишь один перевод строки
             //
             if (cursorBackwardText != "(") {
-                editor()->addScenarioBlock(ScreenplayParagraphType::Lyrics);
+                editor()->addParagraph(ScreenplayParagraphType::Lyrics);
             }
             //
             // ... если после скобки нет текста, не добавляем новый параграф
             //
             if (!cursorForwardText.isEmpty()) {
-                editor()->addScenarioBlock(ScreenplayParagraphType::Lyrics);
+                editor()->addParagraph(ScreenplayParagraphType::Lyrics);
 
                 //
                 // ... возвращаем курсор к пустому блоку
@@ -286,7 +286,7 @@ void LyricsHandler::handleOther(QKeyEvent* _event)
             //
             // ... делаем блок под курсором ремаркой
             //
-            editor()->changeScenarioBlockType(ScreenplayParagraphType::Parenthetical);
+            editor()->setCurrentParagraphType(ScreenplayParagraphType::Parenthetical);
         }
     } else {
         //! В противном случае, обрабатываем в базовом классе

@@ -51,14 +51,14 @@ public:
     /**
      * @brief Секции блока заголовка сцены
      *
-     * @note [МЕСТО]. [ЛОКАЦИЯ] - [ВРЕМЯ], [СЦЕНАРНЫЙ ДЕНЬ]
+     * @note [МЕСТО]. [ЛОКАЦИЯ] - [ВРЕМЯ], [ДЕНЬ ИСТОРИИ]
      */
     enum Section {
         SectionUndefined,	 //!< Неопределённое
-        SectionPlace,		 //!< МЕСТО
+        SectionSceneIntro,	 //!< МЕСТО
         SectionLocation,	 //!< ЛОКАЦИЯ
-        SectionScenarioDay,	 //!< СЦЕНАРНЫЙ ДЕНЬ
-        SectionTime			 //!< ВРЕМЯ
+        SectionSceneTime,    //!< ВРЕМЯ
+        SectionStoryDay,	 //!< ДЕНЬ ИСТОРИИ
     };
 
 public:
@@ -70,22 +70,22 @@ public:
     /**
      * @brief Получить название места
      */
-    static QString placeName(const QString& _text);
+    static QString sceneIntro(const QString& _text);
 
     /**
      * @brief Получить название локации, если задан \p _force, то берём текст до конца
      */
-    static QString locationName(const QString& _text, bool _force = false);
+    static QString location(const QString& _text, bool _force = false);
 
     /**
      * @brief Получить название сценарного дня
      */
-    static QString scenarioDayName(const QString& _text);
+    static QString storyDay(const QString& _text);
 
     /**
      * @brief Получить название времени
      */
-    static QString timeName(const QString& _text);
+    static QString sceneTime(const QString& _text);
 };
 
 /**

@@ -537,7 +537,7 @@ void StandardKeyHandler::removeCharacters(bool _backward)
     // Применим финальный стиль
     //
     if (ScreenplayBlockStyle::forBlock(editor()->textCursor().block()) != targetType) {
-        editor()->applyScenarioTypeToBlockText(targetType);
+        editor()->setCurrentParagraphType(targetType);
     }
 
     //

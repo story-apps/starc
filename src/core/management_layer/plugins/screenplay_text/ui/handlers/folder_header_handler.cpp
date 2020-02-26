@@ -64,7 +64,7 @@ void FolderHeaderHandler::handleEnter(QKeyEvent*)
 				//
 				// Ни чего не делаем
 				//
-                editor()->changeScenarioBlockType(changeForEnter(ScreenplayParagraphType::FolderHeader));
+                editor()->setCurrentParagraphType(changeForEnter(ScreenplayParagraphType::FolderHeader));
 			} else {
 				//! Текст не пуст
 
@@ -78,11 +78,11 @@ void FolderHeaderHandler::handleEnter(QKeyEvent*)
 					cursor.movePosition(QTextCursor::PreviousCharacter);
 					cursor.setBlockFormat(QTextBlockFormat());
 					editor()->setTextCursor(cursor);
-                    editor()->changeScenarioBlockType(ScreenplayParagraphType::SceneHeading);
+                    editor()->setCurrentParagraphType(ScreenplayParagraphType::SceneHeading);
                     editor()->moveCursor(QTextCursor::NextCharacter);
 
                     //
-                    // FIXME: Тут довольно критичный момент с переносом информации о залоговке сцены
+                    // FIXME: SceneHeadingBlockInfo
                     //
 //                    //
 //                    // Перенесём параметры из блока в котором они остались к текущему блоку
@@ -101,14 +101,14 @@ void FolderHeaderHandler::handleEnter(QKeyEvent*)
 					//
 					// Вставить блок время и место
 					//
-                    editor()->addScenarioBlock(jumpForEnter(ScreenplayParagraphType::FolderHeader));
+                    editor()->addParagraph(jumpForEnter(ScreenplayParagraphType::FolderHeader));
 				} else {
 					//! Внутри блока
 
 					//
 					// Вставить блок время и место
 					//
-                    editor()->addScenarioBlock(ScreenplayParagraphType::SceneHeading);
+                    editor()->addParagraph(ScreenplayParagraphType::SceneHeading);
 				}
 			}
 		}
@@ -158,7 +158,7 @@ void FolderHeaderHandler::handleTab(QKeyEvent*)
 				//
 				// Ни чего не делаем
 				//
-                editor()->changeScenarioBlockType(changeForTab(ScreenplayParagraphType::FolderHeader));
+                editor()->setCurrentParagraphType(changeForTab(ScreenplayParagraphType::FolderHeader));
 			} else {
 				//! Текст не пуст
 
@@ -174,7 +174,7 @@ void FolderHeaderHandler::handleTab(QKeyEvent*)
 					//
 					// Как ENTER
 					//
-                    editor()->addScenarioBlock(jumpForTab(ScreenplayParagraphType::FolderHeader));
+                    editor()->addParagraph(jumpForTab(ScreenplayParagraphType::FolderHeader));
 				} else {
 					//! Внутри блока
 
@@ -221,7 +221,7 @@ void FolderHeaderHandler::updateFooter()
     //
     // Если редактируется заголовок группы
     //
-    if (editor()->scenarioBlockType() == ScreenplayParagraphType::FolderHeader) {
+    if (editor()->currentParagraphType() == ScreenplayParagraphType::FolderHeader) {
         //
         // ... открытые группы на пути поиска необходимого для обновления блока
         //

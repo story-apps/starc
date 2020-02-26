@@ -1,4 +1,4 @@
-#include "inline_note_handler.h"
+#include "unformatted_text_handler.h"
 
 #include <business_layer/templates/screenplay_template.h>
 
@@ -14,12 +14,12 @@ using Ui::ScreenplayTextEdit;
 namespace KeyProcessingLayer
 {
 
-InlineNoteHandler::InlineNoteHandler(Ui::ScreenplayTextEdit* _editor) :
-	StandardKeyHandler(_editor)
+UnformattedTextHandler::UnformattedTextHandler(ScreenplayTextEdit* _editor)
+    : StandardKeyHandler(_editor)
 {
 }
 
-void InlineNoteHandler::handleEnter(QKeyEvent*)
+void UnformattedTextHandler::handleEnter(QKeyEvent*)
 {
 	//
 	// Получим необходимые значения
@@ -52,7 +52,7 @@ void InlineNoteHandler::handleEnter(QKeyEvent*)
             //
             // Удаляем всё, но оставляем стилем блока текущий
             //
-            editor()->addParagraph(ScreenplayParagraphType::InlineNote);
+            editor()->addParagraph(ScreenplayParagraphType::UnformattedText);
 		} else {
 			//! Нет выделения
 
@@ -63,7 +63,7 @@ void InlineNoteHandler::handleEnter(QKeyEvent*)
 				//
 				// Ни чего не делаем
 				//
-                editor()->setCurrentParagraphType(changeForEnter(ScreenplayParagraphType::InlineNote));
+                editor()->setCurrentParagraphType(changeForEnter(ScreenplayParagraphType::UnformattedText));
 			} else {
 				//! Текст не пуст
 
@@ -79,7 +79,7 @@ void InlineNoteHandler::handleEnter(QKeyEvent*)
 					//
 					// Вставляем блок и применяем ему стиль описания действия
 					//
-                    editor()->addParagraph(jumpForEnter(ScreenplayParagraphType::InlineNote));
+                    editor()->addParagraph(jumpForEnter(ScreenplayParagraphType::UnformattedText));
 				} else {
 					//! Внутри блока
 
@@ -93,7 +93,7 @@ void InlineNoteHandler::handleEnter(QKeyEvent*)
 	}
 }
 
-void InlineNoteHandler::handleTab(QKeyEvent*)
+void UnformattedTextHandler::handleTab(QKeyEvent*)
 {
 	//
 	// Получим необходимые значения
@@ -136,6 +136,7 @@ void InlineNoteHandler::handleTab(QKeyEvent*)
 				//
 				// Ни чего не делаем
 				//
+                editor()->setCurrentParagraphType(changeForTab(ScreenplayParagraphType::UnformattedText));
 			} else {
 				//! Текст не пуст
 
@@ -151,7 +152,7 @@ void InlineNoteHandler::handleTab(QKeyEvent*)
 					//
 					// Действуем как нажатие клавиши ENTER
 					//
-					handleEnter();
+                    editor()->addParagraph(jumpForTab(ScreenplayParagraphType::UnformattedText));
 				} else {
 					//! Внутри блока
 

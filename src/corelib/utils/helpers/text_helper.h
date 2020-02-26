@@ -43,6 +43,12 @@ public:
     /**
      * @brief Продвинутый toUpper с учётом некоторых специфичных юникод-символов
      */
-    static QString smartToUpper(const QString& _string);
+    static QString smartToUpper(const QString& _text);
     static QChar smartToUpper(const QChar& _char);
+
+    /**
+     * @brief Продвинутый toLower с учётом некоторых специфичных юникод-символов
+     */
+    static QString smartToLower(const QString& _text);
+    static QChar smartToLower(const QChar& _char);
 };

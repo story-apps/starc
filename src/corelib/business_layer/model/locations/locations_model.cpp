@@ -36,6 +36,13 @@ void LocationsModel::addLocationModel(LocationModel* _LocationModel)
     emit endInsertRows();
 }
 
+void LocationsModel::createLocation(const QString& _name)
+{
+    //
+    // FIXME:
+    //
+}
+
 QModelIndex LocationsModel::index(int _row, int _column, const QModelIndex& _parent) const
 {
     if (_row < 0

@@ -14,6 +14,7 @@ namespace {
     const QString kDocumentKey = "document";
     const QString kSceneIntrosKey = "scene_intros";
     const QString kSceneTimesKey = "scene_times";
+    const QString kStoryDaysKey = "story_days";
     const QString kCharacterExtensionsKey = "character_extensions";
     const QString kTransitionsKey = "transitions";
     const QString kItemKey = "v";
@@ -24,6 +25,7 @@ class ScreenplayDictionariesModel::Implementation
 public:
     QVector<QString> sceneIntros;
     QVector<QString> sceneTimes;
+    QVector<QString> storyDays;
     QVector<QString> characterExtensions;
     QVector<QString> transitions;
 };
@@ -33,11 +35,14 @@ public:
 
 
 ScreenplayDictionariesModel::ScreenplayDictionariesModel(QObject* _parent)
-    : AbstractModel({}, _parent),
+    : AbstractModel({ kDocumentKey, kSceneIntrosKey, kSceneTimesKey, kStoryDaysKey,
+                      kCharacterExtensionsKey, kTransitionsKey, kItemKey},
+                    _parent),
       d(new Implementation)
 {
     connect(this, &ScreenplayDictionariesModel::sceneIntrosChanged, this, &ScreenplayDictionariesModel::updateDocumentContent);
     connect(this, &ScreenplayDictionariesModel::sceneTimesChanged, this, &ScreenplayDictionariesModel::updateDocumentContent);
+    connect(this, &ScreenplayDictionariesModel::storyDaysChanged, this, &ScreenplayDictionariesModel::updateDocumentContent);
     connect(this, &ScreenplayDictionariesModel::charactersExtensionsChanged, this, &ScreenplayDictionariesModel::updateDocumentContent);
     connect(this, &ScreenplayDictionariesModel::transitionsChanged, this, &ScreenplayDictionariesModel::updateDocumentContent);
 }
@@ -72,6 +77,22 @@ void ScreenplayDictionariesModel::addSceneTime(const QString& _time)
 
     d->sceneTimes.append(timeCorrected);
     emit sceneTimesChanged();
+}
+
+const QVector<QString>& ScreenplayDictionariesModel::storyDays() const
+{
+    return d->storyDays;
+}
+
+void ScreenplayDictionariesModel::addStoryDay(const QString& _day)
+{
+    const auto dayCorrected = TextHelper::smartToUpper(_day);
+    if (d->storyDays.contains(dayCorrected)) {
+        return;
+    }
+
+    d->storyDays.append(dayCorrected);
+    emit storyDaysChanged();
 }
 
 const QVector<QString>& ScreenplayDictionariesModel::characterExtensions() const
@@ -147,6 +168,8 @@ void ScreenplayDictionariesModel::initDocument()
                                                  tr("THE NEXT DAY") };
     fillDictionary(kSceneTimesKey, defaultSceneTimes, d->sceneTimes);
     //
+    fillDictionary(kStoryDaysKey, {}, d->storyDays);
+    //
     const QVector<QString> defaultCharacterExtensions = { tr("V.O."),
                                                           tr("O.S."),
                                                           tr("O.C."),
@@ -193,6 +216,7 @@ QByteArray ScreenplayDictionariesModel::toXml() const
     };
     writeDictionary(kSceneIntrosKey, d->sceneIntros);
     writeDictionary(kSceneTimesKey, d->sceneTimes);
+    writeDictionary(kStoryDaysKey, d->storyDays);
     writeDictionary(kCharacterExtensionsKey, d->characterExtensions);
     writeDictionary(kTransitionsKey, d->transitions);
     xml += QString("</%1>").arg(kDocumentKey);

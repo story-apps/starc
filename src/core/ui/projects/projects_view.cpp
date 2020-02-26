@@ -147,6 +147,8 @@ ProjectsView::ProjectsView(QWidget* _parent)
     designSystemChangeEvent(nullptr);
 }
 
+ProjectsView::~ProjectsView() = default;
+
 void ProjectsView::setProjects(ManagementLayer::ProjectsModel* _projects)
 {
     d->projectsPage->setProjects(_projects);
@@ -175,8 +177,6 @@ void ProjectsView::updateTranslations()
     d->emptyPageTitleLabel->setText(tr("Here will be a list of your stories."));
     d->emptyPageCreateProjectButton->setText(tr("It's time to create the first story!"));
 }
-
-ProjectsView::~ProjectsView() = default;
 
 void ProjectsView::designSystemChangeEvent(DesignSystemChangeEvent* _event)
 {

@@ -22,6 +22,10 @@ public:
     void addSceneTime(const QString& _time);
     Q_SIGNAL void sceneTimesChanged();
 
+    const QVector<QString>& storyDays() const;
+    void addStoryDay(const QString& _day);
+    Q_SIGNAL void storyDaysChanged();
+
     const QVector<QString>& characterExtensions() const;
     void addCharacterExtension(const QString& _extension);
     Q_SIGNAL void charactersExtensionsChanged();

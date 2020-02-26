@@ -1,41 +1,48 @@
-#ifndef TRANSITIONHANDLER_H
-#define TRANSITIONHANDLER_H
+#pragma once
 
 #include "standard_key_handler.h"
+
+class QStringListModel;
 
 
 namespace KeyProcessingLayer
 {
+
+/**
+ * @brief Класс выполняющий обработку нажатия клавиш в блоке переход
+ */
+class TransitionHandler : public StandardKeyHandler
+{
+public:
+    explicit TransitionHandler(Ui::ScreenplayTextEdit* _editor);
+
+protected:
     /**
-     * @brief Класс выполняющий обработку нажатия клавиш в блоке переход
+     * @brief Реализация интерфейса AbstractKeyHandler
      */
-    class TransitionHandler : public StandardKeyHandler
-    {
-    public:
-        TransitionHandler(UserInterface::ScenarioTextEdit* _editor);
+    /** @{ */
+    void handleEnter(QKeyEvent* _event = nullptr) override;
+    void handleTab(QKeyEvent* _event = nullptr) override;
+    void handleOther(QKeyEvent* _event = nullptr) override;
+    void handleInput(QInputMethodEvent* _event) override;
+    /** @} */
 
-    protected:
-        /**
-         * @brief Реализация интерфейса AbstractKeyHandler
-         */
-        /** @{ */
-        void handleEnter(QKeyEvent* _event = nullptr) override;
-        void handleTab(QKeyEvent* _event = nullptr) override;
-        void handleOther(QKeyEvent* _event = nullptr) override;
-        void handleInput(QInputMethodEvent* _event) override;
-        /** @} */
+private:
+    /**
+     * @brief Показать автодополнение, если это возможно
+     */
+    void complete(const QString& _currentBlockText, const QString& _cursorBackwardText);
 
-    private:
-        /**
-         * @brief Показать автодополнение, если это возможно
-         */
-        void complete(const QString& _currentBlockText, const QString& _cursorBackwardText);
+    /**
+     * @brief Сохранить переход
+     */
+    void storeTransition() const;
 
-        /**
-         * @brief Сохранить переход
-         */
-        void storeTransition() const;
-    };
-}
+private:
+    /**
+     * @brief Модель переходов
+     */
+    QStringListModel* m_completerModel = nullptr;
+};
 
-#endif // TRANSITIONHANDLER_H
+} // namespace KeyProcessingLayer

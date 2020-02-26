@@ -56,11 +56,11 @@ qreal PageMetrics::ptToPx(qreal _pt, bool _x)
 {
     static qreal xCoefficient = [] {
         const auto density = QApplication::primaryScreen()->physicalDotsPerInchX();
-        return 72 * density;
+        return 72 / density;
     } ();
     static qreal yCoefficient = [] {
         const auto density = QApplication::primaryScreen()->physicalDotsPerInchY();
-        return 72 * density;
+        return 72 / density;
     } ();
 
     return _pt / (_x ? xCoefficient : yCoefficient);

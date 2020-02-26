@@ -55,7 +55,7 @@ void SceneDescriptionHandler::handleEnter(QKeyEvent*)
             //
             // Удаляем всё, но оставляем стилем блока текущий
             //
-            editor()->addScenarioBlock(ScreenplayParagraphType::SceneDescription);
+            editor()->addParagraph(ScreenplayParagraphType::SceneDescription);
 		} else {
 			//! Нет выделения
 
@@ -66,14 +66,14 @@ void SceneDescriptionHandler::handleEnter(QKeyEvent*)
 				//
 				// Меняем стиль на место и время
 				//
-                editor()->changeScenarioBlockType(ScreenplayParagraphType::SceneHeading);
+                editor()->setCurrentParagraphType(ScreenplayParagraphType::SceneHeading);
 			} else {
 				//! Текст не пуст
 
 				//
 				// Вставляем блок и применяем ему стиль описания сцены
 				//
-                editor()->addScenarioBlock(ScreenplayParagraphType::SceneDescription);
+                editor()->addParagraph(ScreenplayParagraphType::SceneDescription);
 			}
 		}
 	}
@@ -122,7 +122,7 @@ void SceneDescriptionHandler::handleTab(QKeyEvent*)
 				//
 				// Если строка пуста, то сменить стиль на место и время
 				//
-                editor()->changeScenarioBlockType(ScreenplayParagraphType::SceneHeading);
+                editor()->setCurrentParagraphType(ScreenplayParagraphType::SceneHeading);
 			} else {
 				//! Текст не пуст
 
@@ -138,7 +138,7 @@ void SceneDescriptionHandler::handleTab(QKeyEvent*)
 					//
 					// Вставляем блок место и время
 					//
-                    editor()->addScenarioBlock(ScreenplayParagraphType::SceneHeading);
+                    editor()->addParagraph(ScreenplayParagraphType::SceneHeading);
 				} else {
 					//! Внутри блока
 
@@ -178,7 +178,7 @@ void SceneDescriptionHandler::handleOther(QKeyEvent* _event)
 		//
         const QString maybeSceneIntro = TextHelper::smartToUpper(cursorBackwardText);
         if (editor()->dictionaries()->sceneIntros().contains(maybeSceneIntro)) {
-            editor()->changeScenarioBlockType(ScreenplayParagraphType::SceneHeading);
+            editor()->setCurrentParagraphType(ScreenplayParagraphType::SceneHeading);
 		}
 	} else {
 		//! В противном случае, обрабатываем в базовом классе

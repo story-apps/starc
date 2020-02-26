@@ -156,7 +156,7 @@ void CharacterHandler::handleEnter(QKeyEvent* _event)
             && currentSection == CharacterParser::SectionName) {
             cursor.movePosition(QTextCursor::EndOfBlock);
             editor()->setTextCursor(cursor);
-            editor()->addScenarioBlock(jumpForEnter(ScreenplayParagraphType::Character));
+            editor()->addParagraph(jumpForEnter(ScreenplayParagraphType::Character));
         }
     } else {
         //! Подстановщик закрыт
@@ -167,7 +167,7 @@ void CharacterHandler::handleEnter(QKeyEvent* _event)
             //
             // Удаляем всё, но оставляем стилем блока текущий
             //
-            editor()->addScenarioBlock(ScreenplayParagraphType::Character);
+            editor()->addParagraph(ScreenplayParagraphType::Character);
         } else {
             //! Нет выделения
 
@@ -178,7 +178,7 @@ void CharacterHandler::handleEnter(QKeyEvent* _event)
                 //
                 // Cменить стиль
                 //
-                editor()->changeScenarioBlockType(changeForEnter(ScreenplayParagraphType::Character));
+                editor()->setCurrentParagraphType(changeForEnter(ScreenplayParagraphType::Character));
             } else {
                 //! Текст не пуст
 
@@ -193,21 +193,21 @@ void CharacterHandler::handleEnter(QKeyEvent* _event)
                     //
                     // Вставим блок имени героя перед собой
                     //
-                    editor()->addScenarioBlock(ScreenplayParagraphType::Character);
+                    editor()->addParagraph(ScreenplayParagraphType::Character);
                 } else if (cursorForwardText.isEmpty()) {
                     //! В конце блока
 
                     //
                     // Вставить блок реплики героя
                     //
-                    editor()->addScenarioBlock(jumpForEnter(ScreenplayParagraphType::Character));
+                    editor()->addParagraph(jumpForEnter(ScreenplayParagraphType::Character));
                 } else {
                     //! Внутри блока
 
                     //
                     // Вставить блок реплики героя
                     //
-                    editor()->addScenarioBlock(ScreenplayParagraphType::Dialogue);
+                    editor()->addParagraph(ScreenplayParagraphType::Dialogue);
                 }
             }
         }
@@ -258,7 +258,7 @@ void CharacterHandler::handleTab(QKeyEvent*)
                 //
                 // Cменить стиль на описание действия
                 //
-                editor()->changeScenarioBlockType(changeForTab(ScreenplayParagraphType::Character));
+                editor()->setCurrentParagraphType(changeForTab(ScreenplayParagraphType::Character));
             } else {
                 //! Текст не пуст
 
@@ -279,7 +279,7 @@ void CharacterHandler::handleTab(QKeyEvent*)
                     //
                     // Вставить блок ремарки
                     //
-                    editor()->addScenarioBlock(jumpForTab(ScreenplayParagraphType::Character));
+                    editor()->addParagraph(jumpForTab(ScreenplayParagraphType::Character));
                 } else {
                     //! Внутри блока
 
@@ -394,8 +394,7 @@ void CharacterHandler::complete(const QString& _currentBlockText, const QString&
         }
 
         case CharacterParser::SectionState: {
-            m_completerModel->setStringList(
-                QStringList::fromVector(editor()->dictionaries()->characterExtensions()));
+            m_completerModel->setStringList(editor()->dictionaries()->characterExtensions().toList());
             sectionModel = m_completerModel;
             sectionText = CharacterParser::extension(_currentBlockText);
             break;

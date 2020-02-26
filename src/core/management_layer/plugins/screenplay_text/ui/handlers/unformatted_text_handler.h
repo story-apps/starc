@@ -7,12 +7,12 @@ namespace KeyProcessingLayer
 {
 
 /**
- * @brief Класс выполняющий обработку нажатия клавиш в блоке кадр
+ * @brief Класс выполняющий обработку нажатия клавиш в блоке неформатированный текст
  */
-class ShotHandler : public StandardKeyHandler
+class UnformattedTextHandler : public StandardKeyHandler
 {
 public:
-    explicit ShotHandler(Ui::ScreenplayTextEdit* _editor);
+    explicit UnformattedTextHandler(Ui::ScreenplayTextEdit* _editor);
 
 protected:
     /**

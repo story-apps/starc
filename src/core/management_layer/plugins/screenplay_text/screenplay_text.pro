@@ -39,10 +39,13 @@ HEADERS += \
     ui/handlers/scene_characters_handler.h \
     ui/handlers/scene_description_handler.h \
     ui/handlers/scene_heading_handler.h \
+    ui/handlers/scene_name_handler.h \
     ui/handlers/shot_handler.h \
     ui/handlers/standard_key_handler.h \
     ui/handlers/transition_handler.h \
+    ui/handlers/unformatted_text_handler.h \
     ui/screenplay_text_edit.h \
+    ui/screenplay_text_edit_toolbar.h \
     ui/screenplay_text_view.h
 
 SOURCES += \
@@ -62,10 +65,13 @@ SOURCES += \
     ui/handlers/scene_characters_handler.cpp \
     ui/handlers/scene_description_handler.cpp \
     ui/handlers/scene_heading_handler.cpp \
+    ui/handlers/scene_name_handler.cpp \
     ui/handlers/shot_handler.cpp \
     ui/handlers/standard_key_handler.cpp \
     ui/handlers/transition_handler.cpp \
+    ui/handlers/unformatted_text_handler.cpp \
     ui/screenplay_text_edit.cpp \
+    ui/screenplay_text_edit_toolbar.cpp \
     ui/screenplay_text_view.cpp
 
 RESOURCES += \

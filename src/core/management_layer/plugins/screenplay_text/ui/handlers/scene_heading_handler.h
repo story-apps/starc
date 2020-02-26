@@ -2,6 +2,8 @@
 
 #include "standard_key_handler.h"
 
+class QStringListModel;
+
 
 namespace KeyProcessingLayer
 {
@@ -35,6 +37,12 @@ private:
      * @brief Сохранить данные сцены
      */
     void storeSceneParameters() const;
+
+private:
+    /**
+     * @brief Модель дополнений
+     */
+    QStringListModel* m_completerModel = nullptr;
 };
 
 } // namespace KeyProcessingLayer

@@ -54,7 +54,7 @@ void ActionHandler::handleEnter(QKeyEvent*)
             //
             // Удаляем всё, но оставляем стилем блока текущий
             //
-            editor()->addScenarioBlock(ScreenplayParagraphType::Action);
+            editor()->addParagraph(ScreenplayParagraphType::Action);
         } else {
             //! Нет выделения
 
@@ -65,14 +65,14 @@ void ActionHandler::handleEnter(QKeyEvent*)
                 //
                 // Меняем стиль на место и время
                 //
-                editor()->changeScenarioBlockType(changeForEnter(ScreenplayParagraphType::Action));
+                editor()->setCurrentParagraphType(changeForEnter(ScreenplayParagraphType::Action));
             } else {
                 //! Текст не пуст
 
                 //
                 // Вставляем блок и применяем ему стиль описания действия
                 //
-                editor()->addScenarioBlock(jumpForEnter(ScreenplayParagraphType::Action));
+                editor()->addParagraph(jumpForEnter(ScreenplayParagraphType::Action));
             }
         }
 	}
@@ -121,7 +121,7 @@ void ActionHandler::handleTab(QKeyEvent*)
 				//
 				// Если строка пуста, то сменить стиль на имя героя
 				//
-                editor()->changeScenarioBlockType(changeForTab(ScreenplayParagraphType::Action));
+                editor()->setCurrentParagraphType(changeForTab(ScreenplayParagraphType::Action));
 			} else {
 				//! Текст не пуст
 
@@ -131,14 +131,14 @@ void ActionHandler::handleTab(QKeyEvent*)
 					//
 					// Меняем на блок персонажа
 					//
-                    editor()->changeScenarioBlockType(ScreenplayParagraphType::Character);
+                    editor()->setCurrentParagraphType(ScreenplayParagraphType::Character);
 				} else if (cursorForwardText.isEmpty()) {
 					//! В конце блока
 
 					//
 					// Вставляем блок персонажа
 					//
-                    editor()->addScenarioBlock(jumpForTab(ScreenplayParagraphType::Action));
+                    editor()->addParagraph(jumpForTab(ScreenplayParagraphType::Action));
 				} else {
 					//! Внутри блока
 
@@ -178,7 +178,7 @@ void ActionHandler::handleOther(QKeyEvent* _event)
 		//
         const QString maybeSceneIntro = TextHelper::smartToUpper(cursorBackwardText);
         if (editor()->dictionaries()->sceneIntros().contains(maybeSceneIntro)) {
-            editor()->changeScenarioBlockType(ScreenplayParagraphType::SceneHeading);
+            editor()->setCurrentParagraphType(ScreenplayParagraphType::SceneHeading);
 		}
 	} else {
 		//! В противном случае, обрабатываем в базовом классе

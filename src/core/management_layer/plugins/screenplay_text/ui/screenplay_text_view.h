@@ -19,6 +19,11 @@ public:
 
 protected:
     /**
+     * @brief Переопределяем для корректировки положения тулбара действий над проектами
+     */
+    void resizeEvent(QResizeEvent* _event) override;
+
+    /**
      * @brief Обновить переводы
      */
     void updateTranslations() override;

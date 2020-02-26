@@ -65,7 +65,7 @@ void SceneCharactersHandler::handleEnter(QKeyEvent*)
             //
             // Удаляем всё, но оставляем стилем блока текущий
             //
-            editor()->addScenarioBlock(ScreenplayParagraphType::SceneCharacters);
+            editor()->addParagraph(ScreenplayParagraphType::SceneCharacters);
 		} else {
 			//! Нет выделения
 
@@ -76,7 +76,7 @@ void SceneCharactersHandler::handleEnter(QKeyEvent*)
 				//
 				// Cменить стиль на описание действия
 				//
-                editor()->changeScenarioBlockType(changeForEnter(ScreenplayParagraphType::SceneCharacters));
+                editor()->setCurrentParagraphType(changeForEnter(ScreenplayParagraphType::SceneCharacters));
 			} else {
 				//! Текст не пуст
 
@@ -101,7 +101,7 @@ void SceneCharactersHandler::handleEnter(QKeyEvent*)
 					//
 					cursor.movePosition(QTextCursor::EndOfBlock);
 					editor()->setTextCursor(cursor);
-                    editor()->addScenarioBlock(jumpForEnter(ScreenplayParagraphType::SceneCharacters));
+                    editor()->addParagraph(jumpForEnter(ScreenplayParagraphType::SceneCharacters));
 				} else {
 					//! Внутри блока
 
@@ -121,7 +121,7 @@ void SceneCharactersHandler::handleEnter(QKeyEvent*)
 					// Перейдём к блоку действия
 					//
 					editor()->setTextCursor(cursor);
-                    editor()->addScenarioBlock(ScreenplayParagraphType::Action);
+                    editor()->addParagraph(ScreenplayParagraphType::Action);
 				}
 			}
 		}

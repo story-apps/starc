@@ -74,7 +74,7 @@ void FolderFooterHandler::handleEnter(QKeyEvent*)
 					cursor.movePosition(QTextCursor::PreviousCharacter);
 					cursor.setBlockFormat(QTextBlockFormat());
 					editor()->setTextCursor(cursor);
-                    editor()->changeScenarioBlockType(ScreenplayParagraphType::SceneHeading);
+                    editor()->setCurrentParagraphType(ScreenplayParagraphType::SceneHeading);
 					editor()->moveCursor(QTextCursor::NextCharacter);
 				} else if (cursorForwardText.isEmpty()) {
 					//! В конце блока
@@ -82,14 +82,14 @@ void FolderFooterHandler::handleEnter(QKeyEvent*)
 					//
 					// Вставить блок время и место
 					//
-                    editor()->addScenarioBlock(ScreenplayParagraphType::SceneHeading);
+                    editor()->addParagraph(ScreenplayParagraphType::SceneHeading);
 				} else {
 					//! Внутри блока
 
 					//
 					// Вставить блок время и место
 					//
-                    editor()->addScenarioBlock(ScreenplayParagraphType::SceneHeading);
+                    editor()->addParagraph(ScreenplayParagraphType::SceneHeading);
 				}
 			}
 		}

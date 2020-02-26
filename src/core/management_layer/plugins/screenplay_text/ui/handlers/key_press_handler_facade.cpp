@@ -13,8 +13,10 @@
 #include "scene_characters_handler.h"
 #include "scene_description_handler.h"
 #include "scene_heading_handler.h"
+#include "scene_name_handler.h"
 #include "shot_handler.h"
 #include "transition_handler.h"
+#include "unformatted_text_handler.h"
 
 #include <business_layer/templates/screenplay_template.h>
 
@@ -36,46 +38,45 @@ public:
 
     Ui::ScreenplayTextEdit* m_editor = nullptr;
 
-    PrepareHandler* m_prepareHandler = nullptr;
-    PreHandler* m_preHandler = nullptr;
-    SceneHeadingHandler* m_sceneHeaderHandler = nullptr;
-    SceneCharactersHandler* m_sceneCharactersHandler = nullptr;
-    ActionHandler* m_actionHandler = nullptr;
-    CharacterHandler* m_characterHandler = nullptr;
-    ParentheticalHandler* m_parentheticalHandler = nullptr;
-    DialogHandler* m_dialogHandler = nullptr;
-    TransitionHandler* m_transitionHandler = nullptr;
-    NoteHandler* m_shotHandler = nullptr;
-    TitleHeaderHandler* m_titleheaderHandler = nullptr;
-    TitleHandler* m_titleHandler = nullptr;
-    InlineNoteHandler* m_inlineNoteHandler = nullptr;
-    FolderHeaderHandler* m_folderHeaderHandler = nullptr;
-    FolderFooterHandler* m_folderFooterHandler = nullptr;
-    SceneDescriptionHandler* m_sceneDescriptionHandler = nullptr;
-    LyricsHandler* m_lyricsHandler = nullptr;
+    QScopedPointer<PrepareHandler> m_prepareHandler;
+    QScopedPointer<PreHandler> m_preHandler;
+    QScopedPointer<UnformattedTextHandler> m_unformattedTextHandler;
+    QScopedPointer<SceneNameHandler> m_sceneNameHandler;
+    QScopedPointer<SceneDescriptionHandler> m_sceneDescriptionHandler;
+    QScopedPointer<SceneHeadingHandler> m_sceneHeaderHandler;
+    QScopedPointer<SceneCharactersHandler> m_sceneCharactersHandler;
+    QScopedPointer<ActionHandler> m_actionHandler;
+    QScopedPointer<CharacterHandler> m_characterHandler;
+    QScopedPointer<ParentheticalHandler> m_parentheticalHandler;
+    QScopedPointer<DialogHandler> m_dialogHandler;
+    QScopedPointer<LyricsHandler> m_lyricsHandler;
+    QScopedPointer<TransitionHandler> m_transitionHandler;
+    QScopedPointer<ShotHandler> m_shotHandler;
+    QScopedPointer<InlineNoteHandler> m_inlineNoteHandler;
+    QScopedPointer<FolderHeaderHandler> m_folderHeaderHandler;
+    QScopedPointer<FolderFooterHandler> m_folderFooterHandler;
 };
 
 KeyPressHandlerFacade::Implementation::Implementation(Ui::ScreenplayTextEdit* _editor)
     : m_editor(_editor),
       m_prepareHandler(new PrepareHandler(_editor)),
       m_preHandler(new PreHandler(_editor)),
+      m_unformattedTextHandler(new UnformattedTextHandler(_editor)),
+      m_sceneNameHandler(new SceneNameHandler(_editor)),
+      m_sceneDescriptionHandler(new SceneDescriptionHandler(_editor)),
       m_sceneHeaderHandler(new SceneHeadingHandler(_editor)),
       m_sceneCharactersHandler(new SceneCharactersHandler(_editor)),
       m_actionHandler(new ActionHandler(_editor)),
       m_characterHandler(new CharacterHandler(_editor)),
       m_parentheticalHandler(new ParentheticalHandler(_editor)),
       m_dialogHandler(new DialogHandler(_editor)),
+      m_lyricsHandler(new LyricsHandler(_editor)),
       m_transitionHandler(new TransitionHandler(_editor)),
-      m_shotHandler(new NoteHandler(_editor)),
-      m_titleheaderHandler(new TitleHeaderHandler(_editor)),
-      m_titleHandler(new TitleHandler(_editor)),
+      m_shotHandler(new ShotHandler(_editor)),
       m_inlineNoteHandler(new InlineNoteHandler(_editor)),
       m_folderHeaderHandler(new FolderHeaderHandler(_editor)),
-      m_folderFooterHandler(new FolderFooterHandler(_editor)),
-      m_sceneDescriptionHandler(new SceneDescriptionHandler(_editor)),
-      m_lyricsHandler(new LyricsHandler(_editor))
+      m_folderFooterHandler(new FolderFooterHandler(_editor))
 {
-
 }
 
 
@@ -114,14 +115,16 @@ void KeyPressHandlerFacade::handle(QEvent* _event, bool _pre)
 {
     QTextBlock currentBlock = d->m_editor->textCursor().block();
     const ScreenplayParagraphType currentType = BusinessLayer::ScreenplayBlockStyle::forBlock(currentBlock);
-    AbstractKeyHandler* currentHandler = handlerFor(currentType);
+    auto currentHandler = handlerFor(currentType);
 
-    if (currentHandler != nullptr) {
-        if (_pre) {
-            currentHandler->prehandle();
-        } else {
-            currentHandler->handle(_event);
-        }
+    if (currentHandler == nullptr) {
+        return;
+    }
+
+    if (_pre) {
+        currentHandler->prehandle();
+    } else {
+        currentHandler->handle(_event);
     }
 }
 
@@ -148,55 +151,64 @@ KeyPressHandlerFacade::KeyPressHandlerFacade(ScreenplayTextEdit* _editor)
 AbstractKeyHandler* KeyPressHandlerFacade::handlerFor(ScreenplayParagraphType _type)
 {
     switch (_type) {
-        case ScreenplayParagraphType::SceneHeading: {
-            return d->m_sceneHeaderHandler;
+        case ScreenplayParagraphType::UnformattedText: {
+            return d->m_unformattedTextHandler.data();
         }
 
-        case ScreenplayParagraphType::SceneCharacters: {
-            return d->m_sceneCharactersHandler;
-        }
-
-        case ScreenplayParagraphType::Action: {
-            return d->m_actionHandler;
-        }
-
-        case ScreenplayParagraphType::Character: {
-            return d->m_characterHandler;
-        }
-        case ScreenplayParagraphType::Parenthetical: {
-            return d->m_parentheticalHandler;
-        }
-
-        case ScreenplayParagraphType::Dialogue: {
-            return d->m_dialogHandler;
-        }
-
-        case ScreenplayParagraphType::Transition: {
-            return d->m_transitionHandler;
-        }
-
-        case ScreenplayParagraphType::Shot: {
-            return d->m_shotHandler;
-        }
-
-        case ScreenplayParagraphType::InlineNote: {
-            return d->m_inlineNoteHandler;
-        }
-
-        case ScreenplayParagraphType::FolderHeader: {
-            return d->m_folderHeaderHandler;
-        }
-
-        case ScreenplayParagraphType::FolderFooter: {
-            return d->m_folderFooterHandler;
+        case ScreenplayParagraphType::SceneName: {
+            return d->m_sceneNameHandler.data();
         }
 
         case ScreenplayParagraphType::SceneDescription: {
-            return d->m_sceneDescriptionHandler;
+            return d->m_sceneDescriptionHandler.data();
+        }
+
+        case ScreenplayParagraphType::SceneHeading: {
+            return d->m_sceneHeaderHandler.data();
+        }
+
+        case ScreenplayParagraphType::SceneCharacters: {
+            return d->m_sceneCharactersHandler.data();
+        }
+
+        case ScreenplayParagraphType::Action: {
+            return d->m_actionHandler.data();
+        }
+
+        case ScreenplayParagraphType::Character: {
+            return d->m_characterHandler.data();
+        }
+
+        case ScreenplayParagraphType::Parenthetical: {
+            return d->m_parentheticalHandler.data();
+        }
+
+        case ScreenplayParagraphType::Dialogue: {
+            return d->m_dialogHandler.data();
         }
 
         case ScreenplayParagraphType::Lyrics: {
-            return d->m_lyricsHandler;
+            return d->m_lyricsHandler.data();
+        }
+
+        case ScreenplayParagraphType::Transition: {
+            return d->m_transitionHandler.data();
+        }
+
+        case ScreenplayParagraphType::Shot: {
+            return d->m_shotHandler.data();
+        }
+
+        case ScreenplayParagraphType::InlineNote: {
+            return d->m_inlineNoteHandler.data();
+        }
+
+        case ScreenplayParagraphType::FolderHeader: {
+            return d->m_folderHeaderHandler.data();
+        }
+
+        case ScreenplayParagraphType::FolderFooter: {
+            return d->m_folderFooterHandler.data();
         }
 
         default: {

@@ -61,13 +61,13 @@ SceneHeadingParser::Section SceneHeadingParser::section(const QString& _text)
     SceneHeadingParser::Section section = SectionUndefined;
 
     if (_text.split(", ").count() == 2) {
-        section = SectionScenarioDay;
+        section = SectionStoryDay;
     } else if (_text.split(" - ").count() >= 2) {
-        section = SectionTime;
+        section = SectionSceneTime;
     } else {
         const int splitDotCount = _text.split(". ").count();
         if (splitDotCount == 1) {
-            section = SectionPlace;
+            section = SectionSceneIntro;
         } else {
             section = SectionLocation;
         }
@@ -76,7 +76,7 @@ SceneHeadingParser::Section SceneHeadingParser::section(const QString& _text)
     return section;
 }
 
-QString SceneHeadingParser::placeName(const QString& _text)
+QString SceneHeadingParser::sceneIntro(const QString& _text)
 {
     QString placeName;
 
@@ -87,7 +87,7 @@ QString SceneHeadingParser::placeName(const QString& _text)
     return TextHelper::smartToUpper(placeName);
 }
 
-QString SceneHeadingParser::locationName(const QString& _text, bool _force)
+QString SceneHeadingParser::location(const QString& _text, bool _force)
 {
     QString locationName;
 
@@ -103,7 +103,7 @@ QString SceneHeadingParser::locationName(const QString& _text, bool _force)
     return TextHelper::smartToUpper(locationName);
 }
 
-QString SceneHeadingParser::scenarioDayName(const QString& _text)
+QString SceneHeadingParser::storyDay(const QString& _text)
 {
     QString scenarioDayName;
 
@@ -114,7 +114,7 @@ QString SceneHeadingParser::scenarioDayName(const QString& _text)
     return TextHelper::smartToUpper(scenarioDayName);
 }
 
-QString SceneHeadingParser::timeName(const QString& _text)
+QString SceneHeadingParser::sceneTime(const QString& _text)
 {
     QString timeName;
 

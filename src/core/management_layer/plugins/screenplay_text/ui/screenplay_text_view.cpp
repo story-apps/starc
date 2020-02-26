@@ -1,17 +1,22 @@
 #include "screenplay_text_view.h"
 
+#include "screenplay_text_edit.h"
+#include "screenplay_text_edit_toolbar.h"
+
 #include <ui/design_system/design_system.h>
+#include <ui/widgets/floating_tool_bar/floating_tool_bar.h>
 #include <ui/widgets/scroll_bar/scroll_bar.h>
-#include <ui/widgets/text_edit/completer/completer_text_edit.h>
 #include <ui/widgets/text_edit/completer/completer.h>
+#include <ui/widgets/text_edit/page/page_metrics.h>
 #include <ui/widgets/text_edit/spell_check/spell_checker.h>
 #include <ui/widgets/text_edit/scalable_wrapper/scalable_wrapper.h>
 
+#include <QAction>
 #include <QScrollArea>
 #include <QStringListModel>
 #include <QVBoxLayout>
 
-#include <QDebug>
+
 namespace Ui
 {
 
@@ -20,13 +25,21 @@ class ScreenplayTextView::Implementation
 public:
     explicit Implementation(QWidget* _parent);
 
+    /**
+     * @brief Обновить настройки UI панели инструментов
+     */
+    void updateToolBarsUi();
 
-    CompleterTextEdit* screenplayText = nullptr;
+
+    ScreenplayTextEditToolBar* toolBar = nullptr;
+
+    ScreenplayTextEdit* screenplayText = nullptr;
     ScalableWrapper* scalableWrapper = nullptr;
 };
 
 ScreenplayTextView::Implementation::Implementation(QWidget* _parent)
-    : screenplayText(new CompleterTextEdit(_parent)),
+    : toolBar(new ScreenplayTextEditToolBar(_parent)),
+      screenplayText(new ScreenplayTextEdit(_parent)),
       scalableWrapper(new ScalableWrapper(screenplayText, _parent))
 {
     screenplayText->setVerticalScrollBar(new ScrollBar);
@@ -37,8 +50,12 @@ ScreenplayTextView::Implementation::Implementation(QWidget* _parent)
 
     screenplayText->setFrameShape(QFrame::NoFrame);
     screenplayText->setUsePageMode(true);
-    screenplayText->setPageFormat(QPageSize::A6);
-    screenplayText->setPageMargins({30, 20, 10, 20});
+    screenplayText->setPageFormat(QPageSize::A4);
+    screenplayText->setPageMargins({38, 20, 17, 20});
+    QFont font("Courier Prime");
+    auto size = PageMetrics::ptToPx(12);
+    font.setPixelSize(size);
+    screenplayText->document()->setDefaultFont(font);
     screenplayText->setPageNumbersAlignment(Qt::AlignBottom | Qt::AlignRight);
     screenplayText->setHeader("Header text");
     screenplayText->setFooter("Footer text");
@@ -57,6 +74,16 @@ ScreenplayTextView::Implementation::Implementation(QWidget* _parent)
     });
 }
 
+void ScreenplayTextView::Implementation::updateToolBarsUi()
+{
+    toolBar->resize(toolBar->sizeHint());
+    toolBar->move(QPointF(Ui::DesignSystem::layout().px24(),
+                          Ui::DesignSystem::layout().px24()).toPoint());
+    toolBar->setBackgroundColor(Ui::DesignSystem::color().primary());
+    toolBar->setTextColor(Ui::DesignSystem::color().onPrimary());
+    toolBar->raise();
+}
+
 
 // ****
 
@@ -65,6 +92,8 @@ ScreenplayTextView::ScreenplayTextView(QWidget* _parent)
     : Widget(_parent),
       d(new Implementation(this))
 {
+
+
     QVBoxLayout* layout = new QVBoxLayout;
     layout->setContentsMargins({});
     layout->setSpacing(0);
@@ -84,6 +113,14 @@ void ScreenplayTextView::setText(const QString& _text)
 
 }
 
+void ScreenplayTextView::resizeEvent(QResizeEvent* _event)
+{
+    Widget::resizeEvent(_event);
+
+    d->toolBar->move(QPointF(Ui::DesignSystem::layout().px24(),
+                             Ui::DesignSystem::layout().px24()).toPoint());
+}
+
 ScreenplayTextView::~ScreenplayTextView() = default;
 
 void ScreenplayTextView::updateTranslations()
@@ -96,6 +133,8 @@ void ScreenplayTextView::designSystemChangeEvent(DesignSystemChangeEvent* _event
     Widget::designSystemChangeEvent(_event);
 
     setBackgroundColor(Ui::DesignSystem::color().surface());
+
+    d->updateToolBarsUi();
 
     d->screenplayText->setPageSpacing(Ui::DesignSystem::layout().px24());
     QPalette palette;

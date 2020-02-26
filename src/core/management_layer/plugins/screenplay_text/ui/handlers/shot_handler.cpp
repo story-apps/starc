@@ -1,21 +1,25 @@
-#include "NoteHandler.h"
+#include "shot_handler.h"
 
-#include "../ScenarioTextEdit.h"
+#include <business_layer/templates/screenplay_template.h>
+
+#include <ui/screenplay_text_edit.h>
 
 #include <QKeyEvent>
 #include <QTextBlock>
 
-using namespace KeyProcessingLayer;
-using namespace BusinessLogic;
-using UserInterface::ScenarioTextEdit;
+using BusinessLayer::ScreenplayParagraphType;
+using Ui::ScreenplayTextEdit;
 
 
-NoteHandler::NoteHandler(ScenarioTextEdit* _editor) :
-	StandardKeyHandler(_editor)
+namespace KeyProcessingLayer
+{
+
+ShotHandler::ShotHandler(ScreenplayTextEdit* _editor)
+    : StandardKeyHandler(_editor)
 {
 }
 
-void NoteHandler::handleEnter(QKeyEvent*)
+void ShotHandler::handleEnter(QKeyEvent*)
 {
 	//
 	// Получим необходимые значения
@@ -48,7 +52,7 @@ void NoteHandler::handleEnter(QKeyEvent*)
             //
             // Удаляем всё, но оставляем стилем блока текущий
             //
-            editor()->addScenarioBlock(ScenarioBlockStyle::Note);
+            editor()->addParagraph(ScreenplayParagraphType::Shot);
 		} else {
 			//! Нет выделения
 
@@ -59,7 +63,7 @@ void NoteHandler::handleEnter(QKeyEvent*)
 				//
 				// Ни чего не делаем
 				//
-				editor()->changeScenarioBlockType(changeForEnter(ScenarioBlockStyle::Note));
+                editor()->setCurrentParagraphType(changeForEnter(ScreenplayParagraphType::Shot));
 			} else {
 				//! Текст не пуст
 
@@ -75,21 +79,21 @@ void NoteHandler::handleEnter(QKeyEvent*)
 					//
 					// Вставляем блок и применяем ему стиль описания действия
 					//
-					editor()->addScenarioBlock(jumpForEnter(ScenarioBlockStyle::Note));
+                    editor()->addParagraph(jumpForEnter(ScreenplayParagraphType::Shot));
 				} else {
 					//! Внутри блока
 
 					//
 					// Вставляем блок и применяем ему стиль описания действия
 					//
-					editor()->addScenarioBlock(ScenarioBlockStyle::Action);
+                    editor()->addParagraph(ScreenplayParagraphType::Action);
 				}
 			}
 		}
 	}
 }
 
-void NoteHandler::handleTab(QKeyEvent*)
+void ShotHandler::handleTab(QKeyEvent*)
 {
 	//
 	// Получим необходимые значения
@@ -132,7 +136,7 @@ void NoteHandler::handleTab(QKeyEvent*)
 				//
 				// Ни чего не делаем
 				//
-				editor()->changeScenarioBlockType(changeForTab(ScenarioBlockStyle::Note));
+                editor()->setCurrentParagraphType(changeForTab(ScreenplayParagraphType::Shot));
 			} else {
 				//! Текст не пуст
 
@@ -148,7 +152,7 @@ void NoteHandler::handleTab(QKeyEvent*)
 					//
 					// Действуем как нажатие клавиши ENTER
 					//
-					editor()->addScenarioBlock(jumpForTab(ScenarioBlockStyle::Note));
+                    editor()->addParagraph(jumpForTab(ScreenplayParagraphType::Shot));
 				} else {
 					//! Внутри блока
 
@@ -160,3 +164,5 @@ void NoteHandler::handleTab(QKeyEvent*)
 		}
 	}
 }
+
+} // namespace KeyProcessingLayer

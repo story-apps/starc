@@ -88,13 +88,17 @@ QAction* FloatingToolBar::Implementation::pressedAction(const QPoint& _coordinat
     qreal actionLeft = Ui::DesignSystem::floatingToolBar().shadowMargins().left()
                        + Ui::DesignSystem::floatingToolBar().margins().left()
                        - (Ui::DesignSystem::floatingToolBar().spacing() / 2.0);
-    //
-    // Берём увеличенный регион для удобства клика в области кнопки
-    //
-    const qreal actionWidth = Ui::DesignSystem::floatingToolBar().iconSize().width()
-                              + Ui::DesignSystem::floatingToolBar().spacing();
     for (QAction* action : _actions) {
-        const qreal actionRight = actionLeft + actionWidth;
+        if (!action->isVisible()) {
+            continue;
+        }
+
+        const qreal actionRight
+                = actionLeft
+                  + (action->text().length() > 1
+                     ? QFontMetricsF(Ui::DesignSystem::font().body1()).horizontalAdvance(action->text())
+                     : Ui::DesignSystem::floatingToolBar().iconSize().width())
+                  + Ui::DesignSystem::floatingToolBar().spacing();
 
         if (actionLeft < _coordinate.x() && _coordinate.x() < actionRight) {
             return action;
@@ -121,18 +125,34 @@ FloatingToolBar::FloatingToolBar(QWidget* _parent)
     designSystemChangeEvent(nullptr);
 }
 
+FloatingToolBar::~FloatingToolBar() = default;
+
 QSize FloatingToolBar::sizeHint() const
 {
+    const auto allActions = actions();
+    const auto visibleActionsSize = std::count_if(allActions.begin(), allActions.end(),
+                                                  [] (QAction* _action) { return _action->isVisible(); });
     const qreal width = Ui::DesignSystem::floatingToolBar().shadowMargins().left()
                         + Ui::DesignSystem::floatingToolBar().margins().left()
-                        + Ui::DesignSystem::floatingToolBar().iconSize().width() * actions().size()
-                        + Ui::DesignSystem::floatingToolBar().spacing() * (actions().size() - 1)
+                        + Ui::DesignSystem::floatingToolBar().iconSize().width() * visibleActionsSize
+                        + Ui::DesignSystem::floatingToolBar().spacing() * (visibleActionsSize - 1)
                         + Ui::DesignSystem::floatingToolBar().margins().right()
                         + Ui::DesignSystem::floatingToolBar().shadowMargins().right();
+    const qreal additionalWidth = [this] {
+        const QFontMetricsF fontMetrics(Ui::DesignSystem::font().body1());
+        qreal width = 0.0;
+        for (const auto action : actions()) {
+            if (action->text().length() > 1) {
+                width += fontMetrics.horizontalAdvance(action->text());
+                width -= Ui::DesignSystem::floatingToolBar().iconSize().width();
+            }
+        }
+        return width;
+    }();
     const qreal height = Ui::DesignSystem::floatingToolBar().shadowMargins().top()
                          + Ui::DesignSystem::floatingToolBar().height()
                          + Ui::DesignSystem::floatingToolBar().shadowMargins().bottom();
-    return QSize(static_cast<int>(width), static_cast<int>(height));
+    return QSize(static_cast<int>(width + additionalWidth), static_cast<int>(height));
 }
 
 bool FloatingToolBar::event(QEvent* _event)
@@ -151,8 +171,6 @@ bool FloatingToolBar::event(QEvent* _event)
 
     return Widget::event(_event);
 }
-
-FloatingToolBar::~FloatingToolBar() = default;
 
 void FloatingToolBar::paintEvent(QPaintEvent* _event)
 {
@@ -197,45 +215,67 @@ void FloatingToolBar::paintEvent(QPaintEvent* _event)
     //
     // Рисуем иконки
     //
-    painter.setFont(Ui::DesignSystem::font().iconsMid());
     qreal actionIconX = Ui::DesignSystem::floatingToolBar().shadowMargins().left()
                         + Ui::DesignSystem::floatingToolBar().margins().left();
     const qreal actionIconY = Ui::DesignSystem::floatingToolBar().shadowMargins().top()
                               + Ui::DesignSystem::floatingToolBar().margins().top();
     const QSizeF actionIconSize = Ui::DesignSystem::floatingToolBar().iconSize();
     for (const QAction* action : actions()) {
-        //
-        // ... сама иконка
-        //
-        const QRectF actionRect(QPointF(actionIconX, actionIconY), actionIconSize);
-        painter.setPen(action->isChecked() ? Ui::DesignSystem::color().secondary() : textColor());
-        if (action->icon().isNull()) {
-            painter.drawText(actionRect, Qt::AlignCenter, action->iconText());
-        } else {
-            const qreal actionPixmapX = Ui::DesignSystem::floatingToolBar().shadowMargins().left();
-            const qreal actionPixmapY = Ui::DesignSystem::floatingToolBar().shadowMargins().top();
-            const qreal actionPixmpWidth = Ui::DesignSystem::floatingToolBar().margins().left()
-                                           + Ui::DesignSystem::floatingToolBar().iconSize().width()
-                                           + Ui::DesignSystem::floatingToolBar().margins().right();
-            const QSizeF actionPixmapSize = QSizeF(actionPixmpWidth, actionPixmpWidth);
-            painter.drawPixmap(QPointF(actionPixmapX, actionPixmapY), action->icon().pixmap(actionPixmapSize.toSize()));
+        if (!action->isVisible()) {
+            continue;
         }
 
         //
-        // ... декорация
+        // Рисуем действие с текстом
         //
-        if (action == d->lastPressedAction
-            && (d->decorationRadiusAnimation.state() == QVariantAnimation::Running
-                || d->decorationOpacityAnimation.state() == QVariantAnimation::Running)) {
-            painter.setPen(Qt::NoPen);
-            painter.setBrush(Ui::DesignSystem::color().secondary());
-            painter.setOpacity(d->decorationOpacityAnimation.currentValue().toReal());
-            painter.drawEllipse(actionRect.center(), d->decorationRadiusAnimation.currentValue().toReal(),
-                                d->decorationRadiusAnimation.currentValue().toReal());
-            painter.setOpacity(1.0);
-        }
+        if (action->text().length() > 1) {
+            painter.setFont(Ui::DesignSystem::font().body1());
+            const QFontMetricsF fontMetrics(painter.font());
+            const QRectF actionRect(actionIconX, actionIconY,
+                                    fontMetrics.horizontalAdvance(action->text()), actionIconSize.height());
+            painter.setPen(textColor());
+            painter.drawText(actionRect, Qt::AlignCenter, action->text());
 
-        actionIconX += actionRect.width() + Ui::DesignSystem::floatingToolBar().spacing();
+            actionIconX += actionRect.width() + Ui::DesignSystem::floatingToolBar().spacing();
+        }
+        //
+        // Рисуем действие с одной лишь иконкой
+        //
+        else {
+            //
+            // ... сама иконка
+            //
+            painter.setFont(Ui::DesignSystem::font().iconsMid());
+            const QRectF actionRect(QPointF(actionIconX, actionIconY), actionIconSize);
+            painter.setPen(action->isChecked() ? Ui::DesignSystem::color().secondary() : textColor());
+            if (action->icon().isNull()) {
+                painter.drawText(actionRect, Qt::AlignCenter, action->iconText());
+            } else {
+                const qreal actionPixmapX = Ui::DesignSystem::floatingToolBar().shadowMargins().left();
+                const qreal actionPixmapY = Ui::DesignSystem::floatingToolBar().shadowMargins().top();
+                const qreal actionPixmpWidth = Ui::DesignSystem::floatingToolBar().margins().left()
+                                               + Ui::DesignSystem::floatingToolBar().iconSize().width()
+                                               + Ui::DesignSystem::floatingToolBar().margins().right();
+                const QSizeF actionPixmapSize = QSizeF(actionPixmpWidth, actionPixmpWidth);
+                painter.drawPixmap(QPointF(actionPixmapX, actionPixmapY), action->icon().pixmap(actionPixmapSize.toSize()));
+            }
+
+            //
+            // ... декорация
+            //
+            if (action == d->lastPressedAction
+                    && (d->decorationRadiusAnimation.state() == QVariantAnimation::Running
+                        || d->decorationOpacityAnimation.state() == QVariantAnimation::Running)) {
+                painter.setPen(Qt::NoPen);
+                painter.setBrush(Ui::DesignSystem::color().secondary());
+                painter.setOpacity(d->decorationOpacityAnimation.currentValue().toReal());
+                painter.drawEllipse(actionRect.center(), d->decorationRadiusAnimation.currentValue().toReal(),
+                                    d->decorationRadiusAnimation.currentValue().toReal());
+                painter.setOpacity(1.0);
+            }
+
+            actionIconX += actionRect.width() + Ui::DesignSystem::floatingToolBar().spacing();
+        }
     }
 }
 

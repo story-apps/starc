@@ -22,6 +22,11 @@ public:
     void addLocationModel(LocationModel* _LocationModel);
 
     /**
+     * @brief Создать локацию с заданным именем
+     */
+    void createLocation(const QString& _name);
+
+    /**
      * @brief Реализация древовидной модели
      */
     /** @{ */

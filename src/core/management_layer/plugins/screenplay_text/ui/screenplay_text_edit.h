@@ -1,6 +1,6 @@
 #pragma once
 
-#include <ui/widgets/text_edit/completer/completer_text_edit.h>
+#include <ui/widgets/text_edit/base/base_text_edit.h>
 
 namespace BusinessLayer {
     class CharactersModel;
@@ -17,7 +17,7 @@ namespace Ui
 /**
  * @brief Текстовый редактор сценария
  */
-class ScreenplayTextEdit : public CompleterTextEdit
+class ScreenplayTextEdit : public BaseTextEdit
 {
 public:
     explicit ScreenplayTextEdit(QWidget* _parent = nullptr);
@@ -47,34 +47,48 @@ public:
      * @brief Вставить новый блок
      * @param Тип блока
      */
-    void addScenarioBlock(BusinessLayer::ScreenplayParagraphType _blockType);
+    void addParagraph(BusinessLayer::ScreenplayParagraphType _type);
 
     /**
-     * @brief Установить вид текущего блока
+     * @brief Установить тип текущего блока
      * @param Тип блока
      */
-    void changeScenarioBlockType(BusinessLayer::ScreenplayParagraphType _blockType, bool _forced = false);
+    void setCurrentParagraphType(BusinessLayer::ScreenplayParagraphType _type);
 
     /**
-     * @brief Установить заданный тип блока для всех выделенных блоков
+     * @brief Получить тип блока в котором находится курсор
      */
-    void changeScenarioBlockTypeForSelection(BusinessLayer::ScreenplayParagraphType _blockType);
-
-    /**
-     * @brief Применить тип блока ко всему тексту в блоке
-     * @param Тип для применения
-     */
-    void applyScenarioTypeToBlockText(BusinessLayer::ScreenplayParagraphType _blockType);
-
-    /**
-     * @brief Получить вид блока в котором находится курсор
-     */
-    BusinessLayer::ScreenplayParagraphType scenarioBlockType() const;
+    BusinessLayer::ScreenplayParagraphType currentParagraphType() const;
 
     /**
      * @brief Своя реализация установки курсора
      */
     void setTextCursorReimpl(const QTextCursor& _cursor);
+
+signals:
+    /**
+     * @brief Запрос на отмену последнего действия
+     */
+    void undoRequest();
+
+    /**
+     * @brief Запрос на повтор последнего действия
+     */
+    void redoRequest();
+
+protected:
+    /**
+     * @brief Нажатия многих клавиш обрабатываются вручную
+     */
+    void keyPressEvent(QKeyEvent* _event) override;
+
+    /**
+     * @brief Обрабатываем специфичные ситуации для редактора сценария
+     */
+    /** @{ */
+    bool keyPressEventReimpl(QKeyEvent* _event) override;
+    bool updateEnteredText(const QString& _eventText) override;
+    /** @} */
 
 private:
     class Implementation;

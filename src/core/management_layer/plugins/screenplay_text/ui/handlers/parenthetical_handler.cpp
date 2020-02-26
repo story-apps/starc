@@ -57,7 +57,7 @@ void ParentheticalHandler::handleEnter(QKeyEvent*)
             //
             // Удаляем всё, но оставляем стилем блока текущий
             //
-            editor()->addScenarioBlock(ScreenplayParagraphType::Parenthetical);
+            editor()->addParagraph(ScreenplayParagraphType::Parenthetical);
 		} else {
 			//! Нет выделения
 
@@ -68,7 +68,7 @@ void ParentheticalHandler::handleEnter(QKeyEvent*)
 				//
 				// Ни чего не делаем
 				//
-                editor()->changeScenarioBlockType(changeForEnter(ScreenplayParagraphType::Parenthetical));
+                editor()->setCurrentParagraphType(changeForEnter(ScreenplayParagraphType::Parenthetical));
 			} else {
 				//! Текст не пуст
 
@@ -88,7 +88,7 @@ void ParentheticalHandler::handleEnter(QKeyEvent*)
 					//
 					cursor.movePosition(QTextCursor::EndOfBlock);
 					editor()->setTextCursor(cursor);
-                    editor()->addScenarioBlock(jumpForEnter(ScreenplayParagraphType::Parenthetical));
+                    editor()->addParagraph(jumpForEnter(ScreenplayParagraphType::Parenthetical));
 				} else {
 					//! Внутри блока
 
@@ -108,7 +108,7 @@ void ParentheticalHandler::handleEnter(QKeyEvent*)
 					// Перейдём к блоку реплики
 					//
 					editor()->setTextCursor(cursor);
-                    editor()->addScenarioBlock(ScreenplayParagraphType::Dialogue);
+                    editor()->addParagraph(ScreenplayParagraphType::Dialogue);
 				}
 			}
 		}
@@ -162,7 +162,7 @@ void ParentheticalHandler::handleTab(QKeyEvent*)
 				//
 				// Меняем стиль на реплику
 				//
-                editor()->changeScenarioBlockType(changeForTab(ScreenplayParagraphType::Parenthetical));
+                editor()->setCurrentParagraphType(changeForTab(ScreenplayParagraphType::Parenthetical));
 			} else {
 				//! Текст не пуст
 
@@ -182,7 +182,7 @@ void ParentheticalHandler::handleTab(QKeyEvent*)
 					//
 					cursor.movePosition(QTextCursor::EndOfBlock);
 					editor()->setTextCursor(cursor);
-                    editor()->addScenarioBlock(jumpForTab(ScreenplayParagraphType::Parenthetical));
+                    editor()->addParagraph(jumpForTab(ScreenplayParagraphType::Parenthetical));
 				} else {
 					//! Внутри блока
 
@@ -258,7 +258,7 @@ void ParentheticalHandler::handleOther(QKeyEvent* _event)
 			//
 			// Переходим к блоку реплики
 			//
-            editor()->addScenarioBlock(ScreenplayParagraphType::Dialogue);
+            editor()->addParagraph(ScreenplayParagraphType::Dialogue);
 		}
 		//
 		// Во всех остальных случаях удаляем введённую скобку

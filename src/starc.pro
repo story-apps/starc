@@ -14,3 +14,7 @@ HEADERS += \
 TRANSLATIONS += \
     core/translations/en_EN.ts \
     core/translations/ru_RU.ts
+
+CONFIG += qt
+
+QT += widgets

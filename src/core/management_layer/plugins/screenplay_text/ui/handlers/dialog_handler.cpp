@@ -55,7 +55,7 @@ void DialogHandler::handleEnter(QKeyEvent*)
             //
             // Удаляем всё, но оставляем стилем блока текущий
             //
-            editor()->addScenarioBlock(ScreenplayParagraphType::Dialogue);
+            editor()->addParagraph(ScreenplayParagraphType::Dialogue);
         } else {
             //! Нет выделения
 
@@ -66,7 +66,7 @@ void DialogHandler::handleEnter(QKeyEvent*)
                 //
                 // Меняем стиль блока на описание действия
                 //
-                editor()->changeScenarioBlockType(changeForEnter(ScreenplayParagraphType::Dialogue));
+                editor()->setCurrentParagraphType(changeForEnter(ScreenplayParagraphType::Dialogue));
             } else {
                 //! Текст не пуст
 
@@ -82,7 +82,7 @@ void DialogHandler::handleEnter(QKeyEvent*)
                     //
                     // Перейдём к блоку персонажа
                     //
-                    editor()->addScenarioBlock(jumpForEnter(ScreenplayParagraphType::Dialogue));
+                    editor()->addParagraph(jumpForEnter(ScreenplayParagraphType::Dialogue));
                 } else {
                     //! Внутри блока
 
@@ -114,13 +114,13 @@ void DialogHandler::handleEnter(QKeyEvent*)
                         //
                         // Вставляем блок "герой" и добавляем имя
                         //
-                        editor()->addScenarioBlock(ScreenplayParagraphType::Character);
+                        editor()->addParagraph(ScreenplayParagraphType::Character);
                         editor()->insertPlainText(characterName);
 
                         //
                         // Оставшийся текст форматируем, как "диалог"
                         //
-                        editor()->addScenarioBlock(ScreenplayParagraphType::Dialogue);
+                        editor()->addParagraph(ScreenplayParagraphType::Dialogue);
                     }
                 }
             }
@@ -171,7 +171,7 @@ void DialogHandler::handleTab(QKeyEvent*)
                 //
                 // Меняем стиль на ремарку
                 //
-                editor()->changeScenarioBlockType(changeForTab(ScreenplayParagraphType::Dialogue));
+                editor()->setCurrentParagraphType(changeForTab(ScreenplayParagraphType::Dialogue));
             } else {
                 //! Текст не пуст
 
@@ -187,7 +187,7 @@ void DialogHandler::handleTab(QKeyEvent*)
                     //
                     // Вставляем блок ремарки
                     //
-                    editor()->addScenarioBlock(jumpForTab(ScreenplayParagraphType::Dialogue));
+                    editor()->addParagraph(jumpForTab(ScreenplayParagraphType::Dialogue));
                 } else {
                     //! Внутри блока
 
@@ -198,8 +198,8 @@ void DialogHandler::handleTab(QKeyEvent*)
                     //
                     // ... оставляем пустой блок реплики
                     //
-                    editor()->addScenarioBlock(ScreenplayParagraphType::Dialogue);
-                    editor()->addScenarioBlock(ScreenplayParagraphType::Dialogue);
+                    editor()->addParagraph(ScreenplayParagraphType::Dialogue);
+                    editor()->addParagraph(ScreenplayParagraphType::Dialogue);
 
                     //
                     // ... возвращаем курсор к пустому блоку
@@ -211,7 +211,7 @@ void DialogHandler::handleTab(QKeyEvent*)
                     //
                     // ... делаем блок под курсором ремаркой
                     //
-                    editor()->changeScenarioBlockType(ScreenplayParagraphType::Parenthetical);
+                    editor()->setCurrentParagraphType(ScreenplayParagraphType::Parenthetical);
                 }
             }
         }
@@ -253,7 +253,7 @@ void DialogHandler::handleOther(QKeyEvent* _event)
             //
             // Cменить стиль на ремарку
             //
-            editor()->changeScenarioBlockType(ScreenplayParagraphType::Parenthetical);
+            editor()->setCurrentParagraphType(ScreenplayParagraphType::Parenthetical);
         } else {
             //! Если текст не пуст
 
@@ -267,13 +267,13 @@ void DialogHandler::handleOther(QKeyEvent* _event)
             // если скобка нажата в начале строки, то делаем лишь один перевод строки
             //
             if (cursorBackwardText != "(") {
-                editor()->addScenarioBlock(ScreenplayParagraphType::Dialogue);
+                editor()->addParagraph(ScreenplayParagraphType::Dialogue);
             }
             //
             // ... если после скобки нет текста, не добавляем новый параграф
             //
             if (!cursorForwardText.isEmpty()) {
-                editor()->addScenarioBlock(ScreenplayParagraphType::Dialogue);
+                editor()->addParagraph(ScreenplayParagraphType::Dialogue);
 
                 //
                 // ... возвращаем курсор к пустому блоку
@@ -286,7 +286,7 @@ void DialogHandler::handleOther(QKeyEvent* _event)
             //
             // ... делаем блок под курсором ремаркой
             //
-            editor()->changeScenarioBlockType(ScreenplayParagraphType::Parenthetical);
+            editor()->setCurrentParagraphType(ScreenplayParagraphType::Parenthetical);
         }
     } else {
         //! В противном случае, обрабатываем в базовом классе
