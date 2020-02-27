@@ -43,6 +43,11 @@ public:
     void setDragDropEnabled(bool _enabled);
 
     /**
+     * @brief Получить ширину заданной колонки
+     */
+    int sizeHintForColumn(int _column) const;
+
+    /**
      * @brief Задать делегат для отрисовки элементов
      */
     void setItemDelegate(QAbstractItemDelegate* _delegate);

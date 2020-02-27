@@ -24,6 +24,11 @@ public:
      */
     QVariant saveState() const;
 
+    /**
+     * @brief Делаем возможность узнать необходимую ширину столбца публичным
+     */
+    int sizeHintForColumn(int _column) const override;
+
 signals:
     /**
      * @brief Пользователь навёл мышь на элемент с заданным индексом

@@ -42,6 +42,9 @@ ScreenplayTextView::Implementation::Implementation(QWidget* _parent)
       screenplayText(new ScreenplayTextEdit(_parent)),
       scalableWrapper(new ScalableWrapper(screenplayText, _parent))
 {
+    QStringListModel* paragraphsModel = new QStringListModel({"Scene heading", "Scene characters", "Action", "Character", "Parenthetical", "Dialogue", "Lirycs", "Shot", "Transition", "Unformatted text", "Inline note", "Folder"}, toolBar);
+    toolBar->setParagraphsModel(paragraphsModel);
+
     screenplayText->setVerticalScrollBar(new ScrollBar);
     screenplayText->setHorizontalScrollBar(new ScrollBar);
     scalableWrapper->setVerticalScrollBar(new ScrollBar);
@@ -57,10 +60,10 @@ ScreenplayTextView::Implementation::Implementation(QWidget* _parent)
     font.setPixelSize(size);
     screenplayText->document()->setDefaultFont(font);
     screenplayText->setPageNumbersAlignment(Qt::AlignBottom | Qt::AlignRight);
-    screenplayText->setHeader("Header text");
-    screenplayText->setFooter("Footer text");
+//    screenplayText->setHeader("Header text");
+//    screenplayText->setFooter("Footer text");
     screenplayText->setCursorWidth(4);
-    screenplayText->setUseSpellChecker(true);
+//    screenplayText->setUseSpellChecker(true);
     screenplayText->setSpellCheckLanguage(SpellCheckerLanguage::EnglishUS);
 
     connect(screenplayText, &CompleterTextEdit::textChanged, [this] {
@@ -76,7 +79,6 @@ ScreenplayTextView::Implementation::Implementation(QWidget* _parent)
 
 void ScreenplayTextView::Implementation::updateToolBarsUi()
 {
-    toolBar->resize(toolBar->sizeHint());
     toolBar->move(QPointF(Ui::DesignSystem::layout().px24(),
                           Ui::DesignSystem::layout().px24()).toPoint());
     toolBar->setBackgroundColor(Ui::DesignSystem::color().primary());
@@ -92,8 +94,6 @@ ScreenplayTextView::ScreenplayTextView(QWidget* _parent)
     : Widget(_parent),
       d(new Implementation(this))
 {
-
-
     QVBoxLayout* layout = new QVBoxLayout;
     layout->setContentsMargins({});
     layout->setSpacing(0);

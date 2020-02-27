@@ -2,6 +2,8 @@
 
 #include <ui/widgets/floating_tool_bar/floating_tool_bar.h>
 
+class QAbstractItemModel;
+
 
 namespace Ui
 {
@@ -17,12 +19,26 @@ public:
     explicit ScreenplayTextEditToolBar(QWidget* _parent = nullptr);
     ~ScreenplayTextEditToolBar() override;
 
+    /**
+     * @brief Задать модель выпадающего списка типов абзацев
+     */
+    void setParagraphsModel(QAbstractItemModel* _model);
+
 signals:
     void undoPressed();
     void redoPressed();
+    void paragraphTypeChanged(const QModelIndex& _index);
 
 protected:
+    /**
+     * @brief Сворачиваем панель, при уходе мыши с неё
+     */
     void leaveEvent(QEvent* _event) override;
+
+    /**
+     * @brief Скрываем попап, когда фокус ушёл из виджета
+     */
+    void focusOutEvent(QFocusEvent* _event) override;
 
     /**
      * @brief Обновить переводы

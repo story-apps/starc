@@ -15,6 +15,16 @@ public:
     ~FloatingToolBar() override;
 
     /**
+     * @brief Задать ширину области для отрисовки действия
+     */
+    void setActionWidth(QAction* _action, int _width);
+
+    /**
+     * @brief Получишь ширину области для отрисовки действия
+     */
+    int actionWidth(QAction* _action) const;
+
+    /**
      * @brief Переопределяем, чтобы знать лучший размер
      */
     QSize sizeHint() const override;

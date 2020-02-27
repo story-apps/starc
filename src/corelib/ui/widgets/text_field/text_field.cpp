@@ -93,7 +93,7 @@ void TextField::Implementation::reconfigure(TextField* _textField)
 
     QPalette palette = _textField->palette();
     palette.setColor(QPalette::Base, Qt::transparent);
-    palette.setColor(QPalette::Normal, QPalette::Text, textColor);
+    palette.setColor(QPalette::Text, textColor);
     palette.setColor(QPalette::Disabled, QPalette::Text, textDisabledColor);
     palette.setColor(QPalette::Highlight, Ui::DesignSystem::color().secondary());
     palette.setColor(QPalette::HighlightedText, Ui::DesignSystem::color().onSecondary());
@@ -249,6 +249,8 @@ TextField::TextField(QWidget* _parent)
     connect(&d->decorationAnimation, &QVariantAnimation::valueChanged, this, [this] { update(); });
     connect(document(), &QTextDocument::contentsChange, this, &TextField::updateGeometry);
 }
+
+TextField::~TextField() = default;
 
 void TextField::setBackgroundColor(const QColor& _color)
 {
@@ -703,5 +705,3 @@ void TextField::insertFromMimeData(const QMimeData* _source)
         insertPlainText(_source->text());
     }
 }
-
-TextField::~TextField() = default;

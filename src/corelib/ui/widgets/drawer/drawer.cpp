@@ -122,6 +122,7 @@ Drawer::Drawer(QWidget* _parent)
     : Widget(_parent),
       d(new Implementation)
 {
+    setFocusPolicy(Qt::StrongFocus);
     setFixedWidth(static_cast<int>(Ui::DesignSystem::drawer().width()));
 
     connect(&d->decorationRadiusAnimation, &QVariantAnimation::valueChanged, this, [this] { update(); });

@@ -90,6 +90,11 @@ void Tree::setDragDropEnabled(bool _enabled)
     d->tree->setSelectionMode(_enabled ? QAbstractItemView::ExtendedSelection : QAbstractItemView::SingleSelection);
 }
 
+int Tree::sizeHintForColumn(int _column) const
+{
+    return d->tree->sizeHintForColumn(_column);
+}
+
 void Tree::setItemDelegate(QAbstractItemDelegate* _delegate)
 {
     d->tree->setItemDelegate(_delegate);

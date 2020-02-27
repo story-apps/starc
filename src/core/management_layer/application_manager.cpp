@@ -315,6 +315,7 @@ void ApplicationManager::Implementation::showContent()
 
 void ApplicationManager::Implementation::showMenu()
 {
+    menuView->setFocus();
     menuView->setFixedWidth(std::max(applicationView->navigationPanelWidth(),
                                      static_cast<int>(Ui::DesignSystem::drawer().width())));
     WAF::Animation::sideSlideIn(menuView);

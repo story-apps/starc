@@ -11,6 +11,10 @@
 #include <QVariantAnimation>
 
 
+namespace {
+    const char* kActionWidthKey = "action-width";
+}
+
 class FloatingToolBar::Implementation
 {
 public:
@@ -95,8 +99,8 @@ QAction* FloatingToolBar::Implementation::pressedAction(const QPoint& _coordinat
 
         const qreal actionRight
                 = actionLeft
-                  + (action->text().length() > 1
-                     ? QFontMetricsF(Ui::DesignSystem::font().body1()).horizontalAdvance(action->text())
+                  + (!action->property(kActionWidthKey).isNull()
+                     ? action->property(kActionWidthKey).toReal()
                      : Ui::DesignSystem::floatingToolBar().iconSize().width())
                   + Ui::DesignSystem::floatingToolBar().spacing();
 
@@ -118,6 +122,8 @@ FloatingToolBar::FloatingToolBar(QWidget* _parent)
     : Widget(_parent),
       d(new Implementation)
 {
+    setFocusPolicy(Qt::StrongFocus);
+
     connect(&d->decorationRadiusAnimation, &QVariantAnimation::valueChanged, this, [this] { update(); });
     connect(&d->decorationOpacityAnimation, &QVariantAnimation::valueChanged, this, [this] { update(); });
     connect(&d->shadowBlurRadiusAnimation, &QVariantAnimation::valueChanged, this, [this] { update(); });
@@ -126,6 +132,25 @@ FloatingToolBar::FloatingToolBar(QWidget* _parent)
 }
 
 FloatingToolBar::~FloatingToolBar() = default;
+
+void FloatingToolBar::setActionWidth(QAction* _action, int _width)
+{
+    if (!actions().contains(_action)) {
+        return;
+    }
+
+    _action->setProperty(kActionWidthKey, _width);
+    updateGeometry();
+}
+
+int FloatingToolBar::actionWidth(QAction* _action) const
+{
+    if (!actions().contains(_action)) {
+        return 0;
+    }
+
+    return _action->property(kActionWidthKey).toInt();
+}
 
 QSize FloatingToolBar::sizeHint() const
 {
@@ -142,8 +167,8 @@ QSize FloatingToolBar::sizeHint() const
         const QFontMetricsF fontMetrics(Ui::DesignSystem::font().body1());
         qreal width = 0.0;
         for (const auto action : actions()) {
-            if (action->text().length() > 1) {
-                width += fontMetrics.horizontalAdvance(action->text());
+            if (!action->property(kActionWidthKey).isNull()) {
+                width += action->property(kActionWidthKey).toReal();
                 width -= Ui::DesignSystem::floatingToolBar().iconSize().width();
             }
         }
@@ -226,15 +251,22 @@ void FloatingToolBar::paintEvent(QPaintEvent* _event)
         }
 
         //
-        // Рисуем действие с текстом
+        // Рисуем действие с кастомной шириной
         //
-        if (action->text().length() > 1) {
-            painter.setFont(Ui::DesignSystem::font().body1());
+        if (!action->property(kActionWidthKey).isNull()) {
+            painter.setFont(Ui::DesignSystem::font().subtitle2());
             const QFontMetricsF fontMetrics(painter.font());
             const QRectF actionRect(actionIconX, actionIconY,
-                                    fontMetrics.horizontalAdvance(action->text()), actionIconSize.height());
+                                    action->property(kActionWidthKey).toReal(), actionIconSize.height());
             painter.setPen(textColor());
-            painter.drawText(actionRect, Qt::AlignCenter, action->text());
+            painter.drawText(actionRect, Qt::AlignLeft | Qt::AlignVCenter, action->text());
+            //
+            // Если есть и текст и иконка, рисуем ещё и иконку
+            //
+            if (action->iconText() != action->text()) {
+                painter.setFont(Ui::DesignSystem::font().iconsMid());
+                painter.drawText(actionRect, Qt::AlignRight | Qt::AlignVCenter, action->iconText());
+            }
 
             actionIconX += actionRect.width() + Ui::DesignSystem::floatingToolBar().spacing();
         }
@@ -314,16 +346,7 @@ void FloatingToolBar::mouseReleaseEvent(QMouseEvent* _event)
         return;
     }
 
-    if (pressedAction->isChecked()) {
-        return;
-    }
-
-    for (auto action : actions()) {
-        if (action->isCheckable() && action != pressedAction) {
-            action->setChecked(false);
-        }
-    }
-    pressedAction->setChecked(true);
+    pressedAction->setChecked(!pressedAction->isChecked());
     update();
 }
 

@@ -120,6 +120,11 @@ QVariant TreeView::saveState() const
     return state.toHex();
 }
 
+int TreeView::sizeHintForColumn(int _column) const
+{
+    return QTreeView::sizeHintForColumn(_column);
+}
+
 TreeView::~TreeView() = default;
 
 bool TreeView::eventFilter(QObject* _watched, QEvent* _event)
