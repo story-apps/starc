@@ -11,4 +11,13 @@
         <file alias="movie-poster">resources/images/movie-poster.jpg</file>
         <file alias="default-avatar">resources/images/default-avatar.png</file>
     </qresource>
+    <qresource prefix="/audio">
+        <file alias="backspace">resources/audio/backspace.wav</file>
+        <file alias="key-01">resources/audio/key-01.wav</file>
+        <file alias="key-02">resources/audio/key-02.wav</file>
+        <file alias="key-03">resources/audio/key-03.wav</file>
+        <file alias="key-04">resources/audio/key-04.wav</file>
+        <file alias="return">resources/audio/return.wav</file>
+        <file alias="space">resources/audio/space.wav</file>
+    </qresource>
 </RCC>

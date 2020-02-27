@@ -7,7 +7,7 @@
 TEMPLATE = lib
 
 CONFIG += plugin c++1z
-QT += concurrent widgets
+QT += concurrent widgets multimedia
 
 TARGET = $$qtLibraryTarget(coreplugin)
 

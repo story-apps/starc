@@ -24,6 +24,8 @@ namespace {
     const QString kApplicationCustomThemeColorsKey = kApplicationGroupKey + "/custom-theme";
     // масштаб приложения
     const QString kApplicationScaleFactorKey = kApplicationGroupKey + "/scale-factor";
+    // включены ли звуки печатной машинки при наборе текста
+    const QString kApplicationTypewriterSoundEnabledKey = kApplicationGroupKey + "/typewriter-sound";
     // состояние и геометрия основного окна приложения
     const QString kApplicationViewStateKey = kApplicationGroupKey + "-view/";
     // включена ли проверка орфографии

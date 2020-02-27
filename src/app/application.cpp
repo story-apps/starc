@@ -33,6 +33,7 @@ public:
 
     QString fileToOpen;
     QTimer idleTimer;
+    bool waitKeyRelease = false;
 };
 
 
@@ -87,18 +88,49 @@ Application::~Application() = default;
 
 bool Application::notify(QObject* _object, QEvent* _event)
 {
-    //
-    // Работа с таймером определяющим простой приложения
-    //
-    if (_event != nullptr
-        && (_event->type() == QEvent::MouseMove
-            || _event->type() == QEvent::MouseButtonPress
-            || _event->type() == QEvent::MouseButtonDblClick
-            || _event->type() == QEvent::KeyPress
-            || _event->type() == QEvent::InputMethod
-            || _event->type() == QEvent::Wheel
-            || _event->type() == QEvent::Gesture)) {
-        d->idleTimer.start();
+    if (_event != nullptr) {
+        //
+        // Работа с таймером определяющим простой приложения
+        //
+        switch (_event->type()) {
+            case QEvent::MouseMove:
+            case QEvent::MouseButtonPress:
+            case QEvent::MouseButtonDblClick:
+            case QEvent::KeyPress:
+            case QEvent::InputMethod:
+            case QEvent::Wheel:
+            case QEvent::Gesture: {
+                d->idleTimer.start();
+                break;
+            }
+
+            default: break;
+        }
+
+        //
+        // Отправка событий о нажатии клавиш в менеджер приложения
+        //
+        switch (_event->type()) {
+            case QEvent::KeyPress: {
+                if (d->waitKeyRelease
+                    || _object == d->applicationManager) {
+                    break;
+                }
+
+                d->waitKeyRelease = true;
+                const auto keyEvent = static_cast<QKeyEvent*>(_event);
+                postEvent(d->applicationManager,
+                          new QKeyEvent(QEvent::KeyPress, keyEvent->key(), keyEvent->modifiers(), keyEvent->text()));
+                break;
+            }
+
+            case QEvent::KeyRelease: {
+                d->waitKeyRelease = false;
+                break;
+            }
+
+            default: break;
+        }
     }
 
     return QApplication::notify(_object, _event);
