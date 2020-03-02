@@ -181,6 +181,11 @@ public:
     //
 
     /**
+     * @brief Если необходимо имитировать звуки печатной машинки в зависимости от нажатой клавиши
+     */
+    void imitateTypewriterSound(QKeyEvent* _event) const;
+
+    /**
      * @brief Выйти из приложения
      */
     void exit();
@@ -775,6 +780,70 @@ void ApplicationManager::Implementation::closeCurrentProject()
     state = ApplicationState::Working;
 }
 
+void ApplicationManager::Implementation::imitateTypewriterSound(QKeyEvent* _event) const
+{
+    //
+    // Обрабатываем событие только в случае, если в виджет в фокусе можно вводить текст
+    //
+    if (!QApplication::focusWidget()->testAttribute(Qt::WA_InputMethodEnabled)) {
+        return;
+    }
+    //
+    // ... и если опция озвучивания печати включена
+    //
+    const auto keyboardSoundEnabled
+            = settingsValue(DataStorageLayer::kApplicationTypewriterSoundEnabledKey).toBool();
+    if (!keyboardSoundEnabled) {
+        return;
+    }
+
+    auto makeSound = [this] (const QString& path) {
+        QSoundEffect* sound = new QSoundEffect(q);
+        sound->setSource(QUrl::fromLocalFile(path));
+        return sound;
+    };
+    static auto s_returnSound = makeSound(":/audio/return");
+    static auto s_spaceSound = makeSound(":/audio/space");
+    static auto s_deleteSound = makeSound(":/audio/backspace");
+    static QVector<QSoundEffect*> s_keySounds = { makeSound(":/audio/key-01"),
+                                                  makeSound(":/audio/key-02"),
+                                                  makeSound(":/audio/key-03"),
+                                                  makeSound(":/audio/key-04") };
+    switch (_event->key()) {
+        case Qt::Key_Return:
+        case Qt::Key_Enter: {
+            s_returnSound->play();
+            break;
+        }
+
+        case Qt::Key_Space: {
+            s_spaceSound->play();
+            break;
+        }
+
+        case Qt::Key_Backspace:
+        case Qt::Key_Delete: {
+            s_deleteSound->play();
+            break;
+        }
+
+        default: {
+            if (_event->text().isEmpty()) {
+                break;
+            }
+
+            const int firstSoundId = 0;
+            const int maxSoundId = 3;
+            static int lastSoundId = firstSoundId;
+            if (lastSoundId > maxSoundId) {
+                lastSoundId = firstSoundId;
+            }
+            s_keySounds[lastSoundId++]->play();
+            break;
+        }
+    }
+}
+
 void ApplicationManager::Implementation::exit()
 {
     //
@@ -938,61 +1007,12 @@ bool ApplicationManager::event(QEvent* _event)
         }
 
         case QEvent::KeyPress: {
-            const auto keyboardSoundEnabled
-                    = d->settingsValue(DataStorageLayer::kApplicationTypewriterSoundEnabledKey).toBool();
-            if (!keyboardSoundEnabled) {
-                return false;
-            }
+            const auto keyEvent = static_cast<QKeyEvent*>(_event);
 
             //
             // Музицируем
             //
-            auto makeSound = [this] (const QString& path) {
-                QSoundEffect* sound = new QSoundEffect(this);
-                sound->setSource(QUrl::fromLocalFile(path));
-                return sound;
-            };
-            static auto s_returnSound = makeSound(":/audio/return");
-            static auto s_spaceSound = makeSound(":/audio/space");
-            static auto s_deleteSound = makeSound(":/audio/backspace");
-            static QVector<QSoundEffect*> s_keySounds = { makeSound(":/audio/key-01"),
-                                                          makeSound(":/audio/key-02"),
-                                                          makeSound(":/audio/key-03"),
-                                                          makeSound(":/audio/key-04") };
-            const auto keyEvent = static_cast<QKeyEvent*>(_event);
-            switch (keyEvent->key()) {
-                case Qt::Key_Return:
-                case Qt::Key_Enter: {
-                    s_returnSound->play();
-                    break;
-                }
-
-                case Qt::Key_Space: {
-                    s_spaceSound->play();
-                    break;
-                }
-
-                case Qt::Key_Backspace:
-                case Qt::Key_Delete: {
-                    s_deleteSound->play();
-                    break;
-                }
-
-                default: {
-                    if (keyEvent->text().isEmpty()) {
-                        break;
-                    }
-
-                    const int firstSoundId = 0;
-                    const int maxSoundId = 3;
-                    static int lastSoundId = firstSoundId;
-                    if (lastSoundId > maxSoundId) {
-                        lastSoundId = firstSoundId;
-                    }
-                    s_keySounds[lastSoundId++]->play();
-                    break;
-                }
-            }
+            d->imitateTypewriterSound(keyEvent);
 
             return false;
         }
