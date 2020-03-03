@@ -61,6 +61,11 @@ bool CompleterTextEdit::isCompleterVisible() const
 
 bool CompleterTextEdit::complete(QAbstractItemModel* _model, const QString& _completionPrefix)
 {
+    return complete(_model, _completionPrefix, _completionPrefix.length());
+}
+
+bool CompleterTextEdit::complete(QAbstractItemModel* _model, const QString& _completionPrefix, int _cursorMovement)
+{
     if (!d->useCompleter) {
         return false;
     }
@@ -95,15 +100,15 @@ bool CompleterTextEdit::complete(QAbstractItemModel* _model, const QString& _com
     //
     d->completer->popup()->setCurrentIndex(d->completer->completionModel()->index(0, 0));
     QTextCursor cursor = textCursor();
-    cursor.movePosition(QTextCursor::PreviousCharacter, QTextCursor::MoveAnchor, _completionPrefix.length());
+    cursor.movePosition(QTextCursor::PreviousCharacter, QTextCursor::KeepAnchor, _cursorMovement);
     QRect rect = cursorRect(cursor);
     rect.moveLeft(rect.left() + verticalScrollBar()->width() + viewportMargins().left());
     rect.moveTop(rect.top()
-                 + static_cast<int>(cursor.block().layout()->boundingRect().height())
+                 + cursor.block().layout()->boundingRect().height()
                  + Ui::DesignSystem::layout().px16());
-    rect.setWidth(static_cast<int>(Ui::DesignSystem::treeOneLineItem().margins().left())
+    rect.setWidth(Ui::DesignSystem::treeOneLineItem().margins().left()
                   + d->completer->popup()->sizeHintForColumn(0)
-                  + static_cast<int>(Ui::DesignSystem::treeOneLineItem().margins().right()));
+                  + Ui::DesignSystem::treeOneLineItem().margins().right());
     d->completer->showCompleter(rect);
     emit popupShowed();
     return true;

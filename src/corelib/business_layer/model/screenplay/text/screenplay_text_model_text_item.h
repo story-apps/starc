@@ -8,6 +8,8 @@ class QDomElement;
 namespace BusinessLayer
 {
 
+enum class ScreenplayParagraphType;
+
 /**
  * @brief Класс элемента текста модели сценария
  */
@@ -17,6 +19,11 @@ public:
     ScreenplayTextModelTextItem();
     explicit ScreenplayTextModelTextItem(const QDomElement& _node);
     ~ScreenplayTextModelTextItem() override;
+
+    /**
+     * @brief Получить тип параграфа
+     */
+    ScreenplayParagraphType paragraphType() const;
 
     /**
      * @brief Получить текст элемента

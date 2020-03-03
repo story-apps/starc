@@ -74,6 +74,7 @@ void ScreenplayTextManager::setModel(BusinessLayer::AbstractModel* _model)
     // Определяем новую модель
     //
     d->model = qobject_cast<BusinessLayer::ScreenplayTextModel*>(_model);
+    d->view->setModel(d->model);
 
     //
     // Настраиваем соединения с новой моделью

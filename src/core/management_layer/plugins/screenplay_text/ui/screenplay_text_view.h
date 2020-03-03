@@ -3,6 +3,10 @@
 #include <ui/widgets/widget/widget.h>
 
 
+namespace BusinessLayer {
+    class ScreenplayTextModel;
+}
+
 namespace Ui
 {
 
@@ -14,8 +18,10 @@ public:
     explicit ScreenplayTextView(QWidget* _parent = nullptr);
     ~ScreenplayTextView() override;
 
-    void setText(const QString& _text);
-    Q_SIGNAL void textChanged(const QString& _text);
+    /**
+     * @brief Установить модель сценария
+     */
+    void setModel(BusinessLayer::ScreenplayTextModel* _model);
 
 protected:
     /**

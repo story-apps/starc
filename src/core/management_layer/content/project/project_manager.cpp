@@ -312,14 +312,8 @@ ProjectManager::ProjectManager(QObject* _parent, QWidget* _parentWidget)
         documentModel->setDocumentName(_name);
     });
     connect(d->projectStructureModel, &BusinessLayer::StructureModel::contentsChanged, this,
-            [this] (const QByteArray& _undo, const QByteArray& _redo)
-    {
-        DataStorageLayer::StorageFacade::documentChangeStorage()->appendDocumentChange(
-            d->projectStructureModel->document()->uuid(), QUuid::createUuid(), _undo, _redo,
-            DataStorageLayer::StorageFacade::settingsStorage()->userName(),
-            DataStorageLayer::StorageFacade::settingsStorage()->userEmail());
-
-        emit contentsChanged();
+            [this] (const QByteArray& _undo, const QByteArray& _redo) {
+        handleModelChange(d->projectStructureModel, _undo, _redo);
     });
 
     //
@@ -331,6 +325,10 @@ ProjectManager::ProjectManager(QObject* _parent, QWidget* _parentWidget)
             this, &ProjectManager::projectLoglineChanged, Qt::UniqueConnection);
     connect(d->projectInformationModel, &BusinessLayer::ProjectInformationModel::coverChanged,
             this, &ProjectManager::projectCoverChanged, Qt::UniqueConnection);
+    connect(d->projectInformationModel, &BusinessLayer::ProjectInformationModel::contentsChanged, this,
+            [this] (const QByteArray& _undo, const QByteArray& _redo) {
+        handleModelChange(d->projectInformationModel, _undo, _redo);
+    });
 
     //
     // Соединения представления
@@ -338,6 +336,11 @@ ProjectManager::ProjectManager(QObject* _parent, QWidget* _parentWidget)
     connect(d->view, &Ui::ProjectView::createNewItemPressed, this, [this] {
         d->addDocument({});
     });
+
+    //
+    // Соединения со строителем моделей
+    //
+    connect(&d->modelBuilder, &ProjectModelsBuilder::modelContentChanged, this, &ProjectManager::handleModelChange);
 }
 
 ProjectManager::~ProjectManager() = default;
@@ -362,7 +365,8 @@ void ProjectManager::loadCurrentProject(const QString& _name, const QString& _pa
     //
     // Загружаем структуру
     //
-    d->projectStructureModel->setDocument(DataStorageLayer::StorageFacade::documentStorage()->structure());
+    d->projectStructureModel->setDocument(
+        DataStorageLayer::StorageFacade::documentStorage()->document(Domain::DocumentObjectType::Structure));
 
     //
     // Загружаем информацию о проекте
@@ -469,6 +473,17 @@ void ProjectManager::saveChanges()
     DataStorageLayer::StorageFacade::documentChangeStorage()->store();
 }
 
+void ProjectManager::handleModelChange(BusinessLayer::AbstractModel* _model,
+    const QByteArray& _undo, const QByteArray& _redo)
+{
+    DataStorageLayer::StorageFacade::documentChangeStorage()->appendDocumentChange(
+        _model->document()->uuid(), QUuid::createUuid(), _undo, _redo,
+        DataStorageLayer::StorageFacade::settingsStorage()->userName(),
+        DataStorageLayer::StorageFacade::settingsStorage()->userEmail());
+
+    emit contentsChanged();
+}
+
 void ProjectManager::showView(const QModelIndex& _itemIndex, const QString& _viewMimeType)
 {
     const auto item = d->projectStructureModel->itemForIndex(_itemIndex);
@@ -485,19 +500,6 @@ void ProjectManager::showView(const QModelIndex& _itemIndex, const QString& _vie
         d->view->showDefaultPage();
         return;
     }
-    //
-    // ... и при необходимости настроим её
-    //
-    connect(model, &BusinessLayer::AbstractModel::contentsChanged, this,
-            [this, model] (const QByteArray& _undo, const QByteArray& _redo) {
-                DataStorageLayer::StorageFacade::documentChangeStorage()->appendDocumentChange(
-                    model->document()->uuid(), QUuid::createUuid(), _undo, _redo,
-                    DataStorageLayer::StorageFacade::settingsStorage()->userName(),
-                    DataStorageLayer::StorageFacade::settingsStorage()->userEmail());
-
-                emit contentsChanged();
-            },
-            Qt::UniqueConnection);
 
     //
     // Определим представление и отобразим

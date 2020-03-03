@@ -57,7 +57,7 @@ public:
     /**
      * @brief Тип параграфа
      */
-    ScreenplayParagraphType type = ScreenplayParagraphType::UnformattedText;
+    ScreenplayParagraphType paragraphType = ScreenplayParagraphType::UnformattedText;
 
     /**
      * @brief Выравнивание текста в блоке
@@ -121,8 +121,8 @@ public:
 
 ScreenplayTextModelTextItem::Implementation::Implementation(const QDomElement& _node)
 {
-    type = screenplayParagraphTypeFromString(_node.tagName());
-    Q_ASSERT(type != ScreenplayParagraphType::Undefined);
+    paragraphType = screenplayParagraphTypeFromString(_node.tagName());
+    Q_ASSERT(paragraphType != ScreenplayParagraphType::Undefined);
 
     if (_node.hasAttribute(kAlignAttribute)) {
         alignment = alignmentFromString(_node.attribute(kAlignAttribute));
@@ -206,7 +206,7 @@ void ScreenplayTextModelTextItem::Implementation::updateXml()
 {
     xml.clear();
     xml += QString("<%1%2>")
-           .arg(toString(type),
+           .arg(toString(paragraphType),
                 (alignment.has_value() && alignment->testFlag(Qt::AlignHorizontal_Mask)
                  ? QString(" %1=\"%2\"").arg(kAlignAttribute, toString(*alignment))
                  : ""));
@@ -284,7 +284,7 @@ void ScreenplayTextModelTextItem::Implementation::updateXml()
         }
         xml += QString("</%1>").arg(kRevisionsTag);
     }
-    xml += QString("</%1>\n").arg(toString(type));
+    xml += QString("</%1>\n").arg(toString(paragraphType));
 }
 
 
@@ -303,6 +303,11 @@ ScreenplayTextModelTextItem::ScreenplayTextModelTextItem(const QDomElement& _nod
       d(new Implementation(_node))
 {
     d->updateXml();
+}
+
+ScreenplayParagraphType ScreenplayTextModelTextItem::paragraphType() const
+{
+    return d->paragraphType;
 }
 
 const QString& ScreenplayTextModelTextItem::text() const

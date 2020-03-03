@@ -1,5 +1,7 @@
 #include "project_models_builder.h"
 
+#include <business_layer/model/characters/characters_model.h>
+#include <business_layer/model/locations/locations_model.h>
 #include <business_layer/model/project/project_information_model.h>
 #include <business_layer/model/recycle_bin/recycle_bin_model.h>
 #include <business_layer/model/screenplay/screenplay_dictionaries_model.h>
@@ -37,8 +39,9 @@ ProjectModelsBuilder::Implementation::Implementation(BusinessLayer::AbstractImag
 // ****
 
 
-ProjectModelsBuilder::ProjectModelsBuilder(BusinessLayer::AbstractImageWrapper* _imageWrapper)
-    : d(new Implementation(_imageWrapper))
+ProjectModelsBuilder::ProjectModelsBuilder(BusinessLayer::AbstractImageWrapper* _imageWrapper, QObject* _parent)
+    : QObject(_parent),
+      d(new Implementation(_imageWrapper))
 {
 }
 
@@ -102,6 +105,10 @@ BusinessLayer::AbstractModel* ProjectModelsBuilder::modelFor(Domain::DocumentObj
 
             case Domain::DocumentObjectType::ScreenplayText: {
                 auto screenplayModel = new BusinessLayer::ScreenplayTextModel;
+
+                //
+                // Добавляем в модель сценария, модель справочников сценариев
+                //
                 auto dictionariesDocument
                         = DataStorageLayer::StorageFacade::documentStorage()->document(
                               Domain::DocumentObjectType::ScreenplayDictionaries);
@@ -109,12 +116,43 @@ BusinessLayer::AbstractModel* ProjectModelsBuilder::modelFor(Domain::DocumentObj
                         = qobject_cast<BusinessLayer::ScreenplayDictionariesModel*>(
                               modelFor(dictionariesDocument));
                 screenplayModel->setDictionariesModel(dictionariesModel);
+                //
+                // ... модель персонажей
+                //
+                auto charactersDocument
+                        = DataStorageLayer::StorageFacade::documentStorage()->document(
+                              Domain::DocumentObjectType::Characters);
+                auto charactersModel
+                        = qobject_cast<BusinessLayer::CharactersModel*>(
+                              modelFor(charactersDocument));
+                screenplayModel->setCharactersModel(charactersModel);
+                //
+                // ... и модель локаций
+                //
+                auto locationsDocument
+                        = DataStorageLayer::StorageFacade::documentStorage()->document(
+                              Domain::DocumentObjectType::Locations);
+                auto locationsModel
+                        = qobject_cast<BusinessLayer::LocationsModel*>(
+                              modelFor(locationsDocument));
+                screenplayModel->setLocationsModel(locationsModel);
+
                 model = screenplayModel;
                 break;
             }
 
             case Domain::DocumentObjectType::ScreenplayDictionaries: {
                 model = new BusinessLayer::ScreenplayDictionariesModel;
+                break;
+            }
+
+            case Domain::DocumentObjectType::Characters: {
+                model = new BusinessLayer::CharactersModel;
+                break;
+            }
+
+            case Domain::DocumentObjectType::Locations: {
+                model = new BusinessLayer::LocationsModel;
                 break;
             }
 
@@ -125,6 +163,11 @@ BusinessLayer::AbstractModel* ProjectModelsBuilder::modelFor(Domain::DocumentObj
         model->setImageWrapper(d->imageWrapper);
 
         model->setDocument(_document);
+
+        connect(model, &BusinessLayer::AbstractModel::contentsChanged, this,
+                [this, model] (const QByteArray& _undo, const QByteArray& _redo) {
+           emit modelContentChanged(model, _undo, _redo);
+        });
 
         d->documentsToModels.insert(_document, model);
     }

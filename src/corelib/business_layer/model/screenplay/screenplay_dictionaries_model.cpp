@@ -152,9 +152,9 @@ void ScreenplayDictionariesModel::initDocument()
             _dictionary.append(_defaultItems);
         }
     };
-    const QVector<QString> defaultSceneIntros = { tr("INT"),
-                                                  tr("EXT"),
-                                                  tr("INT./EXT") };
+    const QVector<QString> defaultSceneIntros = { tr("INT."),
+                                                  tr("EXT."),
+                                                  tr("INT./EXT.") };
     fillDictionary(kSceneIntrosKey, defaultSceneIntros, d->sceneIntros);
     //
     const QVector<QString> defaultSceneTimes = { tr("DAY"),

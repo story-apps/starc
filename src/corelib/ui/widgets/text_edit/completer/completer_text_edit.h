@@ -37,6 +37,7 @@ public:
      * @return Есть ли в модели для дополнения элементы с таким текстом
      */
     bool complete(QAbstractItemModel* _model, const QString& _completionPrefix);
+    bool complete(QAbstractItemModel* _model, const QString& _completionPrefix, int _cursorMovement);
 
     /**
      * @brief Применить выбранный в подстановщике элемент

@@ -1,6 +1,6 @@
 #pragma once
 
-#include <QScopedPointer>
+#include <QObject>
 
 namespace BusinessLayer {
 class AbstractImageWrapper;
@@ -18,11 +18,13 @@ namespace ManagementLayer
 /**
  * @brief Билдер для работы с моделями документов проекта
  */
-class ProjectModelsBuilder
+class ProjectModelsBuilder : public QObject
 {
+    Q_OBJECT
+
 public:
-    explicit ProjectModelsBuilder(BusinessLayer::AbstractImageWrapper* _imageWrapper);
-    ~ProjectModelsBuilder();
+    explicit ProjectModelsBuilder(BusinessLayer::AbstractImageWrapper* _imageWrapper, QObject* _parent = nullptr);
+    ~ProjectModelsBuilder() override;
 
     /**
      * @brief Сбросить все загруженные модели
@@ -43,6 +45,12 @@ public:
      * @brief Получить список загруженных моделей документов
      */
     QVector<BusinessLayer::AbstractModel*> models()  const;
+
+signals:
+    /**
+     * @brief Изменился контент модели
+     */
+    void modelContentChanged(BusinessLayer::AbstractModel* _model, const QByteArray& _undo, const QByteArray& _redo);
 
 private:
     class Implementation;

@@ -67,11 +67,6 @@ QVector<Domain::DocumentObject*> DocumentMapper::findAll(Domain::DocumentObjectT
     return documentObjects;
 }
 
-DocumentObject* DocumentMapper::findStructure()
-{
-    return find(QUuid());
-}
-
 void DocumentMapper::insert(DocumentObject* _object)
 {
     abstractInsert(_object);

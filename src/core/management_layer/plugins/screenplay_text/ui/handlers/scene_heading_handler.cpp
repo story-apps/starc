@@ -10,6 +10,7 @@
 #include <QKeyEvent>
 #include <QStringListModel>
 #include <QTextBlock>
+#include <QTimer>
 
 using BusinessLayer::SceneHeadingParser;
 using BusinessLayer::ScreenplayParagraphType;
@@ -389,7 +390,17 @@ void SceneHeadingHandler::complete(const QString& _currentBlockText, const QStri
     //
     // Дополним текст
     //
-    editor()->complete(sectionModel, sectionText);
+    int cursorMovement = sectionText.length();
+    while (!_cursorBackwardText.endsWith(sectionText.left(cursorMovement), Qt::CaseInsensitive)) {
+        --cursorMovement;
+    }
+    //
+    // ... дополняем, когда цикл обработки событий выполнится, чтобы позиция курсора
+    //     корректно определилась после изменения текста
+    //
+    QTimer::singleShot(0, [this, sectionModel, sectionText, cursorMovement] {
+        editor()->complete(sectionModel, sectionText, cursorMovement);
+    });
 }
 
 void SceneHeadingHandler::storeSceneParameters() const

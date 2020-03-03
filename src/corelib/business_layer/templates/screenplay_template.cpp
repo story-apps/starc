@@ -352,7 +352,7 @@ ScreenplayBlockStyle::ScreenplayBlockStyle(const QXmlStreamAttributes& _blockAtt
     // ... настройки шрифта
     //
     m_font.setFamily(_blockAttributes.value("font_family").toString());
-    m_font.setPointSizeF(_blockAttributes.value("font_size").toDouble());
+    m_font.setPixelSize(PageMetrics::ptToPx(_blockAttributes.value("font_size").toDouble()));
     //
     // ... начертание
     //

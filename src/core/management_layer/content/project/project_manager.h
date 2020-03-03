@@ -3,6 +3,10 @@
 #include <QObject>
 
 
+namespace BusinessLayer {
+    class AbstractModel;
+}
+
 namespace ManagementLayer
 {
 
@@ -63,6 +67,11 @@ signals:
     void projectCoverChanged(const QPixmap& _cover);
 
 private:
+    /**
+     * @brief Обработать изменение модели
+     */
+    void handleModelChange(BusinessLayer::AbstractModel* _model, const QByteArray& _undo, const QByteArray& _redo);
+
     /**
      * @brief Отобразить представление заданного типа для заданного элемента
      */

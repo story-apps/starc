@@ -10,20 +10,6 @@
 namespace DataStorageLayer
 {
 
-Domain::DocumentObject* DocumentStorage::structure()
-{
-    auto structure = DataMappingLayer::MapperFacade::documentMapper()->findStructure();
-
-    //
-    // Создаём структуру, если ещё не была создана
-    //
-    if (structure == nullptr) {
-        structure = storeDocument({}, Domain::DocumentObjectType::Structure);
-    }
-
-    return structure;
-}
-
 Domain::DocumentObject* DocumentStorage::document(const QUuid& _uuid)
 {
     return DataMappingLayer::MapperFacade::documentMapper()->find(_uuid);
@@ -31,7 +17,11 @@ Domain::DocumentObject* DocumentStorage::document(const QUuid& _uuid)
 
 Domain::DocumentObject* DocumentStorage::document(Domain::DocumentObjectType _type)
 {
-    return DataMappingLayer::MapperFacade::documentMapper()->findFirst(_type);
+    auto document = DataMappingLayer::MapperFacade::documentMapper()->findFirst(_type);
+    if (document == nullptr) {
+        document = storeDocument(QUuid::createUuid(), _type);
+    }
+    return document;
 }
 
 QVector<Domain::DocumentObject*> DocumentStorage::documents(Domain::DocumentObjectType _type)

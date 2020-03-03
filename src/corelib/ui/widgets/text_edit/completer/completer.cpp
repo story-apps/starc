@@ -107,6 +107,8 @@ Completer::Completer(QWidget* _parent)
     setMaxVisibleItems(maxVisibleItems);
 }
 
+Completer::~Completer() = default;
+
 void Completer::setBackgroundColor(const QColor& _color)
 {
     d->backgroundColor = _color;
@@ -118,8 +120,6 @@ void Completer::setTextColor(const QColor& _color)
     d->textColor = _color;
     d->reconfigurePopup();
 }
-
-Completer::~Completer() = default;
 
 void Completer::showCompleter(const QRect& _rect)
 {

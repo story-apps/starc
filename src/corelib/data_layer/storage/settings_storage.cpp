@@ -1,5 +1,7 @@
 #include "settings_storage.h"
 
+#include <business_layer/templates/screenplay_template.h>
+
 #include <data_layer/mapper/mapper_facade.h>
 #include <data_layer/mapper/settings_mapper.h>
 
@@ -71,8 +73,14 @@ public:
 
 SettingsStorage::Implementation::Implementation()
 {
+    using namespace BusinessLayer;
+
     //
     // Настроим значения параметров по умолчанию
+    //
+
+    //
+    // Для приложения
     //
     defaultValues.insert(kApplicationConfiguredKey, false);
     defaultValues.insert(kApplicationLanguagedKey, QLocale::AnyLanguage);
@@ -89,6 +97,61 @@ SettingsStorage::Implementation::Implementation()
         QStandardPaths::writableLocation(QStandardPaths::DocumentsLocation) + "/starc/projects");
     defaultValues.insert(kProjectImportFolderKey,
         QStandardPaths::writableLocation(QStandardPaths::DownloadLocation));
+    //
+    // Параметры редактора сценария
+    //
+    defaultValues.insert("screenplay-editor/styles-jumping/from-scene_heading-by-tab", toString(ScreenplayParagraphType::SceneCharacters));
+    defaultValues.insert("screenplay-editor/styles-jumping/from-scene_heading-by-enter", toString(ScreenplayParagraphType::Action));
+    defaultValues.insert("screenplay-editor/styles-jumping/from-scene_characters-by-tab", toString(ScreenplayParagraphType::Action));
+    defaultValues.insert("screenplay-editor/styles-jumping/from-scene_characters-by-enter", toString(ScreenplayParagraphType::Action));
+    defaultValues.insert("screenplay-editor/styles-jumping/from-action-by-tab", toString(ScreenplayParagraphType::Character));
+    defaultValues.insert("screenplay-editor/styles-jumping/from-action-by-enter", toString(ScreenplayParagraphType::Action));
+    defaultValues.insert("screenplay-editor/styles-jumping/from-character-by-tab", toString(ScreenplayParagraphType::Parenthetical));
+    defaultValues.insert("screenplay-editor/styles-jumping/from-character-by-enter", toString(ScreenplayParagraphType::Dialogue));
+    defaultValues.insert("screenplay-editor/styles-jumping/from-dialog-by-tab", toString(ScreenplayParagraphType::Parenthetical));
+    defaultValues.insert("screenplay-editor/styles-jumping/from-dialog-by-enter", toString(ScreenplayParagraphType::Action));
+    defaultValues.insert("screenplay-editor/styles-jumping/from-parenthetical-by-tab", toString(ScreenplayParagraphType::Dialogue));
+    defaultValues.insert("screenplay-editor/styles-jumping/from-parenthetical-by-enter", toString(ScreenplayParagraphType::Dialogue));
+    defaultValues.insert("screenplay-editor/styles-jumping/from-transition-by-tab", toString(ScreenplayParagraphType::SceneHeading));
+    defaultValues.insert("screenplay-editor/styles-jumping/from-transition-by-enter", toString(ScreenplayParagraphType::SceneHeading));
+    defaultValues.insert("screenplay-editor/styles-jumping/from-note-by-tab", toString(ScreenplayParagraphType::Action));
+    defaultValues.insert("screenplay-editor/styles-jumping/from-note-by-enter", toString(ScreenplayParagraphType::Action));
+    defaultValues.insert("screenplay-editor/styles-jumping/from-title-by-tab", toString(ScreenplayParagraphType::Action));
+    defaultValues.insert("screenplay-editor/styles-jumping/from-title-by-enter", toString(ScreenplayParagraphType::Action));
+    defaultValues.insert("screenplay-editor/styles-jumping/from-noprintable_text-by-tab", toString(ScreenplayParagraphType::Action));
+    defaultValues.insert("screenplay-editor/styles-jumping/from-noprintable_text-by-enter", toString(ScreenplayParagraphType::Action));
+    defaultValues.insert("screenplay-editor/styles-jumping/from-scene_group_header-by-tab", toString(ScreenplayParagraphType::SceneHeading));
+    defaultValues.insert("screenplay-editor/styles-jumping/from-scene_group_header-by-enter", toString(ScreenplayParagraphType::SceneHeading));
+    defaultValues.insert("screenplay-editor/styles-jumping/from-folder_header-by-tab", toString(ScreenplayParagraphType::SceneHeading));
+    defaultValues.insert("screenplay-editor/styles-jumping/from-folder_header-by-enter", toString(ScreenplayParagraphType::SceneHeading));
+    defaultValues.insert("screenplay-editor/styles-jumping/from-lyrics-by-tab", toString(ScreenplayParagraphType::Parenthetical));
+    defaultValues.insert("screenplay-editor/styles-jumping/from-lyrics-by-enter", toString(ScreenplayParagraphType::Action));
+    //
+    defaultValues.insert("screenplay-editor/styles-changing/from-scene_heading-by-tab", toString(ScreenplayParagraphType::Action));
+    defaultValues.insert("screenplay-editor/styles-changing/from-scene_heading-by-enter", toString(ScreenplayParagraphType::SceneHeading));
+    defaultValues.insert("screenplay-editor/styles-changing/from-scene_characters-by-tab", toString(ScreenplayParagraphType::Action));
+    defaultValues.insert("screenplay-editor/styles-changing/from-scene_characters-by-enter", toString(ScreenplayParagraphType::Action));
+    defaultValues.insert("screenplay-editor/styles-changing/from-action-by-tab", toString(ScreenplayParagraphType::Character));
+    defaultValues.insert("screenplay-editor/styles-changing/from-action-by-enter", toString(ScreenplayParagraphType::SceneHeading));
+    defaultValues.insert("screenplay-editor/styles-changing/from-character-by-tab", toString(ScreenplayParagraphType::Action));
+    defaultValues.insert("screenplay-editor/styles-changing/from-character-by-enter", toString(ScreenplayParagraphType::Action));
+    defaultValues.insert("screenplay-editor/styles-changing/from-dialog-by-tab", toString(ScreenplayParagraphType::Parenthetical));
+    defaultValues.insert("screenplay-editor/styles-changing/from-dialog-by-enter", toString(ScreenplayParagraphType::Action));
+    defaultValues.insert("screenplay-editor/styles-changing/from-parenthetical-by-tab", toString(ScreenplayParagraphType::Dialogue));
+    defaultValues.insert("screenplay-editor/styles-changing/from-parenthetical-by-enter", toString(ScreenplayParagraphType::Parenthetical));
+    defaultValues.insert("screenplay-editor/styles-changing/from-transition-by-tab", toString(ScreenplayParagraphType::Transition));
+    defaultValues.insert("screenplay-editor/styles-changing/from-transition-by-enter", toString(ScreenplayParagraphType::Transition));
+//    defaultValues.insert("screenplay-editor/styles-changing/from-note-by-tab", toString(ScreenplayParagraphType::Note));
+//    defaultValues.insert("screenplay-editor/styles-changing/from-note-by-enter", toString(ScreenplayParagraphType::Note));
+//    defaultValues.insert("screenplay-editor/styles-changing/from-title-by-tab", toString(ScreenplayParagraphType::Title));
+//    defaultValues.insert("screenplay-editor/styles-changing/from-title-by-enter", toString(ScreenplayParagraphType::Title));
+//    defaultValues.insert("screenplay-editor/styles-changing/from-noprintable_text-by-tab", toString(ScreenplayParagraphType::NoprintableText));
+//    defaultValues.insert("screenplay-editor/styles-changing/from-noprintable_text-by-enter", toString(ScreenplayParagraphType::NoprintableText));
+    defaultValues.insert("screenplay-editor/styles-changing/from-folder_header-by-tab", toString(ScreenplayParagraphType::FolderHeader));
+    defaultValues.insert("screenplay-editor/styles-changing/from-folder_header-by-enter", toString(ScreenplayParagraphType::FolderHeader));
+    defaultValues.insert("screenplay-editor/styles-changing/from-lyrics-by-tab", toString(ScreenplayParagraphType::Parenthetical));
+    defaultValues.insert("screenplay-editor/styles-changing/from-lyrics-by-enter", toString(ScreenplayParagraphType::Action));
+    //
 
     defaultValues.insert(kSystemUsernameKey, systemUserName());
 }

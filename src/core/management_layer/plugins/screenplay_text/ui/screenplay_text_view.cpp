@@ -55,26 +55,12 @@ ScreenplayTextView::Implementation::Implementation(QWidget* _parent)
     screenplayText->setUsePageMode(true);
     screenplayText->setPageFormat(QPageSize::A4);
     screenplayText->setPageMargins({38, 20, 17, 20});
-    QFont font("Courier Prime");
-    auto size = PageMetrics::ptToPx(12);
-    font.setPixelSize(size);
-    screenplayText->document()->setDefaultFont(font);
     screenplayText->setPageNumbersAlignment(Qt::AlignBottom | Qt::AlignRight);
 //    screenplayText->setHeader("Header text");
 //    screenplayText->setFooter("Footer text");
     screenplayText->setCursorWidth(4);
 //    screenplayText->setUseSpellChecker(true);
     screenplayText->setSpellCheckLanguage(SpellCheckerLanguage::EnglishUS);
-
-    connect(screenplayText, &CompleterTextEdit::textChanged, [this] {
-        if (screenplayText->toPlainText().isEmpty()) {
-            screenplayText->closeCompleter();
-            return;
-        }
-
-        static QStringListModel* model = new QStringListModel({"АНТОН", "АДМИРАЛ", "АДМИНИСТРАТОР", "АПОСТОЛ", "АДЛЕН", "АМИР"}, screenplayText);
-        screenplayText->complete(model, screenplayText->toPlainText());
-    });
 }
 
 void ScreenplayTextView::Implementation::updateToolBarsUi()
@@ -100,17 +86,13 @@ ScreenplayTextView::ScreenplayTextView(QWidget* _parent)
     layout->addWidget(d->scalableWrapper);
     setLayout(layout);
 
-    connect(d->screenplayText, &PageTextEdit::textChanged, this, [this] {
-        emit textChanged(d->screenplayText->toHtml());
-    });
-
     updateTranslations();
     designSystemChangeEvent(nullptr);
 }
 
-void ScreenplayTextView::setText(const QString& _text)
+void ScreenplayTextView::setModel(BusinessLayer::ScreenplayTextModel* _model)
 {
-
+    d->screenplayText->setModel(_model);
 }
 
 void ScreenplayTextView::resizeEvent(QResizeEvent* _event)
