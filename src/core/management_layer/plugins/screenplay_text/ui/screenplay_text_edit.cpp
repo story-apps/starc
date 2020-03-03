@@ -2,9 +2,9 @@
 
 #include "handlers/key_press_handler_facade.h"
 #include "screenplay_text_cursor.h"
+#include "screenplay_text_document.h"
 
 #include <business_layer/model/screenplay/text/screenplay_text_model.h>
-#include <business_layer/model/screenplay/text/screenplay_text_model_text_item.h>
 #include <business_layer/templates/screenplay_template.h>
 #include <business_layer/templates/screenplay_template_facade.h>
 
@@ -23,6 +23,7 @@ class ScreenplayTextEdit::Implementation
 {
 public:
     BusinessLayer::ScreenplayTextModel* model = nullptr;
+    ScreenplayTextDocument document;
 };
 
 
@@ -33,93 +34,15 @@ ScreenplayTextEdit::ScreenplayTextEdit(QWidget* _parent)
     : BaseTextEdit(_parent),
       d(new Implementation)
 {
+    setDocument(&d->document);
 }
 
 ScreenplayTextEdit::~ScreenplayTextEdit() = default;
 
 void ScreenplayTextEdit::setModel(BusinessLayer::ScreenplayTextModel* _model)
 {
-    QSignalBlocker signalBlocker(this);
-
     d->model = _model;
-    document()->clear();
-
-    if (d->model == nullptr) {
-        return;
-    }
-
-    //
-    // Начинаем операцию вставки
-    //
-    ScreenplayTextCursor cursor(document());
-    cursor.beginEditBlock();
-
-    //
-    // Последовательно формируем текст документа
-    //
-    bool isFirstParagraph = true;
-    std::function<void(const QModelIndex&)> readDocumentFromModel;
-    readDocumentFromModel = [model = d->model, &cursor, &isFirstParagraph, &readDocumentFromModel] (const QModelIndex& _parent) {
-        for (int itemRow = 0; itemRow < model->rowCount(_parent); ++itemRow) {
-            const auto itemIndex = model->index(itemRow, 0, _parent);
-            const auto item = model->itemForIndex(itemIndex);
-            switch (item->type()) {
-                case BusinessLayer::ScreenplayTextModelItemType::Scene: {
-                    break;
-                }
-
-                case BusinessLayer::ScreenplayTextModelItemType::Text: {
-                    const auto textItem = static_cast<BusinessLayer::ScreenplayTextModelTextItem*>(item);
-
-                    //
-                    // Если это не первый абзац, вставим блок для него
-                    //
-                    if (!isFirstParagraph) {
-                        cursor.insertBlock();
-                    }
-                    //
-                    // ... в противном же случае, новый блок нет необходимости вставлять
-                    //
-                    else {
-                        isFirstParagraph = false;
-                    }
-
-                    //
-                    // Установим стиль блока
-                    //
-                    const auto currentStyle
-                            = ScreenplayTemplateFacade::getTemplate().blockStyle(textItem->paragraphType());
-                    cursor.setBlockFormat(currentStyle.blockFormat());
-                    cursor.setBlockCharFormat(currentStyle.charFormat());
-                    cursor.setCharFormat(currentStyle.charFormat());
-
-                    //
-                    // Вставим текст абзаца
-                    //
-                    const auto textToInsert = TextHelper::fromHtmlEscaped(textItem->text());
-                    cursor.insertText(textToInsert);
-
-                    break;
-                }
-
-                default: {
-                    Q_ASSERT(false);
-                    break;
-                }
-            }
-
-            //
-            // Считываем информацию о детях
-            //
-            readDocumentFromModel(itemIndex);
-        }
-    };
-    readDocumentFromModel({});
-
-    //
-    // Завершаем операцию
-    //
-    cursor.endEditBlock();
+    d->document.setModel(_model);
 }
 
 BusinessLayer::ScreenplayDictionariesModel* ScreenplayTextEdit::dictionaries() const
@@ -151,12 +74,70 @@ BusinessLayer::LocationsModel* ScreenplayTextEdit::locations() const
 
 void ScreenplayTextEdit::addParagraph(BusinessLayer::ScreenplayParagraphType _type)
 {
+    ScreenplayTextCursor cursor = textCursor();
+    cursor.beginEditBlock();
 
+    //
+    // Вставим блок
+    //
+    cursor.insertBlock();
+    setTextCursorReimpl(cursor);
+
+    //
+    // Применим стиль к новому блоку
+    //
+    applyParagraphType(_type);
+
+    //
+    // Уведомим о том, что стиль сменился
+    //
+    emit paragraphTypeChanged();
+
+    cursor.endEditBlock();
 }
 
 void ScreenplayTextEdit::setCurrentParagraphType(BusinessLayer::ScreenplayParagraphType _type)
 {
+    ScreenplayTextCursor cursor = textCursor();
+    const auto currentParagraphType = ScreenplayBlockStyle::forBlock(cursor.block());
+    if (currentParagraphType == _type) {
+        return;
+    }
 
+    //
+    // Нельзя сменить стиль конечных элементов папок
+    //
+    if (currentParagraphType == ScreenplayParagraphType::FolderFooter) {
+        return;
+    }
+
+
+    cursor.beginEditBlock();
+
+    //
+    // Первым делом очищаем пользовательские данные
+    //
+    cursor.block().setUserData(nullptr);
+
+    //
+    // Закроем подсказку
+    //
+    closeCompleter();
+
+    //
+    // Обработаем предшествующий установленный стиль
+    //
+    cleanParagraphType();
+
+    //
+    // Применим новый стиль к блоку
+    //
+    applyParagraphType(_type);
+
+    cursor.endEditBlock();
+
+
+    emit paragraphTypeChanged();
 }
 
 BusinessLayer::ScreenplayParagraphType ScreenplayTextEdit::currentParagraphType() const
@@ -377,6 +358,162 @@ bool ScreenplayTextEdit::updateEnteredText(const QString& _eventText)
     }
 
     return BaseTextEdit::updateEnteredText(_eventText);
+}
+
+void ScreenplayTextEdit::cleanParagraphType()
+{
+    ScreenplayTextCursor cursor = textCursor();
+    const auto oldBlockStyle
+            = ScreenplayTemplateFacade::getTemplate().blockStyle(
+                  ScreenplayBlockStyle::forBlock(cursor.block()));
+
+    //
+    // Удалить завершающий блок папки
+    //
+    if (oldBlockStyle.isEmbeddableHeader()) {
+        QTextCursor cursor = textCursor();
+        cursor.movePosition(QTextCursor::NextBlock);
+
+        // ... открытые группы на пути поиска необходимого для обновления блока
+        int openedGroups = 0;
+        bool isFooterUpdated = false;
+        do {
+            const auto currentType = ScreenplayBlockStyle::forBlock(cursor.block());
+            if (currentType == oldBlockStyle.embeddableFooter()) {
+                if (openedGroups == 0) {
+                    //
+                    // Запомним стиль предыдущего блока
+                    //
+                    cursor.movePosition(QTextCursor::PreviousBlock);
+                    const auto previousBlockType = ScreenplayBlockStyle::forBlock(cursor.block());
+                    cursor.movePosition(QTextCursor::NextBlock);
+                    //
+                    // Удаляем закрывающий блок
+                    //
+                    cursor.movePosition(QTextCursor::EndOfBlock, QTextCursor::KeepAnchor);
+                    cursor.deleteChar();
+                    cursor.deletePreviousChar();
+                    //
+                    // Восстановим стиль предыдущего блока
+                    //
+                    if (ScreenplayBlockStyle::forBlock(cursor.block()) != previousBlockType) {
+                        QTextCursor lastTextCursor = textCursor();
+                        setTextCursor(cursor);
+                        applyParagraphType(previousBlockType);
+                        setTextCursor(lastTextCursor);
+                    }
+                    isFooterUpdated = true;
+                } else {
+                    --openedGroups;
+                }
+            } else if (currentType == oldBlockStyle.type()) {
+                //
+                // Встретилась новая папка
+                //
+                ++openedGroups;
+            }
+            cursor.movePosition(QTextCursor::EndOfBlock);
+            cursor.movePosition(QTextCursor::NextBlock);
+        } while (!isFooterUpdated
+                 && !cursor.atEnd());
+    }
+}
+
+void ScreenplayTextEdit::applyParagraphType(BusinessLayer::ScreenplayParagraphType _type)
+{
+    ScreenplayTextCursor cursor = textCursor();
+    cursor.beginEditBlock();
+
+    const auto newBlockStyle = ScreenplayTemplateFacade::getTemplate().blockStyle(_type);
+
+    //
+    // Обновим стили
+    //
+    cursor.setBlockCharFormat(newBlockStyle.charFormat());
+    cursor.setBlockFormat(newBlockStyle.blockFormat());
+
+    //
+    // Применим стиль текста ко всему блоку, выделив его,
+    // т.к. в блоке могут находиться фрагменты в другом стиле
+    // + сохраняем форматирование выделений
+    //
+    {
+        cursor.movePosition(QTextCursor::StartOfBlock);
+
+        //
+        // Если в блоке есть выделения, обновляем цвет только тех частей, которые не входят в выделения
+        //
+        QTextBlock currentBlock = cursor.block();
+        if (!currentBlock.textFormats().isEmpty()) {
+            const auto formats = currentBlock.textFormats();
+            for (const auto& range : formats) {
+                if (range.format.boolProperty(ScreenplayBlockStyle::PropertyIsReviewMark)) {
+                    continue;
+                }
+                cursor.setPosition(currentBlock.position() + range.start);
+                cursor.setPosition(cursor.position() + range.length, QTextCursor::KeepAnchor);
+                cursor.mergeCharFormat(newBlockStyle.charFormat());
+            }
+        }
+        //
+        // Если выделений нет, обновляем блок целиком
+        //
+        else {
+            cursor.movePosition(QTextCursor::EndOfBlock, QTextCursor::KeepAnchor);
+            cursor.mergeCharFormat(newBlockStyle.charFormat());
+        }
+    }
+
+    //
+    // Для заголовка папки нужно создать завершение, захватив всё содержимое сцены
+    //
+    if (newBlockStyle.isEmbeddableHeader()) {
+        const auto footerStyle = ScreenplayTemplateFacade::getTemplate().blockStyle(newBlockStyle.embeddableFooter());
+
+        //
+        // Запомним позицию курсора
+        //
+        const int lastCursorPosition = textCursor().position();
+
+        //
+        // Ищем конец сцены
+        //
+        do {
+            cursor.movePosition(QTextCursor::EndOfBlock);
+            cursor.movePosition(QTextCursor::NextBlock);
+        } while (!cursor.atEnd()
+                 && ScreenplayBlockStyle::forBlock(cursor.block()) != ScreenplayParagraphType::SceneHeading
+                 && ScreenplayBlockStyle::forBlock(cursor.block()) != ScreenplayParagraphType::FolderHeader
+                 && ScreenplayBlockStyle::forBlock(cursor.block()) != ScreenplayParagraphType::FolderFooter);
+
+        //
+        // Если забежали на блок следующей сцены, вернёмся на один символ назад
+        //
+        if (!cursor.atEnd() && cursor.atBlockStart()) {
+            cursor.movePosition(QTextCursor::PreviousCharacter);
+        }
+
+        //
+        // Когда дошли до конца сцены, вставляем закрывающий блок
+        //
+        cursor.insertBlock();
+        cursor.setBlockCharFormat(footerStyle.charFormat());
+        cursor.setBlockFormat(footerStyle.blockFormat());
+
+        //
+        // т.к. вставлен блок, нужно вернуть курсор на место
+        //
+        cursor.setPosition(lastCursorPosition);
+        setTextCursor(cursor);
+
+        //
+        // Эмулируем нажатие кнопки клавиатуры, чтобы обновился футер стиля
+        //
+        QKeyEvent empyEvent(QEvent::KeyPress, -1, Qt::NoModifier);
+        keyPressEvent(&empyEvent);
+    }
+
+    cursor.endEditBlock();
 }
 
 } // namespace Ui

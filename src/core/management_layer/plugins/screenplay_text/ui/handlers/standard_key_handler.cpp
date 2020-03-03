@@ -31,12 +31,12 @@ namespace {
                 .arg(BusinessLayer::toString(_blockType))
                 .arg(_tab ? "tab" : "enter");
 
-        const int result =
+        const auto typeString =
                 DataStorageLayer::StorageFacade::settingsStorage()->value(
                     settingsKey, DataStorageLayer::SettingsStorage::SettingsPlace::Application
-                    ).toInt();
+                    ).toString();
 
-        return static_cast<ScreenplayParagraphType>(result);
+        return BusinessLayer::screenplayParagraphTypeFromString(typeString);
     }
 
     /**

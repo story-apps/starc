@@ -114,7 +114,7 @@ void KeyPressHandlerFacade::prehandle()
 void KeyPressHandlerFacade::handle(QEvent* _event, bool _pre)
 {
     QTextBlock currentBlock = d->m_editor->textCursor().block();
-    const ScreenplayParagraphType currentType = BusinessLayer::ScreenplayBlockStyle::forBlock(currentBlock);
+    const auto currentType = BusinessLayer::ScreenplayBlockStyle::forBlock(currentBlock);
     auto currentHandler = handlerFor(currentType);
 
     if (currentHandler == nullptr) {

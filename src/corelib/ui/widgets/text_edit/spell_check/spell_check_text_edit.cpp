@@ -23,43 +23,56 @@ namespace {
 class SpellCheckTextEdit::Implementation
 {
 public:
-    explicit Implementation(QTextDocument* _document);
+    Implementation();
 
+    /**
+     * @brief Получить подсвечивающий ошибки объект
+     * @note Объект пересоздаётся, если прошлый был удалён
+     */
+    SpellCheckHighlighter* spellCheckHighlighter(QTextDocument* _document);
 
     /**
      * @brief Проверяющий орфографию
      */
-    SpellChecker& m_spellChecker;
-
-    /**
-     * @brief Подсвечивающий орфографические ошибки
-     */
-    SpellCheckHighlighter m_spellCheckHighlighter;
+    SpellChecker& spellChecker;
 
     /**
      * @brief Действия для слова не прошедшего проверку орфографии
      */
     /** @{ */
-    QAction* m_ignoreWordAction;
-    QAction* m_addWordToUserDictionaryAction;
-    QList<QAction*> m_suggestionsActions;
+    QAction* ignoreWordAction;
+    QAction* addWordToUserDictionaryAction;
+    QList<QAction*> suggestionsActions;
     /** @} */
 
     /**
      * @brief Последняя позиция курсора, при открытии контекстного меню
      */
-    QPoint m_lastCursorPosition;
+    QPoint lastCursorPosition;
 
     /**
      * @brief Предыдущий блок, на котором был курсор
      */
-    QTextBlock m_prevBlock;
+    QTextBlock previousBlockUnderCursor;
+
+private:
+    /**
+     * @brief Подсвечивающий орфографические ошибки
+     */
+    QPointer<SpellCheckHighlighter> m_spellCheckHighlighter;
 };
 
-SpellCheckTextEdit::Implementation::Implementation(QTextDocument* _document)
-    : m_spellChecker(SpellChecker::instance()),
-      m_spellCheckHighlighter(_document, m_spellChecker)
+SpellCheckTextEdit::Implementation::Implementation()
+    : spellChecker(SpellChecker::instance())
 {
+}
+
+SpellCheckHighlighter* SpellCheckTextEdit::Implementation::spellCheckHighlighter(QTextDocument* _document)
+{
+    if (m_spellCheckHighlighter.isNull()) {
+        m_spellCheckHighlighter = new SpellCheckHighlighter(_document, spellChecker);
+    }
+    return m_spellCheckHighlighter;
 }
 
 
@@ -68,22 +81,21 @@ SpellCheckTextEdit::Implementation::Implementation(QTextDocument* _document)
 
 SpellCheckTextEdit::SpellCheckTextEdit(QWidget *_parent)
     : PageTextEdit(_parent),
-      d(new Implementation(document()))
+      d(new Implementation)
 {
-    connect(this, &SpellCheckTextEdit::cursorPositionChanged,
-            this, &SpellCheckTextEdit::rehighlighWithNewCursor);
+    connect(this, &SpellCheckTextEdit::cursorPositionChanged, this, &SpellCheckTextEdit::rehighlighWithNewCursor);
 }
 
 SpellCheckTextEdit::~SpellCheckTextEdit() = default;
 
 void SpellCheckTextEdit::setUseSpellChecker(bool _use)
 {
-    d->m_spellCheckHighlighter.setUseSpellChecker(_use);
+    d->spellCheckHighlighter(document())->setUseSpellChecker(_use);
 }
 
 bool SpellCheckTextEdit::useSpellChecker() const
 {
-    return d->m_spellCheckHighlighter.useSpellChecker();
+    return d->spellCheckHighlighter(document())->useSpellChecker();
 }
 
 void SpellCheckTextEdit::setSpellCheckLanguage(SpellCheckerLanguage _language)
@@ -91,7 +103,7 @@ void SpellCheckTextEdit::setSpellCheckLanguage(SpellCheckerLanguage _language)
     //
     // Установим язык проверяющего
     //
-    d->m_spellChecker.setSpellingLanguage(_language);
+    d->spellChecker.setSpellingLanguage(_language);
 
     if (!useSpellChecker()) {
         return;
@@ -100,18 +112,18 @@ void SpellCheckTextEdit::setSpellCheckLanguage(SpellCheckerLanguage _language)
     //
     // Заново выделим слова не проходящие проверку орфографии вновь заданного языка
     //
-    d->m_spellCheckHighlighter.rehighlight();
+    d->spellCheckHighlighter(document())->rehighlight();
 }
 
 void SpellCheckTextEdit::prepareToClear()
 {
-    d->m_prevBlock = QTextBlock();
+    d->previousBlockUnderCursor = QTextBlock();
 }
 
 void SpellCheckTextEdit::setHighlighterDocument(QTextDocument* _document)
 {
-    d->m_prevBlock = QTextBlock();
-    d->m_spellCheckHighlighter.setDocument(_document);
+    d->previousBlockUnderCursor = QTextBlock();
+    d->spellCheckHighlighter(document())->setDocument(_document);
 }
 
 void SpellCheckTextEdit::ignoreWord() const
@@ -119,7 +131,7 @@ void SpellCheckTextEdit::ignoreWord() const
     //
     // Определим слово под курсором
     //
-    const QString wordUnderCursor = wordOnPosition(d->m_lastCursorPosition);
+    const QString wordUnderCursor = wordOnPosition(d->lastCursorPosition);
 
     //
     // Уберем пунктуацию
@@ -134,12 +146,12 @@ void SpellCheckTextEdit::ignoreWord() const
     //
     // Объявляем проверяющему о том, что это слово нужно игнорировать
     //
-    d->m_spellChecker.ignoreWord(wordUnderCursorWithoutPunctInCorrectRegister);
+    d->spellChecker.ignoreWord(wordUnderCursorWithoutPunctInCorrectRegister);
 
     //
     // Уберём выделение с игнорируемых слов
     //
-    d->m_spellCheckHighlighter.rehighlight();
+    d->spellCheckHighlighter(document())->rehighlight();
 }
 
 void SpellCheckTextEdit::addWordToUserDictionary() const
@@ -147,7 +159,7 @@ void SpellCheckTextEdit::addWordToUserDictionary() const
     //
     // Определим слово под курсором
     //
-    const QString wordUnderCursor = wordOnPosition(d->m_lastCursorPosition);
+    const QString wordUnderCursor = wordOnPosition(d->lastCursorPosition);
 
     //
     // Уберем пунктуацию в слове
@@ -162,18 +174,18 @@ void SpellCheckTextEdit::addWordToUserDictionary() const
     //
     // Объявляем проверяющему о том, что это слово нужно добавить в пользовательский словарь
     //
-    d->m_spellChecker.addWordToDictionary(wordUnderCursorWithoutPunctInCorrectRegister);
+    d->spellChecker.addWordToDictionary(wordUnderCursorWithoutPunctInCorrectRegister);
 
     //
     // Уберём выделение со слов добавленных в словарь
     //
-    d->m_spellCheckHighlighter.rehighlight();
+    d->spellCheckHighlighter(document())->rehighlight();
 }
 
 void SpellCheckTextEdit::replaceWordOnSuggestion()
 {
     if (QAction* suggestAction = qobject_cast<QAction*>(sender())) {
-        QTextCursor cursor = cursorForPosition(d->m_lastCursorPosition);
+        QTextCursor cursor = cursorForPosition(d->lastCursorPosition);
         cursor = moveCursorToStartWord(cursor);
         QTextCursor endCursor = moveCursorToEndWord(cursor);
         cursor.movePosition(QTextCursor::NextCharacter, QTextCursor::KeepAnchor, endCursor.positionInBlock() - cursor.positionInBlock());
@@ -191,9 +203,9 @@ void SpellCheckTextEdit::replaceWordOnSuggestion()
         // Поэтому, мы ему говорим, что слово не редактировалось, проверяй весь абзац
         // а затем восстанавливаем в прежнее состояние
         //
-        bool isEdited = d->m_spellCheckHighlighter.isChanged();
-        d->m_spellCheckHighlighter.rehighlightBlock(cursor.block());
-        d->m_spellCheckHighlighter.setChanged(isEdited);
+        bool isEdited = d->spellCheckHighlighter(document())->isChanged();
+        d->spellCheckHighlighter(document())->rehighlightBlock(cursor.block());
+        d->spellCheckHighlighter(document())->setChanged(isEdited);
     }
 }
 
@@ -233,7 +245,7 @@ QTextCursor SpellCheckTextEdit::moveCursorToEndWord(QTextCursor cursor) const
 
 void SpellCheckTextEdit::rehighlighWithNewCursor()
 {
-    if (!d->m_spellCheckHighlighter.useSpellChecker()) {
+    if (!d->spellCheckHighlighter(document())->useSpellChecker()) {
         return;
     }
 
@@ -247,11 +259,11 @@ void SpellCheckTextEdit::rehighlighWithNewCursor()
 
     QTextCursor cursor = textCursor();
     cursor = moveCursorToStartWord(cursor);
-    d->m_spellCheckHighlighter.setCursorPosition(cursor.positionInBlock());
-    if (d->m_prevBlock.isValid()) {
-        d->m_spellCheckHighlighter.rehighlightBlock(d->m_prevBlock);
+    d->spellCheckHighlighter(document())->setCursorPosition(cursor.positionInBlock());
+    if (d->previousBlockUnderCursor.isValid()) {
+        d->spellCheckHighlighter(document())->rehighlightBlock(d->previousBlockUnderCursor);
     }
-    d->m_prevBlock = textCursor().block();
+    d->previousBlockUnderCursor = textCursor().block();
 }
 
 QString SpellCheckTextEdit::wordOnPosition(const QPoint& _position) const

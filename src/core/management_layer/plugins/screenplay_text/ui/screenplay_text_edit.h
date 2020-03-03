@@ -19,6 +19,8 @@ namespace Ui
  */
 class ScreenplayTextEdit : public BaseTextEdit
 {
+    Q_OBJECT
+
 public:
     explicit ScreenplayTextEdit(QWidget* _parent = nullptr);
     ~ScreenplayTextEdit() override;
@@ -76,6 +78,11 @@ signals:
      */
     void redoRequest();
 
+    /**
+     * @brief Изменён тип абзаца
+     */
+    void paragraphTypeChanged();
+
 protected:
     /**
      * @brief Нажатия многих клавиш обрабатываются вручную
@@ -89,6 +96,18 @@ protected:
     bool keyPressEventReimpl(QKeyEvent* _event) override;
     bool updateEnteredText(const QString& _eventText) override;
     /** @} */
+
+private:
+    /**
+     * @brief Очистить текущий блок от установленного в нём типа
+     */
+    void cleanParagraphType();
+
+    /**
+     * @brief Применить заданный тип к текущему блоку редактора
+     * @param Тип блока
+     */
+    void applyParagraphType(BusinessLayer::ScreenplayParagraphType _type);
 
 private:
     class Implementation;

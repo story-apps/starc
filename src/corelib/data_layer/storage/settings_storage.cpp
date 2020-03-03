@@ -100,57 +100,145 @@ SettingsStorage::Implementation::Implementation()
     //
     // Параметры редактора сценария
     //
-    defaultValues.insert("screenplay-editor/styles-jumping/from-scene_heading-by-tab", toString(ScreenplayParagraphType::SceneCharacters));
-    defaultValues.insert("screenplay-editor/styles-jumping/from-scene_heading-by-enter", toString(ScreenplayParagraphType::Action));
-    defaultValues.insert("screenplay-editor/styles-jumping/from-scene_characters-by-tab", toString(ScreenplayParagraphType::Action));
-    defaultValues.insert("screenplay-editor/styles-jumping/from-scene_characters-by-enter", toString(ScreenplayParagraphType::Action));
-    defaultValues.insert("screenplay-editor/styles-jumping/from-action-by-tab", toString(ScreenplayParagraphType::Character));
-    defaultValues.insert("screenplay-editor/styles-jumping/from-action-by-enter", toString(ScreenplayParagraphType::Action));
-    defaultValues.insert("screenplay-editor/styles-jumping/from-character-by-tab", toString(ScreenplayParagraphType::Parenthetical));
-    defaultValues.insert("screenplay-editor/styles-jumping/from-character-by-enter", toString(ScreenplayParagraphType::Dialogue));
-    defaultValues.insert("screenplay-editor/styles-jumping/from-dialog-by-tab", toString(ScreenplayParagraphType::Parenthetical));
-    defaultValues.insert("screenplay-editor/styles-jumping/from-dialog-by-enter", toString(ScreenplayParagraphType::Action));
-    defaultValues.insert("screenplay-editor/styles-jumping/from-parenthetical-by-tab", toString(ScreenplayParagraphType::Dialogue));
-    defaultValues.insert("screenplay-editor/styles-jumping/from-parenthetical-by-enter", toString(ScreenplayParagraphType::Dialogue));
-    defaultValues.insert("screenplay-editor/styles-jumping/from-transition-by-tab", toString(ScreenplayParagraphType::SceneHeading));
-    defaultValues.insert("screenplay-editor/styles-jumping/from-transition-by-enter", toString(ScreenplayParagraphType::SceneHeading));
-    defaultValues.insert("screenplay-editor/styles-jumping/from-note-by-tab", toString(ScreenplayParagraphType::Action));
-    defaultValues.insert("screenplay-editor/styles-jumping/from-note-by-enter", toString(ScreenplayParagraphType::Action));
-    defaultValues.insert("screenplay-editor/styles-jumping/from-title-by-tab", toString(ScreenplayParagraphType::Action));
-    defaultValues.insert("screenplay-editor/styles-jumping/from-title-by-enter", toString(ScreenplayParagraphType::Action));
-    defaultValues.insert("screenplay-editor/styles-jumping/from-noprintable_text-by-tab", toString(ScreenplayParagraphType::Action));
-    defaultValues.insert("screenplay-editor/styles-jumping/from-noprintable_text-by-enter", toString(ScreenplayParagraphType::Action));
-    defaultValues.insert("screenplay-editor/styles-jumping/from-scene_group_header-by-tab", toString(ScreenplayParagraphType::SceneHeading));
-    defaultValues.insert("screenplay-editor/styles-jumping/from-scene_group_header-by-enter", toString(ScreenplayParagraphType::SceneHeading));
-    defaultValues.insert("screenplay-editor/styles-jumping/from-folder_header-by-tab", toString(ScreenplayParagraphType::SceneHeading));
-    defaultValues.insert("screenplay-editor/styles-jumping/from-folder_header-by-enter", toString(ScreenplayParagraphType::SceneHeading));
-    defaultValues.insert("screenplay-editor/styles-jumping/from-lyrics-by-tab", toString(ScreenplayParagraphType::Parenthetical));
-    defaultValues.insert("screenplay-editor/styles-jumping/from-lyrics-by-enter", toString(ScreenplayParagraphType::Action));
+    auto addScreenplayEditorStylesAction
+            = [this] (const QString& _actionType, const QString& _actionKey,
+                      ScreenplayParagraphType _from, ScreenplayParagraphType _to) {
+        defaultValues.insert(
+                    QString("screenplay-editor/styles-%1/from-%2-by-%3").arg(_actionType, toString(_from), _actionKey),
+                    toString(_to));
+    };
+    auto addScreenplayEditorStylesActionByTab
+            = [addScreenplayEditorStylesAction] (const QString& _actionType,
+                                                 ScreenplayParagraphType _from, ScreenplayParagraphType _to) {
+        addScreenplayEditorStylesAction(_actionType, "tab", _from, _to);
+    };
+    auto addScreenplayEditorStylesActionByEnter
+            = [addScreenplayEditorStylesAction] (const QString& _actionType,
+                                                 ScreenplayParagraphType _from, ScreenplayParagraphType _to) {
+        addScreenplayEditorStylesAction(_actionType, "enter", _from, _to);
+    };
     //
-    defaultValues.insert("screenplay-editor/styles-changing/from-scene_heading-by-tab", toString(ScreenplayParagraphType::Action));
-    defaultValues.insert("screenplay-editor/styles-changing/from-scene_heading-by-enter", toString(ScreenplayParagraphType::SceneHeading));
-    defaultValues.insert("screenplay-editor/styles-changing/from-scene_characters-by-tab", toString(ScreenplayParagraphType::Action));
-    defaultValues.insert("screenplay-editor/styles-changing/from-scene_characters-by-enter", toString(ScreenplayParagraphType::Action));
-    defaultValues.insert("screenplay-editor/styles-changing/from-action-by-tab", toString(ScreenplayParagraphType::Character));
-    defaultValues.insert("screenplay-editor/styles-changing/from-action-by-enter", toString(ScreenplayParagraphType::SceneHeading));
-    defaultValues.insert("screenplay-editor/styles-changing/from-character-by-tab", toString(ScreenplayParagraphType::Action));
-    defaultValues.insert("screenplay-editor/styles-changing/from-character-by-enter", toString(ScreenplayParagraphType::Action));
-    defaultValues.insert("screenplay-editor/styles-changing/from-dialog-by-tab", toString(ScreenplayParagraphType::Parenthetical));
-    defaultValues.insert("screenplay-editor/styles-changing/from-dialog-by-enter", toString(ScreenplayParagraphType::Action));
-    defaultValues.insert("screenplay-editor/styles-changing/from-parenthetical-by-tab", toString(ScreenplayParagraphType::Dialogue));
-    defaultValues.insert("screenplay-editor/styles-changing/from-parenthetical-by-enter", toString(ScreenplayParagraphType::Parenthetical));
-    defaultValues.insert("screenplay-editor/styles-changing/from-transition-by-tab", toString(ScreenplayParagraphType::Transition));
-    defaultValues.insert("screenplay-editor/styles-changing/from-transition-by-enter", toString(ScreenplayParagraphType::Transition));
-//    defaultValues.insert("screenplay-editor/styles-changing/from-note-by-tab", toString(ScreenplayParagraphType::Note));
-//    defaultValues.insert("screenplay-editor/styles-changing/from-note-by-enter", toString(ScreenplayParagraphType::Note));
-//    defaultValues.insert("screenplay-editor/styles-changing/from-title-by-tab", toString(ScreenplayParagraphType::Title));
-//    defaultValues.insert("screenplay-editor/styles-changing/from-title-by-enter", toString(ScreenplayParagraphType::Title));
-//    defaultValues.insert("screenplay-editor/styles-changing/from-noprintable_text-by-tab", toString(ScreenplayParagraphType::NoprintableText));
-//    defaultValues.insert("screenplay-editor/styles-changing/from-noprintable_text-by-enter", toString(ScreenplayParagraphType::NoprintableText));
-    defaultValues.insert("screenplay-editor/styles-changing/from-folder_header-by-tab", toString(ScreenplayParagraphType::FolderHeader));
-    defaultValues.insert("screenplay-editor/styles-changing/from-folder_header-by-enter", toString(ScreenplayParagraphType::FolderHeader));
-    defaultValues.insert("screenplay-editor/styles-changing/from-lyrics-by-tab", toString(ScreenplayParagraphType::Parenthetical));
-    defaultValues.insert("screenplay-editor/styles-changing/from-lyrics-by-enter", toString(ScreenplayParagraphType::Action));
+    auto addScreenplayEditorStylesJumpByTab
+            = [addScreenplayEditorStylesActionByTab] (ScreenplayParagraphType _from, ScreenplayParagraphType _to) {
+        addScreenplayEditorStylesActionByTab("jumping", _from, _to);
+    };
+    auto addScreenplayEditorStylesJumpByEnter
+            = [addScreenplayEditorStylesActionByEnter] (ScreenplayParagraphType _from, ScreenplayParagraphType _to) {
+        addScreenplayEditorStylesActionByEnter("jumping", _from, _to);
+    };
+    addScreenplayEditorStylesJumpByTab(ScreenplayParagraphType::UnformattedText,
+                                       ScreenplayParagraphType::UnformattedText);
+    addScreenplayEditorStylesJumpByEnter(ScreenplayParagraphType::UnformattedText,
+                                         ScreenplayParagraphType::UnformattedText);
+    addScreenplayEditorStylesJumpByTab(ScreenplayParagraphType::SceneName,
+                                       ScreenplayParagraphType::SceneCharacters);
+    addScreenplayEditorStylesJumpByEnter(ScreenplayParagraphType::SceneName,
+                                         ScreenplayParagraphType::SceneDescription);
+    addScreenplayEditorStylesJumpByTab(ScreenplayParagraphType::SceneHeading,
+                                       ScreenplayParagraphType::SceneCharacters);
+    addScreenplayEditorStylesJumpByEnter(ScreenplayParagraphType::SceneHeading,
+                                         ScreenplayParagraphType::Action);
+    addScreenplayEditorStylesJumpByTab(ScreenplayParagraphType::SceneCharacters,
+                                       ScreenplayParagraphType::Action);
+    addScreenplayEditorStylesJumpByEnter(ScreenplayParagraphType::SceneCharacters,
+                                         ScreenplayParagraphType::Action);
+    addScreenplayEditorStylesJumpByTab(ScreenplayParagraphType::Action,
+                                       ScreenplayParagraphType::Character);
+    addScreenplayEditorStylesJumpByEnter(ScreenplayParagraphType::Action,
+                                         ScreenplayParagraphType::Action);
+    addScreenplayEditorStylesJumpByTab(ScreenplayParagraphType::Character,
+                                       ScreenplayParagraphType::Parenthetical);
+    addScreenplayEditorStylesJumpByEnter(ScreenplayParagraphType::Character,
+                                         ScreenplayParagraphType::Dialogue);
+    addScreenplayEditorStylesJumpByTab(ScreenplayParagraphType::Parenthetical,
+                                       ScreenplayParagraphType::Dialogue);
+    addScreenplayEditorStylesJumpByEnter(ScreenplayParagraphType::Parenthetical,
+                                         ScreenplayParagraphType::Dialogue);
+    addScreenplayEditorStylesJumpByTab(ScreenplayParagraphType::Dialogue,
+                                       ScreenplayParagraphType::Parenthetical);
+    addScreenplayEditorStylesJumpByEnter(ScreenplayParagraphType::Dialogue,
+                                         ScreenplayParagraphType::Action);
+    addScreenplayEditorStylesJumpByTab(ScreenplayParagraphType::Lyrics,
+                                       ScreenplayParagraphType::Parenthetical);
+    addScreenplayEditorStylesJumpByEnter(ScreenplayParagraphType::Lyrics,
+                                         ScreenplayParagraphType::Action);
+    addScreenplayEditorStylesJumpByTab(ScreenplayParagraphType::Transition,
+                                       ScreenplayParagraphType::SceneHeading);
+    addScreenplayEditorStylesJumpByEnter(ScreenplayParagraphType::Transition,
+                                         ScreenplayParagraphType::SceneHeading);
+    addScreenplayEditorStylesJumpByTab(ScreenplayParagraphType::Shot,
+                                       ScreenplayParagraphType::Action);
+    addScreenplayEditorStylesJumpByEnter(ScreenplayParagraphType::Shot,
+                                         ScreenplayParagraphType::Action);
+    addScreenplayEditorStylesJumpByTab(ScreenplayParagraphType::InlineNote,
+                                       ScreenplayParagraphType::Action);
+    addScreenplayEditorStylesJumpByEnter(ScreenplayParagraphType::InlineNote,
+                                         ScreenplayParagraphType::Action);
+    addScreenplayEditorStylesJumpByTab(ScreenplayParagraphType::FolderHeader,
+                                       ScreenplayParagraphType::SceneHeading);
+    addScreenplayEditorStylesJumpByEnter(ScreenplayParagraphType::FolderHeader,
+                                         ScreenplayParagraphType::SceneHeading);
+    //
+    auto addScreenplayEditorStylesChangeByTab
+            = [addScreenplayEditorStylesActionByTab] (ScreenplayParagraphType _from, ScreenplayParagraphType _to) {
+        addScreenplayEditorStylesActionByTab("changing", _from, _to);
+    };
+    auto addScreenplayEditorStylesChangeByEnter
+            = [addScreenplayEditorStylesActionByEnter] (ScreenplayParagraphType _from, ScreenplayParagraphType _to) {
+        addScreenplayEditorStylesActionByEnter("changing", _from, _to);
+    };
+    addScreenplayEditorStylesChangeByTab(ScreenplayParagraphType::UnformattedText,
+                                         ScreenplayParagraphType::UnformattedText);
+    addScreenplayEditorStylesChangeByEnter(ScreenplayParagraphType::UnformattedText,
+                                           ScreenplayParagraphType::UnformattedText);
+    addScreenplayEditorStylesChangeByTab(ScreenplayParagraphType::SceneName,
+                                         ScreenplayParagraphType::SceneDescription);
+    addScreenplayEditorStylesChangeByEnter(ScreenplayParagraphType::SceneName,
+                                           ScreenplayParagraphType::SceneName);
+    addScreenplayEditorStylesChangeByTab(ScreenplayParagraphType::SceneHeading,
+                                         ScreenplayParagraphType::Action);
+    addScreenplayEditorStylesChangeByEnter(ScreenplayParagraphType::SceneHeading,
+                                           ScreenplayParagraphType::SceneHeading);
+    addScreenplayEditorStylesChangeByTab(ScreenplayParagraphType::SceneCharacters,
+                                         ScreenplayParagraphType::Action);
+    addScreenplayEditorStylesChangeByEnter(ScreenplayParagraphType::SceneCharacters,
+                                           ScreenplayParagraphType::SceneCharacters);
+    addScreenplayEditorStylesChangeByTab(ScreenplayParagraphType::Action,
+                                         ScreenplayParagraphType::Character);
+    addScreenplayEditorStylesChangeByEnter(ScreenplayParagraphType::Action,
+                                           ScreenplayParagraphType::SceneHeading);
+    addScreenplayEditorStylesChangeByTab(ScreenplayParagraphType::Character,
+                                         ScreenplayParagraphType::Action);
+    addScreenplayEditorStylesChangeByEnter(ScreenplayParagraphType::Character,
+                                           ScreenplayParagraphType::Action);
+    addScreenplayEditorStylesChangeByTab(ScreenplayParagraphType::Parenthetical,
+                                         ScreenplayParagraphType::Dialogue);
+    addScreenplayEditorStylesChangeByEnter(ScreenplayParagraphType::Parenthetical,
+                                           ScreenplayParagraphType::Parenthetical);
+    addScreenplayEditorStylesChangeByTab(ScreenplayParagraphType::Dialogue,
+                                         ScreenplayParagraphType::Parenthetical);
+    addScreenplayEditorStylesChangeByEnter(ScreenplayParagraphType::Dialogue,
+                                           ScreenplayParagraphType::Action);
+    addScreenplayEditorStylesChangeByTab(ScreenplayParagraphType::Lyrics,
+                                         ScreenplayParagraphType::Parenthetical);
+    addScreenplayEditorStylesChangeByEnter(ScreenplayParagraphType::Lyrics,
+                                           ScreenplayParagraphType::Action);
+    addScreenplayEditorStylesChangeByTab(ScreenplayParagraphType::Transition,
+                                         ScreenplayParagraphType::Action);
+    addScreenplayEditorStylesChangeByEnter(ScreenplayParagraphType::Transition,
+                                           ScreenplayParagraphType::Transition);
+    addScreenplayEditorStylesChangeByTab(ScreenplayParagraphType::Shot,
+                                         ScreenplayParagraphType::Action);
+    addScreenplayEditorStylesChangeByEnter(ScreenplayParagraphType::Shot,
+                                           ScreenplayParagraphType::Shot);
+    addScreenplayEditorStylesChangeByTab(ScreenplayParagraphType::InlineNote,
+                                         ScreenplayParagraphType::InlineNote);
+    addScreenplayEditorStylesChangeByEnter(ScreenplayParagraphType::InlineNote,
+                                           ScreenplayParagraphType::InlineNote);
+    addScreenplayEditorStylesChangeByTab(ScreenplayParagraphType::FolderHeader,
+                                         ScreenplayParagraphType::FolderHeader);
+    addScreenplayEditorStylesChangeByEnter(ScreenplayParagraphType::FolderHeader,
+                                           ScreenplayParagraphType::FolderHeader);
     //
 
     defaultValues.insert(kSystemUsernameKey, systemUserName());
