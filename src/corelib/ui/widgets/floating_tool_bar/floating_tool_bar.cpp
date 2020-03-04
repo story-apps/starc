@@ -258,6 +258,10 @@ void FloatingToolBar::paintEvent(QPaintEvent* _event)
             const QFontMetricsF fontMetrics(painter.font());
             const QRectF actionRect(actionIconX, actionIconY,
                                     action->property(kActionWidthKey).toReal(), actionIconSize.height());
+            if (!backgroundRect.contains(actionRect.toRect(), true)) {
+                continue;
+            }
+
             painter.setPen(textColor());
             painter.drawText(actionRect, Qt::AlignLeft | Qt::AlignVCenter, action->text());
             //
@@ -279,6 +283,10 @@ void FloatingToolBar::paintEvent(QPaintEvent* _event)
             //
             painter.setFont(Ui::DesignSystem::font().iconsMid());
             const QRectF actionRect(QPointF(actionIconX, actionIconY), actionIconSize);
+            if (!backgroundRect.contains(actionRect.toRect(), true)) {
+                continue;
+            }
+
             painter.setPen(action->isChecked() ? Ui::DesignSystem::color().secondary() : textColor());
             if (action->icon().isNull()) {
                 painter.drawText(actionRect, Qt::AlignCenter, action->iconText());
