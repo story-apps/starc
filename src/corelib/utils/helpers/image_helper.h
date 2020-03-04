@@ -66,5 +66,6 @@ public:
     /**
      * @brief Получить изображение тени для заданного изображения и параметров
      */
-    static QPixmap dropShadow(const QPixmap& _sourcePixmap, const QMarginsF& _shadowMargins, qreal _blurRadius, const QColor& _color);
+    static QPixmap dropShadow(const QPixmap& _sourcePixmap, const QMarginsF& _shadowMargins,
+        qreal _blurRadius, const QColor& _color, bool _useCache = false);
 };

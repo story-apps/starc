@@ -6,6 +6,7 @@
 #include <QIcon>
 #include <QPainter>
 #include <QPixmap>
+#include <QtMath>
 
 namespace {
     /**
@@ -289,14 +290,24 @@ QT_BEGIN_NAMESPACE
 extern void qt_blurImage(QPainter *p, QImage &blurImage, qreal radius, bool quality, bool alphaOnly, int transposed = 0);
 QT_END_NAMESPACE
 
-QPixmap ImageHelper::dropShadow(const QPixmap& _sourcePixmap, const QMarginsF& _shadowMargins, qreal _blurRadius, const QColor& _color)
+QPixmap ImageHelper::dropShadow(const QPixmap& _sourcePixmap, const QMarginsF& _shadowMargins, qreal _blurRadius, const QColor& _color, bool _useCache)
 {
-    //
-    // TODO: сделать кэш теней, т.к. это довольно долгая операция
-    //
-
     if (_sourcePixmap.isNull()) {
         return QPixmap();
+    }
+
+    //
+    // Кэш теней
+    //
+    using CacheKey = QPair<qint64, QPair<int, QRgb>>;
+    static QCache<CacheKey, QPixmap> s_shadowsCache;
+
+    //
+    // Ищем тень в кэше
+    //
+    const CacheKey shadowKey{_sourcePixmap.cacheKey(), {qCeil(_blurRadius * 100.0), _color.rgba()}};
+    if (_useCache && s_shadowsCache.contains(shadowKey)) {
+        return *s_shadowsCache[shadowKey];
     }
 
     //
@@ -331,5 +342,9 @@ QPixmap ImageHelper::dropShadow(const QPixmap& _sourcePixmap, const QMarginsF& _
     painter.fillRect(shadowedImage.rect(), _color);
     painter.end();
 
-    return QPixmap::fromImage(shadowedImage);
+    auto shadowedPixmap = QPixmap::fromImage(shadowedImage);
+    if (_useCache) {
+        s_shadowsCache.insert(shadowKey, new QPixmap(shadowedPixmap));
+    }
+    return shadowedPixmap;
 }

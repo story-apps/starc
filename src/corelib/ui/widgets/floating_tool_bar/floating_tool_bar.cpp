@@ -281,24 +281,14 @@ void FloatingToolBar::paintEvent(QPaintEvent* _event)
             //
             // ... сама иконка
             //
-            painter.setFont(Ui::DesignSystem::font().iconsMid());
             const QRectF actionRect(QPointF(actionIconX, actionIconY), actionIconSize);
             if (!backgroundRect.contains(actionRect.toRect(), true)) {
                 continue;
             }
 
+            painter.setFont(Ui::DesignSystem::font().iconsMid());
             painter.setPen(action->isChecked() ? Ui::DesignSystem::color().secondary() : textColor());
-            if (action->icon().isNull()) {
-                painter.drawText(actionRect, Qt::AlignCenter, action->iconText());
-            } else {
-                const qreal actionPixmapX = Ui::DesignSystem::floatingToolBar().shadowMargins().left();
-                const qreal actionPixmapY = Ui::DesignSystem::floatingToolBar().shadowMargins().top();
-                const qreal actionPixmpWidth = Ui::DesignSystem::floatingToolBar().margins().left()
-                                               + Ui::DesignSystem::floatingToolBar().iconSize().width()
-                                               + Ui::DesignSystem::floatingToolBar().margins().right();
-                const QSizeF actionPixmapSize = QSizeF(actionPixmpWidth, actionPixmpWidth);
-                painter.drawPixmap(QPointF(actionPixmapX, actionPixmapY), action->icon().pixmap(actionPixmapSize.toSize()));
-            }
+            painter.drawText(actionRect, Qt::AlignCenter, action->iconText());
 
             //
             // ... декорация

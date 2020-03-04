@@ -1764,26 +1764,31 @@ void PageTextEditPrivate::paintPagesView(QPainter *_painter)
     while (currentPageTop <= q->height()) {
         const QRectF pageRect(0 - horizontalDelta, currentPageTop, pageWidth, pageHeight - m_pageSpacing);
         const QRectF backgroundRect = pageRect.marginsRemoved(Ui::DesignSystem::card().shadowMargins().toMargins());
+        const qreal borderRadius = Ui::DesignSystem::card().borderRadius();
 
         //
         // Заливаем фон
         //
-        QPixmap backgroundImage(backgroundRect.size().toSize());
-        backgroundImage.fill(Qt::transparent);
-        QPainter backgroundImagePainter(&backgroundImage);
-        backgroundImagePainter.setPen(Qt::NoPen);
-        backgroundImagePainter.setBrush(Ui::DesignSystem::color().background());
-        const qreal borderRadius = Ui::DesignSystem::card().borderRadius();
-        backgroundImagePainter.drawRoundedRect(QRect({0,0}, backgroundImage.size()), borderRadius, borderRadius);
+        static QPixmap backgroundImage;
+        if (backgroundImage.size() != backgroundRect.size().toSize()) {
+            backgroundImage = QPixmap(backgroundRect.size().toSize());
+            backgroundImage.fill(Qt::transparent);
+            QPainter backgroundImagePainter(&backgroundImage);
+            backgroundImagePainter.setPen(Qt::NoPen);
+            backgroundImagePainter.setBrush(Ui::DesignSystem::color().background());
+            backgroundImagePainter.drawRoundedRect(QRect({0,0}, backgroundImage.size()), borderRadius, borderRadius);
+        }
         //
         // ... рисуем тень
         //
         const qreal shadowHeight = Ui::DesignSystem::card().minimumShadowBlurRadius();
+        const bool useCache = true;
         const QPixmap shadow
                 = ImageHelper::dropShadow(backgroundImage,
                                           Ui::DesignSystem::card().shadowMargins(),
                                           shadowHeight,
-                                          Ui::DesignSystem::color().shadow());
+                                          Ui::DesignSystem::color().shadow(),
+                                          useCache);
 
         _painter->drawPixmap(pageRect.topLeft(), shadow);
         //
