@@ -6,6 +6,10 @@
         <file alias="roboto-medium">resources/fonts/roboto-medium.ttf</file>
         <file alias="roboto-regular">resources/fonts/roboto-regular.ttf</file>
         <file alias="roboto-thin">resources/fonts/roboto-thin.ttf</file>
+        <file alias="courier-prime-bold-italic">resources/fonts/courier-prime-bold-italic.ttf</file>
+        <file alias="courier-prime-bold">resources/fonts/courier-prime-bold.ttf</file>
+        <file alias="courier-prime-italic">resources/fonts/courier-prime-italic.ttf</file>
+        <file alias="courier-prime">resources/fonts/courier-prime.ttf</file>
     </qresource>
     <qresource prefix="/images">
         <file alias="movie-poster">resources/images/movie-poster.jpg</file>
