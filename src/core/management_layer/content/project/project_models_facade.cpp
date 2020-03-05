@@ -1,6 +1,8 @@
-#include "project_models_builder.h"
+#include "project_models_facade.h"
 
+#include <business_layer/model/characters/character_model.h>
 #include <business_layer/model/characters/characters_model.h>
+#include <business_layer/model/locations/location_model.h>
 #include <business_layer/model/locations/locations_model.h>
 #include <business_layer/model/project/project_information_model.h>
 #include <business_layer/model/recycle_bin/recycle_bin_model.h>
@@ -21,7 +23,7 @@
 namespace ManagementLayer
 {
 
-class ProjectModelsBuilder::Implementation
+class ProjectModelsFacade::Implementation
 {
 public:
     explicit Implementation(BusinessLayer::AbstractImageWrapper* _imageWrapper);
@@ -30,7 +32,7 @@ public:
     BusinessLayer::AbstractImageWrapper* imageWrapper = nullptr;
 };
 
-ProjectModelsBuilder::Implementation::Implementation(BusinessLayer::AbstractImageWrapper* _imageWrapper)
+ProjectModelsFacade::Implementation::Implementation(BusinessLayer::AbstractImageWrapper* _imageWrapper)
     : imageWrapper(_imageWrapper)
 {
 }
@@ -39,18 +41,18 @@ ProjectModelsBuilder::Implementation::Implementation(BusinessLayer::AbstractImag
 // ****
 
 
-ProjectModelsBuilder::ProjectModelsBuilder(BusinessLayer::AbstractImageWrapper* _imageWrapper, QObject* _parent)
+ProjectModelsFacade::ProjectModelsFacade(BusinessLayer::AbstractImageWrapper* _imageWrapper, QObject* _parent)
     : QObject(_parent),
       d(new Implementation(_imageWrapper))
 {
 }
 
-ProjectModelsBuilder::~ProjectModelsBuilder()
+ProjectModelsFacade::~ProjectModelsFacade()
 {
     clear();
 }
 
-void ProjectModelsBuilder::clear()
+void ProjectModelsFacade::clear()
 {
     for (auto model : d->documentsToModels.values()) {
         model->disconnect();
@@ -61,7 +63,7 @@ void ProjectModelsBuilder::clear()
     d->documentsToModels.clear();
 }
 
-BusinessLayer::AbstractModel* ProjectModelsBuilder::modelFor(Domain::DocumentObject* _document)
+BusinessLayer::AbstractModel* ProjectModelsFacade::modelFor(Domain::DocumentObject* _document)
 {
     if (_document == nullptr) {
         return nullptr;
@@ -71,11 +73,15 @@ BusinessLayer::AbstractModel* ProjectModelsBuilder::modelFor(Domain::DocumentObj
         BusinessLayer::AbstractModel* model = nullptr;
         switch (_document->type()) {
             case Domain::DocumentObjectType::Project: {
-                //
-                // Модель параметров проекта находится в самом менеджере проекта, отсюда она не должна браться
-                //
-                Q_ASSERT(false);
-                return nullptr;
+                auto projectInformationModel = new BusinessLayer::ProjectInformationModel;
+                connect(projectInformationModel, &BusinessLayer::ProjectInformationModel::nameChanged,
+                        this, &ProjectModelsFacade::projectNameChanged, Qt::UniqueConnection);
+                connect(projectInformationModel, &BusinessLayer::ProjectInformationModel::loglineChanged,
+                        this, &ProjectModelsFacade::projectLoglineChanged, Qt::UniqueConnection);
+                connect(projectInformationModel, &BusinessLayer::ProjectInformationModel::coverChanged,
+                        this, &ProjectModelsFacade::projectCoverChanged, Qt::UniqueConnection);
+                model = projectInformationModel;
+                break;
             }
 
             case Domain::DocumentObjectType::RecycleBin: {
@@ -151,12 +157,26 @@ BusinessLayer::AbstractModel* ProjectModelsBuilder::modelFor(Domain::DocumentObj
                 break;
             }
 
+            case Domain::DocumentObjectType::Character: {
+                model = new BusinessLayer::CharacterModel;
+                break;
+            }
+
             case Domain::DocumentObjectType::Locations: {
-                model = new BusinessLayer::LocationsModel;
+                auto locationsModel = new BusinessLayer::LocationsModel;
+                connect(locationsModel, &BusinessLayer::LocationsModel::createLocationRequested,
+                        this, &ProjectModelsFacade::createLocationRequested);
+                model = locationsModel;
+                break;
+            }
+
+            case Domain::DocumentObjectType::Location: {
+                model = new BusinessLayer::LocationModel;
                 break;
             }
 
             default: {
+                Q_ASSERT(false);
                 return nullptr;
             }
         }
@@ -175,7 +195,7 @@ BusinessLayer::AbstractModel* ProjectModelsBuilder::modelFor(Domain::DocumentObj
     return d->documentsToModels.value(_document);
 }
 
-void ProjectModelsBuilder::removeModelFor(Domain::DocumentObject* _document)
+void ProjectModelsFacade::removeModelFor(Domain::DocumentObject* _document)
 {
     auto model = d->documentsToModels.take(_document);
     model->disconnect();
@@ -183,7 +203,7 @@ void ProjectModelsBuilder::removeModelFor(Domain::DocumentObject* _document)
     model->deleteLater();
 }
 
-QVector<BusinessLayer::AbstractModel*> ProjectModelsBuilder::models() const
+QVector<BusinessLayer::AbstractModel*> ProjectModelsFacade::models() const
 {
     return d->documentsToModels.values().toVector();
 }

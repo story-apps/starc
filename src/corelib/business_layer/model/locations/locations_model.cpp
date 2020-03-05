@@ -38,9 +38,13 @@ void LocationsModel::addLocationModel(LocationModel* _LocationModel)
 
 void LocationsModel::createLocation(const QString& _name)
 {
-    //
-    // FIXME:
-    //
+    for (const auto location : d->locationModels) {
+        if (location->name() == _name) {
+            return;
+        }
+    }
+
+    emit createLocationRequested(_name);
 }
 
 QModelIndex LocationsModel::index(int _row, int _column, const QModelIndex& _parent) const

@@ -1,8 +1,10 @@
 #include "project_manager.h"
 
-#include "project_models_builder.h"
+#include "project_models_facade.h"
 #include "project_plugins_builder.h"
 
+#include <business_layer/model/locations/location_model.h>
+#include <business_layer/model/locations/locations_model.h>
 #include <business_layer/model/project/project_information_model.h>
 #include <business_layer/model/structure/structure_model.h>
 #include <business_layer/model/structure/structure_model_item.h>
@@ -78,12 +80,11 @@ public:
     Ui::ProjectView* view = nullptr;
 
     BusinessLayer::StructureModel* projectStructureModel = nullptr;
-    BusinessLayer::ProjectInformationModel* projectInformationModel = nullptr;
 
     DataStorageLayer::DocumentDataStorage documentDataStorage;
 
-    ProjectModelsBuilder modelBuilder;
-    ProjectPluginsBuilder pluginBuilder;
+    ProjectModelsFacade modelsFacade;
+    ProjectPluginsBuilder pluginsBuilder;
 };
 
 ProjectManager::Implementation::Implementation(QWidget* _parent)
@@ -93,8 +94,7 @@ ProjectManager::Implementation::Implementation(QWidget* _parent)
       navigatorContextMenuModel(new QStandardItemModel(navigator)),
       view(new Ui::ProjectView(_parent)),
       projectStructureModel(new BusinessLayer::StructureModel(navigator)),
-      projectInformationModel(new BusinessLayer::ProjectInformationModel(navigator)),
-      modelBuilder(&documentDataStorage)
+      modelsFacade(&documentDataStorage)
 {
     toolBar->hide();
     navigator->hide();
@@ -102,8 +102,6 @@ ProjectManager::Implementation::Implementation(QWidget* _parent)
 
     navigator->setModel(projectStructureModel);
     navigator->setContextMenuModel(navigatorContextMenuModel);
-
-    projectInformationModel->setImageWrapper(&documentDataStorage);
 }
 
 void ProjectManager::Implementation::updateNavigatorContextMenu(const QModelIndex& _index)
@@ -215,7 +213,7 @@ void ProjectManager::Implementation::removeDocument(const QModelIndex& _itemInde
             // NOTE: порядок удаления важен
             //
             auto document = DataStorageLayer::StorageFacade::documentStorage()->document(item->uuid());
-            modelBuilder.removeModelFor(document);
+            modelsFacade.removeModelFor(document);
             DataStorageLayer::StorageFacade::documentStorage()->removeDocument(document);
             projectStructureModel->removeItem(item);
         });
@@ -262,7 +260,7 @@ ProjectManager::ProjectManager(QObject* _parent, QWidget* _parentWidget)
         // ... настроим иконки представлений
         //
         d->toolBar->clearViews();
-        const auto views = d->pluginBuilder.editorsInfoFor(documentMimeType);
+        const auto views = d->pluginsBuilder.editorsInfoFor(documentMimeType);
         for (auto view : views) {
             const bool isActive = view.mimeType == views.first().mimeType;
             d->toolBar->addView(view.mimeType, view.icon, isActive);
@@ -305,29 +303,26 @@ ProjectManager::ProjectManager(QObject* _parent, QWidget* _parentWidget)
             [this] (const QUuid& _uuid, Domain::DocumentObjectType _type, const QString& _name)
     {
         auto document = DataStorageLayer::StorageFacade::documentStorage()->storeDocument(_uuid, _type);
-        auto documentModel
-                = _type == Domain::DocumentObjectType::Project
-                  ? d->projectInformationModel
-                  : d->modelBuilder.modelFor(document);
+        auto documentModel = d->modelsFacade.modelFor(document);
         documentModel->setDocumentName(_name);
+
+        switch (_type) {
+            case Domain::DocumentObjectType::Location: {
+                auto locationsDocument = DataStorageLayer::StorageFacade::documentStorage()->document(
+                                             Domain::DocumentObjectType::Locations);
+                auto locationsModel = static_cast<BusinessLayer::LocationsModel*>(d->modelsFacade.modelFor(locationsDocument));
+                auto locationModel = static_cast<BusinessLayer::LocationModel*>(documentModel);
+                locationsModel->addLocationModel(locationModel);
+
+                break;
+            }
+
+            default: break;
+        }
     });
     connect(d->projectStructureModel, &BusinessLayer::StructureModel::contentsChanged, this,
             [this] (const QByteArray& _undo, const QByteArray& _redo) {
         handleModelChange(d->projectStructureModel, _undo, _redo);
-    });
-
-    //
-    // Соединения с моделью данных о проекте
-    //
-    connect(d->projectInformationModel, &BusinessLayer::ProjectInformationModel::nameChanged,
-            this, &ProjectManager::projectNameChanged, Qt::UniqueConnection);
-    connect(d->projectInformationModel, &BusinessLayer::ProjectInformationModel::loglineChanged,
-            this, &ProjectManager::projectLoglineChanged, Qt::UniqueConnection);
-    connect(d->projectInformationModel, &BusinessLayer::ProjectInformationModel::coverChanged,
-            this, &ProjectManager::projectCoverChanged, Qt::UniqueConnection);
-    connect(d->projectInformationModel, &BusinessLayer::ProjectInformationModel::contentsChanged, this,
-            [this] (const QByteArray& _undo, const QByteArray& _redo) {
-        handleModelChange(d->projectInformationModel, _undo, _redo);
     });
 
     //
@@ -340,7 +335,23 @@ ProjectManager::ProjectManager(QObject* _parent, QWidget* _parentWidget)
     //
     // Соединения со строителем моделей
     //
-    connect(&d->modelBuilder, &ProjectModelsBuilder::modelContentChanged, this, &ProjectManager::handleModelChange);
+    connect(&d->modelsFacade, &ProjectModelsFacade::modelContentChanged, this, &ProjectManager::handleModelChange);
+    connect(&d->modelsFacade, &ProjectModelsFacade::projectNameChanged,
+            this, &ProjectManager::projectNameChanged, Qt::UniqueConnection);
+    connect(&d->modelsFacade, &ProjectModelsFacade::projectLoglineChanged,
+            this, &ProjectManager::projectLoglineChanged, Qt::UniqueConnection);
+    connect(&d->modelsFacade, &ProjectModelsFacade::projectCoverChanged,
+            this, &ProjectManager::projectCoverChanged, Qt::UniqueConnection);
+    connect(&d->modelsFacade, &ProjectModelsFacade::createLocationRequested, this, [this] (const QString& _name) {
+        for (int itemRow = 0; itemRow < d->projectStructureModel->rowCount(); ++itemRow) {
+            const auto itemIndex = d->projectStructureModel->index(itemRow, 0);
+            const auto item = d->projectStructureModel->itemForIndex(itemIndex);
+            if (item->type() == Domain::DocumentObjectType::Locations) {
+                d->projectStructureModel->addDocument(Domain::DocumentObjectType::Location, _name, itemIndex);
+                break;
+            }
+        }
+    });
 }
 
 ProjectManager::~ProjectManager() = default;
@@ -371,14 +382,17 @@ void ProjectManager::loadCurrentProject(const QString& _name, const QString& _pa
     //
     // Загружаем информацию о проекте
     //
-    d->projectInformationModel->setDocument(
-        DataStorageLayer::StorageFacade::documentStorage()->document(Domain::DocumentObjectType::Project));
-    if (d->projectInformationModel->name().isEmpty()) {
-        d->projectInformationModel->setName(_name);
+    auto projectInformationModel
+            = static_cast<BusinessLayer::ProjectInformationModel*>(
+                  d->modelsFacade.modelFor(
+                      DataStorageLayer::StorageFacade::documentStorage()->document(
+                          Domain::DocumentObjectType::Project)));
+    if (projectInformationModel->name().isEmpty()) {
+        projectInformationModel->setName(_name);
     } else {
-        emit projectNameChanged(d->projectInformationModel->name());
-        emit projectLoglineChanged(d->projectInformationModel->logline());
-        emit projectCoverChanged(d->projectInformationModel->cover());
+        emit projectNameChanged(projectInformationModel->name());
+        emit projectLoglineChanged(projectInformationModel->logline());
+        emit projectCoverChanged(projectInformationModel->cover());
     }
 
 
@@ -426,14 +440,9 @@ void ProjectManager::closeCurrentProject(const QString& _path)
     d->projectStructureModel->clear();
 
     //
-    // Очищаем данные о проекте
-    //
-    d->projectInformationModel->clear();
-
-    //
     // Очищаем все загруженные модели документов
     //
-    d->modelBuilder.clear();
+    d->modelsFacade.clear();
 
     //
     // Сбрасываем загруженные изображения
@@ -450,15 +459,9 @@ void ProjectManager::saveChanges()
     DataStorageLayer::StorageFacade::documentStorage()->updateDocument(structure);
 
     //
-    // Сохраняем проект
-    //
-    const auto project = d->projectInformationModel->document();
-    DataStorageLayer::StorageFacade::documentStorage()->updateDocument(project);
-
-    //
     // Сохраняем остальные документы
     //
-    for (auto model : d->modelBuilder.models()) {
+    for (auto model : d->modelsFacade.models()) {
         DataStorageLayer::StorageFacade::documentStorage()->updateDocument(model->document());
     }
 
@@ -492,10 +495,7 @@ void ProjectManager::showView(const QModelIndex& _itemIndex, const QString& _vie
     // Определим модель
     //
     auto document = DataStorageLayer::StorageFacade::documentStorage()->document(item->uuid());
-    auto model =
-            document->type() == Domain::DocumentObjectType::Project
-            ? d->projectInformationModel
-            : d->modelBuilder.modelFor(document);
+    auto model = d->modelsFacade.modelFor(document);
     if (model == nullptr) {
         d->view->showDefaultPage();
         return;
@@ -504,7 +504,7 @@ void ProjectManager::showView(const QModelIndex& _itemIndex, const QString& _vie
     //
     // Определим представление и отобразим
     //
-    auto view = d->pluginBuilder.activateView(_viewMimeType, model);
+    auto view = d->pluginsBuilder.activateView(_viewMimeType, model);
     if (view == nullptr) {
         d->view->showDefaultPage();
         return;
@@ -514,7 +514,7 @@ void ProjectManager::showView(const QModelIndex& _itemIndex, const QString& _vie
     //
     // Настроим возможность перехода в навигатор
     //
-    const auto navigator = d->pluginBuilder.navigatorMimeTypeFor(_viewMimeType);
+    const auto navigator = d->pluginsBuilder.navigatorMimeTypeFor(_viewMimeType);
     d->projectStructureModel->setNavigatorAvailableFor(_itemIndex, !navigator.isEmpty());
 
     //
@@ -538,10 +538,7 @@ void ProjectManager::showNavigator(const QModelIndex& _itemIndex, const QString&
     // Определим модель
     //
     auto document = DataStorageLayer::StorageFacade::documentStorage()->document(item->uuid());
-    auto model =
-            document->type() == Domain::DocumentObjectType::Project
-            ? d->projectInformationModel
-            : d->modelBuilder.modelFor(document);
+    auto model = d->modelsFacade.modelFor(document);
     if (model == nullptr) {
         d->navigator->showProjectNavigator();
         return;
@@ -553,8 +550,8 @@ void ProjectManager::showNavigator(const QModelIndex& _itemIndex, const QString&
     const auto viewMimeType = !_viewMimeType.isEmpty()
                               ? _viewMimeType
                               : d->toolBar->currentViewMimeType();
-    const auto navigatorMimeType = d->pluginBuilder.navigatorMimeTypeFor(viewMimeType);
-    auto view = d->pluginBuilder.activateView(navigatorMimeType, model);
+    const auto navigatorMimeType = d->pluginsBuilder.navigatorMimeTypeFor(viewMimeType);
+    auto view = d->pluginsBuilder.activateView(navigatorMimeType, model);
     if (view == nullptr) {
         d->navigator->showProjectNavigator();
         return;

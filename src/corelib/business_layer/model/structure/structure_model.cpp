@@ -169,6 +169,22 @@ void StructureModel::addDocument(Domain::DocumentObjectType _type, const QString
             break;
         }
 
+        case DocumentObjectType::Characters: {
+            appendItem(createItem(_type, tr("Characters")), parentItem);
+            break;
+        }
+
+        case DocumentObjectType::Locations: {
+            appendItem(createItem(_type, tr("Locations")), parentItem);
+            break;
+        }
+
+        case DocumentObjectType::Character:
+        case DocumentObjectType::Location: {
+            appendItem(createItem(_type, _name), parentItem);
+            break;
+        }
+
         default: {
             Q_ASSERT(false);
             break;
@@ -670,6 +686,8 @@ void StructureModel::initDocument()
         //
 
         addDocument(Domain::DocumentObjectType::Project);
+        addDocument(Domain::DocumentObjectType::Characters);
+        addDocument(Domain::DocumentObjectType::Locations);
         addDocument(Domain::DocumentObjectType::Screenplay);
         addDocument(Domain::DocumentObjectType::RecycleBin);
     }

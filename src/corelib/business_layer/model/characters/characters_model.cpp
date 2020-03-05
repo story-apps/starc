@@ -41,6 +41,7 @@ void CharactersModel::createCharacter(const QString& _name)
     //
     // FIXME:
     //
+
 }
 
 QModelIndex CharactersModel::index(int _row, int _column, const QModelIndex& _parent) const

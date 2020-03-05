@@ -38,6 +38,12 @@ public:
     QVariant data(const QModelIndex &_index, int _role) const override;
     /** @} */
 
+signals:
+    /**
+     * @brief Неоходимо создать локацию с заданным именем
+     */
+    void createLocationRequested(const QString& _name);
+
 protected:
     /**
      * @brief Реализация модели для работы с документами

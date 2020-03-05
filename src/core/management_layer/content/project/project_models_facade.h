@@ -16,15 +16,15 @@ namespace ManagementLayer
 {
 
 /**
- * @brief Билдер для работы с моделями документов проекта
+ * @brief Фасад для работы с моделями документов проекта
  */
-class ProjectModelsBuilder : public QObject
+class ProjectModelsFacade : public QObject
 {
     Q_OBJECT
 
 public:
-    explicit ProjectModelsBuilder(BusinessLayer::AbstractImageWrapper* _imageWrapper, QObject* _parent = nullptr);
-    ~ProjectModelsBuilder() override;
+    explicit ProjectModelsFacade(BusinessLayer::AbstractImageWrapper* _imageWrapper, QObject* _parent = nullptr);
+    ~ProjectModelsFacade() override;
 
     /**
      * @brief Сбросить все загруженные модели
@@ -51,6 +51,26 @@ signals:
      * @brief Изменился контент модели
      */
     void modelContentChanged(BusinessLayer::AbstractModel* _model, const QByteArray& _undo, const QByteArray& _redo);
+
+    /**
+     * @brief Изменилось название проекта
+     */
+    void projectNameChanged(const QString& _name);
+
+    /**
+     * @brief Изменилось короткое описание проекта
+     */
+    void projectLoglineChanged(const QString& _logline);
+
+    /**
+     * @brief Изменилась обложка проекта
+     */
+    void projectCoverChanged(const QPixmap& _cover);
+
+    /**
+     * @brief Неоходимо создать локацию с заданным именем
+     */
+    void createLocationRequested(const QString& _name);
 
 private:
     class Implementation;

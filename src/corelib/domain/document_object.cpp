@@ -16,7 +16,11 @@ const QHash<DocumentObjectType, QByteArray> kDocumentObjectTypeToMimeType
        { DocumentObjectType::ScreenplaySynopsis, "application/x-starc/document/screenplay/synopsis" },
        { DocumentObjectType::ScreenplayOutline, "application/x-starc/document/screenplay/outline" },
        { DocumentObjectType::ScreenplayText, "application/x-starc/document/screenplay/text" },
-       { DocumentObjectType::ScreenplayDictionaries, "application/x-starc/document/screenplay/dictionaries" }};
+       { DocumentObjectType::ScreenplayDictionaries, "application/x-starc/document/screenplay/dictionaries" },
+       { DocumentObjectType::Characters, "application/x-starc/document/characters" },
+       { DocumentObjectType::Character, "application/x-starc/document/character" },
+       { DocumentObjectType::Locations, "application/x-starc/document/locations" },
+       { DocumentObjectType::Location, "application/x-starc/document/location" }};
 const QHash<DocumentObjectType, QString> kDocumentObjectTypeToIcon
     = {{ DocumentObjectType::Undefined, "\uf78a" },
        { DocumentObjectType::Structure, "\uf78a" },
@@ -26,7 +30,11 @@ const QHash<DocumentObjectType, QString> kDocumentObjectTypeToIcon
        { DocumentObjectType::ScreenplayTitlePage, "\uf0be" },
        { DocumentObjectType::ScreenplaySynopsis, "\uf21a" },
        { DocumentObjectType::ScreenplayOutline, "\uf21a" },
-       { DocumentObjectType::ScreenplayText, "\uf21a" }};
+       { DocumentObjectType::ScreenplayText, "\uf21a" },
+       { DocumentObjectType::Characters, "\uf848" },
+       { DocumentObjectType::Character, "\uf004" },
+       { DocumentObjectType::Locations, "\ufcf1" },
+       { DocumentObjectType::Location, "\uf2dc" }};
 }
 
 QByteArray mimeTypeFor(DocumentObjectType _type)
