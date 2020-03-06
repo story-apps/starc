@@ -48,6 +48,11 @@ public:
 
 signals:
     /**
+     * @brief Изменилось название модели
+     */
+    void modelNameChanged(BusinessLayer::AbstractModel* _model, const QString& _name);
+
+    /**
      * @brief Изменился контент модели
      */
     void modelContentChanged(BusinessLayer::AbstractModel* _model, const QByteArray& _undo, const QByteArray& _redo);

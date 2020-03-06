@@ -92,6 +92,11 @@ public:
     StructureModelItem* itemForIndex(const QModelIndex& _index) const;
 
     /**
+     * @brief Получить элемент имеющий заданный юид
+     */
+    StructureModelItem* itemForUuid(const QUuid& _uuid) const;
+
+    /**
      * @brief Получить элемент корзины
      */
     void moveItemToRecycleBin(StructureModelItem* _item);
@@ -100,6 +105,7 @@ public:
      * @brief Задать имя элемента
      */
     void setItemName(const QModelIndex& _index, const QString& _name);
+    void setItemName(StructureModelItem* _item, const QString& _name);
 
     /**
      * @brief Задать возможность перехода в навигатор для заданного индекса

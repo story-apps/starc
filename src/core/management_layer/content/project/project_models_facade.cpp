@@ -164,6 +164,16 @@ BusinessLayer::AbstractModel* ProjectModelsFacade::modelFor(Domain::DocumentObje
 
             case Domain::DocumentObjectType::Locations: {
                 auto locationsModel = new BusinessLayer::LocationsModel;
+
+                const auto locationDocuments
+                        = DataStorageLayer::StorageFacade::documentStorage()->documents(
+                              Domain::DocumentObjectType::Location);
+                for (const auto locationDocument : locationDocuments) {
+                    auto locationModel = modelFor(locationDocument);
+                    locationsModel->addLocationModel(
+                        static_cast<BusinessLayer::LocationModel*>(locationModel));
+                }
+
                 connect(locationsModel, &BusinessLayer::LocationsModel::createLocationRequested,
                         this, &ProjectModelsFacade::createLocationRequested);
                 model = locationsModel;
@@ -184,6 +194,10 @@ BusinessLayer::AbstractModel* ProjectModelsFacade::modelFor(Domain::DocumentObje
 
         model->setDocument(_document);
 
+        connect(model, &BusinessLayer::AbstractModel::documentNameChanged, this,
+                [this, model] (const QString& _name) {
+           emit modelNameChanged(model, _name);
+        });
         connect(model, &BusinessLayer::AbstractModel::contentsChanged, this,
                 [this, model] (const QByteArray& _undo, const QByteArray& _redo) {
            emit modelContentChanged(model, _undo, _redo);

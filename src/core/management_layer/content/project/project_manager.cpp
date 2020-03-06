@@ -335,13 +335,15 @@ ProjectManager::ProjectManager(QObject* _parent, QWidget* _parentWidget)
     //
     // Соединения со строителем моделей
     //
+    connect(&d->modelsFacade, &ProjectModelsFacade::modelNameChanged, this,
+            [this] (BusinessLayer::AbstractModel* _model, const QString& _name) {
+        auto item = d->projectStructureModel->itemForUuid(_model->document()->uuid());
+        d->projectStructureModel->setItemName(item, _name);
+    });
     connect(&d->modelsFacade, &ProjectModelsFacade::modelContentChanged, this, &ProjectManager::handleModelChange);
-    connect(&d->modelsFacade, &ProjectModelsFacade::projectNameChanged,
-            this, &ProjectManager::projectNameChanged, Qt::UniqueConnection);
-    connect(&d->modelsFacade, &ProjectModelsFacade::projectLoglineChanged,
-            this, &ProjectManager::projectLoglineChanged, Qt::UniqueConnection);
-    connect(&d->modelsFacade, &ProjectModelsFacade::projectCoverChanged,
-            this, &ProjectManager::projectCoverChanged, Qt::UniqueConnection);
+    connect(&d->modelsFacade, &ProjectModelsFacade::projectNameChanged, this, &ProjectManager::projectNameChanged);
+    connect(&d->modelsFacade, &ProjectModelsFacade::projectLoglineChanged, this, &ProjectManager::projectLoglineChanged);
+    connect(&d->modelsFacade, &ProjectModelsFacade::projectCoverChanged, this, &ProjectManager::projectCoverChanged);
     connect(&d->modelsFacade, &ProjectModelsFacade::createLocationRequested, this, [this] (const QString& _name) {
         for (int itemRow = 0; itemRow < d->projectStructureModel->rowCount(); ++itemRow) {
             const auto itemIndex = d->projectStructureModel->index(itemRow, 0);

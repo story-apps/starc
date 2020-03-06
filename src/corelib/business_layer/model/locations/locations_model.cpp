@@ -38,6 +38,10 @@ void LocationsModel::addLocationModel(LocationModel* _LocationModel)
 
 void LocationsModel::createLocation(const QString& _name)
 {
+    if (_name.simplified().isEmpty()) {
+        return;
+    }
+
     for (const auto location : d->locationModels) {
         if (location->name() == _name) {
             return;
@@ -95,7 +99,8 @@ QVariant LocationsModel::data(const QModelIndex& _index, int _role) const
     }
 
     switch (_role) {
-        case Qt::DisplayRole: {
+        case Qt::DisplayRole:
+        case Qt::EditRole: {
             return d->locationModels.at(_index.row())->name();
         }
 

@@ -86,7 +86,7 @@ bool CompleterTextEdit::complete(QAbstractItemModel* _model, const QString& _com
     // Если в модели для дополнения нет элементов, или она уже полностью дополнена
     //
     const bool hasCompletions = d->completer->completionModel()->rowCount() > 0;
-    const bool alreadyComplete = _completionPrefix.toLower().endsWith(d->completer->currentCompletion().toLower());
+    const bool alreadyComplete = _completionPrefix.endsWith(d->completer->currentCompletion(), Qt::CaseInsensitive);
     if (!hasCompletions || alreadyComplete) {
         //
         // ... скроем завершателя, если был показан

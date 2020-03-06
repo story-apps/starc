@@ -631,6 +631,24 @@ StructureModelItem* StructureModel::itemForIndex(const QModelIndex& _index) cons
     return item;
 }
 
+StructureModelItem* StructureModel::itemForUuid(const QUuid& _uuid) const
+{
+    std::function<StructureModelItem*(StructureModelItem*)> search;
+    search = [&search, _uuid] (StructureModelItem* _parent) -> StructureModelItem* {
+        for (int itemRow = 0; itemRow < _parent->childCount(); ++itemRow) {
+            auto item = _parent->childAt(itemRow);
+            if (item->uuid() == _uuid) {
+                return item;
+            }
+
+            search(item);
+        }
+        return nullptr;
+    };
+
+    return search(d->rootItem);
+}
+
 void StructureModel::moveItemToRecycleBin(StructureModelItem* _item)
 {
     if (_item == nullptr) {
@@ -664,6 +682,17 @@ void StructureModel::setItemName(const QModelIndex& _index, const QString& _name
 
     item->setName(_name);
     emit dataChanged(_index, _index);
+}
+
+void StructureModel::setItemName(StructureModelItem* _item, const QString& _name)
+{
+    if (_item == nullptr) {
+        return;
+    }
+
+    const auto itemIndex = indexForItem(_item);
+    _item->setName(_name);
+    emit dataChanged(itemIndex, itemIndex);
 }
 
 void StructureModel::setNavigatorAvailableFor(const QModelIndex& _index, bool isAvailable)
