@@ -18,7 +18,7 @@
 #include <QStringList>
 #include <QTextBlock>
 #include <QTimer>
-#include <QDebug>
+
 using BusinessLayer::CharacterParser;
 using BusinessLayer::SceneCharactersParser;
 using BusinessLayer::ScreenplayBlockStyle;
@@ -376,7 +376,6 @@ void CharacterHandler::complete(const QString& _currentBlockText, const QString&
     //     корректно определилась после изменения текста
     //
     QTimer::singleShot(0, [this, sectionModel, sectionText, cursorMovement] {
-        qDebug() << sectionModel->rowCount() << sectionText;
         editor()->complete(sectionModel, sectionText, cursorMovement);
     });
 }

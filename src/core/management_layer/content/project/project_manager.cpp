@@ -333,7 +333,8 @@ ProjectManager::ProjectManager(QObject* _parent, QWidget* _parentWidget)
         }
     });
     connect(d->projectStructureModel, &BusinessLayer::StructureModel::contentsChanged, this,
-            [this] (const QByteArray& _undo, const QByteArray& _redo) {
+            [this] (const QByteArray& _undo, const QByteArray& _redo)
+    {
         handleModelChange(d->projectStructureModel, _undo, _redo);
     });
 
@@ -348,7 +349,8 @@ ProjectManager::ProjectManager(QObject* _parent, QWidget* _parentWidget)
     // Соединения со строителем моделей
     //
     connect(&d->modelsFacade, &ProjectModelsFacade::modelNameChanged, this,
-            [this] (BusinessLayer::AbstractModel* _model, const QString& _name) {
+            [this] (BusinessLayer::AbstractModel* _model, const QString& _name)
+    {
         auto item = d->projectStructureModel->itemForUuid(_model->document()->uuid());
         d->projectStructureModel->setItemName(item, _name);
     });
@@ -367,13 +369,15 @@ ProjectManager::ProjectManager(QObject* _parent, QWidget* _parentWidget)
         }
     };
     connect(&d->modelsFacade, &ProjectModelsFacade::createCharacterRequested, this,
-            [addDocumentToContainer] (const QString& _name) {
+            [addDocumentToContainer] (const QString& _name)
+    {
         addDocumentToContainer(Domain::DocumentObjectType::Characters,
                                Domain::DocumentObjectType::Character,
                                _name);
     });
     connect(&d->modelsFacade, &ProjectModelsFacade::createLocationRequested, this,
-            [addDocumentToContainer] (const QString& _name) {
+            [addDocumentToContainer] (const QString& _name)
+    {
         addDocumentToContainer(Domain::DocumentObjectType::Locations,
                                Domain::DocumentObjectType::Location,
                                _name);

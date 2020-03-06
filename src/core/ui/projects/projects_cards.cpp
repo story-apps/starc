@@ -377,7 +377,6 @@ void ProjectCard::mouseReleaseEvent(QGraphicsSceneMouseEvent* _event)
         m_decorationOpacityAnimation.setStartValue(0.15);
         m_decorationOpacityAnimation.setEndValue(0.0);
         m_decorationOpacityAnimation.start();
-
     }
 
     //
@@ -577,7 +576,9 @@ void ProjectsCards::Implementation::reorderCards()
             && card->pos() != newItemPosition) {
             const QRectF itemRect(card->pos(), card->boundingRect().size());
             const QRectF newItemRect(newItemPosition, card->boundingRect().size());
-            if (cardsAnimationsAvailable && viewportRect.intersects(itemRect.united(newItemRect))) {
+            if (cardsAnimationsAvailable
+                && scene->isActive()
+                && viewportRect.intersects(itemRect.united(newItemRect))) {
                 //
                 // ... анимируем смещение
                 //

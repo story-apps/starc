@@ -75,6 +75,8 @@ ScalableWrapper::ScalableWrapper(PageTextEdit* _editor, QWidget* _parent)
     : QGraphicsView(_parent),
       d(new Implementation(_editor))
 {
+    setFrameShape(QFrame::NoFrame);
+
     //
     // Настраиваем лучшее опции прорисовки
     //
