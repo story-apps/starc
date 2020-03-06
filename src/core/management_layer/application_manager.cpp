@@ -893,8 +893,7 @@ void ApplicationManager::Implementation::saveLastContent(Manager* _manager)
 
 ApplicationManager::ApplicationManager(QObject* _parent)
     : QObject(_parent),
-      IApplicationManager(),
-      d(new Implementation(this))
+      IApplicationManager()
 {
     QApplication::setStyle(new ApplicationStyle(QStyleFactory::create("Fusion")));
 
@@ -912,6 +911,11 @@ ApplicationManager::ApplicationManager(QObject* _parent)
     fontDatabase.addApplicationFont(":/fonts/courier-prime-bold");
     fontDatabase.addApplicationFont(":/fonts/courier-prime-italic");
     fontDatabase.addApplicationFont(":/fonts/courier-prime-bold-italic");
+
+    //
+    // Инициилизируем данные после подгрузки шрифтов, чтобы они сразу подхватились системой
+    //
+    d.reset(new Implementation(this));
 
     initConnections();
 }
