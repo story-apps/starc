@@ -17,7 +17,8 @@
 #include <QStringListModel>
 #include <QStringList>
 #include <QTextBlock>
-
+#include <QTimer>
+#include <QDebug>
 using BusinessLayer::CharacterParser;
 using BusinessLayer::SceneCharactersParser;
 using BusinessLayer::ScreenplayBlockStyle;
@@ -45,59 +46,10 @@ void CharacterHandler::prehandle()
     QTextBlock currentBlock = cursor.block();
     // ... текст блока
     QString currentBlockText = currentBlock.text().trimmed();
+    // ... текст до курсора
+    QString cursorBackwardText = currentBlockText.left(cursor.positionInBlock());
 
-    //
-    // Пробуем определить кто сейчас должен говорить
-    //
-    if (currentBlockText.isEmpty()) {
-        QString previousCharacter, character;
-
-        //
-        // ... для этого ищем предпоследнего персонажа сцены
-        //
-        cursor.movePosition(QTextCursor::PreviousBlock);
-        while (!cursor.atStart()
-               && ScreenplayBlockStyle::forBlock(cursor.block()) != ScreenplayParagraphType::SceneHeading) {
-            if (ScreenplayBlockStyle::forBlock(cursor.block()) == ScreenplayParagraphType::Character) {
-                //
-                // Нашли предыдущего персонажа
-                //
-                if (previousCharacter.isEmpty()) {
-                    previousCharacter = CharacterParser::name(cursor.block().text());
-                }
-                //
-                // Нашли потенциального говорящего
-                //
-                else {
-                    //
-                    // Выберем его в списке вариантов
-                    //
-                    character = CharacterParser::name(cursor.block().text());
-                    if (character != previousCharacter) {
-                        break;
-                    }
-                }
-            }
-
-            cursor.movePosition(QTextCursor::PreviousBlock);
-            cursor.movePosition(QTextCursor::StartOfBlock);
-        }
-
-        //
-        // Показываем всплывающую подсказку
-        //
-        QAbstractItemModel* model = 0;
-        if (!character.isEmpty()) {
-            m_completerModel->setStringList(QStringList() << character);
-            model = m_completerModel;
-        } else if (!previousCharacter.isEmpty()) {
-            m_completerModel->setStringList(QStringList() << previousCharacter);
-            model = m_completerModel;
-        } else {
-            model = editor()->characters();
-        }
-        editor()->complete(model, QString());
-    }
+    complete(currentBlockText, cursorBackwardText);
 }
 void CharacterHandler::handleEnter(QKeyEvent* _event)
 {
@@ -336,11 +288,6 @@ void CharacterHandler::handleInput(QInputMethodEvent*)
 void CharacterHandler::complete(const QString& _currentBlockText, const QString& _cursorBackwardText)
 {
     //
-    // Текущая секция
-    //
-    CharacterParser::Section currentSection = CharacterParser::section(_cursorBackwardText);
-
-    //
     // Получим модель подсказок для текущей секции и выведем пользователю
     //
     QAbstractItemModel* sectionModel = 0;
@@ -350,45 +297,57 @@ void CharacterHandler::complete(const QString& _currentBlockText, const QString&
     QString sectionText;
 
     QTextCursor cursor = editor()->textCursor();
-    switch (currentSection) {
+    switch (CharacterParser::section(_cursorBackwardText)) {
         case CharacterParser::SectionName: {
-            QStringList sceneCharacters;
+            QStringList charactersToComplete;
             //
-            // Когда введён один символ имени пробуем оптимизировать поиск персонажей из текущей сцены
+            // Определим персонажей сцены
             //
-            if (_cursorBackwardText.length() < 2) {
-                cursor.movePosition(QTextCursor::PreviousBlock);
-                while (!cursor.atStart()
-                       && ScreenplayBlockStyle::forBlock(cursor.block()) != ScreenplayParagraphType::SceneHeading) {
-                    if (ScreenplayBlockStyle::forBlock(cursor.block()) == ScreenplayParagraphType::Character) {
-                        const QString characterName = CharacterParser::name(cursor.block().text());
-                        if (characterName.startsWith(_cursorBackwardText, Qt::CaseInsensitive)
-                            && !sceneCharacters.contains(characterName)) {
-                            sceneCharacters.append(characterName);
+            cursor.movePosition(QTextCursor::PreviousBlock);
+            while (!cursor.atStart()
+                   && ScreenplayBlockStyle::forBlock(cursor.block()) != ScreenplayParagraphType::SceneHeading) {
+                if (ScreenplayBlockStyle::forBlock(cursor.block()) == ScreenplayParagraphType::Character) {
+                    const QString characterName = CharacterParser::name(cursor.block().text());
+                    if (!characterName.isEmpty() && !charactersToComplete.contains(characterName)) {
+                        //
+                        // Персонажа, который говорил встречный диалог ставим выше,
+                        // т.к. высока вероятность того, что они общаются
+                        //
+                        if (charactersToComplete.size() == 1) {
+                            charactersToComplete.prepend(characterName);
                         }
-                    } else if (ScreenplayBlockStyle::forBlock(cursor.block()) == ScreenplayParagraphType::SceneCharacters) {
-                        const QStringList characters = SceneCharactersParser::characters(cursor.block().text());
-                        foreach (const QString& characterName, characters) {
-                            if (characterName.startsWith(_cursorBackwardText, Qt::CaseInsensitive)
-                                && !sceneCharacters.contains(characterName)) {
-                                sceneCharacters.append(characterName);
-                            }
+                        //
+                        // Остальных персонажей наполняем просто по очереди в тексте
+                        //
+                        else {
+                            charactersToComplete.append(characterName);
                         }
                     }
-                    cursor.movePosition(QTextCursor::PreviousBlock);
-                    cursor.movePosition(QTextCursor::StartOfBlock);
+                } else if (ScreenplayBlockStyle::forBlock(cursor.block()) == ScreenplayParagraphType::SceneCharacters) {
+                    const QStringList characters = SceneCharactersParser::characters(cursor.block().text());
+                    for (const QString& characterName : characters) {
+                        if (!charactersToComplete.contains(characterName)) {
+                            charactersToComplete.append(characterName);
+                        }
+                    }
                 }
+                cursor.movePosition(QTextCursor::PreviousBlock);
+                cursor.movePosition(QTextCursor::StartOfBlock);
             }
 
             //
-            // По возможности используем список персонажей сцены
+            // Все остальные персонажи
             //
-            if (!sceneCharacters.isEmpty()) {
-                m_completerModel->setStringList(sceneCharacters);
-                sectionModel = m_completerModel;
-            } else {
-                sectionModel = editor()->characters();
+            for (int characterRow = 0; characterRow < editor()->characters()->rowCount(); ++characterRow) {
+                const auto characterIndex = editor()->characters()->index(characterRow, 0);
+                const auto characterName = editor()->characters()->data(characterIndex, Qt::DisplayRole).toString();
+                if (!charactersToComplete.contains(characterName)) {
+                    charactersToComplete.append(characterName);
+                }
             }
+
+            m_completerModel->setStringList(charactersToComplete);
+            sectionModel = m_completerModel;
             sectionText = CharacterParser::name(_currentBlockText);
             break;
         }
@@ -408,7 +367,18 @@ void CharacterHandler::complete(const QString& _currentBlockText, const QString&
     //
     // Дополним текст
     //
-    editor()->complete(sectionModel, sectionText);
+    int cursorMovement = sectionText.length();
+    while (!_cursorBackwardText.endsWith(sectionText.left(cursorMovement), Qt::CaseInsensitive)) {
+        --cursorMovement;
+    }
+    //
+    // ... дополняем, когда цикл обработки событий выполнится, чтобы позиция курсора
+    //     корректно определилась после изменения текста
+    //
+    QTimer::singleShot(0, [this, sectionModel, sectionText, cursorMovement] {
+        qDebug() << sectionModel->rowCount() << sectionText;
+        editor()->complete(sectionModel, sectionText, cursorMovement);
+    });
 }
 
 void CharacterHandler::storeCharacter() const

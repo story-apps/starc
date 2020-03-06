@@ -153,7 +153,21 @@ BusinessLayer::AbstractModel* ProjectModelsFacade::modelFor(Domain::DocumentObje
             }
 
             case Domain::DocumentObjectType::Characters: {
-                model = new BusinessLayer::CharactersModel;
+                auto charactersModel = new BusinessLayer::CharactersModel;
+
+                const auto characterDocuments
+                        = DataStorageLayer::StorageFacade::documentStorage()->documents(
+                              Domain::DocumentObjectType::Character);
+                for (const auto characterDocument : characterDocuments) {
+                    auto characterModel = modelFor(characterDocument);
+                    charactersModel->addCharacterModel(
+                        static_cast<BusinessLayer::CharacterModel*>(characterModel));
+                }
+
+                connect(charactersModel, &BusinessLayer::CharactersModel::createCharacterRequested,
+                        this, &ProjectModelsFacade::createCharacterRequested);
+
+                model = charactersModel;
                 break;
             }
 
@@ -176,6 +190,7 @@ BusinessLayer::AbstractModel* ProjectModelsFacade::modelFor(Domain::DocumentObje
 
                 connect(locationsModel, &BusinessLayer::LocationsModel::createLocationRequested,
                         this, &ProjectModelsFacade::createLocationRequested);
+
                 model = locationsModel;
                 break;
             }

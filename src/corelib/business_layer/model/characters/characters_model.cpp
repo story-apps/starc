@@ -38,10 +38,17 @@ void CharactersModel::addCharacterModel(CharacterModel* _characterModel)
 
 void CharactersModel::createCharacter(const QString& _name)
 {
-    //
-    // FIXME:
-    //
+    if (_name.simplified().isEmpty()) {
+        return;
+    }
 
+    for (const auto character : d->characterModels) {
+        if (character->name() == _name) {
+            return;
+        }
+    }
+
+    emit createCharacterRequested(_name);
 }
 
 QModelIndex CharactersModel::index(int _row, int _column, const QModelIndex& _parent) const
@@ -92,7 +99,8 @@ QVariant CharactersModel::data(const QModelIndex& _index, int _role) const
     }
 
     switch (_role) {
-        case Qt::DisplayRole: {
+        case Qt::DisplayRole:
+        case Qt::EditRole: {
             return d->characterModels.at(_index.row())->name();
         }
 

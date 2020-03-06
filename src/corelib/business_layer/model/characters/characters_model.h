@@ -38,6 +38,12 @@ public:
     QVariant data(const QModelIndex &_index, int _role) const override;
     /** @} */
 
+signals:
+    /**
+     * @brief Необходимо создать персонажа с заданным именем
+     */
+    void createCharacterRequested(const QString& _name);
+
 protected:
     /**
      * @brief Реализация модели для работы с документами

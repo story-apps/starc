@@ -73,6 +73,11 @@ signals:
     void projectCoverChanged(const QPixmap& _cover);
 
     /**
+     * @brief Необходимо создать персонажа с заданным именем
+     */
+    void createCharacterRequested(const QString& _name);
+
+    /**
      * @brief Неоходимо создать локацию с заданным именем
      */
     void createLocationRequested(const QString& _name);

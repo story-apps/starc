@@ -3,6 +3,8 @@
 #include "project_models_facade.h"
 #include "project_plugins_builder.h"
 
+#include <business_layer/model/characters/character_model.h>
+#include <business_layer/model/characters/characters_model.h>
 #include <business_layer/model/locations/location_model.h>
 #include <business_layer/model/locations/locations_model.h>
 #include <business_layer/model/project/project_information_model.h>
@@ -307,6 +309,16 @@ ProjectManager::ProjectManager(QObject* _parent, QWidget* _parentWidget)
         documentModel->setDocumentName(_name);
 
         switch (_type) {
+            case Domain::DocumentObjectType::Character: {
+                auto charactersDocument = DataStorageLayer::StorageFacade::documentStorage()->document(
+                                              Domain::DocumentObjectType::Characters);
+                auto charactersModel = static_cast<BusinessLayer::CharactersModel*>(d->modelsFacade.modelFor(charactersDocument));
+                auto characterModel = static_cast<BusinessLayer::CharacterModel*>(documentModel);
+                charactersModel->addCharacterModel(characterModel);
+
+                break;
+            }
+
             case Domain::DocumentObjectType::Location: {
                 auto locationsDocument = DataStorageLayer::StorageFacade::documentStorage()->document(
                                              Domain::DocumentObjectType::Locations);
@@ -344,15 +356,27 @@ ProjectManager::ProjectManager(QObject* _parent, QWidget* _parentWidget)
     connect(&d->modelsFacade, &ProjectModelsFacade::projectNameChanged, this, &ProjectManager::projectNameChanged);
     connect(&d->modelsFacade, &ProjectModelsFacade::projectLoglineChanged, this, &ProjectManager::projectLoglineChanged);
     connect(&d->modelsFacade, &ProjectModelsFacade::projectCoverChanged, this, &ProjectManager::projectCoverChanged);
-    connect(&d->modelsFacade, &ProjectModelsFacade::createLocationRequested, this, [this] (const QString& _name) {
+    auto addDocumentToContainer = [this] (Domain::DocumentObjectType _containerType, Domain::DocumentObjectType _documentType, const QString& _documentName) {
         for (int itemRow = 0; itemRow < d->projectStructureModel->rowCount(); ++itemRow) {
             const auto itemIndex = d->projectStructureModel->index(itemRow, 0);
             const auto item = d->projectStructureModel->itemForIndex(itemIndex);
-            if (item->type() == Domain::DocumentObjectType::Locations) {
-                d->projectStructureModel->addDocument(Domain::DocumentObjectType::Location, _name, itemIndex);
+            if (item->type() == _containerType) {
+                d->projectStructureModel->addDocument(_documentType, _documentName, itemIndex);
                 break;
             }
         }
+    };
+    connect(&d->modelsFacade, &ProjectModelsFacade::createCharacterRequested, this,
+            [addDocumentToContainer] (const QString& _name) {
+        addDocumentToContainer(Domain::DocumentObjectType::Characters,
+                               Domain::DocumentObjectType::Character,
+                               _name);
+    });
+    connect(&d->modelsFacade, &ProjectModelsFacade::createLocationRequested, this,
+            [addDocumentToContainer] (const QString& _name) {
+        addDocumentToContainer(Domain::DocumentObjectType::Locations,
+                               Domain::DocumentObjectType::Location,
+                               _name);
     });
 }
 
