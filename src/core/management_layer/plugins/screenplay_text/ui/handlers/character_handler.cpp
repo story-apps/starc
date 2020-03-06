@@ -104,7 +104,6 @@ void CharacterHandler::handleEnter(QKeyEvent* _event)
         // Если нужно автоматически перепрыгиваем к следующему блоку
         //
         if (_event != 0 // ... чтобы таб не переводил на новую строку
-            && autoJumpToNextBlock()
             && currentSection == CharacterParser::SectionName) {
             cursor.movePosition(QTextCursor::EndOfBlock);
             editor()->setTextCursor(cursor);

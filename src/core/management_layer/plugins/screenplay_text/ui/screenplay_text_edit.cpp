@@ -34,6 +34,7 @@ ScreenplayTextEdit::ScreenplayTextEdit(QWidget* _parent)
     : BaseTextEdit(_parent),
       d(new Implementation)
 {
+    setFrameShape(QFrame::NoFrame);
     setDocument(&d->document);
 }
 
@@ -43,6 +44,12 @@ void ScreenplayTextEdit::setModel(BusinessLayer::ScreenplayTextModel* _model)
 {
     d->model = _model;
     d->document.setModel(_model);
+
+    const auto currentTemplate = BusinessLayer::ScreenplayTemplateFacade::getTemplate();
+    setPageFormat(currentTemplate.pageSizeId());
+    setPageMargins(currentTemplate.pageMargins());
+    setPageNumbersAlignment(currentTemplate.pageNumbersAlignment());
+    d->document.setDefaultFont(currentTemplate.blockStyle(ScreenplayParagraphType::SceneHeading).font());
 }
 
 BusinessLayer::ScreenplayDictionariesModel* ScreenplayTextEdit::dictionaries() const

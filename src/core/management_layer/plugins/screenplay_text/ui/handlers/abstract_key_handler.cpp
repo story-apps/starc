@@ -132,7 +132,9 @@ void AbstractKeyHandler::handleKeyEvent(QKeyEvent* _event)
     // Нажата любая другая клавиша
     //
     else {
-        handleOther(_event);
+        if (!_event->modifiers().testFlag(Qt::AltModifier)) {
+            handleOther(_event);
+        }
     }
 }
 

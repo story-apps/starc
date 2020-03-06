@@ -51,11 +51,7 @@ ScreenplayTextView::Implementation::Implementation(QWidget* _parent)
     scalableWrapper->setHorizontalScrollBar(new ScrollBar);
     scalableWrapper->initScrollBarsSyncing();
 
-    screenplayText->setFrameShape(QFrame::NoFrame);
     screenplayText->setUsePageMode(true);
-    screenplayText->setPageFormat(QPageSize::A4);
-    screenplayText->setPageMargins({38, 20, 17, 20});
-    screenplayText->setPageNumbersAlignment(Qt::AlignBottom | Qt::AlignRight);
 //    screenplayText->setHeader("Header text");
 //    screenplayText->setFooter("Footer text");
     screenplayText->setCursorWidth(4);

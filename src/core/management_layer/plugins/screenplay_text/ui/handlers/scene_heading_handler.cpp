@@ -82,7 +82,6 @@ void SceneHeadingHandler::handleEnter(QKeyEvent* _event)
         // Если нужно автоматически перепрыгиваем к следующему блоку
         //
         if (_event != nullptr // ... чтобы таб не переводил на новую строку
-            && autoJumpToNextBlock()
             && currentSection == SceneHeadingParser::SectionSceneTime) {
             //
             // Сохраним параметры сцены

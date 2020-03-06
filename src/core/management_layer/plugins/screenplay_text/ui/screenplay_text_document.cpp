@@ -36,7 +36,13 @@ void ScreenplayTextDocument::setModel(BusinessLayer::ScreenplayTextModel* _model
     QSignalBlocker signalBlocker(this);
 
     d->model = _model;
-    clear();
+
+    //
+    // Аккуратно очищаем текст, чтобы не сломать форматирование самого документа
+    //
+    ScreenplayTextCursor cursor(this);
+    cursor.select(QTextCursor::Document);
+    cursor.deleteChar();
 
     if (d->model == nullptr) {
         return;
@@ -45,7 +51,6 @@ void ScreenplayTextDocument::setModel(BusinessLayer::ScreenplayTextModel* _model
     //
     // Начинаем операцию вставки
     //
-    ScreenplayTextCursor cursor(this);
     cursor.beginEditBlock();
 
     //

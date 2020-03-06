@@ -56,15 +56,6 @@ StandardKeyHandler::StandardKeyHandler(Ui::ScreenplayTextEdit* _editor) :
 {
 }
 
-bool StandardKeyHandler::autoJumpToNextBlock()
-{
-    return
-            DataStorageLayer::StorageFacade::settingsStorage()->value(
-                "screenplay-editor/auto-styles-jumping",
-                DataStorageLayer::SettingsStorage::SettingsPlace::Application)
-            .toInt();
-}
-
 ScreenplayParagraphType StandardKeyHandler::jumpForTab(ScreenplayParagraphType _blockType)
 {
     return actionFor(TAB, JUMP, _blockType);

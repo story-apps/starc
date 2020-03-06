@@ -56,8 +56,7 @@ void TransitionHandler::handleEnter(QKeyEvent* _event)
         //
         // Если нужно автоматически перепрыгиваем к следующему блоку
         //
-        if (_event != nullptr // ... чтобы таб не переводил на новую строку
-            && autoJumpToNextBlock()) {
+        if (_event != nullptr) { // ... чтобы таб не переводил на новую строку
             cursor.movePosition(QTextCursor::EndOfBlock);
             editor()->setTextCursor(cursor);
             editor()->addParagraph(jumpForEnter(ScreenplayParagraphType::Transition));

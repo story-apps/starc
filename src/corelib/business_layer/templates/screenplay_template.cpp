@@ -500,7 +500,7 @@ void ScreenplayTemplate::saveToFile(const QString& _filePath) const
     writer.writeAttribute("description", m_description);
     writer.writeAttribute("page_format", PageMetrics::stringFromPageSizeId(m_pageSizeId));
     writer.writeAttribute("page_margins", toString(m_pageMargins));
-    writer.writeAttribute("numbering_alignment", toString(m_numberingAlignment));
+    writer.writeAttribute("numbering_alignment", toString(m_pageNumbersAlignment));
     for (const auto& blockStyle : m_blockStyles.values()) {
         if (toString(blockStyle.type()).isEmpty()) {
             continue;
@@ -559,9 +559,9 @@ QMarginsF ScreenplayTemplate::pageMargins() const
     return m_pageMargins;
 }
 
-Qt::Alignment ScreenplayTemplate::numberingAlignment() const
+Qt::Alignment ScreenplayTemplate::pageNumbersAlignment() const
 {
-    return m_numberingAlignment;
+    return m_pageNumbersAlignment;
 }
 
 ScreenplayBlockStyle ScreenplayTemplate::blockStyle(ScreenplayParagraphType _forType) const
@@ -596,7 +596,7 @@ void ScreenplayTemplate::setPageMargins(const QMarginsF& _pageMargins)
 
 void ScreenplayTemplate::setNumberingAlignment(Qt::Alignment _alignment)
 {
-    m_numberingAlignment = _alignment;
+    m_pageNumbersAlignment = _alignment;
 }
 
 //
@@ -644,7 +644,7 @@ void ScreenplayTemplate::load(const QString& _fromFile)
     m_description = templateAttributes.value("description").toString();
     m_pageSizeId = PageMetrics::pageSizeIdFromString(templateAttributes.value("page_format").toString());
     m_pageMargins = marginsFromString(templateAttributes.value("page_margins").toString());
-    m_numberingAlignment = alignmentFromString(templateAttributes.value("numbering_alignment").toString());
+    m_pageNumbersAlignment = alignmentFromString(templateAttributes.value("numbering_alignment").toString());
 
     //
     // Считываем настройки оформления блоков текста

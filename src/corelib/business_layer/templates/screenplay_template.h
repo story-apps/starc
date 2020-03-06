@@ -442,7 +442,7 @@ public:
     /**
      * @brief Получить расположение нумерации
      */
-    Qt::Alignment numberingAlignment() const;
+    Qt::Alignment pageNumbersAlignment() const;
 
     /**
      * @brief Получить стиль блока заданного типа
@@ -527,7 +527,7 @@ private:
     /**
      * @brief Расположение нумерации
      */
-    Qt::Alignment m_numberingAlignment;
+    Qt::Alignment m_pageNumbersAlignment;
 
     /**
      * @brief Стили блоков текста
