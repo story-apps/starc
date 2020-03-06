@@ -27,7 +27,7 @@ public:
     /**
      * @brief Задать название типа текущего параграфа
      */
-    void setCurrentParagraphTypeName(const QString& _name);
+    void setCurrentParagraphType(const QModelIndex& _index);
 
 signals:
     void undoPressed();

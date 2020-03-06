@@ -101,7 +101,7 @@ void ScreenplayTextView::Implementation::updateToolBarCurrentParagraphTypeName()
         const auto item = paragraphTypesModel->item(itemRow);
         const auto itemType = static_cast<BusinessLayer::ScreenplayParagraphType>(item->data(kTypeDataRole).toInt());
         if (itemType == paragraphType) {
-            toolBar->setCurrentParagraphTypeName(item->text());
+            toolBar->setCurrentParagraphType(paragraphTypesModel->index(itemRow, 0));
             return;
         }
     }
@@ -124,6 +124,7 @@ ScreenplayTextView::ScreenplayTextView(QWidget* _parent)
     connect(d->toolBar, &ScreenplayTextEditToolBar::paragraphTypeChanged, this, [this] (const QModelIndex& _index) {
         const auto type = static_cast<BusinessLayer::ScreenplayParagraphType>( _index.data(kTypeDataRole).toInt());
         d->screenplayText->setCurrentParagraphType(type);
+        d->scalableWrapper->setFocus();
     });
     connect(d->screenplayText, &ScreenplayTextEdit::paragraphTypeChanged, this, [this] {
         d->updateToolBarCurrentParagraphTypeName();
@@ -141,6 +142,8 @@ ScreenplayTextView::ScreenplayTextView(QWidget* _parent)
 void ScreenplayTextView::setModel(BusinessLayer::ScreenplayTextModel* _model)
 {
     d->screenplayText->setModel(_model);
+
+    d->updateToolBarCurrentParagraphTypeName();
 }
 
 void ScreenplayTextView::reconfigure()

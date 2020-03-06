@@ -13,6 +13,7 @@
 #include <QRegularExpression>
 #include <QStringListModel>
 #include <QTextBlock>
+#include <QTimer>
 
 using BusinessLayer::ScreenplayParagraphType;
 using Ui::ScreenplayTextEdit;
@@ -218,7 +219,17 @@ void SceneCharactersHandler::complete(const QString& _currentBlockText, const QS
     //
     // Дополним текст
     //
-    editor()->complete(m_filteredCharactersModel, cursorBackwardTextToComma);
+    int cursorMovement = cursorBackwardTextToComma.length();
+    while (!_cursorBackwardText.endsWith(cursorBackwardTextToComma.left(cursorMovement), Qt::CaseInsensitive)) {
+        --cursorMovement;
+    }
+    //
+    // ... дополняем, когда цикл обработки событий выполнится, чтобы позиция курсора
+    //     корректно определилась после изменения текста
+    //
+    QTimer::singleShot(0, [this, cursorBackwardTextToComma, cursorMovement] {
+        editor()->complete(m_filteredCharactersModel, cursorBackwardTextToComma, cursorMovement);
+    });
 }
 
 void SceneCharactersHandler::storeCharacters() const

@@ -227,9 +227,10 @@ void ScreenplayTextEditToolBar::setParagraphTypesModel(QAbstractItemModel* _mode
     designSystemChangeEvent(nullptr);
 }
 
-void ScreenplayTextEditToolBar::setCurrentParagraphTypeName(const QString& _name)
+void ScreenplayTextEditToolBar::setCurrentParagraphType(const QModelIndex& _index)
 {
-    d->paragraphTypeAction->setText(_name);
+    d->paragraphTypeAction->setText(_index.data().toString());
+    d->popupContent->setCurrentIndex(_index);
 }
 
 ScreenplayTextEditToolBar::~ScreenplayTextEditToolBar() = default;

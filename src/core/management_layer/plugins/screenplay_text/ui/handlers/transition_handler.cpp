@@ -8,6 +8,7 @@
 #include <QKeyEvent>
 #include <QStringListModel>
 #include <QTextBlock>
+#include <QTimer>
 
 using BusinessLayer::ScreenplayParagraphType;
 using Ui::ScreenplayTextEdit;
@@ -240,13 +241,19 @@ void TransitionHandler::handleInput(QInputMethodEvent* _event)
 
 void TransitionHandler::complete(const QString& _currentBlockText, const QString& _cursorBackwardText)
 {
-    Q_UNUSED(_cursorBackwardText);
+    Q_UNUSED(_cursorBackwardText)
 
     //
     // Дополним текст
     //
     m_completerModel->setStringList(editor()->dictionaries()->transitions().toList());
-    editor()->complete(m_completerModel, _currentBlockText);
+    //
+    // ... дополняем, когда цикл обработки событий выполнится, чтобы позиция курсора
+    //     корректно определилась после изменения текста
+    //
+    QTimer::singleShot(0, [this, _currentBlockText] {
+        editor()->complete(m_completerModel, _currentBlockText, 0);
+    });
 }
 
 void TransitionHandler::storeTransition() const
