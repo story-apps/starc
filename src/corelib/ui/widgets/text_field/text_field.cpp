@@ -557,7 +557,7 @@ void TextField::paintEvent(QPaintEvent* _event)
         painter.setFont(Ui::DesignSystem::font().iconsMid());
         painter.setPen(d->trailingIconColor.isValid()
                        ? d->trailingIconColor
-                       : palette().color(QPalette::Active, QPalette::Text));
+                       : palette().color(QPalette::Text));
         const QRectF iconRect = d->iconRect(width());
         painter.drawText(iconRect.toRect(), Qt::AlignCenter, d->trailingIcon);
     }
