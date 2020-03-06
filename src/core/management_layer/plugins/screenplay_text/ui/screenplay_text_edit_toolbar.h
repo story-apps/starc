@@ -22,7 +22,12 @@ public:
     /**
      * @brief Задать модель выпадающего списка типов абзацев
      */
-    void setParagraphsModel(QAbstractItemModel* _model);
+    void setParagraphTypesModel(QAbstractItemModel* _model);
+
+    /**
+     * @brief Задать название типа текущего параграфа
+     */
+    void setCurrentParagraphTypeName(const QString& _name);
 
 signals:
     void undoPressed();

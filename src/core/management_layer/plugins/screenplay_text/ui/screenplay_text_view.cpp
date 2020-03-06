@@ -3,6 +3,9 @@
 #include "screenplay_text_edit.h"
 #include "screenplay_text_edit_toolbar.h"
 
+#include <business_layer/templates/screenplay_template.h>
+#include <business_layer/templates/screenplay_template_facade.h>
+
 #include <ui/design_system/design_system.h>
 #include <ui/widgets/floating_tool_bar/floating_tool_bar.h>
 #include <ui/widgets/scroll_bar/scroll_bar.h>
@@ -13,12 +16,17 @@
 
 #include <QAction>
 #include <QScrollArea>
-#include <QStringListModel>
+#include <QStandardItem>
+#include <QStandardItemModel>
 #include <QVBoxLayout>
 
 
 namespace Ui
 {
+
+namespace {
+    const int kTypeDataRole = Qt::UserRole + 100;
+}
 
 class ScreenplayTextView::Implementation
 {
@@ -28,10 +36,18 @@ public:
     /**
      * @brief Обновить настройки UI панели инструментов
      */
-    void updateToolBarsUi();
+    void updateToolBarUi();
+
+    /**
+     * @brief Обновить текущий отображаемый тип абзаца в панели инструментов
+     */
+    void updateToolBarCurrentParagraphTypeName();
 
 
     ScreenplayTextEditToolBar* toolBar = nullptr;
+    QHash<BusinessLayer::ScreenplayParagraphType, QString> typesToDisplayNames;
+    BusinessLayer::ScreenplayParagraphType currentParagraphType = BusinessLayer::ScreenplayParagraphType::Undefined;
+    QStandardItemModel* paragraphTypesModel = nullptr;
 
     ScreenplayTextEdit* screenplayText = nullptr;
     ScalableWrapper* scalableWrapper = nullptr;
@@ -39,11 +55,11 @@ public:
 
 ScreenplayTextView::Implementation::Implementation(QWidget* _parent)
     : toolBar(new ScreenplayTextEditToolBar(_parent)),
+      paragraphTypesModel(new QStandardItemModel(toolBar)),
       screenplayText(new ScreenplayTextEdit(_parent)),
       scalableWrapper(new ScalableWrapper(screenplayText, _parent))
 {
-    QStringListModel* paragraphsModel = new QStringListModel({"Scene heading", "Scene characters", "Action", "Character", "Parenthetical", "Dialogue", "Lirycs", "Shot", "Transition", "Unformatted text", "Inline note", "Folder"}, toolBar);
-    toolBar->setParagraphsModel(paragraphsModel);
+    toolBar->setParagraphTypesModel(paragraphTypesModel);
 
     screenplayText->setVerticalScrollBar(new ScrollBar);
     screenplayText->setHorizontalScrollBar(new ScrollBar);
@@ -59,13 +75,36 @@ ScreenplayTextView::Implementation::Implementation(QWidget* _parent)
     screenplayText->setSpellCheckLanguage(SpellCheckerLanguage::EnglishUS);
 }
 
-void ScreenplayTextView::Implementation::updateToolBarsUi()
+void ScreenplayTextView::Implementation::updateToolBarUi()
 {
     toolBar->move(QPointF(Ui::DesignSystem::layout().px24(),
                           Ui::DesignSystem::layout().px24()).toPoint());
     toolBar->setBackgroundColor(Ui::DesignSystem::color().primary());
     toolBar->setTextColor(Ui::DesignSystem::color().onPrimary());
     toolBar->raise();
+}
+
+void ScreenplayTextView::Implementation::updateToolBarCurrentParagraphTypeName()
+{
+    auto paragraphType = screenplayText->currentParagraphType();
+    if (currentParagraphType == paragraphType) {
+        return;
+    }
+
+    currentParagraphType = paragraphType;
+
+    if (paragraphType == BusinessLayer::ScreenplayParagraphType::FolderFooter) {
+        paragraphType = BusinessLayer::ScreenplayParagraphType::FolderHeader;
+    }
+
+    for (int itemRow = 0; itemRow < paragraphTypesModel->rowCount(); ++itemRow) {
+        const auto item = paragraphTypesModel->item(itemRow);
+        const auto itemType = static_cast<BusinessLayer::ScreenplayParagraphType>(item->data(kTypeDataRole).toInt());
+        if (itemType == paragraphType) {
+            toolBar->setCurrentParagraphTypeName(item->text());
+            return;
+        }
+    }
 }
 
 
@@ -82,13 +121,56 @@ ScreenplayTextView::ScreenplayTextView(QWidget* _parent)
     layout->addWidget(d->scalableWrapper);
     setLayout(layout);
 
+    connect(d->toolBar, &ScreenplayTextEditToolBar::paragraphTypeChanged, this, [this] (const QModelIndex& _index) {
+        const auto type = static_cast<BusinessLayer::ScreenplayParagraphType>( _index.data(kTypeDataRole).toInt());
+        d->screenplayText->setCurrentParagraphType(type);
+    });
+    connect(d->screenplayText, &ScreenplayTextEdit::paragraphTypeChanged, this, [this] {
+        d->updateToolBarCurrentParagraphTypeName();
+    });
+    connect(d->screenplayText, &ScreenplayTextEdit::cursorPositionChanged, this, [this] {
+        d->updateToolBarCurrentParagraphTypeName();
+    });
+
     updateTranslations();
     designSystemChangeEvent(nullptr);
+
+    reconfigure();
 }
 
 void ScreenplayTextView::setModel(BusinessLayer::ScreenplayTextModel* _model)
 {
     d->screenplayText->setModel(_model);
+}
+
+void ScreenplayTextView::reconfigure()
+{
+    d->paragraphTypesModel->clear();
+
+    using namespace BusinessLayer;
+    const auto usedTemplate = BusinessLayer::ScreenplayTemplateFacade::getTemplate();
+    const QVector<ScreenplayParagraphType> types
+            = { ScreenplayParagraphType::SceneHeading,
+                ScreenplayParagraphType::SceneCharacters,
+                ScreenplayParagraphType::Action,
+                ScreenplayParagraphType::Character,
+                ScreenplayParagraphType::Parenthetical,
+                ScreenplayParagraphType::Dialogue,
+                ScreenplayParagraphType::Lyrics,
+                ScreenplayParagraphType::Shot,
+                ScreenplayParagraphType::Transition,
+                ScreenplayParagraphType::InlineNote,
+                ScreenplayParagraphType::UnformattedText,
+                ScreenplayParagraphType::FolderHeader };
+    for (const auto type : types) {
+        if (!usedTemplate.blockStyle(type).isActive()) {
+            continue;
+        }
+
+        auto typeItem = new QStandardItem(d->typesToDisplayNames.value(type));
+        typeItem->setData(static_cast<int>(type), kTypeDataRole);
+        d->paragraphTypesModel->appendRow(typeItem);
+    }
 }
 
 void ScreenplayTextView::resizeEvent(QResizeEvent* _event)
@@ -103,7 +185,19 @@ ScreenplayTextView::~ScreenplayTextView() = default;
 
 void ScreenplayTextView::updateTranslations()
 {
-
+    using namespace  BusinessLayer;
+    d->typesToDisplayNames = {{ ScreenplayParagraphType::SceneHeading, tr("Scene heading") },
+                              { ScreenplayParagraphType::SceneCharacters, tr("Scene characters") },
+                              { ScreenplayParagraphType::Action, tr("Action") },
+                              { ScreenplayParagraphType::Character, tr("Character") },
+                              { ScreenplayParagraphType::Parenthetical, tr("Parenthetical") },
+                              { ScreenplayParagraphType::Dialogue, tr("Dialogue") },
+                              { ScreenplayParagraphType::Lyrics, tr("Lyrics") },
+                              { ScreenplayParagraphType::Shot, tr("Shot") },
+                              { ScreenplayParagraphType::Transition, tr("Transition") },
+                              { ScreenplayParagraphType::InlineNote, tr("Inline note") },
+                              { ScreenplayParagraphType::UnformattedText, tr("Unformatted text") },
+                              { ScreenplayParagraphType::FolderHeader, tr("Folder") }};
 }
 
 void ScreenplayTextView::designSystemChangeEvent(DesignSystemChangeEvent* _event)
@@ -112,7 +206,7 @@ void ScreenplayTextView::designSystemChangeEvent(DesignSystemChangeEvent* _event
 
     setBackgroundColor(Ui::DesignSystem::color().surface());
 
-    d->updateToolBarsUi();
+    d->updateToolBarUi();
 
     d->screenplayText->setPageSpacing(Ui::DesignSystem::layout().px24());
     QPalette palette;

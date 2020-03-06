@@ -204,19 +204,32 @@ ScreenplayTextEditToolBar::ScreenplayTextEditToolBar(QWidget* _parent)
     designSystemChangeEvent(nullptr);
 }
 
-void ScreenplayTextEditToolBar::setParagraphsModel(QAbstractItemModel* _model)
+void ScreenplayTextEditToolBar::setParagraphTypesModel(QAbstractItemModel* _model)
 {
+    if (d->popupContent->model() != nullptr) {
+        d->popupContent->model()->disconnect(this);
+    }
+
     d->popupContent->setModel(_model);
 
-    if (_model != nullptr
-        && _model->rowCount() > 0) {
-        d->popupContent->setCurrentIndex(_model->index(0, 0));
+    if (_model != nullptr) {
+        connect(_model, &QAbstractItemModel::rowsInserted, this, [this] {
+            designSystemChangeEvent(nullptr);
+        });
+        if (_model->rowCount() > 0) {
+            d->popupContent->setCurrentIndex(_model->index(0, 0));
+        }
     }
 
     //
     // Обновим внешний вид, чтобы пересчитать ширину элемента с выбором стилей
     //
     designSystemChangeEvent(nullptr);
+}
+
+void ScreenplayTextEditToolBar::setCurrentParagraphTypeName(const QString& _name)
+{
+    d->paragraphTypeAction->setText(_name);
 }
 
 ScreenplayTextEditToolBar::~ScreenplayTextEditToolBar() = default;

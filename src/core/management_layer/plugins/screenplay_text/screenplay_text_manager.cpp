@@ -105,4 +105,9 @@ QWidget* ScreenplayTextManager::createView()
     return d->createView();
 }
 
+void ScreenplayTextManager::reconfigure()
+{
+    d->view->reconfigure();
+}
+
 } // namespace ManagementLayer
