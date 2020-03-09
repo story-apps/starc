@@ -44,6 +44,7 @@ HEADERS += \
     ui/handlers/standard_key_handler.h \
     ui/handlers/transition_handler.h \
     ui/handlers/unformatted_text_handler.h \
+    ui/screenplay_text_block_data.h \
     ui/screenplay_text_cursor.h \
     ui/screenplay_text_document.h \
     ui/screenplay_text_edit.h \
@@ -72,6 +73,7 @@ SOURCES += \
     ui/handlers/standard_key_handler.cpp \
     ui/handlers/transition_handler.cpp \
     ui/handlers/unformatted_text_handler.cpp \
+    ui/screenplay_text_block_data.cpp \
     ui/screenplay_text_cursor.cpp \
     ui/screenplay_text_document.cpp \
     ui/screenplay_text_edit.cpp \

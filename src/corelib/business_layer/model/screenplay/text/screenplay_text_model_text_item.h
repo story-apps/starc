@@ -21,14 +21,16 @@ public:
     ~ScreenplayTextModelTextItem() override;
 
     /**
-     * @brief Получить тип параграфа
+     * @brief Тип параграфа
      */
     ScreenplayParagraphType paragraphType() const;
+    void setParagraphType(ScreenplayParagraphType _type);
 
     /**
-     * @brief Получить текст элемента
+     * @brief Текст элемента
      */
     const QString& text() const;
+    void setText(const QString& _text);
 
     /**
      * @brief Определяем интерфейс получения данных сцены

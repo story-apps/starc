@@ -170,6 +170,7 @@ QString ScreenplayTextModelSceneItem::toXml() const
         xml += childAt(childIndex)->toXml();
     }
     xml.append(QString("</%1>\n").arg(kContentTag));
+    xml.append(QString("</%1>\n").arg(kSceneTag));
 
     return xml;
 }

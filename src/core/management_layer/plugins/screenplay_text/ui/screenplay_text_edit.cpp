@@ -1,6 +1,7 @@
 #include "screenplay_text_edit.h"
 
 #include "handlers/key_press_handler_facade.h"
+#include "screenplay_text_block_data.h"
 #include "screenplay_text_cursor.h"
 #include "screenplay_text_document.h"
 
@@ -40,16 +41,20 @@ ScreenplayTextEdit::ScreenplayTextEdit(QWidget* _parent)
 
 ScreenplayTextEdit::~ScreenplayTextEdit() = default;
 
-void ScreenplayTextEdit::setModel(BusinessLayer::ScreenplayTextModel* _model)
+void ScreenplayTextEdit::initWithModel(BusinessLayer::ScreenplayTextModel* _model)
 {
     d->model = _model;
-    d->document.setModel(_model);
 
     const auto currentTemplate = BusinessLayer::ScreenplayTemplateFacade::getTemplate();
     setPageFormat(currentTemplate.pageSizeId());
     setPageMargins(currentTemplate.pageMargins());
     setPageNumbersAlignment(currentTemplate.pageNumbersAlignment());
     d->document.setDefaultFont(currentTemplate.blockStyle(ScreenplayParagraphType::SceneHeading).font());
+
+    //
+    // Документ нужно формировать только после того, как редактор настроен, чтобы избежать лишний изменений
+    //
+    d->document.setModel(_model);
 }
 
 BusinessLayer::ScreenplayDictionariesModel* ScreenplayTextEdit::dictionaries() const
@@ -85,6 +90,20 @@ void ScreenplayTextEdit::addParagraph(BusinessLayer::ScreenplayParagraphType _ty
     cursor.beginEditBlock();
 
     //
+    // Если параграф целиком переносится (энтер нажат перед всем текстом блока),
+    // необходимо перенести данные блока с текущего на следующий
+    //
+    ScreenplayTextBlockData* blockData = nullptr;
+    if (cursor.block().text().left(cursor.positionInBlock()).isEmpty()
+        && !cursor.block().text().isEmpty()) {
+        auto block = cursor.block();
+        if (block.userData() != nullptr) {
+            blockData = new ScreenplayTextBlockData(static_cast<ScreenplayTextBlockData*>(block.userData()));
+            block.setUserData(nullptr);
+        }
+    }
+
+    //
     // Вставим блок
     //
     cursor.insertBlock();
@@ -94,6 +113,11 @@ void ScreenplayTextEdit::addParagraph(BusinessLayer::ScreenplayParagraphType _ty
     // Применим стиль к новому блоку
     //
     applyParagraphType(_type);
+
+    //
+    // Перенесём данные блока
+    //
+    cursor.block().setUserData(blockData);
 
     //
     // Уведомим о том, что стиль сменился

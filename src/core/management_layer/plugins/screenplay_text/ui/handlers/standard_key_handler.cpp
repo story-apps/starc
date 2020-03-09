@@ -3,6 +3,7 @@
 #include <business_layer/templates/screenplay_template.h>
 #include <business_layer/templates/screenplay_template_facade.h>
 
+#include <ui/screenplay_text_block_data.h>
 #include <ui/screenplay_text_edit.h>
 
 #include <data_layer/storage/settings_storage.h>
@@ -80,10 +81,6 @@ void StandardKeyHandler::handleDelete(QKeyEvent* _event)
 {
     if (!editor()->isReadOnly()) {
         //
-        // TODO: как быть с невидимыми блоками?
-        //
-
-        //
         // Удаление
         //
         removeCharacters(false);
@@ -102,17 +99,6 @@ void StandardKeyHandler::handleBackspace(QKeyEvent* _event)
         // Удаление
         //
         removeCharacters(true);
-
-        //
-        // Переходим к видимому блоку
-        //
-        QTextCursor cursor = editor()->textCursor();
-        while (!cursor.atStart()
-               && !cursor.block().isVisible()) {
-            cursor.movePosition(QTextCursor::PreviousBlock);
-            cursor.movePosition(QTextCursor::StartOfBlock);
-        }
-        editor()->setTextCursor(cursor);
 
         //
         // Покажем подсказку, если это возможно
@@ -510,11 +496,28 @@ void StandardKeyHandler::removeCharacters(bool _backward)
         }
 
         //
+        // В результирующем блоке должны остаться данные от верхнего блока
+        //
+        Ui::ScreenplayTextBlockData* blockData = nullptr;
+        if (topBlock.userData() != nullptr) {
+            auto topBlockData = static_cast<Ui::ScreenplayTextBlockData*>(topBlock.userData());
+            if (topBlockData != nullptr) {
+                blockData = new Ui::ScreenplayTextBlockData(topBlockData);
+            }
+        }
+
+
+        //
         // Удалить текст
         //
         cursor.setPosition(topCursorPosition);
         cursor.setPosition(bottomCursorPosition, QTextCursor::KeepAnchor);
         cursor.removeSelectedText();
+
+        //
+        // Положим корректные данные в блок
+        //
+        cursor.block().setUserData(blockData);
 
         //
         // Удалить вторые половинки группирующих элементов

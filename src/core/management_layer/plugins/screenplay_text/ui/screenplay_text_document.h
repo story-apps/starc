@@ -23,7 +23,11 @@ public:
      */
     void setModel(BusinessLayer::ScreenplayTextModel* _model);
 
-signals:
+private:
+    /**
+     * @brief Обновить содержимое модели, при изменение текста документа
+     */
+    void updateModelOnContentChange(int _position, int _charsRemoved, int _charsAdded);
 
 private:
     class Implementation;

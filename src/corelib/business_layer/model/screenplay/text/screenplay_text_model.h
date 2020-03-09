@@ -40,6 +40,21 @@ public:
     void appendItem(ScreenplayTextModelItem* _item, ScreenplayTextModelItem* _parentItem = nullptr);
 
     /**
+     * @brief Вставить элемент после заданного
+     */
+    void insertItem(ScreenplayTextModelItem* _item, ScreenplayTextModelItem* _afterSiblingItem);
+
+    /**
+     * @brief Удалить заданный элемент
+     */
+    void removeItem(ScreenplayTextModelItem* _item);
+
+    /**
+     * @brief Обновить заданный элемент
+     */
+    void updateItem(ScreenplayTextModelItem* _item);
+
+    /**
      * @brief Реализация древовидной модели
      */
     /** @{ */

@@ -98,6 +98,8 @@ ScreenplayTextModel::ScreenplayTextModel(QObject* _parent)
 {
 }
 
+ScreenplayTextModel::~ScreenplayTextModel() = default;
+
 void ScreenplayTextModel::appendItem(ScreenplayTextModelItem* _item, ScreenplayTextModelItem* _parentItem)
 {
     if (_item == nullptr) {
@@ -119,7 +121,52 @@ void ScreenplayTextModel::appendItem(ScreenplayTextModelItem* _item, ScreenplayT
     endInsertRows();
 }
 
-ScreenplayTextModel::~ScreenplayTextModel() = default;
+void ScreenplayTextModel::insertItem(ScreenplayTextModelItem* _item, ScreenplayTextModelItem* _afterSiblingItem)
+{
+    if (_item == nullptr
+        || _afterSiblingItem == nullptr
+        || _afterSiblingItem->parent() == nullptr) {
+        return;
+    }
+
+    auto parent = _afterSiblingItem->parent();
+
+    if (parent->hasChild(_item)) {
+        return;
+    }
+
+    const QModelIndex parentIndex = indexForItem(parent);
+    const int itemRowIndex = parent->rowOfChild(_afterSiblingItem) + 1;
+    beginInsertRows(parentIndex, itemRowIndex, itemRowIndex);
+    parent->insertItem(itemRowIndex, _item);
+    endInsertRows();
+}
+
+void ScreenplayTextModel::removeItem(ScreenplayTextModelItem* _item)
+{
+    if (_item == nullptr
+        || _item->parent() == nullptr) {
+        return;
+    }
+
+    auto itemParent = _item->parent();
+    const QModelIndex itemParentIndex = indexForItem(_item).parent();
+    const int itemRowIndex = itemParent->rowOfChild(_item);
+    beginRemoveRows(itemParentIndex, itemRowIndex, itemRowIndex);
+    itemParent->removeItem(_item);
+    endRemoveRows();
+}
+
+void ScreenplayTextModel::updateItem(ScreenplayTextModelItem* _item)
+{
+    if (_item == nullptr
+        || _item->parent() == nullptr) {
+        return;
+    }
+
+    const QModelIndex indexForUpdate = indexForItem(_item);
+    emit dataChanged(indexForUpdate, indexForUpdate);
+}
 
 QModelIndex ScreenplayTextModel::index(int _row, int _column, const QModelIndex& _parent) const
 {

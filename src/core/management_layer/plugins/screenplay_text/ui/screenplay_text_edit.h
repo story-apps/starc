@@ -28,7 +28,7 @@ public:
     /**
      * @brief Задать модель текста сценария
      */
-    void setModel(BusinessLayer::ScreenplayTextModel* _model);
+    void initWithModel(BusinessLayer::ScreenplayTextModel* _model);
 
     /**
      * @brief Получить модель справочников сценария

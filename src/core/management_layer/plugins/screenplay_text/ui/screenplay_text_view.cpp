@@ -141,7 +141,7 @@ ScreenplayTextView::ScreenplayTextView(QWidget* _parent)
 
 void ScreenplayTextView::setModel(BusinessLayer::ScreenplayTextModel* _model)
 {
-    d->screenplayText->setModel(_model);
+    d->screenplayText->initWithModel(_model);
 
     d->updateToolBarCurrentParagraphTypeName();
 }

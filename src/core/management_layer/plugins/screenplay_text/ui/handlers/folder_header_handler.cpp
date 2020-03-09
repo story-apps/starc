@@ -74,27 +74,14 @@ void FolderHeaderHandler::handleEnter(QKeyEvent*)
 					//
 					// Вставить блок время и место перед папкой
 					//
+                    cursor.beginEditBlock();
 					cursor.insertBlock();
 					cursor.movePosition(QTextCursor::PreviousCharacter);
 					cursor.setBlockFormat(QTextBlockFormat());
 					editor()->setTextCursor(cursor);
                     editor()->setCurrentParagraphType(ScreenplayParagraphType::SceneHeading);
                     editor()->moveCursor(QTextCursor::NextCharacter);
-
-                    //
-                    // FIXME: SceneHeadingBlockInfo
-                    //
-//                    //
-//                    // Перенесём параметры из блока в котором они остались к текущему блоку
-//                    //
-//                    QTextCursor cursor = editor()->textCursor();
-//                    cursor.movePosition(QTextCursor::PreviousBlock);
-//                    if (SceneHeadingBlockInfo* info = dynamic_cast<SceneHeadingBlockInfo*> (cursor.block().userData())) {
-//                        SceneHeadingBlockInfo* movedInfo = info->clone();
-//                        cursor.block().setUserData(nullptr);
-//                        cursor.movePosition(QTextCursor::NextBlock);
-//                        cursor.block().setUserData(movedInfo);
-//                    }
+                    cursor.endEditBlock();
 				} else if (cursorForwardText.isEmpty()) {
 					//! В конце блока
 

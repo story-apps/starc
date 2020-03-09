@@ -130,21 +130,6 @@ void SceneHeadingHandler::handleEnter(QKeyEvent* _event)
                     // Вставка блока заголовка перед собой
                     //
                     editor()->addParagraph(ScreenplayParagraphType::SceneHeading);
-
-                    //
-                    // FIXME: SceneHeadingBlockInfo
-                    //
-//                    //
-//                    // Перенесём параметры из блока в котором они остались к текущему блоку
-//                    //
-//                    QTextCursor cursor = editor()->textCursor();
-//                    cursor.movePosition(QTextCursor::PreviousBlock);
-//                    if (SceneHeadingBlockInfo* info = dynamic_cast<SceneHeadingBlockInfo*> (cursor.block().userData())) {
-//                        SceneHeadingBlockInfo* movedInfo = info->clone();
-//                        cursor.block().setUserData(nullptr);
-//                        cursor.movePosition(QTextCursor::NextBlock);
-//                        cursor.block().setUserData(movedInfo);
-//                    }
                 } else if (cursorForwardText.isEmpty()) {
                     //! В конце блока
 

@@ -239,6 +239,7 @@ HEADERS += \
     utils/helpers/string_helper.h \
     utils/helpers/text_helper.h \
     utils/helpers/quotes_helper.h \
+    utils/shugar.h \
     utils/tools/backup_builder.h \
     utils/tools/debouncer.h \
     utils/tools/run_once.h \

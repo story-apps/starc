@@ -305,9 +305,21 @@ ScreenplayTextModelTextItem::ScreenplayTextModelTextItem(const QDomElement& _nod
     d->updateXml();
 }
 
+ScreenplayTextModelTextItem::~ScreenplayTextModelTextItem() = default;
+
 ScreenplayParagraphType ScreenplayTextModelTextItem::paragraphType() const
 {
     return d->paragraphType;
+}
+
+void ScreenplayTextModelTextItem::setParagraphType(ScreenplayParagraphType _type)
+{
+    if (d->paragraphType == _type) {
+        return;
+    }
+
+    d->paragraphType = _type;
+    d->updateXml();
 }
 
 const QString& ScreenplayTextModelTextItem::text() const
@@ -315,10 +327,22 @@ const QString& ScreenplayTextModelTextItem::text() const
     return d->text;
 }
 
-ScreenplayTextModelTextItem::~ScreenplayTextModelTextItem() = default;
+void ScreenplayTextModelTextItem::setText(const QString& _text)
+{
+    if (d->text == _text) {
+        return;
+    }
+
+    d->text = _text;
+    d->updateXml();
+}
 
 QVariant ScreenplayTextModelTextItem::data(int _role) const
 {
+    if (_role == Qt::DisplayRole) {
+        return d->text;
+    }
+
     return {};
 }
 
