@@ -190,7 +190,7 @@ void ScreenplayTextDocument::updateModelOnContentChange(int _position, int _char
         //
         auto removeIter = d->positionsToitems.upper_bound(_position);
         while (removeIter != d->positionsToitems.end()
-               && removeIter->first <= _position + _charsRemoved) {
+               && removeIter->first < _position + _charsRemoved) {
             d->model->removeItem(removeIter->second);
             removeIter = d->positionsToitems.erase(removeIter);
         }
@@ -251,7 +251,9 @@ void ScreenplayTextDocument::updateModelOnContentChange(int _position, int _char
             if (blockType == BusinessLayer::ScreenplayParagraphType::SceneHeading
                 || blockType == BusinessLayer::ScreenplayParagraphType::FolderFooter) {
                 sceneItem = new BusinessLayer::ScreenplayTextModelSceneItem;
-                d->model->insertItem(sceneItem, previousTextItem->parent());
+                auto sceneParent = previousTextItem != nullptr ? previousTextItem->parent()
+                                                               : nullptr;
+                d->model->insertItem(sceneItem, sceneParent);
             }
 
             auto textItem = new BusinessLayer::ScreenplayTextModelTextItem;
