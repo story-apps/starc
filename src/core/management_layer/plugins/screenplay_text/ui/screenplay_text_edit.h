@@ -97,6 +97,11 @@ protected:
     bool updateEnteredText(const QString& _eventText) override;
     /** @} */
 
+    /**
+     * @brief Реализуем отрисовку дополнительных элементов
+     */
+    void paintEvent(QPaintEvent* _event) override;
+
 private:
     /**
      * @brief Очистить текущий блок от установленного в нём типа
