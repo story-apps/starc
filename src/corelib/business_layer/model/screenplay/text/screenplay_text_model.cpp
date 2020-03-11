@@ -1,5 +1,6 @@
 #include "screenplay_text_model.h"
 
+#include "screenplay_text_model_folder_item.h"
 #include "screenplay_text_model_scene_item.h"
 #include "screenplay_text_model_text_item.h"
 
@@ -67,10 +68,14 @@ void ScreenplayTextModel::Implementation::buildModel(Domain::DocumentObject* _sc
     QDomDocument domDocument;
     domDocument.setContent(_screenplay->content());
     auto documentNode = domDocument.firstChildElement("document");
-    auto sceneNode = documentNode.firstChildElement();
-    while (!sceneNode.isNull()) {
-        rootItem->appendItem(new ScreenplayTextModelSceneItem(sceneNode));
-        sceneNode = sceneNode.nextSiblingElement();
+    auto rootNode = documentNode.firstChildElement();
+    while (!rootNode.isNull()) {
+        if (rootNode.nodeName() == "folder") {
+            rootItem->appendItem(new ScreenplayTextModelFolderItem(rootNode));
+        } else {
+            rootItem->appendItem(new ScreenplayTextModelSceneItem(rootNode));
+        }
+        rootNode = rootNode.nextSiblingElement();
     }
 }
 
@@ -169,6 +174,11 @@ void ScreenplayTextModel::removeItem(ScreenplayTextModelItem* _item)
         return;
     }
 
+    //
+    // TODO: Если удаляется сцена или папка, нужно удалить соответствующий элемент
+    //       и перенести элементы к предыдущему группирующему элементу
+    //
+
     auto itemParent = _item->parent();
     const QModelIndex itemParentIndex = indexForItem(_item).parent();
     const int itemRowIndex = itemParent->rowOfChild(_item);
@@ -183,6 +193,10 @@ void ScreenplayTextModel::updateItem(ScreenplayTextModelItem* _item)
         || _item->parent() == nullptr) {
         return;
     }
+
+    //
+    // TODO: Если сменился стиль блока, то возможно нужно удалить предыдущую сцену/папку
+    //
 
     const QModelIndex indexForUpdate = indexForItem(_item);
     emit dataChanged(indexForUpdate, indexForUpdate);

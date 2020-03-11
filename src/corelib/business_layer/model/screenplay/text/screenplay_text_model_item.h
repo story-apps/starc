@@ -11,6 +11,7 @@ namespace BusinessLayer
  * @brief Перечисление типов элементов модели сценария
  */
 enum class ScreenplayTextModelItemType {
+    Folder,
     Scene,
     Text,
     Splitter

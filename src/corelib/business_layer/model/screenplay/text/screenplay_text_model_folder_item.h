@@ -9,14 +9,14 @@ namespace BusinessLayer
 {
 
 /**
- * @brief Класс элементов сцен модели сценария
+ * @brief Класс элементов папок модели сценария
  */
-class ScreenplayTextModelSceneItem : public ScreenplayTextModelItem
+class ScreenplayTextModelFolderItem : public ScreenplayTextModelItem
 {
 public:
-    ScreenplayTextModelSceneItem();
-    explicit ScreenplayTextModelSceneItem(const QDomElement& _node);
-    ~ScreenplayTextModelSceneItem() override;
+    ScreenplayTextModelFolderItem();
+    explicit ScreenplayTextModelFolderItem(const QDomElement& _node);
+    ~ScreenplayTextModelFolderItem() override;
 
     /**
      * @brief Определяем интерфейс получения данных сцены

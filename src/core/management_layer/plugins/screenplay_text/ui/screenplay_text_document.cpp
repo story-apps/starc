@@ -4,6 +4,7 @@
 #include "screenplay_text_cursor.h"
 
 #include <business_layer/model/screenplay/text/screenplay_text_model.h>
+#include <business_layer/model/screenplay/text/screenplay_text_model_folder_item.h>
 #include <business_layer/model/screenplay/text/screenplay_text_model_scene_item.h>
 #include <business_layer/model/screenplay/text/screenplay_text_model_text_item.h>
 #include <business_layer/templates/screenplay_template.h>
@@ -78,6 +79,10 @@ void ScreenplayTextDocument::setModel(BusinessLayer::ScreenplayTextModel* _model
             const auto itemIndex = d->model->index(itemRow, 0, _parent);
             const auto item = d->model->itemForIndex(itemIndex);
             switch (item->type()) {
+                case BusinessLayer::ScreenplayTextModelItemType::Folder: {
+                    break;
+                }
+
                 case BusinessLayer::ScreenplayTextModelItemType::Scene: {
                     break;
                 }
@@ -186,17 +191,51 @@ void ScreenplayTextDocument::updateModelOnContentChange(int _position, int _char
         }
 
         //
-        // Собственно удаляем удалённые
+        // Собираем элементы которые потенциально могут быть удалены
+        //
+        std::map<BusinessLayer::ScreenplayTextModelTextItem*, int> itemsToDelete;
+        auto itemsToDeleteIter = d->positionsToitems.upper_bound(_position);
+        while (itemsToDeleteIter != d->positionsToitems.end()
+               && itemsToDeleteIter->first <= _position + _charsRemoved) {
+            itemsToDelete.emplace(itemsToDeleteIter->second, itemsToDeleteIter->first);
+            ++itemsToDeleteIter;
+        }
+
+        //
+        // Проходим по изменённым блокам и фильтруем элементы, которые не были удалены
+        //
+        auto block = findBlock(_position);
+        while (block.isValid()
+               && block.position() <= _position + std::max(_charsRemoved, _charsAdded)) {
+            if (block.userData() != nullptr) {
+                const auto blockData = static_cast<ScreenplayTextBlockData*>(block.userData());
+                itemsToDelete.erase(blockData->item());
+            }
+            block = block.next();
+        }
+
+        //
+        // Удаляем блоки, которые действительно были удалены из текста
         //
         auto removeIter = d->positionsToitems.upper_bound(_position);
         while (removeIter != d->positionsToitems.end()
-               && removeIter->first < _position + _charsRemoved) {
-            d->model->removeItem(removeIter->second);
+               && removeIter->first <= _position + _charsRemoved) {
+            //
+            // Если элемент действительно удалён - удаляем его из модели
+            //
+            if (itemsToDelete.find(removeIter->second) != itemsToDelete.end()) {
+                d->model->removeItem(removeIter->second);
+            }
+
+            //
+            // Убираем информацию о позиции блока, т.к. она могла измениться и будет обновлена далее
+            //
             removeIter = d->positionsToitems.erase(removeIter);
         }
-        if (removeIter == d->positionsToitems.end()) {
-            break;
-        }
+
+        //
+        // Корректируем позиции элементов идущих за удаляемым блоком
+        //
 
         auto itemToUpdateIter = removeIter;
 
@@ -247,24 +286,61 @@ void ScreenplayTextDocument::updateModelOnContentChange(int _position, int _char
         //
         if (block.userData() == nullptr) {
             const auto blockType = BusinessLayer::ScreenplayBlockStyle::forBlock(block);
-            BusinessLayer::ScreenplayTextModelSceneItem* sceneItem = nullptr;
-            if (blockType == BusinessLayer::ScreenplayParagraphType::SceneHeading
-                || blockType == BusinessLayer::ScreenplayParagraphType::FolderFooter) {
-                sceneItem = new BusinessLayer::ScreenplayTextModelSceneItem;
-                if (previousTextItem == nullptr) {
-                    d->model->prependItem(sceneItem);
-                } else {
-                    d->model->insertItem(sceneItem, previousTextItem->parent());
+
+            //
+            // Создаём группирующий элемент, если есть необходимость
+            //
+            BusinessLayer::ScreenplayTextModelItem* parentItem = nullptr;
+            switch (blockType) {
+                case BusinessLayer::ScreenplayParagraphType::FolderHeader: {
+                    parentItem = new BusinessLayer::ScreenplayTextModelFolderItem;
+                    break;
                 }
+
+                case BusinessLayer::ScreenplayParagraphType::SceneHeading: {
+                    parentItem = new BusinessLayer::ScreenplayTextModelSceneItem;
+                    break;
+                }
+
+                default: break;
             }
 
+            //
+            // Создаём сам текстовый элемент
+            //
             auto textItem = new BusinessLayer::ScreenplayTextModelTextItem;
             textItem->setParagraphType(blockType);
             textItem->setText(block.text());
-            if (sceneItem != nullptr) {
-                d->model->appendItem(textItem, sceneItem);
-            } else {
-                d->model->insertItem(textItem, previousTextItem);
+
+            //
+            // Добавляем элементы в модель
+            //
+            // ... в случае, когда вставляем внутрь созданной папки, или сцены
+            //
+            if (parentItem != nullptr) {
+                if (previousTextItem != nullptr) {
+                    auto previousTextItemParent = previousTextItem->parent();
+                    if (previousTextItemParent != nullptr
+                        && previousTextItemParent->type() == BusinessLayer::ScreenplayTextModelItemType::Folder) {
+                        d->model->prependItem(parentItem, previousTextItemParent);
+                    } else {
+                        d->model->insertItem(parentItem, previousTextItem);
+                    }
+                } else {
+                    d->model->prependItem(parentItem);
+                }
+
+                d->model->appendItem(textItem, parentItem);
+            }
+            //
+            // ... в случае, когда добавился просто текст
+            //
+            else {
+                if (previousTextItem != nullptr) {
+                    d->model->insertItem(textItem, previousTextItem);
+                } else {
+                    d->model->prependItem(textItem);
+                }
             }
 
             auto blockData = new ScreenplayTextBlockData(textItem);
