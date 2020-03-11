@@ -251,9 +251,11 @@ void ScreenplayTextDocument::updateModelOnContentChange(int _position, int _char
             if (blockType == BusinessLayer::ScreenplayParagraphType::SceneHeading
                 || blockType == BusinessLayer::ScreenplayParagraphType::FolderFooter) {
                 sceneItem = new BusinessLayer::ScreenplayTextModelSceneItem;
-                auto sceneParent = previousTextItem != nullptr ? previousTextItem->parent()
-                                                               : nullptr;
-                d->model->insertItem(sceneItem, sceneParent);
+                if (previousTextItem == nullptr) {
+                    d->model->prependItem(sceneItem);
+                } else {
+                    d->model->insertItem(sceneItem, previousTextItem->parent());
+                }
             }
 
             auto textItem = new BusinessLayer::ScreenplayTextModelTextItem;

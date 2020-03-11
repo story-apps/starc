@@ -410,11 +410,6 @@ ScreenplayBlockStyle::ScreenplayBlockStyle(const QXmlStreamAttributes& _blockAtt
             break;
         }
 
-        case ScreenplayParagraphType::FolderFooter: {
-            m_charFormat.setProperty(ScreenplayBlockStyle::PropertyIsCanModify, false);
-            break;
-        }
-
         default: {
             break;
         }

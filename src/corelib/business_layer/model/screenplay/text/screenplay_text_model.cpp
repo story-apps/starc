@@ -115,9 +115,29 @@ void ScreenplayTextModel::appendItem(ScreenplayTextModelItem* _item, ScreenplayT
     }
 
     const QModelIndex parentIndex = indexForItem(_parentItem);
-    const int itemRowIndex = _parentItem->childCount();
-    beginInsertRows(parentIndex, itemRowIndex, itemRowIndex);
-    _parentItem->insertItem(itemRowIndex, _item);
+    const int itemRow = _parentItem->childCount();
+    beginInsertRows(parentIndex, itemRow, itemRow);
+    _parentItem->insertItem(itemRow, _item);
+    endInsertRows();
+}
+
+void ScreenplayTextModel::prependItem(ScreenplayTextModelItem* _item, ScreenplayTextModelItem* _parentItem)
+{
+    if (_item == nullptr) {
+        return;
+    }
+
+    if (_parentItem == nullptr) {
+        _parentItem = d->rootItem;
+    }
+
+    if (_parentItem->hasChild(_item)) {
+        return;
+    }
+
+    const QModelIndex parentIndex = indexForItem(_parentItem);
+    beginInsertRows(parentIndex, 0, 0);
+    _parentItem->insertItem(0, _item);
     endInsertRows();
 }
 

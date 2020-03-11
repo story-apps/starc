@@ -40,6 +40,11 @@ public:
     void appendItem(ScreenplayTextModelItem* _item, ScreenplayTextModelItem* _parentItem = nullptr);
 
     /**
+     * @brief Добавить элемент в начало
+     */
+    void prependItem(ScreenplayTextModelItem* _item, ScreenplayTextModelItem* _parentItem = nullptr);
+
+    /**
      * @brief Вставить элемент после заданного
      */
     void insertItem(ScreenplayTextModelItem* _item, ScreenplayTextModelItem* _afterSiblingItem);
