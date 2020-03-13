@@ -290,6 +290,8 @@ void ScreenplayTextDocument::updateModelOnContentChange(int _position, int _char
             //
             // Создаём группирующий элемент, если есть необходимость
             //
+            // ... если непосредственно создаётся сцена или папка
+            //
             BusinessLayer::ScreenplayTextModelItem* parentItem = nullptr;
             switch (blockType) {
                 case BusinessLayer::ScreenplayParagraphType::FolderHeader: {
@@ -303,6 +305,20 @@ void ScreenplayTextDocument::updateModelOnContentChange(int _position, int _char
                 }
 
                 default: break;
+            }
+            //
+            // ... если текст встявляется перед первым элементом в структуре
+            //
+            if (parentItem == nullptr
+                && previousTextItem == nullptr) {
+                parentItem = new BusinessLayer::ScreenplayTextModelSceneItem;
+            }
+            //
+            // ... если текст вставляется после окончания папки
+            //
+            if (parentItem == nullptr
+                && previousTextItem->paragraphType() == BusinessLayer::ScreenplayParagraphType::FolderFooter) {
+                parentItem = new BusinessLayer::ScreenplayTextModelSceneItem;
             }
 
             //
@@ -318,15 +334,31 @@ void ScreenplayTextDocument::updateModelOnContentChange(int _position, int _char
             // ... в случае, когда вставляем внутрь созданной папки, или сцены
             //
             if (parentItem != nullptr) {
+                //
+                // Если перед вставляемым элементом что-то уже есть
+                //
                 if (previousTextItem != nullptr) {
                     auto previousTextItemParent = previousTextItem->parent();
-                    if (previousTextItemParent != nullptr
-                        && previousTextItemParent->type() == BusinessLayer::ScreenplayTextModelItemType::Folder) {
-                        d->model->prependItem(parentItem, previousTextItemParent);
-                    } else {
+                    Q_ASSERT(previousTextItemParent);
+                    //
+                    // Если элемент вставляется после другой сцены, или после окончания папки,
+                    // то вставляем его на том же уровне, что и предыдущий
+                    //
+                    if (previousTextItemParent->type() == BusinessLayer::ScreenplayTextModelItemType::Scene
+                        || previousTextItem->paragraphType() == BusinessLayer::ScreenplayParagraphType::FolderFooter) {
+                        d->model->insertItem(parentItem, previousTextItemParent);
+                    }
+                    //
+                    // В противном случае вставляем внутрь папки
+                    //
+                    else {
                         d->model->insertItem(parentItem, previousTextItem);
                     }
-                } else {
+                }
+                //
+                // Если перед вставляемым ничего нет, просто вставим в самое начало
+                //
+                else {
                     d->model->prependItem(parentItem);
                 }
 

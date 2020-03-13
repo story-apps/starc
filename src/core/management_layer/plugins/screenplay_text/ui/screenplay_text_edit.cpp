@@ -1160,24 +1160,6 @@ void ScreenplayTextEdit::applyParagraphType(BusinessLayer::ScreenplayParagraphTy
         const int lastCursorPosition = textCursor().position();
 
         //
-        // Ищем конец сцены
-        //
-        do {
-            cursor.movePosition(QTextCursor::EndOfBlock);
-            cursor.movePosition(QTextCursor::NextBlock);
-        } while (!cursor.atEnd()
-                 && ScreenplayBlockStyle::forBlock(cursor.block()) != ScreenplayParagraphType::SceneHeading
-                 && ScreenplayBlockStyle::forBlock(cursor.block()) != ScreenplayParagraphType::FolderHeader
-                 && ScreenplayBlockStyle::forBlock(cursor.block()) != ScreenplayParagraphType::FolderFooter);
-
-        //
-        // Если забежали на блок следующей сцены, вернёмся на один символ назад
-        //
-        if (!cursor.atEnd() && cursor.atBlockStart()) {
-            cursor.movePosition(QTextCursor::PreviousCharacter);
-        }
-
-        //
         // Когда дошли до конца сцены, вставляем закрывающий блок
         //
         cursor.insertBlock();

@@ -58,9 +58,10 @@ void FolderFooterHandler::handleEnter(QKeyEvent*)
 				&& cursorForwardText.isEmpty()) {
 				//! Текст пуст
 
-				//
-				// Ни чего не делаем
-				//
+                //
+                // Вставить блок время и место
+                //
+                editor()->addParagraph(ScreenplayParagraphType::SceneHeading);
 			} else {
 				//! Текст не пуст
 
