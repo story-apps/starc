@@ -13,7 +13,7 @@
 #include <utils/helpers/text_helper.h>
 #include <utils/shugar.h>
 
-#include <QDebug>
+
 namespace Ui
 {
 
@@ -161,26 +161,6 @@ void ScreenplayTextDocument::updateModelOnContentChange(int _position, int _char
     }
 
     d->state = DocumentState::Changing;
-
-    {
-        qDebug() << "change" << _position << _charsRemoved << _charsAdded;
-        auto block = findBlock(_position);
-        while (block.isValid()
-               && block.position() <= _position + std::max(_charsRemoved, _charsAdded)) {
-            qDebug() << "block" << block.blockNumber() << block.position();
-            if (block.userData() == nullptr) {
-                qDebug() << "no data";
-            } else {
-                auto blockData = static_cast<ScreenplayTextBlockData*>(block.userData());
-                blockData->print();
-            }
-
-            block = block.next();
-        }
-    }
-
-
-
 
     //
     // Удаляем из модели элементы удалённых блоков и корректируем позиции блоков идущих после

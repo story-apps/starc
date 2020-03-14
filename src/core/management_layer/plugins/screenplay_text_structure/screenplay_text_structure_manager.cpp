@@ -1,5 +1,6 @@
 #include "screenplay_text_structure_manager.h"
 
+#include "business_layer/screenplay_text_structure_model.h"
 #include "ui/screenplay_text_structure_view.h"
 
 #include <business_layer/model/screenplay/text/screenplay_text_model.h>
@@ -23,9 +24,14 @@ public:
 
 
     /**
-     * @brief Текущая модель представления основного окна
+     * @brief Текущая модель сценария
      */
     BusinessLayer::ScreenplayTextModel* model = nullptr;
+
+    /**
+     * @brief Модель отображения структуры сценария
+     */
+    BusinessLayer::ScreenplayTextStructureModel* structureModel = nullptr;
 
     /**
      * @brief Предаставление для основного окна
@@ -76,10 +82,18 @@ void ScreenplayTextStructureManager::setModel(BusinessLayer::AbstractModel* _mod
     d->model = qobject_cast<BusinessLayer::ScreenplayTextModel*>(_model);
 
     //
+    // Помещаем модель в прокси
+    //
+    if (d->structureModel == nullptr) {
+        d->structureModel = new BusinessLayer::ScreenplayTextStructureModel(this);
+        d->view->setModel(d->structureModel);
+    }
+    d->structureModel->setSourceModel(d->model);
+
+    //
     // Настраиваем соединения с новой моделью
     //
     if (d->model != nullptr) {
-        d->view->setModel(d->model);
 //        d->view->setName(d->model->name());
 //        d->view->setText(d->model->text());
 

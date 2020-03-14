@@ -3,6 +3,8 @@
 #include "screenplay_text_model_scene_item.h"
 #include "screenplay_text_model_text_item.h"
 
+#include <utils/helpers/text_helper.h>
+
 #include <QDomElement>
 #include <QUuid>
 #include <QVariant>
@@ -32,7 +34,7 @@ public:
     Implementation();
 
     /**
-     * @brief Идентификатор сцены
+     * @brief Идентификатор папки
      */
     QUuid uuid;
 };
@@ -86,8 +88,7 @@ QVariant ScreenplayTextModelFolderItem::data(int _role) const
                 }
 
                 auto childTextItem = static_cast<ScreenplayTextModelTextItem*>(child);
-//                if (childTextItem->textType() )
-                return childTextItem->text();
+                return TextHelper::smartToUpper(childTextItem->text());
             }
         }
 

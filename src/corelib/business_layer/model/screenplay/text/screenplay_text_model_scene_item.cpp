@@ -128,8 +128,7 @@ QVariant ScreenplayTextModelSceneItem::data(int _role) const
                 }
 
                 auto childTextItem = static_cast<ScreenplayTextModelTextItem*>(child);
-//                if (childTextItem->textType() )
-                return childTextItem->text();
+                return TextHelper::smartToUpper(childTextItem->text());
             }
         }
 
