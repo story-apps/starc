@@ -200,6 +200,8 @@ void ScreenplayTextModel::updateItem(ScreenplayTextModelItem* _item)
 
     const QModelIndex indexForUpdate = indexForItem(_item);
     emit dataChanged(indexForUpdate, indexForUpdate);
+
+    updateItem(_item->parent());
 }
 
 QModelIndex ScreenplayTextModel::index(int _row, int _column, const QModelIndex& _parent) const
@@ -332,6 +334,25 @@ ScreenplayTextModelItem* ScreenplayTextModel::itemForIndex(const QModelIndex& _i
     return item;
 }
 
+QModelIndex ScreenplayTextModel::indexForItem(ScreenplayTextModelItem* _item) const
+{
+    if (_item == nullptr) {
+        return {};
+    }
+
+    int row = 0;
+    QModelIndex parent;
+    if (_item->hasParent()
+        && _item->parent()->hasParent()) {
+        row = _item->parent()->rowOfChild(_item);
+        parent = indexForItem(_item->parent());
+    } else {
+        row = d->rootItem->rowOfChild(_item);
+    }
+
+    return index(row, 0, parent);
+}
+
 void ScreenplayTextModel::setDictionariesModel(ScreenplayDictionariesModel* _model)
 {
     d->dictionariesModel = _model;
@@ -398,25 +419,6 @@ void ScreenplayTextModel::clearDocument()
 QByteArray ScreenplayTextModel::toXml() const
 {
     return d->toXml(document());
-}
-
-QModelIndex ScreenplayTextModel::indexForItem(ScreenplayTextModelItem* _item) const
-{
-    if (_item == nullptr) {
-        return {};
-    }
-
-    int row = 0;
-    QModelIndex parent;
-    if (_item->hasParent()
-        && _item->parent()->hasParent()) {
-        row = _item->parent()->rowOfChild(_item);
-        parent = indexForItem(_item->parent());
-    } else {
-        row = d->rootItem->rowOfChild(_item);
-    }
-
-    return index(row, 0, parent);
 }
 
 } // namespace BusinessLayer

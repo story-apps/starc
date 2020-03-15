@@ -63,9 +63,18 @@ ScreenplayTextStructureManager::ScreenplayTextStructureManager(QObject* _parent)
     : QObject(_parent),
       d(new Implementation)
 {
+    connect(d->view, &Ui::ScreenplayTextStructureView::currentModelIndexChanged, this,
+            [this] (const QModelIndex& _index) {
+        emit currentModelIndexChanged(d->structureModel->mapToSource(_index));
+    });
 }
 
 ScreenplayTextStructureManager::~ScreenplayTextStructureManager() = default;
+
+QObject* ScreenplayTextStructureManager::asQObject()
+{
+    return this;
+}
 
 void ScreenplayTextStructureManager::setModel(BusinessLayer::AbstractModel* _model)
 {
@@ -117,6 +126,29 @@ QWidget* ScreenplayTextStructureManager::view()
 QWidget* ScreenplayTextStructureManager::createView()
 {
     return d->createView();
+}
+
+void ScreenplayTextStructureManager::bind(IDocumentManager* _manager)
+{
+    Q_ASSERT(_manager);
+
+    connect(_manager->asQObject(), SIGNAL(currentModelIndexChanged(const QModelIndex&)),
+            this, SLOT(setCurrentModelIndex(const QModelIndex&)), Qt::UniqueConnection);
+}
+
+void ScreenplayTextStructureManager::setCurrentModelIndex(const QModelIndex& _index)
+{
+    if (!_index.isValid()) {
+        return;
+    }
+
+    QSignalBlocker signalBlocker(this);
+
+    //
+    // Из редактора сценария мы получаем индексы текстовых элементов, они хранятся внутри
+    // сцен или папок, которые как раз и отображаются в навигаторе
+    //
+    d->view->setCurrentModelIndex(d->structureModel->mapFromSource(_index.parent()));
 }
 
 } // namespace ManagementLayer

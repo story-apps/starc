@@ -90,6 +90,7 @@ QVariant ScreenplayTextModelFolderItem::data(int _role) const
                 auto childTextItem = static_cast<ScreenplayTextModelTextItem*>(child);
                 return TextHelper::smartToUpper(childTextItem->text());
             }
+            return {};
         }
 
         case Qt::DecorationRole: {

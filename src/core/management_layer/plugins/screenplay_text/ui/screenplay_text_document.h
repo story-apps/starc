@@ -23,6 +23,11 @@ public:
      */
     void setModel(BusinessLayer::ScreenplayTextModel* _model);
 
+    /**
+     * @brief Получить позицию элемента в заданном индексе
+     */
+    int itemPosition(const QModelIndex& _index);
+
 private:
     /**
      * @brief Обновить содержимое модели, при изменение текста документа

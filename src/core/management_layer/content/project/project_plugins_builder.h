@@ -46,6 +46,12 @@ public:
      */
     QWidget* activateView(const QString& _viewMimeType, BusinessLayer::AbstractModel* _model);
 
+    /**
+     * @brief Связать два менеджера
+     * @note Обычно используется для связки навигатора и редактора
+     */
+    void bind(const QString& _viewMimeType, const QString& _navigatorMimeType);
+
 private:
     class Implementation;
     QScopedPointer<Implementation> d;

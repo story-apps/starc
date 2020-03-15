@@ -154,6 +154,25 @@ void ScreenplayTextDocument::setModel(BusinessLayer::ScreenplayTextModel* _model
     d->state = DocumentState::Ready;
 }
 
+int ScreenplayTextDocument::itemPosition(const QModelIndex& _index)
+{
+    auto item = d->model->itemForIndex(_index);
+    if (item == nullptr) {
+        return 0;
+    }
+
+    while (item->childCount() > 0) {
+        item = item->childAt(0);
+    }
+    for (const auto& [key, value] : d->positionsToitems) {
+        if (value == item) {
+            return key;
+        }
+    }
+
+    return 0;
+}
+
 void ScreenplayTextDocument::updateModelOnContentChange(int _position, int _charsRemoved, int _charsAdded)
 {
     if (d->state != DocumentState::Ready) {

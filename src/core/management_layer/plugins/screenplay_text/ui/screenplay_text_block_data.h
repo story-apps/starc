@@ -16,7 +16,6 @@ class ScreenplayTextBlockData : public QTextBlockUserData
 public:
     explicit ScreenplayTextBlockData(BusinessLayer::ScreenplayTextModelTextItem* _item);
     explicit ScreenplayTextBlockData(const ScreenplayTextBlockData* _other);
-    void print();
 
     BusinessLayer::ScreenplayTextModelTextItem* item() const;
 

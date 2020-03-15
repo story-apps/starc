@@ -6,6 +6,7 @@ namespace BusinessLayer {
 class AbstractModel;
 }
 
+class QObject;
 class QWidget;
 
 namespace ManagementLayer
@@ -18,6 +19,11 @@ class IDocumentManager
 {
 public:
     virtual ~IDocumentManager() = default;
+
+    /**
+     * @brief Вернуть указатель на себя как QObject, если менеджер является наследником  QObject
+     */
+    virtual QObject* asQObject() { return nullptr; }
 
     /**
      * @brief Задать модель документа
@@ -33,6 +39,16 @@ public:
      * @brief Представление документа для отдельного окна
      */
     virtual QWidget* createView() = 0;
+
+    /**
+     * @brief Перенастроить редактор, которым управляет менеджер
+     */
+    virtual void reconfigure() {}
+
+    /**
+     * @brief Связать с другим менеджером
+     */
+    virtual void bind(IDocumentManager*) {}
 };
 
 } // namespace ManagementLayer

@@ -1,5 +1,6 @@
 #include "screenplay_text_view.h"
 
+#include "screenplay_text_block_data.h"
 #include "screenplay_text_edit.h"
 #include "screenplay_text_edit_toolbar.h"
 
@@ -115,6 +116,8 @@ ScreenplayTextView::ScreenplayTextView(QWidget* _parent)
     : Widget(_parent),
       d(new Implementation(this))
 {
+    setFocusProxy(d->scalableWrapper);
+
     QVBoxLayout* layout = new QVBoxLayout;
     layout->setContentsMargins({});
     layout->setSpacing(0);
@@ -126,6 +129,7 @@ ScreenplayTextView::ScreenplayTextView(QWidget* _parent)
         d->screenplayText->setCurrentParagraphType(type);
         d->scalableWrapper->setFocus();
     });
+    connect(d->screenplayText, &ScreenplayTextEdit::currentModelIndexChanged, this, &ScreenplayTextView::currentModelIndexChanged);
     connect(d->screenplayText, &ScreenplayTextEdit::paragraphTypeChanged, this, [this] {
         d->updateToolBarCurrentParagraphTypeName();
     });
@@ -137,13 +141,6 @@ ScreenplayTextView::ScreenplayTextView(QWidget* _parent)
     designSystemChangeEvent(nullptr);
 
     reconfigure();
-}
-
-void ScreenplayTextView::setModel(BusinessLayer::ScreenplayTextModel* _model)
-{
-    d->screenplayText->initWithModel(_model);
-
-    d->updateToolBarCurrentParagraphTypeName();
 }
 
 void ScreenplayTextView::reconfigure()
@@ -174,6 +171,18 @@ void ScreenplayTextView::reconfigure()
         typeItem->setData(static_cast<int>(type), kTypeDataRole);
         d->paragraphTypesModel->appendRow(typeItem);
     }
+}
+
+void ScreenplayTextView::setModel(BusinessLayer::ScreenplayTextModel* _model)
+{
+    d->screenplayText->initWithModel(_model);
+
+    d->updateToolBarCurrentParagraphTypeName();
+}
+
+void ScreenplayTextView::setCurrentModelIndex(const QModelIndex& _index)
+{
+    d->screenplayText->setCurrentModelIndex(_index);
 }
 
 void ScreenplayTextView::resizeEvent(QResizeEvent* _event)

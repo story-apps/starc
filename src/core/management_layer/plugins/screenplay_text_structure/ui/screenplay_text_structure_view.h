@@ -26,6 +26,17 @@ public:
      */
     void setModel(QAbstractItemModel* _model);
 
+    /**
+     * @brief Установить текущий выделенный элемент в модели
+     */
+    void setCurrentModelIndex(const QModelIndex& _index);
+
+signals:
+    /**
+     * @brief Пользователь выбрал элемент в навигаторе с заданным индексом
+     */
+    void currentModelIndexChanged(const QModelIndex& _index);
+
 protected:
     /**
      * @brief Обновить переводы

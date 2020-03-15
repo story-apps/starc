@@ -8,6 +8,7 @@
 #include "QtWidgets/qmenu.h"
 #include "QtGui/qabstracttextdocumentlayout.h"
 #include "QtCore/qbasictimer.h"
+#include "QtCore/qpropertyanimation.h"
 #include "QtCore/qurl.h"
 #include "private/qwidgettextcontrol_p.h"
 
@@ -173,6 +174,11 @@ public:
      */
     QString m_header;
     QString m_footer;
+
+    /**
+     * @brief Анимация скроллирования
+     */
+    QPropertyAnimation m_scrollAnimation;
 
     //
     // Дополнения для корректной работы с мышью при наличии невидимых текстовых блоков в документе

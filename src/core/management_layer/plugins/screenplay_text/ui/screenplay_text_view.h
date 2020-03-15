@@ -19,14 +19,25 @@ public:
     ~ScreenplayTextView() override;
 
     /**
+     * @brief Настроить редактор сценария в соответствии с параметрами заданными в настройках
+     */
+    void reconfigure();
+
+    /**
      * @brief Установить модель сценария
      */
     void setModel(BusinessLayer::ScreenplayTextModel* _model);
 
     /**
-     * @brief Настроить редактор сценария в соответствии с параметрами заданными в настройках
+     * @brief Поставить курсор в позицию элемента с заданным индексом модели сценария
      */
-    void reconfigure();
+    void setCurrentModelIndex(const QModelIndex& _index);
+
+signals:
+    /**
+     * @brief Изменился индекс текущего элемента модели в текстовом документе (перестился курсор)
+     */
+    void currentModelIndexChanged(const QModelIndex& _index);
 
 protected:
     /**

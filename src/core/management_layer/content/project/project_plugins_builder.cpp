@@ -166,4 +166,16 @@ QWidget* ProjectPluginsBuilder::activateView(const QString& _viewMimeType, Busin
     return d->activatePlugin(_viewMimeType, _model);
 }
 
+void ProjectPluginsBuilder::bind(const QString& _viewMimeType, const QString& _navigatorMimeType)
+{
+    auto viewPlugin = d->plugins.value(_viewMimeType);
+    Q_ASSERT(viewPlugin);
+
+    auto navigatorPlugin = d->plugins.value(_navigatorMimeType);
+    Q_ASSERT(navigatorPlugin);
+
+    viewPlugin->bind(navigatorPlugin);
+    navigatorPlugin->bind(viewPlugin);
+}
+
 } // namespace ManagementLayer

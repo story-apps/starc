@@ -6,6 +6,7 @@
 #include "screenplay_text_document.h"
 
 #include <business_layer/model/screenplay/text/screenplay_text_model.h>
+#include <business_layer/model/screenplay/text/screenplay_text_model_text_item.h>
 #include <business_layer/templates/screenplay_template.h>
 #include <business_layer/templates/screenplay_template_facade.h>
 
@@ -40,6 +41,20 @@ ScreenplayTextEdit::ScreenplayTextEdit(QWidget* _parent)
 {
     setFrameShape(QFrame::NoFrame);
     setDocument(&d->document);
+
+    connect(this, &ScreenplayTextEdit::cursorPositionChanged, this, [this] {
+        if (d->model == nullptr) {
+            return;
+        }
+
+        auto userData = textCursor().block().userData();
+        if (userData == nullptr) {
+            return;
+        }
+
+        auto screenplayBlockData = static_cast<Ui::ScreenplayTextBlockData*>(userData);
+        emit currentModelIndexChanged(d->model->indexForItem(screenplayBlockData->item()));
+    });
 }
 
 ScreenplayTextEdit::~ScreenplayTextEdit() = default;
@@ -187,6 +202,13 @@ void ScreenplayTextEdit::setTextCursorReimpl(const QTextCursor& _cursor)
     const int verticalScrollValue = verticalScrollBar()->value();
     setTextCursor(_cursor);
     verticalScrollBar()->setValue(verticalScrollValue);
+}
+
+void ScreenplayTextEdit::setCurrentModelIndex(const QModelIndex& _index)
+{
+    ScreenplayTextCursor textCursor(document());
+    textCursor.setPosition(d->document.itemPosition(_index));
+    ensureCursorVisible(textCursor);
 }
 
 void ScreenplayTextEdit::keyPressEvent(QKeyEvent* _event)

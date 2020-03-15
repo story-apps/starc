@@ -57,9 +57,16 @@ ScreenplayTextManager::ScreenplayTextManager(QObject* _parent)
     : QObject(_parent),
       d(new Implementation)
 {
+    connect(d->view, &Ui::ScreenplayTextView::currentModelIndexChanged,
+            this, &ScreenplayTextManager::currentModelIndexChanged);
 }
 
 ScreenplayTextManager::~ScreenplayTextManager() = default;
+
+QObject* ScreenplayTextManager::asQObject()
+{
+    return this;
+}
 
 void ScreenplayTextManager::setModel(BusinessLayer::AbstractModel* _model)
 {
@@ -108,6 +115,24 @@ QWidget* ScreenplayTextManager::createView()
 void ScreenplayTextManager::reconfigure()
 {
     d->view->reconfigure();
+}
+
+void ScreenplayTextManager::bind(IDocumentManager* _manager)
+{
+    Q_ASSERT(_manager);
+
+    connect(_manager->asQObject(), SIGNAL(currentModelIndexChanged(const QModelIndex&)),
+            this, SLOT(setCurrentModelIndex(const QModelIndex&)), Qt::UniqueConnection);
+}
+
+void ScreenplayTextManager::setCurrentModelIndex(const QModelIndex& _index)
+{
+    if (!_index.isValid()) {
+        return;
+    }
+
+    d->view->setCurrentModelIndex(_index);
+    d->view->setFocus();
 }
 
 } // namespace ManagementLayer

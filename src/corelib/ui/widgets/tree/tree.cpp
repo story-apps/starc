@@ -25,7 +25,6 @@ Tree::Implementation::Implementation(QWidget* _parent)
     tree->setAnimated(true);
     tree->setMouseTracking(true);
     tree->setFrameShape(QFrame::NoFrame);
-    tree->setVerticalScrollMode(QAbstractItemView::ScrollPerPixel);
     tree->setSelectionMode(QAbstractItemView::SingleSelection);
     tree->setSelectionBehavior(QAbstractItemView::SelectRows);
     tree->setVerticalScrollBar(new ScrollBar(tree));

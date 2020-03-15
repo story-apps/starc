@@ -84,6 +84,11 @@ public:
     ScreenplayTextModelItem* itemForIndex(const QModelIndex& _index) const;
 
     /**
+     * @brief Получить индекс заданного элемента
+     */
+    QModelIndex indexForItem(ScreenplayTextModelItem* _item) const;
+
+    /**
      * @brief Задать модель справочников сценария
      */
     void setDictionariesModel(ScreenplayDictionariesModel* _model);
@@ -110,12 +115,6 @@ protected:
     void clearDocument() override;
     QByteArray toXml() const override;
     /** @} */
-
-private:
-    /**
-     * @brief Получить индекс заданного элемента
-     */
-    QModelIndex indexForItem(ScreenplayTextModelItem* _item) const;
 
 private:
     class Implementation;

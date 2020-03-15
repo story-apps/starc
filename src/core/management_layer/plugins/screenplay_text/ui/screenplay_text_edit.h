@@ -67,7 +67,17 @@ public:
      */
     void setTextCursorReimpl(const QTextCursor& _cursor);
 
+    /**
+     * @brief Поставить курсор в позицию элемента с заданным индексом модели сценария
+     */
+    void setCurrentModelIndex(const QModelIndex& _index);
+
 signals:
+    /**
+     * @brief Сменился текущий элемент модели (сместился курсор)
+     */
+    void currentModelIndexChanged(const QModelIndex& _index);
+
     /**
      * @brief Запрос на отмену последнего действия
      */

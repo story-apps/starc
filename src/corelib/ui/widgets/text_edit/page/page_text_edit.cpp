@@ -169,6 +169,9 @@ void PageTextEditPrivate::init(const QString &html)
 #ifndef QT_NO_CURSOR
     viewport->setCursor(Qt::IBeamCursor);
 #endif
+
+    m_scrollAnimation.setPropertyName("value");
+    m_scrollAnimation.setEasingCurve(QEasingCurve::OutQuad);
 }
 
 void PageTextEditPrivate::_q_repaintContents(const QRectF &contentsRect)
@@ -3462,16 +3465,21 @@ void PageTextEdit::ensureCursorVisible(const QTextCursor& _cursor, bool _animate
     // Если нужно, анимируем
     //
     if (_animate) {
-        QPropertyAnimation* animation = new QPropertyAnimation(d->vbar, "value", this);
+        //
+        // Настроим анимацию, если ещё не была настроена
+        //
+        if (d->m_scrollAnimation.targetObject() == nullptr) {
+            d->m_scrollAnimation.setTargetObject(d->vbar);
+        }
+
         qreal delta = log(abs(nextVbarValue - lastVbarValue) / 300) / 2;
         if (delta < 1) {
             delta = 1;
         }
-        animation->setDuration(300 * delta);
-        animation->setEasingCurve(QEasingCurve::InOutCubic);
-        animation->setStartValue(lastVbarValue);
-        animation->setEndValue(nextVbarValue);
-        animation->start();
+        d->m_scrollAnimation.setDuration(static_cast<int>(300 * delta));
+        d->m_scrollAnimation.setStartValue(lastVbarValue);
+        d->m_scrollAnimation.setEndValue(std::min(nextVbarValue, d->vbar->maximum()));
+        d->m_scrollAnimation.start();
     } else {
         d->vbar->setValue(nextVbarValue);
     }

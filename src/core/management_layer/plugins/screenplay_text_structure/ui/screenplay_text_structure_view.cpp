@@ -55,6 +55,7 @@ ScreenplayTextStructureView::ScreenplayTextStructureView(QWidget* _parent)
 
     connect(d->backIcon, &AbstractLabel::clicked, this, &ScreenplayTextStructureView::backPressed);
     connect(d->backText, &AbstractLabel::clicked, this, &ScreenplayTextStructureView::backPressed);
+    connect(d->content, &Tree::currentIndexChanged, this, &ScreenplayTextStructureView::currentModelIndexChanged);
 
     updateTranslations();
     designSystemChangeEvent(nullptr);
@@ -68,6 +69,11 @@ void ScreenplayTextStructureView::setTitle(const QString& _title)
 void ScreenplayTextStructureView::setModel(QAbstractItemModel* _model)
 {
     d->content->setModel(_model);
+}
+
+void ScreenplayTextStructureView::setCurrentModelIndex(const QModelIndex& _index)
+{
+    d->content->setCurrentIndex(_index);
 }
 
 ScreenplayTextStructureView::~ScreenplayTextStructureView() = default;
@@ -91,14 +97,18 @@ void ScreenplayTextStructureView::designSystemChangeEvent(DesignSystemChangeEven
     d->content->setBackgroundColor(DesignSystem::color().primary());
     d->content->setTextColor(DesignSystem::color().onPrimary());
 
-    d->backIcon->setContentsMargins(Ui::DesignSystem::layout().px12(),
-                                    Ui::DesignSystem::layout().px8(),
-                                    Ui::DesignSystem::layout().px4(),
-                                    Ui::DesignSystem::layout().px8());
-    d->backText->setContentsMargins(0,
-                                    Ui::DesignSystem::layout().px12(),
-                                    Ui::DesignSystem::layout().px16(),
-                                    Ui::DesignSystem::layout().px12());
+    d->backIcon->setContentsMargins(
+                QMarginsF(Ui::DesignSystem::layout().px12(),
+                          Ui::DesignSystem::layout().px8(),
+                          Ui::DesignSystem::layout().px4(),
+                          Ui::DesignSystem::layout().px8())
+                .toMargins());
+    d->backText->setContentsMargins(
+                QMarginsF(0,
+                          Ui::DesignSystem::layout().px12(),
+                          Ui::DesignSystem::layout().px16(),
+                          Ui::DesignSystem::layout().px12())
+                .toMargins());
 }
 
 } // namespace Ui

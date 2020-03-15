@@ -544,8 +544,8 @@ void ProjectManager::showView(const QModelIndex& _itemIndex, const QString& _vie
     //
     // Настроим возможность перехода в навигатор
     //
-    const auto navigator = d->pluginsBuilder.navigatorMimeTypeFor(_viewMimeType);
-    d->projectStructureModel->setNavigatorAvailableFor(_itemIndex, !navigator.isEmpty());
+    const auto navigatorMimeType = d->pluginsBuilder.navigatorMimeTypeFor(_viewMimeType);
+    d->projectStructureModel->setNavigatorAvailableFor(_itemIndex, !navigatorMimeType.isEmpty());
 
     //
     // Если в данный момент отображён кастомный навигатов, откроем навигатор соответствующий редактору
@@ -587,9 +587,18 @@ void ProjectManager::showNavigator(const QModelIndex& _itemIndex, const QString&
         return;
     }
 
+    //
+    // Связываем редактор с навигатоом
+    //
+    d->pluginsBuilder.bind(viewMimeType, navigatorMimeType);
+
+    //
+    // Задаём заголовок навигатора и настраиваем возможность перехода к навигатору проекта
+    //
     auto navigatorView = qobject_cast<Ui::AbstractNavigator*>(view);
     //
-    // FIXME: Надо как-то более универсально сделать этот момент
+    // FIXME: Надо как-то более универсально сделать этот момент, чтобы не приходилось задавать
+    //        название родителя для случаев, когда нужно имя самого документа, а не его родителя
     //
     navigatorView->setTitle(item->parent()->name());
     connect(navigatorView, &Ui::AbstractNavigator::backPressed,

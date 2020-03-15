@@ -58,6 +58,7 @@ TreeView::TreeView(QWidget* _parent)
     : QTreeView(_parent),
       d(new Implementation)
 {
+    setVerticalScrollMode(TreeView::ScrollPerPixel);
     viewport()->installEventFilter(this);
 
     connect(&d->decorationRadiusAnimation, &QVariantAnimation::valueChanged, this, [this] { update(); viewport()->update(); });
