@@ -470,6 +470,11 @@ void ProjectManager::closeCurrentProject(const QString& _path)
     d->projectStructureModel->clear();
 
     //
+    // Сбрасываем все плагины
+    //
+    d->pluginsBuilder.reset();
+
+    //
     // Очищаем все загруженные модели документов
     //
     d->modelsFacade.clear();

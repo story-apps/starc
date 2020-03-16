@@ -52,6 +52,11 @@ public:
      */
     void bind(const QString& _viewMimeType, const QString& _navigatorMimeType);
 
+    /**
+     * @brief Сбросить модели для всех плагинов
+     */
+    void reset();
+
 private:
     class Implementation;
     QScopedPointer<Implementation> d;

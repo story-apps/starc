@@ -178,4 +178,11 @@ void ProjectPluginsBuilder::bind(const QString& _viewMimeType, const QString& _n
     navigatorPlugin->bind(viewPlugin);
 }
 
+void ProjectPluginsBuilder::reset()
+{
+    for (auto& plugin : d->plugins) {
+        plugin->setModel(nullptr);
+    }
+}
+
 } // namespace ManagementLayer
