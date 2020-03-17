@@ -245,6 +245,8 @@ bool ScalableWrapper::event(QEvent* _event)
             if (_event->type() == QEvent::FocusIn) {
                 d->editor->clearFocus();
                 d->editor->setFocus();
+            } else if (_event->type() == QEvent::FocusOut) {
+                d->editor->clearFocus();
             }
 
             break;
