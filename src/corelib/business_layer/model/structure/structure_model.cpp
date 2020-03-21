@@ -155,7 +155,7 @@ void StructureModel::addDocument(Domain::DocumentObjectType _type, const QString
         }
 
         case DocumentObjectType::RecycleBin: {
-            appendItem(createItem(_type, tr("Recicle bin")), parentItem);
+            appendItem(createItem(_type, tr("Recycle bin")), parentItem);
             break;
         }
 
