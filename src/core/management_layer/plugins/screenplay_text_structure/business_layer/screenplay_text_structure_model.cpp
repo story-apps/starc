@@ -28,13 +28,13 @@ ScreenplayTextStructureModel::~ScreenplayTextStructureModel() = default;
 void ScreenplayTextStructureModel::setSourceModel(QAbstractItemModel* _sourceModel)
 {
     d->screenplayModel = qobject_cast<ScreenplayTextModel*>(_sourceModel);
-    Q_ASSERT(d->screenplayModel);
 
     QSortFilterProxyModel::setSourceModel(_sourceModel);
 }
 
 bool ScreenplayTextStructureModel::filterAcceptsRow(int _sourceRow, const QModelIndex& _sourceParent) const
 {
+    return true;
     if (d->screenplayModel == nullptr) {
         return false;
     }

@@ -30,6 +30,8 @@ ScreenplayTextStructureView::Implementation::Implementation(QWidget* _parent)
       content(new Tree(_parent))
 {
     backIcon->setText("\uf141");
+
+    content->setDragDropEnabled(true);
 }
 
 

@@ -4,6 +4,8 @@
 #include "screenplay_text_model_scene_item.h"
 #include "screenplay_text_model_text_item.h"
 
+#include <business_layer/templates/screenplay_template.h>
+
 #include <domain/document_object.h>
 
 #include <QDomDocument>
@@ -175,16 +177,101 @@ void ScreenplayTextModel::removeItem(ScreenplayTextModelItem* _item)
     }
 
     //
-    // TODO: Если удаляется сцена или папка, нужно удалить соответствующий элемент
-    //       и перенести элементы к предыдущему группирующему элементу
+    // Если удаляется сцена или папка, нужно удалить соответствующий элемент
+    // и перенести элементы к предыдущему группирующему элементу
     //
+    bool needToDeleteParent = false;
+    if (_item->type() == ScreenplayTextModelItemType::Text) {
+        const auto textItem = static_cast<ScreenplayTextModelTextItem*>(_item);
+        needToDeleteParent
+                // FolderHeader не нужно обрабатывать, т.к. он всегда удаляется первым перед FolderFooter
+                = textItem->paragraphType() == ScreenplayParagraphType::FolderFooter
+                  || textItem->paragraphType() == ScreenplayParagraphType::SceneHeading;
+    }
 
+    //
+    // Удаляем сам текстовый элемент
+    //
     auto itemParent = _item->parent();
     const QModelIndex itemParentIndex = indexForItem(_item).parent();
     const int itemRowIndex = itemParent->rowOfChild(_item);
     beginRemoveRows(itemParentIndex, itemRowIndex, itemRowIndex);
     itemParent->removeItem(_item);
     endRemoveRows();
+
+    //
+    // Если необходимо удаляем родительский элемент
+    //
+    if (needToDeleteParent) {
+        removeItemWithoutChilds(itemParent);
+    }
+}
+
+void ScreenplayTextModel::removeItemWithoutChilds(ScreenplayTextModelItem* _item)
+{
+    if (_item == nullptr
+        || _item->parent() == nullptr) {
+        return;
+    }
+
+    //
+    // Определим предыдущий
+    //
+    ScreenplayTextModelItem* previousItem = nullptr;
+    const int itemRow = _item->parent()->rowOfChild(_item);
+    if (itemRow > 0) {
+        const int previousItemRow = itemRow - 1;
+        previousItem = _item->parent()->childAt(previousItemRow);
+    }
+
+    //
+    // Переносим дочерние элементы на уровень родительского элемента
+    //
+    while (_item->childCount() > 0) {
+        //
+        // Переносим с конца, чтобы было удобней добавлять после самого элемента
+        //
+        auto childItem = _item->childAt(_item->childCount() - 1);
+        _item->takeItem(childItem);
+
+        //
+        // Папки и сцены переносим на один уровень с текущим элементом
+        //
+        if (childItem->type() == ScreenplayTextModelItemType::Folder
+            || childItem->type() == ScreenplayTextModelItemType::Scene) {
+            insertItem(childItem, _item);
+        }
+        //
+        // Все остальные элементы
+        //
+        else {
+            //
+            // ... вкладываем в предыдущий родительский
+            //
+            if (previousItem != nullptr
+                && (previousItem->type() == ScreenplayTextModelItemType::Folder
+                    || previousItem->type() == ScreenplayTextModelItemType::Scene)) {
+                appendItem(childItem, previousItem);
+            }
+            //
+            // ... вставляем в начало к деду
+            //
+            else if (_item->parent() != nullptr) {
+                prependItem(childItem, _item->parent());
+            }
+            //
+            // ... кладём на один уровень с предыдущим элементом
+            //
+            else {
+                insertItem(childItem, previousItem);
+            }
+        }
+    }
+
+    //
+    // Удаляем сам элемент
+    //
+    removeItem(_item);
 }
 
 void ScreenplayTextModel::updateItem(ScreenplayTextModelItem* _item)

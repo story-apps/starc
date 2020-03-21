@@ -182,22 +182,20 @@ void ScreenplayTextDocument::updateModelOnContentChange(int _position, int _char
     d->state = DocumentState::Changing;
 
     //
-    // Удаляем из модели элементы удалённых блоков и корректируем позиции блоков идущих после
+    // Удаляем из модели элементы удалённых блоков и корректируем позиции блоков идущих после правки
     //
-    do {
-        if (_charsRemoved == 0) {
-            break;
-        }
-
+    {
         //
         // Собираем элементы которые потенциально могут быть удалены
         //
         std::map<BusinessLayer::ScreenplayTextModelTextItem*, int> itemsToDelete;
-        auto itemsToDeleteIter = d->positionsToitems.upper_bound(_position);
-        while (itemsToDeleteIter != d->positionsToitems.end()
-               && itemsToDeleteIter->first <= _position + _charsRemoved) {
-            itemsToDelete.emplace(itemsToDeleteIter->second, itemsToDeleteIter->first);
-            ++itemsToDeleteIter;
+        if (_charsRemoved > 0) {
+            auto itemsToDeleteIter = d->positionsToitems.upper_bound(_position);
+            while (itemsToDeleteIter != d->positionsToitems.end()
+                   && itemsToDeleteIter->first <= _position + _charsRemoved) {
+                itemsToDelete.emplace(itemsToDeleteIter->second, itemsToDeleteIter->first);
+                ++itemsToDeleteIter;
+            }
         }
 
         //
@@ -255,7 +253,7 @@ void ScreenplayTextDocument::updateModelOnContentChange(int _position, int _char
         // И записываем на их место новые элементы
         //
         d->positionsToitems.merge(correctedItems);
-    } once;
+    }
 
     //
     // Идём с позиции начала, до конца добавления

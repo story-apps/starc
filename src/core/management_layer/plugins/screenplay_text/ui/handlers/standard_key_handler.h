@@ -70,7 +70,11 @@ private:
      * 2 - заголовки папок
      * 3 - окончания папок
      */
-    QVector<int> findGroupCountsToDelete(int _topCursorPosition, int _bottomCursorPosition);
+    struct FoldersToDelete {
+        int headers = 0;
+        int footers = 0;
+    };
+    FoldersToDelete findGroupCountsToDelete(int _topCursorPosition, int _bottomCursorPosition);
 
     /**
      * @brief Удалить пары стёртых групп
@@ -78,7 +82,7 @@ private:
      * @param _groupHeadersCount
      * @param _groupFootersCount
      */
-    void removeGroupsPairs(int _cursorPosition, const QVector<int>& _groupCountsToDelete);
+    void removeGroupsPairs(int _cursorPosition, const FoldersToDelete& _groupCountsToDelete);
 };
 
 } // namespace KeyProcessingLayer

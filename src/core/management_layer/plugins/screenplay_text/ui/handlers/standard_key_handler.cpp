@@ -481,16 +481,15 @@ void StandardKeyHandler::removeCharacters(bool _backward)
     //
     // Собственно удаление
     //
+    FoldersToDelete groupsToDeleteCounts;
     cursor.beginEditBlock();
     {
         //
         // Подсчитать количество группирующих элементов входящих в выделение
         //
-        QVector<int> groupsToDeleteCounts;
-        const bool needToDeleteGroups =
-                topBlock != bottomBlock
-                && ((topStyle.isEmbeddable() && (!bottomBlock.text().isEmpty() || (bottomCursorPosition - topCursorPosition > 1)))
-                    || (bottomStyle.isEmbeddable() && (!topBlock.text().isEmpty() || (bottomCursorPosition - topCursorPosition > 1))));
+        const bool needToDeleteGroups
+                = topBlock != bottomBlock
+                  && (topStyle.isEmbeddable() || bottomStyle.isEmbeddable());
         if (needToDeleteGroups) {
             groupsToDeleteCounts = findGroupCountsToDelete(topCursorPosition, bottomCursorPosition);
         }
@@ -528,26 +527,20 @@ void StandardKeyHandler::removeCharacters(bool _backward)
     }
 
     //
+    // Если и верхний и нижний блоки являются началом и концом папки,
+    //
+    if (topParagraphType == ScreenplayParagraphType::FolderHeader
+        && bottomParagraphType == ScreenplayParagraphType::FolderFooter) {
+        //
+        // ... то ничего не делаем, весь мусорный текст был удалён выше
+        //
+    }
+    //
     // Применим финальный стиль
     //
-    if (ScreenplayBlockStyle::forBlock(editor()->textCursor().block()) != targetType) {
-        editor()->setCurrentParagraphType(targetType);
-    }
-
-    //
-    // Если и верхний и нижний блоки являются группирующими,
-    // то нужно стереть то, что после них остаётся (а как правило это одна половинка)
-    //
-    if (topBlock != bottomBlock && topStyle.isEmbeddable() && bottomStyle.isEmbeddable()) {
-        if (cursor.block().text().isEmpty()) {
-            if (cursor.atStart()) {
-                cursor.deleteChar();
-            } else {
-                cursor.deletePreviousChar();
-            }
-        } else {
-            cursor.select(QTextCursor::BlockUnderCursor);
-            cursor.removeSelectedText();
+    else {
+        if (editor()->currentParagraphType() != targetType) {
+            editor()->setCurrentParagraphType(targetType);
         }
     }
 
@@ -557,21 +550,20 @@ void StandardKeyHandler::removeCharacters(bool _backward)
     cursor.endEditBlock();
 }
 
-namespace {
-    const int FOLDER_HEADER = 0;
-    const int FOLDER_FOOTER = 1;
-}
-
-QVector<int> StandardKeyHandler::findGroupCountsToDelete(int _topCursorPosition, int _bottomCursorPosition)
+StandardKeyHandler::FoldersToDelete StandardKeyHandler::findGroupCountsToDelete(int _topCursorPosition, int _bottomCursorPosition)
 {
-    QVector<int> groupCountsToDelete;
-    groupCountsToDelete << 0 << 0;
+    FoldersToDelete groupCountsToDelete;
 
     //
     // Начнём поиск с заданной позиции
     //
     QTextCursor searchGroupsCursor(editor()->document());
     searchGroupsCursor.setPosition(_topCursorPosition);
+
+    //
+    // Пропускаем поиск в первом блоке области удаления, т.к. он всегда остаётся с текущим стилем
+    //
+    searchGroupsCursor.movePosition(QTextCursor::NextBlock);
 
     while (searchGroupsCursor.position() <= _bottomCursorPosition) {
         //
@@ -581,23 +573,22 @@ QVector<int> StandardKeyHandler::findGroupCountsToDelete(int _topCursorPosition,
                 ScreenplayBlockStyle::forBlock(searchGroupsCursor.block());
 
         //
-        // Если найден блок открывающий группу, то нужно удалить закрывающий блок
+        // Если найден блок открывающий папку, то нужно удалить закрывающий блок
         //
         if (currentType == ScreenplayParagraphType::FolderHeader) {
-            ++groupCountsToDelete[FOLDER_FOOTER];
+            ++groupCountsToDelete.footers;
         }
-
         //
-        // Если найден блок закрывающий группу
+        // Если найден блок закрывающий папку
         // ... если все группы закрыты, нужно удалить предыдущую открытую
         // ... в противном случае закрываем открытую группу
         //
         else if (currentType == ScreenplayParagraphType::FolderFooter) {
-            if (groupCountsToDelete.value(FOLDER_FOOTER) == 0) {
-                ++groupCountsToDelete[FOLDER_HEADER];
+            if (groupCountsToDelete.footers == 0) {
+                ++groupCountsToDelete.headers;
             }
             else {
-                --groupCountsToDelete[FOLDER_FOOTER];
+                --groupCountsToDelete.footers;
             }
         }
 
@@ -618,27 +609,22 @@ QVector<int> StandardKeyHandler::findGroupCountsToDelete(int _topCursorPosition,
     return groupCountsToDelete;
 }
 
-void StandardKeyHandler::removeGroupsPairs(int _cursorPosition, const QVector<int>& _groupCountsToDelete)
+void StandardKeyHandler::removeGroupsPairs(int _cursorPosition, const FoldersToDelete& _groupCountsToDelete)
 {
     //
     // Удалим пары из последующего текста
     //
     // ... папки
     //
-    if (_groupCountsToDelete.value(FOLDER_FOOTER) > 0) {
+    if (_groupCountsToDelete.footers > 0) {
         QTextCursor cursor(editor()->document());
         cursor.setPosition(_cursorPosition);
 
         // ... открытые группы на пути поиска необходимого для удаления блока
         int openedGroups = 0;
-        int groupsToDeleteCount = _groupCountsToDelete.value(FOLDER_FOOTER);
+        int groupsToDeleteCount = _groupCountsToDelete.footers;
         do {
-            cursor.movePosition(QTextCursor::NextBlock);
-            cursor.movePosition(QTextCursor::EndOfBlock);
-
-            ScreenplayParagraphType currentType =
-                    ScreenplayBlockStyle::forBlock(cursor.block());
-
+            const auto currentType = ScreenplayBlockStyle::forBlock(cursor.block());
             if (currentType == ScreenplayParagraphType::FolderFooter) {
                 if (openedGroups == 0) {
                     cursor.select(QTextCursor::BlockUnderCursor);
@@ -661,8 +647,15 @@ void StandardKeyHandler::removeGroupsPairs(int _cursorPosition, const QVector<in
                 // ... встретилась новая группа, которую не нужно удалять
                 ++openedGroups;
             }
-        } while (groupsToDeleteCount > 0
-                 && !cursor.atEnd());
+
+            if (cursor.atEnd()) {
+                Q_ASSERT(false);
+                break;
+            }
+
+            cursor.movePosition(QTextCursor::NextBlock);
+            cursor.movePosition(QTextCursor::EndOfBlock);
+        } while (groupsToDeleteCount > 0);
     }
 
     //
@@ -670,18 +663,15 @@ void StandardKeyHandler::removeGroupsPairs(int _cursorPosition, const QVector<in
     //
     // ... папки
     //
-    if (_groupCountsToDelete.value(FOLDER_HEADER) > 0) {
+    if (_groupCountsToDelete.headers > 0) {
         QTextCursor cursor = editor()->textCursor();
         cursor.setPosition(_cursorPosition);
 
         // ... открытые группы на пути поиска необходимого для удаления блока
         int openedGroups = 0;
-        int groupsToDeleteCount = _groupCountsToDelete.value(FOLDER_HEADER);
+        int groupsToDeleteCount = _groupCountsToDelete.headers;
         do {
-            cursor.movePosition(QTextCursor::PreviousBlock);
-            ScreenplayParagraphType currentType =
-                    ScreenplayBlockStyle::forBlock(cursor.block());
-
+            const auto currentType = ScreenplayBlockStyle::forBlock(cursor.block());
             if (currentType == ScreenplayParagraphType::FolderHeader) {
                 if (openedGroups == 0) {
                     cursor.select(QTextCursor::BlockUnderCursor);
@@ -704,8 +694,14 @@ void StandardKeyHandler::removeGroupsPairs(int _cursorPosition, const QVector<in
                 // ... встретилась новая группа, которую не нужно удалять
                 ++openedGroups;
             }
-        } while (groupsToDeleteCount > 0
-                 && !cursor.atStart());
+
+            if (cursor.atStart()) {
+                Q_ASSERT(false);
+                break;
+            }
+
+            cursor.movePosition(QTextCursor::PreviousBlock);
+        } while (groupsToDeleteCount > 0);
     }
 }
 

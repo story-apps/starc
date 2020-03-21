@@ -91,12 +91,15 @@ void ScreenplayTextStructureManager::setModel(BusinessLayer::AbstractModel* _mod
     d->model = qobject_cast<BusinessLayer::ScreenplayTextModel*>(_model);
 
     //
-    // Помещаем модель в прокси
+    // Создаём прокси модель, если ещё не была создана и настриваем её
     //
     if (d->structureModel == nullptr) {
-        d->structureModel = new BusinessLayer::ScreenplayTextStructureModel(this);
+        d->structureModel = new BusinessLayer::ScreenplayTextStructureModel(d->view);
         d->view->setModel(d->structureModel);
     }
+    //
+    // Помещаем модель с данными в прокси
+    //
     d->structureModel->setSourceModel(d->model);
 
     //
