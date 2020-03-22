@@ -1168,6 +1168,8 @@ void ScreenplayTextEdit::applyParagraphType(BusinessLayer::ScreenplayParagraphTy
             cursor.movePosition(QTextCursor::EndOfBlock, QTextCursor::KeepAnchor);
             cursor.mergeCharFormat(newBlockStyle.charFormat());
         }
+
+        cursor.clearSelection();
     }
 
     //
@@ -1182,7 +1184,7 @@ void ScreenplayTextEdit::applyParagraphType(BusinessLayer::ScreenplayParagraphTy
         const int lastCursorPosition = textCursor().position();
 
         //
-        // Когда дошли до конца сцены, вставляем закрывающий блок
+        // Вставляем закрывающий блок
         //
         cursor.insertBlock();
         cursor.setBlockCharFormat(footerStyle.charFormat());
