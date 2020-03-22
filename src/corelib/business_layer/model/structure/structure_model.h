@@ -33,6 +33,11 @@ public:
     ~StructureModel() override;
 
     /**
+     * @brief Задать название проекта
+     */
+    void setProjectName(const QString& _name);
+
+    /**
      * @brief Добавить документ
      */
     void addDocument(Domain::DocumentObjectType _type, const QString& _name = {}, const QModelIndex& _parent = {});

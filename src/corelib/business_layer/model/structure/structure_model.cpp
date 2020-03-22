@@ -37,6 +37,11 @@ public:
 
 
     /**
+     * @brief Название текущего проекта
+     */
+    QString projectName;
+
+    /**
      * @brief Корневой элемент дерева
      */
     StructureModelItem* rootItem = nullptr;
@@ -137,6 +142,11 @@ StructureModel::StructureModel(QObject* _parent)
 
 StructureModel::~StructureModel() = default;
 
+void StructureModel::setProjectName(const QString& _name)
+{
+    d->projectName = _name;
+}
+
 void StructureModel::addDocument(Domain::DocumentObjectType _type, const QString& _name, const QModelIndex& _parent)
 {
     using namespace Domain;
@@ -150,7 +160,7 @@ void StructureModel::addDocument(Domain::DocumentObjectType _type, const QString
 
     switch (_type) {
         case DocumentObjectType::Project: {
-            appendItem(createItem(_type, tr("Project")), parentItem);
+            appendItem(createItem(_type, d->projectName), parentItem);
             break;
         }
 

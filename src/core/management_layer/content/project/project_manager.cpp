@@ -406,6 +406,7 @@ void ProjectManager::loadCurrentProject(const QString& _name, const QString& _pa
     //
     // Загружаем структуру
     //
+    d->projectStructureModel->setProjectName(_name);
     d->projectStructureModel->setDocument(
         DataStorageLayer::StorageFacade::documentStorage()->document(Domain::DocumentObjectType::Structure));
 
