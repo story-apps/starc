@@ -60,12 +60,6 @@ public:
     void removeItem(ScreenplayTextModelItem* _item);
 
     /**
-     * @brief Удалить элемент, не удаляя его дочерние элементы
-     * @note Дочерние элементы размещаются в родителе на месте удаляемого элементв
-     */
-    void removeItemWithoutChilds(ScreenplayTextModelItem* _item);
-
-    /**
      * @brief Обновить заданный элемент
      */
     void updateItem(ScreenplayTextModelItem* _item);

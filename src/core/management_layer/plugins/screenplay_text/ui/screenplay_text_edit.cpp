@@ -1104,27 +1104,12 @@ void ScreenplayTextEdit::cleanParagraphType()
             const auto currentType = ScreenplayBlockStyle::forBlock(cursor.block());
             if (currentType == oldBlockStyle.embeddableFooter()) {
                 if (openedGroups == 0) {
-                    //
-                    // Запомним стиль предыдущего блока
-                    //
                     cursor.movePosition(QTextCursor::PreviousBlock);
-                    const auto previousBlockType = ScreenplayBlockStyle::forBlock(cursor.block());
-                    cursor.movePosition(QTextCursor::NextBlock);
-                    //
-                    // Удаляем закрывающий блок
-                    //
+                    cursor.movePosition(QTextCursor::EndOfBlock);
+                    cursor.movePosition(QTextCursor::NextBlock, QTextCursor::KeepAnchor);
                     cursor.movePosition(QTextCursor::EndOfBlock, QTextCursor::KeepAnchor);
                     cursor.deleteChar();
-                    cursor.deletePreviousChar();
-                    //
-                    // Восстановим стиль предыдущего блока
-                    //
-                    if (ScreenplayBlockStyle::forBlock(cursor.block()) != previousBlockType) {
-                        QTextCursor lastTextCursor = textCursor();
-                        setTextCursor(cursor);
-                        applyParagraphType(previousBlockType);
-                        setTextCursor(lastTextCursor);
-                    }
+
                     isFooterUpdated = true;
                 } else {
                     --openedGroups;
@@ -1135,10 +1120,14 @@ void ScreenplayTextEdit::cleanParagraphType()
                 //
                 ++openedGroups;
             }
+
+            if (cursor.atEnd()) {
+                break;
+            }
+
             cursor.movePosition(QTextCursor::EndOfBlock);
             cursor.movePosition(QTextCursor::NextBlock);
-        } while (!isFooterUpdated
-                 && !cursor.atEnd());
+        } while (!isFooterUpdated);
     }
 }
 

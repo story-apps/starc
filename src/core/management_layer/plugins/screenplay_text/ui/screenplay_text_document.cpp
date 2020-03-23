@@ -223,7 +223,102 @@ void ScreenplayTextDocument::updateModelOnContentChange(int _position, int _char
             // Если элемент действительно удалён - удаляем его из модели
             //
             if (itemsToDelete.find(removeIter->second) != itemsToDelete.end()) {
-                d->model->removeItem(removeIter->second);
+                auto item = removeIter->second;
+
+                //
+                // Если удаляется сцена или папка, нужно удалить соответствующий элемент
+                // и перенести элементы к предыдущему группирующему элементу
+                //
+                bool needToDeleteParent = false;
+                if (item->type() == ScreenplayTextModelItemType::Text) {
+                    const auto textItem = static_cast<ScreenplayTextModelTextItem*>(item);
+                    needToDeleteParent
+                            = textItem->paragraphType() == ScreenplayParagraphType::FolderHeader
+                              || textItem->paragraphType() == ScreenplayParagraphType::SceneHeading;
+                }
+
+                //
+                // Запомним родителя и удаляем сам элемент
+                //
+                auto itemParent = item->parent();
+                d->model->removeItem(item);
+
+                //
+                // Если необходимо удаляем родительский элемент
+                //
+                if (needToDeleteParent && itemParent != nullptr) {
+                    //
+                    // Определим предыдущий
+                    //
+                    ScreenplayTextModelItem* previousItem = nullptr;
+                    const int itemRow = itemParent->hasParent()
+                                        ? itemParent->parent()->rowOfChild(itemParent)
+                                        : 0;
+                    if (itemRow > 0) {
+                        const int previousItemRow = itemRow - 1;
+                        previousItem = itemParent->parent()->childAt(previousItemRow);
+                    }
+
+                    //
+                    // Переносим дочерние элементы на уровень родительского элемента
+                    //
+                    ScreenplayTextModelItem* lastMovedItem = nullptr;
+                    while (itemParent->childCount() > 0) {
+                        auto childItem = itemParent->childAt(0);
+                        itemParent->takeItem(childItem);
+
+                        //
+                        // Папки и сцены переносим на один уровень с текущим элементом
+                        //
+                        if (childItem->type() == ScreenplayTextModelItemType::Folder
+                            || childItem->type() == ScreenplayTextModelItemType::Scene) {
+                            if (lastMovedItem == nullptr
+                                || lastMovedItem->parent() != itemParent->parent()) {
+                                d->model->insertItem(childItem, itemParent);
+                            } else {
+                                d->model->insertItem(childItem, lastMovedItem);
+                            }
+                        }
+                        //
+                        // Все остальные элементы
+                        //
+                        else {
+                            if (lastMovedItem == nullptr) {
+                                //
+                                // Если перед удаляемым была сцена или папка, то в её конец
+                                //
+                                if (previousItem != nullptr
+                                        && (previousItem->type() == ScreenplayTextModelItemType::Folder
+                                            || previousItem->type() == ScreenplayTextModelItemType::Scene)) {
+                                    d->model->appendItem(childItem, previousItem);
+                                }
+                                //
+                                // Если перед удаляемым внутри родителя нет ни одного элемента, то вставляем в начало к деду
+                                //
+                                else if (previousItem == nullptr
+                                         && itemParent->parent() != nullptr) {
+                                    d->model->prependItem(childItem, itemParent->parent());
+                                }
+                                //
+                                // Во всех остальных случаях просто кладём на один уровень с предыдущим элементом
+                                //
+                                else {
+                                    d->model->insertItem(childItem, previousItem);
+                                }
+                            }
+                            else {
+                                d->model->insertItem(childItem, lastMovedItem);
+                            }
+                        }
+
+                        lastMovedItem = childItem;
+                    }
+
+                    //
+                    // Удаляем родителя удалённого элемента
+                    //
+                    d->model->removeItem(itemParent);
+                }
             }
 
             //
@@ -423,7 +518,8 @@ void ScreenplayTextDocument::updateModelOnContentChange(int _position, int _char
                 // А для папки, если она вставляется после сцены, то нужно перенести все текстовые
                 // элементы, которые идут после вставленной папки на уровень самой папки
                 //
-                else if (previousTextItem->parent()->type() == ScreenplayTextModelItemType::Scene) {
+                else if (previousTextItem != nullptr
+                         && previousTextItem->parent()->type() == ScreenplayTextModelItemType::Scene) {
                     auto grandParentItem = previousTextItem->parent();
                     const int lastItemIndex = grandParentItem->rowOfChild(previousTextItem) + 1;
                     //
