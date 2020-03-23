@@ -57,7 +57,7 @@ public:
 };
 
 ScreenplayTextModel::Implementation::Implementation()
-    : rootItem(new ScreenplayTextModelSceneItem)
+    : rootItem(new ScreenplayTextModelFolderItem)
 {
 }
 
@@ -169,6 +169,30 @@ void ScreenplayTextModel::insertItem(ScreenplayTextModelItem* _item, ScreenplayT
     endInsertRows();
 }
 
+void ScreenplayTextModel::takeItem(ScreenplayTextModelItem* _item, ScreenplayTextModelItem* _parentItem)
+{
+    if (_item == nullptr) {
+        return;
+    }
+
+    if (_parentItem == nullptr) {
+        _parentItem = d->rootItem;
+    }
+
+    if (!_parentItem->hasChild(_item)) {
+        return;
+    }
+
+    //
+    // Извлекаем элемент
+    //
+    const QModelIndex parentItemIndex = indexForItem(_item).parent();
+    const int itemRowIndex = _parentItem->rowOfChild(_item);
+    beginRemoveRows(parentItemIndex, itemRowIndex, itemRowIndex);
+    _parentItem->takeItem(_item);
+    endRemoveRows();
+}
+
 void ScreenplayTextModel::removeItem(ScreenplayTextModelItem* _item)
 {
     if (_item == nullptr
@@ -246,7 +270,7 @@ void ScreenplayTextModel::removeItemWithoutChilds(ScreenplayTextModelItem* _item
         //
         else {
             //
-            // ... вкладываем в предыдущий родительский
+            // Если перед удаляемым была сцена или папка, то в её конец
             //
             if (previousItem != nullptr
                 && (previousItem->type() == ScreenplayTextModelItemType::Folder
@@ -254,13 +278,14 @@ void ScreenplayTextModel::removeItemWithoutChilds(ScreenplayTextModelItem* _item
                 appendItem(childItem, previousItem);
             }
             //
-            // ... вставляем в начало к деду
+            // Если перед удаляемым внутри родителя нет ни одного элемента, то вставляем в начало к деду
             //
-            else if (_item->parent() != nullptr) {
+            else if (previousItem == nullptr
+                     && _item->parent() != nullptr) {
                 prependItem(childItem, _item->parent());
             }
             //
-            // ... кладём на один уровень с предыдущим элементом
+            // Во всех остальных случаях просто кладём на один уровень с предыдущим элементом
             //
             else {
                 insertItem(childItem, previousItem);
@@ -280,10 +305,6 @@ void ScreenplayTextModel::updateItem(ScreenplayTextModelItem* _item)
         || _item->parent() == nullptr) {
         return;
     }
-
-    //
-    // TODO: Если сменился стиль блока, то возможно нужно удалить предыдущую сцену/папку
-    //
 
     const QModelIndex indexForUpdate = indexForItem(_item);
     emit dataChanged(indexForUpdate, indexForUpdate);
@@ -476,9 +497,7 @@ void ScreenplayTextModel::initDocument()
     // Если документ пустой, создаём первоначальную структуру
     //
     if (document()->content().isEmpty()) {
-        auto scene = new ScreenplayTextModelSceneItem;
-        scene->appendItem(new ScreenplayTextModelTextItem);
-        appendItem(scene);
+        appendItem(new ScreenplayTextModelTextItem);
     }
     //
     // А если данные есть, то загрузим их из документа

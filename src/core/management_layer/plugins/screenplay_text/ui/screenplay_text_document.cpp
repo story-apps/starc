@@ -181,6 +181,8 @@ void ScreenplayTextDocument::updateModelOnContentChange(int _position, int _char
 
     d->state = DocumentState::Changing;
 
+    using namespace BusinessLayer;
+
     //
     // Удаляем из модели элементы удалённых блоков и корректируем позиции блоков идущих после правки
     //
@@ -188,9 +190,9 @@ void ScreenplayTextDocument::updateModelOnContentChange(int _position, int _char
         //
         // Собираем элементы которые потенциально могут быть удалены
         //
-        std::map<BusinessLayer::ScreenplayTextModelTextItem*, int> itemsToDelete;
+        std::map<ScreenplayTextModelTextItem*, int> itemsToDelete;
         if (_charsRemoved > 0) {
-            auto itemsToDeleteIter = d->positionsToitems.upper_bound(_position);
+            auto itemsToDeleteIter = d->positionsToitems.lower_bound(_position);
             while (itemsToDeleteIter != d->positionsToitems.end()
                    && itemsToDeleteIter->first <= _position + _charsRemoved) {
                 itemsToDelete.emplace(itemsToDeleteIter->second, itemsToDeleteIter->first);
@@ -214,7 +216,7 @@ void ScreenplayTextDocument::updateModelOnContentChange(int _position, int _char
         //
         // Удаляем блоки, которые действительно были удалены из текста
         //
-        auto removeIter = d->positionsToitems.upper_bound(_position);
+        auto removeIter = d->positionsToitems.lower_bound(_position);
         while (removeIter != d->positionsToitems.end()
                && removeIter->first <= _position + _charsRemoved) {
             //
@@ -239,7 +241,7 @@ void ScreenplayTextDocument::updateModelOnContentChange(int _position, int _char
         //
         // Формируем мапу элементов со скорректированными позициями
         //
-        std::map<int, BusinessLayer::ScreenplayTextModelTextItem*> correctedItems;
+        std::map<int, ScreenplayTextModelTextItem*> correctedItems;
         for (auto itemIter = itemToUpdateIter; itemIter != d->positionsToitems.end(); ++itemIter) {
             correctedItems.emplace(itemIter->first - _charsRemoved + _charsAdded, itemIter->second);
         }
@@ -262,13 +264,13 @@ void ScreenplayTextDocument::updateModelOnContentChange(int _position, int _char
     //
     // ... определим элемент модели для предыдущего блока
     //
-    auto previousTextItem = [block] () -> BusinessLayer::ScreenplayTextModelTextItem* {
+    auto previousTextItem = [block] () -> ScreenplayTextModelTextItem* {
         if (!block.isValid()) {
             return nullptr;
         }
 
         auto previousBlock = block.previous();
-        if (previousBlock.isValid()
+        if (!previousBlock.isValid()
             || previousBlock.userData() == nullptr) {
             return nullptr;
         }
@@ -282,46 +284,30 @@ void ScreenplayTextDocument::updateModelOnContentChange(int _position, int _char
         // Новый блок
         //
         if (block.userData() == nullptr) {
-            const auto blockType = BusinessLayer::ScreenplayBlockStyle::forBlock(block);
+            const auto blockType = ScreenplayBlockStyle::forBlock(block);
 
             //
-            // Создаём группирующий элемент, если есть необходимость
+            // Создаём группирующий элемент, если создаётся непосредственно сцена или папка
             //
-            // ... если непосредственно создаётся сцена или папка
-            //
-            BusinessLayer::ScreenplayTextModelItem* parentItem = nullptr;
+            ScreenplayTextModelItem* parentItem = nullptr;
             switch (blockType) {
-                case BusinessLayer::ScreenplayParagraphType::FolderHeader: {
-                    parentItem = new BusinessLayer::ScreenplayTextModelFolderItem;
+                case ScreenplayParagraphType::FolderHeader: {
+                    parentItem = new ScreenplayTextModelFolderItem;
                     break;
                 }
 
-                case BusinessLayer::ScreenplayParagraphType::SceneHeading: {
-                    parentItem = new BusinessLayer::ScreenplayTextModelSceneItem;
+                case ScreenplayParagraphType::SceneHeading: {
+                    parentItem = new ScreenplayTextModelSceneItem;
                     break;
                 }
 
                 default: break;
             }
-            //
-            // ... если текст встявляется перед первым элементом в структуре
-            //
-            if (parentItem == nullptr
-                && previousTextItem == nullptr) {
-                parentItem = new BusinessLayer::ScreenplayTextModelSceneItem;
-            }
-            //
-            // ... если текст вставляется после окончания папки
-            //
-            if (parentItem == nullptr
-                && previousTextItem->paragraphType() == BusinessLayer::ScreenplayParagraphType::FolderFooter) {
-                parentItem = new BusinessLayer::ScreenplayTextModelSceneItem;
-            }
 
             //
             // Создаём сам текстовый элемент
             //
-            auto textItem = new BusinessLayer::ScreenplayTextModelTextItem;
+            auto textItem = new ScreenplayTextModelTextItem;
             textItem->setParagraphType(blockType);
             textItem->setText(block.text());
 
@@ -337,12 +323,13 @@ void ScreenplayTextDocument::updateModelOnContentChange(int _position, int _char
                 if (previousTextItem != nullptr) {
                     auto previousTextItemParent = previousTextItem->parent();
                     Q_ASSERT(previousTextItemParent);
+
                     //
                     // Если элемент вставляется после другой сцены, или после окончания папки,
                     // то вставляем его на том же уровне, что и предыдущий
                     //
-                    if (previousTextItemParent->type() == BusinessLayer::ScreenplayTextModelItemType::Scene
-                        || previousTextItem->paragraphType() == BusinessLayer::ScreenplayParagraphType::FolderFooter) {
+                    if (previousTextItemParent->type() == ScreenplayTextModelItemType::Scene
+                        || previousTextItem->paragraphType() == ScreenplayParagraphType::FolderFooter) {
                         d->model->insertItem(parentItem, previousTextItemParent);
                     }
                     //
@@ -359,16 +346,131 @@ void ScreenplayTextDocument::updateModelOnContentChange(int _position, int _char
                     d->model->prependItem(parentItem);
                 }
 
+                //
+                // Вставляем сам текстовый элемент в родителя
+                //
                 d->model->appendItem(textItem, parentItem);
+
+                //
+                // Если вставляется сцена, то все текстовые элементы идущие после неё нужно
+                // положить к ней внутрь
+                //
+                if (parentItem->type() == ScreenplayTextModelItemType::Scene) {
+                    //
+                    // Определим родителя из которого нужно извлекать те самые текстовые элементы
+                    //
+                    auto grandParentItem = [previousTextItem, parentItem] {
+                        //
+                        // Если есть предыдущий текстовый элемент
+                        //
+                        if (previousTextItem != nullptr) {
+                            //
+                            // Если это конец папки, то берём родителя папки
+                            //
+                            if (previousTextItem->paragraphType() == ScreenplayParagraphType::FolderFooter) {
+                                return previousTextItem->parent()->parent();
+                            }
+                            //
+                            // В противном случае, берём родителя предыдущего текстового элемента
+                            //
+                            else {
+                                return previousTextItem->parent();
+                            }
+                        }
+
+                        //
+                        // Если перед сценой ничего нет, то берём родителя самой сцены
+                        //
+                        return parentItem->parent();
+                    }();
+                    Q_ASSERT(grandParentItem);
+
+                    //
+                    // Определим индекс, начиная с которого нужно извлекать текстовые элементы
+                    //
+                    const int itemIndex = [previousTextItem, parentItem, grandParentItem] {
+                        if (previousTextItem != nullptr) {
+                            if (previousTextItem->paragraphType() == ScreenplayParagraphType::FolderFooter) {
+                                return grandParentItem->rowOfChild(previousTextItem->parent()) + 2;
+                            }
+                            else if (grandParentItem->type() == ScreenplayTextModelItemType::Scene) {
+                                return grandParentItem->rowOfChild(previousTextItem) + 1;
+                            }
+                        }
+
+                        return grandParentItem->rowOfChild(parentItem) + 1;
+                    }();
+
+                    //
+                    // Собственно переносим элементы
+                    //
+                    while (grandParentItem->childCount() > itemIndex) {
+                        auto grandParentChildItem = grandParentItem->childAt(itemIndex);
+                        if (grandParentChildItem->type() != ScreenplayTextModelItemType::Text) {
+                            break;
+                        }
+
+                        auto grandParentChildTextItem = static_cast<ScreenplayTextModelTextItem*>(grandParentChildItem);
+                        if (grandParentChildTextItem->paragraphType() == ScreenplayParagraphType::FolderFooter) {
+                            break;
+                        }
+
+                        d->model->takeItem(grandParentChildItem, grandParentItem);
+                        d->model->appendItem(grandParentChildItem, parentItem);
+                    }
+                }
+                //
+                // А для папки, если она вставляется после сцены, то нужно перенести все текстовые
+                // элементы, которые идут после вставленной папки на уровень самой папки
+                //
+                else if (previousTextItem->parent()->type() == ScreenplayTextModelItemType::Scene) {
+                    auto grandParentItem = previousTextItem->parent();
+                    const int lastItemIndex = grandParentItem->rowOfChild(previousTextItem) + 1;
+                    //
+                    // Собственно переносим элементы
+                    //
+                    while (grandParentItem->childCount() > lastItemIndex) {
+                        auto grandParentChildItem = grandParentItem->childAt(grandParentItem->childCount() - 1);
+                        if (grandParentChildItem->type() != ScreenplayTextModelItemType::Text) {
+                            break;
+                        }
+
+                        auto grandParentChildTextItem = static_cast<ScreenplayTextModelTextItem*>(grandParentChildItem);
+                        if (grandParentChildTextItem->paragraphType() == ScreenplayParagraphType::FolderFooter) {
+                            break;
+                        }
+
+                        d->model->takeItem(grandParentChildItem, grandParentItem);
+                        d->model->insertItem(grandParentChildItem, parentItem);
+                    }
+                }
             }
             //
             // ... в случае, когда добавился просто текст
             //
             else {
-                if (previousTextItem != nullptr) {
-                    d->model->insertItem(textItem, previousTextItem);
-                } else {
+                //
+                // ... в самое начало документа
+                //
+                if (previousTextItem == nullptr) {
                     d->model->prependItem(textItem);
+                }
+                //
+                // ... после предыдущего элемента
+                //
+                else {
+                    //
+                    // ... если блок вставляется после конца папки, то нужно вынести на уровень с папкой
+                    //
+                    if (previousTextItem->paragraphType() == ScreenplayParagraphType::FolderFooter) {
+                        d->model->insertItem(textItem, previousTextItem->parent());
+                    }
+                    //
+                    // ... в противном случае ставим на уровне с предыдущим элементом
+                    //
+                    else {
+                        d->model->insertItem(textItem, previousTextItem);
+                    }
                 }
             }
 
@@ -383,6 +485,17 @@ void ScreenplayTextDocument::updateModelOnContentChange(int _position, int _char
         else {
             auto blockData = static_cast<ScreenplayTextBlockData*>(block.userData());
             auto textItem = blockData->item();
+
+            //
+            // Если сменился стиль блока, то возможно нужно добавить новую,
+            // или удалить предыдущую сцену/папку
+            //
+
+            //
+            // Если был папкой, то
+            //
+
+            textItem->setParagraphType(ScreenplayBlockStyle::forBlock(block));
             textItem->setText(block.text());
             d->model->updateItem(textItem);
 

@@ -111,36 +111,53 @@ void ScreenplayTextEdit::addParagraph(BusinessLayer::ScreenplayParagraphType _ty
     // Если параграф целиком переносится (энтер нажат перед всем текстом блока),
     // необходимо перенести данные блока с текущего на следующий
     //
-    ScreenplayTextBlockData* blockData = nullptr;
     if (cursor.block().text().left(cursor.positionInBlock()).isEmpty()
         && !cursor.block().text().isEmpty()) {
+        ScreenplayTextBlockData* blockData = nullptr;
         auto block = cursor.block();
         if (block.userData() != nullptr) {
             blockData = new ScreenplayTextBlockData(static_cast<ScreenplayTextBlockData*>(block.userData()));
             block.setUserData(nullptr);
         }
+
+        //
+        // Вставим блок
+        //
+        cursor.insertBlock();
+
+        //
+        // Перенесём данные блока
+        //
+        cursor.block().setUserData(blockData);
+
+        //
+        // Перейдём к предыдущему абзацу
+        //
+        moveCursor(QTextCursor::PreviousBlock);
+        //
+        // ...и применим стиль к нему
+        //
+        applyParagraphType(_type);
     }
+    //
+    // Вставляем новый блок после текущего
+    //
+    else {
+        //
+        // Вставим блок
+        //
+        cursor.insertBlock();
 
-    //
-    // Вставим блок
-    //
-    cursor.insertBlock();
-    setTextCursorReimpl(cursor);
+        //
+        // Применим стиль к новому блоку
+        //
+        applyParagraphType(_type);
 
-    //
-    // Применим стиль к новому блоку
-    //
-    applyParagraphType(_type);
-
-    //
-    // Перенесём данные блока
-    //
-    cursor.block().setUserData(blockData);
-
-    //
-    // Уведомим о том, что стиль сменился
-    //
-    emit paragraphTypeChanged();
+        //
+        // Уведомим о том, что стиль сменился
+        //
+        emit paragraphTypeChanged();
+    }
 
     cursor.endEditBlock();
 }

@@ -696,7 +696,6 @@ void StandardKeyHandler::removeGroupsPairs(int _cursorPosition, const FoldersToD
             }
 
             if (cursor.atStart()) {
-                Q_ASSERT(false);
                 break;
             }
 

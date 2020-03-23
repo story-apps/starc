@@ -50,6 +50,11 @@ public:
     void insertItem(ScreenplayTextModelItem* _item, ScreenplayTextModelItem* _afterSiblingItem);
 
     /**
+     * @brief Извлечь заданный элемент без удаления
+     */
+    void takeItem(ScreenplayTextModelItem* _item, ScreenplayTextModelItem* _parentItem = nullptr);
+
+    /**
      * @brief Удалить заданный элемент
      */
     void removeItem(ScreenplayTextModelItem* _item);

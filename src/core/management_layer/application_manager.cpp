@@ -622,6 +622,8 @@ void ApplicationManager::Implementation::saveIfNeeded(std::function<void()> _cal
         _callback();
     });
     QObject::connect(dialog, &Dialog::disappeared, dialog, &Dialog::deleteLater);
+
+    QApplication::alert(applicationView);
 }
 
 void ApplicationManager::Implementation::createProject()

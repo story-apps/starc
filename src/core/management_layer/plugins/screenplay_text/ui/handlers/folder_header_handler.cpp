@@ -69,19 +69,12 @@ void FolderHeaderHandler::handleEnter(QKeyEvent*)
 				//! Текст не пуст
 
 				if (cursorBackwardText.isEmpty()) {
-					//! В начале блока
+                    //! В начале блока
 
-					//
-					// Вставить блок время и место перед папкой
-					//
-                    cursor.beginEditBlock();
-					cursor.insertBlock();
-					cursor.movePosition(QTextCursor::PreviousCharacter);
-					cursor.setBlockFormat(QTextBlockFormat());
-					editor()->setTextCursor(cursor);
-                    editor()->setCurrentParagraphType(ScreenplayParagraphType::SceneHeading);
-                    editor()->moveCursor(QTextCursor::NextCharacter);
-                    cursor.endEditBlock();
+                    //
+                    // Вставка блока заголовка перед собой
+                    //
+                    editor()->addParagraph(ScreenplayParagraphType::SceneHeading);
 				} else if (cursorForwardText.isEmpty()) {
 					//! В конце блока
 
