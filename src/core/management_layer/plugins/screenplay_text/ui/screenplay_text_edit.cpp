@@ -39,7 +39,9 @@ ScreenplayTextEdit::ScreenplayTextEdit(QWidget* _parent)
     : BaseTextEdit(_parent),
       d(new Implementation)
 {
+    setContextMenuPolicy(Qt::CustomContextMenu);
     setFrameShape(QFrame::NoFrame);
+
     setDocument(&d->document);
     setCapitalizeWords(false);
 
