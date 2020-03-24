@@ -34,7 +34,6 @@ void ScreenplayTextStructureModel::setSourceModel(QAbstractItemModel* _sourceMod
 
 bool ScreenplayTextStructureModel::filterAcceptsRow(int _sourceRow, const QModelIndex& _sourceParent) const
 {
-    return true;
     if (d->screenplayModel == nullptr) {
         return false;
     }

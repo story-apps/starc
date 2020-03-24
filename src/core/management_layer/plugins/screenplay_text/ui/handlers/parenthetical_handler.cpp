@@ -7,7 +7,7 @@
 
 #include <QKeyEvent>
 #include <QTextBlock>
-
+#include <QDebug>
 using BusinessLayer::ScreenplayParagraphType;
 using Ui::ScreenplayTextEdit;
 
@@ -213,58 +213,36 @@ void ParentheticalHandler::handleOther(QKeyEvent* _event)
 	// Была нажата открывающая скобка
 	//
 	if (_event != 0
-		&& _event->text() == "(") {
+        && _event->text() == "(") {
 		//
-		// Если в начале строки и скобки не было
-		//
-		if (cursorBackwardText == "("
-			&& !cursorForwardText.startsWith("(")
-			&& !cursorForwardText.contains("(")) {
-			//
-			// Ни чего не делаем
-			//
-		}
-		//
-		// Во всех остальных случаях удаляем введённую скобку
-		//
-		else {
-			cursor.deletePreviousChar();
+        // Удаляем введённую скобку
+        //
+        cursor.deletePreviousChar();
 
-			//
-			// BUG: Если курсор в начале документа, то не прорисовывается текст
-			//
-		}
+        //
+        // BUG: Если курсор в начале документа, то не прорисовывается текст
+        //
 	}
 	//
 	// Была нажата закрывающая скобка
 	//
 	else if (_event != 0
 			 && _event->text() == ")") {
-		//
-		// Если в конце строки или перед закрывающей скобкой
-		//
-		if (cursorForwardText.isEmpty()
-			|| cursorForwardText == ")") {
-			//
-			// Если необходимо удаляем лишнюю скобку
-			//
-			if (cursorBackwardText.endsWith("))")
-				|| cursorForwardText == ")") {
-				cursor.deletePreviousChar();
-				cursor.movePosition(QTextCursor::EndOfBlock);
-				editor()->setTextCursor(cursor);
-			}
+        //
+        // Во всех случаях удаляем введённую скобку
+        //
+        cursor.deletePreviousChar();
 
-			//
+        //
+        // Если в блоке, в котором есть текст
+		//
+        if (!currentBlock.text().isEmpty()) {
+            //
 			// Переходим к блоку реплики
 			//
+            cursor.movePosition(QTextCursor::EndOfBlock);
+            editor()->setTextCursor(cursor);
             editor()->addParagraph(ScreenplayParagraphType::Dialogue);
-		}
-		//
-		// Во всех остальных случаях удаляем введённую скобку
-		//
-		else {
-			cursor.deletePreviousChar();
 		}
 	}
 	//

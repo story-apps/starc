@@ -41,6 +41,7 @@ ScreenplayTextEdit::ScreenplayTextEdit(QWidget* _parent)
 {
     setFrameShape(QFrame::NoFrame);
     setDocument(&d->document);
+    setCapitalizeWords(false);
 
     connect(this, &ScreenplayTextEdit::cursorPositionChanged, this, [this] {
         if (d->model == nullptr) {
@@ -375,10 +376,6 @@ bool ScreenplayTextEdit::keyPressEventReimpl(QKeyEvent* _event)
 
 bool ScreenplayTextEdit::updateEnteredText(const QString& _eventText)
 {
-    if (!capitalizeWords()) {
-        return false;
-    }
-
     if (_eventText.isEmpty()) {
         return false;
     }
@@ -404,9 +401,7 @@ bool ScreenplayTextEdit::updateEnteredText(const QString& _eventText)
     //
     if (currentCharFormat.boolProperty(ScreenplayBlockStyle::PropertyIsFirstUppercase)
         && cursorBackwardText != " "
-        && (cursorBackwardText == _eventText
-            || cursorBackwardText == (currentCharFormat.stringProperty(ScreenplayBlockStyle::PropertyPrefix)
-                                      + _eventText))
+        && cursorBackwardText == _eventText
         && _eventText[0] != TextHelper::smartToUpper(_eventText[0])) {
         //
         // Сформируем правильное представление строки
@@ -832,7 +827,7 @@ void ScreenplayTextEdit::paintEvent(QPaintEvent* _event)
                         // Для пустого футера рисуем плейсхолдер
                         //
                         if (blockType == ScreenplayParagraphType::FolderFooter) {
-                            painter.setFont(cursor.charFormat().font());
+                            painter.setFont(block.charFormat().font());
 
                             //
                             // Ищем открывающий блок папки
@@ -888,12 +883,12 @@ void ScreenplayTextEdit::paintEvent(QPaintEvent* _event)
                                                       : pageRight + leftDelta,
                                                       cursorR.bottom() + 2);
                             const QRectF rect(topLeft, bottomRight);
-                            painter.setFont(cursor.charFormat().font());
+                            painter.setFont(block.charFormat().font());
                             painter.drawText(rect, Qt::AlignRight | Qt::AlignTop, "» ");
                         }
                     }
 //                    //
-//                    // Прорисовка номера для строки
+//                    // Прорисовка декораций непустых строк
 //                    //
 //                    else {
 //                        //
@@ -1003,6 +998,37 @@ void ScreenplayTextEdit::paintEvent(QPaintEvent* _event)
 //                            painter.drawText(rect, Qt::AlignRight | Qt::AlignTop, ScriptTextCorrector::continuedTerm());
 //                        }
 //                    }
+
+                    //
+                    // Прорисовка перфикса блока
+                    //
+                    if (block.charFormat().hasProperty(ScreenplayBlockStyle::PropertyPrefix)) {
+                        painter.setFont(block.charFormat().font());
+
+                        const auto prefix = block.charFormat().stringProperty(ScreenplayBlockStyle::PropertyPrefix);
+                        const QPoint topLeft = QPoint(cursorR.left()
+                                                      - painter.fontMetrics().horizontalAdvance(prefix),
+                                                      cursorR.top());
+                        const QPoint bottomRight = QPoint(cursorR.left(),
+                                                          cursorR.bottom());
+                        const QRect rect(topLeft, bottomRight);
+                        painter.drawText(rect, Qt::AlignLeft | Qt::AlignVCenter, prefix);
+                    }
+                    //
+                    // Прорисовка постфикса блока
+                    //
+                    if (block.charFormat().hasProperty(ScreenplayBlockStyle::PropertyPostfix)) {
+                        painter.setFont(block.charFormat().font());
+
+                        const auto postfix = block.charFormat().stringProperty(ScreenplayBlockStyle::PropertyPostfix);
+                        const QPoint topLeft = QPoint(cursorREnd.left(),
+                                                      cursorREnd.top());
+                        const QPoint bottomRight = QPoint(cursorREnd.left()
+                                                          + painter.fontMetrics().horizontalAdvance(postfix),
+                                                          cursorREnd.bottom());
+                        const QRect rect(topLeft, bottomRight);
+                        painter.drawText(rect, Qt::AlignRight | Qt::AlignVCenter, postfix);
+                    }
                 }
 
                 lastSceneBlockBottom = cursorREnd.bottom();
