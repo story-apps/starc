@@ -17,8 +17,6 @@ namespace BusinessLayer
 enum class ScreenplayParagraphType {
     Undefined,
     UnformattedText,
-    SceneName,
-    SceneDescription,
     SceneHeading,
     SceneCharacters,
     Action,

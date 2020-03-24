@@ -19,8 +19,6 @@ namespace BusinessLayer
 namespace {
     const QHash<ScreenplayParagraphType, QString> kScreenplayParagraphTypeToString
     = {{ ScreenplayParagraphType::UnformattedText, QLatin1String("unformatted_text") },
-       { ScreenplayParagraphType::SceneName, QLatin1String("scene_name") },
-       { ScreenplayParagraphType::SceneDescription, QLatin1String("scene_description") },
        { ScreenplayParagraphType::SceneHeading, QLatin1String("scene_heading") },
        { ScreenplayParagraphType::SceneCharacters, QLatin1String("scene_characters") },
        { ScreenplayParagraphType::Action, QLatin1String("action") },

@@ -130,10 +130,6 @@ SettingsStorage::Implementation::Implementation()
                                        ScreenplayParagraphType::UnformattedText);
     addScreenplayEditorStylesJumpByEnter(ScreenplayParagraphType::UnformattedText,
                                          ScreenplayParagraphType::UnformattedText);
-    addScreenplayEditorStylesJumpByTab(ScreenplayParagraphType::SceneName,
-                                       ScreenplayParagraphType::SceneCharacters);
-    addScreenplayEditorStylesJumpByEnter(ScreenplayParagraphType::SceneName,
-                                         ScreenplayParagraphType::SceneDescription);
     addScreenplayEditorStylesJumpByTab(ScreenplayParagraphType::SceneHeading,
                                        ScreenplayParagraphType::SceneCharacters);
     addScreenplayEditorStylesJumpByEnter(ScreenplayParagraphType::SceneHeading,
@@ -191,10 +187,6 @@ SettingsStorage::Implementation::Implementation()
                                          ScreenplayParagraphType::UnformattedText);
     addScreenplayEditorStylesChangeByEnter(ScreenplayParagraphType::UnformattedText,
                                            ScreenplayParagraphType::UnformattedText);
-    addScreenplayEditorStylesChangeByTab(ScreenplayParagraphType::SceneName,
-                                         ScreenplayParagraphType::SceneDescription);
-    addScreenplayEditorStylesChangeByEnter(ScreenplayParagraphType::SceneName,
-                                           ScreenplayParagraphType::SceneName);
     addScreenplayEditorStylesChangeByTab(ScreenplayParagraphType::SceneHeading,
                                          ScreenplayParagraphType::Action);
     addScreenplayEditorStylesChangeByEnter(ScreenplayParagraphType::SceneHeading,

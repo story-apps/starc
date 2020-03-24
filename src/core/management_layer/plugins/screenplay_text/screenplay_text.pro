@@ -37,9 +37,7 @@ HEADERS += \
     ui/handlers/pre_handler.h \
     ui/handlers/prepare_handler.h \
     ui/handlers/scene_characters_handler.h \
-    ui/handlers/scene_description_handler.h \
     ui/handlers/scene_heading_handler.h \
-    ui/handlers/scene_name_handler.h \
     ui/handlers/shot_handler.h \
     ui/handlers/standard_key_handler.h \
     ui/handlers/transition_handler.h \
@@ -66,9 +64,7 @@ SOURCES += \
     ui/handlers/pre_handler.cpp \
     ui/handlers/prepare_handler.cpp \
     ui/handlers/scene_characters_handler.cpp \
-    ui/handlers/scene_description_handler.cpp \
     ui/handlers/scene_heading_handler.cpp \
-    ui/handlers/scene_name_handler.cpp \
     ui/handlers/shot_handler.cpp \
     ui/handlers/standard_key_handler.cpp \
     ui/handlers/transition_handler.cpp \

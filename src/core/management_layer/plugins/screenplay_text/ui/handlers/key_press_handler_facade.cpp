@@ -11,9 +11,7 @@
 #include "pre_handler.h"
 #include "prepare_handler.h"
 #include "scene_characters_handler.h"
-#include "scene_description_handler.h"
 #include "scene_heading_handler.h"
-#include "scene_name_handler.h"
 #include "shot_handler.h"
 #include "transition_handler.h"
 #include "unformatted_text_handler.h"
@@ -41,8 +39,6 @@ public:
     QScopedPointer<PrepareHandler> m_prepareHandler;
     QScopedPointer<PreHandler> m_preHandler;
     QScopedPointer<UnformattedTextHandler> m_unformattedTextHandler;
-    QScopedPointer<SceneNameHandler> m_sceneNameHandler;
-    QScopedPointer<SceneDescriptionHandler> m_sceneDescriptionHandler;
     QScopedPointer<SceneHeadingHandler> m_sceneHeaderHandler;
     QScopedPointer<SceneCharactersHandler> m_sceneCharactersHandler;
     QScopedPointer<ActionHandler> m_actionHandler;
@@ -62,8 +58,6 @@ KeyPressHandlerFacade::Implementation::Implementation(Ui::ScreenplayTextEdit* _e
       m_prepareHandler(new PrepareHandler(_editor)),
       m_preHandler(new PreHandler(_editor)),
       m_unformattedTextHandler(new UnformattedTextHandler(_editor)),
-      m_sceneNameHandler(new SceneNameHandler(_editor)),
-      m_sceneDescriptionHandler(new SceneDescriptionHandler(_editor)),
       m_sceneHeaderHandler(new SceneHeadingHandler(_editor)),
       m_sceneCharactersHandler(new SceneCharactersHandler(_editor)),
       m_actionHandler(new ActionHandler(_editor)),
@@ -153,14 +147,6 @@ AbstractKeyHandler* KeyPressHandlerFacade::handlerFor(ScreenplayParagraphType _t
     switch (_type) {
         case ScreenplayParagraphType::UnformattedText: {
             return d->m_unformattedTextHandler.data();
-        }
-
-        case ScreenplayParagraphType::SceneName: {
-            return d->m_sceneNameHandler.data();
-        }
-
-        case ScreenplayParagraphType::SceneDescription: {
-            return d->m_sceneDescriptionHandler.data();
         }
 
         case ScreenplayParagraphType::SceneHeading: {
