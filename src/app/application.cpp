@@ -24,7 +24,8 @@ static QString preparePath(const QString& _path) {
 #endif
     return newPath;
 }
-}
+
+} // namespace
 
 class Application::Implementation
 {
@@ -44,9 +45,10 @@ Application::Application(int& _argc, char** _argv)
     : QApplication(_argc, _argv),
       d(new Implementation)
 {
-    setApplicationName("Starc");
-    setOrganizationName("Story Architect");
-    setOrganizationDomain("starc.app");
+    setApplicationName("Story Architect");
+    setApplicationVersion("0.0.1");
+    setOrganizationName("Story Apps");
+    setOrganizationDomain("storyapps.dev");
 
     //
     // Настроим таймер определения простоя приложения
@@ -69,7 +71,7 @@ void Application::startUp()
 {
     auto manager = qobject_cast<ManagementLayer::IApplicationManager*>(d->applicationManager);
     if (manager == nullptr) {
-        qCritical() << "Can start application without application manager";
+        qCritical() << "Can't start application without application manager";
         exit(1);
     }
 

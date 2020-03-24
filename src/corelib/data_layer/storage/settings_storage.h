@@ -14,6 +14,8 @@ namespace {
     //
     const QString kApplicationGroupKey = "application";
     //
+    // уникальный индентификатор приложения
+    const QString kApplicationUuidKey = kApplicationGroupKey + "/uuid";
     // первый запуск приложения (false) или оно уже сконфигурировано (true)
     const QString kApplicationConfiguredKey = kApplicationGroupKey + "/configured";
     // язык приложения

@@ -7,7 +7,7 @@
 TEMPLATE = lib
 
 CONFIG += plugin c++1z
-QT += concurrent widgets multimedia
+QT += concurrent widgets multimedia network
 
 TARGET = $$qtLibraryTarget(coreplugin)
 
@@ -23,11 +23,17 @@ INCLUDEPATH += ..
 #
 # Подключаем библиотеку corelib
 #
-
 LIBS += -L$$DESTDIR/../ -lcorelib
 INCLUDEPATH += $$PWD/../corelib
 DEPENDPATH += $$PWD/../corelib
+#
 
+#
+# Подключаем библиотеку Webloader
+#
+LIBS += -L$$DESTDIR/../libs/ -lwebloader
+INCLUDEPATH += $$PWD/../3rd_party/webloader/src
+DEPENDPATH += $$PWD/../3rd_party/webloader
 #
 
 SOURCES += \

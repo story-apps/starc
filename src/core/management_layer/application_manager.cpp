@@ -29,6 +29,8 @@
 #include <utils/tools/backup_builder.h>
 #include <utils/tools/run_once.h>
 
+#include <NetworkRequest.h>
+
 #include <QApplication>
 #include <QDir>
 #include <QFontDatabase>
@@ -39,6 +41,7 @@
 #include <QtConcurrentRun>
 #include <QTimer>
 #include <QTranslator>
+#include <QUuid>
 #include <QVariant>
 #include <QWidget>
 
@@ -69,6 +72,11 @@ public:
      */
     QVariant settingsValue(const QString& _key) const;
     QVariantMap settingsValues(const QString& _key) const;
+
+    /**
+     * @brief Проверить новую версию
+     */
+    void checkNewVersion();
 
     /**
      * @brief Настроить параметры автосохранения
@@ -277,6 +285,45 @@ QVariantMap ApplicationManager::Implementation::settingsValues(const QString& _k
 {
     return DataStorageLayer::StorageFacade::settingsStorage()->values(
                 _key, DataStorageLayer::SettingsStorage::SettingsPlace::Application);
+}
+
+void ApplicationManager::Implementation::checkNewVersion()
+{
+    //
+    // Сформируем uuid для приложения, по которому будем идентифицировать данного пользователя
+    //
+    auto applicationUuidValue = settingsValue(DataStorageLayer::kApplicationUuidKey).toUuid();
+    if (applicationUuidValue.isNull()) {
+        applicationUuidValue = QUuid::createUuid();
+        DataStorageLayer::StorageFacade::settingsStorage()->setValue(
+                    DataStorageLayer::kApplicationUuidKey,
+                    applicationUuidValue,
+                    DataStorageLayer::SettingsStorage::SettingsPlace::Application);
+    }
+
+    //
+    // Построим ссылку, чтобы учитывать запрос на проверку обновлений
+    //
+    NetworkRequest loader;
+    loader.setRequestMethod(NetworkRequestMethod::Post);
+    loader.addRequestAttribute("uuid", applicationUuidValue.toString());
+    loader.addRequestAttribute("application_name", "starc");
+    loader.addRequestAttribute("application_version", QApplication::applicationVersion());
+    loader.addRequestAttribute("system_type",
+#ifdef Q_OS_WIN
+                "windows"
+#elif defined Q_OS_LINUX
+                "linux"
+#elif defined Q_OS_MAC
+                "mac"
+#else
+                QSysInfo::kernelType()
+#endif
+                );
+
+    loader.addRequestAttribute("system_name", QSysInfo::prettyProductName().toUtf8().toPercentEncoding());
+
+    loader.loadAsync("https://kitscenarist.ru/api/app/updates/");
 }
 
 void ApplicationManager::Implementation::configureAutoSave()
@@ -975,6 +1022,11 @@ void ApplicationManager::exec(const QString& _fileToOpenPath)
         // Открыть заданный проект
         //
         openProject(_fileToOpenPath);
+
+        //
+        // Отправим запрос в статистику
+        //
+        d->checkNewVersion();
 
         //
         // Переводим состояние приложение в рабочий режим
