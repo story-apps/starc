@@ -43,7 +43,7 @@ ContextMenu::ContextMenu(QWidget* _parent)
     : Card(_parent),
       d(new Implementation(this))
 {
-    setWindowFlag(Qt::Popup);
+    setWindowFlags(Qt::Popup | Qt::FramelessWindowHint | Qt::NoDropShadowWindowHint);
     setAttribute(Qt::WA_Hover, false);
     setAttribute(Qt::WA_TranslucentBackground);
     setAttribute(Qt::WA_ShowWithoutActivating);
