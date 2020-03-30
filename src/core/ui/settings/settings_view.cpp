@@ -167,6 +167,8 @@ SettingsView::Implementation::Implementation(QWidget* _parent)
 
 void SettingsView::Implementation::initApplicationCard()
 {
+    useSpellChecker->hide();
+    spellCheckerLanguage->hide();
     spellCheckerLanguage->setEnabled(false);
     spellCheckerLanguage->setModel(spellCheckerLanguagesModel);
     scaleFactor->setMaximumValue(4000);
