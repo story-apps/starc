@@ -18,13 +18,15 @@ QObject* loadApplicationManager()
     // Смотрим папку с данными приложения на компе
     // NOTE: В Debug-режим работает с папкой сборки приложения
     //
+    // TODO: Когда дорастём включить этот функционал, плюс продумать, как быть в режиме разработки
+    //
     const QString pluginsDirName = "plugins";
     QDir pluginsDir(
-#ifndef QT_NO_DEBUG
+//#ifndef QT_NO_DEBUG
                 QApplication::applicationDirPath()
-#else
-                QStandardPaths::writableLocation(QStandardPaths::DataLocation)
-#endif
+//#else
+//                QStandardPaths::writableLocation(QStandardPaths::DataLocation)
+//#endif
                 );
 
 #if !defined(QT_NO_DEBUG) && defined(Q_OS_MAC)
