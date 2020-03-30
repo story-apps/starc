@@ -253,6 +253,13 @@ void Drawer::paintEvent(QPaintEvent* _event)
                               - Ui::DesignSystem::drawer().actionMargins().bottom());
         painter.drawText(textRect, Qt::AlignLeft | Qt::AlignVCenter, action->text());
 
+        //
+        // ... горячие клавиши
+        //
+        if (!action->shortcut().isEmpty()) {
+            painter.drawText(textRect, Qt::AlignRight | Qt::AlignVCenter, action->shortcut().toString());
+        }
+
         actionY += Ui::DesignSystem::drawer().actionHeight();
     }
 

@@ -36,6 +36,7 @@
 #include <QFontDatabase>
 #include <QKeyEvent>
 #include <QLocale>
+#include <QShortcut>
 #include <QSoundEffect>
 #include <QStyleFactory>
 #include <QtConcurrentRun>
@@ -518,6 +519,7 @@ void ApplicationManager::Implementation::markChangesSaved(bool _saved)
     }
 
     applicationView->setWindowModified(!_saved);
+    menuView->markChangesSaved(_saved);
 }
 
 void ApplicationManager::Implementation::saveChanges()
@@ -1090,6 +1092,12 @@ bool ApplicationManager::event(QEvent* _event)
 void ApplicationManager::initConnections()
 {
     //
+    // Горячие клавиши
+    //
+    QShortcut* saveShortcut = new QShortcut(QKeySequence::Save, d->applicationView);
+    connect(saveShortcut, &QShortcut::activated, this, [this] { d->saveChanges(); });
+
+    //
     // Представление приложения
     //
     connect(d->applicationView, &Ui::ApplicationView::closeRequested, this,
@@ -1098,10 +1106,15 @@ void ApplicationManager::initConnections()
         auto callback = [this] { d->exit(); };
         d->saveIfNeeded(callback);
     });
+
+    //
+    // Представление меню
+    //
     connect(d->menuView, &Ui::MenuView::projectsPressed, this, [this] { d->showProjects(); });
     connect(d->menuView, &Ui::MenuView::createProjectPressed, this, [this] { d->createProject(); });
     connect(d->menuView, &Ui::MenuView::openProjectPressed, this, [this] { d->openProject(); });
     connect(d->menuView, &Ui::MenuView::projectPressed, this, [this] { d->showProject(); });
+    connect(d->menuView, &Ui::MenuView::saveChangesPressed, this, [this] { d->saveChanges(); });
     connect(d->menuView, &Ui::MenuView::settingsPressed, this, [this] { d->showSettings(); });
 
     //

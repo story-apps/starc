@@ -189,6 +189,7 @@ void MenuView::updateTranslations()
     d->createProject->setText(tr("Create story"));
     d->openProject->setText(tr("Open story"));
     d->saveProject->setText(d->saveProject->isEnabled() ? tr("Save changes") : tr("All changes saved"));
+    d->saveProject->setShortcuts(QKeySequence::Save);
     d->saveProjectAs->setText(tr("Save current story as..."));
     d->importProject->setText(tr("Import..."));
     d->exportProject->setText(tr("Export..."));
