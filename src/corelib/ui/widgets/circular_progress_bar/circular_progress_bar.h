@@ -6,7 +6,7 @@
 /**
  * @brief Виджет для отображения прогресса в виде круга
  */
-class CircularProgressBar : public Widget
+class CORE_LIBRARY_EXPORT CircularProgressBar : public Widget
 {
     Q_OBJECT
 

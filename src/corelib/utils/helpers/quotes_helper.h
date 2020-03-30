@@ -1,5 +1,7 @@
 #pragma once
 
+#include <corelib_global.h>
+
 #include <QString>
 
 
@@ -17,7 +19,7 @@ https://www.la-screenwriter.com/screenwriting-quotes/
 /**
  * @brief Генератор цитат великих
  */
-class QuotesHelper
+class CORE_LIBRARY_EXPORT QuotesHelper
 {
 public:
     /**

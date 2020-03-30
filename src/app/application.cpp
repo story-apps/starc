@@ -46,7 +46,6 @@ Application::Application(int& _argc, char** _argv)
       d(new Implementation)
 {
     setApplicationName("Story Architect");
-    setApplicationVersion("0.0.1");
     setOrganizationName("Story Apps");
     setOrganizationDomain("storyapps.dev");
 

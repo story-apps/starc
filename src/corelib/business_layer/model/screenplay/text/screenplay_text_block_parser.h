@@ -1,5 +1,7 @@
 #pragma once
 
+#include <corelib_global.h>
+
 class QString;
 class QStringList;
 
@@ -10,7 +12,7 @@ namespace BusinessLayer
 /**
  * @brief Парсер текста блока персонаж
  */
-class CharacterParser
+class CORE_LIBRARY_EXPORT CharacterParser
 {
 public:
     /**
@@ -45,7 +47,7 @@ public:
 /**
  * @brief Парсер текста блока время и место
  */
-class SceneHeadingParser
+class CORE_LIBRARY_EXPORT SceneHeadingParser
 {
 public:
     /**
@@ -91,7 +93,7 @@ public:
 /**
  * @brief Парсер текста блока участники сцены
  */
-class SceneCharactersParser
+class CORE_LIBRARY_EXPORT SceneCharactersParser
 {
 public:
     /**

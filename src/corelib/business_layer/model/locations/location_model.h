@@ -6,7 +6,7 @@
 namespace BusinessLayer
 {
 
-class LocationModel : public AbstractModel
+class CORE_LIBRARY_EXPORT LocationModel : public AbstractModel
 {
     Q_OBJECT
 

@@ -12,6 +12,36 @@ namespace DatabaseLayer {
 
 namespace {
 /**
+ * @brief Название соединения с базой данных
+ */
+static QString s_connectionName = "local_database";
+
+/**
+ * @brief Плагин используемый для работы с базой
+ */
+static QString s_sqlDriver = "QSQLITE";
+
+/**
+ * @brief Имя файла базы данных, если не задан, то база будет размещаться во временной памяти
+ */
+static QString s_databaseName = ":memory:";
+
+/**
+ * @brief Текст ошибки открытия последнего загружаемого файла
+ */
+static QString s_openFileError;
+
+/**
+ * @brief Текст последней ошибки
+ */
+static QString s_lastError;
+
+/**
+ * @brief Счётчик открытых транзакций
+ */
+static int s_openedTransactions = 0;
+
+/**
  * @brief Получить ключ хранения номера версии приложения
  */
 static QString applicationVersionKey()
@@ -160,14 +190,6 @@ void Database::commit()
 }
 
 // ****
-
-QString Database::s_connectionName = "local_database";
-QString Database::s_sqlDriver = "QSQLITE";
-QString Database::s_databaseName = ":memory:";
-
-QString Database::s_openFileError = QString();
-QString Database::s_lastError = QString();
-int Database::s_openedTransactions = 0;
 
 QSqlDatabase Database::instanse()
 {

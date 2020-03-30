@@ -1,5 +1,7 @@
 #pragma once
 
+#include <corelib_global.h>
+
 #include <QScopedPointer>
 
 class QVariant;
@@ -11,7 +13,7 @@ namespace BusinessLayer
 /**
  * @brief Абстрактный класс элемента древовидной модели
  */
-class AbstractModelItem
+class CORE_LIBRARY_EXPORT AbstractModelItem
 {
 public:
     AbstractModelItem();

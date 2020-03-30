@@ -6,7 +6,7 @@
 /**
  * @brief Базовый класс для текстовой метки с ссылкой
  */
-class AbstractLinkLabel : public AbstractLabel
+class CORE_LIBRARY_EXPORT AbstractLinkLabel : public AbstractLabel
 {
 public:
     explicit AbstractLinkLabel(QWidget* _parent);
@@ -32,7 +32,7 @@ private:
 /**
  * @brief Класс текстовой метки со ссылкой
  */
-class Body1LinkLabel : public AbstractLinkLabel
+class CORE_LIBRARY_EXPORT Body1LinkLabel : public AbstractLinkLabel
 {
     Q_OBJECT
 

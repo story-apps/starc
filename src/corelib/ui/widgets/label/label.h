@@ -6,7 +6,7 @@
 /**
  * @brief Базовый класс для виджетов текстовых меток
  */
-class AbstractLabel : public Widget
+class CORE_LIBRARY_EXPORT AbstractLabel : public Widget
 {
     Q_OBJECT
 
@@ -66,7 +66,7 @@ private:
 /**
  * @brief Текстовая метка заголовка пятого уровня
  */
-class H5Label : public AbstractLabel
+class CORE_LIBRARY_EXPORT H5Label : public AbstractLabel
 {
 public:
     explicit H5Label(QWidget* _parent = nullptr);
@@ -79,7 +79,7 @@ protected:
 /**
  * @brief Текстовая метка заголовка шестого уровня
  */
-class H6Label : public AbstractLabel
+class CORE_LIBRARY_EXPORT H6Label : public AbstractLabel
 {
 public:
     explicit H6Label(QWidget* _parent = nullptr);
@@ -92,7 +92,7 @@ protected:
 /**
  * @brief Текстовая метка со шрифтом subtitle1
  */
-class Subtitle1Label : public AbstractLabel
+class CORE_LIBRARY_EXPORT Subtitle1Label : public AbstractLabel
 {
 public:
     explicit Subtitle1Label(QWidget* _parent = nullptr);
@@ -105,7 +105,7 @@ protected:
 /**
  * @brief Текстовая метка со шрифтом subtitle2
  */
-class Subtitle2Label : public AbstractLabel
+class CORE_LIBRARY_EXPORT Subtitle2Label : public AbstractLabel
 {
 public:
     explicit Subtitle2Label(QWidget* _parent = nullptr);
@@ -118,7 +118,7 @@ protected:
 /**
  * @brief Текстовая метка со шрифтом body1
  */
-class Body1Label : public AbstractLabel
+class CORE_LIBRARY_EXPORT Body1Label : public AbstractLabel
 {
 public:
     explicit Body1Label(QWidget* _parent = nullptr);
@@ -131,7 +131,7 @@ protected:
 /**
  * @brief Текстовая метка со шрифтом body2
  */
-class Body2Label : public AbstractLabel
+class CORE_LIBRARY_EXPORT Body2Label : public AbstractLabel
 {
 public:
     explicit Body2Label(QWidget* _parent = nullptr);
@@ -144,7 +144,7 @@ protected:
 /**
  * @brief Текстовая метка со шрифтом caption
  */
-class CaptionLabel : public AbstractLabel
+class CORE_LIBRARY_EXPORT CaptionLabel : public AbstractLabel
 {
 public:
     explicit CaptionLabel(QWidget* _parent = nullptr);
@@ -157,7 +157,7 @@ protected:
 /**
  * @brief Текстовая метка со шрифтом overline
  */
-class OverlineLabel : public AbstractLabel
+class CORE_LIBRARY_EXPORT OverlineLabel : public AbstractLabel
 {
 public:
     explicit OverlineLabel(QWidget* _parent = nullptr);
@@ -170,7 +170,7 @@ protected:
 /**
  * @brief Текстовая метка со шрифтом iconMid
  */
-class IconsMidLabel : public AbstractLabel
+class CORE_LIBRARY_EXPORT IconsMidLabel : public AbstractLabel
 {
 public:
     explicit IconsMidLabel(QWidget* _parent = nullptr);

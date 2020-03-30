@@ -269,7 +269,7 @@ void ProjectCard::paint(QPainter* _painter, const QStyleOptionGraphicsItem* _opt
                           Ui::DesignSystem::layout().px24() * 2,
                           Ui::DesignSystem::layout().px24() * 2);
     _painter->drawText(iconRect, Qt::AlignCenter,
-                       m_project.type() == ManagementLayer::ProjectType::Local ? "\uf379" : "\uf163");
+                       m_project.type() == ManagementLayer::ProjectType::Local ? u8"\uf379" : u8"\uf163");
 
     //
     // Иконки действий
@@ -277,11 +277,11 @@ void ProjectCard::paint(QPainter* _painter, const QStyleOptionGraphicsItem* _opt
     _painter->setOpacity(m_actionsOpacityAnimation.currentValue().toReal());
     const auto iconsRects = actionsRects();
     if (m_project.type() == ManagementLayer::ProjectType::Local) {
-        _painter->drawText(iconsRects[0], Qt::AlignCenter, "\uf167"); // move to cloud
-        _painter->drawText(iconsRects[1], Qt::AlignCenter, "\uf6d0"); // hide
+        _painter->drawText(iconsRects[0], Qt::AlignCenter, u8"\uf167"); // move to cloud
+        _painter->drawText(iconsRects[1], Qt::AlignCenter, u8"\uf6d0"); // hide
     } else {
-        _painter->drawText(iconsRects[0], Qt::AlignCenter, "\uf3eb"); // pencil
-        _painter->drawText(iconsRects[1], Qt::AlignCenter, "\uf1c0"); // delete
+        _painter->drawText(iconsRects[0], Qt::AlignCenter, u8"\uf3eb"); // pencil
+        _painter->drawText(iconsRects[1], Qt::AlignCenter, u8"\uf1c0"); // delete
     }
 
     //

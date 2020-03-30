@@ -3,7 +3,7 @@
 #include <ui/widgets/widget/widget.h>
 
 
-class CheckBox : public Widget
+class CORE_LIBRARY_EXPORT CheckBox : public Widget
 {
     Q_OBJECT
 

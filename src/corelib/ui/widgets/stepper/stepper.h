@@ -6,7 +6,7 @@
 /**
  * @brief Виджет реализующий пошаговый проход состояний
  */
-class Stepper : public Widget
+class CORE_LIBRARY_EXPORT Stepper : public Widget
 {
     Q_OBJECT
 

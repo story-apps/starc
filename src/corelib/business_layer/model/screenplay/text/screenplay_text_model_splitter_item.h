@@ -19,7 +19,7 @@ enum class ScreenplayTextModelSplitterItemType {
 /**
  * @brief Класс элемента разделителя модели сценария
  */
-class ScreenplayTextModelSplitterItem : public ScreenplayTextModelItem
+class CORE_LIBRARY_EXPORT ScreenplayTextModelSplitterItem : public ScreenplayTextModelItem
 {
 public:
     explicit ScreenplayTextModelSplitterItem(ScreenplayTextModelSplitterItemType _type);

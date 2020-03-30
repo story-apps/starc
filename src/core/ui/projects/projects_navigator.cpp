@@ -37,9 +37,9 @@ ProjectsNavigator::Implementation::Implementation(QWidget* _parent)
       openProjectButton(new Button(_parent)),
       helpButton(new Button(_parent))
 {
-    createProjectButton->setIcon("\uf415");
-    openProjectButton->setIcon("\uf256");
-    helpButton->setIcon("\uf2d7");
+    createProjectButton->setIcon(u8"\uf415");
+    openProjectButton->setIcon(u8"\uf256");
+    helpButton->setIcon(u8"\uf2d7");
 
     layout->setContentsMargins({});
     layout->setSpacing(0);

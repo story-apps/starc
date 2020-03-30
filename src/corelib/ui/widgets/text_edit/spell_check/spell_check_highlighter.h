@@ -1,5 +1,7 @@
 #pragma once
 
+#include <corelib_global.h>
+
 #include "syntax_highlighter.h"
 
 class SpellChecker;
@@ -8,7 +10,7 @@ class SpellChecker;
 /**
  * @brief Класс подсвечивающий слова не прошедшие проверку правописания
  */
-class SpellCheckHighlighter : public SyntaxHighlighter
+class CORE_LIBRARY_EXPORT SpellCheckHighlighter : public SyntaxHighlighter
 {
     Q_OBJECT
 

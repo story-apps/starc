@@ -56,9 +56,9 @@ CreateProjectDialog::Implementation::Implementation(QWidget* _parent)
 {
     localProject->setChecked(true);
 
-    projectFolder->setTrailingIcon("\uf256");
-    importFilePath->setTrailingIcon("\uf256");
-    advancedSettingsButton->setIcon("\uf493");
+    projectFolder->setTrailingIcon(u8"\uf256");
+    importFilePath->setTrailingIcon(u8"\uf256");
+    advancedSettingsButton->setIcon(u8"\uf493");
 
     buttonsLayout = new QHBoxLayout;
     buttonsLayout->setContentsMargins({});

@@ -1,12 +1,14 @@
 #pragma once
 
+#include <corelib_global.h>
+
 #include <QStyledItemDelegate>
 
 
 /**
  * @brief Базовый делегат отрисовки элементов дерева
  */
-class TreeDelegate : public QStyledItemDelegate
+class CORE_LIBRARY_EXPORT TreeDelegate : public QStyledItemDelegate
 {
     Q_OBJECT
 

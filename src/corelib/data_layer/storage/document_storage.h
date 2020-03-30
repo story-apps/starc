@@ -1,5 +1,7 @@
 #pragma once
 
+#include <corelib_global.h>
+
 class QByteArray;
 class QUuid;
 
@@ -18,7 +20,7 @@ namespace DataStorageLayer
 /**
  * @brief Хранилище документов
  */
-class DocumentStorage
+class CORE_LIBRARY_EXPORT DocumentStorage
 {
 public:
     /**

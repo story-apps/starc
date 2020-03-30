@@ -1,5 +1,7 @@
 #pragma once
 
+#include <corelib_global.h>
+
 #include <QAbstractItemModel>
 
 namespace Domain {
@@ -14,7 +16,7 @@ class AbstractImageWrapper;
 /**
  * @brief Абстрактная модель для работы над документами
  */
-class AbstractModel : public QAbstractItemModel
+class CORE_LIBRARY_EXPORT AbstractModel : public QAbstractItemModel
 {
     Q_OBJECT
 

@@ -1,12 +1,14 @@
 #pragma once
 
+#include <corelib_global.h>
+
 #include <QSplitter>
 
 
 /**
  * @brief Виджет сплитер
  */
-class Splitter : public QSplitter
+class CORE_LIBRARY_EXPORT Splitter : public QSplitter
 {
     Q_OBJECT
 

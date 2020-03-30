@@ -1,5 +1,7 @@
 #pragma once
 
+#include <corelib_global.h>
+
 #include <QGraphicsView>
 
 class QGestureEvent;
@@ -9,7 +11,7 @@ class PageTextEdit;
 /**
  * @brief Обёртка над редактором текста, чтобы сделать его масштабируемым
  */
-class ScalableWrapper : public QGraphicsView
+class CORE_LIBRARY_EXPORT ScalableWrapper : public QGraphicsView
 {
     Q_OBJECT
 

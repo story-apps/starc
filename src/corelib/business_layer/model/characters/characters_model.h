@@ -8,7 +8,7 @@ namespace BusinessLayer
 
 class CharacterModel;
 
-class CharactersModel : public AbstractModel
+class CORE_LIBRARY_EXPORT CharactersModel : public AbstractModel
 {
     Q_OBJECT
 

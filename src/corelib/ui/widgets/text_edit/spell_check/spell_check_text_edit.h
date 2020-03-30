@@ -1,7 +1,6 @@
 #pragma once
 
 #include <ui/widgets/text_edit/page/page_text_edit.h>
-#include <QTextBlock>
 
 class SpellCheckHighlighter;
 enum class SpellCheckerLanguage;
@@ -10,7 +9,7 @@ enum class SpellCheckerLanguage;
 /**
  * @brief Класс текстового редактора с проверкой орфографии
  */
-class SpellCheckTextEdit : public PageTextEdit
+class CORE_LIBRARY_EXPORT SpellCheckTextEdit : public PageTextEdit
 {
     Q_OBJECT
 

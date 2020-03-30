@@ -1,5 +1,7 @@
 #pragma once
 
+#include <corelib_global.h>
+
 #include <QtCore/qglobal.h>
 #include <QObject>
 #include <QTextObject>
@@ -15,7 +17,7 @@ class QColor;
 class QTextBlockUserData;
 
 
-class SyntaxHighlighter : public QObject
+class CORE_LIBRARY_EXPORT SyntaxHighlighter : public QObject
 {
     Q_OBJECT
 

@@ -1,5 +1,7 @@
 #pragma once
 
+#include <corelib_global.h>
+
 #include <qnamespace.h>
 
 class QMarginsF;
@@ -8,14 +10,14 @@ class QMarginsF;
 /**
  * @brief Функции конвертации из строки в перечисление
  */
-Qt::Alignment alignmentFromString(const QString& _text);
-QMarginsF marginsFromString(const QString& _margins);
+CORE_LIBRARY_EXPORT Qt::Alignment alignmentFromString(const QString& _text);
+CORE_LIBRARY_EXPORT QMarginsF marginsFromString(const QString& _margins);
 
 /**
  * @brief Преобразование разных типов в строку
  */
-QString toString(bool _value);
-QString toString(int _value);
-QString toString(qreal _value);
-QString toString(Qt::Alignment _alignment);
-QString toString(const QMarginsF& _margins);
+CORE_LIBRARY_EXPORT QString toString(bool _value);
+CORE_LIBRARY_EXPORT QString toString(int _value);
+CORE_LIBRARY_EXPORT QString toString(qreal _value);
+CORE_LIBRARY_EXPORT QString toString(Qt::Alignment _alignment);
+CORE_LIBRARY_EXPORT QString toString(const QMarginsF& _margins);

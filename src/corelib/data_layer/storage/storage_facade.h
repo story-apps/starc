@@ -1,5 +1,7 @@
 #pragma once
 
+#include <corelib_global.h>
+
 
 namespace DataStorageLayer
 {
@@ -11,7 +13,7 @@ class SettingsStorage;
 /**
  * @brief Фасад для доступа к хранилищам данных
  */
-class StorageFacade
+class CORE_LIBRARY_EXPORT StorageFacade
 {
 public:
     /**

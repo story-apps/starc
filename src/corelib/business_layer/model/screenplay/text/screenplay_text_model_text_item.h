@@ -13,7 +13,7 @@ enum class ScreenplayParagraphType;
 /**
  * @brief Класс элемента текста модели сценария
  */
-class ScreenplayTextModelTextItem : public ScreenplayTextModelItem
+class CORE_LIBRARY_EXPORT ScreenplayTextModelTextItem : public ScreenplayTextModelItem
 {
 public:
     ScreenplayTextModelTextItem();

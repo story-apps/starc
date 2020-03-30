@@ -9,7 +9,7 @@ namespace BusinessLayer
 /**
  * @brief Модель корзины с удалёнными документами
  */
-class RecycleBinModel : public AbstractModel
+class CORE_LIBRARY_EXPORT RecycleBinModel : public AbstractModel
 {
     Q_OBJECT
 

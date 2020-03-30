@@ -139,7 +139,7 @@ void RadioButton::paintEvent(QPaintEvent* _event)
                    : isEnabled()
                      ? textColor()
                      : ColorHelper::transparent(textColor(), Ui::DesignSystem::disabledTextOpacity()));
-    painter.drawText(iconRect, Qt::AlignCenter, d->isChecked ? "\uf43e" : "\uf43d");
+    painter.drawText(iconRect, Qt::AlignCenter, d->isChecked ? u8"\uf43e" : u8"\uf43d");
 
     //
     // Рисуем текст

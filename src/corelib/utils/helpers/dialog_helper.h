@@ -1,12 +1,14 @@
 #pragma once
 
+#include <corelib_global.h>
+
 class QString;
 
 
 /**
  * @brief Вспомогательные функции для работы с диалогами
  */
-class DialogHelper
+class CORE_LIBRARY_EXPORT DialogHelper
 {
 public:
     /**

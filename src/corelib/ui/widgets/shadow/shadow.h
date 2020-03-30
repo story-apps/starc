@@ -6,7 +6,7 @@
 /**
  * @brief Виджет тени, использующийся для декорирования основных виджетов
  */
-class Shadow : public Widget
+class CORE_LIBRARY_EXPORT Shadow : public Widget
 {
     Q_OBJECT
 

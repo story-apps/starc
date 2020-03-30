@@ -1,5 +1,7 @@
 #pragma once
 
+#include <corelib_global.h>
+
 #include <QTimer>
 
 
@@ -7,7 +9,7 @@
  * @brief Класс для введения задержки между запросом некоторого действия и реализацией самого действия
  *        К примеру, для избежания флуда пользователями интерфейса
  */
-class Debouncer : public QObject
+class CORE_LIBRARY_EXPORT Debouncer : public QObject
 {
     Q_OBJECT
 

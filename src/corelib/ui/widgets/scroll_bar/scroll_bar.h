@@ -1,12 +1,14 @@
 #pragma once
 
+#include <corelib_global.h>
+
 #include <QScrollBar>
 
 
 /**
  * @brief Виджет полосы прокрутки
  */
-class ScrollBar : public QScrollBar
+class CORE_LIBRARY_EXPORT ScrollBar : public QScrollBar
 {
     Q_OBJECT
 

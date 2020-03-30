@@ -6,7 +6,7 @@
 /**
  * @brief Виджет слайдера
  */
-class Slider : public Widget
+class CORE_LIBRARY_EXPORT Slider : public Widget
 {
     Q_OBJECT
 

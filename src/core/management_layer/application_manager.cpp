@@ -642,7 +642,7 @@ void ApplicationManager::Implementation::saveIfNeeded(std::function<void()> _cal
                         { kNoButtonId, tr("Don't save"), Dialog::NormalButton },
                         { kYesButtonId, tr("Save"), Dialog::AcceptButton }});
     QObject::connect(dialog, &Dialog::finished,
-                     [this, dialog, _callback] (const Dialog::ButtonInfo& _buttonInfo)
+                     [this, _callback, kCancelButtonId, kNoButtonId, dialog] (const Dialog::ButtonInfo& _buttonInfo)
     {
         dialog->hideDialog();
 
@@ -944,6 +944,8 @@ ApplicationManager::ApplicationManager(QObject* _parent)
     : QObject(_parent),
       IApplicationManager()
 {
+    QApplication::setApplicationVersion("0.0.1");
+
     QApplication::setStyle(new ApplicationStyle(QStyleFactory::create("Fusion")));
 
     //

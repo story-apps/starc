@@ -12,7 +12,7 @@ SettingsToolBar::SettingsToolBar(QWidget* _parent)
     : AppBar(_parent)
 {
     QAction* backAction = new QAction(this);
-    backAction->setIconText("\uf04d");
+    backAction->setIconText(u8"\uf04d");
     addAction(backAction);
     connect(backAction, &QAction::triggered, this, &SettingsToolBar::backPressed);
 

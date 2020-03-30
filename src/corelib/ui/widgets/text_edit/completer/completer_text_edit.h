@@ -9,7 +9,7 @@ class Completer;
 /**
  * @brief Класс текстового редактора с подстановщиком для завершения текста
  */
-class CompleterTextEdit : public SpellCheckTextEdit
+class CORE_LIBRARY_EXPORT CompleterTextEdit : public SpellCheckTextEdit
 {
     Q_OBJECT
 

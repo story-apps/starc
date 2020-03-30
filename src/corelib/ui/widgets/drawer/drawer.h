@@ -6,7 +6,7 @@
 /**
  * @brief Виджет выезжающего меню
  */
-class Drawer : public Widget
+class CORE_LIBRARY_EXPORT Drawer : public Widget
 {
     Q_OBJECT
 

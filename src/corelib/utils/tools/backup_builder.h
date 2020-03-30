@@ -1,12 +1,14 @@
 #pragma once
 
+#include <corelib_global.h>
+
 class QString;
 
 
 /**
  * @brief Класс для организации создания резервных копий
  */
-class BackupBuilder
+class CORE_LIBRARY_EXPORT BackupBuilder
 {
 public:
     /**

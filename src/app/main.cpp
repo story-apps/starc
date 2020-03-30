@@ -66,7 +66,13 @@ QObject* loadApplicationManager()
     //
     // Подгружаем плагин
     //
-    const QStringList libCorePluginEntries = pluginsDir.entryList({ "libcoreplugin*.*" }, QDir::Files);
+    const QString extensionFilter =
+#ifdef Q_OS_WIN
+            ".dll";
+#else
+            "";
+#endif
+    const QStringList libCorePluginEntries = pluginsDir.entryList({ "*coreplugin*" + extensionFilter }, QDir::Files);
     if (libCorePluginEntries.isEmpty()) {
         qCritical() << "Core plugin isn't found";
         return nullptr;

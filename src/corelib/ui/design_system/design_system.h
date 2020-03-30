@@ -1,5 +1,7 @@
 #pragma once
 
+#include <corelib_global.h>
+
 #include <QScopedPointer>
 
 class QColor;
@@ -27,76 +29,10 @@ enum class ApplicationTheme
  * @brief Дизайн система приложения
  */
 class DesignSystemPrivate;
-class DesignSystem
+class CORE_LIBRARY_EXPORT DesignSystem
 {
 public:
     class Color;
-
-
-    /**
-     * @brief Параметры панели иструментов приложения
-     */
-    class AppBarPrivate;
-    class AppBar
-    {
-    public:
-        ~AppBar();
-
-        /**
-         * @brief Отступы
-         */
-        QMarginsF margins() const;
-
-        /**
-         * @brief Отступы для большой иконки
-         */
-        QMarginsF bigIconMargins() const;
-
-        /**
-         * @brief Высота в обычном варианте
-         */
-        qreal heightRegular() const;
-
-        /**
-         * @brief Размер иконки
-         */
-        QSizeF iconSize() const;
-
-        /**
-         * @brief Размер большой иконки (которая расположена перед текстом)
-         */
-        QSizeF bigIconSize() const;
-
-        /**
-         * @brief Отступ между иконками
-         */
-        qreal iconsSpacing() const;
-
-        /**
-         * @brief Левый отступ текста
-         */
-        qreal leftTitleMargin() const;
-
-        /**
-         * @brief Радиус размытия тени
-         */
-        qreal shadowRadius() const;
-
-        /**
-         * @brief Отступ для рисования тени
-         */
-        QPointF shadowOffset() const;
-
-        /**
-         * @brief Шрифт
-         */
-        QFont font() const;
-
-    private:
-        explicit AppBar(qreal _scaleFactor);
-        QScopedPointer<AppBarPrivate> d;
-        friend class DesignSystemPrivate;
-    };
 
     /**
      * @brief Параметры виджета таба
@@ -268,7 +204,7 @@ public:
      * @link https://material.io/design/color/applying-color-to-ui.html
      * @line https://www.materialpalette.com/brown/blue
      */
-    class Color
+    class CORE_LIBRARY_EXPORT Color
     {
     public:
         explicit Color(const Color& _rhs);
@@ -315,7 +251,7 @@ public:
     /**
      * @brief Параметры шрифтов
      */
-    class Font
+    class CORE_LIBRARY_EXPORT CORE_LIBRARY_EXPORT Font
     {
     public:
         ~Font();
@@ -346,7 +282,7 @@ public:
         QScopedPointer<Implementation> d;
     };
 
-    class Layout
+    class CORE_LIBRARY_EXPORT Layout
     {
     public:
         ~Layout();
@@ -404,10 +340,76 @@ public:
         QScopedPointer<Implementation> d;
     };
 
+
+    /**
+     * @brief Параметры панели иструментов приложения
+     */
+    class AppBarPrivate;
+    class CORE_LIBRARY_EXPORT AppBar
+    {
+    public:
+        ~AppBar();
+
+        /**
+         * @brief Отступы
+         */
+        QMarginsF margins() const;
+
+        /**
+         * @brief Отступы для большой иконки
+         */
+        QMarginsF bigIconMargins() const;
+
+        /**
+         * @brief Высота в обычном варианте
+         */
+        qreal heightRegular() const;
+
+        /**
+         * @brief Размер иконки
+         */
+        QSizeF iconSize() const;
+
+        /**
+         * @brief Размер большой иконки (которая расположена перед текстом)
+         */
+        QSizeF bigIconSize() const;
+
+        /**
+         * @brief Отступ между иконками
+         */
+        qreal iconsSpacing() const;
+
+        /**
+         * @brief Левый отступ текста
+         */
+        qreal leftTitleMargin() const;
+
+        /**
+         * @brief Радиус размытия тени
+         */
+        qreal shadowRadius() const;
+
+        /**
+         * @brief Отступ для рисования тени
+         */
+        QPointF shadowOffset() const;
+
+        /**
+         * @brief Шрифт
+         */
+        QFont font() const;
+
+    private:
+        explicit AppBar(qreal _scaleFactor);
+        QScopedPointer<AppBarPrivate> d;
+        friend class DesignSystemPrivate;
+    };
+
     /**
      * @brief Параметры виджета текстовой метки
      */
-    class Label
+    class CORE_LIBRARY_EXPORT Label
     {
     public:
         ~Label();
@@ -428,7 +430,7 @@ public:
     /**
      * @brief Параметры виджета кнопки
      */
-    class Button
+    class CORE_LIBRARY_EXPORT Button
     {
     public:
         ~Button();
@@ -489,7 +491,7 @@ public:
     /**
      * @brief Параметры виджета кнопки-тумблера
      */
-    class ToggleButton
+    class CORE_LIBRARY_EXPORT ToggleButton
     {
     public:
         ~ToggleButton();
@@ -520,7 +522,7 @@ public:
     /**
      * @brief Параметры виджета переключателя
      */
-    class RadioButton
+    class CORE_LIBRARY_EXPORT RadioButton
     {
     public:
         ~RadioButton();
@@ -556,7 +558,7 @@ public:
     /**
      * @brief Параметры виджета флажка
      */
-    class CheckBox
+    class CORE_LIBRARY_EXPORT CheckBox
     {
     public:
         ~CheckBox();
@@ -592,7 +594,7 @@ public:
     /**
      * @brief Параметры виджета слайдера
      */
-    class Slider
+    class CORE_LIBRARY_EXPORT Slider
     {
     public:
         ~Slider();
@@ -628,7 +630,7 @@ public:
     /**
      * @brief Параметры виджета прогрессбара
      */
-    class ProgressBar
+    class CORE_LIBRARY_EXPORT ProgressBar
     {
     public:
         ~ProgressBar();
@@ -659,7 +661,7 @@ public:
     /**
      * @brief Параметры виджета текстового поля
      */
-    class TextField
+    class CORE_LIBRARY_EXPORT TextField
     {
     public:
         ~TextField();
@@ -735,7 +737,7 @@ public:
     /**
      * @brief Параметры виджета полосы прокрутки
      */
-    class ScrollBar
+    class CORE_LIBRARY_EXPORT ScrollBar
     {
     public:
         ~ScrollBar();
@@ -781,7 +783,7 @@ public:
     /**
      * @brief Параметры панели иструментов приложения
      */
-    class FloatingToolBar
+    class CORE_LIBRARY_EXPORT FloatingToolBar
     {
     public:
         ~FloatingToolBar();
@@ -832,7 +834,7 @@ public:
     /**
      * @brief Параметры виджета пошагового переключения
      */
-    class Stepper
+    class CORE_LIBRARY_EXPORT Stepper
     {
     public:
         ~Stepper();
@@ -878,7 +880,7 @@ public:
     /**
      * @brief Параметры виджета выезжающего меню
      */
-    class Drawer
+    class CORE_LIBRARY_EXPORT Drawer
     {
     public:
         ~Drawer();
@@ -959,7 +961,7 @@ public:
     /**
      * @brief Параметры однострочного элемента в списке
      */
-    class TreeOneLineItem
+    class CORE_LIBRARY_EXPORT TreeOneLineItem
     {
     public:
         ~TreeOneLineItem();
@@ -995,7 +997,7 @@ public:
     /**
      * @brief Параметры виджета списка (используем дерево как базу)
      */
-    class Tree
+    class CORE_LIBRARY_EXPORT Tree
     {
     public:
         ~Tree();
@@ -1036,7 +1038,7 @@ public:
     /**
      * @brief Параметры виджета карточки
      */
-    class Card
+    class CORE_LIBRARY_EXPORT Card
     {
     public:
         ~Card();
@@ -1072,7 +1074,7 @@ public:
     /**
      * @brief Параметры виджета диалога
      */
-    class Dialog
+    class CORE_LIBRARY_EXPORT Dialog
     {
     public:
         ~Dialog();
@@ -1103,7 +1105,7 @@ public:
     /**
      * @brief Параметры карточки проекта
      */
-    class ProjectCard
+    class CORE_LIBRARY_EXPORT ProjectCard
     {
     public:
         ~ProjectCard();

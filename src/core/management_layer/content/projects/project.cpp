@@ -260,6 +260,10 @@ void ProjectsModel::append(const Project &_project)
 
 void ProjectsModel::append(const QVector<Project>& _projects)
 {
+    if (_projects.isEmpty()) {
+        return;
+    }
+
     beginInsertRows({}, d->projects.size(), d->projects.size() + _projects.size() - 1);
     d->projects.append(_projects);
     endInsertRows();

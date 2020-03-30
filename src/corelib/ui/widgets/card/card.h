@@ -3,7 +3,7 @@
 #include <ui/widgets/widget/widget.h>
 
 
-class Card : public Widget
+class CORE_LIBRARY_EXPORT Card : public Widget
 {
     Q_OBJECT
 

@@ -1,5 +1,7 @@
 #pragma once
 
+#include <corelib_global.h>
+
 #include <business_layer/model/abstract_model_item.h>
 
 
@@ -21,7 +23,7 @@ enum class ScreenplayTextModelItemType {
 /**
  * @brief Базовый класс элемента модели сценария
  */
-class ScreenplayTextModelItem : public AbstractModelItem
+class CORE_LIBRARY_EXPORT ScreenplayTextModelItem : public AbstractModelItem
 {
 public:
     ScreenplayTextModelItem(ScreenplayTextModelItemType _type);

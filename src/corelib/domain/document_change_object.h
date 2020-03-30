@@ -12,7 +12,7 @@ namespace Domain
 /**
  * @brief Класс изменения документа
  */
-class DocumentChangeObject : public DomainObject
+class CORE_LIBRARY_EXPORT DocumentChangeObject : public DomainObject
 {
 public:
     /**

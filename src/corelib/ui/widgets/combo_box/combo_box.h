@@ -8,7 +8,7 @@ class QAbstractItemModel;
 /**
  * @brief Виджет выпадающего списка
  */
-class ComboBox : public TextField
+class CORE_LIBRARY_EXPORT ComboBox : public TextField
 {
     Q_OBJECT
 

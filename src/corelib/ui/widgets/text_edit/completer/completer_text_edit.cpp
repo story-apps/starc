@@ -6,6 +6,7 @@
 
 #include <QAbstractItemView>
 #include <QScrollBar>
+#include <QTextBlock>
 
 
 class CompleterTextEdit::Implementation

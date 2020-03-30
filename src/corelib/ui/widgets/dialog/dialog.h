@@ -6,7 +6,7 @@
 /**
  * @brief Класс простого диалога для уточняющих вопросов
  */
-class Dialog : public AbstractDialog
+class CORE_LIBRARY_EXPORT Dialog : public AbstractDialog
 {
     Q_OBJECT
 

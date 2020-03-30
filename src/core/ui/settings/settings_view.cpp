@@ -172,7 +172,7 @@ void SettingsView::Implementation::initApplicationCard()
     scaleFactor->setMaximumValue(4000);
     scaleFactor->setValue(1000);
     backupsFolderPath->setEnabled(false);
-    backupsFolderPath->setTrailingIcon("\uf256");
+    backupsFolderPath->setTrailingIcon(u8"\uf256");
 
     //
     // Компоновка

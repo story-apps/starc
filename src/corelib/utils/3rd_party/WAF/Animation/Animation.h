@@ -17,6 +17,8 @@
 #ifndef ANIMATION_H
 #define ANIMATION_H
 
+#include <corelib_global.h>
+
 #include "../WAF.h"
 
 class QColor;
@@ -37,7 +39,7 @@ namespace WAF
     /**
      * @brief Фасад доступа к анимациям
      */
-    class Animation
+    class CORE_LIBRARY_EXPORT Animation
     {
     public:
         /**

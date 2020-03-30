@@ -124,11 +124,11 @@ ProjectsView::ProjectsView(QWidget* _parent)
       d(new Implementation(this))
 {
     QAction* createProjectAction = new QAction;
-    createProjectAction->setIconText("\uf415");
+    createProjectAction->setIconText(u8"\uf415");
     d->toolBar->addAction(createProjectAction);
     connect(createProjectAction, &QAction::triggered, this, &ProjectsView::createProjectPressed);
     QAction* openProjectAction = new QAction;
-    openProjectAction->setIconText("\uf256");
+    openProjectAction->setIconText(u8"\uf256");
     d->toolBar->addAction(openProjectAction);
     connect(openProjectAction, &QAction::triggered, this, &ProjectsView::openProjectPressed);
 

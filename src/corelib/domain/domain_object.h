@@ -11,7 +11,7 @@ namespace Domain
 /**
  * @brief Базовый класс для объектов извлекаемых из базы данных
  */
-class DomainObject
+class CORE_LIBRARY_EXPORT DomainObject
 {
 public:
     DomainObject() = default;

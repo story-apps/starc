@@ -6,7 +6,7 @@
 /**
  * @brief Виджет обрезчика изображения
  */
-class ImageCropper : public Widget
+class CORE_LIBRARY_EXPORT ImageCropper : public Widget
 {
     Q_OBJECT
 

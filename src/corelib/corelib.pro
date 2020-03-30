@@ -4,7 +4,6 @@ TEMPLATE = lib
 CONFIG += c++1z
 QT += widgets widgets-private sql xml
 
-
 DEFINES += CORE_LIBRARY
 DEFINES += QT_DEPRECATED_WARNINGS
 
@@ -16,6 +15,7 @@ INCLUDEPATH += ..
 # Подключаем библиотеку HUNSPELL
 #
 LIBS += -L$$DESTDIR/libs/ -lhunspell
+win32:QMAKE_LFLAGS += /WHOLEARCHIVE:$$DESTDIR/libs/hunspell.lib
 
 INCLUDEPATH += $$PWD/../3rd_party/hunspell/src
 DEPENDPATH += $$PWD/../3rd_party/hunspell
@@ -128,7 +128,8 @@ SOURCES += \
     utils/helpers/quotes_helper.cpp \
     utils/tools/backup_builder.cpp \
     utils/tools/debouncer.cpp \
-    utils/tools/run_once.cpp
+    utils/tools/run_once.cpp \
+    utils/validators/email_validator.cpp
 
 HEADERS += \
     business_layer/import/abstract_importer.h \

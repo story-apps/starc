@@ -1,11 +1,13 @@
 #pragma once
 
+#include <corelib_global.h>
+
 #include <QtGlobal>
 
 class QColor;
 
 
-class ColorHelper
+class CORE_LIBRARY_EXPORT ColorHelper
 {
 public:
     /**

@@ -32,26 +32,26 @@ public:
 MenuView::Implementation::Implementation(QWidget* _parent)
 {
     projects = new QAction;
-    projects->setIconText("\uf24b");
+    projects->setIconText(u8"\uf24b");
     projects->setCheckable(true);
     projects->setChecked(true);
     //
     createProject = new QAction;
-    createProject->setIconText("\uf415");
+    createProject->setIconText(u8"\uf415");
     createProject->setCheckable(false);
     //
     openProject = new QAction;
-    openProject->setIconText("\uf76f");
+    openProject->setIconText(u8"\uf76f");
     openProject->setCheckable(false);
     //
     project = new QAction;
-    project->setIconText("\uf0be");
+    project->setIconText(u8"\uf0be");
     project->setCheckable(true);
     project->setVisible(false);
     project->setSeparator(true);
     //
     saveProject = new QAction;
-    saveProject->setIconText("\uf193");
+    saveProject->setIconText(u8"\uf193");
     saveProject->setCheckable(false);
     saveProject->setEnabled(false);
     saveProject->setVisible(false);
@@ -63,23 +63,23 @@ MenuView::Implementation::Implementation(QWidget* _parent)
     saveProjectAs->setVisible(false);
     //
     importProject = new QAction;
-    importProject->setIconText("\uf2fa");
+    importProject->setIconText(u8"\uf2fa");
     importProject->setCheckable(false);
     importProject->setVisible(false);
     //
     exportProject = new QAction;
-    exportProject->setIconText("\uf207");
+    exportProject->setIconText(u8"\uf207");
     exportProject->setCheckable(false);
     exportProject->setVisible(false);
     //
     settings = new QAction;
-    settings->setIconText("\uf493");
+    settings->setIconText(u8"\uf493");
     settings->setCheckable(false);
     settings->setVisible(true);
     settings->setSeparator(true);
     //
     help = new QAction;
-    help->setIconText("\uf2d7");
+    help->setIconText(u8"\uf2d7");
     help->setCheckable(false);
     help->setChecked(false);
     help->setSeparator(true);

@@ -9,7 +9,7 @@ namespace Ui
 /**
  * @brief Интерфейс менеджера документа
  */
-class AbstractNavigator : public Widget
+class CORE_LIBRARY_EXPORT AbstractNavigator : public Widget
 {
     Q_OBJECT
 

@@ -1,5 +1,7 @@
 #pragma once
 
+#include <corelib_global.h>
+
 #include <QScopedPointer>
 #include <QString>
 
@@ -14,7 +16,7 @@ class ScreenplayTemplate;
 /**
  * @brief Фасад доступа к шаблонам сценария
  */
-class ScreenplayTemplateFacade
+class CORE_LIBRARY_EXPORT ScreenplayTemplateFacade
 {
 public:
     /**

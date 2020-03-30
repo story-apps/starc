@@ -24,7 +24,7 @@ enum class StructureModelDataRole {
 /**
  * @brief Модель структуры документов проекта
  */
-class StructureModel : public AbstractModel
+class CORE_LIBRARY_EXPORT StructureModel : public AbstractModel
 {
     Q_OBJECT
 

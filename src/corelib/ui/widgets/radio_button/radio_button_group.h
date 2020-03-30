@@ -1,5 +1,7 @@
 #pragma once
 
+#include <corelib_global.h>
+
 #include <QObject>
 
 
@@ -8,7 +10,7 @@ class RadioButton;
 /**
  * @brief Группа переключателей, среди которых выбран может быть только один
  */
-class RadioButtonGroup : public QObject
+class CORE_LIBRARY_EXPORT RadioButtonGroup : public QObject
 {
     Q_OBJECT
 

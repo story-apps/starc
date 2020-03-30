@@ -6,7 +6,7 @@
 namespace BusinessLayer
 {
 
-class ProjectInformationModel : public AbstractModel
+class CORE_LIBRARY_EXPORT ProjectInformationModel : public AbstractModel
 {
     Q_OBJECT
 

@@ -6,7 +6,7 @@
 /**
  * @brief Виджет плавающей панели инструментов
  */
-class FloatingToolBar : public Widget
+class CORE_LIBRARY_EXPORT FloatingToolBar : public Widget
 {
     Q_OBJECT
 

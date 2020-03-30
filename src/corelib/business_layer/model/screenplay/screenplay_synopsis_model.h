@@ -9,7 +9,7 @@ namespace BusinessLayer
 /**
  * @brief Модель
  */
-class ScreenplaySynopsisModel : public AbstractModel
+class CORE_LIBRARY_EXPORT ScreenplaySynopsisModel : public AbstractModel
 {
     Q_OBJECT
 

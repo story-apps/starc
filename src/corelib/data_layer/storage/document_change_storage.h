@@ -1,5 +1,7 @@
 #pragma once
 
+#include <corelib_global.h>
+
 #include <QScopedPointer>
 
 class QDateTime;
@@ -16,7 +18,7 @@ namespace DataStorageLayer
 /**
  * @brief Хранилище изменений документов
  */
-class DocumentChangeStorage
+class CORE_LIBRARY_EXPORT DocumentChangeStorage
 {
 public:
     ~DocumentChangeStorage();

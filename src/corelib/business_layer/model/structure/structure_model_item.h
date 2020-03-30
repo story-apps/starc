@@ -1,5 +1,7 @@
 #pragma once
 
+#include <corelib_global.h>
+
 #include <business_layer/model/abstract_model_item.h>
 
 class QColor;
@@ -16,12 +18,13 @@ namespace BusinessLayer
 /**
  * @brief Элемент структуры проекта
  */
-class StructureModelItem : public AbstractModelItem
+class CORE_LIBRARY_EXPORT StructureModelItem : public AbstractModelItem
 {
 public:
     explicit StructureModelItem(const QUuid& _uuid, Domain::DocumentObjectType _type,
          const QString& _name, const QColor& _color);
     explicit StructureModelItem(const StructureModelItem& _other);
+    ~StructureModelItem() override;
 
     /**
      * @brief Уникальный идентификатор элемента

@@ -6,7 +6,7 @@
 namespace BusinessLayer
 {
 
-class ScreenplayDictionariesModel : public AbstractModel
+class CORE_LIBRARY_EXPORT ScreenplayDictionariesModel : public AbstractModel
 {
     Q_OBJECT
 

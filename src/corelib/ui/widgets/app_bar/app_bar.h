@@ -6,7 +6,7 @@
 /**
  * @brief Виджет панели инструментов приложения
  */
-class AppBar : public Widget
+class CORE_LIBRARY_EXPORT AppBar : public Widget
 {
     Q_OBJECT
 

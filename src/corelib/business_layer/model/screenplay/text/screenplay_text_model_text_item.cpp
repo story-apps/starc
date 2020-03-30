@@ -9,6 +9,7 @@
 #include <QDomElement>
 #include <QVariant>
 
+#include <optional>
 
 namespace BusinessLayer
 {

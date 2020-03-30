@@ -92,22 +92,22 @@ inline uint qHash(DocumentObjectType _type)
 /**
  * @brief Получить майм-тип по типу объекта
  */
-QByteArray mimeTypeFor(DocumentObjectType _type);
+QByteArray CORE_LIBRARY_EXPORT mimeTypeFor(DocumentObjectType _type);
 
 /**
  * @brief Получить тип объекта по майм-типу
  */
-DocumentObjectType typeFor(const QByteArray &_mime);
+DocumentObjectType CORE_LIBRARY_EXPORT typeFor(const QByteArray &_mime);
 
 /**
  * @brief Получить иконку по типу объекта
  */
-QString iconForType(DocumentObjectType _type);
+QString CORE_LIBRARY_EXPORT iconForType(DocumentObjectType _type);
 
 /**
  * @brief Класс данных документа
  */
-class DocumentObject : public DomainObject
+class CORE_LIBRARY_EXPORT DocumentObject : public DomainObject
 {
 public:
     /**

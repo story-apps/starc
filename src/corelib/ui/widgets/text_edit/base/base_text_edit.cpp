@@ -2,8 +2,10 @@
 
 #include <utils/helpers/text_helper.h>
 
+#include <QKeyEvent>
 #include <QLocale>
 #include <QRegularExpression>
+#include <QTextBlock>
 
 namespace {
     /**

@@ -124,47 +124,47 @@ ScreenplayTextEditToolBar::ScreenplayTextEditToolBar(QWidget* _parent)
       d(new Implementation(this))
 {
     QAction* undoAction = new QAction;
-    undoAction->setIconText("\uf54c");
+    undoAction->setIconText(u8"\uf54c");
     addAction(undoAction);
 
     QAction* redoAction = new QAction;
-    redoAction->setIconText("\uf44e");
+    redoAction->setIconText(u8"\uf44e");
     addAction(redoAction);
 
     d->paragraphTypeAction = new QAction;
     d->paragraphTypeAction->setText(tr("Scene heading"));
-    d->paragraphTypeAction->setIconText("\uf35d");
+    d->paragraphTypeAction->setIconText(u8"\uf35d");
     addAction(d->paragraphTypeAction);
     connect(d->paragraphTypeAction, &QAction::triggered, this, [this] {
         if (!d->isPopupShown) {
-            d->paragraphTypeAction->setIconText("\uf360");
+            d->paragraphTypeAction->setIconText(u8"\uf360");
             d->showPopup(this);
         } else {
-            d->paragraphTypeAction->setIconText("\uf35d");
+            d->paragraphTypeAction->setIconText(u8"\uf35d");
             d->hidePopup();
         }
     });
 
     d->fastFormatAction = new QAction;
-    d->fastFormatAction->setIconText("\uf328");
+    d->fastFormatAction->setIconText(u8"\uf328");
     d->fastFormatAction->setCheckable(true);
     d->fastFormatAction->setVisible(false);
     addAction(d->fastFormatAction);
 
     d->searchAction = new QAction;
-    d->searchAction->setIconText("\uf349");
+    d->searchAction->setIconText(u8"\uf349");
     d->searchAction->setCheckable(true);
     d->searchAction->setVisible(false);
     addAction(d->searchAction);
 
     d->reviewAction = new QAction;
-    d->reviewAction->setIconText("\ufe14");
+    d->reviewAction->setIconText(u8"\ufe14");
     d->reviewAction->setCheckable(true);
     d->reviewAction->setVisible(false);
     addAction(d->reviewAction);
 
     d->expandToolBarAction = new QAction;
-    d->expandToolBarAction->setIconText("\uf1d9");
+    d->expandToolBarAction->setIconText(u8"\uf1d9");
     addAction(d->expandToolBarAction);
     connect(d->expandToolBarAction, &QAction::triggered, this, [this] {
         d->expandToolBarAction->setVisible(false);
@@ -258,7 +258,7 @@ void ScreenplayTextEditToolBar::focusOutEvent(QFocusEvent* _event)
 {
     FloatingToolBar::focusOutEvent(_event);
 
-    d->paragraphTypeAction->setIconText("\uf35d");
+    d->paragraphTypeAction->setIconText(u8"\uf35d");
     d->hidePopup();
 }
 

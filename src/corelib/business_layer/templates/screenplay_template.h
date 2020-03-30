@@ -1,5 +1,7 @@
 #pragma once
 
+#include <corelib_global.h>
+
 #include <QHash>
 #include <QPageSize>
 #include <QTextFormat>
@@ -36,7 +38,7 @@ enum class ScreenplayParagraphType {
 /**
  * @brief Определим метод для возможности использовать типы в виде ключей в словарях
  */
-inline uint qHash(ScreenplayParagraphType _type)
+CORE_LIBRARY_EXPORT inline uint qHash(ScreenplayParagraphType _type)
 {
     return ::qHash(static_cast<int>(_type));
 }
@@ -44,18 +46,18 @@ inline uint qHash(ScreenplayParagraphType _type)
 /**
  * @brief Получить текстовое представление типа блока
  */
-QString toString(ScreenplayParagraphType _type);
+CORE_LIBRARY_EXPORT QString toString(ScreenplayParagraphType _type);
 
 /**
  * @brief Получить тип блока из текстового представления
  */
-ScreenplayParagraphType screenplayParagraphTypeFromString(const QString& _text);
+CORE_LIBRARY_EXPORT ScreenplayParagraphType screenplayParagraphTypeFromString(const QString& _text);
 
 
 /**
  * @brief Класс стиля блока сценария
  */
-class ScreenplayBlockStyle
+class CORE_LIBRARY_EXPORT ScreenplayBlockStyle
 {
 public:
     /**
@@ -397,7 +399,7 @@ private:
 /**
  * @brief Класс шаблона сценария
  */
-class ScreenplayTemplate
+class CORE_LIBRARY_EXPORT ScreenplayTemplate
 {
 public:
     ScreenplayTemplate() = default;

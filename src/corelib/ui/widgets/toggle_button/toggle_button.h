@@ -8,7 +8,7 @@
 /**
  * @brief Кнопка переключатель
  */
-class ToggleButton : public Widget
+class CORE_LIBRARY_EXPORT ToggleButton : public Widget
 {
     Q_OBJECT
 

@@ -1,5 +1,7 @@
 #pragma once
 
+#include <corelib_global.h>
+
 #include <QWidget>
 
 class DesignSystemChangeEvent;
@@ -8,7 +10,7 @@ class DesignSystemChangeEvent;
 /**
  * @brief Базовый виджет
  */
-class Widget : public QWidget
+class CORE_LIBRARY_EXPORT Widget : public QWidget
 {
     Q_OBJECT
 

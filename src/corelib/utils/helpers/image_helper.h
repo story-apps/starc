@@ -1,5 +1,7 @@
 #pragma once
 
+#include <corelib_global.h>
+
 #include <QtGlobal>
 
 class QByteArray;
@@ -15,7 +17,7 @@ class QString;
 /**
  * @brief Вспомогательные функции для работы с изображениями
  */
-class ImageHelper
+class CORE_LIBRARY_EXPORT ImageHelper
 {
 public:
     /**

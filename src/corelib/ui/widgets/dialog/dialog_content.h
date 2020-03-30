@@ -6,7 +6,7 @@
 /**
  * @brief Виджет содержимого диалога, который анимирует свой размер при изменении контента
  */
-class DialogContent : public Widget
+class CORE_LIBRARY_EXPORT DialogContent : public Widget
 {
     Q_OBJECT
 

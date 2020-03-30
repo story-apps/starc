@@ -22,19 +22,19 @@ const QHash<DocumentObjectType, QByteArray> kDocumentObjectTypeToMimeType
        { DocumentObjectType::Locations, "application/x-starc/document/locations" },
        { DocumentObjectType::Location, "application/x-starc/document/location" }};
 const QHash<DocumentObjectType, QString> kDocumentObjectTypeToIcon
-    = {{ DocumentObjectType::Undefined, "\uf78a" },
-       { DocumentObjectType::Structure, "\uf78a" },
-       { DocumentObjectType::Project, "\ufab6" },
-       { DocumentObjectType::RecycleBin, "\uf1c0" },
-       { DocumentObjectType::Screenplay, "\ufb9e" },
-       { DocumentObjectType::ScreenplayTitlePage, "\uf0be" },
-       { DocumentObjectType::ScreenplaySynopsis, "\uf21a" },
-       { DocumentObjectType::ScreenplayOutline, "\uf21a" },
-       { DocumentObjectType::ScreenplayText, "\uf21a" },
-       { DocumentObjectType::Characters, "\uf848" },
-       { DocumentObjectType::Character, "\uf004" },
-       { DocumentObjectType::Locations, "\ufcf1" },
-       { DocumentObjectType::Location, "\uf2dc" }};
+    = {{ DocumentObjectType::Undefined, u8"\uf78a" },
+       { DocumentObjectType::Structure, u8"\uf78a" },
+       { DocumentObjectType::Project, u8"\ufab6" },
+       { DocumentObjectType::RecycleBin, u8"\uf1c0" },
+       { DocumentObjectType::Screenplay, u8"\ufb9e" },
+       { DocumentObjectType::ScreenplayTitlePage, u8"\uf0be" },
+       { DocumentObjectType::ScreenplaySynopsis, u8"\uf21a" },
+       { DocumentObjectType::ScreenplayOutline, u8"\uf21a" },
+       { DocumentObjectType::ScreenplayText, u8"\uf21a" },
+       { DocumentObjectType::Characters, u8"\uf848" },
+       { DocumentObjectType::Character, u8"\uf004" },
+       { DocumentObjectType::Locations, u8"\ufcf1" },
+       { DocumentObjectType::Location, u8"\uf2dc" }};
 }
 
 QByteArray mimeTypeFor(DocumentObjectType _type)

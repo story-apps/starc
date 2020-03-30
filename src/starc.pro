@@ -15,6 +15,18 @@ TRANSLATIONS += \
     core/translations/en_EN.ts \
     core/translations/ru_RU.ts
 
-CONFIG += qt
+#
+# Настраиваем вывод в консоль в Windows в нормальной кодировке
+#
+win32 {
+    QMAKE_EXTRA_TARGETS += before_build makefilehook
 
-QT += widgets
+    makefilehook.target = $(MAKEFILE)
+    makefilehook.depends = .beforebuild
+
+    PRE_TARGETDEPS += .beforebuild
+
+    before_build.target = .beforebuild
+    before_build.depends = FORCE
+    before_build.commands = chcp 1251
+}

@@ -6,7 +6,7 @@
 /**
  * @brief Виджет реализующий стэк вложенных виджетов, один из которых является видимым
  */
-class StackWidget : public Widget
+class CORE_LIBRARY_EXPORT StackWidget : public Widget
 {
     Q_OBJECT
 

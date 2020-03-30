@@ -39,8 +39,8 @@ AccountNavigator::Implementation::Implementation(QWidget* _parent)
       subscriptionAvailabilityLabel(new Body1Label(_parent)),
       renewSubscriptionButton(new Button(_parent))
 {
-    upgradeToProButton->setIcon("\uf42d");
-    renewSubscriptionButton->setIcon("\uf06a");
+    upgradeToProButton->setIcon(u8"\uf42d");
+    renewSubscriptionButton->setIcon(u8"\uf06a");
 
     layout->setContentsMargins({});
     layout->setSpacing(0);

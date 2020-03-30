@@ -2,18 +2,6 @@
 
 #include <business_layer/model/abstract_model.h>
 
-/*
-
-  наложение патчей
-  формирование дочерних моделей
-    для навигатора
-    для редактора текста
-        для аутлайна
-        для сценария
-  обновление данных из дочерних моделей
-
- */
-
 
 namespace BusinessLayer
 {
@@ -26,7 +14,7 @@ class ScreenplayTextModelItem;
 /**
  * @brief Модель текста сценария
  */
-class ScreenplayTextModel : public AbstractModel
+class CORE_LIBRARY_EXPORT ScreenplayTextModel : public AbstractModel
 {
     Q_OBJECT
 

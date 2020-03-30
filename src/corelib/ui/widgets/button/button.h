@@ -2,7 +2,7 @@
 
 #include <ui/widgets/widget/widget.h>
 
-class Button : public Widget
+class CORE_LIBRARY_EXPORT Button : public Widget
 {
     Q_OBJECT
 

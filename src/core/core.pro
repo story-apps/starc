@@ -9,7 +9,7 @@ TEMPLATE = lib
 CONFIG += plugin c++1z
 QT += concurrent widgets multimedia network
 
-TARGET = $$qtLibraryTarget(coreplugin)
+TARGET = coreplugin
 
 include(../cloud/cloud.pri)
 

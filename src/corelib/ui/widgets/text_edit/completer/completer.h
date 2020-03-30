@@ -1,12 +1,14 @@
 #pragma once
 
+#include <corelib_global.h>
+
 #include <QCompleter>
 
 
 /**
  * @brief Переопределяем комплитер, чтобы показывать список красиво
  */
-class Completer : public QCompleter
+class CORE_LIBRARY_EXPORT Completer : public QCompleter
 {
 public:
     explicit Completer(QWidget* _parent = nullptr);

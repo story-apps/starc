@@ -3,7 +3,7 @@
 #include <ui/widgets/text_edit/completer/completer_text_edit.h>
 
 
-class BaseTextEdit : public CompleterTextEdit
+class CORE_LIBRARY_EXPORT BaseTextEdit : public CompleterTextEdit
 {
 public:
     explicit BaseTextEdit(QWidget* _parent = nullptr);

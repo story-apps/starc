@@ -49,6 +49,8 @@ StructureModelItem::StructureModelItem(const StructureModelItem& _other)
 {
 }
 
+StructureModelItem::~StructureModelItem() = default;
+
 const QUuid& StructureModelItem::uuid() const
 {
     return d->uuid;

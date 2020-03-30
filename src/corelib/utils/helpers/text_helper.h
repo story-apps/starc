@@ -1,5 +1,7 @@
 #pragma once
 
+#include <corelib_global.h>
+
 #include <QtGlobal>
 
 class QChar;
@@ -12,7 +14,7 @@ class QTextOption;
 /**
  * @brief Вспомогательные функции для работы с текстом
  */
-class TextHelper
+class CORE_LIBRARY_EXPORT TextHelper
 {
 public:
     /**

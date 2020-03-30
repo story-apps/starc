@@ -1,5 +1,7 @@
 #pragma once
 
+#include <corelib_global.h>
+
 #include <QtWidgets/qabstractscrollarea.h>
 #include <QtGui/qpagesize.h>
 #include <QtGui/qtextdocument.h>
@@ -18,7 +20,7 @@ class QMimeData;
 class QPagedPaintDevice;
 class QRegularExpression;
 
-class PageTextEdit : public QAbstractScrollArea
+class CORE_LIBRARY_EXPORT PageTextEdit : public QAbstractScrollArea
 {
     Q_OBJECT
     Q_DECLARE_PRIVATE(PageTextEdit)

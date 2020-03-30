@@ -1,12 +1,14 @@
 #pragma once
 
+#include <corelib_global.h>
+
 #include <QTreeView>
 
 
 /**
  * @brief Докрученный виджет дерева с эффектом клика на элементе
  */
-class TreeView : public QTreeView
+class CORE_LIBRARY_EXPORT TreeView : public QTreeView
 {
     Q_OBJECT
 

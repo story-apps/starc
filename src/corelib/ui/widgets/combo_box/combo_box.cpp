@@ -105,7 +105,7 @@ ComboBox::ComboBox(QWidget* _parent)
       d(new Implementation(this))
 {
     setReadOnly(true);
-    setTrailingIcon("\uf35d");
+    setTrailingIcon(u8"\uf35d");
     viewport()->setCursor(Qt::ArrowCursor);
     viewport()->setMouseTracking(false);
 
@@ -156,7 +156,7 @@ void ComboBox::focusOutEvent(QFocusEvent* _event)
 {
     TextField::focusOutEvent(_event);
 
-    setTrailingIcon("\uf35d");
+    setTrailingIcon(u8"\uf35d");
     setTrailingIconColor({});
     d->hidePopup();
 }
@@ -166,11 +166,11 @@ void ComboBox::mousePressEvent(QMouseEvent* _event)
     TextField::mousePressEvent(_event);
 
     if (!d->isPopupShown) {
-        setTrailingIcon("\uf360");
+        setTrailingIcon(u8"\uf360");
         setTrailingIconColor(Ui::DesignSystem::color().secondary());
         d->showPopup(this);
     } else {
-        setTrailingIcon("\uf35d");
+        setTrailingIcon(u8"\uf35d");
         setTrailingIconColor({});
         d->hidePopup();
     }

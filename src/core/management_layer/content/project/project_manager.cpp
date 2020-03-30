@@ -111,13 +111,13 @@ void ProjectManager::Implementation::updateNavigatorContextMenu(const QModelInde
     navigatorContextMenuModel->clear();
 
     auto addDocument = new QStandardItem(tr("Add document"));
-    addDocument->setData("\uf415", Qt::DecorationRole);
+    addDocument->setData(u8"\uf415", Qt::DecorationRole);
     addDocument->setData(static_cast<int>(ContextMenuAction::AddDocument), Qt::UserRole);
     navigatorContextMenuModel->appendRow(addDocument);
 
     if (_index.isValid()) {
         auto removeDocument = new QStandardItem(tr("Remove document"));
-        removeDocument->setData("\uf1c0", Qt::DecorationRole);
+        removeDocument->setData(u8"\uf1c0", Qt::DecorationRole);
         removeDocument->setData(static_cast<int>(ContextMenuAction::RemoveDocument), Qt::UserRole);
         navigatorContextMenuModel->appendRow(removeDocument);
     }
@@ -199,7 +199,7 @@ void ProjectManager::Implementation::removeDocument(const QModelIndex& _itemInde
                            {{ kCancelButtonId, tr("No"), Dialog::RejectButton },
                             { kRemoveButtonId, tr("Yes, remove"), Dialog::NormalButton }});
         QObject::connect(dialog, &Dialog::finished,
-                         [this, dialog, item] (const Dialog::ButtonInfo& _buttonInfo)
+                         [this, item, kCancelButtonId, dialog] (const Dialog::ButtonInfo& _buttonInfo)
         {
             dialog->hideDialog();
 

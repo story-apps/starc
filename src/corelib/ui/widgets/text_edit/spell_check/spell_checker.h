@@ -1,5 +1,7 @@
 #pragma once
 
+#include <corelib_global.h>
+
 #include <QHash>
 #include <QScopedPointer>
 
@@ -54,7 +56,7 @@ inline uint qHash(SpellCheckerLanguage _language)
 /**
  * @brief Класс проверяющего орфографию
  */
-class SpellChecker
+class CORE_LIBRARY_EXPORT SpellChecker
 {
 public:
     /**

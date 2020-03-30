@@ -1,12 +1,14 @@
 #pragma once
 
+#include <corelib_global.h>
+
 #include <QTextEdit>
 
 
 /**
  * @brief Виджет текстового поля
  */
-class TextField : public QTextEdit
+class CORE_LIBRARY_EXPORT TextField : public QTextEdit
 {
     Q_OBJECT
 

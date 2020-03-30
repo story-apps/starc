@@ -1,5 +1,7 @@
 #pragma once
 
+#include <corelib_global.h>
+
 #include <QMarginsF>
 #include <QPageSize>
 
@@ -8,7 +10,7 @@ class QPaintDevice;
 /**
  * @brief Класс метрик страницы
  */
-class PageMetrics
+class CORE_LIBRARY_EXPORT PageMetrics
 {
 public:
     /**

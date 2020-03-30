@@ -9,7 +9,7 @@ class QGridLayout;
 /**
  * @brief Абстрактный диалог
  */
-class AbstractDialog : public Widget
+class CORE_LIBRARY_EXPORT AbstractDialog : public Widget
 {
     Q_OBJECT
 

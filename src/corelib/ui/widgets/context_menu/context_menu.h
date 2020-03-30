@@ -1,5 +1,7 @@
 #pragma once
 
+#include <corelib_global.h>
+
 #include <ui/widgets/card/card.h>
 
 class QAbstractItemModel;
@@ -8,7 +10,7 @@ class QAbstractItemModel;
 /**
  * @brief Виджет контекстного меню
  */
-class ContextMenu : public Card
+class CORE_LIBRARY_EXPORT ContextMenu : public Card
 {
     Q_OBJECT
 

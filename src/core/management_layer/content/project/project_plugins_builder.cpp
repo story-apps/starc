@@ -26,16 +26,16 @@ namespace {
      * @brief Карта соответствия майм-типов документа к редакторам
      */
     const QHash<QString, QVector<ProjectPluginsBuilder::EditorInfo>> kDocumentToEditors
-    = {{ "application/x-starc/document/project", {{ "application/x-starc/editor/project/information", "\uf2fd" },
-                                                  { "application/x-starc/editor/project/collaborators", "\ufb34" }}},
-       { "application/x-starc/document/screenplay", {{ "application/x-starc/editor/screenplay/information", "\uf2fd" },
-                                                     { "application/x-starc/editor/screenplay/parameters", "\uf493" }}},
-       { "application/x-starc/document/screenplay/title-page", {{ "application/x-starc/editor/screenplay/title-page", "\uf9ec" }}},
-       { "application/x-starc/document/screenplay/synopsis", {{ "application/x-starc/editor/text", "\uf9ec" }}},
-       { "application/x-starc/document/screenplay/outline", {{ "application/x-starc/editor/screenplay/outline", "\uf9ec" },
-                                                             { "application/x-starc/editor/screenplay/cards", "\uf554" }}},
-       { "application/x-starc/document/screenplay/text", {{ "application/x-starc/editor/screenplay/text", "\uf9ec" },
-                                                          { "application/x-starc/editor/screenplay/cards", "\uf554" }}}};
+    = {{ "application/x-starc/document/project", {{ "application/x-starc/editor/project/information", u8"\uf2fd" },
+                                                  { "application/x-starc/editor/project/collaborators", u8"\ufb34" }}},
+       { "application/x-starc/document/screenplay", {{ "application/x-starc/editor/screenplay/information", u8"\uf2fd" },
+                                                     { "application/x-starc/editor/screenplay/parameters", u8"\uf493" }}},
+       { "application/x-starc/document/screenplay/title-page", {{ "application/x-starc/editor/screenplay/title-page", u8"\uf9ec" }}},
+       { "application/x-starc/document/screenplay/synopsis", {{ "application/x-starc/editor/text", u8"\uf9ec" }}},
+       { "application/x-starc/document/screenplay/outline", {{ "application/x-starc/editor/screenplay/outline", u8"\uf9ec" },
+                                                             { "application/x-starc/editor/screenplay/cards", u8"\uf554" }}},
+       { "application/x-starc/document/screenplay/text", {{ "application/x-starc/editor/screenplay/text", u8"\uf9ec" },
+                                                          { "application/x-starc/editor/screenplay/cards", u8"\uf554" }}}};
 
     /**
       * @brief Карта соответсвий майм-типов навигаторов/редакторов к названиям библиотек с плагинами
@@ -43,17 +43,17 @@ namespace {
       *       извлечения майм-типа навигатора/редактора, а подгружать точечно только то, что нужно
       */
     const QHash<QString, QString> kMimeToPlugin
-    = {{ "application/x-starc/editor/project/information", "libprojectinformationplugin*.*" },
+    = {{ "application/x-starc/editor/project/information", "*projectinformationplugin*" },
        //
-       { "application/x-starc/navigator/screenplay/text-structure", "libscreenplaytextstructureplugin*.*" },
-       { "application/x-starc/editor/screenplay/information", "libscreenplayinformationplugin*.*" },
-       { "application/x-starc/editor/screenplay/parameters", "libscreenplayparametersplugin*.*" },
-       { "application/x-starc/editor/screenplay/title-page", "libtextplugin*.*" },
-       { "application/x-starc/editor/screenplay/synopsis", "libtextplugin*.*" },
-       { "application/x-starc/editor/screenplay/outline", "libscreenplayoutlineplugin*.*" },
-       { "application/x-starc/editor/screenplay/outline-cards", "libscreenplayoutlinecardsplugin*.*" },
-       { "application/x-starc/editor/screenplay/text", "libscreenplaytextplugin*.*" },
-       { "application/x-starc/editor/screenplay/cards", "libscreenplaytextcardsplugin*.*" }};
+       { "application/x-starc/navigator/screenplay/text-structure", "*screenplaytextstructureplugin*" },
+       { "application/x-starc/editor/screenplay/information", "*screenplayinformationplugin*" },
+       { "application/x-starc/editor/screenplay/parameters", "*screenplayparametersplugin*" },
+       { "application/x-starc/editor/screenplay/title-page", "*textplugin*" },
+       { "application/x-starc/editor/screenplay/synopsis", "*textplugin*" },
+       { "application/x-starc/editor/screenplay/outline", "*screenplayoutlineplugin*" },
+       { "application/x-starc/editor/screenplay/outline-cards", "*screenplayoutlinecardsplugin*" },
+       { "application/x-starc/editor/screenplay/text", "*screenplaytextplugin*" },
+       { "application/x-starc/editor/screenplay/cards", "*screenplaytextcardsplugin*" }};
 }
 
 class ProjectPluginsBuilder::Implementation
@@ -109,7 +109,13 @@ QWidget* ProjectPluginsBuilder::Implementation::activatePlugin(const QString& _m
         //
         // Подгружаем плагин
         //
-        const QStringList libCorePluginEntries = pluginsDir.entryList({ kMimeToPlugin.value(_mimeType) }, QDir::Files);
+        const QString extensionFilter =
+#ifdef Q_OS_WIN
+                ".dll";
+#else
+                "";
+#endif
+        const QStringList libCorePluginEntries = pluginsDir.entryList({ kMimeToPlugin.value(_mimeType) + extensionFilter }, QDir::Files);
         if (libCorePluginEntries.isEmpty()) {
             qCritical() << "Plugin isn't found for mime-type:" << _mimeType;
             return nullptr;

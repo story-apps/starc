@@ -1,5 +1,7 @@
 #pragma once
 
+#include <corelib_global.h>
+
 #include <business_layer/model/abstract_image_wrapper.h>
 
 #include <QScopedPointer>
@@ -8,7 +10,7 @@
 namespace DataStorageLayer
 {
 
-class DocumentDataStorage : public BusinessLayer::AbstractImageWrapper
+class CORE_LIBRARY_EXPORT DocumentDataStorage : public BusinessLayer::AbstractImageWrapper
 {
 public:
     DocumentDataStorage();

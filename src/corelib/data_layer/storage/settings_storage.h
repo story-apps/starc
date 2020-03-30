@@ -1,5 +1,7 @@
 #pragma once
 
+#include <corelib_global.h>
+
 #include <QVariantMap>
 #include <QSettings>
 #include <QVariant>
@@ -75,7 +77,7 @@ namespace {
 /**
  * @brief Хранилище настроек
  */
-class SettingsStorage
+class CORE_LIBRARY_EXPORT SettingsStorage
 {
 public:
     enum class SettingsPlace {

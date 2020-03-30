@@ -6,7 +6,7 @@
 /**
  * @brief Виджет кнопки переключателя
  */
-class RadioButton : public Widget
+class CORE_LIBRARY_EXPORT RadioButton : public Widget
 {
     Q_OBJECT
 

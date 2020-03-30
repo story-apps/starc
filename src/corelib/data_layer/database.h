@@ -1,5 +1,7 @@
 #pragma once
 
+#include <corelib_global.h>
+
 #include <QtGlobal>
 
 class QString;
@@ -10,7 +12,7 @@ class QSqlDatabase;
 namespace DatabaseLayer
 {
 
-class Database
+class CORE_LIBRARY_EXPORT Database
 {
 public:
     /**
@@ -81,25 +83,6 @@ public:
     Q_DECLARE_FLAGS(States, State)
 
 private:
-    static QString s_connectionName,
-                   s_sqlDriver,
-                   s_databaseName;
-
-    /**
-     * @brief Текст ошибки открытия последнего загружаемого файла
-     */
-    static QString s_openFileError;
-
-    /**
-     * @brief Текст последней ошибки
-     */
-    static QString s_lastError;
-
-    /**
-     * @brief Счётчик открытых транзакций
-     */
-    static int s_openedTransactions;
-
     /**
      * @brief Получить объект текущей базы данных
      */

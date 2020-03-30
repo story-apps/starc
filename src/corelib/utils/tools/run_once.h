@@ -1,12 +1,14 @@
 #pragma once
 
+#include <corelib_global.h>
+
 #include <QSet>
 
 
 /**
  * @brief Замок для одиночного запуска
  */
-class RunOnceLock
+class CORE_LIBRARY_EXPORT RunOnceLock
 {
 public:
     ~RunOnceLock();
@@ -31,7 +33,7 @@ private:
 /**
  * @brief Фасад для единовременного запуска функций
  */
-class RunOnce
+class CORE_LIBRARY_EXPORT RunOnce
 {
     RunOnce() = delete;
 

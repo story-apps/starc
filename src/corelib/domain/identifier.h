@@ -1,5 +1,7 @@
 #pragma once
 
+#include <corelib_global.h>
+
 #include <QString>
 #include <QHash>
 #include <QVariant>
@@ -10,7 +12,7 @@ namespace Domain
 /**
  * @brief Класс идентификатора объектов в базе данных
  */
-class Identifier
+class CORE_LIBRARY_EXPORT Identifier
 {
 public:
     Identifier();

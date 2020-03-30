@@ -3,7 +3,7 @@ TEMPLATE = lib
 CONFIG += plugin c++1z
 QT += widgets
 
-TARGET = $$qtLibraryTarget(projectinformationplugin)
+TARGET = projectinformationplugin
 
 DEFINES += MANAGER_PLUGIN
 DEFINES += QT_DEPRECATED_WARNINGS

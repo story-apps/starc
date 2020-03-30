@@ -9,7 +9,7 @@ class QAbstractItemDelegate;
 /**
  * @brief Виджет дерева элементов
  */
-class Tree : public Widget
+class CORE_LIBRARY_EXPORT Tree : public Widget
 {
     Q_OBJECT
 

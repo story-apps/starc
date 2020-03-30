@@ -11,7 +11,7 @@ namespace BusinessLayer
 /**
  * @brief Класс элементов сцен модели сценария
  */
-class ScreenplayTextModelSceneItem : public ScreenplayTextModelItem
+class CORE_LIBRARY_EXPORT ScreenplayTextModelSceneItem : public ScreenplayTextModelItem
 {
 public:
     ScreenplayTextModelSceneItem();
