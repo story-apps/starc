@@ -1584,7 +1584,7 @@ void PageTextEditPrivate::updateDocumentGeometry()
     // ... и настроим поля документа
     //
     QMarginsF rootFrameMargins = m_pageMetrics.pxPageMargins();
-    rootFrameMargins.setBottom(rootFrameMargins.bottom() + m_pageSpacing);
+    rootFrameMargins.setTop(rootFrameMargins.top() + m_pageSpacing);
     QTextFrameFormat rootFrameFormat = doc->rootFrame()->frameFormat();
     if (!qFuzzyCompare(rootFrameFormat.leftMargin(), rootFrameMargins.left())
         || !qFuzzyCompare(rootFrameFormat.topMargin(), rootFrameMargins.top())
@@ -1765,7 +1765,7 @@ void PageTextEditPrivate::paintPagesView(QPainter *_painter)
     //
     auto currentPageTop = firstVisiblePageBottom - pageHeight;
     while (currentPageTop <= q->height()) {
-        const QRectF pageRect(0 - horizontalDelta, currentPageTop, pageWidth, pageHeight - m_pageSpacing);
+        const QRectF pageRect(0 - horizontalDelta, currentPageTop + m_pageSpacing, pageWidth, pageHeight);
         const QRectF backgroundRect = pageRect.marginsRemoved(Ui::DesignSystem::card().shadowMargins().toMargins());
         const qreal borderRadius = Ui::DesignSystem::card().borderRadius();
 
@@ -1854,8 +1854,8 @@ void PageTextEditPrivate::paintPageMargins(QPainter* _painter)
     //
     // Верхнее поле первой страницы на экране, когда не видно предыдущей страницы
     //
-    if (currentPageBottom - pageSize.height() + pageMargins.top() >= 0) {
-        const QRectF topMarginRect(leftMarginPosition, currentPageBottom - pageSize.height(), marginWidth, pageMargins.top());
+    if (currentPageBottom - pageSize.height() + pageMargins.top() + m_pageSpacing >= 0) {
+        const QRectF topMarginRect(leftMarginPosition, currentPageBottom - pageSize.height() + m_pageSpacing, marginWidth, pageMargins.top());
         paintHeader(_painter, topMarginRect);
         paintPageNumber(_painter, topMarginRect, true, pageNumber);
     }
@@ -1863,11 +1863,11 @@ void PageTextEditPrivate::paintPageMargins(QPainter* _painter)
     //
     // Для всех видимых страниц
     //
-    while (currentPageBottom - pageMargins.bottom() - m_pageSpacing < q->height()) {
+    while (currentPageBottom - pageMargins.bottom() < q->height()) {
         //
         // Определить прямоугольник нижнего поля
         //
-        const QRect bottomMarginRect(leftMarginPosition, currentPageBottom - pageMargins.bottom() - m_pageSpacing,
+        const QRect bottomMarginRect(leftMarginPosition, currentPageBottom - pageMargins.bottom(),
                                marginWidth, pageMargins.bottom());
         paintFooter(_painter, bottomMarginRect);
         paintPageNumber(_painter, bottomMarginRect, false, pageNumber);
@@ -1880,7 +1880,7 @@ void PageTextEditPrivate::paintPageMargins(QPainter* _painter)
         //
         // Определить прямоугольник верхнего поля следующей страницы
         //
-        const QRect topMarginRect(leftMarginPosition, currentPageBottom, marginWidth, pageMargins.top());
+        const QRect topMarginRect(leftMarginPosition, currentPageBottom + m_pageSpacing, marginWidth, pageMargins.top());
         paintHeader(_painter, topMarginRect);
         paintPageNumber(_painter, topMarginRect, true, pageNumber);
 
