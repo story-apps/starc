@@ -148,8 +148,9 @@ void Completer::showCompleter(const QRect& _rect)
     //
     // Анимируем размер попапа
     // FIXME: разобраться с проблемами backing store в маке
+    // FIXME: в винде тоже не работает как хотелось бы, какие-то моргания
     //
-#ifndef Q_OS_MAC
+#ifdef Q_OS_LINUX
     const int finalHeight = static_cast<int>(std::min(maxVisibleItems(), completionCount())
                                              * Ui::DesignSystem::treeOneLineItem().height());
     if (d->popupHeightAnimation.state() == QVariantAnimation::Stopped) {
