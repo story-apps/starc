@@ -161,6 +161,7 @@ CreateProjectDialog::CreateProjectDialog(QWidget* _parent)
 
 void CreateProjectDialog::configureCloudProjectCreationAbility(bool _isLogged, bool _isSubscriptionActive)
 {
+
     //
     // TODO: Обработать вариант, когда пользователь в офлайне
     //       - нужно запретить создавать проект в облаке, но показать другую подсказку
@@ -199,6 +200,14 @@ void CreateProjectDialog::configureCloudProjectCreationAbility(bool _isLogged, b
         connect(d->cloudProjectCreationAction, &Body1LinkLabel::clicked,
                 this, &CreateProjectDialog::loginPressed);
     }
+
+    //
+    // FIXME: открыть, когда будет работать облако
+    //
+//    d->cloudProjectCreationNote->hide();
+    d->cloudProjectCreationAction->hide();
+    d->cloudProjectCreationActionNote->hide();
+    return;
 }
 
 void CreateProjectDialog::setProjectFolder(const QString& _path)
