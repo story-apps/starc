@@ -13,10 +13,6 @@
 namespace Ui
 {
 
-namespace {
-    const char* kActionWidthKey = "action-width";
-}
-
 class ScreenplayTextEditToolBar::Implementation
 {
 public:
@@ -51,7 +47,7 @@ ScreenplayTextEditToolBar::Implementation::Implementation(QWidget* _parent)
     : popup(new Card(_parent)),
       popupContent(new Tree(popup))
 {
-    popup->setWindowFlag(Qt::SplashScreen);
+    popup->setWindowFlags(Qt::SplashScreen | Qt::FramelessWindowHint | Qt::NoDropShadowWindowHint);
     popup->setAttribute(Qt::WA_Hover, false);
     popup->setAttribute(Qt::WA_TranslucentBackground);
     popup->setAttribute(Qt::WA_ShowWithoutActivating);
