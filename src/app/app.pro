@@ -25,3 +25,5 @@ SOURCES += \
 
 HEADERS += \
     application.h
+
+win32:RC_FILE = app.rc
