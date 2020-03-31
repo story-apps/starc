@@ -107,7 +107,12 @@ Section "Uninstall"
   DeleteRegKey HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\Starc"
   
   ; Удаляем все файлы кроме базы данных
+  Delete "$INSTDIR\audio\*.*"
+  Delete "$INSTDIR\imageformats\*.*"
+  Delete "$INSTDIR\platforms\*.*"
   Delete "$INSTDIR\plugins\*.*"
+  Delete "$INSTDIR\printsupport\*.*"
+  Delete "$INSTDIR\sqldrivers\*.*"
   Delete "$INSTDIR\*.dll"
   Delete "$INSTDIR\*.exe"
   Delete "$INSTDIR\*.ico"
@@ -119,7 +124,12 @@ Section "Uninstall"
   Delete "$DESKTOP\Story Architect.lnk"
 
   ; Remove directories used
-  RMDir /r "$INSTDIR\plugins"
+  RMDir /r "$INSTDIR\audio\*.*"
+  RMDir /r "$INSTDIR\imageformats\*.*"
+  RMDir /r "$INSTDIR\platforms\*.*"
+  RMDir /r "$INSTDIR\plugins\*.*"
+  RMDir /r "$INSTDIR\printsupport\*.*"
+  RMDir /r "$INSTDIR\sqldrivers\*.*"
   RMDir "$INSTDIR"
   RMDir "$SMPROGRAMS\Starc"
   
