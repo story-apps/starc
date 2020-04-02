@@ -74,8 +74,10 @@ void ScreenplayTextModel::Implementation::buildModel(Domain::DocumentObject* _sc
     while (!rootNode.isNull()) {
         if (rootNode.nodeName() == "folder") {
             rootItem->appendItem(new ScreenplayTextModelFolderItem(rootNode));
-        } else {
+        } else if (rootNode.nodeName() == "scene") {
             rootItem->appendItem(new ScreenplayTextModelSceneItem(rootNode));
+        } else {
+            rootItem->appendItem(new ScreenplayTextModelTextItem(rootNode));
         }
         rootNode = rootNode.nextSiblingElement();
     }
