@@ -98,7 +98,7 @@ public:
     /**
      * @brief Виды межстрочных интервалов
      */
-    enum LineSpacing {
+    enum class LineSpacingType {
         SingleLineSpacing,
         OneAndHalfLineSpacing,
         DoubleLineSpacing,
@@ -114,149 +114,90 @@ public:
     ScreenplayBlockStyle() = default;
 
     /**
-     * @brief Получить тип блока
+     * @brief Тип блока
      */
     ScreenplayParagraphType type() const;
+    void setType(ScreenplayParagraphType _type);
 
     /**
-     * @brief Получить активность стиля блока
+     * @brief Активен ли стиль блока
      */
     bool isActive() const;
+    void setActive(bool _isActive);
+
+    /**
+     * @brief Экспортируется ли блок
+     */
+    bool isExportable() const;
+    void setExportable(bool _isExportable);
+
+    /**
+     * @brief Располагается ли блок с начала страницы
+     */
+    bool isStartFromNewPage() const;
+    void setStartFromNewPage(bool _startFromNewPage);
 
     /**
      * @brief Получить шрифт блока
      */
     QFont font() const;
+    void setFont(const QFont& _font);
 
     /**
      * @brief Выравнивание блока
      */
     Qt::Alignment align() const;
-
-    /**
-     * @brief Отступ сверху, линий
-     */
-    int topSpace() const;
-
-    /**
-     * @brief Отступ снизу, линий
-     */
-    int bottomSpace() const;
-
-    /**
-     * @brief Отступ слева, мм
-     */
-    qreal leftMargin() const;
-
-    /**
-     * @brief Отступ сверху, мм
-     */
-    qreal topMargin() const;
-
-    /**
-     * @brief Отступ справа, мм
-     */
-    qreal rightMargin() const;
-
-    /**
-     * @brief Отступ снизу, мм
-     */
-    qreal bottomMargin() const;
-
-    /**
-     * @brief Заданы ли отступы в блоке в мм [true], или в линиях [false]
-     */
-    bool hasVerticalSpacingInMM() const;
+    void setAlign(Qt::Alignment _align);
 
     /**
      * @brief Межстрочный интервал
      */
-    LineSpacing lineSpacing() const;
+    LineSpacingType lineSpacingType() const;
+    void setLineSpacingType(LineSpacingType _type);
 
     /**
      * @brief Значение межстрочного интервала для FixedLineSpacing, мм
      */
     qreal lineSpacingValue() const;
-
-    /**
-     * @brief Установить тип
-     */
-    void setType(ScreenplayParagraphType _type);
-
-    /**
-     * @brief Установить активность
-     */
-    void setIsActive(bool _isActive);
-
-    /**
-     * @brief Установить шрифт
-     */
-    void setFont(const QFont& _font);
-
-    /**
-     * @brief Установить выравнивание
-     */
-    void setAlign(Qt::Alignment _align);
-
-    /**
-     * @brief Установить отступ сверху, линий
-     */
-    void setTopSpace(int _topSpace);
-
-    /**
-     * @brief Установить отступ сверху, линий
-     */
-    void setBottomSpace(int _bottomSpace);
-
-    /**
-     * @brief Установить левый отступ, мм
-     */
-    void setLeftMargin(qreal _leftMargin);
-
-    /**
-     * @brief Установить верхний отступ, мм
-     */
-    void setTopMargin(qreal _topMargin);
-
-    /**
-     * @brief Установить правый отступ, мм
-     */
-    void setRightMargin(qreal _rightMargin);
-
-    /**
-     * @brief Установить нижний отступ, мм
-     */
-    void setBottomMargin(qreal _bottomMargin);
-
-    /**
-     * @brief Установить межстрочный интервал
-     */
-    void setLineSpacing(LineSpacing _lineSpacing);
-
-    /**
-     * @brief Значение межстрочного интервала для FixedLineSpacing, мм
-     */
     void setLineSpacingValue(qreal _value);
+
+    /**
+     * @brief Отступ сверху, линий
+     */
+    int linesBefore() const;
+    void setLinesBefore(int _linesBefore);
+
+    /**
+     * @brief Отступы вокруг блока, мм
+     */
+    QMarginsF margins() const;
+    void setMargins(const QMarginsF& _margins);
+
+    /**
+     * @brief Отступы вокруг блока в режиме разделения на колонки, мм
+     */
+    QMarginsF marginsOnHalfPage() const;
+    void setMarginsOnHalfPage(const QMarginsF& _margins);
+
+    /**
+     * @brief Отступ снизу, линий
+     */
+    int linesAfter() const;
+    void setLinesAfter(int _linesAfter);
+
 
     /**
      * @brief Настройки стиля отображения блока
      */
-    QTextBlockFormat blockFormat() const;
-
-    /**
-     * @brief Установить цвет фона блока
-     */
+    QTextBlockFormat blockFormat(bool _onHalfPage = false) const;
     void setBackgroundColor(const QColor& _color);
 
     /**
      * @brief Настройки шрифта блока
      */
     QTextCharFormat charFormat() const;
-
-    /**
-     * @brief Установить цвет текста
-     */
     void setTextColor(const QColor& _color);
+
 
     /**
      * @brief Первый символ заглавный
@@ -335,6 +276,16 @@ private:
     bool m_isActive = false;
 
     /**
+     * @brief Будет ли экспортироваться блок
+     */
+    bool m_isExportable = true;
+
+    /**
+     * @brief Начинается ли блок с начала страницы
+     */
+    bool m_isStartFromNewPage = false;
+
+    /**
      * @brief Шрифт блока
      */
     QFont m_font = QFont("Courier Prime", 12);
@@ -345,49 +296,38 @@ private:
     Qt::Alignment m_align = Qt::AlignLeft;
 
     /**
+     * @brief Межстрочный интервал
+     */
+    struct {
+        LineSpacingType type = LineSpacingType::SingleLineSpacing;
+        qreal value = 0.0;
+    } m_lineSpacing;
+
+    /**
      * @brief Отступ сверху, линий
      */
-    int m_topSpace = 0;
+    int m_linesBefore = 0;
+
+    /**
+     * @brief Отступы вокруг блока, мм
+     */
+    QMarginsF m_margins;
+
+    /**
+     * @brief Отступы вокруг блока в режиме разделения на колонки, мм
+     */
+    QMarginsF m_marginsOnHalfPage;
 
     /**
      * @brief Отступ снизу, линий
      */
-    int m_bottomSpace = 0;
-
-    /**
-     * @brief Отступ слева, мм
-     */
-    qreal m_leftMargin = 0.0;
-
-    /**
-     * @brief Отступ сверху, мм
-     */
-    qreal m_topMargin = 0.0;
-
-    /**
-     * @brief Отступ справа, мм
-     */
-    qreal m_rightMargin = 0.0;
-
-    /**
-     * @brief Отступ снизу, мм
-     */
-    qreal m_bottomMargin = 0.0;
-
-    /**
-     * @brief Межстрочный интервал
-     */
-    LineSpacing m_lineSpacing = SingleLineSpacing;
-
-    /**
-     * @brief Значение межстрочного интервала для FixedLineSpacing, мм
-     */
-    qreal m_lineSpacingValue = 0.0;
+    int m_linesAfter = 0;
 
     /**
      * @brief Формат блока
      */
     QTextBlockFormat m_blockFormat;
+    QTextBlockFormat m_blockFormatOnHalfPage;
 
     /**
      * @brief Формат текста
@@ -420,68 +360,46 @@ public:
     bool isDefault() const;
 
     /**
-     * @brief Получить название
+     * @brief Название
      */
     QString name() const;
-
-    /**
-     * @brief Получить описание
-     */
-    QString description() const;
-
-    /**
-     * @brief Получить размер страницы
-     */
-    QPageSize::PageSizeId pageSizeId() const;
-
-    /**
-     * @brief Получить отступы страницы в миллиметрах
-     */
-    QMarginsF pageMargins() const;
-
-    /**
-     * @brief Получить расположение нумерации
-     */
-    Qt::Alignment pageNumbersAlignment() const;
-
-    /**
-     * @brief Получить стиль блока заданного типа
-     */
-    ScreenplayBlockStyle blockStyle(ScreenplayParagraphType _forType) const;
-
-    /**
-     * @brief Получить стиль заданного блока
-     */
-    ScreenplayBlockStyle blockStyle(const QTextBlock& _forBlock) const;
-
-    /**
-     * @brief Установить наименование
-     */
     void setName(const QString& _name);
 
     /**
-     * @brief Установить описание
+     * @brief Описание
      */
+    QString description() const;
     void setDescription(const QString& _description);
 
     /**
-     * @brief Установить формат страницы
+     * @brief Размер страницы
      */
+    QPageSize::PageSizeId pageSizeId() const;
     void setPageSizeId(QPageSize::PageSizeId _pageSizeId);
 
     /**
-     * @brief Установить поля документа
+     * @brief Отступы страницы в миллиметрах
      */
+    QMarginsF pageMargins() const;
     void setPageMargins(const QMarginsF& _pageMargins);
 
     /**
-     * @brief Установить расположение нумерации
+     * @brief Расположение нумерации
      */
-    void setNumberingAlignment(Qt::Alignment _alignment);
+    Qt::Alignment pageNumbersAlignment() const;
+    void setPageNumbersAlignment(Qt::Alignment _alignment);
 
     /**
-     * @brief Установить стиль блока
+     * @brief Процент ширины страницы для левой части разделителя
      */
+    int leftHalfOfPageWidthPercents() const;
+    void setLeftHalfOfPageWidthPercents(int _width);
+
+    /**
+     * @brief Получить стиль блока
+     */
+    ScreenplayBlockStyle blockStyle(ScreenplayParagraphType _forType) const;
+    ScreenplayBlockStyle blockStyle(const QTextBlock& _forBlock) const;
     void setBlockStyle(const ScreenplayBlockStyle& _blockStyle);
 
     /**
@@ -530,9 +448,22 @@ private:
     Qt::Alignment m_pageNumbersAlignment;
 
     /**
+     * @brief Процент от ширины страницы, которые занимает левая часть разделения
+     */
+    int m_leftHalfOfPageWidthPercents = 50;
+
+    /**
      * @brief Стили блоков текста
      */
-    QMap<ScreenplayParagraphType, ScreenplayBlockStyle> m_blockStyles;
+    QHash<ScreenplayParagraphType, ScreenplayBlockStyle> m_blockStyles;
 };
+
+/**
+ * @brief Определим метод для возможности использовать типы в виде ключей в словарях
+ */
+inline uint qHash(ScreenplayBlockStyle::LineSpacingType _type)
+{
+    return ::qHash(static_cast<int>(_type));
+}
 
 } // namespace BusinessLayer

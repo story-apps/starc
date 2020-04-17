@@ -18,32 +18,25 @@ namespace BusinessLayer
 
 namespace {
     const QHash<ScreenplayParagraphType, QString> kScreenplayParagraphTypeToString
-    = {{ ScreenplayParagraphType::UnformattedText, QLatin1String("unformatted_text") },
-       { ScreenplayParagraphType::SceneHeading, QLatin1String("scene_heading") },
-       { ScreenplayParagraphType::SceneCharacters, QLatin1String("scene_characters") },
-       { ScreenplayParagraphType::Action, QLatin1String("action") },
-       { ScreenplayParagraphType::Character, QLatin1String("character") },
-       { ScreenplayParagraphType::Parenthetical, QLatin1String("parenthetical") },
-       { ScreenplayParagraphType::Dialogue, QLatin1String("dialogue") },
-       { ScreenplayParagraphType::Lyrics, QLatin1String("lyrics") },
-       { ScreenplayParagraphType::Transition, QLatin1String("transition") },
-       { ScreenplayParagraphType::Shot, QLatin1String("shot") },
-       { ScreenplayParagraphType::InlineNote, QLatin1String("inline_note") },
-       { ScreenplayParagraphType::FolderHeader, QLatin1String("folder_header") },
-       { ScreenplayParagraphType::FolderFooter, QLatin1String("folder_footer") }};
+            = {{ ScreenplayParagraphType::UnformattedText, QLatin1String("unformatted_text") },
+               { ScreenplayParagraphType::SceneHeading, QLatin1String("scene_heading") },
+               { ScreenplayParagraphType::SceneCharacters, QLatin1String("scene_characters") },
+               { ScreenplayParagraphType::Action, QLatin1String("action") },
+               { ScreenplayParagraphType::Character, QLatin1String("character") },
+               { ScreenplayParagraphType::Parenthetical, QLatin1String("parenthetical") },
+               { ScreenplayParagraphType::Dialogue, QLatin1String("dialogue") },
+               { ScreenplayParagraphType::Lyrics, QLatin1String("lyrics") },
+               { ScreenplayParagraphType::Transition, QLatin1String("transition") },
+               { ScreenplayParagraphType::Shot, QLatin1String("shot") },
+               { ScreenplayParagraphType::InlineNote, QLatin1String("inline_note") },
+               { ScreenplayParagraphType::FolderHeader, QLatin1String("folder_header") },
+               { ScreenplayParagraphType::FolderFooter, QLatin1String("folder_footer") }};
 
-    /**
-     * @brief Получить межстрочный интервал из строки
-     */
-    static ScreenplayBlockStyle::LineSpacing lineSpacingFromString(const QString& _lineSpacing) {
-        const QHash<ScreenplayBlockStyle::LineSpacing, QString> lineSpacingToString
-                = {{ ScreenplayBlockStyle::SingleLineSpacing, "single" },
-                   { ScreenplayBlockStyle::OneAndHalfLineSpacing, "oneandhalf" },
-                   { ScreenplayBlockStyle::DoubleLineSpacing, "double" },
-                   { ScreenplayBlockStyle::FixedLineSpacing, "fixed" }};
-
-        return lineSpacingToString.key(_lineSpacing);
-    }
+    const QHash<ScreenplayBlockStyle::LineSpacingType, QString> kLineSpacingToString
+            = {{ ScreenplayBlockStyle::LineSpacingType::SingleLineSpacing, "single" },
+               { ScreenplayBlockStyle::LineSpacingType::OneAndHalfLineSpacing, "oneandhalf" },
+               { ScreenplayBlockStyle::LineSpacingType::DoubleLineSpacing, "double" },
+               { ScreenplayBlockStyle::LineSpacingType::FixedLineSpacing, "fixed" }};
 }
 
 
@@ -55,6 +48,16 @@ QString toString(ScreenplayParagraphType _type)
 ScreenplayParagraphType screenplayParagraphTypeFromString(const QString& _text)
 {
     return kScreenplayParagraphTypeToString.key(_text, ScreenplayParagraphType::Undefined);
+}
+
+QString toString(ScreenplayBlockStyle::LineSpacingType _type)
+{
+    return kLineSpacingToString.value(_type);
+}
+
+ScreenplayBlockStyle::LineSpacingType lineSpacingFromString(const QString& _lineSpacing)
+{
+    return kLineSpacingToString.key(_lineSpacing);
 }
 
 
@@ -75,66 +78,6 @@ ScreenplayParagraphType ScreenplayBlockStyle::type() const
     return m_type;
 }
 
-bool ScreenplayBlockStyle::isActive() const
-{
-    return m_isActive;
-}
-
-QFont ScreenplayBlockStyle::font() const
-{
-    return m_font;
-}
-
-Qt::Alignment ScreenplayBlockStyle::align() const
-{
-    return m_align;
-}
-
-int ScreenplayBlockStyle::topSpace() const
-{
-    return m_topSpace;
-}
-
-int ScreenplayBlockStyle::bottomSpace() const
-{
-    return m_bottomSpace;
-}
-
-qreal ScreenplayBlockStyle::leftMargin() const
-{
-    return m_leftMargin;
-}
-
-qreal ScreenplayBlockStyle::topMargin() const
-{
-    return m_topMargin;
-}
-
-qreal ScreenplayBlockStyle::rightMargin() const
-{
-    return m_rightMargin;
-}
-
-qreal ScreenplayBlockStyle::bottomMargin() const
-{
-    return m_bottomMargin;
-}
-
-bool ScreenplayBlockStyle::hasVerticalSpacingInMM() const
-{
-    return m_topMargin != 0 || m_bottomMargin != 0;
-}
-
-ScreenplayBlockStyle::LineSpacing ScreenplayBlockStyle::lineSpacing() const
-{
-    return m_lineSpacing;
-}
-
-qreal ScreenplayBlockStyle::lineSpacingValue() const
-{
-    return m_lineSpacingValue;
-}
-
 void ScreenplayBlockStyle::setType(ScreenplayParagraphType _type)
 {
     if (m_type == _type) {
@@ -143,11 +86,49 @@ void ScreenplayBlockStyle::setType(ScreenplayParagraphType _type)
 
     m_type = _type;
     m_blockFormat.setProperty(ScreenplayBlockStyle::PropertyType, static_cast<int>(_type));
+    m_blockFormatOnHalfPage.setProperty(ScreenplayBlockStyle::PropertyType, static_cast<int>(_type));
 }
 
-void ScreenplayBlockStyle::setIsActive(bool _isActive)
+bool ScreenplayBlockStyle::isActive() const
 {
-    m_isActive = _isActive;
+    return m_isActive;
+}
+
+void ScreenplayBlockStyle::setActive(bool _active)
+{
+    m_isActive = _active;
+}
+
+bool ScreenplayBlockStyle::isExportable() const
+{
+    return m_isExportable;
+}
+
+void ScreenplayBlockStyle::setExportable(bool _exportable)
+{
+    m_isExportable = _exportable;
+}
+
+bool ScreenplayBlockStyle::isStartFromNewPage() const
+{
+    return m_isStartFromNewPage;
+}
+
+void ScreenplayBlockStyle::setStartFromNewPage(bool _startFromNewPage)
+{
+    if (m_isStartFromNewPage == _startFromNewPage) {
+        return;
+    }
+
+    m_isStartFromNewPage = _startFromNewPage;
+    m_blockFormat.setPageBreakPolicy(m_isStartFromNewPage ? QTextFormat::PageBreak_AlwaysBefore
+                                                          : QTextFormat::PageBreak_Auto);
+    m_blockFormatOnHalfPage.setPageBreakPolicy(m_blockFormat.pageBreakPolicy());
+}
+
+QFont ScreenplayBlockStyle::font() const
+{
+    return m_font;
 }
 
 void ScreenplayBlockStyle::setFont(const QFont& _font)
@@ -161,6 +142,11 @@ void ScreenplayBlockStyle::setFont(const QFont& _font)
     updateLineHeight();
 }
 
+Qt::Alignment ScreenplayBlockStyle::align() const
+{
+    return m_align;
+}
+
 void ScreenplayBlockStyle::setAlign(Qt::Alignment _align)
 {
     if (m_align == _align) {
@@ -169,97 +155,128 @@ void ScreenplayBlockStyle::setAlign(Qt::Alignment _align)
 
     m_align = _align;
     m_blockFormat.setAlignment(m_align);
-    m_blockFormat.setTopMargin(QFontMetricsF(m_font).lineSpacing() * m_topSpace);
+    m_blockFormatOnHalfPage.setAlignment(m_blockFormat.alignment());
 }
 
-void ScreenplayBlockStyle::setTopSpace(int _topSpace)
+ScreenplayBlockStyle::LineSpacingType ScreenplayBlockStyle::lineSpacingType() const
 {
-    if (m_topSpace == _topSpace) {
+    return m_lineSpacing.type;
+}
+
+void ScreenplayBlockStyle::setLineSpacingType(ScreenplayBlockStyle::LineSpacingType _type)
+{
+    if (m_lineSpacing.type == _type) {
         return;
     }
 
-    m_topSpace = _topSpace;
-    updateTopMargin();
-}
-
-void ScreenplayBlockStyle::setBottomSpace(int _bottomSpace)
-{
-    if (m_bottomSpace == _bottomSpace) {
-        return;
-    }
-
-    m_bottomSpace = _bottomSpace;
-    updateBottomMargin();
-}
-
-void ScreenplayBlockStyle::setLeftMargin(qreal _leftMargin)
-{
-    if (m_leftMargin == _leftMargin) {
-        return;
-    }
-
-    m_leftMargin = _leftMargin;
-    m_blockFormat.setLeftMargin(PageMetrics::mmToPx(m_leftMargin));
-}
-
-void ScreenplayBlockStyle::setTopMargin(qreal _topMargin)
-{
-    if (m_topMargin == _topMargin) {
-        return;
-    }
-
-    m_topMargin = _topMargin;
-    updateTopMargin();
-}
-
-void ScreenplayBlockStyle::setRightMargin(qreal _rightMargin)
-{
-    if (m_rightMargin == _rightMargin) {
-        return;
-    }
-
-    m_rightMargin = _rightMargin;
-    m_blockFormat.setRightMargin(PageMetrics::mmToPx(m_rightMargin));
-}
-
-void ScreenplayBlockStyle::setBottomMargin(qreal _bottomMargin)
-{
-    if (m_bottomMargin == _bottomMargin) {
-        return;
-    }
-
-    m_bottomMargin = _bottomMargin;
-    updateBottomMargin();
-}
-
-void ScreenplayBlockStyle::setLineSpacing(ScreenplayBlockStyle::LineSpacing _lineSpacing)
-{
-    if (m_lineSpacing == _lineSpacing) {
-        return;
-    }
-
-    m_lineSpacing = _lineSpacing;
+    m_lineSpacing.type = _type;
     updateLineHeight();
+}
+
+qreal ScreenplayBlockStyle::lineSpacingValue() const
+{
+    return m_lineSpacing.value;
 }
 
 void ScreenplayBlockStyle::setLineSpacingValue(qreal _value)
 {
-    if (m_lineSpacingValue == _value) {
+    if (m_lineSpacing.value == _value) {
         return;
     }
 
-    m_lineSpacingValue = _value;
+    m_lineSpacing.value = _value;
     updateLineHeight();
 }
 
-QTextBlockFormat ScreenplayBlockStyle::blockFormat() const
+int ScreenplayBlockStyle::linesBefore() const
 {
-    return m_blockFormat;
+    return m_linesBefore;
+}
+
+void ScreenplayBlockStyle::setLinesBefore(int _linesBefore)
+{
+    if (m_linesBefore == _linesBefore) {
+        return;
+    }
+
+    m_linesBefore = _linesBefore;
+    updateTopMargin();
+}
+
+QMarginsF ScreenplayBlockStyle::margins() const
+{
+    return m_margins;
+}
+
+void ScreenplayBlockStyle::setMargins(const QMarginsF& _margins)
+{
+    if (m_margins.left() != _margins.left()) {
+        m_margins.setLeft(_margins.left());
+        m_blockFormat.setLeftMargin(PageMetrics::mmToPx(m_margins.left()));
+    }
+
+    if (m_margins.top() != _margins.top()) {
+        m_margins.setTop(_margins.top());
+        updateTopMargin();
+    }
+
+    if (m_margins.right() != _margins.right()) {
+        m_margins.setRight(_margins.right());
+        m_blockFormat.setRightMargin(PageMetrics::mmToPx(m_margins.right()));
+    }
+
+    if (m_margins.bottom() != _margins.bottom()) {
+        m_margins.setBottom(_margins.bottom());
+        updateBottomMargin();
+    }
+}
+
+QMarginsF ScreenplayBlockStyle::marginsOnHalfPage() const
+{
+    return m_marginsOnHalfPage;
+}
+
+void ScreenplayBlockStyle::setMarginsOnHalfPage(const QMarginsF& _margins)
+{
+    if (m_marginsOnHalfPage.left() != _margins.left()) {
+        m_marginsOnHalfPage.setLeft(_margins.left());
+        m_blockFormatOnHalfPage.setLeftMargin(PageMetrics::mmToPx(m_marginsOnHalfPage.left()));
+    }
+
+    if (m_marginsOnHalfPage.right() != _margins.right()) {
+        m_marginsOnHalfPage.setRight(_margins.right());
+        m_blockFormatOnHalfPage.setRightMargin(PageMetrics::mmToPx(m_marginsOnHalfPage.right()));
+    }
+}
+
+int ScreenplayBlockStyle::linesAfter() const
+{
+    return m_linesAfter;
+}
+
+void ScreenplayBlockStyle::setLinesAfter(int _linesAfter)
+{
+    if (m_linesAfter == _linesAfter) {
+        return;
+    }
+
+    m_linesAfter = _linesAfter;
+    updateBottomMargin();
+}
+
+QTextBlockFormat ScreenplayBlockStyle::blockFormat(bool _onHalfPage) const
+{
+    if (_onHalfPage) {
+        return m_blockFormatOnHalfPage;
+    } else {
+        return m_blockFormat;
+    }
 }
 
 void ScreenplayBlockStyle::setBackgroundColor(const QColor& _color)
 {
     m_blockFormat.setBackground(_color);
+    m_blockFormatOnHalfPage.setBackground(m_blockFormat.background());
 }
 
 QTextCharFormat ScreenplayBlockStyle::charFormat() const
@@ -337,15 +354,12 @@ ScreenplayBlockStyle::ScreenplayBlockStyle(const QXmlStreamAttributes& _blockAtt
     //
     // Считываем параметры
     //
-    // ... тип блока и его активность в стиле
-    // NOTE: обрабатываем так же и старые стили
+    // ... тип блока и его основные параметры в стиле
     //
-    QString typeName = _blockAttributes.value("id").toString();
-    if (typeName == "time_and_place") {
-        typeName = "scene_heading";
-    }
-    m_type = screenplayParagraphTypeFromString(typeName);
+    m_type = screenplayParagraphTypeFromString(_blockAttributes.value("id").toString());
     m_isActive = _blockAttributes.value("active").toString() == "true";
+    m_isExportable = _blockAttributes.value("exportable").toString() == "true";
+    m_isStartFromNewPage = _blockAttributes.value("starts_from_new_page").toString() == "true";
     //
     // ... настройки шрифта
     //
@@ -359,19 +373,16 @@ ScreenplayBlockStyle::ScreenplayBlockStyle(const QXmlStreamAttributes& _blockAtt
     m_font.setUnderline(_blockAttributes.value("underline").toString() == "true");
     m_font.setCapitalization(_blockAttributes.value("uppercase").toString() == "true"
                              ? QFont::AllUppercase : QFont::MixedCase);
-
     //
     // ... расположение блока
     //
     m_align = alignmentFromString(_blockAttributes.value("alignment").toString());
-    m_topSpace = _blockAttributes.value("top_space").toInt();
-    m_bottomSpace = _blockAttributes.value("bottom_space").toInt();
-    m_leftMargin = _blockAttributes.value("left_margin").toDouble();
-    m_topMargin = _blockAttributes.value("top_margin").toDouble();
-    m_rightMargin = _blockAttributes.value("right_margin").toDouble();
-    m_bottomMargin = _blockAttributes.value("bottom_margin").toDouble();
-    m_lineSpacing = lineSpacingFromString(_blockAttributes.value("line_spacing").toString());
-    m_lineSpacingValue = _blockAttributes.value("line_spacing_value").toDouble();
+    m_lineSpacing.type = lineSpacingFromString(_blockAttributes.value("line_spacing").toString());
+    m_lineSpacing.value = _blockAttributes.value("line_spacing_value").toDouble();
+    m_linesBefore = _blockAttributes.value("lines_before").toInt();
+    m_margins = marginsFromString(_blockAttributes.value("margins").toString());
+    m_marginsOnHalfPage = marginsFromString(_blockAttributes.value("margins_on_half_page").toString());
+    m_linesAfter = _blockAttributes.value("lines_after").toInt();
 
     //
     // Настроим форматы
@@ -379,8 +390,14 @@ ScreenplayBlockStyle::ScreenplayBlockStyle(const QXmlStreamAttributes& _blockAtt
     // ... блока
     //
     m_blockFormat.setAlignment(m_align);
-    m_blockFormat.setLeftMargin(PageMetrics::mmToPx(m_leftMargin));
-    m_blockFormat.setRightMargin(PageMetrics::mmToPx(m_rightMargin));
+    m_blockFormat.setLeftMargin(PageMetrics::mmToPx(m_margins.left()));
+    m_blockFormat.setRightMargin(PageMetrics::mmToPx(m_margins.right()));
+    m_blockFormat.setPageBreakPolicy(m_isStartFromNewPage ? QTextFormat::PageBreak_AlwaysBefore
+                                                           : QTextFormat::PageBreak_Auto);
+    m_blockFormatOnHalfPage.setAlignment(m_align);
+    m_blockFormatOnHalfPage.setLeftMargin(PageMetrics::mmToPx(m_marginsOnHalfPage.left()));
+    m_blockFormatOnHalfPage.setRightMargin(PageMetrics::mmToPx(m_marginsOnHalfPage.right()));
+    m_blockFormatOnHalfPage.setPageBreakPolicy(m_blockFormat.pageBreakPolicy());
     updateLineHeight();
     //
     // ... текста
@@ -391,6 +408,7 @@ ScreenplayBlockStyle::ScreenplayBlockStyle(const QXmlStreamAttributes& _blockAtt
     // Запомним в стиле его настройки
     //
     m_blockFormat.setProperty(ScreenplayBlockStyle::PropertyType, static_cast<int>(m_type));
+    m_blockFormatOnHalfPage.setProperty(ScreenplayBlockStyle::PropertyType, static_cast<int>(m_type));
     m_charFormat.setProperty(ScreenplayBlockStyle::PropertyIsFirstUppercase, true);
     m_charFormat.setProperty(ScreenplayBlockStyle::PropertyIsCanModify, true);
 
@@ -412,44 +430,34 @@ ScreenplayBlockStyle::ScreenplayBlockStyle(const QXmlStreamAttributes& _blockAtt
             break;
         }
     }
-    //
-    // ... обрамление блока
-    //
-    const QString prefix = _blockAttributes.value("prefix").toString();
-    if (!prefix.isEmpty()) {
-        m_charFormat.setProperty(ScreenplayBlockStyle::PropertyPrefix, prefix);
-    }
-    const QString postfix = _blockAttributes.value("postfix").toString();
-    if (!postfix.isEmpty()) {
-        m_charFormat.setProperty(ScreenplayBlockStyle::PropertyPostfix, postfix);
-    }
 }
 
 void ScreenplayBlockStyle::updateLineHeight()
 {
     auto lineHeight = QFontMetricsF(m_font).lineSpacing();
-    switch (m_lineSpacing) {
-        case FixedLineSpacing: {
-            lineHeight = PageMetrics::mmToPx(m_lineSpacingValue);
+    switch (m_lineSpacing.type) {
+        case LineSpacingType::FixedLineSpacing: {
+            lineHeight = PageMetrics::mmToPx(m_lineSpacing.value);
             break;
         }
 
-        case DoubleLineSpacing: {
-            lineHeight *= 2;
+        case LineSpacingType::DoubleLineSpacing: {
+            lineHeight *= 2.0;
             break;
         }
 
-        case OneAndHalfLineSpacing: {
+        case LineSpacingType::OneAndHalfLineSpacing: {
             lineHeight *= 1.5;
             break;
         }
 
-        case SingleLineSpacing:
+        case LineSpacingType::SingleLineSpacing:
         default: {
             break;
         }
     }
     m_blockFormat.setLineHeight(lineHeight, QTextBlockFormat::FixedHeight);
+    m_blockFormatOnHalfPage.setLineHeight(lineHeight, QTextBlockFormat::FixedHeight);
 
     updateTopMargin();
     updateBottomMargin();
@@ -457,14 +465,16 @@ void ScreenplayBlockStyle::updateLineHeight()
 
 void ScreenplayBlockStyle::updateTopMargin()
 {
-    m_blockFormat.setTopMargin(m_blockFormat.lineHeight() * m_topSpace
-                               + PageMetrics::mmToPx(m_topMargin));
+    m_blockFormat.setTopMargin(m_blockFormat.lineHeight() * m_linesBefore
+                               + PageMetrics::mmToPx(m_margins.top()));
+    m_blockFormatOnHalfPage.setTopMargin(m_blockFormat.topMargin());
 }
 
 void ScreenplayBlockStyle::updateBottomMargin()
 {
-    m_blockFormat.setBottomMargin(m_blockFormat.lineHeight() * m_bottomSpace
-                                  + PageMetrics::mmToPx(m_bottomMargin));
+    m_blockFormat.setBottomMargin(m_blockFormat.lineHeight() * m_linesAfter
+                                  + PageMetrics::mmToPx(m_margins.bottom()));
+    m_blockFormatOnHalfPage.setBottomMargin(m_blockFormat.bottomMargin());
 }
 
 
@@ -492,8 +502,9 @@ void ScreenplayTemplate::saveToFile(const QString& _filePath) const
     writer.writeAttribute("name", m_name);
     writer.writeAttribute("description", m_description);
     writer.writeAttribute("page_format", PageMetrics::stringFromPageSizeId(m_pageSizeId));
-    writer.writeAttribute("page_margins", toString(m_pageMargins));
-    writer.writeAttribute("numbering_alignment", toString(m_pageNumbersAlignment));
+    writer.writeAttribute("page_margins", ::toString(m_pageMargins));
+    writer.writeAttribute("page_numbers_alignment", ::toString(m_pageNumbersAlignment));
+    writer.writeAttribute("left_half_of_page_width", ::toString(m_leftHalfOfPageWidthPercents));
     for (const auto& blockStyle : m_blockStyles.values()) {
         if (toString(blockStyle.type()).isEmpty()) {
             continue;
@@ -502,6 +513,8 @@ void ScreenplayTemplate::saveToFile(const QString& _filePath) const
         writer.writeStartElement("block");
         writer.writeAttribute("id", toString(blockStyle.type()));
         writer.writeAttribute("active", ::toString(blockStyle.isActive()));
+        writer.writeAttribute("exportable", ::toString(blockStyle.isExportable()));
+        writer.writeAttribute("starts_from_new_page", ::toString(blockStyle.isStartFromNewPage()));
         writer.writeAttribute("font_family", blockStyle.font().family());
         writer.writeAttribute("font_size", ::toString(blockStyle.font().pointSize()));
         writer.writeAttribute("bold", ::toString(blockStyle.font().bold()));
@@ -509,16 +522,12 @@ void ScreenplayTemplate::saveToFile(const QString& _filePath) const
         writer.writeAttribute("underline", ::toString(blockStyle.font().underline()));
         writer.writeAttribute("uppercase", ::toString(blockStyle.font().capitalization() == QFont::AllUppercase));
         writer.writeAttribute("alignment", toString(blockStyle.align()));
-        writer.writeAttribute("top_space", ::toString(blockStyle.topSpace()));
-        writer.writeAttribute("bottom_space", ::toString(blockStyle.bottomSpace()));
-        writer.writeAttribute("left_margin", ::toString(blockStyle.leftMargin()));
-        writer.writeAttribute("top_margin", ::toString(blockStyle.topMargin()));
-        writer.writeAttribute("right_margin", ::toString(blockStyle.rightMargin()));
-        writer.writeAttribute("bottom_margin", ::toString(blockStyle.bottomMargin()));
-        writer.writeAttribute("line_spacing", ::toString(blockStyle.lineSpacing()));
+        writer.writeAttribute("line_spacing", toString(blockStyle.lineSpacingType()));
         writer.writeAttribute("line_spacing_value", ::toString(blockStyle.lineSpacingValue()));
-        writer.writeAttribute("prefix", blockStyle.prefix());
-        writer.writeAttribute("postfix", blockStyle.postfix());
+        writer.writeAttribute("lines_before", ::toString(blockStyle.linesBefore()));
+        writer.writeAttribute("margins", ::toString(blockStyle.margins()));
+        writer.writeAttribute("margins_on_half_page", ::toString(blockStyle.marginsOnHalfPage()));
+        writer.writeAttribute("lines_after", ::toString(blockStyle.linesAfter()));
         writer.writeEndElement(); // block
     }
     writer.writeEndElement(); // style
@@ -537,9 +546,19 @@ QString ScreenplayTemplate::name() const
     return m_name;
 }
 
+void ScreenplayTemplate::setName(const QString& _name)
+{
+    m_name = _name;
+}
+
 QString ScreenplayTemplate::description() const
 {
     return m_description;
+}
+
+void ScreenplayTemplate::setDescription(const QString& _description)
+{
+    m_description = _description;
 }
 
 QPageSize::PageSizeId ScreenplayTemplate::pageSizeId() const
@@ -547,14 +566,39 @@ QPageSize::PageSizeId ScreenplayTemplate::pageSizeId() const
     return m_pageSizeId;
 }
 
+void ScreenplayTemplate::setPageSizeId(QPageSize::PageSizeId _pageSizeId)
+{
+    m_pageSizeId = _pageSizeId;
+}
+
 QMarginsF ScreenplayTemplate::pageMargins() const
 {
     return m_pageMargins;
 }
 
+void ScreenplayTemplate::setPageMargins(const QMarginsF& _pageMargins)
+{
+    m_pageMargins = _pageMargins;
+}
+
 Qt::Alignment ScreenplayTemplate::pageNumbersAlignment() const
 {
     return m_pageNumbersAlignment;
+}
+
+void ScreenplayTemplate::setPageNumbersAlignment(Qt::Alignment _alignment)
+{
+    m_pageNumbersAlignment = _alignment;
+}
+
+int ScreenplayTemplate::leftHalfOfPageWidthPercents() const
+{
+    return m_leftHalfOfPageWidthPercents;
+}
+
+void ScreenplayTemplate::setLeftHalfOfPageWidthPercents(int _width)
+{
+    m_leftHalfOfPageWidthPercents = _width;
 }
 
 ScreenplayBlockStyle ScreenplayTemplate::blockStyle(ScreenplayParagraphType _forType) const
@@ -567,34 +611,6 @@ ScreenplayBlockStyle ScreenplayTemplate::blockStyle(const QTextBlock& _forBlock)
     return blockStyle(ScreenplayBlockStyle::forBlock(_forBlock));
 }
 
-void ScreenplayTemplate::setName(const QString& _name)
-{
-    m_name = _name;
-}
-
-void ScreenplayTemplate::setDescription(const QString& _description)
-{
-    m_description = _description;
-}
-
-void ScreenplayTemplate::setPageSizeId(QPageSize::PageSizeId _pageSizeId)
-{
-    m_pageSizeId = _pageSizeId;
-}
-
-void ScreenplayTemplate::setPageMargins(const QMarginsF& _pageMargins)
-{
-    m_pageMargins = _pageMargins;
-}
-
-void ScreenplayTemplate::setNumberingAlignment(Qt::Alignment _alignment)
-{
-    m_pageNumbersAlignment = _alignment;
-}
-
-//
-// FIXME: переименовать
-//
 void ScreenplayTemplate::setBlockStyle(const ScreenplayBlockStyle& _blockStyle)
 {
     m_blockStyles.insert(_blockStyle.type(), _blockStyle);
@@ -637,7 +653,8 @@ void ScreenplayTemplate::load(const QString& _fromFile)
     m_description = templateAttributes.value("description").toString();
     m_pageSizeId = PageMetrics::pageSizeIdFromString(templateAttributes.value("page_format").toString());
     m_pageMargins = marginsFromString(templateAttributes.value("page_margins").toString());
-    m_pageNumbersAlignment = alignmentFromString(templateAttributes.value("numbering_alignment").toString());
+    m_pageNumbersAlignment = alignmentFromString(templateAttributes.value("page_numbers_alignment").toString());
+    m_leftHalfOfPageWidthPercents = templateAttributes.value("left_half_of_page_width").toInt();
 
     //
     // Считываем настройки оформления блоков текста
