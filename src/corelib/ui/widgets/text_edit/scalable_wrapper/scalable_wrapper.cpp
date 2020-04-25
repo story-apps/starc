@@ -186,37 +186,6 @@ bool ScalableWrapper::event(QEvent* _event)
         }
 
         //
-        // Для событий showEvent и resizeEvent отключаем синхронизацию полос прокрутки,
-        // т.к. в стандартной реализации QGraphicsView они сбиваются для нас
-        //
-        case QEvent::Show:
-        case QEvent::Resize: {
-            //
-            // Перед событием отключаем синхронизацию полос прокрутки
-            //
-            setupScrollingSynchronization(false);
-
-            result = QGraphicsView::event(_event);
-
-            updateTextEditSize();
-
-            //
-            // Корректируем размер сцены, чтобы исключить внезапные смещения редактора на ней
-            //
-            if (d->scene->sceneRect() != viewport()->rect()) {
-                setSceneRect(viewport()->rect());
-                ensureVisible(d->editorProxy);
-                syncScrollBarWithTextEdit();
-            }
-
-            //
-            // А после события включаем синхронизацию
-            //
-            setupScrollingSynchronization(true);
-            break;
-        }
-
-        //
         // Во время события paint корректируем размер встроенного редактора
         //
         case QEvent::Paint: {
@@ -418,7 +387,17 @@ bool ScalableWrapper::eventFilter(QObject* _object, QEvent* _event)
     return result;
 }
 
-void ScalableWrapper::resizeEvent(QResizeEvent* event)
+void ScalableWrapper::showEvent(QShowEvent* _event)
+{
+    callEventWithScrollbarsTweak([this, _event] { QGraphicsView::showEvent(_event); });
+}
+
+void ScalableWrapper::resizeEvent(QResizeEvent* _event)
+{
+    callEventWithScrollbarsTweak([this, _event] { QGraphicsView::resizeEvent(_event); });
+}
+
+void ScalableWrapper::callEventWithScrollbarsTweak(std::function<void()> _callback)
 {
     //
     // Перед событием отключаем синхронизацию полос прокрутки
@@ -428,7 +407,21 @@ void ScalableWrapper::resizeEvent(QResizeEvent* event)
     //
     // Запускаем событие
     //
-    QGraphicsView::resizeEvent(event);
+    _callback();
+
+    //
+    // ОБновляем размер редактора сценария
+    //
+    updateTextEditSize();
+
+    //
+    // Корректируем размер сцены, чтобы исключить внезапные смещения редактора на ней
+    //
+    if (d->scene->sceneRect() != viewport()->rect()) {
+        setSceneRect(viewport()->rect());
+        ensureVisible(d->editorProxy);
+        syncScrollBarWithTextEdit();
+    }
 
     //
     // А после события включаем синхронизацию

@@ -72,7 +72,13 @@ protected:
      */
     bool eventFilter(QObject* _object, QEvent* _event) override;
 
-    void resizeEvent(QResizeEvent *event) override;
+    /**
+     * @brief Для событий showEvent и resizeEvent отключаем синхронизацию полос прокрутки,
+     *        т.к. в стандартной реализации QGraphicsView они сбиваются для нас
+     */
+    void showEvent(QShowEvent* _event) override;
+    void resizeEvent(QResizeEvent* _event) override;
+    void callEventWithScrollbarsTweak(std::function<void()> _callback);
 
 private:
     /**
