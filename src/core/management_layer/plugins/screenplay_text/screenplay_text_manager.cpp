@@ -4,12 +4,25 @@
 
 #include <business_layer/model/screenplay/text/screenplay_text_model.h>
 
+#include <data_layer/storage/settings_storage.h>
+#include <data_layer/storage/storage_facade.h>
+
+#include <domain/document_object.h>
+
 #include <QApplication>
 #include <QFileDialog>
 
 
 namespace ManagementLayer
 {
+
+namespace  {
+    const QString kSettingsKey = "screenplay-text";
+    const QString kScaleFactorKey = kSettingsKey + "/scale-factor";
+    QString cursorPositionFor(Domain::DocumentObject* _item) {
+        return QString("%1/%2/last-cursor").arg(kSettingsKey, _item->uuid().toString());
+    }
+}
 
 class ScreenplayTextManager::Implementation
 {
@@ -20,6 +33,18 @@ public:
      * @brief Создать представление
      */
     Ui::ScreenplayTextView* createView();
+
+    /**
+     * @brief Работа с параметрами отображения представления
+     */
+    void loadViewSettings();
+    void saveViewSettings();
+
+    /**
+     * @brief Работа с параметрами отображения текущей модели
+     */
+    void loadModelSettings();
+    void saveModelSettings();
 
 
     /**
@@ -41,12 +66,46 @@ public:
 ScreenplayTextManager::Implementation::Implementation()
 {
     view = createView();
+    loadViewSettings();
 }
 
 Ui::ScreenplayTextView* ScreenplayTextManager::Implementation::createView()
 {
     allViews.append(new Ui::ScreenplayTextView);
     return allViews.last();
+}
+
+void ScreenplayTextManager::Implementation::loadViewSettings()
+{
+    using namespace DataStorageLayer;
+    const auto scaleFactor
+            = StorageFacade::settingsStorage()->value(
+                  kScaleFactorKey, SettingsStorage::SettingsPlace::Application, 1.0).toReal();
+    view->setScaleFactor(scaleFactor);
+}
+
+void ScreenplayTextManager::Implementation::saveViewSettings()
+{
+    using namespace DataStorageLayer;
+    StorageFacade::settingsStorage()->setValue(
+        kScaleFactorKey, view->scaleFactor(), SettingsStorage::SettingsPlace::Application);
+}
+
+void ScreenplayTextManager::Implementation::loadModelSettings()
+{
+    using namespace DataStorageLayer;
+    const auto cursorPosition
+            = StorageFacade::settingsStorage()->value(
+                  cursorPositionFor(model->document()), SettingsStorage::SettingsPlace::Application, 0).toInt();
+    view->setCursorPosition(cursorPosition);
+}
+
+void ScreenplayTextManager::Implementation::saveModelSettings()
+{
+    using namespace DataStorageLayer;
+    StorageFacade::settingsStorage()->setValue(
+        cursorPositionFor(model->document()), view->cursorPosition(),
+        SettingsStorage::SettingsPlace::Application);
 }
 
 
@@ -71,9 +130,16 @@ QObject* ScreenplayTextManager::asQObject()
 void ScreenplayTextManager::setModel(BusinessLayer::AbstractModel* _model)
 {
     //
-    // Разрываем соединения со старой моделью
+    // Если модель была задана
     //
     if (d->model != nullptr) {
+        //
+        // ... сохраняем её параметры
+        //
+        d->saveModelSettings();
+        //
+        // ... разрываем соединения
+        //
         d->view->disconnect(d->model);
     }
 
@@ -84,9 +150,16 @@ void ScreenplayTextManager::setModel(BusinessLayer::AbstractModel* _model)
     d->view->setModel(d->model);
 
     //
-    // Настраиваем соединения с новой моделью
+    // Если новая модель задана
     //
     if (d->model != nullptr) {
+        //
+        // ... загрузим параметры
+        //
+        d->loadModelSettings();
+        //
+        // ... настраиваем соединения
+        //
 //        d->view->setName(d->model->name());
 //        d->view->setText(d->model->text());
 
@@ -123,6 +196,15 @@ void ScreenplayTextManager::bind(IDocumentManager* _manager)
 
     connect(_manager->asQObject(), SIGNAL(currentModelIndexChanged(const QModelIndex&)),
             this, SLOT(setCurrentModelIndex(const QModelIndex&)), Qt::UniqueConnection);
+}
+
+void ScreenplayTextManager::saveSettings()
+{
+    d->saveViewSettings();
+
+    if (d->model != nullptr) {
+        d->saveModelSettings();
+    }
 }
 
 void ScreenplayTextManager::setCurrentModelIndex(const QModelIndex& _index)

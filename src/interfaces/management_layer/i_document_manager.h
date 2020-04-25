@@ -49,6 +49,11 @@ public:
      * @brief Связать с другим менеджером
      */
     virtual void bind(IDocumentManager*) {}
+
+    /**
+     * @brief Сохранить параметры плагина
+     */
+    virtual void saveSettings() {}
 };
 
 } // namespace ManagementLayer

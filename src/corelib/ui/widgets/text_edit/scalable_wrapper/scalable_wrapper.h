@@ -25,8 +25,9 @@ public:
     void initScrollBarsSyncing();
 
     /**
-     * @brief Установить коэффициент масштабирование
+     * @brief Коэффициент масштабирование
      */
+    qreal zoomRange() const;
     void setZoomRange(qreal _zoomRange);
 
     /**
@@ -70,6 +71,8 @@ protected:
      * @brief Переопределяется для отлавливания контекстного меню текстового редактора
      */
     bool eventFilter(QObject* _object, QEvent* _event) override;
+
+    void resizeEvent(QResizeEvent *event) override;
 
 private:
     /**

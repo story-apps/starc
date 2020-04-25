@@ -189,6 +189,7 @@ void ProjectPluginsBuilder::bind(const QString& _viewMimeType, const QString& _n
 void ProjectPluginsBuilder::reset()
 {
     for (auto& plugin : d->plugins) {
+        plugin->saveSettings();
         plugin->setModel(nullptr);
     }
 }

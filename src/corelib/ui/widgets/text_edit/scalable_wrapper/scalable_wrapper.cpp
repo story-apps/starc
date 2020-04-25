@@ -143,6 +143,11 @@ void ScalableWrapper::initScrollBarsSyncing()
     setupScrollingSynchronization(true);
 }
 
+qreal ScalableWrapper::zoomRange() const
+{
+    return d->zoomRange;
+}
+
 ScalableWrapper::~ScalableWrapper() = default;
 
 void ScalableWrapper::setZoomRange(qreal _zoomRange)
@@ -411,6 +416,24 @@ bool ScalableWrapper::eventFilter(QObject* _object, QEvent* _event)
     }
 
     return result;
+}
+
+void ScalableWrapper::resizeEvent(QResizeEvent* event)
+{
+    //
+    // Перед событием отключаем синхронизацию полос прокрутки
+    //
+    setupScrollingSynchronization(false);
+
+    //
+    // Запускаем событие
+    //
+    QGraphicsView::resizeEvent(event);
+
+    //
+    // А после события включаем синхронизацию
+    //
+    setupScrollingSynchronization(true);
 }
 
 void ScalableWrapper::setupScrollingSynchronization(bool _needSync)

@@ -33,6 +33,18 @@ public:
      */
     void setCurrentModelIndex(const QModelIndex& _index);
 
+    /**
+     * @brief Коэффициент масштабирования
+     */
+    qreal scaleFactor() const;
+    void setScaleFactor(qreal _scaleFactor);
+
+    /**
+     * @brief Позиция курсора
+     */
+    int cursorPosition() const;
+    void setCursorPosition(int _position);
+
 signals:
     /**
      * @brief Изменился индекс текущего элемента модели в текстовом документе (перестился курсор)

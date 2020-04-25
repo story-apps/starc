@@ -33,6 +33,7 @@ public:
     QWidget* createView() override;
     void reconfigure() override;
     void bind(IDocumentManager* _manager) override;
+    void saveSettings() override;
     /** @} */
 
 signals:

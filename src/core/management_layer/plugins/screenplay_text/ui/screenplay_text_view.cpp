@@ -19,6 +19,7 @@
 #include <QScrollArea>
 #include <QStandardItem>
 #include <QStandardItemModel>
+#include <QTimer>
 #include <QVBoxLayout>
 
 
@@ -69,10 +70,7 @@ ScreenplayTextView::Implementation::Implementation(QWidget* _parent)
     scalableWrapper->initScrollBarsSyncing();
 
     screenplayText->setUsePageMode(true);
-//    screenplayText->setHeader("Header text");
-//    screenplayText->setFooter("Footer text");
-    screenplayText->setCursorWidth(4);
-//    screenplayText->setUseSpellChecker(true);
+    screenplayText->setCursorWidth(DesignSystem::scaleFactor() * 4);
     screenplayText->setSpellCheckLanguage(SpellCheckerLanguage::EnglishUS);
 }
 
@@ -183,6 +181,28 @@ void ScreenplayTextView::setModel(BusinessLayer::ScreenplayTextModel* _model)
 void ScreenplayTextView::setCurrentModelIndex(const QModelIndex& _index)
 {
     d->screenplayText->setCurrentModelIndex(_index);
+}
+
+qreal ScreenplayTextView::scaleFactor() const
+{
+    return d->scalableWrapper->zoomRange();
+}
+
+void ScreenplayTextView::setScaleFactor(qreal _scaleFactor)
+{
+    d->scalableWrapper->setZoomRange(_scaleFactor);
+}
+
+int ScreenplayTextView::cursorPosition() const
+{
+    return d->screenplayText->textCursor().position();
+}
+
+void ScreenplayTextView::setCursorPosition(int _position)
+{
+    auto cursor = d->screenplayText->textCursor();
+    cursor.setPosition(_position);
+    d->screenplayText->ensureCursorVisible(cursor, false);
 }
 
 void ScreenplayTextView::resizeEvent(QResizeEvent* _event)
