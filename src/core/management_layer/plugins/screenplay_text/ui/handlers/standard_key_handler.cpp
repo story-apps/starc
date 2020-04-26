@@ -157,6 +157,7 @@ void StandardKeyHandler::handleUp(QKeyEvent* _event)
             const QTextBlock firstDocumentBlock = cursor.document()->firstBlock();
             while (cursor.block() != firstDocumentBlock
                    && (!cursor.block().isVisible()
+                       || ScreenplayBlockStyle::forBlock(cursor.block()) == ScreenplayParagraphType::PageSplitter
                        || cursor.blockFormat().boolProperty(ScreenplayBlockStyle::PropertyIsCorrection))) {
                 cursor.movePosition(QTextCursor::PreviousBlock, cursorMoveMode);
                 cursor.movePosition(QTextCursor::EndOfBlock, cursorMoveMode);
@@ -254,6 +255,7 @@ void StandardKeyHandler::handleDown(QKeyEvent* _event)
             //
             while (!cursor.atEnd()
                    && (!cursor.block().isVisible()
+                       || ScreenplayBlockStyle::forBlock(cursor.block()) == ScreenplayParagraphType::PageSplitter
                        || cursor.blockFormat().boolProperty(ScreenplayBlockStyle::PropertyIsCorrection))) {
                 cursor.movePosition(QTextCursor::NextBlock, cursorMoveMode);
                 cursor.movePosition(QTextCursor::EndOfBlock, cursorMoveMode);

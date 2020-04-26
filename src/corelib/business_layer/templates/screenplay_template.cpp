@@ -680,6 +680,17 @@ void ScreenplayTemplate::load(const QString& _fromFile)
         sceneHeadingShadowStyle.setType(ScreenplayParagraphType::SceneHeadingShadow);
         setBlockStyle(sceneHeadingShadowStyle);
     }
+
+    //
+    // Создаём стиль для блоков хранящих внутри себя таблицу разделающую страницу
+    //
+    if (!m_blockStyles.contains(ScreenplayParagraphType::PageSplitter)) {
+        auto pageSplitterStyle = m_blockStyles.value(ScreenplayParagraphType::Action);
+        pageSplitterStyle.setType(ScreenplayParagraphType::PageSplitter);
+        pageSplitterStyle.setMargins({});
+        pageSplitterStyle.setCanModify(false);
+        m_blockStyles.insert(pageSplitterStyle.type(), pageSplitterStyle);
+    }
 }
 
 } // namespace BusinessLayer

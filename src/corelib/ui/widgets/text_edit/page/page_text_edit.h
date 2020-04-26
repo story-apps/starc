@@ -12,13 +12,14 @@
 
 QT_BEGIN_NAMESPACE
 
-class QStyleSheet;
-class QTextDocument;
-class QMenu;
+class ContextMenu;
 class PageTextEditPrivate;
+class QMenu;
 class QMimeData;
 class QPagedPaintDevice;
 class QRegularExpression;
+class QStyleSheet;
+class QTextDocument;
 
 class CORE_LIBRARY_EXPORT PageTextEdit : public QAbstractScrollArea
 {
@@ -371,6 +372,11 @@ public:
      */
     void setHeader(const QString& _header);
     void setFooter(const QString& _footer);
+
+    /**
+     * @brief Создать контекстное меню в заданной позиции
+     */
+    virtual ContextMenu* createContextMenu(const QPoint& _position, QWidget* _parent = nullptr);
 
 protected:
     /**

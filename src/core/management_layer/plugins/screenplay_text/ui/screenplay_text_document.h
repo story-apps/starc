@@ -28,6 +28,12 @@ public:
      */
     int itemPosition(const QModelIndex& _index);
 
+    //
+    // FIXME: переделать
+    //
+    QString mimeFromSelection(int, int) const { return {}; }
+    void insertFromMime(int, const QString&) {}
+
 private:
     /**
      * @brief Обновить содержимое модели, при изменение текста документа

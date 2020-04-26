@@ -33,6 +33,8 @@ enum class ScreenplayParagraphType {
     FolderFooter,
     //
     SceneHeadingShadow,	//!< Время и место, для вспомогательных разрывов
+    //
+    PageSplitter, //!< Разделитель страницы (для блоков внутри которых находятся таблицы)
 };
 
 /**

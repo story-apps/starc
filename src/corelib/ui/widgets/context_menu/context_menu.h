@@ -25,6 +25,7 @@ public:
 
     /**
      * @brief Отобразить контекстное меню
+     * @param _pos - глобальная координата для отображения меню
      */
     void showContextMenu(const QPoint& _pos);
 

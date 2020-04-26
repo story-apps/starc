@@ -39,6 +39,7 @@
 #include <qpropertyanimation.h>
 
 #include <ui/design_system/design_system.h>
+#include <ui/widgets/context_menu/context_menu.h>
 
 #include <utils/helpers/image_helper.h>
 
@@ -3630,6 +3631,11 @@ void PageTextEdit::setFooter(const QString& _footer)
 
     d->m_footer = _footer;
     d->relayoutDocument();
+}
+
+ContextMenu* PageTextEdit::createContextMenu(const QPoint& _position, QWidget* _parent)
+{
+    return new ContextMenu(_parent == nullptr ? this : _parent);
 }
 
 void PageTextEdit::clipPageDecorationRegions(QPainter* _painter)

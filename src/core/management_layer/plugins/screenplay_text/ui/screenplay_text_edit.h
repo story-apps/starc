@@ -112,6 +112,11 @@ protected:
      */
     void paintEvent(QPaintEvent* _event) override;
 
+    /**
+     * @brief Переопределяем для добавления в меню собственных пунктов
+     */
+    ContextMenu* createContextMenu(const QPoint& _position, QWidget* _parent = nullptr) override;
+
 private:
     /**
      * @brief Очистить текущий блок от установленного в нём типа
@@ -123,6 +128,16 @@ private:
      * @param Тип блока
      */
     void applyParagraphType(BusinessLayer::ScreenplayParagraphType _type);
+
+    /**
+     * @brief Разделить блок на два
+     */
+    void splitBlock();
+
+    /**
+     * @brief Соединить разделённые блоки
+     */
+    void unsplitBlock();
 
 private:
     class Implementation;

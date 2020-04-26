@@ -1,5 +1,6 @@
 #include "scalable_wrapper.h"
 
+#include <ui/widgets/context_menu/context_menu.h>
 #include <ui/widgets/text_edit/completer/completer.h>
 #include <ui/widgets/text_edit/completer/completer_text_edit.h>
 #include <ui/widgets/text_edit/page/page_text_edit.h>
@@ -356,12 +357,8 @@ bool ScalableWrapper::eventFilter(QObject* _object, QEvent* _event)
         //
         // TODO: реализовать работу с новым контекстным меню
         //
-//        QMenu* menu = d->editor->createContextMenu(d->editor->viewport()->mapFromGlobal(cursorGlobalPos), this);
-//        menu->exec(QCursor::pos());
-//        delete menu;
-
-        d->editor->clearFocus();
-        d->editor->setFocus();
+        auto menu = d->editor->createContextMenu(d->editor->viewport()->mapFromGlobal(cursorGlobalPos), this);
+        menu->showContextMenu(QCursor::pos());
 
         //
         // Событие перехвачено
