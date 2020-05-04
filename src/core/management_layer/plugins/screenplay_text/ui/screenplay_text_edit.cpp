@@ -455,6 +455,9 @@ void ScreenplayTextEdit::paintEvent(QPaintEvent* _event)
     const int leftDelta = (isLeftToRight ? -1 : 1) * horizontalScrollBar()->value();
 //    int colorRectWidth = 0;
     int verticalMargin = 0;
+    const int splitterX = leftDelta + textLeft
+                          + (textRight - textLeft)
+                          * ScreenplayTemplateFacade::getTemplate().leftHalfOfPageWidthPercents() / 100;
 
 
     //
@@ -484,7 +487,7 @@ void ScreenplayTextEdit::paintEvent(QPaintEvent* _event)
     //
     QTextBlock bottomBlock = document()->firstBlock();
     {
-        QTextCursor bottomCursor;
+        ScreenplayTextCursor bottomCursor;
         for (int delta = viewport()->height(); delta > viewport()->height()*3/4; delta -= 10) {
             bottomCursor = cursorForPosition(viewport()->mapFromParent(QPoint(0, delta)));
             if (bottomBlock.blockNumber() < bottomCursor.block().blockNumber()) {
@@ -496,6 +499,16 @@ void ScreenplayTextEdit::paintEvent(QPaintEvent* _event)
         bottomBlock = document()->lastBlock();
     }
     bottomBlock = bottomBlock.next();
+    //
+    // ... в случае, если блок попал в таблицу, нужно дойти до конца таблицы
+    //
+    {
+        ScreenplayTextCursor bottomCursor(document());
+        bottomCursor.setPosition(bottomBlock.position());
+        while (bottomCursor.isBlockInTable() && bottomCursor.movePosition(QTextCursor::NextBlock)) {
+            bottomBlock = bottomCursor.block();
+        }
+    }
 
 
 //    //
@@ -881,20 +894,50 @@ void ScreenplayTextEdit::paintEvent(QPaintEvent* _event)
                         // В остальных случаях рисуем индикатор пустой строки
                         //
                         else {
+                            painter.setFont(block.charFormat().font());
+                            const QString emptyLineMark = "» ";
                             //
                             // Определим область для отрисовки и выведем символ в редактор
                             //
-                            const QPointF topLeft(isLeftToRight
-                                                  ? pageLeft + leftDelta
-                                                  : textRight + leftDelta,
-                                                  cursorR.top());
-                            const QPointF bottomRight(isLeftToRight
-                                                      ? textLeft + leftDelta
-                                                      : pageRight + leftDelta,
-                                                      cursorR.bottom() + 2);
-                            const QRectF rect(topLeft, bottomRight);
-                            painter.setFont(block.charFormat().font());
-                            painter.drawText(rect, Qt::AlignRight | Qt::AlignTop, "» ");
+                            // ... в тексте или в первой колоке таблички
+                            //
+                            if (!cursor.isBlockInTable() || cursor.isInFirstColumn()) {
+                                const QPointF topLeft(isLeftToRight
+                                                      ? pageLeft + leftDelta
+                                                      : textRight + leftDelta,
+                                                      cursorR.top());
+                                const QPointF bottomRight(isLeftToRight
+                                                          ? textLeft + leftDelta
+                                                          : pageRight + leftDelta,
+                                                          cursorR.bottom() + 2);
+                                const QRectF rect(topLeft, bottomRight);
+                                painter.drawText(rect, Qt::AlignRight | Qt::AlignTop, emptyLineMark);
+                            }
+                            //
+                            // ... во второй колонке таблички
+                            //
+                            else {
+                                const qreal x = splitterX - cursor.currentTable()->format().border();
+                                const QPointF topLeft(x - painter.fontMetrics().horizontalAdvance(emptyLineMark),
+                                                      cursorR.top());
+                                const QPointF bottomRight(x, cursorR.bottom() + 2);
+                                const QRectF rect(topLeft, bottomRight);
+                                painter.drawText(rect, Qt::AlignRight | Qt::AlignTop, emptyLineMark);
+                            }
+
+//                            //
+//                            // Прорисовка разделителя страницы
+//                            //
+//                            if (cursor.isBlockInTable()) {
+//                                painter.save();
+//                                painter.setRenderHint(QPainter::Antialiasing, false);
+//                                auto pen = painter.pen();
+//                                pen.setWidth(2);
+//                                painter.setPen(pen);
+//                                painter.drawLine(QPointF(splitterX, cursorR.top() - verticalMargin),
+//                                                 QPointF(splitterX, cursorREnd.bottom() + verticalMargin));
+//                                painter.restore();
+//                            }
                         }
                     }
 //                    //
@@ -1273,20 +1316,32 @@ void ScreenplayTextEdit::splitBlock()
     // Получим курсор для блока, который хочет разделить пользователь
     //
     ScreenplayTextCursor cursor = textCursor();
-    cursor.movePosition(QTextCursor::StartOfBlock);
     cursor.beginEditBlock();
 
     //
-    // Сохраним текущий формат блока и вырежем его текст, или текст выделения
+    // Сохраним текущий формат блока
     //
     const auto lastBlockType = ScreenplayBlockStyle::forBlock(cursor.block());
-    if (!textCursor().hasSelection()) {
+    //
+    // Вырезаем выделение, захватываея блоки целиком
+    //
+    if (textCursor().hasSelection()) {
+        const auto cursorPositions = std::minmax(textCursor().selectionStart(), textCursor().selectionEnd());
+        cursor.setPosition(cursorPositions.first);
+        cursor.movePosition(QTextCursor::StartOfBlock);
+        cursor.setPosition(cursorPositions.second, QTextCursor::KeepAnchor);
         cursor.movePosition(QTextCursor::EndOfBlock, QTextCursor::KeepAnchor);
-        setTextCursor(cursor);
     }
-    const QString mime = d->document.mimeFromSelection(textCursor().selectionStart(),
-                                                       textCursor().selectionEnd());
-    textCursor().removeSelectedText();
+    //
+    // ... либо только текущий блок
+    //
+    else {
+        cursor.movePosition(QTextCursor::StartOfBlock);
+        cursor.movePosition(QTextCursor::EndOfBlock, QTextCursor::KeepAnchor);
+    }
+    const QString mime = d->document.mimeFromSelection(cursor.selectionStart(),
+                                                       cursor.selectionEnd());
+    cursor.removeSelectedText();
 
     //
     // Назначим блоку перед таблицей формат PageSplitter
@@ -1295,17 +1350,20 @@ void ScreenplayTextEdit::splitBlock()
     //
     // ... и запретим позиционировать в нём курсор
     //
-    auto pageSplitterBlockFormat = textCursor().blockFormat();
+    auto pageSplitterBlockFormat = cursor.blockFormat();
+    pageSplitterBlockFormat.setLeftMargin(100);
     pageSplitterBlockFormat.setProperty(PageTextEdit::PropertyDontShowCursor, true);
-    textCursor().setBlockFormat(pageSplitterBlockFormat);
+    cursor.setBlockFormat(pageSplitterBlockFormat);
 
     //
     // Вставляем таблицу
     //
     const auto scriptTemplate = ScreenplayTemplateFacade::getTemplate();
+    const int tableBorderWidth = 15;
     const qreal tableWidth = d->document.pageSize().width()
                              - document()->rootFrame()->frameFormat().leftMargin()
-                             - document()->rootFrame()->frameFormat().rightMargin();
+                             - document()->rootFrame()->frameFormat().rightMargin()
+                             - 3*tableBorderWidth;
     const qreal leftColumnWidth = tableWidth * scriptTemplate.leftHalfOfPageWidthPercents() / 100;
     const qreal rightColumnWidth = tableWidth - leftColumnWidth;
     QTextTableFormat format;
@@ -1313,7 +1371,10 @@ void ScreenplayTextEdit::splitBlock()
     format.setColumnWidthConstraints({ QTextLength{QTextLength::FixedLength, leftColumnWidth},
                                        QTextLength{QTextLength::FixedLength, rightColumnWidth} });
     format.setBorderStyle(QTextFrameFormat::BorderStyle_None);
+    format.setLeftMargin(-2 * tableBorderWidth);
+    format.setBorder(tableBorderWidth);
     cursor.insertTable(1, 2, format);
+    cursor.movePosition(QTextCursor::NextBlock, QTextCursor::MoveAnchor, 2);
 
     //
     // Назначим блоку после таблицы формат PageSplitter
@@ -1322,14 +1383,22 @@ void ScreenplayTextEdit::splitBlock()
     //
     // ... и запретим позиционировать в нём курсор
     //
-    textCursor().setBlockFormat(pageSplitterBlockFormat);
+    cursor.setBlockFormat(pageSplitterBlockFormat);
 
     //
     // Вставляем параграф после таблицы - это обязательное условие, чтобы после таблицы всегда
     // оставался один параграф, чтобы пользователь всегда мог выйти из таблицы
     //
     addParagraph(lastBlockType);
-    moveCursor(QTextCursor::PreviousBlock);
+
+    //
+    // NOTE: После изменений документа и перед началом перемещения курсора,
+    //       нужно закрыть транзакцию, а потом джойним следующую к предыдущей,
+    //       чтобы курсор не скакал по экрану
+    //
+    cursor.endEditBlock();
+    moveCursor(QTextCursor::PreviousCharacter);
+    cursor.joinPreviousEditBlock();
 
     //
     // Применяем сохранённый формат блока каждой из колонок
@@ -1342,7 +1411,7 @@ void ScreenplayTextEdit::splitBlock()
     //
     // Вставляем текст в первую колонку
     //
-    d->document.insertFromMime(textCursor().position(), mime);
+    d->document.insertFromMime(cursor.position(), mime);
 
     cursor.endEditBlock();
 }

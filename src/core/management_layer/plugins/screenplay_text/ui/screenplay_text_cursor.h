@@ -20,6 +20,11 @@ public:
      * @brief Находится ли блок в таблице
      */
     bool isBlockInTable() const;
+
+    /**
+     * @brief Находится ли блок в первой колонке
+     */
+    bool isInFirstColumn() const;
 };
 
 } // namespace Ui
