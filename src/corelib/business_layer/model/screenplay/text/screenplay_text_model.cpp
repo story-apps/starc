@@ -2,6 +2,7 @@
 
 #include "screenplay_text_model_folder_item.h"
 #include "screenplay_text_model_scene_item.h"
+#include "screenplay_text_model_splitter_item.h"
 #include "screenplay_text_model_text_item.h"
 
 #include <business_layer/templates/screenplay_template.h>
@@ -69,13 +70,15 @@ void ScreenplayTextModel::Implementation::buildModel(Domain::DocumentObject* _sc
 
     QDomDocument domDocument;
     domDocument.setContent(_screenplay->content());
-    auto documentNode = domDocument.firstChildElement("document");
+    auto documentNode = domDocument.firstChildElement(QStringLiteral("document"));
     auto rootNode = documentNode.firstChildElement();
     while (!rootNode.isNull()) {
-        if (rootNode.nodeName() == "folder") {
+        if (rootNode.nodeName() == QLatin1String("folder")) {
             rootItem->appendItem(new ScreenplayTextModelFolderItem(rootNode));
-        } else if (rootNode.nodeName() == "scene") {
+        } else if (rootNode.nodeName() == QLatin1String("scene")) {
             rootItem->appendItem(new ScreenplayTextModelSceneItem(rootNode));
+        } else if (rootNode.nodeName() == QLatin1String("splitter")) {
+            rootItem->appendItem(new ScreenplayTextModelSplitterItem(rootNode));
         } else {
             rootItem->appendItem(new ScreenplayTextModelTextItem(rootNode));
         }

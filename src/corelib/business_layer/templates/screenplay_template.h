@@ -463,7 +463,7 @@ private:
 /**
  * @brief Определим метод для возможности использовать типы в виде ключей в словарях
  */
-inline uint qHash(ScreenplayBlockStyle::LineSpacingType _type)
+CORE_LIBRARY_EXPORT inline uint qHash(ScreenplayBlockStyle::LineSpacingType _type)
 {
     return ::qHash(static_cast<int>(_type));
 }
