@@ -3,6 +3,7 @@
 #include "screenplay_template_facade.h"
 
 #include <ui/widgets/text_edit/page/page_metrics.h>
+#include <ui/widgets/text_edit/page/page_text_edit.h>
 
 #include <utils/helpers/string_helper.h>
 
@@ -30,7 +31,8 @@ namespace {
                { ScreenplayParagraphType::Shot, QLatin1String("shot") },
                { ScreenplayParagraphType::InlineNote, QLatin1String("inline_note") },
                { ScreenplayParagraphType::FolderHeader, QLatin1String("folder_header") },
-               { ScreenplayParagraphType::FolderFooter, QLatin1String("folder_footer") }};
+               { ScreenplayParagraphType::FolderFooter, QLatin1String("folder_footer") },
+               { ScreenplayParagraphType::PageSplitter, QLatin1String("page_splitter") }};
 
     const QHash<ScreenplayBlockStyle::LineSpacingType, QString> kLineSpacingToString
             = {{ ScreenplayBlockStyle::LineSpacingType::SingleLineSpacing, "single" },
@@ -266,11 +268,7 @@ void ScreenplayBlockStyle::setLinesAfter(int _linesAfter)
 
 QTextBlockFormat ScreenplayBlockStyle::blockFormat(bool _onHalfPage) const
 {
-    if (_onHalfPage) {
-        return m_blockFormatOnHalfPage;
-    } else {
-        return m_blockFormat;
-    }
+    return _onHalfPage ? m_blockFormatOnHalfPage : m_blockFormat;
 }
 
 void ScreenplayBlockStyle::setBackgroundColor(const QColor& _color)
@@ -423,6 +421,15 @@ ScreenplayBlockStyle::ScreenplayBlockStyle(const QXmlStreamAttributes& _blockAtt
             //
             m_charFormat.setProperty(ScreenplayBlockStyle::PropertyPrefix, "(");
             m_charFormat.setProperty(ScreenplayBlockStyle::PropertyPostfix, ")");
+            break;
+        }
+
+        case ScreenplayParagraphType::PageSplitter: {
+            //
+            // Запрещаем редактирование данного блока и отображение в нём курсора
+            //
+            m_charFormat.setProperty(ScreenplayBlockStyle::PropertyIsCanModify, false);
+            m_blockFormat.setProperty(PageTextEdit::PropertyDontShowCursor, true);
             break;
         }
 
@@ -601,6 +608,14 @@ void ScreenplayTemplate::setLeftHalfOfPageWidthPercents(int _width)
     m_leftHalfOfPageWidthPercents = _width;
 }
 
+qreal ScreenplayTemplate::pageSplitterWidth() const
+{
+    //
+    // TODO: вынести в параметры шаблона
+    //
+    return PageMetrics::mmToPx(5);
+}
+
 ScreenplayBlockStyle ScreenplayTemplate::blockStyle(ScreenplayParagraphType _forType) const
 {
     return m_blockStyles.value(_forType);
@@ -679,17 +694,6 @@ void ScreenplayTemplate::load(const QString& _fromFile)
         ScreenplayBlockStyle sceneHeadingShadowStyle = m_blockStyles.value(ScreenplayParagraphType::SceneHeading);
         sceneHeadingShadowStyle.setType(ScreenplayParagraphType::SceneHeadingShadow);
         setBlockStyle(sceneHeadingShadowStyle);
-    }
-
-    //
-    // Создаём стиль для блоков хранящих внутри себя таблицу разделающую страницу
-    //
-    if (!m_blockStyles.contains(ScreenplayParagraphType::PageSplitter)) {
-        auto pageSplitterStyle = m_blockStyles.value(ScreenplayParagraphType::Action);
-        pageSplitterStyle.setType(ScreenplayParagraphType::PageSplitter);
-        pageSplitterStyle.setMargins({});
-        pageSplitterStyle.setCanModify(false);
-        m_blockStyles.insert(pageSplitterStyle.type(), pageSplitterStyle);
     }
 }
 

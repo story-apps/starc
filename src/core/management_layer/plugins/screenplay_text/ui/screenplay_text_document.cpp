@@ -6,6 +6,7 @@
 #include <business_layer/model/screenplay/text/screenplay_text_model.h>
 #include <business_layer/model/screenplay/text/screenplay_text_model_folder_item.h>
 #include <business_layer/model/screenplay/text/screenplay_text_model_scene_item.h>
+#include <business_layer/model/screenplay/text/screenplay_text_model_splitter_item.h>
 #include <business_layer/model/screenplay/text/screenplay_text_model_text_item.h>
 #include <business_layer/templates/screenplay_template.h>
 #include <business_layer/templates/screenplay_template_facade.h>
@@ -75,19 +76,119 @@ void ScreenplayTextDocument::setModel(BusinessLayer::ScreenplayTextModel* _model
     bool isFirstParagraph = true;
     std::function<void(const QModelIndex&)> readDocumentFromModel;
     readDocumentFromModel = [this, &cursor, &isFirstParagraph, &readDocumentFromModel] (const QModelIndex& _parent) {
+        using namespace BusinessLayer;
         for (int itemRow = 0; itemRow < d->model->rowCount(_parent); ++itemRow) {
             const auto itemIndex = d->model->index(itemRow, 0, _parent);
             const auto item = d->model->itemForIndex(itemIndex);
             switch (item->type()) {
-                case BusinessLayer::ScreenplayTextModelItemType::Folder: {
+                case ScreenplayTextModelItemType::Folder: {
                     break;
                 }
 
-                case BusinessLayer::ScreenplayTextModelItemType::Scene: {
+                case ScreenplayTextModelItemType::Scene: {
                     break;
                 }
 
-                case BusinessLayer::ScreenplayTextModelItemType::Text: {
+                case ScreenplayTextModelItemType::Splitter: {
+                    const auto splitterItem = static_cast<ScreenplayTextModelSplitterItem*>(item);
+                    switch (splitterItem->splitterType()) {
+                        case ScreenplayTextModelSplitterItemType::Start: {
+                            //
+                            // Если это не первый абзац, вставим блок для него
+                            //
+                            if (!isFirstParagraph) {
+                                cursor.insertBlock();
+                            }
+                            //
+                            // ... в противном же случае, новый блок нет необходимости вставлять
+                            //
+                            else {
+                                isFirstParagraph = false;
+                            }
+
+                            //
+                            // Назначим блоку перед таблицей формат PageSplitter
+                            //
+                            auto insertPageSplitter = [&cursor] {
+                                const auto style = ScreenplayTemplateFacade::getTemplate().blockStyle(
+                                                       ScreenplayParagraphType::PageSplitter);
+                                cursor.setBlockFormat(style.blockFormat());
+                                cursor.setBlockCharFormat(style.charFormat());
+                                cursor.setCharFormat(style.charFormat());
+                            };
+                            insertPageSplitter();
+
+                            //
+                            // Вставляем таблицу
+                            //
+                            const auto scriptTemplate = ScreenplayTemplateFacade::getTemplate();
+                            const auto tableBorderWidth = scriptTemplate.pageSplitterWidth();
+                            const qreal tableWidth = pageSize().width()
+                                                     - rootFrame()->frameFormat().leftMargin()
+                                                     - rootFrame()->frameFormat().rightMargin()
+                                                     - 3 * tableBorderWidth;
+                            const qreal leftColumnWidth = tableWidth * scriptTemplate.leftHalfOfPageWidthPercents() / 100;
+                            const qreal rightColumnWidth = tableWidth - leftColumnWidth;
+                            QTextTableFormat format;
+                            format.setWidth(QTextLength{ QTextLength::FixedLength, tableWidth });
+                            format.setColumnWidthConstraints({ QTextLength{QTextLength::FixedLength, leftColumnWidth},
+                                                               QTextLength{QTextLength::FixedLength, rightColumnWidth} });
+                            format.setBorderStyle(QTextFrameFormat::BorderStyle_None);
+                            format.setLeftMargin(-2 * tableBorderWidth);
+                            format.setTopMargin(-2 * tableBorderWidth);
+                            format.setBottomMargin(-2 * tableBorderWidth);
+                            format.setBorder(tableBorderWidth);
+                            cursor.insertTable(1, 2, format);
+                            cursor.movePosition(QTextCursor::NextBlock, QTextCursor::MoveAnchor, 2);
+
+                            //
+                            // Назначим блоку после таблицы формат PageSplitter
+                            //
+                            insertPageSplitter();
+
+                            //
+                            // После вставки таблицы нужно завершить транзакцию изменения документа,
+                            // чтобы корректно считывались таблицы в положении курсора
+                            //
+                            cursor.endEditBlock();
+                            cursor.joinPreviousEditBlock();
+
+                            //
+                            // Помещаем курсор в первую ячейку для дальнейшего наполнения
+                            //
+                            cursor.movePosition(QTextCursor::PreviousBlock, QTextCursor::MoveAnchor, 2);
+                            //
+                            // ... и помечаем, что вставлять новый блок нет необходимости
+                            //
+                            isFirstParagraph = true;
+
+                            break;
+                        }
+
+                        case ScreenplayTextModelSplitterItemType::Middle: {
+                            //
+                            // Переходим к следующей колонке
+                            //
+                            cursor.movePosition(QTextCursor::NextBlock);
+                            //
+                            // ... и помечаем, что вставлять новый блок нет необходимости
+                            //
+                            isFirstParagraph = true;
+                            break;
+                        }
+
+                        case ScreenplayTextModelSplitterItemType::End: {
+                            cursor.movePosition(QTextCursor::NextBlock);
+                            break;
+                        }
+
+                        default: break;
+                    }
+
+                    break;
+                }
+
+                case ScreenplayTextModelItemType::Text: {
                     //
                     // Если это не первый абзац, вставим блок для него
                     //
@@ -104,16 +205,16 @@ void ScreenplayTextDocument::setModel(BusinessLayer::ScreenplayTextModel* _model
                     //
                     // Запомним позицию элемента
                     //
-                    const auto textItem = static_cast<BusinessLayer::ScreenplayTextModelTextItem*>(item);
+                    const auto textItem = static_cast<ScreenplayTextModelTextItem*>(item);
                     d->positionsToitems.emplace(cursor.position(), textItem);
 
                     //
                     // Установим стиль блока
                     //
                     const auto currentStyle
-                            = BusinessLayer::ScreenplayTemplateFacade::getTemplate().blockStyle(
+                            = ScreenplayTemplateFacade::getTemplate().blockStyle(
                                   textItem->paragraphType());
-                    cursor.setBlockFormat(currentStyle.blockFormat());
+                    cursor.setBlockFormat(currentStyle.blockFormat(cursor.isBlockInTable()));
                     cursor.setBlockCharFormat(currentStyle.charFormat());
                     cursor.setCharFormat(currentStyle.charFormat());
 

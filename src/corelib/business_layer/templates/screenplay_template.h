@@ -398,6 +398,11 @@ public:
     void setLeftHalfOfPageWidthPercents(int _width);
 
     /**
+     * @brief Ширина разделителя колонок
+     */
+    qreal pageSplitterWidth() const;
+
+    /**
      * @brief Получить стиль блока
      */
     ScreenplayBlockStyle blockStyle(ScreenplayParagraphType _forType) const;

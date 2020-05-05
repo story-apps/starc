@@ -1347,23 +1347,16 @@ void ScreenplayTextEdit::splitBlock()
     // Назначим блоку перед таблицей формат PageSplitter
     //
     setCurrentParagraphType(ScreenplayParagraphType::PageSplitter);
-    //
-    // ... и запретим позиционировать в нём курсор
-    //
-    auto pageSplitterBlockFormat = cursor.blockFormat();
-    pageSplitterBlockFormat.setLeftMargin(100);
-    pageSplitterBlockFormat.setProperty(PageTextEdit::PropertyDontShowCursor, true);
-    cursor.setBlockFormat(pageSplitterBlockFormat);
 
     //
     // Вставляем таблицу
     //
     const auto scriptTemplate = ScreenplayTemplateFacade::getTemplate();
-    const int tableBorderWidth = 15;
+    const auto tableBorderWidth = scriptTemplate.pageSplitterWidth();
     const qreal tableWidth = d->document.pageSize().width()
-                             - document()->rootFrame()->frameFormat().leftMargin()
-                             - document()->rootFrame()->frameFormat().rightMargin()
-                             - 3*tableBorderWidth;
+                             - d->document.rootFrame()->frameFormat().leftMargin()
+                             - d->document.rootFrame()->frameFormat().rightMargin()
+                             - 3 * tableBorderWidth;
     const qreal leftColumnWidth = tableWidth * scriptTemplate.leftHalfOfPageWidthPercents() / 100;
     const qreal rightColumnWidth = tableWidth - leftColumnWidth;
     QTextTableFormat format;
@@ -1372,6 +1365,8 @@ void ScreenplayTextEdit::splitBlock()
                                        QTextLength{QTextLength::FixedLength, rightColumnWidth} });
     format.setBorderStyle(QTextFrameFormat::BorderStyle_None);
     format.setLeftMargin(-2 * tableBorderWidth);
+    format.setTopMargin(-2 * tableBorderWidth);
+    format.setBottomMargin(-2 * tableBorderWidth);
     format.setBorder(tableBorderWidth);
     cursor.insertTable(1, 2, format);
     cursor.movePosition(QTextCursor::NextBlock, QTextCursor::MoveAnchor, 2);
@@ -1380,10 +1375,6 @@ void ScreenplayTextEdit::splitBlock()
     // Назначим блоку после таблицы формат PageSplitter
     //
     setCurrentParagraphType(ScreenplayParagraphType::PageSplitter);
-    //
-    // ... и запретим позиционировать в нём курсор
-    //
-    cursor.setBlockFormat(pageSplitterBlockFormat);
 
     //
     // Вставляем параграф после таблицы - это обязательное условие, чтобы после таблицы всегда

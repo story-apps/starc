@@ -40,6 +40,11 @@ public:
     ~ScreenplayTextModelSplitterItem() override;
 
     /**
+     * @brief Тип разделителя
+     */
+    ScreenplayTextModelSplitterItemType splitterType() const;
+
+    /**
      * @brief Определяем интерфейс получения данных сцены
      */
     QVariant data(int _role) const override;

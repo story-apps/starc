@@ -13,8 +13,8 @@ namespace {
     const QHash<ScreenplayTextModelSplitterItemType, QString> kSplitterTypeToString
         = {{ ScreenplayTextModelSplitterItemType::Unsplitted, {} },
            { ScreenplayTextModelSplitterItemType::Start, QStringLiteral("start") },
-           { ScreenplayTextModelSplitterItemType::Start, QStringLiteral("middle") },
-           { ScreenplayTextModelSplitterItemType::Start, QStringLiteral("end") }};
+           { ScreenplayTextModelSplitterItemType::Middle, QStringLiteral("middle") },
+           { ScreenplayTextModelSplitterItemType::End, QStringLiteral("end") }};
 }
 
 class ScreenplayTextModelSplitterItem::Implementation
@@ -48,6 +48,11 @@ ScreenplayTextModelSplitterItem::ScreenplayTextModelSplitterItem(const QDomEleme
     Q_ASSERT(_node.tagName() == kSplitterTag);
 
     d->type = kSplitterTypeToString.key(_node.attribute(kTypeAttribute));
+}
+
+ScreenplayTextModelSplitterItemType ScreenplayTextModelSplitterItem::splitterType() const
+{
+    return d->type;
 }
 
 QVariant ScreenplayTextModelSplitterItem::data(int _role) const
