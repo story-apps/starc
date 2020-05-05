@@ -24,12 +24,12 @@ ScreenplayTextCursor::~ScreenplayTextCursor()
 {
 }
 
-bool ScreenplayTextCursor::isBlockInTable() const
+bool ScreenplayTextCursor::inTable() const
 {
     return currentTable() != nullptr;
 }
 
-bool ScreenplayTextCursor::isInFirstColumn() const
+bool ScreenplayTextCursor::inFirstColumn() const
 {
     return currentTable()->cellAt(*this).column() == 0;
 }

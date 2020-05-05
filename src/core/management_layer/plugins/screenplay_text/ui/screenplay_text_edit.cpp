@@ -112,104 +112,21 @@ BusinessLayer::LocationsModel* ScreenplayTextEdit::locations() const
 
 void ScreenplayTextEdit::addParagraph(BusinessLayer::ScreenplayParagraphType _type)
 {
-    ScreenplayTextCursor cursor = textCursor();
-    cursor.beginEditBlock();
+    d->document.addParagraph(_type, textCursor());
 
-    //
-    // Если параграф целиком переносится (энтер нажат перед всем текстом блока),
-    // необходимо перенести данные блока с текущего на следующий
-    //
-    if (cursor.block().text().left(cursor.positionInBlock()).isEmpty()
-        && !cursor.block().text().isEmpty()) {
-        ScreenplayTextBlockData* blockData = nullptr;
-        auto block = cursor.block();
-        if (block.userData() != nullptr) {
-            blockData = new ScreenplayTextBlockData(static_cast<ScreenplayTextBlockData*>(block.userData()));
-            block.setUserData(nullptr);
-        }
-
-        //
-        // Вставим блок
-        //
-        cursor.insertBlock();
-
-        //
-        // Перенесём данные блока
-        //
-        cursor.block().setUserData(blockData);
-
-        //
-        // Перейдём к предыдущему абзацу
-        //
-        moveCursor(QTextCursor::PreviousBlock);
-        //
-        // ...и применим стиль к нему
-        //
-        applyParagraphType(_type);
-    }
-    //
-    // Вставляем новый блок после текущего
-    //
-    else {
-        //
-        // Вставим блок
-        //
-        cursor.insertBlock();
-
-        //
-        // Применим стиль к новому блоку
-        //
-        applyParagraphType(_type);
-
-        //
-        // Уведомим о том, что стиль сменился
-        //
-        emit paragraphTypeChanged();
-    }
-
-    cursor.endEditBlock();
+    emit paragraphTypeChanged();
 }
 
 void ScreenplayTextEdit::setCurrentParagraphType(BusinessLayer::ScreenplayParagraphType _type)
 {
-    ScreenplayTextCursor cursor = textCursor();
-    const auto currentParagraphType = ScreenplayBlockStyle::forBlock(cursor.block());
-    if (currentParagraphType == _type) {
-        return;
+    d->document.setCurrentParagraphType(_type, textCursor());
+
+    //
+    // Если вставили папку, то нужно перейти к предыдущему блоку (из футера к хидеру)
+    //
+    if (_type == ScreenplayParagraphType::FolderHeader) {
+        moveCursor(QTextCursor::PreviousBlock);
     }
-
-    //
-    // Нельзя сменить стиль конечных элементов папок
-    //
-    if (currentParagraphType == ScreenplayParagraphType::FolderFooter) {
-        return;
-    }
-
-
-    cursor.beginEditBlock();
-
-    //
-    // Первым делом очищаем пользовательские данные
-    //
-    cursor.block().setUserData(nullptr);
-
-    //
-    // Закроем подсказку
-    //
-    closeCompleter();
-
-    //
-    // Обработаем предшествующий установленный стиль
-    //
-    cleanParagraphType();
-
-    //
-    // Применим новый стиль к блоку
-    //
-    applyParagraphType(_type);
-
-    cursor.endEditBlock();
-
 
     emit paragraphTypeChanged();
 }
@@ -505,7 +422,7 @@ void ScreenplayTextEdit::paintEvent(QPaintEvent* _event)
     {
         ScreenplayTextCursor bottomCursor(document());
         bottomCursor.setPosition(bottomBlock.position());
-        while (bottomCursor.isBlockInTable() && bottomCursor.movePosition(QTextCursor::NextBlock)) {
+        while (bottomCursor.inTable() && bottomCursor.movePosition(QTextCursor::NextBlock)) {
             bottomBlock = bottomCursor.block();
         }
     }
@@ -901,7 +818,7 @@ void ScreenplayTextEdit::paintEvent(QPaintEvent* _event)
                             //
                             // ... в тексте или в первой колоке таблички
                             //
-                            if (!cursor.isBlockInTable() || cursor.isInFirstColumn()) {
+                            if (!cursor.inTable() || cursor.inFirstColumn()) {
                                 const QPointF topLeft(isLeftToRight
                                                       ? pageLeft + leftDelta
                                                       : textRight + leftDelta,
@@ -1177,309 +1094,22 @@ ContextMenu* ScreenplayTextEdit::createContextMenu(const QPoint& _position, QWid
     connect(menu, &ContextMenu::clicked, this, [this, menu] {
         menu->hideContextMenu();
         ScreenplayTextCursor cursor = textCursor();
-        if (cursor.isBlockInTable()) {
-            unsplitBlock();
+        if (cursor.inTable()) {
+            d->document.unsplitParagraph(cursor);
         } else {
-            splitBlock();
+            d->document.splitParagraph(cursor);
+
+            //
+            // После разделения, возвращаемся в первую ячейку таблицы
+            //
+            moveCursor(QTextCursor::PreviousBlock);
+            moveCursor(QTextCursor::PreviousBlock);
+            moveCursor(QTextCursor::PreviousBlock);
+            moveCursor(QTextCursor::EndOfBlock);
         }
     });
 
     return menu;
-}
-
-void ScreenplayTextEdit::cleanParagraphType()
-{
-    ScreenplayTextCursor cursor = textCursor();
-    const auto oldBlockStyle
-            = ScreenplayTemplateFacade::getTemplate().blockStyle(
-                  ScreenplayBlockStyle::forBlock(cursor.block()));
-
-    //
-    // Удалить завершающий блок папки
-    //
-    if (oldBlockStyle.isEmbeddableHeader()) {
-        QTextCursor cursor = textCursor();
-        cursor.movePosition(QTextCursor::NextBlock);
-
-        // ... открытые группы на пути поиска необходимого для обновления блока
-        int openedGroups = 0;
-        bool isFooterUpdated = false;
-        do {
-            const auto currentType = ScreenplayBlockStyle::forBlock(cursor.block());
-            if (currentType == oldBlockStyle.embeddableFooter()) {
-                if (openedGroups == 0) {
-                    cursor.movePosition(QTextCursor::PreviousBlock);
-                    cursor.movePosition(QTextCursor::EndOfBlock);
-                    cursor.movePosition(QTextCursor::NextBlock, QTextCursor::KeepAnchor);
-                    cursor.movePosition(QTextCursor::EndOfBlock, QTextCursor::KeepAnchor);
-                    cursor.deleteChar();
-
-                    isFooterUpdated = true;
-                } else {
-                    --openedGroups;
-                }
-            } else if (currentType == oldBlockStyle.type()) {
-                //
-                // Встретилась новая папка
-                //
-                ++openedGroups;
-            }
-
-            if (cursor.atEnd()) {
-                break;
-            }
-
-            cursor.movePosition(QTextCursor::EndOfBlock);
-            cursor.movePosition(QTextCursor::NextBlock);
-        } while (!isFooterUpdated);
-    }
-}
-
-void ScreenplayTextEdit::applyParagraphType(BusinessLayer::ScreenplayParagraphType _type)
-{
-    ScreenplayTextCursor cursor = textCursor();
-    cursor.beginEditBlock();
-
-    const auto newBlockStyle = ScreenplayTemplateFacade::getTemplate().blockStyle(_type);
-
-    //
-    // Обновим стили
-    //
-    cursor.setBlockCharFormat(newBlockStyle.charFormat());
-    cursor.setBlockFormat(newBlockStyle.blockFormat(cursor.isBlockInTable()));
-
-    //
-    // Применим стиль текста ко всему блоку, выделив его,
-    // т.к. в блоке могут находиться фрагменты в другом стиле
-    // + сохраняем форматирование выделений
-    //
-    {
-        cursor.movePosition(QTextCursor::StartOfBlock);
-
-        //
-        // Если в блоке есть выделения, обновляем цвет только тех частей, которые не входят в выделения
-        //
-        QTextBlock currentBlock = cursor.block();
-        if (!currentBlock.textFormats().isEmpty()) {
-            const auto formats = currentBlock.textFormats();
-            for (const auto& range : formats) {
-                if (range.format.boolProperty(ScreenplayBlockStyle::PropertyIsReviewMark)) {
-                    continue;
-                }
-                cursor.setPosition(currentBlock.position() + range.start);
-                cursor.setPosition(cursor.position() + range.length, QTextCursor::KeepAnchor);
-                cursor.mergeCharFormat(newBlockStyle.charFormat());
-            }
-        }
-        //
-        // Если выделений нет, обновляем блок целиком
-        //
-        else {
-            cursor.movePosition(QTextCursor::EndOfBlock, QTextCursor::KeepAnchor);
-            cursor.mergeCharFormat(newBlockStyle.charFormat());
-        }
-
-        cursor.clearSelection();
-    }
-
-    //
-    // Для заголовка папки нужно создать завершение, захватив всё содержимое сцены
-    //
-    if (newBlockStyle.isEmbeddableHeader()) {
-        const auto footerStyle = ScreenplayTemplateFacade::getTemplate().blockStyle(newBlockStyle.embeddableFooter());
-
-        //
-        // Запомним позицию курсора
-        //
-        const int lastCursorPosition = textCursor().position();
-
-        //
-        // Вставляем закрывающий блок
-        //
-        cursor.insertBlock();
-        cursor.setBlockCharFormat(footerStyle.charFormat());
-        cursor.setBlockFormat(footerStyle.blockFormat(cursor.isBlockInTable()));
-
-        //
-        // т.к. вставлен блок, нужно вернуть курсор на место
-        //
-        cursor.setPosition(lastCursorPosition);
-        setTextCursor(cursor);
-    }
-
-    cursor.endEditBlock();
-}
-
-void ScreenplayTextEdit::splitBlock()
-{
-    //
-    // Получим курсор для блока, который хочет разделить пользователь
-    //
-    ScreenplayTextCursor cursor = textCursor();
-    cursor.beginEditBlock();
-
-    //
-    // Сохраним текущий формат блока
-    //
-    const auto lastBlockType = ScreenplayBlockStyle::forBlock(cursor.block());
-    //
-    // Вырезаем выделение, захватываея блоки целиком
-    //
-    if (textCursor().hasSelection()) {
-        const auto cursorPositions = std::minmax(textCursor().selectionStart(), textCursor().selectionEnd());
-        cursor.setPosition(cursorPositions.first);
-        cursor.movePosition(QTextCursor::StartOfBlock);
-        cursor.setPosition(cursorPositions.second, QTextCursor::KeepAnchor);
-        cursor.movePosition(QTextCursor::EndOfBlock, QTextCursor::KeepAnchor);
-    }
-    //
-    // ... либо только текущий блок
-    //
-    else {
-        cursor.movePosition(QTextCursor::StartOfBlock);
-        cursor.movePosition(QTextCursor::EndOfBlock, QTextCursor::KeepAnchor);
-    }
-    const QString mime = d->document.mimeFromSelection(cursor.selectionStart(),
-                                                       cursor.selectionEnd());
-    cursor.removeSelectedText();
-
-    //
-    // Назначим блоку перед таблицей формат PageSplitter
-    //
-    setCurrentParagraphType(ScreenplayParagraphType::PageSplitter);
-
-    //
-    // Вставляем таблицу
-    //
-    const auto scriptTemplate = ScreenplayTemplateFacade::getTemplate();
-    const auto tableBorderWidth = scriptTemplate.pageSplitterWidth();
-    const qreal tableWidth = d->document.pageSize().width()
-                             - d->document.rootFrame()->frameFormat().leftMargin()
-                             - d->document.rootFrame()->frameFormat().rightMargin()
-                             - 3 * tableBorderWidth;
-    const qreal leftColumnWidth = tableWidth * scriptTemplate.leftHalfOfPageWidthPercents() / 100;
-    const qreal rightColumnWidth = tableWidth - leftColumnWidth;
-    QTextTableFormat format;
-    format.setWidth(QTextLength{ QTextLength::FixedLength, tableWidth });
-    format.setColumnWidthConstraints({ QTextLength{QTextLength::FixedLength, leftColumnWidth},
-                                       QTextLength{QTextLength::FixedLength, rightColumnWidth} });
-    format.setBorderStyle(QTextFrameFormat::BorderStyle_None);
-    format.setLeftMargin(-2 * tableBorderWidth);
-    format.setTopMargin(-2 * tableBorderWidth);
-    format.setBottomMargin(-2 * tableBorderWidth);
-    format.setBorder(tableBorderWidth);
-    cursor.insertTable(1, 2, format);
-    cursor.movePosition(QTextCursor::NextBlock, QTextCursor::MoveAnchor, 2);
-
-    //
-    // Назначим блоку после таблицы формат PageSplitter
-    //
-    setCurrentParagraphType(ScreenplayParagraphType::PageSplitter);
-
-    //
-    // Вставляем параграф после таблицы - это обязательное условие, чтобы после таблицы всегда
-    // оставался один параграф, чтобы пользователь всегда мог выйти из таблицы
-    //
-    addParagraph(lastBlockType);
-
-    //
-    // NOTE: После изменений документа и перед началом перемещения курсора,
-    //       нужно закрыть транзакцию, а потом джойним следующую к предыдущей,
-    //       чтобы курсор не скакал по экрану
-    //
-    cursor.endEditBlock();
-    moveCursor(QTextCursor::PreviousCharacter);
-    cursor.joinPreviousEditBlock();
-
-    //
-    // Применяем сохранённый формат блока каждой из колонок
-    //
-    moveCursor(QTextCursor::PreviousCharacter);
-    setCurrentParagraphType(lastBlockType);
-    moveCursor(QTextCursor::PreviousCharacter);
-    setCurrentParagraphType(lastBlockType);
-
-    //
-    // Вставляем текст в первую колонку
-    //
-    d->document.insertFromMime(cursor.position(), mime);
-
-    cursor.endEditBlock();
-}
-
-void ScreenplayTextEdit::unsplitBlock()
-{
-    //
-    // Получим курсор для блока, из которого пользователь хочет убрать разделение
-    //
-    ScreenplayTextCursor cursor = textCursor();
-    cursor.movePosition(QTextCursor::StartOfBlock);
-    cursor.beginEditBlock();
-
-    //
-    // Идём до начала таблицы
-    //
-    while (ScreenplayBlockStyle::forBlock(cursor.block()) != ScreenplayParagraphType::PageSplitter) {
-        cursor.movePosition(QTextCursor::PreviousBlock);
-    }
-
-    //
-    // Выделяем и сохраняем текст из первой ячейки
-    //
-    cursor.movePosition(QTextCursor::NextBlock);
-    QTextTable* table = cursor.currentTable();
-    while (table->cellAt(cursor).column() == 0) {
-        cursor.movePosition(QTextCursor::NextBlock, QTextCursor::KeepAnchor);
-    }
-    cursor.movePosition(QTextCursor::PreviousCharacter, QTextCursor::KeepAnchor);
-    const QString firstColumnData =
-            cursor.selectedText().isEmpty()
-            ? QString()
-            : d->document.mimeFromSelection(cursor.selectionStart(), cursor.selectionEnd());
-    cursor.removeSelectedText();
-
-    //
-    // Выделяем и сохраняем текст из второй ячейки
-    //
-    cursor.movePosition(QTextCursor::NextBlock);
-    while (cursor.movePosition(QTextCursor::NextBlock, QTextCursor::KeepAnchor));
-    cursor.movePosition(QTextCursor::EndOfBlock, QTextCursor::KeepAnchor);
-    const QString secondColumnData =
-            cursor.selectedText().isEmpty()
-            ? QString()
-            : d->document.mimeFromSelection(cursor.selectionStart(), cursor.selectionEnd());
-    cursor.removeSelectedText();
-
-    //
-    // Удаляем таблицу
-    //
-    // NOTE: Делается это только таким костылём, как удалить таблицу по-человечески я не нашёл...
-    //
-    cursor.movePosition(QTextCursor::NextBlock);
-    cursor.movePosition(QTextCursor::NextBlock);
-    cursor.movePosition(QTextCursor::PreviousBlock, QTextCursor::KeepAnchor);
-    cursor.movePosition(QTextCursor::PreviousBlock, QTextCursor::KeepAnchor);
-    cursor.deletePreviousChar();
-
-    //
-    // Вставляем текст из удалённых ячеек
-    //
-    cursor.movePosition(QTextCursor::StartOfBlock);
-    cursor.movePosition(QTextCursor::PreviousCharacter);
-    const int insertPosition = cursor.position();
-    if (!secondColumnData.isEmpty()) {
-        cursor.insertBlock();
-        d->document.insertFromMime(cursor.position(), secondColumnData);
-        cursor.setPosition(insertPosition);
-    }
-    if (!firstColumnData.isEmpty()) {
-        cursor.insertBlock();
-        d->document.insertFromMime(cursor.position(), firstColumnData);
-    }
-
-
-    cursor.endEditBlock();
-    cursor.endEditBlock();
 }
 
 } // namespace Ui

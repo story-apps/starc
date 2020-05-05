@@ -5,7 +5,7 @@
 
 
 namespace BusinessLayer {
-    class ScreenplayTextModelTextItem;
+    class ScreenplayTextModelItem;
 }
 
 namespace Ui
@@ -14,13 +14,13 @@ namespace Ui
 class ScreenplayTextBlockData : public QTextBlockUserData
 {
 public:
-    explicit ScreenplayTextBlockData(BusinessLayer::ScreenplayTextModelTextItem* _item);
+    explicit ScreenplayTextBlockData(BusinessLayer::ScreenplayTextModelItem* _item);
     explicit ScreenplayTextBlockData(const ScreenplayTextBlockData* _other);
 
-    BusinessLayer::ScreenplayTextModelTextItem* item() const;
+    BusinessLayer::ScreenplayTextModelItem* item() const;
 
 private:
-    BusinessLayer::ScreenplayTextModelTextItem* m_item = nullptr;
+    BusinessLayer::ScreenplayTextModelItem* m_item = nullptr;
 };
 
 } // namespace Ui

@@ -70,7 +70,7 @@ QString ScreenplayTextModelSplitterItem::toXml() const
         return {};
     }
 
-    return QString("<%1 %2=\"%3\"/>")
+    return QString("<%1 %2=\"%3\"/>\n")
             .arg(kSplitterTag, kTypeAttribute, kSplitterTypeToString.value(d->type));
 }
 

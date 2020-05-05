@@ -19,12 +19,12 @@ public:
     /**
      * @brief Находится ли блок в таблице
      */
-    bool isBlockInTable() const;
+    bool inTable() const;
 
     /**
      * @brief Находится ли блок в первой колонке
      */
-    bool isInFirstColumn() const;
+    bool inFirstColumn() const;
 };
 
 } // namespace Ui

@@ -1,12 +1,12 @@
 #include "screenplay_text_block_data.h"
 
-#include <business_layer/model/screenplay/text/screenplay_text_model_text_item.h>
+#include <business_layer/model/screenplay/text/screenplay_text_model_item.h>
 
 
 namespace Ui
 {
 
-ScreenplayTextBlockData::ScreenplayTextBlockData(BusinessLayer::ScreenplayTextModelTextItem* _item)
+ScreenplayTextBlockData::ScreenplayTextBlockData(BusinessLayer::ScreenplayTextModelItem* _item)
     : QTextBlockUserData(),
       m_item(_item)
 {
@@ -19,7 +19,7 @@ ScreenplayTextBlockData::ScreenplayTextBlockData(const ScreenplayTextBlockData* 
 
 }
 
-BusinessLayer::ScreenplayTextModelTextItem* ScreenplayTextBlockData::item() const
+BusinessLayer::ScreenplayTextModelItem* ScreenplayTextBlockData::item() const
 {
     return m_item;
 }

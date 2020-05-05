@@ -14,6 +14,12 @@
 #include <utils/helpers/text_helper.h>
 #include <utils/shugar.h>
 
+#include <QTextTable>
+
+using BusinessLayer::ScreenplayBlockStyle;
+using BusinessLayer::ScreenplayTemplateFacade;
+using BusinessLayer::ScreenplayParagraphType;
+
 
 namespace Ui
 {
@@ -31,7 +37,7 @@ class ScreenplayTextDocument::Implementation
 public:
     DocumentState state = DocumentState::Undefined;
     BusinessLayer::ScreenplayTextModel* model = nullptr;
-    std::map<int, BusinessLayer::ScreenplayTextModelTextItem*> positionsToitems;
+    std::map<int, BusinessLayer::ScreenplayTextModelItem*> positionsToItems;
 };
 
 
@@ -51,7 +57,7 @@ void ScreenplayTextDocument::setModel(BusinessLayer::ScreenplayTextModel* _model
 {
     d->state = DocumentState::Loading;
     d->model = _model;
-    d->positionsToitems.clear();
+    d->positionsToItems.clear();
 
     //
     // Аккуратно очищаем текст, чтобы не сломать форматирование самого документа
@@ -167,6 +173,13 @@ void ScreenplayTextDocument::setModel(BusinessLayer::ScreenplayTextModel* _model
 
                         case ScreenplayTextModelSplitterItemType::Middle: {
                             //
+                            // Если остался не удалённый разделитель, просто пропускаем его
+                            //
+                            if (!cursor.inTable()) {
+                                break;
+                            }
+
+                            //
                             // Переходим к следующей колонке
                             //
                             cursor.movePosition(QTextCursor::NextBlock);
@@ -206,7 +219,7 @@ void ScreenplayTextDocument::setModel(BusinessLayer::ScreenplayTextModel* _model
                     // Запомним позицию элемента
                     //
                     const auto textItem = static_cast<ScreenplayTextModelTextItem*>(item);
-                    d->positionsToitems.emplace(cursor.position(), textItem);
+                    d->positionsToItems.emplace(cursor.position(), textItem);
 
                     //
                     // Установим стиль блока
@@ -214,7 +227,7 @@ void ScreenplayTextDocument::setModel(BusinessLayer::ScreenplayTextModel* _model
                     const auto currentStyle
                             = ScreenplayTemplateFacade::getTemplate().blockStyle(
                                   textItem->paragraphType());
-                    cursor.setBlockFormat(currentStyle.blockFormat(cursor.isBlockInTable()));
+                    cursor.setBlockFormat(currentStyle.blockFormat(cursor.inTable()));
                     cursor.setBlockCharFormat(currentStyle.charFormat());
                     cursor.setCharFormat(currentStyle.charFormat());
 
@@ -265,13 +278,376 @@ int ScreenplayTextDocument::itemPosition(const QModelIndex& _index)
     while (item->childCount() > 0) {
         item = item->childAt(0);
     }
-    for (const auto& [key, value] : d->positionsToitems) {
+    for (const auto& [key, value] : d->positionsToItems) {
         if (value == item) {
             return key;
         }
     }
 
     return 0;
+}
+
+void ScreenplayTextDocument::addParagraph(BusinessLayer::ScreenplayParagraphType _type, ScreenplayTextCursor _cursor)
+{
+    _cursor.beginEditBlock();
+
+    //
+    // Если параграф целиком переносится (энтер нажат перед всем текстом блока),
+    // необходимо перенести данные блока с текущего на следующий
+    //
+    if (_cursor.block().text().left(_cursor.positionInBlock()).isEmpty()
+        && !_cursor.block().text().isEmpty()) {
+        ScreenplayTextBlockData* blockData = nullptr;
+        auto block = _cursor.block();
+        if (block.userData() != nullptr) {
+            blockData = new ScreenplayTextBlockData(static_cast<ScreenplayTextBlockData*>(block.userData()));
+            block.setUserData(nullptr);
+        }
+
+        //
+        // Вставим блок
+        //
+        _cursor.insertBlock();
+
+        //
+        // Перенесём данные блока
+        //
+        _cursor.block().setUserData(blockData);
+
+        //
+        // Перейдём к предыдущему абзацу
+        //
+        _cursor.movePosition(QTextCursor::PreviousBlock);
+        //
+        // ...и применим стиль к нему
+        //
+        applyParagraphType(_type, _cursor);
+    }
+    //
+    // Вставляем новый блок после текущего
+    //
+    else {
+        //
+        // Вставим блок
+        //
+        _cursor.insertBlock();
+
+        //
+        // Применим стиль к новому блоку
+        //
+        applyParagraphType(_type, _cursor);
+    }
+
+    _cursor.endEditBlock();
+}
+
+void ScreenplayTextDocument::setCurrentParagraphType(BusinessLayer::ScreenplayParagraphType _type, const ScreenplayTextCursor& _cursor)
+{
+    const auto currentParagraphType = ScreenplayBlockStyle::forBlock(_cursor.block());
+    if (currentParagraphType == _type) {
+        return;
+    }
+
+    //
+    // Нельзя сменить стиль конечных элементов папок
+    //
+    if (currentParagraphType == ScreenplayParagraphType::FolderFooter) {
+        return;
+    }
+
+    auto cursor = _cursor;
+    cursor.beginEditBlock();
+
+    //
+    // Первым делом очищаем пользовательские данные
+    //
+    cursor.block().setUserData(nullptr);
+
+    //
+    // Обработаем предшествующий установленный стиль
+    //
+    cleanParagraphType(_cursor);
+
+    //
+    // Применим новый стиль к блоку
+    //
+    applyParagraphType(_type, _cursor);
+
+    cursor.endEditBlock();
+}
+
+void ScreenplayTextDocument::cleanParagraphType(const ScreenplayTextCursor& _cursor)
+{
+    const auto oldBlockStyle
+            = ScreenplayTemplateFacade::getTemplate().blockStyle(
+                  ScreenplayBlockStyle::forBlock(_cursor.block()));
+    if (!oldBlockStyle.isEmbeddableHeader()) {
+        return;
+    }
+
+    auto cursor = _cursor;
+
+    //
+    // Удалить завершающий блок папки
+    //
+    cursor.movePosition(QTextCursor::NextBlock);
+
+    // ... открытые группы на пути поиска необходимого для обновления блока
+    int openedGroups = 0;
+    bool isFooterUpdated = false;
+    do {
+        const auto currentType = ScreenplayBlockStyle::forBlock(cursor.block());
+        if (currentType == oldBlockStyle.embeddableFooter()) {
+            if (openedGroups == 0) {
+                cursor.movePosition(QTextCursor::PreviousBlock);
+                cursor.movePosition(QTextCursor::EndOfBlock);
+                cursor.movePosition(QTextCursor::NextBlock, QTextCursor::KeepAnchor);
+                cursor.movePosition(QTextCursor::EndOfBlock, QTextCursor::KeepAnchor);
+                cursor.deleteChar();
+
+                isFooterUpdated = true;
+            } else {
+                --openedGroups;
+            }
+        } else if (currentType == oldBlockStyle.type()) {
+            //
+            // Встретилась новая папка
+            //
+            ++openedGroups;
+        }
+
+        if (cursor.atEnd()) {
+            break;
+        }
+
+        cursor.movePosition(QTextCursor::EndOfBlock);
+        cursor.movePosition(QTextCursor::NextBlock);
+    } while (!isFooterUpdated);
+}
+
+void ScreenplayTextDocument::applyParagraphType(BusinessLayer::ScreenplayParagraphType _type, const ScreenplayTextCursor& _cursor)
+{
+    auto cursor = _cursor;
+    cursor.beginEditBlock();
+
+    const auto newBlockStyle = ScreenplayTemplateFacade::getTemplate().blockStyle(_type);
+
+    //
+    // Обновим стили
+    //
+    cursor.setBlockCharFormat(newBlockStyle.charFormat());
+    cursor.setBlockFormat(newBlockStyle.blockFormat(cursor.inTable()));
+
+    //
+    // Применим стиль текста ко всему блоку, выделив его,
+    // т.к. в блоке могут находиться фрагменты в другом стиле
+    // + сохраняем форматирование выделений
+    //
+    {
+        cursor.movePosition(QTextCursor::StartOfBlock);
+
+        //
+        // Если в блоке есть выделения, обновляем цвет только тех частей, которые не входят в выделения
+        //
+        QTextBlock currentBlock = cursor.block();
+        if (!currentBlock.textFormats().isEmpty()) {
+            const auto formats = currentBlock.textFormats();
+            for (const auto& range : formats) {
+                if (range.format.boolProperty(ScreenplayBlockStyle::PropertyIsReviewMark)) {
+                    continue;
+                }
+                cursor.setPosition(currentBlock.position() + range.start);
+                cursor.setPosition(cursor.position() + range.length, QTextCursor::KeepAnchor);
+                cursor.mergeCharFormat(newBlockStyle.charFormat());
+            }
+        }
+        //
+        // Если выделений нет, обновляем блок целиком
+        //
+        else {
+            cursor.movePosition(QTextCursor::EndOfBlock, QTextCursor::KeepAnchor);
+            cursor.mergeCharFormat(newBlockStyle.charFormat());
+        }
+
+        cursor.clearSelection();
+    }
+
+    //
+    // Для заголовка папки нужно создать завершение, захватив всё содержимое сцены
+    //
+    if (newBlockStyle.isEmbeddableHeader()) {
+        const auto footerStyle = ScreenplayTemplateFacade::getTemplate().blockStyle(newBlockStyle.embeddableFooter());
+
+        //
+        // Вставляем закрывающий блок
+        //
+        cursor.insertBlock();
+        cursor.setBlockCharFormat(footerStyle.charFormat());
+        cursor.setBlockFormat(footerStyle.blockFormat(cursor.inTable()));
+    }
+
+    cursor.endEditBlock();
+}
+
+void ScreenplayTextDocument::splitParagraph(const ScreenplayTextCursor& _cursor)
+{
+    //
+    // Получим курсор для блока, который хочет разделить пользователь
+    //
+    ScreenplayTextCursor cursor = _cursor;
+    cursor.beginEditBlock();
+
+    //
+    // Сохраним текущий формат блока
+    //
+    const auto lastBlockType = ScreenplayBlockStyle::forBlock(cursor.block());
+    //
+    // Вырезаем выделение, захватываея блоки целиком
+    //
+    if (cursor.hasSelection()) {
+        const auto cursorPositions = std::minmax(cursor.selectionStart(), cursor.selectionEnd());
+        cursor.setPosition(cursorPositions.first);
+        cursor.movePosition(QTextCursor::StartOfBlock);
+        cursor.setPosition(cursorPositions.second, QTextCursor::KeepAnchor);
+        cursor.movePosition(QTextCursor::EndOfBlock, QTextCursor::KeepAnchor);
+    }
+    //
+    // ... либо только текущий блок
+    //
+    else {
+        cursor.movePosition(QTextCursor::StartOfBlock);
+        cursor.movePosition(QTextCursor::EndOfBlock, QTextCursor::KeepAnchor);
+    }
+    const QString mime = mimeFromSelection(cursor.selectionStart(), cursor.selectionEnd());
+    cursor.removeSelectedText();
+
+    //
+    // Назначим блоку перед таблицей формат PageSplitter
+    //
+    setCurrentParagraphType(ScreenplayParagraphType::PageSplitter, cursor);
+
+    //
+    // Вставляем таблицу
+    //
+    const auto scriptTemplate = ScreenplayTemplateFacade::getTemplate();
+    const auto tableBorderWidth = scriptTemplate.pageSplitterWidth();
+    const qreal tableWidth = pageSize().width()
+                             - rootFrame()->frameFormat().leftMargin()
+                             - rootFrame()->frameFormat().rightMargin()
+                             - 3 * tableBorderWidth;
+    const qreal leftColumnWidth = tableWidth * scriptTemplate.leftHalfOfPageWidthPercents() / 100;
+    const qreal rightColumnWidth = tableWidth - leftColumnWidth;
+    QTextTableFormat format;
+    format.setWidth(QTextLength{ QTextLength::FixedLength, tableWidth });
+    format.setColumnWidthConstraints({ QTextLength{QTextLength::FixedLength, leftColumnWidth},
+                                       QTextLength{QTextLength::FixedLength, rightColumnWidth} });
+    format.setBorderStyle(QTextFrameFormat::BorderStyle_None);
+    format.setLeftMargin(-2 * tableBorderWidth);
+    format.setTopMargin(-2 * tableBorderWidth);
+    format.setBottomMargin(-2 * tableBorderWidth);
+    format.setBorder(tableBorderWidth);
+    cursor.insertTable(1, 2, format);
+
+    //
+    // Применяем сохранённый формат блока каждой из колонок
+    //
+    setCurrentParagraphType(lastBlockType, cursor);
+    cursor.movePosition(QTextCursor::NextBlock);
+    setCurrentParagraphType(lastBlockType, cursor);
+    cursor.movePosition(QTextCursor::NextBlock);
+
+    //
+    // Назначим блоку после таблицы формат PageSplitter
+    //
+    setCurrentParagraphType(ScreenplayParagraphType::PageSplitter, cursor);
+
+    //
+    // Вставляем параграф после таблицы - это обязательное условие, чтобы после таблицы всегда
+    // оставался один параграф, чтобы пользователь всегда мог выйти из таблицы
+    //
+    addParagraph(lastBlockType, cursor);
+
+    //
+    // Вставляем текст в первую колонку
+    //
+    insertFromMime(cursor.position(), mime);
+
+    cursor.endEditBlock();
+}
+
+void ScreenplayTextDocument::unsplitParagraph(const ScreenplayTextCursor& _cursor)
+{
+    //
+    // Получим курсор для блока, из которого пользователь хочет убрать разделение
+    //
+    ScreenplayTextCursor cursor = _cursor;
+    cursor.movePosition(QTextCursor::StartOfBlock);
+    cursor.beginEditBlock();
+
+    //
+    // Идём до начала таблицы
+    //
+    while (ScreenplayBlockStyle::forBlock(cursor.block()) != ScreenplayParagraphType::PageSplitter) {
+        cursor.movePosition(QTextCursor::PreviousBlock);
+    }
+
+    //
+    // Выделяем и сохраняем текст из первой ячейки
+    //
+    cursor.movePosition(QTextCursor::NextBlock);
+    QTextTable* table = cursor.currentTable();
+    while (table->cellAt(cursor).column() == 0) {
+        cursor.movePosition(QTextCursor::NextBlock, QTextCursor::KeepAnchor);
+    }
+    cursor.movePosition(QTextCursor::PreviousCharacter, QTextCursor::KeepAnchor);
+    const QString firstColumnData =
+            cursor.selectedText().isEmpty()
+            ? QString()
+            : mimeFromSelection(cursor.selectionStart(), cursor.selectionEnd());
+    cursor.removeSelectedText();
+
+    //
+    // Выделяем и сохраняем текст из второй ячейки
+    //
+    cursor.movePosition(QTextCursor::NextBlock);
+    while (cursor.movePosition(QTextCursor::NextBlock, QTextCursor::KeepAnchor));
+    cursor.movePosition(QTextCursor::EndOfBlock, QTextCursor::KeepAnchor);
+    const QString secondColumnData =
+            cursor.selectedText().isEmpty()
+            ? QString()
+            : mimeFromSelection(cursor.selectionStart(), cursor.selectionEnd());
+    cursor.removeSelectedText();
+
+    //
+    // Удаляем таблицу
+    //
+    // NOTE: Делается это только таким костылём, как удалить таблицу по-человечески я не нашёл...
+    //
+    cursor.movePosition(QTextCursor::NextBlock);
+    cursor.movePosition(QTextCursor::NextBlock);
+    cursor.movePosition(QTextCursor::PreviousBlock, QTextCursor::KeepAnchor);
+    cursor.movePosition(QTextCursor::PreviousBlock, QTextCursor::KeepAnchor);
+    cursor.deletePreviousChar();
+
+    //
+    // Вставляем текст из удалённых ячеек
+    //
+    cursor.movePosition(QTextCursor::StartOfBlock);
+    cursor.movePosition(QTextCursor::PreviousCharacter);
+    const int insertPosition = cursor.position();
+    if (!secondColumnData.isEmpty()) {
+        cursor.insertBlock();
+        insertFromMime(cursor.position(), secondColumnData);
+        cursor.setPosition(insertPosition);
+    }
+    if (!firstColumnData.isEmpty()) {
+        cursor.insertBlock();
+        insertFromMime(cursor.position(), firstColumnData);
+    }
+
+
+    cursor.endEditBlock();
+    cursor.endEditBlock();
 }
 
 void ScreenplayTextDocument::updateModelOnContentChange(int _position, int _charsRemoved, int _charsAdded)
@@ -291,10 +667,10 @@ void ScreenplayTextDocument::updateModelOnContentChange(int _position, int _char
         //
         // Собираем элементы которые потенциально могут быть удалены
         //
-        std::map<ScreenplayTextModelTextItem*, int> itemsToDelete;
+        std::map<ScreenplayTextModelItem*, int> itemsToDelete;
         if (_charsRemoved > 0) {
-            auto itemsToDeleteIter = d->positionsToitems.lower_bound(_position);
-            while (itemsToDeleteIter != d->positionsToitems.end()
+            auto itemsToDeleteIter = d->positionsToItems.lower_bound(_position);
+            while (itemsToDeleteIter != d->positionsToItems.end()
                    && itemsToDeleteIter->first <= _position + _charsRemoved) {
                 itemsToDelete.emplace(itemsToDeleteIter->second, itemsToDeleteIter->first);
                 ++itemsToDeleteIter;
@@ -317,8 +693,8 @@ void ScreenplayTextDocument::updateModelOnContentChange(int _position, int _char
         //
         // Удаляем блоки, которые действительно были удалены из текста
         //
-        auto removeIter = d->positionsToitems.lower_bound(_position);
-        while (removeIter != d->positionsToitems.end()
+        auto removeIter = d->positionsToItems.lower_bound(_position);
+        while (removeIter != d->positionsToItems.end()
                && removeIter->first <= _position + _charsRemoved) {
             //
             // Если элемент действительно удалён - удаляем его из модели
@@ -425,7 +801,7 @@ void ScreenplayTextDocument::updateModelOnContentChange(int _position, int _char
             //
             // Убираем информацию о позиции блока, т.к. она могла измениться и будет обновлена далее
             //
-            removeIter = d->positionsToitems.erase(removeIter);
+            removeIter = d->positionsToItems.erase(removeIter);
         }
 
         //
@@ -437,20 +813,20 @@ void ScreenplayTextDocument::updateModelOnContentChange(int _position, int _char
         //
         // Формируем мапу элементов со скорректированными позициями
         //
-        std::map<int, ScreenplayTextModelTextItem*> correctedItems;
-        for (auto itemIter = itemToUpdateIter; itemIter != d->positionsToitems.end(); ++itemIter) {
+        std::map<int, ScreenplayTextModelItem*> correctedItems;
+        for (auto itemIter = itemToUpdateIter; itemIter != d->positionsToItems.end(); ++itemIter) {
             correctedItems.emplace(itemIter->first - _charsRemoved + _charsAdded, itemIter->second);
         }
 
         //
         // Удаляем элементы со старыми позициями
         //
-        d->positionsToitems.erase(itemToUpdateIter, d->positionsToitems.end());
+        d->positionsToItems.erase(itemToUpdateIter, d->positionsToItems.end());
 
         //
         // И записываем на их место новые элементы
         //
-        d->positionsToitems.merge(correctedItems);
+        d->positionsToItems.merge(correctedItems);
     }
 
     //
@@ -460,7 +836,7 @@ void ScreenplayTextDocument::updateModelOnContentChange(int _position, int _char
     //
     // ... определим элемент модели для предыдущего блока
     //
-    auto previousTextItem = [block] () -> ScreenplayTextModelTextItem* {
+    auto previousItem = [block] () -> ScreenplayTextModelItem* {
         if (!block.isValid()) {
             return nullptr;
         }
@@ -474,19 +850,81 @@ void ScreenplayTextDocument::updateModelOnContentChange(int _position, int _char
         auto blockData = static_cast<ScreenplayTextBlockData*>(previousBlock.userData());
         return blockData->item();
     } ();
+
+    //
+    // Информация о таблице, в которой находится блок
+    //
+    struct {
+        bool inTable = false;
+        bool inFirstColumn = false;
+    } tableInfo;
+
+
     while (block.isValid()
            && block.position() <= _position + _charsAdded) {
+        const auto paragraphType = ScreenplayBlockStyle::forBlock(block);
+
         //
         // Новый блок
         //
         if (block.userData() == nullptr) {
-            const auto blockType = ScreenplayBlockStyle::forBlock(block);
+            //
+            // Разделитель
+            //
+            if (paragraphType == ScreenplayParagraphType::PageSplitter) {
+                //
+                // Сформируем элемент в зависимости от типа разделителя
+                //
+                ScreenplayTextModelSplitterItem* splitterItem = nullptr;
+                if (!tableInfo.inTable) {
+                    tableInfo.inTable = true;
+                    tableInfo.inFirstColumn = true;
+                    splitterItem = new ScreenplayTextModelSplitterItem(ScreenplayTextModelSplitterItemType::Start);
+                } else {
+                    tableInfo = {};
+                    splitterItem = new ScreenplayTextModelSplitterItem(ScreenplayTextModelSplitterItemType::End);
+                }
+                d->model->insertItem(splitterItem, previousItem);
+
+                //
+                // Запомним информацию о разделителе в блоке
+                //
+                auto blockData = new ScreenplayTextBlockData(splitterItem);
+                block.setUserData(blockData);
+                previousItem = splitterItem;
+
+                //
+                // Запомним новый блок, или обновим старый
+                //
+                d->positionsToItems.insert_or_assign(block.position(), previousItem);
+
+                block = block.next();
+                continue;
+            }
+
+            //
+            // Если внутри таблицы, то контролируем переход в следующую колонку
+            //
+            if (tableInfo.inTable && tableInfo.inFirstColumn) {
+                ScreenplayTextCursor cursor(this);
+                cursor.setPosition(block.position());
+                if (!cursor.inFirstColumn()) {
+                    //
+                    // Формируем, серединный разделитель, но не запоминаем его в блоке,
+                    // т.к. в середине таблицы под это просто нет блока
+                    //
+                    tableInfo.inFirstColumn = false;
+                    auto splitterItem = new ScreenplayTextModelSplitterItem(ScreenplayTextModelSplitterItemType::Middle);
+                    d->model->insertItem(splitterItem, previousItem);
+                    previousItem = splitterItem;
+                }
+            }
 
             //
             // Создаём группирующий элемент, если создаётся непосредственно сцена или папка
             //
             ScreenplayTextModelItem* parentItem = nullptr;
-            switch (blockType) {
+            switch (paragraphType) {
                 case ScreenplayParagraphType::FolderHeader: {
                     parentItem = new ScreenplayTextModelFolderItem;
                     break;
@@ -504,8 +942,20 @@ void ScreenplayTextDocument::updateModelOnContentChange(int _position, int _char
             // Создаём сам текстовый элемент
             //
             auto textItem = new ScreenplayTextModelTextItem;
-            textItem->setParagraphType(blockType);
+            textItem->setParagraphType(paragraphType);
             textItem->setText(block.text());
+
+            //
+            // Является ли предыдущий элемент футером папки
+            //
+            const bool previousItemIsFolderFooter = [previousItem] {
+                if (previousItem->type() != ScreenplayTextModelItemType::Text) {
+                    return false;
+                }
+
+                auto textItem = static_cast<ScreenplayTextModelTextItem*>(previousItem);
+                return textItem->paragraphType() == ScreenplayParagraphType::FolderFooter;
+            }();
 
             //
             // Добавляем элементы в модель
@@ -516,8 +966,8 @@ void ScreenplayTextDocument::updateModelOnContentChange(int _position, int _char
                 //
                 // Если перед вставляемым элементом что-то уже есть
                 //
-                if (previousTextItem != nullptr) {
-                    auto previousTextItemParent = previousTextItem->parent();
+                if (previousItem != nullptr) {
+                    auto previousTextItemParent = previousItem->parent();
                     Q_ASSERT(previousTextItemParent);
 
                     //
@@ -525,14 +975,14 @@ void ScreenplayTextDocument::updateModelOnContentChange(int _position, int _char
                     // то вставляем его на том же уровне, что и предыдущий
                     //
                     if (previousTextItemParent->type() == ScreenplayTextModelItemType::Scene
-                        || previousTextItem->paragraphType() == ScreenplayParagraphType::FolderFooter) {
+                        || previousItemIsFolderFooter) {
                         d->model->insertItem(parentItem, previousTextItemParent);
                     }
                     //
                     // В противном случае вставляем внутрь папки
                     //
                     else {
-                        d->model->insertItem(parentItem, previousTextItem);
+                        d->model->insertItem(parentItem, previousItem);
                     }
                 }
                 //
@@ -555,22 +1005,22 @@ void ScreenplayTextDocument::updateModelOnContentChange(int _position, int _char
                     //
                     // Определим родителя из которого нужно извлекать те самые текстовые элементы
                     //
-                    auto grandParentItem = [previousTextItem, parentItem] {
+                    auto grandParentItem = [previousItem, previousItemIsFolderFooter, parentItem] {
                         //
                         // Если есть предыдущий текстовый элемент
                         //
-                        if (previousTextItem != nullptr) {
+                        if (previousItem != nullptr) {
                             //
                             // Если это конец папки, то берём родителя папки
                             //
-                            if (previousTextItem->paragraphType() == ScreenplayParagraphType::FolderFooter) {
-                                return previousTextItem->parent()->parent();
+                            if (previousItemIsFolderFooter) {
+                                return previousItem->parent()->parent();
                             }
                             //
                             // В противном случае, берём родителя предыдущего текстового элемента
                             //
                             else {
-                                return previousTextItem->parent();
+                                return previousItem->parent();
                             }
                         }
 
@@ -584,13 +1034,13 @@ void ScreenplayTextDocument::updateModelOnContentChange(int _position, int _char
                     //
                     // Определим индекс, начиная с которого нужно извлекать текстовые элементы
                     //
-                    const int itemIndex = [previousTextItem, parentItem, grandParentItem] {
-                        if (previousTextItem != nullptr) {
-                            if (previousTextItem->paragraphType() == ScreenplayParagraphType::FolderFooter) {
-                                return grandParentItem->rowOfChild(previousTextItem->parent()) + 2;
+                    const int itemIndex = [previousItem, previousItemIsFolderFooter, parentItem, grandParentItem] {
+                        if (previousItem != nullptr) {
+                            if (previousItemIsFolderFooter) {
+                                return grandParentItem->rowOfChild(previousItem->parent()) + 2;
                             }
                             else if (grandParentItem->type() == ScreenplayTextModelItemType::Scene) {
-                                return grandParentItem->rowOfChild(previousTextItem) + 1;
+                                return grandParentItem->rowOfChild(previousItem) + 1;
                             }
                         }
 
@@ -619,10 +1069,10 @@ void ScreenplayTextDocument::updateModelOnContentChange(int _position, int _char
                 // А для папки, если она вставляется после сцены, то нужно перенести все текстовые
                 // элементы, которые идут после вставленной папки на уровень самой папки
                 //
-                else if (previousTextItem != nullptr
-                         && previousTextItem->parent()->type() == ScreenplayTextModelItemType::Scene) {
-                    auto grandParentItem = previousTextItem->parent();
-                    const int lastItemIndex = grandParentItem->rowOfChild(previousTextItem) + 1;
+                else if (previousItem != nullptr
+                         && previousItem->parent()->type() == ScreenplayTextModelItemType::Scene) {
+                    auto grandParentItem = previousItem->parent();
+                    const int lastItemIndex = grandParentItem->rowOfChild(previousItem) + 1;
                     //
                     // Собственно переносим элементы
                     //
@@ -649,7 +1099,7 @@ void ScreenplayTextDocument::updateModelOnContentChange(int _position, int _char
                 //
                 // ... в самое начало документа
                 //
-                if (previousTextItem == nullptr) {
+                if (previousItem == nullptr) {
                     d->model->prependItem(textItem);
                 }
                 //
@@ -659,14 +1109,14 @@ void ScreenplayTextDocument::updateModelOnContentChange(int _position, int _char
                     //
                     // ... если блок вставляется после конца папки, то нужно вынести на уровень с папкой
                     //
-                    if (previousTextItem->paragraphType() == ScreenplayParagraphType::FolderFooter) {
-                        d->model->insertItem(textItem, previousTextItem->parent());
+                    if (previousItemIsFolderFooter) {
+                        d->model->insertItem(textItem, previousItem->parent());
                     }
                     //
                     // ... в противном случае ставим на уровне с предыдущим элементом
                     //
                     else {
-                        d->model->insertItem(textItem, previousTextItem);
+                        d->model->insertItem(textItem, previousItem);
                     }
                 }
             }
@@ -674,35 +1124,29 @@ void ScreenplayTextDocument::updateModelOnContentChange(int _position, int _char
             auto blockData = new ScreenplayTextBlockData(textItem);
             block.setUserData(blockData);
 
-            previousTextItem = textItem;
+            previousItem = textItem;
         }
         //
         // Старый блок
         //
         else {
             auto blockData = static_cast<ScreenplayTextBlockData*>(block.userData());
-            auto textItem = blockData->item();
+            auto item = blockData->item();
 
-            //
-            // Если сменился стиль блока, то возможно нужно добавить новую,
-            // или удалить предыдущую сцену/папку
-            //
+            if (item->type() == ScreenplayTextModelItemType::Text) {
+                auto textItem = static_cast<ScreenplayTextModelTextItem*>(item);
+                textItem->setParagraphType(paragraphType);
+                textItem->setText(block.text());
+            }
 
-            //
-            // Если был папкой, то
-            //
-
-            textItem->setParagraphType(ScreenplayBlockStyle::forBlock(block));
-            textItem->setText(block.text());
-            d->model->updateItem(textItem);
-
-            previousTextItem = textItem;
+            d->model->updateItem(item);
+            previousItem = item;
         }
 
         //
         // Запомним новый блок, или обновим старый
         //
-        d->positionsToitems.insert_or_assign(block.position(), previousTextItem);
+        d->positionsToItems.insert_or_assign(block.position(), previousItem);
 
         //
         // Переходим к обработке следующего блока
