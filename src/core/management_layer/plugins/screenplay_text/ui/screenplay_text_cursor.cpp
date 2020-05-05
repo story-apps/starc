@@ -31,7 +31,7 @@ bool ScreenplayTextCursor::inTable() const
 
 bool ScreenplayTextCursor::inFirstColumn() const
 {
-    return currentTable()->cellAt(*this).column() == 0;
+    return currentTable() && currentTable()->cellAt(*this).column() == 0;
 }
 
 } // namespace Ui

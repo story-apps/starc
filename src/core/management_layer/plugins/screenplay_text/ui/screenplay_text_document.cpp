@@ -113,6 +113,11 @@ void ScreenplayTextDocument::setModel(BusinessLayer::ScreenplayTextModel* _model
                             }
 
                             //
+                            // Запомним позицию разделителя
+                            //
+                            d->positionsToItems.emplace(cursor.position(), splitterItem);
+
+                            //
                             // Назначим блоку перед таблицей формат PageSplitter
                             //
                             auto insertPageSplitter = [&cursor] {
@@ -192,6 +197,7 @@ void ScreenplayTextDocument::setModel(BusinessLayer::ScreenplayTextModel* _model
 
                         case ScreenplayTextModelSplitterItemType::End: {
                             cursor.movePosition(QTextCursor::NextBlock);
+                            d->positionsToItems.emplace(cursor.position(), splitterItem);
                             break;
                         }
 
@@ -854,10 +860,15 @@ void ScreenplayTextDocument::updateModelOnContentChange(int _position, int _char
     //
     // Информация о таблице, в которой находится блок
     //
-    struct {
+    struct TableInfo {
         bool inTable = false;
         bool inFirstColumn = false;
     } tableInfo;
+    tableInfo = [this, block] () -> TableInfo {
+        ScreenplayTextCursor cursor(this);
+        cursor.setPosition(block.position());
+        return {cursor.inTable(), cursor.inFirstColumn()};
+    }();
 
 
     while (block.isValid()
@@ -872,11 +883,14 @@ void ScreenplayTextDocument::updateModelOnContentChange(int _position, int _char
             // Разделитель
             //
             if (paragraphType == ScreenplayParagraphType::PageSplitter) {
+                ScreenplayTextCursor cursor(this);
+                cursor.setPosition(block.position());
+                cursor.movePosition(QTextCursor::NextBlock);
                 //
                 // Сформируем элемент в зависимости от типа разделителя
                 //
                 ScreenplayTextModelSplitterItem* splitterItem = nullptr;
-                if (!tableInfo.inTable) {
+                if (cursor.inTable() && !tableInfo.inTable) {
                     tableInfo.inTable = true;
                     tableInfo.inFirstColumn = true;
                     splitterItem = new ScreenplayTextModelSplitterItem(ScreenplayTextModelSplitterItemType::Start);
