@@ -533,6 +533,7 @@ void ScreenplayTextCorrector::Implementation::correctPageBreaks(int _position)
         // ... если блок декорация, то удаляем его
         //
         if (blockFormat.boolProperty(ScreenplayBlockStyle::PropertyIsCorrection)) {
+            blockItems[currentBlockNumber] = {};
             cursor.setPosition(block.position());
             cursor.movePosition(ScreenplayTextCursor::EndOfBlock, ScreenplayTextCursor::KeepAnchor);
             cursor.movePosition(ScreenplayTextCursor::NextCharacter, ScreenplayTextCursor::KeepAnchor);
@@ -544,10 +545,27 @@ void ScreenplayTextCorrector::Implementation::correctPageBreaks(int _position)
             continue;
         }
         //
-        // ... если в текущем блоке начинается разрыв, пробуем его вернуть
+        // ... если в текущем блоке есть разрыв, пробуем его вернуть
         //
-        else if (blockFormat.boolProperty(ScreenplayBlockStyle::PropertyIsBreakCorrectionStart)) {
+        else if (blockFormat.boolProperty(ScreenplayBlockStyle::PropertyIsBreakCorrectionStart)
+                 || blockFormat.boolProperty(ScreenplayBlockStyle::PropertyIsBreakCorrectionEnd)) {
             cursor.setPosition(block.position());
+
+            //
+            // Если в конце разрыва, вернёмся к началу
+            //
+            if (blockFormat.boolProperty(ScreenplayBlockStyle::PropertyIsBreakCorrectionEnd)) {
+                do {
+                    blockItems[currentBlockNumber] = {};
+                    cursor.movePosition(ScreenplayTextCursor::PreviousBlock);
+                    lastBlockHeight -= blockHeight;
+                    --currentBlockNumber;
+                } while (!cursor.blockFormat().boolProperty(ScreenplayBlockStyle::PropertyIsBreakCorrectionStart));
+            }
+
+            //
+            // Начинаем склеивать разрыв
+            //
             cursor.movePosition(ScreenplayTextCursor::EndOfBlock);
             do {
                 cursor.movePosition(ScreenplayTextCursor::NextBlock, ScreenplayTextCursor::KeepAnchor);
