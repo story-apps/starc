@@ -1,6 +1,7 @@
 #include "screenplay_text_document.h"
 
 #include "screenplay_text_block_data.h"
+#include "screenplay_text_corrector.h"
 #include "screenplay_text_cursor.h"
 
 #include <business_layer/model/screenplay/text/screenplay_text_model.h>
@@ -35,10 +36,18 @@ enum class DocumentState {
 class ScreenplayTextDocument::Implementation
 {
 public:
+    explicit Implementation(ScreenplayTextDocument* _document);
+
     DocumentState state = DocumentState::Undefined;
     BusinessLayer::ScreenplayTextModel* model = nullptr;
     std::map<int, BusinessLayer::ScreenplayTextModelItem*> positionsToItems;
+    ScreenplayTextCorrector corrector;
 };
+
+ScreenplayTextDocument::Implementation::Implementation(ScreenplayTextDocument* _document)
+    : corrector(_document)
+{
+}
 
 
 // ****
@@ -46,9 +55,10 @@ public:
 
 ScreenplayTextDocument::ScreenplayTextDocument(QObject *_parent)
     : QTextDocument(_parent),
-      d(new Implementation)
+      d(new Implementation(this))
 {
     connect(this, &ScreenplayTextDocument::contentsChange, this, &ScreenplayTextDocument::updateModelOnContentChange);
+    connect(this, &ScreenplayTextDocument::contentsChange, &d->corrector, &ScreenplayTextCorrector::correct);
 }
 
 ScreenplayTextDocument::~ScreenplayTextDocument() = default;
@@ -58,6 +68,11 @@ void ScreenplayTextDocument::setModel(BusinessLayer::ScreenplayTextModel* _model
     d->state = DocumentState::Loading;
     d->model = _model;
     d->positionsToItems.clear();
+
+    //
+    // Сбрасываем корректор
+    //
+    d->corrector.clear();
 
     //
     // Аккуратно очищаем текст, чтобы не сломать форматирование самого документа
@@ -654,6 +669,12 @@ void ScreenplayTextDocument::unsplitParagraph(const ScreenplayTextCursor& _curso
 
     cursor.endEditBlock();
     cursor.endEditBlock();
+}
+
+void ScreenplayTextDocument::setCorrectionOptions(bool _needToCorrectCharactersNames, bool _needToCorrectPageBreaks)
+{
+    d->corrector.setNeedToCorrectCharactersNames(_needToCorrectCharactersNames);
+    d->corrector.setNeedToCorrectPageBreaks(_needToCorrectPageBreaks);
 }
 
 void ScreenplayTextDocument::updateModelOnContentChange(int _position, int _charsRemoved, int _charsAdded)

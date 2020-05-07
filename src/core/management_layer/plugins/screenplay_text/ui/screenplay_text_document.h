@@ -72,6 +72,11 @@ public:
      */
     void unsplitParagraph(const ScreenplayTextCursor& _cursor);
 
+    /**
+     * @brief Настроить необходимость корректировок
+     */
+    void setCorrectionOptions(bool _needToCorrectCharactersNames, bool _needToCorrectPageBreaks);
+
 private:
     /**
      * @brief Обновить содержимое модели, при изменение текста документа

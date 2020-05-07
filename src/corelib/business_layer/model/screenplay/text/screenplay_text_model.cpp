@@ -17,6 +17,11 @@ namespace BusinessLayer
 
 namespace {
     const char* kMimeType = "application/x-starc/screenplay/text/item";
+
+    const QString kDocumentTag = QLatin1String("document");
+    const QString kFolderTag = QLatin1String("folder");
+    const QString kSceneTag = QLatin1String("scene");
+    const QString kSplitterTag = QLatin1String("splitter");
 }
 
 class ScreenplayTextModel::Implementation
@@ -70,14 +75,14 @@ void ScreenplayTextModel::Implementation::buildModel(Domain::DocumentObject* _sc
 
     QDomDocument domDocument;
     domDocument.setContent(_screenplay->content());
-    auto documentNode = domDocument.firstChildElement(QStringLiteral("document"));
+    auto documentNode = domDocument.firstChildElement(kDocumentTag);
     auto rootNode = documentNode.firstChildElement();
     while (!rootNode.isNull()) {
-        if (rootNode.nodeName() == QLatin1String("folder")) {
+        if (rootNode.nodeName() == kFolderTag) {
             rootItem->appendItem(new ScreenplayTextModelFolderItem(rootNode));
-        } else if (rootNode.nodeName() == QLatin1String("scene")) {
+        } else if (rootNode.nodeName() == kSceneTag) {
             rootItem->appendItem(new ScreenplayTextModelSceneItem(rootNode));
-        } else if (rootNode.nodeName() == QLatin1String("splitter")) {
+        } else if (rootNode.nodeName() == kSplitterTag) {
             rootItem->appendItem(new ScreenplayTextModelSplitterItem(rootNode));
         } else {
             rootItem->appendItem(new ScreenplayTextModelTextItem(rootNode));

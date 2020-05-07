@@ -2,6 +2,7 @@
 
 #include "handlers/key_press_handler_facade.h"
 #include "screenplay_text_block_data.h"
+#include "screenplay_text_corrector.h"
 #include "screenplay_text_cursor.h"
 #include "screenplay_text_document.h"
 
@@ -841,26 +842,12 @@ void ScreenplayTextEdit::paintEvent(QPaintEvent* _event)
                                 const QRectF rect(topLeft, bottomRight);
                                 painter.drawText(rect, Qt::AlignRight | Qt::AlignTop, emptyLineMark);
                             }
-
-//                            //
-//                            // Прорисовка разделителя страницы
-//                            //
-//                            if (cursor.isBlockInTable()) {
-//                                painter.save();
-//                                painter.setRenderHint(QPainter::Antialiasing, false);
-//                                auto pen = painter.pen();
-//                                pen.setWidth(2);
-//                                painter.setPen(pen);
-//                                painter.drawLine(QPointF(splitterX, cursorR.top() - verticalMargin),
-//                                                 QPointF(splitterX, cursorREnd.bottom() + verticalMargin));
-//                                painter.restore();
-//                            }
                         }
                     }
-//                    //
-//                    // Прорисовка декораций непустых строк
-//                    //
-//                    else {
+                    //
+                    // Прорисовка декораций непустых строк
+                    //
+                    else {
 //                        //
 //                        // Прорисовка номеров сцен, если необходимо
 //                        //
@@ -946,28 +933,29 @@ void ScreenplayTextEdit::paintEvent(QPaintEvent* _event)
 //                            }
 //                        }
 
-//                        //
-//                        // Прорисовка автоматических (ПРОД) для реплик
-//                        //
-//                        if (blockType == ScenarioBlockStyle::Character
-//                            && block.blockFormat().boolProperty(ScenarioBlockStyle::PropertyIsCharacterContinued)
-//                            && !block.blockFormat().boolProperty(ScenarioBlockStyle::PropertyIsCorrection)) {
-//                            painter.setFont(cursor.charFormat().font());
+                        //
+                        // Прорисовка автоматических (ПРОД) для реплик
+                        //
+                        if (blockType == ScreenplayParagraphType::Character
+                            && block.blockFormat().boolProperty(ScreenplayBlockStyle::PropertyIsCharacterContinued)
+                            && !block.blockFormat().boolProperty(ScreenplayBlockStyle::PropertyIsCorrection)) {
+                            painter.setFont(cursor.charFormat().font());
 
-//                            //
-//                            // Определим место положение конца имени персонажа
-//                            //
-//                            const int continuedTermWidth = painter.fontMetrics().width(ScriptTextCorrector::continuedTerm());
-//                            const QPoint topLeft = isLeftToRight
-//                                                   ? cursorREnd.topLeft()
-//                                                   : cursorREnd.topRight() - QPoint(continuedTermWidth, 0);
-//                            const QPoint bottomRight = isLeftToRight
-//                                                       ? cursorREnd.bottomRight() + QPoint(continuedTermWidth, 0)
-//                                                       : cursorREnd.bottomLeft();
-//                            const QRect rect(topLeft, bottomRight);
-//                            painter.drawText(rect, Qt::AlignRight | Qt::AlignTop, ScriptTextCorrector::continuedTerm());
-//                        }
-//                    }
+                            //
+                            // Определим место положение конца имени персонажа
+                            //
+                            const int continuedTermWidth
+                                    = painter.fontMetrics().horizontalAdvance(ScreenplayTextCorrector::continuedTerm());
+                            const QPoint topLeft = isLeftToRight
+                                                   ? cursorREnd.topLeft()
+                                                   : cursorREnd.topRight() - QPoint(continuedTermWidth, 0);
+                            const QPoint bottomRight = isLeftToRight
+                                                       ? cursorREnd.bottomRight() + QPoint(continuedTermWidth, 0)
+                                                       : cursorREnd.bottomLeft();
+                            const QRect rect(topLeft, bottomRight);
+                            painter.drawText(rect, Qt::AlignRight | Qt::AlignTop, ScreenplayTextCorrector::continuedTerm());
+                        }
+                    }
 
                     //
                     // Прорисовка перфикса блока

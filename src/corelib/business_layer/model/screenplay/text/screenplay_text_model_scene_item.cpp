@@ -1,5 +1,6 @@
 #include "screenplay_text_model_scene_item.h"
 
+#include "screenplay_text_model_splitter_item.h"
 #include "screenplay_text_model_text_item.h"
 
 #include <utils/helpers/text_helper.h>
@@ -26,6 +27,7 @@ namespace {
     const QString kStampTag = QLatin1String("stamp");
     const QString kPlannedDurationTag = QLatin1String("planned_duration");
     const QString kContentTag = QLatin1String("content");
+    const QString kSplitterTag = QLatin1String("splitter");
 }
 
 class ScreenplayTextModelSceneItem::Implementation
@@ -108,6 +110,8 @@ ScreenplayTextModelSceneItem::ScreenplayTextModelSceneItem(const QDomElement& _n
     while (!childNode.isNull()) {
         if (childNode.tagName() == kSceneTag) {
             appendItem(new ScreenplayTextModelSceneItem(childNode));
+        } else if (childNode.tagName() == kSplitterTag) {
+            appendItem(new ScreenplayTextModelSplitterItem(childNode));
         } else {
             appendItem(new ScreenplayTextModelTextItem(childNode));
         }
