@@ -147,24 +147,7 @@ void ScreenplayTextDocument::setModel(BusinessLayer::ScreenplayTextModel* _model
                             //
                             // Вставляем таблицу
                             //
-                            const auto scriptTemplate = ScreenplayTemplateFacade::getTemplate();
-                            const auto tableBorderWidth = scriptTemplate.pageSplitterWidth();
-                            const qreal tableWidth = pageSize().width()
-                                                     - rootFrame()->frameFormat().leftMargin()
-                                                     - rootFrame()->frameFormat().rightMargin()
-                                                     - 3 * tableBorderWidth;
-                            const qreal leftColumnWidth = tableWidth * scriptTemplate.leftHalfOfPageWidthPercents() / 100;
-                            const qreal rightColumnWidth = tableWidth - leftColumnWidth;
-                            QTextTableFormat format;
-                            format.setWidth(QTextLength{ QTextLength::FixedLength, tableWidth });
-                            format.setColumnWidthConstraints({ QTextLength{QTextLength::FixedLength, leftColumnWidth},
-                                                               QTextLength{QTextLength::FixedLength, rightColumnWidth} });
-                            format.setBorderStyle(QTextFrameFormat::BorderStyle_None);
-                            format.setLeftMargin(-2 * tableBorderWidth);
-                            format.setTopMargin(-2 * tableBorderWidth);
-                            format.setBottomMargin(-2 * tableBorderWidth);
-                            format.setBorder(tableBorderWidth);
-                            cursor.insertTable(1, 2, format);
+                            insertTable(cursor);
                             cursor.movePosition(QTextCursor::NextBlock, QTextCursor::MoveAnchor, 2);
 
                             //
@@ -550,24 +533,7 @@ void ScreenplayTextDocument::splitParagraph(const ScreenplayTextCursor& _cursor)
     //
     // Вставляем таблицу
     //
-    const auto scriptTemplate = ScreenplayTemplateFacade::getTemplate();
-    const auto tableBorderWidth = scriptTemplate.pageSplitterWidth();
-    const qreal tableWidth = pageSize().width()
-                             - rootFrame()->frameFormat().leftMargin()
-                             - rootFrame()->frameFormat().rightMargin()
-                             - 3 * tableBorderWidth;
-    const qreal leftColumnWidth = tableWidth * scriptTemplate.leftHalfOfPageWidthPercents() / 100;
-    const qreal rightColumnWidth = tableWidth - leftColumnWidth;
-    QTextTableFormat format;
-    format.setWidth(QTextLength{ QTextLength::FixedLength, tableWidth });
-    format.setColumnWidthConstraints({ QTextLength{QTextLength::FixedLength, leftColumnWidth},
-                                       QTextLength{QTextLength::FixedLength, rightColumnWidth} });
-    format.setBorderStyle(QTextFrameFormat::BorderStyle_None);
-    format.setLeftMargin(-2 * tableBorderWidth);
-    format.setTopMargin(-2 * tableBorderWidth);
-    format.setBottomMargin(-2 * tableBorderWidth);
-    format.setBorder(tableBorderWidth);
-    cursor.insertTable(1, 2, format);
+    insertTable(cursor);
 
     //
     // Применяем сохранённый формат блока каждой из колонок
@@ -1191,6 +1157,31 @@ void ScreenplayTextDocument::updateModelOnContentChange(int _position, int _char
     }
 
     d->state = DocumentState::Ready;
+}
+
+void ScreenplayTextDocument::insertTable(const ScreenplayTextCursor& _cursor)
+{
+    const auto scriptTemplate = ScreenplayTemplateFacade::getTemplate();
+    const auto tableBorderWidth = scriptTemplate.pageSplitterWidth();
+    const qreal tableWidth = pageSize().width()
+                             - rootFrame()->frameFormat().leftMargin()
+                             - rootFrame()->frameFormat().rightMargin()
+                             - 3 * tableBorderWidth;
+    const qreal leftColumnWidth = tableWidth * scriptTemplate.leftHalfOfPageWidthPercents() / 100;
+    const qreal rightColumnWidth = tableWidth - leftColumnWidth;
+    QTextTableFormat format;
+    format.setWidth(QTextLength{ QTextLength::FixedLength, tableWidth });
+    format.setColumnWidthConstraints({ QTextLength{QTextLength::FixedLength, leftColumnWidth},
+                                       QTextLength{QTextLength::FixedLength, rightColumnWidth} });
+    format.setBorderStyle(QTextFrameFormat::BorderStyle_None);
+    format.setLeftMargin(-2 * tableBorderWidth);
+    const int qtTableBorderWidth = 2;
+    format.setTopMargin(-2 * tableBorderWidth - qtTableBorderWidth);
+    format.setBottomMargin(-2 * tableBorderWidth - qtTableBorderWidth);
+    format.setBorder(tableBorderWidth);
+
+    auto cursor = _cursor;
+    cursor.insertTable(1, 2, format);
 }
 
 } // namespace Ui

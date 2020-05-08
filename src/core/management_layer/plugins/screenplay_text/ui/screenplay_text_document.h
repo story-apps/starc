@@ -83,6 +83,11 @@ private:
      */
     void updateModelOnContentChange(int _position, int _charsRemoved, int _charsAdded);
 
+    /**
+     * @brief Вставить таблицу в заданном курсоре
+     */
+    void insertTable(const ScreenplayTextCursor& _cursor);
+
 private:
     class Implementation;
     QScopedPointer<Implementation> d;
