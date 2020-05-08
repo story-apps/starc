@@ -984,7 +984,8 @@ void ScreenplayTextDocument::updateModelOnContentChange(int _position, int _char
             // Является ли предыдущий элемент футером папки
             //
             const bool previousItemIsFolderFooter = [previousItem] {
-                if (previousItem->type() != ScreenplayTextModelItemType::Text) {
+                if (!previousItem
+                    || previousItem->type() != ScreenplayTextModelItemType::Text) {
                     return false;
                 }
 
