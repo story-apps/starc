@@ -385,7 +385,7 @@ void ScreenplayTextCorrector::Implementation::correctPageBreaks(int _position)
         const auto currentTemplate = ScreenplayTemplateFacade::getTemplate(templateName);
         leftHalfWidth =  pageWidth
                          * currentTemplate.leftHalfOfPageWidthPercents() / 100.0
-                         - currentTemplate.pageSplitterWidth();
+                         - currentTemplate.pageSplitterWidth() / 2;
         rightHalfWidth = pageWidth - leftHalfWidth - currentTemplate.pageSplitterWidth();
     }
     auto currentBlockWidth = [this, pageWidth, leftHalfWidth, rightHalfWidth] {

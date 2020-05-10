@@ -1178,7 +1178,7 @@ void ScreenplayTextDocument::insertTable(const ScreenplayTextCursor& _cursor)
     format.setLeftMargin(-2 * tableBorderWidth - qtTableBorderWidth);
     format.setRightMargin(2 * tableBorderWidth - qtTableBorderWidth);
     format.setTopMargin(-2 * tableBorderWidth - qtTableBorderWidth);
-    format.setBottomMargin(-2 * tableBorderWidth - qtTableBorderWidth);
+    format.setBottomMargin(-tableBorderWidth - qtTableBorderWidth);
     format.setBorder(tableBorderWidth);
 
     auto cursor = _cursor;
