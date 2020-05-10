@@ -14,6 +14,24 @@ int TextHelper::fineTextWidth(const QString& _text, const QFont& _font)
     return qCeil(qMax(metrics.boundingRect(_text).width(), metrics.horizontalAdvance(_text))) + 1;
 }
 
+qreal TextHelper::fineLineSpacing(const QFont& _font)
+{
+    const QFontMetricsF metrics(_font);
+    const qreal platformDelta =
+#ifdef Q_OS_LINUX
+            //
+            // 09.04.2020 Ubuntu 18.04.4
+            // Не знаю почему, но ручками пришлось подобрать данный коэффициент,
+            // только при нём получается такой же вывод как и в ворде для разных шрифтов
+            // тестировал как минимум на Courier New, Courier Prime и ещё паре каких были в системе
+            //
+            0.4;
+#else
+            0;
+#endif
+    return metrics.lineSpacing() + platformDelta;
+}
+
 qreal TextHelper::heightForWidth(const QString& _text, const QFont& _font, int _width)
 {
     const QFontMetricsF metrics(_font);

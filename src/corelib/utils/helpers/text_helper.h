@@ -23,6 +23,11 @@ public:
     static int fineTextWidth(const QString& _text, const QFont& _font);
 
     /**
+     * @brief Определить правильную высоту строки для заданного шрифта
+     */
+    static qreal fineLineSpacing(const QFont& _font);
+
+    /**
      * Возвращает высоту текста
      * @param text Текст
      * @param font Шрифт, которым рисуется текст

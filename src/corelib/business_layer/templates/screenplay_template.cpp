@@ -6,6 +6,7 @@
 #include <ui/widgets/text_edit/page/page_text_edit.h>
 
 #include <utils/helpers/string_helper.h>
+#include <utils/helpers/text_helper.h>
 
 #include <QApplication>
 #include <QFontMetricsF>
@@ -441,7 +442,7 @@ ScreenplayBlockStyle::ScreenplayBlockStyle(const QXmlStreamAttributes& _blockAtt
 
 void ScreenplayBlockStyle::updateLineHeight()
 {
-    auto lineHeight = QFontMetricsF(m_font).lineSpacing();
+    qreal lineHeight = TextHelper::fineLineSpacing(m_font);
     switch (m_lineSpacing.type) {
         case LineSpacingType::FixedLineSpacing: {
             lineHeight = PageMetrics::mmToPx(m_lineSpacing.value);
