@@ -1166,7 +1166,7 @@ void ScreenplayTextDocument::insertTable(const ScreenplayTextCursor& _cursor)
     const qreal tableWidth = pageSize().width()
                              - rootFrame()->frameFormat().leftMargin()
                              - rootFrame()->frameFormat().rightMargin()
-                             - 3 * tableBorderWidth;
+                             - 2 * tableBorderWidth;
     const qreal leftColumnWidth = tableWidth * scriptTemplate.leftHalfOfPageWidthPercents() / 100;
     const qreal rightColumnWidth = tableWidth - leftColumnWidth;
     QTextTableFormat format;
@@ -1174,8 +1174,9 @@ void ScreenplayTextDocument::insertTable(const ScreenplayTextCursor& _cursor)
     format.setColumnWidthConstraints({ QTextLength{QTextLength::FixedLength, leftColumnWidth},
                                        QTextLength{QTextLength::FixedLength, rightColumnWidth} });
     format.setBorderStyle(QTextFrameFormat::BorderStyle_None);
-    format.setLeftMargin(-2 * tableBorderWidth);
     const int qtTableBorderWidth = 2;
+    format.setLeftMargin(-2 * tableBorderWidth - qtTableBorderWidth);
+    format.setRightMargin(2 * tableBorderWidth - qtTableBorderWidth);
     format.setTopMargin(-2 * tableBorderWidth - qtTableBorderWidth);
     format.setBottomMargin(-2 * tableBorderWidth - qtTableBorderWidth);
     format.setBorder(tableBorderWidth);
