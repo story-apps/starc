@@ -1095,6 +1095,7 @@ void ApplicationManager::initConnections()
     // Горячие клавиши
     //
     QShortcut* saveShortcut = new QShortcut(QKeySequence::Save, d->applicationView);
+    saveShortcut->setContext(Qt::ApplicationShortcut);
     connect(saveShortcut, &QShortcut::activated, this, [this] { d->saveChanges(); });
 
     //
