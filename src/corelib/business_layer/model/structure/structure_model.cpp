@@ -720,14 +720,9 @@ void StructureModel::initDocument()
     // Если документ пустой, создаём первоначальную структуру
     //
     if (document()->content().isEmpty()) {
-        //
-        // TODO: сделать зависимо от предустановленного типа проекта
-        //
-
         addDocument(Domain::DocumentObjectType::Project);
         addDocument(Domain::DocumentObjectType::Characters);
         addDocument(Domain::DocumentObjectType::Locations);
-        addDocument(Domain::DocumentObjectType::Screenplay);
         addDocument(Domain::DocumentObjectType::RecycleBin);
     }
     //
