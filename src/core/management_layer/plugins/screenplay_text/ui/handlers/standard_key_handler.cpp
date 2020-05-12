@@ -541,9 +541,7 @@ void StandardKeyHandler::removeCharacters(bool _backward)
     // Применим финальный стиль
     //
     else {
-        if (editor()->currentParagraphType() != targetType) {
-            editor()->setCurrentParagraphType(targetType);
-        }
+        editor()->setCurrentParagraphType(targetType);
     }
 
     //
