@@ -247,7 +247,9 @@ void StructureModel::appendItem(StructureModelItem* _item, StructureModelItem* _
     //
     int recycleBinDelta = 0;
     if (_parentItem == d->rootItem
-        && _parentItem->childAt(_parentItem->childCount() - 1)->type() == Domain::DocumentObjectType::RecycleBin) {
+        && _parentItem->hasChildren()
+        && _parentItem->childAt(_parentItem->childCount() - 1)->type()
+            == Domain::DocumentObjectType::RecycleBin) {
         recycleBinDelta = -1;
     }
 
