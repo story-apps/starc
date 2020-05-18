@@ -112,7 +112,7 @@ void ImportManager::Implementation::import(const BusinessLayer::ImportOptions& _
     }
 
     //
-    // Импортируем текст сценария
+    // Импортируем текст сценариев
     //
     const auto screenplays = importer->importScreenplays(_options);
     for (const auto& screenplay : screenplays) {

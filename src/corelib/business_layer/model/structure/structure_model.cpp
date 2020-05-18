@@ -519,19 +519,24 @@ bool StructureModel::dropMimeData(const QMimeData* _data, Qt::DropAction _action
     //
     if (_row == -1
         || _row == parentItem->childCount()) {
+        //
+        // Если вставляем перед корзиной, то добавляем дельту
+        //
+        const int recycleBinIndexDelta = parentItem == d->rootItem ? -1 : 0;
+
         while (!d->lastMimeItems.isEmpty()) {
             auto item = d->lastMimeItems.takeFirst();
-            auto itemIndex = indexForItem(item);
+            const auto itemIndex = indexForItem(item);
 
             if (item->parent() == parentItem
-                && itemIndex.row() == (parentItem->childCount() - 1)) {
+                && itemIndex.row() == (parentItem->childCount() - 1 + recycleBinIndexDelta)) {
                 continue;
             }
 
             emit beginMoveRows(itemIndex.parent(), itemIndex.row(), itemIndex.row(),
-                               _parent, parentItem->childCount());
+                               _parent, parentItem->childCount() + recycleBinIndexDelta);
             item->parent()->takeItem(item);
-            parentItem->appendItem(item);
+            parentItem->insertItem(parentItem->childCount() + recycleBinIndexDelta, item);
             emit endMoveRows();
         }
     }
