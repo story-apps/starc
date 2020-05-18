@@ -1180,6 +1180,11 @@ public:
     static qreal hoverBackgroundOpacity();
 
     /**
+     * @brief Прозрачность фона сфокусированного элемента
+     */
+    static qreal focusBackgroundOpacity();
+
+    /**
      * @brief Прозрачность залития эффекта выделения
      */
     /** @{ */

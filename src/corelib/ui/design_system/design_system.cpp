@@ -1903,6 +1903,7 @@ public:
     qreal inactiveTextOpacity = 0.68;
     qreal disabledTextOpacity = 0.46;
     qreal hoverBackgroundOpacity = 0.06;
+    qreal focusBackgroundOpacity = 0.18;
     qreal elevationStartOpacity = 0.04;
     qreal elevationEndOpacity = 0.08;
 
@@ -2114,6 +2115,11 @@ qreal DesignSystem::disabledTextOpacity()
 qreal DesignSystem::hoverBackgroundOpacity()
 {
     return instance()->d->hoverBackgroundOpacity;
+}
+
+qreal DesignSystem::focusBackgroundOpacity()
+{
+    return instance()->d->focusBackgroundOpacity;
 }
 
 qreal DesignSystem::elevationStartOpacity()

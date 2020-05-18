@@ -119,13 +119,21 @@ void CheckBox::paintEvent(QPaintEvent* _event)
     const QRectF iconRect(QPointF(Ui::DesignSystem::checkBox().margins().left(),
                                   Ui::DesignSystem::checkBox().margins().top()),
                           Ui::DesignSystem::checkBox().iconSize());
+    if (hasFocus()) {
+        painter.setPen(Qt::NoPen);
+        painter.setBrush(Ui::DesignSystem::color().secondary());
+        painter.setOpacity(Ui::DesignSystem::focusBackgroundOpacity());
+        const auto radius = d->decorationRadiusAnimation.endValue().toReal();
+        painter.drawEllipse(iconRect.center(), radius, radius);
+        painter.setOpacity(1.0);
+    }
     if (d->decorationRadiusAnimation.state() == QVariantAnimation::Running
         || d->decorationOpacityAnimation.state() == QVariantAnimation::Running) {
         painter.setPen(Qt::NoPen);
         painter.setBrush(Ui::DesignSystem::color().secondary());
         painter.setOpacity(d->decorationOpacityAnimation.currentValue().toReal());
-        painter.drawEllipse(iconRect.center(), d->decorationRadiusAnimation.currentValue().toReal(),
-                            d->decorationRadiusAnimation.currentValue().toReal());
+        const auto radius = d->decorationRadiusAnimation.currentValue().toReal();
+        painter.drawEllipse(iconRect.center(), radius, radius);
         painter.setOpacity(1.0);
     }
 
