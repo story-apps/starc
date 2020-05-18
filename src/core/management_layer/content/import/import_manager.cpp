@@ -1,11 +1,16 @@
 #include "import_manager.h"
 
+#include <business_layer/import/kit_scenarist_importer.h>
+#include <business_layer/import/import_options.h>
+
 #include <data_layer/storage/settings_storage.h>
 #include <data_layer/storage/storage_facade.h>
 
 #include <ui/import/import_dialog.h>
+#include <ui/widgets/dialog/standard_dialog.h>
 
 #include <utils/helpers/dialog_helper.h>
+#include <utils/helpers/extension_helper.h>
 
 #include <QFileDialog>
 
@@ -16,28 +21,53 @@ namespace ManagementLayer
 class ImportManager::Implementation
 {
 public:
-    explicit Implementation(QWidget* _parent);
+    explicit Implementation(ImportManager* _parent, QWidget* _topLevelWidget);
 
     /**
      * @brief Показать диалог импорта для заданного файла
      */
     void showImportDialogFor(const QString& _path);
 
+    /**
+     * @brief Импортировать данные из заданного файла
+     */
+    void import(const BusinessLayer::ImportOptions& _options);
+
+    //
+    // Данные
+    //
+
+    ImportManager* q = nullptr;
 
     QWidget* topLevelWidget = nullptr;
 
     Ui::ImportDialog* importDialog = nullptr;
 };
 
-ImportManager::Implementation::Implementation(QWidget* _parent)
-    : topLevelWidget(_parent)
+ImportManager::Implementation::Implementation(ImportManager* _parent, QWidget* _topLevelWidget)
+    : q(_parent),
+      topLevelWidget(_topLevelWidget)
 {
 }
 
 void ImportManager::Implementation::showImportDialogFor(const QString& _path)
 {
+    //
+    // Формат MS DOC не поддерживается, он отображается только для того, чтобы пользователи
+    // не теряли свои файлы
+    //
+    if (_path.toLower().endsWith(ExtensionHelper::msOfficeBinary())) {
+        StandardDialog::information(topLevelWidget, tr("File format not supported"),
+            tr("Importing from DOC files is not supported. You need to save the file in DOCX format and repeat the import."));
+        return;
+    }
+
     if (importDialog == nullptr) {
         importDialog = new Ui::ImportDialog(_path, topLevelWidget);
+        connect(importDialog, &Ui::ImportDialog::importRequested, importDialog, [this] {
+            importDialog->hideDialog();
+            import(importDialog->importOptions());
+        });
         connect(importDialog, &Ui::ImportDialog::canceled, importDialog, &Ui::ImportDialog::hideDialog);
         connect(importDialog, &Ui::ImportDialog::disappeared, importDialog, [this] {
             importDialog->deleteLater();
@@ -48,13 +78,56 @@ void ImportManager::Implementation::showImportDialogFor(const QString& _path)
     importDialog->showDialog();
 }
 
+void ImportManager::Implementation::import(const BusinessLayer::ImportOptions& _options)
+{
+    //
+    // Определим нужный импортер
+    //
+    QScopedPointer<BusinessLayer::AbstractImporter> importer;
+    {
+        const auto importFilePath = _options.path.toLower();
+        if (importFilePath.endsWith(ExtensionHelper::starc())) {
+
+        } else if (importFilePath.endsWith(ExtensionHelper::kitScenarist())) {
+            importer.reset(new BusinessLayer::KitScenaristImporter);
+        } else if (importFilePath.endsWith(ExtensionHelper::finalDraft())) {
+
+        } else if (importFilePath.endsWith(ExtensionHelper::finalDraftTemplate())) {
+
+        } else if (importFilePath.endsWith(ExtensionHelper::trelby())) {
+
+        } else if (importFilePath.endsWith(ExtensionHelper::msOfficeBinary())) {
+
+        } else if (importFilePath.endsWith(ExtensionHelper::msOfficeOpenXml())) {
+
+        } else if (importFilePath.endsWith(ExtensionHelper::openDocumentXml())) {
+
+        } else if (importFilePath.endsWith(ExtensionHelper::fountain())) {
+
+        } else if (importFilePath.endsWith(ExtensionHelper::celtx())) {
+
+        } else if (importFilePath.endsWith(ExtensionHelper::plainText())) {
+
+        }
+    }
+
+    //
+    // Импортируем текст сценария
+    //
+    const auto screenplays = importer->importScreenplays(_options);
+    for (const auto& screenplay : screenplays) {
+        emit q->screenplayImported(screenplay.name, screenplay.titlePage, screenplay.synopsis,
+            screenplay.outline, screenplay.text);
+    }
+}
+
 
 // ****
 
 
 ImportManager::ImportManager(QObject* _parent, QWidget* _parentWidget)
     : QObject(_parent),
-      d(new Implementation(_parentWidget))
+      d(new Implementation(this, _parentWidget))
 {
 
 }

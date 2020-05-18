@@ -71,6 +71,9 @@ public:
      */
     void removeDocument(const QModelIndex& _itemIndex);
 
+    //
+    // Данные
+    //
 
     QWidget* topLevelWidget = nullptr;
 
@@ -302,9 +305,14 @@ ProjectManager::ProjectManager(QObject* _parent, QWidget* _parentWidget)
     // Соединения с моделью структуры проекта
     //
     connect(d->projectStructureModel, &BusinessLayer::StructureModel::documentAdded,
-            [this] (const QUuid& _uuid, Domain::DocumentObjectType _type, const QString& _name)
+            [this] (const QUuid& _uuid, Domain::DocumentObjectType _type, const QString& _name,
+                    const QString& _content)
     {
         auto document = DataStorageLayer::StorageFacade::documentStorage()->storeDocument(_uuid, _type);
+        if (!_content.isNull()) {
+            document->setContent(_content.toUtf8());
+        }
+
         auto documentModel = d->modelsFacade.modelFor(document);
         documentModel->setDocumentName(_name);
 
@@ -510,6 +518,34 @@ void ProjectManager::saveChanges()
     // Сохраняем все изменения документов
     //
     DataStorageLayer::StorageFacade::documentChangeStorage()->store();
+}
+
+void ProjectManager::addScreenplay(const QString& _name, const QString& _titlePage,
+    const QString& _synopsis, const QString& _outline, const QString& _text)
+{
+    //
+    // ATTENTION: Копипаста из StructureModel, быть внимательным при обновлении
+    //
+
+    using namespace Domain;
+
+    auto createItem = [] (DocumentObjectType _type, const QString& _name) {
+        auto uuid = QUuid::createUuid();
+        return new BusinessLayer::StructureModelItem(uuid, _type, _name, {});
+    };
+
+    auto rootItem = d->projectStructureModel->itemForIndex({});
+    auto screenplayItem = createItem(DocumentObjectType::Screenplay, _name);
+    d->projectStructureModel->appendItem(screenplayItem, rootItem);
+
+    d->projectStructureModel->appendItem(createItem(DocumentObjectType::ScreenplayTitlePage,
+                                                    tr("Title page")), screenplayItem, _titlePage);
+    d->projectStructureModel->appendItem(createItem(DocumentObjectType::ScreenplaySynopsis,
+                                                    tr("Synopsis")), screenplayItem, _synopsis);
+    d->projectStructureModel->appendItem(createItem(DocumentObjectType::ScreenplayOutline,
+                                                    tr("Outline")), screenplayItem, _outline);
+    d->projectStructureModel->appendItem(createItem(DocumentObjectType::ScreenplayText,
+                                                    tr("Screenplay")), screenplayItem, _text);
 }
 
 void ProjectManager::handleModelChange(BusinessLayer::AbstractModel* _model,

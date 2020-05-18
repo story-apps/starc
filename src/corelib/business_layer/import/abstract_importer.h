@@ -1,10 +1,11 @@
 #pragma once
 
-class QString;
+#include <QString>
 
 
 namespace BusinessLayer
 {
+struct ImportOptions;
 
 /**
  * @brief Базовый класс для реализации импортера документов
@@ -13,6 +14,22 @@ class AbstractImporter
 {
 public:
     virtual ~AbstractImporter() = default;
+
+    /**
+     * @brief Вспомогательная структура для хранения данных импортированного сценария
+     */
+    struct Screenplay {
+        QString name;
+        QString titlePage;
+        QString synopsis;
+        QString outline;
+        QString text;
+    };
+
+    /**
+     * @brief Импорт сценариев из заданного документа
+     */
+    virtual QVector<Screenplay> importScreenplays(const ImportOptions& _options) const = 0;
 };
 
 } // namespace BusinessLayer

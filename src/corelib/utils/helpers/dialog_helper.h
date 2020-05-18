@@ -12,9 +12,18 @@ class CORE_LIBRARY_EXPORT DialogHelper
 {
 public:
     /**
-     * @brief Получить фильтр проектов приложения
+     * @brief Получить фильтр конкретного типа
      */
     static QString starcProjectFilter();
+    static QString kitScenaristFilter();
+    static QString finalDraftFilter();
+    static QString finalDraftTemplateFilter();
+    static QString trelbyFilter();
+    static QString msWordFilter();
+    static QString openDocumentXmlFilter();
+    static QString fountainFilter();
+    static QString celtxFilter();
+    static QString plainTextFilter();
 
     /**
      * @brief Получить список фильтров файлов которые приложение может импортировать

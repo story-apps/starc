@@ -137,7 +137,7 @@
 <context>
     <name>BusinessLayer::ScriptTemplate</name>
     <message>
-        <location filename="../../corelib/business_layer/templates/screenplay_template.cpp" line="477"/>
+        <location filename="../../corelib/business_layer/templates/screenplay_template.cpp" line="495"/>
         <source>Copy of </source>
         <translation type="unfinished"></translation>
     </message>
@@ -182,6 +182,20 @@
     </message>
 </context>
 <context>
+    <name>BusinessLogic::ScriptTextCorrector</name>
+    <message>
+        <location filename="../management_layer/plugins/screenplay_text/ui/screenplay_text_corrector.cpp" line="40"/>
+        <source>CONT&apos;D</source>
+        <extracomment>Continued</extracomment>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../management_layer/plugins/screenplay_text/ui/screenplay_text_corrector.cpp" line="45"/>
+        <source>MORE</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
     <name>DatabaseLayer::Database</name>
     <message>
         <location filename="../../corelib/data_layer/database.cpp" line="91"/>
@@ -192,53 +206,57 @@
 <context>
     <name>DialogHelper</name>
     <message>
-        <location filename="../../corelib/utils/helpers/dialog_helper.cpp" line="8"/>
-        <location filename="../../corelib/utils/helpers/dialog_helper.cpp" line="18"/>
+        <location filename="../../corelib/utils/helpers/dialog_helper.cpp" line="31"/>
         <source>Story Architect project</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../corelib/utils/helpers/dialog_helper.cpp" line="15"/>
+        <location filename="../../corelib/utils/helpers/dialog_helper.cpp" line="85"/>
+        <source>Plain text</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../corelib/utils/helpers/dialog_helper.cpp" line="92"/>
         <source>All supported files</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../corelib/utils/helpers/dialog_helper.cpp" line="21"/>
+        <location filename="../../corelib/utils/helpers/dialog_helper.cpp" line="37"/>
         <source>KIT Scenarist project</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../corelib/utils/helpers/dialog_helper.cpp" line="24"/>
+        <location filename="../../corelib/utils/helpers/dialog_helper.cpp" line="43"/>
         <source>Final Draft screenplay</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../corelib/utils/helpers/dialog_helper.cpp" line="27"/>
+        <location filename="../../corelib/utils/helpers/dialog_helper.cpp" line="49"/>
         <source>Final Draft template</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../corelib/utils/helpers/dialog_helper.cpp" line="30"/>
+        <location filename="../../corelib/utils/helpers/dialog_helper.cpp" line="55"/>
         <source>Trelby screenplay</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../corelib/utils/helpers/dialog_helper.cpp" line="33"/>
+        <location filename="../../corelib/utils/helpers/dialog_helper.cpp" line="61"/>
         <source>Office Open XML</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../corelib/utils/helpers/dialog_helper.cpp" line="36"/>
+        <location filename="../../corelib/utils/helpers/dialog_helper.cpp" line="67"/>
         <source>OpenDocument text</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../corelib/utils/helpers/dialog_helper.cpp" line="39"/>
+        <location filename="../../corelib/utils/helpers/dialog_helper.cpp" line="73"/>
         <source>Fountain text</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../corelib/utils/helpers/dialog_helper.cpp" line="42"/>
+        <location filename="../../corelib/utils/helpers/dialog_helper.cpp" line="79"/>
         <source>Celtx project</source>
         <translation type="unfinished"></translation>
     </message>
@@ -259,7 +277,7 @@
 <context>
     <name>KeyProcessingLayer::FolderFooterHandler</name>
     <message>
-        <location filename="../management_layer/plugins/screenplay_text/ui/screenplay_text_edit.cpp" line="859"/>
+        <location filename="../management_layer/plugins/screenplay_text/ui/screenplay_text_edit.cpp" line="798"/>
         <source>END OF</source>
         <translation type="unfinished"></translation>
     </message>
@@ -275,63 +293,63 @@
 <context>
     <name>ManagementLayer::ApplicationManager</name>
     <message>
-        <location filename="../management_layer/application_manager.cpp" line="511"/>
+        <location filename="../management_layer/application_manager.cpp" line="515"/>
         <source> - changed</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../management_layer/application_manager.cpp" line="576"/>
-        <location filename="../management_layer/application_manager.cpp" line="594"/>
+        <location filename="../management_layer/application_manager.cpp" line="581"/>
+        <location filename="../management_layer/application_manager.cpp" line="599"/>
         <source>Saving error</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../management_layer/application_manager.cpp" line="577"/>
+        <location filename="../management_layer/application_manager.cpp" line="582"/>
         <source>Changes can&apos;t be written. There is an internal database error: &quot;%1&quot; Please check, if your file exists and if you have permission to write.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../management_layer/application_manager.cpp" line="595"/>
+        <location filename="../management_layer/application_manager.cpp" line="600"/>
         <source>Changes can&apos;t be written because the story located at &quot;%1&quot; doesn&apos;t exist. Please move the file back and retry saving.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../management_layer/application_manager.cpp" line="640"/>
+        <location filename="../management_layer/application_manager.cpp" line="645"/>
         <source>Project was modified. Save changes?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../management_layer/application_manager.cpp" line="641"/>
+        <location filename="../management_layer/application_manager.cpp" line="646"/>
         <source>Cancel</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../management_layer/application_manager.cpp" line="642"/>
+        <location filename="../management_layer/application_manager.cpp" line="647"/>
         <source>Don&apos;t save</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../management_layer/application_manager.cpp" line="643"/>
+        <location filename="../management_layer/application_manager.cpp" line="648"/>
         <source>Save</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../management_layer/application_manager.cpp" line="715"/>
+        <location filename="../management_layer/application_manager.cpp" line="720"/>
         <source>You try to create a project in nonexistent folder %1. Please, choose another location for the new project.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../management_layer/application_manager.cpp" line="720"/>
+        <location filename="../management_layer/application_manager.cpp" line="725"/>
         <source>The file can&apos;t be written. Looks like it is opened by another application. Please close it and retry to create a new project.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../management_layer/application_manager.cpp" line="724"/>
+        <location filename="../management_layer/application_manager.cpp" line="729"/>
         <source>The file can&apos;t be written. Please, check and give permissions to the app to write into the selected folder, or choose another folder for saving a new project.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../management_layer/application_manager.cpp" line="727"/>
+        <location filename="../management_layer/application_manager.cpp" line="732"/>
         <source>Create project error</source>
         <translation type="unfinished"></translation>
     </message>
@@ -348,6 +366,24 @@
         <location filename="../../cloud/cloud_service_manager.cpp" line="317"/>
         <source>Wrong password</source>
         <translation></translation>
+    </message>
+</context>
+<context>
+    <name>ManagementLayer::ImportManager</name>
+    <message>
+        <location filename="../management_layer/content/import/import_manager.cpp" line="54"/>
+        <source>File format not supported</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../management_layer/content/import/import_manager.cpp" line="55"/>
+        <source>Importing from DOC files is not supported. You need to save the file in DOCX format and repeat the import.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../management_layer/content/import/import_manager.cpp" line="134"/>
+        <source>Choose the file to import</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -1067,12 +1103,12 @@ from 2 Gb</source>
 <context>
     <name>Ui::CreateProjectDialog</name>
     <message>
-        <location filename="../ui/projects/create_project_dialog.cpp" line="247"/>
+        <location filename="../ui/projects/create_project_dialog.cpp" line="256"/>
         <source>Create new story</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../ui/projects/create_project_dialog.cpp" line="249"/>
+        <location filename="../ui/projects/create_project_dialog.cpp" line="258"/>
         <source>Enter name of the new story</source>
         <translation></translation>
     </message>
@@ -1102,54 +1138,107 @@ from 2 Gb</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/projects/create_project_dialog.cpp" line="191"/>
+        <location filename="../ui/projects/create_project_dialog.cpp" line="192"/>
         <source>The story will be created on the local computer.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/projects/create_project_dialog.cpp" line="192"/>
+        <location filename="../ui/projects/create_project_dialog.cpp" line="193"/>
         <source>to create stories on the cloud.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/projects/create_project_dialog.cpp" line="194"/>
+        <location filename="../ui/projects/create_project_dialog.cpp" line="195"/>
         <source>Renew subscription</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/projects/create_project_dialog.cpp" line="198"/>
+        <location filename="../ui/projects/create_project_dialog.cpp" line="199"/>
         <source>Sign in</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/projects/create_project_dialog.cpp" line="250"/>
+        <location filename="../ui/projects/create_project_dialog.cpp" line="259"/>
         <source>Save story in the local computer</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/projects/create_project_dialog.cpp" line="251"/>
+        <location filename="../ui/projects/create_project_dialog.cpp" line="260"/>
         <source>Save story in the cloud</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/projects/create_project_dialog.cpp" line="252"/>
+        <location filename="../ui/projects/create_project_dialog.cpp" line="261"/>
         <source>Location of the new story file</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../ui/projects/create_project_dialog.cpp" line="253"/>
+        <location filename="../ui/projects/create_project_dialog.cpp" line="262"/>
         <source>Choose file with story to import</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../ui/projects/create_project_dialog.cpp" line="255"/>
+        <location filename="../ui/projects/create_project_dialog.cpp" line="264"/>
         <source>Create</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../ui/projects/create_project_dialog.cpp" line="254"/>
+        <location filename="../ui/projects/create_project_dialog.cpp" line="263"/>
         <source>Cancel</source>
         <translation></translation>
+    </message>
+</context>
+<context>
+    <name>Ui::ImportDialog</name>
+    <message>
+        <location filename="../ui/import/import_dialog.cpp" line="128"/>
+        <source>Import data from the file &quot;%1&quot;</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ui/import/import_dialog.cpp" line="130"/>
+        <source>Documents</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ui/import/import_dialog.cpp" line="131"/>
+        <source>Import characters</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ui/import/import_dialog.cpp" line="132"/>
+        <source>Import locations</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ui/import/import_dialog.cpp" line="133"/>
+        <source>Screenplay</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ui/import/import_dialog.cpp" line="134"/>
+        <source>Import screenplay</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ui/import/import_dialog.cpp" line="135"/>
+        <source>Remove scene numbers</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ui/import/import_dialog.cpp" line="136"/>
+        <source>Import with review marks</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ui/import/import_dialog.cpp" line="138"/>
+        <source>Import</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ui/import/import_dialog.cpp" line="139"/>
+        <source>Cancel</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -1247,27 +1336,27 @@ from 2 Gb</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../ui/menu_view.cpp" line="192"/>
+        <location filename="../ui/menu_view.cpp" line="193"/>
         <source>Save current story as...</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/menu_view.cpp" line="193"/>
+        <location filename="../ui/menu_view.cpp" line="194"/>
         <source>Import...</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../ui/menu_view.cpp" line="194"/>
+        <location filename="../ui/menu_view.cpp" line="195"/>
         <source>Export...</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../ui/menu_view.cpp" line="195"/>
+        <location filename="../ui/menu_view.cpp" line="196"/>
         <source>Application settings</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../ui/menu_view.cpp" line="196"/>
+        <location filename="../ui/menu_view.cpp" line="197"/>
         <source>How to use the application</source>
         <translation></translation>
     </message>
@@ -1555,6 +1644,14 @@ from 2 Gb</source>
     </message>
 </context>
 <context>
+    <name>Ui::ScreenplayTextEdit</name>
+    <message>
+        <location filename="../management_layer/plugins/screenplay_text/ui/screenplay_text_edit.cpp" line="1078"/>
+        <source>Add document</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
     <name>Ui::ScreenplayTextEditToolBar</name>
     <message>
         <location filename="../management_layer/plugins/screenplay_text/ui/screenplay_text_edit_toolbar.cpp" line="131"/>
@@ -1565,62 +1662,62 @@ from 2 Gb</source>
 <context>
     <name>Ui::ScreenplayTextView</name>
     <message>
-        <location filename="../management_layer/plugins/screenplay_text/ui/screenplay_text_view.cpp" line="201"/>
+        <location filename="../management_layer/plugins/screenplay_text/ui/screenplay_text_view.cpp" line="221"/>
         <source>Scene heading</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_text/ui/screenplay_text_view.cpp" line="202"/>
+        <location filename="../management_layer/plugins/screenplay_text/ui/screenplay_text_view.cpp" line="222"/>
         <source>Scene characters</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_text/ui/screenplay_text_view.cpp" line="203"/>
+        <location filename="../management_layer/plugins/screenplay_text/ui/screenplay_text_view.cpp" line="223"/>
         <source>Action</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_text/ui/screenplay_text_view.cpp" line="204"/>
+        <location filename="../management_layer/plugins/screenplay_text/ui/screenplay_text_view.cpp" line="224"/>
         <source>Character</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_text/ui/screenplay_text_view.cpp" line="205"/>
+        <location filename="../management_layer/plugins/screenplay_text/ui/screenplay_text_view.cpp" line="225"/>
         <source>Parenthetical</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_text/ui/screenplay_text_view.cpp" line="206"/>
+        <location filename="../management_layer/plugins/screenplay_text/ui/screenplay_text_view.cpp" line="226"/>
         <source>Dialogue</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_text/ui/screenplay_text_view.cpp" line="207"/>
+        <location filename="../management_layer/plugins/screenplay_text/ui/screenplay_text_view.cpp" line="227"/>
         <source>Lyrics</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_text/ui/screenplay_text_view.cpp" line="208"/>
+        <location filename="../management_layer/plugins/screenplay_text/ui/screenplay_text_view.cpp" line="228"/>
         <source>Shot</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_text/ui/screenplay_text_view.cpp" line="209"/>
+        <location filename="../management_layer/plugins/screenplay_text/ui/screenplay_text_view.cpp" line="229"/>
         <source>Transition</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_text/ui/screenplay_text_view.cpp" line="210"/>
+        <location filename="../management_layer/plugins/screenplay_text/ui/screenplay_text_view.cpp" line="230"/>
         <source>Inline note</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_text/ui/screenplay_text_view.cpp" line="211"/>
+        <location filename="../management_layer/plugins/screenplay_text/ui/screenplay_text_view.cpp" line="231"/>
         <source>Unformatted text</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_text/ui/screenplay_text_view.cpp" line="212"/>
+        <location filename="../management_layer/plugins/screenplay_text/ui/screenplay_text_view.cpp" line="232"/>
         <source>Folder</source>
         <translation type="unfinished"></translation>
     </message>

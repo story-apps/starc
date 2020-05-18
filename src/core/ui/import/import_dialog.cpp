@@ -1,5 +1,7 @@
 #include "import_dialog.h"
 
+#include <business_layer/import/import_options.h>
+
 #include <ui/design_system/design_system.h>
 #include <ui/widgets/button/button.h>
 #include <ui/widgets/check_box/check_box.h>
@@ -30,8 +32,8 @@ public:
     CheckBox* keepReviewMarks = nullptr;
 
     QHBoxLayout* buttonsLayout = nullptr;
-    Button* cancelButton = nullptr;
     Button* importButton = nullptr;
+    Button* cancelButton = nullptr;
 };
 
 
@@ -45,8 +47,8 @@ ImportDialog::Implementation::Implementation(const QString& _importFilePath, QWi
       removeSceneNumbers(new CheckBox(_parent)),
       keepReviewMarks(new CheckBox(_parent)),
       buttonsLayout(new QHBoxLayout),
-      cancelButton(new Button(_parent)),
-      importButton(new Button(_parent))
+      importButton(new Button(_parent)),
+      cancelButton(new Button(_parent))
 {
     for (auto checkBox : { importCharacters, importLocations,
                            importScreenplay, removeSceneNumbers, keepReviewMarks }) {
@@ -70,6 +72,9 @@ ImportDialog::ImportDialog(const QString& _importFilePath, QWidget* _parent)
 {
     d->importButton->installEventFilter(this);
 
+    setAcceptButton(d->importButton);
+    setRejectButton(d->cancelButton);
+
     contentsLayout()->addWidget(d->documentsTitle, 0, 0);
     contentsLayout()->addWidget(d->importCharacters, 1, 0);
     contentsLayout()->addWidget(d->importLocations, 2, 0);
@@ -79,10 +84,19 @@ ImportDialog::ImportDialog(const QString& _importFilePath, QWidget* _parent)
     contentsLayout()->addWidget(d->keepReviewMarks, 6, 0);
     contentsLayout()->addLayout(d->buttonsLayout, 7, 0);
 
+    auto configureImportAvailability = [this] {
+        d->importButton->setEnabled(d->importCharacters->isChecked()
+                                    || d->importLocations->isChecked()
+                                    || d->importScreenplay->isChecked());
+    };
+    connect(d->importCharacters, &CheckBox::checkedChanged, this, configureImportAvailability);
+    connect(d->importLocations, &CheckBox::checkedChanged, this, configureImportAvailability);
+    connect(d->importScreenplay, &CheckBox::checkedChanged, this, configureImportAvailability);
     connect(d->importScreenplay, &CheckBox::checkedChanged, this, [this] (bool _checked) {
         d->removeSceneNumbers->setVisible(_checked);
         d->keepReviewMarks->setVisible(_checked);
     });
+    connect(d->importButton, &Button::clicked, this, &ImportDialog::importRequested);
     connect(d->cancelButton, &Button::clicked, this, &ImportDialog::canceled);
 
     updateTranslations();
@@ -90,6 +104,18 @@ ImportDialog::ImportDialog(const QString& _importFilePath, QWidget* _parent)
 }
 
 ImportDialog::~ImportDialog() = default;
+
+BusinessLayer::ImportOptions ImportDialog::importOptions() const
+{
+    BusinessLayer::ImportOptions options;
+    options.path = d->importFilePath;
+    options.importCharacters = d->importCharacters->isChecked();
+    options.importLocations = d->importLocations->isChecked();
+    options.importScreenplay = d->importScreenplay->isChecked();
+    options.removeSceneNumbers = d->removeSceneNumbers->isChecked();
+    options.keepReviewMarks = d->keepReviewMarks->isChecked();
+    return options;
+}
 
 QWidget* ImportDialog::focusedWidgetAfterShow() const
 {
@@ -99,7 +125,7 @@ QWidget* ImportDialog::focusedWidgetAfterShow() const
 void ImportDialog::updateTranslations()
 {
     const QFileInfo importFileInfo(d->importFilePath);
-    setTitle(tr("Import data from the \"%1\"").arg(importFileInfo.completeBaseName()));
+    setTitle(tr("Import data from the file \"%1\"").arg(importFileInfo.fileName()));
 
     d->documentsTitle->setText(tr("Documents"));
     d->importCharacters->setText(tr("Import characters"));
@@ -109,8 +135,8 @@ void ImportDialog::updateTranslations()
     d->removeSceneNumbers->setText(tr("Remove scene numbers"));
     d->keepReviewMarks->setText(tr("Import with review marks"));
 
-    d->cancelButton->setText(tr("Cancel"));
     d->importButton->setText(tr("Import"));
+    d->cancelButton->setText(tr("Cancel"));
 }
 
 void ImportDialog::designSystemChangeEvent(DesignSystemChangeEvent* _event)
@@ -132,8 +158,8 @@ void ImportDialog::designSystemChangeEvent(DesignSystemChangeEvent* _event)
         checkBox->setTextColor(Ui::DesignSystem::color().onBackground());
     }
 
-    for (auto button : { d->cancelButton,
-                         d->importButton }) {
+    for (auto button : { d->importButton,
+                         d->cancelButton }) {
         button->setBackgroundColor(Ui::DesignSystem::color().secondary());
         button->setTextColor(Ui::DesignSystem::color().secondary());
     }

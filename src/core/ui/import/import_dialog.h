@@ -2,6 +2,10 @@
 
 #include <ui/widgets/dialog/abstract_dialog.h>
 
+namespace BusinessLayer {
+struct ImportOptions;
+}
+
 
 namespace Ui
 {
@@ -17,7 +21,17 @@ public:
     explicit ImportDialog(const QString& _importFilePath, QWidget* _parent = nullptr);
     ~ImportDialog() override;
 
+    /**
+     * @brief Получить заданные опции импортирования
+     */
+    BusinessLayer::ImportOptions importOptions() const;
+
 signals:
+    /**
+     * @brief Пользователь хочет импортировать сценарий с заданными параметрами
+     */
+    void importRequested();
+
     /**
      * @brief Пользователь передумал импортировать данные
      */

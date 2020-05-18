@@ -222,10 +222,10 @@ public:
      * @brief Менеджеры управляющие конкретными частями приложения
      */
     QScopedPointer<AccountManager> accountManager;
-    QScopedPointer<ImportManager> importManager;
     QScopedPointer<OnboardingManager> onboardingManager;
     QScopedPointer<ProjectsManager> projectsManager;
     QScopedPointer<ProjectManager> projectManager;
+    QScopedPointer<ImportManager> importManager;
     QScopedPointer<SettingsManager> settingsManager;
 #ifdef CLOUD_SERVICE_MANAGER
     QScopedPointer<CloudServiceManager> cloudServiceManager;
@@ -254,10 +254,10 @@ ApplicationManager::Implementation::Implementation(ApplicationManager* _q)
       applicationView(new Ui::ApplicationView),
       menuView(new Ui::MenuView(applicationView)),
       accountManager(new AccountManager(nullptr, applicationView)),
-      importManager(new ImportManager(nullptr, applicationView)),
       onboardingManager(new OnboardingManager(nullptr, applicationView)),
       projectsManager(new ProjectsManager(nullptr, applicationView)),
       projectManager(new ProjectManager(nullptr, applicationView)),
+      importManager(new ImportManager(nullptr, applicationView)),
       settingsManager(new SettingsManager(nullptr, applicationView))
 #ifdef CLOUD_SERVICE_MANAGER
     , cloudServiceManager(new CloudServiceManager)
@@ -1207,6 +1207,12 @@ void ApplicationManager::initConnections()
             d->projectsManager.data(), &ProjectsManager::setCurrentProjectLogline);
     connect(d->projectManager.data(), &ProjectManager::projectCoverChanged,
             d->projectsManager.data(), &ProjectsManager::setCurrentProjectCover);
+
+    //
+    // Менеджер импорта
+    //
+    connect(d->importManager.data(), &ImportManager::screenplayImported,
+            d->projectManager.data(), &ProjectManager::addScreenplay);
 
     //
     // Менеджер настроек

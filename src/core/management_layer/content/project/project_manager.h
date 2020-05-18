@@ -4,7 +4,11 @@
 
 
 namespace BusinessLayer {
-    class AbstractModel;
+class AbstractModel;
+}
+
+namespace Domain {
+enum class DocumentObjectType;
 }
 
 namespace ManagementLayer
@@ -39,6 +43,12 @@ public:
      * @brief Сохранить изменения проекта
      */
     void saveChanges();
+
+    /**
+     * @brief Добавить документ заданного типа с заданным названием и содержимым
+     */
+    void addScreenplay(const QString& _name, const QString& _titlePage, const QString& _synopsis,
+                       const QString& _outline, const QString& _text);
 
 signals:
     /**

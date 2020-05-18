@@ -149,6 +149,10 @@ void StructureModel::setProjectName(const QString& _name)
 
 void StructureModel::addDocument(Domain::DocumentObjectType _type, const QString& _name, const QModelIndex& _parent)
 {
+    //
+    // ATTENTION: В ProjectManager есть копипаста отсюда, быть внимательным при обновлении
+    //
+
     using namespace Domain;
 
     auto createItem = [] (DocumentObjectType _type, const QString& _name) {
@@ -223,7 +227,7 @@ void StructureModel::prependItem(StructureModelItem* _item, StructureModelItem* 
     endInsertRows();
 }
 
-void StructureModel::appendItem(StructureModelItem* _item, StructureModelItem* _parentItem)
+void StructureModel::appendItem(StructureModelItem* _item, StructureModelItem* _parentItem, const QString& _content)
 {
     if (_item == nullptr) {
         return;
@@ -237,13 +241,26 @@ void StructureModel::appendItem(StructureModelItem* _item, StructureModelItem* _
         return;
     }
 
+    //
+    // Если уже создана корзина, то добавляем все новые элементы перед ней,
+    // для этого определим смещение по индексу для добавляемого элемента
+    //
+    int recycleBinDelta = 0;
+    if (_parentItem == d->rootItem
+        && _parentItem->childAt(_parentItem->childCount() - 1)->type() == Domain::DocumentObjectType::RecycleBin) {
+        recycleBinDelta = -1;
+    }
+
+    //
+    // Собственно добавляем новый элемент
+    //
     const QModelIndex parentIndex = indexForItem(_parentItem);
-    const int itemRowIndex = _parentItem->childCount();
+    const int itemRowIndex = _parentItem->childCount() + recycleBinDelta;
     beginInsertRows(parentIndex, itemRowIndex, itemRowIndex);
     _parentItem->insertItem(itemRowIndex, _item);
     endInsertRows();
 
-    emit documentAdded(_item->uuid(), _item->type(), _item->name());
+    emit documentAdded(_item->uuid(), _item->type(), _item->name(), _content);
 }
 
 void StructureModel::insertItem(StructureModelItem* _item, StructureModelItem* _afterSiblingItem)

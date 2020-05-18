@@ -50,7 +50,7 @@ public:
     /**
      * @brief Добавить элемент в конец
      */
-    void appendItem(StructureModelItem* _item, StructureModelItem* _parentItem = nullptr);
+    void appendItem(StructureModelItem* _item, StructureModelItem* _parentItem = nullptr, const QString& _content = {});
 
     /**
      * @brief Вставить элемент после родственика
@@ -119,9 +119,10 @@ public:
 
 signals:
     /**
-     * @brief Был добавлен документ с заданным идентификатором и типом
+     * @brief Был добавлен документ с заданным идентификатором, типом и содержимым
      */
-    void documentAdded(const QUuid& _uuid, Domain::DocumentObjectType _type, const QString& _name);
+    void documentAdded(const QUuid& _uuid, Domain::DocumentObjectType _type, const QString& _name,
+        const QString& _content);
 
 protected:
     /**
