@@ -17,7 +17,7 @@ class AccountManager : public QObject
     Q_OBJECT
 
 public:
-    explicit AccountManager(QObject* _parent, QWidget* _parentWidget);
+    AccountManager(QObject* _parent, QWidget* _parentWidget);
     ~AccountManager() override;
 
     Widget* accountBar() const;

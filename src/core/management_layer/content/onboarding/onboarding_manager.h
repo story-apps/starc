@@ -19,7 +19,7 @@ class OnboardingManager : public QObject
     Q_OBJECT
 
 public:
-    explicit OnboardingManager(QObject* _parent, QWidget* _parentWidget);
+    OnboardingManager(QObject* _parent, QWidget* _parentWidget);
     ~OnboardingManager() override;
 
     QWidget* toolBar() const;

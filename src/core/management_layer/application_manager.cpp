@@ -1,6 +1,7 @@
 #include "application_manager.h"
 
 #include "content/account/account_manager.h"
+#include "content/import/import_manager.h"
 #include "content/onboarding/onboarding_manager.h"
 #include "content/project/project_manager.h"
 #include "content/projects/project.h"
@@ -221,6 +222,7 @@ public:
      * @brief Менеджеры управляющие конкретными частями приложения
      */
     QScopedPointer<AccountManager> accountManager;
+    QScopedPointer<ImportManager> importManager;
     QScopedPointer<OnboardingManager> onboardingManager;
     QScopedPointer<ProjectsManager> projectsManager;
     QScopedPointer<ProjectManager> projectManager;
@@ -252,6 +254,7 @@ ApplicationManager::Implementation::Implementation(ApplicationManager* _q)
       applicationView(new Ui::ApplicationView),
       menuView(new Ui::MenuView(applicationView)),
       accountManager(new AccountManager(nullptr, applicationView)),
+      importManager(new ImportManager(nullptr, applicationView)),
       onboardingManager(new OnboardingManager(nullptr, applicationView)),
       projectsManager(new ProjectsManager(nullptr, applicationView)),
       projectManager(new ProjectManager(nullptr, applicationView)),
@@ -836,7 +839,8 @@ void ApplicationManager::Implementation::imitateTypewriterSound(QKeyEvent* _even
     //
     // Обрабатываем событие только в случае, если в виджет в фокусе можно вводить текст
     //
-    if (!QApplication::focusWidget()->testAttribute(Qt::WA_InputMethodEnabled)) {
+    if (QApplication::focusWidget()
+        && !QApplication::focusWidget()->testAttribute(Qt::WA_InputMethodEnabled)) {
         return;
     }
     //
@@ -1116,6 +1120,7 @@ void ApplicationManager::initConnections()
     connect(d->menuView, &Ui::MenuView::openProjectPressed, this, [this] { d->openProject(); });
     connect(d->menuView, &Ui::MenuView::projectPressed, this, [this] { d->showProject(); });
     connect(d->menuView, &Ui::MenuView::saveChangesPressed, this, [this] { d->saveChanges(); });
+    connect(d->menuView, &Ui::MenuView::importPressed, this, [this] { d->importManager->import(); });
     connect(d->menuView, &Ui::MenuView::settingsPressed, this, [this] { d->showSettings(); });
 
     //

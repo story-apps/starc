@@ -16,7 +16,7 @@ class ProjectsManager : public QObject
     Q_OBJECT
 
 public:
-    explicit ProjectsManager(QObject* _parent, QWidget* _parentWidget);
+    ProjectsManager(QObject* _parent, QWidget* _parentWidget);
     ~ProjectsManager() override;
 
     QWidget* toolBar() const;

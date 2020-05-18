@@ -18,7 +18,7 @@ class SettingsManager : public QObject
     Q_OBJECT
 
 public:
-    explicit SettingsManager(QObject* _parent, QWidget* _parentWidget);
+    SettingsManager(QObject* _parent, QWidget* _parentWidget);
     ~SettingsManager() override;
 
     QWidget* toolBar() const;
