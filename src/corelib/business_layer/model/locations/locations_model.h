@@ -8,6 +8,9 @@ namespace BusinessLayer
 
 class LocationModel;
 
+/**
+ * @brief Модель списка локаций
+ */
 class CORE_LIBRARY_EXPORT LocationsModel : public AbstractModel
 {
     Q_OBJECT

@@ -8,6 +8,9 @@ namespace BusinessLayer
 
 class CharacterModel;
 
+/**
+ * @brief Модель списка персонажей
+ */
 class CORE_LIBRARY_EXPORT CharactersModel : public AbstractModel
 {
     Q_OBJECT

@@ -45,6 +45,11 @@ public:
     void setImageWrapper(AbstractImageWrapper* _image);
 
     /**
+     * @brief Применить заданное изменение для модели
+     */
+    virtual void applyPatch(const QByteArray& _patch) {}
+
+    /**
      * @brief Очистить все загруженные данные
      */
     void clear();

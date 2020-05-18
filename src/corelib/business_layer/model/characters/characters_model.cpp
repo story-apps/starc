@@ -26,6 +26,10 @@ CharactersModel::CharactersModel(QObject* _parent)
 
 void CharactersModel::addCharacterModel(CharacterModel* _characterModel)
 {
+    if (_characterModel->name().isEmpty()) {
+        return;
+    }
+
     if (d->characterModels.contains(_characterModel)) {
         return;
     }

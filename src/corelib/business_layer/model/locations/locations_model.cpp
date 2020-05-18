@@ -26,6 +26,10 @@ LocationsModel::LocationsModel(QObject* _parent)
 
 void LocationsModel::addLocationModel(LocationModel* _LocationModel)
 {
+    if (_LocationModel->name().isEmpty()) {
+        return;
+    }
+
     if (d->locationModels.contains(_LocationModel)) {
         return;
     }
