@@ -58,7 +58,7 @@ ScreenplayTextDocument::ScreenplayTextDocument(QObject *_parent)
       d(new Implementation(this))
 {
     connect(this, &ScreenplayTextDocument::contentsChange, this, &ScreenplayTextDocument::updateModelOnContentChange);
-    connect(this, &ScreenplayTextDocument::contentsChange, &d->corrector, &ScreenplayTextCorrector::correct);
+    connect(this, &ScreenplayTextDocument::contentsChange, &d->corrector, &ScreenplayTextCorrector::correct, Qt::QueuedConnection);
 }
 
 ScreenplayTextDocument::~ScreenplayTextDocument() = default;
@@ -632,8 +632,6 @@ void ScreenplayTextDocument::unsplitParagraph(const ScreenplayTextCursor& _curso
         insertFromMime(cursor.position(), firstColumnData);
     }
 
-
-    cursor.endEditBlock();
     cursor.endEditBlock();
 }
 

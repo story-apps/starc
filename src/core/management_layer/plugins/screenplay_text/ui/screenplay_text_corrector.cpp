@@ -428,34 +428,6 @@ void ScreenplayTextCorrector::Implementation::correctPageBreaks(int _position)
     }
 
     //
-    // Определим список блоков для принудительной ручной проверки
-    // NOTE: Это необходимо для того, чтобы корректно обрабатывать изменение текста
-    //       в предыдущих и следующих за переносом блоках
-    //
-    QSet<int> blocksToRecheck;
-    if (_position != -1) {
-        QTextBlock blockToRecheck = document->findBlock(_position);
-        //
-        // ... спускаемся на два блока вперёд
-        //
-        blockToRecheck = blockToRecheck.next();
-        blockToRecheck = blockToRecheck.next();
-        //
-        // ... и возвращаемся на пять блоков назад
-        // NOTE: максимальное количество блоков которое может быть перенесено на новую страницу
-        //
-        int recheckBlocksCount = 5;
-        do {
-            blocksToRecheck.insert(blockToRecheck.blockNumber());
-            blockToRecheck = blockToRecheck.previous();
-        } while (blockToRecheck.isValid()
-                 && (recheckBlocksCount-- > 0
-                     || blockToRecheck.blockFormat().boolProperty(ScreenplayBlockStyle::PropertyIsCorrection)
-                     || blockToRecheck.blockFormat().boolProperty(ScreenplayBlockStyle::PropertyIsBreakCorrectionStart)
-                     || blockToRecheck.blockFormat().boolProperty(ScreenplayBlockStyle::PropertyIsBreakCorrectionEnd)));
-    }
-
-    //
     // Начинаем работу с документом
     //
     ScreenplayTextCursor cursor(document);
@@ -577,8 +549,7 @@ void ScreenplayTextCorrector::Implementation::correctPageBreaks(int _position)
         if (blockItems[currentBlockInfo.number].isValid()
             && !isBlockEmptyDecorationOnTopOfThePage
             && qFuzzyCompare(blockItems[currentBlockInfo.number].height, blockHeight)
-            && qFuzzyCompare(blockItems[currentBlockInfo.number].top, lastBlockHeight)
-            && !blocksToRecheck.contains(currentBlockInfo.number)) {
+            && qFuzzyCompare(blockItems[currentBlockInfo.number].top, lastBlockHeight)) {
             //
             // Если не изменилась
             //
@@ -607,6 +578,32 @@ void ScreenplayTextCorrector::Implementation::correctPageBreaks(int _position)
         //
         // Если позиция блока изменилась, то работаем по алгоритму корректировки текста
         //
+
+
+        //
+        // Если в блоке сменилось расположение или высота, проверяем также ближайшие блоки,
+        // чтобы корректно обработать ситуацию, когда в блоке удалили текст и теперь он может
+        // быть помещён на предыдущей странице
+        //
+        if (blockItems[currentBlockInfo.number].isValid()) {
+            const auto maxDecorationBlocks = 2;
+            const int topIndex = std::max(0, currentBlockInfo.number - maxDecorationBlocks);
+            if (topIndex == 0) {
+                block = document->begin();
+                lastBlockHeight = 0;
+            } else {
+                block = block.previous().previous();
+                lastBlockHeight = blockItems[topIndex].top;
+            }
+            currentBlockInfo.number = topIndex;
+
+            const int bottomIndex = currentBlockInfo.number + maxDecorationBlocks;
+            for (int index = topIndex; index <= bottomIndex; ++index) {
+                blockItems[index] = {};
+            }
+
+            continue;
+        }
 
 
         //
