@@ -29,6 +29,11 @@ public:
     void setModel(BusinessLayer::ScreenplayTextModel* _model);
 
     /**
+     * @brief Получить индекс элемента модели в текущей позиции курсора
+     */
+    QModelIndex currentModelIndex() const;
+
+    /**
      * @brief Поставить курсор в позицию элемента с заданным индексом модели сценария
      */
     void setCurrentModelIndex(const QModelIndex& _index);

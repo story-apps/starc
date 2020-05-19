@@ -147,6 +147,17 @@ void ScreenplayTextEdit::setTextCursorReimpl(const QTextCursor& _cursor)
     verticalScrollBar()->setValue(verticalScrollValue);
 }
 
+QModelIndex ScreenplayTextEdit::currentModelIndex() const
+{
+    auto userData = textCursor().block().userData();
+    if (userData == nullptr) {
+        return {};
+    }
+
+    auto screenplayBlockData = static_cast<Ui::ScreenplayTextBlockData*>(userData);
+    return d->model->indexForItem(screenplayBlockData->item());
+}
+
 void ScreenplayTextEdit::setCurrentModelIndex(const QModelIndex& _index)
 {
     ScreenplayTextCursor textCursor(document());

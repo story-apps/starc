@@ -7,7 +7,7 @@
 
 #include <QKeyEvent>
 #include <QTextBlock>
-#include <QDebug>
+
 using BusinessLayer::ScreenplayParagraphType;
 using Ui::ScreenplayTextEdit;
 

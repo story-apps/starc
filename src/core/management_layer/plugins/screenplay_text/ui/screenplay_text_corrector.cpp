@@ -51,7 +51,6 @@ namespace {
      * @brief Обновить компановку текста для блока
      */
     void updateBlockLayout(qreal _pageWidth, const QTextBlock& _block) {
-        qDebug(QString("%1 %2").arg(_pageWidth).arg(_block.text()).toUtf8());
         _block.layout()->setText(_block.text());
         _block.layout()->beginLayout();
         forever {

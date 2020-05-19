@@ -45,6 +45,7 @@ Tree::Tree(QWidget* _parent)
     layout->setSpacing(0);
     layout->addWidget(d->tree);
 
+    connect(d->tree, &QTreeView::clicked, this, &Tree::clicked);
     connect(d->tree, &QTreeView::doubleClicked, this, &Tree::doubleClicked);
 
     designSystemChangeEvent(nullptr);

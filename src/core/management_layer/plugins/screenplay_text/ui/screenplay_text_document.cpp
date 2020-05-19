@@ -347,10 +347,14 @@ void ScreenplayTextDocument::addParagraph(BusinessLayer::ScreenplayParagraphType
 
 void ScreenplayTextDocument::setCurrentParagraphType(BusinessLayer::ScreenplayParagraphType _type, const ScreenplayTextCursor& _cursor)
 {
+    const auto currentParagraphType = ScreenplayBlockStyle::forBlock(_cursor.block());
+    if (currentParagraphType == _type) {
+        return;
+    }
+
     //
     // Нельзя сменить стиль конечных элементов папок
     //
-    const auto currentParagraphType = ScreenplayBlockStyle::forBlock(_cursor.block());
     if (currentParagraphType == ScreenplayParagraphType::FolderFooter) {
         return;
     }

@@ -11,6 +11,7 @@
 
 #include <QApplication>
 #include <QFileDialog>
+#include <QTimer>
 
 
 namespace ManagementLayer
@@ -194,8 +195,19 @@ void ScreenplayTextManager::bind(IDocumentManager* _manager)
 {
     Q_ASSERT(_manager);
 
-    connect(_manager->asQObject(), SIGNAL(currentModelIndexChanged(const QModelIndex&)),
-            this, SLOT(setCurrentModelIndex(const QModelIndex&)), Qt::UniqueConnection);
+    const auto isConnectedFirstTime
+            = connect(_manager->asQObject(), SIGNAL(currentModelIndexChanged(const QModelIndex&)),
+                      this, SLOT(setCurrentModelIndex(const QModelIndex&)), Qt::UniqueConnection);
+
+    //
+    // Ставим в очередь событие нотификацию о смене текущей сцены,
+    // чтобы навигатор отобразил её при первом открытии
+    //
+    if (isConnectedFirstTime) {
+        QTimer::singleShot(0, this, [this] {
+            emit currentModelIndexChanged(d->view->currentModelIndex());
+        });
+    }
 }
 
 void ScreenplayTextManager::saveSettings()

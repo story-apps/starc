@@ -89,6 +89,11 @@ signals:
     void currentIndexChanged(const QModelIndex& _index);
 
     /**
+     * @brief Пользователь кликнул на заданном элементе
+     */
+    void clicked(const QModelIndex& _index);
+
+    /**
      * @brief Пользователь сделал двойной клик на элемента
      */
     void doubleClicked(const QModelIndex& _index);

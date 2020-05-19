@@ -178,6 +178,11 @@ void ScreenplayTextView::setModel(BusinessLayer::ScreenplayTextModel* _model)
     d->updateToolBarCurrentParagraphTypeName();
 }
 
+QModelIndex ScreenplayTextView::currentModelIndex() const
+{
+    return d->screenplayText->currentModelIndex();
+}
+
 void ScreenplayTextView::setCurrentModelIndex(const QModelIndex& _index)
 {
     d->screenplayText->setCurrentModelIndex(_index);

@@ -69,6 +69,11 @@ public:
     void setTextCursorReimpl(const QTextCursor& _cursor);
 
     /**
+     * @brief Получить индекс элемента модели в текущей позиции курсора
+     */
+    QModelIndex currentModelIndex() const;
+
+    /**
      * @brief Поставить курсор в позицию элемента с заданным индексом модели сценария
      */
     void setCurrentModelIndex(const QModelIndex& _index);
