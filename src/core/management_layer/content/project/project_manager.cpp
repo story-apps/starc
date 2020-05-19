@@ -48,7 +48,8 @@ public:
      */
     enum class ContextMenuAction {
         AddDocument,
-        RemoveDocument
+        RemoveDocument,
+        EmptyRecycleBin
     };
 
     /**
@@ -70,6 +71,11 @@ public:
      * @brief Удалить документ
      */
     void removeDocument(const QModelIndex& _itemIndex);
+
+    /**
+     * @brief Очистить корзину
+     */
+    void emptyRecycleBin(const QModelIndex& _recycleBinIndex);
 
     //
     // Данные
@@ -113,16 +119,26 @@ void ProjectManager::Implementation::updateNavigatorContextMenu(const QModelInde
 {
     navigatorContextMenuModel->clear();
 
-    auto addDocument = new QStandardItem(tr("Add document"));
-    addDocument->setData(u8"\uf415", Qt::DecorationRole);
-    addDocument->setData(static_cast<int>(ContextMenuAction::AddDocument), Qt::UserRole);
-    navigatorContextMenuModel->appendRow(addDocument);
+    const auto currentItem = projectStructureModel->itemForIndex(_index);
+    if (currentItem->type() == Domain::DocumentObjectType::RecycleBin) {
+        if (currentItem->hasChildren()) {
+            auto emptyRecicleBin = new QStandardItem(tr("Empty recycle bin"));
+            emptyRecicleBin->setData(u8"\uf5e8", Qt::DecorationRole);
+            emptyRecicleBin->setData(static_cast<int>(ContextMenuAction::EmptyRecycleBin), Qt::UserRole);
+            navigatorContextMenuModel->appendRow(emptyRecicleBin);
+        }
+    } else {
+        auto addDocument = new QStandardItem(tr("Add document"));
+        addDocument->setData(u8"\uf415", Qt::DecorationRole);
+        addDocument->setData(static_cast<int>(ContextMenuAction::AddDocument), Qt::UserRole);
+        navigatorContextMenuModel->appendRow(addDocument);
 
-    if (_index.isValid()) {
-        auto removeDocument = new QStandardItem(tr("Remove document"));
-        removeDocument->setData(u8"\uf1c0", Qt::DecorationRole);
-        removeDocument->setData(static_cast<int>(ContextMenuAction::RemoveDocument), Qt::UserRole);
-        navigatorContextMenuModel->appendRow(removeDocument);
+        if (_index.isValid()) {
+            auto removeDocument = new QStandardItem(tr("Remove document"));
+            removeDocument->setData(u8"\uf1c0", Qt::DecorationRole);
+            removeDocument->setData(static_cast<int>(ContextMenuAction::RemoveDocument), Qt::UserRole);
+            navigatorContextMenuModel->appendRow(removeDocument);
+        }
     }
 }
 
@@ -147,6 +163,11 @@ void ProjectManager::Implementation::executeContextMenuAction(const QModelIndex&
 
         case ContextMenuAction::RemoveDocument: {
             removeDocument(_itemIndex);
+            break;
+        }
+
+        case ContextMenuAction::EmptyRecycleBin: {
+            emptyRecycleBin(_itemIndex);
             break;
         }
     }
@@ -188,48 +209,91 @@ void ProjectManager::Implementation::removeDocument(const QModelIndex& _itemInde
     }
 
     //
-    // Если документ в корзине
-    //
-    if (itemTopLevelParent->type() == Domain::DocumentObjectType::RecycleBin) {
-        //
-        // ... то спросим действительно ли пользователь хочет его удалить
-        //
-        const int kCancelButtonId = 0;
-        const int kRemoveButtonId = 1;
-        auto dialog = new Dialog(topLevelWidget);
-        dialog->showDialog({},
-                           tr("Do you really want to permanently remove document?"),
-                           {{ kCancelButtonId, tr("No"), Dialog::RejectButton },
-                            { kRemoveButtonId, tr("Yes, remove"), Dialog::NormalButton }});
-        QObject::connect(dialog, &Dialog::finished,
-                         [this, item, kCancelButtonId, dialog] (const Dialog::ButtonInfo& _buttonInfo)
-        {
-            dialog->hideDialog();
-
-            //
-            // Пользователь передумал удалять
-            //
-            if (_buttonInfo.id == kCancelButtonId) {
-                return;
-            }
-
-            //
-            // Если таки хочет, то удаляем документ
-            // NOTE: порядок удаления важен
-            //
-            auto document = DataStorageLayer::StorageFacade::documentStorage()->document(item->uuid());
-            modelsFacade.removeModelFor(document);
-            DataStorageLayer::StorageFacade::documentStorage()->removeDocument(document);
-            projectStructureModel->removeItem(item);
-        });
-        QObject::connect(dialog, &Dialog::disappeared, dialog, &Dialog::deleteLater);
-    }
-    //
     // Если документ ещё не в корзине, то переносим его в корзину
     //
-    else {
+    if (itemTopLevelParent->type() != Domain::DocumentObjectType::RecycleBin) {
         projectStructureModel->moveItemToRecycleBin(item);
+        return;
     }
+
+    //
+    // Если документ в корзине
+    //
+    // ... то спросим действительно ли пользователь хочет его удалить
+    //
+    const int kCancelButtonId = 0;
+    const int kRemoveButtonId = 1;
+    auto dialog = new Dialog(topLevelWidget);
+    dialog->showDialog({},
+                       tr("Do you really want to permanently remove document?"),
+                       {{ kCancelButtonId, tr("No"), Dialog::RejectButton },
+                        { kRemoveButtonId, tr("Yes, remove"), Dialog::NormalButton }});
+    QObject::connect(dialog, &Dialog::finished,
+                     [this, item, kCancelButtonId, dialog] (const Dialog::ButtonInfo& _buttonInfo)
+    {
+        dialog->hideDialog();
+
+        //
+        // Пользователь передумал удалять
+        //
+        if (_buttonInfo.id == kCancelButtonId) {
+            return;
+        }
+
+        //
+        // Если таки хочет, то удаляем документ
+        // NOTE: порядок удаления важен
+        //
+        auto document = DataStorageLayer::StorageFacade::documentStorage()->document(item->uuid());
+        modelsFacade.removeModelFor(document);
+        DataStorageLayer::StorageFacade::documentStorage()->removeDocument(document);
+        projectStructureModel->removeItem(item);
+    });
+    QObject::connect(dialog, &Dialog::disappeared, dialog, &Dialog::deleteLater);
+}
+
+void ProjectManager::Implementation::emptyRecycleBin(const QModelIndex& _recycleBinIndex)
+{
+    auto recycleBin = projectStructureModel->itemForIndex(_recycleBinIndex);
+    if (recycleBin == nullptr) {
+        return;
+    }
+
+    //
+    // Спросим действительно ли пользователь хочет очистить корзину
+    //
+    const int kCancelButtonId = 0;
+    const int kEmptyButtonId = 1;
+    auto dialog = new Dialog(topLevelWidget);
+    dialog->showDialog({},
+                       tr("Do you really want to permanently remove all documents from the recycle bin?"),
+                       {{ kCancelButtonId, tr("No"), Dialog::RejectButton },
+                        { kEmptyButtonId, tr("Yes, remove"), Dialog::NormalButton }});
+    QObject::connect(dialog, &Dialog::finished,
+                     [this, recycleBin, kCancelButtonId, dialog] (const Dialog::ButtonInfo& _buttonInfo)
+    {
+        dialog->hideDialog();
+
+        //
+        // Пользователь передумал очищать корзину
+        //
+        if (_buttonInfo.id == kCancelButtonId) {
+            return;
+        }
+
+        //
+        // Если таки хочет, то удаляем все вложенные документы
+        // NOTE: порядок удаления важен
+        //
+        while (recycleBin->hasChildren()) {
+            auto itemToRemove = recycleBin->childAt(0);
+            auto documentToRemove = DataStorageLayer::StorageFacade::documentStorage()->document(itemToRemove->uuid());
+            modelsFacade.removeModelFor(documentToRemove);
+            DataStorageLayer::StorageFacade::documentStorage()->removeDocument(documentToRemove);
+            projectStructureModel->removeItem(itemToRemove);
+        }
+    });
+    QObject::connect(dialog, &Dialog::disappeared, dialog, &Dialog::deleteLater);
 }
 
 

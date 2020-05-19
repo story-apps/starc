@@ -226,6 +226,10 @@ BusinessLayer::AbstractModel* ProjectModelsFacade::modelFor(Domain::DocumentObje
 
 void ProjectModelsFacade::removeModelFor(Domain::DocumentObject* _document)
 {
+    if (!d->documentsToModels.contains(_document)) {
+        return;
+    }
+
     auto model = d->documentsToModels.take(_document);
     model->disconnect();
     model->clear();
