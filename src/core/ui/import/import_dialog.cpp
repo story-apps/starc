@@ -108,7 +108,7 @@ ImportDialog::~ImportDialog() = default;
 BusinessLayer::ImportOptions ImportDialog::importOptions() const
 {
     BusinessLayer::ImportOptions options;
-    options.path = d->importFilePath;
+    options.filePath = d->importFilePath;
     options.importCharacters = d->importCharacters->isChecked();
     options.importLocations = d->importLocations->isChecked();
     options.importScreenplay = d->importScreenplay->isChecked();

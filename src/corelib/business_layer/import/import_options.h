@@ -13,7 +13,7 @@ struct ImportOptions {
     /**
      * @brief Путь файла для импорта
      */
-    QString path;
+    QString filePath;
 
     /**
      * @brief Нужно ли импортировать персонажей

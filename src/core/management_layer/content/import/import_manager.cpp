@@ -85,7 +85,7 @@ void ImportManager::Implementation::import(const BusinessLayer::ImportOptions& _
     //
     QScopedPointer<BusinessLayer::AbstractImporter> importer;
     {
-        const auto importFilePath = _options.path.toLower();
+        const auto importFilePath = _options.filePath.toLower();
         if (importFilePath.endsWith(ExtensionHelper::starc())) {
 
         } else if (importFilePath.endsWith(ExtensionHelper::kitScenarist())) {
