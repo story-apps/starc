@@ -53,12 +53,12 @@ SettingsNavigator::SettingsNavigator(QWidget* _parent)
         return item;
     };
     QStandardItemModel* model = new QStandardItemModel(this);
-    auto applicationItem = createItem(u8"\uF614");
-    applicationItem->appendRow(createItem(u8"\uf62e"));
-    applicationItem->appendRow(createItem(u8"\uf61b"));
+    auto applicationItem = createItem(u8"\U000f0614");
+    applicationItem->appendRow(createItem(u8"\U000f062e"));
+    applicationItem->appendRow(createItem(u8"\U000f061b"));
     model->appendRow(applicationItem);
-    model->appendRow(createItem(u8"\uf9ab"));
-    model->appendRow(createItem(u8"\uf30c"));
+    model->appendRow(createItem(u8"\U000f09ac"));
+    model->appendRow(createItem(u8"\U000f030c"));
     d->tree->setModel(model);
     d->tree->setCurrentIndex(model->index(0, 0));
     d->tree->expandAll();

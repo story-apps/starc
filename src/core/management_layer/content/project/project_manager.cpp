@@ -123,19 +123,19 @@ void ProjectManager::Implementation::updateNavigatorContextMenu(const QModelInde
     if (currentItem->type() == Domain::DocumentObjectType::RecycleBin) {
         if (currentItem->hasChildren()) {
             auto emptyRecicleBin = new QStandardItem(tr("Empty recycle bin"));
-            emptyRecicleBin->setData(u8"\uf5e8", Qt::DecorationRole);
+            emptyRecicleBin->setData(u8"\U000f05e8", Qt::DecorationRole);
             emptyRecicleBin->setData(static_cast<int>(ContextMenuAction::EmptyRecycleBin), Qt::UserRole);
             navigatorContextMenuModel->appendRow(emptyRecicleBin);
         }
     } else {
         auto addDocument = new QStandardItem(tr("Add document"));
-        addDocument->setData(u8"\uf415", Qt::DecorationRole);
+        addDocument->setData(u8"\U000f0415", Qt::DecorationRole);
         addDocument->setData(static_cast<int>(ContextMenuAction::AddDocument), Qt::UserRole);
         navigatorContextMenuModel->appendRow(addDocument);
 
         if (_index.isValid()) {
             auto removeDocument = new QStandardItem(tr("Remove document"));
-            removeDocument->setData(u8"\uf1c0", Qt::DecorationRole);
+            removeDocument->setData(u8"\U000f01b4", Qt::DecorationRole);
             removeDocument->setData(static_cast<int>(ContextMenuAction::RemoveDocument), Qt::UserRole);
             navigatorContextMenuModel->appendRow(removeDocument);
         }

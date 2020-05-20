@@ -142,7 +142,7 @@ void CheckBox::paintEvent(QPaintEvent* _event)
     //
     painter.setFont(Ui::DesignSystem::font().iconsMid());
     painter.setPen(d->isChecked ? Ui::DesignSystem::color().secondary() : textColor());
-    painter.drawText(iconRect, Qt::AlignCenter, d->isChecked ? u8"\ufc2e" : u8"\uf131");
+    painter.drawText(iconRect, Qt::AlignCenter, d->isChecked ? u8"\U000f0c52" : u8"\U000f0131");
 
     //
     // Рисуем текст

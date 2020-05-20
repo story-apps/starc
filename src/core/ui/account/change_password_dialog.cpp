@@ -35,7 +35,7 @@ ChangePasswordDialog::Implementation::Implementation(QWidget* _parent)
 
     password->setTabChangesFocus(true);
     password->setPasswordModeEnabled(true);
-    password->setTrailingIcon(u8"\uf6d0");
+    password->setTrailingIcon(u8"\U000f06d1");
 
     buttonsLayout->setContentsMargins({});
     buttonsLayout->setSpacing(0);
@@ -64,7 +64,7 @@ ChangePasswordDialog::ChangePasswordDialog(QWidget* _parent)
     connect(d->restorePasswordConfirmationCode, &TextField::textChanged, this, &ChangePasswordDialog::confirmationCodeEntered);
     connect(d->password, &TextField::trailingIconPressed, d->password, [password = d->password] {
         password->setPasswordModeEnabled(!password->isPasswordModeEnabled());
-        password->setTrailingIcon(password->isPasswordModeEnabled() ? u8"\uf6d0" : u8"\uf6cf");
+        password->setTrailingIcon(password->isPasswordModeEnabled() ? u8"\U000f06d1" : u8"\U000f06d0");
     });
     connect(d->changePasswordButton, &Button::clicked, this, &ChangePasswordDialog::changePasswordRequested);
     connect(d->cancelButton, &Button::clicked, this, &ChangePasswordDialog::canceled);

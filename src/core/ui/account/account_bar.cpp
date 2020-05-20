@@ -46,7 +46,7 @@ AccountBar::AccountBar(QWidget* _parent)
     : FloatingToolBar(_parent),
       d(new Implementation)
 {
-    d->accountAction->setIconText(u8"\uf004");
+    d->accountAction->setIconText(u8"\U000f0004");
     addAction(d->accountAction);
     hide();
 

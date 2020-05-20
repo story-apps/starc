@@ -12,7 +12,7 @@ ProjectToolBar::ProjectToolBar(QWidget* _parent)
     : AppBar(_parent)
 {
     QAction* menuAction = new QAction(this);
-    menuAction->setText(u8"\uf35c");
+    menuAction->setText(u8"\U000f035c");
     addAction(menuAction);
     connect(menuAction, &QAction::triggered, this, &ProjectToolBar::menuPressed);
 

@@ -168,7 +168,7 @@ void Stepper::paintEvent(QPaintEvent* _event)
         //
         else {
             painter.setFont(Ui::DesignSystem::font().iconsSmall());
-            painter.drawText(stepNumberBackgroundRect, Qt::AlignCenter, u8"\uf12c");
+            painter.drawText(stepNumberBackgroundRect, Qt::AlignCenter, u8"\U000f012c");
         }
 
         //

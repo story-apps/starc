@@ -270,7 +270,7 @@ public:
         const QFont& caption() const;
         const QFont& overline() const;
 
-        // Cheat sheet - https://cdn.materialdesignicons.com/3.8.95/
+        // Cheat sheet - https://cdn.materialdesignicons.com/5.2.45/
         const QFont& iconsSmall() const;
         const QFont& iconsMid() const;
 

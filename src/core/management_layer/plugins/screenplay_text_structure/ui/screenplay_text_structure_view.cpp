@@ -29,7 +29,7 @@ ScreenplayTextStructureView::Implementation::Implementation(QWidget* _parent)
       backText(new Subtitle2Label(_parent)),
       content(new Tree(_parent))
 {
-    backIcon->setText(u8"\uf141");
+    backIcon->setText(u8"\U000f0141");
 
     content->setDragDropEnabled(true);
 }

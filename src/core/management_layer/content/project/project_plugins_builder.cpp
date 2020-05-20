@@ -26,16 +26,16 @@ namespace {
      * @brief Карта соответствия майм-типов документа к редакторам
      */
     const QHash<QString, QVector<ProjectPluginsBuilder::EditorInfo>> kDocumentToEditors
-    = {{ "application/x-starc/document/project", {{ "application/x-starc/editor/project/information", u8"\uf2fd" },
-                                                  { "application/x-starc/editor/project/collaborators", u8"\ufb34" }}},
-       { "application/x-starc/document/screenplay", {{ "application/x-starc/editor/screenplay/information", u8"\uf2fd" },
-                                                     { "application/x-starc/editor/screenplay/parameters", u8"\uf493" }}},
-       { "application/x-starc/document/screenplay/title-page", {{ "application/x-starc/editor/screenplay/title-page", u8"\uf9ec" }}},
-       { "application/x-starc/document/screenplay/synopsis", {{ "application/x-starc/editor/text", u8"\uf9ec" }}},
-       { "application/x-starc/document/screenplay/outline", {{ "application/x-starc/editor/screenplay/outline", u8"\uf9ec" },
-                                                             { "application/x-starc/editor/screenplay/cards", u8"\uf554" }}},
-       { "application/x-starc/document/screenplay/text", {{ "application/x-starc/editor/screenplay/text", u8"\uf9ec" },
-                                                          { "application/x-starc/editor/screenplay/cards", u8"\uf554" }}}};
+    = {{ "application/x-starc/document/project", {{ "application/x-starc/editor/project/information", u8"\U000f02fd" },
+                                                  { "application/x-starc/editor/project/collaborators", u8"\U000f0b58" }}},
+       { "application/x-starc/document/screenplay", {{ "application/x-starc/editor/screenplay/information", u8"\U000f02fd" },
+                                                     { "application/x-starc/editor/screenplay/parameters", u8"\U000f0493" }}},
+       { "application/x-starc/document/screenplay/title-page", {{ "application/x-starc/editor/screenplay/title-page", u8"\U000f09ed" }}},
+       { "application/x-starc/document/screenplay/synopsis", {{ "application/x-starc/editor/text", u8"\U000f09ed" }}},
+       { "application/x-starc/document/screenplay/outline", {{ "application/x-starc/editor/screenplay/outline", u8"\U000f09ed" },
+                                                             { "application/x-starc/editor/screenplay/cards", u8"\U000f0554" }}},
+       { "application/x-starc/document/screenplay/text", {{ "application/x-starc/editor/screenplay/text", u8"\U000f09ed" },
+                                                          { "application/x-starc/editor/screenplay/cards", u8"\U000f0554" }}}};
 
     /**
       * @brief Карта соответсвий майм-типов навигаторов/редакторов к названиям библиотек с плагинами

@@ -29,7 +29,7 @@ public:
     Widget* navigatorPage = nullptr;
     Tree* tree = nullptr;
     ProjectTreeDelegate* treeDelegate = nullptr;
-    ContextMenu* contexMenu = nullptr;
+    ContextMenu* contextMenu = nullptr;
     TextField* filter = nullptr;
 };
 
@@ -37,7 +37,7 @@ ProjectNavigator::Implementation::Implementation(QWidget* _parent)
     : navigatorPage(new Widget(_parent)),
       tree(new Tree(_parent)),
       treeDelegate(new ProjectTreeDelegate(tree)),
-      contexMenu(new ContextMenu(tree)),
+      contextMenu(new ContextMenu(tree)),
       filter(new TextField(_parent))
 {
     tree->setDragDropEnabled(true);
@@ -78,11 +78,11 @@ ProjectNavigator::ProjectNavigator(QWidget* _parent)
         //
         // Отображаем контекстное меню с обновлённой моделью
         //
-        d->contexMenu->showContextMenu(d->tree->mapToGlobal(_pos));
+        d->contextMenu->showContextMenu(d->tree->mapToGlobal(_pos));
     });
 
-    connect(d->contexMenu, &ContextMenu::clicked, d->contexMenu, &ContextMenu::hide);
-    connect(d->contexMenu, &ContextMenu::clicked, this, [this] (const QModelIndex& _contextMenuIndex) {
+    connect(d->contextMenu, &ContextMenu::clicked, d->contextMenu, &ContextMenu::hide);
+    connect(d->contextMenu, &ContextMenu::clicked, this, [this] (const QModelIndex& _contextMenuIndex) {
         emit contextMenuItemClicked(_contextMenuIndex);
     });
 }
@@ -94,7 +94,7 @@ void ProjectNavigator::setModel(QAbstractItemModel* _model)
 
 void ProjectNavigator::setContextMenuModel(QAbstractItemModel* _model)
 {
-    d->contexMenu->setModel(_model);
+    d->contextMenu->setModel(_model);
 }
 
 QVariant ProjectNavigator::saveState() const
@@ -138,8 +138,8 @@ void ProjectNavigator::designSystemChangeEvent(DesignSystemChangeEvent* _event)
     d->tree->setBackgroundColor(DesignSystem::color().primary());
     d->tree->setTextColor(DesignSystem::color().onPrimary());
     d->tree->setItemDelegate(d->treeDelegate);
-    d->contexMenu->setBackgroundColor(DesignSystem::color().background());
-    d->contexMenu->setTextColor(DesignSystem::color().onBackground());
+    d->contextMenu->setBackgroundColor(DesignSystem::color().background());
+    d->contextMenu->setTextColor(DesignSystem::color().onBackground());
     d->filter->setBackgroundColor(DesignSystem::color().primary());
     d->filter->setTextColor(DesignSystem::color().onPrimary());
 }

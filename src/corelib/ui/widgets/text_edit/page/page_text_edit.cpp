@@ -3578,7 +3578,10 @@ void PageTextEdit::setFooter(const QString& _footer)
 
 ContextMenu* PageTextEdit::createContextMenu(const QPoint& _position, QWidget* _parent)
 {
-    return new ContextMenu(_parent == nullptr ? this : _parent);
+    auto contextMenu = new ContextMenu(_parent == nullptr ? this : _parent);
+    contextMenu->setBackgroundColor(Ui::DesignSystem::color().background());
+    contextMenu->setTextColor(Ui::DesignSystem::color().onBackground());
+    return contextMenu;
 }
 
 void PageTextEdit::clipPageDecorationRegions(QPainter* _painter)

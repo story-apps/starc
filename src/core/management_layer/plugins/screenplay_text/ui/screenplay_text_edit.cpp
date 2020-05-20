@@ -1090,9 +1090,15 @@ ContextMenu* ScreenplayTextEdit::createContextMenu(const QPoint& _position, QWid
     // TODO: Разделить на две колонки можно только диалоги
     //
     QStandardItemModel* model = new QStandardItemModel(menu);
-    auto addDocument = new QStandardItem(tr("Add document"));
-    addDocument->setData(u8"\uf415", Qt::DecorationRole);
-    model->appendRow(addDocument);
+    auto splitAction = new QStandardItem;
+    if (ScreenplayTextCursor cursor = textCursor(); cursor.inTable()) {
+        splitAction->setText(tr("Unsplit paragraph"));
+        splitAction->setData(u8"\U000f10e7", Qt::DecorationRole);
+    } else {
+        splitAction->setText(tr("Split paragraph"));
+        splitAction->setData(u8"\U000f10e7", Qt::DecorationRole);
+    }
+    model->appendRow(splitAction);
     menu->setModel(model);
     connect(menu, &ContextMenu::clicked, this, [this, menu] {
         menu->hideContextMenu();

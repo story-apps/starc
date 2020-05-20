@@ -12,7 +12,7 @@ AccountToolBar::AccountToolBar(QWidget* _parent)
     : AppBar(_parent)
 {
     QAction* backAction = new QAction(this);
-    backAction->setIconText(u8"\uf04d");
+    backAction->setIconText(u8"\U000f004d");
     addAction(backAction);
     connect(backAction, &QAction::triggered, this, &AccountToolBar::backPressed);
 

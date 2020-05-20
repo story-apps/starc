@@ -48,9 +48,9 @@ AccountView::Implementation::Implementation(QWidget* _parent)
       receiveEmailNotifications(new CheckBox(userInfo)),
       avatar(new Avatar(userInfo))
 {
-    changePasswordAction->setIconText(u8"\uf772");
+    changePasswordAction->setIconText(u8"\U000f0773");
     toolBar->addAction(changePasswordAction);
-    logoutAction->setIconText(u8"\uf343");
+    logoutAction->setIconText(u8"\U000f0343");
     toolBar->addAction(logoutAction);
 
     userInfoLayout->setContentsMargins({});

@@ -55,7 +55,7 @@ LoginDialog::Implementation::Implementation(QWidget* _parent)
 
     password->setTabChangesFocus(true);
     password->setPasswordModeEnabled(true);
-    password->setTrailingIcon(u8"\uf6d0");
+    password->setTrailingIcon(u8"\U000f06d1");
 
     registrationConfirmationCode->setTabChangesFocus(true);
     restorePasswordConfirmationCode->setTabChangesFocus(true);
@@ -122,7 +122,7 @@ LoginDialog::LoginDialog(QWidget* _parent)
     connect(&d->notifyEmailDebouncer, &Debouncer::gotWork, this, &LoginDialog::emailEntered);
     connect(d->password, &TextField::trailingIconPressed, d->password, [password = d->password] {
         password->setPasswordModeEnabled(!password->isPasswordModeEnabled());
-        password->setTrailingIcon(password->isPasswordModeEnabled() ? u8"\uf6d0" : u8"\uf6cf");
+        password->setTrailingIcon(password->isPasswordModeEnabled() ? u8"\U000f06d1" : u8"\U000f06d0");
     });
     connect(d->registrationConfirmationCode, &TextField::textChanged, this, &LoginDialog::registrationConfirmationCodeEntered);
     connect(d->restorePasswordConfirmationCode, &TextField::textChanged, this, &LoginDialog::passwordRestoringConfirmationCodeEntered);

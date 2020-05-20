@@ -94,7 +94,7 @@ QVariant ScreenplayTextModelFolderItem::data(int _role) const
         }
 
         case Qt::DecorationRole: {
-            return u8"\uf24b";
+            return u8"\U000f024b";
         }
     }
 
