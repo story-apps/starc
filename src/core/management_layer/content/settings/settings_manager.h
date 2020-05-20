@@ -58,6 +58,7 @@ private:
     // Сохранение параметров приложения
     //
     void setApplicationLanguage(int _language);
+    void setApplicationUseTypeWriterSound(bool _use);
     void setApplicationUseSpellChecker(bool _use);
     void setApplicationSpellCheckerLanguage(const QString& _languageCode);
     void setApplicationTheme(Ui::ApplicationTheme _theme);

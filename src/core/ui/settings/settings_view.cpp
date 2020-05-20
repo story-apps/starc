@@ -77,6 +77,7 @@ public:
     H5Label* applicationTitle = nullptr;
     Body1Label* language = nullptr;
     Button* changeLanuage = nullptr;
+    CheckBox* useTypewriterSound = nullptr;
     CheckBox* useSpellChecker = nullptr;
     ComboBox* spellCheckerLanguage = nullptr;
     QAbstractItemModel* spellCheckerLanguagesModel = nullptr;
@@ -118,6 +119,7 @@ SettingsView::Implementation::Implementation(QWidget* _parent)
       applicationTitle(new H5Label(applicationCard)),
       language(new Body1Label(applicationCard)),
       changeLanuage(new Button(applicationCard)),
+      useTypewriterSound(new CheckBox(applicationCard)),
       useSpellChecker(new CheckBox(applicationCard)),
       spellCheckerLanguage(new ComboBox(applicationCard)),
       spellCheckerLanguagesModel(buildSpellCheckerLanguagesModel()),
@@ -190,6 +192,7 @@ void SettingsView::Implementation::initApplicationCard()
         layout->addStretch();
         applicationCardLayout->addLayout(layout, itemIndex++, 0);
     }
+    applicationCardLayout->addWidget(useTypewriterSound, itemIndex++, 0);
     {
         spellCheckerLanguage->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Preferred);
 
@@ -304,6 +307,7 @@ SettingsView::SettingsView(QWidget* _parent)
     });
 
     connect(d->changeLanuage, &Button::clicked, this, &SettingsView::applicationLanguagePressed);
+    connect(d->useTypewriterSound, &CheckBox::checkedChanged, this, &SettingsView::applicationUseTypewriterSoundChanged);
     connect(d->useSpellChecker, &CheckBox::checkedChanged, this, &SettingsView::applicationUseSpellCheckerChanged);
     connect(d->spellCheckerLanguage, &ComboBox::currentIndexChanged, this, [this] (const QModelIndex& _index) {}); // TODO
     connect(d->changeTheme, &Button::clicked, this, &SettingsView::applicationThemePressed);
@@ -360,6 +364,11 @@ void SettingsView::setApplicationLanguage(int _language)
         }
     };
     d->changeLanuage->setText(languageString());
+}
+
+void SettingsView::setApplicationUseTypewriterSound(bool _use)
+{
+    d->useTypewriterSound->setChecked(_use);
 }
 
 void SettingsView::setApplicationUseSpellChecker(bool _use)
@@ -419,6 +428,7 @@ void SettingsView::updateTranslations()
 {
     d->applicationTitle->setText(tr("Application settings"));
     d->language->setText(tr("Language"));
+    d->useTypewriterSound->setText(tr("Use typewriter sound for keys pressing"));
     d->useSpellChecker->setText(tr("Spell check"));
     d->spellCheckerLanguage->setLabel(tr("Spelling dictionary"));
     d->applicationUserInterfaceTitle->setText(tr("User interface"));
@@ -476,9 +486,8 @@ void SettingsView::designSystemChangeEvent(DesignSystemChangeEvent* _event)
         label->setContentsMargins(labelMargins);
     }
 
-    for (auto checkBox : { d->useSpellChecker,
-                           d->autoSave,
-                           d->saveBackups }) {
+    for (auto checkBox : { d->useTypewriterSound, d->useSpellChecker,
+                           d->autoSave, d->saveBackups }) {
         checkBox->setBackgroundColor(DesignSystem::color().background());
         checkBox->setTextColor(DesignSystem::color().onBackground());
     }

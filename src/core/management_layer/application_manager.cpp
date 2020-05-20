@@ -847,7 +847,7 @@ void ApplicationManager::Implementation::imitateTypewriterSound(QKeyEvent* _even
     // ... и если опция озвучивания печати включена
     //
     const auto keyboardSoundEnabled
-            = settingsValue(DataStorageLayer::kApplicationTypewriterSoundEnabledKey).toBool();
+            = settingsValue(DataStorageLayer::kApplicationUseTypewriterSoundKey).toBool();
     if (!keyboardSoundEnabled) {
         return;
     }

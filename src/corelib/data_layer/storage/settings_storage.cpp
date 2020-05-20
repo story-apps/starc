@@ -88,7 +88,7 @@ SettingsStorage::Implementation::Implementation()
     defaultValues.insert(kApplicationCustomThemeColorsKey,
                          "e4e4e438393a448affffffffffffff000000ffffff000000b00020ffffff000000c8c8c8");
     defaultValues.insert(kApplicationScaleFactorKey, 1.0);
-    defaultValues.insert(kApplicationTypewriterSoundEnabledKey, false);
+    defaultValues.insert(kApplicationUseTypewriterSoundKey, false);
     defaultValues.insert(kApplicationUseAutoSaveKey, true);
     defaultValues.insert(kApplicationSaveBackupsKey, true);
     defaultValues.insert(kApplicationBackupsFolderKey,

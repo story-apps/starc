@@ -68,6 +68,7 @@ void SettingsManager::Implementation::setSettingsValue(const QString& _key, cons
 void SettingsManager::Implementation::loadApplicationSettings()
 {
     view->setApplicationLanguage(settingsValue(DataStorageLayer::kApplicationLanguagedKey).toInt());
+    view->setApplicationUseTypewriterSound(settingsValue(DataStorageLayer::kApplicationUseTypewriterSoundKey).toBool());
     view->setApplicationUseSpellChecker(settingsValue(DataStorageLayer::kApplicationUseSpellCheckerKey).toBool());
     view->setApplicationSpellCheckerLanguage(settingsValue(DataStorageLayer::kApplicationSpellCheckerLanguageKey).toString());
     view->setApplicationTheme(settingsValue(DataStorageLayer::kApplicationThemeKey).toInt());
@@ -114,6 +115,7 @@ SettingsManager::SettingsManager(QObject* _parent, QWidget* _parentWidget)
         connect(dialog, &Ui::ThemeDialog::customThemeColorsChanged, this, &SettingsManager::setApplicationCustomThemeColors);
         connect(dialog, &Ui::ThemeDialog::disappeared, dialog, &Ui::ThemeDialog::deleteLater);
     });
+    connect(d->view, &Ui::SettingsView::applicationUseTypewriterSoundChanged, this, &SettingsManager::setApplicationUseTypeWriterSound);
     connect(d->view, &Ui::SettingsView::applicationUseSpellCheckerChanged, this, &SettingsManager::setApplicationUseSpellChecker);
     connect(d->view, &Ui::SettingsView::applicationSpellCheckerLanguageChanged, this, &SettingsManager::setApplicationSpellCheckerLanguage);
     connect(d->view, &Ui::SettingsView::applicationScaleFactorChanged, this, &SettingsManager::setApplicationScaleFactor);
@@ -168,6 +170,11 @@ bool SettingsManager::eventFilter(QObject* _watched, QEvent* _event)
 void SettingsManager::setApplicationLanguage(int _language)
 {
     d->setSettingsValue(DataStorageLayer::kApplicationLanguagedKey, _language);
+}
+
+void SettingsManager::setApplicationUseTypeWriterSound(bool _use)
+{
+    d->setSettingsValue(DataStorageLayer::kApplicationUseTypewriterSoundKey, _use);
 }
 
 void SettingsManager::setApplicationUseSpellChecker(bool _use)

@@ -32,6 +32,7 @@ public:
     // Задание параметров приложения
     //
     void setApplicationLanguage(int _language);
+    void setApplicationUseTypewriterSound(bool _use);
     void setApplicationUseSpellChecker(bool _use);
     void setApplicationSpellCheckerLanguage(const QString& _languageCode);
     void setApplicationTheme(int _theme);
@@ -54,6 +55,7 @@ signals:
     //
     // Уведомление об изменении параметров приложения
     //
+    void applicationUseTypewriterSoundChanged(bool _use);
     void applicationUseSpellCheckerChanged(bool _use);
     void applicationSpellCheckerLanguageChanged(const QString& _languageCode);
     void applicationScaleFactorChanged(qreal _scaleFactor);
