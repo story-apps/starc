@@ -229,6 +229,11 @@ void ScreenplayTextEditToolBar::setCurrentParagraphType(const QModelIndex& _inde
     d->popupContent->setCurrentIndex(_index);
 }
 
+void ScreenplayTextEditToolBar::setParagraphTypesEnabled(bool _enabled)
+{
+    d->paragraphTypeAction->setEnabled(_enabled);
+}
+
 ScreenplayTextEditToolBar::~ScreenplayTextEditToolBar() = default;
 
 void ScreenplayTextEditToolBar::leaveEvent(QEvent* _event)

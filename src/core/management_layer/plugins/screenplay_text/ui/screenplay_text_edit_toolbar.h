@@ -29,6 +29,11 @@ public:
      */
     void setCurrentParagraphType(const QModelIndex& _index);
 
+    /**
+     * @brief Установить доступность выбора типа параграфа
+     */
+    void setParagraphTypesEnabled(bool _enabled);
+
 signals:
     void undoPressed();
     void redoPressed();

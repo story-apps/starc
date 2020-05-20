@@ -2,6 +2,7 @@
 
 #include <ui/design_system/design_system.h>
 
+#include <utils/helpers/color_helper.h>
 #include <utils/helpers/image_helper.h>
 
 #include <QAction>
@@ -251,18 +252,26 @@ void FloatingToolBar::paintEvent(QPaintEvent* _event)
         }
 
         //
+        // Настроим цвет отрисовки действия
+        //
+        painter.setPen(ColorHelper::transparent(action->isChecked()
+                                                ? Ui::DesignSystem::color().secondary()
+                                                : textColor(),
+                                                action->isEnabled()
+                                                ? 1.0
+                                                : Ui::DesignSystem::disabledTextOpacity()));
+
+        //
         // Рисуем действие с кастомной шириной
         //
         if (!action->property(kActionWidthKey).isNull()) {
             painter.setFont(Ui::DesignSystem::font().subtitle2());
-            const QFontMetricsF fontMetrics(painter.font());
             const QRectF actionRect(actionIconX, actionIconY,
                                     action->property(kActionWidthKey).toReal(), actionIconSize.height());
             if (!backgroundRect.contains(actionRect.toRect(), true)) {
                 continue;
             }
 
-            painter.setPen(textColor());
             painter.drawText(actionRect, Qt::AlignLeft | Qt::AlignVCenter, action->text());
             //
             // Если есть и текст и иконка, рисуем ещё и иконку
@@ -287,7 +296,6 @@ void FloatingToolBar::paintEvent(QPaintEvent* _event)
             }
 
             painter.setFont(Ui::DesignSystem::font().iconsMid());
-            painter.setPen(action->isChecked() ? Ui::DesignSystem::color().secondary() : textColor());
             painter.drawText(actionRect, Qt::AlignCenter, action->iconText());
 
             //
@@ -328,6 +336,10 @@ void FloatingToolBar::mousePressEvent(QMouseEvent* _event)
         return;
     }
 
+    if (!pressedAction->isEnabled()) {
+        return;
+    }
+
     d->lastPressedAction = pressedAction;
     d->animateClick();
 }
@@ -336,6 +348,10 @@ void FloatingToolBar::mouseReleaseEvent(QMouseEvent* _event)
 {
     QAction* pressedAction = d->pressedAction(_event->pos(), actions());
     if (pressedAction == nullptr) {
+        return;
+    }
+
+    if (!pressedAction->isEnabled()) {
         return;
     }
 

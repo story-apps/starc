@@ -94,6 +94,9 @@ void ScreenplayTextView::Implementation::updateToolBarCurrentParagraphTypeName()
 
     if (paragraphType == BusinessLayer::ScreenplayParagraphType::FolderFooter) {
         paragraphType = BusinessLayer::ScreenplayParagraphType::FolderHeader;
+        toolBar->setParagraphTypesEnabled(false);
+    } else {
+        toolBar->setParagraphTypesEnabled(true);
     }
 
     for (int itemRow = 0; itemRow < paragraphTypesModel->rowCount(); ++itemRow) {

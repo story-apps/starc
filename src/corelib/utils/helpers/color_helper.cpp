@@ -5,6 +5,10 @@
 
 QColor ColorHelper::transparent(const QColor& _color, qreal _alphaF)
 {
+    if (qFuzzyCompare(_alphaF, 1.0)) {
+        return _color;
+    }
+
     QColor transparentColor = _color;
     transparentColor.setAlphaF(_alphaF);
     return transparentColor;
