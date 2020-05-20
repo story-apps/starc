@@ -12,6 +12,8 @@
 #include <business_layer/templates/screenplay_template.h>
 #include <business_layer/templates/screenplay_template_facade.h>
 
+#include <ui/widgets/text_edit/page/page_text_edit.h>
+
 #include <utils/helpers/text_helper.h>
 #include <utils/shugar.h>
 
@@ -236,6 +238,16 @@ void ScreenplayTextDocument::setModel(BusinessLayer::ScreenplayTextModel* _model
                     cursor.setCharFormat(currentStyle.charFormat());
 
                     //
+                    // Для докараций, добавим дополнительные флаги
+                    //
+                    if (textItem->isCorrection()) {
+                        auto decorationFormat = cursor.block().blockFormat();
+                        decorationFormat.setProperty(ScreenplayBlockStyle::PropertyIsCorrection, true);
+                        decorationFormat.setProperty(PageTextEdit::PropertyDontShowCursor, true);
+                        cursor.setBlockFormat(decorationFormat);
+                    }
+
+                    //
                     // Вставим текст абзаца
                     //
                     const auto textToInsert = TextHelper::fromHtmlEscaped(textItem->text());
@@ -429,7 +441,8 @@ void ScreenplayTextDocument::cleanParagraphType(const ScreenplayTextCursor& _cur
     } while (!isFooterUpdated);
 }
 
-void ScreenplayTextDocument::applyParagraphType(BusinessLayer::ScreenplayParagraphType _type, const ScreenplayTextCursor& _cursor)
+void ScreenplayTextDocument::applyParagraphType(BusinessLayer::ScreenplayParagraphType _type,
+    const ScreenplayTextCursor& _cursor)
 {
     auto cursor = _cursor;
     cursor.beginEditBlock();
@@ -941,6 +954,7 @@ void ScreenplayTextDocument::updateModelOnContentChange(int _position, int _char
             // Создаём сам текстовый элемент
             //
             auto textItem = new ScreenplayTextModelTextItem;
+            textItem->setCorrection(block.blockFormat().boolProperty(ScreenplayBlockStyle::PropertyIsCorrection));
             textItem->setParagraphType(paragraphType);
             textItem->setText(block.text());
 
@@ -1135,6 +1149,7 @@ void ScreenplayTextDocument::updateModelOnContentChange(int _position, int _char
 
             if (item->type() == ScreenplayTextModelItemType::Text) {
                 auto textItem = static_cast<ScreenplayTextModelTextItem*>(item);
+                textItem->setCorrection(block.blockFormat().boolProperty(ScreenplayBlockStyle::PropertyIsCorrection));
                 textItem->setParagraphType(paragraphType);
                 textItem->setText(block.text());
             }

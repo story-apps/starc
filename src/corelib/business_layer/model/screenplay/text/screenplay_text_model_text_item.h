@@ -21,6 +21,12 @@ public:
     ~ScreenplayTextModelTextItem() override;
 
     /**
+     * @brief Является ли блок декорацией
+     */
+    bool isCorrection() const;
+    void setCorrection(bool _correction);
+
+    /**
      * @brief Тип параграфа
      */
     ScreenplayParagraphType paragraphType() const;

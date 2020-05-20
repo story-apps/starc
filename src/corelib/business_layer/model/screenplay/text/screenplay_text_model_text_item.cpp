@@ -56,6 +56,11 @@ public:
 
 
     /**
+     * @brief Является ли блок декорацией
+     */
+    bool isCorrection = false;
+
+    /**
      * @brief Тип параграфа
      */
     ScreenplayParagraphType paragraphType = ScreenplayParagraphType::UnformattedText;
@@ -205,6 +210,10 @@ ScreenplayTextModelTextItem::Implementation::Implementation(const QDomElement& _
 
 void ScreenplayTextModelTextItem::Implementation::updateXml()
 {
+    if (isCorrection) {
+        return;
+    }
+
     xml.clear();
     xml += QString("<%1%2>")
            .arg(toString(paragraphType),
@@ -307,6 +316,25 @@ ScreenplayTextModelTextItem::ScreenplayTextModelTextItem(const QDomElement& _nod
 }
 
 ScreenplayTextModelTextItem::~ScreenplayTextModelTextItem() = default;
+
+bool ScreenplayTextModelTextItem::isCorrection() const
+{
+    return d->isCorrection;
+}
+
+void ScreenplayTextModelTextItem::setCorrection(bool _correction)
+{
+    if (d->isCorrection == _correction) {
+        return;
+    }
+
+    d->isCorrection = _correction;
+    if (d->isCorrection) {
+        d->xml.clear();
+    } else {
+        d->updateXml();
+    }
+}
 
 ScreenplayParagraphType ScreenplayTextModelTextItem::paragraphType() const
 {
