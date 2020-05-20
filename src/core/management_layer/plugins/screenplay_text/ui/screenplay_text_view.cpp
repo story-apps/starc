@@ -2,6 +2,7 @@
 
 #include "screenplay_text_block_data.h"
 #include "screenplay_text_edit.h"
+#include "screenplay_text_edit_shortcuts_manager.h"
 #include "screenplay_text_edit_toolbar.h"
 
 #include <business_layer/templates/screenplay_template.h>
@@ -52,6 +53,7 @@ public:
     QStandardItemModel* paragraphTypesModel = nullptr;
 
     ScreenplayTextEdit* screenplayText = nullptr;
+    ScreenplayTextEditShortcutsManager shortcutsManager;
     ScalableWrapper* scalableWrapper = nullptr;
 };
 
@@ -59,12 +61,14 @@ ScreenplayTextView::Implementation::Implementation(QWidget* _parent)
     : toolBar(new ScreenplayTextEditToolBar(_parent)),
       paragraphTypesModel(new QStandardItemModel(toolBar)),
       screenplayText(new ScreenplayTextEdit(_parent)),
+      shortcutsManager(screenplayText),
       scalableWrapper(new ScalableWrapper(screenplayText, _parent))
 {
     toolBar->setParagraphTypesModel(paragraphTypesModel);
 
     screenplayText->setVerticalScrollBar(new ScrollBar);
     screenplayText->setHorizontalScrollBar(new ScrollBar);
+    shortcutsManager.setShortcutsContext(scalableWrapper);
     scalableWrapper->setVerticalScrollBar(new ScrollBar);
     scalableWrapper->setHorizontalScrollBar(new ScrollBar);
     scalableWrapper->initScrollBarsSyncing();
@@ -172,6 +176,8 @@ void ScreenplayTextView::reconfigure()
         typeItem->setData(static_cast<int>(type), kTypeDataRole);
         d->paragraphTypesModel->appendRow(typeItem);
     }
+
+    d->shortcutsManager.reconfigure();
 }
 
 void ScreenplayTextView::setModel(BusinessLayer::ScreenplayTextModel* _model)

@@ -8,6 +8,7 @@
 #include <ui/design_system/design_system.h>
 
 #include <QDir>
+#include <QKeySequence>
 #include <QLocale>
 #include <QStandardPaths>
 
@@ -100,12 +101,13 @@ SettingsStorage::Implementation::Implementation()
     //
     // Параметры редактора сценария
     //
+    const QString kScreenplayEditorKey = "screenplay-editor";
     auto addScreenplayEditorStylesAction
-            = [this] (const QString& _actionType, const QString& _actionKey,
-                      ScreenplayParagraphType _from, ScreenplayParagraphType _to) {
+            = [this, kScreenplayEditorKey] (const QString& _actionType, const QString& _actionKey,
+                                      ScreenplayParagraphType _from, ScreenplayParagraphType _to) {
         defaultValues.insert(
-                    QString("screenplay-editor/styles-%1/from-%2-by-%3").arg(_actionType, toString(_from), _actionKey),
-                    toString(_to));
+            QString("%1/styles-%2/from-%3-by-%4").arg(kScreenplayEditorKey, _actionType, toString(_from), _actionKey),
+            toString(_to));
     };
     auto addScreenplayEditorStylesActionByTab
             = [addScreenplayEditorStylesAction] (const QString& _actionType,
@@ -231,6 +233,25 @@ SettingsStorage::Implementation::Implementation()
                                          ScreenplayParagraphType::FolderHeader);
     addScreenplayEditorStylesChangeByEnter(ScreenplayParagraphType::FolderHeader,
                                            ScreenplayParagraphType::FolderHeader);
+    //
+    auto addShortcut = [this, kScreenplayEditorKey] (BusinessLayer::ScreenplayParagraphType _type,
+                                                     const QString& _shortcut) {
+        defaultValues.insert(
+            QString("%1/shortcuts/%2").arg(kScreenplayEditorKey, BusinessLayer::toString(_type)),
+            QKeySequence(_shortcut).toString(QKeySequence::NativeText));
+    };
+    addShortcut(BusinessLayer::ScreenplayParagraphType::UnformattedText, "Ctrl+0");
+    addShortcut(BusinessLayer::ScreenplayParagraphType::SceneHeading, "Ctrl+1");
+    addShortcut(BusinessLayer::ScreenplayParagraphType::SceneCharacters, "Ctrl+2");
+    addShortcut(BusinessLayer::ScreenplayParagraphType::Action, "Ctrl+3");
+    addShortcut(BusinessLayer::ScreenplayParagraphType::Character, "Ctrl+4");
+    addShortcut(BusinessLayer::ScreenplayParagraphType::Parenthetical, "Ctrl+5");
+    addShortcut(BusinessLayer::ScreenplayParagraphType::Dialogue, "Ctrl+6");
+    addShortcut(BusinessLayer::ScreenplayParagraphType::Lyrics, "Ctrl+7");
+    addShortcut(BusinessLayer::ScreenplayParagraphType::Transition, "Ctrl+8");
+    addShortcut(BusinessLayer::ScreenplayParagraphType::Shot, "Ctrl+9");
+    addShortcut(BusinessLayer::ScreenplayParagraphType::InlineNote, "Ctrl+Esc");
+    addShortcut(BusinessLayer::ScreenplayParagraphType::FolderHeader, "Ctrl+Space");
     //
 
     defaultValues.insert(kSystemUsernameKey, systemUserName());
