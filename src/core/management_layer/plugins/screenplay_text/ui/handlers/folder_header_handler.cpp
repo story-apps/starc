@@ -62,7 +62,7 @@ void FolderHeaderHandler::handleEnter(QKeyEvent*)
 				//! Текст пуст
 
 				//
-				// Ни чего не делаем
+                // Меняем стиль в соответствии с настройками
 				//
                 editor()->setCurrentParagraphType(changeForEnter(ScreenplayParagraphType::FolderHeader));
 			} else {

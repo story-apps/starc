@@ -120,6 +120,10 @@ void ScreenplayTextEdit::addParagraph(BusinessLayer::ScreenplayParagraphType _ty
 
 void ScreenplayTextEdit::setCurrentParagraphType(BusinessLayer::ScreenplayParagraphType _type)
 {
+    if (currentParagraphType() == _type) {
+        return;
+    }
+
     d->document.setCurrentParagraphType(_type, textCursor());
 
     //

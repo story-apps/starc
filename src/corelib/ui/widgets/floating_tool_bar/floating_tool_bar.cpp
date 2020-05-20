@@ -254,12 +254,13 @@ void FloatingToolBar::paintEvent(QPaintEvent* _event)
         //
         // Настроим цвет отрисовки действия
         //
-        painter.setPen(ColorHelper::transparent(action->isChecked()
-                                                ? Ui::DesignSystem::color().secondary()
-                                                : textColor(),
-                                                action->isEnabled()
-                                                ? 1.0
-                                                : Ui::DesignSystem::disabledTextOpacity()));
+        painter.setPen(ColorHelper::transparent(
+                           action->isChecked()
+                           ? Ui::DesignSystem::color().secondary()
+                           : textColor(),
+                           action->isEnabled()
+                           ? 1.0
+                           : Ui::DesignSystem::disabledTextOpacity()));
 
         //
         // Рисуем действие с кастомной шириной
