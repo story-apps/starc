@@ -33,13 +33,142 @@ QHBoxLayout* makeLayout() {
     return layout;
 };
 
-QAbstractItemModel* buildSpellCheckerLanguagesModel() {
+/**
+ * @brief Карта соответствия названий языков для проверки орфографии с их кодами
+ */
+const QVector<QString> kSpellCheckerLanguagesNameToCode = {
+    "af",
+    "an",
+    "ar",
+    "az",
+    "be",
+    "bg",
+    "bn",
+    "bo",
+    "br",
+    "bs",
+    "ca-valencia",
+    "ca",
+    "cs",
+    "cy",
+    "da",
+    "de-AT",
+    "de-CH",
+    "de",
+    "el-polyton",
+    "el",
+    "en-AU",
+    "en-CA",
+    "en-GB",
+    "en-NZ",
+    "en-ZA",
+    "en",
+    "eo",
+    "es-AR",
+    "es-BO",
+    "es-CL",
+    "es-CO",
+    "es-CR",
+    "es-CU",
+    "es-DO",
+    "es-EC",
+    "es-GT",
+    "es-HN",
+    "es-MX",
+    "es-NI",
+    "es-PA",
+    "es-PE",
+    "es-PH",
+    "es-PR",
+    "es-PY",
+    "es-SV",
+    "es-US",
+    "es-UY",
+    "es-VE",
+    "es",
+    "et",
+    "eu",
+    "fa",
+    "fo",
+    "fr",
+    "fur",
+    "fy",
+    "ga",
+    "gd",
+    "gl",
+    "gu",
+    "gug",
+    "he",
+    "hi",
+    "hr",
+    "hu",
+    "hy",
+    "hyw",
+    "ia",
+    "id",
+    "is",
+    "it",
+    "ka",
+    "kk",
+    "kmr",
+    "ko",
+    "la",
+    "lb",
+    "lo",
+    "lt",
+    "ltg",
+    "lv",
+    "mk",
+    "mn",
+    "mt",
+    "nb",
+    "nds",
+    "ne",
+    "nl",
+    "nn",
+    "oc",
+    "pl",
+    "pt-BR",
+    "pt",
+    "qu",
+    "ro",
+    "ru-yo",
+    "ru",
+    "rw",
+    "si",
+    "sk",
+    "sl",
+    "sq",
+    "sr-Latn",
+    "sr",
+    "sv-FI",
+    "sv",
+    "sw",
+    "te",
+    "th",
+    "tk",
+    "tlh-Latn",
+    "tlh",
+    "tr",
+    "uk",
+    "vi"
+};
+
+/**
+ * @brief Индекс для сохранения в модели информации о коде языка
+ */
+const int kSpellCheckerLanguageCodeRole = Qt::UserRole + 1;
+
+/**
+ * @brief Построить модель для всех доступных справочников проверки орфографии
+ */
+QStandardItemModel* buildSpellCheckerLanguagesModel() {
     auto model = new QStandardItemModel;
-    model->appendRow(new QStandardItem("English AU"));
-    model->appendRow(new QStandardItem("English UK"));
-    model->appendRow(new QStandardItem("English US"));
-    model->appendRow(new QStandardItem("Russian"));
-    model->appendRow(new QStandardItem("Russian with Yo"));
+    for (const auto& language : kSpellCheckerLanguagesNameToCode) {
+        auto item = new QStandardItem;
+        item->setData(language, kSpellCheckerLanguageCodeRole);
+        model->appendRow(item);
+    }
     return model;
 }
 
@@ -65,6 +194,9 @@ public:
      */
     void initShortcutsCard();
 
+    /**
+     * @brief Проскролить представление до заданного виджета
+     */
     void scrollToWidget(QWidget* _widget);
 
 
@@ -80,7 +212,7 @@ public:
     CheckBox* useTypewriterSound = nullptr;
     CheckBox* useSpellChecker = nullptr;
     ComboBox* spellCheckerLanguage = nullptr;
-    QAbstractItemModel* spellCheckerLanguagesModel = nullptr;
+    QStandardItemModel* spellCheckerLanguagesModel = nullptr;
     //
     H6Label* applicationUserInterfaceTitle = nullptr;
     Body1Label* theme = nullptr;
@@ -169,8 +301,6 @@ SettingsView::Implementation::Implementation(QWidget* _parent)
 
 void SettingsView::Implementation::initApplicationCard()
 {
-    useSpellChecker->hide();
-    spellCheckerLanguage->hide();
     spellCheckerLanguage->setEnabled(false);
     spellCheckerLanguage->setModel(spellCheckerLanguagesModel);
     scaleFactor->setMaximumValue(4000);
@@ -309,7 +439,9 @@ SettingsView::SettingsView(QWidget* _parent)
     connect(d->changeLanuage, &Button::clicked, this, &SettingsView::applicationLanguagePressed);
     connect(d->useTypewriterSound, &CheckBox::checkedChanged, this, &SettingsView::applicationUseTypewriterSoundChanged);
     connect(d->useSpellChecker, &CheckBox::checkedChanged, this, &SettingsView::applicationUseSpellCheckerChanged);
-    connect(d->spellCheckerLanguage, &ComboBox::currentIndexChanged, this, [this] (const QModelIndex& _index) {}); // TODO
+    connect(d->spellCheckerLanguage, &ComboBox::currentIndexChanged, this, [this] (const QModelIndex& _index) {
+        emit applicationSpellCheckerLanguageChanged(_index.data(Qt::UserRole).toString());
+    });
     connect(d->changeTheme, &Button::clicked, this, &SettingsView::applicationThemePressed);
     connect(d->scaleFactor, &Slider::valueChanged, this, [this] (int _value) {
         emit applicationScaleFactorChanged(static_cast<qreal>(std::max(1, _value)) / 1000.0);
@@ -431,6 +563,126 @@ void SettingsView::updateTranslations()
     d->useTypewriterSound->setText(tr("Use typewriter sound for keys pressing"));
     d->useSpellChecker->setText(tr("Spell check"));
     d->spellCheckerLanguage->setLabel(tr("Spelling dictionary"));
+    {
+        int index = 0;
+        for (const auto& language : { tr("Afrikaans"),
+                                      tr("Aragonese"),
+                                      tr("Arabic"),
+                                      tr("Azerbaijani"),
+                                      tr("Belarusian"),
+                                      tr("Bulgarian"),
+                                      tr("Bengali"),
+                                      tr("Tibetan"),
+                                      tr("Breton"),
+                                      tr("Bosnian"),
+                                      tr("Catalan (Valencian)"),
+                                      tr("Catalan"),
+                                      tr("Czech"),
+                                      tr("Welsh"),
+                                      tr("Danish"),
+                                      tr("German (Austria)"),
+                                      tr("German (Switzerland)"),
+                                      tr("German"),
+                                      tr("Greek (Polytonic)"),
+                                      tr("Greek"),
+                                      tr("English (Australia)"),
+                                      tr("English (Canada)"),
+                                      tr("English (United Kingdom)"),
+                                      tr("English (New Zealand)"),
+                                      tr("English (South Africa)"),
+                                      tr("English (United States)"),
+                                      tr("Esperanto"),
+                                      tr("Spanish (Argentina)"),
+                                      tr("Spanish (Bolivia)"),
+                                      tr("Spanish (Chile)"),
+                                      tr("Spanish (Colombia)"),
+                                      tr("Spanish (Costa Rica)"),
+                                      tr("Spanish (Cuba)"),
+                                      tr("Spanish (Dominican Republic)"),
+                                      tr("Spanish (Ecuador)"),
+                                      tr("Spanish (Guatemala)"),
+                                      tr("Spanish (Honduras)"),
+                                      tr("Spanish (Mexico)"),
+                                      tr("Spanish (Nicaragua)"),
+                                      tr("Spanish (Panama)"),
+                                      tr("Spanish (Peru)"),
+                                      tr("Spanish (Philippines)"),
+                                      tr("Spanish (Puerto Rico)"),
+                                      tr("Spanish (Paraguay)"),
+                                      tr("Spanish (El Salvador)"),
+                                      tr("Spanish (United States)"),
+                                      tr("Spanish (Uruguay)"),
+                                      tr("Spanish (Venezuela)"),
+                                      tr("Spanish"),
+                                      tr("Estonian"),
+                                      tr("Basque"),
+                                      tr("Persian"),
+                                      tr("Faroese"),
+                                      tr("French"),
+                                      tr("Friulian"),
+                                      tr("Western Frisian"),
+                                      tr("Irish"),
+                                      tr("Gaelic"),
+                                      tr("Galician"),
+                                      tr("Gujarati"),
+                                      tr("Guarani"),
+                                      tr("Hebrew"),
+                                      tr("Hindi"),
+                                      tr("Croatian"),
+                                      tr("Hungarian"),
+                                      tr("Armenian"),
+                                      tr("Armenian (Western)"),
+                                      tr("Interlingua"),
+                                      tr("Indonesian"),
+                                      tr("Icelandic"),
+                                      tr("Italian"),
+                                      tr("Georgian"),
+                                      tr("Kazakh"),
+                                      tr("Kurdish"),
+                                      tr("Korean"),
+                                      tr("Latin"),
+                                      tr("Luxembourgish"),
+                                      tr("Lao"),
+                                      tr("Lithuanian"),
+                                      tr("Latgalian"),
+                                      tr("Latvian"),
+                                      tr("Macedonian"),
+                                      tr("Mongolian"),
+                                      tr("Maltese"),
+                                      tr("Norwegian"),
+                                      tr("Low German"),
+                                      tr("Nepali"),
+                                      tr("Dutch"),
+                                      tr("Norwegian"),
+                                      tr("Occitan"),
+                                      tr("Polish"),
+                                      tr("Portuguese (Brazilian)"),
+                                      tr("Portuguese"),
+                                      tr("Quechua"),
+                                      tr("Romanian"),
+                                      tr("Russian (with Yo)"),
+                                      tr("Russian"),
+                                      tr("Kinyarwanda"),
+                                      tr("Sinhala"),
+                                      tr("Slovak"),
+                                      tr("Slovenian"),
+                                      tr("Albanian"),
+                                      tr("Serbian (Latin)"),
+                                      tr("Serbian"),
+                                      tr("Swedish (Finland)"),
+                                      tr("Swedish"),
+                                      tr("Swahili"),
+                                      tr("Telugu"),
+                                      tr("Thai"),
+                                      tr("Turkmen"),
+                                      tr("Klingon (Latin)"),
+                                      tr("Klingon"),
+                                      tr("Turkish"),
+                                      tr("Ukrainian"),
+                                      tr("Vietnamese") }) {
+            d->spellCheckerLanguagesModel->item(index++)->setText(language);
+        }
+    }
     d->applicationUserInterfaceTitle->setText(tr("User interface"));
     d->theme->setText(tr("Theme"));
     d->scaleFactorTitle->setText(tr("Size of the user interface elements:"));

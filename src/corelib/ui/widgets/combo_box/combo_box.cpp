@@ -125,13 +125,24 @@ ComboBox::ComboBox(QWidget* _parent)
     });
 }
 
+ComboBox::~ComboBox() = default;
+
 void ComboBox::setModel(QAbstractItemModel* _model)
 {
+    if (d->popupContent->model() != nullptr) {
+        disconnect(d->popupContent->model());
+    }
+
     d->popupContent->setModel(_model);
 
     if (_model != nullptr
         && _model->rowCount() > 0) {
         d->popupContent->setCurrentIndex(_model->index(0, 0));
+        connect(_model, &QAbstractItemModel::dataChanged, this, [this] (const QModelIndex& _index) {
+            if (d->popupContent->currentIndex() == _index) {
+                setText(_index.data().toString());
+            }
+        });
     }
 }
 
@@ -179,5 +190,3 @@ void ComboBox::mouseMoveEvent(QMouseEvent* _event)
 {
     QTextEdit::mouseMoveEvent(_event);
 }
-
-ComboBox::~ComboBox() = default;
