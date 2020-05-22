@@ -3,7 +3,6 @@
 #include <ui/widgets/text_edit/page/page_text_edit.h>
 
 class SpellCheckHighlighter;
-enum class SpellCheckerLanguage;
 
 
 /**
@@ -32,7 +31,7 @@ public slots:
      * @brief Установить язык для проверки орфографии
      * @param Язык
      */
-    void setSpellCheckLanguage(SpellCheckerLanguage _language);
+    void setSpellCheckLanguage(const QString& _languageCode);
 
     /**
      * @brief Переопределяем для очистки собственных параметров, перед очисткой в  базовом классе

@@ -15,8 +15,7 @@
 * Full license: http://dimkanovikov.pro/license/LGPLv3
 */
 
-#ifndef NETWORKREQUEST_H
-#define NETWORKREQUEST_H
+#pragma once
 
 #include "NetworkTypes.h"
 
@@ -149,10 +148,7 @@ signals:
     /**
      * @brief Сообщение об ошибке при загрузке
      */
-    /** @{ */
     void error(QString, QUrl);
-    void errorDetails(QString, QUrl);
-    /** @} */
 
 private:
     /**
@@ -170,5 +166,3 @@ private:
      */
     QByteArray m_downloadedData;
 };
-
-#endif // NETWORKREQUEST_H

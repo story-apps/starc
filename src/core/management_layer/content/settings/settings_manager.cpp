@@ -10,12 +10,22 @@
 #include <ui/settings/settings_tool_bar.h>
 #include <ui/settings/settings_view.h>
 #include <ui/settings/theme_dialog.h>
+#include <ui/widgets/task_bar/task_bar.h>
 
+#include <3rd_party/webloader/src/NetworkRequest.h>
+
+#include <QDir>
 #include <QEvent>
+#include <QFileInfo>
+#include <QStandardPaths>
 
 
 namespace ManagementLayer
 {
+
+namespace {
+const QString kSpellCheckerLoadingTaskId = "spell_checker_loading_task_id";
+}
 
 class SettingsManager::Implementation
 {
@@ -127,6 +137,8 @@ SettingsManager::SettingsManager(QObject* _parent, QWidget* _parentWidget)
     // Нотификации об изменении параметров
     //
     connect(d->view, &Ui::SettingsView::applicationScaleFactorChanged, this, &SettingsManager::applicationScaleFactorChanged);
+    connect(d->view, &Ui::SettingsView::applicationUseSpellCheckerChanged, this, &SettingsManager::applicationUseSpellCheckerChanged);
+    connect(d->view, &Ui::SettingsView::applicationSpellCheckerLanguageChanged, this, &SettingsManager::applicationSpellCheckerLanguageChanged);
     connect(d->view, &Ui::SettingsView::applicationUseAutoSaveChanged, this, &SettingsManager::applicationUseAutoSaveChanged);
     connect(d->view, &Ui::SettingsView::applicationSaveBackupsChanged, this, &SettingsManager::applicationSaveBackupsChanged);
     connect(d->view, &Ui::SettingsView::applicationBackupsFolderChanged, this, &SettingsManager::applicationBackupsFolderChanged);
@@ -184,7 +196,170 @@ void SettingsManager::setApplicationUseSpellChecker(bool _use)
 
 void SettingsManager::setApplicationSpellCheckerLanguage(const QString& _languageCode)
 {
+    //
+    // Сохраняем значение выбранного языка
+    //
     d->setSettingsValue(DataStorageLayer::kApplicationSpellCheckerLanguageKey, _languageCode);
+
+    //
+    // Проверяем установлен ли выбранный словарь
+    //
+    const QString appDataFolderPath = QStandardPaths::writableLocation(QStandardPaths::DataLocation);
+    const QString hunspellDictionariesFolderPath = appDataFolderPath + "/hunspell/";
+    const QString affFileName = _languageCode + ".aff";
+    const QString dicFileName = _languageCode + ".dic";
+    //
+    // Получим информацию о файлах словаря
+    //
+    const QFileInfo affFileInfo(hunspellDictionariesFolderPath + affFileName);
+    const QFileInfo dicFileInfo(hunspellDictionariesFolderPath + dicFileName);
+
+    //
+    // Если словарь установлен, просто будем использовать его
+    //
+    if (affFileInfo.exists() && dicFileInfo.exists()) {
+        return;
+    }
+
+    //
+    // Ежели словарь не установлен, будем качать
+    //
+    loadSpellingDictionary(_languageCode);
+}
+
+void SettingsManager::loadSpellingDictionary(const QString& _languageCode)
+{
+    //
+    // Добавляем идентификацию процесса загрузки словарей
+    //
+    TaskBar::addTask(kSpellCheckerLoadingTaskId);
+    TaskBar::setTaskTitle(kSpellCheckerLoadingTaskId, tr("Spelling dictionary loading"));
+    TaskBar::setTaskProgress(kSpellCheckerLoadingTaskId, 0.0);
+
+    //
+    // Создаём папку для пользовательских файлов
+    //
+    const QString appDataFolderPath = QStandardPaths::writableLocation(QStandardPaths::DataLocation);
+    const QString hunspellDictionariesFolderPath = appDataFolderPath + "/hunspell/";
+    QDir::root().mkpath(hunspellDictionariesFolderPath);
+
+    //
+    // Начинаем загрузку файлов словаря
+    //
+    loadSpellingDictionaryAffFile(_languageCode);
+}
+
+void SettingsManager::loadSpellingDictionaryAffFile(const QString& _languageCode)
+{
+    const auto hunspellDictionariesFolderUrl
+            = QString("https://starc.app/downloads/hunspell/%1/").arg(_languageCode);
+    const QString affFileName = _languageCode + ".aff";
+
+    //
+    // Настраиваем загрузчик
+    //
+    auto dictionaryLoader = new NetworkRequest;
+    connect(dictionaryLoader, &NetworkRequest::downloadProgress, this, [] (int _value) {
+        //
+        // Aff-файлы считаем за 10 процентов всего словаря
+        //
+        const qreal progress = _value * 0.1;
+        TaskBar::setTaskProgress(kSpellCheckerLoadingTaskId, progress);
+    });
+    connect(dictionaryLoader, &NetworkRequest::downloadComplete, this,
+            [this, _languageCode, affFileName] (const QByteArray& _data)
+    {
+        if (_data.isEmpty()) {
+            //
+            // TODO: сообщить об ошибке
+            //
+            return;
+        }
+
+        //
+        // Сохраняем файл
+        //
+        QFile affFile(QString("%1/hunspell/%2")
+                      .arg(QStandardPaths::writableLocation(QStandardPaths::DataLocation), affFileName));
+        affFile.open(QIODevice::WriteOnly);
+        affFile.write(_data);
+        affFile.close();
+
+        //
+        // Загрузим следующий файл
+        //
+        loadSpellingDictionaryDicFile(_languageCode);
+    });
+    connect(dictionaryLoader, &NetworkRequest::error, this, [] {
+        //
+        // TODO: сообщить об ошибке
+        //
+    });
+    connect(dictionaryLoader, &NetworkRequest::finished, dictionaryLoader, &NetworkRequest::deleteLater);
+
+    //
+    // Запускаем загрузку
+    //
+    dictionaryLoader->loadAsync(hunspellDictionariesFolderUrl + affFileName);
+}
+
+void SettingsManager::loadSpellingDictionaryDicFile(const QString& _languageCode)
+{
+    const auto hunspellDictionariesFolderUrl
+            = QString("https://starc.app/downloads/hunspell/%1/").arg(_languageCode);
+    const QString dicFileName = _languageCode + ".dic";
+
+    //
+    // Настраиваем загрузчик
+    //
+    auto dictionaryLoader = new NetworkRequest;
+    connect(dictionaryLoader, &NetworkRequest::downloadProgress, this, [] (int _value) {
+        //
+        // Dic-файлы считаем за 90 процентов всего словаря
+        //
+        const qreal progress = 0.1 + _value * 0.9;
+        TaskBar::setTaskProgress(kSpellCheckerLoadingTaskId, progress);
+    });
+    connect(dictionaryLoader, &NetworkRequest::downloadComplete, this,
+            [this, _languageCode, dicFileName] (const QByteArray& _data)
+    {
+        if (_data.isEmpty()) {
+            //
+            // TODO: сообщить об ошибке
+            //
+            return;
+        }
+
+        //
+        // Сохраняем файл
+        //
+        QFile affFile(QString("%1/hunspell/%2")
+                      .arg(QStandardPaths::writableLocation(QStandardPaths::DataLocation), dicFileName));
+        affFile.open(QIODevice::WriteOnly);
+        affFile.write(_data);
+        affFile.close();
+
+        //
+        // Cкрываем прогресс
+        //
+        TaskBar::finishTask(kSpellCheckerLoadingTaskId);
+
+        //
+        // Уведимим клиентов, что теперь можно использовать данный словарь
+        //
+        emit applicationSpellCheckerLanguageChanged(_languageCode);
+    });
+    connect(dictionaryLoader, &NetworkRequest::error, this, [] {
+        //
+        // TODO: сообщить об ошибке
+        //
+    });
+    connect(dictionaryLoader, &NetworkRequest::finished, dictionaryLoader, &NetworkRequest::deleteLater);
+
+    //
+    // Запускаем загрузку
+    //
+    dictionaryLoader->loadAsync(hunspellDictionariesFolderUrl + dicFileName);
 }
 
 void SettingsManager::setApplicationTheme(Ui::ApplicationTheme _theme)

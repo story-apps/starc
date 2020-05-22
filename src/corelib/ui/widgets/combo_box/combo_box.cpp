@@ -146,6 +146,21 @@ void ComboBox::setModel(QAbstractItemModel* _model)
     }
 }
 
+QModelIndex ComboBox::currentIndex() const
+{
+    return d->popupContent->currentIndex();
+}
+
+void ComboBox::setCurrentIndex(const QModelIndex& _index)
+{
+    if (d->popupContent->currentIndex() == _index) {
+        return;
+    }
+
+    d->popupContent->setCurrentIndex(_index);
+    setText(_index.data().toString());
+}
+
 bool ComboBox::event(QEvent* _event)
 {
     switch (static_cast<int>(_event->type())) {

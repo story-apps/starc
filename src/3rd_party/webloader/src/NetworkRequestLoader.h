@@ -14,8 +14,7 @@
 * Full license: http://dimkanovikov.pro/license/LGPLv3
 */
 
-#ifndef NETWORKREQUESTLOADER_H
-#define NETWORKREQUESTLOADER_H
+#pragma once
 
 #include "NetworkRequest.h"
 
@@ -92,12 +91,6 @@ public:
 	/**
 	 * @brief Загрузить ссылку синхронно
 	 */
-	static QByteArray loadSync(const QUrl& _urlToLoad);
-
-	/**
-	 * @brief Загрузить ссылку синхронно
-	 */
+    static QByteArray loadSync(const QUrl& _urlToLoad);
 	static QByteArray loadSync(const QString& _urlToLoad);
 };
-
-#endif // NETWORKREQUESTLOADER_H

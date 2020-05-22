@@ -147,7 +147,6 @@ void NetworkQueue::processQueue()
     connect(loader, static_cast<void (WebLoader::*)(int, QUrl)>(&WebLoader::downloadProgress),
             requestEntry.request, &NetworkRequest::downloadProgress);
     connect(loader, &WebLoader::error, requestEntry.request, &NetworkRequest::error);
-    connect(loader, &WebLoader::errorDetails, requestEntry.request, &NetworkRequest::errorDetails);
     connect(loader, &WebLoader::finished, requestEntry.request, &NetworkRequest::finished);
     connect(loader, &WebLoader::finished, this, &NetworkQueue::reinitFinishedLoader);
     //

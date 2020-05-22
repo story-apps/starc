@@ -14,6 +14,7 @@
 #include <QGridLayout>
 #include <QLocale>
 #include <QScrollArea>
+#include <QSortFilterProxyModel>
 #include <QStandardItemModel>
 #include <QVariantAnimation>
 
@@ -35,6 +36,9 @@ QHBoxLayout* makeLayout() {
 
 /**
  * @brief Карта соответствия названий языков для проверки орфографии с их кодами
+ * @link https://github.com/wooorm/dictionaries/
+ * @link https://cgit.freedesktop.org/libreoffice/dictionaries/tree/
+ * @link https://www.softmaker.com/en/dictionaries
  */
 const QVector<QString> kSpellCheckerLanguagesNameToCode = {
     "af",
@@ -162,10 +166,10 @@ const int kSpellCheckerLanguageCodeRole = Qt::UserRole + 1;
 /**
  * @brief Построить модель для всех доступных справочников проверки орфографии
  */
-QStandardItemModel* buildSpellCheckerLanguagesModel() {
-    auto model = new QStandardItemModel;
+QStandardItemModel* buildSpellCheckerLanguagesModel(QObject* _parent) {
+    auto model = new QStandardItemModel(_parent);
     for (const auto& language : kSpellCheckerLanguagesNameToCode) {
-        auto item = new QStandardItem;
+        auto item = new QStandardItem(language);
         item->setData(language, kSpellCheckerLanguageCodeRole);
         model->appendRow(item);
     }
@@ -254,7 +258,7 @@ SettingsView::Implementation::Implementation(QWidget* _parent)
       useTypewriterSound(new CheckBox(applicationCard)),
       useSpellChecker(new CheckBox(applicationCard)),
       spellCheckerLanguage(new ComboBox(applicationCard)),
-      spellCheckerLanguagesModel(buildSpellCheckerLanguagesModel()),
+      spellCheckerLanguagesModel(buildSpellCheckerLanguagesModel(spellCheckerLanguage)),
       applicationUserInterfaceTitle(new H6Label(applicationCard)),
       theme(new Body1Label(applicationCard)),
       changeTheme(new Button(applicationCard)),
@@ -438,9 +442,15 @@ SettingsView::SettingsView(QWidget* _parent)
 
     connect(d->changeLanuage, &Button::clicked, this, &SettingsView::applicationLanguagePressed);
     connect(d->useTypewriterSound, &CheckBox::checkedChanged, this, &SettingsView::applicationUseTypewriterSoundChanged);
-    connect(d->useSpellChecker, &CheckBox::checkedChanged, this, &SettingsView::applicationUseSpellCheckerChanged);
+    connect(d->useSpellChecker, &CheckBox::checkedChanged, this, [this] (bool _checked) {
+        emit applicationUseSpellCheckerChanged(_checked);
+        if (_checked) {
+            emit applicationSpellCheckerLanguageChanged(
+                d->spellCheckerLanguage->currentIndex().data(kSpellCheckerLanguageCodeRole).toString());
+        }
+    });
     connect(d->spellCheckerLanguage, &ComboBox::currentIndexChanged, this, [this] (const QModelIndex& _index) {
-        emit applicationSpellCheckerLanguageChanged(_index.data(Qt::UserRole).toString());
+        emit applicationSpellCheckerLanguageChanged(_index.data(kSpellCheckerLanguageCodeRole).toString());
     });
     connect(d->changeTheme, &Button::clicked, this, &SettingsView::applicationThemePressed);
     connect(d->scaleFactor, &Slider::valueChanged, this, [this] (int _value) {
@@ -510,9 +520,15 @@ void SettingsView::setApplicationUseSpellChecker(bool _use)
 
 void SettingsView::setApplicationSpellCheckerLanguage(const QString& _languageCode)
 {
-    //
-    // TODO
-    //
+    for (int row = 0; row < d->spellCheckerLanguagesModel->rowCount(); ++row) {
+        auto item = d->spellCheckerLanguagesModel->item(row);
+        if (item->data(kSpellCheckerLanguageCodeRole).toString() != _languageCode) {
+            continue;
+        }
+
+        d->spellCheckerLanguage->setCurrentIndex(item->index());
+        break;
+    }
 }
 
 void SettingsView::setApplicationTheme(int _theme)
@@ -682,6 +698,7 @@ void SettingsView::updateTranslations()
                                       tr("Vietnamese") }) {
             d->spellCheckerLanguagesModel->item(index++)->setText(language);
         }
+        d->spellCheckerLanguagesModel->sort(0);
     }
     d->applicationUserInterfaceTitle->setText(tr("User interface"));
     d->theme->setText(tr("Theme"));

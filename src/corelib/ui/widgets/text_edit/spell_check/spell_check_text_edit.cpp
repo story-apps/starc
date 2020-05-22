@@ -98,12 +98,12 @@ bool SpellCheckTextEdit::useSpellChecker() const
     return d->spellCheckHighlighter(document())->useSpellChecker();
 }
 
-void SpellCheckTextEdit::setSpellCheckLanguage(SpellCheckerLanguage _language)
+void SpellCheckTextEdit::setSpellCheckLanguage(const QString& _languageCode)
 {
     //
     // Установим язык проверяющего
     //
-    d->spellChecker.setSpellingLanguage(_language);
+    d->spellChecker.setSpellingLanguage(_languageCode);
 
     if (!useSpellChecker()) {
         return;

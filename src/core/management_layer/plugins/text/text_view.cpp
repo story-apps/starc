@@ -72,7 +72,6 @@ TextView::Implementation::Implementation(QWidget* _parent)
     documentText->setFooter("Footer text");
     documentText->setCursorWidth(4);
     documentText->setUseSpellChecker(true);
-    documentText->setSpellCheckLanguage(SpellCheckerLanguage::EnglishUS);
 
     connect(documentText, &CompleterTextEdit::textChanged, [this] {
         static QStringListModel* model = new QStringListModel({"АНТОН", "АДМИРАЛ", "АДМИНИСТРАТОР", "АПОСТОЛ", "АДЛЕН", "АМИР"}, documentText);

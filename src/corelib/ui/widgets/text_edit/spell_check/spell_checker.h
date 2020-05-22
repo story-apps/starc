@@ -11,59 +11,11 @@ class QTextCodec;
 
 
 /**
- * @brief Языки для проверки орфографии
- */
-enum class SpellCheckerLanguage {
-    Undefined,
-
-    ArmenianEastern,
-    ArmenianWestern,
-    Azerbaijani,
-    Belorussian,
-    Catalan,
-    Dutch,
-    EnglishGB,
-    EnglishUS,
-    Farsi,
-    French,
-    German,
-    Hebrew,
-    Hungarian,
-    Italian,
-    Kazakh,
-    Macedonian,
-    Polish,
-    Portuguese,
-    PortugueseBrazilian,
-    Russian,
-    RussianWithYo,
-    Slovenian,
-    Spanish,
-    Swedish,
-    Telugu,
-    Turkish,
-    Ukrainian,
-};
-
-/**
- * @brief Определим метод для возможности использовать языка в виде ключей в словарях
- */
-inline uint qHash(SpellCheckerLanguage _language)
-{
-    return qHash(static_cast<int>(_language));
-}
-
-/**
  * @brief Класс проверяющего орфографию
  */
 class CORE_LIBRARY_EXPORT SpellChecker
 {
 public:
-    /**
-     * @brief Получить код заданного словаря
-     */
-    static QString languageCode(SpellCheckerLanguage _language);
-
     /**
      * @brief Синглтон
      */
@@ -75,7 +27,7 @@ public:
     /**
      * @brief Установить язык для проверки орфографии
      */
-    void setSpellingLanguage(SpellCheckerLanguage _spellingLanguage);
+    void setSpellingLanguage(const QString& _languageCode);
 
     /**
      * @brief Проверить орфографию слова

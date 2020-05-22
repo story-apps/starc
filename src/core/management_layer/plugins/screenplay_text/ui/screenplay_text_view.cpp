@@ -75,7 +75,6 @@ ScreenplayTextView::Implementation::Implementation(QWidget* _parent)
 
     screenplayText->setUsePageMode(true);
     screenplayText->setCursorWidth(DesignSystem::scaleFactor() * 4);
-    screenplayText->setSpellCheckLanguage(SpellCheckerLanguage::EnglishUS);
 }
 
 void ScreenplayTextView::Implementation::updateToolBarUi()

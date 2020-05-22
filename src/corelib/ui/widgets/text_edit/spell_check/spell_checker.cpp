@@ -48,7 +48,7 @@ public:
     /**
      * @brief Текущий язык проверки орфографии
      */
-    SpellCheckerLanguage spellingLanguage = SpellCheckerLanguage::Undefined;
+    QString languageCode;
 
     /**
      * @brief Объект проверяющий орфографию
@@ -79,7 +79,7 @@ QString SpellChecker::Implementation::hunspellFilePath(SpellCheckerFileType _fil
     // Получим файл со словарём в зависимости от выбранного языка,
     // по-умолчанию используется русский язык
     //
-    QString fileName = languageCode(spellingLanguage);
+    QString fileName = languageCode;
 
     //
     // Определим расширение файла, в зависимости от словаря
@@ -115,41 +115,6 @@ void SpellChecker::Implementation::addWordToChecker(const QString& _word) const
 // ****
 
 
-QString SpellChecker::languageCode(SpellCheckerLanguage _language)
-{
-    const QHash<SpellCheckerLanguage, QString> languageToCode
-            = {{ SpellCheckerLanguage::Undefined, "undefined" },
-               { SpellCheckerLanguage::ArmenianEastern, "arm_ARM_east" },
-               { SpellCheckerLanguage::ArmenianWestern, "arm_ARM_west" },
-               { SpellCheckerLanguage::Azerbaijani, "az_AZ" },
-               { SpellCheckerLanguage::Belorussian, "be_BY" },
-               { SpellCheckerLanguage::Catalan, "ca_CA" },
-               { SpellCheckerLanguage::Dutch, "nl_NL" },
-               { SpellCheckerLanguage::EnglishGB, "en_GB" },
-               { SpellCheckerLanguage::EnglishUS, "en_US" },
-               { SpellCheckerLanguage::Farsi, "fa_IR" },
-               { SpellCheckerLanguage::French, "fr_FR" },
-               { SpellCheckerLanguage::German, "de_DE" },
-               { SpellCheckerLanguage::Hebrew, "he_IL" },
-               { SpellCheckerLanguage::Hungarian, "hu_HU" },
-               { SpellCheckerLanguage::Italian, "it_IT" },
-               { SpellCheckerLanguage::Kazakh, "kk_KZ" },
-               { SpellCheckerLanguage::Macedonian, "mk_MK" },
-               { SpellCheckerLanguage::Polish, "pl_PL" },
-               { SpellCheckerLanguage::Portuguese, "pt_PT" },
-               { SpellCheckerLanguage::PortugueseBrazilian, "pt_BR" },
-               { SpellCheckerLanguage::Russian, "ru_RU" },
-               { SpellCheckerLanguage::RussianWithYo, "ru_RU_yo" },
-               { SpellCheckerLanguage::Slovenian, "sl_SL" },
-               { SpellCheckerLanguage::Spanish, "es_ES" },
-               { SpellCheckerLanguage::Swedish, "sv_SE" },
-               { SpellCheckerLanguage::Telugu, "te_IN" },
-               { SpellCheckerLanguage::Turkish, "tr_TR" },
-               { SpellCheckerLanguage::Ukrainian, "uk_UA" }};
-
-    return languageToCode.value(_language);
-}
-
 SpellChecker& SpellChecker::instance()
 {
     static SpellChecker spellChecker;
@@ -158,13 +123,14 @@ SpellChecker& SpellChecker::instance()
 
 SpellChecker::~SpellChecker() = default;
 
-void SpellChecker::setSpellingLanguage(SpellCheckerLanguage _spellingLanguage)
+void SpellChecker::setSpellingLanguage(const QString& _languageCode)
 {
-    if (d->spellingLanguage == _spellingLanguage) {
+    if (d->languageCode == _languageCode
+        && d->checker && d->checkerTextCodec) {
         return;
     }
 
-    d->spellingLanguage = _spellingLanguage;
+    d->languageCode = _languageCode;
 
     //
     // Удаляем предыдущего проверяющего
@@ -186,13 +152,14 @@ void SpellChecker::setSpellingLanguage(SpellCheckerLanguage _spellingLanguage)
     //
     d->checker.reset(new Hunspell(affFileInfo.absoluteFilePath().toLocal8Bit().constData(),
                                     dicFileInfo.absoluteFilePath().toLocal8Bit().constData()));
+    if (d->checker.isNull()) {
+        return;
+    }
+    //
     d->checkerTextCodec = QTextCodec::codecForName(d->checker->get_dic_encoding());
-
-    //
-    // Проверяющий обязательно должен быть создан
-    //
-    Q_ASSERT(d->checker);
-    Q_ASSERT(d->checkerTextCodec);
+    if (d->checkerTextCodec == nullptr) {
+        return;
+    }
 
     //
     // Загружаем слова из пользовательского словаря
@@ -233,8 +200,7 @@ bool SpellChecker::spellCheckWord(const QString& _word) const
     //
     // Для слов заканчивающихся на s с апострофом убираем апостроф в конце, т.к. ханспел его не умеет
     //
-    if ((d->spellingLanguage == SpellCheckerLanguage::EnglishGB
-         || d->spellingLanguage == SpellCheckerLanguage::EnglishGB)
+    if ((d->languageCode.startsWith("en"))
         && correctedWord.endsWith("s'", Qt::CaseInsensitive)) {
         correctedWord.chop(1);
     }

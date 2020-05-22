@@ -82,10 +82,7 @@ signals:
     /**
      * @brief Сообщение об ошибке при загрузке
      */
-    /** @{ */
     void error(QString, QUrl);
-    void errorDetails(QString, QUrl);
-    /** @} */
 
 protected:
     /**

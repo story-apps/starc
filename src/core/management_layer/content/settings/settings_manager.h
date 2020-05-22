@@ -40,6 +40,8 @@ signals:
      * @brief Изменились параметры приложения
      */
     void applicationLanguageChanged(QLocale::Language _language);
+    void applicationUseSpellCheckerChanged(bool _use);
+    void applicationSpellCheckerLanguageChanged(const QString& _languageCode);
     void applicationThemeChanged(Ui::ApplicationTheme _theme);
     void applicationCustomThemeColorsChanged(const Ui::DesignSystem::Color& _color);
     void applicationScaleFactorChanged(qreal _scaleFactor);
@@ -67,6 +69,13 @@ private:
     void setApplicationUseAutoSave(bool _use);
     void setApplicationSaveBackups(bool _save);
     void setApplicationBackupsFolder(const QString& _path);
+
+    /**
+     * @brief Загрузить заданный словарь
+     */
+    void loadSpellingDictionary(const QString& _languageCode);
+    void loadSpellingDictionaryAffFile(const QString& _languageCode);
+    void loadSpellingDictionaryDicFile(const QString& _languageCode);
 
 private:
     class Implementation;

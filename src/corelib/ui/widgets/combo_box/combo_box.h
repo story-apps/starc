@@ -21,6 +21,12 @@ public:
      */
     void setModel(QAbstractItemModel* _model);
 
+    /**
+     * @brief Индекс текущего выбранного элемента
+     */
+    QModelIndex currentIndex() const;
+    void setCurrentIndex(const QModelIndex& _index);
+
 signals:
     /**
      * @brief Изменился текущий индекс
