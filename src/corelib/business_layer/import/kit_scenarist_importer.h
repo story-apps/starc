@@ -9,7 +9,7 @@ namespace BusinessLayer
 /**
  * @brief Импортер сценария из файлов КИТа
  */
-class KitScenaristImporter : public AbstractImporter
+class CORE_LIBRARY_EXPORT KitScenaristImporter : public AbstractImporter
 {
 public:
     KitScenaristImporter() = default;

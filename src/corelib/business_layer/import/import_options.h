@@ -1,5 +1,7 @@
 #pragma once
 
+#include <corelib_global.h>
+
 #include <QString>
 
 
@@ -9,7 +11,7 @@ namespace BusinessLayer
 /**
  * @brief Опции импорта
  */
-struct ImportOptions {
+struct CORE_LIBRARY_EXPORT ImportOptions {
     /**
      * @brief Путь файла для импорта
      */

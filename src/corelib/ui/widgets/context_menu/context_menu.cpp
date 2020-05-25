@@ -84,7 +84,10 @@ void ContextMenu::showContextMenu(const QPoint& _pos)
         return;
     }
 
-    resize(0, 0);
+    //
+    // NOTE: Если сделать размер 1х1, то на Windows будет моргать окошечко при появлении
+    //
+    resize(1, 1);
     const auto pos = _pos - QPointF(Ui::DesignSystem::card().shadowMargins().left(),
                                     Ui::DesignSystem::card().shadowMargins().top());
     move(pos.toPoint());

@@ -1,5 +1,7 @@
 #pragma once
 
+#include <corelib_global.h>
+
 #include <QString>
 
 
@@ -10,7 +12,7 @@ struct ImportOptions;
 /**
  * @brief Базовый класс для реализации импортера документов
  */
-class AbstractImporter
+class CORE_LIBRARY_EXPORT AbstractImporter
 {
 public:
     virtual ~AbstractImporter() = default;
