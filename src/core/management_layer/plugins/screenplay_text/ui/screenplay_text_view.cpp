@@ -8,6 +8,9 @@
 #include <business_layer/templates/screenplay_template.h>
 #include <business_layer/templates/screenplay_template_facade.h>
 
+#include <data_layer/storage/settings_storage.h>
+#include <data_layer/storage/storage_facade.h>
+
 #include <ui/design_system/design_system.h>
 #include <ui/widgets/floating_tool_bar/floating_tool_bar.h>
 #include <ui/widgets/scroll_bar/scroll_bar.h>
@@ -174,6 +177,21 @@ void ScreenplayTextView::reconfigure()
         auto typeItem = new QStandardItem(d->typesToDisplayNames.value(type));
         typeItem->setData(static_cast<int>(type), kTypeDataRole);
         d->paragraphTypesModel->appendRow(typeItem);
+    }
+
+    const bool useSpellChecker =
+            DataStorageLayer::StorageFacade::settingsStorage()->value(
+                DataStorageLayer::kApplicationUseSpellCheckerKey,
+                DataStorageLayer::SettingsStorage::SettingsPlace::Application
+                ).toBool();
+    d->screenplayText->setUseSpellChecker(useSpellChecker);
+    if (useSpellChecker) {
+        const QString languageCode =
+                DataStorageLayer::StorageFacade::settingsStorage()->value(
+                    DataStorageLayer::kApplicationSpellCheckerLanguageKey,
+                    DataStorageLayer::SettingsStorage::SettingsPlace::Application
+                    ).toString();
+        d->screenplayText->setSpellCheckLanguage(languageCode);
     }
 
     d->shortcutsManager.reconfigure();

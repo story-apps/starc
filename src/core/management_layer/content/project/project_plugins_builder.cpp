@@ -186,6 +186,13 @@ void ProjectPluginsBuilder::bind(const QString& _viewMimeType, const QString& _n
     navigatorPlugin->bind(viewPlugin);
 }
 
+void ProjectPluginsBuilder::reconfigure()
+{
+    for (auto& plugin : d->plugins) {
+        plugin->reconfigure();
+    }
+}
+
 void ProjectPluginsBuilder::reset()
 {
     for (auto& plugin : d->plugins) {

@@ -27,7 +27,7 @@ public:
     /**
      * @brief Позиция курсора в блоке
      */
-    int cursorPosition = 0;
+    int cursorPosition = -1;
 };
 
 SpellCheckHighlighter::Implementation::Implementation(const SpellChecker& _checker)
@@ -75,11 +75,6 @@ bool SpellCheckHighlighter::useSpellChecker() const
 
 void SpellCheckHighlighter::setCursorPosition(int _position)
 {
-    if (d->cursorPosition == _position) {
-        return;
-    }
-
-    m_isDocumentChangedFormLastEdit = false;
     d->cursorPosition = _position;
 }
 
@@ -125,9 +120,10 @@ void SpellCheckHighlighter::highlightBlock(const QString& _text)
             int positionInText = wordPos;
             //
             // Не проверяем слово, которое сейчас пишется
-            if (m_isDocumentChangedFormLastEdit
-                    && positionInText <= d->cursorPosition
-                    && positionInText + wordToCheck.length() > d->cursorPosition) {
+            //
+            if (isChanged()
+                && positionInText <= d->cursorPosition
+                && positionInText + wordToCheck.length() > d->cursorPosition) {
                 continue;
             }
 

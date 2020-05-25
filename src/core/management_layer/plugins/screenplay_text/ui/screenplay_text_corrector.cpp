@@ -340,18 +340,17 @@ void ScreenplayTextCorrector::Implementation::correctCharactersNames(int _positi
                     }
                 }
                 //
-                // Если второе подряд, добавляем вспомогательный текст
+                // Если второе подряд и ещё не настроено, добавляем вспомогательный текст
                 //
                 else if (characterName == lastCharacterName){
                     const QString characterState = CharacterParser::extension(block.text());
-                    //
-                    // ... помечаем блок, что нужно отрисовывать вспомогательный текст
-                    //
                     QTextBlockFormat characterFormat = block.blockFormat();
-                    characterFormat.setProperty(ScreenplayBlockStyle::PropertyIsCharacterContinued,
-                                                needToCorrectCharactersNames && characterState.isEmpty());
-                    cursor.setPosition(block.position());
-                    cursor.setBlockFormat(characterFormat);
+                    if (characterState.isEmpty()
+                        && !characterFormat.boolProperty(ScreenplayBlockStyle::PropertyIsCharacterContinued)) {
+                        characterFormat.setProperty(ScreenplayBlockStyle::PropertyIsCharacterContinued, true);
+                        cursor.setPosition(block.position());
+                        cursor.setBlockFormat(characterFormat);
+                    }
                 }
 
                 lastCharacterName = characterName;

@@ -36,7 +36,7 @@ public:
     /**
      * @brief Подсветить текст не прошедший проверку орфографии
      */
-    void highlightBlock(const QString& _text);
+    void highlightBlock(const QString& _text) override;
 
 private:
     class Implementation;

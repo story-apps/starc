@@ -317,7 +317,7 @@ void SettingsManager::loadSpellingDictionaryDicFile(const QString& _languageCode
         //
         // Dic-файлы считаем за 90 процентов всего словаря
         //
-        const qreal progress = 0.1 + _value * 0.9;
+        const qreal progress = 10 + _value * 0.9;
         TaskBar::setTaskProgress(kSpellCheckerLoadingTaskId, progress);
     });
     connect(dictionaryLoader, &NetworkRequest::downloadComplete, this,

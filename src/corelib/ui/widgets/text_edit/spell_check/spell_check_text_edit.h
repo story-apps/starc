@@ -16,7 +16,6 @@ public:
     explicit SpellCheckTextEdit(QWidget* _parent = nullptr);
     ~SpellCheckTextEdit() override;
 
-public slots:
     /**
      * @brief Включить/выключить проверку правописания
      */
@@ -29,7 +28,6 @@ public slots:
 
     /**
      * @brief Установить язык для проверки орфографии
-     * @param Язык
      */
     void setSpellCheckLanguage(const QString& _languageCode);
 

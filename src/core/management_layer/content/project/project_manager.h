@@ -30,6 +30,11 @@ public:
     QWidget* view() const;
 
     /**
+     * @brief Перенастроить плагины
+     */
+    void reconfigure();
+
+    /**
      * @brief Загрузить данные текущего проекта
      */
     void loadCurrentProject(const QString& _name, const QString& _path);

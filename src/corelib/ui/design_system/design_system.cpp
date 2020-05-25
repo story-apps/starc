@@ -1842,6 +1842,67 @@ DesignSystem::Dialog::Dialog(qreal _scaleFactor)
 
 // ****
 
+class DesignSystem::TaskBar::Implementation
+{
+public:
+    explicit Implementation(qreal _scaleFactor);
+
+    QMarginsF margins = {24, 24, 24, 24};
+    qreal width = 260;
+    qreal taskHeight = 32;
+    qreal taskTitleHeight = 18;
+    qreal spacing = 4;
+
+};
+
+DesignSystem::TaskBar::Implementation::Implementation(qreal _scaleFactor)
+{
+    margins *= _scaleFactor;
+    width *= _scaleFactor;
+    taskHeight *= _scaleFactor;
+    taskTitleHeight *= _scaleFactor;
+    spacing *= _scaleFactor;
+}
+
+
+// **
+
+
+DesignSystem::TaskBar::~TaskBar() = default;
+
+const QMarginsF& DesignSystem::TaskBar::margins() const
+{
+    return d->margins;
+}
+
+qreal DesignSystem::TaskBar::width() const
+{
+    return d->width;
+}
+
+qreal DesignSystem::TaskBar::taskHeight() const
+{
+    return d->taskHeight;
+}
+
+qreal DesignSystem::TaskBar::taskTitleHeight() const
+{
+    return d->taskTitleHeight;
+}
+
+qreal DesignSystem::TaskBar::spacing() const
+{
+    return d->spacing;
+}
+
+DesignSystem::TaskBar::TaskBar(qreal _scaleFactor)
+    : d(new Implementation(_scaleFactor))
+{
+}
+
+
+// ****
+
 class DesignSystem::ProjectCard::Implementation
 {
 public:
@@ -1934,6 +1995,7 @@ public:
     DesignSystem::Tree tree;
     DesignSystem::Card card;
     DesignSystem::Dialog dialog;
+    DesignSystem::TaskBar taskBar;
     DesignSystem::ProjectCard projectCard;
 };
 
@@ -1965,6 +2027,7 @@ DesignSystemPrivate::DesignSystemPrivate(ApplicationTheme _theme, qreal _scaleFa
       tree(_scaleFactor, _color),
       card(_scaleFactor),
       dialog(_scaleFactor),
+      taskBar(_scaleFactor),
       projectCard(_scaleFactor)
 {
     pageMargins *= _scaleFactor;
@@ -2255,6 +2318,11 @@ const DesignSystem::Card& DesignSystem::card()
 const DesignSystem::Dialog& DesignSystem::dialog()
 {
     return instance()->d->dialog;
+}
+
+const DesignSystem::TaskBar& DesignSystem::taskBar()
+{
+    return instance()->d->taskBar;
 }
 
 const DesignSystem::ProjectCard& DesignSystem::projectCard()

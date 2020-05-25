@@ -1103,6 +1103,47 @@ public:
     };
 
     /**
+     * @brief Параметры панели фоновых процессов
+     */
+    class CORE_LIBRARY_EXPORT TaskBar
+    {
+    public:
+        ~TaskBar();
+
+        /**
+         * @brief Отступы от контента
+         */
+        const QMarginsF& margins() const;
+
+        /**
+         * @brief Ширина панели
+         */
+        qreal width() const;
+
+        /**
+         * @brief Высота одного процесса
+         */
+        qreal taskHeight() const;
+
+        /**
+         * @brief Высота заголовка
+         */
+        qreal taskTitleHeight() const;
+
+        /**
+         * @brief Отступ между заголовком и полосой прогресса
+         */
+        qreal spacing() const;
+
+    private:
+        explicit TaskBar(qreal _scaleFactor);
+        friend class DesignSystemPrivate;
+        //
+        class Implementation;
+        QScopedPointer<Implementation> d;
+    };
+
+    /**
      * @brief Параметры карточки проекта
      */
     class CORE_LIBRARY_EXPORT ProjectCard
@@ -1316,6 +1357,11 @@ public:
      * @brief Параметры виджета диалога
      */
     static const Dialog& dialog();
+
+    /**
+     * @brief Параметры виджета списка фоновых процессов
+     */
+    static const TaskBar& taskBar();
 
     /**
      * @brief Параметры карточки проекта

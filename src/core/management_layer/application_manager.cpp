@@ -1221,6 +1221,10 @@ void ApplicationManager::initConnections()
             [this] { d->showLastContent(); });
     connect(d->settingsManager.data(), &SettingsManager::applicationLanguageChanged, this,
             [this] (QLocale::Language _language) { d->setTranslation(_language); });
+    connect(d->settingsManager.data(), &SettingsManager::applicationUseSpellCheckerChanged, this,
+            [this] { d->projectManager->reconfigure(); });
+    connect(d->settingsManager.data(), &SettingsManager::applicationSpellCheckerLanguageChanged, this,
+            [this] { d->projectManager->reconfigure(); });
     connect(d->settingsManager.data(), &SettingsManager::applicationThemeChanged, this,
             [this] (Ui::ApplicationTheme _theme)
     {

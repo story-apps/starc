@@ -83,13 +83,17 @@ void CircularProgressBar::paintEvent(QPaintEvent* _event)
     pen.setWidthF(Ui::DesignSystem::progressBar().circularTrackHeight());
     painter.setPen(pen);
 
+    //
     // Фон
+    //
     painter.setOpacity(Ui::DesignSystem::progressBar().unfilledPartOpacity());
     int startAngle = 90 * 16;
     int spanAngle = 360 * 360 * 16;
     painter.drawArc(rectangle, startAngle, spanAngle);
 
+    //
     // Заполнение
+    //
     painter.setOpacity(1.0);
     startAngle = 90 * 16;
     qreal valueCorrected = d->value;
@@ -99,7 +103,9 @@ void CircularProgressBar::paintEvent(QPaintEvent* _event)
     spanAngle = static_cast<int>(valueCorrected * 360 * 16);
     painter.drawArc(rectangle, startAngle, spanAngle);
 
+    //
     // Текст
+    //
     pen.setColor(textColor());
     painter.setPen(pen);
     painter.setFont(Ui::DesignSystem::font().button());

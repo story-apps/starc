@@ -82,7 +82,7 @@ void SyntaxHighlighterPrivate::_q_reformatBlocks(int from, int charsRemoved, int
         // Если изменилась папка/группа не нужно пересчитывать весь текст,
         // нужно обновить одну лишь папку/группу
         //
-        q->m_isDocumentChangedFormLastEdit = true;
+        isDocumentChangedFormLastEdit = true;
         if (charsAdded > 300
             && charsRemoved > 300) {
             //
@@ -258,8 +258,7 @@ void SyntaxHighlighterPrivate::reformatBlock(const QTextBlock &block)
 */
 SyntaxHighlighter::SyntaxHighlighter(QObject *parent)
     : QObject(parent),
-      d(new SyntaxHighlighterPrivate(parent, this)),
-      m_isDocumentChangedFormLastEdit(false)
+      d(new SyntaxHighlighterPrivate(parent, this))
 {
     if (parent->inherits("QTextEdit")) {
         QTextDocument *doc = parent->property("document").value<QTextDocument *>();
@@ -366,12 +365,12 @@ void SyntaxHighlighter::rehighlightBlock(const QTextBlock &block)
 
 bool SyntaxHighlighter::isChanged() const
 {
-    return m_isDocumentChangedFormLastEdit;
+    return d->isDocumentChangedFormLastEdit;
 }
 
 void SyntaxHighlighter::setChanged(bool _changed)
 {
-    m_isDocumentChangedFormLastEdit = _changed;
+    d->isDocumentChangedFormLastEdit = _changed;
 }
 
 /*!

@@ -61,12 +61,6 @@ private:
     Q_PRIVATE_SLOT(d, void _q_delayedRehighlight())
 
     SyntaxHighlighterPrivate* d;
-
-protected:
-    /**
-     * @brief Изменялся ли документ с момента последней проверки
-     */
-    bool m_isDocumentChangedFormLastEdit = false;
 };
 
 
@@ -112,4 +106,13 @@ public slots:
         rehighlightPending = false;
         q->rehighlight();
     }
+
+//
+// Доработки
+//
+public:
+    /**
+     * @brief Изменялся ли документ с момента последней проверки
+     */
+    bool isDocumentChangedFormLastEdit = false;
 };

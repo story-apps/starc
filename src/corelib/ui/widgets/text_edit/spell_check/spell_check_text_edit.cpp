@@ -250,19 +250,38 @@ void SpellCheckTextEdit::rehighlighWithNewCursor()
     }
 
     //
-    // Если редактирование документа не закончено, но позиция курсора сменилась, откладываем проверку орфографии
+    // Если редактирование документа не закончено, но позиция курсора сменилась,
+    // откладываем проверку орфографии
     //
     if (document()->docHandle()->isInEditBlock()) {
         QTimer::singleShot(0, this, &SpellCheckTextEdit::rehighlighWithNewCursor);
         return;
     }
 
+    //
+    // Определим позицию курсора в блоке, чтобы игнорировать проверку текущего слова
+    //
     QTextCursor cursor = textCursor();
     cursor = moveCursorToStartWord(cursor);
-    d->spellCheckHighlighter(document())->setCursorPosition(cursor.positionInBlock());
-    if (d->previousBlockUnderCursor.isValid()) {
+    //
+    // Если сменился параграф, перепроверим орфографию в том блоке, где курсор был прежде
+    //
+    if (d->previousBlockUnderCursor.isValid()
+        && d->previousBlockUnderCursor != cursor.block()) {
+        //
+        // ... сбросим значение курсора в блоке, чтобы блок проверился полностью
+        //
+        d->spellCheckHighlighter(document())->setCursorPosition(-1);
         d->spellCheckHighlighter(document())->rehighlightBlock(d->previousBlockUnderCursor);
     }
+    //
+    // А затем проверим орфографию в текущем абзаце, чтобы перепроверить слово под курсором
+    //
+    d->spellCheckHighlighter(document())->setCursorPosition(cursor.positionInBlock());
+    d->spellCheckHighlighter(document())->rehighlightBlock(textCursor().block());
+    //
+    // И на последок запомним, абзац, в которым был курсор
+    //
     d->previousBlockUnderCursor = textCursor().block();
 }
 

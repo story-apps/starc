@@ -1,12 +1,12 @@
 #pragma once
 
-#include "../widget/widget.h"
+#include "../card/card.h"
 
 
 /**
  * @brief Виджет уведомления о фоновых процессах
  */
-class CORE_LIBRARY_EXPORT TaskBar : public Widget
+class CORE_LIBRARY_EXPORT TaskBar : public Card
 {
     Q_OBJECT
 
@@ -14,7 +14,8 @@ public:
     /**
      * @brief Зарегистрировать панель уведомлений в заданном виджете
      */
-    static void registerTaskBar(QWidget* _parent);
+    static void registerTaskBar(QWidget* _parent, const QColor& _backgroundColor,
+        const QColor& _textColor, const QColor& _barColor);
 
     /**
      * @brief Добавить процесс в список активных процессов
@@ -39,11 +40,27 @@ public:
 public:
     ~TaskBar() override;
 
+    /**
+     * @brief Задать цвет полосы прогресса
+     */
+    void setBarColor(const QColor& _color);
+
 protected:
+    /**
+     * @brief Переопределяем, чтобы отлавливать изменение размера
+     *        родительского виджета и корректировать свою позицию
+     */
+    bool eventFilter(QObject* _watched, QEvent* _event) override;
+
     /**
      * @brief Собственная реализация рисования
      */
     void paintEvent(QPaintEvent* _event) override;
+
+    /**
+     * @brief Переопределяем для обработки события смены дизайн-системы
+     */
+    void designSystemChangeEvent(DesignSystemChangeEvent* _event) override;
 
 private:
     explicit TaskBar(QWidget* _parent = nullptr);

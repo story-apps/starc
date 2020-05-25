@@ -4,6 +4,7 @@
 #include <ui/widgets/shadow/shadow.h>
 #include <ui/widgets/splitter/splitter.h>
 #include <ui/widgets/stack_widget/stack_widget.h>
+#include <ui/widgets/task_bar/task_bar.h>
 
 #include <QAction>
 #include <QCloseEvent>
@@ -180,6 +181,9 @@ void ApplicationView::designSystemChangeEvent(DesignSystemChangeEvent* _event)
         d->accountBar->setBackgroundColor(Ui::DesignSystem::color().primary());
         d->accountBar->setTextColor(Ui::DesignSystem::color().onPrimary());
     }
+
+    TaskBar::registerTaskBar(this, Ui::DesignSystem::color().primary(),
+        Ui::DesignSystem::color().onPrimary(), Ui::DesignSystem::color().secondary());
 }
 
 } // namespace Ui
