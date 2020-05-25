@@ -124,7 +124,7 @@ void ScreenplayTextEdit::setCurrentParagraphType(BusinessLayer::ScreenplayParagr
         return;
     }
 
-    d->document.setCurrentParagraphType(_type, textCursor());
+    d->document.setParagraphType(_type, textCursor());
 
     //
     // Если вставили папку, то нужно перейти к предыдущему блоку (из футера к хидеру)
@@ -1086,9 +1086,6 @@ ContextMenu* ScreenplayTextEdit::createContextMenu(const QPoint& _position, QWid
 {
     auto menu = BaseTextEdit::createContextMenu(_position, _parent);
 
-    //
-    // TODO: Разделить на две колонки можно только диалоги
-    //
     QStandardItemModel* model = new QStandardItemModel(menu);
     auto splitAction = new QStandardItem;
     if (ScreenplayTextCursor cursor = textCursor(); cursor.inTable()) {

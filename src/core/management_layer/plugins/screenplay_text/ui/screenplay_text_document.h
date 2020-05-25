@@ -48,7 +48,7 @@ public:
     /**
      * @brief Установить тип блока для заданного курсора
      */
-    void setCurrentParagraphType(BusinessLayer::ScreenplayParagraphType _type,
+    void setParagraphType(BusinessLayer::ScreenplayParagraphType _type,
         const ScreenplayTextCursor& _cursor);
 
     /**

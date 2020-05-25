@@ -150,7 +150,6 @@ void ScreenplayTextDocument::setModel(BusinessLayer::ScreenplayTextModel* _model
                             // Вставляем таблицу
                             //
                             insertTable(cursor);
-                            cursor.movePosition(QTextCursor::NextBlock, QTextCursor::MoveAnchor, 2);
 
                             //
                             // Назначим блоку после таблицы формат PageSplitter
@@ -357,7 +356,7 @@ void ScreenplayTextDocument::addParagraph(BusinessLayer::ScreenplayParagraphType
     _cursor.endEditBlock();
 }
 
-void ScreenplayTextDocument::setCurrentParagraphType(BusinessLayer::ScreenplayParagraphType _type, const ScreenplayTextCursor& _cursor)
+void ScreenplayTextDocument::setParagraphType(BusinessLayer::ScreenplayParagraphType _type, const ScreenplayTextCursor& _cursor)
 {
     const auto currentParagraphType = ScreenplayBlockStyle::forBlock(_cursor.block());
     if (currentParagraphType == _type) {
@@ -519,7 +518,7 @@ void ScreenplayTextDocument::splitParagraph(const ScreenplayTextCursor& _cursor)
     //
     const auto lastBlockType = ScreenplayBlockStyle::forBlock(cursor.block());
     //
-    // Вырезаем выделение, захватываея блоки целиком
+    // Вырезаем выделение, захватывая блоки целиком
     //
     if (cursor.hasSelection()) {
         const auto cursorPositions = std::minmax(cursor.selectionStart(), cursor.selectionEnd());
@@ -541,25 +540,26 @@ void ScreenplayTextDocument::splitParagraph(const ScreenplayTextCursor& _cursor)
     //
     // Назначим блоку перед таблицей формат PageSplitter
     //
-    setCurrentParagraphType(ScreenplayParagraphType::PageSplitter, cursor);
+    setParagraphType(ScreenplayParagraphType::PageSplitter, cursor);
 
     //
     // Вставляем таблицу
     //
     insertTable(cursor);
+    cursor.movePosition(QTextCursor::PreviousBlock, QTextCursor::MoveAnchor, 2);
 
     //
     // Применяем сохранённый формат блока каждой из колонок
     //
-    setCurrentParagraphType(lastBlockType, cursor);
+    setParagraphType(lastBlockType, cursor);
     cursor.movePosition(QTextCursor::NextBlock);
-    setCurrentParagraphType(lastBlockType, cursor);
+    setParagraphType(lastBlockType, cursor);
     cursor.movePosition(QTextCursor::NextBlock);
 
     //
     // Назначим блоку после таблицы формат PageSplitter
     //
-    setCurrentParagraphType(ScreenplayParagraphType::PageSplitter, cursor);
+    setParagraphType(ScreenplayParagraphType::PageSplitter, cursor);
 
     //
     // Вставляем параграф после таблицы - это обязательное условие, чтобы после таблицы всегда
