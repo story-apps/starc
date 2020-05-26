@@ -11,7 +11,7 @@ namespace {
     const QString kSplitterTag = QLatin1String("splitter");
     const QString kTypeAttribute = QLatin1String("type");
     const QHash<ScreenplayTextModelSplitterItemType, QString> kSplitterTypeToString
-        = {{ ScreenplayTextModelSplitterItemType::Unsplitted, {} },
+        = {{ ScreenplayTextModelSplitterItemType::Undefined, {} },
            { ScreenplayTextModelSplitterItemType::Start, QStringLiteral("start") },
            { ScreenplayTextModelSplitterItemType::Middle, QStringLiteral("middle") },
            { ScreenplayTextModelSplitterItemType::End, QStringLiteral("end") }};
@@ -23,7 +23,7 @@ public:
     Implementation() = default;
     explicit Implementation(ScreenplayTextModelSplitterItemType _type);
 
-    ScreenplayTextModelSplitterItemType type = ScreenplayTextModelSplitterItemType::Unsplitted;
+    ScreenplayTextModelSplitterItemType type = ScreenplayTextModelSplitterItemType::Undefined;
 };
 
 ScreenplayTextModelSplitterItem::Implementation::Implementation(ScreenplayTextModelSplitterItemType _type)
@@ -65,7 +65,7 @@ ScreenplayTextModelSplitterItem::~ScreenplayTextModelSplitterItem() = default;
 
 QString ScreenplayTextModelSplitterItem::toXml() const
 {
-    if (d->type == ScreenplayTextModelSplitterItemType::Unsplitted) {
+    if (d->type == ScreenplayTextModelSplitterItemType::Undefined) {
         Q_ASSERT(0);
         return {};
     }

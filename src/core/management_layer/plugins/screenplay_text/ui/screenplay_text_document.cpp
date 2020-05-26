@@ -575,7 +575,7 @@ void ScreenplayTextDocument::splitParagraph(const ScreenplayTextCursor& _cursor)
     cursor.endEditBlock();
 }
 
-void ScreenplayTextDocument::unsplitParagraph(const ScreenplayTextCursor& _cursor)
+void ScreenplayTextDocument::mergeParagraph(const ScreenplayTextCursor& _cursor)
 {
     //
     // Получим курсор для блока, из которого пользователь хочет убрать разделение

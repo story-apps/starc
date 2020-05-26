@@ -70,7 +70,7 @@ public:
     /**
      * @brief Соединить разделённый параграф
      */
-    void unsplitParagraph(const ScreenplayTextCursor& _cursor);
+    void mergeParagraph(const ScreenplayTextCursor& _cursor);
 
     /**
      * @brief Настроить необходимость корректировок

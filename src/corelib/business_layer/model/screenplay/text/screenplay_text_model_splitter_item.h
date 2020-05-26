@@ -14,7 +14,7 @@ namespace BusinessLayer
  * @brief Тип разделителя
  */
 enum class ScreenplayTextModelSplitterItemType {
-    Unsplitted,
+    Undefined,
     Start,
     Middle,
     End

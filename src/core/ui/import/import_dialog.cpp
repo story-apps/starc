@@ -125,7 +125,7 @@ QWidget* ImportDialog::focusedWidgetAfterShow() const
 void ImportDialog::updateTranslations()
 {
     const QFileInfo importFileInfo(d->importFilePath);
-    setTitle(tr("Import data from the file \"%1\"").arg(importFileInfo.fileName()));
+    setTitle(QString("%1 \"%2\"").arg(tr("Import data from the file"), importFileInfo.fileName()));
 
     d->documentsTitle->setText(tr("Documents"));
     d->importCharacters->setText(tr("Import characters"));

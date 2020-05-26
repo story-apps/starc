@@ -1089,7 +1089,7 @@ ContextMenu* ScreenplayTextEdit::createContextMenu(const QPoint& _position, QWid
     QStandardItemModel* model = new QStandardItemModel(menu);
     auto splitAction = new QStandardItem;
     if (ScreenplayTextCursor cursor = textCursor(); cursor.inTable()) {
-        splitAction->setText(tr("Unsplit paragraph"));
+        splitAction->setText(tr("Merge paragraph"));
         splitAction->setData(u8"\U000f10e7", Qt::DecorationRole);
     } else {
         splitAction->setText(tr("Split paragraph"));
@@ -1101,7 +1101,7 @@ ContextMenu* ScreenplayTextEdit::createContextMenu(const QPoint& _position, QWid
         menu->hideContextMenu();
         ScreenplayTextCursor cursor = textCursor();
         if (cursor.inTable()) {
-            d->document.unsplitParagraph(cursor);
+            d->document.mergeParagraph(cursor);
         } else {
             d->document.splitParagraph(cursor);
 
