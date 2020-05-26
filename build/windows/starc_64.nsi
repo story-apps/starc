@@ -17,12 +17,12 @@
   ;Show all languages, despite user's codepage
   !define MUI_LANGDLL_ALLLANGUAGES
 
-  !define pkgdir "files"
+  !define pkgdir "files_64"
 
   ;Name and file
   Name "Story Architect"
   Caption "Installing application for creating stories"
-  OutFile "starcapp.exe"
+  OutFile "starc-setup-64.exe"
   BrandingText "Story Apps LLC"
 
   ;Default installation folder
