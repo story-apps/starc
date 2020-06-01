@@ -6,6 +6,7 @@
 #include <QPainter>
 
 
+namespace {
 /**
  * @brief Позиция курсора относительно рамки обрезки
  */
@@ -22,6 +23,7 @@ enum class CursorPosition
     BottomLeft,
     BottomRight
 };
+}
 
 class ImageCropper::Implementation
 {
@@ -565,44 +567,85 @@ void ImageCropper::mousePressEvent(QMouseEvent* _event)
 
 void ImageCropper::mouseMoveEvent(QMouseEvent* _event)
 {
-    QPointF mousePos = _event->pos(); // относительно себя (виджета)
     //
+    // Позиция относительно себя
+    //
+    const QPointF mousePos(_event->pos());
     if (!d->isMousePressed) {
         // Обработка обычного состояния, т.е. не изменяется размер
         // области обрезки, и она не перемещается по виджету
         d->currentCursorPosition = d->cursorPosition(d->croppingRect, mousePos);
         d->updateCursorIcon(mousePos, this);
-    } else if (d->currentCursorPosition != CursorPosition::Undefined) {
-        // Обработка действий над областью обрезки
-        // ... определим смещение курсора мышки
-        QPointF mouseDelta;
-        mouseDelta.setX(mousePos.x() - d->startMousePos.x());
-        mouseDelta.setY(mousePos.y() - d->startMousePos.y());
-        //
-        if (d->currentCursorPosition != CursorPosition::Middle) {
-            // ... изменяем размер области обрезки
-            const QRectF newGeometry
-                    = d->calculateGeometry(d->lastStaticCroppingRect, d->currentCursorPosition, mouseDelta);
-            // ... пользователь пытается вывернуть область обрезки наизнанку
-            if (newGeometry.isNull()) {
-                return;
-            }
-            // ... пользователь пытается вытянуть область обрезки за пределы виджета
-            if (!QRectF(rect()).contains(newGeometry)) {
-                return;
-            }
-            // ... обновляем область
-            d->croppingRect = newGeometry;
-        } else {
-            // ... перемещаем область обрезки
-            auto newPos = d->lastStaticCroppingRect.topLeft() + mouseDelta;
-            newPos.setX(std::clamp(newPos.x(), 0.0, width() - d->croppingRect.width()));
-            newPos.setY(std::clamp(newPos.y(), 0.0, height() - d->croppingRect.height()));
-            d->croppingRect.moveTo(newPos);
-        }
-        // Перерисуем виджет
-        update();
+        return;
     }
+
+    if (d->currentCursorPosition == CursorPosition::Undefined) {
+        return;
+    }
+
+    //
+    // Определим позицию курсора внутри виджета
+    //
+    QPointF correctedMousePos;
+    if (mousePos.x() < d->startMousePos.x()) {
+        correctedMousePos.setX(std::clamp(mousePos.x(), 0.0, d->startMousePos.x()));
+    } else {
+        correctedMousePos.setX(std::clamp(mousePos.x(), d->startMousePos.x(), static_cast<qreal>(width())));
+    }
+    //
+    if (mousePos.y() < d->startMousePos.y()) {
+        correctedMousePos.setY(std::clamp(mousePos.y(), 0.0, d->startMousePos.y()));
+    } else {
+        correctedMousePos.setY(std::clamp(mousePos.y(), d->startMousePos.y(), static_cast<qreal>(height())));
+    }
+
+    //
+    // Обработка действий над областью обрезки
+    //
+    // ... определим смещение курсора мышки
+    //
+    const QPointF mouseDelta(correctedMousePos.x() - d->startMousePos.x(),
+                             correctedMousePos.y() - d->startMousePos.y());
+    //
+    // ... изменяем размер области обрезки
+    //
+    if (d->currentCursorPosition != CursorPosition::Middle) {
+        const QRectF newGeometry
+                = d->calculateGeometry(d->lastStaticCroppingRect, d->currentCursorPosition, mouseDelta);
+
+        //
+        // ... пользователь пытается вывернуть область обрезки наизнанку
+        //
+        if (newGeometry.isNull()) {
+            return;
+        }
+
+        //
+        // ... пользователь пытается вытянуть область обрезки за пределы виджета
+        //
+        if (!QRectF(rect()).contains(newGeometry)) {
+            return;
+        }
+
+        //
+        // ... обновляем область
+        //
+        d->croppingRect = newGeometry;
+    }
+    //
+    // ... перемещаем область обрезки
+    //
+    else {
+        auto newPos = d->lastStaticCroppingRect.topLeft() + mouseDelta;
+        newPos.setX(std::clamp(newPos.x(), 0.0, width() - d->croppingRect.width()));
+        newPos.setY(std::clamp(newPos.y(), 0.0, height() - d->croppingRect.height()));
+        d->croppingRect.moveTo(newPos);
+    }
+
+    //
+    // Перерисуем виджет
+    //
+    update();
 }
 
 void ImageCropper::mouseReleaseEvent(QMouseEvent* _event)
