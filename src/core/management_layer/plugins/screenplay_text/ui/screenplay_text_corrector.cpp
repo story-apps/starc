@@ -598,6 +598,10 @@ void ScreenplayTextCorrector::Implementation::correctPageBreaks(int _position)
 
             const int bottomIndex = currentBlockInfo.number + maxDecorationBlocks;
             for (int index = topIndex; index <= bottomIndex; ++index) {
+                if (index >= blockItems.size()) {
+                    break;
+                }
+
                 blockItems[index] = {};
             }
 
