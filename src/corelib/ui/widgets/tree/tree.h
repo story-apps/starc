@@ -2,8 +2,7 @@
 
 #include <ui/widgets/widget/widget.h>
 
-class QAbstractItemModel;
-class QAbstractItemDelegate;
+#include <QAbstractItemView>
 
 
 /**
@@ -41,6 +40,11 @@ public:
      * @brief Включить/отключить возможность перетаскивания элементов
      */
     void setDragDropEnabled(bool _enabled);
+
+    /**
+     * @brief Установить режим выделения элементов в дереве
+     */
+    void setSelectionMode(QAbstractItemView::SelectionMode _mode);
 
     /**
      * @brief Получить ширину заданной колонки

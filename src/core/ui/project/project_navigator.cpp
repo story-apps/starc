@@ -41,6 +41,7 @@ ProjectNavigator::Implementation::Implementation(QWidget* _parent)
       filter(new TextField(_parent))
 {
     tree->setDragDropEnabled(true);
+    tree->setSelectionMode(QAbstractItemView::ExtendedSelection);
     tree->setContextMenuPolicy(Qt::ContextMenuPolicy::CustomContextMenu);
     filter->hide();
 }

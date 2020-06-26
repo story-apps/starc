@@ -87,7 +87,11 @@ void Tree::setDragDropEnabled(bool _enabled)
     d->tree->setDragEnabled(_enabled);
     d->tree->setDragDropMode(_enabled ? QAbstractItemView::DragDrop : QAbstractItemView::NoDragDrop);
     d->tree->setDropIndicatorShown(_enabled);
-    d->tree->setSelectionMode(_enabled ? QAbstractItemView::ExtendedSelection : QAbstractItemView::SingleSelection);
+}
+
+void Tree::setSelectionMode(QAbstractItemView::SelectionMode _mode)
+{
+    d->tree->setSelectionMode(_mode);
 }
 
 int Tree::sizeHintForColumn(int _column) const
