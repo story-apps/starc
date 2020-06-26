@@ -82,6 +82,16 @@ signals:
      */
     void createLocationRequested(const QString& _name);
 
+    /**
+     * @brief Сменилась видимость элемента сценария
+     */
+    /** @{ */
+    void screenplayTitlePageVisibilityChanged(BusinessLayer::AbstractModel* _screenplayModel, bool _visible);
+    void screenplaySynopsisVisibilityChanged(BusinessLayer::AbstractModel* _screenplayModel, bool _visible);
+    void screenplayOutlineVisibilityChanged(BusinessLayer::AbstractModel* _screenplayModel, bool _visible);
+    void screenplayTextVisibilityChanged(BusinessLayer::AbstractModel* _screenplayModel, bool _visible);
+    /** @} */
+
 private:
     class Implementation;
     QScopedPointer<Implementation> d;

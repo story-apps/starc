@@ -454,6 +454,38 @@ ProjectManager::ProjectManager(QObject* _parent, QWidget* _parentWidget)
                                Domain::DocumentObjectType::Location,
                                _name);
     });
+    //
+    auto setDocumentVisible = [this] (BusinessLayer::AbstractModel* _screenplayModel,
+                                      Domain::DocumentObjectType _type, bool _visible) {
+        auto screenplayItem = d->projectStructureModel->itemForUuid(_screenplayModel->document()->uuid());
+        for (int childIndex = 0; childIndex < screenplayItem->childCount(); ++childIndex) {
+            auto childItem = screenplayItem->childAt(childIndex);
+            if (childItem->type() == _type) {
+                d->projectStructureModel->setItemVisible(childItem, _visible);
+                break;
+            }
+        }
+    };
+    connect(&d->modelsFacade, &ProjectModelsFacade::screenplayTitlePageVisibilityChanged, this,
+            [setDocumentVisible] (BusinessLayer::AbstractModel* _screenplayModel, bool _visible)
+    {
+        setDocumentVisible(_screenplayModel, Domain::DocumentObjectType::ScreenplayTitlePage, _visible);
+    });
+    connect(&d->modelsFacade, &ProjectModelsFacade::screenplaySynopsisVisibilityChanged, this,
+            [setDocumentVisible] (BusinessLayer::AbstractModel* _screenplayModel, bool _visible)
+    {
+        setDocumentVisible(_screenplayModel, Domain::DocumentObjectType::ScreenplaySynopsis, _visible);
+    });
+    connect(&d->modelsFacade, &ProjectModelsFacade::screenplayOutlineVisibilityChanged, this,
+            [setDocumentVisible] (BusinessLayer::AbstractModel* _screenplayModel, bool _visible)
+    {
+        setDocumentVisible(_screenplayModel, Domain::DocumentObjectType::ScreenplayOutline, _visible);
+    });
+    connect(&d->modelsFacade, &ProjectModelsFacade::screenplayTextVisibilityChanged, this,
+            [setDocumentVisible] (BusinessLayer::AbstractModel* _screenplayModel, bool _visible)
+    {
+        setDocumentVisible(_screenplayModel, Domain::DocumentObjectType::ScreenplayText, _visible);
+    });
 }
 
 ProjectManager::~ProjectManager() = default;
@@ -600,7 +632,8 @@ void ProjectManager::addScreenplay(const QString& _name, const QString& _titlePa
 
     auto createItem = [] (DocumentObjectType _type, const QString& _name) {
         auto uuid = QUuid::createUuid();
-        return new BusinessLayer::StructureModelItem(uuid, _type, _name, {});
+        const auto visible = true;
+        return new BusinessLayer::StructureModelItem(uuid, _type, _name, {}, visible);
     };
 
     auto rootItem = d->projectStructureModel->itemForIndex({});

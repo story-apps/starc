@@ -15,20 +15,22 @@ class StructureModelItem::Implementation
 {
 public:
     explicit Implementation(const QUuid& _uuid, Domain::DocumentObjectType _type, const QString& _name,
-        const QColor& _color);
+        const QColor& _color, bool _visible);
 
     const QUuid uuid;
     Domain::DocumentObjectType type;
     QString name;
     QColor color;
+    bool visible = true;
 };
 
 StructureModelItem::Implementation::Implementation(const QUuid& _uuid, Domain::DocumentObjectType _type,
-    const QString& _name, const QColor& _color)
+    const QString& _name, const QColor& _color, bool _visible)
     : uuid(_uuid),
       type(_type),
       name(_name),
-      color(_color)
+      color(_color),
+      visible(_visible)
 {
 }
 
@@ -37,15 +39,15 @@ StructureModelItem::Implementation::Implementation(const QUuid& _uuid, Domain::D
 
 
 StructureModelItem::StructureModelItem(const QUuid& _uuid, Domain::DocumentObjectType _type,
-    const QString& _name, const QColor& _color)
+    const QString& _name, const QColor& _color, bool _visible)
     : AbstractModelItem(),
-      d(new Implementation(_uuid, _type, _name, _color))
+      d(new Implementation(_uuid, _type, _name, _color, _visible))
 {
 }
 
 StructureModelItem::StructureModelItem(const StructureModelItem& _other)
     : AbstractModelItem(),
-      d(new Implementation(_other.d->uuid, _other.d->type, _other.d->name, _other.d->color))
+      d(new Implementation(_other.d->uuid, _other.d->type, _other.d->name, _other.d->color, _other.d->visible))
 {
 }
 
@@ -68,16 +70,22 @@ const QString& StructureModelItem::name() const
 
 void StructureModelItem::setName(const QString& _name)
 {
-    if (d->name == _name) {
-        return;
-    }
-
     d->name = _name;
 }
 
 const QColor& StructureModelItem::color() const
 {
     return d->color;
+}
+
+bool StructureModelItem::visible() const
+{
+    return d->visible;
+}
+
+void StructureModelItem::setVisible(bool _visible)
+{
+    d->visible = _visible;
 }
 
 QVariant StructureModelItem::data(int _role) const

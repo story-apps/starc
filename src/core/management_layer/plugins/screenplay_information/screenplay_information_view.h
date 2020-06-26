@@ -20,6 +20,18 @@ public:
     void setLogline(const QString& _logline);
     Q_SIGNAL void loglineChanged(const QString& _logline);
 
+    void setTitlePageVisible(bool _visible);
+    Q_SIGNAL void titlePageVisibleChanged(bool _visible);
+
+    void setSynopsisVisible(bool _visible);
+    Q_SIGNAL void synopsisVisibleChanged(bool _visible);
+
+    void setOutlineVisible(bool _visible);
+    Q_SIGNAL void outlineVisibleChanged(bool _visible);
+
+    void setScreenplayTextVisible(bool _visible);
+    Q_SIGNAL void screenplayTextVisibleChanged(bool _visible);
+
 protected:
     /**
      * @brief Обновить переводы

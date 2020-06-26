@@ -90,7 +90,25 @@ BusinessLayer::AbstractModel* ProjectModelsFacade::modelFor(Domain::DocumentObje
             }
 
             case Domain::DocumentObjectType::Screenplay: {
-                model = new BusinessLayer::ScreenplayInformationModel;
+                auto screenplayModel = new BusinessLayer::ScreenplayInformationModel;
+                connect(screenplayModel, &BusinessLayer::ScreenplayInformationModel::titlePageVisibleChanged, this,
+                        [this, screenplayModel] (bool _visible) {
+                   emit screenplayTitlePageVisibilityChanged(screenplayModel, _visible);
+                });
+                connect(screenplayModel, &BusinessLayer::ScreenplayInformationModel::synopsisVisibleChanged, this,
+                        [this, screenplayModel] (bool _visible) {
+                   emit screenplaySynopsisVisibilityChanged(screenplayModel, _visible);
+                });
+                connect(screenplayModel, &BusinessLayer::ScreenplayInformationModel::outlineVisibleChanged, this,
+                        [this, screenplayModel] (bool _visible) {
+                   emit screenplayOutlineVisibilityChanged(screenplayModel, _visible);
+                });
+                connect(screenplayModel, &BusinessLayer::ScreenplayInformationModel::screenplayTextVisibleChanged, this,
+                        [this, screenplayModel] (bool _visible) {
+                   emit screenplayTextVisibilityChanged(screenplayModel, _visible);
+                });
+
+                model = screenplayModel;
                 break;
             }
 

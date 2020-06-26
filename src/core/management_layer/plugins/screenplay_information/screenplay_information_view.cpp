@@ -2,6 +2,7 @@
 
 #include <ui/design_system/design_system.h>
 #include <ui/widgets/card/card.h>
+#include <ui/widgets/check_box/check_box.h>
 #include <ui/widgets/scroll_bar/scroll_bar.h>
 #include <ui/widgets/text_field/text_field.h>
 
@@ -24,6 +25,10 @@ public:
     QGridLayout* screenplayInfoLayout = nullptr;
     TextField* screenplayName = nullptr;
     TextField* screenplayLogline = nullptr;
+    CheckBox* titlePageVisiblity = nullptr;
+    CheckBox* synopsisVisiblity = nullptr;
+    CheckBox* outlineVisiblity = nullptr;
+    CheckBox* screenplayTextVisiblity = nullptr;
 };
 
 ScreenplayInformationView::Implementation::Implementation(QWidget* _parent)
@@ -31,7 +36,11 @@ ScreenplayInformationView::Implementation::Implementation(QWidget* _parent)
       screenplayInfo(new Card(_parent)),
       screenplayInfoLayout(new QGridLayout),
       screenplayName(new TextField(screenplayInfo)),
-      screenplayLogline(new TextField(screenplayInfo))
+      screenplayLogline(new TextField(screenplayInfo)),
+      titlePageVisiblity(new CheckBox(screenplayInfo)),
+      synopsisVisiblity(new CheckBox(screenplayInfo)),
+      outlineVisiblity(new CheckBox(screenplayInfo)),
+      screenplayTextVisiblity(new CheckBox(screenplayInfo))
 {
     QPalette palette;
     palette.setColor(QPalette::Base, Qt::transparent);
@@ -45,7 +54,11 @@ ScreenplayInformationView::Implementation::Implementation(QWidget* _parent)
     screenplayInfoLayout->setRowMinimumHeight(0, 1); // добавляем пустую строку сверху
     screenplayInfoLayout->addWidget(screenplayName, 1, 0);
     screenplayInfoLayout->addWidget(screenplayLogline, 2, 0);
-    screenplayInfoLayout->setRowMinimumHeight(3, 1); // добавляем пустую строку внизу
+    screenplayInfoLayout->addWidget(titlePageVisiblity, 3, 0);
+    screenplayInfoLayout->addWidget(synopsisVisiblity, 4, 0);
+    screenplayInfoLayout->addWidget(outlineVisiblity, 5, 0);
+    screenplayInfoLayout->addWidget(screenplayTextVisiblity, 6, 0);
+    screenplayInfoLayout->setRowMinimumHeight(7, 1); // добавляем пустую строку внизу
     screenplayInfoLayout->setColumnStretch(0, 1);
     screenplayInfo->setLayoutReimpl(screenplayInfoLayout);
 
@@ -82,6 +95,14 @@ ScreenplayInformationView::ScreenplayInformationView(QWidget* _parent)
     connect(d->screenplayLogline, &TextField::textChanged, this, [this] {
         emit loglineChanged(d->screenplayLogline->text());
     });
+    connect(d->titlePageVisiblity, &CheckBox::checkedChanged,
+            this, &ScreenplayInformationView::titlePageVisibleChanged);
+    connect(d->synopsisVisiblity, &CheckBox::checkedChanged,
+            this, &ScreenplayInformationView::synopsisVisibleChanged);
+    connect(d->outlineVisiblity, &CheckBox::checkedChanged,
+            this, &ScreenplayInformationView::outlineVisibleChanged);
+    connect(d->screenplayTextVisiblity, &CheckBox::checkedChanged,
+            this, &ScreenplayInformationView::screenplayTextVisibleChanged);
 
     updateTranslations();
     designSystemChangeEvent(nullptr);
@@ -107,10 +128,34 @@ void ScreenplayInformationView::setLogline(const QString& _logline)
     d->screenplayLogline->setText(_logline);
 }
 
+void ScreenplayInformationView::setTitlePageVisible(bool _visible)
+{
+    d->titlePageVisiblity->setChecked(_visible);
+}
+
+void ScreenplayInformationView::setSynopsisVisible(bool _visible)
+{
+    d->synopsisVisiblity->setChecked(_visible);
+}
+
+void ScreenplayInformationView::setOutlineVisible(bool _visible)
+{
+    d->outlineVisiblity->setChecked(_visible);
+}
+
+void ScreenplayInformationView::setScreenplayTextVisible(bool _visible)
+{
+    d->screenplayTextVisiblity->setChecked(_visible);
+}
+
 void ScreenplayInformationView::updateTranslations()
 {
     d->screenplayName->setLabel(tr("Screenplay name"));
     d->screenplayLogline->setLabel(tr("Logline"));
+    d->titlePageVisiblity->setText(tr("Title page"));
+    d->synopsisVisiblity->setText(tr("Synopsis"));
+    d->outlineVisiblity->setText(tr("Outline"));
+    d->screenplayTextVisiblity->setText(tr("Screenplay text"));
 }
 
 void ScreenplayInformationView::designSystemChangeEvent(DesignSystemChangeEvent* _event)
@@ -132,9 +177,16 @@ void ScreenplayInformationView::designSystemChangeEvent(DesignSystemChangeEvent*
         textField->setBackgroundColor(Ui::DesignSystem::color().onBackground());
         textField->setTextColor(Ui::DesignSystem::color().onBackground());
     }
+    for (auto checkBox : { d->titlePageVisiblity,
+                           d->synopsisVisiblity,
+                           d->outlineVisiblity,
+                           d->screenplayTextVisiblity }) {
+        checkBox->setBackgroundColor(Ui::DesignSystem::color().background());
+        checkBox->setTextColor(Ui::DesignSystem::color().onBackground());
+    }
     d->screenplayInfoLayout->setVerticalSpacing(static_cast<int>(Ui::DesignSystem::layout().px16()));
     d->screenplayInfoLayout->setRowMinimumHeight(0, static_cast<int>(Ui::DesignSystem::layout().px24()));
-    d->screenplayInfoLayout->setRowMinimumHeight(3, static_cast<int>(Ui::DesignSystem::layout().px24()));
+    d->screenplayInfoLayout->setRowMinimumHeight(7, static_cast<int>(Ui::DesignSystem::layout().px24()));
 }
 
 } // namespace Ui

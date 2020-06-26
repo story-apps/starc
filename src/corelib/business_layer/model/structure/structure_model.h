@@ -113,6 +113,11 @@ public:
     void setItemName(StructureModelItem* _item, const QString& _name);
 
     /**
+     * @brief Задать видимость элемента
+     */
+    void setItemVisible(StructureModelItem* _item, bool _visible);
+
+    /**
      * @brief Задать возможность перехода в навигатор для заданного индекса
      */
     void setNavigatorAvailableFor(const QModelIndex& _index, bool isAvailable);

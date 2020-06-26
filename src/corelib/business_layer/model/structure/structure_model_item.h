@@ -22,7 +22,7 @@ class CORE_LIBRARY_EXPORT StructureModelItem : public AbstractModelItem
 {
 public:
     explicit StructureModelItem(const QUuid& _uuid, Domain::DocumentObjectType _type,
-         const QString& _name, const QColor& _color);
+         const QString& _name, const QColor& _color, bool _visible);
     explicit StructureModelItem(const StructureModelItem& _other);
     ~StructureModelItem() override;
 
@@ -46,6 +46,12 @@ public:
      * @brief Цвет элемента
      */
     const QColor& color() const;
+
+    /**
+     * @brief Должен ли быть виден элемент модели
+     */
+    bool visible() const;
+    void setVisible(bool _visible);
 
     /**
      * @brief Переопределяем интерфейс для получения данных модели по роли
