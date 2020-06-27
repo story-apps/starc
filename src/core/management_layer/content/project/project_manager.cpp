@@ -10,6 +10,7 @@
 #include <business_layer/model/project/project_information_model.h>
 #include <business_layer/model/structure/structure_model.h>
 #include <business_layer/model/structure/structure_model_item.h>
+#include <business_layer/model/structure/structure_proxy_model.h>
 
 #include <data_layer/storage/document_change_storage.h>
 #include <data_layer/storage/document_data_storage.h>
@@ -91,6 +92,7 @@ public:
     Ui::ProjectView* view = nullptr;
 
     BusinessLayer::StructureModel* projectStructureModel = nullptr;
+    BusinessLayer::StructureProxyModel* projectStructureProxyModel = nullptr;
 
     DataStorageLayer::DocumentDataStorage documentDataStorage;
 
@@ -105,13 +107,14 @@ ProjectManager::Implementation::Implementation(QWidget* _parent)
       navigatorContextMenuModel(new QStandardItemModel(navigator)),
       view(new Ui::ProjectView(_parent)),
       projectStructureModel(new BusinessLayer::StructureModel(navigator)),
+      projectStructureProxyModel(new BusinessLayer::StructureProxyModel(projectStructureModel)),
       modelsFacade(&documentDataStorage)
 {
     toolBar->hide();
     navigator->hide();
     view->hide();
 
-    navigator->setModel(projectStructureModel);
+    navigator->setModel(projectStructureProxyModel);
     navigator->setContextMenuModel(navigatorContextMenuModel);
 }
 
@@ -119,7 +122,8 @@ void ProjectManager::Implementation::updateNavigatorContextMenu(const QModelInde
 {
     navigatorContextMenuModel->clear();
 
-    const auto currentItem = projectStructureModel->itemForIndex(_index);
+    const auto currentItemIndex = projectStructureProxyModel->mapToSource(_index);
+    const auto currentItem = projectStructureModel->itemForIndex(currentItemIndex);
     if (currentItem->type() == Domain::DocumentObjectType::RecycleBin) {
         if (currentItem->hasChildren()) {
             auto emptyRecicleBin = new QStandardItem(tr("Empty recycle bin"));
@@ -194,7 +198,8 @@ void ProjectManager::Implementation::addDocument(const QModelIndex& _itemIndex)
 
 void ProjectManager::Implementation::removeDocument(const QModelIndex& _itemIndex)
 {
-    auto item = projectStructureModel->itemForIndex(_itemIndex);
+    const auto mappedItemIndex = projectStructureProxyModel->mapToSource(_itemIndex);
+    auto item = projectStructureModel->itemForIndex(mappedItemIndex);
     if (item == nullptr) {
         return;
     }
@@ -254,7 +259,8 @@ void ProjectManager::Implementation::removeDocument(const QModelIndex& _itemInde
 
 void ProjectManager::Implementation::emptyRecycleBin(const QModelIndex& _recycleBinIndex)
 {
-    auto recycleBin = projectStructureModel->itemForIndex(_recycleBinIndex);
+    const auto mappedRecycleBinIndex = projectStructureProxyModel->mapToSource(_recycleBinIndex);
+    auto recycleBin = projectStructureModel->itemForIndex(mappedRecycleBinIndex);
     if (recycleBin == nullptr) {
         return;
     }
@@ -323,7 +329,8 @@ ProjectManager::ProjectManager(QObject* _parent, QWidget* _parentWidget)
         //
         // Определим выделенный элемент и скорректируем интерфейс
         //
-        const auto item = d->projectStructureModel->itemForIndex(_index);
+        const auto mappedIndex = d->projectStructureProxyModel->mapToSource(_index);
+        const auto item = d->projectStructureModel->itemForIndex(mappedIndex);
         const auto documentMimeType = Domain::mimeTypeFor(item->type());
         //
         // ... настроим иконки представлений
@@ -350,8 +357,9 @@ ProjectManager::ProjectManager(QObject* _parent, QWidget* _parentWidget)
     connect(d->navigator, &Ui::ProjectNavigator::itemDoubleClicked, this,
             [this] (const QModelIndex& _index)
     {
-        if (!d->projectStructureModel->data(
-                _index, static_cast<int>(BusinessLayer::StructureModelDataRole::IsNavigatorAvailable)).toBool()) {
+        const auto mappedIndex = d->projectStructureProxyModel->mapToSource(_index);
+        if (!d->projectStructureModel->data(mappedIndex,
+                static_cast<int>(BusinessLayer::StructureModelDataRole::IsNavigatorAvailable)).toBool()) {
             return;
         }
 
@@ -485,6 +493,11 @@ ProjectManager::ProjectManager(QObject* _parent, QWidget* _parentWidget)
             [setDocumentVisible] (BusinessLayer::AbstractModel* _screenplayModel, bool _visible)
     {
         setDocumentVisible(_screenplayModel, Domain::DocumentObjectType::ScreenplayText, _visible);
+    });
+    connect(&d->modelsFacade, &ProjectModelsFacade::screenplayStatisticsVisibilityChanged, this,
+            [setDocumentVisible] (BusinessLayer::AbstractModel* _screenplayModel, bool _visible)
+    {
+        setDocumentVisible(_screenplayModel, Domain::DocumentObjectType::ScreenplayStatistics, _visible);
     });
 }
 
@@ -663,7 +676,8 @@ void ProjectManager::handleModelChange(BusinessLayer::AbstractModel* _model,
 
 void ProjectManager::showView(const QModelIndex& _itemIndex, const QString& _viewMimeType)
 {
-    const auto item = d->projectStructureModel->itemForIndex(_itemIndex);
+    const auto mappedItemIndex = d->projectStructureProxyModel->mapToSource(_itemIndex);
+    const auto item = d->projectStructureModel->itemForIndex(mappedItemIndex);
 
     //
     // Определим модель
@@ -689,7 +703,7 @@ void ProjectManager::showView(const QModelIndex& _itemIndex, const QString& _vie
     // Настроим возможность перехода в навигатор
     //
     const auto navigatorMimeType = d->pluginsBuilder.navigatorMimeTypeFor(_viewMimeType);
-    d->projectStructureModel->setNavigatorAvailableFor(_itemIndex, !navigatorMimeType.isEmpty());
+    d->projectStructureModel->setNavigatorAvailableFor(mappedItemIndex, !navigatorMimeType.isEmpty());
 
     //
     // Если в данный момент отображён кастомный навигатов, откроем навигатор соответствующий редактору
@@ -701,12 +715,13 @@ void ProjectManager::showView(const QModelIndex& _itemIndex, const QString& _vie
 
 void ProjectManager::showNavigator(const QModelIndex& _itemIndex, const QString& _viewMimeType)
 {
-    if (!_itemIndex.isValid()) {
+    const auto mappedItemIndex = d->projectStructureProxyModel->mapToSource(_itemIndex);
+    if (!mappedItemIndex.isValid()) {
         d->navigator->showProjectNavigator();
         return;
     }
 
-    const auto item = d->projectStructureModel->itemForIndex(_itemIndex);
+    const auto item = d->projectStructureModel->itemForIndex(mappedItemIndex);
 
     //
     // Определим модель

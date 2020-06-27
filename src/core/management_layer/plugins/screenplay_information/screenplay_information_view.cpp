@@ -29,6 +29,7 @@ public:
     CheckBox* synopsisVisiblity = nullptr;
     CheckBox* outlineVisiblity = nullptr;
     CheckBox* screenplayTextVisiblity = nullptr;
+    CheckBox* screenplayStatisticsVisiblity = nullptr;
 };
 
 ScreenplayInformationView::Implementation::Implementation(QWidget* _parent)
@@ -40,7 +41,8 @@ ScreenplayInformationView::Implementation::Implementation(QWidget* _parent)
       titlePageVisiblity(new CheckBox(screenplayInfo)),
       synopsisVisiblity(new CheckBox(screenplayInfo)),
       outlineVisiblity(new CheckBox(screenplayInfo)),
-      screenplayTextVisiblity(new CheckBox(screenplayInfo))
+      screenplayTextVisiblity(new CheckBox(screenplayInfo)),
+      screenplayStatisticsVisiblity(new CheckBox(screenplayInfo))
 {
     QPalette palette;
     palette.setColor(QPalette::Base, Qt::transparent);
@@ -58,7 +60,8 @@ ScreenplayInformationView::Implementation::Implementation(QWidget* _parent)
     screenplayInfoLayout->addWidget(synopsisVisiblity, 4, 0);
     screenplayInfoLayout->addWidget(outlineVisiblity, 5, 0);
     screenplayInfoLayout->addWidget(screenplayTextVisiblity, 6, 0);
-    screenplayInfoLayout->setRowMinimumHeight(7, 1); // добавляем пустую строку внизу
+    screenplayInfoLayout->addWidget(screenplayStatisticsVisiblity, 7, 0);
+    screenplayInfoLayout->setRowMinimumHeight(8, 1); // добавляем пустую строку внизу
     screenplayInfoLayout->setColumnStretch(0, 1);
     screenplayInfo->setLayoutReimpl(screenplayInfoLayout);
 
@@ -103,6 +106,8 @@ ScreenplayInformationView::ScreenplayInformationView(QWidget* _parent)
             this, &ScreenplayInformationView::outlineVisibleChanged);
     connect(d->screenplayTextVisiblity, &CheckBox::checkedChanged,
             this, &ScreenplayInformationView::screenplayTextVisibleChanged);
+    connect(d->screenplayStatisticsVisiblity, &CheckBox::checkedChanged,
+            this, &ScreenplayInformationView::screenplayStatisticsVisibleChanged);
 
     updateTranslations();
     designSystemChangeEvent(nullptr);
@@ -148,6 +153,11 @@ void ScreenplayInformationView::setScreenplayTextVisible(bool _visible)
     d->screenplayTextVisiblity->setChecked(_visible);
 }
 
+void ScreenplayInformationView::setScreenplayStatisticsVisible(bool _visible)
+{
+    d->screenplayStatisticsVisiblity->setChecked(_visible);
+}
+
 void ScreenplayInformationView::updateTranslations()
 {
     d->screenplayName->setLabel(tr("Screenplay name"));
@@ -155,7 +165,8 @@ void ScreenplayInformationView::updateTranslations()
     d->titlePageVisiblity->setText(tr("Title page"));
     d->synopsisVisiblity->setText(tr("Synopsis"));
     d->outlineVisiblity->setText(tr("Outline"));
-    d->screenplayTextVisiblity->setText(tr("Screenplay text"));
+    d->screenplayTextVisiblity->setText(tr("Text"));
+    d->screenplayStatisticsVisiblity->setText(tr("Statistics"));
 }
 
 void ScreenplayInformationView::designSystemChangeEvent(DesignSystemChangeEvent* _event)
@@ -180,13 +191,14 @@ void ScreenplayInformationView::designSystemChangeEvent(DesignSystemChangeEvent*
     for (auto checkBox : { d->titlePageVisiblity,
                            d->synopsisVisiblity,
                            d->outlineVisiblity,
-                           d->screenplayTextVisiblity }) {
+                           d->screenplayTextVisiblity,
+                           d->screenplayStatisticsVisiblity }) {
         checkBox->setBackgroundColor(Ui::DesignSystem::color().background());
         checkBox->setTextColor(Ui::DesignSystem::color().onBackground());
     }
     d->screenplayInfoLayout->setVerticalSpacing(static_cast<int>(Ui::DesignSystem::layout().px16()));
     d->screenplayInfoLayout->setRowMinimumHeight(0, static_cast<int>(Ui::DesignSystem::layout().px24()));
-    d->screenplayInfoLayout->setRowMinimumHeight(7, static_cast<int>(Ui::DesignSystem::layout().px24()));
+    d->screenplayInfoLayout->setRowMinimumHeight(8, static_cast<int>(Ui::DesignSystem::layout().px24()));
 }
 
 } // namespace Ui

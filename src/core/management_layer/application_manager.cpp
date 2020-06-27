@@ -853,7 +853,7 @@ void ApplicationManager::Implementation::imitateTypewriterSound(QKeyEvent* _even
     }
 
     auto makeSound = [this] (const QString& path) {
-        QSoundEffect* sound = new QSoundEffect(q);
+        QSoundEffect* sound = new QSoundEffect(applicationView);
         sound->setSource(QUrl::fromLocalFile(path));
         return sound;
     };

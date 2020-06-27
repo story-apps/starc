@@ -42,6 +42,10 @@ public:
     void setScreenplayTextVisible(bool _visible);
     Q_SIGNAL void screenplayTextVisibleChanged(bool _visible);
 
+    bool screenplayStatisticsVisible() const;
+    void setScreenplayStatisticsVisible(bool _visible);
+    Q_SIGNAL void screenplayStatisticsVisibleChanged(bool _visible);
+
     const QString& header() const;
     void setHeader(const QString& _header);
     Q_SIGNAL void headerChanged(const QString& _header);

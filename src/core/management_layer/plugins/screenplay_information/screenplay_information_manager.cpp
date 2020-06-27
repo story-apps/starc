@@ -85,6 +85,7 @@ void ScreenplayInformationManager::setModel(BusinessLayer::AbstractModel* _model
         d->view->setSynopsisVisible(d->model->synopsisVisible());
         d->view->setOutlineVisible(d->model->outlineVisible());
         d->view->setScreenplayTextVisible(d->model->screenplayTextVisible());
+        d->view->setScreenplayStatisticsVisible(d->model->screenplayStatisticsVisible());
 
         connect(d->model, &BusinessLayer::ScreenplayInformationModel::nameChanged,
                 d->view, &Ui::ScreenplayInformationView::setName);
@@ -98,6 +99,8 @@ void ScreenplayInformationManager::setModel(BusinessLayer::AbstractModel* _model
                 d->view, &Ui::ScreenplayInformationView::setOutlineVisible);
         connect(d->model, &BusinessLayer::ScreenplayInformationModel::screenplayTextVisibleChanged,
                 d->view, &Ui::ScreenplayInformationView::setScreenplayTextVisible);
+        connect(d->model, &BusinessLayer::ScreenplayInformationModel::screenplayStatisticsVisibleChanged,
+                d->view, &Ui::ScreenplayInformationView::setScreenplayStatisticsVisible);
         //
         connect(d->view, &Ui::ScreenplayInformationView::nameChanged,
                 d->model, &BusinessLayer::ScreenplayInformationModel::setName);
@@ -111,6 +114,8 @@ void ScreenplayInformationManager::setModel(BusinessLayer::AbstractModel* _model
                 d->model, &BusinessLayer::ScreenplayInformationModel::setOutlineVisible);
         connect(d->view, &Ui::ScreenplayInformationView::screenplayTextVisibleChanged,
                 d->model, &BusinessLayer::ScreenplayInformationModel::setScreenplayTextVisible);
+        connect(d->view, &Ui::ScreenplayInformationView::screenplayStatisticsVisibleChanged,
+                d->model, &BusinessLayer::ScreenplayInformationModel::setScreenplayStatisticsVisible);
     }
 }
 

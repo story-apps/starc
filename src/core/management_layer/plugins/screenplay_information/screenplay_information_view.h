@@ -32,6 +32,9 @@ public:
     void setScreenplayTextVisible(bool _visible);
     Q_SIGNAL void screenplayTextVisibleChanged(bool _visible);
 
+    void setScreenplayStatisticsVisible(bool _visible);
+    Q_SIGNAL void screenplayStatisticsVisibleChanged(bool _visible);
+
 protected:
     /**
      * @brief Обновить переводы

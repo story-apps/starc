@@ -20,7 +20,8 @@ namespace {
      */
     const QHash<QString, QString> kEditorToNavigator
     = {{ "application/x-starc/editor/screenplay/text", "application/x-starc/navigator/screenplay/text-structure" },
-       { "application/x-starc/editor/screenplay/cards", "application/x-starc/navigator/screenplay/text-structure" }};
+       { "application/x-starc/editor/screenplay/cards", "application/x-starc/navigator/screenplay/text-structure" },
+       { "application/x-starc/editor/screenplay/statistics", "application/x-starc/navigator/screenplay/statistics-structure" }};
 
     /**
      * @brief Карта соответствия майм-типов документа к редакторам
@@ -35,7 +36,8 @@ namespace {
        { "application/x-starc/document/screenplay/outline", {{ "application/x-starc/editor/screenplay/outline", u8"\U000f09ed" },
                                                              { "application/x-starc/editor/screenplay/cards", u8"\U000f0554" }}},
        { "application/x-starc/document/screenplay/text", {{ "application/x-starc/editor/screenplay/text", u8"\U000f09ed" },
-                                                          { "application/x-starc/editor/screenplay/cards", u8"\U000f0554" }}}};
+                                                          { "application/x-starc/editor/screenplay/cards", u8"\U000f0554" }}},
+       { "application/x-starc/document/screenplay/statistics", {{ "application/x-starc/editor/screenplay/statistics", u8"\U000f0127" }}},};
 
     /**
       * @brief Карта соответсвий майм-типов навигаторов/редакторов к названиям библиотек с плагинами
@@ -45,7 +47,6 @@ namespace {
     const QHash<QString, QString> kMimeToPlugin
     = {{ "application/x-starc/editor/project/information", "*projectinformationplugin*" },
        //
-       { "application/x-starc/navigator/screenplay/text-structure", "*screenplaytextstructureplugin*" },
        { "application/x-starc/editor/screenplay/information", "*screenplayinformationplugin*" },
        { "application/x-starc/editor/screenplay/parameters", "*screenplayparametersplugin*" },
        { "application/x-starc/editor/screenplay/title-page", "*textplugin*" },
@@ -53,7 +54,10 @@ namespace {
        { "application/x-starc/editor/screenplay/outline", "*screenplayoutlineplugin*" },
        { "application/x-starc/editor/screenplay/outline-cards", "*screenplayoutlinecardsplugin*" },
        { "application/x-starc/editor/screenplay/text", "*screenplaytextplugin*" },
-       { "application/x-starc/editor/screenplay/cards", "*screenplaytextcardsplugin*" }};
+       { "application/x-starc/navigator/screenplay/text-structure", "*screenplaytextstructureplugin*" },
+       { "application/x-starc/editor/screenplay/cards", "*screenplaytextcardsplugin*" },
+       { "application/x-starc/editor/screenplay/statistics", "*screenplaystatisticsplugin*" },
+       { "application/x-starc/navigator/screenplay/statistics-structure", "*screenplaystatisticsstructureplugin*" }};
 }
 
 class ProjectPluginsBuilder::Implementation

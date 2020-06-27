@@ -9,6 +9,7 @@
 #include <business_layer/model/screenplay/screenplay_dictionaries_model.h>
 #include <business_layer/model/screenplay/screenplay_information_model.h>
 #include <business_layer/model/screenplay/screenplay_outline_model.h>
+#include <business_layer/model/screenplay/screenplay_statistics_model.h>
 #include <business_layer/model/screenplay/screenplay_synopsis_model.h>
 #include <business_layer/model/screenplay/screenplay_title_page_model.h>
 #include <business_layer/model/screenplay/text/screenplay_text_model.h>
@@ -107,6 +108,10 @@ BusinessLayer::AbstractModel* ProjectModelsFacade::modelFor(Domain::DocumentObje
                         [this, screenplayModel] (bool _visible) {
                    emit screenplayTextVisibilityChanged(screenplayModel, _visible);
                 });
+                connect(screenplayModel, &BusinessLayer::ScreenplayInformationModel::screenplayStatisticsVisibleChanged, this,
+                        [this, screenplayModel] (bool _visible) {
+                   emit screenplayStatisticsVisibilityChanged(screenplayModel, _visible);
+                });
 
                 model = screenplayModel;
                 break;
@@ -167,6 +172,11 @@ BusinessLayer::AbstractModel* ProjectModelsFacade::modelFor(Domain::DocumentObje
 
             case Domain::DocumentObjectType::ScreenplayDictionaries: {
                 model = new BusinessLayer::ScreenplayDictionariesModel;
+                break;
+            }
+
+            case Domain::DocumentObjectType::ScreenplayStatistics: {
+                model = new BusinessLayer::ScreenplayStatisticsModel;
                 break;
             }
 
