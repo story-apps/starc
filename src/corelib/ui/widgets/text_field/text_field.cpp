@@ -230,6 +230,7 @@ TextField::TextField(QWidget* _parent)
       d(new Implementation)
 {
     setAttribute(Qt::WA_Hover);
+    setContextMenuPolicy(Qt::CustomContextMenu);
     setFrameShape(QFrame::NoFrame);
     setWordWrapMode(QTextOption::WordWrap);
     setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
