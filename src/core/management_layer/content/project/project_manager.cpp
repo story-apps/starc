@@ -31,6 +31,7 @@
 
 #include <QDateTime>
 #include <QHBoxLayout>
+#include <QSet>
 #include <QStandardItemModel>
 #include <QUuid>
 #include <QVariantAnimation>
@@ -124,6 +125,7 @@ void ProjectManager::Implementation::updateNavigatorContextMenu(const QModelInde
 
     const auto currentItemIndex = projectStructureProxyModel->mapToSource(_index);
     const auto currentItem = projectStructureModel->itemForIndex(currentItemIndex);
+
     if (currentItem->type() == Domain::DocumentObjectType::RecycleBin) {
         if (currentItem->hasChildren()) {
             auto emptyRecicleBin = new QStandardItem(tr("Empty recycle bin"));
@@ -131,18 +133,26 @@ void ProjectManager::Implementation::updateNavigatorContextMenu(const QModelInde
             emptyRecicleBin->setData(static_cast<int>(ContextMenuAction::EmptyRecycleBin), Qt::UserRole);
             navigatorContextMenuModel->appendRow(emptyRecicleBin);
         }
-    } else {
-        auto addDocument = new QStandardItem(tr("Add document"));
-        addDocument->setData(u8"\U000f0415", Qt::DecorationRole);
-        addDocument->setData(static_cast<int>(ContextMenuAction::AddDocument), Qt::UserRole);
-        navigatorContextMenuModel->appendRow(addDocument);
+        return;
+    }
 
-        if (_index.isValid()) {
-            auto removeDocument = new QStandardItem(tr("Remove document"));
-            removeDocument->setData(u8"\U000f01b4", Qt::DecorationRole);
-            removeDocument->setData(static_cast<int>(ContextMenuAction::RemoveDocument), Qt::UserRole);
-            navigatorContextMenuModel->appendRow(removeDocument);
-        }
+
+    auto addDocument = new QStandardItem(tr("Add document"));
+    addDocument->setData(u8"\U000f0415", Qt::DecorationRole);
+    addDocument->setData(static_cast<int>(ContextMenuAction::AddDocument), Qt::UserRole);
+    navigatorContextMenuModel->appendRow(addDocument);
+
+    const QSet<Domain::DocumentObjectType> cantBeRemovedItems
+            = { Domain::DocumentObjectType::ScreenplayTitlePage,
+                Domain::DocumentObjectType::ScreenplaySynopsis,
+                Domain::DocumentObjectType::ScreenplayOutline,
+                Domain::DocumentObjectType::ScreenplayText,
+                Domain::DocumentObjectType::ScreenplayStatistics };
+    if (_index.isValid() && !cantBeRemovedItems.contains(currentItem->type())) {
+        auto removeDocument = new QStandardItem(tr("Remove document"));
+        removeDocument->setData(u8"\U000f01b4", Qt::DecorationRole);
+        removeDocument->setData(static_cast<int>(ContextMenuAction::RemoveDocument), Qt::UserRole);
+        navigatorContextMenuModel->appendRow(removeDocument);
     }
 }
 
