@@ -24,20 +24,36 @@ LocationsModel::LocationsModel(QObject* _parent)
 {
 }
 
-void LocationsModel::addLocationModel(LocationModel* _LocationModel)
+void LocationsModel::addLocationModel(LocationModel* _locationModel)
 {
-    if (_LocationModel->name().isEmpty()) {
+    if (_locationModel->name().isEmpty()) {
         return;
     }
 
-    if (d->locationModels.contains(_LocationModel)) {
+    if (d->locationModels.contains(_locationModel)) {
         return;
     }
 
     const int itemRowIndex = rowCount();
     beginInsertRows({}, itemRowIndex, itemRowIndex);
-    d->locationModels.append(_LocationModel);
-    emit endInsertRows();
+    d->locationModels.append(_locationModel);
+    endInsertRows();
+}
+
+void LocationsModel::removeLocationModel(LocationModel* _locationModel)
+{
+    if (_locationModel == nullptr) {
+        return;
+    }
+
+    if (!d->locationModels.contains(_locationModel)) {
+        return;
+    }
+
+    const int itemRowIndex = d->locationModels.indexOf(_locationModel);
+    beginRemoveRows({}, itemRowIndex, itemRowIndex);
+    d->locationModels.remove(itemRowIndex);
+    endRemoveRows();
 }
 
 void LocationsModel::createLocation(const QString& _name)

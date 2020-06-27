@@ -40,6 +40,22 @@ void CharactersModel::addCharacterModel(CharacterModel* _characterModel)
     emit endInsertRows();
 }
 
+void CharactersModel::removeCharacterModel(CharacterModel* _characterModel)
+{
+    if (_characterModel == nullptr) {
+        return;
+    }
+
+    if (!d->characterModels.contains(_characterModel)) {
+        return;
+    }
+
+    const int itemRowIndex = d->characterModels.indexOf(_characterModel);
+    beginRemoveRows({}, itemRowIndex, itemRowIndex);
+    d->characterModels.remove(itemRowIndex);
+    endRemoveRows();
+}
+
 void CharactersModel::createCharacter(const QString& _name)
 {
     if (_name.simplified().isEmpty()) {

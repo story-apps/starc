@@ -143,7 +143,10 @@ void ProjectManager::Implementation::updateNavigatorContextMenu(const QModelInde
     navigatorContextMenuModel->appendRow(addDocument);
 
     const QSet<Domain::DocumentObjectType> cantBeRemovedItems
-            = { Domain::DocumentObjectType::ScreenplayTitlePage,
+            = { Domain::DocumentObjectType::Project,
+                Domain::DocumentObjectType::Characters,
+                Domain::DocumentObjectType::Locations,
+                Domain::DocumentObjectType::ScreenplayTitlePage,
                 Domain::DocumentObjectType::ScreenplaySynopsis,
                 Domain::DocumentObjectType::ScreenplayOutline,
                 Domain::DocumentObjectType::ScreenplayText,

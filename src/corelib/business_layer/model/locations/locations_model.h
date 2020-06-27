@@ -20,9 +20,14 @@ public:
     ~LocationsModel() override;
 
     /**
-     * @brief Добавить модель персонажа
+     * @brief Добавить модель локации
      */
-    void addLocationModel(LocationModel* _LocationModel);
+    void addLocationModel(LocationModel* _locationModel);
+
+    /**
+     * @brief Удалить модель локации
+     */
+    void removeLocationModel(LocationModel* _locationModel);
 
     /**
      * @brief Создать локацию с заданным именем

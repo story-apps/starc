@@ -25,6 +25,11 @@ public:
     void addCharacterModel(CharacterModel* _characterModel);
 
     /**
+     * @brief Удалить модель персонажа
+     */
+    void removeCharacterModel(CharacterModel* _characterModel);
+
+    /**
      * @brief Создать персонажа с заданным именем
      */
     void createCharacter(const QString& _name);

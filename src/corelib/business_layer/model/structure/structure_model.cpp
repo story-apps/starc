@@ -413,10 +413,14 @@ Qt::ItemFlags StructureModel::flags(const QModelIndex& _index) const
     const auto item = itemForIndex(_index);
     switch (item->type()) {
         case Domain::DocumentObjectType::Project:
+        case Domain::DocumentObjectType::Characters:
+        case Domain::DocumentObjectType::Locations:
         case Domain::DocumentObjectType::RecycleBin: {
             return Qt::ItemIsEnabled | Qt::ItemIsSelectable | Qt::ItemIsDropEnabled;
         }
 
+        case Domain::DocumentObjectType::Character:
+        case Domain::DocumentObjectType::Location:
         case Domain::DocumentObjectType::Screenplay: {
             return Qt::ItemIsEnabled | Qt::ItemIsSelectable | Qt::ItemIsDragEnabled | Qt::ItemIsDropEnabled;
         }
