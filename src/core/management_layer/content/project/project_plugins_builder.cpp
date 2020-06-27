@@ -37,7 +37,7 @@ namespace {
                                                              { "application/x-starc/editor/screenplay/cards", u8"\U000f0554" }}},
        { "application/x-starc/document/screenplay/text", {{ "application/x-starc/editor/screenplay/text", u8"\U000f09ed" },
                                                           { "application/x-starc/editor/screenplay/cards", u8"\U000f0554" }}},
-       { "application/x-starc/document/screenplay/statistics", {{ "application/x-starc/editor/screenplay/statistics", u8"\U000f0127" }}},};
+       { "application/x-starc/document/screenplay/statistics", {{ "application/x-starc/editor/screenplay/statistics", u8"\U000f0127" }}}};
 
     /**
       * @brief Карта соответсвий майм-типов навигаторов/редакторов к названиям библиотек с плагинами
@@ -166,6 +166,32 @@ ProjectPluginsBuilder::~ProjectPluginsBuilder() = default;
 QVector<ProjectPluginsBuilder::EditorInfo> ProjectPluginsBuilder::editorsInfoFor(const QString& _documentMimeType) const
 {
     return kDocumentToEditors.value(_documentMimeType);
+}
+
+QString ProjectPluginsBuilder::editorDescription(const QString& _editorMimeType) const
+{
+    const QHash<QString, QString> descriptions
+            = {{ "application/x-starc/editor/project/information",
+                 QApplication::translate("ProjectPluginsBuilder", "Information about project") },
+               { "application/x-starc/editor/project/collaborators",
+                 QApplication::translate("ProjectPluginsBuilder", "Project collaborators") },
+               { "application/x-starc/editor/screenplay/information",
+                 QApplication::translate("ProjectPluginsBuilder", "Information about screenplay") },
+               { "application/x-starc/editor/screenplay/parameters",
+                 QApplication::translate("ProjectPluginsBuilder", "Screenplay parameters") },
+               { "application/x-starc/editor/screenplay/title-page",
+                 QApplication::translate("ProjectPluginsBuilder", "Title page text") },
+               { "application/x-starc/editor/text",
+                 QApplication::translate("ProjectPluginsBuilder", "Text") },
+               { "application/x-starc/editor/screenplay/outline",
+                 QApplication::translate("ProjectPluginsBuilder", "Outline text") },
+               { "application/x-starc/editor/screenplay/text",
+                 QApplication::translate("ProjectPluginsBuilder", "Screenplay text") },
+               { "application/x-starc/editor/screenplay/cards",
+                 QApplication::translate("ProjectPluginsBuilder", "Cards") },
+               { "application/x-starc/editor/screenplay/statistics",
+                 QApplication::translate("ProjectPluginsBuilder", "Statistics") }};
+    return descriptions.value(_editorMimeType);
 }
 
 QString ProjectPluginsBuilder::navigatorMimeTypeFor(const QString& _editorMimeType) const

@@ -34,10 +34,11 @@ void ProjectToolBar::clearViews()
     update();
 }
 
-void ProjectToolBar::addView(const QString& _mimeType, const QString& _icon, bool _isActive)
+void ProjectToolBar::addView(const QString& _mimeType, const QString& _icon, const QString& _tooltip, bool _isActive)
 {
     QAction* viewAction = new QAction(this);
     viewAction->setText(_icon);
+    viewAction->setToolTip(_tooltip);
     viewAction->setCheckable(true);
     viewAction->setChecked(_isActive);
     viewAction->setData(_mimeType);
@@ -59,6 +60,11 @@ QString ProjectToolBar::currentViewMimeType() const
     }
 
     return {};
+}
+
+void ProjectToolBar::updateTranslations()
+{
+    actions().at(0)->setToolTip(tr("Show main menu"));
 }
 
 void ProjectToolBar::designSystemChangeEvent(DesignSystemChangeEvent* _event)

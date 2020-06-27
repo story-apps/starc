@@ -36,6 +36,11 @@ public:
     QVector<EditorInfo> editorsInfoFor(const QString& _documentMimeType) const;
 
     /**
+     * @brief Получить описание редактора по заданному майм типу
+     */
+    QString editorDescription(const QString& _editorMimeType) const;
+
+    /**
      * @brief Получить майм-тип навигатора для заданного редактора
      * @note Если такого не существует, возвращается пустая строка
      */

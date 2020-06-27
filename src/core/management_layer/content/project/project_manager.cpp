@@ -351,8 +351,9 @@ ProjectManager::ProjectManager(QObject* _parent, QWidget* _parentWidget)
         d->toolBar->clearViews();
         const auto views = d->pluginsBuilder.editorsInfoFor(documentMimeType);
         for (auto view : views) {
+            const auto tooltip = d->pluginsBuilder.editorDescription(view.mimeType);
             const bool isActive = view.mimeType == views.first().mimeType;
-            d->toolBar->addView(view.mimeType, view.icon, isActive);
+            d->toolBar->addView(view.mimeType, view.icon, tooltip, isActive);
         }
 
         //

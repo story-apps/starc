@@ -29,6 +29,8 @@ public:
     void hidePopup();
 
 
+    QAction* undoAction = nullptr;
+    QAction* redoAction = nullptr;
     QAction* paragraphTypeAction = nullptr;
     QAction* fastFormatAction = nullptr;
     QAction* searchAction = nullptr;
@@ -119,13 +121,13 @@ ScreenplayTextEditToolBar::ScreenplayTextEditToolBar(QWidget* _parent)
     : FloatingToolBar(_parent),
       d(new Implementation(this))
 {
-    QAction* undoAction = new QAction;
-    undoAction->setIconText(u8"\U000f054c");
-    addAction(undoAction);
+    d->undoAction = new QAction;
+    d->undoAction->setIconText(u8"\U000f054c");
+    addAction(d->undoAction);
 
-    QAction* redoAction = new QAction;
-    redoAction->setIconText(u8"\U000f044e");
-    addAction(redoAction);
+    d->redoAction = new QAction;
+    d->redoAction->setIconText(u8"\U000f044e");
+    addAction(d->redoAction);
 
     d->paragraphTypeAction = new QAction;
     d->paragraphTypeAction->setText(tr("Scene heading"));
@@ -146,6 +148,7 @@ ScreenplayTextEditToolBar::ScreenplayTextEditToolBar(QWidget* _parent)
     d->fastFormatAction->setCheckable(true);
     d->fastFormatAction->setVisible(false);
     addAction(d->fastFormatAction);
+    connect(d->fastFormatAction, &QAction::toggled, this, &ScreenplayTextEditToolBar::updateTranslations);
 
     d->searchAction = new QAction;
     d->searchAction->setIconText(u8"\U000f0349");
@@ -158,6 +161,7 @@ ScreenplayTextEditToolBar::ScreenplayTextEditToolBar(QWidget* _parent)
     d->reviewAction->setCheckable(true);
     d->reviewAction->setVisible(false);
     addAction(d->reviewAction);
+    connect(d->reviewAction, &QAction::toggled, this, &ScreenplayTextEditToolBar::updateTranslations);
 
     d->expandToolBarAction = new QAction;
     d->expandToolBarAction->setIconText(u8"\U000f01d9");
@@ -197,6 +201,7 @@ ScreenplayTextEditToolBar::ScreenplayTextEditToolBar(QWidget* _parent)
         emit paragraphTypeChanged(_index);
     });
 
+    updateTranslations();
     designSystemChangeEvent(nullptr);
 }
 
@@ -265,7 +270,15 @@ void ScreenplayTextEditToolBar::focusOutEvent(QFocusEvent* _event)
 
 void ScreenplayTextEditToolBar::updateTranslations()
 {
-
+    d->undoAction->setToolTip(tr("Undo last action"));
+    d->redoAction->setToolTip(tr("Redo last action"));
+    d->paragraphTypeAction->setToolTip(tr("Current paragraph format"));
+    d->expandToolBarAction->setToolTip(tr("Show additional instruments"));
+    d->fastFormatAction->setToolTip(d->fastFormatAction->isChecked() ? tr("Hide fast format panel")
+                                                                     : tr("Show fast format panel"));
+    d->searchAction->setToolTip(tr("Search text"));
+    d->reviewAction->setToolTip(d->reviewAction->isChecked() ? tr("Disable review mode")
+                                                             : tr("Enable review mode"));
 }
 
 void ScreenplayTextEditToolBar::designSystemChangeEvent(DesignSystemChangeEvent* _event)
