@@ -241,7 +241,8 @@ void ProjectCard::paint(QPainter* _painter, const QStyleOptionGraphicsItem* _opt
     _painter->setPen(Ui::DesignSystem::color().onBackground());
     const QRectF loglineRect(pathRect.left(), pathRect.bottom() + Ui::DesignSystem::layout().px4(),
                              pathRect.width(), fontMetrics.lineSpacing() * 5);
-    _painter->drawText(loglineRect, Qt::AlignLeft | Qt::AlignTop | Qt::TextWordWrap, m_project.logline());
+    const QString text = TextHelper::elidedText(m_project.logline(), _painter->font(), loglineRect);
+    _painter->drawText(loglineRect, Qt::AlignLeft | Qt::AlignTop | Qt::TextWordWrap, text);
 
     //
     // Нижняя строка формируется в зависимости от того, наведена ли мышь на проект

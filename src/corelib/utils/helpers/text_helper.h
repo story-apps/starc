@@ -6,9 +6,8 @@
 
 class QChar;
 class QFont;
-class QSizeF;
+class QRectF;
 class QString;
-class QTextOption;
 
 
 /**
@@ -35,7 +34,12 @@ public:
      * @param option Параметры отображения
      * @return Размер прямоугольника.
      */
-    static qreal heightForWidth(const QString& _text, const QFont& _font, int _width);
+    static qreal heightForWidth(const QString& _text, const QFont& _font, qreal _width);
+
+    /**
+     * @brief Сформировать замноготоченный текст из исходного в рамках заданной области
+     */
+    static QString elidedText(const QString& _text, const QFont& _font, const QRectF& _rect);
 
     /**
      * @brief Преобразовать специфичные символы к html-виду

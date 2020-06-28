@@ -32,7 +32,7 @@ qreal TextHelper::fineLineSpacing(const QFont& _font)
     return metrics.lineSpacing() + platformDelta;
 }
 
-qreal TextHelper::heightForWidth(const QString& _text, const QFont& _font, int _width)
+qreal TextHelper::heightForWidth(const QString& _text, const QFont& _font, qreal _width)
 {
     const QFontMetricsF metrics(_font);
     const qreal lineHeight = qMax(0.0, metrics.leading()) + qCeil(metrics.height());
@@ -61,6 +61,62 @@ qreal TextHelper::heightForWidth(const QString& _text, const QFont& _font, int _
     textLayout.endLayout();
 
     return height;
+}
+
+QString TextHelper::elidedText(const QString& _text, const QFont& _font, const QRectF& _rect)
+{
+    const QFontMetricsF metrics(_font);
+    const qreal lineHeight = qMax(0.0, metrics.leading()) + qCeil(metrics.height());
+    qreal height = 0;
+
+    //
+    // Корректируем текст, чтобы QTextLayout смог сам обработать переносы строк
+    //
+    QString correctedText = _text;
+    correctedText.replace('\n', QChar::LineSeparator);
+
+    //
+    // Компануем текст и определяем текст, который влезает в заданную область
+    //
+    QString elidedText;
+    QTextLayout textLayout(correctedText, _font);
+    textLayout.beginLayout();
+    forever {
+        QTextLine line = textLayout.createLine();
+        if (!line.isValid()) {
+            break;
+        }
+
+        line.setLineWidth(_rect.width());
+        height += lineHeight;
+
+        //
+        // Если строка влезает, то оставляем её без изменений
+        //
+        if (height < _rect.height()) {
+            elidedText += _text.mid(line.textStart(), line.textLength());
+        }
+        //
+        // А если это последняя строка, то многоточим её
+        //
+        else {
+            //
+            // ... при этом берём не только влезающий текст, а чуть больше,
+            //     чтобы корректно обработать ситуацию длинного слова в конце строки
+            //
+            QString lastLine = _text.mid(line.textStart(), line.textLength() * 2);
+            lastLine += "…";
+            while (lastLine.length() > 1
+                   && metrics.horizontalAdvance(lastLine) > _rect.width()) {
+                lastLine.remove(lastLine.length() - 2, 1);
+            }
+            elidedText += lastLine;
+            break;
+        }
+    }
+    textLayout.endLayout();
+
+    return elidedText;
 }
 
 QString TextHelper::toHtmlEscaped(const QString& _text)
