@@ -37,6 +37,11 @@ public:
     void setScrollBarVisible(bool _visible);
 
     /**
+     * @brief Получить вертикальную полосу прокрутки виджета
+     */
+    QScrollBar* verticalScrollBar() const;
+
+    /**
      * @brief Включить/отключить возможность перетаскивания элементов
      */
     void setDragDropEnabled(bool _enabled);

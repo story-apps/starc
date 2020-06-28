@@ -81,6 +81,11 @@ void Tree::setScrollBarVisible(bool _visible)
     d->tree->setVerticalScrollBarPolicy(_visible ? Qt::ScrollBarAsNeeded : Qt::ScrollBarAlwaysOff);
 }
 
+QScrollBar* Tree::verticalScrollBar() const
+{
+    return d->tree->verticalScrollBar();
+}
+
 void Tree::setDragDropEnabled(bool _enabled)
 {
     d->tree->setAcceptDrops(_enabled);
