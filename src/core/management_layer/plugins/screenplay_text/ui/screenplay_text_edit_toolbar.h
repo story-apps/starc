@@ -34,17 +34,18 @@ public:
      */
     void setParagraphTypesEnabled(bool _enabled);
 
+    /**
+     * @brief Включена ли панель быстрого форматирования
+     */
+    bool isFastFormatPanelVisible() const;
+
 signals:
     void undoPressed();
     void redoPressed();
     void paragraphTypeChanged(const QModelIndex& _index);
+    void fastFormatPanelVisibleChanged(bool _visible);
 
 protected:
-    /**
-     * @brief Сворачиваем панель, при уходе мыши с неё
-     */
-    void leaveEvent(QEvent* _event) override;
-
     /**
      * @brief Скрываем попап, когда фокус ушёл из виджета
      */

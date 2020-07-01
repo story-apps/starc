@@ -146,7 +146,8 @@ void FloatingToolBar::setActionWidth(QAction* _action, int _width)
 
 int FloatingToolBar::actionWidth(QAction* _action) const
 {
-    if (!actions().contains(_action)) {
+    if (!actions().contains(_action)
+        || !_action->isVisible()) {
         return 0;
     }
 
@@ -168,6 +169,10 @@ QSize FloatingToolBar::sizeHint() const
         const QFontMetricsF fontMetrics(Ui::DesignSystem::font().body1());
         qreal width = 0.0;
         for (const auto action : actions()) {
+            if (!action->isVisible()) {
+                continue;
+            }
+
             if (!action->property(kActionWidthKey).isNull()) {
                 width += action->property(kActionWidthKey).toReal();
                 width -= Ui::DesignSystem::floatingToolBar().iconSize().width();

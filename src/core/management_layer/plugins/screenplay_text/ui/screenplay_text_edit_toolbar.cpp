@@ -36,9 +36,6 @@ public:
     QAction* searchAction = nullptr;
     QAction* reviewAction = nullptr;
 
-    QAction* expandToolBarAction = nullptr;
-    QVariantAnimation widthAnimation;
-
     bool isPopupShown = false;
     Card* popup = nullptr;
     Tree* popupContent = nullptr;
@@ -146,42 +143,24 @@ ScreenplayTextEditToolBar::ScreenplayTextEditToolBar(QWidget* _parent)
     d->fastFormatAction = new QAction;
     d->fastFormatAction->setIconText(u8"\U000f0328");
     d->fastFormatAction->setCheckable(true);
-    d->fastFormatAction->setVisible(false);
     addAction(d->fastFormatAction);
     connect(d->fastFormatAction, &QAction::toggled, this, &ScreenplayTextEditToolBar::updateTranslations);
+    connect(d->fastFormatAction, &QAction::toggled, this, &ScreenplayTextEditToolBar::fastFormatPanelVisibleChanged);
+    connect(d->fastFormatAction, &QAction::toggled, [this] (bool _checked) {
+        d->paragraphTypeAction->setVisible(!_checked);
+        designSystemChangeEvent(nullptr);
+    });
 
     d->searchAction = new QAction;
     d->searchAction->setIconText(u8"\U000f0349");
     d->searchAction->setCheckable(true);
-    d->searchAction->setVisible(false);
     addAction(d->searchAction);
 
     d->reviewAction = new QAction;
     d->reviewAction->setIconText(u8"\U000f0e31");
     d->reviewAction->setCheckable(true);
-    d->reviewAction->setVisible(false);
     addAction(d->reviewAction);
     connect(d->reviewAction, &QAction::toggled, this, &ScreenplayTextEditToolBar::updateTranslations);
-
-    d->expandToolBarAction = new QAction;
-    d->expandToolBarAction->setIconText(u8"\U000f01d9");
-    addAction(d->expandToolBarAction);
-    connect(d->expandToolBarAction, &QAction::triggered, this, [this] {
-        d->expandToolBarAction->setVisible(false);
-        d->fastFormatAction->setVisible(true);
-        d->searchAction->setVisible(true);
-        d->reviewAction->setVisible(true);
-
-        d->widthAnimation.stop();
-        d->widthAnimation.setDirection(QVariantAnimation::Forward);
-        d->widthAnimation.setEasingCurve(QEasingCurve::OutQuad);
-        d->widthAnimation.start();
-    });
-    d->widthAnimation.setDuration(120);
-    d->widthAnimation.setEasingCurve(QEasingCurve::OutQuad);
-    connect(&d->widthAnimation, &QVariantAnimation::valueChanged, this, [this] (const QVariant& _value) {
-        resize(_value.toInt(), height());
-    });
 
     connect(&d->popupHeightAnimation, &QVariantAnimation::valueChanged, this, [this] (const QVariant& _value) {
         const auto height = _value.toInt();
@@ -204,6 +183,8 @@ ScreenplayTextEditToolBar::ScreenplayTextEditToolBar(QWidget* _parent)
     updateTranslations();
     designSystemChangeEvent(nullptr);
 }
+
+ScreenplayTextEditToolBar::~ScreenplayTextEditToolBar() = default;
 
 void ScreenplayTextEditToolBar::setParagraphTypesModel(QAbstractItemModel* _model)
 {
@@ -239,25 +220,9 @@ void ScreenplayTextEditToolBar::setParagraphTypesEnabled(bool _enabled)
     d->paragraphTypeAction->setEnabled(_enabled);
 }
 
-ScreenplayTextEditToolBar::~ScreenplayTextEditToolBar() = default;
-
-void ScreenplayTextEditToolBar::leaveEvent(QEvent* _event)
+bool ScreenplayTextEditToolBar::isFastFormatPanelVisible() const
 {
-    FloatingToolBar::leaveEvent(_event);
-
-    if (d->expandToolBarAction->isVisible()) {
-        return;
-    }
-
-    d->expandToolBarAction->setVisible(true);
-    d->fastFormatAction->setVisible(false);
-    d->searchAction->setVisible(false);
-    d->reviewAction->setVisible(false);
-
-    d->widthAnimation.stop();
-    d->widthAnimation.setDirection(QVariantAnimation::Backward);
-    d->widthAnimation.setEasingCurve(QEasingCurve::InQuad);
-    d->widthAnimation.start();
+    return d->fastFormatAction->isChecked();
 }
 
 void ScreenplayTextEditToolBar::focusOutEvent(QFocusEvent* _event)
@@ -273,7 +238,6 @@ void ScreenplayTextEditToolBar::updateTranslations()
     d->undoAction->setToolTip(tr("Undo last action"));
     d->redoAction->setToolTip(tr("Redo last action"));
     d->paragraphTypeAction->setToolTip(tr("Current paragraph format"));
-    d->expandToolBarAction->setToolTip(tr("Show additional instruments"));
     d->fastFormatAction->setToolTip(d->fastFormatAction->isChecked() ? tr("Hide fast format panel")
                                                                      : tr("Show fast format panel"));
     d->searchAction->setToolTip(tr("Search text"));
@@ -289,33 +253,6 @@ void ScreenplayTextEditToolBar::designSystemChangeEvent(DesignSystemChangeEvent*
                    static_cast<int>(Ui::DesignSystem::treeOneLineItem().margins().left())
                    + d->popupContent->sizeHintForColumn(0)
                    + static_cast<int>(Ui::DesignSystem::treeOneLineItem().margins().right()));
-
-    const qreal additionalWidth = [this] {
-        const QFontMetricsF fontMetrics(Ui::DesignSystem::font().body1());
-        qreal width = 0.0;
-        for (const auto action : actions()) {
-            const auto actionCustomWidth = actionWidth(action);
-            if (actionCustomWidth > 0) {
-                width += actionCustomWidth;
-                width -= Ui::DesignSystem::floatingToolBar().iconSize().width();
-            }
-        }
-        return width;
-    }();
-    auto findWidth = [additionalWidth] (int _iconsSize) {
-        return Ui::DesignSystem::floatingToolBar().shadowMargins().left()
-                + Ui::DesignSystem::floatingToolBar().margins().left()
-                + Ui::DesignSystem::floatingToolBar().iconSize().width() * _iconsSize
-                + Ui::DesignSystem::floatingToolBar().spacing() * (_iconsSize - 1)
-                + Ui::DesignSystem::floatingToolBar().margins().right()
-                + Ui::DesignSystem::floatingToolBar().shadowMargins().right()
-                + additionalWidth;
-    };
-
-    const auto minimumWidth = findWidth(4);
-    const auto maximumWidth = findWidth(6);
-    d->widthAnimation.setStartValue(minimumWidth);
-    d->widthAnimation.setEndValue(maximumWidth);
 
     d->popup->setBackgroundColor(Ui::DesignSystem::color().primary());
     d->popupContent->setBackgroundColor(Ui::DesignSystem::color().primary());
