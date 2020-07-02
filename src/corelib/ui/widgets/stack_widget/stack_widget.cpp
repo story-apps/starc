@@ -138,6 +138,15 @@ QWidget* StackWidget::currentWidget() const
     return d->currentWidget;
 }
 
+QSize StackWidget::sizeHint() const
+{
+    if (d->currentWidget == nullptr) {
+        return {};
+    }
+
+    return d->currentWidget->sizeHint();
+}
+
 void StackWidget::paintEvent(QPaintEvent *_event)
 {
     Widget::paintEvent(_event);

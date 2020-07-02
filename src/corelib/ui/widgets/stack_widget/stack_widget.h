@@ -38,6 +38,11 @@ public:
      */
     QWidget* currentWidget() const;
 
+    /**
+     * @brief Определяем по желаемому размеру текущего виджета
+     */
+    QSize sizeHint() const override;
+
 protected:
     /**
      * @brief Реализуем собственную отрисовку для реализации эффекста смены текущего виджета

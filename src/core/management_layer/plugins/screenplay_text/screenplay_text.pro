@@ -49,6 +49,7 @@ HEADERS += \
     ui/screenplay_text_edit.h \
     ui/screenplay_text_edit_shortcuts_manager.h \
     ui/screenplay_text_edit_toolbar.h \
+    ui/screenplay_text_fast_format_widget.h \
     ui/screenplay_text_view.h
 
 SOURCES += \
@@ -78,6 +79,7 @@ SOURCES += \
     ui/screenplay_text_edit.cpp \
     ui/screenplay_text_edit_shortcuts_manager.cpp \
     ui/screenplay_text_edit_toolbar.cpp \
+    ui/screenplay_text_fast_format_widget.cpp \
     ui/screenplay_text_view.cpp
 
 RESOURCES += \

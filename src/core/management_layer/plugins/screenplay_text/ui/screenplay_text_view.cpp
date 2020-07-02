@@ -4,6 +4,7 @@
 #include "screenplay_text_edit.h"
 #include "screenplay_text_edit_shortcuts_manager.h"
 #include "screenplay_text_edit_toolbar.h"
+#include "screenplay_text_fast_format_widget.h"
 
 #include <business_layer/templates/screenplay_template.h>
 #include <business_layer/templates/screenplay_template_facade.h>
@@ -14,6 +15,9 @@
 #include <ui/design_system/design_system.h>
 #include <ui/widgets/floating_tool_bar/floating_tool_bar.h>
 #include <ui/widgets/scroll_bar/scroll_bar.h>
+#include <ui/widgets/shadow/shadow.h>
+#include <ui/widgets/splitter/splitter.h>
+#include <ui/widgets/stack_widget/stack_widget.h>
 #include <ui/widgets/text_edit/completer/completer.h>
 #include <ui/widgets/text_edit/page/page_metrics.h>
 #include <ui/widgets/text_edit/spell_check/spell_checker.h>
@@ -49,6 +53,11 @@ public:
      */
     void updateToolBarCurrentParagraphTypeName();
 
+    /**
+     * @brief Обновить видимость боковой панели (показана, если показана хотя бы одна из вложенных панелей)
+     */
+    void updateSideBarVisibility(QWidget* _container);
+
 
     ScreenplayTextEditToolBar* toolBar = nullptr;
     QHash<BusinessLayer::ScreenplayParagraphType, QString> typesToDisplayNames;
@@ -58,6 +67,12 @@ public:
     ScreenplayTextEdit* screenplayText = nullptr;
     ScreenplayTextEditShortcutsManager shortcutsManager;
     ScalableWrapper* scalableWrapper = nullptr;
+
+    Widget* sidebarWidget = nullptr;
+    StackWidget* sidebarContent = nullptr;
+    ScreenplayTextFastFormatWidget* fastFormatWidget = nullptr;
+
+    Splitter* splitter = nullptr;
 };
 
 ScreenplayTextView::Implementation::Implementation(QWidget* _parent)
@@ -65,9 +80,15 @@ ScreenplayTextView::Implementation::Implementation(QWidget* _parent)
       paragraphTypesModel(new QStandardItemModel(toolBar)),
       screenplayText(new ScreenplayTextEdit(_parent)),
       shortcutsManager(screenplayText),
-      scalableWrapper(new ScalableWrapper(screenplayText, _parent))
+      scalableWrapper(new ScalableWrapper(screenplayText, _parent)),
+      sidebarWidget(new Widget(_parent)),
+      sidebarContent(new StackWidget(_parent)),
+      fastFormatWidget(new ScreenplayTextFastFormatWidget(_parent)),
+      splitter(new Splitter(_parent))
+
 {
     toolBar->setParagraphTypesModel(paragraphTypesModel);
+    fastFormatWidget->setParagraphTypesModel(paragraphTypesModel);
 
     screenplayText->setVerticalScrollBar(new ScrollBar);
     screenplayText->setHorizontalScrollBar(new ScrollBar);
@@ -78,6 +99,8 @@ ScreenplayTextView::Implementation::Implementation(QWidget* _parent)
 
     screenplayText->setUsePageMode(true);
     screenplayText->setCursorWidth(DesignSystem::scaleFactor() * 4);
+
+    sidebarWidget->setVisible(false);
 }
 
 void ScreenplayTextView::Implementation::updateToolBarUi()
@@ -110,8 +133,24 @@ void ScreenplayTextView::Implementation::updateToolBarCurrentParagraphTypeName()
         const auto itemType = static_cast<BusinessLayer::ScreenplayParagraphType>(item->data(kTypeDataRole).toInt());
         if (itemType == paragraphType) {
             toolBar->setCurrentParagraphType(paragraphTypesModel->index(itemRow, 0));
+            fastFormatWidget->setCurrentParagraphType(paragraphTypesModel->index(itemRow, 0));
             return;
         }
+    }
+}
+
+void ScreenplayTextView::Implementation::updateSideBarVisibility(QWidget* _container)
+{
+    const bool isSidebarShouldBeVisible = toolBar->isFastFormatPanelVisible();
+    if (sidebarWidget->isVisible() == isSidebarShouldBeVisible) {
+        return;
+    }
+
+    sidebarWidget->setVisible(isSidebarShouldBeVisible);
+
+    if (isSidebarShouldBeVisible) {
+        const auto sideBarWidth = sidebarContent->sizeHint().width();
+        splitter->setSizes({ _container->width() - sideBarWidth, sideBarWidth });
     }
 }
 
@@ -125,17 +164,41 @@ ScreenplayTextView::ScreenplayTextView(QWidget* _parent)
 {
     setFocusProxy(d->scalableWrapper);
 
-    QVBoxLayout* layout = new QVBoxLayout;
+    QVBoxLayout* sidebarLayout = new QVBoxLayout(d->sidebarWidget);
+    sidebarLayout->setContentsMargins({});
+    sidebarLayout->setSpacing(0);
+    //
+    // TODO: добавить табы для переключения между разными панелями
+    //
+    sidebarLayout->addWidget(d->sidebarContent);
+
+    d->splitter->addWidget(d->scalableWrapper);
+    d->splitter->addWidget(d->sidebarWidget);
+
+    QVBoxLayout* layout = new QVBoxLayout(this);
     layout->setContentsMargins({});
     layout->setSpacing(0);
-    layout->addWidget(d->scalableWrapper);
-    setLayout(layout);
+    layout->addWidget(d->splitter);
 
     connect(d->toolBar, &ScreenplayTextEditToolBar::paragraphTypeChanged, this, [this] (const QModelIndex& _index) {
         const auto type = static_cast<BusinessLayer::ScreenplayParagraphType>( _index.data(kTypeDataRole).toInt());
         d->screenplayText->setCurrentParagraphType(type);
         d->scalableWrapper->setFocus();
     });
+    connect(d->toolBar, &ScreenplayTextEditToolBar::fastFormatPanelVisibleChanged, this, [this] (bool _visible) {
+        d->fastFormatWidget->setVisible(_visible);
+        if (_visible) {
+            d->sidebarContent->setCurrentWidget(d->fastFormatWidget);
+        }
+        d->updateSideBarVisibility(this);
+    });
+    //
+    connect(d->fastFormatWidget, &ScreenplayTextFastFormatWidget::paragraphTypeChanged, this, [this] (const QModelIndex& _index) {
+        const auto type = static_cast<BusinessLayer::ScreenplayParagraphType>( _index.data(kTypeDataRole).toInt());
+        d->screenplayText->setCurrentParagraphType(type);
+        d->scalableWrapper->setFocus();
+    });
+    //
     connect(d->screenplayText, &ScreenplayTextEdit::currentModelIndexChanged, this, &ScreenplayTextView::currentModelIndexChanged);
     connect(d->screenplayText, &ScreenplayTextEdit::paragraphTypeChanged, this, [this] {
         d->updateToolBarCurrentParagraphTypeName();
@@ -175,6 +238,7 @@ void ScreenplayTextView::reconfigure()
         }
 
         auto typeItem = new QStandardItem(d->typesToDisplayNames.value(type));
+        typeItem->setData(d->shortcutsManager.shortcut(type), Qt::WhatsThisRole);
         typeItem->setData(static_cast<int>(type), kTypeDataRole);
         d->paragraphTypesModel->appendRow(typeItem);
     }
@@ -282,6 +346,9 @@ void ScreenplayTextView::designSystemChangeEvent(DesignSystemChangeEvent* _event
     d->screenplayText->setPalette(palette);
     d->screenplayText->completer()->setTextColor(Ui::DesignSystem::color().onBackground());
     d->screenplayText->completer()->setBackgroundColor(Ui::DesignSystem::color().background());
+
+    d->splitter->setHandleColor(DesignSystem::color().primary());
+    d->splitter->setHandleWidth(1);
 }
 
 } // namespace Ui
