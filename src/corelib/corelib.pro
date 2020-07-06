@@ -94,6 +94,7 @@ SOURCES += \
     ui/widgets/splitter/splitter_handle.cpp \
     ui/widgets/stack_widget/stack_widget.cpp \
     ui/widgets/stepper/stepper.cpp \
+    ui/widgets/tab_bar/tab_bar.cpp \
     ui/widgets/task_bar/task_bar.cpp \
     ui/widgets/text_edit/base/base_text_edit.cpp \
     ui/widgets/text_edit/completer/completer.cpp \
@@ -128,6 +129,7 @@ SOURCES += \
     utils/helpers/dialog_helper.cpp \
     utils/helpers/extension_helper.cpp \
     utils/helpers/image_helper.cpp \
+    utils/helpers/scroller_helper.cpp \
     utils/helpers/string_helper.cpp \
     utils/helpers/text_helper.cpp \
     utils/helpers/quotes_helper.cpp \
@@ -212,6 +214,7 @@ HEADERS += \
     ui/widgets/splitter/splitter_handle.h \
     ui/widgets/stack_widget/stack_widget.h \
     ui/widgets/stepper/stepper.h \
+    ui/widgets/tab_bar/tab_bar.h \
     ui/widgets/task_bar/task_bar.h \
     ui/widgets/text_edit/base/base_text_edit.h \
     ui/widgets/text_edit/completer/completer.h \
@@ -250,6 +253,7 @@ HEADERS += \
     utils/helpers/dialog_helper.h \
     utils/helpers/extension_helper.h \
     utils/helpers/image_helper.h \
+    utils/helpers/scroller_helper.h \
     utils/helpers/string_helper.h \
     utils/helpers/text_helper.h \
     utils/helpers/quotes_helper.h \

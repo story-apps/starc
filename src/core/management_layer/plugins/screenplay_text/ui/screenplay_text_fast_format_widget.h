@@ -4,11 +4,9 @@
 
 class QAbstractItemModel;
 
+
 namespace Ui
 {
-
-class ScreenplayTextEdit;
-
 
 /**
  * @brief Панель быстрого форматирования сценария

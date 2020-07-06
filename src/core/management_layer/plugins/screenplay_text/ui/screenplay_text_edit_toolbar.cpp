@@ -161,6 +161,7 @@ ScreenplayTextEditToolBar::ScreenplayTextEditToolBar(QWidget* _parent)
     d->reviewAction->setCheckable(true);
     addAction(d->reviewAction);
     connect(d->reviewAction, &QAction::toggled, this, &ScreenplayTextEditToolBar::updateTranslations);
+    connect(d->reviewAction, &QAction::toggled, this, &ScreenplayTextEditToolBar::reviewModeEnabledChanged);
 
     connect(&d->popupHeightAnimation, &QVariantAnimation::valueChanged, this, [this] (const QVariant& _value) {
         const auto height = _value.toInt();
@@ -223,6 +224,11 @@ void ScreenplayTextEditToolBar::setParagraphTypesEnabled(bool _enabled)
 bool ScreenplayTextEditToolBar::isFastFormatPanelVisible() const
 {
     return d->fastFormatAction->isChecked();
+}
+
+bool ScreenplayTextEditToolBar::isReviewModeEnabled() const
+{
+    return d->reviewAction->isChecked();
 }
 
 void ScreenplayTextEditToolBar::focusOutEvent(QFocusEvent* _event)

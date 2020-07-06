@@ -32,8 +32,8 @@ StackWidget::Implementation::Implementation()
     fadeAnimation.setStartValue(0.0);
     fadeAnimation.setEndValue(1.0);
 
-    slideAnimation.setDuration(180);
-    slideAnimation.setEasingCurve(QEasingCurve::InOutQuad);
+    slideAnimation.setDuration(160);
+    slideAnimation.setEasingCurve(QEasingCurve::OutQuad);
 }
 
 const QAbstractAnimation& StackWidget::Implementation::currentAnimation() const
@@ -71,11 +71,18 @@ void StackWidget::setAnimationType(StackWidget::AnimationType _type)
     d->animationType = _type;
 }
 
+void StackWidget::addWidget(QWidget* _widget)
+{
+    if (!d->widgets.contains(_widget)) {
+        d->widgets.append(_widget);
+    }
+}
+
 StackWidget::~StackWidget() = default;
 
-void StackWidget::setCurrentWidget(QWidget *widget)
+void StackWidget::setCurrentWidget(QWidget *_widget)
 {
-    if (d->currentWidget == widget) {
+    if (d->currentWidget == _widget) {
         return;
     }
 
@@ -91,7 +98,7 @@ void StackWidget::setCurrentWidget(QWidget *widget)
     //
     // Устанавливаем новый виджет в качестве текущего
     //
-    d->currentWidget = widget;
+    d->currentWidget = _widget;
     if (!d->widgets.contains(d->currentWidget)) {
         d->widgets.append(d->currentWidget);
     }
@@ -140,11 +147,12 @@ QWidget* StackWidget::currentWidget() const
 
 QSize StackWidget::sizeHint() const
 {
-    if (d->currentWidget == nullptr) {
-        return {};
+    QSize sizeHint;
+    for (auto widget : d->widgets) {
+        sizeHint.setWidth(std::max(sizeHint.width(), widget->sizeHint().width()));
+        sizeHint.setHeight(std::max(sizeHint.height(), widget->sizeHint().height()));
     }
-
-    return d->currentWidget->sizeHint();
+    return sizeHint;
 }
 
 void StackWidget::paintEvent(QPaintEvent *_event)

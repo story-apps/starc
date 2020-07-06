@@ -1,6 +1,7 @@
 #include "screenplay_text_view.h"
 
 #include "screenplay_text_block_data.h"
+#include "screenplay_text_comments_widget.h"
 #include "screenplay_text_edit.h"
 #include "screenplay_text_edit_shortcuts_manager.h"
 #include "screenplay_text_edit_toolbar.h"
@@ -18,6 +19,7 @@
 #include <ui/widgets/shadow/shadow.h>
 #include <ui/widgets/splitter/splitter.h>
 #include <ui/widgets/stack_widget/stack_widget.h>
+#include <ui/widgets/tab_bar/tab_bar.h>
 #include <ui/widgets/text_edit/completer/completer.h>
 #include <ui/widgets/text_edit/page/page_metrics.h>
 #include <ui/widgets/text_edit/spell_check/spell_checker.h>
@@ -36,6 +38,9 @@ namespace Ui
 
 namespace {
     const int kTypeDataRole = Qt::UserRole + 100;
+
+    const int kFastFormatTabIndex = 0;
+    const int kCommentsTabIndex = 1;
 }
 
 class ScreenplayTextView::Implementation
@@ -69,8 +74,10 @@ public:
     ScalableWrapper* scalableWrapper = nullptr;
 
     Widget* sidebarWidget = nullptr;
+    TabBar* sidebarTabs = nullptr;
     StackWidget* sidebarContent = nullptr;
     ScreenplayTextFastFormatWidget* fastFormatWidget = nullptr;
+    ScreenplayTextCommentsWidget* commentsWidget = nullptr;
 
     Splitter* splitter = nullptr;
 };
@@ -82,13 +89,14 @@ ScreenplayTextView::Implementation::Implementation(QWidget* _parent)
       shortcutsManager(screenplayText),
       scalableWrapper(new ScalableWrapper(screenplayText, _parent)),
       sidebarWidget(new Widget(_parent)),
+      sidebarTabs(new TabBar(_parent)),
       sidebarContent(new StackWidget(_parent)),
       fastFormatWidget(new ScreenplayTextFastFormatWidget(_parent)),
+      commentsWidget(new ScreenplayTextCommentsWidget(_parent)),
       splitter(new Splitter(_parent))
 
 {
     toolBar->setParagraphTypesModel(paragraphTypesModel);
-    fastFormatWidget->setParagraphTypesModel(paragraphTypesModel);
 
     screenplayText->setVerticalScrollBar(new ScrollBar);
     screenplayText->setHorizontalScrollBar(new ScrollBar);
@@ -100,7 +108,19 @@ ScreenplayTextView::Implementation::Implementation(QWidget* _parent)
     screenplayText->setUsePageMode(true);
     screenplayText->setCursorWidth(DesignSystem::scaleFactor() * 4);
 
-    sidebarWidget->setVisible(false);
+    sidebarWidget->hide();
+    sidebarTabs->setFixed(true);
+    sidebarTabs->addTab({}); // fastformat
+    sidebarTabs->setTabVisible(kFastFormatTabIndex, false);
+    sidebarTabs->addTab({}); // comments
+    sidebarTabs->setTabVisible(kCommentsTabIndex, false);
+    sidebarContent->setSizePolicy(QSizePolicy::Preferred, QSizePolicy::Expanding);
+    sidebarContent->setAnimationType(StackWidget::AnimationType::Slide);
+    sidebarContent->addWidget(fastFormatWidget);
+    sidebarContent->addWidget(commentsWidget);
+    fastFormatWidget->hide();
+    fastFormatWidget->setParagraphTypesModel(paragraphTypesModel);
+    commentsWidget->hide();
 }
 
 void ScreenplayTextView::Implementation::updateToolBarUi()
@@ -141,7 +161,8 @@ void ScreenplayTextView::Implementation::updateToolBarCurrentParagraphTypeName()
 
 void ScreenplayTextView::Implementation::updateSideBarVisibility(QWidget* _container)
 {
-    const bool isSidebarShouldBeVisible = toolBar->isFastFormatPanelVisible();
+    const bool isSidebarShouldBeVisible = toolBar->isFastFormatPanelVisible()
+                                          || toolBar->isReviewModeEnabled();
     if (sidebarWidget->isVisible() == isSidebarShouldBeVisible) {
         return;
     }
@@ -167,9 +188,7 @@ ScreenplayTextView::ScreenplayTextView(QWidget* _parent)
     QVBoxLayout* sidebarLayout = new QVBoxLayout(d->sidebarWidget);
     sidebarLayout->setContentsMargins({});
     sidebarLayout->setSpacing(0);
-    //
-    // TODO: добавить табы для переключения между разными панелями
-    //
+    sidebarLayout->addWidget(d->sidebarTabs);
     sidebarLayout->addWidget(d->sidebarContent);
 
     d->splitter->addWidget(d->scalableWrapper);
@@ -186,11 +205,30 @@ ScreenplayTextView::ScreenplayTextView(QWidget* _parent)
         d->scalableWrapper->setFocus();
     });
     connect(d->toolBar, &ScreenplayTextEditToolBar::fastFormatPanelVisibleChanged, this, [this] (bool _visible) {
+        d->sidebarTabs->setTabVisible(kFastFormatTabIndex, _visible);
         d->fastFormatWidget->setVisible(_visible);
         if (_visible) {
+            d->sidebarTabs->setCurrentTab(kFastFormatTabIndex);
             d->sidebarContent->setCurrentWidget(d->fastFormatWidget);
         }
         d->updateSideBarVisibility(this);
+    });
+    connect(d->toolBar, &ScreenplayTextEditToolBar::reviewModeEnabledChanged, this, [this] (bool _enabled) {
+        d->sidebarTabs->setTabVisible(kCommentsTabIndex, _enabled);
+        d->commentsWidget->setVisible(_enabled);
+        if (_enabled) {
+            d->sidebarTabs->setCurrentTab(kCommentsTabIndex);
+            d->sidebarContent->setCurrentWidget(d->commentsWidget);
+        }
+        d->updateSideBarVisibility(this);
+    });
+    //
+    connect(d->sidebarTabs, &TabBar::currentIndexChanged, this, [this] (int _currentIndex) {
+        if (_currentIndex == kFastFormatTabIndex) {
+            d->sidebarContent->setCurrentWidget(d->fastFormatWidget);
+        } else {
+            d->sidebarContent->setCurrentWidget(d->commentsWidget);
+        }
     });
     //
     connect(d->fastFormatWidget, &ScreenplayTextFastFormatWidget::paragraphTypeChanged, this, [this] (const QModelIndex& _index) {
@@ -325,6 +363,8 @@ void ScreenplayTextView::updateTranslations()
                               { ScreenplayParagraphType::InlineNote, tr("Inline note") },
                               { ScreenplayParagraphType::UnformattedText, tr("Unformatted text") },
                               { ScreenplayParagraphType::FolderHeader, tr("Folder") }};
+    d->sidebarTabs->setTabName(kFastFormatTabIndex, tr("Formatting"));
+    d->sidebarTabs->setTabName(kCommentsTabIndex, tr("Comments"));
 }
 
 void ScreenplayTextView::designSystemChangeEvent(DesignSystemChangeEvent* _event)
@@ -349,6 +389,9 @@ void ScreenplayTextView::designSystemChangeEvent(DesignSystemChangeEvent* _event
 
     d->splitter->setHandleColor(DesignSystem::color().primary());
     d->splitter->setHandleWidth(1);
+    d->sidebarTabs->setTextColor(Ui::DesignSystem::color().onPrimary());
+    d->sidebarTabs->setBackgroundColor(Ui::DesignSystem::color().primary());
+
 }
 
 } // namespace Ui

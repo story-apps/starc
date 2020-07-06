@@ -32,172 +32,6 @@ class DesignSystemPrivate;
 class CORE_LIBRARY_EXPORT DesignSystem
 {
 public:
-    class Color;
-
-    /**
-     * @brief Параметры виджета таба
-     */
-    class TabPrivate;
-    class Tab
-    {
-    public:
-        ~Tab();
-
-        /**
-         * @brief Минимальная ширина
-         */
-        qreal minimumWidth() const;
-
-        /**
-         * @brief Высота
-         */
-        /** @{ */
-        qreal heightWithText() const;
-        qreal heightWithIcon() const;
-        qreal heightWithTextAndIcon() const;
-        /** @} */
-
-        /**
-         * @brief Отступы вокруг
-         */
-        QMarginsF margins() const;
-
-        /**
-         * @brief Размер иконки
-         */
-        QSizeF iconSize() const;
-
-    private:
-        explicit Tab(qreal _scaleFactor);
-        QScopedPointer<TabPrivate> d;
-        friend class DesignSystemPrivate;
-    };
-
-    // ****
-
-    /**
-     * @brief Параметры виджета вкладок
-     */
-    class TabsPrivate;
-    class Tabs
-    {
-    public:
-        ~Tabs();
-
-        /**
-         * @brief Отступ слева для случая, когда табы могут быть прокручены
-         */
-        qreal scrollableLeftMargin() const;
-
-        /**
-         * @brief Высота полоски под активным табом (входит в нижний отступ)
-         */
-        qreal underlineHeight() const;
-
-        /**
-         * @brief Шрифт
-         */
-        QFont font() const;
-
-    private:
-        explicit Tabs(qreal _scaleFactor);
-        QScopedPointer<TabsPrivate> d;
-        friend class DesignSystemPrivate;
-    };
-
-    // ****
-
-
-
-    /**
-     * @brief Параметры виджета выбора цвета
-     */
-    class ColorPickerPrivate;
-    class ColorPicker
-    {
-    public:
-        ~ColorPicker();
-
-        /**
-         * @brief Отступы
-         */
-        QMarginsF margins() const;
-
-        /**
-         * @brief Высота виджета
-         */
-        qreal height() const;
-
-        /**
-         * @brief Размер иконки с цветом
-         */
-        QSizeF iconSize() const;
-
-        /**
-         * @brief Отступ между соседними иконками
-         */
-        qreal iconsSpacing() const;
-
-        /**
-         * @brief Ширина линии обводки иконки
-         */
-        qreal iconBorderWidth() const;
-
-    private:
-        explicit ColorPicker(qreal _scaleFactor);
-        QScopedPointer<ColorPickerPrivate> d;
-        friend class DesignSystemPrivate;
-    };
-
-    /**
-     * @brief Параметры виджета текстового переключателя
-     */
-    class TextTogglePrivate;
-    class TextToggle
-    {
-    public:
-        ~TextToggle();
-
-        /**
-         * @brief Отступы вокруг
-         */
-        QMarginsF margins() const;
-
-        /**
-         * @brief Размер всего переключателя
-         */
-        QSizeF toggleSize() const;
-
-        /**
-         * @brief Радиус скругления переключателя
-         */
-        qreal toggleRadius() const;
-
-        /**
-         * @brief Отступ от текста до переключателя
-         */
-        qreal spacing() const;
-
-        /**
-         * @brief Отступ от края переключателя до рамки
-         */
-        qreal toggleSpacing() const;
-
-        /**
-         * @brief Шрифт текста
-         */
-        QFont font() const;
-
-    private:
-        explicit TextToggle(qreal _scaleFactor);
-        QScopedPointer<TextTogglePrivate> d;
-        friend class DesignSystemPrivate;
-    };
-
-
-
-
-
     /**
      * @brief Параметры цвета приложения
      * @link https://material.io/design/color/the-color-system.html
@@ -282,6 +116,9 @@ public:
         QScopedPointer<Implementation> d;
     };
 
+    /**
+     * @brief Параметры компоновки
+     */
     class CORE_LIBRARY_EXPORT Layout
     {
     public:
@@ -340,11 +177,9 @@ public:
         QScopedPointer<Implementation> d;
     };
 
-
     /**
      * @brief Параметры панели иструментов приложения
      */
-    class AppBarPrivate;
     class CORE_LIBRARY_EXPORT AppBar
     {
     public:
@@ -395,15 +230,12 @@ public:
          */
         QPointF shadowOffset() const;
 
-        /**
-         * @brief Шрифт
-         */
-        QFont font() const;
-
     private:
         explicit AppBar(qreal _scaleFactor);
-        QScopedPointer<AppBarPrivate> d;
         friend class DesignSystemPrivate;
+        //
+        class Implementation;
+        QScopedPointer<Implementation> d;
     };
 
     /**
@@ -832,6 +664,73 @@ public:
     };
 
     /**
+     * @brief Параметры вкладки
+     */
+    class CORE_LIBRARY_EXPORT Tab
+    {
+    public:
+        ~Tab();
+
+        /**
+         * @brief Минимальная ширина
+         */
+        qreal minimumWidth() const;
+
+        /**
+         * @brief Высота
+         */
+        /** @{ */
+        qreal heightWithText() const;
+        qreal heightWithIcon() const;
+        qreal heightWithTextAndIcon() const;
+        /** @} */
+
+        /**
+         * @brief Отступы вокруг
+         */
+        QMarginsF margins() const;
+
+        /**
+         * @brief Размер иконки
+         */
+        QSizeF iconSize() const;
+
+    private:
+        explicit Tab(qreal _scaleFactor);
+        friend class DesignSystemPrivate;
+        //
+        class Implementation;
+        QScopedPointer<Implementation> d;
+    };
+
+
+    /**
+     * @brief Параметры виджета вкладок
+     */
+    class CORE_LIBRARY_EXPORT TabBar
+    {
+    public:
+        ~TabBar();
+
+        /**
+         * @brief Отступ слева для случая, когда табы могут быть прокручены
+         */
+        qreal scrollableLeftMargin() const;
+
+        /**
+         * @brief Высота полоски под активным табом (входит в нижний отступ)
+         */
+        qreal underlineHeight() const;
+
+    private:
+        explicit TabBar(qreal _scaleFactor);
+        friend class DesignSystemPrivate;
+        //
+        class Implementation;
+        QScopedPointer<Implementation> d;
+    };
+
+    /**
      * @brief Параметры виджета пошагового переключения
      */
     class CORE_LIBRARY_EXPORT Stepper
@@ -1233,39 +1132,6 @@ public:
     static qreal elevationEndOpacity();
     /** @} */
 
-    /**
-     * @brief Параметры панели инструментов приложения
-     */
-    static const AppBar& appBar();
-
-    /**
-     * @brief Параметры виджета вкладки
-     */
-    static const Tab& tab();
-
-    /**
-     * @brief Параметры виджета вкладок
-     */
-    static const Tabs& tabs();
-
-    /**
-     * @brief Параметры виджета выбора цвета
-     */
-    static const ColorPicker& colorPicker();
-
-    /**
-     * @brief Параметры виджета переключателя с текстом
-     */
-    static const TextToggle& textToggle();
-
-    /**
-     * @brief Параметры виджета списка
-     */
-    static const Tree& tree();
-
-
-
-
 
     /**
      * @brief Параметры цвета приложения
@@ -1282,6 +1148,11 @@ public:
      * @brief Параметры компоновки
      */
     static const Layout& layout();
+
+    /**
+     * @brief Параметры панели инструментов приложения
+     */
+    static const AppBar& appBar();
 
     /**
      * @brief Параметры текстовой метки
@@ -1334,6 +1205,16 @@ public:
     static const FloatingToolBar& floatingToolBar();
 
     /**
+     * @brief Параметры виджета вкладки
+     */
+    static const Tab& tab();
+
+    /**
+     * @brief Параметры виджета вкладок
+     */
+    static const TabBar& tabBar();
+
+    /**
      * @brief Параметры виджета пошагового движения
      */
     static const Stepper& stepper();
@@ -1347,6 +1228,11 @@ public:
      * @brief Параметры однострочного элемента списка
      */
     static const TreeOneLineItem& treeOneLineItem();
+
+    /**
+     * @brief Параметры виджета списка
+     */
+    static const Tree& tree();
 
     /**
      * @brief Параметры виджета карточки

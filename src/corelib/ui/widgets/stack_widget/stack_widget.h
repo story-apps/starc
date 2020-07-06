@@ -29,9 +29,15 @@ public:
     void setAnimationType(AnimationType _type);
 
     /**
+     * @brief Добавить виджет в стек
+     * @note При этом виджет не делается текущим
+     */
+    void addWidget(QWidget* _widget);
+
+    /**
      * @brief Сделать заданный виджет текущим
      */
-    void setCurrentWidget(QWidget* widget);
+    void setCurrentWidget(QWidget* _widget);
 
     /**
      * @brief Получить текущий виджет

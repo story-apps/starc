@@ -39,11 +39,17 @@ public:
      */
     bool isFastFormatPanelVisible() const;
 
+    /**
+     * @brief Включён ли режим рецензирования
+     */
+    bool isReviewModeEnabled() const;
+
 signals:
     void undoPressed();
     void redoPressed();
     void paragraphTypeChanged(const QModelIndex& _index);
     void fastFormatPanelVisibleChanged(bool _visible);
+    void reviewModeEnabledChanged(bool _enabled);
 
 protected:
     /**
