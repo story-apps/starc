@@ -15,14 +15,19 @@ public:
     ~FloatingToolBar() override;
 
     /**
+     * @brief Установить ориентацию панели
+     */
+    void setOrientation(Qt::Orientation _orientation);
+
+    /**
      * @brief Задать ширину области для отрисовки действия
      */
-    void setActionWidth(QAction* _action, int _width);
+    void setActionCustomWidth(QAction* _action, int _width);
 
     /**
      * @brief Получишь ширину области для отрисовки действия
      */
-    int actionWidth(QAction* _action) const;
+    int actionCustomWidth(QAction* _action) const;
 
     /**
      * @brief Переопределяем, чтобы знать лучший размер

@@ -1,6 +1,7 @@
 #include "screenplay_text_view.h"
 
 #include "screenplay_text_block_data.h"
+#include "screenplay_text_comments_toolbar.h"
 #include "screenplay_text_comments_widget.h"
 #include "screenplay_text_edit.h"
 #include "screenplay_text_edit_shortcuts_manager.h"
@@ -69,6 +70,8 @@ public:
     BusinessLayer::ScreenplayParagraphType currentParagraphType = BusinessLayer::ScreenplayParagraphType::Undefined;
     QStandardItemModel* paragraphTypesModel = nullptr;
 
+    ScreenplayTextCommentsToolbar* commentsToolBar = nullptr;
+
     ScreenplayTextEdit* screenplayText = nullptr;
     ScreenplayTextEditShortcutsManager shortcutsManager;
     ScalableWrapper* scalableWrapper = nullptr;
@@ -85,6 +88,7 @@ public:
 ScreenplayTextView::Implementation::Implementation(QWidget* _parent)
     : toolBar(new ScreenplayTextEditToolBar(_parent)),
       paragraphTypesModel(new QStandardItemModel(toolBar)),
+      commentsToolBar(new ScreenplayTextCommentsToolbar(_parent)),
       screenplayText(new ScreenplayTextEdit(_parent)),
       shortcutsManager(screenplayText),
       scalableWrapper(new ScalableWrapper(screenplayText, _parent)),
@@ -97,6 +101,8 @@ ScreenplayTextView::Implementation::Implementation(QWidget* _parent)
 
 {
     toolBar->setParagraphTypesModel(paragraphTypesModel);
+
+    commentsToolBar->hide();
 
     screenplayText->setVerticalScrollBar(new ScrollBar);
     screenplayText->setHorizontalScrollBar(new ScrollBar);
@@ -130,6 +136,14 @@ void ScreenplayTextView::Implementation::updateToolBarUi()
     toolBar->setBackgroundColor(Ui::DesignSystem::color().primary());
     toolBar->setTextColor(Ui::DesignSystem::color().onPrimary());
     toolBar->raise();
+
+    commentsToolBar->move(QPointF(commentsToolBar->parentWidget()->width()
+                                  - commentsToolBar->width()
+                                  - Ui::DesignSystem::layout().px24(),
+                                  Ui::DesignSystem::layout().px24()).toPoint());
+    commentsToolBar->setBackgroundColor(Ui::DesignSystem::color().primary());
+    commentsToolBar->setTextColor(Ui::DesignSystem::color().onPrimary());
+    commentsToolBar->raise();
 }
 
 void ScreenplayTextView::Implementation::updateToolBarCurrentParagraphTypeName()
@@ -162,7 +176,7 @@ void ScreenplayTextView::Implementation::updateToolBarCurrentParagraphTypeName()
 void ScreenplayTextView::Implementation::updateSideBarVisibility(QWidget* _container)
 {
     const bool isSidebarShouldBeVisible = toolBar->isFastFormatPanelVisible()
-                                          || toolBar->isReviewModeEnabled();
+                                          || toolBar->isCommentsModeEnabled();
     if (sidebarWidget->isVisible() == isSidebarShouldBeVisible) {
         return;
     }
@@ -243,6 +257,14 @@ ScreenplayTextView::ScreenplayTextView(QWidget* _parent)
     });
     connect(d->screenplayText, &ScreenplayTextEdit::cursorPositionChanged, this, [this] {
         d->updateToolBarCurrentParagraphTypeName();
+    });
+    connect(d->screenplayText, &ScreenplayTextEdit::selectionChanged, this, [this] {
+        if (d->toolBar->isCommentsModeEnabled()
+            && d->screenplayText->textCursor().hasSelection()) {
+            d->commentsToolBar->showToolbar();
+        } else {
+            d->commentsToolBar->hideToolbar();
+        }
     });
 
     updateTranslations();
@@ -344,6 +366,10 @@ void ScreenplayTextView::resizeEvent(QResizeEvent* _event)
 
     d->toolBar->move(QPointF(Ui::DesignSystem::layout().px24(),
                              Ui::DesignSystem::layout().px24()).toPoint());
+    d->commentsToolBar->move(QPointF(width()
+                                     - d->commentsToolBar->width()
+                                     - Ui::DesignSystem::layout().px24(),
+                                     Ui::DesignSystem::layout().px24()).toPoint());
 }
 
 ScreenplayTextView::~ScreenplayTextView() = default;

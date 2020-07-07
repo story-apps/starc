@@ -42,7 +42,7 @@ public:
     /**
      * @brief Включён ли режим рецензирования
      */
-    bool isReviewModeEnabled() const;
+    bool isCommentsModeEnabled() const;
 
 signals:
     void undoPressed();

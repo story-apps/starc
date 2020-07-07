@@ -85,6 +85,7 @@ void AbstractLabel::paintEvent(QPaintEvent* _event)
     //
     painter.setFont(textFont());
     painter.setPen(textColor());
+    painter.setOpacity(isEnabled() ? 1.0 : Ui::DesignSystem::disabledTextOpacity());
     painter.drawText(contentsRect(), d->alignment | Qt::TextWordWrap, d->text);
 }
 
