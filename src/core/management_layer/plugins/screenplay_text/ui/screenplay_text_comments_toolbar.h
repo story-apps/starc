@@ -18,14 +18,19 @@ public:
     ~ScreenplayTextCommentsToolbar() override;
 
     /**
-     * @brief Отобразить диалог
+     * @brief Отобразить тулбар
      */
     void showToolbar();
 
     /**
-     * @brief Скрыть диалог
+     * @brief Скрыть тулбар
      */
     void hideToolbar();
+
+    /**
+     * @brief Сместить тулбар в заданную точку
+     */
+    void moveToolbar(const QPoint& _position);
 
 signals:
 

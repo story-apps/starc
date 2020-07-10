@@ -13,8 +13,8 @@
 
 namespace {
     const qreal kDefaultZoomRange = 1.;
-    const qreal kMinimumZoomRange = 0.5;
-    const qreal kMaximumZoomRange = 3.;
+    const qreal kMinimumZoomRange = 0.1;
+    const qreal kMaximumZoomRange = 10.;
 }
 
 
@@ -117,7 +117,7 @@ ScalableWrapper::ScalableWrapper(PageTextEdit* _editor, QWidget* _parent)
 
     if (auto editor = qobject_cast<CompleterTextEdit*>(d->editor.data())) {
         connect(editor, &CompleterTextEdit::popupShowed, [=] {
-            QPointF point = d->editorProxy->mapToScene(editor->completer()->popup()->pos());
+            const QPointF point = d->editorProxy->mapToScene(editor->completer()->popup()->pos());
             editor->completer()->popup()->move(mapToGlobal(mapFromScene(point)));
         });
     }
@@ -172,6 +172,12 @@ void ScalableWrapper::zoomIn()
 void ScalableWrapper::zoomOut()
 {
     setZoomRange(d->zoomRange - 0.1);
+}
+
+QPoint ScalableWrapper::mapFromEditor(const QPoint& _position) const
+{
+    const QPointF point = d->editorProxy->mapToScene(_position);
+    return mapFromScene(point);
 }
 
 bool ScalableWrapper::event(QEvent* _event)

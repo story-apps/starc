@@ -161,7 +161,7 @@ ScreenplayTextEditToolBar::ScreenplayTextEditToolBar(QWidget* _parent)
     d->commentsAction->setCheckable(true);
     addAction(d->commentsAction);
     connect(d->commentsAction, &QAction::toggled, this, &ScreenplayTextEditToolBar::updateTranslations);
-    connect(d->commentsAction, &QAction::toggled, this, &ScreenplayTextEditToolBar::reviewModeEnabledChanged);
+    connect(d->commentsAction, &QAction::toggled, this, &ScreenplayTextEditToolBar::commentsModeEnabledChanged);
 
     connect(&d->popupHeightAnimation, &QVariantAnimation::valueChanged, this, [this] (const QVariant& _value) {
         const auto height = _value.toInt();

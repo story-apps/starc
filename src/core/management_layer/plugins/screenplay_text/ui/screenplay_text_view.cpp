@@ -60,6 +60,11 @@ public:
     void updateToolBarCurrentParagraphTypeName();
 
     /**
+     * @brief Обновить видимость и положение панели инструментов рецензирования
+     */
+    void updateCommentsToolBar();
+
+    /**
      * @brief Обновить видимость боковой панели (показана, если показана хотя бы одна из вложенных панелей)
      */
     void updateSideBarVisibility(QWidget* _container);
@@ -137,13 +142,10 @@ void ScreenplayTextView::Implementation::updateToolBarUi()
     toolBar->setTextColor(Ui::DesignSystem::color().onPrimary());
     toolBar->raise();
 
-    commentsToolBar->move(QPointF(commentsToolBar->parentWidget()->width()
-                                  - commentsToolBar->width()
-                                  - Ui::DesignSystem::layout().px24(),
-                                  Ui::DesignSystem::layout().px24()).toPoint());
     commentsToolBar->setBackgroundColor(Ui::DesignSystem::color().primary());
     commentsToolBar->setTextColor(Ui::DesignSystem::color().onPrimary());
     commentsToolBar->raise();
+    updateCommentsToolBar();
 }
 
 void ScreenplayTextView::Implementation::updateToolBarCurrentParagraphTypeName()
@@ -173,6 +175,41 @@ void ScreenplayTextView::Implementation::updateToolBarCurrentParagraphTypeName()
     }
 }
 
+void ScreenplayTextView::Implementation::updateCommentsToolBar()
+{
+    if (!toolBar->isCommentsModeEnabled()
+        || !screenplayText->textCursor().hasSelection()) {
+        commentsToolBar->hideToolbar();
+        return;
+    }
+
+    //
+    // Определяем точку на границе страницы, либо если страница не влезает в экран, то с боку экрана
+    //
+    const int x = (screenplayText->width() - screenplayText->viewport()->width()) / 2
+                  + screenplayText->viewport()->width()
+                  - commentsToolBar->width();
+    const qreal textRight = scalableWrapper->mapFromEditor(QPoint(x, 0)).x();
+    const auto cursorRect = screenplayText->cursorRect();
+    const auto globalCursorCenter = screenplayText->mapToGlobal(cursorRect.center());
+    const auto localCursorCenter = commentsToolBar->parentWidget()->mapFromGlobal(globalCursorCenter);
+    //
+    // И смещаем панель рецензирования к этой точке
+    //
+    commentsToolBar->moveToolbar(
+                QPoint(std::min(scalableWrapper->width()
+                                - commentsToolBar->width()
+                                - Ui::DesignSystem::layout().px24(),
+                                textRight),
+                       localCursorCenter.y()
+                       - (commentsToolBar->height() / 3)));
+
+    //
+    // Если панель ещё не была показана, отобразим её
+    //
+    commentsToolBar->showToolbar();
+}
+
 void ScreenplayTextView::Implementation::updateSideBarVisibility(QWidget* _container)
 {
     const bool isSidebarShouldBeVisible = toolBar->isFastFormatPanelVisible()
@@ -198,6 +235,7 @@ ScreenplayTextView::ScreenplayTextView(QWidget* _parent)
       d(new Implementation(this))
 {
     setFocusProxy(d->scalableWrapper);
+    d->scalableWrapper->installEventFilter(this);
 
     QVBoxLayout* sidebarLayout = new QVBoxLayout(d->sidebarWidget);
     sidebarLayout->setContentsMargins({});
@@ -227,12 +265,13 @@ ScreenplayTextView::ScreenplayTextView(QWidget* _parent)
         }
         d->updateSideBarVisibility(this);
     });
-    connect(d->toolBar, &ScreenplayTextEditToolBar::reviewModeEnabledChanged, this, [this] (bool _enabled) {
+    connect(d->toolBar, &ScreenplayTextEditToolBar::commentsModeEnabledChanged, this, [this] (bool _enabled) {
         d->sidebarTabs->setTabVisible(kCommentsTabIndex, _enabled);
         d->commentsWidget->setVisible(_enabled);
         if (_enabled) {
             d->sidebarTabs->setCurrentTab(kCommentsTabIndex);
             d->sidebarContent->setCurrentWidget(d->commentsWidget);
+            d->updateCommentsToolBar();
         }
         d->updateSideBarVisibility(this);
     });
@@ -246,10 +285,20 @@ ScreenplayTextView::ScreenplayTextView(QWidget* _parent)
     });
     //
     connect(d->fastFormatWidget, &ScreenplayTextFastFormatWidget::paragraphTypeChanged, this, [this] (const QModelIndex& _index) {
-        const auto type = static_cast<BusinessLayer::ScreenplayParagraphType>( _index.data(kTypeDataRole).toInt());
+        const auto type = static_cast<BusinessLayer::ScreenplayParagraphType>(_index.data(kTypeDataRole).toInt());
         d->screenplayText->setCurrentParagraphType(type);
         d->scalableWrapper->setFocus();
     });
+    //
+    connect(d->scalableWrapper->verticalScrollBar(), &QScrollBar::valueChanged, this, [this] {
+        d->updateCommentsToolBar();
+    });
+    connect(d->scalableWrapper->horizontalScrollBar(), &QScrollBar::valueChanged, this, [this] {
+        d->updateCommentsToolBar();
+    });
+    connect(d->scalableWrapper, &ScalableWrapper::zoomRangeChanged, this, [this] {
+        d->updateCommentsToolBar();
+    }, Qt::QueuedConnection);
     //
     connect(d->screenplayText, &ScreenplayTextEdit::currentModelIndexChanged, this, &ScreenplayTextView::currentModelIndexChanged);
     connect(d->screenplayText, &ScreenplayTextEdit::paragraphTypeChanged, this, [this] {
@@ -259,12 +308,7 @@ ScreenplayTextView::ScreenplayTextView(QWidget* _parent)
         d->updateToolBarCurrentParagraphTypeName();
     });
     connect(d->screenplayText, &ScreenplayTextEdit::selectionChanged, this, [this] {
-        if (d->toolBar->isCommentsModeEnabled()
-            && d->screenplayText->textCursor().hasSelection()) {
-            d->commentsToolBar->showToolbar();
-        } else {
-            d->commentsToolBar->hideToolbar();
-        }
+        d->updateCommentsToolBar();
     });
 
     updateTranslations();
@@ -360,16 +404,22 @@ void ScreenplayTextView::setCursorPosition(int _position)
     d->screenplayText->ensureCursorVisible(cursor, false);
 }
 
+bool ScreenplayTextView::eventFilter(QObject* _target, QEvent* _event)
+{
+    if (_target == d->scalableWrapper && _event->type() == QEvent::Resize) {
+        QTimer::singleShot(0, this, [this] { d->updateCommentsToolBar(); });
+    }
+
+    return Widget::eventFilter(_target, _event);
+}
+
 void ScreenplayTextView::resizeEvent(QResizeEvent* _event)
 {
     Widget::resizeEvent(_event);
 
     d->toolBar->move(QPointF(Ui::DesignSystem::layout().px24(),
                              Ui::DesignSystem::layout().px24()).toPoint());
-    d->commentsToolBar->move(QPointF(width()
-                                     - d->commentsToolBar->width()
-                                     - Ui::DesignSystem::layout().px24(),
-                                     Ui::DesignSystem::layout().px24()).toPoint());
+    d->updateCommentsToolBar();
 }
 
 ScreenplayTextView::~ScreenplayTextView() = default;

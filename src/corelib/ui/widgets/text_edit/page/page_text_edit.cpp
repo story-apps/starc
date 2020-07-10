@@ -1766,7 +1766,7 @@ void PageTextEditPrivate::paintPagesView(QPainter *_painter)
     //
     auto currentPageTop = firstVisiblePageBottom - pageHeight;
     while (currentPageTop <= q->height()) {
-        const QRectF pageRect(0 - horizontalDelta, currentPageTop + m_pageSpacing, pageWidth, pageHeight);
+        const QRectF pageRect(0 - horizontalDelta, currentPageTop + m_pageSpacing / 2, pageWidth, pageHeight);
         const QRectF backgroundRect = pageRect.marginsRemoved(Ui::DesignSystem::card().shadowMargins().toMargins());
         const qreal borderRadius = Ui::DesignSystem::card().borderRadius();
 

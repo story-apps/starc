@@ -49,7 +49,7 @@ signals:
     void redoPressed();
     void paragraphTypeChanged(const QModelIndex& _index);
     void fastFormatPanelVisibleChanged(bool _visible);
-    void reviewModeEnabledChanged(bool _enabled);
+    void commentsModeEnabledChanged(bool _enabled);
 
 protected:
     /**

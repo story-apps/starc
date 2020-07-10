@@ -25,6 +25,11 @@ public:
      */
     void animateHide();
 
+    /**
+     * @brief Анимировать смещение
+     */
+    void animateMove(const QPoint& _from, const QPoint& _to);
+
 
     QAction* textColorAction = nullptr;
     QAction* backgroundColorAction = nullptr;
@@ -32,7 +37,9 @@ public:
     QAction* colorAction = nullptr;
 
     QVariantAnimation opacityAnimation;
+    QTimer hideTimer;
     QPixmap contentPixmap;
+    QVariantAnimation moveAnimation;
 };
 
 ScreenplayTextCommentsToolbar::Implementation::Implementation()
@@ -43,10 +50,16 @@ ScreenplayTextCommentsToolbar::Implementation::Implementation()
 {
     opacityAnimation.setDuration(220);
     opacityAnimation.setEasingCurve(QEasingCurve::OutQuad);
+    hideTimer.setSingleShot(true);
+    hideTimer.setInterval(opacityAnimation.duration());
+    moveAnimation.setDuration(420);
+    moveAnimation.setEasingCurve(QEasingCurve::OutQuad);
 }
 
 void ScreenplayTextCommentsToolbar::Implementation::animateShow()
 {
+    hideTimer.stop();
+
     opacityAnimation.setStartValue(0.0);
     opacityAnimation.setEndValue(1.0);
     opacityAnimation.start();
@@ -57,6 +70,23 @@ void ScreenplayTextCommentsToolbar::Implementation::animateHide()
     opacityAnimation.setStartValue(1.0);
     opacityAnimation.setEndValue(0.0);
     opacityAnimation.start();
+
+    hideTimer.start();
+}
+
+void ScreenplayTextCommentsToolbar::Implementation::animateMove(const QPoint& _from, const QPoint& _to)
+{
+    if (moveAnimation.state() == QVariantAnimation::Running) {
+        if (moveAnimation.endValue().toPoint() == _to) {
+            return;
+        } else {
+            moveAnimation.stop();
+        }
+    }
+
+    moveAnimation.setStartValue(_from);
+    moveAnimation.setEndValue(_to);
+    moveAnimation.start();
 }
 
 
@@ -82,6 +112,9 @@ ScreenplayTextCommentsToolbar::ScreenplayTextCommentsToolbar(QWidget* _parent)
     addAction(d->colorAction);
 
     connect(&d->opacityAnimation, &QVariantAnimation::valueChanged, this, [this] { update(); });
+    connect(&d->hideTimer, &QTimer::timeout, this, &Widget::hide);
+    connect(&d->moveAnimation, &QVariantAnimation::valueChanged, this,
+            [this] (const QVariant& _value) { move(_value.toPoint()); });
 
     updateTranslations();
     designSystemChangeEvent(nullptr);
@@ -93,7 +126,7 @@ void ScreenplayTextCommentsToolbar::showToolbar()
         return;
     }
 
-    if (qFuzzyCompare(d->opacityAnimation.endValue().toReal(), 1.0)) {
+    if (isVisible() && d->opacityAnimation.endValue().toReal() > 0.0) {
         return;
     }
 
@@ -115,13 +148,22 @@ void ScreenplayTextCommentsToolbar::hideToolbar()
         return;
     }
 
-    if (qFuzzyCompare(d->opacityAnimation.endValue().toReal(), 0.0)) {
+    if (d->opacityAnimation.endValue().toReal() < 1.0) {
         return;
     }
 
     d->contentPixmap = grab();
     d->animateHide();
-    QTimer::singleShot(d->opacityAnimation.duration(), this, &Widget::hide);
+}
+
+void ScreenplayTextCommentsToolbar::moveToolbar(const QPoint& _position)
+{
+    if (isHidden()) {
+        move(_position);
+        return;
+    }
+
+    d->animateMove(pos(), _position);
 }
 
 void ScreenplayTextCommentsToolbar::paintEvent(QPaintEvent* _event)
