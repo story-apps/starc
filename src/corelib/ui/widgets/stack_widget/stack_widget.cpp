@@ -1,5 +1,7 @@
 #include "stack_widget.h"
 
+#include <utils/tools/run_once.h>
+
 #include <QPainter>
 #include <QResizeEvent>
 #include <QVariantAnimation>
@@ -207,6 +209,11 @@ void StackWidget::resizeEvent(QResizeEvent *_event)
     }
 
     if (d->currentWidget->size() == _event->size()) {
+        return;
+    }
+
+    const auto canRun = RunOnce::tryRun(Q_FUNC_INFO);
+    if (!canRun) {
         return;
     }
 
