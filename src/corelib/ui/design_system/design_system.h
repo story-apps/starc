@@ -155,6 +155,11 @@ public:
         qreal px24() const;
 
         /**
+         * @brief Отступ в 24 пикселя
+         */
+        qreal px48() const;
+
+        /**
          * @brief Отступ в 62 пикселя
          */
         qreal px62() const;

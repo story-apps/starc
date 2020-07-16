@@ -413,6 +413,7 @@ public:
     qreal px12 = 12.0;
     qreal px16 = 16.0;
     qreal px24 = 24.0;
+    qreal px48 = 48.0;
     qreal px62 = 62.0;
     qreal topContentMargin = 116.0;
     qreal buttonsSpacing = 8.0;
@@ -426,6 +427,7 @@ DesignSystem::Layout::Implementation::Implementation(qreal _scaleFactor)
     px12 *= _scaleFactor;
     px16 *= _scaleFactor;
     px24 *= _scaleFactor;
+    px48 *= _scaleFactor;
     px62 *= _scaleFactor;
     topContentMargin *= _scaleFactor;
     buttonsSpacing *= _scaleFactor;
@@ -465,6 +467,11 @@ qreal DesignSystem::Layout::px16() const
 qreal DesignSystem::Layout::px24() const
 {
     return d->px24;
+}
+
+qreal DesignSystem::Layout::px48() const
+{
+    return d->px48;
 }
 
 qreal DesignSystem::Layout::px62() const
