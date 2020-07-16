@@ -20,6 +20,11 @@ public:
     QColor selectedColor() const;
     void setSelectedColor(const QColor& _color);
 
+    /**
+     * @brief Сами определяем идеальный размер для виджета
+     */
+    QSize sizeHint() const override;
+
 signals:
     /**
      * @brief Пользователь выбрал цвет
@@ -36,6 +41,11 @@ protected:
      * @brief Рисуем обводку вокруг цвета над которым находится курсор
      */
     void mouseMoveEvent(QMouseEvent* _event) override;
+
+    /**
+     * @brief Обрабатываем клики
+     */
+    void mousePressEvent(QMouseEvent* _event) override;
 
     /**
      * @brief При изменении дизайн системы, нужно перестроить палитру

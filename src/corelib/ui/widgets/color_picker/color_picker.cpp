@@ -3,6 +3,7 @@
 #include <ui/design_system/design_system.h>
 
 #include <QPainter>
+#include <QMouseEvent>
 
 
 class ColorPicker::Implementation
@@ -13,7 +14,13 @@ public:
      */
     void buildPalette();
 
+
     struct ColorItem {
+        bool operator== (const ColorItem& _other) const {
+            return color == _other.color
+                    && rect == _other.rect;
+        }
+
         QColor color;
         QRectF rect;
     };
@@ -22,6 +29,7 @@ public:
     QVector<QColor> customColors = {"#dfc123"};
     QRectF addCustomColorRect;
 };
+
 
 void ColorPicker::Implementation::buildPalette()
 {
@@ -190,6 +198,11 @@ void ColorPicker::setSelectedColor(const QColor& _color)
     update();
 }
 
+QSize ColorPicker::sizeHint() const
+{
+    return {};
+}
+
 void ColorPicker::paintEvent(QPaintEvent* _event)
 {
     Widget::paintEvent(_event);
@@ -210,6 +223,15 @@ void ColorPicker::paintEvent(QPaintEvent* _event)
         painter.setPen(Qt::NoPen);
         painter.setBrush(color.color);
         painter.drawEllipse(color.rect);
+
+        //
+        // Текущий
+        //
+        if (color == d->selectedColor) {
+            painter.setPen(backgroundColor());
+            painter.setFont(Ui::DesignSystem::font().iconsSmall());
+            painter.drawText(color.rect, Qt::AlignCenter, u8"\U000F0E1E");
+        }
 
         //
         // Под мышкой
@@ -256,6 +278,27 @@ void ColorPicker::mouseMoveEvent(QMouseEvent* _event)
     Widget::mouseMoveEvent(_event);
 
     update();
+}
+
+void ColorPicker::mousePressEvent(QMouseEvent* _event)
+{
+    if (d->addCustomColorRect.contains(_event->pos())) {
+
+        return;
+    }
+
+    for (const auto& color : d->colorsPalette) {
+        if (!color.rect.contains(_event->pos())) {
+            continue;
+        }
+
+        d->selectedColor = color;
+        emit colorSelected(color.color);
+
+        update();
+
+        break;
+    }
 }
 
 void ColorPicker::designSystemChangeEvent(DesignSystemChangeEvent* _event)
