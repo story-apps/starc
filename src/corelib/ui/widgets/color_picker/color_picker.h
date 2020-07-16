@@ -21,6 +21,11 @@ public:
     void setSelectedColor(const QColor& _color);
 
     /**
+     * @brief Добавить кастомный цвет
+     */
+    void addCustormColor(const QColor& _color);
+
+    /**
      * @brief Сами определяем идеальный размер для виджета
      */
     QSize sizeHint() const override;
@@ -30,6 +35,11 @@ signals:
      * @brief Пользователь выбрал цвет
      */
     void colorSelected(const QColor& _color);
+
+    /**
+     * @brief Пользователь хочет добавить кастомный цвет
+     */
+    void addCustomColorPressed();
 
 protected:
     /**

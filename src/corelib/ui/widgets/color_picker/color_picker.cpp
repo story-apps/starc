@@ -2,8 +2,17 @@
 
 #include <ui/design_system/design_system.h>
 
+#include <utils/helpers/color_helper.h>
+
 #include <QPainter>
 #include <QMouseEvent>
+#include <QSettings>
+
+
+namespace {
+    const QString kColorsKey = QLatin1String("widgets/color-picker/colors");
+    const QString kColorsSeparator = QLatin1String(";");
+}
 
 
 class ColorPicker::Implementation
@@ -26,7 +35,7 @@ public:
     };
     QVector<ColorItem> colorsPalette;
     ColorItem selectedColor;
-    QVector<QColor> customColors = {"#dfc123"};
+    QVector<QColor> customColors;
     QRectF addCustomColorRect;
 };
 
@@ -170,6 +179,13 @@ ColorPicker::ColorPicker(QWidget* _parent)
 {
     setMouseTracking(true);
 
+    QSettings settings;
+    const auto customColors = settings.value(kColorsKey).toString().split(kColorsKey,
+                                                                          QString::SkipEmptyParts);
+    for (const auto& color : customColors) {
+        d->customColors.append(color);
+    }
+
     designSystemChangeEvent(nullptr);
 }
 
@@ -195,6 +211,45 @@ void ColorPicker::setSelectedColor(const QColor& _color)
         break;
     }
 
+    update();
+}
+
+void ColorPicker::addCustormColor(const QColor& _color)
+{
+    //
+    // Если такой цвет уже есть, переместим его в конец
+    //
+    if (d->customColors.contains(_color)) {
+        d->customColors.move(d->customColors.indexOf(_color), d->customColors.size());
+    }
+    //
+    // Если же цвета не было, то добавим его в пределах допустимой нормы цветов
+    //
+    else {
+        const int maxColorsSize = 9;
+        if (d->customColors.size() == maxColorsSize) {
+            d->customColors.removeFirst();
+        }
+        d->customColors.append(_color);
+    }
+
+    //
+    // Сохраним цвета
+    //
+    QSettings settings;
+    const QString colorsValue = [colors = d->customColors] {
+        QString colorsText;
+        for (const auto& color : colors) {
+            colorsText.append(color.name() + kColorsSeparator);
+        }
+        return colorsText;
+    } ();
+    settings.setValue(kColorsKey, colorsValue);
+
+    //
+    // Обновим внешний вид
+    //
+    d->buildPalette();
     update();
 }
 
@@ -249,7 +304,7 @@ void ColorPicker::paintEvent(QPaintEvent* _event)
     // Разделитель между верхней и центральной
     //
     const QRectF dividerRect(0, Ui::DesignSystem::layout().px48(), width(), Ui::DesignSystem::scaleFactor());
-    painter.fillRect(dividerRect, textColor());
+    painter.fillRect(dividerRect, ColorHelper::transparent(textColor(), Ui::DesignSystem::disabledTextOpacity()));
 
     //
     // Кастомные цвета
@@ -283,7 +338,7 @@ void ColorPicker::mouseMoveEvent(QMouseEvent* _event)
 void ColorPicker::mousePressEvent(QMouseEvent* _event)
 {
     if (d->addCustomColorRect.contains(_event->pos())) {
-
+        emit addCustomColorPressed();
         return;
     }
 
@@ -305,5 +360,8 @@ void ColorPicker::designSystemChangeEvent(DesignSystemChangeEvent* _event)
 {
     Widget::designSystemChangeEvent(_event);
 
+    //
+    // При смене дизайн системы перестраиваем палитру, чтобы пересчитались кэши положений цветов
+    //
     d->buildPalette();
 }
