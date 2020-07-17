@@ -36,6 +36,11 @@ public:
 
 protected:
     /**
+     * @brief Задать цвет действия
+     */
+    void setActionColor(QAction* _action, const QColor& _color);
+
+    /**
      * @brief Переопределяем для отображения тултипов кнопок
      */
     bool event(QEvent *_event) override;

@@ -74,6 +74,9 @@ SOURCES += \
     ui/widgets/card/card.cpp \
     ui/widgets/check_box/check_box.cpp \
     ui/widgets/circular_progress_bar/circular_progress_bar.cpp \
+    ui/widgets/color_picker/color_2d_slider.cpp \
+    ui/widgets/color_picker/color_hue_slider.cpp \
+    ui/widgets/color_picker/color_palette.cpp \
     ui/widgets/color_picker/color_picker.cpp \
     ui/widgets/combo_box/combo_box.cpp \
     ui/widgets/context_menu/context_menu.cpp \
@@ -195,6 +198,9 @@ HEADERS += \
     ui/widgets/card/card.h \
     ui/widgets/check_box/check_box.h \
     ui/widgets/circular_progress_bar/circular_progress_bar.h \
+    ui/widgets/color_picker/color_2d_slider.h \
+    ui/widgets/color_picker/color_hue_slider.h \
+    ui/widgets/color_picker/color_palette.h \
     ui/widgets/color_picker/color_picker.h \
     ui/widgets/combo_box/combo_box.h \
     ui/widgets/context_menu/context_menu.h \

@@ -309,7 +309,7 @@ void ThemeDialog::designSystemChangeEvent(DesignSystemChangeEvent* _event)
 
     auto initColorLabel = [] (const QColor& _color, Widget* _label) {
         _label->setBackgroundColor(_color);
-        _label->setTextColor(ColorHelper::contrast(_color));
+        _label->setTextColor(ColorHelper::contrasted(_color));
     };
     initColorLabel(Ui::DesignSystem::color().primary(), d->primary);
     initColorLabel(Ui::DesignSystem::color().onPrimary(), d->onPrimary);

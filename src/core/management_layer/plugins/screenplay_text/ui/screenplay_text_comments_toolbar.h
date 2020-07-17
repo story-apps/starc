@@ -35,7 +35,15 @@ public:
 signals:
 
 protected:
+    /**
+     * @brief Добавим возможность анимированного отображения
+     */
     void paintEvent(QPaintEvent* _event) override;
+
+    /**
+     * @brief Скрываем попап, когда фокус ушёл из виджета
+     */
+    void focusOutEvent(QFocusEvent* _event) override;
 
     /**
      * @brief Обновить переводы

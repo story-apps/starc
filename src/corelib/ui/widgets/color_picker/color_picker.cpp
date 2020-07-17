@@ -1,172 +1,41 @@
 #include "color_picker.h"
 
+#include "color_2d_slider.h"
+#include "color_hue_slider.h"
+#include "color_palette.h"
+
 #include <ui/design_system/design_system.h>
 
-#include <utils/helpers/color_helper.h>
-
-#include <QPainter>
-#include <QMouseEvent>
-#include <QSettings>
+#include <ui/widgets/button/button.h>
 
 
-namespace {
-    const QString kColorsKey = QLatin1String("widgets/color-picker/colors");
-    const QString kColorsSeparator = QLatin1String(";");
-}
+#include <QVBoxLayout>
 
 
 class ColorPicker::Implementation
 {
 public:
-    /**
-     * @brief Сформировать палитру
-     */
-    void buildPalette();
+    explicit Implementation(QWidget* _parent);
 
-
-    struct ColorItem {
-        bool operator== (const ColorItem& _other) const {
-            return color == _other.color
-                    && rect == _other.rect;
-        }
-
-        QColor color;
-        QRectF rect;
-    };
-    QVector<ColorItem> colorsPalette;
-    ColorItem selectedColor;
-    QVector<QColor> customColors;
-    QRectF addCustomColorRect;
+    ColorPallete* colorPallete = nullptr;
+    Widget* customColorPanel = nullptr;
+    color_widgets::Color2DSlider* colorSlider = nullptr;
+    ColorHueSlider* colorHueSlider = nullptr;
+    Button* cancelButton = nullptr;
+    Button* addButton = nullptr;
 };
 
-
-void ColorPicker::Implementation::buildPalette()
+ColorPicker::Implementation::Implementation(QWidget* _parent)
+    : colorPallete(new ColorPallete(_parent)),
+      customColorPanel(new Widget(_parent)),
+      colorSlider(new color_widgets::Color2DSlider(_parent)),
+      colorHueSlider(new ColorHueSlider(_parent)),
+      cancelButton(new Button(_parent)),
+      addButton(new Button(_parent))
 {
-    colorsPalette.clear();
-
-    const int colorRectColumns = 10;
-    const QSizeF colorRectSize = { Ui::DesignSystem::layout().px24(),
-                                   Ui::DesignSystem::layout().px24() };
-    const qreal colorRectSpace = Ui::DesignSystem::layout().px4();
-
-    //
-    // Формируем первый ряд
-    //
-    int topMargin = Ui::DesignSystem::layout().px12();
-    int leftMargin = Ui::DesignSystem::layout().px12();
-    QList<QColor> colors;
-    colors << QColor("#000000")
-           << QColor("#434343")
-           << QColor("#666666")
-           << QColor("#999999")
-           << QColor("#B7B7B7")
-           << QColor("#CCCCCC")
-           << QColor("#D9D9D9")
-           << QColor("#EFEFEF")
-           << QColor("#F3F3F3")
-           << QColor("#FFFFFF");
-    for (int column = 0; column < colorRectColumns; ++column) {
-        QRectF colorRect;
-        colorRect.setLeft(leftMargin);
-        colorRect.setTop(topMargin);
-        colorRect.setSize(colorRectSize);
-
-        colorsPalette.append({ colors.at(column), colorRect });
-
-        leftMargin += colorRectSize.width() + colorRectSpace;
-    }
-    topMargin += colorRectSize.height() + Ui::DesignSystem::layout().px24();
-
-
-    //
-    // Остальные ряды
-    //
-    colors.clear();
-    colors << QColor("#FE0000")
-           << QColor("#FF7401")
-           << QColor("#FFD302")
-           << QColor("#A0ED00")
-           << QColor("#01CC01")
-           << QColor("#06E3E4")
-           << QColor("#0046F4")
-           << QColor("#4F18FF")
-           << QColor("#9706E7")
-           << QColor("#EC0085") // ****
-           << QColor("#FE3235")
-           << QColor("#FF9036")
-           << QColor("#FFDB34")
-           << QColor("#B3F134")
-           << QColor("#35D533")
-           << QColor("#44D0D1")
-           << QColor("#4174F0")
-           << QColor("#653EE0")
-           << QColor("#A048CF")
-           << QColor("#F22B9E") // ****
-           << QColor("#FF686A")
-           << QColor("#FFAC66")
-           << QColor("#FCE364")
-           << QColor("#C6F567")
-           << QColor("#65DF66")
-           << QColor("#77DDE0")
-           << QColor("#7293F4")
-           << QColor("#8964EF")
-           << QColor("#B74EED")
-           << QColor("#F35EB2") // ****
-           << QColor("#FF999C")
-           << QColor("#FFC79C")
-           << QColor("#FFEC99")
-           << QColor("#DAF798")
-           << QColor("#99EB99")
-           << QColor("#B2F0F1")
-           << QColor("#94B3F6")
-           << QColor("#B29BF5")
-           << QColor("#CF92F4")
-           << QColor("#FE8ACA") // ****
-           << QColor("#F4CCCC")
-           << QColor("#FCE5CD")
-           << QColor("#FFF2CC")
-           << QColor("#D9EAD3")
-           << QColor("#CAFFCA")
-           << QColor("#BEFEFF")
-           << QColor("#B2CEFF")
-           << QColor("#CFBDF8")
-           << QColor("#E3B6FF")
-           << QColor("#FFAADA");
-    const int colorRectRows = colors.size() / 10;
-    for (int row = 0; row < colorRectRows; ++row) {
-        leftMargin = Ui::DesignSystem::layout().px12();
-        for (int column = 0; column < colorRectColumns; ++column) {
-            QRectF colorRect;
-            colorRect.setLeft(leftMargin);
-            colorRect.setTop(topMargin);
-            colorRect.setSize(colorRectSize);
-
-            colorsPalette.append({ colors.at((row * colorRectColumns) + column), colorRect });
-
-            leftMargin += colorRectSize.width() + colorRectSpace;
-        }
-        topMargin += colorRectSize.height() + colorRectSpace;
-    }
-
-    topMargin += -colorRectSpace
-                 + Ui::DesignSystem::layout().px12()
-                 + Ui::DesignSystem::layout().px16()
-                 + Ui::DesignSystem::layout().px12();
-    leftMargin = Ui::DesignSystem::layout().px12();
-    for (const auto& color : customColors) {
-        QRectF colorRect;
-        colorRect.setLeft(leftMargin);
-        colorRect.setTop(topMargin);
-        colorRect.setSize(colorRectSize);
-
-        colorsPalette.append({ color, colorRect });
-
-        leftMargin += colorRectSize.width() + colorRectSpace;
-    }
-
-    addCustomColorRect.setLeft(leftMargin);
-    addCustomColorRect.setTop(topMargin);
-    addCustomColorRect.setSize(colorRectSize);
+    customColorPanel->hide();
+    cancelButton->setFocusPolicy(Qt::NoFocus);
+    addButton->setFocusPolicy(Qt::NoFocus);
 }
 
 
@@ -175,193 +44,78 @@ void ColorPicker::Implementation::buildPalette()
 
 ColorPicker::ColorPicker(QWidget* _parent)
     : Widget(_parent),
-      d(new Implementation)
+      d(new Implementation(this))
 {
-    setMouseTracking(true);
+    QHBoxLayout* buttonsLayout = new QHBoxLayout;
+    buttonsLayout->setContentsMargins({});
+    buttonsLayout->setSpacing(0);
+    buttonsLayout->addStretch();
+    buttonsLayout->addWidget(d->cancelButton);
+    buttonsLayout->addWidget(d->addButton);
 
-    QSettings settings;
-    const auto customColors = settings.value(kColorsKey).toString().split(kColorsKey,
-                                                                          QString::SkipEmptyParts);
-    for (const auto& color : customColors) {
-        d->customColors.append(color);
-    }
+    QVBoxLayout* customColorPanelLayout = new QVBoxLayout(d->customColorPanel);
+    customColorPanelLayout->setContentsMargins({});
+    customColorPanelLayout->setSpacing(0);
+    customColorPanelLayout->addWidget(d->colorSlider, 1);
+    customColorPanelLayout->addWidget(d->colorHueSlider);
+    customColorPanelLayout->addLayout(buttonsLayout);
 
+    QVBoxLayout* layout = new QVBoxLayout(this);
+    layout->setContentsMargins({});
+    layout->setSpacing(0);
+    layout->addWidget(d->colorPallete);
+    layout->addWidget(d->customColorPanel);
+
+    d->colorHueSlider->setHue(d->colorSlider->hue());
+
+    connect(d->colorPallete, &ColorPallete::colorSelected, this, &ColorPicker::colorSelected);
+    connect(d->colorPallete, &ColorPallete::addCustomColorPressed, this, [this] {
+        d->customColorPanel->show();
+    });
+    connect(d->colorHueSlider, &ColorHueSlider::hueChanged, this, [this] (qreal _hue) {
+        d->colorSlider->setHue(_hue);
+    });
+    connect(d->cancelButton, &Button::clicked, this, [this] {
+        d->customColorPanel->hide();
+    });
+    connect(d->addButton, &Button::clicked, this, [this] {
+        d->customColorPanel->hide();
+        d->colorPallete->addCustormColor(d->colorSlider->color());
+    });
+
+    updateTranslations();
     designSystemChangeEvent(nullptr);
 }
 
 ColorPicker::~ColorPicker() = default;
 
-QColor ColorPicker::selectedColor() const
+void ColorPicker::updateTranslations()
 {
-    return d->selectedColor.color;
-}
-
-void ColorPicker::setSelectedColor(const QColor& _color)
-{
-    if (d->selectedColor.color == _color) {
-        return;
-    }
-
-    for (const auto& color : d->colorsPalette) {
-        if (color.color != _color) {
-            continue;
-        }
-
-        d->selectedColor = color;
-        break;
-    }
-
-    update();
-}
-
-void ColorPicker::addCustormColor(const QColor& _color)
-{
-    //
-    // Если такой цвет уже есть, переместим его в конец
-    //
-    if (d->customColors.contains(_color)) {
-        d->customColors.move(d->customColors.indexOf(_color), d->customColors.size());
-    }
-    //
-    // Если же цвета не было, то добавим его в пределах допустимой нормы цветов
-    //
-    else {
-        const int maxColorsSize = 9;
-        if (d->customColors.size() == maxColorsSize) {
-            d->customColors.removeFirst();
-        }
-        d->customColors.append(_color);
-    }
-
-    //
-    // Сохраним цвета
-    //
-    QSettings settings;
-    const QString colorsValue = [colors = d->customColors] {
-        QString colorsText;
-        for (const auto& color : colors) {
-            colorsText.append(color.name() + kColorsSeparator);
-        }
-        return colorsText;
-    } ();
-    settings.setValue(kColorsKey, colorsValue);
-
-    //
-    // Обновим внешний вид
-    //
-    d->buildPalette();
-    update();
-}
-
-QSize ColorPicker::sizeHint() const
-{
-    return {};
-}
-
-void ColorPicker::paintEvent(QPaintEvent* _event)
-{
-    Widget::paintEvent(_event);
-
-    Q_UNUSED(_event);
-
-    QPainter painter( this );
-    painter.setRenderHint(QPainter::Antialiasing);
-
-    //
-    // Рисуем кружки с цветами
-    //
-    const QPoint mousePos = mapFromGlobal(QCursor::pos());
-    for (const auto& color : std::as_const(d->colorsPalette)) {
-        //
-        // Сам цвет
-        //
-        painter.setPen(Qt::NoPen);
-        painter.setBrush(color.color);
-        painter.drawEllipse(color.rect);
-
-        //
-        // Текущий
-        //
-        if (color == d->selectedColor) {
-            painter.setPen(backgroundColor());
-            painter.setFont(Ui::DesignSystem::font().iconsSmall());
-            painter.drawText(color.rect, Qt::AlignCenter, u8"\U000F0E1E");
-        }
-
-        //
-        // Под мышкой
-        //
-        if (color.rect.contains(mousePos)) {
-            const auto adjustSize = Ui::DesignSystem::layout().px2();
-            const auto borderRect = color.rect.adjusted(-adjustSize, -adjustSize, adjustSize, adjustSize);
-            painter.setBrush(Qt::NoBrush);
-            painter.setPen(QPen(color.color, 1.0 * Ui::DesignSystem::scaleFactor()));
-            painter.drawEllipse(borderRect);
-        }
-    }
-
-    //
-    // Разделитель между верхней и центральной
-    //
-    const QRectF dividerRect(0, Ui::DesignSystem::layout().px48(), width(), Ui::DesignSystem::scaleFactor());
-    painter.fillRect(dividerRect, ColorHelper::transparent(textColor(), Ui::DesignSystem::disabledTextOpacity()));
-
-    //
-    // Кастомные цвета
-    //
-    // ... заголовок
-    //
-    painter.setPen(QPen(textColor(), Ui::DesignSystem::layout().px2()));
-    painter.setBrush(Qt::NoBrush);
-    painter.setFont(Ui::DesignSystem::font().button());
-    const qreal otherColorsLabelTop = (12 + 24 + 12
-                                       + 12 + 24*5 + 4*4 + 12) * Ui::DesignSystem::scaleFactor();
-    const QRectF otherColorsLabelRect(Ui::DesignSystem::layout().px12(), otherColorsLabelTop,
-                                      width() - Ui::DesignSystem::layout().px24(), Ui::DesignSystem::layout().px16());
-    painter.drawText(otherColorsLabelRect, Qt::AlignLeft | Qt::AlignVCenter, tr("User colors"));
-    //
-    // ... кнопка добавления
-    //
-    const auto penWidth = painter.pen().widthF() / 2;
-    painter.drawEllipse(d->addCustomColorRect.adjusted(penWidth, penWidth, -penWidth, -penWidth));
-    painter.setFont(Ui::DesignSystem::font().iconsMid());
-    painter.drawText(d->addCustomColorRect, Qt::AlignCenter, u8"\U000F0415");
-}
-
-void ColorPicker::mouseMoveEvent(QMouseEvent* _event)
-{
-    Widget::mouseMoveEvent(_event);
-
-    update();
-}
-
-void ColorPicker::mousePressEvent(QMouseEvent* _event)
-{
-    if (d->addCustomColorRect.contains(_event->pos())) {
-        emit addCustomColorPressed();
-        return;
-    }
-
-    for (const auto& color : d->colorsPalette) {
-        if (!color.rect.contains(_event->pos())) {
-            continue;
-        }
-
-        d->selectedColor = color;
-        emit colorSelected(color.color);
-
-        update();
-
-        break;
-    }
+    d->cancelButton->setText(tr("Cancel"));
+    d->addButton->setText(tr("Add"));
 }
 
 void ColorPicker::designSystemChangeEvent(DesignSystemChangeEvent* _event)
 {
     Widget::designSystemChangeEvent(_event);
 
+    setBackgroundColor(Ui::DesignSystem::color().background());
+    layout()->setContentsMargins(Ui::DesignSystem::layout().px4(), Ui::DesignSystem::layout().px4(),
+                                 Ui::DesignSystem::layout().px4(), Ui::DesignSystem::layout().px4());
+
+    d->colorPallete->setBackgroundColor(Ui::DesignSystem::color().background());
+    d->colorPallete->setTextColor(Ui::DesignSystem::color().onBackground());
+
+    d->customColorPanel->setBackgroundColor(Ui::DesignSystem::color().background());
     //
-    // При смене дизайн системы перестраиваем палитру, чтобы пересчитались кэши положений цветов
+    d->colorSlider->setBackgroundColor(Ui::DesignSystem::color().background());
+    d->colorSlider->setTextColor(Ui::DesignSystem::color().onBackground());
+    d->colorHueSlider->setBackgroundColor(Ui::DesignSystem::color().background());
+    d->colorHueSlider->setTextColor(Ui::DesignSystem::color().onBackground());
+    d->colorHueSlider->setFixedHeight(Ui::DesignSystem::layout().px24());
     //
-    d->buildPalette();
+    d->addButton->setBackgroundColor(Ui::DesignSystem::color().secondary());
+    d->addButton->setTextColor(Ui::DesignSystem::color().secondary());
+    d->cancelButton->setBackgroundColor(Ui::DesignSystem::color().secondary());
+    d->cancelButton->setTextColor(Ui::DesignSystem::color().secondary());
 }

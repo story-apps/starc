@@ -28,5 +28,10 @@ public:
     /**
      * @brief Получить контрастный цвет к заданному
      */
-    static QColor contrast(const QColor& _color);
+    static QColor contrasted(const QColor& _color);
+
+    /**
+     * @brief Получить инвертированный цвет
+     */
+    static QColor inverted(const QColor& _color);
 };

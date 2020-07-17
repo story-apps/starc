@@ -49,6 +49,11 @@ public:
     QAction* lastPressedAction = nullptr;
 
     /**
+     * @brief Цвета иконок
+     */
+    QMap<const QAction*, QColor> actionToColor;
+
+    /**
      * @brief  Декорации иконки при клике
      */
     QVariantAnimation decorationRadiusAnimation;
@@ -212,6 +217,21 @@ QSize FloatingToolBar::sizeHint() const
     }
 }
 
+void FloatingToolBar::setActionColor(QAction* _action, const QColor& _color)
+{
+    if (!actions().contains(_action)) {
+        return;
+    }
+
+    if (_color.isValid()) {
+        d->actionToColor[_action] = _color;
+    } else {
+        d->actionToColor.remove(_action);
+    }
+
+    update();
+}
+
 bool FloatingToolBar::event(QEvent* _event)
 {
     if (_event->type() == QEvent::ToolTip) {
@@ -285,13 +305,20 @@ void FloatingToolBar::paintEvent(QPaintEvent* _event)
         //
         // Настроим цвет отрисовки действия
         //
-        painter.setPen(ColorHelper::transparent(
-                           action->isChecked()
-                           ? Ui::DesignSystem::color().secondary()
-                           : textColor(),
-                           action->isEnabled()
-                           ? 1.0
-                           : Ui::DesignSystem::disabledTextOpacity()));
+        const QColor penColor = [this, action] {
+            if (d->actionToColor.contains(action)) {
+                return d->actionToColor.value(action);
+            }
+
+            return ColorHelper::transparent(
+                        action->isChecked()
+                        ? Ui::DesignSystem::color().secondary()
+                        : textColor(),
+                        action->isEnabled()
+                        ? 1.0
+                        : Ui::DesignSystem::disabledTextOpacity());
+        } ();
+        painter.setPen(penColor);
 
         //
         // Рисуем действие с кастомной шириной
