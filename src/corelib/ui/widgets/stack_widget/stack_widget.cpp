@@ -212,12 +212,12 @@ void StackWidget::resizeEvent(QResizeEvent *_event)
         return;
     }
 
+    d->currentWidget->resize(_event->size());
+
     const auto canRun = RunOnce::tryRun(Q_FUNC_INFO);
     if (!canRun) {
         return;
     }
-
-    d->currentWidget->resize(_event->size());
 
     //
     // Если изменение размера виджета происходит в момент анимации,
