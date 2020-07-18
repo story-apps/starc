@@ -9,12 +9,12 @@ namespace BusinessLayer
 /**
  * @brief Модель
  */
-class CORE_LIBRARY_EXPORT ScreenplayOutlineModel : public AbstractModel
+class CORE_LIBRARY_EXPORT ScreenplayTreatmentModel : public AbstractModel
 {
     Q_OBJECT
 
 public:
-    explicit ScreenplayOutlineModel(QObject* _parent = nullptr);
+    explicit ScreenplayTreatmentModel(QObject* _parent = nullptr);
 
 protected:
     /**

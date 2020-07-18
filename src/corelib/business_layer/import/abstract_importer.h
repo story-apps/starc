@@ -24,7 +24,7 @@ public:
         QString name;
         QString titlePage;
         QString synopsis;
-        QString outline;
+        QString treatment;
         QString text;
     };
 

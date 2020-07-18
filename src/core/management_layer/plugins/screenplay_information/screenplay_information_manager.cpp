@@ -83,7 +83,7 @@ void ScreenplayInformationManager::setModel(BusinessLayer::AbstractModel* _model
         d->view->setLogline(d->model->logline());
         d->view->setTitlePageVisible(d->model->titlePageVisible());
         d->view->setSynopsisVisible(d->model->synopsisVisible());
-        d->view->setOutlineVisible(d->model->outlineVisible());
+        d->view->setTreatmentVisible(d->model->treatmentVisible());
         d->view->setScreenplayTextVisible(d->model->screenplayTextVisible());
         d->view->setScreenplayStatisticsVisible(d->model->screenplayStatisticsVisible());
 
@@ -95,8 +95,8 @@ void ScreenplayInformationManager::setModel(BusinessLayer::AbstractModel* _model
                 d->view, &Ui::ScreenplayInformationView::setTitlePageVisible);
         connect(d->model, &BusinessLayer::ScreenplayInformationModel::synopsisVisibleChanged,
                 d->view, &Ui::ScreenplayInformationView::setSynopsisVisible);
-        connect(d->model, &BusinessLayer::ScreenplayInformationModel::outlineVisibleChanged,
-                d->view, &Ui::ScreenplayInformationView::setOutlineVisible);
+        connect(d->model, &BusinessLayer::ScreenplayInformationModel::treatmentVisibleChanged,
+                d->view, &Ui::ScreenplayInformationView::setTreatmentVisible);
         connect(d->model, &BusinessLayer::ScreenplayInformationModel::screenplayTextVisibleChanged,
                 d->view, &Ui::ScreenplayInformationView::setScreenplayTextVisible);
         connect(d->model, &BusinessLayer::ScreenplayInformationModel::screenplayStatisticsVisibleChanged,
@@ -110,8 +110,8 @@ void ScreenplayInformationManager::setModel(BusinessLayer::AbstractModel* _model
                 d->model, &BusinessLayer::ScreenplayInformationModel::setTitlePageVisible);
         connect(d->view, &Ui::ScreenplayInformationView::synopsisVisibleChanged,
                 d->model, &BusinessLayer::ScreenplayInformationModel::setSynopsisVisible);
-        connect(d->view, &Ui::ScreenplayInformationView::outlineVisibleChanged,
-                d->model, &BusinessLayer::ScreenplayInformationModel::setOutlineVisible);
+        connect(d->view, &Ui::ScreenplayInformationView::treatmentVisibleChanged,
+                d->model, &BusinessLayer::ScreenplayInformationModel::setTreatmentVisible);
         connect(d->view, &Ui::ScreenplayInformationView::screenplayTextVisibleChanged,
                 d->model, &BusinessLayer::ScreenplayInformationModel::setScreenplayTextVisible);
         connect(d->view, &Ui::ScreenplayInformationView::screenplayStatisticsVisibleChanged,

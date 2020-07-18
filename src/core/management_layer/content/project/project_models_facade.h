@@ -88,7 +88,7 @@ signals:
     /** @{ */
     void screenplayTitlePageVisibilityChanged(BusinessLayer::AbstractModel* _screenplayModel, bool _visible);
     void screenplaySynopsisVisibilityChanged(BusinessLayer::AbstractModel* _screenplayModel, bool _visible);
-    void screenplayOutlineVisibilityChanged(BusinessLayer::AbstractModel* _screenplayModel, bool _visible);
+    void screenplayTreatmentVisibilityChanged(BusinessLayer::AbstractModel* _screenplayModel, bool _visible);
     void screenplayTextVisibilityChanged(BusinessLayer::AbstractModel* _screenplayModel, bool _visible);
     void screenplayStatisticsVisibilityChanged(BusinessLayer::AbstractModel* _screenplayModel, bool _visible);
     /** @} */

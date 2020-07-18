@@ -34,7 +34,7 @@ enum class DocumentObjectType {
     Screenplay = 10100,
     ScreenplayTitlePage = 10101,
     ScreenplaySynopsis = 10102,
-    ScreenplayOutline = 10103,
+    ScreenplayTreatment = 10103,
     ScreenplayText = 10104,
     ScreenplayDictionaries = 10105,
     ScreenplayStatistics = 10106,

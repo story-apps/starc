@@ -148,7 +148,7 @@ void ProjectManager::Implementation::updateNavigatorContextMenu(const QModelInde
                 Domain::DocumentObjectType::Locations,
                 Domain::DocumentObjectType::ScreenplayTitlePage,
                 Domain::DocumentObjectType::ScreenplaySynopsis,
-                Domain::DocumentObjectType::ScreenplayOutline,
+                Domain::DocumentObjectType::ScreenplayTreatment,
                 Domain::DocumentObjectType::ScreenplayText,
                 Domain::DocumentObjectType::ScreenplayStatistics };
     if (_index.isValid() && !cantBeRemovedItems.contains(currentItem->type())) {
@@ -498,10 +498,10 @@ ProjectManager::ProjectManager(QObject* _parent, QWidget* _parentWidget)
     {
         setDocumentVisible(_screenplayModel, Domain::DocumentObjectType::ScreenplaySynopsis, _visible);
     });
-    connect(&d->modelsFacade, &ProjectModelsFacade::screenplayOutlineVisibilityChanged, this,
+    connect(&d->modelsFacade, &ProjectModelsFacade::screenplayTreatmentVisibilityChanged, this,
             [setDocumentVisible] (BusinessLayer::AbstractModel* _screenplayModel, bool _visible)
     {
-        setDocumentVisible(_screenplayModel, Domain::DocumentObjectType::ScreenplayOutline, _visible);
+        setDocumentVisible(_screenplayModel, Domain::DocumentObjectType::ScreenplayTreatment, _visible);
     });
     connect(&d->modelsFacade, &ProjectModelsFacade::screenplayTextVisibilityChanged, this,
             [setDocumentVisible] (BusinessLayer::AbstractModel* _screenplayModel, bool _visible)
@@ -649,7 +649,7 @@ void ProjectManager::saveChanges()
 }
 
 void ProjectManager::addScreenplay(const QString& _name, const QString& _titlePage,
-    const QString& _synopsis, const QString& _outline, const QString& _text)
+    const QString& _synopsis, const QString& _treatment, const QString& _text)
 {
     //
     // ATTENTION: Копипаста из StructureModel, быть внимательным при обновлении
@@ -671,8 +671,8 @@ void ProjectManager::addScreenplay(const QString& _name, const QString& _titlePa
                                                     tr("Title page")), screenplayItem, _titlePage);
     d->projectStructureModel->appendItem(createItem(DocumentObjectType::ScreenplaySynopsis,
                                                     tr("Synopsis")), screenplayItem, _synopsis);
-    d->projectStructureModel->appendItem(createItem(DocumentObjectType::ScreenplayOutline,
-                                                    tr("Outline")), screenplayItem, _outline);
+    d->projectStructureModel->appendItem(createItem(DocumentObjectType::ScreenplayTreatment,
+                                                    tr("Treatment")), screenplayItem, _treatment);
     d->projectStructureModel->appendItem(createItem(DocumentObjectType::ScreenplayText,
                                                     tr("Screenplay")), screenplayItem, _text);
 }

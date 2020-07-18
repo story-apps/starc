@@ -117,7 +117,7 @@ void ImportManager::Implementation::import(const BusinessLayer::ImportOptions& _
     const auto screenplays = importer->importScreenplays(_options);
     for (const auto& screenplay : screenplays) {
         emit q->screenplayImported(screenplay.name, screenplay.titlePage, screenplay.synopsis,
-            screenplay.outline, screenplay.text);
+            screenplay.treatment, screenplay.text);
     }
 }
 

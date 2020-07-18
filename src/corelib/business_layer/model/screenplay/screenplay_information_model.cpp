@@ -20,7 +20,7 @@ namespace {
     const QString kLoglineKey = "logline";
     const QString kTitlePageVisibleKey = "title_page_visible";
     const QString kSynopsisVisibleKey = "synopsis_visible";
-    const QString kOutlineVisibleKey = "outline_visible";
+    const QString kTreatmentVisibleKey = "treatment_visible";
     const QString kScreenplayTextVisibleKey = "screenplay_text_visible";
     const QString kScreenplayStatisticsVisibleKey = "screenplay_statistics_visible";
     const QString kHeaderKey = "header";
@@ -38,7 +38,7 @@ public:
     QString logline;
     bool titlePageVisible = true;
     bool synopsisVisible = true;
-    bool outlineVisible = true;
+    bool treatmentVisible = true;
     bool screenplayTextVisible = true;
     bool screenplayStatisticsVisible = true;
     QString header;
@@ -64,7 +64,7 @@ ScreenplayInformationModel::ScreenplayInformationModel(QObject* _parent)
     connect(this, &ScreenplayInformationModel::loglineChanged, this, &ScreenplayInformationModel::updateDocumentContent);
     connect(this, &ScreenplayInformationModel::titlePageVisibleChanged, this, &ScreenplayInformationModel::updateDocumentContent);
     connect(this, &ScreenplayInformationModel::synopsisVisibleChanged, this, &ScreenplayInformationModel::updateDocumentContent);
-    connect(this, &ScreenplayInformationModel::outlineVisibleChanged, this, &ScreenplayInformationModel::updateDocumentContent);
+    connect(this, &ScreenplayInformationModel::treatmentVisibleChanged, this, &ScreenplayInformationModel::updateDocumentContent);
     connect(this, &ScreenplayInformationModel::screenplayTextVisibleChanged, this, &ScreenplayInformationModel::updateDocumentContent);
     connect(this, &ScreenplayInformationModel::screenplayStatisticsVisibleChanged, this, &ScreenplayInformationModel::updateDocumentContent);
     connect(this, &ScreenplayInformationModel::headerChanged, this, &ScreenplayInformationModel::updateDocumentContent);
@@ -143,19 +143,19 @@ void ScreenplayInformationModel::setSynopsisVisible(bool _visible)
     emit synopsisVisibleChanged(d->synopsisVisible);
 }
 
-bool ScreenplayInformationModel::outlineVisible() const
+bool ScreenplayInformationModel::treatmentVisible() const
 {
-    return d->outlineVisible;
+    return d->treatmentVisible;
 }
 
-void ScreenplayInformationModel::setOutlineVisible(bool _visible)
+void ScreenplayInformationModel::setTreatmentVisible(bool _visible)
 {
-    if (d->outlineVisible == _visible) {
+    if (d->treatmentVisible == _visible) {
         return;
     }
 
-    d->outlineVisible = _visible;
-    emit outlineVisibleChanged(d->outlineVisible);
+    d->treatmentVisible = _visible;
+    emit treatmentVisibleChanged(d->treatmentVisible);
 }
 
 bool ScreenplayInformationModel::screenplayTextVisible() const
@@ -295,7 +295,7 @@ void ScreenplayInformationModel::initDocument()
     d->logline = documentNode.firstChildElement(kLoglineKey).text();
     d->titlePageVisible = documentNode.firstChildElement(kTitlePageVisibleKey).text() == "true";
     d->synopsisVisible = documentNode.firstChildElement(kSynopsisVisibleKey).text() == "true";
-    d->outlineVisible = documentNode.firstChildElement(kOutlineVisibleKey).text() == "true";
+    d->treatmentVisible = documentNode.firstChildElement(kTreatmentVisibleKey).text() == "true";
     d->screenplayTextVisible = documentNode.firstChildElement(kScreenplayTextVisibleKey).text() == "true";
     d->screenplayStatisticsVisible = documentNode.firstChildElement(kScreenplayStatisticsVisibleKey).text() == "true";
     d->header = documentNode.firstChildElement(kHeaderKey).text();
@@ -317,7 +317,7 @@ void ScreenplayInformationModel::clearDocument()
     setLogline({});
     setTitlePageVisible({});
     setSynopsisVisible({});
-    setOutlineVisible({});
+    setTreatmentVisible({});
     setScreenplayTextVisible({});
     setScreenplayStatisticsVisible({});
     setHeader({});
@@ -340,7 +340,7 @@ QByteArray ScreenplayInformationModel::toXml() const
     xml += QString("<%1><![CDATA[%2]]></%1>\n").arg(kLoglineKey, d->logline);
     xml += QString("<%1><![CDATA[%2]]></%1>\n").arg(kTitlePageVisibleKey, d->titlePageVisible ? "true" : "false");
     xml += QString("<%1><![CDATA[%2]]></%1>\n").arg(kSynopsisVisibleKey, d->synopsisVisible ? "true" : "false");
-    xml += QString("<%1><![CDATA[%2]]></%1>\n").arg(kOutlineVisibleKey, d->outlineVisible ? "true" : "false");
+    xml += QString("<%1><![CDATA[%2]]></%1>\n").arg(kTreatmentVisibleKey, d->treatmentVisible ? "true" : "false");
     xml += QString("<%1><![CDATA[%2]]></%1>\n").arg(kScreenplayTextVisibleKey, d->screenplayTextVisible ? "true" : "false");
     xml += QString("<%1><![CDATA[%2]]></%1>\n").arg(kScreenplayStatisticsVisibleKey, d->screenplayStatisticsVisible ? "true" : "false");
     xml += QString("<%1><![CDATA[%2]]></%1>\n").arg(kHeaderKey, d->header);

@@ -188,7 +188,7 @@ void StructureModel::addDocument(Domain::DocumentObjectType _type, const QString
             appendItem(screenplayItem, parentItem);
             appendItem(createItem(DocumentObjectType::ScreenplayTitlePage, tr("Title page")), screenplayItem);
             appendItem(createItem(DocumentObjectType::ScreenplaySynopsis, tr("Synopsis")), screenplayItem);
-            appendItem(createItem(DocumentObjectType::ScreenplayOutline, tr("Outline")), screenplayItem);
+            appendItem(createItem(DocumentObjectType::ScreenplayTreatment, tr("Treatment")), screenplayItem);
             appendItem(createItem(DocumentObjectType::ScreenplayText, tr("Text")), screenplayItem);
             appendItem(createItem(DocumentObjectType::ScreenplayStatistics, tr("Statistics")), screenplayItem);
             break;
@@ -427,7 +427,7 @@ Qt::ItemFlags StructureModel::flags(const QModelIndex& _index) const
 
         case Domain::DocumentObjectType::ScreenplayTitlePage:
         case Domain::DocumentObjectType::ScreenplaySynopsis:
-        case Domain::DocumentObjectType::ScreenplayOutline:
+        case Domain::DocumentObjectType::ScreenplayTreatment:
         case Domain::DocumentObjectType::ScreenplayText:
         case Domain::DocumentObjectType::ScreenplayStatistics: {
             return Qt::ItemIsEnabled | Qt::ItemIsSelectable;

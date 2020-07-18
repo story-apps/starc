@@ -26,8 +26,8 @@ public:
     void setSynopsisVisible(bool _visible);
     Q_SIGNAL void synopsisVisibleChanged(bool _visible);
 
-    void setOutlineVisible(bool _visible);
-    Q_SIGNAL void outlineVisibleChanged(bool _visible);
+    void setTreatmentVisible(bool _visible);
+    Q_SIGNAL void treatmentVisibleChanged(bool _visible);
 
     void setScreenplayTextVisible(bool _visible);
     Q_SIGNAL void screenplayTextVisibleChanged(bool _visible);

@@ -35,9 +35,9 @@ SOURCES += \
     business_layer/model/recycle_bin/recycle_bin_model.cpp \
     business_layer/model/screenplay/screenplay_dictionaries_model.cpp \
     business_layer/model/screenplay/screenplay_information_model.cpp \
-    business_layer/model/screenplay/screenplay_outline_model.cpp \
     business_layer/model/screenplay/screenplay_statistics_model.cpp \
     business_layer/model/screenplay/screenplay_synopsis_model.cpp \
+    business_layer/model/screenplay/screenplay_treatment_model.cpp \
     business_layer/model/screenplay/text/screenplay_text_block_parser.cpp \
     business_layer/model/screenplay/text/screenplay_text_model.cpp \
     business_layer/model/screenplay/text/screenplay_text_model_folder_item.cpp \
@@ -157,9 +157,9 @@ HEADERS += \
     business_layer/model/recycle_bin/recycle_bin_model.h \
     business_layer/model/screenplay/screenplay_dictionaries_model.h \
     business_layer/model/screenplay/screenplay_information_model.h \
-    business_layer/model/screenplay/screenplay_outline_model.h \
     business_layer/model/screenplay/screenplay_statistics_model.h \
     business_layer/model/screenplay/screenplay_synopsis_model.h \
+    business_layer/model/screenplay/screenplay_treatment_model.h \
     business_layer/model/screenplay/text/screenplay_text_block_parser.h \
     business_layer/model/screenplay/text/screenplay_text_model.h \
     business_layer/model/screenplay/text/screenplay_text_model_folder_item.h \

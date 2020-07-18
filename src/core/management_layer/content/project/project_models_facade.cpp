@@ -8,7 +8,7 @@
 #include <business_layer/model/recycle_bin/recycle_bin_model.h>
 #include <business_layer/model/screenplay/screenplay_dictionaries_model.h>
 #include <business_layer/model/screenplay/screenplay_information_model.h>
-#include <business_layer/model/screenplay/screenplay_outline_model.h>
+#include <business_layer/model/screenplay/screenplay_treatment_model.h>
 #include <business_layer/model/screenplay/screenplay_statistics_model.h>
 #include <business_layer/model/screenplay/screenplay_synopsis_model.h>
 #include <business_layer/model/screenplay/screenplay_title_page_model.h>
@@ -100,9 +100,9 @@ BusinessLayer::AbstractModel* ProjectModelsFacade::modelFor(Domain::DocumentObje
                         [this, screenplayModel] (bool _visible) {
                    emit screenplaySynopsisVisibilityChanged(screenplayModel, _visible);
                 });
-                connect(screenplayModel, &BusinessLayer::ScreenplayInformationModel::outlineVisibleChanged, this,
+                connect(screenplayModel, &BusinessLayer::ScreenplayInformationModel::treatmentVisibleChanged, this,
                         [this, screenplayModel] (bool _visible) {
-                   emit screenplayOutlineVisibilityChanged(screenplayModel, _visible);
+                   emit screenplayTreatmentVisibilityChanged(screenplayModel, _visible);
                 });
                 connect(screenplayModel, &BusinessLayer::ScreenplayInformationModel::screenplayTextVisibleChanged, this,
                         [this, screenplayModel] (bool _visible) {
@@ -127,8 +127,8 @@ BusinessLayer::AbstractModel* ProjectModelsFacade::modelFor(Domain::DocumentObje
                 break;
             }
 
-            case Domain::DocumentObjectType::ScreenplayOutline: {
-                model = new BusinessLayer::ScreenplayOutlineModel;
+            case Domain::DocumentObjectType::ScreenplayTreatment: {
+                model = new BusinessLayer::ScreenplayTreatmentModel;
                 break;
             }
 

@@ -27,7 +27,7 @@ signals:
      * @brief Сценарий загружен
      */
     void screenplayImported(const QString& _name, const QString& _titlePage,
-        const QString& _synopsis, const QString& _outline, const QString& _screenplay);
+        const QString& _synopsis, const QString& _treatment, const QString& _screenplay);
 
 private:
     class Implementation;
