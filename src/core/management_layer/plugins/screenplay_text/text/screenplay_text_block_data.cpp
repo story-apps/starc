@@ -3,7 +3,7 @@
 #include <business_layer/model/screenplay/text/screenplay_text_model_item.h>
 
 
-namespace Ui
+namespace BusinessLayer
 {
 
 ScreenplayTextBlockData::ScreenplayTextBlockData(BusinessLayer::ScreenplayTextModelItem* _item)

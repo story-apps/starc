@@ -24,7 +24,7 @@ using BusinessLayer::ScreenplayParagraphType;
 using BusinessLayer::ScreenplayTemplateFacade;
 
 
-namespace Ui
+namespace BusinessLayer
 {
 
 namespace {

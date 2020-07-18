@@ -217,6 +217,15 @@ QSize FloatingToolBar::sizeHint() const
     }
 }
 
+QColor FloatingToolBar::actionColor(QAction* _action) const
+{
+    if (!actions().contains(_action)) {
+        return {};
+    }
+
+    return d->actionToColor.value(_action);
+}
+
 void FloatingToolBar::setActionColor(QAction* _action, const QColor& _color)
 {
     if (!actions().contains(_action)) {

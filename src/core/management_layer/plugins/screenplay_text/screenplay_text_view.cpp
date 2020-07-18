@@ -1,12 +1,12 @@
 #include "screenplay_text_view.h"
 
-#include "screenplay_text_block_data.h"
-#include "screenplay_text_comments_toolbar.h"
-#include "screenplay_text_comments_widget.h"
-#include "screenplay_text_edit.h"
-#include "screenplay_text_edit_shortcuts_manager.h"
-#include "screenplay_text_edit_toolbar.h"
-#include "screenplay_text_fast_format_widget.h"
+#include "comments/screenplay_text_comments_toolbar.h"
+#include "comments/screenplay_text_comments_widget.h"
+#include "text/screenplay_text_block_data.h"
+#include "text/screenplay_text_edit.h"
+#include "text/screenplay_text_edit_shortcuts_manager.h"
+#include "text/screenplay_text_edit_toolbar.h"
+#include "text/screenplay_text_fast_format_widget.h"
 
 #include <business_layer/templates/screenplay_template.h>
 #include <business_layer/templates/screenplay_template_facade.h>
@@ -272,6 +272,10 @@ ScreenplayTextView::ScreenplayTextView(QWidget* _parent)
             d->updateCommentsToolBar();
         }
         d->updateSideBarVisibility(this);
+    });
+    //
+    connect(d->commentsToolBar, &ScreenplayTextCommentsToolbar::textBackgoundColorChangRequested, this, [this] (const QColor& _color) {
+
     });
     //
     connect(d->sidebarTabs, &TabBar::currentIndexChanged, this, [this] (int _currentIndex) {

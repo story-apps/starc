@@ -7,7 +7,7 @@ class QTextBlockFormat;
 class QTextDocument;
 
 
-namespace Ui
+namespace BusinessLayer
 {
 
 class ScreenplayTextCursor;

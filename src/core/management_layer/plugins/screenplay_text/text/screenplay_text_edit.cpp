@@ -34,7 +34,7 @@ class ScreenplayTextEdit::Implementation
 {
 public:
     BusinessLayer::ScreenplayTextModel* model = nullptr;
-    ScreenplayTextDocument document;
+    BusinessLayer::ScreenplayTextDocument document;
 };
 
 
@@ -61,7 +61,7 @@ ScreenplayTextEdit::ScreenplayTextEdit(QWidget* _parent)
             return;
         }
 
-        auto screenplayBlockData = static_cast<Ui::ScreenplayTextBlockData*>(userData);
+        auto screenplayBlockData = static_cast<BusinessLayer::ScreenplayTextBlockData*>(userData);
         emit currentModelIndexChanged(d->model->indexForItem(screenplayBlockData->item()));
     });
 }
@@ -158,13 +158,13 @@ QModelIndex ScreenplayTextEdit::currentModelIndex() const
         return {};
     }
 
-    auto screenplayBlockData = static_cast<Ui::ScreenplayTextBlockData*>(userData);
+    auto screenplayBlockData = static_cast<BusinessLayer::ScreenplayTextBlockData*>(userData);
     return d->model->indexForItem(screenplayBlockData->item());
 }
 
 void ScreenplayTextEdit::setCurrentModelIndex(const QModelIndex& _index)
 {
-    ScreenplayTextCursor textCursor(document());
+    BusinessLayer::ScreenplayTextCursor textCursor(document());
     textCursor.setPosition(d->document.itemPosition(_index));
     ensureCursorVisible(textCursor);
 }
@@ -420,7 +420,7 @@ void ScreenplayTextEdit::paintEvent(QPaintEvent* _event)
     //
     QTextBlock bottomBlock = document()->firstBlock();
     {
-        ScreenplayTextCursor bottomCursor;
+        BusinessLayer::ScreenplayTextCursor bottomCursor;
         for (int delta = viewport()->height(); delta > viewport()->height()*3/4; delta -= 10) {
             bottomCursor = cursorForPosition(viewport()->mapFromParent(QPoint(0, delta)));
             if (bottomBlock.blockNumber() < bottomCursor.block().blockNumber()) {
@@ -436,7 +436,7 @@ void ScreenplayTextEdit::paintEvent(QPaintEvent* _event)
     // ... в случае, если блок попал в таблицу, нужно дойти до конца таблицы
     //
     {
-        ScreenplayTextCursor bottomCursor(document());
+        BusinessLayer::ScreenplayTextCursor bottomCursor(document());
         bottomCursor.setPosition(bottomBlock.position());
         while (bottomCursor.inTable() && bottomCursor.movePosition(QTextCursor::NextBlock)) {
             bottomBlock = bottomCursor.block();
@@ -659,7 +659,7 @@ void ScreenplayTextEdit::paintEvent(QPaintEvent* _event)
             int lastCharacterBlockBottom = 0;
             QColor lastCharacterColor;
 
-            ScreenplayTextCursor cursor(document());
+            BusinessLayer::ScreenplayTextCursor cursor(document());
             while (block.isValid() && block != bottomBlock) {
                 //
                 // Стиль текущего блока
@@ -960,7 +960,8 @@ void ScreenplayTextEdit::paintEvent(QPaintEvent* _event)
                             // Определим место положение конца имени персонажа
                             //
                             const int continuedTermWidth
-                                    = painter.fontMetrics().horizontalAdvance(ScreenplayTextCorrector::continuedTerm());
+                                    = painter.fontMetrics().horizontalAdvance(
+                                          BusinessLayer::ScreenplayTextCorrector::continuedTerm());
                             const QPoint topLeft = isLeftToRight
                                                    ? cursorREnd.topLeft()
                                                    : cursorREnd.topRight() - QPoint(continuedTermWidth, 0);
@@ -968,7 +969,8 @@ void ScreenplayTextEdit::paintEvent(QPaintEvent* _event)
                                                        ? cursorREnd.bottomRight() + QPoint(continuedTermWidth, 0)
                                                        : cursorREnd.bottomLeft();
                             const QRect rect(topLeft, bottomRight);
-                            painter.drawText(rect, Qt::AlignRight | Qt::AlignTop, ScreenplayTextCorrector::continuedTerm());
+                            painter.drawText(rect, Qt::AlignRight | Qt::AlignTop,
+                                             BusinessLayer::ScreenplayTextCorrector::continuedTerm());
                         }
                     }
 
@@ -1088,7 +1090,7 @@ ContextMenu* ScreenplayTextEdit::createContextMenu(const QPoint& _position, QWid
 
     QStandardItemModel* model = new QStandardItemModel(menu);
     auto splitAction = new QStandardItem;
-    if (ScreenplayTextCursor cursor = textCursor(); cursor.inTable()) {
+    if (BusinessLayer::ScreenplayTextCursor cursor = textCursor(); cursor.inTable()) {
         splitAction->setText(tr("Merge paragraph"));
         splitAction->setData(u8"\U000f10e7", Qt::DecorationRole);
     } else {
@@ -1099,7 +1101,7 @@ ContextMenu* ScreenplayTextEdit::createContextMenu(const QPoint& _position, QWid
     menu->setModel(model);
     connect(menu, &ContextMenu::clicked, this, [this, menu] {
         menu->hideContextMenu();
-        ScreenplayTextCursor cursor = textCursor();
+        BusinessLayer::ScreenplayTextCursor cursor = textCursor();
         if (cursor.inTable()) {
             d->document.mergeParagraph(cursor);
         } else {

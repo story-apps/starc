@@ -36,6 +36,11 @@ public:
 
 protected:
     /**
+     * @brief Получить цвет заданного действия
+     */
+    QColor actionColor(QAction* _action) const;
+
+    /**
      * @brief Задать цвет действия
      */
     void setActionColor(QAction* _action, const QColor& _color);

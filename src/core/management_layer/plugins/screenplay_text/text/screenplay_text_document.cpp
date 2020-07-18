@@ -24,7 +24,7 @@ using BusinessLayer::ScreenplayTemplateFacade;
 using BusinessLayer::ScreenplayParagraphType;
 
 
-namespace Ui
+namespace BusinessLayer
 {
 
 enum class DocumentState {

@@ -1,6 +1,6 @@
 #include "screenplay_text_manager.h"
 
-#include "ui/screenplay_text_view.h"
+#include "screenplay_text_view.h"
 
 #include <business_layer/model/screenplay/text/screenplay_text_model.h>
 

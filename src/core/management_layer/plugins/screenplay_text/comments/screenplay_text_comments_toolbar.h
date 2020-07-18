@@ -33,6 +33,20 @@ public:
     void moveToolbar(const QPoint& _position);
 
 signals:
+    /**
+     * @brief Пользователь хочет изменить цвет текста
+     */
+    void textColorChangRequested(const QColor& _color);
+
+    /**
+     * @brief Пользователь хочет изменить цвет фона текста
+     */
+    void textBackgoundColorChangRequested(const QColor& _color);
+
+    /**
+     * @brief Пользователь хочет добавить комментарий с заданным цветом
+     */
+    void commentAddRequested(const QColor& _color, const QString& _comment);
 
 protected:
     /**

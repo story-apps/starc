@@ -48,7 +48,7 @@ public:
 
 
     QAction* textColorAction = nullptr;
-    QAction* backgroundColorAction = nullptr;
+    QAction* textBackgroundColorAction = nullptr;
     QAction* commentAction = nullptr;
     QAction* colorAction = nullptr;
 
@@ -65,7 +65,7 @@ public:
 
 ScreenplayTextCommentsToolbar::Implementation::Implementation(QWidget* _parent)
     : textColorAction(new QAction),
-      backgroundColorAction(new QAction),
+      textBackgroundColorAction(new QAction),
       commentAction(new QAction),
       colorAction(new QAction),
       popup(new Card(_parent)),
@@ -170,8 +170,8 @@ ScreenplayTextCommentsToolbar::ScreenplayTextCommentsToolbar(QWidget* _parent)
     d->textColorAction->setIconText(u8"\U000f069e");
     addAction(d->textColorAction);
 
-    d->backgroundColorAction->setIconText(u8"\U000f0266");
-    addAction(d->backgroundColorAction);
+    d->textBackgroundColorAction->setIconText(u8"\U000f0266");
+    addAction(d->textBackgroundColorAction);
 
     d->commentAction->setIconText(u8"\U000f0188");
     addAction(d->commentAction);
@@ -179,6 +179,18 @@ ScreenplayTextCommentsToolbar::ScreenplayTextCommentsToolbar(QWidget* _parent)
     d->colorAction->setIconText(u8"\U000f0765");
     addAction(d->colorAction);
 
+
+    connect(d->textColorAction, &QAction::triggered, this, [this] {
+        emit textColorChangRequested(actionColor(d->colorAction));
+    });
+    connect(d->textBackgroundColorAction, &QAction::triggered, this, [this] {
+        emit textBackgoundColorChangRequested(actionColor(d->colorAction));
+    });
+    connect(d->commentAction, &QAction::triggered, this, [this] {
+        //
+        // TODO: Показать панель добавления комментария
+        //
+    });
     connect(d->colorAction, &QAction::triggered, this, [this] {
         if (d->isPopupShown) {
             d->hidePopup();
@@ -205,6 +217,7 @@ ScreenplayTextCommentsToolbar::ScreenplayTextCommentsToolbar(QWidget* _parent)
             d->popup->hide();
         }
     });
+
 
     updateTranslations();
     designSystemChangeEvent(nullptr);
@@ -285,7 +298,7 @@ void ScreenplayTextCommentsToolbar::focusOutEvent(QFocusEvent* _event)
 void ScreenplayTextCommentsToolbar::updateTranslations()
 {
     d->textColorAction->setToolTip(tr("Change text color"));
-    d->backgroundColorAction->setToolTip(tr("Change text highlight color"));
+    d->textBackgroundColorAction->setToolTip(tr("Change text highlight color"));
     d->commentAction->setToolTip(tr("Add comment"));
     d->colorAction->setToolTip(tr("Choose color for the action below"));
 }

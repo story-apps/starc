@@ -3,7 +3,7 @@
 #include <QTextCursor>
 
 
-namespace Ui {
+namespace BusinessLayer {
 
 /**
  * @brief Класс курсора со вспомогательными функциями

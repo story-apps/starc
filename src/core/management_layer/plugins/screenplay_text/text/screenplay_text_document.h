@@ -8,7 +8,7 @@ namespace BusinessLayer {
     enum class ScreenplayParagraphType;
 }
 
-namespace Ui
+namespace BusinessLayer
 {
 class ScreenplayTextCursor;
 
@@ -34,7 +34,7 @@ public:
     int itemPosition(const QModelIndex& _index);
 
     //
-    // FIXME: переделать
+    // FIXME: делать
     //
     QString mimeFromSelection(int, int) const { return {}; }
     void insertFromMime(int, const QString&) {}

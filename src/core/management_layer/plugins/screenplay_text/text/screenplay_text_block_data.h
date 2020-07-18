@@ -8,7 +8,7 @@ namespace BusinessLayer {
     class ScreenplayTextModelItem;
 }
 
-namespace Ui
+namespace BusinessLayer
 {
 
 class ScreenplayTextBlockData : public QTextBlockUserData

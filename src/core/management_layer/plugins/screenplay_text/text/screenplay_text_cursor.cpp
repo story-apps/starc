@@ -3,7 +3,7 @@
 #include <QTextTable>
 
 
-namespace Ui {
+namespace BusinessLayer {
 
 ScreenplayTextCursor::ScreenplayTextCursor()
     : QTextCursor()

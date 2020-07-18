@@ -6,6 +6,7 @@ namespace BusinessLayer {
     class CharactersModel;
     class LocationsModel;
     class ScreenplayDictionariesModel;
+    class ScreenplayTextCursor;
     class ScreenplayTextModel;
     enum class ScreenplayParagraphType;
 }
@@ -13,7 +14,6 @@ namespace BusinessLayer {
 
 namespace Ui
 {
-class ScreenplayTextCursor;
 
 /**
  * @brief Текстовый редактор сценария
