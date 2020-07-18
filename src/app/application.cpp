@@ -34,7 +34,7 @@ public:
 
     QString fileToOpen;
     QTimer idleTimer;
-    bool waitKeyRelease = false;
+    bool waitKeyWithTextRelease = false;
 };
 
 
@@ -113,20 +113,21 @@ bool Application::notify(QObject* _object, QEvent* _event)
         //
         switch (_event->type()) {
             case QEvent::KeyPress: {
-                if (d->waitKeyRelease
+                if (d->waitKeyWithTextRelease
                     || _object == d->applicationManager) {
                     break;
                 }
 
-                d->waitKeyRelease = true;
                 const auto keyEvent = static_cast<QKeyEvent*>(_event);
+                d->waitKeyWithTextRelease = !keyEvent->text().isEmpty();
+
                 postEvent(d->applicationManager,
                           new QKeyEvent(QEvent::KeyPress, keyEvent->key(), keyEvent->modifiers(), keyEvent->text()));
                 break;
             }
 
             case QEvent::KeyRelease: {
-                d->waitKeyRelease = false;
+                d->waitKeyWithTextRelease = false;
                 break;
             }
 
