@@ -43,7 +43,7 @@ ColorPicker::Implementation::Implementation(QWidget* _parent)
 
 
 ColorPicker::ColorPicker(QWidget* _parent)
-    : Widget(_parent),
+    : StackWidget(_parent),
       d(new Implementation(this))
 {
     QHBoxLayout* buttonsLayout = new QHBoxLayout;
@@ -60,27 +60,24 @@ ColorPicker::ColorPicker(QWidget* _parent)
     customColorPanelLayout->addWidget(d->colorHueSlider);
     customColorPanelLayout->addLayout(buttonsLayout);
 
-    QVBoxLayout* layout = new QVBoxLayout(this);
-    layout->setContentsMargins({});
-    layout->setSpacing(0);
-    layout->addWidget(d->colorPallete);
-    layout->addWidget(d->customColorPanel);
+    setCurrentWidget(d->colorPallete);
+    addWidget(d->customColorPanel);
 
     d->colorHueSlider->setHue(d->colorSlider->hue());
 
     connect(d->colorPallete, &ColorPallete::colorSelected, this, &ColorPicker::colorSelected);
     connect(d->colorPallete, &ColorPallete::addCustomColorPressed, this, [this] {
-        d->customColorPanel->show();
+        setCurrentWidget(d->customColorPanel);
     });
     connect(d->colorHueSlider, &ColorHueSlider::hueChanged, this, [this] (qreal _hue) {
         d->colorSlider->setHue(_hue);
     });
     connect(d->cancelButton, &Button::clicked, this, [this] {
-        d->customColorPanel->hide();
+        setCurrentWidget(d->colorPallete);
     });
     connect(d->addButton, &Button::clicked, this, [this] {
-        d->customColorPanel->hide();
         d->colorPallete->addCustormColor(d->colorSlider->color());
+        setCurrentWidget(d->colorPallete);
     });
 
     updateTranslations();
@@ -100,8 +97,6 @@ void ColorPicker::designSystemChangeEvent(DesignSystemChangeEvent* _event)
     Widget::designSystemChangeEvent(_event);
 
     setBackgroundColor(Ui::DesignSystem::color().background());
-    layout()->setContentsMargins(Ui::DesignSystem::layout().px4(), Ui::DesignSystem::layout().px4(),
-                                 Ui::DesignSystem::layout().px4(), Ui::DesignSystem::layout().px4());
 
     d->colorPallete->setBackgroundColor(Ui::DesignSystem::color().background());
     d->colorPallete->setTextColor(Ui::DesignSystem::color().onBackground());

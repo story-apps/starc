@@ -5,7 +5,6 @@
 #include <ui/widgets/scroll_bar/scroll_bar.h>
 #include <ui/widgets/tree/tree.h>
 
-#include <QScrollArea>
 #include <QStringListModel>
 #include <QVBoxLayout>
 

@@ -106,8 +106,6 @@ void StackWidget::setCurrentWidget(QWidget *_widget)
     }
     d->currentWidget->setParent(this);
     d->currentWidget->resize(size());
-    d->currentWidgetImage = d->currentWidget->grab();
-    d->currentWidget->hide();
 
     //
     // Если виджет не виден на экране, просто отображаем новый текущий виджет
@@ -120,6 +118,8 @@ void StackWidget::setCurrentWidget(QWidget *_widget)
     //
     // А если виджет виден, то запускаем анимацию отображения нового текущего виджета
     //
+    d->currentWidgetImage = d->currentWidget->grab();
+    d->currentWidget->hide();
     switch (d->animationType) {
         case AnimationType::Fade: {
             d->fadeAnimation.start();

@@ -1,5 +1,7 @@
 #include "base_text_edit.h"
 
+#include <ui/design_system/design_system.h>
+
 #include <utils/helpers/text_helper.h>
 
 #include <QKeyEvent>
@@ -102,6 +104,7 @@ BaseTextEdit::BaseTextEdit(QWidget* _parent)
     : CompleterTextEdit(_parent),
       d(new Implementation)
 {
+    setCursorWidth(Ui::DesignSystem::scaleFactor() * 4);
 }
 
 void BaseTextEdit::setCapitalizeWords(bool _capitalize)

@@ -41,8 +41,9 @@ TextView::Implementation::Implementation(QWidget* _parent)
     palette.setColor(QPalette::Base, Qt::transparent);
     palette.setColor(QPalette::Window, Qt::transparent);
     content->setPalette(palette);
-    content->setVerticalScrollBar(new ScrollBar);
+    content->setFrameShape(QFrame::NoFrame);
     content->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
+    content->setVerticalScrollBar(new ScrollBar);
 
     screenplayInfoLayout->setContentsMargins({});
     screenplayInfoLayout->setSpacing(0);
@@ -70,7 +71,6 @@ TextView::Implementation::Implementation(QWidget* _parent)
     documentText->setPageNumbersAlignment(Qt::AlignBottom | Qt::AlignRight);
     documentText->setHeader("Header text");
     documentText->setFooter("Footer text");
-    documentText->setCursorWidth(4);
     documentText->setUseSpellChecker(true);
 
     connect(documentText, &CompleterTextEdit::textChanged, [this] {

@@ -194,9 +194,46 @@ void TabBar::setTabVisible(int _tabIndex, bool _visible)
     }
 
     d->tabs[_tabIndex].visible = _visible;
+    //
+    // Если скрывается выделенная вкладка, ищем, какую можно сделать текущей
+    //
     if (d->currentTabIndex == _tabIndex
         && _visible == false) {
-        setCurrentTab(std::min(0, d->currentTabIndex - 1));
+        //
+        // Спарва ищем назад
+        //
+        int visibleTab = d->currentTabIndex - 1;
+        while (visibleTab >= 0) {
+            if (d->tabs[visibleTab].visible == true) {
+                setCurrentTab(visibleTab);
+                break;
+            }
+
+            --visibleTab;
+        }
+
+        //
+        // Если там не нашлось, ищем вперёд
+        //
+        if (visibleTab < 0) {
+            visibleTab = d->currentTabIndex + 1;
+            while (visibleTab < d->tabs.size()) {
+                if (d->tabs[visibleTab].visible == true) {
+                    setCurrentTab(visibleTab);
+                    break;
+                }
+
+                ++visibleTab;
+            }
+        }
+    }
+
+    //
+    // Если все вкладки были скрыты, а эта становится видимой, то сделаем её текущей
+    //
+    if (_visible == true
+        && d->tabs.value(d->currentTabIndex).visible == false) {
+        setCurrentTab(_tabIndex);
     }
 
     updateGeometry();
@@ -402,6 +439,7 @@ void TabBar::paintEvent(QPaintEvent* _event)
 
             const QRectF currentDecorationRect
                     = d->decorationAnimation.state() == QAbstractAnimation::Running
+                      && d->decorationAnimation.currentValue().isValid()
                         ? d->decorationAnimation.currentValue().toRectF()
                         : decorationRect;
             painter.fillRect(currentDecorationRect, painter.pen().color());

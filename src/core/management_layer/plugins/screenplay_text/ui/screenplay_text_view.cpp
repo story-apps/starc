@@ -27,7 +27,6 @@
 #include <ui/widgets/text_edit/scalable_wrapper/scalable_wrapper.h>
 
 #include <QAction>
-#include <QScrollArea>
 #include <QStandardItem>
 #include <QStandardItemModel>
 #include <QTimer>
@@ -117,7 +116,6 @@ ScreenplayTextView::Implementation::Implementation(QWidget* _parent)
     scalableWrapper->initScrollBarsSyncing();
 
     screenplayText->setUsePageMode(true);
-    screenplayText->setCursorWidth(DesignSystem::scaleFactor() * 4);
 
     sidebarWidget->hide();
     sidebarTabs->setFixed(true);

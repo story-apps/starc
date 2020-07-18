@@ -1,12 +1,12 @@
 #pragma once
 
-#include <ui/widgets/widget/widget.h>
+#include <ui/widgets/stack_widget/stack_widget.h>
 
 
 /**
  * @brief Виджет для отображения панелей выбора кастомного цвета
  */
-class ColorPicker : public Widget
+class ColorPicker : public StackWidget
 {
     Q_OBJECT
 

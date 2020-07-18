@@ -231,11 +231,12 @@ TextField::TextField(QWidget* _parent)
 {
     setAttribute(Qt::WA_Hover);
     setContextMenuPolicy(Qt::CustomContextMenu);
+    setCursorWidth(Ui::DesignSystem::scaleFactor() * 4);
     setFrameShape(QFrame::NoFrame);
-    setWordWrapMode(QTextOption::WordWrap);
     setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
-    setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
     setTabChangesFocus(true);
+    setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
+    setWordWrapMode(QTextOption::WrapAtWordBoundaryOrAnywhere);
     viewport()->setMouseTracking(true);
 
     QSizePolicy policy(QSizePolicy::Preferred, QSizePolicy::Preferred);

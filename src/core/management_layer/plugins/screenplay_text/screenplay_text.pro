@@ -42,6 +42,7 @@ HEADERS += \
     ui/handlers/standard_key_handler.h \
     ui/handlers/transition_handler.h \
     ui/handlers/unformatted_text_handler.h \
+    ui/screenplay_text_add_comment_widget.h \
     ui/screenplay_text_block_data.h \
     ui/screenplay_text_comments_toolbar.h \
     ui/screenplay_text_comments_widget.h \
@@ -74,6 +75,7 @@ SOURCES += \
     ui/handlers/standard_key_handler.cpp \
     ui/handlers/transition_handler.cpp \
     ui/handlers/unformatted_text_handler.cpp \
+    ui/screenplay_text_add_comment_widget.cpp \
     ui/screenplay_text_block_data.cpp \
     ui/screenplay_text_comments_toolbar.cpp \
     ui/screenplay_text_comments_widget.cpp \

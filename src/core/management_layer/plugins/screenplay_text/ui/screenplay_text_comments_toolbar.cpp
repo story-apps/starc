@@ -142,6 +142,7 @@ void ScreenplayTextCommentsToolbar::Implementation::showPopup(QWidget* _parent)
     const auto pos = _parent->mapToGlobal(left);
     popup->move(pos);
     popup->show();
+    popup->setFocus();
 
     popupHeightAnimation.setDirection(QVariantAnimation::Forward);
     popupHeightAnimation.setEndValue(popup->sizeHint().height());

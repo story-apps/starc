@@ -222,7 +222,7 @@ void ColorPallete::addCustormColor(const QColor& _color)
     // Если такой цвет уже есть, переместим его в конец
     //
     if (d->customColors.contains(colorInRgb)) {
-        d->customColors.move(d->customColors.indexOf(colorInRgb), 0);
+        d->customColors.move(d->customColors.indexOf(colorInRgb), d->customColors.size() - 1);
     }
     //
     // Если же цвета не было, то добавим его в пределах допустимой нормы цветов
@@ -230,9 +230,9 @@ void ColorPallete::addCustormColor(const QColor& _color)
     else {
         const int maxColorsSize = 9;
         if (d->customColors.size() == maxColorsSize) {
-            d->customColors.removeLast();
+            d->customColors.removeFirst();
         }
-        d->customColors.prepend(colorInRgb);
+        d->customColors.append(colorInRgb);
     }
 
     //

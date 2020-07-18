@@ -1,6 +1,6 @@
 #pragma once
 
-#include <ui/widgets/widget/widget.h>
+#include <ui/widgets/stack_widget/stack_widget.h>
 
 class QAbstractItemModel;
 
@@ -11,7 +11,7 @@ namespace Ui
 /**
  * @brief Виджет комментариев сценария
  */
-class ScreenplayTextCommentsWidget : public Widget
+class ScreenplayTextCommentsWidget : public StackWidget
 {
     Q_OBJECT
 
