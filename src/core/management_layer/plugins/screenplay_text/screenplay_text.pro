@@ -26,7 +26,7 @@ HEADERS += \
     comments/screenplay_text_add_comment_widget.h \
     comments/screenplay_text_comments_model.h \
     comments/screenplay_text_comments_toolbar.h \
-    comments/screenplay_text_comments_widget.h \
+    comments/screenplay_text_comments_view.h \
     screenplay_text_manager.h \
     screenplay_text_view.h \
     text/handlers/abstract_key_handler.h \
@@ -59,8 +59,8 @@ HEADERS += \
 SOURCES += \
     comments/screenplay_text_add_comment_widget.cpp \
     comments/screenplay_text_comments_toolbar.cpp \
-    comments/screenplay_text_comments_widget.cpp \
     comments/screenplay_text_comments_model.cpp \
+    comments/screenplay_text_comments_view.cpp \
     screenplay_text_manager.cpp \
     screenplay_text_view.cpp \
     text/handlers/abstract_key_handler.cpp \

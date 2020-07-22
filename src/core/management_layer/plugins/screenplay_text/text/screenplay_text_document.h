@@ -77,6 +77,12 @@ public:
      */
     void setCorrectionOptions(bool _needToCorrectCharactersNames, bool _needToCorrectPageBreaks);
 
+    /**
+     * @brief Добавить редакторсую заметку в текущее выделение
+     */
+    void addReviewMark(const QColor& _textColor, const QColor& _backgroundColor,
+        const QString& _comment, const ScreenplayTextCursor& _cursor);
+
 private:
     /**
      * @brief Обновить содержимое модели, при изменение текста документа

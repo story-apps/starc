@@ -78,6 +78,11 @@ public:
      */
     void setCurrentModelIndex(const QModelIndex& _index);
 
+    /**
+     * @brief Добавить редакторскую заметку для текущего выделения
+     */
+    void addReviewMark(const QColor& _textColor, const QColor& _backgroundColor, const QString& _comment);
+
 signals:
     /**
      * @brief Сменился текущий элемент модели (сместился курсор)

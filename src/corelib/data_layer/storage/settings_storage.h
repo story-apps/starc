@@ -7,6 +7,23 @@
 #include <QVariant>
 
 
+/**
+ * Правила именования настроек
+ *
+ * Приложение
+ * application/key
+ *
+ * Проект
+ * project/key - общее для всех
+ * project/concrete/path/ - для конкретного проекта
+ *
+ * Система
+ * system/key
+ *
+ * Виджеты
+ * widgets/widget-name/key
+ */
+
 namespace DataStorageLayer
 {
 

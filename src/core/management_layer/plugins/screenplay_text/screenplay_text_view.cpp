@@ -1,7 +1,8 @@
 #include "screenplay_text_view.h"
 
+#include "comments/screenplay_text_comments_model.h"
 #include "comments/screenplay_text_comments_toolbar.h"
-#include "comments/screenplay_text_comments_widget.h"
+#include "comments/screenplay_text_comments_view.h"
 #include "text/screenplay_text_block_data.h"
 #include "text/screenplay_text_edit.h"
 #include "text/screenplay_text_edit_shortcuts_manager.h"
@@ -23,7 +24,6 @@
 #include <ui/widgets/tab_bar/tab_bar.h>
 #include <ui/widgets/text_edit/completer/completer.h>
 #include <ui/widgets/text_edit/page/page_metrics.h>
-#include <ui/widgets/text_edit/spell_check/spell_checker.h>
 #include <ui/widgets/text_edit/scalable_wrapper/scalable_wrapper.h>
 
 #include <QAction>
@@ -31,7 +31,6 @@
 #include <QStandardItemModel>
 #include <QTimer>
 #include <QVBoxLayout>
-
 
 namespace Ui
 {
@@ -68,6 +67,7 @@ public:
      */
     void updateSideBarVisibility(QWidget* _container);
 
+    BusinessLayer::ScreenplayTextCommentsModel *commentsModel = nullptr;
 
     ScreenplayTextEditToolBar* toolBar = nullptr;
     QHash<BusinessLayer::ScreenplayParagraphType, QString> typesToDisplayNames;
@@ -84,13 +84,14 @@ public:
     TabBar* sidebarTabs = nullptr;
     StackWidget* sidebarContent = nullptr;
     ScreenplayTextFastFormatWidget* fastFormatWidget = nullptr;
-    ScreenplayTextCommentsWidget* commentsWidget = nullptr;
+    ScreenplayTextCommentsView* commentsView = nullptr;
 
     Splitter* splitter = nullptr;
 };
 
 ScreenplayTextView::Implementation::Implementation(QWidget* _parent)
-    : toolBar(new ScreenplayTextEditToolBar(_parent)),
+    : commentsModel(new BusinessLayer::ScreenplayTextCommentsModel(_parent)),
+      toolBar(new ScreenplayTextEditToolBar(_parent)),
       paragraphTypesModel(new QStandardItemModel(toolBar)),
       commentsToolBar(new ScreenplayTextCommentsToolbar(_parent)),
       screenplayText(new ScreenplayTextEdit(_parent)),
@@ -100,7 +101,7 @@ ScreenplayTextView::Implementation::Implementation(QWidget* _parent)
       sidebarTabs(new TabBar(_parent)),
       sidebarContent(new StackWidget(_parent)),
       fastFormatWidget(new ScreenplayTextFastFormatWidget(_parent)),
-      commentsWidget(new ScreenplayTextCommentsWidget(_parent)),
+      commentsView(new ScreenplayTextCommentsView(_parent)),
       splitter(new Splitter(_parent))
 
 {
@@ -126,10 +127,10 @@ ScreenplayTextView::Implementation::Implementation(QWidget* _parent)
     sidebarContent->setSizePolicy(QSizePolicy::Preferred, QSizePolicy::Expanding);
     sidebarContent->setAnimationType(StackWidget::AnimationType::Slide);
     sidebarContent->addWidget(fastFormatWidget);
-    sidebarContent->addWidget(commentsWidget);
+    sidebarContent->addWidget(commentsView);
     fastFormatWidget->hide();
     fastFormatWidget->setParagraphTypesModel(paragraphTypesModel);
-    commentsWidget->hide();
+    commentsView->hide();
 }
 
 void ScreenplayTextView::Implementation::updateToolBarUi()
@@ -250,7 +251,7 @@ ScreenplayTextView::ScreenplayTextView(QWidget* _parent)
     layout->addWidget(d->splitter);
 
     connect(d->toolBar, &ScreenplayTextEditToolBar::paragraphTypeChanged, this, [this] (const QModelIndex& _index) {
-        const auto type = static_cast<BusinessLayer::ScreenplayParagraphType>( _index.data(kTypeDataRole).toInt());
+        const auto type = static_cast<BusinessLayer::ScreenplayParagraphType>(_index.data(kTypeDataRole).toInt());
         d->screenplayText->setCurrentParagraphType(type);
         d->scalableWrapper->setFocus();
     });
@@ -265,28 +266,36 @@ ScreenplayTextView::ScreenplayTextView(QWidget* _parent)
     });
     connect(d->toolBar, &ScreenplayTextEditToolBar::commentsModeEnabledChanged, this, [this] (bool _enabled) {
         d->sidebarTabs->setTabVisible(kCommentsTabIndex, _enabled);
-        d->commentsWidget->setVisible(_enabled);
+        d->commentsView->setVisible(_enabled);
         if (_enabled) {
             d->sidebarTabs->setCurrentTab(kCommentsTabIndex);
-            d->sidebarContent->setCurrentWidget(d->commentsWidget);
+            d->sidebarContent->setCurrentWidget(d->commentsView);
             d->updateCommentsToolBar();
         }
         d->updateSideBarVisibility(this);
     });
     //
-    connect(d->commentsToolBar, &ScreenplayTextCommentsToolbar::textBackgoundColorChangRequested, this, [this] (const QColor& _color) {
-
+    connect(d->commentsToolBar, &ScreenplayTextCommentsToolbar::textColorChangeRequested,
+            this, [this](const QColor& _color) { d->screenplayText->addReviewMark(_color, {}, {}); });
+    connect(d->commentsToolBar, &ScreenplayTextCommentsToolbar::textBackgoundColorChangeRequested,
+            this, [this](const QColor& _color) { d->screenplayText->addReviewMark({}, _color, {}); });
+    connect(d->commentsToolBar, &ScreenplayTextCommentsToolbar::commentAddRequested, this, [this] (const QColor& _color) {
+        d->sidebarTabs->setCurrentTab(kCommentsTabIndex);
+        d->commentsView->showAddCommentView(_color);
+    });
+    connect(d->commentsView, &ScreenplayTextCommentsView::addCommentRequested, this, [this] (const QColor& _color, const QString& _comment) {
+        d->screenplayText->addReviewMark({}, _color, _comment);
     });
     //
     connect(d->sidebarTabs, &TabBar::currentIndexChanged, this, [this] (int _currentIndex) {
         if (_currentIndex == kFastFormatTabIndex) {
             d->sidebarContent->setCurrentWidget(d->fastFormatWidget);
         } else {
-            d->sidebarContent->setCurrentWidget(d->commentsWidget);
+            d->sidebarContent->setCurrentWidget(d->commentsView);
         }
     });
     //
-    connect(d->fastFormatWidget, &ScreenplayTextFastFormatWidget::paragraphTypeChanged, this, [this] (const QModelIndex& _index) {
+    connect(d->fastFormatWidget, &ScreenplayTextFastFormatWidget::paragraphTypeChanged, this, [this](const QModelIndex& _index) {
         const auto type = static_cast<BusinessLayer::ScreenplayParagraphType>(_index.data(kTypeDataRole).toInt());
         d->screenplayText->setCurrentParagraphType(type);
         d->scalableWrapper->setFocus();
@@ -370,6 +379,7 @@ void ScreenplayTextView::reconfigure()
 void ScreenplayTextView::setModel(BusinessLayer::ScreenplayTextModel* _model)
 {
     d->screenplayText->initWithModel(_model);
+    d->commentsModel->setModel(_model);
 
     d->updateToolBarCurrentParagraphTypeName();
 }
@@ -469,7 +479,6 @@ void ScreenplayTextView::designSystemChangeEvent(DesignSystemChangeEvent* _event
     d->splitter->setHandleWidth(1);
     d->sidebarTabs->setTextColor(Ui::DesignSystem::color().onPrimary());
     d->sidebarTabs->setBackgroundColor(Ui::DesignSystem::color().primary());
-
 }
 
 } // namespace Ui

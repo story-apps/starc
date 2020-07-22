@@ -51,6 +51,11 @@ public:
 
 protected:
     /**
+     * @brief Длительность анимации
+     */
+    int animationDuration() const;
+
+    /**
      * @brief Реализуем собственную отрисовку для реализации эффекста смены текущего виджета
      */
     void paintEvent(QPaintEvent* _event) override;

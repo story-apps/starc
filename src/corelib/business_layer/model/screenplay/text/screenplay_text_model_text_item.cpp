@@ -28,7 +28,6 @@ namespace {
     const QString kLengthAttribute = QLatin1String("length");
     const QString kColorAttribute = QLatin1String("color");
     const QString kBackgroundColorAttribute = QLatin1String("bgcolor");
-    const QString kHiglightAttribute = QLatin1String("highlight");
     const QString kDoneAttribute = QLatin1String("done");
     const QString kAuthorAttribute = QLatin1String("author");
     const QString kDateAttribute = QLatin1String("date");
@@ -36,11 +35,6 @@ namespace {
     const QString kItalicAttribute = QLatin1String("italic");
     const QString kUnderlineAttribute = QLatin1String("underline");
     const QString kAlignAttribute = QLatin1String("align");
-
-    struct TextPart {
-        int from = 0;
-        int length = 0;
-    };
 }
 
 class ScreenplayTextModelTextItem::Implementation
@@ -87,28 +81,11 @@ public:
     /**
      * @brief Редакторские заметки в параграфе
      */
-    struct ReviewComment {
-        QString author;
-        QString date;
-        QString text;
-    };
-    struct ReviewMark : TextPart {
-        QColor textColor;
-        QColor backgroundColor;
-        bool isHighlight = false;
-        bool isDone = false;
-        QVector<ReviewComment> comments;
-    };
     QVector<ReviewMark> reviewMarks;
 
     /**
      * @brief Форматирование текста в параграфе
      */
-    struct TextFormat : TextPart {
-        bool isBold = false;
-        bool isItalic = false;
-        bool isUnderline = false;
-    };
     QVector<TextFormat> formats;
 
     /**
@@ -152,9 +129,6 @@ ScreenplayTextModelTextItem::Implementation::Implementation(const QDomElement& _
             }
             if (reviewMarkNode.hasAttribute(kBackgroundColorAttribute)) {
                 reviewMark.backgroundColor = reviewMarkNode.attribute(kBackgroundColorAttribute);
-            }
-            if (reviewMarkNode.hasAttribute(kHiglightAttribute)) {
-                reviewMark.isHighlight = true;
             }
             if (reviewMarkNode.hasAttribute(kDoneAttribute)) {
                 reviewMark.isDone = true;
@@ -232,7 +206,7 @@ void ScreenplayTextModelTextItem::Implementation::updateXml()
     if (!reviewMarks.isEmpty()) {
         xml += QString("<%1>").arg(kReviewMarksTag);
         for (const auto& reviewMarks : std::as_const(reviewMarks)) {
-            xml += QString("<%1 %2=\"%3\" %4=\"%5\" %6%7%8%9")
+            xml += QString("<%1 %2=\"%3\" %4=\"%5\" %6%7%9")
                    .arg(kReviewMarkTag,
                         kFromAttribute, QString::number(reviewMarks.from),
                         kLengthAttribute, QString::number(reviewMarks.length),
@@ -241,9 +215,6 @@ void ScreenplayTextModelTextItem::Implementation::updateXml()
                          : ""),
                         (reviewMarks.backgroundColor.isValid()
                          ? QString(" %1=\"%2\"").arg(kBackgroundColorAttribute, reviewMarks.backgroundColor.name())
-                         : ""),
-                        (reviewMarks.isHighlight
-                         ? QString(" %1=\"true\"").arg(kHiglightAttribute)
                          : ""),
                         (reviewMarks.isDone
                          ? QString(" done=\"true\"").arg(kDoneAttribute)
@@ -300,6 +271,55 @@ void ScreenplayTextModelTextItem::Implementation::updateXml()
 
 // ****
 
+
+bool ScreenplayTextModelTextItem::TextFormat::operator==(const ScreenplayTextModelTextItem::TextFormat& _other) const
+{
+    return from == _other.from
+            && length == _other.length
+            && isBold == _other.isBold
+            && isItalic == _other.isItalic
+            && isUnderline == _other.isUnderline;
+}
+
+bool ScreenplayTextModelTextItem::ReviewComment::operator==(const ScreenplayTextModelTextItem::ReviewComment& _other) const
+{
+    return author == _other.author
+            && date == _other.date
+            && text == _other.text;
+}
+
+QTextCharFormat ScreenplayTextModelTextItem::ReviewMark::charFormat() const
+{
+    QTextCharFormat reviewFormat;
+    reviewFormat.setProperty(ScreenplayBlockStyle::PropertyIsReviewMark, true);
+    if (textColor.isValid()) {
+        reviewFormat.setForeground(textColor);
+    }
+    if (backgroundColor.isValid()) {
+        reviewFormat.setBackground(backgroundColor);
+    }
+    reviewFormat.setProperty(ScreenplayBlockStyle::PropertyIsDone, isDone);
+    QStringList authors, dates, comments;
+    for (const auto& comment : this->comments) {
+        authors.append(comment.author);
+        dates.append(comment.date);
+        comments.append(comment.text);
+    }
+    reviewFormat.setProperty(ScreenplayBlockStyle::PropertyCommentsAuthors, authors);
+    reviewFormat.setProperty(ScreenplayBlockStyle::PropertyCommentsDates, dates);
+    reviewFormat.setProperty(ScreenplayBlockStyle::PropertyComments, comments);
+    return reviewFormat;
+}
+
+bool ScreenplayTextModelTextItem::ReviewMark::operator==(const ScreenplayTextModelTextItem::ReviewMark& _other) const
+{
+    return from == _other.from
+            && length == _other.length
+            && textColor == _other.textColor
+            && backgroundColor == _other.backgroundColor
+            && isDone == _other.isDone
+            && comments == _other.comments;
+}
 
 ScreenplayTextModelTextItem::ScreenplayTextModelTextItem()
     : ScreenplayTextModelItem(ScreenplayTextModelItemType::Text),
@@ -364,6 +384,79 @@ void ScreenplayTextModelTextItem::setText(const QString& _text)
 
     d->text = _text;
     d->updateXml();
+}
+
+void ScreenplayTextModelTextItem::setFormats(const QVector<QTextLayout::FormatRange>& _formats)
+{
+    QVector<TextFormat> newFormats;
+    for (const auto& format : _formats) {
+        if (format.format.boolProperty(ScreenplayBlockStyle::PropertyIsFormatting) == false) {
+            continue;
+        }
+
+        TextFormat newFormat;
+        newFormat.from = format.start;
+        newFormat.length = format.length;
+        if (format.format.hasProperty(QTextFormat::FontWeight)) {
+            newFormat.isBold = format.format.font().bold();
+        }
+        if (format.format.hasProperty(QTextFormat::FontItalic)) {
+            newFormat.isItalic = format.format.font().italic();
+        }
+        if (format.format.hasProperty(QTextFormat::TextUnderlineStyle)) {
+            newFormat.isUnderline = format.format.font().underline();
+        }
+
+        newFormats.append(newFormat);
+    }
+
+    if (d->formats == newFormats) {
+        return;
+    }
+
+    d->formats = newFormats;
+    d->updateXml();
+}
+
+void ScreenplayTextModelTextItem::setReviewMarks(const QVector<QTextLayout::FormatRange>& _reviewMarks)
+{
+    QVector<ReviewMark> newReviewMarks;
+    for (const auto& reviewMark : _reviewMarks) {
+        if (reviewMark.format.boolProperty(ScreenplayBlockStyle::PropertyIsReviewMark) == false) {
+            continue;
+        }
+
+        ReviewMark newReviewMark;
+        newReviewMark.from = reviewMark.start;
+        newReviewMark.length = reviewMark.length;
+        if (reviewMark.format.hasProperty(QTextFormat::ForegroundBrush)) {
+            newReviewMark.textColor = reviewMark.format.foreground().color();
+        }
+        if (reviewMark.format.hasProperty(QTextFormat::BackgroundBrush)) {
+            newReviewMark.backgroundColor = reviewMark.format.background().color();
+        }
+        newReviewMark.isDone = reviewMark.format.boolProperty(ScreenplayBlockStyle::PropertyIsDone);
+        const QStringList comments = reviewMark.format.property(ScreenplayBlockStyle::PropertyComments).toStringList();
+        const QStringList dates = reviewMark.format.property(ScreenplayBlockStyle::PropertyCommentsDates).toStringList();
+        const QStringList authors = reviewMark.format.property(ScreenplayBlockStyle::PropertyCommentsAuthors).toStringList();
+        for (int commentIndex = 0; commentIndex < comments.size(); ++commentIndex) {
+            newReviewMark.comments.append({ authors.at(commentIndex), dates.at(commentIndex), comments.at(commentIndex) });
+        }
+
+        newReviewMarks.append(newReviewMark);
+    }
+
+    if (d->reviewMarks == newReviewMarks) {
+        return;
+    }
+
+    d->reviewMarks = newReviewMarks;
+    d->updateXml();
+}
+
+const QVector<ScreenplayTextModelTextItem::ReviewMark>& ScreenplayTextModelTextItem::reviewMarks() const
+{
+    return d->reviewMarks;
 }
 
 QVariant ScreenplayTextModelTextItem::data(int _role) const

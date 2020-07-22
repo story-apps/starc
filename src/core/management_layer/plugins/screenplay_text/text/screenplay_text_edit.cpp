@@ -169,6 +169,25 @@ void ScreenplayTextEdit::setCurrentModelIndex(const QModelIndex& _index)
     ensureCursorVisible(textCursor);
 }
 
+void ScreenplayTextEdit::addReviewMark(const QColor& _textColor, const QColor& _backgroundColor, const QString& _comment)
+{
+    BusinessLayer::ScreenplayTextCursor cursor(textCursor());
+    if (!cursor.hasSelection()) {
+        return;
+    }
+
+    //
+    // Добавим заметку
+    //
+    d->document.addReviewMark(_textColor, _backgroundColor, _comment, cursor);
+
+    //
+    // Снимем выделение, чтобы пользователь получил обратную связь от приложения, что выделение добавлено
+    //
+    cursor.clearSelection();
+    setTextCursorReimpl(cursor);
+}
+
 void ScreenplayTextEdit::keyPressEvent(QKeyEvent* _event)
 {
     if (isReadOnly()) {

@@ -75,9 +75,14 @@ void StackWidget::setAnimationType(StackWidget::AnimationType _type)
 
 void StackWidget::addWidget(QWidget* _widget)
 {
-    if (!d->widgets.contains(_widget)) {
-        d->widgets.append(_widget);
+    if (d->widgets.contains(_widget)) {
+        return;
     }
+
+    d->widgets.append(_widget);
+    _widget->setParent(this);
+    _widget->resize(size());
+    _widget->hide();
 }
 
 StackWidget::~StackWidget() = default;
@@ -155,6 +160,18 @@ QSize StackWidget::sizeHint() const
         sizeHint.setHeight(std::max(sizeHint.height(), widget->sizeHint().height()));
     }
     return sizeHint;
+}
+
+int StackWidget::animationDuration() const
+{
+    switch (d->animationType) {
+        case AnimationType::Fade: {
+            return d->fadeAnimation.duration();
+        }
+        case AnimationType::Slide: {
+            return d->slideAnimation.duration();
+        }
+    }
 }
 
 void StackWidget::paintEvent(QPaintEvent *_event)

@@ -10,11 +10,16 @@
 #include <QPainter>
 #include <QPaintEvent>
 #include <QTimer>
+#include <QSettings>
 #include <QVariantAnimation>
 
 
 namespace Ui
 {
+
+namespace {
+    const QString kColorKey = QLatin1String("widgets/screenplay-text-comments-toolbar/color");
+}
 
 class ScreenplayTextCommentsToolbar::Implementation
 {
@@ -178,18 +183,21 @@ ScreenplayTextCommentsToolbar::ScreenplayTextCommentsToolbar(QWidget* _parent)
 
     d->colorAction->setIconText(u8"\U000f0765");
     addAction(d->colorAction);
+    if (QSettings settings; settings.value(kColorKey).isValid()) {
+        setActionColor(d->colorAction, settings.value(kColorKey).value<QColor>());
+    } else {
+        setActionColor(d->colorAction, "#FE0000");
+    }
 
 
     connect(d->textColorAction, &QAction::triggered, this, [this] {
-        emit textColorChangRequested(actionColor(d->colorAction));
+        emit textColorChangeRequested(actionColor(d->colorAction));
     });
     connect(d->textBackgroundColorAction, &QAction::triggered, this, [this] {
-        emit textBackgoundColorChangRequested(actionColor(d->colorAction));
+        emit textBackgoundColorChangeRequested(actionColor(d->colorAction));
     });
     connect(d->commentAction, &QAction::triggered, this, [this] {
-        //
-        // TODO: Показать панель добавления комментария
-        //
+        emit commentAddRequested(actionColor(d->colorAction));
     });
     connect(d->colorAction, &QAction::triggered, this, [this] {
         if (d->isPopupShown) {
@@ -201,6 +209,9 @@ ScreenplayTextCommentsToolbar::ScreenplayTextCommentsToolbar(QWidget* _parent)
     connect(d->popupContent, &ColorPicker::colorSelected, this, [this] (const QColor& _color) {
         setActionColor(d->colorAction, _color);
         d->hidePopup();
+
+        QSettings settings;
+        settings.setValue(kColorKey, _color);
     });
 
     connect(&d->opacityAnimation, &QVariantAnimation::valueChanged, this, [this] { update(); });
@@ -300,7 +311,8 @@ void ScreenplayTextCommentsToolbar::updateTranslations()
     d->textColorAction->setToolTip(tr("Change text color"));
     d->textBackgroundColorAction->setToolTip(tr("Change text highlight color"));
     d->commentAction->setToolTip(tr("Add comment"));
-    d->colorAction->setToolTip(tr("Choose color for the action below"));
+    //: This allow user to choose color for the review mode actions like text higlight or comments
+    d->colorAction->setToolTip(tr("Choose color for the action"));
 }
 
 void ScreenplayTextCommentsToolbar::designSystemChangeEvent(DesignSystemChangeEvent* _event)

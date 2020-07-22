@@ -1,10 +1,10 @@
 #include "standard_key_handler.h"
 
+#include "../screenplay_text_block_data.h"
+#include "../screenplay_text_edit.h"
+
 #include <business_layer/templates/screenplay_template.h>
 #include <business_layer/templates/screenplay_template_facade.h>
-
-#include <ui/screenplay_text_block_data.h>
-#include <ui/screenplay_text_edit.h>
 
 #include <data_layer/storage/settings_storage.h>
 #include <data_layer/storage/storage_facade.h>
@@ -499,11 +499,11 @@ void StandardKeyHandler::removeCharacters(bool _backward)
         //
         // В результирующем блоке должны остаться данные от верхнего блока
         //
-        Ui::ScreenplayTextBlockData* blockData = nullptr;
+        BusinessLayer::ScreenplayTextBlockData* blockData = nullptr;
         if (topBlock.userData() != nullptr) {
-            auto topBlockData = static_cast<Ui::ScreenplayTextBlockData*>(topBlock.userData());
+            auto topBlockData = static_cast<BusinessLayer::ScreenplayTextBlockData*>(topBlock.userData());
             if (topBlockData != nullptr) {
-                blockData = new Ui::ScreenplayTextBlockData(topBlockData);
+                blockData = new BusinessLayer::ScreenplayTextBlockData(topBlockData);
             }
         }
 

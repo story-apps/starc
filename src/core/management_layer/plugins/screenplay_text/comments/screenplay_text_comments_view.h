@@ -11,13 +11,27 @@ namespace Ui
 /**
  * @brief Виджет комментариев сценария
  */
-class ScreenplayTextCommentsWidget : public StackWidget
+class ScreenplayTextCommentsView : public StackWidget
 {
     Q_OBJECT
 
 public:
-    explicit ScreenplayTextCommentsWidget(QWidget* _parent = nullptr);
-    ~ScreenplayTextCommentsWidget() override;
+    explicit ScreenplayTextCommentsView(QWidget* _parent = nullptr);
+    ~ScreenplayTextCommentsView() override;
+
+    /**
+     * @brief Показать виджет добавления/редактирования комментария
+     */
+    void showAddCommentView(const QColor& _withColor);
+
+signals:
+    /**
+     * @brief Пользователь хочет добавить комментарий
+     */
+    void addCommentRequested(const QColor& _color, const QString& _text);
+
+protected:
+    void designSystemChangeEvent(DesignSystemChangeEvent* _event) override;
 
 private:
     class Implementation;

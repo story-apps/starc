@@ -42,6 +42,8 @@ ScreenplayTextAddCommentWidget::ScreenplayTextAddCommentWidget(QWidget* _parent)
     : Widget(_parent),
       d(new Implementation(this))
 {
+    setFocusProxy(d->comment);
+
     QPalette palette;
     palette.setColor(QPalette::Base, Qt::transparent);
     palette.setColor(QPalette::Window, Qt::transparent);
@@ -82,10 +84,22 @@ ScreenplayTextAddCommentWidget::ScreenplayTextAddCommentWidget(QWidget* _parent)
 
         d->content->ensureVisible(0, d->comment->pos().y() + d->comment->cursorRect().bottom());
     });
+    connect(d->saveButton, &Button::clicked, this, &ScreenplayTextAddCommentWidget::savePressed);
+    connect(d->cancelButton, &Button::clicked, this, &ScreenplayTextAddCommentWidget::cancelPressed);
 
 
     updateTranslations();
     designSystemChangeEvent(nullptr);
+}
+
+QString ScreenplayTextAddCommentWidget::comment() const
+{
+    return d->comment->text();
+}
+
+void ScreenplayTextAddCommentWidget::setComment(const QString& _comment)
+{
+    d->comment->setText(_comment);
 }
 
 ScreenplayTextAddCommentWidget::~ScreenplayTextAddCommentWidget() = default;

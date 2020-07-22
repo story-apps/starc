@@ -12,11 +12,15 @@
 #include <business_layer/templates/screenplay_template.h>
 #include <business_layer/templates/screenplay_template_facade.h>
 
+#include <data_layer/storage/settings_storage.h>
+#include <data_layer/storage/storage_facade.h>
+
 #include <ui/widgets/text_edit/page/page_text_edit.h>
 
 #include <utils/helpers/text_helper.h>
 #include <utils/shugar.h>
 
+#include <QDateTime>
 #include <QTextTable>
 
 using BusinessLayer::ScreenplayBlockStyle;
@@ -257,6 +261,16 @@ void ScreenplayTextDocument::setModel(BusinessLayer::ScreenplayTextModel* _model
                     //
                     auto blockData = new ScreenplayTextBlockData(textItem);
                     cursor.block().setUserData(blockData);
+
+                    //
+                    // Вставим редакторские заметки
+                    //
+                    auto reviewCursor = cursor;
+                    for (const auto& reviewMark : textItem->reviewMarks()) {
+                        reviewCursor.setPosition(reviewCursor.block().position() + reviewMark.from);
+                        reviewCursor.movePosition(QTextCursor::NextCharacter, QTextCursor::KeepAnchor, reviewMark.length);
+                        reviewCursor.mergeCharFormat(reviewMark.charFormat());
+                    }
 
                     break;
                 }
@@ -654,6 +668,24 @@ void ScreenplayTextDocument::setCorrectionOptions(bool _needToCorrectCharactersN
     d->corrector.setNeedToCorrectPageBreaks(_needToCorrectPageBreaks);
 }
 
+void ScreenplayTextDocument::addReviewMark(const QColor& _textColor, const QColor& _backgroundColor,
+    const QString& _comment, const ScreenplayTextCursor& _cursor)
+{
+    ScreenplayTextModelTextItem::ReviewMark reviewMark;
+    if (_textColor.isValid()) {
+        reviewMark.textColor = _textColor;
+    }
+    if (_backgroundColor.isValid()) {
+        reviewMark.backgroundColor = _backgroundColor;
+    }
+    reviewMark.comments.append({ DataStorageLayer::StorageFacade::settingsStorage()->userName(),
+                                 QDateTime::currentDateTime().toString(Qt::ISODate),
+                                 _comment });
+
+    auto cursor = _cursor;
+    cursor.mergeCharFormat(reviewMark.charFormat());
+}
+
 void ScreenplayTextDocument::updateModelOnContentChange(int _position, int _charsRemoved, int _charsAdded)
 {
     if (d->state != DocumentState::Ready) {
@@ -957,6 +989,8 @@ void ScreenplayTextDocument::updateModelOnContentChange(int _position, int _char
             textItem->setCorrection(block.blockFormat().boolProperty(ScreenplayBlockStyle::PropertyIsCorrection));
             textItem->setParagraphType(paragraphType);
             textItem->setText(block.text());
+            textItem->setFormats(block.textFormats());
+            textItem->setReviewMarks(block.textFormats());
 
             //
             // Является ли предыдущий элемент футером папки
@@ -1152,6 +1186,8 @@ void ScreenplayTextDocument::updateModelOnContentChange(int _position, int _char
                 textItem->setCorrection(block.blockFormat().boolProperty(ScreenplayBlockStyle::PropertyIsCorrection));
                 textItem->setParagraphType(paragraphType);
                 textItem->setText(block.text());
+                textItem->setFormats(block.textFormats());
+                textItem->setReviewMarks(block.textFormats());
             }
 
             d->model->updateItem(item);
