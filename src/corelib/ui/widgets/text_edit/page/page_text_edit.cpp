@@ -792,11 +792,15 @@ Qt::Alignment PageTextEdit::alignment() const
 */
 void PageTextEdit::setDocument(QTextDocument *document)
 {
+    const auto lastCursorWidth = cursorWidth();
+
     Q_D(PageTextEdit);
     d->control->setDocument(document);
     d->updateDefaultTextOption();
     d->updateDocumentGeometry();
     d->relayoutDocument();
+
+    setCursorWidth(lastCursorWidth);
 }
 
 QTextDocument *PageTextEdit::document() const

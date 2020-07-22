@@ -1,11 +1,14 @@
 #include "scalable_wrapper.h"
 
+#include <include/custom_events.h>
+
 #include <ui/widgets/context_menu/context_menu.h>
 #include <ui/widgets/text_edit/completer/completer.h>
 #include <ui/widgets/text_edit/completer/completer_text_edit.h>
 #include <ui/widgets/text_edit/page/page_text_edit.h>
 
 #include <QAbstractItemView>
+#include <QApplication>
 #include <QGestureEvent>
 #include <QGraphicsProxyWidget>
 #include <QScrollBar>
@@ -183,7 +186,7 @@ QPoint ScalableWrapper::mapFromEditor(const QPoint& _position) const
 bool ScalableWrapper::event(QEvent* _event)
 {
     bool result = true;
-    switch (_event->type()) {
+    switch (static_cast<int>(_event->type())) {
         //
         // Определяем особый обработчик для жестов
         //
@@ -211,6 +214,11 @@ bool ScalableWrapper::event(QEvent* _event)
 
             syncScrollBarWithTextEdit();
             setupScrollingSynchronization(true);
+            break;
+        }
+
+        case static_cast<QEvent::Type>(EventType::DesignSystemChangeEvent): {
+            QApplication::sendEvent(d->editor.data(), _event);
             break;
         }
 
