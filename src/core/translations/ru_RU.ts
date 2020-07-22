@@ -170,10 +170,6 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Outline</source>
-        <translation type="vanished">Аутлайн</translation>
-    </message>
-    <message>
         <location filename="../../corelib/business_layer/model/structure/structure_model.cpp" line="192"/>
         <source>Text</source>
         <translation type="unfinished"></translation>
@@ -197,13 +193,13 @@
 <context>
     <name>BusinessLogic::ScriptTextCorrector</name>
     <message>
-        <location filename="../management_layer/plugins/screenplay_text/ui/screenplay_text_corrector.cpp" line="40"/>
+        <location filename="../management_layer/plugins/screenplay_text/text/screenplay_text_corrector.cpp" line="40"/>
         <source>CONT&apos;D</source>
         <extracomment>Continued</extracomment>
         <translation>ПРОД.</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_text/ui/screenplay_text_corrector.cpp" line="45"/>
+        <location filename="../management_layer/plugins/screenplay_text/text/screenplay_text_corrector.cpp" line="45"/>
         <source>MORE</source>
         <translation>ДАЛЬШЕ</translation>
     </message>
@@ -307,15 +303,11 @@
         <source>yesterday at</source>
         <translation>вчера в</translation>
     </message>
-    <message>
-        <source>tomorrow at</source>
-        <translation type="vanished">вчера в</translation>
-    </message>
 </context>
 <context>
     <name>KeyProcessingLayer::FolderFooterHandler</name>
     <message>
-        <location filename="../management_layer/plugins/screenplay_text/ui/screenplay_text_edit.cpp" line="813"/>
+        <location filename="../management_layer/plugins/screenplay_text/text/screenplay_text_edit.cpp" line="828"/>
         <source>END OF</source>
         <translation>КОНЕЦ</translation>
     </message>
@@ -485,10 +477,6 @@
         <location filename="../management_layer/content/project/project_manager.cpp" line="675"/>
         <source>Treatment</source>
         <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Outline</source>
-        <translation type="vanished">Аутлайн</translation>
     </message>
     <message>
         <location filename="../management_layer/content/project/project_manager.cpp" line="677"/>
@@ -1248,14 +1236,6 @@ from 2 Gb</source>
         <translation>Введите название новой истории</translation>
     </message>
     <message>
-        <source>Local project</source>
-        <translation type="vanished">Проект на компьютере</translation>
-    </message>
-    <message>
-        <source>Remote project</source>
-        <translation type="vanished">Проект в облаке</translation>
-    </message>
-    <message>
         <location filename="../ui/projects/create_project_dialog.cpp" line="117"/>
         <source>Choose the folder where new story will be saved</source>
         <translation>Выберите папку, где будет сохранена новая история</translation>
@@ -1334,10 +1314,6 @@ from 2 Gb</source>
 <context>
     <name>Ui::ImportDialog</name>
     <message>
-        <source>Import data from the file &quot;%1&quot;</source>
-        <translation type="vanished">Импортировать данные из файла:</translation>
-    </message>
-    <message>
         <location filename="../ui/import/import_dialog.cpp" line="128"/>
         <source>Import data from the file</source>
         <translation>Импортировать данные из файла</translation>
@@ -1404,10 +1380,6 @@ from 2 Gb</source>
         <location filename="../ui/settings/language_dialog.cpp" line="123"/>
         <source>Close</source>
         <translation>Закрыть</translation>
-    </message>
-    <message>
-        <source>Apply</source>
-        <translation type="vanished">Применить</translation>
     </message>
 </context>
 <context>
@@ -1487,10 +1459,6 @@ from 2 Gb</source>
         <translation>Открыть историю</translation>
     </message>
     <message>
-        <source>Save current story</source>
-        <translation type="vanished">Сохранить текущую историю</translation>
-    </message>
-    <message>
         <location filename="../ui/menu_view.cpp" line="194"/>
         <source>Save current story as...</source>
         <translation>Сохранить текущую историю как...</translation>
@@ -1547,10 +1515,6 @@ from 2 Gb</source>
         <location filename="../ui/onboarding/onboarding_view.cpp" line="303"/>
         <source>Choose preferred language</source>
         <translation>Выберите предпочитаемый язык</translation>
-    </message>
-    <message>
-        <source>Use system locale settings</source>
-        <translation type="vanished">Использовать системные настройки локализации</translation>
     </message>
     <message>
         <location filename="../ui/onboarding/onboarding_view.cpp" line="304"/>
@@ -1732,31 +1696,6 @@ from 2 Gb</source>
         <translation>Продлить подписку на облачный сервис на</translation>
     </message>
     <message>
-        <location filename="../ui/account/renew_subscription_dialog.cpp" line="137"/>
-        <source>1 month by $3.99</source>
-        <translation></translation>
-    </message>
-    <message>
-        <location filename="../ui/account/renew_subscription_dialog.cpp" line="138"/>
-        <source>2 month by $7.99</source>
-        <translation></translation>
-    </message>
-    <message>
-        <location filename="../ui/account/renew_subscription_dialog.cpp" line="139"/>
-        <source>3 month by $11.99</source>
-        <translation></translation>
-    </message>
-    <message>
-        <location filename="../ui/account/renew_subscription_dialog.cpp" line="140"/>
-        <source>6 month by $21.99</source>
-        <translation></translation>
-    </message>
-    <message>
-        <location filename="../ui/account/renew_subscription_dialog.cpp" line="141"/>
-        <source>12 month by $41.99</source>
-        <translation></translation>
-    </message>
-    <message>
         <location filename="../ui/account/renew_subscription_dialog.cpp" line="142"/>
         <source>via PayPal</source>
         <translation>PayPal</translation>
@@ -1810,10 +1749,6 @@ from 2 Gb</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Outline</source>
-        <translation type="obsolete">Аутлайн</translation>
-    </message>
-    <message>
         <location filename="../management_layer/plugins/screenplay_information/screenplay_information_view.cpp" line="169"/>
         <source>Text</source>
         <translation type="unfinished"></translation>
@@ -1860,17 +1795,17 @@ from 2 Gb</source>
 <context>
     <name>Ui::ScreenplayTextAddCommentWidget</name>
     <message>
-        <location filename="../management_layer/plugins/screenplay_text/ui/screenplay_text_add_comment_widget.cpp" line="95"/>
+        <location filename="../management_layer/plugins/screenplay_text/comments/screenplay_text_add_comment_widget.cpp" line="95"/>
         <source>Add new comment</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_text/ui/screenplay_text_add_comment_widget.cpp" line="96"/>
+        <location filename="../management_layer/plugins/screenplay_text/comments/screenplay_text_add_comment_widget.cpp" line="96"/>
         <source>Cancel</source>
         <translation type="unfinished">Отмена</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_text/ui/screenplay_text_add_comment_widget.cpp" line="97"/>
+        <location filename="../management_layer/plugins/screenplay_text/comments/screenplay_text_add_comment_widget.cpp" line="97"/>
         <source>Save</source>
         <translation type="unfinished">Сохранить</translation>
     </message>
@@ -1878,39 +1813,36 @@ from 2 Gb</source>
 <context>
     <name>Ui::ScreenplayTextCommentsToolbar</name>
     <message>
-        <location filename="../management_layer/plugins/screenplay_text/ui/screenplay_text_comments_toolbar.cpp" line="287"/>
+        <location filename="../management_layer/plugins/screenplay_text/comments/screenplay_text_comments_toolbar.cpp" line="300"/>
         <source>Change text color</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_text/ui/screenplay_text_comments_toolbar.cpp" line="288"/>
+        <location filename="../management_layer/plugins/screenplay_text/comments/screenplay_text_comments_toolbar.cpp" line="301"/>
         <source>Change text highlight color</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_text/ui/screenplay_text_comments_toolbar.cpp" line="289"/>
+        <location filename="../management_layer/plugins/screenplay_text/comments/screenplay_text_comments_toolbar.cpp" line="302"/>
         <source>Add comment</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_text/ui/screenplay_text_comments_toolbar.cpp" line="290"/>
-        <source>Choose color for the action below</source>
+        <location filename="../management_layer/plugins/screenplay_text/comments/screenplay_text_comments_toolbar.cpp" line="304"/>
+        <source>Choose color for the action</source>
+        <extracomment>This allow user to choose color for the review mode actions like text higlight or comments</extracomment>
         <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
     <name>Ui::ScreenplayTextEdit</name>
     <message>
-        <source>Add document</source>
-        <translation type="obsolete">Добавить документ</translation>
-    </message>
-    <message>
-        <location filename="../management_layer/plugins/screenplay_text/ui/screenplay_text_edit.cpp" line="1092"/>
+        <location filename="../management_layer/plugins/screenplay_text/text/screenplay_text_edit.cpp" line="1109"/>
         <source>Merge paragraph</source>
         <translation>Объединить параграф</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_text/ui/screenplay_text_edit.cpp" line="1095"/>
+        <location filename="../management_layer/plugins/screenplay_text/text/screenplay_text_edit.cpp" line="1112"/>
         <source>Split paragraph</source>
         <translation>Разделить параграф</translation>
     </message>
@@ -1918,47 +1850,47 @@ from 2 Gb</source>
 <context>
     <name>Ui::ScreenplayTextEditToolBar</name>
     <message>
-        <location filename="../management_layer/plugins/screenplay_text/ui/screenplay_text_edit_toolbar.cpp" line="133"/>
+        <location filename="../management_layer/plugins/screenplay_text/text/screenplay_text_edit_toolbar.cpp" line="133"/>
         <source>Scene heading</source>
         <translation>Время и место</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_text/ui/screenplay_text_edit_toolbar.cpp" line="244"/>
+        <location filename="../management_layer/plugins/screenplay_text/text/screenplay_text_edit_toolbar.cpp" line="244"/>
         <source>Undo last action</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_text/ui/screenplay_text_edit_toolbar.cpp" line="245"/>
+        <location filename="../management_layer/plugins/screenplay_text/text/screenplay_text_edit_toolbar.cpp" line="245"/>
         <source>Redo last action</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_text/ui/screenplay_text_edit_toolbar.cpp" line="246"/>
+        <location filename="../management_layer/plugins/screenplay_text/text/screenplay_text_edit_toolbar.cpp" line="246"/>
         <source>Current paragraph format</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_text/ui/screenplay_text_edit_toolbar.cpp" line="247"/>
+        <location filename="../management_layer/plugins/screenplay_text/text/screenplay_text_edit_toolbar.cpp" line="247"/>
         <source>Hide fast format panel</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_text/ui/screenplay_text_edit_toolbar.cpp" line="248"/>
+        <location filename="../management_layer/plugins/screenplay_text/text/screenplay_text_edit_toolbar.cpp" line="248"/>
         <source>Show fast format panel</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_text/ui/screenplay_text_edit_toolbar.cpp" line="249"/>
+        <location filename="../management_layer/plugins/screenplay_text/text/screenplay_text_edit_toolbar.cpp" line="249"/>
         <source>Search text</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_text/ui/screenplay_text_edit_toolbar.cpp" line="250"/>
+        <location filename="../management_layer/plugins/screenplay_text/text/screenplay_text_edit_toolbar.cpp" line="250"/>
         <source>Disable review mode</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_text/ui/screenplay_text_edit_toolbar.cpp" line="251"/>
+        <location filename="../management_layer/plugins/screenplay_text/text/screenplay_text_edit_toolbar.cpp" line="251"/>
         <source>Enable review mode</source>
         <translation type="unfinished"></translation>
     </message>
@@ -1966,72 +1898,72 @@ from 2 Gb</source>
 <context>
     <name>Ui::ScreenplayTextView</name>
     <message>
-        <location filename="../management_layer/plugins/screenplay_text/ui/screenplay_text_view.cpp" line="428"/>
+        <location filename="../management_layer/plugins/screenplay_text/screenplay_text_view.cpp" line="440"/>
         <source>Scene heading</source>
         <translation>Время и место</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_text/ui/screenplay_text_view.cpp" line="429"/>
+        <location filename="../management_layer/plugins/screenplay_text/screenplay_text_view.cpp" line="441"/>
         <source>Scene characters</source>
         <translation>Участники сцены</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_text/ui/screenplay_text_view.cpp" line="430"/>
+        <location filename="../management_layer/plugins/screenplay_text/screenplay_text_view.cpp" line="442"/>
         <source>Action</source>
         <translation>Действие</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_text/ui/screenplay_text_view.cpp" line="431"/>
+        <location filename="../management_layer/plugins/screenplay_text/screenplay_text_view.cpp" line="443"/>
         <source>Character</source>
         <translation>Персонаж</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_text/ui/screenplay_text_view.cpp" line="432"/>
+        <location filename="../management_layer/plugins/screenplay_text/screenplay_text_view.cpp" line="444"/>
         <source>Parenthetical</source>
         <translation>Ремарка</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_text/ui/screenplay_text_view.cpp" line="433"/>
+        <location filename="../management_layer/plugins/screenplay_text/screenplay_text_view.cpp" line="445"/>
         <source>Dialogue</source>
         <translation>Реплика</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_text/ui/screenplay_text_view.cpp" line="434"/>
+        <location filename="../management_layer/plugins/screenplay_text/screenplay_text_view.cpp" line="446"/>
         <source>Lyrics</source>
         <translation>Лирика</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_text/ui/screenplay_text_view.cpp" line="435"/>
+        <location filename="../management_layer/plugins/screenplay_text/screenplay_text_view.cpp" line="447"/>
         <source>Shot</source>
         <translation>Кадр</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_text/ui/screenplay_text_view.cpp" line="436"/>
+        <location filename="../management_layer/plugins/screenplay_text/screenplay_text_view.cpp" line="448"/>
         <source>Transition</source>
         <translation>Переход</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_text/ui/screenplay_text_view.cpp" line="437"/>
+        <location filename="../management_layer/plugins/screenplay_text/screenplay_text_view.cpp" line="449"/>
         <source>Inline note</source>
         <translation>Заметка по тексту</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_text/ui/screenplay_text_view.cpp" line="438"/>
+        <location filename="../management_layer/plugins/screenplay_text/screenplay_text_view.cpp" line="450"/>
         <source>Unformatted text</source>
         <translation>Простой текст</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_text/ui/screenplay_text_view.cpp" line="439"/>
+        <location filename="../management_layer/plugins/screenplay_text/screenplay_text_view.cpp" line="451"/>
         <source>Folder</source>
         <translation>Папка</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_text/ui/screenplay_text_view.cpp" line="440"/>
+        <location filename="../management_layer/plugins/screenplay_text/screenplay_text_view.cpp" line="452"/>
         <source>Formatting</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_text/ui/screenplay_text_view.cpp" line="441"/>
+        <location filename="../management_layer/plugins/screenplay_text/screenplay_text_view.cpp" line="453"/>
         <source>Comments</source>
         <translation type="unfinished"></translation>
     </message>
@@ -2074,22 +2006,6 @@ from 2 Gb</source>
 </context>
 <context>
     <name>Ui::SettingsView</name>
-    <message>
-        <source>Dark</source>
-        <translation type="vanished">Тёмная</translation>
-    </message>
-    <message>
-        <source>Light</source>
-        <translation type="vanished">Светлая</translation>
-    </message>
-    <message>
-        <source>Dark and light</source>
-        <translation type="vanished">Тёмно-светлая</translation>
-    </message>
-    <message>
-        <source>Custom</source>
-        <translation type="vanished">Пользовательская</translation>
-    </message>
     <message>
         <location filename="../ui/settings/settings_view.cpp" line="438"/>
         <source>Choose the folder where backups will be saved</source>
@@ -2908,11 +2824,6 @@ If you work with no interruptions it saves the project every 3 minutes.</source>
 </context>
 <context>
     <name>Ui::UpgradeToProDialog</name>
-    <message>
-        <location filename="../ui/account/upgrade_to_pro_dialog.cpp" line="85"/>
-        <source>Upgrade to pro for $39.99 lifetime</source>
-        <translation></translation>
-    </message>
     <message>
         <location filename="../ui/account/upgrade_to_pro_dialog.cpp" line="86"/>
         <source>via PayPal</source>
