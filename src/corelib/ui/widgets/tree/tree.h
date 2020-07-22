@@ -82,6 +82,11 @@ public:
     void expandAll();
 
     /**
+     * @brief Установить необходимость пересчитывать размер элементов в делегате
+     */
+    void setAutoAdjustSize(bool _auto);
+
+    /**
      * @brief Загрузить состояние дерева
      */
     void restoreState(const QVariant& _state);

@@ -130,6 +130,7 @@ ScreenplayTextView::Implementation::Implementation(QWidget* _parent)
     sidebarContent->addWidget(commentsView);
     fastFormatWidget->hide();
     fastFormatWidget->setParagraphTypesModel(paragraphTypesModel);
+    commentsView->setModel(commentsModel);
     commentsView->hide();
 }
 

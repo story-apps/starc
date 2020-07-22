@@ -1498,10 +1498,11 @@ class DesignSystem::TreeOneLineItem::Implementation
 public:
     explicit Implementation(qreal _scaleFactor);
 
-    QMarginsF margins = {12.0, 12.0, 12.0, 12.0};
-    qreal height = 48.0;
+    QMarginsF margins = {16.0, 16.0, 16.0, 16.0};
+    qreal height = 56.0;
     qreal spacing = 16.0;
-    QSizeF iconSize = {24.0, 24.0};
+    QSizeF iconSize = {32.0, 32.0};
+    QSizeF avatarSize = {40.0, 40.0};
 };
 
 DesignSystem::TreeOneLineItem::Implementation::Implementation(qreal _scaleFactor)
@@ -1510,6 +1511,7 @@ DesignSystem::TreeOneLineItem::Implementation::Implementation(qreal _scaleFactor
     height *= _scaleFactor;
     spacing *= _scaleFactor;
     iconSize *= _scaleFactor;
+    avatarSize *= _scaleFactor;
 }
 
 
@@ -1536,6 +1538,11 @@ qreal DesignSystem::TreeOneLineItem::spacing() const
 const QSizeF& DesignSystem::TreeOneLineItem::iconSize() const
 {
     return d->iconSize;
+}
+
+const QSizeF& DesignSystem::TreeOneLineItem::avatarSize() const
+{
+    return d->avatarSize;
 }
 
 DesignSystem::TreeOneLineItem::TreeOneLineItem(qreal _scaleFactor)

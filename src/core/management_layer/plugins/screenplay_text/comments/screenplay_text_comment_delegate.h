@@ -1,17 +1,18 @@
 #pragma once
 
-#include <corelib_global.h>
-
 #include <QStyledItemDelegate>
 
 
+namespace Ui
+{
+
 /**
- * @brief Базовый делегат отрисовки элементов дерева
+ * @brief Делегат для отрисовки комментариев
  */
-class CORE_LIBRARY_EXPORT TreeDelegate : public QStyledItemDelegate
+class ScreenplayTextCommentDelegate : public QStyledItemDelegate
 {
 public:
-    explicit TreeDelegate(QObject* _parent = nullptr);
+    explicit ScreenplayTextCommentDelegate(QObject* _parent = nullptr);
 
     /**
      * @brief Реализуем собственную отрисовку
@@ -19,3 +20,5 @@ public:
     void paint(QPainter* _painter, const QStyleOptionViewItem& _option, const QModelIndex& _index) const;
     QSize sizeHint(const QStyleOptionViewItem& _option, const QModelIndex& _index) const;
 };
+
+} // namespace Ui

@@ -1,6 +1,7 @@
 #include "screenplay_text_comments_view.h"
 
 #include "screenplay_text_add_comment_widget.h"
+#include "screenplay_text_comment_delegate.h"
 
 #include <ui/design_system/design_system.h>
 #include <ui/widgets/tree/tree.h>
@@ -28,6 +29,8 @@ ScreenplayTextCommentsView::Implementation::Implementation(QWidget* _parent)
     : commentsView(new Tree(_parent)),
       addCommentWidget(new ScreenplayTextAddCommentWidget(_parent))
 {
+    commentsView->setItemDelegate(new ScreenplayTextCommentDelegate(commentsView));
+    commentsView->setAutoAdjustSize(true);
 }
 
 
@@ -58,6 +61,11 @@ ScreenplayTextCommentsView::ScreenplayTextCommentsView(QWidget* _parent)
 
 ScreenplayTextCommentsView::~ScreenplayTextCommentsView() = default;
 
+void ScreenplayTextCommentsView::setModel(QAbstractItemModel* _model)
+{
+    d->commentsView->setModel(_model);
+}
+
 void ScreenplayTextCommentsView::showAddCommentView(const QColor& _withColor)
 {
     d->addCommentColor = _withColor;
@@ -71,7 +79,8 @@ void ScreenplayTextCommentsView::designSystemChangeEvent(DesignSystemChangeEvent
     StackWidget::designSystemChangeEvent(_event);
 
     setBackgroundColor(Ui::DesignSystem::color().primary());
-    d->commentsView->setBackgroundColor(Ui::DesignSystem::color().primary());
+    d->commentsView->setBackgroundColor(DesignSystem::color().primary());
+    d->commentsView->setTextColor(DesignSystem::color().onPrimary());
 }
 
 } // namespace Ui

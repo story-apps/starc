@@ -17,6 +17,11 @@ public:
     ~TreeView() override;
 
     /**
+     * @brief Установить необходимость пересчитывать размер элементов в делегате
+     */
+    void setAutoAdjustSize(bool _auto);
+
+    /**
      * @brief Загрузить состояние дерева
      */
     void restoreState(const QVariant& _state);
@@ -47,6 +52,11 @@ protected:
      * @brief Декорируем вьюпорт после нажатия клавиши
      */
     void paintEvent(QPaintEvent* _event) override;
+
+    /**
+     * @brief Переопределяем, чтобы при необходимости пересчитывать размер элементов
+     */
+    void resizeEvent(QResizeEvent* _event) override;
 
     /**
      * @brief Переопределяем, чтобы раскрывать элемент в который кидаются данные, если элемент свёрнут

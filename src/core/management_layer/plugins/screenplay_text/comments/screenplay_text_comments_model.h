@@ -24,6 +24,7 @@ public:
         ReviewMarkAuthorEmail = Qt::UserRole + 1,
         ReviewMarkCreationDate,
         ReviewMarkComment,
+        ReviewMarkColor,
         ReviewMarkIsDone
     };
 
@@ -46,8 +47,6 @@ public:
      */
     int rowCount(const QModelIndex &_parent = {}) const override;
     QVariant data(const QModelIndex &_index, int _role) const override;
-
-signals:
 
 private:
     class Implementation;

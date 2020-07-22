@@ -18,6 +18,11 @@ public:
 
 
     /**
+     * @brief Нужно ли пересчитывать размер отрисовываемых элементов при изменении размера
+     */
+    bool adjustSizeAutomatically = false;
+
+    /**
      * @brief Индекс элемента на который наведена мышь
      */
     QModelIndex hoverIndex;
@@ -63,6 +68,11 @@ TreeView::TreeView(QWidget* _parent)
 
     connect(&d->decorationRadiusAnimation, &QVariantAnimation::valueChanged, this, [this] { update(); viewport()->update(); });
     connect(&d->decorationOpacityAnimation, &QVariantAnimation::valueChanged, this, [this] { update(); viewport()->update(); });
+}
+
+void TreeView::setAutoAdjustSize(bool _auto)
+{
+    d->adjustSizeAutomatically = _auto;
 }
 
 void TreeView::restoreState(const QVariant& _state)
@@ -161,6 +171,15 @@ void TreeView::paintEvent(QPaintEvent* _event)
                             d->decorationRadiusAnimation.currentValue().toReal());
         painter.setOpacity(1.0);
         painter.setClipRect(QRect(), Qt::NoClip);
+    }
+}
+
+void TreeView::resizeEvent(QResizeEvent* _event)
+{
+    QTreeView::resizeEvent(_event);
+
+    if (d->adjustSizeAutomatically) {
+        scheduleDelayedItemsLayout();
     }
 }
 

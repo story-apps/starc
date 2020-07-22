@@ -889,6 +889,7 @@ public:
          * @brief Размер иконки
          */
         const QSizeF& iconSize() const;
+        const QSizeF& avatarSize() const;
 
     private:
         explicit TreeOneLineItem(qreal _scaleFactor);

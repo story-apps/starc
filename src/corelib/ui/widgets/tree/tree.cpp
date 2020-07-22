@@ -129,6 +129,11 @@ void Tree::expandAll()
     d->tree->expandAll();
 }
 
+void Tree::setAutoAdjustSize(bool _auto)
+{
+    d->tree->setAutoAdjustSize(_auto);
+}
+
 void Tree::restoreState(const QVariant& _state)
 {
     d->tree->restoreState(_state);

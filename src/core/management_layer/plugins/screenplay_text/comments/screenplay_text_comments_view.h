@@ -20,6 +20,11 @@ public:
     ~ScreenplayTextCommentsView() override;
 
     /**
+     * @brief Установить модель комментариев
+     */
+    void setModel(QAbstractItemModel* _model);
+
+    /**
      * @brief Показать виджет добавления/редактирования комментария
      */
     void showAddCommentView(const QColor& _withColor);
