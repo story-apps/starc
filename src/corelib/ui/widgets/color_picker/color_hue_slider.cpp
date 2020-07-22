@@ -86,7 +86,8 @@ void ColorHueSlider::paintEvent(QPaintEvent* _event)
 
     painter.setPen(QPen(textColor(), Ui::DesignSystem::layout().px2()));
     painter.setBrush(QColor::fromHsvF(d->hue, 1.0, 1.0));
-    painter.drawEllipse(d->selectorPos(size()), Ui::DesignSystem::layout().px4(), Ui::DesignSystem::layout().px4());
+    const auto radius = Ui::DesignSystem::layout().px4() + Ui::DesignSystem::layout().px2();
+    painter.drawEllipse(d->selectorPos(size()), radius, radius);
 }
 
 void ColorHueSlider::mousePressEvent(QMouseEvent* _event)

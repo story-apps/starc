@@ -249,7 +249,8 @@ void Color2DSlider::paintEvent(QPaintEvent* _event)
 
     painter.setPen(QPen(textColor(), Ui::DesignSystem::layout().px2()));
     painter.setBrush(color());
-    painter.drawEllipse(p->selectorPos(size()), Ui::DesignSystem::layout().px4(), Ui::DesignSystem::layout().px4());
+    const auto radius = Ui::DesignSystem::layout().px4() + Ui::DesignSystem::layout().px2();
+    painter.drawEllipse(p->selectorPos(size()), radius, radius);
 }
 
 void Color2DSlider::mousePressEvent(QMouseEvent* event)
