@@ -23,6 +23,7 @@ public:
     struct TextPart {
         int from = 0;
         int length = 0;
+        int end() const;
     };
     struct TextFormat : TextPart {
         bool isBold = false;

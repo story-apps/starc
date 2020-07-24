@@ -272,6 +272,11 @@ void ScreenplayTextModelTextItem::Implementation::updateXml()
 // ****
 
 
+int ScreenplayTextModelTextItem::TextPart::end() const
+{
+     return from + length;
+}
+
 bool ScreenplayTextModelTextItem::TextFormat::operator==(const ScreenplayTextModelTextItem::TextFormat& _other) const
 {
     return from == _other.from

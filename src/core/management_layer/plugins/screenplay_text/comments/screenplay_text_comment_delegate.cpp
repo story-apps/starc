@@ -90,12 +90,15 @@ void ScreenplayTextCommentDelegate::paint(QPainter* _painter, const QStyleOption
     // ... пользователь
     //
     _painter->setFont(Ui::DesignSystem::font().subtitle2());
-    const qreal textLeft = avatarRect.right() + Ui::DesignSystem::treeOneLineItem().avatarSpacing();
+    const qreal textLeft = avatarRect.right() + Ui::DesignSystem::layout().px12();
     const QRectF textRect(QPointF(textLeft,
                                   avatarRect.top()),
-                          QSizeF(backgroundRect.right() - textLeft - Ui::DesignSystem::treeOneLineItem().avatarMargins().right(),
+                          QSizeF(backgroundRect.right() - textLeft -  + Ui::DesignSystem::layout().px12(),
                                  avatarRect.height() / 2));
-    const auto text = _painter->fontMetrics().elidedText(_index.data(ScreenplayTextCommentsModel::ReviewMarkAuthorEmail).toString(), Qt::ElideRight, static_cast<int>(textRect.width()));
+    const auto text = _painter->fontMetrics().elidedText(
+                          _index.data(ScreenplayTextCommentsModel::ReviewMarkAuthorEmail).toString(),
+                          Qt::ElideRight,
+                          static_cast<int>(textRect.width()));
     _painter->drawText(textRect, Qt::AlignLeft | Qt::AlignBottom, text);
     //
     // ... дата
