@@ -87,102 +87,6 @@ public:
     QVector<ReviewMarkWrapper> reviewMarks;
 };
 
-//        //
-//        // Вспомогательные функции
-//        //
-//        auto saveReviewMark = [this] (const QModelIndex& _itemIndex,
-//                                      ScreenplayTextModelTextItem* _textItem,
-//                                      const ScreenplayTextModelTextItem::ReviewMark& _reviewMark)
-//        {
-//            Implementation::ReviewMarkWrapper reviewMarkWrapper;
-//            reviewMarkWrapper.items.append(_textItem);
-//            reviewMarkWrapper.itemsReviewMark = _reviewMark;
-//            reviewMarkWrapper.fromInFirstItem = _reviewMark.from;
-//            reviewMarkWrapper.toInLastItem = _reviewMark.from + _reviewMark.length;
-
-//            const ModelIndexPath indexPath = {_itemIndex, _reviewMark.from};
-//            d->reviewMarks.insert(indexPath, reviewMarkWrapper);
-//            const auto reviewMarkRow = std::distance(d->reviewMarks.begin(), d->reviewMarks.find(indexPath));
-//            beginInsertRows({}, reviewMarkRow, reviewMarkRow);
-//            endInsertRows();
-//        };
-
-
-//        connect(d->model, &ScreenplayTextModel::rowsInserted, this, [this, saveReviewMark] (const QModelIndex& _parent, int _first, int _last) {
-//            //
-//            // Для каждого из абзацев
-//            //
-//            for (int itemRow = _first; itemRow <= _last; ++itemRow) {
-//                const auto itemIndex = d->model->index(itemRow, 0, _parent);
-//                const auto item = d->model->itemForIndex(itemIndex);
-//                if (item == nullptr
-//                    || item->type() != ScreenplayTextModelItemType::Text) {
-//                    continue;
-//                }
-
-//                //
-//                // Если вставился абзац без заметок, пропускаем его
-//                //
-//                auto textItem = static_cast<ScreenplayTextModelTextItem*>(item);
-//                if (textItem->reviewMarks().isEmpty()) {
-//                    continue;
-//                }
-
-//                //
-//                // Если в абзаце есть заметка
-//                //
-//                for (const auto& reviewMark : std::as_const(textItem->reviewMarks())) {
-//                    //
-//                    // Если заметка внутри абзаца, просто сохраняем её
-//                    //
-//                    if (0 < reviewMark.from && (reviewMark.from + reviewMark.length) < textItem->text().length()) {
-//                        saveReviewMark(itemIndex, textItem, reviewMark);
-//                    }
-
-//                    //
-//                    // Если заметка начинается в начале абзаца, проверяем нельзя ли её присовокупить к заметке в конце предыдущего абзаца
-//                    //
-
-//                    //
-//                    // Если заметка заканчивается в конце абзаца, проверяем нельзя ли её присовокупить к заметке в начале следующего абзаца
-//                    //
-//                }
-//            }
-//        });
-//        connect(d->model, &ScreenplayTextModel::rowsRemoved, this, [this] (const QModelIndex& _parent, int _first, int _last) {
-//            //
-//            // Для каждого из абзацев
-//            //
-//            for (int itemRow = _first; itemRow <= _last; ++itemRow) {
-
-//                //
-//                // Если нет заметок связанных с удаляемым абзацем, пропускаем
-//                //
-
-//                //
-//                // Если есть заметки в удаляемом абзаце
-//                //
-//                {
-//                    //
-//                    // Если заметка была посередине абзаца, то просто удаляем её
-//                    //
-
-//                    //
-//                    // Если абзац был внутри заметки, которая занимала несколько абзацев, то убираем её из списка
-//                    //
-//                    {
-//                        //
-//                        // Если в этой абзаце был конец заметки, то делаем концом заметки конец предыдущего абзаца
-//                        //
-
-//                        //
-//                        // Если в этом абзаце была середина заметки, то просто удаляем его из списков
-//                        //
-//                    }
-//                }
-//            }
-//        });
-
 ScreenplayTextCommentsModel::Implementation::Implementation(ScreenplayTextCommentsModel* _q)
     : q(_q)
 {
@@ -313,6 +217,14 @@ void ScreenplayTextCommentsModel::Implementation::processSourceModelRowsInserted
         // Вставляем текстовый элемент в общий список на своё место
         //
         auto textItem = static_cast<ScreenplayTextModelTextItem*>(item);
+
+        //
+        // Пропускаем корректировочные блоки
+        //
+        if (textItem->isCorrection()) {
+            continue;
+        }
+
         if (lastInsertPosition == invalidPosition) {
             const auto itemIndexPath = buildModelIndexPath(itemIndex);
             for (int index = 0; index < modelTextItems.size(); ++index) {
@@ -336,14 +248,14 @@ void ScreenplayTextCommentsModel::Implementation::processSourceModelRowsInserted
         //
         if (lastInsertPosition > 0) {
             auto previousTextItem = modelTextItems.value(lastInsertPosition - 1);
-            QVector<ReviewMarkWrapper> oldReviewMarkWrappers;
+            QVector<ReviewMarkWrapper> previousItemReviewMarkWrappers;
             for (const auto& reviewMarkWrapper : std::as_const(reviewMarks)) {
                 if (reviewMarkWrapper.items.contains(previousTextItem)) {
-                    oldReviewMarkWrappers.append(reviewMarkWrapper);
+                    previousItemReviewMarkWrappers.append(reviewMarkWrapper);
                     continue;
                 }
 
-                if (!oldReviewMarkWrappers.isEmpty()) {
+                if (!previousItemReviewMarkWrappers.isEmpty()) {
                     break;
                 }
             }
@@ -351,33 +263,35 @@ void ScreenplayTextCommentsModel::Implementation::processSourceModelRowsInserted
             //
             // Если на границе вставляемого элемента есть состовная редакторская заметка
             //
-            if (!oldReviewMarkWrappers.isEmpty()
-                && oldReviewMarkWrappers.constLast().items.size() > 1) {
-                const auto oldReviewMarkWrapper = oldReviewMarkWrappers.constLast();
-                const auto oldReviewMarkWrapperIndex = reviewMarks.indexOf(oldReviewMarkWrapper);
+            if (!previousItemReviewMarkWrappers.isEmpty()
+                && previousItemReviewMarkWrappers.constLast().items.size() > 1) {
+                const auto previousItemReviewMarkWrapper = previousItemReviewMarkWrappers.constLast();
+                const auto previousItemReviewMarkWrapperIndex = reviewMarks.indexOf(previousItemReviewMarkWrapper);
                 //
                 // ... и вставляемый блок находится у неё в середине, то разделяем её на две
                 //
-                if (previousTextItem != oldReviewMarkWrapper.items.constLast()) {
+                if (previousTextItem != previousItemReviewMarkWrapper.items.constLast()) {
                     //
                     // ... вырежем из верхней, всё, что перенеслось в нижнюю часть
                     //
-                    auto topCorrectedReviewMarkWrapper = oldReviewMarkWrapper;
+                    auto topCorrectedReviewMarkWrapper = previousItemReviewMarkWrapper;
                     do {
                         topCorrectedReviewMarkWrapper.items.removeLast();
                     } while (topCorrectedReviewMarkWrapper.items.constLast() != previousTextItem);
-                    topCorrectedReviewMarkWrapper.toInLastItem = topCorrectedReviewMarkWrapper.items.constLast()->reviewMarks().constLast().end();
-                    reviewMarks[oldReviewMarkWrapperIndex] = topCorrectedReviewMarkWrapper;
+                    topCorrectedReviewMarkWrapper.toInLastItem
+                            = topCorrectedReviewMarkWrapper.items.constLast()->reviewMarks().constLast().end();
+                    reviewMarks[previousItemReviewMarkWrapperIndex] = topCorrectedReviewMarkWrapper;
                     //
                     // ... добавим заметку снизу
                     //
-                    auto bottomCorrectedReviewMarkWrapper = oldReviewMarkWrapper;
+                    auto bottomCorrectedReviewMarkWrapper = previousItemReviewMarkWrapper;
                     while (bottomCorrectedReviewMarkWrapper.items.constFirst() != previousTextItem) {
                         bottomCorrectedReviewMarkWrapper.items.removeFirst();
                     };
                     bottomCorrectedReviewMarkWrapper.items.removeFirst();
-                    bottomCorrectedReviewMarkWrapper.fromInFirstItem = bottomCorrectedReviewMarkWrapper.items.constFirst()->reviewMarks().constFirst().from;
-                    const int bottomCorrectedReviewMarkWrapperIndex = oldReviewMarkWrapperIndex + 1;
+                    bottomCorrectedReviewMarkWrapper.fromInFirstItem
+                            = bottomCorrectedReviewMarkWrapper.items.constFirst()->reviewMarks().constFirst().from;
+                    const int bottomCorrectedReviewMarkWrapperIndex = previousItemReviewMarkWrapperIndex + 1;
                     q->beginInsertRows({}, bottomCorrectedReviewMarkWrapperIndex, bottomCorrectedReviewMarkWrapperIndex);
                     reviewMarks.insert(bottomCorrectedReviewMarkWrapperIndex, bottomCorrectedReviewMarkWrapper);
                     q->endInsertRows();
@@ -394,7 +308,98 @@ void ScreenplayTextCommentsModel::Implementation::processSourceModelRowsInserted
 
 void ScreenplayTextCommentsModel::Implementation::processSourceModelRowsRemoved(const QModelIndex& _parent, int _firstRow, int _lastRow)
 {
+    //
+    // Для каждого из удаляемых
+    //
+    for (int row = _firstRow; row <= _lastRow; ++row) {
+        //
+        // Игнорируем не текстовые элементы
+        //
+        const auto itemIndex = model->index(row, 0, _parent);
+        const auto item = model->itemForIndex(itemIndex);
+        if (item == nullptr
+            || item->type() != ScreenplayTextModelItemType::Text) {
+            continue;
+        }
 
+        //
+        // Собираем и удаляем все заметки, связанные с удаляемым элементом
+        //
+        auto textItem = static_cast<ScreenplayTextModelTextItem*>(item);
+
+        //
+        // Пропускаем корректировочные блоки
+        //
+        if (textItem->isCorrection()) {
+            continue;
+        }
+
+        QVector<ReviewMarkWrapper> reviewMarkWrappersToDelete;
+        for (const auto& reviewMarkWrapper : std::as_const(reviewMarks)) {
+            if (reviewMarkWrapper.items.contains(textItem)) {
+                reviewMarkWrappersToDelete.append(reviewMarkWrapper);
+                continue;
+            }
+
+            if (!reviewMarkWrappersToDelete.isEmpty()) {
+                break;
+            }
+        }
+
+        //
+        // Удаляем заметки
+        //
+        for (const auto& reviewMarkWrapper : reviewMarkWrappersToDelete) {
+            const auto reviewMarkWrapperIndex = reviewMarks.lastIndexOf(reviewMarkWrapper);
+
+            //
+            // Если эта заметка относится только к текущему блоку, просто удалим её
+            //
+            if (reviewMarkWrapper.items.size() == 1) {
+                q->beginRemoveRows({}, reviewMarkWrapperIndex, reviewMarkWrapperIndex);
+                reviewMarks.removeAll(reviewMarkWrapper);
+                q->endRemoveRows();
+            }
+            //
+            // В противном случае исключаем текущий блок из блоков заметки
+            //
+            else {
+                //
+                // ... отрезаем от начала
+                //
+                if (textItem == reviewMarkWrapper.items.constFirst()) {
+                    auto correctedReviewMarkWrapper = reviewMarkWrapper;
+                    correctedReviewMarkWrapper.items.removeFirst();
+                    correctedReviewMarkWrapper.fromInFirstItem
+                            = correctedReviewMarkWrapper.items.constFirst()->reviewMarks().constFirst().from;
+                    reviewMarks[reviewMarkWrapperIndex] = correctedReviewMarkWrapper;
+                }
+                //
+                // ... отрезаем от конца
+                //
+                else if (textItem == reviewMarkWrapper.items.constLast()) {
+                    auto correctedReviewMarkWrapper = reviewMarkWrapper;
+                    correctedReviewMarkWrapper.items.removeLast();
+                    correctedReviewMarkWrapper.toInLastItem
+                            = correctedReviewMarkWrapper.items.constLast()->reviewMarks().constLast().end();
+                    reviewMarks[reviewMarkWrapperIndex] = correctedReviewMarkWrapper;
+                }
+                //
+                // ... вырезаем из середины
+                //
+                else {
+                    auto correctedReviewMarkWrapper = reviewMarkWrapper;
+                    correctedReviewMarkWrapper.items.removeAll(textItem);
+                    reviewMarks[reviewMarkWrapperIndex] = correctedReviewMarkWrapper;
+                }
+            }
+        }
+
+        //
+        // Удаляем текстовый элемент из общего списка
+        //
+        modelTextItems.removeAll(textItem);
+    }
 }
 
 void ScreenplayTextCommentsModel::Implementation::processSourceModelDataChanged(const QModelIndex& _index)
@@ -410,6 +415,14 @@ void ScreenplayTextCommentsModel::Implementation::processSourceModelDataChanged(
     }
 
     auto textItem = static_cast<ScreenplayTextModelTextItem*>(item);
+
+    //
+    // Пропускаем корректировочные блоки
+    //
+    if (textItem->isCorrection()) {
+        return;
+    }
+
     QVector<ReviewMarkWrapper> oldReviewMarkWrappers;
     for (const auto& reviewMarkWrapper : std::as_const(reviewMarks)) {
         if (reviewMarkWrapper.items.contains(textItem)) {
@@ -550,10 +563,18 @@ void ScreenplayTextCommentsModel::setModel(ScreenplayTextModel* _model)
                 const auto item = d->model->itemForIndex(itemIndex);
                 switch (item->type()) {
                     case ScreenplayTextModelItemType::Text: {
+                        const auto textItem = static_cast<ScreenplayTextModelTextItem*>(item);
+
+                        //
+                        // Пропускаем корректировочные блоки
+                        //
+                        if (textItem->isCorrection()) {
+                            break;
+                        }
+
                         //
                         // Сохраним текстовый элемент в плоском списке
                         //
-                        const auto textItem = static_cast<ScreenplayTextModelTextItem*>(item);
                         d->modelTextItems.append(textItem);
 
                         //
@@ -612,7 +633,7 @@ void ScreenplayTextCommentsModel::setModel(ScreenplayTextModel* _model)
         connect(d->model, &ScreenplayTextModel::rowsInserted, this, [this] (const QModelIndex& _parent, int _first, int _last) {
             d->processSourceModelRowsInserted(_parent, _first, _last);
         });
-        connect(d->model, &ScreenplayTextModel::rowsRemoved, this, [this] (const QModelIndex& _parent, int _first, int _last) {
+        connect(d->model, &ScreenplayTextModel::rowsAboutToBeRemoved, this, [this] (const QModelIndex& _parent, int _first, int _last) {
             d->processSourceModelRowsRemoved(_parent, _first, _last);
         });
         connect(d->model, &ScreenplayTextModel::dataChanged, this, [this] (const QModelIndex& _topLeft, const QModelIndex& _bottomRight) {

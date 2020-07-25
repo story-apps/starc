@@ -374,6 +374,7 @@ void ScreenplayTextModelTextItem::setParagraphType(ScreenplayParagraphType _type
 
     d->paragraphType = _type;
     d->updateXml();
+    setChanged(true);
 }
 
 const QString& ScreenplayTextModelTextItem::text() const
@@ -389,6 +390,7 @@ void ScreenplayTextModelTextItem::setText(const QString& _text)
 
     d->text = _text;
     d->updateXml();
+    setChanged(true);
 }
 
 void ScreenplayTextModelTextItem::setFormats(const QVector<QTextLayout::FormatRange>& _formats)
@@ -421,6 +423,12 @@ void ScreenplayTextModelTextItem::setFormats(const QVector<QTextLayout::FormatRa
 
     d->formats = newFormats;
     d->updateXml();
+    setChanged(true);
+}
+
+const QVector<ScreenplayTextModelTextItem::ReviewMark>& ScreenplayTextModelTextItem::reviewMarks() const
+{
+    return d->reviewMarks;
 }
 
 void ScreenplayTextModelTextItem::setReviewMarks(const QVector<QTextLayout::FormatRange>& _reviewMarks)
@@ -457,11 +465,7 @@ void ScreenplayTextModelTextItem::setReviewMarks(const QVector<QTextLayout::Form
 
     d->reviewMarks = newReviewMarks;
     d->updateXml();
-}
-
-const QVector<ScreenplayTextModelTextItem::ReviewMark>& ScreenplayTextModelTextItem::reviewMarks() const
-{
-    return d->reviewMarks;
+    setChanged(true);
 }
 
 QVariant ScreenplayTextModelTextItem::data(int _role) const

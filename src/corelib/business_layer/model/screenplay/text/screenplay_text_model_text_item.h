@@ -73,14 +73,16 @@ public:
     const QString& text() const;
     void setText(const QString& _text);
 
+    /**
+     * @brief Форматирование в блоке
+     */
     void setFormats(const QVector<QTextLayout::FormatRange>& _formats);
-
-    void setReviewMarks(const QVector<QTextLayout::FormatRange>& _reviewMarks);
 
     /**
      * @brief Редакторские заметки
      */
     const QVector<ReviewMark>& reviewMarks() const;
+    void setReviewMarks(const QVector<QTextLayout::FormatRange>& _reviewMarks);
 
     /**
      * @brief Определяем интерфейс получения данных сцены

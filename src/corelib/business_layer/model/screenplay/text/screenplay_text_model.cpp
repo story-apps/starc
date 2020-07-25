@@ -224,12 +224,14 @@ void ScreenplayTextModel::removeItem(ScreenplayTextModelItem* _item)
 void ScreenplayTextModel::updateItem(ScreenplayTextModelItem* _item)
 {
     if (_item == nullptr
-        || _item->parent() == nullptr) {
+        || _item->parent() == nullptr
+        || !_item->isChanged()) {
         return;
     }
 
     const QModelIndex indexForUpdate = indexForItem(_item);
     emit dataChanged(indexForUpdate, indexForUpdate);
+    _item->setChanged(false);
 
     updateItem(_item->parent());
 }

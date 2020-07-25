@@ -85,6 +85,12 @@ public:
      */
     virtual AbstractModelItem* childAt(int _index) const;
 
+    /**
+     * @brief Изменён ли элемент
+     */
+    bool isChanged() const;
+    void setChanged(bool _changed);
+
 private:
     class Implementation;
     QScopedPointer<Implementation> d;
