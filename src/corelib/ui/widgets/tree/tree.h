@@ -77,6 +77,11 @@ public:
     QModelIndex indexAt(const QPoint& _pos) const;
 
     /**
+     * @brief Получить список выделенных элементов
+     */
+    QModelIndexList selectedIndexes() const;
+
+    /**
      * @brief Развернуть все элементы
      */
     void expandAll();

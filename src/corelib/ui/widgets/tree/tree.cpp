@@ -124,6 +124,11 @@ QModelIndex Tree::indexAt(const QPoint& _pos) const
     return d->tree->indexAt(_pos);
 }
 
+QModelIndexList Tree::selectedIndexes() const
+{
+    return d->tree->selectionModel()->selectedIndexes();
+}
+
 void Tree::expandAll()
 {
     d->tree->expandAll();
