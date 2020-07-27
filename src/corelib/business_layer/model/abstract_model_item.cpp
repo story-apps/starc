@@ -112,6 +112,11 @@ bool AbstractModelItem::isChanged() const
 void AbstractModelItem::setChanged(bool _changed)
 {
     d->changed = _changed;
+
+    if (_changed
+        && d->parent != nullptr) {
+        d->parent->setChanged(_changed);
+    }
 }
 
 } // namespace BusinessLayer
