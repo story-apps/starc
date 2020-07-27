@@ -19,6 +19,7 @@
 #include <QLocale>
 #include <QMimeData>
 #include <QPainter>
+#include <QRegularExpression>
 #include <QScrollBar>
 #include <QStandardItemModel>
 #include <QTextTable>
@@ -49,7 +50,7 @@ ScreenplayTextEdit::ScreenplayTextEdit(QWidget* _parent)
     setFrameShape(QFrame::NoFrame);
 
     setDocument(&d->document);
-    setCapitalizeWords(true);
+    setCapitalizeWords(false);
 }
 
 ScreenplayTextEdit::~ScreenplayTextEdit() = default;
@@ -357,6 +358,37 @@ bool ScreenplayTextEdit::updateEnteredText(const QString& _eventText)
         && _eventText[0] != TextHelper::smartToUpper(_eventText[0])) {
         //
         // Сформируем правильное представление строки
+        //
+        QString correctedText = _eventText;
+        correctedText[0] = TextHelper::smartToUpper(correctedText[0]);
+
+        //
+        // Стираем предыдущий введённый текст
+        //
+        for (int repeats = 0; repeats < _eventText.length(); ++repeats) {
+            cursor.deletePreviousChar();
+        }
+
+        //
+        // Выводим необходимый
+        //
+        cursor.insertText(correctedText);
+        setTextCursor(cursor);
+
+        return true;
+    }
+
+    //
+    // Если перед нами конец предложения
+    // и не сокращение
+    // и после курсора нет текста (для ремарки допустима скобка)
+    //
+    const QString endOfSentancePattern = QString("([.]|[?]|[!]|[…]) %1$").arg(_eventText);
+    if (cursorBackwardText.contains(QRegularExpression(endOfSentancePattern))
+        && cursorForwardText.isEmpty()
+        && _eventText[0] != TextHelper::smartToUpper(_eventText[0])) {
+        //
+        // Сделаем первую букву заглавной
         //
         QString correctedText = _eventText;
         correctedText[0] = TextHelper::smartToUpper(correctedText[0]);

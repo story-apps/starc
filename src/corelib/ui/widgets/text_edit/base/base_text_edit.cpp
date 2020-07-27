@@ -415,7 +415,7 @@ bool BaseTextEdit::updateEnteredText(const QString& _eventText)
     // и не сокращение
     // и после курсора нет текста (для ремарки допустима скобка)
     //
-    QString endOfSentancePattern = QString("([.]|[?]|[!]|[…]) %1$").arg(_eventText);
+    const QString endOfSentancePattern = QString("([.]|[?]|[!]|[…]) %1$").arg(_eventText);
     if (d->capitalizeWords
         && cursorBackwardText.contains(QRegularExpression(endOfSentancePattern))
         && !stringEndsWithAbbrev(cursorBackwardText)
