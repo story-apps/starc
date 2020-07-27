@@ -287,6 +287,15 @@ ScreenplayTextView::ScreenplayTextView(QWidget* _parent)
     connect(d->commentsView, &ScreenplayTextCommentsView::addCommentRequested, this, [this] (const QColor& _color, const QString& _comment) {
         d->screenplayText->addReviewMark({}, _color, _comment);
     });
+    connect(d->commentsView, &ScreenplayTextCommentsView::markAsDoneRequested, this, [this] (const QModelIndexList& _indexes) {
+        d->commentsModel->markAsDone(_indexes);
+    });
+    connect(d->commentsView, &ScreenplayTextCommentsView::markAsUndoneRequested, this, [this] (const QModelIndexList& _indexes) {
+        d->commentsModel->markAsUndone(_indexes);
+    });
+    connect(d->commentsView, &ScreenplayTextCommentsView::removeRequested, this, [this] (const QModelIndexList& _indexes) {
+        d->commentsModel->remove(_indexes);
+    });
     //
     connect(d->sidebarTabs, &TabBar::currentIndexChanged, this, [this] (int _currentIndex) {
         if (_currentIndex == kFastFormatTabIndex) {

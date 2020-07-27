@@ -38,9 +38,19 @@ public:
     void setModel(BusinessLayer::ScreenplayTextModel* _model);
 
     /**
-     * @brief addReviewMark
+     * @brief Пометить заданные элементы выполнеными
      */
-    void addReviewMark();
+    void markAsDone(const QModelIndexList& _indexes);
+
+    /**
+     * @brief Пометить заданные элементы невыполнеными
+     */
+    void markAsUndone(const QModelIndexList& _indexes);
+
+    /**
+     * @brief Удалить выбранные элементы
+     */
+    void remove(const QModelIndexList& _indexes);
 
     /**
      * @brief Реализация модели списка

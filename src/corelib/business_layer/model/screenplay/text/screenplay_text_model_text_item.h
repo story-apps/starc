@@ -82,6 +82,7 @@ public:
      * @brief Редакторские заметки
      */
     const QVector<ReviewMark>& reviewMarks() const;
+    void setReviewMarks(const QVector<ReviewMark>& _reviewMarks);
     void setReviewMarks(const QVector<QTextLayout::FormatRange>& _reviewMarks);
 
     /**

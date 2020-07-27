@@ -2,10 +2,13 @@
 
 #include "screenplay_text_add_comment_widget.h"
 #include "screenplay_text_comment_delegate.h"
+#include "screenplay_text_comments_model.h"
 
 #include <ui/design_system/design_system.h>
+#include <ui/widgets/context_menu/context_menu.h>
 #include <ui/widgets/tree/tree.h>
 
+#include <QStandardItemModel>
 #include <QTimer>
 #include <QVBoxLayout>
 
@@ -18,8 +21,24 @@ class ScreenplayTextCommentsView::Implementation
 public:
     explicit Implementation(QWidget* _parent);
 
+    /**
+     * @brief Действия контекстного меню
+     */
+    enum class ContextMenuAction {
+        MarkAsDone,
+        MarkAsUndone,
+        Remove
+    };
+
+    /**
+     * @brief Обновить контекстное меню для заданного списка элементов
+     */
+    void updateCommentsViewContextMenu(const QModelIndexList& _indexes);
+
 
     Tree* commentsView = nullptr;
+    QStandardItemModel* commentsViewContextMenuModel = nullptr;
+    ContextMenu* commentsViewContextMenu = nullptr;
 
     ScreenplayTextAddCommentWidget* addCommentWidget = nullptr;
     QColor addCommentColor;
@@ -27,10 +46,65 @@ public:
 
 ScreenplayTextCommentsView::Implementation::Implementation(QWidget* _parent)
     : commentsView(new Tree(_parent)),
+      commentsViewContextMenuModel(new QStandardItemModel(commentsView)),
+      commentsViewContextMenu(new ContextMenu(commentsView)),
       addCommentWidget(new ScreenplayTextAddCommentWidget(_parent))
 {
-    commentsView->setItemDelegate(new ScreenplayTextCommentDelegate(commentsView));
     commentsView->setAutoAdjustSize(true);
+    commentsView->setContextMenuPolicy(Qt::CustomContextMenu);
+    commentsView->setItemDelegate(new ScreenplayTextCommentDelegate(commentsView));
+    commentsView->setSelectionMode(QAbstractItemView::ExtendedSelection);
+    commentsViewContextMenu->setModel(commentsViewContextMenuModel);
+}
+
+void ScreenplayTextCommentsView::Implementation::updateCommentsViewContextMenu(const QModelIndexList& _indexes)
+{
+    if (_indexes.isEmpty()) {
+        return;
+    }
+
+    commentsViewContextMenuModel->clear();
+
+    //
+    // Настраиваем контекстное меню для одного элемента
+    //
+    if (_indexes.size() == 1) {
+        if (_indexes.constFirst().data(BusinessLayer::ScreenplayTextCommentsModel::ReviewMarkIsDone).toBool()) {
+            auto markAsUndone = new QStandardItem(tr("Mark as undone"));
+            markAsUndone->setData(u8"\U000F0131", Qt::DecorationRole);
+            markAsUndone->setData(static_cast<int>(ContextMenuAction::MarkAsUndone), Qt::UserRole);
+            commentsViewContextMenuModel->appendRow(markAsUndone);
+        } else {
+            auto markAsDone = new QStandardItem(tr("Mark as done"));
+            markAsDone->setData(u8"\U000F0135", Qt::DecorationRole);
+            markAsDone->setData(static_cast<int>(ContextMenuAction::MarkAsDone), Qt::UserRole);
+            commentsViewContextMenuModel->appendRow(markAsDone);
+        }
+        auto remove = new QStandardItem(tr("Remove"));
+        remove->setData(u8"\U000F01B4", Qt::DecorationRole);
+        remove->setData(static_cast<int>(ContextMenuAction::Remove), Qt::UserRole);
+        commentsViewContextMenuModel->appendRow(remove);
+
+    }
+    //
+    // Настраиваем контекстное меню для нескольких выделенных элементов
+    //
+    else {
+        auto markAsDone = new QStandardItem(tr("Mark selected comments as done"));
+        markAsDone->setData(u8"\U000F0139", Qt::DecorationRole);
+        markAsDone->setData(static_cast<int>(ContextMenuAction::MarkAsDone), Qt::UserRole);
+        commentsViewContextMenuModel->appendRow(markAsDone);
+        //
+        auto markAsUndone = new QStandardItem(tr("Mark selected comments as undone"));
+        markAsUndone->setData(u8"\U000F0137", Qt::DecorationRole);
+        markAsUndone->setData(static_cast<int>(ContextMenuAction::MarkAsUndone), Qt::UserRole);
+        commentsViewContextMenuModel->appendRow(markAsUndone);
+        //
+        auto remove = new QStandardItem(tr("Remove selected comments"));
+        remove->setData(u8"\U000F01B4", Qt::DecorationRole);
+        remove->setData(static_cast<int>(ContextMenuAction::Remove), Qt::UserRole);
+        commentsViewContextMenuModel->appendRow(remove);
+    }
 }
 
 
@@ -47,6 +121,30 @@ ScreenplayTextCommentsView::ScreenplayTextCommentsView(QWidget* _parent)
     addWidget(d->addCommentWidget);
 
 
+    connect(d->commentsView, &Tree::customContextMenuRequested, this, [this] (const QPoint& _pos) {
+        d->updateCommentsViewContextMenu(d->commentsView->selectedIndexes());
+        d->commentsViewContextMenu->showContextMenu(d->commentsView->mapToGlobal(_pos));
+    });
+    connect(d->commentsViewContextMenu, &ContextMenu::clicked, d->commentsViewContextMenu, &ContextMenu::hide);
+    connect(d->commentsViewContextMenu, &ContextMenu::clicked, this, [this] (const QModelIndex& _contextMenuIndex) {
+        const auto action = _contextMenuIndex.data(Qt::UserRole).toInt();
+        switch (static_cast<Implementation::ContextMenuAction>(action)) {
+            case Implementation::ContextMenuAction::MarkAsDone: {
+                emit markAsDoneRequested(d->commentsView->selectedIndexes());
+                break;
+            }
+
+            case Implementation::ContextMenuAction::MarkAsUndone: {
+                emit markAsUndoneRequested(d->commentsView->selectedIndexes());
+                break;
+            }
+
+            case Implementation::ContextMenuAction::Remove: {
+                emit removeRequested(d->commentsView->selectedIndexes());
+                break;
+            }
+        }
+    });
     connect(d->addCommentWidget, &ScreenplayTextAddCommentWidget::savePressed, this, [this] {
         emit addCommentRequested(d->addCommentColor, d->addCommentWidget->comment());
         setCurrentWidget(d->commentsView);
@@ -81,6 +179,8 @@ void ScreenplayTextCommentsView::designSystemChangeEvent(DesignSystemChangeEvent
     setBackgroundColor(Ui::DesignSystem::color().primary());
     d->commentsView->setBackgroundColor(DesignSystem::color().primary());
     d->commentsView->setTextColor(DesignSystem::color().onPrimary());
+    d->commentsViewContextMenu->setBackgroundColor(DesignSystem::color().background());
+    d->commentsViewContextMenu->setTextColor(DesignSystem::color().onBackground());
 }
 
 } // namespace Ui

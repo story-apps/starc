@@ -30,6 +30,7 @@ public:
 
     /**
      * @brief Получить позицию элемента в заданном индексе
+     * @return Позицию элемента, -1 если элемент не удалось найти
      */
     int itemPosition(const QModelIndex& _index);
 

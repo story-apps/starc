@@ -3,6 +3,8 @@
 #include <ui/widgets/stack_widget/stack_widget.h>
 
 class QAbstractItemModel;
+template<typename T> class QList;
+typedef QList<QModelIndex> QModelIndexList;
 
 
 namespace Ui
@@ -34,6 +36,21 @@ signals:
      * @brief Пользователь хочет добавить комментарий
      */
     void addCommentRequested(const QColor& _color, const QString& _text);
+
+    /**
+     * @brief Пользователь хочет пометить завершёнными выбранные заметки
+     */
+    void markAsDoneRequested(const QModelIndexList& _indexes);
+
+    /**
+     * @brief Пользователь хочет пометить незавершёнными выбранные заметки
+     */
+    void markAsUndoneRequested(const QModelIndexList& _indexes);
+
+    /**
+     * @brief Пользователь хочет удалить выбранные заметки
+     */
+    void removeRequested(const QModelIndexList& _indexes);
 
 protected:
     void designSystemChangeEvent(DesignSystemChangeEvent* _event) override;

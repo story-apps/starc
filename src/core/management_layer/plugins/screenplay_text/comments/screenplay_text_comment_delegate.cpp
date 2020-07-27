@@ -76,7 +76,6 @@ void ScreenplayTextCommentDelegate::paint(QPainter* _painter, const QStyleOption
     //
     // ... аватар
     //
-    _painter->setPen(textColor);
     const QRectF avatarRect(QPointF(colorRect.right() + Ui::DesignSystem::layout().px16(),
                                     backgroundRect.top() + Ui::DesignSystem::layout().px16()),
                             Ui::DesignSystem::treeOneLineItem().avatarSize());
@@ -87,14 +86,31 @@ void ScreenplayTextCommentDelegate::paint(QPainter* _painter, const QStyleOption
     _painter->drawPixmap(avatarRect, avatar, avatar.rect());
 
     //
+    // ... галочка выполнено
+    //
+    const auto done = _index.data(ScreenplayTextCommentsModel::ReviewMarkIsDone).toBool();
+    QRectF doneRect;
+    if (done) {
+        const QSizeF doneSize = Ui::DesignSystem::treeOneLineItem().iconSize();
+        doneRect = QRectF(QPointF(backgroundRect.right() - doneSize.width() - Ui::DesignSystem::layout().px12(),
+                                  backgroundRect.top() + Ui::DesignSystem::layout().px16() + Ui::DesignSystem::layout().px4()),
+                          doneSize);
+        _painter->setFont(Ui::DesignSystem::font().iconsMid());
+        _painter->setPen(Ui::DesignSystem::color().secondary());
+        _painter->drawText(doneRect, Qt::AlignCenter, u8"\U000F012C");
+    }
+
+    //
     // ... пользователь
     //
     _painter->setFont(Ui::DesignSystem::font().subtitle2());
+    _painter->setPen(textColor);
     const qreal textLeft = avatarRect.right() + Ui::DesignSystem::layout().px12();
-    const QRectF textRect(QPointF(textLeft,
-                                  avatarRect.top()),
-                          QSizeF(backgroundRect.right() - textLeft -  + Ui::DesignSystem::layout().px12(),
-                                 avatarRect.height() / 2));
+    const qreal textWidth = (doneRect.isEmpty() ? backgroundRect.right() : doneRect.left())
+                            - textLeft - Ui::DesignSystem::layout().px12();
+
+    const QRectF textRect(QPointF(textLeft, avatarRect.top()),
+                          QSizeF(textWidth, avatarRect.height() / 2));
     const auto text = _painter->fontMetrics().elidedText(
                           _index.data(ScreenplayTextCommentsModel::ReviewMarkAuthorEmail).toString(),
                           Qt::ElideRight,

@@ -431,6 +431,17 @@ const QVector<ScreenplayTextModelTextItem::ReviewMark>& ScreenplayTextModelTextI
     return d->reviewMarks;
 }
 
+void ScreenplayTextModelTextItem::setReviewMarks(const QVector<ScreenplayTextModelTextItem::ReviewMark>& _reviewMarks)
+{
+    if (d->reviewMarks == _reviewMarks) {
+        return;
+    }
+
+    d->reviewMarks = _reviewMarks;
+    d->updateXml();
+    setChanged(true);
+}
+
 void ScreenplayTextModelTextItem::setReviewMarks(const QVector<QTextLayout::FormatRange>& _reviewMarks)
 {
     QVector<ReviewMark> newReviewMarks;
@@ -459,13 +470,7 @@ void ScreenplayTextModelTextItem::setReviewMarks(const QVector<QTextLayout::Form
         newReviewMarks.append(newReviewMark);
     }
 
-    if (d->reviewMarks == newReviewMarks) {
-        return;
-    }
-
-    d->reviewMarks = newReviewMarks;
-    d->updateXml();
-    setChanged(true);
+    setReviewMarks(newReviewMarks);
 }
 
 QVariant ScreenplayTextModelTextItem::data(int _role) const

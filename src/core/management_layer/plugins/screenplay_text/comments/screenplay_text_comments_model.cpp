@@ -106,7 +106,7 @@ void ScreenplayTextCommentsModel::Implementation::saveReviewMark(
         // Если заметка начинается в начале абзаца, проверяем нельзя ли её присовокупить к заметке в конце предыдущего абзаца
         //
         if (_reviewMark.from == 0
-                && _reviewMark.length != _textItem->text().length()) {
+            /*&& _reviewMark.length != _textItem->text().length()*/) {
             if (_textItem == modelTextItems.constFirst()) {
                 break;
             }
@@ -643,6 +643,59 @@ void ScreenplayTextCommentsModel::setModel(ScreenplayTextModel* _model)
     }
 
     endResetModel();
+}
+
+void ScreenplayTextCommentsModel::markAsDone(const QModelIndexList& _indexes)
+{
+    for (const auto& index : _indexes) {
+        const auto reviewMarkWrapper = d->reviewMarks.at(index.row());
+        for (auto textItem : reviewMarkWrapper.items) {
+            auto updatedReviewMarks = textItem->reviewMarks();
+            for (auto& reviewMark : updatedReviewMarks) {
+                if (isReviewMarksPartiallyEqual(reviewMark, reviewMarkWrapper.reviewMark)) {
+                    reviewMark.isDone = true;
+                }
+            }
+            textItem->setReviewMarks(updatedReviewMarks);
+            d->model->updateItem(textItem);
+        }
+    }
+}
+
+void ScreenplayTextCommentsModel::markAsUndone(const QModelIndexList& _indexes)
+{
+    for (const auto& index : _indexes) {
+        const auto reviewMarkWrapper = d->reviewMarks.at(index.row());
+        for (auto textItem : reviewMarkWrapper.items) {
+            auto updatedReviewMarks = textItem->reviewMarks();
+            for (auto& reviewMark : updatedReviewMarks) {
+                if (isReviewMarksPartiallyEqual(reviewMark, reviewMarkWrapper.reviewMark)) {
+                    reviewMark.isDone = false;
+                }
+            }
+            textItem->setReviewMarks(updatedReviewMarks);
+            d->model->updateItem(textItem);
+        }
+    }
+}
+
+void ScreenplayTextCommentsModel::remove(const QModelIndexList& _indexes)
+{
+    for (const auto& index : _indexes) {
+        const auto reviewMarkWrapper = d->reviewMarks.at(index.row());
+        for (auto textItem : reviewMarkWrapper.items) {
+            auto updatedReviewMarks = textItem->reviewMarks();
+            updatedReviewMarks.erase(
+                        std::remove_if(updatedReviewMarks.begin(),
+                                       updatedReviewMarks.end(),
+                                       [reviewMarkWrapper] (const auto& _reviewMark) {
+                                            return isReviewMarksPartiallyEqual(_reviewMark,
+                                                                               reviewMarkWrapper.reviewMark);
+                                        }));
+            textItem->setReviewMarks(updatedReviewMarks);
+            d->model->updateItem(textItem);
+        }
+    }
 }
 
 int ScreenplayTextCommentsModel::rowCount(const QModelIndex& _parent) const

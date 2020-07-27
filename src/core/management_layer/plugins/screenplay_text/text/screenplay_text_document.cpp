@@ -289,6 +289,58 @@ void ScreenplayTextDocument::setModel(BusinessLayer::ScreenplayTextModel* _model
     };
     readDocumentFromModel({});
 
+    connect(d->model, &ScreenplayTextModel::dataChanged, this, [this] (const QModelIndex& _topLeft, const QModelIndex& _bottomRight) {
+        Q_ASSERT(_topLeft == _bottomRight);
+
+        const auto position = itemPosition(_topLeft);
+        if (position < 0) {
+            return;
+        }
+
+        const auto item = d->model->itemForIndex(_topLeft);
+        if (item->type() != ScreenplayTextModelItemType::Text) {
+            return;
+        }
+
+        const auto textItem = static_cast<ScreenplayTextModelTextItem*>(item);
+
+        ScreenplayTextCursor cursor(this);
+        cursor.setPosition(position);
+        cursor.beginEditBlock();
+
+        if (cursor.block().text() != textItem->text()) {
+            cursor.movePosition(QTextCursor::StartOfBlock);
+            cursor.movePosition(QTextCursor::EndOfBlock, QTextCursor::KeepAnchor);
+            cursor.insertText(textItem->text());
+        }
+        //
+        // TODO: придумать, как не перезаписывать форматирование каждый раз
+        //
+        {
+            //
+            // Сбросим текущее форматирование
+            //
+            cursor.movePosition(QTextCursor::StartOfBlock);
+            cursor.movePosition(QTextCursor::EndOfBlock, QTextCursor::KeepAnchor);
+            const auto blockType = ScreenplayBlockStyle::forBlock(cursor.block());
+            const auto blockStyle = ScreenplayTemplateFacade::getTemplate().blockStyle(blockType);
+            cursor.setBlockCharFormat(blockStyle.charFormat());
+            cursor.setCharFormat(blockStyle.charFormat());
+
+            //
+            // Применяем форматирование из редакторских заметок элемента
+            //
+            for (const auto& reviewMark : textItem->reviewMarks()) {
+                cursor.movePosition(QTextCursor::StartOfBlock);
+                cursor.movePosition(QTextCursor::NextCharacter, QTextCursor::MoveAnchor, reviewMark.from);
+                cursor.movePosition(QTextCursor::NextCharacter, QTextCursor::KeepAnchor, reviewMark.length);
+                cursor.mergeCharFormat(reviewMark.charFormat());
+            }
+        }
+
+        cursor.endEditBlock();
+    });
+
     //
     // Завершаем операцию
     //
@@ -301,7 +353,7 @@ int ScreenplayTextDocument::itemPosition(const QModelIndex& _index)
 {
     auto item = d->model->itemForIndex(_index);
     if (item == nullptr) {
-        return 0;
+        return -1;
     }
 
     while (item->childCount() > 0) {
@@ -313,7 +365,7 @@ int ScreenplayTextDocument::itemPosition(const QModelIndex& _index)
         }
     }
 
-    return 0;
+    return -1;
 }
 
 void ScreenplayTextDocument::addParagraph(BusinessLayer::ScreenplayParagraphType _type, ScreenplayTextCursor _cursor)
