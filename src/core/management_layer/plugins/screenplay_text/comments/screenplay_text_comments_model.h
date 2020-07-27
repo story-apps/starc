@@ -38,6 +38,21 @@ public:
     void setModel(BusinessLayer::ScreenplayTextModel* _model);
 
     /**
+     * @brief Получить индекс элемента из модели сценария, в котором находится заданный комментарий,
+     *        а так же его смещение внутри блока
+     */
+    struct PositionHint {
+        QModelIndex index;
+        int blockPosition;
+    };
+    PositionHint mapToScreenplay(const QModelIndex& _index);
+
+    /**
+     * @brief Получить индекс заметки из индекса элемента модели сценария и позиции в абзаце
+     */
+    QModelIndex mapFromScreenplay(const QModelIndex& _index, int _positionInBlock);
+
+    /**
      * @brief Пометить заданные элементы выполнеными
      */
     void markAsDone(const QModelIndexList& _indexes);

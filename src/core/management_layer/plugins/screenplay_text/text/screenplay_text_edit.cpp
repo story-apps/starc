@@ -49,21 +49,7 @@ ScreenplayTextEdit::ScreenplayTextEdit(QWidget* _parent)
     setFrameShape(QFrame::NoFrame);
 
     setDocument(&d->document);
-    setCapitalizeWords(false);
-
-    connect(this, &ScreenplayTextEdit::cursorPositionChanged, this, [this] {
-        if (d->model == nullptr) {
-            return;
-        }
-
-        auto userData = textCursor().block().userData();
-        if (userData == nullptr) {
-            return;
-        }
-
-        auto screenplayBlockData = static_cast<BusinessLayer::ScreenplayTextBlockData*>(userData);
-        emit currentModelIndexChanged(d->model->indexForItem(screenplayBlockData->item()));
-    });
+    setCapitalizeWords(true);
 }
 
 ScreenplayTextEdit::~ScreenplayTextEdit() = default;
@@ -167,6 +153,11 @@ void ScreenplayTextEdit::setCurrentModelIndex(const QModelIndex& _index)
     BusinessLayer::ScreenplayTextCursor textCursor(document());
     textCursor.setPosition(d->document.itemPosition(_index));
     ensureCursorVisible(textCursor);
+}
+
+int ScreenplayTextEdit::positionForModelIndex(const QModelIndex& _index)
+{
+    return d->document.itemPosition(_index);
 }
 
 void ScreenplayTextEdit::addReviewMark(const QColor& _textColor, const QColor& _backgroundColor, const QString& _comment)

@@ -3406,7 +3406,7 @@ void PageTextEdit::ensureCursorVisible(const QTextCursor& _cursor, bool _animate
     //
     // Прокручиваем ещё немного
     //
-    const int SCROLL_DELTA = d->vbar->singleStep() * 8;
+    const int SCROLL_DELTA = d->vbar->singleStep() * 10;
     nextVbarValue -= SCROLL_DELTA;
 
     //

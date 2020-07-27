@@ -27,6 +27,11 @@ public:
     void setModel(QAbstractItemModel* _model);
 
     /**
+     * @brief Установить текущим элемент для заданного индекса модели сценария и позиции в блоке
+     */
+    void setCurrentIndex(const QModelIndex& _index);
+
+    /**
      * @brief Показать виджет добавления/редактирования комментария
      */
     void showAddCommentView(const QColor& _withColor);
@@ -36,6 +41,11 @@ signals:
      * @brief Пользователь хочет добавить комментарий
      */
     void addCommentRequested(const QColor& _color, const QString& _text);
+
+    /**
+     * @brief Пользователь выбрал комментарий
+     */
+    void commentSelected(const QModelIndex& _index);
 
     /**
      * @brief Пользователь хочет пометить завершёнными выбранные заметки

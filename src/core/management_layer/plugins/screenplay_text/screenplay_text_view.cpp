@@ -67,7 +67,7 @@ public:
      */
     void updateSideBarVisibility(QWidget* _container);
 
-    BusinessLayer::ScreenplayTextCommentsModel *commentsModel = nullptr;
+    BusinessLayer::ScreenplayTextCommentsModel* commentsModel = nullptr;
 
     ScreenplayTextEditToolBar* toolBar = nullptr;
     QHash<BusinessLayer::ScreenplayParagraphType, QString> typesToDisplayNames;
@@ -287,6 +287,14 @@ ScreenplayTextView::ScreenplayTextView(QWidget* _parent)
     connect(d->commentsView, &ScreenplayTextCommentsView::addCommentRequested, this, [this] (const QColor& _color, const QString& _comment) {
         d->screenplayText->addReviewMark({}, _color, _comment);
     });
+    connect(d->commentsView, &ScreenplayTextCommentsView::commentSelected, this, [this] (const QModelIndex& _index) {
+        const auto positionHint = d->commentsModel->mapToScreenplay(_index);
+        const auto position = d->screenplayText->positionForModelIndex(positionHint.index)
+                              + positionHint.blockPosition;
+        auto cursor = d->screenplayText->textCursor();
+        cursor.setPosition(position);
+        d->screenplayText->ensureCursorVisible(cursor);
+    });
     connect(d->commentsView, &ScreenplayTextCommentsView::markAsDoneRequested, this, [this] (const QModelIndexList& _indexes) {
         d->commentsModel->markAsDone(_indexes);
     });
@@ -321,12 +329,18 @@ ScreenplayTextView::ScreenplayTextView(QWidget* _parent)
         d->updateCommentsToolBar();
     }, Qt::QueuedConnection);
     //
-    connect(d->screenplayText, &ScreenplayTextEdit::currentModelIndexChanged, this, &ScreenplayTextView::currentModelIndexChanged);
     connect(d->screenplayText, &ScreenplayTextEdit::paragraphTypeChanged, this, [this] {
         d->updateToolBarCurrentParagraphTypeName();
     });
     connect(d->screenplayText, &ScreenplayTextEdit::cursorPositionChanged, this, [this] {
         d->updateToolBarCurrentParagraphTypeName();
+
+        const auto screenplayModelIndex = d->screenplayText->currentModelIndex();
+        emit currentModelIndexChanged(screenplayModelIndex);
+
+        const auto positionInBlock = d->screenplayText->textCursor().positionInBlock();
+        const auto commentModelIndex = d->commentsModel->mapFromScreenplay(screenplayModelIndex, positionInBlock);
+        d->commentsView->setCurrentIndex(commentModelIndex);
     });
     connect(d->screenplayText, &ScreenplayTextEdit::selectionChanged, this, [this] {
         d->updateCommentsToolBar();

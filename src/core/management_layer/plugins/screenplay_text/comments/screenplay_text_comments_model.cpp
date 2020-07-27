@@ -105,8 +105,7 @@ void ScreenplayTextCommentsModel::Implementation::saveReviewMark(
         //
         // Если заметка начинается в начале абзаца, проверяем нельзя ли её присовокупить к заметке в конце предыдущего абзаца
         //
-        if (_reviewMark.from == 0
-            /*&& _reviewMark.length != _textItem->text().length()*/) {
+        if (_reviewMark.from == 0) {
             if (_textItem == modelTextItems.constFirst()) {
                 break;
             }
@@ -643,6 +642,53 @@ void ScreenplayTextCommentsModel::setModel(ScreenplayTextModel* _model)
     }
 
     endResetModel();
+}
+
+ScreenplayTextCommentsModel::PositionHint ScreenplayTextCommentsModel::mapToScreenplay(const QModelIndex& _index)
+{
+    if (!_index.isValid()
+        || _index.row() >= d->reviewMarks.size()) {
+        return {};
+    }
+
+    const auto reviewMarkWrapper = d->reviewMarks.at(_index.row());
+    return { d->model->indexForItem(reviewMarkWrapper.items.constFirst()), reviewMarkWrapper.fromInFirstItem };
+}
+
+QModelIndex ScreenplayTextCommentsModel::mapFromScreenplay(const QModelIndex& _index, int _positionInBlock)
+{
+    const auto item = d->model->itemForIndex(_index);
+    if (item == nullptr
+        || item->type() != ScreenplayTextModelItemType::Text) {
+        return {};
+    }
+
+    auto textItem = static_cast<ScreenplayTextModelTextItem*>(item);
+
+    //
+    // Пропускаем корректировочные блоки
+    //
+    if (textItem->isCorrection()) {
+        return {};
+    }
+
+    for (const auto& reviewMarkWrapper : d->reviewMarks) {
+        if (!reviewMarkWrapper.items.contains(textItem)) {
+            continue;
+        }
+
+        for (const auto& reviewMark : textItem->reviewMarks()) {
+            if (!isReviewMarksPartiallyEqual(reviewMark, reviewMarkWrapper.reviewMark)) {
+                continue;
+            }
+
+            if (reviewMark.from <= _positionInBlock
+                && _positionInBlock < reviewMark.end()) {
+                return index(d->reviewMarks.indexOf(reviewMarkWrapper), 0);
+            }
+        }
+    }
+    return {};
 }
 
 void ScreenplayTextCommentsModel::markAsDone(const QModelIndexList& _indexes)

@@ -79,16 +79,16 @@ public:
     void setCurrentModelIndex(const QModelIndex& _index);
 
     /**
+     * @brief Получить позицию заданного элемента модели
+     */
+    int positionForModelIndex(const QModelIndex& _index);
+
+    /**
      * @brief Добавить редакторскую заметку для текущего выделения
      */
     void addReviewMark(const QColor& _textColor, const QColor& _backgroundColor, const QString& _comment);
 
 signals:
-    /**
-     * @brief Сменился текущий элемент модели (сместился курсор)
-     */
-    void currentModelIndexChanged(const QModelIndex& _index);
-
     /**
      * @brief Запрос на отмену последнего действия
      */

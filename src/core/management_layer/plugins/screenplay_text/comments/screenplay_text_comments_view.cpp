@@ -121,6 +121,7 @@ ScreenplayTextCommentsView::ScreenplayTextCommentsView(QWidget* _parent)
     addWidget(d->addCommentWidget);
 
 
+    connect(d->commentsView, &Tree::currentIndexChanged, this, &ScreenplayTextCommentsView::commentSelected);
     connect(d->commentsView, &Tree::customContextMenuRequested, this, [this] (const QPoint& _pos) {
         d->updateCommentsViewContextMenu(d->commentsView->selectedIndexes());
         d->commentsViewContextMenu->showContextMenu(d->commentsView->mapToGlobal(_pos));
@@ -162,6 +163,12 @@ ScreenplayTextCommentsView::~ScreenplayTextCommentsView() = default;
 void ScreenplayTextCommentsView::setModel(QAbstractItemModel* _model)
 {
     d->commentsView->setModel(_model);
+}
+
+void ScreenplayTextCommentsView::setCurrentIndex(const QModelIndex& _index)
+{
+    QSignalBlocker blocker(this);
+    d->commentsView->setCurrentIndex(_index);
 }
 
 void ScreenplayTextCommentsView::showAddCommentView(const QColor& _withColor)
