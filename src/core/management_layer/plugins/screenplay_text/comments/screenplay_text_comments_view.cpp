@@ -90,17 +90,17 @@ void ScreenplayTextCommentsView::Implementation::updateCommentsViewContextMenu(c
     // Настраиваем контекстное меню для нескольких выделенных элементов
     //
     else {
-        auto markAsDone = new QStandardItem(tr("Mark selected comments as done"));
+        auto markAsDone = new QStandardItem(tr("Mark selected notes as done"));
         markAsDone->setData(u8"\U000F0139", Qt::DecorationRole);
         markAsDone->setData(static_cast<int>(ContextMenuAction::MarkAsDone), Qt::UserRole);
         commentsViewContextMenuModel->appendRow(markAsDone);
         //
-        auto markAsUndone = new QStandardItem(tr("Mark selected comments as undone"));
+        auto markAsUndone = new QStandardItem(tr("Mark selected notes as undone"));
         markAsUndone->setData(u8"\U000F0137", Qt::DecorationRole);
         markAsUndone->setData(static_cast<int>(ContextMenuAction::MarkAsUndone), Qt::UserRole);
         commentsViewContextMenuModel->appendRow(markAsUndone);
         //
-        auto remove = new QStandardItem(tr("Remove selected comments"));
+        auto remove = new QStandardItem(tr("Remove selected notes"));
         remove->setData(u8"\U000F01B4", Qt::DecorationRole);
         remove->setData(static_cast<int>(ContextMenuAction::Remove), Qt::UserRole);
         commentsViewContextMenuModel->appendRow(remove);
