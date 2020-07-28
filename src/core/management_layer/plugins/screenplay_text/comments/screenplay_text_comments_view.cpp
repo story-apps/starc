@@ -123,6 +123,10 @@ ScreenplayTextCommentsView::ScreenplayTextCommentsView(QWidget* _parent)
 
     connect(d->commentsView, &Tree::currentIndexChanged, this, &ScreenplayTextCommentsView::commentSelected);
     connect(d->commentsView, &Tree::customContextMenuRequested, this, [this] (const QPoint& _pos) {
+        if (d->commentsView->selectedIndexes().isEmpty()) {
+            return;
+        }
+
         d->updateCommentsViewContextMenu(d->commentsView->selectedIndexes());
         d->commentsViewContextMenu->showContextMenu(d->commentsView->mapToGlobal(_pos));
     });

@@ -296,12 +296,15 @@ ScreenplayTextView::ScreenplayTextView(QWidget* _parent)
         d->screenplayText->ensureCursorVisible(cursor);
     });
     connect(d->commentsView, &ScreenplayTextCommentsView::markAsDoneRequested, this, [this] (const QModelIndexList& _indexes) {
+        QSignalBlocker blocker(d->commentsView);
         d->commentsModel->markAsDone(_indexes);
     });
     connect(d->commentsView, &ScreenplayTextCommentsView::markAsUndoneRequested, this, [this] (const QModelIndexList& _indexes) {
+        QSignalBlocker blocker(d->commentsView);
         d->commentsModel->markAsUndone(_indexes);
     });
     connect(d->commentsView, &ScreenplayTextCommentsView::removeRequested, this, [this] (const QModelIndexList& _indexes) {
+        QSignalBlocker blocker(d->commentsView);
         d->commentsModel->remove(_indexes);
     });
     //
