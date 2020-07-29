@@ -1,8 +1,9 @@
 #include "import_manager.h"
 
 #include <business_layer/import/fdx_importer.h>
-#include <business_layer/import/kit_scenarist_importer.h>
 #include <business_layer/import/import_options.h>
+#include <business_layer/import/kit_scenarist_importer.h>
+#include <business_layer/import/trelby_importer.h>
 
 #include <data_layer/storage/settings_storage.h>
 #include <data_layer/storage/storage_facade.h>
@@ -95,7 +96,7 @@ void ImportManager::Implementation::import(const BusinessLayer::ImportOptions& _
                    || importFilePath.endsWith(ExtensionHelper::finalDraftTemplate())) {
             importer.reset(new BusinessLayer::FdxImporter);
         } else if (importFilePath.endsWith(ExtensionHelper::trelby())) {
-
+            importer.reset(new BusinessLayer::TrelbyImporter);
         } else if (importFilePath.endsWith(ExtensionHelper::msOfficeBinary())) {
 
         } else if (importFilePath.endsWith(ExtensionHelper::msOfficeOpenXml())) {

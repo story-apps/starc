@@ -9,7 +9,6 @@
 #include <domain/document_object.h>
 
 #include <QDomDocument>
-#include <QDomNode>
 #include <QFile>
 #include <QFileInfo>
 #include <QXmlStreamWriter>
@@ -28,7 +27,7 @@ QVector<AbstractImporter::Screenplay> FdxImporter::importScreenplays(const Impor
     //
     QFile fdxFile(_options.filePath);
     if (!fdxFile.open(QIODevice::ReadOnly)) {
-        return {};
+        return { result };
     }
 
     //
@@ -57,7 +56,7 @@ QVector<AbstractImporter::Screenplay> FdxImporter::importScreenplays(const Impor
         // Определим тип блока
         //
         const QString paragraphType = paragraph.attributes().namedItem("Type").nodeValue();
-        ScreenplayParagraphType blockType = ScreenplayParagraphType::Action;
+        auto blockType = ScreenplayParagraphType::Action;
         if (paragraphType == "Scene Heading") {
             blockType = ScreenplayParagraphType::SceneHeading;
         } else if (paragraphType == "Action") {
@@ -212,7 +211,7 @@ QVector<AbstractImporter::Screenplay> FdxImporter::importScreenplays(const Impor
             }
             writer.writeEndElement(); // formats
         }
-        writer.writeEndElement(); // block name
+        writer.writeEndElement(); // block type
 
         //
         // Переходим к следующему

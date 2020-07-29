@@ -671,7 +671,7 @@ void ProjectManager::addScreenplay(const QString& _name, const QString& _titlePa
     d->projectStructureModel->appendItem(createItem(DocumentObjectType::ScreenplaySynopsis, tr("Synopsis")), screenplayItem, _synopsis);
     d->projectStructureModel->appendItem(createItem(DocumentObjectType::ScreenplayTreatment, tr("Treatment")), screenplayItem, _treatment);
     d->projectStructureModel->appendItem(createItem(DocumentObjectType::ScreenplayText, tr("Text")), screenplayItem, _text);
-    d->projectStructureModel->appendItem(createItem(DocumentObjectType::ScreenplayStatistics, tr("Statistics")), screenplayItem, _text);
+    d->projectStructureModel->appendItem(createItem(DocumentObjectType::ScreenplayStatistics, tr("Statistics")), screenplayItem, {});
 }
 
 void ProjectManager::handleModelChange(BusinessLayer::AbstractModel* _model,

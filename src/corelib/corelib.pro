@@ -26,6 +26,7 @@ SOURCES += \
     business_layer/import/abstract_importer.cpp \
     business_layer/import/fdx_importer.cpp \
     business_layer/import/kit_scenarist_importer.cpp \
+    business_layer/import/trelby_importer.cpp \
     business_layer/model/abstract_model.cpp \
     business_layer/model/abstract_model_item.cpp \
     business_layer/model/characters/character_model.cpp \
@@ -148,6 +149,7 @@ HEADERS += \
     business_layer/import/fdx_importer.h \
     business_layer/import/import_options.h \
     business_layer/import/kit_scenarist_importer.h \
+    business_layer/import/trelby_importer.h \
     business_layer/model/abstract_image_wrapper.h \
     business_layer/model/abstract_model.h \
     business_layer/model/abstract_model_item.h \
