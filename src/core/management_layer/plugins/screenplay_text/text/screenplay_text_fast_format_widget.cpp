@@ -218,7 +218,7 @@ void ScreenplayTextFastFormatWidget::setCurrentParagraphType(const QModelIndex& 
         button->setProperty(kIsButtonCurrentTypeKey, isCurrentType);
         button->setTextColor(isCurrentType
                              ? DesignSystem::color().secondary()
-                             : DesignSystem::color().onBackground());
+                             : DesignSystem::color().onPrimary());
     }
 }
 
@@ -233,10 +233,10 @@ void ScreenplayTextFastFormatWidget::designSystemChangeEvent(DesignSystemChangeE
                                  DesignSystem::layout().px8(),
                                  DesignSystem::layout().px8());
     for (auto button : d->buttons) {
-        button->setBackgroundColor(DesignSystem::color().background());
+        button->setBackgroundColor(ColorHelper::near(DesignSystem::color().primary()));
         button->setTextColor(button->property(kIsButtonCurrentTypeKey).toBool()
                              ? DesignSystem::color().secondary()
-                             : DesignSystem::color().onBackground());
+                             : DesignSystem::color().onPrimary());
     }
 }
 

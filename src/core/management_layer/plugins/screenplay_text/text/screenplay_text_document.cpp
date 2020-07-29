@@ -72,6 +72,11 @@ ScreenplayTextDocument::~ScreenplayTextDocument() = default;
 void ScreenplayTextDocument::setModel(BusinessLayer::ScreenplayTextModel* _model)
 {
     d->state = DocumentState::Loading;
+
+    if (d->model) {
+        d->model->disconnect(this);
+    }
+
     d->model = _model;
     d->positionsToItems.clear();
 

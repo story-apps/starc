@@ -34,4 +34,9 @@ public:
      * @brief Получить инвертированный цвет
      */
     static QColor inverted(const QColor& _color);
+
+    /**
+     * @brief Получить цвет рядом с заданым
+     */
+    static QColor near(const QColor& _color);
 };
