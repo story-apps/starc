@@ -2,6 +2,7 @@
 
 #include "import_options.h"
 
+#include <business_layer/model/screenplay/text/screenplay_text_block_parser.h>
 #include <business_layer/model/screenplay/text/screenplay_text_model_xml.h>
 #include <business_layer/templates/screenplay_template.h>
 
@@ -12,12 +13,119 @@
 #include <QFileInfo>
 #include <QXmlStreamWriter>
 
+#include <set>
+
 
 namespace BusinessLayer
 {
 
+AbstractImporter::Documents TrelbyImporter::importDocuments(const ImportOptions& _options) const
+{
+    //
+    // Открываем файл
+    //
+    QFile trelbyFile(_options.filePath);
+    if (!trelbyFile.open(QIODevice::ReadOnly)) {
+        return {};
+    }
+
+    //
+    // Читаем plain text
+    //
+    const QStringList paragraphs = QString(trelbyFile.readAll()).split("\n");
+    QString paragraphText;
+    const QStringList blockChecker = {">", "&", "|", "." };
+    std::set<QString> characterNames;
+    std::set<QString> locationNames;
+    for (const QString& paragraph : paragraphs) {
+        const QString paragraphType = paragraph.left(2);
+
+        //
+        // Если строка пуста, или не является текстовым блоком, пропускаем её
+        //
+        if (paragraphType.isEmpty()
+            || !blockChecker.contains(paragraphType[0])) {
+            continue;
+        }
+
+        //
+        // Определим тип блока
+        //
+        auto blockType = ScreenplayParagraphType::Undefined;
+        if (paragraphType.endsWith("\\")) {
+            blockType = ScreenplayParagraphType::SceneHeading;
+        } else if (paragraphType.endsWith("_")) {
+            blockType = ScreenplayParagraphType::Character;
+        }
+
+        //
+        // Получим текст блока
+        //
+        if (!paragraphText.isEmpty()) {
+            paragraphText += " ";
+        }
+        paragraphText += paragraph.mid(2);
+
+
+        //
+        // Если дошли до последней строки блока
+        //
+        if (paragraphType.startsWith(".")) {
+            switch (blockType) {
+                case ScreenplayParagraphType::SceneHeading: {
+                    if (!_options.importLocations) {
+                        break;
+                    }
+
+                    const auto locationName = SceneHeadingParser::location(paragraphText);
+                    if (locationName.isEmpty()) {
+                        break;
+                    }
+
+                    locationNames.emplace(locationName);
+                    break;
+                }
+
+                case ScreenplayParagraphType::Character: {
+                    if (!_options.importCharacters) {
+                        break;
+                    }
+
+                    const auto characterName = CharacterParser::name(paragraphText);
+                    if (characterName.isEmpty()) {
+                        break;
+                    }
+
+                    characterNames.emplace(characterName);
+                    break;
+                }
+
+                default: break;
+            }
+
+            //
+            // И очищаем текст
+            //
+            paragraphText.clear();
+        }
+    }
+
+    Documents documents;
+    for (const auto& characterName : characterNames) {
+        documents.characters.append({ characterName, {} });
+    }
+    for (const auto& locationName : locationNames) {
+        documents.locations.append({ locationName, {} });
+    }
+    return documents;
+}
+
 QVector<AbstractImporter::Screenplay> TrelbyImporter::importScreenplays(const ImportOptions& _options) const
 {
+    if (_options.importScreenplay == false) {
+        return {};
+    }
+
     Screenplay result;
     result.name = QFileInfo(_options.filePath).completeBaseName();
 

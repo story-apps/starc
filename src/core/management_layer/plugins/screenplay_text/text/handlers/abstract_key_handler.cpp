@@ -1,6 +1,6 @@
 #include "abstract_key_handler.h"
 
-#include <ui/screenplay_text_edit.h>
+#include "../screenplay_text_edit.h"
 
 #include <QInputMethodEvent>
 #include <QKeyEvent>

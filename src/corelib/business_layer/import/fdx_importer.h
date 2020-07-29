@@ -15,6 +15,11 @@ public:
     FdxImporter() = default;
 
     /**
+     * @brief Импорт докуметов (всех, кроме сценариев)
+     */
+    Documents importDocuments(const ImportOptions& _options) const override;
+
+    /**
      * @brief Сформировать xml-сценария во внутреннем формате
      */
     QVector<Screenplay> importScreenplays(const ImportOptions& _options) const override;

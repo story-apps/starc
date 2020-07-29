@@ -32,7 +32,7 @@ public:
     /**
      * @brief Создать персонажа с заданным именем
      */
-    void createCharacter(const QString& _name);
+    void createCharacter(const QString& _name, const QByteArray& _content = {});
 
     /**
      * @brief Реализация древовидной модели
@@ -50,7 +50,7 @@ signals:
     /**
      * @brief Необходимо создать персонажа с заданным именем
      */
-    void createCharacterRequested(const QString& _name);
+    void createCharacterRequested(const QString& _name, const QByteArray& _content);
 
 protected:
     /**

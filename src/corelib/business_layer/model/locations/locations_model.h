@@ -32,7 +32,7 @@ public:
     /**
      * @brief Создать локацию с заданным именем
      */
-    void createLocation(const QString& _name);
+    void createLocation(const QString& _name, const QByteArray& _content = {});
 
     /**
      * @brief Реализация древовидной модели
@@ -50,7 +50,7 @@ signals:
     /**
      * @brief Неоходимо создать локацию с заданным именем
      */
-    void createLocationRequested(const QString& _name);
+    void createLocationRequested(const QString& _name, const QByteArray& _content);
 
 protected:
     /**

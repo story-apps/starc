@@ -56,7 +56,7 @@ void LocationsModel::removeLocationModel(LocationModel* _locationModel)
     endRemoveRows();
 }
 
-void LocationsModel::createLocation(const QString& _name)
+void LocationsModel::createLocation(const QString& _name, const QByteArray& _content)
 {
     if (_name.simplified().isEmpty()) {
         return;
@@ -68,7 +68,7 @@ void LocationsModel::createLocation(const QString& _name)
         }
     }
 
-    emit createLocationRequested(_name);
+    emit createLocationRequested(_name, _content);
 }
 
 QModelIndex LocationsModel::index(int _row, int _column, const QModelIndex& _parent) const

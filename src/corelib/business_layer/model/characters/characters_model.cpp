@@ -56,7 +56,7 @@ void CharactersModel::removeCharacterModel(CharacterModel* _characterModel)
     endRemoveRows();
 }
 
-void CharactersModel::createCharacter(const QString& _name)
+void CharactersModel::createCharacter(const QString& _name, const QByteArray& _content)
 {
     if (_name.simplified().isEmpty()) {
         return;
@@ -68,7 +68,7 @@ void CharactersModel::createCharacter(const QString& _name)
         }
     }
 
-    emit createCharacterRequested(_name);
+    emit createCharacterRequested(_name, _content);
 }
 
 QModelIndex CharactersModel::index(int _row, int _column, const QModelIndex& _parent) const

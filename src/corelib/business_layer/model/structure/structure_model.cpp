@@ -157,7 +157,8 @@ void StructureModel::setProjectName(const QString& _name)
     d->projectName = _name;
 }
 
-void StructureModel::addDocument(Domain::DocumentObjectType _type, const QString& _name, const QModelIndex& _parent)
+void StructureModel::addDocument(Domain::DocumentObjectType _type, const QString& _name,
+    const QModelIndex& _parent, const QByteArray& _content)
 {
     //
     // ATTENTION: В ProjectManager есть копипаста отсюда, быть внимательным при обновлении
@@ -175,12 +176,12 @@ void StructureModel::addDocument(Domain::DocumentObjectType _type, const QString
 
     switch (_type) {
         case DocumentObjectType::Project: {
-            appendItem(createItem(_type, d->projectName), parentItem);
+            appendItem(createItem(_type, d->projectName), parentItem, _content);
             break;
         }
 
         case DocumentObjectType::RecycleBin: {
-            appendItem(createItem(_type, tr("Recycle bin")), parentItem);
+            appendItem(createItem(_type, tr("Recycle bin")), parentItem, _content);
             break;
         }
 
@@ -196,18 +197,18 @@ void StructureModel::addDocument(Domain::DocumentObjectType _type, const QString
         }
 
         case DocumentObjectType::Characters: {
-            appendItem(createItem(_type, tr("Characters")), parentItem);
+            appendItem(createItem(_type, tr("Characters")), parentItem, _content);
             break;
         }
 
         case DocumentObjectType::Locations: {
-            appendItem(createItem(_type, tr("Locations")), parentItem);
+            appendItem(createItem(_type, tr("Locations")), parentItem, _content);
             break;
         }
 
         case DocumentObjectType::Character:
         case DocumentObjectType::Location: {
-            appendItem(createItem(_type, _name), parentItem);
+            appendItem(createItem(_type, _name), parentItem, _content);
             break;
         }
 
@@ -239,7 +240,8 @@ void StructureModel::prependItem(StructureModelItem* _item, StructureModelItem* 
     endInsertRows();
 }
 
-void StructureModel::appendItem(StructureModelItem* _item, StructureModelItem* _parentItem, const QString& _content)
+void StructureModel::appendItem(StructureModelItem* _item, StructureModelItem* _parentItem,
+    const QByteArray& _content)
 {
     if (_item == nullptr) {
         return;

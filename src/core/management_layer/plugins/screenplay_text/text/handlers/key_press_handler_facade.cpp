@@ -16,9 +16,9 @@
 #include "transition_handler.h"
 #include "unformatted_text_handler.h"
 
-#include <business_layer/templates/screenplay_template.h>
+#include "../screenplay_text_edit.h"
 
-#include <ui/screenplay_text_edit.h>
+#include <business_layer/templates/screenplay_template.h>
 
 #include <QTextBlock>
 #include <QKeyEvent>

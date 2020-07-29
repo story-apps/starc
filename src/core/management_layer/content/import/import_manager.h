@@ -24,6 +24,16 @@ public:
 
 signals:
     /**
+     * @brief Персонаж загружен
+     */
+    void characterImported(const QString& _name, const QString& _content);
+
+    /**
+     * @brief Локация загружена
+     */
+    void locationImported(const QString& _name, const QString& _content);
+
+    /**
      * @brief Сценарий загружен
      */
     void screenplayImported(const QString& _name, const QString& _titlePage,

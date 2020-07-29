@@ -75,12 +75,12 @@ signals:
     /**
      * @brief Необходимо создать персонажа с заданным именем
      */
-    void createCharacterRequested(const QString& _name);
+    void createCharacterRequested(const QString& _name, const QByteArray& _content);
 
     /**
      * @brief Неоходимо создать локацию с заданным именем
      */
-    void createLocationRequested(const QString& _name);
+    void createLocationRequested(const QString& _name, const QByteArray& _content);
 
     /**
      * @brief Сменилась видимость элемента сценария

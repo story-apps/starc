@@ -1,11 +1,11 @@
 #include "scene_characters_handler.h"
 
+#include "../screenplay_text_edit.h"
+
 #include <business_layer/model/characters/characters_model.h>
 #include <business_layer/model/screenplay/text/screenplay_text_block_parser.h>
 #include <business_layer/templates/screenplay_template.h>
 #include <business_layer/templates/screenplay_template_facade.h>
-
-#include <ui/screenplay_text_edit.h>
 
 #include <utils/helpers/text_helper.h>
 

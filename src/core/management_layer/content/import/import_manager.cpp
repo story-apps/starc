@@ -113,12 +113,23 @@ void ImportManager::Implementation::import(const BusinessLayer::ImportOptions& _
     }
 
     //
+    // Импортируем документы
+    //
+    const auto documents = importer->importDocuments(_options);
+    for (const auto& character : documents.characters) {
+        emit q->characterImported(character.name, character.content);
+    }
+    for (const auto& location : documents.locations) {
+        emit q->locationImported(location.name, location.content);
+    }
+
+    //
     // Импортируем текст сценариев
     //
     const auto screenplays = importer->importScreenplays(_options);
     for (const auto& screenplay : screenplays) {
         emit q->screenplayImported(screenplay.name, screenplay.titlePage, screenplay.synopsis,
-            screenplay.treatment, screenplay.text);
+                                   screenplay.treatment, screenplay.text);
     }
 }
 

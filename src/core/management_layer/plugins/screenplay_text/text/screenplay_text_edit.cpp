@@ -140,6 +140,10 @@ void ScreenplayTextEdit::setTextCursorReimpl(const QTextCursor& _cursor)
 
 QModelIndex ScreenplayTextEdit::currentModelIndex() const
 {
+    if (d->model == nullptr) {
+        return {};
+    }
+
     auto userData = textCursor().block().userData();
     if (userData == nullptr) {
         return {};

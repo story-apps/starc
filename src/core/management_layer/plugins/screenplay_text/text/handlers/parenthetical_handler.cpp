@@ -1,9 +1,9 @@
 #include "parenthetical_handler.h"
 
+#include "../screenplay_text_edit.h"
+
 #include <business_layer/templates/screenplay_template.h>
 #include <business_layer/templates/screenplay_template_facade.h>
-
-#include <ui/screenplay_text_edit.h>
 
 #include <QKeyEvent>
 #include <QTextBlock>

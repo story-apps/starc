@@ -70,6 +70,12 @@ public:
     void addDocument(const QModelIndex& _itemIndex);
 
     /**
+     * @brief Добавить документ в заданный контейнер
+     */
+    void addDocumentToContainer(Domain::DocumentObjectType _containerType,
+        Domain::DocumentObjectType _documentType, const QString& _documentName, const QByteArray& _content = {});
+
+    /**
      * @brief Удалить документ
      */
     void removeDocument(const QModelIndex& _itemIndex);
@@ -209,6 +215,19 @@ void ProjectManager::Implementation::addDocument(const QModelIndex& _itemIndex)
     dialog->showDialog();
 }
 
+void ProjectManager::Implementation::addDocumentToContainer(Domain::DocumentObjectType _containerType,
+    Domain::DocumentObjectType _documentType, const QString& _documentName, const QByteArray& _content)
+{
+    for (int itemRow = 0; itemRow < projectStructureModel->rowCount(); ++itemRow) {
+        const auto itemIndex = projectStructureModel->index(itemRow, 0);
+        const auto item = projectStructureModel->itemForIndex(itemIndex);
+        if (item->type() == _containerType) {
+            projectStructureModel->addDocument(_documentType, _documentName, itemIndex, _content);
+            break;
+        }
+    }
+}
+
 void ProjectManager::Implementation::removeDocument(const QModelIndex& _itemIndex)
 {
     const auto mappedItemIndex = projectStructureProxyModel->mapToSource(_itemIndex);
@@ -307,8 +326,10 @@ void ProjectManager::Implementation::emptyRecycleBin(const QModelIndex& _recycle
         while (recycleBin->hasChildren()) {
             auto itemToRemove = recycleBin->childAt(0);
             auto documentToRemove = DataStorageLayer::StorageFacade::documentStorage()->document(itemToRemove->uuid());
-            modelsFacade.removeModelFor(documentToRemove);
-            DataStorageLayer::StorageFacade::documentStorage()->removeDocument(documentToRemove);
+            if (documentToRemove != nullptr) {
+                modelsFacade.removeModelFor(documentToRemove);
+                DataStorageLayer::StorageFacade::documentStorage()->removeDocument(documentToRemove);
+            }
             projectStructureModel->removeItem(itemToRemove);
         }
     });
@@ -392,11 +413,11 @@ ProjectManager::ProjectManager(QObject* _parent, QWidget* _parentWidget)
     //
     connect(d->projectStructureModel, &BusinessLayer::StructureModel::documentAdded,
             [this] (const QUuid& _uuid, Domain::DocumentObjectType _type, const QString& _name,
-                    const QString& _content)
+                    const QByteArray& _content)
     {
         auto document = DataStorageLayer::StorageFacade::documentStorage()->storeDocument(_uuid, _type);
         if (!_content.isNull()) {
-            document->setContent(_content.toUtf8());
+            document->setContent(_content);
         }
 
         auto documentModel = d->modelsFacade.modelFor(document);
@@ -452,29 +473,19 @@ ProjectManager::ProjectManager(QObject* _parent, QWidget* _parentWidget)
     connect(&d->modelsFacade, &ProjectModelsFacade::projectNameChanged, this, &ProjectManager::projectNameChanged);
     connect(&d->modelsFacade, &ProjectModelsFacade::projectLoglineChanged, this, &ProjectManager::projectLoglineChanged);
     connect(&d->modelsFacade, &ProjectModelsFacade::projectCoverChanged, this, &ProjectManager::projectCoverChanged);
-    auto addDocumentToContainer = [this] (Domain::DocumentObjectType _containerType, Domain::DocumentObjectType _documentType, const QString& _documentName) {
-        for (int itemRow = 0; itemRow < d->projectStructureModel->rowCount(); ++itemRow) {
-            const auto itemIndex = d->projectStructureModel->index(itemRow, 0);
-            const auto item = d->projectStructureModel->itemForIndex(itemIndex);
-            if (item->type() == _containerType) {
-                d->projectStructureModel->addDocument(_documentType, _documentName, itemIndex);
-                break;
-            }
-        }
-    };
     connect(&d->modelsFacade, &ProjectModelsFacade::createCharacterRequested, this,
-            [addDocumentToContainer] (const QString& _name)
+            [this] (const QString& _name, const QByteArray& _content)
     {
-        addDocumentToContainer(Domain::DocumentObjectType::Characters,
-                               Domain::DocumentObjectType::Character,
-                               _name);
+        d->addDocumentToContainer(Domain::DocumentObjectType::Characters,
+                                  Domain::DocumentObjectType::Character,
+                                  _name, _content);
     });
     connect(&d->modelsFacade, &ProjectModelsFacade::createLocationRequested, this,
-            [addDocumentToContainer] (const QString& _name)
+            [this] (const QString& _name, const QByteArray& _content)
     {
-        addDocumentToContainer(Domain::DocumentObjectType::Locations,
-                               Domain::DocumentObjectType::Location,
-                               _name);
+        d->addDocumentToContainer(Domain::DocumentObjectType::Locations,
+                                  Domain::DocumentObjectType::Location,
+                                  _name, _content);
     });
     //
     auto setDocumentVisible = [this] (BusinessLayer::AbstractModel* _screenplayModel,
@@ -648,6 +659,30 @@ void ProjectManager::saveChanges()
     DataStorageLayer::StorageFacade::documentChangeStorage()->store();
 }
 
+void ProjectManager::addCharacter(const QString& _name, const QString& _content)
+{
+    auto document = DataStorageLayer::StorageFacade::documentStorage()->document(Domain::DocumentObjectType::Characters);
+    auto model = d->modelsFacade.modelFor(document);
+    auto charactersModel = qobject_cast<BusinessLayer::CharactersModel*>(model);
+    if (charactersModel == nullptr) {
+        return;
+    }
+
+    charactersModel->createCharacter(_name, _content.toUtf8());
+}
+
+void ProjectManager::addLocation(const QString& _name, const QString& _content)
+{
+    auto document = DataStorageLayer::StorageFacade::documentStorage()->document(Domain::DocumentObjectType::Locations);
+    auto model = d->modelsFacade.modelFor(document);
+    auto charactersModel = qobject_cast<BusinessLayer::LocationsModel*>(model);
+    if (charactersModel == nullptr) {
+        return;
+    }
+
+    charactersModel->createLocation(_name, _content.toUtf8());
+}
+
 void ProjectManager::addScreenplay(const QString& _name, const QString& _titlePage,
     const QString& _synopsis, const QString& _treatment, const QString& _text)
 {
@@ -667,10 +702,10 @@ void ProjectManager::addScreenplay(const QString& _name, const QString& _titlePa
     auto screenplayItem = createItem(DocumentObjectType::Screenplay, _name);
     d->projectStructureModel->appendItem(screenplayItem, rootItem);
 
-    d->projectStructureModel->appendItem(createItem(DocumentObjectType::ScreenplayTitlePage, tr("Title page")), screenplayItem, _titlePage);
-    d->projectStructureModel->appendItem(createItem(DocumentObjectType::ScreenplaySynopsis, tr("Synopsis")), screenplayItem, _synopsis);
-    d->projectStructureModel->appendItem(createItem(DocumentObjectType::ScreenplayTreatment, tr("Treatment")), screenplayItem, _treatment);
-    d->projectStructureModel->appendItem(createItem(DocumentObjectType::ScreenplayText, tr("Text")), screenplayItem, _text);
+    d->projectStructureModel->appendItem(createItem(DocumentObjectType::ScreenplayTitlePage, tr("Title page")), screenplayItem, _titlePage.toUtf8());
+    d->projectStructureModel->appendItem(createItem(DocumentObjectType::ScreenplaySynopsis, tr("Synopsis")), screenplayItem, _synopsis.toUtf8());
+    d->projectStructureModel->appendItem(createItem(DocumentObjectType::ScreenplayTreatment, tr("Treatment")), screenplayItem, _treatment.toUtf8());
+    d->projectStructureModel->appendItem(createItem(DocumentObjectType::ScreenplayText, tr("Text")), screenplayItem, _text.toUtf8());
     d->projectStructureModel->appendItem(createItem(DocumentObjectType::ScreenplayStatistics, tr("Statistics")), screenplayItem, {});
 }
 

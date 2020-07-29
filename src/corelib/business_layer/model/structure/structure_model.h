@@ -40,7 +40,8 @@ public:
     /**
      * @brief Добавить документ
      */
-    void addDocument(Domain::DocumentObjectType _type, const QString& _name = {}, const QModelIndex& _parent = {});
+    void addDocument(Domain::DocumentObjectType _type, const QString& _name = {},
+        const QModelIndex& _parent = {}, const QByteArray& _content = {});
 
     /**
      * @brief Добавить элемент в начало
@@ -50,7 +51,7 @@ public:
     /**
      * @brief Добавить элемент в конец
      */
-    void appendItem(StructureModelItem* _item, StructureModelItem* _parentItem = nullptr, const QString& _content = {});
+    void appendItem(StructureModelItem* _item, StructureModelItem* _parentItem = nullptr, const QByteArray& _content = {});
 
     /**
      * @brief Вставить элемент после родственика
@@ -127,7 +128,7 @@ signals:
      * @brief Был добавлен документ с заданным идентификатором, типом и содержимым
      */
     void documentAdded(const QUuid& _uuid, Domain::DocumentObjectType _type, const QString& _name,
-        const QString& _content);
+        const QByteArray& _content);
 
 protected:
     /**

@@ -2,6 +2,7 @@
 
 #include "import_options.h"
 
+#include <business_layer/model/screenplay/text/screenplay_text_block_parser.h>
 #include <business_layer/model/screenplay/text/screenplay_text_model_text_item.h>
 #include <business_layer/model/screenplay/text/screenplay_text_model_xml.h>
 #include <business_layer/templates/screenplay_template.h>
@@ -13,9 +14,120 @@
 #include <QFileInfo>
 #include <QXmlStreamWriter>
 
+#include <set>
+
 
 namespace BusinessLayer
 {
+
+AbstractImporter::Documents FdxImporter::importDocuments(const ImportOptions& _options) const
+{
+    //
+    // Открываем файл
+    //
+    QFile fdxFile(_options.filePath);
+    if (!fdxFile.open(QIODevice::ReadOnly)) {
+        return {};
+    }
+
+    //
+    // Читаем XML
+    //
+    QDomDocument fdxDocument;
+    fdxDocument.setContent(&fdxFile);
+
+    //
+    // Content - текст сценария
+    //
+    QDomElement rootElement = fdxDocument.documentElement();
+    QDomElement content = rootElement.firstChildElement("Content");
+    QDomNode paragraph = content.firstChild();
+    std::set<QString> characterNames;
+    std::set<QString> locationNames;
+    while (!paragraph.isNull()) {
+        //
+        // Определим тип блока
+        //
+        const QString paragraphType = paragraph.attributes().namedItem("Type").nodeValue();
+        auto blockType = ScreenplayParagraphType::Undefined;
+        if (paragraphType == "Scene Heading") {
+            blockType = ScreenplayParagraphType::SceneHeading;
+        } else if (paragraphType == "Character") {
+            blockType = ScreenplayParagraphType::Character;
+        }
+
+        //
+        // Получим текст блока
+        //
+        QString paragraphText;
+        QVector<ScreenplayTextModelTextItem::TextFormat> formatting;
+        {
+            QDomElement textNode = paragraph.firstChildElement("Text");
+            while (!textNode.isNull()) {
+                //
+                // ... читаем текст
+                //
+                if (!textNode.text().isEmpty()) {
+                    paragraphText.append(textNode.text());
+                } else {
+                    //
+                    // NOTE: Qt пропускает узлы содержащие только пробельные символы,
+                    //       поэтому прибегнем к небольшому воркэраунду
+                    //
+                    paragraphText.append(" ");
+                }
+
+                textNode = textNode.nextSiblingElement("Text");
+            }
+        }
+
+        switch (blockType) {
+            case ScreenplayParagraphType::SceneHeading: {
+                if (!_options.importLocations) {
+                    break;
+                }
+
+                const auto locationName = SceneHeadingParser::location(paragraphText);
+                if (locationName.isEmpty()) {
+                    break;
+                }
+
+                locationNames.emplace(locationName);
+                break;
+            }
+
+            case ScreenplayParagraphType::Character: {
+                if (!_options.importCharacters) {
+                    break;
+                }
+
+                const auto characterName = CharacterParser::name(paragraphText);
+                if (characterName.isEmpty()) {
+                    break;
+                }
+
+                characterNames.emplace(characterName);
+                break;
+            }
+
+            default: break;
+        }
+
+        //
+        // Переходим к следующему
+        //
+        paragraph = paragraph.nextSibling();
+    }
+
+    Documents documents;
+    for (const auto& characterName : characterNames) {
+        documents.characters.append({ characterName, {} });
+    }
+    for (const auto& locationName : locationNames) {
+        documents.locations.append({ locationName, {} });
+    }
+    return documents;
+}
 
 QVector<AbstractImporter::Screenplay> FdxImporter::importScreenplays(const ImportOptions& _options) const
 {

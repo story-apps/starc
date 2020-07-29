@@ -1,9 +1,9 @@
 #include "transition_handler.h"
 
+#include "../screenplay_text_edit.h"
+
 #include <business_layer/model/screenplay/screenplay_dictionaries_model.h>
 #include <business_layer/templates/screenplay_template.h>
-
-#include <ui/screenplay_text_edit.h>
 
 #include <QKeyEvent>
 #include <QStringListModel>

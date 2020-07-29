@@ -1,5 +1,7 @@
 #include "character_handler.h"
 
+#include "../screenplay_text_edit.h"
+
 #include <business_layer/model/characters/characters_model.h>
 #include <business_layer/model/locations/locations_model.h>
 #include <business_layer/model/screenplay/screenplay_dictionaries_model.h>
@@ -10,8 +12,6 @@
 #include <data_layer/storage/storage_facade.h>
 
 #include <domain/document_object.h>
-
-#include <ui/screenplay_text_edit.h>
 
 #include <QKeyEvent>
 #include <QStringListModel>

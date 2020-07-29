@@ -202,7 +202,10 @@ void ScreenplayTextFastFormatWidget::setParagraphTypesModel(QAbstractItemModel* 
         return;
     }
 
-    d->model->disconnect(this);
+    if (d->model != nullptr){
+        d->model->disconnect(this);
+    }
+
     d->model = _model;
 
     connect(d->model, &QAbstractItemModel::dataChanged, this, [this] { d->updateButtons(); });
