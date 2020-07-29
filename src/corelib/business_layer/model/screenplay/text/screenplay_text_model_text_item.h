@@ -31,6 +31,8 @@ public:
         bool isUnderline = false;
 
         bool operator==(const TextFormat& _other) const;
+
+        bool isValid() const;
     };
     struct ReviewComment {
         QString author;

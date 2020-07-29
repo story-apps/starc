@@ -1,5 +1,6 @@
 #include "import_manager.h"
 
+#include <business_layer/import/fdx_importer.h>
 #include <business_layer/import/kit_scenarist_importer.h>
 #include <business_layer/import/import_options.h>
 
@@ -90,10 +91,9 @@ void ImportManager::Implementation::import(const BusinessLayer::ImportOptions& _
 
         } else if (importFilePath.endsWith(ExtensionHelper::kitScenarist())) {
             importer.reset(new BusinessLayer::KitScenaristImporter);
-        } else if (importFilePath.endsWith(ExtensionHelper::finalDraft())) {
-
-        } else if (importFilePath.endsWith(ExtensionHelper::finalDraftTemplate())) {
-
+        } else if (importFilePath.endsWith(ExtensionHelper::finalDraft())
+                   || importFilePath.endsWith(ExtensionHelper::finalDraftTemplate())) {
+            importer.reset(new BusinessLayer::FdxImporter);
         } else if (importFilePath.endsWith(ExtensionHelper::trelby())) {
 
         } else if (importFilePath.endsWith(ExtensionHelper::msOfficeBinary())) {

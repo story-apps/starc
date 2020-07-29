@@ -24,6 +24,7 @@ PRE_TARGETDEPS += $$PWD/../3rd_party/hunspell
 
 SOURCES += \
     business_layer/import/abstract_importer.cpp \
+    business_layer/import/fdx_importer.cpp \
     business_layer/import/kit_scenarist_importer.cpp \
     business_layer/model/abstract_model.cpp \
     business_layer/model/abstract_model_item.cpp \
@@ -144,6 +145,7 @@ SOURCES += \
 
 HEADERS += \
     business_layer/import/abstract_importer.h \
+    business_layer/import/fdx_importer.h \
     business_layer/import/import_options.h \
     business_layer/import/kit_scenarist_importer.h \
     business_layer/model/abstract_image_wrapper.h \
@@ -168,6 +170,7 @@ HEADERS += \
     business_layer/model/screenplay/text/screenplay_text_model_splitter_item.h \
     business_layer/model/screenplay/text/screenplay_text_model_text_item.h \
     business_layer/model/screenplay/screenplay_title_page_model.h \
+    business_layer/model/screenplay/text/screenplay_text_model_xml.h \
     business_layer/model/structure/structure_model.h \
     business_layer/model/structure/structure_model_item.h \
     business_layer/model/structure/structure_proxy_model.h \

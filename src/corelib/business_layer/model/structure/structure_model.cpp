@@ -167,7 +167,8 @@ void StructureModel::addDocument(Domain::DocumentObjectType _type, const QString
 
     auto createItem = [] (DocumentObjectType _type, const QString& _name) {
         auto uuid = QUuid::createUuid();
-        return new StructureModelItem(uuid, _type, _name, {}, true);
+        const auto visible = true;
+        return new StructureModelItem(uuid, _type, _name, {}, visible);
     };
 
     auto parentItem = itemForIndex(_parent);

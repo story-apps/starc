@@ -667,14 +667,11 @@ void ProjectManager::addScreenplay(const QString& _name, const QString& _titlePa
     auto screenplayItem = createItem(DocumentObjectType::Screenplay, _name);
     d->projectStructureModel->appendItem(screenplayItem, rootItem);
 
-    d->projectStructureModel->appendItem(createItem(DocumentObjectType::ScreenplayTitlePage,
-                                                    tr("Title page")), screenplayItem, _titlePage);
-    d->projectStructureModel->appendItem(createItem(DocumentObjectType::ScreenplaySynopsis,
-                                                    tr("Synopsis")), screenplayItem, _synopsis);
-    d->projectStructureModel->appendItem(createItem(DocumentObjectType::ScreenplayTreatment,
-                                                    tr("Treatment")), screenplayItem, _treatment);
-    d->projectStructureModel->appendItem(createItem(DocumentObjectType::ScreenplayText,
-                                                    tr("Screenplay")), screenplayItem, _text);
+    d->projectStructureModel->appendItem(createItem(DocumentObjectType::ScreenplayTitlePage, tr("Title page")), screenplayItem, _titlePage);
+    d->projectStructureModel->appendItem(createItem(DocumentObjectType::ScreenplaySynopsis, tr("Synopsis")), screenplayItem, _synopsis);
+    d->projectStructureModel->appendItem(createItem(DocumentObjectType::ScreenplayTreatment, tr("Treatment")), screenplayItem, _treatment);
+    d->projectStructureModel->appendItem(createItem(DocumentObjectType::ScreenplayText, tr("Text")), screenplayItem, _text);
+    d->projectStructureModel->appendItem(createItem(DocumentObjectType::ScreenplayStatistics, tr("Statistics")), screenplayItem, _text);
 }
 
 void ProjectManager::handleModelChange(BusinessLayer::AbstractModel* _model,

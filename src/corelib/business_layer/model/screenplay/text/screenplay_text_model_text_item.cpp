@@ -286,6 +286,13 @@ bool ScreenplayTextModelTextItem::TextFormat::operator==(const ScreenplayTextMod
             && isUnderline == _other.isUnderline;
 }
 
+bool ScreenplayTextModelTextItem::TextFormat::isValid() const
+{
+    return isBold != false
+            || isItalic != false
+            || isUnderline != false;
+}
+
 bool ScreenplayTextModelTextItem::ReviewComment::operator==(const ScreenplayTextModelTextItem::ReviewComment& _other) const
 {
     return author == _other.author
