@@ -12,6 +12,17 @@ DESTDIR = ../_build
 INCLUDEPATH += ..
 
 #
+# Подключаем библиотеку fileformats
+#
+LIBS += -L$$DESTDIR/libs/ -lfileformats
+win32:QMAKE_LFLAGS += /WHOLEARCHIVE:$$DESTDIR/libs/fileformats.lib
+
+INCLUDEPATH += $$PWD/../3rd_party/fileformats
+DEPENDPATH += $$PWD/../3rd_party/fileformats
+PRE_TARGETDEPS += $$PWD/../3rd_party/fileformats
+#
+
+#
 # Подключаем библиотеку HUNSPELL
 #
 LIBS += -L$$DESTDIR/libs/ -lhunspell
