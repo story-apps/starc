@@ -1,5 +1,6 @@
 #include "import_manager.h"
 
+#include <business_layer/import/celtx_importer.h>
 #include <business_layer/import/fdx_importer.h>
 #include <business_layer/import/import_options.h>
 #include <business_layer/import/kit_scenarist_importer.h>
@@ -106,7 +107,7 @@ void ImportManager::Implementation::import(const BusinessLayer::ImportOptions& _
         } else if (importFilePath.endsWith(ExtensionHelper::fountain())) {
 
         } else if (importFilePath.endsWith(ExtensionHelper::celtx())) {
-
+            importer.reset(new BusinessLayer::CeltxImporter);
         } else if (importFilePath.endsWith(ExtensionHelper::plainText())) {
 
         }

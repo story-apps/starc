@@ -66,7 +66,6 @@ AbstractImporter::Documents TrelbyImporter::importDocuments(const ImportOptions&
         }
         paragraphText += paragraph.mid(2);
 
-
         //
         // Если дошли до последней строки блока
         //

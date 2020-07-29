@@ -60,7 +60,6 @@ AbstractImporter::Documents FdxImporter::importDocuments(const ImportOptions& _o
         // Получим текст блока
         //
         QString paragraphText;
-        QVector<ScreenplayTextModelTextItem::TextFormat> formatting;
         {
             QDomElement textNode = paragraph.firstChildElement("Text");
             while (!textNode.isNull()) {
