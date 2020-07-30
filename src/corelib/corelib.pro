@@ -47,6 +47,7 @@ PRE_TARGETDEPS += $$PWD/../3rd_party/qgumboparser
 SOURCES += \
     business_layer/import/abstract_importer.cpp \
     business_layer/import/celtx_importer.cpp \
+    business_layer/import/document_importer.cpp \
     business_layer/import/fdx_importer.cpp \
     business_layer/import/kit_scenarist_importer.cpp \
     business_layer/import/trelby_importer.cpp \
@@ -170,6 +171,7 @@ SOURCES += \
 HEADERS += \
     business_layer/import/abstract_importer.h \
     business_layer/import/celtx_importer.h \
+    business_layer/import/document_importer.h \
     business_layer/import/fdx_importer.h \
     business_layer/import/import_options.h \
     business_layer/import/kit_scenarist_importer.h \

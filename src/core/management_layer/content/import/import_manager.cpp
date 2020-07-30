@@ -1,6 +1,7 @@
 #include "import_manager.h"
 
 #include <business_layer/import/celtx_importer.h>
+#include <business_layer/import/document_importer.h>
 #include <business_layer/import/fdx_importer.h>
 #include <business_layer/import/import_options.h>
 #include <business_layer/import/kit_scenarist_importer.h>
@@ -98,17 +99,13 @@ void ImportManager::Implementation::import(const BusinessLayer::ImportOptions& _
             importer.reset(new BusinessLayer::FdxImporter);
         } else if (importFilePath.endsWith(ExtensionHelper::trelby())) {
             importer.reset(new BusinessLayer::TrelbyImporter);
-        } else if (importFilePath.endsWith(ExtensionHelper::msOfficeBinary())) {
-
-        } else if (importFilePath.endsWith(ExtensionHelper::msOfficeOpenXml())) {
-
-        } else if (importFilePath.endsWith(ExtensionHelper::openDocumentXml())) {
-
-        } else if (importFilePath.endsWith(ExtensionHelper::fountain())) {
-
+        } else if (importFilePath.endsWith(ExtensionHelper::msOfficeOpenXml())
+                   || importFilePath.endsWith(ExtensionHelper::openDocumentXml())) {
+            importer.reset(new BusinessLayer::DocumentImporter);
         } else if (importFilePath.endsWith(ExtensionHelper::celtx())) {
             importer.reset(new BusinessLayer::CeltxImporter);
-        } else if (importFilePath.endsWith(ExtensionHelper::plainText())) {
+        } else if (importFilePath.endsWith(ExtensionHelper::fountain())
+                   || importFilePath.endsWith(ExtensionHelper::plainText())) {
 
         }
     }
