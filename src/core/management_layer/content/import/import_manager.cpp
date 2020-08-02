@@ -3,6 +3,7 @@
 #include <business_layer/import/celtx_importer.h>
 #include <business_layer/import/document_importer.h>
 #include <business_layer/import/fdx_importer.h>
+#include <business_layer/import/fountain_importer.h>
 #include <business_layer/import/import_options.h>
 #include <business_layer/import/kit_scenarist_importer.h>
 #include <business_layer/import/trelby_importer.h>
@@ -90,9 +91,7 @@ void ImportManager::Implementation::import(const BusinessLayer::ImportOptions& _
     QScopedPointer<BusinessLayer::AbstractImporter> importer;
     {
         const auto importFilePath = _options.filePath.toLower();
-        if (importFilePath.endsWith(ExtensionHelper::starc())) {
-
-        } else if (importFilePath.endsWith(ExtensionHelper::kitScenarist())) {
+        if (importFilePath.endsWith(ExtensionHelper::kitScenarist())) {
             importer.reset(new BusinessLayer::KitScenaristImporter);
         } else if (importFilePath.endsWith(ExtensionHelper::finalDraft())
                    || importFilePath.endsWith(ExtensionHelper::finalDraftTemplate())) {
@@ -106,7 +105,7 @@ void ImportManager::Implementation::import(const BusinessLayer::ImportOptions& _
             importer.reset(new BusinessLayer::CeltxImporter);
         } else if (importFilePath.endsWith(ExtensionHelper::fountain())
                    || importFilePath.endsWith(ExtensionHelper::plainText())) {
-
+            importer.reset(new BusinessLayer::FountainImporter);
         }
     }
 

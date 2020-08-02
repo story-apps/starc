@@ -548,6 +548,7 @@ void ScreenplayTextCommentsModel::setModel(ScreenplayTextModel* _model)
 
     if (d->model != nullptr) {
         d->model->disconnect(this);
+        d->modelTextItems.clear();
         d->reviewMarks.clear();
     }
 

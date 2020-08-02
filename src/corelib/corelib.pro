@@ -49,6 +49,7 @@ SOURCES += \
     business_layer/import/celtx_importer.cpp \
     business_layer/import/document_importer.cpp \
     business_layer/import/fdx_importer.cpp \
+    business_layer/import/fountain_importer.cpp \
     business_layer/import/kit_scenarist_importer.cpp \
     business_layer/import/trelby_importer.cpp \
     business_layer/model/abstract_model.cpp \
@@ -173,6 +174,7 @@ HEADERS += \
     business_layer/import/celtx_importer.h \
     business_layer/import/document_importer.h \
     business_layer/import/fdx_importer.h \
+    business_layer/import/fountain_importer.h \
     business_layer/import/import_options.h \
     business_layer/import/kit_scenarist_importer.h \
     business_layer/import/trelby_importer.h \
