@@ -27,3 +27,7 @@ HEADERS += \
     application.h
 
 win32:RC_FILE = app.rc
+macx {
+    ICON = icon.icns
+    QMAKE_INFO_PLIST = Info.plist
+}

@@ -29,10 +29,10 @@ QObject* loadApplicationManager()
 //#endif
                 );
 
-#if !defined(QT_NO_DEBUG) && defined(Q_OS_MAC)
+#if defined(Q_OS_MAC)
     pluginsDir.cdUp();
-    pluginsDir.cdUp();
-    pluginsDir.cdUp();
+//    pluginsDir.cdUp();
+//    pluginsDir.cdUp();
 #endif
 
     //
