@@ -701,7 +701,7 @@ void FountainImporter::Implementation::appendComments(QXmlStreamWriter& _writer)
     }
 
     _writer.writeEndElement(); // review mark
-    _writer.writeEndElement(); // block
+    _writer.writeEndElement(); // review marks
 
     notes.clear();
 }

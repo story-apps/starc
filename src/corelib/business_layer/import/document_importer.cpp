@@ -497,8 +497,79 @@ QVector<AbstractImporter::Screenplay> DocumentImporter::importScreenplays(const 
             }
             writer.writeStartElement(toString(blockType));
             writer.writeStartElement(xml::kValueTag);
-            writer.writeCDATA(paragraphText);
+            writer.writeCDATA(TextHelper::toHtmlEscaped(paragraphText));
             writer.writeEndElement(); // value
+            //
+            // Пишем редакторские комментарии
+            //
+            {
+                const QTextBlock currentBlock = cursor.block();
+                if (!currentBlock.textFormats().isEmpty()) {
+                    writer.writeStartElement(xml::kReviewMarksTag);
+                    for (const auto& range : currentBlock.textFormats()) {
+                        if (range.format.boolProperty(Docx::IsForeground)
+                                || range.format.boolProperty(Docx::IsBackground)
+                                || range.format.boolProperty(Docx::IsHighlight)
+                                || range.format.boolProperty(Docx::IsComment)) {
+                            writer.writeStartElement(xml::kReviewMarkTag);
+                            writer.writeAttribute(xml::kFromAttribute, QString::number(range.start));
+                            writer.writeAttribute(xml::kLengthAttribute, QString::number(range.length));
+                            if (range.format.hasProperty(QTextFormat::ForegroundBrush)) {
+                                writer.writeAttribute(xml::kColorAttribute, range.format.foreground().color().name());
+                            }
+                            if (range.format.hasProperty(QTextFormat::BackgroundBrush)) {
+                                writer.writeAttribute(xml::kBackgroundColorAttribute, range.format.background().color().name());
+                            }
+                            //
+                            // ... комментарии
+                            //
+                            const QStringList authors = range.format.property(Docx::CommentsAuthors).toStringList();
+                            const QStringList dates = range.format.property(Docx::CommentsDates).toStringList();
+                            const QStringList comments = range.format.property(Docx::Comments).toStringList();
+                            for (int commentIndex = 0; commentIndex < comments.size(); ++commentIndex) {
+                                writer.writeStartElement(xml::kCommentTag);
+                                writer.writeAttribute(xml::kAuthorAttribute, authors.at(commentIndex));
+                                writer.writeAttribute(xml::kDateAttribute, dates.at(commentIndex));
+                                writer.writeCDATA(TextHelper::toHtmlEscaped(comments.at(commentIndex)));
+                                writer.writeEndElement(); // comment
+                            }
+                            //
+                            writer.writeEndElement(); // review mark
+                        }
+                    }
+                    writer.writeEndElement(); // review marks
+                }
+            }
+
+            //
+            // Пишем форматирование
+            //
+            {
+                const QTextBlock currentBlock = cursor.block();
+                if (!currentBlock.textFormats().isEmpty()) {
+                    writer.writeStartElement(xml::kFormatsTag);
+                    for (const auto& range : currentBlock.textFormats()) {
+                        if (range.format != currentBlock.charFormat()
+                            && (range.format.fontWeight() != currentBlock.charFormat().fontWeight()
+                                || range.format.fontItalic() != currentBlock.charFormat().fontItalic()
+                                || range.format.fontUnderline() != currentBlock.charFormat().fontUnderline())) {
+                            writer.writeEmptyElement(xml::kFormatTag);
+                            writer.writeAttribute(xml::kFromAttribute, QString::number(range.start));
+                            writer.writeAttribute(xml::kLengthAttribute, QString::number(range.length));
+                            if (range.format.boolProperty(QTextFormat::FontWeight)) {
+                                writer.writeAttribute(xml::kBoldAttribute, "true");
+                            }
+                            if (range.format.boolProperty(QTextFormat::FontItalic)) {
+                                writer.writeAttribute(xml::kItalicAttribute, "true");
+                            }
+                            if (range.format.boolProperty(QTextFormat::TextUnderlineStyle)) {
+                                writer.writeAttribute(xml::kUnderlineAttribute, "true");
+                            }
+                        }
+                    }
+                    writer.writeEndElement();
+                }
+            }
             writer.writeEndElement(); // block type
 
             //
