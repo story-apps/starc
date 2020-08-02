@@ -26,6 +26,26 @@ public:
     void setLogline(const QString& _logline);
     Q_SIGNAL void loglineChanged(const QString& _logline);
 
+    bool titlePageVisible() const;
+    void setTitlePageVisible(bool _visible);
+    Q_SIGNAL void titlePageVisibleChanged(bool _visible);
+
+    bool synopsisVisible() const;
+    void setSynopsisVisible(bool _visible);
+    Q_SIGNAL void synopsisVisibleChanged(bool _visible);
+
+    bool treatmentVisible() const;
+    void setTreatmentVisible(bool _visible);
+    Q_SIGNAL void treatmentVisibleChanged(bool _visible);
+
+    bool screenplayTextVisible() const;
+    void setScreenplayTextVisible(bool _visible);
+    Q_SIGNAL void screenplayTextVisibleChanged(bool _visible);
+
+    bool screenplayStatisticsVisible() const;
+    void setScreenplayStatisticsVisible(bool _visible);
+    Q_SIGNAL void screenplayStatisticsVisibleChanged(bool _visible);
+
     const QString& header() const;
     void setHeader(const QString& _header);
     Q_SIGNAL void headerChanged(const QString& _header);

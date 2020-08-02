@@ -1,5 +1,9 @@
 #include "base_text_edit.h"
 
+#include <include/custom_events.h>
+
+#include <ui/design_system/design_system.h>
+
 #include <utils/helpers/text_helper.h>
 
 #include <QKeyEvent>
@@ -87,12 +91,18 @@ namespace {
 class BaseTextEdit::Implementation
 {
 public:
+    void reconfigure(BaseTextEdit* _textEdit);
 
     bool capitalizeWords = true;
     bool correctDoubleCapitals = true;
     bool replaceThreeDots = false;
     bool smartQuotes = false;
 };
+
+void BaseTextEdit::Implementation::reconfigure(BaseTextEdit* _textEdit)
+{
+    _textEdit->setCursorWidth(Ui::DesignSystem::layout().px4());
+}
 
 
 // ****
@@ -102,6 +112,7 @@ BaseTextEdit::BaseTextEdit(QWidget* _parent)
     : CompleterTextEdit(_parent),
       d(new Implementation)
 {
+    d->reconfigure(this);
 }
 
 void BaseTextEdit::setCapitalizeWords(bool _capitalize)
@@ -154,6 +165,22 @@ void BaseTextEdit::setTextUnderline(bool _underline)
         return format;
     };
     updateSelectionFormatting(textCursor(), buildFormat);
+}
+
+bool BaseTextEdit::event(QEvent* _event)
+{
+    switch (static_cast<int>(_event->type())) {
+        case static_cast<QEvent::Type>(EventType::DesignSystemChangeEvent): {
+            d->reconfigure(this);
+            updateGeometry();
+            update();
+            return true;
+        }
+
+        default: {
+            return CompleterTextEdit::event(_event);
+        }
+    }
 }
 
 bool BaseTextEdit::keyPressEventReimpl(QKeyEvent* _event)
@@ -388,7 +415,7 @@ bool BaseTextEdit::updateEnteredText(const QString& _eventText)
     // и не сокращение
     // и после курсора нет текста (для ремарки допустима скобка)
     //
-    QString endOfSentancePattern = QString("([.]|[?]|[!]|[…]) %1$").arg(_eventText);
+    const QString endOfSentancePattern = QString("([.]|[?]|[!]|[…]) %1$").arg(_eventText);
     if (d->capitalizeWords
         && cursorBackwardText.contains(QRegularExpression(endOfSentancePattern))
         && !stringEndsWithAbbrev(cursorBackwardText)

@@ -23,62 +23,74 @@ DEPENDPATH += $$PWD/../../../../corelib
 #
 
 HEADERS += \
+    comments/screenplay_text_add_comment_widget.h \
+    comments/screenplay_text_comment_delegate.h \
+    comments/screenplay_text_comments_model.h \
+    comments/screenplay_text_comments_toolbar.h \
+    comments/screenplay_text_comments_view.h \
     screenplay_text_manager.h \
-    ui/handlers/abstract_key_handler.h \
-    ui/handlers/action_handler.h \
-    ui/handlers/character_handler.h \
-    ui/handlers/dialog_handler.h \
-    ui/handlers/folder_footer_handler.h \
-    ui/handlers/folder_header_handler.h \
-    ui/handlers/inline_note_handler.h \
-    ui/handlers/key_press_handler_facade.h \
-    ui/handlers/lyrics_handler.h \
-    ui/handlers/parenthetical_handler.h \
-    ui/handlers/pre_handler.h \
-    ui/handlers/prepare_handler.h \
-    ui/handlers/scene_characters_handler.h \
-    ui/handlers/scene_heading_handler.h \
-    ui/handlers/shot_handler.h \
-    ui/handlers/standard_key_handler.h \
-    ui/handlers/transition_handler.h \
-    ui/handlers/unformatted_text_handler.h \
-    ui/screenplay_text_block_data.h \
-    ui/screenplay_text_corrector.h \
-    ui/screenplay_text_cursor.h \
-    ui/screenplay_text_document.h \
-    ui/screenplay_text_edit.h \
-    ui/screenplay_text_edit_shortcuts_manager.h \
-    ui/screenplay_text_edit_toolbar.h \
-    ui/screenplay_text_view.h
+    screenplay_text_view.h \
+    text/handlers/abstract_key_handler.h \
+    text/handlers/action_handler.h \
+    text/handlers/character_handler.h \
+    text/handlers/dialog_handler.h \
+    text/handlers/folder_footer_handler.h \
+    text/handlers/folder_header_handler.h \
+    text/handlers/inline_note_handler.h \
+    text/handlers/key_press_handler_facade.h \
+    text/handlers/lyrics_handler.h \
+    text/handlers/parenthetical_handler.h \
+    text/handlers/pre_handler.h \
+    text/handlers/prepare_handler.h \
+    text/handlers/scene_characters_handler.h \
+    text/handlers/scene_heading_handler.h \
+    text/handlers/shot_handler.h \
+    text/handlers/standard_key_handler.h \
+    text/handlers/transition_handler.h \
+    text/handlers/unformatted_text_handler.h \
+    text/screenplay_text_block_data.h \
+    text/screenplay_text_corrector.h \
+    text/screenplay_text_cursor.h \
+    text/screenplay_text_document.h \
+    text/screenplay_text_edit.h \
+    text/screenplay_text_edit_shortcuts_manager.h \
+    text/screenplay_text_edit_toolbar.h \
+    text/screenplay_text_fast_format_widget.h
 
 SOURCES += \
+    comments/screenplay_text_add_comment_widget.cpp \
+    comments/screenplay_text_comment_delegate.cpp \
+    comments/screenplay_text_comments_toolbar.cpp \
+    comments/screenplay_text_comments_model.cpp \
+    comments/screenplay_text_comments_view.cpp \
     screenplay_text_manager.cpp \
-    ui/handlers/abstract_key_handler.cpp \
-    ui/handlers/action_handler.cpp \
-    ui/handlers/character_handler.cpp \
-    ui/handlers/dialog_handler.cpp \
-    ui/handlers/folder_footer_handler.cpp \
-    ui/handlers/folder_header_handler.cpp \
-    ui/handlers/inline_note_handler.cpp \
-    ui/handlers/key_press_handler_facade.cpp \
-    ui/handlers/lyrics_handler.cpp \
-    ui/handlers/parenthetical_handler.cpp \
-    ui/handlers/pre_handler.cpp \
-    ui/handlers/prepare_handler.cpp \
-    ui/handlers/scene_characters_handler.cpp \
-    ui/handlers/scene_heading_handler.cpp \
-    ui/handlers/shot_handler.cpp \
-    ui/handlers/standard_key_handler.cpp \
-    ui/handlers/transition_handler.cpp \
-    ui/handlers/unformatted_text_handler.cpp \
-    ui/screenplay_text_block_data.cpp \
-    ui/screenplay_text_corrector.cpp \
-    ui/screenplay_text_cursor.cpp \
-    ui/screenplay_text_document.cpp \
-    ui/screenplay_text_edit.cpp \
-    ui/screenplay_text_edit_shortcuts_manager.cpp \
-    ui/screenplay_text_edit_toolbar.cpp \
-    ui/screenplay_text_view.cpp
+    screenplay_text_view.cpp \
+    text/handlers/abstract_key_handler.cpp \
+    text/handlers/action_handler.cpp \
+    text/handlers/character_handler.cpp \
+    text/handlers/dialog_handler.cpp \
+    text/handlers/folder_footer_handler.cpp \
+    text/handlers/folder_header_handler.cpp \
+    text/handlers/inline_note_handler.cpp \
+    text/handlers/key_press_handler_facade.cpp \
+    text/handlers/lyrics_handler.cpp \
+    text/handlers/parenthetical_handler.cpp \
+    text/handlers/pre_handler.cpp \
+    text/handlers/prepare_handler.cpp \
+    text/handlers/scene_characters_handler.cpp \
+    text/handlers/scene_heading_handler.cpp \
+    text/handlers/shot_handler.cpp \
+    text/handlers/standard_key_handler.cpp \
+    text/handlers/transition_handler.cpp \
+    text/handlers/unformatted_text_handler.cpp \
+    text/screenplay_text_block_data.cpp \
+    text/screenplay_text_corrector.cpp \
+    text/screenplay_text_cursor.cpp \
+    text/screenplay_text_document.cpp \
+    text/screenplay_text_edit.cpp \
+    text/screenplay_text_edit_shortcuts_manager.cpp \
+    text/screenplay_text_edit_toolbar.cpp \
+    text/screenplay_text_fast_format_widget.cpp
 
 RESOURCES += \
     resources.qrc

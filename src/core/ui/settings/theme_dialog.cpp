@@ -29,6 +29,11 @@ public:
     explicit Implementation(QWidget* _parent);
 
     /**
+     * @brief Разрешить/запретить редактирование палитры
+     */
+    void setPaletteReadOnly(bool _readOnly);
+
+    /**
      * @brief Получить список всех кнопок тем
      */
     QVector<RadioButton*> themes() const;
@@ -108,7 +113,7 @@ ThemeDialog::Implementation::Implementation(QWidget* _parent)
     customPaletteLayout->setRowMinimumHeight(3, 1); // добавляем отступ между цветами и полем хэша
     customPaletteLayout->addWidget(customThemeHash, 4, 0, 1, 4);
     customPalette->setLayout(customPaletteLayout);
-    customPalette->hide();
+    setPaletteReadOnly(true);
 
     for (auto color : colors()) {
         color->setAlignment(Qt::AlignCenter);
@@ -125,6 +130,14 @@ ThemeDialog::Implementation::Implementation(QWidget* _parent)
     projectLocationGroup->add(dark);
     projectLocationGroup->add(light);
     projectLocationGroup->add(custom);
+}
+
+void ThemeDialog::Implementation::setPaletteReadOnly(bool _readOnly)
+{
+    for (auto color : colors()) {
+        color->setEnabled(!_readOnly);
+    }
+    customThemeHash->setReadOnly(_readOnly);
 }
 
 QVector<RadioButton*> ThemeDialog::Implementation::themes() const
@@ -170,21 +183,7 @@ ThemeDialog::ThemeDialog(QWidget* _parent)
         });
     }
     connect(d->custom, &RadioButton::checkedChanged, this, [this] (bool _checked) {
-        //
-        // Если это настройка перед отображением диалога, то покажем панель с цветами сразу
-        //
-        if (!isVisible()) {
-            d->customPalette->setVisible(_checked);
-        }
-        //
-        // А если же это изменение темы, то ставим событие на отображение панели с цветами
-        // в очередь, чтобы не происходило дёргание при анимировании её появления
-        //
-        else {
-            QTimer::singleShot(0, this, [this, _checked] {
-                d->customPalette->setVisible(_checked);
-            });
-        }
+        d->setPaletteReadOnly(!_checked);
     });
     auto updateColorLabel = [this] {
         auto colorLabel = qobject_cast<Widget*>(sender());
@@ -253,6 +252,8 @@ ThemeDialog::ThemeDialog(QWidget* _parent)
     designSystemChangeEvent(nullptr);
 }
 
+ThemeDialog::~ThemeDialog() = default;
+
 void ThemeDialog::setCurrentTheme(ApplicationTheme _theme)
 {
     for (auto radioButton : d->themes()) {
@@ -262,8 +263,6 @@ void ThemeDialog::setCurrentTheme(ApplicationTheme _theme)
         }
     }
 }
-
-ThemeDialog::~ThemeDialog() = default;
 
 QWidget* ThemeDialog::focusedWidgetAfterShow() const
 {
@@ -310,7 +309,7 @@ void ThemeDialog::designSystemChangeEvent(DesignSystemChangeEvent* _event)
 
     auto initColorLabel = [] (const QColor& _color, Widget* _label) {
         _label->setBackgroundColor(_color);
-        _label->setTextColor(ColorHelper::contrast(_color));
+        _label->setTextColor(ColorHelper::contrasted(_color));
     };
     initColorLabel(Ui::DesignSystem::color().primary(), d->primary);
     initColorLabel(Ui::DesignSystem::color().onPrimary(), d->onPrimary);

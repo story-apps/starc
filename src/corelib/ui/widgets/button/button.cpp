@@ -31,6 +31,8 @@ public:
     QString icon;
     QString text;
     bool isContained = false;
+    bool isOutlined = false;
+    bool isFlat = false;
 
     /**
      * @brief  Декорации кнопки при клике
@@ -131,6 +133,26 @@ void Button::setContained(bool _contained)
     update();
 }
 
+void Button::setOutlined(bool _outlined)
+{
+    if (d->isOutlined == _outlined) {
+        return;
+    }
+
+    d->isOutlined = _outlined;
+    update();
+}
+
+void Button::setFlat(bool _flat)
+{
+    if (d->isFlat == _flat) {
+        return;
+    }
+
+    d->isFlat = _flat;
+    update();
+}
+
 void Button::click()
 {
     emit clicked();
@@ -166,25 +188,41 @@ void Button::paintEvent(QPaintEvent* _event)
     // Заливаем фон
     //
     QColor backgroundColor;
-    if (d->isContained) {
-        backgroundColor = this->backgroundColor();
-    } else if (underMouse() || hasFocus()) {
-        backgroundColor = this->backgroundColor();
-        backgroundColor.setAlphaF(0.2);
+    if (underMouse()) {
+        if (d->isContained || d->isFlat) {
+            backgroundColor = ColorHelper::transparent(this->backgroundColor(),
+                                                       1.0 - Ui::DesignSystem::hoverBackgroundOpacity());
+        } else {
+            backgroundColor = ColorHelper::transparent(this->backgroundColor(),
+                                                       Ui::DesignSystem::hoverBackgroundOpacity());
+        }
+    } else if (hasFocus()) {
+        if (d->isContained || d->isFlat) {
+            backgroundColor = ColorHelper::transparent(this->backgroundColor(),
+                                                       1.0 - Ui::DesignSystem::focusBackgroundOpacity());
+        } else {
+            backgroundColor = ColorHelper::transparent(this->backgroundColor(),
+                                                       Ui::DesignSystem::focusBackgroundOpacity());
+        }
+    } else {
+        if (d->isContained || d->isFlat) {
+            backgroundColor = this->backgroundColor();
+        }
     }
     if (backgroundColor.isValid()) {
-        QPixmap backgroundImage(backgroundRect.size());
-        backgroundImage.fill(Qt::transparent);
-        QPainter backgroundImagePainter(&backgroundImage);
-        backgroundImagePainter.setPen(Qt::NoPen);
-        backgroundImagePainter.setBrush(backgroundColor);
-        backgroundImagePainter.drawRoundedRect(QRect({0,0}, backgroundImage.size()),
-                                     Ui::DesignSystem::button().borderRadius(),
-                                     Ui::DesignSystem::button().borderRadius());
         //
         // Тень рисуем только в случае, если кнопка имеет установленный фон
         //
         if (d->isContained) {
+            QPixmap backgroundImage(backgroundRect.size());
+            backgroundImage.fill(Qt::transparent);
+            QPainter backgroundImagePainter(&backgroundImage);
+            backgroundImagePainter.setPen(Qt::NoPen);
+            backgroundImagePainter.setBrush(backgroundColor);
+            backgroundImagePainter.drawRoundedRect(QRect({0,0}, backgroundImage.size()),
+                                                   Ui::DesignSystem::button().borderRadius(),
+                                                   Ui::DesignSystem::button().borderRadius());
+
             const qreal shadowBlurRadius = std::max(Ui::DesignSystem::button().minimumShadowBlurRadius(),
                                                     d->shadowBlurRadiusAnimation.currentValue().toReal());
             const QPixmap shadow
@@ -199,6 +237,17 @@ void Button::paintEvent(QPaintEvent* _event)
         //
         painter.setPen(Qt::NoPen);
         painter.setBrush(backgroundColor);
+        painter.drawRoundedRect(backgroundRect,
+                                Ui::DesignSystem::button().borderRadius(),
+                                Ui::DesignSystem::button().borderRadius());
+    }
+
+    //
+    // Рисуем рамку
+    //
+    if (d->isOutlined) {
+        painter.setPen(QPen(textColor(), 1.0 * Ui::DesignSystem::scaleFactor()));
+        painter.setBrush(Qt::NoBrush);
         painter.drawRoundedRect(backgroundRect,
                                 Ui::DesignSystem::button().borderRadius(),
                                 Ui::DesignSystem::button().borderRadius());
@@ -257,8 +306,10 @@ void Button::paintEvent(QPaintEvent* _event)
         buttonInnerRect.setWidth(textWidth);
     }
     //
-    painter.setFont(Ui::DesignSystem::font().button());
-    painter.drawText(buttonInnerRect, Qt::AlignCenter, d->text);
+    if (!d->text.isEmpty()) {
+        painter.setFont(Ui::DesignSystem::font().button());
+        painter.drawText(buttonInnerRect, Qt::AlignCenter, d->text);
+    }
 }
 
 void Button::enterEvent(QEvent* _event)

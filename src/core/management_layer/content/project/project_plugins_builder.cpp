@@ -20,7 +20,8 @@ namespace {
      */
     const QHash<QString, QString> kEditorToNavigator
     = {{ "application/x-starc/editor/screenplay/text", "application/x-starc/navigator/screenplay/text-structure" },
-       { "application/x-starc/editor/screenplay/cards", "application/x-starc/navigator/screenplay/text-structure" }};
+       { "application/x-starc/editor/screenplay/cards", "application/x-starc/navigator/screenplay/text-structure" },
+       { "application/x-starc/editor/screenplay/statistics", "application/x-starc/navigator/screenplay/statistics-structure" }};
 
     /**
      * @brief Карта соответствия майм-типов документа к редакторам
@@ -32,10 +33,11 @@ namespace {
                                                      { "application/x-starc/editor/screenplay/parameters", u8"\U000f0493" }}},
        { "application/x-starc/document/screenplay/title-page", {{ "application/x-starc/editor/screenplay/title-page", u8"\U000f09ed" }}},
        { "application/x-starc/document/screenplay/synopsis", {{ "application/x-starc/editor/text", u8"\U000f09ed" }}},
-       { "application/x-starc/document/screenplay/outline", {{ "application/x-starc/editor/screenplay/outline", u8"\U000f09ed" },
+       { "application/x-starc/document/screenplay/treatment", {{ "application/x-starc/editor/screenplay/treatment", u8"\U000f09ed" },
                                                              { "application/x-starc/editor/screenplay/cards", u8"\U000f0554" }}},
        { "application/x-starc/document/screenplay/text", {{ "application/x-starc/editor/screenplay/text", u8"\U000f09ed" },
-                                                          { "application/x-starc/editor/screenplay/cards", u8"\U000f0554" }}}};
+                                                          { "application/x-starc/editor/screenplay/cards", u8"\U000f0554" }}},
+       { "application/x-starc/document/screenplay/statistics", {{ "application/x-starc/editor/screenplay/statistics", u8"\U000f0127" }}}};
 
     /**
       * @brief Карта соответсвий майм-типов навигаторов/редакторов к названиям библиотек с плагинами
@@ -45,15 +47,17 @@ namespace {
     const QHash<QString, QString> kMimeToPlugin
     = {{ "application/x-starc/editor/project/information", "*projectinformationplugin*" },
        //
-       { "application/x-starc/navigator/screenplay/text-structure", "*screenplaytextstructureplugin*" },
        { "application/x-starc/editor/screenplay/information", "*screenplayinformationplugin*" },
        { "application/x-starc/editor/screenplay/parameters", "*screenplayparametersplugin*" },
        { "application/x-starc/editor/screenplay/title-page", "*textplugin*" },
        { "application/x-starc/editor/screenplay/synopsis", "*textplugin*" },
-       { "application/x-starc/editor/screenplay/outline", "*screenplayoutlineplugin*" },
-       { "application/x-starc/editor/screenplay/outline-cards", "*screenplayoutlinecardsplugin*" },
+       { "application/x-starc/editor/screenplay/treatment", "*screenplaytreatmentplugin*" },
+       { "application/x-starc/editor/screenplay/treatment-cards", "*screenplaytreatmentcardsplugin*" },
        { "application/x-starc/editor/screenplay/text", "*screenplaytextplugin*" },
-       { "application/x-starc/editor/screenplay/cards", "*screenplaytextcardsplugin*" }};
+       { "application/x-starc/navigator/screenplay/text-structure", "*screenplaytextstructureplugin*" },
+       { "application/x-starc/editor/screenplay/cards", "*screenplaytextcardsplugin*" },
+       { "application/x-starc/editor/screenplay/statistics", "*screenplaystatisticsplugin*" },
+       { "application/x-starc/navigator/screenplay/statistics-structure", "*screenplaystatisticsstructureplugin*" }};
 }
 
 class ProjectPluginsBuilder::Implementation
@@ -162,6 +166,32 @@ ProjectPluginsBuilder::~ProjectPluginsBuilder() = default;
 QVector<ProjectPluginsBuilder::EditorInfo> ProjectPluginsBuilder::editorsInfoFor(const QString& _documentMimeType) const
 {
     return kDocumentToEditors.value(_documentMimeType);
+}
+
+QString ProjectPluginsBuilder::editorDescription(const QString& _editorMimeType) const
+{
+    const QHash<QString, QString> descriptions
+            = {{ "application/x-starc/editor/project/information",
+                 QApplication::translate("ProjectPluginsBuilder", "Information about project") },
+               { "application/x-starc/editor/project/collaborators",
+                 QApplication::translate("ProjectPluginsBuilder", "Project collaborators") },
+               { "application/x-starc/editor/screenplay/information",
+                 QApplication::translate("ProjectPluginsBuilder", "Information about screenplay") },
+               { "application/x-starc/editor/screenplay/parameters",
+                 QApplication::translate("ProjectPluginsBuilder", "Screenplay parameters") },
+               { "application/x-starc/editor/screenplay/title-page",
+                 QApplication::translate("ProjectPluginsBuilder", "Title page text") },
+               { "application/x-starc/editor/text",
+                 QApplication::translate("ProjectPluginsBuilder", "Text") },
+               { "application/x-starc/editor/screenplay/treatment",
+                 QApplication::translate("ProjectPluginsBuilder", "Treatment text") },
+               { "application/x-starc/editor/screenplay/text",
+                 QApplication::translate("ProjectPluginsBuilder", "Screenplay text") },
+               { "application/x-starc/editor/screenplay/cards",
+                 QApplication::translate("ProjectPluginsBuilder", "Cards") },
+               { "application/x-starc/editor/screenplay/statistics",
+                 QApplication::translate("ProjectPluginsBuilder", "Statistics") }};
+    return descriptions.value(_editorMimeType);
 }
 
 QString ProjectPluginsBuilder::navigatorMimeTypeFor(const QString& _editorMimeType) const

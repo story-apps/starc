@@ -40,7 +40,23 @@ void CharactersModel::addCharacterModel(CharacterModel* _characterModel)
     emit endInsertRows();
 }
 
-void CharactersModel::createCharacter(const QString& _name)
+void CharactersModel::removeCharacterModel(CharacterModel* _characterModel)
+{
+    if (_characterModel == nullptr) {
+        return;
+    }
+
+    if (!d->characterModels.contains(_characterModel)) {
+        return;
+    }
+
+    const int itemRowIndex = d->characterModels.indexOf(_characterModel);
+    beginRemoveRows({}, itemRowIndex, itemRowIndex);
+    d->characterModels.remove(itemRowIndex);
+    endRemoveRows();
+}
+
+void CharactersModel::createCharacter(const QString& _name, const QByteArray& _content)
 {
     if (_name.simplified().isEmpty()) {
         return;
@@ -52,7 +68,7 @@ void CharactersModel::createCharacter(const QString& _name)
         }
     }
 
-    emit createCharacterRequested(_name);
+    emit createCharacterRequested(_name, _content);
 }
 
 QModelIndex CharactersModel::index(int _row, int _column, const QModelIndex& _parent) const

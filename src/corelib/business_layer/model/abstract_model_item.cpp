@@ -11,6 +11,7 @@ class AbstractModelItem::Implementation
 public:
     AbstractModelItem* parent = nullptr;
     QVector<AbstractModelItem*> children;
+    bool changed = false;
 };
 
 
@@ -101,6 +102,21 @@ int AbstractModelItem::rowOfChild(AbstractModelItem* _child) const
 AbstractModelItem* AbstractModelItem::childAt(int _index) const
 {
     return d->children.value(_index, nullptr);
+}
+
+bool AbstractModelItem::isChanged() const
+{
+    return d->changed;
+}
+
+void AbstractModelItem::setChanged(bool _changed)
+{
+    d->changed = _changed;
+
+    if (_changed
+        && d->parent != nullptr) {
+        d->parent->setChanged(_changed);
+    }
 }
 
 } // namespace BusinessLayer

@@ -41,8 +41,9 @@ ProjectInformationView::Implementation::Implementation(QWidget* _parent)
     palette.setColor(QPalette::Base, Qt::transparent);
     palette.setColor(QPalette::Window, Qt::transparent);
     content->setPalette(palette);
-    content->setVerticalScrollBar(new ScrollBar);
+    content->setFrameShape(QFrame::NoFrame);
     content->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
+    content->setVerticalScrollBar(new ScrollBar);
 
     projectInfoLayout->setContentsMargins({});
     projectInfoLayout->setSpacing(0);

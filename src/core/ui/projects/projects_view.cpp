@@ -176,6 +176,8 @@ void ProjectsView::updateTranslations()
 {
     d->emptyPageTitleLabel->setText(tr("Here will be a list of your stories."));
     d->emptyPageCreateProjectButton->setText(tr("It's time to create the first story!"));
+    d->toolBar->actions().at(0)->setToolTip(tr("Create story"));
+    d->toolBar->actions().at(1)->setToolTip(tr("Open story"));
 }
 
 void ProjectsView::designSystemChangeEvent(DesignSystemChangeEvent* _event)

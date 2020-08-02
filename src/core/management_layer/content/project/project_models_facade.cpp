@@ -8,7 +8,8 @@
 #include <business_layer/model/recycle_bin/recycle_bin_model.h>
 #include <business_layer/model/screenplay/screenplay_dictionaries_model.h>
 #include <business_layer/model/screenplay/screenplay_information_model.h>
-#include <business_layer/model/screenplay/screenplay_outline_model.h>
+#include <business_layer/model/screenplay/screenplay_treatment_model.h>
+#include <business_layer/model/screenplay/screenplay_statistics_model.h>
 #include <business_layer/model/screenplay/screenplay_synopsis_model.h>
 #include <business_layer/model/screenplay/screenplay_title_page_model.h>
 #include <business_layer/model/screenplay/text/screenplay_text_model.h>
@@ -90,7 +91,29 @@ BusinessLayer::AbstractModel* ProjectModelsFacade::modelFor(Domain::DocumentObje
             }
 
             case Domain::DocumentObjectType::Screenplay: {
-                model = new BusinessLayer::ScreenplayInformationModel;
+                auto screenplayModel = new BusinessLayer::ScreenplayInformationModel;
+                connect(screenplayModel, &BusinessLayer::ScreenplayInformationModel::titlePageVisibleChanged, this,
+                        [this, screenplayModel] (bool _visible) {
+                   emit screenplayTitlePageVisibilityChanged(screenplayModel, _visible);
+                });
+                connect(screenplayModel, &BusinessLayer::ScreenplayInformationModel::synopsisVisibleChanged, this,
+                        [this, screenplayModel] (bool _visible) {
+                   emit screenplaySynopsisVisibilityChanged(screenplayModel, _visible);
+                });
+                connect(screenplayModel, &BusinessLayer::ScreenplayInformationModel::treatmentVisibleChanged, this,
+                        [this, screenplayModel] (bool _visible) {
+                   emit screenplayTreatmentVisibilityChanged(screenplayModel, _visible);
+                });
+                connect(screenplayModel, &BusinessLayer::ScreenplayInformationModel::screenplayTextVisibleChanged, this,
+                        [this, screenplayModel] (bool _visible) {
+                   emit screenplayTextVisibilityChanged(screenplayModel, _visible);
+                });
+                connect(screenplayModel, &BusinessLayer::ScreenplayInformationModel::screenplayStatisticsVisibleChanged, this,
+                        [this, screenplayModel] (bool _visible) {
+                   emit screenplayStatisticsVisibilityChanged(screenplayModel, _visible);
+                });
+
+                model = screenplayModel;
                 break;
             }
 
@@ -104,8 +127,8 @@ BusinessLayer::AbstractModel* ProjectModelsFacade::modelFor(Domain::DocumentObje
                 break;
             }
 
-            case Domain::DocumentObjectType::ScreenplayOutline: {
-                model = new BusinessLayer::ScreenplayOutlineModel;
+            case Domain::DocumentObjectType::ScreenplayTreatment: {
+                model = new BusinessLayer::ScreenplayTreatmentModel;
                 break;
             }
 
@@ -152,6 +175,11 @@ BusinessLayer::AbstractModel* ProjectModelsFacade::modelFor(Domain::DocumentObje
                 break;
             }
 
+            case Domain::DocumentObjectType::ScreenplayStatistics: {
+                model = new BusinessLayer::ScreenplayStatisticsModel;
+                break;
+            }
+
             case Domain::DocumentObjectType::Characters: {
                 auto charactersModel = new BusinessLayer::CharactersModel;
 
@@ -161,7 +189,7 @@ BusinessLayer::AbstractModel* ProjectModelsFacade::modelFor(Domain::DocumentObje
                 for (const auto characterDocument : characterDocuments) {
                     auto characterModel = modelFor(characterDocument);
                     charactersModel->addCharacterModel(
-                        static_cast<BusinessLayer::CharacterModel*>(characterModel));
+                        qobject_cast<BusinessLayer::CharacterModel*>(characterModel));
                 }
 
                 connect(charactersModel, &BusinessLayer::CharactersModel::createCharacterRequested,
@@ -185,7 +213,7 @@ BusinessLayer::AbstractModel* ProjectModelsFacade::modelFor(Domain::DocumentObje
                 for (const auto locationDocument : locationDocuments) {
                     auto locationModel = modelFor(locationDocument);
                     locationsModel->addLocationModel(
-                        static_cast<BusinessLayer::LocationModel*>(locationModel));
+                        qobject_cast<BusinessLayer::LocationModel*>(locationModel));
                 }
 
                 connect(locationsModel, &BusinessLayer::LocationsModel::createLocationRequested,
@@ -231,6 +259,34 @@ void ProjectModelsFacade::removeModelFor(Domain::DocumentObject* _document)
     }
 
     auto model = d->documentsToModels.take(_document);
+    switch (_document->type()) {
+        case Domain::DocumentObjectType::Character: {
+            const auto charactersDocuments
+                    = DataStorageLayer::StorageFacade::documentStorage()->documents(
+                          Domain::DocumentObjectType::Characters);
+            Q_ASSERT(charactersDocuments.size() == 1);
+            auto charactersModel = modelFor(charactersDocuments.first());
+            auto characters = qobject_cast<BusinessLayer::CharactersModel*>(charactersModel);
+            characters->removeCharacterModel(qobject_cast<BusinessLayer::CharacterModel*>(model));
+            break;
+        }
+
+        case Domain::DocumentObjectType::Location: {
+            const auto locationsDocuments
+                    = DataStorageLayer::StorageFacade::documentStorage()->documents(
+                          Domain::DocumentObjectType::Locations);
+            Q_ASSERT(locationsDocuments.size() == 1);
+            auto locationsModel = modelFor(locationsDocuments.first());
+            auto locations = qobject_cast<BusinessLayer::LocationsModel*>(locationsModel);
+            locations->removeLocationModel(qobject_cast<BusinessLayer::LocationModel*>(model));
+            break;
+        }
+
+        default: {
+            break;
+        }
+    }
+
     model->disconnect();
     model->clear();
     model->deleteLater();

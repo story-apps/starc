@@ -12,6 +12,17 @@ DESTDIR = ../_build
 INCLUDEPATH += ..
 
 #
+# Подключаем библиотеку fileformats
+#
+LIBS += -L$$DESTDIR/libs/ -lfileformats
+win32:QMAKE_LFLAGS += /WHOLEARCHIVE:$$DESTDIR/libs/fileformats.lib
+
+INCLUDEPATH += $$PWD/../3rd_party/fileformats
+DEPENDPATH += $$PWD/../3rd_party/fileformats
+PRE_TARGETDEPS += $$PWD/../3rd_party/fileformats
+#
+
+#
 # Подключаем библиотеку HUNSPELL
 #
 LIBS += -L$$DESTDIR/libs/ -lhunspell
@@ -22,9 +33,24 @@ DEPENDPATH += $$PWD/../3rd_party/hunspell
 PRE_TARGETDEPS += $$PWD/../3rd_party/hunspell
 #
 
+#
+# Подключаем библиотеку qgumboparser
+#
+LIBS += -L$$DESTDIR/libs/ -lqgumboparser
+win32:QMAKE_LFLAGS += /WHOLEARCHIVE:$$DESTDIR/libs/qgumboparser.lib
+
+INCLUDEPATH += $$PWD/../3rd_party/qgumboparser
+DEPENDPATH += $$PWD/../3rd_party/qgumboparser
+PRE_TARGETDEPS += $$PWD/../3rd_party/qgumboparser
+#
+
 SOURCES += \
     business_layer/import/abstract_importer.cpp \
+    business_layer/import/celtx_importer.cpp \
+    business_layer/import/document_importer.cpp \
+    business_layer/import/fdx_importer.cpp \
     business_layer/import/kit_scenarist_importer.cpp \
+    business_layer/import/trelby_importer.cpp \
     business_layer/model/abstract_model.cpp \
     business_layer/model/abstract_model_item.cpp \
     business_layer/model/characters/character_model.cpp \
@@ -35,8 +61,9 @@ SOURCES += \
     business_layer/model/recycle_bin/recycle_bin_model.cpp \
     business_layer/model/screenplay/screenplay_dictionaries_model.cpp \
     business_layer/model/screenplay/screenplay_information_model.cpp \
-    business_layer/model/screenplay/screenplay_outline_model.cpp \
+    business_layer/model/screenplay/screenplay_statistics_model.cpp \
     business_layer/model/screenplay/screenplay_synopsis_model.cpp \
+    business_layer/model/screenplay/screenplay_treatment_model.cpp \
     business_layer/model/screenplay/text/screenplay_text_block_parser.cpp \
     business_layer/model/screenplay/text/screenplay_text_model.cpp \
     business_layer/model/screenplay/text/screenplay_text_model_folder_item.cpp \
@@ -47,6 +74,7 @@ SOURCES += \
     business_layer/model/screenplay/screenplay_title_page_model.cpp \
     business_layer/model/structure/structure_model.cpp \
     business_layer/model/structure/structure_model_item.cpp \
+    business_layer/model/structure/structure_proxy_model.cpp \
     business_layer/model/text/text_model.cpp \
     business_layer/templates/screenplay_template.cpp \
     business_layer/templates/screenplay_template_facade.cpp \
@@ -72,6 +100,10 @@ SOURCES += \
     ui/widgets/card/card.cpp \
     ui/widgets/check_box/check_box.cpp \
     ui/widgets/circular_progress_bar/circular_progress_bar.cpp \
+    ui/widgets/color_picker/color_2d_slider.cpp \
+    ui/widgets/color_picker/color_hue_slider.cpp \
+    ui/widgets/color_picker/color_palette.cpp \
+    ui/widgets/color_picker/color_picker.cpp \
     ui/widgets/combo_box/combo_box.cpp \
     ui/widgets/context_menu/context_menu.cpp \
     ui/widgets/dialog/abstract_dialog.cpp \
@@ -92,6 +124,7 @@ SOURCES += \
     ui/widgets/splitter/splitter_handle.cpp \
     ui/widgets/stack_widget/stack_widget.cpp \
     ui/widgets/stepper/stepper.cpp \
+    ui/widgets/tab_bar/tab_bar.cpp \
     ui/widgets/task_bar/task_bar.cpp \
     ui/widgets/text_edit/base/base_text_edit.cpp \
     ui/widgets/text_edit/completer/completer.cpp \
@@ -126,6 +159,7 @@ SOURCES += \
     utils/helpers/dialog_helper.cpp \
     utils/helpers/extension_helper.cpp \
     utils/helpers/image_helper.cpp \
+    utils/helpers/scroller_helper.cpp \
     utils/helpers/string_helper.cpp \
     utils/helpers/text_helper.cpp \
     utils/helpers/quotes_helper.cpp \
@@ -136,8 +170,12 @@ SOURCES += \
 
 HEADERS += \
     business_layer/import/abstract_importer.h \
+    business_layer/import/celtx_importer.h \
+    business_layer/import/document_importer.h \
+    business_layer/import/fdx_importer.h \
     business_layer/import/import_options.h \
     business_layer/import/kit_scenarist_importer.h \
+    business_layer/import/trelby_importer.h \
     business_layer/model/abstract_image_wrapper.h \
     business_layer/model/abstract_model.h \
     business_layer/model/abstract_model_item.h \
@@ -149,8 +187,9 @@ HEADERS += \
     business_layer/model/recycle_bin/recycle_bin_model.h \
     business_layer/model/screenplay/screenplay_dictionaries_model.h \
     business_layer/model/screenplay/screenplay_information_model.h \
-    business_layer/model/screenplay/screenplay_outline_model.h \
+    business_layer/model/screenplay/screenplay_statistics_model.h \
     business_layer/model/screenplay/screenplay_synopsis_model.h \
+    business_layer/model/screenplay/screenplay_treatment_model.h \
     business_layer/model/screenplay/text/screenplay_text_block_parser.h \
     business_layer/model/screenplay/text/screenplay_text_model.h \
     business_layer/model/screenplay/text/screenplay_text_model_folder_item.h \
@@ -159,8 +198,10 @@ HEADERS += \
     business_layer/model/screenplay/text/screenplay_text_model_splitter_item.h \
     business_layer/model/screenplay/text/screenplay_text_model_text_item.h \
     business_layer/model/screenplay/screenplay_title_page_model.h \
+    business_layer/model/screenplay/text/screenplay_text_model_xml.h \
     business_layer/model/structure/structure_model.h \
     business_layer/model/structure/structure_model_item.h \
+    business_layer/model/structure/structure_proxy_model.h \
     business_layer/model/text/text_model.h \
     business_layer/templates/screenplay_template.h \
     business_layer/templates/screenplay_template_facade.h \
@@ -188,6 +229,10 @@ HEADERS += \
     ui/widgets/card/card.h \
     ui/widgets/check_box/check_box.h \
     ui/widgets/circular_progress_bar/circular_progress_bar.h \
+    ui/widgets/color_picker/color_2d_slider.h \
+    ui/widgets/color_picker/color_hue_slider.h \
+    ui/widgets/color_picker/color_palette.h \
+    ui/widgets/color_picker/color_picker.h \
     ui/widgets/combo_box/combo_box.h \
     ui/widgets/context_menu/context_menu.h \
     ui/widgets/dialog/abstract_dialog.h \
@@ -208,6 +253,7 @@ HEADERS += \
     ui/widgets/splitter/splitter_handle.h \
     ui/widgets/stack_widget/stack_widget.h \
     ui/widgets/stepper/stepper.h \
+    ui/widgets/tab_bar/tab_bar.h \
     ui/widgets/task_bar/task_bar.h \
     ui/widgets/text_edit/base/base_text_edit.h \
     ui/widgets/text_edit/completer/completer.h \
@@ -246,6 +292,7 @@ HEADERS += \
     utils/helpers/dialog_helper.h \
     utils/helpers/extension_helper.h \
     utils/helpers/image_helper.h \
+    utils/helpers/scroller_helper.h \
     utils/helpers/string_helper.h \
     utils/helpers/text_helper.h \
     utils/helpers/quotes_helper.h \

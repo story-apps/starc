@@ -40,6 +40,11 @@ public:
      */
     void zoomOut();
 
+    /**
+     * @brief Смапить точку из редактора сцнария относительно обёртки
+     */
+    QPoint mapFromEditor(const QPoint& _position) const;
+
 signals:
     /**
      * @brief Изменился коэффициент масштабирования

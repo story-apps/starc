@@ -174,6 +174,7 @@ void MenuView::markChangesSaved(bool _saved)
 {
     d->saveProject->setEnabled(!_saved);
     d->saveProject->setText(_saved ? tr("All changes saved") : tr("Save changes"));
+    update();
 }
 
 void MenuView::setProVersion(bool _isPro)
@@ -189,7 +190,7 @@ void MenuView::updateTranslations()
     d->createProject->setText(tr("Create story"));
     d->openProject->setText(tr("Open story"));
     d->saveProject->setText(d->saveProject->isEnabled() ? tr("Save changes") : tr("All changes saved"));
-    d->saveProject->setShortcuts(QKeySequence::Save);
+    d->saveProject->setWhatsThis(QKeySequence(QKeySequence::Save).toString());
     d->saveProjectAs->setText(tr("Save current story as..."));
     d->importProject->setText(tr("Import..."));
     d->exportProject->setText(tr("Export..."));

@@ -2,8 +2,7 @@
 
 #include <ui/widgets/widget/widget.h>
 
-class QAbstractItemModel;
-class QAbstractItemDelegate;
+#include <QAbstractItemView>
 
 
 /**
@@ -38,9 +37,19 @@ public:
     void setScrollBarVisible(bool _visible);
 
     /**
+     * @brief Получить вертикальную полосу прокрутки виджета
+     */
+    QScrollBar* verticalScrollBar() const;
+
+    /**
      * @brief Включить/отключить возможность перетаскивания элементов
      */
     void setDragDropEnabled(bool _enabled);
+
+    /**
+     * @brief Установить режим выделения элементов в дереве
+     */
+    void setSelectionMode(QAbstractItemView::SelectionMode _mode);
 
     /**
      * @brief Получить ширину заданной колонки
@@ -68,9 +77,19 @@ public:
     QModelIndex indexAt(const QPoint& _pos) const;
 
     /**
+     * @brief Получить список выделенных элементов
+     */
+    QModelIndexList selectedIndexes() const;
+
+    /**
      * @brief Развернуть все элементы
      */
     void expandAll();
+
+    /**
+     * @brief Установить необходимость пересчитывать размер элементов в делегате
+     */
+    void setAutoAdjustSize(bool _auto);
 
     /**
      * @brief Загрузить состояние дерева

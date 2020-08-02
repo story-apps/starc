@@ -792,11 +792,15 @@ Qt::Alignment PageTextEdit::alignment() const
 */
 void PageTextEdit::setDocument(QTextDocument *document)
 {
+    const auto lastCursorWidth = cursorWidth();
+
     Q_D(PageTextEdit);
     d->control->setDocument(document);
     d->updateDefaultTextOption();
     d->updateDocumentGeometry();
     d->relayoutDocument();
+
+    setCursorWidth(lastCursorWidth);
 }
 
 QTextDocument *PageTextEdit::document() const
@@ -1766,7 +1770,7 @@ void PageTextEditPrivate::paintPagesView(QPainter *_painter)
     //
     auto currentPageTop = firstVisiblePageBottom - pageHeight;
     while (currentPageTop <= q->height()) {
-        const QRectF pageRect(0 - horizontalDelta, currentPageTop + m_pageSpacing, pageWidth, pageHeight);
+        const QRectF pageRect(0 - horizontalDelta, currentPageTop + m_pageSpacing / 2, pageWidth, pageHeight);
         const QRectF backgroundRect = pageRect.marginsRemoved(Ui::DesignSystem::card().shadowMargins().toMargins());
         const qreal borderRadius = Ui::DesignSystem::card().borderRadius();
 
@@ -3402,7 +3406,7 @@ void PageTextEdit::ensureCursorVisible(const QTextCursor& _cursor, bool _animate
     //
     // Прокручиваем ещё немного
     //
-    const int SCROLL_DELTA = d->vbar->singleStep() * 8;
+    const int SCROLL_DELTA = d->vbar->singleStep() * 10;
     nextVbarValue -= SCROLL_DELTA;
 
     //

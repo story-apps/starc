@@ -34,12 +34,11 @@ enum class DocumentObjectType {
     Screenplay = 10100,
     ScreenplayTitlePage = 10101,
     ScreenplaySynopsis = 10102,
-    ScreenplayOutline = 10103,
+    ScreenplayTreatment = 10103,
     ScreenplayText = 10104,
     ScreenplayDictionaries = 10105,
-    ScreenplayReport = 10106,
-    ScreenplayChart = 10107,
-    ScreenplaySeries = 10108,
+    ScreenplayStatistics = 10106,
+    ScreenplaySeries = 10110,
     //
     ComicBook = 10200,
     //

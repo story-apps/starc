@@ -134,11 +134,11 @@ QWidget* RenewSubscriptionDialog::focusedWidgetAfterShow() const
 void RenewSubscriptionDialog::updateTranslations()
 {
     setTitle(tr("Renew cloud service subscription for"));
-    d->renew1Month->setText(tr("1 month by $3.99"));
-    d->renew2Month->setText(tr("2 month by $7.99"));
-    d->renew3Month->setText(tr("3 month by $11.99"));
-    d->renew6Month->setText(tr("6 month by $21.99"));
-    d->renew12Month->setText(tr("12 month by $41.99"));
+//    d->renew1Month->setText(tr("1 month by $3.99"));
+//    d->renew2Month->setText(tr("2 month by $7.99"));
+//    d->renew3Month->setText(tr("3 month by $11.99"));
+//    d->renew6Month->setText(tr("6 month by $21.99"));
+//    d->renew12Month->setText(tr("12 month by $41.99"));
     d->paypal->setText(tr("via PayPal"));
     d->bankCard->setText(tr("via bank card"));
     d->yandexMoney->setText(tr("via Yandex.Money"));

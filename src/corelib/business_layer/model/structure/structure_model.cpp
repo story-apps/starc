@@ -18,6 +18,13 @@ namespace BusinessLayer
 
 namespace {
     const char* kMimeType = "application/x-starc/document";
+    const QString kDocumentKey = QLatin1String("document");
+    const QString kItemKey = QLatin1String("item");
+    const QString kUuidAttribute = QLatin1String("uuid");
+    const QString kTypeAttribute = QLatin1String("type");
+    const QString kNameAttribute = QLatin1String("name");
+    const QString kColorAttribute = QLatin1String("color");
+    const QString kVisibleAttribute = QLatin1String("visible");
 }
 
 class StructureModel::Implementation
@@ -58,7 +65,7 @@ public:
 };
 
 StructureModel::Implementation::Implementation()
-    : rootItem(new StructureModelItem({}, Domain::DocumentObjectType::Undefined, {}, {}))
+    : rootItem(new StructureModelItem({}, Domain::DocumentObjectType::Undefined, {}, {}, true))
 {
 }
 
@@ -70,10 +77,11 @@ void StructureModel::Implementation::buildModel(Domain::DocumentObject* _structu
 
     std::function<void(const QDomElement&, StructureModelItem*)> buildItem;
     buildItem = [&buildItem] (const QDomElement& _node, StructureModelItem* _parent) {
-        auto item = new StructureModelItem(_node.attribute("uuid"),
-                                           Domain::typeFor(_node.attribute("type").toUtf8()),
-                                           TextHelper::fromHtmlEscaped(_node.attribute("name")),
-                                           _node.attribute("color"));
+        auto item = new StructureModelItem(_node.attribute(kUuidAttribute),
+                                           Domain::typeFor(_node.attribute(kTypeAttribute).toUtf8()),
+                                           TextHelper::fromHtmlEscaped(_node.attribute(kNameAttribute)),
+                                           _node.attribute(kColorAttribute),
+                                           _node.attribute(kVisibleAttribute) == "true");
         _parent->appendItem(item);
 
         auto child = _node.firstChildElement();
@@ -85,7 +93,7 @@ void StructureModel::Implementation::buildModel(Domain::DocumentObject* _structu
 
     QDomDocument domDocument;
     domDocument.setContent(_structure->content());
-    auto documentNode = domDocument.firstChildElement("document");
+    auto documentNode = domDocument.firstChildElement(kDocumentKey);
     auto itemNode = documentNode.firstChildElement();
     while (!itemNode.isNull()) {
         buildItem(itemNode, rootItem);
@@ -104,14 +112,16 @@ QByteArray StructureModel::Implementation::toXml(Domain::DocumentObject* _struct
     //
 
     QByteArray xml = "<?xml version=\"1.0\"?>\n";
-    xml += "<document mime-type=\"" + Domain::mimeTypeFor(_structure->type()) + "\" version=\"1.0\">\n";
+    xml += QString("<%1 mime-type=\"%2\" version=\"1.0\">\n").arg(kDocumentKey, Domain::mimeTypeFor(_structure->type()));
     std::function<void(StructureModelItem*)> writeItemXml;
     writeItemXml = [&xml, &writeItemXml] (StructureModelItem* _item) {
-        xml += "<item ";
-        xml += " uuid=\"" + _item->uuid().toString() + "\" ";
-        xml += " type=\"" + Domain::mimeTypeFor(_item->type()) + "\" ";
-        xml += " name=\"" + TextHelper::toHtmlEscaped(_item->name()) + "\" ";
-        xml += " color=\"" + _item->color().name() + "\" ";
+        xml += QString("<%1 %2=\"%3\" %4=\"%5\" %6=\"%7\" %8=\"%9\" %10=\"%11\"")
+               .arg(kItemKey,
+                    kUuidAttribute, _item->uuid().toString(),
+                    kTypeAttribute, Domain::mimeTypeFor(_item->type()),
+                    kNameAttribute, TextHelper::toHtmlEscaped(_item->name()),
+                    kColorAttribute, _item->color().name(),
+                    kVisibleAttribute, (_item->visible() ? "true" : "false"));
         if (!_item->hasChildren()) {
             xml += "/>\n";
             return;
@@ -121,12 +131,12 @@ QByteArray StructureModel::Implementation::toXml(Domain::DocumentObject* _struct
         for (int childIndex = 0; childIndex < _item->childCount(); ++childIndex) {
             writeItemXml(_item->childAt(childIndex));
         }
-        xml += "</item>\n";
+        xml += QString("</%1>\n").arg(kItemKey);
     };
     for (int childIndex = 0; childIndex < rootItem->childCount(); ++childIndex) {
         writeItemXml(rootItem->childAt(childIndex));
     }
-    xml += "</document>";
+    xml += QString("</%1>").arg(kDocumentKey);
     return xml;
 }
 
@@ -147,7 +157,8 @@ void StructureModel::setProjectName(const QString& _name)
     d->projectName = _name;
 }
 
-void StructureModel::addDocument(Domain::DocumentObjectType _type, const QString& _name, const QModelIndex& _parent)
+void StructureModel::addDocument(Domain::DocumentObjectType _type, const QString& _name,
+    const QModelIndex& _parent, const QByteArray& _content)
 {
     //
     // ATTENTION: В ProjectManager есть копипаста отсюда, быть внимательным при обновлении
@@ -157,19 +168,20 @@ void StructureModel::addDocument(Domain::DocumentObjectType _type, const QString
 
     auto createItem = [] (DocumentObjectType _type, const QString& _name) {
         auto uuid = QUuid::createUuid();
-        return new StructureModelItem(uuid, _type, _name, {});
+        const auto visible = true;
+        return new StructureModelItem(uuid, _type, _name, {}, visible);
     };
 
     auto parentItem = itemForIndex(_parent);
 
     switch (_type) {
         case DocumentObjectType::Project: {
-            appendItem(createItem(_type, d->projectName), parentItem);
+            appendItem(createItem(_type, d->projectName), parentItem, _content);
             break;
         }
 
         case DocumentObjectType::RecycleBin: {
-            appendItem(createItem(_type, tr("Recycle bin")), parentItem);
+            appendItem(createItem(_type, tr("Recycle bin")), parentItem, _content);
             break;
         }
 
@@ -178,24 +190,25 @@ void StructureModel::addDocument(Domain::DocumentObjectType _type, const QString
             appendItem(screenplayItem, parentItem);
             appendItem(createItem(DocumentObjectType::ScreenplayTitlePage, tr("Title page")), screenplayItem);
             appendItem(createItem(DocumentObjectType::ScreenplaySynopsis, tr("Synopsis")), screenplayItem);
-            appendItem(createItem(DocumentObjectType::ScreenplayOutline, tr("Outline")), screenplayItem);
-            appendItem(createItem(DocumentObjectType::ScreenplayText, tr("Screenplay")), screenplayItem);
+            appendItem(createItem(DocumentObjectType::ScreenplayTreatment, tr("Treatment")), screenplayItem);
+            appendItem(createItem(DocumentObjectType::ScreenplayText, tr("Text")), screenplayItem);
+            appendItem(createItem(DocumentObjectType::ScreenplayStatistics, tr("Statistics")), screenplayItem);
             break;
         }
 
         case DocumentObjectType::Characters: {
-            appendItem(createItem(_type, tr("Characters")), parentItem);
+            appendItem(createItem(_type, tr("Characters")), parentItem, _content);
             break;
         }
 
         case DocumentObjectType::Locations: {
-            appendItem(createItem(_type, tr("Locations")), parentItem);
+            appendItem(createItem(_type, tr("Locations")), parentItem, _content);
             break;
         }
 
         case DocumentObjectType::Character:
         case DocumentObjectType::Location: {
-            appendItem(createItem(_type, _name), parentItem);
+            appendItem(createItem(_type, _name), parentItem, _content);
             break;
         }
 
@@ -227,7 +240,8 @@ void StructureModel::prependItem(StructureModelItem* _item, StructureModelItem* 
     endInsertRows();
 }
 
-void StructureModel::appendItem(StructureModelItem* _item, StructureModelItem* _parentItem, const QString& _content)
+void StructureModel::appendItem(StructureModelItem* _item, StructureModelItem* _parentItem,
+    const QByteArray& _content)
 {
     if (_item == nullptr) {
         return;
@@ -402,18 +416,23 @@ Qt::ItemFlags StructureModel::flags(const QModelIndex& _index) const
     const auto item = itemForIndex(_index);
     switch (item->type()) {
         case Domain::DocumentObjectType::Project:
+        case Domain::DocumentObjectType::Characters:
+        case Domain::DocumentObjectType::Locations:
         case Domain::DocumentObjectType::RecycleBin: {
             return Qt::ItemIsEnabled | Qt::ItemIsSelectable | Qt::ItemIsDropEnabled;
         }
 
+        case Domain::DocumentObjectType::Character:
+        case Domain::DocumentObjectType::Location:
         case Domain::DocumentObjectType::Screenplay: {
             return Qt::ItemIsEnabled | Qt::ItemIsSelectable | Qt::ItemIsDragEnabled | Qt::ItemIsDropEnabled;
         }
 
         case Domain::DocumentObjectType::ScreenplayTitlePage:
         case Domain::DocumentObjectType::ScreenplaySynopsis:
-        case Domain::DocumentObjectType::ScreenplayOutline:
-        case Domain::DocumentObjectType::ScreenplayText: {
+        case Domain::DocumentObjectType::ScreenplayTreatment:
+        case Domain::DocumentObjectType::ScreenplayText:
+        case Domain::DocumentObjectType::ScreenplayStatistics: {
             return Qt::ItemIsEnabled | Qt::ItemIsSelectable;
         }
 
@@ -675,7 +694,10 @@ StructureModelItem* StructureModel::itemForUuid(const QUuid& _uuid) const
                 return item;
             }
 
-            search(item);
+            auto childItem = search(item);
+            if (childItem != nullptr) {
+                return childItem;
+            }
         }
         return nullptr;
     };
@@ -726,6 +748,17 @@ void StructureModel::setItemName(StructureModelItem* _item, const QString& _name
 
     const auto itemIndex = indexForItem(_item);
     _item->setName(_name);
+    emit dataChanged(itemIndex, itemIndex);
+}
+
+void StructureModel::setItemVisible(StructureModelItem* _item, bool _visible)
+{
+    if (_item == nullptr) {
+        return;
+    }
+
+    const auto itemIndex = indexForItem(_item);
+    _item->setVisible(_visible);
     emit dataChanged(itemIndex, itemIndex);
 }
 

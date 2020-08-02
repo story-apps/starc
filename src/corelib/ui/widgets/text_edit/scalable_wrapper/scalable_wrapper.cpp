@@ -1,11 +1,14 @@
 #include "scalable_wrapper.h"
 
+#include <include/custom_events.h>
+
 #include <ui/widgets/context_menu/context_menu.h>
 #include <ui/widgets/text_edit/completer/completer.h>
 #include <ui/widgets/text_edit/completer/completer_text_edit.h>
 #include <ui/widgets/text_edit/page/page_text_edit.h>
 
 #include <QAbstractItemView>
+#include <QApplication>
 #include <QGestureEvent>
 #include <QGraphicsProxyWidget>
 #include <QScrollBar>
@@ -13,8 +16,8 @@
 
 namespace {
     const qreal kDefaultZoomRange = 1.;
-    const qreal kMinimumZoomRange = 0.5;
-    const qreal kMaximumZoomRange = 3.;
+    const qreal kMinimumZoomRange = 0.1;
+    const qreal kMaximumZoomRange = 10.;
 }
 
 
@@ -117,7 +120,7 @@ ScalableWrapper::ScalableWrapper(PageTextEdit* _editor, QWidget* _parent)
 
     if (auto editor = qobject_cast<CompleterTextEdit*>(d->editor.data())) {
         connect(editor, &CompleterTextEdit::popupShowed, [=] {
-            QPointF point = d->editorProxy->mapToScene(editor->completer()->popup()->pos());
+            const QPointF point = d->editorProxy->mapToScene(editor->completer()->popup()->pos());
             editor->completer()->popup()->move(mapToGlobal(mapFromScene(point)));
         });
     }
@@ -174,10 +177,16 @@ void ScalableWrapper::zoomOut()
     setZoomRange(d->zoomRange - 0.1);
 }
 
+QPoint ScalableWrapper::mapFromEditor(const QPoint& _position) const
+{
+    const QPointF point = d->editorProxy->mapToScene(_position);
+    return mapFromScene(point);
+}
+
 bool ScalableWrapper::event(QEvent* _event)
 {
     bool result = true;
-    switch (_event->type()) {
+    switch (static_cast<int>(_event->type())) {
         //
         // Определяем особый обработчик для жестов
         //
@@ -205,6 +214,11 @@ bool ScalableWrapper::event(QEvent* _event)
 
             syncScrollBarWithTextEdit();
             setupScrollingSynchronization(true);
+            break;
+        }
+
+        case static_cast<QEvent::Type>(EventType::DesignSystemChangeEvent): {
+            QApplication::sendEvent(d->editor.data(), _event);
             break;
         }
 

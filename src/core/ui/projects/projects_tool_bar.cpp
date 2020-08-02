@@ -16,7 +16,13 @@ ProjectsToolBar::ProjectsToolBar(QWidget* _parent)
     addAction(menuAction);
     connect(menuAction, &QAction::triggered, this, &ProjectsToolBar::menuPressed);
 
+    updateTranslations();
     designSystemChangeEvent(nullptr);
+}
+
+void ProjectsToolBar::updateTranslations()
+{
+    actions().at(0)->setToolTip(tr("Show main menu"));
 }
 
 void ProjectsToolBar::designSystemChangeEvent(DesignSystemChangeEvent* _event)

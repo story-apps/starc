@@ -19,6 +19,11 @@ SettingsToolBar::SettingsToolBar(QWidget* _parent)
     designSystemChangeEvent(nullptr);
 }
 
+void SettingsToolBar::updateTranslations()
+{
+    actions().at(0)->setToolTip(tr("Go back to the previous screen"));
+}
+
 void SettingsToolBar::designSystemChangeEvent(DesignSystemChangeEvent* _event)
 {
     AppBar::designSystemChangeEvent(_event);

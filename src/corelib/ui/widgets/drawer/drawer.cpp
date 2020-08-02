@@ -256,8 +256,8 @@ void Drawer::paintEvent(QPaintEvent* _event)
         //
         // ... горячие клавиши
         //
-        if (!action->shortcut().isEmpty()) {
-            painter.drawText(textRect, Qt::AlignRight | Qt::AlignVCenter, action->shortcut().toString());
+        if (!action->whatsThis().isEmpty()) {
+            painter.drawText(textRect, Qt::AlignRight | Qt::AlignVCenter, action->whatsThis());
         }
 
         actionY += Ui::DesignSystem::drawer().actionHeight();

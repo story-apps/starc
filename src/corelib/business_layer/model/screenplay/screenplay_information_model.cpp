@@ -18,6 +18,11 @@ namespace {
     const QString kDocumentKey = "document";
     const QString kNameKey = "name";
     const QString kLoglineKey = "logline";
+    const QString kTitlePageVisibleKey = "title_page_visible";
+    const QString kSynopsisVisibleKey = "synopsis_visible";
+    const QString kTreatmentVisibleKey = "treatment_visible";
+    const QString kScreenplayTextVisibleKey = "screenplay_text_visible";
+    const QString kScreenplayStatisticsVisibleKey = "screenplay_statistics_visible";
     const QString kHeaderKey = "header";
     const QString kPrintHeaderOnTitlePageKey = "print_header_on_title";
     const QString kFooterKey = "footer";
@@ -31,6 +36,11 @@ class ScreenplayInformationModel::Implementation
 public:
     QString name;
     QString logline;
+    bool titlePageVisible = true;
+    bool synopsisVisible = true;
+    bool treatmentVisible = true;
+    bool screenplayTextVisible = true;
+    bool screenplayStatisticsVisible = true;
     QString header;
     bool printHeaderOnTitlePage = true;
     QString footer;
@@ -52,6 +62,11 @@ ScreenplayInformationModel::ScreenplayInformationModel(QObject* _parent)
 {
     connect(this, &ScreenplayInformationModel::nameChanged, this, &ScreenplayInformationModel::updateDocumentContent);
     connect(this, &ScreenplayInformationModel::loglineChanged, this, &ScreenplayInformationModel::updateDocumentContent);
+    connect(this, &ScreenplayInformationModel::titlePageVisibleChanged, this, &ScreenplayInformationModel::updateDocumentContent);
+    connect(this, &ScreenplayInformationModel::synopsisVisibleChanged, this, &ScreenplayInformationModel::updateDocumentContent);
+    connect(this, &ScreenplayInformationModel::treatmentVisibleChanged, this, &ScreenplayInformationModel::updateDocumentContent);
+    connect(this, &ScreenplayInformationModel::screenplayTextVisibleChanged, this, &ScreenplayInformationModel::updateDocumentContent);
+    connect(this, &ScreenplayInformationModel::screenplayStatisticsVisibleChanged, this, &ScreenplayInformationModel::updateDocumentContent);
     connect(this, &ScreenplayInformationModel::headerChanged, this, &ScreenplayInformationModel::updateDocumentContent);
     connect(this, &ScreenplayInformationModel::printHeaderOnTitlePageChanged, this, &ScreenplayInformationModel::updateDocumentContent);
     connect(this, &ScreenplayInformationModel::footerChanged, this, &ScreenplayInformationModel::updateDocumentContent);
@@ -96,6 +111,81 @@ void ScreenplayInformationModel::setLogline(const QString& _logline)
 
     d->logline = _logline;
     emit loglineChanged(d->logline);
+}
+
+bool ScreenplayInformationModel::titlePageVisible() const
+{
+    return d->titlePageVisible;
+}
+
+void ScreenplayInformationModel::setTitlePageVisible(bool _visible)
+{
+    if (d->titlePageVisible == _visible) {
+        return;
+    }
+
+    d->titlePageVisible = _visible;
+    emit titlePageVisibleChanged(d->titlePageVisible);
+}
+
+bool ScreenplayInformationModel::synopsisVisible() const
+{
+    return d->synopsisVisible;
+}
+
+void ScreenplayInformationModel::setSynopsisVisible(bool _visible)
+{
+    if (d->synopsisVisible == _visible) {
+        return;
+    }
+
+    d->synopsisVisible = _visible;
+    emit synopsisVisibleChanged(d->synopsisVisible);
+}
+
+bool ScreenplayInformationModel::treatmentVisible() const
+{
+    return d->treatmentVisible;
+}
+
+void ScreenplayInformationModel::setTreatmentVisible(bool _visible)
+{
+    if (d->treatmentVisible == _visible) {
+        return;
+    }
+
+    d->treatmentVisible = _visible;
+    emit treatmentVisibleChanged(d->treatmentVisible);
+}
+
+bool ScreenplayInformationModel::screenplayTextVisible() const
+{
+    return d->screenplayTextVisible;
+}
+
+void ScreenplayInformationModel::setScreenplayTextVisible(bool _visible)
+{
+    if (d->screenplayTextVisible == _visible) {
+        return;
+    }
+
+    d->screenplayTextVisible = _visible;
+    emit screenplayTextVisibleChanged(d->screenplayTextVisible);
+}
+
+bool ScreenplayInformationModel::screenplayStatisticsVisible() const
+{
+    return d->screenplayStatisticsVisible;
+}
+
+void ScreenplayInformationModel::setScreenplayStatisticsVisible(bool _visible)
+{
+    if (d->screenplayStatisticsVisible == _visible) {
+        return;
+    }
+
+    d->screenplayStatisticsVisible = _visible;
+    emit screenplayStatisticsVisibleChanged(d->screenplayStatisticsVisible);
 }
 
 const QString& ScreenplayInformationModel::header() const
@@ -195,10 +285,19 @@ void ScreenplayInformationModel::initDocument()
     }
 
     QDomDocument domDocument;
-    domDocument.setContent(document()->content());
+    const bool isContentValid = domDocument.setContent(document()->content());
+    if (!isContentValid) {
+        return;
+    }
+
     const auto documentNode = domDocument.firstChildElement(kDocumentKey);
     d->name = documentNode.firstChildElement(kNameKey).text();
     d->logline = documentNode.firstChildElement(kLoglineKey).text();
+    d->titlePageVisible = documentNode.firstChildElement(kTitlePageVisibleKey).text() == "true";
+    d->synopsisVisible = documentNode.firstChildElement(kSynopsisVisibleKey).text() == "true";
+    d->treatmentVisible = documentNode.firstChildElement(kTreatmentVisibleKey).text() == "true";
+    d->screenplayTextVisible = documentNode.firstChildElement(kScreenplayTextVisibleKey).text() == "true";
+    d->screenplayStatisticsVisible = documentNode.firstChildElement(kScreenplayStatisticsVisibleKey).text() == "true";
     d->header = documentNode.firstChildElement(kHeaderKey).text();
     d->printHeaderOnTitlePage = documentNode.firstChildElement(kPrintHeaderOnTitlePageKey).text() == "true";
     d->footer = documentNode.firstChildElement(kFooterKey).text();
@@ -216,6 +315,11 @@ void ScreenplayInformationModel::clearDocument()
 
     setName({});
     setLogline({});
+    setTitlePageVisible({});
+    setSynopsisVisible({});
+    setTreatmentVisible({});
+    setScreenplayTextVisible({});
+    setScreenplayStatisticsVisible({});
     setHeader({});
     setPrintHeaderOnTitlePage({});
     setFooter({});
@@ -234,6 +338,11 @@ QByteArray ScreenplayInformationModel::toXml() const
     xml += QString("<%1 mime-type=\"%2\" version=\"1.0\">\n").arg(kDocumentKey, Domain::mimeTypeFor(document()->type()));
     xml += QString("<%1><![CDATA[%2]]></%1>\n").arg(kNameKey, d->name);
     xml += QString("<%1><![CDATA[%2]]></%1>\n").arg(kLoglineKey, d->logline);
+    xml += QString("<%1><![CDATA[%2]]></%1>\n").arg(kTitlePageVisibleKey, d->titlePageVisible ? "true" : "false");
+    xml += QString("<%1><![CDATA[%2]]></%1>\n").arg(kSynopsisVisibleKey, d->synopsisVisible ? "true" : "false");
+    xml += QString("<%1><![CDATA[%2]]></%1>\n").arg(kTreatmentVisibleKey, d->treatmentVisible ? "true" : "false");
+    xml += QString("<%1><![CDATA[%2]]></%1>\n").arg(kScreenplayTextVisibleKey, d->screenplayTextVisible ? "true" : "false");
+    xml += QString("<%1><![CDATA[%2]]></%1>\n").arg(kScreenplayStatisticsVisibleKey, d->screenplayStatisticsVisible ? "true" : "false");
     xml += QString("<%1><![CDATA[%2]]></%1>\n").arg(kHeaderKey, d->header);
     xml += QString("<%1><![CDATA[%2]]></%1>\n").arg(kPrintHeaderOnTitlePageKey, d->printHeaderOnTitlePage ? "true" : "false");
     xml += QString("<%1><![CDATA[%2]]></%1>\n").arg(kFooterKey, d->footer);

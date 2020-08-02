@@ -29,8 +29,18 @@ bool ColorHelper::isColorLight(const QColor& _color)
     return (_color.redF() + _color.greenF() + _color.blueF()) / 3 > 0.5;
 }
 
-QColor ColorHelper::contrast(const QColor& _color)
+QColor ColorHelper::contrasted(const QColor& _color)
 {
     const auto value = isColorLight(_color) ? 0 : 255;
     return QColor(value, value, value);
+}
+
+QColor ColorHelper::inverted(const QColor& _color)
+{
+    return _color.rgb() ^ 0xffffff;
+}
+
+QColor ColorHelper::near(const QColor& _color)
+{
+    return isColorLight(_color) ? _color.darker(110) : _color.lighter(130);
 }

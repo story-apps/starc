@@ -10,8 +10,6 @@
  */
 class CORE_LIBRARY_EXPORT TreeDelegate : public QStyledItemDelegate
 {
-    Q_OBJECT
-
 public:
     explicit TreeDelegate(QObject* _parent = nullptr);
 

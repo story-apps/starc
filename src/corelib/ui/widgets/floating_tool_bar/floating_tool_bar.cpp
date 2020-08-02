@@ -35,13 +35,23 @@ public:
     /**
      * @brief Получить пункт меню по координате
      */
-    QAction* pressedAction(const QPoint& _coordinate, const QList<QAction*>& _actions) const;
+    QAction* actionAt(const QPoint& _coordinate, const QList<QAction*>& _actions) const;
 
+
+    /**
+     * @brief Ориентация панели
+     */
+    Qt::Orientation orientation = Qt::Horizontal;
 
     /**
      * @brief Иконка на которой кликнули последней
      */
     QAction* lastPressedAction = nullptr;
+
+    /**
+     * @brief Цвета иконок
+     */
+    QMap<const QAction*, QColor> actionToColor;
 
     /**
      * @brief  Декорации иконки при клике
@@ -88,7 +98,7 @@ void FloatingToolBar::Implementation::animateHoverOut()
     shadowBlurRadiusAnimation.start();
 }
 
-QAction* FloatingToolBar::Implementation::pressedAction(const QPoint& _coordinate, const QList<QAction*>& _actions) const
+QAction* FloatingToolBar::Implementation::actionAt(const QPoint& _coordinate, const QList<QAction*>& _actions) const
 {
     qreal actionLeft = Ui::DesignSystem::floatingToolBar().shadowMargins().left()
                        + Ui::DesignSystem::floatingToolBar().margins().left()
@@ -105,8 +115,14 @@ QAction* FloatingToolBar::Implementation::pressedAction(const QPoint& _coordinat
                      : Ui::DesignSystem::floatingToolBar().iconSize().width())
                   + Ui::DesignSystem::floatingToolBar().spacing();
 
-        if (actionLeft < _coordinate.x() && _coordinate.x() < actionRight) {
-            return action;
+        if (orientation == Qt::Horizontal) {
+            if (actionLeft < _coordinate.x() && _coordinate.x() < actionRight) {
+                return action;
+            }
+        } else {
+            if (actionLeft < _coordinate.y() && _coordinate.y() < actionRight) {
+                return action;
+            }
         }
 
         actionLeft = actionRight;
@@ -134,7 +150,18 @@ FloatingToolBar::FloatingToolBar(QWidget* _parent)
 
 FloatingToolBar::~FloatingToolBar() = default;
 
-void FloatingToolBar::setActionWidth(QAction* _action, int _width)
+void FloatingToolBar::setOrientation(Qt::Orientation _orientation)
+{
+    if (d->orientation == _orientation) {
+        return;
+    }
+
+    d->orientation = _orientation;
+    updateGeometry();
+    update();
+}
+
+void FloatingToolBar::setActionCustomWidth(QAction* _action, int _width)
 {
     if (!actions().contains(_action)) {
         return;
@@ -144,9 +171,10 @@ void FloatingToolBar::setActionWidth(QAction* _action, int _width)
     updateGeometry();
 }
 
-int FloatingToolBar::actionWidth(QAction* _action) const
+int FloatingToolBar::actionCustomWidth(QAction* _action) const
 {
-    if (!actions().contains(_action)) {
+    if (!actions().contains(_action)
+        || !_action->isVisible()) {
         return 0;
     }
 
@@ -168,6 +196,10 @@ QSize FloatingToolBar::sizeHint() const
         const QFontMetricsF fontMetrics(Ui::DesignSystem::font().body1());
         qreal width = 0.0;
         for (const auto action : actions()) {
+            if (!action->isVisible()) {
+                continue;
+            }
+
             if (!action->property(kActionWidthKey).isNull()) {
                 width += action->property(kActionWidthKey).toReal();
                 width -= Ui::DesignSystem::floatingToolBar().iconSize().width();
@@ -178,14 +210,42 @@ QSize FloatingToolBar::sizeHint() const
     const qreal height = Ui::DesignSystem::floatingToolBar().shadowMargins().top()
                          + Ui::DesignSystem::floatingToolBar().height()
                          + Ui::DesignSystem::floatingToolBar().shadowMargins().bottom();
-    return QSize(static_cast<int>(width + additionalWidth), static_cast<int>(height));
+    if (d->orientation == Qt::Horizontal) {
+        return QSize(static_cast<int>(width + additionalWidth), static_cast<int>(height));
+    } else {
+        return QSize(static_cast<int>(height), static_cast<int>(width));
+    }
+}
+
+QColor FloatingToolBar::actionColor(QAction* _action) const
+{
+    if (!actions().contains(_action)) {
+        return {};
+    }
+
+    return d->actionToColor.value(_action);
+}
+
+void FloatingToolBar::setActionColor(QAction* _action, const QColor& _color)
+{
+    if (!actions().contains(_action)) {
+        return;
+    }
+
+    if (_color.isValid()) {
+        d->actionToColor[_action] = _color;
+    } else {
+        d->actionToColor.remove(_action);
+    }
+
+    update();
 }
 
 bool FloatingToolBar::event(QEvent* _event)
 {
     if (_event->type() == QEvent::ToolTip) {
         QHelpEvent* event = static_cast<QHelpEvent*>(_event);
-        QAction* action = d->pressedAction(event->pos(), actions());
+        QAction* action = d->actionAt(event->pos(), actions());
         if (action != nullptr
             && action->toolTip() != action->iconText()) {
             QToolTip::showText(event->globalPos(), action->toolTip());
@@ -254,21 +314,31 @@ void FloatingToolBar::paintEvent(QPaintEvent* _event)
         //
         // Настроим цвет отрисовки действия
         //
-        painter.setPen(ColorHelper::transparent(
-                           action->isChecked()
-                           ? Ui::DesignSystem::color().secondary()
-                           : textColor(),
-                           action->isEnabled()
-                           ? 1.0
-                           : Ui::DesignSystem::disabledTextOpacity()));
+        const QColor penColor = [this, action] {
+            if (d->actionToColor.contains(action)) {
+                return d->actionToColor.value(action);
+            }
+
+            return ColorHelper::transparent(
+                        action->isChecked()
+                        ? Ui::DesignSystem::color().secondary()
+                        : textColor(),
+                        action->isEnabled()
+                        ? 1.0
+                        : Ui::DesignSystem::disabledTextOpacity());
+        } ();
+        painter.setPen(penColor);
 
         //
         // Рисуем действие с кастомной шириной
         //
         if (!action->property(kActionWidthKey).isNull()) {
             painter.setFont(Ui::DesignSystem::font().subtitle2());
-            const QRectF actionRect(actionIconX, actionIconY,
-                                    action->property(kActionWidthKey).toReal(), actionIconSize.height());
+            const QRectF actionRect = d->orientation == Qt::Horizontal
+                                      ? QRectF(actionIconX, actionIconY,
+                                               action->property(kActionWidthKey).toReal(), actionIconSize.height())
+                                      : QRectF(actionIconY, actionIconX,
+                                               actionIconSize.width(), action->property(kActionWidthKey).toReal());
             if (!backgroundRect.contains(actionRect.toRect(), true)) {
                 continue;
             }
@@ -291,7 +361,9 @@ void FloatingToolBar::paintEvent(QPaintEvent* _event)
             //
             // ... сама иконка
             //
-            const QRectF actionRect(QPointF(actionIconX, actionIconY), actionIconSize);
+            const QRectF actionRect = d->orientation == Qt::Horizontal
+                                      ? QRectF(QPointF(actionIconX, actionIconY), actionIconSize)
+                                      : QRectF(QPointF(actionIconY, actionIconX), actionIconSize);
             if (!backgroundRect.contains(actionRect.toRect(), true)) {
                 continue;
             }
@@ -332,7 +404,7 @@ void FloatingToolBar::leaveEvent(QEvent* _event)
 
 void FloatingToolBar::mousePressEvent(QMouseEvent* _event)
 {
-    QAction* pressedAction = d->pressedAction(_event->pos(), actions());
+    QAction* pressedAction = d->actionAt(_event->pos(), actions());
     if (pressedAction == nullptr) {
         return;
     }
@@ -347,7 +419,7 @@ void FloatingToolBar::mousePressEvent(QMouseEvent* _event)
 
 void FloatingToolBar::mouseReleaseEvent(QMouseEvent* _event)
 {
-    QAction* pressedAction = d->pressedAction(_event->pos(), actions());
+    QAction* pressedAction = d->actionAt(_event->pos(), actions());
     if (pressedAction == nullptr) {
         return;
     }

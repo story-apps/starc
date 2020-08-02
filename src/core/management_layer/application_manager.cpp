@@ -853,7 +853,7 @@ void ApplicationManager::Implementation::imitateTypewriterSound(QKeyEvent* _even
     }
 
     auto makeSound = [this] (const QString& path) {
-        QSoundEffect* sound = new QSoundEffect(q);
+        QSoundEffect* sound = new QSoundEffect(applicationView);
         sound->setSource(QUrl::fromLocalFile(path));
         return sound;
     };
@@ -1211,6 +1211,10 @@ void ApplicationManager::initConnections()
     //
     // Менеджер импорта
     //
+    connect(d->importManager.data(), &ImportManager::characterImported,
+            d->projectManager.data(), &ProjectManager::addCharacter);
+    connect(d->importManager.data(), &ImportManager::locationImported,
+            d->projectManager.data(), &ProjectManager::addLocation);
     connect(d->importManager.data(), &ImportManager::screenplayImported,
             d->projectManager.data(), &ProjectManager::addScreenplay);
 

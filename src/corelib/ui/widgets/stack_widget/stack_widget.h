@@ -29,16 +29,32 @@ public:
     void setAnimationType(AnimationType _type);
 
     /**
+     * @brief Добавить виджет в стек
+     * @note При этом виджет не делается текущим
+     */
+    void addWidget(QWidget* _widget);
+
+    /**
      * @brief Сделать заданный виджет текущим
      */
-    void setCurrentWidget(QWidget* widget);
+    void setCurrentWidget(QWidget* _widget);
 
     /**
      * @brief Получить текущий виджет
      */
     QWidget* currentWidget() const;
 
+    /**
+     * @brief Определяем по желаемому размеру текущего виджета
+     */
+    QSize sizeHint() const override;
+
 protected:
+    /**
+     * @brief Длительность анимации
+     */
+    int animationDuration() const;
+
     /**
      * @brief Реализуем собственную отрисовку для реализации эффекста смены текущего виджета
      */

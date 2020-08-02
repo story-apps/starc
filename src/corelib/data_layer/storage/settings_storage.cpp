@@ -87,7 +87,7 @@ SettingsStorage::Implementation::Implementation()
     defaultValues.insert(kApplicationLanguagedKey, QLocale::AnyLanguage);
     defaultValues.insert(kApplicationThemeKey, static_cast<int>(Ui::ApplicationTheme::DarkAndLight));
     defaultValues.insert(kApplicationCustomThemeColorsKey,
-                         "e4e4e438393a448affffffffffffff000000ffffff000000b00020ffffff000000c8c8c8");
+                         "323740ffffff2ab177f8f8f2272b34f8f8f222262ef8f8f2ec3740f8f8f2000000f8f8f2");
     defaultValues.insert(kApplicationScaleFactorKey, 1.0);
     defaultValues.insert(kApplicationUseTypewriterSoundKey, false);
     defaultValues.insert(kApplicationUseAutoSaveKey, true);

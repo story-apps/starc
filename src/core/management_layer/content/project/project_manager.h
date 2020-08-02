@@ -50,10 +50,20 @@ public:
     void saveChanges();
 
     /**
-     * @brief Добавить документ заданного типа с заданным названием и содержимым
+     * @brief Добавить персонажа
+     */
+    void addCharacter(const QString& _name, const QString& _content);
+
+    /**
+     * @brief Добавить локацию
+     */
+    void addLocation(const QString& _name, const QString& _content);
+
+    /**
+     * @brief Добавить данные по сценарию
      */
     void addScreenplay(const QString& _name, const QString& _titlePage, const QString& _synopsis,
-                       const QString& _outline, const QString& _text);
+                       const QString& _treatment, const QString& _text);
 
 signals:
     /**

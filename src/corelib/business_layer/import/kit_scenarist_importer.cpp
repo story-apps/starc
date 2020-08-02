@@ -16,6 +16,11 @@ namespace {
 namespace BusinessLayer
 {
 
+AbstractImporter::Documents KitScenaristImporter::importDocuments(const ImportOptions& _options) const
+{
+    return {};
+}
+
 QVector<AbstractImporter::Screenplay> KitScenaristImporter::importScreenplays(const ImportOptions& _options) const
 {
     QString sourceScreenplayXml;

@@ -81,13 +81,22 @@ void Tree::setScrollBarVisible(bool _visible)
     d->tree->setVerticalScrollBarPolicy(_visible ? Qt::ScrollBarAsNeeded : Qt::ScrollBarAlwaysOff);
 }
 
+QScrollBar* Tree::verticalScrollBar() const
+{
+    return d->tree->verticalScrollBar();
+}
+
 void Tree::setDragDropEnabled(bool _enabled)
 {
     d->tree->setAcceptDrops(_enabled);
     d->tree->setDragEnabled(_enabled);
     d->tree->setDragDropMode(_enabled ? QAbstractItemView::DragDrop : QAbstractItemView::NoDragDrop);
     d->tree->setDropIndicatorShown(_enabled);
-    d->tree->setSelectionMode(_enabled ? QAbstractItemView::ExtendedSelection : QAbstractItemView::SingleSelection);
+}
+
+void Tree::setSelectionMode(QAbstractItemView::SelectionMode _mode)
+{
+    d->tree->setSelectionMode(_mode);
 }
 
 int Tree::sizeHintForColumn(int _column) const
@@ -115,9 +124,19 @@ QModelIndex Tree::indexAt(const QPoint& _pos) const
     return d->tree->indexAt(_pos);
 }
 
+QModelIndexList Tree::selectedIndexes() const
+{
+    return d->tree->selectionModel()->selectedIndexes();
+}
+
 void Tree::expandAll()
 {
     d->tree->expandAll();
+}
+
+void Tree::setAutoAdjustSize(bool _auto)
+{
+    d->tree->setAutoAdjustSize(_auto);
 }
 
 void Tree::restoreState(const QVariant& _state)

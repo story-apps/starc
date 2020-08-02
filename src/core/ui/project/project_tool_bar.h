@@ -23,7 +23,7 @@ public:
     /**
      * @brief Добавить представление
      */
-    void addView(const QString& _mimeType, const QString& _icon, bool _isActive = false);
+    void addView(const QString& _mimeType, const QString& _icon, const QString& _tooltip, bool _isActive = false);
 
     /**
      * @brief Получить майм-тип текущего представления
@@ -42,6 +42,11 @@ signals:
     void viewPressed(const QString& _mimeType);
 
 protected:
+    /**
+     * @brief Обновить переводы
+     */
+    void updateTranslations() override;
+
     /**
      * @brief Обновляем виджет при изменении дизайн системы
      */

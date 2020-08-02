@@ -25,341 +25,6 @@
 namespace Ui
 {
 
-class DesignSystem::AppBarPrivate
-{
-public:
-    explicit AppBarPrivate(qreal _scaleFactor);
-
-    QMarginsF margins = {16.0, 16.0, 16.0, 16.0};
-    QMarginsF bigIconMargins = {0.0, 8.0, 16.0, 8.0};
-    qreal heightRegular = 56.0;
-    QSizeF iconSize = {24.0, 24.0};
-    QSizeF bigIconSize = {40.0, 40.0};
-    qreal iconsSpacing = 24.0;
-    qreal leftTitleMargin = 72.0;
-    qreal shadowRadius = 12.0;
-    QPointF shadowOffset = {0.0, 3.0};
-    QFont font;
-};
-
-DesignSystem::AppBarPrivate::AppBarPrivate(qreal _scaleFactor)
-{
-    margins *= _scaleFactor;
-    bigIconMargins *= _scaleFactor;
-    heightRegular *= _scaleFactor;
-    iconSize *= _scaleFactor;
-    bigIconSize *= _scaleFactor;
-    iconsSpacing *= _scaleFactor;
-    leftTitleMargin *= _scaleFactor;
-    shadowRadius *= _scaleFactor;
-    shadowOffset *= _scaleFactor;
-    font = QFont("Roboto");
-    font.setPixelSize(static_cast<int>(20.0 * _scaleFactor));
-    font.setWeight(QFont::Normal);
-}
-
-// **
-
-DesignSystem::AppBar::~AppBar() = default;
-
-QMarginsF DesignSystem::AppBar::margins() const
-{
-    return d->margins;
-}
-
-QMarginsF DesignSystem::AppBar::bigIconMargins() const
-{
-    return d->bigIconMargins;
-}
-
-qreal DesignSystem::AppBar::heightRegular() const
-{
-    return d->heightRegular;
-}
-
-QSizeF DesignSystem::AppBar::iconSize() const
-{
-    return d->iconSize;
-}
-
-QSizeF DesignSystem::AppBar::bigIconSize() const
-{
-    return d->bigIconSize;
-}
-
-qreal DesignSystem::AppBar::iconsSpacing() const
-{
-    return d->iconsSpacing;
-}
-
-qreal DesignSystem::AppBar::leftTitleMargin() const
-{
-    return d->leftTitleMargin;
-}
-
-qreal DesignSystem::AppBar::shadowRadius() const
-{
-    return d->shadowRadius;
-}
-
-QPointF DesignSystem::AppBar::shadowOffset() const
-{
-    return d->shadowOffset;
-}
-
-QFont DesignSystem::AppBar::font() const
-{
-    return d->font;
-}
-
-DesignSystem::AppBar::AppBar(qreal _scaleFactor)
-    : d(new AppBarPrivate(_scaleFactor))
-{
-}
-
-
-// ****
-
-
-class DesignSystem::TabPrivate
-{
-public:
-    explicit TabPrivate(qreal _scaleFactor);
-
-    qreal minimumWidth = 90.0;
-    qreal heightWithText = 48.0;
-    qreal heightWithIcon = 48.0;
-    qreal heightWithTextAndIcon = 72.0;
-    QMarginsF margins = {16.0, 12.0, 16.0, 12.0};
-    QSizeF iconSize = {24.0, 24.0};
-};
-
-DesignSystem::TabPrivate::TabPrivate(qreal _scaleFactor)
-{
-    minimumWidth *= _scaleFactor;
-    heightWithText *= _scaleFactor;
-    heightWithIcon *= _scaleFactor;
-    heightWithTextAndIcon *= _scaleFactor;
-    margins *= _scaleFactor;
-    iconSize *= _scaleFactor;
-}
-
-// **
-
-DesignSystem::Tab::~Tab() = default;
-
-qreal DesignSystem::Tab::minimumWidth() const
-{
-    return d->minimumWidth;
-}
-
-qreal DesignSystem::Tab::heightWithText() const
-{
-    return d->heightWithText;
-}
-
-qreal DesignSystem::Tab::heightWithIcon() const
-{
-    return d->heightWithIcon;
-}
-
-qreal DesignSystem::Tab::heightWithTextAndIcon() const
-{
-    return d->heightWithTextAndIcon;
-}
-
-QMarginsF DesignSystem::Tab::margins() const
-{
-    return d->margins;
-}
-
-QSizeF DesignSystem::Tab::iconSize() const
-{
-    return d->iconSize;
-}
-
-DesignSystem::Tab::Tab(qreal _scaleFactor)
-    : d(new TabPrivate(_scaleFactor))
-{
-}
-
-
-// ****
-
-
-class DesignSystem::TabsPrivate
-{
-public:
-    explicit TabsPrivate(qreal _scaleFactor);
-
-    qreal scrollableLeftMargin = 52.0;
-    qreal underlineHeight = 2.0;
-    QFont font;
-};
-
-DesignSystem::TabsPrivate::TabsPrivate(qreal _scaleFactor)
-{
-    scrollableLeftMargin *= _scaleFactor;
-    underlineHeight *= _scaleFactor;
-    font = QFont("Roboto");
-    font.setPixelSize(static_cast<int>(14.0 * _scaleFactor));
-    font.setWeight(QFont::Medium);
-}
-
-// **
-
-DesignSystem::Tabs::~Tabs() = default;
-
-qreal DesignSystem::Tabs::scrollableLeftMargin() const
-{
-    return d->scrollableLeftMargin;
-}
-
-qreal DesignSystem::Tabs::underlineHeight() const
-{
-    return d->underlineHeight;
-}
-
-QFont DesignSystem::Tabs::font() const
-{
-    return d->font;
-}
-
-DesignSystem::Tabs::Tabs(qreal _scaleFactor)
-    : d(new TabsPrivate(_scaleFactor))
-{
-}
-
-
-// ****
-
-
-class DesignSystem::ColorPickerPrivate
-{
-public:
-    explicit ColorPickerPrivate(qreal _scaleFactor);
-
-    QMarginsF margins = {16.0, 16.0, 16.0, 16.0};
-    qreal height = 72.0;
-    QSizeF iconSize = {40.0, 40.0};
-    qreal iconsSpacing = 32.0;
-    qreal iconBorderWidth = 1.2;
-};
-
-DesignSystem::ColorPickerPrivate::ColorPickerPrivate(qreal _scaleFactor)
-{
-    margins *= _scaleFactor;
-    height *= _scaleFactor;
-    iconSize *= _scaleFactor;
-    iconsSpacing *= _scaleFactor;
-    iconBorderWidth *= _scaleFactor;
-}
-
-// **
-
-DesignSystem::ColorPicker::~ColorPicker() = default;
-
-QMarginsF DesignSystem::ColorPicker::margins() const
-{
-    return d->margins;
-}
-
-qreal DesignSystem::ColorPicker::height() const
-{
-    return d->height;
-}
-
-QSizeF DesignSystem::ColorPicker::iconSize() const
-{
-    return d->iconSize;
-}
-
-qreal DesignSystem::ColorPicker::iconsSpacing() const
-{
-    return d->iconsSpacing;
-}
-
-qreal DesignSystem::ColorPicker::iconBorderWidth() const
-{
-    return d->iconBorderWidth;
-}
-
-DesignSystem::ColorPicker::ColorPicker(qreal _scaleFactor)
-    : d(new ColorPickerPrivate(_scaleFactor))
-{
-}
-
-
-// ****
-
-
-class DesignSystem::TextTogglePrivate
-{
-public:
-    explicit TextTogglePrivate(qreal _scaleFactor);
-
-    QMarginsF margins = {4.0, 4.0, 4.0, 4.0};
-    QSizeF toggleSize = {64.0, 36.0};
-    qreal toggleRadius = 17.0;
-    qreal spacing = 12.0;
-    qreal toggleSpacing = 3.0;
-    QFont font;
-};
-
-DesignSystem::TextTogglePrivate::TextTogglePrivate(qreal _scaleFactor)
-{
-    margins *= _scaleFactor;
-    toggleSize *= _scaleFactor;
-    toggleRadius *= _scaleFactor;
-    spacing *= _scaleFactor;
-    toggleSpacing *= _scaleFactor;
-    font = QFont("Roboto");
-    font.setPixelSize(static_cast<int>(14.0 * _scaleFactor));
-    font.setWeight(QFont::Medium);
-}
-
-
-DesignSystem::TextToggle::~TextToggle() = default;
-
-QMarginsF DesignSystem::TextToggle::margins() const
-{
-    return d->margins;
-}
-
-QSizeF DesignSystem::TextToggle::toggleSize() const
-{
-    return d->toggleSize;
-}
-
-qreal DesignSystem::TextToggle::toggleRadius() const
-{
-    return d->toggleRadius;
-}
-
-qreal DesignSystem::TextToggle::spacing() const
-{
-    return d->spacing;
-}
-
-qreal DesignSystem::TextToggle::toggleSpacing() const
-{
-    return d->toggleSpacing;
-}
-
-QFont DesignSystem::TextToggle::font() const
-{
-    return d->font;
-}
-
-DesignSystem::TextToggle::TextToggle(qreal _scaleFactor)
-    : d(new TextTogglePrivate(_scaleFactor))
-{
-}
-
-
-// ****
-
-
 class DesignSystem::Color::Implementation
 {
 public:
@@ -748,6 +413,7 @@ public:
     qreal px12 = 12.0;
     qreal px16 = 16.0;
     qreal px24 = 24.0;
+    qreal px48 = 48.0;
     qreal px62 = 62.0;
     qreal topContentMargin = 116.0;
     qreal buttonsSpacing = 8.0;
@@ -761,6 +427,7 @@ DesignSystem::Layout::Implementation::Implementation(qreal _scaleFactor)
     px12 *= _scaleFactor;
     px16 *= _scaleFactor;
     px24 *= _scaleFactor;
+    px48 *= _scaleFactor;
     px62 *= _scaleFactor;
     topContentMargin *= _scaleFactor;
     buttonsSpacing *= _scaleFactor;
@@ -802,6 +469,11 @@ qreal DesignSystem::Layout::px24() const
     return d->px24;
 }
 
+qreal DesignSystem::Layout::px48() const
+{
+    return d->px48;
+}
+
 qreal DesignSystem::Layout::px62() const
 {
     return d->px62;
@@ -818,6 +490,93 @@ qreal DesignSystem::Layout::buttonsSpacing() const
 }
 
 DesignSystem::Layout::Layout(qreal _scaleFactor)
+    : d(new Implementation(_scaleFactor))
+{
+}
+
+
+// ****
+
+
+class DesignSystem::AppBar::Implementation
+{
+public:
+    explicit Implementation(qreal _scaleFactor);
+
+    QMarginsF margins = {16.0, 16.0, 16.0, 16.0};
+    QMarginsF bigIconMargins = {0.0, 8.0, 16.0, 8.0};
+    qreal heightRegular = 56.0;
+    QSizeF iconSize = {24.0, 24.0};
+    QSizeF bigIconSize = {40.0, 40.0};
+    qreal iconsSpacing = 24.0;
+    qreal leftTitleMargin = 72.0;
+    qreal shadowRadius = 12.0;
+    QPointF shadowOffset = {0.0, 3.0};
+};
+
+DesignSystem::AppBar::Implementation::Implementation(qreal _scaleFactor)
+{
+    margins *= _scaleFactor;
+    bigIconMargins *= _scaleFactor;
+    heightRegular *= _scaleFactor;
+    iconSize *= _scaleFactor;
+    bigIconSize *= _scaleFactor;
+    iconsSpacing *= _scaleFactor;
+    leftTitleMargin *= _scaleFactor;
+    shadowRadius *= _scaleFactor;
+    shadowOffset *= _scaleFactor;
+}
+
+// **
+
+DesignSystem::AppBar::~AppBar() = default;
+
+QMarginsF DesignSystem::AppBar::margins() const
+{
+    return d->margins;
+}
+
+QMarginsF DesignSystem::AppBar::bigIconMargins() const
+{
+    return d->bigIconMargins;
+}
+
+qreal DesignSystem::AppBar::heightRegular() const
+{
+    return d->heightRegular;
+}
+
+QSizeF DesignSystem::AppBar::iconSize() const
+{
+    return d->iconSize;
+}
+
+QSizeF DesignSystem::AppBar::bigIconSize() const
+{
+    return d->bigIconSize;
+}
+
+qreal DesignSystem::AppBar::iconsSpacing() const
+{
+    return d->iconsSpacing;
+}
+
+qreal DesignSystem::AppBar::leftTitleMargin() const
+{
+    return d->leftTitleMargin;
+}
+
+qreal DesignSystem::AppBar::shadowRadius() const
+{
+    return d->shadowRadius;
+}
+
+QPointF DesignSystem::AppBar::shadowOffset() const
+{
+    return d->shadowOffset;
+}
+
+DesignSystem::AppBar::AppBar(qreal _scaleFactor)
     : d(new Implementation(_scaleFactor))
 {
 }
@@ -1448,6 +1207,110 @@ DesignSystem::FloatingToolBar::FloatingToolBar(qreal _scaleFactor)
 // ****
 
 
+class DesignSystem::Tab::Implementation
+{
+public:
+    explicit Implementation(qreal _scaleFactor);
+
+    qreal minimumWidth = 90.0;
+    qreal heightWithText = 48.0;
+    qreal heightWithIcon = 48.0;
+    qreal heightWithTextAndIcon = 72.0;
+    QMarginsF margins = {16.0, 12.0, 16.0, 12.0};
+    QSizeF iconSize = {24.0, 24.0};
+};
+
+DesignSystem::Tab::Implementation::Implementation(qreal _scaleFactor)
+{
+    minimumWidth *= _scaleFactor;
+    heightWithText *= _scaleFactor;
+    heightWithIcon *= _scaleFactor;
+    heightWithTextAndIcon *= _scaleFactor;
+    margins *= _scaleFactor;
+    iconSize *= _scaleFactor;
+}
+
+// **
+
+DesignSystem::Tab::~Tab() = default;
+
+qreal DesignSystem::Tab::minimumWidth() const
+{
+    return d->minimumWidth;
+}
+
+qreal DesignSystem::Tab::heightWithText() const
+{
+    return d->heightWithText;
+}
+
+qreal DesignSystem::Tab::heightWithIcon() const
+{
+    return d->heightWithIcon;
+}
+
+qreal DesignSystem::Tab::heightWithTextAndIcon() const
+{
+    return d->heightWithTextAndIcon;
+}
+
+QMarginsF DesignSystem::Tab::margins() const
+{
+    return d->margins;
+}
+
+QSizeF DesignSystem::Tab::iconSize() const
+{
+    return d->iconSize;
+}
+
+DesignSystem::Tab::Tab(qreal _scaleFactor)
+    : d(new Implementation(_scaleFactor))
+{
+}
+
+
+// ****
+
+
+class DesignSystem::TabBar::Implementation
+{
+public:
+    explicit Implementation(qreal _scaleFactor);
+
+    qreal scrollableLeftMargin = 52.0;
+    qreal underlineHeight = 2.0;
+};
+
+DesignSystem::TabBar::Implementation::Implementation(qreal _scaleFactor)
+{
+    scrollableLeftMargin *= _scaleFactor;
+    underlineHeight *= _scaleFactor;
+}
+
+// **
+
+DesignSystem::TabBar::~TabBar() = default;
+
+qreal DesignSystem::TabBar::scrollableLeftMargin() const
+{
+    return d->scrollableLeftMargin;
+}
+
+qreal DesignSystem::TabBar::underlineHeight() const
+{
+    return d->underlineHeight;
+}
+
+DesignSystem::TabBar::TabBar(qreal _scaleFactor)
+    : d(new Implementation(_scaleFactor))
+{
+}
+
+
+// ****
+
+
 class DesignSystem::Stepper::Implementation
 {
 public:
@@ -1635,10 +1498,11 @@ class DesignSystem::TreeOneLineItem::Implementation
 public:
     explicit Implementation(qreal _scaleFactor);
 
-    QMarginsF margins = {12.0, 12.0, 12.0, 12.0};
-    qreal height = 48.0;
+    QMarginsF margins = {16.0, 16.0, 16.0, 16.0};
+    qreal height = 56.0;
     qreal spacing = 16.0;
-    QSizeF iconSize = {24.0, 24.0};
+    QSizeF iconSize = {32.0, 32.0};
+    QSizeF avatarSize = {40.0, 40.0};
 };
 
 DesignSystem::TreeOneLineItem::Implementation::Implementation(qreal _scaleFactor)
@@ -1647,6 +1511,7 @@ DesignSystem::TreeOneLineItem::Implementation::Implementation(qreal _scaleFactor
     height *= _scaleFactor;
     spacing *= _scaleFactor;
     iconSize *= _scaleFactor;
+    avatarSize *= _scaleFactor;
 }
 
 
@@ -1673,6 +1538,11 @@ qreal DesignSystem::TreeOneLineItem::spacing() const
 const QSizeF& DesignSystem::TreeOneLineItem::iconSize() const
 {
     return d->iconSize;
+}
+
+const QSizeF& DesignSystem::TreeOneLineItem::avatarSize() const
+{
+    return d->avatarSize;
 }
 
 DesignSystem::TreeOneLineItem::TreeOneLineItem(qreal _scaleFactor)
@@ -1963,22 +1833,15 @@ public:
     qreal pageSpacing = 16.0;
     qreal inactiveTextOpacity = 0.68;
     qreal disabledTextOpacity = 0.46;
-    qreal hoverBackgroundOpacity = 0.06;
-    qreal focusBackgroundOpacity = 0.18;
+    qreal hoverBackgroundOpacity = 0.18;
+    qreal focusBackgroundOpacity = 0.28;
     qreal elevationStartOpacity = 0.04;
     qreal elevationEndOpacity = 0.08;
-
-    DesignSystem::AppBar appBar;
-    DesignSystem::Tab tab;
-    DesignSystem::Tabs tabs;
-    DesignSystem::ColorPicker colorPicker;
-    DesignSystem::TextToggle textToggle;
-
-
 
     DesignSystem::Color color;
     DesignSystem::Font font;
     DesignSystem::Layout layout;
+    DesignSystem::AppBar appBar;
     DesignSystem::Label label;
     DesignSystem::Button button;
     DesignSystem::ToggleButton toggleButton;
@@ -1988,7 +1851,9 @@ public:
     DesignSystem::ProgressBar progressBar;
     DesignSystem::TextField textField;
     DesignSystem::ScrollBar scrollBar;
-    DesignSystem::FloatingToolBar floatingAppBar;
+    DesignSystem::FloatingToolBar floatingToolBar;
+    DesignSystem::Tab tab;
+    DesignSystem::TabBar tabBar;
     DesignSystem::Stepper stepper;
     DesignSystem::Drawer drawer;
     DesignSystem::TreeOneLineItem treeOneLineItem;
@@ -2003,14 +1868,10 @@ DesignSystemPrivate::DesignSystemPrivate(ApplicationTheme _theme, qreal _scaleFa
     const DesignSystem::Color& _color)
     : theme(_theme),
       scaleFactor(_scaleFactor),
-      appBar(_scaleFactor),
-      tab(_scaleFactor),
-      tabs(_scaleFactor),
-      colorPicker(_scaleFactor),
-      textToggle(_scaleFactor),
       color(_color),
       font(_scaleFactor),
       layout(_scaleFactor),
+      appBar(_scaleFactor),
       label(_scaleFactor),
       button(_scaleFactor),
       toggleButton(_scaleFactor),
@@ -2020,7 +1881,9 @@ DesignSystemPrivate::DesignSystemPrivate(ApplicationTheme _theme, qreal _scaleFa
       progressBar(_scaleFactor),
       textField(_scaleFactor),
       scrollBar(_scaleFactor, _color),
-      floatingAppBar(_scaleFactor),
+      floatingToolBar(_scaleFactor),
+      tab(_scaleFactor),
+      tabBar(_scaleFactor),
       stepper(_scaleFactor),
       drawer(_scaleFactor, _color),
       treeOneLineItem(_scaleFactor),
@@ -2065,54 +1928,54 @@ void DesignSystem::setTheme(ApplicationTheme _theme)
     switch (_theme) {
         case Ui::ApplicationTheme::DarkAndLight: {
             primary = "#323740";
-            secondary = "#448AFF";
-            background = "#FFFFFF";
-            surface = "#FFFFFF";
-            error = "#B00020";
+            secondary = "#448aff";
+            background = "#ffffff";
+            surface = "#f3f3f3";
+            error = "#b00020";
             shadow = [] { QColor color = "#000000";
                           color.setAlphaF(0.36);
                           return color; } ();
-            onPrimary = "#FFFFFF";
-            onSecondary = "#FFFFFF";
+            onPrimary = "#ffffff";
+            onSecondary = "#ffffff";
             onBackground = "#000000";
             onSurface = "#000000";
-            onError = "#FFFFFF";
+            onError = "#ffffff";
             onShadow = "#FFFFFF";
             break;
         }
 
         case Ui::ApplicationTheme::Dark: {
-            primary = "#1F1F1F";
-            secondary = "#448AFF";
-            background = "#1F1F1F";
-            surface = "#121212";
-            error = "#CF6679";
+            primary = "#323740";
+            secondary = "#5796ff";
+            background = "#272b34";
+            surface = "#22262e";
+            error = "#ec3740";
             shadow = [] { QColor color = "#000000";
                           color.setAlphaF(0.68);
                           return color; } ();
-            onPrimary = "#FFFFFF";
-            onSecondary = "#FFFFFF";
-            onBackground = "#FFFFFF";
-            onSurface = "#FFFFFF";
-            onError = "#000000";
-            onShadow = "#FFFFFF";
+            onPrimary = "#ffffff";
+            onSecondary = "#f8f8f2";
+            onBackground = "#f8f8f2";
+            onSurface = "#f8f8f2";
+            onError = "#f8f8f2";
+            onShadow = "#f8f8f2";
             break;
         }
 
         case Ui::ApplicationTheme::Light: {
-            primary = "#E4E4E4";
-            secondary = "#448AFF";
-            background = "#FFFFFF";
-            surface = "#FFFFFF";
-            error = "#B00020";
+            primary = "#e4e4e4";
+            secondary = "#448aff";
+            background = "#ffffff";
+            surface = "#f3f3f3";
+            error = "#b00020";
             shadow = [] { QColor color = "#000000";
                           color.setAlphaF(0.36);
                           return color; } ();
-            onPrimary = "#38393A";
-            onSecondary = "#FFFFFF";
+            onPrimary = "#38393a";
+            onSecondary = "#ffffff";
             onBackground = "#000000";
             onSurface = "#000000";
-            onError = "#FFFFFF";
+            onError = "#ffffff";
             onShadow = "#FFFFFF";
             break;
         }
@@ -2195,31 +2058,6 @@ qreal DesignSystem::elevationEndOpacity()
     return instance()->d->elevationEndOpacity;
 }
 
-const DesignSystem::AppBar& DesignSystem::appBar()
-{
-    return instance()->d->appBar;
-}
-
-const DesignSystem::Tab& DesignSystem::tab()
-{
-    return instance()->d->tab;
-}
-
-const DesignSystem::Tabs& DesignSystem::tabs()
-{
-    return instance()->d->tabs;
-}
-
-const DesignSystem::ColorPicker& DesignSystem::colorPicker()
-{
-    return instance()->d->colorPicker;
-}
-
-const DesignSystem::TextToggle&DesignSystem::textToggle()
-{
-    return instance()->d->textToggle;
-}
-
 const DesignSystem::Color& DesignSystem::color()
 {
     return instance()->d->color;
@@ -2238,6 +2076,11 @@ const DesignSystem::Font& DesignSystem::font()
 const DesignSystem::Layout& DesignSystem::layout()
 {
     return instance()->d->layout;
+}
+
+const DesignSystem::AppBar& DesignSystem::appBar()
+{
+    return instance()->d->appBar;
 }
 
 const DesignSystem::Label& DesignSystem::label()
@@ -2287,7 +2130,17 @@ const DesignSystem::ScrollBar& DesignSystem::scrollBar()
 
 const DesignSystem::FloatingToolBar& DesignSystem::floatingToolBar()
 {
-    return instance()->d->floatingAppBar;
+    return instance()->d->floatingToolBar;
+}
+
+const DesignSystem::Tab& DesignSystem::tab()
+{
+    return instance()->d->tab;
+}
+
+const DesignSystem::TabBar& DesignSystem::tabBar()
+{
+    return instance()->d->tabBar;
 }
 
 const DesignSystem::Stepper& DesignSystem::stepper()

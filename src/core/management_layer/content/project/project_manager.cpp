@@ -10,6 +10,7 @@
 #include <business_layer/model/project/project_information_model.h>
 #include <business_layer/model/structure/structure_model.h>
 #include <business_layer/model/structure/structure_model_item.h>
+#include <business_layer/model/structure/structure_proxy_model.h>
 
 #include <data_layer/storage/document_change_storage.h>
 #include <data_layer/storage/document_data_storage.h>
@@ -30,6 +31,7 @@
 
 #include <QDateTime>
 #include <QHBoxLayout>
+#include <QSet>
 #include <QStandardItemModel>
 #include <QUuid>
 #include <QVariantAnimation>
@@ -68,6 +70,12 @@ public:
     void addDocument(const QModelIndex& _itemIndex);
 
     /**
+     * @brief Добавить документ в заданный контейнер
+     */
+    void addDocumentToContainer(Domain::DocumentObjectType _containerType,
+        Domain::DocumentObjectType _documentType, const QString& _documentName, const QByteArray& _content = {});
+
+    /**
      * @brief Удалить документ
      */
     void removeDocument(const QModelIndex& _itemIndex);
@@ -91,6 +99,7 @@ public:
     Ui::ProjectView* view = nullptr;
 
     BusinessLayer::StructureModel* projectStructureModel = nullptr;
+    BusinessLayer::StructureProxyModel* projectStructureProxyModel = nullptr;
 
     DataStorageLayer::DocumentDataStorage documentDataStorage;
 
@@ -105,13 +114,14 @@ ProjectManager::Implementation::Implementation(QWidget* _parent)
       navigatorContextMenuModel(new QStandardItemModel(navigator)),
       view(new Ui::ProjectView(_parent)),
       projectStructureModel(new BusinessLayer::StructureModel(navigator)),
+      projectStructureProxyModel(new BusinessLayer::StructureProxyModel(projectStructureModel)),
       modelsFacade(&documentDataStorage)
 {
     toolBar->hide();
     navigator->hide();
     view->hide();
 
-    navigator->setModel(projectStructureModel);
+    navigator->setModel(projectStructureProxyModel);
     navigator->setContextMenuModel(navigatorContextMenuModel);
 }
 
@@ -119,7 +129,9 @@ void ProjectManager::Implementation::updateNavigatorContextMenu(const QModelInde
 {
     navigatorContextMenuModel->clear();
 
-    const auto currentItem = projectStructureModel->itemForIndex(_index);
+    const auto currentItemIndex = projectStructureProxyModel->mapToSource(_index);
+    const auto currentItem = projectStructureModel->itemForIndex(currentItemIndex);
+
     if (currentItem->type() == Domain::DocumentObjectType::RecycleBin) {
         if (currentItem->hasChildren()) {
             auto emptyRecicleBin = new QStandardItem(tr("Empty recycle bin"));
@@ -127,18 +139,29 @@ void ProjectManager::Implementation::updateNavigatorContextMenu(const QModelInde
             emptyRecicleBin->setData(static_cast<int>(ContextMenuAction::EmptyRecycleBin), Qt::UserRole);
             navigatorContextMenuModel->appendRow(emptyRecicleBin);
         }
-    } else {
-        auto addDocument = new QStandardItem(tr("Add document"));
-        addDocument->setData(u8"\U000f0415", Qt::DecorationRole);
-        addDocument->setData(static_cast<int>(ContextMenuAction::AddDocument), Qt::UserRole);
-        navigatorContextMenuModel->appendRow(addDocument);
+        return;
+    }
 
-        if (_index.isValid()) {
-            auto removeDocument = new QStandardItem(tr("Remove document"));
-            removeDocument->setData(u8"\U000f01b4", Qt::DecorationRole);
-            removeDocument->setData(static_cast<int>(ContextMenuAction::RemoveDocument), Qt::UserRole);
-            navigatorContextMenuModel->appendRow(removeDocument);
-        }
+
+    auto addDocument = new QStandardItem(tr("Add document"));
+    addDocument->setData(u8"\U000f0415", Qt::DecorationRole);
+    addDocument->setData(static_cast<int>(ContextMenuAction::AddDocument), Qt::UserRole);
+    navigatorContextMenuModel->appendRow(addDocument);
+
+    const QSet<Domain::DocumentObjectType> cantBeRemovedItems
+            = { Domain::DocumentObjectType::Project,
+                Domain::DocumentObjectType::Characters,
+                Domain::DocumentObjectType::Locations,
+                Domain::DocumentObjectType::ScreenplayTitlePage,
+                Domain::DocumentObjectType::ScreenplaySynopsis,
+                Domain::DocumentObjectType::ScreenplayTreatment,
+                Domain::DocumentObjectType::ScreenplayText,
+                Domain::DocumentObjectType::ScreenplayStatistics };
+    if (_index.isValid() && !cantBeRemovedItems.contains(currentItem->type())) {
+        auto removeDocument = new QStandardItem(tr("Remove document"));
+        removeDocument->setData(u8"\U000f01b4", Qt::DecorationRole);
+        removeDocument->setData(static_cast<int>(ContextMenuAction::RemoveDocument), Qt::UserRole);
+        navigatorContextMenuModel->appendRow(removeDocument);
     }
 }
 
@@ -192,9 +215,23 @@ void ProjectManager::Implementation::addDocument(const QModelIndex& _itemIndex)
     dialog->showDialog();
 }
 
+void ProjectManager::Implementation::addDocumentToContainer(Domain::DocumentObjectType _containerType,
+    Domain::DocumentObjectType _documentType, const QString& _documentName, const QByteArray& _content)
+{
+    for (int itemRow = 0; itemRow < projectStructureModel->rowCount(); ++itemRow) {
+        const auto itemIndex = projectStructureModel->index(itemRow, 0);
+        const auto item = projectStructureModel->itemForIndex(itemIndex);
+        if (item->type() == _containerType) {
+            projectStructureModel->addDocument(_documentType, _documentName, itemIndex, _content);
+            break;
+        }
+    }
+}
+
 void ProjectManager::Implementation::removeDocument(const QModelIndex& _itemIndex)
 {
-    auto item = projectStructureModel->itemForIndex(_itemIndex);
+    const auto mappedItemIndex = projectStructureProxyModel->mapToSource(_itemIndex);
+    auto item = projectStructureModel->itemForIndex(mappedItemIndex);
     if (item == nullptr) {
         return;
     }
@@ -254,7 +291,8 @@ void ProjectManager::Implementation::removeDocument(const QModelIndex& _itemInde
 
 void ProjectManager::Implementation::emptyRecycleBin(const QModelIndex& _recycleBinIndex)
 {
-    auto recycleBin = projectStructureModel->itemForIndex(_recycleBinIndex);
+    const auto mappedRecycleBinIndex = projectStructureProxyModel->mapToSource(_recycleBinIndex);
+    auto recycleBin = projectStructureModel->itemForIndex(mappedRecycleBinIndex);
     if (recycleBin == nullptr) {
         return;
     }
@@ -288,8 +326,10 @@ void ProjectManager::Implementation::emptyRecycleBin(const QModelIndex& _recycle
         while (recycleBin->hasChildren()) {
             auto itemToRemove = recycleBin->childAt(0);
             auto documentToRemove = DataStorageLayer::StorageFacade::documentStorage()->document(itemToRemove->uuid());
-            modelsFacade.removeModelFor(documentToRemove);
-            DataStorageLayer::StorageFacade::documentStorage()->removeDocument(documentToRemove);
+            if (documentToRemove != nullptr) {
+                modelsFacade.removeModelFor(documentToRemove);
+                DataStorageLayer::StorageFacade::documentStorage()->removeDocument(documentToRemove);
+            }
             projectStructureModel->removeItem(itemToRemove);
         }
     });
@@ -323,7 +363,8 @@ ProjectManager::ProjectManager(QObject* _parent, QWidget* _parentWidget)
         //
         // Определим выделенный элемент и скорректируем интерфейс
         //
-        const auto item = d->projectStructureModel->itemForIndex(_index);
+        const auto mappedIndex = d->projectStructureProxyModel->mapToSource(_index);
+        const auto item = d->projectStructureModel->itemForIndex(mappedIndex);
         const auto documentMimeType = Domain::mimeTypeFor(item->type());
         //
         // ... настроим иконки представлений
@@ -331,8 +372,9 @@ ProjectManager::ProjectManager(QObject* _parent, QWidget* _parentWidget)
         d->toolBar->clearViews();
         const auto views = d->pluginsBuilder.editorsInfoFor(documentMimeType);
         for (auto view : views) {
+            const auto tooltip = d->pluginsBuilder.editorDescription(view.mimeType);
             const bool isActive = view.mimeType == views.first().mimeType;
-            d->toolBar->addView(view.mimeType, view.icon, isActive);
+            d->toolBar->addView(view.mimeType, view.icon, tooltip, isActive);
         }
 
         //
@@ -350,8 +392,9 @@ ProjectManager::ProjectManager(QObject* _parent, QWidget* _parentWidget)
     connect(d->navigator, &Ui::ProjectNavigator::itemDoubleClicked, this,
             [this] (const QModelIndex& _index)
     {
-        if (!d->projectStructureModel->data(
-                _index, static_cast<int>(BusinessLayer::StructureModelDataRole::IsNavigatorAvailable)).toBool()) {
+        const auto mappedIndex = d->projectStructureProxyModel->mapToSource(_index);
+        if (!d->projectStructureModel->data(mappedIndex,
+                static_cast<int>(BusinessLayer::StructureModelDataRole::IsNavigatorAvailable)).toBool()) {
             return;
         }
 
@@ -370,11 +413,11 @@ ProjectManager::ProjectManager(QObject* _parent, QWidget* _parentWidget)
     //
     connect(d->projectStructureModel, &BusinessLayer::StructureModel::documentAdded,
             [this] (const QUuid& _uuid, Domain::DocumentObjectType _type, const QString& _name,
-                    const QString& _content)
+                    const QByteArray& _content)
     {
         auto document = DataStorageLayer::StorageFacade::documentStorage()->storeDocument(_uuid, _type);
         if (!_content.isNull()) {
-            document->setContent(_content.toUtf8());
+            document->setContent(_content);
         }
 
         auto documentModel = d->modelsFacade.modelFor(document);
@@ -430,29 +473,56 @@ ProjectManager::ProjectManager(QObject* _parent, QWidget* _parentWidget)
     connect(&d->modelsFacade, &ProjectModelsFacade::projectNameChanged, this, &ProjectManager::projectNameChanged);
     connect(&d->modelsFacade, &ProjectModelsFacade::projectLoglineChanged, this, &ProjectManager::projectLoglineChanged);
     connect(&d->modelsFacade, &ProjectModelsFacade::projectCoverChanged, this, &ProjectManager::projectCoverChanged);
-    auto addDocumentToContainer = [this] (Domain::DocumentObjectType _containerType, Domain::DocumentObjectType _documentType, const QString& _documentName) {
-        for (int itemRow = 0; itemRow < d->projectStructureModel->rowCount(); ++itemRow) {
-            const auto itemIndex = d->projectStructureModel->index(itemRow, 0);
-            const auto item = d->projectStructureModel->itemForIndex(itemIndex);
-            if (item->type() == _containerType) {
-                d->projectStructureModel->addDocument(_documentType, _documentName, itemIndex);
+    connect(&d->modelsFacade, &ProjectModelsFacade::createCharacterRequested, this,
+            [this] (const QString& _name, const QByteArray& _content)
+    {
+        d->addDocumentToContainer(Domain::DocumentObjectType::Characters,
+                                  Domain::DocumentObjectType::Character,
+                                  _name, _content);
+    });
+    connect(&d->modelsFacade, &ProjectModelsFacade::createLocationRequested, this,
+            [this] (const QString& _name, const QByteArray& _content)
+    {
+        d->addDocumentToContainer(Domain::DocumentObjectType::Locations,
+                                  Domain::DocumentObjectType::Location,
+                                  _name, _content);
+    });
+    //
+    auto setDocumentVisible = [this] (BusinessLayer::AbstractModel* _screenplayModel,
+                                      Domain::DocumentObjectType _type, bool _visible) {
+        auto screenplayItem = d->projectStructureModel->itemForUuid(_screenplayModel->document()->uuid());
+        for (int childIndex = 0; childIndex < screenplayItem->childCount(); ++childIndex) {
+            auto childItem = screenplayItem->childAt(childIndex);
+            if (childItem->type() == _type) {
+                d->projectStructureModel->setItemVisible(childItem, _visible);
                 break;
             }
         }
     };
-    connect(&d->modelsFacade, &ProjectModelsFacade::createCharacterRequested, this,
-            [addDocumentToContainer] (const QString& _name)
+    connect(&d->modelsFacade, &ProjectModelsFacade::screenplayTitlePageVisibilityChanged, this,
+            [setDocumentVisible] (BusinessLayer::AbstractModel* _screenplayModel, bool _visible)
     {
-        addDocumentToContainer(Domain::DocumentObjectType::Characters,
-                               Domain::DocumentObjectType::Character,
-                               _name);
+        setDocumentVisible(_screenplayModel, Domain::DocumentObjectType::ScreenplayTitlePage, _visible);
     });
-    connect(&d->modelsFacade, &ProjectModelsFacade::createLocationRequested, this,
-            [addDocumentToContainer] (const QString& _name)
+    connect(&d->modelsFacade, &ProjectModelsFacade::screenplaySynopsisVisibilityChanged, this,
+            [setDocumentVisible] (BusinessLayer::AbstractModel* _screenplayModel, bool _visible)
     {
-        addDocumentToContainer(Domain::DocumentObjectType::Locations,
-                               Domain::DocumentObjectType::Location,
-                               _name);
+        setDocumentVisible(_screenplayModel, Domain::DocumentObjectType::ScreenplaySynopsis, _visible);
+    });
+    connect(&d->modelsFacade, &ProjectModelsFacade::screenplayTreatmentVisibilityChanged, this,
+            [setDocumentVisible] (BusinessLayer::AbstractModel* _screenplayModel, bool _visible)
+    {
+        setDocumentVisible(_screenplayModel, Domain::DocumentObjectType::ScreenplayTreatment, _visible);
+    });
+    connect(&d->modelsFacade, &ProjectModelsFacade::screenplayTextVisibilityChanged, this,
+            [setDocumentVisible] (BusinessLayer::AbstractModel* _screenplayModel, bool _visible)
+    {
+        setDocumentVisible(_screenplayModel, Domain::DocumentObjectType::ScreenplayText, _visible);
+    });
+    connect(&d->modelsFacade, &ProjectModelsFacade::screenplayStatisticsVisibilityChanged, this,
+            [setDocumentVisible] (BusinessLayer::AbstractModel* _screenplayModel, bool _visible)
+    {
+        setDocumentVisible(_screenplayModel, Domain::DocumentObjectType::ScreenplayStatistics, _visible);
     });
 }
 
@@ -589,8 +659,32 @@ void ProjectManager::saveChanges()
     DataStorageLayer::StorageFacade::documentChangeStorage()->store();
 }
 
+void ProjectManager::addCharacter(const QString& _name, const QString& _content)
+{
+    auto document = DataStorageLayer::StorageFacade::documentStorage()->document(Domain::DocumentObjectType::Characters);
+    auto model = d->modelsFacade.modelFor(document);
+    auto charactersModel = qobject_cast<BusinessLayer::CharactersModel*>(model);
+    if (charactersModel == nullptr) {
+        return;
+    }
+
+    charactersModel->createCharacter(_name, _content.toUtf8());
+}
+
+void ProjectManager::addLocation(const QString& _name, const QString& _content)
+{
+    auto document = DataStorageLayer::StorageFacade::documentStorage()->document(Domain::DocumentObjectType::Locations);
+    auto model = d->modelsFacade.modelFor(document);
+    auto charactersModel = qobject_cast<BusinessLayer::LocationsModel*>(model);
+    if (charactersModel == nullptr) {
+        return;
+    }
+
+    charactersModel->createLocation(_name, _content.toUtf8());
+}
+
 void ProjectManager::addScreenplay(const QString& _name, const QString& _titlePage,
-    const QString& _synopsis, const QString& _outline, const QString& _text)
+    const QString& _synopsis, const QString& _treatment, const QString& _text)
 {
     //
     // ATTENTION: Копипаста из StructureModel, быть внимательным при обновлении
@@ -600,21 +694,19 @@ void ProjectManager::addScreenplay(const QString& _name, const QString& _titlePa
 
     auto createItem = [] (DocumentObjectType _type, const QString& _name) {
         auto uuid = QUuid::createUuid();
-        return new BusinessLayer::StructureModelItem(uuid, _type, _name, {});
+        const auto visible = true;
+        return new BusinessLayer::StructureModelItem(uuid, _type, _name, {}, visible);
     };
 
     auto rootItem = d->projectStructureModel->itemForIndex({});
     auto screenplayItem = createItem(DocumentObjectType::Screenplay, _name);
     d->projectStructureModel->appendItem(screenplayItem, rootItem);
 
-    d->projectStructureModel->appendItem(createItem(DocumentObjectType::ScreenplayTitlePage,
-                                                    tr("Title page")), screenplayItem, _titlePage);
-    d->projectStructureModel->appendItem(createItem(DocumentObjectType::ScreenplaySynopsis,
-                                                    tr("Synopsis")), screenplayItem, _synopsis);
-    d->projectStructureModel->appendItem(createItem(DocumentObjectType::ScreenplayOutline,
-                                                    tr("Outline")), screenplayItem, _outline);
-    d->projectStructureModel->appendItem(createItem(DocumentObjectType::ScreenplayText,
-                                                    tr("Screenplay")), screenplayItem, _text);
+    d->projectStructureModel->appendItem(createItem(DocumentObjectType::ScreenplayTitlePage, tr("Title page")), screenplayItem, _titlePage.toUtf8());
+    d->projectStructureModel->appendItem(createItem(DocumentObjectType::ScreenplaySynopsis, tr("Synopsis")), screenplayItem, _synopsis.toUtf8());
+    d->projectStructureModel->appendItem(createItem(DocumentObjectType::ScreenplayTreatment, tr("Treatment")), screenplayItem, _treatment.toUtf8());
+    d->projectStructureModel->appendItem(createItem(DocumentObjectType::ScreenplayText, tr("Text")), screenplayItem, _text.toUtf8());
+    d->projectStructureModel->appendItem(createItem(DocumentObjectType::ScreenplayStatistics, tr("Statistics")), screenplayItem, {});
 }
 
 void ProjectManager::handleModelChange(BusinessLayer::AbstractModel* _model,
@@ -630,7 +722,8 @@ void ProjectManager::handleModelChange(BusinessLayer::AbstractModel* _model,
 
 void ProjectManager::showView(const QModelIndex& _itemIndex, const QString& _viewMimeType)
 {
-    const auto item = d->projectStructureModel->itemForIndex(_itemIndex);
+    const auto mappedItemIndex = d->projectStructureProxyModel->mapToSource(_itemIndex);
+    const auto item = d->projectStructureModel->itemForIndex(mappedItemIndex);
 
     //
     // Определим модель
@@ -656,7 +749,7 @@ void ProjectManager::showView(const QModelIndex& _itemIndex, const QString& _vie
     // Настроим возможность перехода в навигатор
     //
     const auto navigatorMimeType = d->pluginsBuilder.navigatorMimeTypeFor(_viewMimeType);
-    d->projectStructureModel->setNavigatorAvailableFor(_itemIndex, !navigatorMimeType.isEmpty());
+    d->projectStructureModel->setNavigatorAvailableFor(mappedItemIndex, !navigatorMimeType.isEmpty());
 
     //
     // Если в данный момент отображён кастомный навигатов, откроем навигатор соответствующий редактору
@@ -668,12 +761,13 @@ void ProjectManager::showView(const QModelIndex& _itemIndex, const QString& _vie
 
 void ProjectManager::showNavigator(const QModelIndex& _itemIndex, const QString& _viewMimeType)
 {
-    if (!_itemIndex.isValid()) {
+    const auto mappedItemIndex = d->projectStructureProxyModel->mapToSource(_itemIndex);
+    if (!mappedItemIndex.isValid()) {
         d->navigator->showProjectNavigator();
         return;
     }
 
-    const auto item = d->projectStructureModel->itemForIndex(_itemIndex);
+    const auto item = d->projectStructureModel->itemForIndex(mappedItemIndex);
 
     //
     // Определим модель

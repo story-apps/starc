@@ -25,9 +25,14 @@ public:
     void addCharacterModel(CharacterModel* _characterModel);
 
     /**
+     * @brief Удалить модель персонажа
+     */
+    void removeCharacterModel(CharacterModel* _characterModel);
+
+    /**
      * @brief Создать персонажа с заданным именем
      */
-    void createCharacter(const QString& _name);
+    void createCharacter(const QString& _name, const QByteArray& _content = {});
 
     /**
      * @brief Реализация древовидной модели
@@ -45,7 +50,7 @@ signals:
     /**
      * @brief Необходимо создать персонажа с заданным именем
      */
-    void createCharacterRequested(const QString& _name);
+    void createCharacterRequested(const QString& _name, const QByteArray& _content);
 
 protected:
     /**

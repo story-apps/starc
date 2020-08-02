@@ -82,7 +82,7 @@ QWidget* UpgradeToProDialog::focusedWidgetAfterShow() const
 
 void UpgradeToProDialog::updateTranslations()
 {
-    setTitle(tr("Upgrade to pro for $39.99 lifetime"));
+//    setTitle(tr("Upgrade to pro for $39.99 lifetime"));
     d->paypal->setText(tr("via PayPal"));
     d->bankCard->setText(tr("via bank card"));
     d->yandexMoney->setText(tr("via Yandex.Money"));

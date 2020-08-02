@@ -90,6 +90,7 @@ void TextField::Implementation::reconfigure(TextField* _textField)
     QSignalBlocker signalBlocker(_textField);
 
     _textField->setFont(Ui::DesignSystem::font().body1());
+    _textField->setCursorWidth(Ui::DesignSystem::layout().px4());
 
     QPalette palette = _textField->palette();
     palette.setColor(QPalette::Base, Qt::transparent);
@@ -230,11 +231,12 @@ TextField::TextField(QWidget* _parent)
       d(new Implementation)
 {
     setAttribute(Qt::WA_Hover);
+    setContextMenuPolicy(Qt::CustomContextMenu);
     setFrameShape(QFrame::NoFrame);
-    setWordWrapMode(QTextOption::WordWrap);
     setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
-    setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
     setTabChangesFocus(true);
+    setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
+    setWordWrapMode(QTextOption::WrapAtWordBoundaryOrAnywhere);
     viewport()->setMouseTracking(true);
 
     QSizePolicy policy(QSizePolicy::Preferred, QSizePolicy::Preferred);

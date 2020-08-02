@@ -8,6 +8,7 @@
 
 #include <QAbstractItemModel>
 #include <QHBoxLayout>
+#include <QScrollBar>
 #include <QVariantAnimation>
 
 
@@ -180,6 +181,13 @@ bool ComboBox::event(QEvent* _event)
 void ComboBox::focusOutEvent(QFocusEvent* _event)
 {
     TextField::focusOutEvent(_event);
+
+    //
+    // Не скрываем попап, если фокус перешёл на его полосу прокрутки
+    //
+    if (d->popupContent->verticalScrollBar()->underMouse()) {
+        return;
+    }
 
     setTrailingIcon(u8"\U000f035d");
     setTrailingIconColor({});

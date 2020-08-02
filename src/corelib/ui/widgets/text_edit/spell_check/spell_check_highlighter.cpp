@@ -44,9 +44,9 @@ SpellCheckHighlighter::Implementation::Implementation(const SpellChecker& _check
 // ****
 
 
-SpellCheckHighlighter::SpellCheckHighlighter(QTextDocument* _parent, const SpellChecker& _checker) :
-    SyntaxHighlighter(_parent),
-    d(new Implementation(_checker))
+SpellCheckHighlighter::SpellCheckHighlighter(QTextDocument* _parent, const SpellChecker& _checker)
+    : SyntaxHighlighter(_parent),
+      d(new Implementation(_checker))
 {
 }
 

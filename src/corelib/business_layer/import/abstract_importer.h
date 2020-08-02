@@ -2,7 +2,7 @@
 
 #include <corelib_global.h>
 
-#include <QString>
+#include <QVector>
 
 
 namespace BusinessLayer
@@ -18,13 +18,33 @@ public:
     virtual ~AbstractImporter() = default;
 
     /**
+     * @brief Вспомогательные структуры для хранения данных импортируемых документов
+     */
+    struct Document {
+        QString name;
+        QString content;
+    };
+    struct Documents {
+        //
+        // <Название, контент>
+        //
+        QVector<Document> characters;
+        QVector<Document> locations;
+    };
+
+    /**
+     * @brief Импорт докуметов (всех, кроме сценариев)
+     */
+    virtual Documents importDocuments(const ImportOptions& _options) const = 0;
+
+    /**
      * @brief Вспомогательная структура для хранения данных импортированного сценария
      */
     struct Screenplay {
         QString name;
         QString titlePage;
         QString synopsis;
-        QString outline;
+        QString treatment;
         QString text;
     };
 

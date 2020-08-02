@@ -26,6 +26,16 @@ public:
     void setContained(bool _contained);
 
     /**
+     * @brief Установить необходимость нарисовать рамку кнопки
+     */
+    void setOutlined(bool _outlined);
+
+    /**
+     * @brief Установить необходимость нарисовать плоский фон
+     */
+    void setFlat(bool _flat);
+
+    /**
      * @brief Имитировать клик пользователя на кнопке для испускания сигнала
      */
     void click();

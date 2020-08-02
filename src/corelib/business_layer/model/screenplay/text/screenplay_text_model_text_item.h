@@ -2,6 +2,10 @@
 
 #include "screenplay_text_model_item.h"
 
+#include <QColor>
+#include <QString>
+#include <QTextLayout>
+
 class QDomElement;
 
 
@@ -15,6 +19,39 @@ enum class ScreenplayParagraphType;
  */
 class CORE_LIBRARY_EXPORT ScreenplayTextModelTextItem : public ScreenplayTextModelItem
 {
+public:
+    struct TextPart {
+        int from = 0;
+        int length = 0;
+        int end() const;
+    };
+    struct TextFormat : TextPart {
+        bool isBold = false;
+        bool isItalic = false;
+        bool isUnderline = false;
+
+        bool operator==(const TextFormat& _other) const;
+
+        bool isValid() const;
+    };
+    struct ReviewComment {
+        QString author;
+        QString date;
+        QString text;
+
+        bool operator==(const ReviewComment& _other) const;
+    };
+    struct ReviewMark : TextPart {
+        QColor textColor;
+        QColor backgroundColor;
+        bool isDone = false;
+        QVector<ReviewComment> comments;
+
+        bool operator==(const ReviewMark& _other) const;
+
+        QTextCharFormat charFormat() const;
+    };
+
 public:
     ScreenplayTextModelTextItem();
     explicit ScreenplayTextModelTextItem(const QDomElement& _node);
@@ -37,6 +74,18 @@ public:
      */
     const QString& text() const;
     void setText(const QString& _text);
+
+    /**
+     * @brief Форматирование в блоке
+     */
+    void setFormats(const QVector<QTextLayout::FormatRange>& _formats);
+
+    /**
+     * @brief Редакторские заметки
+     */
+    const QVector<ReviewMark>& reviewMarks() const;
+    void setReviewMarks(const QVector<ReviewMark>& _reviewMarks);
+    void setReviewMarks(const QVector<QTextLayout::FormatRange>& _reviewMarks);
 
     /**
      * @brief Определяем интерфейс получения данных сцены

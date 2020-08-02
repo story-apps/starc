@@ -1,7 +1,11 @@
 #include "import_manager.h"
 
-#include <business_layer/import/kit_scenarist_importer.h>
+#include <business_layer/import/celtx_importer.h>
+#include <business_layer/import/document_importer.h>
+#include <business_layer/import/fdx_importer.h>
 #include <business_layer/import/import_options.h>
+#include <business_layer/import/kit_scenarist_importer.h>
+#include <business_layer/import/trelby_importer.h>
 
 #include <data_layer/storage/settings_storage.h>
 #include <data_layer/storage/storage_facade.h>
@@ -90,25 +94,31 @@ void ImportManager::Implementation::import(const BusinessLayer::ImportOptions& _
 
         } else if (importFilePath.endsWith(ExtensionHelper::kitScenarist())) {
             importer.reset(new BusinessLayer::KitScenaristImporter);
-        } else if (importFilePath.endsWith(ExtensionHelper::finalDraft())) {
-
-        } else if (importFilePath.endsWith(ExtensionHelper::finalDraftTemplate())) {
-
+        } else if (importFilePath.endsWith(ExtensionHelper::finalDraft())
+                   || importFilePath.endsWith(ExtensionHelper::finalDraftTemplate())) {
+            importer.reset(new BusinessLayer::FdxImporter);
         } else if (importFilePath.endsWith(ExtensionHelper::trelby())) {
-
-        } else if (importFilePath.endsWith(ExtensionHelper::msOfficeBinary())) {
-
-        } else if (importFilePath.endsWith(ExtensionHelper::msOfficeOpenXml())) {
-
-        } else if (importFilePath.endsWith(ExtensionHelper::openDocumentXml())) {
-
-        } else if (importFilePath.endsWith(ExtensionHelper::fountain())) {
-
+            importer.reset(new BusinessLayer::TrelbyImporter);
+        } else if (importFilePath.endsWith(ExtensionHelper::msOfficeOpenXml())
+                   || importFilePath.endsWith(ExtensionHelper::openDocumentXml())) {
+            importer.reset(new BusinessLayer::DocumentImporter);
         } else if (importFilePath.endsWith(ExtensionHelper::celtx())) {
-
-        } else if (importFilePath.endsWith(ExtensionHelper::plainText())) {
+            importer.reset(new BusinessLayer::CeltxImporter);
+        } else if (importFilePath.endsWith(ExtensionHelper::fountain())
+                   || importFilePath.endsWith(ExtensionHelper::plainText())) {
 
         }
+    }
+
+    //
+    // Импортируем документы
+    //
+    const auto documents = importer->importDocuments(_options);
+    for (const auto& character : documents.characters) {
+        emit q->characterImported(character.name, character.content);
+    }
+    for (const auto& location : documents.locations) {
+        emit q->locationImported(location.name, location.content);
     }
 
     //
@@ -117,7 +127,7 @@ void ImportManager::Implementation::import(const BusinessLayer::ImportOptions& _
     const auto screenplays = importer->importScreenplays(_options);
     for (const auto& screenplay : screenplays) {
         emit q->screenplayImported(screenplay.name, screenplay.titlePage, screenplay.synopsis,
-            screenplay.outline, screenplay.text);
+                                   screenplay.treatment, screenplay.text);
     }
 }
 
