@@ -12,6 +12,8 @@
 
 #include <domain/document_object.h>
 
+#include <utils/helpers/text_helper.h>
+
 #include <qtzip/QtZipReader>
 
 #include <QFileInfo>
@@ -74,7 +76,6 @@ AbstractImporter::Documents CeltxImporter::importDocuments(const ImportOptions& 
     const auto scriptDocument = QGumboDocument::parse(scriptHtml.toUtf8());
     const auto rootNode = scriptDocument.rootNode();
     const auto pNodes = rootNode.getElementsByTagName(HtmlTag::P);
-    bool alreadyInScene = false;
     for (const auto& pNode : pNodes) {
         const QString pNodeClass = pNode.getAttribute("class");
         auto blockType = ScreenplayParagraphType::Undefined;
@@ -205,6 +206,52 @@ QVector<AbstractImporter::Screenplay> CeltxImporter::importScreenplays(const Imp
             }
         }
 
+        QVector<ScreenplayTextModelTextItem::ReviewMark> reviewMarks;
+        QVector<ScreenplayTextModelTextItem::TextFormat> formats;
+        for (const auto& child : pNode.children()) {
+            if (child.tag() != HtmlTag::SPAN) {
+                continue;
+            }
+
+            //
+            // Обработать заметку
+            //
+            if (child.hasAttribute("text")) {
+                QString colorText = child.getAttribute("style");
+                colorText = colorText.remove(0, colorText.indexOf("(") + 1);
+                colorText = colorText.left(colorText.indexOf(")"));
+                colorText = colorText.remove(" ");
+                const QStringList colorComponents = colorText.split(",");
+                if (colorComponents.size() == 3) {
+                    ScreenplayTextModelTextItem::ReviewMark note;
+                    note.from = 0;
+                    note.length = paragraphText.length();
+                    note.backgroundColor = QColor(colorComponents[0].toInt(), colorComponents[1].toInt(), colorComponents[2].toInt());
+                    note.comments.append({ "celtx user", QDateTime::currentDateTime().toString(Qt::ISODate), child.getAttribute("text") });
+                    reviewMarks.append(note);
+                }
+            }
+            //
+            // Обработать форматированный текст
+            //
+            else {
+                const QString childText = child.innerText();
+                const int childStartPosition = pNode.childStartPosition(child);
+                paragraphText.insert(childStartPosition, childText);
+
+                const QString style = child.getAttribute("style");
+                ScreenplayTextModelTextItem::TextFormat format;
+                format.from = childStartPosition;
+                format.length = childText.length();
+                format.isBold = style.contains("font-weight: bold;");
+                format.isItalic = style.contains("font-style: italic;");
+                format.isUnderline = style.contains("text-decoration: underline;");
+                if (format.isValid()) {
+                    formats.append(format);
+                }
+            }
+        }
+
         //
         // Формируем блок сценария
         //
@@ -221,8 +268,51 @@ QVector<AbstractImporter::Screenplay> CeltxImporter::importScreenplays(const Imp
         }
         writer.writeStartElement(toString(blockType));
         writer.writeStartElement(xml::kValueTag);
-        writer.writeCDATA(paragraphText);
+        writer.writeCDATA(TextHelper::toHtmlEscaped(paragraphText));
         writer.writeEndElement(); // value
+        //
+        // Пишем редакторские заметки
+        //
+        if (!reviewMarks.isEmpty()) {
+            writer.writeStartElement(xml::kReviewMarksTag);
+            for (const auto& reviewMark : std::as_const(reviewMarks)) {
+                writer.writeStartElement(xml::kReviewMarkTag);
+                writer.writeAttribute(xml::kFromAttribute, QString::number(reviewMark.from));
+                writer.writeAttribute(xml::kLengthAttribute, QString::number(reviewMark.length));
+                writer.writeAttribute(xml::kBackgroundColorAttribute, reviewMark.backgroundColor.name());
+                for (const auto& comment : std::as_const(reviewMark.comments)) {
+                    writer.writeStartElement(xml::kCommentTag);
+                    writer.writeAttribute(xml::kAuthorAttribute, comment.author);
+                    writer.writeAttribute(xml::kDateAttribute, comment.date);
+                    writer.writeCDATA(TextHelper::toHtmlEscaped(comment.text));
+                    writer.writeEndElement(); // comment
+                }
+                writer.writeEndElement();
+            }
+            writer.writeEndElement(); // review marks
+        }
+        //
+        // Пишем форматирование
+        //
+        if (!formats.isEmpty()) {
+            writer.writeStartElement(xml::kFormatsTag);
+            for (const auto& format : std::as_const(formats)) {
+                writer.writeEmptyElement(xml::kFormatTag);
+                writer.writeAttribute(xml::kFromAttribute, QString::number(format.from));
+                writer.writeAttribute(xml::kLengthAttribute, QString::number(format.length));
+                if (format.isBold) {
+                    writer.writeAttribute(xml::kBoldAttribute, "true");
+                }
+                if (format.isItalic) {
+                    writer.writeAttribute(xml::kItalicAttribute, "true");
+                }
+                if (format.isUnderline) {
+                    writer.writeAttribute(xml::kUnderlineAttribute, "true");
+                }
+            }
+            writer.writeEndElement(); // formats
+        }
+        //
         writer.writeEndElement(); // block type
     }
     writer.writeEndDocument();
