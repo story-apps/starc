@@ -303,7 +303,7 @@ void OnboardingView::updateTranslations()
     d->languageTitleLabel->setText(tr("Choose preferred language"));
     d->languageHowToAddLink->setText(tr("Did not find your preffered language? Read how you can add it yourself."));
     d->goToThemeButton->setText(tr("Continue"));
-    d->skipOnboardingButton->setText(tr("Skip onboarding"));
+    d->skipOnboardingButton->setText(tr("Skip initial setup"));
 
     d->themeTitleLabel->setText(tr("Choose application theme"));
     d->darkAndLightThemeButton->setText(tr("Dark & light theme"));

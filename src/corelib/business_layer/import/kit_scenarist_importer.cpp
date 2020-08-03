@@ -391,7 +391,9 @@ QVector<AbstractImporter::Screenplay> KitScenaristImporter::importScreenplays(co
                                                   "</scenario>\n";
                 if (kitScreenplayXml != defaultKitScreenplay) {
                     auto screenplay = readScreenplay(kitScreenplayXml);
-                    screenplay.name = QString("%1 (%2)").arg(name, QApplication::translate("BusinessLayer::KitScenaristImporter", "draft"));
+                    screenplay.name = QString("%1 (%2)").arg(name,
+                                         //: Draft screenplay imported from KIT Scenarist file
+                                         QApplication::translate("BusinessLayer::KitScenaristImporter", "draft"));
                     result.append(screenplay);
                 }
             }

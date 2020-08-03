@@ -18,7 +18,7 @@ namespace {
                     QApplication::translate("StandardDialog", "Wonderful"),
                     QApplication::translate("StandardDialog", "Alright"),
                     QApplication::translate("StandardDialog", "So-so"),
-                    QApplication::translate("StandardDialog", "Amaizing"),
+                    QApplication::translate("StandardDialog", "Amazing"),
                     QApplication::translate("StandardDialog", "Cool"),
                     QApplication::translate("StandardDialog", "Gorgeous"),
                     QApplication::translate("StandardDialog", "Fine") };

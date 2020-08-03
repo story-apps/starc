@@ -2,6 +2,48 @@
 <!DOCTYPE TS>
 <TS version="2.1" language="ru_RU">
 <context>
+    <name>BusinessLayer::FountainImporter</name>
+    <message>
+        <location filename="../../corelib/business_layer/import/fountain_importer.cpp" line="32"/>
+        <source>INT</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../corelib/business_layer/import/fountain_importer.cpp" line="33"/>
+        <source>EXT</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../corelib/business_layer/import/fountain_importer.cpp" line="34"/>
+        <source>EST</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../corelib/business_layer/import/fountain_importer.cpp" line="35"/>
+        <source>INT./EXT</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../corelib/business_layer/import/fountain_importer.cpp" line="36"/>
+        <source>INT/EXT</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../corelib/business_layer/import/fountain_importer.cpp" line="37"/>
+        <source>I/E</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>BusinessLayer::KitScenaristImporter</name>
+    <message>
+        <location filename="../../corelib/business_layer/import/kit_scenarist_importer.cpp" line="396"/>
+        <source>draft</source>
+        <extracomment>Draft screenplay imported from KIT Scenarist file</extracomment>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
     <name>BusinessLayer::ScreenplayDictionariesModel</name>
     <message>
         <location filename="../../corelib/business_layer/model/screenplay/screenplay_dictionaries_model.cpp" line="155"/>
@@ -145,47 +187,47 @@
 <context>
     <name>BusinessLayer::StructureModel</name>
     <message>
-        <location filename="../../corelib/business_layer/model/structure/structure_model.cpp" line="182"/>
+        <location filename="../../corelib/business_layer/model/structure/structure_model.cpp" line="184"/>
         <source>Recycle bin</source>
         <translation>Корзина</translation>
     </message>
     <message>
-        <location filename="../../corelib/business_layer/model/structure/structure_model.cpp" line="187"/>
+        <location filename="../../corelib/business_layer/model/structure/structure_model.cpp" line="189"/>
         <source>Screenplay</source>
         <translation>Сценарий</translation>
     </message>
     <message>
-        <location filename="../../corelib/business_layer/model/structure/structure_model.cpp" line="189"/>
+        <location filename="../../corelib/business_layer/model/structure/structure_model.cpp" line="191"/>
         <source>Title page</source>
         <translation>Титульная страница</translation>
     </message>
     <message>
-        <location filename="../../corelib/business_layer/model/structure/structure_model.cpp" line="190"/>
+        <location filename="../../corelib/business_layer/model/structure/structure_model.cpp" line="192"/>
         <source>Synopsis</source>
         <translation>Синопсис</translation>
     </message>
     <message>
-        <location filename="../../corelib/business_layer/model/structure/structure_model.cpp" line="191"/>
+        <location filename="../../corelib/business_layer/model/structure/structure_model.cpp" line="193"/>
         <source>Treatment</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../corelib/business_layer/model/structure/structure_model.cpp" line="192"/>
+        <location filename="../../corelib/business_layer/model/structure/structure_model.cpp" line="194"/>
         <source>Text</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../corelib/business_layer/model/structure/structure_model.cpp" line="193"/>
+        <location filename="../../corelib/business_layer/model/structure/structure_model.cpp" line="195"/>
         <source>Statistics</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../corelib/business_layer/model/structure/structure_model.cpp" line="198"/>
+        <location filename="../../corelib/business_layer/model/structure/structure_model.cpp" line="200"/>
         <source>Characters</source>
         <translation>Персонажи</translation>
     </message>
     <message>
-        <location filename="../../corelib/business_layer/model/structure/structure_model.cpp" line="203"/>
+        <location filename="../../corelib/business_layer/model/structure/structure_model.cpp" line="205"/>
         <source>Locations</source>
         <translation>Локации</translation>
     </message>
@@ -228,9 +270,13 @@
 <context>
     <name>DatabaseLayer::Database</name>
     <message>
-        <location filename="../../corelib/data_layer/database.cpp" line="91"/>
         <source>Project was modified in higher version. You need update application to latest version for open it.</source>
-        <translation>Проект был изменён в более поздней версии. Вам нужно обновиться, чтобы открыть его.</translation>
+        <translation type="vanished">Проект был изменён в более поздней версии. Вам нужно обновиться, чтобы открыть его.</translation>
+    </message>
+    <message>
+        <location filename="../../corelib/data_layer/database.cpp" line="91"/>
+        <source>Project was modified in a newer version. Update to the latest version to open it.</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -292,6 +338,14 @@
     </message>
 </context>
 <context>
+    <name>DocxReader</name>
+    <message>
+        <location filename="../../3rd_party/fileformats/docx_reader.cpp" line="145"/>
+        <source>Unable to open archive.</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
     <name>Domain::Project</name>
     <message>
         <location filename="../management_layer/content/projects/project.cpp" line="150"/>
@@ -305,9 +359,37 @@
     </message>
 </context>
 <context>
+    <name>FormatManager</name>
+    <message>
+        <location filename="../../3rd_party/fileformats/format_manager.cpp" line="71"/>
+        <source>OpenDocument Text</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../3rd_party/fileformats/format_manager.cpp" line="73"/>
+        <source>Office Open XML</source>
+        <translation type="unfinished">Документ Microsoft Office</translation>
+    </message>
+    <message>
+        <location filename="../../3rd_party/fileformats/format_manager.cpp" line="75"/>
+        <source>Rich Text Format</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../3rd_party/fileformats/format_manager.cpp" line="77"/>
+        <source>Plain Text</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../3rd_party/fileformats/format_manager.cpp" line="107"/>
+        <source>All Supported Files</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
     <name>KeyProcessingLayer::FolderFooterHandler</name>
     <message>
-        <location filename="../management_layer/plugins/screenplay_text/text/screenplay_text_edit.cpp" line="855"/>
+        <location filename="../management_layer/plugins/screenplay_text/text/screenplay_text_edit.cpp" line="870"/>
         <source>END OF</source>
         <translation>КОНЕЦ</translation>
     </message>
@@ -365,8 +447,12 @@
     </message>
     <message>
         <location filename="../management_layer/application_manager.cpp" line="720"/>
+        <source>You tried to create a project in nonexistent folder %1. Please, choose another location for the new project.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
         <source>You try to create a project in nonexistent folder %1. Please, choose another location for the new project.</source>
-        <translation>Нельзя создать файл в папке, которой не существует: %1. Пожалуйста, выберите существующую папку.</translation>
+        <translation type="vanished">Нельзя создать файл в папке, которой не существует: %1. Пожалуйста, выберите существующую папку.</translation>
     </message>
     <message>
         <location filename="../management_layer/application_manager.cpp" line="725"/>
@@ -401,17 +487,17 @@
 <context>
     <name>ManagementLayer::ImportManager</name>
     <message>
-        <location filename="../management_layer/content/import/import_manager.cpp" line="60"/>
+        <location filename="../management_layer/content/import/import_manager.cpp" line="65"/>
         <source>File format not supported</source>
         <translation>Формат файла не поддерживается</translation>
     </message>
     <message>
-        <location filename="../management_layer/content/import/import_manager.cpp" line="61"/>
+        <location filename="../management_layer/content/import/import_manager.cpp" line="66"/>
         <source>Importing from DOC files is not supported. You need to save the file in DOCX format and repeat the import.</source>
         <translation>Импорт файлов в формате DOC не поддерживается. Вам нужно сохранить файл в формате DOCX и повторить импорт.</translation>
     </message>
     <message>
-        <location filename="../management_layer/content/import/import_manager.cpp" line="148"/>
+        <location filename="../management_layer/content/import/import_manager.cpp" line="157"/>
         <source>Choose the file to import</source>
         <translation>Выберите файл для импорта</translation>
     </message>
@@ -427,61 +513,70 @@
 <context>
     <name>ManagementLayer::ProjectManager</name>
     <message>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="131"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="137"/>
         <source>Empty recycle bin</source>
         <translation>Очистить корзину</translation>
     </message>
     <message>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="140"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="146"/>
         <source>Add document</source>
         <translation>Добавить документ</translation>
     </message>
     <message>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="155"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="161"/>
         <source>Remove document</source>
         <translation>Удалить документ</translation>
     </message>
     <message>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="246"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="265"/>
         <source>Do you really want to permanently remove document?</source>
         <translation>Вы действительно хотите удалить документ из корзины?</translation>
     </message>
     <message>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="247"/>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="289"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="266"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="308"/>
         <source>No</source>
         <translation>Нет</translation>
     </message>
     <message>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="248"/>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="290"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="267"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="309"/>
         <source>Yes, remove</source>
         <translation>Да, удалить</translation>
     </message>
     <message>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="288"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="307"/>
         <source>Do you really want to permanently remove all documents from the recycle bin?</source>
         <translation>Удалить все элементы из корзины без возможности восстановления?</translation>
     </message>
     <message>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="671"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="705"/>
         <source>Title page</source>
         <translation>Титульная страница</translation>
     </message>
     <message>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="673"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="706"/>
         <source>Synopsis</source>
         <translation>Синопсис</translation>
     </message>
     <message>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="675"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="707"/>
         <source>Treatment</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="677"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="708"/>
+        <source>Text</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="709"/>
+        <source>Statistics</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
         <source>Screenplay</source>
-        <translation>Сценарий</translation>
+        <translation type="vanished">Сценарий</translation>
     </message>
 </context>
 <context>
@@ -498,6 +593,14 @@
         <location filename="../management_layer/content/settings/settings_manager.cpp" line="236"/>
         <source>Spelling dictionary loading</source>
         <translation>Загрузка орфографического словаря</translation>
+    </message>
+</context>
+<context>
+    <name>OdtReader</name>
+    <message>
+        <location filename="../../3rd_party/fileformats/odt_reader.cpp" line="77"/>
+        <source>Unable to open archive.</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -554,6 +657,23 @@
     </message>
 </context>
 <context>
+    <name>RtfReader</name>
+    <message>
+        <location filename="../../3rd_party/fileformats/rtf_reader.cpp" line="341"/>
+        <location filename="../../3rd_party/fileformats/rtf_reader.cpp" line="345"/>
+        <source>Not a supported RTF file.</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>RtfTokenizer</name>
+    <message>
+        <location filename="../../3rd_party/fileformats/rtf_tokenizer.cpp" line="151"/>
+        <source>Unexpectedly reached end of file.</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
     <name>StandardDialog</name>
     <message>
         <location filename="../../corelib/ui/widgets/dialog/standard_dialog.cpp" line="13"/>
@@ -597,8 +717,12 @@
     </message>
     <message>
         <location filename="../../corelib/ui/widgets/dialog/standard_dialog.cpp" line="21"/>
+        <source>Amazing</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
         <source>Amaizing</source>
-        <translation>Изумительно</translation>
+        <translation type="vanished">Изумительно</translation>
     </message>
     <message>
         <location filename="../../corelib/ui/widgets/dialog/standard_dialog.cpp" line="22"/>
@@ -759,9 +883,8 @@ from 2 Gb</source>
         <translation>Название</translation>
     </message>
     <message>
-        <location filename="../ui/project/create_document_dialog.cpp" line="133"/>
         <source>Insert into parent</source>
-        <translation>Вставить в родителя</translation>
+        <translation type="vanished">Вставить в родителя</translation>
     </message>
     <message>
         <location filename="../ui/project/create_document_dialog.cpp" line="134"/>
@@ -865,52 +988,55 @@ from 2 Gb</source>
 <context>
     <name>Ui::ImportDialog</name>
     <message>
-        <location filename="../ui/import/import_dialog.cpp" line="128"/>
+        <location filename="../ui/import/import_dialog.cpp" line="125"/>
         <source>Import data from the file</source>
         <translation>Импортировать данные из файла</translation>
     </message>
     <message>
-        <location filename="../ui/import/import_dialog.cpp" line="130"/>
+        <location filename="../ui/import/import_dialog.cpp" line="127"/>
         <source>Documents</source>
         <translation>Документы</translation>
     </message>
     <message>
-        <location filename="../ui/import/import_dialog.cpp" line="131"/>
+        <location filename="../ui/import/import_dialog.cpp" line="128"/>
         <source>Import characters</source>
         <translation>Импортировать персонажей</translation>
     </message>
     <message>
-        <location filename="../ui/import/import_dialog.cpp" line="132"/>
+        <location filename="../ui/import/import_dialog.cpp" line="129"/>
         <source>Import locations</source>
         <translation>Импортировать локации</translation>
     </message>
     <message>
-        <location filename="../ui/import/import_dialog.cpp" line="133"/>
+        <location filename="../ui/import/import_dialog.cpp" line="130"/>
         <source>Screenplay</source>
         <translation>Сценарий</translation>
     </message>
     <message>
-        <location filename="../ui/import/import_dialog.cpp" line="134"/>
+        <location filename="../ui/import/import_dialog.cpp" line="131"/>
         <source>Import screenplay</source>
         <translation>Импортировать сценарий</translation>
     </message>
     <message>
-        <location filename="../ui/import/import_dialog.cpp" line="135"/>
+        <location filename="../ui/import/import_dialog.cpp" line="132"/>
+        <source>Keep scene numbers</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
         <source>Remove scene numbers</source>
-        <translation>Удалить номера сцен</translation>
+        <translation type="vanished">Удалить номера сцен</translation>
     </message>
     <message>
-        <location filename="../ui/import/import_dialog.cpp" line="136"/>
         <source>Import with review marks</source>
-        <translation>Импортировать с редакторскими заметками</translation>
+        <translation type="vanished">Импортировать с редакторскими заметками</translation>
     </message>
     <message>
-        <location filename="../ui/import/import_dialog.cpp" line="138"/>
+        <location filename="../ui/import/import_dialog.cpp" line="134"/>
         <source>Import</source>
         <translation>Импортировать</translation>
     </message>
     <message>
-        <location filename="../ui/import/import_dialog.cpp" line="139"/>
+        <location filename="../ui/import/import_dialog.cpp" line="135"/>
         <source>Cancel</source>
         <translation>Отмена</translation>
     </message>
@@ -1078,9 +1204,13 @@ from 2 Gb</source>
         <translation>Продолжить</translation>
     </message>
     <message>
-        <location filename="../ui/onboarding/onboarding_view.cpp" line="306"/>
         <source>Skip onboarding</source>
-        <translation>Пропустить настройку</translation>
+        <translation type="vanished">Пропустить настройку</translation>
+    </message>
+    <message>
+        <location filename="../ui/onboarding/onboarding_view.cpp" line="306"/>
+        <source>Skip initial setup</source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../ui/onboarding/onboarding_view.cpp" line="308"/>
@@ -1421,12 +1551,12 @@ from 2 Gb</source>
 <context>
     <name>Ui::ScreenplayTextEdit</name>
     <message>
-        <location filename="../management_layer/plugins/screenplay_text/text/screenplay_text_edit.cpp" line="1136"/>
+        <location filename="../management_layer/plugins/screenplay_text/text/screenplay_text_edit.cpp" line="1151"/>
         <source>Merge paragraph</source>
         <translation>Объединить параграф</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_text/text/screenplay_text_edit.cpp" line="1139"/>
+        <location filename="../management_layer/plugins/screenplay_text/text/screenplay_text_edit.cpp" line="1154"/>
         <source>Split paragraph</source>
         <translation>Разделить параграф</translation>
     </message>
@@ -1482,72 +1612,72 @@ from 2 Gb</source>
 <context>
     <name>Ui::ScreenplayTextView</name>
     <message>
-        <location filename="../management_layer/plugins/screenplay_text/screenplay_text_view.cpp" line="466"/>
+        <location filename="../management_layer/plugins/screenplay_text/screenplay_text_view.cpp" line="469"/>
         <source>Scene heading</source>
         <translation>Время и место</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_text/screenplay_text_view.cpp" line="467"/>
+        <location filename="../management_layer/plugins/screenplay_text/screenplay_text_view.cpp" line="470"/>
         <source>Scene characters</source>
         <translation>Участники сцены</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_text/screenplay_text_view.cpp" line="468"/>
+        <location filename="../management_layer/plugins/screenplay_text/screenplay_text_view.cpp" line="471"/>
         <source>Action</source>
         <translation>Действие</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_text/screenplay_text_view.cpp" line="469"/>
+        <location filename="../management_layer/plugins/screenplay_text/screenplay_text_view.cpp" line="472"/>
         <source>Character</source>
         <translation>Персонаж</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_text/screenplay_text_view.cpp" line="470"/>
+        <location filename="../management_layer/plugins/screenplay_text/screenplay_text_view.cpp" line="473"/>
         <source>Parenthetical</source>
         <translation>Ремарка</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_text/screenplay_text_view.cpp" line="471"/>
+        <location filename="../management_layer/plugins/screenplay_text/screenplay_text_view.cpp" line="474"/>
         <source>Dialogue</source>
         <translation>Реплика</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_text/screenplay_text_view.cpp" line="472"/>
+        <location filename="../management_layer/plugins/screenplay_text/screenplay_text_view.cpp" line="475"/>
         <source>Lyrics</source>
         <translation>Лирика</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_text/screenplay_text_view.cpp" line="473"/>
+        <location filename="../management_layer/plugins/screenplay_text/screenplay_text_view.cpp" line="476"/>
         <source>Shot</source>
         <translation>Кадр</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_text/screenplay_text_view.cpp" line="474"/>
+        <location filename="../management_layer/plugins/screenplay_text/screenplay_text_view.cpp" line="477"/>
         <source>Transition</source>
         <translation>Переход</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_text/screenplay_text_view.cpp" line="475"/>
+        <location filename="../management_layer/plugins/screenplay_text/screenplay_text_view.cpp" line="478"/>
         <source>Inline note</source>
         <translation>Заметка по тексту</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_text/screenplay_text_view.cpp" line="476"/>
+        <location filename="../management_layer/plugins/screenplay_text/screenplay_text_view.cpp" line="479"/>
         <source>Unformatted text</source>
         <translation>Простой текст</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_text/screenplay_text_view.cpp" line="477"/>
+        <location filename="../management_layer/plugins/screenplay_text/screenplay_text_view.cpp" line="480"/>
         <source>Folder</source>
         <translation>Папка</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_text/screenplay_text_view.cpp" line="478"/>
+        <location filename="../management_layer/plugins/screenplay_text/screenplay_text_view.cpp" line="481"/>
         <source>Formatting</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_text/screenplay_text_view.cpp" line="479"/>
+        <location filename="../management_layer/plugins/screenplay_text/screenplay_text_view.cpp" line="482"/>
         <source>Comments</source>
         <translation type="unfinished"></translation>
     </message>

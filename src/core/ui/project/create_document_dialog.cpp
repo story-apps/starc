@@ -130,7 +130,7 @@ void CreateDocumentDialog::updateTranslations()
 
     d->documentName->setLabel(tr("Name"));
     d->updateDocumentInfo();
-    d->insertIntoParent->setText(tr("Insert into parent"));
+//    d->insertIntoParent->setText(tr("Insert into parent"));
     d->cancelButton->setText(tr("Cancel"));
     d->createButton->setText(tr("Create"));
 }

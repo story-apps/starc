@@ -89,8 +89,7 @@ bool Database::canOpenFile(const QString &_databaseFileName)
             canOpen = false;
             s_openFileError
                 = QApplication::translate("DatabaseLayer::Database",
-                                          "Project was modified in higher version. You need update "
-                                          "application to latest version for open it.");
+                        "Project was modified in a newer version. Update to the latest version to open it.");
         }
     }
 

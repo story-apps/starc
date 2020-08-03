@@ -717,7 +717,7 @@ void ApplicationManager::Implementation::createLocalProject(const QString& _proj
         QString errorMessage;
         if (!fileInfo.dir().exists()) {
             errorMessage =
-                tr("You try to create a project in nonexistent folder %1. "
+                tr("You tried to create a project in nonexistent folder %1. "
                    "Please, choose another location for the new project.")
                 .arg(fileInfo.dir().absolutePath());
         } else if (fileInfo.exists()) {
