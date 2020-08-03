@@ -9,6 +9,8 @@
 
 #include <domain/document_object.h>
 
+#include <utils/helpers/text_helper.h>
+
 #include <QDomDocument>
 #include <QFile>
 #include <QFileInfo>
@@ -192,7 +194,7 @@ QVector<AbstractImporter::Screenplay> FdxImporter::importScreenplays(const Impor
         // Получим текст блока
         //
         QString paragraphText;
-        QVector<ScreenplayTextModelTextItem::TextFormat> formatting;
+        QVector<ScreenplayTextModelTextItem::TextFormat> formats;
         {
             QDomElement textNode = paragraph.firstChildElement("Text");
             while (!textNode.isNull()) {
@@ -208,7 +210,7 @@ QVector<AbstractImporter::Screenplay> FdxImporter::importScreenplays(const Impor
                     format.isItalic = style.contains("Italic");
                     format.isUnderline = style.contains("Underline");
                     if (format.isValid()) {
-                        formatting.append(format);
+                        formats.append(format);
                     }
                 }
                 //
@@ -303,11 +305,11 @@ QVector<AbstractImporter::Screenplay> FdxImporter::importScreenplays(const Impor
         }
         writer.writeStartElement(toString(blockType));
         writer.writeStartElement(xml::kValueTag);
-        writer.writeCDATA(paragraphText);
+        writer.writeCDATA(TextHelper::toHtmlEscaped(paragraphText));
         writer.writeEndElement(); // value
-        if (!formatting.isEmpty()) {
+        if (!formats.isEmpty()) {
             writer.writeStartElement(xml::kFormatsTag);
-            for (const auto& format : formatting){
+            for (const auto& format : std::as_const(formats)){
                 writer.writeStartElement(xml::kFormatTag);
                 //
                 // Данные пользовательского форматирования

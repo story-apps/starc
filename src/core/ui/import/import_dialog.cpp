@@ -28,8 +28,7 @@ public:
     CheckBox* importLocations = nullptr;
     OverlineLabel* screenplayTitle = nullptr;
     CheckBox* importScreenplay = nullptr;
-    CheckBox* removeSceneNumbers = nullptr;
-    CheckBox* keepReviewMarks = nullptr;
+    CheckBox* keepSceneNumbers = nullptr;
 
     QHBoxLayout* buttonsLayout = nullptr;
     Button* importButton = nullptr;
@@ -44,16 +43,17 @@ ImportDialog::Implementation::Implementation(const QString& _importFilePath, QWi
       importLocations(new CheckBox(_parent)),
       screenplayTitle(new OverlineLabel(_parent)),
       importScreenplay(new CheckBox(_parent)),
-      removeSceneNumbers(new CheckBox(_parent)),
-      keepReviewMarks(new CheckBox(_parent)),
+      keepSceneNumbers(new CheckBox(_parent)),
       buttonsLayout(new QHBoxLayout),
       importButton(new Button(_parent)),
       cancelButton(new Button(_parent))
 {
     for (auto checkBox : { importCharacters, importLocations,
-                           importScreenplay, removeSceneNumbers, keepReviewMarks }) {
+                           importScreenplay, keepSceneNumbers }) {
         checkBox->setChecked(true);
     }
+
+    keepSceneNumbers->hide();
 
     buttonsLayout->setContentsMargins({});
     buttonsLayout->setSpacing(0);
@@ -80,9 +80,8 @@ ImportDialog::ImportDialog(const QString& _importFilePath, QWidget* _parent)
     contentsLayout()->addWidget(d->importLocations, 2, 0);
     contentsLayout()->addWidget(d->screenplayTitle, 3, 0);
     contentsLayout()->addWidget(d->importScreenplay, 4, 0);
-    contentsLayout()->addWidget(d->removeSceneNumbers, 5, 0);
-    contentsLayout()->addWidget(d->keepReviewMarks, 6, 0);
-    contentsLayout()->addLayout(d->buttonsLayout, 7, 0);
+    contentsLayout()->addWidget(d->keepSceneNumbers, 5, 0);
+    contentsLayout()->addLayout(d->buttonsLayout, 6, 0);
 
     auto configureImportAvailability = [this] {
         d->importButton->setEnabled(d->importCharacters->isChecked()
@@ -93,8 +92,7 @@ ImportDialog::ImportDialog(const QString& _importFilePath, QWidget* _parent)
     connect(d->importLocations, &CheckBox::checkedChanged, this, configureImportAvailability);
     connect(d->importScreenplay, &CheckBox::checkedChanged, this, configureImportAvailability);
     connect(d->importScreenplay, &CheckBox::checkedChanged, this, [this] (bool _checked) {
-        d->removeSceneNumbers->setVisible(_checked);
-        d->keepReviewMarks->setVisible(_checked);
+//        d->keepSceneNumbers->setVisible(_checked);
     });
     connect(d->importButton, &Button::clicked, this, &ImportDialog::importRequested);
     connect(d->cancelButton, &Button::clicked, this, &ImportDialog::canceled);
@@ -112,8 +110,7 @@ BusinessLayer::ImportOptions ImportDialog::importOptions() const
     options.importCharacters = d->importCharacters->isChecked();
     options.importLocations = d->importLocations->isChecked();
     options.importScreenplay = d->importScreenplay->isChecked();
-    options.removeSceneNumbers = d->removeSceneNumbers->isChecked();
-    options.keepReviewMarks = d->keepReviewMarks->isChecked();
+    options.keepSceneNumbers = d->keepSceneNumbers->isChecked();
     return options;
 }
 
@@ -132,8 +129,7 @@ void ImportDialog::updateTranslations()
     d->importLocations->setText(tr("Import locations"));
     d->screenplayTitle->setText(tr("Screenplay"));
     d->importScreenplay->setText(tr("Import screenplay"));
-    d->removeSceneNumbers->setText(tr("Remove scene numbers"));
-    d->keepReviewMarks->setText(tr("Import with review marks"));
+    d->keepSceneNumbers->setText(tr("Keep scene numbers"));
 
     d->importButton->setText(tr("Import"));
     d->cancelButton->setText(tr("Cancel"));
@@ -153,7 +149,7 @@ void ImportDialog::designSystemChangeEvent(DesignSystemChangeEvent* _event)
     }
 
     for (auto checkBox : { d->importCharacters, d->importLocations,
-                           d->importScreenplay, d->removeSceneNumbers, d->keepReviewMarks }) {
+                           d->importScreenplay, d->keepSceneNumbers }) {
         checkBox->setBackgroundColor(Ui::DesignSystem::color().background());
         checkBox->setTextColor(Ui::DesignSystem::color().onBackground());
     }
