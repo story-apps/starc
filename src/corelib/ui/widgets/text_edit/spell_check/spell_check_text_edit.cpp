@@ -222,6 +222,7 @@ QTextCursor SpellCheckTextEdit::moveCursorToStartWord(QTextCursor cursor) const
     //
     while (cursor.positionInBlock() > 0 &&
            (text[cursor.positionInBlock()] == '\''
+            || text[cursor.positionInBlock()] == "’"
             || text[cursor.positionInBlock()] == '-'
             || text[cursor.positionInBlock() - 1] == '\''
             || text[cursor.positionInBlock() - 1] == '-')) {
@@ -233,7 +234,7 @@ QTextCursor SpellCheckTextEdit::moveCursorToStartWord(QTextCursor cursor) const
 
 QTextCursor SpellCheckTextEdit::moveCursorToEndWord(QTextCursor cursor) const
 {
-    QRegExp splitWord("[^\\w'-]");
+    QRegExp splitWord("[^\\w'’-]");
     splitWord.indexIn(cursor.block().text(), cursor.positionInBlock());
     int pos = splitWord.pos();
     if (pos == -1) {
