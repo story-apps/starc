@@ -105,6 +105,7 @@ SettingsManager::SettingsManager(QObject* _parent, QWidget* _parentWidget)
     connect(d->navigator, &Ui::SettingsNavigator::applicationUserInterfacePressed, d->view, &Ui::SettingsView::showApplicationUserInterface);
     connect(d->navigator, &Ui::SettingsNavigator::applicationSaveAndBackupsPressed, d->view, &Ui::SettingsView::showApplicationSaveAndBackups);
     connect(d->navigator, &Ui::SettingsNavigator::componentsPressed, d->view, &Ui::SettingsView::showComponents);
+    connect(d->navigator, &Ui::SettingsNavigator::componentsScreenplayPressed, d->view, &Ui::SettingsView::showComponentsScreenplay);
     connect(d->navigator, &Ui::SettingsNavigator::shortcutsPressed, d->view, &Ui::SettingsView::showShortcuts);
 
     connect(d->view, &Ui::SettingsView::applicationLanguagePressed, this, [this, _parentWidget] {

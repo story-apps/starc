@@ -191,7 +191,7 @@ public:
     /**
      * @brief Настроить карточку параметров компонентов
      */
-    void initComponentsCard();
+    void initScreenplayCard();
 
     /**
      * @brief Настроить карточку горячих клавиш
@@ -207,16 +207,23 @@ public:
     QScrollArea* content = nullptr;
     QVariantAnimation scrollAnimation;
 
+    //
+    // Application
+    //
     Card* applicationCard = nullptr;
     QGridLayout* applicationCardLayout = nullptr;
-    //
     H5Label* applicationTitle = nullptr;
+    //
+    // ... Common
+    //
     Body1Label* language = nullptr;
     Button* changeLanuage = nullptr;
     CheckBox* useTypewriterSound = nullptr;
     CheckBox* useSpellChecker = nullptr;
     ComboBox* spellCheckerLanguage = nullptr;
     QStandardItemModel* spellCheckerLanguagesModel = nullptr;
+    //
+    // ... User interface
     //
     H6Label* applicationUserInterfaceTitle = nullptr;
     Body1Label* theme = nullptr;
@@ -226,6 +233,8 @@ public:
     Body2Label* scaleFactorSmallInfo = nullptr;
     Body2Label* scaleFactorBigInfo = nullptr;
     //
+    // ... Save changes & backups
+    //
     H6Label* applicationSaveAndBackupTitle = nullptr;
     CheckBox* autoSave = nullptr;
     CheckBox* saveBackups = nullptr;
@@ -233,12 +242,28 @@ public:
     //
     int applicationCardBottomSpacerIndex = 0;
 
-    Card* componentsCard = nullptr;
-    QGridLayout* componentsCardLayout = nullptr;
+    H4Label* componentsTitle = nullptr;
+
     //
-    H5Label* componentsTitle = nullptr;
+    // Comonents
     //
-    int componentsCardBottomSpacerIndex = 0;
+    Card* screenplayCard = nullptr;
+    QGridLayout* screenplayCardLayout = nullptr;
+    H5Label* screenplayTitle = nullptr;
+    //
+    // ... Screenplay editor
+    //
+    H6Label* screenplayEditorTitle = nullptr;
+    CheckBox* screenplayEditorShowSceneNumber = nullptr;
+    CheckBox* screenplayEditorShowSceneNumberAtLeft = nullptr;
+    CheckBox* screenplayEditorShowSceneNumberAtRight = nullptr;
+    CheckBox* screenplayEditorShowDialogueNumber = nullptr;
+    CheckBox* screenplayEditorHighlightCurrentLine = nullptr;
+    //
+    // ... Screenplay navigator
+    //
+    //
+    int screenplayCardBottomSpacerIndex = 0;
 
     Card* shortcutsCard = nullptr;
     QGridLayout* shortcutsCardLayout = nullptr;
@@ -250,6 +275,7 @@ public:
 
 SettingsView::Implementation::Implementation(QWidget* _parent)
     : content(new QScrollArea(_parent)),
+      //
       applicationCard(new Card(content)),
       applicationCardLayout(new QGridLayout),
       applicationTitle(new H5Label(applicationCard)),
@@ -270,12 +296,22 @@ SettingsView::Implementation::Implementation(QWidget* _parent)
       autoSave(new CheckBox(applicationCard)),
       saveBackups(new CheckBox(applicationCard)),
       backupsFolderPath(new TextField(applicationCard)),
-      componentsCard(new Card(content)),
-      componentsCardLayout(new QGridLayout),
-      componentsTitle(new H5Label(applicationCard)),
+      //
+      componentsTitle(new H4Label(content)),
+      //
+      screenplayCard(new Card(content)),
+      screenplayCardLayout(new QGridLayout),
+      screenplayTitle(new H5Label(screenplayCard)),
+      screenplayEditorTitle(new H6Label(screenplayCard)),
+      screenplayEditorShowSceneNumber(new CheckBox(screenplayCard)),
+      screenplayEditorShowSceneNumberAtLeft(new CheckBox(screenplayCard)),
+      screenplayEditorShowSceneNumberAtRight(new CheckBox(screenplayCard)),
+      screenplayEditorShowDialogueNumber(new CheckBox(screenplayCard)),
+      screenplayEditorHighlightCurrentLine(new CheckBox(screenplayCard)),
+      //
       shortcutsCard(new Card(content)),
       shortcutsCardLayout(new QGridLayout),
-      shortcutsTitle(new H5Label(applicationCard))
+      shortcutsTitle(new H5Label(shortcutsCard))
 {
     QPalette palette;
     palette.setColor(QPalette::Base, Qt::transparent);
@@ -288,20 +324,20 @@ SettingsView::Implementation::Implementation(QWidget* _parent)
     scrollAnimation.setDuration(180);
 
     initApplicationCard();
-    initComponentsCard();
+    initScreenplayCard();
     initShortcutsCard();
 
     QWidget* contentWidget = new QWidget;
     content->setWidget(contentWidget);
     content->setWidgetResizable(true);
-    QVBoxLayout* layout = new QVBoxLayout;
+    QVBoxLayout* layout = new QVBoxLayout(contentWidget);
     layout->setContentsMargins({});
     layout->setSpacing(0);
     layout->addWidget(applicationCard);
-    layout->addWidget(componentsCard);
+    layout->addWidget(componentsTitle);
+    layout->addWidget(screenplayCard);
     layout->addWidget(shortcutsCard);
     layout->addStretch();
-    contentWidget->setLayout(layout);
 }
 
 void SettingsView::Implementation::initApplicationCard()
@@ -375,14 +411,36 @@ void SettingsView::Implementation::initApplicationCard()
     applicationCard->setLayoutReimpl(applicationCardLayout);
 }
 
-void SettingsView::Implementation::initComponentsCard()
+void SettingsView::Implementation::initScreenplayCard()
 {
-    componentsCardLayout->setContentsMargins({});
-    componentsCardLayout->setSpacing(0);
+    screenplayEditorShowSceneNumberAtLeft->setEnabled(false);
+    screenplayEditorShowSceneNumberAtLeft->setChecked(true);
+    screenplayEditorShowSceneNumberAtRight->setEnabled(false);
+
+    //
+    // Компоновка
+    //
+    screenplayCardLayout->setContentsMargins({});
+    screenplayCardLayout->setSpacing(0);
     int itemIndex = 0;
-    componentsCardLayout->addWidget(componentsTitle, itemIndex++, 0);
-    componentsCardBottomSpacerIndex = itemIndex;
-    componentsCard->setLayoutReimpl(componentsCardLayout);
+    screenplayCardLayout->addWidget(screenplayTitle, itemIndex++, 0);
+    //
+    // ... редактор сценария
+    //
+    screenplayCardLayout->addWidget(screenplayEditorTitle, itemIndex++, 0);
+    {
+        auto layout = makeLayout();
+        layout->addWidget(screenplayEditorShowSceneNumber);
+        layout->addWidget(screenplayEditorShowSceneNumberAtLeft);
+        layout->addWidget(screenplayEditorShowSceneNumberAtRight);
+        layout->addStretch();
+        screenplayCardLayout->addLayout(layout, itemIndex++, 0);
+    }
+    screenplayCardLayout->addWidget(screenplayEditorShowDialogueNumber, itemIndex++, 0);
+    screenplayCardLayout->addWidget(screenplayEditorHighlightCurrentLine, itemIndex++, 0);
+    //
+    screenplayCardBottomSpacerIndex = itemIndex;
+    screenplayCard->setLayoutReimpl(screenplayCardLayout);
 }
 
 void SettingsView::Implementation::initShortcutsCard()
@@ -429,7 +487,9 @@ SettingsView::SettingsView(QWidget* _parent)
     connect(&d->scrollAnimation, &QVariantAnimation::valueChanged, this, [this] (const QVariant& _value) {
         d->content->verticalScrollBar()->setValue(_value.toInt());
     });
-
+    //
+    // Приложение
+    //
     connect(d->useSpellChecker, &CheckBox::checkedChanged, d->spellCheckerLanguage, &ComboBox::setEnabled);
     connect(d->saveBackups, &CheckBox::checkedChanged, d->backupsFolderPath, &ComboBox::setEnabled);
     connect(d->backupsFolderPath, &TextField::trailingIconPressed, this, [this] {
@@ -440,7 +500,7 @@ SettingsView::SettingsView(QWidget* _parent)
             d->backupsFolderPath->setText(path);
         }
     });
-
+    //
     connect(d->changeLanuage, &Button::clicked, this, &SettingsView::applicationLanguagePressed);
     connect(d->useTypewriterSound, &CheckBox::checkedChanged, this, &SettingsView::applicationUseTypewriterSoundChanged);
     connect(d->useSpellChecker, &CheckBox::checkedChanged, this, [this] (bool _checked) {
@@ -463,6 +523,33 @@ SettingsView::SettingsView(QWidget* _parent)
         emit applicationBackupsFolderChanged(d->backupsFolderPath->text());
     });
 
+    //
+    // Компоненты
+    //
+    // ... Редактор сценария
+    //
+    connect(d->screenplayEditorShowSceneNumber, &CheckBox::checkedChanged, d->screenplayEditorShowSceneNumberAtLeft, &CheckBox::setEnabled);
+    connect(d->screenplayEditorShowSceneNumber, &CheckBox::checkedChanged, d->screenplayEditorShowSceneNumberAtRight, &CheckBox::setEnabled);
+    auto screenplayEditorCorrectShownSceneNumber = [this] {
+        if (!d->screenplayEditorShowSceneNumberAtLeft->isChecked()
+            && !d->screenplayEditorShowSceneNumberAtRight->isChecked()) {
+            d->screenplayEditorShowSceneNumberAtLeft->setChecked(true);
+        }
+    };
+    connect(d->screenplayEditorShowSceneNumberAtLeft, &CheckBox::checkedChanged, this, screenplayEditorCorrectShownSceneNumber);
+    connect(d->screenplayEditorShowSceneNumberAtRight, &CheckBox::checkedChanged, this, screenplayEditorCorrectShownSceneNumber);
+    //
+    auto notifyScreenplayEditorShowSceneNumbersChanged = [this] {
+        emit screenplayEditorShowSceneNumberChanged(d->screenplayEditorShowSceneNumber->isChecked(),
+                                                    d->screenplayEditorShowSceneNumberAtLeft->isChecked(),
+                                                    d->screenplayEditorShowSceneNumberAtRight->isChecked());
+    };
+    connect(d->screenplayEditorShowSceneNumber, &CheckBox::checkedChanged, this, notifyScreenplayEditorShowSceneNumbersChanged);
+    connect(d->screenplayEditorShowSceneNumberAtLeft, &CheckBox::checkedChanged, this, notifyScreenplayEditorShowSceneNumbersChanged);
+    connect(d->screenplayEditorShowSceneNumberAtRight, &CheckBox::checkedChanged, this, notifyScreenplayEditorShowSceneNumbersChanged);
+    connect(d->screenplayEditorShowDialogueNumber, &CheckBox::checkedChanged, this, &SettingsView::screenplayEditorShowDialogueNumberChanged);
+    connect(d->screenplayEditorHighlightCurrentLine, &CheckBox::checkedChanged, this, &SettingsView::screenplayEditorHighlightCurrentLineChanged);
+
     designSystemChangeEvent(nullptr);
 }
 
@@ -484,6 +571,11 @@ void SettingsView::showApplicationSaveAndBackups()
 void SettingsView::showComponents()
 {
     d->scrollToWidget(d->componentsTitle);
+}
+
+void SettingsView::showComponentsScreenplay()
+{
+    d->scrollToWidget(d->screenplayTitle);
 }
 
 void SettingsView::showShortcuts()
@@ -571,6 +663,23 @@ void SettingsView::setApplicationSaveBackups(bool _save)
 void SettingsView::setApplicationBackupsFolder(const QString& _path)
 {
     d->backupsFolderPath->setText(_path);
+}
+
+void SettingsView::setScreenplayEditorShowSceneNumber(bool _show, bool _atLeft, bool _atRight)
+{
+    d->screenplayEditorShowSceneNumber->setChecked(_show);
+    d->screenplayEditorShowSceneNumberAtLeft->setChecked(_atLeft);
+    d->screenplayEditorShowSceneNumberAtRight->setChecked(_atRight);
+}
+
+void SettingsView::setScreenplayEditorShowDialogueNumber(bool _show)
+{
+    d->screenplayEditorShowDialogueNumber->setChecked(_show);
+}
+
+void SettingsView::setScreenplayEditorHighlightCurrentLine(bool _highlight)
+{
+    d->screenplayEditorHighlightCurrentLine->setChecked(_highlight);
 }
 
 void SettingsView::updateTranslations()
@@ -715,6 +824,14 @@ void SettingsView::updateTranslations()
     d->backupsFolderPath->setLabel(tr("Backups folder path"));
 
     d->componentsTitle->setText(tr("Components"));
+    //
+    d->screenplayTitle->setText(tr("Screenplay"));
+    d->screenplayEditorTitle->setText(tr("Text editor"));
+    d->screenplayEditorShowSceneNumber->setText(tr("Show scene number"));
+    d->screenplayEditorShowSceneNumberAtLeft->setText(tr("at left"));
+    d->screenplayEditorShowSceneNumberAtRight->setText(tr("at right"));
+    d->screenplayEditorShowDialogueNumber->setText(tr("Show dialogue number"));
+    d->screenplayEditorHighlightCurrentLine->setText(tr("Highlight current line"));
 
     d->shortcutsTitle->setText(tr("Shortcuts"));
 }
@@ -729,19 +846,25 @@ void SettingsView::designSystemChangeEvent(DesignSystemChangeEvent* _event)
     d->content->widget()->layout()->setContentsMargins(QMarginsF(Ui::DesignSystem::layout().px24(), Ui::DesignSystem::layout().topContentMargin(),
                                                                  Ui::DesignSystem::layout().px24(), Ui::DesignSystem::layout().px24()).toMargins());
 
-    for (auto card : { d->applicationCard }) {
+    for (auto card : { d->applicationCard, d->screenplayCard, d->shortcutsCard }) {
         card->setBackgroundColor(DesignSystem::color().background());
     }
 
     auto titleColor = DesignSystem::color().onBackground();
     titleColor.setAlphaF(DesignSystem::inactiveTextOpacity());
-    for (auto title : QVector<Widget*>{ d->applicationTitle,
+    for (auto cardTitle : QVector<Widget*>{ d->applicationTitle,
                                         d->applicationUserInterfaceTitle,
                                         d->applicationSaveAndBackupTitle,
-                                        d->componentsTitle,
+                                        d->screenplayTitle,
+                                        d->screenplayEditorTitle,
                                         d->shortcutsTitle }) {
-        title->setBackgroundColor(DesignSystem::color().background());
-        title->setTextColor(titleColor);
+        cardTitle->setBackgroundColor(DesignSystem::color().background());
+        cardTitle->setTextColor(titleColor);
+        cardTitle->setContentsMargins(Ui::DesignSystem::label().margins().toMargins());
+    }
+    for (auto title : QVector<Widget*>{ d->componentsTitle } ) {
+        title->setBackgroundColor(DesignSystem::color().surface());
+        title->setTextColor(DesignSystem::color().onSurface());
         title->setContentsMargins(Ui::DesignSystem::label().margins().toMargins());
     }
 
@@ -756,8 +879,18 @@ void SettingsView::designSystemChangeEvent(DesignSystemChangeEvent* _event)
         label->setContentsMargins(labelMargins);
     }
 
-    for (auto checkBox : { d->useTypewriterSound, d->useSpellChecker,
-                           d->autoSave, d->saveBackups }) {
+    for (auto checkBox : {
+         d->useTypewriterSound,
+         d->useSpellChecker,
+         //
+         d->autoSave,
+         d->saveBackups,
+         //
+         d->screenplayEditorShowSceneNumber,
+         d->screenplayEditorShowSceneNumberAtLeft,
+         d->screenplayEditorShowSceneNumberAtRight,
+         d->screenplayEditorShowDialogueNumber,
+         d->screenplayEditorHighlightCurrentLine }) {
         checkBox->setBackgroundColor(DesignSystem::color().background());
         checkBox->setTextColor(DesignSystem::color().onBackground());
     }
@@ -779,6 +912,10 @@ void SettingsView::designSystemChangeEvent(DesignSystemChangeEvent* _event)
                                            static_cast<int>(Ui::DesignSystem::layout().px24()), 0});
 
     d->applicationCardLayout->setRowMinimumHeight(d->applicationCardBottomSpacerIndex,
+                                                  static_cast<int>(Ui::DesignSystem::layout().px24()));
+    d->screenplayCardLayout->setRowMinimumHeight(d->screenplayCardBottomSpacerIndex,
+                                                  static_cast<int>(Ui::DesignSystem::layout().px24()));
+    d->shortcutsCardLayout->setRowMinimumHeight(d->shortcutsCardBottomSpacerIndex,
                                                   static_cast<int>(Ui::DesignSystem::layout().px24()));
 }
 

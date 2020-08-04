@@ -66,6 +66,19 @@ private:
 /**
  * @brief Текстовая метка заголовка пятого уровня
  */
+class CORE_LIBRARY_EXPORT H4Label : public AbstractLabel
+{
+public:
+    explicit H4Label(QWidget* _parent = nullptr);
+
+protected:
+    const QFont& textFont() const override;
+};
+
+
+/**
+ * @brief Текстовая метка заголовка пятого уровня
+ */
 class CORE_LIBRARY_EXPORT H5Label : public AbstractLabel
 {
 public:

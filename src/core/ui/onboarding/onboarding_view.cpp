@@ -288,6 +288,8 @@ OnboardingView::OnboardingView(QWidget* _parent)
     designSystemChangeEvent(nullptr);
 }
 
+OnboardingView::~OnboardingView() = default;
+
 void OnboardingView::showLanguagePage()
 {
     setCurrentWidget(d->languagePage);
@@ -327,7 +329,5 @@ void OnboardingView::designSystemChangeEvent(DesignSystemChangeEvent* _event)
     d->updateLanguagePageUi();
     d->updateThemePageUi();
 }
-
-OnboardingView::~OnboardingView() = default;
 
 } // namespace Ui

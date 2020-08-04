@@ -26,6 +26,7 @@ public:
     void showApplicationUserInterface();
     void showApplicationSaveAndBackups();
     void showComponents();
+    void showComponentsScreenplay();
     void showShortcuts();
 
     //
@@ -40,6 +41,13 @@ public:
     void setApplicationUseAutoSave(bool _use);
     void setApplicationSaveBackups(bool _save);
     void setApplicationBackupsFolder(const QString& _path);
+
+    //
+    // Задание параметров редактора сценария
+    //
+    void setScreenplayEditorShowSceneNumber(bool _show, bool _atLeft, bool _atRight);
+    void setScreenplayEditorShowDialogueNumber(bool _show);
+    void setScreenplayEditorHighlightCurrentLine(bool _highlight);
 
 signals:
     /**
@@ -62,6 +70,13 @@ signals:
     void applicationUseAutoSaveChanged(bool _use);
     void applicationSaveBackupsChanged(bool _save);
     void applicationBackupsFolderChanged(const QString& _path);
+
+    //
+    // Уведомление об изменении параметров редактора сценария
+    //
+    void screenplayEditorShowSceneNumberChanged(bool _show, bool _atLeft, bool _atRight);
+    void screenplayEditorShowDialogueNumberChanged(bool _show);
+    void screenplayEditorHighlightCurrentLineChanged(bool _highlight);
 
 protected:
     /**

@@ -100,6 +100,20 @@ void AbstractLabel::mouseReleaseEvent(QMouseEvent* _event)
 // ****
 
 
+H4Label::H4Label(QWidget* _parent)
+    : AbstractLabel(_parent)
+{
+}
+
+const QFont& H4Label::textFont() const
+{
+    return Ui::DesignSystem::font().h4();
+}
+
+
+// ****
+
+
 H5Label::H5Label(QWidget* _parent)
     : AbstractLabel(_parent)
 {

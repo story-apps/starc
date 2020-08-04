@@ -2,6 +2,7 @@
 
 #include <ui/design_system/design_system.h>
 
+#include <utils/helpers/color_helper.h>
 #include <utils/helpers/text_helper.h>
 
 #include <QPainter>
@@ -137,18 +138,25 @@ void CheckBox::paintEvent(QPaintEvent* _event)
         painter.setOpacity(1.0);
     }
 
+    const auto penColor = isEnabled()
+                          ? textColor()
+                          : ColorHelper::transparent(textColor(), Ui::DesignSystem::disabledTextOpacity());
+
     //
     // Рисуем сам переключатель
     //
     painter.setFont(Ui::DesignSystem::font().iconsMid());
-    painter.setPen(d->isChecked ? Ui::DesignSystem::color().secondary() : textColor());
+    painter.setPen(isEnabled() && d->isChecked
+                   ? Ui::DesignSystem::color().secondary()
+                   : penColor);
     painter.drawText(iconRect, Qt::AlignCenter, d->isChecked ? u8"\U000f0c52" : u8"\U000f0131");
+
 
     //
     // Рисуем текст
     //
     painter.setFont(Ui::DesignSystem::font().subtitle1());
-    painter.setPen(textColor());
+    painter.setPen(penColor);
     const qreal textRectX = iconRect.right() + Ui::DesignSystem::checkBox().spacing();
     const QRectF textRect(textRectX, 0, width() - textRectX, sizeHint().height());
     painter.drawText(textRect, Qt::AlignLeft | Qt::AlignVCenter, d->text);

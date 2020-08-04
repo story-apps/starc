@@ -15,6 +15,7 @@ namespace {
     const int kApplicationUserInterfaceIndex = 0;
     const int kApplicationSaveAndBackupIndex = 1;
     const int kComponentsIndex = 1;
+    const int kComponentsScreenplayIndex = 0;
     const int kShortcutsIndex = 2;
 }
 
@@ -57,7 +58,9 @@ SettingsNavigator::SettingsNavigator(QWidget* _parent)
     applicationItem->appendRow(createItem(u8"\U000f062e"));
     applicationItem->appendRow(createItem(u8"\U000f061b"));
     model->appendRow(applicationItem);
-    model->appendRow(createItem(u8"\U000f09ac"));
+    auto componentsItem = createItem(u8"\U000f09ac");
+    componentsItem->appendRow(createItem(u8"\U000f0bc2"));
+    model->appendRow(componentsItem);
     model->appendRow(createItem(u8"\U000f030c"));
     d->tree->setModel(model);
     d->tree->setCurrentIndex(model->index(0, 0));
@@ -74,6 +77,18 @@ SettingsNavigator::SettingsNavigator(QWidget* _parent)
                         }
                         case kApplicationSaveAndBackupIndex: {
                             emit applicationSaveAndBackupsPressed();
+                            break;
+                        }
+                        default: {
+                            break;
+                        }
+                    }
+                    break;
+                }
+                case kComponentsIndex: {
+                    switch (_index.row()) {
+                        case kComponentsScreenplayIndex: {
+                            emit componentsScreenplayPressed();
                             break;
                         }
                         default: {
@@ -118,6 +133,7 @@ void SettingsNavigator::updateTranslations()
     model->item(kApplicationIndex)->child(kApplicationUserInterfaceIndex)->setText(tr("User interface"));
     model->item(kApplicationIndex)->child(kApplicationSaveAndBackupIndex)->setText(tr("Save changes & backups"));
     model->item(kComponentsIndex)->setText(tr("Components"));
+    model->item(kComponentsIndex)->child(kComponentsScreenplayIndex)->setText(tr("Screenplay"));
     model->item(kShortcutsIndex)->setText(tr("Shortcuts"));
 }
 
