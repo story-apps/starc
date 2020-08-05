@@ -667,6 +667,8 @@ void SettingsView::setApplicationBackupsFolder(const QString& _path)
 
 void SettingsView::setScreenplayEditorShowSceneNumber(bool _show, bool _atLeft, bool _atRight)
 {
+    QSignalBlocker blocker(d->screenplayEditorShowSceneNumberAtLeft);
+
     d->screenplayEditorShowSceneNumber->setChecked(_show);
     d->screenplayEditorShowSceneNumberAtLeft->setChecked(_atLeft);
     d->screenplayEditorShowSceneNumberAtRight->setChecked(_atRight);
@@ -828,8 +830,8 @@ void SettingsView::updateTranslations()
     d->screenplayTitle->setText(tr("Screenplay"));
     d->screenplayEditorTitle->setText(tr("Text editor"));
     d->screenplayEditorShowSceneNumber->setText(tr("Show scene number"));
-    d->screenplayEditorShowSceneNumberAtLeft->setText(tr("at left"));
-    d->screenplayEditorShowSceneNumberAtRight->setText(tr("at right"));
+    d->screenplayEditorShowSceneNumberAtLeft->setText(tr("on the left"));
+    d->screenplayEditorShowSceneNumberAtRight->setText(tr("on the right"));
     d->screenplayEditorShowDialogueNumber->setText(tr("Show dialogue number"));
     d->screenplayEditorHighlightCurrentLine->setText(tr("Highlight current line"));
 

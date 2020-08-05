@@ -39,6 +39,11 @@ public:
      */
     QByteArray toXml(Domain::DocumentObject* _screenplay) const;
 
+    /**
+     * @brief Обновить номера сцен
+     */
+    void updateSceneNumbers();
+
 
 
     /**
@@ -105,6 +110,31 @@ QByteArray ScreenplayTextModel::Implementation::toXml(Domain::DocumentObject* _s
     return xml;
 }
 
+void ScreenplayTextModel::Implementation::updateSceneNumbers()
+{
+    int sceneNumber = 1;
+    std::function<void(const ScreenplayTextModelItem*)> updateChildSceneNumbers;
+    updateChildSceneNumbers = [&sceneNumber, updateChildSceneNumbers] (const ScreenplayTextModelItem* _item) {
+        for (int childIndex = 0; childIndex < _item->childCount(); ++childIndex) {
+            auto childItem = _item->childAt(childIndex);
+            switch (childItem->type()) {
+                case ScreenplayTextModelItemType::Scene: {
+                    auto sceneItem = static_cast<ScreenplayTextModelSceneItem*>(childItem);
+                    sceneItem->setNumber(sceneNumber++);
+                    break;
+                }
+
+                case ScreenplayTextModelItemType::Folder: {
+                    updateChildSceneNumbers(childItem);
+                    [[fallthrough]];
+                }
+                default: break;
+            }
+        }
+    };
+    updateChildSceneNumbers(rootItem);
+}
+
 
 // ****
 
@@ -135,6 +165,7 @@ void ScreenplayTextModel::appendItem(ScreenplayTextModelItem* _item, ScreenplayT
     const int itemRow = _parentItem->childCount();
     beginInsertRows(parentIndex, itemRow, itemRow);
     _parentItem->insertItem(itemRow, _item);
+    d->updateSceneNumbers();
     endInsertRows();
 }
 
@@ -155,6 +186,7 @@ void ScreenplayTextModel::prependItem(ScreenplayTextModelItem* _item, Screenplay
     const QModelIndex parentIndex = indexForItem(_parentItem);
     beginInsertRows(parentIndex, 0, 0);
     _parentItem->insertItem(0, _item);
+    d->updateSceneNumbers();
     endInsertRows();
 }
 
@@ -176,6 +208,7 @@ void ScreenplayTextModel::insertItem(ScreenplayTextModelItem* _item, ScreenplayT
     const int itemRowIndex = parent->rowOfChild(_afterSiblingItem) + 1;
     beginInsertRows(parentIndex, itemRowIndex, itemRowIndex);
     parent->insertItem(itemRowIndex, _item);
+    d->updateSceneNumbers();
     endInsertRows();
 }
 
@@ -200,6 +233,7 @@ void ScreenplayTextModel::takeItem(ScreenplayTextModelItem* _item, ScreenplayTex
     const int itemRowIndex = _parentItem->rowOfChild(_item);
     beginRemoveRows(parentItemIndex, itemRowIndex, itemRowIndex);
     _parentItem->takeItem(_item);
+    d->updateSceneNumbers();
     endRemoveRows();
 }
 
@@ -218,6 +252,7 @@ void ScreenplayTextModel::removeItem(ScreenplayTextModelItem* _item)
     const int itemRowIndex = itemParent->rowOfChild(_item);
     beginRemoveRows(itemParentIndex, itemRowIndex, itemRowIndex);
     itemParent->removeItem(_item);
+    d->updateSceneNumbers();
     endRemoveRows();
 }
 
@@ -433,6 +468,7 @@ void ScreenplayTextModel::initDocument()
     else {
         beginResetModel();
         d->buildModel(document());
+        d->updateSceneNumbers();
         endResetModel();
     }
 }

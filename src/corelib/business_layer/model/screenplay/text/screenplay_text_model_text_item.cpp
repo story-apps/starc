@@ -238,7 +238,7 @@ void ScreenplayTextModelTextItem::Implementation::updateXml()
     if (!formats.isEmpty()) {
         xml += QString("<%1>").arg(kFormatsTag);
         for (const auto& format : std::as_const(formats)) {
-            xml += QString("<%1 %2=\"%3\" %4=\"%5\" %6%7%8")
+            xml += QString("<%1 %2=\"%3\" %4=\"%5\" %6%7%8/>")
                    .arg(kFormatTag,
                         kFromAttribute, QString::number(format.from),
                         kLengthAttribute, QString::number(format.length),

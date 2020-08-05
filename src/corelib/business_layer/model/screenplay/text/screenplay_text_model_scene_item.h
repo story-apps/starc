@@ -2,6 +2,8 @@
 
 #include "screenplay_text_model_item.h"
 
+#include <QString>
+
 class QDomElement;
 
 
@@ -14,9 +16,25 @@ namespace BusinessLayer
 class CORE_LIBRARY_EXPORT ScreenplayTextModelSceneItem : public ScreenplayTextModelItem
 {
 public:
+    /**
+     * @brief Номер сцены
+     */
+    struct SceneNumber {
+        QString value;
+        int group = 0;
+        int groupIndex = 0;
+    };
+
+public:
     ScreenplayTextModelSceneItem();
     explicit ScreenplayTextModelSceneItem(const QDomElement& _node);
     ~ScreenplayTextModelSceneItem() override;
+
+    /**
+     * @brief Номер сцены
+     */
+    void setNumber(int _number);
+    SceneNumber number() const;
 
     /**
      * @brief Определяем интерфейс получения данных сцены

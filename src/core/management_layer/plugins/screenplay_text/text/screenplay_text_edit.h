@@ -27,6 +27,16 @@ public:
     ~ScreenplayTextEdit() override;
 
     /**
+     * @brief Включить отображение номеров сцен
+     */
+    void setShowSceneNumber(bool _show, bool _onLeft, bool _onRight);
+
+    /**
+     * @brief Включить отображение номеров реплик
+     */
+    void setShowDialogueNumber(bool _show);
+
+    /**
      * @brief Задать модель текста сценария
      */
     void initWithModel(BusinessLayer::ScreenplayTextModel* _model);

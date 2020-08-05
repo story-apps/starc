@@ -89,6 +89,20 @@ namespace {
     //
     // системное имя пользователя
     const QString kSystemUsernameKey = kSystemGroupKey + "/username";
+
+    //
+    // Компоненты
+    //
+    const QString kComponentsGroupKey = QStringLiteral("components");
+    //
+    // сценарий
+    const QString kComponentsScreenplayKey = kComponentsGroupKey + QStringLiteral("/screenplay");
+    const QString kComponentsScreenplayEditorKey = kComponentsScreenplayKey + QStringLiteral("/editor");
+    const QString kComponentsScreenplayEditorShowSceneNumbersKey = kComponentsScreenplayEditorKey + QStringLiteral("/show-scene-numbers");
+    const QString kComponentsScreenplayEditorShowSceneNumbersOnRightKey = kComponentsScreenplayEditorKey + QStringLiteral("/show-scene-numbers-on-left");
+    const QString kComponentsScreenplayEditorShowSceneNumberOnLeftKey = kComponentsScreenplayEditorKey + QStringLiteral("/show-scene-number-on-right");
+    const QString kComponentsScreenplayEditorShowDialogueNumberKey = kComponentsScreenplayEditorKey + QStringLiteral("/show-dialogue-number");
+    const QString kComponentsScreenplayEditorHighlightCurrentLineKey = kComponentsScreenplayEditorKey + QStringLiteral("/highlight-current-line");
 }
 
 /**

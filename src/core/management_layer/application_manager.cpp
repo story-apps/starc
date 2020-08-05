@@ -1226,9 +1226,9 @@ void ApplicationManager::initConnections()
     connect(d->settingsManager.data(), &SettingsManager::applicationLanguageChanged, this,
             [this] (QLocale::Language _language) { d->setTranslation(_language); });
     connect(d->settingsManager.data(), &SettingsManager::applicationUseSpellCheckerChanged, this,
-            [this] { d->projectManager->reconfigure(); });
+            [this] { d->projectManager->reconfigureAll(); });
     connect(d->settingsManager.data(), &SettingsManager::applicationSpellCheckerLanguageChanged, this,
-            [this] { d->projectManager->reconfigure(); });
+            [this] { d->projectManager->reconfigureAll(); });
     connect(d->settingsManager.data(), &SettingsManager::applicationThemeChanged, this,
             [this] (Ui::ApplicationTheme _theme)
     {
@@ -1246,6 +1246,13 @@ void ApplicationManager::initConnections()
             [this] (qreal _scaleFactor) { d->setScaleFactor(_scaleFactor); });
     connect(d->settingsManager.data(), &SettingsManager::applicationUseAutoSaveChanged, this,
             [this] { d->configureAutoSave(); });
+    //
+    connect(d->settingsManager.data(), &SettingsManager::screenplayEditorShowSceneNumberChanged, this,
+            [this] { d->projectManager->reconfigureScreenplayEditor(); });
+    connect(d->settingsManager.data(), &SettingsManager::screenplayEditorShowDialogueNumberChanged, this,
+            [this] { d->projectManager->reconfigureScreenplayEditor(); });
+    connect(d->settingsManager.data(), &SettingsManager::screenplayEditorHighlightCurrentLineChanged, this,
+            [this] { d->projectManager->reconfigureScreenplayEditor(); });
 
 #ifdef CLOUD_SERVICE_MANAGER
     //

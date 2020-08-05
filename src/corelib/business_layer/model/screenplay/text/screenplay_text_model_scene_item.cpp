@@ -48,11 +48,6 @@ public:
     /**
      * @brief Номер сцены
      */
-    struct SceneNumber {
-        QString value;
-        int group = 0;
-        int groupIndex = 0;
-    };
     std::optional<SceneNumber> number;
 
     /**
@@ -117,6 +112,27 @@ ScreenplayTextModelSceneItem::ScreenplayTextModelSceneItem(const QDomElement& _n
         }
         childNode = childNode.nextSiblingElement();
     }
+}
+
+void ScreenplayTextModelSceneItem::setNumber(int _number)
+{
+    const auto newNumber = QString("%1.").arg(_number);
+    if (d->number.has_value()
+        && d->number->value == newNumber) {
+        return;
+    }
+
+    d->number = { newNumber };
+    setChanged(true);
+}
+
+ScreenplayTextModelSceneItem::SceneNumber ScreenplayTextModelSceneItem::number() const
+{
+    if (!d->number.has_value()) {
+        return {};
+    }
+
+    return d->number.value();
 }
 
 ScreenplayTextModelSceneItem::~ScreenplayTextModelSceneItem() = default;

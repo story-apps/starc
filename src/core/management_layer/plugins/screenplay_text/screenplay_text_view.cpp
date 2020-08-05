@@ -385,22 +385,30 @@ void ScreenplayTextView::reconfigure()
         d->paragraphTypesModel->appendRow(typeItem);
     }
 
-    const bool useSpellChecker =
-            DataStorageLayer::StorageFacade::settingsStorage()->value(
-                DataStorageLayer::kApplicationUseSpellCheckerKey,
-                DataStorageLayer::SettingsStorage::SettingsPlace::Application
-                ).toBool();
+    auto settingsValue = [] (const QString& _key) {
+        return DataStorageLayer::StorageFacade::settingsStorage()->value(
+                    _key, DataStorageLayer::SettingsStorage::SettingsPlace::Application);
+    };
+
+    const bool useSpellChecker
+            = settingsValue(DataStorageLayer::kApplicationUseSpellCheckerKey).toBool();
     d->screenplayText->setUseSpellChecker(useSpellChecker);
     if (useSpellChecker) {
-        const QString languageCode =
-                DataStorageLayer::StorageFacade::settingsStorage()->value(
-                    DataStorageLayer::kApplicationSpellCheckerLanguageKey,
-                    DataStorageLayer::SettingsStorage::SettingsPlace::Application
-                    ).toString();
+        const QString languageCode
+                = settingsValue(DataStorageLayer::kApplicationSpellCheckerLanguageKey).toString();
         d->screenplayText->setSpellCheckLanguage(languageCode);
     }
 
     d->shortcutsManager.reconfigure();
+
+    d->screenplayText->setShowSceneNumber(
+        settingsValue(DataStorageLayer::kComponentsScreenplayEditorShowSceneNumbersKey).toBool(),
+        settingsValue(DataStorageLayer::kComponentsScreenplayEditorShowSceneNumbersOnRightKey).toBool(),
+        settingsValue(DataStorageLayer::kComponentsScreenplayEditorShowSceneNumberOnLeftKey).toBool());
+    d->screenplayText->setShowDialogueNumber(
+        settingsValue(DataStorageLayer::kComponentsScreenplayEditorShowDialogueNumberKey).toBool());
+    d->screenplayText->setHighlightCurrentLine(
+        settingsValue(DataStorageLayer::kComponentsScreenplayEditorHighlightCurrentLineKey).toBool());
 }
 
 void ScreenplayTextView::setModel(BusinessLayer::ScreenplayTextModel* _model)

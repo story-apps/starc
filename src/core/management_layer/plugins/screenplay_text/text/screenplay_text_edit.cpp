@@ -11,6 +11,7 @@
 #include <business_layer/templates/screenplay_template.h>
 #include <business_layer/templates/screenplay_template_facade.h>
 
+#include <ui/design_system/design_system.h>
 #include <ui/widgets/context_menu/context_menu.h>
 
 #include <utils/helpers/text_helper.h>
@@ -36,6 +37,11 @@ class ScreenplayTextEdit::Implementation
 public:
     BusinessLayer::ScreenplayTextModel* model = nullptr;
     BusinessLayer::ScreenplayTextDocument document;
+
+    bool showSceneNumber = false;
+    bool showSceneNumberOnLeft = false;
+    bool showSceneNumberOnRight = false;
+    bool showDialogueNumber = false;
 };
 
 
@@ -51,6 +57,20 @@ ScreenplayTextEdit::ScreenplayTextEdit(QWidget* _parent)
 
     setDocument(&d->document);
     setCapitalizeWords(false);
+}
+
+void ScreenplayTextEdit::setShowSceneNumber(bool _show, bool _onLeft, bool _onRight)
+{
+    d->showSceneNumber = _show;
+    d->showSceneNumberOnLeft = _onLeft;
+    d->showSceneNumberOnRight = _onRight;
+    update();
+}
+
+void ScreenplayTextEdit::setShowDialogueNumber(bool _show)
+{
+    d->showDialogueNumber = _show;
+    update();
 }
 
 ScreenplayTextEdit::~ScreenplayTextEdit() = default;
@@ -429,25 +449,27 @@ bool ScreenplayTextEdit::updateEnteredText(const QString& _eventText)
 
 void ScreenplayTextEdit::paintEvent(QPaintEvent* _event)
 {
+    BaseTextEdit::paintEvent(_event);
+
     //
     // Определить область прорисовки по краям от текста
     //
     const bool isLeftToRight = QLocale().textDirection() == Qt::LeftToRight;
-    const int pageLeft = 0;
-    const int pageRight = viewport()->width();
-    const int spaceBetweenSceneNumberAndText = 10;
-    const int textLeft = pageLeft
-                         - (isLeftToRight ? 0 : horizontalScrollBar()->maximum())
-                         + document()->rootFrame()->frameFormat().leftMargin() - spaceBetweenSceneNumberAndText;
-    const int textRight = pageRight
-                          + (isLeftToRight ? horizontalScrollBar()->maximum() : 0)
-                          - document()->rootFrame()->frameFormat().rightMargin() + spaceBetweenSceneNumberAndText;
-    const int leftDelta = (isLeftToRight ? -1 : 1) * horizontalScrollBar()->value();
+    const qreal pageLeft = 0;
+    const qreal pageRight = viewport()->width();
+    const qreal spaceBetweenSceneNumberAndText = 10 * Ui::DesignSystem::scaleFactor();;
+    const qreal textLeft = pageLeft
+                           - (isLeftToRight ? 0 : horizontalScrollBar()->maximum())
+                           + document()->rootFrame()->frameFormat().leftMargin() - spaceBetweenSceneNumberAndText;
+    const qreal textRight = pageRight
+                            + (isLeftToRight ? horizontalScrollBar()->maximum() : 0)
+                            - document()->rootFrame()->frameFormat().rightMargin() + spaceBetweenSceneNumberAndText;
+    const qreal leftDelta = (isLeftToRight ? -1 : 1) * horizontalScrollBar()->value();
 //    int colorRectWidth = 0;
-    int verticalMargin = 0;
-    const int splitterX = leftDelta + textLeft
-                          + (textRight - textLeft)
-                          * ScreenplayTemplateFacade::getTemplate().leftHalfOfPageWidthPercents() / 100;
+    qreal verticalMargin = 0;
+    const qreal splitterX = leftDelta + textLeft
+                            + (textRight - textLeft)
+                            * ScreenplayTemplateFacade::getTemplate().leftHalfOfPageWidthPercents() / 100;
 
 
     //
@@ -499,201 +521,6 @@ void ScreenplayTextEdit::paintEvent(QPaintEvent* _event)
             bottomBlock = bottomCursor.block();
         }
     }
-
-
-//    //
-//    // Подсветка блоков и строки, если нужно
-//    //
-//    {
-//        QPainter painter(viewport());
-//        if (m_highlightBlocks) {
-//            const int opacity = 33;
-
-//            //
-//            // Если курсор в блоке реплики, закрасить примыкающие блоки диалогов
-//            //
-//            {
-//                const QVector<ScenarioBlockStyle::Type> dialogueTypes = { ScenarioBlockStyle::Character,
-//                                                                          ScenarioBlockStyle::Parenthetical,
-//                                                                          ScenarioBlockStyle::Dialogue,
-//                                                                          ScenarioBlockStyle::Lyrics};
-//                if (dialogueTypes.contains(scenarioBlockType())) {
-//                    //
-//                    // Идём до самого начала блоков диалогов
-//                    //
-//                    QTextCursor cursor = textCursor();
-//                    while (cursor.movePosition(QTextCursor::PreviousBlock)) {
-//                        if (!dialogueTypes.contains(ScenarioBlockStyle::forBlock(cursor.block()))) {
-//                            cursor.movePosition(QTextCursor::NextBlock);
-//                            break;
-//                        }
-//                    }
-
-//                    //
-//                    // Проходим каждый из блоков по-очереди
-//                    //
-//                    do {
-//                        const QRect topCursorRect = cursorRect(cursor);
-//                        const QString characterName = BusinessLogic::CharacterParser::name(cursor.block().text());
-//                        const Domain::Research* character = DataStorageLayer::StorageFacade::researchStorage()->character(characterName);
-//                        const QColor characterColor = character == nullptr ? QColor() : character->color();
-
-//                        //
-//                        // Идём до конца блока диалога
-//                        //
-//                        while (cursor.movePosition(QTextCursor::EndOfBlock)
-//                               && cursor.movePosition(QTextCursor::NextBlock)) {
-//                            const ScenarioBlockStyle::Type blockType = ScenarioBlockStyle::forBlock(cursor.block());
-//                            //
-//                            // Если дошли до персонажа, или до конца диалога, возвращаемся на блок назад и раскрашиваем
-//                            //
-//                            if (blockType == ScenarioBlockStyle::Character
-//                                || !dialogueTypes.contains(blockType)) {
-//                                cursor.movePosition(QTextCursor::StartOfBlock);
-//                                cursor.movePosition(QTextCursor::PreviousCharacter);
-//                                break;
-//                            }
-//                        }
-//                        const QRect bottomCursorRect = cursorRect(cursor);
-//                        cursor.movePosition(QTextCursor::NextBlock);
-
-//                        if (characterName.isEmpty()
-//                            && !characterColor.isValid()) {
-//                            continue;
-//                        }
-
-//                        //
-//                        // Раскрашиваем
-//                        //
-//                        verticalMargin = topCursorRect.height() / 2;
-//                        QColor noizeColor = textColor();
-//                        if (characterColor.isValid()) {
-//                            noizeColor = characterColor;
-//                        }
-//                        noizeColor.setAlpha(opacity);
-//                        const QRect noizeRect(QPoint(textLeft + leftDelta, topCursorRect.top() - verticalMargin),
-//                                              QPoint(textRight + leftDelta, bottomCursorRect.bottom() + verticalMargin));
-//                        painter.fillRect(noizeRect, noizeColor);
-//                    } while(!cursor.atEnd()
-//                            && dialogueTypes.contains(ScenarioBlockStyle::forBlock(cursor.block())));
-//                }
-//            }
-
-//            //
-//            // Закрасить блок сцены/папки
-//            //
-//            {
-//                //
-//                // Идём до начала блока сцены, считая по пути вложенные папки
-//                //
-//                QTextCursor cursor = textCursor();
-//                int closedFolders = 0;
-//                bool isScene = scenarioBlockType() == ScenarioBlockStyle::SceneHeading;
-//                if (scenarioBlockType() != ScenarioBlockStyle::SceneHeading
-//                    && scenarioBlockType() != ScenarioBlockStyle::FolderHeader) {
-//                    while (cursor.movePosition(QTextCursor::PreviousBlock)) {
-//                        const ScenarioBlockStyle::Type blockType = ScenarioBlockStyle::forBlock(cursor.block());
-//                        if (blockType == ScenarioBlockStyle::SceneHeading) {
-//                            isScene = true;
-//                            break;
-//                        } else if (blockType == ScenarioBlockStyle::FolderFooter) {
-//                            ++closedFolders;
-//                        } else if (blockType == ScenarioBlockStyle::FolderHeader) {
-//                            if (closedFolders > 0) {
-//                                --closedFolders;
-//                            } else {
-//                                break;
-//                            }
-//                        }
-//                    }
-//                }
-//                const QRect topCursorRect = cursorRect(cursor);
-//                QColor noizeColor = textColor();
-//                if (SceneHeadingBlockInfo* info = dynamic_cast<SceneHeadingBlockInfo*>(cursor.block().userData())) {
-//                    if (!info->colors().isEmpty()) {
-//                        noizeColor = QColor(info->colors().split(";").first());
-//                    }
-//                }
-//                noizeColor.setAlpha(opacity);
-
-//                //
-//                // Идём до конца блока сцены, считая по пути вложенные папки
-//                //
-//                cursor = textCursor();
-//                int openedFolders = 0;
-//                while (cursor.movePosition(QTextCursor::NextBlock)) {
-//                    const ScenarioBlockStyle::Type blockType = ScenarioBlockStyle::forBlock(cursor.block());
-//                    if (isScene
-//                        && blockType == ScenarioBlockStyle::SceneHeading) {
-//                        cursor.movePosition(QTextCursor::PreviousBlock);
-//                        break;
-//                    } else if (blockType == ScenarioBlockStyle::FolderHeader) {
-//                        ++openedFolders;
-//                    } else if (blockType == ScenarioBlockStyle::FolderFooter) {
-//                        if (openedFolders > 0) {
-//                            --openedFolders;
-//                        } else {
-//                            if (isScene) {
-//                                cursor.movePosition(QTextCursor::PreviousBlock);
-//                            }
-//                            break;
-//                        }
-//                    }
-//                }
-//                cursor.movePosition(QTextCursor::EndOfBlock);
-//                const QRect bottomCursorRect = cursorRect(cursor);
-
-//                verticalMargin = topCursorRect.height() / 2;
-//                colorRectWidth = QFontMetrics(cursor.charFormat().font()).width(".");
-
-//                //
-//                // Закрасим область сцены
-//                //
-//                const QRect noizeRect(QPoint(pageLeft, topCursorRect.top() - verticalMargin),
-//                                      QPoint(pageRight, bottomCursorRect.bottom() + verticalMargin));
-//                painter.fillRect(noizeRect, noizeColor);
-//            }
-//        }
-
-//        //
-//        // Подсветка строки
-//        //
-//        if (m_highlightCurrentLine) {
-//            const QRect cursorR = cursorRect();
-//            const QRect highlightRect(0, cursorR.top(), viewport()->width(), cursorR.height());
-//            QColor lineColor = palette().highlight().color().lighter();
-//            lineColor.setAlpha(40);
-//            painter.fillRect(highlightRect, lineColor);
-//        }
-
-//        //
-//        // Подсветка дифов
-//        //
-//        {
-//            QTextBlock block = topBlock;
-//            ScriptTextCursor cursor(document());
-//            while (block.isValid() && block != bottomBlock) {
-//                TextBlockInfo* blockInfo = dynamic_cast<TextBlockInfo*>(block.userData());
-//                if (blockInfo != nullptr
-//                    && blockInfo->diffColor().isValid()) {
-//                    cursor.setPosition(block.position());
-//                    const QRect topCursorRect = cursorRect(cursor);
-//                    cursor.movePosition(QTextCursor::EndOfBlock);
-//                    const QRect bottomCursorRect = cursorRect(cursor);
-//                    //
-//                    const int topMargin = std::max(block.blockFormat().topMargin(), block.previous().blockFormat().bottomMargin()) / 2;
-//                    const int bottomMargin = std::max(block.blockFormat().bottomMargin(), block.next().blockFormat().topMargin()) / 2;
-//                    const QRect diffRect(QPoint(pageLeft, topCursorRect.top() - topMargin),
-//                                         QPoint(pageRight, bottomCursorRect.bottom() + bottomMargin));
-//                    painter.fillRect(diffRect, blockInfo->diffColor());
-//                }
-
-//                block = block.next();
-//            }
-//        }
-//    }
-
-    BaseTextEdit::paintEvent(_event);
 
     //
     // Прорисовка дополнительных элементов редактора
@@ -807,7 +634,6 @@ void ScreenplayTextEdit::paintEvent(QPaintEvent* _event)
 //                    //
 //                    // Прорисовка закладок
 //                    //
-//                    TextBlockInfo* blockInfo = dynamic_cast<TextBlockInfo*>(block.userData());
 //                    if (blockInfo != nullptr
 //                        && blockInfo->hasBookmark()) {
 //                        //
@@ -920,33 +746,47 @@ void ScreenplayTextEdit::paintEvent(QPaintEvent* _event)
                     // Прорисовка декораций непустых строк
                     //
                     else {
-//                        //
-//                        // Прорисовка номеров сцен, если необходимо
-//                        //
-//                        if (m_showSceneNumbers
-//                            && blockType == ScenarioBlockStyle::SceneHeading) {
-//                            //
-//                            // Определим номер сцены
-//                            //
-//                            if (SceneHeadingBlockInfo* info = dynamic_cast<SceneHeadingBlockInfo*>(blockInfo)) {
-//                                const QString sceneNumber = m_sceneNumbersPrefix + info->sceneNumber() + ".";
-
-//                                //
-//                                // Определим область для отрисовки и выведем номер сцены в редактор
-//                                //
-//                                QPointF topLeft(isLeftToRight
-//                                                ? pageLeft + leftDelta
-//                                                : textRight + leftDelta,
-//                                                cursorR.top());
-//                                QPointF bottomRight(isLeftToRight
-//                                                    ? textLeft + leftDelta
-//                                                    : pageRight + leftDelta,
-//                                                    cursorR.bottom());
-//                                QRectF rect(topLeft, bottomRight);
-//                                painter.setFont(cursor.charFormat().font());
-//                                painter.drawText(rect, Qt::AlignRight | Qt::AlignTop, sceneNumber);
-//                            }
-//                        }
+                        //
+                        // Прорисовка номеров сцен, если необходимо
+                        //
+                        if (d->showSceneNumber
+                            && blockType == ScreenplayParagraphType::SceneHeading) {
+                            //
+                            // Определим номер сцены
+                            //
+                            const auto sceneNumber = d->document.sceneNumber(block);
+                            if (!sceneNumber.isEmpty()) {
+                                //
+                                // Определим область для отрисовки и выведем номер сцены в редактор в зависимости от стороны
+                                //
+                                if (d->showSceneNumberOnLeft) {
+                                    QPointF topLeft(isLeftToRight
+                                                    ? pageLeft + leftDelta
+                                                    : textRight + leftDelta,
+                                                    cursorR.top());
+                                    QPointF bottomRight(isLeftToRight
+                                                        ? textLeft + leftDelta
+                                                        : pageRight + leftDelta,
+                                                        cursorR.bottom());
+                                    QRectF rect(topLeft, bottomRight);
+                                    painter.setFont(cursor.charFormat().font());
+                                    painter.drawText(rect, Qt::AlignRight | Qt::AlignTop, sceneNumber);
+                                }
+                                if (d->showSceneNumberOnRight) {
+                                    QPointF topLeft(isLeftToRight
+                                                    ? textRight - leftDelta
+                                                    : pageLeft - leftDelta,
+                                                    cursorR.top());
+                                    QPointF bottomRight(isLeftToRight
+                                                        ? pageRight - leftDelta
+                                                        : textLeft - leftDelta,
+                                                        cursorR.bottom());
+                                    QRectF rect(topLeft, bottomRight);
+                                    painter.setFont(cursor.charFormat().font());
+                                    painter.drawText(rect, Qt::AlignLeft | Qt::AlignTop, sceneNumber);
+                                }
+                            }
+                        }
 //                        //
 //                        // Прорисовка номеров реплик, если необходимо
 //                        //
@@ -1032,7 +872,7 @@ void ScreenplayTextEdit::paintEvent(QPaintEvent* _event)
                     }
 
                     //
-                    // Прорисовка перфикса блока
+                    // Прорисовка префикса блока
                     //
                     if (block.charFormat().hasProperty(ScreenplayBlockStyle::PropertyPrefix)) {
                         painter.setFont(block.charFormat().font());

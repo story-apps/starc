@@ -49,6 +49,13 @@ signals:
     void applicationSaveBackupsChanged(bool _save);
     void applicationBackupsFolderChanged(const QString& _path);
 
+    /**
+     * @brief Изменились параметры компонентов
+     */
+    void screenplayEditorShowSceneNumberChanged(bool _show, bool _atLeft, bool _atRight);
+    void screenplayEditorShowDialogueNumberChanged(bool _show);
+    void screenplayEditorHighlightCurrentLineChanged(bool _highlight);
+
 protected:
     /**
      * @brief Реализуем фильтр на событие смены языка и дизайн системы, чтобы обновить значения в представлении
@@ -76,6 +83,13 @@ private:
     void loadSpellingDictionary(const QString& _languageCode);
     void loadSpellingDictionaryAffFile(const QString& _languageCode);
     void loadSpellingDictionaryDicFile(const QString& _languageCode);
+
+    //
+    // Сохранение параметров редактора сценария
+    //
+    void setScreenplayEditorShowSceneNumber(bool _show, bool _atLeft, bool _atRight);
+    void setScreenplayEditorShowDialogueNumber(bool _show);
+    void setScreenplayEditorHighlightCurrentLine(bool _highlight);
 
 private:
     class Implementation;

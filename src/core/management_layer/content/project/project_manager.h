@@ -32,7 +32,9 @@ public:
     /**
      * @brief Перенастроить плагины
      */
-    void reconfigure();
+    void reconfigureAll();
+    void reconfigureScreenplayEditor();
+    void reconfigureScreenplayNavigator();
 
     /**
      * @brief Загрузить данные текущего проекта

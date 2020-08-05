@@ -674,9 +674,9 @@ void ScreenplayTextCorrector::Implementation::correctPageBreaks(int _position)
             // ... очищаем значения обрывов
             //
             QTextBlockFormat cleanFormat = blockFormat;
-            cleanFormat.setProperty(PageTextEdit::PropertyDontShowCursor, QVariant());
-            cleanFormat.setProperty(ScreenplayBlockStyle::PropertyIsBreakCorrectionStart, QVariant());
-            cleanFormat.setProperty(ScreenplayBlockStyle::PropertyIsBreakCorrectionEnd, QVariant());
+            cleanFormat.clearProperty(PageTextEdit::PropertyDontShowCursor);
+            cleanFormat.clearProperty(ScreenplayBlockStyle::PropertyIsBreakCorrectionStart);
+            cleanFormat.clearProperty(ScreenplayBlockStyle::PropertyIsBreakCorrectionEnd);
             cursor.setBlockFormat(cleanFormat);
             //
             // ... и проработаем текущий блок с начала
@@ -1428,11 +1428,12 @@ void ScreenplayTextCorrector::Implementation::breakDialogue(const QTextBlockForm
         //
         // Оформляем его, как имя персонажа
         //
-        QTextBlockFormat characterFormat = characterBlock.blockFormat();
-        characterFormat.setProperty(ScreenplayBlockStyle::PropertyIsCorrection, true);
-        characterFormat.setProperty(ScreenplayBlockStyle::PropertyIsCorrectionCharacter, true);
-        characterFormat.setProperty(PageTextEdit::PropertyDontShowCursor, true);
-        _cursor.setBlockFormat(characterFormat);
+        QTextBlockFormat characterBlockFormat = characterBlock.blockFormat();
+        characterBlockFormat.setProperty(ScreenplayBlockStyle::PropertyIsCorrection, true);
+        characterBlockFormat.setProperty(ScreenplayBlockStyle::PropertyIsCorrectionCharacter, true);
+        characterBlockFormat.setProperty(PageTextEdit::PropertyDontShowCursor, true);
+        _cursor.setBlockFormat(characterBlockFormat);
+        _cursor.setBlockCharFormat(characterBlock.charFormat());
         //
         // И вставляем текст с именем персонажа
         //
@@ -1442,8 +1443,8 @@ void ScreenplayTextCorrector::Implementation::breakDialogue(const QTextBlockForm
         //
         updateBlockLayout(_pageWidth, _block);
         const qreal continuedBlockHeight =
-                _block.layout()->lineCount() * characterFormat.lineHeight()
-                + characterFormat.bottomMargin();
+                _block.layout()->lineCount() * characterBlockFormat.lineHeight()
+                + characterBlockFormat.bottomMargin();
         blockItems[currentBlockInfo.number++] = BlockInfo{continuedBlockHeight, 0};
         //
         // Обозначаем последнюю высоту, как высоту предыдущего блока

@@ -34,6 +34,11 @@ public:
      */
     int itemPosition(const QModelIndex& _index);
 
+    /**
+     * @brief Получить номер сцены для заданного блока
+     */
+    QString sceneNumber(const QTextBlock& _forBlock);
+
     //
     // FIXME: делать
     //

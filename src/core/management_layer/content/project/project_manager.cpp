@@ -543,9 +543,19 @@ QWidget* ProjectManager::view() const
     return d->view;
 }
 
-void ProjectManager::reconfigure()
+void ProjectManager::reconfigureAll()
 {
-    d->pluginsBuilder.reconfigure();
+    d->pluginsBuilder.reconfigureAll();
+}
+
+void ProjectManager::reconfigureScreenplayEditor()
+{
+    d->pluginsBuilder.reconfigureScreenplayEditor();
+}
+
+void ProjectManager::reconfigureScreenplayNavigator()
+{
+    d->pluginsBuilder.reconfigureScreenplayNavigator();
 }
 
 void ProjectManager::loadCurrentProject(const QString& _name, const QString& _path)

@@ -373,6 +373,27 @@ int ScreenplayTextDocument::itemPosition(const QModelIndex& _index)
     return -1;
 }
 
+QString ScreenplayTextDocument::sceneNumber(const QTextBlock& _forBlock)
+{
+    if (_forBlock.userData() == nullptr) {
+        return {};
+    }
+
+    auto blockData = static_cast<ScreenplayTextBlockData*>(_forBlock.userData());
+    if (blockData == nullptr) {
+        return {};
+    }
+
+    auto itemParent = blockData->item()->parent();
+    if (itemParent == nullptr
+        || itemParent->type() != ScreenplayTextModelItemType::Scene) {
+        return {};
+    }
+
+    auto itemScene = static_cast<ScreenplayTextModelSceneItem*>(itemParent);
+    return itemScene->number().value;
+}
+
 void ScreenplayTextDocument::addParagraph(BusinessLayer::ScreenplayParagraphType _type, ScreenplayTextCursor _cursor)
 {
     _cursor.beginEditBlock();
