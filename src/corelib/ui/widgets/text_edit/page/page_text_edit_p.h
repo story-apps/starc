@@ -139,7 +139,7 @@ public:
     /**
      * @brief Включена ли возможность выделения текста
      */
-    bool m_textSelectionEnabled;
+    bool m_textSelectionEnabled = true;
 
     /**
      * @brief Режим отображения текста
@@ -147,17 +147,17 @@ public:
      * true - постраничный
      * false - сплошной
      */
-    bool m_usePageMode;
+    bool m_usePageMode = false;
 
     /**
      * @brief Необходимо ли добавлять пространство снизу в обычном режиме
      */
-    bool m_addBottomSpace;
+    bool m_addBottomSpace = false;
 
     /**
      * @brief Необходимо ли показывать номера страниц
      */
-    bool m_showPageNumbers;
+    bool m_showPageNumbers = false;
 
     /**
      * @brief Где показывать номера страниц

@@ -54,6 +54,7 @@ ScreenplayTextEdit::ScreenplayTextEdit(QWidget* _parent)
 {
     setContextMenuPolicy(Qt::CustomContextMenu);
     setFrameShape(QFrame::NoFrame);
+    setShowPageNumbers(true);
 
     setDocument(&d->document);
     setCapitalizeWords(false);
