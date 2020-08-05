@@ -41,6 +41,7 @@
 #include <ui/design_system/design_system.h>
 #include <ui/widgets/context_menu/context_menu.h>
 
+#include <utils/helpers/color_helper.h>
 #include <utils/helpers/image_helper.h>
 
 static inline bool shouldEnableInputMethod(PageTextEdit *textedit)
@@ -1954,6 +1955,23 @@ void PageTextEditPrivate::paintFooter(QPainter* _painter, const QRectF& _rect)
     _painter->drawText(_rect, alignment, m_footer);
 }
 
+void PageTextEditPrivate::paintHighlights(QPainter* _painter)
+{
+    //
+    // Подсветка строки
+    //
+    if (m_highlightCurrentLine) {
+        Q_Q(PageTextEdit);
+        const QRect cursorR = q->cursorRect();
+        const QSizeF pageSize(m_pageMetrics.pxPageSize());
+        const QMarginsF pageMargins = Ui::DesignSystem::card().shadowMargins();
+        const qreal highlightLeft = pageMargins.left() - hbar->value();
+        const qreal highlightWidth = pageSize.width() - pageMargins.left() - pageMargins.right();
+        const QRect highlightRect(highlightLeft, cursorR.top(), highlightWidth, cursorR.height());
+        _painter->fillRect(highlightRect, ColorHelper::transparent(q->palette().highlight().color(), 0.14));
+    }
+}
+
 void PageTextEditPrivate::clipPageDecorationRegions(QPainter* _painter)
 {
     Q_Q(PageTextEdit);
@@ -2177,6 +2195,7 @@ void PageTextEditPrivate::paint(QPainter *p, QPaintEvent *e)
 {
     paintPagesView(p);
     paintPageMargins(p);
+    paintHighlights(p);
 
     const int xOffset = horizontalOffset();
     const int yOffset = verticalOffset();
@@ -3578,6 +3597,17 @@ void PageTextEdit::setFooter(const QString& _footer)
 
     d->m_footer = _footer;
     d->relayoutDocument();
+}
+
+void PageTextEdit::setHighlightCurrentLine(bool _highlight)
+{
+    Q_D(PageTextEdit);
+    if (d->m_highlightCurrentLine == _highlight) {
+        return;
+    }
+
+    d->m_highlightCurrentLine = _highlight;
+    update();
 }
 
 ContextMenu* PageTextEdit::createContextMenu(const QPoint& _position, QWidget* _parent)

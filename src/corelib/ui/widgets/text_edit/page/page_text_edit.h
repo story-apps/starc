@@ -374,6 +374,11 @@ public:
     void setFooter(const QString& _footer);
 
     /**
+     * @brief Установить необходимость подсвечивания текущей строки
+     */
+    void setHighlightCurrentLine(bool _highlight);
+
+    /**
      * @brief Создать контекстное меню в заданной позиции
      */
     virtual ContextMenu* createContextMenu(const QPoint& _position, QWidget* _parent = nullptr);

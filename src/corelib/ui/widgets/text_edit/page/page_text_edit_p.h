@@ -127,6 +127,11 @@ public:
     void paintFooter(QPainter* _painter, const QRectF& _rect);
 
     /**
+     * @brief Нарисовать подсветки
+     */
+    void paintHighlights(QPainter* _painter);
+
+    /**
      * @brief Установить область обрезки так, чтобы вырезалось всё, что выходит на поля страницы
      */
     void clipPageDecorationRegions(QPainter* _painter);
@@ -174,6 +179,11 @@ public:
      */
     QString m_header;
     QString m_footer;
+
+    /**
+     * @brief Подсвечивать ли текущую строку
+     */
+    bool m_highlightCurrentLine = false;
 
     /**
      * @brief Анимация скроллирования
