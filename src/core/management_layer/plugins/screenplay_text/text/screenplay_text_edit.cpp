@@ -788,63 +788,60 @@ void ScreenplayTextEdit::paintEvent(QPaintEvent* _event)
                                 }
                             }
                         }
-//                        //
-//                        // Прорисовка номеров реплик, если необходимо
-//                        //
-//                        if (m_showDialoguesNumbers
-//                            && blockType == ScenarioBlockStyle::Character
-//                            && (!block.blockFormat().boolProperty(ScenarioBlockStyle::PropertyIsCorrection)
-//                                || block.blockFormat().boolProperty(ScenarioBlockStyle::PropertyIsCorrectionCharacter))) {
-//                            //
-//                            // Определим номер реплики
-//                            //
-//                            if (CharacterBlockInfo* info = dynamic_cast<CharacterBlockInfo*>(blockInfo)) {
-//                                const QString dialogueNumber = QString::number(info->dialogueNumber()) + ":";
-
-//                                //
-//                                // Определим область для отрисовки и выведем номер реплики в редактор
-//                                //
-//                                painter.setFont(cursor.charFormat().font());
-//                                const int numberDelta = painter.fontMetrics().width(dialogueNumber);
-//                                QRectF rect;
-//                                //
-//                                // Если имя персонажа находится не с самого края листа
-//                                //
-//                                if (block.blockFormat().leftMargin() > numberDelta) {
-//                                    //
-//                                    // ... то поместим номер реплики внутри текстовой области,
-//                                    //     чтобы их было удобно отличать от номеров сцен
-//                                    //
-//                                    QPointF topLeft(isLeftToRight
-//                                                    ? textLeft + leftDelta + spaceBetweenSceneNumberAndText
-//                                                    : textRight + leftDelta - spaceBetweenSceneNumberAndText - numberDelta,
-//                                                    cursorR.top());
-//                                    QPointF bottomRight(isLeftToRight
-//                                                        ? textLeft + leftDelta + spaceBetweenSceneNumberAndText + numberDelta
-//                                                        : textRight + leftDelta - spaceBetweenSceneNumberAndText,
-//                                                        cursorR.bottom());
-//                                    rect = QRectF(topLeft, bottomRight);
-//                                }
-//                                //
-//                                // В противном же случае
-//                                //
-//                                else {
-//                                    //
-//                                    // ... позиционируем номера реплик на полях, так же как и номера сцен
-//                                    //
-//                                    QPointF topLeft(isLeftToRight
-//                                                    ? pageLeft + leftDelta
-//                                                    : textRight + leftDelta,
-//                                                    cursorR.top());
-//                                    QPointF bottomRight(isLeftToRight
-//                                                        ? textLeft + leftDelta
-//                                                        : pageRight + leftDelta,
-//                                                        cursorR.bottom());
-//                                    rect = QRectF(topLeft, bottomRight);
-//                                }
-//                                painter.drawText(rect, Qt::AlignRight | Qt::AlignTop, dialogueNumber);
-//                            }
-//                        }
+                        //
+                        // Прорисовка номеров реплик, если необходимо
+                        //
+                        if (d->showDialogueNumber
+                            && blockType == ScreenplayParagraphType::Character) {
+                            //
+                            // Определим номер реплики
+                            //
+                            const auto dialogueNumber = d->document.dialogueNumber(block);
+                            if (!dialogueNumber.isEmpty()) {
+                                //
+                                // Определим область для отрисовки и выведем номер реплики в редактор
+                                //
+                                painter.setFont(cursor.charFormat().font());
+                                const int numberDelta = painter.fontMetrics().horizontalAdvance(dialogueNumber);
+                                QRectF rect;
+                                //
+                                // Если имя персонажа находится не с самого края листа
+                                //
+                                if (block.blockFormat().leftMargin() > numberDelta) {
+                                    //
+                                    // ... то поместим номер реплики внутри текстовой области,
+                                    //     чтобы их было удобно отличать от номеров сцен
+                                    //
+                                    QPointF topLeft(isLeftToRight
+                                                    ? textLeft + leftDelta + spaceBetweenSceneNumberAndText
+                                                    : textRight + leftDelta - spaceBetweenSceneNumberAndText - numberDelta,
+                                                    cursorR.top());
+                                    QPointF bottomRight(isLeftToRight
+                                                        ? textLeft + leftDelta + spaceBetweenSceneNumberAndText + numberDelta
+                                                        : textRight + leftDelta - spaceBetweenSceneNumberAndText,
+                                                        cursorR.bottom());
+                                    rect = QRectF(topLeft, bottomRight);
+                                }
+                                //
+                                // В противном же случае
+                                //
+                                else {
+                                    //
+                                    // ... позиционируем номера реплик на полях, так же как и номера сцен
+                                    //
+                                    QPointF topLeft(isLeftToRight
+                                                    ? pageLeft + leftDelta
+                                                    : textRight + leftDelta,
+                                                    cursorR.top());
+                                    QPointF bottomRight(isLeftToRight
+                                                        ? textLeft + leftDelta
+                                                        : pageRight + leftDelta,
+                                                        cursorR.bottom());
+                                    rect = QRectF(topLeft, bottomRight);
+                                }
+                                painter.drawText(rect, Qt::AlignRight | Qt::AlignTop, dialogueNumber);
+                            }
+                        }
 
                         //
                         // Прорисовка автоматических (ПРОД) для реплик

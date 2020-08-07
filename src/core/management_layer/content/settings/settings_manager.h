@@ -70,19 +70,15 @@ private:
     void setApplicationUseTypeWriterSound(bool _use);
     void setApplicationUseSpellChecker(bool _use);
     void setApplicationSpellCheckerLanguage(const QString& _languageCode);
+    void loadSpellingDictionary(const QString& _languageCode);
+    void loadSpellingDictionaryAffFile(const QString& _languageCode);
+    void loadSpellingDictionaryDicFile(const QString& _languageCode);
     void setApplicationTheme(Ui::ApplicationTheme _theme);
     void setApplicationCustomThemeColors(const Ui::DesignSystem::Color& _color);
     void setApplicationScaleFactor(qreal _scaleFactor);
     void setApplicationUseAutoSave(bool _use);
     void setApplicationSaveBackups(bool _save);
     void setApplicationBackupsFolder(const QString& _path);
-
-    /**
-     * @brief Загрузить заданный словарь
-     */
-    void loadSpellingDictionary(const QString& _languageCode);
-    void loadSpellingDictionaryAffFile(const QString& _languageCode);
-    void loadSpellingDictionaryDicFile(const QString& _languageCode);
 
     //
     // Сохранение параметров редактора сценария

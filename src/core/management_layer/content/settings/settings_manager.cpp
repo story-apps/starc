@@ -393,23 +393,6 @@ void SettingsManager::loadSpellingDictionaryDicFile(const QString& _languageCode
     dictionaryLoader->loadAsync(hunspellDictionariesFolderUrl + dicFileName);
 }
 
-void SettingsManager::setScreenplayEditorShowSceneNumber(bool _show, bool _atLeft, bool _atRight)
-{
-    d->setSettingsValue(DataStorageLayer::kComponentsScreenplayEditorShowSceneNumbersKey, _show);
-    d->setSettingsValue(DataStorageLayer::kComponentsScreenplayEditorShowSceneNumbersOnRightKey, _atLeft);
-    d->setSettingsValue(DataStorageLayer::kComponentsScreenplayEditorShowSceneNumberOnLeftKey, _atRight);
-}
-
-void SettingsManager::setScreenplayEditorShowDialogueNumber(bool _show)
-{
-    d->setSettingsValue(DataStorageLayer::kComponentsScreenplayEditorShowDialogueNumberKey, _show);
-}
-
-void SettingsManager::setScreenplayEditorHighlightCurrentLine(bool _highlight)
-{
-    d->setSettingsValue(DataStorageLayer::kComponentsScreenplayEditorHighlightCurrentLineKey, _highlight);
-}
-
 void SettingsManager::setApplicationTheme(Ui::ApplicationTheme _theme)
 {
     d->setSettingsValue(DataStorageLayer::kApplicationThemeKey, static_cast<int>(_theme));
@@ -438,6 +421,23 @@ void SettingsManager::setApplicationSaveBackups(bool _save)
 void SettingsManager::setApplicationBackupsFolder(const QString& _path)
 {
     d->setSettingsValue(DataStorageLayer::kApplicationBackupsFolderKey, _path);
+}
+
+void SettingsManager::setScreenplayEditorShowSceneNumber(bool _show, bool _atLeft, bool _atRight)
+{
+    d->setSettingsValue(DataStorageLayer::kComponentsScreenplayEditorShowSceneNumbersKey, _show);
+    d->setSettingsValue(DataStorageLayer::kComponentsScreenplayEditorShowSceneNumbersOnRightKey, _atLeft);
+    d->setSettingsValue(DataStorageLayer::kComponentsScreenplayEditorShowSceneNumberOnLeftKey, _atRight);
+}
+
+void SettingsManager::setScreenplayEditorShowDialogueNumber(bool _show)
+{
+    d->setSettingsValue(DataStorageLayer::kComponentsScreenplayEditorShowDialogueNumberKey, _show);
+}
+
+void SettingsManager::setScreenplayEditorHighlightCurrentLine(bool _highlight)
+{
+    d->setSettingsValue(DataStorageLayer::kComponentsScreenplayEditorHighlightCurrentLineKey, _highlight);
 }
 
 }

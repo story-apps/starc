@@ -373,7 +373,7 @@ int ScreenplayTextDocument::itemPosition(const QModelIndex& _index)
     return -1;
 }
 
-QString ScreenplayTextDocument::sceneNumber(const QTextBlock& _forBlock)
+QString ScreenplayTextDocument::sceneNumber(const QTextBlock& _forBlock) const
 {
     if (_forBlock.userData() == nullptr) {
         return {};
@@ -391,6 +391,27 @@ QString ScreenplayTextDocument::sceneNumber(const QTextBlock& _forBlock)
     }
 
     auto itemScene = static_cast<ScreenplayTextModelSceneItem*>(itemParent);
+    return itemScene->number().value;
+}
+
+QString ScreenplayTextDocument::dialogueNumber(const QTextBlock& _forBlock) const
+{
+    if (_forBlock.userData() == nullptr) {
+        return {};
+    }
+
+    auto blockData = static_cast<ScreenplayTextBlockData*>(_forBlock.userData());
+    if (blockData == nullptr) {
+        return {};
+    }
+
+    auto item = blockData->item();
+    if (item == nullptr
+        || item->type() != ScreenplayTextModelItemType::Text) {
+        return {};
+    }
+
+    auto itemScene = static_cast<ScreenplayTextModelTextItem*>(item);
     return itemScene->number().value;
 }
 

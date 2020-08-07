@@ -37,7 +37,12 @@ public:
     /**
      * @brief Получить номер сцены для заданного блока
      */
-    QString sceneNumber(const QTextBlock& _forBlock);
+    QString sceneNumber(const QTextBlock& _forBlock) const;
+
+    /**
+     * @brief Получить номер реплики для заданного блока
+     */
+    QString dialogueNumber(const QTextBlock& _forBlock) const;
 
     //
     // FIXME: делать

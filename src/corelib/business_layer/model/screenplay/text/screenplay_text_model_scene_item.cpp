@@ -22,8 +22,6 @@ namespace {
     const QString kOmitedAttribute = QLatin1String("omited");
     const QString kNumberTag = QLatin1String("number");
     const QString kNumberValueAttribute = QLatin1String("value");
-    const QString kNumberGroupAttribute = QLatin1String("group");
-    const QString kNumberGroupIndexAttribute = QLatin1String("group_index");
     const QString kStampTag = QLatin1String("stamp");
     const QString kPlannedDurationTag = QLatin1String("planned_duration");
     const QString kContentTag = QLatin1String("content");
@@ -48,7 +46,7 @@ public:
     /**
      * @brief Номер сцены
      */
-    std::optional<SceneNumber> number;
+    std::optional<Number> number;
 
     /**
      * @brief Штамп на сцене
@@ -89,9 +87,7 @@ ScreenplayTextModelSceneItem::ScreenplayTextModelSceneItem(const QDomElement& _n
     d->isOmited = _node.hasAttribute(kOmitedAttribute);
     const auto numberNode = _node.firstChildElement(kNumberTag);
     if (!numberNode.isNull()) {
-        d->number = { numberNode.attribute(kNumberValueAttribute),
-                      numberNode.attribute(kNumberGroupAttribute).toInt(),
-                      numberNode.attribute(kNumberGroupIndexAttribute).toInt()};
+        d->number = { numberNode.attribute(kNumberValueAttribute) };
     }
     const auto stampNode = _node.firstChildElement(kStampTag);
     if (!stampNode.isNull()) {
@@ -123,10 +119,13 @@ void ScreenplayTextModelSceneItem::setNumber(int _number)
     }
 
     d->number = { newNumber };
-    setChanged(true);
+    //
+    // Т.к. пока мы не сохраняем номера, в указании, что произошли изменения нет смысла
+    //
+//    setChanged(true);
 }
 
-ScreenplayTextModelSceneItem::SceneNumber ScreenplayTextModelSceneItem::number() const
+ScreenplayTextModelSceneItem::Number ScreenplayTextModelSceneItem::number() const
 {
     if (!d->number.has_value()) {
         return {};
@@ -173,11 +172,8 @@ QString ScreenplayTextModelSceneItem::toXml() const
                 kPlotsAttribute, {},
                 (d->isOmited ? QString("%1=\"true\"").arg(kOmitedAttribute) : ""));
     if (d->number.has_value()) {
-        xml += QString("<%1 %2=\"%3\" %4=\"%5\" %6=\"%7\"/>")
-               .arg(kNumberTag,
-                    kNumberValueAttribute, d->number->value,
-                    kNumberGroupAttribute, QString::number(d->number->group),
-                    kNumberGroupIndexAttribute, QString::number(d->number->groupIndex));
+        xml += QString("<%1 %2=\"%3\"/>")
+               .arg(kNumberTag, kNumberValueAttribute, d->number->value);
     }
     if (!d->stamp.isEmpty()) {
         xml += QString("<%1><![CDATA[%2]]></%1>").arg(kStampTag, TextHelper::toHtmlEscaped(d->stamp));

@@ -50,6 +50,11 @@ public:
 
 
     /**
+     * @brief Номер сцены
+     */
+    std::optional<Number> number;
+
+    /**
      * @brief Является ли блок декорацией
      */
     bool isCorrection = false;
@@ -381,7 +386,7 @@ void ScreenplayTextModelTextItem::setParagraphType(ScreenplayParagraphType _type
 
     d->paragraphType = _type;
     d->updateXml();
-    setChanged(true);
+    markChanged();
 }
 
 const QString& ScreenplayTextModelTextItem::text() const
@@ -397,7 +402,7 @@ void ScreenplayTextModelTextItem::setText(const QString& _text)
 
     d->text = _text;
     d->updateXml();
-    setChanged(true);
+    markChanged();
 }
 
 void ScreenplayTextModelTextItem::setFormats(const QVector<QTextLayout::FormatRange>& _formats)
@@ -430,7 +435,7 @@ void ScreenplayTextModelTextItem::setFormats(const QVector<QTextLayout::FormatRa
 
     d->formats = newFormats;
     d->updateXml();
-    setChanged(true);
+    markChanged();
 }
 
 const QVector<ScreenplayTextModelTextItem::ReviewMark>& ScreenplayTextModelTextItem::reviewMarks() const
@@ -446,7 +451,7 @@ void ScreenplayTextModelTextItem::setReviewMarks(const QVector<ScreenplayTextMod
 
     d->reviewMarks = _reviewMarks;
     d->updateXml();
-    setChanged(true);
+    markChanged();
 }
 
 void ScreenplayTextModelTextItem::setReviewMarks(const QVector<QTextLayout::FormatRange>& _reviewMarks)
@@ -480,6 +485,30 @@ void ScreenplayTextModelTextItem::setReviewMarks(const QVector<QTextLayout::Form
     setReviewMarks(newReviewMarks);
 }
 
+void ScreenplayTextModelTextItem::setNumber(int _number)
+{
+    const auto newNumber = QString("%1:").arg(_number);
+    if (d->number.has_value()
+        && d->number->value == newNumber) {
+        return;
+    }
+
+    d->number = { newNumber };
+    //
+    // Т.к. пока мы не сохраняем номера, в указании, что произошли изменения нет смысла
+    //
+//    markChanged();
+}
+
+ScreenplayTextModelTextItem::Number ScreenplayTextModelTextItem::number() const
+{
+    if (!d->number.has_value()) {
+        return {};
+    }
+
+    return d->number.value();
+}
+
 QVariant ScreenplayTextModelTextItem::data(int _role) const
 {
     if (_role == Qt::DisplayRole) {
@@ -492,6 +521,15 @@ QVariant ScreenplayTextModelTextItem::data(int _role) const
 QString ScreenplayTextModelTextItem::toXml() const
 {
     return d->xml;
+}
+
+void ScreenplayTextModelTextItem::markChanged()
+{
+    if (isCorrection()) {
+        return;
+    }
+
+    setChanged(true);
 }
 
 } // namespace BusinessLayer

@@ -51,6 +51,9 @@ public:
 
         QTextCharFormat charFormat() const;
     };
+    struct Number {
+        QString value;
+    };
 
 public:
     ScreenplayTextModelTextItem();
@@ -88,6 +91,12 @@ public:
     void setReviewMarks(const QVector<QTextLayout::FormatRange>& _reviewMarks);
 
     /**
+     * @brief Номер сцены
+     */
+    void setNumber(int _number);
+    Number number() const;
+
+    /**
      * @brief Определяем интерфейс получения данных сцены
      */
     QVariant data(int _role) const override;
@@ -96,6 +105,12 @@ public:
      * @brief Определяем интерфейс для получения XML блока
      */
     QString toXml() const override;
+
+private:
+    /**
+     * @brief Пометить блок изменённым
+     */
+    void markChanged();
 
 private:
     class Implementation;

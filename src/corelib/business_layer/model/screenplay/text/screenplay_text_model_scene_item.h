@@ -19,10 +19,8 @@ public:
     /**
      * @brief Номер сцены
      */
-    struct SceneNumber {
+    struct Number {
         QString value;
-        int group = 0;
-        int groupIndex = 0;
     };
 
 public:
@@ -34,7 +32,7 @@ public:
      * @brief Номер сцены
      */
     void setNumber(int _number);
-    SceneNumber number() const;
+    Number number() const;
 
     /**
      * @brief Определяем интерфейс получения данных сцены
