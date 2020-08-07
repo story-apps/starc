@@ -13,6 +13,9 @@ namespace Ui {
 namespace ManagementLayer
 {
 
+/**
+ * @brief Менеджер экрана настроек
+ */
 class SettingsManager : public QObject
 {
     Q_OBJECT
@@ -55,6 +58,9 @@ signals:
     void screenplayEditorShowSceneNumberChanged(bool _show, bool _atLeft, bool _atRight);
     void screenplayEditorShowDialogueNumberChanged(bool _show);
     void screenplayEditorHighlightCurrentLineChanged(bool _highlight);
+    //
+    void screenplayNavigatorShowSceneNumberChanged(bool _show);
+    void screenplayNavigatorShowSceneTextChanged(bool _show, int _lines);
 
 protected:
     /**
@@ -86,6 +92,11 @@ private:
     void setScreenplayEditorShowSceneNumber(bool _show, bool _atLeft, bool _atRight);
     void setScreenplayEditorShowDialogueNumber(bool _show);
     void setScreenplayEditorHighlightCurrentLine(bool _highlight);
+    //
+    // Сохранение параметров навигатора сценария
+    //
+    void setScreenplayNavigatorShowSceneNumber(bool _show);
+    void setScreenplayNavigatorShowSceneText(bool _show, int _lines);
 
 private:
     class Implementation;

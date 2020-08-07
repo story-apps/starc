@@ -48,6 +48,11 @@ public:
     void setScreenplayEditorShowSceneNumber(bool _show, bool _atLeft, bool _atRight);
     void setScreenplayEditorShowDialogueNumber(bool _show);
     void setScreenplayEditorHighlightCurrentLine(bool _highlight);
+    //
+    // Задание параметров навигатора сценария
+    //
+    void setScreenplayNavigatorShowSceneNumber(bool _show);
+    void setScreenplayNavigatorShowSceneText(bool _show, int _lines);
 
 signals:
     /**
@@ -77,6 +82,11 @@ signals:
     void screenplayEditorShowSceneNumberChanged(bool _show, bool _atLeft, bool _atRight);
     void screenplayEditorShowDialogueNumberChanged(bool _show);
     void screenplayEditorHighlightCurrentLineChanged(bool _highlight);
+    //
+    // Уведомление об изменении параметров навигатора сценария
+    //
+    void screenplayNavigatorShowSceneNumberChanged(bool _show);
+    void screenplayNavigatorShowSceneTextChanged(bool _show, int _lines);
 
 protected:
     /**

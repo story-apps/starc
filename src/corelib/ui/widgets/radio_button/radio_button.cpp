@@ -134,11 +134,11 @@ void RadioButton::paintEvent(QPaintEvent* _event)
     // Рисуем сам переключатель
     //
     painter.setFont(Ui::DesignSystem::font().iconsMid());
-    painter.setPen(d->isChecked
-                   ? Ui::DesignSystem::color().secondary()
-                   : isEnabled()
-                     ? textColor()
-                     : ColorHelper::transparent(textColor(), Ui::DesignSystem::disabledTextOpacity()));
+    painter.setPen(!isEnabled()
+                   ? ColorHelper::transparent(textColor(), Ui::DesignSystem::disabledTextOpacity())
+                   : d->isChecked
+                     ? Ui::DesignSystem::color().secondary()
+                     : textColor());
     painter.drawText(iconRect, Qt::AlignCenter, d->isChecked ? u8"\U000f043e" : u8"\U000f043d");
 
     //

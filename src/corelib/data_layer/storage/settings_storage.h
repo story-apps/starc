@@ -97,12 +97,18 @@ namespace {
     //
     // сценарий
     const QString kComponentsScreenplayKey = kComponentsGroupKey + QStringLiteral("/screenplay");
+    // ... редактор
     const QString kComponentsScreenplayEditorKey = kComponentsScreenplayKey + QStringLiteral("/editor");
     const QString kComponentsScreenplayEditorShowSceneNumbersKey = kComponentsScreenplayEditorKey + QStringLiteral("/show-scene-numbers");
     const QString kComponentsScreenplayEditorShowSceneNumbersOnRightKey = kComponentsScreenplayEditorKey + QStringLiteral("/show-scene-numbers-on-left");
     const QString kComponentsScreenplayEditorShowSceneNumberOnLeftKey = kComponentsScreenplayEditorKey + QStringLiteral("/show-scene-number-on-right");
     const QString kComponentsScreenplayEditorShowDialogueNumberKey = kComponentsScreenplayEditorKey + QStringLiteral("/show-dialogue-number");
     const QString kComponentsScreenplayEditorHighlightCurrentLineKey = kComponentsScreenplayEditorKey + QStringLiteral("/highlight-current-line");
+    // ... навигатор
+    const QString kComponentsScreenplayNavigatorKey = kComponentsScreenplayKey + QStringLiteral("/navigator");
+    const QString kComponentsScreenplayNavigatorShowSceneNumberKey = kComponentsScreenplayNavigatorKey + QStringLiteral("/show-scene-number");
+    const QString kComponentsScreenplayNavigatorShowSceneTextKey = kComponentsScreenplayNavigatorKey + QStringLiteral("/show-scene-text");
+    const QString kComponentsScreenplayNavigatorSceneTextLinesKey = kComponentsScreenplayNavigatorKey + QStringLiteral("/scene-text-lines");
 }
 
 /**

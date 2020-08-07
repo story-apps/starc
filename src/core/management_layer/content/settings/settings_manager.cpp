@@ -107,6 +107,11 @@ void SettingsManager::Implementation::loadScreenplaySettings()
                 settingsValue(DataStorageLayer::kComponentsScreenplayEditorShowSceneNumberOnLeftKey).toBool());
     view->setScreenplayEditorShowDialogueNumber(settingsValue(DataStorageLayer::kComponentsScreenplayEditorShowDialogueNumberKey).toBool());
     view->setScreenplayEditorHighlightCurrentLine(settingsValue(DataStorageLayer::kComponentsScreenplayEditorHighlightCurrentLineKey).toBool());
+    //
+    view->setScreenplayNavigatorShowSceneNumber(settingsValue(DataStorageLayer::kComponentsScreenplayNavigatorShowSceneNumberKey).toBool());
+    view->setScreenplayNavigatorShowSceneText(
+                settingsValue(DataStorageLayer::kComponentsScreenplayNavigatorShowSceneTextKey).toBool(),
+                settingsValue(DataStorageLayer::kComponentsScreenplayNavigatorSceneTextLinesKey).toInt());
 }
 
 
@@ -156,9 +161,13 @@ SettingsManager::SettingsManager(QObject* _parent, QWidget* _parentWidget)
     connect(d->view, &Ui::SettingsView::applicationSaveBackupsChanged, this, &SettingsManager::setApplicationSaveBackups);
     connect(d->view, &Ui::SettingsView::applicationBackupsFolderChanged, this, &SettingsManager::setApplicationBackupsFolder);
     //
+    //
     connect(d->view, &Ui::SettingsView::screenplayEditorShowSceneNumberChanged, this, &SettingsManager::setScreenplayEditorShowSceneNumber);
     connect(d->view, &Ui::SettingsView::screenplayEditorShowDialogueNumberChanged, this, &SettingsManager::setScreenplayEditorShowDialogueNumber);
     connect(d->view, &Ui::SettingsView::screenplayEditorHighlightCurrentLineChanged, this, &SettingsManager::setScreenplayEditorHighlightCurrentLine);
+    //
+    connect(d->view, &Ui::SettingsView::screenplayNavigatorShowSceneNumberChanged, this, &SettingsManager::setScreenplayNavigatorShowSceneNumber);
+    connect(d->view, &Ui::SettingsView::screenplayNavigatorShowSceneTextChanged, this, &SettingsManager::setScreenplayNavigatorShowSceneText);
 
     //
     // Нотификации об изменении параметров
@@ -170,9 +179,13 @@ SettingsManager::SettingsManager(QObject* _parent, QWidget* _parentWidget)
     connect(d->view, &Ui::SettingsView::applicationSaveBackupsChanged, this, &SettingsManager::applicationSaveBackupsChanged);
     connect(d->view, &Ui::SettingsView::applicationBackupsFolderChanged, this, &SettingsManager::applicationBackupsFolderChanged);
     //
+    //
     connect(d->view, &Ui::SettingsView::screenplayEditorShowSceneNumberChanged, this, &SettingsManager::screenplayEditorShowSceneNumberChanged);
     connect(d->view, &Ui::SettingsView::screenplayEditorShowDialogueNumberChanged, this, &SettingsManager::screenplayEditorShowDialogueNumberChanged);
     connect(d->view, &Ui::SettingsView::screenplayEditorHighlightCurrentLineChanged, this, &SettingsManager::screenplayEditorHighlightCurrentLineChanged);
+    //
+    connect(d->view, &Ui::SettingsView::screenplayNavigatorShowSceneNumberChanged, this, &SettingsManager::screenplayNavigatorShowSceneNumberChanged);
+    connect(d->view, &Ui::SettingsView::screenplayNavigatorShowSceneTextChanged, this, &SettingsManager::screenplayNavigatorShowSceneTextChanged);
 }
 
 SettingsManager::~SettingsManager() = default;
@@ -438,6 +451,17 @@ void SettingsManager::setScreenplayEditorShowDialogueNumber(bool _show)
 void SettingsManager::setScreenplayEditorHighlightCurrentLine(bool _highlight)
 {
     d->setSettingsValue(DataStorageLayer::kComponentsScreenplayEditorHighlightCurrentLineKey, _highlight);
+}
+
+void SettingsManager::setScreenplayNavigatorShowSceneNumber(bool _show)
+{
+    d->setSettingsValue(DataStorageLayer::kComponentsScreenplayNavigatorShowSceneNumberKey, _show);
+}
+
+void SettingsManager::setScreenplayNavigatorShowSceneText(bool _show, int _lines)
+{
+    d->setSettingsValue(DataStorageLayer::kComponentsScreenplayNavigatorShowSceneTextKey, _show);
+    d->setSettingsValue(DataStorageLayer::kComponentsScreenplayNavigatorSceneTextLinesKey, _lines);
 }
 
 }

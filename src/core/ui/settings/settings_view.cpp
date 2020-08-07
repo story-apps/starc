@@ -6,6 +6,8 @@
 #include <ui/widgets/check_box/check_box.h>
 #include <ui/widgets/combo_box/combo_box.h>
 #include <ui/widgets/label/label.h>
+#include <ui/widgets/radio_button/radio_button.h>
+#include <ui/widgets/radio_button/radio_button_group.h>
 #include <ui/widgets/scroll_bar/scroll_bar.h>
 #include <ui/widgets/slider/slider.h>
 #include <ui/widgets/text_field/text_field.h>
@@ -255,13 +257,21 @@ public:
     //
     H6Label* screenplayEditorTitle = nullptr;
     CheckBox* screenplayEditorShowSceneNumber = nullptr;
-    CheckBox* screenplayEditorShowSceneNumberAtLeft = nullptr;
-    CheckBox* screenplayEditorShowSceneNumberAtRight = nullptr;
+    CheckBox* screenplayEditorShowSceneNumberOnLeft = nullptr;
+    CheckBox* screenplayEditorShowSceneNumberOnRight = nullptr;
     CheckBox* screenplayEditorShowDialogueNumber = nullptr;
     CheckBox* screenplayEditorHighlightCurrentLine = nullptr;
     //
     // ... Screenplay navigator
     //
+    H6Label* screenplayNavigatorTitle = nullptr;
+    CheckBox* screenplayNavigatorShowSceneNumber = nullptr;
+    CheckBox* screenplayNavigatorShowSceneText = nullptr;
+    RadioButton* screenplayNavigatorSceneDescriptionLines1 = nullptr;
+    RadioButton* screenplayNavigatorSceneDescriptionLines2 = nullptr;
+    RadioButton* screenplayNavigatorSceneDescriptionLines3 = nullptr;
+    RadioButton* screenplayNavigatorSceneDescriptionLines4 = nullptr;
+    RadioButton* screenplayNavigatorSceneDescriptionLines5 = nullptr;
     //
     int screenplayCardBottomSpacerIndex = 0;
 
@@ -304,10 +314,18 @@ SettingsView::Implementation::Implementation(QWidget* _parent)
       screenplayTitle(new H5Label(screenplayCard)),
       screenplayEditorTitle(new H6Label(screenplayCard)),
       screenplayEditorShowSceneNumber(new CheckBox(screenplayCard)),
-      screenplayEditorShowSceneNumberAtLeft(new CheckBox(screenplayCard)),
-      screenplayEditorShowSceneNumberAtRight(new CheckBox(screenplayCard)),
+      screenplayEditorShowSceneNumberOnLeft(new CheckBox(screenplayCard)),
+      screenplayEditorShowSceneNumberOnRight(new CheckBox(screenplayCard)),
       screenplayEditorShowDialogueNumber(new CheckBox(screenplayCard)),
       screenplayEditorHighlightCurrentLine(new CheckBox(screenplayCard)),
+      screenplayNavigatorTitle(new H6Label(screenplayCard)),
+      screenplayNavigatorShowSceneNumber(new CheckBox(screenplayCard)),
+      screenplayNavigatorShowSceneText(new CheckBox(screenplayCard)),
+      screenplayNavigatorSceneDescriptionLines1(new RadioButton(screenplayCard)),
+      screenplayNavigatorSceneDescriptionLines2(new RadioButton(screenplayCard)),
+      screenplayNavigatorSceneDescriptionLines3(new RadioButton(screenplayCard)),
+      screenplayNavigatorSceneDescriptionLines4(new RadioButton(screenplayCard)),
+      screenplayNavigatorSceneDescriptionLines5(new RadioButton(screenplayCard)),
       //
       shortcutsCard(new Card(content)),
       shortcutsCardLayout(new QGridLayout),
@@ -413,9 +431,23 @@ void SettingsView::Implementation::initApplicationCard()
 
 void SettingsView::Implementation::initScreenplayCard()
 {
-    screenplayEditorShowSceneNumberAtLeft->setEnabled(false);
-    screenplayEditorShowSceneNumberAtLeft->setChecked(true);
-    screenplayEditorShowSceneNumberAtRight->setEnabled(false);
+    screenplayEditorShowSceneNumberOnLeft->setEnabled(false);
+    screenplayEditorShowSceneNumberOnLeft->setChecked(true);
+    screenplayEditorShowSceneNumberOnRight->setEnabled(false);
+    //
+    auto linesGroup = new RadioButtonGroup(screenplayCard);
+    linesGroup->add(screenplayNavigatorSceneDescriptionLines1);
+    linesGroup->add(screenplayNavigatorSceneDescriptionLines2);
+    linesGroup->add(screenplayNavigatorSceneDescriptionLines3);
+    linesGroup->add(screenplayNavigatorSceneDescriptionLines4);
+    linesGroup->add(screenplayNavigatorSceneDescriptionLines5);
+    screenplayNavigatorSceneDescriptionLines1->setEnabled(false);
+    screenplayNavigatorSceneDescriptionLines1->setChecked(true);
+    screenplayNavigatorSceneDescriptionLines2->setEnabled(false);
+    screenplayNavigatorSceneDescriptionLines3->setEnabled(false);
+    screenplayNavigatorSceneDescriptionLines4->setEnabled(false);
+    screenplayNavigatorSceneDescriptionLines5->setEnabled(false);
+
 
     //
     // Компоновка
@@ -431,13 +463,29 @@ void SettingsView::Implementation::initScreenplayCard()
     {
         auto layout = makeLayout();
         layout->addWidget(screenplayEditorShowSceneNumber);
-        layout->addWidget(screenplayEditorShowSceneNumberAtLeft);
-        layout->addWidget(screenplayEditorShowSceneNumberAtRight);
+        layout->addWidget(screenplayEditorShowSceneNumberOnLeft);
+        layout->addWidget(screenplayEditorShowSceneNumberOnRight);
         layout->addStretch();
         screenplayCardLayout->addLayout(layout, itemIndex++, 0);
     }
     screenplayCardLayout->addWidget(screenplayEditorShowDialogueNumber, itemIndex++, 0);
     screenplayCardLayout->addWidget(screenplayEditorHighlightCurrentLine, itemIndex++, 0);
+    //
+    // ... навигатор сценария
+    //
+    screenplayCardLayout->addWidget(screenplayNavigatorTitle, itemIndex++, 0);
+    screenplayCardLayout->addWidget(screenplayNavigatorShowSceneNumber, itemIndex++, 0);
+    {
+        auto layout = makeLayout();
+        layout->addWidget(screenplayNavigatorShowSceneText);
+        layout->addWidget(screenplayNavigatorSceneDescriptionLines1);
+        layout->addWidget(screenplayNavigatorSceneDescriptionLines2);
+        layout->addWidget(screenplayNavigatorSceneDescriptionLines3);
+        layout->addWidget(screenplayNavigatorSceneDescriptionLines4);
+        layout->addWidget(screenplayNavigatorSceneDescriptionLines5);
+        layout->addStretch();
+        screenplayCardLayout->addLayout(layout, itemIndex++, 0);
+    }
     //
     screenplayCardBottomSpacerIndex = itemIndex;
     screenplayCard->setLayoutReimpl(screenplayCardLayout);
@@ -528,27 +576,56 @@ SettingsView::SettingsView(QWidget* _parent)
     //
     // ... Редактор сценария
     //
-    connect(d->screenplayEditorShowSceneNumber, &CheckBox::checkedChanged, d->screenplayEditorShowSceneNumberAtLeft, &CheckBox::setEnabled);
-    connect(d->screenplayEditorShowSceneNumber, &CheckBox::checkedChanged, d->screenplayEditorShowSceneNumberAtRight, &CheckBox::setEnabled);
+    connect(d->screenplayEditorShowSceneNumber, &CheckBox::checkedChanged, d->screenplayEditorShowSceneNumberOnLeft, &CheckBox::setEnabled);
+    connect(d->screenplayEditorShowSceneNumber, &CheckBox::checkedChanged, d->screenplayEditorShowSceneNumberOnRight, &CheckBox::setEnabled);
     auto screenplayEditorCorrectShownSceneNumber = [this] {
-        if (!d->screenplayEditorShowSceneNumberAtLeft->isChecked()
-            && !d->screenplayEditorShowSceneNumberAtRight->isChecked()) {
-            d->screenplayEditorShowSceneNumberAtLeft->setChecked(true);
+        if (!d->screenplayEditorShowSceneNumberOnLeft->isChecked()
+            && !d->screenplayEditorShowSceneNumberOnRight->isChecked()) {
+            d->screenplayEditorShowSceneNumberOnLeft->setChecked(true);
         }
     };
-    connect(d->screenplayEditorShowSceneNumberAtLeft, &CheckBox::checkedChanged, this, screenplayEditorCorrectShownSceneNumber);
-    connect(d->screenplayEditorShowSceneNumberAtRight, &CheckBox::checkedChanged, this, screenplayEditorCorrectShownSceneNumber);
+    connect(d->screenplayEditorShowSceneNumberOnLeft, &CheckBox::checkedChanged, this, screenplayEditorCorrectShownSceneNumber);
+    connect(d->screenplayEditorShowSceneNumberOnRight, &CheckBox::checkedChanged, this, screenplayEditorCorrectShownSceneNumber);
     //
     auto notifyScreenplayEditorShowSceneNumbersChanged = [this] {
         emit screenplayEditorShowSceneNumberChanged(d->screenplayEditorShowSceneNumber->isChecked(),
-                                                    d->screenplayEditorShowSceneNumberAtLeft->isChecked(),
-                                                    d->screenplayEditorShowSceneNumberAtRight->isChecked());
+                                                    d->screenplayEditorShowSceneNumberOnLeft->isChecked(),
+                                                    d->screenplayEditorShowSceneNumberOnRight->isChecked());
     };
     connect(d->screenplayEditorShowSceneNumber, &CheckBox::checkedChanged, this, notifyScreenplayEditorShowSceneNumbersChanged);
-    connect(d->screenplayEditorShowSceneNumberAtLeft, &CheckBox::checkedChanged, this, notifyScreenplayEditorShowSceneNumbersChanged);
-    connect(d->screenplayEditorShowSceneNumberAtRight, &CheckBox::checkedChanged, this, notifyScreenplayEditorShowSceneNumbersChanged);
+    connect(d->screenplayEditorShowSceneNumberOnLeft, &CheckBox::checkedChanged, this, notifyScreenplayEditorShowSceneNumbersChanged);
+    connect(d->screenplayEditorShowSceneNumberOnRight, &CheckBox::checkedChanged, this, notifyScreenplayEditorShowSceneNumbersChanged);
     connect(d->screenplayEditorShowDialogueNumber, &CheckBox::checkedChanged, this, &SettingsView::screenplayEditorShowDialogueNumberChanged);
     connect(d->screenplayEditorHighlightCurrentLine, &CheckBox::checkedChanged, this, &SettingsView::screenplayEditorHighlightCurrentLineChanged);
+    //
+    // ... навигатор сценария
+    //
+    connect(d->screenplayNavigatorShowSceneText, &CheckBox::checkedChanged, d->screenplayNavigatorSceneDescriptionLines1, &RadioButton::setEnabled);
+    connect(d->screenplayNavigatorShowSceneText, &CheckBox::checkedChanged, d->screenplayNavigatorSceneDescriptionLines2, &RadioButton::setEnabled);
+    connect(d->screenplayNavigatorShowSceneText, &CheckBox::checkedChanged, d->screenplayNavigatorSceneDescriptionLines3, &RadioButton::setEnabled);
+    connect(d->screenplayNavigatorShowSceneText, &CheckBox::checkedChanged, d->screenplayNavigatorSceneDescriptionLines4, &RadioButton::setEnabled);
+    connect(d->screenplayNavigatorShowSceneText, &CheckBox::checkedChanged, d->screenplayNavigatorSceneDescriptionLines5, &RadioButton::setEnabled);
+    //
+    connect(d->screenplayNavigatorShowSceneNumber, &CheckBox::checkedChanged, this, &SettingsView::screenplayNavigatorShowSceneNumberChanged);
+    auto notifyScreenplayNavigatorShowSceneTextChanged = [this] {
+        int sceneTextLines = 1;
+        if (d->screenplayNavigatorSceneDescriptionLines2->isChecked()) {
+            sceneTextLines = 2;
+        } else if (d->screenplayNavigatorSceneDescriptionLines3->isChecked()) {
+            sceneTextLines = 3;
+        } else if (d->screenplayNavigatorSceneDescriptionLines4->isChecked()) {
+            sceneTextLines = 4;
+        } else if (d->screenplayNavigatorSceneDescriptionLines5->isChecked()) {
+            sceneTextLines = 5;
+        }
+        emit screenplayNavigatorShowSceneTextChanged(d->screenplayNavigatorShowSceneText->isChecked(), sceneTextLines);
+    };
+    connect(d->screenplayNavigatorShowSceneText, &CheckBox::checkedChanged, this, notifyScreenplayNavigatorShowSceneTextChanged);
+    connect(d->screenplayNavigatorSceneDescriptionLines1, &RadioButton::checkedChanged, this, notifyScreenplayNavigatorShowSceneTextChanged);
+    connect(d->screenplayNavigatorSceneDescriptionLines2, &RadioButton::checkedChanged, this, notifyScreenplayNavigatorShowSceneTextChanged);
+    connect(d->screenplayNavigatorSceneDescriptionLines3, &RadioButton::checkedChanged, this, notifyScreenplayNavigatorShowSceneTextChanged);
+    connect(d->screenplayNavigatorSceneDescriptionLines4, &RadioButton::checkedChanged, this, notifyScreenplayNavigatorShowSceneTextChanged);
+    connect(d->screenplayNavigatorSceneDescriptionLines5, &RadioButton::checkedChanged, this, notifyScreenplayNavigatorShowSceneTextChanged);
 
     designSystemChangeEvent(nullptr);
 }
@@ -667,11 +744,11 @@ void SettingsView::setApplicationBackupsFolder(const QString& _path)
 
 void SettingsView::setScreenplayEditorShowSceneNumber(bool _show, bool _atLeft, bool _atRight)
 {
-    QSignalBlocker blocker(d->screenplayEditorShowSceneNumberAtLeft);
+    QSignalBlocker blocker(d->screenplayEditorShowSceneNumberOnLeft);
 
     d->screenplayEditorShowSceneNumber->setChecked(_show);
-    d->screenplayEditorShowSceneNumberAtLeft->setChecked(_atLeft);
-    d->screenplayEditorShowSceneNumberAtRight->setChecked(_atRight);
+    d->screenplayEditorShowSceneNumberOnLeft->setChecked(_atLeft);
+    d->screenplayEditorShowSceneNumberOnRight->setChecked(_atRight);
 }
 
 void SettingsView::setScreenplayEditorShowDialogueNumber(bool _show)
@@ -682,6 +759,42 @@ void SettingsView::setScreenplayEditorShowDialogueNumber(bool _show)
 void SettingsView::setScreenplayEditorHighlightCurrentLine(bool _highlight)
 {
     d->screenplayEditorHighlightCurrentLine->setChecked(_highlight);
+}
+
+void SettingsView::setScreenplayNavigatorShowSceneNumber(bool _show)
+{
+    d->screenplayNavigatorShowSceneNumber->setChecked(_show);
+}
+
+void SettingsView::setScreenplayNavigatorShowSceneText(bool _show, int _lines)
+{
+    d->screenplayNavigatorShowSceneText->setChecked(_show);
+    switch(_lines) {
+        case 1: {
+            d->screenplayNavigatorSceneDescriptionLines1->setChecked(true);
+            break;
+        }
+
+        case 2: {
+            d->screenplayNavigatorSceneDescriptionLines2->setChecked(true);
+            break;
+        }
+
+        case 3: {
+            d->screenplayNavigatorSceneDescriptionLines3->setChecked(true);
+            break;
+        }
+
+        case 4: {
+            d->screenplayNavigatorSceneDescriptionLines4->setChecked(true);
+            break;
+        }
+
+        case 5: {
+            d->screenplayNavigatorSceneDescriptionLines5->setChecked(true);
+            break;
+        }
+    }
 }
 
 void SettingsView::updateTranslations()
@@ -830,10 +943,18 @@ void SettingsView::updateTranslations()
     d->screenplayTitle->setText(tr("Screenplay"));
     d->screenplayEditorTitle->setText(tr("Text editor"));
     d->screenplayEditorShowSceneNumber->setText(tr("Show scene number"));
-    d->screenplayEditorShowSceneNumberAtLeft->setText(tr("on the left"));
-    d->screenplayEditorShowSceneNumberAtRight->setText(tr("on the right"));
+    d->screenplayEditorShowSceneNumberOnLeft->setText(tr("on the left"));
+    d->screenplayEditorShowSceneNumberOnRight->setText(tr("on the right"));
     d->screenplayEditorShowDialogueNumber->setText(tr("Show dialogue number"));
     d->screenplayEditorHighlightCurrentLine->setText(tr("Highlight current line"));
+    d->screenplayNavigatorTitle->setText(tr("Navigator"));
+    d->screenplayNavigatorShowSceneNumber->setText(tr("Show scene number"));
+    d->screenplayNavigatorShowSceneText->setText(tr("Show scene text, lines"));
+    d->screenplayNavigatorSceneDescriptionLines1->setText("1");
+    d->screenplayNavigatorSceneDescriptionLines2->setText("2");
+    d->screenplayNavigatorSceneDescriptionLines3->setText("3");
+    d->screenplayNavigatorSceneDescriptionLines4->setText("4");
+    d->screenplayNavigatorSceneDescriptionLines5->setText("5");
 
     d->shortcutsTitle->setText(tr("Shortcuts"));
 }
@@ -854,12 +975,14 @@ void SettingsView::designSystemChangeEvent(DesignSystemChangeEvent* _event)
 
     auto titleColor = DesignSystem::color().onBackground();
     titleColor.setAlphaF(DesignSystem::inactiveTextOpacity());
-    for (auto cardTitle : QVector<Widget*>{ d->applicationTitle,
-                                        d->applicationUserInterfaceTitle,
-                                        d->applicationSaveAndBackupTitle,
-                                        d->screenplayTitle,
-                                        d->screenplayEditorTitle,
-                                        d->shortcutsTitle }) {
+    for (auto cardTitle : QVector<Widget*>{
+         d->applicationTitle,
+         d->applicationUserInterfaceTitle,
+         d->applicationSaveAndBackupTitle,
+         d->screenplayTitle,
+         d->screenplayEditorTitle,
+         d->screenplayNavigatorTitle,
+         d->shortcutsTitle }) {
         cardTitle->setBackgroundColor(DesignSystem::color().background());
         cardTitle->setTextColor(titleColor);
         cardTitle->setContentsMargins(Ui::DesignSystem::label().margins().toMargins());
@@ -889,12 +1012,24 @@ void SettingsView::designSystemChangeEvent(DesignSystemChangeEvent* _event)
          d->saveBackups,
          //
          d->screenplayEditorShowSceneNumber,
-         d->screenplayEditorShowSceneNumberAtLeft,
-         d->screenplayEditorShowSceneNumberAtRight,
+         d->screenplayEditorShowSceneNumberOnLeft,
+         d->screenplayEditorShowSceneNumberOnRight,
          d->screenplayEditorShowDialogueNumber,
-         d->screenplayEditorHighlightCurrentLine }) {
+         d->screenplayEditorHighlightCurrentLine,
+         d->screenplayNavigatorShowSceneNumber,
+         d->screenplayNavigatorShowSceneText }) {
         checkBox->setBackgroundColor(DesignSystem::color().background());
         checkBox->setTextColor(DesignSystem::color().onBackground());
+    }
+
+    for (auto radioButton : {
+         d->screenplayNavigatorSceneDescriptionLines1,
+         d->screenplayNavigatorSceneDescriptionLines2,
+         d->screenplayNavigatorSceneDescriptionLines3,
+         d->screenplayNavigatorSceneDescriptionLines4,
+         d->screenplayNavigatorSceneDescriptionLines5 }) {
+        radioButton->setBackgroundColor(DesignSystem::color().background());
+        radioButton->setTextColor(DesignSystem::color().onBackground());
     }
 
     for (auto textField : QVector<TextField*>{ d->spellCheckerLanguage,
