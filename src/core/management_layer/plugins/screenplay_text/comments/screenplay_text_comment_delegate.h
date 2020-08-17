@@ -17,8 +17,8 @@ public:
     /**
      * @brief Реализуем собственную отрисовку
      */
-    void paint(QPainter* _painter, const QStyleOptionViewItem& _option, const QModelIndex& _index) const;
-    QSize sizeHint(const QStyleOptionViewItem& _option, const QModelIndex& _index) const;
+    void paint(QPainter* _painter, const QStyleOptionViewItem& _option, const QModelIndex& _index) const override;
+    QSize sizeHint(const QStyleOptionViewItem& _option, const QModelIndex& _index) const override;
 };
 
 } // namespace Ui

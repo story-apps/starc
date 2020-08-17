@@ -105,6 +105,19 @@ QString TextHelper::elidedText(const QString& _text, const QFont& _font, const Q
             //     чтобы корректно обработать ситуацию длинного слова в конце строки
             //
             QString lastLine = _text.mid(line.textStart(), line.textLength() * 2);
+
+            //
+            // ... если весь текст влез, не надо добавлять многоточие в конце
+            //
+            if (metrics.horizontalAdvance(lastLine) <= _rect.width()
+                && _text.endsWith(lastLine)) {
+                elidedText += lastLine;
+                break;
+            }
+
+            //
+            // ... многоточим
+            //
             lastLine += "…";
             while (lastLine.length() > 1
                    && metrics.horizontalAdvance(lastLine) > _rect.width()) {

@@ -131,6 +131,11 @@ QWidget* ScreenplayTextStructureManager::createView()
     return d->createView();
 }
 
+void ScreenplayTextStructureManager::reconfigure()
+{
+    d->view->reconfigure();
+}
+
 void ScreenplayTextStructureManager::bind(IDocumentManager* _manager)
 {
     Q_ASSERT(_manager);

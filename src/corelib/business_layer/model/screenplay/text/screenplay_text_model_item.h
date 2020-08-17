@@ -41,6 +41,11 @@ public:
     ScreenplayTextModelItem* childAt(int _index) const override;
 
     /**
+     * @brief Определяем интерфейс получения данных элемента
+     */
+    QVariant data(int _role) const override;
+
+    /**
      * @brief Сформировать xml блока
      */
     virtual QString toXml() const = 0;

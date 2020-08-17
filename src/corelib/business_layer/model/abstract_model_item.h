@@ -91,6 +91,12 @@ public:
     bool isChanged() const;
     void setChanged(bool _changed);
 
+protected:
+    /**
+     * @brief Возможность обработки изменния для дочерних классов
+     */
+    virtual void handleChange() {}
+
 private:
     class Implementation;
     QScopedPointer<Implementation> d;

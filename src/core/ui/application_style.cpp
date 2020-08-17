@@ -58,6 +58,9 @@ int ApplicationStyle::pixelMetric(QStyle::PixelMetric _metric, const QStyleOptio
 void ApplicationStyle::drawPrimitive(QStyle::PrimitiveElement _element, const QStyleOption* _option,
     QPainter* _painter, const QWidget* _widget) const
 {
+    //
+    // Отрисовка индикатора вставки/перемещения элементов при драг&дропе
+    //
     if (_element == PE_IndicatorItemViewItemDrop) {
         _painter->setRenderHint(QPainter::Antialiasing, true);
 
@@ -130,7 +133,7 @@ void ApplicationStyle::drawPrimitive(QStyle::PrimitiveElement _element, const QS
         }
     }
     //
-    // Рисуем индикатор элемента
+    // Рисуем индикатор элемента в дереве (открытый/закрытый)
     //
     else if (_element == PE_IndicatorBranch) {
         _painter->setRenderHint(QPainter::Antialiasing, true);
@@ -192,7 +195,13 @@ void ApplicationStyle::drawPrimitive(QStyle::PrimitiveElement _element, const QS
                              << QPointF(-arrowHeight, 0.0);
                 }
             }
-            const QPointF distance = _option->rect.center() - triangle.boundingRect().center();
+
+            //
+            // Позиционируем
+            //
+            auto optionRectCenter = _option->rect.center();
+            optionRectCenter.setY(_option->rect.top() + Ui::DesignSystem::treeOneLineItem().height() / 2);
+            const QPointF distance = optionRectCenter - triangle.boundingRect().center();
             triangle.translate(distance);
 
             //

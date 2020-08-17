@@ -1253,6 +1253,10 @@ void ApplicationManager::initConnections()
             [this] { d->projectManager->reconfigureScreenplayEditor(); });
     connect(d->settingsManager.data(), &SettingsManager::screenplayEditorHighlightCurrentLineChanged, this,
             [this] { d->projectManager->reconfigureScreenplayEditor(); });
+    connect(d->settingsManager.data(), &SettingsManager::screenplayNavigatorShowSceneNumberChanged, this,
+            [this] { d->projectManager->reconfigureScreenplayNavigator(); });
+    connect(d->settingsManager.data(), &SettingsManager::screenplayNavigatorShowSceneTextChanged, this,
+            [this] { d->projectManager->reconfigureScreenplayNavigator(); });
 
 #ifdef CLOUD_SERVICE_MANAGER
     //

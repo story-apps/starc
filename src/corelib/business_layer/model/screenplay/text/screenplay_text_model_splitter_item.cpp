@@ -50,18 +50,12 @@ ScreenplayTextModelSplitterItem::ScreenplayTextModelSplitterItem(const QDomEleme
     d->type = kSplitterTypeToString.key(_node.attribute(kTypeAttribute));
 }
 
+ScreenplayTextModelSplitterItem::~ScreenplayTextModelSplitterItem() = default;
+
 ScreenplayTextModelSplitterItemType ScreenplayTextModelSplitterItem::splitterType() const
 {
     return d->type;
 }
-
-QVariant ScreenplayTextModelSplitterItem::data(int _role) const
-{
-    Q_UNUSED(_role);
-    return {};
-}
-
-ScreenplayTextModelSplitterItem::~ScreenplayTextModelSplitterItem() = default;
 
 QString ScreenplayTextModelSplitterItem::toXml() const
 {

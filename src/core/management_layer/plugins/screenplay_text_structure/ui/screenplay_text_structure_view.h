@@ -17,6 +17,11 @@ public:
     ~ScreenplayTextStructureView() override;
 
     /**
+     * @brief Настроить навигатор в соответствии с параметрами заданными в настройках
+     */
+    void reconfigure();
+
+    /**
      * @brief Задать заголовок навигатора
      */
     void setTitle(const QString& _title) override;

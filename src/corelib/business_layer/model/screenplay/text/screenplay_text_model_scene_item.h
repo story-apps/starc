@@ -23,6 +23,17 @@ public:
         QString value;
     };
 
+    /**
+     * @brief Роли данных из модели
+     */
+    enum DataRole {
+        SceneNumberRole = Qt::UserRole + 1,
+        SceneHeadingRole,
+        SceneTextRole,
+        SceneInlineNotesSizeRole,
+        SceneReviewMarksSizeRole
+    };
+
 public:
     ScreenplayTextModelSceneItem();
     explicit ScreenplayTextModelSceneItem(const QDomElement& _node);
@@ -43,6 +54,12 @@ public:
      * @brief Определяем интерфейс для получения XML блока
      */
     QString toXml() const override;
+
+protected:
+    /**
+     * @brief Обновляем текст сцены при изменении кого-то из детей
+     */
+    void handleChange() override;
 
 private:
     class Implementation;

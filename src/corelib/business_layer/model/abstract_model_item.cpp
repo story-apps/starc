@@ -117,6 +117,8 @@ void AbstractModelItem::setChanged(bool _changed)
         && d->parent != nullptr) {
         d->parent->setChanged(_changed);
     }
+
+    handleChange();
 }
 
 } // namespace BusinessLayer

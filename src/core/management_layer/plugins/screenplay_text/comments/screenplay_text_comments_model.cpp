@@ -768,20 +768,20 @@ QVariant ScreenplayTextCommentsModel::data(const QModelIndex& _index, int _role)
 
     const auto reviewMarkWrapper = d->reviewMarks.at(_index.row());
     switch (_role) {
-        case ReviewMarkAuthorEmail: {
+        case ReviewMarkAuthorEmailRole: {
             return reviewMarkWrapper.reviewMark.comments.constFirst().author;
         }
 
-        case ReviewMarkCreationDate: {
+        case ReviewMarkCreationDateRole: {
             return reviewMarkWrapper.reviewMark.comments.constFirst().date;
         }
 
-        case ReviewMarkComment: {
+        case ReviewMarkCommentRole: {
             return reviewMarkWrapper.reviewMark.comments.constFirst().text;
 
         }
 
-        case ReviewMarkColor: {
+        case ReviewMarkColorRole: {
             if (reviewMarkWrapper.reviewMark.backgroundColor.isValid()) {
                 return reviewMarkWrapper.reviewMark.backgroundColor;
             } else {
@@ -790,13 +790,14 @@ QVariant ScreenplayTextCommentsModel::data(const QModelIndex& _index, int _role)
 
         }
 
-        case ReviewMarkIsDone: {
+        case ReviewMarkIsDoneRole: {
             return reviewMarkWrapper.reviewMark.isDone;
+        }
 
+        default: {
+            return {};
         }
     }
-
-    return {};
 }
 
 } // namespace BusinessLayer

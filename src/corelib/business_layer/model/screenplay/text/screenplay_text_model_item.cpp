@@ -1,5 +1,7 @@
 #include "screenplay_text_model_item.h"
 
+#include <QVariant>
+
 
 namespace BusinessLayer
 {
@@ -41,6 +43,15 @@ ScreenplayTextModelItem* ScreenplayTextModelItem::parent() const
 ScreenplayTextModelItem* ScreenplayTextModelItem::childAt(int _index) const
 {
     return static_cast<ScreenplayTextModelItem*>(AbstractModelItem::childAt(_index));
+}
+
+QVariant ScreenplayTextModelItem::data(int _role) const
+{
+    if (_role == Qt::UserRole) {
+        return static_cast<int>(d->type);
+    }
+
+    return {};
 }
 
 } // namespace BusinessLayer

@@ -3,6 +3,8 @@
 #include "screenplay_text_model_splitter_item.h"
 #include "screenplay_text_model_text_item.h"
 
+#include <business_layer/templates/screenplay_template.h>
+
 #include <utils/helpers/text_helper.h>
 
 #include <QDomElement>
@@ -33,6 +35,7 @@ class ScreenplayTextModelSceneItem::Implementation
 public:
     Implementation();
 
+
     /**
      * @brief Идентификатор сцены
      */
@@ -57,6 +60,30 @@ public:
      * @brief Запланированная длительность сцены
      */
     std::optional<int> plannedDuration;
+
+    //
+    // Ридонли свойства, которые формируются по ходу работы со сценарием
+    //
+
+    /**
+     * @brief Заголовок сцены
+     */
+    QString heading;
+
+    /**
+     * @brief Текст сцены
+     */
+    QString text;
+
+    /**
+     * @brief Количество заметок по тексту
+     */
+    int inlineNotesSize = 0;
+
+    /**
+     * @brief Количество редакторских заметок
+     */
+    int reviewMarksSize = 0;
 };
 
 ScreenplayTextModelSceneItem::Implementation::Implementation()
@@ -108,6 +135,11 @@ ScreenplayTextModelSceneItem::ScreenplayTextModelSceneItem(const QDomElement& _n
         }
         childNode = childNode.nextSiblingElement();
     }
+
+    //
+    // Соберём заголовок, текст сцены и прочие параметры
+    //
+    handleChange();
 }
 
 void ScreenplayTextModelSceneItem::setNumber(int _number)
@@ -139,25 +171,37 @@ ScreenplayTextModelSceneItem::~ScreenplayTextModelSceneItem() = default;
 QVariant ScreenplayTextModelSceneItem::data(int _role) const
 {
     switch (_role) {
-        case Qt::DisplayRole: {
-            for (int childIndex = 0; childIndex < childCount(); ++childIndex) {
-                auto child = childAt(childIndex);
-                if (child->type() != ScreenplayTextModelItemType::Text) {
-                    continue;
-                }
+        case Qt::DecorationRole: {
+            return u8"\U000f021a";
+        }
 
-                auto childTextItem = static_cast<ScreenplayTextModelTextItem*>(child);
-                return TextHelper::smartToUpper(childTextItem->text());
+        case SceneNumberRole: {
+            if (d->number.has_value()) {
+                return d->number->value;
             }
             return {};
         }
 
-        case Qt::DecorationRole: {
-            return u8"\U000f021a";
+        case SceneHeadingRole: {
+            return d->heading;
+        }
+
+        case SceneTextRole: {
+            return d->text;
+        }
+
+        case SceneInlineNotesSizeRole: {
+            return d->inlineNotesSize;
+        }
+
+        case SceneReviewMarksSizeRole: {
+            return d->reviewMarksSize;
+        }
+
+        default: {
+            return ScreenplayTextModelItem::data(_role);
         }
     }
-
-    return {};
 }
 
 QString ScreenplayTextModelSceneItem::toXml() const
@@ -189,6 +233,44 @@ QString ScreenplayTextModelSceneItem::toXml() const
     xml.append(QString("</%1>\n").arg(kSceneTag));
 
     return xml;
+}
+
+void ScreenplayTextModelSceneItem::handleChange()
+{
+    d->heading.clear();
+    d->text.clear();
+    d->inlineNotesSize = 0;
+    d->reviewMarksSize = 0;
+
+    for (int childIndex = 0; childIndex < childCount(); ++childIndex) {
+        auto child = childAt(childIndex);
+        if (child->type() != ScreenplayTextModelItemType::Text) {
+            continue;
+        }
+
+        auto childTextItem = static_cast<ScreenplayTextModelTextItem*>(child);
+        switch (childTextItem->paragraphType()) {
+            case ScreenplayParagraphType::SceneHeading: {
+                d->heading = TextHelper::smartToUpper(childTextItem->text());
+                break;
+            }
+
+            case ScreenplayParagraphType::InlineNote: {
+                ++d->inlineNotesSize;
+                break;
+            }
+
+            default: {
+                d->text.append(childTextItem->text() + " ");
+                d->reviewMarksSize += std::count_if(childTextItem->reviewMarks().begin(),
+                                                    childTextItem->reviewMarks().end(),
+                                                    [] (const ScreenplayTextModelTextItem::ReviewMark& _reviewMark) {
+                                                        return !_reviewMark.isDone;
+                                                    });
+                break;
+            }
+        }
+    }
 }
 
 } // namespace BusinessLayer

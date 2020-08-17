@@ -37,6 +37,12 @@ public:
      * @brief Идентификатор папки
      */
     QUuid uuid;
+
+    //
+    // Ридонли свойства, которые формируются по ходу работы со сценарием
+    //
+
+    QString name;
 };
 
 ScreenplayTextModelFolderItem::Implementation::Implementation()
@@ -73,6 +79,11 @@ ScreenplayTextModelFolderItem::ScreenplayTextModelFolderItem(const QDomElement& 
         }
         childNode = childNode.nextSiblingElement();
     }
+
+    //
+    // Определим название
+    //
+    handleChange();
 }
 
 ScreenplayTextModelFolderItem::~ScreenplayTextModelFolderItem() = default;
@@ -80,25 +91,18 @@ ScreenplayTextModelFolderItem::~ScreenplayTextModelFolderItem() = default;
 QVariant ScreenplayTextModelFolderItem::data(int _role) const
 {
     switch (_role) {
-        case Qt::DisplayRole: {
-            for (int childIndex = 0; childIndex < childCount(); ++childIndex) {
-                auto child = childAt(childIndex);
-                if (child->type() != ScreenplayTextModelItemType::Text) {
-                    continue;
-                }
-
-                auto childTextItem = static_cast<ScreenplayTextModelTextItem*>(child);
-                return TextHelper::smartToUpper(childTextItem->text());
-            }
-            return {};
-        }
-
         case Qt::DecorationRole: {
             return u8"\U000f024b";
         }
-    }
 
-    return {};
+        case FolderNameRole: {
+            return d->name;
+        }
+
+        default: {
+            return ScreenplayTextModelItem::data(_role);
+        }
+    }
 }
 
 QString ScreenplayTextModelFolderItem::toXml() const
@@ -115,6 +119,22 @@ QString ScreenplayTextModelFolderItem::toXml() const
     xml.append(QString("</%1>\n").arg(kFolderTag));
 
     return xml;
+}
+
+void ScreenplayTextModelFolderItem::handleChange()
+{
+    d->name.clear();
+
+    for (int childIndex = 0; childIndex < childCount(); ++childIndex) {
+        auto child = childAt(childIndex);
+        if (child->type() != ScreenplayTextModelItemType::Text) {
+            continue;
+        }
+
+        auto childTextItem = static_cast<ScreenplayTextModelTextItem*>(child);
+        d->name = TextHelper::smartToUpper(childTextItem->text());
+        break;
+    }
 }
 
 } // namespace BusinessLayer

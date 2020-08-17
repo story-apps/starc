@@ -69,7 +69,7 @@ void ScreenplayTextCommentsView::Implementation::updateCommentsViewContextMenu(c
     // Настраиваем контекстное меню для одного элемента
     //
     if (_indexes.size() == 1) {
-        if (_indexes.constFirst().data(BusinessLayer::ScreenplayTextCommentsModel::ReviewMarkIsDone).toBool()) {
+        if (_indexes.constFirst().data(BusinessLayer::ScreenplayTextCommentsModel::ReviewMarkIsDoneRole).toBool()) {
             auto markAsUndone = new QStandardItem(tr("Mark as undone"));
             markAsUndone->setData(u8"\U000F0131", Qt::DecorationRole);
             markAsUndone->setData(static_cast<int>(ContextMenuAction::MarkAsUndone), Qt::UserRole);

@@ -1,5 +1,10 @@
 #include "screenplay_text_structure_view.h"
 
+#include "screenplay_text_structure_delegate.h"
+
+#include <data_layer/storage/settings_storage.h>
+#include <data_layer/storage/storage_facade.h>
+
 #include <ui/design_system/design_system.h>
 #include <ui/widgets/label/label.h>
 #include <ui/widgets/scroll_bar/scroll_bar.h>
@@ -21,16 +26,19 @@ public:
     IconsMidLabel* backIcon = nullptr;
     Subtitle2Label* backText = nullptr;
     Tree* content = nullptr;
+    ScreenplayTextStructureDelegate* contentDelegate = nullptr;
 };
 
 ScreenplayTextStructureView::Implementation::Implementation(QWidget* _parent)
     : backIcon(new IconsMidLabel(_parent)),
       backText(new Subtitle2Label(_parent)),
-      content(new Tree(_parent))
+      content(new Tree(_parent)),
+      contentDelegate(new ScreenplayTextStructureDelegate(content))
 {
     backIcon->setText(u8"\U000f0141");
 
     content->setDragDropEnabled(true);
+    content->setItemDelegate(contentDelegate);
 }
 
 
@@ -60,6 +68,33 @@ ScreenplayTextStructureView::ScreenplayTextStructureView(QWidget* _parent)
 
     updateTranslations();
     designSystemChangeEvent(nullptr);
+
+    reconfigure();
+}
+
+void ScreenplayTextStructureView::reconfigure()
+{
+    auto settingsValue = [] (const QString& _key) {
+        return DataStorageLayer::StorageFacade::settingsStorage()->value(
+                    _key, DataStorageLayer::SettingsStorage::SettingsPlace::Application);
+    };
+
+    const bool showSceneNumber
+            = settingsValue(DataStorageLayer::kComponentsScreenplayNavigatorShowSceneNumberKey).toBool();
+    d->contentDelegate->showSceneNumber(showSceneNumber);
+
+    const bool showSceneText
+            = settingsValue(DataStorageLayer::kComponentsScreenplayNavigatorShowSceneTextKey).toBool();
+    if (showSceneText == false) {
+        d->contentDelegate->setTextLinesSize(0);
+    } else {
+        const int sceneTextLines
+                = settingsValue(DataStorageLayer::kComponentsScreenplayNavigatorSceneTextLinesKey).toInt();
+        d->contentDelegate->setTextLinesSize(sceneTextLines);
+    }
+
+    d->content->setItemDelegate(nullptr);
+    d->content->setItemDelegate(d->contentDelegate);
 }
 
 void ScreenplayTextStructureView::setTitle(const QString& _title)

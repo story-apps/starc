@@ -515,7 +515,7 @@ QVariant ScreenplayTextModelTextItem::data(int _role) const
         return d->text;
     }
 
-    return {};
+    return ScreenplayTextModelItem::data(_role);
 }
 
 QString ScreenplayTextModelTextItem::toXml() const

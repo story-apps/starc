@@ -45,11 +45,6 @@ public:
     ScreenplayTextModelSplitterItemType splitterType() const;
 
     /**
-     * @brief Определяем интерфейс получения данных сцены
-     */
-    QVariant data(int _role) const override;
-
-    /**
      * @brief Определяем интерфейс для получения XML блока
      */
     QString toXml() const override;

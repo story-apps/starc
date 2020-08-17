@@ -21,11 +21,11 @@ public:
      * @brief Роли данных из модели
      */
     enum DataRole {
-        ReviewMarkAuthorEmail = Qt::UserRole + 1,
-        ReviewMarkCreationDate,
-        ReviewMarkComment,
-        ReviewMarkColor,
-        ReviewMarkIsDone
+        ReviewMarkAuthorEmailRole = Qt::UserRole + 1,
+        ReviewMarkCreationDateRole,
+        ReviewMarkCommentRole,
+        ReviewMarkColorRole,
+        ReviewMarkIsDoneRole
     };
 
 public:

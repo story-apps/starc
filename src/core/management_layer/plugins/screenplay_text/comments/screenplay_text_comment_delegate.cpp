@@ -11,7 +11,6 @@
 #include <QAbstractItemView>
 #include <QDateTime>
 #include <QPainter>
-#include <QScrollBar>
 
 using BusinessLayer::ScreenplayTextCommentsModel;
 
@@ -20,6 +19,7 @@ namespace Ui
 {
 
 ScreenplayTextCommentDelegate::ScreenplayTextCommentDelegate(QObject* _parent)
+    : QStyledItemDelegate(_parent)
 {
 }
 
@@ -71,7 +71,7 @@ void ScreenplayTextCommentDelegate::paint(QPainter* _painter, const QStyleOption
     //
     const QRectF colorRect(QPointF(0.0, backgroundRect.top()),
                            QSizeF(Ui::DesignSystem::layout().px4(), backgroundRect.height()));
-    _painter->fillRect(colorRect, _index.data(ScreenplayTextCommentsModel::ReviewMarkColor).value<QColor>());
+    _painter->fillRect(colorRect, _index.data(ScreenplayTextCommentsModel::ReviewMarkColorRole).value<QColor>());
 
     //
     // ... аватар
@@ -79,7 +79,7 @@ void ScreenplayTextCommentDelegate::paint(QPainter* _painter, const QStyleOption
     const QRectF avatarRect(QPointF(colorRect.right() + Ui::DesignSystem::layout().px16(),
                                     backgroundRect.top() + Ui::DesignSystem::layout().px16()),
                             Ui::DesignSystem::treeOneLineItem().avatarSize());
-    const auto avatar = ImageHelper::makeAvatar(_index.data(ScreenplayTextCommentsModel::ReviewMarkAuthorEmail).toString(),
+    const auto avatar = ImageHelper::makeAvatar(_index.data(ScreenplayTextCommentsModel::ReviewMarkAuthorEmailRole).toString(),
                                                 Ui::DesignSystem::font().body1(),
                                                 avatarRect.size().toSize(),
                                                 Qt::white);
@@ -88,7 +88,7 @@ void ScreenplayTextCommentDelegate::paint(QPainter* _painter, const QStyleOption
     //
     // ... галочка выполнено
     //
-    const auto done = _index.data(ScreenplayTextCommentsModel::ReviewMarkIsDone).toBool();
+    const auto done = _index.data(ScreenplayTextCommentsModel::ReviewMarkIsDoneRole).toBool();
     QRectF doneRect;
     if (done) {
         const QSizeF doneSize = Ui::DesignSystem::treeOneLineItem().iconSize();
@@ -112,7 +112,7 @@ void ScreenplayTextCommentDelegate::paint(QPainter* _painter, const QStyleOption
     const QRectF textRect(QPointF(textLeft, avatarRect.top()),
                           QSizeF(textWidth, avatarRect.height() / 2));
     const auto text = _painter->fontMetrics().elidedText(
-                          _index.data(ScreenplayTextCommentsModel::ReviewMarkAuthorEmail).toString(),
+                          _index.data(ScreenplayTextCommentsModel::ReviewMarkAuthorEmailRole).toString(),
                           Qt::ElideRight,
                           static_cast<int>(textRect.width()));
     _painter->drawText(textRect, Qt::AlignLeft | Qt::AlignBottom, text);
@@ -121,19 +121,20 @@ void ScreenplayTextCommentDelegate::paint(QPainter* _painter, const QStyleOption
     //
     _painter->setPen(ColorHelper::transparent(textColor, Ui::DesignSystem::disabledTextOpacity()));
     const QRectF dateRect(textRect.bottomLeft(), textRect.size());
-    const auto date = _index.data(ScreenplayTextCommentsModel::ReviewMarkCreationDate).toDateTime();
+    const auto date = _index.data(ScreenplayTextCommentsModel::ReviewMarkCreationDateRole).toDateTime();
     const auto dateText = _painter->fontMetrics().elidedText(date.toString("HH:mm d MMM"), Qt::ElideRight, static_cast<int>(dateRect.width()));
     _painter->drawText(dateRect, Qt::AlignLeft | Qt::AlignTop, dateText);
 
     //
     // ... комментарий
     //
-    const auto comment = _index.data(ScreenplayTextCommentsModel::ReviewMarkComment).toString();
+    const auto comment = _index.data(ScreenplayTextCommentsModel::ReviewMarkCommentRole).toString();
     if (!comment.isEmpty()) {
         const QRectF commentRect(QPointF(avatarRect.left(),
                                          avatarRect.bottom() + Ui::DesignSystem::layout().px12()),
                                  QSizeF(backgroundRect.right() - Ui::DesignSystem::layout().px16() - Ui::DesignSystem::layout().px16() - Ui::DesignSystem::layout().px8(),
                                         backgroundRect.height() - avatarRect.height() - Ui::DesignSystem::layout().px16() * 2 - Ui::DesignSystem::layout().px12()));
+        _painter->setFont(Ui::DesignSystem::font().body2());
         _painter->setPen(textColor);
         _painter->drawText(commentRect, Qt::TextWordWrap, comment);
     }
@@ -167,17 +168,17 @@ QSize ScreenplayTextCommentDelegate::sizeHint(const QStyleOptionViewItem& _optio
     //
     // ... высота без комментария
     //
-    if (_index.data(ScreenplayTextCommentsModel::ReviewMarkIsDone).toBool() == true
-        || _index.data(ScreenplayTextCommentsModel::ReviewMarkComment).toString().isEmpty()) {
+    if (_index.data(ScreenplayTextCommentsModel::ReviewMarkIsDoneRole).toBool() == true
+        || _index.data(ScreenplayTextCommentsModel::ReviewMarkCommentRole).toString().isEmpty()) {
         return { width, headerHeight };
     }
     //
     // ... полная высота
     //
-    const auto comment = _index.data(ScreenplayTextCommentsModel::ReviewMarkComment).toString();
+    const auto comment = _index.data(ScreenplayTextCommentsModel::ReviewMarkCommentRole).toString();
     const int height = headerHeight
                        + Ui::DesignSystem::layout().px12()
-                       + TextHelper::heightForWidth(comment, Ui::DesignSystem::font().subtitle2(), width);
+                       + TextHelper::heightForWidth(comment, Ui::DesignSystem::font().body2(), width);
     return { width, height };
 }
 
