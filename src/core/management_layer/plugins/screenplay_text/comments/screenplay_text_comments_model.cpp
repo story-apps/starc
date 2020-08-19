@@ -330,6 +330,10 @@ void ScreenplayTextCommentsModel::Implementation::processSourceModelRowsRemoved(
         // Пропускаем корректировочные блоки
         //
         if (textItem->isCorrection()) {
+            //
+            // Исключим его из списка
+            //
+            modelTextItems.removeAll(textItem);
             continue;
         }
 
