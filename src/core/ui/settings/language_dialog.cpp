@@ -49,7 +49,7 @@ LanguageDialog::Implementation::Implementation(QWidget* _parent)
     russian->setText("Русский");
     russian->setProperty(kLanguageKey, QLocale::Russian);
 
-    languageHowToAddLink->setLink(QUrl("https://github.com/dimkanovikov/KITScenarist/wiki/How-to-add-the-translation-of-KIT-Scenarist-to-your-native-language-or-improve-one-of-existing%3F"));
+    languageHowToAddLink->setLink(QUrl("https://github.com/dimkanovikov/starc/wiki/How-to-add-the-translation-of-Story-Architect-to-your-native-language-or-improve-one-of-existing%3F"));
 
     buttonsLayout = new QHBoxLayout;
     buttonsLayout->setContentsMargins({});
