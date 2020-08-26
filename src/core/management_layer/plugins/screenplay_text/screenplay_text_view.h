@@ -24,6 +24,12 @@ public:
     void reconfigure();
 
     /**
+     * @brief Работа с параметрами отображения представления
+     */
+    void loadViewSettings();
+    void saveViewSettings();
+
+    /**
      * @brief Установить модель сценария
      */
     void setModel(BusinessLayer::ScreenplayTextModel* _model);
@@ -37,12 +43,6 @@ public:
      * @brief Поставить курсор в позицию элемента с заданным индексом модели сценария
      */
     void setCurrentModelIndex(const QModelIndex& _index);
-
-    /**
-     * @brief Коэффициент масштабирования
-     */
-    qreal scaleFactor() const;
-    void setScaleFactor(qreal _scaleFactor);
 
     /**
      * @brief Позиция курсора

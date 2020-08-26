@@ -40,6 +40,12 @@ namespace {
 
     const int kFastFormatTabIndex = 0;
     const int kCommentsTabIndex = 1;
+
+    const QString kSettingsKey = "screenplay-text";
+    const QString kScaleFactorKey = kSettingsKey + "/scale-factor";
+    const QString kSidebarStateKey = kSettingsKey + "/sidebar-state";
+    const QString kIsFastFormatPanelVisibleKey = kSettingsKey + "/is-fast-format-panel-visible";
+    const QString kIsCommentsModeEnabledKey = kSettingsKey + "/is-comments-mode-enabled";
 }
 
 class ScreenplayTextView::Implementation
@@ -80,6 +86,7 @@ public:
     ScreenplayTextEditShortcutsManager shortcutsManager;
     ScalableWrapper* scalableWrapper = nullptr;
 
+    bool isSidebarShownFirstTime = true;
     Widget* sidebarWidget = nullptr;
     TabBar* sidebarTabs = nullptr;
     StackWidget* sidebarContent = nullptr;
@@ -220,7 +227,8 @@ void ScreenplayTextView::Implementation::updateSideBarVisibility(QWidget* _conta
 
     sidebarWidget->setVisible(isSidebarShouldBeVisible);
 
-    if (isSidebarShouldBeVisible) {
+    if (isSidebarShownFirstTime && isSidebarShouldBeVisible) {
+        isSidebarShownFirstTime = false;
         const auto sideBarWidth = sidebarContent->sizeHint().width();
         splitter->setSizes({ _container->width() - sideBarWidth, sideBarWidth });
     }
@@ -408,7 +416,53 @@ void ScreenplayTextView::reconfigure()
     d->screenplayText->setShowDialogueNumber(
         settingsValue(DataStorageLayer::kComponentsScreenplayEditorShowDialogueNumberKey).toBool());
     d->screenplayText->setHighlightCurrentLine(
-        settingsValue(DataStorageLayer::kComponentsScreenplayEditorHighlightCurrentLineKey).toBool());
+                settingsValue(DataStorageLayer::kComponentsScreenplayEditorHighlightCurrentLineKey).toBool());
+}
+
+void ScreenplayTextView::loadViewSettings()
+{
+    using namespace DataStorageLayer;
+
+    const auto scaleFactor
+            = StorageFacade::settingsStorage()->value(
+                  kScaleFactorKey, SettingsStorage::SettingsPlace::Application, 1.0).toReal();
+    d->scalableWrapper->setZoomRange(scaleFactor);
+
+    //
+    // Тут важен порядок, чтобы при загрузке активной была таки первая из вкладок
+    //
+    const auto isCommentsModeEnabled
+            = StorageFacade::settingsStorage()->value(
+                  kIsCommentsModeEnabledKey, SettingsStorage::SettingsPlace::Application, false).toBool();
+    d->toolBar->setCommentsModeEnabled(isCommentsModeEnabled);
+    const auto isFastFormatPanelVisible
+            = StorageFacade::settingsStorage()->value(
+                  kIsFastFormatPanelVisibleKey, SettingsStorage::SettingsPlace::Application, false).toBool();
+    d->toolBar->setFastFormatPanelVisible(isFastFormatPanelVisible);
+
+    const auto sidebarState
+            = StorageFacade::settingsStorage()->value(
+                  kSidebarStateKey, SettingsStorage::SettingsPlace::Application);
+    if (sidebarState.isValid()) {
+        d->isSidebarShownFirstTime = false;
+        d->splitter->restoreState(sidebarState.toByteArray());
+    }
+}
+
+void ScreenplayTextView::saveViewSettings()
+{
+    using namespace DataStorageLayer;
+
+    StorageFacade::settingsStorage()->setValue(
+        kScaleFactorKey, d->scalableWrapper->zoomRange(), SettingsStorage::SettingsPlace::Application);
+
+    StorageFacade::settingsStorage()->setValue(
+        kIsFastFormatPanelVisibleKey, d->toolBar->isFastFormatPanelVisible(), SettingsStorage::SettingsPlace::Application);
+    StorageFacade::settingsStorage()->setValue(
+        kIsCommentsModeEnabledKey, d->toolBar->isCommentsModeEnabled(), SettingsStorage::SettingsPlace::Application);
+
+    StorageFacade::settingsStorage()->setValue(
+        kSidebarStateKey, d->splitter->saveState(), SettingsStorage::SettingsPlace::Application);
 }
 
 void ScreenplayTextView::setModel(BusinessLayer::ScreenplayTextModel* _model)
@@ -427,16 +481,6 @@ QModelIndex ScreenplayTextView::currentModelIndex() const
 void ScreenplayTextView::setCurrentModelIndex(const QModelIndex& _index)
 {
     d->screenplayText->setCurrentModelIndex(_index);
-}
-
-qreal ScreenplayTextView::scaleFactor() const
-{
-    return d->scalableWrapper->zoomRange();
-}
-
-void ScreenplayTextView::setScaleFactor(qreal _scaleFactor)
-{
-    d->scalableWrapper->setZoomRange(_scaleFactor);
 }
 
 int ScreenplayTextView::cursorPosition() const

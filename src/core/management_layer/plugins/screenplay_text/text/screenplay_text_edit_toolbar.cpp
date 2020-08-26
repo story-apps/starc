@@ -226,9 +226,19 @@ bool ScreenplayTextEditToolBar::isFastFormatPanelVisible() const
     return d->fastFormatAction->isChecked();
 }
 
+void ScreenplayTextEditToolBar::setFastFormatPanelVisible(bool _visible)
+{
+    d->fastFormatAction->setChecked(_visible);
+}
+
 bool ScreenplayTextEditToolBar::isCommentsModeEnabled() const
 {
     return d->commentsAction->isChecked();
+}
+
+void ScreenplayTextEditToolBar::setCommentsModeEnabled(bool _enabled)
+{
+    d->commentsAction->setChecked(_enabled);
 }
 
 void ScreenplayTextEditToolBar::focusOutEvent(QFocusEvent* _event)

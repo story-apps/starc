@@ -19,7 +19,6 @@ namespace ManagementLayer
 
 namespace  {
     const QString kSettingsKey = "screenplay-text";
-    const QString kScaleFactorKey = kSettingsKey + "/scale-factor";
     QString cursorPositionFor(Domain::DocumentObject* _item) {
         return QString("%1/%2/last-cursor").arg(kSettingsKey, _item->uuid().toString());
     }
@@ -78,18 +77,12 @@ Ui::ScreenplayTextView* ScreenplayTextManager::Implementation::createView()
 
 void ScreenplayTextManager::Implementation::loadViewSettings()
 {
-    using namespace DataStorageLayer;
-    const auto scaleFactor
-            = StorageFacade::settingsStorage()->value(
-                  kScaleFactorKey, SettingsStorage::SettingsPlace::Application, 1.0).toReal();
-    view->setScaleFactor(scaleFactor);
+    view->loadViewSettings();
 }
 
 void ScreenplayTextManager::Implementation::saveViewSettings()
 {
-    using namespace DataStorageLayer;
-    StorageFacade::settingsStorage()->setValue(
-        kScaleFactorKey, view->scaleFactor(), SettingsStorage::SettingsPlace::Application);
+    view->saveViewSettings();
 }
 
 void ScreenplayTextManager::Implementation::loadModelSettings()

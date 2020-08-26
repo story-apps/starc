@@ -222,7 +222,7 @@ void ScreenplayTextModelTextItem::Implementation::updateXml()
                          ? QString(" %1=\"%2\"").arg(kBackgroundColorAttribute, reviewMarks.backgroundColor.name())
                          : ""),
                         (reviewMarks.isDone
-                         ? QString(" done=\"true\"").arg(kDoneAttribute)
+                         ? QString(" %1=\"true\"").arg(kDoneAttribute)
                          : ""));
             if (!reviewMarks.comments.isEmpty()) {
                 xml += ">";

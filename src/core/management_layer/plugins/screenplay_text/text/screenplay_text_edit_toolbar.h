@@ -38,11 +38,13 @@ public:
      * @brief Включена ли панель быстрого форматирования
      */
     bool isFastFormatPanelVisible() const;
+    void setFastFormatPanelVisible(bool _visible);
 
     /**
      * @brief Включён ли режим рецензирования
      */
     bool isCommentsModeEnabled() const;
+    void setCommentsModeEnabled(bool _enabled);
 
 signals:
     void undoPressed();

@@ -72,6 +72,8 @@ ScreenplayTextStructureView::ScreenplayTextStructureView(QWidget* _parent)
     reconfigure();
 }
 
+ScreenplayTextStructureView::~ScreenplayTextStructureView() = default;
+
 void ScreenplayTextStructureView::reconfigure()
 {
     auto settingsValue = [] (const QString& _key) {
@@ -111,8 +113,6 @@ void ScreenplayTextStructureView::setCurrentModelIndex(const QModelIndex& _index
 {
     d->content->setCurrentIndex(_index);
 }
-
-ScreenplayTextStructureView::~ScreenplayTextStructureView() = default;
 
 void ScreenplayTextStructureView::updateTranslations()
 {
