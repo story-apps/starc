@@ -69,7 +69,7 @@ ProjectInformationManager::ProjectInformationManager(QObject* _parent)
             return;
         }
 
-        auto dlg = new Ui::CoverDialog(QApplication::topLevelAt(d->view->mapToGlobal({})));
+        auto dlg = new Ui::CoverDialog(d->view->window());
         dlg->setCover(cover);
         dlg->showDialog();
         connect(dlg, &Ui::CoverDialog::disappeared, dlg, &Ui::CoverDialog::deleteLater);
