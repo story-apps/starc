@@ -12,8 +12,15 @@ HEADERS += \
     interfaces/management_layer/i_document_manager.h
 
 TRANSLATIONS += \
-    core/translations/en_EN.ts \
-    core/translations/ru_RU.ts
+    core/translations/for_use_starc_translation_az.ts \
+    core/translations/for_use_starc_translation_de.ts \
+    core/translations/for_use_starc_translation_es.ts \
+    core/translations/for_use_starc_translation_he.ts \
+    core/translations/for_use_starc_translation_hu.ts \
+    core/translations/for_use_starc_translation_it.ts \
+    core/translations/for_use_starc_translation_ru.ts \
+    core/translations/for_use_starc_translation_sl.ts \
+    core/translations/for_use_starc_translation_uk.ts
 
 #
 # Настраиваем вывод в консоль в Windows в нормальной кодировке

@@ -426,13 +426,51 @@ void ApplicationManager::Implementation::setTranslation(QLocale::Language _langu
     QString translation;
     switch (currentLanguage) {
         default:
-        case QLocale::English: {
-            translation = "en_EN";
+        case QLocale::English:
+            break;
+
+        case QLocale::Azerbaijani: {
+            translation = "az";
+            break;
+        }
+
+        case QLocale::German: {
+            translation = "de";
+            break;
+        }
+
+        case QLocale::Hebrew: {
+            translation = "he";
+            break;
+        }
+
+        case QLocale::Hungarian: {
+            translation = "hu";
+            break;
+        }
+
+        case QLocale::Italian: {
+            translation = "it";
             break;
         }
 
         case QLocale::Russian: {
-            translation = "ru_RU";
+            translation = "ru";
+            break;
+        }
+
+        case QLocale::Slovenian: {
+            translation = "sl";
+            break;
+        }
+
+        case QLocale::Spanish: {
+            translation = "es";
+            break;
+        }
+
+        case QLocale::Ukrainian: {
+            translation = "uk";
             break;
         }
     }
@@ -452,7 +490,11 @@ void ApplicationManager::Implementation::setTranslation(QLocale::Language _langu
     } ();
     //
     QApplication::removeTranslator(appTranslator);
-    appTranslator->load(":/translations/" + translation + ".qm");
+    if (translation.isEmpty()) {
+        return;
+    }
+
+    appTranslator->load(":/translations/for_use_starc_translation_" + translation + ".qm");
     QApplication::installTranslator(appTranslator);
 
     //

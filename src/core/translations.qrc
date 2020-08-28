@@ -1,6 +1,13 @@
 <RCC>
     <qresource prefix="/">
-        <file>translations/en_EN.qm</file>
-        <file>translations/ru_RU.qm</file>
+        <file>translations/for_use_starc_translation_uk.qm</file>
+        <file>translations/for_use_starc_translation_sl.qm</file>
+        <file>translations/for_use_starc_translation_ru.qm</file>
+        <file>translations/for_use_starc_translation_it.qm</file>
+        <file>translations/for_use_starc_translation_hu.qm</file>
+        <file>translations/for_use_starc_translation_he.qm</file>
+        <file>translations/for_use_starc_translation_es.qm</file>
+        <file>translations/for_use_starc_translation_de.qm</file>
+        <file>translations/for_use_starc_translation_az.qm</file>
     </qresource>
 </RCC>

@@ -28,8 +28,16 @@ public:
     QVector<RadioButton*> languages() const;
 
 
+    RadioButton* azerbaijani = nullptr;
     RadioButton* english = nullptr;
+    RadioButton* german = nullptr;
+    RadioButton* hebrew = nullptr;
+    RadioButton* hungarian = nullptr;
+    RadioButton* italian = nullptr;
     RadioButton* russian = nullptr;
+    RadioButton* slovenian = nullptr;
+    RadioButton* spanish = nullptr;
+    RadioButton* ukrainian = nullptr;
 
     Body1LinkLabel* languageHowToAddLink = nullptr;
 
@@ -38,16 +46,40 @@ public:
 };
 
 LanguageDialog::Implementation::Implementation(QWidget* _parent)
-    : english(new RadioButton(_parent)),
+    : azerbaijani(new RadioButton(_parent)),
+      english(new RadioButton(_parent)),
+      german(new RadioButton(_parent)),
+      hebrew(new RadioButton(_parent)),
+      hungarian(new RadioButton(_parent)),
+      italian(new RadioButton(_parent)),
       russian(new RadioButton(_parent)),
+      slovenian(new RadioButton(_parent)),
+      spanish(new RadioButton(_parent)),
+      ukrainian(new RadioButton(_parent)),
       languageHowToAddLink(new Body1LinkLabel(_parent)),
       okButton(new Button(_parent))
 {
+    azerbaijani->setText("Azərbaycan");
+    azerbaijani->setProperty(kLanguageKey, QLocale::Azerbaijani);
     english->setChecked(true);
     english->setText("English");
     english->setProperty(kLanguageKey, QLocale::English);
+    german->setText("Deutsch");
+    german->setProperty(kLanguageKey, QLocale::German);
+    hebrew ->setText("עִבְרִית");
+    hebrew->setProperty(kLanguageKey, QLocale::Hebrew);
+    hungarian->setText("Magyar");
+    hungarian->setProperty(kLanguageKey, QLocale::Hungarian);
+    italian->setText("Italiano");
+    italian->setProperty(kLanguageKey, QLocale::Italian);
     russian->setText("Русский");
     russian->setProperty(kLanguageKey, QLocale::Russian);
+    slovenian->setText("Slovenski");
+    slovenian->setProperty(kLanguageKey, QLocale::Slovenian);
+    spanish->setText("Español");
+    spanish->setProperty(kLanguageKey, QLocale::Spanish);
+    ukrainian->setText("Українська");
+    ukrainian->setProperty(kLanguageKey, QLocale::Ukrainian);
 
     languageHowToAddLink->setLink(QUrl("https://github.com/dimkanovikov/starc/wiki/How-to-add-the-translation-of-Story-Architect-to-your-native-language-or-improve-one-of-existing%3F"));
 
@@ -65,8 +97,16 @@ LanguageDialog::Implementation::Implementation(QWidget* _parent)
 
 QVector<RadioButton*> LanguageDialog::Implementation::languages() const
 {
-    return { english,
-             russian };
+    return { azerbaijani,
+             english,
+             german,
+             hebrew,
+             hungarian,
+             italian,
+             russian,
+             slovenian,
+             spanish,
+             ukrainian };
 }
 
 
@@ -77,11 +117,23 @@ LanguageDialog::LanguageDialog(QWidget* _parent)
     : AbstractDialog(_parent),
       d(new Implementation(this))
 {
-    contentsLayout()->addWidget(d->english, 0, 0);
-    contentsLayout()->addWidget(d->russian, 1, 0);
-    contentsLayout()->setRowStretch(2, 1);
-    contentsLayout()->addWidget(d->languageHowToAddLink, 3, 0);
-    contentsLayout()->addLayout(d->buttonsLayout, 4, 0);
+    int row = 0;
+    contentsLayout()->addWidget(d->azerbaijani, row++, 0);
+    contentsLayout()->addWidget(d->german, row++, 0);
+    contentsLayout()->addWidget(d->english, row++, 0);
+    contentsLayout()->addWidget(d->spanish, row++, 0);
+    contentsLayout()->addWidget(d->italian, row++, 0);
+    contentsLayout()->addWidget(d->hungarian, row++, 0);
+    contentsLayout()->addWidget(d->russian, row++, 0);
+    contentsLayout()->addWidget(d->slovenian, row++, 0);
+    contentsLayout()->addWidget(d->ukrainian, row++, 0);
+    //
+    contentsLayout()->addWidget(d->hebrew, 0, 1);
+    //
+    contentsLayout()->setRowStretch(row++, 1);
+    contentsLayout()->setColumnStretch(2, 1);
+    contentsLayout()->addWidget(d->languageHowToAddLink, row++, 0, 1, 3);
+    contentsLayout()->addLayout(d->buttonsLayout, row++, 0, 1, 3);
 
     for (auto radioButton : d->languages()) {
         connect(radioButton, &RadioButton::checkedChanged, this, [this, radioButton] (bool _checked) {
