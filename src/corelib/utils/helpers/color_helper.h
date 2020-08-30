@@ -38,5 +38,5 @@ public:
     /**
      * @brief Получить цвет рядом с заданым
      */
-    static QColor near(const QColor& _color);
+    static QColor nearby(const QColor& _color);
 };

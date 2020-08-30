@@ -236,7 +236,7 @@ void ScreenplayTextFastFormatWidget::designSystemChangeEvent(DesignSystemChangeE
                                  DesignSystem::layout().px8(),
                                  DesignSystem::layout().px8());
     for (auto button : d->buttons) {
-        button->setBackgroundColor(ColorHelper::near(DesignSystem::color().primary()));
+        button->setBackgroundColor(ColorHelper::nearby(DesignSystem::color().primary()));
         button->setTextColor(button->property(kIsButtonCurrentTypeKey).toBool()
                              ? DesignSystem::color().secondary()
                              : DesignSystem::color().onPrimary());

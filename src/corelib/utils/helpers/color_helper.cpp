@@ -40,7 +40,7 @@ QColor ColorHelper::inverted(const QColor& _color)
     return _color.rgb() ^ 0xffffff;
 }
 
-QColor ColorHelper::near(const QColor& _color)
+QColor ColorHelper::nearby(const QColor& _color)
 {
     return isColorLight(_color) ? _color.darker(110) : _color.lighter(130);
 }

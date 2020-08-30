@@ -20,12 +20,12 @@ enum class ScreenplayParagraphType;
 class CORE_LIBRARY_EXPORT ScreenplayTextModelTextItem : public ScreenplayTextModelItem
 {
 public:
-    struct TextPart {
+    struct CORE_LIBRARY_EXPORT TextPart {
         int from = 0;
         int length = 0;
         int end() const;
     };
-    struct TextFormat : TextPart {
+    struct CORE_LIBRARY_EXPORT TextFormat : TextPart {
         bool isBold = false;
         bool isItalic = false;
         bool isUnderline = false;
@@ -34,14 +34,14 @@ public:
 
         bool isValid() const;
     };
-    struct ReviewComment {
+    struct CORE_LIBRARY_EXPORT ReviewComment {
         QString author;
         QString date;
         QString text;
 
         bool operator==(const ReviewComment& _other) const;
     };
-    struct ReviewMark : TextPart {
+    struct CORE_LIBRARY_EXPORT ReviewMark : TextPart {
         QColor textColor;
         QColor backgroundColor;
         bool isDone = false;
