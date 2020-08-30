@@ -59,7 +59,8 @@ ProjectInformationManager::ProjectInformationManager(QObject* _parent)
       d(new Implementation)
 {
     connect(d->view, &Ui::ProjectInformationView::selectCoverPressed, this, [this] {
-        const QString coverPath = QFileDialog::getOpenFileName(d->view, tr("Choose cover"));
+        const QString coverPath = QFileDialog::getOpenFileName(d->view, tr("Choose cover"), {},
+                                        QString("%1 (*.png *.jpeg *.jpg *.bmp *.tiff *.tif *.gif)").arg(tr("Images")));
         if (coverPath.isEmpty()) {
             return;
         }
