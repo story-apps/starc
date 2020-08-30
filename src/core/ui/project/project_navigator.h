@@ -75,6 +75,11 @@ signals:
      */
     void contextMenuItemClicked(const QModelIndex& _contextMenuIndex);
 
+    /**
+     * @brief Пользователь нажал кнопку добавления документа
+     */
+    void addDocumentClicked();
+
 protected:
     /**
      * @brief Обновить переводы

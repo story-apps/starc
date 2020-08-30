@@ -407,6 +407,7 @@ ProjectManager::ProjectManager(QObject* _parent, QWidget* _parentWidget)
     {
         d->executeContextMenuAction(d->navigator->currentIndex(), _contextMenuIndex);
     });
+    connect(d->navigator, &Ui::ProjectNavigator::addDocumentClicked, this, [this] { d->addDocument({}); });
 
     //
     // Соединения с моделью структуры проекта

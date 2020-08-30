@@ -8,8 +8,8 @@
 #include <domain/document_object.h>
 
 #include <ui/design_system/design_system.h>
+#include <ui/widgets/button/button.h>
 #include <ui/widgets/context_menu/context_menu.h>
-#include <ui/widgets/text_field/text_field.h>
 #include <ui/widgets/tree/tree.h>
 
 #include <QAction>
@@ -30,7 +30,9 @@ public:
     Tree* tree = nullptr;
     ProjectTreeDelegate* treeDelegate = nullptr;
     ContextMenu* contextMenu = nullptr;
-    TextField* filter = nullptr;
+
+    QHBoxLayout* buttonsLayout = nullptr;
+    Button* addDocumentButton = nullptr;
 };
 
 ProjectNavigator::Implementation::Implementation(QWidget* _parent)
@@ -38,12 +40,14 @@ ProjectNavigator::Implementation::Implementation(QWidget* _parent)
       tree(new Tree(_parent)),
       treeDelegate(new ProjectTreeDelegate(tree)),
       contextMenu(new ContextMenu(tree)),
-      filter(new TextField(_parent))
+      buttonsLayout(new QHBoxLayout),
+      addDocumentButton(new Button(_parent))
 {
     tree->setDragDropEnabled(true);
     tree->setSelectionMode(QAbstractItemView::ExtendedSelection);
     tree->setContextMenuPolicy(Qt::ContextMenuPolicy::CustomContextMenu);
-    filter->hide();
+    addDocumentButton->setFocusPolicy(Qt::NoFocus);
+    addDocumentButton->setIcon(u8"\U000f0415");
 }
 
 
@@ -56,15 +60,15 @@ ProjectNavigator::ProjectNavigator(QWidget* _parent)
 {
     setAnimationType(AnimationType::Slide);
 
-    QHBoxLayout* filterLayout = new QHBoxLayout;
-    filterLayout->setSpacing(0);
-    filterLayout->setContentsMargins({});
+    d->buttonsLayout->setContentsMargins({});
+    d->buttonsLayout->setSpacing(0);
+    d->buttonsLayout->addWidget(d->addDocumentButton);
 
     QVBoxLayout* layout = new QVBoxLayout;
     layout->setContentsMargins({});
     layout->setSpacing(0);
     layout->addWidget(d->tree);
-    layout->addWidget(d->filter);
+    layout->addLayout(d->buttonsLayout);
     d->navigatorPage->setLayout(layout);
     showProjectNavigator();
 
@@ -86,6 +90,7 @@ ProjectNavigator::ProjectNavigator(QWidget* _parent)
     connect(d->contextMenu, &ContextMenu::clicked, this, [this] (const QModelIndex& _contextMenuIndex) {
         emit contextMenuItemClicked(_contextMenuIndex);
     });
+    connect(d->addDocumentButton, &Button::clicked, this, &ProjectNavigator::addDocumentClicked);
 }
 
 void ProjectNavigator::setModel(QAbstractItemModel* _model)
@@ -130,7 +135,7 @@ bool ProjectNavigator::isProjectNavigatorShown() const
 
 void ProjectNavigator::updateTranslations()
 {
-    d->filter->setLabel(tr("Filter"));
+    d->addDocumentButton->setText(tr("Add document"));
 }
 
 ProjectNavigator::~ProjectNavigator() = default;
@@ -146,8 +151,14 @@ void ProjectNavigator::designSystemChangeEvent(DesignSystemChangeEvent* _event)
     d->tree->setItemDelegate(d->treeDelegate);
     d->contextMenu->setBackgroundColor(DesignSystem::color().background());
     d->contextMenu->setTextColor(DesignSystem::color().onBackground());
-    d->filter->setBackgroundColor(DesignSystem::color().primary());
-    d->filter->setTextColor(DesignSystem::color().onPrimary());
+
+
+    d->buttonsLayout->setContentsMargins(DesignSystem::layout().px12(),
+                                         DesignSystem::layout().px12(),
+                                         DesignSystem::layout().px12(),
+                                         DesignSystem::layout().px12());
+    d->addDocumentButton->setBackgroundColor(DesignSystem::color().secondary());
+    d->addDocumentButton->setTextColor(DesignSystem::color().secondary());
 }
 
 } // namespace Ui
