@@ -128,18 +128,21 @@ LanguageDialog::LanguageDialog(QWidget* _parent)
     contentsLayout()->addWidget(d->english, row++, 0);
     contentsLayout()->addWidget(d->spanish, row++, 0);
     contentsLayout()->addWidget(d->italian, row++, 0);
-    contentsLayout()->addWidget(d->hungarian, row++, 0);
-    contentsLayout()->addWidget(d->russian, row++, 0);
-    contentsLayout()->addWidget(d->slovenian, row++, 0);
-    contentsLayout()->addWidget(d->turkish, row++, 0);
-    contentsLayout()->addWidget(d->ukrainian, row++, 0);
     //
-    contentsLayout()->addWidget(d->hebrew, 0, 1);
+    int rowForSecondColumn = 0;
+    contentsLayout()->addWidget(d->hungarian, rowForSecondColumn++, 1);
+    contentsLayout()->addWidget(d->russian, rowForSecondColumn++, 1);
+    contentsLayout()->addWidget(d->slovenian, rowForSecondColumn++, 1);
+    contentsLayout()->addWidget(d->turkish, rowForSecondColumn++, 1);
+    contentsLayout()->addWidget(d->ukrainian, rowForSecondColumn++, 1);
+    //
+    int rowForThirdColumn = 0;
+    contentsLayout()->addWidget(d->hebrew, rowForThirdColumn++, 2);
     //
     contentsLayout()->setRowStretch(row++, 1);
-    contentsLayout()->setColumnStretch(2, 1);
-    contentsLayout()->addWidget(d->languageHowToAddLink, row++, 0, 1, 3);
-    contentsLayout()->addLayout(d->buttonsLayout, row++, 0, 1, 3);
+    contentsLayout()->setColumnStretch(3, 1);
+    contentsLayout()->addWidget(d->languageHowToAddLink, row++, 0, 1, 4);
+    contentsLayout()->addLayout(d->buttonsLayout, row++, 0, 1, 4);
 
     for (auto radioButton : d->languages()) {
         connect(radioButton, &RadioButton::checkedChanged, this, [this, radioButton] (bool _checked) {

@@ -507,7 +507,10 @@ void ApplicationManager::Implementation::setTranslation(QLocale::Language _langu
     //
     if (currentLanguage == QLocale::Persian
         || currentLanguage == QLocale::Hebrew) {
-        QApplication::setLayoutDirection(Qt::RightToLeft);
+        //
+        // TODO: v 0.0.4
+        //
+//        QApplication::setLayoutDirection(Qt::RightToLeft);
     } else {
         QApplication::setLayoutDirection(Qt::LeftToRight);
     }

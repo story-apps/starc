@@ -95,8 +95,17 @@ void OnboardingView::Implementation::initLanguagePage()
         languageButtons.append(languageButton);
         return languageButton;
     };
+    RadioButton* azerbaijaniLanguage = initLanguageButton("Azərbaycan", QLocale::Azerbaijani);
     RadioButton* englishLanguage = initLanguageButton("English", QLocale::English);
+    RadioButton* germanLanguage = initLanguageButton("Deutsch", QLocale::German);
+    RadioButton* hebrewLanguage = initLanguageButton("עִבְרִית", QLocale::Hebrew);
+    RadioButton* hungarianLanguage = initLanguageButton("Magyar", QLocale::Hungarian);
+    RadioButton* italianLanguage = initLanguageButton("Italiano", QLocale::Italian);
     RadioButton* russianLanguage = initLanguageButton("Русский", QLocale::Russian);
+    RadioButton* slovenianLanguage = initLanguageButton("Slovenski", QLocale::Slovenian);
+    RadioButton* spanishLanguage = initLanguageButton("Español", QLocale::Spanish);
+    RadioButton* turkishLanguage = initLanguageButton("Türkçe", QLocale::Turkish);
+    RadioButton* ukrainianLanguage = initLanguageButton("Українська", QLocale::Ukrainian);
     //
     // Если мы умеем в язык системы, то оставляем выбранным его
     //
@@ -115,8 +124,9 @@ void OnboardingView::Implementation::initLanguagePage()
     }
 
     RadioButtonGroup* languagesGroup = new RadioButtonGroup(languagePage);
-    languagesGroup->add(englishLanguage);
-    languagesGroup->add(russianLanguage);
+    for (auto languageButton : languageButtons) {
+        languagesGroup->add(languageButton);
+    }
 
     languageHowToAddLink = new Body1LinkLabel(languagePage);
     languageHowToAddLink->setLink(QUrl("https://github.com/dimkanovikov/starc/wiki/How-to-add-the-translation-of-Story-Architect-to-your-native-language-or-improve-one-of-existing%3F"));
@@ -135,12 +145,25 @@ void OnboardingView::Implementation::initLanguagePage()
     QGridLayout* languagePageLayout = new QGridLayout(languagePage);
     languagePageLayout->setSpacing(0);
     languagePageLayout->setContentsMargins({});
-    languagePageLayout->addWidget(languageTitleLabel, 0, 0, 1, 3);
-    languagePageLayout->addWidget(englishLanguage, 1, 0, 1, 1);
-    languagePageLayout->addWidget(russianLanguage, 2, 0, 1, 1);
-    languagePageLayout->setRowStretch(3, 1);
-    languagePageLayout->addWidget(languageHowToAddLink, 4, 0, 1, 3);
-    languagePageLayout->addLayout(languagePageButtonsLayout, 5, 0, 1, 3);
+    int row = 0;
+    languagePageLayout->addWidget(languageTitleLabel, row++, 0, 1, 4);
+    languagePageLayout->addWidget(azerbaijaniLanguage, row++, 0);
+    languagePageLayout->addWidget(germanLanguage, row++, 0);
+    languagePageLayout->addWidget(englishLanguage, row++, 0);
+    languagePageLayout->addWidget(spanishLanguage, row++, 0);
+    languagePageLayout->addWidget(italianLanguage, row++, 0);
+    int rowForSecondColumn = 1;
+    languagePageLayout->addWidget(hungarianLanguage, rowForSecondColumn++, 1);
+    languagePageLayout->addWidget(russianLanguage, rowForSecondColumn++, 1);
+    languagePageLayout->addWidget(slovenianLanguage, rowForSecondColumn++, 1);
+    languagePageLayout->addWidget(turkishLanguage, rowForSecondColumn++, 1);
+    languagePageLayout->addWidget(ukrainianLanguage, rowForSecondColumn++, 1);
+    int rowForThirdColumn = 1;
+    languagePageLayout->addWidget(hebrewLanguage, rowForThirdColumn++, 2);
+    languagePageLayout->setRowStretch(row++, 1);
+    languagePageLayout->setColumnStretch(3, 1);
+    languagePageLayout->addWidget(languageHowToAddLink, row++, 0, 1, 4);
+    languagePageLayout->addLayout(languagePageButtonsLayout, row++, 0, 1, 4);
 
     languagePage->hide();
 }
