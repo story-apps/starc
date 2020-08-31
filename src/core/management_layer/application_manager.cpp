@@ -1000,7 +1000,7 @@ ApplicationManager::ApplicationManager(QObject* _parent)
     : QObject(_parent),
       IApplicationManager()
 {
-    QApplication::setApplicationVersion("0.0.2");
+    QApplication::setApplicationVersion("0.0.3");
 
     QApplication::setStyle(new ApplicationStyle(QStyleFactory::create("Fusion")));
 
