@@ -37,6 +37,7 @@ public:
     RadioButton* russian = nullptr;
     RadioButton* slovenian = nullptr;
     RadioButton* spanish = nullptr;
+    RadioButton* turkish = nullptr;
     RadioButton* ukrainian = nullptr;
 
     Body1LinkLabel* languageHowToAddLink = nullptr;
@@ -55,6 +56,7 @@ LanguageDialog::Implementation::Implementation(QWidget* _parent)
       russian(new RadioButton(_parent)),
       slovenian(new RadioButton(_parent)),
       spanish(new RadioButton(_parent)),
+      turkish(new RadioButton(_parent)),
       ukrainian(new RadioButton(_parent)),
       languageHowToAddLink(new Body1LinkLabel(_parent)),
       okButton(new Button(_parent))
@@ -78,6 +80,8 @@ LanguageDialog::Implementation::Implementation(QWidget* _parent)
     slovenian->setProperty(kLanguageKey, QLocale::Slovenian);
     spanish->setText("Español");
     spanish->setProperty(kLanguageKey, QLocale::Spanish);
+    turkish->setText("Türkçe");
+    turkish->setProperty(kLanguageKey, QLocale::Turkish);
     ukrainian->setText("Українська");
     ukrainian->setProperty(kLanguageKey, QLocale::Ukrainian);
 
@@ -106,6 +110,7 @@ QVector<RadioButton*> LanguageDialog::Implementation::languages() const
              russian,
              slovenian,
              spanish,
+             turkish,
              ukrainian };
 }
 
@@ -126,6 +131,7 @@ LanguageDialog::LanguageDialog(QWidget* _parent)
     contentsLayout()->addWidget(d->hungarian, row++, 0);
     contentsLayout()->addWidget(d->russian, row++, 0);
     contentsLayout()->addWidget(d->slovenian, row++, 0);
+    contentsLayout()->addWidget(d->turkish, row++, 0);
     contentsLayout()->addWidget(d->ukrainian, row++, 0);
     //
     contentsLayout()->addWidget(d->hebrew, 0, 1);

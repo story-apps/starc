@@ -469,6 +469,11 @@ void ApplicationManager::Implementation::setTranslation(QLocale::Language _langu
             break;
         }
 
+        case QLocale::Turkish: {
+            translation = "tr";
+            break;
+        }
+
         case QLocale::Ukrainian: {
             translation = "uk";
             break;

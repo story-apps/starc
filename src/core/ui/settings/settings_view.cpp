@@ -691,6 +691,9 @@ void SettingsView::setApplicationLanguage(int _language)
             case QLocale::Spanish: {
                 return "Español";
             }
+            case QLocale::Turkish: {
+                return "Türkçe";
+            }
             case QLocale::Ukrainian: {
                 return "Українська";
             }
