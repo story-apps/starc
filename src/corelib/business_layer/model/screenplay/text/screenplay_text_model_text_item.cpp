@@ -506,7 +506,7 @@ ScreenplayTextModelTextItem::Number ScreenplayTextModelTextItem::number() const
         return {};
     }
 
-    return d->number.value();
+    return *d->number;
 }
 
 QVariant ScreenplayTextModelTextItem::data(int _role) const

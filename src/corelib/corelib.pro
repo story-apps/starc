@@ -20,6 +20,10 @@ win32:QMAKE_LFLAGS += /WHOLEARCHIVE:$$DESTDIR/libs/fileformats.lib
 INCLUDEPATH += $$PWD/../3rd_party/fileformats
 DEPENDPATH += $$PWD/../3rd_party/fileformats
 PRE_TARGETDEPS += $$PWD/../3rd_party/fileformats
+
+mac {
+     LIBS += -lz
+}
 #
 
 #

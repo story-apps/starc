@@ -163,7 +163,7 @@ ScreenplayTextModelSceneItem::Number ScreenplayTextModelSceneItem::number() cons
         return {};
     }
 
-    return d->number.value();
+    return *d->number;
 }
 
 ScreenplayTextModelSceneItem::~ScreenplayTextModelSceneItem() = default;
