@@ -299,13 +299,13 @@ QPixmap ImageHelper::dropShadow(const QPixmap& _sourcePixmap, const QMarginsF& _
     //
     // Кэш теней
     //
-    using CacheKey = QPair<qint64, QPair<int, QRgb>>;
+    using CacheKey = QPair<int, QPair<int, QPair<int, QRgb>>>;
     static QCache<CacheKey, QPixmap> s_shadowsCache;
 
     //
     // Ищем тень в кэше
     //
-    const CacheKey shadowKey{_sourcePixmap.cacheKey(), {qCeil(_blurRadius * 100.0), _color.rgba()}};
+    const CacheKey shadowKey{_sourcePixmap.width(), {_sourcePixmap.height(), {qCeil(_blurRadius * 100.0), _color.rgba()}}};
     if (_useCache && s_shadowsCache.contains(shadowKey)) {
         return *s_shadowsCache[shadowKey];
     }
