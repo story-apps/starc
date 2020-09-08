@@ -91,10 +91,16 @@ public:
     void setReviewMarks(const QVector<QTextLayout::FormatRange>& _reviewMarks);
 
     /**
+     * @brief Длительность сцены
+     */
+    std::chrono::seconds duration() const;
+    void setDuration(std::chrono::seconds _duration);
+
+    /**
      * @brief Номер сцены
      */
-    void setNumber(int _number);
     Number number() const;
+    void setNumber(int _number);
 
     /**
      * @brief Определяем интерфейс получения данных сцены

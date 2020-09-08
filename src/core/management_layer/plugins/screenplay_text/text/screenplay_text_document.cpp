@@ -4,6 +4,7 @@
 #include "screenplay_text_corrector.h"
 #include "screenplay_text_cursor.h"
 
+#include <business_layer/chronometry/chronometer.h>
 #include <business_layer/model/screenplay/text/screenplay_text_model.h>
 #include <business_layer/model/screenplay/text/screenplay_text_model_folder_item.h>
 #include <business_layer/model/screenplay/text/screenplay_text_model_scene_item.h>
@@ -294,6 +295,33 @@ void ScreenplayTextDocument::setModel(BusinessLayer::ScreenplayTextModel* _model
     };
     readDocumentFromModel({});
 
+    //
+    // Завершаем операцию
+    //
+    cursor.endEditBlock();
+
+    //
+    // Вычислим хронометраж блоков
+    //
+    for (auto block = begin(); block != end(); block = block.next()) {
+        if (block.userData() == nullptr) {
+            continue;
+        }
+
+        auto blockData = static_cast<ScreenplayTextBlockData*>(block.userData());
+        auto item = blockData->item();
+        if (item->type() != ScreenplayTextModelItemType::Text) {
+            continue;
+        }
+
+        auto textItem = static_cast<ScreenplayTextModelTextItem*>(item);
+        textItem->setDuration(Chronometer::duration(block));
+        d->model->updateItem(item);
+    }
+
+    //
+    // Настроим соединения
+    //
     connect(d->model, &ScreenplayTextModel::dataChanged, this, [this] (const QModelIndex& _topLeft, const QModelIndex& _bottomRight) {
         Q_ASSERT(_topLeft == _bottomRight);
 
@@ -345,11 +373,6 @@ void ScreenplayTextDocument::setModel(BusinessLayer::ScreenplayTextModel* _model
 
         cursor.endEditBlock();
     });
-
-    //
-    // Завершаем операцию
-    //
-    cursor.endEditBlock();
 
     d->state = DocumentState::Ready;
 }
@@ -1090,6 +1113,7 @@ void ScreenplayTextDocument::updateModelOnContentChange(int _position, int _char
             textItem->setText(block.text());
             textItem->setFormats(block.textFormats());
             textItem->setReviewMarks(block.textFormats());
+            textItem->setDuration(Chronometer::duration(block));
 
             //
             // Является ли предыдущий элемент футером папки
@@ -1287,6 +1311,7 @@ void ScreenplayTextDocument::updateModelOnContentChange(int _position, int _char
                 textItem->setText(block.text());
                 textItem->setFormats(block.textFormats());
                 textItem->setReviewMarks(block.textFormats());
+                textItem->setDuration(Chronometer::duration(block));
             }
 
             d->model->updateItem(item);

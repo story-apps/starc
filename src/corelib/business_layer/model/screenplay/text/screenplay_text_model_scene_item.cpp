@@ -84,6 +84,11 @@ public:
      * @brief Количество редакторских заметок
      */
     int reviewMarksSize = 0;
+
+    /**
+     * @brief Длительность сцены
+     */
+    std::chrono::seconds duration = std::chrono::seconds{0};
 };
 
 ScreenplayTextModelSceneItem::Implementation::Implementation()
@@ -142,6 +147,17 @@ ScreenplayTextModelSceneItem::ScreenplayTextModelSceneItem(const QDomElement& _n
     handleChange();
 }
 
+ScreenplayTextModelSceneItem::~ScreenplayTextModelSceneItem() = default;
+
+ScreenplayTextModelSceneItem::Number ScreenplayTextModelSceneItem::number() const
+{
+    if (!d->number.has_value()) {
+        return {};
+    }
+
+    return d->number.value();
+}
+
 void ScreenplayTextModelSceneItem::setNumber(int _number)
 {
     const auto newNumber = QString("%1.").arg(_number);
@@ -157,16 +173,10 @@ void ScreenplayTextModelSceneItem::setNumber(int _number)
 //    setChanged(true);
 }
 
-ScreenplayTextModelSceneItem::Number ScreenplayTextModelSceneItem::number() const
+std::chrono::seconds ScreenplayTextModelSceneItem::duration() const
 {
-    if (!d->number.has_value()) {
-        return {};
-    }
-
-    return d->number.value();
+    return d->duration;
 }
-
-ScreenplayTextModelSceneItem::~ScreenplayTextModelSceneItem() = default;
 
 QVariant ScreenplayTextModelSceneItem::data(int _role) const
 {
@@ -196,6 +206,11 @@ QVariant ScreenplayTextModelSceneItem::data(int _role) const
 
         case SceneReviewMarksSizeRole: {
             return d->reviewMarksSize;
+        }
+
+        case SceneDurationRole: {
+            const int duration = d->duration.count();
+            return duration;
         }
 
         default: {
@@ -241,6 +256,7 @@ void ScreenplayTextModelSceneItem::handleChange()
     d->text.clear();
     d->inlineNotesSize = 0;
     d->reviewMarksSize = 0;
+    d->duration = std::chrono::seconds{0};
 
     for (int childIndex = 0; childIndex < childCount(); ++childIndex) {
         auto child = childAt(childIndex);
@@ -249,6 +265,10 @@ void ScreenplayTextModelSceneItem::handleChange()
         }
 
         auto childTextItem = static_cast<ScreenplayTextModelTextItem*>(child);
+
+        //
+        // Собираем текст
+        //
         switch (childTextItem->paragraphType()) {
             case ScreenplayParagraphType::SceneHeading: {
                 d->heading = TextHelper::smartToUpper(childTextItem->text());
@@ -270,6 +290,11 @@ void ScreenplayTextModelSceneItem::handleChange()
                 break;
             }
         }
+
+        //
+        // Собираем хронометраж
+        //
+        d->duration += childTextItem->duration();
     }
 }
 

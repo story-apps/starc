@@ -3,6 +3,8 @@
 #include "screenplay_text_model_scene_item.h"
 #include "screenplay_text_model_text_item.h"
 
+#include <business_layer/templates/screenplay_template.h>
+
 #include <utils/helpers/text_helper.h>
 
 #include <QDomElement>
@@ -42,7 +44,15 @@ public:
     // Ридонли свойства, которые формируются по ходу работы со сценарием
     //
 
+    /**
+     * @brief Название папки
+     */
     QString name;
+
+    /**
+     * @brief Длительность папки
+     */
+    std::chrono::seconds duration = std::chrono::seconds{0};
 };
 
 ScreenplayTextModelFolderItem::Implementation::Implementation()
@@ -86,6 +96,11 @@ ScreenplayTextModelFolderItem::ScreenplayTextModelFolderItem(const QDomElement& 
     handleChange();
 }
 
+std::chrono::seconds ScreenplayTextModelFolderItem::duration() const
+{
+    return d->duration;
+}
+
 ScreenplayTextModelFolderItem::~ScreenplayTextModelFolderItem() = default;
 
 QVariant ScreenplayTextModelFolderItem::data(int _role) const
@@ -124,16 +139,28 @@ QString ScreenplayTextModelFolderItem::toXml() const
 void ScreenplayTextModelFolderItem::handleChange()
 {
     d->name.clear();
+    d->duration = std::chrono::seconds{0};
 
     for (int childIndex = 0; childIndex < childCount(); ++childIndex) {
         auto child = childAt(childIndex);
-        if (child->type() != ScreenplayTextModelItemType::Text) {
-            continue;
-        }
+        switch (child->type()) {
+            case ScreenplayTextModelItemType::Text: {
+                auto childTextItem = static_cast<ScreenplayTextModelTextItem*>(child);
+                if (childTextItem->paragraphType() == ScreenplayParagraphType::FolderHeader) {
+                    d->name = TextHelper::smartToUpper(childTextItem->text());
+                }
+                d->duration += childTextItem->duration();
+                break;
+            }
 
-        auto childTextItem = static_cast<ScreenplayTextModelTextItem*>(child);
-        d->name = TextHelper::smartToUpper(childTextItem->text());
-        break;
+            case ScreenplayTextModelItemType::Scene: {
+                auto childSceneItem = static_cast<ScreenplayTextModelSceneItem*>(child);
+                d->duration += childSceneItem->duration();
+                break;
+            }
+
+            default: break;
+        }
     }
 }
 

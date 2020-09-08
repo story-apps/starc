@@ -45,6 +45,7 @@ PRE_TARGETDEPS += $$PWD/../3rd_party/qgumboparser
 #
 
 SOURCES += \
+    business_layer/chronometry/chronometer.cpp \
     business_layer/import/abstract_importer.cpp \
     business_layer/import/celtx_importer.cpp \
     business_layer/import/document_importer.cpp \
@@ -164,12 +165,14 @@ SOURCES += \
     utils/helpers/string_helper.cpp \
     utils/helpers/text_helper.cpp \
     utils/helpers/quotes_helper.cpp \
+    utils/helpers/time_helper.cpp \
     utils/tools/backup_builder.cpp \
     utils/tools/debouncer.cpp \
     utils/tools/run_once.cpp \
     utils/validators/email_validator.cpp
 
 HEADERS += \
+    business_layer/chronometry/chronometer.h \
     business_layer/import/abstract_importer.h \
     business_layer/import/celtx_importer.h \
     business_layer/import/document_importer.h \
@@ -298,6 +301,7 @@ HEADERS += \
     utils/helpers/string_helper.h \
     utils/helpers/text_helper.h \
     utils/helpers/quotes_helper.h \
+    utils/helpers/time_helper.h \
     utils/shugar.h \
     utils/tools/backup_builder.h \
     utils/tools/debouncer.h \

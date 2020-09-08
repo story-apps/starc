@@ -4,6 +4,8 @@
 
 #include <Qt>
 
+#include <chrono>
+
 class QDomElement;
 
 
@@ -27,6 +29,11 @@ public:
     ScreenplayTextModelFolderItem();
     explicit ScreenplayTextModelFolderItem(const QDomElement& _node);
     ~ScreenplayTextModelFolderItem() override;
+
+    /**
+     * @brief Длительность сцены
+     */
+    std::chrono::seconds duration() const;
 
     /**
      * @brief Определяем интерфейс получения данных сцены

@@ -8,6 +8,7 @@
 #include "text/screenplay_text_edit_shortcuts_manager.h"
 #include "text/screenplay_text_edit_toolbar.h"
 #include "text/screenplay_text_fast_format_widget.h"
+#include "text/screenplay_text_scrollbar_manager.h"
 
 #include <business_layer/templates/screenplay_template.h>
 #include <business_layer/templates/screenplay_template_facade.h>
@@ -85,6 +86,7 @@ public:
     ScreenplayTextEdit* screenplayText = nullptr;
     ScreenplayTextEditShortcutsManager shortcutsManager;
     ScalableWrapper* scalableWrapper = nullptr;
+    ScreenplayTextScrollBarManager* screenplayTextScrollbarManager = nullptr;
 
     bool isSidebarShownFirstTime = true;
     Widget* sidebarWidget = nullptr;
@@ -104,6 +106,7 @@ ScreenplayTextView::Implementation::Implementation(QWidget* _parent)
       screenplayText(new ScreenplayTextEdit(_parent)),
       shortcutsManager(screenplayText),
       scalableWrapper(new ScalableWrapper(screenplayText, _parent)),
+      screenplayTextScrollbarManager(new ScreenplayTextScrollBarManager(scalableWrapper)),
       sidebarWidget(new Widget(_parent)),
       sidebarTabs(new TabBar(_parent)),
       sidebarContent(new StackWidget(_parent)),
@@ -119,9 +122,12 @@ ScreenplayTextView::Implementation::Implementation(QWidget* _parent)
     screenplayText->setVerticalScrollBar(new ScrollBar);
     screenplayText->setHorizontalScrollBar(new ScrollBar);
     shortcutsManager.setShortcutsContext(scalableWrapper);
-    scalableWrapper->setVerticalScrollBar(new ScrollBar);
+    //
+    // Вертикальный скрол настраивается менеджером screenplayTextScrollbarManager
+    //
     scalableWrapper->setHorizontalScrollBar(new ScrollBar);
     scalableWrapper->initScrollBarsSyncing();
+    screenplayTextScrollbarManager->initScrollBarsSyncing();
 
     screenplayText->setUsePageMode(true);
 
@@ -468,6 +474,7 @@ void ScreenplayTextView::saveViewSettings()
 void ScreenplayTextView::setModel(BusinessLayer::ScreenplayTextModel* _model)
 {
     d->screenplayText->initWithModel(_model);
+    d->screenplayTextScrollbarManager->setModel(_model);
     d->commentsModel->setModel(_model);
 
     d->updateToolBarCurrentParagraphTypeName();

@@ -8,6 +8,7 @@
 
 #include <utils/helpers/color_helper.h>
 #include <utils/helpers/text_helper.h>
+#include <utils/helpers/time_helper.h>
 
 #include <QAbstractItemView>
 #include <QPainter>
@@ -171,18 +172,28 @@ void ScreenplayTextStructureDelegate::Implementation::paintScene(QPainter* _pain
     }
 
     //
-    // ... TODO: хронометраж
+    // ... хронометраж
     //
+    _painter->setPen(textColor);
+    _painter->setFont(Ui::DesignSystem::font().body2());
+    const std::chrono::seconds sceneDuration{_index.data(ScreenplayTextModelSceneItem::SceneDurationRole).toInt()};
+    const auto sceneDurationText = QString("(%1)").arg(TimeHelper::toString(sceneDuration));
+    const qreal sceneDurationWidth = _painter->fontMetrics().horizontalAdvance(sceneDurationText);
+    const QRectF sceneDurationRect(QPointF(backgroundRect.right() - sceneDurationWidth - Ui::DesignSystem::treeOneLineItem().margins().right(),
+                                           backgroundRect.top() + Ui::DesignSystem::layout().px16()),
+                                   QSizeF(sceneDurationWidth,
+                                          Ui::DesignSystem::layout().px24()));
+    _painter->drawText(sceneDurationRect, Qt::AlignLeft | Qt::AlignVCenter, sceneDurationText);
+
 
     //
     // ... заголовок сцены
     //
     _painter->setFont(Ui::DesignSystem::font().subtitle2());
-    _painter->setPen(textColor);
     const qreal sceneHeadingLeft = iconRect.right() + Ui::DesignSystem::layout().px4();
-    const qreal sceneHeadingWidth = backgroundRect.right() - sceneHeadingLeft - Ui::DesignSystem::treeOneLineItem().margins().right();
+    const qreal sceneHeadingWidth = sceneDurationRect.left() - sceneHeadingLeft - Ui::DesignSystem::treeOneLineItem().spacing();
     const QRectF sceneHeadingRect(QPointF(sceneHeadingLeft, backgroundRect.top() + Ui::DesignSystem::layout().px16()),
-                          QSizeF(sceneHeadingWidth, Ui::DesignSystem::layout().px24()));
+                                  QSizeF(sceneHeadingWidth, Ui::DesignSystem::layout().px24()));
     auto sceneHeading = _index.data(ScreenplayTextModelSceneItem::SceneHeadingRole).toString();
     if (showSceneNumber) {
         sceneHeading.prepend(_index.data(ScreenplayTextModelSceneItem::SceneNumberRole).toString() + " ");

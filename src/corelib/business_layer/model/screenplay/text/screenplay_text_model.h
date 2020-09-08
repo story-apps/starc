@@ -99,6 +99,11 @@ public:
     void setLocationsModel(LocationsModel* _model);
     LocationsModel* locationsModel() const;
 
+    /**
+     * @brief Длительность сценария
+     */
+    std::chrono::seconds duration() const;
+
 protected:
     /**
      * @brief Реализация модели для работы с документами

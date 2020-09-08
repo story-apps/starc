@@ -4,6 +4,8 @@
 
 #include <QString>
 
+#include <chrono>
+
 class QDomElement;
 
 
@@ -31,7 +33,8 @@ public:
         SceneHeadingRole,
         SceneTextRole,
         SceneInlineNotesSizeRole,
-        SceneReviewMarksSizeRole
+        SceneReviewMarksSizeRole,
+        SceneDurationRole
     };
 
 public:
@@ -42,8 +45,13 @@ public:
     /**
      * @brief Номер сцены
      */
-    void setNumber(int _number);
     Number number() const;
+    void setNumber(int _number);
+
+    /**
+     * @brief Длительность сцены
+     */
+    std::chrono::seconds duration() const;
 
     /**
      * @brief Определяем интерфейс получения данных сцены

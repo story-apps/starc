@@ -55,6 +55,11 @@ public:
     std::optional<Number> number;
 
     /**
+     * @brief Длительность сцены
+     */
+    std::chrono::seconds duration = std::chrono::seconds{0};
+
+    /**
      * @brief Является ли блок декорацией
      */
     bool isCorrection = false;
@@ -485,6 +490,30 @@ void ScreenplayTextModelTextItem::setReviewMarks(const QVector<QTextLayout::Form
     setReviewMarks(newReviewMarks);
 }
 
+std::chrono::seconds ScreenplayTextModelTextItem::duration() const
+{
+    return d->duration;
+}
+
+void ScreenplayTextModelTextItem::setDuration(std::chrono::seconds _duration)
+{
+    if (d->duration == _duration) {
+        return;
+    }
+
+    d->duration = _duration;
+    markChanged();
+}
+
+ScreenplayTextModelTextItem::Number ScreenplayTextModelTextItem::number() const
+{
+    if (!d->number.has_value()) {
+        return {};
+    }
+
+    return d->number.value();
+}
+
 void ScreenplayTextModelTextItem::setNumber(int _number)
 {
     const auto newNumber = QString("%1:").arg(_number);
@@ -498,15 +527,6 @@ void ScreenplayTextModelTextItem::setNumber(int _number)
     // Т.к. пока мы не сохраняем номера, в указании, что произошли изменения нет смысла
     //
 //    markChanged();
-}
-
-ScreenplayTextModelTextItem::Number ScreenplayTextModelTextItem::number() const
-{
-    if (!d->number.has_value()) {
-        return {};
-    }
-
-    return d->number.value();
 }
 
 QVariant ScreenplayTextModelTextItem::data(int _role) const

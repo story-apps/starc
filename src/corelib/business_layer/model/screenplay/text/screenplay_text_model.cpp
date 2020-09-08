@@ -49,7 +49,7 @@ public:
     /**
      * @brief Корневой элемент дерева
      */
-    ScreenplayTextModelItem* rootItem = nullptr;
+    ScreenplayTextModelFolderItem* rootItem = nullptr;
 
     /**
      * @brief Модель справочников
@@ -460,6 +460,11 @@ void ScreenplayTextModel::setLocationsModel(LocationsModel* _model)
 LocationsModel* ScreenplayTextModel::locationsModel() const
 {
     return d->locationModel;
+}
+
+std::chrono::seconds ScreenplayTextModel::duration() const
+{
+    return d->rootItem->duration();
 }
 
 void ScreenplayTextModel::initDocument()
