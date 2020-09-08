@@ -83,11 +83,13 @@ void Card::paintEvent(QPaintEvent* _event)
     //
     const qreal shadowHeight = std::max(Ui::DesignSystem::card().minimumShadowBlurRadius(),
                                         d->shadowHeightAnimation.currentValue().toReal());
+    const bool cacheShadow = qFuzzyCompare(shadowHeight, Ui::DesignSystem::card().minimumShadowBlurRadius());
     const QPixmap shadow
             = ImageHelper::dropShadow(backgroundImage,
                                       Ui::DesignSystem::card().shadowMargins(),
                                       shadowHeight,
-                                      Ui::DesignSystem::color().shadow());
+                                      Ui::DesignSystem::color().shadow(),
+                                      cacheShadow);
 
     QPainter painter(this);
     painter.drawPixmap(0, 0, shadow);

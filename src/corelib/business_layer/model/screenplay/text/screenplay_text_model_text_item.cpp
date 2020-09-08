@@ -511,7 +511,7 @@ ScreenplayTextModelTextItem::Number ScreenplayTextModelTextItem::number() const
         return {};
     }
 
-    return d->number.value();
+    return *d->number;
 }
 
 void ScreenplayTextModelTextItem::setNumber(int _number)
