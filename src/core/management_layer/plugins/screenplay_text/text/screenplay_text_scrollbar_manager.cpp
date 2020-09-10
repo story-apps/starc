@@ -62,20 +62,22 @@ void ScreenplayTextScrollBarManager::initScrollBarsSyncing()
     connect(d->scrollbar, &QScrollBar::rangeChanged, this, [this] (int _minimum, int _maximum) {
         d->timeline->setScrollable(_minimum < _maximum);
     });
-    connect(d->scrollbar, &QScrollBar::valueChanged, this, [this] (int _value) {
+    auto updateTimelineValue = [this] {
         QSignalBlocker signalBlocker(d->timeline);
         if (d->scrollbar->maximum() == 0) {
             d->timeline->setValue({});
         } else {
-            const qreal scrollBarValue = _value;
+            const qreal scrollBarValue = d->scrollbar->value();
             const qreal scrollBarMaximum = d->scrollbar->maximum();
             const auto value = d->model->duration() * scrollBarValue / scrollBarMaximum;
             d->timeline->setValue(std::chrono::duration_cast<std::chrono::milliseconds>(value));
         }
-    });
+    };
+    connect(d->scrollbar, &QScrollBar::valueChanged, this, updateTimelineValue);
     connect(d->timeline, &ScreenplayTextTimeline::valueChanged, this, [this] (std::chrono::milliseconds _value) {
         d->scrollbar->setValue(d->scrollbar->maximum() * _value / std::chrono::duration_cast<std::chrono::milliseconds>(d->model->duration()));
     });
+    connect(d->timeline, &ScreenplayTextTimeline::updateValueRequested, this, updateTimelineValue);
 }
 
 ScreenplayTextScrollBarManager::~ScreenplayTextScrollBarManager() = default;
@@ -156,6 +158,11 @@ void ScreenplayTextTimeline::setMaximum(std::chrono::seconds _maximum)
     }
 
     d->maximum = _maximum;
+    emit updateValueRequested();
+    if (d->current > d->maximum) {
+        d->current = d->maximum;
+    }
+
     update();
 }
 

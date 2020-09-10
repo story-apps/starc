@@ -55,12 +55,9 @@ signals:
     /**
      * @brief Изменились параметры компонентов
      */
-    void screenplayEditorShowSceneNumberChanged(bool _show, bool _atLeft, bool _atRight);
-    void screenplayEditorShowDialogueNumberChanged(bool _show);
-    void screenplayEditorHighlightCurrentLineChanged(bool _highlight);
-    //
-    void screenplayNavigatorShowSceneNumberChanged(bool _show);
-    void screenplayNavigatorShowSceneTextChanged(bool _show, int _lines);
+    void screenplayEditorChanged();
+    void screenplayNavigatorChanged();
+    void screenplayDurationChanged();
 
 protected:
     /**
@@ -97,6 +94,14 @@ private:
     //
     void setScreenplayNavigatorShowSceneNumber(bool _show);
     void setScreenplayNavigatorShowSceneText(bool _show, int _lines);
+    //
+    // Сохранение параметров хронометража сценария
+    //
+    void setScreenplayDurationType(int _type);
+    void setScreenplayDurationByPageDuration(int _duration);
+    void setScreenplayDurationByCharactersCharacters(int _characters);
+    void setScreenplayDurationByCharactersIncludeSpaces(bool _include);
+    void setScreenplayDurationByCharactersDuration(int _duration);
 
 private:
     class Implementation;

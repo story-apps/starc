@@ -271,7 +271,6 @@ void ScreenplayTextModel::removeItem(ScreenplayTextModelItem* _item)
 void ScreenplayTextModel::updateItem(ScreenplayTextModelItem* _item)
 {
     if (_item == nullptr
-        || _item->parent() == nullptr
         || !_item->isChanged()) {
         return;
     }
@@ -280,7 +279,9 @@ void ScreenplayTextModel::updateItem(ScreenplayTextModelItem* _item)
     emit dataChanged(indexForUpdate, indexForUpdate);
     _item->setChanged(false);
 
-    updateItem(_item->parent());
+    if (_item->parent() != nullptr) {
+        updateItem(_item->parent());
+    }
 }
 
 QModelIndex ScreenplayTextModel::index(int _row, int _column, const QModelIndex& _parent) const
@@ -467,6 +468,37 @@ std::chrono::seconds ScreenplayTextModel::duration() const
     return d->rootItem->duration();
 }
 
+void ScreenplayTextModel::recalculateDuration()
+{
+    std::function<void(const ScreenplayTextModelItem*)> updateChildDuration;
+    updateChildDuration = [this, &updateChildDuration] (const ScreenplayTextModelItem* _item) {
+        for (int childIndex = 0; childIndex < _item->childCount(); ++childIndex) {
+            auto childItem = _item->childAt(childIndex);
+            switch (childItem->type()) {
+                case ScreenplayTextModelItemType::Folder: {
+                    updateChildDuration(childItem);
+                    break;
+                }
+
+                case ScreenplayTextModelItemType::Scene: {
+                    updateChildDuration(childItem);
+                    break;
+                }
+
+                case ScreenplayTextModelItemType::Text: {
+                    auto textItem = static_cast<ScreenplayTextModelTextItem*>(childItem);
+                    textItem->updateDuration();
+                    updateItem(textItem);
+                    break;
+                }
+
+                default: break;
+            }
+        }
+    };
+    updateChildDuration(d->rootItem);
+}
+
 void ScreenplayTextModel::initDocument()
 {
     //
@@ -485,9 +517,11 @@ void ScreenplayTextModel::initDocument()
     else {
         beginResetModel();
         d->buildModel(document());
-        d->updateNumbering();
         endResetModel();
     }
+
+    d->updateNumbering();
+    recalculateDuration();
 }
 
 void ScreenplayTextModel::clearDocument()

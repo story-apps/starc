@@ -94,7 +94,7 @@ public:
      * @brief Длительность сцены
      */
     std::chrono::seconds duration() const;
-    void setDuration(std::chrono::seconds _duration);
+    void updateDuration();
 
     /**
      * @brief Номер сцены

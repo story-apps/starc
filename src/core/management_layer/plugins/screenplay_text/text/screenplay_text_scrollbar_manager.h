@@ -87,6 +87,11 @@ signals:
      */
     void valueChanged(std::chrono::milliseconds _value);
 
+    /**
+     * @brief Запрос на обновление значения ползунка
+     */
+    void updateValueRequested();
+
 protected:
     /**
      * @brief Переопределяем для собственной отрисовки

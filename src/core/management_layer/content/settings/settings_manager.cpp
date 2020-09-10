@@ -112,6 +112,12 @@ void SettingsManager::Implementation::loadScreenplaySettings()
     view->setScreenplayNavigatorShowSceneText(
                 settingsValue(DataStorageLayer::kComponentsScreenplayNavigatorShowSceneTextKey).toBool(),
                 settingsValue(DataStorageLayer::kComponentsScreenplayNavigatorSceneTextLinesKey).toInt());
+    //
+    view->setScreenplayDurationType(settingsValue(DataStorageLayer::kComponentsScreenplayDurationTypeKey).toInt());
+    view->setScreenplayDurationByPageDuration(settingsValue(DataStorageLayer::kComponentsScreenplayDurationByPageDurationKey).toInt());
+    view->setScreenplayDurationByCharactersCharacters(settingsValue(DataStorageLayer::kComponentsScreenplayDurationByCharactersCharactersKey).toInt());
+    view->setScreenplayDurationByCharactersIncludeSpaces(settingsValue(DataStorageLayer::kComponentsScreenplayDurationByCharactersIncludeSpacesKey).toInt());
+    view->setScreenplayDurationByCharactersDuration(settingsValue(DataStorageLayer::kComponentsScreenplayDurationByCharactersDurationKey).toInt());
 }
 
 
@@ -168,6 +174,12 @@ SettingsManager::SettingsManager(QObject* _parent, QWidget* _parentWidget)
     //
     connect(d->view, &Ui::SettingsView::screenplayNavigatorShowSceneNumberChanged, this, &SettingsManager::setScreenplayNavigatorShowSceneNumber);
     connect(d->view, &Ui::SettingsView::screenplayNavigatorShowSceneTextChanged, this, &SettingsManager::setScreenplayNavigatorShowSceneText);
+    //
+    connect(d->view, &Ui::SettingsView::screenplayDurationTypeChanged, this, &SettingsManager::setScreenplayDurationType);
+    connect(d->view, &Ui::SettingsView::screenplayDurationByPageDurationChanged, this, &SettingsManager::setScreenplayDurationByPageDuration);
+    connect(d->view, &Ui::SettingsView::screenplayDurationByCharactersCharactersChanged, this, &SettingsManager::setScreenplayDurationByCharactersCharacters);
+    connect(d->view, &Ui::SettingsView::screenplayDurationByCharactersIncludeSpacesChanged, this, &SettingsManager::setScreenplayDurationByCharactersIncludeSpaces);
+    connect(d->view, &Ui::SettingsView::screenplayDurationByCharactersDurationChanged, this, &SettingsManager::setScreenplayDurationByCharactersDuration);
 
     //
     // Нотификации об изменении параметров
@@ -180,12 +192,18 @@ SettingsManager::SettingsManager(QObject* _parent, QWidget* _parentWidget)
     connect(d->view, &Ui::SettingsView::applicationBackupsFolderChanged, this, &SettingsManager::applicationBackupsFolderChanged);
     //
     //
-    connect(d->view, &Ui::SettingsView::screenplayEditorShowSceneNumberChanged, this, &SettingsManager::screenplayEditorShowSceneNumberChanged);
-    connect(d->view, &Ui::SettingsView::screenplayEditorShowDialogueNumberChanged, this, &SettingsManager::screenplayEditorShowDialogueNumberChanged);
-    connect(d->view, &Ui::SettingsView::screenplayEditorHighlightCurrentLineChanged, this, &SettingsManager::screenplayEditorHighlightCurrentLineChanged);
+    connect(d->view, &Ui::SettingsView::screenplayEditorShowSceneNumberChanged, this, &SettingsManager::screenplayEditorChanged);
+    connect(d->view, &Ui::SettingsView::screenplayEditorShowDialogueNumberChanged, this, &SettingsManager::screenplayEditorChanged);
+    connect(d->view, &Ui::SettingsView::screenplayEditorHighlightCurrentLineChanged, this, &SettingsManager::screenplayEditorChanged);
     //
-    connect(d->view, &Ui::SettingsView::screenplayNavigatorShowSceneNumberChanged, this, &SettingsManager::screenplayNavigatorShowSceneNumberChanged);
-    connect(d->view, &Ui::SettingsView::screenplayNavigatorShowSceneTextChanged, this, &SettingsManager::screenplayNavigatorShowSceneTextChanged);
+    connect(d->view, &Ui::SettingsView::screenplayNavigatorShowSceneNumberChanged, this, &SettingsManager::screenplayNavigatorChanged);
+    connect(d->view, &Ui::SettingsView::screenplayNavigatorShowSceneTextChanged, this, &SettingsManager::screenplayNavigatorChanged);
+    //
+    connect(d->view, &Ui::SettingsView::screenplayDurationTypeChanged, this, &SettingsManager::screenplayDurationChanged);
+    connect(d->view, &Ui::SettingsView::screenplayDurationByPageDurationChanged, this, &SettingsManager::screenplayDurationChanged);
+    connect(d->view, &Ui::SettingsView::screenplayDurationByCharactersCharactersChanged, this, &SettingsManager::screenplayDurationChanged);
+    connect(d->view, &Ui::SettingsView::screenplayDurationByCharactersIncludeSpacesChanged, this, &SettingsManager::screenplayDurationChanged);
+    connect(d->view, &Ui::SettingsView::screenplayDurationByCharactersDurationChanged, this, &SettingsManager::screenplayDurationChanged);
 }
 
 SettingsManager::~SettingsManager() = default;
@@ -462,6 +480,31 @@ void SettingsManager::setScreenplayNavigatorShowSceneText(bool _show, int _lines
 {
     d->setSettingsValue(DataStorageLayer::kComponentsScreenplayNavigatorShowSceneTextKey, _show);
     d->setSettingsValue(DataStorageLayer::kComponentsScreenplayNavigatorSceneTextLinesKey, _lines);
+}
+
+void SettingsManager::setScreenplayDurationType(int _type)
+{
+    d->setSettingsValue(DataStorageLayer::kComponentsScreenplayDurationTypeKey, _type);
+}
+
+void SettingsManager::setScreenplayDurationByPageDuration(int _duration)
+{
+    d->setSettingsValue(DataStorageLayer::kComponentsScreenplayDurationByPageDurationKey, _duration);
+}
+
+void SettingsManager::setScreenplayDurationByCharactersCharacters(int _characters)
+{
+    d->setSettingsValue(DataStorageLayer::kComponentsScreenplayDurationByCharactersCharactersKey, _characters);
+}
+
+void SettingsManager::setScreenplayDurationByCharactersIncludeSpaces(bool _include)
+{
+    d->setSettingsValue(DataStorageLayer::kComponentsScreenplayDurationByCharactersIncludeSpacesKey, _include);
+}
+
+void SettingsManager::setScreenplayDurationByCharactersDuration(int _duration)
+{
+    d->setSettingsValue(DataStorageLayer::kComponentsScreenplayDurationByCharactersDurationKey, _duration);
 }
 
 }

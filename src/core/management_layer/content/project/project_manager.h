@@ -35,6 +35,7 @@ public:
     void reconfigureAll();
     void reconfigureScreenplayEditor();
     void reconfigureScreenplayNavigator();
+    void reconfigureScreenplayDuration();
 
     /**
      * @brief Загрузить данные текущего проекта

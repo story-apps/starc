@@ -1,5 +1,6 @@
 #include "screenplay_text_model_text_item.h"
 
+#include <business_layer/chronometry/chronometer.h>
 #include <business_layer/templates/screenplay_template.h>
 
 #include <utils/helpers/string_helper.h>
@@ -391,6 +392,7 @@ void ScreenplayTextModelTextItem::setParagraphType(ScreenplayParagraphType _type
 
     d->paragraphType = _type;
     d->updateXml();
+    updateDuration();
     markChanged();
 }
 
@@ -407,6 +409,7 @@ void ScreenplayTextModelTextItem::setText(const QString& _text)
 
     d->text = _text;
     d->updateXml();
+    updateDuration();
     markChanged();
 }
 
@@ -495,13 +498,18 @@ std::chrono::seconds ScreenplayTextModelTextItem::duration() const
     return d->duration;
 }
 
-void ScreenplayTextModelTextItem::setDuration(std::chrono::seconds _duration)
+void ScreenplayTextModelTextItem::updateDuration()
 {
-    if (d->duration == _duration) {
+    const auto duration = Chronometer::duration(d->paragraphType, d->text);
+    if (d->duration == duration) {
         return;
     }
 
-    d->duration = _duration;
+    d->duration = duration;
+
+    //
+    // Помещаем изменённым для пересчёта хронометража в родительском элементе
+    //
     markChanged();
 }
 

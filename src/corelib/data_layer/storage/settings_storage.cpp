@@ -258,6 +258,15 @@ SettingsStorage::Implementation::Implementation()
     defaultValues.insert(kComponentsScreenplayNavigatorShowSceneNumberKey, true);
     defaultValues.insert(kComponentsScreenplayNavigatorShowSceneTextKey, true);
     defaultValues.insert(kComponentsScreenplayNavigatorSceneTextLinesKey, 2);
+    //
+    // Параметры хронометража сценария
+    //
+    defaultValues.insert(kComponentsScreenplayDurationTypeKey, 1);
+    defaultValues.insert(kComponentsScreenplayDurationByPageDurationKey, 60);
+    defaultValues.insert(kComponentsScreenplayDurationByCharactersCharactersKey, 1350);
+    defaultValues.insert(kComponentsScreenplayDurationByCharactersIncludeSpacesKey, true);
+    defaultValues.insert(kComponentsScreenplayDurationByCharactersDurationKey, 60);
+
 
     defaultValues.insert(kSystemUsernameKey, systemUserName());
 }

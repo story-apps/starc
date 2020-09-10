@@ -53,6 +53,14 @@ public:
     //
     void setScreenplayNavigatorShowSceneNumber(bool _show);
     void setScreenplayNavigatorShowSceneText(bool _show, int _lines);
+    //
+    // Задание параметров хронометража
+    //
+    void setScreenplayDurationType(int _type);
+    void setScreenplayDurationByPageDuration(int _duration);
+    void setScreenplayDurationByCharactersCharacters(int _characters);
+    void setScreenplayDurationByCharactersIncludeSpaces(bool _include);
+    void setScreenplayDurationByCharactersDuration(int _duration);
 
 signals:
     /**
@@ -87,6 +95,14 @@ signals:
     //
     void screenplayNavigatorShowSceneNumberChanged(bool _show);
     void screenplayNavigatorShowSceneTextChanged(bool _show, int _lines);
+    //
+    // Уведомление об изменении параметров хронометража сценария
+    //
+    void screenplayDurationTypeChanged(int _type);
+    void screenplayDurationByPageDurationChanged(int _duration);
+    void screenplayDurationByCharactersCharactersChanged(int _characters);
+    void screenplayDurationByCharactersIncludeSpacesChanged(bool _include);
+    void screenplayDurationByCharactersDurationChanged(int _duration);
 
 protected:
     /**

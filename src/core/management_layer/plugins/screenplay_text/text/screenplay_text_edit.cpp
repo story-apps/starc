@@ -60,6 +60,8 @@ ScreenplayTextEdit::ScreenplayTextEdit(QWidget* _parent)
     setCapitalizeWords(false);
 }
 
+ScreenplayTextEdit::~ScreenplayTextEdit() = default;
+
 void ScreenplayTextEdit::setShowSceneNumber(bool _show, bool _onLeft, bool _onRight)
 {
     d->showSceneNumber = _show;
@@ -73,8 +75,6 @@ void ScreenplayTextEdit::setShowDialogueNumber(bool _show)
     d->showDialogueNumber = _show;
     update();
 }
-
-ScreenplayTextEdit::~ScreenplayTextEdit() = default;
 
 void ScreenplayTextEdit::initWithModel(BusinessLayer::ScreenplayTextModel* _model)
 {

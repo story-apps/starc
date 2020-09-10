@@ -1,5 +1,7 @@
 #include "settings_view.h"
 
+#include <business_layer/chronometry/chronometer.h>
+
 #include <ui/design_system/design_system.h>
 #include <ui/widgets/button/button.h>
 #include <ui/widgets/card/card.h>
@@ -273,6 +275,17 @@ public:
     RadioButton* screenplayNavigatorSceneDescriptionLines4 = nullptr;
     RadioButton* screenplayNavigatorSceneDescriptionLines5 = nullptr;
     //
+    // ... Screenplay duration
+    //
+    H6Label* screenplayDurationTitle = nullptr;
+    RadioButton* screenplayDurationByPage = nullptr;
+    TextField* screenplayDurationByPagePage = nullptr;
+    TextField* screenplayDurationByPageDuration = nullptr;
+    RadioButton* screenplayDurationByCharacters = nullptr;
+    TextField* screenplayDurationByCharactersCharacters = nullptr;
+    CheckBox* screenplayDurationByCharactersIncludingSpaces = nullptr;
+    TextField* screenplayDurationByCharactersDuration = nullptr;
+    //
     int screenplayCardBottomSpacerIndex = 0;
 
     Card* shortcutsCard = nullptr;
@@ -326,6 +339,14 @@ SettingsView::Implementation::Implementation(QWidget* _parent)
       screenplayNavigatorSceneDescriptionLines3(new RadioButton(screenplayCard)),
       screenplayNavigatorSceneDescriptionLines4(new RadioButton(screenplayCard)),
       screenplayNavigatorSceneDescriptionLines5(new RadioButton(screenplayCard)),
+      screenplayDurationTitle(new H6Label(screenplayCard)),
+      screenplayDurationByPage(new RadioButton(screenplayCard)),
+      screenplayDurationByPagePage(new TextField(screenplayCard)),
+      screenplayDurationByPageDuration(new TextField(screenplayCard)),
+      screenplayDurationByCharacters(new RadioButton(screenplayCard)),
+      screenplayDurationByCharactersCharacters(new TextField(screenplayCard)),
+      screenplayDurationByCharactersIncludingSpaces(new CheckBox(screenplayCard)),
+      screenplayDurationByCharactersDuration(new TextField(screenplayCard)),
       //
       shortcutsCard(new Card(content)),
       shortcutsCardLayout(new QGridLayout),
@@ -447,6 +468,16 @@ void SettingsView::Implementation::initScreenplayCard()
     screenplayNavigatorSceneDescriptionLines3->setEnabled(false);
     screenplayNavigatorSceneDescriptionLines4->setEnabled(false);
     screenplayNavigatorSceneDescriptionLines5->setEnabled(false);
+    //
+    auto durationGroup = new RadioButtonGroup(screenplayCard);
+    durationGroup->add(screenplayDurationByPage);
+    durationGroup->add(screenplayDurationByCharacters);
+    screenplayDurationByPage->setChecked(true);
+    screenplayDurationByPagePage->setText("1");
+    screenplayDurationByPagePage->setReadOnly(true);
+    screenplayDurationByCharactersCharacters->setEnabled(false);
+    screenplayDurationByCharactersIncludingSpaces->setEnabled(false);
+    screenplayDurationByCharactersDuration->setEnabled(false);
 
 
     //
@@ -483,6 +514,27 @@ void SettingsView::Implementation::initScreenplayCard()
         layout->addWidget(screenplayNavigatorSceneDescriptionLines3);
         layout->addWidget(screenplayNavigatorSceneDescriptionLines4);
         layout->addWidget(screenplayNavigatorSceneDescriptionLines5);
+        layout->addStretch();
+        screenplayCardLayout->addLayout(layout, itemIndex++, 0);
+    }
+    //
+    // ... счётчики хронометража
+    //
+    screenplayCardLayout->addWidget(screenplayDurationTitle, itemIndex++, 0);
+    screenplayCardLayout->addWidget(screenplayDurationByPage, itemIndex++, 0);
+    {
+        auto layout = makeLayout();
+        layout->addWidget(screenplayDurationByPagePage);
+        layout->addWidget(screenplayDurationByPageDuration);
+        layout->addStretch();
+        screenplayCardLayout->addLayout(layout, itemIndex++, 0);
+    }
+    screenplayCardLayout->addWidget(screenplayDurationByCharacters, itemIndex++, 0, Qt::AlignBottom);
+    {
+        auto layout = makeLayout();
+        layout->addWidget(screenplayDurationByCharactersCharacters);
+        layout->addWidget(screenplayDurationByCharactersIncludingSpaces, 0, Qt::AlignCenter);
+        layout->addWidget(screenplayDurationByCharactersDuration);
         layout->addStretch();
         screenplayCardLayout->addLayout(layout, itemIndex++, 0);
     }
@@ -626,6 +678,35 @@ SettingsView::SettingsView(QWidget* _parent)
     connect(d->screenplayNavigatorSceneDescriptionLines3, &RadioButton::checkedChanged, this, notifyScreenplayNavigatorShowSceneTextChanged);
     connect(d->screenplayNavigatorSceneDescriptionLines4, &RadioButton::checkedChanged, this, notifyScreenplayNavigatorShowSceneTextChanged);
     connect(d->screenplayNavigatorSceneDescriptionLines5, &RadioButton::checkedChanged, this, notifyScreenplayNavigatorShowSceneTextChanged);
+    //
+    // ... хронометраж
+    //
+    connect(d->screenplayDurationByPage, &RadioButton::checkedChanged, d->screenplayDurationByPagePage, &TextField::setEnabled);
+    connect(d->screenplayDurationByPage, &RadioButton::checkedChanged, d->screenplayDurationByPageDuration, &TextField::setEnabled);
+    connect(d->screenplayDurationByCharacters, &RadioButton::checkedChanged, d->screenplayDurationByCharactersCharacters, &TextField::setEnabled);
+    connect(d->screenplayDurationByCharacters, &RadioButton::checkedChanged, d->screenplayDurationByCharactersIncludingSpaces, &RadioButton::setEnabled);
+    connect(d->screenplayDurationByCharacters, &RadioButton::checkedChanged, d->screenplayDurationByCharactersDuration, &TextField::setEnabled);
+    //
+    auto notifyScreenplayDurationTypeChanged = [this] {
+        using namespace BusinessLayer;
+        if (d->screenplayDurationByPage->isChecked()) {
+            emit screenplayDurationTypeChanged(static_cast<int>(ChronometerType::Page));
+        } else if (d->screenplayDurationByCharacters->isChecked()) {
+            emit screenplayDurationTypeChanged(static_cast<int>(ChronometerType::Page));
+        }
+    };
+    connect(d->screenplayDurationByPage, &RadioButton::checkedChanged, this, notifyScreenplayDurationTypeChanged);
+    connect(d->screenplayDurationByCharacters, &RadioButton::checkedChanged, this, notifyScreenplayDurationTypeChanged);
+    connect(d->screenplayDurationByPageDuration, &TextField::textChanged, this, [this] {
+        emit screenplayDurationByPageDurationChanged(d->screenplayDurationByPageDuration->text().toInt());
+    });
+    connect(d->screenplayDurationByCharactersCharacters, &TextField::textChanged, this, [this] {
+        emit screenplayDurationByCharactersCharactersChanged(d->screenplayDurationByCharactersCharacters->text().toInt());
+    });
+    connect(d->screenplayDurationByCharactersIncludingSpaces, &CheckBox::checkedChanged, this, &SettingsView::screenplayDurationByCharactersIncludeSpacesChanged);
+    connect(d->screenplayDurationByCharactersDuration, &TextField::textChanged, this, [this] {
+        emit screenplayDurationByCharactersDurationChanged(d->screenplayDurationByCharactersDuration->text().toInt());
+    });
 
     designSystemChangeEvent(nullptr);
 }
@@ -824,6 +905,42 @@ void SettingsView::setScreenplayNavigatorShowSceneText(bool _show, int _lines)
     }
 }
 
+void SettingsView::setScreenplayDurationType(int _type)
+{
+    using namespace BusinessLayer;
+    switch (static_cast<ChronometerType>(_type)) {
+        case ChronometerType::Page: {
+            d->screenplayDurationByPage->setChecked(true);
+            break;
+        }
+
+        case ChronometerType::Characters: {
+            d->screenplayDurationByCharacters->setChecked(true);
+            break;
+        }
+    }
+}
+
+void SettingsView::setScreenplayDurationByPageDuration(int _duration)
+{
+    d->screenplayDurationByPageDuration->setText(QString::number(_duration));
+}
+
+void SettingsView::setScreenplayDurationByCharactersCharacters(int _characters)
+{
+    d->screenplayDurationByCharactersCharacters->setText(QString::number(_characters));
+}
+
+void SettingsView::setScreenplayDurationByCharactersIncludeSpaces(bool _include)
+{
+    d->screenplayDurationByCharactersIncludingSpaces->setChecked(_include);
+}
+
+void SettingsView::setScreenplayDurationByCharactersDuration(int _duration)
+{
+    d->screenplayDurationByCharactersDuration->setText(QString::number(_duration));
+}
+
 void SettingsView::updateTranslations()
 {
     d->applicationTitle->setText(tr("Application settings"));
@@ -982,6 +1099,18 @@ void SettingsView::updateTranslations()
     d->screenplayNavigatorSceneDescriptionLines3->setText("3");
     d->screenplayNavigatorSceneDescriptionLines4->setText("4");
     d->screenplayNavigatorSceneDescriptionLines5->setText("5");
+    d->screenplayDurationTitle->setText(tr("Duration"));
+    d->screenplayDurationByPage->setText(tr("Calculate duration based on the count of pages"));
+    d->screenplayDurationByPagePage->setLabel(tr("at the rate of"));
+    d->screenplayDurationByPagePage->setSuffix(tr("pages"));
+    d->screenplayDurationByPageDuration->setLabel(tr("has duration"));
+    d->screenplayDurationByPageDuration->setSuffix(tr("seconds"));
+    d->screenplayDurationByCharacters->setText(tr("Calculate duration based on the count of letters"));
+    d->screenplayDurationByCharactersCharacters->setLabel(tr("at the rate of"));
+    d->screenplayDurationByCharactersCharacters->setSuffix(tr("letters"));
+    d->screenplayDurationByCharactersIncludingSpaces->setText(tr("including spaces"));
+    d->screenplayDurationByCharactersDuration->setLabel(tr("has duration"));
+    d->screenplayDurationByCharactersDuration->setSuffix(tr("seconds"));
 
     d->shortcutsTitle->setText(tr("Shortcuts"));
 }
@@ -1009,6 +1138,7 @@ void SettingsView::designSystemChangeEvent(DesignSystemChangeEvent* _event)
          d->screenplayTitle,
          d->screenplayEditorTitle,
          d->screenplayNavigatorTitle,
+         d->screenplayDurationTitle,
          d->shortcutsTitle }) {
         cardTitle->setBackgroundColor(DesignSystem::color().background());
         cardTitle->setTextColor(titleColor);
@@ -1025,7 +1155,8 @@ void SettingsView::designSystemChangeEvent(DesignSystemChangeEvent* _event)
     labelMargins.setBottom(static_cast<int>(Ui::DesignSystem::button().shadowMargins().bottom()));
     for (auto label : QVector<Widget*>{ d->language,
                                         d->theme,
-                                        d->scaleFactorTitle, d->scaleFactorSmallInfo, d->scaleFactorBigInfo }) {
+                                        d->scaleFactorTitle, d->scaleFactorSmallInfo, d->scaleFactorBigInfo,
+                                        }) {
         label->setBackgroundColor(DesignSystem::color().background());
         label->setTextColor(DesignSystem::color().onBackground());
         label->setContentsMargins(labelMargins);
@@ -1044,7 +1175,8 @@ void SettingsView::designSystemChangeEvent(DesignSystemChangeEvent* _event)
          d->screenplayEditorShowDialogueNumber,
          d->screenplayEditorHighlightCurrentLine,
          d->screenplayNavigatorShowSceneNumber,
-         d->screenplayNavigatorShowSceneText }) {
+         d->screenplayNavigatorShowSceneText,
+         d->screenplayDurationByCharactersIncludingSpaces }) {
         checkBox->setBackgroundColor(DesignSystem::color().background());
         checkBox->setTextColor(DesignSystem::color().onBackground());
     }
@@ -1054,13 +1186,20 @@ void SettingsView::designSystemChangeEvent(DesignSystemChangeEvent* _event)
          d->screenplayNavigatorSceneDescriptionLines2,
          d->screenplayNavigatorSceneDescriptionLines3,
          d->screenplayNavigatorSceneDescriptionLines4,
-         d->screenplayNavigatorSceneDescriptionLines5 }) {
+         d->screenplayNavigatorSceneDescriptionLines5,
+         d->screenplayDurationByPage,
+         d->screenplayDurationByCharacters }) {
         radioButton->setBackgroundColor(DesignSystem::color().background());
         radioButton->setTextColor(DesignSystem::color().onBackground());
     }
 
-    for (auto textField : QVector<TextField*>{ d->spellCheckerLanguage,
-                                               d->backupsFolderPath }) {
+    for (auto textField : QVector<TextField*>{
+         d->spellCheckerLanguage,
+         d->backupsFolderPath,
+         d->screenplayDurationByPagePage,
+         d->screenplayDurationByPageDuration,
+         d->screenplayDurationByCharactersCharacters,
+         d->screenplayDurationByCharactersDuration }) {
         textField->setBackgroundColor(DesignSystem::color().background());
         textField->setTextColor(DesignSystem::color().onBackground());
     }
@@ -1077,10 +1216,16 @@ void SettingsView::designSystemChangeEvent(DesignSystemChangeEvent* _event)
 
     d->applicationCardLayout->setRowMinimumHeight(d->applicationCardBottomSpacerIndex,
                                                   static_cast<int>(Ui::DesignSystem::layout().px24()));
+    //
     d->screenplayCardLayout->setRowMinimumHeight(d->screenplayCardBottomSpacerIndex,
                                                   static_cast<int>(Ui::DesignSystem::layout().px24()));
+    const auto screenplayDurationByCharactersRow = d->screenplayCardLayout->indexOf(d->screenplayDurationByCharacters);
+    d->screenplayCardLayout->setRowMinimumHeight(screenplayDurationByCharactersRow,
+                                                 static_cast<int>(Ui::DesignSystem::layout().px24()*3));
+    //
     d->shortcutsCardLayout->setRowMinimumHeight(d->shortcutsCardBottomSpacerIndex,
                                                   static_cast<int>(Ui::DesignSystem::layout().px24()));
+
 }
 
 } // namespace Ui

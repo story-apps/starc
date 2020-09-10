@@ -8,6 +8,7 @@
 #include <business_layer/model/locations/location_model.h>
 #include <business_layer/model/locations/locations_model.h>
 #include <business_layer/model/project/project_information_model.h>
+#include <business_layer/model/screenplay/text/screenplay_text_model.h>
 #include <business_layer/model/structure/structure_model.h>
 #include <business_layer/model/structure/structure_model_item.h>
 #include <business_layer/model/structure/structure_proxy_model.h>
@@ -557,6 +558,18 @@ void ProjectManager::reconfigureScreenplayEditor()
 void ProjectManager::reconfigureScreenplayNavigator()
 {
     d->pluginsBuilder.reconfigureScreenplayNavigator();
+}
+
+void ProjectManager::reconfigureScreenplayDuration()
+{
+    for (auto model : d->modelsFacade.models()) {
+        auto screenplayModel = qobject_cast<BusinessLayer::ScreenplayTextModel*>(model);
+        if (screenplayModel == nullptr) {
+            continue;
+        }
+
+        screenplayModel->recalculateDuration();
+    }
 }
 
 void ProjectManager::loadCurrentProject(const QString& _name, const QString& _path)

@@ -104,6 +104,11 @@ public:
      */
     std::chrono::seconds duration() const;
 
+    /**
+     * @brief Пересчитать хронометраж
+     */
+    void recalculateDuration();
+
 protected:
     /**
      * @brief Реализация модели для работы с документами

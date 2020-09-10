@@ -4,6 +4,7 @@
 
 #include <ui/design_system/design_system.h>
 
+#include <utils/helpers/color_helper.h>
 #include <utils/helpers/image_helper.h>
 #include <utils/helpers/text_helper.h>
 
@@ -47,6 +48,11 @@ public:
     /** @} */
 
     /**
+     * @brief Определить область для отрисовки суффикса
+     */
+    QRectF suffixRect(const QSize& _size) const;
+
+    /**
      * @brief Определить область для отрисовки иконки
      */
     QRectF iconRect(int _width) const;
@@ -60,6 +66,7 @@ public:
     QString label;
     QString helper;
     QString error;
+    QString suffix;
 
     QString trailingIcon;
     QColor trailingIconColor;
@@ -212,6 +219,26 @@ QRectF TextField::Implementation::decorationRectInFocus(const QSize& _textFieldS
                   Ui::DesignSystem::textField().underlineHeightInFocus());
 }
 
+QRectF TextField::Implementation::suffixRect(const QSize& _size) const
+{
+    const qreal suffixWidth = TextHelper::fineTextWidth(suffix, Ui::DesignSystem::font().body1());
+    QPointF labelTopLeft = Ui::DesignSystem::textField().labelTopLeft()
+                           + QPointF(Ui::DesignSystem::textField().contentsMargins().left(),
+                                     Ui::DesignSystem::textField().contentsMargins().top());
+    labelTopLeft.setY(Ui::DesignSystem::textField().margins().top());
+
+
+    return QRectF(QPointF(_size.width()
+                          - Ui::DesignSystem::textField().contentsMargins().right()
+                          - Ui::DesignSystem::textField().margins().right()
+                          - suffixWidth,
+                          Ui::DesignSystem::textField().margins().top()),
+                  QSizeF(suffixWidth,
+                         _size.height()
+                         - Ui::DesignSystem::textField().margins().top()
+                         - Ui::DesignSystem::textField().margins().bottom()));
+}
+
 QRectF TextField::Implementation::iconRect(int _width) const
 {
     return QRectF(QPointF(_width
@@ -311,6 +338,17 @@ void TextField::setError(const QString& _text)
     update();
 }
 
+void TextField::setSuffix(const QString& _suffix)
+{
+    if (d->suffix == _suffix) {
+        return;
+    }
+
+    d->suffix = _suffix;
+    updateGeometry();
+    update();
+}
+
 QString TextField::text() const
 {
     return toPlainText();
@@ -399,6 +437,11 @@ QSize TextField::sizeHint() const
     const QFontMetrics fontMetrics(Ui::DesignSystem::font().body1());
     QSize size(TextHelper::fineTextWidth(text(), Ui::DesignSystem::font().body1()),
                fontMetrics.height());
+    if (!d->suffix.isEmpty()) {
+        const int suffixWidth = TextHelper::fineTextWidth(d->suffix, Ui::DesignSystem::font().body1())
+                                + Ui::DesignSystem::textField().spacing();
+        size += {suffixWidth, 0};
+    }
     if (!d->error.isEmpty()) {
         const auto errorWidth = TextHelper::fineTextWidth(d->error, Ui::DesignSystem::font().caption());
         size = size.expandedTo({errorWidth, 1});
@@ -509,8 +552,11 @@ void TextField::paintEvent(QPaintEvent* _event)
                                          Ui::DesignSystem::textField().contentsMargins().top());
         labelTopLeft.setY(Ui::DesignSystem::textField().margins().top());
         const QRectF labelRect(labelTopLeft,
-                               QSizeF(width() - labelTopLeft.x(),
-                                      QFontMetricsF(Ui::DesignSystem::font().body1()).lineSpacing()));
+                               QSizeF(width()
+                                      - labelTopLeft.x(),
+                                      height()
+                                      - Ui::DesignSystem::textField().margins().top()
+                                      - Ui::DesignSystem::textField().margins().bottom()));
         painter.drawText(labelRect, Qt::AlignLeft | Qt::AlignBottom,
                          QString(text().length(), QString("●").front()));
         painter.end();
@@ -553,6 +599,16 @@ void TextField::paintEvent(QPaintEvent* _event)
         painter.drawText(labelRect, Qt::AlignLeft | Qt::AlignVCenter, d->label);
     }
     //
+    // ... суффикс
+    //
+    if (!d->suffix.isEmpty()) {
+        painter.setFont(Ui::DesignSystem::font().body1());
+        painter.setPen(ColorHelper::transparent(d->textColor, isEnabled() ? Ui::DesignSystem::inactiveTextOpacity()
+                                                                          : Ui::DesignSystem::disabledTextOpacity()));
+        const QRectF suffixRect = d->suffixRect(size());
+        painter.drawText(suffixRect, Qt::AlignLeft | Qt::AlignVCenter, d->suffix);
+    }
+    //
     // ... иконка действия
     //
     if (!d->trailingIcon.isEmpty()) {
@@ -570,7 +626,7 @@ void TextField::paintEvent(QPaintEvent* _event)
     {
         const QRectF decorationRect = d->decorationRect(size());
         const QColor decorationColor = !d->error.isEmpty() ? Ui::DesignSystem::color().error()
-                                                           : d->textColor;
+                                                           : palette().color(QPalette::Text);
         painter.fillRect(decorationRect, decorationColor);
     }
     //

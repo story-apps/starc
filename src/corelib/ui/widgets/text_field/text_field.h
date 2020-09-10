@@ -4,6 +4,8 @@
 
 #include <QTextEdit>
 
+class QValidator;
+
 
 /**
  * @brief Виджет текстового поля
@@ -40,6 +42,11 @@ public:
      * @brief Установить текст ошибки
      */
     void setError(const QString& _text);
+
+    /**
+     * @brief Задать суффикс для поля ввода
+     */
+    void setSuffix(const QString& _suffix);
 
     /**
      * @brief Получить текст поля ввода

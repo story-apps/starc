@@ -109,6 +109,13 @@ namespace {
     const QString kComponentsScreenplayNavigatorShowSceneNumberKey = kComponentsScreenplayNavigatorKey + QStringLiteral("/show-scene-number");
     const QString kComponentsScreenplayNavigatorShowSceneTextKey = kComponentsScreenplayNavigatorKey + QStringLiteral("/show-scene-text");
     const QString kComponentsScreenplayNavigatorSceneTextLinesKey = kComponentsScreenplayNavigatorKey + QStringLiteral("/scene-text-lines");
+    // ... хронометраж
+    const QString kComponentsScreenplayDurationKey = kComponentsScreenplayKey + QStringLiteral("/duration");
+    const QString kComponentsScreenplayDurationTypeKey = kComponentsScreenplayDurationKey + QStringLiteral("/type");
+    const QString kComponentsScreenplayDurationByPageDurationKey = kComponentsScreenplayDurationKey + QStringLiteral("/by-page-duration");
+    const QString kComponentsScreenplayDurationByCharactersCharactersKey = kComponentsScreenplayDurationKey + QStringLiteral("/by-characters-characters");
+    const QString kComponentsScreenplayDurationByCharactersIncludeSpacesKey = kComponentsScreenplayDurationKey + QStringLiteral("/by-characters-include-spaces");
+    const QString kComponentsScreenplayDurationByCharactersDurationKey = kComponentsScreenplayDurationKey + QStringLiteral("/by-characters-duration");
 }
 
 /**
