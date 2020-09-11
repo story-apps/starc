@@ -1030,7 +1030,11 @@ void ScreenplayTextDocument::updateModelOnContentChange(int _position, int _char
                     tableInfo = {};
                     splitterItem = new ScreenplayTextModelSplitterItem(ScreenplayTextModelSplitterItemType::End);
                 }
-                d->model->insertItem(splitterItem, previousItem);
+                if (previousItem == nullptr) {
+                    d->model->prependItem(splitterItem);
+                } else {
+                    d->model->insertItem(splitterItem, previousItem);
+                }
 
                 //
                 // Запомним информацию о разделителе в блоке
