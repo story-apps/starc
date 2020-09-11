@@ -666,6 +666,10 @@ ScreenplayTextCommentsModel::PositionHint ScreenplayTextCommentsModel::mapToScre
 
 QModelIndex ScreenplayTextCommentsModel::mapFromScreenplay(const QModelIndex& _index, int _positionInBlock)
 {
+    if (!_index.isValid()) {
+        return {};
+    }
+
     const auto item = d->model->itemForIndex(_index);
     if (item == nullptr
         || item->type() != ScreenplayTextModelItemType::Text) {
