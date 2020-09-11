@@ -99,6 +99,7 @@ void OnboardingView::Implementation::initLanguagePage()
     RadioButton* englishLanguage = initLanguageButton("English", QLocale::English);
     RadioButton* germanLanguage = initLanguageButton("Deutsch", QLocale::German);
     RadioButton* hebrewLanguage = initLanguageButton("עִבְרִית", QLocale::Hebrew);
+    RadioButton* hindiLanguage = initLanguageButton("हिन्दी", QLocale::Hindi);
     RadioButton* hungarianLanguage = initLanguageButton("Magyar", QLocale::Hungarian);
     RadioButton* italianLanguage = initLanguageButton("Italiano", QLocale::Italian);
     RadioButton* russianLanguage = initLanguageButton("Русский", QLocale::Russian);
@@ -160,6 +161,7 @@ void OnboardingView::Implementation::initLanguagePage()
     languagePageLayout->addWidget(ukrainianLanguage, rowForSecondColumn++, 1);
     int rowForThirdColumn = 1;
     languagePageLayout->addWidget(hebrewLanguage, rowForThirdColumn++, 2);
+    languagePageLayout->addWidget(hindiLanguage, rowForThirdColumn++, 2);
     languagePageLayout->setRowStretch(row++, 1);
     languagePageLayout->setColumnStretch(3, 1);
     languagePageLayout->addWidget(languageHowToAddLink, row++, 0, 1, 4);

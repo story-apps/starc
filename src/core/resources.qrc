@@ -10,6 +10,10 @@
         <file alias="courier-prime-bold">resources/fonts/courier-prime-bold.ttf</file>
         <file alias="courier-prime-italic">resources/fonts/courier-prime-italic.ttf</file>
         <file alias="courier-prime">resources/fonts/courier-prime.ttf</file>
+        <file alias="noto-sans-bold">resources/fonts/noto-sans-bold.ttf</file>
+        <file alias="noto-sans-bold-italic">resources/fonts/noto-sans-bold-italic.ttf</file>
+        <file alias="noto-sans-italic">resources/fonts/noto-sans-italic.ttf</file>
+        <file alias="noto-sans">resources/fonts/noto-sans-regular.ttf</file>
     </qresource>
     <qresource prefix="/images">
         <file alias="movie-poster">resources/images/movie-poster.jpg</file>

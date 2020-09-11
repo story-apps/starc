@@ -2,6 +2,7 @@
 
 #include <corelib_global.h>
 
+#include <QLocale>
 #include <QScopedPointer>
 
 class QColor;
@@ -1084,6 +1085,11 @@ public:
      * @brief Текущая тема
      */
     static ApplicationTheme theme();
+
+    /**
+     * @brief Выбрать шрифт в зависимости от языка приложения
+     */
+    static void updateLanguage();
 
     /**
      * @brief Задать тему приложения

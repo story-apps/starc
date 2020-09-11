@@ -444,6 +444,11 @@ void ApplicationManager::Implementation::setTranslation(QLocale::Language _langu
             break;
         }
 
+        case QLocale::Hindi: {
+            translation = "hi";
+            break;
+        }
+
         case QLocale::Hungarian: {
             translation = "hu";
             break;
@@ -495,25 +500,25 @@ void ApplicationManager::Implementation::setTranslation(QLocale::Language _langu
     } ();
     //
     QApplication::removeTranslator(appTranslator);
-    if (translation.isEmpty()) {
-        return;
+    if (!translation.isEmpty()) {
+        appTranslator->load(":/translations/for_use_starc_translation_" + translation + ".qm");
+        QApplication::installTranslator(appTranslator);
     }
-
-    appTranslator->load(":/translations/for_use_starc_translation_" + translation + ".qm");
-    QApplication::installTranslator(appTranslator);
 
     //
     // Для языков, которые пишутся справа-налево настроим соответствующее выравнивание интерфейса
     //
     if (currentLanguage == QLocale::Persian
         || currentLanguage == QLocale::Hebrew) {
-        //
-        // TODO: v 0.0.4
-        //
-//        QApplication::setLayoutDirection(Qt::RightToLeft);
+        QApplication::setLayoutDirection(Qt::RightToLeft);
     } else {
         QApplication::setLayoutDirection(Qt::LeftToRight);
     }
+
+    //
+    // Настроим дизайн систему так, чтобы она использовала шрифт подходящий для используемого языка
+    //
+    Ui::DesignSystem::updateLanguage();
 }
 
 void ApplicationManager::Implementation::setTheme(Ui::ApplicationTheme _theme)
@@ -1014,6 +1019,10 @@ ApplicationManager::ApplicationManager(QObject* _parent)
     fontDatabase.addApplicationFont(":/fonts/roboto-medium");
     fontDatabase.addApplicationFont(":/fonts/roboto-regular");
     fontDatabase.addApplicationFont(":/fonts/roboto-thin");
+    fontDatabase.addApplicationFont(":/fonts/noto-sans");
+    fontDatabase.addApplicationFont(":/fonts/noto-sans-bold");
+    fontDatabase.addApplicationFont(":/fonts/noto-sans-bold-italic");
+    fontDatabase.addApplicationFont(":/fonts/noto-sans-italic");
     fontDatabase.addApplicationFont(":/fonts/courier-prime");
     fontDatabase.addApplicationFont(":/fonts/courier-prime-bold");
     fontDatabase.addApplicationFont(":/fonts/courier-prime-italic");

@@ -13,6 +13,7 @@
 #include <QMarginsF>
 #include <QPixmap>
 #include <QPointF>
+#include <QSet>
 #include <QSizeF>
 
 #ifdef Q_OS_ANDROID
@@ -268,19 +269,19 @@ class DesignSystem::Font::Implementation
 public:
     explicit Implementation(qreal _scaleFactor);
 
-    QFont h1 = QFont("Roboto");
-    QFont h2 = QFont("Roboto");
-    QFont h3 = QFont("Roboto");
-    QFont h4 = QFont("Roboto");
-    QFont h5 = QFont("Roboto");
-    QFont h6 = QFont("Roboto");
-    QFont subtitle1 = QFont("Roboto");
-    QFont subtitle2 = QFont("Roboto");
-    QFont body1 = QFont("Roboto");
-    QFont body2 = QFont("Roboto");
-    QFont button = QFont("Roboto");
-    QFont caption = QFont("Roboto");
-    QFont overline = QFont("Roboto");
+    QFont h1;
+    QFont h2;
+    QFont h3;
+    QFont h4;
+    QFont h5;
+    QFont h6;
+    QFont subtitle1;
+    QFont subtitle2;
+    QFont body1;
+    QFont body2;
+    QFont button;
+    QFont caption;
+    QFont overline;
 
     QFont iconsSmall = QFont("Material Design Icons");
     QFont iconsMid = QFont("Material Design Icons");
@@ -288,8 +289,16 @@ public:
 
 DesignSystem::Font::Implementation::Implementation(qreal _scaleFactor)
 {
-    auto initFont = [_scaleFactor] (QFont::Weight _weight, QFont::Capitalization _capitalization,
+    QString fontFamily = QLatin1String("Roboto");
+    const QSet<QLocale::Language> notoLanguages = { QLocale::Hebrew,
+                                          QLocale::Hindi,
+                                          QLocale::Persian };
+    if (notoLanguages.contains(QLocale().language())) {
+        fontFamily = QLatin1String("Noto");
+    }
+    auto initFont = [_scaleFactor, fontFamily] (QFont::Weight _weight, QFont::Capitalization _capitalization,
             int _pixelSize, qreal _letterSpacing, QFont& _font) {
+        _font.setFamily(fontFamily);
         _font.setWeight(_weight);
         _font.setCapitalization(_capitalization);
         _font.setPixelSize(static_cast<int>(_pixelSize * _scaleFactor));
@@ -1902,6 +1911,14 @@ DesignSystemPrivate::DesignSystemPrivate(ApplicationTheme _theme, qreal _scaleFa
 ApplicationTheme DesignSystem::theme()
 {
     return instance()->d->theme;
+}
+
+void DesignSystem::updateLanguage()
+{
+    //
+    // Просто пересоздаём инстанс со стилями, а шрифты подхватятся при создании объекта Font
+    //
+    instance()->d.reset(new DesignSystemPrivate(theme(), scaleFactor(), color()));
 }
 
 void DesignSystem::setTheme(ApplicationTheme _theme)

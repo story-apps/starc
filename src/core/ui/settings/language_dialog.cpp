@@ -32,6 +32,7 @@ public:
     RadioButton* english = nullptr;
     RadioButton* german = nullptr;
     RadioButton* hebrew = nullptr;
+    RadioButton* hindi = nullptr;
     RadioButton* hungarian = nullptr;
     RadioButton* italian = nullptr;
     RadioButton* russian = nullptr;
@@ -51,6 +52,7 @@ LanguageDialog::Implementation::Implementation(QWidget* _parent)
       english(new RadioButton(_parent)),
       german(new RadioButton(_parent)),
       hebrew(new RadioButton(_parent)),
+      hindi(new RadioButton(_parent)),
       hungarian(new RadioButton(_parent)),
       italian(new RadioButton(_parent)),
       russian(new RadioButton(_parent)),
@@ -70,6 +72,8 @@ LanguageDialog::Implementation::Implementation(QWidget* _parent)
     german->setProperty(kLanguageKey, QLocale::German);
     hebrew ->setText("עִבְרִית");
     hebrew->setProperty(kLanguageKey, QLocale::Hebrew);
+    hindi ->setText("हिन्दी");
+    hindi->setProperty(kLanguageKey, QLocale::Hindi);
     hungarian->setText("Magyar");
     hungarian->setProperty(kLanguageKey, QLocale::Hungarian);
     italian->setText("Italiano");
@@ -102,16 +106,17 @@ LanguageDialog::Implementation::Implementation(QWidget* _parent)
 QVector<RadioButton*> LanguageDialog::Implementation::languages() const
 {
     return { azerbaijani,
-             english,
-             german,
-             hebrew,
-             hungarian,
-             italian,
-             russian,
-             slovenian,
-             spanish,
-             turkish,
-             ukrainian };
+                english,
+                german,
+                hebrew,
+                hindi,
+                hungarian,
+                italian,
+                russian,
+                slovenian,
+                spanish,
+                turkish,
+                ukrainian };
 }
 
 
@@ -138,6 +143,7 @@ LanguageDialog::LanguageDialog(QWidget* _parent)
     //
     int rowForThirdColumn = 0;
     contentsLayout()->addWidget(d->hebrew, rowForThirdColumn++, 2);
+    contentsLayout()->addWidget(d->hindi, rowForThirdColumn++, 2);
     //
     contentsLayout()->setRowStretch(row++, 1);
     contentsLayout()->setColumnStretch(3, 1);
