@@ -401,63 +401,63 @@
 <context>
     <name>ManagementLayer::ApplicationManager</name>
     <message>
-        <location filename="../management_layer/application_manager.cpp" line="565"/>
+        <location filename="../management_layer/application_manager.cpp" line="570"/>
         <source> - changed</source>
         <translation> - изменено</translation>
     </message>
     <message>
-        <location filename="../management_layer/application_manager.cpp" line="631"/>
-        <location filename="../management_layer/application_manager.cpp" line="649"/>
+        <location filename="../management_layer/application_manager.cpp" line="636"/>
+        <location filename="../management_layer/application_manager.cpp" line="654"/>
         <source>Saving error</source>
         <translation>Ошибка сохранения</translation>
     </message>
     <message>
-        <location filename="../management_layer/application_manager.cpp" line="632"/>
+        <location filename="../management_layer/application_manager.cpp" line="637"/>
         <source>Changes can&apos;t be written. There is an internal database error: &quot;%1&quot; Please check, if your file exists and if you have permission to write.</source>
         <translation>Не удалось сохранить изменения. Произошла ошибка базы данный: &quot;%1&quot;. Пожалуйста проверьте существует ли файл проекта и есть ли у вас разрешение на запись в него.</translation>
     </message>
     <message>
-        <location filename="../management_layer/application_manager.cpp" line="650"/>
+        <location filename="../management_layer/application_manager.cpp" line="655"/>
         <source>Changes can&apos;t be written because the story located at &quot;%1&quot; doesn&apos;t exist. Please move the file back and retry saving.</source>
         <translation>Изменения не удалось сохранить, потому что файл проекта, который должен находиться по пути &quot;%1&quot; отстутствует. Пожалуйста верните файл назад и попробуйте сохранить изменения ещё раз.</translation>
     </message>
     <message>
-        <location filename="../management_layer/application_manager.cpp" line="695"/>
+        <location filename="../management_layer/application_manager.cpp" line="700"/>
         <source>Project was modified. Save changes?</source>
         <translation>Проект был изменён. Сохранить изменения?</translation>
     </message>
     <message>
-        <location filename="../management_layer/application_manager.cpp" line="696"/>
+        <location filename="../management_layer/application_manager.cpp" line="701"/>
         <source>Cancel</source>
         <translation>Отмена</translation>
     </message>
     <message>
-        <location filename="../management_layer/application_manager.cpp" line="697"/>
+        <location filename="../management_layer/application_manager.cpp" line="702"/>
         <source>Don&apos;t save</source>
         <translation>Не сохранять</translation>
     </message>
     <message>
-        <location filename="../management_layer/application_manager.cpp" line="698"/>
+        <location filename="../management_layer/application_manager.cpp" line="703"/>
         <source>Save</source>
         <translation>Сохранить</translation>
     </message>
     <message>
-        <location filename="../management_layer/application_manager.cpp" line="770"/>
+        <location filename="../management_layer/application_manager.cpp" line="775"/>
         <source>You tried to create a project in nonexistent folder %1. Please, choose another location for the new project.</source>
         <translation>Нельзя создать файл в папке, которой не существует: %1. Пожалуйста, выберите существующую папку.</translation>
     </message>
     <message>
-        <location filename="../management_layer/application_manager.cpp" line="775"/>
+        <location filename="../management_layer/application_manager.cpp" line="780"/>
         <source>The file can&apos;t be written. Looks like it is opened by another application. Please close it and retry to create a new project.</source>
         <translation>Не удалось произвести запись файла. Похоже, что он открыт другой программой. Пожалуйста закроте её и попробуйте ещё раз сохранить изменения.</translation>
     </message>
     <message>
-        <location filename="../management_layer/application_manager.cpp" line="779"/>
+        <location filename="../management_layer/application_manager.cpp" line="784"/>
         <source>The file can&apos;t be written. Please, check and give permissions to the app to write into the selected folder, or choose another folder for saving a new project.</source>
         <translation>Не удалось произвести запись файла. Пожалуйста проверьте разрешение на запись в выбранную папку, или выберите другую папку для сохранения.</translation>
     </message>
     <message>
-        <location filename="../management_layer/application_manager.cpp" line="782"/>
+        <location filename="../management_layer/application_manager.cpp" line="787"/>
         <source>Create project error</source>
         <translation>Ошибка создания проекта</translation>
     </message>
@@ -1021,17 +1021,17 @@ from 2 Gb</source>
 <context>
     <name>Ui::LanguageDialog</name>
     <message>
-        <location filename="../ui/settings/language_dialog.cpp" line="180"/>
+        <location filename="../ui/settings/language_dialog.cpp" line="186"/>
         <source>Change application language</source>
         <translation>Изменить язык приложения</translation>
     </message>
     <message>
-        <location filename="../ui/settings/language_dialog.cpp" line="182"/>
+        <location filename="../ui/settings/language_dialog.cpp" line="188"/>
         <source>Did not find your preffered language? Read how you can add it yourself.</source>
         <translation>Не нашли предпочтительный для вас язык? Узнайте как вы можете добавить его сами.</translation>
     </message>
     <message>
-        <location filename="../ui/settings/language_dialog.cpp" line="184"/>
+        <location filename="../ui/settings/language_dialog.cpp" line="190"/>
         <source>Close</source>
         <translation>Закрыть</translation>
     </message>
@@ -1166,77 +1166,77 @@ from 2 Gb</source>
 <context>
     <name>Ui::OnboardingView</name>
     <message>
-        <location filename="../ui/onboarding/onboarding_view.cpp" line="328"/>
+        <location filename="../ui/onboarding/onboarding_view.cpp" line="330"/>
         <source>Choose preferred language</source>
         <translation>Выберите предпочитаемый язык</translation>
     </message>
     <message>
-        <location filename="../ui/onboarding/onboarding_view.cpp" line="329"/>
+        <location filename="../ui/onboarding/onboarding_view.cpp" line="331"/>
         <source>Did not find your preffered language? Read how you can add it yourself.</source>
         <translation>Не нашли предпочтительный для вас язык? Узнайте как вы можете добавить его сами.</translation>
     </message>
     <message>
-        <location filename="../ui/onboarding/onboarding_view.cpp" line="330"/>
+        <location filename="../ui/onboarding/onboarding_view.cpp" line="332"/>
         <source>Continue</source>
         <translation>Продолжить</translation>
     </message>
     <message>
-        <location filename="../ui/onboarding/onboarding_view.cpp" line="331"/>
+        <location filename="../ui/onboarding/onboarding_view.cpp" line="333"/>
         <source>Skip initial setup</source>
         <translation>Пропустить настройку</translation>
     </message>
     <message>
-        <location filename="../ui/onboarding/onboarding_view.cpp" line="333"/>
+        <location filename="../ui/onboarding/onboarding_view.cpp" line="335"/>
         <source>Choose application theme</source>
         <translation>Выберите тему приложения</translation>
     </message>
     <message>
-        <location filename="../ui/onboarding/onboarding_view.cpp" line="334"/>
+        <location filename="../ui/onboarding/onboarding_view.cpp" line="336"/>
         <source>Dark &amp; light theme</source>
         <translation>Темно-светлая тема</translation>
     </message>
     <message>
-        <location filename="../ui/onboarding/onboarding_view.cpp" line="335"/>
+        <location filename="../ui/onboarding/onboarding_view.cpp" line="337"/>
         <source>Modern theme which combines dark and light colors for better concentration on the documents you work.</source>
         <translation>Современная тема, сочетающая в себе тёмные и светлые тона для лучшей концентрации на рабочих документах.</translation>
     </message>
     <message>
-        <location filename="../ui/onboarding/onboarding_view.cpp" line="336"/>
+        <location filename="../ui/onboarding/onboarding_view.cpp" line="338"/>
         <source>Dark theme</source>
         <translation>Тёмная тема</translation>
     </message>
     <message>
-        <location filename="../ui/onboarding/onboarding_view.cpp" line="337"/>
+        <location filename="../ui/onboarding/onboarding_view.cpp" line="339"/>
         <source>Theme is more suitable for work in dimly lit rooms, and also in the evening or night.</source>
         <translation>Тема подойдёт для работы в слабоосвещённых помещених, а также вечером и ночью.</translation>
     </message>
     <message>
-        <location filename="../ui/onboarding/onboarding_view.cpp" line="338"/>
+        <location filename="../ui/onboarding/onboarding_view.cpp" line="340"/>
         <source>Light theme</source>
         <translation>Светлая тема</translation>
     </message>
     <message>
-        <location filename="../ui/onboarding/onboarding_view.cpp" line="339"/>
+        <location filename="../ui/onboarding/onboarding_view.cpp" line="341"/>
         <source>Theme is convenient for work with sufficient light.</source>
         <translation>Тема удобна для работы при достаточном количестве света.</translation>
     </message>
     <message>
-        <location filename="../ui/onboarding/onboarding_view.cpp" line="340"/>
+        <location filename="../ui/onboarding/onboarding_view.cpp" line="342"/>
         <source>Setup size of the user interface elements</source>
         <translation>Настройте размер элементов управления</translation>
     </message>
     <message>
-        <location filename="../ui/onboarding/onboarding_view.cpp" line="341"/>
+        <location filename="../ui/onboarding/onboarding_view.cpp" line="343"/>
         <source>small</source>
         <translation>маленький</translation>
     </message>
     <message>
-        <location filename="../ui/onboarding/onboarding_view.cpp" line="342"/>
+        <location filename="../ui/onboarding/onboarding_view.cpp" line="344"/>
         <source>big</source>
         <translation>большой</translation>
     </message>
     <message>
-        <location filename="../ui/onboarding/onboarding_view.cpp" line="343"/>
+        <location filename="../ui/onboarding/onboarding_view.cpp" line="345"/>
         <source>Start writing</source>
         <translation>Приступить к работе</translation>
     </message>

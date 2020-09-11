@@ -401,63 +401,63 @@
 <context>
     <name>ManagementLayer::ApplicationManager</name>
     <message>
-        <location filename="../management_layer/application_manager.cpp" line="565"/>
+        <location filename="../management_layer/application_manager.cpp" line="570"/>
         <source> - changed</source>
         <translation> – spremenjeno</translation>
     </message>
     <message>
-        <location filename="../management_layer/application_manager.cpp" line="631"/>
-        <location filename="../management_layer/application_manager.cpp" line="649"/>
+        <location filename="../management_layer/application_manager.cpp" line="636"/>
+        <location filename="../management_layer/application_manager.cpp" line="654"/>
         <source>Saving error</source>
         <translation>Napaka pri shranjevanju</translation>
     </message>
     <message>
-        <location filename="../management_layer/application_manager.cpp" line="632"/>
+        <location filename="../management_layer/application_manager.cpp" line="637"/>
         <source>Changes can&apos;t be written. There is an internal database error: &quot;%1&quot; Please check, if your file exists and if you have permission to write.</source>
         <translation>Sprememb ni mogoče zapisati. Prišlo je do napake notranje zbirke podatkov: »%1«. Preverite, da datoteka obstaja in da imate ustrezne pravice za pisanje.</translation>
     </message>
     <message>
-        <location filename="../management_layer/application_manager.cpp" line="650"/>
+        <location filename="../management_layer/application_manager.cpp" line="655"/>
         <source>Changes can&apos;t be written because the story located at &quot;%1&quot; doesn&apos;t exist. Please move the file back and retry saving.</source>
         <translation>Sprememb ni mogoče zapisati, ker zgodba na mestu »%1« ne obstaja. Postavite datoteko nazaj in poskusite ponovno shraniti zgodbo.</translation>
     </message>
     <message>
-        <location filename="../management_layer/application_manager.cpp" line="695"/>
+        <location filename="../management_layer/application_manager.cpp" line="700"/>
         <source>Project was modified. Save changes?</source>
         <translation>Projekt je bil spremenjen. Ali želite shraniti spremembe?</translation>
     </message>
     <message>
-        <location filename="../management_layer/application_manager.cpp" line="696"/>
+        <location filename="../management_layer/application_manager.cpp" line="701"/>
         <source>Cancel</source>
         <translation>Prekliči</translation>
     </message>
     <message>
-        <location filename="../management_layer/application_manager.cpp" line="697"/>
+        <location filename="../management_layer/application_manager.cpp" line="702"/>
         <source>Don&apos;t save</source>
         <translation>Ne shrani</translation>
     </message>
     <message>
-        <location filename="../management_layer/application_manager.cpp" line="698"/>
+        <location filename="../management_layer/application_manager.cpp" line="703"/>
         <source>Save</source>
         <translation>Shrani</translation>
     </message>
     <message>
-        <location filename="../management_layer/application_manager.cpp" line="770"/>
+        <location filename="../management_layer/application_manager.cpp" line="775"/>
         <source>You tried to create a project in nonexistent folder %1. Please, choose another location for the new project.</source>
         <translation>Projekt ste poskusili ustvariti v neobstoječi mapi %1. Izberite drugo mesto za novi projekt.</translation>
     </message>
     <message>
-        <location filename="../management_layer/application_manager.cpp" line="775"/>
+        <location filename="../management_layer/application_manager.cpp" line="780"/>
         <source>The file can&apos;t be written. Looks like it is opened by another application. Please close it and retry to create a new project.</source>
         <translation>Datoteke ni mogoče zapisati. Kaže, da je odprta v drugem programu. Zaprite jo in poskusite ustvariti nov projekt.</translation>
     </message>
     <message>
-        <location filename="../management_layer/application_manager.cpp" line="779"/>
+        <location filename="../management_layer/application_manager.cpp" line="784"/>
         <source>The file can&apos;t be written. Please, check and give permissions to the app to write into the selected folder, or choose another folder for saving a new project.</source>
         <translation>Datoteke ni mogoče zapisati. Preverite in dodelite ustrezne pravice programu za pisanje v izbrano mapo ali pa izberite drugo mapo za shranjevanje novega projekta.</translation>
     </message>
     <message>
-        <location filename="../management_layer/application_manager.cpp" line="782"/>
+        <location filename="../management_layer/application_manager.cpp" line="787"/>
         <source>Create project error</source>
         <translation>Napaka pri ustvarjanju projekta</translation>
     </message>
@@ -1022,17 +1022,17 @@ od 2 Gb</translation>
 <context>
     <name>Ui::LanguageDialog</name>
     <message>
-        <location filename="../ui/settings/language_dialog.cpp" line="180"/>
+        <location filename="../ui/settings/language_dialog.cpp" line="186"/>
         <source>Change application language</source>
         <translation>Spremenite jezik programa</translation>
     </message>
     <message>
-        <location filename="../ui/settings/language_dialog.cpp" line="182"/>
+        <location filename="../ui/settings/language_dialog.cpp" line="188"/>
         <source>Did not find your preffered language? Read how you can add it yourself.</source>
         <translation>Ne najdete želenega jezika? Preberite si, kako ga lahko dodate sami.</translation>
     </message>
     <message>
-        <location filename="../ui/settings/language_dialog.cpp" line="184"/>
+        <location filename="../ui/settings/language_dialog.cpp" line="190"/>
         <source>Close</source>
         <translation>Zapri</translation>
     </message>
@@ -1167,77 +1167,77 @@ od 2 Gb</translation>
 <context>
     <name>Ui::OnboardingView</name>
     <message>
-        <location filename="../ui/onboarding/onboarding_view.cpp" line="328"/>
+        <location filename="../ui/onboarding/onboarding_view.cpp" line="330"/>
         <source>Choose preferred language</source>
         <translation>Izberite želeni jezik</translation>
     </message>
     <message>
-        <location filename="../ui/onboarding/onboarding_view.cpp" line="329"/>
+        <location filename="../ui/onboarding/onboarding_view.cpp" line="331"/>
         <source>Did not find your preffered language? Read how you can add it yourself.</source>
         <translation>Ne najdete želenega jezika? Preberite si, kako ga lahko dodate sami.</translation>
     </message>
     <message>
-        <location filename="../ui/onboarding/onboarding_view.cpp" line="330"/>
+        <location filename="../ui/onboarding/onboarding_view.cpp" line="332"/>
         <source>Continue</source>
         <translation>Nadaljuj</translation>
     </message>
     <message>
-        <location filename="../ui/onboarding/onboarding_view.cpp" line="331"/>
+        <location filename="../ui/onboarding/onboarding_view.cpp" line="333"/>
         <source>Skip initial setup</source>
         <translation>Preskoči otvoritvene nastavitve</translation>
     </message>
     <message>
-        <location filename="../ui/onboarding/onboarding_view.cpp" line="333"/>
+        <location filename="../ui/onboarding/onboarding_view.cpp" line="335"/>
         <source>Choose application theme</source>
         <translation>Izberite temo programa</translation>
     </message>
     <message>
-        <location filename="../ui/onboarding/onboarding_view.cpp" line="334"/>
+        <location filename="../ui/onboarding/onboarding_view.cpp" line="336"/>
         <source>Dark &amp; light theme</source>
         <translation>Temna in svetla tema</translation>
     </message>
     <message>
-        <location filename="../ui/onboarding/onboarding_view.cpp" line="335"/>
+        <location filename="../ui/onboarding/onboarding_view.cpp" line="337"/>
         <source>Modern theme which combines dark and light colors for better concentration on the documents you work.</source>
         <translation>Sodobna tema, ki kombinira svetle in temne barve za boljše osredotočanje na dokumente v delu.</translation>
     </message>
     <message>
-        <location filename="../ui/onboarding/onboarding_view.cpp" line="336"/>
+        <location filename="../ui/onboarding/onboarding_view.cpp" line="338"/>
         <source>Dark theme</source>
         <translation>Temna tema</translation>
     </message>
     <message>
-        <location filename="../ui/onboarding/onboarding_view.cpp" line="337"/>
+        <location filename="../ui/onboarding/onboarding_view.cpp" line="339"/>
         <source>Theme is more suitable for work in dimly lit rooms, and also in the evening or night.</source>
         <translation>Tema je primernejša za delo v temnejših prostorih ter zvečer ali ponoči.</translation>
     </message>
     <message>
-        <location filename="../ui/onboarding/onboarding_view.cpp" line="338"/>
+        <location filename="../ui/onboarding/onboarding_view.cpp" line="340"/>
         <source>Light theme</source>
         <translation>Svetla tema</translation>
     </message>
     <message>
-        <location filename="../ui/onboarding/onboarding_view.cpp" line="339"/>
+        <location filename="../ui/onboarding/onboarding_view.cpp" line="341"/>
         <source>Theme is convenient for work with sufficient light.</source>
         <translation>Tema je primerna za delo pri zadostni svetlobi.</translation>
     </message>
     <message>
-        <location filename="../ui/onboarding/onboarding_view.cpp" line="340"/>
+        <location filename="../ui/onboarding/onboarding_view.cpp" line="342"/>
         <source>Setup size of the user interface elements</source>
         <translation>Velikost elementov uporabniškega vmesnika</translation>
     </message>
     <message>
-        <location filename="../ui/onboarding/onboarding_view.cpp" line="341"/>
+        <location filename="../ui/onboarding/onboarding_view.cpp" line="343"/>
         <source>small</source>
         <translation>majhna</translation>
     </message>
     <message>
-        <location filename="../ui/onboarding/onboarding_view.cpp" line="342"/>
+        <location filename="../ui/onboarding/onboarding_view.cpp" line="344"/>
         <source>big</source>
         <translation>velika</translation>
     </message>
     <message>
-        <location filename="../ui/onboarding/onboarding_view.cpp" line="343"/>
+        <location filename="../ui/onboarding/onboarding_view.cpp" line="345"/>
         <source>Start writing</source>
         <translation>Začnite pisati</translation>
     </message>

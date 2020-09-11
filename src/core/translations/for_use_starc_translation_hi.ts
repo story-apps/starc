@@ -401,63 +401,63 @@
 <context>
     <name>ManagementLayer::ApplicationManager</name>
     <message>
-        <location filename="../management_layer/application_manager.cpp" line="565"/>
+        <location filename="../management_layer/application_manager.cpp" line="570"/>
         <source> - changed</source>
         <translation>- परिवर्तन क्रिया सफ़ल</translation>
     </message>
     <message>
-        <location filename="../management_layer/application_manager.cpp" line="631"/>
-        <location filename="../management_layer/application_manager.cpp" line="649"/>
+        <location filename="../management_layer/application_manager.cpp" line="636"/>
+        <location filename="../management_layer/application_manager.cpp" line="654"/>
         <source>Saving error</source>
         <translation>फ़ाइल सेव एरर</translation>
     </message>
     <message>
-        <location filename="../management_layer/application_manager.cpp" line="632"/>
+        <location filename="../management_layer/application_manager.cpp" line="637"/>
         <source>Changes can&apos;t be written. There is an internal database error: &quot;%1&quot; Please check, if your file exists and if you have permission to write.</source>
         <translation>किये गए परिवर्तन दर्ज नहीं हुए. ये एक अंदरूनी डेटाबेस एरर है. &quot;1%&quot; कृपया जांच करें, अगर आपकी फ़ाइल मौजूद है और अगर आपके पास इसे दर्ज करने की अनुमति है.</translation>
     </message>
     <message>
-        <location filename="../management_layer/application_manager.cpp" line="650"/>
+        <location filename="../management_layer/application_manager.cpp" line="655"/>
         <source>Changes can&apos;t be written because the story located at &quot;%1&quot; doesn&apos;t exist. Please move the file back and retry saving.</source>
         <translation>किये गए परिवर्तन दर्ज नहीं हुए क्यूंकि आपकी कहानी जो &quot;%1&quot; स्थान पे मौजूद नहीं है. कृपया फ़ाइल को वही स्थान पे लाएं और फ़िर से सेव करने का प्रयास करें.</translation>
     </message>
     <message>
-        <location filename="../management_layer/application_manager.cpp" line="695"/>
+        <location filename="../management_layer/application_manager.cpp" line="700"/>
         <source>Project was modified. Save changes?</source>
         <translation> प्रोजेक्ट मॉडिफाई हुआ है... सेव करें?</translation>
     </message>
     <message>
-        <location filename="../management_layer/application_manager.cpp" line="696"/>
+        <location filename="../management_layer/application_manager.cpp" line="701"/>
         <source>Cancel</source>
         <translation>रद्द करें</translation>
     </message>
     <message>
-        <location filename="../management_layer/application_manager.cpp" line="697"/>
+        <location filename="../management_layer/application_manager.cpp" line="702"/>
         <source>Don&apos;t save</source>
         <translation>सेव न करें</translation>
     </message>
     <message>
-        <location filename="../management_layer/application_manager.cpp" line="698"/>
+        <location filename="../management_layer/application_manager.cpp" line="703"/>
         <source>Save</source>
         <translation>फ़ाइल सेव करें</translation>
     </message>
     <message>
-        <location filename="../management_layer/application_manager.cpp" line="770"/>
+        <location filename="../management_layer/application_manager.cpp" line="775"/>
         <source>You tried to create a project in nonexistent folder %1. Please, choose another location for the new project.</source>
         <translation>आपने कोशिश की है, एक प्रोजेक्ट बनाने की, किसी नॉन एक्सिस्टिंग फोल्डर/लोकेशन में %1. कृपया, कोई और लोकेशन चुने, इस नए प्रोजेक्ट के लिए.</translation>
     </message>
     <message>
-        <location filename="../management_layer/application_manager.cpp" line="775"/>
+        <location filename="../management_layer/application_manager.cpp" line="780"/>
         <source>The file can&apos;t be written. Looks like it is opened by another application. Please close it and retry to create a new project.</source>
         <translation>ये फाइल सेव करने के लिए, लिखी नहीं जा पा रही है.&#xa0; लगता है ये फाइल अभी कोई और एप्लीकेशन में खुली है. कृपया उसे वहां से बंद करें और फिर फाइल सेव करने की कोशिश करें. </translation>
     </message>
     <message>
-        <location filename="../management_layer/application_manager.cpp" line="779"/>
+        <location filename="../management_layer/application_manager.cpp" line="784"/>
         <source>The file can&apos;t be written. Please, check and give permissions to the app to write into the selected folder, or choose another folder for saving a new project.</source>
         <translation>ये फाइल सेव करने के लिए, लिखी नहीं जा पा रही है.&#xa0; कृपया चेक करें और हमारी ऍप को सिलेक्टेड फोल्डर में फाइल लिखने कि परमिशन अदा करें. करें. या फ़िर, इसे एक नए प्रोजेक्ट की तरह सेव करने के लिए, कोई और फोल्डर चुने. </translation>
     </message>
     <message>
-        <location filename="../management_layer/application_manager.cpp" line="782"/>
+        <location filename="../management_layer/application_manager.cpp" line="787"/>
         <source>Create project error</source>
         <translation>प्रोजेक्ट क्रिएट करने में एरर</translation>
     </message>
@@ -1021,17 +1021,17 @@ from 2 Gb</source>
 <context>
     <name>Ui::LanguageDialog</name>
     <message>
-        <location filename="../ui/settings/language_dialog.cpp" line="180"/>
+        <location filename="../ui/settings/language_dialog.cpp" line="186"/>
         <source>Change application language</source>
         <translation>अप्लिकेशन भाषा बदलिए </translation>
     </message>
     <message>
-        <location filename="../ui/settings/language_dialog.cpp" line="182"/>
+        <location filename="../ui/settings/language_dialog.cpp" line="188"/>
         <source>Did not find your preffered language? Read how you can add it yourself.</source>
         <translation>क्या आप अपनी चुनिंदा भाषा ढूँढ नही पा रहे? पढ़िए, आप खुद कैसे दर्ज कर सकते हैं</translation>
     </message>
     <message>
-        <location filename="../ui/settings/language_dialog.cpp" line="184"/>
+        <location filename="../ui/settings/language_dialog.cpp" line="190"/>
         <source>Close</source>
         <translation>बंद करें</translation>
     </message>
@@ -1166,77 +1166,77 @@ from 2 Gb</source>
 <context>
     <name>Ui::OnboardingView</name>
     <message>
-        <location filename="../ui/onboarding/onboarding_view.cpp" line="328"/>
+        <location filename="../ui/onboarding/onboarding_view.cpp" line="330"/>
         <source>Choose preferred language</source>
         <translation>अपनी पसंदीदा भाषा सेलेक्ट कीजिए</translation>
     </message>
     <message>
-        <location filename="../ui/onboarding/onboarding_view.cpp" line="329"/>
+        <location filename="../ui/onboarding/onboarding_view.cpp" line="331"/>
         <source>Did not find your preffered language? Read how you can add it yourself.</source>
         <translation>क्या आपको अपनी पसंदीदा भाषा नही मिली? तो पढ़िए, आप खुद इसे दर्ज कैसे कर सकते हैं</translation>
     </message>
     <message>
-        <location filename="../ui/onboarding/onboarding_view.cpp" line="330"/>
+        <location filename="../ui/onboarding/onboarding_view.cpp" line="332"/>
         <source>Continue</source>
         <translation>कंटिन्यू कीजिए</translation>
     </message>
     <message>
-        <location filename="../ui/onboarding/onboarding_view.cpp" line="331"/>
+        <location filename="../ui/onboarding/onboarding_view.cpp" line="333"/>
         <source>Skip initial setup</source>
         <translation>इनिशियल सेटप स्किप कीजिए</translation>
     </message>
     <message>
-        <location filename="../ui/onboarding/onboarding_view.cpp" line="333"/>
+        <location filename="../ui/onboarding/onboarding_view.cpp" line="335"/>
         <source>Choose application theme</source>
         <translation>अप्लिकेशन थीम चुनिए </translation>
     </message>
     <message>
-        <location filename="../ui/onboarding/onboarding_view.cpp" line="334"/>
+        <location filename="../ui/onboarding/onboarding_view.cpp" line="336"/>
         <source>Dark &amp; light theme</source>
         <translation>डार्क और लाइट थीम</translation>
     </message>
     <message>
-        <location filename="../ui/onboarding/onboarding_view.cpp" line="335"/>
+        <location filename="../ui/onboarding/onboarding_view.cpp" line="337"/>
         <source>Modern theme which combines dark and light colors for better concentration on the documents you work.</source>
         <translation>ये मॉडर्न थीम है, जिसमे दनो, डार्क और लाइट रंगों का मिश्रण है, ताकि आप अपने डॉक्युमेंट पे बेहतर कॉन्सेंट्रेट कर सकें</translation>
     </message>
     <message>
-        <location filename="../ui/onboarding/onboarding_view.cpp" line="336"/>
+        <location filename="../ui/onboarding/onboarding_view.cpp" line="338"/>
         <source>Dark theme</source>
         <translation>डार्क थीम</translation>
     </message>
     <message>
-        <location filename="../ui/onboarding/onboarding_view.cpp" line="337"/>
+        <location filename="../ui/onboarding/onboarding_view.cpp" line="339"/>
         <source>Theme is more suitable for work in dimly lit rooms, and also in the evening or night.</source>
         <translation>ये थीम सूटबल है जब आप धीमी रोशनी, शाम या फिर रात में काम कर रहे हों</translation>
     </message>
     <message>
-        <location filename="../ui/onboarding/onboarding_view.cpp" line="338"/>
+        <location filename="../ui/onboarding/onboarding_view.cpp" line="340"/>
         <source>Light theme</source>
         <translation>लाइट थीम</translation>
     </message>
     <message>
-        <location filename="../ui/onboarding/onboarding_view.cpp" line="339"/>
+        <location filename="../ui/onboarding/onboarding_view.cpp" line="341"/>
         <source>Theme is convenient for work with sufficient light.</source>
         <translation>ये थीम कन्वीनियेंट है जब आप अच्छी ख़ासी रोशनी में काम कर रहे हों</translation>
     </message>
     <message>
-        <location filename="../ui/onboarding/onboarding_view.cpp" line="340"/>
+        <location filename="../ui/onboarding/onboarding_view.cpp" line="342"/>
         <source>Setup size of the user interface elements</source>
         <translation>यूज़र इंटरफेस एलिमेंट्स का सेटप साइज़</translation>
     </message>
     <message>
-        <location filename="../ui/onboarding/onboarding_view.cpp" line="341"/>
+        <location filename="../ui/onboarding/onboarding_view.cpp" line="343"/>
         <source>small</source>
         <translation>छोटा</translation>
     </message>
     <message>
-        <location filename="../ui/onboarding/onboarding_view.cpp" line="342"/>
+        <location filename="../ui/onboarding/onboarding_view.cpp" line="344"/>
         <source>big</source>
         <translation>बड़ा</translation>
     </message>
     <message>
-        <location filename="../ui/onboarding/onboarding_view.cpp" line="343"/>
+        <location filename="../ui/onboarding/onboarding_view.cpp" line="345"/>
         <source>Start writing</source>
         <translation>लिखना शुरू कीजिए</translation>
     </message>

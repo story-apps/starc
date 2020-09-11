@@ -401,63 +401,63 @@
 <context>
     <name>ManagementLayer::ApplicationManager</name>
     <message>
-        <location filename="../management_layer/application_manager.cpp" line="565"/>
+        <location filename="../management_layer/application_manager.cpp" line="570"/>
         <source> - changed</source>
         <translation>- geändert</translation>
     </message>
     <message>
-        <location filename="../management_layer/application_manager.cpp" line="631"/>
-        <location filename="../management_layer/application_manager.cpp" line="649"/>
+        <location filename="../management_layer/application_manager.cpp" line="636"/>
+        <location filename="../management_layer/application_manager.cpp" line="654"/>
         <source>Saving error</source>
         <translation>Speicherfehler</translation>
     </message>
     <message>
-        <location filename="../management_layer/application_manager.cpp" line="632"/>
+        <location filename="../management_layer/application_manager.cpp" line="637"/>
         <source>Changes can&apos;t be written. There is an internal database error: &quot;%1&quot; Please check, if your file exists and if you have permission to write.</source>
         <translation>Die Änderungen können nicht geschrieben werden. Es gibt einen internen Datenbasis-Error: &quot;%1&quot; Bitte überprüfen Sie, ob Ihre Datei existiert und Sie die Berechtigung zum Schreiben haben.</translation>
     </message>
     <message>
-        <location filename="../management_layer/application_manager.cpp" line="650"/>
+        <location filename="../management_layer/application_manager.cpp" line="655"/>
         <source>Changes can&apos;t be written because the story located at &quot;%1&quot; doesn&apos;t exist. Please move the file back and retry saving.</source>
         <translation>Die Änderungen können nicht niedergeschrieben werden, weil die Geschichte in &quot;%1&quot; nicht existiert. Bitte schieben Sie die Datei zurück, versuchen Sie dann erneut, die Datei zu speichern.</translation>
     </message>
     <message>
-        <location filename="../management_layer/application_manager.cpp" line="695"/>
+        <location filename="../management_layer/application_manager.cpp" line="700"/>
         <source>Project was modified. Save changes?</source>
         <translation>Das Projekt wurde geändert. Änderungen speichern?</translation>
     </message>
     <message>
-        <location filename="../management_layer/application_manager.cpp" line="696"/>
+        <location filename="../management_layer/application_manager.cpp" line="701"/>
         <source>Cancel</source>
         <translation>Abbrechen</translation>
     </message>
     <message>
-        <location filename="../management_layer/application_manager.cpp" line="697"/>
+        <location filename="../management_layer/application_manager.cpp" line="702"/>
         <source>Don&apos;t save</source>
         <translation>Nicht speichern</translation>
     </message>
     <message>
-        <location filename="../management_layer/application_manager.cpp" line="698"/>
+        <location filename="../management_layer/application_manager.cpp" line="703"/>
         <source>Save</source>
         <translation>Speichern</translation>
     </message>
     <message>
-        <location filename="../management_layer/application_manager.cpp" line="770"/>
+        <location filename="../management_layer/application_manager.cpp" line="775"/>
         <source>You tried to create a project in nonexistent folder %1. Please, choose another location for the new project.</source>
         <translation>Sie haben versucht, ein Projekt im nicht existenten Ordner &amp;1 zu erstellen. Bitte wählen Sie einen anderen Speicherort für das neue Projekt.</translation>
     </message>
     <message>
-        <location filename="../management_layer/application_manager.cpp" line="775"/>
+        <location filename="../management_layer/application_manager.cpp" line="780"/>
         <source>The file can&apos;t be written. Looks like it is opened by another application. Please close it and retry to create a new project.</source>
         <translation>Die Datei kann nicht bearbeitet werden. Es sieht so aus, als ob sie von einer anderen Applikation geöffnet ist. Bitte schließen Sie es und versuchen Sie erneut, ein neues Projekt zu erstellen.</translation>
     </message>
     <message>
-        <location filename="../management_layer/application_manager.cpp" line="779"/>
+        <location filename="../management_layer/application_manager.cpp" line="784"/>
         <source>The file can&apos;t be written. Please, check and give permissions to the app to write into the selected folder, or choose another folder for saving a new project.</source>
         <translation>Die Datei kann nicht bearbeitet werden. Bitte überprüfen Sie, ob die Applikation die Rechte hat, den ausgewählten Ordner zu bearbeiten, und geben Sie ihr diese Rechte gegebenfalls, oder wählen Sie einen anderen Speicherort zum Speichern eines neuen Projekts.</translation>
     </message>
     <message>
-        <location filename="../management_layer/application_manager.cpp" line="782"/>
+        <location filename="../management_layer/application_manager.cpp" line="787"/>
         <source>Create project error</source>
         <translation>Projekt-Error erstellen</translation>
     </message>
@@ -1022,17 +1022,17 @@ von 2 GB</translation>
 <context>
     <name>Ui::LanguageDialog</name>
     <message>
-        <location filename="../ui/settings/language_dialog.cpp" line="180"/>
+        <location filename="../ui/settings/language_dialog.cpp" line="186"/>
         <source>Change application language</source>
         <translation>Sprache der Applikation wechseln</translation>
     </message>
     <message>
-        <location filename="../ui/settings/language_dialog.cpp" line="182"/>
+        <location filename="../ui/settings/language_dialog.cpp" line="188"/>
         <source>Did not find your preffered language? Read how you can add it yourself.</source>
         <translation>Haben Sie Ihre bevorzugte Sprache nicht gefunden? Lesen Sie nach, wie Sie sie selbst hinzufügen können.</translation>
     </message>
     <message>
-        <location filename="../ui/settings/language_dialog.cpp" line="184"/>
+        <location filename="../ui/settings/language_dialog.cpp" line="190"/>
         <source>Close</source>
         <translation>Schließen</translation>
     </message>
@@ -1167,77 +1167,77 @@ von 2 GB</translation>
 <context>
     <name>Ui::OnboardingView</name>
     <message>
-        <location filename="../ui/onboarding/onboarding_view.cpp" line="328"/>
+        <location filename="../ui/onboarding/onboarding_view.cpp" line="330"/>
         <source>Choose preferred language</source>
         <translation>Bevorzugte Sprache auswählen</translation>
     </message>
     <message>
-        <location filename="../ui/onboarding/onboarding_view.cpp" line="329"/>
+        <location filename="../ui/onboarding/onboarding_view.cpp" line="331"/>
         <source>Did not find your preffered language? Read how you can add it yourself.</source>
         <translation>Haben Sie Ihre bevorzugte Sprache nicht gefunden? Lesen Sie nach, wie Sie sie selbst hinzufügen können.</translation>
     </message>
     <message>
-        <location filename="../ui/onboarding/onboarding_view.cpp" line="330"/>
+        <location filename="../ui/onboarding/onboarding_view.cpp" line="332"/>
         <source>Continue</source>
         <translation>Weitermachen</translation>
     </message>
     <message>
-        <location filename="../ui/onboarding/onboarding_view.cpp" line="331"/>
+        <location filename="../ui/onboarding/onboarding_view.cpp" line="333"/>
         <source>Skip initial setup</source>
         <translation>Anfängliches Set-Up überspringen</translation>
     </message>
     <message>
-        <location filename="../ui/onboarding/onboarding_view.cpp" line="333"/>
+        <location filename="../ui/onboarding/onboarding_view.cpp" line="335"/>
         <source>Choose application theme</source>
         <translation>Applikationsdesign auswählen</translation>
     </message>
     <message>
-        <location filename="../ui/onboarding/onboarding_view.cpp" line="334"/>
+        <location filename="../ui/onboarding/onboarding_view.cpp" line="336"/>
         <source>Dark &amp; light theme</source>
         <translation>Dunkles &amp; helles Design</translation>
     </message>
     <message>
-        <location filename="../ui/onboarding/onboarding_view.cpp" line="335"/>
+        <location filename="../ui/onboarding/onboarding_view.cpp" line="337"/>
         <source>Modern theme which combines dark and light colors for better concentration on the documents you work.</source>
         <translation>Modernes Desigen, das dunkle und helle Farben kombiniert, damit Sie sich besser auf die Dokumente konzentrieren können, an denen Sie arbeiten.</translation>
     </message>
     <message>
-        <location filename="../ui/onboarding/onboarding_view.cpp" line="336"/>
+        <location filename="../ui/onboarding/onboarding_view.cpp" line="338"/>
         <source>Dark theme</source>
         <translation>Dunkles Design</translation>
     </message>
     <message>
-        <location filename="../ui/onboarding/onboarding_view.cpp" line="337"/>
+        <location filename="../ui/onboarding/onboarding_view.cpp" line="339"/>
         <source>Theme is more suitable for work in dimly lit rooms, and also in the evening or night.</source>
         <translation>Das Design passt besser in schlecht ausgeleuchteten Räumen, ebenso abends oder in der Nacht.</translation>
     </message>
     <message>
-        <location filename="../ui/onboarding/onboarding_view.cpp" line="338"/>
+        <location filename="../ui/onboarding/onboarding_view.cpp" line="340"/>
         <source>Light theme</source>
         <translation>Helles Design</translation>
     </message>
     <message>
-        <location filename="../ui/onboarding/onboarding_view.cpp" line="339"/>
+        <location filename="../ui/onboarding/onboarding_view.cpp" line="341"/>
         <source>Theme is convenient for work with sufficient light.</source>
         <translation>Das Design ist praktisch für die Arbeit mit ausreichend Licht.</translation>
     </message>
     <message>
-        <location filename="../ui/onboarding/onboarding_view.cpp" line="340"/>
+        <location filename="../ui/onboarding/onboarding_view.cpp" line="342"/>
         <source>Setup size of the user interface elements</source>
         <translation>Die Größe der Nutzerinterfaceelemente konfigurieren</translation>
     </message>
     <message>
-        <location filename="../ui/onboarding/onboarding_view.cpp" line="341"/>
+        <location filename="../ui/onboarding/onboarding_view.cpp" line="343"/>
         <source>small</source>
         <translation>klein</translation>
     </message>
     <message>
-        <location filename="../ui/onboarding/onboarding_view.cpp" line="342"/>
+        <location filename="../ui/onboarding/onboarding_view.cpp" line="344"/>
         <source>big</source>
         <translation>groß</translation>
     </message>
     <message>
-        <location filename="../ui/onboarding/onboarding_view.cpp" line="343"/>
+        <location filename="../ui/onboarding/onboarding_view.cpp" line="345"/>
         <source>Start writing</source>
         <translation>Starten Sie zu schreiben</translation>
     </message>

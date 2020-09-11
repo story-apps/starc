@@ -12,6 +12,7 @@ HEADERS += \
     interfaces/management_layer/i_document_manager.h
 
 TRANSLATIONS += \
+    core/translations/_en_source.ts \
     core/translations/for_use_starc_translation_az.ts \
     core/translations/for_use_starc_translation_de.ts \
     core/translations/for_use_starc_translation_es.ts \
