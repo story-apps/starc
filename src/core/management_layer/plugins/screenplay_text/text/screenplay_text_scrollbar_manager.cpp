@@ -207,7 +207,8 @@ void ScreenplayTextTimeline::paintEvent(QPaintEvent* _event)
     //
     const QRectF scrollbarRect(Ui::DesignSystem::layout().px4(), 0,
                                Ui::DesignSystem::layout().px8(), contentRect.height());
-    painter.fillRect(scrollbarRect, Ui::DesignSystem::color().background());
+    const auto scrollbarColor = ColorHelper::nearby(Ui::DesignSystem::color().surface());
+    painter.fillRect(scrollbarRect, scrollbarColor);
     const QRectF scrollbarBackgroundRect(scrollbarRect.right(), scrollbarRect.top(),
                                          Ui::DesignSystem::layout().px62(), scrollbarRect.height());
     painter.fillRect(scrollbarBackgroundRect, Ui::DesignSystem::color().surface());
@@ -238,19 +239,26 @@ void ScreenplayTextTimeline::paintEvent(QPaintEvent* _event)
     //
     // Рисуем метки на таймлайне
     //
-    painter.setPen(ColorHelper::transparent(Ui::DesignSystem::color().onBackground(), Ui::DesignSystem::disabledTextOpacity()));
+    const auto tickRight = scrollbarRect.right() + (handleTextLeft - scrollbarRect.right()) / 2;
+    const auto markColor = ColorHelper::transparent(Ui::DesignSystem::color().onBackground(),
+                                                    Ui::DesignSystem::disabledTextOpacity());
+    const auto markWidth = contentRect.width() - handleTextLeft;
     const qreal marksSpacing = painter.fontMetrics().lineSpacing() * 4;
     const int marksCount = (height() - painter.fontMetrics().lineSpacing()) / marksSpacing;
     const qreal marksSpacingCorrected = static_cast<qreal>(height() - painter.fontMetrics().lineSpacing()) / marksCount;
     qreal top = 0.0;
     for (int markIndex = 0; markIndex <= marksCount; ++markIndex) {
         const QRectF markTextRect(handleTextLeft, top,
-                                  contentRect.width() - handleTextLeft, painter.fontMetrics().lineSpacing());
+                                  markWidth, painter.fontMetrics().lineSpacing());
         const auto duartionAtMark = d->maximum * (static_cast<qreal>(markIndex) / marksCount);
         if (d->scrollable
             && markTextRect.intersects(handleTextRect)) {
             painter.setOpacity(Ui::DesignSystem::focusBackgroundOpacity());
         }
+        painter.setPen(QPen(scrollbarColor, Ui::DesignSystem::layout().px2()));
+        painter.drawLine(scrollbarRect.right(), markTextRect.center().y(),
+                         tickRight, markTextRect.center().y());
+        painter.setPen(markColor);
         painter.drawText(markTextRect, Qt::AlignLeft | Qt::AlignVCenter,
                          TimeHelper::toString(std::chrono::duration_cast<std::chrono::seconds>(duartionAtMark)));
         if (markTextRect.intersects(handleTextRect)) {
