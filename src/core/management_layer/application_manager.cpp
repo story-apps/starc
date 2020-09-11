@@ -552,7 +552,7 @@ void ApplicationManager::Implementation::updateWindowTitle()
     }
 
     applicationView->setWindowTitle(
-                QString("%1 - Story Architect")
+                QString("[*]%1 - Story Architect")
                 .arg(projectsManager->currentProject().name()));
 
     if (applicationView->isWindowModified()) {
