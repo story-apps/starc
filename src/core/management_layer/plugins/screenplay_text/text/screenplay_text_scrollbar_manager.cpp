@@ -216,8 +216,10 @@ void ScreenplayTextTimeline::paintEvent(QPaintEvent* _event)
     // Рисуем хэндл
     //
     const qreal handleX = scrollbarRect.center().x();
-    const qreal handleY = (height() - painter.fontMetrics().lineSpacing()) * d->current / d->maximum
-                          + painter.fontMetrics().lineSpacing() / 2;
+    const qreal handleY = d->maximum > std::chrono::milliseconds{0}
+                          ? ((height() - painter.fontMetrics().lineSpacing()) * d->current / d->maximum
+                             + painter.fontMetrics().lineSpacing() / 2)
+                          : 0;
     const qreal handleSize = Ui::DesignSystem::layout().px12();
     const QRectF handleRect = QRectF(handleX - handleSize / 2, handleY - handleSize / 2,
                                      handleSize, handleSize);
