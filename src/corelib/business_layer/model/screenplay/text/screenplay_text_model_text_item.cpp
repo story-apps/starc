@@ -58,7 +58,7 @@ public:
     /**
      * @brief Длительность сцены
      */
-    std::chrono::seconds duration = std::chrono::seconds{0};
+    std::chrono::milliseconds duration = std::chrono::milliseconds{0};
 
     /**
      * @brief Является ли блок декорацией
@@ -493,7 +493,7 @@ void ScreenplayTextModelTextItem::setReviewMarks(const QVector<QTextLayout::Form
     setReviewMarks(newReviewMarks);
 }
 
-std::chrono::seconds ScreenplayTextModelTextItem::duration() const
+std::chrono::milliseconds ScreenplayTextModelTextItem::duration() const
 {
     return d->duration;
 }

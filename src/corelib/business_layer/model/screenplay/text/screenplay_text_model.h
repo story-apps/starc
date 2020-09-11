@@ -102,7 +102,7 @@ public:
     /**
      * @brief Длительность сценария
      */
-    std::chrono::seconds duration() const;
+    std::chrono::milliseconds duration() const;
 
     /**
      * @brief Пересчитать хронометраж

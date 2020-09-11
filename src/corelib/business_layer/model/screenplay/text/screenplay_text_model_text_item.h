@@ -93,7 +93,7 @@ public:
     /**
      * @brief Длительность сцены
      */
-    std::chrono::seconds duration() const;
+    std::chrono::milliseconds duration() const;
     void updateDuration();
 
     /**

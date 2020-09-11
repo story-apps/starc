@@ -151,7 +151,7 @@ void ScreenplayTextTimeline::setScrollable(bool _scrollable)
     update();
 }
 
-void ScreenplayTextTimeline::setMaximum(std::chrono::seconds _maximum)
+void ScreenplayTextTimeline::setMaximum(std::chrono::milliseconds _maximum)
 {
     if (d->maximum == _maximum) {
         return;

@@ -1,0 +1,7 @@
+<RCC>
+    <qresource prefix="/">
+        <file>templates/screenplay/fd_a4</file>
+        <file>templates/screenplay/fd_letter</file>
+        <file>templates/screenplay/ru</file>
+    </qresource>
+</RCC>

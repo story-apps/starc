@@ -8,9 +8,12 @@
 int TextHelper::fineTextWidth(const QString& _text, const QFont& _font)
 {
     const QFontMetricsF metrics(_font);
+
+    //
     // Чтобы корректно разместить текст нужна максимальная ширина, которую текст может занимать
     // используемые методы реализуют разные механизмы определения ширины, поэтому выбираем больший
     // и не забываем прибавить волшебную единичку, а то так не работает :)
+    //
     return qCeil(qMax(metrics.boundingRect(_text).width(), metrics.horizontalAdvance(_text))) + 1;
 }
 
@@ -34,8 +37,7 @@ qreal TextHelper::fineLineSpacing(const QFont& _font)
 
 qreal TextHelper::heightForWidth(const QString& _text, const QFont& _font, qreal _width)
 {
-    const QFontMetricsF metrics(_font);
-    const qreal lineHeight = qMax(0.0, metrics.leading()) + qCeil(metrics.height());
+    const qreal lineHeight = fineLineSpacing(_font);
     qreal height = 0;
 
     //
@@ -66,7 +68,7 @@ qreal TextHelper::heightForWidth(const QString& _text, const QFont& _font, qreal
 QString TextHelper::elidedText(const QString& _text, const QFont& _font, const QRectF& _rect)
 {
     const QFontMetricsF metrics(_font);
-    const qreal lineHeight = qMax(0.0, metrics.leading()) + qCeil(metrics.height());
+    const qreal lineHeight = fineLineSpacing(_font);
     qreal height = 0;
 
     //

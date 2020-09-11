@@ -93,6 +93,3 @@ SOURCES += \
     text/screenplay_text_edit_toolbar.cpp \
     text/screenplay_text_fast_format_widget.cpp \
     text/screenplay_text_scrollbar_manager.cpp
-
-RESOURCES += \
-    resources.qrc

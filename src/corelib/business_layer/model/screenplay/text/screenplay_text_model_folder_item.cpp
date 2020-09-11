@@ -52,7 +52,7 @@ public:
     /**
      * @brief Длительность папки
      */
-    std::chrono::seconds duration = std::chrono::seconds{0};
+    std::chrono::milliseconds duration = std::chrono::milliseconds{0};
 };
 
 ScreenplayTextModelFolderItem::Implementation::Implementation()
@@ -96,7 +96,7 @@ ScreenplayTextModelFolderItem::ScreenplayTextModelFolderItem(const QDomElement& 
     handleChange();
 }
 
-std::chrono::seconds ScreenplayTextModelFolderItem::duration() const
+std::chrono::milliseconds ScreenplayTextModelFolderItem::duration() const
 {
     return d->duration;
 }

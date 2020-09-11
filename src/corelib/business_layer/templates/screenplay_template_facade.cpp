@@ -151,7 +151,7 @@ ScreenplayTemplateFacade::ScreenplayTemplateFacade()
     //
     QStandardItem* rootItem = d->m_templatesModel.invisibleRootItem();
     for (const auto& templateObj : d->m_templates) {
-        if (templateObj.name() == "Mobile") {
+        if (templateObj.name() == "mobile") {
             continue;
         }
 

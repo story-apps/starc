@@ -33,7 +33,7 @@ public:
     /**
      * @brief Длительность сцены
      */
-    std::chrono::seconds duration() const;
+    std::chrono::milliseconds duration() const;
 
     /**
      * @brief Определяем интерфейс получения данных сцены

@@ -88,7 +88,7 @@ public:
     /**
      * @brief Длительность сцены
      */
-    std::chrono::seconds duration = std::chrono::seconds{0};
+    std::chrono::milliseconds duration = std::chrono::milliseconds{0};
 };
 
 ScreenplayTextModelSceneItem::Implementation::Implementation()
@@ -173,7 +173,7 @@ void ScreenplayTextModelSceneItem::setNumber(int _number)
 //    setChanged(true);
 }
 
-std::chrono::seconds ScreenplayTextModelSceneItem::duration() const
+std::chrono::milliseconds ScreenplayTextModelSceneItem::duration() const
 {
     return d->duration;
 }
@@ -209,7 +209,7 @@ QVariant ScreenplayTextModelSceneItem::data(int _role) const
         }
 
         case SceneDurationRole: {
-            const int duration = d->duration.count();
+            const int duration = std::chrono::duration_cast<std::chrono::seconds>(d->duration).count();
             return duration;
         }
 

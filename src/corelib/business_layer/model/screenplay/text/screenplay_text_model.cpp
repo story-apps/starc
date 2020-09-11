@@ -463,7 +463,7 @@ LocationsModel* ScreenplayTextModel::locationsModel() const
     return d->locationModel;
 }
 
-std::chrono::seconds ScreenplayTextModel::duration() const
+std::chrono::milliseconds ScreenplayTextModel::duration() const
 {
     return d->rootItem->duration();
 }

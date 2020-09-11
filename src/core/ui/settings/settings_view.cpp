@@ -692,7 +692,7 @@ SettingsView::SettingsView(QWidget* _parent)
         if (d->screenplayDurationByPage->isChecked()) {
             emit screenplayDurationTypeChanged(static_cast<int>(ChronometerType::Page));
         } else if (d->screenplayDurationByCharacters->isChecked()) {
-            emit screenplayDurationTypeChanged(static_cast<int>(ChronometerType::Page));
+            emit screenplayDurationTypeChanged(static_cast<int>(ChronometerType::Characters));
         }
     };
     connect(d->screenplayDurationByPage, &RadioButton::checkedChanged, this, notifyScreenplayDurationTypeChanged);

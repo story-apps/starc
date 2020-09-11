@@ -69,7 +69,7 @@ public:
     /**
      * @brief Задать максимальное значение слайдера
      */
-    void setMaximum(std::chrono::seconds _maximum);
+    void setMaximum(std::chrono::milliseconds _maximum);
 
     /**
      * @brief Задать текущее значение слайдера
