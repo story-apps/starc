@@ -119,6 +119,40 @@ BusinessLayer::LocationsModel* ScreenplayTextEdit::locations() const
     return d->model->locationsModel();
 }
 
+void ScreenplayTextEdit::undo()
+{
+    if (d->model == nullptr) {
+        return;
+    }
+
+    const auto lastCursorPosition = textCursor().position();
+    //
+    d->model->undo();
+    //
+    if (d->document.characterCount() > lastCursorPosition) {
+        auto cursor = textCursor();
+        cursor.setPosition(lastCursorPosition);
+        setTextCursorReimpl(cursor);
+    }
+}
+
+void ScreenplayTextEdit::redo()
+{
+    if (d->model == nullptr) {
+        return;
+    }
+
+    const auto lastCursorPosition = textCursor().position();
+    //
+    d->model->redo();
+    //
+    if (d->document.characterCount() > lastCursorPosition) {
+        auto cursor = textCursor();
+        cursor.setPosition(lastCursorPosition);
+        setTextCursorReimpl(cursor);
+    }
+}
+
 void ScreenplayTextEdit::addParagraph(BusinessLayer::ScreenplayParagraphType _type)
 {
     d->document.addParagraph(_type, textCursor());
@@ -223,17 +257,17 @@ void ScreenplayTextEdit::keyPressEvent(QKeyEvent* _event)
     //
     // FIXME: разобраться
     //
-    if (_event == QKeySequence::Undo
-        || _event == QKeySequence::Redo) {
-        if (_event == QKeySequence::Undo) {
-            emit undoRequest();
-        }
-        else if (_event == QKeySequence::Redo) {
-            emit redoRequest();
-        }
-        _event->accept();
-        return;
-    }
+//    if (_event == QKeySequence::Undo
+//        || _event == QKeySequence::Redo) {
+//        if (_event == QKeySequence::Undo) {
+//            emit undoRequest();
+//        }
+//        else if (_event == QKeySequence::Redo) {
+//            emit redoRequest();
+//        }
+//        _event->accept();
+//        return;
+//    }
 
     //
     // Получим обработчик
@@ -305,9 +339,21 @@ bool ScreenplayTextEdit::keyPressEventReimpl(QKeyEvent* _event)
     //
     // Переопределяем
     //
+    // ... отмена последнего действия
+    //
+    if (_event == QKeySequence::Undo) {
+        undo();
+    }
+    //
+    // ... отмена последнего действия
+    //
+    else if (_event == QKeySequence::Redo) {
+        redo();
+    }
+    //
     // ... перевод курсора к следующему символу
     //
-    if (_event == QKeySequence::MoveToNextChar) {
+    else  if (_event == QKeySequence::MoveToNextChar) {
         if (textCursor().block().textDirection() == Qt::LeftToRight) {
             moveCursor(QTextCursor::NextCharacter);
         } else {

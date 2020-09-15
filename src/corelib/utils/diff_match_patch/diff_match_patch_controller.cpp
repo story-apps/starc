@@ -130,7 +130,7 @@ QByteArray DiffMatchPatchController::makePatch(const QString& _lhs, const QStrin
     return d->makePatchXml(_lhs, _rhs).toUtf8();
 }
 
-QByteArray DiffMatchPatchController::applyPatch(const QString& _content, const QString& _patch)
+QByteArray DiffMatchPatchController::applyPatch(const QByteArray& _content, const QByteArray& _patch)
 {
     return d->applyPatchXml(_content, _patch).toUtf8();
 }

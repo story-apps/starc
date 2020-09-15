@@ -245,6 +245,10 @@ BusinessLayer::AbstractModel* ProjectModelsFacade::modelFor(Domain::DocumentObje
                 [this, model] (const QByteArray& _undo, const QByteArray& _redo) {
            emit modelContentChanged(model, _undo, _redo);
         });
+        connect(model, &BusinessLayer::AbstractModel::undoRequested, this,
+                [this, model] (int _undoStep) {
+           emit modelUndoRequested(model, _undoStep);
+        });
 
         d->documentsToModels.insert(_document, model);
     }

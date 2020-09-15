@@ -20,7 +20,7 @@ public:
     /**
      * @brief Применить патч
      */
-    QByteArray applyPatch(const QString& _content, const QString& _patch);
+    QByteArray applyPatch(const QByteArray& _content, const QByteArray& _patch);
 
 private:
     class Implementation;

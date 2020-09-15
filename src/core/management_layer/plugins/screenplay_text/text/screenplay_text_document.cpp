@@ -302,6 +302,10 @@ void ScreenplayTextDocument::setModel(BusinessLayer::ScreenplayTextModel* _model
     //
     // Настроим соединения
     //
+    connect(d->model, &ScreenplayTextModel::modelReset, this, [this] {
+        QSignalBlocker signalBlocker(this);
+        setModel(d->model);
+    });
     connect(d->model, &ScreenplayTextModel::dataChanged, this, [this] (const QModelIndex& _topLeft, const QModelIndex& _bottomRight) {
         Q_ASSERT(_topLeft == _bottomRight);
 

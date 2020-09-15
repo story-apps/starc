@@ -45,14 +45,29 @@ public:
     void setImageWrapper(AbstractImageWrapper* _image);
 
     /**
-     * @brief Применить заданное изменение для модели
-     */
-    virtual void applyPatch(const QByteArray& _patch) {}
-
-    /**
      * @brief Очистить все загруженные данные
      */
     void clear();
+
+    /**
+     * @brief Применить заданное изменение для модели
+     */
+    virtual void applyPatch(const QByteArray& _patch);
+
+    /**
+     * @brief Отменить последнее изменение текущего пользователя
+     */
+    void undo();
+
+    /**
+     * @brief Отменить заданное изменение
+     */
+    void undoChange(const QByteArray& _undo, const QByteArray& _redo);
+
+    /**
+     * @brief Повторить отменённое действие
+     */
+    void redo();
 
     /**
      * @brief Реализация базовых вещей для древовидной модели
@@ -70,6 +85,11 @@ signals:
      * @brief Изменилось название документа модели
      */
     void documentNameChanged(const QString& _name);
+
+    /**
+     * @brief Модель хочет отменить изменение с заданным индексом изменения в истории
+     */
+    void undoRequested(int _undoStep);
 
     /**
      * @brief Данные изменились

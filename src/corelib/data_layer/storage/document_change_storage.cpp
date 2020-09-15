@@ -7,6 +7,8 @@
 #include <domain/document_change_object.h>
 #include <domain/objects_builder.h>
 
+#include <utils/shugar.h>
+
 
 namespace DataStorageLayer
 {
@@ -32,6 +34,34 @@ Domain::DocumentChangeObject* DocumentChangeStorage::appendDocumentChange(const 
                     _redoPatch, QDateTime::currentDateTimeUtc(), _userEmail, _userName);
     d->newDocumentChanges.append(newDocumentChange);
     return newDocumentChange;
+}
+
+Domain::DocumentChangeObject* DocumentChangeStorage::documentChangeAt(const QUuid& _documentUuid, int _changeIndex)
+{
+    //
+    // TODO: Изменения только от текущего пользователя
+    //
+//    StorageFacade::settingsStorage()->userName(),
+//    StorageFacade::settingsStorage()->userEmail()
+
+    auto correctedChangeIndex = _changeIndex;
+
+    //
+    // Изменения могут находиться и в списке недавних
+    //
+    for (const auto change : reversed(d->newDocumentChanges)) {
+        if (change->documentUuid() != _documentUuid) {
+            continue;
+        }
+
+        if (correctedChangeIndex == 0) {
+            return change;
+        } else {
+            --correctedChangeIndex;
+        }
+    }
+
+    return DataMappingLayer::MapperFacade::documentChangeMapper()->find(_documentUuid, correctedChangeIndex);
 }
 
 void DocumentChangeStorage::store()

@@ -265,6 +265,8 @@ ScreenplayTextView::ScreenplayTextView(QWidget* _parent)
     layout->setSpacing(0);
     layout->addWidget(d->splitter);
 
+    connect(d->toolBar, &ScreenplayTextEditToolBar::undoPressed, d->screenplayText, &ScreenplayTextEdit::undo);
+    connect(d->toolBar, &ScreenplayTextEditToolBar::redoPressed, d->screenplayText, &ScreenplayTextEdit::redo);
     connect(d->toolBar, &ScreenplayTextEditToolBar::paragraphTypeChanged, this, [this] (const QModelIndex& _index) {
         const auto type = static_cast<BusinessLayer::ScreenplayParagraphType>(_index.data(kTypeDataRole).toInt());
         d->screenplayText->setCurrentParagraphType(type);

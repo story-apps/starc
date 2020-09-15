@@ -18,6 +18,7 @@ class DocumentChangeMapper : public AbstractMapper
 public:
     Domain::DocumentChangeObject* find(const Domain::Identifier& _id);
     Domain::DocumentChangeObject* find(const QUuid& _uuid);
+    Domain::DocumentChangeObject* find(const QUuid& _documentUuid, int _changeIndex);
 
     void insert(Domain::DocumentChangeObject* _object);
     bool update(Domain::DocumentChangeObject* _object);

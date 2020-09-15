@@ -58,6 +58,11 @@ signals:
     void modelContentChanged(BusinessLayer::AbstractModel* _model, const QByteArray& _undo, const QByteArray& _redo);
 
     /**
+     * @brief Запрос на отмену последнего действия в модели
+     */
+    void modelUndoRequested(BusinessLayer::AbstractModel* _model, int _undoStep);
+
+    /**
      * @brief Изменилось название проекта
      */
     void projectNameChanged(const QString& _name);

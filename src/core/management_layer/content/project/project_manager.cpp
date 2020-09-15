@@ -19,6 +19,7 @@
 #include <data_layer/storage/settings_storage.h>
 #include <data_layer/storage/storage_facade.h>
 
+#include <domain/document_change_object.h>
 #include <domain/document_object.h>
 
 #include <ui/abstract_navigator.h>
@@ -472,6 +473,7 @@ ProjectManager::ProjectManager(QObject* _parent, QWidget* _parentWidget)
         d->projectStructureModel->setItemName(item, _name);
     });
     connect(&d->modelsFacade, &ProjectModelsFacade::modelContentChanged, this, &ProjectManager::handleModelChange);
+    connect(&d->modelsFacade, &ProjectModelsFacade::modelUndoRequested, this, &ProjectManager::undoModelChange);
     connect(&d->modelsFacade, &ProjectModelsFacade::projectNameChanged, this, &ProjectManager::projectNameChanged);
     connect(&d->modelsFacade, &ProjectModelsFacade::projectLoglineChanged, this, &ProjectManager::projectLoglineChanged);
     connect(&d->modelsFacade, &ProjectModelsFacade::projectCoverChanged, this, &ProjectManager::projectCoverChanged);
@@ -736,12 +738,29 @@ void ProjectManager::addScreenplay(const QString& _name, const QString& _titlePa
 void ProjectManager::handleModelChange(BusinessLayer::AbstractModel* _model,
     const QByteArray& _undo, const QByteArray& _redo)
 {
-    DataStorageLayer::StorageFacade::documentChangeStorage()->appendDocumentChange(
+    using namespace DataStorageLayer;
+    StorageFacade::documentChangeStorage()->appendDocumentChange(
         _model->document()->uuid(), QUuid::createUuid(), _undo, _redo,
-        DataStorageLayer::StorageFacade::settingsStorage()->userName(),
-        DataStorageLayer::StorageFacade::settingsStorage()->userEmail());
+        StorageFacade::settingsStorage()->userName(),
+        StorageFacade::settingsStorage()->userEmail());
 
     emit contentsChanged();
+}
+
+void ProjectManager::undoModelChange(BusinessLayer::AbstractModel* _model, int _undoStep)
+{
+    //
+    // Удваиваем индекс изменения для отмены, т.к. при применении какого-либо из патчей в историю
+    // изменений тут же записывается выполненное изменение
+    //
+    const auto changeIndex = _undoStep * 2;
+    const auto change = DataStorageLayer::StorageFacade::documentChangeStorage()->documentChangeAt(
+                            _model->document()->uuid(), changeIndex);
+    if (change == nullptr) {
+        return;
+    }
+
+    _model->undoChange(change->undoPatch(), change->redoPatch());
 }
 
 void ProjectManager::showView(const QModelIndex& _itemIndex, const QString& _viewMimeType)

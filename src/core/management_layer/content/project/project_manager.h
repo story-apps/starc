@@ -101,6 +101,11 @@ private:
     void handleModelChange(BusinessLayer::AbstractModel* _model, const QByteArray& _undo, const QByteArray& _redo);
 
     /**
+     * @brief Отменить последнее изменение в модели с заданным индексом
+     */
+    void undoModelChange(BusinessLayer::AbstractModel* _model, int _undoStep);
+
+    /**
      * @brief Отобразить представление заданного типа для заданного элемента
      */
     void showView(const QModelIndex& _itemIndex, const QString& _viewMimeType);

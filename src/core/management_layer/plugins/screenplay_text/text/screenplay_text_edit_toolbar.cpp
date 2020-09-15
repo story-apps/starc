@@ -126,9 +126,11 @@ ScreenplayTextEditToolBar::ScreenplayTextEditToolBar(QWidget* _parent)
 {
     d->undoAction->setIconText(u8"\U000f054c");
     addAction(d->undoAction);
+    connect(d->undoAction, &QAction::triggered, this, &ScreenplayTextEditToolBar::undoPressed);
 
     d->redoAction->setIconText(u8"\U000f044e");
     addAction(d->redoAction);
+    connect(d->redoAction, &QAction::triggered, this, &ScreenplayTextEditToolBar::redoPressed);
 
     d->paragraphTypeAction->setText(tr("Scene heading"));
     d->paragraphTypeAction->setIconText(u8"\U000f035d");

@@ -57,6 +57,16 @@ public:
     BusinessLayer::LocationsModel* locations() const;
 
     /**
+     * @brief Отменить последнее изменение
+     */
+    void undo();
+
+    /**
+     * @brief Повторить последнее отменённое изменение
+     */
+    void redo();
+
+    /**
      * @brief Вставить новый блок
      * @param Тип блока
      */
@@ -99,16 +109,6 @@ public:
     void addReviewMark(const QColor& _textColor, const QColor& _backgroundColor, const QString& _comment);
 
 signals:
-    /**
-     * @brief Запрос на отмену последнего действия
-     */
-    void undoRequest();
-
-    /**
-     * @brief Запрос на повтор последнего действия
-     */
-    void redoRequest();
-
     /**
      * @brief Изменён тип абзаца
      */

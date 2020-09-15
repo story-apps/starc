@@ -30,6 +30,11 @@ public:
         const QUuid& _uuid, const QByteArray& _undoPatch, const QByteArray& _redoPatch, const QString& _userEmail, const QString& _userName);
 
     /**
+     * @brief Получить изменение документа с заданным индексом
+     */
+    Domain::DocumentChangeObject* documentChangeAt(const QUuid& _documentUuid, int _changeIndex);
+
+    /**
      * @brief Сохранить несохранённые изменения сценарии
      */
     void store();
