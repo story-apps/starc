@@ -281,25 +281,25 @@ bool BaseTextEdit::keyPressEventReimpl(QKeyEvent* _event)
         const bool textInUpper = (selectedText.length() > 1) && (TextHelper::smartToUpper(selectedText) == selectedText);
         const int fromPosition = qMin(cursor.selectionStart(), cursor.selectionEnd());
         const int toPosition = qMax(cursor.selectionStart(), cursor.selectionEnd());
+        const bool toUpper = _event->key() == Qt::Key_Up;
         for (int position = fromPosition; position < toPosition; ++position) {
             cursor.setPosition(position);
             cursor.movePosition(QTextCursor::NextCharacter, QTextCursor::KeepAnchor);
             selectedText = cursor.selectedText();
-            const bool toUpper = _event->key() == Qt::Key_Up;
             if (toUpper) {
-                if (firstToUpper) {
-                    cursor.insertText(position == fromPosition
-                                      ? TextHelper::smartToUpper(selectedText)
-                                      : TextHelper::smartToLower(selectedText));
-                } else {
+                //
+                // Поднимаем для всего текста, или только для первого символа
+                //
+                if (!firstToUpper
+                    || (firstToUpper && position == fromPosition)) {
                     cursor.insertText(TextHelper::smartToUpper(selectedText));
                 }
             } else {
-                if (textInUpper) {
-                    cursor.insertText(position == fromPosition
-                                      ? TextHelper::smartToUpper(selectedText)
-                                      : TextHelper::smartToLower(selectedText));
-                } else {
+                //
+                // Опускаем для всего текста, или для всех символов, кроме первого
+                //
+                if (!textInUpper
+                    || (textInUpper && position != fromPosition)) {
                     cursor.insertText(TextHelper::smartToLower(selectedText));
                 }
             }

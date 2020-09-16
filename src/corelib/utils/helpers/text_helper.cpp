@@ -205,7 +205,7 @@ QString TextHelper::smartToLower(const QString& _text)
 {
     QString result = _text;
     result = result.replace("ẞ", "ß");
-    result = result.toUpper();
+    result = result.toLower();
     return result;
 }
 
@@ -215,6 +215,6 @@ QChar TextHelper::smartToLower(const QChar& _char)
         return QString("ß")[0];
     }
 
-    return _char.toUpper();
+    return _char.toLower();
 }
 
