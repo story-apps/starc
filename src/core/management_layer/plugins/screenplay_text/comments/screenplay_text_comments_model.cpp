@@ -639,7 +639,6 @@ void ScreenplayTextCommentsModel::setModel(ScreenplayTextModel* _model)
         readReviewMarksFromModel({});
 
         connect(d->model, &ScreenplayTextModel::modelReset, this, [this] {
-            QSignalBlocker signalBlocker(this);
             setModel(d->model);
         });
         connect(d->model, &ScreenplayTextModel::rowsInserted, this, [this] (const QModelIndex& _parent, int _first, int _last) {

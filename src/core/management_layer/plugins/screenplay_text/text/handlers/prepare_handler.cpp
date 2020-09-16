@@ -51,9 +51,9 @@ void PrepareHandler::prepareForHandle(QKeyEvent* _event)
 	}
 }
 
-void PrepareHandler::handleEnter(QKeyEvent*)
+void PrepareHandler::handleEnter(QKeyEvent* _event)
 {
-	m_needSendEventToBaseClass = false;
+    m_needSendEventToBaseClass = _event->modifiers().testFlag(Qt::ShiftModifier) ? true : false;
 	m_needPrehandle = true;
 }
 

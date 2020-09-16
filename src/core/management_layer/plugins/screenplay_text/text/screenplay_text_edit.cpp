@@ -246,28 +246,9 @@ void ScreenplayTextEdit::keyPressEvent(QKeyEvent* _event)
     }
 
     //
-    // Отмену и повтор последнего действия, делаем без последующей обработки
+    // Подготовим событие к обработке
     //
-    // Если так не делать, то это приведёт к вставке странных символов, которые непонятно откуда берутся :(
-    // Например:
-    // 1. после реплики идёт время и место
-    // 2. вставляем после реплики описание действия
-    // 3. отменяем последнее действие
-    // 4. в последующем времени и месте появляется символ "кружочек со стрелочкой"
-    //
-    // FIXME: разобраться
-    //
-//    if (_event == QKeySequence::Undo
-//        || _event == QKeySequence::Redo) {
-//        if (_event == QKeySequence::Undo) {
-//            emit undoRequest();
-//        }
-//        else if (_event == QKeySequence::Redo) {
-//            emit redoRequest();
-//        }
-//        _event->accept();
-//        return;
-//    }
+    _event->setAccepted(false);
 
     //
     // Получим обработчик
@@ -295,7 +276,9 @@ void ScreenplayTextEdit::keyPressEvent(QKeyEvent* _event)
     // Отправить событие в базовый класс
     //
     if (handler->needSendEventToBaseClass()) {
-        if (!keyPressEventReimpl(_event)) {
+        if (keyPressEventReimpl(_event)) {
+            _event->accept();
+        } else {
             BaseTextEdit::keyPressEvent(_event);
         }
 
@@ -305,7 +288,9 @@ void ScreenplayTextEdit::keyPressEvent(QKeyEvent* _event)
     //
     // Обработка
     //
-    handler->handle(_event);
+    if (!_event->isAccepted()) {
+        handler->handle(_event);
+    }
 
     //
     // Событие дошло по назначению
@@ -387,6 +372,12 @@ bool ScreenplayTextEdit::keyPressEventReimpl(QKeyEvent* _event)
                 moveCursor(QTextCursor::NextCharacter);
             }
         }
+    }
+    //
+    // ... вставим перенос строки внутри абзаца
+    //
+    else if (_event->key() == Qt::Key_Enter && _event->modifiers().testFlag(Qt::ShiftModifier)) {
+        textCursor().insertText(QChar(QChar::LineSeparator));
     }
     //
     // Обрабатываем в базовом классе
