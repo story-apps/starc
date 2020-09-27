@@ -172,6 +172,7 @@ SOURCES += \
     utils/helpers/time_helper.cpp \
     utils/tools/backup_builder.cpp \
     utils/tools/debouncer.cpp \
+    utils/tools/model_index_path.cpp \
     utils/tools/run_once.cpp \
     utils/validators/email_validator.cpp
 
@@ -309,5 +310,6 @@ HEADERS += \
     utils/shugar.h \
     utils/tools/backup_builder.h \
     utils/tools/debouncer.h \
+    utils/tools/model_index_path.h \
     utils/tools/run_once.h \
     utils/validators/email_validator.h

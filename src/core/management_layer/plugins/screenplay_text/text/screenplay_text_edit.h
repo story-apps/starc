@@ -138,6 +138,15 @@ protected:
      */
     ContextMenu* createContextMenu(const QPoint& _position, QWidget* _parent = nullptr) override;
 
+    /**
+     * @brief Переопределяем работу с буфером обмена для использования собственного майм типа данных
+     */
+    /** @{ */
+    bool canInsertFromMimeData(const QMimeData* _source) const override;
+    QMimeData* createMimeDataFromSelection() const override;
+    void insertFromMimeData(const QMimeData* _source) override;
+    /** @} */
+
 private:
     class Implementation;
     QScopedPointer<Implementation> d;

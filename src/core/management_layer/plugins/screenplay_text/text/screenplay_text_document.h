@@ -30,9 +30,12 @@ public:
 
     /**
      * @brief Получить позицию элемента в заданном индексе
+     * @param _fromStart - true начальная позиция, false конечная позиция
      * @return Позицию элемента, -1 если элемент не удалось найти
      */
-    int itemPosition(const QModelIndex& _index);
+    int itemPosition(const QModelIndex& _index, bool _fromStart);
+    int itemStartPosition(const QModelIndex& _index);
+    int itemEndPosition(const QModelIndex& _index);
 
     /**
      * @brief Получить номер сцены для заданного блока
@@ -44,11 +47,15 @@ public:
      */
     QString dialogueNumber(const QTextBlock& _forBlock) const;
 
-    //
-    // FIXME: делать
-    //
-    QString mimeFromSelection(int, int) const { return {}; }
-    void insertFromMime(int, const QString&) {}
+    /**
+     * @brief Сформировать mime-данные сценария в заданном диапазоне
+     */
+    QString mimeFromSelection(int _fromPosition, int _toPosition) const;
+
+    /**
+     * @brief Вставить контент из mime-данных со сценарием в заданной позиции
+     */
+    void insertFromMime(int _position, const QString& _mimeData);
 
     /**
      * @brief Вставить новый блок заданного типа

@@ -49,6 +49,11 @@ public:
      */
     void updateXml();
 
+    /**
+     * @brief Сформировать xml абзаца в заданном диапазоне текста
+     */
+    QByteArray buildXml(int _from, int _length);
+
 
     /**
      * @brief Номер сцены
@@ -195,11 +200,18 @@ ScreenplayTextModelTextItem::Implementation::Implementation(const QDomElement& _
 
 void ScreenplayTextModelTextItem::Implementation::updateXml()
 {
+    xml = buildXml(0, text.length());
+}
+
+QByteArray ScreenplayTextModelTextItem::Implementation::buildXml(int _from, int _length)
+{
     if (isCorrection) {
-        return;
+        return {};
     }
 
-    xml.clear();
+    const auto _end = _from + _length;
+
+    QByteArray xml;
     xml += QString("<%1%2>")
            .arg(toString(paragraphType),
                 (alignment.has_value() && alignment->testFlag(Qt::AlignHorizontal_Mask)
@@ -213,26 +225,55 @@ void ScreenplayTextModelTextItem::Implementation::updateXml()
     }
     xml += QString("<%1><![CDATA[%2]]></%1>")
            .arg(kValueTag,
-                TextHelper::toHtmlEscaped(text));
-    if (!reviewMarks.isEmpty()) {
+                TextHelper::toHtmlEscaped(text.mid(_from, _length)));
+
+    //
+    // Сохранить редакторские заметки
+    //
+    QVector<ReviewMark> reviewMarksToSave;
+    for (const auto& reviewMark : std::as_const(reviewMarks)) {
+        if (reviewMark.from >= _end) {
+            continue;
+        }
+
+        //
+        // Корректируем заметки, которые будут сохранены,
+        // т.к. начало и конец сохраняемого блока могут отличаться
+        //
+        auto reviewMarkToSave = reviewMark;
+        if (reviewMark.from >= _from) {
+            reviewMarkToSave.from -= _from;
+        } else {
+            reviewMarkToSave.from = 0;
+            reviewMarkToSave.length -= _from - reviewMark.from;
+        }
+        if (reviewMark.end() > _end) {
+            reviewMarkToSave.length -= reviewMark.end() - _end;
+        }
+        reviewMarksToSave.append(reviewMarkToSave);
+    }
+    //
+    // Собственно сохраняем
+    //
+    if (!reviewMarksToSave.isEmpty()) {
         xml += QString("<%1>").arg(kReviewMarksTag);
-        for (const auto& reviewMarks : std::as_const(reviewMarks)) {
+        for (const auto& reviewMark : std::as_const(reviewMarksToSave)) {
             xml += QString("<%1 %2=\"%3\" %4=\"%5\" %6%7%9")
                    .arg(kReviewMarkTag,
-                        kFromAttribute, QString::number(reviewMarks.from),
-                        kLengthAttribute, QString::number(reviewMarks.length),
-                        (reviewMarks.textColor.isValid()
-                         ? QString(" %1=\"%2\"").arg(kColorAttribute, reviewMarks.textColor.name())
+                        kFromAttribute, QString::number(reviewMark.from),
+                        kLengthAttribute, QString::number(reviewMark.length),
+                        (reviewMark.textColor.isValid()
+                         ? QString(" %1=\"%2\"").arg(kColorAttribute, reviewMark.textColor.name())
                          : ""),
-                        (reviewMarks.backgroundColor.isValid()
-                         ? QString(" %1=\"%2\"").arg(kBackgroundColorAttribute, reviewMarks.backgroundColor.name())
+                        (reviewMark.backgroundColor.isValid()
+                         ? QString(" %1=\"%2\"").arg(kBackgroundColorAttribute, reviewMark.backgroundColor.name())
                          : ""),
-                        (reviewMarks.isDone
+                        (reviewMark.isDone
                          ? QString(" %1=\"true\"").arg(kDoneAttribute)
                          : ""));
-            if (!reviewMarks.comments.isEmpty()) {
+            if (!reviewMark.comments.isEmpty()) {
                 xml += ">";
-                for (const auto& comment : std::as_const(reviewMarks.comments)) {
+                for (const auto& comment : std::as_const(reviewMark.comments)) {
                     xml += QString("<%1 %2=\"%3\" %4=\"%5\"><![CDATA[%6]]></%1>")
                            .arg(kCommentTag,
                                 kAuthorAttribute, TextHelper::toHtmlEscaped(comment.author),
@@ -246,9 +287,38 @@ void ScreenplayTextModelTextItem::Implementation::updateXml()
         }
         xml += QString("</%1>").arg(kReviewMarksTag);
     }
-    if (!formats.isEmpty()) {
+
+    //
+    // Сохраняем форматированое блока
+    //
+    QVector<TextFormat> formatsToSave;
+    for (const auto& format : std::as_const(formats)) {
+        if (format.from >= _end) {
+            continue;
+        }
+
+        //
+        // Корректируем заметки, которые будут сохранены,
+        // т.к. начало и конец сохраняемого блока могут отличаться
+        //
+        auto formatToSave = format;
+        if (format.from >= _from) {
+            formatToSave.from -= _from;
+        } else {
+            formatToSave.from = 0;
+            formatToSave.length -= _from - format.from;
+        }
+        if (format.end() > _end) {
+            formatToSave.length -= format.end() - _end;
+        }
+        formatsToSave.append(formatToSave);
+    }
+    //
+    // Собственно сохраняем
+    //
+    if (!formatsToSave.isEmpty()) {
         xml += QString("<%1>").arg(kFormatsTag);
-        for (const auto& format : std::as_const(formats)) {
+        for (const auto& format : std::as_const(formatsToSave)) {
             xml += QString("<%1 %2=\"%3\" %4=\"%5\" %6%7%8/>")
                    .arg(kFormatTag,
                         kFromAttribute, QString::number(format.from),
@@ -265,6 +335,10 @@ void ScreenplayTextModelTextItem::Implementation::updateXml()
         }
         xml += QString("</%1>").arg(kFormatsTag);
     }
+
+    //
+    // Сохраняем ревизии блока
+    //
     if (!revisions.isEmpty()) {
         xml += QString("<%1>").arg(kRevisionsTag);
         for (const auto& revision : std::as_const(revisions)) {
@@ -276,7 +350,13 @@ void ScreenplayTextModelTextItem::Implementation::updateXml()
         }
         xml += QString("</%1>").arg(kRevisionsTag);
     }
+
+    //
+    // Закрываем блок
+    //
     xml += QString("</%1>\n").arg(toString(paragraphType));
+
+    return xml;
 }
 
 
@@ -413,6 +493,58 @@ void ScreenplayTextModelTextItem::setText(const QString& _text)
     markChanged();
 }
 
+void ScreenplayTextModelTextItem::removeText(int _from)
+{
+    if (_from >= d->text.length()) {
+        return;
+    }
+
+    //
+    // Корректируем
+    //
+    // ... текст
+    //
+    d->text = d->text.left(_from);
+    //
+    // ... редакторские заметки
+    //
+    for (int index = 0; index < d->reviewMarks.size(); ++index) {
+        auto& reviewMark = d->reviewMarks[index];
+        if (reviewMark.end() < _from) {
+            continue;
+        }
+
+        if (reviewMark.from < _from) {
+            reviewMark.length = _from - reviewMark.from;
+            continue;
+        }
+
+        d->reviewMarks.remove(index);
+        --index;
+    }
+    //
+    // ... форматирование
+    //
+    for (int index = 0; index < d->formats.size(); ++index) {
+        auto& format = d->formats[index];
+        if (format.end() < _from) {
+            continue;
+        }
+
+        if (format.from < _from) {
+            format.length = _from - format.from;
+            continue;
+        }
+
+        d->formats.remove(index);
+        --index;
+    }
+
+    d->updateXml();
+    updateDuration();
+    markChanged();
+}
+
 void ScreenplayTextModelTextItem::setFormats(const QVector<QTextLayout::FormatRange>& _formats)
 {
     QVector<TextFormat> newFormats;
@@ -493,6 +625,11 @@ void ScreenplayTextModelTextItem::setReviewMarks(const QVector<QTextLayout::Form
     setReviewMarks(newReviewMarks);
 }
 
+const QVector<ScreenplayTextModelTextItem::TextFormat>& ScreenplayTextModelTextItem::formats() const
+{
+    return d->formats;
+}
+
 std::chrono::milliseconds ScreenplayTextModelTextItem::duration() const
 {
     return d->duration;
@@ -531,10 +668,30 @@ void ScreenplayTextModelTextItem::setNumber(int _number)
     }
 
     d->number = { newNumber };
-    //
-    // Т.к. пока мы не сохраняем номера, в указании, что произошли изменения нет смысла
-    //
-//    markChanged();
+    markChanged();
+}
+
+void ScreenplayTextModelTextItem::mergeWith(const ScreenplayTextModelTextItem* _other)
+{
+    if (_other == nullptr
+        || _other->text().isEmpty()) {
+        return;
+    }
+
+    const auto sourceTextLength = d->text.length();
+    d->text += _other->text();
+    for (auto reviewMark : _other->reviewMarks()) {
+        reviewMark.from += sourceTextLength;
+        d->reviewMarks.append(reviewMark);
+    }
+    for (auto format : _other->formats()) {
+        format.from += sourceTextLength;
+        d->formats.append(format);
+    }
+
+    d->updateXml();
+    updateDuration();
+    markChanged();
 }
 
 QVariant ScreenplayTextModelTextItem::data(int _role) const
@@ -549,6 +706,18 @@ QVariant ScreenplayTextModelTextItem::data(int _role) const
 QString ScreenplayTextModelTextItem::toXml() const
 {
     return d->xml;
+}
+
+QString ScreenplayTextModelTextItem::toXml(int _from, int _length)
+{
+    //
+    // Для блока целиком, используем закешированные данные
+    //
+    if (_from == 0 && _length == d->text.length()) {
+        return toXml();
+    }
+
+    return d->buildXml(_from, _length);
 }
 
 void ScreenplayTextModelTextItem::markChanged()

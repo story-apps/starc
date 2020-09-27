@@ -79,6 +79,11 @@ public:
     void setText(const QString& _text);
 
     /**
+     * @brief Удалить текст, начиная с заданной позиции, при этом корректируется и остальной контент блока
+     */
+    void removeText(int _from);
+
+    /**
      * @brief Форматирование в блоке
      */
     void setFormats(const QVector<QTextLayout::FormatRange>& _formats);
@@ -89,6 +94,11 @@ public:
     const QVector<ReviewMark>& reviewMarks() const;
     void setReviewMarks(const QVector<ReviewMark>& _reviewMarks);
     void setReviewMarks(const QVector<QTextLayout::FormatRange>& _reviewMarks);
+
+    /**
+     * @brief Форматирование
+     */
+    const QVector<TextFormat>& formats() const;
 
     /**
      * @brief Длительность сцены
@@ -103,6 +113,11 @@ public:
     void setNumber(int _number);
 
     /**
+     * @brief Объединить с заданным элементом
+     */
+    void mergeWith(const ScreenplayTextModelTextItem* _other);
+
+    /**
      * @brief Определяем интерфейс получения данных сцены
      */
     QVariant data(int _role) const override;
@@ -111,6 +126,7 @@ public:
      * @brief Определяем интерфейс для получения XML блока
      */
     QString toXml() const override;
+    QString toXml(int _from, int _length);
 
 private:
     /**

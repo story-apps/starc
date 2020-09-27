@@ -122,13 +122,91 @@ QVariant ScreenplayTextModelFolderItem::data(int _role) const
 
 QString ScreenplayTextModelFolderItem::toXml() const
 {
+    return toXml(nullptr, 0, nullptr, 0);
+}
+
+QString ScreenplayTextModelFolderItem::toXml(ScreenplayTextModelItem* _from, int _fromPosition, ScreenplayTextModelItem* _to, int _toPosition) const
+{
+    auto folderFooterXml = [] {
+        ScreenplayTextModelTextItem item;
+        item.setParagraphType(ScreenplayParagraphType::FolderFooter);
+        return item.toXml();
+    };
+
     QByteArray xml;
-    xml += QString("<%1 %2=\"%3\">")
+    xml += QString("<%1 %2=\"%3\">\n")
            .arg(kFolderTag,
                 kUuidAttribute, d->uuid.toString());
-    xml.append(QString("<%1>").arg(kContentTag));
+    xml.append(QString("<%1>\n").arg(kContentTag));
     for (int childIndex = 0; childIndex < childCount(); ++childIndex) {
-        xml += childAt(childIndex)->toXml();
+        auto child = childAt(childIndex);
+
+        //
+        // Нетекстовые блоки, просто добавляем к общему xml
+        //
+        if (child->type() == ScreenplayTextModelItemType::Splitter) {
+            xml += child->toXml();
+            continue;
+        }
+        //
+        // Папки и сцены проверяем на наличие в них завершающего элемента
+        //
+        else if (child->type() != ScreenplayTextModelItemType::Text) {
+            //
+            // Если конечный элемент содержится в дите, то сохраняем его и завершаем формирование
+            //
+            const bool recursively = true;
+            if (child->hasChild(_to, recursively)) {
+                if (child->type() == ScreenplayTextModelItemType::Folder) {
+                    auto folder = static_cast<ScreenplayTextModelFolderItem*>(child);
+                    xml += folder->toXml(_from, _fromPosition, _to, _toPosition);
+                } else if (child->type() == ScreenplayTextModelItemType::Scene) {
+                    auto scene = static_cast<ScreenplayTextModelSceneItem*>(child);
+                    xml += scene->toXml(_from, _fromPosition, _to, _toPosition);
+                } else {
+                    Q_ASSERT(false);
+                }
+
+                //
+                // Не забываем завершить папку
+                //
+                xml += folderFooterXml();
+                break;
+            }
+            //
+            // В противном случае просто дополняем xml
+            //
+            else {
+                xml += child->toXml();
+                continue;
+            }
+        }
+
+        //
+        // Текстовые блоки, в зависимости от необходимости вставить блок целиком, или его часть
+        //
+        auto textItem = static_cast<ScreenplayTextModelTextItem*>(child);
+        if (textItem == _to) {
+            if (textItem == _from) {
+                xml += textItem->toXml(_fromPosition, _toPosition - _fromPosition);
+            } else {
+                xml += textItem->toXml(0, _toPosition);
+            }
+
+            //
+            // Если папка не была закрыта, добавим корректное завершение для неё
+            //
+            if (textItem->paragraphType() != ScreenplayParagraphType::FolderFooter) {
+                xml += folderFooterXml();
+            }
+            break;
+        }
+        //
+        else if (textItem == _from) {
+            xml += textItem->toXml(_fromPosition, textItem->text().length() - _fromPosition);
+        } else {
+            xml += textItem->toXml();
+        }
     }
     xml.append(QString("</%1>\n").arg(kContentTag));
     xml.append(QString("</%1>\n").arg(kFolderTag));

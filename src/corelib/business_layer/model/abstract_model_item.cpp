@@ -89,9 +89,27 @@ int AbstractModelItem::childCount() const
     return d->children.count();
 }
 
-bool AbstractModelItem::hasChild(AbstractModelItem* _child) const
+bool AbstractModelItem::hasChild(AbstractModelItem* _child, bool _recursively) const
 {
-    return d->children.contains(_child);
+    if (!_recursively) {
+        return d->children.contains(_child);
+    }
+
+    //
+    // Рекурсивный поиск
+    //
+
+    if (d->children.contains(_child)) {
+        return true;
+    }
+
+    for (auto child : d->children) {
+        if (child->hasChild(_child, _recursively)) {
+            return true;
+        }
+    }
+
+    return false;
 }
 
 int AbstractModelItem::rowOfChild(AbstractModelItem* _child) const

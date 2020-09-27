@@ -21,6 +21,7 @@
 #include <utils/shugar.h>
 
 #include <QDateTime>
+#include <QScopedValueRollback>
 #include <QTextTable>
 
 using BusinessLayer::ScreenplayBlockStyle;
@@ -44,6 +45,22 @@ class ScreenplayTextDocument::Implementation
 public:
     explicit Implementation(ScreenplayTextDocument* _document);
 
+    /**
+     * @brief Считать содержимое элмента модели с заданным индексом
+     *        и вставить считанные данные в текущее положение курсора
+     */
+    void readModelItemContent(int _itemRow, const QModelIndex& _parent,
+        ScreenplayTextCursor& _cursor, bool& _isFirstParagraph);
+
+    /**
+     * @brief Считать содержимое вложенных в заданный индекс элементов
+     *        и вставить считанные данные в текущее положение курсора
+     */
+    void readModelItemsContent(const QModelIndex& _parent, ScreenplayTextCursor& _cursor, bool& _isFirstParagraph);
+
+
+    ScreenplayTextDocument* q = nullptr;
+
     DocumentState state = DocumentState::Undefined;
     BusinessLayer::ScreenplayTextModel* model = nullptr;
     std::map<int, BusinessLayer::ScreenplayTextModelItem*> positionsToItems;
@@ -51,8 +68,201 @@ public:
 };
 
 ScreenplayTextDocument::Implementation::Implementation(ScreenplayTextDocument* _document)
-    : corrector(_document)
+    : q(_document),
+      corrector(_document)
 {
+}
+
+void ScreenplayTextDocument::Implementation::readModelItemContent(int _itemRow, const QModelIndex& _parent, ScreenplayTextCursor& _cursor, bool& _isFirstParagraph)
+{
+    const auto itemIndex = model->index(_itemRow, 0, _parent);
+    const auto item = model->itemForIndex(itemIndex);
+    switch (item->type()) {
+        case ScreenplayTextModelItemType::Folder: {
+            break;
+        }
+
+        case ScreenplayTextModelItemType::Scene: {
+            break;
+        }
+
+        case ScreenplayTextModelItemType::Splitter: {
+            const auto splitterItem = static_cast<ScreenplayTextModelSplitterItem*>(item);
+            switch (splitterItem->splitterType()) {
+                case ScreenplayTextModelSplitterItemType::Start: {
+                    //
+                    // Если это не первый абзац, вставим блок для него
+                    //
+                    if (!_isFirstParagraph) {
+                        _cursor.insertBlock();
+                    }
+                    //
+                    // ... в противном же случае, новый блок нет необходимости вставлять
+                    //
+                    else {
+                        _isFirstParagraph = false;
+                    }
+
+                    //
+                    // Запомним позицию разделителя
+                    //
+                    positionsToItems.emplace(_cursor.position(), splitterItem);
+
+                    //
+                    // Назначим блоку перед таблицей формат PageSplitter
+                    //
+                    auto insertPageSplitter = [&_cursor] {
+                        const auto style = ScreenplayTemplateFacade::getTemplate().blockStyle(
+                                               ScreenplayParagraphType::PageSplitter);
+                        _cursor.setBlockFormat(style.blockFormat());
+                        _cursor.setBlockCharFormat(style.charFormat());
+                        _cursor.setCharFormat(style.charFormat());
+                    };
+                    insertPageSplitter();
+
+                    //
+                    // Вставляем таблицу
+                    //
+                    q->insertTable(_cursor);
+
+                    //
+                    // Назначим блоку после таблицы формат PageSplitter
+                    //
+                    insertPageSplitter();
+
+                    //
+                    // После вставки таблицы нужно завершить транзакцию изменения документа,
+                    // чтобы корректно считывались таблицы в положении курсора
+                    //
+                    _cursor.endEditBlock();
+                    _cursor.joinPreviousEditBlock();
+
+                    //
+                    // Помещаем курсор в первую ячейку для дальнейшего наполнения
+                    //
+                    _cursor.movePosition(QTextCursor::PreviousBlock, QTextCursor::MoveAnchor, 2);
+                    //
+                    // ... и помечаем, что вставлять новый блок нет необходимости
+                    //
+                    _isFirstParagraph = true;
+
+                    break;
+                }
+
+                case ScreenplayTextModelSplitterItemType::Middle: {
+                    //
+                    // Если остался не удалённый разделитель, просто пропускаем его
+                    //
+                    if (!_cursor.inTable()) {
+                        break;
+                    }
+
+                    //
+                    // Переходим к следующей колонке
+                    //
+                    _cursor.movePosition(QTextCursor::NextBlock);
+                    //
+                    // ... и помечаем, что вставлять новый блок нет необходимости
+                    //
+                    _isFirstParagraph = true;
+                    break;
+                }
+
+                case ScreenplayTextModelSplitterItemType::End: {
+                    _cursor.movePosition(QTextCursor::NextBlock);
+                    positionsToItems.emplace(_cursor.position(), splitterItem);
+                    break;
+                }
+
+                default: break;
+            }
+
+            break;
+        }
+
+        case ScreenplayTextModelItemType::Text: {
+            //
+            // Если это не первый абзац, вставим блок для него
+            //
+            if (!_isFirstParagraph) {
+                _cursor.insertBlock();
+            }
+            //
+            // ... в противном же случае, новый блок нет необходимости вставлять
+            //
+            else {
+                _isFirstParagraph = false;
+            }
+
+            //
+            // Запомним позицию элемента
+            //
+            const auto textItem = static_cast<ScreenplayTextModelTextItem*>(item);
+            positionsToItems.emplace(_cursor.position(), textItem);
+
+            //
+            // Установим стиль блока
+            //
+            const auto currentStyle
+                    = ScreenplayTemplateFacade::getTemplate().blockStyle(
+                          textItem->paragraphType());
+            _cursor.setBlockFormat(currentStyle.blockFormat(_cursor.inTable()));
+            _cursor.setBlockCharFormat(currentStyle.charFormat());
+            _cursor.setCharFormat(currentStyle.charFormat());
+
+            //
+            // Для докараций, добавим дополнительные флаги
+            //
+            if (textItem->isCorrection()) {
+                auto decorationFormat = _cursor.block().blockFormat();
+                decorationFormat.setProperty(ScreenplayBlockStyle::PropertyIsCorrection, true);
+                decorationFormat.setProperty(PageTextEdit::PropertyDontShowCursor, true);
+                _cursor.setBlockFormat(decorationFormat);
+            }
+
+            //
+            // Вставим текст абзаца
+            //
+            const auto textToInsert = TextHelper::fromHtmlEscaped(textItem->text());
+            _cursor.insertText(textToInsert);
+
+            //
+            // Вставим данные блока
+            //
+            auto blockData = new ScreenplayTextBlockData(textItem);
+            _cursor.block().setUserData(blockData);
+
+            //
+            // Вставим редакторские заметки
+            //
+            auto reviewCursor = _cursor;
+            for (const auto& reviewMark : textItem->reviewMarks()) {
+                reviewCursor.setPosition(reviewCursor.block().position() + reviewMark.from);
+                reviewCursor.movePosition(QTextCursor::NextCharacter, QTextCursor::KeepAnchor, reviewMark.length);
+                reviewCursor.mergeCharFormat(reviewMark.charFormat());
+            }
+
+            break;
+        }
+
+        default: {
+            Q_ASSERT(false);
+            break;
+        }
+    }
+}
+
+void ScreenplayTextDocument::Implementation::readModelItemsContent(const QModelIndex& _parent, ScreenplayTextCursor& _cursor, bool& _isFirstParagraph)
+{
+    for (int itemRow = 0; itemRow < model->rowCount(_parent); ++itemRow) {
+        readModelItemContent(itemRow, _parent, _cursor, _isFirstParagraph);
+
+        //
+        // Считываем информацию о детях
+        //
+        const auto itemIndex = model->index(itemRow, 0, _parent);
+        readModelItemsContent(itemIndex, _cursor, _isFirstParagraph);
+    }
 }
 
 
@@ -106,193 +316,7 @@ void ScreenplayTextDocument::setModel(BusinessLayer::ScreenplayTextModel* _model
     // Последовательно формируем текст документа
     //
     bool isFirstParagraph = true;
-    std::function<void(const QModelIndex&)> readDocumentFromModel;
-    readDocumentFromModel = [this, &cursor, &isFirstParagraph, &readDocumentFromModel] (const QModelIndex& _parent) {
-        using namespace BusinessLayer;
-        for (int itemRow = 0; itemRow < d->model->rowCount(_parent); ++itemRow) {
-            const auto itemIndex = d->model->index(itemRow, 0, _parent);
-            const auto item = d->model->itemForIndex(itemIndex);
-            switch (item->type()) {
-                case ScreenplayTextModelItemType::Folder: {
-                    break;
-                }
-
-                case ScreenplayTextModelItemType::Scene: {
-                    break;
-                }
-
-                case ScreenplayTextModelItemType::Splitter: {
-                    const auto splitterItem = static_cast<ScreenplayTextModelSplitterItem*>(item);
-                    switch (splitterItem->splitterType()) {
-                        case ScreenplayTextModelSplitterItemType::Start: {
-                            //
-                            // Если это не первый абзац, вставим блок для него
-                            //
-                            if (!isFirstParagraph) {
-                                cursor.insertBlock();
-                            }
-                            //
-                            // ... в противном же случае, новый блок нет необходимости вставлять
-                            //
-                            else {
-                                isFirstParagraph = false;
-                            }
-
-                            //
-                            // Запомним позицию разделителя
-                            //
-                            d->positionsToItems.emplace(cursor.position(), splitterItem);
-
-                            //
-                            // Назначим блоку перед таблицей формат PageSplitter
-                            //
-                            auto insertPageSplitter = [&cursor] {
-                                const auto style = ScreenplayTemplateFacade::getTemplate().blockStyle(
-                                                       ScreenplayParagraphType::PageSplitter);
-                                cursor.setBlockFormat(style.blockFormat());
-                                cursor.setBlockCharFormat(style.charFormat());
-                                cursor.setCharFormat(style.charFormat());
-                            };
-                            insertPageSplitter();
-
-                            //
-                            // Вставляем таблицу
-                            //
-                            insertTable(cursor);
-
-                            //
-                            // Назначим блоку после таблицы формат PageSplitter
-                            //
-                            insertPageSplitter();
-
-                            //
-                            // После вставки таблицы нужно завершить транзакцию изменения документа,
-                            // чтобы корректно считывались таблицы в положении курсора
-                            //
-                            cursor.endEditBlock();
-                            cursor.joinPreviousEditBlock();
-
-                            //
-                            // Помещаем курсор в первую ячейку для дальнейшего наполнения
-                            //
-                            cursor.movePosition(QTextCursor::PreviousBlock, QTextCursor::MoveAnchor, 2);
-                            //
-                            // ... и помечаем, что вставлять новый блок нет необходимости
-                            //
-                            isFirstParagraph = true;
-
-                            break;
-                        }
-
-                        case ScreenplayTextModelSplitterItemType::Middle: {
-                            //
-                            // Если остался не удалённый разделитель, просто пропускаем его
-                            //
-                            if (!cursor.inTable()) {
-                                break;
-                            }
-
-                            //
-                            // Переходим к следующей колонке
-                            //
-                            cursor.movePosition(QTextCursor::NextBlock);
-                            //
-                            // ... и помечаем, что вставлять новый блок нет необходимости
-                            //
-                            isFirstParagraph = true;
-                            break;
-                        }
-
-                        case ScreenplayTextModelSplitterItemType::End: {
-                            cursor.movePosition(QTextCursor::NextBlock);
-                            d->positionsToItems.emplace(cursor.position(), splitterItem);
-                            break;
-                        }
-
-                        default: break;
-                    }
-
-                    break;
-                }
-
-                case ScreenplayTextModelItemType::Text: {
-                    //
-                    // Если это не первый абзац, вставим блок для него
-                    //
-                    if (!isFirstParagraph) {
-                        cursor.insertBlock();
-                    }
-                    //
-                    // ... в противном же случае, новый блок нет необходимости вставлять
-                    //
-                    else {
-                        isFirstParagraph = false;
-                    }
-
-                    //
-                    // Запомним позицию элемента
-                    //
-                    const auto textItem = static_cast<ScreenplayTextModelTextItem*>(item);
-                    d->positionsToItems.emplace(cursor.position(), textItem);
-
-                    //
-                    // Установим стиль блока
-                    //
-                    const auto currentStyle
-                            = ScreenplayTemplateFacade::getTemplate().blockStyle(
-                                  textItem->paragraphType());
-                    cursor.setBlockFormat(currentStyle.blockFormat(cursor.inTable()));
-                    cursor.setBlockCharFormat(currentStyle.charFormat());
-                    cursor.setCharFormat(currentStyle.charFormat());
-
-                    //
-                    // Для докараций, добавим дополнительные флаги
-                    //
-                    if (textItem->isCorrection()) {
-                        auto decorationFormat = cursor.block().blockFormat();
-                        decorationFormat.setProperty(ScreenplayBlockStyle::PropertyIsCorrection, true);
-                        decorationFormat.setProperty(PageTextEdit::PropertyDontShowCursor, true);
-                        cursor.setBlockFormat(decorationFormat);
-                    }
-
-                    //
-                    // Вставим текст абзаца
-                    //
-                    const auto textToInsert = TextHelper::fromHtmlEscaped(textItem->text());
-                    cursor.insertText(textToInsert);
-
-                    //
-                    // Вставим данные блока
-                    //
-                    auto blockData = new ScreenplayTextBlockData(textItem);
-                    cursor.block().setUserData(blockData);
-
-                    //
-                    // Вставим редакторские заметки
-                    //
-                    auto reviewCursor = cursor;
-                    for (const auto& reviewMark : textItem->reviewMarks()) {
-                        reviewCursor.setPosition(reviewCursor.block().position() + reviewMark.from);
-                        reviewCursor.movePosition(QTextCursor::NextCharacter, QTextCursor::KeepAnchor, reviewMark.length);
-                        reviewCursor.mergeCharFormat(reviewMark.charFormat());
-                    }
-
-                    break;
-                }
-
-                default: {
-                    Q_ASSERT(false);
-                    break;
-                }
-            }
-
-            //
-            // Считываем информацию о детях
-            //
-            readDocumentFromModel(itemIndex);
-        }
-    };
-    readDocumentFromModel({});
+    d->readModelItemsContent({}, cursor, isFirstParagraph);
 
     //
     // Завершаем операцию
@@ -307,9 +331,15 @@ void ScreenplayTextDocument::setModel(BusinessLayer::ScreenplayTextModel* _model
         setModel(d->model);
     });
     connect(d->model, &ScreenplayTextModel::dataChanged, this, [this] (const QModelIndex& _topLeft, const QModelIndex& _bottomRight) {
+        if (d->state != DocumentState::Ready) {
+            return;
+        }
+
         Q_ASSERT(_topLeft == _bottomRight);
 
-        const auto position = itemPosition(_topLeft);
+        QScopedValueRollback temporatryState(d->state, DocumentState::Changing);
+
+        const auto position = itemStartPosition(_topLeft);
         if (position < 0) {
             return;
         }
@@ -357,11 +387,103 @@ void ScreenplayTextDocument::setModel(BusinessLayer::ScreenplayTextModel* _model
 
         cursor.endEditBlock();
     });
+    connect(d->model, &ScreenplayTextModel::rowsInserted, this, [this] (const QModelIndex& _parent, int _from, int _to) {
+        if (d->state != DocumentState::Ready) {
+            return;
+        }
+
+        QScopedValueRollback temporatryState(d->state, DocumentState::Changing);
+
+        QSignalBlocker signalBlocker(this);
+
+        //
+        // Определим позицию курсора откуда нужно начинать вставку
+        //
+        QModelIndex cursorItemIndex;
+        if (_from > 0) {
+            cursorItemIndex = d->model->index(_from - 1, 0, _parent);
+        } else {
+            cursorItemIndex = _parent;
+        }
+        if (!cursorItemIndex.isValid()) {
+            return;
+        }
+        //
+        const int cursorPosition = itemEndPosition(cursorItemIndex);
+        if (cursorPosition < 0) {
+            return;
+        }
+
+        //
+        // Собственно вставляем контент
+        //
+        ScreenplayTextCursor cursor(this);
+        cursor.setPosition(cursorPosition);
+        cursor.movePosition(QTextCursor::EndOfBlock);
+
+        cursor.beginEditBlock();
+
+        bool isFirstParagraph = false;
+        for (int itemRow = _from; itemRow <= _to; ++itemRow) {
+            d->readModelItemContent(itemRow, _parent, cursor, isFirstParagraph);
+
+            //
+            // Считываем информацию о детях
+            //
+            const auto itemIndex = d->model->index(itemRow, 0, _parent);
+            d->readModelItemsContent(itemIndex, cursor, isFirstParagraph);
+        }
+
+        cursor.endEditBlock();
+    });
+    connect(d->model, &ScreenplayTextModel::rowsAboutToBeRemoved, this, [this] (const QModelIndex& _parent, int _from, int _to) {
+        if (d->state != DocumentState::Ready) {
+            return;
+        }
+
+        QScopedValueRollback temporatryState(d->state, DocumentState::Changing);
+
+        QSignalBlocker signalBlocker(this);
+
+        const QModelIndex fromIndex = d->model->index(_from, 0, _parent);
+        if (!fromIndex.isValid()) {
+            return;
+        }
+        auto fromPosition = itemStartPosition(fromIndex);
+        if (fromPosition < 0) {
+            return;
+        }
+        //
+        // Если это не самый первый блок, то нужно взять на один символ назад, чтобы удалить сам блок
+        //
+        else if (fromPosition > 0) {
+            --fromPosition;
+        }
+        //
+        const QModelIndex toIndex = d->model->index(_to, 0, _parent);
+        if (!toIndex.isValid()) {
+            return;
+        }
+        const auto toPosition = itemStartPosition(toIndex);
+        if (toPosition < 0) {
+            return;
+        }
+
+        ScreenplayTextCursor cursor(this);
+        cursor.setPosition(fromPosition);
+        cursor.setPosition(toPosition, QTextCursor::KeepAnchor);
+        cursor.movePosition(QTextCursor::EndOfBlock, QTextCursor::KeepAnchor);
+        if (!cursor.hasSelection()) {
+            return;
+        }
+
+        cursor.deleteChar();
+    });
 
     d->state = DocumentState::Ready;
 }
 
-int ScreenplayTextDocument::itemPosition(const QModelIndex& _index)
+int ScreenplayTextDocument::itemPosition(const QModelIndex& _index, bool _fromStart)
 {
     auto item = d->model->itemForIndex(_index);
     if (item == nullptr) {
@@ -369,7 +491,8 @@ int ScreenplayTextDocument::itemPosition(const QModelIndex& _index)
     }
 
     while (item->childCount() > 0) {
-        item = item->childAt(0);
+        item = item->childAt(_fromStart ? 0
+                                        : item->childCount() - 1);
     }
     for (const auto& [key, value] : d->positionsToItems) {
         if (value == item) {
@@ -378,6 +501,16 @@ int ScreenplayTextDocument::itemPosition(const QModelIndex& _index)
     }
 
     return -1;
+}
+
+int ScreenplayTextDocument::itemStartPosition(const QModelIndex& _index)
+{
+    return itemPosition(_index, true);
+}
+
+int ScreenplayTextDocument::itemEndPosition(const QModelIndex& _index)
+{
+    return itemPosition(_index, false);
 }
 
 QString ScreenplayTextDocument::sceneNumber(const QTextBlock& _forBlock) const
@@ -420,6 +553,51 @@ QString ScreenplayTextDocument::dialogueNumber(const QTextBlock& _forBlock) cons
 
     auto itemScene = static_cast<ScreenplayTextModelTextItem*>(item);
     return itemScene->number().value;
+}
+
+QString ScreenplayTextDocument::mimeFromSelection(int _fromPosition, int _toPosition) const
+{
+    const auto fromBlock = findBlock(_fromPosition);
+    if (fromBlock.userData() == nullptr) {
+        return {};
+    }
+    auto fromBlockData = static_cast<ScreenplayTextBlockData*>(fromBlock.userData());
+    if (fromBlockData == nullptr) {
+        return {};
+    }
+    const auto fromItemIndex = d->model->indexForItem(fromBlockData->item());
+    const auto fromPositionInBlock = _fromPosition - fromBlock.position();
+
+    const auto toBlock = findBlock(_toPosition);
+    if (toBlock.userData() == nullptr) {
+        return {};
+    }
+    auto toBlockData = static_cast<ScreenplayTextBlockData*>(toBlock.userData());
+    if (toBlockData == nullptr) {
+        return {};
+    }
+    const auto toItemIndex = d->model->indexForItem(toBlockData->item());
+    const auto toPositionInBlock = _toPosition - toBlock.position();
+
+    return d->model->mimeFromSelection(fromItemIndex, fromPositionInBlock,
+                                       toItemIndex, toPositionInBlock);
+}
+
+void ScreenplayTextDocument::insertFromMime(int _position, const QString& _mimeData)
+{
+    const auto block = findBlock(_position);
+    if (block.userData() == nullptr) {
+        return;
+    }
+
+    auto blockData = static_cast<ScreenplayTextBlockData*>(block.userData());
+    if (blockData == nullptr) {
+        return;
+    }
+
+    const auto itemIndex = d->model->indexForItem(blockData->item());
+    const auto positionInBlock = _position - block.position();
+    d->model->insertFromMime(itemIndex, positionInBlock, _mimeData);
 }
 
 void ScreenplayTextDocument::addParagraph(BusinessLayer::ScreenplayParagraphType _type, ScreenplayTextCursor _cursor)
@@ -798,7 +976,7 @@ void ScreenplayTextDocument::updateModelOnContentChange(int _position, int _char
         return;
     }
 
-    d->state = DocumentState::Changing;
+    QScopedValueRollback temporatryState(d->state, DocumentState::Changing);
 
     using namespace BusinessLayer;
 
@@ -1314,8 +1492,6 @@ void ScreenplayTextDocument::updateModelOnContentChange(int _position, int _char
         //
         block = block.next();
     }
-
-    d->state = DocumentState::Ready;
 }
 
 void ScreenplayTextDocument::insertTable(const ScreenplayTextCursor& _cursor)

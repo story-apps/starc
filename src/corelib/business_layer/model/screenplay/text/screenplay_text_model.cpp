@@ -4,10 +4,13 @@
 #include "screenplay_text_model_scene_item.h"
 #include "screenplay_text_model_splitter_item.h"
 #include "screenplay_text_model_text_item.h"
+#include "screenplay_text_model_xml.h"
 
 #include <business_layer/templates/screenplay_template.h>
 
 #include <domain/document_object.h>
+
+#include <utils/tools/model_index_path.h>
 
 #include <QDomDocument>
 
@@ -17,11 +20,6 @@ namespace BusinessLayer
 
 namespace {
     const char* kMimeType = "application/x-starc/screenplay/text/item";
-
-    const QString kDocumentTag = QLatin1String("document");
-    const QString kFolderTag = QLatin1String("folder");
-    const QString kSceneTag = QLatin1String("scene");
-    const QString kSplitterTag = QLatin1String("splitter");
 }
 
 class ScreenplayTextModel::Implementation
@@ -80,14 +78,14 @@ void ScreenplayTextModel::Implementation::buildModel(Domain::DocumentObject* _sc
 
     QDomDocument domDocument;
     domDocument.setContent(_screenplay->content());
-    auto documentNode = domDocument.firstChildElement(kDocumentTag);
+    auto documentNode = domDocument.firstChildElement(xml::kDocumentTag);
     auto rootNode = documentNode.firstChildElement();
     while (!rootNode.isNull()) {
-        if (rootNode.nodeName() == kFolderTag) {
+        if (rootNode.nodeName() == xml::kFolderTag) {
             rootItem->appendItem(new ScreenplayTextModelFolderItem(rootNode));
-        } else if (rootNode.nodeName() == kSceneTag) {
+        } else if (rootNode.nodeName() == xml::kSceneTag) {
             rootItem->appendItem(new ScreenplayTextModelSceneItem(rootNode));
-        } else if (rootNode.nodeName() == kSplitterTag) {
+        } else if (rootNode.nodeName() == xml::kSplitterTag) {
             rootItem->appendItem(new ScreenplayTextModelSplitterItem(rootNode));
         } else {
             rootItem->appendItem(new ScreenplayTextModelTextItem(rootNode));
@@ -398,6 +396,267 @@ Qt::DropActions ScreenplayTextModel::supportedDragActions() const
 Qt::DropActions ScreenplayTextModel::supportedDropActions() const
 {
     return Qt::MoveAction;
+}
+
+QString ScreenplayTextModel::mimeFromSelection(const QModelIndex& _from, int _fromPosition,
+    const QModelIndex& _to, int _toPosition) const
+{
+    if (document() == nullptr) {
+        return {};
+    }
+
+    if (ModelIndexPath(_to) < ModelIndexPath(_from)
+        || (_from == _to && _fromPosition >= _toPosition)) {
+        return {};
+    }
+
+    const auto fromItem = itemForIndex(_from);
+    if (fromItem == nullptr) {
+        return {};
+    }
+
+    const auto toItem = itemForIndex(_to);
+    if (toItem == nullptr) {
+        return {};
+    }
+
+
+    QByteArray xml = "<?xml version=\"1.0\"?>\n";
+    xml += "<document mime-type=\"" + Domain::mimeTypeFor(document()->type()) + "\" version=\"1.0\">\n";
+
+    auto buildXmlFor = [&xml, fromItem, _fromPosition, toItem, _toPosition] (ScreenplayTextModelItem* _fromItemParent, int _fromItemRow) {
+        for (int childIndex = _fromItemRow; childIndex < _fromItemParent->childCount(); ++childIndex) {
+            const auto childItem = _fromItemParent->childAt(childIndex);
+
+            switch (childItem->type()) {
+                case ScreenplayTextModelItemType::Folder: {
+                    const auto folderItem = static_cast<ScreenplayTextModelFolderItem*>(childItem);
+                    xml += folderItem->toXml(fromItem, _fromPosition, toItem, _toPosition);
+                    break;
+                }
+
+                case ScreenplayTextModelItemType::Scene: {
+                    const auto sceneItem = static_cast<ScreenplayTextModelSceneItem*>(childItem);
+                    xml += sceneItem->toXml(fromItem, _fromPosition, toItem, _toPosition);
+                    break;
+                }
+
+                case ScreenplayTextModelItemType::Text: {
+                    const auto textItem = static_cast<ScreenplayTextModelTextItem*>(childItem);
+
+                    //
+                    // Не сохраняем закрывающие блоки неоткрытых папок, всё это делается внутри самих папок
+                    //
+                    if (textItem->paragraphType() == ScreenplayParagraphType::FolderFooter) {
+                        break;
+                    }
+
+                    if (textItem == fromItem && textItem == toItem) {
+                        xml += textItem->toXml(_fromPosition, _toPosition - _fromPosition);
+                    } else if (textItem == fromItem) {
+                        xml += textItem->toXml(_fromPosition, textItem->text().length() - _fromPosition);
+                    } else if (textItem == toItem) {
+                        xml += textItem->toXml(0, _toPosition);
+                    } else {
+                        xml += textItem->toXml();
+                    }
+                    break;
+                }
+
+                default: {
+                    xml += childItem->toXml();
+                    break;
+                }
+            }
+
+            const bool recursively = true;
+            if (childItem == toItem
+                || childItem->hasChild(toItem, recursively)) {
+                return true;
+            }
+        }
+
+        return false;
+    };
+    auto fromItemParent = fromItem->parent();
+    auto fromItemRow = fromItemParent->rowOfChild(fromItem);
+    //
+    // Если построить нужно начиная с заголовка сцены или папки, то нужно захватить и саму сцену/папку
+    //
+    if (fromItem->type() == ScreenplayTextModelItemType::Text) {
+        const auto textItem = static_cast<ScreenplayTextModelTextItem*>(fromItem);
+        if (textItem->paragraphType() == ScreenplayParagraphType::SceneHeading
+            || textItem->paragraphType() == ScreenplayParagraphType::FolderHeader) {
+            auto newFromItem = fromItemParent;
+            fromItemParent = fromItemParent->parent();
+            fromItemRow = fromItemParent->rowOfChild(newFromItem);
+        }
+    }
+    //
+    // Собственно строим xml с данными выделенного интервала
+    //
+    while (buildXmlFor(fromItemParent, fromItemRow) != true) {
+        auto newFromItem = fromItemParent;
+        fromItemParent = fromItemParent->parent();
+        fromItemRow = fromItemParent->rowOfChild(newFromItem) + 1; // +1, т.к. текущий мы уже обработали
+    }
+
+    xml += "</document>";
+    return xml;
+}
+
+void ScreenplayTextModel::insertFromMime(const QModelIndex& _index, int _position, const QString& _mimeData)
+{
+    if (!_index.isValid()) {
+        return;
+    }
+
+    if (_mimeData.isEmpty()) {
+        return;
+    }
+
+    //
+    // Определим элемент, внутрь, или после которого будем вставлять данные
+    //
+    auto item = itemForIndex(_index);
+
+    //
+    // Извлекаем остающийся в блоке текст, если нужно
+    //
+    QString sourceBlockEndContent;
+    if (item->type() == ScreenplayTextModelItemType::Text) {
+        auto textItem = static_cast<ScreenplayTextModelTextItem*>(item);
+        if (textItem->text().length() > _position) {
+            sourceBlockEndContent = mimeFromSelection(_index, _position,
+                                                     _index, textItem->text().length());
+            textItem->removeText(_position);
+        }
+    }
+
+    //
+    // Считываем данные и последовательно вставляем в модель
+    //
+    QDomDocument domDocument;
+    domDocument.setContent(_mimeData);
+    auto documentNode = domDocument.firstChildElement(xml::kDocumentTag);
+    auto contentNode = documentNode.firstChildElement();
+    bool isFirstTextItemHandled = false;
+    ScreenplayTextModelItem* lastItem = item;
+    QVector<ScreenplayTextModelItem*> lastItemsFromSourceScene;
+    while (!contentNode.isNull()) {
+        ScreenplayTextModelItem* newItem = nullptr;
+        //
+        // При входе в папку или сцену, если предыдущий текстовый элемент был в сцене,
+        // то вставлять их будем не после текстового элемента, а после сцены
+        //
+        if ((contentNode.nodeName() == xml::kFolderTag
+             || contentNode.nodeName() == xml::kSceneTag)
+            && (lastItem->type() == ScreenplayTextModelItemType::Text
+                || lastItem->type() == ScreenplayTextModelItemType::Splitter)
+            && lastItem->parent()->type() == ScreenplayTextModelItemType::Scene) {
+            //
+            // ... и при этом вырезаем из него все текстовые блоки, идущие до конца сцены/папки
+            //
+            auto lastItemParent = lastItem->parent();
+            const int maxSize = lastItemParent->rowOfChild(lastItem) + 1;
+            while (lastItemParent->childCount() > maxSize) {
+                lastItemsFromSourceScene.append(lastItemParent->childAt(maxSize));
+                takeItem(lastItemsFromSourceScene.last(), lastItemParent);
+            }
+            //
+            // Собственно берём родителя вместо самого элемента
+            //
+            lastItem = lastItemParent;
+        }
+
+
+        if (contentNode.nodeName() == xml::kFolderTag) {
+            newItem = new ScreenplayTextModelFolderItem(contentNode);
+        } else if (contentNode.nodeName() == xml::kSceneTag) {
+            newItem = new ScreenplayTextModelSceneItem(contentNode);
+        }
+        else if (contentNode.nodeName() == xml::kSplitterTag) {
+            newItem = new ScreenplayTextModelSplitterItem(contentNode);
+        } else {
+            auto newTextItem = new ScreenplayTextModelTextItem(contentNode);
+            //
+            // Если вставляется текстовый элемент внутрь уже существующего элемента
+            //
+            if (!isFirstTextItemHandled
+                && item->type() == ScreenplayTextModelItemType::Text) {
+                //
+                // ... то просто объединим их
+                //
+                isFirstTextItemHandled = true;
+                auto textItem = static_cast<ScreenplayTextModelTextItem*>(item);
+                textItem->mergeWith(newTextItem);
+                updateItem(textItem);
+                delete newTextItem;
+            }
+            //
+            // В противном случае вставляем текстовый элемент в модель
+            //
+            else {
+                newItem = newTextItem;
+            }
+        }
+
+        if (newItem != nullptr) {
+            insertItem(newItem, lastItem);
+            lastItem = newItem;
+        }
+
+        contentNode = contentNode.nextSiblingElement();
+    }
+
+    //
+    // Если есть оторванный от первого блока текст
+    //
+    if (!sourceBlockEndContent.isEmpty()) {
+        QDomDocument sourceBlockEndContentDocument;
+        sourceBlockEndContentDocument.setContent(sourceBlockEndContent);
+        auto documentNode = sourceBlockEndContentDocument.firstChildElement(xml::kDocumentTag);
+        auto contentNode = documentNode.firstChildElement();
+        auto item = new ScreenplayTextModelTextItem(contentNode);
+        //
+        // ... и последний вставленный элемент был текстовым
+        //
+        if (lastItem->type() == ScreenplayTextModelItemType::Text) {
+            auto lastTextItem = static_cast<ScreenplayTextModelTextItem*>(lastItem);
+
+            //
+            // Объединим элементы
+            //
+            lastTextItem->mergeWith(item);
+            updateItem(lastTextItem);
+            delete item;
+        }
+        //
+        // В противном случае, вставляем текстовый элемент после последнего вставленного
+        //
+        else {
+            insertItem(item, lastItem);
+            lastItem = item;
+        }
+    }
+
+    //
+    // Если есть оторванные текстовые блоки
+    //
+    if (!lastItemsFromSourceScene.isEmpty()) {
+        //
+        // Просто вставляем их в после последнего элемента
+        //
+        for (auto item : lastItemsFromSourceScene) {
+            if (lastItem->type() == ScreenplayTextModelItemType::Folder
+                || lastItem->type() == ScreenplayTextModelItemType::Scene) {
+                appendItem(item, lastItem);
+            } else {
+                insertItem(item, lastItem);
+            }
+            lastItem = item;
+        }
+    }
 }
 
 ScreenplayTextModelItem* ScreenplayTextModel::itemForIndex(const QModelIndex& _index) const

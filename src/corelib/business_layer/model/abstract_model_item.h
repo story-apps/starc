@@ -73,7 +73,7 @@ public:
     /**
      * @brief Является ли заданный элемент дочерним текущему
      */
-    bool hasChild(AbstractModelItem* _child) const;
+    bool hasChild(AbstractModelItem* _child, bool _recursively = false) const;
 
     /**
      * @brief Индекс дочернего элемента

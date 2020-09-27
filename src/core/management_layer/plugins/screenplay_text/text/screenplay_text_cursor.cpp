@@ -34,4 +34,17 @@ bool ScreenplayTextCursor::inFirstColumn() const
     return currentTable() && currentTable()->cellAt(*this).column() == 0;
 }
 
+ScreenplayTextCursor::Selection ScreenplayTextCursor::selectionInterval() const
+{
+    if (!hasSelection()) {
+        return {};
+    }
+
+    if (selectionStart() > selectionEnd()) {
+        return { selectionEnd(), selectionStart() };
+    } else {
+        return { selectionStart(), selectionEnd() };
+    }
+}
+
 } // namespace Ui

@@ -72,6 +72,16 @@ public:
     /** @} */
 
     /**
+     * @brief Сформировать mime-данные сценария в заданном диапазоне
+     */
+    QString mimeFromSelection(const QModelIndex& _from, int _fromPosition, const QModelIndex& _to, int _toPosition) const;
+
+    /**
+     * @brief Вставить контент из mime-данных со сценарием в заданной позиции
+     */
+    void insertFromMime(const QModelIndex& _index, int _position, const QString& _mimeData);
+
+    /**
      * @brief Получить элемент находящийся в заданном индексе
      */
     ScreenplayTextModelItem* itemForIndex(const QModelIndex& _index) const;

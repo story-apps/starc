@@ -221,28 +221,61 @@ QVariant ScreenplayTextModelSceneItem::data(int _role) const
 
 QString ScreenplayTextModelSceneItem::toXml() const
 {
+    return toXml(nullptr, 0, nullptr, 0);
+}
+
+QString ScreenplayTextModelSceneItem::toXml(ScreenplayTextModelItem* _from, int _fromPosition,
+    ScreenplayTextModelItem* _to, int _toPosition) const
+{
     QByteArray xml;
     //
     // TODO: plots
     //
-    xml += QString("<%1 %2=\"%3\" %4=\"%5\" %6>")
+    xml += QString("<%1 %2=\"%3\" %4=\"%5\" %6>\n")
            .arg(kSceneTag,
                 kUuidAttribute, d->uuid.toString(),
                 kPlotsAttribute, {},
                 (d->isOmited ? QString("%1=\"true\"").arg(kOmitedAttribute) : ""));
     if (d->number.has_value()) {
-        xml += QString("<%1 %2=\"%3\"/>")
+        xml += QString("<%1 %2=\"%3\"/>\n")
                .arg(kNumberTag, kNumberValueAttribute, d->number->value);
     }
     if (!d->stamp.isEmpty()) {
-        xml += QString("<%1><![CDATA[%2]]></%1>").arg(kStampTag, TextHelper::toHtmlEscaped(d->stamp));
+        xml += QString("<%1><![CDATA[%2]]></%1>\n").arg(kStampTag, TextHelper::toHtmlEscaped(d->stamp));
     }
     if (d->plannedDuration.has_value()) {
-        xml += QString("<%1>%2</%1>").arg(kPlannedDurationTag, QString::number(*d->plannedDuration));
+        xml += QString("<%1>%2</%1>\n").arg(kPlannedDurationTag, QString::number(*d->plannedDuration));
     }
-    xml.append(QString("<%1>").arg(kContentTag));
+    xml.append(QString("<%1>\n").arg(kContentTag));
     for (int childIndex = 0; childIndex < childCount(); ++childIndex) {
-        xml += childAt(childIndex)->toXml();
+        auto child = childAt(childIndex);
+
+        //
+        // Нетекстовые блоки, просто добавляем к общему xml
+        //
+        if (child->type() != ScreenplayTextModelItemType::Text) {
+            xml += child->toXml();
+            continue;
+        }
+
+        //
+        // Текстовые блоки, в зависимости от необходимости вставить блок целиком, или его часть
+        //
+        auto textItem = static_cast<ScreenplayTextModelTextItem*>(child);
+        if (textItem == _to) {
+            if (textItem == _from) {
+                xml += textItem->toXml(_fromPosition, _toPosition - _fromPosition);
+            } else {
+                xml += textItem->toXml(0, _toPosition);
+            }
+            break;
+        }
+        //
+        else if (textItem == _from) {
+            xml += textItem->toXml(_fromPosition, textItem->text().length() - _fromPosition);
+        } else {
+            xml += textItem->toXml();
+        }
     }
     xml.append(QString("</%1>\n").arg(kContentTag));
     xml.append(QString("</%1>\n").arg(kSceneTag));

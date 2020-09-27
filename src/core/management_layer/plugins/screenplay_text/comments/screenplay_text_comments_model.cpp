@@ -4,6 +4,7 @@
 #include <business_layer/model/screenplay/text/screenplay_text_model_text_item.h>
 
 #include <utils/shugar.h>
+#include <utils/tools/model_index_path.h>
 
 #include <QColor>
 #include <QDateTime>
@@ -184,19 +185,6 @@ void ScreenplayTextCommentsModel::Implementation::saveReviewMark(
 void ScreenplayTextCommentsModel::Implementation::processSourceModelRowsInserted(const QModelIndex& _parent, int _firstRow, int _lastRow)
 {
     //
-    // Впомогательная функция построения пути элемента по его индексу, для определения позиции вставки новых элементов
-    //
-    auto buildModelIndexPath = [] (const QModelIndex& _index) {
-        QList<int> path;
-        QModelIndex parent = _index;
-        while (parent.isValid()) {
-            path.prepend(parent.row());
-            parent = parent.parent();
-        }
-        return path;
-    };
-
-    //
     // Для каждого из вставленных
     //
     const int invalidPosition = -1;
@@ -225,11 +213,11 @@ void ScreenplayTextCommentsModel::Implementation::processSourceModelRowsInserted
         }
 
         if (lastInsertPosition == invalidPosition) {
-            const auto itemIndexPath = buildModelIndexPath(itemIndex);
+            const auto itemIndexPath = ModelIndexPath(itemIndex);
             for (int index = 0; index < modelTextItems.size(); ++index) {
                 const auto modelTextItem = modelTextItems.at(index);
                 const auto modelTextItemIndex = model->indexForItem(modelTextItem);
-                if (itemIndexPath < buildModelIndexPath(modelTextItemIndex)) {
+                if (itemIndexPath < ModelIndexPath(modelTextItemIndex)) {
                     lastInsertPosition = index;
                     break;
                 }

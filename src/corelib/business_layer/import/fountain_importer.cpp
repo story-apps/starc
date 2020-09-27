@@ -1053,18 +1053,32 @@ QVector<AbstractImporter::Screenplay> FountainImporter::importScreenplays(const 
         return {};
     }
 
-    Screenplay result;
-    result.name = QFileInfo(_options.filePath).completeBaseName();
-
     //
     // Открываем файл
     //
     QFile fountainFile(_options.filePath);
     if (!fountainFile.open(QIODevice::ReadOnly)) {
-        return { result };
+        return {};
     }
 
-    const QString& scriptText = fountainFile.readAll();
+    //
+    // Импортируем
+    //
+    auto screenplay = importScreenplay(fountainFile.readAll());
+    if (screenplay.name.isEmpty()) {
+        screenplay.name = QFileInfo(_options.filePath).completeBaseName();
+    }
+
+    return { screenplay };
+}
+
+AbstractImporter::Screenplay FountainImporter::importScreenplay(const QString& _screenplayText) const
+{
+    if (_screenplayText.simplified().isEmpty()) {
+        return {};
+    }
+
+    Screenplay result;
 
     //
     // Читаем plain text
@@ -1083,7 +1097,7 @@ QVector<AbstractImporter::Screenplay> FountainImporter::importScreenplays(const 
     QVector<QString> paragraphs;
     bool isTitle = false;
     bool isFirstLine = true;
-    for (QString str : scriptText.split("\n")) {
+    for (QString str : _screenplayText.split("\n")) {
         //
         // Если первая строка содержит ':', то в начале идет титульная страница,
         // которую мы обрабатываем не здесь
@@ -1397,7 +1411,7 @@ QVector<AbstractImporter::Screenplay> FountainImporter::importScreenplays(const 
     writer.writeEndElement();
     writer.writeEndDocument();
 
-    return { result };
+    return result;
 }
 
 } // namespace BusinessLayer

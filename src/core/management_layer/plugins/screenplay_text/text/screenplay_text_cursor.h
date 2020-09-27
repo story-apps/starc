@@ -25,6 +25,15 @@ public:
      * @brief Находится ли блок в первой колонке
      */
     bool inFirstColumn() const;
+
+    /**
+     * @brief Получить интервал выделения в нормализованном виде (from <= to)
+     */
+    struct Selection {
+        int from = 0;
+        int to = 0;
+    };
+    Selection selectionInterval() const;
 };
 
 } // namespace Ui

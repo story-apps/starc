@@ -42,9 +42,14 @@ public:
     Documents importDocuments(const ImportOptions& _options) const override;
 
     /**
-     * @brief Сформировать xml-сценария во внутреннем формате
+     * @brief Импортировать сценарии
      */
     QVector<Screenplay> importScreenplays(const ImportOptions& _options) const override;
+
+    /**
+     * @brief Импортировать сценарий из заданного текста
+     */
+    Screenplay importScreenplay(const QString& _screenplayText) const;
 
 private:
     class Implementation;

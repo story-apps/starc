@@ -6,6 +6,7 @@
 #include "screenplay_text_cursor.h"
 #include "screenplay_text_document.h"
 
+#include <business_layer/import/fountain_importer.h>
 #include <business_layer/model/screenplay/text/screenplay_text_model.h>
 #include <business_layer/model/screenplay/text/screenplay_text_model_text_item.h>
 #include <business_layer/templates/screenplay_template.h>
@@ -133,6 +134,7 @@ void ScreenplayTextEdit::undo()
         auto cursor = textCursor();
         cursor.setPosition(lastCursorPosition);
         setTextCursorReimpl(cursor);
+        ensureCursorVisible();
     }
 }
 
@@ -150,6 +152,7 @@ void ScreenplayTextEdit::redo()
         auto cursor = textCursor();
         cursor.setPosition(lastCursorPosition);
         setTextCursorReimpl(cursor);
+        ensureCursorVisible();
     }
 }
 
@@ -211,13 +214,13 @@ QModelIndex ScreenplayTextEdit::currentModelIndex() const
 void ScreenplayTextEdit::setCurrentModelIndex(const QModelIndex& _index)
 {
     BusinessLayer::ScreenplayTextCursor textCursor(document());
-    textCursor.setPosition(d->document.itemPosition(_index));
+    textCursor.setPosition(d->document.itemStartPosition(_index));
     ensureCursorVisible(textCursor);
 }
 
 int ScreenplayTextEdit::positionForModelIndex(const QModelIndex& _index)
 {
-    return d->document.itemPosition(_index);
+    return d->document.itemStartPosition(_index);
 }
 
 void ScreenplayTextEdit::addReviewMark(const QColor& _textColor, const QColor& _backgroundColor, const QString& _comment)
@@ -1050,6 +1053,96 @@ ContextMenu* ScreenplayTextEdit::createContextMenu(const QPoint& _position, QWid
     });
 
     return menu;
+}
+
+bool ScreenplayTextEdit::canInsertFromMimeData(const QMimeData* _source) const
+{
+    return _source->formats().contains(d->model->mimeTypes().first())
+            || _source->hasText();
+}
+
+QMimeData* ScreenplayTextEdit::createMimeDataFromSelection() const
+{
+    if (!textCursor().hasSelection()) {
+        return {};
+    }
+
+    QMimeData* mimeData = new QMimeData;
+    BusinessLayer::ScreenplayTextCursor cursor = textCursor();
+    const auto selection = cursor.selectionInterval();
+
+    //
+    // Сформируем в текстовом виде, для вставки наружу
+    // TODO: экспорт в фонтан
+    //
+    {
+        QByteArray text;
+        auto cursor = textCursor();
+        cursor.setPosition(selection.from);
+        do {
+            cursor.movePosition(QTextCursor::EndOfBlock, QTextCursor::KeepAnchor);
+            if (cursor.position() > selection.to) {
+                cursor.setPosition(selection.to, QTextCursor::KeepAnchor);
+            }
+            if (!text.isEmpty()) {
+                text.append("\r\n");
+            }
+            text.append(cursor.blockCharFormat().fontCapitalization() == QFont::AllUppercase
+                        ? TextHelper::smartToUpper(cursor.selectedText())
+                        : cursor.selectedText());
+        } while (cursor.position() < textCursor().selectionEnd()
+                 && !cursor.atEnd()
+                 && cursor.movePosition(QTextCursor::NextBlock));
+
+        mimeData->setData("text/plain", text);
+    }
+
+    //
+    // Поместим в буфер данные о тексте в специальном формате
+    //
+    {
+        mimeData->setData(d->model->mimeTypes().first(),
+                          d->document.mimeFromSelection(selection.from, selection.to).toUtf8());
+    }
+
+    return mimeData;
+}
+
+void ScreenplayTextEdit::insertFromMimeData(const QMimeData* _source)
+{
+    if (isReadOnly()) {
+        return;
+    }
+
+    //
+    // Удаляем выделенный текст
+    //
+    if (textCursor().hasSelection()) {
+        textCursor().deleteChar();
+    }
+
+    //
+    // Вставляем сценарий из майм-данных
+    //
+    QString textToInsert;
+
+    //
+    // Если вставляются данные в сценарном формате, то вставляем как положено
+    //
+    if (_source->formats().contains(d->model->mimeTypes().first())) {
+        textToInsert = _source->data(d->model->mimeTypes().first());
+    }
+    //
+    // Если простой текст, то вставляем его, импортировав с фонтана
+    // NOTE: Перед текстом нужно обязательно добавить перенос строки, чтобы он
+    //       не воспринимался как титульная страница
+    //
+    else if (_source->hasText()) {
+        BusinessLayer::FountainImporter fountainImporter;
+        textToInsert = fountainImporter.importScreenplay("\n" + _source->text()).text;
+    }
+
+    d->document.insertFromMime(textCursor().position(), textToInsert);
 }
 
 } // namespace Ui
