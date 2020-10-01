@@ -283,6 +283,7 @@ void ScreenplayTextEdit::keyPressEvent(QKeyEvent* _event)
             _event->accept();
         } else {
             BaseTextEdit::keyPressEvent(_event);
+            _event->ignore();
         }
 
         updateEnteredText(_event->text());
@@ -379,7 +380,8 @@ bool ScreenplayTextEdit::keyPressEventReimpl(QKeyEvent* _event)
     //
     // ... вставим перенос строки внутри абзаца
     //
-    else if (_event->key() == Qt::Key_Enter && _event->modifiers().testFlag(Qt::ShiftModifier)) {
+    else if ((_event->key() == Qt::Key_Enter || _event->key() == Qt::Key_Return)
+             && _event->modifiers().testFlag(Qt::ShiftModifier)) {
         textCursor().insertText(QChar(QChar::LineSeparator));
     }
     //

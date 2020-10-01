@@ -18,7 +18,6 @@
 #include <QGridLayout>
 #include <QLocale>
 #include <QScrollArea>
-#include <QSortFilterProxyModel>
 #include <QStandardItemModel>
 #include <QVariantAnimation>
 
