@@ -219,12 +219,12 @@ QVariant ScreenplayTextModelSceneItem::data(int _role) const
     }
 }
 
-QString ScreenplayTextModelSceneItem::toXml() const
+QByteArray ScreenplayTextModelSceneItem::toXml() const
 {
     return toXml(nullptr, 0, nullptr, 0);
 }
 
-QString ScreenplayTextModelSceneItem::toXml(ScreenplayTextModelItem* _from, int _fromPosition,
+QByteArray ScreenplayTextModelSceneItem::toXml(ScreenplayTextModelItem* _from, int _fromPosition,
     ScreenplayTextModelItem* _to, int _toPosition) const
 {
     QByteArray xml;
@@ -235,18 +235,18 @@ QString ScreenplayTextModelSceneItem::toXml(ScreenplayTextModelItem* _from, int 
            .arg(kSceneTag,
                 kUuidAttribute, d->uuid.toString(),
                 kPlotsAttribute, {},
-                (d->isOmited ? QString("%1=\"true\"").arg(kOmitedAttribute) : ""));
+                (d->isOmited ? QString("%1=\"true\"").arg(kOmitedAttribute) : "")).toUtf8();
     if (d->number.has_value()) {
         xml += QString("<%1 %2=\"%3\"/>\n")
-               .arg(kNumberTag, kNumberValueAttribute, d->number->value);
+               .arg(kNumberTag, kNumberValueAttribute, d->number->value).toUtf8();
     }
     if (!d->stamp.isEmpty()) {
-        xml += QString("<%1><![CDATA[%2]]></%1>\n").arg(kStampTag, TextHelper::toHtmlEscaped(d->stamp));
+        xml += QString("<%1><![CDATA[%2]]></%1>\n").arg(kStampTag, TextHelper::toHtmlEscaped(d->stamp)).toUtf8();
     }
     if (d->plannedDuration.has_value()) {
-        xml += QString("<%1>%2</%1>\n").arg(kPlannedDurationTag, QString::number(*d->plannedDuration));
+        xml += QString("<%1>%2</%1>\n").arg(kPlannedDurationTag, QString::number(*d->plannedDuration)).toUtf8();
     }
-    xml.append(QString("<%1>\n").arg(kContentTag));
+    xml += QString("<%1>\n").arg(kContentTag).toUtf8();
     for (int childIndex = 0; childIndex < childCount(); ++childIndex) {
         auto child = childAt(childIndex);
 
@@ -277,8 +277,8 @@ QString ScreenplayTextModelSceneItem::toXml(ScreenplayTextModelItem* _from, int 
             xml += textItem->toXml();
         }
     }
-    xml.append(QString("</%1>\n").arg(kContentTag));
-    xml.append(QString("</%1>\n").arg(kSceneTag));
+    xml += QString("</%1>\n").arg(kContentTag).toUtf8();
+    xml += QString("</%1>\n").arg(kSceneTag).toUtf8();
 
     return xml;
 }

@@ -57,7 +57,7 @@ ScreenplayTextModelSplitterItemType ScreenplayTextModelSplitterItem::splitterTyp
     return d->type;
 }
 
-QString ScreenplayTextModelSplitterItem::toXml() const
+QByteArray ScreenplayTextModelSplitterItem::toXml() const
 {
     if (d->type == ScreenplayTextModelSplitterItemType::Undefined) {
         Q_ASSERT(0);
@@ -65,7 +65,7 @@ QString ScreenplayTextModelSplitterItem::toXml() const
     }
 
     return QString("<%1 %2=\"%3\"/>\n")
-            .arg(kSplitterTag, kTypeAttribute, kSplitterTypeToString.value(d->type));
+            .arg(kSplitterTag, kTypeAttribute, kSplitterTypeToString.value(d->type)).toUtf8();
 }
 
 } // namespace BusinessLayer

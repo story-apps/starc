@@ -48,7 +48,7 @@ public:
     /**
      * @brief Сформировать xml блока
      */
-    virtual QString toXml() const = 0;
+    virtual QByteArray toXml() const = 0;
 
 private:
     class Implementation;

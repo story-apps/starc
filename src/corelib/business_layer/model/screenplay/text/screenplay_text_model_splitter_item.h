@@ -47,7 +47,7 @@ public:
     /**
      * @brief Определяем интерфейс для получения XML блока
      */
-    QString toXml() const override;
+    QByteArray toXml() const override;
 
 private:
     class Implementation;

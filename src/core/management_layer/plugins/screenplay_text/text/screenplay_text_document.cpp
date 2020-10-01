@@ -46,6 +46,12 @@ public:
     explicit Implementation(ScreenplayTextDocument* _document);
 
     /**
+     * @brief Скорректировать позиции элементов на заданную дистанцию
+     */
+    void correctPositionsToItems(std::map<int, BusinessLayer::ScreenplayTextModelItem*>::iterator _from, int _distance);
+    void correctPositionsToItems(int _fromPosition, int _distance);
+
+    /**
      * @brief Считать содержимое элмента модели с заданным индексом
      *        и вставить считанные данные в текущее положение курсора
      */
@@ -71,6 +77,35 @@ ScreenplayTextDocument::Implementation::Implementation(ScreenplayTextDocument* _
     : q(_document),
       corrector(_document)
 {
+}
+
+void ScreenplayTextDocument::Implementation::correctPositionsToItems(std::map<int, BusinessLayer::ScreenplayTextModelItem*>::iterator _from, int _distance)
+{
+    if (_from == positionsToItems.end()) {
+        return;
+    }
+
+    if (_distance > 0) {
+        auto reversed = [] (std::map<int, BusinessLayer::ScreenplayTextModelItem*>::iterator iter) {
+            return std::prev(std::make_reverse_iterator(iter));
+        };
+        for (auto iter = positionsToItems.rbegin(); iter != std::make_reverse_iterator(_from); ++iter) {
+            auto itemToUpdate = positionsToItems.extract(iter->first);
+            itemToUpdate.key() = itemToUpdate.key() + _distance;
+            iter = reversed(positionsToItems.insert(std::move(itemToUpdate)).position);
+        }
+    } else if (_distance < 0) {
+        for (auto iter = _from; iter != positionsToItems.end(); ++iter) {
+            auto itemToUpdate = positionsToItems.extract(iter->first);
+            itemToUpdate.key() = itemToUpdate.key() + _distance;
+            iter = positionsToItems.insert(std::move(itemToUpdate)).position;
+        }
+    }
+}
+
+void ScreenplayTextDocument::Implementation::correctPositionsToItems(int _fromPosition, int _distance)
+{
+    correctPositionsToItems(positionsToItems.lower_bound(_fromPosition), _distance);
 }
 
 void ScreenplayTextDocument::Implementation::readModelItemContent(int _itemRow, const QModelIndex& _parent, ScreenplayTextCursor& _cursor, bool& _isFirstParagraph)
@@ -106,6 +141,7 @@ void ScreenplayTextDocument::Implementation::readModelItemContent(int _itemRow, 
                     //
                     // Запомним позицию разделителя
                     //
+                    correctPositionsToItems(_cursor.position(), 1);
                     positionsToItems.emplace(_cursor.position(), splitterItem);
 
                     //
@@ -170,6 +206,7 @@ void ScreenplayTextDocument::Implementation::readModelItemContent(int _itemRow, 
 
                 case ScreenplayTextModelSplitterItemType::End: {
                     _cursor.movePosition(QTextCursor::NextBlock);
+                    correctPositionsToItems(_cursor.position(), 1);
                     positionsToItems.emplace(_cursor.position(), splitterItem);
                     break;
                 }
@@ -182,6 +219,10 @@ void ScreenplayTextDocument::Implementation::readModelItemContent(int _itemRow, 
 
         case ScreenplayTextModelItemType::Text: {
             //
+            // При корректировке положений блоков нужно учитывать перенос строки
+            //
+            int additionalDistance = 1;
+            //
             // Если это не первый абзац, вставим блок для него
             //
             if (!_isFirstParagraph) {
@@ -192,12 +233,14 @@ void ScreenplayTextDocument::Implementation::readModelItemContent(int _itemRow, 
             //
             else {
                 _isFirstParagraph = false;
+                additionalDistance = 0;
             }
 
             //
             // Запомним позицию элемента
             //
             const auto textItem = static_cast<ScreenplayTextModelTextItem*>(item);
+            correctPositionsToItems(_cursor.position(), textItem->text().length() + additionalDistance);
             positionsToItems.emplace(_cursor.position(), textItem);
 
             //
@@ -394,8 +437,6 @@ void ScreenplayTextDocument::setModel(BusinessLayer::ScreenplayTextModel* _model
 
         QScopedValueRollback temporatryState(d->state, DocumentState::Changing);
 
-        QSignalBlocker signalBlocker(this);
-
         //
         // Определим позицию курсора откуда нужно начинать вставку
         //
@@ -405,11 +446,10 @@ void ScreenplayTextDocument::setModel(BusinessLayer::ScreenplayTextModel* _model
         } else {
             cursorItemIndex = _parent;
         }
-        if (!cursorItemIndex.isValid()) {
-            return;
-        }
         //
-        const int cursorPosition = itemEndPosition(cursorItemIndex);
+        bool isFirstParagraph = !cursorItemIndex.isValid();
+        const int cursorPosition = isFirstParagraph ? 0
+                                                    : itemEndPosition(cursorItemIndex);
         if (cursorPosition < 0) {
             return;
         }
@@ -418,12 +458,33 @@ void ScreenplayTextDocument::setModel(BusinessLayer::ScreenplayTextModel* _model
         // Собственно вставляем контент
         //
         ScreenplayTextCursor cursor(this);
-        cursor.setPosition(cursorPosition);
-        cursor.movePosition(QTextCursor::EndOfBlock);
-
         cursor.beginEditBlock();
 
-        bool isFirstParagraph = false;
+        cursor.setPosition(cursorPosition);
+        if (isFirstParagraph) {
+            //
+            // Если первый параграф, то нужно перенести блок со своими данными дальше
+            //
+            ScreenplayTextBlockData* blockData = nullptr;
+            auto block = cursor.block();
+            if (block.userData() != nullptr) {
+                blockData = new ScreenplayTextBlockData(static_cast<ScreenplayTextBlockData*>(block.userData()));
+                block.setUserData(nullptr);
+            }
+            cursor.insertBlock();
+            cursor.block().setUserData(blockData);
+            //
+            // И вернуться назад, для вставки данныхшт
+            //
+            cursor.movePosition(QTextCursor::PreviousBlock);
+            //
+            // Корректируем позиции всех блоков на один символ
+            //
+            d->correctPositionsToItems(0, 1);
+        } else {
+            cursor.movePosition(QTextCursor::EndOfBlock);
+        }
+
         for (int itemRow = _from; itemRow <= _to; ++itemRow) {
             d->readModelItemContent(itemRow, _parent, cursor, isFirstParagraph);
 
@@ -442,8 +503,6 @@ void ScreenplayTextDocument::setModel(BusinessLayer::ScreenplayTextModel* _model
         }
 
         QScopedValueRollback temporatryState(d->state, DocumentState::Changing);
-
-        QSignalBlocker signalBlocker(this);
 
         const QModelIndex fromIndex = d->model->index(_from, 0, _parent);
         if (!fromIndex.isValid()) {
@@ -464,7 +523,7 @@ void ScreenplayTextDocument::setModel(BusinessLayer::ScreenplayTextModel* _model
         if (!toIndex.isValid()) {
             return;
         }
-        const auto toPosition = itemStartPosition(toIndex);
+        const auto toPosition = itemEndPosition(toIndex);
         if (toPosition < 0) {
             return;
         }
@@ -473,9 +532,35 @@ void ScreenplayTextDocument::setModel(BusinessLayer::ScreenplayTextModel* _model
         cursor.setPosition(fromPosition);
         cursor.setPosition(toPosition, QTextCursor::KeepAnchor);
         cursor.movePosition(QTextCursor::EndOfBlock, QTextCursor::KeepAnchor);
+        //
+        // Если это самый первый блок, то нужно захватить на один символ больше, чтобы удалить сам блок
+        //
+        if (fromPosition == 0
+            && toPosition != characterCount()) {
+            cursor.movePosition(QTextCursor::NextCharacter, QTextCursor::KeepAnchor);
+        }
         if (!cursor.hasSelection()) {
             return;
         }
+
+        //
+        // Корректируем карту позиций элементов
+        //
+        auto fromIter = d->positionsToItems.lower_bound(cursor.selectionInterval().from);
+        auto endIter = d->positionsToItems.lower_bound(cursor.selectionInterval().to);
+        Q_ASSERT(fromIter != endIter);
+        //
+        // ... определим дистанцию занимаемую удаляемыми элементами
+        //
+        const auto distance = endIter->first - fromIter->first;
+        //
+        // ... удаляем сами элементы из карты
+        //
+        d->positionsToItems.erase(fromIter, endIter);
+        //
+        // ... корректируем позиции остальных элементов
+        //
+        d->correctPositionsToItems(cursor.selectionInterval().to, -1 * distance);
 
         cursor.deleteChar();
     });

@@ -216,16 +216,16 @@ QByteArray ScreenplayTextModelTextItem::Implementation::buildXml(int _from, int 
            .arg(toString(paragraphType),
                 (alignment.has_value() && alignment->testFlag(Qt::AlignHorizontal_Mask)
                  ? QString(" %1=\"%2\"").arg(kAlignAttribute, toString(*alignment))
-                 : ""));
+                 : "")).toUtf8();
     if (bookmark.has_value()) {
         xml += QString("<%1 %2=\"%3\"><![CDATA[%4]]></%1>")
                .arg(kBookmarkTag,
                     kColorAttribute, bookmark->color.name(),
-                    TextHelper::toHtmlEscaped(bookmark->text));
+                    TextHelper::toHtmlEscaped(bookmark->text)).toUtf8();
     }
     xml += QString("<%1><![CDATA[%2]]></%1>")
            .arg(kValueTag,
-                TextHelper::toHtmlEscaped(text.mid(_from, _length)));
+                TextHelper::toHtmlEscaped(text.mid(_from, _length))).toUtf8();
 
     //
     // Сохранить редакторские заметки
@@ -256,7 +256,7 @@ QByteArray ScreenplayTextModelTextItem::Implementation::buildXml(int _from, int 
     // Собственно сохраняем
     //
     if (!reviewMarksToSave.isEmpty()) {
-        xml += QString("<%1>").arg(kReviewMarksTag);
+        xml += QString("<%1>").arg(kReviewMarksTag).toUtf8();
         for (const auto& reviewMark : std::as_const(reviewMarksToSave)) {
             xml += QString("<%1 %2=\"%3\" %4=\"%5\" %6%7%9")
                    .arg(kReviewMarkTag,
@@ -270,7 +270,7 @@ QByteArray ScreenplayTextModelTextItem::Implementation::buildXml(int _from, int 
                          : ""),
                         (reviewMark.isDone
                          ? QString(" %1=\"true\"").arg(kDoneAttribute)
-                         : ""));
+                         : "")).toUtf8();
             if (!reviewMark.comments.isEmpty()) {
                 xml += ">";
                 for (const auto& comment : std::as_const(reviewMark.comments)) {
@@ -278,14 +278,14 @@ QByteArray ScreenplayTextModelTextItem::Implementation::buildXml(int _from, int 
                            .arg(kCommentTag,
                                 kAuthorAttribute, TextHelper::toHtmlEscaped(comment.author),
                                 kDateAttribute, comment.date,
-                                TextHelper::toHtmlEscaped(comment.text));
+                                TextHelper::toHtmlEscaped(comment.text)).toUtf8();
                 }
-                xml += QString("</%1>").arg(kReviewMarkTag);
+                xml += QString("</%1>").arg(kReviewMarkTag).toUtf8();
             } else {
                 xml += "/>";
             }
         }
-        xml += QString("</%1>").arg(kReviewMarksTag);
+        xml += QString("</%1>").arg(kReviewMarksTag).toUtf8();
     }
 
     //
@@ -317,7 +317,7 @@ QByteArray ScreenplayTextModelTextItem::Implementation::buildXml(int _from, int 
     // Собственно сохраняем
     //
     if (!formatsToSave.isEmpty()) {
-        xml += QString("<%1>").arg(kFormatsTag);
+        xml += QString("<%1>").arg(kFormatsTag).toUtf8();
         for (const auto& format : std::as_const(formatsToSave)) {
             xml += QString("<%1 %2=\"%3\" %4=\"%5\" %6%7%8/>")
                    .arg(kFormatTag,
@@ -331,30 +331,30 @@ QByteArray ScreenplayTextModelTextItem::Implementation::buildXml(int _from, int 
                          : ""),
                         (format.isUnderline
                          ? QString(" %1=\"true\"").arg(kUnderlineAttribute)
-                         : ""));
+                         : "")).toUtf8();
         }
-        xml += QString("</%1>").arg(kFormatsTag);
+        xml += QString("</%1>").arg(kFormatsTag).toUtf8();
     }
 
     //
     // Сохраняем ревизии блока
     //
     if (!revisions.isEmpty()) {
-        xml += QString("<%1>").arg(kRevisionsTag);
+        xml += QString("<%1>").arg(kRevisionsTag).toUtf8();
         for (const auto& revision : std::as_const(revisions)) {
             xml += QString("<%1 %2=\"%3\" %4=\"%5\" %6=\"%7\"/>")
                    .arg(kRevisionTag,
                         kFromAttribute, QString::number(revision.from),
                         kLengthAttribute, QString::number(revision.length),
-                        kColorAttribute, revision.color.name());
+                        kColorAttribute, revision.color.name()).toUtf8();
         }
-        xml += QString("</%1>").arg(kRevisionsTag);
+        xml += QString("</%1>").arg(kRevisionsTag).toUtf8();
     }
 
     //
     // Закрываем блок
     //
-    xml += QString("</%1>\n").arg(toString(paragraphType));
+    xml += QString("</%1>\n").arg(toString(paragraphType)).toUtf8();
 
     return xml;
 }
@@ -703,12 +703,12 @@ QVariant ScreenplayTextModelTextItem::data(int _role) const
     return ScreenplayTextModelItem::data(_role);
 }
 
-QString ScreenplayTextModelTextItem::toXml() const
+QByteArray ScreenplayTextModelTextItem::toXml() const
 {
     return d->xml;
 }
 
-QString ScreenplayTextModelTextItem::toXml(int _from, int _length)
+QByteArray ScreenplayTextModelTextItem::toXml(int _from, int _length)
 {
     //
     // Для блока целиком, используем закешированные данные

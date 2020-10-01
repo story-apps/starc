@@ -197,6 +197,9 @@ void ScreenplayTextCommentsModel::Implementation::processSourceModelRowsInserted
         const auto item = model->itemForIndex(itemIndex);
         if (item == nullptr
             || item->type() != ScreenplayTextModelItemType::Text) {
+            if (item->hasChildren()) {
+                processSourceModelRowsInserted(itemIndex, 0, item->childCount() - 1);
+            }
             continue;
         }
 
@@ -306,6 +309,9 @@ void ScreenplayTextCommentsModel::Implementation::processSourceModelRowsRemoved(
         const auto item = model->itemForIndex(itemIndex);
         if (item == nullptr
             || item->type() != ScreenplayTextModelItemType::Text) {
+            if (item->hasChildren()) {
+                processSourceModelRowsRemoved(itemIndex, 0, item->childCount() - 1);
+            }
             continue;
         }
 

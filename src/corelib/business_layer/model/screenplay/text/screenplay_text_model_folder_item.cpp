@@ -120,12 +120,12 @@ QVariant ScreenplayTextModelFolderItem::data(int _role) const
     }
 }
 
-QString ScreenplayTextModelFolderItem::toXml() const
+QByteArray ScreenplayTextModelFolderItem::toXml() const
 {
     return toXml(nullptr, 0, nullptr, 0);
 }
 
-QString ScreenplayTextModelFolderItem::toXml(ScreenplayTextModelItem* _from, int _fromPosition, ScreenplayTextModelItem* _to, int _toPosition) const
+QByteArray ScreenplayTextModelFolderItem::toXml(ScreenplayTextModelItem* _from, int _fromPosition, ScreenplayTextModelItem* _to, int _toPosition) const
 {
     auto folderFooterXml = [] {
         ScreenplayTextModelTextItem item;
@@ -136,8 +136,8 @@ QString ScreenplayTextModelFolderItem::toXml(ScreenplayTextModelItem* _from, int
     QByteArray xml;
     xml += QString("<%1 %2=\"%3\">\n")
            .arg(kFolderTag,
-                kUuidAttribute, d->uuid.toString());
-    xml.append(QString("<%1>\n").arg(kContentTag));
+                kUuidAttribute, d->uuid.toString()).toUtf8();
+    xml += QString("<%1>\n").arg(kContentTag).toUtf8();
     for (int childIndex = 0; childIndex < childCount(); ++childIndex) {
         auto child = childAt(childIndex);
 
@@ -208,8 +208,8 @@ QString ScreenplayTextModelFolderItem::toXml(ScreenplayTextModelItem* _from, int
             xml += textItem->toXml();
         }
     }
-    xml.append(QString("</%1>\n").arg(kContentTag));
-    xml.append(QString("</%1>\n").arg(kFolderTag));
+    xml += QString("</%1>\n").arg(kContentTag).toUtf8();
+    xml += QString("</%1>\n").arg(kFolderTag).toUtf8();
 
     return xml;
 }

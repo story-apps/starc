@@ -125,8 +125,8 @@ public:
     /**
      * @brief Определяем интерфейс для получения XML блока
      */
-    QString toXml() const override;
-    QString toXml(int _from, int _length);
+    QByteArray toXml() const override;
+    QByteArray toXml(int _from, int _length);
 
 private:
     /**

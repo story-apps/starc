@@ -13,6 +13,7 @@
 #include <utils/tools/model_index_path.h>
 
 #include <QDomDocument>
+#include <QMimeData>
 
 
 namespace BusinessLayer
@@ -63,6 +64,15 @@ public:
      * @brief Модель локаций
      */
     LocationsModel* locationModel = nullptr;
+
+    /**
+     * @brief Последние скопированные данные модели
+     */
+    struct {
+        QModelIndex from;
+        QModelIndex to;
+        QMimeData* data = nullptr;
+    } lastMime;
 };
 
 ScreenplayTextModel::Implementation::Implementation()
@@ -348,10 +358,14 @@ int ScreenplayTextModel::rowCount(const QModelIndex& _parent) const
 
 Qt::ItemFlags ScreenplayTextModel::flags(const QModelIndex& _index) const
 {
-    //
-    // TODO:
-    //
-    return Qt::ItemIsEnabled | Qt::ItemIsSelectable;
+    Qt::ItemFlags flags = Qt::ItemIsEnabled | Qt::ItemIsSelectable | Qt::ItemIsDragEnabled;
+
+    const auto item = itemForIndex(_index);
+    if (item->type() == ScreenplayTextModelItemType::Folder) {
+        flags |= Qt::ItemIsDropEnabled;
+    }
+
+    return flags;
 }
 
 QVariant ScreenplayTextModel::data(const QModelIndex& _index, int _role) const
@@ -370,17 +384,165 @@ QVariant ScreenplayTextModel::data(const QModelIndex& _index, int _role) const
 
 bool ScreenplayTextModel::canDropMimeData(const QMimeData* _data, Qt::DropAction _action, int _row, int _column, const QModelIndex& _parent) const
 {
-    return false;
+    Q_UNUSED(_action);
+    Q_UNUSED(_row);
+    Q_UNUSED(_column);
+    Q_UNUSED(_parent);
+
+    return _data->formats().contains(mimeTypes().first());
 }
 
 bool ScreenplayTextModel::dropMimeData(const QMimeData* _data, Qt::DropAction _action, int _row, int _column, const QModelIndex& _parent)
 {
-    return false;
+    Q_UNUSED(_column);
+
+    //
+    // _row - индекс, куда вставлять, если в папку, то он равен -1 и если в самый низ списка, то он тоже равен -1
+    //
+
+    if (_data == 0
+        || !canDropMimeData(_data, _action, _row, _column, _parent)) {
+        return false;
+    }
+
+    switch (_action) {
+        case Qt::IgnoreAction: {
+            return true;
+        }
+
+        case Qt::MoveAction:
+        case Qt::CopyAction: {
+            //
+            // Определим элемент после которого планируется вставить данные
+            //
+            QModelIndex insertAnchorIndex;
+            if (_row == -1) {
+                if (_parent.isValid()) {
+                    insertAnchorIndex = _parent;
+                } else {
+                    insertAnchorIndex = index(d->rootItem->childCount() - 1, 0);
+                }
+            } else {
+                insertAnchorIndex = index(_row - 1, 0, _parent);
+            }
+            if (d->lastMime.from == insertAnchorIndex
+                || d->lastMime.to == insertAnchorIndex) {
+                return false;
+            }
+            ScreenplayTextModelItem* insertAnchorItem = itemForIndex(insertAnchorIndex);
+
+            //
+            // Если это перемещение внутри модели, то удалим старые элементы
+            //
+            if (d->lastMime.data == _data) {
+                for (int row = d->lastMime.from.row(); row <= d->lastMime.to.row(); ++row) {
+                    const auto& itemIndex = index(row, 0, d->lastMime.from.parent());
+                    auto item = itemForIndex(itemIndex);
+                    removeItem(item);
+                }
+                d->lastMime = {};
+            }
+
+            //
+            // Вставим перемещаемые элементы
+            //
+            // ... cчитываем данные и последовательно вставляем в модель
+            //
+            QDomDocument domDocument;
+            domDocument.setContent(_data->data(mimeTypes().first()));
+            auto documentNode = domDocument.firstChildElement(xml::kDocumentTag);
+            auto contentNode = documentNode.firstChildElement();
+            bool isFirstItemHandled = false;
+            ScreenplayTextModelItem* lastItem = insertAnchorItem;
+            while (!contentNode.isNull()) {
+                ScreenplayTextModelItem* newItem = nullptr;
+                if (contentNode.nodeName() == xml::kFolderTag) {
+                    newItem = new ScreenplayTextModelFolderItem(contentNode);
+                } else if (contentNode.nodeName() == xml::kSceneTag) {
+                    newItem = new ScreenplayTextModelSceneItem(contentNode);
+                } else if (contentNode.nodeName() == xml::kSplitterTag) {
+                    newItem = new ScreenplayTextModelSplitterItem(contentNode);
+                } else {
+                    newItem = new ScreenplayTextModelTextItem(contentNode);
+                }
+
+                if (!isFirstItemHandled) {
+                    isFirstItemHandled = true;
+                    if (_row == 0) {
+                        prependItem(newItem, lastItem);
+                    } else if (_row > 0) {
+                        insertItem(newItem, lastItem);
+                    } else {
+                        appendItem(newItem, lastItem);
+                    }
+                } else {
+                    insertItem(newItem, lastItem);
+                }
+
+                lastItem = newItem;
+                contentNode = contentNode.nextSiblingElement();
+            }
+
+            return true;
+        }
+
+        default: {
+            return false;
+        }
+    }
 }
 
 QMimeData* ScreenplayTextModel::mimeData(const QModelIndexList& _indexes) const
 {
-    return nullptr;
+    if (_indexes.isEmpty()) {
+        return nullptr;
+    }
+
+    //
+    // Выделение может быть только последовательным, но нужно учесть ситуацию, когда в выделение
+    // попадает родительский элемент и не все его дочерние элементы, поэтому просто использовать
+    // последний элемент некорректно, нужно проверить, не входит ли его родитель в выделение
+    //
+
+    QModelIndexList correctedIndexes;
+    for (const auto& index : _indexes) {
+        if (!_indexes.contains(index.parent())) {
+            correctedIndexes.append(index);
+        }
+    }
+    if (correctedIndexes.isEmpty()) {
+        return nullptr;
+    }
+
+    //
+    // Для того, чтобы запретить разрывать папки проверяем выделены ли элементы одного уровня
+    //
+    bool itemsHaveSameParent = true;
+    const QModelIndex& genericParent = correctedIndexes.first().parent();
+    for (const auto& index : correctedIndexes) {
+        if (index.parent() != genericParent) {
+            itemsHaveSameParent = false;
+            break;
+        }
+    }
+    if (!itemsHaveSameParent) {
+        return nullptr;
+    }
+
+    //
+    // Если выделены элементы одного уровня, то создаём майм-данные
+    //
+
+    std::sort(correctedIndexes.begin(), correctedIndexes.end());
+    QModelIndex fromIndex = correctedIndexes.first();
+    QModelIndex toIndex = correctedIndexes.last();
+
+    auto mimeData = new QMimeData;
+    mimeData->setData(mimeTypes().first(), mimeFromSelection(fromIndex, 0, toIndex, 1).toUtf8());
+
+    d->lastMime = { fromIndex, toIndex, mimeData };
+
+    return mimeData;
 }
 
 QStringList ScreenplayTextModel::mimeTypes() const
@@ -551,9 +713,9 @@ void ScreenplayTextModel::insertFromMime(const QModelIndex& _index, int _positio
         //
         if ((contentNode.nodeName() == xml::kFolderTag
              || contentNode.nodeName() == xml::kSceneTag)
-            && (lastItem->type() == ScreenplayTextModelItemType::Text
-                || lastItem->type() == ScreenplayTextModelItemType::Splitter)
-            && lastItem->parent()->type() == ScreenplayTextModelItemType::Scene) {
+                && (lastItem->type() == ScreenplayTextModelItemType::Text
+                    || lastItem->type() == ScreenplayTextModelItemType::Splitter)
+                && lastItem->parent()->type() == ScreenplayTextModelItemType::Scene) {
             //
             // ... и при этом вырезаем из него все текстовые блоки, идущие до конца сцены/папки
             //
@@ -574,8 +736,7 @@ void ScreenplayTextModel::insertFromMime(const QModelIndex& _index, int _positio
             newItem = new ScreenplayTextModelFolderItem(contentNode);
         } else if (contentNode.nodeName() == xml::kSceneTag) {
             newItem = new ScreenplayTextModelSceneItem(contentNode);
-        }
-        else if (contentNode.nodeName() == xml::kSplitterTag) {
+        } else if (contentNode.nodeName() == xml::kSplitterTag) {
             newItem = new ScreenplayTextModelSplitterItem(contentNode);
         } else {
             auto newTextItem = new ScreenplayTextModelTextItem(contentNode);

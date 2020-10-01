@@ -61,8 +61,8 @@ public:
     /**
      * @brief Определяем интерфейс для получения XML блока
      */
-    QString toXml() const override;
-    QString toXml(ScreenplayTextModelItem* _from, int _fromPosition, ScreenplayTextModelItem* _to, int _toPosition) const;
+    QByteArray toXml() const override;
+    QByteArray toXml(ScreenplayTextModelItem* _from, int _fromPosition, ScreenplayTextModelItem* _to, int _toPosition) const;
 
 protected:
     /**

@@ -57,12 +57,18 @@ ScreenplayTextScrollBarManager::ScreenplayTextScrollBarManager(QAbstractScrollAr
     d->updateTimelineGeometry();
 }
 
+ScreenplayTextScrollBarManager::~ScreenplayTextScrollBarManager() = default;
+
 void ScreenplayTextScrollBarManager::initScrollBarsSyncing()
 {
     connect(d->scrollbar, &QScrollBar::rangeChanged, this, [this] (int _minimum, int _maximum) {
         d->timeline->setScrollable(_minimum < _maximum);
     });
     auto updateTimelineValue = [this] {
+        if (d->model == nullptr) {
+            return;
+        }
+
         QSignalBlocker signalBlocker(d->timeline);
         if (d->scrollbar->maximum() == 0) {
             d->timeline->setValue({});
@@ -79,8 +85,6 @@ void ScreenplayTextScrollBarManager::initScrollBarsSyncing()
     });
     connect(d->timeline, &ScreenplayTextTimeline::updateValueRequested, this, updateTimelineValue);
 }
-
-ScreenplayTextScrollBarManager::~ScreenplayTextScrollBarManager() = default;
 
 void ScreenplayTextScrollBarManager::setModel(BusinessLayer::ScreenplayTextModel* _model)
 {
