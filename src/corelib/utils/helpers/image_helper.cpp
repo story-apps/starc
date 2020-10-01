@@ -5,6 +5,7 @@
 #include <QCache>
 #include <QIcon>
 #include <QPainter>
+#include <QPainterPath>
 #include <QPixmap>
 #include <QtMath>
 
