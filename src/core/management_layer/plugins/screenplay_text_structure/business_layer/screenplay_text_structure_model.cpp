@@ -3,6 +3,8 @@
 #include <business_layer/model/screenplay/text/screenplay_text_model.h>
 #include <business_layer/model/screenplay/text/screenplay_text_model_item.h>
 
+#include <QApplication>
+
 
 namespace BusinessLayer
 {
@@ -30,6 +32,16 @@ void ScreenplayTextStructureModel::setSourceModel(QAbstractItemModel* _sourceMod
     d->screenplayModel = qobject_cast<ScreenplayTextModel*>(_sourceModel);
 
     QSortFilterProxyModel::setSourceModel(_sourceModel);
+
+    //
+    // FIXME: Это сделано из-за того, что при перемещении элементов внутри модели сценария
+    //        в позицию 0, на вторую попытку происходит падение внутри QSortFilterModel,
+    //        видимо не успевает происходить какая-то внутренняя магия при синхронном удалении
+    //        и последующей вставки элементов в модели
+    //
+    connect(d->screenplayModel, &ScreenplayTextModel::rowsRemoved, this, [] {
+        QApplication::processEvents(QEventLoop::ExcludeUserInputEvents);
+    });
 }
 
 bool ScreenplayTextStructureModel::filterAcceptsRow(int _sourceRow, const QModelIndex& _sourceParent) const
