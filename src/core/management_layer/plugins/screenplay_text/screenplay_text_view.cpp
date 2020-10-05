@@ -173,8 +173,10 @@ void ScreenplayTextView::Implementation::updateToolBarCurrentParagraphTypeName()
     if (paragraphType == BusinessLayer::ScreenplayParagraphType::FolderFooter) {
         paragraphType = BusinessLayer::ScreenplayParagraphType::FolderHeader;
         toolBar->setParagraphTypesEnabled(false);
+        fastFormatWidget->setEnabled(false);
     } else {
         toolBar->setParagraphTypesEnabled(true);
+        fastFormatWidget->setEnabled(true);
     }
 
     for (int itemRow = 0; itemRow < paragraphTypesModel->rowCount(); ++itemRow) {
