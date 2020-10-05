@@ -44,9 +44,9 @@ public:
     QVector<Subtitle2Label*> colors() const;
 
 
+    RadioButton* light = nullptr;
     RadioButton* darkAndLight = nullptr;
     RadioButton* dark = nullptr;
-    RadioButton* light = nullptr;
     RadioButton* custom = nullptr;
     Widget* customPalette = nullptr;
     QGridLayout* customPaletteLayout = nullptr;
@@ -69,9 +69,9 @@ public:
 };
 
 ThemeDialog::Implementation::Implementation(QWidget* _parent)
-    : darkAndLight(new RadioButton(_parent)),
+    : light(new RadioButton(_parent)),
+      darkAndLight(new RadioButton(_parent)),
       dark(new RadioButton(_parent)),
-      light(new RadioButton(_parent)),
       custom(new RadioButton(_parent)),
       customPalette(new Widget(_parent)),
       primary(new Subtitle2Label(_parent)),
@@ -89,10 +89,10 @@ ThemeDialog::Implementation::Implementation(QWidget* _parent)
       customThemeHash(new TextField(_parent)),
       okButton(new Button(_parent))
 {
-    darkAndLight->setChecked(true);
+    light->setChecked(true);
+    light->setProperty(kThemeKey, static_cast<int>(ApplicationTheme::Light));
     darkAndLight->setProperty(kThemeKey, static_cast<int>(ApplicationTheme::DarkAndLight));
     dark->setProperty(kThemeKey, static_cast<int>(ApplicationTheme::Dark));
-    light->setProperty(kThemeKey, static_cast<int>(ApplicationTheme::Light));
     custom->setProperty(kThemeKey, static_cast<int>(ApplicationTheme::Custom));
 
     customPaletteLayout = new QGridLayout;
@@ -126,9 +126,9 @@ ThemeDialog::Implementation::Implementation(QWidget* _parent)
     buttonsLayout->addWidget(okButton);
 
     RadioButtonGroup* projectLocationGroup = new RadioButtonGroup(_parent);
+    projectLocationGroup->add(light);
     projectLocationGroup->add(darkAndLight);
     projectLocationGroup->add(dark);
-    projectLocationGroup->add(light);
     projectLocationGroup->add(custom);
 }
 
@@ -163,9 +163,9 @@ ThemeDialog::ThemeDialog(QWidget* _parent)
     : AbstractDialog(_parent),
       d(new Implementation(this))
 {
-    contentsLayout()->addWidget(d->darkAndLight, 0, 0);
-    contentsLayout()->addWidget(d->dark, 0, 1);
-    contentsLayout()->addWidget(d->light, 0, 2);
+    contentsLayout()->addWidget(d->light, 0, 0);
+    contentsLayout()->addWidget(d->darkAndLight, 0, 1);
+    contentsLayout()->addWidget(d->dark, 0, 2);
     contentsLayout()->setColumnStretch(3, 1);
     contentsLayout()->addWidget(d->custom, 1, 0, 1, 3);
     contentsLayout()->addWidget(d->customPalette, 2, 0, 1, 4);

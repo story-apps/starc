@@ -54,12 +54,12 @@ public:
 
     Widget* themePage = nullptr;
     H5Label* themeTitleLabel = nullptr;
+    RadioButton* lightThemeButton = nullptr;
+    Body2Label* lightThemeInfoLabel = nullptr;
     RadioButton* darkAndLightThemeButton = nullptr;
     Body2Label* darkAndLightThemeInfoLabel = nullptr;
     RadioButton* darkThemeButton = nullptr;
     Body2Label* darkThemeInfoLabel = nullptr;
-    RadioButton* lightThemeButton = nullptr;
-    Body2Label* lightThemeInfoLabel = nullptr;
     H6Label* scaleFactorTitleLabel = nullptr;
     Slider* scaleFactorSlider = nullptr;
     Body2Label* scaleFactorSmallInfoLabel = nullptr;
@@ -207,19 +207,19 @@ void OnboardingView::Implementation::initThemePage()
         });
         return radioButton;
     };
-    darkAndLightThemeButton = initThemeButton(ApplicationTheme::DarkAndLight);
-    darkAndLightThemeButton->setChecked(true);
-    darkThemeButton = initThemeButton(ApplicationTheme::Dark);
     lightThemeButton = initThemeButton(ApplicationTheme::Light);
+    lightThemeButton->setChecked(true);
+    darkAndLightThemeButton = initThemeButton(ApplicationTheme::DarkAndLight);
+    darkThemeButton = initThemeButton(ApplicationTheme::Dark);
 
     RadioButtonGroup* themesGroup = new RadioButtonGroup(languagePage);
+    themesGroup->add(lightThemeButton);
     themesGroup->add(darkAndLightThemeButton);
     themesGroup->add(darkThemeButton);
-    themesGroup->add(lightThemeButton);
 
+    lightThemeInfoLabel = new Body2Label(themePage);
     darkAndLightThemeInfoLabel = new Body2Label(themePage);
     darkThemeInfoLabel = new Body2Label(themePage);
-    lightThemeInfoLabel = new Body2Label(themePage);
 
     scaleFactorTitleLabel = new H6Label(themePage);
     scaleFactorSlider = new Slider(themePage);
@@ -243,12 +243,12 @@ void OnboardingView::Implementation::initThemePage()
     themePageLayout->setSpacing(0);
     themePageLayout->setContentsMargins({});
     themePageLayout->addWidget(themeTitleLabel, 0, 0, 1, 3);
-    themePageLayout->addWidget(darkAndLightThemeButton, 1, 0, 1, 3);
-    themePageLayout->addWidget(darkAndLightThemeInfoLabel, 2, 0, 1, 3);
-    themePageLayout->addWidget(darkThemeButton, 3, 0, 1, 3);
-    themePageLayout->addWidget(darkThemeInfoLabel, 4, 0, 1, 3);
-    themePageLayout->addWidget(lightThemeButton, 5, 0, 1, 3);
-    themePageLayout->addWidget(lightThemeInfoLabel, 6, 0, 1, 3);
+    themePageLayout->addWidget(lightThemeButton, 1, 0, 1, 3);
+    themePageLayout->addWidget(lightThemeInfoLabel, 2, 0, 1, 3);
+    themePageLayout->addWidget(darkAndLightThemeButton, 3, 0, 1, 3);
+    themePageLayout->addWidget(darkAndLightThemeInfoLabel, 4, 0, 1, 3);
+    themePageLayout->addWidget(darkThemeButton, 5, 0, 1, 3);
+    themePageLayout->addWidget(darkThemeInfoLabel, 6, 0, 1, 3);
     themePageLayout->addWidget(scaleFactorTitleLabel, 7, 0, 1, 3);
     themePageLayout->addWidget(scaleFactorSlider, 8, 0, 1, 3);
     themePageLayout->addWidget(scaleFactorSmallInfoLabel, 9, 0, 1, 1);
