@@ -513,12 +513,6 @@ void ScreenplayTextDocument::setModel(BusinessLayer::ScreenplayTextModel* _model
             return;
         }
         //
-        // Если это не самый первый блок, то нужно взять на один символ назад, чтобы удалить сам блок
-        //
-        else if (fromPosition > 0) {
-            --fromPosition;
-        }
-        //
         const QModelIndex toIndex = d->model->index(_to, 0, _parent);
         if (!toIndex.isValid()) {
             return;
@@ -532,13 +526,6 @@ void ScreenplayTextDocument::setModel(BusinessLayer::ScreenplayTextModel* _model
         cursor.setPosition(fromPosition);
         cursor.setPosition(toPosition, QTextCursor::KeepAnchor);
         cursor.movePosition(QTextCursor::EndOfBlock, QTextCursor::KeepAnchor);
-        //
-        // Если это самый первый блок, то нужно захватить на один символ больше, чтобы удалить сам блок
-        //
-        if (fromPosition == 0
-            && toPosition != characterCount()) {
-            cursor.movePosition(QTextCursor::NextCharacter, QTextCursor::KeepAnchor);
-        }
         if (!cursor.hasSelection()) {
             return;
         }
@@ -562,7 +549,33 @@ void ScreenplayTextDocument::setModel(BusinessLayer::ScreenplayTextModel* _model
         //
         d->correctPositionsToItems(cursor.selectionInterval().to, -1 * distance);
 
+        cursor.beginEditBlock();
         cursor.deleteChar();
+        //
+        // Если это самый первый блок, то нужно удалить на один символ больше, чтобы удалить сам блок
+        //
+        if (fromPosition == 0
+            && toPosition != characterCount()) {
+            cursor.deleteChar();
+        }
+        //
+        // Если это не самый первый блок, то нужно взять на один символ назад, чтобы удалить сам блок
+        //
+        else if (fromPosition > 0) {
+            //
+            // ... и при этом нужно сохранить данные блока и его формат
+            //
+            ScreenplayTextBlockData* blockData = nullptr;
+            auto block = cursor.block().previous();
+            if (block.userData() != nullptr) {
+                blockData = new ScreenplayTextBlockData(static_cast<ScreenplayTextBlockData*>(block.userData()));
+            }
+            const auto blockFormat = cursor.block().previous().blockFormat();
+            cursor.deletePreviousChar();
+            cursor.block().setUserData(blockData);
+            cursor.setBlockFormat(blockFormat);
+        }
+        cursor.endEditBlock();
     });
 
     d->state = DocumentState::Ready;

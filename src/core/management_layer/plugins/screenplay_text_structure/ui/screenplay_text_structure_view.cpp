@@ -38,6 +38,7 @@ ScreenplayTextStructureView::Implementation::Implementation(QWidget* _parent)
     backIcon->setText(u8"\U000f0141");
 
     content->setDragDropEnabled(true);
+    content->setSelectionMode(QAbstractItemView::ContiguousSelection);
     content->setItemDelegate(contentDelegate);
 }
 
@@ -64,7 +65,7 @@ ScreenplayTextStructureView::ScreenplayTextStructureView(QWidget* _parent)
 
     connect(d->backIcon, &AbstractLabel::clicked, this, &ScreenplayTextStructureView::backPressed);
     connect(d->backText, &AbstractLabel::clicked, this, &ScreenplayTextStructureView::backPressed);
-    connect(d->content, &Tree::currentIndexChanged, this, &ScreenplayTextStructureView::currentModelIndexChanged);
+    connect(d->content, &Tree::clicked, this, &ScreenplayTextStructureView::currentModelIndexChanged);
 
     updateTranslations();
     designSystemChangeEvent(nullptr);

@@ -205,7 +205,7 @@ void ScreenplayTextModel::prependItem(ScreenplayTextModelItem* _item, Screenplay
 
     const QModelIndex parentIndex = indexForItem(_parentItem);
     beginInsertRows(parentIndex, 0, 0);
-    _parentItem->insertItem(0, _item);
+    _parentItem->prependItem(_item);
     d->updateNumbering();
     endInsertRows();
 }
@@ -416,14 +416,36 @@ bool ScreenplayTextModel::dropMimeData(const QMimeData* _data, Qt::DropAction _a
             // Определим элемент после которого планируется вставить данные
             //
             QModelIndex insertAnchorIndex;
-            if (_row == -1) {
+            //
+            // ... вкладывается первым
+            //
+            if (_row == 0) {
+                insertAnchorIndex = _parent;
+            }
+            //
+            // ... вкладывается в конец
+            //
+            else if (_row == -1) {
                 if (_parent.isValid()) {
                     insertAnchorIndex = _parent;
                 } else {
                     insertAnchorIndex = index(d->rootItem->childCount() - 1, 0);
                 }
-            } else {
-                insertAnchorIndex = index(_row - 1, 0, _parent);
+            }
+            //
+            // ... устанавливается после заданного
+            //
+            else {
+                int delta = 1;
+                if (_parent.isValid()
+                    && rowCount(_parent) == _row) {
+                    //
+                    // ... для папок, при вставке в самый конец также нужно учитывать
+                    //     текстовый блок закрывающий папку
+                    //
+                    ++delta;
+                }
+                insertAnchorIndex = index(_row - delta, 0, _parent);
             }
             if (d->lastMime.from == insertAnchorIndex
                 || d->lastMime.to == insertAnchorIndex) {
@@ -435,7 +457,7 @@ bool ScreenplayTextModel::dropMimeData(const QMimeData* _data, Qt::DropAction _a
             // Если это перемещение внутри модели, то удалим старые элементы
             //
             if (d->lastMime.data == _data) {
-                for (int row = d->lastMime.from.row(); row <= d->lastMime.to.row(); ++row) {
+                for (int row = d->lastMime.to.row(); row >= d->lastMime.from.row(); --row) {
                     const auto& itemIndex = index(row, 0, d->lastMime.from.parent());
                     auto item = itemForIndex(itemIndex);
                     removeItem(item);
@@ -468,12 +490,47 @@ bool ScreenplayTextModel::dropMimeData(const QMimeData* _data, Qt::DropAction _a
 
                 if (!isFirstItemHandled) {
                     isFirstItemHandled = true;
+                    //
+                    // Вставить в начало папки
+                    //
                     if (_row == 0) {
-                        prependItem(newItem, lastItem);
-                    } else if (_row > 0) {
+                        //
+                        // При вставке в папку, нужно не забыть про открывающий папку блок
+                        //
+                        if (lastItem->type() == ScreenplayTextModelItemType::Folder
+                            && _parent.isValid()) {
+                            insertItem(newItem, lastItem->childAt(0));
+                        }
+                        //
+                        // В остальных слачаях, добавляем в начало
+                        //
+                        else {
+                            prependItem(newItem, lastItem);
+                        }
+                    }
+                    //
+                    // Вставить в конец папки
+                    //
+                    else if (_row == -1) {
+                        //
+                        // При вставке в папку, нужно не забыть про завершающий папку блок
+                        //
+                        if (lastItem->type() == ScreenplayTextModelItemType::Folder
+                                && _parent.isValid()) {
+                            insertItem(newItem, lastItem->childAt(lastItem->childCount() - 2));
+                        }
+                        //
+                        // В остальных случаях просто вставляем после предыдущего
+                        //
+                        else {
+                            insertItem(newItem, lastItem);
+                        }
+                    }
+                    //
+                    // Вставить в середину папки
+                    //
+                    else {
                         insertItem(newItem, lastItem);
-                    } else {
-                        appendItem(newItem, lastItem);
                     }
                 } else {
                     insertItem(newItem, lastItem);
@@ -686,12 +743,23 @@ void ScreenplayTextModel::insertFromMime(const QModelIndex& _index, int _positio
     // Извлекаем остающийся в блоке текст, если нужно
     //
     QString sourceBlockEndContent;
+    QVector<ScreenplayTextModelItem*> lastItemsFromSourceScene;
     if (item->type() == ScreenplayTextModelItemType::Text) {
         auto textItem = static_cast<ScreenplayTextModelTextItem*>(item);
-        if (textItem->text().length() > _position) {
+        //
+        // Если вставка идёт в самое начало блока, то просто переносим блок после вставляемого фрагмента
+        //
+        if (_position == 0) {
+            lastItemsFromSourceScene.append(textItem);
+        }
+        //
+        // В противном случае, дробим блок на две части
+        //
+        else if (textItem->text().length() > _position) {
             sourceBlockEndContent = mimeFromSelection(_index, _position,
                                                      _index, textItem->text().length());
             textItem->removeText(_position);
+            updateItem(textItem);
         }
     }
 
@@ -704,7 +772,6 @@ void ScreenplayTextModel::insertFromMime(const QModelIndex& _index, int _positio
     auto contentNode = documentNode.firstChildElement();
     bool isFirstTextItemHandled = false;
     ScreenplayTextModelItem* lastItem = item;
-    QVector<ScreenplayTextModelItem*> lastItemsFromSourceScene;
     while (!contentNode.isNull()) {
         ScreenplayTextModelItem* newItem = nullptr;
         //
@@ -723,7 +790,6 @@ void ScreenplayTextModel::insertFromMime(const QModelIndex& _index, int _positio
             const int maxSize = lastItemParent->rowOfChild(lastItem) + 1;
             while (lastItemParent->childCount() > maxSize) {
                 lastItemsFromSourceScene.append(lastItemParent->childAt(maxSize));
-                takeItem(lastItemsFromSourceScene.last(), lastItemParent);
             }
             //
             // Собственно берём родителя вместо самого элемента
@@ -753,6 +819,10 @@ void ScreenplayTextModel::insertFromMime(const QModelIndex& _index, int _positio
                 textItem->mergeWith(newTextItem);
                 updateItem(textItem);
                 delete newTextItem;
+                //
+                // ... и исключаем исходный блок из переноса, если он был туда помещён
+                //
+                lastItemsFromSourceScene.removeAll(textItem);
             }
             //
             // В противном случае вставляем текстовый элемент в модель
@@ -796,7 +866,7 @@ void ScreenplayTextModel::insertFromMime(const QModelIndex& _index, int _positio
         // В противном случае, вставляем текстовый элемент после последнего вставленного
         //
         else {
-            insertItem(item, lastItem);
+            appendItem(item, lastItem);
             lastItem = item;
         }
     }
@@ -806,11 +876,19 @@ void ScreenplayTextModel::insertFromMime(const QModelIndex& _index, int _positio
     //
     if (!lastItemsFromSourceScene.isEmpty()) {
         //
-        // Просто вставляем их в после последнего элемента
+        // Извлечём блоки из родителя
         //
         for (auto item : lastItemsFromSourceScene) {
-            if (lastItem->type() == ScreenplayTextModelItemType::Folder
-                || lastItem->type() == ScreenplayTextModelItemType::Scene) {
+            if (item->hasParent()) {
+                takeItem(item, item->parent());
+            }
+        }
+
+        //
+        // Просто вставляем их внутрь или после последнего элемента
+        //
+        for (auto item : lastItemsFromSourceScene) {
+            if (lastItem->type() == ScreenplayTextModelItemType::Scene) {
                 appendItem(item, lastItem);
             } else {
                 insertItem(item, lastItem);

@@ -111,6 +111,10 @@ void Tree::setItemDelegate(QAbstractItemDelegate* _delegate)
 
 void Tree::setCurrentIndex(const QModelIndex& _index)
 {
+    if (d->tree->selectionModel()->selectedIndexes().contains(_index)) {
+        return;
+    }
+
     d->tree->setCurrentIndex(_index);
 }
 
