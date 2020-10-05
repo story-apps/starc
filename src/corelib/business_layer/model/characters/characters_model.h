@@ -35,6 +35,11 @@ public:
     void createCharacter(const QString& _name, const QByteArray& _content = {});
 
     /**
+     * @brief Существует ли персонаж с заданным именем
+     */
+    bool exists(const QString& _name) const;
+
+    /**
      * @brief Реализация древовидной модели
      */
     /** @{ */

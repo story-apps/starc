@@ -2,6 +2,7 @@
 
 #include "../screenplay_text_edit.h"
 
+#include <business_layer/model/characters/characters_model.h>
 #include <business_layer/model/screenplay/screenplay_dictionaries_model.h>
 #include <business_layer/templates/screenplay_template.h>
 
@@ -70,9 +71,19 @@ void ActionHandler::handleEnter(QKeyEvent*)
                 //! Текст не пуст
 
                 //
+                // Если введён персонаж, меняем стиль блока и переходим к реплике
+                //
+                if (cursorForwardText.isEmpty()
+                    && editor()->characters()->exists(cursorBackwardText)) {
+                    editor()->setCurrentParagraphType(ScreenplayParagraphType::Character);
+                    editor()->addParagraph(ScreenplayParagraphType::Dialogue);
+                }
+                //
                 // Вставляем блок и применяем ему стиль описания действия
                 //
-                editor()->addParagraph(jumpForEnter(ScreenplayParagraphType::Action));
+                else {
+                    editor()->addParagraph(jumpForEnter(ScreenplayParagraphType::Action));
+                }
             }
         }
 	}

@@ -71,6 +71,17 @@ void CharactersModel::createCharacter(const QString& _name, const QByteArray& _c
     emit createCharacterRequested(_name, _content);
 }
 
+bool CharactersModel::exists(const QString& _name) const
+{
+    for (const auto character : d->characterModels) {
+        if (character->name() == _name) {
+            return true;
+        }
+    }
+
+    return false;
+}
+
 QModelIndex CharactersModel::index(int _row, int _column, const QModelIndex& _parent) const
 {
     if (_row < 0
