@@ -44,6 +44,12 @@ public:
     void setError(const QString& _text);
 
     /**
+     * @brief Перекрываем собственной реализацией
+     */
+    void setPlaceholderText(const QString& _placeholder);
+    QString placeholderText() const;
+
+    /**
      * @brief Задать суффикс для поля ввода
      */
     void setSuffix(const QString& _suffix);
@@ -68,6 +74,11 @@ public:
      */
     void setPasswordModeEnabled(bool _enable);
     bool isPasswordModeEnabled() const;
+
+    /**
+     * @brief Установить видимость декоративной полосы под текстом
+     */
+    void setUnderlineDecorationVisible(bool _visible);
 
     /**
      * @brief Установить необходимость добавления новых строк при нажатии Enter'а

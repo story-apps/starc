@@ -56,6 +56,11 @@ protected:
     void paintEvent(QPaintEvent* _event) override;
 
     /**
+     * @brief Если при отображении курсор уже над панелью, то не анимируем ховер
+     */
+    void showEvent(QShowEvent* _event) override;
+
+    /**
      * @brief Переопределяем для реализации эффекта поднятия виджета при ховере
      */
     void enterEvent(QEvent* _event) override;

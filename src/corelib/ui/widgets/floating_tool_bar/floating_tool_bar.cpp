@@ -88,6 +88,11 @@ void FloatingToolBar::Implementation::animateClick()
 
 void FloatingToolBar::Implementation::animateHoverIn()
 {
+    if (shadowBlurRadiusAnimation.direction() == QVariantAnimation::Forward
+        && shadowBlurRadiusAnimation.currentValue() == shadowBlurRadiusAnimation.endValue()) {
+        return;
+    }
+
     shadowBlurRadiusAnimation.setDirection(QVariantAnimation::Forward);
     shadowBlurRadiusAnimation.start();
 }
@@ -193,10 +198,10 @@ QSize FloatingToolBar::sizeHint() const
                         + Ui::DesignSystem::floatingToolBar().margins().right()
                         + Ui::DesignSystem::floatingToolBar().shadowMargins().right();
     const qreal additionalWidth = [this] {
-        const QFontMetricsF fontMetrics(Ui::DesignSystem::font().body1());
         qreal width = 0.0;
         for (const auto action : actions()) {
-            if (!action->isVisible()) {
+            if (!action->isVisible()
+                || action->isSeparator()) {
                 continue;
             }
 
@@ -312,6 +317,16 @@ void FloatingToolBar::paintEvent(QPaintEvent* _event)
         }
 
         //
+        // Рисуем разделитель
+        //
+        if (action->isSeparator()) {
+            const auto separatorX = actionIconX - Ui::DesignSystem::floatingToolBar().spacing() / 2.0;
+            painter.setPen(QPen(ColorHelper::transparent(textColor(), Ui::DesignSystem::disabledTextOpacity()), Ui::DesignSystem::scaleFactor()));
+            painter.drawLine(separatorX, actionIconY, separatorX, actionIconSize.height() + actionIconY);
+            continue;
+        }
+
+        //
         // Настроим цвет отрисовки действия
         //
         const QColor penColor = [this, action] {
@@ -387,6 +402,17 @@ void FloatingToolBar::paintEvent(QPaintEvent* _event)
 
             actionIconX += actionRect.width() + Ui::DesignSystem::floatingToolBar().spacing();
         }
+    }
+}
+
+void FloatingToolBar::showEvent(QShowEvent* _event)
+{
+    Widget::showEvent(_event);
+
+    if (geometry().contains(mapFromGlobal(QCursor::pos()))) {
+        d->shadowBlurRadiusAnimation.setDirection(QVariantAnimation::Forward);
+        d->shadowBlurRadiusAnimation.start();
+        d->shadowBlurRadiusAnimation.setCurrentTime(d->shadowBlurRadiusAnimation.duration());
     }
 }
 

@@ -11,13 +11,13 @@ namespace Ui
 /**
  * @brief Панель инструментов редактора сценария
  */
-class ScreenplayTextEditToolBar : public FloatingToolBar
+class ScreenplayTextEditToolbar : public FloatingToolBar
 {
     Q_OBJECT
 
 public:
-    explicit ScreenplayTextEditToolBar(QWidget* _parent = nullptr);
-    ~ScreenplayTextEditToolBar() override;
+    explicit ScreenplayTextEditToolbar(QWidget* _parent = nullptr);
+    ~ScreenplayTextEditToolbar() override;
 
     /**
      * @brief Задать модель выпадающего списка типов абзацев
@@ -41,6 +41,11 @@ public:
     void setFastFormatPanelVisible(bool _visible);
 
     /**
+     * @brief Позиция иконки поиска
+     */
+    QPointF searchIconPosition() const;
+
+    /**
      * @brief Включён ли режим рецензирования
      */
     bool isCommentsModeEnabled() const;
@@ -51,6 +56,7 @@ signals:
     void redoPressed();
     void paragraphTypeChanged(const QModelIndex& _index);
     void fastFormatPanelVisibleChanged(bool _visible);
+    void searchPressed();
     void commentsModeEnabledChanged(bool _enabled);
 
 protected:
