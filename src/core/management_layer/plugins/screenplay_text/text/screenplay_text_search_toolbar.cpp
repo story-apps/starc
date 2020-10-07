@@ -10,6 +10,7 @@
 #include <QApplication>
 #include <QHBoxLayout>
 #include <QEvent>
+#include <QKeyEvent>
 #include <QStringListModel>
 #include <QVariantAnimation>
 
@@ -37,6 +38,7 @@ public:
 
     QAction* searchTextAction = nullptr;
     TextField* searchText = nullptr;
+    QString lastSearchText; // чтобы защититься от флуда при активации окна
     QAction* goToNextAction = nullptr;
     QAction* goToPreviousAction = nullptr;
     QAction* matchCaseAction = nullptr;
@@ -172,16 +174,23 @@ ScreenplayTextSearchToolbar::ScreenplayTextSearchToolbar(QWidget* _parent)
     });
     //
     addAction(d->searchTextAction);
-    connect(d->searchText, &TextField::textChanged, this, &ScreenplayTextSearchToolbar::findTextRequested);
+    connect(d->searchText, &TextField::textChanged, this, [this] {
+        if (d->lastSearchText == d->searchText->text()) {
+            return;
+        }
+
+        d->lastSearchText = d->searchText->text();
+        emit findTextRequested();
+    });
     //
-    d->goToNextAction->setIconText(u8"\U000f0140");
-    d->goToNextAction->setShortcut(QKeySequence::FindNext);
-    addAction(d->goToNextAction);
-    connect(d->goToNextAction, &QAction::triggered, this, &ScreenplayTextSearchToolbar::findNextRequested);
     d->goToPreviousAction->setIconText(u8"\U000f0143");
     d->goToPreviousAction->setShortcut(QKeySequence::FindPrevious);
     addAction(d->goToPreviousAction);
     connect(d->goToPreviousAction, &QAction::triggered, this, &ScreenplayTextSearchToolbar::findPreviousRequested);
+    d->goToNextAction->setIconText(u8"\U000f0140");
+    d->goToNextAction->setShortcut(QKeySequence::FindNext);
+    addAction(d->goToNextAction);
+    connect(d->goToNextAction, &QAction::triggered, this, &ScreenplayTextSearchToolbar::findNextRequested);
     d->matchCaseAction->setIconText(u8"\U000f0b34");
     d->matchCaseAction->setCheckable(true);
     addAction(d->matchCaseAction);
@@ -238,9 +247,14 @@ ScreenplayTextSearchToolbar::ScreenplayTextSearchToolbar(QWidget* _parent)
 
 ScreenplayTextSearchToolbar::~ScreenplayTextSearchToolbar() = default;
 
+void ScreenplayTextSearchToolbar::refocus()
+{
+    d->searchText->setFocus();
+}
+
 QString ScreenplayTextSearchToolbar::searchText() const
 {
-    return d->searchText->text();
+    return d->lastSearchText;
 }
 
 bool ScreenplayTextSearchToolbar::isCaseSensitive() const
@@ -273,6 +287,18 @@ bool ScreenplayTextSearchToolbar::eventFilter(QObject* _watched, QEvent* _event)
                  || QApplication::focusWidget()->parent() != this)
                 && d->popup->isVisible()) {
                 d->searchInAction->trigger();
+            }
+            break;
+        }
+
+        case QEvent::KeyPress: {
+            if (_watched == d->searchText) {
+                const auto keyEvent = static_cast<QKeyEvent*>(_event);
+                if ((keyEvent->key() == Qt::Key_Enter
+                     || keyEvent->key() == Qt::Key_Return)
+                    && !d->searchText->text().isEmpty()) {
+                    emit findTextRequested();
+                }
             }
             break;
         }

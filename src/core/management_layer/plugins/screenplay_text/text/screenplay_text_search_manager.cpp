@@ -70,6 +70,12 @@ void ScreenplayTextSearchManager::Implementation::findText(bool _backward)
         // Сохраняем искомый текст
         //
         m_lastSearchText = searchText;
+
+        //
+        // Возвращаем фокус в панель поиска
+        //
+        toolbar->refocus();
+
         return;
     }
 
@@ -140,6 +146,11 @@ void ScreenplayTextSearchManager::Implementation::findText(bool _backward)
     // Сохраняем искомый текст
     //
     m_lastSearchText = searchText;
+
+    //
+    // Возвращаем фокус в панель поиска
+    //
+    toolbar->refocus();
 }
 
 

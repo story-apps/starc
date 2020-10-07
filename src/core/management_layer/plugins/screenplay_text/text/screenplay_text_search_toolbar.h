@@ -17,6 +17,11 @@ public:
     ~ScreenplayTextSearchToolbar() override;
 
     /**
+     * @brief Возвращаем фокус после поиска
+     */
+    void refocus();
+
+    /**
      * @brief Текст для поиска
      */
     QString searchText() const;
@@ -70,7 +75,8 @@ signals:
 protected:
     /**
      * @brief Ловим событие изменения размера родительского виджета, чтобы скорректировать свои размеры
-     *        плюс события потери фокуса для скрытия попапа
+     *        + события потери фокуса для скрытия попапа
+     *        + события нажатия ENTER в поле поиска
      */
     bool eventFilter(QObject* _watched, QEvent* _event) override;
 
