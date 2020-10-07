@@ -234,6 +234,11 @@ void ScreenplayTextEditToolbar::setFastFormatPanelVisible(bool _visible)
     d->fastFormatAction->setChecked(_visible);
 }
 
+QString ScreenplayTextEditToolbar::searchIcon() const
+{
+    return d->searchAction->iconText();
+}
+
 QPointF ScreenplayTextEditToolbar::searchIconPosition() const
 {
     const auto allActions = actions();

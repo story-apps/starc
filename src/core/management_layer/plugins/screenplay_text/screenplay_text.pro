@@ -57,6 +57,7 @@ HEADERS += \
     text/screenplay_text_edit_toolbar.h \
     text/screenplay_text_fast_format_widget.h \
     text/screenplay_text_scrollbar_manager.h \
+    text/screenplay_text_search_manager.h \
     text/screenplay_text_search_toolbar.h
 
 SOURCES += \
@@ -94,4 +95,5 @@ SOURCES += \
     text/screenplay_text_edit_toolbar.cpp \
     text/screenplay_text_fast_format_widget.cpp \
     text/screenplay_text_scrollbar_manager.cpp \
+    text/screenplay_text_search_manager.cpp \
     text/screenplay_text_search_toolbar.cpp

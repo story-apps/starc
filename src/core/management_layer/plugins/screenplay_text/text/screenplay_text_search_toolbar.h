@@ -3,37 +3,7 @@
 #include <ui/widgets/floating_tool_bar/floating_tool_bar.h>
 
 
-namespace Ui
-{
-
-/**
- * @brief Обёртка для анимирования тулбара
- */
-class ToolbarAnimationWrapper : public FloatingToolBar
-{
-    Q_OBJECT
-
-public:
-    explicit ToolbarAnimationWrapper(QWidget* _parent);
-    ~ToolbarAnimationWrapper() override;
-
-    /**
-     * @brief Анимировать переход от одного тулбара к другому
-     */
-    void animateToolbarShowing(const QPointF _sourceIconPosition, QWidget* _sourceWidget, QWidget* _targetWidget);
-    void animateToolbarHiding();
-
-protected:
-    /**
-     * @brief Рисуем анимированное состояние сменяющихся тулбаров
-     */
-    void paintEvent(QPaintEvent* _event) override;
-
-private:
-    class Implementation;
-    QScopedPointer<Implementation> d;
-};
-
+namespace Ui {
 
 /**
  * @brief Панель поиска по тексту сценария
@@ -46,29 +16,63 @@ public:
     explicit ScreenplayTextSearchToolbar(QWidget* _parent = nullptr);
     ~ScreenplayTextSearchToolbar() override;
 
+    /**
+     * @brief Текст для поиска
+     */
+    QString searchText() const;
+
+    /**
+     * @brief Нужно ли учитывать регистр при поиске
+     */
+    bool isCaseSensitive() const;
+
+    /**
+     * @brief В каком блоке искать
+     */
+    int searchInType() const;
+
+    /**
+     * @brief Текст на который нужно заменить
+     */
+    QString replaceText() const;
+
 signals:
+    /**
+     * @brief Пользователь хочет закрыть панель поиска
+     */
     void closePressed();
-    void searchTextChanged(const QString& _text);
-    void goToNextPressed();
-    void goToPreviousPressed();
-    void matchCasePressed(bool _caseSensitive);
+
+    /**
+     * @brief Пользователь хочет найти заданный текст
+     */
+    void findTextRequested();
+
+    /**
+     * @brief Пользователь хочет посмотреть на следующее совпадение
+     */
+    void findNextRequested();
+
+    /**
+     * @brief Пользователь хочет посмотреть на предыдущее совпадение
+     */
+    void findPreviousRequested();
+
+    /**
+     * @brief Пользователь хочет заменить текущий найденный текст на заданный
+     */
+    void replaceOnePressed();
+
+    /**
+     * @brief Пользователь хочет заменить все вхождения поискового запроса на заданный
+     */
+    void replaceAllPressed();
 
 protected:
     /**
      * @brief Ловим событие изменения размера родительского виджета, чтобы скорректировать свои размеры
+     *        плюс события потери фокуса для скрытия попапа
      */
     bool eventFilter(QObject* _watched, QEvent* _event) override;
-
-    /**
-     * @brief Фокусируем нужный элемент при получении фокуса
-     * @note Не делаем это через проксифокус, т.к. нужно реагировать и на событие выхода фокуса из панели
-     */
-    void focusInEvent(QFocusEvent* _event) override;
-
-    /**
-     * @brief Скрываем попап, когда фокус ушёл из виджета
-     */
-    void focusOutEvent(QFocusEvent* _event) override;
 
     /**
      * @brief Корректируем цвета вложенных виджетов

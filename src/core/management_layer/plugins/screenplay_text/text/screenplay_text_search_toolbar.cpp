@@ -7,163 +7,15 @@
 #include <ui/widgets/tree/tree.h>
 
 #include <QAction>
+#include <QApplication>
 #include <QHBoxLayout>
 #include <QEvent>
-#include <QPainter>
 #include <QStringListModel>
 #include <QVariantAnimation>
 
 
 namespace Ui
 {
-
-class ToolbarAnimationWrapper::Implementation {
-public:
-    QPointF sourceIconPosition;
-    QWidget* sourceWidget = nullptr;
-    QPixmap sourceWidgetImage;
-    QWidget* targetWidget = nullptr;
-    QPixmap targetWidgetImage;
-
-    QVariantAnimation geometryAnimation;
-    QVariantAnimation iconPositionAnimation;
-    QVariantAnimation opacityAnimation;
-};
-
-// **
-
-ToolbarAnimationWrapper::ToolbarAnimationWrapper(QWidget* _parent)
-    : FloatingToolBar(_parent),
-      d(new Implementation)
-{
-    hide();
-
-    d->geometryAnimation.setEasingCurve(QEasingCurve::OutQuad);
-    d->geometryAnimation.setDuration(240);
-    connect(&d->geometryAnimation, &QVariantAnimation::valueChanged, this, [this] (const QVariant& _value) {
-        setGeometry(_value.toRect());
-    });
-    connect(&d->geometryAnimation, &QVariantAnimation::finished, this, [this] {
-        hide();
-        if (d->geometryAnimation.direction() == QVariantAnimation::Forward) {
-            d->targetWidget->show();
-            d->targetWidget->setFocus();
-        } else {
-            d->sourceWidget->show();
-        }
-    });
-
-    d->iconPositionAnimation.setEasingCurve(QEasingCurve::OutQuad);
-    d->iconPositionAnimation.setDuration(240);
-    connect(&d->iconPositionAnimation, &QVariantAnimation::valueChanged, this, [this] {
-        update();
-    });
-
-    d->opacityAnimation.setEasingCurve(QEasingCurve::OutQuad);
-    d->opacityAnimation.setDuration(240);
-    d->opacityAnimation.setStartValue(1.0);
-    d->opacityAnimation.setEndValue(0.0);
-    connect(&d->opacityAnimation, &QVariantAnimation::valueChanged, this, [this] {
-        update();
-    });
-}
-
-ToolbarAnimationWrapper::~ToolbarAnimationWrapper() = default;
-
-void ToolbarAnimationWrapper::animateToolbarShowing(const QPointF _sourceIconPosition, QWidget* _sourceWidget, QWidget* _targetWidget)
-{
-    d->sourceIconPosition = _sourceIconPosition;
-    d->sourceWidget = _sourceWidget;
-    d->targetWidget = _targetWidget;
-
-    d->sourceWidgetImage = d->sourceWidget->grab();
-    d->targetWidget->show();
-    d->targetWidgetImage = d->targetWidget->grab();
-    d->targetWidget->hide();
-
-    d->geometryAnimation.setStartValue(d->sourceWidget->geometry());
-    d->geometryAnimation.setEndValue(d->targetWidget->geometry());
-    d->iconPositionAnimation.setStartValue(_sourceIconPosition);
-    d->iconPositionAnimation.setEndValue(QPointF(Ui::DesignSystem::floatingToolBar().shadowMargins().left()
-                                                 + Ui::DesignSystem::floatingToolBar().margins().left(),
-                                                 Ui::DesignSystem::floatingToolBar().shadowMargins().top()
-                                                 + Ui::DesignSystem::floatingToolBar().margins().top()));
-
-    setGeometry(d->sourceWidget->geometry());
-    show();
-    raise();
-    d->sourceWidget->hide();
-
-    d->geometryAnimation.setDirection(QVariantAnimation::Forward);
-    d->geometryAnimation.start();
-    d->iconPositionAnimation.setDirection(QVariantAnimation::Forward);
-    d->iconPositionAnimation.start();
-    d->opacityAnimation.setDirection(QVariantAnimation::Forward);
-    d->opacityAnimation.start();
-}
-
-void ToolbarAnimationWrapper::animateToolbarHiding()
-{
-    d->sourceWidget->show();
-    d->sourceWidgetImage = d->sourceWidget->grab();
-    d->sourceWidget->hide();
-    d->targetWidgetImage = d->targetWidget->grab();
-
-    d->geometryAnimation.setStartValue(d->sourceWidget->geometry());
-    d->geometryAnimation.setEndValue(d->targetWidget->geometry());
-
-    setGeometry(d->targetWidget->geometry());
-    show();
-    raise();
-    d->targetWidget->hide();
-
-    d->geometryAnimation.setDirection(QVariantAnimation::Backward);
-    d->geometryAnimation.start();
-    d->iconPositionAnimation.setDirection(QVariantAnimation::Backward);
-    d->iconPositionAnimation.start();
-    d->opacityAnimation.setDirection(QVariantAnimation::Backward);
-    d->opacityAnimation.start();
-}
-
-void ToolbarAnimationWrapper::paintEvent(QPaintEvent* _event)
-{
-    FloatingToolBar::paintEvent(_event);
-
-    QPainter painter(this);
-    const auto leftMargin = Ui::DesignSystem::floatingToolBar().shadowMargins().left()
-                            + Ui::DesignSystem::floatingToolBar().margins().left();
-    const auto rightMargin = Ui::DesignSystem::floatingToolBar().shadowMargins().right()
-                             + Ui::DesignSystem::floatingToolBar().margins().right();
-    const auto topMargin = Ui::DesignSystem::floatingToolBar().shadowMargins().top();
-    const auto bottomMargin = Ui::DesignSystem::floatingToolBar().shadowMargins().bottom();
-
-    const auto iconRect = QRectF(d->iconPositionAnimation.currentValue().toPointF(),
-                                 Ui::DesignSystem::floatingToolBar().iconSize());
-    painter.drawPixmap(iconRect.left(), topMargin,
-                       d->targetWidgetImage,
-                       leftMargin, topMargin,
-                       width() - iconRect.left() - rightMargin,
-                       height() - topMargin - bottomMargin);
-
-    painter.setFont(Ui::DesignSystem::font().iconsMid());
-    painter.setPen(textColor());
-    painter.drawText(iconRect, Qt::AlignCenter, u8"\U000f004d");
-
-    painter.setOpacity(d->opacityAnimation.currentValue().toReal());
-    painter.drawPixmap(leftMargin, topMargin,
-                       d->sourceWidgetImage,
-                       leftMargin, topMargin,
-                       d->sourceWidgetImage.width() - leftMargin - rightMargin,
-                       d->sourceWidgetImage.height() - topMargin - bottomMargin);
-
-    painter.setOpacity(d->opacityAnimation.currentValue().toReal());
-    painter.fillRect(iconRect, backgroundColor());
-    painter.drawText(iconRect, Qt::AlignCenter, u8"\U000f0349");
-}
-
-
-// ****
-
 
 class ScreenplayTextSearchToolbar::Implementation
 {
@@ -294,13 +146,18 @@ void ScreenplayTextSearchToolbar::Implementation::hidePopup()
     popupHeightAnimation.start();
 }
 
-// **
+
+// ****
+
 
 ScreenplayTextSearchToolbar::ScreenplayTextSearchToolbar(QWidget* _parent)
     : FloatingToolBar(_parent),
       d(new Implementation(this))
 {
     _parent->installEventFilter(this);
+    d->searchText->installEventFilter(this);
+    d->replaceText->installEventFilter(this);
+    setFocusProxy(d->searchText);
 
     d->closeAction->setIconText(u8"\U000f004d");
     d->closeAction->setShortcut(QKeySequence::Find);
@@ -315,15 +172,16 @@ ScreenplayTextSearchToolbar::ScreenplayTextSearchToolbar(QWidget* _parent)
     });
     //
     addAction(d->searchTextAction);
+    connect(d->searchText, &TextField::textChanged, this, &ScreenplayTextSearchToolbar::findTextRequested);
     //
     d->goToNextAction->setIconText(u8"\U000f0140");
     d->goToNextAction->setShortcut(QKeySequence::FindNext);
     addAction(d->goToNextAction);
-    connect(d->goToNextAction, &QAction::triggered, this, &ScreenplayTextSearchToolbar::goToNextPressed);
+    connect(d->goToNextAction, &QAction::triggered, this, &ScreenplayTextSearchToolbar::findNextRequested);
     d->goToPreviousAction->setIconText(u8"\U000f0143");
     d->goToPreviousAction->setShortcut(QKeySequence::FindPrevious);
     addAction(d->goToPreviousAction);
-    connect(d->goToPreviousAction, &QAction::triggered, this, &ScreenplayTextSearchToolbar::goToNextPressed);
+    connect(d->goToPreviousAction, &QAction::triggered, this, &ScreenplayTextSearchToolbar::findPreviousRequested);
     d->matchCaseAction->setIconText(u8"\U000f0b34");
     d->matchCaseAction->setCheckable(true);
     addAction(d->matchCaseAction);
@@ -331,7 +189,7 @@ ScreenplayTextSearchToolbar::ScreenplayTextSearchToolbar(QWidget* _parent)
         d->matchCaseAction->setToolTip(d->matchCaseAction->isChecked() ? tr("Search without case sensitive")
                                                                        : tr("Search with case sensitive"));
     });
-    connect(d->matchCaseAction, &QAction::toggled, this, &ScreenplayTextSearchToolbar::goToNextPressed);
+    connect(d->matchCaseAction, &QAction::toggled, this, &ScreenplayTextSearchToolbar::findTextRequested);
     //
     d->searchInAction->setText(tr("In the whole text"));
     d->searchInAction->setIconText(u8"\U000f035d");
@@ -354,7 +212,7 @@ ScreenplayTextSearchToolbar::ScreenplayTextSearchToolbar(QWidget* _parent)
         d->hidePopup();
         update();
 
-//        emit paragraphTypeChanged(_index);
+        emit findTextRequested();
     });
     //
     addAction(d->searchInAction);
@@ -370,37 +228,59 @@ ScreenplayTextSearchToolbar::ScreenplayTextSearchToolbar(QWidget* _parent)
 
     addAction(d->replaceTextAction);
     addAction(d->replaceAction);
+    connect(d->replace, &Button::clicked, this, &ScreenplayTextSearchToolbar::replaceOnePressed);
     addAction(d->replaceAllAction);
+    connect(d->replaceAll, &Button::clicked, this, &ScreenplayTextSearchToolbar::replaceAllPressed);
 
     updateTranslations();
     designSystemChangeEvent(nullptr);
 }
 
+ScreenplayTextSearchToolbar::~ScreenplayTextSearchToolbar() = default;
+
+QString ScreenplayTextSearchToolbar::searchText() const
+{
+    return d->searchText->text();
+}
+
+bool ScreenplayTextSearchToolbar::isCaseSensitive() const
+{
+    return d->matchCaseAction->isChecked();
+}
+
+int ScreenplayTextSearchToolbar::searchInType() const
+{
+    return d->popupContent->currentIndex().row();
+}
+
+QString ScreenplayTextSearchToolbar::replaceText() const
+{
+    return d->replaceText->text();
+}
+
 bool ScreenplayTextSearchToolbar::eventFilter(QObject* _watched, QEvent* _event)
 {
-    if (_watched == parent() && _event->type() == QEvent::Resize) {
-        designSystemChangeEvent(nullptr);
+    switch (_event->type()) {
+        case QEvent::Resize: {
+            if (_watched == parent()) {
+                designSystemChangeEvent(nullptr);
+            }
+            break;
+        }
+
+        case QEvent::FocusOut: {
+            if ((QApplication::focusWidget() == nullptr
+                 || QApplication::focusWidget()->parent() != this)
+                && d->popup->isVisible()) {
+                d->searchInAction->trigger();
+            }
+            break;
+        }
+
+        default: break;
     }
 
     return FloatingToolBar::eventFilter(_watched, _event);
-}
-
-ScreenplayTextSearchToolbar::~ScreenplayTextSearchToolbar() = default;
-
-void ScreenplayTextSearchToolbar::focusInEvent(QFocusEvent* _event)
-{
-    FloatingToolBar::focusInEvent(_event);
-
-    d->searchText->setFocus();
-    d->searchText->selectAll();
-}
-
-void ScreenplayTextSearchToolbar::focusOutEvent(QFocusEvent* _event)
-{
-    FloatingToolBar::focusOutEvent(_event);
-
-    d->searchInAction->setIconText(u8"\U000f035d");
-    d->hidePopup();
 }
 
 void ScreenplayTextSearchToolbar::processBackgroundColorChange()

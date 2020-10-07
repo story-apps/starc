@@ -9,7 +9,7 @@
 #include "text/screenplay_text_edit_toolbar.h"
 #include "text/screenplay_text_fast_format_widget.h"
 #include "text/screenplay_text_scrollbar_manager.h"
-#include "text/screenplay_text_search_toolbar.h"
+#include "text/screenplay_text_search_manager.h"
 
 #include <business_layer/templates/screenplay_template.h>
 #include <business_layer/templates/screenplay_template_facade.h>
@@ -19,6 +19,7 @@
 
 #include <ui/design_system/design_system.h>
 #include <ui/widgets/floating_tool_bar/floating_tool_bar.h>
+#include <ui/widgets/floating_tool_bar/floating_toolbar_animator.h>
 #include <ui/widgets/scroll_bar/scroll_bar.h>
 #include <ui/widgets/shadow/shadow.h>
 #include <ui/widgets/splitter/splitter.h>
@@ -83,8 +84,8 @@ public:
     ScreenplayTextScrollBarManager* screenplayTextScrollbarManager = nullptr;
 
     ScreenplayTextEditToolbar* toolbar = nullptr;
-    ScreenplayTextSearchToolbar* searchToolbar = nullptr;
-    ToolbarAnimationWrapper* toolbarAnimation = nullptr;
+    BusinessLayer::ScreenplayTextSearchManager* searchManager = nullptr;
+    FloatingToolbarAnimator* toolbarAnimation = nullptr;
     QHash<BusinessLayer::ScreenplayParagraphType, QString> typesToDisplayNames;
     BusinessLayer::ScreenplayParagraphType currentParagraphType = BusinessLayer::ScreenplayParagraphType::Undefined;
     QStandardItemModel* paragraphTypesModel = nullptr;
@@ -108,8 +109,8 @@ ScreenplayTextView::Implementation::Implementation(QWidget* _parent)
       scalableWrapper(new ScalableWrapper(screenplayText, _parent)),
       screenplayTextScrollbarManager(new ScreenplayTextScrollBarManager(scalableWrapper)),
       toolbar(new ScreenplayTextEditToolbar(scalableWrapper)),
-      searchToolbar(new ScreenplayTextSearchToolbar(scalableWrapper)),
-      toolbarAnimation(new ToolbarAnimationWrapper(_parent)),
+      searchManager(new BusinessLayer::ScreenplayTextSearchManager(scalableWrapper, screenplayText)),
+      toolbarAnimation(new FloatingToolbarAnimator(_parent)),
       paragraphTypesModel(new QStandardItemModel(toolbar)),
       commentsToolbar(new ScreenplayTextCommentsToolbar(_parent)),
       sidebarWidget(new Widget(_parent)),
@@ -121,7 +122,6 @@ ScreenplayTextView::Implementation::Implementation(QWidget* _parent)
 
 {
     toolbar->setParagraphTypesModel(paragraphTypesModel);
-    searchToolbar->hide();
 
     commentsToolbar->hide();
 
@@ -161,11 +161,11 @@ void ScreenplayTextView::Implementation::updateToolBarUi()
     toolbar->setTextColor(Ui::DesignSystem::color().onPrimary());
     toolbar->raise();
 
-    searchToolbar->move(QPointF(Ui::DesignSystem::layout().px24(),
+    searchManager->toolbar()->move(QPointF(Ui::DesignSystem::layout().px24(),
                                 Ui::DesignSystem::layout().px24()).toPoint());
-    searchToolbar->setBackgroundColor(Ui::DesignSystem::color().primary());
-    searchToolbar->setTextColor(Ui::DesignSystem::color().onPrimary());
-    searchToolbar->raise();
+    searchManager->toolbar()->setBackgroundColor(Ui::DesignSystem::color().primary());
+    searchManager->toolbar()->setTextColor(Ui::DesignSystem::color().onPrimary());
+    searchManager->toolbar()->raise();
 
     toolbarAnimation->setBackgroundColor(Ui::DesignSystem::color().primary());
     toolbarAnimation->setTextColor(Ui::DesignSystem::color().onPrimary());
@@ -309,11 +309,12 @@ ScreenplayTextView::ScreenplayTextView(QWidget* _parent)
         d->updateSideBarVisibility(this);
     });
     connect(d->toolbar, &ScreenplayTextEditToolbar::searchPressed, this, [this] {
-        d->toolbarAnimation->animateToolbarShowing(d->toolbar->searchIconPosition(), d->toolbar, d->searchToolbar);
+        d->toolbarAnimation->switchToolbars(d->toolbar->searchIcon(), d->toolbar->searchIconPosition(),
+                                            d->toolbar, d->searchManager->toolbar());
     });
     //
-    connect(d->searchToolbar, &ScreenplayTextSearchToolbar::closePressed, this, [this] {
-        d->toolbarAnimation->animateToolbarHiding();
+    connect(d->searchManager, &BusinessLayer::ScreenplayTextSearchManager::hideToolbarRequested, this, [this] {
+        d->toolbarAnimation->switchToolbarsBack();
     });
     //
     connect(d->commentsToolbar, &ScreenplayTextCommentsToolbar::textColorChangeRequested,
@@ -541,10 +542,10 @@ void ScreenplayTextView::resizeEvent(QResizeEvent* _event)
 {
     Widget::resizeEvent(_event);
 
-    d->toolbar->move(QPointF(Ui::DesignSystem::layout().px24(),
-                             Ui::DesignSystem::layout().px24()).toPoint());
-    d->searchToolbar->move(QPointF(Ui::DesignSystem::layout().px24(),
-                                   Ui::DesignSystem::layout().px24()).toPoint());
+    const auto toolbarPosition = QPointF(Ui::DesignSystem::layout().px24(),
+                                         Ui::DesignSystem::layout().px24()).toPoint();
+    d->toolbar->move(toolbarPosition);
+    d->searchManager->toolbar()->move(toolbarPosition);
     d->updateCommentsToolBar();
 }
 

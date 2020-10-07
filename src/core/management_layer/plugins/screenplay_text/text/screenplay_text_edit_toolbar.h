@@ -41,6 +41,11 @@ public:
     void setFastFormatPanelVisible(bool _visible);
 
     /**
+     * @brief Иконка поиска
+     */
+    QString searchIcon() const;
+
+    /**
      * @brief Позиция иконки поиска
      */
     QPointF searchIconPosition() const;
