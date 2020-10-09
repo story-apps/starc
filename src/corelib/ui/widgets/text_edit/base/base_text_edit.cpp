@@ -314,22 +314,31 @@ bool BaseTextEdit::keyPressEventReimpl(QKeyEvent* _event)
         setTextCursor(cursor);
     }
     //
-    // Сделать текст полужирным
+    // Для форматирования нужно брать значение в стиле у последнего символа из выделения,
+    // т.к. charFormat() отдаёт значение стиля предыдущего перед курсором символа
+    //
+    // ... сделать текст полужирным
     //
     else if (_event == QKeySequence::Bold) {
-        setTextBold(!textCursor().charFormat().font().bold());
+        auto cursor = textCursor();
+        cursor.setPosition(std::max(cursor.selectionStart(), cursor.selectionEnd()));
+        setTextBold(!cursor.charFormat().font().bold());
     }
     //
-    // Сделать текст курсивом
+    // ... сделать текст курсивом
     //
     else if (_event == QKeySequence::Italic) {
-        setTextItalic(!textCursor().charFormat().font().italic());
+        auto cursor = textCursor();
+        cursor.setPosition(std::max(cursor.selectionStart(), cursor.selectionEnd()));
+        setTextItalic(!cursor.charFormat().font().italic());
     }
     //
-    // Сделать текст подчёркнутым
+    // ... сделать текст подчёркнутым
     //
     else if (_event == QKeySequence::Underline) {
-        setTextUnderline(!textCursor().charFormat().font().underline());
+        auto cursor = textCursor();
+        cursor.setPosition(std::max(cursor.selectionStart(), cursor.selectionEnd()));
+        setTextUnderline(!cursor.charFormat().font().underline());
     }
 #ifdef Q_OS_MAC
     //

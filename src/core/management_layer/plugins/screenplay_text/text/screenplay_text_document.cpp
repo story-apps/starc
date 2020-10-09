@@ -276,6 +276,16 @@ void ScreenplayTextDocument::Implementation::readModelItemContent(int _itemRow, 
             _cursor.block().setUserData(blockData);
 
             //
+            // Вставим форматирование
+            //
+            auto formatCursor = _cursor;
+            for (const auto& format : textItem->formats()) {
+                formatCursor.setPosition(formatCursor.block().position() + format.from);
+                formatCursor.movePosition(QTextCursor::NextCharacter, QTextCursor::KeepAnchor, format.length);
+                formatCursor.mergeCharFormat(format.charFormat());
+            }
+
+            //
             // Вставим редакторские заметки
             //
             auto reviewCursor = _cursor;

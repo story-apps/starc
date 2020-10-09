@@ -2,6 +2,7 @@
 
 #include <business_layer/chronometry/chronometer.h>
 #include <business_layer/templates/screenplay_template.h>
+#include <business_layer/templates/screenplay_template_facade.h>
 
 #include <utils/helpers/string_helper.h>
 #include <utils/helpers/text_helper.h>
@@ -384,34 +385,30 @@ bool ScreenplayTextModelTextItem::TextFormat::isValid() const
             || isUnderline != false;
 }
 
+QTextCharFormat ScreenplayTextModelTextItem::TextFormat::charFormat() const
+{
+    if (!isValid()) {
+        return {};
+    }
+
+    QTextCharFormat format;
+    if (isBold) {
+        format.setFontWeight(QFont::Bold);
+    }
+    if (isItalic) {
+        format.setFontItalic(true);
+    }
+    if (isUnderline) {
+        format.setFontUnderline(true);
+    }
+    return format;
+}
+
 bool ScreenplayTextModelTextItem::ReviewComment::operator==(const ScreenplayTextModelTextItem::ReviewComment& _other) const
 {
     return author == _other.author
             && date == _other.date
             && text == _other.text;
-}
-
-QTextCharFormat ScreenplayTextModelTextItem::ReviewMark::charFormat() const
-{
-    QTextCharFormat reviewFormat;
-    reviewFormat.setProperty(ScreenplayBlockStyle::PropertyIsReviewMark, true);
-    if (textColor.isValid()) {
-        reviewFormat.setForeground(textColor);
-    }
-    if (backgroundColor.isValid()) {
-        reviewFormat.setBackground(backgroundColor);
-    }
-    reviewFormat.setProperty(ScreenplayBlockStyle::PropertyIsDone, isDone);
-    QStringList authors, dates, comments;
-    for (const auto& comment : this->comments) {
-        authors.append(comment.author);
-        dates.append(comment.date);
-        comments.append(comment.text);
-    }
-    reviewFormat.setProperty(ScreenplayBlockStyle::PropertyCommentsAuthors, authors);
-    reviewFormat.setProperty(ScreenplayBlockStyle::PropertyCommentsDates, dates);
-    reviewFormat.setProperty(ScreenplayBlockStyle::PropertyComments, comments);
-    return reviewFormat;
 }
 
 bool ScreenplayTextModelTextItem::ReviewMark::operator==(const ScreenplayTextModelTextItem::ReviewMark& _other) const
@@ -422,6 +419,29 @@ bool ScreenplayTextModelTextItem::ReviewMark::operator==(const ScreenplayTextMod
             && backgroundColor == _other.backgroundColor
             && isDone == _other.isDone
             && comments == _other.comments;
+}
+
+QTextCharFormat ScreenplayTextModelTextItem::ReviewMark::charFormat() const
+{
+    QTextCharFormat format;
+    format.setProperty(ScreenplayBlockStyle::PropertyIsReviewMark, true);
+    if (textColor.isValid()) {
+        format.setForeground(textColor);
+    }
+    if (backgroundColor.isValid()) {
+        format.setBackground(backgroundColor);
+    }
+    format.setProperty(ScreenplayBlockStyle::PropertyIsDone, isDone);
+    QStringList authors, dates, comments;
+    for (const auto& comment : this->comments) {
+        authors.append(comment.author);
+        dates.append(comment.date);
+        comments.append(comment.text);
+    }
+    format.setProperty(ScreenplayBlockStyle::PropertyCommentsAuthors, authors);
+    format.setProperty(ScreenplayBlockStyle::PropertyCommentsDates, dates);
+    format.setProperty(ScreenplayBlockStyle::PropertyComments, comments);
+    return format;
 }
 
 ScreenplayTextModelTextItem::ScreenplayTextModelTextItem()
@@ -548,8 +568,9 @@ void ScreenplayTextModelTextItem::removeText(int _from)
 void ScreenplayTextModelTextItem::setFormats(const QVector<QTextLayout::FormatRange>& _formats)
 {
     QVector<TextFormat> newFormats;
+    const auto defaultBlockFormat = ScreenplayTemplateFacade::getTemplate().blockStyle(d->paragraphType);
     for (const auto& format : _formats) {
-        if (format.format.boolProperty(ScreenplayBlockStyle::PropertyIsFormatting) == false) {
+        if (format.format == defaultBlockFormat.charFormat()) {
             continue;
         }
 

@@ -91,10 +91,6 @@ public:
         PropertyIsBreakCorrectionStart,	//!< Разрывающий текст блок в начале разрыва
         PropertyIsBreakCorrectionEnd,	//!< Разрывающий текст блок в конце разрыва
         PropertyIsCharacterContinued,   //!< Имя персонажа для которого необходимо отображать допольнительный текст ПРОД., не пишем в xml
-        //
-        // Свойства форматирования
-        //
-        PropertyIsFormatting    //!< Пользовательский формат текста
     };
 
     /**

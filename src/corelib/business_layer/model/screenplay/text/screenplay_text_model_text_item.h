@@ -33,6 +33,8 @@ public:
         bool operator==(const TextFormat& _other) const;
 
         bool isValid() const;
+
+        QTextCharFormat charFormat() const;
     };
     struct CORE_LIBRARY_EXPORT ReviewComment {
         QString author;
