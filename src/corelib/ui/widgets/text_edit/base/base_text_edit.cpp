@@ -115,6 +115,8 @@ BaseTextEdit::BaseTextEdit(QWidget* _parent)
     d->reconfigure(this);
 }
 
+BaseTextEdit::~BaseTextEdit() = default;
+
 void BaseTextEdit::setCapitalizeWords(bool _capitalize)
 {
     d->capitalizeWords = _capitalize;
@@ -134,8 +136,6 @@ bool BaseTextEdit::correctDoubleCapitals() const
 {
     return d->correctDoubleCapitals;
 }
-
-BaseTextEdit::~BaseTextEdit() = default;
 
 void BaseTextEdit::setTextBold(bool _bold)
 {
@@ -165,6 +165,27 @@ void BaseTextEdit::setTextUnderline(bool _underline)
         return format;
     };
     updateSelectionFormatting(textCursor(), buildFormat);
+}
+
+void BaseTextEdit::invertTextBold()
+{
+    auto cursor = textCursor();
+    cursor.setPosition(std::max(cursor.selectionStart(), cursor.selectionEnd()));
+    setTextBold(!cursor.charFormat().font().bold());
+}
+
+void BaseTextEdit::invertTextItalic()
+{
+    auto cursor = textCursor();
+    cursor.setPosition(std::max(cursor.selectionStart(), cursor.selectionEnd()));
+    setTextItalic(!cursor.charFormat().font().italic());
+}
+
+void BaseTextEdit::invertTextUnderline()
+{
+    auto cursor = textCursor();
+    cursor.setPosition(std::max(cursor.selectionStart(), cursor.selectionEnd()));
+    setTextUnderline(!cursor.charFormat().font().underline());
 }
 
 bool BaseTextEdit::event(QEvent* _event)
@@ -320,25 +341,19 @@ bool BaseTextEdit::keyPressEventReimpl(QKeyEvent* _event)
     // ... сделать текст полужирным
     //
     else if (_event == QKeySequence::Bold) {
-        auto cursor = textCursor();
-        cursor.setPosition(std::max(cursor.selectionStart(), cursor.selectionEnd()));
-        setTextBold(!cursor.charFormat().font().bold());
+        invertTextBold();
     }
     //
     // ... сделать текст курсивом
     //
     else if (_event == QKeySequence::Italic) {
-        auto cursor = textCursor();
-        cursor.setPosition(std::max(cursor.selectionStart(), cursor.selectionEnd()));
-        setTextItalic(!cursor.charFormat().font().italic());
+        invertTextItalic();
     }
     //
     // ... сделать текст подчёркнутым
     //
     else if (_event == QKeySequence::Underline) {
-        auto cursor = textCursor();
-        cursor.setPosition(std::max(cursor.selectionStart(), cursor.selectionEnd()));
-        setTextUnderline(!cursor.charFormat().font().underline());
+        invertTextUnderline();
     }
 #ifdef Q_OS_MAC
     //
