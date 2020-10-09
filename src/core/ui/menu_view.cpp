@@ -179,8 +179,9 @@ void MenuView::markChangesSaved(bool _saved)
 
 void MenuView::setProVersion(bool _isPro)
 {
-    setSubtitle(QString("Story Architect %1 version")
-                .arg(_isPro ? "Pro" : "Free"));
+    setSubtitle(QString("Story Architect v.%1 %2")
+                .arg(QApplication::applicationVersion())
+                .arg(_isPro ? "PRO" : "free"));
     d->help->setVisible(!_isPro);
 }
 
