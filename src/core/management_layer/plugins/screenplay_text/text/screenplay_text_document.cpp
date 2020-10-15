@@ -687,8 +687,9 @@ QString ScreenplayTextDocument::mimeFromSelection(int _fromPosition, int _toPosi
     const auto toItemIndex = d->model->indexForItem(toBlockData->item());
     const auto toPositionInBlock = _toPosition - toBlock.position();
 
+    const bool clearUuid = true;
     return d->model->mimeFromSelection(fromItemIndex, fromPositionInBlock,
-                                       toItemIndex, toPositionInBlock);
+                                       toItemIndex, toPositionInBlock, clearUuid);
 }
 
 void ScreenplayTextDocument::insertFromMime(int _position, const QString& _mimeData)
@@ -922,15 +923,15 @@ void ScreenplayTextDocument::splitParagraph(const ScreenplayTextCursor& _cursor)
     //
     // Сохраним текущий формат блока
     //
-    const auto lastBlockType = ScreenplayBlockStyle::forBlock(cursor.block());
+    const auto lastBlockType = ScreenplayBlockStyle::forBlock(findBlock(cursor.selectionInterval().from));
     //
     // Вырезаем выделение, захватывая блоки целиком
     //
     if (cursor.hasSelection()) {
-        const auto cursorPositions = std::minmax(cursor.selectionStart(), cursor.selectionEnd());
-        cursor.setPosition(cursorPositions.first);
+        const auto selection = cursor.selectionInterval();
+        cursor.setPosition(selection.from);
         cursor.movePosition(QTextCursor::StartOfBlock);
-        cursor.setPosition(cursorPositions.second, QTextCursor::KeepAnchor);
+        cursor.setPosition(selection.to, QTextCursor::KeepAnchor);
         cursor.movePosition(QTextCursor::EndOfBlock, QTextCursor::KeepAnchor);
     }
     //
@@ -940,7 +941,7 @@ void ScreenplayTextDocument::splitParagraph(const ScreenplayTextCursor& _cursor)
         cursor.movePosition(QTextCursor::StartOfBlock);
         cursor.movePosition(QTextCursor::EndOfBlock, QTextCursor::KeepAnchor);
     }
-    const QString mime = mimeFromSelection(cursor.selectionStart(), cursor.selectionEnd());
+    const QString mime = mimeFromSelection(cursor.selectionInterval().from, cursor.selectionInterval().to);
     cursor.removeSelectedText();
 
     //
@@ -953,6 +954,8 @@ void ScreenplayTextDocument::splitParagraph(const ScreenplayTextCursor& _cursor)
     //
     insertTable(cursor);
     cursor.movePosition(QTextCursor::PreviousBlock, QTextCursor::MoveAnchor, 2);
+    cursor.endEditBlock();
+    cursor.joinPreviousEditBlock();
 
     //
     // Применяем сохранённый формат блока каждой из колонок
@@ -971,14 +974,17 @@ void ScreenplayTextDocument::splitParagraph(const ScreenplayTextCursor& _cursor)
     // Вставляем параграф после таблицы - это обязательное условие, чтобы после таблицы всегда
     // оставался один параграф, чтобы пользователь всегда мог выйти из таблицы
     //
-    addParagraph(lastBlockType, cursor);
+    addParagraph(ScreenplayParagraphType::Action, cursor);
 
     //
-    // Вставляем текст в первую колонку
+    // Завершаем редактирование
     //
-    insertFromMime(cursor.position(), mime);
-
     cursor.endEditBlock();
+    //
+    // ... и только после этого вставляем текст в первую колонку
+    //
+    cursor.movePosition(QTextCursor::PreviousBlock, QTextCursor::MoveAnchor, 3);
+    insertFromMime(cursor.position(), mime);
 }
 
 void ScreenplayTextDocument::mergeParagraph(const ScreenplayTextCursor& _cursor)
@@ -1009,7 +1015,7 @@ void ScreenplayTextDocument::mergeParagraph(const ScreenplayTextCursor& _cursor)
     const QString firstColumnData =
             cursor.selectedText().isEmpty()
             ? QString()
-            : mimeFromSelection(cursor.selectionStart(), cursor.selectionEnd());
+            : mimeFromSelection(cursor.selectionInterval().from, cursor.selectionInterval().to);
     cursor.removeSelectedText();
 
     //
@@ -1021,7 +1027,7 @@ void ScreenplayTextDocument::mergeParagraph(const ScreenplayTextCursor& _cursor)
     const QString secondColumnData =
             cursor.selectedText().isEmpty()
             ? QString()
-            : mimeFromSelection(cursor.selectionStart(), cursor.selectionEnd());
+            : mimeFromSelection(cursor.selectionInterval().from, cursor.selectionInterval().to);
     cursor.removeSelectedText();
 
     //
@@ -1034,6 +1040,7 @@ void ScreenplayTextDocument::mergeParagraph(const ScreenplayTextCursor& _cursor)
     cursor.movePosition(QTextCursor::PreviousBlock, QTextCursor::KeepAnchor);
     cursor.movePosition(QTextCursor::PreviousBlock, QTextCursor::KeepAnchor);
     cursor.deletePreviousChar();
+    cursor.endEditBlock();
 
     //
     // Вставляем текст из удалённых ячеек
@@ -1050,8 +1057,6 @@ void ScreenplayTextDocument::mergeParagraph(const ScreenplayTextCursor& _cursor)
         cursor.insertBlock();
         insertFromMime(cursor.position(), firstColumnData);
     }
-
-    cursor.endEditBlock();
 }
 
 void ScreenplayTextDocument::setCorrectionOptions(bool _needToCorrectCharactersNames, bool _needToCorrectPageBreaks)
