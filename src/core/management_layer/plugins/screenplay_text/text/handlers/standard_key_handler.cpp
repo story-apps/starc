@@ -465,17 +465,17 @@ void StandardKeyHandler::removeCharacters(bool _backward)
     //
     // Определим стиль результирующего блока
     //
-    ScreenplayParagraphType targetType = _backward ? topStyle.type() : bottomStyle.type();
+    auto targetStyle = _backward ? topStyle : bottomStyle;
     {
         if (topBlock == bottomBlock) {
-            targetType = topStyle.type();
+            targetStyle = topStyle;
         } else {
             if (topStyle.isEmbeddable() && !bottomStyle.isEmbeddable() && !bottomBlock.text().isEmpty()) {
-                targetType = bottomStyle.type();
+                targetStyle = bottomStyle;
             } else if (!topBlock.text().isEmpty()) {
-                targetType = topStyle.type();
+                targetStyle = topStyle;
             } else if (!bottomBlock.text().isEmpty()) {
-                targetType = bottomStyle.type();
+                targetStyle = bottomStyle;
             }
         }
     }
@@ -541,7 +541,19 @@ void StandardKeyHandler::removeCharacters(bool _backward)
     // Применим финальный стиль
     //
     else {
-        editor()->setCurrentParagraphType(targetType);
+        //
+        // Если стиль последнего абзаца сменился при удалении, корректируем его
+        //
+        if (editor()->currentParagraphType() != targetStyle.type()) {
+            editor()->setCurrentParagraphType(targetStyle.type());
+        }
+        //
+        // В противном случае, при удалении, формат текста остаётся от предыдущего блока,
+        // поэтому перезапишем его корректным форматом
+        //
+        else {
+            cursor.setBlockCharFormat(targetStyle.charFormat());
+        }
     }
 
     //
