@@ -76,7 +76,8 @@ ScreenplayTextModelFolderItem::ScreenplayTextModelFolderItem(const QDomElement& 
 {
     Q_ASSERT(_node.tagName() == kFolderTag);
 
-    d->uuid = _node.attribute(kUuidAttribute);
+    d->uuid = _node.hasAttribute(kUuidAttribute) ? _node.attribute(kUuidAttribute)
+                                                 : QUuid::createUuid();
 
     auto childNode = _node.firstChildElement(kContentTag).firstChildElement();
     while (!childNode.isNull()) {
@@ -122,10 +123,10 @@ QVariant ScreenplayTextModelFolderItem::data(int _role) const
 
 QByteArray ScreenplayTextModelFolderItem::toXml() const
 {
-    return toXml(nullptr, 0, nullptr, 0);
+    return toXml(nullptr, 0, nullptr, 0, false);
 }
 
-QByteArray ScreenplayTextModelFolderItem::toXml(ScreenplayTextModelItem* _from, int _fromPosition, ScreenplayTextModelItem* _to, int _toPosition) const
+QByteArray ScreenplayTextModelFolderItem::toXml(ScreenplayTextModelItem* _from, int _fromPosition, ScreenplayTextModelItem* _to, int _toPosition, bool _clearUuid) const
 {
     auto folderFooterXml = [] {
         ScreenplayTextModelTextItem item;
@@ -134,9 +135,13 @@ QByteArray ScreenplayTextModelFolderItem::toXml(ScreenplayTextModelItem* _from, 
     };
 
     QByteArray xml;
-    xml += QString("<%1 %2=\"%3\">\n")
-           .arg(kFolderTag,
-                kUuidAttribute, d->uuid.toString()).toUtf8();
+    if (_clearUuid) {
+        xml += QString("<%1>\n").arg(kFolderTag).toUtf8();
+    } else {
+        xml += QString("<%1 %2=\"%3\">\n")
+               .arg(kFolderTag,
+                    kUuidAttribute, d->uuid.toString()).toUtf8();
+    }
     xml += QString("<%1>\n").arg(kContentTag).toUtf8();
     for (int childIndex = 0; childIndex < childCount(); ++childIndex) {
         auto child = childAt(childIndex);
@@ -159,10 +164,10 @@ QByteArray ScreenplayTextModelFolderItem::toXml(ScreenplayTextModelItem* _from, 
             if (child->hasChild(_to, recursively)) {
                 if (child->type() == ScreenplayTextModelItemType::Folder) {
                     auto folder = static_cast<ScreenplayTextModelFolderItem*>(child);
-                    xml += folder->toXml(_from, _fromPosition, _to, _toPosition);
+                    xml += folder->toXml(_from, _fromPosition, _to, _toPosition, _clearUuid);
                 } else if (child->type() == ScreenplayTextModelItemType::Scene) {
                     auto scene = static_cast<ScreenplayTextModelSceneItem*>(child);
-                    xml += scene->toXml(_from, _fromPosition, _to, _toPosition);
+                    xml += scene->toXml(_from, _fromPosition, _to, _toPosition, _clearUuid);
                 } else {
                     Q_ASSERT(false);
                 }

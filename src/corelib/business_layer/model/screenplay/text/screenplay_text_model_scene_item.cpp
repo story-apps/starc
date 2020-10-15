@@ -112,7 +112,8 @@ ScreenplayTextModelSceneItem::ScreenplayTextModelSceneItem(const QDomElement& _n
 {
     Q_ASSERT(_node.tagName() == kSceneTag);
 
-    d->uuid = _node.attribute(kUuidAttribute);
+    d->uuid = _node.hasAttribute(kUuidAttribute) ? _node.attribute(kUuidAttribute)
+                                                 : QUuid::createUuid();
     //
     // TODO: plots
     //
@@ -221,21 +222,28 @@ QVariant ScreenplayTextModelSceneItem::data(int _role) const
 
 QByteArray ScreenplayTextModelSceneItem::toXml() const
 {
-    return toXml(nullptr, 0, nullptr, 0);
+    return toXml(nullptr, 0, nullptr, 0, false);
 }
 
 QByteArray ScreenplayTextModelSceneItem::toXml(ScreenplayTextModelItem* _from, int _fromPosition,
-    ScreenplayTextModelItem* _to, int _toPosition) const
+    ScreenplayTextModelItem* _to, int _toPosition, bool _clearUuid) const
 {
     QByteArray xml;
     //
     // TODO: plots
     //
-    xml += QString("<%1 %2=\"%3\" %4=\"%5\" %6>\n")
-           .arg(kSceneTag,
-                kUuidAttribute, d->uuid.toString(),
-                kPlotsAttribute, {},
-                (d->isOmited ? QString("%1=\"true\"").arg(kOmitedAttribute) : "")).toUtf8();
+    if (_clearUuid) {
+        xml += QString("<%1 %2=\"%3\" %4>\n")
+               .arg(kSceneTag,
+                    kPlotsAttribute, {},
+                    (d->isOmited ? QString("%1=\"true\"").arg(kOmitedAttribute) : "")).toUtf8();
+    } else {
+        xml += QString("<%1 %2=\"%3\" %4=\"%5\" %6>\n")
+               .arg(kSceneTag,
+                    kUuidAttribute, d->uuid.toString(),
+                    kPlotsAttribute, {},
+                    (d->isOmited ? QString("%1=\"true\"").arg(kOmitedAttribute) : "")).toUtf8();
+    }
     if (d->number.has_value()) {
         xml += QString("<%1 %2=\"%3\"/>\n")
                .arg(kNumberTag, kNumberValueAttribute, d->number->value).toUtf8();

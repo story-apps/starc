@@ -74,7 +74,7 @@ public:
     /**
      * @brief Сформировать mime-данные сценария в заданном диапазоне
      */
-    QString mimeFromSelection(const QModelIndex& _from, int _fromPosition, const QModelIndex& _to, int _toPosition) const;
+    QString mimeFromSelection(const QModelIndex& _from, int _fromPosition, const QModelIndex& _to, int _toPosition, bool _clearUuid) const;
 
     /**
      * @brief Вставить контент из mime-данных со сценарием в заданной позиции

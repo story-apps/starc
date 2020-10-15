@@ -595,7 +595,8 @@ QMimeData* ScreenplayTextModel::mimeData(const QModelIndexList& _indexes) const
     QModelIndex toIndex = correctedIndexes.last();
 
     auto mimeData = new QMimeData;
-    mimeData->setData(mimeTypes().first(), mimeFromSelection(fromIndex, 0, toIndex, 1).toUtf8());
+    const bool clearUuid = false;
+    mimeData->setData(mimeTypes().first(), mimeFromSelection(fromIndex, 0, toIndex, 1, clearUuid).toUtf8());
 
     d->lastMime = { fromIndex, toIndex, mimeData };
 
@@ -618,7 +619,7 @@ Qt::DropActions ScreenplayTextModel::supportedDropActions() const
 }
 
 QString ScreenplayTextModel::mimeFromSelection(const QModelIndex& _from, int _fromPosition,
-    const QModelIndex& _to, int _toPosition) const
+    const QModelIndex& _to, int _toPosition, bool _clearUuid) const
 {
     if (document() == nullptr) {
         return {};
@@ -643,20 +644,22 @@ QString ScreenplayTextModel::mimeFromSelection(const QModelIndex& _from, int _fr
     QByteArray xml = "<?xml version=\"1.0\"?>\n";
     xml += "<document mime-type=\"" + Domain::mimeTypeFor(document()->type()) + "\" version=\"1.0\">\n";
 
-    auto buildXmlFor = [&xml, fromItem, _fromPosition, toItem, _toPosition] (ScreenplayTextModelItem* _fromItemParent, int _fromItemRow) {
+    auto buildXmlFor = [&xml, fromItem, _fromPosition, toItem, _toPosition, _clearUuid]
+                       (ScreenplayTextModelItem* _fromItemParent, int _fromItemRow)
+    {
         for (int childIndex = _fromItemRow; childIndex < _fromItemParent->childCount(); ++childIndex) {
             const auto childItem = _fromItemParent->childAt(childIndex);
 
             switch (childItem->type()) {
                 case ScreenplayTextModelItemType::Folder: {
                     const auto folderItem = static_cast<ScreenplayTextModelFolderItem*>(childItem);
-                    xml += folderItem->toXml(fromItem, _fromPosition, toItem, _toPosition);
+                    xml += folderItem->toXml(fromItem, _fromPosition, toItem, _toPosition, _clearUuid);
                     break;
                 }
 
                 case ScreenplayTextModelItemType::Scene: {
                     const auto sceneItem = static_cast<ScreenplayTextModelSceneItem*>(childItem);
-                    xml += sceneItem->toXml(fromItem, _fromPosition, toItem, _toPosition);
+                    xml += sceneItem->toXml(fromItem, _fromPosition, toItem, _toPosition, _clearUuid);
                     break;
                 }
 
@@ -756,8 +759,9 @@ void ScreenplayTextModel::insertFromMime(const QModelIndex& _index, int _positio
         // В противном случае, дробим блок на две части
         //
         else if (textItem->text().length() > _position) {
+            const bool clearUuid = true;
             sourceBlockEndContent = mimeFromSelection(_index, _position,
-                                                     _index, textItem->text().length());
+                                                     _index, textItem->text().length(), clearUuid);
             textItem->removeText(_position);
             updateItem(textItem);
         }
