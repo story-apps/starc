@@ -327,7 +327,8 @@ ScreenplayTextDocument::ScreenplayTextDocument(QObject *_parent)
       d(new Implementation(this))
 {
     connect(this, &ScreenplayTextDocument::contentsChange, this, &ScreenplayTextDocument::updateModelOnContentChange);
-    connect(this, &ScreenplayTextDocument::contentsChange, &d->corrector, &ScreenplayTextCorrector::correct, Qt::QueuedConnection);
+    connect(this, &ScreenplayTextDocument::contentsChange, &d->corrector, &ScreenplayTextCorrector::planCorrection);
+    connect(this, &ScreenplayTextDocument::contentsChanged, &d->corrector, &ScreenplayTextCorrector::makePlannedCorrection);
 }
 
 ScreenplayTextDocument::~ScreenplayTextDocument() = default;

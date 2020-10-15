@@ -179,6 +179,16 @@ public:
     bool needToCorrectPageBreaks = true;
 
     /**
+     * @brief Запланированная корректировка
+     */
+    struct {
+        bool isValid = false;
+        int position = 0;
+        int removed = 0;
+        int added = 0;
+    } plannedCorrection;
+
+    /**
      * @brief Размер документа при последней проверке
      */
     QSizeF lastDocumentSize;
@@ -1604,6 +1614,21 @@ void ScreenplayTextCorrector::correct(int _position, int _charRemoved, int _char
     if (d->needToCorrectPageBreaks) {
         d->correctPageBreaks(_position);
     }
+}
+
+void ScreenplayTextCorrector::planCorrection(int _position, int _charsRemoved, int _charsAdded)
+{
+    d->plannedCorrection = {true, _position, _charsRemoved, _charsAdded};
+}
+
+void ScreenplayTextCorrector::makePlannedCorrection()
+{
+    if (!d->plannedCorrection.isValid) {
+        return;
+    }
+
+    correct(d->plannedCorrection.position, d->plannedCorrection.removed, d->plannedCorrection.added);
+    d->plannedCorrection = {};
 }
 
 } // namespace Ui

@@ -49,6 +49,12 @@ public:
      */
     void correct(int _position = -1, int _charsRemoved = 0, int _charsAdded = 0);
 
+    /**
+     * @brief Подготовиться к корректировке и выполнить подготовленную корректировку
+     */
+    void planCorrection(int _position, int _charsRemoved, int _charsAdded);
+    void makePlannedCorrection();
+
 private:
     class Implementation;
     QScopedPointer<Implementation> d;
