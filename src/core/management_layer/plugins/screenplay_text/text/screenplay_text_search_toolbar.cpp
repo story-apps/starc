@@ -373,6 +373,9 @@ void ScreenplayTextSearchToolbar::designSystemChangeEvent(DesignSystemChangeEven
                       + replaceActionWidth // кнопка единичной замены
                       + replaceAllActionWidth; // кнопка полной замены
     textFieldWidth /= 2; // делим поровну
+    if (textFieldWidth < 0) {
+        return;
+    }
 
     //
     // Расставляем элементы в панели

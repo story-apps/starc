@@ -1606,10 +1606,11 @@ void ScreenplayTextDocument::insertTable(const ScreenplayTextCursor& _cursor)
 {
     const auto scriptTemplate = ScreenplayTemplateFacade::getTemplate();
     const auto tableBorderWidth = scriptTemplate.pageSplitterWidth();
+    const auto doubleTableBorderWidth = 2 * tableBorderWidth;
     const qreal tableWidth = pageSize().width()
                              - rootFrame()->frameFormat().leftMargin()
                              - rootFrame()->frameFormat().rightMargin()
-                             - 2 * tableBorderWidth;
+                             - doubleTableBorderWidth;
     const qreal leftColumnWidth = tableWidth * scriptTemplate.leftHalfOfPageWidthPercents() / 100;
     const qreal rightColumnWidth = tableWidth - leftColumnWidth;
     QTextTableFormat format;
@@ -1618,10 +1619,10 @@ void ScreenplayTextDocument::insertTable(const ScreenplayTextCursor& _cursor)
                                        QTextLength{QTextLength::FixedLength, rightColumnWidth} });
     format.setBorderStyle(QTextFrameFormat::BorderStyle_None);
     const int qtTableBorderWidth = 2;
-    format.setLeftMargin(-2 * tableBorderWidth - qtTableBorderWidth);
-    format.setRightMargin(2 * tableBorderWidth - qtTableBorderWidth);
-    format.setTopMargin(-2 * tableBorderWidth - qtTableBorderWidth);
-    format.setBottomMargin(-tableBorderWidth - qtTableBorderWidth);
+    format.setLeftMargin(-1 * doubleTableBorderWidth - qtTableBorderWidth);
+    format.setRightMargin(doubleTableBorderWidth - qtTableBorderWidth);
+    format.setTopMargin(-1 * doubleTableBorderWidth - qtTableBorderWidth);
+    format.setBottomMargin(-1 * doubleTableBorderWidth - qtTableBorderWidth);
     format.setBorder(tableBorderWidth);
 
     auto cursor = _cursor;
