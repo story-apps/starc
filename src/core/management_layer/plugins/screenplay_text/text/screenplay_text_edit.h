@@ -145,6 +145,7 @@ protected:
     bool canInsertFromMimeData(const QMimeData* _source) const override;
     QMimeData* createMimeDataFromSelection() const override;
     void insertFromMimeData(const QMimeData* _source) override;
+    void dropEvent(QDropEvent* _event) override;
     /** @} */
 
 private:

@@ -36,6 +36,7 @@ enum class DocumentState {
     Undefined,
     Loading,
     Changing,
+    MimeDropping,
     Ready
 };
 
@@ -442,7 +443,8 @@ void ScreenplayTextDocument::setModel(BusinessLayer::ScreenplayTextModel* _model
         cursor.endEditBlock();
     });
     connect(d->model, &ScreenplayTextModel::rowsInserted, this, [this] (const QModelIndex& _parent, int _from, int _to) {
-        if (d->state != DocumentState::Ready) {
+        if (d->state != DocumentState::Ready
+            && d->state != DocumentState::MimeDropping) {
             return;
         }
 
@@ -509,7 +511,8 @@ void ScreenplayTextDocument::setModel(BusinessLayer::ScreenplayTextModel* _model
         cursor.endEditBlock();
     });
     connect(d->model, &ScreenplayTextModel::rowsAboutToBeRemoved, this, [this] (const QModelIndex& _parent, int _from, int _to) {
-        if (d->state != DocumentState::Ready) {
+        if (d->state != DocumentState::Ready
+            && d->state != DocumentState::MimeDropping) {
             return;
         }
 
@@ -717,6 +720,16 @@ void ScreenplayTextDocument::insertFromMime(int _position, const QString& _mimeD
     const auto itemIndex = d->model->indexForItem(blockData->item());
     const auto positionInBlock = _position - block.position();
     d->model->insertFromMime(itemIndex, positionInBlock, _mimeData);
+}
+
+void ScreenplayTextDocument::startMimeDropping()
+{
+    d->state = DocumentState::MimeDropping;
+}
+
+void ScreenplayTextDocument::finishMimeDropping()
+{
+    d->state = DocumentState::Ready;
 }
 
 void ScreenplayTextDocument::addParagraph(BusinessLayer::ScreenplayParagraphType _type, ScreenplayTextCursor _cursor)

@@ -328,6 +328,14 @@ bool ScreenplayTextEdit::keyPressEventReimpl(QKeyEvent* _event)
         redo();
     }
     //
+    // ... вырезать текст
+    //
+    else if (_event == QKeySequence::Cut) {
+        copy();
+        BusinessLayer::ScreenplayTextCursor cursor = textCursor();
+        cursor.removeCharacters(this);
+    }
+    //
     // ... перевод курсора к следующему символу
     //
     else  if (_event == QKeySequence::MoveToNextChar) {
@@ -1133,6 +1141,18 @@ void ScreenplayTextEdit::insertFromMimeData(const QMimeData* _source)
     }
 
     d->document.insertFromMime(textCursor().position(), textToInsert);
+}
+
+void ScreenplayTextEdit::dropEvent(QDropEvent* _event)
+{
+    if (_event->dropAction() == Qt::MoveAction) {
+        BusinessLayer::ScreenplayTextCursor cursor = textCursor();
+        cursor.removeCharacters(this);
+    }
+
+    d->document.startMimeDropping();
+    PageTextEdit::dropEvent(_event);
+    d->document.finishMimeDropping();
 }
 
 } // namespace Ui

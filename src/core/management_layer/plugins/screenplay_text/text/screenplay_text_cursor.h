@@ -2,6 +2,10 @@
 
 #include <QTextCursor>
 
+namespace Ui {
+class ScreenplayTextEdit;
+}
+
 
 namespace BusinessLayer {
 
@@ -34,6 +38,38 @@ public:
         int to = 0;
     };
     Selection selectionInterval() const;
+
+    /**
+     * @brief Удалить символы в заданном редакторе сценария
+     */
+    void removeCharacters(Ui::ScreenplayTextEdit* _editor);
+    void removeCharacters(bool _backward, Ui::ScreenplayTextEdit* _editor);
+
+private:
+    /**
+     * @brief Найти количество групповых элементов для удаления
+     * @param _topCursorPosition
+     * @param _bottomCursorPosition
+     * @return
+     *
+     * 0 - заголовки групп сцен
+     * 1 - окончания групп сцен
+     * 2 - заголовки папок
+     * 3 - окончания папок
+     */
+    struct FoldersToDelete {
+        int headers = 0;
+        int footers = 0;
+    };
+    FoldersToDelete findGroupCountsToDelete(int _topCursorPosition, int _bottomCursorPosition);
+
+    /**
+     * @brief Удалить пары стёртых групп
+     * @param _isFirstGroupHeader
+     * @param _groupHeadersCount
+     * @param _groupFootersCount
+     */
+    void removeGroupsPairs(int _cursorPosition, const FoldersToDelete& _groupCountsToDelete);
 };
 
 } // namespace Ui

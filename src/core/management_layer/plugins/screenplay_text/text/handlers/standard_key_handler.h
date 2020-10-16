@@ -58,31 +58,6 @@ private:
      * @brief Удалить символы
      */
     void removeCharacters(bool _backward);
-
-    /**
-     * @brief Найти количество групповых элементов для удаления
-     * @param _topCursorPosition
-     * @param _bottomCursorPosition
-     * @return
-     *
-     * 0 - заголовки групп сцен
-     * 1 - окончания групп сцен
-     * 2 - заголовки папок
-     * 3 - окончания папок
-     */
-    struct FoldersToDelete {
-        int headers = 0;
-        int footers = 0;
-    };
-    FoldersToDelete findGroupCountsToDelete(int _topCursorPosition, int _bottomCursorPosition);
-
-    /**
-     * @brief Удалить пары стёртых групп
-     * @param _isFirstGroupHeader
-     * @param _groupHeadersCount
-     * @param _groupFootersCount
-     */
-    void removeGroupsPairs(int _cursorPosition, const FoldersToDelete& _groupCountsToDelete);
 };
 
 } // namespace KeyProcessingLayer
