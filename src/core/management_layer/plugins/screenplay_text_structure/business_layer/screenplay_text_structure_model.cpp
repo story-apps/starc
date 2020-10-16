@@ -50,7 +50,8 @@ bool ScreenplayTextStructureModel::filterAcceptsRow(int _sourceRow, const QModel
         return false;
     }
 
-    const auto item = d->screenplayModel->itemForIndex(d->screenplayModel->index(_sourceRow, 0, _sourceParent));
+    const auto itemIndex = d->screenplayModel->index(_sourceRow, 0, _sourceParent);
+    const auto item = d->screenplayModel->itemForIndex(itemIndex);
     return item->type() == ScreenplayTextModelItemType::Folder
             || item->type() == ScreenplayTextModelItemType::Scene;
 }

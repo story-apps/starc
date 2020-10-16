@@ -79,7 +79,7 @@ public:
     /**
      * @brief Вставить контент из mime-данных со сценарием в заданной позиции
      */
-    void insertFromMime(const QModelIndex& _index, int _position, const QString& _mimeData);
+    void insertFromMime(const QModelIndex& _index, int _positionInBlock, const QString& _mimeData);
 
     /**
      * @brief Получить элемент находящийся в заданном индексе

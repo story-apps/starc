@@ -215,6 +215,11 @@ void ScreenplayTextEditToolbar::setParagraphTypesModel(QAbstractItemModel* _mode
 
 void ScreenplayTextEditToolbar::setCurrentParagraphType(const QModelIndex& _index)
 {
+    //
+    // Не вызываем сигнал о смене типа параграфа, т.к. это сделал не пользователь
+    //
+    QSignalBlocker blocker(this);
+
     d->paragraphTypeAction->setText(_index.data().toString());
     d->popupContent->setCurrentIndex(_index);
 }

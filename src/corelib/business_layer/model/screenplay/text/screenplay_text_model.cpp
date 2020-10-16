@@ -727,7 +727,7 @@ QString ScreenplayTextModel::mimeFromSelection(const QModelIndex& _from, int _fr
     return xml;
 }
 
-void ScreenplayTextModel::insertFromMime(const QModelIndex& _index, int _position, const QString& _mimeData)
+void ScreenplayTextModel::insertFromMime(const QModelIndex& _index, int _positionInBlock, const QString& _mimeData)
 {
     if (!_index.isValid()) {
         return;
@@ -752,17 +752,17 @@ void ScreenplayTextModel::insertFromMime(const QModelIndex& _index, int _positio
         //
         // Если вставка идёт в самое начало блока, то просто переносим блок после вставляемого фрагмента
         //
-        if (_position == 0) {
+        if (_positionInBlock == 0) {
             lastItemsFromSourceScene.append(textItem);
         }
         //
         // В противном случае, дробим блок на две части
         //
-        else if (textItem->text().length() > _position) {
+        else if (textItem->text().length() > _positionInBlock) {
             const bool clearUuid = true;
-            sourceBlockEndContent = mimeFromSelection(_index, _position,
+            sourceBlockEndContent = mimeFromSelection(_index, _positionInBlock,
                                                      _index, textItem->text().length(), clearUuid);
-            textItem->removeText(_position);
+            textItem->removeText(_positionInBlock);
             updateItem(textItem);
         }
     }
@@ -892,6 +892,13 @@ void ScreenplayTextModel::insertFromMime(const QModelIndex& _index, int _positio
         // Просто вставляем их внутрь или после последнего элемента
         //
         for (auto item : lastItemsFromSourceScene) {
+            auto textItem = static_cast<ScreenplayTextModelTextItem*>(item);
+            if (textItem->text().isEmpty()) {
+                delete textItem;
+                textItem = nullptr;
+                continue;
+            }
+
             if (lastItem->type() == ScreenplayTextModelItemType::Scene) {
                 appendItem(item, lastItem);
             } else {
