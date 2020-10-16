@@ -750,22 +750,42 @@ void ScreenplayTextModel::insertFromMime(const QModelIndex& _index, int _positio
     if (item->type() == ScreenplayTextModelItemType::Text) {
         auto textItem = static_cast<ScreenplayTextModelTextItem*>(item);
         //
-        // Если вставка идёт в самое начало блока, то просто переносим блок после вставляемого фрагмента
+        // Если в заголовок папки
         //
-        if (_positionInBlock == 0
-            && textItem->paragraphType() != ScreenplayParagraphType::FolderHeader
-            && textItem->paragraphType() != ScreenplayParagraphType::FolderFooter) {
-            lastItemsFromSourceScene.append(textItem);
+        if (textItem->paragraphType() == ScreenplayParagraphType::FolderHeader) {
+            //
+            // ... то вставим после него
+            //
         }
         //
-        // В противном случае, дробим блок на две части
+        // Если завершение папки
         //
-        else if (textItem->text().length() > _positionInBlock) {
-            const bool clearUuid = true;
-            sourceBlockEndContent = mimeFromSelection(_index, _positionInBlock,
-                                                     _index, textItem->text().length(), clearUuid);
-            textItem->removeText(_positionInBlock);
-            updateItem(textItem);
+        else if (textItem->paragraphType() == ScreenplayParagraphType::FolderFooter) {
+            //
+            // ... то вставляем после папки
+            //
+            item = item->parent();
+        }
+        //
+        // В остальных случаях
+        //
+        else {
+            //
+            // Если вставка идёт в самое начало блока, то просто переносим блок после вставляемого фрагмента
+            //
+            if (_positionInBlock == 0) {
+                lastItemsFromSourceScene.append(textItem);
+            }
+            //
+            // В противном случае, дробим блок на две части
+            //
+            else if (textItem->text().length() > _positionInBlock) {
+                const bool clearUuid = true;
+                sourceBlockEndContent = mimeFromSelection(_index, _positionInBlock,
+                                                          _index, textItem->text().length(), clearUuid);
+                textItem->removeText(_positionInBlock);
+                updateItem(textItem);
+            }
         }
     }
 
