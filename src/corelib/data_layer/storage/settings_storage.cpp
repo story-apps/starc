@@ -253,6 +253,8 @@ SettingsStorage::Implementation::Implementation()
     addShortcut(BusinessLayer::ScreenplayParagraphType::InlineNote, "Ctrl+Esc");
     addShortcut(BusinessLayer::ScreenplayParagraphType::FolderHeader, "Ctrl+Space");
     //
+    defaultValues.insert(kComponentsScreenplayEditorShowSceneNumberOnLeftKey, true);
+    //
     // Параметры навигатора сценария
     //
     defaultValues.insert(kComponentsScreenplayNavigatorShowSceneNumberKey, true);
