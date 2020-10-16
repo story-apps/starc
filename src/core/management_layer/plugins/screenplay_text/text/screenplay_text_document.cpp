@@ -537,7 +537,8 @@ void ScreenplayTextDocument::setModel(BusinessLayer::ScreenplayTextModel* _model
         cursor.setPosition(fromPosition);
         cursor.setPosition(toPosition, QTextCursor::KeepAnchor);
         cursor.movePosition(QTextCursor::EndOfBlock, QTextCursor::KeepAnchor);
-        if (!cursor.hasSelection()) {
+        if (!cursor.hasSelection()
+            && !cursor.block().text().isEmpty()) {
             return;
         }
 
@@ -546,7 +547,12 @@ void ScreenplayTextDocument::setModel(BusinessLayer::ScreenplayTextModel* _model
         //
         auto fromIter = d->positionsToItems.lower_bound(cursor.selectionInterval().from);
         auto endIter = d->positionsToItems.lower_bound(cursor.selectionInterval().to);
-        Q_ASSERT(fromIter != endIter);
+        //
+        // ... если удаляется пустой абзац, берём следующий за ним элемент
+        //
+        if (fromIter == endIter) {
+            endIter = std::next(fromIter);
+        }
         //
         // ... определим дистанцию занимаемую удаляемыми элементами
         //
@@ -561,7 +567,10 @@ void ScreenplayTextDocument::setModel(BusinessLayer::ScreenplayTextModel* _model
         d->correctPositionsToItems(cursor.selectionInterval().to, -1 * distance);
 
         cursor.beginEditBlock();
-        cursor.deleteChar();
+        if (cursor.hasSelection()) {
+            cursor.deleteChar();
+        }
+
         //
         // Если это самый первый блок, то нужно удалить на один символ больше, чтобы удалить сам блок
         //

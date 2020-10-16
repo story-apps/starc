@@ -259,13 +259,6 @@ void ScreenplayTextEdit::keyPressEvent(QKeyEvent* _event)
     auto handler = KeyProcessingLayer::KeyPressHandlerFacade::instance(this);
 
     //
-    // Получим курсор в текущем положении
-    // Начнём блок операций
-    //
-    QTextCursor cursor = textCursor();
-    cursor.beginEditBlock();
-
-    //
     // Подготовка к обработке
     //
     handler->prepare(_event);
@@ -300,11 +293,6 @@ void ScreenplayTextEdit::keyPressEvent(QKeyEvent* _event)
     // Событие дошло по назначению
     //
     _event->accept();
-
-    //
-    // Завершим блок операций
-    //
-    cursor.endEditBlock();
 
     //
     // Убедимся, что курсор виден

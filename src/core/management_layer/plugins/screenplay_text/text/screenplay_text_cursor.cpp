@@ -37,7 +37,7 @@ bool ScreenplayTextCursor::inFirstColumn() const
 ScreenplayTextCursor::Selection ScreenplayTextCursor::selectionInterval() const
 {
     if (!hasSelection()) {
-        return {};
+        return { position(), position() };
     }
 
     if (selectionStart() > selectionEnd()) {

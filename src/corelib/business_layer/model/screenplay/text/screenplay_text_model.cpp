@@ -752,7 +752,9 @@ void ScreenplayTextModel::insertFromMime(const QModelIndex& _index, int _positio
         //
         // Если вставка идёт в самое начало блока, то просто переносим блок после вставляемого фрагмента
         //
-        if (_positionInBlock == 0) {
+        if (_positionInBlock == 0
+            && textItem->paragraphType() != ScreenplayParagraphType::FolderHeader
+            && textItem->paragraphType() != ScreenplayParagraphType::FolderFooter) {
             lastItemsFromSourceScene.append(textItem);
         }
         //
@@ -884,7 +886,16 @@ void ScreenplayTextModel::insertFromMime(const QModelIndex& _index, int _positio
         //
         for (auto item : lastItemsFromSourceScene) {
             if (item->hasParent()) {
-                takeItem(item, item->parent());
+                auto itemParent = item->parent();
+                takeItem(item, itemParent);
+
+                //
+                // Удалим родителя, если у него больше не осталось детей
+                // NOTE: актуально для случая, когда в сцене был один пустой абзац заголовка
+                //
+                if (itemParent->childCount() == 0) {
+                    removeItem(itemParent);
+                }
             }
         }
 
@@ -893,6 +904,9 @@ void ScreenplayTextModel::insertFromMime(const QModelIndex& _index, int _positio
         //
         for (auto item : lastItemsFromSourceScene) {
             auto textItem = static_cast<ScreenplayTextModelTextItem*>(item);
+            //
+            // Удаляем пустые элементы модели
+            //
             if (textItem->text().isEmpty()) {
                 delete textItem;
                 textItem = nullptr;
