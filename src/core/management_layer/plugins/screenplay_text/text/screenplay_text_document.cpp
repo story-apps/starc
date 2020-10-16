@@ -551,10 +551,10 @@ void ScreenplayTextDocument::setModel(BusinessLayer::ScreenplayTextModel* _model
         auto fromIter = d->positionsToItems.lower_bound(cursor.selectionInterval().from);
         auto endIter = d->positionsToItems.lower_bound(cursor.selectionInterval().to);
         //
-        // ... если удаляется пустой абзац, берём следующий за ним элемент
+        // ... если удаление заканчивается на пустом абзаце, берём следующий за ним элемент
         //
-        if (fromIter == endIter) {
-            endIter = std::next(fromIter);
+        if (cursor.block().text().isEmpty()) {
+            endIter = std::next(endIter);
         }
         //
         // ... определим дистанцию занимаемую удаляемыми элементами
