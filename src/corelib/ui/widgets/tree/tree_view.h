@@ -59,11 +59,6 @@ protected:
     void resizeEvent(QResizeEvent* _event) override;
 
     /**
-     * @brief Переопределяем, чтобы раскрывать элемент в который кидаются данные, если элемент свёрнут
-     */
-    void dropEvent(QDropEvent* _event) override;
-
-    /**
      * @brief Переопределяем для реализации уведомлений об изменении элемента под курсором
      */
     void mouseMoveEvent(QMouseEvent* _event) override;

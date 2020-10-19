@@ -183,16 +183,6 @@ void TreeView::resizeEvent(QResizeEvent* _event)
     }
 }
 
-void TreeView::dropEvent(QDropEvent* _event)
-{
-    const auto index = indexAt(_event->pos());
-    if (index.isValid()) {
-        expand(index);
-    }
-
-    QTreeView::dropEvent(_event);
-}
-
 void TreeView::mouseMoveEvent(QMouseEvent* _event)
 {
     QTreeView::mouseMoveEvent(_event);
