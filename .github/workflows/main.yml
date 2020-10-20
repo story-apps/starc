@@ -1,0 +1,45 @@
+name: Build
+
+env:
+  APP_VERSION: 0.0.4
+
+on: [push]
+
+jobs:
+  build_linux:
+    name: Build Linux version
+    runs-on: ubuntu-18.04
+    timeout-minutes: 60
+    steps:
+      - name: Checkout Sources
+        uses: actions/checkout@master
+
+      - name: Install Qt
+        uses: jurplel/install-qt-action@v2
+        with:
+          version: 5.15.1
+          target: desktop
+
+      - name: Run QMake
+        shell: bash
+        run: |
+          cd src
+          qmake starc.pro
+
+      - name: Build
+        shell: bash
+        run: |
+          cd src
+          make -j$(nproc)
+
+      - name: Make deb-package
+        shell: bash
+        run: |
+          cd build/linux
+          ./make-deb_amd64.sh ${{env.APP_VERSION}}
+
+      - name: Collect artifacts
+        uses: actions/upload-artifact@v2
+        with:
+          name: linux packages
+          path: build/linux/starc-setup-${{env.APP_VERSION}}_amd64.deb
