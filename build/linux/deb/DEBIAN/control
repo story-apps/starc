@@ -1,0 +1,11 @@
+Package: starcapp
+Version: 0.0.4
+Provides: starcapp
+Maintainer: Dimka Novikov <to@dimkanovikov.pro>
+Architecture: amd64
+Installed-Size: 18893
+Priority: optional
+Section: text
+Homepage: https://starc.app/
+Description: Story Architect
+ Story Architect (STARC) is a all-in-one screenwriting application

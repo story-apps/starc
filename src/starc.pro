@@ -1,11 +1,13 @@
-TEMPLATE = subdirs
+TEMPLATE = subdirs ordered
 
 SUBDIRS += \
-    app \
-    core \
-    core/management_layer/plugins \
+    3rd_party \
     corelib \
-    3rd_party
+    core/management_layer/plugins \
+    core \
+    app
+
+CONFIG += ordered
 
 HEADERS += \
     interfaces/management_layer/i_application_manager.h \
