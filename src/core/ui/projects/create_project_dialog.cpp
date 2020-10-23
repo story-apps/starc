@@ -278,7 +278,7 @@ void CreateProjectDialog::designSystemChangeEvent(DesignSystemChangeEvent* _even
 
     for (auto textField : { d->projectName, d->projectFolder, d->importFilePath }) {
         textField->setTextColor(Ui::DesignSystem::color().onBackground());
-        textField->setBackgroundColor(Ui::DesignSystem::color().background());
+        textField->setBackgroundColor(Ui::DesignSystem::color().onBackground());
     }
 
     d->cloudProjectCreationNote->setContentsMargins(

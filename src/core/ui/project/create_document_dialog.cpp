@@ -143,7 +143,7 @@ void CreateDocumentDialog::designSystemChangeEvent(DesignSystemChangeEvent* _eve
     d->documentType->setTextColor(DesignSystem::color().onPrimary());
 
     d->documentName->setTextColor(Ui::DesignSystem::color().onBackground());
-    d->documentName->setBackgroundColor(Ui::DesignSystem::color().background());
+    d->documentName->setBackgroundColor(Ui::DesignSystem::color().onBackground());
 
     d->documentInfo->setContentsMargins(Ui::DesignSystem::label().margins().toMargins());
     d->documentInfo->setTextColor(Ui::DesignSystem::color().onBackground());

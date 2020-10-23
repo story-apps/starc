@@ -1199,7 +1199,7 @@ void SettingsView::designSystemChangeEvent(DesignSystemChangeEvent* _event)
          d->screenplayDurationByPageDuration,
          d->screenplayDurationByCharactersCharacters,
          d->screenplayDurationByCharactersDuration }) {
-        textField->setBackgroundColor(DesignSystem::color().background());
+        textField->setBackgroundColor(DesignSystem::color().onBackground());
         textField->setTextColor(DesignSystem::color().onBackground());
     }
 
