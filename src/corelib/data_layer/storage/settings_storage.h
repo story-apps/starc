@@ -81,6 +81,10 @@ namespace {
     QString projectStructureKey(const QString& _path) {
         return projectKey(_path) + "/structure";
     }
+    // был ли октрыт ли навигатор по проекту
+    QString projectStructureVisibleKey(const QString& _path) {
+        return projectKey(_path) + "/structure-visible";
+    }
 
     //
     // Система

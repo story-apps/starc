@@ -616,8 +616,15 @@ void ProjectManager::loadCurrentProject(const QString& _name, const QString& _pa
                                    DataStorageLayer::SettingsStorage::SettingsPlace::Application));
 
     //
-    // Восстановить последнее состояние дерева, если возможно
+    // При необходимости открыть навигатор по документу
     //
+    const auto isProjectStructureVisible
+            = DataStorageLayer::StorageFacade::settingsStorage()->value(
+                  DataStorageLayer::projectStructureVisibleKey(_path),
+                  DataStorageLayer::SettingsStorage::SettingsPlace::Application);
+    if (isProjectStructureVisible.isValid() && !isProjectStructureVisible.toBool()) {
+        showNavigator(d->navigator->currentIndex());
+    }
 
     //
     // Синхронизировать выбранный документ
@@ -636,6 +643,10 @@ void ProjectManager::closeCurrentProject(const QString& _path)
     DataStorageLayer::StorageFacade::settingsStorage()->setValue(
                 DataStorageLayer::projectStructureKey(_path),
                 d->navigator->saveState(),
+                DataStorageLayer::SettingsStorage::SettingsPlace::Application);
+    DataStorageLayer::StorageFacade::settingsStorage()->setValue(
+                DataStorageLayer::projectStructureVisibleKey(_path),
+                d->navigator->isProjectNavigatorShown(),
                 DataStorageLayer::SettingsStorage::SettingsPlace::Application);
 
     //
