@@ -6,7 +6,7 @@
 /**
  * @brief Обёртка для анимирования тулбаров
  */
-class FloatingToolbarAnimator : public FloatingToolBar
+class CORE_LIBRARY_EXPORT FloatingToolbarAnimator : public FloatingToolBar
 {
     Q_OBJECT
 

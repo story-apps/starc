@@ -1,12 +1,14 @@
 #pragma once
 
+#include <corelib_global.h>
+
 #include <QModelIndex>
 
 
 /**
  * @brief Класс строящий путь элемента по его индексу, для последующей возможности сравнения
  */
-class ModelIndexPath
+class CORE_LIBRARY_EXPORT ModelIndexPath
 {
 public:
     explicit ModelIndexPath(const QModelIndex& _index);

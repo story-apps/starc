@@ -294,7 +294,7 @@ DesignSystem::Font::Implementation::Implementation(qreal _scaleFactor)
                                           QLocale::Hindi,
                                           QLocale::Persian };
     if (notoLanguages.contains(QLocale().language())) {
-        fontFamily = QLatin1String("Noto");
+        fontFamily = QLatin1String("Noto Sans");
     }
     auto initFont = [_scaleFactor, fontFamily] (QFont::Weight _weight, QFont::Capitalization _capitalization,
             int _pixelSize, qreal _letterSpacing, QFont& _font) {
