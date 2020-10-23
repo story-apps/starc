@@ -383,7 +383,7 @@ ProjectManager::ProjectManager(QObject* _parent, QWidget* _parentWidget)
         // Откроем документ на редактирование в первом из представлений
         //
         if (views.isEmpty()) {
-            d->view->showDefaultPage();
+            d->view->showNotImplementedPage();
             return;
         }
         showView(_index, views.first().mimeType);
@@ -776,6 +776,11 @@ void ProjectManager::undoModelChange(BusinessLayer::AbstractModel* _model, int _
 
 void ProjectManager::showView(const QModelIndex& _itemIndex, const QString& _viewMimeType)
 {
+    if (!_itemIndex.isValid()) {
+        d->view->showDefaultPage();
+        return;
+    }
+
     const auto mappedItemIndex = d->projectStructureProxyModel->mapToSource(_itemIndex);
     const auto item = d->projectStructureModel->itemForIndex(mappedItemIndex);
 
@@ -785,7 +790,7 @@ void ProjectManager::showView(const QModelIndex& _itemIndex, const QString& _vie
     auto document = DataStorageLayer::StorageFacade::documentStorage()->document(item->uuid());
     auto model = d->modelsFacade.modelFor(document);
     if (model == nullptr) {
-        d->view->showDefaultPage();
+        d->view->showNotImplementedPage();
         return;
     }
 
@@ -794,7 +799,7 @@ void ProjectManager::showView(const QModelIndex& _itemIndex, const QString& _vie
     //
     auto view = d->pluginsBuilder.activateView(_viewMimeType, model);
     if (view == nullptr) {
-        d->view->showDefaultPage();
+        d->view->showNotImplementedPage();
         return;
     }
     d->view->setCurrentWidget(view);

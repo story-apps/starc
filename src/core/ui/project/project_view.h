@@ -21,6 +21,11 @@ public:
      */
     void showDefaultPage();
 
+    /**
+     * @brief Показать страницу с информацией о том, что это ещё не реализовано
+     */
+    void showNotImplementedPage();
+
 signals:
     /**
      * @brief Пользователь нажал кнопку создания нового проекта
