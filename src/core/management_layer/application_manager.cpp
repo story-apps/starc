@@ -434,6 +434,16 @@ void ApplicationManager::Implementation::setTranslation(QLocale::Language _langu
             break;
         }
 
+        case QLocale::Belarusian: {
+            translation = "be";
+            break;
+        }
+
+        case QLocale::French: {
+            translation = "fr";
+            break;
+        }
+
         case QLocale::German: {
             translation = "de";
             break;
@@ -454,8 +464,23 @@ void ApplicationManager::Implementation::setTranslation(QLocale::Language _langu
             break;
         }
 
+        case QLocale::Indonesian: {
+            translation = "id";
+            break;
+        }
+
         case QLocale::Italian: {
             translation = "it";
+            break;
+        }
+
+        case QLocale::Polish: {
+            translation = "pl";
+            break;
+        }
+
+        case QLocale::Portuguese: {
+            translation = "pt_BR";
             break;
         }
 

@@ -16,12 +16,17 @@ HEADERS += \
 TRANSLATIONS += \
     core/translations/_en_source.ts \
     core/translations/for_use_starc_translation_az.ts \
+    core/translations/for_use_starc_translation_be.ts \
     core/translations/for_use_starc_translation_de.ts \
     core/translations/for_use_starc_translation_es.ts \
+    core/translations/for_use_starc_translation_fr.ts \
     core/translations/for_use_starc_translation_he.ts \
     core/translations/for_use_starc_translation_hi.ts \
     core/translations/for_use_starc_translation_hu.ts \
+    core/translations/for_use_starc_translation_id.ts \
     core/translations/for_use_starc_translation_it.ts \
+    core/translations/for_use_starc_translation_pl.ts \
+    core/translations/for_use_starc_translation_pt_BR.ts \
     core/translations/for_use_starc_translation_ru.ts \
     core/translations/for_use_starc_translation_tr.ts \
     core/translations/for_use_starc_translation_sl.ts \

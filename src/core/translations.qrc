@@ -11,5 +11,10 @@
         <file>translations/for_use_starc_translation_az.qm</file>
         <file>translations/for_use_starc_translation_tr.qm</file>
         <file>translations/for_use_starc_translation_hi.qm</file>
+        <file>translations/for_use_starc_translation_pt_BR.qm</file>
+        <file>translations/for_use_starc_translation_pl.qm</file>
+        <file>translations/for_use_starc_translation_id.qm</file>
+        <file>translations/for_use_starc_translation_fr.qm</file>
+        <file>translations/for_use_starc_translation_be.qm</file>
     </qresource>
 </RCC>

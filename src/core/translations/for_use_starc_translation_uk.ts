@@ -1,6 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!DOCTYPE TS>
-<TS version="2.1" language="uk">
+<?xml version="1.0" ?><!DOCTYPE TS><TS language="uk" version="2.1">
 <context>
     <name>BusinessLayer::FountainImporter</name>
     <message>
@@ -283,16 +281,6 @@
         <translation>Проєкт Story Architect</translation>
     </message>
     <message>
-        <location filename="../../corelib/utils/helpers/dialog_helper.cpp" line="85"/>
-        <source>Plain text</source>
-        <translation>Звичайний текст</translation>
-    </message>
-    <message>
-        <location filename="../../corelib/utils/helpers/dialog_helper.cpp" line="92"/>
-        <source>All supported files</source>
-        <translation>Типи файлів, що підтримуються</translation>
-    </message>
-    <message>
         <location filename="../../corelib/utils/helpers/dialog_helper.cpp" line="37"/>
         <source>KIT Scenarist project</source>
         <translation>Проєкт KIT Scenarist</translation>
@@ -331,6 +319,16 @@
         <location filename="../../corelib/utils/helpers/dialog_helper.cpp" line="79"/>
         <source>Celtx project</source>
         <translation>Проєкт Celtx</translation>
+    </message>
+    <message>
+        <location filename="../../corelib/utils/helpers/dialog_helper.cpp" line="85"/>
+        <source>Plain text</source>
+        <translation>Звичайний текст</translation>
+    </message>
+    <message>
+        <location filename="../../corelib/utils/helpers/dialog_helper.cpp" line="92"/>
+        <source>All supported files</source>
+        <translation>Типи файлів, що підтримуються</translation>
     </message>
 </context>
 <context>
@@ -385,7 +383,7 @@
 <context>
     <name>KeyProcessingLayer::FolderFooterHandler</name>
     <message>
-        <location filename="../management_layer/plugins/screenplay_text/text/screenplay_text_edit.cpp" line="697"/>
+        <location filename="../management_layer/plugins/screenplay_text/text/screenplay_text_edit.cpp" line="736"/>
         <source>END OF</source>
         <translation>КІНЕЦЬ</translation>
     </message>
@@ -504,70 +502,70 @@
     <message>
         <location filename="../management_layer/plugins/project_information/project_information_manager.cpp" line="63"/>
         <source>Images</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
     <name>ManagementLayer::ProjectManager</name>
     <message>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="138"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="139"/>
         <source>Empty recycle bin</source>
         <translation>Винести непотріб</translation>
     </message>
     <message>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="147"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="148"/>
         <source>Add document</source>
         <translation>Додати документ</translation>
     </message>
     <message>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="162"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="163"/>
         <source>Remove document</source>
         <translation>Видалити документ</translation>
     </message>
     <message>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="266"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="267"/>
         <source>Do you really want to permanently remove document?</source>
         <translation>Дійсно видалити документ назавжди?</translation>
     </message>
     <message>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="267"/>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="309"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="268"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="310"/>
         <source>No</source>
         <translation>Ні, в жодному разі</translation>
     </message>
     <message>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="268"/>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="310"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="269"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="311"/>
         <source>Yes, remove</source>
         <translation>Так, видалити</translation>
     </message>
     <message>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="308"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="309"/>
         <source>Do you really want to permanently remove all documents from the recycle bin?</source>
         <translation>Дійсно видалити усі непотрібні документи назавжди?</translation>
     </message>
     <message>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="729"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="742"/>
         <source>Title page</source>
         <translation>Титульна сторінка</translation>
     </message>
     <message>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="730"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="743"/>
         <source>Synopsis</source>
         <translation>Синопсис</translation>
     </message>
     <message>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="731"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="744"/>
         <source>Treatment</source>
         <translation>Поепізодник</translation>
     </message>
     <message>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="732"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="745"/>
         <source>Text</source>
         <translation>Текст</translation>
     </message>
     <message>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="733"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="746"/>
         <source>Statistics</source>
         <translation>Статистика</translation>
     </message>
@@ -886,16 +884,6 @@ from 2 Gb</source>
 <context>
     <name>Ui::CreateProjectDialog</name>
     <message>
-        <location filename="../ui/projects/create_project_dialog.cpp" line="256"/>
-        <source>Create new story</source>
-        <translation>Створити новий твір</translation>
-    </message>
-    <message>
-        <location filename="../ui/projects/create_project_dialog.cpp" line="258"/>
-        <source>Enter name of the new story</source>
-        <translation>Введіть назву майбутнього твору</translation>
-    </message>
-    <message>
         <location filename="../ui/projects/create_project_dialog.cpp" line="117"/>
         <source>Choose the folder where new story will be saved</source>
         <translation>Оберіть папку для збереження майбутнього твору</translation>
@@ -941,6 +929,16 @@ from 2 Gb</source>
         <translation>Увійти</translation>
     </message>
     <message>
+        <location filename="../ui/projects/create_project_dialog.cpp" line="256"/>
+        <source>Create new story</source>
+        <translation>Створити новий твір</translation>
+    </message>
+    <message>
+        <location filename="../ui/projects/create_project_dialog.cpp" line="258"/>
+        <source>Enter name of the new story</source>
+        <translation>Введіть назву майбутнього твору</translation>
+    </message>
+    <message>
         <location filename="../ui/projects/create_project_dialog.cpp" line="259"/>
         <source>Save story in the local computer</source>
         <translation>Зберегти твір у комп&apos;ютері</translation>
@@ -961,14 +959,14 @@ from 2 Gb</source>
         <translation>Оберіть для імпортування файл твору</translation>
     </message>
     <message>
-        <location filename="../ui/projects/create_project_dialog.cpp" line="264"/>
-        <source>Create</source>
-        <translation>Створити</translation>
-    </message>
-    <message>
         <location filename="../ui/projects/create_project_dialog.cpp" line="263"/>
         <source>Cancel</source>
         <translation>Скасувати</translation>
+    </message>
+    <message>
+        <location filename="../ui/projects/create_project_dialog.cpp" line="264"/>
+        <source>Create</source>
+        <translation>Створити</translation>
     </message>
 </context>
 <context>
@@ -1099,56 +1097,56 @@ from 2 Gb</source>
 <context>
     <name>Ui::MenuView</name>
     <message>
-        <location filename="../ui/menu_view.cpp" line="189"/>
-        <source>Stories</source>
-        <translation>Твори</translation>
-    </message>
-    <message>
-        <location filename="../ui/menu_view.cpp" line="190"/>
-        <source>Create story</source>
-        <translation>Створити твір</translation>
-    </message>
-    <message>
-        <location filename="../ui/menu_view.cpp" line="191"/>
-        <source>Open story</source>
-        <translation>Відкрити твір</translation>
-    </message>
-    <message>
-        <location filename="../ui/menu_view.cpp" line="194"/>
-        <source>Save current story as...</source>
-        <translation>Зберегти актуальний твір як...</translation>
-    </message>
-    <message>
-        <location filename="../ui/menu_view.cpp" line="195"/>
-        <source>Import...</source>
-        <translation>Імпортувати</translation>
-    </message>
-    <message>
-        <location filename="../ui/menu_view.cpp" line="196"/>
-        <source>Export...</source>
-        <translation>Експортувати</translation>
-    </message>
-    <message>
-        <location filename="../ui/menu_view.cpp" line="197"/>
-        <source>Application settings</source>
-        <translation>Налаштування інтерфейсу</translation>
-    </message>
-    <message>
-        <location filename="../ui/menu_view.cpp" line="198"/>
-        <source>How to use the application</source>
-        <translation>Довідка</translation>
-    </message>
-    <message>
         <location filename="../ui/menu_view.cpp" line="176"/>
-        <location filename="../ui/menu_view.cpp" line="192"/>
+        <location filename="../ui/menu_view.cpp" line="193"/>
         <source>All changes saved</source>
         <translation>Зміни збережені</translation>
     </message>
     <message>
         <location filename="../ui/menu_view.cpp" line="176"/>
-        <location filename="../ui/menu_view.cpp" line="192"/>
+        <location filename="../ui/menu_view.cpp" line="193"/>
         <source>Save changes</source>
         <translation>Зберегти зміни</translation>
+    </message>
+    <message>
+        <location filename="../ui/menu_view.cpp" line="190"/>
+        <source>Stories</source>
+        <translation>Твори</translation>
+    </message>
+    <message>
+        <location filename="../ui/menu_view.cpp" line="191"/>
+        <source>Create story</source>
+        <translation>Створити твір</translation>
+    </message>
+    <message>
+        <location filename="../ui/menu_view.cpp" line="192"/>
+        <source>Open story</source>
+        <translation>Відкрити твір</translation>
+    </message>
+    <message>
+        <location filename="../ui/menu_view.cpp" line="195"/>
+        <source>Save current story as...</source>
+        <translation>Зберегти актуальний твір як...</translation>
+    </message>
+    <message>
+        <location filename="../ui/menu_view.cpp" line="196"/>
+        <source>Import...</source>
+        <translation>Імпортувати</translation>
+    </message>
+    <message>
+        <location filename="../ui/menu_view.cpp" line="197"/>
+        <source>Export...</source>
+        <translation>Експортувати</translation>
+    </message>
+    <message>
+        <location filename="../ui/menu_view.cpp" line="198"/>
+        <source>Application settings</source>
+        <translation>Налаштування інтерфейсу</translation>
+    </message>
+    <message>
+        <location filename="../ui/menu_view.cpp" line="199"/>
+        <source>How to use the application</source>
+        <translation>Довідка</translation>
     </message>
 </context>
 <context>
@@ -1263,13 +1261,9 @@ from 2 Gb</source>
 <context>
     <name>Ui::ProjectNavigator</name>
     <message>
-        <source>Filter</source>
-        <translation type="vanished">Фільтр</translation>
-    </message>
-    <message>
         <location filename="../ui/project/project_navigator.cpp" line="138"/>
         <source>Add document</source>
-        <translation type="unfinished">Додати документ</translation>
+        <translation>Додати документ</translation>
     </message>
 </context>
 <context>
@@ -1283,19 +1277,29 @@ from 2 Gb</source>
 <context>
     <name>Ui::ProjectView</name>
     <message>
-        <location filename="../ui/project/project_view.cpp" line="72"/>
+        <location filename="../ui/project/project_view.cpp" line="106"/>
         <source>Here will be an editor of the document you choose in the navigator (at left).</source>
         <translation>Тут буде редактор документу, який Ви оберете в навігаторі (ліворуч).</translation>
     </message>
     <message>
-        <location filename="../ui/project/project_view.cpp" line="73"/>
+        <location filename="../ui/project/project_view.cpp" line="107"/>
         <source>Choose an item to edit, or</source>
         <translation>Оберіть документ для редагування або</translation>
     </message>
     <message>
-        <location filename="../ui/project/project_view.cpp" line="74"/>
+        <location filename="../ui/project/project_view.cpp" line="108"/>
         <source>create a new one</source>
         <translation>створіть новий</translation>
+    </message>
+    <message>
+        <location filename="../ui/project/project_view.cpp" line="110"/>
+        <source>Ooops... looks like editor of this document not implemented yet.</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../ui/project/project_view.cpp" line="111"/>
+        <source>But don&apos;t worry, it will be here in one of the future updates!</source>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
@@ -1530,133 +1534,219 @@ from 2 Gb</source>
 <context>
     <name>Ui::ScreenplayTextEdit</name>
     <message>
-        <location filename="../management_layer/plugins/screenplay_text/text/screenplay_text_edit.cpp" line="989"/>
+        <location filename="../management_layer/plugins/screenplay_text/text/screenplay_text_edit.cpp" line="1054"/>
         <source>Merge paragraph</source>
         <translation>Об&apos;єднати абзаци</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_text/text/screenplay_text_edit.cpp" line="992"/>
+        <location filename="../management_layer/plugins/screenplay_text/text/screenplay_text_edit.cpp" line="1057"/>
         <source>Split paragraph</source>
         <translation>Роз&apos;єднати абзац</translation>
     </message>
 </context>
 <context>
-    <name>Ui::ScreenplayTextEditToolBar</name>
+    <name>Ui::ScreenplayTextEditToolbar</name>
     <message>
-        <location filename="../management_layer/plugins/screenplay_text/text/screenplay_text_edit_toolbar.cpp" line="133"/>
+        <location filename="../management_layer/plugins/screenplay_text/text/screenplay_text_edit_toolbar.cpp" line="135"/>
         <source>Scene heading</source>
         <translation>Заголовок сцени</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_text/text/screenplay_text_edit_toolbar.cpp" line="254"/>
+        <location filename="../management_layer/plugins/screenplay_text/text/screenplay_text_edit_toolbar.cpp" line="293"/>
         <source>Undo last action</source>
         <translation>Скасувати останню дію</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_text/text/screenplay_text_edit_toolbar.cpp" line="255"/>
+        <location filename="../management_layer/plugins/screenplay_text/text/screenplay_text_edit_toolbar.cpp" line="294"/>
         <source>Redo last action</source>
         <translation>Повторити останню дію</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_text/text/screenplay_text_edit_toolbar.cpp" line="256"/>
+        <location filename="../management_layer/plugins/screenplay_text/text/screenplay_text_edit_toolbar.cpp" line="295"/>
         <source>Current paragraph format</source>
         <translation>Поточний формат абзацу</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_text/text/screenplay_text_edit_toolbar.cpp" line="257"/>
+        <location filename="../management_layer/plugins/screenplay_text/text/screenplay_text_edit_toolbar.cpp" line="296"/>
         <source>Hide fast format panel</source>
         <translation>Сховати панель форматування</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_text/text/screenplay_text_edit_toolbar.cpp" line="258"/>
+        <location filename="../management_layer/plugins/screenplay_text/text/screenplay_text_edit_toolbar.cpp" line="297"/>
         <source>Show fast format panel</source>
         <translation>Показати панель форматування</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_text/text/screenplay_text_edit_toolbar.cpp" line="259"/>
+        <location filename="../management_layer/plugins/screenplay_text/text/screenplay_text_edit_toolbar.cpp" line="298"/>
         <source>Search text</source>
         <translation>Шукати в тексті</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_text/text/screenplay_text_edit_toolbar.cpp" line="260"/>
+        <location filename="../management_layer/plugins/screenplay_text/text/screenplay_text_edit_toolbar.cpp" line="299"/>
         <source>Disable review mode</source>
         <translation>Вийти з режиму рецензування</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_text/text/screenplay_text_edit_toolbar.cpp" line="261"/>
+        <location filename="../management_layer/plugins/screenplay_text/text/screenplay_text_edit_toolbar.cpp" line="300"/>
         <source>Enable review mode</source>
         <translation>Режим рецензування</translation>
     </message>
 </context>
 <context>
+    <name>Ui::ScreenplayTextSearchToolbar</name>
+    <message>
+        <location filename="../management_layer/plugins/screenplay_text/text/screenplay_text_search_toolbar.cpp" line="198"/>
+        <location filename="../management_layer/plugins/screenplay_text/text/screenplay_text_search_toolbar.cpp" line="346"/>
+        <source>Search without case sensitive</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../management_layer/plugins/screenplay_text/text/screenplay_text_search_toolbar.cpp" line="199"/>
+        <location filename="../management_layer/plugins/screenplay_text/text/screenplay_text_search_toolbar.cpp" line="347"/>
+        <source>Search with case sensitive</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../management_layer/plugins/screenplay_text/text/screenplay_text_search_toolbar.cpp" line="203"/>
+        <location filename="../management_layer/plugins/screenplay_text/text/screenplay_text_search_toolbar.cpp" line="335"/>
+        <source>In the whole text</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../management_layer/plugins/screenplay_text/text/screenplay_text_search_toolbar.cpp" line="330"/>
+        <source>Exit from search</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../management_layer/plugins/screenplay_text/text/screenplay_text_search_toolbar.cpp" line="332"/>
+        <source>Search</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../management_layer/plugins/screenplay_text/text/screenplay_text_search_toolbar.cpp" line="333"/>
+        <source>Enter search phrase here</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../management_layer/plugins/screenplay_text/text/screenplay_text_search_toolbar.cpp" line="336"/>
+        <source>In scene heading</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../management_layer/plugins/screenplay_text/text/screenplay_text_search_toolbar.cpp" line="337"/>
+        <source>In action</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../management_layer/plugins/screenplay_text/text/screenplay_text_search_toolbar.cpp" line="338"/>
+        <source>In character</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../management_layer/plugins/screenplay_text/text/screenplay_text_search_toolbar.cpp" line="339"/>
+        <source>In dialogue</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../management_layer/plugins/screenplay_text/text/screenplay_text_search_toolbar.cpp" line="342"/>
+        <source>Go to the next search result</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../management_layer/plugins/screenplay_text/text/screenplay_text_search_toolbar.cpp" line="344"/>
+        <source>Go to the previous search result</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../management_layer/plugins/screenplay_text/text/screenplay_text_search_toolbar.cpp" line="349"/>
+        <source>Replace with</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../management_layer/plugins/screenplay_text/text/screenplay_text_search_toolbar.cpp" line="350"/>
+        <source>Enter phrase to replace</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../management_layer/plugins/screenplay_text/text/screenplay_text_search_toolbar.cpp" line="351"/>
+        <source>Replace</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../management_layer/plugins/screenplay_text/text/screenplay_text_search_toolbar.cpp" line="352"/>
+        <source>All</source>
+        <translation type="unfinished"/>
+    </message>
+</context>
+<context>
     <name>Ui::ScreenplayTextView</name>
     <message>
-        <location filename="../management_layer/plugins/screenplay_text/screenplay_text_view.cpp" line="528"/>
+        <location filename="../management_layer/plugins/screenplay_text/screenplay_text_view.cpp" line="557"/>
         <source>Scene heading</source>
         <translation>Локація і час</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_text/screenplay_text_view.cpp" line="529"/>
+        <location filename="../management_layer/plugins/screenplay_text/screenplay_text_view.cpp" line="558"/>
         <source>Scene characters</source>
         <translation>Дійові особи</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_text/screenplay_text_view.cpp" line="530"/>
+        <location filename="../management_layer/plugins/screenplay_text/screenplay_text_view.cpp" line="559"/>
         <source>Action</source>
         <translation>Дія</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_text/screenplay_text_view.cpp" line="531"/>
+        <location filename="../management_layer/plugins/screenplay_text/screenplay_text_view.cpp" line="560"/>
         <source>Character</source>
         <translation>Персонаж</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_text/screenplay_text_view.cpp" line="532"/>
+        <location filename="../management_layer/plugins/screenplay_text/screenplay_text_view.cpp" line="561"/>
         <source>Parenthetical</source>
         <translation>Нотатка</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_text/screenplay_text_view.cpp" line="533"/>
+        <location filename="../management_layer/plugins/screenplay_text/screenplay_text_view.cpp" line="562"/>
         <source>Dialogue</source>
         <translation>Репліка</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_text/screenplay_text_view.cpp" line="534"/>
+        <location filename="../management_layer/plugins/screenplay_text/screenplay_text_view.cpp" line="563"/>
         <source>Lyrics</source>
         <translation>Лірика</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_text/screenplay_text_view.cpp" line="535"/>
+        <location filename="../management_layer/plugins/screenplay_text/screenplay_text_view.cpp" line="564"/>
         <source>Shot</source>
         <translation>Кадр</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_text/screenplay_text_view.cpp" line="536"/>
+        <location filename="../management_layer/plugins/screenplay_text/screenplay_text_view.cpp" line="565"/>
         <source>Transition</source>
         <translation>Перехід</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_text/screenplay_text_view.cpp" line="537"/>
+        <location filename="../management_layer/plugins/screenplay_text/screenplay_text_view.cpp" line="566"/>
         <source>Inline note</source>
         <translation>Службові записи</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_text/screenplay_text_view.cpp" line="538"/>
+        <location filename="../management_layer/plugins/screenplay_text/screenplay_text_view.cpp" line="567"/>
         <source>Unformatted text</source>
         <translation>Текст без формату</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_text/screenplay_text_view.cpp" line="539"/>
+        <location filename="../management_layer/plugins/screenplay_text/screenplay_text_view.cpp" line="568"/>
         <source>Folder</source>
         <translation>Папка</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_text/screenplay_text_view.cpp" line="540"/>
+        <location filename="../management_layer/plugins/screenplay_text/screenplay_text_view.cpp" line="569"/>
         <source>Formatting</source>
         <translation>Форматування</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_text/screenplay_text_view.cpp" line="541"/>
+        <location filename="../management_layer/plugins/screenplay_text/screenplay_text_view.cpp" line="570"/>
         <source>Comments</source>
         <translation>Коментарі</translation>
     </message>
@@ -1705,667 +1795,667 @@ from 2 Gb</source>
 <context>
     <name>Ui::SettingsView</name>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="598"/>
+        <location filename="../ui/settings/settings_view.cpp" line="597"/>
         <source>Choose the folder where backups will be saved</source>
         <translation>Оберіть папку для збереження резервних копій</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="817"/>
+        <location filename="../ui/settings/settings_view.cpp" line="816"/>
         <source>Dark</source>
         <comment>Theme, will be used in case &quot;Theme: Dark&quot;</comment>
         <translation>Темна</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="820"/>
+        <location filename="../ui/settings/settings_view.cpp" line="819"/>
         <source>Light</source>
         <comment>Theme, will be used in case &quot;Theme: Light&quot;</comment>
         <translation>Світла</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="823"/>
+        <location filename="../ui/settings/settings_view.cpp" line="822"/>
         <source>Dark and light</source>
         <comment>Theme, will be used in case &quot;Theme: Dark and light&quot;</comment>
         <translation>Збалансована</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="826"/>
+        <location filename="../ui/settings/settings_view.cpp" line="825"/>
         <source>Custom</source>
         <comment>Theme, will be used in case &quot;Theme: Custom&quot;</comment>
         <translation>Власна</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="946"/>
+        <location filename="../ui/settings/settings_view.cpp" line="945"/>
         <source>Application settings</source>
         <translation>Налаштування</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="947"/>
+        <location filename="../ui/settings/settings_view.cpp" line="946"/>
         <source>Language</source>
         <translation>Мова</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="948"/>
+        <location filename="../ui/settings/settings_view.cpp" line="947"/>
         <source>Use typewriter sound for keys pressing</source>
         <translation>Увімкнути звук друкарки при натисканні клавіш</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="949"/>
+        <location filename="../ui/settings/settings_view.cpp" line="948"/>
         <source>Spell check</source>
         <translation>Перевірка правопису</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="950"/>
+        <location filename="../ui/settings/settings_view.cpp" line="949"/>
         <source>Spelling dictionary</source>
         <translation>Мова перевірки правопису</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="953"/>
+        <location filename="../ui/settings/settings_view.cpp" line="952"/>
         <source>Afrikaans</source>
         <translation>Африкаанс</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="954"/>
+        <location filename="../ui/settings/settings_view.cpp" line="953"/>
         <source>Aragonese</source>
         <translation>Арагонська</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="955"/>
+        <location filename="../ui/settings/settings_view.cpp" line="954"/>
         <source>Arabic</source>
         <translation>Арабська</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="956"/>
+        <location filename="../ui/settings/settings_view.cpp" line="955"/>
         <source>Azerbaijani</source>
         <translation>Азербайджанська</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="957"/>
+        <location filename="../ui/settings/settings_view.cpp" line="956"/>
         <source>Belarusian</source>
         <translation>Біларуська</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="958"/>
+        <location filename="../ui/settings/settings_view.cpp" line="957"/>
         <source>Bulgarian</source>
         <translation>Болгарська</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="959"/>
+        <location filename="../ui/settings/settings_view.cpp" line="958"/>
         <source>Bengali</source>
         <translation>Бенгальська</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="960"/>
+        <location filename="../ui/settings/settings_view.cpp" line="959"/>
         <source>Tibetan</source>
         <translation>Тібетська</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="961"/>
+        <location filename="../ui/settings/settings_view.cpp" line="960"/>
         <source>Breton</source>
         <translation>Бретонська</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="962"/>
+        <location filename="../ui/settings/settings_view.cpp" line="961"/>
         <source>Bosnian</source>
         <translation>Боснійська</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="963"/>
+        <location filename="../ui/settings/settings_view.cpp" line="962"/>
         <source>Catalan (Valencian)</source>
         <translation>Каталанська (Валенсійська)</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="964"/>
+        <location filename="../ui/settings/settings_view.cpp" line="963"/>
         <source>Catalan</source>
         <translation>Каталанська</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="965"/>
+        <location filename="../ui/settings/settings_view.cpp" line="964"/>
         <source>Czech</source>
         <translation>Чеська</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="966"/>
+        <location filename="../ui/settings/settings_view.cpp" line="965"/>
         <source>Welsh</source>
         <translation>Валлійська</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="967"/>
+        <location filename="../ui/settings/settings_view.cpp" line="966"/>
         <source>Danish</source>
         <translation>Данська</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="968"/>
+        <location filename="../ui/settings/settings_view.cpp" line="967"/>
         <source>German (Austria)</source>
         <translation>Німецька (Австрія)</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="969"/>
+        <location filename="../ui/settings/settings_view.cpp" line="968"/>
         <source>German (Switzerland)</source>
         <translation>Німецька (Швейцарія)</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="970"/>
+        <location filename="../ui/settings/settings_view.cpp" line="969"/>
         <source>German</source>
         <translation>Німецька</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="971"/>
+        <location filename="../ui/settings/settings_view.cpp" line="970"/>
         <source>Greek (Polytonic)</source>
         <translation>Грецька (політонічна)</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="972"/>
+        <location filename="../ui/settings/settings_view.cpp" line="971"/>
         <source>Greek</source>
         <translation>Грецька</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="973"/>
+        <location filename="../ui/settings/settings_view.cpp" line="972"/>
         <source>English (Australia)</source>
         <translation>Англійська (Австралія)</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="974"/>
+        <location filename="../ui/settings/settings_view.cpp" line="973"/>
         <source>English (Canada)</source>
         <translation>Англійська (Канада)</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="975"/>
+        <location filename="../ui/settings/settings_view.cpp" line="974"/>
         <source>English (United Kingdom)</source>
         <translation>Англійська (Сполучене Королівство)</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="976"/>
+        <location filename="../ui/settings/settings_view.cpp" line="975"/>
         <source>English (New Zealand)</source>
         <translation>Англійська (Нова Зеландія)</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="977"/>
+        <location filename="../ui/settings/settings_view.cpp" line="976"/>
         <source>English (South Africa)</source>
         <translation>Англійська (Південна Африка)</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="978"/>
+        <location filename="../ui/settings/settings_view.cpp" line="977"/>
         <source>English (United States)</source>
         <translation>Англійська (США)</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="979"/>
+        <location filename="../ui/settings/settings_view.cpp" line="978"/>
         <source>Esperanto</source>
         <translation>Есперанто</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="980"/>
+        <location filename="../ui/settings/settings_view.cpp" line="979"/>
         <source>Spanish (Argentina)</source>
         <translation>Іспанська (Аргентина)</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="981"/>
+        <location filename="../ui/settings/settings_view.cpp" line="980"/>
         <source>Spanish (Bolivia)</source>
         <translation>Іспанська (Болівія)</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="982"/>
+        <location filename="../ui/settings/settings_view.cpp" line="981"/>
         <source>Spanish (Chile)</source>
         <translation>Іспанська (Чілі)</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="983"/>
+        <location filename="../ui/settings/settings_view.cpp" line="982"/>
         <source>Spanish (Colombia)</source>
         <translation>Іспанська (Колумбія)</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="984"/>
+        <location filename="../ui/settings/settings_view.cpp" line="983"/>
         <source>Spanish (Costa Rica)</source>
         <translation>Іспанська (Коста Ріка)</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="985"/>
+        <location filename="../ui/settings/settings_view.cpp" line="984"/>
         <source>Spanish (Cuba)</source>
         <translation>Іспанська (Куба)</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="986"/>
+        <location filename="../ui/settings/settings_view.cpp" line="985"/>
         <source>Spanish (Dominican Republic)</source>
         <translation>Іспанська (Домініканська Республіка)</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="987"/>
+        <location filename="../ui/settings/settings_view.cpp" line="986"/>
         <source>Spanish (Ecuador)</source>
         <translation>Іспанська (Еквадор)</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="988"/>
+        <location filename="../ui/settings/settings_view.cpp" line="987"/>
         <source>Spanish (Guatemala)</source>
         <translation>Іспанська (Гватемала)</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="989"/>
+        <location filename="../ui/settings/settings_view.cpp" line="988"/>
         <source>Spanish (Honduras)</source>
         <translation>Іспанська (Гондурас)</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="990"/>
+        <location filename="../ui/settings/settings_view.cpp" line="989"/>
         <source>Spanish (Mexico)</source>
         <translation>Іспанська (Мексика)</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="991"/>
+        <location filename="../ui/settings/settings_view.cpp" line="990"/>
         <source>Spanish (Nicaragua)</source>
         <translation>Іспанська (Нікарагуа)</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="992"/>
+        <location filename="../ui/settings/settings_view.cpp" line="991"/>
         <source>Spanish (Panama)</source>
         <translation>Іспанська (Панама)</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="993"/>
+        <location filename="../ui/settings/settings_view.cpp" line="992"/>
         <source>Spanish (Peru)</source>
         <translation>Іспанська (Перу)</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="994"/>
+        <location filename="../ui/settings/settings_view.cpp" line="993"/>
         <source>Spanish (Philippines)</source>
         <translation>Іспанська (Філіппіни)</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="995"/>
+        <location filename="../ui/settings/settings_view.cpp" line="994"/>
         <source>Spanish (Puerto Rico)</source>
         <translation>Іспанська (Пуерто-Рико)</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="996"/>
+        <location filename="../ui/settings/settings_view.cpp" line="995"/>
         <source>Spanish (Paraguay)</source>
         <translation>Іспанська (Парагвай)</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="997"/>
+        <location filename="../ui/settings/settings_view.cpp" line="996"/>
         <source>Spanish (El Salvador)</source>
         <translation>Іспанська (Ель-Сальвадор)</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="998"/>
+        <location filename="../ui/settings/settings_view.cpp" line="997"/>
         <source>Spanish (United States)</source>
         <translation>Іспанська (США)</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="999"/>
+        <location filename="../ui/settings/settings_view.cpp" line="998"/>
         <source>Spanish (Uruguay)</source>
         <translation>Іспанська (Уругвай)</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="1000"/>
+        <location filename="../ui/settings/settings_view.cpp" line="999"/>
         <source>Spanish (Venezuela)</source>
         <translation>Іспанська (Венесуела)</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="1001"/>
+        <location filename="../ui/settings/settings_view.cpp" line="1000"/>
         <source>Spanish</source>
         <translation>Іспанська</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="1002"/>
+        <location filename="../ui/settings/settings_view.cpp" line="1001"/>
         <source>Estonian</source>
         <translation>Естонська</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="1003"/>
+        <location filename="../ui/settings/settings_view.cpp" line="1002"/>
         <source>Basque</source>
         <translation>Баскійська</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="1004"/>
+        <location filename="../ui/settings/settings_view.cpp" line="1003"/>
         <source>Persian</source>
         <translation>Фарсі</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="1005"/>
+        <location filename="../ui/settings/settings_view.cpp" line="1004"/>
         <source>Faroese</source>
         <translation>Фарерська</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="1006"/>
+        <location filename="../ui/settings/settings_view.cpp" line="1005"/>
         <source>French</source>
         <translation>Французька</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="1007"/>
+        <location filename="../ui/settings/settings_view.cpp" line="1006"/>
         <source>Friulian</source>
         <translation>Фріульська</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="1008"/>
+        <location filename="../ui/settings/settings_view.cpp" line="1007"/>
         <source>Western Frisian</source>
         <translation>Західнофризька</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="1009"/>
+        <location filename="../ui/settings/settings_view.cpp" line="1008"/>
         <source>Irish</source>
         <translation>Ірландська</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="1010"/>
+        <location filename="../ui/settings/settings_view.cpp" line="1009"/>
         <source>Gaelic</source>
         <translation>Гельська</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="1011"/>
+        <location filename="../ui/settings/settings_view.cpp" line="1010"/>
         <source>Galician</source>
         <translation>Галісійська</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="1012"/>
+        <location filename="../ui/settings/settings_view.cpp" line="1011"/>
         <source>Gujarati</source>
         <translation>Гуджараті</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="1013"/>
+        <location filename="../ui/settings/settings_view.cpp" line="1012"/>
         <source>Guarani</source>
         <translation>Гуарані</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="1014"/>
+        <location filename="../ui/settings/settings_view.cpp" line="1013"/>
         <source>Hebrew</source>
         <translation>Іврит</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="1015"/>
+        <location filename="../ui/settings/settings_view.cpp" line="1014"/>
         <source>Hindi</source>
         <translation>Гінді</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="1016"/>
+        <location filename="../ui/settings/settings_view.cpp" line="1015"/>
         <source>Croatian</source>
         <translation>Хорватська</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="1017"/>
+        <location filename="../ui/settings/settings_view.cpp" line="1016"/>
         <source>Hungarian</source>
         <translation>Угорська</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="1018"/>
+        <location filename="../ui/settings/settings_view.cpp" line="1017"/>
         <source>Armenian</source>
         <translation>Вірменська</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="1019"/>
+        <location filename="../ui/settings/settings_view.cpp" line="1018"/>
         <source>Armenian (Western)</source>
         <translation>Вірменська (західна)</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="1020"/>
+        <location filename="../ui/settings/settings_view.cpp" line="1019"/>
         <source>Interlingua</source>
         <translation>Інтерлінгва</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="1021"/>
+        <location filename="../ui/settings/settings_view.cpp" line="1020"/>
         <source>Indonesian</source>
         <translation>Індонезійська</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="1022"/>
+        <location filename="../ui/settings/settings_view.cpp" line="1021"/>
         <source>Icelandic</source>
         <translation>Ісландська</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="1023"/>
+        <location filename="../ui/settings/settings_view.cpp" line="1022"/>
         <source>Italian</source>
         <translation>Італійська</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="1024"/>
+        <location filename="../ui/settings/settings_view.cpp" line="1023"/>
         <source>Georgian</source>
         <translation>Грузинська</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="1025"/>
+        <location filename="../ui/settings/settings_view.cpp" line="1024"/>
         <source>Kazakh</source>
         <translation>Казахська</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="1026"/>
+        <location filename="../ui/settings/settings_view.cpp" line="1025"/>
         <source>Kurdish</source>
         <translation>Курдська</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="1027"/>
+        <location filename="../ui/settings/settings_view.cpp" line="1026"/>
         <source>Korean</source>
         <translation>Корейська</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="1028"/>
+        <location filename="../ui/settings/settings_view.cpp" line="1027"/>
         <source>Latin</source>
         <translation>Латина</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="1029"/>
+        <location filename="../ui/settings/settings_view.cpp" line="1028"/>
         <source>Luxembourgish</source>
         <translation>Люксембурзька</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="1030"/>
+        <location filename="../ui/settings/settings_view.cpp" line="1029"/>
         <source>Lao</source>
         <translation>Лаоська</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="1031"/>
+        <location filename="../ui/settings/settings_view.cpp" line="1030"/>
         <source>Lithuanian</source>
         <translation>Литовська</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="1032"/>
+        <location filename="../ui/settings/settings_view.cpp" line="1031"/>
         <source>Latgalian</source>
         <translation>Латгальська</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="1033"/>
+        <location filename="../ui/settings/settings_view.cpp" line="1032"/>
         <source>Latvian</source>
         <translation>Латиська</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="1034"/>
+        <location filename="../ui/settings/settings_view.cpp" line="1033"/>
         <source>Macedonian</source>
         <translation>Македонська</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="1035"/>
+        <location filename="../ui/settings/settings_view.cpp" line="1034"/>
         <source>Mongolian</source>
         <translation>Монгольська</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="1036"/>
+        <location filename="../ui/settings/settings_view.cpp" line="1035"/>
         <source>Maltese</source>
         <translation>Мальтійська</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="1037"/>
-        <location filename="../ui/settings/settings_view.cpp" line="1041"/>
+        <location filename="../ui/settings/settings_view.cpp" line="1036"/>
+        <location filename="../ui/settings/settings_view.cpp" line="1040"/>
         <source>Norwegian</source>
         <translation>Норвезька</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="1038"/>
+        <location filename="../ui/settings/settings_view.cpp" line="1037"/>
         <source>Low German</source>
         <translation>Нижньонімецька</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="1039"/>
+        <location filename="../ui/settings/settings_view.cpp" line="1038"/>
         <source>Nepali</source>
         <translation>Непальська</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="1040"/>
+        <location filename="../ui/settings/settings_view.cpp" line="1039"/>
         <source>Dutch</source>
         <translation>Нідерландська</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="1042"/>
+        <location filename="../ui/settings/settings_view.cpp" line="1041"/>
         <source>Occitan</source>
         <translation>Аквитанська</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="1043"/>
+        <location filename="../ui/settings/settings_view.cpp" line="1042"/>
         <source>Polish</source>
         <translation>Польська</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="1044"/>
+        <location filename="../ui/settings/settings_view.cpp" line="1043"/>
         <source>Portuguese (Brazilian)</source>
         <translation>Португальська (Бразильська)</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="1045"/>
+        <location filename="../ui/settings/settings_view.cpp" line="1044"/>
         <source>Portuguese</source>
         <translation>Португальська</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="1046"/>
+        <location filename="../ui/settings/settings_view.cpp" line="1045"/>
         <source>Quechua</source>
         <translation>Кечуа</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="1047"/>
+        <location filename="../ui/settings/settings_view.cpp" line="1046"/>
         <source>Romanian</source>
         <translation>Румунська</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="1048"/>
+        <location filename="../ui/settings/settings_view.cpp" line="1047"/>
         <source>Russian (with Yo)</source>
         <translation>Російська (з літерою ё)</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="1049"/>
+        <location filename="../ui/settings/settings_view.cpp" line="1048"/>
         <source>Russian</source>
         <translation>Російська</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="1050"/>
+        <location filename="../ui/settings/settings_view.cpp" line="1049"/>
         <source>Kinyarwanda</source>
         <translation>Руандійська</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="1051"/>
+        <location filename="../ui/settings/settings_view.cpp" line="1050"/>
         <source>Sinhala</source>
         <translation>Сингальська</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="1052"/>
+        <location filename="../ui/settings/settings_view.cpp" line="1051"/>
         <source>Slovak</source>
         <translation>Словацька</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="1053"/>
+        <location filename="../ui/settings/settings_view.cpp" line="1052"/>
         <source>Slovenian</source>
         <translation>Словенська</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="1054"/>
+        <location filename="../ui/settings/settings_view.cpp" line="1053"/>
         <source>Albanian</source>
         <translation>Албанська</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="1055"/>
+        <location filename="../ui/settings/settings_view.cpp" line="1054"/>
         <source>Serbian (Latin)</source>
         <translation>Сербська (латиною)</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="1056"/>
+        <location filename="../ui/settings/settings_view.cpp" line="1055"/>
         <source>Serbian</source>
         <translation>Сербська</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="1057"/>
+        <location filename="../ui/settings/settings_view.cpp" line="1056"/>
         <source>Swedish (Finland)</source>
         <translation>Шведська (Фінляндія)</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="1058"/>
+        <location filename="../ui/settings/settings_view.cpp" line="1057"/>
         <source>Swedish</source>
         <translation>Шведська</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="1059"/>
+        <location filename="../ui/settings/settings_view.cpp" line="1058"/>
         <source>Swahili</source>
         <translation>Суахілі</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="1060"/>
+        <location filename="../ui/settings/settings_view.cpp" line="1059"/>
         <source>Telugu</source>
         <translation>Телуґу</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="1061"/>
+        <location filename="../ui/settings/settings_view.cpp" line="1060"/>
         <source>Thai</source>
         <translation>Тайська</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="1062"/>
+        <location filename="../ui/settings/settings_view.cpp" line="1061"/>
         <source>Turkmen</source>
         <translation>Туркменська</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="1063"/>
+        <location filename="../ui/settings/settings_view.cpp" line="1062"/>
         <source>Klingon (Latin)</source>
         <translation>Клінгонська (латиною)</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="1064"/>
+        <location filename="../ui/settings/settings_view.cpp" line="1063"/>
         <source>Klingon</source>
         <translation>Клінгонська</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="1065"/>
+        <location filename="../ui/settings/settings_view.cpp" line="1064"/>
         <source>Turkish</source>
         <translation>Турецька</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="1066"/>
+        <location filename="../ui/settings/settings_view.cpp" line="1065"/>
         <source>Ukrainian</source>
         <translation>Українська</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="1067"/>
+        <location filename="../ui/settings/settings_view.cpp" line="1066"/>
         <source>Vietnamese</source>
         <translation>В&apos;єтнамська</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="1072"/>
+        <location filename="../ui/settings/settings_view.cpp" line="1071"/>
         <source>User interface</source>
         <translation>Власний інтерфейс</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="1073"/>
+        <location filename="../ui/settings/settings_view.cpp" line="1072"/>
         <source>Theme</source>
         <translation>Тема</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="1074"/>
+        <location filename="../ui/settings/settings_view.cpp" line="1073"/>
         <source>Size of the user interface elements:</source>
         <translation>Розмір елементів інтерфейсу</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="1075"/>
+        <location filename="../ui/settings/settings_view.cpp" line="1074"/>
         <source>small</source>
         <translation>маленький</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="1076"/>
+        <location filename="../ui/settings/settings_view.cpp" line="1075"/>
         <source>big</source>
         <translation>великий</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="1077"/>
+        <location filename="../ui/settings/settings_view.cpp" line="1076"/>
         <source>Save changes &amp; backups</source>
         <translation>Зберегти зміни та резервні копії</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="1078"/>
+        <location filename="../ui/settings/settings_view.cpp" line="1077"/>
         <source>Automatically save changes as soon as possible</source>
         <translation>Автоматично зберігати зміни якнайшвидше</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="1079"/>
+        <location filename="../ui/settings/settings_view.cpp" line="1078"/>
         <source>Autosave works very accurately.
 It saves the project every 3 seconds if you do not use your mouse or keyboard.
 If you work with no interruptions it saves the project every 3 minutes.</source>
@@ -2373,116 +2463,116 @@ If you work with no interruptions it saves the project every 3 minutes.</source>
 В разі безупинної роботи проєкт також зберігається кожні 3 хвилини.</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="1082"/>
+        <location filename="../ui/settings/settings_view.cpp" line="1081"/>
         <source>Save backups</source>
         <translation>Зберегти резервні копії</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="1083"/>
+        <location filename="../ui/settings/settings_view.cpp" line="1082"/>
         <source>Backups folder path</source>
         <translation>Місце збереження резервних копій</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="1085"/>
+        <location filename="../ui/settings/settings_view.cpp" line="1084"/>
         <source>Components</source>
         <translation>Компоненти</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="1087"/>
+        <location filename="../ui/settings/settings_view.cpp" line="1086"/>
         <source>Screenplay</source>
         <translation>Сценарій</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="1088"/>
+        <location filename="../ui/settings/settings_view.cpp" line="1087"/>
         <source>Text editor</source>
         <translation>Редактор сценарію</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="1089"/>
-        <location filename="../ui/settings/settings_view.cpp" line="1095"/>
+        <location filename="../ui/settings/settings_view.cpp" line="1088"/>
+        <location filename="../ui/settings/settings_view.cpp" line="1094"/>
         <source>Show scene number</source>
         <translation>Нумерація сцен</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="1090"/>
+        <location filename="../ui/settings/settings_view.cpp" line="1089"/>
         <source>on the left</source>
         <translation>ліворуч</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="1091"/>
+        <location filename="../ui/settings/settings_view.cpp" line="1090"/>
         <source>on the right</source>
         <translation>праворуч</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="1092"/>
+        <location filename="../ui/settings/settings_view.cpp" line="1091"/>
         <source>Show dialogue number</source>
         <translation>Нумерація диалогів</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="1093"/>
+        <location filename="../ui/settings/settings_view.cpp" line="1092"/>
         <source>Highlight current line</source>
         <translation>Виділяти поточний рядок</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="1094"/>
+        <location filename="../ui/settings/settings_view.cpp" line="1093"/>
         <source>Navigator</source>
         <translation>Навігатор</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="1096"/>
+        <location filename="../ui/settings/settings_view.cpp" line="1095"/>
         <source>Show scene text, lines</source>
         <translation>Показати рядки тексту сцен</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="1102"/>
+        <location filename="../ui/settings/settings_view.cpp" line="1101"/>
         <source>Duration</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../ui/settings/settings_view.cpp" line="1102"/>
+        <source>Calculate duration based on the count of pages</source>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../ui/settings/settings_view.cpp" line="1103"/>
-        <source>Calculate duration based on the count of pages</source>
-        <translation type="unfinished"></translation>
+        <location filename="../ui/settings/settings_view.cpp" line="1108"/>
+        <source>at the rate of</source>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../ui/settings/settings_view.cpp" line="1104"/>
-        <location filename="../ui/settings/settings_view.cpp" line="1109"/>
-        <source>at the rate of</source>
-        <translation type="unfinished"></translation>
+        <source>pages</source>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../ui/settings/settings_view.cpp" line="1105"/>
-        <source>pages</source>
-        <translation type="unfinished"></translation>
+        <location filename="../ui/settings/settings_view.cpp" line="1111"/>
+        <source>has duration</source>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../ui/settings/settings_view.cpp" line="1106"/>
         <location filename="../ui/settings/settings_view.cpp" line="1112"/>
-        <source>has duration</source>
-        <translation type="unfinished"></translation>
+        <source>seconds</source>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../ui/settings/settings_view.cpp" line="1107"/>
-        <location filename="../ui/settings/settings_view.cpp" line="1113"/>
-        <source>seconds</source>
-        <translation type="unfinished"></translation>
+        <source>Calculate duration based on the count of letters</source>
+        <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="1108"/>
-        <source>Calculate duration based on the count of letters</source>
-        <translation type="unfinished"></translation>
+        <location filename="../ui/settings/settings_view.cpp" line="1109"/>
+        <source>letters</source>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../ui/settings/settings_view.cpp" line="1110"/>
-        <source>letters</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../ui/settings/settings_view.cpp" line="1111"/>
         <source>including spaces</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="1115"/>
+        <location filename="../ui/settings/settings_view.cpp" line="1114"/>
         <source>Shortcuts</source>
         <translation>Гарячі клавіші</translation>
     </message>
@@ -2558,29 +2648,14 @@ If you work with no interruptions it saves the project every 3 minutes.</source>
         <translation>текст акцентів</translation>
     </message>
     <message>
-        <location filename="../ui/settings/theme_dialog.cpp" line="285"/>
-        <source>text on background</source>
-        <translation>текст сценарію</translation>
-    </message>
-    <message>
-        <location filename="../ui/settings/theme_dialog.cpp" line="287"/>
-        <source>text on surface</source>
-        <translation>текст на тлі</translation>
-    </message>
-    <message>
-        <location filename="../ui/settings/theme_dialog.cpp" line="289"/>
-        <source>text on error</source>
-        <translation>текст повідомлення</translation>
-    </message>
-    <message>
-        <location filename="../ui/settings/theme_dialog.cpp" line="291"/>
-        <source>text on shadow</source>
-        <translation>текст у затінках</translation>
-    </message>
-    <message>
         <location filename="../ui/settings/theme_dialog.cpp" line="284"/>
         <source>background</source>
         <translation>сторінка</translation>
+    </message>
+    <message>
+        <location filename="../ui/settings/theme_dialog.cpp" line="285"/>
+        <source>text on background</source>
+        <translation>текст сценарію</translation>
     </message>
     <message>
         <location filename="../ui/settings/theme_dialog.cpp" line="286"/>
@@ -2588,14 +2663,29 @@ If you work with no interruptions it saves the project every 3 minutes.</source>
         <translation>тло</translation>
     </message>
     <message>
+        <location filename="../ui/settings/theme_dialog.cpp" line="287"/>
+        <source>text on surface</source>
+        <translation>текст на тлі</translation>
+    </message>
+    <message>
         <location filename="../ui/settings/theme_dialog.cpp" line="288"/>
         <source>error</source>
         <translation>повідомлення</translation>
     </message>
     <message>
+        <location filename="../ui/settings/theme_dialog.cpp" line="289"/>
+        <source>text on error</source>
+        <translation>текст повідомлення</translation>
+    </message>
+    <message>
         <location filename="../ui/settings/theme_dialog.cpp" line="290"/>
         <source>shadow</source>
         <translation>затінки</translation>
+    </message>
+    <message>
+        <location filename="../ui/settings/theme_dialog.cpp" line="291"/>
+        <source>text on shadow</source>
+        <translation>текст у затінках</translation>
     </message>
     <message>
         <location filename="../ui/settings/theme_dialog.cpp" line="293"/>
