@@ -704,13 +704,41 @@ void ScreenplayTextCorrector::Implementation::correctPageBreaks(int _position)
             && (atPageEnd || atPageBreak)) {
             switch (ScreenplayBlockStyle::forBlock(block)) {
                 //
-                // Если это время и место
+                // Если это время и место или начало папки
                 //
-                case ScreenplayParagraphType::SceneHeading: {
+                case ScreenplayParagraphType::SceneHeading:
+                case ScreenplayParagraphType::FolderHeader: {
                     //
                     // Переносим на следующую страницу
                     //
                     moveCurrentBlockToNextPage(blockFormat, blockHeight, pageHeight, currentBlockWidth(), cursor, block, lastBlockHeight);
+
+                    break;
+                }
+
+                //
+                // Конец папки распологаем либо только в конце страницы, либо целиком переносим на следующую страницу
+                //
+                case ScreenplayParagraphType::FolderFooter: {
+                    //
+                    // Если в конце страницы, оставляем как есть
+                    //
+                    if (atPageEnd) {
+                        //
+                        // Запоминаем параметры текущего блока
+                        //
+                        blockItems[currentBlockInfo.number++] = BlockInfo{blockHeight, lastBlockHeight};
+                        //
+                        // и идём дальше
+                        //
+                        lastBlockHeight = 0;
+                    }
+                    //
+                    // В противном случае, просто переносим блок на следующую страницу
+                    //
+                    else {
+                        moveCurrentBlockToNextPage(blockFormat, blockHeight, pageHeight, pageWidth, cursor, block, lastBlockHeight);
+                    }
 
                     break;
                 }
@@ -1079,7 +1107,6 @@ void ScreenplayTextCorrector::Implementation::correctPageBreaks(int _position)
 
                     break;
                 }
-
 
                 //
                 // Если это описание действия или любой другой блок, для которого нет собственных правил
@@ -1511,9 +1538,16 @@ void ScreenplayTextCorrector::Implementation::moveBlockToNextPage(const QTextBlo
     // Определим формат блоков декорации
     //
     QTextBlockFormat decorationFormat = format;
-    if (ScreenplayBlockStyle::forBlock(_block) == ScreenplayParagraphType::SceneHeading) {
+    const auto paragraphType = ScreenplayBlockStyle::forBlock(_block);
+    if (paragraphType == ScreenplayParagraphType::SceneHeading) {
         decorationFormat.setProperty(ScreenplayBlockStyle::PropertyType,
                                      static_cast<int>(ScreenplayParagraphType::SceneHeadingShadow));
+    }
+    if (paragraphType == ScreenplayParagraphType::FolderHeader
+        || paragraphType == ScreenplayParagraphType::FolderHeader) {
+        decorationFormat.setProperty(ScreenplayBlockStyle::PropertyType,
+                                     static_cast<int>(ScreenplayParagraphType::Action));
+        decorationFormat.setBackground(Qt::NoBrush);
     }
     decorationFormat.setProperty(ScreenplayBlockStyle::PropertyIsCorrection, true);
     decorationFormat.setProperty(PageTextEdit::PropertyDontShowCursor, true);
