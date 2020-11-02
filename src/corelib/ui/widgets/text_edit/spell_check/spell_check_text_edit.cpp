@@ -220,12 +220,13 @@ QTextCursor SpellCheckTextEdit::moveCursorToStartWord(QTextCursor cursor) const
     // Примеры "кто-" - еще не закончив печатать слово, получим
     // его подсветку
     //
-    while (cursor.positionInBlock() > 0 &&
-           (text[cursor.positionInBlock()] == '\''
-            || text[cursor.positionInBlock()] == "’"
-            || text[cursor.positionInBlock()] == '-'
-            || text[cursor.positionInBlock() - 1] == '\''
-            || text[cursor.positionInBlock() - 1] == '-')) {
+    while (cursor.positionInBlock() > 0
+           && text.length() > cursor.positionInBlock()
+           && (text[cursor.positionInBlock()] == '\''
+               || text[cursor.positionInBlock()] == "’"
+               || text[cursor.positionInBlock()] == '-'
+               || text[cursor.positionInBlock() - 1] == '\''
+               || text[cursor.positionInBlock() - 1] == '-')) {
             cursor.movePosition(QTextCursor::PreviousCharacter);
             cursor.movePosition(QTextCursor::StartOfWord);
     }
