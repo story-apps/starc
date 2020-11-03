@@ -1108,7 +1108,12 @@ void ScreenplayTextDocument::addReviewMark(const QColor& _textColor, const QColo
 
 void ScreenplayTextDocument::updateModelOnContentChange(int _position, int _charsRemoved, int _charsAdded)
 {
-    if (d->state != DocumentState::Ready) {
+    if (d->model == nullptr) {
+        return;
+    }
+
+    if (d->state != DocumentState::Ready
+        && d->state != DocumentState::Loading) {
         return;
     }
 
