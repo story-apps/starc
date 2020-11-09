@@ -335,6 +335,14 @@ bool ScreenplayTextEdit::keyPressEventReimpl(QKeyEvent* _event)
         copy();
         BusinessLayer::ScreenplayTextCursor cursor = textCursor();
         cursor.removeCharacters(this);
+        d->model->saveChanges();
+    }
+    //
+    // ... вставить текст
+    //
+    else if (_event == QKeySequence::Paste) {
+        paste();
+        d->model->saveChanges();
     }
     //
     // ... перевод курсора к следующему символу

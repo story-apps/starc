@@ -50,6 +50,11 @@ public:
     void clear();
 
     /**
+     * @brief Сохранить изменения прямо сейчас
+     */
+    void saveChanges();
+
+    /**
      * @brief Применить заданное изменение для модели
      */
     virtual void applyPatch(const QByteArray& _patch);

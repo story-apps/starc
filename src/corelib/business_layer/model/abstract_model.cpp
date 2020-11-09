@@ -69,27 +69,7 @@ AbstractModel::AbstractModel(const QVector<QString>& _tags, QObject* _parent)
     : QAbstractItemModel(_parent),
       d(new Implementation(_tags))
 {
-    connect(&d->updateDocumentContentDebouncer, &Debouncer::gotWork, this, [this] {
-        if (d->document == nullptr) {
-            return;
-        }
-
-        const auto content = toXml();
-        //
-        const QByteArray undoPatch = d->dmpController.makePatch(content, d->document->content());
-        if (undoPatch.isEmpty()) {
-            return;
-        }
-        //
-        const QByteArray redoPatch = d->dmpController.makePatch(d->document->content(), content);
-        if (redoPatch.isEmpty()) {
-            return;
-        }
-
-        d->document->setContent(content);
-
-        emit contentsChanged(undoPatch, redoPatch);
-    });
+    connect(&d->updateDocumentContentDebouncer, &Debouncer::gotWork, this, &AbstractModel::saveChanges);
 
     connect(this, &AbstractModel::modelReset, this, &AbstractModel::updateDocumentContent);
     connect(this, &AbstractModel::rowsInserted, this, &AbstractModel::updateDocumentContent);
@@ -132,6 +112,29 @@ void AbstractModel::clear()
     d->document = nullptr;
 
     clearDocument();
+}
+
+void AbstractModel::saveChanges()
+{
+    if (d->document == nullptr) {
+        return;
+    }
+
+    const auto content = toXml();
+    //
+    const QByteArray undoPatch = d->dmpController.makePatch(content, d->document->content());
+    if (undoPatch.isEmpty()) {
+        return;
+    }
+    //
+    const QByteArray redoPatch = d->dmpController.makePatch(d->document->content(), content);
+    if (redoPatch.isEmpty()) {
+        return;
+    }
+
+    d->document->setContent(content);
+
+    emit contentsChanged(undoPatch, redoPatch);
 }
 
 void AbstractModel::applyPatch(const QByteArray& _patch)
