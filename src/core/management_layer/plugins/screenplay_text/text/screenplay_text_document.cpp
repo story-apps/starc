@@ -36,6 +36,7 @@ enum class DocumentState {
     Undefined,
     Loading,
     Changing,
+    Correcting,
     MimeDropping,
     Ready
 };
@@ -329,7 +330,10 @@ ScreenplayTextDocument::ScreenplayTextDocument(QObject *_parent)
 {
     connect(this, &ScreenplayTextDocument::contentsChange, this, &ScreenplayTextDocument::updateModelOnContentChange);
     connect(this, &ScreenplayTextDocument::contentsChange, &d->corrector, &ScreenplayTextCorrector::planCorrection);
-    connect(this, &ScreenplayTextDocument::contentsChanged, &d->corrector, &ScreenplayTextCorrector::makePlannedCorrection);
+    connect(this, &ScreenplayTextDocument::contentsChanged, this, [this] {
+        QScopedValueRollback temporatryState(d->state, DocumentState::Correcting);
+        d->corrector.makePlannedCorrection();
+    });
 }
 
 ScreenplayTextDocument::~ScreenplayTextDocument() = default;
@@ -1113,7 +1117,7 @@ void ScreenplayTextDocument::updateModelOnContentChange(int _position, int _char
     }
 
     if (d->state != DocumentState::Ready
-        && d->state != DocumentState::Loading) {
+        && d->state != DocumentState::Correcting) {
         return;
     }
 

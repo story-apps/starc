@@ -813,9 +813,10 @@ void ScreenplayTextModel::insertFromMime(const QModelIndex& _index, int _positio
             // ... и при этом вырезаем из него все текстовые блоки, идущие до конца сцены/папки
             //
             auto lastItemParent = lastItem->parent();
-            const int maxSize = lastItemParent->rowOfChild(lastItem) + 1;
-            while (lastItemParent->childCount() > maxSize) {
-                lastItemsFromSourceScene.append(lastItemParent->childAt(maxSize));
+            int movedItemIndex = lastItemParent->rowOfChild(lastItem) + 1;
+            while (lastItemParent->childCount() > movedItemIndex) {
+                lastItemsFromSourceScene.append(lastItemParent->childAt(movedItemIndex));
+                ++movedItemIndex;
             }
             //
             // Собственно берём родителя вместо самого элемента

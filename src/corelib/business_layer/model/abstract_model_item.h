@@ -61,6 +61,11 @@ public:
     virtual AbstractModelItem* parent() const;
 
     /**
+     * @brief Установить родительский элемент
+     */
+    void setParent(AbstractModelItem* _parent);
+
+    /**
      * @brief Имеет ли элемент детей
      */
     bool hasChildren() const;

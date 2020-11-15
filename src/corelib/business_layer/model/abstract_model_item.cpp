@@ -66,6 +66,7 @@ void AbstractModelItem::removeItem(AbstractModelItem* _item)
 
 void AbstractModelItem::takeItem(AbstractModelItem* _item)
 {
+    _item->setParent(nullptr);
     d->children.removeOne(_item);
 }
 
@@ -77,6 +78,11 @@ bool AbstractModelItem::hasParent() const
 AbstractModelItem* AbstractModelItem::parent() const
 {
     return d->parent;
+}
+
+void AbstractModelItem::setParent(AbstractModelItem* _parent)
+{
+    d->parent = _parent;
 }
 
 bool AbstractModelItem::hasChildren() const

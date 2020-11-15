@@ -2400,14 +2400,18 @@ void PageTextEdit::dropEvent(QDropEvent *e)
  */
 void PageTextEdit::inputMethodEvent(QInputMethodEvent *e)
 {
-    Q_D(PageTextEdit);
 #ifdef QT_KEYPAD_NAVIGATION
+    Q_D(PageTextEdit);
     if (d->control->textInteractionFlags() & Qt::TextEditable
         && QApplicationPrivate::keypadNavigationEnabled()
         && !hasEditFocus())
         setEditFocus(true);
 #endif
-    d->sendControlEvent(e);
+    //
+    // На десктопе совершенно бесполезное действие, которое приводит только к лишнему срабатыванию
+    // события обработки текста документа
+    //
+    // d->sendControlEvent(e);
     ensureCursorVisible();
 }
 
