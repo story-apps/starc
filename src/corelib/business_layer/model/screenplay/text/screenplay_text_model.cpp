@@ -454,6 +454,11 @@ bool ScreenplayTextModel::dropMimeData(const QMimeData* _data, Qt::DropAction _a
             ScreenplayTextModelItem* insertAnchorItem = itemForIndex(insertAnchorIndex);
 
             //
+            // Начинаем операцию изменения модели
+            //
+            emit rowsAboutToBeChanged();
+
+            //
             // Если это перемещение внутри модели, то удалим старые элементы
             //
             if (d->lastMime.data == _data) {
@@ -539,6 +544,11 @@ bool ScreenplayTextModel::dropMimeData(const QMimeData* _data, Qt::DropAction _a
                 lastItem = newItem;
                 contentNode = contentNode.nextSiblingElement();
             }
+
+            //
+            // Операция изменения завершена
+            //
+            emit rowsChanged();
 
             return true;
         }
@@ -736,6 +746,11 @@ void ScreenplayTextModel::insertFromMime(const QModelIndex& _index, int _positio
     if (_mimeData.isEmpty()) {
         return;
     }
+
+    //
+    // Начинаем операцию изменения модели
+    //
+    emit rowsAboutToBeChanged();
 
     //
     // Определим элемент, внутрь, или после которого будем вставлять данные
@@ -942,6 +957,11 @@ void ScreenplayTextModel::insertFromMime(const QModelIndex& _index, int _positio
             lastItem = item;
         }
     }
+
+    //
+    // Завершаем изменение
+    //
+    emit rowsChanged();
 }
 
 ScreenplayTextModelItem* ScreenplayTextModel::itemForIndex(const QModelIndex& _index) const

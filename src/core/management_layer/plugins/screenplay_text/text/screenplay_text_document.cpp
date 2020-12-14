@@ -66,6 +66,11 @@ public:
      */
     void readModelItemsContent(const QModelIndex& _parent, ScreenplayTextCursor& _cursor, bool& _isFirstParagraph);
 
+    /**
+     * @brief Скорректировать документ, если это возможно
+     */
+    void tryToCorrectDocument();
+
 
     ScreenplayTextDocument* q = nullptr;
 
@@ -320,6 +325,16 @@ void ScreenplayTextDocument::Implementation::readModelItemsContent(const QModelI
     }
 }
 
+void ScreenplayTextDocument::Implementation::tryToCorrectDocument()
+{
+    if (state != DocumentState::Ready) {
+        return;
+    }
+
+    QScopedValueRollback temporatryState(state, DocumentState::Correcting);
+    corrector.makePlannedCorrection();
+}
+
 
 // ****
 
@@ -330,10 +345,7 @@ ScreenplayTextDocument::ScreenplayTextDocument(QObject *_parent)
 {
     connect(this, &ScreenplayTextDocument::contentsChange, this, &ScreenplayTextDocument::updateModelOnContentChange);
     connect(this, &ScreenplayTextDocument::contentsChange, &d->corrector, &ScreenplayTextCorrector::planCorrection);
-    connect(this, &ScreenplayTextDocument::contentsChanged, this, [this] {
-        QScopedValueRollback temporatryState(d->state, DocumentState::Correcting);
-        d->corrector.makePlannedCorrection();
-    });
+    connect(this, &ScreenplayTextDocument::contentsChanged, this, [this] { d->tryToCorrectDocument(); });
 }
 
 ScreenplayTextDocument::~ScreenplayTextDocument() = default;
@@ -604,6 +616,10 @@ void ScreenplayTextDocument::setModel(BusinessLayer::ScreenplayTextModel* _model
         }
         cursor.endEditBlock();
     });
+    //
+    // После того, как все изменения были выполнены, пробуем скорректировать документ
+    //
+    connect(d->model, &ScreenplayTextModel::rowsChanged, this, [this] { d->tryToCorrectDocument(); });
 
     d->state = DocumentState::Ready;
 }
@@ -733,6 +749,8 @@ void ScreenplayTextDocument::startMimeDropping()
 
 void ScreenplayTextDocument::finishMimeDropping()
 {
+    d->state = DocumentState::Correcting;
+    d->corrector.makePlannedCorrection();
     d->state = DocumentState::Ready;
 }
 

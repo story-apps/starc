@@ -2400,6 +2400,7 @@ void PageTextEdit::dropEvent(QDropEvent *e)
  */
 void PageTextEdit::inputMethodEvent(QInputMethodEvent *e)
 {
+
 #ifdef QT_KEYPAD_NAVIGATION
     Q_D(PageTextEdit);
     if (d->control->textInteractionFlags() & Qt::TextEditable
@@ -2412,6 +2413,7 @@ void PageTextEdit::inputMethodEvent(QInputMethodEvent *e)
     // события обработки текста документа
     //
     // d->sendControlEvent(e);
+    Q_UNUSED(e)
     ensureCursorVisible();
 }
 

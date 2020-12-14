@@ -60,6 +60,9 @@ public:
     /**
      * @brief Методы для управления бросанием текста в документ
      */
+    //
+    // FIXME: Выпилить это, должно работать через общий механизм
+    //
     void startMimeDropping();
     void finishMimeDropping();
 

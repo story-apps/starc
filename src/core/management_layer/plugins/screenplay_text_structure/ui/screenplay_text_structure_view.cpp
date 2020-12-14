@@ -65,7 +65,7 @@ ScreenplayTextStructureView::ScreenplayTextStructureView(QWidget* _parent)
 
     connect(d->backIcon, &AbstractLabel::clicked, this, &ScreenplayTextStructureView::backPressed);
     connect(d->backText, &AbstractLabel::clicked, this, &ScreenplayTextStructureView::backPressed);
-    connect(d->content, &Tree::clicked, this, &ScreenplayTextStructureView::currentModelIndexChanged);
+    connect(d->content, &Tree::currentIndexChanged, this, &ScreenplayTextStructureView::currentModelIndexChanged);
 
     updateTranslations();
     designSystemChangeEvent(nullptr);

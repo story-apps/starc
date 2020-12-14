@@ -101,6 +101,13 @@ signals:
      */
     void contentsChanged(const QByteArray& _undo, const QByteArray& _redo);
 
+    /**
+     * @brief Сигналы для обёртки групповых действий над элементами модели,
+     *        которые не ложатся в рамки стандартных механизмов Qt
+     */
+    void rowsAboutToBeChanged();
+    void rowsChanged();
+
 protected:
     /**
      * @brief Настроить документ
