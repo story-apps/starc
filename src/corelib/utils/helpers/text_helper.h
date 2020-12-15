@@ -6,6 +6,7 @@
 
 class QChar;
 class QFont;
+class QFontMetricsF;
 class QRectF;
 class QString;
 
@@ -19,12 +20,14 @@ public:
     /**
      * @brief Определить оптимальную ширину текста
      */
-    static int fineTextWidth(const QString& _text, const QFont& _font);
+    static qreal fineTextWidth(const QString& _text, const QFont& _font);
+    static qreal fineTextWidth(const QString& _text, const QFontMetricsF& _metrics);
 
     /**
      * @brief Определить правильную высоту строки для заданного шрифта
      */
     static qreal fineLineSpacing(const QFont& _font);
+    static qreal fineLineSpacing(const QFontMetricsF& _metrics);
 
     /**
      * Возвращает высоту текста

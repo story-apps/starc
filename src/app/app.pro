@@ -5,11 +5,10 @@
 #-------------------------------------------------
 
 TEMPLATE = app
+TARGET = starcapp
 
 CONFIG += c++1z
 QT += core gui widgets
-
-TARGET = starcapp
 
 DEFINES += QT_DEPRECATED_WARNINGS
 

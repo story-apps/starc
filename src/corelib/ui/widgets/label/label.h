@@ -11,7 +11,7 @@ class CORE_LIBRARY_EXPORT AbstractLabel : public Widget
     Q_OBJECT
 
 public:
-    explicit AbstractLabel(QWidget *_parent = nullptr);
+    explicit AbstractLabel(QWidget* _parent = nullptr);
     ~AbstractLabel() override;
 
     /**

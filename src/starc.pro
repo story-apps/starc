@@ -5,7 +5,8 @@ SUBDIRS += \
     corelib \
     core/management_layer/plugins \
     core \
-    app
+    app \
+    testapp
 
 CONFIG += ordered
 
