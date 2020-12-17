@@ -8,11 +8,11 @@
 /**
  * @brief Сообщение чата
  */
-class Message
+class ChatMessage
 {
 public:
-    Message();
-    Message(const QDateTime& _dateTime, const QString& _text, const User& _author);
+    ChatMessage();
+    ChatMessage(const QDateTime& _dateTime, const QString& _text, const User& _author);
 
     QDateTime dateTime() const;
     QString text() const;
@@ -25,5 +25,5 @@ private:
 };
 
 
-bool operator==(const Message& _lhs, const Message& _rhs);
-bool operator!=(const Message& _lhs, const Message& _rhs);
+bool operator==(const ChatMessage& _lhs, const ChatMessage& _rhs);
+bool operator!=(const ChatMessage& _lhs, const ChatMessage& _rhs);

@@ -104,9 +104,8 @@ SOURCES += \
     ui/widgets/app_bar/app_bar.cpp \
     ui/widgets/button/button.cpp \
     ui/widgets/card/card.cpp \
-    ui/widgets/chat/message.cpp \
-    ui/widgets/chat/messages_view.cpp \
-    ui/widgets/chat/messages_view_content.cpp \
+    ui/widgets/chat/chat_message.cpp \
+    ui/widgets/chat/chat_messages_view.cpp \
     ui/widgets/chat/user.cpp \
     ui/widgets/check_box/check_box.cpp \
     ui/widgets/circular_progress_bar/circular_progress_bar.cpp \
@@ -242,9 +241,8 @@ HEADERS += \
     ui/widgets/app_bar/app_bar.h \
     ui/widgets/button/button.h \
     ui/widgets/card/card.h \
-    ui/widgets/chat/message.h \
-    ui/widgets/chat/messages_view.h \
-    ui/widgets/chat/messages_view_content.h \
+    ui/widgets/chat/chat_message.h \
+    ui/widgets/chat/chat_messages_view.h \
     ui/widgets/chat/user.h \
     ui/widgets/check_box/check_box.h \
     ui/widgets/circular_progress_bar/circular_progress_bar.h \

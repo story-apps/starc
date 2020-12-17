@@ -783,7 +783,6 @@ QVariant ScreenplayTextCommentsModel::data(const QModelIndex& _index, int _role)
 
         case ReviewMarkCommentRole: {
             return reviewMarkWrapper.reviewMark.comments.constFirst().text;
-
         }
 
         case ReviewMarkColorRole: {
@@ -797,6 +796,10 @@ QVariant ScreenplayTextCommentsModel::data(const QModelIndex& _index, int _role)
 
         case ReviewMarkIsDoneRole: {
             return reviewMarkWrapper.reviewMark.isDone;
+        }
+
+        case ReviewMarkCommentsRole: {
+            return QVariant::fromValue(reviewMarkWrapper.reviewMark.comments);
         }
 
         default: {

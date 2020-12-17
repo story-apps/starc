@@ -36,6 +36,11 @@ public:
      */
     void showAddCommentView(const QColor& _withColor);
 
+    /**
+     * @brief Отобразить обуждение комментария
+     */
+    void showCommentRepliesView(const QModelIndex& _commentIndex);
+
 signals:
     /**
      * @brief Пользователь хочет добавить комментарий

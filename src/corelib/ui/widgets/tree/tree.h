@@ -92,6 +92,11 @@ public:
     void setAutoAdjustSize(bool _auto);
 
     /**
+     * @brief Получить область занимаемую элементом с заданным индексом
+     */
+    QRect visualRect(const QModelIndex& _index) const;
+
+    /**
      * @brief Загрузить состояние дерева
      */
     void restoreState(const QVariant& _state);

@@ -1,6 +1,6 @@
-#include "messages_view_content.h"
+#include "chat_messages_view.h"
 
-#include "message.h"
+#include "chat_message.h"
 
 #include <ui/design_system/design_system.h>
 
@@ -12,18 +12,18 @@
 #include <QPaintEvent>
 
 
-class MessagesViewContent::Implementation
+class ChatMessagesView::Implementation
 {
 public:
     User currectUser;
-    QVector<Message> messages;
+    QVector<ChatMessage> messages;
 };
 
 
 // ****
 
 
-MessagesViewContent::MessagesViewContent(QWidget* _parent)
+ChatMessagesView::ChatMessagesView(QWidget* _parent)
     : Widget(_parent),
       d(new Implementation)
 {
@@ -32,23 +32,23 @@ MessagesViewContent::MessagesViewContent(QWidget* _parent)
     setSizePolicy(sizePolicy);
 }
 
-MessagesViewContent::~MessagesViewContent() = default;
+ChatMessagesView::~ChatMessagesView() = default;
 
-void MessagesViewContent::setCurrectUser(const User& _user)
+void ChatMessagesView::setCurrectUser(const User& _user)
 {
     d->currectUser = _user;
     updateGeometry();
     update();
 }
 
-void MessagesViewContent::setMessages(const QVector<Message>& _messages)
+void ChatMessagesView::setMessages(const QVector<ChatMessage>& _messages)
 {
     d->messages = _messages;
     updateGeometry();
     update();
 }
 
-int MessagesViewContent::heightForWidth(int _width) const
+int ChatMessagesView::heightForWidth(int _width) const
 {
     //
     // Пересчитываем высоту в зависимости от ширины
@@ -65,7 +65,7 @@ int MessagesViewContent::heightForWidth(int _width) const
     bool isDateChanged = false;
     bool isAuthorChanged = false;
     bool isCurrentAuthor = false;
-    Message lastMessage;
+    ChatMessage lastMessage;
 
     for (const auto& message : d->messages) {
         isDateChanged = lastMessage.dateTime().date() != message.dateTime().date();
@@ -98,7 +98,7 @@ int MessagesViewContent::heightForWidth(int _width) const
     return lastY + Ui::DesignSystem::layout().px16();
 }
 
-void MessagesViewContent::paintEvent(QPaintEvent* _event)
+void ChatMessagesView::paintEvent(QPaintEvent* _event)
 {
     QPainter painter(this);
     painter.setRenderHint(QPainter::Antialiasing);
@@ -115,17 +115,17 @@ void MessagesViewContent::paintEvent(QPaintEvent* _event)
 
     const QFontMetricsF titleFontMetrics(Ui::DesignSystem::font().subtitle2());
     const QFontMetricsF textFontMetrics(Ui::DesignSystem::font().body2());
-    const QColor defaultBaloonColor = ColorHelper::nearby(Ui::DesignSystem::color().background());
+    const QColor defaultBaloonColor = ColorHelper::nearby(backgroundColor());
     const QColor currentAuthorBaloonColor = ColorHelper::nearby(defaultBaloonColor);
     const qreal maximumTextWidth = width()
                                      - Ui::DesignSystem::layout().px48() // отступ слева под авку и между авкой и текстом
                                      - Ui::DesignSystem::layout().px24() // марджины текста от балуна
                                      - Ui::DesignSystem::layout().px16(); // отступ справа от границы
     qreal lastY = 0.0;
-    bool isDateChanged = false;
-    bool isAuthorChanged = false;
+    bool isDateChanged = true;
+    bool isAuthorChanged = true;
     bool isCurrentAuthor = false;
-    Message lastMessage;
+    ChatMessage lastMessage;
     auto drawAvatar = [&painter, &lastY, &isDateChanged, &isAuthorChanged, &isCurrentAuthor, &lastMessage] {
         if (!lastMessage.author().isValid()) {
             return;
@@ -214,7 +214,7 @@ void MessagesViewContent::paintEvent(QPaintEvent* _event)
         //
         if (isAuthorChanged && !isCurrentAuthor) {
             painter.setFont(Ui::DesignSystem::font().subtitle2());
-            painter.setPen(Ui::DesignSystem::color().secondary());
+            painter.setPen(message.author().avatarColor());
             painter.drawText(QPointF(messageTextRect.left(),
                                      messageRect.top()
                                      + Ui::DesignSystem::layout().px4()
@@ -237,5 +237,6 @@ void MessagesViewContent::paintEvent(QPaintEvent* _event)
     //
     // Рисуем авку после того, как нарисовали последнее сообщение
     //
+    isAuthorChanged = true;
     drawAvatar();
 }

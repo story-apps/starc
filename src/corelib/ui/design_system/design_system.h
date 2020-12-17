@@ -527,7 +527,7 @@ public:
         /**
          * @brief Отступы вокруг текста
          */
-        QMarginsF margins() const;
+        QMarginsF margins(bool _withTitle = true) const;
 
         /**
          * @brief Координата отрисовки лейбла

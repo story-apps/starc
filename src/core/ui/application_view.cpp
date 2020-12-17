@@ -100,8 +100,6 @@ void ApplicationView::showContent(QWidget* _toolbar, QWidget* _navigator, QWidge
     d->toolBar->setCurrentWidget(_toolbar);
     d->navigator->setCurrentWidget(_navigator);
     d->view->setCurrentWidget(_view);
-
-    d->splitterShadow->raise();
 }
 
 void ApplicationView::setAccountBar(Widget* _accountBar)
@@ -140,14 +138,6 @@ void ApplicationView::closeEvent(QCloseEvent* _event)
     emit closeRequested();
 }
 
-void ApplicationView::resizeEvent(QResizeEvent* _event)
-{
-    Widget::resizeEvent(_event);
-
-    d->splitterShadow->resize(static_cast<int>(Ui::DesignSystem::layout().px24()),
-                              _event->size().height());
-}
-
 void ApplicationView::designSystemChangeEvent(DesignSystemChangeEvent* _event)
 {
     Q_UNUSED(_event)
@@ -169,8 +159,6 @@ void ApplicationView::designSystemChangeEvent(DesignSystemChangeEvent* _event)
 
     d->splitter->setHandleColor(DesignSystem::color().primary());
     d->splitter->setHandleWidth(1);
-
-    d->splitterShadow->move(-1 * d->splitterShadow->width() * 2 / 3, 0);
 
     if (d->accountBar != nullptr) {
         d->accountBar->resize(d->accountBar->sizeHint());

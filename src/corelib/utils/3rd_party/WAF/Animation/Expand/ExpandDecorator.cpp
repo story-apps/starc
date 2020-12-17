@@ -41,9 +41,9 @@ void ExpandDecorator::setFillColor(const QColor& _fillColor)
 void ExpandDecorator::paintEvent(QPaintEvent* _event)
 {
 	QPainter painter(this);
-	painter.setOpacity(qMin((qreal)m_expandRect.height() / height(), 0.4));
-	painter.fillRect(rect(), Qt::black);
-	painter.setOpacity(1.);
+    painter.setOpacity(qMin((qreal)m_expandRect.height() / height(), 0.4));
+    painter.fillRect(rect(), Qt::black);
+    painter.setOpacity(1.);
 	painter.fillRect(m_expandRect, m_fillColor);
 	painter.drawPixmap(m_expandRect.topLeft(), m_expandRectPixmap);
 	//

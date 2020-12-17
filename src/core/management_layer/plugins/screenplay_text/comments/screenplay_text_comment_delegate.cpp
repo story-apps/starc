@@ -23,6 +23,11 @@ ScreenplayTextCommentDelegate::ScreenplayTextCommentDelegate(QObject* _parent)
 {
 }
 
+void ScreenplayTextCommentDelegate::setSingleCommentMode(bool _isSingleComment)
+{
+    m_isSingleCommentMode = _isSingleComment;
+}
+
 void ScreenplayTextCommentDelegate::paint(QPainter* _painter, const QStyleOptionViewItem& _option, const QModelIndex& _index) const
 {
     //
@@ -89,15 +94,23 @@ void ScreenplayTextCommentDelegate::paint(QPainter* _painter, const QStyleOption
     // ... галочка выполнено
     //
     const auto done = _index.data(ScreenplayTextCommentsModel::ReviewMarkIsDoneRole).toBool();
-    QRectF doneRect;
-    if (done) {
-        const QSizeF doneSize = Ui::DesignSystem::treeOneLineItem().iconSize();
-        doneRect = QRectF(QPointF(backgroundRect.right() - doneSize.width() - Ui::DesignSystem::layout().px12(),
+    QRectF iconRect;
+    if (m_isSingleCommentMode || done) {
+        //
+        // ... в режиме единичного комментария также рисуем крестик, который будет закрывать представление с комментарием
+        //
+        const QSizeF iconSize = Ui::DesignSystem::treeOneLineItem().iconSize();
+        iconRect = QRectF(QPointF(backgroundRect.right() - iconSize.width() - Ui::DesignSystem::layout().px12(),
                                   backgroundRect.top() + Ui::DesignSystem::layout().px16() + Ui::DesignSystem::layout().px4()),
-                          doneSize);
+                          iconSize);
         _painter->setFont(Ui::DesignSystem::font().iconsMid());
-        _painter->setPen(Ui::DesignSystem::color().secondary());
-        _painter->drawText(doneRect, Qt::AlignCenter, u8"\U000F012C");
+        _painter->setPen(m_isSingleCommentMode ? textColor : Ui::DesignSystem::color().secondary());
+        _painter->drawText(iconRect, Qt::AlignCenter, m_isSingleCommentMode ? u8"\U000f0156" : u8"\U000F012C");
+        if (m_isSingleCommentMode && done) {
+            iconRect.moveRight(iconRect.left());
+            _painter->setPen(Ui::DesignSystem::color().secondary());
+            _painter->drawText(iconRect, Qt::AlignCenter, u8"\U000F012C");
+        }
     }
 
     //
@@ -106,7 +119,7 @@ void ScreenplayTextCommentDelegate::paint(QPainter* _painter, const QStyleOption
     _painter->setFont(Ui::DesignSystem::font().subtitle2());
     _painter->setPen(textColor);
     const qreal textLeft = avatarRect.right() + Ui::DesignSystem::layout().px12();
-    const qreal textWidth = (doneRect.isEmpty() ? backgroundRect.right() : doneRect.left())
+    const qreal textWidth = (iconRect.isEmpty() ? backgroundRect.right() : iconRect.left())
                             - textLeft - Ui::DesignSystem::layout().px12();
 
     const QRectF textRect(QPointF(textLeft, avatarRect.top()),
@@ -142,14 +155,10 @@ void ScreenplayTextCommentDelegate::paint(QPainter* _painter, const QStyleOption
 
 QSize ScreenplayTextCommentDelegate::sizeHint(const QStyleOptionViewItem& _option, const QModelIndex& _index) const
 {
-    if (_option.widget == nullptr) {
-        return QStyledItemDelegate::sizeHint(_option, _index);
-    }
-
     //
     // Ширина
     //
-    int width = _option.widget->width();
+    int width = _option.rect.width();
     if (const QAbstractItemView* view = qobject_cast<const QAbstractItemView*>(_option.widget)) {
         width = view->viewport()->width();
     }
@@ -168,7 +177,8 @@ QSize ScreenplayTextCommentDelegate::sizeHint(const QStyleOptionViewItem& _optio
     //
     // ... высота без комментария
     //
-    if (_index.data(ScreenplayTextCommentsModel::ReviewMarkIsDoneRole).toBool() == true
+    if ((!m_isSingleCommentMode
+         && _index.data(ScreenplayTextCommentsModel::ReviewMarkIsDoneRole).toBool() == true)
         || _index.data(ScreenplayTextCommentsModel::ReviewMarkCommentRole).toString().isEmpty()) {
         return { width, headerHeight };
     }

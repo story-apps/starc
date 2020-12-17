@@ -143,6 +143,11 @@ void Tree::setAutoAdjustSize(bool _auto)
     d->tree->setAutoAdjustSize(_auto);
 }
 
+QRect Tree::visualRect(const QModelIndex& _index) const
+{
+    return d->tree->visualRect(_index);
+}
+
 void Tree::restoreState(const QVariant& _state)
 {
     d->tree->restoreState(_state);

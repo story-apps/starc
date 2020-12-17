@@ -1,12 +1,15 @@
 #include "screenplay_text_comments_view.h"
 
-#include "screenplay_text_add_comment_widget.h"
+#include "screenplay_text_add_comment_view.h"
 #include "screenplay_text_comment_delegate.h"
+#include "screenplay_text_comment_replies_view.h"
 #include "screenplay_text_comments_model.h"
 
 #include <ui/design_system/design_system.h>
 #include <ui/widgets/context_menu/context_menu.h>
 #include <ui/widgets/tree/tree.h>
+
+#include <utils/3rd_party/WAF/Animation/Animation.h>
 
 #include <QStandardItemModel>
 #include <QTimer>
@@ -40,15 +43,18 @@ public:
     QStandardItemModel* commentsViewContextMenuModel = nullptr;
     ContextMenu* commentsViewContextMenu = nullptr;
 
-    ScreenplayTextAddCommentWidget* addCommentWidget = nullptr;
+    ScreenplayTextAddCommentView* addCommentView = nullptr;
     QColor addCommentColor;
+
+    ScreenplayTextCommentRepliesView* repliesView = nullptr;
 };
 
 ScreenplayTextCommentsView::Implementation::Implementation(QWidget* _parent)
     : commentsView(new Tree(_parent)),
       commentsViewContextMenuModel(new QStandardItemModel(commentsView)),
       commentsViewContextMenu(new ContextMenu(commentsView)),
-      addCommentWidget(new ScreenplayTextAddCommentWidget(_parent))
+      addCommentView(new ScreenplayTextAddCommentView(_parent)),
+      repliesView(new ScreenplayTextCommentRepliesView(_parent))
 {
     commentsView->setAutoAdjustSize(true);
     commentsView->setContextMenuPolicy(Qt::CustomContextMenu);
@@ -118,10 +124,12 @@ ScreenplayTextCommentsView::ScreenplayTextCommentsView(QWidget* _parent)
     setAnimationType(StackWidget::AnimationType::Slide);
 
     setCurrentWidget(d->commentsView);
-    addWidget(d->addCommentWidget);
+    addWidget(d->addCommentView);
+    addWidget(d->repliesView);
 
 
     connect(d->commentsView, &Tree::currentIndexChanged, this, &ScreenplayTextCommentsView::commentSelected);
+    connect(d->commentsView, &Tree::doubleClicked, this, &ScreenplayTextCommentsView::showCommentRepliesView);
     connect(d->commentsView, &Tree::customContextMenuRequested, this, [this] (const QPoint& _pos) {
         if (d->commentsView->selectedIndexes().isEmpty()) {
             return;
@@ -150,12 +158,21 @@ ScreenplayTextCommentsView::ScreenplayTextCommentsView(QWidget* _parent)
             }
         }
     });
-    connect(d->addCommentWidget, &ScreenplayTextAddCommentWidget::savePressed, this, [this] {
-        emit addCommentRequested(d->addCommentColor, d->addCommentWidget->comment());
+    connect(d->addCommentView, &ScreenplayTextAddCommentView::savePressed, this, [this] {
+        emit addCommentRequested(d->addCommentColor, d->addCommentView->comment());
         setCurrentWidget(d->commentsView);
     });
-    connect(d->addCommentWidget, &ScreenplayTextAddCommentWidget::cancelPressed, this, [this] {
+    connect(d->addCommentView, &ScreenplayTextAddCommentView::cancelPressed, this, [this] {
         setCurrentWidget(d->commentsView);
+    });
+    connect(d->repliesView, &ScreenplayTextCommentRepliesView::closePressed, this, [this] {
+        auto animationRect = d->commentsView->visualRect(d->commentsView->currentIndex());
+        animationRect.setLeft(0);
+        setAnimationRect(d->commentsView, animationRect);
+        setCurrentWidget(d->commentsView);
+        QTimer::singleShot(animationDuration(), [this] {
+            setAnimationType(StackWidget::AnimationType::Slide);
+        });
     });
 
 
@@ -178,9 +195,22 @@ void ScreenplayTextCommentsView::setCurrentIndex(const QModelIndex& _index)
 void ScreenplayTextCommentsView::showAddCommentView(const QColor& _withColor)
 {
     d->addCommentColor = _withColor;
-    d->addCommentWidget->setComment({});
-    setCurrentWidget(d->addCommentWidget);
-    QTimer::singleShot(animationDuration(), d->addCommentWidget, qOverload<>(&ScreenplayTextAddCommentWidget::setFocus));
+    d->addCommentView->setComment({});
+    setCurrentWidget(d->addCommentView);
+    QTimer::singleShot(animationDuration(), d->addCommentView, qOverload<>(&ScreenplayTextAddCommentView::setFocus));
+}
+
+void ScreenplayTextCommentsView::showCommentRepliesView(const QModelIndex& _commentIndex)
+{
+    d->repliesView->setCommentIndex(_commentIndex);
+    QTimer::singleShot(100, [this, _commentIndex] {
+        setAnimationType(StackWidget::AnimationType::Expand);
+        auto animationRect = d->commentsView->visualRect(_commentIndex);
+        animationRect.setLeft(0);
+        setAnimationRect(d->commentsView, animationRect);
+        setCurrentWidget(d->repliesView);
+        QTimer::singleShot(animationDuration(), d->repliesView, qOverload<>(&ScreenplayTextAddCommentView::setFocus));
+    });
 }
 
 void ScreenplayTextCommentsView::designSystemChangeEvent(DesignSystemChangeEvent* _event)

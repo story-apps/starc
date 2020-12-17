@@ -1,4 +1,4 @@
-#include "screenplay_text_add_comment_widget.h"
+#include "screenplay_text_add_comment_view.h"
 
 #include <ui/design_system/design_system.h>
 
@@ -13,7 +13,7 @@
 namespace Ui
 {
 
-class ScreenplayTextAddCommentWidget::Implementation
+class ScreenplayTextAddCommentView::Implementation
 {
 public:
     explicit Implementation(QWidget* _parent);
@@ -25,41 +25,39 @@ public:
     Button* saveButton = nullptr;
 };
 
-ScreenplayTextAddCommentWidget::Implementation::Implementation(QWidget* _parent)
+ScreenplayTextAddCommentView::Implementation::Implementation(QWidget* _parent)
     : content(new QScrollArea(_parent)),
       comment(new TextField(_parent)),
+      buttonsLayout(new QHBoxLayout),
       cancelButton(new Button(_parent)),
       saveButton(new Button(_parent))
 {
+    QPalette palette;
+    palette.setColor(QPalette::Base, Qt::transparent);
+    palette.setColor(QPalette::Window, Qt::transparent);
+    content->setPalette(palette);
+    content->setFrameShape(QFrame::NoFrame);
+    content->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
+    content->setVerticalScrollBar(new ScrollBar);
 
+    comment->setEnterMakesNewLine(true);
+
+    buttonsLayout->setContentsMargins({});
+    buttonsLayout->setSpacing(0);
+    buttonsLayout->addStretch();
+    buttonsLayout->addWidget(cancelButton);
+    buttonsLayout->addWidget(saveButton);
 }
 
 
 // ****
 
 
-ScreenplayTextAddCommentWidget::ScreenplayTextAddCommentWidget(QWidget* _parent)
+ScreenplayTextAddCommentView::ScreenplayTextAddCommentView(QWidget* _parent)
     : Widget(_parent),
       d(new Implementation(this))
 {
     setFocusProxy(d->comment);
-
-    QPalette palette;
-    palette.setColor(QPalette::Base, Qt::transparent);
-    palette.setColor(QPalette::Window, Qt::transparent);
-    d->content->setPalette(palette);
-    d->content->setFrameShape(QFrame::NoFrame);
-    d->content->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
-    d->content->setVerticalScrollBar(new ScrollBar);
-
-    d->comment->setEnterMakesNewLine(true);
-
-    d->buttonsLayout = new QHBoxLayout;
-    d->buttonsLayout->setContentsMargins({});
-    d->buttonsLayout->setSpacing(0);
-    d->buttonsLayout->addStretch();
-    d->buttonsLayout->addWidget(d->cancelButton);
-    d->buttonsLayout->addWidget(d->saveButton);
 
     QWidget* contentWidget = new QWidget;
     d->content->setWidgetResizable(true);
@@ -84,34 +82,34 @@ ScreenplayTextAddCommentWidget::ScreenplayTextAddCommentWidget(QWidget* _parent)
 
         d->content->ensureVisible(0, d->comment->pos().y() + d->comment->cursorRect().bottom());
     });
-    connect(d->saveButton, &Button::clicked, this, &ScreenplayTextAddCommentWidget::savePressed);
-    connect(d->cancelButton, &Button::clicked, this, &ScreenplayTextAddCommentWidget::cancelPressed);
+    connect(d->saveButton, &Button::clicked, this, &ScreenplayTextAddCommentView::savePressed);
+    connect(d->cancelButton, &Button::clicked, this, &ScreenplayTextAddCommentView::cancelPressed);
 
 
     updateTranslations();
     designSystemChangeEvent(nullptr);
 }
 
-QString ScreenplayTextAddCommentWidget::comment() const
+QString ScreenplayTextAddCommentView::comment() const
 {
     return d->comment->text();
 }
 
-void ScreenplayTextAddCommentWidget::setComment(const QString& _comment)
+void ScreenplayTextAddCommentView::setComment(const QString& _comment)
 {
     d->comment->setText(_comment);
 }
 
 ScreenplayTextAddCommentWidget::~ScreenplayTextAddCommentWidget() = default;
 
-void ScreenplayTextAddCommentWidget::updateTranslations()
+void ScreenplayTextAddCommentView::updateTranslations()
 {
     d->comment->setLabel(tr("Add new comment"));
     d->cancelButton->setText(tr("Cancel"));
     d->saveButton->setText(tr("Save"));
 }
 
-void ScreenplayTextAddCommentWidget::designSystemChangeEvent(DesignSystemChangeEvent* _event)
+void ScreenplayTextAddCommentView::designSystemChangeEvent(DesignSystemChangeEvent* _event)
 {
     Widget::designSystemChangeEvent(_event);
 

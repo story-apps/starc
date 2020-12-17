@@ -60,11 +60,6 @@ protected:
     void closeEvent(QCloseEvent* _event) override;
 
     /**
-     * @brief Переопределяем, чтобы корректировать положение тени от сплитера
-     */
-    void resizeEvent(QResizeEvent* _event) override;
-
-    /**
      * @brief Обновляем навигатор при изменении дизайн системы
      */
     void designSystemChangeEvent(DesignSystemChangeEvent* _event) override;

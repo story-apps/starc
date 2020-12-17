@@ -2,17 +2,17 @@
 
 #include <ui/design_system/design_system.h>
 
-#include <ui/widgets/chat/message.h>
-#include <ui/widgets/chat/messages_view.h>
+#include <ui/widgets/chat/chat_message.h>
+#include <ui/widgets/chat/chat_messages_view.h>
 
 int main(int argc, char *argv[])
 {
     QApplication a(argc, argv);
 
-    MessagesView w;
+    ChatMessagesView w;
     w.show();
 
-    QVector<Message> messages
+    QVector<ChatMessage> messages
             = {{ QDateTime(QDate(2020, 12, 13), QTime(14, 28, 11)),
                  "Пока не понял. Где он вводит имайл?",
                  User("Mikhail Galkin") },

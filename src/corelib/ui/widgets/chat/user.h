@@ -1,7 +1,8 @@
 #pragma once
 
-#include <QString>
+#include <QScopedPointer>
 
+class QColor;
 
 /**
  * @brief Пользователь
@@ -11,13 +12,19 @@ class User
 public:
     User();
     explicit User(const QString& _name);
+    User(const User& _other);
+    virtual ~User();
+    User operator=(const User& _other);
 
     bool isValid() const;
 
     QString name() const;
 
+    QColor avatarColor() const;
+
 private:
-    QString m_name;
+    class Implementation;
+    QScopedPointer<Implementation> d;
 };
 
 /**

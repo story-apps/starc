@@ -16,7 +16,8 @@ public:
      */
     enum class AnimationType {
         Fade,
-        Slide
+        Slide,
+        Expand
     };
 
 public:
@@ -27,6 +28,12 @@ public:
       * @brief Установить тип анимации виджета
       */
     void setAnimationType(AnimationType _type);
+
+    /**
+     * @brief Задать область анимации для конкретного виджета
+     * @note Используется при анимации расширения/скрытия
+     */
+    void setAnimationRect(QWidget* _widget, const QRect& _animationRect);
 
     /**
      * @brief Добавить виджет в стек

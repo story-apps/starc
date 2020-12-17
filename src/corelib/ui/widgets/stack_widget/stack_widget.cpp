@@ -1,10 +1,101 @@
 #include "stack_widget.h"
 
+#include <ui/design_system/design_system.h>
+
+#include <utils/helpers/color_helper.h>
+
 #include <utils/tools/run_once.h>
 
 #include <QPainter>
+#include <QParallelAnimationGroup>
 #include <QResizeEvent>
+#include <QSequentialAnimationGroup>
 #include <QVariantAnimation>
+
+namespace {
+
+/**
+ * @brief Анимация разъезжающегося контейнера
+ *        https://material.io/design/motion/the-motion-system.html#container-transform
+ */
+class ExpandAnimation : public QParallelAnimationGroup
+{
+public:
+    explicit ExpandAnimation(QObject* _parent = nullptr);
+
+    QVariantAnimation outgoingContentFadeOut;
+    QVariantAnimation incomingContentFadeIn;
+    QSequentialAnimationGroup contentFadeGroup;
+
+    QVariantAnimation contentGeometry;
+    QHash<QWidget*, QRect> widgetToRect;
+
+    QVariantAnimation scrimFadeIn;
+    QSequentialAnimationGroup scrimFadeGroup;
+
+protected:
+    /**
+      * @brief Обновим настройки анимаций, при смене направления анимирования
+      */
+     void updateDirection(QAbstractAnimation::Direction _direction) override;
+};
+
+ExpandAnimation::ExpandAnimation(QObject* _parent)
+    : QParallelAnimationGroup(_parent)
+{
+    outgoingContentFadeOut.setDuration(90);
+    outgoingContentFadeOut.setEasingCurve(QEasingCurve::InQuad);
+    outgoingContentFadeOut.setStartValue(1.0);
+    outgoingContentFadeOut.setEndValue(0.0);
+    //
+    incomingContentFadeIn.setDuration(210);
+    incomingContentFadeIn.setEasingCurve(QEasingCurve::OutQuart);
+    incomingContentFadeIn.setStartValue(0.0);
+    incomingContentFadeIn.setEndValue(1.0);
+    //
+    contentFadeGroup.addAnimation(&outgoingContentFadeOut);
+    contentFadeGroup.addAnimation(&incomingContentFadeIn);
+    addAnimation(&contentFadeGroup);
+
+    contentGeometry.setDuration(300);
+    contentGeometry.setEasingCurve(QEasingCurve::InOutQuart);
+    addAnimation(&contentGeometry);
+
+    scrimFadeIn.setDuration(90);
+    scrimFadeIn.setEasingCurve(QEasingCurve::Linear);
+    scrimFadeIn.setStartValue(0.0);
+    scrimFadeIn.setEndValue(0.4);
+    scrimFadeGroup.addAnimation(&scrimFadeIn);
+    scrimFadeGroup.addPause(210);
+    addAnimation(&scrimFadeGroup);
+}
+
+void ExpandAnimation::updateDirection(QAbstractAnimation::Direction _direction)
+{
+    QParallelAnimationGroup::updateDirection(_direction);
+
+    if (_direction == QAbstractAnimation::Forward) {
+        outgoingContentFadeOut.setDuration(90);
+        outgoingContentFadeOut.setEasingCurve(QEasingCurve::InQuad);
+
+        incomingContentFadeIn.setDuration(210);
+        incomingContentFadeIn.setEasingCurve(QEasingCurve::OutQuart);
+
+        scrimFadeIn.setStartValue(0.0);
+        scrimFadeIn.setEndValue(0.4);
+    } else {
+        outgoingContentFadeOut.setDuration(210);
+        outgoingContentFadeOut.setEasingCurve(QEasingCurve::InQuart);
+
+        incomingContentFadeIn.setDuration(90);
+        incomingContentFadeIn.setEasingCurve(QEasingCurve::OutQuad);
+
+        scrimFadeIn.setStartValue(0.0);
+        scrimFadeIn.setEndValue(0.2);
+    }
+}
+
+}
 
 
 class StackWidget::Implementation
@@ -25,10 +116,15 @@ public:
     AnimationType animationType = AnimationType::Fade;
     QVariantAnimation fadeAnimation;
     QVariantAnimation slideAnimation;
+    ExpandAnimation expandAnimation;
 };
 
 StackWidget::Implementation::Implementation()
 {
+    //
+    // TODO: Сделать эти анимации тоже по гайдам
+    //
+
     fadeAnimation.setDuration(240);
     fadeAnimation.setEasingCurve(QEasingCurve::OutQuad);
     fadeAnimation.setStartValue(0.0);
@@ -49,6 +145,10 @@ const QAbstractAnimation& StackWidget::Implementation::currentAnimation() const
         case AnimationType::Slide: {
             return slideAnimation;
         }
+
+        case AnimationType::Expand: {
+            return expandAnimation;
+        }
     }
 }
 
@@ -58,19 +158,30 @@ StackWidget::StackWidget(QWidget *_parent)
     : Widget(_parent)
     , d(new Implementation)
 {
-    connect(&d->fadeAnimation, &QVariantAnimation::valueChanged, this, [this] { update(); });
-    connect(&d->fadeAnimation, &QVariantAnimation::finished, this, [this] {
-        d->currentWidget->show();
-    });
-    connect(&d->slideAnimation, &QVariantAnimation::valueChanged, this, [this] { update(); });
-    connect(&d->slideAnimation, &QVariantAnimation::finished, this, [this] {
-        d->currentWidget->show();
-    });
+    auto update = [this] { this->update(); };
+    auto showCurrentWidget = [this] { d->currentWidget->show(); };
+
+    connect(&d->fadeAnimation, &QVariantAnimation::valueChanged, this, update);
+    connect(&d->fadeAnimation, &QVariantAnimation::finished, this, showCurrentWidget);
+
+    connect(&d->slideAnimation, &QVariantAnimation::valueChanged, this, update);
+    connect(&d->slideAnimation, &QVariantAnimation::finished, this, showCurrentWidget);
+
+    connect(&d->expandAnimation.outgoingContentFadeOut, &QVariantAnimation::valueChanged, this, update);
+    connect(&d->expandAnimation.incomingContentFadeIn, &QVariantAnimation::valueChanged, this, update);
+    connect(&d->expandAnimation.contentGeometry, &QVariantAnimation::valueChanged, this, update);
+    connect(&d->expandAnimation.scrimFadeIn, &QVariantAnimation::valueChanged, this, update);
+    connect(&d->expandAnimation, &ExpandAnimation::finished, this, showCurrentWidget);
 }
 
 void StackWidget::setAnimationType(StackWidget::AnimationType _type)
 {
     d->animationType = _type;
+}
+
+void StackWidget::setAnimationRect(QWidget* _widget, const QRect& _animationRect)
+{
+    d->expandAnimation.widgetToRect[_widget] = _animationRect;
 }
 
 void StackWidget::addWidget(QWidget* _widget)
@@ -144,6 +255,22 @@ void StackWidget::setCurrentWidget(QWidget *_widget)
             d->slideAnimation.start();
             break;
         }
+
+        case AnimationType::Expand: {
+            QAbstractAnimation::Direction direction;
+            if (d->expandAnimation.widgetToRect.contains(d->previousWidget)) {
+                d->expandAnimation.contentGeometry.setStartValue(d->expandAnimation.widgetToRect[d->previousWidget]);
+                d->expandAnimation.contentGeometry.setEndValue(rect());
+                direction = QAbstractAnimation::Forward;
+            } else {
+                d->expandAnimation.contentGeometry.setStartValue(d->expandAnimation.widgetToRect[d->currentWidget]);
+                d->expandAnimation.contentGeometry.setEndValue(rect());
+                direction = QAbstractAnimation::Backward;
+            }
+            d->expandAnimation.setDirection(direction);
+            d->expandAnimation.start();
+            break;
+        }
     }
 }
 
@@ -164,14 +291,7 @@ QSize StackWidget::sizeHint() const
 
 int StackWidget::animationDuration() const
 {
-    switch (d->animationType) {
-        case AnimationType::Fade: {
-            return d->fadeAnimation.duration();
-        }
-        case AnimationType::Slide: {
-            return d->slideAnimation.duration();
-        }
-    }
+    return d->currentAnimation().duration();
 }
 
 void StackWidget::paintEvent(QPaintEvent *_event)
@@ -214,6 +334,52 @@ void StackWidget::paintEvent(QPaintEvent *_event)
             if (!d->currentWidgetImage.isNull()) {
                 painter.drawPixmap(d->slideAnimation.currentValue().toInt(), 0, d->currentWidgetImage);
             }
+            break;
+        }
+
+        case AnimationType::Expand: {
+            if (d->previousWidgetImage.isNull() || d->currentWidgetImage.isNull()) {
+                break;
+            }
+
+            const auto backgroundImage
+                    = d->currentAnimation().direction() == QAbstractAnimation::Forward
+                      ? d->previousWidgetImage
+                      : d->currentWidgetImage;
+            const auto foregroundImage
+                    = d->currentAnimation().direction() == QAbstractAnimation::Forward
+                      ? d->currentWidgetImage
+                      : d->previousWidgetImage;
+
+            //
+            // Фоновое изображение старого виджета
+            //
+            painter.drawPixmap(0, 0, backgroundImage);
+            //
+            // Затемнение
+            //
+            painter.setOpacity(d->expandAnimation.scrimFadeIn.currentValue().toReal());
+            qDebug(QString("%1").arg(painter.opacity()).toUtf8());
+            painter.fillRect(rect(), Ui::DesignSystem::color().shadow());
+            painter.setOpacity(1.0);
+            //
+            // Анимируемая область
+            //
+            const auto animatedRect = d->expandAnimation.contentGeometry.currentValue().toRect();
+            painter.fillRect(animatedRect, backgroundColor());
+            //
+            // Часть старого виджета
+            //
+            if (d->expandAnimation.outgoingContentFadeOut.state() == QAbstractAnimation::Running) {
+                painter.setOpacity(d->expandAnimation.outgoingContentFadeOut.currentValue().toReal());
+                painter.drawPixmap(animatedRect.topLeft(), backgroundImage, d->expandAnimation.contentGeometry.startValue().toRect());
+            }
+            //
+            // Новый виджет
+            //
+            painter.setOpacity(d->expandAnimation.incomingContentFadeIn.currentValue().toReal());
+            const auto currentWidgetRect = QRect(QPoint(0, 0), animatedRect.size());
+            painter.drawPixmap(animatedRect.topLeft(), foregroundImage, currentWidgetRect);
             break;
         }
     }

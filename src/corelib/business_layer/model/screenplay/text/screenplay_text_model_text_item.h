@@ -141,4 +141,8 @@ private:
     QScopedPointer<Implementation> d;
 };
 
+
 } // namespace BusinessLayer
+
+Q_DECLARE_METATYPE(BusinessLayer::ScreenplayTextModelTextItem::ReviewComment)
+Q_DECLARE_METATYPE(QVector<BusinessLayer::ScreenplayTextModelTextItem::ReviewComment>)

@@ -23,8 +23,10 @@ DEPENDPATH += $$PWD/../../../../corelib
 #
 
 HEADERS += \
-    comments/screenplay_text_add_comment_widget.h \
+    comments/screenplay_text_add_comment_view.h \
     comments/screenplay_text_comment_delegate.h \
+    comments/screenplay_text_comment_replies_view.h \
+    comments/screenplay_text_comment_view.h \
     comments/screenplay_text_comments_model.h \
     comments/screenplay_text_comments_toolbar.h \
     comments/screenplay_text_comments_view.h \
@@ -61,8 +63,10 @@ HEADERS += \
     text/screenplay_text_search_toolbar.h
 
 SOURCES += \
-    comments/screenplay_text_add_comment_widget.cpp \
+    comments/screenplay_text_add_comment_view.cpp \
     comments/screenplay_text_comment_delegate.cpp \
+    comments/screenplay_text_comment_replies_view.cpp \
+    comments/screenplay_text_comment_view.cpp \
     comments/screenplay_text_comments_toolbar.cpp \
     comments/screenplay_text_comments_model.cpp \
     comments/screenplay_text_comments_view.cpp \

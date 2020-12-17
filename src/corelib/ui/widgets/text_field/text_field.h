@@ -81,6 +81,16 @@ public:
     void setUnderlineDecorationVisible(bool _visible);
 
     /**
+     * @brief Установить видимость заголовка
+     */
+    void setTitleVisible(bool _visible);
+
+    /**
+     * @brief Установить использование отступов по-умолчанию
+     */
+    void setDefaultMarginsEnabled(bool _enable);
+
+    /**
      * @brief Установить необходимость добавления новых строк при нажатии Enter'а
      */
     void setEnterMakesNewLine(bool _make);

@@ -2,20 +2,20 @@
 
 #include <ui/widgets/widget/widget.h>
 
-class Message;
+class ChatMessage;
 class User;
 
 
 /**
  * @brief Отрисовщик списка сообщений чата
  */
-class MessagesViewContent : public Widget
+class ChatMessagesView : public Widget
 {
     Q_OBJECT
 
 public:
-    explicit MessagesViewContent(QWidget* _parent = nullptr);
-    ~MessagesViewContent() override;
+    explicit ChatMessagesView(QWidget* _parent = nullptr);
+    ~ChatMessagesView() override;
 
     /**
      * @brief Задать текущего пользователя чата
@@ -25,7 +25,7 @@ public:
     /**
      * @brief Установить список сообщений
      */
-    void setMessages(const QVector<Message>& _messages);
+    void setMessages(const QVector<ChatMessage>& _messages);
 
     /**
      * @brief Получить необходимую высоту в зависимости от ширины

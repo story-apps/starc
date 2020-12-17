@@ -92,6 +92,8 @@ public:
 
     ScreenplayTextCommentsToolbar* commentsToolbar = nullptr;
 
+    Shadow* sidebarShadow = nullptr;
+
     bool isSidebarShownFirstTime = true;
     Widget* sidebarWidget = nullptr;
     TabBar* sidebarTabs = nullptr;
@@ -113,6 +115,7 @@ ScreenplayTextView::Implementation::Implementation(QWidget* _parent)
       toolbarAnimation(new FloatingToolbarAnimator(_parent)),
       paragraphTypesModel(new QStandardItemModel(toolbar)),
       commentsToolbar(new ScreenplayTextCommentsToolbar(_parent)),
+      sidebarShadow(new Shadow(Qt::RightEdge, scalableWrapper)),
       sidebarWidget(new Widget(_parent)),
       sidebarTabs(new TabBar(_parent)),
       sidebarContent(new StackWidget(_parent)),
@@ -248,6 +251,7 @@ void ScreenplayTextView::Implementation::updateSideBarVisibility(QWidget* _conta
         return;
     }
 
+    sidebarShadow->setVisible(isSidebarShouldBeVisible);
     sidebarWidget->setVisible(isSidebarShouldBeVisible);
 
     if (isSidebarShownFirstTime && isSidebarShouldBeVisible) {

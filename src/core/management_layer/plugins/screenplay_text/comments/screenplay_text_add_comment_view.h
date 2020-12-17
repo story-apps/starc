@@ -8,13 +8,13 @@ namespace Ui
 /**
  * @brief Виджет добавления комментария
  */
-class ScreenplayTextAddCommentWidget : public Widget
+class ScreenplayTextAddCommentView : public Widget
 {
     Q_OBJECT
 
 public:
-    explicit ScreenplayTextAddCommentWidget(QWidget* _parent = nullptr);
-    ~ScreenplayTextAddCommentWidget() override;
+    explicit ScreenplayTextAddCommentView(QWidget* _parent = nullptr);
+    ~ScreenplayTextAddCommentView() override;
 
     /**
      * @brief Текст комментария

@@ -25,7 +25,8 @@ public:
         ReviewMarkCreationDateRole,
         ReviewMarkCommentRole,
         ReviewMarkColorRole,
-        ReviewMarkIsDoneRole
+        ReviewMarkIsDoneRole,
+        ReviewMarkCommentsRole
     };
 
 public:
