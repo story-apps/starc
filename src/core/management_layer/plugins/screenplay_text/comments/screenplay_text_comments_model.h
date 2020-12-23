@@ -64,6 +64,11 @@ public:
     void markAsUndone(const QModelIndexList& _indexes);
 
     /**
+     * @brief Добавить комментарий к редакторской заметке
+     */
+    void addComment(const QModelIndex& _index, const QString& _comment);
+
+    /**
      * @brief Удалить выбранные элементы
      */
     void remove(const QModelIndexList& _indexes);

@@ -16,7 +16,9 @@
 
 #include <QBoxLayout>
 #include <QDateTime>
+#include <QKeyEvent>
 #include <QScrollArea>
+#include <QTimer>
 
 using BusinessLayer::ScreenplayTextCommentsModel;
 
@@ -28,6 +30,8 @@ class ScreenplayTextCommentRepliesView::Implementation
 {
 public:
     explicit Implementation(QWidget* _parent);
+
+    QModelIndex commentIndex;
 
     ScreenplayTextCommentView* headerView = nullptr;
     ChatMessagesView* repliesView = nullptr;
@@ -70,6 +74,8 @@ ScreenplayTextCommentRepliesView::ScreenplayTextCommentRepliesView(QWidget* _par
 {
     setFocusProxy(d->replyTextField);
 
+    d->replyTextField->installEventFilter(this);
+
     QVBoxLayout* layout = new QVBoxLayout(this);
     layout->setContentsMargins({});
     layout->setSpacing(0);
@@ -78,34 +84,68 @@ ScreenplayTextCommentRepliesView::ScreenplayTextCommentRepliesView(QWidget* _par
     layout->addWidget(d->replyTextField);
 
     connect(d->headerView, &ScreenplayTextCommentView::clicked, this, &ScreenplayTextCommentRepliesView::closePressed);
+    connect(d->replyTextField, &TextField::trailingIconPressed, this, &ScreenplayTextCommentRepliesView::postReply);
 
 
     updateTranslations();
     designSystemChangeEvent(nullptr);
 }
 
-ScreenplayTextCommentRepliesView::~ScreenplayTextCommentRepliesView()
-{
-
-}
+ScreenplayTextCommentRepliesView::~ScreenplayTextCommentRepliesView() = default;
 
 void ScreenplayTextCommentRepliesView::setCommentIndex(const QModelIndex& _index)
 {
-    d->headerView->setCommentIndex(_index);
+    if (d->commentIndex != _index) {
+        d->commentIndex = _index;
+        d->headerView->setCommentIndex(d->commentIndex);
+    }
 
     const auto comments
             = _index.data(ScreenplayTextCommentsModel::ReviewMarkCommentsRole)
                     .value<QVector<BusinessLayer::ScreenplayTextModelTextItem::ReviewComment>>();
     QVector<ChatMessage> replies;
     for (auto comment : comments) {
-        if (comment == comments.first()
-            || comment.text.isEmpty()) {
+        if (comment == comments.first()) {
             continue;
         }
 
         replies.append({ QDateTime::fromString(comment.date, Qt::ISODate), comment.text, User(comment.author) });
     }
     d->repliesView->setMessages(replies);
+
+    //
+    // Отложенно скролим вьюху, чтобы пересчиталась геометрия окна чата
+    //
+    QTimer::singleShot(0, this, [this] {
+        d->repliesViewContainer->verticalScrollBar()->setValue(
+                    d->repliesViewContainer->verticalScrollBar()->maximum());
+    });
+}
+
+bool ScreenplayTextCommentRepliesView::eventFilter(QObject* _watched, QEvent* _event)
+{
+    if (_watched == d->replyTextField && _event->type() == QEvent::KeyPress) {
+        const auto keyEvent = static_cast<QKeyEvent*>(_event);
+        if (keyEvent->key() == Qt::Key_Escape) {
+            emit closePressed();
+        } else if (!keyEvent->modifiers().testFlag(Qt::ShiftModifier)
+                   && (keyEvent->key() == Qt::Key_Return
+                       || keyEvent->key() == Qt::Key_Enter)) {
+            postReply();
+            return true;
+        }
+    }
+
+    return Widget::eventFilter(_watched, _event);
+}
+
+void ScreenplayTextCommentRepliesView::keyPressEvent(QKeyEvent* _event)
+{
+    if (_event->key() == Qt::Key_Escape) {
+        emit closePressed();
+    }
+
+    Widget::keyPressEvent(_event);
 }
 
 void ScreenplayTextCommentRepliesView::updateTranslations()
@@ -127,6 +167,17 @@ void ScreenplayTextCommentRepliesView::designSystemChangeEvent(DesignSystemChang
 
     d->replyTextField->setBackgroundColor(Ui::DesignSystem::color().onPrimary());
     d->replyTextField->setTextColor(Ui::DesignSystem::color().onPrimary());
+}
+
+void ScreenplayTextCommentRepliesView::postReply()
+{
+    if (d->replyTextField->text().isEmpty()) {
+        return;
+    }
+
+    emit addReplyPressed(d->replyTextField->text());
+    d->replyTextField->clear();
+    setCommentIndex(d->commentIndex);
 }
 
 } // namespace Ui

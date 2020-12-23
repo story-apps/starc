@@ -3,6 +3,9 @@
 #include <business_layer/model/screenplay/text/screenplay_text_model.h>
 #include <business_layer/model/screenplay/text/screenplay_text_model_text_item.h>
 
+#include <data_layer/storage/settings_storage.h>
+#include <data_layer/storage/storage_facade.h>
+
 #include <utils/shugar.h>
 #include <utils/tools/model_index_path.h>
 
@@ -735,6 +738,23 @@ void ScreenplayTextCommentsModel::markAsUndone(const QModelIndexList& _indexes)
     }
 }
 
+void ScreenplayTextCommentsModel::addComment(const QModelIndex& _index, const QString& _comment)
+{
+    const auto reviewMarkWrapper = d->reviewMarks.at(_index.row());
+    for (auto textItem : reviewMarkWrapper.items) {
+        auto updatedReviewMarks = textItem->reviewMarks();
+        for (auto& reviewMark : updatedReviewMarks) {
+            if (isReviewMarksPartiallyEqual(reviewMark, reviewMarkWrapper.reviewMark)) {
+                reviewMark.comments.append({ DataStorageLayer::StorageFacade::settingsStorage()->userName(),
+                                             QDateTime::currentDateTime().toString(Qt::ISODate),
+                                             _comment });
+            }
+        }
+        textItem->setReviewMarks(updatedReviewMarks);
+        d->model->updateItem(textItem);
+    }
+}
+
 void ScreenplayTextCommentsModel::remove(const QModelIndexList& _indexes)
 {
     for (const auto& index : _indexes) {
@@ -799,6 +819,9 @@ QVariant ScreenplayTextCommentsModel::data(const QModelIndex& _index, int _role)
         }
 
         case ReviewMarkCommentsRole: {
+            if (reviewMarkWrapper.reviewMark.comments.isEmpty()){
+                return {};
+            }
             return QVariant::fromValue(reviewMarkWrapper.reviewMark.comments);
         }
 

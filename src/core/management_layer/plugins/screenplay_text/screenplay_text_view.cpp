@@ -4,6 +4,7 @@
 #include "comments/screenplay_text_comments_toolbar.h"
 #include "comments/screenplay_text_comments_view.h"
 #include "text/screenplay_text_block_data.h"
+#include "text/screenplay_text_cursor.h"
 #include "text/screenplay_text_edit.h"
 #include "text/screenplay_text_edit_shortcuts_manager.h"
 #include "text/screenplay_text_edit_toolbar.h"
@@ -75,6 +76,12 @@ public:
      * @brief Обновить видимость боковой панели (показана, если показана хотя бы одна из вложенных панелей)
      */
     void updateSideBarVisibility(QWidget* _container);
+
+    /**
+     * @brief Добавить редакторскую заметку для текущего выделения
+     */
+    void addReviewMark(const QColor& _textColor, const QColor& _backgroundColor, const QString& _comment);
+
 
     BusinessLayer::ScreenplayTextCommentsModel* commentsModel = nullptr;
 
@@ -261,6 +268,33 @@ void ScreenplayTextView::Implementation::updateSideBarVisibility(QWidget* _conta
     }
 }
 
+void ScreenplayTextView::Implementation::addReviewMark(const QColor& _textColor, const QColor& _backgroundColor, const QString& _comment)
+{
+    //
+    // Добавим заметку
+    //
+    screenplayText->addReviewMark(_textColor, _backgroundColor, _comment);
+
+    //
+    // Снимем выделение, чтобы пользователь получил обратную связь от приложения, что выделение добавлено
+    //
+    BusinessLayer::ScreenplayTextCursor cursor(screenplayText->textCursor());
+    const auto selectionInterval = cursor.selectionInterval();
+    //
+    // ... делаем танец с бубном, чтобы получить сигнал об обновлении позиции курсора
+    //     и выделить новую заметку в общем списке
+    //
+    cursor.setPosition(selectionInterval.to);
+    screenplayText->setTextCursorReimpl(cursor);
+    cursor.setPosition(selectionInterval.from);
+    screenplayText->setTextCursorReimpl(cursor);
+
+    //
+    // Фокусируем редактор сценария, чтобы пользователь мог продолжать работать с ним
+    //
+    scalableWrapper->setFocus();
+}
+
 
 // ****
 
@@ -322,15 +356,20 @@ ScreenplayTextView::ScreenplayTextView(QWidget* _parent)
     });
     //
     connect(d->commentsToolbar, &ScreenplayTextCommentsToolbar::textColorChangeRequested,
-            this, [this](const QColor& _color) { d->screenplayText->addReviewMark(_color, {}, {}); });
+            this, [this](const QColor& _color) { d->addReviewMark(_color, {}, {}); });
     connect(d->commentsToolbar, &ScreenplayTextCommentsToolbar::textBackgoundColorChangeRequested,
-            this, [this](const QColor& _color) { d->screenplayText->addReviewMark({}, _color, {}); });
+            this, [this](const QColor& _color) { d->addReviewMark({}, _color, {}); });
     connect(d->commentsToolbar, &ScreenplayTextCommentsToolbar::commentAddRequested, this, [this] (const QColor& _color) {
         d->sidebarTabs->setCurrentTab(kCommentsTabIndex);
         d->commentsView->showAddCommentView(_color);
     });
-    connect(d->commentsView, &ScreenplayTextCommentsView::addCommentRequested, this, [this] (const QColor& _color, const QString& _comment) {
-        d->screenplayText->addReviewMark({}, _color, _comment);
+    connect(d->commentsView, &ScreenplayTextCommentsView::addReviewMarkRequested, this, [this] (const QColor& _color, const QString& _comment) {
+        d->addReviewMark({}, _color, _comment);
+    });
+    connect(d->commentsView, &ScreenplayTextCommentsView::addReviewMarkCommentRequested, this,
+            [this] (const QModelIndex& _index, const QString& _comment) {
+        QSignalBlocker blocker(d->commentsView);
+        d->commentsModel->addComment(_index, _comment);
     });
     connect(d->commentsView, &ScreenplayTextCommentsView::commentSelected, this, [this] (const QModelIndex& _index) {
         const auto positionHint = d->commentsModel->mapToScreenplay(_index);

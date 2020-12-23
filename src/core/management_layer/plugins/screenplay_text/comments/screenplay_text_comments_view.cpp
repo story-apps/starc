@@ -159,11 +159,15 @@ ScreenplayTextCommentsView::ScreenplayTextCommentsView(QWidget* _parent)
         }
     });
     connect(d->addCommentView, &ScreenplayTextAddCommentView::savePressed, this, [this] {
-        emit addCommentRequested(d->addCommentColor, d->addCommentView->comment());
+        emit addReviewMarkRequested(d->addCommentColor, d->addCommentView->comment());
         setCurrentWidget(d->commentsView);
     });
     connect(d->addCommentView, &ScreenplayTextAddCommentView::cancelPressed, this, [this] {
         setCurrentWidget(d->commentsView);
+    });
+    connect(d->repliesView, &ScreenplayTextCommentRepliesView::addReplyPressed, this, [this] (const QString& _reply) {
+        emit addReviewMarkCommentRequested(d->commentsView->currentIndex(), _reply);
+
     });
     connect(d->repliesView, &ScreenplayTextCommentRepliesView::closePressed, this, [this] {
         auto animationRect = d->commentsView->visualRect(d->commentsView->currentIndex());
@@ -203,6 +207,10 @@ void ScreenplayTextCommentsView::showAddCommentView(const QColor& _withColor)
 void ScreenplayTextCommentsView::showCommentRepliesView(const QModelIndex& _commentIndex)
 {
     d->repliesView->setCommentIndex(_commentIndex);
+
+    //
+    // Начинаем переход после того, как закончится анимация выбора элемента
+    //
     QTimer::singleShot(100, [this, _commentIndex] {
         setAnimationType(StackWidget::AnimationType::Expand);
         auto animationRect = d->commentsView->visualRect(_commentIndex);

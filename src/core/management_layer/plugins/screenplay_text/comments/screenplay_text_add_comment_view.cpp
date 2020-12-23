@@ -6,6 +6,7 @@
 #include <ui/widgets/scroll_bar/scroll_bar.h>
 #include <ui/widgets/text_field/text_field.h>
 
+#include <QKeyEvent>
 #include <QScrollArea>
 #include <QVBoxLayout>
 
@@ -59,6 +60,8 @@ ScreenplayTextAddCommentView::ScreenplayTextAddCommentView(QWidget* _parent)
 {
     setFocusProxy(d->comment);
 
+    d->comment->installEventFilter(this);
+
     QWidget* contentWidget = new QWidget;
     d->content->setWidgetResizable(true);
     d->content->setWidget(contentWidget);
@@ -90,6 +93,8 @@ ScreenplayTextAddCommentView::ScreenplayTextAddCommentView(QWidget* _parent)
     designSystemChangeEvent(nullptr);
 }
 
+ScreenplayTextAddCommentView::~ScreenplayTextAddCommentView() = default;
+
 QString ScreenplayTextAddCommentView::comment() const
 {
     return d->comment->text();
@@ -100,7 +105,22 @@ void ScreenplayTextAddCommentView::setComment(const QString& _comment)
     d->comment->setText(_comment);
 }
 
-ScreenplayTextAddCommentWidget::~ScreenplayTextAddCommentWidget() = default;
+bool ScreenplayTextAddCommentView::eventFilter(QObject* _watched, QEvent* _event)
+{
+    if (_watched == d->comment && _event->type() == QEvent::KeyPress) {
+        const auto keyEvent = static_cast<QKeyEvent*>(_event);
+        if (keyEvent->key() == Qt::Key_Escape) {
+            emit cancelPressed();
+        } else if (!keyEvent->modifiers().testFlag(Qt::ShiftModifier)
+                   && (keyEvent->key() == Qt::Key_Return
+                       || keyEvent->key() == Qt::Key_Enter)) {
+            emit savePressed();
+            return true;
+        }
+    }
+
+    return Widget::eventFilter(_watched, _event);
+}
 
 void ScreenplayTextAddCommentView::updateTranslations()
 {

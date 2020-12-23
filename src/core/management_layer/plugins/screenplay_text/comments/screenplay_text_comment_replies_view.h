@@ -33,8 +33,31 @@ signals:
     void addReplyPressed(const QString& _reply);
 
 protected:
+    /**
+     * @brief Отлавливаем события ввода комментария
+     */
+    bool eventFilter(QObject* _watched, QEvent* _event) override;
+
+    /**
+     * @brief Переопределяем, чтобы по ескейп выходить из экрана
+     */
+    void keyPressEvent(QKeyEvent* _event) override;
+
+    /**
+     * @brief Обновляем переводы вьюхи
+     */
     void updateTranslations() override;
+
+    /**
+     * @brief Наводим красоту, если сменилась дизайн система
+     */
     void designSystemChangeEvent(DesignSystemChangeEvent* _event) override;
+
+private:
+    /**
+     * @brief Обработать нажатие пользователем кнопки ответа
+     */
+    void postReply();
 
 private:
     class Implementation;

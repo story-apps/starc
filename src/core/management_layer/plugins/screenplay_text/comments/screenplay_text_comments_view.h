@@ -43,9 +43,14 @@ public:
 
 signals:
     /**
-     * @brief Пользователь хочет добавить комментарий
+     * @brief Пользователь хочет добавить редакторскую заметку
      */
-    void addCommentRequested(const QColor& _color, const QString& _text);
+    void addReviewMarkRequested(const QColor& _color, const QString& _text);
+
+    /**
+     * @brief Пользователь хочет комментарий к редакторской заметке
+     */
+    void addReviewMarkCommentRequested(const QModelIndex& _index, const QString& _text);
 
     /**
      * @brief Пользователь выбрал комментарий

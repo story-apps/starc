@@ -162,7 +162,7 @@ QPixmap ImageHelper::makeAvatar(const QString& _text, const QFont& _font, const 
         hash += _text.at(characterIndex).unicode() + ((hash << 5) - hash);
     }
     hash = hash % 360;
-    const QColor avatarColor = QColor::fromHsl(hash, 255 * 0.3, 255 * 0.6);
+    const QColor avatarColor = QColor::fromHsl(hash, 255 * 0.4, 255 * 0.6);
 
     //
     // Рисуем фон авки
@@ -177,7 +177,7 @@ QPixmap ImageHelper::makeAvatar(const QString& _text, const QFont& _font, const 
     //
     QString textToDraw = _text.simplified().toUpper();
     if (textToDraw.count(' ') > 0) {
-        const QStringList words = textToDraw.split(' ', QString::SkipEmptyParts);
+        const QStringList words = textToDraw.split(' ', Qt::SkipEmptyParts);
         textToDraw = QString("%1%2").arg(words[0][0]).arg(words[1][0]);
     } else {
         textToDraw = textToDraw.left(2);
