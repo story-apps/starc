@@ -622,6 +622,8 @@ void ScreenplayTextDocument::setModel(BusinessLayer::ScreenplayTextModel* _model
     connect(d->model, &ScreenplayTextModel::rowsChanged, this, [this] { d->tryToCorrectDocument(); });
 
     d->state = DocumentState::Ready;
+
+    d->tryToCorrectDocument();
 }
 
 int ScreenplayTextDocument::itemPosition(const QModelIndex& _index, bool _fromStart)
