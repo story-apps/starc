@@ -8,7 +8,6 @@
 
 #include <domain/document_object.h>
 
-#include <QDomDocument>
 #include <QFile>
 #include <QFileInfo>
 #include <QXmlStreamWriter>

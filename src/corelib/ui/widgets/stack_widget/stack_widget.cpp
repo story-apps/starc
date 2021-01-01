@@ -359,7 +359,6 @@ void StackWidget::paintEvent(QPaintEvent *_event)
             // Затемнение
             //
             painter.setOpacity(d->expandAnimation.scrimFadeIn.currentValue().toReal());
-            qDebug(QString("%1").arg(painter.opacity()).toUtf8());
             painter.fillRect(rect(), Ui::DesignSystem::color().shadow());
             painter.setOpacity(1.0);
             //

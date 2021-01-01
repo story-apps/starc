@@ -1,34 +1,21 @@
 #include "screenplay_text_model_folder_item.h"
 
 #include "screenplay_text_model_scene_item.h"
+#include "screenplay_text_model_splitter_item.h"
 #include "screenplay_text_model_text_item.h"
+#include "screenplay_text_model_xml.h"
 
 #include <business_layer/templates/screenplay_template.h>
 
 #include <utils/helpers/text_helper.h>
 
-#include <QDomElement>
 #include <QUuid>
 #include <QVariant>
+#include <QXmlStreamReader>
 
 
 namespace BusinessLayer
 {
-
-namespace {
-    const QString kFolderTag = QLatin1String("folder");
-    const QString kSceneTag = QLatin1String("scene");
-    const QString kUuidAttribute = QLatin1String("uuid");
-    const QString kPlotsAttribute = QLatin1String("plots");
-    const QString kOmitedAttribute = QLatin1String("omited");
-    const QString kNumberTag = QLatin1String("number");
-    const QString kNumberValueAttribute = QLatin1String("value");
-    const QString kNumberGroupAttribute = QLatin1String("group");
-    const QString kNumberGroupIndexAttribute = QLatin1String("group_index");
-    const QString kStampTag = QLatin1String("stamp");
-    const QString kPlannedDurationTag = QLatin1String("planned_duration");
-    const QString kContentTag = QLatin1String("content");
-}
 
 class ScreenplayTextModelFolderItem::Implementation
 {
@@ -70,26 +57,49 @@ ScreenplayTextModelFolderItem::ScreenplayTextModelFolderItem()
 {
 }
 
-ScreenplayTextModelFolderItem::ScreenplayTextModelFolderItem(const QDomElement& _node)
+ScreenplayTextModelFolderItem::ScreenplayTextModelFolderItem(QXmlStreamReader& _contentReader)
     : ScreenplayTextModelItem(ScreenplayTextModelItemType::Folder),
       d(new Implementation)
 {
-    Q_ASSERT(_node.tagName() == kFolderTag);
+    Q_ASSERT(_contentReader.name() == xml::kFolderTag);
 
-    d->uuid = _node.hasAttribute(kUuidAttribute) ? _node.attribute(kUuidAttribute)
-                                                 : QUuid::createUuid();
+    d->uuid = _contentReader.attributes().hasAttribute(xml::kUuidAttribute)
+              ? _contentReader.attributes().value(xml::kUuidAttribute).toString()
+              : QUuid::createUuid();
 
-    auto childNode = _node.firstChildElement(kContentTag).firstChildElement();
-    while (!childNode.isNull()) {
-        if (childNode.tagName() == kFolderTag) {
-            appendItem(new ScreenplayTextModelFolderItem(childNode));
-        } else if (childNode.tagName() == kSceneTag) {
-            appendItem(new ScreenplayTextModelSceneItem(childNode));
-        } else {
-            appendItem(new ScreenplayTextModelTextItem(childNode));
+    do {
+        xml::readNextElement(_contentReader);
+        const auto currentTag = _contentReader.name();
+
+        //
+        // Проглатываем закрывающий контентный тэг
+        //
+        if (currentTag == xml::kContentTag
+            && _contentReader.isEndElement()) {
+            xml::readNextElement(_contentReader);
+            continue;
         }
-        childNode = childNode.nextSiblingElement();
-    }
+        //
+        // Если дошли до конца папки, выходим из обработки
+        //
+        else if (currentTag == xml::kFolderTag
+            && _contentReader.isEndElement()) {
+            xml::readNextElement(_contentReader);
+            break;
+        }
+        //
+        // Считываем вложенный контент
+        //
+        else if (currentTag == xml::kFolderTag) {
+            appendItem(new ScreenplayTextModelFolderItem(_contentReader));
+        } else if (currentTag == xml::kSceneTag) {
+            appendItem(new ScreenplayTextModelSceneItem(_contentReader));
+        } else if (currentTag == xml::kSplitterTag) {
+            appendItem(new ScreenplayTextModelSplitterItem(_contentReader));
+        } else {
+            appendItem(new ScreenplayTextModelTextItem(_contentReader));
+        }
+    } while (!_contentReader.atEnd());
 
     //
     // Определим название
@@ -136,13 +146,13 @@ QByteArray ScreenplayTextModelFolderItem::toXml(ScreenplayTextModelItem* _from, 
 
     QByteArray xml;
     if (_clearUuid) {
-        xml += QString("<%1>\n").arg(kFolderTag).toUtf8();
+        xml += QString("<%1>\n").arg(xml::kFolderTag).toUtf8();
     } else {
         xml += QString("<%1 %2=\"%3\">\n")
-               .arg(kFolderTag,
-                    kUuidAttribute, d->uuid.toString()).toUtf8();
+               .arg(xml::kFolderTag,
+                    xml::kUuidAttribute, d->uuid.toString()).toUtf8();
     }
-    xml += QString("<%1>\n").arg(kContentTag).toUtf8();
+    xml += QString("<%1>\n").arg(xml::kContentTag).toUtf8();
     for (int childIndex = 0; childIndex < childCount(); ++childIndex) {
         auto child = childAt(childIndex);
 
@@ -213,8 +223,8 @@ QByteArray ScreenplayTextModelFolderItem::toXml(ScreenplayTextModelItem* _from, 
             xml += textItem->toXml();
         }
     }
-    xml += QString("</%1>\n").arg(kContentTag).toUtf8();
-    xml += QString("</%1>\n").arg(kFolderTag).toUtf8();
+    xml += QString("</%1>\n").arg(xml::kContentTag).toUtf8();
+    xml += QString("</%1>\n").arg(xml::kFolderTag).toUtf8();
 
     return xml;
 }

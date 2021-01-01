@@ -1,5 +1,7 @@
 #include "screenplay_text_model_text_item.h"
 
+#include "screenplay_text_model_xml.h"
+
 #include <business_layer/chronometry/chronometer.h>
 #include <business_layer/templates/screenplay_template.h>
 #include <business_layer/templates/screenplay_template_facade.h>
@@ -8,42 +10,19 @@
 #include <utils/helpers/text_helper.h>
 
 #include <QColor>
-#include <QDomElement>
 #include <QVariant>
+#include <QXmlStreamReader>
 
 #include <optional>
 
 namespace BusinessLayer
 {
 
-namespace {
-    const QString kBookmarkTag = QLatin1String("bm");
-    const QString kValueTag = QLatin1String("v");
-    const QString kReviewMarksTag = QLatin1String("rms");
-    const QString kReviewMarkTag = QLatin1String("rm");
-    const QString kCommentTag = QLatin1String("c");
-    const QString kFormatsTag = QLatin1String("fms");
-    const QString kFormatTag = QLatin1String("fm");
-    const QString kRevisionsTag = QLatin1String("revs");
-    const QString kRevisionTag = QLatin1String("rev");
-    const QString kFromAttribute = QLatin1String("from");
-    const QString kLengthAttribute = QLatin1String("length");
-    const QString kColorAttribute = QLatin1String("color");
-    const QString kBackgroundColorAttribute = QLatin1String("bgcolor");
-    const QString kDoneAttribute = QLatin1String("done");
-    const QString kAuthorAttribute = QLatin1String("author");
-    const QString kDateAttribute = QLatin1String("date");
-    const QString kBoldAttribute = QLatin1String("bold");
-    const QString kItalicAttribute = QLatin1String("italic");
-    const QString kUnderlineAttribute = QLatin1String("underline");
-    const QString kAlignAttribute = QLatin1String("align");
-}
-
 class ScreenplayTextModelTextItem::Implementation
 {
 public:
     Implementation() = default;
-    explicit Implementation(const QDomElement& _node);
+    explicit Implementation(QXmlStreamReader& _contentReader);
 
     /**
      * @brief Обновить закешированный xml
@@ -119,84 +98,119 @@ public:
     QByteArray xml;
 };
 
-ScreenplayTextModelTextItem::Implementation::Implementation(const QDomElement& _node)
+ScreenplayTextModelTextItem::Implementation::Implementation(QXmlStreamReader& _contentReader)
 {
-    paragraphType = screenplayParagraphTypeFromString(_node.tagName());
+    paragraphType = screenplayParagraphTypeFromString(_contentReader.name().toString());
     Q_ASSERT(paragraphType != ScreenplayParagraphType::Undefined);
 
-    if (_node.hasAttribute(kAlignAttribute)) {
-        alignment = alignmentFromString(_node.attribute(kAlignAttribute));
+    if (_contentReader.attributes().hasAttribute(xml::kAlignAttribute)) {
+        alignment = alignmentFromString(_contentReader.attributes().value(xml::kAlignAttribute).toString());
     }
-    const auto bookmarkNode = _node.firstChildElement(kBookmarkTag);
-    if (!bookmarkNode.isNull()) {
-        bookmark = { bookmarkNode.attribute(kColorAttribute),
-                     bookmarkNode.text() };
+
+    auto currentTag = xml::readNextElement(_contentReader);
+    if (currentTag == xml::kBookmarkTag) {
+        const auto attributes = _contentReader.attributes();
+        bookmark = { attributes.value(xml::kColorAttribute).toString(),
+                     TextHelper::fromHtmlEscaped(xml::readContent(_contentReader).toString()) };
+        xml::readNextElement(_contentReader); // end
+        currentTag = xml::readNextElement(_contentReader); // next
     }
-    const auto textNode = _node.firstChildElement(kValueTag);
-    text = TextHelper::fromHtmlEscaped(textNode.text());
-    const auto reviewMarksNode = _node.firstChildElement(kReviewMarksTag);
-    if (!reviewMarksNode.isNull()) {
-        auto reviewMarkNode = reviewMarksNode.firstChildElement();
-        while (!reviewMarkNode.isNull()) {
-            ReviewMark reviewMark;
-            reviewMark.from = reviewMarkNode.attribute(kFromAttribute).toInt();
-            reviewMark.length = reviewMarkNode.attribute(kLengthAttribute).toInt();
-            if (reviewMarkNode.hasAttribute(kColorAttribute)) {
-                reviewMark.textColor = reviewMarkNode.attribute(kColorAttribute);
+
+    if (currentTag == xml::kValueTag) {
+        text = TextHelper::fromHtmlEscaped(xml::readContent(_contentReader).toString());
+        xml::readNextElement(_contentReader); // end
+        currentTag = xml::readNextElement(_contentReader); // next
+    }
+
+    if (currentTag == xml::kReviewMarksTag) {
+        do {
+            currentTag = xml::readNextElement(_contentReader);
+
+            //
+            // Прекращаем обработку, если дошли до конца редакторских заметок
+            //
+            if (currentTag == xml::kReviewMarksTag
+                && _contentReader.isEndElement()) {
+                currentTag = xml::readNextElement(_contentReader);
+                break;
             }
-            if (reviewMarkNode.hasAttribute(kBackgroundColorAttribute)) {
-                reviewMark.backgroundColor = reviewMarkNode.attribute(kBackgroundColorAttribute);
-            }
-            if (reviewMarkNode.hasAttribute(kDoneAttribute)) {
-                reviewMark.isDone = true;
-            }
-            if (reviewMarkNode.hasChildNodes()) {
-                auto commentNode = reviewMarkNode.firstChildElement();
-                while (!commentNode.isNull()) {
-                    reviewMark.comments.append({ TextHelper::fromHtmlEscaped(commentNode.attribute(kAuthorAttribute)),
-                                                 commentNode.attribute(kDateAttribute),
-                                                 TextHelper::fromHtmlEscaped(commentNode.text()) });
-                    //
-                    commentNode = commentNode.nextSiblingElement();
+            //
+            // Считываем заметки
+            //
+            else if (currentTag == xml::kReviewMarkTag) {
+                const auto reviewMarkAttributes = _contentReader.attributes();
+                ReviewMark reviewMark;
+                reviewMark.from = reviewMarkAttributes.value(xml::kFromAttribute).toInt();
+                reviewMark.length = reviewMarkAttributes.value(xml::kLengthAttribute).toInt();
+                if (reviewMarkAttributes.hasAttribute(xml::kColorAttribute)) {
+                    reviewMark.textColor = reviewMarkAttributes.value(xml::kColorAttribute).toString();
                 }
+                if (reviewMarkAttributes.hasAttribute(xml::kBackgroundColorAttribute)) {
+                    reviewMark.backgroundColor = reviewMarkAttributes.value(xml::kBackgroundColorAttribute).toString();
+                }
+                reviewMark.isDone = reviewMarkAttributes.hasAttribute(xml::kDoneAttribute);
+
+                do {
+                    currentTag = xml::readNextElement(_contentReader);
+                    if (currentTag != xml::kCommentTag) {
+                        break;
+                    }
+
+                    const auto commentAttributes = _contentReader.attributes();
+                    reviewMark.comments.append({ TextHelper::fromHtmlEscaped(commentAttributes.value(xml::kAuthorAttribute).toString()),
+                                                 commentAttributes.value(xml::kDateAttribute).toString(),
+                                                 TextHelper::fromHtmlEscaped(xml::readContent(_contentReader).toString()) });
+
+                    xml::readNextElement(_contentReader); // end
+                } while (!_contentReader.atEnd());
+
+                reviewMarks.append(reviewMark);
             }
-            reviewMarks.append(reviewMark);
-            //
-            reviewMarkNode = reviewMarkNode.nextSiblingElement();
-        }
+        } while (!_contentReader.atEnd());
     }
-    const auto formatsNode = _node.firstChildElement(kFormatsTag);
-    if (!formatsNode.isNull()) {
-        auto formatNode = formatsNode.firstChildElement();
-        while (!formatNode.isNull()) {
-            TextFormat format;
-            format.from = formatNode.attribute(kFromAttribute).toInt();
-            format.length = formatNode.attribute(kLengthAttribute).toInt();
-            if (formatNode.hasAttribute(kBoldAttribute)) {
-                format.isBold = true;
-            }
-            if (formatNode.hasAttribute(kItalicAttribute)) {
-                format.isItalic = true;
-            }
-            if (formatNode.hasAttribute(kUnderlineAttribute)) {
-                format.isUnderline = true;
-            }
-            formats.append(format);
+
+    if (currentTag == xml::kFormatsTag) {
+        do {
+            currentTag = xml::readNextElement(_contentReader);
+
             //
-            formatNode = formatNode.nextSiblingElement();
-        }
-    }
-    const auto revisionsNode = _node.firstChildElement(kRevisionsTag);
-    if (!revisionsNode.isNull()) {
-        auto revisionNode = revisionsNode.firstChildElement();
-        while (!revisionNode.isNull()) {
-            revisions.append({{ revisionNode.attribute(kFromAttribute).toInt(),
-                                revisionNode.attribute(kLengthAttribute).toInt()},
-                               revisionNode.attribute(kColorAttribute) });
+            // Прекращаем обработку, если дошли до конца форматов
             //
-            revisionNode = revisionNode.nextSiblingElement();
-        }
+            if (currentTag == xml::kFormatsTag
+                && _contentReader.isEndElement()) {
+                currentTag = xml::readNextElement(_contentReader);
+                break;
+            }
+
+            else if (currentTag == xml::kFormatTag) {
+                const auto formatAttributes = _contentReader.attributes();
+                TextFormat format;
+                format.from = formatAttributes.value(xml::kFromAttribute).toInt();
+                format.length = formatAttributes.value(xml::kLengthAttribute).toInt();
+                format.isBold = formatAttributes.hasAttribute(xml::kBoldAttribute);
+                format.isItalic = formatAttributes.hasAttribute(xml::kItalicAttribute);
+                format.isUnderline = formatAttributes.hasAttribute(xml::kUnderlineAttribute);
+
+                formats.append(format);
+            }
+
+            xml::readNextElement(_contentReader); // end
+        } while (!_contentReader.atEnd());
     }
+
+    if (currentTag == xml::kRevisionsTag) {
+        Q_ASSERT(false);
+//        auto revisionNode = revisionsNode.firstChildElement();
+//        while (!revisionNode.isNull()) {
+//            revisions.append({{ revisionNode.attribute(xml::kFromAttribute).toInt(),
+//                                revisionNode.attribute(xml::kLengthAttribute).toInt()},
+//                               revisionNode.attribute(xml::kColorAttribute) });
+//            //
+//            revisionNode = revisionNode.nextSiblingElement();
+//        }
+    }
+
+    xml::readNextElement(_contentReader); // next
 }
 
 void ScreenplayTextModelTextItem::Implementation::updateXml()
@@ -216,16 +230,16 @@ QByteArray ScreenplayTextModelTextItem::Implementation::buildXml(int _from, int 
     xml += QString("<%1%2>")
            .arg(toString(paragraphType),
                 (alignment.has_value() && alignment->testFlag(Qt::AlignHorizontal_Mask)
-                 ? QString(" %1=\"%2\"").arg(kAlignAttribute, toString(*alignment))
+                 ? QString(" %1=\"%2\"").arg(xml::kAlignAttribute, toString(*alignment))
                  : "")).toUtf8();
     if (bookmark.has_value()) {
         xml += QString("<%1 %2=\"%3\"><![CDATA[%4]]></%1>")
-               .arg(kBookmarkTag,
-                    kColorAttribute, bookmark->color.name(),
+               .arg(xml::kBookmarkTag,
+                    xml::kColorAttribute, bookmark->color.name(),
                     TextHelper::toHtmlEscaped(bookmark->text)).toUtf8();
     }
     xml += QString("<%1><![CDATA[%2]]></%1>")
-           .arg(kValueTag,
+           .arg(xml::kValueTag,
                 TextHelper::toHtmlEscaped(text.mid(_from, _length))).toUtf8();
 
     //
@@ -257,36 +271,36 @@ QByteArray ScreenplayTextModelTextItem::Implementation::buildXml(int _from, int 
     // Собственно сохраняем
     //
     if (!reviewMarksToSave.isEmpty()) {
-        xml += QString("<%1>").arg(kReviewMarksTag).toUtf8();
+        xml += QString("<%1>").arg(xml::kReviewMarksTag).toUtf8();
         for (const auto& reviewMark : std::as_const(reviewMarksToSave)) {
             xml += QString("<%1 %2=\"%3\" %4=\"%5\" %6%7%9")
-                   .arg(kReviewMarkTag,
-                        kFromAttribute, QString::number(reviewMark.from),
-                        kLengthAttribute, QString::number(reviewMark.length),
+                   .arg(xml::kReviewMarkTag,
+                        xml::kFromAttribute, QString::number(reviewMark.from),
+                        xml::kLengthAttribute, QString::number(reviewMark.length),
                         (reviewMark.textColor.isValid()
-                         ? QString(" %1=\"%2\"").arg(kColorAttribute, reviewMark.textColor.name())
+                         ? QString(" %1=\"%2\"").arg(xml::kColorAttribute, reviewMark.textColor.name())
                          : ""),
                         (reviewMark.backgroundColor.isValid()
-                         ? QString(" %1=\"%2\"").arg(kBackgroundColorAttribute, reviewMark.backgroundColor.name())
+                         ? QString(" %1=\"%2\"").arg(xml::kBackgroundColorAttribute, reviewMark.backgroundColor.name())
                          : ""),
                         (reviewMark.isDone
-                         ? QString(" %1=\"true\"").arg(kDoneAttribute)
+                         ? QString(" %1=\"true\"").arg(xml::kDoneAttribute)
                          : "")).toUtf8();
             if (!reviewMark.comments.isEmpty()) {
                 xml += ">";
                 for (const auto& comment : std::as_const(reviewMark.comments)) {
                     xml += QString("<%1 %2=\"%3\" %4=\"%5\"><![CDATA[%6]]></%1>")
-                           .arg(kCommentTag,
-                                kAuthorAttribute, TextHelper::toHtmlEscaped(comment.author),
-                                kDateAttribute, comment.date,
+                           .arg(xml::kCommentTag,
+                                xml::kAuthorAttribute, TextHelper::toHtmlEscaped(comment.author),
+                                xml::kDateAttribute, comment.date,
                                 TextHelper::toHtmlEscaped(comment.text)).toUtf8();
                 }
-                xml += QString("</%1>").arg(kReviewMarkTag).toUtf8();
+                xml += QString("</%1>").arg(xml::kReviewMarkTag).toUtf8();
             } else {
                 xml += "/>";
             }
         }
-        xml += QString("</%1>").arg(kReviewMarksTag).toUtf8();
+        xml += QString("</%1>").arg(xml::kReviewMarksTag).toUtf8();
     }
 
     //
@@ -318,38 +332,38 @@ QByteArray ScreenplayTextModelTextItem::Implementation::buildXml(int _from, int 
     // Собственно сохраняем
     //
     if (!formatsToSave.isEmpty()) {
-        xml += QString("<%1>").arg(kFormatsTag).toUtf8();
+        xml += QString("<%1>").arg(xml::kFormatsTag).toUtf8();
         for (const auto& format : std::as_const(formatsToSave)) {
             xml += QString("<%1 %2=\"%3\" %4=\"%5\" %6%7%8/>")
-                   .arg(kFormatTag,
-                        kFromAttribute, QString::number(format.from),
-                        kLengthAttribute, QString::number(format.length),
+                   .arg(xml::kFormatTag,
+                        xml::kFromAttribute, QString::number(format.from),
+                        xml::kLengthAttribute, QString::number(format.length),
                         (format.isBold
-                         ? QString(" %1=\"true\"").arg(kBoldAttribute)
+                         ? QString(" %1=\"true\"").arg(xml::kBoldAttribute)
                          : ""),
                         (format.isItalic
-                         ? QString(" %1=\"true\"").arg(kItalicAttribute)
+                         ? QString(" %1=\"true\"").arg(xml::kItalicAttribute)
                          : ""),
                         (format.isUnderline
-                         ? QString(" %1=\"true\"").arg(kUnderlineAttribute)
+                         ? QString(" %1=\"true\"").arg(xml::kUnderlineAttribute)
                          : "")).toUtf8();
         }
-        xml += QString("</%1>").arg(kFormatsTag).toUtf8();
+        xml += QString("</%1>").arg(xml::kFormatsTag).toUtf8();
     }
 
     //
     // Сохраняем ревизии блока
     //
     if (!revisions.isEmpty()) {
-        xml += QString("<%1>").arg(kRevisionsTag).toUtf8();
+        xml += QString("<%1>").arg(xml::kRevisionsTag).toUtf8();
         for (const auto& revision : std::as_const(revisions)) {
             xml += QString("<%1 %2=\"%3\" %4=\"%5\" %6=\"%7\"/>")
-                   .arg(kRevisionTag,
-                        kFromAttribute, QString::number(revision.from),
-                        kLengthAttribute, QString::number(revision.length),
-                        kColorAttribute, revision.color.name()).toUtf8();
+                   .arg(xml::kRevisionTag,
+                        xml::kFromAttribute, QString::number(revision.from),
+                        xml::kLengthAttribute, QString::number(revision.length),
+                        xml::kColorAttribute, revision.color.name()).toUtf8();
         }
-        xml += QString("</%1>").arg(kRevisionsTag).toUtf8();
+        xml += QString("</%1>").arg(xml::kRevisionsTag).toUtf8();
     }
 
     //
@@ -451,9 +465,9 @@ ScreenplayTextModelTextItem::ScreenplayTextModelTextItem()
     d->updateXml();
 }
 
-ScreenplayTextModelTextItem::ScreenplayTextModelTextItem(const QDomElement& _node)
+ScreenplayTextModelTextItem::ScreenplayTextModelTextItem(QXmlStreamReader& _contentReaded)
     : ScreenplayTextModelItem(ScreenplayTextModelItemType::Text),
-      d(new Implementation(_node))
+      d(new Implementation(_contentReaded))
 {
     d->updateXml();
 }

@@ -10,10 +10,11 @@
 
 #include <domain/document_object.h>
 
+#include <utils/diff_match_patch/diff_match_patch_controller.h>
 #include <utils/tools/model_index_path.h>
 
-#include <QDomDocument>
 #include <QMimeData>
+#include <QXmlStreamReader>
 
 
 namespace BusinessLayer
@@ -86,21 +87,24 @@ void ScreenplayTextModel::Implementation::buildModel(Domain::DocumentObject* _sc
         return;
     }
 
-    QDomDocument domDocument;
-    domDocument.setContent(_screenplay->content());
-    auto documentNode = domDocument.firstChildElement(xml::kDocumentTag);
-    auto rootNode = documentNode.firstChildElement();
-    while (!rootNode.isNull()) {
-        if (rootNode.nodeName() == xml::kFolderTag) {
-            rootItem->appendItem(new ScreenplayTextModelFolderItem(rootNode));
-        } else if (rootNode.nodeName() == xml::kSceneTag) {
-            rootItem->appendItem(new ScreenplayTextModelSceneItem(rootNode));
-        } else if (rootNode.nodeName() == xml::kSplitterTag) {
-            rootItem->appendItem(new ScreenplayTextModelSplitterItem(rootNode));
-        } else {
-            rootItem->appendItem(new ScreenplayTextModelTextItem(rootNode));
+    QXmlStreamReader contentReader(_screenplay->content());
+    contentReader.readNextStartElement(); // document
+    contentReader.readNextStartElement();
+    while (!contentReader.atEnd()) {
+        const auto currentTag = contentReader.name();
+        if (currentTag == xml::kDocumentTag) {
+            break;
         }
-        rootNode = rootNode.nextSiblingElement();
+
+        if (currentTag == xml::kFolderTag) {
+            rootItem->appendItem(new ScreenplayTextModelFolderItem(contentReader));
+        } else if (currentTag == xml::kSceneTag) {
+            rootItem->appendItem(new ScreenplayTextModelSceneItem(contentReader));
+        } else if (currentTag == xml::kSplitterTag) {
+            rootItem->appendItem(new ScreenplayTextModelSplitterItem(contentReader));
+        } else {
+            rootItem->appendItem(new ScreenplayTextModelTextItem(contentReader));
+        }
     }
 }
 
@@ -160,7 +164,24 @@ void ScreenplayTextModel::Implementation::updateNumbering()
 
 
 ScreenplayTextModel::ScreenplayTextModel(QObject* _parent)
-    : AbstractModel({}, _parent),
+    : AbstractModel({ xml::kDocumentTag,
+                      xml::kFolderTag,
+                      xml::kSceneTag,
+                      toString(ScreenplayParagraphType::UnformattedText),
+                      toString(ScreenplayParagraphType::SceneHeading),
+                      toString(ScreenplayParagraphType::SceneCharacters),
+                      toString(ScreenplayParagraphType::Action),
+                      toString(ScreenplayParagraphType::Character),
+                      toString(ScreenplayParagraphType::Parenthetical),
+                      toString(ScreenplayParagraphType::Dialogue),
+                      toString(ScreenplayParagraphType::Lyrics),
+                      toString(ScreenplayParagraphType::Transition),
+                      toString(ScreenplayParagraphType::Shot),
+                      toString(ScreenplayParagraphType::InlineNote),
+                      toString(ScreenplayParagraphType::FolderHeader),
+                      toString(ScreenplayParagraphType::FolderFooter),
+                      toString(ScreenplayParagraphType::PageSplitter) },
+                    _parent),
       d(new Implementation)
 {
 }
@@ -475,22 +496,26 @@ bool ScreenplayTextModel::dropMimeData(const QMimeData* _data, Qt::DropAction _a
             //
             // ... cчитываем данные и последовательно вставляем в модель
             //
-            QDomDocument domDocument;
-            domDocument.setContent(_data->data(mimeTypes().first()));
-            auto documentNode = domDocument.firstChildElement(xml::kDocumentTag);
-            auto contentNode = documentNode.firstChildElement();
+            QXmlStreamReader contentReader(_data->data(mimeTypes().first()));
+            contentReader.readNextStartElement(); // document
+            contentReader.readNextStartElement();
             bool isFirstItemHandled = false;
             ScreenplayTextModelItem* lastItem = insertAnchorItem;
-            while (!contentNode.isNull()) {
+            while (!contentReader.atEnd()) {
+                const auto currentTag = contentReader.name();
+                if (currentTag == xml::kDocumentTag) {
+                    break;
+                }
+
                 ScreenplayTextModelItem* newItem = nullptr;
-                if (contentNode.nodeName() == xml::kFolderTag) {
-                    newItem = new ScreenplayTextModelFolderItem(contentNode);
-                } else if (contentNode.nodeName() == xml::kSceneTag) {
-                    newItem = new ScreenplayTextModelSceneItem(contentNode);
-                } else if (contentNode.nodeName() == xml::kSplitterTag) {
-                    newItem = new ScreenplayTextModelSplitterItem(contentNode);
+                if (currentTag == xml::kFolderTag) {
+                    newItem = new ScreenplayTextModelFolderItem(contentReader);
+                } else if (currentTag == xml::kSceneTag) {
+                    newItem = new ScreenplayTextModelSceneItem(contentReader);
+                } else if (currentTag == xml::kSplitterTag) {
+                    newItem = new ScreenplayTextModelSplitterItem(contentReader);
                 } else {
-                    newItem = new ScreenplayTextModelTextItem(contentNode);
+                    newItem = new ScreenplayTextModelTextItem(contentReader);
                 }
 
                 if (!isFirstItemHandled) {
@@ -542,7 +567,6 @@ bool ScreenplayTextModel::dropMimeData(const QMimeData* _data, Qt::DropAction _a
                 }
 
                 lastItem = newItem;
-                contentNode = contentNode.nextSiblingElement();
             }
 
             //
@@ -807,20 +831,24 @@ void ScreenplayTextModel::insertFromMime(const QModelIndex& _index, int _positio
     //
     // Считываем данные и последовательно вставляем в модель
     //
-    QDomDocument domDocument;
-    domDocument.setContent(_mimeData);
-    auto documentNode = domDocument.firstChildElement(xml::kDocumentTag);
-    auto contentNode = documentNode.firstChildElement();
+    QXmlStreamReader contentReader(_mimeData);
+    contentReader.readNextStartElement(); // document
+    contentReader.readNextStartElement();
     bool isFirstTextItemHandled = false;
     ScreenplayTextModelItem* lastItem = item;
-    while (!contentNode.isNull()) {
+    while (!contentReader.atEnd()) {
+        const auto currentTag = contentReader.name();
+        if (currentTag == xml::kDocumentTag) {
+            break;
+        }
+
         ScreenplayTextModelItem* newItem = nullptr;
         //
         // При входе в папку или сцену, если предыдущий текстовый элемент был в сцене,
         // то вставлять их будем не после текстового элемента, а после сцены
         //
-        if ((contentNode.nodeName() == xml::kFolderTag
-             || contentNode.nodeName() == xml::kSceneTag)
+        if ((currentTag == xml::kFolderTag
+             || currentTag == xml::kSceneTag)
                 && (lastItem->type() == ScreenplayTextModelItemType::Text
                     || lastItem->type() == ScreenplayTextModelItemType::Splitter)
                 && lastItem->parent()->type() == ScreenplayTextModelItemType::Scene) {
@@ -840,14 +868,14 @@ void ScreenplayTextModel::insertFromMime(const QModelIndex& _index, int _positio
         }
 
 
-        if (contentNode.nodeName() == xml::kFolderTag) {
-            newItem = new ScreenplayTextModelFolderItem(contentNode);
-        } else if (contentNode.nodeName() == xml::kSceneTag) {
-            newItem = new ScreenplayTextModelSceneItem(contentNode);
-        } else if (contentNode.nodeName() == xml::kSplitterTag) {
-            newItem = new ScreenplayTextModelSplitterItem(contentNode);
+        if (currentTag == xml::kFolderTag) {
+            newItem = new ScreenplayTextModelFolderItem(contentReader);
+        } else if (currentTag == xml::kSceneTag) {
+            newItem = new ScreenplayTextModelSceneItem(contentReader);
+        } else if (currentTag == xml::kSplitterTag) {
+            newItem = new ScreenplayTextModelSplitterItem(contentReader);
         } else {
-            auto newTextItem = new ScreenplayTextModelTextItem(contentNode);
+            auto newTextItem = new ScreenplayTextModelTextItem(contentReader);
             //
             // Если вставляется текстовый элемент внутрь уже существующего элемента
             //
@@ -878,19 +906,17 @@ void ScreenplayTextModel::insertFromMime(const QModelIndex& _index, int _positio
             insertItem(newItem, lastItem);
             lastItem = newItem;
         }
-
-        contentNode = contentNode.nextSiblingElement();
     }
 
     //
     // Если есть оторванный от первого блока текст
     //
     if (!sourceBlockEndContent.isEmpty()) {
-        QDomDocument sourceBlockEndContentDocument;
-        sourceBlockEndContentDocument.setContent(sourceBlockEndContent);
-        auto documentNode = sourceBlockEndContentDocument.firstChildElement(xml::kDocumentTag);
-        auto contentNode = documentNode.firstChildElement();
-        auto item = new ScreenplayTextModelTextItem(contentNode);
+        contentReader.clear();
+        contentReader.addData(sourceBlockEndContent);
+        contentReader.readNextStartElement(); // document
+        contentReader.readNextStartElement(); // text node
+        auto item = new ScreenplayTextModelTextItem(contentReader);
         //
         // ... и последний вставленный элемент был текстовым
         //
@@ -1094,16 +1120,54 @@ void ScreenplayTextModel::clearDocument()
         return;
     }
 
-    emit beginRemoveRows({}, 0, d->rootItem->childCount() - 1);
+    beginResetModel();
     while (d->rootItem->childCount() > 0) {
         d->rootItem->removeItem(d->rootItem->childAt(0));
     }
-    emit endRemoveRows();
+    endResetModel();
 }
 
 QByteArray ScreenplayTextModel::toXml() const
 {
     return d->toXml(document());
+}
+
+void ScreenplayTextModel::applyPatch(const QByteArray& _patch)
+{
+    //
+    // Определить область изменения в xml
+    //
+    const auto changes = dmpController().changedXml(toXml(), _patch);
+
+
+    //
+    // Идём по структуре документа до момента достижения элемента, входящего в изменение
+    //
+
+
+    //
+    // Определяем ситуации, которые произошли в изменении
+    //
+
+    //
+    // Изменение элемента модели
+    //
+
+    //
+    // Добавление элемента
+    //
+
+    //
+    // Удаление элемента
+    //
+
+
+#if 1
+    //
+    // Делаем проверку на соответствие обновлённой модели прямому наложению патча
+    //
+
+#endif
 }
 
 } // namespace BusinessLayer

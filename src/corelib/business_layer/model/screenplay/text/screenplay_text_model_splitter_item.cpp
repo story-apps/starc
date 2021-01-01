@@ -1,15 +1,15 @@
 #include "screenplay_text_model_splitter_item.h"
 
-#include <QDomElement>
+#include "screenplay_text_model_xml.h"
+
 #include <QVariant>
+#include <QXmlStreamReader>
 
 
 namespace BusinessLayer
 {
 
 namespace {
-    const QString kSplitterTag = QLatin1String("splitter");
-    const QString kTypeAttribute = QLatin1String("type");
     const QHash<ScreenplayTextModelSplitterItemType, QString> kSplitterTypeToString
         = {{ ScreenplayTextModelSplitterItemType::Undefined, {} },
            { ScreenplayTextModelSplitterItemType::Start, QStringLiteral("start") },
@@ -41,13 +41,16 @@ ScreenplayTextModelSplitterItem::ScreenplayTextModelSplitterItem(ScreenplayTextM
 {
 }
 
-ScreenplayTextModelSplitterItem::ScreenplayTextModelSplitterItem(const QDomElement& _node)
+ScreenplayTextModelSplitterItem::ScreenplayTextModelSplitterItem(QXmlStreamReader& _contentReader)
     : ScreenplayTextModelItem(ScreenplayTextModelItemType::Splitter),
       d(new Implementation)
 {
-    Q_ASSERT(_node.tagName() == kSplitterTag);
+    Q_ASSERT(_contentReader.name() == xml::kSplitterTag);
 
-    d->type = kSplitterTypeToString.key(_node.attribute(kTypeAttribute));
+    d->type = kSplitterTypeToString.key(_contentReader.attributes().value(xml::kTypeAttribute).toString());
+
+    xml::readNextElement(_contentReader); // end
+    xml::readNextElement(_contentReader); // next
 }
 
 ScreenplayTextModelSplitterItem::~ScreenplayTextModelSplitterItem() = default;
@@ -65,7 +68,7 @@ QByteArray ScreenplayTextModelSplitterItem::toXml() const
     }
 
     return QString("<%1 %2=\"%3\"/>\n")
-            .arg(kSplitterTag, kTypeAttribute, kSplitterTypeToString.value(d->type)).toUtf8();
+            .arg(xml::kSplitterTag, xml::kTypeAttribute, kSplitterTypeToString.value(d->type)).toUtf8();
 }
 
 } // namespace BusinessLayer

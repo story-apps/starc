@@ -7,6 +7,7 @@
 #include <chrono>
 
 class QDomElement;
+class QXmlStreamReader;
 
 
 namespace BusinessLayer
@@ -39,7 +40,7 @@ public:
 
 public:
     ScreenplayTextModelSceneItem();
-    explicit ScreenplayTextModelSceneItem(const QDomElement& _node);
+    explicit ScreenplayTextModelSceneItem(QXmlStreamReader& _contentReader);
     ~ScreenplayTextModelSceneItem() override;
 
     /**

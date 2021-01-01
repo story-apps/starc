@@ -7,6 +7,7 @@
 #include <QTextLayout>
 
 class QDomElement;
+class QXmlStreamReader;
 
 
 namespace BusinessLayer
@@ -59,7 +60,7 @@ public:
 
 public:
     ScreenplayTextModelTextItem();
-    explicit ScreenplayTextModelTextItem(const QDomElement& _node);
+    explicit ScreenplayTextModelTextItem(QXmlStreamReader& _contentReaded);
     ~ScreenplayTextModelTextItem() override;
 
     /**

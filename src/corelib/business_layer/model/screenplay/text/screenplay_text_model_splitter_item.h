@@ -5,6 +5,7 @@
 #include <QHash>
 
 class QDomElement;
+class QXmlStreamReader;
 
 
 namespace BusinessLayer
@@ -36,7 +37,7 @@ class CORE_LIBRARY_EXPORT ScreenplayTextModelSplitterItem : public ScreenplayTex
 {
 public:
     explicit ScreenplayTextModelSplitterItem(ScreenplayTextModelSplitterItemType _type);
-    explicit ScreenplayTextModelSplitterItem(const QDomElement& _node);
+    explicit ScreenplayTextModelSplitterItem(QXmlStreamReader& _contentReader);
     ~ScreenplayTextModelSplitterItem() override;
 
     /**

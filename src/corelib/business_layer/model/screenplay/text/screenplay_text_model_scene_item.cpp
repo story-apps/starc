@@ -2,33 +2,21 @@
 
 #include "screenplay_text_model_splitter_item.h"
 #include "screenplay_text_model_text_item.h"
+#include "screenplay_text_model_xml.h"
 
 #include <business_layer/templates/screenplay_template.h>
 
 #include <utils/helpers/text_helper.h>
 
-#include <QDomElement>
 #include <QUuid>
 #include <QVariant>
+#include <QXmlStreamReader>
 
 #include <optional>
 
 
 namespace BusinessLayer
 {
-
-namespace {
-    const QString kSceneTag = QLatin1String("scene");
-    const QString kUuidAttribute = QLatin1String("uuid");
-    const QString kPlotsAttribute = QLatin1String("plots");
-    const QString kOmitedAttribute = QLatin1String("omited");
-    const QString kNumberTag = QLatin1String("number");
-    const QString kNumberValueAttribute = QLatin1String("value");
-    const QString kStampTag = QLatin1String("stamp");
-    const QString kPlannedDurationTag = QLatin1String("planned_duration");
-    const QString kContentTag = QLatin1String("content");
-    const QString kSplitterTag = QLatin1String("splitter");
-}
 
 class ScreenplayTextModelSceneItem::Implementation
 {
@@ -106,40 +94,73 @@ ScreenplayTextModelSceneItem::ScreenplayTextModelSceneItem()
 {
 }
 
-ScreenplayTextModelSceneItem::ScreenplayTextModelSceneItem(const QDomElement& _node)
+ScreenplayTextModelSceneItem::ScreenplayTextModelSceneItem(QXmlStreamReader& _contentReader)
     : ScreenplayTextModelItem(ScreenplayTextModelItemType::Scene),
       d(new Implementation)
 {
-    Q_ASSERT(_node.tagName() == kSceneTag);
+    Q_ASSERT(_contentReader.name() == xml::kSceneTag);
 
-    d->uuid = _node.hasAttribute(kUuidAttribute) ? _node.attribute(kUuidAttribute)
-                                                 : QUuid::createUuid();
+    const auto attributes = _contentReader.attributes();
+    d->uuid = attributes.hasAttribute(xml::kUuidAttribute)
+              ? attributes.value(xml::kUuidAttribute).toString()
+              : QUuid::createUuid();
     //
     // TODO: plots
     //
-    d->isOmited = _node.hasAttribute(kOmitedAttribute);
-    const auto numberNode = _node.firstChildElement(kNumberTag);
-    if (!numberNode.isNull()) {
-        d->number = { numberNode.attribute(kNumberValueAttribute) };
+    d->isOmited = attributes.hasAttribute(xml::kOmitedAttribute);
+    xml::readNextElement(_contentReader);
+
+    auto currentTag = _contentReader.name();
+    if (currentTag == xml::kNumberTag) {
+        d->number = { _contentReader.attributes().value(xml::kNumberValueAttribute).toString() };
+        xml::readNextElement(_contentReader); // end
+        currentTag = xml::readNextElement(_contentReader); // next
     }
-    const auto stampNode = _node.firstChildElement(kStampTag);
-    if (!stampNode.isNull()) {
-        d->stamp = TextHelper::fromHtmlEscaped(_node.text());
+
+    if (currentTag == xml::kStampTag) {
+        d->stamp = TextHelper::fromHtmlEscaped(xml::readContent(_contentReader).toString());
+        xml::readNextElement(_contentReader); // end
+        currentTag = xml::readNextElement(_contentReader); // next
     }
-    const auto plannedDurationNode = _node.firstChildElement(kPlannedDurationTag);
-    if (!plannedDurationNode.isNull()) {
-        d->plannedDuration = plannedDurationNode.text().toInt();
+
+    if (currentTag == xml::kPlannedDurationTag) {
+        d->plannedDuration = xml::readContent(_contentReader).toInt();
+        xml::readNextElement(_contentReader); // end
+        currentTag = xml::readNextElement(_contentReader); // next
     }
-    auto childNode = _node.firstChildElement(kContentTag).firstChildElement();
-    while (!childNode.isNull()) {
-        if (childNode.tagName() == kSceneTag) {
-            appendItem(new ScreenplayTextModelSceneItem(childNode));
-        } else if (childNode.tagName() == kSplitterTag) {
-            appendItem(new ScreenplayTextModelSplitterItem(childNode));
-        } else {
-            appendItem(new ScreenplayTextModelTextItem(childNode));
-        }
-        childNode = childNode.nextSiblingElement();
+
+    if (currentTag == xml::kContentTag) {
+        xml::readNextElement(_contentReader); // next item
+        do {
+            currentTag = _contentReader.name();
+
+            //
+            // Проглатываем закрывающий контентный тэг
+            //
+            if (currentTag == xml::kContentTag
+                && _contentReader.isEndElement()) {
+                xml::readNextElement(_contentReader);
+                continue;
+            }
+            //
+            // Если дошли до конца сцены, выходим из обработки
+            //
+            else if (currentTag == xml::kSceneTag
+                && _contentReader.isEndElement()) {
+                xml::readNextElement(_contentReader);
+                break;
+            }
+            //
+            // Считываем вложенный контент
+            //
+            else if (currentTag == xml::kSceneTag) {
+                appendItem(new ScreenplayTextModelSceneItem(_contentReader));
+            } else if (currentTag == xml::kSplitterTag) {
+                appendItem(new ScreenplayTextModelSplitterItem(_contentReader));
+            } else {
+                appendItem(new ScreenplayTextModelTextItem(_contentReader));
+            }
+        } while (!_contentReader.atEnd());
     }
 
     //
@@ -234,27 +255,27 @@ QByteArray ScreenplayTextModelSceneItem::toXml(ScreenplayTextModelItem* _from, i
     //
     if (_clearUuid) {
         xml += QString("<%1 %2=\"%3\" %4>\n")
-               .arg(kSceneTag,
-                    kPlotsAttribute, {},
-                    (d->isOmited ? QString("%1=\"true\"").arg(kOmitedAttribute) : "")).toUtf8();
+               .arg(xml::kSceneTag,
+                    xml::kPlotsAttribute, {},
+                    (d->isOmited ? QString("%1=\"true\"").arg(xml::kOmitedAttribute) : "")).toUtf8();
     } else {
         xml += QString("<%1 %2=\"%3\" %4=\"%5\" %6>\n")
-               .arg(kSceneTag,
-                    kUuidAttribute, d->uuid.toString(),
-                    kPlotsAttribute, {},
-                    (d->isOmited ? QString("%1=\"true\"").arg(kOmitedAttribute) : "")).toUtf8();
+               .arg(xml::kSceneTag,
+                    xml::kUuidAttribute, d->uuid.toString(),
+                    xml::kPlotsAttribute, {},
+                    (d->isOmited ? QString("%1=\"true\"").arg(xml::kOmitedAttribute) : "")).toUtf8();
     }
     if (d->number.has_value()) {
         xml += QString("<%1 %2=\"%3\"/>\n")
-               .arg(kNumberTag, kNumberValueAttribute, d->number->value).toUtf8();
+               .arg(xml::kNumberTag, xml::kNumberValueAttribute, d->number->value).toUtf8();
     }
     if (!d->stamp.isEmpty()) {
-        xml += QString("<%1><![CDATA[%2]]></%1>\n").arg(kStampTag, TextHelper::toHtmlEscaped(d->stamp)).toUtf8();
+        xml += QString("<%1><![CDATA[%2]]></%1>\n").arg(xml::kStampTag, TextHelper::toHtmlEscaped(d->stamp)).toUtf8();
     }
     if (d->plannedDuration.has_value()) {
-        xml += QString("<%1>%2</%1>\n").arg(kPlannedDurationTag, QString::number(*d->plannedDuration)).toUtf8();
+        xml += QString("<%1>%2</%1>\n").arg(xml::kPlannedDurationTag, QString::number(*d->plannedDuration)).toUtf8();
     }
-    xml += QString("<%1>\n").arg(kContentTag).toUtf8();
+    xml += QString("<%1>\n").arg(xml::kContentTag).toUtf8();
     for (int childIndex = 0; childIndex < childCount(); ++childIndex) {
         auto child = childAt(childIndex);
 
@@ -285,8 +306,8 @@ QByteArray ScreenplayTextModelSceneItem::toXml(ScreenplayTextModelItem* _from, i
             xml += textItem->toXml();
         }
     }
-    xml += QString("</%1>\n").arg(kContentTag).toUtf8();
-    xml += QString("</%1>\n").arg(kSceneTag).toUtf8();
+    xml += QString("</%1>\n").arg(xml::kContentTag).toUtf8();
+    xml += QString("</%1>\n").arg(xml::kSceneTag).toUtf8();
 
     return xml;
 }

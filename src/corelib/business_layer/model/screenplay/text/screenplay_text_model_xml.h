@@ -1,6 +1,7 @@
 #pragma once
 
-#include <QString>
+#include <QStringRef>
+#include <QXmlStreamReader>
 
 
 namespace BusinessLayer
@@ -60,6 +61,12 @@ const QString kBoldAttribute = QLatin1String("bold");
 const QString kItalicAttribute = QLatin1String("italic");
 const QString kUnderlineAttribute = QLatin1String("underline");
 const QString kAlignAttribute = QLatin1String("align");
+
+//
+// Вспомогательные методы для чтения контента из потока
+//
+QStringRef readContent(QXmlStreamReader& _reader);
+QStringRef readNextElement(QXmlStreamReader& _reader);
 
 } // namespace xml
 } // namespace BusinessLayer

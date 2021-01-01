@@ -137,15 +137,6 @@ void AbstractModel::saveChanges()
     emit contentsChanged(undoPatch, redoPatch);
 }
 
-void AbstractModel::applyPatch(const QByteArray& _patch)
-{
-    const auto newContent = d->dmpController.applyPatch(toXml(), _patch);
-
-    clearDocument();
-    document()->setContent(newContent);
-    initDocument();
-}
-
 void AbstractModel::undo()
 {
     emit undoRequested(d->undoedChanges.size());
@@ -224,9 +215,23 @@ QVariant AbstractModel::data(const QModelIndex& _index, int _role) const
     return {};
 }
 
+void AbstractModel::applyPatch(const QByteArray& _patch)
+{
+    const auto newContent = d->dmpController.applyPatch(toXml(), _patch);
+
+    clearDocument();
+    document()->setContent(newContent);
+    initDocument();
+}
+
 AbstractImageWrapper* AbstractModel::imageWrapper() const
 {
     return d->image;
+}
+
+const DiffMatchPatchController& AbstractModel::dmpController() const
+{
+    return d->dmpController;
 }
 
 void AbstractModel::updateDocumentContent()

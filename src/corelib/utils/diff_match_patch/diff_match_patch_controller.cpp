@@ -3,6 +3,32 @@
 #include "diff_match_patch.h"
 
 
+namespace {
+
+/**
+ * @brief Является ли строка тэгом
+ */
+static bool isTag(const QString& _tag) {
+    return !_tag.isEmpty() && _tag.startsWith(QLatin1String("<")) && _tag.endsWith(QLatin1String(">"));
+}
+
+/**
+ * @brief Является ли тэг открывающим
+ */
+static bool isOpenTag(const QString& _tag) {
+    return isTag(_tag) && !_tag.contains(QLatin1String("/"));
+}
+
+/**
+ * @brief Является ли тэг закрывающим
+ */
+static bool isCloseTag(const QString& _tag) {
+    return isTag(_tag) && _tag.contains(QLatin1String("/"));
+}
+
+} // namespace
+
+
 class DiffMatchPatchController::Implementation
 {
 public:
@@ -45,16 +71,20 @@ public:
 DiffMatchPatchController::Implementation::Implementation(const QVector<QString>& _tags)
 {
     //
-    // Используем зарезервированную секцию кодов юникода U+E000–U+F8FF, для генерации служебних кодов
+    // Используем зарезервированную секцию кодов юникода U+E000–U+F8FF,
+    // для генерации служебных символов для карты тэгов
     //
     uint characterIndex = 0xE000;
+    auto nextCharacter = [&characterIndex] {
+        return QChar(characterIndex++);
+    };
 
     //
     // Добавить заданный тэг в карту служебных символов
     //
-    auto addTag = [this, &characterIndex] (const QString& _tag) {
-        tagsMap.insert("<" + _tag + ">", QChar(characterIndex++));
-        tagsMap.insert("</" + _tag + ">", QChar(characterIndex++));
+    auto addTag = [this, nextCharacter] (const QString& _tag) {
+        tagsMap.insert("<" + _tag + ">", nextCharacter());
+        tagsMap.insert("</" + _tag + ">", nextCharacter());
     };
     for (auto tag : _tags) {
         addTag(tag);
@@ -125,12 +155,135 @@ DiffMatchPatchController::DiffMatchPatchController(const QVector<QString>& _tags
 
 DiffMatchPatchController::~DiffMatchPatchController() = default;
 
-QByteArray DiffMatchPatchController::makePatch(const QString& _lhs, const QString& _rhs)
+QByteArray DiffMatchPatchController::makePatch(const QString& _lhs, const QString& _rhs) const
 {
     return d->makePatchXml(_lhs, _rhs).toUtf8();
 }
 
-QByteArray DiffMatchPatchController::applyPatch(const QByteArray& _content, const QByteArray& _patch)
+QByteArray DiffMatchPatchController::applyPatch(const QByteArray& _content, const QByteArray& _patch) const
 {
     return d->applyPatchXml(_content, _patch).toUtf8();
+}
+
+QPair<DiffMatchPatchController::Change, DiffMatchPatchController::Change> DiffMatchPatchController::changedXml(const QString& _xml, const QString& _patch) const {
+    //
+    // Применим патчи
+    //
+    const QString oldXmlPlain = d->xmlToPlain(_xml);
+    const QString newXml = d->applyPatchXml(_xml, _patch);
+    const QString newXmlPlain = d->xmlToPlain(newXml);
+
+    //
+    // Формируем новый патч, он будет содержать корректные данные,
+    // для текста сценария текущего пользователя
+    //
+    const QString newPatch = makePatch(oldXmlPlain, newXmlPlain);
+    if (newPatch.isEmpty()) {
+        return {};
+    }
+
+    //
+    // Разберём патчи на список
+    //
+    diff_match_patch dmp;
+    const QList<Patch> patches = dmp.patch_fromText(newPatch);
+
+    //
+    // Рассчитаем метрики для формирования xml для обновления
+    //
+    int oldStartPos = -1;
+    int oldEndPos = -1;
+    int oldDistance = 0;
+    int newStartPos = -1;
+    int newEndPos = -1;
+    for (const Patch& patch : patches) {
+        //
+        // ... для старого
+        //
+        if (oldStartPos == -1
+            || patch.start1 < oldStartPos) {
+            oldStartPos = patch.start1;
+        }
+        if (oldEndPos == -1
+            || oldEndPos < (patch.start1 + patch.length1 - oldDistance)) {
+            oldEndPos = patch.start1 + patch.length1 - oldDistance;
+        }
+        oldDistance += patch.length2 - patch.length1;
+        //
+        // ... для нового
+        //
+        if (newStartPos == -1
+            || patch.start2 < newStartPos) {
+            newStartPos = patch.start2;
+        }
+        if (newEndPos == -1
+            || newEndPos < (patch.start2 + patch.length2)) {
+            newEndPos = patch.start2 + patch.length2;
+        }
+    }
+    //
+    // Для случая, когда текста остаётся ровно столько же, сколько и было
+    //
+    if (oldDistance == 0) {
+        oldEndPos = newEndPos;
+    }
+    //
+    // Отнимает один символ, т.к. в патче указан индекс символа начиная с 1
+    //
+    oldEndPos -= 1;
+    newEndPos -= 1;
+
+
+    //
+    // Определим кусок xml из текущего документа для обновления
+    //
+    int oldStartPosForXml = oldStartPos;
+    for (; oldStartPosForXml > 0; --oldStartPosForXml) {
+        //
+        // Идём до открывающего тега
+        //
+        if (isOpenTag(d->tagsMap.key(oldXmlPlain.at(oldStartPosForXml)))) {
+            break;
+        }
+    }
+    int oldEndPosForXml = oldEndPos;
+    for (; oldEndPosForXml < oldXmlPlain.length(); ++oldEndPosForXml) {
+        //
+        // Идём до закрывающего тэга, он находится в конце строки
+        //
+        if (isCloseTag(d->tagsMap.key(oldXmlPlain.at(oldEndPosForXml)))) {
+            ++oldEndPosForXml;
+            break;
+        }
+    }
+    const QString oldXmlForUpdate = oldXmlPlain.mid(oldStartPosForXml, oldEndPosForXml - oldStartPosForXml);
+
+
+    //
+    // Определим кусок из нового документа для обновления
+    //
+    int newStartPosForXml = newStartPos;
+    for (; newStartPosForXml > 0; --newStartPosForXml) {
+        //
+        // Идём до открывающего тега
+        //
+        if (isOpenTag(d->tagsMap.key(newXmlPlain.at(newStartPosForXml)))) {
+            break;
+        }
+    }
+    int newEndPosForXml = newEndPos;
+    for (; newEndPosForXml < newXmlPlain.length(); ++newEndPosForXml) {
+        //
+        // Идём до закрывающего тэга, он находится в конце строки
+        //
+        if (isCloseTag(d->tagsMap.key(newXmlPlain.at(newEndPosForXml)))) {
+            ++newEndPosForXml;
+            break;
+        }
+    }
+    const QString newXmlForUpdate = newXmlPlain.mid(newStartPosForXml, newEndPosForXml - newStartPosForXml);
+
+
+    return {{ d->plainToXml(oldXmlForUpdate), oldStartPosForXml},
+            { d->plainToXml(newXmlForUpdate), newStartPosForXml} };
 }

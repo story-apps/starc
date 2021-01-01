@@ -78,6 +78,7 @@ SOURCES += \
     business_layer/model/screenplay/text/screenplay_text_model_splitter_item.cpp \
     business_layer/model/screenplay/text/screenplay_text_model_text_item.cpp \
     business_layer/model/screenplay/screenplay_title_page_model.cpp \
+    business_layer/model/screenplay/text/screenplay_text_model_xml.cpp \
     business_layer/model/structure/structure_model.cpp \
     business_layer/model/structure/structure_model_item.cpp \
     business_layer/model/structure/structure_proxy_model.cpp \

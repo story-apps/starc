@@ -4,10 +4,12 @@
 
 #include <QAbstractItemModel>
 
+
+class DiffMatchPatchController;
+
 namespace Domain {
     class DocumentObject;
 }
-
 
 namespace BusinessLayer {
 
@@ -53,11 +55,6 @@ public:
      * @brief Сохранить изменения прямо сейчас
      */
     void saveChanges();
-
-    /**
-     * @brief Применить заданное изменение для модели
-     */
-    virtual void applyPatch(const QByteArray& _patch);
 
     /**
      * @brief Отменить последнее изменение текущего пользователя
@@ -125,9 +122,19 @@ protected:
     virtual QByteArray toXml() const = 0;
 
     /**
+     * @brief Применить заданное изменение для модели
+     */
+    virtual void applyPatch(const QByteArray& _patch);
+
+    /**
      * @brief Получить обёртку для работы с изображениями
      */
     AbstractImageWrapper* imageWrapper() const;
+
+    /**
+     * @brief Получить управляющего процессом применения изменений
+     */
+    const DiffMatchPatchController& dmpController() const;
 
     /**
      * @brief Установить данные в документ
