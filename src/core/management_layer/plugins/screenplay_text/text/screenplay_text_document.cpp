@@ -427,9 +427,19 @@ void ScreenplayTextDocument::setModel(BusinessLayer::ScreenplayTextModel* _model
         cursor.beginEditBlock();
 
         if (cursor.block().text() != textItem->text()) {
+            //
+            // TODO: Сделать более умный алгоритм, который заменяет только изменённые части текста
+            //
+
             cursor.movePosition(QTextCursor::StartOfBlock);
             cursor.movePosition(QTextCursor::EndOfBlock, QTextCursor::KeepAnchor);
             cursor.insertText(textItem->text());
+
+            //
+            // Корректируем позиции всех элментов идущих за обновляемым
+            //
+            const auto distanse = textItem->text().length() - cursor.block().text().length();
+            d->correctPositionsToItems(position + 1, distanse);
         }
         //
         // TODO: придумать, как не перезаписывать форматирование каждый раз
