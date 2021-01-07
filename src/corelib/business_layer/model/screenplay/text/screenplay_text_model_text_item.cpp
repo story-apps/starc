@@ -36,7 +36,7 @@ public:
 
 
     /**
-     * @brief Номер сцены
+     * @brief Номер блока
      */
     std::optional<Number> number;
 
@@ -63,10 +63,6 @@ public:
     /**
      * @brief Закладка в параграфе
      */
-    struct Bookmark {
-        QColor color;
-        QString text;
-    };
     std::optional<Bookmark> bookmark;
 
     /**
@@ -87,9 +83,6 @@ public:
     /**
      * @brief Ревизии в блоке
      */
-    struct Revision : TextPart {
-        QColor color;
-    };
     QVector<Revision> revisions;
 
     /**
@@ -474,6 +467,43 @@ ScreenplayTextModelTextItem::ScreenplayTextModelTextItem(QXmlStreamReader& _cont
 
 ScreenplayTextModelTextItem::~ScreenplayTextModelTextItem() = default;
 
+std::optional<ScreenplayTextModelTextItem::Number> ScreenplayTextModelTextItem::number() const
+{
+    return d->number;
+}
+
+void ScreenplayTextModelTextItem::setNumber(int _number)
+{
+    const auto newNumber = QString("%1:").arg(_number);
+    if (d->number.has_value()
+        && d->number->value == newNumber) {
+        return;
+    }
+
+    d->number = { newNumber };
+    markChanged();
+}
+
+std::chrono::milliseconds ScreenplayTextModelTextItem::duration() const
+{
+    return d->duration;
+}
+
+void ScreenplayTextModelTextItem::updateDuration()
+{
+    const auto duration = Chronometer::duration(d->paragraphType, d->text);
+    if (d->duration == duration) {
+        return;
+    }
+
+    d->duration = duration;
+
+    //
+    // Помещаем изменённым для пересчёта хронометража в родительском элементе
+    //
+    markChanged();
+}
+
 bool ScreenplayTextModelTextItem::isCorrection() const
 {
     return d->isCorrection;
@@ -507,6 +537,41 @@ void ScreenplayTextModelTextItem::setParagraphType(ScreenplayParagraphType _type
     d->paragraphType = _type;
     d->updateXml();
     updateDuration();
+    markChanged();
+}
+
+std::optional<Qt::Alignment> ScreenplayTextModelTextItem::alignment() const
+{
+    return d->alignment;
+}
+
+void ScreenplayTextModelTextItem::setAlignment(Qt::Alignment _align)
+{
+    if (d->alignment.has_value()
+        && d->alignment == _align) {
+        return;
+    }
+
+    d->alignment = _align;
+    d->updateXml();
+    markChanged();
+}
+
+std::optional<ScreenplayTextModelTextItem::Bookmark> ScreenplayTextModelTextItem::bookmark() const
+{
+    return d->bookmark;
+}
+
+void ScreenplayTextModelTextItem::setBookmark(const ScreenplayTextModelTextItem::Bookmark& _bookmark)
+{
+    if (d->bookmark.has_value()
+        && d->bookmark->color == _bookmark.color
+        && d->bookmark->text == _bookmark.text) {
+        return;
+    }
+
+    d->bookmark = _bookmark;
+    d->updateXml();
     markChanged();
 }
 
@@ -665,45 +730,9 @@ const QVector<ScreenplayTextModelTextItem::TextFormat>& ScreenplayTextModelTextI
     return d->formats;
 }
 
-std::chrono::milliseconds ScreenplayTextModelTextItem::duration() const
+const QVector<ScreenplayTextModelTextItem::Revision>& ScreenplayTextModelTextItem::revisions() const
 {
-    return d->duration;
-}
-
-void ScreenplayTextModelTextItem::updateDuration()
-{
-    const auto duration = Chronometer::duration(d->paragraphType, d->text);
-    if (d->duration == duration) {
-        return;
-    }
-
-    d->duration = duration;
-
-    //
-    // Помещаем изменённым для пересчёта хронометража в родительском элементе
-    //
-    markChanged();
-}
-
-ScreenplayTextModelTextItem::Number ScreenplayTextModelTextItem::number() const
-{
-    if (!d->number.has_value()) {
-        return {};
-    }
-
-    return *d->number;
-}
-
-void ScreenplayTextModelTextItem::setNumber(int _number)
-{
-    const auto newNumber = QString("%1:").arg(_number);
-    if (d->number.has_value()
-        && d->number->value == newNumber) {
-        return;
-    }
-
-    d->number = { newNumber };
-    markChanged();
+    return d->revisions;
 }
 
 void ScreenplayTextModelTextItem::mergeWith(const ScreenplayTextModelTextItem* _other)
@@ -753,6 +782,29 @@ QByteArray ScreenplayTextModelTextItem::toXml(int _from, int _length)
     }
 
     return d->buildXml(_from, _length);
+}
+
+void ScreenplayTextModelTextItem::copyFrom(ScreenplayTextModelItem* _item)
+{
+    ScreenplayTextModelItem::copyFrom(_item);
+
+    if (_item->type() != ScreenplayTextModelItemType::Text) {
+        Q_ASSERT(false);
+        return;
+    }
+
+    auto textItem = static_cast<ScreenplayTextModelTextItem*>(_item);
+    d->text = textItem->text();
+    d->paragraphType = textItem->paragraphType();
+    d->alignment = textItem->alignment();
+    d->bookmark = textItem->bookmark();
+    d->text = textItem->text();
+    d->reviewMarks = textItem->reviewMarks();
+    d->formats = textItem->formats();
+    d->revisions = textItem->revisions();
+    d->xml = textItem->toXml();
+
+    markChanged();
 }
 
 void ScreenplayTextModelTextItem::markChanged()

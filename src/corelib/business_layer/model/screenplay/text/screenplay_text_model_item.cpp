@@ -54,4 +54,9 @@ QVariant ScreenplayTextModelItem::data(int _role) const
     return {};
 }
 
+void ScreenplayTextModelItem::copyFrom(ScreenplayTextModelItem* _item)
+{
+    Q_ASSERT(d->type == _item->type());
+}
+
 } // namespace BusinessLayer

@@ -9,10 +9,17 @@ namespace BusinessLayer
 class AbstractModelItem::Implementation
 {
 public:
+    ~Implementation();
+
     AbstractModelItem* parent = nullptr;
     QVector<AbstractModelItem*> children;
     bool changed = false;
 };
+
+AbstractModelItem::Implementation::~Implementation()
+{
+    qDeleteAll(children);
+}
 
 
 // ****

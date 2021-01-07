@@ -705,7 +705,7 @@ QString ScreenplayTextDocument::dialogueNumber(const QTextBlock& _forBlock) cons
     }
 
     auto itemScene = static_cast<ScreenplayTextModelTextItem*>(item);
-    return itemScene->number().value;
+    return itemScene->number().value_or(ScreenplayTextModelTextItem::Number()).value;
 }
 
 QString ScreenplayTextDocument::mimeFromSelection(int _fromPosition, int _toPosition) const

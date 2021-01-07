@@ -16,6 +16,8 @@
 #include <QMimeData>
 #include <QXmlStreamReader>
 
+#define XML_CHECKS
+
 
 namespace BusinessLayer
 {
@@ -1134,35 +1136,245 @@ QByteArray ScreenplayTextModel::toXml() const
 
 void ScreenplayTextModel::applyPatch(const QByteArray& _patch)
 {
+    Q_ASSERT(document());
+
     //
     // Определить область изменения в xml
     //
-    const auto changes = dmpController().changedXml(toXml(), _patch);
-
+    auto changes = dmpController().changedXml(toXml(), _patch);
+    changes.first.xml = xml::prepareXml(changes.first.xml);
+    changes.second.xml = xml::prepareXml(changes.second.xml);
 
     //
     // Идём по структуре документа до момента достижения элемента, входящего в изменение
     //
+    auto length = [this] {
+        QByteArray xml = "<?xml version=\"1.0\"?>\n";
+        xml += "<document mime-type=\"" + Domain::mimeTypeFor(document()->type()) + "\" version=\"1.0\">\n";
+        return xml.length();
+    } ();
+    std::function<ScreenplayTextModelItem*(ScreenplayTextModelItem*)> findStartItem;
+    findStartItem = [changes, &length, &findStartItem] (ScreenplayTextModelItem* _item) -> ScreenplayTextModelItem*
+    {
+        for (int childIndex = 0; childIndex < _item->childCount(); ++childIndex) {
+            auto child = _item->childAt(childIndex);
+            const auto childLength = QString(child->toXml()).length();
+
+            //
+            // В этом элементе начинается изменение
+            //
+            if (changes.first.from >= length
+                && changes.first.from < length + childLength) {
+                //
+                // Если есть дети, то уточняем поиск
+                //
+                int headerLength = 0;
+                if (child->type() == ScreenplayTextModelItemType::Folder) {
+                    auto folder = static_cast<ScreenplayTextModelFolderItem*>(child);
+                    headerLength = QString(folder->xmlHeader()).length();
+                } else if (child->type() == ScreenplayTextModelItemType::Scene) {
+                    auto scene = static_cast<ScreenplayTextModelSceneItem*>(child);
+                    headerLength = QString(scene->xmlHeader()).length();
+                }
+
+                if (child->hasChildren()
+                    && changes.first.from >= length + headerLength) {
+                    length += headerLength;
+                    return findStartItem(child);
+                }
+                //
+                // В противном случае завершаем поиск
+                //
+                else {
+                   return child;
+                }
+            }
+
+            length += childLength;
+        }
+
+        return nullptr;
+    };
+    auto findPreviousItem = [] (ScreenplayTextModelItem* _item) -> ScreenplayTextModelItem*
+    {
+        if (!_item->hasParent()) {
+            return nullptr;
+        }
+        auto parent = _item->parent();
+
+        auto itemIndex = parent->rowOfChild(_item);
+        if (itemIndex < 0 || itemIndex >= parent->childCount()) {
+            return nullptr;
+        }
+
+        //
+        // Не первый в родителе
+        //
+        if (itemIndex > 0) {
+            return parent->childAt(itemIndex - 1);
+        }
+        //
+        // Первый в родителе
+        //
+        else {
+            return parent;
+        }
+    };
+    std::function<ScreenplayTextModelItem*(ScreenplayTextModelItem*)> findNextItem;
+    findNextItem = [&findNextItem] (ScreenplayTextModelItem* _item) -> ScreenplayTextModelItem*
+    {
+        if (!_item->hasParent()) {
+            return nullptr;
+        }
+        auto parent = _item->parent();
+
+        auto itemIndex = parent->rowOfChild(_item);
+        if (itemIndex < 0 || itemIndex >= parent->childCount()) {
+            return nullptr;
+        }
+
+        //
+        // Не последний в родителе
+        //
+        if (itemIndex < parent->childCount() - 1) {
+            return parent->childAt(itemIndex + 1);
+        }
+        //
+        // Последний в родителе
+        //
+        else {
+            return findNextItem(parent);
+        }
+    };
+    auto modelItem = findStartItem(d->rootItem);
+
+    //
+    // Подготавливаем чтецов xml-данных изменений
+    //
+    auto prepareReader = [] (QXmlStreamReader& _reader, const QString& _xml) {
+        _reader.clear();
+        _reader.addData(_xml);
+#ifdef XML_CHECKS
+        if (_reader.hasError()) {
+            qDebug(_reader.errorString().toUtf8());
+            Q_ASSERT(false);
+        }
+#endif
+        xml::readNextElement(_reader); // document
+        xml::readNextElement(_reader);
+    };
+    QXmlStreamReader oldXmlReader;
+    prepareReader(oldXmlReader, changes.first.xml);
+    QXmlStreamReader newXmlReader;
+    prepareReader(newXmlReader, changes.second.xml);
+
+
+    emit rowsAboutToBeChanged();
 
 
     //
-    // Определяем ситуации, которые произошли в изменении
+    // Считываем элементы по одному, пока не обработаем все данные в xml изменений
     //
+    ScreenplayTextModelItem* oldItem = nullptr;
+    ScreenplayTextModelItem* newItem = nullptr;
+    while (!oldXmlReader.atEnd() && !newXmlReader.atEnd()) {
+        auto readNextItem = [] (QXmlStreamReader& _reader) -> ScreenplayTextModelItem* {
+            if (_reader.atEnd()) {
+                return nullptr;
+            }
 
-    //
-    // Изменение элемента модели
-    //
+            const auto currentTag = _reader.name();
+            ScreenplayTextModelItem* item = nullptr;
+            if (currentTag == xml::kFolderTag) {
+                item = new ScreenplayTextModelFolderItem(_reader);
+            } else if (currentTag == xml::kSceneTag) {
+                item = new ScreenplayTextModelSceneItem(_reader);
+            } else if (currentTag == xml::kSplitterTag) {
+                item = new ScreenplayTextModelSplitterItem(_reader);
+            } else {
+                item = new ScreenplayTextModelTextItem(_reader);
+            }
 
-    //
-    // Добавление элемента
-    //
+            //
+            // Считываем контент до конца
+            //
+            if (_reader.name() == xml::kDocumentTag) {
+                _reader.readNext();
+            }
 
-    //
-    // Удаление элемента
-    //
+            return item;
+        };
+
+        if (!oldXmlReader.atEnd()) {
+            delete oldItem;
+            oldItem = readNextItem(oldXmlReader);
+        }
+        if (oldItem == nullptr) {
+            Q_ASSERT(false);
+            return;
+        }
+
+#ifdef XML_CHECKS
+        Q_ASSERT(modelItem->toXml() == oldItem->toXml());
+#endif
+
+        if (!newXmlReader.atEnd()) {
+            delete newItem;
+            newItem = readNextItem(newXmlReader);
+        }
+        if (newItem == nullptr) {
+            Q_ASSERT(false);
+            return;
+        }
+
+        //
+        // Если элемент нового xml равен элементу старого xml, переходим к следующему
+        //
+        if (oldItem->toXml() == newItem->toXml()) {
+            modelItem = findNextItem(modelItem);
+            continue;
+        }
+
+        //
+        // Если элементы не равны
+        //
+
+        //
+        // Если в старом xml - это последний элемент, то значит текущий блок нового был добавлен
+        //
+        if (oldXmlReader.atEnd() && !newXmlReader.atEnd()) {
+            insertItem(newItem, modelItem);
+            modelItem = newItem;
+            newItem = nullptr;
+        }
+        //
+        // Если в новом xml - это последний элемент, то значит текущий блок был удалён
+        //
+        else if (!oldXmlReader.atEnd() && newXmlReader.atEnd()) {
+            auto previousModelItem = findPreviousItem(modelItem);
+            removeItem(modelItem);
+            modelItem = previousModelItem;
+        }
+        //
+        // Во всех остальных случаях - это изменение текущего элемента
+        //
+        else {
+            modelItem->copyFrom(newItem);
+            updateItem(modelItem);
+            modelItem = findNextItem(modelItem);
+        }
+    }
+    delete oldItem;
+    delete newItem;
 
 
-#if 1
+    emit rowsChanged();
+
+
+
+
+
+#ifdef XML_CHECKS
     //
     // Делаем проверку на соответствие обновлённой модели прямому наложению патча
     //

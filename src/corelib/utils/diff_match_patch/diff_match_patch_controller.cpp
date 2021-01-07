@@ -237,12 +237,12 @@ QPair<DiffMatchPatchController::Change, DiffMatchPatchController::Change> DiffMa
     //
     // Определим кусок xml из текущего документа для обновления
     //
-    int oldStartPosForXml = oldStartPos;
-    for (; oldStartPosForXml > 0; --oldStartPosForXml) {
+    int oldStartPosForXmlPlain = oldStartPos;
+    for (; oldStartPosForXmlPlain > 0; --oldStartPosForXmlPlain) {
         //
         // Идём до открывающего тега
         //
-        if (isOpenTag(d->tagsMap.key(oldXmlPlain.at(oldStartPosForXml)))) {
+        if (isOpenTag(d->tagsMap.key(oldXmlPlain.at(oldStartPosForXmlPlain)))) {
             break;
         }
     }
@@ -256,18 +256,18 @@ QPair<DiffMatchPatchController::Change, DiffMatchPatchController::Change> DiffMa
             break;
         }
     }
-    const QString oldXmlForUpdate = oldXmlPlain.mid(oldStartPosForXml, oldEndPosForXml - oldStartPosForXml);
+    const QString oldXmlForUpdate = oldXmlPlain.mid(oldStartPosForXmlPlain, oldEndPosForXml - oldStartPosForXmlPlain);
 
 
     //
     // Определим кусок из нового документа для обновления
     //
-    int newStartPosForXml = newStartPos;
-    for (; newStartPosForXml > 0; --newStartPosForXml) {
+    int newStartPosForXmlPlain = newStartPos;
+    for (; newStartPosForXmlPlain > 0; --newStartPosForXmlPlain) {
         //
         // Идём до открывающего тега
         //
-        if (isOpenTag(d->tagsMap.key(newXmlPlain.at(newStartPosForXml)))) {
+        if (isOpenTag(d->tagsMap.key(newXmlPlain.at(newStartPosForXmlPlain)))) {
             break;
         }
     }
@@ -281,9 +281,9 @@ QPair<DiffMatchPatchController::Change, DiffMatchPatchController::Change> DiffMa
             break;
         }
     }
-    const QString newXmlForUpdate = newXmlPlain.mid(newStartPosForXml, newEndPosForXml - newStartPosForXml);
+    const QString newXmlForUpdate = newXmlPlain.mid(newStartPosForXmlPlain, newEndPosForXml - newStartPosForXmlPlain);
 
 
-    return {{ d->plainToXml(oldXmlForUpdate), oldStartPosForXml},
-            { d->plainToXml(newXmlForUpdate), newStartPosForXml} };
+    return {{ d->plainToXml(oldXmlForUpdate), d->plainToXml(oldXmlPlain.left(oldStartPosForXmlPlain)).length()},
+            { d->plainToXml(newXmlForUpdate), d->plainToXml(newXmlPlain.left(newStartPosForXmlPlain)).length()} };
 }

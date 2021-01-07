@@ -54,14 +54,33 @@ public:
 
         QTextCharFormat charFormat() const;
     };
-    struct Number {
+    struct CORE_LIBRARY_EXPORT Number {
         QString value;
+    };
+    struct CORE_LIBRARY_EXPORT Bookmark {
+        QColor color;
+        QString text;
+    };
+    struct CORE_LIBRARY_EXPORT Revision : TextPart {
+        QColor color;
     };
 
 public:
     ScreenplayTextModelTextItem();
     explicit ScreenplayTextModelTextItem(QXmlStreamReader& _contentReaded);
     ~ScreenplayTextModelTextItem() override;
+
+    /**
+     * @brief Номер сцены
+     */
+    std::optional<Number> number() const;
+    void setNumber(int _number);
+
+    /**
+     * @brief Длительность сцены
+     */
+    std::chrono::milliseconds duration() const;
+    void updateDuration();
 
     /**
      * @brief Является ли блок декорацией
@@ -74,6 +93,18 @@ public:
      */
     ScreenplayParagraphType paragraphType() const;
     void setParagraphType(ScreenplayParagraphType _type);
+
+    /**
+     * @brief Выравнивание текста в блоке
+     */
+    std::optional<Qt::Alignment> alignment() const;
+    void setAlignment(Qt::Alignment _align);
+
+    /**
+     * @brief Закладка
+     */
+    std::optional<Bookmark> bookmark() const;
+    void setBookmark(const Bookmark& _bookmark);
 
     /**
      * @brief Текст элемента
@@ -104,16 +135,9 @@ public:
     const QVector<TextFormat>& formats() const;
 
     /**
-     * @brief Длительность сцены
+     * @brief Ревизии
      */
-    std::chrono::milliseconds duration() const;
-    void updateDuration();
-
-    /**
-     * @brief Номер сцены
-     */
-    Number number() const;
-    void setNumber(int _number);
+    const QVector<Revision>& revisions() const;
 
     /**
      * @brief Объединить с заданным элементом
@@ -130,6 +154,11 @@ public:
      */
     QByteArray toXml() const override;
     QByteArray toXml(int _from, int _length);
+
+    /**
+     * @brief Скопировать контент с заданного элемента
+     */
+    void copyFrom(ScreenplayTextModelItem* _item) override;
 
 private:
     /**

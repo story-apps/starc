@@ -50,6 +50,11 @@ public:
      */
     virtual QByteArray toXml() const = 0;
 
+    /**
+     * @brief Скопировать контент с заданного элемента
+     */
+    virtual void copyFrom(ScreenplayTextModelItem* _item);
+
 private:
     class Implementation;
     QScopedPointer<Implementation> d;

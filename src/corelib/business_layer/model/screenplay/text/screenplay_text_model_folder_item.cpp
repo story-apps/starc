@@ -145,14 +145,7 @@ QByteArray ScreenplayTextModelFolderItem::toXml(ScreenplayTextModelItem* _from, 
     };
 
     QByteArray xml;
-    if (_clearUuid) {
-        xml += QString("<%1>\n").arg(xml::kFolderTag).toUtf8();
-    } else {
-        xml += QString("<%1 %2=\"%3\">\n")
-               .arg(xml::kFolderTag,
-                    xml::kUuidAttribute, d->uuid.toString()).toUtf8();
-    }
-    xml += QString("<%1>\n").arg(xml::kContentTag).toUtf8();
+    xml += xmlHeader(_clearUuid);
     for (int childIndex = 0; childIndex < childCount(); ++childIndex) {
         auto child = childAt(childIndex);
 
@@ -225,6 +218,21 @@ QByteArray ScreenplayTextModelFolderItem::toXml(ScreenplayTextModelItem* _from, 
     }
     xml += QString("</%1>\n").arg(xml::kContentTag).toUtf8();
     xml += QString("</%1>\n").arg(xml::kFolderTag).toUtf8();
+
+    return xml;
+}
+
+QByteArray ScreenplayTextModelFolderItem::xmlHeader(bool _clearUuid) const
+{
+    QByteArray xml;
+    if (_clearUuid) {
+        xml += QString("<%1>\n").arg(xml::kFolderTag).toUtf8();
+    } else {
+        xml += QString("<%1 %2=\"%3\">\n")
+               .arg(xml::kFolderTag,
+                    xml::kUuidAttribute, d->uuid.toString()).toUtf8();
+    }
+    xml += QString("<%1>\n").arg(xml::kContentTag).toUtf8();
 
     return xml;
 }

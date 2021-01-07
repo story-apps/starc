@@ -62,6 +62,11 @@ const QString kItalicAttribute = QLatin1String("italic");
 const QString kUnderlineAttribute = QLatin1String("underline");
 const QString kAlignAttribute = QLatin1String("align");
 
+/**
+ * @brief Привести xml в читаемый парсером вид
+ */
+QString prepareXml(const QString& _xml);
+
 //
 // Вспомогательные методы для чтения контента из потока
 //

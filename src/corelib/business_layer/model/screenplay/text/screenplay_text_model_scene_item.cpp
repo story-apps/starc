@@ -250,32 +250,7 @@ QByteArray ScreenplayTextModelSceneItem::toXml(ScreenplayTextModelItem* _from, i
     ScreenplayTextModelItem* _to, int _toPosition, bool _clearUuid) const
 {
     QByteArray xml;
-    //
-    // TODO: plots
-    //
-    if (_clearUuid) {
-        xml += QString("<%1 %2=\"%3\" %4>\n")
-               .arg(xml::kSceneTag,
-                    xml::kPlotsAttribute, {},
-                    (d->isOmited ? QString("%1=\"true\"").arg(xml::kOmitedAttribute) : "")).toUtf8();
-    } else {
-        xml += QString("<%1 %2=\"%3\" %4=\"%5\" %6>\n")
-               .arg(xml::kSceneTag,
-                    xml::kUuidAttribute, d->uuid.toString(),
-                    xml::kPlotsAttribute, {},
-                    (d->isOmited ? QString("%1=\"true\"").arg(xml::kOmitedAttribute) : "")).toUtf8();
-    }
-    if (d->number.has_value()) {
-        xml += QString("<%1 %2=\"%3\"/>\n")
-               .arg(xml::kNumberTag, xml::kNumberValueAttribute, d->number->value).toUtf8();
-    }
-    if (!d->stamp.isEmpty()) {
-        xml += QString("<%1><![CDATA[%2]]></%1>\n").arg(xml::kStampTag, TextHelper::toHtmlEscaped(d->stamp)).toUtf8();
-    }
-    if (d->plannedDuration.has_value()) {
-        xml += QString("<%1>%2</%1>\n").arg(xml::kPlannedDurationTag, QString::number(*d->plannedDuration)).toUtf8();
-    }
-    xml += QString("<%1>\n").arg(xml::kContentTag).toUtf8();
+    xml += xmlHeader(_clearUuid);
     for (int childIndex = 0; childIndex < childCount(); ++childIndex) {
         auto child = childAt(childIndex);
 
@@ -308,6 +283,42 @@ QByteArray ScreenplayTextModelSceneItem::toXml(ScreenplayTextModelItem* _from, i
     }
     xml += QString("</%1>\n").arg(xml::kContentTag).toUtf8();
     xml += QString("</%1>\n").arg(xml::kSceneTag).toUtf8();
+
+    return xml;
+}
+
+QByteArray ScreenplayTextModelSceneItem::xmlHeader(bool _clearUuid) const
+{
+    QByteArray xml;
+    //
+    // TODO: plots
+    //
+    if (_clearUuid) {
+        xml += QString("<%1 %2=\"%3\" %4>\n")
+               .arg(xml::kSceneTag,
+                    xml::kPlotsAttribute, {},
+                    (d->isOmited ? QString("%1=\"true\"").arg(xml::kOmitedAttribute) : "")).toUtf8();
+    } else {
+        xml += QString("<%1 %2=\"%3\" %4=\"%5\" %6>\n")
+               .arg(xml::kSceneTag,
+                    xml::kUuidAttribute, d->uuid.toString(),
+                    xml::kPlotsAttribute, {},
+                    (d->isOmited ? QString("%1=\"true\"").arg(xml::kOmitedAttribute) : "")).toUtf8();
+    }
+    //
+    // TODO: Номера будем сохранять только когда они кастомные или фиксированные
+    //
+//    if (d->number.has_value()) {
+//        xml += QString("<%1 %2=\"%3\"/>\n")
+//               .arg(xml::kNumberTag, xml::kNumberValueAttribute, d->number->value).toUtf8();
+//    }
+    if (!d->stamp.isEmpty()) {
+        xml += QString("<%1><![CDATA[%2]]></%1>\n").arg(xml::kStampTag, TextHelper::toHtmlEscaped(d->stamp)).toUtf8();
+    }
+    if (d->plannedDuration.has_value()) {
+        xml += QString("<%1>%2</%1>\n").arg(xml::kPlannedDurationTag, QString::number(*d->plannedDuration)).toUtf8();
+    }
+    xml += QString("<%1>\n").arg(xml::kContentTag).toUtf8();
 
     return xml;
 }

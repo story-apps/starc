@@ -46,6 +46,7 @@ public:
      */
     QByteArray toXml() const override;
     QByteArray toXml(ScreenplayTextModelItem* _from, int _fromPosition, ScreenplayTextModelItem* _to, int _toPosition, bool _clearUuid) const;
+    QByteArray xmlHeader(bool _clearUuid = false) const;
 
 protected:
     /**
