@@ -426,6 +426,15 @@ void ScreenplayTextDocument::setModel(BusinessLayer::ScreenplayTextModel* _model
         cursor.setPosition(position);
         cursor.beginEditBlock();
 
+        //
+        // ... тип параграфа
+        //
+        if (ScreenplayBlockStyle::forBlock(cursor.block()) != textItem->paragraphType()) {
+            applyParagraphType(textItem->paragraphType(), cursor);
+        }
+        //
+        // ... текст
+        //
         if (cursor.block().text() != textItem->text()) {
             //
             // TODO: Сделать более умный алгоритм, который заменяет только изменённые части текста
@@ -442,9 +451,13 @@ void ScreenplayTextDocument::setModel(BusinessLayer::ScreenplayTextModel* _model
             d->correctPositionsToItems(position + 1, distanse);
         }
         //
-        // TODO: придумать, как не перезаписывать форматирование каждый раз
+        // ... редакторские заметки и форматирование
         //
         {
+            //
+            // TODO: придумать, как не перезаписывать форматирование каждый раз
+            //
+
             //
             // Сбросим текущее форматирование
             //
@@ -463,6 +476,12 @@ void ScreenplayTextDocument::setModel(BusinessLayer::ScreenplayTextModel* _model
                 cursor.movePosition(QTextCursor::NextCharacter, QTextCursor::MoveAnchor, reviewMark.from);
                 cursor.movePosition(QTextCursor::NextCharacter, QTextCursor::KeepAnchor, reviewMark.length);
                 cursor.mergeCharFormat(reviewMark.charFormat());
+            }
+            for (const auto& format : textItem->formats()) {
+                cursor.movePosition(QTextCursor::StartOfBlock);
+                cursor.movePosition(QTextCursor::NextCharacter, QTextCursor::MoveAnchor, format.from);
+                cursor.movePosition(QTextCursor::NextCharacter, QTextCursor::KeepAnchor, format.length);
+                cursor.mergeCharFormat(format.charFormat());
             }
         }
 

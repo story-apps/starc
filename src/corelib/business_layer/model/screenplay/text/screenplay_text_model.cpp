@@ -1138,12 +1138,21 @@ void ScreenplayTextModel::applyPatch(const QByteArray& _patch)
 {
     Q_ASSERT(document());
 
+#ifdef XML_CHECKS
+    const auto newContent = dmpController().applyPatch(toXml(), _patch);
+#endif
+
     //
     // Определить область изменения в xml
     //
     auto changes = dmpController().changedXml(toXml(), _patch);
     changes.first.xml = xml::prepareXml(changes.first.xml);
     changes.second.xml = xml::prepareXml(changes.second.xml);
+
+    qDebug(changes.first.xml.toUtf8());
+    qDebug("************************");
+    qDebug(changes.second.xml.toUtf8());
+    qDebug("\n\n\n");
 
     //
     // Идём по структуре документа до момента достижения элемента, входящего в изменение
@@ -1343,7 +1352,13 @@ void ScreenplayTextModel::applyPatch(const QByteArray& _patch)
         // Если в старом xml - это последний элемент, то значит текущий блок нового был добавлен
         //
         if (oldXmlReader.atEnd() && !newXmlReader.atEnd()) {
-            insertItem(newItem, modelItem);
+            auto previousModelItem = findPreviousItem(modelItem);
+            if (previousModelItem->type() == ScreenplayTextModelItemType::Folder
+                || previousModelItem->type() == ScreenplayTextModelItemType::Scene) {
+                prependItem(newItem, previousModelItem);
+            } else {
+                insertItem(newItem, previousModelItem);
+            }
             modelItem = newItem;
             newItem = nullptr;
         }
@@ -1371,14 +1386,11 @@ void ScreenplayTextModel::applyPatch(const QByteArray& _patch)
     emit rowsChanged();
 
 
-
-
-
 #ifdef XML_CHECKS
     //
     // Делаем проверку на соответствие обновлённой модели прямому наложению патча
     //
-
+    Q_ASSERT(newContent == toXml());
 #endif
 }
 

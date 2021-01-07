@@ -36,7 +36,8 @@ QStringRef readNextElement(QXmlStreamReader& _reader)
     do {
         _reader.readNext();
     } while (!_reader.isStartElement()
-             && !_reader.isEndElement());
+             && !_reader.isEndElement()
+             && !_reader.atEnd());
     return _reader.name();
 }
 

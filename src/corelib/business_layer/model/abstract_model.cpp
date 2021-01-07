@@ -152,11 +152,6 @@ void AbstractModel::undoChange(const QByteArray& _undo, const QByteArray& _redo)
 
     applyPatch(_undo);
     d->undoedChanges.append({_undo, _redo});
-
-    //
-    // Говорим, что контент изменился с заданными правками, при этом тут меняется порядок изменений
-    //
-    emit contentsChanged(_redo, _undo);
 }
 
 void AbstractModel::redo()
@@ -169,12 +164,6 @@ void AbstractModel::redo()
 
     const auto change = d->undoedChanges.takeLast();
     applyPatch(change.redo);
-
-    //
-    // Говорим, что контент изменился с заданными правками
-    //
-    emit contentsChanged(change.undo, change.redo);
-
 }
 
 QModelIndex AbstractModel::index(int _row, int _column, const QModelIndex& _parent) const
