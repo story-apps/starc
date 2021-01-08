@@ -1263,12 +1263,6 @@ void ScreenplayTextModel::applyPatch(const QByteArray& _patch)
     auto prepareReader = [] (QXmlStreamReader& _reader, const QString& _xml) {
         _reader.clear();
         _reader.addData(_xml);
-#ifdef XML_CHECKS
-        if (_reader.hasError()) {
-            qDebug(_reader.errorString().toUtf8());
-            Q_ASSERT(false);
-        }
-#endif
         xml::readNextElement(_reader); // document
         xml::readNextElement(_reader);
     };
@@ -1286,7 +1280,7 @@ void ScreenplayTextModel::applyPatch(const QByteArray& _patch)
     //
     ScreenplayTextModelItem* oldItem = nullptr;
     ScreenplayTextModelItem* newItem = nullptr;
-    while (!oldXmlReader.atEnd() && !newXmlReader.atEnd()) {
+    while (!oldXmlReader.atEnd() || !newXmlReader.atEnd()) {
         auto readNextItem = [] (QXmlStreamReader& _reader) -> ScreenplayTextModelItem* {
             if (_reader.atEnd()) {
                 return nullptr;
@@ -1359,16 +1353,15 @@ void ScreenplayTextModel::applyPatch(const QByteArray& _patch)
             } else {
                 insertItem(newItem, previousModelItem);
             }
-            modelItem = newItem;
             newItem = nullptr;
         }
         //
         // Если в новом xml - это последний элемент, то значит текущий блок был удалён
         //
         else if (!oldXmlReader.atEnd() && newXmlReader.atEnd()) {
-            auto previousModelItem = findPreviousItem(modelItem);
+            auto nextModelItem = findNextItem(modelItem);
             removeItem(modelItem);
-            modelItem = previousModelItem;
+            modelItem = nextModelItem;
         }
         //
         // Во всех остальных случаях - это изменение текущего элемента
