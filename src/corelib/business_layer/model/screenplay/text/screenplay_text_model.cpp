@@ -1278,36 +1278,36 @@ void ScreenplayTextModel::applyPatch(const QByteArray& _patch)
     //
     // Считываем элементы по одному, пока не обработаем все данные в xml изменений
     //
+    auto readNextItem = [] (QXmlStreamReader& _reader) -> ScreenplayTextModelItem* {
+        if (_reader.atEnd()) {
+            return nullptr;
+        }
+
+        const auto currentTag = _reader.name();
+        ScreenplayTextModelItem* item = nullptr;
+        if (currentTag == xml::kFolderTag) {
+            item = new ScreenplayTextModelFolderItem(_reader);
+        } else if (currentTag == xml::kSceneTag) {
+            item = new ScreenplayTextModelSceneItem(_reader);
+        } else if (currentTag == xml::kSplitterTag) {
+            item = new ScreenplayTextModelSplitterItem(_reader);
+        } else {
+            item = new ScreenplayTextModelTextItem(_reader);
+        }
+
+        //
+        // Считываем контент до конца
+        //
+        if (_reader.name() == xml::kDocumentTag) {
+            _reader.readNext();
+        }
+
+        return item;
+    };
     ScreenplayTextModelItem* oldItem = nullptr;
     ScreenplayTextModelItem* newItem = nullptr;
-    while (!oldXmlReader.atEnd() || !newXmlReader.atEnd()) {
-        auto readNextItem = [] (QXmlStreamReader& _reader) -> ScreenplayTextModelItem* {
-            if (_reader.atEnd()) {
-                return nullptr;
-            }
-
-            const auto currentTag = _reader.name();
-            ScreenplayTextModelItem* item = nullptr;
-            if (currentTag == xml::kFolderTag) {
-                item = new ScreenplayTextModelFolderItem(_reader);
-            } else if (currentTag == xml::kSceneTag) {
-                item = new ScreenplayTextModelSceneItem(_reader);
-            } else if (currentTag == xml::kSplitterTag) {
-                item = new ScreenplayTextModelSplitterItem(_reader);
-            } else {
-                item = new ScreenplayTextModelTextItem(_reader);
-            }
-
-            //
-            // Считываем контент до конца
-            //
-            if (_reader.name() == xml::kDocumentTag) {
-                _reader.readNext();
-            }
-
-            return item;
-        };
-
+    while (!oldXmlReader.atEnd()
+           || !newXmlReader.atEnd()) {
         if (!oldXmlReader.atEnd()) {
             delete oldItem;
             oldItem = readNextItem(oldXmlReader);
