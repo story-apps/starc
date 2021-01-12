@@ -1442,7 +1442,14 @@ void ScreenplayTextModel::applyPatch(const QByteArray& _patch)
             // Добавляем папку
             //
             if (newItem->type() == ScreenplayTextModelItemType::Folder) {
-                Q_ASSERT(false);
+                auto modelItemParent = modelItem->parent();
+                takeItem(modelItem, modelItemParent);
+
+                auto folder = new ScreenplayTextModelFolderItem;
+                folder->copyFrom(newItem);
+                folder->appendItem(modelItem);
+
+                insertItem(folder, modelItemParent);
             }
             //
             // Добавляем сцену
@@ -1469,18 +1476,22 @@ void ScreenplayTextModel::applyPatch(const QByteArray& _patch)
             // Добавляем текстовый блок
             //
             else {
+                ScreenplayTextModelItem* addedItem = nullptr;
+                if (newItem->type() == ScreenplayTextModelItemType::Splitter) {
+                    auto splitterItem = static_cast<ScreenplayTextModelSplitterItem*>(newItem);
+                    addedItem = new ScreenplayTextModelSplitterItem(splitterItem->splitterType());
+                } else {
+                    addedItem = new ScreenplayTextModelTextItem;
+                }
+                addedItem->copyFrom(newItem);
+
                 auto previousModelItem = findPreviousItem(modelItem);
                 if (previousModelItem->type() == ScreenplayTextModelItemType::Folder
                     || previousModelItem->type() == ScreenplayTextModelItemType::Scene) {
-                    prependItem(newItem, previousModelItem);
+                    prependItem(addedItem, previousModelItem);
                 } else {
-                    insertItem(newItem, previousModelItem);
+                    insertItem(addedItem, previousModelItem);
                 }
-
-                //
-                // Обнуляем элемент, чтобы он не удалился, при следующем проходе
-                //
-                newItem = nullptr;
             }
         }
         //
@@ -1490,10 +1501,8 @@ void ScreenplayTextModel::applyPatch(const QByteArray& _patch)
             //
             // Если в элементе есть дети, нужно вынести их в конец или после предыдущего элемента
             //
-            if (modelItem->type() == ScreenplayTextModelItemType::Folder) {
-                Q_ASSERT(false);
-            }
-            else if (modelItem->type() == ScreenplayTextModelItemType::Scene) {
+            if (modelItem->type() == ScreenplayTextModelItemType::Folder
+                || modelItem->type() == ScreenplayTextModelItemType::Scene) {
                 QVector<ScreenplayTextModelItem*> movedItems;
                 while (modelItem->hasChildren()) {
                     auto movedItem = modelItem->childAt(0);

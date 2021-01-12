@@ -48,6 +48,11 @@ public:
     QByteArray toXml(ScreenplayTextModelItem* _from, int _fromPosition, ScreenplayTextModelItem* _to, int _toPosition, bool _clearUuid) const;
     QByteArray xmlHeader(bool _clearUuid = false) const;
 
+    /**
+     * @brief Скопировать контент с заданного элемента
+     */
+    void copyFrom(ScreenplayTextModelItem* _item) override;
+
 protected:
     /**
      * @brief Обновляем текст сцены при изменении кого-то из детей

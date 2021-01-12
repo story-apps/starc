@@ -66,40 +66,43 @@ ScreenplayTextModelFolderItem::ScreenplayTextModelFolderItem(QXmlStreamReader& _
     d->uuid = _contentReader.attributes().hasAttribute(xml::kUuidAttribute)
               ? _contentReader.attributes().value(xml::kUuidAttribute).toString()
               : QUuid::createUuid();
+    auto currentTag = xml::readNextElement(_contentReader); // content
 
-    do {
-        xml::readNextElement(_contentReader);
-        const auto currentTag = _contentReader.name();
+    if (currentTag == xml::kContentTag) {
+        xml::readNextElement(_contentReader); // next item
+        do {
+            currentTag = _contentReader.name();
 
-        //
-        // Проглатываем закрывающий контентный тэг
-        //
-        if (currentTag == xml::kContentTag
-            && _contentReader.isEndElement()) {
-            xml::readNextElement(_contentReader);
-            continue;
-        }
-        //
-        // Если дошли до конца папки, выходим из обработки
-        //
-        else if (currentTag == xml::kFolderTag
-            && _contentReader.isEndElement()) {
-            xml::readNextElement(_contentReader);
-            break;
-        }
-        //
-        // Считываем вложенный контент
-        //
-        else if (currentTag == xml::kFolderTag) {
-            appendItem(new ScreenplayTextModelFolderItem(_contentReader));
-        } else if (currentTag == xml::kSceneTag) {
-            appendItem(new ScreenplayTextModelSceneItem(_contentReader));
-        } else if (currentTag == xml::kSplitterTag) {
-            appendItem(new ScreenplayTextModelSplitterItem(_contentReader));
-        } else {
-            appendItem(new ScreenplayTextModelTextItem(_contentReader));
-        }
-    } while (!_contentReader.atEnd());
+            //
+            // Проглатываем закрывающий контентный тэг
+            //
+            if (currentTag == xml::kContentTag
+                && _contentReader.isEndElement()) {
+                xml::readNextElement(_contentReader);
+                continue;
+            }
+            //
+            // Если дошли до конца папки, выходим из обработки
+            //
+            else if (currentTag == xml::kFolderTag
+                && _contentReader.isEndElement()) {
+                xml::readNextElement(_contentReader);
+                break;
+            }
+            //
+            // Считываем вложенный контент
+            //
+            else if (currentTag == xml::kFolderTag) {
+                appendItem(new ScreenplayTextModelFolderItem(_contentReader));
+            } else if (currentTag == xml::kSceneTag) {
+                appendItem(new ScreenplayTextModelSceneItem(_contentReader));
+            } else if (currentTag == xml::kSplitterTag) {
+                appendItem(new ScreenplayTextModelSplitterItem(_contentReader));
+            } else {
+                appendItem(new ScreenplayTextModelTextItem(_contentReader));
+            }
+        } while (!_contentReader.atEnd());
+    }
 
     //
     // Определим название
@@ -235,6 +238,19 @@ QByteArray ScreenplayTextModelFolderItem::xmlHeader(bool _clearUuid) const
     xml += QString("<%1>\n").arg(xml::kContentTag).toUtf8();
 
     return xml;
+}
+
+void ScreenplayTextModelFolderItem::copyFrom(ScreenplayTextModelItem* _item)
+{
+    ScreenplayTextModelItem::copyFrom(_item);
+
+    if (_item->type() != ScreenplayTextModelItemType::Folder) {
+        Q_ASSERT(false);
+        return;
+    }
+
+    auto folderItem = static_cast<ScreenplayTextModelFolderItem*>(_item);
+    d->uuid = folderItem->d->uuid;
 }
 
 void ScreenplayTextModelFolderItem::handleChange()
