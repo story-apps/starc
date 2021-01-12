@@ -794,15 +794,14 @@ void ScreenplayTextModelTextItem::copyFrom(ScreenplayTextModelItem* _item)
     }
 
     auto textItem = static_cast<ScreenplayTextModelTextItem*>(_item);
-    d->text = textItem->text();
-    d->paragraphType = textItem->paragraphType();
-    d->alignment = textItem->alignment();
-    d->bookmark = textItem->bookmark();
-    d->text = textItem->text();
-    d->reviewMarks = textItem->reviewMarks();
-    d->formats = textItem->formats();
-    d->revisions = textItem->revisions();
-    d->xml = textItem->toXml();
+    d->paragraphType = textItem->d->paragraphType;
+    d->alignment = textItem->d->alignment;
+    d->bookmark = textItem->d->bookmark;
+    d->text = textItem->d->text;
+    d->reviewMarks = textItem->d->reviewMarks;
+    d->formats = textItem->d->formats;
+    d->revisions = textItem->d->revisions;
+    d->xml = textItem->d->xml;
 
     markChanged();
 }

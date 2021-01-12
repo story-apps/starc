@@ -323,6 +323,23 @@ QByteArray ScreenplayTextModelSceneItem::xmlHeader(bool _clearUuid) const
     return xml;
 }
 
+void ScreenplayTextModelSceneItem::copyFrom(ScreenplayTextModelItem* _item)
+{
+    ScreenplayTextModelItem::copyFrom(_item);
+
+    if (_item->type() != ScreenplayTextModelItemType::Scene) {
+        Q_ASSERT(false);
+        return;
+    }
+
+    auto sceneItem = static_cast<ScreenplayTextModelSceneItem*>(_item);
+    d->uuid = sceneItem->d->uuid;
+    d->isOmited = sceneItem->d->isOmited;
+    d->number = sceneItem->d->number;
+    d->stamp = sceneItem->d->stamp;
+    d->plannedDuration = sceneItem->d->plannedDuration;
+}
+
 void ScreenplayTextModelSceneItem::handleChange()
 {
     d->heading.clear();

@@ -502,7 +502,7 @@ void ScreenplayTextDocument::setModel(BusinessLayer::ScreenplayTextModel* _model
         if (_from > 0) {
             cursorItemIndex = d->model->index(_from - 1, 0, _parent);
         } else {
-            cursorItemIndex = _parent;
+            cursorItemIndex = d->model->index(_parent.row() - 1, 0, _parent.parent());
         }
         //
         bool isFirstParagraph = !cursorItemIndex.isValid();
