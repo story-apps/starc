@@ -24,6 +24,8 @@ public:
      */
     struct Number {
         QString value;
+
+        bool operator==(const Number& _other) const;
     };
 
     /**
@@ -70,6 +72,11 @@ public:
      * @brief Скопировать контент с заданного элемента
      */
     void copyFrom(ScreenplayTextModelItem* _item) override;
+
+    /**
+     * @brief Проверить равен ли текущий элемент заданному
+     */
+    bool isEqual(ScreenplayTextModelItem* _item) const override;
 
 protected:
     /**

@@ -60,9 +60,13 @@ public:
     struct CORE_LIBRARY_EXPORT Bookmark {
         QColor color;
         QString text;
+
+        bool operator==(const Bookmark& _other) const;
     };
     struct CORE_LIBRARY_EXPORT Revision : TextPart {
         QColor color;
+
+        bool operator==(const Revision& _other) const;
     };
 
 public:
@@ -159,6 +163,11 @@ public:
      * @brief Скопировать контент с заданного элемента
      */
     void copyFrom(ScreenplayTextModelItem* _item) override;
+
+    /**
+     * @brief Проверить равен ли текущий элемент заданному
+     */
+    bool isEqual(ScreenplayTextModelItem* _item) const override;
 
 private:
     /**

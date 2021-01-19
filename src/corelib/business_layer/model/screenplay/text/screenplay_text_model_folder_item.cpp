@@ -242,8 +242,6 @@ QByteArray ScreenplayTextModelFolderItem::xmlHeader(bool _clearUuid) const
 
 void ScreenplayTextModelFolderItem::copyFrom(ScreenplayTextModelItem* _item)
 {
-    ScreenplayTextModelItem::copyFrom(_item);
-
     if (_item->type() != ScreenplayTextModelItemType::Folder) {
         Q_ASSERT(false);
         return;
@@ -251,6 +249,16 @@ void ScreenplayTextModelFolderItem::copyFrom(ScreenplayTextModelItem* _item)
 
     auto folderItem = static_cast<ScreenplayTextModelFolderItem*>(_item);
     d->uuid = folderItem->d->uuid;
+}
+
+bool ScreenplayTextModelFolderItem::isEqual(ScreenplayTextModelItem* _item) const
+{
+    if (type() != _item->type()) {
+        return false;
+    }
+
+    const auto folderItem = static_cast<ScreenplayTextModelFolderItem*>(_item);
+    return d->uuid == folderItem->d->uuid;
 }
 
 void ScreenplayTextModelFolderItem::handleChange()

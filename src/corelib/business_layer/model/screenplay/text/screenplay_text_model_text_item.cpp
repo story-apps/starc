@@ -451,6 +451,19 @@ QTextCharFormat ScreenplayTextModelTextItem::ReviewMark::charFormat() const
     return format;
 }
 
+bool ScreenplayTextModelTextItem::Bookmark::operator==(const ScreenplayTextModelTextItem::Bookmark& _other) const
+{
+    return color == _other.color
+            && text == _other.text;
+}
+
+bool ScreenplayTextModelTextItem::Revision::operator==(const Revision& _other) const
+{
+    return from == _other.from
+            && length == _other.length
+            && color == _other.color;
+}
+
 ScreenplayTextModelTextItem::ScreenplayTextModelTextItem()
     : ScreenplayTextModelItem(ScreenplayTextModelItemType::Text),
       d(new Implementation)
@@ -786,8 +799,6 @@ QByteArray ScreenplayTextModelTextItem::toXml(int _from, int _length)
 
 void ScreenplayTextModelTextItem::copyFrom(ScreenplayTextModelItem* _item)
 {
-    ScreenplayTextModelItem::copyFrom(_item);
-
     if (_item->type() != ScreenplayTextModelItemType::Text) {
         Q_ASSERT(false);
         return;
@@ -804,6 +815,22 @@ void ScreenplayTextModelTextItem::copyFrom(ScreenplayTextModelItem* _item)
     d->xml = textItem->d->xml;
 
     markChanged();
+}
+
+bool ScreenplayTextModelTextItem::isEqual(ScreenplayTextModelItem* _item) const
+{
+    if (type() != _item->type()) {
+        return false;
+    }
+
+    const auto textItem = static_cast<ScreenplayTextModelTextItem*>(_item);
+    return d->paragraphType == textItem->d->paragraphType
+            && d->alignment == textItem->d->alignment
+            && d->bookmark == textItem->d->bookmark
+            && d->text == textItem->d->text
+            && d->reviewMarks == textItem->d->reviewMarks
+            && d->formats == textItem->d->formats
+            && d->revisions == textItem->d->revisions;
 }
 
 void ScreenplayTextModelTextItem::markChanged()

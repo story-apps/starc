@@ -50,6 +50,16 @@ public:
      */
     QByteArray toXml() const override;
 
+    /**
+     * @brief Скопировать контент с заданного элемента
+     */
+    void copyFrom(ScreenplayTextModelItem* _item) override;
+
+    /**
+     * @brief Проверить равен ли текущий элемент заданному
+     */
+    bool isEqual(ScreenplayTextModelItem* _item) const override;
+
 private:
     class Implementation;
     QScopedPointer<Implementation> d;

@@ -88,6 +88,11 @@ ScreenplayTextModelSceneItem::Implementation::Implementation()
 // ****
 
 
+bool ScreenplayTextModelSceneItem::Number::operator==(const ScreenplayTextModelSceneItem::Number& _other) const
+{
+    return value == _other.value;
+}
+
 ScreenplayTextModelSceneItem::ScreenplayTextModelSceneItem()
     : ScreenplayTextModelItem(ScreenplayTextModelItemType::Scene),
       d(new Implementation)
@@ -325,8 +330,6 @@ QByteArray ScreenplayTextModelSceneItem::xmlHeader(bool _clearUuid) const
 
 void ScreenplayTextModelSceneItem::copyFrom(ScreenplayTextModelItem* _item)
 {
-    ScreenplayTextModelItem::copyFrom(_item);
-
     if (_item->type() != ScreenplayTextModelItemType::Scene) {
         Q_ASSERT(false);
         return;
@@ -338,6 +341,20 @@ void ScreenplayTextModelSceneItem::copyFrom(ScreenplayTextModelItem* _item)
     d->number = sceneItem->d->number;
     d->stamp = sceneItem->d->stamp;
     d->plannedDuration = sceneItem->d->plannedDuration;
+}
+
+bool ScreenplayTextModelSceneItem::isEqual(ScreenplayTextModelItem* _item) const
+{
+    if (type() != _item->type()) {
+        return false;
+    }
+
+    const auto sceneItem = static_cast<ScreenplayTextModelSceneItem*>(_item);
+    return d->uuid == sceneItem->d->uuid
+            && d->isOmited == sceneItem->d->isOmited
+            && d->number == sceneItem->d->number
+            && d->stamp == sceneItem->d->stamp
+            && d->plannedDuration == sceneItem->d->plannedDuration;
 }
 
 void ScreenplayTextModelSceneItem::handleChange()

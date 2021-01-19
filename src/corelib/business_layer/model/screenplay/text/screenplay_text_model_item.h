@@ -53,7 +53,12 @@ public:
     /**
      * @brief Скопировать контент с заданного элемента
      */
-    virtual void copyFrom(ScreenplayTextModelItem* _item);
+    virtual void copyFrom(ScreenplayTextModelItem* _item) = 0;
+
+    /**
+     * @brief Проверить равен ли текущий элемент заданному
+     */
+    virtual bool isEqual(ScreenplayTextModelItem* _item) const = 0;
 
 private:
     class Implementation;

@@ -53,6 +53,11 @@ public:
      */
     void copyFrom(ScreenplayTextModelItem* _item) override;
 
+    /**
+     * @brief Проверить равен ли текущий элемент заданному
+     */
+    bool isEqual(ScreenplayTextModelItem* _item) const override;
+
 protected:
     /**
      * @brief Обновляем текст сцены при изменении кого-то из детей

@@ -71,4 +71,22 @@ QByteArray ScreenplayTextModelSplitterItem::toXml() const
             .arg(xml::kSplitterTag, xml::kTypeAttribute, kSplitterTypeToString.value(d->type)).toUtf8();
 }
 
+void ScreenplayTextModelSplitterItem::copyFrom(ScreenplayTextModelItem* _item)
+{
+    if (_item->type() != ScreenplayTextModelItemType::Splitter) {
+        Q_ASSERT(false);
+        return;
+    }
+}
+
+bool ScreenplayTextModelSplitterItem::isEqual(ScreenplayTextModelItem* _item) const
+{
+    if (type() != _item->type()) {
+        return false;
+    }
+
+    const auto splitterItem = static_cast<ScreenplayTextModelSplitterItem*>(_item);
+    return d->type == splitterItem->d->type;
+}
+
 } // namespace BusinessLayer

@@ -10,7 +10,9 @@
 
 #include <domain/document_object.h>
 
+#include <utils/shugar.h>
 #include <utils/diff_match_patch/diff_match_patch_controller.h>
+#include <utils/tools/edit_distance.h>
 #include <utils/tools/model_index_path.h>
 
 #include <QMimeData>
@@ -18,12 +20,12 @@
 
 #define XML_CHECKS
 
-
 namespace BusinessLayer
 {
 
 namespace {
     const char* kMimeType = "application/x-starc/screenplay/text/item";
+
 }
 
 class ScreenplayTextModel::Implementation
@@ -45,7 +47,6 @@ public:
      * @brief Обновить номера сцен и реплик
      */
     void updateNumbering();
-
 
 
     /**
@@ -1157,7 +1158,60 @@ void ScreenplayTextModel::applyPatch(const QByteArray& _patch)
 #endif
 
     //
-    // Идём по структуре документа до момента достижения элемента, входящего в изменение
+    // Считываем элементы из обоих изменений для дальнейшего определения необходимых изменений
+    //
+    auto readItems = [] (const QString& _xml) {
+        QXmlStreamReader _reader(_xml);
+        xml::readNextElement(_reader); // document
+        xml::readNextElement(_reader);
+
+        QVector<ScreenplayTextModelItem*> items;
+        while (!_reader.atEnd()) {
+            const auto currentTag = _reader.name();
+            ScreenplayTextModelItem* item = nullptr;
+            if (currentTag == xml::kFolderTag) {
+                item = new ScreenplayTextModelFolderItem(_reader);
+            } else if (currentTag == xml::kSceneTag) {
+                item = new ScreenplayTextModelSceneItem(_reader);
+            } else if (currentTag == xml::kSplitterTag) {
+                item = new ScreenplayTextModelSplitterItem(_reader);
+            } else {
+                item = new ScreenplayTextModelTextItem(_reader);
+            }
+            items.append(item);
+
+            //
+            // Считываем контент до конца
+            //
+            if (_reader.name() == xml::kDocumentTag) {
+                _reader.readNext();
+            }
+        }
+
+        return items;
+    };
+    const auto oldItems = readItems(changes.first.xml);
+    const auto newItems = readItems(changes.second.xml);
+
+    //
+    // Раскладываем элементы в плоские списки для сравнения
+    //
+    std::function<QVector<ScreenplayTextModelItem*>(const QVector<ScreenplayTextModelItem*>&)> makeItemsPlain;
+    makeItemsPlain = [&makeItemsPlain] (const QVector<ScreenplayTextModelItem*>& _items) {
+        QVector<ScreenplayTextModelItem*> itemsPlain;
+        for (auto item : _items) {
+            itemsPlain.append(item);
+            for (int row = 0; row < item->childCount(); ++row) {
+                itemsPlain.append(makeItemsPlain({item->childAt(row)}));
+            }
+        }
+        return itemsPlain;
+    };
+    auto oldItemsPlain = makeItemsPlain(oldItems);
+    auto newItemsPlain = makeItemsPlain(newItems);
+
+    //
+    // Идём по структуре документа до момента достижения начала изменения
     //
     auto length = [this] {
         QByteArray xml = "<?xml version=\"1.0\"?>\n";
@@ -1167,6 +1221,10 @@ void ScreenplayTextModel::applyPatch(const QByteArray& _patch)
     std::function<ScreenplayTextModelItem*(ScreenplayTextModelItem*)> findStartItem;
     findStartItem = [changes, &length, &findStartItem] (ScreenplayTextModelItem* _item) -> ScreenplayTextModelItem*
     {
+        if (changes.first.from == 0) {
+            return _item->childAt(0);
+        }
+
         for (int childIndex = 0; childIndex < _item->childCount(); ++childIndex) {
             auto child = _item->childAt(childIndex);
             const auto childLength = QString(child->toXml()).length();
@@ -1206,6 +1264,24 @@ void ScreenplayTextModel::applyPatch(const QByteArray& _patch)
 
         return nullptr;
     };
+    auto modelItem = findStartItem(d->rootItem);
+
+    //
+    // Если была вставлена сцена или папка, при формализации xml, опустим этот элемент
+    //
+    if (oldItemsPlain.size() > 1
+        && oldItemsPlain.constFirst()->type() != modelItem->type()) {
+        oldItemsPlain.removeFirst();
+    }
+    if (newItemsPlain.size() > 1
+        && newItemsPlain.constFirst()->type() != modelItem->type()) {
+        newItemsPlain.removeFirst();
+    }
+
+    //
+    // Определим необходимые операции для применения изменения
+    //
+    const auto operations = edit_distance::editDistance(oldItemsPlain, newItemsPlain);
     //
     auto findPreviousItem = [] (ScreenplayTextModelItem* _item) -> ScreenplayTextModelItem*
     {
@@ -1227,7 +1303,14 @@ void ScreenplayTextModel::applyPatch(const QByteArray& _patch)
         // Не первый в родителе
         //
         if (itemIndex > 0) {
-            return parent->childAt(itemIndex - 1);
+            //
+            // Берём последний вложенный элемент в предыдущий элемент в родителе исходного
+            //
+            auto previousItem = parent->childAt(itemIndex - 1);
+            while (previousItem->hasChildren()) {
+                previousItem = previousItem->childAt(previousItem->childCount() - 1);
+            }
+            return previousItem;
         }
         //
         // Первый в родителе
@@ -1283,270 +1366,267 @@ void ScreenplayTextModel::applyPatch(const QByteArray& _patch)
     auto findNextItem = [&findNextItemWithChildren] (ScreenplayTextModelItem* _item) {
         return findNextItemWithChildren(_item, true);
     };
-
     //
-    // Подготавливаем чтецов xml-данных изменений
+    // И применяем их
     //
-    auto prepareReader = [] (QXmlStreamReader& _reader, const QString& _xml) {
-        _reader.clear();
-        _reader.addData(_xml);
-        xml::readNextElement(_reader); // document
-        xml::readNextElement(_reader);
-    };
-    QXmlStreamReader oldXmlReader;
-    prepareReader(oldXmlReader, changes.first.xml);
-    QXmlStreamReader newXmlReader;
-    prepareReader(newXmlReader, changes.second.xml);
-
-
     emit rowsAboutToBeChanged();
-
-
-    //
-    // Считываем элементы по одному, пока не обработаем все данные в xml изменений
-    //
-    auto deleteTopLevelParent = [] (ScreenplayTextModelItem* _item) {
-        if (_item == nullptr) {
-            return;
-        }
-
-        ScreenplayTextModelItem* topLevelParent = _item;
-        while (topLevelParent->hasParent()) {
-            topLevelParent = topLevelParent->parent();
-        }
-        delete topLevelParent;
-        topLevelParent = nullptr;
-    };
-    auto readNextItem = [] (QXmlStreamReader& _reader) -> ScreenplayTextModelItem* {
-        if (_reader.atEnd()) {
-            return nullptr;
-        }
-
-        const auto currentTag = _reader.name();
-        ScreenplayTextModelItem* item = nullptr;
-        if (currentTag == xml::kFolderTag) {
-            item = new ScreenplayTextModelFolderItem(_reader);
-        } else if (currentTag == xml::kSceneTag) {
-            item = new ScreenplayTextModelSceneItem(_reader);
-        } else if (currentTag == xml::kSplitterTag) {
-            item = new ScreenplayTextModelSplitterItem(_reader);
-        } else {
-            item = new ScreenplayTextModelTextItem(_reader);
-        }
-
-        //
-        // Считываем контент до конца
-        //
-        if (_reader.name() == xml::kDocumentTag) {
-            _reader.readNext();
-        }
-
-        return item;
-    };
-    auto atEnd = [&findNextItem] (const QXmlStreamReader& _reader, ScreenplayTextModelItem* _item) {
-        return _reader.atEnd() && findNextItem(_item) == nullptr;
-    };
-    ScreenplayTextModelItem* modelItem = findStartItem(d->rootItem);
-    ScreenplayTextModelItem* oldItem = nullptr;
-    ScreenplayTextModelItem* newItem = nullptr;
-    bool isFirstIteration = true;
-    while (!atEnd(oldXmlReader, oldItem)
-           || !atEnd(newXmlReader, newItem)) {
-        //
-        // Определим следующий элемент в xml текущей версии документа
-        //
-        if (auto nextOldItem = findNextItem(oldItem); nextOldItem != nullptr) {
-            oldItem = nextOldItem;
-        } else if (!oldXmlReader.atEnd()) {
-            deleteTopLevelParent(oldItem);
-            oldItem = readNextItem(oldXmlReader);
-
-            //
-            // Для первого прохода возможна ситуация с добавлением группирующего элемента вокруг,
-            // в этом случае корректируем текущий обрабатываемый элемент
-            //
-            if (isFirstIteration) {
-                if (oldItem->type() != modelItem->type()) {
-                    Q_ASSERT(oldItem->hasChildren());
-                    oldItem = findNextItem(oldItem);
-                }
+    for (auto operation : operations) {
+        auto newItem = operation.value;
+        switch (operation.type) {
+            case edit_distance::OperationType::Skip: {
+                modelItem = findNextItem(modelItem);
+                break;
             }
-        }
-        if (oldItem == nullptr) {
-            Q_ASSERT(false);
-            return;
-        }
 
-#ifdef XML_CHECKS
-        //
-        // Сверяем xml, чтобы быть уверенным в том, что алгоритм работает корректно
-        //
-        if (modelItem->type() == ScreenplayTextModelItemType::Folder
-            && oldItem->type() == ScreenplayTextModelItemType::Folder) {
-            auto modelItemFolder = static_cast<ScreenplayTextModelFolderItem*>(modelItem);
-            auto oldItemFolder = static_cast<ScreenplayTextModelFolderItem*>(modelItem);
-            Q_ASSERT(modelItemFolder->xmlHeader() == oldItemFolder->xmlHeader());
-        } else if (modelItem->type() == ScreenplayTextModelItemType::Scene
-                   && oldItem->type() == ScreenplayTextModelItemType::Scene) {
-            auto modelItemScene = static_cast<ScreenplayTextModelSceneItem*>(modelItem);
-            auto oldItemScene = static_cast<ScreenplayTextModelSceneItem*>(modelItem);
-            Q_ASSERT(modelItemScene->xmlHeader() == oldItemScene->xmlHeader());
-        } else {
-            Q_ASSERT(modelItem->toXml() == oldItem->toXml());
-        }
-#endif
+            case edit_distance::OperationType::Insert: {
+                //
+                // Добавляем папку
+                //
+                if (newItem->type() == ScreenplayTextModelItemType::Folder) {
+//                    auto modelItemParent = modelItem->parent();
+//                    takeItem(modelItem, modelItemParent);
 
-        if (auto nextNewItem = findNextItem(newItem); nextNewItem != nullptr) {
-            newItem = nextNewItem;
-        } else if (!newXmlReader.atEnd()) {
-            deleteTopLevelParent(newItem);
-            newItem = readNextItem(newXmlReader);
+//                    auto folder = new ScreenplayTextModelFolderItem;
+//                    folder->copyFrom(newItem);
+//                    folder->appendItem(modelItem);
 
-            //
-            // Для первого прохода возможна ситуация с добавлением группирующего элемента вокруг,
-            // в этом случае корректируем текущий обрабатываемый элемент
-            //
-            if (isFirstIteration) {
-                if (newItem->type() != modelItem->type()) {
-                    Q_ASSERT(newItem->hasChildren());
-                    newItem = findNextItem(newItem);
+//                    insertItem(folder, modelItemParent);
                 }
-            }
-        }
-        if (newItem == nullptr) {
-            Q_ASSERT(false);
-            return;
-        }
+                //
+                // Добавляем сцену
+                //
+                else if (newItem->type() == ScreenplayTextModelItemType::Scene) {
+                    auto sceneItem = new ScreenplayTextModelSceneItem;
+                    sceneItem->copyFrom(newItem);
 
+                    //
+                    // Если вставляем в конец документа
+                    //
+                    if (modelItem == nullptr) {
+                        appendItem(sceneItem);
+                    }
+                    //
+                    // А если не в конец, то
+                    //
+                    else {
+                        auto modelItemParent = modelItem->parent();
+                        //
+                        // ... если сцена вставляется перед папкой или сценой
+                        //
+                        if (modelItem->type() == ScreenplayTextModelItemType::Folder
+                            || modelItem->type() == ScreenplayTextModelItemType::Scene) {
+                            //
+                            // ... в начало папки
+                            //
+                            if (modelItemParent->rowOfChild(modelItem) == 0) {
+                                prependItem(sceneItem, modelItemParent);
+                            }
+                            //
+                            // ... в середину папки
+                            //
+                            else {
+                                auto previousModelItem = modelItemParent->childAt(modelItemParent->rowOfChild(modelItem) - 1);
+                                insertItem(sceneItem, previousModelItem);
+                            }
+                        }
+                        //
+                        // ... если сцена вставляется посреди текста
+                        //
+                        else {
+                            QVector<ScreenplayTextModelItem*> movedItems;
+                            const auto lastRow = modelItemParent->rowOfChild(modelItem);
+                            for (int row = modelItemParent->childCount() - 1; row >= lastRow; --row) {
+                                auto movedItem = modelItemParent->childAt(row);
+                                //
+                                // Вытаскиваем из предыдущей родительского элемента только текстовые элементы
+                                // Актуально, когда текст находится на самом верху иерархии документа и не вставлен ни в одну сцену/папку
+                                //
+                                if (movedItem->type() == ScreenplayTextModelItemType::Folder
+                                        || movedItem->type() == ScreenplayTextModelItemType::Scene) {
+                                    break;
+                                }
+                                //
+                                // Завершаем на окончании папки
+                                //
+                                else if (movedItem->type() == ScreenplayTextModelItemType::Text) {
+                                    const auto textItem = static_cast<ScreenplayTextModelTextItem*>(movedItem);
+                                    if (textItem->paragraphType() == ScreenplayParagraphType::FolderFooter) {
+                                        break;
+                                    }
+                                }
+                                takeItem(movedItem, modelItemParent);
+                                movedItems.prepend(movedItem);
+                            }
 
-        isFirstIteration = false;
+                            //
+                            // Переносим элементы внутрь добавляемой сцены
+                            //
+                            for (auto movedItem : movedItems) {
+                                sceneItem->appendItem(movedItem);
+                            }
 
-
-        //
-        // Если элемент нового xml равен элементу старого xml, переходим к следующему
-        //
-        if (oldItem->toXml() == newItem->toXml()) {
-            modelItem = findNextItem(modelItem);
-            continue;
-        }
-
-        //
-        // Если элементы не равны
-        //
-
-        //
-        // Если в старом xml - это последний элемент, то значит текущий элемент нового был добавлен
-        //
-        if (atEnd(oldXmlReader, oldItem) && !atEnd(newXmlReader, newItem)) {
-            //
-            // Добавляем папку
-            //
-            if (newItem->type() == ScreenplayTextModelItemType::Folder) {
-                auto modelItemParent = modelItem->parent();
-                takeItem(modelItem, modelItemParent);
-
-                auto folder = new ScreenplayTextModelFolderItem;
-                folder->copyFrom(newItem);
-                folder->appendItem(modelItem);
-
-                insertItem(folder, modelItemParent);
-            }
-            //
-            // Добавляем сцену
-            //
-            else if (newItem->type() == ScreenplayTextModelItemType::Scene) {
-                auto modelItemParent = modelItem->parent();
-                QVector<ScreenplayTextModelItem*> movedItems;
-                const auto lastRow = modelItemParent->rowOfChild(modelItem);
-                for (int row = modelItemParent->childCount() - 1; row >= lastRow; --row) {
-                    auto movedItem = modelItemParent->childAt(row);
-                    takeItem(movedItem, modelItemParent);
-                    movedItems.prepend(movedItem);
-                }
-
-                auto scene = new ScreenplayTextModelSceneItem;
-                scene->copyFrom(newItem);
-                for (auto movedItem : movedItems) {
-                    scene->appendItem(movedItem);
-                }
-
-                insertItem(scene, modelItemParent);
-            }
-            //
-            // Добавляем текстовый блок
-            //
-            else {
-                ScreenplayTextModelItem* addedItem = nullptr;
-                if (newItem->type() == ScreenplayTextModelItemType::Splitter) {
-                    auto splitterItem = static_cast<ScreenplayTextModelSplitterItem*>(newItem);
-                    addedItem = new ScreenplayTextModelSplitterItem(splitterItem->splitterType());
-                } else {
-                    addedItem = new ScreenplayTextModelTextItem;
-                }
-                addedItem->copyFrom(newItem);
-
-                auto previousModelItem = findPreviousItem(modelItem);
-                if (previousModelItem->type() == ScreenplayTextModelItemType::Folder
-                    || previousModelItem->type() == ScreenplayTextModelItemType::Scene) {
-                    prependItem(addedItem, previousModelItem);
-                } else {
-                    insertItem(addedItem, previousModelItem);
-                }
-            }
-        }
-        //
-        // Если в новом xml - это последний элемент, то значит текущий элемент был удалён
-        //
-        else if (!atEnd(oldXmlReader, oldItem) && atEnd(newXmlReader, newItem)) {
-            //
-            // Если в элементе есть дети, нужно вынести их в конец или после предыдущего элемента
-            //
-            if (modelItem->type() == ScreenplayTextModelItemType::Folder
-                || modelItem->type() == ScreenplayTextModelItemType::Scene) {
-                QVector<ScreenplayTextModelItem*> movedItems;
-                while (modelItem->hasChildren()) {
-                    auto movedItem = modelItem->childAt(0);
-                    takeItem(movedItem, modelItem);
-                    movedItems.append(movedItem);
-                }
-
-                auto previousItem = findPreviousItem(modelItem);
-                removeItem(modelItem);
-
-                for (auto movedItem : movedItems) {
-                    if (previousItem->hasChildren()) {
-                        appendItem(movedItem, previousItem);
-                    } else {
-                        insertItem(movedItem, previousItem);
+                            //
+                            // Если предыдуший родительский элемент папка, то вставляем после заголовка
+                            //
+                            if (modelItemParent->type() == ScreenplayTextModelItemType::Folder) {
+                                insertItem(sceneItem, modelItemParent->childAt(0));
+                            }
+                            //
+                            // Если предыдущий родительский элемент - сцена, то вставляем после неё
+                            //
+                            else {
+                                insertItem(sceneItem, modelItemParent);
+                            }
+                        }
                     }
                 }
+                //
+                // Добавляем текстовый блок/разделитель
+                //
+                else {
+                    ScreenplayTextModelItem* addedItem = nullptr;
+                    if (newItem->type() == ScreenplayTextModelItemType::Splitter) {
+                        auto splitterItem = static_cast<ScreenplayTextModelSplitterItem*>(newItem);
+                        addedItem = new ScreenplayTextModelSplitterItem(splitterItem->splitterType());
+                    } else {
+                        addedItem = new ScreenplayTextModelTextItem;
+                    }
+                    addedItem->copyFrom(newItem);
 
-                modelItem = movedItems.constFirst();
+                    //
+                    // Если вставляется в конец документа
+                    //
+                    if (modelItem == nullptr) {
+                        auto lastRootChild = d->rootItem->childAt(d->rootItem->childCount() - 1);
+                        //
+                        // Если в конце идёт сцена, то вставить в её конец
+                        //
+                        if (lastRootChild->type() == ScreenplayTextModelItemType::Scene) {
+                            appendItem(addedItem, lastRootChild);
+                        }
+                        //
+                        // В остальных случаях в конец документа
+                        //
+                        else {
+                            appendItem(addedItem);
+                        }
+                    }
+                    //
+                    // А если не в конец, то
+                    //
+                    else {
+                        auto previousModelItem = findPreviousItem(modelItem);
+                        //
+                        // ... если блок вставляется в начало папки или сцены
+                        //
+                        if (previousModelItem->type() == ScreenplayTextModelItemType::Folder
+                            || previousModelItem->type() == ScreenplayTextModelItemType::Scene) {
+                            prependItem(addedItem, previousModelItem);
+                        }
+                        //
+                        // ... если блок вставляется посередине папки или сцены
+                        //
+                        else {
+                            insertItem(addedItem, previousModelItem);
+                        }
+                    }
+                }
+                break;
             }
-            //
-            // А если детей нет, то просто удаляем элемент
-            //
-            else {
-                auto nextModelItem = findNextItem(modelItem);
-                removeItem(modelItem);
-                modelItem = nextModelItem;
+
+            case edit_distance::OperationType::Remove: {
+                //
+                // Если в элементе есть дети, нужно вынести их в конец или после предыдущего элемента
+                //
+                if (modelItem->type() == ScreenplayTextModelItemType::Folder) {
+                    Q_ASSERT(false);
+                }
+                //
+                // Удаляем сцену
+                //
+                else if (modelItem->type() == ScreenplayTextModelItemType::Scene) {
+                    QVector<ScreenplayTextModelItem*> movedItems;
+                    while (modelItem->hasChildren()) {
+                        auto movedItem = modelItem->childAt(0);
+                        takeItem(movedItem, modelItem);
+                        movedItems.append(movedItem);
+                    }
+
+                    auto previousItem = findPreviousItem(modelItem);
+                    removeItem(modelItem);
+
+                    //
+                    // Если сцена удаляется в начале документа
+                    //
+                    if (previousItem->type() == ScreenplayTextModelItemType::Folder
+                        || previousItem->type() == ScreenplayTextModelItemType::Scene) {
+                        for (auto movedItem : reversed(movedItems)) {
+                            prependItem(movedItem);
+                        }
+                    }
+                    //
+                    // Если сцена удаляется в середине документа
+                    //
+                    else if (previousItem->type() == ScreenplayTextModelItemType::Text) {
+                        const auto textItem = static_cast<ScreenplayTextModelTextItem*>(previousItem);
+                        //
+                        // Если сцена удаляется после папки, то вынесем все вложенные элементы
+                        // на уровень самой папки, но после неё
+                        //
+                        if (textItem->paragraphType() == ScreenplayParagraphType::FolderFooter) {
+                            previousItem = previousItem->parent();
+                        }
+                        //
+                        // В остальных случаях, содержимое папки вставляется в предыдущего родителя,
+                        // после идучего перед папкой элемента
+                        //
+
+                        for (auto movedItem : movedItems) {
+                            insertItem(movedItem, previousItem);
+                            previousItem = movedItem;
+                        }
+                    }
+                    //
+                    // В остальных случаях
+                    //
+                    else {
+                        for (auto movedItem : movedItems) {
+                            insertItem(movedItem, previousItem);
+                            previousItem = movedItem;
+                        }
+                    }
+
+                    modelItem = movedItems.constFirst();
+                }
+                //
+                // А если детей нет, то просто удаляем элемент
+                //
+                else {
+                    auto nextModelItem = findNextItem(modelItem);
+                    removeItem(modelItem);
+                    modelItem = nextModelItem;
+                }
+                break;
             }
-        }
-        //
-        // Во всех остальных случаях - это изменение текущего элемента
-        //
-        else {
-            modelItem->copyFrom(newItem);
-            updateItem(modelItem);
-            modelItem = findNextItem(modelItem);
+
+            case edit_distance::OperationType::Replace: {
+                //
+                // Если элементы одного типа - это изменение текущего элемента
+                //
+                if (modelItem->type() == newItem->type()) {
+                    modelItem->copyFrom(newItem);
+                    updateItem(modelItem);
+                    modelItem = findNextItem(modelItem);
+                }
+
+                else {
+                    Q_ASSERT(false);
+                }
+                break;
+            }
         }
     }
-    deleteTopLevelParent(oldItem);
-    deleteTopLevelParent(newItem);
-
-
     emit rowsChanged();
-
 
 #ifdef XML_CHECKS
     //
@@ -1554,7 +1634,9 @@ void ScreenplayTextModel::applyPatch(const QByteArray& _patch)
     //
     if (newContent != toXml()) {
         qDebug(newContent);
-        qDebug("************************");
+        qDebug("\n\n************************\n\n");
+        qDebug(qUtf8Printable(QByteArray::fromPercentEncoding(_patch)));
+        qDebug("\n\n************************\n\n");
         qDebug(toXml());
         qDebug("\n\n\n");
     }

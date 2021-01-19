@@ -437,18 +437,17 @@ void ScreenplayTextDocument::setModel(BusinessLayer::ScreenplayTextModel* _model
         //
         if (cursor.block().text() != textItem->text()) {
             //
-            // TODO: Сделать более умный алгоритм, который заменяет только изменённые части текста
-            //
-
-            cursor.movePosition(QTextCursor::StartOfBlock);
-            cursor.movePosition(QTextCursor::EndOfBlock, QTextCursor::KeepAnchor);
-            cursor.insertText(textItem->text());
-
-            //
             // Корректируем позиции всех элментов идущих за обновляемым
             //
             const auto distanse = textItem->text().length() - cursor.block().text().length();
             d->correctPositionsToItems(position + 1, distanse);
+
+            //
+            // TODO: Сделать более умный алгоритм, который заменяет только изменённые части текста
+            //
+            cursor.movePosition(QTextCursor::StartOfBlock);
+            cursor.movePosition(QTextCursor::EndOfBlock, QTextCursor::KeepAnchor);
+            cursor.insertText(textItem->text());
         }
         //
         // ... редакторские заметки и форматирование
@@ -494,6 +493,16 @@ void ScreenplayTextDocument::setModel(BusinessLayer::ScreenplayTextModel* _model
         }
 
         QScopedValueRollback temporatryState(d->state, DocumentState::Changing);
+
+        //
+        // Игнорируем добавление пустых сцен и папок
+        //
+        const auto item = d->model->itemForIndex(d->model->index(_from, 0, _parent));
+        if ((item->type() == ScreenplayTextModelItemType::Folder
+             || item->type() == ScreenplayTextModelItemType::Scene)
+            && !item->hasChildren()) {
+            return;
+        }
 
         //
         // Определим позицию курсора откуда нужно начинать вставку
