@@ -18,8 +18,9 @@ enum class OperationType {
 
 template<typename T>
 struct Operation {
-    OperationType type;
-    T* value;
+    OperationType type = OperationType::Skip;
+    T* value = nullptr;
+    int weight = 0;
 };
 
 namespace {
@@ -29,7 +30,7 @@ QVector<Operation<T>> minimumDistance(const QVector<Operation<T>>& _x, const QVe
     auto operationWeight = [] (const QVector<Operation<T>>& _operations) {
         int weight = 0;
         for (const auto& operation : _operations) {
-            weight += operation.type == OperationType::Skip ? 0 : 1;
+            weight += operation.weight;
         }
         return weight;
     };
@@ -63,7 +64,7 @@ QVector<Operation<T>> editDistance(const QVector<T*>& _source, const QVector<T*>
     // is empty then we remove all characters
     for (int i = 1; i <= _source.size(); i++) {
         auto operations = DP[0][i - 1];
-        operations.append({OperationType::Remove, nullptr});
+        operations.append({OperationType::Remove, nullptr, 1});
         DP[0][i] = operations;
     }
 
@@ -80,7 +81,7 @@ QVector<Operation<T>> editDistance(const QVector<T*>& _source, const QVector<T*>
             // operation to get second string
             if (j == 0) {
                 auto operations = DP[(i - 1) % 2][j];
-                operations.append({OperationType::Insert, _target.at(i - 1)});
+                operations.append({OperationType::Insert, _target[i - 1], 1});
                 DP[i % 2][j] = operations;
             }
 
@@ -90,7 +91,7 @@ QVector<Operation<T>> editDistance(const QVector<T*>& _source, const QVector<T*>
             // the row number.
             else if (_source[j - 1]->isEqual(_target[i - 1])) {
                 auto operations = DP[(i - 1) % 2][j - 1];
-                operations.append({OperationType::Skip, nullptr});
+                operations.append({OperationType::Skip, nullptr, 0});
                 DP[i % 2][j] = operations;
             }
 
@@ -99,13 +100,16 @@ QVector<Operation<T>> editDistance(const QVector<T*>& _source, const QVector<T*>
             // from three specified operation
             else {
                 auto operationsWithInsert = DP[(i - 1) % 2][j];
-                operationsWithInsert.append({OperationType::Insert, _target.at(i - 1)});
+                operationsWithInsert.append({OperationType::Insert, _target[i - 1], 1});
                 //
                 auto operationsWithRemove = DP[i % 2][j - 1];
-                operationsWithRemove.append({OperationType::Remove, nullptr});
+                operationsWithRemove.append({OperationType::Remove, nullptr, 1});
                 //
                 auto operationsWithReplace = DP[(i - 1) % 2][j - 1];
-                operationsWithReplace.append({OperationType::Replace, _target.at(i - 1)});
+                operationsWithReplace.append({OperationType::Replace, _target[i - 1],
+                                              // ... предпочитаем замене элементов разного типа
+                                              //     операции вставки/удаления
+                                              _source[j - 1]->type() == _target[i - 1]->type() ? 1 : 2});
                 //
                 DP[i % 2][j] = minimumDistance(operationsWithInsert,
                                                operationsWithRemove,
