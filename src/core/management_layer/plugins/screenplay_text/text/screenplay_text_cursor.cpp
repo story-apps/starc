@@ -231,13 +231,13 @@ void ScreenplayTextCursor::removeCharacters(bool _backward, Ui::ScreenplayTextEd
         }
 
         //
-        // В результирующем блоке должны остаться данные от нижнего блока
+        // В результирующем блоке должны остаться данные от верхнего блока (нижний блок считаем удалённым)
         //
         BusinessLayer::ScreenplayTextBlockData* blockData = nullptr;
-        if (bottomBlock.userData() != nullptr) {
-            auto bottomBlockData = static_cast<BusinessLayer::ScreenplayTextBlockData*>(bottomBlock.userData());
-            if (bottomBlockData != nullptr) {
-                blockData = new BusinessLayer::ScreenplayTextBlockData(bottomBlockData);
+        if (topBlock.userData() != nullptr) {
+            auto topBlockData = static_cast<BusinessLayer::ScreenplayTextBlockData*>(topBlock.userData());
+            if (topBlockData != nullptr) {
+                blockData = new BusinessLayer::ScreenplayTextBlockData(topBlockData);
             }
         }
 

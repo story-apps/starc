@@ -1295,6 +1295,7 @@ void ScreenplayTextDocument::updateModelOnContentChange(int _position, int _char
                             } else {
                                 d->model->insertItem(childItem, lastMovedItem);
                             }
+                            previousItem = childItem;
                         }
                         //
                         // Все остальные элементы
@@ -1335,6 +1336,25 @@ void ScreenplayTextDocument::updateModelOnContentChange(int _position, int _char
                     // Удаляем родителя удалённого элемента
                     //
                     d->model->removeItem(itemParent);
+
+                    //
+                    // Если после удаляемого элемента есть текстовые элементы, пробуем их встроить в предыдущую сцену
+                    //
+                    if (previousItem != nullptr
+                        && previousItem->type() == ScreenplayTextModelItemType::Scene) {
+                        const auto previousItemRow = previousItem->parent()->rowOfChild(previousItem);
+                        if (previousItemRow >= 0 && previousItemRow < previousItem->parent()->childCount() - 1) {
+                            const int nextItemRow = previousItemRow + 1;
+                            auto nextItem = previousItem->parent()->childAt(nextItemRow);
+                            while (nextItem != nullptr
+                                   && (nextItem->type() == ScreenplayTextModelItemType::Text
+                                       || nextItem->type() == ScreenplayTextModelItemType::Splitter)) {
+                                d->model->takeItem(nextItem);
+                                d->model->appendItem(nextItem, previousItem);
+                                nextItem = previousItem->parent()->childAt(nextItemRow);
+                            }
+                        }
+                    }
                 }
             }
 
