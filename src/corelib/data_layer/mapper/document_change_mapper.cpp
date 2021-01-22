@@ -24,9 +24,15 @@ namespace {
         return QString(" WHERE uuid = '%1' ").arg(_uuid.toString());
     }
     QString documentFilter(const QUuid& _documentUuid, int _changeIndex) {
-        return QString(" WHERE fk_document_uuid = '%1' ORDER BY id DESC LIMIT %2, 1")
+        //
+        // Игнорируем самое первое изменнеие документа, т.к. это добавление стандартной разметки элемента в пустой документ
+        //
+        return QString(" WHERE fk_document_uuid = '%1'"
+                       " AND id not in (SELECT id FROM %3 WHERE fk_document_uuid = '%1' ORDER BY id ASC LIMIT 0, 1) "
+                       " ORDER BY id DESC LIMIT %2, 1")
                 .arg(_documentUuid.toString())
-                .arg(_changeIndex);
+                .arg(_changeIndex)
+                .arg(kTableName);
     }
 }
 

@@ -50,6 +50,11 @@ public:
     QVector<Change> undoedChanges;
 
     /**
+     * @brief Шаг в истории изменений, который будет отменён как последняя правка
+     */
+    int undoStep = 0;
+
+    /**
      * @brief Дебаунсер на изменение контента документа
      */
     Debouncer updateDocumentContentDebouncer;
@@ -139,19 +144,27 @@ void AbstractModel::saveChanges()
 
 void AbstractModel::undo()
 {
-    emit undoRequested(d->undoedChanges.size());
+
+    //
+    // Перед отменой последнего действия нужно сохранить все несохранённые изменения
+    //
+    saveChanges();
+
+    //
+    // И после этого уже можно отменять
+    //
+    emit undoRequested(d->undoStep);
 }
 
 void AbstractModel::undoChange(const QByteArray& _undo, const QByteArray& _redo)
 {
     QScopedValueRollback isUndoInProgressRollback(d->isUndoInProgress, true);
 
-    //
-    // TODO: Проверить, а можно ли вообще отменить это изменение
-    //
-
     applyPatch(_undo);
+    saveChanges();
+
     d->undoedChanges.append({_undo, _redo});
+    d->undoStep += 2;
 }
 
 void AbstractModel::redo()
@@ -164,6 +177,7 @@ void AbstractModel::redo()
 
     const auto change = d->undoedChanges.takeLast();
     applyPatch(change.redo);
+    saveChanges();
 }
 
 QModelIndex AbstractModel::index(int _row, int _column, const QModelIndex& _parent) const
@@ -225,13 +239,22 @@ const DiffMatchPatchController& AbstractModel::dmpController() const
 
 void AbstractModel::updateDocumentContent()
 {
-    if (!d->isUndoInProgress && !d->isRedoInProgress) {
-        //
-        // Если произошло изменение в самой модели, то очищаем список изменений доступных для повтора
-        //
-        d->undoedChanges.clear();
+    //
+    // В режиме отмены/повтора последнего действия сохранение изменений будет делаться вручную
+    //
+    if (d->isUndoInProgress || d->isRedoInProgress) {
+        return;
     }
 
+    //
+    // Если произошло изменение в самой модели, то очищаем список изменений доступных для повтора
+    //
+    d->undoedChanges.clear();
+    d->undoStep = 0;
+
+    //
+    // Запускаем таймер сохранения изменений
+    //
     d->updateDocumentContentDebouncer.orderWork();
 }
 

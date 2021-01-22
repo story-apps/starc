@@ -760,13 +760,8 @@ void ProjectManager::handleModelChange(BusinessLayer::AbstractModel* _model,
 
 void ProjectManager::undoModelChange(BusinessLayer::AbstractModel* _model, int _undoStep)
 {
-    //
-    // Удваиваем индекс изменения для отмены, т.к. при применении какого-либо из патчей в историю
-    // изменений тут же записывается выполненное изменение
-    //
-    const auto changeIndex = _undoStep * 2;
     const auto change = DataStorageLayer::StorageFacade::documentChangeStorage()->documentChangeAt(
-                            _model->document()->uuid(), changeIndex);
+                            _model->document()->uuid(), _undoStep);
     if (change == nullptr) {
         return;
     }
