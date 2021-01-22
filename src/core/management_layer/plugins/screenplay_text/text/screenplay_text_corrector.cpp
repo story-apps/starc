@@ -1652,7 +1652,14 @@ void ScreenplayTextCorrector::correct(int _position, int _charRemoved, int _char
 
 void ScreenplayTextCorrector::planCorrection(int _position, int _charsRemoved, int _charsAdded)
 {
-    d->plannedCorrection = {true, _position, _charsRemoved, _charsAdded};
+    if (!d->plannedCorrection.isValid) {
+        d->plannedCorrection = {true, _position, _charsRemoved, _charsAdded};
+    } else if (d->plannedCorrection.position > _position) {
+        //
+        // TODO: тут нужно аккуратно расширять область корректировок, чтобы захватить все изменения
+        //
+        d->plannedCorrection.position = _position;
+    }
 }
 
 void ScreenplayTextCorrector::makePlannedCorrection()

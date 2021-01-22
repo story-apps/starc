@@ -1274,7 +1274,8 @@ void ScreenplayTextModel::applyPatch(const QByteArray& _patch)
         oldItemsPlain.removeFirst();
     }
     if (newItemsPlain.size() > 1
-        && newItemsPlain.constFirst()->type() != modelItem->type()) {
+        && newItemsPlain.constFirst()->type() != modelItem->type()
+        && changes.second.from > 0) {
         newItemsPlain.removeFirst();
     }
 
@@ -1364,7 +1365,16 @@ void ScreenplayTextModel::applyPatch(const QByteArray& _patch)
         }
     };
     auto findNextItem = [&findNextItemWithChildren] (ScreenplayTextModelItem* _item) {
-        return findNextItemWithChildren(_item, true);
+        auto nextItem = findNextItemWithChildren(_item, true);
+        //
+        // Пропускаем текстовые декорации, т.к. они не сохраняются в модель
+        //
+        while (nextItem != nullptr
+               && nextItem->type() == ScreenplayTextModelItemType::Text
+               && static_cast<ScreenplayTextModelTextItem*>(nextItem)->isCorrection()) {
+            nextItem = findNextItemWithChildren(nextItem, true);
+        }
+        return nextItem;
     };
     //
     // И применяем их
@@ -1434,16 +1444,17 @@ void ScreenplayTextModel::applyPatch(const QByteArray& _patch)
                         //
                         else {
                             QVector<ScreenplayTextModelItem*> movedItems;
-                            const auto lastRow = modelItemParent->rowOfChild(modelItem);
-                            for (int row = modelItemParent->childCount() - 1; row >= lastRow; --row) {
+                            const auto modelItemRow = modelItemParent->rowOfChild(modelItem);
+                            for (int row = modelItemParent->childCount() - 1; row >= modelItemRow; --row) {
                                 auto movedItem = modelItemParent->childAt(row);
                                 //
                                 // Вытаскиваем из предыдущей родительского элемента только текстовые элементы
                                 // Актуально, когда текст находится на самом верху иерархии документа и не вставлен ни в одну сцену/папку
                                 //
                                 if (movedItem->type() == ScreenplayTextModelItemType::Folder
-                                        || movedItem->type() == ScreenplayTextModelItemType::Scene) {
-                                    break;
+                                    || movedItem->type() == ScreenplayTextModelItemType::Scene) {
+                                    movedItems.clear();
+                                    continue;
                                 }
                                 //
                                 // Завершаем на окончании папки
@@ -1451,11 +1462,17 @@ void ScreenplayTextModel::applyPatch(const QByteArray& _patch)
                                 else if (movedItem->type() == ScreenplayTextModelItemType::Text) {
                                     const auto textItem = static_cast<ScreenplayTextModelTextItem*>(movedItem);
                                     if (textItem->paragraphType() == ScreenplayParagraphType::FolderFooter) {
-                                        break;
+                                        continue;
                                     }
                                 }
-                                takeItem(movedItem, modelItemParent);
                                 movedItems.prepend(movedItem);
+                            }
+
+                            //
+                            // Вытаскиваем перемещаемые элементы из родителя
+                            //
+                            for (auto movedItem : movedItems) {
+                                takeItem(movedItem, modelItemParent);
                             }
 
                             //
@@ -1466,10 +1483,14 @@ void ScreenplayTextModel::applyPatch(const QByteArray& _patch)
                             }
 
                             //
-                            // Если предыдуший родительский элемент папка, то вставляем после заголовка
+                            // Если предыдуший родительский элемент папка, то вставляем на место удаляемого блока
                             //
                             if (modelItemParent->type() == ScreenplayTextModelItemType::Folder) {
-                                insertItem(sceneItem, modelItemParent->childAt(0));
+                                if (modelItemRow == 0) {
+                                    prependItem(sceneItem, modelItemParent);
+                                } else {
+                                    insertItem(sceneItem, modelItemParent->childAt(modelItemRow - 1));
+                                }
                             }
                             //
                             // Если предыдущий родительский элемент - сцена, то вставляем после неё
@@ -1626,6 +1647,9 @@ void ScreenplayTextModel::applyPatch(const QByteArray& _patch)
             }
         }
     }
+    qDeleteAll(oldItems);
+    qDeleteAll(newItems);
+
     emit rowsChanged();
 
 #ifdef XML_CHECKS

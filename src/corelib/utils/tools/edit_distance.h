@@ -6,8 +6,7 @@ namespace edit_distance
 {
 
 //
-// Наивная реализация взята из https://www.geeksforgeeks.org/edit-distance-dp-5/
-// TODO: Использовать более оптимальное решение
+// Реализация взята из https://www.geeksforgeeks.org/edit-distance-dp-5/
 //
 
 enum class OperationType {
@@ -47,65 +46,80 @@ QVector<Operation<T>> minimumDistance(const QVector<Operation<T>>& _x, const QVe
     }
 };
 
-template<typename T>
-QVector<Operation<T>> editDistanceImpl(const QVector<T*>& source, int sourceIndex,
-    const QVector<T*>& target, int targetIndex, const QVector<Operation<T>>& _operations) {
-    auto operations = _operations;
-
-    // If first string is empty, the only option is to
-    // insert all characters of second string into first
-    if (sourceIndex == 0) {
-        for (int index = targetIndex - 1; index >= 0; --index) {
-            operations.prepend({OperationType::Insert, target.at(index)});
-        }
-        return operations;
-    }
-
-    // If second string is empty, the only option is to
-    // remove all characters of first string
-    if (targetIndex == 0) {
-        for (int index = sourceIndex - 1; index >= 0; --index) {
-            operations.prepend({OperationType::Remove, nullptr});
-        }
-        return operations;
-    }
-
-    // If last characters of two strings are same, nothing
-    // much to do. Ignore last characters and get count for
-    // remaining strings.
-    if (source.at(sourceIndex - 1)->isEqual(target.at(targetIndex - 1))) {
-        operations.prepend({OperationType::Skip, nullptr});
-        return editDistanceImpl(source, sourceIndex - 1, target, targetIndex - 1, operations);
-    }
-
-    // If last characters are not same, consider all three
-    // operations on last character of first string,
-    // recursively compute minimum cost for all three
-    // operations and take minimum of three values.
-    auto operationsWithInsert = operations;
-    operationsWithInsert.prepend({OperationType::Insert, target.at(targetIndex - 1)});
-    operationsWithInsert = editDistanceImpl(source, sourceIndex, target, targetIndex - 1, operationsWithInsert);
-    //
-    auto operationsWithRemove = operations;
-    operationsWithRemove.prepend({OperationType::Remove, {}});
-    operationsWithRemove = editDistanceImpl(source, sourceIndex - 1, target, targetIndex, operationsWithRemove);
-    //
-    auto operationsWithReplace = operations;
-    operationsWithReplace.prepend({OperationType::Replace, target.at(targetIndex - 1)});
-    operationsWithReplace = editDistanceImpl(source, sourceIndex - 1, target, targetIndex - 1, operationsWithReplace);
-    //
-    return minimumDistance(operationsWithInsert,
-                           operationsWithRemove,
-                           operationsWithReplace);
-};
-
 } // namespace
 
 
 template<typename T>
 QVector<Operation<T>> editDistance(const QVector<T*>& _source, const QVector<T*>& _target)
 {
-    return editDistanceImpl(_source, _source.size(), _target, _target.size(), {});
+    // Create a DP array to memoize result
+    // of previous computations
+    QVector<QVector<QVector<Operation<T>>>> DP;
+    DP.resize(2);
+    DP[0].resize(_source.size() + 1);
+    DP[1].resize(_source.size() + 1);
+
+    // Base condition when second string
+    // is empty then we remove all characters
+    for (int i = 1; i <= _source.size(); i++) {
+        auto operations = DP[0][i - 1];
+        operations.append({OperationType::Remove, nullptr});
+        DP[0][i] = operations;
+    }
+
+    // Start filling the DP
+    // This loop run for every
+    // character in second string
+    for (int i = 1; i <= _target.size(); i++) {
+        // This loop compares the char from
+        // second string with first string
+        // characters
+        for (int j = 0; j <= _source.size(); j++) {
+            // if first string is empty then
+            // we have to perform add character
+            // operation to get second string
+            if (j == 0) {
+                auto operations = DP[(i - 1) % 2][j];
+                operations.append({OperationType::Insert, _target.at(i - 1)});
+                DP[i % 2][j] = operations;
+            }
+
+            // if character from both string
+            // is same then we do not perform any
+            // operation . here i % 2 is for bound
+            // the row number.
+            else if (_source[j - 1]->isEqual(_target[i - 1])) {
+                auto operations = DP[(i - 1) % 2][j - 1];
+                operations.append({OperationType::Skip, nullptr});
+                DP[i % 2][j] = operations;
+            }
+
+            // if character from both string is
+            // not same then we take the minimum
+            // from three specified operation
+            else {
+                auto operationsWithInsert = DP[(i - 1) % 2][j];
+                operationsWithInsert.append({OperationType::Insert, _target.at(i - 1)});
+                //
+                auto operationsWithRemove = DP[i % 2][j - 1];
+                operationsWithRemove.append({OperationType::Remove, nullptr});
+                //
+                auto operationsWithReplace = DP[(i - 1) % 2][j - 1];
+                operationsWithReplace.append({OperationType::Replace, _target.at(i - 1)});
+                //
+                DP[i % 2][j] = minimumDistance(operationsWithInsert,
+                                               operationsWithRemove,
+                                               operationsWithReplace);
+            }
+        }
+    }
+
+    // after complete fill the DP array
+    // if the len2 is even then we end
+    // up in the 0th row else we end up
+    // in the 1th row so we take len2 % 2
+    // to get row
+    return DP[_target.size() % 2][_source.size()];
 }
 
 } // namespace edit_distance

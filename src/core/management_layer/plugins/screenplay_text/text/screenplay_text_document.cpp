@@ -655,9 +655,26 @@ void ScreenplayTextDocument::setModel(BusinessLayer::ScreenplayTextModel* _model
         cursor.endEditBlock();
     });
     //
-    // После того, как все изменения были выполнены, пробуем скорректировать документ
+    // Группируем массовые изменения, чтобы не мелькать пользователю перед глазами
     //
-    connect(d->model, &ScreenplayTextModel::rowsChanged, this, [this] { d->tryToCorrectDocument(); });
+    connect(d->model, &ScreenplayTextModel::rowsAboutToBeChanged, this, [this] {
+        ScreenplayTextCursor(this).beginEditBlock();
+    });
+    connect(d->model, &ScreenplayTextModel::rowsChanged, this, [this] {
+        //
+        // Завершаем групповое изменение, но при этом обходим стороной корректировки документа,
+        // т.к. всё это происходило в модели и документ уже находится в синхронизированном с
+        // моделью состоянии
+        //
+        d->state = DocumentState::Changing;
+        ScreenplayTextCursor(this).endEditBlock();
+        d->state = DocumentState::Ready;
+
+        //
+        // После того, как все изменения были выполнены, пробуем скорректировать документ
+        //
+        d->tryToCorrectDocument();
+    });
 
     d->state = DocumentState::Ready;
 
