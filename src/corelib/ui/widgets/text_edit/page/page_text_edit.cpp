@@ -3449,6 +3449,7 @@ void PageTextEdit::ensureCursorVisible(const QTextCursor& _cursor, bool _animate
         if (delta < 1) {
             delta = 1;
         }
+        d->m_scrollAnimation.stop();
         d->m_scrollAnimation.setDuration(static_cast<int>(300 * delta));
         d->m_scrollAnimation.setStartValue(lastVbarValue);
         d->m_scrollAnimation.setEndValue(std::min(nextVbarValue, d->vbar->maximum()));
