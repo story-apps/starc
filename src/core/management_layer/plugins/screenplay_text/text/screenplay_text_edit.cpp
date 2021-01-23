@@ -695,6 +695,31 @@ void ScreenplayTextEdit::paintEvent(QPaintEvent* _event)
 //                        painter.setPen(palette().text().color());
 //                    }
 
+//                    //
+//                    // Новый способ отрисовки
+//                    //
+//                    //
+//                    // Определим область для отрисовки и выведем номер сцены в редактор в зависимости от стороны
+//                    //
+//                    QPointF topLeft(isLeftToRight
+//                                    ? pageLeft + leftDelta
+//                                    : textRight + leftDelta,
+//                                    cursorR.top());
+//                    QPointF bottomRight(isLeftToRight
+//                                        ? textLeft + leftDelta
+//                                        : pageRight + leftDelta,
+//                                        cursorR.bottom());
+//                    QRectF rect(topLeft, bottomRight);
+//                    rect.adjust(38, 0, 0, 0);
+//                    painter.setFont(DesignSystem::font().iconsMid());
+//                    const int size = painter.fontMetrics().lineSpacing();
+//                    QRectF circle(rect.left() - size, rect.top() - size, size * 3, size * 3);
+//                    painter.setBrush(ColorHelper::transparent(palette().text().color(), Ui::DesignSystem::hoverBackgroundOpacity()));
+//                    painter.setPen(Qt::NoPen);
+//                    painter.drawRect(circle);
+//                    painter.setPen(palette().text().color());
+//                    painter.drawText(rect, Qt::AlignLeft | Qt::AlignTop, u8"\U000F024B");
+
                     //
                     // Прорисовка декораций пустой строки
                     //
@@ -785,32 +810,27 @@ void ScreenplayTextEdit::paintEvent(QPaintEvent* _event)
                     // Прорисовка декораций непустых строк
                     //
                     else {
-//                        //
-//                        // Прорисовка значков папки (можно использовать для закладок)
-//                        //
-//                        if (blockType == ScreenplayParagraphType::FolderHeader) {
-//                            //
-//                            // Определим область для отрисовки и выведем номер сцены в редактор в зависимости от стороны
-//                            //
-//                            QPointF topLeft(isLeftToRight
-//                                            ? pageLeft + leftDelta
-//                                            : textRight + leftDelta,
-//                                            cursorR.top());
-//                            QPointF bottomRight(isLeftToRight
-//                                                ? textLeft + leftDelta
-//                                                : pageRight + leftDelta,
-//                                                cursorR.bottom());
-//                            QRectF rect(topLeft, bottomRight);
-//                            rect.adjust(38, 0, 0, 0);
-//                            painter.setFont(DesignSystem::font().iconsMid());
-//                            const int size = painter.fontMetrics().lineSpacing();
-//                            QRectF circle(rect.left() - size, rect.top() - size, size * 3, size * 3);
-//                            painter.setBrush(ColorHelper::transparent(palette().text().color(), Ui::DesignSystem::hoverBackgroundOpacity()));
-//                            painter.setPen(Qt::NoPen);
-//                            painter.drawRect(circle);
-//                            painter.setPen(palette().text().color());
-//                            painter.drawText(rect, Qt::AlignLeft | Qt::AlignTop, u8"\U000F024B");
-//                        }
+                        //
+                        // Прорисовка значков папки (можно использовать для закладок)
+                        //
+                        if (blockType == ScreenplayParagraphType::FolderHeader) {
+                            //
+                            // Определим область для отрисовки и выведем номер сцены в редактор в зависимости от стороны
+                            //
+                            QPointF topLeft(isLeftToRight
+                                            ? pageLeft + leftDelta
+                                            : textRight + leftDelta,
+                                            cursorR.top());
+                            QPointF bottomRight(isLeftToRight
+                                                ? textLeft + leftDelta
+                                                : pageRight + leftDelta,
+                                                cursorR.bottom());
+                            QRectF rect(topLeft, bottomRight);
+                            rect.adjust(0, -4, - QFontMetricsF(cursor.charFormat().font()).horizontalAdvance(".")/2, 0);
+                            painter.setFont(DesignSystem::font().iconsBig());
+                            painter.setPen(palette().text().color());
+                            painter.drawText(rect, Qt::AlignRight | Qt::AlignTop, u8"\U000F024B");
+                        }
                         //
                         // Прорисовка номеров сцен, если необходимо
                         //
