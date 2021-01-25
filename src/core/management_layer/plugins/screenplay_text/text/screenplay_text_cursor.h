@@ -61,7 +61,7 @@ private:
         int headers = 0;
         int footers = 0;
     };
-    FoldersToDelete findGroupCountsToDelete(int _topCursorPosition, int _bottomCursorPosition);
+    FoldersToDelete findFoldersToDelete(int _topCursorPosition, int _bottomCursorPosition, bool isTopBlockShouldBeRemoved);
 
     /**
      * @brief Удалить пары стёртых групп
@@ -69,7 +69,7 @@ private:
      * @param _groupHeadersCount
      * @param _groupFootersCount
      */
-    void removeGroupsPairs(int _cursorPosition, const FoldersToDelete& _groupCountsToDelete);
+    void removeGroupsPairs(int _cursorPosition, const FoldersToDelete& _foldersToDelete);
 };
 
 } // namespace Ui

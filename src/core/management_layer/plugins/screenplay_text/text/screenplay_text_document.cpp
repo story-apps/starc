@@ -1249,8 +1249,13 @@ void ScreenplayTextDocument::updateModelOnContentChange(int _position, int _char
                 bool needToDeleteParent = false;
                 if (item->type() == ScreenplayTextModelItemType::Text) {
                     const auto textItem = static_cast<ScreenplayTextModelTextItem*>(item);
+                    //
+                    // ... т.к. при удалении папки удаляются и заголовок и конец, но удаляются они
+                    //     последовательно сверху вниз, то удалять непосредственно папку будем,
+                    //     когда дойдём до обработки именно конца папки
+                    //
                     needToDeleteParent
-                            = textItem->paragraphType() == ScreenplayParagraphType::FolderHeader
+                            = textItem->paragraphType() == ScreenplayParagraphType::FolderFooter
                               || textItem->paragraphType() == ScreenplayParagraphType::SceneHeading;
                 }
 
@@ -1349,7 +1354,7 @@ void ScreenplayTextDocument::updateModelOnContentChange(int _position, int _char
                             while (nextItem != nullptr
                                    && (nextItem->type() == ScreenplayTextModelItemType::Text
                                        || nextItem->type() == ScreenplayTextModelItemType::Splitter)) {
-                                d->model->takeItem(nextItem);
+                                d->model->takeItem(nextItem, nextItem->parent());
                                 d->model->appendItem(nextItem, previousItem);
                                 nextItem = previousItem->parent()->childAt(nextItemRow);
                             }
