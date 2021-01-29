@@ -1267,59 +1267,44 @@ void ScreenplayTextModel::applyPatch(const QByteArray& _patch)
     auto modelItem = findStartItem(d->rootItem);
 
     //
-    // Если была вставлена сцена или папка, при формализации xml, опустим этот элемент
+    // Если были вставлены сцены или папки при балансировке xml, опустим их
     //
-    if (oldItemsPlain.size() > 1
-        && oldItemsPlain.constFirst()->type() != modelItem->type()) {
+    while (oldItemsPlain.size() > 1
+           && oldItemsPlain.constFirst()->type() != modelItem->type()) {
         oldItemsPlain.removeFirst();
     }
-    if (newItemsPlain.size() > 1
-        && newItemsPlain.constFirst()->type() != modelItem->type()
-        && changes.second.from > 0) {
+    while (newItemsPlain.size() > 1
+           && newItemsPlain.constFirst()->type() != modelItem->type()
+           && changes.second.from > 0) {
         newItemsPlain.removeFirst();
+    }
+
+    //
+    // Подгрузим информацию о родительских элементах, если они были вставлены при балансировке
+    //
+    if (oldItemsPlain.constFirst()->isEqual(modelItem)) {
+        auto oldItemParent = oldItemsPlain.first()->parent();
+        auto modelItemParent = modelItem->parent();
+        while (oldItemParent != nullptr) {
+            oldItemParent->copyFrom(modelItemParent);
+            oldItemParent = oldItemParent->parent();
+            modelItemParent = modelItemParent->parent();
+        }
+    }
+    if (newItemsPlain.constFirst()->isEqual(modelItem)) {
+        auto newItemParent = newItemsPlain.first()->parent();
+        auto modelItemParent = modelItem->parent();
+        while (newItemParent != nullptr) {
+            newItemParent->copyFrom(modelItemParent);
+            newItemParent = newItemParent->parent();
+            modelItemParent = modelItemParent->parent();
+        }
     }
 
     //
     // Определим необходимые операции для применения изменения
     //
     const auto operations = edit_distance::editDistance(oldItemsPlain, newItemsPlain);
-    //
-    auto findPreviousItem = [] (ScreenplayTextModelItem* _item) -> ScreenplayTextModelItem*
-    {
-        if (_item == nullptr) {
-            return nullptr;
-        }
-
-        if (!_item->hasParent()) {
-            return nullptr;
-        }
-        auto parent = _item->parent();
-
-        auto itemIndex = parent->rowOfChild(_item);
-        if (itemIndex < 0 || itemIndex >= parent->childCount()) {
-            return nullptr;
-        }
-
-        //
-        // Не первый в родителе
-        //
-        if (itemIndex > 0) {
-            //
-            // Берём последний вложенный элемент в предыдущий элемент в родителе исходного
-            //
-            auto previousItem = parent->childAt(itemIndex - 1);
-            while (previousItem->hasChildren()) {
-                previousItem = previousItem->childAt(previousItem->childCount() - 1);
-            }
-            return previousItem;
-        }
-        //
-        // Первый в родителе
-        //
-        else {
-            return parent;
-        }
-    };
     //
     std::function<ScreenplayTextModelItem*(ScreenplayTextModelItem*, bool)> findNextItemWithChildren;
     findNextItemWithChildren = [&findNextItemWithChildren] (ScreenplayTextModelItem* _item, bool _searchInChildren) -> ScreenplayTextModelItem*
@@ -1380,273 +1365,285 @@ void ScreenplayTextModel::applyPatch(const QByteArray& _patch)
     // И применяем их
     //
     emit rowsAboutToBeChanged();
-    for (auto operation : operations) {
+    ScreenplayTextModelItem* previousModelItem = nullptr;
+    auto updateItemPlacement = [this, &modelItem, &previousModelItem, newItemsPlain]
+                               (ScreenplayTextModelItem* _newItem, ScreenplayTextModelItem* _item)
+    {
+        //
+        // Определим предыдущий элемент из списка новых, в дальнейшем будем опираться
+        // на его расположение относительно текущего нового
+        //
+        const auto newItemIndex = newItemsPlain.indexOf(_newItem);
+        ScreenplayTextModelItem* previousNewItem = newItemIndex > 0
+                                                   ? newItemsPlain.at(newItemIndex - 1)
+                                                   : nullptr;
+        //
+        // У элемента нет родителя, то это вставка нового элемента
+        //
+        if (!_item->hasParent()) {
+            //
+            // И это первый из вставляемых
+            //
+            if (previousNewItem == nullptr) {
+                const int modelItemIndex = modelItem->parent()->rowOfChild(modelItem);
+                //
+                // Если нужно вставить перед первым элементом, то это случай вставки в начало документа
+                //
+                if (modelItemIndex == 0) {
+                    prependItem(_item);
+                }
+                //
+                // Иначе вставим перед элементом модели
+                //
+                else {
+                    insertItem(_item, modelItem->parent()->childAt(modelItemIndex - 1));
+                }
+            }
+            //
+            // А если он не первый из вставляемых
+            //
+            else {
+                Q_ASSERT(previousNewItem->isEqual(previousModelItem));
+                //
+                // Если у текущего нового и предыдущего нет родителя, то они на одном уровне,
+                // вставим после предыдущего
+                //
+                if ((!_newItem->hasParent() && !previousNewItem->hasParent())
+                    || (_newItem->hasParent() && previousNewItem->hasParent()
+                        && _newItem->parent() == previousNewItem->parent())) {
+                    insertItem(_item, previousModelItem);
+                }
+                //
+                // Если предыдущий новый является родителем текущего
+                //
+                else if (_newItem->parent() == previousNewItem) {
+                    prependItem(_item, previousModelItem);
+                }
+                //
+                // Если у предыдущего есть родитель, то нужно определить смещение
+                //
+                else {
+                    auto previousNewItemParent = previousNewItem->parent()->parent();
+                    auto insertAfterItem = previousModelItem->parent(); // этот на один уровень опаздывает за предыдущим
+                    while (previousNewItemParent != _newItem->parent()) {
+                        previousNewItemParent = previousNewItemParent->parent();
+                        insertAfterItem = insertAfterItem->parent();
+                    }
+
+                    insertItem(_item, insertAfterItem);
+
+//                    //
+//                    // И вытаскиваем все последующие элементы в модели на уровень вставки
+//                    //
+//                    auto modelItemParent = modelItem->parent();
+//                    const int modelItemIndex = modelItemParent->rowOfChild(modelItem);
+//                    while (modelItemParent->childCount() > modelItemIndex) {
+//                        auto childItem = modelItemParent->childAt(modelItemParent->childCount() - 1);
+//                        takeItem(childItem, modelItemParent);
+//                        insertItem(childItem, _item);
+//                    }
+                }
+            }
+        }
+        //
+        // А если у элемента есть родитель, то это обновление существующего в модели
+        //
+        else {
+            Q_ASSERT(_item->isEqual(modelItem));
+
+            //
+            // Первый из обновлённых элементов просто пропускаем
+            //
+            if (previousNewItem == nullptr) {
+                return false;
+            }
+
+            //
+            // А если это не первый из обновляемых элементов
+            //
+            Q_ASSERT(previousNewItem->isEqual(previousModelItem));
+
+            //
+            // Если должен находиться на том же уровне, что и предыдущий
+            //
+            if ((!_newItem->hasParent() && !previousNewItem->hasParent())
+                || (_newItem->hasParent() && previousNewItem->hasParent()
+                    && _newItem->parent() == previousNewItem->parent())) {
+                //
+                // ... и находится, то ничего не делаем
+                //
+                if (_item->parent()->isEqual(previousModelItem->parent())) {
+                    return false;
+                }
+
+                //
+                // ... а если не находится, то корректируем
+                //
+                takeItem(_item, _item->parent());
+                insertItem(_item, previousModelItem);
+            }
+            //
+            // Если предыдущий должен быть родителем текущего
+            //
+            else if (_newItem->parent() == previousNewItem) {
+                //
+                // ... и является, то ничего не делаем
+                //
+                if (_item->parent() == previousModelItem) {
+                    return false;
+                }
+
+                //
+                // ... а если родитель, другой, то просто перемещаем элемент внутрь предыдушего
+                //
+                takeItem(_item, _item->parent());
+                prependItem(_item, previousModelItem);
+            }
+            //
+            // Если должен находиться на разных уровнях
+            //
+            else {
+                auto previousNewItemParent = previousNewItem->parent()->parent();
+                auto insertAfterItem = previousModelItem->parent(); // этот на один уровень опаздывает за предыдущим
+                while (previousNewItemParent != _newItem->parent()) {
+                    previousNewItemParent = previousNewItemParent->parent();
+                    insertAfterItem = insertAfterItem->parent();
+                }
+
+                //
+                // ... и находится по месту, то ничего не делаем
+                //
+                if (_item->parent()->isEqual(insertAfterItem->parent())) {
+                    return false;
+                }
+
+                //
+                // ... а если не там где должен быть, то корректируем структуру
+                //
+
+                auto modelItemParent = modelItem->parent();
+                const int modelItemIndex = modelItemParent->rowOfChild(modelItem);
+
+                takeItem(_item, _item->parent());
+                insertItem(_item, insertAfterItem);
+
+                //
+                // И вытаскиваем все последующие элементы в модели на уровень вставки
+                //
+                while (modelItemParent->childCount() > modelItemIndex) {
+                    auto childItem = modelItemParent->childAt(modelItemParent->childCount() - 1);
+                    takeItem(childItem, modelItemParent);
+                    insertItem(childItem, _item);
+                }
+            }
+        }
+
+        return true;
+    };
+
+
+    for (const auto& operation : operations) {
         auto newItem = operation.value;
         switch (operation.type) {
             case edit_distance::OperationType::Skip: {
+                //
+                // Корректируем позицию
+                //
+                updateItemPlacement(newItem, modelItem);
+                //
+                // ... и просто переходим к следующему элементу
+                //
+                previousModelItem = modelItem;
                 modelItem = findNextItem(modelItem);
-                break;
-            }
-
-            case edit_distance::OperationType::Insert: {
-                //
-                // Добавляем папку
-                //
-                if (newItem->type() == ScreenplayTextModelItemType::Folder) {
-//                    auto modelItemParent = modelItem->parent();
-//                    takeItem(modelItem, modelItemParent);
-
-//                    auto folder = new ScreenplayTextModelFolderItem;
-//                    folder->copyFrom(newItem);
-//                    folder->appendItem(modelItem);
-
-//                    insertItem(folder, modelItemParent);
-                }
-                //
-                // Добавляем сцену
-                //
-                else if (newItem->type() == ScreenplayTextModelItemType::Scene) {
-                    auto sceneItem = new ScreenplayTextModelSceneItem;
-                    sceneItem->copyFrom(newItem);
-
-                    //
-                    // Если вставляем в конец документа
-                    //
-                    if (modelItem == nullptr) {
-                        appendItem(sceneItem);
-                    }
-                    //
-                    // А если не в конец, то
-                    //
-                    else {
-                        auto modelItemParent = modelItem->parent();
-                        //
-                        // ... если сцена вставляется перед папкой или сценой
-                        //
-                        if (modelItem->type() == ScreenplayTextModelItemType::Folder
-                            || modelItem->type() == ScreenplayTextModelItemType::Scene) {
-                            //
-                            // ... в начало папки
-                            //
-                            if (modelItemParent->rowOfChild(modelItem) == 0) {
-                                prependItem(sceneItem, modelItemParent);
-                            }
-                            //
-                            // ... в середину папки
-                            //
-                            else {
-                                auto previousModelItem = modelItemParent->childAt(modelItemParent->rowOfChild(modelItem) - 1);
-                                insertItem(sceneItem, previousModelItem);
-                            }
-                        }
-                        //
-                        // ... если сцена вставляется посреди текста
-                        //
-                        else {
-                            QVector<ScreenplayTextModelItem*> movedItems;
-                            const auto modelItemRow = modelItemParent->rowOfChild(modelItem);
-                            for (int row = modelItemParent->childCount() - 1; row >= modelItemRow; --row) {
-                                auto movedItem = modelItemParent->childAt(row);
-                                //
-                                // Вытаскиваем из предыдущей родительского элемента только текстовые элементы
-                                // Актуально, когда текст находится на самом верху иерархии документа и не вставлен ни в одну сцену/папку
-                                //
-                                if (movedItem->type() == ScreenplayTextModelItemType::Folder
-                                    || movedItem->type() == ScreenplayTextModelItemType::Scene) {
-                                    movedItems.clear();
-                                    continue;
-                                }
-                                //
-                                // Завершаем на окончании папки
-                                //
-                                else if (movedItem->type() == ScreenplayTextModelItemType::Text) {
-                                    const auto textItem = static_cast<ScreenplayTextModelTextItem*>(movedItem);
-                                    if (textItem->paragraphType() == ScreenplayParagraphType::FolderFooter) {
-                                        continue;
-                                    }
-                                }
-                                movedItems.prepend(movedItem);
-                            }
-
-                            //
-                            // Вытаскиваем перемещаемые элементы из родителя
-                            //
-                            for (auto movedItem : movedItems) {
-                                takeItem(movedItem, modelItemParent);
-                            }
-
-                            //
-                            // Переносим элементы внутрь добавляемой сцены
-                            //
-                            for (auto movedItem : movedItems) {
-                                sceneItem->appendItem(movedItem);
-                            }
-
-                            //
-                            // Если предыдуший родительский элемент папка, то вставляем на место удаляемого блока
-                            //
-                            if (modelItemParent->type() == ScreenplayTextModelItemType::Folder) {
-                                if (modelItemRow == 0) {
-                                    prependItem(sceneItem, modelItemParent);
-                                } else {
-                                    insertItem(sceneItem, modelItemParent->childAt(modelItemRow - 1));
-                                }
-                            }
-                            //
-                            // Если предыдущий родительский элемент - сцена, то вставляем после неё
-                            //
-                            else {
-                                insertItem(sceneItem, modelItemParent);
-                            }
-                        }
-                    }
-                }
-                //
-                // Добавляем текстовый блок/разделитель
-                //
-                else {
-                    ScreenplayTextModelItem* addedItem = nullptr;
-                    if (newItem->type() == ScreenplayTextModelItemType::Splitter) {
-                        auto splitterItem = static_cast<ScreenplayTextModelSplitterItem*>(newItem);
-                        addedItem = new ScreenplayTextModelSplitterItem(splitterItem->splitterType());
-                    } else {
-                        addedItem = new ScreenplayTextModelTextItem;
-                    }
-                    addedItem->copyFrom(newItem);
-
-                    //
-                    // Если вставляется в конец документа
-                    //
-                    if (modelItem == nullptr) {
-                        auto lastRootChild = d->rootItem->childAt(d->rootItem->childCount() - 1);
-                        //
-                        // Если в конце идёт сцена, то вставить в её конец
-                        //
-                        if (lastRootChild->type() == ScreenplayTextModelItemType::Scene) {
-                            appendItem(addedItem, lastRootChild);
-                        }
-                        //
-                        // В остальных случаях в конец документа
-                        //
-                        else {
-                            appendItem(addedItem);
-                        }
-                    }
-                    //
-                    // А если не в конец, то
-                    //
-                    else {
-                        auto previousModelItem = findPreviousItem(modelItem);
-                        //
-                        // ... если блок вставляется в начало папки или сцены
-                        //
-                        if (previousModelItem->type() == ScreenplayTextModelItemType::Folder
-                            || previousModelItem->type() == ScreenplayTextModelItemType::Scene) {
-                            prependItem(addedItem, previousModelItem);
-                        }
-                        //
-                        // ... если блок вставляется посередине папки или сцены
-                        //
-                        else {
-                            insertItem(addedItem, previousModelItem);
-                        }
-                    }
-                }
                 break;
             }
 
             case edit_distance::OperationType::Remove: {
                 //
-                // Если в элементе есть дети, нужно вынести их в конец или после предыдущего элемента
+                // Выносим детей на предыдущий уровень
                 //
-                if (modelItem->type() == ScreenplayTextModelItemType::Folder) {
-                    Q_ASSERT(false);
+                while (modelItem->hasChildren()) {
+                    auto childItem = modelItem->childAt(modelItem->childCount() - 1);
+                    takeItem(childItem, modelItem);
+                    insertItem(childItem, modelItem);
                 }
                 //
-                // Удаляем сцену
+                // ... и удаляем сам элемент
                 //
-                else if (modelItem->type() == ScreenplayTextModelItemType::Scene) {
-                    QVector<ScreenplayTextModelItem*> movedItems;
-                    while (modelItem->hasChildren()) {
-                        auto movedItem = modelItem->childAt(0);
-                        takeItem(movedItem, modelItem);
-                        movedItems.append(movedItem);
+                auto nextItem = findNextItem(modelItem);
+                removeItem(modelItem);
+                modelItem = nextItem;
+                break;
+            }
+
+            case edit_distance::OperationType::Insert: {
+                //
+                // Создаём новый элемент
+                //
+                ScreenplayTextModelItem* itemToInsert = nullptr;
+                switch (newItem->type()) {
+                    case ScreenplayTextModelItemType::Folder: {
+                        itemToInsert = new ScreenplayTextModelFolderItem;
+                        break;
                     }
 
-                    auto previousItem = findPreviousItem(modelItem);
-                    removeItem(modelItem);
-
-                    //
-                    // Если сцена удаляется в начале документа
-                    //
-                    if (previousItem->type() == ScreenplayTextModelItemType::Folder
-                        || previousItem->type() == ScreenplayTextModelItemType::Scene) {
-                        for (auto movedItem : reversed(movedItems)) {
-                            prependItem(movedItem);
-                        }
-                    }
-                    //
-                    // Если сцена удаляется в середине документа
-                    //
-                    else if (previousItem->type() == ScreenplayTextModelItemType::Text) {
-                        const auto textItem = static_cast<ScreenplayTextModelTextItem*>(previousItem);
-                        //
-                        // Если сцена удаляется после папки, то вынесем все вложенные элементы
-                        // на уровень самой папки, но после неё
-                        //
-                        if (textItem->paragraphType() == ScreenplayParagraphType::FolderFooter) {
-                            previousItem = previousItem->parent();
-                        }
-                        //
-                        // В остальных случаях, содержимое папки вставляется в предыдущего родителя,
-                        // после идучего перед папкой элемента
-                        //
-
-                        for (auto movedItem : movedItems) {
-                            insertItem(movedItem, previousItem);
-                            previousItem = movedItem;
-                        }
-                    }
-                    //
-                    // В остальных случаях
-                    //
-                    else {
-                        for (auto movedItem : movedItems) {
-                            insertItem(movedItem, previousItem);
-                            previousItem = movedItem;
-                        }
+                    case ScreenplayTextModelItemType::Scene: {
+                        itemToInsert = new ScreenplayTextModelSceneItem;
+                        break;
                     }
 
-                    modelItem = movedItems.constFirst();
+                    case ScreenplayTextModelItemType::Text: {
+                        itemToInsert = new ScreenplayTextModelTextItem;
+                        break;
+                    }
+
+                    case ScreenplayTextModelItemType::Splitter: {
+                        itemToInsert = new ScreenplayTextModelSplitterItem(
+                                           static_cast<ScreenplayTextModelSplitterItem*>(newItem)
+                                           ->splitterType());
+                        break;
+                    }
                 }
+                itemToInsert->copyFrom(newItem);
+
                 //
-                // А если детей нет, то просто удаляем элемент
+                // ... и вставляем в нужного родителя
                 //
-                else {
-                    auto nextModelItem = findNextItem(modelItem);
-                    removeItem(modelItem);
-                    modelItem = nextModelItem;
-                }
+                updateItemPlacement(newItem, itemToInsert);
+
+                previousModelItem = itemToInsert;
                 break;
             }
 
             case edit_distance::OperationType::Replace: {
                 //
-                // Если элементы одного типа - это изменение текущего элемента
+                // Обновляем элемент
                 //
-                if (modelItem->type() == newItem->type()) {
+                Q_ASSERT(modelItem->type() == newItem->type());
+                if (!modelItem->isEqual(newItem)) {
                     modelItem->copyFrom(newItem);
-                    updateItem(modelItem);
-                    modelItem = findNextItem(modelItem);
                 }
 
-                else {
-                    Q_ASSERT(false);
+                auto nextItem = findNextItem(modelItem);
+
+                //
+                // Если элемент был перемещён, скорректируем его позицию
+                //
+                const auto isPlacementChanged = updateItemPlacement(newItem, modelItem);
+                //
+                // В противном случае просто обновим его в модели
+                //
+                if (!isPlacementChanged) {
+                    updateItem(modelItem);
                 }
+
+                previousModelItem = modelItem;
+                modelItem = nextItem;
                 break;
             }
         }
     }
+
     qDeleteAll(oldItems);
     qDeleteAll(newItems);
 

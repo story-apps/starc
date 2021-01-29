@@ -1287,7 +1287,7 @@ void ScreenplayTextDocument::updateModelOnContentChange(int _position, int _char
                     ScreenplayTextModelItem* lastMovedItem = nullptr;
                     while (itemParent->childCount() > 0) {
                         auto childItem = itemParent->childAt(0);
-                        itemParent->takeItem(childItem);
+                        d->model->takeItem(childItem, itemParent);
 
                         //
                         // Папки и сцены переносим на один уровень с текущим элементом

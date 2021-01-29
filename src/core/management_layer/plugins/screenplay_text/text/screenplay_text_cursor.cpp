@@ -236,14 +236,36 @@ void ScreenplayTextCursor::removeCharacters(bool _backward, Ui::ScreenplayTextEd
     ScreenplayTextBlockData* targetBlockData = nullptr;
     bool isTopBlockShouldBeRemoved = false;
     //
+    // Если пользователь хочет удалить пустую папку, расширим выделение, чтобы полностью её удалить
+    //
+    if (topParagraphType == ScreenplayParagraphType::FolderHeader
+        && bottomParagraphType == ScreenplayParagraphType::FolderFooter
+        && topBlock.next() == bottomBlock) {
+        if (bottomBlock.next() == document()->end()) {
+            cursor.setPosition(topBlock.position());
+            cursor.movePosition(QTextCursor::PreviousBlock);
+            cursor.movePosition(QTextCursor::EndOfBlock);
+            topCursorPosition = cursor.position();
+        } else {
+            cursor.setPosition(bottomBlock.position());
+            cursor.movePosition(QTextCursor::NextBlock);
+            bottomCursorPosition = cursor.position();
+            isTopBlockShouldBeRemoved = true;
+        }
+        const QTextBlock targetBlock = cursor.block();
+        const auto targetBlockType = ScreenplayBlockStyle::forBlock(targetBlock);
+        targetStyle = ScreenplayTemplateFacade::getTemplate().blockStyle(targetBlockType);
+        targetBlockData = cloneBlockData(targetBlock);
+    }
+    //
     // Если в верхнем блоке нет текста, а в нижнем есть
     // Или верхний блок полностью удаляется, а нижний не полностью
     //
-    if ((topBlock.text().isEmpty()
-         && !bottomBlock.text().isEmpty())
-        || (topBlock.position() == topCursorPosition
-            && topBlock.position() + topBlock.text().length() < bottomCursorPosition
-            && bottomBlock.position() + bottomBlock.text().length() > bottomCursorPosition)) {
+    else if ((topBlock.text().isEmpty()
+              && !bottomBlock.text().isEmpty())
+             || (topBlock.position() == topCursorPosition
+                 && topBlock.position() + topBlock.text().length() < bottomCursorPosition
+                 && bottomBlock.position() + bottomBlock.text().length() > bottomCursorPosition)) {
         //
         // ... то результирующим стилем будет стиль нижнего блока
         //
@@ -270,7 +292,8 @@ void ScreenplayTextCursor::removeCharacters(bool _backward, Ui::ScreenplayTextEd
         //
         const bool needToDeleteGroups = topBlock != bottomBlock;
         if (needToDeleteGroups) {
-            foldersToDelete = findFoldersToDelete(topCursorPosition, bottomCursorPosition, isTopBlockShouldBeRemoved);
+            foldersToDelete = findFoldersToDelete(topCursorPosition, bottomCursorPosition,
+                                                  isTopBlockShouldBeRemoved);
         }
 
         //
@@ -290,35 +313,7 @@ void ScreenplayTextCursor::removeCharacters(bool _backward, Ui::ScreenplayTextEd
         // Удалить вторые половинки группирующих элементов
         //
         if (needToDeleteGroups) {
-            removeGroupsPairs(cursor.position(), foldersToDelete);
-        }
-    }
-
-    //
-    // Если и верхний и нижний блоки являются началом и концом папки,
-    //
-    if (topParagraphType == ScreenplayParagraphType::FolderHeader
-        && bottomParagraphType == ScreenplayParagraphType::FolderFooter) {
-        //
-        // ... то ничего не делаем, весь мусорный текст был удалён выше
-        //
-    }
-    //
-    // Применим финальный стиль
-    //
-    else {
-        //
-        // Если стиль последнего абзаца сменился при удалении, корректируем его
-        //
-        if (_editor->currentParagraphType() != targetStyle.type()) {
-            _editor->setCurrentParagraphType(targetStyle.type());
-        }
-        //
-        // В противном случае, при удалении, формат текста остаётся от предыдущего блока,
-        // поэтому перезапишем его корректным форматом
-        //
-        else {
-            cursor.setBlockCharFormat(targetStyle.charFormat());
+            removeGroupsPairs(cursor.position(), foldersToDelete, isTopBlockShouldBeRemoved);
         }
     }
 
@@ -364,7 +359,18 @@ ScreenplayTextCursor::FoldersToDelete ScreenplayTextCursor::findFoldersToDelete(
         // Если найден блок открывающий папку, то нужно удалить закрывающий блок
         //
         if (currentType == ScreenplayParagraphType::FolderHeader) {
-            ++foldersToDelete.footers;
+            //
+            // ... если все группы закрыты, нужно удалить последующую закрытую
+            //
+            if (foldersToDelete.headers == 0) {
+                ++foldersToDelete.footers;
+            }
+            //
+            // ... в противном случае закрываем открытую группу
+            //
+            else {
+                --foldersToDelete.headers;
+            }
         }
         //
         // Если найден блок закрывающий папку
@@ -400,18 +406,26 @@ ScreenplayTextCursor::FoldersToDelete ScreenplayTextCursor::findFoldersToDelete(
     return foldersToDelete;
 }
 
-void ScreenplayTextCursor::removeGroupsPairs(int _cursorPosition, const ScreenplayTextCursor::FoldersToDelete& _foldersToDelete)
+void ScreenplayTextCursor::removeGroupsPairs(int _cursorPosition,
+    const ScreenplayTextCursor::FoldersToDelete& _foldersToDelete, bool isTopBlockShouldBeRemoved)
 {
     //
     // Удалим пары из последующего текста
-    //
-    // ... папки
     //
     if (_foldersToDelete.footers > 0) {
         QTextCursor cursor(document());
         cursor.setPosition(_cursorPosition);
 
+        //
+        // Если первый блок не будет удалён, то пропускаем его, т.к. он остаётся с текущим стилем
+        //
+        if (!isTopBlockShouldBeRemoved) {
+            cursor.movePosition(QTextCursor::NextBlock);
+        }
+
+        //
         // ... открытые группы на пути поиска необходимого для удаления блока
+        //
         int openedGroups = 0;
         int groupsToDeleteCount = _foldersToDelete.footers;
         do {
@@ -463,13 +477,20 @@ void ScreenplayTextCursor::removeGroupsPairs(int _cursorPosition, const Screenpl
     //
     // Удалим пары из предшествующего текста
     //
-    // ... папки
-    //
     if (_foldersToDelete.headers > 0) {
         QTextCursor cursor(document());
         cursor.setPosition(_cursorPosition);
 
+        //
+        // Если первый блок не будет удалён, то пропускаем его, т.к. он остаётся с текущим стилем
+        //
+        if (!isTopBlockShouldBeRemoved) {
+            cursor.movePosition(QTextCursor::NextBlock);
+        }
+
+        //
         // ... открытые группы на пути поиска необходимого для удаления блока
+        //
         int openedGroups = 0;
         int groupsToDeleteCount = _foldersToDelete.headers;
         do {

@@ -20,8 +20,6 @@ namespace BusinessLayer
 class ScreenplayTextModelFolderItem::Implementation
 {
 public:
-    Implementation();
-
     /**
      * @brief Идентификатор папки
      */
@@ -42,11 +40,6 @@ public:
     std::chrono::milliseconds duration = std::chrono::milliseconds{0};
 };
 
-ScreenplayTextModelFolderItem::Implementation::Implementation()
-    : uuid(QUuid::createUuid())
-{
-}
-
 
 // ****
 
@@ -55,6 +48,7 @@ ScreenplayTextModelFolderItem::ScreenplayTextModelFolderItem()
     : ScreenplayTextModelItem(ScreenplayTextModelItemType::Folder),
       d(new Implementation)
 {
+    d->uuid = QUuid::createUuid();
 }
 
 ScreenplayTextModelFolderItem::ScreenplayTextModelFolderItem(QXmlStreamReader& _contentReader)
@@ -63,9 +57,9 @@ ScreenplayTextModelFolderItem::ScreenplayTextModelFolderItem(QXmlStreamReader& _
 {
     Q_ASSERT(_contentReader.name() == xml::kFolderTag);
 
-    d->uuid = _contentReader.attributes().hasAttribute(xml::kUuidAttribute)
-              ? _contentReader.attributes().value(xml::kUuidAttribute).toString()
-              : QUuid::createUuid();
+    if (_contentReader.attributes().hasAttribute(xml::kUuidAttribute)) {
+        d->uuid = _contentReader.attributes().value(xml::kUuidAttribute).toString();
+    }
     auto currentTag = xml::readNextElement(_contentReader); // content
 
     if (currentTag == xml::kContentTag) {
@@ -253,7 +247,8 @@ void ScreenplayTextModelFolderItem::copyFrom(ScreenplayTextModelItem* _item)
 
 bool ScreenplayTextModelFolderItem::isEqual(ScreenplayTextModelItem* _item) const
 {
-    if (type() != _item->type()) {
+    if (_item == nullptr
+        || type() != _item->type()) {
         return false;
     }
 

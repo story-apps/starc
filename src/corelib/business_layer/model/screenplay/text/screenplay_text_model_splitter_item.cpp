@@ -81,7 +81,8 @@ void ScreenplayTextModelSplitterItem::copyFrom(ScreenplayTextModelItem* _item)
 
 bool ScreenplayTextModelSplitterItem::isEqual(ScreenplayTextModelItem* _item) const
 {
-    if (type() != _item->type()) {
+    if (_item == nullptr
+        || type() != _item->type()) {
         return false;
     }
 

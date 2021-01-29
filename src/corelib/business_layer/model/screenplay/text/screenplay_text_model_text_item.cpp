@@ -819,7 +819,8 @@ void ScreenplayTextModelTextItem::copyFrom(ScreenplayTextModelItem* _item)
 
 bool ScreenplayTextModelTextItem::isEqual(ScreenplayTextModelItem* _item) const
 {
-    if (type() != _item->type()) {
+    if (_item == nullptr
+        || type() != _item->type()) {
         return false;
     }
 

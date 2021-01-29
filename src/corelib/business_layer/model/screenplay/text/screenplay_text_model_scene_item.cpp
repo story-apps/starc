@@ -21,9 +21,6 @@ namespace BusinessLayer
 class ScreenplayTextModelSceneItem::Implementation
 {
 public:
-    Implementation();
-
-
     /**
      * @brief Идентификатор сцены
      */
@@ -79,11 +76,6 @@ public:
     std::chrono::milliseconds duration = std::chrono::milliseconds{0};
 };
 
-ScreenplayTextModelSceneItem::Implementation::Implementation()
-    : uuid(QUuid::createUuid())
-{
-}
-
 
 // ****
 
@@ -97,6 +89,7 @@ ScreenplayTextModelSceneItem::ScreenplayTextModelSceneItem()
     : ScreenplayTextModelItem(ScreenplayTextModelItemType::Scene),
       d(new Implementation)
 {
+    d->uuid = QUuid::createUuid();
 }
 
 ScreenplayTextModelSceneItem::ScreenplayTextModelSceneItem(QXmlStreamReader& _contentReader)
@@ -106,9 +99,10 @@ ScreenplayTextModelSceneItem::ScreenplayTextModelSceneItem(QXmlStreamReader& _co
     Q_ASSERT(_contentReader.name() == xml::kSceneTag);
 
     const auto attributes = _contentReader.attributes();
-    d->uuid = attributes.hasAttribute(xml::kUuidAttribute)
-              ? attributes.value(xml::kUuidAttribute).toString()
-              : QUuid::createUuid();
+    if (attributes.hasAttribute(xml::kUuidAttribute)) {
+        d->uuid = attributes.value(xml::kUuidAttribute).toString();
+    }
+
     //
     // TODO: plots
     //
@@ -345,14 +339,18 @@ void ScreenplayTextModelSceneItem::copyFrom(ScreenplayTextModelItem* _item)
 
 bool ScreenplayTextModelSceneItem::isEqual(ScreenplayTextModelItem* _item) const
 {
-    if (type() != _item->type()) {
+    if (_item == nullptr
+        || type() != _item->type()) {
         return false;
     }
 
     const auto sceneItem = static_cast<ScreenplayTextModelSceneItem*>(_item);
     return d->uuid == sceneItem->d->uuid
             && d->isOmited == sceneItem->d->isOmited
-            && d->number == sceneItem->d->number
+            //
+            // TODO: тут нужно сравнивать, только когда номера зафиксированы
+            //
+//            && d->number == sceneItem->d->number
             && d->stamp == sceneItem->d->stamp
             && d->plannedDuration == sceneItem->d->plannedDuration;
 }

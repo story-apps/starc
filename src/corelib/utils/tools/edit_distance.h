@@ -30,7 +30,11 @@ QVector<Operation<T>> minimumDistance(const QVector<Operation<T>>& _x, const QVe
     auto operationWeight = [] (const QVector<Operation<T>>& _operations) {
         int weight = 0;
         for (const auto& operation : _operations) {
-            weight += operation.weight;
+            //
+            // Из-за того, что для некоторых кейсов вес может быть максимальным значением int,
+            // берём максимум, чтобы не было переполнения
+            //
+            weight = std::max(weight + operation.weight, operation.weight);
         }
         return weight;
     };
@@ -38,14 +42,39 @@ QVector<Operation<T>> minimumDistance(const QVector<Operation<T>>& _x, const QVe
     const auto xWeight = operationWeight(_x);
     const auto yWeight = operationWeight(_y);
     const auto zWeight = operationWeight(_z);
-    if (xWeight < yWeight && xWeight < zWeight) {
+    const auto minimumWeight = std::min({ xWeight, yWeight, zWeight });
+    if (minimumWeight == xWeight) {
         return _x;
-    } else if (yWeight < xWeight && yWeight < zWeight) {
+    } else if (minimumWeight == yWeight) {
         return _y;
     } else {
         return _z;
     }
 };
+
+template<typename T>
+bool isItemsParentsEqual(T* _lhs, T* _rhs) {
+    return (_lhs->parent() == nullptr && _rhs->parent() == nullptr)
+            || (_lhs->parent() != nullptr && _rhs->parent() != nullptr && _lhs->parent()->isEqual(_rhs->parent()));
+}
+
+template<typename T>
+bool isItemsEqual(T* _lhs, T* _rhs) {
+    return _lhs->isEqual(_rhs)
+            && isItemsParentsEqual(_lhs, _rhs);
+}
+
+template<typename T>
+int replaceOperationWeight(T* _lhs, T* _rhs) {
+    //
+    // Исключаем замену элементов разных типов
+    //
+    if (_lhs->type() != _rhs->type()) {
+        return std::numeric_limits<int>::max();
+    }
+
+    return 1;
+}
 
 } // namespace
 
@@ -89,9 +118,9 @@ QVector<Operation<T>> editDistance(const QVector<T*>& _source, const QVector<T*>
             // is same then we do not perform any
             // operation . here i % 2 is for bound
             // the row number.
-            else if (_source[j - 1]->isEqual(_target[i - 1])) {
+            else if (isItemsEqual(_source[j - 1], _target[i - 1])) {
                 auto operations = DP[(i - 1) % 2][j - 1];
-                operations.append({OperationType::Skip, nullptr, 0});
+                operations.append({OperationType::Skip, _target[i - 1], 0});
                 DP[i % 2][j] = operations;
             }
 
@@ -107,9 +136,7 @@ QVector<Operation<T>> editDistance(const QVector<T*>& _source, const QVector<T*>
                 //
                 auto operationsWithReplace = DP[(i - 1) % 2][j - 1];
                 operationsWithReplace.append({OperationType::Replace, _target[i - 1],
-                                              // ... предпочитаем замене элементов разного типа
-                                              //     операции вставки/удаления
-                                              _source[j - 1]->type() == _target[i - 1]->type() ? 1 : 2});
+                                              replaceOperationWeight(_source[j - 1], _target[i - 1])});
                 //
                 DP[i % 2][j] = minimumDistance(operationsWithInsert,
                                                operationsWithRemove,
