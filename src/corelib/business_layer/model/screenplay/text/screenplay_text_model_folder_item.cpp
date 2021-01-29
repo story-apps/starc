@@ -264,18 +264,24 @@ void ScreenplayTextModelFolderItem::handleChange()
     for (int childIndex = 0; childIndex < childCount(); ++childIndex) {
         auto child = childAt(childIndex);
         switch (child->type()) {
-            case ScreenplayTextModelItemType::Text: {
-                auto childTextItem = static_cast<ScreenplayTextModelTextItem*>(child);
-                if (childTextItem->paragraphType() == ScreenplayParagraphType::FolderHeader) {
-                    d->name = TextHelper::smartToUpper(childTextItem->text());
-                }
-                d->duration += childTextItem->duration();
+            case ScreenplayTextModelItemType::Folder: {
+                auto childItem = static_cast<ScreenplayTextModelFolderItem*>(child);
+                d->duration += childItem->duration();
                 break;
             }
 
             case ScreenplayTextModelItemType::Scene: {
-                auto childSceneItem = static_cast<ScreenplayTextModelSceneItem*>(child);
-                d->duration += childSceneItem->duration();
+                auto childItem = static_cast<ScreenplayTextModelSceneItem*>(child);
+                d->duration += childItem->duration();
+                break;
+            }
+
+            case ScreenplayTextModelItemType::Text: {
+                auto childItem = static_cast<ScreenplayTextModelTextItem*>(child);
+                if (childItem->paragraphType() == ScreenplayParagraphType::FolderHeader) {
+                    d->name = TextHelper::smartToUpper(childItem->text());
+                }
+                d->duration += childItem->duration();
                 break;
             }
 
