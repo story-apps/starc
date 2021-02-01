@@ -11,7 +11,9 @@ QT += concurrent widgets multimedia network
 
 TARGET = coreplugin
 
-include(../cloud/cloud.pri)
+exists("../cloud/cloud.pri") {
+    include(../cloud/cloud.pri)
+}
 
 DEFINES += CORE_PLUGIN
 DEFINES += QT_DEPRECATED_WARNINGS
