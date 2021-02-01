@@ -168,7 +168,7 @@ void CircleFillAnimator::hideDecorator()
     hideAnimation->setDuration(200);
     hideAnimation->setStartValue(1.);
     hideAnimation->setEndValue(0.);
-    connect(hideAnimation, &QPropertyAnimation::finished, [=] {
+    connect(hideAnimation, &QPropertyAnimation::finished, [this, &hideEffect] {
         m_decorator->hide();
         hideEffect->setOpacity(1.);
     });

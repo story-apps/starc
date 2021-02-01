@@ -56,7 +56,7 @@ SlideAnimator::SlideAnimator(QWidget* _widgetForSlide) :
     //
     // Корректировки размера по завершению
     //
-    connect(m_animation, &QPropertyAnimation::finished, [=] {
+    connect(m_animation, &QPropertyAnimation::finished, [this] {
         setAnimatedStopped();
         m_decorator->hide();
     });

@@ -52,7 +52,7 @@ Application::Application(int& _argc, char** _argv)
     // Настроим таймер определения простоя приложения
     //
     d->idleTimer.setInterval(std::chrono::seconds{3});
-    connect(&d->idleTimer, &QTimer::timeout, [=] {
+    connect(&d->idleTimer, &QTimer::timeout, [this] {
         if (d->applicationManager != nullptr) {
             postEvent(d->applicationManager, new IdleEvent);
         }
