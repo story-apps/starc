@@ -299,6 +299,9 @@ bool ScreenplayTextSearchToolbar::eventFilter(QObject* _watched, QEvent* _event)
                     && !d->searchText->text().isEmpty()) {
                     emit findTextRequested();
                 }
+                else if (keyEvent->key() == Qt::Key_Escape) {
+                    emit closePressed();
+                }
             }
             break;
         }
