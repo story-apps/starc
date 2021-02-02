@@ -15,22 +15,20 @@ INCLUDEPATH += ..
 # Подключаем библиотеку fileformats
 #
 LIBS += -L$$DESTDIR/libs/ -lfileformats
-win32:QMAKE_LFLAGS += /WHOLEARCHIVE:$$DESTDIR/libs/fileformats.lib
+win32-msvc*:QMAKE_LFLAGS += /WHOLEARCHIVE:$$DESTDIR/libs/fileformats.lib
 
 INCLUDEPATH += $$PWD/../3rd_party/fileformats
 DEPENDPATH += $$PWD/../3rd_party/fileformats
 PRE_TARGETDEPS += $$PWD/../3rd_party/fileformats
 
-mac {
-     LIBS += -lz
-}
+mac:LIBS += -lz
 #
 
 #
 # Подключаем библиотеку HUNSPELL
 #
 LIBS += -L$$DESTDIR/libs/ -lhunspell
-win32:QMAKE_LFLAGS += /WHOLEARCHIVE:$$DESTDIR/libs/hunspell.lib
+win32-msvc*:QMAKE_LFLAGS += /WHOLEARCHIVE:$$DESTDIR/libs/hunspell.lib
 
 INCLUDEPATH += $$PWD/../3rd_party/hunspell/src
 DEPENDPATH += $$PWD/../3rd_party/hunspell
@@ -41,7 +39,7 @@ PRE_TARGETDEPS += $$PWD/../3rd_party/hunspell
 # Подключаем библиотеку qgumboparser
 #
 LIBS += -L$$DESTDIR/libs/ -lqgumboparser
-win32:QMAKE_LFLAGS += /WHOLEARCHIVE:$$DESTDIR/libs/qgumboparser.lib
+win32-msvc*:QMAKE_LFLAGS += /WHOLEARCHIVE:$$DESTDIR/libs/qgumboparser.lib
 
 INCLUDEPATH += $$PWD/../3rd_party/qgumboparser
 DEPENDPATH += $$PWD/../3rd_party/qgumboparser

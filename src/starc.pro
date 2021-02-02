@@ -36,7 +36,7 @@ TRANSLATIONS += \
 #
 # Настраиваем вывод в консоль в Windows в нормальной кодировке
 #
-win32 {
+win32-msvc* {
     QMAKE_EXTRA_TARGETS += before_build makefilehook
 
     makefilehook.target = $(MAKEFILE)

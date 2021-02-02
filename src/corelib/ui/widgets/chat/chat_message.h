@@ -8,7 +8,7 @@
 /**
  * @brief Сообщение чата
  */
-class ChatMessage
+class CORE_LIBRARY_EXPORT ChatMessage
 {
 public:
     ChatMessage();

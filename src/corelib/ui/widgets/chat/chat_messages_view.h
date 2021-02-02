@@ -9,7 +9,7 @@ class User;
 /**
  * @brief Отрисовщик списка сообщений чата
  */
-class ChatMessagesView : public Widget
+class CORE_LIBRARY_EXPORT ChatMessagesView : public Widget
 {
     Q_OBJECT
 

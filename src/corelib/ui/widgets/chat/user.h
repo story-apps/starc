@@ -1,5 +1,7 @@
 #pragma once
 
+#include <corelib_global.h>
+
 #include <QScopedPointer>
 
 class QColor;
@@ -7,7 +9,7 @@ class QColor;
 /**
  * @brief Пользователь
  */
-class User
+class CORE_LIBRARY_EXPORT User
 {
 public:
     User();
