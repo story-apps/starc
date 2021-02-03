@@ -8,7 +8,7 @@
 #include <QPainter>
 #include <QPaintEvent>
 #include <QVariantAnimation>
-
+#include <QApplication>
 
 class RadioButton::Implementation
 {
@@ -114,12 +114,39 @@ void RadioButton::paintEvent(QPaintEvent* _event)
     //
     painter.fillRect(_event->rect(), backgroundColor());
 
+    qreal textRectX;
+    qreal textWidth;
+    QRectF textRect;
+    QRectF iconRect;
+
+    if (QApplication::layoutDirection() == Qt::RightToLeft) {
+        textRectX = Ui::DesignSystem::radioButton().margins().left();
+        textWidth = width() -
+                    Ui::DesignSystem::radioButton().iconSize().width() -
+                    Ui::DesignSystem::radioButton().margins().left() -
+                    Ui::DesignSystem::radioButton().margins().right();
+
+        textRect.setRect(textRectX, 0, textWidth, sizeHint().height());
+        iconRect.setRect(textRectX + textWidth +
+                         Ui::DesignSystem::radioButton().spacing(),
+                         Ui::DesignSystem::radioButton().margins().top(),
+                         Ui::DesignSystem::radioButton().iconSize().width(),
+                         Ui::DesignSystem::radioButton().iconSize().height());
+    }
+    else {
+        iconRect.setRect(Ui::DesignSystem::radioButton().margins().left(),
+                         Ui::DesignSystem::radioButton().margins().top(),
+                         Ui::DesignSystem::radioButton().iconSize().width(),
+                         Ui::DesignSystem::radioButton().iconSize().height());
+
+        textRectX = iconRect.right() + Ui::DesignSystem::radioButton().spacing();
+        textWidth = width() - textRectX;
+        textRect.setRect(textRectX, 0, width() - textRectX, sizeHint().height());
+
+    }
     //
     // Рисуем декорацию переключателя
     //
-    const QRectF iconRect(QPointF(Ui::DesignSystem::radioButton().margins().left(),
-                                  Ui::DesignSystem::radioButton().margins().top()),
-                          Ui::DesignSystem::radioButton().iconSize());
     if (d->decorationRadiusAnimation.state() == QVariantAnimation::Running
         || d->decorationOpacityAnimation.state() == QVariantAnimation::Running) {
         painter.setPen(Qt::NoPen);
@@ -129,7 +156,6 @@ void RadioButton::paintEvent(QPaintEvent* _event)
                             d->decorationRadiusAnimation.currentValue().toReal());
         painter.setOpacity(1.0);
     }
-
     //
     // Рисуем сам переключатель
     //
@@ -140,16 +166,13 @@ void RadioButton::paintEvent(QPaintEvent* _event)
                      ? Ui::DesignSystem::color().secondary()
                      : textColor());
     painter.drawText(iconRect, Qt::AlignCenter, d->isChecked ? u8"\U000f043e" : u8"\U000f043d");
-
     //
-    // Рисуем текст
+    //Текст
     //
     painter.setFont(Ui::DesignSystem::font().subtitle1());
     painter.setPen(isEnabled()
                    ? textColor()
                    : ColorHelper::transparent(textColor(), Ui::DesignSystem::disabledTextOpacity()));
-    const qreal textRectX = iconRect.right() + Ui::DesignSystem::radioButton().spacing();
-    const QRectF textRect(textRectX, 0, width() - textRectX, sizeHint().height());
     painter.drawText(textRect, Qt::AlignLeft | Qt::AlignVCenter, d->text);
 }
 
