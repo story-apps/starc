@@ -8,7 +8,6 @@
 #include <QPainter>
 #include <QPaintEvent>
 #include <QVariantAnimation>
-#include <QApplication>
 
 class RadioButton::Implementation
 {
@@ -114,26 +113,12 @@ void RadioButton::paintEvent(QPaintEvent* _event)
     //
     painter.fillRect(_event->rect(), backgroundColor());
 
-    qreal textRectX;
-    qreal textWidth;
+    qreal textRectX = 0;
+    qreal textWidth = 0;
     QRectF textRect;
     QRectF iconRect;
 
-    if (QApplication::layoutDirection() == Qt::RightToLeft) {
-        textRectX = Ui::DesignSystem::radioButton().margins().left();
-        textWidth = width() -
-                    Ui::DesignSystem::radioButton().iconSize().width() -
-                    Ui::DesignSystem::radioButton().margins().left() -
-                    Ui::DesignSystem::radioButton().margins().right();
-
-        textRect.setRect(textRectX, 0, textWidth, sizeHint().height());
-        iconRect.setRect(textRectX + textWidth +
-                         Ui::DesignSystem::radioButton().spacing(),
-                         Ui::DesignSystem::radioButton().margins().top(),
-                         Ui::DesignSystem::radioButton().iconSize().width(),
-                         Ui::DesignSystem::radioButton().iconSize().height());
-    }
-    else {
+    if (layoutDirection() == Qt::LeftToRight) {
         iconRect.setRect(Ui::DesignSystem::radioButton().margins().left(),
                          Ui::DesignSystem::radioButton().margins().top(),
                          Ui::DesignSystem::radioButton().iconSize().width(),
@@ -142,7 +127,21 @@ void RadioButton::paintEvent(QPaintEvent* _event)
         textRectX = iconRect.right() + Ui::DesignSystem::radioButton().spacing();
         textWidth = width() - textRectX;
         textRect.setRect(textRectX, 0, width() - textRectX, sizeHint().height());
+    }
+    else {
+        textRectX = Ui::DesignSystem::radioButton().margins().left();
+        textWidth = width()
+                       -Ui::DesignSystem::radioButton().margins().left()
+                       -Ui::DesignSystem::radioButton().spacing()
+                       -Ui::DesignSystem::radioButton().iconSize().width()
+                       -Ui::DesignSystem::radioButton().margins().right();
 
+        textRect.setRect(textRectX, 0, textWidth, sizeHint().height());
+        iconRect.setRect(textRectX + textWidth +
+                         Ui::DesignSystem::radioButton().spacing(),
+                         Ui::DesignSystem::radioButton().margins().top(),
+                         Ui::DesignSystem::radioButton().iconSize().width(),
+                         Ui::DesignSystem::radioButton().iconSize().height());
     }
     //
     // Рисуем декорацию переключателя
@@ -167,7 +166,7 @@ void RadioButton::paintEvent(QPaintEvent* _event)
                      : textColor());
     painter.drawText(iconRect, Qt::AlignCenter, d->isChecked ? u8"\U000f043e" : u8"\U000f043d");
     //
-    //Текст
+    // Текст
     //
     painter.setFont(Ui::DesignSystem::font().subtitle1());
     painter.setPen(isEnabled()
