@@ -71,6 +71,11 @@ void Widget::setVisible(bool _visible)
     }
 }
 
+bool Widget::isLeftToRight() const
+{
+    return layoutDirection() == Qt::LeftToRight;
+}
+
 bool Widget::event(QEvent* _event)
 {
     switch (static_cast<int>(_event->type())) {

@@ -118,7 +118,7 @@ void RadioButton::paintEvent(QPaintEvent* _event)
     QRectF textRect;
     QRectF iconRect;
 
-    if (layoutDirection() == Qt::LeftToRight) {
+    if (isLeftToRight()) {
         iconRect.setRect(Ui::DesignSystem::radioButton().margins().left(),
                          Ui::DesignSystem::radioButton().margins().top(),
                          Ui::DesignSystem::radioButton().iconSize().width(),
@@ -127,18 +127,17 @@ void RadioButton::paintEvent(QPaintEvent* _event)
         textRectX = iconRect.right() + Ui::DesignSystem::radioButton().spacing();
         textWidth = width() - textRectX;
         textRect.setRect(textRectX, 0, width() - textRectX, sizeHint().height());
-    }
-    else {
+    } else {
         textRectX = Ui::DesignSystem::radioButton().margins().left();
         textWidth = width()
-                       -Ui::DesignSystem::radioButton().margins().left()
-                       -Ui::DesignSystem::radioButton().spacing()
-                       -Ui::DesignSystem::radioButton().iconSize().width()
-                       -Ui::DesignSystem::radioButton().margins().right();
+                    - Ui::DesignSystem::radioButton().margins().left()
+                    - Ui::DesignSystem::radioButton().spacing()
+                    - Ui::DesignSystem::radioButton().iconSize().width()
+                    - Ui::DesignSystem::radioButton().margins().right();
 
         textRect.setRect(textRectX, 0, textWidth, sizeHint().height());
-        iconRect.setRect(textRectX + textWidth +
-                         Ui::DesignSystem::radioButton().spacing(),
+        iconRect.setRect(textRectX + textWidth
+                         + Ui::DesignSystem::radioButton().spacing(),
                          Ui::DesignSystem::radioButton().margins().top(),
                          Ui::DesignSystem::radioButton().iconSize().width(),
                          Ui::DesignSystem::radioButton().iconSize().height());

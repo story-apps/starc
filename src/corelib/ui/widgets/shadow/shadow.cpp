@@ -75,16 +75,31 @@ void Shadow::paintEvent(QPaintEvent* _event)
 
     switch (m_edge) {
         default:
-        case Qt::LeftEdge: {
-            auto x = lineWidth / 2;
-            painter.setOpacity(0.4);
-            painter.drawLine(QPointF(x, 0.0), QPointF(x, height()));
-            x += lineWidth;
-            painter.setOpacity(0.2);
-            painter.drawLine(QPointF(x, 0.0), QPointF(x, height()));
-            x += lineWidth;
-            painter.setOpacity(0.1);
-            painter.drawLine(QPointF(x, 0.0), QPointF(x, height()));
+        case Qt::LeftEdge:
+        case Qt::RightEdge: {
+            if ((m_edge == Qt::LeftEdge && isLeftToRight())
+                || (m_edge == Qt::RightEdge && !isLeftToRight())) {
+                auto x = lineWidth / 2;
+                painter.setOpacity(0.4);
+                painter.drawLine(QPointF(x, 0.0), QPointF(x, height()));
+                x += lineWidth;
+                painter.setOpacity(0.2);
+                painter.drawLine(QPointF(x, 0.0), QPointF(x, height()));
+                x += lineWidth;
+                painter.setOpacity(0.1);
+                painter.drawLine(QPointF(x, 0.0), QPointF(x, height()));
+            } else {
+                auto x = width() - lineWidth / 2;
+                painter.setOpacity(0.4);
+                painter.drawLine(QPointF(x, 0.0), QPointF(x, height()));
+                x -= lineWidth;
+                painter.setOpacity(0.2);
+                painter.drawLine(QPointF(x, 0.0), QPointF(x, height()));
+                x -= lineWidth;
+                painter.setOpacity(0.1);
+                painter.drawLine(QPointF(x, 0.0), QPointF(x, height()));
+            }
+
             break;
         }
 
@@ -98,19 +113,6 @@ void Shadow::paintEvent(QPaintEvent* _event)
             y += lineWidth;
             painter.setOpacity(0.1);
             painter.drawLine(QPointF(0.0, y), QPointF(width(), y));
-            break;
-        }
-
-        case Qt::RightEdge: {
-            auto x = width() - lineWidth / 2;
-            painter.setOpacity(0.4);
-            painter.drawLine(QPointF(x, 0.0), QPointF(x, height()));
-            x -= lineWidth;
-            painter.setOpacity(0.2);
-            painter.drawLine(QPointF(x, 0.0), QPointF(x, height()));
-            x -= lineWidth;
-            painter.setOpacity(0.1);
-            painter.drawLine(QPointF(x, 0.0), QPointF(x, height()));
             break;
         }
 
@@ -149,22 +151,23 @@ void Shadow::refreshGeometry()
     const int shadowWidth = qCeil(Ui::DesignSystem::scaleFactor() * 3);
     switch (m_edge) {
         default:
-        case Qt::LeftEdge: {
-            height = parentWidget()->height();
-            width = shadowWidth;
+        case Qt::LeftEdge:
+        case Qt::RightEdge: {
+            if ((m_edge == Qt::LeftEdge && isLeftToRight())
+                || (m_edge == Qt::RightEdge && !isLeftToRight())) {
+                height = parentWidget()->height();
+                width = shadowWidth;
+            } else {
+                x = parentWidget()->width() - shadowWidth;
+                height = parentWidget()->height();
+                width = shadowWidth;
+            }
             break;
         }
 
         case Qt::TopEdge: {
             height = shadowWidth;
             width = parentWidget()->width();
-            break;
-        }
-
-        case Qt::RightEdge: {
-            x = parentWidget()->width() - shadowWidth;
-            height = parentWidget()->height();
-            width = shadowWidth;
             break;
         }
 

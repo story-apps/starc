@@ -35,6 +35,11 @@ public:
      */
     void setVisible(bool _visible) override;
 
+    /**
+     * @brief Должел ли быть виджет скомпонован для письма слева направо (true) или справа налево (false)
+     */
+    bool isLeftToRight() const;
+
 signals:
     /**
      * @brief Виджет был показан
