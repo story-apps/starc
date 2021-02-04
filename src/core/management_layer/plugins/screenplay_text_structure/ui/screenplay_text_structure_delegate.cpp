@@ -21,6 +21,11 @@ class ScreenplayTextStructureDelegate::Implementation
 {
 public:
     /**
+     * @brief Нарисовать хронометраж
+     */
+    QRectF paintDuration(QPainter* _painter, const QStyleOptionViewItem& _option, const QModelIndex& _index) const;
+
+    /**
      * @brief Нарисовать папку
      */
     void paintFolder(QPainter* _painter, const QStyleOptionViewItem& _option, const QModelIndex& _index) const;
@@ -44,6 +49,28 @@ public:
     bool showSceneNumber = true;
     int textLines = 2;
 };
+
+QRectF ScreenplayTextStructureDelegate::Implementation::paintDuration(QPainter* _painter, const QStyleOptionViewItem& _option, const QModelIndex& _index) const
+{
+    using namespace BusinessLayer;
+
+    const auto textColor = _option.palette.color(QPalette::Text);
+    _painter->setPen(textColor);
+    _painter->setFont(Ui::DesignSystem::font().body2());
+
+    const std::chrono::seconds duration{_index.data(ScreenplayTextModelSceneItem::SceneDurationRole).toInt()};
+    const auto durationText = QString("(%1)").arg(TimeHelper::toString(duration));
+    const qreal durationWidth = _painter->fontMetrics().horizontalAdvance(durationText);
+
+    const QRectF backgroundRect = _option.rect;
+    const QRectF durationRect(QPointF(backgroundRect.right() - durationWidth - Ui::DesignSystem::treeOneLineItem().margins().right(),
+                                           backgroundRect.top() + Ui::DesignSystem::layout().px16()),
+                                   QSizeF(durationWidth,
+                                          Ui::DesignSystem::layout().px24()));
+    _painter->drawText(durationRect, Qt::AlignLeft | Qt::AlignVCenter, durationText);
+
+    return durationRect;
+}
 
 void ScreenplayTextStructureDelegate::Implementation::paintFolder(QPainter* _painter, const QStyleOptionViewItem& _option, const QModelIndex& _index) const
 {
@@ -101,12 +128,17 @@ void ScreenplayTextStructureDelegate::Implementation::paintFolder(QPainter* _pai
     }
 
     //
+    // ... хронометраж
+    //
+    const auto folderDurationRect = paintDuration(_painter, _option, _index);
+
+    //
     // ... название папки
     //
     _painter->setFont(Ui::DesignSystem::font().subtitle2());
     _painter->setPen(textColor);
     const qreal folderNameLeft = iconRect.right() + Ui::DesignSystem::layout().px4();
-    const qreal folderNameWidth = backgroundRect.right() - folderNameLeft - Ui::DesignSystem::treeOneLineItem().margins().right();
+    const qreal folderNameWidth = folderDurationRect.left() - folderNameLeft - Ui::DesignSystem::treeOneLineItem().spacing();
     const QRectF folderNameRect(QPointF(folderNameLeft, backgroundRect.top() + Ui::DesignSystem::layout().px16()),
                                 QSizeF(folderNameWidth, Ui::DesignSystem::layout().px24()));
     const auto folderName = _painter->fontMetrics().elidedText(
@@ -174,17 +206,7 @@ void ScreenplayTextStructureDelegate::Implementation::paintScene(QPainter* _pain
     //
     // ... хронометраж
     //
-    _painter->setPen(textColor);
-    _painter->setFont(Ui::DesignSystem::font().body2());
-    const std::chrono::seconds sceneDuration{_index.data(ScreenplayTextModelSceneItem::SceneDurationRole).toInt()};
-    const auto sceneDurationText = QString("(%1)").arg(TimeHelper::toString(sceneDuration));
-    const qreal sceneDurationWidth = _painter->fontMetrics().horizontalAdvance(sceneDurationText);
-    const QRectF sceneDurationRect(QPointF(backgroundRect.right() - sceneDurationWidth - Ui::DesignSystem::treeOneLineItem().margins().right(),
-                                           backgroundRect.top() + Ui::DesignSystem::layout().px16()),
-                                   QSizeF(sceneDurationWidth,
-                                          Ui::DesignSystem::layout().px24()));
-    _painter->drawText(sceneDurationRect, Qt::AlignLeft | Qt::AlignVCenter, sceneDurationText);
-
+    const auto sceneDurationRect = paintDuration(_painter, _option, _index);
 
     //
     // ... заголовок сцены
