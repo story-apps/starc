@@ -24,6 +24,7 @@ public:
      */
     enum DataRole {
         FolderNameRole = Qt::UserRole + 1,
+        FolderDurationRole
     };
 
 public:

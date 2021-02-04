@@ -23,7 +23,7 @@ public:
     /**
      * @brief Нарисовать хронометраж
      */
-    QRectF paintDuration(QPainter* _painter, const QStyleOptionViewItem& _option, const QModelIndex& _index) const;
+    QRectF paintDuration(QPainter* _painter, const QStyleOptionViewItem& _option, const std::chrono::seconds& _duration) const;
 
     /**
      * @brief Нарисовать папку
@@ -50,7 +50,7 @@ public:
     int textLines = 2;
 };
 
-QRectF ScreenplayTextStructureDelegate::Implementation::paintDuration(QPainter* _painter, const QStyleOptionViewItem& _option, const QModelIndex& _index) const
+QRectF ScreenplayTextStructureDelegate::Implementation::paintDuration(QPainter* _painter, const QStyleOptionViewItem& _option, const std::chrono::seconds& _duration) const
 {
     using namespace BusinessLayer;
 
@@ -58,8 +58,7 @@ QRectF ScreenplayTextStructureDelegate::Implementation::paintDuration(QPainter* 
     _painter->setPen(textColor);
     _painter->setFont(Ui::DesignSystem::font().body2());
 
-    const std::chrono::seconds duration{_index.data(ScreenplayTextModelSceneItem::SceneDurationRole).toInt()};
-    const auto durationText = QString("(%1)").arg(TimeHelper::toString(duration));
+    const auto durationText = QString("(%1)").arg(TimeHelper::toString(_duration));
     const qreal durationWidth = _painter->fontMetrics().horizontalAdvance(durationText);
 
     const QRectF backgroundRect = _option.rect;
@@ -130,7 +129,8 @@ void ScreenplayTextStructureDelegate::Implementation::paintFolder(QPainter* _pai
     //
     // ... хронометраж
     //
-    const auto folderDurationRect = paintDuration(_painter, _option, _index);
+    const std::chrono::seconds duration{_index.data(ScreenplayTextModelFolderItem::FolderDurationRole).toInt()};
+    const auto folderDurationRect = paintDuration(_painter, _option, duration);
 
     //
     // ... название папки
@@ -206,7 +206,8 @@ void ScreenplayTextStructureDelegate::Implementation::paintScene(QPainter* _pain
     //
     // ... хронометраж
     //
-    const auto sceneDurationRect = paintDuration(_painter, _option, _index);
+    const std::chrono::seconds duration{_index.data(ScreenplayTextModelSceneItem::SceneDurationRole).toInt()};
+    const auto sceneDurationRect = paintDuration(_painter, _option, duration);
 
     //
     // ... заголовок сцены

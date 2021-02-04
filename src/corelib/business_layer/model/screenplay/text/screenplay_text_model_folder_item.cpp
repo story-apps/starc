@@ -122,6 +122,11 @@ QVariant ScreenplayTextModelFolderItem::data(int _role) const
             return d->name;
         }
 
+        case FolderDurationRole: {
+            const int duration = std::chrono::duration_cast<std::chrono::seconds>(d->duration).count();
+            return duration;
+        }
+
         default: {
             return ScreenplayTextModelItem::data(_role);
         }
