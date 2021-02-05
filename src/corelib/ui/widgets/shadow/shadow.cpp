@@ -78,7 +78,7 @@ void Shadow::paintEvent(QPaintEvent* _event)
         case Qt::LeftEdge:
         case Qt::RightEdge: {
             if ((m_edge == Qt::LeftEdge && isLeftToRight())
-                || (m_edge == Qt::RightEdge && !isLeftToRight())) {
+                || (m_edge == Qt::RightEdge && isRightToLeft())) {
                 auto x = lineWidth / 2;
                 painter.setOpacity(0.4);
                 painter.drawLine(QPointF(x, 0.0), QPointF(x, height()));
@@ -154,7 +154,7 @@ void Shadow::refreshGeometry()
         case Qt::LeftEdge:
         case Qt::RightEdge: {
             if ((m_edge == Qt::LeftEdge && isLeftToRight())
-                || (m_edge == Qt::RightEdge && !isLeftToRight())) {
+                || (m_edge == Qt::RightEdge && isRightToLeft())) {
                 height = parentWidget()->height();
                 width = shadowWidth;
             } else {

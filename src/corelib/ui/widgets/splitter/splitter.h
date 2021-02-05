@@ -1,14 +1,12 @@
 #pragma once
 
-#include <corelib_global.h>
-
-#include <QSplitter>
+#include "../widget/widget.h"
 
 
 /**
- * @brief Виджет сплитер
+ * @brief Виджет-контейнер для разделения двух вложенных виджетов и настройки их размера
  */
-class CORE_LIBRARY_EXPORT Splitter : public QSplitter
+class CORE_LIBRARY_EXPORT Splitter : public Widget
 {
     Q_OBJECT
 
@@ -17,15 +15,40 @@ public:
     ~Splitter() override;
 
     /**
-     * @brief Задать цвет фона разделителя
+     * @brief Задать виджеты в контейнер
      */
-    void setHandleColor(const QColor& _color);
+    void setWidgets(QWidget* _first, QWidget* _second);
+
+    /**
+     * @brief Установить пропорции вложенных виджетов
+     */
+    void setSizes(const QVector<int>& _sizes);
+
+    /**
+     * @brief Сохранить текущее состояние
+     */
+    QByteArray saveState() const;
+
+    /**
+     * @brief Загрузить состояние
+     */
+    void restoreState(const QByteArray& _state);
 
 protected:
     /**
-     * @brief Переопределяем метод создания разделителя, чтобы создать собственный
+     * @brief Переопределяем для корректировки вложенных элементов, при смене направления компоновки
      */
-    QSplitterHandle* createHandle() override;
+    bool event(QEvent* _event) override;
+
+    /**
+     * @brief Переопределяем для пропорциональной корректировки размеров вложенных виджетов
+     */
+    void resizeEvent(QResizeEvent* _event) override;
+
+    /**
+     * @brief Реагируем на события вложенных виджетов и самого разделителя
+     */
+    bool eventFilter(QObject* _watched, QEvent* _event) override;
 
 private:
     class Implementation;

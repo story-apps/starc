@@ -198,7 +198,8 @@ void OnboardingView::Implementation::updateLanguagePageUi()
     skipOnboardingButton->setBackgroundColor(DesignSystem::color().secondary());
     skipOnboardingButton->setTextColor(DesignSystem::color().secondary());
     languagePageButtonsLayout->setSpacing(static_cast<int>(Ui::DesignSystem::layout().buttonsSpacing()));
-    languagePageButtonsLayout->setContentsMargins({static_cast<int>(Ui::DesignSystem::layout().px24()), 0, 0,
+    languagePageButtonsLayout->setContentsMargins({static_cast<int>(Ui::DesignSystem::layout().px24()), 0,
+                                                   static_cast<int>(Ui::DesignSystem::layout().px24()),
                                                    static_cast<int>(Ui::DesignSystem::layout().px12())});
 }
 

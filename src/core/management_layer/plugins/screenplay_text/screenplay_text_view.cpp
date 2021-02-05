@@ -312,8 +312,7 @@ ScreenplayTextView::ScreenplayTextView(QWidget* _parent)
     sidebarLayout->addWidget(d->sidebarTabs);
     sidebarLayout->addWidget(d->sidebarContent);
 
-    d->splitter->addWidget(d->scalableWrapper);
-    d->splitter->addWidget(d->sidebarWidget);
+    d->splitter->setWidgets(d->scalableWrapper, d->sidebarWidget);
 
     QVBoxLayout* layout = new QVBoxLayout(this);
     layout->setContentsMargins({});
@@ -633,8 +632,8 @@ void ScreenplayTextView::designSystemChangeEvent(DesignSystemChangeEvent* _event
     d->screenplayText->completer()->setTextColor(Ui::DesignSystem::color().onBackground());
     d->screenplayText->completer()->setBackgroundColor(Ui::DesignSystem::color().background());
 
-    d->splitter->setHandleColor(DesignSystem::color().primary());
-    d->splitter->setHandleWidth(1);
+    d->splitter->setBackgroundColor(Ui::DesignSystem::color().background());
+
     d->sidebarTabs->setTextColor(Ui::DesignSystem::color().onPrimary());
     d->sidebarTabs->setBackgroundColor(Ui::DesignSystem::color().primary());
 }

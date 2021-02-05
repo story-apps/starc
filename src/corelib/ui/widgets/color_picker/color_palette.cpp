@@ -181,7 +181,7 @@ ColorPallete::ColorPallete(QWidget* _parent)
 
     QSettings settings;
     const auto customColors = settings.value(kColorsKey).toString().split(kColorsSeparator,
-                                                                          QString::SkipEmptyParts);
+                                                                          Qt::SkipEmptyParts);
     for (const auto& color : customColors) {
         d->customColors.append(color);
     }

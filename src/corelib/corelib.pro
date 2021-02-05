@@ -130,7 +130,6 @@ SOURCES += \
     ui/widgets/shadow/shadow.cpp \
     ui/widgets/slider/slider.cpp \
     ui/widgets/splitter/splitter.cpp \
-    ui/widgets/splitter/splitter_handle.cpp \
     ui/widgets/stack_widget/stack_widget.cpp \
     ui/widgets/stepper/stepper.cpp \
     ui/widgets/tab_bar/tab_bar.cpp \
@@ -267,7 +266,6 @@ HEADERS += \
     ui/widgets/shadow/shadow.h \
     ui/widgets/slider/slider.h \
     ui/widgets/splitter/splitter.h \
-    ui/widgets/splitter/splitter_handle.h \
     ui/widgets/stack_widget/stack_widget.h \
     ui/widgets/stepper/stepper.h \
     ui/widgets/tab_bar/tab_bar.h \

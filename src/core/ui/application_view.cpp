@@ -63,8 +63,7 @@ ApplicationView::ApplicationView(QWidget* _parent)
     navigationLayout->addWidget(d->toolBar);
     navigationLayout->addWidget(d->navigator);
 
-    d->splitter->addWidget(d->navigationWidget);
-    d->splitter->addWidget(d->view);
+    d->splitter->setWidgets(d->navigationWidget, d->view);
     d->splitter->setSizes({3, 7});
 
     QVBoxLayout* layout = new QVBoxLayout(this);
@@ -109,7 +108,7 @@ void ApplicationView::setAccountBar(Widget* _accountBar)
 
 int ApplicationView::navigationPanelWidth() const
 {
-    return d->toolBar->width() + d->splitter->handleWidth();
+    return d->toolBar->width();
 }
 
 bool ApplicationView::eventFilter(QObject* _target, QEvent* _event)
@@ -156,9 +155,6 @@ void ApplicationView::designSystemChangeEvent(DesignSystemChangeEvent* _event)
     d->navigator->setBackgroundColor(DesignSystem::color().primary());
 
     d->view->setBackgroundColor(DesignSystem::color().surface());
-
-    d->splitter->setHandleColor(DesignSystem::color().primary());
-    d->splitter->setHandleWidth(1);
 
     if (d->accountBar != nullptr) {
         d->accountBar->resize(d->accountBar->sizeHint());
