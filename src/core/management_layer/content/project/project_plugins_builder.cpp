@@ -55,8 +55,8 @@ namespace {
        //
        { "application/x-starc/editor/screenplay/information", "*screenplayinformationplugin*" },
        { "application/x-starc/editor/screenplay/parameters", "*screenplayparametersplugin*" },
-       { "application/x-starc/editor/screenplay/title-page", "*textplugin*" },
-       { "application/x-starc/editor/screenplay/synopsis", "*textplugin*" },
+       { "application/x-starc/editor/screenplay/title-page", "*simpletextplugin*" },
+       { "application/x-starc/editor/screenplay/synopsis", "*simpletextplugin*" },
        { "application/x-starc/editor/screenplay/treatment", "*screenplaytreatmentplugin*" },
        { "application/x-starc/editor/screenplay/treatment-cards", "*screenplaytreatmentcardsplugin*" },
        { kScreenplayEditorMime, "*screenplaytextplugin*" },
