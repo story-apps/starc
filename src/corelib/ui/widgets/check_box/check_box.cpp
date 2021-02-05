@@ -115,11 +115,41 @@ void CheckBox::paintEvent(QPaintEvent* _event)
     painter.fillRect(_event->rect(), backgroundColor());
 
     //
+    // Настраиваем размещение текста для разных языков
+    //
+    qreal textRectX = 0;
+    qreal textWidth = 0;
+    QRectF iconRect;
+    QRectF textRect;
+
+    if (isLeftToRight()) {
+        iconRect.setRect(Ui::DesignSystem::checkBox().margins().left(),
+                         Ui::DesignSystem::checkBox().margins().top(),
+                         Ui::DesignSystem::checkBox().iconSize().width(),
+                         Ui::DesignSystem::checkBox().iconSize().height());
+
+        textRectX = iconRect.right() + Ui::DesignSystem::checkBox().spacing();
+        textWidth = width() - textRectX;
+        textRect.setRect(textRectX, 0, textWidth, sizeHint().height());
+    } else {
+        textWidth = width()
+                - Ui::DesignSystem::checkBox().margins().left()
+                - Ui::DesignSystem::checkBox().spacing()
+                - Ui::DesignSystem::checkBox().iconSize().width()
+                - Ui::DesignSystem::checkBox().margins().right();
+
+        textRectX = Ui::DesignSystem::checkBox().margins().left();
+        textRect.setRect(textRectX, 0, textWidth, sizeHint().height());
+        iconRect.setRect(textRectX + textWidth
+                         + Ui::DesignSystem::checkBox().spacing(),
+                         Ui::DesignSystem::checkBox().margins().top(),
+                         Ui::DesignSystem::checkBox().iconSize().width(),
+                         Ui::DesignSystem::checkBox().iconSize().height());
+    }
+
+    //
     // Рисуем декорацию переключателя
     //
-    const QRectF iconRect(QPointF(Ui::DesignSystem::checkBox().margins().left(),
-                                  Ui::DesignSystem::checkBox().margins().top()),
-                          Ui::DesignSystem::checkBox().iconSize());
     if (hasFocus()) {
         painter.setPen(Qt::NoPen);
         painter.setBrush(Ui::DesignSystem::color().secondary());
@@ -157,8 +187,6 @@ void CheckBox::paintEvent(QPaintEvent* _event)
     //
     painter.setFont(Ui::DesignSystem::font().subtitle1());
     painter.setPen(penColor);
-    const qreal textRectX = iconRect.right() + Ui::DesignSystem::checkBox().spacing();
-    const QRectF textRect(textRectX, 0, width() - textRectX, sizeHint().height());
     painter.drawText(textRect, Qt::AlignLeft | Qt::AlignVCenter, d->text);
 }
 
