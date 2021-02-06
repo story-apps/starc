@@ -15,6 +15,9 @@ public:
     void maximizeScrollbar();
     void minimizeScrollbar();
 
+    QColor backgroundColor;
+    QColor handleColor;
+
     QVariantAnimation widthAnimation;
 };
 
@@ -71,12 +74,44 @@ QSize ScrollBar::sizeHint() const
     }
 }
 
+void ScrollBar::setHandleColor(const QColor & _handleColor)
+{
+    if (d->handleColor == _handleColor) {
+        return;
+    }
+
+    d->handleColor = _handleColor;
+    update();
+}
+
+void ScrollBar::setBackgroundColor(const QColor & _backgroundColor)
+{
+    if (d->backgroundColor == _backgroundColor) {
+        return;
+    }
+
+    d->backgroundColor = _backgroundColor;
+    update();
+}
+
 void ScrollBar::paintEvent(QPaintEvent* _event)
 {
     Q_UNUSED(_event)
 
     QPainter painter(this);
     painter.fillRect(rect(), Qt::transparent);
+
+    //
+    // Проверяем задан ли цвет
+    //
+
+    const auto handleColor = d->handleColor.isValid()
+                             ? d->handleColor
+                             : Ui::DesignSystem::scrollBar().handleColor();
+
+    const auto backgroundColor = d->backgroundColor.isValid()
+                                 ? d->backgroundColor
+                                 : Ui::DesignSystem::scrollBar().backgroundColor();
 
     //
     // Настраиваем видимость полосы прокрутки
@@ -88,7 +123,7 @@ void ScrollBar::paintEvent(QPaintEvent* _event)
     // Рисуем фон скролбара
     //
     const QRectF contentRect = QRectF(rect()).marginsRemoved(Ui::DesignSystem::scrollBar().margins());
-    painter.fillRect(contentRect, Ui::DesignSystem::scrollBar().backgroundColor());
+    painter.fillRect(contentRect, backgroundColor);
 
     //
     // Рисуем хэндл
@@ -113,7 +148,7 @@ void ScrollBar::paintEvent(QPaintEvent* _event)
                           : QRectF(contentRect.left(), sliderPosition() * handleDelta + additionalHandleMovement,
                                    contentRect.width(), std::max(pageStep() * handleDelta,
                                                                  Ui::DesignSystem::scrollBar().minimumHandleLength()));
-    painter.fillRect(handle, Ui::DesignSystem::scrollBar().handleColor());
+    painter.fillRect(handle, handleColor);
 }
 
 void ScrollBar::enterEvent(QEvent* _event)
