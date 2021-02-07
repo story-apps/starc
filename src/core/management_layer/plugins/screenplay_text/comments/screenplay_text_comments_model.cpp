@@ -83,7 +83,7 @@ public:
         QVector<ScreenplayTextModelTextItem*> items;
 
 
-        bool operator== (const ReviewMarkWrapper& _other) const;
+        bool operator==(const ReviewMarkWrapper& _other) const;
     };
     /**
      * @brief Список заметок сценария
@@ -106,14 +106,14 @@ void ScreenplayTextCommentsModel::Implementation::saveReviewMark(
             break;
         }
 
+        if (_textItem == modelTextItems.constFirst()) {
+            break;
+        }
+
         //
         // Если заметка начинается в начале абзаца, проверяем нельзя ли её присовокупить к заметке в конце предыдущего абзаца
         //
         if (_reviewMark.from == 0) {
-            if (_textItem == modelTextItems.constFirst()) {
-                break;
-            }
-
             //
             // Смотрим заметки которые есть в предыдущем блоке
             //
@@ -146,6 +146,83 @@ void ScreenplayTextCommentsModel::Implementation::saveReviewMark(
                 reviewMarkWrapper.items.append(_textItem);
                 reviewMarkWrapper.toInLastItem = _reviewMark.length;
                 reviewMarkAdded = true;
+            }
+        }
+        //
+        // А если не вначале, то возможно просто разное форматирование текста внутри одной заметки
+        //
+        else {
+            //
+            // Смотрим заметки которые есть в текущем блоке
+            //
+            QVector<ReviewMarkWrapper> textItemReviewMarkWrappers;
+            for (const auto& reviewMarkWrapper : std::as_const(reviewMarks)) {
+                if (reviewMarkWrapper.items.contains(_textItem)) {
+                    textItemReviewMarkWrappers.append(reviewMarkWrapper);
+                    continue;
+                }
+
+                if (!textItemReviewMarkWrappers.isEmpty()) {
+                    break;
+                }
+            }
+            if (textItemReviewMarkWrappers.isEmpty()) {
+                break;
+            }
+
+            //
+            // Ищем ближайшую заметку
+            //
+            for (const auto& textItemReviewMarkWrapper : std::as_const(textItemReviewMarkWrappers)) {
+                //
+                // ... присовокупляем, если она имеет аналогичное форматирование и заканчивается в конце абзаца
+                //
+                if (isReviewMarksPartiallyEqual(textItemReviewMarkWrapper.reviewMark, _reviewMark)) {
+                    auto& reviewMarkWrapper = reviewMarks[reviewMarks.indexOf(textItemReviewMarkWrapper)];
+                    //
+                    // ... если выделения в одном блоке
+                    //
+                    if (reviewMarkWrapper.items.size() == 1) {
+                        //
+                        // ... расширяется вперёд
+                        //
+                        if (reviewMarkWrapper.toInLastItem == _reviewMark.from) {
+                            reviewMarkWrapper.toInLastItem = _reviewMark.end();
+                            reviewMarkAdded = true;
+                        }
+                        //
+                        // ... просто изменилось форматирование внутри блока
+                        //
+                        else if (reviewMarkWrapper.fromInFirstItem <= _reviewMark.from
+                            && reviewMarkWrapper.toInLastItem >= _reviewMark.end()) {
+                            reviewMarkAdded = true;
+                        }
+                    }
+                    //
+                    // ... если выделение на несколько блоков
+                    //
+                    else {
+                        //
+                        // ... расширяется вперёд
+                        //
+                        if (reviewMarkWrapper.items.constLast() == _textItem
+                            && reviewMarkWrapper.toInLastItem == _reviewMark.from) {
+                            reviewMarkWrapper.toInLastItem = _reviewMark.end();
+                            reviewMarkAdded = true;
+                        }
+                        //
+                        // ... просто изменилось форматирование внутри
+                        //
+                        else if ((reviewMarkWrapper.items.constFirst() == _textItem
+                                  && reviewMarkWrapper.fromInFirstItem <= _reviewMark.from)
+                                 || (reviewMarkWrapper.items.constFirst() != _textItem
+                                     && reviewMarkWrapper.items.constLast() != _textItem)
+                                 || (reviewMarkWrapper.items.constLast() == _textItem
+                                     && reviewMarkWrapper.toInLastItem >= _reviewMark.end())) {
+                            reviewMarkAdded = true;
+                        }
+                    }
+                }
             }
         }
     } once;
@@ -596,18 +673,35 @@ void ScreenplayTextCommentsModel::setModel(ScreenplayTextModel* _model)
                             //
                             // Если заметка начинается в начале абзаца, проверяем нельзя ли её присовокупить к заметке в конце предыдущего абзаца
                             //
-                            if (reviewMark.from == 0
-                                && !d->reviewMarks.isEmpty()) {
-                                auto& lastReviewMarkWrapper = d->reviewMarks.last();
+                            if (!d->reviewMarks.isEmpty()) {
+                                if (reviewMark.from == 0) {
+                                    auto& lastReviewMarkWrapper = d->reviewMarks.last();
+                                    //
+                                    // В предыдущем блоке есть заметка с аналогичным форматированием и заканчивается она в конце абзаца
+                                    //
+                                    if (lastReviewMarkWrapper.items.last() == d->modelTextItems.at(d->modelTextItems.size() - 2)
+                                        && isReviewMarksPartiallyEqual(lastReviewMarkWrapper.reviewMark, reviewMark)
+                                        && lastReviewMarkWrapper.toInLastItem == lastReviewMarkWrapper.items.constLast()->text().length()) {
+                                        lastReviewMarkWrapper.items.append(textItem);
+                                        lastReviewMarkWrapper.toInLastItem = reviewMark.length;
+                                        continue;
+                                    }
+                                }
                                 //
-                                // В предыдущем блоке есть заметка с аналогичным форматированием и заканчивается она в конце абзаца
+                                // А если не вначале, то возможно в этой заметке просто разное форматирование текста
                                 //
-                                if (lastReviewMarkWrapper.items.last() == d->modelTextItems.at(d->modelTextItems.size() - 2)
-                                    && isReviewMarksPartiallyEqual(lastReviewMarkWrapper.reviewMark, reviewMark)
-                                    && lastReviewMarkWrapper.toInLastItem == lastReviewMarkWrapper.items.constLast()->text().length()) {
-                                    lastReviewMarkWrapper.items.append(textItem);
-                                    lastReviewMarkWrapper.toInLastItem = reviewMark.length;
-                                    continue;
+                                else {
+                                    auto& lastReviewMarkWrapper = d->reviewMarks.last();
+                                    //
+                                    // В предыдущем блоке есть заметка с аналогичным форматированием и заканчивается она в конце абзаца
+                                    //
+                                    if (lastReviewMarkWrapper.items.last() == textItem
+                                        && isReviewMarksPartiallyEqual(lastReviewMarkWrapper.reviewMark, reviewMark)
+                                        && lastReviewMarkWrapper.toInLastItem == reviewMark.from) {
+                                        lastReviewMarkWrapper.items.append(textItem);
+                                        lastReviewMarkWrapper.toInLastItem = reviewMark.end();
+                                        continue;
+                                    }
                                 }
                             }
 
