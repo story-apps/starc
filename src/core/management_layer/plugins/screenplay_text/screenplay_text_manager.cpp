@@ -218,6 +218,10 @@ void ScreenplayTextManager::setCurrentModelIndex(const QModelIndex& _index)
         return;
     }
 
+    if (d->view->currentModelIndex().parent() == _index.parent()) {
+        return;
+    }
+
     d->view->setCurrentModelIndex(_index);
     d->view->setFocus();
 }

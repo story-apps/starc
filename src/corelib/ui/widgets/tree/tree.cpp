@@ -115,6 +115,7 @@ void Tree::setCurrentIndex(const QModelIndex& _index)
         return;
     }
 
+    d->tree->clearSelection();
     d->tree->setCurrentIndex(_index);
 }
 

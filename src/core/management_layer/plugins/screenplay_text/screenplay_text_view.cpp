@@ -416,7 +416,16 @@ ScreenplayTextView::ScreenplayTextView(QWidget* _parent)
     }, Qt::QueuedConnection);
     //
     connect(d->screenplayText, &ScreenplayTextEdit::paragraphTypeChanged, this, [this] {
+        //
+        // При смене типа параграфа обновим состояние панелей форматов
+        //
         d->updateToolBarCurrentParagraphTypeName();
+        //
+        // ... а также отправляем сигнал о смене текущего элемента, т.к. могло произойти
+        //     преобразование папка <-> сцена <-> простой текст и в навигаторе нужно выбрать
+        //     корректный элемент
+        //
+        emit currentModelIndexChanged(d->screenplayText->currentModelIndex());
     });
     connect(d->screenplayText, &ScreenplayTextEdit::cursorPositionChanged, this, [this] {
         d->updateToolBarCurrentParagraphTypeName();
