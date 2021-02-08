@@ -416,28 +416,25 @@ ScreenplayTextView::ScreenplayTextView(QWidget* _parent)
         d->updateCommentsToolBar();
     }, Qt::QueuedConnection);
     //
-    connect(d->screenplayText, &ScreenplayTextEdit::paragraphTypeChanged, this, [this] {
+    auto handleCursorPositionChanged = [this] {
         //
-        // При смене типа параграфа обновим состояние панелей форматов
+        // Обновим состояние панелей форматов
         //
         d->updateToolBarCurrentParagraphTypeName();
         //
-        // ... а также отправляем сигнал о смене текущего элемента, т.к. могло произойти
-        //     преобразование папка <-> сцена <-> простой текст и в навигаторе нужно выбрать
-        //     корректный элемент
+        // Уведомим навигатор клиентов, о смене текущего элемента
         //
-        emit currentModelIndexChanged(d->screenplayText->currentModelIndex());
-    });
-    connect(d->screenplayText, &ScreenplayTextEdit::cursorPositionChanged, this, [this] {
-        d->updateToolBarCurrentParagraphTypeName();
-
         const auto screenplayModelIndex = d->screenplayText->currentModelIndex();
         emit currentModelIndexChanged(screenplayModelIndex);
-
+        //
+        // Если необходимо выберем соответствующий комментарий
+        //
         const auto positionInBlock = d->screenplayText->textCursor().positionInBlock();
         const auto commentModelIndex = d->commentsModel->mapFromScreenplay(screenplayModelIndex, positionInBlock);
         d->commentsView->setCurrentIndex(commentModelIndex);
-    });
+    };
+    connect(d->screenplayText, &ScreenplayTextEdit::paragraphTypeChanged, this, handleCursorPositionChanged);
+    connect(d->screenplayText, &ScreenplayTextEdit::cursorPositionChanged, this, handleCursorPositionChanged);
     connect(d->screenplayText, &ScreenplayTextEdit::selectionChanged, this, [this] {
         d->updateCommentsToolBar();
     });

@@ -128,7 +128,7 @@ ScreenplayTextCommentsView::ScreenplayTextCommentsView(QWidget* _parent)
     addWidget(d->repliesView);
 
 
-    connect(d->commentsView, &Tree::currentIndexChanged, this, &ScreenplayTextCommentsView::commentSelected);
+    connect(d->commentsView, &Tree::clicked, this, &ScreenplayTextCommentsView::commentSelected);
     connect(d->commentsView, &Tree::doubleClicked, this, &ScreenplayTextCommentsView::showCommentRepliesView);
     connect(d->commentsView, &Tree::customContextMenuRequested, this, [this] (const QPoint& _pos) {
         if (d->commentsView->selectedIndexes().isEmpty()) {
