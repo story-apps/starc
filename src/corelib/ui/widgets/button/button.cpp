@@ -282,26 +282,49 @@ void Button::paintEvent(QPaintEvent* _event)
     //
     if (!d->icon.isEmpty()) {
         const QSizeF iconSize = Ui::DesignSystem::button().iconSize();
-        const qreal textWithIconWidth = iconSize.width() + Ui::DesignSystem::button().spacing() + textWidth;
-        const qreal iconX = buttonInnerRect.x()
-                            + (d->isContained
+        const qreal textWithIconWidth = iconSize.width()
+                + Ui::DesignSystem::button().spacing()
+                + textWidth;
+
+        qreal iconX = buttonInnerRect.x();
+        if (isLeftToRight()) {
+            iconX += d->isContained
                                ? ((buttonInnerRect.width() - textWithIconWidth) / 2.0)
-                               : 0.0);
+                               : 0.0;
+        } else {
+            iconX += d->isContained
+                       ? ((buttonInnerRect.width() - textWithIconWidth) / 2.0
+                          + textWidth + Ui::DesignSystem::button().spacing())
+                       : buttonInnerRect.width() - iconSize.width();
+        }
         const QRectF iconRect(QPointF(iconX, buttonInnerRect.top()), QSizeF(iconSize.width(), buttonInnerRect.height()));
         painter.setFont(Ui::DesignSystem::font().iconsMid());
         painter.drawText(iconRect, Qt::AlignCenter, d->icon);
 
-        buttonInnerRect.setX(iconRect.right() + Ui::DesignSystem::button().spacing());
-        buttonInnerRect.setWidth(textWidth);
+        if (isLeftToRight()) {
+            buttonInnerRect.setX(iconRect.right() + Ui::DesignSystem::button().spacing());
+            buttonInnerRect.setWidth(textWidth);
+        } else {
+            buttonInnerRect.setX(iconRect.left()
+                                 - Ui::DesignSystem::button().spacing()
+                                 - textWidth);
+            buttonInnerRect.setWidth(textWidth);
+        }
     }
     //
     // ... а если иконки нет, то просто корректируем область в которой будет рисоваться текст
     //
     else {
-        const qreal textX = buttonInnerRect.x()
-                            + (d->isContained
-                               ? ((buttonInnerRect.width() - textWidth) / 2.0)
-                               : 0.0);
+        qreal textX = buttonInnerRect.x();
+
+        if (d->isContained) {
+            textX += (buttonInnerRect.width() - textWidth) / 2.0;
+        } else {
+            textX += isLeftToRight()
+                    ? 0.0
+                    : (buttonInnerRect.width() - textWidth);
+        }
+
         buttonInnerRect.setX(textX);
         buttonInnerRect.setWidth(textWidth);
     }
