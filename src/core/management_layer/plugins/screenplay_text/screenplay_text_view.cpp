@@ -377,6 +377,7 @@ ScreenplayTextView::ScreenplayTextView(QWidget* _parent)
         auto cursor = d->screenplayText->textCursor();
         cursor.setPosition(position);
         d->screenplayText->ensureCursorVisible(cursor);
+        d->scalableWrapper->setFocus();
     });
     connect(d->commentsView, &ScreenplayTextCommentsView::markAsDoneRequested, this, [this] (const QModelIndexList& _indexes) {
         QSignalBlocker blocker(d->commentsView);
