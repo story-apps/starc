@@ -1366,7 +1366,13 @@ void ScreenplayTextModel::applyPatch(const QByteArray& _patch)
     //
     emit rowsAboutToBeChanged();
     ScreenplayTextModelItem* previousModelItem = nullptr;
-    auto updateItemPlacement = [this, &modelItem, &previousModelItem, newItemsPlain]
+    //
+    // В некоторых ситуациях мы не знаем сразу, куда будут извлечены элементы из удаляемого элемента,
+    // или когда элемент вставляется посреди и отрезает часть вложенных элементов, поэтому упаковываем
+    // их в список для размещения в правильном месте в следующем проходе
+    //
+    QVector<ScreenplayTextModelItem*> movedSiblingItems;
+    auto updateItemPlacement = [this, &modelItem, &previousModelItem, newItemsPlain, &movedSiblingItems]
                                (ScreenplayTextModelItem* _newItem, ScreenplayTextModelItem* _item)
     {
         //
@@ -1432,16 +1438,17 @@ void ScreenplayTextModel::applyPatch(const QByteArray& _patch)
 
                     insertItem(_item, insertAfterItem);
 
-//                    //
-//                    // И вытаскиваем все последующие элементы в модели на уровень вставки
-//                    //
-//                    auto modelItemParent = modelItem->parent();
-//                    const int modelItemIndex = modelItemParent->rowOfChild(modelItem);
-//                    while (modelItemParent->childCount() > modelItemIndex) {
-//                        auto childItem = modelItemParent->childAt(modelItemParent->childCount() - 1);
-//                        takeItem(childItem, modelItemParent);
-//                        insertItem(childItem, _item);
-//                    }
+                    //
+                    // И вытаскиваем все последующие элементы на уровень нового
+                    //
+                    auto modelItemParent = modelItem->parent();
+                    const int modelItemIndex = modelItemParent->rowOfChild(modelItem);
+                    while (modelItemParent->childCount() > modelItemIndex) {
+                        auto childItem = modelItemParent->childAt(modelItemParent->childCount() - 1);
+                        takeItem(childItem, modelItemParent);
+                        insertItem(childItem, _item);
+                        movedSiblingItems.prepend(childItem);
+                    }
                 }
             }
         }
@@ -1497,7 +1504,7 @@ void ScreenplayTextModel::applyPatch(const QByteArray& _patch)
                 // ... а если родитель, другой, то просто перемещаем элемент внутрь предыдушего
                 //
                 takeItem(_item, _item->parent());
-                prependItem(_item, previousModelItem);
+                appendItem(_item, previousModelItem);
             }
             //
             // Если должен находиться на разных уровнях
@@ -1521,21 +1528,44 @@ void ScreenplayTextModel::applyPatch(const QByteArray& _patch)
                 // ... а если не там где должен быть, то корректируем структуру
                 //
 
-                auto modelItemParent = modelItem->parent();
-                const int modelItemIndex = modelItemParent->rowOfChild(modelItem);
+                auto itemParent = _item->parent();
+                const int itemIndex = itemParent->rowOfChild(_item);
 
-                takeItem(_item, _item->parent());
+                takeItem(_item, itemParent);
                 insertItem(_item, insertAfterItem);
 
                 //
                 // И вытаскиваем все последующие элементы в модели на уровень вставки
                 //
-                while (modelItemParent->childCount() > modelItemIndex) {
-                    auto childItem = modelItemParent->childAt(modelItemParent->childCount() - 1);
-                    takeItem(childItem, modelItemParent);
+                while (itemParent->childCount() > itemIndex) {
+                    auto childItem = itemParent->childAt(itemParent->childCount() - 1);
+                    takeItem(childItem, itemParent);
                     insertItem(childItem, _item);
+                    movedSiblingItems.prepend(childItem);
                 }
             }
+        }
+
+        //
+        // Если у нас в буфере есть перенесённые элементы и текущий является их предводителем
+        //
+        if (!movedSiblingItems.isEmpty()
+            && movedSiblingItems.constFirst() == _item) {
+            //
+            // Удалим сам якорный элемент
+            //
+            movedSiblingItems.removeFirst();
+            //
+            // То перенесём их в след за предводителем
+            //
+            for (auto siblingItem : reversed(movedSiblingItems)) {
+                takeItem(siblingItem, siblingItem->parent());
+                insertItem(siblingItem, _item);
+            }
+            //
+            // и очистим список для будущих свершений
+            //
+            movedSiblingItems.clear();
         }
 
         return true;
@@ -1566,6 +1596,7 @@ void ScreenplayTextModel::applyPatch(const QByteArray& _patch)
                     auto childItem = modelItem->childAt(modelItem->childCount() - 1);
                     takeItem(childItem, modelItem);
                     insertItem(childItem, modelItem);
+                    movedSiblingItems.prepend(childItem);
                 }
                 //
                 // ... и удаляем сам элемент
