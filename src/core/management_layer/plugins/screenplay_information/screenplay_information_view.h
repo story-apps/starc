@@ -17,6 +17,9 @@ public:
     void setName(const QString& _name);
     Q_SIGNAL void nameChanged(const QString& _name);
 
+    void setTagline(const QString& _tagline);
+    Q_SIGNAL void taglineChanged(const QString& _logline);
+
     void setLogline(const QString& _logline);
     Q_SIGNAL void loglineChanged(const QString& _logline);
 
