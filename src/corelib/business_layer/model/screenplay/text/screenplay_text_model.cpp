@@ -211,6 +211,8 @@ void ScreenplayTextModel::appendItem(ScreenplayTextModelItem* _item, ScreenplayT
     _parentItem->insertItem(itemRow, _item);
     d->updateNumbering();
     endInsertRows();
+
+    updateItem(_parentItem);
 }
 
 void ScreenplayTextModel::prependItem(ScreenplayTextModelItem* _item, ScreenplayTextModelItem* _parentItem)
@@ -232,6 +234,8 @@ void ScreenplayTextModel::prependItem(ScreenplayTextModelItem* _item, Screenplay
     _parentItem->prependItem(_item);
     d->updateNumbering();
     endInsertRows();
+
+    updateItem(_parentItem);
 }
 
 void ScreenplayTextModel::insertItem(ScreenplayTextModelItem* _item, ScreenplayTextModelItem* _afterSiblingItem)
@@ -242,18 +246,19 @@ void ScreenplayTextModel::insertItem(ScreenplayTextModelItem* _item, ScreenplayT
         return;
     }
 
-    auto parent = _afterSiblingItem->parent();
-
-    if (parent->hasChild(_item)) {
+    auto parentItem = _afterSiblingItem->parent();
+    if (parentItem->hasChild(_item)) {
         return;
     }
 
-    const QModelIndex parentIndex = indexForItem(parent);
-    const int itemRowIndex = parent->rowOfChild(_afterSiblingItem) + 1;
+    const QModelIndex parentIndex = indexForItem(parentItem);
+    const int itemRowIndex = parentItem->rowOfChild(_afterSiblingItem) + 1;
     beginInsertRows(parentIndex, itemRowIndex, itemRowIndex);
-    parent->insertItem(itemRowIndex, _item);
+    parentItem->insertItem(itemRowIndex, _item);
     d->updateNumbering();
     endInsertRows();
+
+    updateItem(parentItem);
 }
 
 void ScreenplayTextModel::takeItem(ScreenplayTextModelItem* _item, ScreenplayTextModelItem* _parentItem)
@@ -270,15 +275,14 @@ void ScreenplayTextModel::takeItem(ScreenplayTextModelItem* _item, ScreenplayTex
         return;
     }
 
-    //
-    // Извлекаем элемент
-    //
     const QModelIndex parentItemIndex = indexForItem(_item).parent();
     const int itemRowIndex = _parentItem->rowOfChild(_item);
     beginRemoveRows(parentItemIndex, itemRowIndex, itemRowIndex);
     _parentItem->takeItem(_item);
     d->updateNumbering();
     endRemoveRows();
+
+    updateItem(_parentItem);
 }
 
 void ScreenplayTextModel::removeItem(ScreenplayTextModelItem* _item)
@@ -288,16 +292,15 @@ void ScreenplayTextModel::removeItem(ScreenplayTextModelItem* _item)
         return;
     }
 
-    //
-    // Удаляем элемент
-    //
-    auto itemParent = _item->parent();
+    auto parentItem = _item->parent();
     const QModelIndex itemParentIndex = indexForItem(_item).parent();
-    const int itemRowIndex = itemParent->rowOfChild(_item);
+    const int itemRowIndex = parentItem->rowOfChild(_item);
     beginRemoveRows(itemParentIndex, itemRowIndex, itemRowIndex);
-    itemParent->removeItem(_item);
+    parentItem->removeItem(_item);
     d->updateNumbering();
     endRemoveRows();
+
+    updateItem(parentItem);
 }
 
 void ScreenplayTextModel::updateItem(ScreenplayTextModelItem* _item)

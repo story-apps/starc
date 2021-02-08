@@ -62,6 +62,8 @@ void AbstractModelItem::insertItem(int _index, AbstractModelItem* _item)
 {
     _item->d->parent = this;
     d->children.insert(_index, _item);
+
+    setChanged(true);
 }
 
 void AbstractModelItem::removeItem(AbstractModelItem* _item)
@@ -69,12 +71,16 @@ void AbstractModelItem::removeItem(AbstractModelItem* _item)
     d->children.removeOne(_item);
     delete _item;
     _item = nullptr;
+
+    setChanged(true);
 }
 
 void AbstractModelItem::takeItem(AbstractModelItem* _item)
 {
     _item->setParent(nullptr);
     d->children.removeOne(_item);
+
+    setChanged(true);
 }
 
 bool AbstractModelItem::hasParent() const
