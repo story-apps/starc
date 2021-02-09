@@ -1,6 +1,7 @@
 #include "shadow.h"
 
 #include <ui/design_system/design_system.h>
+#include <ui/widgets/tree/tree.h>
 
 #include <utils/helpers/image_helper.h>
 
@@ -62,11 +63,33 @@ void Shadow::paintEvent(QPaintEvent* _event)
 {
     Q_UNUSED(_event);
 
+    //
+    // Если мы находимся внутри скролируемого виджета
+    //
+    QScrollBar* parentWidgetVerticalScrollBar = nullptr;
+    QScrollBar* parentWidgetHorizontalScrollBar = nullptr;
     if (auto scrollArea = qobject_cast<QScrollArea*>(parentWidget())) {
-        if ((m_edge == Qt::TopEdge && scrollArea->verticalScrollBar()->value() == 0)
-            || (m_edge == Qt::LeftEdge && scrollArea->horizontalScrollBar()->value() == 0)) {
-            return;
-        }
+        parentWidgetVerticalScrollBar = scrollArea->verticalScrollBar();
+        parentWidgetHorizontalScrollBar = scrollArea->horizontalScrollBar();
+    } else if (auto tree = qobject_cast<Tree*>(parentWidget())) {
+        parentWidgetVerticalScrollBar = tree->verticalScrollBar();
+    }
+    //
+    // То возможно нам и не нужно рисовать тень
+    //
+    if ((m_edge == Qt::TopEdge
+         && parentWidgetVerticalScrollBar != nullptr
+         && parentWidgetVerticalScrollBar->value() == 0)
+        || (m_edge == Qt::BottomEdge
+            && parentWidgetVerticalScrollBar != nullptr
+            && parentWidgetVerticalScrollBar->value() == parentWidgetVerticalScrollBar->maximum())
+        || (m_edge == Qt::LeftEdge
+            && parentWidgetHorizontalScrollBar != nullptr
+            && parentWidgetHorizontalScrollBar->value() == 0)
+        || (m_edge == Qt::RightEdge
+            && parentWidgetHorizontalScrollBar != nullptr
+            && parentWidgetHorizontalScrollBar->value() == parentWidgetHorizontalScrollBar->maximum())) {
+        return;
     }
 
     QPainter painter(this);

@@ -8,6 +8,7 @@
 #include <ui/design_system/design_system.h>
 #include <ui/widgets/label/label.h>
 #include <ui/widgets/scroll_bar/scroll_bar.h>
+#include <ui/widgets/shadow/shadow.h>
 #include <ui/widgets/tree/tree.h>
 
 #include <QStringListModel>
@@ -40,6 +41,8 @@ ScreenplayTextStructureView::Implementation::Implementation(QWidget* _parent)
     content->setDragDropEnabled(true);
     content->setSelectionMode(QAbstractItemView::ContiguousSelection);
     content->setItemDelegate(contentDelegate);
+
+    new Shadow(Qt::TopEdge, content);
 }
 
 

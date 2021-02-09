@@ -32,7 +32,6 @@ public:
     StackWidget* view = nullptr;
 
     Splitter* splitter = nullptr;
-    Shadow* splitterShadow = nullptr;
 
     Widget* accountBar = nullptr;
 };
@@ -42,9 +41,9 @@ ApplicationView::Implementation::Implementation(QWidget* _parent)
       toolBar(new StackWidget(_parent)),
       navigator(new StackWidget(_parent)),
       view(new StackWidget(_parent)),
-      splitter(new Splitter(_parent)),
-      splitterShadow(new Shadow(view))
+      splitter(new Splitter(_parent))
 {
+    new Shadow(view);
 }
 
 

@@ -10,6 +10,7 @@
 #include <ui/design_system/design_system.h>
 #include <ui/widgets/button/button.h>
 #include <ui/widgets/context_menu/context_menu.h>
+#include <ui/widgets/shadow/shadow.h>
 #include <ui/widgets/tree/tree.h>
 
 #include <QAction>
@@ -48,6 +49,9 @@ ProjectNavigator::Implementation::Implementation(QWidget* _parent)
     tree->setContextMenuPolicy(Qt::ContextMenuPolicy::CustomContextMenu);
     addDocumentButton->setFocusPolicy(Qt::NoFocus);
     addDocumentButton->setIcon(u8"\U000f0415");
+
+    new Shadow(Qt::TopEdge, tree);
+    new Shadow(Qt::BottomEdge, tree);
 }
 
 
