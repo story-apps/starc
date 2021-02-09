@@ -15,6 +15,7 @@
 #include <QApplication>
 #include <QTextBlock>
 #include <QTextDocument>
+#include <QRegularExpression>
 
 #include <cmath>
 
@@ -31,7 +32,7 @@ namespace {
     /**
      * @brief Список символов пунктуации, разделяющие предложения
      */
-    const QList<QChar> PUNCTUATION_CHARACTERS = { '.', '!', '?', ':', ';', QString("…").at(0)};
+    const QRegularExpression kPunctuationCharacter("([.]|[!]|[?]|[:]|[;]|[…])");
 
     /**
      * @brief Автоматически добавляемые продолжения в диалогах
@@ -84,7 +85,7 @@ public:
     /**
      * @brief Скорректировать имена персонажей
      */
-    void correctCharactersNames(int _position = -1, int _charsRemoved = 0, int _charsAdded = 0);
+    void correctCharactersNames(int _position = -1, int _charsChanged = 0);
 
     /**
      * @brief Скорректировать текст сценария
@@ -184,8 +185,8 @@ public:
     struct {
         bool isValid = false;
         int position = 0;
-        int removed = 0;
-        int added = 0;
+        int changed = 0;
+        int end() const { return position + changed; }
     } plannedCorrection;
 
     /**
@@ -261,13 +262,13 @@ ScreenplayTextCorrector::Implementation::Implementation(QTextDocument* _document
 {
 }
 
-void ScreenplayTextCorrector::Implementation::correctCharactersNames(int _position, int _charsRemoved, int _charsAdded)
+void ScreenplayTextCorrector::Implementation::correctCharactersNames(int _position, int _charsChanged)
 {
     //
     // Определим границы работы алгоритма
     //
     int startPosition = _position;
-    int endPosition = _position + (std::max(_charsRemoved, _charsAdded));
+    int endPosition = _position + _charsChanged;
     if (startPosition == -1) {
         startPosition = 0;
         endPosition = document->characterCount();
@@ -433,6 +434,28 @@ void ScreenplayTextCorrector::Implementation::correctPageBreaks(int _position)
         const int blocksCount = document->blockCount() * 1.1;
         if (blockItems.size() < blocksCount) {
             blockItems.resize(blocksCount * 2);
+        }
+    }
+
+    //
+    // Определим список блоков для принудительной ручной проверки для случая, когда пользователь
+    // редактирует текст на границе страниц в разорванном блоке. Это необходимо для того,
+    // чтобы корректно обрабатывать изменение текста в предыдущих и следующих за переносом блоках
+    //
+    if (_position != -1) {
+        auto block = document->findBlock(_position);
+        if (block.blockFormat().boolProperty(ScreenplayBlockStyle::PropertyIsBreakCorrectionStart)
+                || block.blockFormat().boolProperty(ScreenplayBlockStyle::PropertyIsBreakCorrectionEnd)) {
+            block = block.next().next();
+            auto replies = 5;
+            do {
+                blockItems[block.blockNumber()] = {};
+                block = block.previous();
+            } while (block.isValid()
+                     && (replies-- > 0
+                         || block.blockFormat().boolProperty(ScreenplayBlockStyle::PropertyIsCorrection)
+                         || block.blockFormat().boolProperty(ScreenplayBlockStyle::PropertyIsBreakCorrectionStart)
+                         || block.blockFormat().boolProperty(ScreenplayBlockStyle::PropertyIsBreakCorrectionEnd)));
         }
     }
 
@@ -942,67 +965,65 @@ void ScreenplayTextCorrector::Implementation::correctPageBreaks(int _position)
                                && !isBreaked) {
                             const QTextLine line = block.layout()->lineAt(lineToBreak - 1); // -1 т.к. нужен индекс, а не порядковый номер
                             const QString lineText = block.text().mid(line.textStart(), line.textLength());
-                            for (const auto& punctuation : PUNCTUATION_CHARACTERS) {
-                                const int punctuationIndex = lineText.lastIndexOf(punctuation);
+                            const int punctuationIndex = lineText.lastIndexOf(kPunctuationCharacter);
+                            //
+                            // ... нашлось место, где можно разорвать
+                            //
+                            if (punctuationIndex != -1) {
                                 //
-                                // ... нашлось место, где можно разорвать
+                                // ... разрываем
                                 //
-                                if (punctuationIndex != -1) {
-                                    //
-                                    // ... разрываем
-                                    //
-                                    // +1, т.к. символ пунктуации нужно оставить в текущем блоке
-                                    cursor.setPosition(block.position() + line.textStart() + punctuationIndex + 1);
-                                    insertBlock(currentBlockWidth(), cursor);
-                                    //
-                                    // ... запоминаем параметры блока оставшегося в конце страницы
-                                    //
-                                    const qreal breakStartBlockHeight =
-                                            lineToBreak * blockLineHeight + blockFormat.topMargin() + blockFormat.bottomMargin();
-                                    blockItems[currentBlockInfo.number++] = BlockInfo{breakStartBlockHeight, lastBlockHeight};
-                                    lastBlockHeight += breakStartBlockHeight;
-                                    //
-                                    // ... если после разрыва остался пробел, уберём его
-                                    //
-                                    if (cursor.block().text().startsWith(" ")) {
-                                        cursor.deleteChar();
-                                    }
-                                    //
-                                    // ... помечаем блоки, как разорванные
-                                    //
-                                    QTextBlockFormat breakStartFormat = blockFormat;
-                                    breakStartFormat.setProperty(ScreenplayBlockStyle::PropertyIsBreakCorrectionStart, true);
-                                    cursor.movePosition(ScreenplayTextCursor::PreviousBlock);
-                                    cursor.setBlockFormat(breakStartFormat);
-                                    //
-                                    QTextBlockFormat breakEndFormat = blockFormat;
-                                    breakEndFormat.setProperty(ScreenplayBlockStyle::PropertyIsBreakCorrectionEnd, true);
-                                    cursor.movePosition(ScreenplayTextCursor::NextBlock);
-                                    cursor.setBlockFormat(breakEndFormat);
-                                    //
-                                    // ... обновим лэйаут оторванного блока
-                                    //
-                                    block = cursor.block();
-                                    updateBlockLayout(currentBlockWidth(), block);
-                                    const qreal breakEndBlockHeight =
-                                            block.layout()->lineCount() * blockLineHeight + blockFormat.topMargin()
-                                            + blockFormat.bottomMargin();
-                                    //
-                                    // ... и декорируем разрыв диалога по правилам
-                                    //
-                                    breakDialogue(blockFormat, breakEndBlockHeight, pageHeight, currentBlockWidth(), cursor, block, lastBlockHeight);
-                                    //
-                                    // ... сохраняем оторванный конец блока и корректируем последнюю высоту
-                                    //
-                                    block = block.next();
-                                    blockItems[currentBlockInfo.number++] = BlockInfo{breakEndBlockHeight, lastBlockHeight};
-                                    lastBlockHeight += breakEndBlockHeight;
-                                    //
-                                    // ... помечаем, что разорвать удалось
-                                    //
-                                    isBreaked = true;
-                                    break;
+                                // +1, т.к. символ пунктуации нужно оставить в текущем блоке
+                                cursor.setPosition(block.position() + line.textStart() + punctuationIndex + 1);
+                                insertBlock(currentBlockWidth(), cursor);
+                                //
+                                // ... запоминаем параметры блока оставшегося в конце страницы
+                                //
+                                const qreal breakStartBlockHeight =
+                                        lineToBreak * blockLineHeight + blockFormat.topMargin() + blockFormat.bottomMargin();
+                                blockItems[currentBlockInfo.number++] = BlockInfo{breakStartBlockHeight, lastBlockHeight};
+                                lastBlockHeight += breakStartBlockHeight;
+                                //
+                                // ... если после разрыва остался пробел, уберём его
+                                //
+                                if (cursor.block().text().startsWith(" ")) {
+                                    cursor.deleteChar();
                                 }
+                                //
+                                // ... помечаем блоки, как разорванные
+                                //
+                                QTextBlockFormat breakStartFormat = blockFormat;
+                                breakStartFormat.setProperty(ScreenplayBlockStyle::PropertyIsBreakCorrectionStart, true);
+                                cursor.movePosition(ScreenplayTextCursor::PreviousBlock);
+                                cursor.setBlockFormat(breakStartFormat);
+                                //
+                                QTextBlockFormat breakEndFormat = blockFormat;
+                                breakEndFormat.setProperty(ScreenplayBlockStyle::PropertyIsBreakCorrectionEnd, true);
+                                cursor.movePosition(ScreenplayTextCursor::NextBlock);
+                                cursor.setBlockFormat(breakEndFormat);
+                                //
+                                // ... обновим лэйаут оторванного блока
+                                //
+                                block = cursor.block();
+                                updateBlockLayout(currentBlockWidth(), block);
+                                const qreal breakEndBlockHeight =
+                                        block.layout()->lineCount() * blockLineHeight + blockFormat.topMargin()
+                                        + blockFormat.bottomMargin();
+                                //
+                                // ... и декорируем разрыв диалога по правилам
+                                //
+                                breakDialogue(blockFormat, breakEndBlockHeight, pageHeight, currentBlockWidth(), cursor, block, lastBlockHeight);
+                                //
+                                // ... сохраняем оторванный конец блока и корректируем последнюю высоту
+                                //
+                                block = block.next();
+                                blockItems[currentBlockInfo.number++] = BlockInfo{breakEndBlockHeight, lastBlockHeight};
+                                lastBlockHeight += breakEndBlockHeight;
+                                //
+                                // ... помечаем, что разорвать удалось
+                                //
+                                isBreaked = true;
+                                break;
                             }
 
                             //
@@ -1143,70 +1164,68 @@ void ScreenplayTextCorrector::Implementation::correctPageBreaks(int _position)
                                && !isBreaked) {
                             const QTextLine line = block.layout()->lineAt(lineToBreak - 1); // -1 т.к. нужен индекс, а не порядковый номер
                             const QString lineText = block.text().mid(line.textStart(), line.textLength());
-                            for (const auto& punctuation : PUNCTUATION_CHARACTERS) {
-                                const int punctuationIndex = lineText.lastIndexOf(punctuation);
+                            const int punctuationIndex = lineText.lastIndexOf(kPunctuationCharacter);
+                            //
+                            // ... нашлось место, где можно разорвать
+                            //
+                            if (punctuationIndex != -1) {
                                 //
-                                // ... нашлось место, где можно разорвать
+                                // ... разрываем
                                 //
-                                if (punctuationIndex != -1) {
-                                    //
-                                    // ... разрываем
-                                    //
-                                    // +1, т.к. символ пунктуации нужно оставить в текущем блоке
-                                    cursor.setPosition(block.position() + line.textStart() + punctuationIndex + 1);
-                                    insertBlock(currentBlockWidth(), cursor);
-                                    //
-                                    // ... запоминаем параметры блока оставшегося в конце страницы
-                                    //
-                                    const qreal breakStartBlockHeight =
-                                            lineToBreak * blockLineHeight + blockFormat.topMargin() + blockFormat.bottomMargin();
-                                    blockItems[currentBlockInfo.number++] = BlockInfo{breakStartBlockHeight, lastBlockHeight};
-                                    //
-                                    // ... если после разрыва остался пробел, уберём его
-                                    //
-                                    if (cursor.block().text().startsWith(" ")) {
-                                        cursor.deleteChar();
-                                    }
-                                    //
-                                    // ... помечаем блоки, как разорванные
-                                    //
-                                    QTextBlockFormat breakStartFormat = blockFormat;
-                                    breakStartFormat.setProperty(ScreenplayBlockStyle::PropertyIsBreakCorrectionStart, true);
-                                    cursor.movePosition(ScreenplayTextCursor::PreviousBlock);
-                                    cursor.setBlockFormat(breakStartFormat);
-                                    //
-                                    QTextBlockFormat breakEndFormat = blockFormat;
-                                    breakEndFormat.setProperty(ScreenplayBlockStyle::PropertyIsBreakCorrectionEnd, true);
-                                    cursor.movePosition(ScreenplayTextCursor::NextBlock);
-                                    cursor.setBlockFormat(breakEndFormat);
-                                    //
-                                    // ... переносим оторванный конец на следующую страницу,
-                                    //     если на текущую влезает ещё хотя бы одна строка текста
-                                    //
-                                    block = cursor.block();
-                                    const qreal sizeToPageEnd = pageHeight - lastBlockHeight - breakStartBlockHeight;
-                                    if (sizeToPageEnd >= blockFormat.topMargin() + blockLineHeight) {
-                                        moveBlockToNextPage(block, sizeToPageEnd, pageHeight, currentBlockWidth(), cursor);
-                                        block = cursor.block();
-                                    }
-                                    updateBlockLayout(currentBlockWidth(), block);
-                                    const qreal breakEndBlockHeight =
-                                            block.layout()->lineCount() * blockLineHeight + blockFormat.bottomMargin();
-                                    //
-                                    // ... запоминаем параметры блока перенесённого на следующую страницу
-                                    //
-                                    blockItems[currentBlockInfo.number++] =
-                                            BlockInfo{breakEndBlockHeight, 0};
-                                    //
-                                    // ... обозначаем последнюю высоту
-                                    //
-                                    lastBlockHeight = breakEndBlockHeight;
-                                    //
-                                    // ... помечаем, что разорвать удалось
-                                    //
-                                    isBreaked = true;
-                                    break;
+                                // +1, т.к. символ пунктуации нужно оставить в текущем блоке
+                                cursor.setPosition(block.position() + line.textStart() + punctuationIndex + 1);
+                                insertBlock(currentBlockWidth(), cursor);
+                                //
+                                // ... запоминаем параметры блока оставшегося в конце страницы
+                                //
+                                const qreal breakStartBlockHeight =
+                                        lineToBreak * blockLineHeight + blockFormat.topMargin() + blockFormat.bottomMargin();
+                                blockItems[currentBlockInfo.number++] = BlockInfo{breakStartBlockHeight, lastBlockHeight};
+                                //
+                                // ... если после разрыва остался пробел, уберём его
+                                //
+                                if (cursor.block().text().startsWith(" ")) {
+                                    cursor.deleteChar();
                                 }
+                                //
+                                // ... помечаем блоки, как разорванные
+                                //
+                                QTextBlockFormat breakStartFormat = blockFormat;
+                                breakStartFormat.setProperty(ScreenplayBlockStyle::PropertyIsBreakCorrectionStart, true);
+                                cursor.movePosition(ScreenplayTextCursor::PreviousBlock);
+                                cursor.setBlockFormat(breakStartFormat);
+                                //
+                                QTextBlockFormat breakEndFormat = blockFormat;
+                                breakEndFormat.setProperty(ScreenplayBlockStyle::PropertyIsBreakCorrectionEnd, true);
+                                cursor.movePosition(ScreenplayTextCursor::NextBlock);
+                                cursor.setBlockFormat(breakEndFormat);
+                                //
+                                // ... переносим оторванный конец на следующую страницу,
+                                //     если на текущую влезает ещё хотя бы одна строка текста
+                                //
+                                block = cursor.block();
+                                const qreal sizeToPageEnd = pageHeight - lastBlockHeight - breakStartBlockHeight;
+                                if (sizeToPageEnd >= blockFormat.topMargin() + blockLineHeight) {
+                                    moveBlockToNextPage(block, sizeToPageEnd, pageHeight, currentBlockWidth(), cursor);
+                                    block = cursor.block();
+                                }
+                                updateBlockLayout(currentBlockWidth(), block);
+                                const qreal breakEndBlockHeight =
+                                        block.layout()->lineCount() * blockLineHeight + blockFormat.bottomMargin();
+                                //
+                                // ... запоминаем параметры блока перенесённого на следующую страницу
+                                //
+                                blockItems[currentBlockInfo.number++] =
+                                        BlockInfo{breakEndBlockHeight, 0};
+                                //
+                                // ... обозначаем последнюю высоту
+                                //
+                                lastBlockHeight = breakEndBlockHeight;
+                                //
+                                // ... помечаем, что разорвать удалось
+                                //
+                                isBreaked = true;
+                                break;
                             }
 
                             //
@@ -1630,7 +1649,7 @@ void ScreenplayTextCorrector::clear()
     d->blockItems.clear();
 }
 
-void ScreenplayTextCorrector::correct(int _position, int _charRemoved, int _charAdded)
+void ScreenplayTextCorrector::correct(int _position, int _charsChanged)
 {
     //
     // Избегаем рекурсии, которая может возникать от того, что корректировка происходит
@@ -1642,7 +1661,7 @@ void ScreenplayTextCorrector::correct(int _position, int _charRemoved, int _char
     }
 
     if (d->needToCorrectCharactersNames) {
-        d->correctCharactersNames(_position, _charRemoved, _charAdded);
+        d->correctCharactersNames(_position, _charsChanged);
     }
 
     if (d->needToCorrectPageBreaks) {
@@ -1652,13 +1671,27 @@ void ScreenplayTextCorrector::correct(int _position, int _charRemoved, int _char
 
 void ScreenplayTextCorrector::planCorrection(int _position, int _charsRemoved, int _charsAdded)
 {
+    //
+    // Если корректировка ещё не была запланирована, то просто заполняем информацию
+    // об изменённой части текстового документ
+    //
     if (!d->plannedCorrection.isValid) {
-        d->plannedCorrection = {true, _position, _charsRemoved, _charsAdded};
-    } else if (d->plannedCorrection.position > _position) {
-        //
-        // TODO: тут нужно аккуратно расширять область корректировок, чтобы захватить все изменения
-        //
-        d->plannedCorrection.position = _position;
+        d->plannedCorrection = { true, _position, std::max(_charsRemoved, _charsAdded) };
+    }
+    //
+    // А если уже была запланирована, то расширим выделение
+    //
+    else if (d->plannedCorrection.position > _position) {
+        const auto newPosition = _position;
+        const auto newChanged = std::max(_charsRemoved, _charsAdded);
+        if (newPosition < d->plannedCorrection.position) {
+            d->plannedCorrection.changed += d->plannedCorrection.position - newPosition;
+            d->plannedCorrection.position = newPosition;
+        }
+        const auto newEnd = newPosition + newChanged;
+        if (newEnd > d->plannedCorrection.end()) {
+            d->plannedCorrection.changed = newEnd - d->plannedCorrection.position;
+        }
     }
 }
 
@@ -1668,7 +1701,7 @@ void ScreenplayTextCorrector::makePlannedCorrection()
         return;
     }
 
-    correct(d->plannedCorrection.position, d->plannedCorrection.removed, d->plannedCorrection.added);
+    correct(d->plannedCorrection.position, d->plannedCorrection.changed);
     d->plannedCorrection = {};
 }
 

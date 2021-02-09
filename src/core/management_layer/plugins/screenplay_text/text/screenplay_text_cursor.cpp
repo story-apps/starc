@@ -285,8 +285,9 @@ void ScreenplayTextCursor::removeCharacters(bool _backward, Ui::ScreenplayTextEd
     // Собственно удаление
     //
     cursor.beginEditBlock();
-    FoldersToDelete foldersToDelete;
     {
+        FoldersToDelete foldersToDelete;
+
         //
         // Подсчитать количество группирующих элементов входящих в выделение
         //
@@ -295,6 +296,10 @@ void ScreenplayTextCursor::removeCharacters(bool _backward, Ui::ScreenplayTextEd
             foldersToDelete = findFoldersToDelete(topCursorPosition, bottomCursorPosition,
                                                   isTopBlockShouldBeRemoved);
         }
+        //
+        // Определим происходит ли изменение внутри одного блока
+        //
+        const bool inblockChange = topBlock == bottomBlock;
 
         //
         // Удалить текст
@@ -306,8 +311,10 @@ void ScreenplayTextCursor::removeCharacters(bool _backward, Ui::ScreenplayTextEd
         //
         // Положим корректные данные в блок
         //
-        cursor.setBlockFormat(targetStyle.blockFormat());
-        cursor.block().setUserData(targetBlockData);
+        if (!inblockChange) {
+            cursor.setBlockFormat(targetStyle.blockFormat());
+            cursor.block().setUserData(targetBlockData);
+        }
 
         //
         // Удалить вторые половинки группирующих элементов

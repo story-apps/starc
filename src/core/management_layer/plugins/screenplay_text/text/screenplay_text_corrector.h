@@ -47,7 +47,7 @@ public:
     /**
      * @brief Выполнить корректировки
      */
-    void correct(int _position = -1, int _charsRemoved = 0, int _charsAdded = 0);
+    void correct(int _position = -1, int _charsChanged = 0);
 
     /**
      * @brief Подготовиться к корректировке и выполнить подготовленную корректировку
