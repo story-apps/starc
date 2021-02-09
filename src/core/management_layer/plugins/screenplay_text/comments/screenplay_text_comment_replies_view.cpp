@@ -113,13 +113,10 @@ void ScreenplayTextCommentRepliesView::setCommentIndex(const QModelIndex& _index
     }
     d->repliesView->setMessages(replies);
 
-    //
-    // Отложенно скролим вьюху, чтобы пересчиталась геометрия окна чата
-    //
-    QTimer::singleShot(0, this, [this] {
-        d->repliesViewContainer->verticalScrollBar()->setValue(
-                    d->repliesViewContainer->verticalScrollBar()->maximum());
-    });
+    const auto repliesHeight = d->repliesView->heightForWidth(width());
+    d->repliesViewContainer->verticalScrollBar()->setMaximum(repliesHeight);
+    d->repliesViewContainer->verticalScrollBar()->setValue(
+                d->repliesViewContainer->verticalScrollBar()->maximum());
 }
 
 bool ScreenplayTextCommentRepliesView::eventFilter(QObject* _watched, QEvent* _event)
