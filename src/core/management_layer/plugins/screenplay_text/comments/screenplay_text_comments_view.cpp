@@ -167,7 +167,6 @@ ScreenplayTextCommentsView::ScreenplayTextCommentsView(QWidget* _parent)
     });
     connect(d->repliesView, &ScreenplayTextCommentRepliesView::addReplyPressed, this, [this] (const QString& _reply) {
         emit addReviewMarkCommentRequested(d->commentsView->currentIndex(), _reply);
-
     });
     connect(d->repliesView, &ScreenplayTextCommentRepliesView::closePressed, this, [this] {
         auto animationRect = d->commentsView->visualRect(d->commentsView->currentIndex());
@@ -187,7 +186,19 @@ ScreenplayTextCommentsView::~ScreenplayTextCommentsView() = default;
 
 void ScreenplayTextCommentsView::setModel(QAbstractItemModel* _model)
 {
+    if (d->commentsView->model() != nullptr) {
+        disconnect(d->commentsView->model());
+    }
+
     d->commentsView->setModel(_model);
+
+    if (_model != nullptr) {
+        connect(_model, &QAbstractItemModel::dataChanged, this, [this] (const QModelIndex& _index) {
+            if (_index == d->repliesView->commentIndex()) {
+                d->repliesView->setCommentIndex(_index);
+            }
+        });
+    }
 }
 
 void ScreenplayTextCommentsView::setCurrentIndex(const QModelIndex& _index)

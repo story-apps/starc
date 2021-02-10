@@ -91,15 +91,27 @@ ScreenplayTextCommentRepliesView::ScreenplayTextCommentRepliesView(QWidget* _par
     designSystemChangeEvent(nullptr);
 }
 
+QModelIndex ScreenplayTextCommentRepliesView::commentIndex() const
+{
+    return d->commentIndex;
+}
+
 ScreenplayTextCommentRepliesView::~ScreenplayTextCommentRepliesView() = default;
 
 void ScreenplayTextCommentRepliesView::setCommentIndex(const QModelIndex& _index)
 {
-    if (d->commentIndex != _index) {
+    //
+    // Если сменился индекс, отобразим вверху текущий комментарий
+    //
+    const bool isIndexChanged = d->commentIndex != _index;
+    if (isIndexChanged) {
         d->commentIndex = _index;
         d->headerView->setCommentIndex(d->commentIndex);
     }
 
+    //
+    // Собираем ответы на комментарий и помещаем их во вьюху
+    //
     const auto comments
             = _index.data(ScreenplayTextCommentsModel::ReviewMarkCommentsRole)
                     .value<QVector<BusinessLayer::ScreenplayTextModelTextItem::ReviewComment>>();
@@ -113,10 +125,22 @@ void ScreenplayTextCommentRepliesView::setCommentIndex(const QModelIndex& _index
     }
     d->repliesView->setMessages(replies);
 
-    const auto repliesHeight = d->repliesView->heightForWidth(width());
-    d->repliesViewContainer->verticalScrollBar()->setMaximum(repliesHeight);
-    d->repliesViewContainer->verticalScrollBar()->setValue(
-                d->repliesViewContainer->verticalScrollBar()->maximum());
+    //
+    // Если это установка нового индекса, то предрасчитаем размер скролбара,
+    // чтобы проскролить его вниз до момента первой отрисовки экрана
+    //
+    if (isIndexChanged) {
+        const auto repliesHeight = d->repliesView->heightForWidth(width());
+        d->repliesViewContainer->verticalScrollBar()->setMaximum(repliesHeight);
+    }
+
+    //
+    // Отложенно скролим вьюху, чтобы пересчиталась геометрия окна чата
+    //
+    QTimer::singleShot(0, this, [this] {
+        d->repliesViewContainer->verticalScrollBar()->setValue(
+                    d->repliesViewContainer->verticalScrollBar()->maximum());
+    });
 }
 
 bool ScreenplayTextCommentRepliesView::eventFilter(QObject* _watched, QEvent* _event)
