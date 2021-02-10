@@ -86,7 +86,6 @@ void ScreenplayTextEdit::initWithModel(BusinessLayer::ScreenplayTextModel* _mode
     setPageFormat(currentTemplate.pageSizeId());
     setPageMargins(currentTemplate.pageMargins());
     setPageNumbersAlignment(currentTemplate.pageNumbersAlignment());
-    d->document.setDefaultFont(currentTemplate.blockStyle(ScreenplayParagraphType::SceneHeading).font());
 
     //
     // Документ нужно формировать только после того, как редактор настроен, чтобы избежать лишний изменений
