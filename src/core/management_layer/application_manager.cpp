@@ -35,6 +35,7 @@
 #include <QApplication>
 #include <QDir>
 #include <QFontDatabase>
+#include <QJsonDocument>
 #include <QKeyEvent>
 #include <QLocale>
 #include <QShortcut>
@@ -46,7 +47,6 @@
 #include <QUuid>
 #include <QVariant>
 #include <QWidget>
-
 
 namespace ManagementLayer {
 
@@ -310,24 +310,28 @@ void ApplicationManager::Implementation::checkNewVersion()
     //
     NetworkRequest loader;
     loader.setRequestMethod(NetworkRequestMethod::Post);
-    loader.addRequestAttribute("uuid", applicationUuidValue.toString());
-    loader.addRequestAttribute("application_name", "starc");
-    loader.addRequestAttribute("application_version", QApplication::applicationVersion());
-    loader.addRequestAttribute("system_type",
+    QJsonObject data;
+    data["device_uuid"] = applicationUuidValue.toString();
+    data["application_name"] = QApplication::applicationName();
+    data["application_version"] = QApplication::applicationVersion();
+    data["application_language"] = QLocale::languageToString(QLocale().language());
+    data["system_type"] =
 #ifdef Q_OS_WIN
-                "windows"
+            "windows"
 #elif defined Q_OS_LINUX
-                "linux"
+            "linux"
 #elif defined Q_OS_MAC
-                "mac"
+            "mac"
 #else
-                QSysInfo::kernelType()
+            QSysInfo::kernelType()
 #endif
-                );
-
-    loader.addRequestAttribute("system_name", QSysInfo::prettyProductName().toUtf8().toPercentEncoding());
-
-    loader.loadAsync("https://kitscenarist.ru/api/app/updates/");
+            ;
+    data["system_name"] = QSysInfo::prettyProductName();
+    data["system_language"] = QLocale::languageToString(QLocale::system().language());
+    data["action_name"] = "startup";
+    data["action_content"] = QString();
+    loader.setRawRequestData(QJsonDocument(data).toJson(), "application/json");
+    loader.loadAsync("http://demo.storyapps.dev/telemetry/");
 }
 
 void ApplicationManager::Implementation::configureAutoSave()
