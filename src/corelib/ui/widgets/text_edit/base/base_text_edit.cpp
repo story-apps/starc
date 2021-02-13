@@ -25,17 +25,26 @@ namespace {
         int position = positionInterval.first;
         const int lastPosition = positionInterval.second;
         while (position < lastPosition) {
-            _cursor.setPosition(position);
-            _cursor.movePosition(QTextCursor::EndOfBlock, QTextCursor::KeepAnchor);
-            if (_cursor.position() > lastPosition) {
-                _cursor.setPosition(lastPosition, QTextCursor::KeepAnchor);
+            const auto block = _cursor.document()->findBlock(position);
+            for (const auto& format : block.textFormats()) {
+                const auto formatStart = block.position() + format.start;
+                const auto formatEnd = formatStart + format.length;
+                if (position >= formatEnd) {
+                    continue;
+                }
+                if (formatStart >= lastPosition) {
+                    break;
+                }
+
+                _cursor.setPosition(std::max(formatStart, position));
+                _cursor.setPosition(std::min(formatEnd, lastPosition), QTextCursor::KeepAnchor);
+
+                const auto newFormat = updateFormat(format.format);
+                _cursor.mergeCharFormat(newFormat);
+
+                _cursor.movePosition(QTextCursor::NextCharacter);
+                position = _cursor.position();
             }
-
-            const auto format = updateFormat(_cursor.charFormat());
-            _cursor.mergeCharFormat(format);
-
-            _cursor.movePosition(QTextCursor::NextCharacter);
-            position = _cursor.position();
         }
     }
 
