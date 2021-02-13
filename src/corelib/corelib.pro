@@ -48,7 +48,6 @@ PRE_TARGETDEPS += $$PWD/../3rd_party/qgumboparser
 
 SOURCES += \
     business_layer/chronometry/chronometer.cpp \
-    business_layer/import/abstract_importer.cpp \
     business_layer/import/celtx_importer.cpp \
     business_layer/import/document_importer.cpp \
     business_layer/import/fdx_importer.cpp \
