@@ -27,7 +27,7 @@ public:
     /**
      * @brief Задать модель контекстного меню навигатора
      */
-    void setContextMenuModel(QAbstractItemModel* _model);
+    void setContextMenuActions(const QVector<QAction*>& _actions);
 
     /**
      * @brief Сохранить состояние
@@ -69,11 +69,6 @@ signals:
      * @brief Пользователь хочет открыть контекстное меню
      */
     void contextMenuUpdateRequested(const QModelIndex& _index);
-
-    /**
-     * @brief Пользователь выбрал пункт контекстного меню
-     */
-    void contextMenuItemClicked(const QModelIndex& _contextMenuIndex);
 
     /**
      * @brief Пользователь нажал кнопку добавления документа

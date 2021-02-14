@@ -119,7 +119,7 @@ CreateDocumentDialog::~CreateDocumentDialog() = default;
 
 QWidget* CreateDocumentDialog::focusedWidgetAfterShow() const
 {
-    return d->documentType;
+    return d->documentName;
 }
 
 void CreateDocumentDialog::updateTranslations()

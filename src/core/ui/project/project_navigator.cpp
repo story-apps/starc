@@ -90,10 +90,6 @@ ProjectNavigator::ProjectNavigator(QWidget* _parent)
         d->contextMenu->showContextMenu(d->tree->mapToGlobal(_pos));
     });
 
-    connect(d->contextMenu, &ContextMenu::clicked, d->contextMenu, &ContextMenu::hide);
-    connect(d->contextMenu, &ContextMenu::clicked, this, [this] (const QModelIndex& _contextMenuIndex) {
-        emit contextMenuItemClicked(_contextMenuIndex);
-    });
     connect(d->addDocumentButton, &Button::clicked, this, &ProjectNavigator::addDocumentClicked);
 }
 
@@ -102,9 +98,9 @@ void ProjectNavigator::setModel(QAbstractItemModel* _model)
     d->tree->setModel(_model);
 }
 
-void ProjectNavigator::setContextMenuModel(QAbstractItemModel* _model)
+void ProjectNavigator::setContextMenuActions(const QVector<QAction*>& _actions)
 {
-    d->contextMenu->setModel(_model);
+    d->contextMenu->setActions(_actions);
 }
 
 QVariant ProjectNavigator::saveState() const

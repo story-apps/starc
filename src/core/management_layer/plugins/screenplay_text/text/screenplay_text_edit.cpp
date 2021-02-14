@@ -18,13 +18,13 @@
 #include <utils/helpers/color_helper.h>
 #include <utils/helpers/text_helper.h>
 
+#include <QAction>
 #include <QCoreApplication>
 #include <QLocale>
 #include <QMimeData>
 #include <QPainter>
 #include <QRegularExpression>
 #include <QScrollBar>
-#include <QStandardItemModel>
 #include <QTextTable>
 
 using BusinessLayer::ScreenplayBlockStyle;
@@ -1066,18 +1066,15 @@ ContextMenu* ScreenplayTextEdit::createContextMenu(const QPoint& _position, QWid
 {
     auto menu = BaseTextEdit::createContextMenu(_position, _parent);
 
-    QStandardItemModel* model = new QStandardItemModel(menu);
-    auto splitAction = new QStandardItem;
+    auto splitAction = new QAction;
     if (BusinessLayer::ScreenplayTextCursor cursor = textCursor(); cursor.inTable()) {
         splitAction->setText(tr("Merge paragraph"));
-        splitAction->setData(u8"\U000f10e7", Qt::DecorationRole);
+        splitAction->setIconText(u8"\U000f10e7");
     } else {
         splitAction->setText(tr("Split paragraph"));
-        splitAction->setData(u8"\U000f10e7", Qt::DecorationRole);
+        splitAction->setIconText(u8"\U000f10e7");
     }
-    model->appendRow(splitAction);
-    menu->setModel(model);
-    connect(menu, &ContextMenu::clicked, this, [this, menu] {
+    connect(splitAction, &QAction::triggered, this, [this, menu] {
         menu->hideContextMenu();
         BusinessLayer::ScreenplayTextCursor cursor = textCursor();
         if (cursor.inTable()) {
@@ -1094,6 +1091,8 @@ ContextMenu* ScreenplayTextEdit::createContextMenu(const QPoint& _position, QWid
             moveCursor(QTextCursor::EndOfBlock);
         }
     });
+
+    menu->setActions({ splitAction });
 
     return menu;
 }

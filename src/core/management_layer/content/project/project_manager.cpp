@@ -31,10 +31,10 @@
 #include <ui/widgets/context_menu/context_menu.h>
 #include <ui/widgets/dialog/dialog.h>
 
+#include <QAction>
 #include <QDateTime>
 #include <QHBoxLayout>
 #include <QSet>
-#include <QStandardItemModel>
 #include <QUuid>
 #include <QVariantAnimation>
 
@@ -60,11 +60,6 @@ public:
      * @brief Обновить модель действий контекстного меню навигатора
      */
     void updateNavigatorContextMenu(const QModelIndex& _index);
-
-    /**
-     * @brief Выполнить заданное действие контекстного меню
-     */
-    void executeContextMenuAction(const QModelIndex& _itemIndex, const QModelIndex& _contextMenuIndex);
 
     /**
      * @brief Добавить документ в проект
@@ -96,7 +91,6 @@ public:
     Ui::ProjectToolBar* toolBar = nullptr;
 
     Ui::ProjectNavigator* navigator = nullptr;
-    QStandardItemModel* navigatorContextMenuModel = nullptr;
 
     Ui::ProjectView* view = nullptr;
 
@@ -113,7 +107,6 @@ ProjectManager::Implementation::Implementation(QWidget* _parent)
     : topLevelWidget(_parent),
       toolBar(new Ui::ProjectToolBar(_parent)),
       navigator(new Ui::ProjectNavigator(_parent)),
-      navigatorContextMenuModel(new QStandardItemModel(navigator)),
       view(new Ui::ProjectView(_parent)),
       projectStructureModel(new BusinessLayer::StructureModel(navigator)),
       projectStructureProxyModel(new BusinessLayer::StructureProxyModel(projectStructureModel)),
@@ -124,78 +117,59 @@ ProjectManager::Implementation::Implementation(QWidget* _parent)
     view->hide();
 
     navigator->setModel(projectStructureProxyModel);
-    navigator->setContextMenuModel(navigatorContextMenuModel);
 }
 
 void ProjectManager::Implementation::updateNavigatorContextMenu(const QModelIndex& _index)
 {
-    navigatorContextMenuModel->clear();
+    QVector<QAction*> menuActions;
 
     const auto currentItemIndex = projectStructureProxyModel->mapToSource(_index);
     const auto currentItem = projectStructureModel->itemForIndex(currentItemIndex);
 
+    //
+    // Формируем список действий контекстного меню для корзины
+    //
     if (currentItem->type() == Domain::DocumentObjectType::RecycleBin) {
         if (currentItem->hasChildren()) {
-            auto emptyRecicleBin = new QStandardItem(tr("Empty recycle bin"));
-            emptyRecicleBin->setData(u8"\U000f05e8", Qt::DecorationRole);
-            emptyRecicleBin->setData(static_cast<int>(ContextMenuAction::EmptyRecycleBin), Qt::UserRole);
-            navigatorContextMenuModel->appendRow(emptyRecicleBin);
-        }
-        return;
-    }
-
-
-    auto addDocument = new QStandardItem(tr("Add document"));
-    addDocument->setData(u8"\U000f0415", Qt::DecorationRole);
-    addDocument->setData(static_cast<int>(ContextMenuAction::AddDocument), Qt::UserRole);
-    navigatorContextMenuModel->appendRow(addDocument);
-
-    const QSet<Domain::DocumentObjectType> cantBeRemovedItems
-            = { Domain::DocumentObjectType::Project,
-                Domain::DocumentObjectType::Characters,
-                Domain::DocumentObjectType::Locations,
-                Domain::DocumentObjectType::ScreenplayTitlePage,
-                Domain::DocumentObjectType::ScreenplaySynopsis,
-                Domain::DocumentObjectType::ScreenplayTreatment,
-                Domain::DocumentObjectType::ScreenplayText,
-                Domain::DocumentObjectType::ScreenplayStatistics };
-    if (_index.isValid() && !cantBeRemovedItems.contains(currentItem->type())) {
-        auto removeDocument = new QStandardItem(tr("Remove document"));
-        removeDocument->setData(u8"\U000f01b4", Qt::DecorationRole);
-        removeDocument->setData(static_cast<int>(ContextMenuAction::RemoveDocument), Qt::UserRole);
-        navigatorContextMenuModel->appendRow(removeDocument);
-    }
-}
-
-void ProjectManager::Implementation::executeContextMenuAction(const QModelIndex& _itemIndex,
-    const QModelIndex& _contextMenuIndex)
-{
-    if (!_contextMenuIndex.isValid()) {
-        return;
-    }
-
-    const auto actionData = _contextMenuIndex.data(Qt::UserRole);
-    if (actionData.isNull()) {
-        return;
-    }
-
-    const auto action = static_cast<ContextMenuAction>(actionData.toInt());
-    switch (action) {
-        case ContextMenuAction::AddDocument: {
-            addDocument(_itemIndex);
-            break;
-        }
-
-        case ContextMenuAction::RemoveDocument: {
-            removeDocument(_itemIndex);
-            break;
-        }
-
-        case ContextMenuAction::EmptyRecycleBin: {
-            emptyRecycleBin(_itemIndex);
-            break;
+            auto emptyRecycleBin = new QAction(tr("Empty recycle bin"));
+            emptyRecycleBin->setIconText(u8"\U000f05e8");
+            connect(emptyRecycleBin, &QAction::triggered, [this, currentItemIndex] {
+                this->emptyRecycleBin(currentItemIndex);
+            });
+            menuActions.append(emptyRecycleBin);
         }
     }
+    //
+    // ... для остальных элементов
+    //
+    else {
+        auto addDocument = new QAction(tr("Add document"));
+        addDocument->setIconText(u8"\U000f0415");
+        connect(addDocument, &QAction::triggered, [this, currentItemIndex] {
+            this->addDocument(currentItemIndex);
+        });
+        menuActions.append(addDocument);
+
+        const QSet<Domain::DocumentObjectType> cantBeRemovedItems
+                = { Domain::DocumentObjectType::Project,
+                    Domain::DocumentObjectType::Characters,
+                    Domain::DocumentObjectType::Locations,
+                    Domain::DocumentObjectType::ScreenplayTitlePage,
+                    Domain::DocumentObjectType::ScreenplaySynopsis,
+                    Domain::DocumentObjectType::ScreenplayTreatment,
+                    Domain::DocumentObjectType::ScreenplayText,
+                    Domain::DocumentObjectType::ScreenplayStatistics };
+        if (_index.isValid() && !cantBeRemovedItems.contains(currentItem->type())) {
+            auto removeDocument = new QAction(tr("Remove document"));
+            removeDocument->setIconText(u8"\U000f01b4");
+            connect(removeDocument, &QAction::triggered, [this, currentItemIndex] {
+                this->removeDocument(currentItemIndex);
+            });
+            menuActions.append(removeDocument);
+        }
+    }
+
+    navigator->setContextMenuActions(menuActions);
 }
 
 void ProjectManager::Implementation::addDocument(const QModelIndex& _itemIndex)
@@ -232,8 +206,7 @@ void ProjectManager::Implementation::addDocumentToContainer(Domain::DocumentObje
 
 void ProjectManager::Implementation::removeDocument(const QModelIndex& _itemIndex)
 {
-    const auto mappedItemIndex = projectStructureProxyModel->mapToSource(_itemIndex);
-    auto item = projectStructureModel->itemForIndex(mappedItemIndex);
+    auto item = projectStructureModel->itemForIndex(_itemIndex);
     if (item == nullptr) {
         return;
     }
@@ -293,8 +266,7 @@ void ProjectManager::Implementation::removeDocument(const QModelIndex& _itemInde
 
 void ProjectManager::Implementation::emptyRecycleBin(const QModelIndex& _recycleBinIndex)
 {
-    const auto mappedRecycleBinIndex = projectStructureProxyModel->mapToSource(_recycleBinIndex);
-    auto recycleBin = projectStructureModel->itemForIndex(mappedRecycleBinIndex);
+    auto recycleBin = projectStructureModel->itemForIndex(_recycleBinIndex);
     if (recycleBin == nullptr) {
         return;
     }
@@ -404,11 +376,6 @@ ProjectManager::ProjectManager(QObject* _parent, QWidget* _parentWidget)
     });
     connect(d->navigator, &Ui::ProjectNavigator::contextMenuUpdateRequested, this,
             [this] (const QModelIndex& _index) { d->updateNavigatorContextMenu(_index); });
-    connect(d->navigator, &Ui::ProjectNavigator::contextMenuItemClicked, this,
-            [this] (const QModelIndex& _contextMenuIndex)
-    {
-        d->executeContextMenuAction(d->navigator->currentIndex(), _contextMenuIndex);
-    });
     connect(d->navigator, &Ui::ProjectNavigator::addDocumentClicked, this, [this] { d->addDocument({}); });
 
     //
