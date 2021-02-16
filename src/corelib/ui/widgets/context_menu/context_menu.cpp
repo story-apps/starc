@@ -362,7 +362,7 @@ void ContextMenu::paintEvent(QPaintEvent* _event)
         }
 
         painter.setPen(action->isChecked() ? Ui::DesignSystem::color().secondary()
-                                           : Ui::DesignSystem::color().onPrimary());
+                                           : textColor());
         if (action->isChecked()) {
             painter.setOpacity(1.0);
         } else if (!action->isEnabled()) {
