@@ -183,9 +183,10 @@ QByteArray Splitter::saveState() const
     }
     return state;
 }
-
+#include <QDebug>
 void Splitter::restoreState(const QByteArray& _state)
 {
+    qDebug() << Q_FUNC_INFO;
     auto state = _state;
     QDataStream stream(&state, QIODevice::ReadOnly);
     qreal size = 0;
@@ -199,6 +200,7 @@ void Splitter::restoreState(const QByteArray& _state)
     // Избегаем кривых данных
     //
     if (sizes.size() != 2) {
+        qDebug() << sizes;
         return;
     }
 

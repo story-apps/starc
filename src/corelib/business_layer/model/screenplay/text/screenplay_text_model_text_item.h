@@ -2,6 +2,8 @@
 
 #include "screenplay_text_model_item.h"
 
+#include <optional>
+
 #include <QColor>
 #include <QString>
 #include <QTextLayout>

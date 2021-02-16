@@ -86,7 +86,7 @@ public:
     /**
      * @brief Параметры шрифтов
      */
-    class CORE_LIBRARY_EXPORT CORE_LIBRARY_EXPORT Font
+    class CORE_LIBRARY_EXPORT Font
     {
     public:
         ~Font();

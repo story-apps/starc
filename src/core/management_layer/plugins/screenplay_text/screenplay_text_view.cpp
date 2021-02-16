@@ -316,6 +316,7 @@ ScreenplayTextView::ScreenplayTextView(QWidget* _parent)
     sidebarLayout->addWidget(d->sidebarContent);
 
     d->splitter->setWidgets(d->scalableWrapper, d->sidebarWidget);
+    d->splitter->setSizes({ 1, 0 });
 
     QVBoxLayout* layout = new QVBoxLayout(this);
     layout->setContentsMargins({});
