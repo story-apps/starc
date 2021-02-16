@@ -7,6 +7,8 @@
 
 #include <ui/design_system/design_system.h>
 
+#include <utils/helpers/color_helper.h>
+
 #include <ui/widgets/chat/chat_message.h>
 #include <ui/widgets/chat/chat_messages_view.h>
 #include <ui/widgets/chat/user.h>
@@ -36,6 +38,7 @@ public:
     ScreenplayTextCommentView* headerView = nullptr;
     ChatMessagesView* repliesView = nullptr;
     QScrollArea* repliesViewContainer = nullptr;
+    ScrollBar* repliesViewScrollBar = nullptr;
     Shadow* repliesViewTopShadow = nullptr;
     TextField* replyTextField = nullptr;
 };
@@ -44,6 +47,7 @@ ScreenplayTextCommentRepliesView::Implementation::Implementation(QWidget* _paren
     : headerView(new ScreenplayTextCommentView(_parent)),
       repliesView(new ChatMessagesView),
       repliesViewContainer(new QScrollArea(_parent)),
+      repliesViewScrollBar(new ScrollBar(repliesViewContainer)),
       repliesViewTopShadow(new Shadow(Qt::TopEdge, repliesViewContainer)),
       replyTextField(new TextField(_parent))
 {
@@ -53,7 +57,7 @@ ScreenplayTextCommentRepliesView::Implementation::Implementation(QWidget* _paren
     repliesViewContainer->setPalette(palette);
     repliesViewContainer->setFrameShape(QFrame::NoFrame);
     repliesViewContainer->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
-    repliesViewContainer->setVerticalScrollBar(new ScrollBar);
+    repliesViewContainer->setVerticalScrollBar(repliesViewScrollBar);
     repliesViewContainer->setWidget(repliesView);
     repliesViewContainer->setWidgetResizable(true);
 
@@ -179,12 +183,15 @@ void ScreenplayTextCommentRepliesView::designSystemChangeEvent(DesignSystemChang
     Widget::designSystemChangeEvent(_event);
 
     setBackgroundColor(Ui::DesignSystem::color().primary());
+    setTextColor(Ui::DesignSystem::color().onPrimary());
 
     d->headerView->setBackgroundColor(Ui::DesignSystem::color().primary());
     d->headerView->setTextColor(Ui::DesignSystem::color().onPrimary());
 
     d->repliesView->setBackgroundColor(Ui::DesignSystem::color().primary());
     d->repliesView->setTextColor(Ui::DesignSystem::color().onPrimary());
+    d->repliesViewScrollBar->setBackgroundColor(ColorHelper::transparent(textColor(), Ui::DesignSystem::elevationEndOpacity()));
+    d->repliesViewScrollBar->setHandleColor(ColorHelper::transparent(textColor(), Ui::DesignSystem::focusBackgroundOpacity()));
 
     d->replyTextField->setBackgroundColor(Ui::DesignSystem::color().onPrimary());
     d->replyTextField->setTextColor(Ui::DesignSystem::color().onPrimary());

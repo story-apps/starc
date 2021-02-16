@@ -5,6 +5,8 @@
 #include <ui/design_system/design_system.h>
 #include <ui/widgets/scroll_bar/scroll_bar.h>
 
+#include <utils/helpers/color_helper.h>
+
 #include <QVBoxLayout>
 
 
@@ -15,11 +17,13 @@ public:
 
     TreeView* tree = nullptr;
     TreeDelegate* delegate = nullptr;
+    ScrollBar* treeScrollBar = nullptr;
 };
 
 Tree::Implementation::Implementation(QWidget* _parent)
     : tree(new TreeView(_parent)),
-      delegate(new TreeDelegate(_parent))
+      delegate(new TreeDelegate(_parent)),
+      treeScrollBar(new ScrollBar(tree))
 {
     tree->setHeaderHidden(true);
     tree->setAnimated(true);
@@ -27,7 +31,7 @@ Tree::Implementation::Implementation(QWidget* _parent)
     tree->setFrameShape(QFrame::NoFrame);
     tree->setSelectionMode(QAbstractItemView::SingleSelection);
     tree->setSelectionBehavior(QAbstractItemView::SelectRows);
-    tree->setVerticalScrollBar(new ScrollBar(tree));
+    tree->setVerticalScrollBar(treeScrollBar);
     tree->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
     tree->setItemDelegate(delegate);
 }
@@ -186,4 +190,7 @@ void Tree::designSystemChangeEvent(DesignSystemChangeEvent* _event)
     auto lastDelegate = d->tree->itemDelegate();
     d->tree->setItemDelegate(nullptr);
     d->tree->setItemDelegate(lastDelegate);
+
+    d->treeScrollBar->setBackgroundColor(ColorHelper::transparent(textColor(), Ui::DesignSystem::elevationEndOpacity()));
+    d->treeScrollBar->setHandleColor(ColorHelper::transparent(textColor(), Ui::DesignSystem::focusBackgroundOpacity()));
 }
