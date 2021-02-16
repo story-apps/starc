@@ -30,6 +30,8 @@
 #include <ui/widgets/text_edit/page/page_metrics.h>
 #include <ui/widgets/text_edit/scalable_wrapper/scalable_wrapper.h>
 
+#include <utils/helpers/color_helper.h>
+
 #include <QAction>
 #include <QStandardItem>
 #include <QStandardItemModel>
@@ -273,7 +275,8 @@ void ScreenplayTextView::Implementation::addReviewMark(const QColor& _textColor,
     //
     // Добавим заметку
     //
-    screenplayText->addReviewMark(_textColor, _backgroundColor, _comment);
+    const auto textColor = _textColor.isValid() ? _textColor : ColorHelper::contrasted(_backgroundColor);
+    screenplayText->addReviewMark(textColor, _backgroundColor, _comment);
 
     //
     // Снимем выделение, чтобы пользователь получил обратную связь от приложения, что выделение добавлено
