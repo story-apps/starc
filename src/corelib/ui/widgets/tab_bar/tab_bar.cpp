@@ -98,7 +98,7 @@ QSizeF TabBar::Implementation::tabSizeHint(const Tab& _tab) const
 
 qreal TabBar::Implementation::contentWidth() const
 {
-    qreal contentWidth;
+    qreal contentWidth = 0.0;
     for (const Tab& tab : tabs) {
         if (!tab.visible) {
             continue;
