@@ -16,5 +16,6 @@
         <file>translations/for_use_starc_translation_id.qm</file>
         <file>translations/for_use_starc_translation_fr.qm</file>
         <file>translations/for_use_starc_translation_be.qm</file>
+        <file>translations/for_use_starc_translation_en.qm</file>
     </qresource>
 </RCC>

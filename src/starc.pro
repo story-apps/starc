@@ -19,6 +19,7 @@ TRANSLATIONS += \
     core/translations/for_use_starc_translation_az.ts \
     core/translations/for_use_starc_translation_be.ts \
     core/translations/for_use_starc_translation_de.ts \
+    core/translations/for_use_starc_translation_en.ts \
     core/translations/for_use_starc_translation_es.ts \
     core/translations/for_use_starc_translation_fr.ts \
     core/translations/for_use_starc_translation_he.ts \

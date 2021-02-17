@@ -430,8 +430,10 @@ void ApplicationManager::Implementation::setTranslation(QLocale::Language _langu
     QString translation;
     switch (currentLanguage) {
         default:
-        case QLocale::English:
+        case QLocale::English: {
+            translation = "en";
             break;
+        }
 
         case QLocale::Azerbaijani: {
             translation = "az";
