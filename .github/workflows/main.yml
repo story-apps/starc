@@ -71,7 +71,7 @@ jobs:
           nmake
           
       - name: Make installer
-        uses: joncloud/makensis-action@v2
+        uses: joncloud/makensis-action@v3.4
         with:
           arguments: "/V3"
           script-file: "build/windows/starc64.nsi"
