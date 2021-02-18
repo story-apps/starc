@@ -43,3 +43,43 @@ jobs:
         with:
           name: linux packages
           path: build/linux/starc-setup-${{env.APP_VERSION}}_amd64.deb
+
+  build_windows:
+    name: Build Windows version
+    runs-on: windows-latest
+    timeout-minutes: 60
+    steps:
+      - name: Checkout Sources
+        uses: actions/checkout@master
+
+      - name: Install Qt
+        uses: jurplel/install-qt-action@v2
+        with:
+          version: 5.15.1
+          target: desktop
+
+      - name: Run QMake
+        shell: bash
+        run: |
+          cd src
+          qmake starc.pro CONFIG+=release
+
+      - name: Build
+        shell: bash
+        run: |
+          cd src
+          nmake
+          
+      - name: Make installer
+        uses: joncloud/makensis-action@v2
+        with:
+          arguments: "/V3"
+          script-file: "build/windows/starc64.nsi"
+#           additional-plugin-paths: ${{ github.workspace }}/NSIS_Plugins/Plugins/
+
+      - name: Collect artifacts
+        uses: actions/upload-artifact@v2
+        with:
+          name: linux packages
+          path: build/windows/starc-setup_64.exe
+      
