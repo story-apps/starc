@@ -1,37 +1,37 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!DOCTYPE TS>
-<TS version="2.1" language="en_US">
+<TS version="2.1" language="id">
 <context>
     <name>BusinessLayer::FountainImporter</name>
     <message>
         <location filename="../../corelib/business_layer/import/fountain_importer.cpp" line="32"/>
         <source>INT</source>
-        <translation type="unfinished"></translation>
+        <translation>INT</translation>
     </message>
     <message>
         <location filename="../../corelib/business_layer/import/fountain_importer.cpp" line="33"/>
         <source>EXT</source>
-        <translation type="unfinished"></translation>
+        <translation>EXT</translation>
     </message>
     <message>
         <location filename="../../corelib/business_layer/import/fountain_importer.cpp" line="34"/>
         <source>EST</source>
-        <translation type="unfinished"></translation>
+        <translation>EST</translation>
     </message>
     <message>
         <location filename="../../corelib/business_layer/import/fountain_importer.cpp" line="35"/>
         <source>INT./EXT</source>
-        <translation type="unfinished"></translation>
+        <translation>INT./EXT</translation>
     </message>
     <message>
         <location filename="../../corelib/business_layer/import/fountain_importer.cpp" line="36"/>
         <source>INT/EXT</source>
-        <translation type="unfinished"></translation>
+        <translation>INT/EXT</translation>
     </message>
     <message>
         <location filename="../../corelib/business_layer/import/fountain_importer.cpp" line="37"/>
         <source>I/E</source>
-        <translation type="unfinished"></translation>
+        <translation>I/E</translation>
     </message>
 </context>
 <context>
@@ -40,7 +40,7 @@
         <location filename="../../corelib/business_layer/import/kit_scenarist_importer.cpp" line="396"/>
         <source>draft</source>
         <extracomment>Draft screenplay imported from KIT Scenarist file</extracomment>
-        <translation type="unfinished"></translation>
+        <translation>draf</translation>
     </message>
 </context>
 <context>
@@ -48,132 +48,132 @@
     <message>
         <location filename="../../corelib/business_layer/model/screenplay/screenplay_dictionaries_model.cpp" line="155"/>
         <source>INT.</source>
-        <translation type="unfinished"></translation>
+        <translation>INT.</translation>
     </message>
     <message>
         <location filename="../../corelib/business_layer/model/screenplay/screenplay_dictionaries_model.cpp" line="156"/>
         <source>EXT.</source>
-        <translation type="unfinished"></translation>
+        <translation>EXT.</translation>
     </message>
     <message>
         <location filename="../../corelib/business_layer/model/screenplay/screenplay_dictionaries_model.cpp" line="157"/>
         <source>INT./EXT.</source>
-        <translation type="unfinished"></translation>
+        <translation>INT./EXT.</translation>
     </message>
     <message>
         <location filename="../../corelib/business_layer/model/screenplay/screenplay_dictionaries_model.cpp" line="160"/>
         <source>DAY</source>
-        <translation type="unfinished"></translation>
+        <translation>SIANG</translation>
     </message>
     <message>
         <location filename="../../corelib/business_layer/model/screenplay/screenplay_dictionaries_model.cpp" line="161"/>
         <source>NIGHT</source>
-        <translation type="unfinished"></translation>
+        <translation>MALAM</translation>
     </message>
     <message>
         <location filename="../../corelib/business_layer/model/screenplay/screenplay_dictionaries_model.cpp" line="162"/>
         <source>MORNING</source>
-        <translation type="unfinished"></translation>
+        <translation>PAGI</translation>
     </message>
     <message>
         <location filename="../../corelib/business_layer/model/screenplay/screenplay_dictionaries_model.cpp" line="163"/>
         <source>AFTERNOON</source>
-        <translation type="unfinished"></translation>
+        <translation>SIANG</translation>
     </message>
     <message>
         <location filename="../../corelib/business_layer/model/screenplay/screenplay_dictionaries_model.cpp" line="164"/>
         <source>EVENING</source>
-        <translation type="unfinished"></translation>
+        <translation>MALAM</translation>
     </message>
     <message>
         <location filename="../../corelib/business_layer/model/screenplay/screenplay_dictionaries_model.cpp" line="165"/>
         <source>LATER</source>
-        <translation type="unfinished"></translation>
+        <translation>KEMUDIAN</translation>
     </message>
     <message>
         <location filename="../../corelib/business_layer/model/screenplay/screenplay_dictionaries_model.cpp" line="166"/>
         <source>MOMENTS LATER</source>
-        <translation type="unfinished"></translation>
+        <translation>BEBERAPA SAAT KEMUDIAN</translation>
     </message>
     <message>
         <location filename="../../corelib/business_layer/model/screenplay/screenplay_dictionaries_model.cpp" line="167"/>
         <source>CONTINUOUS</source>
-        <translation type="unfinished"></translation>
+        <translation>BERLANJUTAN</translation>
     </message>
     <message>
         <location filename="../../corelib/business_layer/model/screenplay/screenplay_dictionaries_model.cpp" line="168"/>
         <source>THE NEXT DAY</source>
-        <translation type="unfinished"></translation>
+        <translation>KEESOKAN HARINYA</translation>
     </message>
     <message>
         <location filename="../../corelib/business_layer/model/screenplay/screenplay_dictionaries_model.cpp" line="173"/>
         <source>V.O.</source>
-        <translation type="unfinished"></translation>
+        <translation>V.O.</translation>
     </message>
     <message>
         <location filename="../../corelib/business_layer/model/screenplay/screenplay_dictionaries_model.cpp" line="174"/>
         <source>O.S.</source>
-        <translation type="unfinished"></translation>
+        <translation>O.S.</translation>
     </message>
     <message>
         <location filename="../../corelib/business_layer/model/screenplay/screenplay_dictionaries_model.cpp" line="175"/>
         <source>O.C.</source>
-        <translation type="unfinished"></translation>
+        <translation>O.C.</translation>
     </message>
     <message>
         <location filename="../../corelib/business_layer/model/screenplay/screenplay_dictionaries_model.cpp" line="176"/>
         <source>SUBTITLE</source>
-        <translation type="unfinished"></translation>
+        <translation>SUBTITLE</translation>
     </message>
     <message>
         <location filename="../../corelib/business_layer/model/screenplay/screenplay_dictionaries_model.cpp" line="177"/>
         <source>CONT&apos;D</source>
-        <translation type="unfinished"></translation>
+        <translation>CONT&apos;D</translation>
     </message>
     <message>
         <location filename="../../corelib/business_layer/model/screenplay/screenplay_dictionaries_model.cpp" line="180"/>
         <source>CUT TO:</source>
-        <translation type="unfinished"></translation>
+        <translation>CUT TO:</translation>
     </message>
     <message>
         <location filename="../../corelib/business_layer/model/screenplay/screenplay_dictionaries_model.cpp" line="181"/>
         <source>FADE IN:</source>
-        <translation type="unfinished"></translation>
+        <translation>FADE IN:</translation>
     </message>
     <message>
         <location filename="../../corelib/business_layer/model/screenplay/screenplay_dictionaries_model.cpp" line="182"/>
         <source>FADE OUT</source>
-        <translation type="unfinished"></translation>
+        <translation>FADE OUT:</translation>
     </message>
     <message>
         <location filename="../../corelib/business_layer/model/screenplay/screenplay_dictionaries_model.cpp" line="183"/>
         <source>FADE TO:</source>
-        <translation type="unfinished"></translation>
+        <translation>FADE TO:</translation>
     </message>
     <message>
         <location filename="../../corelib/business_layer/model/screenplay/screenplay_dictionaries_model.cpp" line="184"/>
         <source>DISSOLVE TO:</source>
-        <translation type="unfinished"></translation>
+        <translation>DISSOLVE TO:</translation>
     </message>
     <message>
         <location filename="../../corelib/business_layer/model/screenplay/screenplay_dictionaries_model.cpp" line="185"/>
         <source>BACK TO:</source>
-        <translation type="unfinished"></translation>
+        <translation>BACK TO:</translation>
     </message>
     <message>
         <location filename="../../corelib/business_layer/model/screenplay/screenplay_dictionaries_model.cpp" line="186"/>
         <source>MATCH CUT TO:</source>
-        <translation type="unfinished"></translation>
+        <translation>MATCH CUT TO:</translation>
     </message>
     <message>
         <location filename="../../corelib/business_layer/model/screenplay/screenplay_dictionaries_model.cpp" line="187"/>
         <source>JUMP CUT TO:</source>
-        <translation type="unfinished"></translation>
+        <translation>JUMP CUT TO:</translation>
     </message>
     <message>
         <location filename="../../corelib/business_layer/model/screenplay/screenplay_dictionaries_model.cpp" line="188"/>
         <source>FADE TO BLACK</source>
-        <translation type="unfinished"></translation>
+        <translation>FADE TO BLACK:</translation>
     </message>
 </context>
 <context>
@@ -181,7 +181,7 @@
     <message>
         <location filename="../../corelib/business_layer/templates/screenplay_template.cpp" line="495"/>
         <source>Copy of </source>
-        <translation type="unfinished"></translation>
+        <translation>Salinan dari</translation>
     </message>
 </context>
 <context>
@@ -189,22 +189,22 @@
     <message>
         <location filename="../../corelib/business_layer/model/structure/structure_model.cpp" line="184"/>
         <source>Recycle bin</source>
-        <translation type="unfinished"></translation>
+        <translation>Tempat Sampah</translation>
     </message>
     <message>
         <location filename="../../corelib/business_layer/model/structure/structure_model.cpp" line="189"/>
         <source>Screenplay</source>
-        <translation type="unfinished"></translation>
+        <translation>Skenario</translation>
     </message>
     <message>
         <location filename="../../corelib/business_layer/model/structure/structure_model.cpp" line="191"/>
         <source>Title page</source>
-        <translation type="unfinished"></translation>
+        <translation>Judul halaman</translation>
     </message>
     <message>
         <location filename="../../corelib/business_layer/model/structure/structure_model.cpp" line="192"/>
         <source>Synopsis</source>
-        <translation type="unfinished"></translation>
+        <translation>Sinopsis</translation>
     </message>
     <message>
         <location filename="../../corelib/business_layer/model/structure/structure_model.cpp" line="193"/>
@@ -214,22 +214,22 @@
     <message>
         <location filename="../../corelib/business_layer/model/structure/structure_model.cpp" line="194"/>
         <source>Text</source>
-        <translation type="unfinished"></translation>
+        <translation>Teks</translation>
     </message>
     <message>
         <location filename="../../corelib/business_layer/model/structure/structure_model.cpp" line="195"/>
         <source>Statistics</source>
-        <translation type="unfinished"></translation>
+        <translation>Statistik</translation>
     </message>
     <message>
         <location filename="../../corelib/business_layer/model/structure/structure_model.cpp" line="200"/>
         <source>Characters</source>
-        <translation type="unfinished"></translation>
+        <translation>Tokoh</translation>
     </message>
     <message>
         <location filename="../../corelib/business_layer/model/structure/structure_model.cpp" line="205"/>
         <source>Locations</source>
-        <translation type="unfinished"></translation>
+        <translation>Lokasi</translation>
     </message>
 </context>
 <context>
@@ -238,12 +238,12 @@
         <location filename="../management_layer/plugins/screenplay_text/text/screenplay_text_corrector.cpp" line="41"/>
         <source>CONT&apos;D</source>
         <extracomment>Continued</extracomment>
-        <translation type="unfinished"></translation>
+        <translation>CONT&apos;D</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/screenplay_text/text/screenplay_text_corrector.cpp" line="46"/>
         <source>MORE</source>
-        <translation type="unfinished"></translation>
+        <translation>MORE</translation>
     </message>
 </context>
 <context>
@@ -251,7 +251,7 @@
     <message>
         <location filename="../../corelib/ui/widgets/color_picker/color_palette.cpp" line="325"/>
         <source>User colors</source>
-        <translation type="unfinished"></translation>
+        <translation>Pakai warna</translation>
     </message>
 </context>
 <context>
@@ -259,12 +259,12 @@
     <message>
         <location filename="../../corelib/ui/widgets/color_picker/color_picker.cpp" line="91"/>
         <source>Cancel</source>
-        <translation type="unfinished"></translation>
+        <translation>Batal</translation>
     </message>
     <message>
         <location filename="../../corelib/ui/widgets/color_picker/color_picker.cpp" line="92"/>
         <source>Add</source>
-        <translation type="unfinished"></translation>
+        <translation>Tambah</translation>
     </message>
 </context>
 <context>
@@ -272,7 +272,7 @@
     <message>
         <location filename="../../corelib/data_layer/database.cpp" line="91"/>
         <source>Project was modified in a newer version. Update to the latest version to open it.</source>
-        <translation type="unfinished"></translation>
+        <translation>Proyek ini sudah diubah ke versi terbaru. Harap update ke versi terbaru untuk membukannya.</translation>
     </message>
 </context>
 <context>
@@ -280,57 +280,57 @@
     <message>
         <location filename="../../corelib/utils/helpers/dialog_helper.cpp" line="31"/>
         <source>Story Architect project</source>
-        <translation type="unfinished"></translation>
+        <translation>Proyek Story Architect</translation>
     </message>
     <message>
         <location filename="../../corelib/utils/helpers/dialog_helper.cpp" line="37"/>
         <source>KIT Scenarist project</source>
-        <translation type="unfinished"></translation>
+        <translation>Projek KIT Scenarist</translation>
     </message>
     <message>
         <location filename="../../corelib/utils/helpers/dialog_helper.cpp" line="43"/>
         <source>Final Draft screenplay</source>
-        <translation type="unfinished"></translation>
+        <translation>Skenario Final Draft</translation>
     </message>
     <message>
         <location filename="../../corelib/utils/helpers/dialog_helper.cpp" line="49"/>
         <source>Final Draft template</source>
-        <translation type="unfinished"></translation>
+        <translation>Templat Final Draft</translation>
     </message>
     <message>
         <location filename="../../corelib/utils/helpers/dialog_helper.cpp" line="55"/>
         <source>Trelby screenplay</source>
-        <translation type="unfinished"></translation>
+        <translation>Skenario Trelby</translation>
     </message>
     <message>
         <location filename="../../corelib/utils/helpers/dialog_helper.cpp" line="61"/>
         <source>Office Open XML</source>
-        <translation type="unfinished"></translation>
+        <translation>Buka Office XML</translation>
     </message>
     <message>
         <location filename="../../corelib/utils/helpers/dialog_helper.cpp" line="67"/>
         <source>OpenDocument text</source>
-        <translation type="unfinished"></translation>
+        <translation>Buka Teks Dokumen</translation>
     </message>
     <message>
         <location filename="../../corelib/utils/helpers/dialog_helper.cpp" line="73"/>
         <source>Fountain text</source>
-        <translation type="unfinished"></translation>
+        <translation>Teks Fountain</translation>
     </message>
     <message>
         <location filename="../../corelib/utils/helpers/dialog_helper.cpp" line="79"/>
         <source>Celtx project</source>
-        <translation type="unfinished"></translation>
+        <translation>Proyek Celtx</translation>
     </message>
     <message>
         <location filename="../../corelib/utils/helpers/dialog_helper.cpp" line="85"/>
         <source>Plain text</source>
-        <translation type="unfinished"></translation>
+        <translation>Teks Kosong</translation>
     </message>
     <message>
         <location filename="../../corelib/utils/helpers/dialog_helper.cpp" line="92"/>
         <source>All supported files</source>
-        <translation type="unfinished"></translation>
+        <translation>Semua file yang mendukung</translation>
     </message>
 </context>
 <context>
@@ -338,7 +338,7 @@
     <message>
         <location filename="../../3rd_party/fileformats/docx_reader.cpp" line="145"/>
         <source>Unable to open archive.</source>
-        <translation type="unfinished"></translation>
+        <translation>Tidak dapat membuka arsip.</translation>
     </message>
 </context>
 <context>
@@ -346,12 +346,12 @@
     <message>
         <location filename="../management_layer/content/projects/project.cpp" line="150"/>
         <source>today at</source>
-        <translation type="unfinished"></translation>
+        <translation>Hari ini saat</translation>
     </message>
     <message>
         <location filename="../management_layer/content/projects/project.cpp" line="154"/>
         <source>yesterday at</source>
-        <translation type="unfinished"></translation>
+        <translation>Kemarin saat</translation>
     </message>
 </context>
 <context>
@@ -359,27 +359,27 @@
     <message>
         <location filename="../../3rd_party/fileformats/format_manager.cpp" line="71"/>
         <source>OpenDocument Text</source>
-        <translation type="unfinished"></translation>
+        <translation>Buka Teks Dokumen</translation>
     </message>
     <message>
         <location filename="../../3rd_party/fileformats/format_manager.cpp" line="73"/>
         <source>Office Open XML</source>
-        <translation type="unfinished"></translation>
+        <translation>Buka Office XML</translation>
     </message>
     <message>
         <location filename="../../3rd_party/fileformats/format_manager.cpp" line="75"/>
         <source>Rich Text Format</source>
-        <translation type="unfinished"></translation>
+        <translation>Format Teks Rich</translation>
     </message>
     <message>
         <location filename="../../3rd_party/fileformats/format_manager.cpp" line="77"/>
         <source>Plain Text</source>
-        <translation type="unfinished"></translation>
+        <translation>Teks Kosong</translation>
     </message>
     <message>
         <location filename="../../3rd_party/fileformats/format_manager.cpp" line="107"/>
         <source>All Supported Files</source>
-        <translation type="unfinished"></translation>
+        <translation>Semua File Yang Mendukung</translation>
     </message>
 </context>
 <context>
@@ -387,7 +387,7 @@
     <message>
         <location filename="../management_layer/plugins/screenplay_text/text/screenplay_text_edit.cpp" line="759"/>
         <source>END OF</source>
-        <translation type="unfinished"></translation>
+        <translation>AKHIR DARI</translation>
     </message>
 </context>
 <context>
@@ -395,7 +395,7 @@
     <message>
         <location filename="../management_layer/content/account/account_manager.cpp" line="390"/>
         <source>Choose avatar</source>
-        <translation type="unfinished"></translation>
+        <translation>Pilih avatar</translation>
     </message>
 </context>
 <context>
@@ -403,13 +403,13 @@
     <message>
         <location filename="../management_layer/application_manager.cpp" line="601"/>
         <source> - changed</source>
-        <translation type="unfinished"></translation>
+        <translation>- diubah</translation>
     </message>
     <message>
         <location filename="../management_layer/application_manager.cpp" line="667"/>
         <location filename="../management_layer/application_manager.cpp" line="685"/>
         <source>Saving error</source>
-        <translation type="unfinished"></translation>
+        <translation>Menyimpan error</translation>
     </message>
     <message>
         <location filename="../management_layer/application_manager.cpp" line="668"/>
@@ -424,22 +424,22 @@
     <message>
         <location filename="../management_layer/application_manager.cpp" line="731"/>
         <source>Project was modified. Save changes?</source>
-        <translation type="unfinished"></translation>
+        <translation>Proyek ini telah diubah. Simpan perubahan?</translation>
     </message>
     <message>
         <location filename="../management_layer/application_manager.cpp" line="732"/>
         <source>Cancel</source>
-        <translation type="unfinished"></translation>
+        <translation>Batal</translation>
     </message>
     <message>
         <location filename="../management_layer/application_manager.cpp" line="733"/>
         <source>Don&apos;t save</source>
-        <translation type="unfinished"></translation>
+        <translation>Jangan simpan</translation>
     </message>
     <message>
         <location filename="../management_layer/application_manager.cpp" line="734"/>
         <source>Save</source>
-        <translation type="unfinished"></translation>
+        <translation>Simpan</translation>
     </message>
     <message>
         <location filename="../management_layer/application_manager.cpp" line="806"/>
@@ -449,7 +449,8 @@
     <message>
         <location filename="../management_layer/application_manager.cpp" line="811"/>
         <source>The file can&apos;t be written. Looks like it is opened by another application. Please close it and retry to create a new project.</source>
-        <translation type="unfinished"></translation>
+        <translation>File ini tidak bisa ditulis. Sepertinya file ini sudah dibuka dengan aplikasi lain.
+Harap tutup dan coba kembali membuat proyek baru.</translation>
     </message>
     <message>
         <location filename="../management_layer/application_manager.cpp" line="815"/>
@@ -459,7 +460,7 @@
     <message>
         <location filename="../management_layer/application_manager.cpp" line="818"/>
         <source>Create project error</source>
-        <translation type="unfinished"></translation>
+        <translation>Membuat error proyek</translation>
     </message>
 </context>
 <context>
@@ -468,12 +469,12 @@
         <location filename="../../cloud/cloud_service_manager.cpp" line="275"/>
         <location filename="../../cloud/cloud_service_manager.cpp" line="284"/>
         <source>Wrong confirmation code</source>
-        <translation type="unfinished"></translation>
+        <translation>Kode konfirmasi salah</translation>
     </message>
     <message>
         <location filename="../../cloud/cloud_service_manager.cpp" line="317"/>
         <source>Wrong password</source>
-        <translation type="unfinished"></translation>
+        <translation>Salah kata sandi</translation>
     </message>
 </context>
 <context>
@@ -481,7 +482,7 @@
     <message>
         <location filename="../management_layer/content/import/import_manager.cpp" line="65"/>
         <source>File format not supported</source>
-        <translation type="unfinished"></translation>
+        <translation>Format file tidak mendukung</translation>
     </message>
     <message>
         <location filename="../management_layer/content/import/import_manager.cpp" line="66"/>
@@ -491,7 +492,7 @@
     <message>
         <location filename="../management_layer/content/import/import_manager.cpp" line="157"/>
         <source>Choose the file to import</source>
-        <translation type="unfinished"></translation>
+        <translation>Pilih file untuk di import</translation>
     </message>
 </context>
 <context>
@@ -512,34 +513,34 @@
     <message>
         <location filename="../management_layer/content/project/project_manager.cpp" line="134"/>
         <source>Empty recycle bin</source>
-        <translation type="unfinished"></translation>
+        <translation>Bersihkan tempat sampah</translation>
     </message>
     <message>
         <location filename="../management_layer/content/project/project_manager.cpp" line="146"/>
         <source>Add document</source>
-        <translation type="unfinished"></translation>
+        <translation>Tambah dokumen</translation>
     </message>
     <message>
         <location filename="../management_layer/content/project/project_manager.cpp" line="163"/>
         <source>Remove document</source>
-        <translation type="unfinished"></translation>
+        <translation>Hapus dokumen</translation>
     </message>
     <message>
         <location filename="../management_layer/content/project/project_manager.cpp" line="240"/>
         <source>Do you really want to permanently remove document?</source>
-        <translation type="unfinished"></translation>
+        <translation>Apakah Anda yakin ingin menghapus dokumen secara permanen?</translation>
     </message>
     <message>
         <location filename="../management_layer/content/project/project_manager.cpp" line="241"/>
         <location filename="../management_layer/content/project/project_manager.cpp" line="282"/>
         <source>No</source>
-        <translation type="unfinished"></translation>
+        <translation>Tidak</translation>
     </message>
     <message>
         <location filename="../management_layer/content/project/project_manager.cpp" line="242"/>
         <location filename="../management_layer/content/project/project_manager.cpp" line="283"/>
         <source>Yes, remove</source>
-        <translation type="unfinished"></translation>
+        <translation>Ya, hapus</translation>
     </message>
     <message>
         <location filename="../management_layer/content/project/project_manager.cpp" line="281"/>
@@ -549,12 +550,12 @@
     <message>
         <location filename="../management_layer/content/project/project_manager.cpp" line="709"/>
         <source>Title page</source>
-        <translation type="unfinished"></translation>
+        <translation>Judul halaman</translation>
     </message>
     <message>
         <location filename="../management_layer/content/project/project_manager.cpp" line="710"/>
         <source>Synopsis</source>
-        <translation type="unfinished"></translation>
+        <translation>Sinopsis</translation>
     </message>
     <message>
         <location filename="../management_layer/content/project/project_manager.cpp" line="711"/>
@@ -564,12 +565,12 @@
     <message>
         <location filename="../management_layer/content/project/project_manager.cpp" line="712"/>
         <source>Text</source>
-        <translation type="unfinished"></translation>
+        <translation>Teks</translation>
     </message>
     <message>
         <location filename="../management_layer/content/project/project_manager.cpp" line="713"/>
         <source>Statistics</source>
-        <translation type="unfinished"></translation>
+        <translation>Statistik</translation>
     </message>
 </context>
 <context>
@@ -577,7 +578,7 @@
     <message>
         <location filename="../management_layer/content/projects/projects_manager.cpp" line="250"/>
         <source>Choose the file to open</source>
-        <translation type="unfinished"></translation>
+        <translation>Pilih file untuk dibuka</translation>
     </message>
 </context>
 <context>
@@ -585,7 +586,7 @@
     <message>
         <location filename="../management_layer/content/settings/settings_manager.cpp" line="298"/>
         <source>Spelling dictionary loading</source>
-        <translation type="unfinished"></translation>
+        <translation>Kamus pengejaan sedang dibuka</translation>
     </message>
 </context>
 <context>
@@ -593,7 +594,8 @@
     <message>
         <location filename="../../3rd_party/fileformats/odt_reader.cpp" line="77"/>
         <source>Unable to open archive.</source>
-        <translation type="unfinished"></translation>
+        <translation>Tidak dapat membuka arsip.
+</translation>
     </message>
 </context>
 <context>
@@ -601,7 +603,7 @@
     <message>
         <location filename="../management_layer/content/project/project_plugins_builder.cpp" line="181"/>
         <source>Information about project</source>
-        <translation type="unfinished"></translation>
+        <translation>Informasi tentang proyek</translation>
     </message>
     <message>
         <location filename="../management_layer/content/project/project_plugins_builder.cpp" line="183"/>
@@ -611,7 +613,7 @@
     <message>
         <location filename="../management_layer/content/project/project_plugins_builder.cpp" line="185"/>
         <source>Information about screenplay</source>
-        <translation type="unfinished"></translation>
+        <translation>Informasi tentang skenario</translation>
     </message>
     <message>
         <location filename="../management_layer/content/project/project_plugins_builder.cpp" line="187"/>
@@ -621,12 +623,12 @@
     <message>
         <location filename="../management_layer/content/project/project_plugins_builder.cpp" line="189"/>
         <source>Title page text</source>
-        <translation type="unfinished"></translation>
+        <translation>Teks judul halaman</translation>
     </message>
     <message>
         <location filename="../management_layer/content/project/project_plugins_builder.cpp" line="191"/>
         <source>Text</source>
-        <translation type="unfinished"></translation>
+        <translation>Teks</translation>
     </message>
     <message>
         <location filename="../management_layer/content/project/project_plugins_builder.cpp" line="193"/>
@@ -636,17 +638,17 @@
     <message>
         <location filename="../management_layer/content/project/project_plugins_builder.cpp" line="195"/>
         <source>Screenplay text</source>
-        <translation type="unfinished"></translation>
+        <translation>Teks skenario</translation>
     </message>
     <message>
         <location filename="../management_layer/content/project/project_plugins_builder.cpp" line="197"/>
         <source>Cards</source>
-        <translation type="unfinished"></translation>
+        <translation>Kartu</translation>
     </message>
     <message>
         <location filename="../management_layer/content/project/project_plugins_builder.cpp" line="199"/>
         <source>Statistics</source>
-        <translation type="unfinished"></translation>
+        <translation>Statistik</translation>
     </message>
 </context>
 <context>
@@ -655,7 +657,7 @@
         <location filename="../../3rd_party/fileformats/rtf_reader.cpp" line="341"/>
         <location filename="../../3rd_party/fileformats/rtf_reader.cpp" line="345"/>
         <source>Not a supported RTF file.</source>
-        <translation type="unfinished"></translation>
+        <translation>File RTF tidak mendukung</translation>
     </message>
 </context>
 <context>
@@ -676,57 +678,57 @@
     <message>
         <location filename="../../corelib/ui/widgets/dialog/standard_dialog.cpp" line="14"/>
         <source>Ah, perfect</source>
-        <translation type="unfinished"></translation>
+        <translation>Ah, sempurna</translation>
     </message>
     <message>
         <location filename="../../corelib/ui/widgets/dialog/standard_dialog.cpp" line="15"/>
         <source>This is fine</source>
-        <translation type="unfinished"></translation>
+        <translation>Ini boleh</translation>
     </message>
     <message>
         <location filename="../../corelib/ui/widgets/dialog/standard_dialog.cpp" line="16"/>
         <source>Not bad</source>
-        <translation type="unfinished"></translation>
+        <translation>Tidak buruk</translation>
     </message>
     <message>
         <location filename="../../corelib/ui/widgets/dialog/standard_dialog.cpp" line="17"/>
         <source>I see</source>
-        <translation type="unfinished"></translation>
+        <translation>Saya paham</translation>
     </message>
     <message>
         <location filename="../../corelib/ui/widgets/dialog/standard_dialog.cpp" line="18"/>
         <source>Wonderful</source>
-        <translation type="unfinished"></translation>
+        <translation>Hebat</translation>
     </message>
     <message>
         <location filename="../../corelib/ui/widgets/dialog/standard_dialog.cpp" line="19"/>
         <source>Alright</source>
-        <translation type="unfinished"></translation>
+        <translation>Baiklah</translation>
     </message>
     <message>
         <location filename="../../corelib/ui/widgets/dialog/standard_dialog.cpp" line="20"/>
         <source>So-so</source>
-        <translation type="unfinished"></translation>
+        <translation>Boleh juga</translation>
     </message>
     <message>
         <location filename="../../corelib/ui/widgets/dialog/standard_dialog.cpp" line="21"/>
         <source>Amazing</source>
-        <translation type="unfinished"></translation>
+        <translation>Luar Biasa</translation>
     </message>
     <message>
         <location filename="../../corelib/ui/widgets/dialog/standard_dialog.cpp" line="22"/>
         <source>Cool</source>
-        <translation type="unfinished"></translation>
+        <translation>Keren</translation>
     </message>
     <message>
         <location filename="../../corelib/ui/widgets/dialog/standard_dialog.cpp" line="23"/>
         <source>Gorgeous</source>
-        <translation type="unfinished"></translation>
+        <translation>Indah sekali</translation>
     </message>
     <message>
         <location filename="../../corelib/ui/widgets/dialog/standard_dialog.cpp" line="24"/>
         <source>Fine</source>
-        <translation type="unfinished"></translation>
+        <translation>Baik</translation>
     </message>
 </context>
 <context>
@@ -734,18 +736,19 @@
     <message>
         <location filename="../ui/account/account_navigator.cpp" line="80"/>
         <source>free version</source>
-        <translation type="unfinished"></translation>
+        <translation>Versi Gratis</translation>
     </message>
     <message>
         <location filename="../ui/account/account_navigator.cpp" line="81"/>
         <source>Upgrade to pro</source>
-        <translation type="unfinished"></translation>
+        <translation>Upgrade ke Pro</translation>
     </message>
     <message>
         <location filename="../ui/account/account_navigator.cpp" line="82"/>
         <source>Used 0.34 Gb 
 from 2 Gb</source>
-        <translation type="unfinished"></translation>
+        <translation>Menggunakan 0.34 Gb
+dari 2 Gb</translation>
     </message>
     <message>
         <location filename="../ui/account/account_navigator.cpp" line="85"/>
@@ -820,7 +823,7 @@ from 2 Gb</source>
     <message>
         <location filename="../ui/account/change_password_dialog.cpp" line="114"/>
         <source>Cancel</source>
-        <translation type="unfinished"></translation>
+        <translation>Batal</translation>
     </message>
 </context>
 <context>
@@ -841,7 +844,7 @@ from 2 Gb</source>
     <message>
         <location filename="../management_layer/plugins/project_information/cover_dialog.cpp" line="82"/>
         <source>Cancel</source>
-        <translation type="unfinished"></translation>
+        <translation>Batal</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/project_information/cover_dialog.cpp" line="83"/>
@@ -864,7 +867,7 @@ from 2 Gb</source>
     <message>
         <location filename="../ui/project/create_document_dialog.cpp" line="129"/>
         <source>Screenplay</source>
-        <translation type="unfinished"></translation>
+        <translation>Skenario</translation>
     </message>
     <message>
         <location filename="../ui/project/create_document_dialog.cpp" line="131"/>
@@ -874,7 +877,7 @@ from 2 Gb</source>
     <message>
         <location filename="../ui/project/create_document_dialog.cpp" line="134"/>
         <source>Cancel</source>
-        <translation type="unfinished"></translation>
+        <translation>Batal</translation>
     </message>
     <message>
         <location filename="../ui/project/create_document_dialog.cpp" line="135"/>
@@ -892,12 +895,12 @@ from 2 Gb</source>
     <message>
         <location filename="../ui/projects/create_project_dialog.cpp" line="124"/>
         <source>Choose the file to import</source>
-        <translation type="unfinished"></translation>
+        <translation>Pilih file untuk di import</translation>
     </message>
     <message>
         <location filename="../ui/projects/create_project_dialog.cpp" line="134"/>
         <source>File format not supported</source>
-        <translation type="unfinished"></translation>
+        <translation>Format file tidak mendukung</translation>
     </message>
     <message>
         <location filename="../ui/projects/create_project_dialog.cpp" line="135"/>
@@ -962,7 +965,7 @@ from 2 Gb</source>
     <message>
         <location filename="../ui/projects/create_project_dialog.cpp" line="263"/>
         <source>Cancel</source>
-        <translation type="unfinished"></translation>
+        <translation>Batal</translation>
     </message>
     <message>
         <location filename="../ui/projects/create_project_dialog.cpp" line="264"/>
@@ -980,7 +983,7 @@ from 2 Gb</source>
     <message>
         <location filename="../ui/import/import_dialog.cpp" line="127"/>
         <source>Documents</source>
-        <translation type="unfinished"></translation>
+        <translation>Dokumen</translation>
     </message>
     <message>
         <location filename="../ui/import/import_dialog.cpp" line="128"/>
@@ -995,7 +998,7 @@ from 2 Gb</source>
     <message>
         <location filename="../ui/import/import_dialog.cpp" line="130"/>
         <source>Screenplay</source>
-        <translation type="unfinished"></translation>
+        <translation>Skenario</translation>
     </message>
     <message>
         <location filename="../ui/import/import_dialog.cpp" line="131"/>
@@ -1015,7 +1018,7 @@ from 2 Gb</source>
     <message>
         <location filename="../ui/import/import_dialog.cpp" line="135"/>
         <source>Cancel</source>
-        <translation type="unfinished"></translation>
+        <translation>Batal</translation>
     </message>
 </context>
 <context>
@@ -1092,7 +1095,7 @@ from 2 Gb</source>
     <message>
         <location filename="../ui/account/login_dialog.cpp" line="241"/>
         <source>Cancel</source>
-        <translation type="unfinished"></translation>
+        <translation>Batal</translation>
     </message>
 </context>
 <context>
@@ -1264,7 +1267,7 @@ from 2 Gb</source>
     <message>
         <location filename="../ui/project/project_navigator.cpp" line="138"/>
         <source>Add document</source>
-        <translation type="unfinished"></translation>
+        <translation>Tambah dokumen</translation>
     </message>
 </context>
 <context>
@@ -1382,7 +1385,7 @@ from 2 Gb</source>
     <message>
         <location filename="../ui/account/renew_subscription_dialog.cpp" line="146"/>
         <source>Cancel</source>
-        <translation type="unfinished"></translation>
+        <translation>Batal</translation>
     </message>
 </context>
 <context>
@@ -1405,12 +1408,12 @@ from 2 Gb</source>
     <message>
         <location filename="../management_layer/plugins/screenplay_information/screenplay_information_view.cpp" line="183"/>
         <source>Title page</source>
-        <translation type="unfinished"></translation>
+        <translation>Judul halaman</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/screenplay_information/screenplay_information_view.cpp" line="184"/>
         <source>Synopsis</source>
-        <translation type="unfinished"></translation>
+        <translation>Sinopsis</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/screenplay_information/screenplay_information_view.cpp" line="185"/>
@@ -1420,12 +1423,12 @@ from 2 Gb</source>
     <message>
         <location filename="../management_layer/plugins/screenplay_information/screenplay_information_view.cpp" line="186"/>
         <source>Text</source>
-        <translation type="unfinished"></translation>
+        <translation>Teks</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/screenplay_information/screenplay_information_view.cpp" line="187"/>
         <source>Statistics</source>
-        <translation type="unfinished"></translation>
+        <translation>Statistik</translation>
     </message>
 </context>
 <context>
@@ -1471,12 +1474,12 @@ from 2 Gb</source>
     <message>
         <location filename="../management_layer/plugins/screenplay_text/comments/screenplay_text_add_comment_view.cpp" line="128"/>
         <source>Cancel</source>
-        <translation type="unfinished"></translation>
+        <translation>Batal</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/screenplay_text/comments/screenplay_text_add_comment_view.cpp" line="129"/>
         <source>Save</source>
-        <translation type="unfinished"></translation>
+        <translation>Simpan</translation>
     </message>
 </context>
 <context>
@@ -1485,7 +1488,6 @@ from 2 Gb</source>
         <location filename="../management_layer/plugins/screenplay_text/comments/screenplay_text_comment_delegate.cpp" line="230"/>
         <source>%n reply(s)</source>
         <translation type="unfinished">
-            <numerusform></numerusform>
             <numerusform></numerusform>
         </translation>
     </message>
@@ -1792,7 +1794,7 @@ from 2 Gb</source>
     <message>
         <location filename="../ui/settings/settings_navigator.cpp" line="136"/>
         <source>Screenplay</source>
-        <translation type="unfinished"></translation>
+        <translation>Skenario</translation>
     </message>
     <message>
         <location filename="../ui/settings/settings_navigator.cpp" line="137"/>
@@ -2495,7 +2497,7 @@ If you work with no interruptions it saves the project every 3 minutes.</source>
     <message>
         <location filename="../ui/settings/settings_view.cpp" line="1104"/>
         <source>Screenplay</source>
-        <translation type="unfinished"></translation>
+        <translation>Skenario</translation>
     </message>
     <message>
         <location filename="../ui/settings/settings_view.cpp" line="1105"/>
@@ -2743,7 +2745,7 @@ If you work with no interruptions it saves the project every 3 minutes.</source>
     <message>
         <location filename="../ui/account/upgrade_to_pro_dialog.cpp" line="90"/>
         <source>Cancel</source>
-        <translation type="unfinished"></translation>
+        <translation>Batal</translation>
     </message>
 </context>
 <context>

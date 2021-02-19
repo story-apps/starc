@@ -532,7 +532,7 @@ void ApplicationManager::Implementation::setTranslation(QLocale::Language _langu
     //
     QApplication::removeTranslator(appTranslator);
     if (!translation.isEmpty()) {
-        appTranslator->load(":/translations/for_use_starc_translation_" + translation + ".qm");
+        appTranslator->load(":/translations/translation_" + translation + ".qm");
         QApplication::installTranslator(appTranslator);
     }
 
