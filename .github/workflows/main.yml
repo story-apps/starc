@@ -57,6 +57,11 @@ jobs:
         with:
           version: 5.15.1
           target: desktop
+          
+      - name: Configure MSVC
+        uses: ilammy/msvc-dev-cmd@v1
+        with:
+          arch: x64
 
       - name: Run QMake
         shell: bash
