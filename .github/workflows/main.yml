@@ -71,7 +71,6 @@ jobs:
           qmake starc.pro CONFIG+=release
 
       - name: Build
-        shell: bash
         run: |
           call "%programfiles(x86)%\Microsoft Visual Studio\2019\Enterprise\VC\Auxiliary\Build\vcvars64.bat"
           cd src
