@@ -58,6 +58,11 @@ jobs:
           version: 5.15.1
           arch: win64_msvc2019_64
           target: desktop
+
+      - name: Install dependencies
+        shell: bash
+        run: |
+          choco install openssl
           
       - name: Configure MSVC
         uses: ilammy/msvc-dev-cmd@v1
@@ -74,17 +79,22 @@ jobs:
         run: |
           cd src
           nmake
+
+      - name: Prepare installer folder
+        shell: bash
+        run: |
+          cd build/windows
+          ./make-exe_64.sh ${{env.APP_VERSION}}
           
       - name: Make installer
         uses: joncloud/makensis-action@v3.4
         with:
           arguments: "/V3"
-          script-file: "build/windows/starc64.nsi"
-#           additional-plugin-paths: ${{ github.workspace }}/NSIS_Plugins/Plugins/
+          script-file: "build/windows/starc_64.nsi"
 
       - name: Collect artifacts
         uses: actions/upload-artifact@v2
         with:
-          name: linux packages
-          path: build/windows/starc-setup_64.exe
+          name: windows packages
+          path: build/windows/starc-setup-64.exe
       

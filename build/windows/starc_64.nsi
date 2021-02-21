@@ -58,6 +58,12 @@
   !insertmacro MUI_LANGUAGE "Russian"
 
 ;--------------------------------
+;Additional includes
+
+
+!include FileAssociation.nsh
+
+;--------------------------------
 ;Installer Sections
 
 Section "App files section" SecFiles

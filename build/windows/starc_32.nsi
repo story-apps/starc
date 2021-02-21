@@ -55,7 +55,13 @@
 ;Languages
 
   !insertmacro MUI_LANGUAGE "English"
-  !insertmacro MUI_LANGUAGE "Russian"
+  !insertmacro MUI_LANGUAGE "Russian"  
+
+;--------------------------------
+;Additional includes
+
+
+!include FileAssociation.nsh
 
 ;--------------------------------
 ;Installer Sections
