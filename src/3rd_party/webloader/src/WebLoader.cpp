@@ -278,7 +278,6 @@ void WebLoader::downloadComplete(QNetworkReply* _reply)
         // Получаем ссылку для загрузки из заголовка ответа [Loacation]
         QUrl redirectUrl = _reply->header(QNetworkRequest::LocationHeader).toUrl();
         m_request.setUrlToLoad(redirectUrl);
-        m_parameters.setRequestMethod(NetworkRequestMethod::Get); // Редирект всегда методом Get
         m_isNeedRedirect = true;
     } else {
         //! Загружены данные [reply->bytesAvailable()]

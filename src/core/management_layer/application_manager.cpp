@@ -308,8 +308,10 @@ void ApplicationManager::Implementation::checkNewVersion()
     //
     // Построим ссылку, чтобы учитывать запрос на проверку обновлений
     //
-    NetworkRequest loader;
-    loader.setRequestMethod(NetworkRequestMethod::Post);
+    auto loader = new NetworkRequest;
+    QObject::connect(loader, &NetworkRequest::finished, loader, &NetworkRequest::deleteLater);
+    //
+    loader->setRequestMethod(NetworkRequestMethod::Post);
     QJsonObject data;
     data["device_uuid"] = applicationUuidValue.toString();
     data["application_name"] = QApplication::applicationName();
@@ -330,8 +332,8 @@ void ApplicationManager::Implementation::checkNewVersion()
     data["system_language"] = QLocale::languageToString(QLocale::system().language());
     data["action_name"] = "startup";
     data["action_content"] = QString();
-    loader.setRawRequestData(QJsonDocument(data).toJson(), "application/json");
-    loader.loadAsync("http://demo.storyapps.dev/telemetry/");
+    loader->setRawRequestData(QJsonDocument(data).toJson(), "application/json");
+    loader->loadAsync("https://demo.storyapps.dev/telemetry/");
 }
 
 void ApplicationManager::Implementation::configureAutoSave()
