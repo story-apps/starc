@@ -43,3 +43,58 @@ jobs:
         with:
           name: linux packages
           path: build/linux/starc-setup-${{env.APP_VERSION}}_amd64.deb
+
+  build_windows:
+    name: Build Windows version
+    runs-on: windows-latest
+    timeout-minutes: 60
+    steps:
+      - name: Checkout Sources
+        uses: actions/checkout@master
+
+      - name: Install Qt
+        uses: jurplel/install-qt-action@v2
+        with:
+          version: 5.15.1
+          arch: win64_msvc2019_64
+          target: desktop
+
+      - name: Install dependencies
+        shell: bash
+        run: |
+          choco install openssl
+          
+      - name: Configure MSVC
+        uses: ilammy/msvc-dev-cmd@v1
+        with:
+          arch: x64
+
+      - name: Run QMake
+        shell: bash
+        run: |
+          cd src
+          qmake starc.pro CONFIG+=release
+
+      - name: Build
+        run: |
+          cd src
+          nmake
+
+      - name: Prepare installer folder
+        shell: bash
+        run: |
+          cd build/windows
+          ./make-exe_64.sh ${{env.APP_VERSION}}
+          
+      - name: Make installer
+        uses: joncloud/makensis-action@v3.4
+        with:
+          arguments: "/V3"
+          script-file: "build/windows/starc_64.nsi"
+
+      - name: Collect artifacts
+        uses: actions/upload-artifact@v2
+        with:
+          name: windows packages
+          path: build/windows/starc-setup-64.exe
+      
