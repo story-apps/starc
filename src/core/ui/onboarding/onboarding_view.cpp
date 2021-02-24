@@ -307,7 +307,8 @@ void OnboardingView::Implementation::updateThemePageUi()
     finishOnboardingButton->setBackgroundColor(DesignSystem::color().secondary());
     finishOnboardingButton->setTextColor(DesignSystem::color().onSecondary());
     themePageButtonsLayout->setSpacing(static_cast<int>(Ui::DesignSystem::layout().buttonsSpacing()));
-    themePageButtonsLayout->setContentsMargins({static_cast<int>(Ui::DesignSystem::layout().px24()), 0, 0,
+    themePageButtonsLayout->setContentsMargins({static_cast<int>(Ui::DesignSystem::layout().px24()), 0,
+                                                static_cast<int>(Ui::DesignSystem::layout().px24()),
                                                 static_cast<int>(Ui::DesignSystem::layout().px12())});
 }
 
