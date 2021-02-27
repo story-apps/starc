@@ -35,9 +35,9 @@ signals:
 
 protected:
     /**
-     * @brief Перенастраиваем виджет при обновлении дизайн системы
+     * @brief Сконфигурируем попап
      */
-    bool event(QEvent* _event) override;
+    void reconfigure() override;
 
     /**
      * @brief Скрываем попап, когда фокус ушёл из виджета

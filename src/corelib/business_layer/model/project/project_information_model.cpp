@@ -8,7 +8,6 @@
 #include <utils/helpers/text_helper.h>
 
 #include <QDomDocument>
-#include <QPixmap>
 
 
 namespace BusinessLayer
@@ -26,10 +25,7 @@ class ProjectInformationModel::Implementation
 public:
     QString name;
     QString logline;
-    struct {
-        QUuid uuid;
-        QPixmap image;
-    } cover;
+    Domain::DocumentImage cover;
 };
 
 
@@ -105,12 +101,9 @@ void ProjectInformationModel::initDocument()
     QDomDocument domDocument;
     domDocument.setContent(document()->content());
     const auto documentNode = domDocument.firstChildElement(kDocumentKey);
-    const auto nameNode = documentNode.firstChildElement(kNameKey);
-    d->name = nameNode.text();
-    const auto loglineNode = documentNode.firstChildElement(kLoglineKey);
-    d->logline = loglineNode.text();
-    const auto coverNode = documentNode.firstChildElement(kCoverKey);
-    d->cover.uuid = coverNode.text();
+    d->name = documentNode.firstChildElement(kNameKey).text();
+    d->logline = documentNode.firstChildElement(kLoglineKey).text();
+    d->cover.uuid = documentNode.firstChildElement(kCoverKey).text();
     d->cover.image = imageWrapper()->load(d->cover.uuid);
 }
 
@@ -130,11 +123,11 @@ QByteArray ProjectInformationModel::toXml() const
     }
 
     QByteArray xml = "<?xml version=\"1.0\"?>\n";
-    xml += QString("<%1 mime-type=\"%2\" version=\"1.0\">\n").arg(kDocumentKey, Domain::mimeTypeFor(document()->type()));
-    xml += QString("<%1><![CDATA[%2]]></%1>\n").arg(kNameKey, d->name);
-    xml += QString("<%1><![CDATA[%2]]></%1>\n").arg(kLoglineKey, d->logline);
-    xml += QString("<%1><![CDATA[%2]]></%1>\n").arg(kCoverKey, d->cover.uuid.toString());
-    xml += QString("</%1>").arg(kDocumentKey);
+    xml += QString("<%1 mime-type=\"%2\" version=\"1.0\">\n").arg(kDocumentKey, Domain::mimeTypeFor(document()->type())).toUtf8();
+    xml += QString("<%1><![CDATA[%2]]></%1>\n").arg(kNameKey, d->name).toUtf8();
+    xml += QString("<%1><![CDATA[%2]]></%1>\n").arg(kLoglineKey, d->logline).toUtf8();
+    xml += QString("<%1><![CDATA[%2]]></%1>\n").arg(kCoverKey, d->cover.uuid.toString()).toUtf8();
+    xml += QString("</%1>").arg(kDocumentKey).toUtf8();
     return xml;
 }
 

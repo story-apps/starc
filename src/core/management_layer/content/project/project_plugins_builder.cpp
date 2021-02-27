@@ -35,6 +35,7 @@ namespace {
     const QHash<QString, QVector<ProjectPluginsBuilder::EditorInfo>> kDocumentToEditors
     = {{ "application/x-starc/document/project", {{ "application/x-starc/editor/project/information", u8"\U000f02fd" },
                                                   { "application/x-starc/editor/project/collaborators", u8"\U000f0b58" }}},
+       { "application/x-starc/document/character", {{ "application/x-starc/editor/character/information", u8"\U000f02fd" }}},
        { "application/x-starc/document/screenplay", {{ "application/x-starc/editor/screenplay/information", u8"\U000f02fd" },
                                                      { "application/x-starc/editor/screenplay/parameters", u8"\U000f0493" }}},
        { "application/x-starc/document/screenplay/title-page", {{ "application/x-starc/editor/screenplay/title-page", u8"\U000f09ed" }}},
@@ -52,6 +53,8 @@ namespace {
       */
     const QHash<QString, QString> kMimeToPlugin
     = {{ "application/x-starc/editor/project/information", "*projectinformationplugin*" },
+       //
+       { "application/x-starc/editor/character/information", "*characterinformationplugin*" },
        //
        { "application/x-starc/editor/screenplay/information", "*screenplayinformationplugin*" },
        { "application/x-starc/editor/screenplay/parameters", "*screenplayparametersplugin*" },

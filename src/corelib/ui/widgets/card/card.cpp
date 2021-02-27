@@ -76,15 +76,15 @@ void Card::paintEvent(QPaintEvent* _event)
     QPainter backgroundImagePainter(&backgroundImage);
     backgroundImagePainter.setPen(Qt::NoPen);
     backgroundImagePainter.setBrush(backgroundColor());
-    const qreal borderRadius = Ui::DesignSystem::card().borderRadius();
+    const auto borderRadius = Ui::DesignSystem::card().borderRadius();
     backgroundImagePainter.drawRoundedRect(QRect({0,0}, backgroundImage.size()), borderRadius, borderRadius);
     //
     // ... рисуем тень
     //
-    const qreal shadowHeight = std::max(Ui::DesignSystem::card().minimumShadowBlurRadius(),
-                                        d->shadowHeightAnimation.currentValue().toReal());
-    const bool cacheShadow = qFuzzyCompare(shadowHeight, Ui::DesignSystem::card().minimumShadowBlurRadius());
-    const QPixmap shadow
+    const auto shadowHeight = std::max(Ui::DesignSystem::card().minimumShadowBlurRadius(),
+                                       d->shadowHeightAnimation.currentValue().toReal());
+    const auto cacheShadow = qFuzzyCompare(shadowHeight, Ui::DesignSystem::card().minimumShadowBlurRadius());
+    const auto shadow
             = ImageHelper::dropShadow(backgroundImage,
                                       Ui::DesignSystem::card().shadowMargins(),
                                       shadowHeight,

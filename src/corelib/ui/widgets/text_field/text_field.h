@@ -89,6 +89,7 @@ public:
      * @brief Установить использование отступов по-умолчанию
      */
     void setDefaultMarginsEnabled(bool _enable);
+    void setCustomMargins(const QMarginsF& _margins);
 
     /**
      * @brief Установить необходимость добавления новых строк при нажатии Enter'а
@@ -120,6 +121,11 @@ protected:
      * @brief Задать цвет иконки вспомогательного действия
      */
     void setTrailingIconColor(const QColor& _color);
+
+    /**
+     * @brief Сконфигурировать виджет при изменении какого-либо из параметров внешнего вида
+     */
+    virtual void reconfigure();
 
     /**
      * @brief Перенастраиваем виджет при обновлении дизайн системы

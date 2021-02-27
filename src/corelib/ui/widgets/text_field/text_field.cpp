@@ -19,12 +19,12 @@
 class TextField::Implementation
 {
 public:
-    Implementation();
+    explicit Implementation(TextField* _q);
 
     /**
      * @brief Переконфигурировать виджет при смене параметров дизайн системы
      */
-    void reconfigure(TextField* _textField);
+    void reconfigure();
 
     /**
      * @brief Анимировать лейбл
@@ -69,6 +69,8 @@ public:
     QRectF iconRect(int _width) const;
 
 
+    TextField* q = nullptr;
+
     QColor backgroundInactiveColor = Qt::red;
     QColor backgroundActiveColor = Qt::red;
     QColor textColor = Qt::red;
@@ -88,6 +90,7 @@ public:
     bool isUnderlineDecorationVisible = true;
     bool isTitleVisible = true;
     bool isDefaultMarginsEnabled = true;
+    QMarginsF customMargins;
 
     QVariantAnimation labelColorAnimation;
     QVariantAnimation labelFontSizeAnimation;
@@ -95,7 +98,8 @@ public:
     QVariantAnimation decorationAnimation;
 };
 
-TextField::Implementation::Implementation()
+TextField::Implementation::Implementation(TextField* _q)
+    : q(_q)
 {
     labelColorAnimation.setDuration(200);
     labelColorAnimation.setEasingCurve(QEasingCurve::OutQuad);
@@ -107,22 +111,22 @@ TextField::Implementation::Implementation()
     decorationAnimation.setEasingCurve(QEasingCurve::OutQuad);
 }
 
-void TextField::Implementation::reconfigure(TextField* _textField)
+void TextField::Implementation::reconfigure()
 {
-    QSignalBlocker signalBlocker(_textField);
+    QSignalBlocker signalBlocker(q);
 
-    _textField->setFont(Ui::DesignSystem::font().body1());
-    _textField->setCursorWidth(Ui::DesignSystem::layout().px4());
+    q->setFont(Ui::DesignSystem::font().body1());
+    q->setCursorWidth(Ui::DesignSystem::layout().px4());
 
-    QPalette palette = _textField->palette();
+    QPalette palette = q->palette();
     palette.setColor(QPalette::Base, Qt::transparent);
     palette.setColor(QPalette::Text, textColor);
     palette.setColor(QPalette::Disabled, QPalette::Text, textDisabledColor);
     palette.setColor(QPalette::Highlight, Ui::DesignSystem::color().secondary());
     palette.setColor(QPalette::HighlightedText, Ui::DesignSystem::color().onSecondary());
-    _textField->setPalette(palette);
+    q->setPalette(palette);
 
-    QTextFrameFormat frameFormat = _textField->document()->rootFrame()->frameFormat();
+    QTextFrameFormat frameFormat = q->document()->rootFrame()->frameFormat();
     frameFormat.setLeftMargin(contentMargins().left()
                               + margins().left());
     frameFormat.setTopMargin(contentMargins().top()
@@ -135,17 +139,17 @@ void TextField::Implementation::reconfigure(TextField* _textField)
                                     + Ui::DesignSystem::textField().spacing()));
     frameFormat.setBottomMargin(contentMargins().bottom()
                                 + margins().bottom());
-    _textField->document()->rootFrame()->setFrameFormat(frameFormat);
+    q->document()->rootFrame()->setFrameFormat(frameFormat);
 
     //
     // Переконфигурируем цвет и размер лейблов
     //
-    if (_textField->hasFocus()) {
+    if (q->hasFocus()) {
         labelColorAnimation.setEndValue(Ui::DesignSystem::color().secondary());
     } else {
         labelColorAnimation.setEndValue(textDisabledColor);
     }
-    if (_textField->text().isEmpty() && _textField->placeholderText().isEmpty()) {
+    if (q->text().isEmpty() && q->placeholderText().isEmpty()) {
         animateLabelToBottom();
     } else {
         animateLabelToTop();
@@ -202,7 +206,8 @@ void TextField::Implementation::finishAnimationIfInvisible(TextField* _textField
 
 QMarginsF TextField::Implementation::contentMargins() const
 {
-    return isDefaultMarginsEnabled ? Ui::DesignSystem::textField().contentsMargins() : QMarginsF();
+    return isDefaultMarginsEnabled ? Ui::DesignSystem::textField().contentsMargins()
+                                   : customMargins;
 }
 
 QMarginsF TextField::Implementation::margins() const
@@ -298,7 +303,7 @@ QRectF TextField::Implementation::iconRect(int _width) const
 
 TextField::TextField(QWidget* _parent)
     : QTextEdit(_parent),
-      d(new Implementation)
+      d(new Implementation(this))
 {
     setAttribute(Qt::WA_Hover);
     setContextMenuPolicy(Qt::CustomContextMenu);
@@ -313,7 +318,7 @@ TextField::TextField(QWidget* _parent)
     policy.setHeightForWidth(true);
     setSizePolicy(policy);
 
-    d->reconfigure(this);
+    reconfigure();
 
     connect(&d->labelColorAnimation, &QVariantAnimation::valueChanged, this, [this] { update(); });
     connect(&d->labelFontSizeAnimation, &QVariantAnimation::valueChanged, this, [this] { update(); });
@@ -334,7 +339,7 @@ void TextField::setBackgroundColor(const QColor& _color)
     d->backgroundInactiveColor.setAlphaF(Ui::DesignSystem::textField().backgroundInactiveColorOpacity());
     d->backgroundActiveColor = _color;
     d->backgroundActiveColor.setAlphaF(Ui::DesignSystem::textField().backgroundActiveColorOpacity());
-    d->reconfigure(this);
+    reconfigure();
 }
 
 void TextField::setTextColor(const QColor& _color)
@@ -346,7 +351,7 @@ void TextField::setTextColor(const QColor& _color)
     d->textColor = _color;
     d->textDisabledColor = d->textColor;
     d->textDisabledColor.setAlphaF(Ui::DesignSystem::disabledTextOpacity());
-    d->reconfigure(this);
+    reconfigure();
 }
 
 void TextField::setLabel(const QString& _text)
@@ -454,7 +459,7 @@ void TextField::setTrailingIcon(const QString& _icon)
     }
 
     d->trailingIcon = _icon;
-    d->reconfigure(this);
+    reconfigure();
     update();
 }
 
@@ -500,6 +505,23 @@ void TextField::setDefaultMarginsEnabled(bool _enable)
     }
 
     d->isDefaultMarginsEnabled = _enable;
+    reconfigure();
+    updateGeometry();
+    update();
+}
+
+void TextField::setCustomMargins(const QMarginsF& _margins)
+{
+    if (d->customMargins == _margins) {
+        return;
+    }
+
+    d->customMargins = _margins;
+    if (d->isDefaultMarginsEnabled) {
+        d->isDefaultMarginsEnabled = false;
+    }
+    reconfigure();
+    updateGeometry();
     update();
 }
 
@@ -598,11 +620,16 @@ void TextField::setTrailingIconColor(const QColor& _color)
     update();
 }
 
+void TextField::reconfigure()
+{
+    d->reconfigure();
+}
+
 bool TextField::event(QEvent* _event)
 {
     switch (static_cast<int>(_event->type())) {
         case static_cast<QEvent::Type>(EventType::DesignSystemChangeEvent): {
-            d->reconfigure(this);
+            reconfigure();
             updateGeometry();
             update();
             return true;

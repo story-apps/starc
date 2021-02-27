@@ -1,3 +1,6 @@
 [submodule "src/cloud"]
 	path = src/cloud
 	url = https://github.com/dimkanovikov/starcloud
+[submodule "src/core/management_layer/plugins/character_information"]
+	path = src/core/management_layer/plugins/character_information
+	url = https://github.com/dimkanovikov/starc-character-information-plugin.git

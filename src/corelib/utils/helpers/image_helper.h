@@ -9,7 +9,9 @@ class QColor;
 class QFont;
 class QIcon;
 class QMarginsF;
+class QPainter;
 class QPixmap;
+class QRectF;
 class QSize;
 class QString;
 
@@ -70,4 +72,10 @@ public:
      */
     static QPixmap dropShadow(const QPixmap& _sourcePixmap, const QMarginsF& _shadowMargins,
         qreal _blurRadius, const QColor& _color, bool _useCache = false);
+
+    /**
+     * @brief Нарисовать изображение в заданной области со скруглёнными краями
+     */
+    static void drawRoundedImage(QPainter& _painter, const QRectF& _rect, const QPixmap& _image,
+        qreal _roundingRadius, int _notRoundedEdge = 0);
 };

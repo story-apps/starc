@@ -70,6 +70,10 @@ QPixmap DocumentDataStorage::load(const QUuid& _uuid) const
 
 QUuid DocumentDataStorage::save(const QPixmap& _image)
 {
+    if (_image.isNull()) {
+        return {};
+    }
+
     const QUuid uuid = QUuid::createUuid();
     d->newImages.insert(uuid, _image);
     return uuid;

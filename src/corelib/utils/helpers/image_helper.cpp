@@ -349,3 +349,41 @@ QPixmap ImageHelper::dropShadow(const QPixmap& _sourcePixmap, const QMarginsF& _
     }
     return shadowedPixmap;
 }
+
+void ImageHelper::drawRoundedImage(QPainter& _painter, const QRectF& _rect, const QPixmap& _image,
+    qreal _roundingRadius, int _notRoundedEdge)
+{
+    if (_rect.isEmpty()) {
+        return;
+    }
+
+    auto s1 = _rect.size();
+    auto s2 = _image.size();
+
+    _painter.setPen(Qt::NoPen);
+
+    QBrush imageBrush(_image);
+    auto transform = imageBrush.transform();
+    transform.translate(_rect.left(), _rect.top());
+    imageBrush.setTransform(transform);
+    _painter.setBrush(imageBrush);
+
+    auto roundedRect = _rect;
+    if (_notRoundedEdge != 0) {
+        int dx1 = 0, dy1 = 0, dx2 = 0, dy2 = 0;
+        int edge = Qt::TopEdge;
+        for (auto diff : {&dy1, &dx1, &dx2, &dy2}) {
+            if (_notRoundedEdge & edge) {
+                // удвоение даёт достаточный запас, когда ширина или высота меньше радиуса
+                *diff = _roundingRadius * 2;
+            }
+            edge <<= 1;
+        }
+        roundedRect.adjust(-dx1, -dy1, dx2, dy2);
+        _painter.setClipRect(_rect);
+    }
+
+    _painter.setRenderHint(QPainter::Antialiasing);
+    _painter.drawRoundedRect(roundedRect, _roundingRadius, _roundingRadius);
+    _painter.setRenderHint(QPainter::Antialiasing, false);
+}

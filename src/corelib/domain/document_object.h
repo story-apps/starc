@@ -2,6 +2,7 @@
 
 #include "domain_object.h"
 
+#include <QPixmap>
 #include <QUuid>
 
 namespace Domain {
@@ -102,6 +103,14 @@ DocumentObjectType CORE_LIBRARY_EXPORT typeFor(const QByteArray &_mime);
  * @brief Получить иконку по типу объекта
  */
 QString CORE_LIBRARY_EXPORT iconForType(DocumentObjectType _type);
+
+/**
+ * @brief Изображение связанное с документом
+ */
+struct DocumentImage {
+    QUuid uuid;
+    QPixmap image;
+};
 
 /**
  * @brief Класс данных документа

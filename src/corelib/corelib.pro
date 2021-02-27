@@ -120,6 +120,8 @@ SOURCES += \
     ui/widgets/drawer/drawer.cpp \
     ui/widgets/floating_tool_bar/floating_tool_bar.cpp \
     ui/widgets/floating_tool_bar/floating_toolbar_animator.cpp \
+    ui/widgets/image/image_card.cpp \
+    ui/widgets/image/image_cropping_dialog.cpp \
     ui/widgets/image_cropper/image_cropper.cpp \
     ui/widgets/label/label.cpp \
     ui/widgets/label/link_label.cpp \
@@ -256,6 +258,8 @@ HEADERS += \
     ui/widgets/drawer/drawer.h \
     ui/widgets/floating_tool_bar/floating_tool_bar.h \
     ui/widgets/floating_tool_bar/floating_toolbar_animator.h \
+    ui/widgets/image/image_card.h \
+    ui/widgets/image/image_cropping_dialog.h \
     ui/widgets/image_cropper/image_cropper.h \
     ui/widgets/label/label.h \
     ui/widgets/label/link_label.h \

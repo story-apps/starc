@@ -590,7 +590,7 @@ SettingsView::SettingsView(QWidget* _parent)
     // Приложение
     //
     connect(d->useSpellChecker, &CheckBox::checkedChanged, d->spellCheckerLanguage, &ComboBox::setEnabled);
-    connect(d->saveBackups, &CheckBox::checkedChanged, d->backupsFolderPath, &ComboBox::setEnabled);
+    connect(d->saveBackups, &CheckBox::checkedChanged, d->backupsFolderPath, &TextField::setEnabled);
     connect(d->backupsFolderPath, &TextField::trailingIconPressed, this, [this] {
         const auto path =
                 QFileDialog::getExistingDirectory(
