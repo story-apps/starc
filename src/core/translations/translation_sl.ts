@@ -383,6 +383,37 @@
     </message>
 </context>
 <context>
+    <name>ImageCard</name>
+    <message>
+        <location filename="../../corelib/ui/widgets/image/image_card.cpp" line="63"/>
+        <source>Choose cover</source>
+        <translation type="unfinished">Izberite naslovnico</translation>
+    </message>
+    <message>
+        <location filename="../../corelib/ui/widgets/image/image_card.cpp" line="64"/>
+        <source>Images</source>
+        <translation type="unfinished">Slike</translation>
+    </message>
+</context>
+<context>
+    <name>ImageCroppingDialog</name>
+    <message>
+        <location filename="../../corelib/ui/widgets/image/image_cropping_dialog.cpp" line="85"/>
+        <source>Select an area for project cover</source>
+        <translation type="unfinished">Izberite področje za plakat projekta</translation>
+    </message>
+    <message>
+        <location filename="../../corelib/ui/widgets/image/image_cropping_dialog.cpp" line="86"/>
+        <source>Cancel</source>
+        <translation type="unfinished">Prekliči</translation>
+    </message>
+    <message>
+        <location filename="../../corelib/ui/widgets/image/image_cropping_dialog.cpp" line="87"/>
+        <source>Select</source>
+        <translation type="unfinished">Izberi</translation>
+    </message>
+</context>
+<context>
     <name>KeyProcessingLayer::FolderFooterHandler</name>
     <message>
         <location filename="../management_layer/plugins/screenplay_text/text/screenplay_text_edit.cpp" line="759"/>
@@ -401,63 +432,63 @@
 <context>
     <name>ManagementLayer::ApplicationManager</name>
     <message>
-        <location filename="../management_layer/application_manager.cpp" line="601"/>
+        <location filename="../management_layer/application_manager.cpp" line="603"/>
         <source> - changed</source>
         <translation> – spremenjeno</translation>
     </message>
     <message>
-        <location filename="../management_layer/application_manager.cpp" line="667"/>
-        <location filename="../management_layer/application_manager.cpp" line="685"/>
+        <location filename="../management_layer/application_manager.cpp" line="669"/>
+        <location filename="../management_layer/application_manager.cpp" line="687"/>
         <source>Saving error</source>
         <translation>Napaka pri shranjevanju</translation>
     </message>
     <message>
-        <location filename="../management_layer/application_manager.cpp" line="668"/>
+        <location filename="../management_layer/application_manager.cpp" line="670"/>
         <source>Changes can&apos;t be written. There is an internal database error: &quot;%1&quot; Please check, if your file exists and if you have permission to write.</source>
         <translation>Sprememb ni mogoče zapisati. Prišlo je do napake notranje zbirke podatkov: »%1«. Preverite, da datoteka obstaja in da imate ustrezne pravice za pisanje.</translation>
     </message>
     <message>
-        <location filename="../management_layer/application_manager.cpp" line="686"/>
+        <location filename="../management_layer/application_manager.cpp" line="688"/>
         <source>Changes can&apos;t be written because the story located at &quot;%1&quot; doesn&apos;t exist. Please move the file back and retry saving.</source>
         <translation>Sprememb ni mogoče zapisati, ker zgodba na mestu »%1« ne obstaja. Postavite datoteko nazaj in poskusite ponovno shraniti zgodbo.</translation>
     </message>
     <message>
-        <location filename="../management_layer/application_manager.cpp" line="731"/>
+        <location filename="../management_layer/application_manager.cpp" line="733"/>
         <source>Project was modified. Save changes?</source>
         <translation>Projekt je bil spremenjen. Ali želite shraniti spremembe?</translation>
     </message>
     <message>
-        <location filename="../management_layer/application_manager.cpp" line="732"/>
+        <location filename="../management_layer/application_manager.cpp" line="734"/>
         <source>Cancel</source>
         <translation>Prekliči</translation>
     </message>
     <message>
-        <location filename="../management_layer/application_manager.cpp" line="733"/>
+        <location filename="../management_layer/application_manager.cpp" line="735"/>
         <source>Don&apos;t save</source>
         <translation>Ne shrani</translation>
     </message>
     <message>
-        <location filename="../management_layer/application_manager.cpp" line="734"/>
+        <location filename="../management_layer/application_manager.cpp" line="736"/>
         <source>Save</source>
         <translation>Shrani</translation>
     </message>
     <message>
-        <location filename="../management_layer/application_manager.cpp" line="806"/>
+        <location filename="../management_layer/application_manager.cpp" line="808"/>
         <source>You tried to create a project in nonexistent folder %1. Please, choose another location for the new project.</source>
         <translation>Projekt ste poskusili ustvariti v neobstoječi mapi %1. Izberite drugo mesto za novi projekt.</translation>
     </message>
     <message>
-        <location filename="../management_layer/application_manager.cpp" line="811"/>
+        <location filename="../management_layer/application_manager.cpp" line="813"/>
         <source>The file can&apos;t be written. Looks like it is opened by another application. Please close it and retry to create a new project.</source>
         <translation>Datoteke ni mogoče zapisati. Kaže, da je odprta v drugem programu. Zaprite jo in poskusite ustvariti nov projekt.</translation>
     </message>
     <message>
-        <location filename="../management_layer/application_manager.cpp" line="815"/>
+        <location filename="../management_layer/application_manager.cpp" line="817"/>
         <source>The file can&apos;t be written. Please, check and give permissions to the app to write into the selected folder, or choose another folder for saving a new project.</source>
         <translation>Datoteke ni mogoče zapisati. Preverite in dodelite ustrezne pravice programu za pisanje v izbrano mapo ali pa izberite drugo mapo za shranjevanje novega projekta.</translation>
     </message>
     <message>
-        <location filename="../management_layer/application_manager.cpp" line="818"/>
+        <location filename="../management_layer/application_manager.cpp" line="820"/>
         <source>Create project error</source>
         <translation>Napaka pri ustvarjanju projekta</translation>
     </message>
@@ -599,52 +630,52 @@
 <context>
     <name>ProjectPluginsBuilder</name>
     <message>
-        <location filename="../management_layer/content/project/project_plugins_builder.cpp" line="181"/>
+        <location filename="../management_layer/content/project/project_plugins_builder.cpp" line="184"/>
         <source>Information about project</source>
         <translation>Podatki o projektu</translation>
     </message>
     <message>
-        <location filename="../management_layer/content/project/project_plugins_builder.cpp" line="183"/>
+        <location filename="../management_layer/content/project/project_plugins_builder.cpp" line="186"/>
         <source>Project collaborators</source>
         <translation>Sodelavci pri projektu</translation>
     </message>
     <message>
-        <location filename="../management_layer/content/project/project_plugins_builder.cpp" line="185"/>
+        <location filename="../management_layer/content/project/project_plugins_builder.cpp" line="188"/>
         <source>Information about screenplay</source>
         <translation>Podatki o scenariju</translation>
     </message>
     <message>
-        <location filename="../management_layer/content/project/project_plugins_builder.cpp" line="187"/>
+        <location filename="../management_layer/content/project/project_plugins_builder.cpp" line="190"/>
         <source>Screenplay parameters</source>
         <translation>Parametri scenarija</translation>
     </message>
     <message>
-        <location filename="../management_layer/content/project/project_plugins_builder.cpp" line="189"/>
+        <location filename="../management_layer/content/project/project_plugins_builder.cpp" line="192"/>
         <source>Title page text</source>
         <translation>Besedilo naslovnice</translation>
     </message>
     <message>
-        <location filename="../management_layer/content/project/project_plugins_builder.cpp" line="191"/>
+        <location filename="../management_layer/content/project/project_plugins_builder.cpp" line="194"/>
         <source>Text</source>
         <translation>Besedilo</translation>
     </message>
     <message>
-        <location filename="../management_layer/content/project/project_plugins_builder.cpp" line="193"/>
+        <location filename="../management_layer/content/project/project_plugins_builder.cpp" line="196"/>
         <source>Treatment text</source>
         <translation>Besedilo treatmenta</translation>
     </message>
     <message>
-        <location filename="../management_layer/content/project/project_plugins_builder.cpp" line="195"/>
+        <location filename="../management_layer/content/project/project_plugins_builder.cpp" line="198"/>
         <source>Screenplay text</source>
         <translation>Besedilo scenarija</translation>
     </message>
     <message>
-        <location filename="../management_layer/content/project/project_plugins_builder.cpp" line="197"/>
+        <location filename="../management_layer/content/project/project_plugins_builder.cpp" line="200"/>
         <source>Cards</source>
         <translation>Kartončki</translation>
     </message>
     <message>
-        <location filename="../management_layer/content/project/project_plugins_builder.cpp" line="199"/>
+        <location filename="../management_layer/content/project/project_plugins_builder.cpp" line="202"/>
         <source>Statistics</source>
         <translation>Statistika</translation>
     </message>
@@ -822,6 +853,54 @@ od 2 Gb</translation>
         <location filename="../ui/account/change_password_dialog.cpp" line="114"/>
         <source>Cancel</source>
         <translation>Prekliči</translation>
+    </message>
+</context>
+<context>
+    <name>Ui::CharacterInformationView</name>
+    <message>
+        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="171"/>
+        <source>Name</source>
+        <translation type="unfinished">Ime</translation>
+    </message>
+    <message>
+        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="172"/>
+        <source>Story role</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="174"/>
+        <source>Primary</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="175"/>
+        <source>Secondary</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="176"/>
+        <source>Tertiary</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="177"/>
+        <source>Undefined</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="179"/>
+        <source>One sentence description</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="180"/>
+        <source>Long description</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="182"/>
+        <source>Add photo +</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -1167,77 +1246,77 @@ od 2 Gb</translation>
 <context>
     <name>Ui::OnboardingView</name>
     <message>
-        <location filename="../ui/onboarding/onboarding_view.cpp" line="341"/>
+        <location filename="../ui/onboarding/onboarding_view.cpp" line="342"/>
         <source>Choose preferred language</source>
         <translation>Izberite želeni jezik</translation>
     </message>
     <message>
-        <location filename="../ui/onboarding/onboarding_view.cpp" line="342"/>
+        <location filename="../ui/onboarding/onboarding_view.cpp" line="343"/>
         <source>Did not find your preffered language? Read how you can add it yourself.</source>
         <translation>Ne najdete želenega jezika? Preberite si, kako ga lahko dodate sami.</translation>
     </message>
     <message>
-        <location filename="../ui/onboarding/onboarding_view.cpp" line="343"/>
+        <location filename="../ui/onboarding/onboarding_view.cpp" line="344"/>
         <source>Continue</source>
         <translation>Nadaljuj</translation>
     </message>
     <message>
-        <location filename="../ui/onboarding/onboarding_view.cpp" line="344"/>
+        <location filename="../ui/onboarding/onboarding_view.cpp" line="345"/>
         <source>Skip initial setup</source>
         <translation>Preskoči otvoritvene nastavitve</translation>
     </message>
     <message>
-        <location filename="../ui/onboarding/onboarding_view.cpp" line="346"/>
+        <location filename="../ui/onboarding/onboarding_view.cpp" line="347"/>
         <source>Choose application theme</source>
         <translation>Izberite temo programa</translation>
     </message>
     <message>
-        <location filename="../ui/onboarding/onboarding_view.cpp" line="347"/>
+        <location filename="../ui/onboarding/onboarding_view.cpp" line="348"/>
         <source>Dark &amp; light theme</source>
         <translation>Temna in svetla tema</translation>
     </message>
     <message>
-        <location filename="../ui/onboarding/onboarding_view.cpp" line="348"/>
+        <location filename="../ui/onboarding/onboarding_view.cpp" line="349"/>
         <source>Modern theme which combines dark and light colors for better concentration on the documents you work.</source>
         <translation>Sodobna tema, ki kombinira svetle in temne barve za boljše osredotočanje na dokumente v delu.</translation>
     </message>
     <message>
-        <location filename="../ui/onboarding/onboarding_view.cpp" line="349"/>
+        <location filename="../ui/onboarding/onboarding_view.cpp" line="350"/>
         <source>Dark theme</source>
         <translation>Temna tema</translation>
     </message>
     <message>
-        <location filename="../ui/onboarding/onboarding_view.cpp" line="350"/>
+        <location filename="../ui/onboarding/onboarding_view.cpp" line="351"/>
         <source>Theme is more suitable for work in dimly lit rooms, and also in the evening or night.</source>
         <translation>Tema je primernejša za delo v temnejših prostorih ter zvečer ali ponoči.</translation>
     </message>
     <message>
-        <location filename="../ui/onboarding/onboarding_view.cpp" line="351"/>
+        <location filename="../ui/onboarding/onboarding_view.cpp" line="352"/>
         <source>Light theme</source>
         <translation>Svetla tema</translation>
     </message>
     <message>
-        <location filename="../ui/onboarding/onboarding_view.cpp" line="352"/>
+        <location filename="../ui/onboarding/onboarding_view.cpp" line="353"/>
         <source>Theme is convenient for work with sufficient light.</source>
         <translation>Tema je primerna za delo pri zadostni svetlobi.</translation>
     </message>
     <message>
-        <location filename="../ui/onboarding/onboarding_view.cpp" line="353"/>
+        <location filename="../ui/onboarding/onboarding_view.cpp" line="354"/>
         <source>Setup size of the user interface elements</source>
         <translation>Velikost elementov uporabniškega vmesnika</translation>
     </message>
     <message>
-        <location filename="../ui/onboarding/onboarding_view.cpp" line="354"/>
+        <location filename="../ui/onboarding/onboarding_view.cpp" line="355"/>
         <source>small</source>
         <translation>majhna</translation>
     </message>
     <message>
-        <location filename="../ui/onboarding/onboarding_view.cpp" line="355"/>
+        <location filename="../ui/onboarding/onboarding_view.cpp" line="356"/>
         <source>big</source>
         <translation>velika</translation>
     </message>
     <message>
-        <location filename="../ui/onboarding/onboarding_view.cpp" line="356"/>
+        <location filename="../ui/onboarding/onboarding_view.cpp" line="357"/>
         <source>Start writing</source>
         <translation>Začnite pisati</translation>
     </message>
@@ -2754,7 +2833,7 @@ Projekt shrani vsake tri sekunde, ko ne uporabljate miške ali tipkovnice.
 <context>
     <name>WebLoader</name>
     <message>
-        <location filename="../../3rd_party/webloader/src/WebLoader.cpp" line="311"/>
+        <location filename="../../3rd_party/webloader/src/WebLoader.cpp" line="310"/>
         <source>Sorry, we have some error while loading. Error is: %1</source>
         <translation>Žal je pri nalaganju prišlo do napake. Napaka je: %1</translation>
     </message>

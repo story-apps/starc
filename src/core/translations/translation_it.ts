@@ -383,6 +383,37 @@
     </message>
 </context>
 <context>
+    <name>ImageCard</name>
+    <message>
+        <location filename="../../corelib/ui/widgets/image/image_card.cpp" line="63"/>
+        <source>Choose cover</source>
+        <translation type="unfinished">Scegli la copertina</translation>
+    </message>
+    <message>
+        <location filename="../../corelib/ui/widgets/image/image_card.cpp" line="64"/>
+        <source>Images</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>ImageCroppingDialog</name>
+    <message>
+        <location filename="../../corelib/ui/widgets/image/image_cropping_dialog.cpp" line="85"/>
+        <source>Select an area for project cover</source>
+        <translation type="unfinished">Selezionare un area per la copertina del progetto</translation>
+    </message>
+    <message>
+        <location filename="../../corelib/ui/widgets/image/image_cropping_dialog.cpp" line="86"/>
+        <source>Cancel</source>
+        <translation type="unfinished">Cancella</translation>
+    </message>
+    <message>
+        <location filename="../../corelib/ui/widgets/image/image_cropping_dialog.cpp" line="87"/>
+        <source>Select</source>
+        <translation type="unfinished">Seleziona</translation>
+    </message>
+</context>
+<context>
     <name>KeyProcessingLayer::FolderFooterHandler</name>
     <message>
         <location filename="../management_layer/plugins/screenplay_text/text/screenplay_text_edit.cpp" line="759"/>
@@ -401,63 +432,63 @@
 <context>
     <name>ManagementLayer::ApplicationManager</name>
     <message>
-        <location filename="../management_layer/application_manager.cpp" line="601"/>
+        <location filename="../management_layer/application_manager.cpp" line="603"/>
         <source> - changed</source>
         <translation>- modificato</translation>
     </message>
     <message>
-        <location filename="../management_layer/application_manager.cpp" line="667"/>
-        <location filename="../management_layer/application_manager.cpp" line="685"/>
+        <location filename="../management_layer/application_manager.cpp" line="669"/>
+        <location filename="../management_layer/application_manager.cpp" line="687"/>
         <source>Saving error</source>
         <translation>Errore di salvataggio</translation>
     </message>
     <message>
-        <location filename="../management_layer/application_manager.cpp" line="668"/>
+        <location filename="../management_layer/application_manager.cpp" line="670"/>
         <source>Changes can&apos;t be written. There is an internal database error: &quot;%1&quot; Please check, if your file exists and if you have permission to write.</source>
         <translation>Impossibile scrivere le modifiche. Errore interno del database: &quot;%1&quot;. Controllare se il file esiste e se si ha il permesso di scrivere.</translation>
     </message>
     <message>
-        <location filename="../management_layer/application_manager.cpp" line="686"/>
+        <location filename="../management_layer/application_manager.cpp" line="688"/>
         <source>Changes can&apos;t be written because the story located at &quot;%1&quot; doesn&apos;t exist. Please move the file back and retry saving.</source>
         <translation>Impossibile scrivere le modifiche perché il documento alla posizione &quot;%1&quot; non esiste. Spostare il file alla posizione precedente e provare a salvare di nuovo.</translation>
     </message>
     <message>
-        <location filename="../management_layer/application_manager.cpp" line="731"/>
+        <location filename="../management_layer/application_manager.cpp" line="733"/>
         <source>Project was modified. Save changes?</source>
         <translation>Il progetto è stato modificato. Salvare le modifiche?</translation>
     </message>
     <message>
-        <location filename="../management_layer/application_manager.cpp" line="732"/>
+        <location filename="../management_layer/application_manager.cpp" line="734"/>
         <source>Cancel</source>
         <translation>Cancella</translation>
     </message>
     <message>
-        <location filename="../management_layer/application_manager.cpp" line="733"/>
+        <location filename="../management_layer/application_manager.cpp" line="735"/>
         <source>Don&apos;t save</source>
         <translation>Non salvare</translation>
     </message>
     <message>
-        <location filename="../management_layer/application_manager.cpp" line="734"/>
+        <location filename="../management_layer/application_manager.cpp" line="736"/>
         <source>Save</source>
         <translation>Salva</translation>
     </message>
     <message>
-        <location filename="../management_layer/application_manager.cpp" line="806"/>
+        <location filename="../management_layer/application_manager.cpp" line="808"/>
         <source>You tried to create a project in nonexistent folder %1. Please, choose another location for the new project.</source>
         <translation>Si è provato a creare un progetto nella cartella inesistente %1. Scegliere un&apos;altra posizione per il nuovo progetto.</translation>
     </message>
     <message>
-        <location filename="../management_layer/application_manager.cpp" line="811"/>
+        <location filename="../management_layer/application_manager.cpp" line="813"/>
         <source>The file can&apos;t be written. Looks like it is opened by another application. Please close it and retry to create a new project.</source>
         <translation>Impossibile scrivere il file. Sembra che il file sia aperto in un&apos;altra applicazione. Chiuderla e riprovare a creare il progetto.</translation>
     </message>
     <message>
-        <location filename="../management_layer/application_manager.cpp" line="815"/>
+        <location filename="../management_layer/application_manager.cpp" line="817"/>
         <source>The file can&apos;t be written. Please, check and give permissions to the app to write into the selected folder, or choose another folder for saving a new project.</source>
         <translation>Impossibile scrivere il file. Dare il permesso all&apos;app di scrivere nella cartella selezionata o scegliere un&apos;altra cartella in cui salvare un nuovo progetto.</translation>
     </message>
     <message>
-        <location filename="../management_layer/application_manager.cpp" line="818"/>
+        <location filename="../management_layer/application_manager.cpp" line="820"/>
         <source>Create project error</source>
         <translation>Errore di creazione di un progetto</translation>
     </message>
@@ -599,52 +630,52 @@
 <context>
     <name>ProjectPluginsBuilder</name>
     <message>
-        <location filename="../management_layer/content/project/project_plugins_builder.cpp" line="181"/>
+        <location filename="../management_layer/content/project/project_plugins_builder.cpp" line="184"/>
         <source>Information about project</source>
         <translation>Informazioni sul progetto</translation>
     </message>
     <message>
-        <location filename="../management_layer/content/project/project_plugins_builder.cpp" line="183"/>
+        <location filename="../management_layer/content/project/project_plugins_builder.cpp" line="186"/>
         <source>Project collaborators</source>
         <translation>Collaboratori al progetto</translation>
     </message>
     <message>
-        <location filename="../management_layer/content/project/project_plugins_builder.cpp" line="185"/>
+        <location filename="../management_layer/content/project/project_plugins_builder.cpp" line="188"/>
         <source>Information about screenplay</source>
         <translation>Informazioni sulla sceneggiatura</translation>
     </message>
     <message>
-        <location filename="../management_layer/content/project/project_plugins_builder.cpp" line="187"/>
+        <location filename="../management_layer/content/project/project_plugins_builder.cpp" line="190"/>
         <source>Screenplay parameters</source>
         <translation>Parametri della sceneggiatura</translation>
     </message>
     <message>
-        <location filename="../management_layer/content/project/project_plugins_builder.cpp" line="189"/>
+        <location filename="../management_layer/content/project/project_plugins_builder.cpp" line="192"/>
         <source>Title page text</source>
         <translation>Testo della prima pagina</translation>
     </message>
     <message>
-        <location filename="../management_layer/content/project/project_plugins_builder.cpp" line="191"/>
+        <location filename="../management_layer/content/project/project_plugins_builder.cpp" line="194"/>
         <source>Text</source>
         <translation>Testo</translation>
     </message>
     <message>
-        <location filename="../management_layer/content/project/project_plugins_builder.cpp" line="193"/>
+        <location filename="../management_layer/content/project/project_plugins_builder.cpp" line="196"/>
         <source>Treatment text</source>
         <translation>Testo del trattamento</translation>
     </message>
     <message>
-        <location filename="../management_layer/content/project/project_plugins_builder.cpp" line="195"/>
+        <location filename="../management_layer/content/project/project_plugins_builder.cpp" line="198"/>
         <source>Screenplay text</source>
         <translation>Testo della sceneggiatura</translation>
     </message>
     <message>
-        <location filename="../management_layer/content/project/project_plugins_builder.cpp" line="197"/>
+        <location filename="../management_layer/content/project/project_plugins_builder.cpp" line="200"/>
         <source>Cards</source>
         <translation>Schede</translation>
     </message>
     <message>
-        <location filename="../management_layer/content/project/project_plugins_builder.cpp" line="199"/>
+        <location filename="../management_layer/content/project/project_plugins_builder.cpp" line="202"/>
         <source>Statistics</source>
         <translation>Statistiche</translation>
     </message>
@@ -822,6 +853,54 @@ su 2Gb</translation>
         <location filename="../ui/account/change_password_dialog.cpp" line="114"/>
         <source>Cancel</source>
         <translation>Cancella</translation>
+    </message>
+</context>
+<context>
+    <name>Ui::CharacterInformationView</name>
+    <message>
+        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="171"/>
+        <source>Name</source>
+        <translation type="unfinished">Nome</translation>
+    </message>
+    <message>
+        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="172"/>
+        <source>Story role</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="174"/>
+        <source>Primary</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="175"/>
+        <source>Secondary</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="176"/>
+        <source>Tertiary</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="177"/>
+        <source>Undefined</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="179"/>
+        <source>One sentence description</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="180"/>
+        <source>Long description</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="182"/>
+        <source>Add photo +</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -1167,77 +1246,77 @@ su 2Gb</translation>
 <context>
     <name>Ui::OnboardingView</name>
     <message>
-        <location filename="../ui/onboarding/onboarding_view.cpp" line="341"/>
+        <location filename="../ui/onboarding/onboarding_view.cpp" line="342"/>
         <source>Choose preferred language</source>
         <translation>Lingua preferita</translation>
     </message>
     <message>
-        <location filename="../ui/onboarding/onboarding_view.cpp" line="342"/>
+        <location filename="../ui/onboarding/onboarding_view.cpp" line="343"/>
         <source>Did not find your preffered language? Read how you can add it yourself.</source>
         <translation>Non trovi la tua lingua? Leggi come puoi aggiungerla tu stesso.</translation>
     </message>
     <message>
-        <location filename="../ui/onboarding/onboarding_view.cpp" line="343"/>
+        <location filename="../ui/onboarding/onboarding_view.cpp" line="344"/>
         <source>Continue</source>
         <translation>Continua</translation>
     </message>
     <message>
-        <location filename="../ui/onboarding/onboarding_view.cpp" line="344"/>
+        <location filename="../ui/onboarding/onboarding_view.cpp" line="345"/>
         <source>Skip initial setup</source>
         <translation>Salta</translation>
     </message>
     <message>
-        <location filename="../ui/onboarding/onboarding_view.cpp" line="346"/>
+        <location filename="../ui/onboarding/onboarding_view.cpp" line="347"/>
         <source>Choose application theme</source>
         <translation>Tema dell&apos;applicazione</translation>
     </message>
     <message>
-        <location filename="../ui/onboarding/onboarding_view.cpp" line="347"/>
+        <location filename="../ui/onboarding/onboarding_view.cpp" line="348"/>
         <source>Dark &amp; light theme</source>
         <translation>Tema chiaro e scuro</translation>
     </message>
     <message>
-        <location filename="../ui/onboarding/onboarding_view.cpp" line="348"/>
+        <location filename="../ui/onboarding/onboarding_view.cpp" line="349"/>
         <source>Modern theme which combines dark and light colors for better concentration on the documents you work.</source>
         <translation>Un tema moderno che combina colori chiari e scuri per una migliore concentrazione sui documenti a cui si sta lavorando.</translation>
     </message>
     <message>
-        <location filename="../ui/onboarding/onboarding_view.cpp" line="349"/>
+        <location filename="../ui/onboarding/onboarding_view.cpp" line="350"/>
         <source>Dark theme</source>
         <translation>Tema scuro</translation>
     </message>
     <message>
-        <location filename="../ui/onboarding/onboarding_view.cpp" line="350"/>
+        <location filename="../ui/onboarding/onboarding_view.cpp" line="351"/>
         <source>Theme is more suitable for work in dimly lit rooms, and also in the evening or night.</source>
         <translation>Un tema più adatto ad ambienti poco illuminati, la sera o di notte.</translation>
     </message>
     <message>
-        <location filename="../ui/onboarding/onboarding_view.cpp" line="351"/>
+        <location filename="../ui/onboarding/onboarding_view.cpp" line="352"/>
         <source>Light theme</source>
         <translation>Tema chiaro</translation>
     </message>
     <message>
-        <location filename="../ui/onboarding/onboarding_view.cpp" line="352"/>
+        <location filename="../ui/onboarding/onboarding_view.cpp" line="353"/>
         <source>Theme is convenient for work with sufficient light.</source>
         <translation>Un tema adatto a lavorare con una sufficiente illuminazione.</translation>
     </message>
     <message>
-        <location filename="../ui/onboarding/onboarding_view.cpp" line="353"/>
+        <location filename="../ui/onboarding/onboarding_view.cpp" line="354"/>
         <source>Setup size of the user interface elements</source>
         <translation>Dimensione degli elementi dell&apos;interfaccia</translation>
     </message>
     <message>
-        <location filename="../ui/onboarding/onboarding_view.cpp" line="354"/>
+        <location filename="../ui/onboarding/onboarding_view.cpp" line="355"/>
         <source>small</source>
         <translation>piccola</translation>
     </message>
     <message>
-        <location filename="../ui/onboarding/onboarding_view.cpp" line="355"/>
+        <location filename="../ui/onboarding/onboarding_view.cpp" line="356"/>
         <source>big</source>
         <translation>grande</translation>
     </message>
     <message>
-        <location filename="../ui/onboarding/onboarding_view.cpp" line="356"/>
+        <location filename="../ui/onboarding/onboarding_view.cpp" line="357"/>
         <source>Start writing</source>
         <translation>Inizia a scrivere</translation>
     </message>
@@ -2751,7 +2830,7 @@ Salva il progetto ogni 3 secondi se non stai usando il mouse o la tastiera, ogni
 <context>
     <name>WebLoader</name>
     <message>
-        <location filename="../../3rd_party/webloader/src/WebLoader.cpp" line="311"/>
+        <location filename="../../3rd_party/webloader/src/WebLoader.cpp" line="310"/>
         <source>Sorry, we have some error while loading. Error is: %1</source>
         <translation>Errore durante il caricamento. Errore: %1</translation>
     </message>

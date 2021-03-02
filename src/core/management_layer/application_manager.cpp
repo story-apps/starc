@@ -1340,7 +1340,9 @@ void ApplicationManager::initConnections()
             [this] { d->configureAutoSave(); });
     //
     connect(d->settingsManager.data(), &SettingsManager::screenplayEditorChanged, this,
-            [this] { d->projectManager->reconfigureScreenplayEditor(); });
+            [this] (const QStringList& _changedSettingsKeys) {
+        d->projectManager->reconfigureScreenplayEditor(_changedSettingsKeys);
+    });
     connect(d->settingsManager.data(), &SettingsManager::screenplayNavigatorChanged, this,
             [this] { d->projectManager->reconfigureScreenplayNavigator(); });
     connect(d->settingsManager.data(), &SettingsManager::screenplayDurationChanged, this,

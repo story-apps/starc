@@ -131,8 +131,9 @@ QWidget* ScreenplayTextStructureManager::createView()
     return d->createView();
 }
 
-void ScreenplayTextStructureManager::reconfigure()
+void ScreenplayTextStructureManager::reconfigure(const QStringList& _changedSettingsKeys)
 {
+    Q_UNUSED(_changedSettingsKeys);
     d->view->reconfigure();
 }
 

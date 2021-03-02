@@ -640,7 +640,7 @@ public:
     explicit Implementation(qreal _scaleFactor);
 
     qreal height = 38.0;
-    qreal minimumWidth = 64.0;
+    qreal minimumWidth = 56.0;
     QMarginsF margins = {16.0, 0.0, 16.0, 0.0};
     qreal spacing = 16.0;
     QMarginsF shadowMargins = {8.0, 8.0, 8.0, 10.0};

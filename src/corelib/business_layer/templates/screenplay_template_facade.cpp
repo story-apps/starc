@@ -21,68 +21,52 @@ public:
     /**
      * @brief Шаблон по умолчанию
      */
-    ScreenplayTemplate m_defaultTemplate;
+    ScreenplayTemplate defaultTemplate;
 
     /**
-     * @brief Шаблоны сценариев
+     * @brief Шаблоны сценариев <id, шаблон>
      */
-    QMap<QString, ScreenplayTemplate> m_templates;
+    QMap<QString, ScreenplayTemplate> templates;
 
     /**
      * @brief Модель шаблонов
      */
-    QStandardItemModel m_templatesModel;
+    QStandardItemModel templatesModel;
 };
 
 
 // ****
 
 
-QStandardItemModel* ScreenplayTemplateFacade::templatesList()
+QStandardItemModel* ScreenplayTemplateFacade::templates()
 {
-    return &instance().d->m_templatesModel;
+    return &instance().d->templatesModel;
 }
 
-const ScreenplayTemplate& ScreenplayTemplateFacade::getTemplate(const QString& _templateName)
+const ScreenplayTemplate& ScreenplayTemplateFacade::getTemplate(const QString& _templateId)
 {
     //
-    // Если название шаблона задано
+    // Если id шаблона задан и он есть в списке доступных шаблонов, возвращаем искомый
     //
-    if (!_templateName.isEmpty()) {
-        //
-        // ... и он есть в списке доступных шаблонов - возвращаем искомый
-        //
-        if (instance().d->m_templates.contains(_templateName)) {
-            return instance().d->m_templates[_templateName];
-        }
-        //
-        // ... а если в списке такого нет, возвращаем дефолтный
-        //
-        else {
-            return instance().d->m_defaultTemplate;
-        }
-    }
-
-    //
-    // Если название шаблона не задано
-    //
-    const QString currentTemplateName =
-            DataStorageLayer::StorageFacade::settingsStorage()->value(
-                "screenplay-editor/current-style",
-                DataStorageLayer::SettingsStorage::SettingsPlace::Application).toString();
-    //
-    // ... получим название текущего используемого шаблона и если такой шаблон есть
-    //     в списке доступных, вернём его
-    //
-    if (!currentTemplateName.isEmpty()
-        && instance().d->m_templates.contains(currentTemplateName)) {
-        return instance().d->m_templates[currentTemplateName];
+    if (!_templateId.isEmpty()
+        && instance().d->templates.contains(_templateId)) {
+        return instance().d->templates[_templateId];
     }
 
     //
     // Во всех остальных случаях возвращаем дефолтный шаблон
     //
-    return instance().d->m_defaultTemplate;
+    return instance().d->defaultTemplate;
+}
+
+void ScreenplayTemplateFacade::setDefaultTemplate(const QString& _templateId)
+{
+    if (_templateId.isEmpty()
+        || !instance().d->templates.contains(_templateId)) {
+        return;
+    }
+
+    instance().d->defaultTemplate = instance().d->templates[_templateId];
 }
 
 ScreenplayTemplateFacade::~ScreenplayTemplateFacade() = default;
@@ -122,7 +106,7 @@ ScreenplayTemplateFacade::ScreenplayTemplateFacade()
         return defaultTemplatePath;
     };
 
-    const QVector<QString> templateNames = { "fd_letter", "fd_a4", "ru" };
+    const QVector<QString> templateNames = { "world_cp", "world_cn", "ru", "us" };
     QString defaultTemplatePath;
     for (const auto& templateName : templateNames) {
         const auto templatePath = updateDefaultTemplate(templateName);
@@ -134,31 +118,31 @@ ScreenplayTemplateFacade::ScreenplayTemplateFacade()
     //
     // Загрузить шаблоны
     //
-    const QDir templatesDir(templatesFolderPath);
-    for (const QFileInfo& templateFile : templatesDir.entryInfoList(QDir::Files)) {
-        ScreenplayTemplate templateObj(templateFile.absoluteFilePath());
-        if (!d->m_templates.contains(templateObj.name())) {
-            d->m_templates.insert(templateObj.name(), templateObj);
-        }
-    }
-    //
     // ... шаблон по умолчанию
     //
-    d->m_defaultTemplate = ScreenplayTemplate(defaultTemplatePath);
+    d->defaultTemplate = ScreenplayTemplate(defaultTemplatePath);
+    d->templates.insert(d->defaultTemplate.id(), d->defaultTemplate);
+    //
+    const auto templatesFiles = QDir(templatesFolderPath).entryInfoList(QDir::Files);
+    for (const QFileInfo& templateFile : templatesFiles) {
+        ScreenplayTemplate screenplayTemplate(templateFile.absoluteFilePath());
+        if (!d->templates.contains(screenplayTemplate.id())) {
+            d->templates.insert(screenplayTemplate.id(), screenplayTemplate);
+        }
+    }
 
     //
     // Настроим модель шаблонов
     //
-    QStandardItem* rootItem = d->m_templatesModel.invisibleRootItem();
-    for (const auto& templateObj : d->m_templates) {
-        if (templateObj.name() == "mobile") {
-            continue;
-        }
-
-        QList<QStandardItem*> row;
-        row << new QStandardItem(templateObj.name());
-        row << new QStandardItem(templateObj.description());
-        rootItem->appendRow(row);
+    auto sortedTemplates = d->templates.values();
+    std::sort(sortedTemplates.begin(), sortedTemplates.end(),
+              [] (const ScreenplayTemplate& _lhs, const ScreenplayTemplate& _rhs) {
+        return _lhs.name() < _rhs.name();
+    });
+    for (const auto& screenplayTemplate : std::as_const(sortedTemplates)) {
+        auto item = new QStandardItem(screenplayTemplate.name());
+        item->setData(screenplayTemplate.id(), kTemplateIdRole);
+        d->templatesModel.appendRow(item);
     }
 }
 

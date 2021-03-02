@@ -15,7 +15,7 @@ jobs:
         uses: actions/checkout@master
         with:
           token: ${{ secrets.ACTION_RUNNER }}
-          submodules: true
+          submodules: recursive
 
       - name: Install Qt
         uses: jurplel/install-qt-action@v2
@@ -56,7 +56,7 @@ jobs:
         uses: actions/checkout@master
         with:
           token: ${{ secrets.ACTION_RUNNER }}
-          submodules: true
+          submodules: recursive
 
       - name: Install Qt
         uses: jurplel/install-qt-action@v2

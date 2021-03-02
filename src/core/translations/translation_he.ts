@@ -383,6 +383,37 @@
     </message>
 </context>
 <context>
+    <name>ImageCard</name>
+    <message>
+        <location filename="../../corelib/ui/widgets/image/image_card.cpp" line="63"/>
+        <source>Choose cover</source>
+        <translation type="unfinished">בחר תמונת שער</translation>
+    </message>
+    <message>
+        <location filename="../../corelib/ui/widgets/image/image_card.cpp" line="64"/>
+        <source>Images</source>
+        <translation type="unfinished">תמונות</translation>
+    </message>
+</context>
+<context>
+    <name>ImageCroppingDialog</name>
+    <message>
+        <location filename="../../corelib/ui/widgets/image/image_cropping_dialog.cpp" line="85"/>
+        <source>Select an area for project cover</source>
+        <translation type="unfinished">בחר אזור לתמונת שער</translation>
+    </message>
+    <message>
+        <location filename="../../corelib/ui/widgets/image/image_cropping_dialog.cpp" line="86"/>
+        <source>Cancel</source>
+        <translation type="unfinished">בטל</translation>
+    </message>
+    <message>
+        <location filename="../../corelib/ui/widgets/image/image_cropping_dialog.cpp" line="87"/>
+        <source>Select</source>
+        <translation type="unfinished">בחר</translation>
+    </message>
+</context>
+<context>
     <name>KeyProcessingLayer::FolderFooterHandler</name>
     <message>
         <location filename="../management_layer/plugins/screenplay_text/text/screenplay_text_edit.cpp" line="759"/>
@@ -401,63 +432,63 @@
 <context>
     <name>ManagementLayer::ApplicationManager</name>
     <message>
-        <location filename="../management_layer/application_manager.cpp" line="601"/>
+        <location filename="../management_layer/application_manager.cpp" line="603"/>
         <source> - changed</source>
         <translation>- שונה</translation>
     </message>
     <message>
-        <location filename="../management_layer/application_manager.cpp" line="667"/>
-        <location filename="../management_layer/application_manager.cpp" line="685"/>
+        <location filename="../management_layer/application_manager.cpp" line="669"/>
+        <location filename="../management_layer/application_manager.cpp" line="687"/>
         <source>Saving error</source>
         <translation>שגיאת שמירה</translation>
     </message>
     <message>
-        <location filename="../management_layer/application_manager.cpp" line="668"/>
+        <location filename="../management_layer/application_manager.cpp" line="670"/>
         <source>Changes can&apos;t be written. There is an internal database error: &quot;%1&quot; Please check, if your file exists and if you have permission to write.</source>
         <translation>לא ניתן לשמור שינויים. יש שגיאת מסד נתונים פנימית: &quot;%1&quot; אנא בדוק אם הקובץ שלך קיים ואם יש לך הרשאה לכתוב.</translation>
     </message>
     <message>
-        <location filename="../management_layer/application_manager.cpp" line="686"/>
+        <location filename="../management_layer/application_manager.cpp" line="688"/>
         <source>Changes can&apos;t be written because the story located at &quot;%1&quot; doesn&apos;t exist. Please move the file back and retry saving.</source>
         <translation>לא ניתן לשמור שינויים מכיוון שסיפור הממוקם ב-&quot;%1&quot; אינו קיים. אנא העבר את הקובץ בחזרה ונסה שוב.</translation>
     </message>
     <message>
-        <location filename="../management_layer/application_manager.cpp" line="731"/>
+        <location filename="../management_layer/application_manager.cpp" line="733"/>
         <source>Project was modified. Save changes?</source>
         <translation>הפרויקט שונה. שמור שינויים?</translation>
     </message>
     <message>
-        <location filename="../management_layer/application_manager.cpp" line="732"/>
+        <location filename="../management_layer/application_manager.cpp" line="734"/>
         <source>Cancel</source>
         <translation>בטל</translation>
     </message>
     <message>
-        <location filename="../management_layer/application_manager.cpp" line="733"/>
+        <location filename="../management_layer/application_manager.cpp" line="735"/>
         <source>Don&apos;t save</source>
         <translation>אל תשמור</translation>
     </message>
     <message>
-        <location filename="../management_layer/application_manager.cpp" line="734"/>
+        <location filename="../management_layer/application_manager.cpp" line="736"/>
         <source>Save</source>
         <translation>שמור</translation>
     </message>
     <message>
-        <location filename="../management_layer/application_manager.cpp" line="806"/>
+        <location filename="../management_layer/application_manager.cpp" line="808"/>
         <source>You tried to create a project in nonexistent folder %1. Please, choose another location for the new project.</source>
         <translation>ניסית ליצור פרויקט בתיקיה לא קיימת %1. אנא בחר מיקום אחר לפרויקט.</translation>
     </message>
     <message>
-        <location filename="../management_layer/application_manager.cpp" line="811"/>
+        <location filename="../management_layer/application_manager.cpp" line="813"/>
         <source>The file can&apos;t be written. Looks like it is opened by another application. Please close it and retry to create a new project.</source>
         <translation>לא ניתן לשמור את הקובץ. נראה שהוא פתוח באפליקציה אחרת. אנא סגור אותה ונסה שוב.</translation>
     </message>
     <message>
-        <location filename="../management_layer/application_manager.cpp" line="815"/>
+        <location filename="../management_layer/application_manager.cpp" line="817"/>
         <source>The file can&apos;t be written. Please, check and give permissions to the app to write into the selected folder, or choose another folder for saving a new project.</source>
         <translation>לא ניתן לשמור את הקובץ. אנא, בדוק ותן הרשאות ליישום לכתוב לתיקיה שנבחרה, או בחר תיקיה אחרת לשמירה.</translation>
     </message>
     <message>
-        <location filename="../management_layer/application_manager.cpp" line="818"/>
+        <location filename="../management_layer/application_manager.cpp" line="820"/>
         <source>Create project error</source>
         <translation>שגיאה ביצירת הפרויקט</translation>
     </message>
@@ -599,52 +630,52 @@
 <context>
     <name>ProjectPluginsBuilder</name>
     <message>
-        <location filename="../management_layer/content/project/project_plugins_builder.cpp" line="181"/>
+        <location filename="../management_layer/content/project/project_plugins_builder.cpp" line="184"/>
         <source>Information about project</source>
         <translation>מידע על הפרויקט</translation>
     </message>
     <message>
-        <location filename="../management_layer/content/project/project_plugins_builder.cpp" line="183"/>
+        <location filename="../management_layer/content/project/project_plugins_builder.cpp" line="186"/>
         <source>Project collaborators</source>
         <translation>שותפים בפרויקט</translation>
     </message>
     <message>
-        <location filename="../management_layer/content/project/project_plugins_builder.cpp" line="185"/>
+        <location filename="../management_layer/content/project/project_plugins_builder.cpp" line="188"/>
         <source>Information about screenplay</source>
         <translation>מידע על התסריט</translation>
     </message>
     <message>
-        <location filename="../management_layer/content/project/project_plugins_builder.cpp" line="187"/>
+        <location filename="../management_layer/content/project/project_plugins_builder.cpp" line="190"/>
         <source>Screenplay parameters</source>
         <translation>הגדרות תסריט</translation>
     </message>
     <message>
-        <location filename="../management_layer/content/project/project_plugins_builder.cpp" line="189"/>
+        <location filename="../management_layer/content/project/project_plugins_builder.cpp" line="192"/>
         <source>Title page text</source>
         <translation>טקסט עמוד שער</translation>
     </message>
     <message>
-        <location filename="../management_layer/content/project/project_plugins_builder.cpp" line="191"/>
+        <location filename="../management_layer/content/project/project_plugins_builder.cpp" line="194"/>
         <source>Text</source>
         <translation>טקסט</translation>
     </message>
     <message>
-        <location filename="../management_layer/content/project/project_plugins_builder.cpp" line="193"/>
+        <location filename="../management_layer/content/project/project_plugins_builder.cpp" line="196"/>
         <source>Treatment text</source>
         <translation>טקסט טריטמנט</translation>
     </message>
     <message>
-        <location filename="../management_layer/content/project/project_plugins_builder.cpp" line="195"/>
+        <location filename="../management_layer/content/project/project_plugins_builder.cpp" line="198"/>
         <source>Screenplay text</source>
         <translation>טקסט תסריט</translation>
     </message>
     <message>
-        <location filename="../management_layer/content/project/project_plugins_builder.cpp" line="197"/>
+        <location filename="../management_layer/content/project/project_plugins_builder.cpp" line="200"/>
         <source>Cards</source>
         <translation>כרטיסיות</translation>
     </message>
     <message>
-        <location filename="../management_layer/content/project/project_plugins_builder.cpp" line="199"/>
+        <location filename="../management_layer/content/project/project_plugins_builder.cpp" line="202"/>
         <source>Statistics</source>
         <translation>סטטיסטיקה</translation>
     </message>
@@ -821,6 +852,54 @@ from 2 Gb</source>
         <location filename="../ui/account/change_password_dialog.cpp" line="114"/>
         <source>Cancel</source>
         <translation>בטל</translation>
+    </message>
+</context>
+<context>
+    <name>Ui::CharacterInformationView</name>
+    <message>
+        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="171"/>
+        <source>Name</source>
+        <translation type="unfinished">שם</translation>
+    </message>
+    <message>
+        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="172"/>
+        <source>Story role</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="174"/>
+        <source>Primary</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="175"/>
+        <source>Secondary</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="176"/>
+        <source>Tertiary</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="177"/>
+        <source>Undefined</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="179"/>
+        <source>One sentence description</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="180"/>
+        <source>Long description</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="182"/>
+        <source>Add photo +</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -1166,77 +1245,77 @@ from 2 Gb</source>
 <context>
     <name>Ui::OnboardingView</name>
     <message>
-        <location filename="../ui/onboarding/onboarding_view.cpp" line="341"/>
+        <location filename="../ui/onboarding/onboarding_view.cpp" line="342"/>
         <source>Choose preferred language</source>
         <translation>בחר שפה מועדפת</translation>
     </message>
     <message>
-        <location filename="../ui/onboarding/onboarding_view.cpp" line="342"/>
+        <location filename="../ui/onboarding/onboarding_view.cpp" line="343"/>
         <source>Did not find your preffered language? Read how you can add it yourself.</source>
         <translation>לא מצאת את השפה המועדפת עליך? קרא כיצד תוכל להוסיף אותו בעצמך.</translation>
     </message>
     <message>
-        <location filename="../ui/onboarding/onboarding_view.cpp" line="343"/>
+        <location filename="../ui/onboarding/onboarding_view.cpp" line="344"/>
         <source>Continue</source>
         <translation>המשך</translation>
     </message>
     <message>
-        <location filename="../ui/onboarding/onboarding_view.cpp" line="344"/>
+        <location filename="../ui/onboarding/onboarding_view.cpp" line="345"/>
         <source>Skip initial setup</source>
         <translation>דלג על הגדרה ראשונית</translation>
     </message>
     <message>
-        <location filename="../ui/onboarding/onboarding_view.cpp" line="346"/>
+        <location filename="../ui/onboarding/onboarding_view.cpp" line="347"/>
         <source>Choose application theme</source>
         <translation>בחר ממשק יישום</translation>
     </message>
     <message>
-        <location filename="../ui/onboarding/onboarding_view.cpp" line="347"/>
+        <location filename="../ui/onboarding/onboarding_view.cpp" line="348"/>
         <source>Dark &amp; light theme</source>
         <translation>ממשק בהיר וכהה</translation>
     </message>
     <message>
-        <location filename="../ui/onboarding/onboarding_view.cpp" line="348"/>
+        <location filename="../ui/onboarding/onboarding_view.cpp" line="349"/>
         <source>Modern theme which combines dark and light colors for better concentration on the documents you work.</source>
         <translation>ממשק מודרני המשלב צבעים כהים ובהירים לריכוז טוב יותר.</translation>
     </message>
     <message>
-        <location filename="../ui/onboarding/onboarding_view.cpp" line="349"/>
+        <location filename="../ui/onboarding/onboarding_view.cpp" line="350"/>
         <source>Dark theme</source>
         <translation>ממשק כהה</translation>
     </message>
     <message>
-        <location filename="../ui/onboarding/onboarding_view.cpp" line="350"/>
+        <location filename="../ui/onboarding/onboarding_view.cpp" line="351"/>
         <source>Theme is more suitable for work in dimly lit rooms, and also in the evening or night.</source>
         <translation>ממשק המתאים לעבודה בחדרים עם אור מועט וגם בערב או בלילה.</translation>
     </message>
     <message>
-        <location filename="../ui/onboarding/onboarding_view.cpp" line="351"/>
+        <location filename="../ui/onboarding/onboarding_view.cpp" line="352"/>
         <source>Light theme</source>
         <translation>ממשק בהיר</translation>
     </message>
     <message>
-        <location filename="../ui/onboarding/onboarding_view.cpp" line="352"/>
+        <location filename="../ui/onboarding/onboarding_view.cpp" line="353"/>
         <source>Theme is convenient for work with sufficient light.</source>
         <translation>ממשק המתאים לעבודה בחדרים עם אור מספק.</translation>
     </message>
     <message>
-        <location filename="../ui/onboarding/onboarding_view.cpp" line="353"/>
+        <location filename="../ui/onboarding/onboarding_view.cpp" line="354"/>
         <source>Setup size of the user interface elements</source>
         <translation>הגדר גודל ממשק משתמש</translation>
     </message>
     <message>
-        <location filename="../ui/onboarding/onboarding_view.cpp" line="354"/>
+        <location filename="../ui/onboarding/onboarding_view.cpp" line="355"/>
         <source>small</source>
         <translation>קטן</translation>
     </message>
     <message>
-        <location filename="../ui/onboarding/onboarding_view.cpp" line="355"/>
+        <location filename="../ui/onboarding/onboarding_view.cpp" line="356"/>
         <source>big</source>
         <translation>גדול</translation>
     </message>
     <message>
-        <location filename="../ui/onboarding/onboarding_view.cpp" line="356"/>
+        <location filename="../ui/onboarding/onboarding_view.cpp" line="357"/>
         <source>Start writing</source>
         <translation>התחל לכתוב</translation>
     </message>
@@ -2751,7 +2830,7 @@ If you work with no interruptions it saves the project every 3 minutes.</source>
 <context>
     <name>WebLoader</name>
     <message>
-        <location filename="../../3rd_party/webloader/src/WebLoader.cpp" line="311"/>
+        <location filename="../../3rd_party/webloader/src/WebLoader.cpp" line="310"/>
         <source>Sorry, we have some error while loading. Error is: %1</source>
         <translation>מצטערים, יש לנו שגיאה במהלך הטעינה. השגיאה היא: %1</translation>
     </message>

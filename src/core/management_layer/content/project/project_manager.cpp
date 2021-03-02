@@ -519,9 +519,9 @@ void ProjectManager::reconfigureAll()
     d->pluginsBuilder.reconfigureAll();
 }
 
-void ProjectManager::reconfigureScreenplayEditor()
+void ProjectManager::reconfigureScreenplayEditor(const QStringList& _changedSettingsKeys)
 {
-    d->pluginsBuilder.reconfigureScreenplayEditor();
+    d->pluginsBuilder.reconfigureScreenplayEditor(_changedSettingsKeys);
 }
 
 void ProjectManager::reconfigureScreenplayNavigator()

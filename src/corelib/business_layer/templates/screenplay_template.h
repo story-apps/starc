@@ -353,6 +353,11 @@ public:
     void saveToFile(const QString& _filePath) const;
 
     /**
+     * @brief Идентификатор шаблона
+     */
+    QString id() const;
+
+    /**
      * @brief Является ли шаблон умолчальным
      */
     bool isDefault() const;
@@ -420,6 +425,11 @@ private:
     void load(const QString& _fromFile);
 
 private:
+    /**
+     * @brief Идентификатор
+     */
+    QString m_id;
+
     /**
      * @brief Является ли шаблон умолчальным
      */

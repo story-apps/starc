@@ -103,6 +103,7 @@ namespace {
     const QString kComponentsScreenplayKey = kComponentsGroupKey + QStringLiteral("/screenplay");
     // ... редактор
     const QString kComponentsScreenplayEditorKey = kComponentsScreenplayKey + QStringLiteral("/editor");
+    const QString kComponentsScreenplayEditorDefaultTemplateKey = kComponentsScreenplayEditorKey + QStringLiteral("/default-template");
     const QString kComponentsScreenplayEditorShowSceneNumbersKey = kComponentsScreenplayEditorKey + QStringLiteral("/show-scene-numbers");
     const QString kComponentsScreenplayEditorShowSceneNumbersOnRightKey = kComponentsScreenplayEditorKey + QStringLiteral("/show-scene-numbers-on-left");
     const QString kComponentsScreenplayEditorShowSceneNumberOnLeftKey = kComponentsScreenplayEditorKey + QStringLiteral("/show-scene-number-on-right");

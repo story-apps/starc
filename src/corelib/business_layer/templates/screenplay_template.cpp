@@ -13,6 +13,7 @@
 #include <QTextBlock>
 #include <QTextBlockFormat>
 #include <QXmlStreamAttributes>
+#include <QUuid>
 
 
 namespace BusinessLayer
@@ -544,6 +545,11 @@ void ScreenplayTemplate::saveToFile(const QString& _filePath) const
     templateFile.close();
 }
 
+QString ScreenplayTemplate::id() const
+{
+    return m_id;
+}
+
 bool ScreenplayTemplate::isDefault() const
 {
     return m_isDefault;
@@ -551,6 +557,22 @@ bool ScreenplayTemplate::isDefault() const
 
 QString ScreenplayTemplate::name() const
 {
+    if (m_name.isEmpty()) {
+        if (m_id == "world_cp") {
+            return QApplication::translate("BusinessLayer::ScreenplayTemplate",
+                                           "International template (page: A4; font: Courier Prime)");
+        } else if (m_id == "world_cn") {
+            return QApplication::translate("BusinessLayer::ScreenplayTemplate",
+                                           "International template (page: A4; font: Courier New)");
+        } else if (m_id == "ru") {
+            return QApplication::translate("BusinessLayer::ScreenplayTemplate",
+                                           "Russian template (page: A4; font: Courier New)");
+        } else if (m_id == "us") {
+            return QApplication::translate("BusinessLayer::ScreenplayTemplate",
+                                           "US template (page: Letter; font: Courier Prime)");
+        }
+    }
+
     return m_name;
 }
 
@@ -640,6 +662,7 @@ void ScreenplayTemplate::updateBlocksColors()
 }
 
 ScreenplayTemplate::ScreenplayTemplate(const QString& _fromFile)
+    : m_id(QUuid::createUuid().toString())
 {
     load(_fromFile);
 }
@@ -664,6 +687,9 @@ void ScreenplayTemplate::load(const QString& _fromFile)
     // Считываем атрибуты шаблона
     //
     QXmlStreamAttributes templateAttributes = reader.attributes();
+    if (templateAttributes.hasAttribute("id")) {
+        m_id = templateAttributes.value("id").toString();
+    }
     m_isDefault = templateAttributes.value("default").toString() == "true";
     m_name = templateAttributes.value("name").toString();
     m_description = templateAttributes.value("description").toString();

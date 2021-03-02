@@ -228,18 +228,18 @@ void ProjectPluginsBuilder::bind(const QString& _viewMimeType, const QString& _n
 void ProjectPluginsBuilder::reconfigureAll()
 {
     for (auto& plugin : d->plugins) {
-        plugin->reconfigure();
+        plugin->reconfigure({});
     }
 }
 
-void ProjectPluginsBuilder::reconfigureScreenplayEditor()
+void ProjectPluginsBuilder::reconfigureScreenplayEditor(const QStringList& _changedSettingsKeys)
 {
     auto screenplayEditor = d->plugins.find(kScreenplayEditorMime);
     if (screenplayEditor == d->plugins.end()) {
         return;
     }
 
-    screenplayEditor.value()->reconfigure();
+    screenplayEditor.value()->reconfigure(_changedSettingsKeys);
 }
 
 void ProjectPluginsBuilder::reconfigureScreenplayNavigator()
@@ -249,7 +249,7 @@ void ProjectPluginsBuilder::reconfigureScreenplayNavigator()
         return;
     }
 
-    screenplayNavigator.value()->reconfigure();
+    screenplayNavigator.value()->reconfigure({});
 }
 
 void ProjectPluginsBuilder::reset()

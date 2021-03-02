@@ -283,19 +283,19 @@ void Button::paintEvent(QPaintEvent* _event)
     if (!d->icon.isEmpty()) {
         const QSizeF iconSize = Ui::DesignSystem::button().iconSize();
         const qreal textWithIconWidth = iconSize.width()
-                + Ui::DesignSystem::button().spacing()
-                + textWidth;
+                                        + (textWidth > 0 ? Ui::DesignSystem::button().spacing() + textWidth
+                                                         : 0);
 
         qreal iconX = buttonInnerRect.x();
         if (isLeftToRight()) {
             iconX += d->isContained
-                               ? ((buttonInnerRect.width() - textWithIconWidth) / 2.0)
-                               : 0.0;
+                     ? ((buttonInnerRect.width() - textWithIconWidth) / 2.0)
+                     : 0.0;
         } else {
             iconX += d->isContained
-                       ? ((buttonInnerRect.width() - textWithIconWidth) / 2.0
-                          + textWidth + Ui::DesignSystem::button().spacing())
-                       : buttonInnerRect.width() - iconSize.width();
+                     ? ((buttonInnerRect.width() - textWithIconWidth) / 2.0
+                        + textWidth + Ui::DesignSystem::button().spacing())
+                     : buttonInnerRect.width() - iconSize.width();
         }
         const QRectF iconRect(QPointF(iconX, buttonInnerRect.top()), QSizeF(iconSize.width(), buttonInnerRect.height()));
         painter.setFont(Ui::DesignSystem::font().iconsMid());

@@ -45,6 +45,7 @@ public:
     //
     // Задание параметров редактора сценария
     //
+    void setScreenplayEditorDefaultTemplate(const QString& _templateId);
     void setScreenplayEditorShowSceneNumber(bool _show, bool _atLeft, bool _atRight);
     void setScreenplayEditorShowDialogueNumber(bool _show);
     void setScreenplayEditorHighlightCurrentLine(bool _highlight);
@@ -87,6 +88,7 @@ signals:
     //
     // Уведомление об изменении параметров редактора сценария
     //
+    void screenplayEditorDefaultTemplateChanged(const QString& _templateId);
     void screenplayEditorShowSceneNumberChanged(bool _show, bool _atLeft, bool _atRight);
     void screenplayEditorShowDialogueNumberChanged(bool _show);
     void screenplayEditorHighlightCurrentLineChanged(bool _highlight);

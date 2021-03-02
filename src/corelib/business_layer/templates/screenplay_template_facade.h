@@ -20,9 +20,14 @@ class CORE_LIBRARY_EXPORT ScreenplayTemplateFacade
 {
 public:
     /**
+     * @brief Индекс для сохранения в модели информации о идентификаторе шаблона
+     */
+    static const int kTemplateIdRole = Qt::UserRole + 1;
+
+    /**
      * @brief Получить список шаблонов
      */
-    static QStandardItemModel* templatesList();
+    static QStandardItemModel* templates();
 
 //    /**
 //     * @brief Проверить существование шаблона с заданным именем
@@ -30,10 +35,15 @@ public:
 //    static bool containsTemplate(const QString& _templateName);
 
     /**
-     * @brief Получить шаблон в соответствии с заданным именем
-     * Если имя не задано, возвращается стандартный шаблон
+     * @brief Получить шаблон в соответствии с заданным идентификатором
+     * @note Если id не задан, возвращается стандартный шаблон
      */
-    static const ScreenplayTemplate& getTemplate(const QString& _templateName = {});
+    static const ScreenplayTemplate& getTemplate(const QString& _templateId = {});
+
+    /**
+     * @brief Задать стандартный шаблон
+     */
+    static void setDefaultTemplate(const QString& _templateId);
 
 //    /**
 //     * @brief Сохранить стиль в библиотеке шаблонов

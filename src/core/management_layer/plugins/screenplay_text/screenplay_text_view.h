@@ -21,7 +21,7 @@ public:
     /**
      * @brief Настроить редактор сценария в соответствии с параметрами заданными в настройках
      */
-    void reconfigure();
+    void reconfigure(const QStringList& _changedSettingsKeys);
 
     /**
      * @brief Работа с параметрами отображения представления

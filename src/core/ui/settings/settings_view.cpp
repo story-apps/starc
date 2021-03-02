@@ -1,6 +1,7 @@
 #include "settings_view.h"
 
 #include <business_layer/chronometry/chronometer.h>
+#include <business_layer/templates/screenplay_template_facade.h>
 
 #include <ui/design_system/design_system.h>
 #include <ui/widgets/button/button.h>
@@ -257,6 +258,8 @@ public:
     // ... Screenplay editor
     //
     H6Label* screenplayEditorTitle = nullptr;
+    ComboBox* screenplayEditorDefaultTemplate = nullptr;
+    IconsMidLabel* screenplayEditorDefaultTemplateOptions = nullptr;
     CheckBox* screenplayEditorShowSceneNumber = nullptr;
     CheckBox* screenplayEditorShowSceneNumberOnLeft = nullptr;
     CheckBox* screenplayEditorShowSceneNumberOnRight = nullptr;
@@ -325,6 +328,8 @@ SettingsView::Implementation::Implementation(QWidget* _parent)
       screenplayCardLayout(new QGridLayout),
       screenplayTitle(new H5Label(screenplayCard)),
       screenplayEditorTitle(new H6Label(screenplayCard)),
+      screenplayEditorDefaultTemplate(new ComboBox(screenplayCard)),
+      screenplayEditorDefaultTemplateOptions(new IconsMidLabel(screenplayCard)),
       screenplayEditorShowSceneNumber(new CheckBox(screenplayCard)),
       screenplayEditorShowSceneNumberOnLeft(new CheckBox(screenplayCard)),
       screenplayEditorShowSceneNumberOnRight(new CheckBox(screenplayCard)),
@@ -451,6 +456,9 @@ void SettingsView::Implementation::initApplicationCard()
 
 void SettingsView::Implementation::initScreenplayCard()
 {
+    screenplayEditorDefaultTemplate->setModel(BusinessLayer::ScreenplayTemplateFacade::templates());
+    screenplayEditorDefaultTemplateOptions->setText(u8"\U000F01D9");
+    screenplayEditorDefaultTemplateOptions->setAlignment(Qt::AlignCenter);
     screenplayEditorShowSceneNumberOnLeft->setEnabled(false);
     screenplayEditorShowSceneNumberOnLeft->setChecked(true);
     screenplayEditorShowSceneNumberOnRight->setEnabled(false);
@@ -490,6 +498,12 @@ void SettingsView::Implementation::initScreenplayCard()
     // ... редактор сценария
     //
     screenplayCardLayout->addWidget(screenplayEditorTitle, itemIndex++, 0);
+    {
+        auto layout = makeLayout();
+        layout->addWidget(screenplayEditorDefaultTemplate, 1);
+        layout->addWidget(screenplayEditorDefaultTemplateOptions);
+        screenplayCardLayout->addLayout(layout, itemIndex++, 0);
+    }
     {
         auto layout = makeLayout();
         layout->addWidget(screenplayEditorShowSceneNumber);
@@ -638,6 +652,9 @@ SettingsView::SettingsView(QWidget* _parent)
     connect(d->screenplayEditorShowSceneNumberOnLeft, &CheckBox::checkedChanged, this, screenplayEditorCorrectShownSceneNumber);
     connect(d->screenplayEditorShowSceneNumberOnRight, &CheckBox::checkedChanged, this, screenplayEditorCorrectShownSceneNumber);
     //
+    connect(d->screenplayEditorDefaultTemplate, &ComboBox::currentIndexChanged, this, [this] (const QModelIndex& _index) {
+        emit screenplayEditorDefaultTemplateChanged(_index.data(BusinessLayer::ScreenplayTemplateFacade::kTemplateIdRole).toString());
+    });
     auto notifyScreenplayEditorShowSceneNumbersChanged = [this] {
         emit screenplayEditorShowSceneNumberChanged(d->screenplayEditorShowSceneNumber->isChecked(),
                                                     d->screenplayEditorShowSceneNumberOnLeft->isChecked(),
@@ -865,6 +882,20 @@ void SettingsView::setApplicationSaveBackups(bool _save)
 void SettingsView::setApplicationBackupsFolder(const QString& _path)
 {
     d->backupsFolderPath->setText(_path);
+}
+
+void SettingsView::setScreenplayEditorDefaultTemplate(const QString& _templateId)
+{
+    using namespace BusinessLayer;
+    for (int row = 0; row < ScreenplayTemplateFacade::templates()->rowCount(); ++row) {
+        auto item = ScreenplayTemplateFacade::templates()->item(row);
+        if (item->data(ScreenplayTemplateFacade::kTemplateIdRole).toString() != _templateId) {
+            continue;
+        }
+
+        d->screenplayEditorDefaultTemplate->setCurrentIndex(item->index());
+        break;
+    }
 }
 
 void SettingsView::setScreenplayEditorShowSceneNumber(bool _show, bool _atLeft, bool _atRight)
@@ -1103,6 +1134,8 @@ void SettingsView::updateTranslations()
     //
     d->screenplayTitle->setText(tr("Screenplay"));
     d->screenplayEditorTitle->setText(tr("Text editor"));
+    d->screenplayEditorDefaultTemplate->setLabel(tr("Default template"));
+    d->screenplayEditorDefaultTemplateOptions->setToolTip(tr("Available actions for the selected template"));
     d->screenplayEditorShowSceneNumber->setText(tr("Show scene number"));
     d->screenplayEditorShowSceneNumberOnLeft->setText(tr("on the left"));
     d->screenplayEditorShowSceneNumberOnRight->setText(tr("on the right"));
@@ -1170,13 +1203,22 @@ void SettingsView::designSystemChangeEvent(DesignSystemChangeEvent* _event)
     auto labelMargins = Ui::DesignSystem::label().margins().toMargins();
     labelMargins.setTop(static_cast<int>(Ui::DesignSystem::button().shadowMargins().top()));
     labelMargins.setBottom(static_cast<int>(Ui::DesignSystem::button().shadowMargins().bottom()));
-    for (auto label : QVector<Widget*>{ d->language,
-                                        d->theme,
-                                        d->scaleFactorTitle, d->scaleFactorSmallInfo, d->scaleFactorBigInfo,
-                                        }) {
+    for (auto label : QVector<Widget*>{
+         d->language,
+         d->theme,
+         d->scaleFactorTitle, d->scaleFactorSmallInfo, d->scaleFactorBigInfo }) {
         label->setBackgroundColor(DesignSystem::color().background());
         label->setTextColor(DesignSystem::color().onBackground());
         label->setContentsMargins(labelMargins);
+    }
+
+    auto iconLabelMargins = labelMargins;
+    iconLabelMargins.setLeft(0);
+    for (auto iconLabel : QVector<Widget*>{
+         d->screenplayEditorDefaultTemplateOptions }) {
+        iconLabel->setBackgroundColor(DesignSystem::color().background());
+        iconLabel->setTextColor(DesignSystem::color().onBackground());
+        iconLabel->setContentsMargins(iconLabelMargins);
     }
 
     for (auto checkBox : {
@@ -1213,6 +1255,7 @@ void SettingsView::designSystemChangeEvent(DesignSystemChangeEvent* _event)
     for (auto textField : QVector<TextField*>{
          d->spellCheckerLanguage,
          d->backupsFolderPath,
+         d->screenplayEditorDefaultTemplate,
          d->screenplayDurationByPagePage,
          d->screenplayDurationByPageDuration,
          d->screenplayDurationByCharactersCharacters,
@@ -1221,8 +1264,9 @@ void SettingsView::designSystemChangeEvent(DesignSystemChangeEvent* _event)
         textField->setTextColor(DesignSystem::color().onBackground());
     }
 
-    for (auto button : { d->changeLanuage,
-                         d->changeTheme }) {
+    for (auto button : {
+         d->changeLanuage,
+         d->changeTheme }) {
         button->setBackgroundColor(DesignSystem::color().secondary());
         button->setTextColor(DesignSystem::color().secondary());
     }
@@ -1230,6 +1274,9 @@ void SettingsView::designSystemChangeEvent(DesignSystemChangeEvent* _event)
     d->scaleFactor->setBackgroundColor(DesignSystem::color().background());
     d->scaleFactor->setContentsMargins({static_cast<int>(Ui::DesignSystem::layout().px24()), 0,
                                            static_cast<int>(Ui::DesignSystem::layout().px24()), 0});
+//    d->screenplayEditorDefaultTemplateOptions->setContentsMargins({});
+    d->screenplayEditorDefaultTemplateOptions->setAlignment(Qt::AlignCenter);
+
 
     d->applicationCardLayout->setRowMinimumHeight(d->applicationCardBottomSpacerIndex,
                                                   static_cast<int>(Ui::DesignSystem::layout().px24()));

@@ -42,6 +42,12 @@ public:
     void initWithModel(BusinessLayer::ScreenplayTextModel* _model);
 
     /**
+     * @brief Перенастроить редактор в соответствии с текущей моделью
+     * @note Например в случае смены шаблона оформления сценария
+     */
+    void reinit();
+
+    /**
      * @brief Получить модель справочников сценария
      */
     BusinessLayer::ScreenplayDictionariesModel* dictionaries() const;

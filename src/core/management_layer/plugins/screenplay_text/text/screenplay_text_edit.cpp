@@ -93,6 +93,11 @@ void ScreenplayTextEdit::initWithModel(BusinessLayer::ScreenplayTextModel* _mode
     d->document.setModel(_model);
 }
 
+void ScreenplayTextEdit::reinit()
+{
+    initWithModel(d->model);
+}
+
 BusinessLayer::ScreenplayDictionariesModel* ScreenplayTextEdit::dictionaries() const
 {
     if (d->model == nullptr) {

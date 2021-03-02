@@ -446,10 +446,10 @@ ScreenplayTextView::ScreenplayTextView(QWidget* _parent)
     updateTranslations();
     designSystemChangeEvent(nullptr);
 
-    reconfigure();
+    reconfigure({});
 }
 
-void ScreenplayTextView::reconfigure()
+void ScreenplayTextView::reconfigure(const QStringList& _changedSettingsKeys)
 {
     d->paragraphTypesModel->clear();
 
@@ -495,14 +495,30 @@ void ScreenplayTextView::reconfigure()
 
     d->shortcutsManager.reconfigure();
 
-    d->screenplayText->setShowSceneNumber(
-        settingsValue(DataStorageLayer::kComponentsScreenplayEditorShowSceneNumbersKey).toBool(),
-        settingsValue(DataStorageLayer::kComponentsScreenplayEditorShowSceneNumbersOnRightKey).toBool(),
-        settingsValue(DataStorageLayer::kComponentsScreenplayEditorShowSceneNumberOnLeftKey).toBool());
-    d->screenplayText->setShowDialogueNumber(
-        settingsValue(DataStorageLayer::kComponentsScreenplayEditorShowDialogueNumberKey).toBool());
-    d->screenplayText->setHighlightCurrentLine(
-                settingsValue(DataStorageLayer::kComponentsScreenplayEditorHighlightCurrentLineKey).toBool());
+    if (_changedSettingsKeys.isEmpty()
+        || _changedSettingsKeys.contains(DataStorageLayer::kComponentsScreenplayEditorDefaultTemplateKey)) {
+        ScreenplayTemplateFacade::setDefaultTemplate(
+                    settingsValue(DataStorageLayer::kComponentsScreenplayEditorDefaultTemplateKey).toString());
+        d->screenplayText->reinit();
+    }
+
+    if (_changedSettingsKeys.isEmpty()
+        || _changedSettingsKeys.contains(DataStorageLayer::kComponentsScreenplayEditorShowSceneNumbersKey)) {
+        d->screenplayText->setShowSceneNumber(
+            settingsValue(DataStorageLayer::kComponentsScreenplayEditorShowSceneNumbersKey).toBool(),
+            settingsValue(DataStorageLayer::kComponentsScreenplayEditorShowSceneNumbersOnRightKey).toBool(),
+            settingsValue(DataStorageLayer::kComponentsScreenplayEditorShowSceneNumberOnLeftKey).toBool());
+    }
+    if (_changedSettingsKeys.isEmpty()
+        || _changedSettingsKeys.contains(DataStorageLayer::kComponentsScreenplayEditorShowDialogueNumberKey)) {
+        d->screenplayText->setShowDialogueNumber(
+            settingsValue(DataStorageLayer::kComponentsScreenplayEditorShowDialogueNumberKey).toBool());
+    }
+    if (_changedSettingsKeys.isEmpty()
+        || _changedSettingsKeys.contains(DataStorageLayer::kComponentsScreenplayEditorHighlightCurrentLineKey)) {
+        d->screenplayText->setHighlightCurrentLine(
+            settingsValue(DataStorageLayer::kComponentsScreenplayEditorHighlightCurrentLineKey).toBool());
+    }
 }
 
 void ScreenplayTextView::loadViewSettings()

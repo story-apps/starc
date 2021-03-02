@@ -101,6 +101,7 @@ void SettingsManager::Implementation::loadComponentsSettings()
 
 void SettingsManager::Implementation::loadScreenplaySettings()
 {
+    view->setScreenplayEditorDefaultTemplate(settingsValue(DataStorageLayer::kComponentsScreenplayEditorDefaultTemplateKey).toString());
     view->setScreenplayEditorShowSceneNumber(
                 settingsValue(DataStorageLayer::kComponentsScreenplayEditorShowSceneNumbersKey).toBool(),
                 settingsValue(DataStorageLayer::kComponentsScreenplayEditorShowSceneNumbersOnRightKey).toBool(),
@@ -168,6 +169,7 @@ SettingsManager::SettingsManager(QObject* _parent, QWidget* _parentWidget)
     connect(d->view, &Ui::SettingsView::applicationBackupsFolderChanged, this, &SettingsManager::setApplicationBackupsFolder);
     //
     //
+    connect(d->view, &Ui::SettingsView::screenplayEditorDefaultTemplateChanged, this, &SettingsManager::setScreenplayEditorDefaultTemplate);
     connect(d->view, &Ui::SettingsView::screenplayEditorShowSceneNumberChanged, this, &SettingsManager::setScreenplayEditorShowSceneNumber);
     connect(d->view, &Ui::SettingsView::screenplayEditorShowDialogueNumberChanged, this, &SettingsManager::setScreenplayEditorShowDialogueNumber);
     connect(d->view, &Ui::SettingsView::screenplayEditorHighlightCurrentLineChanged, this, &SettingsManager::setScreenplayEditorHighlightCurrentLine);
@@ -191,10 +193,6 @@ SettingsManager::SettingsManager(QObject* _parent, QWidget* _parentWidget)
     connect(d->view, &Ui::SettingsView::applicationSaveBackupsChanged, this, &SettingsManager::applicationSaveBackupsChanged);
     connect(d->view, &Ui::SettingsView::applicationBackupsFolderChanged, this, &SettingsManager::applicationBackupsFolderChanged);
     //
-    //
-    connect(d->view, &Ui::SettingsView::screenplayEditorShowSceneNumberChanged, this, &SettingsManager::screenplayEditorChanged);
-    connect(d->view, &Ui::SettingsView::screenplayEditorShowDialogueNumberChanged, this, &SettingsManager::screenplayEditorChanged);
-    connect(d->view, &Ui::SettingsView::screenplayEditorHighlightCurrentLineChanged, this, &SettingsManager::screenplayEditorChanged);
     //
     connect(d->view, &Ui::SettingsView::screenplayNavigatorShowSceneNumberChanged, this, &SettingsManager::screenplayNavigatorChanged);
     connect(d->view, &Ui::SettingsView::screenplayNavigatorShowSceneTextChanged, this, &SettingsManager::screenplayNavigatorChanged);
@@ -454,21 +452,32 @@ void SettingsManager::setApplicationBackupsFolder(const QString& _path)
     d->setSettingsValue(DataStorageLayer::kApplicationBackupsFolderKey, _path);
 }
 
+void SettingsManager::setScreenplayEditorDefaultTemplate(const QString& _templateId)
+{
+    d->setSettingsValue(DataStorageLayer::kComponentsScreenplayEditorDefaultTemplateKey, _templateId);
+    emit screenplayEditorChanged({ DataStorageLayer::kComponentsScreenplayEditorDefaultTemplateKey });
+}
+
 void SettingsManager::setScreenplayEditorShowSceneNumber(bool _show, bool _atLeft, bool _atRight)
 {
     d->setSettingsValue(DataStorageLayer::kComponentsScreenplayEditorShowSceneNumbersKey, _show);
     d->setSettingsValue(DataStorageLayer::kComponentsScreenplayEditorShowSceneNumbersOnRightKey, _atLeft);
     d->setSettingsValue(DataStorageLayer::kComponentsScreenplayEditorShowSceneNumberOnLeftKey, _atRight);
+    emit screenplayEditorChanged({ DataStorageLayer::kComponentsScreenplayEditorShowSceneNumbersKey,
+                                   DataStorageLayer::kComponentsScreenplayEditorShowSceneNumbersOnRightKey,
+                                   DataStorageLayer::kComponentsScreenplayEditorShowSceneNumberOnLeftKey });
 }
 
 void SettingsManager::setScreenplayEditorShowDialogueNumber(bool _show)
 {
     d->setSettingsValue(DataStorageLayer::kComponentsScreenplayEditorShowDialogueNumberKey, _show);
+    emit screenplayEditorChanged({ DataStorageLayer::kComponentsScreenplayEditorShowDialogueNumberKey });
 }
 
 void SettingsManager::setScreenplayEditorHighlightCurrentLine(bool _highlight)
 {
     d->setSettingsValue(DataStorageLayer::kComponentsScreenplayEditorHighlightCurrentLineKey, _highlight);
+    emit screenplayEditorChanged({ DataStorageLayer::kComponentsScreenplayEditorHighlightCurrentLineKey });
 }
 
 void SettingsManager::setScreenplayNavigatorShowSceneNumber(bool _show)

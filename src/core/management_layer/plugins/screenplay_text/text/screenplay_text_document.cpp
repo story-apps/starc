@@ -379,6 +379,16 @@ void ScreenplayTextDocument::setModel(BusinessLayer::ScreenplayTextModel* _model
     }
 
     //
+    // Обновим шрифт документа, в моменте когда текста нет
+    //
+    const auto templateDefaultFont = ScreenplayTemplateFacade::getTemplate()
+                                     .blockStyle(ScreenplayParagraphType::SceneHeading)
+                                     .font();
+    if (defaultFont() != templateDefaultFont) {
+        setDefaultFont(templateDefaultFont);
+    }
+
+    //
     // Начинаем операцию вставки
     //
     cursor.beginEditBlock();

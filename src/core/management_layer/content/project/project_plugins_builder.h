@@ -61,7 +61,7 @@ public:
      * @brief Перенастроить плагины
      */
     void reconfigureAll();
-    void reconfigureScreenplayEditor();
+    void reconfigureScreenplayEditor(const QStringList& _changedSettingsKeys);
     void reconfigureScreenplayNavigator();
 
     /**
