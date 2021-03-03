@@ -95,7 +95,17 @@ void ScreenplayTextEdit::initWithModel(BusinessLayer::ScreenplayTextModel* _mode
 
 void ScreenplayTextEdit::reinit()
 {
+    //
+    // Перенастроим всё, что зависит от шаблона
+    //
     initWithModel(d->model);
+
+    //
+    // Пересчитаем хронометраж
+    //
+    if (d->model != nullptr) {
+        d->model->recalculateDuration();
+    }
 }
 
 BusinessLayer::ScreenplayDictionariesModel* ScreenplayTextEdit::dictionaries() const
@@ -958,34 +968,40 @@ void ScreenplayTextEdit::paintEvent(QPaintEvent* _event)
                     }
 
                     //
-                    // Прорисовка префикса блока
+                    // Прорисовка префикса/постфикса для блока текста, если это не пустая декорация
                     //
-                    if (block.charFormat().hasProperty(ScreenplayBlockStyle::PropertyPrefix)) {
-                        painter.setFont(block.charFormat().font());
+                    if (!block.text().isEmpty()
+                        || !block.blockFormat().boolProperty(ScreenplayBlockStyle::PropertyIsCorrection)) {
+                        //
+                        // ... префикс
+                        //
+                        if (block.charFormat().hasProperty(ScreenplayBlockStyle::PropertyPrefix)) {
+                            painter.setFont(block.charFormat().font());
 
-                        const auto prefix = block.charFormat().stringProperty(ScreenplayBlockStyle::PropertyPrefix);
-                        const QPoint topLeft = QPoint(cursorR.left()
-                                                      - painter.fontMetrics().horizontalAdvance(prefix),
-                                                      cursorR.top());
-                        const QPoint bottomRight = QPoint(cursorR.left(),
-                                                          cursorR.bottom());
-                        const QRect rect(topLeft, bottomRight);
-                        painter.drawText(rect, Qt::AlignLeft | Qt::AlignVCenter, prefix);
-                    }
-                    //
-                    // Прорисовка постфикса блока
-                    //
-                    if (block.charFormat().hasProperty(ScreenplayBlockStyle::PropertyPostfix)) {
-                        painter.setFont(block.charFormat().font());
+                            const auto prefix = block.charFormat().stringProperty(ScreenplayBlockStyle::PropertyPrefix);
+                            const QPoint topLeft = QPoint(cursorR.left()
+                                                          - painter.fontMetrics().horizontalAdvance(prefix),
+                                                          cursorR.top());
+                            const QPoint bottomRight = QPoint(cursorR.left(),
+                                                              cursorR.bottom());
+                            const QRect rect(topLeft, bottomRight);
+                            painter.drawText(rect, Qt::AlignLeft | Qt::AlignVCenter, prefix);
+                        }
+                        //
+                        // ... постфикс
+                        //
+                        if (block.charFormat().hasProperty(ScreenplayBlockStyle::PropertyPostfix)) {
+                            painter.setFont(block.charFormat().font());
 
-                        const auto postfix = block.charFormat().stringProperty(ScreenplayBlockStyle::PropertyPostfix);
-                        const QPoint topLeft = QPoint(cursorREnd.left(),
-                                                      cursorREnd.top());
-                        const QPoint bottomRight = QPoint(cursorREnd.left()
-                                                          + painter.fontMetrics().horizontalAdvance(postfix),
-                                                          cursorREnd.bottom());
-                        const QRect rect(topLeft, bottomRight);
-                        painter.drawText(rect, Qt::AlignRight | Qt::AlignVCenter, postfix);
+                            const auto postfix = block.charFormat().stringProperty(ScreenplayBlockStyle::PropertyPostfix);
+                            const QPoint topLeft = QPoint(cursorREnd.left(),
+                                                          cursorREnd.top());
+                            const QPoint bottomRight = QPoint(cursorREnd.left()
+                                                              + painter.fontMetrics().horizontalAdvance(postfix),
+                                                              cursorREnd.bottom());
+                            const QRect rect(topLeft, bottomRight);
+                            painter.drawText(rect, Qt::AlignRight | Qt::AlignVCenter, postfix);
+                        }
                     }
                 }
 
