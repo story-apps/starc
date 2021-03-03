@@ -1439,6 +1439,7 @@ void ScreenplayTextCorrector::Implementation::breakDialogue(const QTextBlockForm
     moreKeywordFormat.setProperty(ScreenplayBlockStyle::PropertyIsCorrectionContinued, true);
     moreKeywordFormat.setProperty(PageTextEdit::PropertyDontShowCursor, true);
     _cursor.setBlockFormat(moreKeywordFormat);
+    _cursor.setBlockCharFormat(moreKeywordStyle.charFormat());
     //
     // Вставить текст ДАЛЬШЕ
     //
