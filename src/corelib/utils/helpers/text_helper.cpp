@@ -58,6 +58,9 @@ qreal TextHelper::heightForWidth(const QString& _text, const QFont& _font, qreal
     // Компануем текст и считаем, какой высоты получается результат
     //
     QTextLayout textLayout(correctedText, _font);
+    QTextOption textOption;
+    textOption.setWrapMode(QTextOption::WrapAtWordBoundaryOrAnywhere);
+    textLayout.setTextOption(textOption);
     textLayout.beginLayout();
     forever {
         QTextLine line = textLayout.createLine();

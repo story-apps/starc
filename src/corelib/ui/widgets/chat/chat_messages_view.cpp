@@ -143,7 +143,7 @@ void ChatMessagesView::paintEvent(QPaintEvent* _event)
         }
     };
 
-    for (const auto& message : d->messages) {
+    for (const auto& message : std::as_const(d->messages)) {
         //
         // Определим изменилась ли дата
         //
@@ -224,7 +224,9 @@ void ChatMessagesView::paintEvent(QPaintEvent* _event)
             painter.setPen(textColor());
         }
         //
-        painter.drawText(messageTextRect, message.text());
+        QTextOption textOption;
+        textOption.setWrapMode(QTextOption::WrapAtWordBoundaryOrAnywhere);
+        painter.drawText(messageTextRect, message.text(), textOption);
 
         lastY = messageRect.bottom();
 

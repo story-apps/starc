@@ -271,7 +271,9 @@ void ScreenplayTextCommentDelegate::paint(QPainter* _painter, const QStyleOption
                            lastComment.author);
         _painter->setFont(Ui::DesignSystem::font().body2());
         _painter->setPen(textColor);
-        _painter->drawText(lastCommentTextRect, Qt::TextWordWrap, lastComment.text);
+        QTextOption commentTextOption;
+        commentTextOption.setWrapMode(QTextOption::WrapAtWordBoundaryOrAnywhere);
+        _painter->drawText(lastCommentTextRect, lastComment.text, commentTextOption);
 
         lastCommentAvatarRect.moveBottom(lastCommentRect.bottom());
         const auto avatar = ImageHelper::makeAvatar(lastComment.author, Ui::DesignSystem::font().body2(), avatarSize.toSize(), Qt::white);
