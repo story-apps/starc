@@ -110,7 +110,7 @@ public:
 
 void BaseTextEdit::Implementation::reconfigure(BaseTextEdit* _textEdit)
 {
-    _textEdit->setCursorWidth(Ui::DesignSystem::layout().px4());
+    _textEdit->setCursorWidth(Ui::DesignSystem::layout().px2());
 }
 
 
