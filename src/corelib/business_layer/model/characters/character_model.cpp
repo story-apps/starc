@@ -121,11 +121,6 @@ void CharacterModel::setLongDescription(const QString& _text)
     emit longDescriptionChanged(d->longDescription);
 }
 
-const QString& CharacterModel::age() const
-{
-    return d->age;
-}
-
 const QPixmap& CharacterModel::mainPhoto() const
 {
     return d->mainPhoto.image;
@@ -136,6 +131,11 @@ void CharacterModel::setMainPhoto(const QPixmap& _photo)
     d->mainPhoto.image = _photo;
     d->mainPhoto.uuid = imageWrapper()->save(d->mainPhoto.image);
     emit mainPhotoChanged(d->mainPhoto.image);
+}
+
+const QString& CharacterModel::age() const
+{
+    return d->age;
 }
 
 void CharacterModel::setAge(const QString& _text)
@@ -195,11 +195,12 @@ void CharacterModel::clearDocument()
     QSignalBlocker signalBlocker(this);
 
     setName({});
-    setAge({});
-    setGender({});
     setOneSentenceDescription({});
     setLongDescription({});
     setMainPhoto({});
+    //
+    setAge({});
+    setGender({});
 }
 
 QByteArray CharacterModel::toXml() const
@@ -209,10 +210,10 @@ QByteArray CharacterModel::toXml() const
     }
 
     QByteArray xml = "<?xml version=\"1.0\"?>\n";
+    xml += QString("<%1 mime-type=\"%2\" version=\"1.0\">\n").arg(kDocumentKey, Domain::mimeTypeFor(document()->type())).toUtf8();
     auto save = [&xml] (const QString& _key, const QString& _value) {
         xml += QString("<%1><![CDATA[%2]]></%1>\n").arg(_key, _value).toUtf8();
     };
-    xml += QString("<%1 mime-type=\"%2\" version=\"1.0\">\n").arg(kDocumentKey, Domain::mimeTypeFor(document()->type())).toUtf8();
     save(kNameKey, d->name);
     save(kStoryRoleKey, QString::number(d->storyRole));
     save(kOneSentenceDescriptionKey, d->oneSentenceDescription);

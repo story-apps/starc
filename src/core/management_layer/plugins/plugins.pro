@@ -11,3 +11,7 @@ SUBDIRS = \
 exists (character_information/character_information.pro) {
     SUBDIRS += character_information
 }
+
+exists (location_information/location_information.pro) {
+    SUBDIRS += location_information
+}

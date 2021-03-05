@@ -6,6 +6,9 @@
 namespace BusinessLayer
 {
 
+/**
+ * @brief Модель данных персонажа
+ */
 class CORE_LIBRARY_EXPORT CharacterModel : public AbstractModel
 {
     Q_OBJECT

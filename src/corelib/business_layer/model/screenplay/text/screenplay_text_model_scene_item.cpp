@@ -176,7 +176,7 @@ ScreenplayTextModelSceneItem::Number ScreenplayTextModelSceneItem::number() cons
         return {};
     }
 
-    return d->number.value();
+    return *d->number;
 }
 
 void ScreenplayTextModelSceneItem::setNumber(int _number)

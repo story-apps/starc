@@ -4,3 +4,6 @@
 [submodule "src/core/management_layer/plugins/character_information"]
 	path = src/core/management_layer/plugins/character_information
 	url = https://github.com/dimkanovikov/starc-character-information-plugin.git
+[submodule "src/core/management_layer/plugins/location_information"]
+	path = src/core/management_layer/plugins/location_information
+	url = https://github.com/dimkanovikov/starc-location-information-plugin.git
