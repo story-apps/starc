@@ -118,6 +118,12 @@ ScreenplayTemplateFacade::ScreenplayTemplateFacade()
     //
     // Загрузить шаблоны
     //
+    // ... удаляем легаси шаблоны
+    //     FIXME: Убрать этот код в версии 0.1.0
+    //
+    QDir(templatesFolderPath).remove("fd_letter");
+    QDir(templatesFolderPath).remove("fd_a4");
+    //
     // ... шаблон по умолчанию
     //
     d->defaultTemplate = ScreenplayTemplate(defaultTemplatePath);
