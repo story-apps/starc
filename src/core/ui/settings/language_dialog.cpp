@@ -211,6 +211,11 @@ QWidget* LanguageDialog::focusedWidgetAfterShow() const
     return d->english;
 }
 
+QWidget* LanguageDialog::lastFocusableWidget() const
+{
+    return d->okButton;
+}
+
 void LanguageDialog::updateTranslations()
 {
     setTitle(tr("Change application language"));

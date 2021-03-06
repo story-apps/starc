@@ -226,6 +226,11 @@ QWidget* LoginDialog::focusedWidgetAfterShow() const
     return d->email;
 }
 
+QWidget* LoginDialog::lastFocusableWidget() const
+{
+    return d->cancelButton;
+}
+
 void LoginDialog::updateTranslations()
 {
     setTitle(tr("Get into your account"));

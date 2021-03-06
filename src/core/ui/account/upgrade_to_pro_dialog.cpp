@@ -80,6 +80,11 @@ QWidget* UpgradeToProDialog::focusedWidgetAfterShow() const
     return d->paypal;
 }
 
+QWidget* UpgradeToProDialog::lastFocusableWidget() const
+{
+    return d->cancelButton;
+}
+
 void UpgradeToProDialog::updateTranslations()
 {
 //    setTitle(tr("Upgrade to pro for $39.99 lifetime"));

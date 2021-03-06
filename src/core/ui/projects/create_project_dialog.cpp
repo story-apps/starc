@@ -251,6 +251,11 @@ QWidget* CreateProjectDialog::focusedWidgetAfterShow() const
     return d->projectName;
 }
 
+QWidget* CreateProjectDialog::lastFocusableWidget() const
+{
+    return d->createButton;
+}
+
 void CreateProjectDialog::updateTranslations()
 {
     setTitle(tr("Create new story"));

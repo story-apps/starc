@@ -35,6 +35,11 @@ protected:
     QWidget* focusedWidgetAfterShow() const override;
 
     /**
+     * @brief Опеределим последний фокусируемый виджет в диалоге
+     */
+    QWidget* lastFocusableWidget() const override;
+
+    /**
      * @brief Обновить переводы
      */
     void updateTranslations() override;
@@ -43,11 +48,6 @@ protected:
      * @brief Обновляем UI при изменении дизайн системы
      */
     void designSystemChangeEvent(DesignSystemChangeEvent* _event) override;
-
-    /**
-     * @brief Переопределяем, для ручной корректировки цепочки фокусирования виджетов
-     */
-    bool eventFilter(QObject* _watched, QEvent* _event) override;
 
 private:
     class Implementation;

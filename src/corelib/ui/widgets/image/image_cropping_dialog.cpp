@@ -80,6 +80,11 @@ QWidget* ImageCroppingDialog::focusedWidgetAfterShow() const
     return d->imageCropper;
 }
 
+QWidget* ImageCroppingDialog::lastFocusableWidget() const
+{
+    return d->selectButton;
+}
+
 void ImageCroppingDialog::updateTranslations()
 {
     d->imageCroppingNote->setText(tr("Select an area for project cover"));

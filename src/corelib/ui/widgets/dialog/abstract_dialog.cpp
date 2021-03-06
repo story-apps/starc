@@ -7,6 +7,7 @@
 #include <ui/widgets/button/button.h>
 #include <ui/widgets/label/label.h>
 
+#include <QApplication>
 #include <QGridLayout>
 #include <QPainter>
 #include <QPaintEvent>
@@ -119,11 +120,18 @@ AbstractDialog::AbstractDialog(QWidget* _parent)
     designSystemChangeEvent(nullptr);
 }
 
+AbstractDialog::~AbstractDialog() = default;
+
 void AbstractDialog::showDialog()
 {
     if (parentWidget() == nullptr) {
         return;
     }
+
+    //
+    // Установим обрабочик событий, чтобы перехватывать потерю фокуса и возвращать его в диалог
+    //
+    lastFocusableWidget()->installEventFilter(this);
 
     //
     // Конфигурируем геометрию диалога
@@ -200,6 +208,11 @@ bool AbstractDialog::eventFilter(QObject* _watched, QEvent* _event)
         && _event->type() == QEvent::Resize) {
         auto resizeEvent = static_cast<QResizeEvent*>(_event);
         resize(resizeEvent->size());
+    } else if (_watched == lastFocusableWidget()
+               && _event->type() == QEvent::FocusOut
+               && (QApplication::focusWidget() == nullptr
+                   || !findChildren<QWidget*>().contains(QApplication::focusWidget()))) {
+        focusedWidgetAfterShow()->setFocus();
     }
 
     return QWidget::eventFilter(_watched, _event);
@@ -264,5 +277,3 @@ void AbstractDialog::hide()
 {
     QWidget::hide();
 }
-
-AbstractDialog::~AbstractDialog() = default;

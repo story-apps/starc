@@ -10,7 +10,6 @@
 #include <ui/widgets/label/label.h>
 #include <ui/widgets/text_field/text_field.h>
 
-#include <QApplication>
 #include <QEvent>
 #include <QGridLayout>
 #include <QStandardItemModel>
@@ -91,8 +90,6 @@ ExportDialog::ExportDialog(QWidget* _parent)
     : AbstractDialog(_parent),
       d(new Implementation(this))
 {
-    d->exportButton->installEventFilter(this);
-
     setAcceptButton(d->exportButton);
     setRejectButton(d->cancelButton);
 
@@ -165,6 +162,11 @@ QWidget* ExportDialog::focusedWidgetAfterShow() const
     return d->fileFormat;
 }
 
+QWidget* ExportDialog::lastFocusableWidget() const
+{
+    return d->exportButton;
+}
+
 void ExportDialog::updateTranslations()
 {
     setTitle(tr("Export screenplay"));
@@ -213,21 +215,6 @@ void ExportDialog::designSystemChangeEvent(DesignSystemChangeEvent* _event)
                                                    Ui::DesignSystem::layout().px12(),
                                                    Ui::DesignSystem::layout().px16(),
                                                    Ui::DesignSystem::layout().px8()).toMargins());
-}
-
-bool ExportDialog::eventFilter(QObject* _watched, QEvent* _event)
-{
-    //
-    // Зацикливаем фокус, чтобы он всегда оставался внутри диалога
-    //
-    if (_watched == d->exportButton
-        && _event->type() == QEvent::FocusOut
-        && (QApplication::focusWidget() == nullptr
-            || !findChildren<QWidget*>().contains(QApplication::focusWidget()))) {
-        focusedWidgetAfterShow()->setFocus();
-    }
-
-    return AbstractDialog::eventFilter(_watched, _event);
 }
 
 } //namespace Ui

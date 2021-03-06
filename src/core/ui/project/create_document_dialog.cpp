@@ -122,6 +122,11 @@ QWidget* CreateDocumentDialog::focusedWidgetAfterShow() const
     return d->documentName;
 }
 
+QWidget* CreateDocumentDialog::lastFocusableWidget() const
+{
+    return d->createButton;
+}
+
 void CreateDocumentDialog::updateTranslations()
 {
     setTitle(tr("Add document to the story"));

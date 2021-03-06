@@ -269,6 +269,11 @@ QWidget* ThemeDialog::focusedWidgetAfterShow() const
     return d->darkAndLight;
 }
 
+QWidget* ThemeDialog::lastFocusableWidget() const
+{
+    return d->okButton;
+}
+
 void ThemeDialog::updateTranslations()
 {
     setTitle(tr("Change application theme"));

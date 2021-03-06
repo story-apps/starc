@@ -66,7 +66,12 @@ void Dialog::showDialog(const QString& _title, const QString& _supportingText,
 
 QWidget* Dialog::focusedWidgetAfterShow() const
 {
-    return d->supportingText;
+    return d->buttons.first();
+}
+
+QWidget* Dialog::lastFocusableWidget() const
+{
+    return d->buttons.last();
 }
 
 void Dialog::designSystemChangeEvent(DesignSystemChangeEvent* _event)
@@ -82,7 +87,7 @@ void Dialog::designSystemChangeEvent(DesignSystemChangeEvent* _event)
     d->supportingText->setBackgroundColor(Ui::DesignSystem::color().background());
     d->supportingText->setTextColor(Ui::DesignSystem::color().onBackground());
 
-    for (auto button : d->buttons) {
+    for (auto button : std::as_const(d->buttons)) {
         button->setBackgroundColor(Ui::DesignSystem::color().secondary());
         button->setTextColor(Ui::DesignSystem::color().secondary());
     }

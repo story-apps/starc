@@ -7,7 +7,6 @@
 #include <ui/widgets/check_box/check_box.h>
 #include <ui/widgets/label/label.h>
 
-#include <QApplication>
 #include <QEvent>
 #include <QFileInfo>
 #include <QGridLayout>
@@ -71,8 +70,6 @@ ImportDialog::ImportDialog(const QString& _importFilePath, QWidget* _parent)
     : AbstractDialog(_parent),
       d(new Implementation(_importFilePath, this))
 {
-    d->importButton->installEventFilter(this);
-
     setAcceptButton(d->importButton);
     setRejectButton(d->cancelButton);
 
@@ -118,6 +115,11 @@ BusinessLayer::ImportOptions ImportDialog::importOptions() const
 QWidget* ImportDialog::focusedWidgetAfterShow() const
 {
     return d->importCharacters;
+}
+
+QWidget* ImportDialog::lastFocusableWidget() const
+{
+    return d->importButton;
 }
 
 void ImportDialog::updateTranslations()
@@ -166,21 +168,6 @@ void ImportDialog::designSystemChangeEvent(DesignSystemChangeEvent* _event)
                                                    Ui::DesignSystem::layout().px12(),
                                                    Ui::DesignSystem::layout().px16(),
                                                    Ui::DesignSystem::layout().px8()).toMargins());
-}
-
-bool ImportDialog::eventFilter(QObject* _watched, QEvent* _event)
-{
-    //
-    // Зацикливаем фокус, чтобы он всегда оставался внутри диалога
-    //
-    if (_watched == d->importButton
-        && _event->type() == QEvent::FocusOut
-        && (QApplication::focusWidget() == nullptr
-            || !findChildren<QWidget*>().contains(QApplication::focusWidget()))) {
-        focusedWidgetAfterShow()->setFocus();
-    }
-
-    return AbstractDialog::eventFilter(_watched, _event);
 }
 
 } //namespace Ui
