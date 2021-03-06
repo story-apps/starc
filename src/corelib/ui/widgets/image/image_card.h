@@ -24,6 +24,11 @@ public:
     void setDecorationText(const QString& _text);
 
     /**
+     * @brief Задать подсказку для диалога обрезки изображения
+     */
+    void setImageCroppingText(const QString& _text);
+
+    /**
      * @brief Задать изображение
      */
     void setImage(const QPixmap& _image);

@@ -14,7 +14,7 @@ public:
     explicit Implementation(QWidget* _parent);
 
     ImageCropper* imageCropper = nullptr;
-    Body1Label* imageCroppingNote = nullptr;
+    Body1Label* imageCroppingLabel = nullptr;
     QHBoxLayout* buttonsLayout = nullptr;
     Button* cancelButton = nullptr;
     Button* selectButton = nullptr;
@@ -22,7 +22,7 @@ public:
 
 ImageCroppingDialog::Implementation::Implementation(QWidget* _parent)
     : imageCropper(new ImageCropper(_parent)),
-      imageCroppingNote(new Body1Label(_parent)),
+      imageCroppingLabel(new Body1Label(_parent)),
       buttonsLayout(new QHBoxLayout),
       cancelButton(new Button(_parent)),
       selectButton(new Button(_parent))
@@ -45,7 +45,7 @@ ImageCroppingDialog::ImageCroppingDialog(QWidget* _parent)
     contentsLayout()->setContentsMargins({});
     contentsLayout()->setSpacing(0);
     contentsLayout()->addWidget(d->imageCropper, 0, 0);
-    contentsLayout()->addWidget(d->imageCroppingNote, 1, 0);
+    contentsLayout()->addWidget(d->imageCroppingLabel, 1, 0);
     contentsLayout()->addLayout(d->buttonsLayout, 2, 0);
 
     connect(d->cancelButton, &Button::clicked, this, &ImageCroppingDialog::hideDialog);
@@ -57,6 +57,8 @@ ImageCroppingDialog::ImageCroppingDialog(QWidget* _parent)
     updateTranslations();
     designSystemChangeEvent(nullptr);
 }
+
+ImageCroppingDialog::~ImageCroppingDialog() = default;
 
 void ImageCroppingDialog::setImage(const QPixmap& _image)
 {
@@ -73,7 +75,10 @@ void ImageCroppingDialog::setImageProportionFixed(bool _fixed)
     d->imageCropper->setProportionFixed(_fixed);
 }
 
-ImageCroppingDialog::~ImageCroppingDialog() = default;
+void ImageCroppingDialog::setImageCroppingText(const QString& _text)
+{
+    d->imageCroppingLabel->setText(_text);
+}
 
 QWidget* ImageCroppingDialog::focusedWidgetAfterShow() const
 {
@@ -87,7 +92,6 @@ QWidget* ImageCroppingDialog::lastFocusableWidget() const
 
 void ImageCroppingDialog::updateTranslations()
 {
-    d->imageCroppingNote->setText(tr("Select an area for project cover"));
     d->cancelButton->setText(tr("Cancel"));
     d->selectButton->setText(tr("Select"));
 }
@@ -101,9 +105,9 @@ void ImageCroppingDialog::designSystemChangeEvent(DesignSystemChangeEvent* _even
     d->imageCropper->setBackgroundColor(Ui::DesignSystem::color().shadow());
     d->imageCropper->setTextColor(Ui::DesignSystem::color().onShadow());
 
-    d->imageCroppingNote->setTextColor(Ui::DesignSystem::color().onBackground());
-    d->imageCroppingNote->setBackgroundColor(Ui::DesignSystem::color().background());
-    d->imageCroppingNote->setContentsMargins(
+    d->imageCroppingLabel->setTextColor(Ui::DesignSystem::color().onBackground());
+    d->imageCroppingLabel->setBackgroundColor(Ui::DesignSystem::color().background());
+    d->imageCroppingLabel->setContentsMargins(
                 QMarginsF(Ui::DesignSystem::layout().px24(),
                           Ui::DesignSystem::layout().px12(),
                           Ui::DesignSystem::layout().px24(),

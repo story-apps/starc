@@ -26,6 +26,7 @@ public:
 
     QString decorationIcon = u8"\U000F0513";
     QString decorationText;
+    QString imageCroppingText;
     QVariantAnimation decorationColorAnimation;
 
     struct {
@@ -75,6 +76,7 @@ void ImageCard::Implementation::changeImage(ImageCard* _imageCard)
     dlg->setImage(cover);
     dlg->setImageProportion(_imageCard->size());
     dlg->setImageProportionFixed(true);
+    dlg->setImageCroppingText(imageCroppingText);
     connect(dlg, &ImageCroppingDialog::disappeared, dlg, &ImageCroppingDialog::deleteLater);
     connect(dlg, &ImageCroppingDialog::imageSelected, _imageCard, &ImageCard::setImage);
 
@@ -125,6 +127,15 @@ void ImageCard::setDecorationText(const QString& _text)
     }
 
     update();
+}
+
+void ImageCard::setImageCroppingText(const QString& _text)
+{
+    if (d->imageCroppingText == _text) {
+        return;
+    }
+
+    d->imageCroppingText = _text;
 }
 
 void ImageCard::setImage(const QPixmap& _image)

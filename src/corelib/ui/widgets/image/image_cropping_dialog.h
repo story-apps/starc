@@ -29,6 +29,11 @@ public:
      */
     void setImageProportionFixed(bool _fixed);
 
+    /**
+     * @brief Задать подсказку по обрезке изображения
+     */
+    void setImageCroppingText(const QString& _text);
+
 signals:
     /**
      * @brief Изображение выбрана
