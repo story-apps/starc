@@ -6,6 +6,7 @@
 #include <utils/helpers/image_helper.h>
 #include <utils/helpers/text_helper.h>
 
+#include <QKeyEvent>
 #include <QPainter>
 #include <QPaintEvent>
 #include <QVariantAnimation>
@@ -363,6 +364,19 @@ void Button::mouseReleaseEvent(QMouseEvent* _event)
     }
 
     emit clicked();
+}
+
+void Button::keyPressEvent(QKeyEvent* _event)
+{
+    if (_event->key() == Qt::Key_Space
+        || _event->key() == Qt::Key_Enter
+        || _event->key() == Qt::Key_Return) {
+        _event->accept();
+        emit clicked();
+        return;
+    }
+
+    return Widget::keyPressEvent(_event);
 }
 
 void Button::designSystemChangeEvent(DesignSystemChangeEvent* _event)

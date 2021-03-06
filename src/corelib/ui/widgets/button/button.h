@@ -74,6 +74,11 @@ protected:
     void mouseReleaseEvent(QMouseEvent* _event) override;
 
     /**
+     * @brief Переопределяем, чтобы нажатие пробела и энтера активировало кнопку
+     */
+    void keyPressEvent(QKeyEvent* _event) override;
+
+    /**
      * @brief Переопределяем для корректировки собственных размеров
      */
     void designSystemChangeEvent(DesignSystemChangeEvent* _event) override;
