@@ -101,6 +101,11 @@ void AbstractModel::setDocument(Domain::DocumentObject* _document)
     initDocument();
 }
 
+QString AbstractModel::documentName() const
+{
+    return {};
+}
+
 void AbstractModel::setDocumentName(const QString& _name)
 {
     Q_UNUSED(_name);

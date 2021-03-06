@@ -41,6 +41,7 @@ DEPENDPATH += $$PWD/../3rd_party/webloader
 SOURCES += \
     management_layer/application_manager.cpp \
     management_layer/content/account/account_manager.cpp \
+    management_layer/content/export/export_manager.cpp \
     management_layer/content/import/import_manager.cpp \
     management_layer/content/onboarding/onboarding_manager.cpp \
     management_layer/content/project/project_manager.cpp \
@@ -60,6 +61,7 @@ SOURCES += \
     ui/account/upgrade_to_pro_dialog.cpp \
     ui/application_style.cpp \
     ui/application_view.cpp \
+    ui/export/export_dialog.cpp \
     ui/import/import_dialog.cpp \
     ui/menu_view.cpp \
     ui/onboarding/onboarding_navigator.cpp \
@@ -85,6 +87,7 @@ HEADERS += \
     core_global.h \
     management_layer/application_manager.h \
     management_layer/content/account/account_manager.h \
+    management_layer/content/export/export_manager.h \
     management_layer/content/import/import_manager.h \
     management_layer/content/onboarding/onboarding_manager.h \
     management_layer/content/project/project_manager.h \
@@ -104,6 +107,7 @@ HEADERS += \
     ui/account/upgrade_to_pro_dialog.h \
     ui/application_style.h \
     ui/application_view.h \
+    ui/export/export_dialog.h \
     ui/import/import_dialog.h \
     ui/menu_view.h \
     ui/onboarding/onboarding_navigator.h \

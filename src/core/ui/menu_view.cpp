@@ -23,7 +23,7 @@ public:
     QAction* project = nullptr;
     QAction* saveProject = nullptr;
     QAction* saveProjectAs = nullptr;
-    QAction* exportProject = nullptr;
+    QAction* exportCurrentDocument = nullptr;
     QAction* importProject = nullptr;
     QAction* settings = nullptr;
     QAction* help = nullptr;
@@ -67,10 +67,10 @@ MenuView::Implementation::Implementation(QWidget* _parent)
     importProject->setCheckable(false);
     importProject->setVisible(false);
     //
-    exportProject = new QAction;
-    exportProject->setIconText(u8"\U000f0207");
-    exportProject->setCheckable(false);
-    exportProject->setVisible(false);
+    exportCurrentDocument = new QAction;
+    exportCurrentDocument->setIconText(u8"\U000f0207");
+    exportCurrentDocument->setCheckable(false);
+    exportCurrentDocument->setVisible(false);
     //
     settings = new QAction;
     settings->setIconText(u8"\U000f0493");
@@ -109,7 +109,7 @@ MenuView::MenuView(QWidget* _parent)
     addAction(d->saveProject);
     addAction(d->saveProjectAs);
     addAction(d->importProject);
-    addAction(d->exportProject);
+    addAction(d->exportCurrentDocument);
     addAction(d->settings);
     addAction(d->help);
 
@@ -120,7 +120,7 @@ MenuView::MenuView(QWidget* _parent)
     connect(d->saveProject, &QAction::triggered, this, &MenuView::saveChangesPressed);
     connect(d->saveProjectAs, &QAction::triggered, this, &MenuView::saveProjectAsPressed);
     connect(d->importProject, &QAction::triggered, this, &MenuView::importPressed);
-    connect(d->exportProject, &QAction::triggered, this, &MenuView::exportPressed);
+    connect(d->exportCurrentDocument, &QAction::triggered, this, &MenuView::exportCurrentDocumentPressed);
     connect(d->settings, &QAction::triggered, this, &MenuView::settingsPressed);
     connect(d->help, &QAction::triggered, this, &MenuView::helpPressed);
 
@@ -131,7 +131,7 @@ MenuView::MenuView(QWidget* _parent)
     connect(this, &MenuView::projectPressed, this, closeMenu);
     connect(this, &MenuView::saveProjectAsPressed, this, closeMenu);
     connect(this, &MenuView::importPressed, this, closeMenu);
-    connect(this, &MenuView::exportPressed, this, closeMenu);
+    connect(this, &MenuView::exportCurrentDocumentPressed, this, closeMenu);
     connect(this, &MenuView::settingsPressed, this, closeMenu);
     connect(this, &MenuView::helpPressed, this, closeMenu);
 
@@ -149,7 +149,7 @@ void MenuView::setProjectActionsVisible(bool _visible)
     d->project->setVisible(_visible);
     d->saveProject->setVisible(_visible);
     d->saveProjectAs->setVisible(_visible);
-    d->exportProject->setVisible(_visible);
+    d->exportCurrentDocument->setVisible(_visible);
     d->importProject->setVisible(_visible);
 }
 
@@ -180,8 +180,8 @@ void MenuView::markChangesSaved(bool _saved)
 void MenuView::setProVersion(bool _isPro)
 {
     setSubtitle(QString("Story Architect v.%1 %2")
-                .arg(QApplication::applicationVersion())
-                .arg(_isPro ? "PRO" : "free"));
+                .arg(QApplication::applicationVersion(),
+                     (_isPro ? "PRO" : "free")));
     d->help->setVisible(!_isPro);
 }
 
@@ -191,10 +191,12 @@ void MenuView::updateTranslations()
     d->createProject->setText(tr("Create story"));
     d->openProject->setText(tr("Open story"));
     d->saveProject->setText(d->saveProject->isEnabled() ? tr("Save changes") : tr("All changes saved"));
-    d->saveProject->setWhatsThis(QKeySequence(QKeySequence::Save).toString());
+    d->saveProject->setWhatsThis(QKeySequence(QKeySequence::Save).toString(QKeySequence::NativeText));
     d->saveProjectAs->setText(tr("Save current story as..."));
     d->importProject->setText(tr("Import..."));
-    d->exportProject->setText(tr("Export..."));
+    d->importProject->setWhatsThis(QKeySequence("Alt+Ctrl+I").toString(QKeySequence::NativeText));
+    d->exportCurrentDocument->setText(tr("Export current document..."));
+    d->exportCurrentDocument->setWhatsThis(QKeySequence("Alt+Ctrl+E").toString(QKeySequence::NativeText));
     d->settings->setText(tr("Application settings"));
     d->help->setText(tr("How to use the application"));
 }

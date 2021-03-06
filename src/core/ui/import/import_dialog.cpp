@@ -7,6 +7,7 @@
 #include <ui/widgets/check_box/check_box.h>
 #include <ui/widgets/label/label.h>
 
+#include <QApplication>
 #include <QEvent>
 #include <QFileInfo>
 #include <QGridLayout>
@@ -31,8 +32,8 @@ public:
     CheckBox* keepSceneNumbers = nullptr;
 
     QHBoxLayout* buttonsLayout = nullptr;
-    Button* importButton = nullptr;
     Button* cancelButton = nullptr;
+    Button* importButton = nullptr;
 };
 
 
@@ -45,8 +46,8 @@ ImportDialog::Implementation::Implementation(const QString& _importFilePath, QWi
       importScreenplay(new CheckBox(_parent)),
       keepSceneNumbers(new CheckBox(_parent)),
       buttonsLayout(new QHBoxLayout),
-      importButton(new Button(_parent)),
-      cancelButton(new Button(_parent))
+      cancelButton(new Button(_parent)),
+      importButton(new Button(_parent))
 {
     for (auto checkBox : { importCharacters, importLocations,
                            importScreenplay, keepSceneNumbers }) {
@@ -173,7 +174,9 @@ bool ImportDialog::eventFilter(QObject* _watched, QEvent* _event)
     // Зацикливаем фокус, чтобы он всегда оставался внутри диалога
     //
     if (_watched == d->importButton
-        && _event->type() == QEvent::FocusOut) {
+        && _event->type() == QEvent::FocusOut
+        && (QApplication::focusWidget() == nullptr
+            || !findChildren<QWidget*>().contains(QApplication::focusWidget()))) {
         focusedWidgetAfterShow()->setFocus();
     }
 

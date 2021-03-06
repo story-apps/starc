@@ -86,7 +86,8 @@ signals:
     /**
      * @brief Нажат пункт меню "Экспортировать"
      */
-    void exportPressed();
+    void exportProjectPressed();
+    void exportCurrentDocumentPressed();
 
     /**
      * @brief Нажат пункт меню "Импортировать"

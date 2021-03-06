@@ -68,6 +68,16 @@ public:
     void addScreenplay(const QString& _name, const QString& _titlePage, const QString& _synopsis,
                        const QString& _treatment, const QString& _text);
 
+    /**
+     * @brief Модель текущего документа
+     */
+    BusinessLayer::AbstractModel* currentModel() const;
+
+    /**
+     * @brief Представление текущего документа
+     */
+    QString currentModelViewMimeType() const;
+
 signals:
     /**
      * @brief Запрос на отображение меню

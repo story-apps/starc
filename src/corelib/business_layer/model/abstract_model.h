@@ -37,6 +37,11 @@ public:
     void setDocument(Domain::DocumentObject* _document);
 
     /**
+     * @brief Получить название документа
+     */
+    virtual QString documentName() const;
+
+    /**
      * @brief Задать название документа
      */
     virtual void setDocumentName(const QString& _name);

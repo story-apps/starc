@@ -101,6 +101,14 @@ public:
 
     ProjectModelsFacade modelsFacade;
     ProjectPluginsBuilder pluginsBuilder;
+
+    /**
+     * @brief Информация о текущем документе
+     */
+    struct {
+        BusinessLayer::AbstractModel* model = nullptr;
+        QString viewMimeType;
+    } currentDocument;
 };
 
 ProjectManager::Implementation::Implementation(QWidget* _parent)
@@ -713,6 +721,16 @@ void ProjectManager::addScreenplay(const QString& _name, const QString& _titlePa
     d->projectStructureModel->appendItem(createItem(DocumentObjectType::ScreenplayStatistics, tr("Statistics")), screenplayItem, {});
 }
 
+BusinessLayer::AbstractModel* ProjectManager::currentModel() const
+{
+    return d->currentDocument.model;
+}
+
+QString ProjectManager::currentModelViewMimeType() const
+{
+    return d->currentDocument.viewMimeType;
+}
+
 void ProjectManager::handleModelChange(BusinessLayer::AbstractModel* _model,
     const QByteArray& _undo, const QByteArray& _redo)
 {
@@ -739,6 +757,8 @@ void ProjectManager::undoModelChange(BusinessLayer::AbstractModel* _model, int _
 void ProjectManager::showView(const QModelIndex& _itemIndex, const QString& _viewMimeType)
 {
     if (!_itemIndex.isValid()) {
+        d->currentDocument.model = nullptr;
+        d->currentDocument.viewMimeType.clear();
         d->view->showDefaultPage();
         return;
     }
@@ -750,8 +770,9 @@ void ProjectManager::showView(const QModelIndex& _itemIndex, const QString& _vie
     // Определим модель
     //
     auto document = DataStorageLayer::StorageFacade::documentStorage()->document(item->uuid());
-    auto model = d->modelsFacade.modelFor(document);
-    if (model == nullptr) {
+    d->currentDocument.model = d->modelsFacade.modelFor(document);
+    d->currentDocument.viewMimeType = _viewMimeType;
+    if (d->currentDocument.model == nullptr) {
         d->view->showNotImplementedPage();
         return;
     }
@@ -759,7 +780,7 @@ void ProjectManager::showView(const QModelIndex& _itemIndex, const QString& _vie
     //
     // Определим представление и отобразим
     //
-    auto view = d->pluginsBuilder.activateView(_viewMimeType, model);
+    auto view = d->pluginsBuilder.activateView(_viewMimeType, d->currentDocument.model);
     if (view == nullptr) {
         d->view->showNotImplementedPage();
         return;

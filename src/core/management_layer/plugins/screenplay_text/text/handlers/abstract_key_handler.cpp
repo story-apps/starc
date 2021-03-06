@@ -62,6 +62,7 @@ void AbstractKeyHandler::handleKeyEvent(QKeyEvent* _event)
         //
         // Ни чего не делаем, обработкой сочетаний клавиш занимаются ответственные за это классы
         //
+        qDebug("skip");
     }
 
     //

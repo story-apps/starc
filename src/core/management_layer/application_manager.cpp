@@ -1,6 +1,7 @@
 #include "application_manager.h"
 
 #include "content/account/account_manager.h"
+#include "content/export/export_manager.h"
 #include "content/import/import_manager.h"
 #include "content/onboarding/onboarding_manager.h"
 #include "content/project/project_manager.h"
@@ -188,6 +189,16 @@ public:
      */
     void closeCurrentProject();
 
+    /**
+     * @brief Импортировать проект
+     */
+    void importProject();
+
+    /**
+     * @brief Экспортировать текущий документ
+     */
+    void exportCurrentDocument();
+
     //
 
     /**
@@ -226,6 +237,7 @@ public:
     QScopedPointer<ProjectsManager> projectsManager;
     QScopedPointer<ProjectManager> projectManager;
     QScopedPointer<ImportManager> importManager;
+    QScopedPointer<ExportManager> exportManager;
     QScopedPointer<SettingsManager> settingsManager;
 #ifdef CLOUD_SERVICE_MANAGER
     QScopedPointer<CloudServiceManager> cloudServiceManager;
@@ -258,6 +270,7 @@ ApplicationManager::Implementation::Implementation(ApplicationManager* _q)
       projectsManager(new ProjectsManager(nullptr, applicationView)),
       projectManager(new ProjectManager(nullptr, applicationView)),
       importManager(new ImportManager(nullptr, applicationView)),
+      exportManager(new ExportManager(nullptr, applicationView)),
       settingsManager(new SettingsManager(nullptr, applicationView))
 #ifdef CLOUD_SERVICE_MANAGER
     , cloudServiceManager(new CloudServiceManager)
@@ -922,6 +935,16 @@ void ApplicationManager::Implementation::closeCurrentProject()
     state = ApplicationState::Working;
 }
 
+void ApplicationManager::Implementation::importProject()
+{
+    importManager->import();
+}
+
+void ApplicationManager::Implementation::exportCurrentDocument()
+{
+    exportManager->exportDocument(projectManager->currentModel());
+}
+
 void ApplicationManager::Implementation::imitateTypewriterSound(QKeyEvent* _event) const
 {
     //
@@ -1193,6 +1216,14 @@ void ApplicationManager::initConnections()
     QShortcut* saveShortcut = new QShortcut(QKeySequence::Save, d->applicationView);
     saveShortcut->setContext(Qt::ApplicationShortcut);
     connect(saveShortcut, &QShortcut::activated, this, [this] { d->saveChanges(); });
+    //
+    QShortcut* importShortcut = new QShortcut(QKeySequence("Alt+Ctrl+I"), d->applicationView);
+    importShortcut->setContext(Qt::ApplicationShortcut);
+    connect(importShortcut, &QShortcut::activated, this, [this] { d->importProject(); });
+    //
+    QShortcut* exportShortcut = new QShortcut(QKeySequence("Alt+Ctrl+E"), d->applicationView);
+    exportShortcut->setContext(Qt::ApplicationShortcut);
+    connect(exportShortcut, &QShortcut::activated, this, [this] { d->exportCurrentDocument(); });
 
     //
     // Представление приложения
@@ -1212,7 +1243,8 @@ void ApplicationManager::initConnections()
     connect(d->menuView, &Ui::MenuView::openProjectPressed, this, [this] { d->openProject(); });
     connect(d->menuView, &Ui::MenuView::projectPressed, this, [this] { d->showProject(); });
     connect(d->menuView, &Ui::MenuView::saveChangesPressed, this, [this] { d->saveChanges(); });
-    connect(d->menuView, &Ui::MenuView::importPressed, this, [this] { d->importManager->import(); });
+    connect(d->menuView, &Ui::MenuView::importPressed, this, [this] { d->importProject(); });
+    connect(d->menuView, &Ui::MenuView::exportCurrentDocumentPressed, this, [this] { d->exportCurrentDocument(); });
     connect(d->menuView, &Ui::MenuView::settingsPressed, this, [this] { d->showSettings(); });
 
     //
