@@ -81,6 +81,10 @@ QSize ContextMenu::Implementation::sizeHint(const QList<QAction*>& _actions) con
     auto width = 0.0;
     auto height = Ui::DesignSystem::card().shadowMargins().top();
     for (auto action : _actions) {
+        if (!action->isVisible()) {
+            continue;
+        }
+
         if (auto widgetAction = qobject_cast<QWidgetAction*>(action)) {
             const auto widgetSizeHint = widgetAction->defaultWidget()->sizeHint();
             width = std::max(width, static_cast<qreal>(widgetSizeHint.width()));
@@ -89,8 +93,11 @@ QSize ContextMenu::Implementation::sizeHint(const QList<QAction*>& _actions) con
             //
             // TODO: учитывать ширину шортката
             //
+            const auto iconWidth = action->iconText() == action->text()
+                                   ? 0.0
+                                   : Ui::DesignSystem::treeOneLineItem().iconSize().width();
             const auto actionWidth = Ui::DesignSystem::treeOneLineItem().margins().left()
-                                     + Ui::DesignSystem::treeOneLineItem().iconSize().width()
+                                     + iconWidth
                                      + Ui::DesignSystem::treeOneLineItem().spacing()
                                      + TextHelper::fineTextWidth(action->text(),
                                                                  Ui::DesignSystem::font().subtitle2())
@@ -100,6 +107,7 @@ QSize ContextMenu::Implementation::sizeHint(const QList<QAction*>& _actions) con
         }
     }
     width += Ui::DesignSystem::card().shadowMargins().left()
+             + Ui::DesignSystem::layout().px62()
              + Ui::DesignSystem::card().shadowMargins().right();
     height += Ui::DesignSystem::card().shadowMargins().bottom();
 
@@ -263,7 +271,11 @@ void ContextMenu::showContextMenu(const QPoint& _pos)
     auto position = _pos - QPointF(Ui::DesignSystem::card().shadowMargins().left(),
                                    Ui::DesignSystem::card().shadowMargins().top());
     auto endPosition = position;
-    const auto screenGeometry = QApplication::screenAt(position.toPoint())->geometry();
+    const auto screen = QApplication::screenAt(position.toPoint());
+    if (screen == nullptr) {
+        return;
+    }
+    const auto screenGeometry = screen->geometry();
     //
     // Если контекстное меню не помещается на экране справа от указателя
     //
@@ -373,12 +385,12 @@ void ContextMenu::paintEvent(QPaintEvent* _event)
         //
         // ... иконка
         //
-        const QRectF iconRect(QPointF(actionX
-                                      + Ui::DesignSystem::treeOneLineItem().margins().left(),
+        QRectF iconRect;
+        if (action->iconText() != action->text()) {
+            iconRect = QRectF(QPointF(actionX + Ui::DesignSystem::treeOneLineItem().margins().left(),
                                       actionRect.top()),
                               QSizeF(Ui::DesignSystem::treeOneLineItem().iconSize().width(),
                                      actionRect.height()));
-        if (action->iconText().length() <= 2) {
             auto it = action->iconText(), t = action->text();
             painter.setFont(Ui::DesignSystem::font().iconsMid());
             painter.drawText(iconRect, Qt::AlignCenter, action->iconText());
@@ -387,11 +399,12 @@ void ContextMenu::paintEvent(QPaintEvent* _event)
         // ... текст
         //
         painter.setFont(Ui::DesignSystem::font().subtitle2());
-        const auto textX = iconRect.right() + Ui::DesignSystem::treeOneLineItem().spacing();
-        const QRectF textRect(iconRect.right() + Ui::DesignSystem::treeOneLineItem().spacing(),
-                              iconRect.top(),
-                              actionWidth
-                              - textX,
+        const auto textX = iconRect.isEmpty()
+                           ? actionX + Ui::DesignSystem::treeOneLineItem().margins().left()
+                           : iconRect.right() + Ui::DesignSystem::treeOneLineItem().spacing();
+        const QRectF textRect(textX,
+                              actionRect.top(),
+                              actionWidth - textX,
                               actionRect.height());
         painter.drawText(textRect, Qt::AlignLeft | Qt::AlignVCenter, action->text());
 

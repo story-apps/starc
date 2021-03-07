@@ -3,13 +3,16 @@
 #include "image_cropping_dialog.h"
 
 #include <ui/design_system/design_system.h>
+#include <ui/widgets/context_menu/context_menu.h>
 
 #include <utils/helpers/color_helper.h>
 #include <utils/helpers/image_helper.h>
 
 #include <NetworkRequestLoader.h>
 
+#include <QAction>
 #include <QApplication>
+#include <QClipboard>
 #include <QFileDialog>
 #include <QMimeData>
 #include <QPainter>
@@ -22,11 +25,29 @@ class ImageCard::Implementation
 public:
     explicit Implementation(ImageCard* _parent);
 
+    /**
+     * @brief Закешировать масштабированную версию изображения для отображения на виджете
+     */
     void prepareImageForDisplaing(const QSize& _size);
 
+    /**
+     * @brief Выбрать изображение из файла на компьютере
+     */
     void chooseImageFromFile();
+
+    /**
+     * @brief Обрезать выбранное изображение
+     */
     void cropImage(const QPixmap& _image);
 
+    /**
+     * @brief Подготовить контекстное меню к отображению
+     */
+    void prepareContextMenu();
+
+    //
+    // Данные
+    //
 
     ImageCard* q = nullptr;
 
@@ -34,17 +55,28 @@ public:
     QString decorationIcon = u8"\U000F0513";
     QString decorationText;
     QString imageCroppingText;
-    QVariantAnimation dragIndicationOpacityAnimation;
-    QVariantAnimation decorationColorAnimation;
-
     struct {
         QPixmap source;
         QPixmap display;
     } image;
+
+    ContextMenu* contextMenu = nullptr;
+    QAction* changeImageAction = nullptr;
+    QAction* clearImageAction = nullptr;
+    QAction* copyImageAction = nullptr;
+    QAction* pasteImageAction = nullptr;
+
+    QVariantAnimation dragIndicationOpacityAnimation;
+    QVariantAnimation decorationColorAnimation;
 };
 
 ImageCard::Implementation::Implementation(ImageCard* _parent)
-    : q(_parent)
+    : q(_parent),
+      contextMenu(new ContextMenu(_parent)),
+      changeImageAction(new QAction(contextMenu)),
+      clearImageAction(new QAction(contextMenu)),
+      copyImageAction(new QAction(contextMenu)),
+      pasteImageAction(new QAction(contextMenu))
 {
     dragIndicationOpacityAnimation.setStartValue(0.0);
     dragIndicationOpacityAnimation.setEndValue(1.0);
@@ -52,6 +84,8 @@ ImageCard::Implementation::Implementation(ImageCard* _parent)
     dragIndicationOpacityAnimation.setEasingCurve(QEasingCurve::OutQuad);
     decorationColorAnimation.setDuration(240);
     decorationColorAnimation.setEasingCurve(QEasingCurve::OutQuad);
+
+    contextMenu->setActions({ changeImageAction, clearImageAction, copyImageAction, pasteImageAction });
 }
 
 void ImageCard::Implementation::prepareImageForDisplaing(const QSize& _size)
@@ -102,6 +136,13 @@ void ImageCard::Implementation::cropImage(const QPixmap& _image)
     dlg->showDialog();
 }
 
+void ImageCard::Implementation::prepareContextMenu()
+{
+    const auto hasImage = !image.source.isNull();
+    clearImageAction->setVisible(hasImage);
+    copyImageAction->setVisible(hasImage);
+}
+
 
 // ****
 
@@ -112,7 +153,35 @@ ImageCard::ImageCard(QWidget* _parent)
 {
     setAcceptDrops(true);
     setAttribute(Qt::WA_Hover);
+    setContextMenuPolicy(Qt::CustomContextMenu);
 
+    connect(this, &ImageCard::customContextMenuRequested, this, [this] (const QPoint& _pos) {
+        //
+        // Настроим контекстное меню
+        //
+        d->prepareContextMenu();
+        //
+        // ... и отобразим
+        //
+        d->contextMenu->showContextMenu(mapToGlobal(_pos));
+
+        //
+        // При этом, запускаем анимацию ухода курсора из карточки изображения
+        //
+        d->decorationColorAnimation.setDirection(QVariantAnimation::Backward);
+        d->decorationColorAnimation.start();
+    });
+    connect(d->changeImageAction, &QAction::triggered, this, [this] { d->chooseImageFromFile(); });
+    connect(d->clearImageAction, &QAction::triggered, this, [this] { setImage({}); });
+    connect(d->copyImageAction, &QAction::triggered, this, [this] {
+        QApplication::clipboard()->setPixmap(d->image.source);
+    });
+    connect(d->pasteImageAction, &QAction::triggered, this, [this] {
+        const auto image = QApplication::clipboard()->pixmap();
+        if (!image.isNull()) {
+            d->cropImage(image);
+        }
+    });
     connect(&d->dragIndicationOpacityAnimation, &QVariantAnimation::valueChanged, this, qOverload<>(&ImageCard::update));
     connect(&d->decorationColorAnimation, &QVariantAnimation::valueChanged, this, qOverload<>(&ImageCard::update));
 
@@ -268,7 +337,9 @@ void ImageCard::mousePressEvent(QMouseEvent* _event)
 {
     Card::mousePressEvent(_event);
 
-    d->chooseImageFromFile();
+    if (_event->button() == Qt::LeftButton) {
+        d->chooseImageFromFile();
+    }
 }
 
 void ImageCard::dragEnterEvent(QDragEnterEvent* _event)
@@ -344,7 +415,10 @@ void ImageCard::dropEvent(QDropEvent* _event)
 
 void ImageCard::updateTranslations()
 {
-
+    d->clearImageAction->setText(tr("Delete"));
+    d->pasteImageAction->setText(tr("Paste"));
+    d->copyImageAction->setText(tr("Copy"));
+    d->changeImageAction->setText(tr("Change"));
 }
 
 void ImageCard::designSystemChangeEvent(DesignSystemChangeEvent* _event)
@@ -356,4 +430,7 @@ void ImageCard::designSystemChangeEvent(DesignSystemChangeEvent* _event)
                     Ui::DesignSystem::color().onBackground(),
                     Ui::DesignSystem::disabledTextOpacity()));
     d->decorationColorAnimation.setEndValue(Ui::DesignSystem::color().secondary());
+
+    d->contextMenu->setBackgroundColor(Ui::DesignSystem::color().background());
+    d->contextMenu->setTextColor(Ui::DesignSystem::color().onBackground());
 }
