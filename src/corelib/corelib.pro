@@ -46,6 +46,17 @@ DEPENDPATH += $$PWD/../3rd_party/qgumboparser
 PRE_TARGETDEPS += $$PWD/../3rd_party/qgumboparser
 #
 
+#
+# Подключаем библиотеку Webloader
+#
+LIBS += -L$$DESTDIR/libs/ -lwebloader
+win32-msvc*:QMAKE_LFLAGS += /WHOLEARCHIVE:$$DESTDIR/libs/webloader.lib
+
+INCLUDEPATH += $$PWD/../3rd_party/webloader/src
+DEPENDPATH += $$PWD/../3rd_party/webloader
+PRE_TARGETDEPS += $$PWD/../3rd_party/webloader
+#
+
 SOURCES += \
     business_layer/chronometry/chronometer.cpp \
     business_layer/import/celtx_importer.cpp \

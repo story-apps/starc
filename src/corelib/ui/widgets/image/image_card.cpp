@@ -7,8 +7,11 @@
 #include <utils/helpers/color_helper.h>
 #include <utils/helpers/image_helper.h>
 
+#include <NetworkRequestLoader.h>
+
 #include <QApplication>
 #include <QFileDialog>
+#include <QMimeData>
 #include <QPainter>
 #include <QResizeEvent>
 #include <QVariantAnimation>
@@ -17,16 +20,21 @@
 class ImageCard::Implementation
 {
 public:
-    Implementation();
+    explicit Implementation(ImageCard* _parent);
 
     void prepareImageForDisplaing(const QSize& _size);
 
-    void changeImage(ImageCard* _imageCard);
+    void chooseImageFromFile();
+    void cropImage(const QPixmap& _image);
 
 
+    ImageCard* q = nullptr;
+
+    bool isDragActive = false;
     QString decorationIcon = u8"\U000F0513";
     QString decorationText;
     QString imageCroppingText;
+    QVariantAnimation dragIndicationOpacityAnimation;
     QVariantAnimation decorationColorAnimation;
 
     struct {
@@ -35,8 +43,13 @@ public:
     } image;
 };
 
-ImageCard::Implementation::Implementation()
+ImageCard::Implementation::Implementation(ImageCard* _parent)
+    : q(_parent)
 {
+    dragIndicationOpacityAnimation.setStartValue(0.0);
+    dragIndicationOpacityAnimation.setEndValue(1.0);
+    dragIndicationOpacityAnimation.setDuration(240);
+    dragIndicationOpacityAnimation.setEasingCurve(QEasingCurve::OutQuad);
     decorationColorAnimation.setDuration(240);
     decorationColorAnimation.setEasingCurve(QEasingCurve::OutQuad);
 }
@@ -59,26 +72,32 @@ void ImageCard::Implementation::prepareImageForDisplaing(const QSize& _size)
     image.display = image.source.scaled(sizeCorrected, Qt::KeepAspectRatioByExpanding, Qt::SmoothTransformation);
 }
 
-void ImageCard::Implementation::changeImage(ImageCard* _imageCard)
+void ImageCard::Implementation::chooseImageFromFile()
 {
-    const QString coverPath = QFileDialog::getOpenFileName(_imageCard->window(), tr("Choose cover"), {},
-                                    QString("%1 (*.png *.jpeg *.jpg *.bmp *.tiff *.tif *.gif)").arg(tr("Images")));
-    if (coverPath.isEmpty()) {
+    const QString imagePath
+            = QFileDialog::getOpenFileName(q->window(), tr("Choose image"), {},
+                                           QString("%1 (*.png *.jpeg *.jpg *.bmp *.tiff *.tif *.gif)").arg(tr("Images")));
+    if (imagePath.isEmpty()) {
         return;
     }
 
-    QPixmap cover(coverPath);
-    if (cover.isNull()) {
+    QPixmap image(imagePath);
+    if (image.isNull()) {
         return;
     }
 
-    auto dlg = new ImageCroppingDialog(_imageCard->window());
-    dlg->setImage(cover);
-    dlg->setImageProportion(_imageCard->size());
+    cropImage(image);
+}
+
+void ImageCard::Implementation::cropImage(const QPixmap& _image)
+{
+    auto dlg = new ImageCroppingDialog(q->window());
+    dlg->setImage(_image);
+    dlg->setImageProportion(q->size());
     dlg->setImageProportionFixed(true);
     dlg->setImageCroppingText(imageCroppingText);
     connect(dlg, &ImageCroppingDialog::disappeared, dlg, &ImageCroppingDialog::deleteLater);
-    connect(dlg, &ImageCroppingDialog::imageSelected, _imageCard, &ImageCard::setImage);
+    connect(dlg, &ImageCroppingDialog::imageSelected, q, &ImageCard::setImage);
 
     dlg->showDialog();
 }
@@ -89,10 +108,12 @@ void ImageCard::Implementation::changeImage(ImageCard* _imageCard)
 
 ImageCard::ImageCard(QWidget* _parent)
     : Card(_parent),
-      d(new Implementation)
+      d(new Implementation(this))
 {
+    setAcceptDrops(true);
     setAttribute(Qt::WA_Hover);
 
+    connect(&d->dragIndicationOpacityAnimation, &QVariantAnimation::valueChanged, this, qOverload<>(&ImageCard::update));
     connect(&d->decorationColorAnimation, &QVariantAnimation::valueChanged, this, qOverload<>(&ImageCard::update));
 
     updateTranslations();
@@ -160,37 +181,64 @@ void ImageCard::paintEvent(QPaintEvent* _event)
     QPainter painter(this);
 
     //
+    // Если не задано изображение
+    //
+    if (d->image.display.isNull()) {
+        const auto decorationColor = d->decorationColorAnimation.currentValue().isValid()
+                                     ? d->decorationColorAnimation.currentValue().value<QColor>()
+                                     : d->decorationColorAnimation.startValue().value<QColor>();
+        painter.setPen(decorationColor);
+        painter.setBrush(Qt::NoBrush);
+        auto iconFont = Ui::DesignSystem::font().iconsBig();
+        iconFont.setPixelSize(Ui::DesignSystem::scaleFactor() * Ui::DesignSystem::layout().px48() * 2);
+        const auto iconHeight = QFontMetricsF(iconFont).boundingRect(d->decorationIcon).height();
+        const auto textHeight = QFontMetricsF(Ui::DesignSystem::font().button()).boundingRect(d->decorationIcon).height();
+        const auto decorationHeight = iconHeight + textHeight;
+        const auto iconRect = QRectF(0.0, (height() - decorationHeight) / 2.0,
+                                     width(), iconHeight);
+        painter.setFont(iconFont);
+        painter.drawText(iconRect, Qt::AlignCenter, d->decorationIcon);
+        //
+        const auto textRect = QRectF(0.0, iconRect.bottom(),
+                                     width(), textHeight);
+        painter.setFont(Ui::DesignSystem::font().button());
+        painter.drawText(textRect, Qt::AlignHCenter, d->decorationText);
+    }
+    //
     // Если задано изображение, то рисуем его
     //
-    if (!d->image.display.isNull()) {
+    else {
         const auto imageRect = rect().marginsRemoved(Ui::DesignSystem::card().shadowMargins().toMargins());
         const auto borderRadius = Ui::DesignSystem::card().borderRadius();
         ImageHelper::drawRoundedImage(painter, imageRect, d->image.display, borderRadius);
-        return;
     }
 
     //
-    // Если изображение не задано, то рисуем декорацию
+    // Если в режиме вставки из буфера
     //
-    const auto decorationColor = d->decorationColorAnimation.currentValue().isValid()
-                                 ? d->decorationColorAnimation.currentValue().value<QColor>()
-                                 : d->decorationColorAnimation.startValue().value<QColor>();
-    painter.setPen(decorationColor);
-    painter.setBrush(Qt::NoBrush);
-    auto iconFont = Ui::DesignSystem::font().iconsBig();
-    iconFont.setPixelSize(Ui::DesignSystem::scaleFactor() * Ui::DesignSystem::layout().px48() * 2);
-    const auto iconHeight = QFontMetricsF(iconFont).boundingRect(d->decorationIcon).height();
-    const auto textHeight = QFontMetricsF(Ui::DesignSystem::font().button()).boundingRect(d->decorationText).height();
-    const auto decorationHeight = iconHeight + textHeight;
-    const auto iconRect = QRectF(0.0, (height() - decorationHeight) / 2.0,
-                                 width(), iconHeight);
-    painter.setFont(iconFont);
-    painter.drawText(iconRect, Qt::AlignCenter, d->decorationIcon);
-    //
-    const auto textRect = QRectF(0.0, iconRect.bottom(),
-                                 width(), textHeight);
-    painter.setFont(Ui::DesignSystem::font().button());
-    painter.drawText(textRect, Qt::AlignHCenter, d->decorationText);
+    if (d->isDragActive
+        || d->dragIndicationOpacityAnimation.state() == QVariantAnimation::Running) {
+        painter.setOpacity(d->dragIndicationOpacityAnimation.currentValue().toReal());
+        //
+        painter.setPen(Qt::NoPen);
+        painter.setBrush(Ui::DesignSystem::color().secondary());
+        const auto cardRect = rect().marginsRemoved(Ui::DesignSystem::card().shadowMargins().toMargins());
+        const auto borderRadius = Ui::DesignSystem::card().borderRadius();
+        painter.drawRoundedRect(cardRect, borderRadius, borderRadius);
+        //
+        painter.setPen(Ui::DesignSystem::color().onSecondary());
+        painter.setBrush(Qt::NoBrush);
+        auto iconFont = Ui::DesignSystem::font().iconsBig();
+        iconFont.setPixelSize(Ui::DesignSystem::scaleFactor() * Ui::DesignSystem::layout().px48() * 2);
+        const auto icon = u8"\U000F01DA";
+        const auto iconHeight = QFontMetricsF(iconFont).boundingRect(icon).height();
+        const auto iconRect = QRectF(0.0, (height() - iconHeight) / 2.0,
+                                     width(), iconHeight);
+        painter.setFont(iconFont);
+        painter.drawText(iconRect, Qt::AlignCenter, icon);
+        //
+        painter.setOpacity(1.0);
+    }
 }
 
 void ImageCard::resizeEvent(QResizeEvent* _event)
@@ -220,7 +268,78 @@ void ImageCard::mousePressEvent(QMouseEvent* _event)
 {
     Card::mousePressEvent(_event);
 
-    d->changeImage(this);
+    d->chooseImageFromFile();
+}
+
+void ImageCard::dragEnterEvent(QDragEnterEvent* _event)
+{
+    _event->acceptProposedAction();
+
+    d->isDragActive = true;
+    d->dragIndicationOpacityAnimation.setDirection(QVariantAnimation::Forward);
+    d->dragIndicationOpacityAnimation.start();
+}
+
+void ImageCard::dragMoveEvent(QDragMoveEvent* _event)
+{
+    _event->acceptProposedAction();
+}
+
+void ImageCard::dragLeaveEvent(QDragLeaveEvent* _event)
+{
+    _event->accept();
+    d->isDragActive = false;
+    d->dragIndicationOpacityAnimation.setDirection(QVariantAnimation::Backward);
+    d->dragIndicationOpacityAnimation.start();
+}
+
+void ImageCard::dropEvent(QDropEvent* _event)
+{
+    QPixmap droppedImage;
+    const QMimeData *mimeData = _event->mimeData();
+    //
+    // Первым делом проверяем список ссылок, возможно выбраны сразу несколько фотогафий
+    //
+    if (mimeData->hasUrls()) {
+        for (const auto& url : mimeData->urls()) {
+            //
+            // Обрабатываем только изображения
+            //
+            const QString urlString = url.toString().toLower();
+            if (urlString.contains(".png")
+                || urlString.contains(".jpg")
+                || urlString.contains(".jpeg")
+                || urlString.contains(".gif")
+                || urlString.contains(".tiff")
+                || urlString.contains(".bmp")) {
+                //
+                // ... локальные считываем из файла
+                //
+                if (url.isLocalFile()) {
+                    droppedImage = QPixmap(url.toLocalFile());
+                }
+                //
+                // ... подгружаем картинки с инета
+                //
+                else {
+                    const QByteArray pixmapData = NetworkRequestLoader::loadSync(url);
+                    droppedImage.loadFromData(pixmapData);
+                }
+            }
+        }
+    } else if (mimeData->hasImage()) {
+        droppedImage = qvariant_cast<QPixmap>(mimeData->imageData());
+    }
+
+    if (!droppedImage.isNull()) {
+        d->cropImage(droppedImage);
+    }
+
+    _event->acceptProposedAction();
+
+    d->isDragActive = false;
+    d->dragIndicationOpacityAnimation.setDirection(QVariantAnimation::Backward);
+    d->dragIndicationOpacityAnimation.start();
 }
 
 void ImageCard::updateTranslations()

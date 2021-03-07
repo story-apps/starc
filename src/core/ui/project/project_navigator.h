@@ -66,7 +66,7 @@ signals:
     void itemDoubleClicked(const QModelIndex& _index);
 
     /**
-     * @brief Пользователь хочет открыть контекстное меню
+     * @brief Пользователь хочет открыть контекстное меню и поэтому нужно обновить контекстное меню
      */
     void contextMenuUpdateRequested(const QModelIndex& _index);
 

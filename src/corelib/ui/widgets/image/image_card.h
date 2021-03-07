@@ -62,6 +62,16 @@ protected:
     void mousePressEvent(QMouseEvent* _event) override;
 
     /**
+     * @brief Переопределяются для возможности затаскивания изображений
+     */
+    /** @{ */
+    void dragEnterEvent(QDragEnterEvent* _event) override;
+    void dragMoveEvent(QDragMoveEvent* _event) override;
+    void dragLeaveEvent(QDragLeaveEvent* _event) override;
+    void dropEvent(QDropEvent* _event) override;
+    /** @} */
+
+    /**
      * @brief Определяем переводы
      */
     void updateTranslations() override;
