@@ -192,6 +192,7 @@ SOURCES += \
 
 HEADERS += \
     business_layer/chronometry/chronometer.h \
+    business_layer/export/screenplay/export_options.h \
     business_layer/import/abstract_importer.h \
     business_layer/import/celtx_importer.h \
     business_layer/import/document_importer.h \

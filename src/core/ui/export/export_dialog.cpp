@@ -28,6 +28,8 @@ public:
     ComboBox* fileFormat = nullptr;
     ComboBox* screenplayTemplate = nullptr;
     CheckBox* printTitlePage = nullptr;
+    CheckBox* printFolders = nullptr;
+    CheckBox* printInlineNotes = nullptr;
     CheckBox* printSceneNumbers = nullptr;
     CheckBox* printDialoguesNumbers = nullptr;
     CheckBox* printReviewMarks = nullptr;
@@ -43,6 +45,8 @@ ExportDialog::Implementation::Implementation(QWidget* _parent)
     : fileFormat(new ComboBox(_parent)),
       screenplayTemplate(new ComboBox(_parent)),
       printTitlePage(new CheckBox(_parent)),
+      printFolders(new CheckBox(_parent)),
+      printInlineNotes(new CheckBox(_parent)),
       printSceneNumbers(new CheckBox(_parent)),
       printDialoguesNumbers(new CheckBox(_parent)),
       printReviewMarks(new CheckBox(_parent)),
@@ -70,7 +74,7 @@ ExportDialog::Implementation::Implementation(QWidget* _parent)
         break;
     }
 
-    for (auto checkBox : { printTitlePage, printSceneNumbers, printReviewMarks }) {
+    for (auto checkBox : { printTitlePage, printFolders, printSceneNumbers, printReviewMarks }) {
         checkBox->setChecked(true);
     }
 
@@ -97,6 +101,8 @@ ExportDialog::ExportDialog(QWidget* _parent)
     contentsLayout()->addWidget(d->fileFormat, row++, 0);
     contentsLayout()->addWidget(d->screenplayTemplate, row++, 0);
     contentsLayout()->addWidget(d->printTitlePage, row++, 0);
+    contentsLayout()->addWidget(d->printFolders, row++, 0);
+    contentsLayout()->addWidget(d->printInlineNotes, row++, 0);
     contentsLayout()->addWidget(d->printSceneNumbers, row++, 0);
     contentsLayout()->addWidget(d->printDialoguesNumbers, row++, 0);
     contentsLayout()->addWidget(d->printReviewMarks, row++, 0);
@@ -105,6 +111,8 @@ ExportDialog::ExportDialog(QWidget* _parent)
 
     connect(d->fileFormat, &ComboBox::currentIndexChanged, this, [this] {
         auto isScreenplayTemplateVisible = true;
+        auto isPrintFoldersVisible = true;
+        auto isPrintInlineNotesVisible = true;
         auto isPrintDialoguesNumbersVisible = true;
         auto isPrintReviewMarksVisible = true;
         auto isWatermarkVisible = true;
@@ -131,12 +139,20 @@ ExportDialog::ExportDialog(QWidget* _parent)
             //
             // FDX
             //
-            case 2:
+            case 2: {
+                isPrintDialoguesNumbersVisible = false;
+                isPrintReviewMarksVisible = false;
+                isWatermarkVisible = false;
+                break;
+            }
+
             //
             // Foumtain
             //
             case 3: {
                 isScreenplayTemplateVisible = false;
+                isPrintFoldersVisible = false;
+                isPrintInlineNotesVisible = false;
                 isPrintDialoguesNumbersVisible = false;
                 isPrintReviewMarksVisible = false;
                 isWatermarkVisible = false;
@@ -144,6 +160,8 @@ ExportDialog::ExportDialog(QWidget* _parent)
             }
         }
         d->screenplayTemplate->setVisible(isScreenplayTemplateVisible);
+        d->printFolders->setVisible(isPrintFoldersVisible);
+        d->printInlineNotes->setVisible(isPrintInlineNotesVisible);
         d->printDialoguesNumbers->setVisible(isPrintDialoguesNumbersVisible);
         d->printReviewMarks->setVisible(isPrintReviewMarksVisible);
         d->watermark->setVisible(isWatermarkVisible);
@@ -174,6 +192,8 @@ void ExportDialog::updateTranslations()
     d->fileFormat->setLabel(tr("Format"));
     d->screenplayTemplate->setLabel(tr("Template"));
     d->printTitlePage->setText(tr("Print title page"));
+    d->printFolders->setText(tr("Print folders"));
+    d->printInlineNotes->setText(tr("Print inline notes"));
     d->printSceneNumbers->setText(tr("Print scenes numbers"));
     d->printDialoguesNumbers->setText(tr("Print dialogues numbers"));
     d->printReviewMarks->setText(tr("Print review marks"));
@@ -197,8 +217,8 @@ void ExportDialog::designSystemChangeEvent(DesignSystemChangeEvent* _event)
         textField->setTextColor(Ui::DesignSystem::color().onBackground());
     }
 
-    for (auto checkBox : { d->printTitlePage, d->printSceneNumbers,
-                           d->printDialoguesNumbers, d->printReviewMarks,
+    for (auto checkBox : { d->printTitlePage, d->printFolders, d->printInlineNotes,
+                           d->printSceneNumbers, d->printDialoguesNumbers, d->printReviewMarks,
                            d->openDocumentAfterExport }) {
         checkBox->setBackgroundColor(Ui::DesignSystem::color().background());
         checkBox->setTextColor(Ui::DesignSystem::color().onBackground());
