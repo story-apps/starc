@@ -50,10 +50,6 @@ HEADERS += \
     text/handlers/standard_key_handler.h \
     text/handlers/transition_handler.h \
     text/handlers/unformatted_text_handler.h \
-    text/screenplay_text_block_data.h \
-    text/screenplay_text_corrector.h \
-    text/screenplay_text_cursor.h \
-    text/screenplay_text_document.h \
     text/screenplay_text_edit.h \
     text/screenplay_text_edit_shortcuts_manager.h \
     text/screenplay_text_edit_toolbar.h \
@@ -90,10 +86,6 @@ SOURCES += \
     text/handlers/standard_key_handler.cpp \
     text/handlers/transition_handler.cpp \
     text/handlers/unformatted_text_handler.cpp \
-    text/screenplay_text_block_data.cpp \
-    text/screenplay_text_corrector.cpp \
-    text/screenplay_text_cursor.cpp \
-    text/screenplay_text_document.cpp \
     text/screenplay_text_edit.cpp \
     text/screenplay_text_edit_shortcuts_manager.cpp \
     text/screenplay_text_edit_toolbar.cpp \

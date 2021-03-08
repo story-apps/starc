@@ -2,9 +2,7 @@
 
 #include <QTextCursor>
 
-namespace Ui {
-class ScreenplayTextEdit;
-}
+class BaseTextEdit;
 
 
 namespace BusinessLayer {
@@ -42,8 +40,8 @@ public:
     /**
      * @brief Удалить символы в заданном редакторе сценария
      */
-    void removeCharacters(Ui::ScreenplayTextEdit* _editor);
-    void removeCharacters(bool _backward, Ui::ScreenplayTextEdit* _editor);
+    void removeCharacters(BaseTextEdit* _editor);
+    void removeCharacters(bool _backward, BaseTextEdit* _editor);
 
 private:
     /**

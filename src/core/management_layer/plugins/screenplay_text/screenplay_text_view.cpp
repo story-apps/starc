@@ -3,8 +3,6 @@
 #include "comments/screenplay_text_comments_model.h"
 #include "comments/screenplay_text_comments_toolbar.h"
 #include "comments/screenplay_text_comments_view.h"
-#include "text/screenplay_text_block_data.h"
-#include "text/screenplay_text_cursor.h"
 #include "text/screenplay_text_edit.h"
 #include "text/screenplay_text_edit_shortcuts_manager.h"
 #include "text/screenplay_text_edit_toolbar.h"
@@ -12,6 +10,8 @@
 #include "text/screenplay_text_scrollbar_manager.h"
 #include "text/screenplay_text_search_manager.h"
 
+#include <business_layer/document/screenplay/text/screenplay_text_block_data.h>
+#include <business_layer/document/screenplay/text/screenplay_text_cursor.h>
 #include <business_layer/templates/screenplay_template.h>
 #include <business_layer/templates/screenplay_template_facade.h>
 

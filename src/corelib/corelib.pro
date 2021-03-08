@@ -59,6 +59,11 @@ PRE_TARGETDEPS += $$PWD/../3rd_party/webloader
 
 SOURCES += \
     business_layer/chronometry/chronometer.cpp \
+    business_layer/document/screenplay/text/screenplay_text_block_data.cpp \
+    business_layer/document/screenplay/text/screenplay_text_corrector.cpp \
+    business_layer/document/screenplay/text/screenplay_text_cursor.cpp \
+    business_layer/document/screenplay/text/screenplay_text_document.cpp \
+    business_layer/export/screenplay/pdf_exporter.cpp \
     business_layer/import/celtx_importer.cpp \
     business_layer/import/document_importer.cpp \
     business_layer/import/fdx_importer.cpp \
@@ -192,7 +197,13 @@ SOURCES += \
 
 HEADERS += \
     business_layer/chronometry/chronometer.h \
+    business_layer/document/screenplay/text/screenplay_text_block_data.h \
+    business_layer/document/screenplay/text/screenplay_text_corrector.h \
+    business_layer/document/screenplay/text/screenplay_text_cursor.h \
+    business_layer/document/screenplay/text/screenplay_text_document.h \
+    business_layer/export/screenplay/abstract_exporter.h \
     business_layer/export/screenplay/export_options.h \
+    business_layer/export/screenplay/pdf_exporter.h \
     business_layer/import/abstract_importer.h \
     business_layer/import/celtx_importer.h \
     business_layer/import/document_importer.h \

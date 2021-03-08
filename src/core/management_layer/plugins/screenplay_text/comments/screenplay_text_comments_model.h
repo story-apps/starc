@@ -3,7 +3,6 @@
 #include <QAbstractListModel>
 
 
-
 namespace BusinessLayer {
 
 class ScreenplayTextModel;

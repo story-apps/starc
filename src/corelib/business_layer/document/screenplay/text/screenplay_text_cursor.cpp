@@ -1,10 +1,12 @@
 #include "screenplay_text_cursor.h"
 
 #include "screenplay_text_block_data.h"
-#include "screenplay_text_edit.h"
+#include "screenplay_text_document.h"
 
 #include <business_layer/templates/screenplay_template.h>
 #include <business_layer/templates/screenplay_template_facade.h>
+
+#include <ui/widgets/text_edit/base/base_text_edit.h>
 
 #include <utils/shugar.h>
 
@@ -69,7 +71,7 @@ ScreenplayTextCursor::Selection ScreenplayTextCursor::selectionInterval() const
     }
 }
 
-void ScreenplayTextCursor::removeCharacters(Ui::ScreenplayTextEdit* _editor)
+void ScreenplayTextCursor::removeCharacters(BaseTextEdit* _editor)
 {
     removeCharacters(true, _editor);
 }
@@ -78,7 +80,7 @@ void ScreenplayTextCursor::removeCharacters(Ui::ScreenplayTextEdit* _editor)
 // TODO: В нижеследующих методах сделать аккуратно через собственный курсор
 //
 
-void ScreenplayTextCursor::removeCharacters(bool _backward, Ui::ScreenplayTextEdit* _editor)
+void ScreenplayTextCursor::removeCharacters(bool _backward, BaseTextEdit* _editor)
 {
     Q_ASSERT(document() == _editor->document());
 
@@ -202,9 +204,10 @@ void ScreenplayTextCursor::removeCharacters(bool _backward, Ui::ScreenplayTextEd
             // - помещаем туда символ, чтобы при удалении, Qt оставил в блоке и данные и формат
             // - удаляем весь остальной контент и заодно вставленный на предыдущем шаге символ
             //
-            _editor->moveCursor(QTextCursor::Start);
-            _editor->setCurrentParagraphType(ScreenplayParagraphType::SceneHeading);
             cursor.movePosition(QTextCursor::Start);
+            auto screenplayDocument = dynamic_cast<BusinessLayer::ScreenplayTextDocument*>(document());
+            Q_ASSERT(screenplayDocument);
+            screenplayDocument->setParagraphType(ScreenplayParagraphType::SceneHeading, cursor);
             cursor.movePosition(QTextCursor::EndOfBlock, QTextCursor::KeepAnchor);
             cursor.insertText(" ");
             cursor.movePosition(QTextCursor::End, QTextCursor::KeepAnchor);

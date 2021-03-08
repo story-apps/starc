@@ -1,11 +1,11 @@
 #include "screenplay_text_edit.h"
 
 #include "handlers/key_press_handler_facade.h"
-#include "screenplay_text_block_data.h"
-#include "screenplay_text_corrector.h"
-#include "screenplay_text_cursor.h"
-#include "screenplay_text_document.h"
 
+#include <business_layer/document/screenplay/text/screenplay_text_block_data.h>
+#include <business_layer/document/screenplay/text/screenplay_text_corrector.h>
+#include <business_layer/document/screenplay/text/screenplay_text_cursor.h>
+#include <business_layer/document/screenplay/text/screenplay_text_document.h>
 #include <business_layer/import/fountain_importer.h>
 #include <business_layer/model/screenplay/text/screenplay_text_model.h>
 #include <business_layer/model/screenplay/text/screenplay_text_model_text_item.h>

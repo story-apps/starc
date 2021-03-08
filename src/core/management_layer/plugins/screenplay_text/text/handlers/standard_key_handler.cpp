@@ -1,9 +1,9 @@
 #include "standard_key_handler.h"
 
-#include "../screenplay_text_block_data.h"
-#include "../screenplay_text_cursor.h"
 #include "../screenplay_text_edit.h"
 
+#include <business_layer/document/screenplay/text/screenplay_text_block_data.h>
+#include <business_layer/document/screenplay/text/screenplay_text_cursor.h>
 #include <business_layer/templates/screenplay_template.h>
 #include <business_layer/templates/screenplay_template_facade.h>
 
@@ -23,33 +23,33 @@ namespace KeyProcessingLayer
 {
 
 namespace {
-    /**
-     * @brief Получить тип перехода/смены в зависимости от заданных параметров
-     */
-    static ScreenplayParagraphType actionFor(bool _tab, bool _jump, ScreenplayParagraphType _blockType) {
-        const QString settingsKey =
-                QString("screenplay-editor/styles-%1/from-%2-by-%3")
-                .arg(_jump ? "jumping" : "changing")
-                .arg(BusinessLayer::toString(_blockType))
-                .arg(_tab ? "tab" : "enter");
+/**
+ * @brief Получить тип перехода/смены в зависимости от заданных параметров
+ */
+static ScreenplayParagraphType actionFor(bool _tab, bool _jump, ScreenplayParagraphType _blockType) {
+    const QString settingsKey =
+            QString("screenplay-editor/styles-%1/from-%2-by-%3")
+            .arg(_jump ? "jumping" : "changing")
+            .arg(BusinessLayer::toString(_blockType))
+            .arg(_tab ? "tab" : "enter");
 
-        const auto typeString =
-                DataStorageLayer::StorageFacade::settingsStorage()->value(
-                    settingsKey, DataStorageLayer::SettingsStorage::SettingsPlace::Application
-                    ).toString();
+    const auto typeString =
+            DataStorageLayer::StorageFacade::settingsStorage()->value(
+                settingsKey, DataStorageLayer::SettingsStorage::SettingsPlace::Application
+                ).toString();
 
-        return BusinessLayer::screenplayParagraphTypeFromString(typeString);
-    }
+    return BusinessLayer::screenplayParagraphTypeFromString(typeString);
+}
 
-    /**
-     * @brief Вспомогательные константы для использования с функцией actionFor
-     */
-    /** @{ */
-    const bool TAB = true;
-    const bool ENTER = false;
-    const bool JUMP = true;
-    const bool CHANGE = false;
-    /** @} */
+/**
+ * @brief Вспомогательные константы для использования с функцией actionFor
+ */
+/** @{ */
+const bool kTab = true;
+const bool kEnter = false;
+const bool kJump = true;
+const bool kChange = false;
+/** @} */
 }
 
 
@@ -60,22 +60,22 @@ StandardKeyHandler::StandardKeyHandler(Ui::ScreenplayTextEdit* _editor) :
 
 ScreenplayParagraphType StandardKeyHandler::jumpForTab(ScreenplayParagraphType _blockType)
 {
-    return actionFor(TAB, JUMP, _blockType);
+    return actionFor(kTab, kJump, _blockType);
 }
 
 ScreenplayParagraphType StandardKeyHandler::jumpForEnter(ScreenplayParagraphType _blockType)
 {
-    return actionFor(ENTER, JUMP, _blockType);
+    return actionFor(kEnter, kJump, _blockType);
 }
 
 ScreenplayParagraphType StandardKeyHandler::changeForTab(ScreenplayParagraphType _blockType)
 {
-    return actionFor(TAB, CHANGE, _blockType);
+    return actionFor(kTab, kChange, _blockType);
 }
 
 ScreenplayParagraphType StandardKeyHandler::changeForEnter(ScreenplayParagraphType _blockType)
 {
-    return actionFor(ENTER, CHANGE, _blockType);
+    return actionFor(kEnter, kChange, _blockType);
 }
 
 void StandardKeyHandler::handleDelete(QKeyEvent* _event)
