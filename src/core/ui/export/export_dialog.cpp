@@ -59,7 +59,7 @@ ExportDialog::Implementation::Implementation(QWidget* _parent)
 {
     using namespace BusinessLayer;
 
-    auto formatsModel = new QStringListModel({ "PDF", "DOCX", "FDX", "Fontain" });
+    auto formatsModel = new QStringListModel({ "PDF"/*, "DOCX", "FDX", "Fontain" */});
     fileFormat->setModel(formatsModel);
     fileFormat->setCurrentIndex(formatsModel->index(0, 0));
 
@@ -75,7 +75,9 @@ ExportDialog::Implementation::Implementation(QWidget* _parent)
         break;
     }
 
-    for (auto checkBox : { printTitlePage, printFolders, printSceneNumbers, printReviewMarks,
+    printTitlePage->hide();
+
+    for (auto checkBox : { /*printTitlePage,*/ printFolders, printSceneNumbers, printReviewMarks,
                            openDocumentAfterExport }) {
         checkBox->setChecked(true);
     }

@@ -1,5 +1,7 @@
 #pragma once
 
+#include <corelib_global.h>
+
 #include <QTextDocument>
 
 
@@ -15,7 +17,7 @@ class ScreenplayTextCursor;
 /**
  * @brief Класс документа сценария
  */
-class ScreenplayTextDocument : public QTextDocument
+class CORE_LIBRARY_EXPORT ScreenplayTextDocument : public QTextDocument
 {
     Q_OBJECT
 

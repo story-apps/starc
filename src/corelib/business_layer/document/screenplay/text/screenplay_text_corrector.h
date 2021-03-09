@@ -1,5 +1,7 @@
 #pragma once
 
+#include <corelib_global.h>
+
 #include <QObject>
 
 class QTextBlock;
@@ -15,7 +17,7 @@ class ScreenplayTextCursor;
 /**
  * @brief Класс корректирующий текст сценария
  */
-class ScreenplayTextCorrector : public QObject
+class CORE_LIBRARY_EXPORT ScreenplayTextCorrector : public QObject
 {
     Q_OBJECT
 

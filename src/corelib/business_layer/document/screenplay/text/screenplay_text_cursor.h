@@ -1,5 +1,7 @@
 #pragma once
 
+#include <corelib_global.h>
+
 #include <QTextCursor>
 
 class BaseTextEdit;
@@ -10,7 +12,7 @@ namespace BusinessLayer {
 /**
  * @brief Класс курсора со вспомогательными функциями
  */
-class ScreenplayTextCursor : public QTextCursor
+class CORE_LIBRARY_EXPORT ScreenplayTextCursor : public QTextCursor
 {
 public:
     ScreenplayTextCursor();

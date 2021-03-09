@@ -1,5 +1,7 @@
 #pragma once
 
+#include <corelib_global.h>
+
 #include <QModelIndex>
 #include <QTextBlockUserData>
 
@@ -11,7 +13,7 @@ namespace BusinessLayer {
 namespace BusinessLayer
 {
 
-class ScreenplayTextBlockData : public QTextBlockUserData
+class CORE_LIBRARY_EXPORT ScreenplayTextBlockData : public QTextBlockUserData
 {
 public:
     explicit ScreenplayTextBlockData(BusinessLayer::ScreenplayTextModelItem* _item);
