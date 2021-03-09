@@ -57,3 +57,8 @@ QString ExtensionHelper::plainText()
 {
     return QLatin1String("txt");
 }
+
+QString ExtensionHelper::pdf()
+{
+    return QLatin1String("pdf");
+}

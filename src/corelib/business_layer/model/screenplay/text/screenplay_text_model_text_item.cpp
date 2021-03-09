@@ -10,6 +10,7 @@
 #include <utils/helpers/text_helper.h>
 
 #include <QColor>
+#include <QLocale>
 #include <QVariant>
 #include <QXmlStreamReader>
 
@@ -487,7 +488,7 @@ std::optional<ScreenplayTextModelTextItem::Number> ScreenplayTextModelTextItem::
 
 void ScreenplayTextModelTextItem::setNumber(int _number)
 {
-    const auto newNumber = QString("%1:").arg(_number);
+    const auto newNumber = QString(QLocale().textDirection() == Qt::LeftToRight ? "%1:" : ":%1").arg(_number);
     if (d->number.has_value()
         && d->number->value == newNumber) {
         return;

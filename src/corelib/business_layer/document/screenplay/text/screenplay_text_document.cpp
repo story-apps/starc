@@ -64,7 +64,8 @@ public:
      * @brief Считать содержимое вложенных в заданный индекс элементов
      *        и вставить считанные данные в текущее положение курсора
      */
-    void readModelItemsContent(const QModelIndex& _parent, ScreenplayTextCursor& _cursor, bool& _isFirstParagraph);
+    void readModelItemsContent(const QModelIndex& _parent, ScreenplayTextCursor& _cursor,
+        bool& _isFirstParagraph);
 
     /**
      * @brief Скорректировать документ, если это возможно
@@ -75,7 +76,9 @@ public:
     ScreenplayTextDocument* q = nullptr;
 
     DocumentState state = DocumentState::Undefined;
+    QString templateId;
     BusinessLayer::ScreenplayTextModel* model = nullptr;
+    bool canChangeModel = true;
     std::map<int, BusinessLayer::ScreenplayTextModelItem*> positionsToItems;
     ScreenplayTextCorrector corrector;
 };
@@ -86,7 +89,8 @@ ScreenplayTextDocument::Implementation::Implementation(ScreenplayTextDocument* _
 {
 }
 
-void ScreenplayTextDocument::Implementation::correctPositionsToItems(std::map<int, BusinessLayer::ScreenplayTextModelItem*>::iterator _from, int _distance)
+void ScreenplayTextDocument::Implementation::correctPositionsToItems(
+    std::map<int, BusinessLayer::ScreenplayTextModelItem*>::iterator _from, int _distance)
 {
     if (_from == positionsToItems.end()) {
         return;
@@ -115,7 +119,8 @@ void ScreenplayTextDocument::Implementation::correctPositionsToItems(int _fromPo
     correctPositionsToItems(positionsToItems.lower_bound(_fromPosition), _distance);
 }
 
-void ScreenplayTextDocument::Implementation::readModelItemContent(int _itemRow, const QModelIndex& _parent, ScreenplayTextCursor& _cursor, bool& _isFirstParagraph)
+void ScreenplayTextDocument::Implementation::readModelItemContent(int _itemRow,
+    const QModelIndex& _parent, ScreenplayTextCursor& _cursor, bool& _isFirstParagraph)
 {
     const auto itemIndex = model->index(_itemRow, 0, _parent);
     const auto item = model->itemForIndex(itemIndex);
@@ -154,9 +159,9 @@ void ScreenplayTextDocument::Implementation::readModelItemContent(int _itemRow, 
                     //
                     // Назначим блоку перед таблицей формат PageSplitter
                     //
-                    auto insertPageSplitter = [&_cursor] {
-                        const auto style = ScreenplayTemplateFacade::getTemplate().blockStyle(
-                                               ScreenplayParagraphType::PageSplitter);
+                    auto insertPageSplitter = [&_cursor, this] {
+                        const auto style = ScreenplayTemplateFacade::getTemplate(templateId)
+                                           .blockStyle(ScreenplayParagraphType::PageSplitter);
                         _cursor.setBlockFormat(style.blockFormat());
                         _cursor.setBlockCharFormat(style.charFormat());
                         _cursor.setCharFormat(style.charFormat());
@@ -254,7 +259,7 @@ void ScreenplayTextDocument::Implementation::readModelItemContent(int _itemRow, 
             // Установим стиль блока
             //
             const auto currentStyle
-                    = ScreenplayTemplateFacade::getTemplate().blockStyle(
+                    = ScreenplayTemplateFacade::getTemplate(templateId).blockStyle(
                           textItem->paragraphType());
             _cursor.setBlockFormat(currentStyle.blockFormat(_cursor.inTable()));
             _cursor.setBlockCharFormat(currentStyle.charFormat());
@@ -350,7 +355,17 @@ ScreenplayTextDocument::ScreenplayTextDocument(QObject *_parent)
 
 ScreenplayTextDocument::~ScreenplayTextDocument() = default;
 
-void ScreenplayTextDocument::setModel(BusinessLayer::ScreenplayTextModel* _model)
+void ScreenplayTextDocument::setTemplateId(const QString& _templateId)
+{
+    if (d->templateId == _templateId) {
+        return;
+    }
+
+    d->templateId = _templateId;
+    d->corrector.setTemplateId(_templateId);
+}
+
+void ScreenplayTextDocument::setModel(BusinessLayer::ScreenplayTextModel* _model, bool _canChangeModel)
 {
     d->state = DocumentState::Loading;
 
@@ -359,6 +374,7 @@ void ScreenplayTextDocument::setModel(BusinessLayer::ScreenplayTextModel* _model
     }
 
     d->model = _model;
+    d->canChangeModel = _canChangeModel;
     d->positionsToItems.clear();
 
     //
@@ -381,8 +397,8 @@ void ScreenplayTextDocument::setModel(BusinessLayer::ScreenplayTextModel* _model
     //
     // Обновим шрифт документа, в моменте когда текста нет
     //
-    const auto templateDefaultFont = ScreenplayTemplateFacade::getTemplate()
-                                     .blockStyle(ScreenplayParagraphType::SceneHeading)
+    const auto templateDefaultFont = ScreenplayTemplateFacade::getTemplate(d->templateId)
+                                     .blockStyle(ScreenplayParagraphType::Action)
                                      .font();
     if (defaultFont() != templateDefaultFont) {
         setDefaultFont(templateDefaultFont);
@@ -473,7 +489,7 @@ void ScreenplayTextDocument::setModel(BusinessLayer::ScreenplayTextModel* _model
             cursor.movePosition(QTextCursor::StartOfBlock);
             cursor.movePosition(QTextCursor::EndOfBlock, QTextCursor::KeepAnchor);
             const auto blockType = ScreenplayBlockStyle::forBlock(cursor.block());
-            const auto blockStyle = ScreenplayTemplateFacade::getTemplate().blockStyle(blockType);
+            const auto blockStyle = ScreenplayTemplateFacade::getTemplate(d->templateId).blockStyle(blockType);
             cursor.setBlockCharFormat(blockStyle.charFormat());
             cursor.setCharFormat(blockStyle.charFormat());
 
@@ -913,7 +929,7 @@ void ScreenplayTextDocument::setParagraphType(BusinessLayer::ScreenplayParagraph
 void ScreenplayTextDocument::cleanParagraphType(const ScreenplayTextCursor& _cursor)
 {
     const auto oldBlockStyle
-            = ScreenplayTemplateFacade::getTemplate().blockStyle(
+            = ScreenplayTemplateFacade::getTemplate(d->templateId).blockStyle(
                   ScreenplayBlockStyle::forBlock(_cursor.block()));
     if (!oldBlockStyle.isEmbeddableHeader()) {
         return;
@@ -965,7 +981,7 @@ void ScreenplayTextDocument::applyParagraphType(BusinessLayer::ScreenplayParagra
     auto cursor = _cursor;
     cursor.beginEditBlock();
 
-    const auto newBlockStyle = ScreenplayTemplateFacade::getTemplate().blockStyle(_type);
+    const auto newBlockStyle = ScreenplayTemplateFacade::getTemplate(d->templateId).blockStyle(_type);
 
     //
     // Обновим стили
@@ -1011,7 +1027,8 @@ void ScreenplayTextDocument::applyParagraphType(BusinessLayer::ScreenplayParagra
     // Для заголовка папки нужно создать завершение
     //
     if (newBlockStyle.isEmbeddableHeader()) {
-        const auto footerStyle = ScreenplayTemplateFacade::getTemplate().blockStyle(newBlockStyle.embeddableFooter());
+        const auto footerStyle = ScreenplayTemplateFacade::getTemplate(d->templateId).blockStyle(
+                                     newBlockStyle.embeddableFooter());
 
         //
         // Вставляем закрывающий блок
@@ -1198,6 +1215,10 @@ void ScreenplayTextDocument::addReviewMark(const QColor& _textColor, const QColo
 void ScreenplayTextDocument::updateModelOnContentChange(int _position, int _charsRemoved, int _charsAdded)
 {
     if (d->model == nullptr) {
+        return;
+    }
+
+    if (!d->canChangeModel) {
         return;
     }
 
@@ -1751,7 +1772,7 @@ void ScreenplayTextDocument::updateModelOnContentChange(int _position, int _char
 
 void ScreenplayTextDocument::insertTable(const ScreenplayTextCursor& _cursor)
 {
-    const auto scriptTemplate = ScreenplayTemplateFacade::getTemplate();
+    const auto scriptTemplate = ScreenplayTemplateFacade::getTemplate(d->templateId);
     const auto tableBorderWidth = scriptTemplate.pageSplitterWidth();
     const auto doubleTableBorderWidth = 2 * tableBorderWidth;
     const qreal tableWidth = pageSize().width()

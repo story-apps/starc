@@ -2,6 +2,9 @@
 
 #include <ui/widgets/dialog/abstract_dialog.h>
 
+namespace BusinessLayer {
+struct ExportOptions;
+}
 
 namespace Ui
 {
@@ -16,6 +19,16 @@ class ExportDialog : public AbstractDialog
 public:
     explicit ExportDialog(QWidget* _parent = nullptr);
     ~ExportDialog() override;
+
+    /**
+     * @brief Получить опции экспорта
+     */
+    BusinessLayer::ExportOptions exportOptions() const;
+
+    /**
+     * @brief Нужно ли открыть экспортированный документ после экспорта
+     */
+    bool openDocumentAfetrExport() const;
 
 signals:
     /**

@@ -22,4 +22,5 @@ public:
     static QString fountain();
     static QString celtx();
     static QString plainText();
+    static QString pdf();
 };

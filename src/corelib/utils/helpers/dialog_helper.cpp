@@ -86,6 +86,12 @@ QString DialogHelper::plainTextFilter()
                       ExtensionHelper::plainText());
 }
 
+QString DialogHelper::pdfFilter()
+{
+    return makeFilter(QApplication::translate("DialogHelper", "Portable document format"),
+                      ExtensionHelper::pdf());
+}
+
 QString DialogHelper::importFilters()
 {
     QString filters;

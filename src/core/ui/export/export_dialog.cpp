@@ -1,5 +1,6 @@
 #include "export_dialog.h"
 
+#include <business_layer/export/screenplay/export_options.h>
 #include <business_layer/templates/screenplay_template.h>
 #include <business_layer/templates/screenplay_template_facade.h>
 
@@ -74,7 +75,8 @@ ExportDialog::Implementation::Implementation(QWidget* _parent)
         break;
     }
 
-    for (auto checkBox : { printTitlePage, printFolders, printSceneNumbers, printReviewMarks }) {
+    for (auto checkBox : { printTitlePage, printFolders, printSceneNumbers, printReviewMarks,
+                           openDocumentAfterExport }) {
         checkBox->setChecked(true);
     }
 
@@ -174,6 +176,27 @@ ExportDialog::ExportDialog(QWidget* _parent)
 }
 
 ExportDialog::~ExportDialog() = default;
+
+BusinessLayer::ExportOptions ExportDialog::exportOptions() const
+{
+    BusinessLayer::ExportOptions options;
+    options.templateId
+            = d->screenplayTemplate->currentIndex()
+              .data(BusinessLayer::ScreenplayTemplateFacade::kTemplateIdRole).toString();
+    options.printTiltePage = d->printTitlePage->isChecked();
+    options.printFolders = d->printFolders->isChecked();
+    options.printInlineNotes = d->printInlineNotes->isChecked();
+    options.printScenesNumbers = d->printSceneNumbers->isChecked();
+    options.printDialoguesNumbers = d->printDialoguesNumbers->isChecked();
+    options.printReviewMarks = d->printReviewMarks->isChecked();
+    options.watermark = d->watermark->text();
+    return options;
+}
+
+bool ExportDialog::openDocumentAfetrExport() const
+{
+    return d->openDocumentAfterExport->isChecked();
+}
 
 QWidget* ExportDialog::focusedWidgetAfterShow() const
 {

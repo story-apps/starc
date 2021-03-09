@@ -26,8 +26,13 @@ public:
     static QString continuedTerm();
 
 public:
-    explicit ScreenplayTextCorrector(QTextDocument* _document, const QString& _templateName = {});
+    explicit ScreenplayTextCorrector(QTextDocument* _document);
     ~ScreenplayTextCorrector() override;
+
+    /**
+     * @brief Задать идентификатор шаблона, с которым работает корректор
+     */
+    void setTemplateId(const QString& _templateId);
 
     /**
      * @brief Установить необходимость корректировать текст блоков имён персонажей

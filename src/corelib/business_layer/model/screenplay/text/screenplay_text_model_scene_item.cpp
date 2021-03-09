@@ -8,6 +8,7 @@
 
 #include <utils/helpers/text_helper.h>
 
+#include <QLocale>
 #include <QUuid>
 #include <QVariant>
 #include <QXmlStreamReader>
@@ -181,7 +182,7 @@ ScreenplayTextModelSceneItem::Number ScreenplayTextModelSceneItem::number() cons
 
 void ScreenplayTextModelSceneItem::setNumber(int _number)
 {
-    const auto newNumber = QString("%1.").arg(_number);
+    const auto newNumber = QString(QLocale().textDirection() == Qt::LeftToRight ? "%1." : ".%1").arg(_number);
     if (d->number.has_value()
         && d->number->value == newNumber) {
         return;

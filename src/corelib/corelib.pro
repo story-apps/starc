@@ -2,7 +2,7 @@ TARGET = corelib
 TEMPLATE = lib
 
 CONFIG += c++1z
-QT += widgets widgets-private sql xml
+QT += widgets widgets-private sql xml network
 
 DEFINES += CORE_LIBRARY
 DEFINES += QT_DEPRECATED_WARNINGS

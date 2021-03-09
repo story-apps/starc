@@ -19,7 +19,6 @@
 
 #include <QFileDialog>
 
-
 namespace ManagementLayer
 {
 
@@ -148,14 +147,14 @@ void ImportManager::import()
     //
     // Предоставим пользователю возможность выбрать файл, который он хочет импортировать
     //
-    const auto projectOpenFolder
+    const auto projectImportFolder
             = DataStorageLayer::StorageFacade::settingsStorage()->value(
                   DataStorageLayer::kProjectImportFolderKey,
                   DataStorageLayer::SettingsStorage::SettingsPlace::Application)
               .toString();
     const auto importFilePath
             = QFileDialog::getOpenFileName(d->topLevelWidget, tr("Choose the file to import"),
-                    projectOpenFolder, DialogHelper::importFilters());
+                    projectImportFolder, DialogHelper::importFilters());
     if (importFilePath.isEmpty()) {
         return;
     }
@@ -163,7 +162,7 @@ void ImportManager::import()
     //
     // Если файл был выбран
     //
-    // ... обновим папку, откуда в следующий раз он предположительно опять будет открывать проекты
+    // ... обновим папку, откуда в следующий раз он предположительно опять будет импортировать проекты
     //
     DataStorageLayer::StorageFacade::settingsStorage()->setValue(
                 DataStorageLayer::kProjectImportFolderKey,

@@ -19,6 +19,11 @@ struct CORE_LIBRARY_EXPORT ExportOptions
     QString filePath;
 
     /**
+     * @brief Формат файла
+     */
+    int fileFormat = 0;
+
+    /**
      * @brief Идентификатор шаблона экспорта
      */
     QString templateId;
@@ -49,14 +54,21 @@ struct CORE_LIBRARY_EXPORT ExportOptions
     bool printDialoguesNumbers = false;
 
     /**
-     * @brief Сохранять редакторские пометки
+     * @brief Печатать редакторские пометки
      */
-    bool saveReviewMarks = true;
+    bool printReviewMarks = true;
 
     /**
      * @brief Водяной знак
      */
     QString watermark;
+
+    //
+    // Параметры самого документа
+    //
+    QString sceneNumbersPrefix;
+    QString header;
+    QString footer;
 };
 
 } // namespace BusinessLayer

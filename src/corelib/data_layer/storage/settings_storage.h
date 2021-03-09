@@ -73,6 +73,8 @@ namespace {
     const QString kProjectOpenFolderKey = kProjectKey + "/open-folder";
     // папка импорта проектов
     const QString kProjectImportFolderKey = kProjectKey + "/import-folder";
+    // папка экспорта проектов
+    const QString kProjectExportFolderKey = kProjectKey + "/export-folder";
     // путь до свойств конкретного проекта
     QString projectKey(const QString& _path) {
         return kProjectKey + "/concrete/" + _path;

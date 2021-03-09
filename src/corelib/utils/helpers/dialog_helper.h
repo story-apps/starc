@@ -24,6 +24,7 @@ public:
     static QString fountainFilter();
     static QString celtxFilter();
     static QString plainTextFilter();
+    static QString pdfFilter();
 
     /**
      * @brief Получить список фильтров файлов которые приложение может импортировать

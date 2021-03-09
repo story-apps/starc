@@ -24,9 +24,14 @@ public:
     ~ScreenplayTextDocument() override;
 
     /**
+     * @brief Задать идентификатор шаблона, с которым работает документ
+     */
+    void setTemplateId(const QString& _templateId);
+
+    /**
      * @brief Задать модель текста сценария
      */
-    void setModel(BusinessLayer::ScreenplayTextModel* _model);
+    void setModel(BusinessLayer::ScreenplayTextModel* _model, bool _canChangeModel = true);
 
     /**
      * @brief Получить позицию элемента в заданном индексе

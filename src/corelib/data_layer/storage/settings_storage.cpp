@@ -98,6 +98,8 @@ SettingsStorage::Implementation::Implementation()
         QStandardPaths::writableLocation(QStandardPaths::DocumentsLocation) + "/starc/projects");
     defaultValues.insert(kProjectImportFolderKey,
         QStandardPaths::writableLocation(QStandardPaths::DownloadLocation));
+    defaultValues.insert(kProjectExportFolderKey,
+        QStandardPaths::writableLocation(QStandardPaths::DownloadLocation));
     //
     // Параметры редактора сценария
     //

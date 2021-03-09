@@ -80,7 +80,7 @@ namespace {
 class ScreenplayTextCorrector::Implementation
 {
 public:
-    Implementation(QTextDocument* _document, const QString& _templateName);
+    explicit Implementation(QTextDocument* _document);
 
     /**
      * @brief Скорректировать имена персонажей
@@ -167,7 +167,7 @@ public:
     /**
      * @brief Шаблон оформления сценария
      */
-    QString templateName;
+    QString templateId;
 
     /**
      * @brief Необходимо ли корректировать текст блоков имён персонажей
@@ -256,9 +256,8 @@ public:
     QVector<BlockInfo> blockItems;
 };
 
-ScreenplayTextCorrector::Implementation::Implementation(QTextDocument* _document, const QString& _templateName)
-    : document(_document),
-      templateName(_templateName)
+ScreenplayTextCorrector::Implementation::Implementation(QTextDocument* _document)
+    : document(_document)
 {
 }
 
@@ -391,7 +390,7 @@ void ScreenplayTextCorrector::Implementation::correctPageBreaks(int _position)
     qreal leftHalfWidth = 0.0;
     qreal rightHalfWidth = 0.0;
     {
-        const auto currentTemplate = ScreenplayTemplateFacade::getTemplate(templateName);
+        const auto currentTemplate = ScreenplayTemplateFacade::getTemplate(templateId);
         leftHalfWidth =  pageWidth
                          * currentTemplate.leftHalfOfPageWidthPercents() / 100.0
                          - currentTemplate.pageSplitterWidth() / 2;
@@ -1431,7 +1430,7 @@ void ScreenplayTextCorrector::Implementation::breakDialogue(const QTextBlockForm
     //
     // Оформить его, как персонажа, но без отступа сверху
     //
-    const auto moreKeywordStyle = ScreenplayTemplateFacade::getTemplate(templateName)
+    const auto moreKeywordStyle = ScreenplayTemplateFacade::getTemplate(templateId)
                                   .blockStyle(ScreenplayParagraphType::Character);
     QTextBlockFormat moreKeywordFormat = moreKeywordStyle.blockFormat(_cursor.inTable());
     moreKeywordFormat.setTopMargin(0);
@@ -1613,14 +1612,24 @@ QString ScreenplayTextCorrector::continuedTerm()
     return QString(" (%1)").arg(QApplication::translate("BusinessLogic::ScriptTextCorrector", kContinuedTerm));
 }
 
-ScreenplayTextCorrector::ScreenplayTextCorrector(QTextDocument* _document, const QString& _templateName) :
+ScreenplayTextCorrector::ScreenplayTextCorrector(QTextDocument* _document) :
     QObject(_document),
-    d(new Implementation(_document, _templateName))
+    d(new Implementation(_document))
 {
     Q_ASSERT_X(d->document, Q_FUNC_INFO, "Document couldn't be a nullptr");
 }
 
 ScreenplayTextCorrector::~ScreenplayTextCorrector() = default;
+
+void ScreenplayTextCorrector::setTemplateId(const QString& _templateId)
+{
+    if (d->templateId == _templateId) {
+        return;
+    }
+
+    d->templateId = _templateId;
+    correct();
+}
 
 void ScreenplayTextCorrector::setNeedToCorrectCharactersNames(bool _need)
 {
