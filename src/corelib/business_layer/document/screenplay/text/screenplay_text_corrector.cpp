@@ -649,9 +649,16 @@ void ScreenplayTextCorrector::Implementation::correctPageBreaks(int _position)
         if (blockFormat.boolProperty(ScreenplayBlockStyle::PropertyIsCorrection)) {
             blockItems[currentBlockInfo.number] = {};
             cursor.setPosition(block.position());
-            cursor.movePosition(ScreenplayTextCursor::EndOfBlock, ScreenplayTextCursor::KeepAnchor);
-            cursor.movePosition(ScreenplayTextCursor::NextCharacter, ScreenplayTextCursor::KeepAnchor);
-            cursor.deleteChar();
+            if (cursor.block().next() != cursor.document()->end()) {
+                cursor.movePosition(ScreenplayTextCursor::EndOfBlock, ScreenplayTextCursor::KeepAnchor);
+                cursor.movePosition(ScreenplayTextCursor::NextCharacter, ScreenplayTextCursor::KeepAnchor);
+                cursor.deleteChar();
+            } else {
+                cursor.movePosition(ScreenplayTextCursor::PreviousCharacter);
+                cursor.movePosition(ScreenplayTextCursor::NextBlock, ScreenplayTextCursor::KeepAnchor);
+                cursor.movePosition(ScreenplayTextCursor::EndOfBlock, ScreenplayTextCursor::KeepAnchor);
+                cursor.deleteChar();
+            }
             //
             // ... и продолжим со следующего блока
             //
