@@ -52,6 +52,7 @@ CreateDocumentDialog::Implementation::Implementation(QWidget* _parent)
         auto item = new QStandardItem;
         item->setData(Domain::iconForType(_type), Qt::DecorationRole);
         item->setData(static_cast<int>(_type), kMimeTypeRole);
+        item->setEditable(false);
         return item;
     };
 
