@@ -52,6 +52,11 @@ public:
     bool isCorrection = false;
 
     /**
+     * @brief Находится ли элемент в таблице, и если находится, то в какой колонке
+     */
+    std::optional<bool> isInFirstColumn;
+
+    /**
      * @brief Тип параграфа
      */
     ScreenplayParagraphType paragraphType = ScreenplayParagraphType::UnformattedText;
@@ -99,6 +104,9 @@ ScreenplayTextModelTextItem::Implementation::Implementation(QXmlStreamReader& _c
 
     if (_contentReader.attributes().hasAttribute(xml::kAlignAttribute)) {
         alignment = alignmentFromString(_contentReader.attributes().value(xml::kAlignAttribute).toString());
+    }
+    if (_contentReader.attributes().hasAttribute(xml::kInFirstColumn)) {
+        isInFirstColumn = _contentReader.attributes().value(xml::kInFirstColumn).toString() == "true";
     }
 
     auto currentTag = xml::readNextElement(_contentReader);
@@ -221,10 +229,13 @@ QByteArray ScreenplayTextModelTextItem::Implementation::buildXml(int _from, int 
     const auto _end = _from + _length;
 
     QByteArray xml;
-    xml += QString("<%1%2>")
+    xml += QString("<%1%2%3>")
            .arg(toString(paragraphType),
                 (alignment.has_value() && alignment->testFlag(Qt::AlignHorizontal_Mask)
                  ? QString(" %1=\"%2\"").arg(xml::kAlignAttribute, toString(*alignment))
+                 : ""),
+                (isInFirstColumn.has_value()
+                 ? QString(" %1=\"%2\"").arg(xml::kInFirstColumn, *isInFirstColumn ? "true" : "false")
                  : "")).toUtf8();
     if (bookmark.has_value()) {
         xml += QString("<%1 %2=\"%3\"><![CDATA[%4]]></%1>")
@@ -535,6 +546,22 @@ void ScreenplayTextModelTextItem::setCorrection(bool _correction)
     } else {
         d->updateXml();
     }
+}
+
+std::optional<bool> ScreenplayTextModelTextItem::isInFirstColumn() const
+{
+    return d->isInFirstColumn;
+}
+
+void ScreenplayTextModelTextItem::setInFirstColumn(const std::optional<bool>& _in)
+{
+    if (d->isInFirstColumn == _in) {
+        return;
+    }
+
+    d->isInFirstColumn = _in;
+    d->updateXml();
+    markChanged();
 }
 
 ScreenplayParagraphType ScreenplayTextModelTextItem::paragraphType() const

@@ -17,7 +17,6 @@ namespace BusinessLayer
 enum class ScreenplayTextModelSplitterItemType {
     Undefined,
     Start,
-    Middle,
     End
 };
 

@@ -197,25 +197,6 @@ void ScreenplayTextDocument::Implementation::readModelItemContent(int _itemRow,
                     break;
                 }
 
-                case ScreenplayTextModelSplitterItemType::Middle: {
-                    //
-                    // Если остался не удалённый разделитель, просто пропускаем его
-                    //
-                    if (!_cursor.inTable()) {
-                        break;
-                    }
-
-                    //
-                    // Переходим к следующей колонке
-                    //
-                    _cursor.movePosition(QTextCursor::NextBlock);
-                    //
-                    // ... и помечаем, что вставлять новый блок нет необходимости
-                    //
-                    _isFirstParagraph = true;
-                    break;
-                }
-
                 case ScreenplayTextModelSplitterItemType::End: {
                     _cursor.movePosition(QTextCursor::NextBlock);
                     correctPositionsToItems(_cursor.position(), 1);
@@ -230,6 +211,26 @@ void ScreenplayTextDocument::Implementation::readModelItemContent(int _itemRow,
         }
 
         case ScreenplayTextModelItemType::Text: {
+            const auto textItem = static_cast<ScreenplayTextModelTextItem*>(item);
+
+            //
+            // Если новый блок должен быть в другой колонке
+            //
+            if (_cursor.inTable()
+                && _cursor.inFirstColumn()) {
+                Q_ASSERT(textItem->isInFirstColumn().has_value());
+                if (*textItem->isInFirstColumn() == false) {
+                    //
+                    // Переходим к следующей колонке
+                    //
+                    _cursor.movePosition(QTextCursor::NextBlock);
+                    //
+                    // ... и помечаем, что вставлять новый блок нет необходимости
+                    //
+                    _isFirstParagraph = true;
+                }
+            }
+
             //
             // При корректировке положений блоков нужно учитывать перенос строки
             //
@@ -251,7 +252,6 @@ void ScreenplayTextDocument::Implementation::readModelItemContent(int _itemRow,
             //
             // Запомним позицию элемента
             //
-            const auto textItem = static_cast<ScreenplayTextModelTextItem*>(item);
             correctPositionsToItems(_cursor.position(), textItem->text().length() + additionalDistance);
             positionsToItems.emplace(_cursor.position(), textItem);
 
@@ -1454,12 +1454,13 @@ void ScreenplayTextDocument::updateModelOnContentChange(int _position, int _char
         bool inTable = false;
         bool inFirstColumn = false;
     } tableInfo;
-    tableInfo = [this, block] () -> TableInfo {
+    auto updateTableInfo = [this, &tableInfo] (const QTextBlock& _block) {
         ScreenplayTextCursor cursor(this);
-        cursor.setPosition(block.position());
-        return {cursor.inTable(), cursor.inFirstColumn()};
-    }();
-
+        cursor.setPosition(_block.position());
+        tableInfo.inTable = cursor.inTable();
+        tableInfo.inFirstColumn = cursor.inFirstColumn();
+    };
+    updateTableInfo(block);
 
     while (block.isValid()
            && block.position() <= _position + _charsAdded) {
@@ -1508,24 +1509,8 @@ void ScreenplayTextDocument::updateModelOnContentChange(int _position, int _char
 
                 block = block.next();
                 continue;
-            }
-
-            //
-            // Если внутри таблицы, то контролируем переход в следующую колонку
-            //
-            if (tableInfo.inTable && tableInfo.inFirstColumn) {
-                ScreenplayTextCursor cursor(this);
-                cursor.setPosition(block.position());
-                if (!cursor.inFirstColumn()) {
-                    //
-                    // Формируем, серединный разделитель, но не запоминаем его в блоке,
-                    // т.к. в середине таблицы под это просто нет блока
-                    //
-                    tableInfo.inFirstColumn = false;
-                    auto splitterItem = new ScreenplayTextModelSplitterItem(ScreenplayTextModelSplitterItemType::Middle);
-                    d->model->insertItem(splitterItem, previousItem);
-                    previousItem = splitterItem;
-                }
+            } else {
+                updateTableInfo(block);
             }
 
             //
@@ -1551,6 +1536,11 @@ void ScreenplayTextDocument::updateModelOnContentChange(int _position, int _char
             //
             auto textItem = new ScreenplayTextModelTextItem;
             textItem->setCorrection(block.blockFormat().boolProperty(ScreenplayBlockStyle::PropertyIsCorrection));
+            if (tableInfo.inTable) {
+                textItem->setInFirstColumn(tableInfo.inFirstColumn);
+            } else {
+                textItem->setInFirstColumn({});
+            }
             textItem->setParagraphType(paragraphType);
             textItem->setText(block.text());
             textItem->setFormats(block.textFormats());
@@ -1742,12 +1732,18 @@ void ScreenplayTextDocument::updateModelOnContentChange(int _position, int _char
         // Старый блок
         //
         else {
+            updateTableInfo(block);
             auto blockData = static_cast<ScreenplayTextBlockData*>(block.userData());
             auto item = blockData->item();
 
             if (item->type() == ScreenplayTextModelItemType::Text) {
                 auto textItem = static_cast<ScreenplayTextModelTextItem*>(item);
                 textItem->setCorrection(block.blockFormat().boolProperty(ScreenplayBlockStyle::PropertyIsCorrection));
+                if (tableInfo.inTable) {
+                    textItem->setInFirstColumn(tableInfo.inFirstColumn);
+                } else {
+                    textItem->setInFirstColumn({});
+                }
                 textItem->setParagraphType(paragraphType);
                 textItem->setText(block.text());
                 textItem->setFormats(block.textFormats());

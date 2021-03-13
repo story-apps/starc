@@ -77,7 +77,7 @@ public:
     ~ScreenplayTextModelTextItem() override;
 
     /**
-     * @brief Номер сцены
+     * @brief Номер элемента
      */
     std::optional<Number> number() const;
     void setNumber(int _number);
@@ -93,6 +93,13 @@ public:
      */
     bool isCorrection() const;
     void setCorrection(bool _correction);
+
+    /**
+     * @brief Находится ли элемент в первой колонке таблицы
+     * @note Если значение не задано, то элемент находится вне таблицы
+     */
+    std::optional<bool> isInFirstColumn() const;
+    void setInFirstColumn(const std::optional<bool>& _in);
 
     /**
      * @brief Тип параграфа
