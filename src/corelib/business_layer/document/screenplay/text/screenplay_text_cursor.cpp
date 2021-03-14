@@ -188,9 +188,12 @@ void ScreenplayTextCursor::removeCharacters(bool _backward, BaseTextEdit* _edito
     }
 
     //
-    // Обрабатываем особые случай, когда в документе выделен весь текст, который находится внутри папки/папок
+    // Обрабатываем особые случаи
     //
     {
+        //
+        // ... когда в документе выделен весь текст, который находится внутри папки/папок
+        //
         auto topBlock = document()->findBlock(topCursorPosition);
         auto bottomBlock = document()->findBlock(bottomCursorPosition);
         if (ScreenplayBlockStyle::forBlock(topBlock) == ScreenplayParagraphType::FolderHeader
@@ -214,6 +217,32 @@ void ScreenplayTextCursor::removeCharacters(bool _backward, BaseTextEdit* _edito
             cursor.deleteChar();
             cursor.deletePreviousChar();
             return;
+        }
+
+        //
+        // ... когда пользователь хочет удалить внутреннюю границу разделения
+        //
+        ScreenplayTextCursor checkCursor = cursor;
+        checkCursor.setPosition(topCursorPosition);
+        if (checkCursor.inTable() && checkCursor.inFirstColumn()) {
+            checkCursor.setPosition(bottomCursorPosition);
+            if (checkCursor.inTable() && !checkCursor.inFirstColumn()) {
+                //
+                // ... если нет выделения, значит нажат делит в конце последней ячейки левой
+                //     колонки, или бекспейс в начале первой ячейки правой колонки - удалим таблицу
+                //
+                if (!cursor.hasSelection()) {
+                    auto screenplayDocument = dynamic_cast<BusinessLayer::ScreenplayTextDocument*>(document());
+                    screenplayDocument->mergeParagraph(cursor);
+                    return;
+                }
+                //
+                // ... в остальных случаях ничего не делаем
+                //
+                else {
+                    return;
+                }
+            }
         }
     }
 
