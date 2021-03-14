@@ -892,7 +892,15 @@ void ScreenplayTextModel::insertFromMime(const QModelIndex& _index, int _positio
                 //
                 isFirstTextItemHandled = true;
                 auto textItem = static_cast<ScreenplayTextModelTextItem*>(item);
-                textItem->mergeWith(newTextItem);
+                if (!textItem->text().isEmpty()) {
+                    textItem->mergeWith(newTextItem);
+                } else {
+                    //
+                    // ... при копировании сохраняем информацию о том находится ли элемент в таблице
+                    //
+                    newTextItem->setInFirstColumn(textItem->isInFirstColumn());
+                    textItem->copyFrom(newTextItem);
+                }
                 updateItem(textItem);
                 delete newTextItem;
                 //

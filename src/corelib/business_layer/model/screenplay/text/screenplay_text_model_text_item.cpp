@@ -833,6 +833,7 @@ void ScreenplayTextModelTextItem::copyFrom(ScreenplayTextModelItem* _item)
     }
 
     auto textItem = static_cast<ScreenplayTextModelTextItem*>(_item);
+    d->isInFirstColumn = textItem->d->isInFirstColumn;
     d->paragraphType = textItem->d->paragraphType;
     d->alignment = textItem->d->alignment;
     d->bookmark = textItem->d->bookmark;
@@ -853,7 +854,8 @@ bool ScreenplayTextModelTextItem::isEqual(ScreenplayTextModelItem* _item) const
     }
 
     const auto textItem = static_cast<ScreenplayTextModelTextItem*>(_item);
-    return d->paragraphType == textItem->d->paragraphType
+    return d->isInFirstColumn == textItem->d->isInFirstColumn
+            && d->paragraphType == textItem->d->paragraphType
             && d->alignment == textItem->d->alignment
             && d->bookmark == textItem->d->bookmark
             && d->text == textItem->d->text
