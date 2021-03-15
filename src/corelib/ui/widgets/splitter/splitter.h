@@ -50,6 +50,16 @@ protected:
      */
     bool eventFilter(QObject* _watched, QEvent* _event) override;
 
+    /**
+     * @brief Обновляем тексты тултипов
+     */
+    void updateTranslations() override;
+
+    /**
+     * @brief Настроим внешний вид вложенных виджетов
+     */
+    void designSystemChangeEvent(DesignSystemChangeEvent* _event) override;
+
 private:
     class Implementation;
     QScopedPointer<Implementation> d;

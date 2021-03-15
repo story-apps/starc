@@ -1,7 +1,12 @@
 #include "splitter.h"
 
+#include <ui/design_system/design_system.h>
+#include <ui/widgets/floating_tool_bar/floating_tool_bar.h>
+
+#include <QAction>
 #include <QMouseEvent>
 #include <QResizeEvent>
+#include <QVariantAnimation>
 
 
 class Splitter::Implementation
@@ -19,17 +24,40 @@ public:
      */
     void resize(Splitter* _splitter, const QVector<qreal>& _sizes);
 
+    /**
+     * @brief Анимировать кнопку отображения тулбара
+     */
+    void animateShowHiddenPanelToolbar(const QPointF& _finalPosition);
+
     Qt::Orientation orientation = Qt::Horizontal;
     Widget* handle = nullptr;
     QVector<qreal> sizes;
     QVector<QWidget*> widgets;
+
+    FloatingToolBar* showHiddenPanelToolbar = nullptr;
+    QAction* showLeftPanelAction = nullptr;
+    QAction* showRightPanelAction = nullptr;
+
+    QVariantAnimation showHiddenPanelToolbarPositionAnimation;
 };
 
 Splitter::Implementation::Implementation(QWidget* _parent)
-    : handle(new Widget(_parent))
+    : handle(new Widget(_parent)),
+      showHiddenPanelToolbar(new FloatingToolBar(_parent)),
+      showLeftPanelAction(new QAction(showHiddenPanelToolbar)),
+      showRightPanelAction(new QAction(showHiddenPanelToolbar))
 {
     handle->setBackgroundColor(Qt::transparent);
     handle->setCursor(Qt::SplitHCursor);
+
+    showHiddenPanelToolbar->addAction(showRightPanelAction);
+    showHiddenPanelToolbar->addAction(showLeftPanelAction);
+    showHiddenPanelToolbar->hide();
+    showLeftPanelAction->setIconText(u8"\U000F0142");
+    showRightPanelAction->setIconText(u8"\U000F0141");
+
+    showHiddenPanelToolbarPositionAnimation.setEasingCurve(QEasingCurve::OutQuad);
+    showHiddenPanelToolbarPositionAnimation.setDuration(240);
 }
 
 QVector<int> Splitter::Implementation::widgetsSizes() const
@@ -62,6 +90,50 @@ void Splitter::Implementation::resize(Splitter* _splitter, const QVector<qreal>&
     sizes = _sizes;
 }
 
+void Splitter::Implementation::animateShowHiddenPanelToolbar(const QPointF& _finalPosition)
+{
+    //
+    // Показать
+    //
+    if (!_finalPosition.isNull()) {
+        if (showHiddenPanelToolbarPositionAnimation.direction() == QVariantAnimation::Forward
+            && showHiddenPanelToolbarPositionAnimation.endValue() == _finalPosition) {
+            return;
+        }
+
+        showHiddenPanelToolbarPositionAnimation.setDirection(QVariantAnimation::Forward);
+        const QPointF startPosition(_finalPosition.x() < 0
+                                    ? -1 * showHiddenPanelToolbar->width()
+                                    : _finalPosition.x() + (showHiddenPanelToolbar->width() / 2),
+                                    _finalPosition.y());
+        showHiddenPanelToolbarPositionAnimation.setStartValue(startPosition);
+        showHiddenPanelToolbarPositionAnimation.setEndValue(_finalPosition);
+
+        showHiddenPanelToolbar->move(showHiddenPanelToolbarPositionAnimation.startValue().toPointF().toPoint());
+        showHiddenPanelToolbar->show();
+    }
+    //
+    // Скрыть
+    //
+    else {
+        if ((showHiddenPanelToolbarPositionAnimation.direction() == QVariantAnimation::Backward
+             && showHiddenPanelToolbarPositionAnimation.state() == QVariantAnimation::Running)
+            || !showHiddenPanelToolbar->isVisible()) {
+            return;
+        }
+
+        showHiddenPanelToolbarPositionAnimation.setDirection(QVariantAnimation::Backward);
+        const QPointF startPosition(showHiddenPanelToolbar->pos().x() < 0
+                                    ? -1 * showHiddenPanelToolbar->width()
+                                    : showHiddenPanelToolbar->pos().x() + (showHiddenPanelToolbar->width() / 2),
+                                    showHiddenPanelToolbar->pos().y());
+        showHiddenPanelToolbarPositionAnimation.setStartValue(startPosition);
+        showHiddenPanelToolbarPositionAnimation.setEndValue(QPointF(showHiddenPanelToolbar->pos()));
+    }
+
+    showHiddenPanelToolbarPositionAnimation.start();
+}
+
 
 // ****
 
@@ -71,6 +143,20 @@ Splitter::Splitter(QWidget* _parent)
       d(new Implementation(this))
 {
     d->handle->installEventFilter(this);
+
+    connect(d->showLeftPanelAction, &QAction::triggered, this, [this] { setSizes({ 2, 7 }); });
+    connect(d->showRightPanelAction, &QAction::triggered, this, [this] { setSizes({ 7, 2 }); });
+    connect(&d->showHiddenPanelToolbarPositionAnimation, &QVariantAnimation::valueChanged, this, [this] {
+        d->showHiddenPanelToolbar->move(d->showHiddenPanelToolbarPositionAnimation.currentValue().toPoint());
+    });
+    connect(&d->showHiddenPanelToolbarPositionAnimation, &QVariantAnimation::finished, this, [this] {
+        if (d->showHiddenPanelToolbarPositionAnimation.direction() == QVariantAnimation::Backward) {
+            d->showHiddenPanelToolbar->hide();
+        }
+    });
+
+    updateTranslations();
+    designSystemChangeEvent(nullptr);
 }
 
 Splitter::~Splitter() = default;
@@ -109,6 +195,7 @@ void Splitter::setWidgets(QWidget* _first, QWidget* _second)
     // Поднимем хендл, чтобы не терять управление
     //
     d->handle->raise();
+    d->showHiddenPanelToolbar->raise();
 }
 
 void Splitter::setSizes(const QVector<int>& _sizes)
@@ -158,11 +245,12 @@ void Splitter::setSizes(const QVector<int>& _sizes)
         widget->setGeometry(widgetGeometry);
         //
         // И корректируем геометрию следующего
+        // +1, чтобы виджеты не накладывались друг на друга
         //
         if (d->orientation == Qt::Horizontal) {
-            widgetGeometry.moveLeft(widgetGeometry.right());
+            widgetGeometry.moveLeft(widgetGeometry.right() + 1);
         } else {
-            widgetGeometry.moveTop(widgetGeometry.bottom());
+            widgetGeometry.moveTop(widgetGeometry.bottom() + 1);
         }
     }
 
@@ -172,13 +260,34 @@ void Splitter::setSizes(const QVector<int>& _sizes)
     const QRect handleGeometry(widgets.constFirst()->geometry().right() - 2, 0,
                                5, height());
     d->handle->setGeometry(handleGeometry);
+    //
+    // ... и кнопку отображения скрытой панели
+    //
+    if ((widgets.constFirst()->geometry().isEmpty() && widgets.constFirst()->isVisible())
+        || (widgets.constLast()->geometry().isEmpty() && widgets.constLast()->isVisible())) {
+        if (_sizes.constFirst() == 0) {
+            d->showHiddenPanelToolbar->setActionCustomWidth(d->showRightPanelAction, Ui::DesignSystem::layout().px8());
+            d->showHiddenPanelToolbar->clearActionCustomWidth(d->showLeftPanelAction);
+        } else {
+            d->showHiddenPanelToolbar->setActionCustomWidth(d->showLeftPanelAction, Ui::DesignSystem::layout().px8());
+            d->showHiddenPanelToolbar->clearActionCustomWidth(d->showRightPanelAction);
+        }
+        d->showHiddenPanelToolbar->resize(d->showHiddenPanelToolbar->sizeHint());
+
+        d->animateShowHiddenPanelToolbar(QPointF(handleGeometry.center().x()
+                                                 - (d->showHiddenPanelToolbar->width() / 2),
+                                                 (height()
+                                                  - d->showHiddenPanelToolbar->height()) / 2));
+    } else {
+        d->animateShowHiddenPanelToolbar({});
+    }
 }
 
 QByteArray Splitter::saveState() const
 {
     QByteArray state;
     QDataStream stream(&state, QIODevice::WriteOnly);
-    for (auto size : d->sizes) {
+    for (auto size : std::as_const(d->sizes)) {
         stream << size;
     }
     return state;
@@ -315,4 +424,18 @@ bool Splitter::eventFilter(QObject* _watched, QEvent* _event)
     }
 
     return Widget::eventFilter(_watched, _event);
+}
+
+void Splitter::updateTranslations()
+{
+    d->showLeftPanelAction->setToolTip(tr("Show hidden panel"));
+    d->showRightPanelAction->setToolTip(tr("Show hidden panel"));
+}
+
+void Splitter::designSystemChangeEvent(DesignSystemChangeEvent* _event)
+{
+    Widget::designSystemChangeEvent(_event);
+
+    d->showHiddenPanelToolbar->setBackgroundColor(Ui::DesignSystem::color().primary());
+    d->showHiddenPanelToolbar->setTextColor(Ui::DesignSystem::color().onPrimary());
 }

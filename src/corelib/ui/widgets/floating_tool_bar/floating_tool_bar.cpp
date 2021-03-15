@@ -176,6 +176,16 @@ void FloatingToolBar::setActionCustomWidth(QAction* _action, int _width)
     updateGeometry();
 }
 
+void FloatingToolBar::clearActionCustomWidth(QAction* _action)
+{
+    if (!actions().contains(_action)) {
+        return;
+    }
+
+    _action->setProperty(kActionWidthKey, {});
+    updateGeometry();
+}
+
 int FloatingToolBar::actionCustomWidth(QAction* _action) const
 {
     if (!actions().contains(_action)
