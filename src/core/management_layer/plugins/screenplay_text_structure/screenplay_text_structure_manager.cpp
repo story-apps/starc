@@ -4,6 +4,7 @@
 #include "ui/screenplay_text_structure_view.h"
 
 #include <business_layer/model/screenplay/text/screenplay_text_model.h>
+#include <business_layer/model/screenplay/screenplay_information_model.h>
 
 #include <QApplication>
 #include <QFileDialog>
@@ -97,6 +98,12 @@ void ScreenplayTextStructureManager::setModel(BusinessLayer::AbstractModel* _mod
         d->structureModel = new BusinessLayer::ScreenplayTextStructureModel(d->view);
         d->view->setModel(d->structureModel);
     }
+
+    //
+    // Настраиваем заголовок навигатора
+    //
+    d->view->setTitle(d->model->informationModel()->name());
+
     //
     // Помещаем модель с данными в прокси
     //

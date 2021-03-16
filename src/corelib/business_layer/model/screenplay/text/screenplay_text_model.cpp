@@ -55,6 +55,11 @@ public:
     ScreenplayTextModelFolderItem* rootItem = nullptr;
 
     /**
+     * @brief Модель информации о проекте
+     */
+    ScreenplayInformationModel* informationModel = nullptr;
+
+    /**
      * @brief Модель справочников
      */
     ScreenplayDictionariesModel* dictionariesModel = nullptr;
@@ -1035,6 +1040,16 @@ QModelIndex ScreenplayTextModel::indexForItem(ScreenplayTextModelItem* _item) co
     }
 
     return index(row, 0, parent);
+}
+
+void ScreenplayTextModel::setInformationModel(ScreenplayInformationModel* _model)
+{
+    d->informationModel = _model;
+}
+
+ScreenplayInformationModel* ScreenplayTextModel::informationModel() const
+{
+    return d->informationModel;
 }
 
 void ScreenplayTextModel::setDictionariesModel(ScreenplayDictionariesModel* _model)

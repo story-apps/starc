@@ -55,16 +55,26 @@ ProjectModelsFacade::~ProjectModelsFacade()
 
 void ProjectModelsFacade::clear()
 {
-    for (auto model : d->documentsToModels.values()) {
+    for (auto model : std::as_const(d->documentsToModels)) {
         model->disconnect();
         model->clear();
     }
 
-    qDeleteAll(d->documentsToModels.values());
+    qDeleteAll(d->documentsToModels);
     d->documentsToModels.clear();
 }
 
-BusinessLayer::AbstractModel* ProjectModelsFacade::modelFor(Domain::DocumentObject* _document)
+BusinessLayer::AbstractModel* ProjectModelsFacade::modelFor(const QUuid& _uuid, const QUuid& _parentUuid)
+{
+    return modelFor(DataStorageLayer::StorageFacade::documentStorage()->document(_uuid), _parentUuid);
+}
+
+BusinessLayer::AbstractModel* ProjectModelsFacade::modelFor(Domain::DocumentObjectType _type)
+{
+    return modelFor(DataStorageLayer::StorageFacade::documentStorage()->document(_type));
+}
+
+BusinessLayer::AbstractModel* ProjectModelsFacade::modelFor(Domain::DocumentObject* _document, const QUuid& _parentUuid)
 {
     if (_document == nullptr) {
         return nullptr;
@@ -136,34 +146,32 @@ BusinessLayer::AbstractModel* ProjectModelsFacade::modelFor(Domain::DocumentObje
                 auto screenplayModel = new BusinessLayer::ScreenplayTextModel;
 
                 //
-                // Добавляем в модель сценария, модель справочников сценариев
+                // Добавляем в модель сценария, модель информации о сценарие
                 //
-                auto dictionariesDocument
-                        = DataStorageLayer::StorageFacade::documentStorage()->document(
-                              Domain::DocumentObjectType::ScreenplayDictionaries);
+                auto informationModel
+                        = qobject_cast<BusinessLayer::ScreenplayInformationModel*>(
+                              modelFor(_parentUuid));
+                screenplayModel->setInformationModel(informationModel);
+                //
+                // ... модель справочников сценариев
+                //
                 auto dictionariesModel
                         = qobject_cast<BusinessLayer::ScreenplayDictionariesModel*>(
-                              modelFor(dictionariesDocument));
+                              modelFor(Domain::DocumentObjectType::ScreenplayDictionaries));
                 screenplayModel->setDictionariesModel(dictionariesModel);
                 //
                 // ... модель персонажей
                 //
-                auto charactersDocument
-                        = DataStorageLayer::StorageFacade::documentStorage()->document(
-                              Domain::DocumentObjectType::Characters);
                 auto charactersModel
                         = qobject_cast<BusinessLayer::CharactersModel*>(
-                              modelFor(charactersDocument));
+                              modelFor(Domain::DocumentObjectType::Characters));
                 screenplayModel->setCharactersModel(charactersModel);
                 //
                 // ... и модель локаций
                 //
-                auto locationsDocument
-                        = DataStorageLayer::StorageFacade::documentStorage()->document(
-                              Domain::DocumentObjectType::Locations);
                 auto locationsModel
                         = qobject_cast<BusinessLayer::LocationsModel*>(
-                              modelFor(locationsDocument));
+                              modelFor(Domain::DocumentObjectType::Locations));
                 screenplayModel->setLocationsModel(locationsModel);
 
                 model = screenplayModel;

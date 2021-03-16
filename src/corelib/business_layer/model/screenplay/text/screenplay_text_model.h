@@ -9,6 +9,7 @@ namespace BusinessLayer
 class CharactersModel;
 class LocationsModel;
 class ScreenplayDictionariesModel;
+class ScreenplayInformationModel;
 class ScreenplayTextModelItem;
 
 /**
@@ -90,6 +91,12 @@ public:
      * @brief Получить индекс заданного элемента
      */
     QModelIndex indexForItem(ScreenplayTextModelItem* _item) const;
+
+    /**
+     * @brief Задать модель информации о сценарии
+     */
+    void setInformationModel(ScreenplayInformationModel* _model);
+    ScreenplayInformationModel* informationModel() const;
 
     /**
      * @brief Задать модель справочников сценария

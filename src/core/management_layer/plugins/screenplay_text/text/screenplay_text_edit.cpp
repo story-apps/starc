@@ -7,6 +7,7 @@
 #include <business_layer/document/screenplay/text/screenplay_text_cursor.h>
 #include <business_layer/document/screenplay/text/screenplay_text_document.h>
 #include <business_layer/import/fountain_importer.h>
+#include <business_layer/model/screenplay/screenplay_information_model.h>
 #include <business_layer/model/screenplay/text/screenplay_text_model.h>
 #include <business_layer/model/screenplay/text/screenplay_text_model_text_item.h>
 #include <business_layer/templates/screenplay_template.h>
@@ -80,6 +81,10 @@ void ScreenplayTextEdit::setShowDialogueNumber(bool _show)
 
 void ScreenplayTextEdit::initWithModel(BusinessLayer::ScreenplayTextModel* _model)
 {
+    if (d->model
+        && d->model->informationModel()) {
+        disconnect(d->model->informationModel());
+    }
     d->model = _model;
 
     const auto currentTemplate = BusinessLayer::ScreenplayTemplateFacade::getTemplate();
@@ -90,7 +95,21 @@ void ScreenplayTextEdit::initWithModel(BusinessLayer::ScreenplayTextModel* _mode
     //
     // Документ нужно формировать только после того, как редактор настроен, чтобы избежать лишний изменений
     //
-    d->document.setModel(_model);
+    d->document.setModel(d->model);
+
+    //
+    // Отслеживаем изменения некоторых параметров
+    //
+    if (d->model
+        && d->model->informationModel()) {
+        setHeader(d->model->informationModel()->header());
+        setFooter(d->model->informationModel()->footer());
+
+        connect(d->model->informationModel(), &BusinessLayer::ScreenplayInformationModel::headerChanged,
+                this, &ScreenplayTextEdit::setHeader);
+        connect(d->model->informationModel(), &BusinessLayer::ScreenplayInformationModel::footerChanged,
+                this, &ScreenplayTextEdit::setFooter);
+    }
 }
 
 void ScreenplayTextEdit::reinit()

@@ -769,8 +769,7 @@ void ProjectManager::showView(const QModelIndex& _itemIndex, const QString& _vie
     //
     // Определим модель
     //
-    auto document = DataStorageLayer::StorageFacade::documentStorage()->document(item->uuid());
-    d->currentDocument.model = d->modelsFacade.modelFor(document);
+    d->currentDocument.model = d->modelsFacade.modelFor(item->uuid(), item->parent()->uuid());
     d->currentDocument.viewMimeType = _viewMimeType;
     if (d->currentDocument.model == nullptr) {
         d->view->showNotImplementedPage();
@@ -814,8 +813,7 @@ void ProjectManager::showNavigator(const QModelIndex& _itemIndex, const QString&
     //
     // Определим модель
     //
-    auto document = DataStorageLayer::StorageFacade::documentStorage()->document(item->uuid());
-    auto model = d->modelsFacade.modelFor(document);
+    auto model = d->modelsFacade.modelFor(item->uuid(), item->parent()->uuid());
     if (model == nullptr) {
         d->navigator->showProjectNavigator();
         return;
@@ -840,14 +838,9 @@ void ProjectManager::showNavigator(const QModelIndex& _itemIndex, const QString&
     d->pluginsBuilder.bind(viewMimeType, navigatorMimeType);
 
     //
-    // Задаём заголовок навигатора и настраиваем возможность перехода к навигатору проекта
+    // Настраиваем возможность перехода к навигатору проекта
     //
     auto navigatorView = qobject_cast<Ui::AbstractNavigator*>(view);
-    //
-    // FIXME: Надо как-то более универсально сделать этот момент, чтобы не приходилось задавать
-    //        название родителя для случаев, когда нужно имя самого документа, а не его родителя
-    //
-    navigatorView->setTitle(item->parent()->name());
     connect(navigatorView, &Ui::AbstractNavigator::backPressed,
             d->navigator, &Ui::ProjectNavigator::showProjectNavigator,
             Qt::UniqueConnection);

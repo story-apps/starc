@@ -1,6 +1,7 @@
 #pragma once
 
 #include <QObject>
+#include <QUuid>
 
 namespace BusinessLayer {
 class AbstractImageWrapper;
@@ -9,6 +10,7 @@ class AbstractModel;
 
 namespace Domain {
 class DocumentObject;
+enum class DocumentObjectType;
 }
 
 
@@ -34,7 +36,9 @@ public:
     /**
      * @brief Получить модель для заданного документа
      */
-    BusinessLayer::AbstractModel* modelFor(Domain::DocumentObject* _document);
+    BusinessLayer::AbstractModel* modelFor(const QUuid& _uuid, const QUuid& _parentUuid = {});
+    BusinessLayer::AbstractModel* modelFor(Domain::DocumentObjectType _type);
+    BusinessLayer::AbstractModel* modelFor(Domain::DocumentObject* _document, const QUuid& _parentUuid = {});
 
     /**
      * @brief Удалить модель для заданного документа
