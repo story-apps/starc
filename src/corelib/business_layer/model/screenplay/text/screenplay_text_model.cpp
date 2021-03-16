@@ -6,6 +6,7 @@
 #include "screenplay_text_model_text_item.h"
 #include "screenplay_text_model_xml.h"
 
+#include <business_layer/model/screenplay/screenplay_information_model.h>
 #include <business_layer/templates/screenplay_template.h>
 
 #include <domain/document_object.h>
@@ -132,10 +133,10 @@ QByteArray ScreenplayTextModel::Implementation::toXml(Domain::DocumentObject* _s
 
 void ScreenplayTextModel::Implementation::updateNumbering()
 {
-    int sceneNumber = 1;
+    int sceneNumber = informationModel->scenesNumberingStartAt();
     int dialogueNumber = 1;
     std::function<void(const ScreenplayTextModelItem*)> updateChildNumbering;
-    updateChildNumbering = [&sceneNumber, &dialogueNumber, &updateChildNumbering] (const ScreenplayTextModelItem* _item) {
+    updateChildNumbering = [this, &sceneNumber, &dialogueNumber, &updateChildNumbering] (const ScreenplayTextModelItem* _item) {
         for (int childIndex = 0; childIndex < _item->childCount(); ++childIndex) {
             auto childItem = _item->childAt(childIndex);
             switch (childItem->type()) {
@@ -147,7 +148,7 @@ void ScreenplayTextModel::Implementation::updateNumbering()
                 case ScreenplayTextModelItemType::Scene: {
                     updateChildNumbering(childItem);
                     auto sceneItem = static_cast<ScreenplayTextModelSceneItem*>(childItem);
-                    sceneItem->setNumber(sceneNumber++);
+                    sceneItem->setNumber(sceneNumber++, informationModel->scenesNumbersPrefix());
                     break;
                 }
 
@@ -1044,7 +1045,22 @@ QModelIndex ScreenplayTextModel::indexForItem(ScreenplayTextModelItem* _item) co
 
 void ScreenplayTextModel::setInformationModel(ScreenplayInformationModel* _model)
 {
+    if (d->informationModel == _model) {
+        return;
+    }
+
+    if (d->informationModel) {
+        disconnect(d->informationModel);
+    }
+
     d->informationModel = _model;
+
+    if (d->informationModel) {
+        connect(d->informationModel, &ScreenplayInformationModel::scenesNumberingStartAtChanged,
+                this, [this] { d->updateNumbering(); });
+        connect(d->informationModel, &ScreenplayInformationModel::scenesNumbersPrefixChanged,
+                this, [this] { d->updateNumbering(); });
+    }
 }
 
 ScreenplayInformationModel* ScreenplayTextModel::informationModel() const

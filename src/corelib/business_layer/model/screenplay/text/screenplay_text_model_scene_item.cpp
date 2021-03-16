@@ -180,9 +180,10 @@ ScreenplayTextModelSceneItem::Number ScreenplayTextModelSceneItem::number() cons
     return *d->number;
 }
 
-void ScreenplayTextModelSceneItem::setNumber(int _number)
+void ScreenplayTextModelSceneItem::setNumber(int _number, const QString& _prefix)
 {
-    const auto newNumber = QString(QLocale().textDirection() == Qt::LeftToRight ? "%1." : ".%1").arg(_number);
+    const auto newNumber = QString(QLocale().textDirection() == Qt::LeftToRight ? "%1%2." : ".%2%1")
+                           .arg(_prefix, QString::number(_number));
     if (d->number.has_value()
         && d->number->value == newNumber) {
         return;
