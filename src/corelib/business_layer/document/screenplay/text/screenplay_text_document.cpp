@@ -606,7 +606,111 @@ void ScreenplayTextDocument::setModel(BusinessLayer::ScreenplayTextModel* _model
         if (fromPosition < 0) {
             return;
         }
+
         //
+        // Если происходит удаление разделителя таблицы, то удаляем таблицу,
+        // а все блоки переносим за таблицу
+        //
+        if (auto item = d->model->itemForIndex(fromIndex);
+            item->type() == ScreenplayTextModelItemType::Splitter) {
+            auto splitterItem = static_cast<ScreenplayTextModelSplitterItem*>(item);
+
+            //
+            // ... убираем таблицу на удалении стартового элемента
+            //
+            if (splitterItem->splitterType() == ScreenplayTextModelSplitterItemType::Start) {
+                //
+                // Заходим в таблицу
+                //
+                ScreenplayTextCursor cursor(this);
+                cursor.setPosition(fromPosition);
+                cursor.movePosition(ScreenplayTextCursor::NextBlock);
+                //
+                // Берём второй курсор, куда будем переносить блоки
+                //
+                int row = _from + 1;
+                auto insertCursor = cursor;
+                while (ScreenplayBlockStyle::forBlock(insertCursor.block())
+                       != ScreenplayParagraphType::PageSplitter) {
+                    insertCursor.movePosition(ScreenplayTextCursor::NextBlock);
+                }
+                bool isFirstParagraph = false;
+
+                //
+                // Идём по таблице
+                //
+                while (ScreenplayBlockStyle::forBlock(cursor.block())
+                       != ScreenplayParagraphType::PageSplitter) {
+                    //
+                    // ... удаляем блок в таблице
+                    //
+                    cursor.movePosition(ScreenplayTextCursor::EndOfBlock, ScreenplayTextCursor::KeepAnchor);
+                    const auto positionsCorrectionDelta = cursor.selectedText().length();
+                    if (cursor.hasSelection()) {
+                        cursor.deleteChar();
+                    }
+                    //
+                    // ... удаляем блок в карте
+                    //
+                    d->positionsToItems.erase(cursor.position());
+                    //
+                    // ... и корректируем позиции элементов
+                    //
+                    d->correctPositionsToItems(cursor.position(), -1 * positionsCorrectionDelta);
+
+                    //
+                    // ... если всё ещё в одной колонке, то удаляем текущий пустой блок
+                    //
+                    const auto currentBlockInFirstColumn = cursor.inFirstColumn();
+                    if (cursor.movePosition(ScreenplayTextCursor::NextBlock, ScreenplayTextCursor::KeepAnchor)) {
+                        if (currentBlockInFirstColumn == cursor.inFirstColumn()) {
+                            cursor.deleteChar();
+                            d->correctPositionsToItems(cursor.position(), -1);
+                        }
+                        //
+                        // ... если перешли в другую колонку, то сбросим выделение
+                        //
+                        else {
+                            cursor.clearSelection();
+                        }
+                    }
+                    //
+                    // ... если дошли до конца таблицы, то переходим в следующий блок
+                    //
+                    else {
+                        cursor.movePosition(ScreenplayTextCursor::NextBlock);
+                    }
+
+                    //
+                    // ... вставляем этот же блок после таблицы
+                    //
+                    d->readModelItemContent(row++, fromIndex.parent(), insertCursor, isFirstParagraph);
+                }
+
+                //
+                // Удаляем саму таблицу
+                //
+                cursor.movePosition(QTextCursor::NextBlock);
+                cursor.movePosition(QTextCursor::PreviousBlock, QTextCursor::KeepAnchor);
+                cursor.movePosition(QTextCursor::PreviousBlock, QTextCursor::KeepAnchor);
+                cursor.deletePreviousChar();
+
+                //
+                // Корректируем карту позиций блоков
+                //
+                auto fromIter = d->positionsToItems.lower_bound(fromPosition);
+                auto endIter = std::next(fromIter, 2);
+                d->positionsToItems.erase(fromIter, endIter);
+
+                //
+                // Корректируем позиции элементов
+                //
+                d->correctPositionsToItems(cursor.position(), -4);
+            }
+
+            return;
+        }
+
         const QModelIndex toIndex = d->model->index(_to, 0, _parent);
         if (!toIndex.isValid()) {
             return;
