@@ -5,6 +5,7 @@
 #include <business_layer/document/screenplay/text/screenplay_text_block_data.h>
 #include <business_layer/document/screenplay/text/screenplay_text_cursor.h>
 #include <business_layer/document/screenplay/text/screenplay_text_document.h>
+#include <business_layer/model/screenplay/screenplay_information_model.h>
 #include <business_layer/model/screenplay/text/screenplay_text_model.h>
 #include <business_layer/model/screenplay/text/screenplay_text_model_scene_item.h>
 #include <business_layer/model/screenplay/text/screenplay_text_model_text_item.h>
@@ -81,27 +82,24 @@ static void printPage(int _pageNumber, QPainter* _painter, const QTextDocument* 
                     //
                     const auto sceneItem = static_cast<ScreenplayTextModelSceneItem*>(blockData->item()->parent());
                     const int distanceBetweenSceneNumberAndText = 10;
-                    if (QLocale().textDirection() == Qt::LeftToRight) {
-                        const QRectF sceneNumberRect(
-                                    0,
-                                    blockRect.top() <= pageYPos
-                                    ? (pageYPos + PageMetrics::mmToPx(_template.pageMargins().top()))
-                                    : blockRect.top(),
-                                    PageMetrics::mmToPx(_template.pageMargins().left()) - distanceBetweenSceneNumberAndText,
-                                    blockRect.height());
-                        _painter->drawText(sceneNumberRect, Qt::AlignRight | Qt::AlignTop,
-                                           _exportOptions.sceneNumbersPrefix + sceneItem->number().value);
-                    } else {
-                        const QRectF sceneNumberRect(
-                                    PageMetrics::mmToPx(_template.pageMargins().left()) + _body.width() + distanceBetweenSceneNumberAndText,
-                                    blockRect.top() <= pageYPos
-                                    ? (pageYPos + PageMetrics::mmToPx(_template.pageMargins().top()))
-                                    : blockRect.top(),
-                                    PageMetrics::mmToPx(_template.pageMargins().right()) - distanceBetweenSceneNumberAndText,
-                                    blockRect.height());
-                        _painter->drawText(sceneNumberRect, Qt::AlignLeft | Qt::AlignTop,
-                                           sceneItem->number().value + QChar(0x202B) + _exportOptions.sceneNumbersPrefix);
-                    }
+
+                    const QRectF leftSceneNumberRect(
+                                0,
+                                blockRect.top() <= pageYPos
+                                ? (pageYPos + PageMetrics::mmToPx(_template.pageMargins().top()))
+                                : blockRect.top(),
+                                PageMetrics::mmToPx(_template.pageMargins().left()) - distanceBetweenSceneNumberAndText,
+                                blockRect.height());
+                    _painter->drawText(leftSceneNumberRect, Qt::AlignRight | Qt::AlignTop, sceneItem->number().value);
+
+                    const QRectF rightSceneNumberRect(
+                                _body.width() - PageMetrics::mmToPx(_template.pageMargins().right()) + distanceBetweenSceneNumberAndText,
+                                blockRect.top() <= pageYPos
+                                ? (pageYPos + PageMetrics::mmToPx(_template.pageMargins().top()))
+                                : blockRect.top(),
+                                PageMetrics::mmToPx(_template.pageMargins().right()) - distanceBetweenSceneNumberAndText,
+                                blockRect.height());
+                    _painter->drawText(rightSceneNumberRect, Qt::AlignLeft | Qt::AlignTop, sceneItem->number().value);
                 }
             }
             //
@@ -518,9 +516,16 @@ void PdfExporter::exportTo(ScreenplayTextModel* _model, const ExportOptions& _ex
     printer.setPageMargins({});
 
     //
+    // Допишем параметры сценария в параметры экспорта
+    //
+    auto exportOptions = _exportOptions;
+    exportOptions.header = _model->informationModel()->header();
+    exportOptions.footer = _model->informationModel()->footer();
+
+    //
     // Печатаем документ
     //
-    printDocument(&screenplayText, &printer, exportTemplate, _exportOptions);
+    printDocument(&screenplayText, &printer, exportTemplate, exportOptions);
 }
 
 } // mamespace BusinessLayer

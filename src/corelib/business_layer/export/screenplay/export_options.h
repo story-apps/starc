@@ -66,7 +66,6 @@ struct CORE_LIBRARY_EXPORT ExportOptions
     //
     // Параметры самого документа
     //
-    QString sceneNumbersPrefix;
     QString header;
     QString footer;
 };
