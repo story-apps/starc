@@ -76,14 +76,14 @@ void CreateDocumentDialog::Implementation::updateDocumentInfo()
 {
     const QHash<Domain::DocumentObjectType, QString> documenTypeToInfo
             = {{ Domain::DocumentObjectType::Character,
-                 tr("Create a character document that allows you to write out a full bio, "
-                    "track relations with others, and stories participation.") },
+                 tr("Create a document with full Character's description to track his relations "
+                    "and follow his journey within the story.") },
                { Domain::DocumentObjectType::Location,
-                 tr("Create a location document that allows you to write out all information "
-                    "about it.") },
+                 tr("Create a document to note down the Location's description "
+                    "and keep the details.") },
                { Domain::DocumentObjectType::Screenplay,
-                 tr("Create a set of documents that provides abilities for working "
-                    "on the script of the feature film, series, or animation") }};
+                 tr("Create a document set to streamline your work on the feature film, "
+                    "series, or animation.") }};
 
     const auto documentTypeData = documentType->currentIndex().data(kMimeTypeRole).toInt();
     documentInfo->setText(documenTypeToInfo.value(static_cast<Domain::DocumentObjectType>(documentTypeData)));
