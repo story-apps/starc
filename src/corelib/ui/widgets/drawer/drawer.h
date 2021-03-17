@@ -36,6 +36,11 @@ protected:
     void mousePressEvent(QMouseEvent* _event) override;
     void mouseReleaseEvent(QMouseEvent* _event) override;
 
+    /**
+     * @brief Переопределяем для перерисовки выделенного пункта меню
+     */
+    void mouseMoveEvent(QMouseEvent* _event) override;
+
 private:
     class Implementation;
     QScopedPointer<Implementation> d;

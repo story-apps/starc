@@ -2,6 +2,7 @@
 
 #include <ui/design_system/design_system.h>
 
+#include <utils/helpers/color_helper.h>
 #include <utils/helpers/image_helper.h>
 
 #include <QAction>
@@ -123,11 +124,14 @@ Drawer::Drawer(QWidget* _parent)
       d(new Implementation)
 {
     setFocusPolicy(Qt::StrongFocus);
+    setMouseTracking(true);
     setFixedWidth(static_cast<int>(Ui::DesignSystem::drawer().width()));
 
     connect(&d->decorationRadiusAnimation, &QVariantAnimation::valueChanged, this, [this] { update(); });
     connect(&d->decorationOpacityAnimation, &QVariantAnimation::valueChanged, this, [this] { update(); });
 }
+
+Drawer::~Drawer() = default;
 
 void Drawer::setTitle(const QString& _title)
 {
@@ -148,8 +152,6 @@ void Drawer::setSubtitle(const QString& _subtitle)
     d->subtitle = _subtitle;
     update();
 }
-
-Drawer::~Drawer() = default;
 
 void Drawer::paintEvent(QPaintEvent* _event)
 {
@@ -215,6 +217,10 @@ void Drawer::paintEvent(QPaintEvent* _event)
         if (action->isChecked()) {
             painter.fillRect(actionRect.marginsRemoved(Ui::DesignSystem::drawer().selectionMargins()),
                              Ui::DesignSystem::drawer().selectionColor());
+        } else if (actionRect.contains(mapFromGlobal(QCursor::pos()))) {
+            painter.fillRect(actionRect.marginsRemoved(Ui::DesignSystem::drawer().selectionMargins()),
+                             ColorHelper::transparent(Ui::DesignSystem::color().onPrimary(),
+                                                      Ui::DesignSystem::hoverBackgroundOpacity()));
         }
 
         painter.setPen(action->isChecked() ? Ui::DesignSystem::color().secondary()
@@ -305,5 +311,11 @@ void Drawer::mouseReleaseEvent(QMouseEvent* _event)
     }
 
     pressedAction->trigger();
+    update();
+}
+
+void Drawer::mouseMoveEvent(QMouseEvent* _event)
+{
+    Q_UNUSED(_event)
     update();
 }
