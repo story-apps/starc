@@ -460,6 +460,10 @@ void ContextMenu::mousePressEvent(QMouseEvent* _event)
 
 void ContextMenu::mouseReleaseEvent(QMouseEvent* _event)
 {
+    if (d->sizeAnimation.state() == QVariantAnimation::Running) {
+        return;
+    }
+
     if (!rect().contains(_event->pos())) {
         return;
     }
