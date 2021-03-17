@@ -40,6 +40,11 @@ public:
     void restoreState(const QVariant& _state);
 
     /**
+     * @brief Выделить элемент с заданным индексом в дереве
+     */
+    void setCurrentIndex(const QModelIndex& _index);
+
+    /**
      * @brief Получить индекс выделенного элемента в дереве
      */
     QModelIndex currentIndex() const;

@@ -40,7 +40,7 @@ public:
     /**
      * @brief Добавить документ
      */
-    void addDocument(Domain::DocumentObjectType _type, const QString& _name = {},
+    QModelIndex addDocument(Domain::DocumentObjectType _type, const QString& _name = {},
         const QModelIndex& _parent = {}, const QByteArray& _content = {});
 
     /**
@@ -101,6 +101,11 @@ public:
      * @brief Получить элемент имеющий заданный юид
      */
     StructureModelItem* itemForUuid(const QUuid& _uuid) const;
+
+    /**
+     * @brief Получить элемент имеющий заданный тип
+     */
+    StructureModelItem* itemForType(Domain::DocumentObjectType _type) const;
 
     /**
      * @brief Получить элемент корзины

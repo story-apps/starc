@@ -157,11 +157,11 @@ void StructureModel::setProjectName(const QString& _name)
     d->projectName = _name;
 }
 
-void StructureModel::addDocument(Domain::DocumentObjectType _type, const QString& _name,
+QModelIndex StructureModel::addDocument(Domain::DocumentObjectType _type, const QString& _name,
     const QModelIndex& _parent, const QByteArray& _content)
 {
     //
-    // ATTENTION: В ProjectManager есть копипаста отсюда, быть внимательным при обновлении
+    // ATTENTION: В ProjectManager::addScreenplay есть копипаста отсюда, быть внимательным при обновлении
     //
 
     using namespace Domain;
@@ -206,9 +206,16 @@ void StructureModel::addDocument(Domain::DocumentObjectType _type, const QString
             break;
         }
 
-        case DocumentObjectType::Character:
+        case DocumentObjectType::Character: {
+            parentItem = itemForType(Domain::DocumentObjectType::Characters);
+            Q_ASSERT(parentItem);
+            appendItem(createItem(_type, _name.toUpper()), parentItem, _content);
+            break;
+        }
         case DocumentObjectType::Location: {
-            appendItem(createItem(_type, _name), parentItem, _content);
+            parentItem = itemForType(Domain::DocumentObjectType::Locations);
+            Q_ASSERT(parentItem);
+            appendItem(createItem(_type, _name.toUpper()), parentItem, _content);
             break;
         }
 
@@ -217,6 +224,8 @@ void StructureModel::addDocument(Domain::DocumentObjectType _type, const QString
             break;
         }
     }
+
+    return index(parentItem->childCount() - 1, 0, indexForItem(parentItem));
 }
 
 void StructureModel::prependItem(StructureModelItem* _item, StructureModelItem* _parentItem)
@@ -705,6 +714,21 @@ StructureModelItem* StructureModel::itemForUuid(const QUuid& _uuid) const
     return search(d->rootItem);
 }
 
+StructureModelItem* StructureModel::itemForType(Domain::DocumentObjectType _type) const
+{
+    //
+    // Ищем только по верхнеуровневым элементам
+    //
+    for (int itemIndex = 0; itemIndex < d->rootItem->childCount(); ++itemIndex) {
+        auto item = d->rootItem->childAt(itemIndex);
+        if (item->type() == _type) {
+            return item;
+        }
+    }
+
+    return nullptr;
+}
+
 void StructureModel::moveItemToRecycleBin(StructureModelItem* _item)
 {
     if (_item == nullptr) {
@@ -714,14 +738,8 @@ void StructureModel::moveItemToRecycleBin(StructureModelItem* _item)
     //
     // Идём снизу, т.к. обычно корзина находится внизу
     //
-    StructureModelItem* recycleBin = nullptr;
-    for (int itemIndex = d->rootItem->childCount() - 1; itemIndex >= 0; --itemIndex) {
-        auto item = d->rootItem->childAt(itemIndex);
-        if (item->type() == Domain::DocumentObjectType::RecycleBin) {
-            recycleBin = item;
-            break;
-        }
-    }
+    StructureModelItem* recycleBin = itemForType(Domain::DocumentObjectType::RecycleBin);
+    Q_ASSERT(recycleBin);
 
     //
     // Собственно перемещаем элемент в корзину

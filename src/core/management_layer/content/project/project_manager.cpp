@@ -191,7 +191,10 @@ void ProjectManager::Implementation::addDocument(const QModelIndex& _itemIndex)
     connect(dialog, &Ui::CreateDocumentDialog::createPressed, navigator,
             [this, dialog] (Domain::DocumentObjectType _type, const QString& _name)
     {
-        projectStructureModel->addDocument(_type, _name);
+        const auto addedItemIndex = projectStructureModel->addDocument(_type, _name);
+        const auto mappedAddedItemIndex = projectStructureProxyModel->mapFromSource(addedItemIndex);
+        navigator->setCurrentIndex(mappedAddedItemIndex);
+
         dialog->hideDialog();
     });
     connect(dialog, &Ui::CreateDocumentDialog::disappeared, dialog, &Ui::CreateDocumentDialog::deleteLater);
@@ -699,7 +702,7 @@ void ProjectManager::addScreenplay(const QString& _name, const QString& _titlePa
     const QString& _synopsis, const QString& _treatment, const QString& _text)
 {
     //
-    // ATTENTION: Копипаста из StructureModel, быть внимательным при обновлении
+    // ATTENTION: Копипаста из StructureModel::addDocument, быть внимательным при обновлении
     //
 
     using namespace Domain;

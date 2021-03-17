@@ -118,6 +118,11 @@ void ProjectNavigator::restoreState(const QVariant& _state)
     d->tree->restoreState(_state);
 }
 
+void ProjectNavigator::setCurrentIndex(const QModelIndex& _index)
+{
+    d->tree->setCurrentIndex(_index);
+}
+
 QModelIndex ProjectNavigator::currentIndex() const
 {
     return d->tree->currentIndex();
