@@ -3617,12 +3617,50 @@ void PageTextEdit::setHighlightCurrentLine(bool _highlight)
     update();
 }
 
-ContextMenu* PageTextEdit::createContextMenu(const QPoint& _position, QWidget* _parent)
+ContextMenu* PageTextEdit::createContextMenu(QWidget* _parent)
 {
-    auto contextMenu = new ContextMenu(_parent == nullptr ? this : _parent);
-    contextMenu->setBackgroundColor(Ui::DesignSystem::color().background());
-    contextMenu->setTextColor(Ui::DesignSystem::color().onBackground());
-    return contextMenu;
+    auto formattingAction = new QAction;
+    formattingAction->setVisible(false);
+    formattingAction->setText(tr(""));
+    formattingAction->setIconText(u8"\U000f10e7");
+
+    auto cutAction = new QAction;
+    cutAction->setSeparator(true);
+    cutAction->setEnabled(textCursor().hasSelection());
+    cutAction->setText(tr("Cut"));
+    cutAction->setIconText(u8"\U000F0190");
+    cutAction->setWhatsThis(QKeySequence(QKeySequence::Cut).toString(QKeySequence::NativeText));
+    connect(cutAction, &QAction::triggered, this, &PageTextEdit::cut);
+
+    auto copyAction = new QAction;
+    copyAction->setEnabled(textCursor().hasSelection());
+    copyAction->setText(tr("Copy"));
+    copyAction->setIconText(u8"\U000F018F");
+    copyAction->setWhatsThis(QKeySequence(QKeySequence::Copy).toString(QKeySequence::NativeText));
+    connect(copyAction, &QAction::triggered, this, &PageTextEdit::copy);
+
+    auto pasteAction = new QAction;
+    pasteAction->setText(tr("Paste"));
+    pasteAction->setIconText(u8"\U000F0192");
+    pasteAction->setWhatsThis(QKeySequence(QKeySequence::Paste).toString(QKeySequence::NativeText));
+    connect(pasteAction, &QAction::triggered, this, &PageTextEdit::paste);
+
+    auto selectAllAction = new QAction;
+    selectAllAction->setSeparator(true);
+    selectAllAction->setText(tr("Select all"));
+    selectAllAction->setIconText(u8"\U000F09ED");
+    selectAllAction->setWhatsThis(QKeySequence(QKeySequence::SelectAll).toString(QKeySequence::NativeText));
+    connect(selectAllAction, &QAction::triggered, this, &PageTextEdit::selectAll);
+
+    auto menu = new ContextMenu(_parent == nullptr ? this : _parent);
+    menu->addActions({ formattingAction,
+                       cutAction,
+                       copyAction,
+                       pasteAction,
+                       selectAllAction });
+    menu->setBackgroundColor(Ui::DesignSystem::color().background());
+    menu->setTextColor(Ui::DesignSystem::color().onBackground());
+    return menu;
 }
 
 void PageTextEdit::clipPageDecorationRegions(QPainter* _painter)

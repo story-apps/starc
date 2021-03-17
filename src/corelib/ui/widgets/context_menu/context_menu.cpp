@@ -90,6 +90,10 @@ QSize ContextMenu::Implementation::sizeHint(const QList<QAction*>& _actions) con
             width = std::max(width, static_cast<qreal>(widgetSizeHint.width()));
             height += widgetSizeHint.height();
         } else {
+            if (action->isSeparator()) {
+                height += Ui::DesignSystem::drawer().separatorSpacing() * 2;
+            }
+
             //
             // TODO: учитывать ширину шортката
             //
@@ -316,10 +320,10 @@ void ContextMenu::showContextMenu(const QPoint& _pos)
 void ContextMenu::hideContextMenu()
 {
     d->positionAnimation.setDirection(QVariantAnimation::Backward);
-    d->positionAnimation.setDuration(120);
+    d->positionAnimation.setDuration(60);
     d->positionAnimation.start();
     d->sizeAnimation.setDirection(QVariantAnimation::Backward);
-    d->sizeAnimation.setDuration(120);
+    d->sizeAnimation.setDuration(60);
     d->sizeAnimation.start();
 }
 
@@ -359,7 +363,7 @@ void ContextMenu::paintEvent(QPaintEvent* _event)
             QColor separatorColor = Ui::DesignSystem::color().onPrimary();
             separatorColor.setAlphaF(Ui::DesignSystem::disabledTextOpacity());
             painter.setPen(QPen(separatorColor, Ui::DesignSystem::drawer().separatorHeight()));
-            painter.drawLine(QPointF(actionX, actionY), QPointF(actionWidth, actionY));
+            painter.drawLine(QPointF(actionX, actionY), QPointF(actionX + actionWidth, actionY));
 
             actionY += Ui::DesignSystem::drawer().separatorSpacing();
         }
@@ -368,7 +372,8 @@ void ContextMenu::paintEvent(QPaintEvent* _event)
         // ... фон
         //
         const QRectF actionRect(actionX, actionY, actionWidth, Ui::DesignSystem::treeOneLineItem().height());
-        if (actionRect.contains(mapFromGlobal(QCursor::pos()))) {
+        if (action->isEnabled()
+            && actionRect.contains(mapFromGlobal(QCursor::pos()))) {
             painter.fillRect(actionRect,
                              ColorHelper::transparent(textColor(), Ui::DesignSystem::hoverBackgroundOpacity()));
         }
@@ -442,7 +447,8 @@ void ContextMenu::mousePressEvent(QMouseEvent* _event)
     }
 
     QAction* pressedAction = d->pressedAction(_event->pos(), actions());
-    if (pressedAction == nullptr) {
+    if (pressedAction == nullptr
+        || !pressedAction->isEnabled()) {
         return;
     }
 
@@ -459,11 +465,9 @@ void ContextMenu::mouseReleaseEvent(QMouseEvent* _event)
     }
 
     QAction* pressedAction = d->pressedAction(_event->pos(), actions());
-    if (pressedAction == nullptr) {
-        return;
-    }
-
-    if (pressedAction->isChecked()) {
+    if (pressedAction == nullptr
+        || !pressedAction->isEnabled()
+        || pressedAction->isChecked()) {
         return;
     }
 

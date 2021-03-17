@@ -142,7 +142,7 @@ protected:
     /**
      * @brief Переопределяем для добавления в меню собственных пунктов
      */
-    ContextMenu* createContextMenu(const QPoint& _position, QWidget* _parent = nullptr) override;
+    ContextMenu* createContextMenu(QWidget* _parent = nullptr) override;
 
     /**
      * @brief Переопределяем работу с буфером обмена для использования собственного майм типа данных
