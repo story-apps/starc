@@ -301,12 +301,13 @@ void Drawer::mousePressEvent(QMouseEvent* _event)
 
 void Drawer::mouseReleaseEvent(QMouseEvent* _event)
 {
-    QAction* pressedAction = d->pressedAction(_event->pos(), actions());
-    if (pressedAction == nullptr) {
+    if (!rect().contains(_event->pos())) {
         return;
     }
 
-    if (pressedAction->isChecked()) {
+    QAction* pressedAction = d->pressedAction(_event->pos(), actions());
+    if (pressedAction == nullptr
+        || pressedAction->isChecked()) {
         return;
     }
 
