@@ -511,7 +511,6 @@ void ScreenplayTemplate::saveToFile(const QString& _filePath) const
         writer.writeStartElement("block");
         writer.writeAttribute("id", toString(blockStyle.type()));
         writer.writeAttribute("active", ::toString(blockStyle.isActive()));
-        writer.writeAttribute("exportable", ::toString(blockStyle.isExportable()));
         writer.writeAttribute("starts_from_new_page", ::toString(blockStyle.isStartFromNewPage()));
         writer.writeAttribute("font_family", blockStyle.font().family());
         writer.writeAttribute("font_size", ::toString(blockStyle.font().pointSize()));
@@ -553,6 +552,12 @@ QString ScreenplayTemplate::name() const
         } else if (m_id == "world_cn") {
             return QApplication::translate("BusinessLayer::ScreenplayTemplate",
                                            "International template (page: A4; font: Courier New)");
+        } else if (m_id == "ar") {
+            return QApplication::translate("BusinessLayer::ScreenplayTemplate",
+                                           "Arabic template (page: A4; font: Courier New)");
+        } else if (m_id == "he") {
+            return QApplication::translate("BusinessLayer::ScreenplayTemplate",
+                                           "Hebrew template (page: A4; font: Arial");
         } else if (m_id == "ru") {
             return QApplication::translate("BusinessLayer::ScreenplayTemplate",
                                            "Russian template (page: A4; font: Courier New)");

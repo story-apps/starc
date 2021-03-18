@@ -14,6 +14,10 @@
         <file alias="noto-sans-bold-italic">resources/fonts/noto-sans-bold-italic.ttf</file>
         <file alias="noto-sans-italic">resources/fonts/noto-sans-italic.ttf</file>
         <file alias="noto-sans">resources/fonts/noto-sans-regular.ttf</file>
+        <file alias="courier-new">resources/fonts/courier-new.ttf</file>
+        <file alias="courier-new-bold">resources/fonts/courier-new-bold.ttf</file>
+        <file alias="courier-new-bold-italic">resources/fonts/courier-new-bold-italic.ttf</file>
+        <file alias="courier-new-italic">resources/fonts/courier-new-italic.ttf</file>
     </qresource>
     <qresource prefix="/images">
         <file alias="movie-poster">resources/images/movie-poster.jpg</file>

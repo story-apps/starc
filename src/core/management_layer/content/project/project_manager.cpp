@@ -393,15 +393,15 @@ ProjectManager::ProjectManager(QObject* _parent, QWidget* _parentWidget)
     // Соединения с моделью структуры проекта
     //
     connect(d->projectStructureModel, &BusinessLayer::StructureModel::documentAdded,
-            [this] (const QUuid& _uuid, Domain::DocumentObjectType _type, const QString& _name,
-                    const QByteArray& _content)
+            [this] (const QUuid& _uuid, const QUuid& _parentUuid, Domain::DocumentObjectType _type,
+                    const QString& _name, const QByteArray& _content)
     {
         auto document = DataStorageLayer::StorageFacade::documentStorage()->storeDocument(_uuid, _type);
         if (!_content.isNull()) {
             document->setContent(_content);
         }
 
-        auto documentModel = d->modelsFacade.modelFor(document);
+        auto documentModel = d->modelsFacade.modelFor(document, _parentUuid);
         documentModel->setDocumentName(_name);
 
         switch (_type) {

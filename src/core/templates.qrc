@@ -4,5 +4,7 @@
         <file>templates/screenplay/us</file>
         <file>templates/screenplay/ru</file>
         <file>templates/screenplay/world_cn</file>
+        <file>templates/screenplay/he</file>
+        <file>templates/screenplay/ar</file>
     </qresource>
 </RCC>

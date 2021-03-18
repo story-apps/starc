@@ -106,7 +106,7 @@ ScreenplayTemplateFacade::ScreenplayTemplateFacade()
         return defaultTemplatePath;
     };
 
-    const QVector<QString> templateNames = { "world_cp", "world_cn", "ru", "us" };
+    const QVector<QString> templateNames = { "world_cp", "world_cn", "ar", "he", "ru", "us" };
     QString defaultTemplatePath;
     for (const auto& templateName : templateNames) {
         const auto templatePath = updateDefaultTemplate(templateName);

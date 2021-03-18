@@ -285,7 +285,7 @@ void StructureModel::appendItem(StructureModelItem* _item, StructureModelItem* _
     _parentItem->insertItem(itemRowIndex, _item);
     endInsertRows();
 
-    emit documentAdded(_item->uuid(), _item->type(), _item->name(), _content);
+    emit documentAdded(_item->uuid(), _parentItem->uuid(), _item->type(), _item->name(), _content);
 }
 
 void StructureModel::insertItem(StructureModelItem* _item, StructureModelItem* _afterSiblingItem)

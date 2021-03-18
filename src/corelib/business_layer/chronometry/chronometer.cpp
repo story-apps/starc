@@ -20,23 +20,6 @@ namespace BusinessLayer
 namespace {
 
 /**
- * @brief Получить список неэкспортируемых типов
- */
-QSet<ScreenplayParagraphType> unexportableTypes() {
-    QSet<ScreenplayParagraphType> types = { ScreenplayParagraphType::InlineNote };
-    //
-    // Папки могут быть настроены таким образом, чтобы не экспортироваться с остальным текстом
-    //
-    const auto currentTemplate = BusinessLayer::ScreenplayTemplateFacade::getTemplate();
-    for (auto type : { ScreenplayParagraphType::FolderHeader, ScreenplayParagraphType::FolderFooter }) {
-        if (currentTemplate.blockStyle(type).isExportable()) {
-            types.insert(type);
-        }
-    }
-    return types;
-}
-
-/**
  * @brief Абстрактный класс вычислителя хронометража
  */
 class AbstractChronometer {
@@ -52,10 +35,6 @@ class PageChronometer : public AbstractChronometer
 {
 public:
     std::chrono::milliseconds duration(ScreenplayParagraphType _type, const QString& _text) const override {
-        if (unexportableTypes().contains(_type)) {
-            return std::chrono::seconds{0};
-        }
-
         using namespace DataStorageLayer;
         const auto milliseconds = StorageFacade::settingsStorage()->value(
                                       kComponentsScreenplayDurationByPageDurationKey,
@@ -103,9 +82,7 @@ class CharactersChronometer : public AbstractChronometer
 {
 public:
     std::chrono::milliseconds duration(ScreenplayParagraphType _type, const QString& _text) const override {
-        if (unexportableTypes().contains(_type)) {
-            return std::chrono::seconds{0};
-        }
+        Q_UNUSED(_type)
 
         using namespace DataStorageLayer;
         const int characters = StorageFacade::settingsStorage()->value(

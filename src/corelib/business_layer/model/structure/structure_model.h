@@ -132,8 +132,8 @@ signals:
     /**
      * @brief Был добавлен документ с заданным идентификатором, типом и содержимым
      */
-    void documentAdded(const QUuid& _uuid, Domain::DocumentObjectType _type, const QString& _name,
-        const QByteArray& _content);
+    void documentAdded(const QUuid& _uuid, const QUuid& _parentUuid,
+        Domain::DocumentObjectType _type, const QString& _name, const QByteArray& _content);
 
 protected:
     /**
