@@ -103,16 +103,6 @@ void ScreenplayBlockStyle::setActive(bool _active)
     m_isActive = _active;
 }
 
-bool ScreenplayBlockStyle::isExportable() const
-{
-    return m_isExportable;
-}
-
-void ScreenplayBlockStyle::setExportable(bool _exportable)
-{
-    m_isExportable = _exportable;
-}
-
 bool ScreenplayBlockStyle::isStartFromNewPage() const
 {
     return m_isStartFromNewPage;
@@ -358,7 +348,6 @@ ScreenplayBlockStyle::ScreenplayBlockStyle(const QXmlStreamAttributes& _blockAtt
     //
     m_type = screenplayParagraphTypeFromString(_blockAttributes.value("id").toString());
     m_isActive = _blockAttributes.value("active").toString() == "true";
-    m_isExportable = _blockAttributes.value("exportable").toString() == "true";
     m_isStartFromNewPage = _blockAttributes.value("starts_from_new_page").toString() == "true";
     //
     // ... настройки шрифта

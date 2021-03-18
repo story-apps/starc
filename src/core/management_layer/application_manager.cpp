@@ -1217,11 +1217,11 @@ void ApplicationManager::initConnections()
     saveShortcut->setContext(Qt::ApplicationShortcut);
     connect(saveShortcut, &QShortcut::activated, this, [this] { d->saveChanges(); });
     //
-    QShortcut* importShortcut = new QShortcut(QKeySequence("Alt+Ctrl+I"), d->applicationView);
+    QShortcut* importShortcut = new QShortcut(QKeySequence("Alt+I"), d->applicationView);
     importShortcut->setContext(Qt::ApplicationShortcut);
     connect(importShortcut, &QShortcut::activated, this, [this] { d->importProject(); });
     //
-    QShortcut* exportShortcut = new QShortcut(QKeySequence("Alt+Ctrl+E"), d->applicationView);
+    QShortcut* exportShortcut = new QShortcut(QKeySequence("Alt+E"), d->applicationView);
     exportShortcut->setContext(Qt::ApplicationShortcut);
     connect(exportShortcut, &QShortcut::activated, this, [this] { d->exportCurrentDocument(); });
 

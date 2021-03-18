@@ -194,9 +194,9 @@ void MenuView::updateTranslations()
     d->saveProject->setWhatsThis(QKeySequence(QKeySequence::Save).toString(QKeySequence::NativeText));
     d->saveProjectAs->setText(tr("Save current story as..."));
     d->importProject->setText(tr("Import..."));
-    d->importProject->setWhatsThis(QKeySequence("Alt+Ctrl+I").toString(QKeySequence::NativeText));
+    d->importProject->setWhatsThis(QKeySequence("Alt+I").toString(QKeySequence::NativeText));
     d->exportCurrentDocument->setText(tr("Export current document..."));
-    d->exportCurrentDocument->setWhatsThis(QKeySequence("Alt+Ctrl+E").toString(QKeySequence::NativeText));
+    d->exportCurrentDocument->setWhatsThis(QKeySequence("Alt+E").toString(QKeySequence::NativeText));
     d->settings->setText(tr("Application settings"));
     d->help->setText(tr("How to use the application"));
 }

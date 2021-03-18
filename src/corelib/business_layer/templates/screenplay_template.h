@@ -124,12 +124,6 @@ public:
     void setActive(bool _isActive);
 
     /**
-     * @brief Экспортируется ли блок
-     */
-    bool isExportable() const;
-    void setExportable(bool _isExportable);
-
-    /**
      * @brief Располагается ли блок с начала страницы
      */
     bool isStartFromNewPage() const;
@@ -272,11 +266,6 @@ private:
      * @brief Активен ли блок
      */
     bool m_isActive = false;
-
-    /**
-     * @brief Будет ли экспортироваться блок
-     */
-    bool m_isExportable = true;
 
     /**
      * @brief Начинается ли блок с начала страницы
