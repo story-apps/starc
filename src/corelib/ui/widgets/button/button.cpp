@@ -304,12 +304,10 @@ void Button::paintEvent(QPaintEvent* _event)
 
         if (isLeftToRight()) {
             buttonInnerRect.setX(iconRect.right() + Ui::DesignSystem::button().spacing());
-            buttonInnerRect.setWidth(textWidth);
         } else {
             buttonInnerRect.setX(iconRect.left()
                                  - Ui::DesignSystem::button().spacing()
                                  - textWidth);
-            buttonInnerRect.setWidth(textWidth);
         }
     }
     //
@@ -327,12 +325,19 @@ void Button::paintEvent(QPaintEvent* _event)
         }
 
         buttonInnerRect.setX(textX);
+    }
+    //
+    // ... если ширина текста меньше ширины кнопки, то корректируем обасть для отображения текста,
+    //     т.к. текст рисуется в её центре
+    //
+    if (buttonInnerRect.width() > textWidth) {
         buttonInnerRect.setWidth(textWidth);
     }
     //
     if (!d->text.isEmpty()) {
         painter.setFont(Ui::DesignSystem::font().button());
-        painter.drawText(buttonInnerRect, Qt::AlignCenter, d->text);
+        painter.drawText(buttonInnerRect, Qt::AlignCenter,
+                         painter.fontMetrics().elidedText(d->text, Qt::ElideRight, buttonInnerRect.width()));
     }
 }
 
