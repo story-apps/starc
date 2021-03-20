@@ -901,10 +901,6 @@ void ScreenplayTextModel::insertFromMime(const QModelIndex& _index, int _positio
                 if (!textItem->text().isEmpty()) {
                     textItem->mergeWith(newTextItem);
                 } else {
-                    //
-                    // ... при копировании сохраняем информацию о том находится ли элемент в таблице
-                    //
-                    newTextItem->setInFirstColumn(textItem->isInFirstColumn());
                     textItem->copyFrom(newTextItem);
                 }
                 updateItem(textItem);

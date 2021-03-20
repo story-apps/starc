@@ -57,7 +57,7 @@ MenuView::Implementation::Implementation(QWidget* _parent)
     saveProject->setVisible(false);
     //
     saveProjectAs = new QAction;
-    saveProjectAs->setIconText({});
+    saveProjectAs->setIconText(" ");
     saveProjectAs->setCheckable(false);
     saveProjectAs->setEnabled(false);
     saveProjectAs->setVisible(false);

@@ -100,11 +100,6 @@ void ScreenplayTextStructureManager::setModel(BusinessLayer::AbstractModel* _mod
     }
 
     //
-    // Настраиваем заголовок навигатора
-    //
-    d->view->setTitle(d->model->informationModel()->name());
-
-    //
     // Помещаем модель с данными в прокси
     //
     d->structureModel->setSourceModel(d->model);
@@ -113,6 +108,11 @@ void ScreenplayTextStructureManager::setModel(BusinessLayer::AbstractModel* _mod
     // Настраиваем соединения с новой моделью
     //
     if (d->model != nullptr) {
+        //
+        // Настраиваем заголовок навигатора
+        //
+        d->view->setTitle(d->model->informationModel()->name());
+
 //        d->view->setName(d->model->name());
 //        d->view->setText(d->model->text());
 

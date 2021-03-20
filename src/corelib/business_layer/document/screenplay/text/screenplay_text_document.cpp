@@ -24,6 +24,8 @@
 #include <QScopedValueRollback>
 #include <QTextTable>
 
+#include <QtGui/private/qtextdocument_p.h>
+
 using BusinessLayer::ScreenplayBlockStyle;
 using BusinessLayer::ScreenplayTemplateFacade;
 using BusinessLayer::ScreenplayParagraphType;
@@ -151,9 +153,13 @@ void ScreenplayTextDocument::Implementation::readModelItemContent(int _itemRow,
                     }
 
                     //
+                    // Скорректируем позиции последующих элементов
+                    //
+                    correctPositionsToItems(_cursor.position(), 4);
+
+                    //
                     // Запомним позицию разделителя
                     //
-                    correctPositionsToItems(_cursor.position(), 1);
                     positionsToItems.emplace(_cursor.position(), splitterItem);
 
                     //
@@ -181,9 +187,20 @@ void ScreenplayTextDocument::Implementation::readModelItemContent(int _itemRow,
                     //
                     // После вставки таблицы нужно завершить транзакцию изменения документа,
                     // чтобы корректно считывались таблицы в положении курсора
+                    // NOTE: иногда мы находимся на глубоком уровне транзакции, поэтому делаем
+                    //       хитрый ход, завершая транзакцию и восстанавливая её состояние
                     //
                     _cursor.endEditBlock();
+                    int editsCount = 0;
+                    while (q->docHandle()->isInEditBlock()) {
+                        ++editsCount;
+                        _cursor.endEditBlock();
+                    }
                     _cursor.joinPreviousEditBlock();
+                    while (editsCount != 0) {
+                        _cursor.beginEditBlock();
+                        --editsCount;
+                    }
 
                     //
                     // Помещаем курсор в первую ячейку для дальнейшего наполнения
@@ -199,7 +216,6 @@ void ScreenplayTextDocument::Implementation::readModelItemContent(int _itemRow,
 
                 case ScreenplayTextModelSplitterItemType::End: {
                     _cursor.movePosition(QTextCursor::NextBlock);
-                    correctPositionsToItems(_cursor.position(), 1);
                     positionsToItems.emplace(_cursor.position(), splitterItem);
                     break;
                 }
@@ -229,6 +245,21 @@ void ScreenplayTextDocument::Implementation::readModelItemContent(int _itemRow,
                     //
                     _isFirstParagraph = true;
                 }
+            }
+
+            //
+            // Если вставляемый элемент должен быть в таблице, а курсор стоит на разделителе
+            //
+            if (ScreenplayBlockStyle::forBlock(_cursor.block()) == ScreenplayParagraphType::PageSplitter
+                && textItem->isInFirstColumn().has_value()) {
+                //
+                // Зайдём внутрь таблицы
+                //
+                _cursor.movePosition(ScreenplayTextCursor::NextBlock);
+                //
+                // ... и пометим, что вставлять новый блок нет нужны
+                //
+                _isFirstParagraph = true;
             }
 
             //
@@ -453,62 +484,121 @@ void ScreenplayTextDocument::setModel(BusinessLayer::ScreenplayTextModel* _model
         cursor.beginEditBlock();
 
         //
-        // ... тип параграфа
+        // Если элемент расположен там, где и должен быть, обновим его
         //
-        if (ScreenplayBlockStyle::forBlock(cursor.block()) != textItem->paragraphType()) {
-            applyParagraphType(textItem->paragraphType(), cursor);
-        }
-        //
-        // ... текст
-        //
-        if (cursor.block().text() != textItem->text()) {
+        if (textItem->isInFirstColumn().has_value() == cursor.inTable()) {
             //
-            // Корректируем позиции всех элментов идущих за обновляемым
+            // ... тип параграфа
             //
-            const auto distanse = textItem->text().length() - cursor.block().text().length();
-            d->correctPositionsToItems(position + 1, distanse);
-
-            //
-            // TODO: Сделать более умный алгоритм, который заменяет только изменённые части текста
-            //
-            cursor.movePosition(QTextCursor::StartOfBlock);
-            cursor.movePosition(QTextCursor::EndOfBlock, QTextCursor::KeepAnchor);
-            cursor.insertText(textItem->text());
-        }
-        //
-        // ... редакторские заметки и форматирование
-        //
-        {
-            //
-            // TODO: придумать, как не перезаписывать форматирование каждый раз
-            //
-
-            //
-            // Сбросим текущее форматирование
-            //
-            cursor.movePosition(QTextCursor::StartOfBlock);
-            cursor.movePosition(QTextCursor::EndOfBlock, QTextCursor::KeepAnchor);
-            const auto blockType = ScreenplayBlockStyle::forBlock(cursor.block());
-            const auto blockStyle = ScreenplayTemplateFacade::getTemplate(d->templateId).blockStyle(blockType);
-            cursor.setBlockCharFormat(blockStyle.charFormat());
-            cursor.setCharFormat(blockStyle.charFormat());
-
-            //
-            // Применяем форматирование из редакторских заметок элемента
-            //
-            for (const auto& reviewMark : textItem->reviewMarks()) {
-                cursor.movePosition(QTextCursor::StartOfBlock);
-                cursor.movePosition(QTextCursor::NextCharacter, QTextCursor::MoveAnchor, reviewMark.from);
-                cursor.movePosition(QTextCursor::NextCharacter, QTextCursor::KeepAnchor, reviewMark.length);
-                cursor.mergeCharFormat(reviewMark.charFormat());
+            if (ScreenplayBlockStyle::forBlock(cursor.block()) != textItem->paragraphType()) {
+                applyParagraphType(textItem->paragraphType(), cursor);
             }
-            for (const auto& format : textItem->formats()) {
+            //
+            // ... текст
+            //
+            if (cursor.block().text() != textItem->text()) {
+                //
+                // Корректируем позиции всех элментов идущих за обновляемым
+                //
+                const auto distanse = textItem->text().length() - cursor.block().text().length();
+                d->correctPositionsToItems(position + 1, distanse);
+
+                //
+                // TODO: Сделать более умный алгоритм, который заменяет только изменённые части текста
+                //
                 cursor.movePosition(QTextCursor::StartOfBlock);
-                cursor.movePosition(QTextCursor::NextCharacter, QTextCursor::MoveAnchor, format.from);
-                cursor.movePosition(QTextCursor::NextCharacter, QTextCursor::KeepAnchor, format.length);
-                cursor.mergeCharFormat(format.charFormat());
+                cursor.movePosition(QTextCursor::EndOfBlock, QTextCursor::KeepAnchor);
+                cursor.insertText(textItem->text());
+            }
+            //
+            // ... редакторские заметки и форматирование
+            //
+            {
+                //
+                // TODO: придумать, как не перезаписывать форматирование каждый раз
+                //
+
+                //
+                // Сбросим текущее форматирование
+                //
+                cursor.movePosition(QTextCursor::StartOfBlock);
+                cursor.movePosition(QTextCursor::EndOfBlock, QTextCursor::KeepAnchor);
+                const auto blockType = ScreenplayBlockStyle::forBlock(cursor.block());
+                const auto blockStyle = ScreenplayTemplateFacade::getTemplate(d->templateId).blockStyle(blockType);
+                cursor.setBlockCharFormat(blockStyle.charFormat());
+                cursor.setCharFormat(blockStyle.charFormat());
+
+                //
+                // Применяем форматирование из редакторских заметок элемента
+                //
+                for (const auto& reviewMark : textItem->reviewMarks()) {
+                    cursor.movePosition(QTextCursor::StartOfBlock);
+                    cursor.movePosition(QTextCursor::NextCharacter, QTextCursor::MoveAnchor, reviewMark.from);
+                    cursor.movePosition(QTextCursor::NextCharacter, QTextCursor::KeepAnchor, reviewMark.length);
+                    cursor.mergeCharFormat(reviewMark.charFormat());
+                }
+                for (const auto& format : textItem->formats()) {
+                    cursor.movePosition(QTextCursor::StartOfBlock);
+                    cursor.movePosition(QTextCursor::NextCharacter, QTextCursor::MoveAnchor, format.from);
+                    cursor.movePosition(QTextCursor::NextCharacter, QTextCursor::KeepAnchor, format.length);
+                    cursor.mergeCharFormat(format.charFormat());
+                }
             }
         }
+        //
+        // А если нужно скорректировать позицию элемента
+        //
+        else {
+            //
+            // ... то удалим его старую версию
+            //
+            cursor.movePosition(ScreenplayTextCursor::EndOfBlock, ScreenplayTextCursor::KeepAnchor);
+            const auto positionsCorrectionDelta = cursor.selectedText().length();
+            if (cursor.hasSelection()) {
+                cursor.deleteChar();
+            }
+            //
+            // ... удаляем блок в карте
+            //
+            d->positionsToItems.erase(cursor.position());
+            //
+            // ... и корректируем позиции элементов
+            //
+            d->correctPositionsToItems(cursor.position(), -1 * positionsCorrectionDelta);
+            //
+            // ... удалим сам блок и при этом нужно сохранить данные блока и его формат
+            //
+            auto block = cursor.block().previous();
+            ScreenplayTextBlockData* blockData = nullptr;
+            if (block.userData() != nullptr) {
+                blockData = new ScreenplayTextBlockData(static_cast<ScreenplayTextBlockData*>(block.userData()));
+            }
+            const auto blockFormat = cursor.block().previous().blockFormat();
+            cursor.deletePreviousChar();
+            cursor.block().setUserData(blockData);
+            cursor.setBlockFormat(blockFormat);
+            d->correctPositionsToItems(cursor.position(), -1);
+
+            //
+            // ... и вставим новую
+            //
+            if (*textItem->isInFirstColumn()) {
+                while (!cursor.inTable()
+                       || !cursor.inFirstColumn()) {
+                    cursor.movePosition(ScreenplayTextCursor::PreviousBlock);
+                    cursor.movePosition(ScreenplayTextCursor::EndOfBlock);
+                }
+            } else {
+                while (!cursor.inTable()) {
+                    cursor.movePosition(ScreenplayTextCursor::PreviousBlock);
+                    cursor.movePosition(ScreenplayTextCursor::EndOfBlock);
+                }
+            }
+            bool isFirstParagraph = ScreenplayBlockStyle::forBlock(cursor.block())
+                                    == ScreenplayParagraphType::Undefined;
+            d->readModelItemContent(_topLeft.row(), _topLeft.parent(), cursor, isFirstParagraph);
+        }
+
 
         cursor.endEditBlock();
     });
@@ -641,6 +731,14 @@ void ScreenplayTextDocument::setModel(BusinessLayer::ScreenplayTextModel* _model
                 //
                 while (ScreenplayBlockStyle::forBlock(cursor.block())
                        != ScreenplayParagraphType::PageSplitter) {
+                    //
+                    // ... проставим элементу блока флаг, что он теперь вне таблицы
+                    //
+                    auto item = d->positionsToItems[cursor.position()];
+                    if (item->type() == ScreenplayTextModelItemType::Text) {
+                        auto textItem = static_cast<ScreenplayTextModelTextItem*>(item);
+                        textItem->setInFirstColumn({});
+                    }
                     //
                     // ... удаляем блок в таблице
                     //
@@ -1174,6 +1272,25 @@ void ScreenplayTextDocument::splitParagraph(const ScreenplayTextCursor& _cursor)
         cursor.movePosition(QTextCursor::StartOfBlock);
         cursor.movePosition(QTextCursor::EndOfBlock, QTextCursor::KeepAnchor);
     }
+    //
+    // ... проставляем вырезаемым элементам флаг, что они будут теперь внутри таблицы
+    //
+    {
+        auto block = findBlock(cursor.selectionStart());
+        while (block.isValid()
+               && block.position() < cursor.selectionEnd()) {
+            auto item = d->positionsToItems[block.position()];
+            if (item->type() == ScreenplayTextModelItemType::Text) {
+                auto textItem = static_cast<ScreenplayTextModelTextItem*>(item);
+                textItem->setInFirstColumn(true);
+            }
+
+            block = block.next();
+        }
+    }
+    //
+    // ... собственно вырезаем
+    //
     const QString mime = mimeFromSelection(cursor.selectionInterval().from, cursor.selectionInterval().to);
     cursor.removeSelectedText();
 
@@ -1237,6 +1354,25 @@ void ScreenplayTextDocument::mergeParagraph(const ScreenplayTextCursor& _cursor)
     }
 
     //
+    // Проставить элементам блоков в таблице флаг, что они будут теперь вне таблицы
+    //
+    {
+        auto updateCursor = cursor;
+        updateCursor.movePosition(QTextCursor::NextBlock);
+        while (!updateCursor.atEnd()
+               && updateCursor.inTable()) {
+            auto item = d->positionsToItems[updateCursor.position()];
+            if (item->type() == ScreenplayTextModelItemType::Text) {
+                auto textItem = static_cast<ScreenplayTextModelTextItem*>(item);
+                textItem->setInFirstColumn({});
+            }
+
+            updateCursor.movePosition(QTextCursor::EndOfBlock);
+            updateCursor.movePosition(QTextCursor::NextBlock);
+        }
+    }
+
+    //
     // Выделяем и сохраняем текст из первой ячейки
     //
     cursor.movePosition(QTextCursor::NextBlock);
@@ -1282,12 +1418,12 @@ void ScreenplayTextDocument::mergeParagraph(const ScreenplayTextCursor& _cursor)
     cursor.movePosition(QTextCursor::PreviousCharacter);
     const int insertPosition = cursor.position();
     if (!secondColumnData.isEmpty()) {
-        cursor.insertBlock();
+        cursor.insertBlock({});
         insertFromMime(cursor.position(), secondColumnData);
         cursor.setPosition(insertPosition);
     }
     if (!firstColumnData.isEmpty()) {
-        cursor.insertBlock();
+        cursor.insertBlock({});
         insertFromMime(cursor.position(), firstColumnData);
     }
 }

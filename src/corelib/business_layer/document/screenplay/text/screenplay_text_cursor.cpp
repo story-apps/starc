@@ -194,52 +194,71 @@ void ScreenplayTextCursor::removeCharacters(bool _backward, BaseTextEdit* _edito
         //
         // ... когда в документе выделен весь текст, который находится внутри папки/папок
         //
-        auto topBlock = document()->findBlock(topCursorPosition);
-        auto bottomBlock = document()->findBlock(bottomCursorPosition);
-        if (ScreenplayBlockStyle::forBlock(topBlock) == ScreenplayParagraphType::FolderHeader
-            && ScreenplayBlockStyle::forBlock(bottomBlock) == ScreenplayParagraphType::FolderFooter
-            && topBlock == document()->begin()
-            && bottomBlock.next() == document()->end()) {
-            //
-            // Нельзя просто взять и удалить весь текст, потому что тогда останется блок
-            // окончания папки, с которым ничего нельзя сделать, поэтому действуем последовательно:
-            // - делаем первый блок временем и местом
-            // - помещаем туда символ, чтобы при удалении, Qt оставил в блоке и данные и формат
-            // - удаляем весь остальной контент и заодно вставленный на предыдущем шаге символ
-            //
-            cursor.movePosition(QTextCursor::Start);
-            auto screenplayDocument = dynamic_cast<BusinessLayer::ScreenplayTextDocument*>(document());
-            Q_ASSERT(screenplayDocument);
-            screenplayDocument->setParagraphType(ScreenplayParagraphType::SceneHeading, cursor);
-            cursor.movePosition(QTextCursor::EndOfBlock, QTextCursor::KeepAnchor);
-            cursor.insertText(" ");
-            cursor.movePosition(QTextCursor::End, QTextCursor::KeepAnchor);
-            cursor.deleteChar();
-            cursor.deletePreviousChar();
-            return;
+        {
+            auto topBlock = document()->findBlock(topCursorPosition);
+            auto bottomBlock = document()->findBlock(bottomCursorPosition);
+            if (ScreenplayBlockStyle::forBlock(topBlock) == ScreenplayParagraphType::FolderHeader
+                    && ScreenplayBlockStyle::forBlock(bottomBlock) == ScreenplayParagraphType::FolderFooter
+                    && topBlock == document()->begin()
+                    && bottomBlock.next() == document()->end()) {
+                //
+                // Нельзя просто взять и удалить весь текст, потому что тогда останется блок
+                // окончания папки, с которым ничего нельзя сделать, поэтому действуем последовательно:
+                // - делаем первый блок временем и местом
+                // - помещаем туда символ, чтобы при удалении, Qt оставил в блоке и данные и формат
+                // - удаляем весь остальной контент и заодно вставленный на предыдущем шаге символ
+                //
+                cursor.movePosition(QTextCursor::Start);
+                auto screenplayDocument = dynamic_cast<BusinessLayer::ScreenplayTextDocument*>(document());
+                Q_ASSERT(screenplayDocument);
+                screenplayDocument->setParagraphType(ScreenplayParagraphType::SceneHeading, cursor);
+                cursor.movePosition(QTextCursor::EndOfBlock, QTextCursor::KeepAnchor);
+                cursor.insertText(" ");
+                cursor.movePosition(QTextCursor::End, QTextCursor::KeepAnchor);
+                cursor.deleteChar();
+                cursor.deletePreviousChar();
+                return;
+            }
         }
 
         //
         // ... когда пользователь хочет удалить внутреннюю границу разделения
         //
-        ScreenplayTextCursor checkCursor = cursor;
-        checkCursor.setPosition(topCursorPosition);
-        if (checkCursor.inTable() && checkCursor.inFirstColumn()) {
-            checkCursor.setPosition(bottomCursorPosition);
-            if (checkCursor.inTable() && !checkCursor.inFirstColumn()) {
-                //
-                // ... если нет выделения, значит нажат делит в конце последней ячейки левой
-                //     колонки, или бекспейс в начале первой ячейки правой колонки - удалим таблицу
-                //
-                if (!cursor.hasSelection()) {
-                    auto screenplayDocument = dynamic_cast<BusinessLayer::ScreenplayTextDocument*>(document());
-                    screenplayDocument->mergeParagraph(cursor);
-                    return;
+        {
+            ScreenplayTextCursor checkCursor = cursor;
+            checkCursor.setPosition(topCursorPosition);
+            if (checkCursor.inTable() && checkCursor.inFirstColumn()) {
+                checkCursor.setPosition(bottomCursorPosition);
+                if (checkCursor.inTable() && !checkCursor.inFirstColumn()) {
+                    //
+                    // ... если нет выделения, значит нажат делит в конце последней ячейки левой
+                    //     колонки, или бекспейс в начале первой ячейки правой колонки - удалим таблицу
+                    //
+                    if (!cursor.hasSelection()) {
+                        auto screenplayDocument = dynamic_cast<BusinessLayer::ScreenplayTextDocument*>(document());
+                        screenplayDocument->mergeParagraph(cursor);
+                        return;
+                    }
+                    //
+                    // ... в остальных случаях ничего не делаем
+                    //
+                    else {
+                        return;
+                    }
                 }
-                //
-                // ... в остальных случаях ничего не делаем
-                //
-                else {
+            }
+        }
+
+        //
+        // ... запрещаем удалять пустую строку идущую после таблицы
+        //
+        if (topCursorPosition + 1 == bottomCursorPosition) {
+            ScreenplayTextCursor checkCursor = cursor;
+            checkCursor.setPosition(bottomCursorPosition);
+            if (checkCursor.atEnd()) {
+                checkCursor.setPosition(topCursorPosition);
+                if (ScreenplayBlockStyle::forBlock(checkCursor.block())
+                    == ScreenplayParagraphType::PageSplitter) {
                     return;
                 }
             }
