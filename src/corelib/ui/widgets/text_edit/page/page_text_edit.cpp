@@ -3617,8 +3617,19 @@ void PageTextEdit::setHighlightCurrentLine(bool _highlight)
     update();
 }
 
-ContextMenu* PageTextEdit::createContextMenu(QWidget* _parent)
+ContextMenu* PageTextEdit::createContextMenu(const QPoint& _position, QWidget* _parent)
 {
+    auto cursor = cursorForPosition(_position);
+    const auto selection = std::minmax(textCursor().selectionStart(), textCursor().selectionEnd());
+    if (selection.first <= cursor.position()
+        && cursor.position() <= selection.second) {
+        //
+        // Оставляем выделение как есть
+        //
+    } else {
+        setTextCursor(cursor);
+    }
+
     auto formattingAction = new QAction;
     formattingAction->setVisible(false);
     formattingAction->setText(tr(""));

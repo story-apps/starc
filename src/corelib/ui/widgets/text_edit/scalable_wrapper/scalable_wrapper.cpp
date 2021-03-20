@@ -373,7 +373,7 @@ bool ScalableWrapper::eventFilter(QObject* _object, QEvent* _event)
         //
         // TODO: реализовать работу с новым контекстным меню
         //
-        auto menu = d->editor->createContextMenu(this);
+        auto menu = d->editor->createContextMenu(d->editor->viewport()->mapFromGlobal(cursorGlobalPos), this);
         menu->showContextMenu(QCursor::pos());
 
         //

@@ -1102,9 +1102,9 @@ void ScreenplayTextEdit::paintEvent(QPaintEvent* _event)
     }
 }
 
-ContextMenu* ScreenplayTextEdit::createContextMenu(QWidget* _parent)
+ContextMenu* ScreenplayTextEdit::createContextMenu(const QPoint& _position, QWidget* _parent)
 {
-    auto menu = BaseTextEdit::createContextMenu(_parent);
+    auto menu = BaseTextEdit::createContextMenu(_position, _parent);
 
     auto splitAction = new QAction;
 //    splitAction->setSeparator(true);

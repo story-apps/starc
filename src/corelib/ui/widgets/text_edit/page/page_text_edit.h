@@ -381,7 +381,7 @@ public:
     /**
      * @brief Создать контекстное меню в заданной позиции
      */
-    virtual ContextMenu* createContextMenu(QWidget* _parent = nullptr);
+    virtual ContextMenu* createContextMenu(const QPoint& _position, QWidget* _parent = nullptr);
 
 protected:
     /**
