@@ -24,8 +24,6 @@
 #include <QScopedValueRollback>
 #include <QTextTable>
 
-#include <QtGui/private/qtextdocument_p.h>
-
 using BusinessLayer::ScreenplayBlockStyle;
 using BusinessLayer::ScreenplayTemplateFacade;
 using BusinessLayer::ScreenplayParagraphType;
@@ -39,7 +37,6 @@ enum class DocumentState {
     Loading,
     Changing,
     Correcting,
-    MimeDropping,
     Ready
 };
 
@@ -187,20 +184,8 @@ void ScreenplayTextDocument::Implementation::readModelItemContent(int _itemRow,
                     //
                     // После вставки таблицы нужно завершить транзакцию изменения документа,
                     // чтобы корректно считывались таблицы в положении курсора
-                    // NOTE: иногда мы находимся на глубоком уровне транзакции, поэтому делаем
-                    //       хитрый ход, завершая транзакцию и восстанавливая её состояние
                     //
-                    _cursor.endEditBlock();
-                    int editsCount = 0;
-                    while (q->docHandle()->isInEditBlock()) {
-                        ++editsCount;
-                        _cursor.endEditBlock();
-                    }
-                    _cursor.joinPreviousEditBlock();
-                    while (editsCount != 0) {
-                        _cursor.beginEditBlock();
-                        --editsCount;
-                    }
+                    _cursor.restartEditBlock();
 
                     //
                     // Помещаем курсор в первую ячейку для дальнейшего наполнения
@@ -603,8 +588,7 @@ void ScreenplayTextDocument::setModel(BusinessLayer::ScreenplayTextModel* _model
         cursor.endEditBlock();
     });
     connect(d->model, &ScreenplayTextModel::rowsInserted, this, [this] (const QModelIndex& _parent, int _from, int _to) {
-        if (d->state != DocumentState::Ready
-            && d->state != DocumentState::MimeDropping) {
+        if (d->state != DocumentState::Ready) {
             return;
         }
 
@@ -681,8 +665,7 @@ void ScreenplayTextDocument::setModel(BusinessLayer::ScreenplayTextModel* _model
         cursor.endEditBlock();
     });
     connect(d->model, &ScreenplayTextModel::rowsAboutToBeRemoved, this, [this] (const QModelIndex& _parent, int _from, int _to) {
-        if (d->state != DocumentState::Ready
-            && d->state != DocumentState::MimeDropping) {
+        if (d->state != DocumentState::Ready) {
             return;
         }
 
@@ -1027,18 +1010,6 @@ void ScreenplayTextDocument::insertFromMime(int _position, const QString& _mimeD
     d->model->insertFromMime(itemIndex, positionInBlock, _mimeData);
 }
 
-void ScreenplayTextDocument::startMimeDropping()
-{
-    d->state = DocumentState::MimeDropping;
-}
-
-void ScreenplayTextDocument::finishMimeDropping()
-{
-    d->state = DocumentState::Correcting;
-    d->corrector.makePlannedCorrection();
-    d->state = DocumentState::Ready;
-}
-
 void ScreenplayTextDocument::addParagraph(BusinessLayer::ScreenplayParagraphType _type, ScreenplayTextCursor _cursor)
 {
     _cursor.beginEditBlock();
@@ -1304,8 +1275,7 @@ void ScreenplayTextDocument::splitParagraph(const ScreenplayTextCursor& _cursor)
     //
     insertTable(cursor);
     cursor.movePosition(QTextCursor::PreviousBlock, QTextCursor::MoveAnchor, 2);
-    cursor.endEditBlock();
-    cursor.joinPreviousEditBlock();
+    cursor.restartEditBlock();
 
     //
     // Применяем сохранённый формат блока каждой из колонок

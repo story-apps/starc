@@ -12,6 +12,8 @@
 
 #include <QTextTable>
 
+#include <QtGui/private/qtextdocument_p.h>
+
 
 namespace BusinessLayer {
 
@@ -48,6 +50,11 @@ ScreenplayTextCursor::~ScreenplayTextCursor()
 {
 }
 
+bool ScreenplayTextCursor::isInEditBlock() const
+{
+    return document()->docHandle()->isInEditBlock();
+}
+
 bool ScreenplayTextCursor::inTable() const
 {
     return currentTable() != nullptr;
@@ -68,6 +75,24 @@ ScreenplayTextCursor::Selection ScreenplayTextCursor::selectionInterval() const
         return { selectionEnd(), selectionStart() };
     } else {
         return { selectionStart(), selectionEnd() };
+    }
+}
+
+void ScreenplayTextCursor::restartEditBlock()
+{
+    endEditBlock();
+
+    int editsCount = 0;
+    while (isInEditBlock()) {
+        ++editsCount;
+        endEditBlock();
+    }
+
+    joinPreviousEditBlock();
+
+    while (editsCount != 0) {
+        beginEditBlock();
+        --editsCount;
     }
 }
 

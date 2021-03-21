@@ -19,7 +19,9 @@
 #include <QMimeData>
 #include <QXmlStreamReader>
 
+#ifdef QT_DEBUG
 #define XML_CHECKS
+#endif
 
 namespace BusinessLayer
 {

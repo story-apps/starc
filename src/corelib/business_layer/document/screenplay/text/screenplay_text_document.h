@@ -65,15 +65,6 @@ public:
     void insertFromMime(int _position, const QString& _mimeData);
 
     /**
-     * @brief Методы для управления бросанием текста в документ
-     */
-    //
-    // FIXME: Выпилить это, должно работать через общий механизм
-    //
-    void startMimeDropping();
-    void finishMimeDropping();
-
-    /**
      * @brief Вставить новый блок заданного типа
      */
     void addParagraph(BusinessLayer::ScreenplayParagraphType _type,

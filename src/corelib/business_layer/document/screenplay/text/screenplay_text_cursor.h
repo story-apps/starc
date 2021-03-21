@@ -21,6 +21,11 @@ public:
     ~ScreenplayTextCursor();
 
     /**
+     * @brief Находимся ли в данный момент в режиме редактирования
+     */
+    bool isInEditBlock() const;
+
+    /**
      * @brief Находится ли блок в таблице
      */
     bool inTable() const;
@@ -38,6 +43,11 @@ public:
         int to = 0;
     };
     Selection selectionInterval() const;
+
+    /**
+     * @brief Завершить текущую операцию редактирования и присоединить к ней новую
+     */
+    void restartEditBlock();
 
     /**
      * @brief Удалить символы в заданном редакторе сценария

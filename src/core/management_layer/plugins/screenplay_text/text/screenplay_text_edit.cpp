@@ -1200,8 +1200,19 @@ void ScreenplayTextEdit::insertFromMimeData(const QMimeData* _source)
     //
     // Удаляем выделенный текст
     //
-    if (textCursor().hasSelection()) {
-        textCursor().deleteChar();
+    BusinessLayer::ScreenplayTextCursor cursor = textCursor();
+    if (cursor.hasSelection()) {
+        cursor.removeCharacters(this);
+    }
+
+    //
+    // Если в моменте входа мы в состоянии редактирования (такое возможно в момент дропа),
+    // то запомним это состояние, чтобы восстановить после дропа, а для вставки важно,
+    // чтобы режим редактирования был выключен, т.к. данные будут загружаться через модель
+    //
+    const bool wasInEditBlock = cursor.isInEditBlock();
+    if (wasInEditBlock) {
+        cursor.endEditBlock();
     }
 
     //
@@ -1212,8 +1223,8 @@ void ScreenplayTextEdit::insertFromMimeData(const QMimeData* _source)
     //
     // Если вставляются данные в сценарном формате, то вставляем как положено
     //
-    if (_source->formats().contains(d->model->mimeTypes().first())) {
-        textToInsert = _source->data(d->model->mimeTypes().first());
+    if (_source->formats().contains(d->model->mimeTypes().constFirst())) {
+        textToInsert = _source->data(d->model->mimeTypes().constFirst());
     }
     //
     // Если простой текст, то вставляем его, импортировав с фонтана
@@ -1225,19 +1236,47 @@ void ScreenplayTextEdit::insertFromMimeData(const QMimeData* _source)
         textToInsert = fountainImporter.importScreenplay("\n" + _source->text()).text;
     }
 
+    //
+    // Собственно вставка данных
+    //
     d->document.insertFromMime(textCursor().position(), textToInsert);
+
+    //
+    // Восстанавливаем режим редактирования, если нужно
+    //
+    if (wasInEditBlock) {
+        cursor.beginEditBlock();
+    }
 }
 
 void ScreenplayTextEdit::dropEvent(QDropEvent* _event)
 {
-    if (_event->dropAction() == Qt::MoveAction) {
+    //
+    // Если в момент вставки было выделение
+    //
+    if (textCursor().hasSelection()) {
         BusinessLayer::ScreenplayTextCursor cursor = textCursor();
-        cursor.removeCharacters(this);
+        //
+        // ... и это перемещение содержимого внутри редактора
+        //
+        if (_event->source() == this) {
+            //
+            // ... то удалим выделенный текст
+            //
+            cursor.removeCharacters(this);
+        }
+        //
+        // ... а если контент заносят снаружи
+        //
+        else {
+            //
+            // ... то очистим выделение, чтобы оставить контент
+            //
+            cursor.clearSelection();
+        }
     }
 
-    d->document.startMimeDropping();
     PageTextEdit::dropEvent(_event);
-    d->document.finishMimeDropping();
 }
 
 } // namespace Ui
