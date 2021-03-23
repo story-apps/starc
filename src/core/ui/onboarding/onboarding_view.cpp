@@ -234,10 +234,10 @@ void OnboardingView::Implementation::initThemePage()
 
     scaleFactorTitleLabel = new H6Label(themePage);
     scaleFactorSlider = new Slider(themePage);
-    scaleFactorSlider->setMaximumValue(4000);
-    scaleFactorSlider->setValue(1000);
+    scaleFactorSlider->setMaximumValue(3500);
+    scaleFactorSlider->setValue(500);
     QObject::connect(scaleFactorSlider, &Slider::valueChanged, q, [this] (int _value) {
-        emit q->scaleFactorChanged(static_cast<qreal>(std::max(1, _value)) / 1000.0);
+        emit q->scaleFactorChanged(0.5 + static_cast<qreal>(_value) / 1000.0);
     });
     scaleFactorSmallInfoLabel = new Body2Label(themePage);
     scaleFactorBigInfoLabel = new Body2Label(themePage);

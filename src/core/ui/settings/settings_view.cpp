@@ -387,8 +387,9 @@ void SettingsView::Implementation::initApplicationCard()
 {
     spellCheckerLanguage->setEnabled(false);
     spellCheckerLanguage->setModel(spellCheckerLanguagesModel);
-    scaleFactor->setMaximumValue(4000);
-    scaleFactor->setValue(1000);
+    // 0 - 0.5, 500 - 1, 3500 - 4
+    scaleFactor->setMaximumValue(3500);
+    scaleFactor->setValue(500);
     backupsFolderPath->setEnabled(false);
     backupsFolderPath->setTrailingIcon(u8"\U000f0256");
 
@@ -628,7 +629,7 @@ SettingsView::SettingsView(QWidget* _parent)
     });
     connect(d->changeTheme, &Button::clicked, this, &SettingsView::applicationThemePressed);
     connect(d->scaleFactor, &Slider::valueChanged, this, [this] (int _value) {
-        emit applicationScaleFactorChanged(static_cast<qreal>(std::max(1, _value)) / 1000.0);
+        emit applicationScaleFactorChanged(0.5 + static_cast<qreal>(_value) / 1000.0);
     });
     connect(d->autoSave, &CheckBox::checkedChanged, this, &SettingsView::applicationUseAutoSaveChanged);
     connect(d->saveBackups, &CheckBox::checkedChanged, this, &SettingsView::applicationSaveBackupsChanged);
@@ -866,7 +867,7 @@ void SettingsView::setApplicationTheme(int _theme)
 
 void SettingsView::setApplicationScaleFactor(qreal _scaleFactor)
 {
-    d->scaleFactor->setValue(std::max(1, static_cast<int>(_scaleFactor * 1000)));
+    d->scaleFactor->setValue((_scaleFactor - 0.5) * 1000.0);
 }
 
 void SettingsView::setApplicationUseAutoSave(bool _use)
