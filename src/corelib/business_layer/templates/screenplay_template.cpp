@@ -243,6 +243,11 @@ void ScreenplayBlockStyle::setMarginsOnHalfPage(const QMarginsF& _margins)
     }
 }
 
+void ScreenplayBlockStyle::setPageSplitterWidth(qreal _width)
+{
+    m_charFormat.setProperty(QTextFormat::TableCellLeftPadding, _width);
+}
+
 int ScreenplayBlockStyle::linesAfter() const
 {
     return m_linesAfter;
@@ -698,6 +703,7 @@ void ScreenplayTemplate::load(const QString& _fromFile)
     while (reader.readNextStartElement() && reader.name() == "block")
     {
         ScreenplayBlockStyle blockStyle(reader.attributes());
+        blockStyle.setPageSplitterWidth(pageSplitterWidth());
         m_blockStyles.insert(blockStyle.type(), blockStyle);
 
         //

@@ -1979,25 +1979,22 @@ void ScreenplayTextDocument::updateModelOnContentChange(int _position, int _char
 void ScreenplayTextDocument::insertTable(const ScreenplayTextCursor& _cursor)
 {
     const auto scriptTemplate = ScreenplayTemplateFacade::getTemplate(d->templateId);
-    const auto tableBorderWidth = scriptTemplate.pageSplitterWidth();
-    const auto doubleTableBorderWidth = 2 * tableBorderWidth;
+    const auto pageSplitterWidth = scriptTemplate.pageSplitterWidth();
+    const int qtTableBorderWidth = 2; // эта однопиксельная рамка никак не убирается...
     const qreal tableWidth = pageSize().width()
                              - rootFrame()->frameFormat().leftMargin()
                              - rootFrame()->frameFormat().rightMargin()
-                             - doubleTableBorderWidth;
-    const qreal leftColumnWidth = tableWidth * scriptTemplate.leftHalfOfPageWidthPercents() / 100;
+                             - qtTableBorderWidth
+                             + pageSplitterWidth;
+    const qreal leftColumnWidth = tableWidth * scriptTemplate.leftHalfOfPageWidthPercents() / 100.0;
     const qreal rightColumnWidth = tableWidth - leftColumnWidth;
     QTextTableFormat format;
+    format.setBorder(0);
+    format.setBorderStyle(QTextFrameFormat::BorderStyle_None);
     format.setWidth(QTextLength{ QTextLength::FixedLength, tableWidth });
     format.setColumnWidthConstraints({ QTextLength{QTextLength::FixedLength, leftColumnWidth},
                                        QTextLength{QTextLength::FixedLength, rightColumnWidth} });
-    format.setBorderStyle(QTextFrameFormat::BorderStyle_None);
-    const int qtTableBorderWidth = 2;
-    format.setLeftMargin(-1 * doubleTableBorderWidth - qtTableBorderWidth);
-    format.setRightMargin(doubleTableBorderWidth - qtTableBorderWidth);
-    format.setTopMargin(-1 * doubleTableBorderWidth - qtTableBorderWidth);
-    format.setBottomMargin(-1 * doubleTableBorderWidth - qtTableBorderWidth);
-    format.setBorder(tableBorderWidth);
+    format.setLeftMargin(-1 * pageSplitterWidth);
 
     auto cursor = _cursor;
     cursor.insertTable(1, 2, format);

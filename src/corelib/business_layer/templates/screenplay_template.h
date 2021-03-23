@@ -172,6 +172,11 @@ public:
     void setMarginsOnHalfPage(const QMarginsF& _margins);
 
     /**
+     * @brief Настроить стиль в соответствии с шириной разделителя страницы
+     */
+    void setPageSplitterWidth(qreal _width);
+
+    /**
      * @brief Отступ снизу, линий
      */
     int linesAfter() const;
