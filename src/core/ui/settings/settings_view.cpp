@@ -460,6 +460,7 @@ void SettingsView::Implementation::initScreenplayCard()
     screenplayEditorDefaultTemplate->setModel(BusinessLayer::ScreenplayTemplateFacade::templates());
     screenplayEditorDefaultTemplateOptions->setText(u8"\U000F01D9");
     screenplayEditorDefaultTemplateOptions->setAlignment(Qt::AlignCenter);
+    screenplayEditorDefaultTemplateOptions->hide();
     screenplayEditorShowSceneNumberOnLeft->setEnabled(false);
     screenplayEditorShowSceneNumberOnLeft->setChecked(true);
     screenplayEditorShowSceneNumberOnRight->setEnabled(false);
