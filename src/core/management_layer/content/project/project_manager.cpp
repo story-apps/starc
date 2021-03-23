@@ -760,8 +760,7 @@ void ProjectManager::undoModelChange(BusinessLayer::AbstractModel* _model, int _
 void ProjectManager::showView(const QModelIndex& _itemIndex, const QString& _viewMimeType)
 {
     if (!_itemIndex.isValid()) {
-        d->currentDocument.model = nullptr;
-        d->currentDocument.viewMimeType.clear();
+        updateCurrentDocument(nullptr, {});
         d->view->showDefaultPage();
         return;
     }
@@ -772,8 +771,8 @@ void ProjectManager::showView(const QModelIndex& _itemIndex, const QString& _vie
     //
     // Определим модель
     //
-    d->currentDocument.model = d->modelsFacade.modelFor(item->uuid(), item->parent()->uuid());
-    d->currentDocument.viewMimeType = _viewMimeType;
+    updateCurrentDocument(d->modelsFacade.modelFor(item->uuid(), item->parent()->uuid()),
+                          _viewMimeType);
     if (d->currentDocument.model == nullptr) {
         d->view->showNotImplementedPage();
         return;
@@ -848,6 +847,14 @@ void ProjectManager::showNavigator(const QModelIndex& _itemIndex, const QString&
             d->navigator, &Ui::ProjectNavigator::showProjectNavigator,
             Qt::UniqueConnection);
     d->navigator->setCurrentWidget(view);
+}
+
+void ProjectManager::updateCurrentDocument(BusinessLayer::AbstractModel* _model, const QString& _viewMimeType)
+{
+    d->currentDocument.model = _model;
+    d->currentDocument.viewMimeType = _viewMimeType;
+
+    emit currentModelChanged(d->currentDocument.model);
 }
 
 } // namespace ManagementLayer

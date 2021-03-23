@@ -20,6 +20,11 @@ public:
     ~ExportManager() override;
 
     /**
+     * @brief Можно ли экспортировать данный документ
+     */
+    bool canExportDocument(BusinessLayer::AbstractModel* _model) const;
+
+    /**
      * @brief Экспортировать заданный документ
      */
     void exportDocument(BusinessLayer::AbstractModel* _model);

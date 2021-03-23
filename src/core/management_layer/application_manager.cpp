@@ -13,11 +13,13 @@
 #include <cloud/cloud_service_manager.h>
 #endif
 
-#include <include/custom_events.h>
+#include <business_layer/model/abstract_model.h>
 
 #include <data_layer/database.h>
 #include <data_layer/storage/settings_storage.h>
 #include <data_layer/storage/storage_facade.h>
+
+#include <include/custom_events.h>
 
 #include <ui/application_style.h>
 #include <ui/application_view.h>
@@ -1335,6 +1337,10 @@ void ApplicationManager::initConnections()
             d->projectsManager.data(), &ProjectsManager::setCurrentProjectLogline);
     connect(d->projectManager.data(), &ProjectManager::projectCoverChanged,
             d->projectsManager.data(), &ProjectsManager::setCurrentProjectCover);
+    connect(d->projectManager.data(), &ProjectManager::currentModelChanged, this,
+            [this] (BusinessLayer::AbstractModel* _model) {
+        d->menuView->setCurrentDocumentExportAvailable(d->exportManager->canExportDocument(_model));
+    });
 
     //
     // Менеджер импорта

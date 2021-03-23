@@ -217,7 +217,8 @@ void Drawer::paintEvent(QPaintEvent* _event)
         if (action->isChecked()) {
             painter.fillRect(actionRect.marginsRemoved(Ui::DesignSystem::drawer().selectionMargins()),
                              Ui::DesignSystem::drawer().selectionColor());
-        } else if (actionRect.contains(mapFromGlobal(QCursor::pos()))) {
+        } else if (action->isEnabled()
+                   && actionRect.contains(mapFromGlobal(QCursor::pos()))) {
             painter.fillRect(actionRect.marginsRemoved(Ui::DesignSystem::drawer().selectionMargins()),
                              ColorHelper::transparent(Ui::DesignSystem::color().onPrimary(),
                                                       Ui::DesignSystem::hoverBackgroundOpacity()));
@@ -289,7 +290,8 @@ void Drawer::paintEvent(QPaintEvent* _event)
 void Drawer::mousePressEvent(QMouseEvent* _event)
 {
     QAction* pressedAction = d->pressedAction(_event->pos(), actions());
-    if (pressedAction == nullptr) {
+    if (pressedAction == nullptr
+        || !pressedAction->isEnabled()) {
         return;
     }
 
@@ -307,7 +309,8 @@ void Drawer::mouseReleaseEvent(QMouseEvent* _event)
 
     QAction* pressedAction = d->pressedAction(_event->pos(), actions());
     if (pressedAction == nullptr
-        || pressedAction->isChecked()) {
+        || pressedAction->isChecked()
+        || !pressedAction->isEnabled()) {
         return;
     }
 

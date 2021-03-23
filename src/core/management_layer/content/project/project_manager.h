@@ -104,6 +104,11 @@ signals:
      */
     void projectCoverChanged(const QPixmap& _cover);
 
+    /**
+     * @brief Сменилась текущая модель документа
+     */
+    void currentModelChanged(BusinessLayer::AbstractModel* _model);
+
 private:
     /**
      * @brief Обработать изменение модели
@@ -125,6 +130,12 @@ private:
      * @note Если индекс невалидный, то отображается навигатор по проекту
      */
     void showNavigator(const QModelIndex& _itemIndex, const QString& _viewMimeType = {});
+
+private:
+    /**
+     * @brief Обновить значение текущей модели и её представления
+     */
+    void updateCurrentDocument(BusinessLayer::AbstractModel* _model, const QString& _viewMimeType);
 
 private:
     class Implementation;

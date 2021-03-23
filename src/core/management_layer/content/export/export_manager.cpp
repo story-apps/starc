@@ -170,10 +170,26 @@ ExportManager::ExportManager(QObject* _parent, QWidget* _parentWidget)
 
 ExportManager::~ExportManager() = default;
 
-void ExportManager::exportDocument(BusinessLayer::AbstractModel* _model)
+bool ExportManager::canExportDocument(BusinessLayer::AbstractModel* _model) const
 {
     if (_model == nullptr
         || _model->document() == nullptr) {
+        return false;
+    }
+
+    switch (_model->document()->type())
+    {
+        case Domain::DocumentObjectType::ScreenplayText:
+            return true;
+
+        default:
+            return false;
+    }
+}
+
+void ExportManager::exportDocument(BusinessLayer::AbstractModel* _model)
+{
+    if (!canExportDocument(_model)) {
         return;
     }
 

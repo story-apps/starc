@@ -185,6 +185,11 @@ void MenuView::setProVersion(bool _isPro)
     d->help->setVisible(!_isPro);
 }
 
+void MenuView::setCurrentDocumentExportAvailable(bool _available)
+{
+    d->exportCurrentDocument->setEnabled(_available);
+}
+
 void MenuView::updateTranslations()
 {
     d->projects->setText(tr("Stories"));

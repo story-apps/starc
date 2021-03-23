@@ -52,6 +52,11 @@ public:
      */
     void setProVersion(bool _isPro);
 
+    /**
+     * @brief Установить возможность экспортирования текущего документа
+     */
+    void setCurrentDocumentExportAvailable(bool _available);
+
 signals:
     /**
      * @brief Нажат пункт меню "Проекты"
