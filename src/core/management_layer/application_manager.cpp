@@ -1078,7 +1078,7 @@ ApplicationManager::ApplicationManager(QObject* _parent)
     : QObject(_parent),
       IApplicationManager()
 {
-    QApplication::setApplicationVersion("0.0.5");
+    QApplication::setApplicationVersion("0.0.6");
 
     QApplication::setStyle(new ApplicationStyle(QStyleFactory::create("Fusion")));
 
