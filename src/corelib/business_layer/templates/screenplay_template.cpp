@@ -562,7 +562,7 @@ QString ScreenplayTemplate::name() const
                                            "Arabic template (page: A4; font: Courier New)");
         } else if (m_id == "he") {
             return QApplication::translate("BusinessLayer::ScreenplayTemplate",
-                                           "Hebrew template (page: A4; font: Arial");
+                                           "Hebrew template (page: A4; font: Arial)");
         } else if (m_id == "ru") {
             return QApplication::translate("BusinessLayer::ScreenplayTemplate",
                                            "Russian template (page: A4; font: Courier New)");

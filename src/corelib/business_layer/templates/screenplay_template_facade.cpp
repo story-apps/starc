@@ -69,6 +69,16 @@ void ScreenplayTemplateFacade::setDefaultTemplate(const QString& _templateId)
     instance().d->defaultTemplate = instance().d->templates[_templateId];
 }
 
+void ScreenplayTemplateFacade::updateTranslations()
+{
+    auto& templatesModel = instance().d->templatesModel;
+    for (int row = 0; row < templatesModel.rowCount(); ++row) {
+        auto templateItem = templatesModel.item(row);
+        const auto templateId = templateItem->data(kTemplateIdRole).toString();
+        templateItem->setText(getTemplate(templateId).name());
+    }
+}
+
 ScreenplayTemplateFacade::~ScreenplayTemplateFacade() = default;
 
 ScreenplayTemplateFacade::ScreenplayTemplateFacade()

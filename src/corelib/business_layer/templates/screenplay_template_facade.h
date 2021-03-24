@@ -63,6 +63,11 @@ public:
 //     */
 //    static void updateTemplatesColors();
 
+    /**
+     * @brief Обновить переводы
+     */
+    static void updateTranslations();
+
 public:
     ~ScreenplayTemplateFacade();
 

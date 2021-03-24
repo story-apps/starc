@@ -775,6 +775,9 @@ void SettingsView::setApplicationLanguage(int _language)
             case QLocale::French: {
                 return "Français";
             }
+            case QLocale::Galician: {
+                return "Galego";
+            }
             case QLocale::German: {
                 return "Deutsch";
             }
@@ -793,11 +796,17 @@ void SettingsView::setApplicationLanguage(int _language)
             case QLocale::Italian: {
                 return "Italiano";
             }
+            case QLocale::Persian: {
+                return "فارسی";
+            }
             case QLocale::Polish: {
                 return "Polski";
             }
             case QLocale::Portuguese: {
                 return "Português Brasileiro";
+            }
+            case QLocale::Romanian: {
+                return "Română";
             }
             case QLocale::Russian: {
                 return "Русский";
@@ -1138,6 +1147,7 @@ void SettingsView::updateTranslations()
     d->screenplayEditorTitle->setText(tr("Text editor"));
     d->screenplayEditorDefaultTemplate->setLabel(tr("Default template"));
     d->screenplayEditorDefaultTemplateOptions->setToolTip(tr("Available actions for the selected template"));
+    BusinessLayer::ScreenplayTemplateFacade::updateTranslations();
     d->screenplayEditorShowSceneNumber->setText(tr("Show scene number"));
     d->screenplayEditorShowSceneNumberOnLeft->setText(tr("on the left"));
     d->screenplayEditorShowSceneNumberOnRight->setText(tr("on the right"));

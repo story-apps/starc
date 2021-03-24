@@ -99,14 +99,17 @@ void OnboardingView::Implementation::initLanguagePage()
     RadioButton* belarusianLanguage = initLanguageButton("Беларуский", QLocale::Belarusian);
     RadioButton* englishLanguage = initLanguageButton("English", QLocale::English);
     RadioButton* frenchLanguage = initLanguageButton("Français", QLocale::French);
+    RadioButton* galicianLanguage = initLanguageButton("Galego", QLocale::Galician);
     RadioButton* germanLanguage = initLanguageButton("Deutsch", QLocale::German);
     RadioButton* hebrewLanguage = initLanguageButton("עִבְרִית", QLocale::Hebrew);
     RadioButton* hindiLanguage = initLanguageButton("हिन्दी", QLocale::Hindi);
     RadioButton* hungarianLanguage = initLanguageButton("Magyar", QLocale::Hungarian);
     RadioButton* indonesianLanguage = initLanguageButton("Indonesian", QLocale::Indonesian);
     RadioButton* italianLanguage = initLanguageButton("Italiano", QLocale::Italian);
+    RadioButton* persianLanguage = initLanguageButton("فارسی", QLocale::Persian);
     RadioButton* polishLanguage = initLanguageButton("Polski", QLocale::Polish);
     RadioButton* portugueseBrazilLanguage = initLanguageButton("Português Brasileiro", QLocale::Portuguese);
+    RadioButton* romanianLanguage = initLanguageButton("Română", QLocale::Romanian);
     RadioButton* russianLanguage = initLanguageButton("Русский", QLocale::Russian);
     RadioButton* slovenianLanguage = initLanguageButton("Slovenski", QLocale::Slovenian);
     RadioButton* spanishLanguage = initLanguageButton("Español", QLocale::Spanish);
@@ -116,7 +119,7 @@ void OnboardingView::Implementation::initLanguagePage()
     // Если мы умеем в язык системы, то оставляем выбранным его
     //
     bool isSystemLanguageSupported = false;
-    for (auto language : languageButtons) {
+    for (auto language : std::as_const(languageButtons)) {
         if (language->isChecked()) {
             isSystemLanguageSupported = true;
             break;
@@ -130,7 +133,7 @@ void OnboardingView::Implementation::initLanguagePage()
     }
 
     RadioButtonGroup* languagesGroup = new RadioButtonGroup(languagePage);
-    for (auto languageButton : languageButtons) {
+    for (auto languageButton : std::as_const(languageButtons)) {
         languagesGroup->add(languageButton);
     }
 
@@ -159,12 +162,14 @@ void OnboardingView::Implementation::initLanguagePage()
     languagePageLayout->addWidget(englishLanguage, row++, 0);
     languagePageLayout->addWidget(spanishLanguage, row++, 0);
     languagePageLayout->addWidget(frenchLanguage, row++, 0);
+    languagePageLayout->addWidget(galicianLanguage, row++, 0);
     languagePageLayout->addWidget(indonesianLanguage, row++, 0);
     languagePageLayout->addWidget(italianLanguage, row++, 0);
     int rowForSecondColumn = 1;
     languagePageLayout->addWidget(hungarianLanguage, rowForSecondColumn++, 1);
     languagePageLayout->addWidget(polishLanguage, rowForSecondColumn++, 1);
     languagePageLayout->addWidget(portugueseBrazilLanguage, rowForSecondColumn++, 1);
+    languagePageLayout->addWidget(romanianLanguage, rowForSecondColumn++, 1);
     languagePageLayout->addWidget(russianLanguage, rowForSecondColumn++, 1);
     languagePageLayout->addWidget(slovenianLanguage, rowForSecondColumn++, 1);
     languagePageLayout->addWidget(turkishLanguage, rowForSecondColumn++, 1);
@@ -172,6 +177,7 @@ void OnboardingView::Implementation::initLanguagePage()
     int rowForThirdColumn = 1;
     languagePageLayout->addWidget(hebrewLanguage, rowForThirdColumn++, 2);
     languagePageLayout->addWidget(hindiLanguage, rowForThirdColumn++, 2);
+    languagePageLayout->addWidget(persianLanguage, rowForThirdColumn++, 2);
     languagePageLayout->setRowStretch(row++, 1);
     languagePageLayout->setColumnStretch(3, 1);
     languagePageLayout->addWidget(languageHowToAddLink, row++, 0, 1, 4);

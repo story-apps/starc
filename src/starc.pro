@@ -21,7 +21,9 @@ TRANSLATIONS += \
     core/translations/translation_de.ts \
     core/translations/translation_en.ts \
     core/translations/translation_es.ts \
+    core/translations/translation_fa.ts \
     core/translations/translation_fr.ts \
+    core/translations/translation_gl_ES.ts \
     core/translations/translation_he.ts \
     core/translations/translation_hi.ts \
     core/translations/translation_hu.ts \
@@ -29,9 +31,10 @@ TRANSLATIONS += \
     core/translations/translation_it.ts \
     core/translations/translation_pl.ts \
     core/translations/translation_pt_BR.ts \
+    core/translations/translation_ro_RO.ts \
     core/translations/translation_ru.ts \
-    core/translations/translation_tr.ts \
     core/translations/translation_sl.ts \
+    core/translations/translation_tr.ts \
     core/translations/translation_uk.ts
 
 #
