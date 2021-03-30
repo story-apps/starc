@@ -155,7 +155,9 @@ void ScreenplayTextCommentDelegate::paint(QPainter* _painter, const QStyleOption
                                         TextHelper::heightForWidth(comment, Ui::DesignSystem::font().body2(), commentWidth)));
             _painter->setFont(Ui::DesignSystem::font().body2());
             _painter->setPen(textColor);
-            _painter->drawText(commentRect, Qt::TextWordWrap, comment);
+            QTextOption commentTextOption;
+            commentTextOption.setWrapMode(QTextOption::WrapAtWordBoundaryOrAnywhere);
+            _painter->drawText(commentRect, comment, commentTextOption);
         } else {
             commentRect = QRectF(avatarRect.bottomLeft(), QSizeF(commentWidth, 0));
         }
