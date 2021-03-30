@@ -167,6 +167,8 @@ LanguageDialog::LanguageDialog(QWidget* _parent)
     : AbstractDialog(_parent),
       d(new Implementation(this))
 {
+    setRejectButton(d->okButton);
+
     int row = 0;
     contentsLayout()->addWidget(d->azerbaijani, row++, 0);
     contentsLayout()->addWidget(d->belarusian, row++, 0);
