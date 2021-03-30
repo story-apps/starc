@@ -4,6 +4,7 @@
 
 #include <utils/helpers/color_helper.h>
 #include <utils/helpers/image_helper.h>
+#include <utils/helpers/text_helper.h>
 
 #include <QAction>
 #include <QPainter>
@@ -153,6 +154,40 @@ void Drawer::setSubtitle(const QString& _subtitle)
     update();
 }
 
+QSize Drawer::sizeHint() const
+{
+    qreal width = 0.0;
+    qreal height = Ui::DesignSystem::drawer().margins().top()
+                   + Ui::DesignSystem::drawer().titleHeight()
+                   + Ui::DesignSystem::drawer().subtitleHeight()
+                   + Ui::DesignSystem::drawer().subtitleBottomMargin();
+    for (int actionIndex = 0; actionIndex < actions().size(); ++actionIndex) {
+        QAction* action = actions().at(actionIndex);
+        if (!action->isVisible()) {
+            continue;
+        }
+
+        if (action->isSeparator()) {
+            height += Ui::DesignSystem::drawer().separatorSpacing() * 2;
+        }
+
+        const qreal actionWidth = Ui::DesignSystem::drawer().actionMargins().left()
+                                  + Ui::DesignSystem::drawer().iconSize().width()
+                                  + Ui::DesignSystem::drawer().spacing()
+                                  + TextHelper::fineTextWidth(action->text(), Ui::DesignSystem::font().subtitle2())
+                                  + (action->whatsThis().isEmpty()
+                                     ? 0.0
+                                     : Ui::DesignSystem::drawer().spacing()
+                                       + TextHelper::fineTextWidth(action->whatsThis(), Ui::DesignSystem::font().subtitle2()))
+                                  + Ui::DesignSystem::drawer().actionMargins().right();
+        width = std::max(width, actionWidth);
+
+        height += Ui::DesignSystem::drawer().actionHeight();
+    }
+
+    return QSizeF(width, height).toSize();
+}
+
 void Drawer::paintEvent(QPaintEvent* _event)
 {
     Q_UNUSED(_event)
@@ -249,11 +284,11 @@ void Drawer::paintEvent(QPaintEvent* _event)
         // ... текст
         //
         painter.setFont(Ui::DesignSystem::font().subtitle2());
-        const QRectF textRect(iconRect.right() + Ui::DesignSystem::drawer().iconRightMargin(),
+        const QRectF textRect(iconRect.right() + Ui::DesignSystem::drawer().spacing(),
                               iconRect.top(),
                               width()
                               - iconRect.right()
-                              - Ui::DesignSystem::drawer().iconRightMargin()
+                              - Ui::DesignSystem::drawer().spacing()
                               - Ui::DesignSystem::drawer().actionMargins().right(),
                               Ui::DesignSystem::drawer().actionHeight()
                               - Ui::DesignSystem::drawer().actionMargins().top()

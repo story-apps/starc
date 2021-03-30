@@ -24,6 +24,11 @@ public:
      */
     void setSubtitle(const QString& _subtitle);
 
+    /**
+     * @brief Определяем идеальный размер
+     */
+    QSize sizeHint() const override;
+
 protected:
     /**
      * @brief Реализуем собственное рисование

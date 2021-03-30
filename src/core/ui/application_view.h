@@ -37,11 +37,6 @@ public:
      */
     void setAccountBar(Widget* _accountBar);
 
-    /**
-     * @brief Ширина навигационной панели
-     */
-    int navigationPanelWidth() const;
-
 signals:
     /**
      * @brief Запрос на закрытие приложения

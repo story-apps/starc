@@ -105,11 +105,6 @@ void ApplicationView::setAccountBar(Widget* _accountBar)
     d->accountBar = _accountBar;
 }
 
-int ApplicationView::navigationPanelWidth() const
-{
-    return d->toolBar->width();
-}
-
 bool ApplicationView::eventFilter(QObject* _target, QEvent* _event)
 {
     if (d->accountBar != nullptr

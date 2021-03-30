@@ -1404,7 +1404,7 @@ public:
     QMarginsF actionMargins = {16.0, 12.0, 12.0, 12.0};
     QMarginsF selectionMargins = {8.0, 4.0, 8.0, 4.0};
     qreal subtitleBottomMargin = 18.0;
-    qreal iconRightMargin = 32.0;
+    qreal spacing = 32.0;
     qreal width = 304.0;
     qreal titleHeight = 26.0;
     qreal subtitleHeight = 20.0;
@@ -1421,7 +1421,7 @@ DesignSystem::Drawer::Implementation::Implementation(qreal _scaleFactor, const C
     actionMargins *= _scaleFactor;
     selectionMargins *= _scaleFactor;
     subtitleBottomMargin *= _scaleFactor;
-    iconRightMargin *= _scaleFactor;
+    spacing *= _scaleFactor;
     width *= _scaleFactor;
     titleHeight *= _scaleFactor;
     subtitleHeight *= _scaleFactor;
@@ -1457,9 +1457,9 @@ qreal DesignSystem::Drawer::subtitleBottomMargin() const
     return d->subtitleBottomMargin;
 }
 
-qreal DesignSystem::Drawer::iconRightMargin() const
+qreal DesignSystem::Drawer::spacing() const
 {
-    return d->iconRightMargin;
+    return d->spacing;
 }
 
 qreal DesignSystem::Drawer::width() const

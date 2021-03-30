@@ -814,7 +814,7 @@ public:
         /**
          * @brief Отступ от иконки до текста пункта меню
          */
-        qreal iconRightMargin() const;
+        qreal spacing() const;
 
         /**
          * @brief Ширина
