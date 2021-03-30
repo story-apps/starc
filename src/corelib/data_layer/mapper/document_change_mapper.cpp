@@ -111,8 +111,8 @@ QString DocumentChangeMapper::insertStatement(Domain::DomainObject* _object, QVa
     _insertValues.append(documentChangeObject->id().value());
     _insertValues.append(documentChangeObject->documentUuid().toString());
     _insertValues.append(documentChangeObject->uuid().toString());
-    _insertValues.append(documentChangeObject->undoPatch());
-    _insertValues.append(documentChangeObject->redoPatch());
+    _insertValues.append(qCompress(documentChangeObject->undoPatch()));
+    _insertValues.append(qCompress(documentChangeObject->redoPatch()));
     _insertValues.append(documentChangeObject->dateTime().toString(kDateTimeFormat));
     _insertValues.append(documentChangeObject->userName());
     _insertValues.append(documentChangeObject->userEmail());
@@ -138,8 +138,8 @@ QString DocumentChangeMapper::updateStatement(Domain::DomainObject* _object, QVa
     _updateValues.clear();
     _updateValues.append(documentChangeObject->documentUuid().toString());
     _updateValues.append(documentChangeObject->uuid().toString());
-    _updateValues.append(documentChangeObject->undoPatch());
-    _updateValues.append(documentChangeObject->redoPatch());
+    _updateValues.append(qCompress(documentChangeObject->undoPatch()));
+    _updateValues.append(qCompress(documentChangeObject->redoPatch()));
     _updateValues.append(documentChangeObject->dateTime().toString(kDateTimeFormat));
     _updateValues.append(documentChangeObject->userName());
     _updateValues.append(documentChangeObject->userEmail());
@@ -162,8 +162,8 @@ Domain::DomainObject* DocumentChangeMapper::doLoad(const Domain::Identifier& _id
 {
     const QUuid documentUuid = _record.value("fk_document_uuid").toString();
     const QUuid uuid = _record.value("uuid").toString();
-    const auto undoPatch = _record.value("undo_patch").toByteArray();
-    const auto redoPatch = _record.value("redo_patch").toByteArray();
+    const auto undoPatch = qUncompress(_record.value("undo_patch").toByteArray());
+    const auto redoPatch = qUncompress(_record.value("redo_patch").toByteArray());
     const auto dateTime = QDateTime::fromString(_record.value("date_time").toString(), kDateTimeFormat);
     const auto userName = _record.value("user_name").toString();
     const auto userEmail = _record.value("user_email").toString();
@@ -185,10 +185,10 @@ void DocumentChangeMapper::doLoad(Domain::DomainObject* _object, const QSqlRecor
     const QUuid uuid = _record.value("uuid").toString();
     documentChangeObject->setUuid(uuid);
 
-    const auto undoPatch = _record.value("undo_patch").toByteArray();
+    const auto undoPatch = qUncompress(_record.value("undo_patch").toByteArray());
     documentChangeObject->setUndoPatch(undoPatch);
 
-    const auto redoPatch = _record.value("redo_patch").toByteArray();
+    const auto redoPatch = qUncompress(_record.value("redo_patch").toByteArray());
     documentChangeObject->setRedoPatch(redoPatch);
 
     const auto dateTime = QDateTime::fromString(_record.value("date_time").toString(), kDateTimeFormat);
