@@ -330,13 +330,15 @@ void Button::paintEvent(QPaintEvent* _event)
     // ... если ширина текста меньше ширины кнопки, то корректируем обасть для отображения текста,
     //     т.к. текст рисуется в её центре
     //
+    auto textAlignment = Qt::AlignLeft | Qt::AlignVCenter;
     if (buttonInnerRect.width() > textWidth) {
         buttonInnerRect.setWidth(textWidth);
+        textAlignment = Qt::AlignCenter;
     }
     //
     if (!d->text.isEmpty()) {
         painter.setFont(Ui::DesignSystem::font().button());
-        painter.drawText(buttonInnerRect, Qt::AlignCenter,
+        painter.drawText(buttonInnerRect, textAlignment,
                          painter.fontMetrics().elidedText(d->text, Qt::ElideRight, buttonInnerRect.width()));
     }
 }
