@@ -1479,15 +1479,17 @@ void ScreenplayTextModel::applyPatch(const QByteArray& _patch)
                     insertItem(_item, insertAfterItem);
 
                     //
-                    // И вытаскиваем все последующие элементы на уровень нового
+                    // И вытаскиваем все последующие элементы на уровень нового, если есть откуда вытянуть конечно же
                     //
-                    auto modelItemParent = modelItem->parent();
-                    const int modelItemIndex = modelItemParent->rowOfChild(modelItem);
-                    while (modelItemParent->childCount() > modelItemIndex) {
-                        auto childItem = modelItemParent->childAt(modelItemParent->childCount() - 1);
-                        takeItem(childItem, modelItemParent);
-                        insertItem(childItem, _item);
-                        movedSiblingItems.prepend(childItem);
+                    if (modelItem != nullptr) {
+                        auto modelItemParent = modelItem->parent();
+                        const int modelItemIndex = modelItemParent->rowOfChild(modelItem);
+                        while (modelItemParent->childCount() > modelItemIndex) {
+                            auto childItem = modelItemParent->childAt(modelItemParent->childCount() - 1);
+                            takeItem(childItem, modelItemParent);
+                            insertItem(childItem, _item);
+                            movedSiblingItems.prepend(childItem);
+                        }
                     }
                 }
             }
