@@ -200,7 +200,11 @@ void Splitter::setWidgets(QWidget* _first, QWidget* _second)
 
 void Splitter::setSizes(const QVector<int>& _sizes)
 {
-     Q_ASSERT(d->widgets.size() == _sizes.size());
+    if (topLevelWidget()->isMinimized()) {
+        return;
+    }
+
+    Q_ASSERT(d->widgets.size() == _sizes.size());
 
     //
     // Автоматом распределяем пространство между вложенными виджетами
@@ -323,8 +327,19 @@ bool Splitter::event(QEvent* _event)
     // Если произошла смена направления компоновки, переустановим текущие размеры,
     // чтобы перекомпоновать содержимое
     //
-    if (_event->type() == QEvent::LayoutDirectionChange) {
-        setSizes(d->widgetsSizes());
+    switch (_event->type()) {
+        case QEvent::LayoutDirectionChange: {
+            setSizes(d->widgetsSizes());
+            break;
+        }
+
+        case QEvent::WindowStateChange: {
+            const auto event = static_cast<QWindowStateChangeEvent*>(_event);
+//            event->
+            break;
+        }
+
+        default: break;
     }
 
     return Widget::event(_event);
