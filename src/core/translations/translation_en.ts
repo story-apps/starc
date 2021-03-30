@@ -2040,7 +2040,7 @@ from 2 Gb</translation>
     <message>
         <location filename="../management_layer/plugins/screenplay_text/screenplay_text_view.cpp" line="627"/>
         <source>Scene characters</source>
-        <translation>Scene characters</translation>
+        <translation>Cast list</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/screenplay_text/screenplay_text_view.cpp" line="628"/>
