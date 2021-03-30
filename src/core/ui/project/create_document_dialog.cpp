@@ -156,7 +156,7 @@ void CreateDocumentDialog::designSystemChangeEvent(DesignSystemChangeEvent* _eve
     AbstractDialog::designSystemChangeEvent(_event);
 
     d->documentType->setBackgroundColor(DesignSystem::color().background());
-    d->documentType->setTextColor(DesignSystem::color().onPrimary());
+    d->documentType->setTextColor(DesignSystem::color().onBackground());
 
     d->documentName->setTextColor(Ui::DesignSystem::color().onBackground());
     d->documentName->setBackgroundColor(Ui::DesignSystem::color().onBackground());
