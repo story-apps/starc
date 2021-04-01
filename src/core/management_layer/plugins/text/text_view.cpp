@@ -72,11 +72,6 @@ TextView::Implementation::Implementation(QWidget* _parent)
     documentText->setHeader("Header text");
     documentText->setFooter("Footer text");
     documentText->setUseSpellChecker(true);
-
-    connect(documentText, &CompleterTextEdit::textChanged, [this] {
-        static QStringListModel* model = new QStringListModel({"АНТОН", "АДМИРАЛ", "АДМИНИСТРАТОР", "АПОСТОЛ", "АДЛЕН", "АМИР"}, documentText);
-        documentText->complete(model, documentText->toPlainText());
-    });
 }
 
 

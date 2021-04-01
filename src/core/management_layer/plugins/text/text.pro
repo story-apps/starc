@@ -3,7 +3,7 @@ TEMPLATE = lib
 CONFIG += plugin c++1z
 QT += widgets
 
-TARGET = textplugin
+TARGET = simpletextplugin
 
 DEFINES += MANAGER_PLUGIN
 DEFINES += QT_DEPRECATED_WARNINGS

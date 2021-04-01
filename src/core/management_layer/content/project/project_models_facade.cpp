@@ -236,6 +236,12 @@ BusinessLayer::AbstractModel* ProjectModelsFacade::modelFor(Domain::DocumentObje
                 break;
             }
 
+            case Domain::DocumentObjectType::Folder:
+            case Domain::DocumentObjectType::Text: {
+                model = new BusinessLayer::TextModel;
+                break;
+            }
+
             default: {
                 Q_ASSERT(false);
                 return nullptr;

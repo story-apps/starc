@@ -200,22 +200,27 @@ QModelIndex StructureModel::addDocument(Domain::DocumentObjectType _type, const 
             appendItem(createItem(_type, tr("Characters")), parentItem, _content);
             break;
         }
-
-        case DocumentObjectType::Locations: {
-            appendItem(createItem(_type, tr("Locations")), parentItem, _content);
-            break;
-        }
-
         case DocumentObjectType::Character: {
             parentItem = itemForType(Domain::DocumentObjectType::Characters);
             Q_ASSERT(parentItem);
             appendItem(createItem(_type, _name.toUpper()), parentItem, _content);
             break;
         }
+
+        case DocumentObjectType::Locations: {
+            appendItem(createItem(_type, tr("Locations")), parentItem, _content);
+            break;
+        }
         case DocumentObjectType::Location: {
             parentItem = itemForType(Domain::DocumentObjectType::Locations);
             Q_ASSERT(parentItem);
             appendItem(createItem(_type, _name.toUpper()), parentItem, _content);
+            break;
+        }
+
+        case DocumentObjectType::Folder:
+        case DocumentObjectType::Text: {
+            appendItem(createItem(_type, _name), parentItem, _content);
             break;
         }
 
@@ -423,26 +428,44 @@ int StructureModel::rowCount(const QModelIndex& _parent) const
 Qt::ItemFlags StructureModel::flags(const QModelIndex& _index) const
 {
     const auto item = itemForIndex(_index);
+    const auto defaultFlags = Qt::ItemIsEnabled | Qt::ItemIsSelectable;
     switch (item->type()) {
-        case Domain::DocumentObjectType::Project:
-        case Domain::DocumentObjectType::Characters:
-        case Domain::DocumentObjectType::Locations:
-        case Domain::DocumentObjectType::RecycleBin: {
-            return Qt::ItemIsEnabled | Qt::ItemIsSelectable | Qt::ItemIsDropEnabled;
-        }
-
+        //
+        // Элемент можно перемещать и вставлять внутрь другие
+        //
+        case Domain::DocumentObjectType::Screenplay:
         case Domain::DocumentObjectType::Character:
         case Domain::DocumentObjectType::Location:
-        case Domain::DocumentObjectType::Screenplay: {
-            return Qt::ItemIsEnabled | Qt::ItemIsSelectable | Qt::ItemIsDragEnabled | Qt::ItemIsDropEnabled;
+        case Domain::DocumentObjectType::Folder: {
+            return defaultFlags | Qt::ItemIsDragEnabled | Qt::ItemIsDropEnabled;
         }
 
+        //
+        // В элемент можно только вставлять другие
+        //
+        case Domain::DocumentObjectType::Project:
+        case Domain::DocumentObjectType::RecycleBin:
+        case Domain::DocumentObjectType::Characters:
+        case Domain::DocumentObjectType::Locations: {
+            return defaultFlags | Qt::ItemIsDropEnabled;
+        }
+
+        //
+        // Элемент можно только перемещать
+        //
+        case Domain::DocumentObjectType::Text: {
+            return defaultFlags | Qt::ItemIsDragEnabled;
+        }
+
+        //
+        // Элемент нельзя ни перемещать ни вставлять внутрь другие
+        //
         case Domain::DocumentObjectType::ScreenplayTitlePage:
         case Domain::DocumentObjectType::ScreenplaySynopsis:
         case Domain::DocumentObjectType::ScreenplayTreatment:
         case Domain::DocumentObjectType::ScreenplayText:
         case Domain::DocumentObjectType::ScreenplayStatistics: {
-            return Qt::ItemIsEnabled | Qt::ItemIsSelectable;
+            return defaultFlags;
         }
 
         default: {

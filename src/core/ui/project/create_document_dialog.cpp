@@ -59,6 +59,8 @@ CreateDocumentDialog::Implementation::Implementation(QWidget* _parent)
     typesModel->appendRow(makeItem(Domain::DocumentObjectType::Character));
     typesModel->appendRow(makeItem(Domain::DocumentObjectType::Location));
     typesModel->appendRow(makeItem(Domain::DocumentObjectType::Screenplay));
+    typesModel->appendRow(makeItem(Domain::DocumentObjectType::Folder));
+    typesModel->appendRow(makeItem(Domain::DocumentObjectType::Text));
 
     documentType->setModel(typesModel);
     documentType->setCurrentIndex(typesModel->index(0, 0));
@@ -83,7 +85,11 @@ void CreateDocumentDialog::Implementation::updateDocumentInfo()
                     "and keep the details.") },
                { Domain::DocumentObjectType::Screenplay,
                  tr("Create a document set to streamline your work on the feature film, "
-                    "series, or animation.") }};
+                    "series, or animation.") },
+               { Domain::DocumentObjectType::Folder,
+                 tr("Create a folder to group documents inside the story.") },
+               { Domain::DocumentObjectType::Text,
+                 tr("Create a text document.") }};
 
     const auto documentTypeData = documentType->currentIndex().data(kMimeTypeRole).toInt();
     documentInfo->setText(documenTypeToInfo.value(static_cast<Domain::DocumentObjectType>(documentTypeData)));
@@ -143,6 +149,8 @@ void CreateDocumentDialog::updateTranslations()
     d->typesModel->item(0)->setText(tr("Character"));
     d->typesModel->item(1)->setText(tr("Location"));
     d->typesModel->item(2)->setText(tr("Screenplay"));
+    d->typesModel->item(3)->setText(tr("Folder"));
+    d->typesModel->item(4)->setText(tr("Text"));
 
     d->documentName->setLabel(tr("Name"));
     d->updateDocumentInfo();

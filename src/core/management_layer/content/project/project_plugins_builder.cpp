@@ -26,7 +26,7 @@ namespace {
      */
     const QHash<QString, QString> kEditorToNavigator
     = {{ kScreenplayEditorMime, kScreenplayNavigatorMime },
-       { "application/x-starc/editor/screenplay/cards", "application/x-starc/navigator/screenplay/text-structure" },
+       { "application/x-starc/editor/screenplay/cards", kScreenplayNavigatorMime },
        { "application/x-starc/editor/screenplay/statistics", "application/x-starc/navigator/screenplay/statistics-structure" }};
 
     /**
@@ -35,8 +35,6 @@ namespace {
     const QHash<QString, QVector<ProjectPluginsBuilder::EditorInfo>> kDocumentToEditors
     = {{ "application/x-starc/document/project", {{ "application/x-starc/editor/project/information", u8"\U000f02fd" },
                                                   { "application/x-starc/editor/project/collaborators", u8"\U000f0b58" }}},
-       { "application/x-starc/document/character", {{ "application/x-starc/editor/character/information", u8"\U000f02fd" }}},
-       { "application/x-starc/document/location", {{ "application/x-starc/editor/location/information", u8"\U000f02fd" }}},
        { "application/x-starc/document/screenplay", {{ "application/x-starc/editor/screenplay/information", u8"\U000f02fd" },
                                                      { "application/x-starc/editor/screenplay/parameters", u8"\U000f0493" }}},
        { "application/x-starc/document/screenplay/title-page", {{ "application/x-starc/editor/screenplay/title-page", u8"\U000f09ed" }}},
@@ -45,7 +43,11 @@ namespace {
                                                              { "application/x-starc/editor/screenplay/cards", u8"\U000f0554" }}},
        { "application/x-starc/document/screenplay/text", {{ kScreenplayEditorMime, u8"\U000f09ed" },
                                                           { "application/x-starc/editor/screenplay/cards", u8"\U000f0554" }}},
-       { "application/x-starc/document/screenplay/statistics", {{ "application/x-starc/editor/screenplay/statistics", u8"\U000f0127" }}}};
+       { "application/x-starc/document/screenplay/statistics", {{ "application/x-starc/editor/screenplay/statistics", u8"\U000f0127" }}},
+       { "application/x-starc/document/character", {{ "application/x-starc/editor/character/information", u8"\U000f02fd" }}},
+       { "application/x-starc/document/location", {{ "application/x-starc/editor/location/information", u8"\U000f02fd" }}},
+       { "application/x-starc/document/folder", {{ "application/x-starc/editor/text/text", u8"\U000f09ed" }}},
+       { "application/x-starc/document/text", {{ "application/x-starc/editor/text/text", u8"\U000f09ed" }}}};
 
     /**
       * @brief Карта соответсвий майм-типов навигаторов/редакторов к названиям библиотек с плагинами
@@ -54,11 +56,6 @@ namespace {
       */
     const QHash<QString, QString> kMimeToPlugin
     = {{ "application/x-starc/editor/project/information", "*projectinformationplugin*" },
-       //
-       { "application/x-starc/editor/character/information", "*characterinformationplugin*" },
-       //
-       { "application/x-starc/editor/location/information", "*locationinformationplugin*" },
-       //
        { "application/x-starc/editor/screenplay/information", "*screenplayinformationplugin*" },
        { "application/x-starc/editor/screenplay/parameters", "*screenplayparametersplugin*" },
        { "application/x-starc/editor/screenplay/title-page", "*simpletextplugin*" },
@@ -69,7 +66,10 @@ namespace {
        { kScreenplayNavigatorMime, "*screenplaytextstructureplugin*" },
        { "application/x-starc/editor/screenplay/cards", "*screenplaytextcardsplugin*" },
        { "application/x-starc/editor/screenplay/statistics", "*screenplaystatisticsplugin*" },
-       { "application/x-starc/navigator/screenplay/statistics-structure", "*screenplaystatisticsstructureplugin*" }};
+       { "application/x-starc/navigator/screenplay/statistics-structure", "*screenplaystatisticsstructureplugin*" },
+       { "application/x-starc/editor/character/information", "*characterinformationplugin*" },
+       { "application/x-starc/editor/location/information", "*locationinformationplugin*" },
+       { "application/x-starc/editor/text/text", "*simpletextplugin*" }};
 }
 
 class ProjectPluginsBuilder::Implementation
