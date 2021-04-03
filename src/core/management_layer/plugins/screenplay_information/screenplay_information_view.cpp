@@ -183,7 +183,7 @@ void ScreenplayInformationView::updateTranslations()
     d->titlePageVisiblity->setText(tr("Title page"));
     d->synopsisVisiblity->setText(tr("Synopsis"));
     d->treatmentVisiblity->setText(tr("Treatment"));
-    d->screenplayTextVisiblity->setText(tr("Text"));
+    d->screenplayTextVisiblity->setText(tr("Screenplay"));
     d->screenplayStatisticsVisiblity->setText(tr("Statistics"));
 }
 

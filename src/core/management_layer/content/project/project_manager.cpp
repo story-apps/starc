@@ -720,7 +720,7 @@ void ProjectManager::addScreenplay(const QString& _name, const QString& _titlePa
     d->projectStructureModel->appendItem(createItem(DocumentObjectType::ScreenplayTitlePage, tr("Title page")), screenplayItem, _titlePage.toUtf8());
     d->projectStructureModel->appendItem(createItem(DocumentObjectType::ScreenplaySynopsis, tr("Synopsis")), screenplayItem, _synopsis.toUtf8());
     d->projectStructureModel->appendItem(createItem(DocumentObjectType::ScreenplayTreatment, tr("Treatment")), screenplayItem, _treatment.toUtf8());
-    d->projectStructureModel->appendItem(createItem(DocumentObjectType::ScreenplayText, tr("Text")), screenplayItem, _text.toUtf8());
+    d->projectStructureModel->appendItem(createItem(DocumentObjectType::ScreenplayText, tr("Screenplay")), screenplayItem, _text.toUtf8());
     d->projectStructureModel->appendItem(createItem(DocumentObjectType::ScreenplayStatistics, tr("Statistics")), screenplayItem, {});
 }
 

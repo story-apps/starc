@@ -191,7 +191,7 @@ QModelIndex StructureModel::addDocument(Domain::DocumentObjectType _type, const 
             appendItem(createItem(DocumentObjectType::ScreenplayTitlePage, tr("Title page")), screenplayItem);
             appendItem(createItem(DocumentObjectType::ScreenplaySynopsis, tr("Synopsis")), screenplayItem);
             appendItem(createItem(DocumentObjectType::ScreenplayTreatment, tr("Treatment")), screenplayItem);
-            appendItem(createItem(DocumentObjectType::ScreenplayText, tr("Text")), screenplayItem);
+            appendItem(createItem(DocumentObjectType::ScreenplayText, tr("Screenplay")), screenplayItem);
             appendItem(createItem(DocumentObjectType::ScreenplayStatistics, tr("Statistics")), screenplayItem);
             break;
         }
