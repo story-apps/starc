@@ -8,6 +8,7 @@
 #include <ui/widgets/label/label.h>
 #include <ui/widgets/text_field/text_field.h>
 #include <ui/widgets/tree/tree.h>
+#include <ui/widgets/shadow/shadow.h>
 
 #include <QGridLayout>
 #include <QStandardItemModel>
@@ -48,6 +49,8 @@ CreateDocumentDialog::Implementation::Implementation(QWidget* _parent)
       cancelButton(new Button(_parent)),
       createButton(new Button(_parent))
 {
+    new Shadow(Qt::TopEdge, documentType);
+
     auto makeItem = [] (Domain::DocumentObjectType _type) {
         auto item = new QStandardItem;
         item->setData(Domain::iconForType(_type), Qt::DecorationRole);
@@ -89,7 +92,7 @@ void CreateDocumentDialog::Implementation::updateDocumentInfo()
                { Domain::DocumentObjectType::Folder,
                  tr("Create a folder to group documents inside the story.") },
                { Domain::DocumentObjectType::Text,
-                 tr("Create a text document.") }};
+                 tr("Create a plain text document to write out ideas and notes.") }};
 
     const auto documentTypeData = documentType->currentIndex().data(kMimeTypeRole).toInt();
     documentInfo->setText(documenTypeToInfo.value(static_cast<Domain::DocumentObjectType>(documentTypeData)));
@@ -108,7 +111,7 @@ CreateDocumentDialog::CreateDocumentDialog(QWidget *_parent)
 
     contentsLayout()->setContentsMargins({});
     contentsLayout()->setSpacing(0);
-    contentsLayout()->addWidget(d->documentType, 0, 0, 4, 1);
+    contentsLayout()->addWidget(d->documentType, 0, 0, 5, 1);
     contentsLayout()->addWidget(d->documentName, 0, 1, 1, 1);
     contentsLayout()->addWidget(d->documentInfo, 1, 1, 1, 1);
     contentsLayout()->setRowStretch(2, 1);
