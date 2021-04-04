@@ -7,15 +7,20 @@ QT += widgets widgets-private sql xml network
 DEFINES += CORE_LIBRARY
 DEFINES += QT_DEPRECATED_WARNINGS
 
-DESTDIR = ../_build
+mac {
+    DESTDIR = ../_build/starcapp.app/Contents/Frameworks
+} else {
+    DESTDIR = ../_build
+}
+LIBSDIR = ../_build/libs
 
 INCLUDEPATH += ..
 
 #
 # Подключаем библиотеку fileformats
 #
-LIBS += -L$$DESTDIR/libs/ -lfileformats
-win32-msvc*:QMAKE_LFLAGS += /WHOLEARCHIVE:$$DESTDIR/libs/fileformats.lib
+LIBS += -L$$LIBSDIR/ -lfileformats
+win32-msvc*:QMAKE_LFLAGS += /WHOLEARCHIVE:$$LIBSDIR/fileformats.lib
 
 INCLUDEPATH += $$PWD/../3rd_party/fileformats
 DEPENDPATH += $$PWD/../3rd_party/fileformats
@@ -27,8 +32,8 @@ mac:LIBS += -lz
 #
 # Подключаем библиотеку HUNSPELL
 #
-LIBS += -L$$DESTDIR/libs/ -lhunspell
-win32-msvc*:QMAKE_LFLAGS += /WHOLEARCHIVE:$$DESTDIR/libs/hunspell.lib
+LIBS += -L$$LIBSDIR/ -lhunspell
+win32-msvc*:QMAKE_LFLAGS += /WHOLEARCHIVE:$$LIBSDIR/hunspell.lib
 
 INCLUDEPATH += $$PWD/../3rd_party/hunspell/src
 DEPENDPATH += $$PWD/../3rd_party/hunspell
@@ -38,8 +43,8 @@ PRE_TARGETDEPS += $$PWD/../3rd_party/hunspell
 #
 # Подключаем библиотеку qgumboparser
 #
-LIBS += -L$$DESTDIR/libs/ -lqgumboparser
-win32-msvc*:QMAKE_LFLAGS += /WHOLEARCHIVE:$$DESTDIR/libs/qgumboparser.lib
+LIBS += -L$$LIBSDIR/ -lqgumboparser
+win32-msvc*:QMAKE_LFLAGS += /WHOLEARCHIVE:$$LIBSDIR/qgumboparser.lib
 
 INCLUDEPATH += $$PWD/../3rd_party/qgumboparser
 DEPENDPATH += $$PWD/../3rd_party/qgumboparser
@@ -49,8 +54,8 @@ PRE_TARGETDEPS += $$PWD/../3rd_party/qgumboparser
 #
 # Подключаем библиотеку Webloader
 #
-LIBS += -L$$DESTDIR/libs/ -lwebloader
-win32-msvc*:QMAKE_LFLAGS += /WHOLEARCHIVE:$$DESTDIR/libs/webloader.lib
+LIBS += -L$$LIBSDIR/ -lwebloader
+win32-msvc*:QMAKE_LFLAGS += /WHOLEARCHIVE:$$LIBSDIR/webloader.lib
 
 INCLUDEPATH += $$PWD/../3rd_party/webloader/src
 DEPENDPATH += $$PWD/../3rd_party/webloader

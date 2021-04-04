@@ -113,8 +113,6 @@ QWidget* ProjectPluginsBuilder::Implementation::activatePlugin(const QString& _m
 
 #if defined(Q_OS_MAC)
         pluginsDir.cdUp();
-//        pluginsDir.cdUp();
-//        pluginsDir.cdUp();
 #endif
 
         //

@@ -1,11 +1,11 @@
 TEMPLATE = subdirs ordered
 
 SUBDIRS += \
+    app \
     3rd_party \
     corelib \
     core/management_layer/plugins \
     core \
-    app \
     testapp
 
 CONFIG += ordered

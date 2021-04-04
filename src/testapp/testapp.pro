@@ -9,7 +9,12 @@ DESTDIR = ../_build/
 #
 # Подключаем библиотеку corelib
 #
-LIBS += -L$$DESTDIR/ -lcorelib
+mac {
+    CORELIBDIR = ../_build/starcapp.app/Contents/Frameworks
+} else {
+    CORELIBDIR = ../_build
+}
+LIBS += -L$$CORELIBDIR/ -lcorelib
 INCLUDEPATH += $$PWD/../corelib
 DEPENDPATH += $$PWD/../corelib
 
