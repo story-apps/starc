@@ -164,8 +164,11 @@ ScreenplayTemplateFacade::ScreenplayTemplateFacade()
 
 ScreenplayTemplateFacade& ScreenplayTemplateFacade::instance()
 {
-    static ScreenplayTemplateFacade facade;
-    return facade;
+    static ScreenplayTemplateFacade* facade = nullptr;
+    if (facade == nullptr) {
+        facade = new ScreenplayTemplateFacade;
+    }
+    return *facade;
 }
 
 } // namespace BusinssLayer

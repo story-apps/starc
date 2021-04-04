@@ -69,7 +69,7 @@ public:
     static void updateTranslations();
 
 public:
-    ~ScreenplayTemplateFacade();
+    virtual ~ScreenplayTemplateFacade();
 
 private:
     ScreenplayTemplateFacade();
