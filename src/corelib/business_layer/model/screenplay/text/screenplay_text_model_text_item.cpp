@@ -801,11 +801,21 @@ void ScreenplayTextModelTextItem::mergeWith(const ScreenplayTextModelTextItem* _
 
 QVariant ScreenplayTextModelTextItem::data(int _role) const
 {
-    if (_role == Qt::DisplayRole) {
-        return d->text;
-    }
+    switch (_role) {
+        case Qt::DecorationRole: {
+            return d->paragraphType == ScreenplayParagraphType::Shot
+                    ? u8"\U000F0332"
+                    : u8"\U000F09A8";
+        }
 
-    return ScreenplayTextModelItem::data(_role);
+        case Qt::DisplayRole: {
+            return d->text;
+        }
+
+        default: {
+            return ScreenplayTextModelItem::data(_role);
+        }
+    }
 }
 
 QByteArray ScreenplayTextModelTextItem::toXml() const

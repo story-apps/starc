@@ -250,8 +250,8 @@ SettingsStorage::Implementation::Implementation()
     addShortcut(BusinessLayer::ScreenplayParagraphType::Parenthetical, "Ctrl+5");
     addShortcut(BusinessLayer::ScreenplayParagraphType::Dialogue, "Ctrl+6");
     addShortcut(BusinessLayer::ScreenplayParagraphType::Lyrics, "Ctrl+7");
-    addShortcut(BusinessLayer::ScreenplayParagraphType::Transition, "Ctrl+8");
-    addShortcut(BusinessLayer::ScreenplayParagraphType::Shot, "Ctrl+9");
+    addShortcut(BusinessLayer::ScreenplayParagraphType::Shot, "Ctrl+8");
+    addShortcut(BusinessLayer::ScreenplayParagraphType::Transition, "Ctrl+9");
     addShortcut(BusinessLayer::ScreenplayParagraphType::InlineNote, "Ctrl+Esc");
     addShortcut(BusinessLayer::ScreenplayParagraphType::FolderHeader, "Ctrl+Space");
     //

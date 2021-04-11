@@ -214,11 +214,9 @@ void ScreenplayTextManager::saveSettings()
 
 void ScreenplayTextManager::setCurrentModelIndex(const QModelIndex& _index)
 {
-    if (!_index.isValid()) {
-        return;
-    }
+    QSignalBlocker blocker(this);
 
-    if (d->view->currentModelIndex().parent() == _index.parent()) {
+    if (!_index.isValid()) {
         return;
     }
 

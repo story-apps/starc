@@ -393,11 +393,21 @@ int ScreenplayTextModel::rowCount(const QModelIndex& _parent) const
 
 Qt::ItemFlags ScreenplayTextModel::flags(const QModelIndex& _index) const
 {
-    Qt::ItemFlags flags = Qt::ItemIsEnabled | Qt::ItemIsSelectable | Qt::ItemIsDragEnabled;
+    Qt::ItemFlags flags = Qt::ItemIsEnabled | Qt::ItemIsSelectable;
 
     const auto item = itemForIndex(_index);
-    if (item->type() == ScreenplayTextModelItemType::Folder) {
-        flags |= Qt::ItemIsDropEnabled;
+    switch (item->type()) {
+        case ScreenplayTextModelItemType::Folder: {
+            flags |= Qt::ItemIsDragEnabled | Qt::ItemIsDropEnabled;
+            break;
+        }
+
+        case ScreenplayTextModelItemType::Scene: {
+            flags |= Qt::ItemIsDragEnabled;
+            break;
+        }
+
+        default: break;
     }
 
     return flags;
