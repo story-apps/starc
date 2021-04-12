@@ -663,6 +663,7 @@ void ScreenplayTextView::designSystemChangeEvent(DesignSystemChangeEvent* _event
 
     d->sidebarTabs->setTextColor(Ui::DesignSystem::color().onPrimary());
     d->sidebarTabs->setBackgroundColor(Ui::DesignSystem::color().primary());
+    d->sidebarContent->setBackgroundColor(Ui::DesignSystem::color().primary());
 }
 
 } // namespace Ui
