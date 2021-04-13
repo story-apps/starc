@@ -259,7 +259,8 @@ const QAbstractAnimation& StackWidget::Implementation::currentAnimation() const
 {
     switch (animationType) {
         default:
-        case AnimationType::Fade: {
+        case AnimationType::Fade:
+        case AnimationType::FadeThrough: {
             return fadeAnimation;
         }
 
@@ -363,13 +364,16 @@ void StackWidget::setCurrentWidget(QWidget *_widget)
     d->currentWidgetImage = d->currentWidget->grab();
     d->currentWidget->hide();
     switch (d->animationType) {
-        case AnimationType::Fade: {
+        case AnimationType::FadeThrough: {
             const qreal widthDelta = width() * 0.02;
             const qreal heightDelta = height() * 0.02;
             const auto startGeometry = QRectF(rect()).adjusted(widthDelta, heightDelta,
                                                                -widthDelta, -heightDelta);
             d->fadeAnimation.incomingContentGeometry.setStartValue(startGeometry);
             d->fadeAnimation.incomingContentGeometry.setEndValue(QRectF(rect()));
+            Q_FALLTHROUGH();
+        }
+        case AnimationType::Fade: {
             d->fadeAnimation.start();
             break;
         }
@@ -443,16 +447,20 @@ void StackWidget::paintEvent(QPaintEvent *_event)
     //
     QPainter painter(this);
     switch (d->animationType) {
-        case AnimationType::Fade: {
+        case AnimationType::Fade:
+        case AnimationType::FadeThrough: {
             if (!d->previousWidgetImage.isNull()) {
                 painter.setOpacity(d->fadeAnimation.outgoingContentFadeOut.currentValue().toReal());
                 painter.drawPixmap(0, 0, d->previousWidgetImage);
             }
             if (!d->currentWidgetImage.isNull()) {
                 painter.setOpacity(d->fadeAnimation.incomingContentFadeIn.currentValue().toReal());
-                const auto targetRect = d->fadeAnimation.incomingContentGeometry.currentValue().toRectF();
-                painter.drawPixmap(targetRect.topLeft(), d->currentWidgetImage.scaled(targetRect.size().toSize()));
-//                painter.drawPixmap(0, 0, d->currentWidgetImage);
+                if (d->animationType == AnimationType::FadeThrough) {
+                    const auto targetRect = d->fadeAnimation.incomingContentGeometry.currentValue().toRectF();
+                    painter.drawPixmap(targetRect.topLeft(), d->currentWidgetImage.scaled(targetRect.size().toSize()));
+                } else {
+                    painter.drawPixmap(0, 0, d->currentWidgetImage);
+                }
             }
             break;
         }

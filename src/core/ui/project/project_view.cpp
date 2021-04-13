@@ -79,6 +79,8 @@ ProjectView::ProjectView(QWidget* _parent)
     : StackWidget(_parent),
       d(new Implementation(this))
 {
+    setAnimationType(AnimationType::FadeThrough);
+
     addWidget(d->defaultPage);
     addWidget(d->notImplementedPage);
 
