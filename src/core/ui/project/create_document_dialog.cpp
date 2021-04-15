@@ -107,7 +107,6 @@ CreateDocumentDialog::CreateDocumentDialog(QWidget *_parent)
 {
     setAcceptButton(d->createButton);
     setRejectButton(d->cancelButton);
-    setContentMaximumWidth(600);
 
     contentsLayout()->setContentsMargins({});
     contentsLayout()->setSpacing(0);
@@ -166,8 +165,12 @@ void CreateDocumentDialog::designSystemChangeEvent(DesignSystemChangeEvent* _eve
 {
     AbstractDialog::designSystemChangeEvent(_event);
 
+    setContentMaximumWidth(600 * Ui::DesignSystem::scaleFactor());
+
     d->documentType->setBackgroundColor(DesignSystem::color().background());
     d->documentType->setTextColor(DesignSystem::color().onBackground());
+    d->documentType->setMinimumWidth(d->documentType->sizeHintForColumn(0));
+    d->documentType->setMinimumHeight(300 * Ui::DesignSystem::scaleFactor());
 
     d->documentName->setTextColor(Ui::DesignSystem::color().onBackground());
     d->documentName->setBackgroundColor(Ui::DesignSystem::color().onBackground());
