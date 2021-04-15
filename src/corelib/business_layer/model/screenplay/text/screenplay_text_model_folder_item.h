@@ -6,7 +6,6 @@
 
 #include <chrono>
 
-class QDomElement;
 class QXmlStreamReader;
 
 

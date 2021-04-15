@@ -1101,10 +1101,8 @@ void ScreenplayTextDocument::setParagraphType(BusinessLayer::ScreenplayParagraph
 
 void ScreenplayTextDocument::cleanParagraphType(const ScreenplayTextCursor& _cursor)
 {
-    const auto oldBlockStyle
-            = ScreenplayTemplateFacade::getTemplate(d->templateId).blockStyle(
-                  ScreenplayBlockStyle::forBlock(_cursor.block()));
-    if (!oldBlockStyle.isEmbeddableHeader()) {
+    const auto oldBlockType = ScreenplayBlockStyle::forBlock(_cursor.block());
+    if (oldBlockType != ScreenplayParagraphType::FolderHeader) {
         return;
     }
 
@@ -1120,7 +1118,7 @@ void ScreenplayTextDocument::cleanParagraphType(const ScreenplayTextCursor& _cur
     bool isFooterUpdated = false;
     do {
         const auto currentType = ScreenplayBlockStyle::forBlock(cursor.block());
-        if (currentType == oldBlockStyle.embeddableFooter()) {
+        if (currentType == ScreenplayParagraphType::FolderFooter) {
             if (openedGroups == 0) {
                 cursor.movePosition(QTextCursor::PreviousBlock);
                 cursor.movePosition(QTextCursor::EndOfBlock);
@@ -1132,7 +1130,7 @@ void ScreenplayTextDocument::cleanParagraphType(const ScreenplayTextCursor& _cur
             } else {
                 --openedGroups;
             }
-        } else if (currentType == oldBlockStyle.type()) {
+        } else if (currentType == oldBlockType) {
             //
             // Встретилась новая папка
             //
@@ -1199,9 +1197,9 @@ void ScreenplayTextDocument::applyParagraphType(BusinessLayer::ScreenplayParagra
     //
     // Для заголовка папки нужно создать завершение
     //
-    if (newBlockStyle.isEmbeddableHeader()) {
+    if (_type == ScreenplayParagraphType::FolderHeader) {
         const auto footerStyle = ScreenplayTemplateFacade::getTemplate(d->templateId).blockStyle(
-                                     newBlockStyle.embeddableFooter());
+                                     ScreenplayParagraphType::FolderFooter);
 
         //
         // Вставляем закрывающий блок

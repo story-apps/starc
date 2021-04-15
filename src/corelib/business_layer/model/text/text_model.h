@@ -6,6 +6,9 @@
 namespace BusinessLayer
 {
 
+/**
+ * @brief Модель текстового документа
+ */
 class CORE_LIBRARY_EXPORT TextModel : public AbstractModel
 {
     Q_OBJECT

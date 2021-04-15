@@ -8,7 +8,6 @@
 #include <QString>
 #include <QTextLayout>
 
-class QDomElement;
 class QXmlStreamReader;
 
 

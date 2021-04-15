@@ -101,8 +101,12 @@ SOURCES += \
     business_layer/model/structure/structure_model_item.cpp \
     business_layer/model/structure/structure_proxy_model.cpp \
     business_layer/model/text/text_model.cpp \
+    business_layer/model/text/text_model_text_item.cpp \
+    business_layer/model/text/text_model_xml.cpp \
     business_layer/templates/screenplay_template.cpp \
     business_layer/templates/screenplay_template_facade.cpp \
+    business_layer/templates/templates_facade.cpp \
+    business_layer/templates/text_template.cpp \
     data_layer/database.cpp \
     data_layer/mapper/abstract_mapper.cpp \
     data_layer/mapper/document_change_mapper.cpp \
@@ -244,8 +248,12 @@ HEADERS += \
     business_layer/model/structure/structure_model_item.h \
     business_layer/model/structure/structure_proxy_model.h \
     business_layer/model/text/text_model.h \
+    business_layer/model/text/text_model_text_item.h \
+    business_layer/model/text/text_model_xml.h \
     business_layer/templates/screenplay_template.h \
     business_layer/templates/screenplay_template_facade.h \
+    business_layer/templates/templates_facade.h \
+    business_layer/templates/text_template.h \
     corelib_global.h \
     data_layer/database.h \
     data_layer/mapper/abstract_mapper.h \

@@ -4,7 +4,6 @@
 
 #include <QHash>
 
-class QDomElement;
 class QXmlStreamReader;
 
 

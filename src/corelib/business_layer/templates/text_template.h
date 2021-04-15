@@ -14,33 +14,17 @@ namespace BusinessLayer
 {
 
 /**
- * @brief Типы параграфов в сценарии
+ * @brief Типы параграфов в текстовом документ
  */
-enum class ScreenplayParagraphType {
+enum class TextParagraphType {
     Undefined,
-    UnformattedText,
-    SceneHeading,
-    SceneCharacters,
-    Action,
-    Character,
-    Parenthetical,
-    Dialogue,
-    Lyrics,
-    Transition,
-    Shot,
-    InlineNote,
-    FolderHeader,
-    FolderFooter,
-    //
-    SceneHeadingShadow,	//!< Время и место, для вспомогательных разрывов
-    //
-    PageSplitter, //!< Разделитель страницы (для блоков внутри которых находятся таблицы)
+    Text
 };
 
 /**
  * @brief Определим метод для возможности использовать типы в виде ключей в словарях
  */
-CORE_LIBRARY_EXPORT inline uint qHash(ScreenplayParagraphType _type)
+CORE_LIBRARY_EXPORT inline uint qHash(TextParagraphType _type)
 {
     return ::qHash(static_cast<int>(_type));
 }
@@ -48,18 +32,18 @@ CORE_LIBRARY_EXPORT inline uint qHash(ScreenplayParagraphType _type)
 /**
  * @brief Получить текстовое представление типа блока
  */
-CORE_LIBRARY_EXPORT QString toString(ScreenplayParagraphType _type);
+CORE_LIBRARY_EXPORT QString toString(TextParagraphType _type);
 
 /**
  * @brief Получить тип блока из текстового представления
  */
-CORE_LIBRARY_EXPORT ScreenplayParagraphType screenplayParagraphTypeFromString(const QString& _text);
+CORE_LIBRARY_EXPORT TextParagraphType textParagraphTypeFromString(const QString& _text);
 
 
 /**
- * @brief Класс стиля блока сценария
+ * @brief Класс стиля блока текста
  */
-class CORE_LIBRARY_EXPORT ScreenplayBlockStyle
+class CORE_LIBRARY_EXPORT TextBlockStyle
 {
 public:
     /**
@@ -67,12 +51,7 @@ public:
      */
     enum Property {
         PropertyType = QTextFormat::UserProperty + 100, //!< Тип блока
-        PropertyHeaderType,       //!< Тип блока заголовка
-        PropertyHeader,           //!< Текст заголовка блока (а-ля "ТИТР:")
-        PropertyPrefix,           //!< Префикс блока
-        PropertyPostfix,          //!< Постфикс блока
         PropertyIsFirstUppercase, //!< Необходимо ли первый символ поднимать в верхний регистр
-        PropertyIsCanModify,      //!< Редактируемый ли блок
         //
         // Свойства редакторских заметок
         //
@@ -82,15 +61,6 @@ public:
         PropertyComments,        //!< Список комментариев к правке
         PropertyCommentsAuthors, //!< Список авторов комментариев
         PropertyCommentsDates,   //!< Список дат комментариев
-        //
-        // Свойства корректирующих текст блоков
-        //
-        PropertyIsCorrection,           //!< Не разрывающий текст блок (пустые блоки в конце страницы, блоки с текстом ПРОД, или именем персонажа)
-        PropertyIsCorrectionContinued,	//!< Блок с текстом ПРОД., вставляемый на обрыве реплики
-        PropertyIsCorrectionCharacter,	//!< Блок с именем персонажа, вставляемый на новой странице
-        PropertyIsBreakCorrectionStart,	//!< Разрывающий текст блок в начале разрыва
-        PropertyIsBreakCorrectionEnd,	//!< Разрывающий текст блок в конце разрыва
-        PropertyIsCharacterContinued,   //!< Имя персонажа для которого необходимо отображать допольнительный текст ПРОД., не пишем в xml
     };
 
     /**
@@ -106,16 +76,16 @@ public:
     /**
      * @brief Получить тип блока
      */
-    static ScreenplayParagraphType forBlock(const QTextBlock& _block);
+    static TextParagraphType forBlock(const QTextBlock& _block);
 
 public:
-    ScreenplayBlockStyle() = default;
+    TextBlockStyle() = default;
 
     /**
      * @brief Тип блока
      */
-    ScreenplayParagraphType type() const;
-    void setType(ScreenplayParagraphType _type);
+    TextParagraphType type() const;
+    void setType(TextParagraphType _type);
 
     /**
      * @brief Активен ли стиль блока
@@ -166,17 +136,6 @@ public:
     void setMargins(const QMarginsF& _margins);
 
     /**
-     * @brief Отступы вокруг блока в режиме разделения на колонки, мм
-     */
-    QMarginsF marginsOnHalfPage() const;
-    void setMarginsOnHalfPage(const QMarginsF& _margins);
-
-    /**
-     * @brief Настроить стиль в соответствии с шириной разделителя страницы
-     */
-    void setPageSplitterWidth(qreal _width);
-
-    /**
      * @brief Отступ снизу, линий
      */
     int linesAfter() const;
@@ -186,7 +145,7 @@ public:
     /**
      * @brief Настройки стиля отображения блока
      */
-    QTextBlockFormat blockFormat(bool _onHalfPage = false) const;
+    QTextBlockFormat blockFormat() const;
     void setBackgroundColor(const QColor& _color);
 
     /**
@@ -195,28 +154,12 @@ public:
     QTextCharFormat charFormat() const;
     void setTextColor(const QColor& _color);
 
-
-    /**
-     * @brief Разрешено изменять текст блока
-     */
-    bool isCanModify() const;
-
-    /**
-     * @brief Префикс стиля
-     */
-    QString prefix() const;
-
-    /**
-     * @brief Постфикс стиля
-     */
-    QString postfix() const;
-
 private:
     /**
      * @brief Инициилизация возможна только в классе стиля сценария
      */
-    explicit ScreenplayBlockStyle(const QXmlStreamAttributes& _blockAttributes);
-    friend class ScreenplayTemplate;
+    explicit TextBlockStyle(const QXmlStreamAttributes& _blockAttributes);
+    friend class TextTemplate;
 
     /**
      * @brief Обновить межстрочный интервал блока
@@ -237,7 +180,7 @@ private:
     /**
      * @brief Тип блока
      */
-    ScreenplayParagraphType m_type = ScreenplayParagraphType::Undefined;
+    TextParagraphType m_type = TextParagraphType::Undefined;
 
     /**
      * @brief Активен ли блок
@@ -278,11 +221,6 @@ private:
     QMarginsF m_margins;
 
     /**
-     * @brief Отступы вокруг блока в режиме разделения на колонки, мм
-     */
-    QMarginsF m_marginsOnHalfPage;
-
-    /**
      * @brief Отступ снизу, линий
      */
     int m_linesAfter = 0;
@@ -291,7 +229,6 @@ private:
      * @brief Формат блока
      */
     QTextBlockFormat m_blockFormat;
-    QTextBlockFormat m_blockFormatOnHalfPage;
 
     /**
      * @brief Формат текста
@@ -303,10 +240,10 @@ private:
 /**
  * @brief Класс шаблона сценария
  */
-class CORE_LIBRARY_EXPORT ScreenplayTemplate
+class CORE_LIBRARY_EXPORT TextTemplate
 {
 public:
-    ScreenplayTemplate() = default;
+    TextTemplate() = default;
 
     /**
      * @brief Назначить шаблон новым
@@ -359,26 +296,15 @@ public:
     void setPageNumbersAlignment(Qt::Alignment _alignment);
 
     /**
-     * @brief Процент ширины страницы для левой части разделителя
-     */
-    int leftHalfOfPageWidthPercents() const;
-    void setLeftHalfOfPageWidthPercents(int _width);
-
-    /**
-     * @brief Ширина разделителя колонок
-     */
-    qreal pageSplitterWidth() const;
-
-    /**
      * @brief Получить стиль блока
      */
-    ScreenplayBlockStyle blockStyle(ScreenplayParagraphType _forType) const;
-    ScreenplayBlockStyle blockStyle(const QTextBlock& _forBlock) const;
-    void setBlockStyle(const ScreenplayBlockStyle& _blockStyle);
+    TextBlockStyle blockStyle(TextParagraphType _forType) const;
+    TextBlockStyle blockStyle(const QTextBlock& _forBlock) const;
+    void setBlockStyle(const TextBlockStyle& _blockStyle);
 
 private:
-    explicit ScreenplayTemplate(const QString& _fromFile);
-    friend class ScreenplayTemplateFacade;
+    explicit TextTemplate(const QString& _fromFile);
+    friend class TemplatesFacade;
 
     /**
      * @brief Загрузить шаблон из файла
@@ -422,20 +348,15 @@ private:
     Qt::Alignment m_pageNumbersAlignment;
 
     /**
-     * @brief Процент от ширины страницы, которые занимает левая часть разделения
-     */
-    int m_leftHalfOfPageWidthPercents = 50;
-
-    /**
      * @brief Стили блоков текста
      */
-    QHash<ScreenplayParagraphType, ScreenplayBlockStyle> m_blockStyles;
+    QHash<TextParagraphType, TextBlockStyle> m_blockStyles;
 };
 
 /**
  * @brief Определим метод для возможности использовать типы в виде ключей в словарях
  */
-CORE_LIBRARY_EXPORT inline uint qHash(ScreenplayBlockStyle::LineSpacingType _type)
+CORE_LIBRARY_EXPORT inline uint qHash(TextBlockStyle::LineSpacingType _type)
 {
     return ::qHash(static_cast<int>(_type));
 }

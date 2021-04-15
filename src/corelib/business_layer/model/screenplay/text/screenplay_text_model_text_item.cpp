@@ -685,6 +685,11 @@ void ScreenplayTextModelTextItem::removeText(int _from)
     markChanged();
 }
 
+const QVector<ScreenplayTextModelTextItem::TextFormat>& ScreenplayTextModelTextItem::formats() const
+{
+    return d->formats;
+}
+
 void ScreenplayTextModelTextItem::setFormats(const QVector<QTextLayout::FormatRange>& _formats)
 {
     QVector<TextFormat> newFormats;
@@ -764,11 +769,6 @@ void ScreenplayTextModelTextItem::setReviewMarks(const QVector<QTextLayout::Form
     }
 
     setReviewMarks(newReviewMarks);
-}
-
-const QVector<ScreenplayTextModelTextItem::TextFormat>& ScreenplayTextModelTextItem::formats() const
-{
-    return d->formats;
 }
 
 const QVector<ScreenplayTextModelTextItem::Revision>& ScreenplayTextModelTextItem::revisions() const
