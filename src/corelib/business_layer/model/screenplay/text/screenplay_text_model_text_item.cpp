@@ -4,7 +4,7 @@
 
 #include <business_layer/chronometry/chronometer.h>
 #include <business_layer/templates/screenplay_template.h>
-#include <business_layer/templates/screenplay_template_facade.h>
+#include <business_layer/templates/templates_facade.h>
 
 #include <utils/helpers/string_helper.h>
 #include <utils/helpers/text_helper.h>
@@ -693,7 +693,7 @@ const QVector<ScreenplayTextModelTextItem::TextFormat>& ScreenplayTextModelTextI
 void ScreenplayTextModelTextItem::setFormats(const QVector<QTextLayout::FormatRange>& _formats)
 {
     QVector<TextFormat> newFormats;
-    const auto defaultBlockFormat = ScreenplayTemplateFacade::getTemplate().blockStyle(d->paragraphType);
+    const auto defaultBlockFormat = TemplatesFacade::screenplayTemplate().blockStyle(d->paragraphType);
     for (const auto& format : _formats) {
         if (format.format == defaultBlockFormat.charFormat()) {
             continue;

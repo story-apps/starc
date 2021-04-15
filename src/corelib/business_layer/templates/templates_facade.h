@@ -11,6 +11,7 @@ class QStandardItemModel;
 namespace BusinessLayer
 {
 
+class ScreenplayTemplate;
 class TextTemplate;
 
 /**
@@ -28,6 +29,7 @@ public:
      * @brief Получить список шаблонов
      */
     static QStandardItemModel* textTemplates();
+    static QStandardItemModel* screenplayTemplates();
 
 //    /**
 //     * @brief Проверить существование шаблона с заданным именем
@@ -39,11 +41,13 @@ public:
      * @note Если id не задан, возвращается стандартный шаблон
      */
     static const BusinessLayer::TextTemplate& textTemplate(const QString& _templateId = {});
+    static const BusinessLayer::ScreenplayTemplate& screenplayTemplate(const QString& _templateId = {});
 
     /**
      * @brief Задать стандартный шаблон
      */
     static void setDefaultTextTemplate(const QString& _templateId);
+    static void setDefaultScreenplayTemplate(const QString& _templateId);
 
 //    /**
 //     * @brief Сохранить стиль в библиотеке шаблонов

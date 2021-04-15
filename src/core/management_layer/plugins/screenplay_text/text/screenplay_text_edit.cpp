@@ -11,7 +11,7 @@
 #include <business_layer/model/screenplay/text/screenplay_text_model.h>
 #include <business_layer/model/screenplay/text/screenplay_text_model_text_item.h>
 #include <business_layer/templates/screenplay_template.h>
-#include <business_layer/templates/screenplay_template_facade.h>
+#include <business_layer/templates/templates_facade.h>
 
 #include <ui/design_system/design_system.h>
 #include <ui/widgets/context_menu/context_menu.h>
@@ -30,7 +30,7 @@
 
 using BusinessLayer::ScreenplayBlockStyle;
 using BusinessLayer::ScreenplayParagraphType;
-using BusinessLayer::ScreenplayTemplateFacade;
+using BusinessLayer::TemplatesFacade;
 
 namespace Ui
 {
@@ -87,7 +87,7 @@ void ScreenplayTextEdit::initWithModel(BusinessLayer::ScreenplayTextModel* _mode
     }
     d->model = _model;
 
-    const auto currentTemplate = BusinessLayer::ScreenplayTemplateFacade::getTemplate();
+    const auto currentTemplate = TemplatesFacade::screenplayTemplate();
     setPageFormat(currentTemplate.pageSizeId());
     setPageMargins(currentTemplate.pageMargins());
     setPageNumbersAlignment(currentTemplate.pageNumbersAlignment());
@@ -541,7 +541,7 @@ void ScreenplayTextEdit::paintEvent(QPaintEvent* _event)
     qreal verticalMargin = 0;
     const qreal splitterX = leftDelta + textLeft
                             + (textRight - textLeft)
-                            * ScreenplayTemplateFacade::getTemplate().leftHalfOfPageWidthPercents() / 100;
+                            * TemplatesFacade::screenplayTemplate().leftHalfOfPageWidthPercents() / 100;
 
 
     //

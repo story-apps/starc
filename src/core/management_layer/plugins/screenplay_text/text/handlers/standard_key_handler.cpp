@@ -5,7 +5,6 @@
 #include <business_layer/document/screenplay/text/screenplay_text_block_data.h>
 #include <business_layer/document/screenplay/text/screenplay_text_cursor.h>
 #include <business_layer/templates/screenplay_template.h>
-#include <business_layer/templates/screenplay_template_facade.h>
 
 #include <data_layer/storage/settings_storage.h>
 #include <data_layer/storage/storage_facade.h>
@@ -15,7 +14,6 @@
 
 using BusinessLayer::ScreenplayBlockStyle;
 using BusinessLayer::ScreenplayParagraphType;
-using BusinessLayer::ScreenplayTemplateFacade;
 using Ui::ScreenplayTextEdit;
 
 

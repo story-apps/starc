@@ -2,7 +2,7 @@
 
 #include <business_layer/export/screenplay/export_options.h>
 #include <business_layer/templates/screenplay_template.h>
-#include <business_layer/templates/screenplay_template_facade.h>
+#include <business_layer/templates/templates_facade.h>
 
 #include <ui/design_system/design_system.h>
 #include <ui/widgets/button/button.h>
@@ -63,11 +63,11 @@ ExportDialog::Implementation::Implementation(QWidget* _parent)
     fileFormat->setModel(formatsModel);
     fileFormat->setCurrentIndex(formatsModel->index(0, 0));
 
-    screenplayTemplate->setModel(ScreenplayTemplateFacade::templates());
-    for (int row = 0; row < ScreenplayTemplateFacade::templates()->rowCount(); ++row) {
-        auto item = ScreenplayTemplateFacade::templates()->item(row);
-        if (item->data(ScreenplayTemplateFacade::kTemplateIdRole).toString()
-            != ScreenplayTemplateFacade::getTemplate().id()) {
+    screenplayTemplate->setModel(TemplatesFacade::screenplayTemplates());
+    for (int row = 0; row < TemplatesFacade::screenplayTemplates()->rowCount(); ++row) {
+        auto item = TemplatesFacade::screenplayTemplates()->item(row);
+        if (item->data(TemplatesFacade::kTemplateIdRole).toString()
+            != TemplatesFacade::screenplayTemplate().id()) {
             continue;
         }
 
@@ -184,7 +184,7 @@ BusinessLayer::ExportOptions ExportDialog::exportOptions() const
     BusinessLayer::ExportOptions options;
     options.templateId
             = d->screenplayTemplate->currentIndex()
-              .data(BusinessLayer::ScreenplayTemplateFacade::kTemplateIdRole).toString();
+              .data(BusinessLayer::TemplatesFacade::kTemplateIdRole).toString();
     options.printTiltePage = d->printTitlePage->isChecked();
     options.printFolders = d->printFolders->isChecked();
     options.printInlineNotes = d->printInlineNotes->isChecked();

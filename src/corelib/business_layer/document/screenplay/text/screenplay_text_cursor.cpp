@@ -4,7 +4,7 @@
 #include "screenplay_text_document.h"
 
 #include <business_layer/templates/screenplay_template.h>
-#include <business_layer/templates/screenplay_template_facade.h>
+#include <business_layer/templates/templates_facade.h>
 
 #include <ui/widgets/text_edit/base/base_text_edit.h>
 
@@ -297,13 +297,13 @@ void ScreenplayTextCursor::removeCharacters(bool _backward, BaseTextEdit* _edito
     //
     const auto topBlock = document()->findBlock(topCursorPosition);
     const auto topParagraphType = ScreenplayBlockStyle::forBlock(topBlock);
-    const auto topStyle = ScreenplayTemplateFacade::getTemplate().blockStyle(topParagraphType);
+    const auto topStyle = TemplatesFacade::screenplayTemplate().blockStyle(topParagraphType);
     //
     // ... и конца
     //
     const auto bottomBlock = document()->findBlock(bottomCursorPosition);
     const auto bottomParagraphType = ScreenplayBlockStyle::forBlock(bottomBlock);
-    const auto bottomStyle = ScreenplayTemplateFacade::getTemplate().blockStyle(bottomParagraphType);
+    const auto bottomStyle = TemplatesFacade::screenplayTemplate().blockStyle(bottomParagraphType);
 
     //
     // Определим стиль результирующего блока и сохраним его данные
@@ -330,7 +330,7 @@ void ScreenplayTextCursor::removeCharacters(bool _backward, BaseTextEdit* _edito
         }
         const QTextBlock targetBlock = cursor.block();
         const auto targetBlockType = ScreenplayBlockStyle::forBlock(targetBlock);
-        targetStyle = ScreenplayTemplateFacade::getTemplate().blockStyle(targetBlockType);
+        targetStyle = TemplatesFacade::screenplayTemplate().blockStyle(targetBlockType);
         targetBlockData = cloneBlockData(targetBlock);
     }
     //

@@ -3,7 +3,6 @@
 #include "screenplay_text_edit.h"
 
 #include <business_layer/templates/screenplay_template.h>
-#include <business_layer/templates/screenplay_template_facade.h>
 
 #include <ui/design_system/design_system.h>
 #include <ui/widgets/button/button.h>

@@ -1,7 +1,7 @@
 #include "chronometer.h"
 
 #include <business_layer/templates/screenplay_template.h>
-#include <business_layer/templates/screenplay_template_facade.h>
+#include <business_layer/templates/templates_facade.h>
 
 #include <data_layer/storage/settings_storage.h>
 #include <data_layer/storage/storage_facade.h>
@@ -41,7 +41,7 @@ public:
                                       SettingsStorage::SettingsPlace::Application)
                                   .toInt() * 1000;
 
-        const auto currentTemplate = BusinessLayer::ScreenplayTemplateFacade::getTemplate();
+        const auto currentTemplate = BusinessLayer::TemplatesFacade::screenplayTemplate();
         const auto mmPageSize = QPageSize(currentTemplate.pageSizeId()).rect(QPageSize::Millimeter).size();
         const bool x = true, y = false;
         const auto pxPageSize = QSizeF(PageMetrics::mmToPx(mmPageSize.width(), x),

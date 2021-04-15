@@ -379,6 +379,7 @@ public:
 private:
     explicit ScreenplayTemplate(const QString& _fromFile);
     friend class ScreenplayTemplateFacade;
+    friend class TemplatesFacade;
 
     /**
      * @brief Загрузить шаблон из файла

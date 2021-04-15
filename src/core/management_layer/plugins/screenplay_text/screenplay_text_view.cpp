@@ -13,7 +13,7 @@
 #include <business_layer/document/screenplay/text/screenplay_text_block_data.h>
 #include <business_layer/document/screenplay/text/screenplay_text_cursor.h>
 #include <business_layer/templates/screenplay_template.h>
-#include <business_layer/templates/screenplay_template_facade.h>
+#include <business_layer/templates/templates_facade.h>
 
 #include <data_layer/storage/settings_storage.h>
 #include <data_layer/storage/storage_facade.h>
@@ -454,7 +454,7 @@ void ScreenplayTextView::reconfigure(const QStringList& _changedSettingsKeys)
     d->paragraphTypesModel->clear();
 
     using namespace BusinessLayer;
-    const auto usedTemplate = BusinessLayer::ScreenplayTemplateFacade::getTemplate();
+    const auto usedTemplate = BusinessLayer::TemplatesFacade::screenplayTemplate();
     const QVector<ScreenplayParagraphType> types
             = { ScreenplayParagraphType::SceneHeading,
                 ScreenplayParagraphType::SceneCharacters,
@@ -497,7 +497,7 @@ void ScreenplayTextView::reconfigure(const QStringList& _changedSettingsKeys)
 
     if (_changedSettingsKeys.isEmpty()
         || _changedSettingsKeys.contains(DataStorageLayer::kComponentsScreenplayEditorDefaultTemplateKey)) {
-        ScreenplayTemplateFacade::setDefaultTemplate(
+        TemplatesFacade::setDefaultScreenplayTemplate(
                     settingsValue(DataStorageLayer::kComponentsScreenplayEditorDefaultTemplateKey).toString());
         d->screenplayText->reinit();
     }

@@ -1,7 +1,7 @@
 #include "settings_view.h"
 
 #include <business_layer/chronometry/chronometer.h>
-#include <business_layer/templates/screenplay_template_facade.h>
+#include <business_layer/templates/templates_facade.h>
 
 #include <ui/design_system/design_system.h>
 #include <ui/widgets/button/button.h>
@@ -457,7 +457,7 @@ void SettingsView::Implementation::initApplicationCard()
 
 void SettingsView::Implementation::initScreenplayCard()
 {
-    screenplayEditorDefaultTemplate->setModel(BusinessLayer::ScreenplayTemplateFacade::templates());
+    screenplayEditorDefaultTemplate->setModel(BusinessLayer::TemplatesFacade::screenplayTemplates());
     screenplayEditorDefaultTemplateOptions->setText(u8"\U000F01D9");
     screenplayEditorDefaultTemplateOptions->setAlignment(Qt::AlignCenter);
     screenplayEditorDefaultTemplateOptions->hide();
@@ -655,7 +655,7 @@ SettingsView::SettingsView(QWidget* _parent)
     connect(d->screenplayEditorShowSceneNumberOnRight, &CheckBox::checkedChanged, this, screenplayEditorCorrectShownSceneNumber);
     //
     connect(d->screenplayEditorDefaultTemplate, &ComboBox::currentIndexChanged, this, [this] (const QModelIndex& _index) {
-        emit screenplayEditorDefaultTemplateChanged(_index.data(BusinessLayer::ScreenplayTemplateFacade::kTemplateIdRole).toString());
+        emit screenplayEditorDefaultTemplateChanged(_index.data(BusinessLayer::TemplatesFacade::kTemplateIdRole).toString());
     });
     auto notifyScreenplayEditorShowSceneNumbersChanged = [this] {
         emit screenplayEditorShowSceneNumberChanged(d->screenplayEditorShowSceneNumber->isChecked(),
@@ -898,9 +898,9 @@ void SettingsView::setApplicationBackupsFolder(const QString& _path)
 void SettingsView::setScreenplayEditorDefaultTemplate(const QString& _templateId)
 {
     using namespace BusinessLayer;
-    for (int row = 0; row < ScreenplayTemplateFacade::templates()->rowCount(); ++row) {
-        auto item = ScreenplayTemplateFacade::templates()->item(row);
-        if (item->data(ScreenplayTemplateFacade::kTemplateIdRole).toString() != _templateId) {
+    for (int row = 0; row < TemplatesFacade::screenplayTemplates()->rowCount(); ++row) {
+        auto item = TemplatesFacade::screenplayTemplates()->item(row);
+        if (item->data(TemplatesFacade::kTemplateIdRole).toString() != _templateId) {
             continue;
         }
 
@@ -1143,11 +1143,12 @@ void SettingsView::updateTranslations()
 
     d->componentsTitle->setText(tr("Components"));
     //
+    BusinessLayer::TemplatesFacade::updateTranslations();
+    //
     d->screenplayTitle->setText(tr("Screenplay"));
     d->screenplayEditorTitle->setText(tr("Text editor"));
     d->screenplayEditorDefaultTemplate->setLabel(tr("Default template"));
     d->screenplayEditorDefaultTemplateOptions->setToolTip(tr("Available actions for the selected template"));
-    BusinessLayer::ScreenplayTemplateFacade::updateTranslations();
     d->screenplayEditorShowSceneNumber->setText(tr("Show scene number"));
     d->screenplayEditorShowSceneNumberOnLeft->setText(tr("on the left"));
     d->screenplayEditorShowSceneNumberOnRight->setText(tr("on the right"));

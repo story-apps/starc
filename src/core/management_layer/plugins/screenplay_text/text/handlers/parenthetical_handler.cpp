@@ -3,7 +3,7 @@
 #include "../screenplay_text_edit.h"
 
 #include <business_layer/templates/screenplay_template.h>
-#include <business_layer/templates/screenplay_template_facade.h>
+#include <business_layer/templates/templates_facade.h>
 
 #include <QKeyEvent>
 #include <QTextBlock>
@@ -34,7 +34,7 @@ void ParentheticalHandler::handleEnter(QKeyEvent*)
     // ... текст после курсора
     QString cursorForwardText = currentBlock.text().mid(cursor.positionInBlock());
     // ... префикс и постфикс стиля
-    const auto style = BusinessLayer::ScreenplayTemplateFacade::getTemplate().blockStyle(ScreenplayParagraphType::Parenthetical);
+    const auto style = BusinessLayer::TemplatesFacade::screenplayTemplate().blockStyle(ScreenplayParagraphType::Parenthetical);
     QString stylePrefix = style.prefix();
     QString stylePostfix = style.postfix();
 
@@ -128,7 +128,7 @@ void ParentheticalHandler::handleTab(QKeyEvent*)
     // ... текст после курсора
     QString cursorForwardText = currentBlock.text().mid(cursor.positionInBlock());
     // ... префикс и постфикс стиля
-    const auto style = BusinessLayer::ScreenplayTemplateFacade::getTemplate().blockStyle(ScreenplayParagraphType::Parenthetical);
+    const auto style = BusinessLayer::TemplatesFacade::screenplayTemplate().blockStyle(ScreenplayParagraphType::Parenthetical);
     QString stylePrefix = style.prefix();
     QString stylePostfix = style.postfix();
 

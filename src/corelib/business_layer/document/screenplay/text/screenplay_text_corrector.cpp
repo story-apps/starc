@@ -5,7 +5,7 @@
 
 #include <business_layer/model/screenplay/text/screenplay_text_block_parser.h>
 #include <business_layer/templates/screenplay_template.h>
-#include <business_layer/templates/screenplay_template_facade.h>
+#include <business_layer/templates/templates_facade.h>
 
 #include <ui/widgets/text_edit/page/page_text_edit.h>
 
@@ -22,7 +22,7 @@
 using BusinessLayer::CharacterParser;
 using BusinessLayer::ScreenplayBlockStyle;
 using BusinessLayer::ScreenplayParagraphType;
-using BusinessLayer::ScreenplayTemplateFacade;
+using BusinessLayer::TemplatesFacade;
 
 
 namespace BusinessLayer
@@ -390,7 +390,7 @@ void ScreenplayTextCorrector::Implementation::correctPageBreaks(int _position)
     qreal leftHalfWidth = 0.0;
     qreal rightHalfWidth = 0.0;
     {
-        const auto currentTemplate = ScreenplayTemplateFacade::getTemplate(templateId);
+        const auto currentTemplate = TemplatesFacade::screenplayTemplate(templateId);
         leftHalfWidth =  pageWidth
                          * currentTemplate.leftHalfOfPageWidthPercents() / 100.0
                          - currentTemplate.pageSplitterWidth() / 2;
@@ -1437,7 +1437,7 @@ void ScreenplayTextCorrector::Implementation::breakDialogue(const QTextBlockForm
     //
     // Оформить его, как персонажа, но без отступа сверху
     //
-    const auto moreKeywordStyle = ScreenplayTemplateFacade::getTemplate(templateId)
+    const auto moreKeywordStyle = TemplatesFacade::screenplayTemplate(templateId)
                                   .blockStyle(ScreenplayParagraphType::Character);
     QTextBlockFormat moreKeywordFormat = moreKeywordStyle.blockFormat(_cursor.inTable());
     moreKeywordFormat.setTopMargin(0);

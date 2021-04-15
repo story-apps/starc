@@ -10,7 +10,7 @@
 #include <business_layer/model/screenplay/text/screenplay_text_model_scene_item.h>
 #include <business_layer/model/screenplay/text/screenplay_text_model_text_item.h>
 #include <business_layer/templates/screenplay_template.h>
-#include <business_layer/templates/screenplay_template_facade.h>
+#include <business_layer/templates/templates_facade.h>
 
 #include <ui/widgets/text_edit/page/page_metrics.h>
 #include <ui/widgets/text_edit/page/page_text_edit.h>
@@ -425,7 +425,7 @@ void PdfExporter::exportTo(ScreenplayTextModel* _model, const ExportOptions& _ex
     //
     // ... параметры страницы
     //
-    const auto exportTemplate = ScreenplayTemplateFacade::getTemplate(_exportOptions.templateId);
+    const auto exportTemplate = TemplatesFacade::screenplayTemplate(_exportOptions.templateId);
     textEdit.setPageFormat(exportTemplate.pageSizeId());
     textEdit.setPageMargins(exportTemplate.pageMargins());
     textEdit.setPageNumbersAlignment(exportTemplate.pageNumbersAlignment());

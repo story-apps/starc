@@ -1,7 +1,7 @@
 #include "screenplay_text_block_parser.h"
 
 #include <business_layer/templates/screenplay_template.h>
-#include <business_layer/templates/screenplay_template_facade.h>
+#include <business_layer/templates/templates_facade.h>
 
 #include <utils/helpers/text_helper.h>
 
@@ -135,7 +135,7 @@ QStringList SceneCharactersParser::characters(const QString& _text)
     //
     // Удалим потенциальные приставку и окончание
     //
-    const auto style = ScreenplayTemplateFacade::getTemplate().blockStyle(ScreenplayParagraphType::SceneCharacters);
+    const auto style = TemplatesFacade::screenplayTemplate().blockStyle(ScreenplayParagraphType::SceneCharacters);
     QString stylePrefix = style.prefix();
     if (!stylePrefix.isEmpty()
         && characters.startsWith(stylePrefix)) {

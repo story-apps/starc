@@ -10,7 +10,7 @@
 #include <business_layer/model/screenplay/text/screenplay_text_model_splitter_item.h>
 #include <business_layer/model/screenplay/text/screenplay_text_model_text_item.h>
 #include <business_layer/templates/screenplay_template.h>
-#include <business_layer/templates/screenplay_template_facade.h>
+#include <business_layer/templates/templates_facade.h>
 
 #include <data_layer/storage/settings_storage.h>
 #include <data_layer/storage/storage_facade.h>
@@ -25,7 +25,7 @@
 #include <QTextTable>
 
 using BusinessLayer::ScreenplayBlockStyle;
-using BusinessLayer::ScreenplayTemplateFacade;
+using BusinessLayer::TemplatesFacade;
 using BusinessLayer::ScreenplayParagraphType;
 
 
@@ -163,7 +163,7 @@ void ScreenplayTextDocument::Implementation::readModelItemContent(int _itemRow,
                     // Назначим блоку перед таблицей формат PageSplitter
                     //
                     auto insertPageSplitter = [&_cursor, this] {
-                        const auto style = ScreenplayTemplateFacade::getTemplate(templateId)
+                        const auto style = TemplatesFacade::screenplayTemplate(templateId)
                                            .blockStyle(ScreenplayParagraphType::PageSplitter);
                         _cursor.setBlockFormat(style.blockFormat());
                         _cursor.setBlockCharFormat(style.charFormat());
@@ -275,7 +275,7 @@ void ScreenplayTextDocument::Implementation::readModelItemContent(int _itemRow,
             // Установим стиль блока
             //
             const auto currentStyle
-                    = ScreenplayTemplateFacade::getTemplate(templateId).blockStyle(
+                    = TemplatesFacade::screenplayTemplate(templateId).blockStyle(
                           textItem->paragraphType());
             _cursor.setBlockFormat(currentStyle.blockFormat(_cursor.inTable()));
             _cursor.setBlockCharFormat(currentStyle.charFormat());
@@ -413,7 +413,7 @@ void ScreenplayTextDocument::setModel(BusinessLayer::ScreenplayTextModel* _model
     //
     // Обновим шрифт документа, в моменте когда текста нет
     //
-    const auto templateDefaultFont = ScreenplayTemplateFacade::getTemplate(d->templateId)
+    const auto templateDefaultFont = TemplatesFacade::screenplayTemplate(d->templateId)
                                      .blockStyle(ScreenplayParagraphType::Action)
                                      .font();
     if (defaultFont() != templateDefaultFont) {
@@ -509,7 +509,7 @@ void ScreenplayTextDocument::setModel(BusinessLayer::ScreenplayTextModel* _model
                 cursor.movePosition(QTextCursor::StartOfBlock);
                 cursor.movePosition(QTextCursor::EndOfBlock, QTextCursor::KeepAnchor);
                 const auto blockType = ScreenplayBlockStyle::forBlock(cursor.block());
-                const auto blockStyle = ScreenplayTemplateFacade::getTemplate(d->templateId).blockStyle(blockType);
+                const auto blockStyle = TemplatesFacade::screenplayTemplate(d->templateId).blockStyle(blockType);
                 cursor.setBlockCharFormat(blockStyle.charFormat());
                 cursor.setCharFormat(blockStyle.charFormat());
 
@@ -1152,7 +1152,7 @@ void ScreenplayTextDocument::applyParagraphType(BusinessLayer::ScreenplayParagra
     auto cursor = _cursor;
     cursor.beginEditBlock();
 
-    const auto newBlockStyle = ScreenplayTemplateFacade::getTemplate(d->templateId).blockStyle(_type);
+    const auto newBlockStyle = TemplatesFacade::screenplayTemplate(d->templateId).blockStyle(_type);
 
     //
     // Обновим стили
@@ -1198,7 +1198,7 @@ void ScreenplayTextDocument::applyParagraphType(BusinessLayer::ScreenplayParagra
     // Для заголовка папки нужно создать завершение
     //
     if (_type == ScreenplayParagraphType::FolderHeader) {
-        const auto footerStyle = ScreenplayTemplateFacade::getTemplate(d->templateId).blockStyle(
+        const auto footerStyle = TemplatesFacade::screenplayTemplate(d->templateId).blockStyle(
                                      ScreenplayParagraphType::FolderFooter);
 
         //
@@ -1976,7 +1976,7 @@ void ScreenplayTextDocument::updateModelOnContentChange(int _position, int _char
 
 void ScreenplayTextDocument::insertTable(const ScreenplayTextCursor& _cursor)
 {
-    const auto scriptTemplate = ScreenplayTemplateFacade::getTemplate(d->templateId);
+    const auto scriptTemplate = TemplatesFacade::screenplayTemplate(d->templateId);
     const auto pageSplitterWidth = scriptTemplate.pageSplitterWidth();
     const int qtTableBorderWidth = 2; // эта однопиксельная рамка никак не убирается...
     const qreal tableWidth = pageSize().width()
