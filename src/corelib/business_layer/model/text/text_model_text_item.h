@@ -2,6 +2,8 @@
 
 #include "text_model_item.h"
 
+#include <optional>
+
 #include <QTextLayout>
 
 class QXmlStreamReader;
