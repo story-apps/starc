@@ -152,16 +152,6 @@ void TextManager::setModel(BusinessLayer::AbstractModel* _model)
         // ... загрузим параметры
         //
         d->loadModelSettings();
-        d->view->setName(d->model->name());
-
-        //
-        // ... настраиваем соединения
-        //
-        connect(d->model, &BusinessLayer::TextModel::nameChanged,
-                d->view, &Ui::TextView::setName);
-        //
-        connect(d->view, &Ui::TextView::nameChanged,
-                d->model, &BusinessLayer::TextModel::setName);
     }
 }
 

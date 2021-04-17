@@ -253,10 +253,6 @@ void TextView::saveViewSettings()
         kScaleFactorKey, d->scalableWrapper->zoomRange(), SettingsStorage::SettingsPlace::Application);
 }
 
-void TextView::setName(const QString& _name)
-{
-}
-
 void TextView::setModel(BusinessLayer::TextModel* _model)
 {
     d->textEdit->initWithModel(_model);

@@ -230,7 +230,11 @@ QModelIndex StructureModel::addDocument(Domain::DocumentObjectType _type, const 
         }
     }
 
-    return index(parentItem->childCount() - 1, 0, indexForItem(parentItem));
+    //
+    // Вставка идёт в конец, но в корневом элементу учитываем корзину, поэтому смещаем на 2
+    //
+    const int indexDelta = parentItem == d->rootItem ? 2 : 1;
+    return index(parentItem->childCount() - indexDelta, 0, indexForItem(parentItem));
 }
 
 void StructureModel::prependItem(StructureModelItem* _item, StructureModelItem* _parentItem)

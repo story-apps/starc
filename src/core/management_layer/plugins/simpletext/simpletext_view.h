@@ -32,12 +32,6 @@ public:
     void saveViewSettings();
 
     /**
-     * @brief Задать название документа
-     */
-    void setName(const QString& _name);
-    Q_SIGNAL void nameChanged(const QString& _name);
-
-    /**
      * @brief Установить модель текста
      */
     void setModel(BusinessLayer::TextModel* _model);

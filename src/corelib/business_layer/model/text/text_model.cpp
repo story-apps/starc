@@ -24,8 +24,27 @@ namespace BusinessLayer
 {
 
 namespace {
+
 const char* kMimeType = "application/x-starc/text/item";
-}
+
+/**
+ * @brief Найти первый текстовый элемент вложенный в заданный
+ */
+TextModelItem* firstTextItem(TextModelItem* _item)
+{
+    Q_ASSERT(_item->type() != TextModelItemType::Text);
+    for (auto childIndex = 0; childIndex < _item->childCount(); ++childIndex) {
+        auto childItem = _item->childAt(childIndex);
+        if (childItem->type() == TextModelItemType::Chapter) {
+            return firstTextItem(childItem);
+        } else {
+            return childItem;
+        }
+    }
+    return nullptr;
+};
+
+} // namesapce
 
 class TextModel::Implementation
 {
@@ -47,6 +66,11 @@ public:
      */
     void updateNumbering();
 
+
+    /**
+     * @brief Название документа
+     */
+    QString name;
 
     /**
      * @brief Корневой элемент дерева
@@ -151,18 +175,30 @@ TextModel::~TextModel() = default;
 
 const QString TextModel::name() const
 {
-    return {};
+    return d->name;
 }
 
 void TextModel::setName(const QString& _name)
 {
-//    if (d->name == _name) {
-//        return;
-//    }
+    if (d->name == _name) {
+        return;
+    }
 
-//    d->name = _name;
-//    emit nameChanged(d->name);
-//    emit documentNameChanged(d->name);
+    const auto item = firstTextItem(d->rootItem);
+    if (item != nullptr
+        && item->type() == TextModelItemType::Text) {
+        auto textItem = static_cast<TextModelTextItem*>(item);
+        textItem->setText(_name);
+    }
+
+    d->name = _name;
+    emit nameChanged(d->name);
+    emit documentNameChanged(d->name);
+}
+
+void TextModel::setDocumentName(const QString& _name)
+{
+    setName(_name);
 }
 
 void TextModel::appendItem(TextModelItem* _item, TextModelItem* _parentItem)
@@ -290,6 +326,20 @@ void TextModel::updateItem(TextModelItem* _item)
 
     if (_item->parent() != nullptr) {
         updateItem(_item->parent());
+    }
+
+    //
+    // Обновим название документа
+    //
+    if (_item == d->rootItem) {
+        const auto item = firstTextItem(d->rootItem);
+        if (item == nullptr
+            || item->type() != TextModelItemType::Text) {
+            setName({});
+        } else {
+            const auto textItem = static_cast<TextModelTextItem*>(item);
+            setName(textItem->text());
+        }
     }
 }
 
