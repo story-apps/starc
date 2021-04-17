@@ -46,9 +46,7 @@ ScreenplayTextCursor::ScreenplayTextCursor(QTextDocument* _document)
 {
 }
 
-ScreenplayTextCursor::~ScreenplayTextCursor()
-{
-}
+ScreenplayTextCursor::~ScreenplayTextCursor() = default;
 
 bool ScreenplayTextCursor::isInEditBlock() const
 {

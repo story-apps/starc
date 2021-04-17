@@ -19,7 +19,6 @@
 #include <data_layer/storage/storage_facade.h>
 
 #include <ui/design_system/design_system.h>
-#include <ui/widgets/floating_tool_bar/floating_tool_bar.h>
 #include <ui/widgets/floating_tool_bar/floating_toolbar_animator.h>
 #include <ui/widgets/scroll_bar/scroll_bar.h>
 #include <ui/widgets/shadow/shadow.h>
@@ -27,7 +26,6 @@
 #include <ui/widgets/stack_widget/stack_widget.h>
 #include <ui/widgets/tab_bar/tab_bar.h>
 #include <ui/widgets/text_edit/completer/completer.h>
-#include <ui/widgets/text_edit/page/page_metrics.h>
 #include <ui/widgets/text_edit/scalable_wrapper/scalable_wrapper.h>
 
 #include <utils/helpers/color_helper.h>
@@ -449,6 +447,8 @@ ScreenplayTextView::ScreenplayTextView(QWidget* _parent)
     reconfigure({});
 }
 
+ScreenplayTextView::~ScreenplayTextView() = default;
+
 void ScreenplayTextView::reconfigure(const QStringList& _changedSettingsKeys)
 {
     d->paragraphTypesModel->clear();
@@ -617,8 +617,6 @@ void ScreenplayTextView::resizeEvent(QResizeEvent* _event)
     d->searchManager->toolbar()->move(toolbarPosition);
     d->updateCommentsToolBar();
 }
-
-ScreenplayTextView::~ScreenplayTextView() = default;
 
 void ScreenplayTextView::updateTranslations()
 {

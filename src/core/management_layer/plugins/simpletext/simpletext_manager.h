@@ -27,10 +27,26 @@ public:
      * @brief Реализуем интерфейс менеджера документа
      */
     /** @{ */
+    QObject* asQObject() override;
     void setModel(BusinessLayer::AbstractModel* _model) override;
     QWidget* view() override;
     QWidget* createView() override;
+    void reconfigure(const QStringList& _changedSettingsKeys) override;
+    void bind(IDocumentManager* _manager) override;
+    void saveSettings() override;
     /** @} */
+
+signals:
+    /**
+     * @brief Изменился индекс текущего элемента модели в текстовом документе (перестился курсор)
+     */
+    void currentModelIndexChanged(const QModelIndex& _index);
+
+private:
+    /**
+     * @brief Установить в редакторе курсор на позицию соответствующую элементу с заданным индексом в модели
+     */
+    Q_SLOT void setCurrentModelIndex(const QModelIndex& _index);
 
 private:
     class Implementation;

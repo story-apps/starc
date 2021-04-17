@@ -68,6 +68,9 @@ SOURCES += \
     business_layer/document/screenplay/text/screenplay_text_corrector.cpp \
     business_layer/document/screenplay/text/screenplay_text_cursor.cpp \
     business_layer/document/screenplay/text/screenplay_text_document.cpp \
+    business_layer/document/text/text_block_data.cpp \
+    business_layer/document/text/text_cursor.cpp \
+    business_layer/document/text/text_document.cpp \
     business_layer/export/screenplay/pdf_exporter.cpp \
     business_layer/import/celtx_importer.cpp \
     business_layer/import/document_importer.cpp \
@@ -77,6 +80,7 @@ SOURCES += \
     business_layer/import/trelby_importer.cpp \
     business_layer/model/abstract_model.cpp \
     business_layer/model/abstract_model_item.cpp \
+    business_layer/model/abstract_model_xml.cpp \
     business_layer/model/characters/character_model.cpp \
     business_layer/model/characters/characters_model.cpp \
     business_layer/model/locations/location_model.cpp \
@@ -96,13 +100,13 @@ SOURCES += \
     business_layer/model/screenplay/text/screenplay_text_model_splitter_item.cpp \
     business_layer/model/screenplay/text/screenplay_text_model_text_item.cpp \
     business_layer/model/screenplay/screenplay_title_page_model.cpp \
-    business_layer/model/screenplay/text/screenplay_text_model_xml.cpp \
     business_layer/model/structure/structure_model.cpp \
     business_layer/model/structure/structure_model_item.cpp \
     business_layer/model/structure/structure_proxy_model.cpp \
     business_layer/model/text/text_model.cpp \
+    business_layer/model/text/text_model_chapter_item.cpp \
+    business_layer/model/text/text_model_item.cpp \
     business_layer/model/text/text_model_text_item.cpp \
-    business_layer/model/text/text_model_xml.cpp \
     business_layer/templates/screenplay_template.cpp \
     business_layer/templates/templates_facade.cpp \
     business_layer/templates/text_template.cpp \
@@ -209,6 +213,9 @@ HEADERS += \
     business_layer/document/screenplay/text/screenplay_text_corrector.h \
     business_layer/document/screenplay/text/screenplay_text_cursor.h \
     business_layer/document/screenplay/text/screenplay_text_document.h \
+    business_layer/document/text/text_block_data.h \
+    business_layer/document/text/text_cursor.h \
+    business_layer/document/text/text_document.h \
     business_layer/export/screenplay/abstract_exporter.h \
     business_layer/export/screenplay/export_options.h \
     business_layer/export/screenplay/pdf_exporter.h \
@@ -223,6 +230,7 @@ HEADERS += \
     business_layer/model/abstract_image_wrapper.h \
     business_layer/model/abstract_model.h \
     business_layer/model/abstract_model_item.h \
+    business_layer/model/abstract_model_xml.h \
     business_layer/model/characters/character_model.h \
     business_layer/model/characters/characters_model.h \
     business_layer/model/locations/location_model.h \
@@ -247,6 +255,8 @@ HEADERS += \
     business_layer/model/structure/structure_model_item.h \
     business_layer/model/structure/structure_proxy_model.h \
     business_layer/model/text/text_model.h \
+    business_layer/model/text/text_model_chapter_item.h \
+    business_layer/model/text/text_model_item.h \
     business_layer/model/text/text_model_text_item.h \
     business_layer/model/text/text_model_xml.h \
     business_layer/templates/screenplay_template.h \

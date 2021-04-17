@@ -27,8 +27,7 @@ namespace BusinessLayer
 {
 
 namespace {
-    const char* kMimeType = "application/x-starc/screenplay/text/item";
-
+const char* kMimeType = "application/x-starc/screenplay/text/item";
 }
 
 class ScreenplayTextModel::Implementation

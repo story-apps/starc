@@ -20,7 +20,14 @@ namespace BusinessLayer
 namespace {
 
 const QHash<TextParagraphType, QString> kTextParagraphTypeToString
-        = {{ TextParagraphType::Text, QLatin1String("text") }};
+        = {{ TextParagraphType::Heading1, QLatin1String("heading_1") },
+           { TextParagraphType::Heading2, QLatin1String("heading_2") },
+           { TextParagraphType::Heading3, QLatin1String("heading_3") },
+           { TextParagraphType::Heading4, QLatin1String("heading_4") },
+           { TextParagraphType::Heading5, QLatin1String("heading_5") },
+           { TextParagraphType::Heading6, QLatin1String("heading_6") },
+           { TextParagraphType::Text, QLatin1String("text") },
+           { TextParagraphType::InlineNote, QLatin1String("inline_note") }};
 
 const QHash<TextBlockStyle::LineSpacingType, QString> kLineSpacingToString
         = {{ TextBlockStyle::LineSpacingType::SingleLineSpacing, "single" },

@@ -101,6 +101,13 @@ namespace {
     //
     const QString kComponentsGroupKey = QStringLiteral("components");
     //
+    // текст
+    const QString kComponentsSimpletextKey = kComponentsGroupKey + QStringLiteral("/simpletext");
+    // ... редактор
+    const QString kComponentsSimpletextEditorKey = kComponentsSimpletextKey + QStringLiteral("/editor");
+    const QString kComponentsSimpletextEditorDefaultTemplateKey = kComponentsSimpletextEditorKey + QStringLiteral("/default-template");
+    const QString kComponentsSimpletextEditorHighlightCurrentLineKey = kComponentsSimpletextEditorKey + QStringLiteral("/highlight-current-line");
+    //
     // сценарий
     const QString kComponentsScreenplayKey = kComponentsGroupKey + QStringLiteral("/screenplay");
     // ... редактор

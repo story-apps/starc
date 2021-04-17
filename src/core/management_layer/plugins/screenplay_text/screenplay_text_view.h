@@ -4,12 +4,15 @@
 
 
 namespace BusinessLayer {
-    class ScreenplayTextModel;
+class ScreenplayTextModel;
 }
 
 namespace Ui
 {
 
+/**
+ * @brief Представление редактора документа сценария
+ */
 class ScreenplayTextView : public Widget
 {
     Q_OBJECT

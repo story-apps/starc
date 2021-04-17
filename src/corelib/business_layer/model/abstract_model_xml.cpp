@@ -1,4 +1,4 @@
-#include "screenplay_text_model_xml.h"
+#include "abstract_model_xml.h"
 
 namespace BusinessLayer
 {

@@ -6,5 +6,6 @@
         <file>templates/screenplay/world_cn</file>
         <file>templates/screenplay/he</file>
         <file>templates/screenplay/ar</file>
+        <file>templates/text/mono_cp_a4</file>
     </qresource>
 </RCC>

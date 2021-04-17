@@ -122,7 +122,7 @@ void ScreenplayTextEditShortcutsManager::setShortcutsContext(QWidget* _context)
         connect(shortcutIter.value(), &QShortcut::activated, mapper, qOverload<>(&QSignalMapper::map));
         mapper->setMapping(shortcutIter.value(), static_cast<int>(shortcutIter.key()));
     }
-    connect(mapper, qOverload<int>(&QSignalMapper::mapped), this, [this] (int _value) {
+    connect(mapper, &QSignalMapper::mappedInt, this, [this] (int _value) {
         d->screenplayEditor->setCurrentParagraphType(static_cast<ScreenplayParagraphType>(_value));
     });
 }

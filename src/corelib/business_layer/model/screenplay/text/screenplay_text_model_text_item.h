@@ -132,6 +132,7 @@ public:
     /**
      * @brief Форматирование в блоке
      */
+    const QVector<TextFormat>& formats() const;
     void setFormats(const QVector<QTextLayout::FormatRange>& _formats);
 
     /**
@@ -140,11 +141,6 @@ public:
     const QVector<ReviewMark>& reviewMarks() const;
     void setReviewMarks(const QVector<ReviewMark>& _reviewMarks);
     void setReviewMarks(const QVector<QTextLayout::FormatRange>& _reviewMarks);
-
-    /**
-     * @brief Форматирование
-     */
-    const QVector<TextFormat>& formats() const;
 
     /**
      * @brief Ревизии

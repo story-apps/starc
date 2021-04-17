@@ -2,16 +2,13 @@
 
 #include <corelib_global.h>
 
-#include <QModelIndex>
 #include <QTextBlockUserData>
 
 
-namespace BusinessLayer {
-    class ScreenplayTextModelItem;
-}
-
 namespace BusinessLayer
 {
+
+class ScreenplayTextModelItem;
 
 class CORE_LIBRARY_EXPORT ScreenplayTextBlockData : public QTextBlockUserData
 {
