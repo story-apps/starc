@@ -564,6 +564,10 @@ QSize TextField::sizeHint() const
                                 + Ui::DesignSystem::textField().spacing();
         size += {suffixWidth, 0};
     }
+    if (!d->label.isEmpty()) {
+        const auto labelWidth = TextHelper::fineTextWidth(d->label, Ui::DesignSystem::font().caption());
+        size = size.expandedTo({labelWidth, 1});
+    }
     if (!d->error.isEmpty()) {
         const auto errorWidth = TextHelper::fineTextWidth(d->error, Ui::DesignSystem::font().caption());
         size = size.expandedTo({errorWidth, 1});
