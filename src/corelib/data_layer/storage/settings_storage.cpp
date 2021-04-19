@@ -390,7 +390,7 @@ SettingsStorage::Implementation::Implementation()
         //
         // Параметры хронометража сценария
         //
-        defaultValues.insert(kComponentsScreenplayDurationTypeKey, 1);
+        defaultValues.insert(kComponentsScreenplayDurationTypeKey, 0);
         defaultValues.insert(kComponentsScreenplayDurationByPageDurationKey, 60);
         defaultValues.insert(kComponentsScreenplayDurationByCharactersCharactersKey, 1350);
         defaultValues.insert(kComponentsScreenplayDurationByCharactersIncludeSpacesKey, true);
