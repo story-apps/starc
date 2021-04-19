@@ -204,12 +204,12 @@ QGridLayout* AbstractDialog::contentsLayout() const
 
 bool AbstractDialog::eventFilter(QObject* _watched, QEvent* _event)
 {
-    if (_watched == parentWidget()
-        && _event->type() == QEvent::Resize) {
+    if (_event->type() == QEvent::Resize
+        && _watched == parentWidget()) {
         auto resizeEvent = static_cast<QResizeEvent*>(_event);
         resize(resizeEvent->size());
-    } else if (_watched == lastFocusableWidget()
-               && _event->type() == QEvent::FocusOut
+    } else if (_event->type() == QEvent::FocusOut
+               && _watched == lastFocusableWidget()
                && (QApplication::focusWidget() == nullptr
                    || !findChildren<QWidget*>().contains(QApplication::focusWidget()))) {
         focusedWidgetAfterShow()->setFocus();
