@@ -5,12 +5,12 @@
 #include <QTextLayout>
 
 
-qreal TextHelper::fineTextWidth(const QString& _text, const QFont& _font)
+qreal TextHelper::fineTextWidthF(const QString& _text, const QFont& _font)
 {
-    return fineTextWidth(_text, QFontMetricsF(_font));
+    return fineTextWidthF(_text, QFontMetricsF(_font));
 }
 
-qreal TextHelper::fineTextWidth(const QString& _text, const QFontMetricsF& _metrics)
+qreal TextHelper::fineTextWidthF(const QString& _text, const QFontMetricsF& _metrics)
 {
     //
     // Чтобы корректно разместить текст нужна максимальная ширина, которую текст может занимать
@@ -18,6 +18,15 @@ qreal TextHelper::fineTextWidth(const QString& _text, const QFontMetricsF& _metr
     // и не забываем прибавить волшебную единичку, а то так не работает :)
     //
     return qMax(_metrics.boundingRect(_text).width(), _metrics.horizontalAdvance(_text)) + 1.0;
+}
+
+int TextHelper::fineTextWidth(const QString& _text, const QFont& _font)
+{
+    //
+    // Из-за того, что шрифт в целых пикселях, а масштабирование в дробных, чуть увеличиваем ширину,
+    // чтобы при отрисовке, текст всегда точно влезал
+    //
+    return qCeil(fineTextWidthF(_text, _font)) + 1;
 }
 
 qreal TextHelper::fineLineSpacing(const QFont& _font)

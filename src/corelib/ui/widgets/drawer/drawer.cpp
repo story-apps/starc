@@ -174,11 +174,11 @@ QSize Drawer::sizeHint() const
         const qreal actionWidth = Ui::DesignSystem::drawer().actionMargins().left()
                                   + Ui::DesignSystem::drawer().iconSize().width()
                                   + Ui::DesignSystem::drawer().spacing()
-                                  + TextHelper::fineTextWidth(action->text(), Ui::DesignSystem::font().subtitle2())
+                                  + TextHelper::fineTextWidthF(action->text(), Ui::DesignSystem::font().subtitle2())
                                   + (action->whatsThis().isEmpty()
                                      ? 0.0
                                      : Ui::DesignSystem::drawer().spacing()
-                                       + TextHelper::fineTextWidth(action->whatsThis(), Ui::DesignSystem::font().subtitle2()))
+                                       + TextHelper::fineTextWidthF(action->whatsThis(), Ui::DesignSystem::font().subtitle2()))
                                   + Ui::DesignSystem::drawer().actionMargins().right();
         width = std::max(width, actionWidth);
 

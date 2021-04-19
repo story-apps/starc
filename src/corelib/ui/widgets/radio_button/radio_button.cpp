@@ -98,7 +98,7 @@ QSize RadioButton::sizeHint() const
     return QSize(static_cast<int>(Ui::DesignSystem::radioButton().margins().left()
                                   + Ui::DesignSystem::radioButton().iconSize().width()
                                   + Ui::DesignSystem::radioButton().spacing()
-                                  + TextHelper::fineTextWidth(d->text, Ui::DesignSystem::font().subtitle1())
+                                  + TextHelper::fineTextWidthF(d->text, Ui::DesignSystem::font().subtitle1())
                                   + Ui::DesignSystem::radioButton().margins().right()),
                  static_cast<int>(Ui::DesignSystem::radioButton().height()));
 }

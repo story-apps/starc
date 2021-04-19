@@ -103,7 +103,7 @@ QSize ContextMenu::Implementation::sizeHint(const QList<QAction*>& _actions) con
             const auto actionWidth = Ui::DesignSystem::treeOneLineItem().margins().left()
                                      + iconWidth
                                      + Ui::DesignSystem::treeOneLineItem().spacing()
-                                     + TextHelper::fineTextWidth(action->text(),
+                                     + TextHelper::fineTextWidthF(action->text(),
                                                                  Ui::DesignSystem::font().subtitle2())
                                      + Ui::DesignSystem::treeOneLineItem().margins().right();
             width = std::max(width, actionWidth);

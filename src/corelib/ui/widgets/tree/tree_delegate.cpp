@@ -90,7 +90,7 @@ QSize TreeDelegate::sizeHint(const QStyleOptionViewItem& _option, const QModelIn
     Q_UNUSED(_option)
     Q_UNUSED(_index)
 
-    return QSizeF(TextHelper::fineTextWidth(_index.data().toString(),
+    return QSizeF(TextHelper::fineTextWidthF(_index.data().toString(),
                                             Ui::DesignSystem::font().subtitle2()),
                   Ui::DesignSystem::treeOneLineItem().height())
             .toSize();

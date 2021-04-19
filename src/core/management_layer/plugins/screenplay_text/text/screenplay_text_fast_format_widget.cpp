@@ -75,7 +75,7 @@ void FormatButton::setShortcut(const QString& _shortcut)
 
 QSize FormatButton::sizeHint() const
 {
-    const auto shortcutWidth = TextHelper::fineTextWidth(m_shortcut, Ui::DesignSystem::font().overline());
+    const auto shortcutWidth = TextHelper::fineTextWidthF(m_shortcut, Ui::DesignSystem::font().overline());
     return Button::sizeHint() + QSize(shortcutWidth + DesignSystem::button().spacing(), 0);
 }
 

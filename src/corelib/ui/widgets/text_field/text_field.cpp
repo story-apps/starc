@@ -251,7 +251,7 @@ QRectF TextField::Implementation::decorationRectInFocus(const QSize& _textFieldS
 
 QRectF TextField::Implementation::placeholderRect(const QSize& _size) const
 {
-    const qreal placeholderWidth = TextHelper::fineTextWidth(placeholder, Ui::DesignSystem::font().body1());
+    const qreal placeholderWidth = TextHelper::fineTextWidthF(placeholder, Ui::DesignSystem::font().body1());
     QPointF labelTopLeft = Ui::DesignSystem::textField().labelTopLeft()
                            + QPointF(contentMargins().left(),
                                      contentMargins().top());
@@ -269,7 +269,7 @@ QRectF TextField::Implementation::placeholderRect(const QSize& _size) const
 
 QRectF TextField::Implementation::suffixRect(const QSize& _size) const
 {
-    const qreal suffixWidth = TextHelper::fineTextWidth(suffix, Ui::DesignSystem::font().body1());
+    const qreal suffixWidth = TextHelper::fineTextWidthF(suffix, Ui::DesignSystem::font().body1());
     QPointF labelTopLeft = Ui::DesignSystem::textField().labelTopLeft()
                            + QPointF(contentMargins().left(),
                                      contentMargins().top());
@@ -556,23 +556,23 @@ QSize TextField::minimumSizeHint() const
 QSize TextField::sizeHint() const
 {
     const QFontMetrics fontMetrics(Ui::DesignSystem::font().body1());
-    QSizeF size(TextHelper::fineTextWidth(!text().isEmpty() ? text() : d->placeholder,
+    QSizeF size(TextHelper::fineTextWidthF(!text().isEmpty() ? text() : d->placeholder,
                                          Ui::DesignSystem::font().body1()),
                fontMetrics.height());
     if (!d->suffix.isEmpty()) {
-        const auto suffixWidth = TextHelper::fineTextWidth(d->suffix, Ui::DesignSystem::font().body1())
+        const auto suffixWidth = TextHelper::fineTextWidthF(d->suffix, Ui::DesignSystem::font().body1())
                                 + Ui::DesignSystem::textField().spacing();
         size += {suffixWidth, 0};
     }
     if (!d->label.isEmpty()) {
-        const auto labelWidth = TextHelper::fineTextWidth(d->label, Ui::DesignSystem::font().caption());
+        const auto labelWidth = TextHelper::fineTextWidthF(d->label, Ui::DesignSystem::font().caption());
         size = size.expandedTo({labelWidth, 1});
     }
     if (!d->error.isEmpty()) {
-        const auto errorWidth = TextHelper::fineTextWidth(d->error, Ui::DesignSystem::font().caption());
+        const auto errorWidth = TextHelper::fineTextWidthF(d->error, Ui::DesignSystem::font().caption());
         size = size.expandedTo({errorWidth, 1});
     } else if (!d->helper.isEmpty()) {
-        const auto helperWidth = TextHelper::fineTextWidth(d->helper, Ui::DesignSystem::font().caption());
+        const auto helperWidth = TextHelper::fineTextWidthF(d->helper, Ui::DesignSystem::font().caption());
         size = size.expandedTo({helperWidth, 1});
     }
     size += QSizeF(d->margins().left()

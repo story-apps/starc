@@ -99,7 +99,7 @@ QSize CheckBox::sizeHint() const
     return QSize(static_cast<int>(Ui::DesignSystem::checkBox().margins().left()
                                   + Ui::DesignSystem::checkBox().iconSize().width()
                                   + Ui::DesignSystem::checkBox().spacing()
-                                  + TextHelper::fineTextWidth(d->text, Ui::DesignSystem::font().subtitle1())
+                                  + TextHelper::fineTextWidthF(d->text, Ui::DesignSystem::font().subtitle1())
                                   + Ui::DesignSystem::checkBox().margins().right()),
                  static_cast<int>(Ui::DesignSystem::checkBox().height()));
 }

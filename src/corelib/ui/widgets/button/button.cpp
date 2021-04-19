@@ -277,7 +277,7 @@ void Button::paintEvent(QPaintEvent* _event)
                    : ColorHelper::transparent(textColor(), Ui::DesignSystem::disabledTextOpacity()));
     //
     QRectF buttonInnerRect = contentsRect().marginsRemoved(Ui::DesignSystem::button().margins().toMargins());
-    const qreal textWidth = TextHelper::fineTextWidth(d->text, Ui::DesignSystem::font().button());
+    const qreal textWidth = TextHelper::fineTextWidthF(d->text, Ui::DesignSystem::font().button());
     //
     // ... если иконка задана, рисуем иконку и корректируем область отрисовки текста
     //
@@ -331,7 +331,7 @@ void Button::paintEvent(QPaintEvent* _event)
     //     т.к. текст рисуется в её центре
     //
     auto textAlignment = Qt::AlignLeft | Qt::AlignVCenter;
-    if (buttonInnerRect.width() > textWidth) {
+    if (buttonInnerRect.width() >= textWidth) {
         buttonInnerRect.setWidth(textWidth);
         textAlignment = Qt::AlignCenter;
     }

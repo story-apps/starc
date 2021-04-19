@@ -247,8 +247,8 @@ void ScreenplayTextCommentDelegate::paint(QPainter* _painter, const QStyleOption
                                       - Ui::DesignSystem::layout().px24() // марджины текста от балуна
                                       - Ui::DesignSystem::layout().px12();
         const auto lastCommentTextWidth = std::max(std::min(maximumTextWidth,
-                                                            TextHelper::fineTextWidth(lastComment.text, Ui::DesignSystem::font().body2())),
-                                                   TextHelper::fineTextWidth(lastComment.author, titleFontMetrics));
+                                                            TextHelper::fineTextWidthF(lastComment.text, Ui::DesignSystem::font().body2())),
+                                                   TextHelper::fineTextWidthF(lastComment.author, titleFontMetrics));
         const auto lastCommentTextHeight = TextHelper::heightForWidth(lastComment.text, Ui::DesignSystem::font().body2(), lastCommentTextWidth);
         const auto lastCommentHeightDelta = titleFontMetrics.lineSpacing() + Ui::DesignSystem::layout().px4();
         const auto lastCommentWidth = lastCommentTextWidth + Ui::DesignSystem::layout().px24();
@@ -362,7 +362,7 @@ QSize ScreenplayTextCommentDelegate::sizeHint(const QStyleOptionViewItem& _optio
                                           - Ui::DesignSystem::layout().px24() // марджины текста от балуна
                                           - Ui::DesignSystem::layout().px12(); // отступ до правого края
             const auto lastCommentTextWidth = std::min(maximumTextWidth,
-                                                       TextHelper::fineTextWidth(lastComment.text, Ui::DesignSystem::font().body2()));
+                                                       TextHelper::fineTextWidthF(lastComment.text, Ui::DesignSystem::font().body2()));
             const auto lastCommentTextHeight = TextHelper::heightForWidth(lastComment.text, Ui::DesignSystem::font().body2(), lastCommentTextWidth);
             height += lastCommentTextHeight
                       + Ui::DesignSystem::layout().px8()

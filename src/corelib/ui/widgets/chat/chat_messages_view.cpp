@@ -78,7 +78,7 @@ int ChatMessagesView::heightForWidth(int _width) const
 
         const qreal messageTextWidth = std::max(std::min(maximumTextWidth,
                                                          textFontMetrics.width(message.text())),
-                                                TextHelper::fineTextWidth(isCurrentAuthor
+                                                TextHelper::fineTextWidthF(isCurrentAuthor
                                                                           ? ""
                                                                           : message.author().name(),
                                                                           titleFontMetrics));
@@ -182,7 +182,7 @@ void ChatMessagesView::paintEvent(QPaintEvent* _event)
         //
         const qreal messageTextWidth = std::max(std::min(maximumTextWidth,
                                                          textFontMetrics.width(message.text())),
-                                                TextHelper::fineTextWidth(isCurrentAuthor
+                                                TextHelper::fineTextWidthF(isCurrentAuthor
                                                                           ? ""
                                                                           : message.author().name(),
                                                                           titleFontMetrics));
