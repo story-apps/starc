@@ -258,7 +258,7 @@ void ImageCard::paintEvent(QPaintEvent* _event)
                                      : d->decorationColorAnimation.startValue().value<QColor>();
         painter.setPen(decorationColor);
         painter.setBrush(Qt::NoBrush);
-        auto iconFont = Ui::DesignSystem::font().iconsBig();
+        auto iconFont = Ui::DesignSystem::font().iconsForEditors();
         iconFont.setPixelSize(Ui::DesignSystem::scaleFactor() * Ui::DesignSystem::layout().px48() * 2);
         const auto iconHeight = QFontMetricsF(iconFont).boundingRect(d->decorationIcon).height();
         const auto textHeight = QFontMetricsF(Ui::DesignSystem::font().button()).boundingRect(d->decorationIcon).height();
@@ -297,7 +297,7 @@ void ImageCard::paintEvent(QPaintEvent* _event)
         //
         painter.setPen(Ui::DesignSystem::color().onSecondary());
         painter.setBrush(Qt::NoBrush);
-        auto iconFont = Ui::DesignSystem::font().iconsBig();
+        auto iconFont = Ui::DesignSystem::font().iconsForEditors();
         iconFont.setPixelSize(Ui::DesignSystem::scaleFactor() * Ui::DesignSystem::layout().px48() * 2);
         const auto icon = u8"\U000F01DA";
         const auto iconHeight = QFontMetricsF(iconFont).boundingRect(icon).height();

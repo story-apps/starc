@@ -859,8 +859,11 @@ void ScreenplayTextEdit::paintEvent(QPaintEvent* _event)
                                                 : pageRight + leftDelta,
                                                 cursorR.bottom());
                             QRectF rect(topLeft, bottomRight);
-                            rect.adjust(0, -4, - QFontMetricsF(cursor.charFormat().font()).horizontalAdvance(".")/2, 0);
-                            painter.setFont(DesignSystem::font().iconsBig());
+                            const auto textFontMetrics = QFontMetricsF(cursor.charFormat().font());
+                            const auto iconFontMetrics = QFontMetricsF(DesignSystem::font().iconsForEditors());
+                            const auto yDelta = (textFontMetrics.lineSpacing() - iconFontMetrics.lineSpacing()) / 2;
+                            rect.adjust(0, yDelta, - textFontMetrics.horizontalAdvance(".")/2, 0);
+                            painter.setFont(DesignSystem::font().iconsForEditors());
                             painter.setPen(palette().text().color());
                             painter.drawText(rect, Qt::AlignRight | Qt::AlignTop, u8"\U000F024B");
                         }

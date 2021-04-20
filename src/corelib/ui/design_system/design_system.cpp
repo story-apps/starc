@@ -285,7 +285,7 @@ public:
 
     QFont iconsSmall = QFont("Material Design Icons");
     QFont iconsMid = QFont("Material Design Icons");
-    QFont iconsBig = QFont("Material Design Icons");
+    QFont iconsForEditors = QFont("Material Design Icons");
 };
 
 DesignSystem::Font::Implementation::Implementation(qreal _scaleFactor)
@@ -322,7 +322,14 @@ DesignSystem::Font::Implementation::Implementation(qreal _scaleFactor)
 
     iconsSmall.setPixelSize(static_cast<int>(16 * _scaleFactor));
     iconsMid.setPixelSize(static_cast<int>(24 * _scaleFactor));
-    iconsBig.setPixelSize(static_cast<int>(34 * _scaleFactor));
+
+    iconsForEditors.setPixelSize(
+            #ifdef Q_OS_WIN
+                22
+            #else
+                34
+            #endif
+                );
 }
 
 // **
@@ -404,9 +411,9 @@ const QFont& DesignSystem::Font::iconsMid() const
     return d->iconsMid;
 }
 
-const QFont& DesignSystem::Font::iconsBig() const
+const QFont& DesignSystem::Font::iconsForEditors() const
 {
-    return d->iconsBig;
+    return d->iconsForEditors;
 }
 
 DesignSystem::Font::Font(qreal _scaleFactor)
