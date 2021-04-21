@@ -332,11 +332,10 @@ void StackWidget::setCurrentWidget(QWidget *_widget)
     }
 
     //
-    // Сделать снимок текущего виджета
+    // Сохраняем виджет, который был активным до момента установки нового
     //
     if (d->currentWidget != nullptr) {
         d->previousWidget = d->currentWidget;
-        d->previousWidgetImage = d->previousWidget->grab();
         d->previousWidget->hide();
     }
 
@@ -361,6 +360,9 @@ void StackWidget::setCurrentWidget(QWidget *_widget)
     //
     // А если виджет виден, то запускаем анимацию отображения нового текущего виджета
     //
+    if (d->previousWidget != nullptr) {
+        d->previousWidgetImage = d->previousWidget->grab();
+    }
     d->currentWidgetImage = d->currentWidget->grab();
     d->currentWidget->hide();
     switch (d->animationType) {
