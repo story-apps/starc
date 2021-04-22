@@ -94,6 +94,12 @@ public:
     void setCorrection(bool _correction);
 
     /**
+     * @brief Разорван ли текст блока между страницами
+     */
+    bool isBroken() const;
+    void setBroken(bool _broken);
+
+    /**
      * @brief Находится ли элемент в первой колонке таблицы
      * @note Если значение не задано, то элемент находится вне таблицы
      */

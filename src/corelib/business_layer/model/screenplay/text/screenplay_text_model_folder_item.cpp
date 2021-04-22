@@ -4,6 +4,7 @@
 #include "screenplay_text_model_splitter_item.h"
 #include "screenplay_text_model_text_item.h"
 #include "screenplay_text_model_xml.h"
+#include "screenplay_text_model_xml_writer.h"
 
 #include <business_layer/templates/screenplay_template.h>
 
@@ -146,7 +147,7 @@ QByteArray ScreenplayTextModelFolderItem::toXml(ScreenplayTextModelItem* _from, 
         return item.toXml();
     };
 
-    QByteArray xml;
+    xml::ScreenplayTextModelXmlWriter xml;
     xml += xmlHeader(_clearUuid);
     for (int childIndex = 0; childIndex < childCount(); ++childIndex) {
         auto child = childAt(childIndex);
@@ -155,7 +156,7 @@ QByteArray ScreenplayTextModelFolderItem::toXml(ScreenplayTextModelItem* _from, 
         // Нетекстовые блоки, просто добавляем к общему xml
         //
         if (child->type() == ScreenplayTextModelItemType::Splitter) {
-            xml += child->toXml();
+            xml += child;
             continue;
         }
         //
@@ -187,7 +188,7 @@ QByteArray ScreenplayTextModelFolderItem::toXml(ScreenplayTextModelItem* _from, 
             // В противном случае просто дополняем xml
             //
             else {
-                xml += child->toXml();
+                xml += child;
                 continue;
             }
         }
@@ -198,9 +199,9 @@ QByteArray ScreenplayTextModelFolderItem::toXml(ScreenplayTextModelItem* _from, 
         auto textItem = static_cast<ScreenplayTextModelTextItem*>(child);
         if (textItem == _to) {
             if (textItem == _from) {
-                xml += textItem->toXml(_fromPosition, _toPosition - _fromPosition);
+                xml += { textItem, _fromPosition, _toPosition - _fromPosition };
             } else {
-                xml += textItem->toXml(0, _toPosition);
+                xml += { textItem, 0, _toPosition };
             }
 
             //
@@ -213,15 +214,15 @@ QByteArray ScreenplayTextModelFolderItem::toXml(ScreenplayTextModelItem* _from, 
         }
         //
         else if (textItem == _from) {
-            xml += textItem->toXml(_fromPosition, textItem->text().length() - _fromPosition);
+            xml += { textItem, _fromPosition, textItem->text().length() - _fromPosition };
         } else {
-            xml += textItem->toXml();
+            xml += textItem;
         }
     }
     xml += QString("</%1>\n").arg(xml::kContentTag).toUtf8();
     xml += QString("</%1>\n").arg(xml::kFolderTag).toUtf8();
 
-    return xml;
+    return xml.data();
 }
 
 QByteArray ScreenplayTextModelFolderItem::xmlHeader(bool _clearUuid) const

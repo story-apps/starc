@@ -1744,6 +1744,7 @@ void ScreenplayTextDocument::updateModelOnContentChange(int _position, int _char
             //
             auto textItem = new ScreenplayTextModelTextItem;
             textItem->setCorrection(block.blockFormat().boolProperty(ScreenplayBlockStyle::PropertyIsCorrection));
+            textItem->setBroken(block.blockFormat().boolProperty(ScreenplayBlockStyle::PropertyIsBreakCorrectionStart));
             if (tableInfo.inTable) {
                 textItem->setInFirstColumn(tableInfo.inFirstColumn);
             } else {
@@ -1947,6 +1948,7 @@ void ScreenplayTextDocument::updateModelOnContentChange(int _position, int _char
             if (item->type() == ScreenplayTextModelItemType::Text) {
                 auto textItem = static_cast<ScreenplayTextModelTextItem*>(item);
                 textItem->setCorrection(block.blockFormat().boolProperty(ScreenplayBlockStyle::PropertyIsCorrection));
+                textItem->setBroken(block.blockFormat().boolProperty(ScreenplayBlockStyle::PropertyIsBreakCorrectionStart));
                 if (tableInfo.inTable) {
                     textItem->setInFirstColumn(tableInfo.inFirstColumn);
                 } else {

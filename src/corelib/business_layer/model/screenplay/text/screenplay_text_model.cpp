@@ -5,6 +5,7 @@
 #include "screenplay_text_model_splitter_item.h"
 #include "screenplay_text_model_text_item.h"
 #include "screenplay_text_model_xml.h"
+#include "screenplay_text_model_xml_writer.h"
 
 #include <business_layer/model/screenplay/screenplay_information_model.h>
 #include <business_layer/templates/screenplay_template.h>
@@ -123,13 +124,15 @@ QByteArray ScreenplayTextModel::Implementation::toXml(Domain::DocumentObject* _s
     if (_screenplay == nullptr) {
         return {};
     }
-    QByteArray xml = "<?xml version=\"1.0\"?>\n";
+
+    const bool addXMlHeader = true;
+    xml::ScreenplayTextModelXmlWriter xml(addXMlHeader);
     xml += "<document mime-type=\"" + Domain::mimeTypeFor(_screenplay->type()) + "\" version=\"1.0\">\n";
     for (int childIndex = 0; childIndex < rootItem->childCount(); ++childIndex) {
-        xml += rootItem->childAt(childIndex)->toXml();
+        xml += rootItem->childAt(childIndex);
     }
     xml += "</document>";
-    return xml;
+    return xml.data();
 }
 
 void ScreenplayTextModel::Implementation::updateNumbering()
@@ -433,7 +436,7 @@ bool ScreenplayTextModel::canDropMimeData(const QMimeData* _data, Qt::DropAction
     Q_UNUSED(_column);
     Q_UNUSED(_parent);
 
-    return _data->formats().contains(mimeTypes().first());
+    return _data->formats().contains(mimeTypes().constFirst());
 }
 
 bool ScreenplayTextModel::dropMimeData(const QMimeData* _data, Qt::DropAction _action, int _row, int _column, const QModelIndex& _parent)
@@ -519,7 +522,7 @@ bool ScreenplayTextModel::dropMimeData(const QMimeData* _data, Qt::DropAction _a
             //
             // ... cчитываем данные и последовательно вставляем в модель
             //
-            QXmlStreamReader contentReader(_data->data(mimeTypes().first()));
+            QXmlStreamReader contentReader(_data->data(mimeTypes().constFirst()));
             contentReader.readNextStartElement(); // document
             contentReader.readNextStartElement();
             bool isFirstItemHandled = false;
@@ -618,7 +621,7 @@ QMimeData* ScreenplayTextModel::mimeData(const QModelIndexList& _indexes) const
     // последний элемент некорректно, нужно проверить, не входит ли его родитель в выделение
     //
 
-    QModelIndexList correctedIndexes;
+    QVector<QModelIndex> correctedIndexes;
     for (const auto& index : _indexes) {
         if (!_indexes.contains(index.parent())) {
             correctedIndexes.append(index);
@@ -653,7 +656,7 @@ QMimeData* ScreenplayTextModel::mimeData(const QModelIndexList& _indexes) const
 
     auto mimeData = new QMimeData;
     const bool clearUuid = false;
-    mimeData->setData(mimeTypes().first(), mimeFromSelection(fromIndex, 0, toIndex, 1, clearUuid).toUtf8());
+    mimeData->setData(mimeTypes().constFirst(), mimeFromSelection(fromIndex, 0, toIndex, 1, clearUuid).toUtf8());
 
     d->lastMime = { fromIndex, toIndex, mimeData };
 
@@ -698,7 +701,8 @@ QString ScreenplayTextModel::mimeFromSelection(const QModelIndex& _from, int _fr
     }
 
 
-    QByteArray xml = "<?xml version=\"1.0\"?>\n";
+    const bool addXMlHeader = true;
+    xml::ScreenplayTextModelXmlWriter xml(addXMlHeader);
     xml += "<document mime-type=\"" + Domain::mimeTypeFor(document()->type()) + "\" version=\"1.0\">\n";
 
     auto buildXmlFor = [&xml, fromItem, _fromPosition, toItem, _toPosition, _clearUuid]
@@ -731,19 +735,19 @@ QString ScreenplayTextModel::mimeFromSelection(const QModelIndex& _from, int _fr
                     }
 
                     if (textItem == fromItem && textItem == toItem) {
-                        xml += textItem->toXml(_fromPosition, _toPosition - _fromPosition);
+                        xml += { textItem, _fromPosition, _toPosition - _fromPosition };
                     } else if (textItem == fromItem) {
-                        xml += textItem->toXml(_fromPosition, textItem->text().length() - _fromPosition);
+                        xml += { textItem, _fromPosition, textItem->text().length() - _fromPosition };
                     } else if (textItem == toItem) {
-                        xml += textItem->toXml(0, _toPosition);
+                        xml += { textItem, 0, _toPosition};
                     } else {
-                        xml += textItem->toXml();
+                        xml += textItem;
                     }
                     break;
                 }
 
                 default: {
-                    xml += childItem->toXml();
+                    xml += childItem;
                     break;
                 }
             }
@@ -781,7 +785,7 @@ QString ScreenplayTextModel::mimeFromSelection(const QModelIndex& _from, int _fr
     }
 
     xml += "</document>";
-    return xml;
+    return xml.data();
 }
 
 void ScreenplayTextModel::insertFromMime(const QModelIndex& _index, int _positionInBlock, const QString& _mimeData)
@@ -1276,7 +1280,7 @@ void ScreenplayTextModel::applyPatch(const QByteArray& _patch)
 
         for (int childIndex = 0; childIndex < _item->childCount(); ++childIndex) {
             auto child = _item->childAt(childIndex);
-            const auto childLength = QString(child->toXml()).length();
+            const auto childLength = (child->toXml()).length();
 
             //
             // В этом элементе начинается изменение

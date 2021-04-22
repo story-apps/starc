@@ -52,6 +52,11 @@ public:
     bool isCorrection = false;
 
     /**
+     * @brief Разорван ли блок на разрыве страниц
+     */
+    bool isBroken = false;
+
+    /**
      * @brief Находится ли элемент в таблице, и если находится, то в какой колонке
      */
     std::optional<bool> isInFirstColumn;
@@ -546,6 +551,20 @@ void ScreenplayTextModelTextItem::setCorrection(bool _correction)
     } else {
         d->updateXml();
     }
+}
+
+bool ScreenplayTextModelTextItem::isBroken() const
+{
+    return d->isBroken;
+}
+
+void ScreenplayTextModelTextItem::setBroken(bool _broken)
+{
+    if (d->isBroken == _broken) {
+        return;
+    }
+
+    d->isBroken = _broken;
 }
 
 std::optional<bool> ScreenplayTextModelTextItem::isInFirstColumn() const
