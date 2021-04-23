@@ -757,7 +757,8 @@ void ScreenplayTextCorrector::Implementation::correctPageBreaks(int _position)
                 // Если это время и место или начало папки
                 //
                 case ScreenplayParagraphType::SceneHeading:
-                case ScreenplayParagraphType::FolderHeader: {
+                case ScreenplayParagraphType::FolderHeader:
+                case ScreenplayParagraphType::Shot: {
                     //
                     // Переносим на следующую страницу
                     //

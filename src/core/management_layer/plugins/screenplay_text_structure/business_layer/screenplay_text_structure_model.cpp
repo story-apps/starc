@@ -68,11 +68,12 @@ bool ScreenplayTextStructureModel::filterAcceptsRow(int _sourceRow, const QModel
         return true;
     }
     //
-    // Из текста показываем только кадры
+    // Из текста показываем только кадры, которые не являются корректировочными блоками
     //
     if (item->type() == ScreenplayTextModelItemType::Text) {
         const auto textItem = static_cast<ScreenplayTextModelTextItem*>(item);
-        return textItem->paragraphType() == ScreenplayParagraphType::Shot;
+        return !textItem->isCorrection()
+                && textItem->paragraphType() == ScreenplayParagraphType::Shot;
     }
     //
     // Остальное не показываем
