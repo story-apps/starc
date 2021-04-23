@@ -444,9 +444,20 @@ void ScreenplayTextCorrector::Implementation::correctPageBreaks(int _position)
     if (_position != -1) {
         auto block = document->findBlock(_position);
         if (block.blockFormat().boolProperty(ScreenplayBlockStyle::PropertyIsBreakCorrectionStart)
-                || block.blockFormat().boolProperty(ScreenplayBlockStyle::PropertyIsBreakCorrectionEnd)) {
-            block = block.next().next();
-            auto replies = 5;
+            || block.blockFormat().boolProperty(ScreenplayBlockStyle::PropertyIsBreakCorrectionEnd)) {
+            //
+            // ... два вперёд и два назад, включая текущий получается 5
+            //
+            auto replies = 3;
+            for (; replies < 5; ++replies) {
+                if (!block.next().isValid()) {
+                    break;
+                }
+                block = block.next();
+            }
+            //
+            // ... собственно сбрасываем рассчитанные параметры блоков для перепроверки
+            //
             do {
                 blockItems[block.blockNumber()] = {};
                 block = block.previous();
@@ -676,6 +687,10 @@ void ScreenplayTextCorrector::Implementation::correctPageBreaks(int _position)
             // Если в конце разрыва, вернёмся к началу
             //
             if (blockFormat.boolProperty(ScreenplayBlockStyle::PropertyIsBreakCorrectionEnd)) {
+                //
+                // Началом может быть элемент с соответствующим флагом, либо простой элемент,
+                // в случае, когда было удаление переноса строки между абзацем с переносом и предыдущим
+                //
                 do {
                     blockItems[currentBlockInfo.number] = {};
                     cursor.movePosition(ScreenplayTextCursor::PreviousBlock);
@@ -684,7 +699,8 @@ void ScreenplayTextCorrector::Implementation::correctPageBreaks(int _position)
                     // ... восстанавливаем последнюю высоту от предыдущего элемента
                     //
                     lastBlockHeight = blockItems[currentBlockInfo.number].top;
-                } while (!cursor.blockFormat().boolProperty(ScreenplayBlockStyle::PropertyIsBreakCorrectionStart));
+                } while (cursor.blockFormat().boolProperty(ScreenplayBlockStyle::PropertyIsCorrection)
+                         && !cursor.blockFormat().boolProperty(ScreenplayBlockStyle::PropertyIsBreakCorrectionStart));
             }
 
             //
@@ -701,13 +717,18 @@ void ScreenplayTextCorrector::Implementation::correctPageBreaks(int _position)
                 cursor.insertText(" ");
             }
             //
-            // ... а если после начала разрыва идёт другой блок, то просто убираем декорации
+            // ... а если после начала разрыва идёт другой блок, то это кейс, когда был нажат
+            //     энтер в блоке начала разрыва и нужно перенести флаг разрыва в следующий блок
             //
             else {
-                cursor.movePosition(ScreenplayTextCursor::PreviousCharacter, ScreenplayTextCursor::KeepAnchor);
-                if (cursor.hasSelection()) {
-                    cursor.deleteChar();
-                }
+                cursor.clearSelection();
+
+                QTextBlockFormat breakStartFormat = cursor.blockFormat();
+                breakStartFormat.setProperty(ScreenplayBlockStyle::PropertyIsBreakCorrectionStart, true);
+                cursor.setBlockFormat(breakStartFormat);
+
+                cursor.movePosition(ScreenplayTextCursor::PreviousCharacter);
+                Q_ASSERT(cursor.blockFormat().boolProperty(ScreenplayBlockStyle::PropertyIsBreakCorrectionStart));
             }
             //
             // ... очищаем значения обрывов
