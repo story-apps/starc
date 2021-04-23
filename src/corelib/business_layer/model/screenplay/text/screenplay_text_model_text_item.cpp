@@ -493,6 +493,7 @@ ScreenplayTextModelTextItem::ScreenplayTextModelTextItem(QXmlStreamReader& _cont
       d(new Implementation(_contentReaded))
 {
     d->updateXml();
+    updateDuration();
 }
 
 ScreenplayTextModelTextItem::~ScreenplayTextModelTextItem() = default;
@@ -872,6 +873,7 @@ void ScreenplayTextModelTextItem::copyFrom(ScreenplayTextModelItem* _item)
     d->revisions = textItem->d->revisions;
     d->xml = textItem->d->xml;
 
+    updateDuration();
     markChanged();
 }
 

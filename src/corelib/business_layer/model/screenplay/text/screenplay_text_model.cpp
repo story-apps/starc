@@ -1167,7 +1167,6 @@ void ScreenplayTextModel::initDocument()
     }
 
     d->updateNumbering();
-    recalculateDuration();
 }
 
 void ScreenplayTextModel::clearDocument()
@@ -1280,7 +1279,7 @@ void ScreenplayTextModel::applyPatch(const QByteArray& _patch)
 
         for (int childIndex = 0; childIndex < _item->childCount(); ++childIndex) {
             auto child = _item->childAt(childIndex);
-            const auto childLength = (child->toXml()).length();
+            const auto childLength = QString(child->toXml()).length();
 
             //
             // В этом элементе начинается изменение
