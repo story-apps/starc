@@ -282,6 +282,22 @@ void TextView::setCursorPosition(int _position)
     d->textEdit->ensureCursorVisible(cursor, false);
 }
 
+bool TextView::eventFilter(QObject* _target, QEvent* _event)
+{
+    if (_target == d->scalableWrapper) {
+        if (_event->type() == QEvent::KeyPress
+                   && d->searchManager->toolbar()->isVisible()
+                   && d->scalableWrapper->hasFocus()) {
+            auto keyEvent = static_cast<QKeyEvent*>(_event);
+            if (keyEvent->key() == Qt::Key_Escape) {
+                d->toolbarAnimation->switchToolbarsBack();
+            }
+        }
+    }
+
+    return Widget::eventFilter(_target, _event);
+}
+
 void TextView::resizeEvent(QResizeEvent* _event)
 {
     Widget::resizeEvent(_event);

@@ -43,6 +43,11 @@ signals:
     void closePressed();
 
     /**
+     * @brief Пользоутель хочет сфокусироваться на текста
+     */
+    void focusTextRequested();
+
+    /**
      * @brief Пользователь хочет найти заданный текст
      */
     void findTextRequested();

@@ -134,6 +134,8 @@ TextSearchManager::TextSearchManager(QWidget* _parent, Ui::TextEdit* _textEdit)
 {
     connect(d->toolbar, &Ui::TextSearchToolbar::closePressed,
             this, &TextSearchManager::hideToolbarRequested);
+    connect(d->toolbar, &Ui::TextSearchToolbar::focusTextRequested,
+            _parent, qOverload<>(&QWidget::setFocus));
     connect(d->toolbar, &Ui::TextSearchToolbar::findTextRequested, this, [this] {
         d->findText();
     });

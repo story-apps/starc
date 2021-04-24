@@ -60,6 +60,11 @@ signals:
 
 protected:
     /**
+     * @brief Фильтруем события для корректировки панелей
+     */
+    bool eventFilter(QObject* _target, QEvent* _event) override;
+
+    /**
      * @brief Переопределяем для корректировки положения тулбара действий над проектами
      */
     void resizeEvent(QResizeEvent* _event) override;

@@ -600,8 +600,17 @@ void ScreenplayTextView::setCursorPosition(int _position)
 
 bool ScreenplayTextView::eventFilter(QObject* _target, QEvent* _event)
 {
-    if (_target == d->scalableWrapper && _event->type() == QEvent::Resize) {
-        QTimer::singleShot(0, this, [this] { d->updateCommentsToolBar(); });
+    if (_target == d->scalableWrapper) {
+        if (_event->type() == QEvent::Resize) {
+            QTimer::singleShot(0, this, [this] { d->updateCommentsToolBar(); });
+        } else if (_event->type() == QEvent::KeyPress
+                   && d->searchManager->toolbar()->isVisible()
+                   && d->scalableWrapper->hasFocus()) {
+            auto keyEvent = static_cast<QKeyEvent*>(_event);
+            if (keyEvent->key() == Qt::Key_Escape) {
+                d->toolbarAnimation->switchToolbarsBack();
+            }
+        }
     }
 
     return Widget::eventFilter(_target, _event);

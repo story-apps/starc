@@ -163,6 +163,8 @@ ScreenplayTextSearchManager::ScreenplayTextSearchManager(QWidget* _parent, Ui::S
 {
     connect(d->toolbar, &Ui::ScreenplayTextSearchToolbar::closePressed,
             this, &ScreenplayTextSearchManager::hideToolbarRequested);
+    connect(d->toolbar, &Ui::ScreenplayTextSearchToolbar::focusTextRequested,
+            _parent, qOverload<>(&QWidget::setFocus));
     connect(d->toolbar, &Ui::ScreenplayTextSearchToolbar::findTextRequested, this, [this] {
         d->findText();
     });

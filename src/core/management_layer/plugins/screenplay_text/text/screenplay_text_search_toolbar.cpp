@@ -299,8 +299,15 @@ bool ScreenplayTextSearchToolbar::eventFilter(QObject* _watched, QEvent* _event)
                     && !d->searchText->text().isEmpty()) {
                     emit findTextRequested();
                 }
-                else if (keyEvent->key() == Qt::Key_Escape) {
-                    emit closePressed();
+            }
+            break;
+        }
+
+        case QEvent::KeyRelease: {
+            if (_watched == d->searchText) {
+                const auto keyEvent = static_cast<QKeyEvent*>(_event);
+                if (keyEvent->key() == Qt::Key_Escape) {
+                    emit focusTextRequested();
                 }
             }
             break;
