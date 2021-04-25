@@ -529,6 +529,18 @@ void ScreenplayTextDocument::setModel(BusinessLayer::ScreenplayTextModel* _model
                     cursor.mergeCharFormat(format.charFormat());
                 }
             }
+            //
+            // ... разрыв
+            //
+            if (cursor.blockFormat().boolProperty(ScreenplayBlockStyle::PropertyIsBreakCorrectionStart)
+                && !textItem->isBroken()) {
+                auto clearFormat = cursor.blockFormat();
+                clearFormat.clearProperty(ScreenplayBlockStyle::PropertyIsBreakCorrectionStart);
+                cursor.setBlockFormat(clearFormat);
+                //
+                // ... в обратную сторону не делаем, т.к. это реализует сам корректор текста
+                //
+            }
         }
         //
         // А если нужно скорректировать позицию элемента

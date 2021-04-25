@@ -1627,6 +1627,37 @@ void ScreenplayTextModel::applyPatch(const QByteArray& _patch)
 
 
     for (const auto& operation : operations) {
+        //
+        // Если текущий элемент модели разбит на несколько абзацев, нужно его склеить
+        //
+        if (modelItem != nullptr
+            && modelItem->type() == ScreenplayTextModelItemType::Text) {
+            auto textItem = static_cast<ScreenplayTextModelTextItem*>(modelItem);
+            if (textItem->isBroken()) {
+                auto nextItem = findNextItemWithChildren(textItem, false);;
+                while (nextItem != nullptr
+                       && nextItem->type() == ScreenplayTextModelItemType::Text) {
+                    auto nextTextItem = static_cast<ScreenplayTextModelTextItem*>(nextItem);
+                    if (nextTextItem->isCorrection()) {
+                        auto itemToRemove = nextItem;
+                        nextItem = findNextItemWithChildren(nextItem, false);
+                        removeItem(itemToRemove);
+                        continue;
+                    }
+
+                    textItem->setText(textItem->text() + " ");
+                    textItem->mergeWith(nextTextItem);
+                    textItem->setBroken(false);
+                    updateItem(textItem);
+                    removeItem(nextItem);
+                    break;
+                }
+            }
+        }
+
+        //
+        // Собственно применяем операции
+        //
         auto newItem = operation.value;
         switch (operation.type) {
             case edit_distance::OperationType::Skip: {

@@ -431,7 +431,7 @@ void ScreenplayTextCorrector::Implementation::correctPageBreaks(int _position)
         // ... для сравнения, используем минимальный запас в 10 процентов
         //
         const int blocksCount = document->blockCount() * 1.1;
-        if (blockItems.size() < blocksCount) {
+        if (blockItems.size() <= blocksCount) {
             blockItems.resize(blocksCount * 2);
         }
     }
@@ -717,17 +717,33 @@ void ScreenplayTextCorrector::Implementation::correctPageBreaks(int _position)
                 cursor.insertText(" ");
             }
             //
-            // ... а если после начала разрыва идёт другой блок, то это кейс, когда был нажат
-            //     энтер в блоке начала разрыва и нужно перенести флаг разрыва в следующий блок
+            // ... а если после начала разрыва идёт другой блок
             //
             else {
                 cursor.clearSelection();
+                if (cursor.movePosition(QTextCursor::NextBlock)) {
+                    //
+                    // ... если последующий блок корректировка или конец разрыва, то это кейс,
+                    //     когда был нажат энтер в блоке начала разрыва и нужно перенести флаг разрыва
+                    //     в следующий за текущим блок
+                    //
+                    if (cursor.blockFormat().boolProperty(ScreenplayBlockStyle::PropertyIsCorrection)
+                            || cursor.blockFormat().boolProperty(ScreenplayBlockStyle::PropertyIsBreakCorrectionEnd)) {
+                        cursor.movePosition(QTextCursor::PreviousBlock);
+                        QTextBlockFormat breakStartFormat = cursor.blockFormat();
+                        breakStartFormat.setProperty(ScreenplayBlockStyle::PropertyIsBreakCorrectionStart, true);
+                        cursor.setBlockFormat(breakStartFormat);
+                    }
+                    //
+                    // ... в противном случае это был кейс объединения двух блоков и нужно просто убрать флаги разрыва
+                    //
+                    else  {
+                        cursor.movePosition(QTextCursor::PreviousBlock);
+                    }
 
-                QTextBlockFormat breakStartFormat = cursor.blockFormat();
-                breakStartFormat.setProperty(ScreenplayBlockStyle::PropertyIsBreakCorrectionStart, true);
-                cursor.setBlockFormat(breakStartFormat);
+                    cursor.movePosition(ScreenplayTextCursor::PreviousBlock);
+                }
 
-                cursor.movePosition(ScreenplayTextCursor::PreviousCharacter);
                 Q_ASSERT(cursor.blockFormat().boolProperty(ScreenplayBlockStyle::PropertyIsBreakCorrectionStart));
             }
             //
