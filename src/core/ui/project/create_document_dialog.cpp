@@ -59,11 +59,11 @@ CreateDocumentDialog::Implementation::Implementation(QWidget* _parent)
         return item;
     };
 
+    typesModel->appendRow(makeItem(Domain::DocumentObjectType::Folder));
+    typesModel->appendRow(makeItem(Domain::DocumentObjectType::Text));
     typesModel->appendRow(makeItem(Domain::DocumentObjectType::Character));
     typesModel->appendRow(makeItem(Domain::DocumentObjectType::Location));
     typesModel->appendRow(makeItem(Domain::DocumentObjectType::Screenplay));
-    typesModel->appendRow(makeItem(Domain::DocumentObjectType::Folder));
-    typesModel->appendRow(makeItem(Domain::DocumentObjectType::Text));
 
     documentType->setModel(typesModel);
     documentType->setCurrentIndex(typesModel->index(0, 0));
@@ -80,7 +80,11 @@ CreateDocumentDialog::Implementation::Implementation(QWidget* _parent)
 void CreateDocumentDialog::Implementation::updateDocumentInfo()
 {
     const QHash<Domain::DocumentObjectType, QString> documenTypeToInfo
-            = {{ Domain::DocumentObjectType::Character,
+            = {{ Domain::DocumentObjectType::Folder,
+                 tr("Create a folder to group documents inside the story.") },
+               { Domain::DocumentObjectType::Text,
+                 tr("Create a plain text document to write out ideas and notes.") },
+               { Domain::DocumentObjectType::Character,
                  tr("Create a document with full Character's description to track his relations "
                     "and follow his journey within the story.") },
                { Domain::DocumentObjectType::Location,
@@ -88,11 +92,7 @@ void CreateDocumentDialog::Implementation::updateDocumentInfo()
                     "and keep the details.") },
                { Domain::DocumentObjectType::Screenplay,
                  tr("Create a document set to streamline your work on the feature film, "
-                    "series, or animation.") },
-               { Domain::DocumentObjectType::Folder,
-                 tr("Create a folder to group documents inside the story.") },
-               { Domain::DocumentObjectType::Text,
-                 tr("Create a plain text document to write out ideas and notes.") }};
+                    "series, or animation.") }};
 
     const auto documentTypeData = documentType->currentIndex().data(kMimeTypeRole).toInt();
     documentInfo->setText(documenTypeToInfo.value(static_cast<Domain::DocumentObjectType>(documentTypeData)));
@@ -148,11 +148,11 @@ void CreateDocumentDialog::updateTranslations()
 {
     setTitle(tr("Add document to the story"));
 
-    d->typesModel->item(0)->setText(tr("Character"));
-    d->typesModel->item(1)->setText(tr("Location"));
-    d->typesModel->item(2)->setText(tr("Screenplay"));
-    d->typesModel->item(3)->setText(tr("Folder"));
-    d->typesModel->item(4)->setText(tr("Text"));
+    d->typesModel->item(0)->setText(tr("Folder"));
+    d->typesModel->item(1)->setText(tr("Text"));
+    d->typesModel->item(2)->setText(tr("Character"));
+    d->typesModel->item(3)->setText(tr("Location"));
+    d->typesModel->item(4)->setText(tr("Screenplay"));
 
     d->documentName->setLabel(tr("Name"));
     d->updateDocumentInfo();
