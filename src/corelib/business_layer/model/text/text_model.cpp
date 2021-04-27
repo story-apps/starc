@@ -54,12 +54,12 @@ public:
     /**
      * @brief Построить модель структуры из xml хранящегося в документе
      */
-    void buildModel(Domain::DocumentObject* _screenplay);
+    void buildModel(Domain::DocumentObject* _text);
 
     /**
      * @brief Сформировать xml из данных модели
      */
-    QByteArray toXml(Domain::DocumentObject* _screenplay) const;
+    QByteArray toXml(Domain::DocumentObject* _text) const;
 
     /**
      * @brief Обновить номера глав
@@ -92,13 +92,13 @@ TextModel::Implementation::Implementation()
 {
 }
 
-void TextModel::Implementation::buildModel(Domain::DocumentObject* _screenplay)
+void TextModel::Implementation::buildModel(Domain::DocumentObject* _text)
 {
-    if (_screenplay == nullptr) {
+    if (_text == nullptr) {
         return;
     }
 
-    QXmlStreamReader contentReader(_screenplay->content());
+    QXmlStreamReader contentReader(_text->content());
     contentReader.readNextStartElement(); // document
     contentReader.readNextStartElement();
     while (!contentReader.atEnd()) {
@@ -113,15 +113,21 @@ void TextModel::Implementation::buildModel(Domain::DocumentObject* _screenplay)
             rootItem->appendItem(new TextModelTextItem(contentReader));
         }
     }
+
+    const auto firstItem = firstTextItem(rootItem);
+    if (firstItem != nullptr) {
+        const auto textItem = static_cast<const TextModelTextItem*>(firstItem);
+        name = textItem->text();
+    }
 }
 
-QByteArray TextModel::Implementation::toXml(Domain::DocumentObject* _screenplay) const
+QByteArray TextModel::Implementation::toXml(Domain::DocumentObject* _text) const
 {
-    if (_screenplay == nullptr) {
+    if (_text == nullptr) {
         return {};
     }
     QByteArray xml = "<?xml version=\"1.0\"?>\n";
-    xml += "<document mime-type=\"" + Domain::mimeTypeFor(_screenplay->type()) + "\" version=\"1.0\">\n";
+    xml += "<document mime-type=\"" + Domain::mimeTypeFor(_text->type()) + "\" version=\"1.0\">\n";
     for (int childIndex = 0; childIndex < rootItem->childCount(); ++childIndex) {
         xml += rootItem->childAt(childIndex)->toXml();
     }
@@ -173,7 +179,7 @@ TextModel::TextModel(QObject* _parent)
 
 TextModel::~TextModel() = default;
 
-const QString TextModel::name() const
+QString TextModel::name() const
 {
     return d->name;
 }

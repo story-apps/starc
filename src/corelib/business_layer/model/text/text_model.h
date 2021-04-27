@@ -22,10 +22,10 @@ public:
     /**
      * @brief Название текстового документа
      */
-    const QString name() const;
+    QString name() const;
     void setName(const QString& _name);
-    Q_SIGNAL void nameChanged(const QString& _name);
     void setDocumentName(const QString &_name) override;
+    Q_SIGNAL void nameChanged(const QString& _name);
 
     /**
      * @brief Добавить элемент в конец

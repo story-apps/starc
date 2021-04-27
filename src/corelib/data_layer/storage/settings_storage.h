@@ -102,11 +102,15 @@ namespace {
     const QString kComponentsGroupKey = QStringLiteral("components");
     //
     // текст
-    const QString kComponentsSimpletextKey = kComponentsGroupKey + QStringLiteral("/simpletext");
+    const QString kComponentsSimpleTextKey = kComponentsGroupKey + QStringLiteral("/simpletext");
     // ... редактор
-    const QString kComponentsSimpletextEditorKey = kComponentsSimpletextKey + QStringLiteral("/editor");
-    const QString kComponentsSimpletextEditorDefaultTemplateKey = kComponentsSimpletextEditorKey + QStringLiteral("/default-template");
-    const QString kComponentsSimpletextEditorHighlightCurrentLineKey = kComponentsSimpletextEditorKey + QStringLiteral("/highlight-current-line");
+    const QString kComponentsSimpleTextEditorKey = kComponentsSimpleTextKey + QStringLiteral("/editor");
+    const QString kComponentsSimpleTextEditorDefaultTemplateKey = kComponentsSimpleTextEditorKey + QStringLiteral("/default-template");
+    const QString kComponentsSimpleTextEditorHighlightCurrentLineKey = kComponentsSimpleTextEditorKey + QStringLiteral("/highlight-current-line");
+    // ... навигатор
+    const QString kComponentsSimpleTextNavigatorKey = kComponentsSimpleTextKey + QStringLiteral("/navigator");
+    const QString kComponentsSimpleTextNavigatorShowSceneTextKey = kComponentsSimpleTextNavigatorKey + QStringLiteral("/show-scene-text");
+    const QString kComponentsSimpleTextNavigatorSceneTextLinesKey = kComponentsSimpleTextNavigatorKey + QStringLiteral("/scene-text-lines");
     //
     // сценарий
     const QString kComponentsScreenplayKey = kComponentsGroupKey + QStringLiteral("/screenplay");

@@ -6,9 +6,6 @@
 #include <business_layer/model/screenplay/text/screenplay_text_model.h>
 #include <business_layer/model/screenplay/screenplay_information_model.h>
 
-#include <QApplication>
-#include <QFileDialog>
-
 
 namespace ManagementLayer
 {
@@ -108,23 +105,9 @@ void ScreenplayTextStructureManager::setModel(BusinessLayer::AbstractModel* _mod
     // Настраиваем соединения с новой моделью
     //
     if (d->model != nullptr) {
-        //
-        // Настраиваем заголовок навигатора
-        //
         d->view->setTitle(d->model->informationModel()->name());
-
-//        d->view->setName(d->model->name());
-//        d->view->setText(d->model->text());
-
-//        connect(d->model, &BusinessLayer::ScreenplayTextModel::nameChanged,
-//                d->view, &Ui::ScreenplayTextView::setName);
-//        connect(d->model, &BusinessLayer::ScreenplayTextModel::textChanged,
-//                d->view, &Ui::ScreenplayTextView::setText);
-//        //
-//        connect(d->view, &Ui::ScreenplayTextView::nameChanged,
-//                d->model, &BusinessLayer::ScreenplayTextModel::setName);
-//        connect(d->view, &Ui::ScreenplayTextView::textChanged,
-//                d->model, &BusinessLayer::ScreenplayTextModel::setText);
+        connect(d->model->informationModel(), &BusinessLayer::ScreenplayInformationModel::nameChanged,
+                d->view, &Ui::ScreenplayTextStructureView::setTitle);
     }
 }
 

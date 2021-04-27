@@ -6,7 +6,8 @@ SUBDIRS = \
     screenplay_parameters \
     screenplay_text \
     screenplay_text_structure \
-    simpletext
+    simpletext \
+    simple_text_structure
 
 exists (character_information/character_information.pro) {
     SUBDIRS += character_information

@@ -221,7 +221,12 @@ SettingsStorage::Implementation::Implementation()
         addShortcut(BusinessLayer::TextParagraphType::Text, "Ctrl+7");
         addShortcut(BusinessLayer::TextParagraphType::InlineNote, "Ctrl+Esc");
         //
-        defaultValues.insert(kComponentsSimpletextEditorDefaultTemplateKey, "mono_cp_a4");
+        defaultValues.insert(kComponentsSimpleTextEditorDefaultTemplateKey, "mono_cp_a4");
+        //
+        // Параметры навигатора сценария
+        //
+        defaultValues.insert(kComponentsSimpleTextNavigatorShowSceneTextKey, true);
+        defaultValues.insert(kComponentsSimpleTextNavigatorSceneTextLinesKey, 1);
     }
     //
     // Параметры редактора сценария
