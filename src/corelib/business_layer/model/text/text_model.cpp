@@ -199,12 +199,12 @@ void TextModel::setName(const QString& _name)
 
     d->name = _name;
     emit nameChanged(d->name);
-    emit documentNameChanged(d->name);
 }
 
 void TextModel::setDocumentName(const QString& _name)
 {
     setName(_name);
+    emit documentNameChanged(_name);
 }
 
 void TextModel::appendItem(TextModelItem* _item, TextModelItem* _parentItem)
@@ -341,10 +341,10 @@ void TextModel::updateItem(TextModelItem* _item)
         const auto item = firstTextItem(d->rootItem);
         if (item == nullptr
             || item->type() != TextModelItemType::Text) {
-            setName({});
+            setDocumentName({});
         } else {
             const auto textItem = static_cast<TextModelTextItem*>(item);
-            setName(textItem->text());
+            setDocumentName(textItem->text());
         }
     }
 }

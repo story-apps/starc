@@ -5,21 +5,13 @@ namespace BusinessLayer
 {
 
 ScreenplaySynopsisModel::ScreenplaySynopsisModel(QObject* _parent)
-    : AbstractModel({}, _parent)
+    : TextModel(_parent)
 {
 }
 
-void ScreenplaySynopsisModel::initDocument()
+void ScreenplaySynopsisModel::setDocumentName(const QString& _name)
 {
-}
-
-void ScreenplaySynopsisModel::clearDocument()
-{
-}
-
-QByteArray ScreenplaySynopsisModel::toXml() const
-{
-    return {};
+    Q_UNUSED(_name);
 }
 
 } // namespace BusinessLayer
