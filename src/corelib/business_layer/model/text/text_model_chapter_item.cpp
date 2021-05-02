@@ -41,6 +41,11 @@ public:
     //
 
     /**
+     * @brief Уровень главы
+     */
+    int level = 0;
+
+    /**
      * @brief Заголовок главы
      */
     QString heading;
@@ -51,6 +56,11 @@ public:
     QString text;
 
     /**
+     * @brief Количество слов главы
+     */
+    int wordsCount = 0;
+
+    /**
      * @brief Количество заметок по тексту
      */
     int inlineNotesSize = 0;
@@ -59,11 +69,6 @@ public:
      * @brief Количество редакторских заметок
      */
     int reviewMarksSize = 0;
-
-    /**
-     * @brief Количество слов главы
-     */
-    int wordsCount = 0;
 };
 
 
@@ -167,6 +172,21 @@ void TextModelChapterItem::setNumber(int _number)
     }
 
     d->number = { newNumber };
+}
+
+int TextModelChapterItem::level() const
+{
+    return d->level;
+}
+
+QString TextModelChapterItem::heading() const
+{
+    return d->heading;
+}
+
+QString TextModelChapterItem::text() const
+{
+    return d->text;
 }
 
 int TextModelChapterItem::wordsCount() const
@@ -314,48 +334,55 @@ void TextModelChapterItem::handleChange()
 
     for (int childIndex = 0; childIndex < childCount(); ++childIndex) {
         auto child = childAt(childIndex);
-        if (child->type() != TextModelItemType::Text) {
-            continue;
-        }
-
-        auto childTextItem = static_cast<TextModelTextItem*>(child);
-
-        //
-        // Собираем текст
-        //
-        switch (childTextItem->paragraphType()) {
-            case TextParagraphType::Heading1:
-            case TextParagraphType::Heading2:
-            case TextParagraphType::Heading3:
-            case TextParagraphType::Heading4:
-            case TextParagraphType::Heading5:
-            case TextParagraphType::Heading6: {
-                d->heading = childTextItem->text();
+        switch (child->type()) {
+            case TextModelItemType::Chapter: {
+                auto childChapterItem = static_cast<TextModelChapterItem*>(child);
+                const int maxTextLength = 1000;
+                if (d->text.length() < maxTextLength) {
+                    d->text.append(childChapterItem->heading() + " " + childChapterItem->text());
+                } else if (d->text.length() > maxTextLength) {
+                    d->text = d->text.left(maxTextLength);
+                }
+                d->wordsCount += childChapterItem->wordsCount();
                 break;
             }
 
-            case TextParagraphType::InlineNote: {
-                ++d->inlineNotesSize;
-                break;
-            }
+            case TextModelItemType::Text: {
+                auto childTextItem = static_cast<TextModelTextItem*>(child);
+                switch (childTextItem->paragraphType()) {
+                    case TextParagraphType::Heading1:
+                    case TextParagraphType::Heading2:
+                    case TextParagraphType::Heading3:
+                    case TextParagraphType::Heading4:
+                    case TextParagraphType::Heading5:
+                    case TextParagraphType::Heading6: {
+                        d->level = static_cast<int>(childTextItem->paragraphType());
+                        d->heading = childTextItem->text();
+                        d->wordsCount += childTextItem->text().count(' ') + 1;
+                        break;
+                    }
 
-            default: {
-                d->text.append(childTextItem->text() + " ");
-                d->reviewMarksSize += std::count_if(childTextItem->reviewMarks().begin(),
-                                                    childTextItem->reviewMarks().end(),
-                                                    [] (const TextModelTextItem::ReviewMark& _reviewMark) {
-                                                        return !_reviewMark.isDone;
-                                                    });
+                    case TextParagraphType::InlineNote: {
+                        ++d->inlineNotesSize;
+                        break;
+                    }
+
+                    default: {
+                        d->text.append(childTextItem->text() + " ");
+                        d->wordsCount += childTextItem->text().count(' ') + 1;
+                        d->reviewMarksSize += std::count_if(childTextItem->reviewMarks().begin(),
+                                                            childTextItem->reviewMarks().end(),
+                                                            [] (const TextModelTextItem::ReviewMark& _reviewMark) {
+                                                                return !_reviewMark.isDone;
+                                                            });
+                        break;
+                    }
+                }
+
                 break;
             }
         }
     }
-
-    //
-    // Собираем количество символов
-    //
-    d->wordsCount = (d->heading.count(' ') + 1)
-                    + d->text.count(' ');
 }
 
 } // namespace BusinessLayer

@@ -455,7 +455,7 @@ bool TextModel::canDropMimeData(const QMimeData* _data, Qt::DropAction _action, 
     // TODO: вставлять можно только с понижением уровня заголовка
     //
 
-    return _data->formats().contains(mimeTypes().first());
+    return _data->formats().contains(mimeTypes().constFirst());
 }
 
 bool TextModel::dropMimeData(const QMimeData* _data, Qt::DropAction _action, int _row, int _column, const QModelIndex& _parent)

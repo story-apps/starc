@@ -936,7 +936,7 @@ void TextDocument::updateModelOnContentChange(int _position, int _charsRemoved, 
                         else {
                             if (lastMovedItem == nullptr) {
                                 //
-                                // Если перед удаляемым была сцена или папка, то в её конец
+                                // Если перед удаляемым была глава, то в её конец
                                 //
                                 if (previousItem != nullptr
                                     && previousItem->type() == TextModelItemType::Chapter) {
@@ -970,7 +970,7 @@ void TextDocument::updateModelOnContentChange(int _position, int _charsRemoved, 
                     d->model->removeItem(itemParent);
 
                     //
-                    // Если после удаляемого элемента есть текстовые элементы, пробуем их встроить в предыдущую сцену
+                    // Если после удаляемого элемента есть текстовые элементы, пробуем их встроить в предыдущую главу
                     //
                     if (previousItem != nullptr
                         && previousItem->type() == TextModelItemType::Chapter) {
@@ -1051,7 +1051,7 @@ void TextDocument::updateModelOnContentChange(int _position, int _charsRemoved, 
         //
         if (block.userData() == nullptr) {
             //
-            // Создаём группирующий элемент, если создаётся непосредственно сцена или папка
+            // Создаём группирующий элемент, если создаётся глава
             //
             TextModelItem* parentItem = nullptr;
             switch (paragraphType) {
@@ -1080,28 +1080,65 @@ void TextDocument::updateModelOnContentChange(int _position, int _charsRemoved, 
             //
             // Добавляем элементы в модель
             //
-            // ... в случае, когда вставляем внутрь созданной папки, или сцены
+            // ... в случае, когда вставляем внутрь созданной главы
             //
             if (parentItem != nullptr) {
+                const auto parentItemLevel = static_cast<int>(paragraphType);
                 //
                 // Если перед вставляемым элементом что-то уже есть
                 //
                 if (previousItem != nullptr) {
                     auto previousTextItemParent = previousItem->parent();
                     Q_ASSERT(previousTextItemParent);
+                    Q_ASSERT(previousTextItemParent->type() == TextModelItemType::Chapter);
 
                     //
-                    // Если элемент вставляется после другой сцены, или после окончания папки,
+                    // Если элемент вставляется после главы с таким же уровнем,
                     // то вставляем его на том же уровне, что и предыдущий
                     //
-                    if (previousTextItemParent->type() == TextModelItemType::Chapter) {
+                    auto previousChapterItem = static_cast<TextModelChapterItem*>(previousTextItemParent);
+                    if (previousChapterItem->level() == parentItemLevel) {
                         d->model->insertItem(parentItem, previousTextItemParent);
                     }
                     //
-                    // В противном случае вставляем внутрь папки
+                    // Если уровень новой главы ниже уровня предыдущей, вставим внутрь
+                    //
+                    else if (previousChapterItem->level() < parentItemLevel){
+                        d->model->insertItem(parentItem, previousItem);
+                    }
+                    //
+                    // Если уровень новой главы выше уровня предыдущей, вставляем наружу
                     //
                     else {
-                        d->model->insertItem(parentItem, previousItem);
+                        auto previousChapterItemParent = previousChapterItem->parent();
+                        while (previousChapterItemParent != nullptr) {
+                            Q_ASSERT(previousChapterItemParent->type() == TextModelItemType::Chapter);
+                            const auto grandPreviousChapterItem = static_cast<TextModelChapterItem*>(previousChapterItemParent);
+
+                            //
+                            // Если уровень деда такой же, то вставляем его на том же уровне
+                            //
+                            if (grandPreviousChapterItem->level() == parentItemLevel) {
+                                d->model->insertItem(parentItem, grandPreviousChapterItem);
+                                break;
+                            }
+                            //
+                            // Если уровень деда выше, то вставляем внутрь
+                            //
+                            else if (grandPreviousChapterItem->level() < parentItemLevel) {
+                                d->model->insertItem(parentItem, previousChapterItem);
+                                break;
+                            }
+
+                            previousChapterItem = grandPreviousChapterItem;
+                            previousChapterItemParent = grandPreviousChapterItem->parent();
+                        }
+                        //
+                        // Если подходящего деда не нашлось, то вставляем в конец модели
+                        //
+                        if (previousChapterItemParent == nullptr) {
+                            d->model->appendItem(parentItem);
+                        }
                     }
                 }
                 //
@@ -1117,12 +1154,12 @@ void TextDocument::updateModelOnContentChange(int _position, int _charsRemoved, 
                 d->model->appendItem(textItem, parentItem);
 
                 //
-                // Если вставляется сцена, то все текстовые элементы идущие после неё нужно
-                // положить к ней внутрь
+                // Переносим все текстовые элементы идущие после вставленной главы,
+                // а также главы более низкого уровня к ней внутрь
                 //
-                if (parentItem->type() == TextModelItemType::Chapter) {
+                {
                     //
-                    // Определим родителя из которого нужно извлекать те самые текстовые элементы
+                    // Определим родителя из которого нужно извлекать те самые элементы
                     //
                     auto grandParentItem = [previousItem, parentItem] {
                         //
@@ -1146,13 +1183,25 @@ void TextDocument::updateModelOnContentChange(int _position, int _charsRemoved, 
                     // Определим индекс, начиная с которого нужно извлекать текстовые элементы
                     //
                     const int itemIndex = [previousItem, parentItem, grandParentItem] {
+                        //
+                        // Начинаем со следующего за предыдущим
+                        //
+                        int indexDelta = 1;
+                        //
+                        // ... а если вставляемый находится в том же родителе, что и предыдущий,
+                        //     значит перейдём ещё на один элемент вперёд
+                        //
+                        if (parentItem->parent() == grandParentItem) {
+                            ++indexDelta;
+                        }
+
                         if (previousItem != nullptr) {
                             if (grandParentItem->type() == TextModelItemType::Chapter) {
-                                return grandParentItem->rowOfChild(previousItem) + 1;
+                                return grandParentItem->rowOfChild(previousItem) + indexDelta;
                             }
                         }
 
-                        return grandParentItem->rowOfChild(parentItem) + 1;
+                        return grandParentItem->rowOfChild(parentItem) + indexDelta;
                     }();
 
                     //
@@ -1160,33 +1209,15 @@ void TextDocument::updateModelOnContentChange(int _position, int _charsRemoved, 
                     //
                     while (grandParentItem->childCount() > itemIndex) {
                         auto grandParentChildItem = grandParentItem->childAt(itemIndex);
-                        if (grandParentChildItem->type() != TextModelItemType::Text) {
-                            break;
+                        if (grandParentChildItem->type() == TextModelItemType::Chapter) {
+                            auto grandParentChildChapter = static_cast<TextModelChapterItem*>(grandParentChildItem);
+                            if (grandParentChildChapter->level() <= parentItemLevel) {
+                                break;
+                            }
                         }
 
                         d->model->takeItem(grandParentChildItem, grandParentItem);
                         d->model->appendItem(grandParentChildItem, parentItem);
-                    }
-                }
-                //
-                // А для папки, если она вставляется после сцены, то нужно перенести все текстовые
-                // элементы, которые идут после вставленной папки на уровень самой папки
-                //
-                else if (previousItem != nullptr
-                         && previousItem->parent()->type() == TextModelItemType::Chapter) {
-                    auto grandParentItem = previousItem->parent();
-                    const int lastItemIndex = grandParentItem->rowOfChild(previousItem) + 1;
-                    //
-                    // Собственно переносим элементы
-                    //
-                    while (grandParentItem->childCount() > lastItemIndex) {
-                        auto grandParentChildItem = grandParentItem->childAt(grandParentItem->childCount() - 1);
-                        if (grandParentChildItem->type() != TextModelItemType::Text) {
-                            break;
-                        }
-
-                        d->model->takeItem(grandParentChildItem, grandParentItem);
-                        d->model->insertItem(grandParentChildItem, parentItem);
                     }
                 }
             }

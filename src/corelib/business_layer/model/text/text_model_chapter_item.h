@@ -49,6 +49,21 @@ public:
     void setNumber(int _number);
 
     /**
+     * @brief Уровень главы
+     */
+    int level() const;
+
+    /**
+     * @brief Текст заголовка
+     */
+    QString heading() const;
+
+    /**
+     * @brief Текст главы
+     */
+    QString text() const;
+
+    /**
      * @brief Количество слов главы
      */
     int wordsCount() const;
