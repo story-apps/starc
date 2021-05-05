@@ -3,6 +3,7 @@
 #include "handlers/key_press_handler_facade.h"
 
 #include <business_layer/document/text/text_block_data.h>
+#include <business_layer/document/text/text_cursor.h>
 #include <business_layer/document/text/text_document.h>
 #include <business_layer/model/text/text_model.h>
 #include <business_layer/model/text/text_model_text_item.h>
@@ -26,6 +27,7 @@
 
 using BusinessLayer::TemplatesFacade;
 using BusinessLayer::TextBlockStyle;
+using BusinessLayer::TextCursor;
 using BusinessLayer::TextParagraphType;
 
 namespace Ui
@@ -632,7 +634,7 @@ void TextEdit::insertFromMimeData(const QMimeData* _source)
     //
     // Удаляем выделенный текст
     //
-    QTextCursor cursor = textCursor();
+    TextCursor cursor = textCursor();
     if (cursor.hasSelection()) {
         cursor.removeSelectedText();
     }
@@ -642,10 +644,10 @@ void TextEdit::insertFromMimeData(const QMimeData* _source)
     // то запомним это состояние, чтобы восстановить после дропа, а для вставки важно,
     // чтобы режим редактирования был выключен, т.к. данные будут загружаться через модель
     //
-//    const bool wasInEditBlock = cursor.isInEditBlock();
-//    if (wasInEditBlock) {
-//        cursor.endEditBlock();
-//    }
+    const bool wasInEditBlock = cursor.isInEditBlock();
+    if (wasInEditBlock) {
+        cursor.endEditBlock();
+    }
 
     //
     // Вставляем сценарий из майм-данных
@@ -672,12 +674,12 @@ void TextEdit::insertFromMimeData(const QMimeData* _source)
     //
     d->document.insertFromMime(textCursor().position(), textToInsert);
 
-//    //
-//    // Восстанавливаем режим редактирования, если нужно
-//    //
-//    if (wasInEditBlock) {
-//        cursor.beginEditBlock();
-//    }
+    //
+    // Восстанавливаем режим редактирования, если нужно
+    //
+    if (wasInEditBlock) {
+        cursor.beginEditBlock();
+    }
 }
 
 void TextEdit::dropEvent(QDropEvent* _event)

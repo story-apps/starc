@@ -460,6 +460,16 @@ bool TextModel::canDropMimeData(const QMimeData* _data, Qt::DropAction _action, 
 
 bool TextModel::dropMimeData(const QMimeData* _data, Qt::DropAction _action, int _row, int _column, const QModelIndex& _parent)
 {
+    //
+    // FIXME: возможен кейс, когда юзер тащит два заголовка один например
+    //        четвёртого уровка, а следующий второго и вставляет их после
+    //        главы третьего уровня, тогда второй элемент должен вставать
+    //        не внутрь, а после
+    //
+    //        в главе 2 уровня лежит глава 4 уровня, переносишь в начало главы
+    //        2 уровня главу 3-го уровня, глава 4го уровня должна встать внутрь
+    //
+
     Q_UNUSED(_column);
 
     //
@@ -541,7 +551,7 @@ bool TextModel::dropMimeData(const QMimeData* _data, Qt::DropAction _action, int
             //
             // ... cчитываем данные и последовательно вставляем в модель
             //
-            QXmlStreamReader contentReader(_data->data(mimeTypes().first()));
+            QXmlStreamReader contentReader(_data->data(mimeTypes().constFirst()));
             contentReader.readNextStartElement(); // document
             contentReader.readNextStartElement();
             bool isFirstItemHandled = false;
@@ -552,62 +562,112 @@ bool TextModel::dropMimeData(const QMimeData* _data, Qt::DropAction _action, int
                     break;
                 }
 
-                TextModelItem* newItem = nullptr;
+                //
+                // ... вставляем главу
+                //
                 if (currentTag == xml::kChapterTag) {
-                    newItem = new TextModelChapterItem(contentReader);
-                } else {
-                    newItem = new TextModelTextItem(contentReader);
-                }
+                    auto newChapterItem = new TextModelChapterItem(contentReader);
 
-                if (!isFirstItemHandled) {
-                    isFirstItemHandled = true;
-                    //
-                    // Вставить в начало папки
-                    //
-                    if (_row == 0) {
+                    if (!isFirstItemHandled) {
+                        isFirstItemHandled = true;
                         //
-                        // При вставке в папку, нужно не забыть про открывающий папку блок
+                        // Вставить в начало главы
                         //
-                        if (lastItem->type() == TextModelItemType::Chapter
-                            && _parent.isValid()) {
-                            insertItem(newItem, lastItem->childAt(0));
+                        if (_row == 0) {
+                            prependItem(newChapterItem, lastItem);
                         }
                         //
-                        // В остальных слачаях, добавляем в начало
+                        // Вставить в конец или середину главы
                         //
                         else {
-                            prependItem(newItem, lastItem);
+                            //
+                            // Если вставки идёт в конец, берём за якорь последний вложенный элемент
+                            //
+                            if (_row == -1) {
+                                lastItem = lastItem->childAt(lastItem->childCount() - 1);
+                            }
+
+                            //
+                            // Если вставка идёт после главы
+                            //
+                            if (lastItem->type() == TextModelItemType::Chapter) {
+                                auto lastChapterItem = static_cast<TextModelChapterItem*>(lastItem);
+                                //
+                                // ... и её уровень ниже, либо равен вставляемой
+                                //
+                                if (lastChapterItem->level() >= newChapterItem->level()) {
+                                    //
+                                    // ... то вставляем новую главу после неё
+                                    //
+                                    insertItem(newChapterItem, lastChapterItem);
+                                }
+                                //
+                                // ... а если уровень вставляемой ниже
+                                //
+                                else {
+                                    //
+                                    // ... то вставляем внутрь
+                                    //
+                                    lastItem = lastChapterItem->childAt(lastChapterItem->childCount() - 1);
+                                    while (lastItem->type() == TextModelItemType::Chapter) {
+                                        lastChapterItem = static_cast<TextModelChapterItem*>(lastItem);
+                                        if (lastChapterItem->level() >= newChapterItem->level()) {
+                                            insertItem(newChapterItem, lastChapterItem);
+                                            break;
+                                        }
+
+                                        lastItem = lastChapterItem->childAt(lastChapterItem->childCount() - 1);
+                                    }
+                                    if (lastItem->type() != TextModelItemType::Chapter) {
+                                        insertItem(newChapterItem, lastItem);
+                                    }
+                                }
+                            }
+                            //
+                            // А если вставка идёт после текстового элемента, то добавим после него
+                            //
+                            else {
+                                insertItem(newChapterItem, lastItem);
+                            }
                         }
+                    } else {
+                        insertItem(newChapterItem, lastItem);
                     }
-                    //
-                    // Вставить в конец папки
-                    //
-                    else if (_row == -1) {
+
+                    lastItem = newChapterItem;
+                }
+                //
+                // ... вставляем текст
+                //
+                else {
+                    auto newTextItem = new TextModelTextItem(contentReader);
+
+                    if (!isFirstItemHandled) {
+                        isFirstItemHandled = true;
                         //
-                        // При вставке в папку, нужно не забыть про завершающий папку блок
+                        // Вставить в начало lastItem
                         //
-                        if (lastItem->type() == TextModelItemType::Chapter
-                                && _parent.isValid()) {
-                            insertItem(newItem, lastItem->childAt(lastItem->childCount() - 2));
+                        if (_row == 0) {
+                            prependItem(newTextItem, lastItem);
                         }
                         //
-                        // В остальных случаях просто вставляем после предыдущего
+                        // Вставить в конец lastItem
+                        //
+                        else if (_row == -1) {
+                            appendItem(newTextItem, lastItem);
+                        }
+                        //
+                        // Вставить после lastItem
                         //
                         else {
-                            insertItem(newItem, lastItem);
+                            insertItem(newTextItem, lastItem);
                         }
+                    } else {
+                        insertItem(newTextItem, lastItem);
                     }
-                    //
-                    // Вставить в середину папки
-                    //
-                    else {
-                        insertItem(newItem, lastItem);
-                    }
-                } else {
-                    insertItem(newItem, lastItem);
-                }
 
-                lastItem = newItem;
+                    lastItem = newTextItem;
+                }
             }
 
             //
@@ -636,7 +696,7 @@ QMimeData* TextModel::mimeData(const QModelIndexList& _indexes) const
     // последний элемент некорректно, нужно проверить, не входит ли его родитель в выделение
     //
 
-    QModelIndexList correctedIndexes;
+    QVector<QModelIndex> correctedIndexes;
     for (const auto& index : _indexes) {
         if (!_indexes.contains(index.parent())) {
             correctedIndexes.append(index);
@@ -671,7 +731,7 @@ QMimeData* TextModel::mimeData(const QModelIndexList& _indexes) const
 
     auto mimeData = new QMimeData;
     const bool clearUuid = false;
-    mimeData->setData(mimeTypes().first(), mimeFromSelection(fromIndex, 0, toIndex, 1, clearUuid).toUtf8());
+    mimeData->setData(mimeTypes().constFirst(), mimeFromSelection(fromIndex, 0, toIndex, 1, clearUuid).toUtf8());
 
     d->lastMime = { fromIndex, toIndex, mimeData };
 

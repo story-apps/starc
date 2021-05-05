@@ -176,15 +176,15 @@ void TextDocument::Implementation::readModelItemContent(int _itemRow,
                 formatCursor.mergeCharFormat(format.charFormat());
             }
 
-//            //
-//            // Вставим редакторские заметки
-//            //
-//            auto reviewCursor = _cursor;
-//            for (const auto& reviewMark : textItem->reviewMarks()) {
-//                reviewCursor.setPosition(reviewCursor.block().position() + reviewMark.from);
-//                reviewCursor.movePosition(QTextCursor::NextCharacter, QTextCursor::KeepAnchor, reviewMark.length);
-//                reviewCursor.mergeCharFormat(reviewMark.charFormat());
-//            }
+            //
+            // Вставим редакторские заметки
+            //
+            auto reviewCursor = _cursor;
+            for (const auto& reviewMark : textItem->reviewMarks()) {
+                reviewCursor.setPosition(reviewCursor.block().position() + reviewMark.from);
+                reviewCursor.movePosition(QTextCursor::NextCharacter, QTextCursor::KeepAnchor, reviewMark.length);
+                reviewCursor.mergeCharFormat(reviewMark.charFormat());
+            }
 
             break;
         }
@@ -383,7 +383,7 @@ void TextDocument::setModel(BusinessLayer::TextModel* _model, bool _canChangeMod
         QScopedValueRollback temporatryState(d->state, DocumentState::Changing);
 
         //
-        // Игнорируем добавление пустых сцен и папок
+        // Игнорируем добавление пустых глав
         //
         const auto item = d->model->itemForIndex(d->model->index(_from, 0, _parent));
         if (item->type() == TextModelItemType::Chapter
