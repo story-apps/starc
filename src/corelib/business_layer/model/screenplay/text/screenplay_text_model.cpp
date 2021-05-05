@@ -1277,9 +1277,35 @@ void ScreenplayTextModel::applyPatch(const QByteArray& _patch)
             return _item->childAt(0);
         }
 
+        ScreenplayTextModelItem* lastBrokenItem = nullptr;
+        QScopedPointer<ScreenplayTextModelTextItem> lastBrokenItemCopy;
         for (int childIndex = 0; childIndex < _item->childCount(); ++childIndex) {
+            //
+            // Определим дочерний элемент
+            //
             auto child = _item->childAt(childIndex);
-            const auto childLength = QString(child->toXml()).length();
+            if (child->type() == ScreenplayTextModelItemType::Text) {
+                auto textItem = static_cast<ScreenplayTextModelTextItem*>(child);
+                if (textItem->isCorrection()) {
+                    continue;
+                }
+                if (textItem->isBroken()) {
+                    lastBrokenItem = textItem;
+                    lastBrokenItemCopy.reset(new ScreenplayTextModelTextItem);
+                    lastBrokenItemCopy->copyFrom(lastBrokenItem);
+                    continue;
+                }
+                if (!lastBrokenItemCopy.isNull()) {
+                    lastBrokenItemCopy->setText(lastBrokenItemCopy->text() + " ");
+                    lastBrokenItemCopy->mergeWith(textItem);
+                }
+            }
+            //
+            // Определим длину дочернего элемента
+            //
+            const auto childLength = lastBrokenItemCopy.isNull()
+                                     ? QString(child->toXml()).length()
+                                     : QString(lastBrokenItemCopy->toXml()).length();
 
             //
             // В этом элементе начинается изменение
@@ -1307,11 +1333,20 @@ void ScreenplayTextModel::applyPatch(const QByteArray& _patch)
                 // В противном случае завершаем поиск
                 //
                 else {
-                   return child;
+                    if (lastBrokenItem != nullptr) {
+                        return lastBrokenItem;
+                    } else {
+                        return child;
+                    }
                 }
             }
 
             length += childLength;
+
+            if (lastBrokenItem != nullptr) {
+                lastBrokenItem = nullptr;
+                lastBrokenItemCopy.reset();
+            }
         }
 
         return nullptr;
