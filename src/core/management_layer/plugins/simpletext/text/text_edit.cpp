@@ -5,6 +5,7 @@
 #include <business_layer/document/text/text_block_data.h>
 #include <business_layer/document/text/text_cursor.h>
 #include <business_layer/document/text/text_document.h>
+#include <business_layer/import/text/markdown_improter.h>
 #include <business_layer/model/text/text_model.h>
 #include <business_layer/model/text/text_model_text_item.h>
 #include <business_layer/templates/text_template.h>
@@ -666,7 +667,8 @@ void TextEdit::insertFromMimeData(const QMimeData* _source)
     //       не воспринимался как титульная страница
     //
     else if (_source->hasText()) {
-        textToInsert = _source->text();
+        BusinessLayer::MarkdownImporter markdownImporter;
+        textToInsert = markdownImporter.importDocument(_source->text()).text;
     }
 
     //

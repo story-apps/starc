@@ -1,6 +1,6 @@
 #include "import_dialog.h"
 
-#include <business_layer/import/import_options.h>
+#include <business_layer/import/screenplay/screenlay_import_options.h>
 
 #include <ui/design_system/design_system.h>
 #include <ui/widgets/button/button.h>
@@ -101,9 +101,9 @@ ImportDialog::ImportDialog(const QString& _importFilePath, QWidget* _parent)
 
 ImportDialog::~ImportDialog() = default;
 
-BusinessLayer::ImportOptions ImportDialog::importOptions() const
+BusinessLayer::ScreenplayImportOptions ImportDialog::importOptions() const
 {
-    BusinessLayer::ImportOptions options;
+    BusinessLayer::ScreenplayImportOptions options;
     options.filePath = d->importFilePath;
     options.importCharacters = d->importCharacters->isChecked();
     options.importLocations = d->importLocations->isChecked();

@@ -6,7 +6,7 @@
 #include <business_layer/document/screenplay/text/screenplay_text_corrector.h>
 #include <business_layer/document/screenplay/text/screenplay_text_cursor.h>
 #include <business_layer/document/screenplay/text/screenplay_text_document.h>
-#include <business_layer/import/fountain_importer.h>
+#include <business_layer/import/screenplay/fountain_importer.h>
 #include <business_layer/model/screenplay/screenplay_information_model.h>
 #include <business_layer/model/screenplay/text/screenplay_text_model.h>
 #include <business_layer/model/screenplay/text/screenplay_text_model_text_item.h>
