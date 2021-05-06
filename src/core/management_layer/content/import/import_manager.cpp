@@ -174,4 +174,11 @@ void ImportManager::import()
     d->showImportDialogFor(importFilePath);
 }
 
+void ImportManager::import(const QString& _filePath)
+{
+    BusinessLayer::ScreenplayImportOptions options;
+    options.filePath = _filePath;
+    d->import(options);
+}
+
 } // namespace ManagementLayer

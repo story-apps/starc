@@ -130,7 +130,7 @@ CreateProjectDialog::CreateProjectDialog(QWidget* _parent)
        //
        // Старый вордовский формат не поддерживаем
        //
-       if (path.toLower().endsWith(".doc")) {
+       if (path.endsWith(".doc", Qt::CaseInsensitive)) {
            StandardDialog::information(parentWidget(), tr("File format not supported"),
                tr("Importing from DOC files is not supported. You need to save the file in DOCX format and repeat the import."));
            return;

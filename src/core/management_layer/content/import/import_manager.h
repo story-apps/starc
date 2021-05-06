@@ -22,6 +22,11 @@ public:
      */
     void import();
 
+    /**
+     * @brief Импортировать все возможные данные из указанного файла
+     */
+    void import(const QString& _filePath);
+
 signals:
     /**
      * @brief Персонаж загружен

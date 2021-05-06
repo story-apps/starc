@@ -928,6 +928,13 @@ void ApplicationManager::Implementation::goToEditCurrentProject(const QString& _
                                        projectsManager->currentProject().path());
 
     //
+    // При необходимости импортируем данные из заданного файла
+    //
+    if (!_importFilePath.isEmpty()) {
+        importManager->import(_importFilePath);
+    }
+
+    //
     // Отобразить страницу самого проекта
     //
     showProject();
