@@ -87,6 +87,14 @@ void ScreenplayTextEdit::initWithModel(BusinessLayer::ScreenplayTextModel* _mode
     }
     d->model = _model;
 
+    //
+    // Сбрасываем модель, чтобы не вылезали изменения документа при изменении параметров страницы
+    //
+    d->document.setModel(nullptr);
+
+    //
+    // Обновляем параметры страницы из шаблона
+    //
     const auto currentTemplate = TemplatesFacade::screenplayTemplate();
     setPageFormat(currentTemplate.pageSizeId());
     setPageMargins(currentTemplate.pageMargins());

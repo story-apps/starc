@@ -715,7 +715,9 @@ void ScreenplayTextModelTextItem::setFormats(const QVector<QTextLayout::FormatRa
     QVector<TextFormat> newFormats;
     const auto defaultBlockFormat = TemplatesFacade::screenplayTemplate().blockStyle(d->paragraphType);
     for (const auto& format : _formats) {
-        if (format.format == defaultBlockFormat.charFormat()) {
+        if (format.start == 0
+            && format.length == d->text.length()
+            && format.format == defaultBlockFormat.charFormat()) {
             continue;
         }
 
