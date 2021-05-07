@@ -518,10 +518,65 @@ bool StructureModel::canDropMimeData(const QMimeData* _data, Qt::DropAction _act
     }
 
     //
+    // Проверяем, что перемещаются данные из модели
+    //
+    QByteArray encodedData = _data->data(kMimeType);
+    QDataStream stream(&encodedData, QIODevice::ReadOnly);
+    int row = 0;
+    while (!stream.atEnd()) {
+        QUuid itemUuid;
+        stream >> itemUuid;
+        if (itemUuid != d->lastMimeItems[row]->uuid()) {
+            //
+            // ... если это какие-то внешние данные, то ничего не делаем
+            //
+            return false;
+        }
+
+        ++row;
+    }
+
+    //
+    // Смотрим, что за данные перемещаются
+    //
+    bool hasCharacters = false;
+    bool hasLocations = false;
+    for (const auto item : std::as_const(d->lastMimeItems)) {
+        if (!hasCharacters
+            && item->type() == Domain::DocumentObjectType::Character) {
+            hasCharacters = true;
+        }
+        if (!hasLocations
+            && item->type() == Domain::DocumentObjectType::Location) {
+            hasLocations = true;
+        }
+    }
+
+    //
     // Обработка конкретных случаев что куда можно бросать
     //
     const auto dropTarget = itemForIndex(_parent);
+    //
+    // ... eсли среди перемещаемых элементов есть и локации и персонажи, то запрещаем перемещение
+    //
+    if (hasCharacters && hasLocations) {
+        return false;
+    }
+    //
+    // ... персонажей и локации можно перетаскивать только внутри родительского элемента
+    //
+    else if (hasCharacters) {
+        return dropTarget->type() == Domain::DocumentObjectType::Characters;
+    } else if (hasLocations) {
+        return dropTarget->type() == Domain::DocumentObjectType::Locations;
+    }
+    //
+    // ... остальные случаи
+    //
     switch (dropTarget->type()) {
+        //
+        // ... внутрь сценария ничего нельзя вложить
+        //
         case Domain::DocumentObjectType::Screenplay: {
             return false;
         }
