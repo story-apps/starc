@@ -634,7 +634,7 @@ void DocxReader::readRunProperties(Style& style, bool allowstyles)
             //
             // Игнорируем белый
             //
-            if (color != Qt::white) {
+            if (color.isValid() && color != Qt::white) {
                 style.char_format.setProperty(Docx::IsBackground, true);
                 style.char_format.setBackground(color);
                 style.char_format.setForeground(Qt::black);
@@ -648,7 +648,7 @@ void DocxReader::readRunProperties(Style& style, bool allowstyles)
             //
             // Игнорируем белый
             //
-            if (color != Qt::white) {
+            if (color.isValid() && color != Qt::white) {
                 style.char_format.setProperty(Docx::IsHighlight, true);
                 style.char_format.setBackground(color);
                 style.char_format.setForeground(Qt::black);
@@ -662,7 +662,7 @@ void DocxReader::readRunProperties(Style& style, bool allowstyles)
             //
             // Игнорируем все оттенки близкие к чёрному
             //
-            if (color.black() < 220) {
+            if (color.isValid() && color.valueF() > 0.25) {
                 style.char_format.setProperty(Docx::IsForeground, true);
                 style.char_format.setForeground(color);
             }

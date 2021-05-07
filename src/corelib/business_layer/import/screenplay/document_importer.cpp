@@ -10,10 +10,14 @@
 #include <business_layer/model/screenplay/text/screenplay_text_model_xml.h>
 #include <business_layer/templates/screenplay_template.h>
 
+#include <data_layer/storage/storage_facade.h>
+#include <data_layer/storage/settings_storage.h>
+
 #include <domain/document_object.h>
 
 #include <utils/helpers/text_helper.h>
 
+#include <QDateTime>
 #include <QFileInfo>
 #include <QRegularExpression>
 #include <QTextBlock>
@@ -523,9 +527,18 @@ QVector<AbstractScreenplayImporter::Screenplay> DocumentImporter::importScreenpl
                             //
                             // ... комментарии
                             //
-                            const QStringList authors = range.format.property(Docx::CommentsAuthors).toStringList();
-                            const QStringList dates = range.format.property(Docx::CommentsDates).toStringList();
-                            const QStringList comments = range.format.property(Docx::Comments).toStringList();
+                            QStringList authors = range.format.property(Docx::CommentsAuthors).toStringList();
+                            if (authors.isEmpty()) {
+                                authors.append(DataStorageLayer::StorageFacade::settingsStorage()->userName());
+                            }
+                            QStringList dates = range.format.property(Docx::CommentsDates).toStringList();
+                            if (dates.isEmpty()) {
+                                dates.append(QDateTime::currentDateTime().toString(Qt::ISODate));
+                            }
+                            QStringList comments = range.format.property(Docx::Comments).toStringList();
+                            if (comments.isEmpty()) {
+                                comments.append(QString());
+                            }
                             for (int commentIndex = 0; commentIndex < comments.size(); ++commentIndex) {
                                 writer.writeStartElement(xml::kCommentTag);
                                 writer.writeAttribute(xml::kAuthorAttribute, authors.at(commentIndex));
