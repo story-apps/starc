@@ -76,8 +76,7 @@ SpellChecker::Implementation::Implementation()
 QString SpellChecker::Implementation::hunspellFilePath(SpellCheckerFileType _fileType) const
 {
     //
-    // Получим файл со словарём в зависимости от выбранного языка,
-    // по-умолчанию используется русский язык
+    // Получим файл со словарём в зависимости от выбранного языка
     //
     QString fileName = languageCode;
 
