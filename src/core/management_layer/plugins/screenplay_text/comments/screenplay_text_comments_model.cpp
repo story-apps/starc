@@ -851,7 +851,7 @@ void ScreenplayTextCommentsModel::addComment(const QModelIndex& _index, const QS
 
 void ScreenplayTextCommentsModel::remove(const QModelIndexList& _indexes)
 {
-    for (const auto& index : _indexes) {
+    for (const auto& index : reversed(_indexes)) {
         const auto reviewMarkWrapper = d->reviewMarks.at(index.row());
         for (auto textItem : reviewMarkWrapper.items) {
             auto updatedReviewMarks = textItem->reviewMarks();
