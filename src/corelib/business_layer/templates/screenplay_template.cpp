@@ -521,6 +521,9 @@ QString ScreenplayTemplate::name() const
         } else if (m_id == "ru") {
             return QApplication::translate("BusinessLayer::ScreenplayTemplate",
                                            "Russian template (page: A4; font: Courier New)");
+        } else if (m_id == "tamil") {
+            return QApplication::translate("BusinessLayer::ScreenplayTemplate",
+                                           "Tamil template (page: A4; font: Mukta Malar)");
         } else if (m_id == "us") {
             return QApplication::translate("BusinessLayer::ScreenplayTemplate",
                                            "US template (page: Letter; font: Courier Prime)");

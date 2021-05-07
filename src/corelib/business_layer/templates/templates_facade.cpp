@@ -255,6 +255,7 @@ TemplatesFacade::TemplatesFacade()
                                      QLatin1String("ar"),
                                      QLatin1String("he"),
                                      QLatin1String("ru"),
+                                     QLatin1String("tamil"),
                                      QLatin1String("us") });
 }
 

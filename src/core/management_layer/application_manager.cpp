@@ -1111,6 +1111,8 @@ ApplicationManager::ApplicationManager(QObject* _parent)
     fontDatabase.addApplicationFont(":/fonts/courier-prime-bold");
     fontDatabase.addApplicationFont(":/fonts/courier-prime-italic");
     fontDatabase.addApplicationFont(":/fonts/courier-prime-bold-italic");
+    fontDatabase.addApplicationFont(":/fonts/muktamalar-bold");
+    fontDatabase.addApplicationFont(":/fonts/muktamalar-regular");
 
     //
     // Инициилизируем данные после подгрузки шрифтов, чтобы они сразу подхватились системой
