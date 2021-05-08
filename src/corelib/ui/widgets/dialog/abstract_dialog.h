@@ -89,6 +89,11 @@ protected:
     void paintEvent(QPaintEvent* _event) override;
 
     /**
+     * @brief Обрабатываем клики за пределами области контента диалога
+     */
+    void mousePressEvent(QMouseEvent* _event) override;
+
+    /**
      * @brief Обновляем навигатор при изменении дизайн системы
      */
     void designSystemChangeEvent(DesignSystemChangeEvent* _event) override;

@@ -257,6 +257,20 @@ void AbstractDialog::paintEvent(QPaintEvent* _event)
     }
 }
 
+void AbstractDialog::mousePressEvent(QMouseEvent* _event)
+{
+    //
+    // Если пользователь кликнул вне области контента диалога и есть кнопка отмены, то используем её
+    //
+    if (!d->title->rect().contains(d->title->mapFromGlobal(_event->globalPos()))
+        && !d->content->rect().contains(d->content->mapFromGlobal(_event->globalPos()))) {
+        if (d->rejectButton != nullptr
+            && d->rejectButton->isEnabled()) {
+            d->rejectButton->click();
+        }
+    }
+}
+
 void AbstractDialog::designSystemChangeEvent(DesignSystemChangeEvent* _event)
 {
     Q_UNUSED(_event)
