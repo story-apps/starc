@@ -47,6 +47,8 @@ struct CORE_LIBRARY_EXPORT ExportOptions
      * @brief Печатать номера сцен
      */
     bool printScenesNumbers = true;
+    bool printScenesNumbersOnLeft = true;
+    bool printScenesNumbersOnRight = true;
 
     /**
      * @brief Печатать номера реплик

@@ -83,23 +83,27 @@ static void printPage(int _pageNumber, QPainter* _painter, const QTextDocument* 
                     const auto sceneItem = static_cast<ScreenplayTextModelSceneItem*>(blockData->item()->parent());
                     const int distanceBetweenSceneNumberAndText = 10;
 
-                    const QRectF leftSceneNumberRect(
-                                0,
-                                blockRect.top() <= pageYPos
-                                ? (pageYPos + PageMetrics::mmToPx(_template.pageMargins().top()))
-                                : blockRect.top(),
-                                PageMetrics::mmToPx(_template.pageMargins().left()) - distanceBetweenSceneNumberAndText,
-                                blockRect.height());
-                    _painter->drawText(leftSceneNumberRect, Qt::AlignRight | Qt::AlignTop, sceneItem->number().value);
+                    if (_exportOptions.printScenesNumbersOnLeft) {
+                        const QRectF leftSceneNumberRect(
+                                    0,
+                                    blockRect.top() <= pageYPos
+                                    ? (pageYPos + PageMetrics::mmToPx(_template.pageMargins().top()))
+                                    : blockRect.top(),
+                                    PageMetrics::mmToPx(_template.pageMargins().left()) - distanceBetweenSceneNumberAndText,
+                                    blockRect.height());
+                        _painter->drawText(leftSceneNumberRect, Qt::AlignRight | Qt::AlignTop, sceneItem->number().value);
+                    }
 
-                    const QRectF rightSceneNumberRect(
-                                _body.width() - PageMetrics::mmToPx(_template.pageMargins().right()) + distanceBetweenSceneNumberAndText,
-                                blockRect.top() <= pageYPos
-                                ? (pageYPos + PageMetrics::mmToPx(_template.pageMargins().top()))
-                                : blockRect.top(),
-                                PageMetrics::mmToPx(_template.pageMargins().right()) - distanceBetweenSceneNumberAndText,
-                                blockRect.height());
-                    _painter->drawText(rightSceneNumberRect, Qt::AlignLeft | Qt::AlignTop, sceneItem->number().value);
+                    if (_exportOptions.printScenesNumbersOnRight) {
+                        const QRectF rightSceneNumberRect(
+                                    _body.width() - PageMetrics::mmToPx(_template.pageMargins().right()) + distanceBetweenSceneNumberAndText,
+                                    blockRect.top() <= pageYPos
+                                    ? (pageYPos + PageMetrics::mmToPx(_template.pageMargins().top()))
+                                    : blockRect.top(),
+                                    PageMetrics::mmToPx(_template.pageMargins().right()) - distanceBetweenSceneNumberAndText,
+                                    blockRect.height());
+                        _painter->drawText(rightSceneNumberRect, Qt::AlignLeft | Qt::AlignTop, sceneItem->number().value);
+                    }
                 }
             }
             //

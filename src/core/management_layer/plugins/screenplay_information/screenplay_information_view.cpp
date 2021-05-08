@@ -217,7 +217,8 @@ void ScreenplayInformationView::designSystemChangeEvent(DesignSystemChangeEvent*
     }
     d->screenplayInfoLayout->setVerticalSpacing(static_cast<int>(Ui::DesignSystem::layout().px16()));
     d->screenplayInfoLayout->setRowMinimumHeight(0, static_cast<int>(Ui::DesignSystem::layout().px24()));
-    d->screenplayInfoLayout->setRowMinimumHeight(8, static_cast<int>(Ui::DesignSystem::layout().px24()));
+    d->screenplayInfoLayout->setRowMinimumHeight(d->screenplayInfoLayout->rowCount() - 1,
+                                                 static_cast<int>(Ui::DesignSystem::layout().px24()));
 }
 
 } // namespace Ui

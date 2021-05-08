@@ -32,6 +32,8 @@ public:
     CheckBox* printFolders = nullptr;
     CheckBox* printInlineNotes = nullptr;
     CheckBox* printSceneNumbers = nullptr;
+    CheckBox* printSceneNumbersOnLeft = nullptr;
+    CheckBox* printSceneNumbersOnRight = nullptr;
     CheckBox* printDialoguesNumbers = nullptr;
     CheckBox* printReviewMarks = nullptr;
     TextField* watermark = nullptr;
@@ -49,6 +51,8 @@ ExportDialog::Implementation::Implementation(QWidget* _parent)
       printFolders(new CheckBox(_parent)),
       printInlineNotes(new CheckBox(_parent)),
       printSceneNumbers(new CheckBox(_parent)),
+      printSceneNumbersOnLeft(new CheckBox(_parent)),
+      printSceneNumbersOnRight(new CheckBox(_parent)),
       printDialoguesNumbers(new CheckBox(_parent)),
       printReviewMarks(new CheckBox(_parent)),
       watermark(new TextField(_parent)),
@@ -77,8 +81,9 @@ ExportDialog::Implementation::Implementation(QWidget* _parent)
 
     printTitlePage->hide();
 
-    for (auto checkBox : { /*printTitlePage,*/ printFolders, printSceneNumbers, printReviewMarks,
-                           openDocumentAfterExport }) {
+    for (auto checkBox : { /*printTitlePage,*/ printFolders,
+                           printSceneNumbers, printSceneNumbersOnLeft, printSceneNumbersOnRight,
+                           printReviewMarks, openDocumentAfterExport }) {
         checkBox->setChecked(true);
     }
 
@@ -107,7 +112,15 @@ ExportDialog::ExportDialog(QWidget* _parent)
     contentsLayout()->addWidget(d->printTitlePage, row++, 0);
     contentsLayout()->addWidget(d->printFolders, row++, 0);
     contentsLayout()->addWidget(d->printInlineNotes, row++, 0);
-    contentsLayout()->addWidget(d->printSceneNumbers, row++, 0);
+    {
+        auto layout = new QHBoxLayout;
+        layout->setContentsMargins({});
+        layout->setSpacing(0);
+        layout->addWidget(d->printSceneNumbers);
+        layout->addWidget(d->printSceneNumbersOnLeft);
+        layout->addWidget(d->printSceneNumbersOnRight);
+        contentsLayout()->addLayout(layout, row++, 0);
+    }
     contentsLayout()->addWidget(d->printDialoguesNumbers, row++, 0);
     contentsLayout()->addWidget(d->printReviewMarks, row++, 0);
     contentsLayout()->addWidget(d->watermark, row++, 0);
@@ -117,6 +130,7 @@ ExportDialog::ExportDialog(QWidget* _parent)
         auto isScreenplayTemplateVisible = true;
         auto isPrintFoldersVisible = true;
         auto isPrintInlineNotesVisible = true;
+        auto isPrintScenesNumbersOnVisible = true;
         auto isPrintDialoguesNumbersVisible = true;
         auto isPrintReviewMarksVisible = true;
         auto isWatermarkVisible = true;
@@ -136,6 +150,7 @@ ExportDialog::ExportDialog(QWidget* _parent)
             // DOCX
             //
             case 1: {
+                isPrintScenesNumbersOnVisible = false;
                 isWatermarkVisible = false;
                 break;
             }
@@ -144,6 +159,7 @@ ExportDialog::ExportDialog(QWidget* _parent)
             // FDX
             //
             case 2: {
+                isPrintScenesNumbersOnVisible = false;
                 isPrintDialoguesNumbersVisible = false;
                 isPrintReviewMarksVisible = false;
                 isWatermarkVisible = false;
@@ -157,6 +173,7 @@ ExportDialog::ExportDialog(QWidget* _parent)
                 isScreenplayTemplateVisible = false;
                 isPrintFoldersVisible = false;
                 isPrintInlineNotesVisible = false;
+                isPrintScenesNumbersOnVisible = false;
                 isPrintDialoguesNumbersVisible = false;
                 isPrintReviewMarksVisible = false;
                 isWatermarkVisible = false;
@@ -166,10 +183,23 @@ ExportDialog::ExportDialog(QWidget* _parent)
         d->screenplayTemplate->setVisible(isScreenplayTemplateVisible);
         d->printFolders->setVisible(isPrintFoldersVisible);
         d->printInlineNotes->setVisible(isPrintInlineNotesVisible);
+        d->printSceneNumbersOnLeft->setVisible(isPrintScenesNumbersOnVisible);
+        d->printSceneNumbersOnRight->setVisible(isPrintScenesNumbersOnVisible);
         d->printDialoguesNumbers->setVisible(isPrintDialoguesNumbersVisible);
         d->printReviewMarks->setVisible(isPrintReviewMarksVisible);
         d->watermark->setVisible(isWatermarkVisible);
     });
+    connect(d->printSceneNumbers, &CheckBox::checkedChanged, d->printSceneNumbersOnLeft, &CheckBox::setEnabled);
+    connect(d->printSceneNumbers, &CheckBox::checkedChanged, d->printSceneNumbersOnRight, &CheckBox::setEnabled);
+    auto screenplayEditorCorrectShownSceneNumber = [this] {
+        if (!d->printSceneNumbersOnLeft->isChecked()
+            && !d->printSceneNumbersOnRight->isChecked()) {
+            d->printSceneNumbersOnLeft->setChecked(true);
+        }
+    };
+    connect(d->printSceneNumbersOnLeft, &CheckBox::checkedChanged, this, screenplayEditorCorrectShownSceneNumber);
+    connect(d->printSceneNumbersOnRight, &CheckBox::checkedChanged, this, screenplayEditorCorrectShownSceneNumber);
+
     connect(d->exportButton, &Button::clicked, this, &ExportDialog::exportRequested);
     connect(d->cancelButton, &Button::clicked, this, &ExportDialog::canceled);
 
@@ -189,6 +219,8 @@ BusinessLayer::ExportOptions ExportDialog::exportOptions() const
     options.printFolders = d->printFolders->isChecked();
     options.printInlineNotes = d->printInlineNotes->isChecked();
     options.printScenesNumbers = d->printSceneNumbers->isChecked();
+    options.printScenesNumbersOnLeft = d->printSceneNumbersOnLeft->isChecked();
+    options.printScenesNumbersOnRight = d->printSceneNumbersOnRight->isChecked();
     options.printDialoguesNumbers = d->printDialoguesNumbers->isChecked();
     options.printReviewMarks = d->printReviewMarks->isChecked();
     options.watermark = d->watermark->text();
@@ -220,6 +252,8 @@ void ExportDialog::updateTranslations()
     d->printFolders->setText(tr("Print folders"));
     d->printInlineNotes->setText(tr("Print inline notes"));
     d->printSceneNumbers->setText(tr("Print scenes numbers"));
+    d->printSceneNumbersOnLeft->setText(tr("on the left"));
+    d->printSceneNumbersOnRight->setText(tr("on the right"));
     d->printDialoguesNumbers->setText(tr("Print dialogues numbers"));
     d->printReviewMarks->setText(tr("Print review marks"));
     d->watermark->setLabel(tr("Watermark"));
@@ -243,8 +277,8 @@ void ExportDialog::designSystemChangeEvent(DesignSystemChangeEvent* _event)
     }
 
     for (auto checkBox : { d->printTitlePage, d->printFolders, d->printInlineNotes,
-                           d->printSceneNumbers, d->printDialoguesNumbers, d->printReviewMarks,
-                           d->openDocumentAfterExport }) {
+                           d->printSceneNumbers, d->printSceneNumbersOnLeft, d->printSceneNumbersOnRight,
+                           d->printDialoguesNumbers, d->printReviewMarks, d->openDocumentAfterExport }) {
         checkBox->setBackgroundColor(Ui::DesignSystem::color().background());
         checkBox->setTextColor(Ui::DesignSystem::color().onBackground());
     }

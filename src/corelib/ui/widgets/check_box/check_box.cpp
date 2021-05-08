@@ -33,10 +33,10 @@ public:
 
 CheckBox::Implementation::Implementation()
 {
-    decorationRadiusAnimation.setEasingCurve(QEasingCurve::OutQuad);
+    decorationRadiusAnimation.setEasingCurve(QEasingCurve::InOutQuad);
     decorationRadiusAnimation.setDuration(160);
 
-    decorationOpacityAnimation.setEasingCurve(QEasingCurve::InQuad);
+    decorationOpacityAnimation.setEasingCurve(QEasingCurve::InOutQuad);
     decorationOpacityAnimation.setStartValue(0.5);
     decorationOpacityAnimation.setEndValue(0.0);
     decorationOpacityAnimation.setDuration(160);
