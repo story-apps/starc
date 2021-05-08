@@ -81,7 +81,7 @@ signals:
     /**
      * @brief Нажат пункт меню "Сохранить изменения"
      */
-    void saveChangesPressed();
+    void saveProjectChangesPressed();
 
     /**
      * @brief Нажат пункт меню "Сохранить проект как"

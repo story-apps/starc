@@ -30,6 +30,7 @@
 #include <ui/widgets/dialog/standard_dialog.h>
 
 #include <utils/3rd_party/WAF/Animation/Animation.h>
+#include <utils/helpers/dialog_helper.h>
 #include <utils/tools/backup_builder.h>
 #include <utils/tools/run_once.h>
 
@@ -37,6 +38,7 @@
 
 #include <QApplication>
 #include <QDir>
+#include <QFileDialog>
 #include <QFontDatabase>
 #include <QJsonDocument>
 #include <QKeyEvent>
@@ -168,6 +170,11 @@ public:
      *        или не хочет (Нет) сохранять и не будет вызван, если пользователь передумал (Отмена)
      */
     void saveIfNeeded(std::function<void()> _callback);
+
+    /**
+     * @brief Сохранить проект как другой файл
+     */
+    void saveAs();
 
     /**
      * @brief Создать проект
@@ -796,6 +803,84 @@ void ApplicationManager::Implementation::saveIfNeeded(std::function<void()> _cal
     QApplication::alert(applicationView);
 }
 
+void ApplicationManager::Implementation::saveAs()
+{
+    //
+    // Изначально высвечивается текущее имя проекта
+    //
+    const auto& currentProject = projectsManager->currentProject();
+    QString projectPath = currentProject.path();
+    if (currentProject.isRemote()) {
+        //
+        // Для удаленных проектов используем имя проекта + id проекта
+        // и сохраняем в папку вновь создаваемых проектов
+        //
+        const auto projectsFolderPath
+                = DataStorageLayer::StorageFacade::settingsStorage()->value(
+                      DataStorageLayer::kProjectSaveFolderKey,
+                      DataStorageLayer::SettingsStorage::SettingsPlace::Application)
+                  .toString();
+        projectPath = projectsFolderPath + QDir::separator()
+                      + QString("%1 [%2]%3").arg(currentProject.name())
+                                            .arg(currentProject.id())
+                                            .arg(Project::extension());
+    }
+
+    //
+    // Получим имя файла для сохранения
+    //
+    QString saveAsProjectFilePath
+            = QFileDialog::getSaveFileName(applicationView,
+                                           tr("Choose file to save story"),
+                                           projectPath,
+                                           DialogHelper::starcProjectFilter());
+    if (saveAsProjectFilePath.isEmpty()) {
+        return;
+    }
+
+    //
+    // Если файл выбран
+    //
+
+    //
+    // Установим расширение, если не задано
+    //
+    if (!saveAsProjectFilePath.endsWith(Project::extension())) {
+        saveAsProjectFilePath.append(Project::extension());
+    }
+
+    //
+    // Если пользователь указал тот же путь, ничего не делаем
+    //
+    if (saveAsProjectFilePath == currentProject.path()) {
+        return;
+    }
+
+    //
+    // Cохраняем в новый файл
+    //
+    // ... если файл существовал, удалим его для удаления данных в нём
+    //
+    if (QFile::exists(saveAsProjectFilePath)) {
+        QFile::remove(saveAsProjectFilePath);
+    }
+    //
+    // ... скопируем текущую базу в указанный файл
+    //
+    const auto isCopied = QFile::copy(currentProject.path(), saveAsProjectFilePath);
+    if (!isCopied) {
+        StandardDialog::information(applicationView, tr("Saving error"),
+            tr("Can't save the story to the file %1. Please check permissions and retry.")
+                                    .arg(saveAsProjectFilePath));
+        return;
+    }
+
+    //
+    // Откроем копию текущего проекта
+    //
+    openProject(saveAsProjectFilePath);
+}
+
 void ApplicationManager::Implementation::createProject()
 {
     auto callback = [this] { projectsManager->createProject(); };
@@ -1272,7 +1357,11 @@ void ApplicationManager::initConnections()
     connect(d->menuView, &Ui::MenuView::createProjectPressed, this, [this] { d->createProject(); });
     connect(d->menuView, &Ui::MenuView::openProjectPressed, this, [this] { d->openProject(); });
     connect(d->menuView, &Ui::MenuView::projectPressed, this, [this] { d->showProject(); });
-    connect(d->menuView, &Ui::MenuView::saveChangesPressed, this, [this] { d->saveChanges(); });
+    connect(d->menuView, &Ui::MenuView::saveProjectChangesPressed, this, [this] { d->saveChanges(); });
+    connect(d->menuView, &Ui::MenuView::saveProjectAsPressed, this, [this] {
+        auto callback = [this] { d->saveAs(); };
+        d->saveIfNeeded(callback);
+    });
     connect(d->menuView, &Ui::MenuView::importPressed, this, [this] { d->importProject(); });
     connect(d->menuView, &Ui::MenuView::exportCurrentDocumentPressed, this, [this] { d->exportCurrentDocument(); });
     connect(d->menuView, &Ui::MenuView::settingsPressed, this, [this] { d->showSettings(); });

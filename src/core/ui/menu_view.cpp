@@ -59,7 +59,6 @@ MenuView::Implementation::Implementation(QWidget* _parent)
     saveProjectAs = new QAction;
     saveProjectAs->setIconText(" ");
     saveProjectAs->setCheckable(false);
-    saveProjectAs->setEnabled(false);
     saveProjectAs->setVisible(false);
     //
     importProject = new QAction;
@@ -117,7 +116,7 @@ MenuView::MenuView(QWidget* _parent)
     connect(d->createProject, &QAction::triggered, this, &MenuView::createProjectPressed);
     connect(d->openProject, &QAction::triggered, this, &MenuView::openProjectPressed);
     connect(d->project, &QAction::triggered, this, &MenuView::projectPressed);
-    connect(d->saveProject, &QAction::triggered, this, &MenuView::saveChangesPressed);
+    connect(d->saveProject, &QAction::triggered, this, &MenuView::saveProjectChangesPressed);
     connect(d->saveProjectAs, &QAction::triggered, this, &MenuView::saveProjectAsPressed);
     connect(d->importProject, &QAction::triggered, this, &MenuView::importPressed);
     connect(d->exportCurrentDocument, &QAction::triggered, this, &MenuView::exportCurrentDocumentPressed);
