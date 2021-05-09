@@ -463,6 +463,21 @@ void TextField::setTrailingIcon(const QString& _icon)
     update();
 }
 
+void TextField::setTrailingIconColor(const QColor& _color)
+{
+    if (d->trailingIconColor == _color) {
+        return;
+    }
+
+    d->trailingIconColor = _color;
+    update();
+}
+
+QColor TextField::trailingIconColor() const
+{
+    return d->trailingIconColor;
+}
+
 void TextField::setPasswordModeEnabled(bool _enable)
 {
     if (d->isPasswordModeEnabled == _enable) {
@@ -612,16 +627,6 @@ int TextField::heightForWidth(int _width) const
         height += Ui::DesignSystem::textField().helperHeight();
     }
     return static_cast<int>(height);
-}
-
-void TextField::setTrailingIconColor(const QColor& _color)
-{
-    if (d->trailingIconColor == _color) {
-        return;
-    }
-
-    d->trailingIconColor = _color;
-    update();
 }
 
 void TextField::reconfigure()

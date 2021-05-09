@@ -2,6 +2,7 @@
 
 #include <corelib_global.h>
 
+#include <QColor>
 #include <QString>
 
 
@@ -64,6 +65,7 @@ struct CORE_LIBRARY_EXPORT ExportOptions
      * @brief Водяной знак
      */
     QString watermark;
+    QColor watermarkColor;
 
     //
     // Параметры самого документа

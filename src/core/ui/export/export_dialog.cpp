@@ -224,6 +224,7 @@ BusinessLayer::ExportOptions ExportDialog::exportOptions() const
     options.printDialoguesNumbers = d->printDialoguesNumbers->isChecked();
     options.printReviewMarks = d->printReviewMarks->isChecked();
     options.watermark = d->watermark->text();
+    options.watermarkColor = QColor(100, 100, 100, 30);
     return options;
 }
 

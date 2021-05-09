@@ -327,7 +327,7 @@ static void printPage(int _pageNumber, QPainter* _painter, const QTextDocument* 
         }
 
         _painter->setFont(font);
-        _painter->setPen(QColor(100, 100, 100, 30));
+        _painter->setPen(_exportOptions.watermarkColor);
 
         //
         // Рисуем водяной знак

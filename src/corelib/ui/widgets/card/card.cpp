@@ -50,14 +50,14 @@ Card::Card(QWidget* _parent)
     designSystemChangeEvent(nullptr);
 }
 
+Card::~Card() = default;
+
 void Card::setLayoutReimpl(QLayout* _layout) const
 {
     Q_ASSERT_X(d->layout->count() == 0, Q_FUNC_INFO, "Widget already contains layout");
 
     d->layout->addLayout(_layout);
 }
-
-Card::~Card() = default;
 
 void Card::paintEvent(QPaintEvent* _event)
 {

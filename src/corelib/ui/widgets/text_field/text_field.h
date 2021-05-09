@@ -70,6 +70,12 @@ public:
     void setTrailingIcon(const QString& _icon);
 
     /**
+     * @brief Задать цвет иконки действия (по-умолчанию используется цвет текста)
+     */
+    void setTrailingIconColor(const QColor& _color);
+    QColor trailingIconColor() const;
+
+    /**
      * @brief Включить/отключить режим ввода пароля
      */
     void setPasswordModeEnabled(bool _enable);
@@ -117,11 +123,6 @@ signals:
     void trailingIconPressed();
 
 protected:
-    /**
-     * @brief Задать цвет иконки вспомогательного действия
-     */
-    void setTrailingIconColor(const QColor& _color);
-
     /**
      * @brief Сконфигурировать виджет при изменении какого-либо из параметров внешнего вида
      */
