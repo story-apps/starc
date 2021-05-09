@@ -1858,8 +1858,8 @@ public:
     qreal pageSpacing = 16.0;
     qreal inactiveTextOpacity = 0.68;
     qreal disabledTextOpacity = 0.46;
-    qreal hoverBackgroundOpacity = 0.18;
-    qreal focusBackgroundOpacity = 0.28;
+    qreal hoverBackgroundOpacity = 0.12;
+    qreal focusBackgroundOpacity = 0.20;
     qreal elevationStartOpacity = 0.04;
     qreal elevationEndOpacity = 0.08;
 

@@ -268,7 +268,7 @@ void ThemeDialog::setCurrentTheme(ApplicationTheme _theme)
 
 QWidget* ThemeDialog::focusedWidgetAfterShow() const
 {
-    return d->darkAndLight;
+    return d->light;
 }
 
 QWidget* ThemeDialog::lastFocusableWidget() const

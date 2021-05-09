@@ -36,7 +36,7 @@ CheckBox::Implementation::Implementation()
     decorationRadiusAnimation.setEasingCurve(QEasingCurve::InOutQuad);
     decorationRadiusAnimation.setDuration(160);
 
-    decorationOpacityAnimation.setEasingCurve(QEasingCurve::InOutQuad);
+    decorationOpacityAnimation.setEasingCurve(QEasingCurve::InQuad);
     decorationOpacityAnimation.setStartValue(0.5);
     decorationOpacityAnimation.setEndValue(0.0);
     decorationOpacityAnimation.setDuration(160);
@@ -150,10 +150,12 @@ void CheckBox::paintEvent(QPaintEvent* _event)
     //
     // Рисуем декорацию переключателя
     //
-    if (hasFocus()) {
+    if (underMouse() || hasFocus()) {
         painter.setPen(Qt::NoPen);
-        painter.setBrush(Ui::DesignSystem::color().secondary());
-        painter.setOpacity(Ui::DesignSystem::focusBackgroundOpacity());
+        painter.setBrush(isChecked() ? Ui::DesignSystem::color().secondary()
+                                     : textColor());
+        painter.setOpacity(hasFocus() ? Ui::DesignSystem::focusBackgroundOpacity()
+                                      : Ui::DesignSystem::hoverBackgroundOpacity());
         const auto radius = d->decorationRadiusAnimation.endValue().toReal();
         painter.drawEllipse(iconRect.center(), radius, radius);
         painter.setOpacity(1.0);
@@ -161,7 +163,8 @@ void CheckBox::paintEvent(QPaintEvent* _event)
     if (d->decorationRadiusAnimation.state() == QVariantAnimation::Running
         || d->decorationOpacityAnimation.state() == QVariantAnimation::Running) {
         painter.setPen(Qt::NoPen);
-        painter.setBrush(Ui::DesignSystem::color().secondary());
+        painter.setBrush(isChecked() ? Ui::DesignSystem::color().secondary()
+                                     : textColor());
         painter.setOpacity(d->decorationOpacityAnimation.currentValue().toReal());
         const auto radius = d->decorationRadiusAnimation.currentValue().toReal();
         painter.drawEllipse(iconRect.center(), radius, radius);
@@ -190,16 +193,45 @@ void CheckBox::paintEvent(QPaintEvent* _event)
     painter.drawText(textRect, Qt::AlignLeft | Qt::AlignVCenter, d->text);
 }
 
-void CheckBox::mouseReleaseEvent(QMouseEvent* _event)
+void CheckBox::enterEvent(QEvent* _event)
+{
+    Q_UNUSED(_event);
+    update();
+}
+
+void CheckBox::leaveEvent(QEvent* _event)
+{
+    Q_UNUSED(_event);
+    update();
+}
+
+void CheckBox::mousePressEvent(QMouseEvent* _event)
 {
     Q_UNUSED(_event)
+    d->animateClick();
+}
 
+void CheckBox::mouseReleaseEvent(QMouseEvent* _event)
+{
     if (!rect().contains(_event->pos())) {
         return;
     }
 
     setChecked(!d->isChecked);
-    d->animateClick();
+}
+
+void CheckBox::keyPressEvent(QKeyEvent* _event)
+{
+    if (_event->key() == Qt::Key_Space
+        || _event->key() == Qt::Key_Enter
+        || _event->key() == Qt::Key_Return) {
+        _event->accept();
+        d->animateClick();
+        setChecked(!isChecked());
+        return;
+    }
+
+    return Widget::keyPressEvent(_event);
 }
 
 void CheckBox::designSystemChangeEvent(DesignSystemChangeEvent* _event)

@@ -32,7 +32,7 @@ public:
 
 RadioButton::Implementation::Implementation()
 {
-    decorationRadiusAnimation.setEasingCurve(QEasingCurve::OutQuad);
+    decorationRadiusAnimation.setEasingCurve(QEasingCurve::InOutQuad);
     decorationRadiusAnimation.setDuration(160);
 
     decorationOpacityAnimation.setEasingCurve(QEasingCurve::InQuad);
@@ -145,45 +145,86 @@ void RadioButton::paintEvent(QPaintEvent* _event)
     //
     // Рисуем декорацию переключателя
     //
+    if (underMouse() || hasFocus()) {
+        painter.setPen(Qt::NoPen);
+        painter.setBrush(isChecked() ? Ui::DesignSystem::color().secondary()
+                                     : textColor());
+        painter.setOpacity(hasFocus() ? Ui::DesignSystem::focusBackgroundOpacity()
+                                      : Ui::DesignSystem::hoverBackgroundOpacity());
+        const auto radius = d->decorationRadiusAnimation.endValue().toReal();
+        painter.drawEllipse(iconRect.center(), radius, radius);
+        painter.setOpacity(1.0);
+    }
     if (d->decorationRadiusAnimation.state() == QVariantAnimation::Running
         || d->decorationOpacityAnimation.state() == QVariantAnimation::Running) {
         painter.setPen(Qt::NoPen);
-        painter.setBrush(Ui::DesignSystem::color().secondary());
+        painter.setBrush(isChecked() ? Ui::DesignSystem::color().secondary()
+                                     : textColor());
         painter.setOpacity(d->decorationOpacityAnimation.currentValue().toReal());
         painter.drawEllipse(iconRect.center(), d->decorationRadiusAnimation.currentValue().toReal(),
                             d->decorationRadiusAnimation.currentValue().toReal());
         painter.setOpacity(1.0);
     }
+
+    const auto penColor = isEnabled()
+                          ? textColor()
+                          : ColorHelper::transparent(textColor(), Ui::DesignSystem::disabledTextOpacity());
+
     //
     // Рисуем сам переключатель
     //
     painter.setFont(Ui::DesignSystem::font().iconsMid());
-    painter.setPen(!isEnabled()
-                   ? ColorHelper::transparent(textColor(), Ui::DesignSystem::disabledTextOpacity())
-                   : d->isChecked
-                     ? Ui::DesignSystem::color().secondary()
-                     : textColor());
+    painter.setPen(isEnabled() && d->isChecked
+                   ? Ui::DesignSystem::color().secondary()
+                   : penColor);
     painter.drawText(iconRect, Qt::AlignCenter, d->isChecked ? u8"\U000f043e" : u8"\U000f043d");
     //
     // Текст
     //
     painter.setFont(Ui::DesignSystem::font().subtitle1());
-    painter.setPen(isEnabled()
-                   ? textColor()
-                   : ColorHelper::transparent(textColor(), Ui::DesignSystem::disabledTextOpacity()));
+    painter.setPen(penColor);
     painter.drawText(textRect, Qt::AlignLeft | Qt::AlignVCenter, d->text);
+}
+
+void RadioButton::enterEvent(QEvent* _event)
+{
+    Q_UNUSED(_event);
+    update();
+}
+
+void RadioButton::leaveEvent(QEvent* _event)
+{
+    Q_UNUSED(_event);
+    update();
+}
+
+void RadioButton::mousePressEvent(QMouseEvent* _event)
+{
+    Q_UNUSED(_event);
+    d->animateClick();
 }
 
 void RadioButton::mouseReleaseEvent(QMouseEvent* _event)
 {
-    Q_UNUSED(_event)
-
     if (!rect().contains(_event->pos())) {
         return;
     }
 
     setChecked(true);
-    d->animateClick();
+}
+
+void RadioButton::keyPressEvent(QKeyEvent* _event)
+{
+    if (_event->key() == Qt::Key_Space
+        || _event->key() == Qt::Key_Enter
+        || _event->key() == Qt::Key_Return) {
+        _event->accept();
+        d->animateClick();
+        setChecked(true);
+        return;
+    }
+
+    return Widget::keyPressEvent(_event);
 }
 
 void RadioButton::designSystemChangeEvent(DesignSystemChangeEvent* _event)
