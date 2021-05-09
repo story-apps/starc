@@ -556,9 +556,9 @@ QSize TextField::minimumSizeHint() const
 QSize TextField::sizeHint() const
 {
     const QFontMetrics fontMetrics(Ui::DesignSystem::font().body1());
-    QSizeF size(TextHelper::fineTextWidthF(!text().isEmpty() ? text() : d->placeholder,
-                                         Ui::DesignSystem::font().body1()),
-               fontMetrics.height());
+    QSizeF size(TextHelper::fineTextWidth(!text().isEmpty() ? text() : d->placeholder,
+                                          Ui::DesignSystem::font().body1()),
+                fontMetrics.height());
     if (!d->suffix.isEmpty()) {
         const auto suffixWidth = TextHelper::fineTextWidthF(d->suffix, Ui::DesignSystem::font().body1())
                                 + Ui::DesignSystem::textField().spacing();
