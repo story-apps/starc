@@ -26,6 +26,14 @@ public:
     BusinessLayer::TextModel* model = nullptr;
 
     /**
+     * @brief Индекс модели, который необходимо выделить
+     * @note Используется в случаях, когда в навигаторе установлена не та модель, что отображается
+     *       в редакторе, когда будет установлена нужная модель, в навигаторе будет выделен элемент
+     *       с данным индексом
+     */
+    QModelIndex modelIndexToSelect;
+
+    /**
      * @brief Модель отображения структуры документа
      */
     BusinessLayer::SimpleTextStructureModel* structureModel = nullptr;
@@ -108,6 +116,13 @@ void SimpleTextStructureManager::setModel(BusinessLayer::AbstractModel* _model)
         connect(d->model, &BusinessLayer::TextModel::nameChanged,
                 d->view, &Ui::SimpleTextStructureView::setTitle);
     }
+
+    //
+    // Если элемент к выделению уже задан, выберем его в структуре
+    //
+    if (d->modelIndexToSelect.isValid()) {
+        setCurrentModelIndex(d->modelIndexToSelect);
+    }
 }
 
 QWidget* SimpleTextStructureManager::view()
@@ -140,6 +155,11 @@ void SimpleTextStructureManager::setCurrentModelIndex(const QModelIndex& _index)
         return;
     }
 
+    if (d->model != _index.model()) {
+        d->modelIndexToSelect = _index;
+        return;
+    }
+
     QSignalBlocker signalBlocker(this);
 
     //
@@ -147,6 +167,7 @@ void SimpleTextStructureManager::setCurrentModelIndex(const QModelIndex& _index)
     // глав, которые как раз и отображаются в навигаторе
     //
     d->view->setCurrentModelIndex(d->structureModel->mapFromSource(_index.parent()));
+    d->modelIndexToSelect = {};
 }
 
 } // namespace ManagementLayer

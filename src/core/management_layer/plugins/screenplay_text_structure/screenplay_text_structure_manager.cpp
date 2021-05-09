@@ -27,6 +27,14 @@ public:
     BusinessLayer::ScreenplayTextModel* model = nullptr;
 
     /**
+     * @brief Индекс модели, который необходимо выделить
+     * @note Используется в случаях, когда в навигаторе установлена не та модель, что отображается
+     *       в редакторе, когда будет установлена нужная модель, в навигаторе будет выделен элемент
+     *       с данным индексом
+     */
+    QModelIndex modelIndexToSelect;
+
+    /**
      * @brief Модель отображения структуры сценария
      */
     BusinessLayer::ScreenplayTextStructureModel* structureModel = nullptr;
@@ -109,6 +117,13 @@ void ScreenplayTextStructureManager::setModel(BusinessLayer::AbstractModel* _mod
         connect(d->model->informationModel(), &BusinessLayer::ScreenplayInformationModel::nameChanged,
                 d->view, &Ui::ScreenplayTextStructureView::setTitle);
     }
+
+    //
+    // Если элемент к выделению уже задан, выберем его в структуре
+    //
+    if (d->modelIndexToSelect.isValid()) {
+        setCurrentModelIndex(d->modelIndexToSelect);
+    }
 }
 
 QWidget* ScreenplayTextStructureManager::view()
@@ -141,6 +156,11 @@ void ScreenplayTextStructureManager::setCurrentModelIndex(const QModelIndex& _in
         return;
     }
 
+    if (d->model != _index.model()) {
+        d->modelIndexToSelect = _index;
+        return;
+    }
+
     QSignalBlocker signalBlocker(this);
 
     //
@@ -148,6 +168,7 @@ void ScreenplayTextStructureManager::setCurrentModelIndex(const QModelIndex& _in
     // сцен или папок, которые как раз и отображаются в навигаторе
     //
     d->view->setCurrentModelIndex(d->structureModel->mapFromSource(_index.parent()));
+    d->modelIndexToSelect = {};
 }
 
 } // namespace ManagementLayer
