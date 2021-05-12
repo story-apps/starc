@@ -13,6 +13,8 @@
 #include <business_layer/model/screenplay/screenplay_synopsis_model.h>
 #include <business_layer/model/screenplay/screenplay_title_page_model.h>
 #include <business_layer/model/screenplay/text/screenplay_text_model.h>
+#include <business_layer/model/structure/structure_model.h>
+#include <business_layer/model/structure/structure_model_item.h>
 #include <business_layer/model/text/text_model.h>
 
 #include <data_layer/storage/document_storage.h>
@@ -27,14 +29,19 @@ namespace ManagementLayer
 class ProjectModelsFacade::Implementation
 {
 public:
-    explicit Implementation(BusinessLayer::AbstractImageWrapper* _imageWrapper);
+    explicit Implementation(BusinessLayer::StructureModel* _projectStructureModel,
+        BusinessLayer::AbstractImageWrapper* _imageWrapper);
 
-    QHash<Domain::DocumentObject*, BusinessLayer::AbstractModel*> documentsToModels;
+
+    BusinessLayer::StructureModel* projectStructureModel = nullptr;
     BusinessLayer::AbstractImageWrapper* imageWrapper = nullptr;
+    QHash<Domain::DocumentObject*, BusinessLayer::AbstractModel*> documentsToModels;
 };
 
-ProjectModelsFacade::Implementation::Implementation(BusinessLayer::AbstractImageWrapper* _imageWrapper)
-    : imageWrapper(_imageWrapper)
+ProjectModelsFacade::Implementation::Implementation(BusinessLayer::StructureModel* _projectStructureModel,
+    BusinessLayer::AbstractImageWrapper* _imageWrapper)
+    : projectStructureModel(_projectStructureModel),
+      imageWrapper(_imageWrapper)
 {
 }
 
@@ -42,9 +49,10 @@ ProjectModelsFacade::Implementation::Implementation(BusinessLayer::AbstractImage
 // ****
 
 
-ProjectModelsFacade::ProjectModelsFacade(BusinessLayer::AbstractImageWrapper* _imageWrapper, QObject* _parent)
+ProjectModelsFacade::ProjectModelsFacade(BusinessLayer::StructureModel* _projectStructureModel,
+    BusinessLayer::AbstractImageWrapper* _imageWrapper, QObject* _parent)
     : QObject(_parent),
-      d(new Implementation(_imageWrapper))
+      d(new Implementation(_projectStructureModel, _imageWrapper))
 {
 }
 
@@ -64,9 +72,9 @@ void ProjectModelsFacade::clear()
     d->documentsToModels.clear();
 }
 
-BusinessLayer::AbstractModel* ProjectModelsFacade::modelFor(const QUuid& _uuid, const QUuid& _parentUuid)
+BusinessLayer::AbstractModel* ProjectModelsFacade::modelFor(const QUuid& _uuid)
 {
-    return modelFor(DataStorageLayer::StorageFacade::documentStorage()->document(_uuid), _parentUuid);
+    return modelFor(DataStorageLayer::StorageFacade::documentStorage()->document(_uuid));
 }
 
 BusinessLayer::AbstractModel* ProjectModelsFacade::modelFor(Domain::DocumentObjectType _type)
@@ -74,7 +82,7 @@ BusinessLayer::AbstractModel* ProjectModelsFacade::modelFor(Domain::DocumentObje
     return modelFor(DataStorageLayer::StorageFacade::documentStorage()->document(_type));
 }
 
-BusinessLayer::AbstractModel* ProjectModelsFacade::modelFor(Domain::DocumentObject* _document, const QUuid& _parentUuid)
+BusinessLayer::AbstractModel* ProjectModelsFacade::modelFor(Domain::DocumentObject* _document)
 {
     if (_document == nullptr) {
         return nullptr;
@@ -145,12 +153,17 @@ BusinessLayer::AbstractModel* ProjectModelsFacade::modelFor(Domain::DocumentObje
             case Domain::DocumentObjectType::ScreenplayText: {
                 auto screenplayModel = new BusinessLayer::ScreenplayTextModel;
 
+                const auto screenplayItem = d->projectStructureModel->itemForUuid(_document->uuid());
+                Q_ASSERT(screenplayItem);
+                Q_ASSERT(screenplayItem->parent());
+                const auto parentUuid = screenplayItem->parent()->uuid();
+
                 //
                 // Добавляем в модель сценария, модель информации о сценарие
                 //
                 auto informationModel
                         = qobject_cast<BusinessLayer::ScreenplayInformationModel*>(
-                              modelFor(_parentUuid));
+                              modelFor(parentUuid));
                 screenplayModel->setInformationModel(informationModel);
                 //
                 // ... модель справочников сценариев
@@ -208,7 +221,12 @@ BusinessLayer::AbstractModel* ProjectModelsFacade::modelFor(Domain::DocumentObje
             }
 
             case Domain::DocumentObjectType::Character: {
-                model = new BusinessLayer::CharacterModel;
+                auto characterModel = new BusinessLayer::CharacterModel;
+
+                connect(characterModel, &BusinessLayer::CharacterModel::nameChanged,
+                        this, &ProjectModelsFacade::characterNameChanged);
+
+                model = characterModel;
                 break;
             }
 
@@ -232,7 +250,12 @@ BusinessLayer::AbstractModel* ProjectModelsFacade::modelFor(Domain::DocumentObje
             }
 
             case Domain::DocumentObjectType::Location: {
-                model = new BusinessLayer::LocationModel;
+                auto locationModel = new BusinessLayer::LocationModel;
+
+                connect(locationModel, &BusinessLayer::LocationModel::nameChanged,
+                        this, &ProjectModelsFacade::locationNameChanged);
+
+                model = locationModel;
                 break;
             }
 
@@ -268,6 +291,16 @@ BusinessLayer::AbstractModel* ProjectModelsFacade::modelFor(Domain::DocumentObje
     }
 
     return d->documentsToModels.value(_document);
+}
+
+QVector<BusinessLayer::AbstractModel*> ProjectModelsFacade::modelsFor(Domain::DocumentObjectType _type)
+{
+    QVector<BusinessLayer::AbstractModel*> models;
+    const auto documents = DataStorageLayer::StorageFacade::documentStorage()->documents(_type);
+    for (const auto document : documents) {
+        models.append(modelFor(document));
+    }
+    return models;
 }
 
 void ProjectModelsFacade::removeModelFor(Domain::DocumentObject* _document)
@@ -310,7 +343,7 @@ void ProjectModelsFacade::removeModelFor(Domain::DocumentObject* _document)
     model->deleteLater();
 }
 
-QVector<BusinessLayer::AbstractModel*> ProjectModelsFacade::models() const
+QVector<BusinessLayer::AbstractModel*> ProjectModelsFacade::loadedModels() const
 {
     return d->documentsToModels.values().toVector();
 }

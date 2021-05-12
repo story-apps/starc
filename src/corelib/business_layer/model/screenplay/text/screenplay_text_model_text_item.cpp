@@ -647,6 +647,11 @@ void ScreenplayTextModelTextItem::setText(const QString& _text)
         return;
     }
 
+    //
+    // FIXME: если новый текст короче чем старый, то нужно скорректировать
+    //        границы редакторских заметок, форматирования и ревизий
+    //
+
     d->text = _text;
     d->updateXml();
     updateDuration();

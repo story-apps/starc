@@ -1,5 +1,6 @@
 #include "screenplay_text_model.h"
 
+#include "screenplay_text_block_parser.h"
 #include "screenplay_text_model_folder_item.h"
 #include "screenplay_text_model_scene_item.h"
 #include "screenplay_text_model_splitter_item.h"
@@ -14,6 +15,7 @@
 
 #include <utils/shugar.h>
 #include <utils/diff_match_patch/diff_match_patch_controller.h>
+#include <utils/helpers/text_helper.h>
 #include <utils/tools/edit_distance.h>
 #include <utils/tools/model_index_path.h>
 
@@ -1099,6 +1101,107 @@ CharactersModel* ScreenplayTextModel::charactersModel() const
     return d->charactersModel;
 }
 
+void ScreenplayTextModel::updateCharacterName(const QString& _oldName, const QString& _newName)
+{
+    const auto oldName = TextHelper::smartToUpper(_oldName);
+    std::function<void(const ScreenplayTextModelItem*)> updateCharacterBlock;
+    updateCharacterBlock = [this, oldName, _newName, &updateCharacterBlock] (const ScreenplayTextModelItem* _item) {
+        for (int childIndex = 0; childIndex < _item->childCount(); ++childIndex) {
+            auto childItem = _item->childAt(childIndex);
+            switch (childItem->type()) {
+                case ScreenplayTextModelItemType::Folder:
+                case ScreenplayTextModelItemType::Scene: {
+                    updateCharacterBlock(childItem);
+                    break;
+                }
+
+                case ScreenplayTextModelItemType::Text: {
+                    auto textItem = static_cast<ScreenplayTextModelTextItem*>(childItem);
+                    if (textItem->paragraphType() == ScreenplayParagraphType::SceneCharacters
+                        && SceneCharactersParser::characters(textItem->text()).contains(oldName)) {
+                        auto text = textItem->text();
+                        auto nameIndex = TextHelper::smartToUpper(text).indexOf(oldName);
+                        while (nameIndex != -1) {
+                            //
+                            // Убедимся, что выделено именно имя, а не часть другого имени
+                            //
+                            const auto nameEndIndex = nameIndex + oldName.length();
+                            const bool atLeftAllOk = nameIndex == 0
+                                                     || text.at(nameIndex - 1) == ","
+                                                 || (nameIndex > 2 && text.midRef(nameIndex - 2, 2) == ", ");
+                            const bool atRightAllOk = nameEndIndex == text.length()
+                                                      || text.at(nameEndIndex) == ","
+                                                  || (text.length() > nameEndIndex + 1 && text.mid(nameEndIndex, 2) == " ,");
+                            if (!atLeftAllOk || !atRightAllOk) {
+                                nameIndex = TextHelper::smartToUpper(text).indexOf(oldName, nameIndex);
+                                continue;
+                            }
+
+                            text.remove(nameIndex, oldName.length());
+                            text.insert(nameIndex, _newName);
+                            textItem->setText(text);
+                            updateItem(textItem);
+                            break;
+                        }
+                    } else if (textItem->paragraphType() == ScreenplayParagraphType::Character
+                               && CharacterParser::name(textItem->text()) == oldName) {
+                        auto text = textItem->text();
+                        text.remove(0, oldName.length());
+                        text.prepend(_newName);
+                        textItem->setText(text);
+                        updateItem(textItem);
+                    }
+                    break;
+                }
+
+                default: break;
+            }
+        }
+    };
+
+    emit rowsAboutToBeChanged();
+    updateCharacterBlock(d->rootItem);
+    emit rowsChanged();
+}
+
+void ScreenplayTextModel::updateLocationName(const QString& _oldName, const QString& _newName)
+{
+    const auto oldName = TextHelper::smartToUpper(_oldName);
+    std::function<void(const ScreenplayTextModelItem*)> updateLocationBlock;
+    updateLocationBlock = [this, oldName, _newName, &updateLocationBlock] (const ScreenplayTextModelItem* _item) {
+        for (int childIndex = 0; childIndex < _item->childCount(); ++childIndex) {
+            auto childItem = _item->childAt(childIndex);
+            switch (childItem->type()) {
+                case ScreenplayTextModelItemType::Folder:
+                case ScreenplayTextModelItemType::Scene: {
+                    updateLocationBlock(childItem);
+                    break;
+                }
+
+                case ScreenplayTextModelItemType::Text: {
+                    auto textItem = static_cast<ScreenplayTextModelTextItem*>(childItem);
+                    if (textItem->paragraphType() == ScreenplayParagraphType::SceneHeading
+                        && SceneHeadingParser::location(textItem->text()) == oldName) {
+                        auto text = textItem->text();
+                        const auto nameIndex = TextHelper::smartToUpper(text).indexOf(oldName);
+                        text.remove(nameIndex, oldName.length());
+                        text.insert(nameIndex, _newName);
+                        textItem->setText(text);
+                        updateItem(textItem);
+                    }
+                    break;
+                }
+
+                default: break;
+            }
+        }
+    };
+
+    emit rowsAboutToBeChanged();
+    updateLocationBlock(d->rootItem);
+    emit rowsChanged();
+}
+
 void ScreenplayTextModel::setLocationsModel(LocationsModel* _model)
 {
     d->locationModel = _model;
@@ -1142,7 +1245,10 @@ void ScreenplayTextModel::recalculateDuration()
             }
         }
     };
+
+    emit rowsAboutToBeChanged();
     updateChildDuration(d->rootItem);
+    emit rowsChanged();
 }
 
 void ScreenplayTextModel::initDocument()
@@ -1166,7 +1272,9 @@ void ScreenplayTextModel::initDocument()
         endResetModel();
     }
 
+    emit rowsAboutToBeChanged();
     d->updateNumbering();
+    emit rowsChanged();
 }
 
 void ScreenplayTextModel::clearDocument()

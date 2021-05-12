@@ -58,8 +58,9 @@ void LocationModel::setName(const QString& _name)
         return;
     }
 
+    const auto oldName = d->name;
     d->name = _name;
-    emit nameChanged(d->name);
+    emit nameChanged(d->name, oldName);
     emit documentNameChanged(d->name);
 }
 

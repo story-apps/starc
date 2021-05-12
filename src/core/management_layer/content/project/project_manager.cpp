@@ -118,7 +118,7 @@ ProjectManager::Implementation::Implementation(QWidget* _parent)
       view(new Ui::ProjectView(_parent)),
       projectStructureModel(new BusinessLayer::StructureModel(navigator)),
       projectStructureProxyModel(new BusinessLayer::StructureProxyModel(projectStructureModel)),
-      modelsFacade(&documentDataStorage)
+      modelsFacade(projectStructureModel, &documentDataStorage)
 {
     toolBar->hide();
     navigator->hide();
@@ -396,12 +396,14 @@ ProjectManager::ProjectManager(QObject* _parent, QWidget* _parentWidget)
             [this] (const QUuid& _uuid, const QUuid& _parentUuid, Domain::DocumentObjectType _type,
                     const QString& _name, const QByteArray& _content)
     {
+        Q_UNUSED(_parentUuid);
+
         auto document = DataStorageLayer::StorageFacade::documentStorage()->storeDocument(_uuid, _type);
         if (!_content.isNull()) {
             document->setContent(_content);
         }
 
-        auto documentModel = d->modelsFacade.modelFor(document, _parentUuid);
+        auto documentModel = d->modelsFacade.modelFor(document);
         documentModel->setDocumentName(_name);
 
         switch (_type) {
@@ -462,12 +464,34 @@ ProjectManager::ProjectManager(QObject* _parent, QWidget* _parentWidget)
                                   Domain::DocumentObjectType::Character,
                                   _name, _content);
     });
+    connect(&d->modelsFacade, &ProjectModelsFacade::characterNameChanged, this,
+            [this] (const QString& _newName, const QString& _oldName) {
+        //
+        // Найти все модели где может встречаться персонаж и заменить в них его имя со старого на новое
+        //
+        const auto models = d->modelsFacade.modelsFor(Domain::DocumentObjectType::ScreenplayText);
+        for (auto model : models) {
+            auto screenplay = static_cast<BusinessLayer::ScreenplayTextModel*>(model);
+            screenplay->updateCharacterName(_oldName, _newName);
+        }
+    });
     connect(&d->modelsFacade, &ProjectModelsFacade::createLocationRequested, this,
             [this] (const QString& _name, const QByteArray& _content)
     {
         d->addDocumentToContainer(Domain::DocumentObjectType::Locations,
                                   Domain::DocumentObjectType::Location,
                                   _name, _content);
+    });
+    connect(&d->modelsFacade, &ProjectModelsFacade::locationNameChanged, this,
+            [this] (const QString& _newName, const QString& _oldName) {
+        //
+        // Найти все модели где может встречаться персонаж и заменить в них его имя со старого на новое
+        //
+        const auto models = d->modelsFacade.modelsFor(Domain::DocumentObjectType::ScreenplayText);
+        for (auto model : models) {
+            auto screenplay = static_cast<BusinessLayer::ScreenplayTextModel*>(model);
+            screenplay->updateLocationName(_oldName, _newName);
+        }
     });
     //
     auto setDocumentVisible = [this] (BusinessLayer::AbstractModel* _screenplayModel,
@@ -542,7 +566,7 @@ void ProjectManager::reconfigureScreenplayNavigator()
 
 void ProjectManager::reconfigureScreenplayDuration()
 {
-    for (auto model : d->modelsFacade.models()) {
+    for (auto model : d->modelsFacade.loadedModels()) {
         auto screenplayModel = qobject_cast<BusinessLayer::ScreenplayTextModel*>(model);
         if (screenplayModel == nullptr) {
             continue;
@@ -659,7 +683,7 @@ void ProjectManager::saveChanges()
     //
     // Сохраняем остальные документы
     //
-    for (auto model : d->modelsFacade.models()) {
+    for (auto model : d->modelsFacade.loadedModels()) {
         DataStorageLayer::StorageFacade::documentStorage()->updateDocument(model->document());
     }
 
@@ -771,7 +795,7 @@ void ProjectManager::showView(const QModelIndex& _itemIndex, const QString& _vie
     //
     // Определим модель
     //
-    updateCurrentDocument(d->modelsFacade.modelFor(item->uuid(), item->parent()->uuid()),
+    updateCurrentDocument(d->modelsFacade.modelFor(item->uuid()),
                           _viewMimeType);
     if (d->currentDocument.model == nullptr) {
         d->view->showNotImplementedPage();
@@ -815,7 +839,7 @@ void ProjectManager::showNavigator(const QModelIndex& _itemIndex, const QString&
     //
     // Определим модель
     //
-    auto model = d->modelsFacade.modelFor(item->uuid(), item->parent()->uuid());
+    auto model = d->modelsFacade.modelFor(item->uuid());
     if (model == nullptr) {
         d->navigator->showProjectNavigator();
         return;

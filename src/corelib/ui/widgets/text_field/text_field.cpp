@@ -882,6 +882,9 @@ void TextField::mouseMoveEvent(QMouseEvent* _event)
     QTextEdit::mouseMoveEvent(_event);
 
     if (d->trailingIcon.isEmpty()) {
+        if (viewport()->cursor() != Qt::IBeamCursor) {
+            viewport()->setCursor(Qt::IBeamCursor);
+        }
         return;
     }
 

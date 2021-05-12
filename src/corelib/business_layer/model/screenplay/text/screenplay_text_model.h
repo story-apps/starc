@@ -111,6 +111,16 @@ public:
     CharactersModel* charactersModel() const;
 
     /**
+     * @brief Обновить имя персонажа
+     */
+    void updateCharacterName(const QString& _oldName, const QString& _newName);
+
+    /**
+     * @brief Обновить название локации
+     */
+    void updateLocationName(const QString& _oldName, const QString& _newName);
+
+    /**
      * @brief Задать модель локаций проекта
      */
     void setLocationsModel(LocationsModel* _model);

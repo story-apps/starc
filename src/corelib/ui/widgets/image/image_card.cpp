@@ -7,6 +7,7 @@
 
 #include <utils/helpers/color_helper.h>
 #include <utils/helpers/image_helper.h>
+#include <utils/helpers/text_helper.h>
 
 #include <NetworkRequestLoader.h>
 
@@ -260,8 +261,8 @@ void ImageCard::paintEvent(QPaintEvent* _event)
         painter.setBrush(Qt::NoBrush);
         auto iconFont = Ui::DesignSystem::font().iconsForEditors();
         iconFont.setPixelSize(Ui::DesignSystem::scaleFactor() * Ui::DesignSystem::layout().px48() * 2);
-        const auto iconHeight = QFontMetricsF(iconFont).boundingRect(d->decorationIcon).height();
-        const auto textHeight = QFontMetricsF(Ui::DesignSystem::font().button()).boundingRect(d->decorationIcon).height();
+        const auto iconHeight = TextHelper::fineLineSpacing(iconFont);
+        const auto textHeight = TextHelper::fineLineSpacing(Ui::DesignSystem::font().button());
         const auto decorationHeight = iconHeight + textHeight;
         const auto iconRect = QRectF(0.0, (height() - decorationHeight) / 2.0,
                                      width(), iconHeight);
