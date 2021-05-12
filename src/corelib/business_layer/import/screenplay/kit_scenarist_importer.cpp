@@ -17,6 +17,7 @@
 #include <QSqlDatabase>
 #include <QSqlQuery>
 #include <QSqlRecord>
+#include <QTextDocument>
 #include <QVariantMap>
 #include <QXmlStreamWriter>
 
@@ -50,6 +51,77 @@ enum Type {
     LocationsRoot = 200,
     Location
 };
+
+/**
+ * @brief Получить простой текст из Html
+ */
+QString htmlToPlain(const QString& _html) {
+    QTextDocument document;
+    document.setHtml(_html);
+    return document.toPlainText().replace("\n", "\n\n");
+}
+
+/**
+ * @brief Считать данные о персонаже
+ */
+QString readCharacter(const QString& _characterName, const QString& _kitCharacterXml) {
+    QDomDocument kitDocument;
+    kitDocument.setContent(_kitCharacterXml);
+    const auto kitCharacter = kitDocument.firstChildElement();
+
+    QString characterXml;
+    QXmlStreamWriter writer(&characterXml);
+    writer.writeStartDocument();
+    writer.writeStartElement(xml::kDocumentTag);
+    writer.writeAttribute(xml::kMimeTypeAttribute, Domain::mimeTypeFor(Domain::DocumentObjectType::Character));
+    writer.writeAttribute(xml::kVersionAttribute, "1.0");
+
+    auto writeTag = [&writer] (const QString& _tag, const QString& _content) {
+        writer.writeStartElement(_tag);
+        writer.writeCDATA(_content);
+        writer.writeEndElement();
+    };
+    writeTag("name", _characterName);
+    const auto realName = kitCharacter.firstChildElement("real_name").text();
+    if (!realName.isEmpty()) {
+        writeTag("real_name", realName);
+    }
+    const auto description = htmlToPlain(kitCharacter.firstChildElement("description").text());
+    if (!description.isEmpty()) {
+        writeTag("long_description", description);
+    }
+
+    writer.writeEndDocument();
+
+    return characterXml;
+}
+
+/**
+ * @brief Считать данные о локации
+ */
+QString readLocation(const QString& _locationName, const QString& _kitLocationXml) {
+    QString locationXml;
+    QXmlStreamWriter writer(&locationXml);
+    writer.writeStartDocument();
+    writer.writeStartElement(xml::kDocumentTag);
+    writer.writeAttribute(xml::kMimeTypeAttribute, Domain::mimeTypeFor(Domain::DocumentObjectType::Location));
+    writer.writeAttribute(xml::kVersionAttribute, "1.0");
+
+    auto writeTag = [&writer] (const QString& _tag, const QString& _content) {
+        writer.writeStartElement(_tag);
+        writer.writeCDATA(_content);
+        writer.writeEndElement();
+    };
+    writeTag("name", _locationName);
+    const auto description = htmlToPlain(_kitLocationXml);
+    if (!description.isEmpty()) {
+        writeTag("long_description", description);
+    }
+
+    writer.writeEndDocument();
+
+    return locationXml;
+}
 
 /**
  * @brief Сформировать документ сценария из xml сценария КИТа
@@ -312,12 +384,13 @@ AbstractScreenplayImporter::Documents KitScenaristImporter::importDocuments(cons
             //
             if (_options.importCharacters) {
                 QSqlQuery charactersQuery(database);
-                charactersQuery.prepare("SELECT * FROM research WHERE type = ? ORDER by sort_order");
+                charactersQuery.prepare("SELECT name, description FROM research WHERE type = ? ORDER by sort_order");
                 charactersQuery.addBindValue(Character);
                 charactersQuery.exec();
                 while (charactersQuery.next()) {
                     const auto name = charactersQuery.value("name").toString();
-                    result.characters.append({name, {}});
+                    const auto content = readCharacter(name, charactersQuery.value("description").toString());
+                    result.characters.append({name, content});
                 }
             }
 
@@ -325,13 +398,14 @@ AbstractScreenplayImporter::Documents KitScenaristImporter::importDocuments(cons
             // Загрузим данные о локациях
             //
             if (_options.importLocations) {
-                QSqlQuery charactersQuery(database);
-                charactersQuery.prepare("SELECT * FROM research WHERE type = ? ORDER by sort_order");
-                charactersQuery.addBindValue(Location);
-                charactersQuery.exec();
-                while (charactersQuery.next()) {
-                    const auto name = charactersQuery.value("name").toString();
-                    result.locations.append({name, {}});
+                QSqlQuery locationsQuery(database);
+                locationsQuery.prepare("SELECT * FROM research WHERE type = ? ORDER by sort_order");
+                locationsQuery.addBindValue(Location);
+                locationsQuery.exec();
+                while (locationsQuery.next()) {
+                    const auto name = locationsQuery.value("name").toString();
+                    const auto content = readLocation(name, locationsQuery.value("description").toString());
+                    result.locations.append({name, content});
                 }
             }
         }
