@@ -506,9 +506,11 @@ const QVector<TextModelTextItem::TextFormat>& TextModelTextItem::formats() const
 void TextModelTextItem::setFormats(const QVector<QTextLayout::FormatRange>& _formats)
 {
     QVector<TextFormat> newFormats;
-    const auto defaultBlockFormat = TemplatesFacade::textTemplate().blockStyle(TextParagraphType::Text);
+    const auto defaultBlockFormat = TemplatesFacade::textTemplate().blockStyle(d->paragraphType);
     for (const auto& format : _formats) {
-        if (format.format == defaultBlockFormat.charFormat()) {
+        if (format.start == 0
+            && format.length == d->text.length()
+            && format.format == defaultBlockFormat.charFormat()) {
             continue;
         }
 
@@ -648,6 +650,7 @@ void TextModelTextItem::copyFrom(TextModelItem* _item)
     }
 
     auto textItem = static_cast<TextModelTextItem*>(_item);
+    d->paragraphType = textItem->d->paragraphType;
     d->alignment = textItem->d->alignment;
     d->text = textItem->d->text;
     d->reviewMarks = textItem->d->reviewMarks;
@@ -665,7 +668,13 @@ bool TextModelTextItem::isEqual(TextModelItem* _item) const
     }
 
     const auto textItem = static_cast<TextModelTextItem*>(_item);
-    return d->alignment == textItem->d->alignment
+    auto b =  d->paragraphType == textItem->d->paragraphType
+              && d->alignment == textItem->d->alignment
+              && d->text == textItem->d->text
+              && d->reviewMarks == textItem->d->reviewMarks
+              && d->formats == textItem->d->formats;
+    return d->paragraphType == textItem->d->paragraphType
+            && d->alignment == textItem->d->alignment
             && d->text == textItem->d->text
             && d->reviewMarks == textItem->d->reviewMarks
             && d->formats == textItem->d->formats;
