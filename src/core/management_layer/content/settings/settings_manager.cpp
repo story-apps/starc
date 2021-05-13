@@ -103,7 +103,9 @@ void SettingsManager::Implementation::loadComponentsSettings()
 
 void SettingsManager::Implementation::loadScreenplaySettings()
 {
-    view->setScreenplayEditorDefaultTemplate(settingsValue(DataStorageLayer::kComponentsScreenplayEditorDefaultTemplateKey).toString());
+    const auto defaultTemplate = settingsValue(DataStorageLayer::kComponentsScreenplayEditorDefaultTemplateKey).toString();
+    view->setScreenplayEditorDefaultTemplate(defaultTemplate);
+    BusinessLayer::TemplatesFacade::setDefaultScreenplayTemplate(defaultTemplate);
     view->setScreenplayEditorShowSceneNumber(
                 settingsValue(DataStorageLayer::kComponentsScreenplayEditorShowSceneNumbersKey).toBool(),
                 settingsValue(DataStorageLayer::kComponentsScreenplayEditorShowSceneNumbersOnRightKey).toBool(),
