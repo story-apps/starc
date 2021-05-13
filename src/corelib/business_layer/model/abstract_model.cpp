@@ -142,9 +142,16 @@ void AbstractModel::saveChanges()
         return;
     }
 
+    //
+    // Уведомляем о смене контента только, если контент уже был установлен,
+    // если содержимое документа было пустым (как правило это кейс после создания документа),
+    // то отменять и нечего, поэтому игнорируем такие изменения
+    //
+    const auto needToNotifyAboutContentChanged = !d->document->content().isEmpty();
     d->document->setContent(content);
-
-    emit contentsChanged(undoPatch, redoPatch);
+    if (needToNotifyAboutContentChanged) {
+        emit contentsChanged(undoPatch, redoPatch);
+    }
 }
 
 void AbstractModel::undo()
