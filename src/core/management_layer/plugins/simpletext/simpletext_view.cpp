@@ -223,15 +223,15 @@ void TextView::reconfigure(const QStringList& _changedSettingsKeys)
 
     if (_changedSettingsKeys.isEmpty()
         || _changedSettingsKeys.contains(DataStorageLayer::kComponentsScreenplayEditorDefaultTemplateKey)) {
-        TemplatesFacade::setDefaultScreenplayTemplate(
-                    settingsValue(DataStorageLayer::kComponentsScreenplayEditorDefaultTemplateKey).toString());
+        TemplatesFacade::setDefaultTextTemplate(
+                    settingsValue(DataStorageLayer::kComponentsSimpleTextEditorDefaultTemplateKey).toString());
         d->textEdit->reinit();
     }
 
     if (_changedSettingsKeys.isEmpty()
         || _changedSettingsKeys.contains(DataStorageLayer::kComponentsScreenplayEditorHighlightCurrentLineKey)) {
         d->textEdit->setHighlightCurrentLine(
-            settingsValue(DataStorageLayer::kComponentsScreenplayEditorHighlightCurrentLineKey).toBool());
+            settingsValue(DataStorageLayer::kComponentsSimpleTextEditorHighlightCurrentLineKey).toBool());
     }
 }
 

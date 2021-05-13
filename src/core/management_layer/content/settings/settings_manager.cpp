@@ -1,9 +1,11 @@
 #include "settings_manager.h"
 
-#include <include/custom_events.h>
+#include <business_layer/templates/templates_facade.h>
 
 #include <data_layer/storage/settings_storage.h>
 #include <data_layer/storage/storage_facade.h>
+
+#include <include/custom_events.h>
 
 #include <ui/settings/language_dialog.h>
 #include <ui/settings/settings_navigator.h>
@@ -455,6 +457,7 @@ void SettingsManager::setApplicationBackupsFolder(const QString& _path)
 void SettingsManager::setScreenplayEditorDefaultTemplate(const QString& _templateId)
 {
     d->setSettingsValue(DataStorageLayer::kComponentsScreenplayEditorDefaultTemplateKey, _templateId);
+    BusinessLayer::TemplatesFacade::setDefaultScreenplayTemplate(_templateId);
     emit screenplayEditorChanged({ DataStorageLayer::kComponentsScreenplayEditorDefaultTemplateKey });
 }
 

@@ -3,9 +3,6 @@
 #include "screenplay_template.h"
 #include "text_template.h"
 
-#include <data_layer/storage/settings_storage.h>
-#include <data_layer/storage/storage_facade.h>
-
 #include <QApplication>
 #include <QDir>
 #include <QString>
