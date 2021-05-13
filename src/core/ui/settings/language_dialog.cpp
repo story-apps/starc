@@ -169,6 +169,36 @@ LanguageDialog::LanguageDialog(QWidget* _parent)
 {
     setRejectButton(d->okButton);
 
+    auto buildFocusChain = [] (const QVector<RadioButton*>& _buttons) {
+        RadioButton* previousButton = nullptr;
+        for (auto button : _buttons) {
+            if (previousButton != nullptr) {
+                setTabOrder(previousButton, button);
+            }
+            previousButton = button;
+        }
+    };
+    buildFocusChain({ d->azerbaijani,
+                      d->belarusian,
+                      d->german,
+                      d->english,
+                      d->spanish,
+                      d->french,
+                      d->galician,
+                      d->indonesian,
+                      d->italian,
+                      d->hungarian,
+                      d->polish,
+                      d->portugueseBrazil,
+                      d->romanian,
+                      d->russian,
+                      d->slovenian,
+                      d->turkish,
+                      d->ukrainian,
+                      d->hebrew,
+                      d->hindi,
+                      d->persian });
+
     int row = 0;
     contentsLayout()->addWidget(d->azerbaijani, row++, 0);
     contentsLayout()->addWidget(d->belarusian, row++, 0);
@@ -228,7 +258,7 @@ LanguageDialog::~LanguageDialog() = default;
 
 QWidget* LanguageDialog::focusedWidgetAfterShow() const
 {
-    return d->english;
+    return d->azerbaijani;
 }
 
 QWidget* LanguageDialog::lastFocusableWidget() const

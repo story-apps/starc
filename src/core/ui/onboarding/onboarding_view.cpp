@@ -137,6 +137,39 @@ void OnboardingView::Implementation::initLanguagePage()
         languagesGroup->add(languageButton);
     }
 
+    //
+    // Настроим цепочку переходов фокуса
+    //
+    auto buildFocusChain = [] (const QVector<RadioButton*>& _buttons) {
+        RadioButton* previousButton = nullptr;
+        for (auto button : _buttons) {
+            if (previousButton != nullptr) {
+                setTabOrder(previousButton, button);
+            }
+            previousButton = button;
+        }
+    };
+    buildFocusChain({ azerbaijaniLanguage,
+                      belarusianLanguage,
+                      germanLanguage,
+                      englishLanguage,
+                      spanishLanguage,
+                      frenchLanguage,
+                      galicianLanguage,
+                      indonesianLanguage,
+                      italianLanguage,
+                      hungarianLanguage,
+                      polishLanguage,
+                      portugueseBrazilLanguage,
+                      romanianLanguage,
+                      russianLanguage,
+                      slovenianLanguage,
+                      turkishLanguage,
+                      ukrainianLanguage,
+                      hebrewLanguage,
+                      hindiLanguage,
+                      persianLanguage });
+
     languageHowToAddLink = new Body1LinkLabel(languagePage);
     languageHowToAddLink->setLink(QUrl("https://github.com/dimkanovikov/starc/wiki/How-to-add-the-translation-of-Story-Architect-to-your-native-language-or-improve-one-of-existing%3F"));
 
