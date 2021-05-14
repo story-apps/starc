@@ -50,6 +50,7 @@ namespace {
     const QString kSidebarStateKey = kSettingsKey + "/sidebar-state";
     const QString kIsFastFormatPanelVisibleKey = kSettingsKey + "/is-fast-format-panel-visible";
     const QString kIsCommentsModeEnabledKey = kSettingsKey + "/is-comments-mode-enabled";
+    const QString kSidebarPanelIndexKey = kSettingsKey + "/sidebar-panel-index";
 }
 
 class ScreenplayTextView::Implementation
@@ -530,9 +531,6 @@ void ScreenplayTextView::loadViewSettings()
                   kScaleFactorKey, SettingsStorage::SettingsPlace::Application, 1.0).toReal();
     d->scalableWrapper->setZoomRange(scaleFactor);
 
-    //
-    // Тут важен порядок, чтобы при загрузке активной была таки первая из вкладок
-    //
     const auto isCommentsModeEnabled
             = StorageFacade::settingsStorage()->value(
                   kIsCommentsModeEnabledKey, SettingsStorage::SettingsPlace::Application, false).toBool();
@@ -541,6 +539,10 @@ void ScreenplayTextView::loadViewSettings()
             = StorageFacade::settingsStorage()->value(
                   kIsFastFormatPanelVisibleKey, SettingsStorage::SettingsPlace::Application, false).toBool();
     d->toolbar->setFastFormatPanelVisible(isFastFormatPanelVisible);
+    const auto sidebarPanelIndex
+            = StorageFacade::settingsStorage()->value(
+                  kSidebarPanelIndexKey, SettingsStorage::SettingsPlace::Application, 0).toInt();
+    d->sidebarTabs->setCurrentTab(sidebarPanelIndex);
 
     const auto sidebarState
             = StorageFacade::settingsStorage()->value(
@@ -562,6 +564,8 @@ void ScreenplayTextView::saveViewSettings()
         kIsFastFormatPanelVisibleKey, d->toolbar->isFastFormatPanelVisible(), SettingsStorage::SettingsPlace::Application);
     StorageFacade::settingsStorage()->setValue(
         kIsCommentsModeEnabledKey, d->toolbar->isCommentsModeEnabled(), SettingsStorage::SettingsPlace::Application);
+    StorageFacade::settingsStorage()->setValue(
+        kSidebarPanelIndexKey, d->sidebarTabs->currentTab(), SettingsStorage::SettingsPlace::Application);
 
     StorageFacade::settingsStorage()->setValue(
         kSidebarStateKey, d->splitter->saveState(), SettingsStorage::SettingsPlace::Application);
