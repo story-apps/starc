@@ -37,6 +37,13 @@ namespace Ui
 class TextEdit::Implementation
 {
 public:
+    explicit Implementation(TextEdit* _q);
+
+    void revertAction(bool previous);
+
+
+    TextEdit* q = nullptr;
+
     BusinessLayer::TextModel* model = nullptr;
     BusinessLayer::TextDocument document;
 
@@ -46,13 +53,47 @@ public:
     bool showDialogueNumber = false;
 };
 
+TextEdit::Implementation::Implementation(TextEdit* _q)
+    : q(_q)
+{
+}
+
+void TextEdit::Implementation::revertAction(bool previous)
+{
+    if (model == nullptr) {
+        return;
+    }
+
+    const auto lastCursorPosition = q->textCursor().position();
+    //
+    if (previous) {
+        model->undo();
+    } else {
+        model->redo();
+    }
+    //
+    if (document.characterCount() > lastCursorPosition) {
+        auto cursor = q->textCursor();
+        cursor.setPosition(lastCursorPosition);
+        q->setTextCursorReimpl(cursor);
+        q->ensureCursorVisible();
+
+        //
+        // При отмене/повторе последнего действия позиция курсора могла и не поменяться,
+        // но тип параграфа сменился, поэтому перестраховываемся и говорим будто бы
+        // сменилась позиция курсора, чтобы обновить состояние панелей
+        //
+        emit q->cursorPositionChanged();
+    }
+}
+
 
 // ****
 
 
 TextEdit::TextEdit(QWidget* _parent)
     : BaseTextEdit(_parent),
-      d(new Implementation)
+      d(new Implementation(this))
 {
     setContextMenuPolicy(Qt::CustomContextMenu);
     setFrameShape(QFrame::NoFrame);
@@ -89,38 +130,12 @@ void TextEdit::reinit()
 
 void TextEdit::undo()
 {
-    if (d->model == nullptr) {
-        return;
-    }
-
-    const auto lastCursorPosition = textCursor().position();
-    //
-    d->model->undo();
-    //
-    if (d->document.characterCount() > lastCursorPosition) {
-        auto cursor = textCursor();
-        cursor.setPosition(lastCursorPosition);
-        setTextCursorReimpl(cursor);
-        ensureCursorVisible();
-    }
+    d->revertAction(true);
 }
 
 void TextEdit::redo()
 {
-    if (d->model == nullptr) {
-        return;
-    }
-
-    const auto lastCursorPosition = textCursor().position();
-    //
-    d->model->redo();
-    //
-    if (d->document.characterCount() > lastCursorPosition) {
-        auto cursor = textCursor();
-        cursor.setPosition(lastCursorPosition);
-        setTextCursorReimpl(cursor);
-        ensureCursorVisible();
-    }
+    d->revertAction(false);
 }
 
 void TextEdit::addParagraph(BusinessLayer::TextParagraphType _type)

@@ -38,6 +38,13 @@ namespace Ui
 class ScreenplayTextEdit::Implementation
 {
 public:
+    explicit Implementation(ScreenplayTextEdit* _q);
+
+    void revertAction(bool previous);
+
+
+    ScreenplayTextEdit* q = nullptr;
+
     BusinessLayer::ScreenplayTextModel* model = nullptr;
     BusinessLayer::ScreenplayTextDocument document;
 
@@ -47,13 +54,47 @@ public:
     bool showDialogueNumber = false;
 };
 
+ScreenplayTextEdit::Implementation::Implementation(ScreenplayTextEdit* _q)
+    : q(_q)
+{
+}
+
+void ScreenplayTextEdit::Implementation::revertAction(bool previous)
+{
+    if (model == nullptr) {
+        return;
+    }
+
+    const auto lastCursorPosition = q->textCursor().position();
+    //
+    if (previous) {
+        model->undo();
+    } else {
+        model->redo();
+    }
+    //
+    if (document.characterCount() > lastCursorPosition) {
+        auto cursor = q->textCursor();
+        cursor.setPosition(lastCursorPosition);
+        q->setTextCursorReimpl(cursor);
+        q->ensureCursorVisible();
+
+        //
+        // При отмене последнего действия позиция курсора могла и не поменяться,
+        // но тип параграфа сменился, поэтому перестраховываемся и говорим будто бы
+        // сменилась позиция курсора, чтобы обновить состояние панелей
+        //
+        emit q->cursorPositionChanged();
+    }
+}
+
 
 // ****
 
 
 ScreenplayTextEdit::ScreenplayTextEdit(QWidget* _parent)
     : BaseTextEdit(_parent),
-      d(new Implementation)
+      d(new Implementation(this))
 {
     setContextMenuPolicy(Qt::CustomContextMenu);
     setFrameShape(QFrame::NoFrame);
@@ -164,38 +205,12 @@ BusinessLayer::LocationsModel* ScreenplayTextEdit::locations() const
 
 void ScreenplayTextEdit::undo()
 {
-    if (d->model == nullptr) {
-        return;
-    }
-
-    const auto lastCursorPosition = textCursor().position();
-    //
-    d->model->undo();
-    //
-    if (d->document.characterCount() > lastCursorPosition) {
-        auto cursor = textCursor();
-        cursor.setPosition(lastCursorPosition);
-        setTextCursorReimpl(cursor);
-        ensureCursorVisible();
-    }
+    d->revertAction(true);
 }
 
 void ScreenplayTextEdit::redo()
 {
-    if (d->model == nullptr) {
-        return;
-    }
-
-    const auto lastCursorPosition = textCursor().position();
-    //
-    d->model->redo();
-    //
-    if (d->document.characterCount() > lastCursorPosition) {
-        auto cursor = textCursor();
-        cursor.setPosition(lastCursorPosition);
-        setTextCursorReimpl(cursor);
-        ensureCursorVisible();
-    }
+    d->revertAction(false);
 }
 
 void ScreenplayTextEdit::addParagraph(BusinessLayer::ScreenplayParagraphType _type)
