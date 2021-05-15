@@ -41,6 +41,9 @@ protected:
      */
     void paintEvent(QPaintEvent* _event) override;
 
+    void enterEvent(QEvent *_event) override;
+    void leaveEvent(QEvent *_event) override;
+
     /**
      * @brief Переопределяем для установки позиции ползунка в месте указанном пользователем
      */
@@ -57,6 +60,11 @@ protected:
     void mouseReleaseEvent(QMouseEvent* _event) override;
 
     /**
+     * @brief Переопределяем, чтобы нажатие стрелок лево и право изменяло значение
+     */
+    void keyPressEvent(QKeyEvent* _event) override;
+
+    /**
      * @brief Переопределяем для обработки события смены дизайн-системы
      */
     void designSystemChangeEvent(DesignSystemChangeEvent* _event) override;
@@ -66,6 +74,11 @@ private:
      * @brief Обновить значение в соответствии с позицией мыши
      */
     void updateValue(const QPoint& _mousePosition);
+
+    /**
+     * @brief Вычислить текущее значение
+     */
+    int calcValue(int _mousePosition, int _trackWidth);
 
 private:
     class Implementation;
