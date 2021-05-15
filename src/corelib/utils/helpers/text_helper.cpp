@@ -116,7 +116,7 @@ QString TextHelper::elidedText(const QString& _text, const QFont& _font, const Q
         // Если строка влезает, то оставляем её без изменений
         //
         if (height < _rect.height()) {
-            elidedText += _text.mid(line.textStart(), line.textLength());
+            elidedText += _text.midRef(line.textStart(), line.textLength());
         }
         //
         // А если это последняя строка, то многоточим её

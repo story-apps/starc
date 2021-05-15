@@ -17,6 +17,7 @@
 #include <QGraphicsRectItem>
 #include <QPointer>
 #include <QResizeEvent>
+#include <QStyleOption>
 #include <QTimer>
 #include <QtMath>
 #include <QVariantAnimation>
@@ -163,8 +164,8 @@ ManagementLayer::Project ProjectCard::project() const
 void ProjectCard::paint(QPainter* _painter, const QStyleOptionGraphicsItem* _option, QWidget* _widget)
 {
     Q_UNUSED(_option)
-    Q_UNUSED(_widget)
 
+    const bool isLeftToRight = _widget->isLeftToRight();
     const QRectF backgroundRect = rect().marginsRemoved(Ui::DesignSystem::card().shadowMargins());
     if (!backgroundRect.isValid()) {
         return;
@@ -207,8 +208,11 @@ void ProjectCard::paint(QPainter* _painter, const QStyleOptionGraphicsItem* _opt
     // Постер
     //
     const QPixmap& poster = m_project.poster();
-    const QRectF posterRect(backgroundRect.topLeft(),
-                            poster.size().scaled(backgroundRect.size().toSize(), Qt::KeepAspectRatio));
+    const QSizeF posterSize = poster.size().scaled(backgroundRect.size().toSize(), Qt::KeepAspectRatio);
+    const QRectF posterRect(isLeftToRight
+                            ? backgroundRect.topLeft()
+                            : backgroundRect.topRight() - QPointF(posterSize.width(), 0),
+                            posterSize);
     _painter->drawPixmap(posterRect, poster, poster.rect());
 
     //
@@ -217,7 +221,9 @@ void ProjectCard::paint(QPainter* _painter, const QStyleOptionGraphicsItem* _opt
     _painter->setPen(Ui::DesignSystem::color().onBackground());
     _painter->setFont(Ui::DesignSystem::font().h6());
     const QFontMetricsF textFontMetrics(Ui::DesignSystem::font().h6());
-    const QRectF textRect(posterRect.right() + Ui::DesignSystem::layout().px16(),
+    const QRectF textRect(isLeftToRight
+                          ? posterRect.right() + Ui::DesignSystem::layout().px16()
+                          : backgroundRect.left() + Ui::DesignSystem::layout().px12(),
                           backgroundRect.top() + Ui::DesignSystem::layout().px8(),
                           backgroundRect.width() - posterRect.width() - Ui::DesignSystem::layout().px12() * 2,
                           textFontMetrics.lineSpacing());
@@ -265,7 +271,9 @@ void ProjectCard::paint(QPainter* _painter, const QStyleOptionGraphicsItem* _opt
     _painter->setOpacity(1.0);
     _painter->setPen(Ui::DesignSystem::color().onBackground());
     _painter->setFont(Ui::DesignSystem::font().iconsMid());
-    const QRectF iconRect(backgroundRect.right() - Ui::DesignSystem::layout().px24() * 2,
+    const QRectF iconRect(isLeftToRight
+                          ? backgroundRect.right() - Ui::DesignSystem::layout().px24() * 2
+                          : backgroundRect.left(),
                           backgroundRect.bottom() - Ui::DesignSystem::layout().px24() * 2,
                           Ui::DesignSystem::layout().px24() * 2,
                           Ui::DesignSystem::layout().px24() * 2);
@@ -409,11 +417,17 @@ qreal ProjectCard::nextZValue() const
 
 QVector<QRectF> ProjectCard::actionsRects() const
 {
+    const bool isLeftToRight = QApplication::isLeftToRight();
     const QRectF backgroundRect = rect().marginsRemoved(Ui::DesignSystem::card().shadowMargins());
     const QPixmap& poster = m_project.poster();
-    const QRectF posterRect(backgroundRect.topLeft(),
-                            poster.size().scaled(backgroundRect.size().toSize(), Qt::KeepAspectRatio));
-    QRectF iconRect(posterRect.right() + Ui::DesignSystem::layout().px12(),
+    const QSizeF posterSize = poster.size().scaled(backgroundRect.size().toSize(), Qt::KeepAspectRatio);
+    const QRectF posterRect(isLeftToRight
+                            ? backgroundRect.topLeft()
+                            : backgroundRect.topRight() - QPointF(posterSize.width(), 0),
+                            posterSize);
+    QRectF iconRect(isLeftToRight
+                    ? posterRect.right() + Ui::DesignSystem::layout().px12()
+                    : posterRect.left() - Ui::DesignSystem::layout().px12() - Ui::DesignSystem::layout().px24(),
                     backgroundRect.bottom() - Ui::DesignSystem::layout().px24() * 2,
                     Ui::DesignSystem::layout().px24(),
                     Ui::DesignSystem::layout().px24() * 2);
@@ -422,7 +436,8 @@ QVector<QRectF> ProjectCard::actionsRects() const
     const int kRepeats = m_project.type() == ManagementLayer::ProjectType::Local ? 2 : 2;
     for (int repeat = 0; repeat < kRepeats; ++repeat) {
         rects.append(iconRect);
-        iconRect.moveLeft(iconRect.left() + Ui::DesignSystem::layout().px8() * 5);
+        iconRect.moveLeft(iconRect.left()
+                          + (isLeftToRight ? 1 : -1) * Ui::DesignSystem::layout().px8() * 5);
     }
 
     return rects;
@@ -485,7 +500,7 @@ ProjectsCards::Implementation::Implementation(QGraphicsView* _parent)
 void ProjectsCards::Implementation::resizeCards()
 {
     const QRectF cardRect({0, 0}, Ui::DesignSystem::projectCard().size());
-    for (auto card : projectsCards) {
+    for (auto card : std::as_const(projectsCards)) {
         card->setRect(cardRect);
     }
 }
@@ -500,7 +515,7 @@ void ProjectsCards::Implementation::reorderCards()
             return QSizeF();
         }
 
-        const QGraphicsView* view = scene->views().first();
+        const QGraphicsView* view = scene->views().constFirst();
         return QSizeF(view->size());
     }();
 
@@ -532,18 +547,19 @@ void ProjectsCards::Implementation::reorderCards()
             return QRectF();
         }
 
-        const QGraphicsView* view = scene->views().first();
+        const QGraphicsView* view = scene->views().constFirst();
         return view->mapToScene(view->viewport()->geometry()).boundingRect();
     }();
 
 
-    const bool isLtr = QLocale().textDirection() == Qt::LeftToRight;
-    const qreal sceneRectWidth = Ui::DesignSystem::projectCard().margins().left()
-                                 + Ui::DesignSystem::projectCard().size().width() * cardsInRowCount
-                                 + Ui::DesignSystem::projectCard().spacing() * (cardsInRowCount - 1)
-                                 + Ui::DesignSystem::projectCard().margins().right();
-    const qreal firstCardInRowX = [isLtr, sceneRectWidth] {
-        return isLtr
+    const qreal sceneRectWidth = std::max(Ui::DesignSystem::projectCard().margins().left()
+                                          + Ui::DesignSystem::projectCard().size().width() * cardsInRowCount
+                                          + Ui::DesignSystem::projectCard().spacing() * (cardsInRowCount - 1)
+                                          + Ui::DesignSystem::projectCard().margins().right(),
+                                          viewSize.width());
+    const auto isLeftToRight = QApplication::isLeftToRight();
+    const qreal firstCardInRowX = [isLeftToRight, sceneRectWidth]() {
+        return isLeftToRight
                 ? Ui::DesignSystem::projectCard().margins().left()
                 : sceneRectWidth
                   - Ui::DesignSystem::projectCard().margins().right()
@@ -558,7 +574,7 @@ void ProjectsCards::Implementation::reorderCards()
     qreal maxY = 0.0;
     qreal lastItemHeight = 0.0;
     int currentCardInRow = 0;
-    for (auto card : projectsCards) {
+    for (auto card : std::as_const(projectsCards)) {
         //
         // ... корректируем позицию в соответствии с позицией карточки в ряду,
         //     или если предыдущая была вложена, а текущая нет
@@ -609,7 +625,7 @@ void ProjectsCards::Implementation::reorderCards()
         //
         // ... и корректируем координаты для позиционирования следующих элементов
         //
-        x += (isLtr ? 1 : -1) * (Ui::DesignSystem::projectCard().size().width()
+        x += (isLeftToRight ? 1 : -1) * (Ui::DesignSystem::projectCard().size().width()
                                  + Ui::DesignSystem::projectCard().spacing());
         lastItemHeight = Ui::DesignSystem::projectCard().size().height();
 
@@ -655,7 +671,7 @@ void ProjectsCards::Implementation::reorderCard(QGraphicsItem* _cardItem)
     // Ищем элемент, который будет последним перед карточкой в её новом месте
     //
     ProjectCard* previousCard = nullptr;
-    for (auto card : projectsCards) {
+    for (auto card : std::as_const(projectsCards)) {
         if (card == movedCard) {
             continue;
         }
