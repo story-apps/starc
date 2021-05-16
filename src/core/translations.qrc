@@ -20,5 +20,6 @@
         <file>translations/translation_ro_RO.qm</file>
         <file>translations/translation_fa.qm</file>
         <file>translations/translation_gl_ES.qm</file>
+        <file>translations/translation_da_DK.qm</file>
     </qresource>
 </RCC>

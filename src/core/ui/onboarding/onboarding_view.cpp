@@ -97,6 +97,7 @@ void OnboardingView::Implementation::initLanguagePage()
     };
     RadioButton* azerbaijaniLanguage = initLanguageButton("Azərbaycan", QLocale::Azerbaijani);
     RadioButton* belarusianLanguage = initLanguageButton("Беларуский", QLocale::Belarusian);
+    RadioButton* danishLanguage = initLanguageButton("Dansk", QLocale::Danish);
     RadioButton* englishLanguage = initLanguageButton("English", QLocale::English);
     RadioButton* frenchLanguage = initLanguageButton("Français", QLocale::French);
     RadioButton* galicianLanguage = initLanguageButton("Galego", QLocale::Galician);
@@ -151,6 +152,7 @@ void OnboardingView::Implementation::initLanguagePage()
     };
     buildFocusChain({ azerbaijaniLanguage,
                       belarusianLanguage,
+                      danishLanguage,
                       germanLanguage,
                       englishLanguage,
                       spanishLanguage,
@@ -191,14 +193,15 @@ void OnboardingView::Implementation::initLanguagePage()
     languagePageLayout->addWidget(languageTitleLabel, row++, 0, 1, 4);
     languagePageLayout->addWidget(azerbaijaniLanguage, row++, 0);
     languagePageLayout->addWidget(belarusianLanguage, row++, 0);
+    languagePageLayout->addWidget(danishLanguage, row++, 0);
     languagePageLayout->addWidget(germanLanguage, row++, 0);
     languagePageLayout->addWidget(englishLanguage, row++, 0);
     languagePageLayout->addWidget(spanishLanguage, row++, 0);
     languagePageLayout->addWidget(frenchLanguage, row++, 0);
     languagePageLayout->addWidget(galicianLanguage, row++, 0);
     languagePageLayout->addWidget(indonesianLanguage, row++, 0);
-    languagePageLayout->addWidget(italianLanguage, row++, 0);
     int rowForSecondColumn = 1;
+    languagePageLayout->addWidget(italianLanguage, rowForSecondColumn++, 1);
     languagePageLayout->addWidget(hungarianLanguage, rowForSecondColumn++, 1);
     languagePageLayout->addWidget(polishLanguage, rowForSecondColumn++, 1);
     languagePageLayout->addWidget(portugueseBrazilLanguage, rowForSecondColumn++, 1);
@@ -225,7 +228,7 @@ void OnboardingView::Implementation::updateLanguagePageUi()
     languageTitleLabel->setContentsMargins(Ui::DesignSystem::label().margins().toMargins());
     languageTitleLabel->setBackgroundColor(DesignSystem::color().surface());
     languageTitleLabel->setTextColor(DesignSystem::color().onSurface());
-    for (auto languageButton : languageButtons) {
+    for (auto languageButton : std::as_const(languageButtons)) {
         languageButton->setBackgroundColor(DesignSystem::color().surface());
         languageButton->setTextColor(DesignSystem::color().onSurface());
     }
@@ -361,6 +364,7 @@ OnboardingView::OnboardingView(QWidget* _parent)
 {
     showLanguagePage();
 
+    updateTranslations();
     designSystemChangeEvent(nullptr);
 }
 

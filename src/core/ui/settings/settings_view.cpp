@@ -770,6 +770,9 @@ void SettingsView::setApplicationLanguage(int _language)
             case QLocale::Belarusian: {
                 return "Беларуский";
             }
+            case QLocale::Danish: {
+                return "Dansk";
+            }
             case QLocale::English: {
                 return "English";
             }

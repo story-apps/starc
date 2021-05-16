@@ -18,6 +18,7 @@ TRANSLATIONS += \
     core/translations/_en_source.ts \
     core/translations/translation_az.ts \
     core/translations/translation_be.ts \
+    core/translations/translation_da_DK.ts \
     core/translations/translation_de.ts \
     core/translations/translation_en.ts \
     core/translations/translation_es.ts \
