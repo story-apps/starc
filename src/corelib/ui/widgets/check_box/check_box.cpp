@@ -57,6 +57,7 @@ CheckBox::CheckBox(QWidget* _parent)
     : Widget(_parent),
       d(new Implementation)
 {
+    setAttribute(Qt::WA_Hover);
     setFocusPolicy(Qt::StrongFocus);
 
     connect(&d->decorationRadiusAnimation, &QVariantAnimation::valueChanged, this, [this] { update(); });
@@ -191,18 +192,6 @@ void CheckBox::paintEvent(QPaintEvent* _event)
     painter.setFont(Ui::DesignSystem::font().subtitle1());
     painter.setPen(penColor);
     painter.drawText(textRect, Qt::AlignLeft | Qt::AlignVCenter, d->text);
-}
-
-void CheckBox::enterEvent(QEvent* _event)
-{
-    Q_UNUSED(_event);
-    update();
-}
-
-void CheckBox::leaveEvent(QEvent* _event)
-{
-    Q_UNUSED(_event);
-    update();
 }
 
 void CheckBox::mousePressEvent(QMouseEvent* _event)

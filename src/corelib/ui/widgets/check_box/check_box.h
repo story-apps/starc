@@ -40,12 +40,6 @@ protected:
     void paintEvent(QPaintEvent *_event) override;
 
     /**
-     * @brief При входе/выходе курсора обновляем виджет
-     */
-    void enterEvent(QEvent* _event) override;
-    void leaveEvent(QEvent* _event) override;
-
-    /**
      * @brief Реализуем включение переключателя при клике на нём
      */
     void mousePressEvent(QMouseEvent* _event) override;

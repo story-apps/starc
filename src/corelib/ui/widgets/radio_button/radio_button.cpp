@@ -56,6 +56,7 @@ RadioButton::RadioButton(QWidget* _parent)
     : Widget(_parent),
       d(new Implementation)
 {
+    setAttribute(Qt::WA_Hover);
     setFocusPolicy(Qt::StrongFocus);
 
     connect(&d->decorationRadiusAnimation, &QVariantAnimation::valueChanged, this, [this] { update(); });
@@ -184,18 +185,6 @@ void RadioButton::paintEvent(QPaintEvent* _event)
     painter.setFont(Ui::DesignSystem::font().subtitle1());
     painter.setPen(penColor);
     painter.drawText(textRect, Qt::AlignLeft | Qt::AlignVCenter, d->text);
-}
-
-void RadioButton::enterEvent(QEvent* _event)
-{
-    Q_UNUSED(_event);
-    update();
-}
-
-void RadioButton::leaveEvent(QEvent* _event)
-{
-    Q_UNUSED(_event);
-    update();
 }
 
 void RadioButton::mousePressEvent(QMouseEvent* _event)
