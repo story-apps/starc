@@ -122,10 +122,10 @@ void Slider::paintEvent(QPaintEvent* _event)
     //
     // ... слева
     //
-    const int margin = contentsRect().left();
+    const int leftMargin = contentsRect().left();
     const qreal trackWidth = contentsRect().width();
     const qreal leftTrackWidth = trackWidth * d->current / d->maximum;
-    const QRectF leftTrackRect(QPointF(isRightToLeft() ? trackWidth - leftTrackWidth + margin : margin,
+    const QRectF leftTrackRect(QPointF(isRightToLeft() ? trackWidth - leftTrackWidth + leftMargin : leftMargin,
                                        (height() - Ui::DesignSystem::slider().trackHeight()) / 2.0),
                                QSizeF(leftTrackWidth, Ui::DesignSystem::slider().trackHeight()));
     painter.fillRect(leftTrackRect, Ui::DesignSystem::color().secondary());
@@ -133,7 +133,7 @@ void Slider::paintEvent(QPaintEvent* _event)
     //
     // ... справа
     //
-    const QRectF rightTrackRect(isRightToLeft() ? QPointF(margin, leftTrackRect.y()) : leftTrackRect.topRight(),
+    const QRectF rightTrackRect(isRightToLeft() ? QPointF(leftMargin, leftTrackRect.y()) : leftTrackRect.topRight(),
                                 QSizeF(trackWidth - leftTrackWidth, leftTrackRect.height()));
     QColor rightTrackColor = Ui::DesignSystem::color().secondary();
     rightTrackColor.setAlphaF(Ui::DesignSystem::slider().unfilledPartOpacity());
