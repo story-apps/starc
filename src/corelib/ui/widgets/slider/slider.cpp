@@ -19,6 +19,11 @@ public:
      */
     void animateClick();
 
+    /**
+     * @brief Вычислить текущее значение
+     */
+    int calcValue(int _mousePosition, int _trackWidth, bool _isRightToLeft);
+
     const int minimum = 0;
     int maximum = 100;
     int current = 50;
@@ -37,7 +42,7 @@ Slider::Implementation::Implementation()
 
     decorationOpacityAnimation.setEasingCurve(QEasingCurve::InQuad);
     decorationOpacityAnimation.setStartValue(0.6);
-    decorationOpacityAnimation.setEndValue(0.2);
+    decorationOpacityAnimation.setEndValue(0.4);
     decorationOpacityAnimation.setDuration(160);
 }
 
@@ -48,6 +53,13 @@ void Slider::Implementation::animateClick()
     decorationOpacityAnimation.start();
 }
 
+int Slider::Implementation::calcValue(int _mousePosition, int _trackWidth, bool _isRightToLeft)
+{
+    int value = maximum * _mousePosition / _trackWidth;
+
+    return _isRightToLeft ? maximum - value : value;
+}
+
 
 // ****
 
@@ -56,6 +68,9 @@ Slider::Slider(QWidget* _parent)
     : Widget(_parent),
       d(new Implementation)
 {
+    setAttribute(Qt::WA_Hover);
+    setFocusPolicy(Qt::StrongFocus);
+
     connect(&d->decorationRadiusAnimation, &QVariantAnimation::valueChanged, this, [this] { update(); });
     connect(&d->decorationOpacityAnimation, &QVariantAnimation::valueChanged, this, [this] { update(); });
 
@@ -107,25 +122,50 @@ void Slider::paintEvent(QPaintEvent* _event)
     //
     // ... слева
     //
+    const int leftMargin = contentsRect().left();
     const qreal trackWidth = contentsRect().width();
     const qreal leftTrackWidth = trackWidth * d->current / d->maximum;
-    const QRectF leftTrackRect(QPointF(contentsMargins().left(),
+    const QRectF leftTrackRect(QPointF(isRightToLeft() ? trackWidth - leftTrackWidth + leftMargin : leftMargin,
                                        (height() - Ui::DesignSystem::slider().trackHeight()) / 2.0),
                                QSizeF(leftTrackWidth, Ui::DesignSystem::slider().trackHeight()));
     painter.fillRect(leftTrackRect, Ui::DesignSystem::color().secondary());
+
     //
     // ... справа
     //
-    const QRectF rightTrackRect(leftTrackRect.topRight(),
+    const QRectF rightTrackRect(isRightToLeft() ? QPointF(leftMargin, leftTrackRect.y()) : leftTrackRect.topRight(),
                                 QSizeF(trackWidth - leftTrackWidth, leftTrackRect.height()));
     QColor rightTrackColor = Ui::DesignSystem::color().secondary();
     rightTrackColor.setAlphaF(Ui::DesignSystem::slider().unfilledPartOpacity());
     painter.fillRect(rightTrackRect, rightTrackColor);
 
+    const QPointF thumbCenter(isRightToLeft() ? rightTrackRect.right() : rightTrackRect.left(), rightTrackRect.center().y());
+
+    //
+    // Рисуем hower
+    //
+    {
+        if (underMouse() && !hasFocus()) {
+            painter.setPen(Qt::NoPen);
+            painter.setBrush(Ui::DesignSystem::color().secondary());
+            painter.setOpacity(Ui::DesignSystem::hoverBackgroundOpacity());
+            painter.drawEllipse(thumbCenter, d->decorationRadiusAnimation.endValue().toReal(),
+                                d->decorationRadiusAnimation.endValue().toReal());
+            painter.setOpacity(1.0);
+
+        } else if (hasFocus()) {
+            painter.setPen(Qt::NoPen);
+            painter.setBrush(Ui::DesignSystem::color().secondary());
+            painter.setOpacity(Ui::DesignSystem::focusBackgroundOpacity());
+            painter.drawEllipse(thumbCenter, d->decorationRadiusAnimation.endValue().toReal(),
+                                d->decorationRadiusAnimation.endValue().toReal());
+            painter.setOpacity(1.0);
+        }
+    }
+
     //
     // Рисуем декорацию слайдера
     //
-    const QPointF thumbCenter(rightTrackRect.left(), rightTrackRect.center().y());
     if (d->decorationRadiusAnimation.state() == QVariantAnimation::Running
         || d->decorationOpacityAnimation.state() == QVariantAnimation::Running
         || (underMouse() && !QApplication::mouseButtons().testFlag(Qt::NoButton))) {
@@ -173,6 +213,20 @@ void Slider::mouseReleaseEvent(QMouseEvent* _event)
     update();
 }
 
+void Slider::keyPressEvent(QKeyEvent *_event)
+{
+    switch (_event->key()) {
+    case Qt::Key_Left:
+        setValue(d->current + (isRightToLeft()? 1: -1));
+        break;
+    case Qt::Key_Right:
+        setValue(d->current + (isRightToLeft()? -1: 1));
+        break;
+    default:
+        break;
+    }
+}
+
 void Slider::designSystemChangeEvent(DesignSystemChangeEvent* _event)
 {
     Q_UNUSED(_event);
@@ -188,6 +242,6 @@ void Slider::updateValue(const QPoint& _mousePosition)
 {
     const int trackWidth = contentsRect().width();
     const int mousePosition = _mousePosition.x() - contentsMargins().left();
-    const int value = d->maximum * mousePosition / trackWidth;
+    const int value = d->calcValue(mousePosition, trackWidth, isRightToLeft());
     setValue(qBound(d->minimum, value, d->maximum));
 }

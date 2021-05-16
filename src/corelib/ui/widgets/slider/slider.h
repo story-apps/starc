@@ -57,6 +57,11 @@ protected:
     void mouseReleaseEvent(QMouseEvent* _event) override;
 
     /**
+     * @brief Переопределяем, чтобы нажатие стрелок лево и право изменяло значение
+     */
+    void keyPressEvent(QKeyEvent* _event) override;
+
+    /**
      * @brief Переопределяем для обработки события смены дизайн-системы
      */
     void designSystemChangeEvent(DesignSystemChangeEvent* _event) override;
