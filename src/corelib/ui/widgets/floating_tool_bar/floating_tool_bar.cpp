@@ -456,7 +456,8 @@ void FloatingToolBar::mousePressEvent(QMouseEvent* _event)
 void FloatingToolBar::mouseReleaseEvent(QMouseEvent* _event)
 {
     QAction* pressedAction = d->actionAt(_event->pos(), actions());
-    if (pressedAction == nullptr) {
+    if (pressedAction == nullptr
+        || pressedAction != d->lastPressedAction) {
         return;
     }
 
