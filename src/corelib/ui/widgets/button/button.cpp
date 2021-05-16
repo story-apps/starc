@@ -382,8 +382,6 @@ void Button::keyPressEvent(QKeyEvent* _event)
         emit clicked();
         return;
     }
-
-    return Widget::keyPressEvent(_event);
 }
 
 void Button::designSystemChangeEvent(DesignSystemChangeEvent* _event)

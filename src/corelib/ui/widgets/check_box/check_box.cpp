@@ -230,8 +230,6 @@ void CheckBox::keyPressEvent(QKeyEvent* _event)
         setChecked(!isChecked());
         return;
     }
-
-    return Widget::keyPressEvent(_event);
 }
 
 void CheckBox::designSystemChangeEvent(DesignSystemChangeEvent* _event)

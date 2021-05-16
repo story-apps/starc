@@ -223,8 +223,6 @@ void RadioButton::keyPressEvent(QKeyEvent* _event)
         setChecked(true);
         return;
     }
-
-    return Widget::keyPressEvent(_event);
 }
 
 void RadioButton::designSystemChangeEvent(DesignSystemChangeEvent* _event)
