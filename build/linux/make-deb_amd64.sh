@@ -26,7 +26,7 @@ APP_BIN_DIR="../../src/_build"
 ls -l $APP_BIN_DIR
 cp $APP_BIN_DIR/starcapp $DEB_APP_DIR/starc
 cp $APP_BIN_DIR/libcorelib.so.1 $DEB_APP_DIR/libs/
-cp $APP_BIN_DIR/plugins/* $DEB_APP_DIR/plugins/
+cp $APP_BIN_DIR/plugins/*.so $DEB_APP_DIR/plugins/
 
 #
 # Copy Qt libraries
