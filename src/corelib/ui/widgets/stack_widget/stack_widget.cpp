@@ -459,7 +459,9 @@ void StackWidget::paintEvent(QPaintEvent *_event)
                 painter.setOpacity(d->fadeAnimation.incomingContentFadeIn.currentValue().toReal());
                 if (d->animationType == AnimationType::FadeThrough) {
                     const auto targetRect = d->fadeAnimation.incomingContentGeometry.currentValue().toRectF();
-                    painter.drawPixmap(targetRect.topLeft(), d->currentWidgetImage.scaled(targetRect.size().toSize()));
+                    const auto targetPos = targetRect.topLeft();
+                    const auto targetSize = targetRect.size() * devicePixelRatio();
+                    painter.drawPixmap(targetPos, d->currentWidgetImage.scaled(targetSize.toSize()));
                 } else {
                     painter.drawPixmap(0, 0, d->currentWidgetImage);
                 }
