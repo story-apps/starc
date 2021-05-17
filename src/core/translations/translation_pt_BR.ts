@@ -1120,7 +1120,7 @@ de 2Gb</translation>
     <message>
         <location filename="../ui/project/create_document_dialog.cpp" line="94"/>
         <source>Create a document set to streamline your work on the feature film, series, or animation.</source>
-        <translation>Crie um conjunto de documentos para agilizar seu trabalho no longa-metragem, série ou animação.</translation>
+        <translation>Criar documento para aprimorar seu fluxo de trabalho no futuro longa-metragem, série ou animação.</translation>
     </message>
     <message>
         <location filename="../ui/project/create_document_dialog.cpp" line="149"/>
