@@ -586,8 +586,10 @@ void ApplicationManager::Implementation::setTranslation(QLocale::Language _langu
     if (currentLanguage == QLocale::Persian
         || currentLanguage == QLocale::Hebrew) {
         QApplication::setLayoutDirection(Qt::RightToLeft);
+        QApplication::postEvent(q, new DesignSystemChangeEvent);
     } else {
         QApplication::setLayoutDirection(Qt::LeftToRight);
+        QApplication::postEvent(q, new DesignSystemChangeEvent);
     }
 
     //
