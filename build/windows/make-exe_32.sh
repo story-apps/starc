@@ -14,7 +14,7 @@
 #
 # Prepare folders structure
 #
-EXE_APP_DIR="files_64"
+EXE_APP_DIR="files_32"
 mkdir $EXE_APP_DIR
 mkdir $EXE_APP_DIR/plugins
 
@@ -61,7 +61,7 @@ cp $Qt5_Dir/plugins/sqldrivers/qsqlite.dll $EXE_APP_DIR/sqldrivers/
 #
 # Copy openssl lib
 #
-cp /c/Program\ Files/OpenSSL-Win64/*.dll $EXE_APP_DIR
+cp /c/Program\ Files\ \(x86\)/OpenSSL-Win32/*.dll $EXE_APP_DIR
 #
 # Copy msvc lib
 #
