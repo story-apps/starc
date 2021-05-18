@@ -171,6 +171,11 @@ protected:
      */
     void insertFromMimeData(const QMimeData* _source) override;
 
+    /**
+     * @brief Ловим LayoutDirectionChanged
+     */
+    void changeEvent(QEvent *_event) override;
+
 private:
     class Implementation;
     QScopedPointer<Implementation> d;

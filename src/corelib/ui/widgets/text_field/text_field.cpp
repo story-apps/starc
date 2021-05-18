@@ -961,3 +961,14 @@ void TextField::insertFromMimeData(const QMimeData* _source)
         insertPlainText(_source->text());
     }
 }
+
+void TextField::changeEvent(QEvent *_event)
+{
+    switch (_event->type()) {
+        case QEvent::LayoutDirectionChange:
+        reconfigure();
+        return;
+    default:
+        return;
+    }
+}
