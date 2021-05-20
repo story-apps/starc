@@ -167,6 +167,11 @@ protected:
     void keyPressEvent(QKeyEvent* _event) override;
 
     /**
+     * @brief Ловим LayoutDirectionChanged
+     */
+    void changeEvent(QEvent *_event) override;
+
+    /**
      * @brief Разрешаем вставлять только плоский текст
      */
     void insertFromMimeData(const QMimeData* _source) override;
