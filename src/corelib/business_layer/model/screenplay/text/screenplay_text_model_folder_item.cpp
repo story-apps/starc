@@ -105,12 +105,12 @@ ScreenplayTextModelFolderItem::ScreenplayTextModelFolderItem(QXmlStreamReader& _
     handleChange();
 }
 
+ScreenplayTextModelFolderItem::~ScreenplayTextModelFolderItem() = default;
+
 std::chrono::milliseconds ScreenplayTextModelFolderItem::duration() const
 {
     return d->duration;
 }
-
-ScreenplayTextModelFolderItem::~ScreenplayTextModelFolderItem() = default;
 
 QVariant ScreenplayTextModelFolderItem::data(int _role) const
 {

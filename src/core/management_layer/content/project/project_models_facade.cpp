@@ -197,7 +197,27 @@ BusinessLayer::AbstractModel* ProjectModelsFacade::modelFor(Domain::DocumentObje
             }
 
             case Domain::DocumentObjectType::ScreenplayStatistics: {
-                model = new BusinessLayer::ScreenplayStatisticsModel;
+                auto statisticsModel = new BusinessLayer::ScreenplayStatisticsModel;
+
+                const auto statisticsItem = d->projectStructureModel->itemForUuid(_document->uuid());
+                Q_ASSERT(statisticsItem);
+                const auto screenplayItem = statisticsItem->parent();
+                Q_ASSERT(screenplayItem);
+                QUuid screenplayTextItemUuid;
+                for (int childIndex = 0; childIndex < screenplayItem->childCount(); ++childIndex) {
+                    const auto childItem = screenplayItem->childAt(childIndex);
+                    if (childItem->type() == Domain::DocumentObjectType::ScreenplayText) {
+                        screenplayTextItemUuid = childItem->uuid();
+                        break;
+                    }
+                }
+                Q_ASSERT(!screenplayTextItemUuid.isNull());
+                auto screenplayModel
+                        = qobject_cast<BusinessLayer::ScreenplayTextModel*>(
+                              modelFor(screenplayTextItemUuid));
+                statisticsModel->setScreenplayTextModel(screenplayModel);
+
+                model = statisticsModel;
                 break;
             }
 

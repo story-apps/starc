@@ -66,4 +66,9 @@ public:
      */
     static QString smartToLower(const QString& _text);
     static QChar smartToLower(const QChar& _char);
+
+    /**
+     * @brief Определить количество слов в тексте
+     */
+    static int wordsCount(const QString& _text);
 };

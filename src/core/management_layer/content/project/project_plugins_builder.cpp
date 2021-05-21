@@ -20,18 +20,20 @@ namespace {
  * @brief Майм-типы плагинов
  */
 const QString kSimpleTextEditorMime = QStringLiteral("application/x-starc/editor/text/text");
-const QString kSimpleTextNavigatorMime = QStringLiteral("application/x-starc/navigator/text/text-structure");
-const QString kScreenplayEditorMime = QStringLiteral("application/x-starc/editor/screenplay/text");
-const QString kScreenplayNavigatorMime = QStringLiteral("application/x-starc/navigator/screenplay/text-structure");
+const QString kSimpleTextNavigatorMime = QStringLiteral("application/x-starc/navigator/text/text");
+const QString kScreenplayTextEditorMime = QStringLiteral("application/x-starc/editor/screenplay/text");
+const QString kScreenplayTextNavigatorMime = QStringLiteral("application/x-starc/navigator/screenplay/text");
+const QString kScreenplayStatisticsViewMime = QStringLiteral("application/x-starc/view/screenplay/statistics");
+const QString kScreenplayStatisticsNavigatorMime = QStringLiteral("application/x-starc/navigator/screenplay/statistics");
 
 /**
  * @brief Карта соотвествия майм-типов редактора к навигатору
  */
 const QHash<QString, QString> kEditorToNavigator
 = {{ kSimpleTextEditorMime, kSimpleTextNavigatorMime },
-   { kScreenplayEditorMime, kScreenplayNavigatorMime },
-   { "application/x-starc/editor/screenplay/cards", kScreenplayNavigatorMime },
-   { "application/x-starc/editor/screenplay/statistics", "application/x-starc/navigator/screenplay/statistics-structure" }};
+   { kScreenplayTextEditorMime, kScreenplayTextNavigatorMime },
+   { "application/x-starc/editor/screenplay/cards", kScreenplayTextNavigatorMime },
+   { kScreenplayStatisticsViewMime, kScreenplayStatisticsNavigatorMime }};
 
 /**
  * @brief Карта соответствия майм-типов документа к редакторам
@@ -44,10 +46,11 @@ const QHash<QString, QVector<ProjectPluginsBuilder::EditorInfo>> kDocumentToEdit
    { "application/x-starc/document/screenplay/title-page", {{ "application/x-starc/editor/screenplay/title-page", u8"\U000f09ed" }}},
    { "application/x-starc/document/screenplay/synopsis", {{ kSimpleTextEditorMime, u8"\U000f09ed" }}},
    { "application/x-starc/document/screenplay/treatment", {{ "application/x-starc/editor/screenplay/treatment", u8"\U000f09ed" },
-                                                         { "application/x-starc/editor/screenplay/cards", u8"\U000f0554" }}},
-   { "application/x-starc/document/screenplay/text", {{ kScreenplayEditorMime, u8"\U000f09ed" },
+                                                           { "application/x-starc/editor/screenplay/beatboard", u8"\U000f0554" },
+                                                           { "application/x-starc/editor/screenplay/treatmentcards", u8"\U000f0554" }}},
+   { "application/x-starc/document/screenplay/text", {{ kScreenplayTextEditorMime, u8"\U000f09ed" },
                                                       { "application/x-starc/editor/screenplay/cards", u8"\U000f0554" }}},
-   { "application/x-starc/document/screenplay/statistics", {{ "application/x-starc/editor/screenplay/statistics", u8"\U000f0127" }}},
+   { "application/x-starc/document/screenplay/statistics", {{ kScreenplayStatisticsViewMime, u8"\U000f0127" }}},
    { "application/x-starc/document/character", {{ "application/x-starc/editor/character/information", u8"\U000f02fd" }}},
    { "application/x-starc/document/location", {{ "application/x-starc/editor/location/information", u8"\U000f02fd" }}},
    { "application/x-starc/document/folder", {{ kSimpleTextEditorMime, u8"\U000f09ed" }}},
@@ -65,11 +68,11 @@ const QHash<QString, QString> kMimeToPlugin
    { "application/x-starc/editor/screenplay/title-page", "*screenplaytitlepageplugin*" },
    { "application/x-starc/editor/screenplay/treatment", "*screenplaytreatmentplugin*" },
    { "application/x-starc/editor/screenplay/treatment-cards", "*screenplaytreatmentcardsplugin*" },
-   { kScreenplayEditorMime, "*screenplaytextplugin*" },
-   { kScreenplayNavigatorMime, "*screenplaytextstructureplugin*" },
-   { "application/x-starc/editor/screenplay/cards", "*screenplaytextcardsplugin*" },
-   { "application/x-starc/editor/screenplay/statistics", "*screenplaystatisticsplugin*" },
-   { "application/x-starc/navigator/screenplay/statistics-structure", "*screenplaystatisticsstructureplugin*" },
+   { kScreenplayTextEditorMime, "*screenplaytextplugin*" },
+   { kScreenplayTextNavigatorMime, "*screenplaytextstructureplugin*" },
+   { "application/x-starc/editor/screenplay/cards", "*screenplaycardsplugin*" },
+   { kScreenplayStatisticsViewMime, "*screenplaystatisticsplugin*" },
+   { kScreenplayStatisticsNavigatorMime, "*screenplaystatisticsstructureplugin*" },
    { "application/x-starc/editor/character/information", "*characterinformationplugin*" },
    { "application/x-starc/editor/location/information", "*locationinformationplugin*" },
    { kSimpleTextEditorMime, "*simpletextplugin*" },
@@ -240,7 +243,7 @@ void ProjectPluginsBuilder::reconfigureAll()
 
 void ProjectPluginsBuilder::reconfigureScreenplayEditor(const QStringList& _changedSettingsKeys)
 {
-    auto screenplayEditor = d->plugins.find(kScreenplayEditorMime);
+    auto screenplayEditor = d->plugins.find(kScreenplayTextEditorMime);
     if (screenplayEditor == d->plugins.end()) {
         return;
     }
@@ -250,7 +253,7 @@ void ProjectPluginsBuilder::reconfigureScreenplayEditor(const QStringList& _chan
 
 void ProjectPluginsBuilder::reconfigureScreenplayNavigator()
 {
-    auto screenplayNavigator = d->plugins.find(kScreenplayNavigatorMime);
+    auto screenplayNavigator = d->plugins.find(kScreenplayTextNavigatorMime);
     if (screenplayNavigator == d->plugins.end()) {
         return;
     }

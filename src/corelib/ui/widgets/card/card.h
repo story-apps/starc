@@ -12,6 +12,11 @@ public:
     ~Card() override;
 
     /**
+     * @brief Перекрываем метод, чтобы не возникло путанницы во время разработки
+     */
+    void setLayout(QLayout* _layout);
+
+    /**
      * @brief Собственная реализация метода установки компоновщика
      */
     void setLayoutReimpl(QLayout* _layout) const;

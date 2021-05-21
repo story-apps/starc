@@ -1224,11 +1224,7 @@ void ScreenplayTextModel::recalculateDuration()
         for (int childIndex = 0; childIndex < _item->childCount(); ++childIndex) {
             auto childItem = _item->childAt(childIndex);
             switch (childItem->type()) {
-                case ScreenplayTextModelItemType::Folder: {
-                    updateChildDuration(childItem);
-                    break;
-                }
-
+                case ScreenplayTextModelItemType::Folder:
                 case ScreenplayTextModelItemType::Scene: {
                     updateChildDuration(childItem);
                     break;

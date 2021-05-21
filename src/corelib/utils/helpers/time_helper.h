@@ -14,5 +14,6 @@ class CORE_LIBRARY_EXPORT TimeHelper
 {
 public:
     static QString toString(std::chrono::seconds _seconds);
+    static QString toString(std::chrono::milliseconds _milliseconds);
 };
 

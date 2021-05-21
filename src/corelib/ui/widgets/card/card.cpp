@@ -43,7 +43,7 @@ Card::Card(QWidget* _parent)
 {
     setAttribute(Qt::WA_Hover);
 
-    setLayout(d->layout);
+    Widget::setLayout(d->layout);
 
     connect(&d->shadowHeightAnimation, &QVariantAnimation::valueChanged, [this] { update(); });
 
@@ -51,6 +51,12 @@ Card::Card(QWidget* _parent)
 }
 
 Card::~Card() = default;
+
+void Card::setLayout(QLayout* _layout)
+{
+    Q_ASSERT_X(false, Q_FUNC_INFO, "You should use setLayoutReimpl method");
+    Widget::setLayout(_layout);
+}
 
 void Card::setLayoutReimpl(QLayout* _layout) const
 {

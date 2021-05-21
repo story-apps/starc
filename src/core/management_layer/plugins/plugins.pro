@@ -16,3 +16,7 @@ exists (character_information/character_information.pro) {
 exists (location_information/location_information.pro) {
     SUBDIRS += location_information
 }
+
+exists (screenplay_statistics/screenplay_statistics.pro) {
+    SUBDIRS += screenplay_statistics
+}

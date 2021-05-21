@@ -59,6 +59,25 @@ QString toString(ScreenplayParagraphType _type)
     return kScreenplayParagraphTypeToString.value(_type);
 }
 
+QString toDisplayString(ScreenplayParagraphType _type)
+{
+    switch (_type) {
+        case ScreenplayParagraphType::SceneHeading: return QCoreApplication::translate("BusinessLayer::ScreenplayTemplate", "Scene heading");
+        case ScreenplayParagraphType::SceneCharacters: return QCoreApplication::translate("BusinessLayer::ScreenplayTemplate", "Scene characters");
+        case ScreenplayParagraphType::Action: return QCoreApplication::translate("BusinessLayer::ScreenplayTemplate", "Action");
+        case ScreenplayParagraphType::Character: return QCoreApplication::translate("BusinessLayer::ScreenplayTemplate", "Character");
+        case ScreenplayParagraphType::Parenthetical: return QCoreApplication::translate("BusinessLayer::ScreenplayTemplate", "Parenthetical");
+        case ScreenplayParagraphType::Dialogue: return QCoreApplication::translate("BusinessLayer::ScreenplayTemplate", "Dialogue");
+        case ScreenplayParagraphType::Lyrics: return QCoreApplication::translate("BusinessLayer::ScreenplayTemplate", "Lyrics");
+        case ScreenplayParagraphType::Shot: return QCoreApplication::translate("BusinessLayer::ScreenplayTemplate", "Shot");
+        case ScreenplayParagraphType::Transition: return QCoreApplication::translate("BusinessLayer::ScreenplayTemplate", "Transition");
+        case ScreenplayParagraphType::InlineNote: return QCoreApplication::translate("BusinessLayer::ScreenplayTemplate", "Inline note");
+        case ScreenplayParagraphType::UnformattedText: return QCoreApplication::translate("BusinessLayer::ScreenplayTemplate", "Unformatted text");
+        case ScreenplayParagraphType::FolderHeader: return QCoreApplication::translate("BusinessLayer::ScreenplayTemplate", "Folder");
+        default: return QCoreApplication::translate("BusinessLayer::ScreenplayTemplate", "Undefined");
+    }
+}
+
 ScreenplayParagraphType screenplayParagraphTypeFromString(const QString& _text)
 {
     return kScreenplayParagraphTypeToString.key(_text, ScreenplayParagraphType::Undefined);

@@ -49,6 +49,7 @@ CORE_LIBRARY_EXPORT inline uint qHash(ScreenplayParagraphType _type)
  * @brief Получить текстовое представление типа блока
  */
 CORE_LIBRARY_EXPORT QString toString(ScreenplayParagraphType _type);
+CORE_LIBRARY_EXPORT QString toDisplayString(ScreenplayParagraphType _type);
 
 /**
  * @brief Получить тип блока из текстового представления

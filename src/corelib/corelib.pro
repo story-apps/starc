@@ -109,6 +109,7 @@ SOURCES += \
     business_layer/model/text/text_model_chapter_item.cpp \
     business_layer/model/text/text_model_item.cpp \
     business_layer/model/text/text_model_text_item.cpp \
+    business_layer/reports/screenplay/summary_report.cpp \
     business_layer/templates/screenplay_template.cpp \
     business_layer/templates/templates_facade.cpp \
     business_layer/templates/text_template.cpp \
@@ -179,6 +180,7 @@ SOURCES += \
     ui/widgets/toggle_button/toggle_button.cpp \
     ui/widgets/tree/tree.cpp \
     ui/widgets/tree/tree_delegate.cpp \
+    ui/widgets/tree/tree_header_view.cpp \
     ui/widgets/tree/tree_view.cpp \
     ui/widgets/widget/widget.cpp \
     utils/3rd_party/WAF/Animation/Animation.cpp \
@@ -265,6 +267,8 @@ HEADERS += \
     business_layer/model/text/text_model_item.h \
     business_layer/model/text/text_model_text_item.h \
     business_layer/model/text/text_model_xml.h \
+    business_layer/reports/abstract_report.h \
+    business_layer/reports/screenplay/summary_report.h \
     business_layer/templates/screenplay_template.h \
     business_layer/templates/templates_facade.h \
     business_layer/templates/text_template.h \
@@ -338,6 +342,7 @@ HEADERS += \
     ui/widgets/toggle_button/toggle_button.h \
     ui/widgets/tree/tree.h \
     ui/widgets/tree/tree_delegate.h \
+    ui/widgets/tree/tree_header_view.h \
     ui/widgets/tree/tree_view.h \
     ui/widgets/widget/widget.h \
     utils/3rd_party/WAF/AbstractAnimator.h \

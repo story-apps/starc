@@ -1,5 +1,6 @@
 #include "tree.h"
 #include "tree_delegate.h"
+#include "tree_header_view.h"
 #include "tree_view.h"
 
 #include <ui/design_system/design_system.h>
@@ -16,15 +17,18 @@ public:
     explicit Implementation(QWidget* _parent);
 
     TreeView* tree = nullptr;
+    TreeHeaderView* header = nullptr;
     TreeDelegate* delegate = nullptr;
     ScrollBar* treeScrollBar = nullptr;
 };
 
 Tree::Implementation::Implementation(QWidget* _parent)
     : tree(new TreeView(_parent)),
+      header(new TreeHeaderView(_parent)),
       delegate(new TreeDelegate(_parent)),
       treeScrollBar(new ScrollBar(tree))
 {
+    tree->setHeader(header);
     tree->setHeaderHidden(true);
     tree->setAnimated(true);
     tree->setMouseTracking(true);
@@ -34,6 +38,8 @@ Tree::Implementation::Implementation(QWidget* _parent)
     tree->setVerticalScrollBar(treeScrollBar);
     tree->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
     tree->setItemDelegate(delegate);
+
+    header->setSectionResizeMode(QHeaderView::Stretch);
 }
 
 
@@ -88,6 +94,17 @@ void Tree::setScrollBarVisible(bool _visible)
 QScrollBar* Tree::verticalScrollBar() const
 {
     return d->tree->verticalScrollBar();
+}
+
+void Tree::setHeaderVisible(bool _visible)
+{
+    d->tree->setHeaderHidden(!_visible);
+}
+
+void Tree::setColumnWidth(int _column, int _width)
+{
+    d->header->setSectionResizeMode(_column, QHeaderView::Fixed);
+    d->header->resizeSection(_column, _width);
 }
 
 void Tree::setDragDropEnabled(bool _enabled)
@@ -190,6 +207,8 @@ void Tree::designSystemChangeEvent(DesignSystemChangeEvent* _event)
     auto lastDelegate = d->tree->itemDelegate();
     d->tree->setItemDelegate(nullptr);
     d->tree->setItemDelegate(lastDelegate);
+
+    d->header->setPalette(palette);
 
     d->treeScrollBar->setBackgroundColor(ColorHelper::transparent(textColor(), Ui::DesignSystem::elevationEndOpacity()));
     d->treeScrollBar->setHandleColor(ColorHelper::transparent(textColor(), Ui::DesignSystem::focusBackgroundOpacity()));

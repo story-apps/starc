@@ -238,3 +238,13 @@ QChar TextHelper::smartToLower(const QChar& _char)
     return _char.toLower();
 }
 
+int TextHelper::wordsCount(const QString& _text)
+{
+    //
+    // FIXME: Сделать более корректный подсчёт
+    //        - слова разделённые знаками препинания без пробелов
+    //        - не учитывать знаки препинания окружённые пробелами, типа " - "
+    //
+    return _text.split(" ", Qt::SkipEmptyParts).count();
+}
+
