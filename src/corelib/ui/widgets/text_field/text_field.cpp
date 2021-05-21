@@ -139,9 +139,12 @@ void TextField::Implementation::reconfigure()
     QTextFrameFormat frameFormat = q->document()->rootFrame()->frameFormat();
     frameFormat.setLeftMargin(contentMargins().left()
                               + margins().left()
-                              + (trailingIcon.isEmpty() || !q->isRightToLeft()
+                              + (trailingIcon.isEmpty() || q->isLeftToRight()
                                  ? 0
-                                 : trailingIconOffset()));
+                                 : trailingIconOffset())
+                              + (!suffix.isEmpty() && q->isRightToLeft()
+                                 ? suffixRect().width() + Ui::DesignSystem::textField().spacing()
+                                 : 0));
     frameFormat.setTopMargin(contentMargins().top()
                              + margins().top());
     frameFormat.setRightMargin(contentMargins().right()
@@ -458,6 +461,7 @@ void TextField::setSuffix(const QString& _suffix)
     }
 
     d->suffix = _suffix;
+    reconfigure();
     updateGeometry();
     update();
 }
@@ -712,7 +716,13 @@ void TextField::paintEvent(QPaintEvent* _event)
     // Если не включён режим отображения пароля, то отрисовкой текста и курсора занимается сам QTextEdit
     //
     if (!d->isPasswordModeEnabled) {
+//        if (isRightToLeft()) {
+
+//        }
         QTextEdit::paintEvent(_event);
+//        if (isRightToLeft()) {
+//            setContentsMargins({});
+//        }
     }
     //
     // В противном случае, самостоятельно рисуем звёздочки вместо букв
