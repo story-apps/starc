@@ -716,13 +716,7 @@ void TextField::paintEvent(QPaintEvent* _event)
     // Если не включён режим отображения пароля, то отрисовкой текста и курсора занимается сам QTextEdit
     //
     if (!d->isPasswordModeEnabled) {
-//        if (isRightToLeft()) {
-
-//        }
         QTextEdit::paintEvent(_event);
-//        if (isRightToLeft()) {
-//            setContentsMargins({});
-//        }
     }
     //
     // В противном случае, самостоятельно рисуем звёздочки вместо букв
