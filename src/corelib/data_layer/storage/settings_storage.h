@@ -102,7 +102,7 @@ namespace {
     const QString kComponentsGroupKey = QStringLiteral("components");
     //
     // текст
-    const QString kComponentsSimpleTextKey = kComponentsGroupKey + QStringLiteral("/simpletext");
+    const QString kComponentsSimpleTextKey = kComponentsGroupKey + QStringLiteral("/simple-text");
     // ... редактор
     const QString kComponentsSimpleTextEditorKey = kComponentsSimpleTextKey + QStringLiteral("/editor");
     const QString kComponentsSimpleTextEditorDefaultTemplateKey = kComponentsSimpleTextEditorKey + QStringLiteral("/default-template");
