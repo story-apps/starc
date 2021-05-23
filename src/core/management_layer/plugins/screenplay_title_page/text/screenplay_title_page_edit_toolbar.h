@@ -20,19 +20,14 @@ public:
     ~ScreenplayTitlePageEditToolbar() override;
 
     /**
-     * @brief Задать модель выпадающего списка типов абзацев
+     * @brief Задать текущий шрифт у курсора
      */
-    void setParagraphTypesModel(QAbstractItemModel* _model);
-
-    /**
-     * @brief Задать название типа текущего параграфа
-     */
-    void setCurrentParagraphType(const QModelIndex& _index);
+    void setCurrentFont(const QFont& _font);
 
 signals:
     void undoPressed();
     void redoPressed();
-    void paragraphTypeChanged(const QModelIndex& _index);
+    void fontChanged(const QFont& _font);
 
 protected:
     /**

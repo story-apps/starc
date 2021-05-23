@@ -292,6 +292,15 @@ void ScreenplayTextDocument::Implementation::readModelItemContent(int _itemRow,
             }
 
             //
+            // ... выравнивание
+            //
+            if (textItem->alignment().has_value()) {
+                auto blockFormat = _cursor.blockFormat();
+                blockFormat.setAlignment(textItem->alignment().value());
+                _cursor.setBlockFormat(blockFormat);
+            }
+
+            //
             // Вставим текст абзаца
             //
             const auto textToInsert = TextHelper::fromHtmlEscaped(textItem->text());
@@ -477,6 +486,15 @@ void ScreenplayTextDocument::setModel(BusinessLayer::ScreenplayTextModel* _model
             //
             if (ScreenplayBlockStyle::forBlock(cursor.block()) != textItem->paragraphType()) {
                 applyParagraphType(textItem->paragraphType(), cursor);
+            }
+            //
+            // ... выравнивание
+            //
+            if (textItem->alignment().has_value()
+                && cursor.blockFormat().alignment() != textItem->alignment()) {
+                auto blockFormat = cursor.blockFormat();
+                blockFormat.setAlignment(textItem->alignment().value());
+                cursor.setBlockFormat(blockFormat);
             }
             //
             // ... текст
@@ -1763,6 +1781,7 @@ void ScreenplayTextDocument::updateModelOnContentChange(int _position, int _char
                 textItem->setInFirstColumn({});
             }
             textItem->setParagraphType(paragraphType);
+            textItem->setAlignment(block.blockFormat().alignment());
             textItem->setText(block.text());
             textItem->setFormats(block.textFormats());
             textItem->setReviewMarks(block.textFormats());
@@ -1967,6 +1986,7 @@ void ScreenplayTextDocument::updateModelOnContentChange(int _position, int _char
                     textItem->setInFirstColumn({});
                 }
                 textItem->setParagraphType(paragraphType);
+                textItem->setAlignment(block.blockFormat().alignment());
                 textItem->setText(block.text());
                 textItem->setFormats(block.textFormats());
                 textItem->setReviewMarks(block.textFormats());

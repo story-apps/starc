@@ -16,6 +16,8 @@
 #include <ui/widgets/scroll_bar/scroll_bar.h>
 #include <ui/widgets/text_edit/scalable_wrapper/scalable_wrapper.h>
 
+#include <utils/helpers/text_helper.h>
+
 #include <QStandardItem>
 #include <QStandardItemModel>
 #include <QVBoxLayout>
@@ -26,9 +28,6 @@ namespace Ui
 
 namespace {
     const int kTypeDataRole = Qt::UserRole + 100;
-
-    const int kFastFormatTabIndex = 0;
-    const int kCommentsTabIndex = 1;
 
     const QString kSettingsKey = "simple-text";
     const QString kScaleFactorKey = kSettingsKey + "/scale-factor";
@@ -60,18 +59,14 @@ public:
     FloatingToolbarAnimator* toolbarAnimation = nullptr;
     QHash<BusinessLayer::TextParagraphType, QString> typesToDisplayNames;
     BusinessLayer::TextParagraphType currentParagraphType = BusinessLayer::TextParagraphType::Undefined;
-    QStandardItemModel* paragraphTypesModel = nullptr;
 };
 
 ScreenplayTitlePageView::Implementation::Implementation(QWidget* _parent)
     : textEdit(new ScreenplayTitlePageEdit(_parent)),
       scalableWrapper(new ScalableWrapper(textEdit, _parent)),
       toolbar(new ScreenplayTitlePageEditToolbar(scalableWrapper)),
-      toolbarAnimation(new FloatingToolbarAnimator(_parent)),
-      paragraphTypesModel(new QStandardItemModel(toolbar))
+      toolbarAnimation(new FloatingToolbarAnimator(_parent))
 {
-    toolbar->setParagraphTypesModel(paragraphTypesModel);
-
     textEdit->setVerticalScrollBar(new ScrollBar);
     textEdit->setHorizontalScrollBar(new ScrollBar);
     scalableWrapper->setVerticalScrollBar(new ScrollBar);
@@ -95,21 +90,7 @@ void ScreenplayTitlePageView::Implementation::updateToolBarUi()
 
 void ScreenplayTitlePageView::Implementation::updateToolBarCurrentParagraphTypeName()
 {
-    auto paragraphType = textEdit->currentParagraphType();
-    if (currentParagraphType == paragraphType) {
-        return;
-    }
-
-    currentParagraphType = paragraphType;
-
-    for (int itemRow = 0; itemRow < paragraphTypesModel->rowCount(); ++itemRow) {
-        const auto item = paragraphTypesModel->item(itemRow);
-        const auto itemType = static_cast<BusinessLayer::TextParagraphType>(item->data(kTypeDataRole).toInt());
-        if (itemType == paragraphType) {
-            toolbar->setCurrentParagraphType(paragraphTypesModel->index(itemRow, 0));
-            return;
-        }
-    }
+    toolbar->setCurrentFont(textEdit->textCursor().charFormat().font());
 }
 
 
@@ -130,9 +111,28 @@ ScreenplayTitlePageView::ScreenplayTitlePageView(QWidget* _parent)
 
     connect(d->toolbar, &ScreenplayTitlePageEditToolbar::undoPressed, d->textEdit, &ScreenplayTitlePageEdit::undo);
     connect(d->toolbar, &ScreenplayTitlePageEditToolbar::redoPressed, d->textEdit, &ScreenplayTitlePageEdit::redo);
-    connect(d->toolbar, &ScreenplayTitlePageEditToolbar::paragraphTypeChanged, this, [this] (const QModelIndex& _index) {
-        const auto type = static_cast<BusinessLayer::TextParagraphType>(_index.data(kTypeDataRole).toInt());
-        d->textEdit->setCurrentParagraphType(type);
+    connect(d->toolbar, &ScreenplayTitlePageEditToolbar::fontChanged, this, [this] (const QFont& _font) {
+        //
+        // Применяем шрифт
+        //
+        d->textEdit->setTextFont(_font);
+        //
+        // Обновим высоту блока, если требуется
+        //
+        auto cursor = d->textEdit->textCursor();
+        qreal blockHeight = 0.0;
+        const auto formats = cursor.block().textFormats();
+        for (const auto& format : formats) {
+            blockHeight = std::max(blockHeight, TextHelper::fineLineSpacing(format.format.font()));
+        }
+        if (!qFuzzyCompare(cursor.blockFormat().lineHeight(), blockHeight)) {
+            auto blockFormat = cursor.blockFormat();
+            blockFormat.setLineHeight(blockHeight, QTextBlockFormat::FixedHeight);
+            cursor.setBlockFormat(blockFormat);
+        }
+        //
+        // Возвращем фокус в редактор текста
+        //
         d->scalableWrapper->setFocus();
     });
     //
@@ -150,28 +150,7 @@ ScreenplayTitlePageView::~ScreenplayTitlePageView() = default;
 
 void ScreenplayTitlePageView::reconfigure(const QStringList& _changedSettingsKeys)
 {
-    d->paragraphTypesModel->clear();
-
     using namespace BusinessLayer;
-    const auto usedTemplate = BusinessLayer::TemplatesFacade::textTemplate();
-    const QVector<TextParagraphType> types
-            = { TextParagraphType::Heading1,
-                TextParagraphType::Heading2,
-                TextParagraphType::Heading3,
-                TextParagraphType::Heading4,
-                TextParagraphType::Heading5,
-                TextParagraphType::Heading6,
-                TextParagraphType::Text,
-                TextParagraphType::InlineNote };
-    for (const auto type : types) {
-        if (!usedTemplate.blockStyle(type).isActive()) {
-            continue;
-        }
-
-        auto typeItem = new QStandardItem(d->typesToDisplayNames.value(type));
-        typeItem->setData(static_cast<int>(type), kTypeDataRole);
-        d->paragraphTypesModel->appendRow(typeItem);
-    }
 
     auto settingsValue = [] (const QString& _key) {
         return DataStorageLayer::StorageFacade::settingsStorage()->value(

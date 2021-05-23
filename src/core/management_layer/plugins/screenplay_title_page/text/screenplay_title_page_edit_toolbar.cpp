@@ -2,11 +2,16 @@
 
 #include <ui/design_system/design_system.h>
 #include <ui/widgets/card/card.h>
+#include <ui/widgets/text_edit/page/page_metrics.h>
 #include <ui/widgets/tree/tree.h>
 
-#include <QAbstractItemModel>
+#include <utils/helpers/text_helper.h>
+
+#include <QtMath>
 #include <QAction>
+#include <QFontDatabase>
 #include <QHBoxLayout>
+#include <QStringListModel>
 #include <QVariantAnimation>
 
 
@@ -21,7 +26,7 @@ public:
     /**
      * @brief Показать попап
      */
-    void showPopup(ScreenplayTitlePageEditToolbar* _parent);
+    void showPopup(ScreenplayTitlePageEditToolbar* _parent, QAction* _forAction);
 
     /**
      * @brief Скрыть попап
@@ -31,7 +36,11 @@ public:
 
     QAction* undoAction = nullptr;
     QAction* redoAction = nullptr;
-    QAction* paragraphTypeAction = nullptr;
+    QAction* textFontAction = nullptr;
+    QAction* textFontSizeAction = nullptr;
+
+    QStringListModel fontsModel;
+    QStringListModel fontSizesModel;
 
     bool isPopupShown = false;
     Card* popup = nullptr;
@@ -42,10 +51,14 @@ public:
 ScreenplayTitlePageEditToolbar::Implementation::Implementation(QWidget* _parent)
     : undoAction(new QAction),
       redoAction(new QAction),
-      paragraphTypeAction(new QAction),
+      textFontAction(new QAction),
+      textFontSizeAction(new QAction),
       popup(new Card(_parent)),
       popupContent(new Tree(popup))
 {
+    fontsModel.setStringList(QFontDatabase().families());
+    fontSizesModel.setStringList({ "8","9","10","11","12","14","18","24","30","36","48","60","72","96" });
+
     popup->setWindowFlags(Qt::SplashScreen | Qt::FramelessWindowHint | Qt::NoDropShadowWindowHint);
     popup->setAttribute(Qt::WA_Hover, false);
     popup->setAttribute(Qt::WA_TranslucentBackground);
@@ -66,7 +79,8 @@ ScreenplayTitlePageEditToolbar::Implementation::Implementation(QWidget* _parent)
     popupHeightAnimation.setEndValue(0);
 }
 
-void ScreenplayTitlePageEditToolbar::Implementation::showPopup(ScreenplayTitlePageEditToolbar* _parent)
+void ScreenplayTitlePageEditToolbar::Implementation::showPopup(
+    ScreenplayTitlePageEditToolbar* _parent, QAction* _forAction)
 {
     if (popupContent->model() == nullptr) {
         return;
@@ -75,12 +89,20 @@ void ScreenplayTitlePageEditToolbar::Implementation::showPopup(ScreenplayTitlePa
     isPopupShown = true;
 
     const auto popupWidth = Ui::DesignSystem::floatingToolBar().spacing() * 2
-                            + _parent->actionCustomWidth(paragraphTypeAction);
+                            + _parent->actionCustomWidth(_forAction);
     popup->resize(static_cast<int>(popupWidth), 0);
 
     const auto left = QPoint(Ui::DesignSystem::floatingToolBar().shadowMargins().left()
                              + Ui::DesignSystem::floatingToolBar().margins().left()
                              + Ui::DesignSystem::floatingToolBar().iconSize().width() * 2
+                             //
+                             // Тут костылик, чтобы понимать, что нужно дополнительное смещение для попапа с размером шрифта
+                             //
+                             + (_forAction == textFontSizeAction
+                                ? Ui::DesignSystem::floatingToolBar().spacing()
+                                  + _parent->actionCustomWidth(textFontAction)
+                                : 0)
+                             //
                              + Ui::DesignSystem::floatingToolBar().spacing()
                              - Ui::DesignSystem::card().shadowMargins().left(),
                              _parent->rect().bottom()
@@ -95,7 +117,7 @@ void ScreenplayTitlePageEditToolbar::Implementation::showPopup(ScreenplayTitlePa
 
     popupHeightAnimation.setDirection(QVariantAnimation::Forward);
     const auto itemsCount = popupContent->model()->rowCount();
-    const auto height = Ui::DesignSystem::treeOneLineItem().height() * itemsCount
+    const auto height = Ui::DesignSystem::treeOneLineItem().height() * std::min(itemsCount, 12)
                         + Ui::DesignSystem::card().shadowMargins().top()
                         + Ui::DesignSystem::card().shadowMargins().bottom();
     popupHeightAnimation.setEndValue(static_cast<int>(height));
@@ -126,17 +148,36 @@ ScreenplayTitlePageEditToolbar::ScreenplayTitlePageEditToolbar(QWidget* _parent)
     addAction(d->redoAction);
     connect(d->redoAction, &QAction::triggered, this, &ScreenplayTitlePageEditToolbar::redoPressed);
 
-    d->paragraphTypeAction->setText(tr("Scene heading"));
-    d->paragraphTypeAction->setIconText(u8"\U000f035d");
-    addAction(d->paragraphTypeAction);
-    connect(d->paragraphTypeAction, &QAction::triggered, this, [this] {
+    //
+    // FIXME: дефолтный шрифт из шаблона
+    //
+    const QFont defaultFont;
+    d->textFontAction->setText(defaultFont.family());
+    d->textFontAction->setIconText(u8"\U000f035d");
+    addAction(d->textFontAction);
+    d->textFontSizeAction->setText(QString::number(defaultFont.pointSize()));
+    d->textFontSizeAction->setIconText(u8"\U000f035d");
+    addAction(d->textFontSizeAction);
+    auto activatePopup = [this] (QAction* _action, QStringListModel* _model) {
         if (!d->isPopupShown) {
-            d->paragraphTypeAction->setIconText(u8"\U000f0360");
-            d->showPopup(this);
+            d->popupContent->setModel(_model);
+            {
+//                QSignalBlocker signalBlocker(this);
+//                const int currentItemRow = _model->stringList().indexOf(_action->text());
+//                d->popupContent->setCurrentIndex(_model->index(currentItemRow, 0));
+            }
+            _action->setIconText(u8"\U000f0360");
+            d->showPopup(this, _action);
         } else {
-            d->paragraphTypeAction->setIconText(u8"\U000f035d");
+            _action->setIconText(u8"\U000f035d");
             d->hidePopup();
         }
+    };
+    connect(d->textFontAction, &QAction::triggered, this, [this, activatePopup] {
+        activatePopup(d->textFontAction, &d->fontsModel);
+    });
+    connect(d->textFontSizeAction, &QAction::triggered, this, [this, activatePopup] {
+        activatePopup(d->textFontSizeAction, &d->fontSizesModel);
     });
 
     connect(&d->popupHeightAnimation, &QVariantAnimation::valueChanged, this, [this] (const QVariant& _value) {
@@ -150,11 +191,17 @@ ScreenplayTitlePageEditToolbar::ScreenplayTitlePageEditToolbar(QWidget* _parent)
     });
 
     connect(d->popupContent, &Tree::currentIndexChanged, this, [this] (const QModelIndex& _index) {
-        d->paragraphTypeAction->setText(_index.data().toString());
+        if (d->popupContent->model() == &d->fontsModel) {
+            d->textFontAction->setText(_index.data().toString());
+        } else {
+            d->textFontSizeAction->setText(_index.data().toString());
+        }
         d->hidePopup();
         update();
 
-        emit paragraphTypeChanged(_index);
+        QFont newFont(d->textFontAction->text());
+        newFont.setPixelSize(PageMetrics::ptToPx(d->textFontSizeAction->text().toInt()));
+        emit fontChanged(newFont);
     });
 
     updateTranslations();
@@ -163,45 +210,23 @@ ScreenplayTitlePageEditToolbar::ScreenplayTitlePageEditToolbar(QWidget* _parent)
 
 ScreenplayTitlePageEditToolbar::~ScreenplayTitlePageEditToolbar() = default;
 
-void ScreenplayTitlePageEditToolbar::setParagraphTypesModel(QAbstractItemModel* _model)
-{
-    if (d->popupContent->model() != nullptr) {
-        d->popupContent->model()->disconnect(this);
-    }
-
-    d->popupContent->setModel(_model);
-
-    if (_model != nullptr) {
-        connect(_model, &QAbstractItemModel::rowsInserted, this, [this] {
-            designSystemChangeEvent(nullptr);
-        });
-        if (_model->rowCount() > 0) {
-            d->popupContent->setCurrentIndex(_model->index(0, 0));
-        }
-    }
-
-    //
-    // Обновим внешний вид, чтобы пересчитать ширину элемента с выбором стилей
-    //
-    designSystemChangeEvent(nullptr);
-}
-
-void ScreenplayTitlePageEditToolbar::setCurrentParagraphType(const QModelIndex& _index)
+void ScreenplayTitlePageEditToolbar::setCurrentFont(const QFont& _font)
 {
     //
-    // Не вызываем сигнал о смене типа параграфа, т.к. это сделал не пользователь
+    // Не вызываем сигнал о смене типа шрифта, т.к. это сделал не пользователь
     //
     QSignalBlocker blocker(this);
 
-    d->paragraphTypeAction->setText(_index.data().toString());
-    d->popupContent->setCurrentIndex(_index);
+    d->textFontAction->setText(_font.family());
+    d->textFontSizeAction->setText(QString::number(qCeil(PageMetrics::pxToPt(_font.pixelSize()))));
 }
 
 void ScreenplayTitlePageEditToolbar::focusOutEvent(QFocusEvent* _event)
 {
     FloatingToolBar::focusOutEvent(_event);
 
-    d->paragraphTypeAction->setIconText(u8"\U000f035d");
+    d->textFontAction->setIconText(u8"\U000f035d");
+    d->textFontSizeAction->setIconText(u8"\U000f035d");
     d->hidePopup();
 }
 
@@ -209,16 +234,30 @@ void ScreenplayTitlePageEditToolbar::updateTranslations()
 {
     d->undoAction->setToolTip(tr("Undo last action") + QString(" (%1)").arg(QKeySequence(QKeySequence::Undo).toString(QKeySequence::NativeText)));
     d->redoAction->setToolTip(tr("Redo last action") + QString(" (%1)").arg(QKeySequence(QKeySequence::Redo).toString(QKeySequence::NativeText)));
-    d->paragraphTypeAction->setToolTip(tr("Current paragraph format"));
+    d->textFontAction->setToolTip(tr("Current text font family"));
+    d->textFontSizeAction->setToolTip(tr("Current text font size"));
 }
 
 void ScreenplayTitlePageEditToolbar::designSystemChangeEvent(DesignSystemChangeEvent* _event)
 {
     FloatingToolBar::designSystemChangeEvent(_event);
 
-    setActionCustomWidth(d->paragraphTypeAction,
+    auto findMaxWidthFor = [] (const QStringList& _list) {
+        int maxFontNameWidth = 0;
+        for (const auto& fontName : _list) {
+            maxFontNameWidth = std::max(maxFontNameWidth,
+                                        TextHelper::fineTextWidth(fontName, Ui::DesignSystem::font().subtitle2()));
+        }
+        return maxFontNameWidth;
+    };
+
+    setActionCustomWidth(d->textFontAction,
                    static_cast<int>(Ui::DesignSystem::treeOneLineItem().margins().left())
-                   + d->popupContent->sizeHintForColumn(0)
+                   + findMaxWidthFor(d->fontsModel.stringList())
+                   + static_cast<int>(Ui::DesignSystem::treeOneLineItem().margins().right()));
+    setActionCustomWidth(d->textFontSizeAction,
+                   static_cast<int>(Ui::DesignSystem::treeOneLineItem().margins().left())
+                   + findMaxWidthFor(d->fontSizesModel.stringList())
                    + static_cast<int>(Ui::DesignSystem::treeOneLineItem().margins().right()));
 
     d->popup->setBackgroundColor(Ui::DesignSystem::color().primary());

@@ -155,6 +155,15 @@ void TextDocument::Implementation::readModelItemContent(int _itemRow,
             _cursor.setCharFormat(currentStyle.charFormat());
 
             //
+            // ... выравнивание
+            //
+            if (textItem->alignment().has_value()) {
+                auto blockFormat = _cursor.blockFormat();
+                blockFormat.setAlignment(textItem->alignment().value());
+                _cursor.setBlockFormat(blockFormat);
+            }
+
+            //
             // Вставим текст абзаца
             //
             const auto textToInsert = TextHelper::fromHtmlEscaped(textItem->text());
@@ -320,6 +329,15 @@ void TextDocument::setModel(BusinessLayer::TextModel* _model, bool _canChangeMod
         //
         if (TextBlockStyle::forBlock(cursor.block()) != textItem->paragraphType()) {
             applyParagraphType(textItem->paragraphType(), cursor);
+        }
+        //
+        // ... выравнивание
+        //
+        if (textItem->alignment().has_value()
+            && cursor.blockFormat().alignment() != textItem->alignment()) {
+            auto blockFormat = cursor.blockFormat();
+            blockFormat.setAlignment(textItem->alignment().value());
+            cursor.setBlockFormat(blockFormat);
         }
         //
         // ... текст
@@ -1073,6 +1091,7 @@ void TextDocument::updateModelOnContentChange(int _position, int _charsRemoved, 
             //
             auto textItem = new TextModelTextItem;
             textItem->setParagraphType(paragraphType);
+            textItem->setAlignment(block.blockFormat().alignment());
             textItem->setText(block.text());
             textItem->setFormats(block.textFormats());
             textItem->setReviewMarks(block.textFormats());
@@ -1257,6 +1276,7 @@ void TextDocument::updateModelOnContentChange(int _position, int _charsRemoved, 
             if (item->type() == TextModelItemType::Text) {
                 auto textItem = static_cast<TextModelTextItem*>(item);
                 textItem->setParagraphType(paragraphType);
+                textItem->setAlignment(block.blockFormat().alignment());
                 textItem->setText(block.text());
                 textItem->setFormats(block.textFormats());
                 textItem->setReviewMarks(block.textFormats());

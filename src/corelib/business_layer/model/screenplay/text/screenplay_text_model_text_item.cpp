@@ -236,7 +236,7 @@ QByteArray ScreenplayTextModelTextItem::Implementation::buildXml(int _from, int 
     QByteArray xml;
     xml += QString("<%1%2%3>")
            .arg(toString(paragraphType),
-                (alignment.has_value() && alignment->testFlag(Qt::AlignHorizontal_Mask)
+                (alignment.has_value()
                  ? QString(" %1=\"%2\"").arg(xml::kAlignAttribute, toString(*alignment))
                  : ""),
                 (isInFirstColumn.has_value()

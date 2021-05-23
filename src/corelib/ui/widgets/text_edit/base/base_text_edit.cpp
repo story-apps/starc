@@ -285,7 +285,7 @@ bool BaseTextEdit::keyPressEventReimpl(QKeyEvent* _event)
     }
     else if (_event->modifiers().testFlag(Qt::ControlModifier)
              && _event->key() == Qt::Key_E) {
-        setTextAlignment(Qt::AlignCenter);
+        setTextAlignment(Qt::AlignHCenter);
     }
     else if (_event->modifiers().testFlag(Qt::ControlModifier)
              && _event->key() == Qt::Key_R) {

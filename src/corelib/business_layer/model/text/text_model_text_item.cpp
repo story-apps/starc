@@ -174,7 +174,7 @@ QByteArray TextModelTextItem::Implementation::buildXml(int _from, int _length)
     QByteArray xml;
     xml += QString("<%1%2>")
            .arg(toString(paragraphType),
-                (alignment.has_value() && alignment->testFlag(Qt::AlignHorizontal_Mask)
+                (alignment.has_value()
                  ? QString(" %1=\"%2\"").arg(xml::kAlignAttribute, toString(*alignment))
                  : "")).toUtf8();
     xml += QString("<%1><![CDATA[%2]]></%1>")
@@ -668,11 +668,6 @@ bool TextModelTextItem::isEqual(TextModelItem* _item) const
     }
 
     const auto textItem = static_cast<TextModelTextItem*>(_item);
-    auto b =  d->paragraphType == textItem->d->paragraphType
-              && d->alignment == textItem->d->alignment
-              && d->text == textItem->d->text
-              && d->reviewMarks == textItem->d->reviewMarks
-              && d->formats == textItem->d->formats;
     return d->paragraphType == textItem->d->paragraphType
             && d->alignment == textItem->d->alignment
             && d->text == textItem->d->text

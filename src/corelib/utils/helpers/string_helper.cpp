@@ -7,10 +7,11 @@
 namespace {
     const QHash<Qt::Alignment, QString> kAlignmentToString
     = {{ Qt::AlignLeft, "left" },
-       { Qt::AlignCenter, "center" },
+       { Qt::AlignHCenter, "center" },
        { Qt::AlignRight, "right" },
        { Qt::AlignJustify, "justify" },
        { Qt::AlignTop, "top" },
+       { Qt::AlignVCenter, "center" },
        { Qt::AlignBottom, "bottom" }};
 }
 
@@ -18,7 +19,7 @@ namespace {
 Qt::Alignment alignmentFromString(const QString& _alignment)
 {
     Qt::Alignment result;
-    const auto parts = _alignment.split(",", QString::SkipEmptyParts);
+    const auto parts = _alignment.split(",", Qt::SkipEmptyParts);
     for (const auto& align : parts) {
         result |= kAlignmentToString.key(align);
     }
@@ -52,15 +53,11 @@ QString toString(qreal _value)
 QString toString(Qt::Alignment _alignment)
 {
     QString result;
-    if (_alignment.testFlag(Qt::AlignHorizontal_Mask)) {
-        result += kAlignmentToString.value(_alignment & Qt::AlignHorizontal_Mask);
-    }
+    result += kAlignmentToString.value(_alignment & Qt::AlignHorizontal_Mask);
     if (!result.isEmpty()) {
         result.append(",");
     }
-    if (_alignment.testFlag(Qt::AlignVertical_Mask)) {
-        result += kAlignmentToString.value(_alignment & Qt::AlignVertical_Mask);
-    }
+    result += kAlignmentToString.value(_alignment & Qt::AlignVertical_Mask);
     return result;
 }
 
