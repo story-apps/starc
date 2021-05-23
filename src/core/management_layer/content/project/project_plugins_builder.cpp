@@ -21,6 +21,7 @@ namespace {
  */
 const QString kSimpleTextEditorMime = QStringLiteral("application/x-starc/editor/text/text");
 const QString kSimpleTextNavigatorMime = QStringLiteral("application/x-starc/navigator/text/text");
+const QString kScreenplayTitlePageEditorMime = QStringLiteral("application/x-starc/editor/screenplay/title-page");
 const QString kScreenplayTextEditorMime = QStringLiteral("application/x-starc/editor/screenplay/text");
 const QString kScreenplayTextNavigatorMime = QStringLiteral("application/x-starc/navigator/screenplay/text");
 const QString kScreenplayStatisticsViewMime = QStringLiteral("application/x-starc/view/screenplay/statistics");
@@ -43,7 +44,7 @@ const QHash<QString, QVector<ProjectPluginsBuilder::EditorInfo>> kDocumentToEdit
                                               { "application/x-starc/editor/project/collaborators", u8"\U000f0b58" }}},
    { "application/x-starc/document/screenplay", {{ "application/x-starc/editor/screenplay/information", u8"\U000f02fd" },
                                                  { "application/x-starc/editor/screenplay/parameters", u8"\U000f0493" }}},
-   { "application/x-starc/document/screenplay/title-page", {{ "application/x-starc/editor/screenplay/title-page", u8"\U000f09ed" }}},
+   { "application/x-starc/document/screenplay/title-page", {{ kScreenplayTitlePageEditorMime, u8"\U000f09ed" }}},
    { "application/x-starc/document/screenplay/synopsis", {{ kSimpleTextEditorMime, u8"\U000f09ed" }}},
    { "application/x-starc/document/screenplay/treatment", {{ "application/x-starc/editor/screenplay/treatment", u8"\U000f09ed" },
                                                            { "application/x-starc/editor/screenplay/beatboard", u8"\U000f0554" },
@@ -65,7 +66,7 @@ const QHash<QString, QString> kMimeToPlugin
 = {{ "application/x-starc/editor/project/information", "*projectinformationplugin*" },
    { "application/x-starc/editor/screenplay/information", "*screenplayinformationplugin*" },
    { "application/x-starc/editor/screenplay/parameters", "*screenplayparametersplugin*" },
-   { "application/x-starc/editor/screenplay/title-page", "*screenplaytitlepageplugin*" },
+   { kScreenplayTitlePageEditorMime, "*screenplaytitlepageplugin*" },
    { "application/x-starc/editor/screenplay/treatment", "*screenplaytreatmentplugin*" },
    { "application/x-starc/editor/screenplay/treatment-cards", "*screenplaytreatmentcardsplugin*" },
    { kScreenplayTextEditorMime, "*screenplaytextplugin*" },

@@ -6,6 +6,7 @@ SUBDIRS = \
     screenplay_parameters \
     screenplay_text \
     screenplay_text_structure \
+    screenplay_title_page \
     simple_text \
     simple_text_structure
 
