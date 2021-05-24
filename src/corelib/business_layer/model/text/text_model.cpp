@@ -1088,11 +1088,9 @@ void TextModel::initDocument()
     // Если документ пустой, создаём первоначальную структуру
     //
     if (document()->content().isEmpty()) {
-        auto chapterHeading = new TextModelTextItem;
-        chapterHeading->setParagraphType(TextParagraphType::Heading1);
-        auto chapter = new TextModelChapterItem;
-        chapter->appendItem(chapterHeading);
-        appendItem(chapter);
+        auto textItem = new TextModelTextItem;
+        textItem->setParagraphType(TextParagraphType::Text);
+        appendItem(textItem);
     }
     //
     // А если данные есть, то загрузим их из документа

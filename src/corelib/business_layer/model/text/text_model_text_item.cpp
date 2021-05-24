@@ -5,6 +5,7 @@
 #include <business_layer/templates/text_template.h>
 #include <business_layer/templates/templates_facade.h>
 
+#include <utils/helpers/measurement_helper.h>
 #include <utils/helpers/string_helper.h>
 #include <utils/helpers/text_helper.h>
 
@@ -148,6 +149,10 @@ TextModelTextItem::Implementation::Implementation(QXmlStreamReader& _contentRead
                 TextFormat format;
                 format.from = formatAttributes.value(xml::kFromAttribute).toInt();
                 format.length = formatAttributes.value(xml::kLengthAttribute).toInt();
+                if (formatAttributes.hasAttribute(xml::kFontAttribute)) {
+                    format.font = QFont(formatAttributes.value(xml::kFontAttribute).toString());
+                    format.font->setPixelSize(MeasurementHelper::ptToPx(formatAttributes.value(xml::kFontSizeAttribute).toDouble()));
+                }
                 format.isBold = formatAttributes.hasAttribute(xml::kBoldAttribute);
                 format.isItalic = formatAttributes.hasAttribute(xml::kItalicAttribute);
                 format.isUnderline = formatAttributes.hasAttribute(xml::kUnderlineAttribute);
@@ -252,7 +257,7 @@ QByteArray TextModelTextItem::Implementation::buildXml(int _from, int _length)
         }
 
         //
-        // Корректируем заметки, которые будут сохранены,
+        // Корректируем форматы, которые будут сохранены,
         // т.к. начало и конец сохраняемого блока могут отличаться
         //
         auto formatToSave = format;
@@ -273,10 +278,15 @@ QByteArray TextModelTextItem::Implementation::buildXml(int _from, int _length)
     if (!formatsToSave.isEmpty()) {
         xml += QString("<%1>").arg(xml::kFormatsTag).toUtf8();
         for (const auto& format : std::as_const(formatsToSave)) {
-            xml += QString("<%1 %2=\"%3\" %4=\"%5\" %6%7%8/>")
+            xml += QString("<%1 %2=\"%3\" %4=\"%5\" %6%7%8%9/>")
                    .arg(xml::kFormatTag,
                         xml::kFromAttribute, QString::number(format.from),
                         xml::kLengthAttribute, QString::number(format.length),
+                        (format.font.has_value()
+                         ? QString(" %1=\"%2\" %3=\"%4\"")
+                           .arg(xml::kFontAttribute, format.font->family(),
+                                xml::kFontSizeAttribute, QString::number(MeasurementHelper::pxToPt(format.font->pixelSize())))
+                         : ""),
                         (format.isBold
                          ? QString(" %1=\"true\"").arg(xml::kBoldAttribute)
                          : ""),
@@ -311,6 +321,7 @@ bool TextModelTextItem::TextFormat::operator==(const TextModelTextItem::TextForm
 {
     return from == _other.from
             && length == _other.length
+            && font == _other.font
             && isBold == _other.isBold
             && isItalic == _other.isItalic
             && isUnderline == _other.isUnderline;
@@ -318,7 +329,8 @@ bool TextModelTextItem::TextFormat::operator==(const TextModelTextItem::TextForm
 
 bool TextModelTextItem::TextFormat::isValid() const
 {
-    return isBold != false
+    return font.has_value()
+            || isBold != false
             || isItalic != false
             || isUnderline != false;
 }
@@ -330,6 +342,9 @@ QTextCharFormat TextModelTextItem::TextFormat::charFormat() const
     }
 
     QTextCharFormat format;
+    if (font.has_value()) {
+        format.setFont(font.value());
+    }
     if (isBold) {
         format.setFontWeight(QFont::Bold);
     }
@@ -517,6 +532,9 @@ void TextModelTextItem::setFormats(const QVector<QTextLayout::FormatRange>& _for
         TextFormat newFormat;
         newFormat.from = format.start;
         newFormat.length = format.length;
+        if (format.format.font() != defaultBlockFormat.font()) {
+            newFormat.font = format.format.font();
+        }
         if (format.format.hasProperty(QTextFormat::FontWeight)) {
             newFormat.isBold = format.format.font().bold();
         }

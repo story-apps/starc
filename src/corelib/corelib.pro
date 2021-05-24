@@ -200,6 +200,7 @@ SOURCES += \
     utils/helpers/dialog_helper.cpp \
     utils/helpers/extension_helper.cpp \
     utils/helpers/image_helper.cpp \
+    utils/helpers/measurement_helper.cpp \
     utils/helpers/scroller_helper.cpp \
     utils/helpers/string_helper.cpp \
     utils/helpers/text_helper.cpp \
@@ -365,6 +366,7 @@ HEADERS += \
     utils/helpers/dialog_helper.h \
     utils/helpers/extension_helper.h \
     utils/helpers/image_helper.h \
+    utils/helpers/measurement_helper.h \
     utils/helpers/scroller_helper.h \
     utils/helpers/string_helper.h \
     utils/helpers/text_helper.h \

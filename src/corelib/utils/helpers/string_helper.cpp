@@ -7,11 +7,11 @@
 namespace {
     const QHash<Qt::Alignment, QString> kAlignmentToString
     = {{ Qt::AlignLeft, "left" },
-       { Qt::AlignHCenter, "center" },
+       { Qt::AlignHCenter, "hcenter" },
        { Qt::AlignRight, "right" },
        { Qt::AlignJustify, "justify" },
        { Qt::AlignTop, "top" },
-       { Qt::AlignVCenter, "center" },
+       { Qt::AlignVCenter, "vcenter" },
        { Qt::AlignBottom, "bottom" }};
 }
 

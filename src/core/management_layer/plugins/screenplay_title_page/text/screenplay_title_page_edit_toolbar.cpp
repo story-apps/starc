@@ -2,12 +2,11 @@
 
 #include <ui/design_system/design_system.h>
 #include <ui/widgets/card/card.h>
-#include <ui/widgets/text_edit/page/page_metrics.h>
 #include <ui/widgets/tree/tree.h>
 
+#include <utils/helpers/measurement_helper.h>
 #include <utils/helpers/text_helper.h>
 
-#include <QtMath>
 #include <QAction>
 #include <QFontDatabase>
 #include <QHBoxLayout>
@@ -200,7 +199,7 @@ ScreenplayTitlePageEditToolbar::ScreenplayTitlePageEditToolbar(QWidget* _parent)
         update();
 
         QFont newFont(d->textFontAction->text());
-        newFont.setPixelSize(PageMetrics::ptToPx(d->textFontSizeAction->text().toInt()));
+        newFont.setPixelSize(MeasurementHelper::ptToPx(d->textFontSizeAction->text().toInt()));
         emit fontChanged(newFont);
     });
 
@@ -218,7 +217,7 @@ void ScreenplayTitlePageEditToolbar::setCurrentFont(const QFont& _font)
     QSignalBlocker blocker(this);
 
     d->textFontAction->setText(_font.family());
-    d->textFontSizeAction->setText(QString::number(qCeil(PageMetrics::pxToPt(_font.pixelSize()))));
+    d->textFontSizeAction->setText(QString::number(MeasurementHelper::pxToPt(_font.pixelSize())));
 }
 
 void ScreenplayTitlePageEditToolbar::focusOutEvent(QFocusEvent* _event)

@@ -26,6 +26,7 @@ public:
         int end() const;
     };
     struct CORE_LIBRARY_EXPORT TextFormat : TextPart {
+        std::optional<QFont> font;
         bool isBold = false;
         bool isItalic = false;
         bool isUnderline = false;

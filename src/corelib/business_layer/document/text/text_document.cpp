@@ -186,6 +186,20 @@ void TextDocument::Implementation::readModelItemContent(int _itemRow,
             }
 
             //
+            // Обновим высоту блока, если требуется
+            //
+            qreal blockHeight = 0.0;
+            const auto formats = formatCursor.block().textFormats();
+            for (const auto& format : formats) {
+                blockHeight = std::max(blockHeight, TextHelper::fineLineSpacing(format.format.font()));
+            }
+            if (!qFuzzyCompare(formatCursor.blockFormat().lineHeight(), blockHeight)) {
+                auto blockFormat = formatCursor.blockFormat();
+                blockFormat.setLineHeight(blockHeight, QTextBlockFormat::FixedHeight);
+                formatCursor.setBlockFormat(blockFormat);
+            }
+
+            //
             // Вставим редакторские заметки
             //
             auto reviewCursor = _cursor;
@@ -388,6 +402,20 @@ void TextDocument::setModel(BusinessLayer::TextModel* _model, bool _canChangeMod
                 cursor.movePosition(QTextCursor::NextCharacter, QTextCursor::MoveAnchor, format.from);
                 cursor.movePosition(QTextCursor::NextCharacter, QTextCursor::KeepAnchor, format.length);
                 cursor.mergeCharFormat(format.charFormat());
+            }
+
+            //
+            // Обновим высоту блока, если требуется
+            //
+            qreal blockHeight = 0.0;
+            const auto formats = cursor.block().textFormats();
+            for (const auto& format : formats) {
+                blockHeight = std::max(blockHeight, TextHelper::fineLineSpacing(format.format.font()));
+            }
+            if (!qFuzzyCompare(cursor.blockFormat().lineHeight(), blockHeight)) {
+                auto blockFormat = cursor.blockFormat();
+                blockFormat.setLineHeight(blockHeight, QTextBlockFormat::FixedHeight);
+                cursor.setBlockFormat(blockFormat);
             }
         }
 
@@ -679,7 +707,7 @@ void TextDocument::addParagraph(BusinessLayer::TextParagraphType _type, QTextCur
     // Если параграф целиком переносится (энтер нажат перед всем текстом блока),
     // необходимо перенести данные блока с текущего на следующий
     //
-    if (_cursor.block().text().left(_cursor.positionInBlock()).isEmpty()
+    if (_cursor.block().text().leftRef(_cursor.positionInBlock()).isEmpty()
         && !_cursor.block().text().isEmpty()) {
         TextBlockData* blockData = nullptr;
         auto block = _cursor.block();
@@ -741,23 +769,11 @@ void TextDocument::setParagraphType(BusinessLayer::TextParagraphType _type, cons
     cursor.block().setUserData(nullptr);
 
     //
-    // Обработаем предшествующий установленный стиль
-    //
-    cleanParagraphType(_cursor);
-
-    //
     // Применим новый стиль к блоку
     //
     applyParagraphType(_type, _cursor);
 
     cursor.endEditBlock();
-}
-
-void TextDocument::cleanParagraphType(const QTextCursor& _cursor)
-{
-    //
-    // TODO: удалить за ненадобностью
-    //
 }
 
 void TextDocument::applyParagraphType(BusinessLayer::TextParagraphType _type,

@@ -71,11 +71,6 @@ public:
         const QTextCursor& _cursor);
 
     /**
-     * @brief Очистить текущий блок от установленного в нём типа
-     */
-    void cleanParagraphType(const QTextCursor& _cursor);
-
-    /**
      * @brief Применить заданный тип блока к тексту, на который указывает курсор
      */
     void applyParagraphType(BusinessLayer::TextParagraphType _type,
