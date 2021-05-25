@@ -100,15 +100,7 @@ protected:
     /**
      * @brief Обрабатываем специфичные ситуации для редактора сценария
      */
-    /** @{ */
     bool keyPressEventReimpl(QKeyEvent* _event) override;
-    bool updateEnteredText(const QString& _eventText) override;
-    /** @} */
-
-    /**
-     * @brief Реализуем отрисовку дополнительных элементов
-     */
-    void paintEvent(QPaintEvent* _event) override;
 
     /**
      * @brief Переопределяем работу с буфером обмена для использования собственного майм типа данных
