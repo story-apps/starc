@@ -25,6 +25,11 @@ public:
     void setValue(int _value);
 
     /**
+     * @brief Задать стартовую позицию слайдера
+     */
+    void setStartPosition(int _value);
+
+    /**
      * @brief Переопределяем для корректного подсчёта размера в компоновщиках
      */
     QSize sizeHint() const override;
