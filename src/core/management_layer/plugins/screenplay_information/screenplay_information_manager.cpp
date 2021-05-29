@@ -80,6 +80,7 @@ void ScreenplayInformationManager::setModel(BusinessLayer::AbstractModel* _model
     //
     if (d->model != nullptr) {
         d->view->setName(d->model->name());
+        d->view->setTagline(d->model->tagline());
         d->view->setLogline(d->model->logline());
         d->view->setTitlePageVisible(d->model->titlePageVisible());
         d->view->setSynopsisVisible(d->model->synopsisVisible());
@@ -89,6 +90,8 @@ void ScreenplayInformationManager::setModel(BusinessLayer::AbstractModel* _model
 
         connect(d->model, &BusinessLayer::ScreenplayInformationModel::nameChanged,
                 d->view, &Ui::ScreenplayInformationView::setName);
+        connect(d->model, &BusinessLayer::ScreenplayInformationModel::taglineChanged,
+                d->view, &Ui::ScreenplayInformationView::setTagline);
         connect(d->model, &BusinessLayer::ScreenplayInformationModel::loglineChanged,
                 d->view, &Ui::ScreenplayInformationView::setLogline);
         connect(d->model, &BusinessLayer::ScreenplayInformationModel::titlePageVisibleChanged,
@@ -104,6 +107,8 @@ void ScreenplayInformationManager::setModel(BusinessLayer::AbstractModel* _model
         //
         connect(d->view, &Ui::ScreenplayInformationView::nameChanged,
                 d->model, &BusinessLayer::ScreenplayInformationModel::setName);
+        connect(d->view, &Ui::ScreenplayInformationView::taglineChanged,
+                d->model, &BusinessLayer::ScreenplayInformationModel::setTagline);
         connect(d->view, &Ui::ScreenplayInformationView::loglineChanged,
                 d->model, &BusinessLayer::ScreenplayInformationModel::setLogline);
         connect(d->view, &Ui::ScreenplayInformationView::titlePageVisibleChanged,

@@ -5,12 +5,12 @@
 #include <QTextLayout>
 
 
-qreal TextHelper::fineTextWidth(const QString& _text, const QFont& _font)
+qreal TextHelper::fineTextWidthF(const QString& _text, const QFont& _font)
 {
-    return fineTextWidth(_text, QFontMetricsF(_font));
+    return fineTextWidthF(_text, QFontMetricsF(_font));
 }
 
-qreal TextHelper::fineTextWidth(const QString& _text, const QFontMetricsF& _metrics)
+qreal TextHelper::fineTextWidthF(const QString& _text, const QFontMetricsF& _metrics)
 {
     //
     // Чтобы корректно разместить текст нужна максимальная ширина, которую текст может занимать
@@ -18,6 +18,15 @@ qreal TextHelper::fineTextWidth(const QString& _text, const QFontMetricsF& _metr
     // и не забываем прибавить волшебную единичку, а то так не работает :)
     //
     return qMax(_metrics.boundingRect(_text).width(), _metrics.horizontalAdvance(_text)) + 1.0;
+}
+
+int TextHelper::fineTextWidth(const QString& _text, const QFont& _font)
+{
+    //
+    // Из-за того, что шрифт в целых пикселях, а масштабирование в дробных, чуть увеличиваем ширину,
+    // чтобы при отрисовке, текст всегда точно влезал
+    //
+    return qCeil(fineTextWidthF(_text, _font)) + 1;
 }
 
 qreal TextHelper::fineLineSpacing(const QFont& _font)
@@ -58,6 +67,9 @@ qreal TextHelper::heightForWidth(const QString& _text, const QFont& _font, qreal
     // Компануем текст и считаем, какой высоты получается результат
     //
     QTextLayout textLayout(correctedText, _font);
+    QTextOption textOption;
+    textOption.setWrapMode(QTextOption::WrapAtWordBoundaryOrAnywhere);
+    textLayout.setTextOption(textOption);
     textLayout.beginLayout();
     forever {
         QTextLine line = textLayout.createLine();
@@ -104,7 +116,7 @@ QString TextHelper::elidedText(const QString& _text, const QFont& _font, const Q
         // Если строка влезает, то оставляем её без изменений
         //
         if (height < _rect.height()) {
-            elidedText += _text.mid(line.textStart(), line.textLength());
+            elidedText += _text.midRef(line.textStart(), line.textLength());
         }
         //
         // А если это последняя строка, то многоточим её
@@ -224,5 +236,15 @@ QChar TextHelper::smartToLower(const QChar& _char)
     }
 
     return _char.toLower();
+}
+
+int TextHelper::wordsCount(const QString& _text)
+{
+    //
+    // FIXME: Сделать более корректный подсчёт
+    //        - слова разделённые знаками препинания без пробелов
+    //        - не учитывать знаки препинания окружённые пробелами, типа " - "
+    //
+    return _text.split(" ", Qt::SkipEmptyParts).count();
 }
 

@@ -2,11 +2,12 @@
 
 #include "screenplay_text_model_item.h"
 
+#include <optional>
+
 #include <QColor>
 #include <QString>
 #include <QTextLayout>
 
-class QDomElement;
 class QXmlStreamReader;
 
 
@@ -75,7 +76,7 @@ public:
     ~ScreenplayTextModelTextItem() override;
 
     /**
-     * @brief Номер сцены
+     * @brief Номер элемента
      */
     std::optional<Number> number() const;
     void setNumber(int _number);
@@ -91,6 +92,19 @@ public:
      */
     bool isCorrection() const;
     void setCorrection(bool _correction);
+
+    /**
+     * @brief Разорван ли текст блока между страницами
+     */
+    bool isBroken() const;
+    void setBroken(bool _broken);
+
+    /**
+     * @brief Находится ли элемент в первой колонке таблицы
+     * @note Если значение не задано, то элемент находится вне таблицы
+     */
+    std::optional<bool> isInFirstColumn() const;
+    void setInFirstColumn(const std::optional<bool>& _in);
 
     /**
      * @brief Тип параграфа
@@ -124,6 +138,7 @@ public:
     /**
      * @brief Форматирование в блоке
      */
+    const QVector<TextFormat>& formats() const;
     void setFormats(const QVector<QTextLayout::FormatRange>& _formats);
 
     /**
@@ -132,11 +147,6 @@ public:
     const QVector<ReviewMark>& reviewMarks() const;
     void setReviewMarks(const QVector<ReviewMark>& _reviewMarks);
     void setReviewMarks(const QVector<QTextLayout::FormatRange>& _reviewMarks);
-
-    /**
-     * @brief Форматирование
-     */
-    const QVector<TextFormat>& formats() const;
 
     /**
      * @brief Ревизии

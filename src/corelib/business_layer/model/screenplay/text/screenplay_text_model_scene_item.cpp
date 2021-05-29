@@ -3,11 +3,13 @@
 #include "screenplay_text_model_splitter_item.h"
 #include "screenplay_text_model_text_item.h"
 #include "screenplay_text_model_xml.h"
+#include "screenplay_text_model_xml_writer.h"
 
 #include <business_layer/templates/screenplay_template.h>
 
 #include <utils/helpers/text_helper.h>
 
+#include <QLocale>
 #include <QUuid>
 #include <QVariant>
 #include <QXmlStreamReader>
@@ -176,12 +178,13 @@ ScreenplayTextModelSceneItem::Number ScreenplayTextModelSceneItem::number() cons
         return {};
     }
 
-    return d->number.value();
+    return *d->number;
 }
 
-void ScreenplayTextModelSceneItem::setNumber(int _number)
+void ScreenplayTextModelSceneItem::setNumber(int _number, const QString& _prefix)
 {
-    const auto newNumber = QString("%1.").arg(_number);
+    const auto newNumber = QString(QLocale().textDirection() == Qt::LeftToRight ? "%1%2." : ".%2%1")
+                           .arg(_prefix, QString::number(_number));
     if (d->number.has_value()
         && d->number->value == newNumber) {
         return;
@@ -248,7 +251,7 @@ QByteArray ScreenplayTextModelSceneItem::toXml() const
 QByteArray ScreenplayTextModelSceneItem::toXml(ScreenplayTextModelItem* _from, int _fromPosition,
     ScreenplayTextModelItem* _to, int _toPosition, bool _clearUuid) const
 {
-    QByteArray xml;
+    xml::ScreenplayTextModelXmlWriter xml;
     xml += xmlHeader(_clearUuid);
     for (int childIndex = 0; childIndex < childCount(); ++childIndex) {
         auto child = childAt(childIndex);
@@ -257,7 +260,7 @@ QByteArray ScreenplayTextModelSceneItem::toXml(ScreenplayTextModelItem* _from, i
         // Нетекстовые блоки, просто добавляем к общему xml
         //
         if (child->type() != ScreenplayTextModelItemType::Text) {
-            xml += child->toXml();
+            xml += child;
             continue;
         }
 
@@ -267,23 +270,23 @@ QByteArray ScreenplayTextModelSceneItem::toXml(ScreenplayTextModelItem* _from, i
         auto textItem = static_cast<ScreenplayTextModelTextItem*>(child);
         if (textItem == _to) {
             if (textItem == _from) {
-                xml += textItem->toXml(_fromPosition, _toPosition - _fromPosition);
+                xml += { textItem, _fromPosition, _toPosition - _fromPosition };
             } else {
-                xml += textItem->toXml(0, _toPosition);
+                xml += { textItem, 0, _toPosition };
             }
             break;
         }
         //
         else if (textItem == _from) {
-            xml += textItem->toXml(_fromPosition, textItem->text().length() - _fromPosition);
+            xml += { textItem, _fromPosition, textItem->text().length() - _fromPosition };
         } else {
-            xml += textItem->toXml();
+            xml += textItem;
         }
     }
     xml += QString("</%1>\n").arg(xml::kContentTag).toUtf8();
     xml += QString("</%1>\n").arg(xml::kSceneTag).toUtf8();
 
-    return xml;
+    return xml.data();
 }
 
 QByteArray ScreenplayTextModelSceneItem::xmlHeader(bool _clearUuid) const

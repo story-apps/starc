@@ -176,6 +176,16 @@ void FloatingToolBar::setActionCustomWidth(QAction* _action, int _width)
     updateGeometry();
 }
 
+void FloatingToolBar::clearActionCustomWidth(QAction* _action)
+{
+    if (!actions().contains(_action)) {
+        return;
+    }
+
+    _action->setProperty(kActionWidthKey, {});
+    updateGeometry();
+}
+
 int FloatingToolBar::actionCustomWidth(QAction* _action) const
 {
     if (!actions().contains(_action)
@@ -446,7 +456,8 @@ void FloatingToolBar::mousePressEvent(QMouseEvent* _event)
 void FloatingToolBar::mouseReleaseEvent(QMouseEvent* _event)
 {
     QAction* pressedAction = d->actionAt(_event->pos(), actions());
-    if (pressedAction == nullptr) {
+    if (pressedAction == nullptr
+        || pressedAction != d->lastPressedAction) {
         return;
     }
 

@@ -40,7 +40,7 @@ public:
     /**
      * @brief Добавить документ
      */
-    void addDocument(Domain::DocumentObjectType _type, const QString& _name = {},
+    QModelIndex addDocument(Domain::DocumentObjectType _type, const QString& _name = {},
         const QModelIndex& _parent = {}, const QByteArray& _content = {});
 
     /**
@@ -103,6 +103,11 @@ public:
     StructureModelItem* itemForUuid(const QUuid& _uuid) const;
 
     /**
+     * @brief Получить элемент имеющий заданный тип
+     */
+    StructureModelItem* itemForType(Domain::DocumentObjectType _type) const;
+
+    /**
      * @brief Получить элемент корзины
      */
     void moveItemToRecycleBin(StructureModelItem* _item);
@@ -127,8 +132,8 @@ signals:
     /**
      * @brief Был добавлен документ с заданным идентификатором, типом и содержимым
      */
-    void documentAdded(const QUuid& _uuid, Domain::DocumentObjectType _type, const QString& _name,
-        const QByteArray& _content);
+    void documentAdded(const QUuid& _uuid, const QUuid& _parentUuid,
+        Domain::DocumentObjectType _type, const QString& _name, const QByteArray& _content);
 
 protected:
     /**

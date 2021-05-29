@@ -3,8 +3,6 @@
 #include "comments/screenplay_text_comments_model.h"
 #include "comments/screenplay_text_comments_toolbar.h"
 #include "comments/screenplay_text_comments_view.h"
-#include "text/screenplay_text_block_data.h"
-#include "text/screenplay_text_cursor.h"
 #include "text/screenplay_text_edit.h"
 #include "text/screenplay_text_edit_shortcuts_manager.h"
 #include "text/screenplay_text_edit_toolbar.h"
@@ -12,14 +10,15 @@
 #include "text/screenplay_text_scrollbar_manager.h"
 #include "text/screenplay_text_search_manager.h"
 
+#include <business_layer/document/screenplay/text/screenplay_text_block_data.h>
+#include <business_layer/document/screenplay/text/screenplay_text_cursor.h>
 #include <business_layer/templates/screenplay_template.h>
-#include <business_layer/templates/screenplay_template_facade.h>
+#include <business_layer/templates/templates_facade.h>
 
 #include <data_layer/storage/settings_storage.h>
 #include <data_layer/storage/storage_facade.h>
 
 #include <ui/design_system/design_system.h>
-#include <ui/widgets/floating_tool_bar/floating_tool_bar.h>
 #include <ui/widgets/floating_tool_bar/floating_toolbar_animator.h>
 #include <ui/widgets/scroll_bar/scroll_bar.h>
 #include <ui/widgets/shadow/shadow.h>
@@ -27,8 +26,9 @@
 #include <ui/widgets/stack_widget/stack_widget.h>
 #include <ui/widgets/tab_bar/tab_bar.h>
 #include <ui/widgets/text_edit/completer/completer.h>
-#include <ui/widgets/text_edit/page/page_metrics.h>
 #include <ui/widgets/text_edit/scalable_wrapper/scalable_wrapper.h>
+
+#include <utils/helpers/color_helper.h>
 
 #include <QAction>
 #include <QStandardItem>
@@ -50,6 +50,7 @@ namespace {
     const QString kSidebarStateKey = kSettingsKey + "/sidebar-state";
     const QString kIsFastFormatPanelVisibleKey = kSettingsKey + "/is-fast-format-panel-visible";
     const QString kIsCommentsModeEnabledKey = kSettingsKey + "/is-comments-mode-enabled";
+    const QString kSidebarPanelIndexKey = kSettingsKey + "/sidebar-panel-index";
 }
 
 class ScreenplayTextView::Implementation
@@ -273,7 +274,8 @@ void ScreenplayTextView::Implementation::addReviewMark(const QColor& _textColor,
     //
     // Добавим заметку
     //
-    screenplayText->addReviewMark(_textColor, _backgroundColor, _comment);
+    const auto textColor = _textColor.isValid() ? _textColor : ColorHelper::contrasted(_backgroundColor);
+    screenplayText->addReviewMark(textColor, _backgroundColor, _comment);
 
     //
     // Снимем выделение, чтобы пользователь получил обратную связь от приложения, что выделение добавлено
@@ -312,8 +314,8 @@ ScreenplayTextView::ScreenplayTextView(QWidget* _parent)
     sidebarLayout->addWidget(d->sidebarTabs);
     sidebarLayout->addWidget(d->sidebarContent);
 
-    d->splitter->addWidget(d->scalableWrapper);
-    d->splitter->addWidget(d->sidebarWidget);
+    d->splitter->setWidgets(d->scalableWrapper, d->sidebarWidget);
+    d->splitter->setSizes({ 1, 0 });
 
     QVBoxLayout* layout = new QVBoxLayout(this);
     layout->setContentsMargins({});
@@ -378,6 +380,7 @@ ScreenplayTextView::ScreenplayTextView(QWidget* _parent)
         auto cursor = d->screenplayText->textCursor();
         cursor.setPosition(position);
         d->screenplayText->ensureCursorVisible(cursor);
+        d->scalableWrapper->setFocus();
     });
     connect(d->commentsView, &ScreenplayTextCommentsView::markAsDoneRequested, this, [this] (const QModelIndexList& _indexes) {
         QSignalBlocker blocker(d->commentsView);
@@ -416,19 +419,25 @@ ScreenplayTextView::ScreenplayTextView(QWidget* _parent)
         d->updateCommentsToolBar();
     }, Qt::QueuedConnection);
     //
-    connect(d->screenplayText, &ScreenplayTextEdit::paragraphTypeChanged, this, [this] {
+    auto handleCursorPositionChanged = [this] {
+        //
+        // Обновим состояние панелей форматов
+        //
         d->updateToolBarCurrentParagraphTypeName();
-    });
-    connect(d->screenplayText, &ScreenplayTextEdit::cursorPositionChanged, this, [this] {
-        d->updateToolBarCurrentParagraphTypeName();
-
+        //
+        // Уведомим навигатор клиентов, о смене текущего элемента
+        //
         const auto screenplayModelIndex = d->screenplayText->currentModelIndex();
         emit currentModelIndexChanged(screenplayModelIndex);
-
+        //
+        // Если необходимо выберем соответствующий комментарий
+        //
         const auto positionInBlock = d->screenplayText->textCursor().positionInBlock();
         const auto commentModelIndex = d->commentsModel->mapFromScreenplay(screenplayModelIndex, positionInBlock);
         d->commentsView->setCurrentIndex(commentModelIndex);
-    });
+    };
+    connect(d->screenplayText, &ScreenplayTextEdit::paragraphTypeChanged, this, handleCursorPositionChanged);
+    connect(d->screenplayText, &ScreenplayTextEdit::cursorPositionChanged, this, handleCursorPositionChanged);
     connect(d->screenplayText, &ScreenplayTextEdit::selectionChanged, this, [this] {
         d->updateCommentsToolBar();
     });
@@ -436,15 +445,17 @@ ScreenplayTextView::ScreenplayTextView(QWidget* _parent)
     updateTranslations();
     designSystemChangeEvent(nullptr);
 
-    reconfigure();
+    reconfigure({});
 }
 
-void ScreenplayTextView::reconfigure()
+ScreenplayTextView::~ScreenplayTextView() = default;
+
+void ScreenplayTextView::reconfigure(const QStringList& _changedSettingsKeys)
 {
     d->paragraphTypesModel->clear();
 
     using namespace BusinessLayer;
-    const auto usedTemplate = BusinessLayer::ScreenplayTemplateFacade::getTemplate();
+    const auto usedTemplate = BusinessLayer::TemplatesFacade::screenplayTemplate();
     const QVector<ScreenplayParagraphType> types
             = { ScreenplayParagraphType::SceneHeading,
                 ScreenplayParagraphType::SceneCharacters,
@@ -485,14 +496,30 @@ void ScreenplayTextView::reconfigure()
 
     d->shortcutsManager.reconfigure();
 
-    d->screenplayText->setShowSceneNumber(
-        settingsValue(DataStorageLayer::kComponentsScreenplayEditorShowSceneNumbersKey).toBool(),
-        settingsValue(DataStorageLayer::kComponentsScreenplayEditorShowSceneNumbersOnRightKey).toBool(),
-        settingsValue(DataStorageLayer::kComponentsScreenplayEditorShowSceneNumberOnLeftKey).toBool());
-    d->screenplayText->setShowDialogueNumber(
-        settingsValue(DataStorageLayer::kComponentsScreenplayEditorShowDialogueNumberKey).toBool());
-    d->screenplayText->setHighlightCurrentLine(
-                settingsValue(DataStorageLayer::kComponentsScreenplayEditorHighlightCurrentLineKey).toBool());
+    if (_changedSettingsKeys.isEmpty()
+        || _changedSettingsKeys.contains(DataStorageLayer::kComponentsScreenplayEditorDefaultTemplateKey)) {
+        TemplatesFacade::setDefaultScreenplayTemplate(
+                    settingsValue(DataStorageLayer::kComponentsScreenplayEditorDefaultTemplateKey).toString());
+        d->screenplayText->reinit();
+    }
+
+    if (_changedSettingsKeys.isEmpty()
+        || _changedSettingsKeys.contains(DataStorageLayer::kComponentsScreenplayEditorShowSceneNumbersKey)) {
+        d->screenplayText->setShowSceneNumber(
+            settingsValue(DataStorageLayer::kComponentsScreenplayEditorShowSceneNumbersKey).toBool(),
+            settingsValue(DataStorageLayer::kComponentsScreenplayEditorShowSceneNumbersOnRightKey).toBool(),
+            settingsValue(DataStorageLayer::kComponentsScreenplayEditorShowSceneNumberOnLeftKey).toBool());
+    }
+    if (_changedSettingsKeys.isEmpty()
+        || _changedSettingsKeys.contains(DataStorageLayer::kComponentsScreenplayEditorShowDialogueNumberKey)) {
+        d->screenplayText->setShowDialogueNumber(
+            settingsValue(DataStorageLayer::kComponentsScreenplayEditorShowDialogueNumberKey).toBool());
+    }
+    if (_changedSettingsKeys.isEmpty()
+        || _changedSettingsKeys.contains(DataStorageLayer::kComponentsScreenplayEditorHighlightCurrentLineKey)) {
+        d->screenplayText->setHighlightCurrentLine(
+            settingsValue(DataStorageLayer::kComponentsScreenplayEditorHighlightCurrentLineKey).toBool());
+    }
 }
 
 void ScreenplayTextView::loadViewSettings()
@@ -504,9 +531,6 @@ void ScreenplayTextView::loadViewSettings()
                   kScaleFactorKey, SettingsStorage::SettingsPlace::Application, 1.0).toReal();
     d->scalableWrapper->setZoomRange(scaleFactor);
 
-    //
-    // Тут важен порядок, чтобы при загрузке активной была таки первая из вкладок
-    //
     const auto isCommentsModeEnabled
             = StorageFacade::settingsStorage()->value(
                   kIsCommentsModeEnabledKey, SettingsStorage::SettingsPlace::Application, false).toBool();
@@ -515,6 +539,10 @@ void ScreenplayTextView::loadViewSettings()
             = StorageFacade::settingsStorage()->value(
                   kIsFastFormatPanelVisibleKey, SettingsStorage::SettingsPlace::Application, false).toBool();
     d->toolbar->setFastFormatPanelVisible(isFastFormatPanelVisible);
+    const auto sidebarPanelIndex
+            = StorageFacade::settingsStorage()->value(
+                  kSidebarPanelIndexKey, SettingsStorage::SettingsPlace::Application, 0).toInt();
+    d->sidebarTabs->setCurrentTab(sidebarPanelIndex);
 
     const auto sidebarState
             = StorageFacade::settingsStorage()->value(
@@ -536,6 +564,8 @@ void ScreenplayTextView::saveViewSettings()
         kIsFastFormatPanelVisibleKey, d->toolbar->isFastFormatPanelVisible(), SettingsStorage::SettingsPlace::Application);
     StorageFacade::settingsStorage()->setValue(
         kIsCommentsModeEnabledKey, d->toolbar->isCommentsModeEnabled(), SettingsStorage::SettingsPlace::Application);
+    StorageFacade::settingsStorage()->setValue(
+        kSidebarPanelIndexKey, d->sidebarTabs->currentTab(), SettingsStorage::SettingsPlace::Application);
 
     StorageFacade::settingsStorage()->setValue(
         kSidebarStateKey, d->splitter->saveState(), SettingsStorage::SettingsPlace::Application);
@@ -574,8 +604,17 @@ void ScreenplayTextView::setCursorPosition(int _position)
 
 bool ScreenplayTextView::eventFilter(QObject* _target, QEvent* _event)
 {
-    if (_target == d->scalableWrapper && _event->type() == QEvent::Resize) {
-        QTimer::singleShot(0, this, [this] { d->updateCommentsToolBar(); });
+    if (_target == d->scalableWrapper) {
+        if (_event->type() == QEvent::Resize) {
+            QTimer::singleShot(0, this, [this] { d->updateCommentsToolBar(); });
+        } else if (_event->type() == QEvent::KeyPress
+                   && d->searchManager->toolbar()->isVisible()
+                   && d->scalableWrapper->hasFocus()) {
+            auto keyEvent = static_cast<QKeyEvent*>(_event);
+            if (keyEvent->key() == Qt::Key_Escape) {
+                d->toolbarAnimation->switchToolbarsBack();
+            }
+        }
     }
 
     return Widget::eventFilter(_target, _event);
@@ -591,8 +630,6 @@ void ScreenplayTextView::resizeEvent(QResizeEvent* _event)
     d->searchManager->toolbar()->move(toolbarPosition);
     d->updateCommentsToolBar();
 }
-
-ScreenplayTextView::~ScreenplayTextView() = default;
 
 void ScreenplayTextView::updateTranslations()
 {
@@ -633,10 +670,11 @@ void ScreenplayTextView::designSystemChangeEvent(DesignSystemChangeEvent* _event
     d->screenplayText->completer()->setTextColor(Ui::DesignSystem::color().onBackground());
     d->screenplayText->completer()->setBackgroundColor(Ui::DesignSystem::color().background());
 
-    d->splitter->setHandleColor(DesignSystem::color().primary());
-    d->splitter->setHandleWidth(1);
+    d->splitter->setBackgroundColor(Ui::DesignSystem::color().background());
+
     d->sidebarTabs->setTextColor(Ui::DesignSystem::color().onPrimary());
     d->sidebarTabs->setBackgroundColor(Ui::DesignSystem::color().primary());
+    d->sidebarContent->setBackgroundColor(Ui::DesignSystem::color().primary());
 }
 
 } // namespace Ui

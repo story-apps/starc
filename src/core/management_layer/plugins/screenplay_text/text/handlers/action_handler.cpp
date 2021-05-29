@@ -191,7 +191,20 @@ void ActionHandler::handleOther(QKeyEvent* _event)
         if (editor()->dictionaries()->sceneIntros().contains(maybeSceneIntro)) {
             editor()->setCurrentParagraphType(ScreenplayParagraphType::SceneHeading);
 		}
-	} else {
+    } else if (cursorBackwardText.endsWith(":")
+               && _event != 0
+               && _event->text() == ":") {
+        //! Если нажата двоеточие
+
+        //
+        // Если было введено какое-либо значение из списка переходов
+        // то необходимо преобразовать блок в переход
+        //
+        const QString maybeTransition = TextHelper::smartToUpper(cursorBackwardText);
+        if (editor()->dictionaries()->transitions().contains(maybeTransition)) {
+            editor()->setCurrentParagraphType(ScreenplayParagraphType::Transition);
+        }
+    } else {
 		//! В противном случае, обрабатываем в базовом классе
 
 		StandardKeyHandler::handleOther(_event);

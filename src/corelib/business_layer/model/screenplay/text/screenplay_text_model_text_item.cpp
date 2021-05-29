@@ -4,12 +4,13 @@
 
 #include <business_layer/chronometry/chronometer.h>
 #include <business_layer/templates/screenplay_template.h>
-#include <business_layer/templates/screenplay_template_facade.h>
+#include <business_layer/templates/templates_facade.h>
 
 #include <utils/helpers/string_helper.h>
 #include <utils/helpers/text_helper.h>
 
 #include <QColor>
+#include <QLocale>
 #include <QVariant>
 #include <QXmlStreamReader>
 
@@ -49,6 +50,16 @@ public:
      * @brief Является ли блок декорацией
      */
     bool isCorrection = false;
+
+    /**
+     * @brief Разорван ли блок на разрыве страниц
+     */
+    bool isBroken = false;
+
+    /**
+     * @brief Находится ли элемент в таблице, и если находится, то в какой колонке
+     */
+    std::optional<bool> isInFirstColumn;
 
     /**
      * @brief Тип параграфа
@@ -98,6 +109,9 @@ ScreenplayTextModelTextItem::Implementation::Implementation(QXmlStreamReader& _c
 
     if (_contentReader.attributes().hasAttribute(xml::kAlignAttribute)) {
         alignment = alignmentFromString(_contentReader.attributes().value(xml::kAlignAttribute).toString());
+    }
+    if (_contentReader.attributes().hasAttribute(xml::kInFirstColumn)) {
+        isInFirstColumn = _contentReader.attributes().value(xml::kInFirstColumn).toString() == "true";
     }
 
     auto currentTag = xml::readNextElement(_contentReader);
@@ -220,10 +234,13 @@ QByteArray ScreenplayTextModelTextItem::Implementation::buildXml(int _from, int 
     const auto _end = _from + _length;
 
     QByteArray xml;
-    xml += QString("<%1%2>")
+    xml += QString("<%1%2%3>")
            .arg(toString(paragraphType),
-                (alignment.has_value() && alignment->testFlag(Qt::AlignHorizontal_Mask)
+                (alignment.has_value()
                  ? QString(" %1=\"%2\"").arg(xml::kAlignAttribute, toString(*alignment))
+                 : ""),
+                (isInFirstColumn.has_value()
+                 ? QString(" %1=\"%2\"").arg(xml::kInFirstColumn, *isInFirstColumn ? "true" : "false")
                  : "")).toUtf8();
     if (bookmark.has_value()) {
         xml += QString("<%1 %2=\"%3\"><![CDATA[%4]]></%1>")
@@ -476,6 +493,7 @@ ScreenplayTextModelTextItem::ScreenplayTextModelTextItem(QXmlStreamReader& _cont
       d(new Implementation(_contentReaded))
 {
     d->updateXml();
+    updateDuration();
 }
 
 ScreenplayTextModelTextItem::~ScreenplayTextModelTextItem() = default;
@@ -487,7 +505,7 @@ std::optional<ScreenplayTextModelTextItem::Number> ScreenplayTextModelTextItem::
 
 void ScreenplayTextModelTextItem::setNumber(int _number)
 {
-    const auto newNumber = QString("%1:").arg(_number);
+    const auto newNumber = QString(QLocale().textDirection() == Qt::LeftToRight ? "%1:" : ":%1").arg(_number);
     if (d->number.has_value()
         && d->number->value == newNumber) {
         return;
@@ -534,6 +552,36 @@ void ScreenplayTextModelTextItem::setCorrection(bool _correction)
     } else {
         d->updateXml();
     }
+}
+
+bool ScreenplayTextModelTextItem::isBroken() const
+{
+    return d->isBroken;
+}
+
+void ScreenplayTextModelTextItem::setBroken(bool _broken)
+{
+    if (d->isBroken == _broken) {
+        return;
+    }
+
+    d->isBroken = _broken;
+}
+
+std::optional<bool> ScreenplayTextModelTextItem::isInFirstColumn() const
+{
+    return d->isInFirstColumn;
+}
+
+void ScreenplayTextModelTextItem::setInFirstColumn(const std::optional<bool>& _in)
+{
+    if (d->isInFirstColumn == _in) {
+        return;
+    }
+
+    d->isInFirstColumn = _in;
+    d->updateXml();
+    markChanged();
 }
 
 ScreenplayParagraphType ScreenplayTextModelTextItem::paragraphType() const
@@ -599,6 +647,11 @@ void ScreenplayTextModelTextItem::setText(const QString& _text)
         return;
     }
 
+    //
+    // FIXME: если новый текст короче чем старый, то нужно скорректировать
+    //        границы редакторских заметок, форматирования и ревизий
+    //
+
     d->text = _text;
     d->updateXml();
     updateDuration();
@@ -657,12 +710,19 @@ void ScreenplayTextModelTextItem::removeText(int _from)
     markChanged();
 }
 
+const QVector<ScreenplayTextModelTextItem::TextFormat>& ScreenplayTextModelTextItem::formats() const
+{
+    return d->formats;
+}
+
 void ScreenplayTextModelTextItem::setFormats(const QVector<QTextLayout::FormatRange>& _formats)
 {
     QVector<TextFormat> newFormats;
-    const auto defaultBlockFormat = ScreenplayTemplateFacade::getTemplate().blockStyle(d->paragraphType);
+    const auto defaultBlockFormat = TemplatesFacade::screenplayTemplate().blockStyle(d->paragraphType);
     for (const auto& format : _formats) {
-        if (format.format == defaultBlockFormat.charFormat()) {
+        if (format.start == 0
+            && format.length == d->text.length()
+            && format.format == defaultBlockFormat.charFormat()) {
             continue;
         }
 
@@ -738,11 +798,6 @@ void ScreenplayTextModelTextItem::setReviewMarks(const QVector<QTextLayout::Form
     setReviewMarks(newReviewMarks);
 }
 
-const QVector<ScreenplayTextModelTextItem::TextFormat>& ScreenplayTextModelTextItem::formats() const
-{
-    return d->formats;
-}
-
 const QVector<ScreenplayTextModelTextItem::Revision>& ScreenplayTextModelTextItem::revisions() const
 {
     return d->revisions;
@@ -773,11 +828,21 @@ void ScreenplayTextModelTextItem::mergeWith(const ScreenplayTextModelTextItem* _
 
 QVariant ScreenplayTextModelTextItem::data(int _role) const
 {
-    if (_role == Qt::DisplayRole) {
-        return d->text;
-    }
+    switch (_role) {
+        case Qt::DecorationRole: {
+            return d->paragraphType == ScreenplayParagraphType::Shot
+                    ? u8"\U000F0332"
+                    : u8"\U000F09A8";
+        }
 
-    return ScreenplayTextModelItem::data(_role);
+        case Qt::DisplayRole: {
+            return d->text;
+        }
+
+        default: {
+            return ScreenplayTextModelItem::data(_role);
+        }
+    }
 }
 
 QByteArray ScreenplayTextModelTextItem::toXml() const
@@ -805,6 +870,7 @@ void ScreenplayTextModelTextItem::copyFrom(ScreenplayTextModelItem* _item)
     }
 
     auto textItem = static_cast<ScreenplayTextModelTextItem*>(_item);
+    d->isInFirstColumn = textItem->d->isInFirstColumn;
     d->paragraphType = textItem->d->paragraphType;
     d->alignment = textItem->d->alignment;
     d->bookmark = textItem->d->bookmark;
@@ -814,6 +880,7 @@ void ScreenplayTextModelTextItem::copyFrom(ScreenplayTextModelItem* _item)
     d->revisions = textItem->d->revisions;
     d->xml = textItem->d->xml;
 
+    updateDuration();
     markChanged();
 }
 
@@ -825,7 +892,8 @@ bool ScreenplayTextModelTextItem::isEqual(ScreenplayTextModelItem* _item) const
     }
 
     const auto textItem = static_cast<ScreenplayTextModelTextItem*>(_item);
-    return d->paragraphType == textItem->d->paragraphType
+    return d->isInFirstColumn == textItem->d->isInFirstColumn
+            && d->paragraphType == textItem->d->paragraphType
             && d->alignment == textItem->d->alignment
             && d->bookmark == textItem->d->bookmark
             && d->text == textItem->d->text

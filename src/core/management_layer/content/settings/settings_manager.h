@@ -55,7 +55,7 @@ signals:
     /**
      * @brief Изменились параметры компонентов
      */
-    void screenplayEditorChanged();
+    void screenplayEditorChanged(const QStringList& _changedSettingsKeys);
     void screenplayNavigatorChanged();
     void screenplayDurationChanged();
 
@@ -86,6 +86,7 @@ private:
     //
     // Сохранение параметров редактора сценария
     //
+    void setScreenplayEditorDefaultTemplate(const QString& _templateId);
     void setScreenplayEditorShowSceneNumber(bool _show, bool _atLeft, bool _atRight);
     void setScreenplayEditorShowDialogueNumber(bool _show);
     void setScreenplayEditorHighlightCurrentLine(bool _highlight);

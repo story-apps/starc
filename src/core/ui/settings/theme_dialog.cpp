@@ -163,6 +163,8 @@ ThemeDialog::ThemeDialog(QWidget* _parent)
     : AbstractDialog(_parent),
       d(new Implementation(this))
 {
+    setRejectButton(d->okButton);
+
     contentsLayout()->addWidget(d->light, 0, 0);
     contentsLayout()->addWidget(d->darkAndLight, 0, 1);
     contentsLayout()->addWidget(d->dark, 0, 2);
@@ -266,7 +268,12 @@ void ThemeDialog::setCurrentTheme(ApplicationTheme _theme)
 
 QWidget* ThemeDialog::focusedWidgetAfterShow() const
 {
-    return d->darkAndLight;
+    return d->light;
+}
+
+QWidget* ThemeDialog::lastFocusableWidget() const
+{
+    return d->okButton;
 }
 
 void ThemeDialog::updateTranslations()

@@ -157,11 +157,11 @@ void StructureModel::setProjectName(const QString& _name)
     d->projectName = _name;
 }
 
-void StructureModel::addDocument(Domain::DocumentObjectType _type, const QString& _name,
+QModelIndex StructureModel::addDocument(Domain::DocumentObjectType _type, const QString& _name,
     const QModelIndex& _parent, const QByteArray& _content)
 {
     //
-    // ATTENTION: В ProjectManager есть копипаста отсюда, быть внимательным при обновлении
+    // ATTENTION: В ProjectManager::addScreenplay есть копипаста отсюда, быть внимательным при обновлении
     //
 
     using namespace Domain;
@@ -191,7 +191,7 @@ void StructureModel::addDocument(Domain::DocumentObjectType _type, const QString
             appendItem(createItem(DocumentObjectType::ScreenplayTitlePage, tr("Title page")), screenplayItem);
             appendItem(createItem(DocumentObjectType::ScreenplaySynopsis, tr("Synopsis")), screenplayItem);
             appendItem(createItem(DocumentObjectType::ScreenplayTreatment, tr("Treatment")), screenplayItem);
-            appendItem(createItem(DocumentObjectType::ScreenplayText, tr("Text")), screenplayItem);
+            appendItem(createItem(DocumentObjectType::ScreenplayText, tr("Screenplay")), screenplayItem);
             appendItem(createItem(DocumentObjectType::ScreenplayStatistics, tr("Statistics")), screenplayItem);
             break;
         }
@@ -200,14 +200,26 @@ void StructureModel::addDocument(Domain::DocumentObjectType _type, const QString
             appendItem(createItem(_type, tr("Characters")), parentItem, _content);
             break;
         }
+        case DocumentObjectType::Character: {
+            parentItem = itemForType(Domain::DocumentObjectType::Characters);
+            Q_ASSERT(parentItem);
+            appendItem(createItem(_type, _name.toUpper()), parentItem, _content);
+            break;
+        }
 
         case DocumentObjectType::Locations: {
             appendItem(createItem(_type, tr("Locations")), parentItem, _content);
             break;
         }
-
-        case DocumentObjectType::Character:
         case DocumentObjectType::Location: {
+            parentItem = itemForType(Domain::DocumentObjectType::Locations);
+            Q_ASSERT(parentItem);
+            appendItem(createItem(_type, _name.toUpper()), parentItem, _content);
+            break;
+        }
+
+        case DocumentObjectType::Folder:
+        case DocumentObjectType::Text: {
             appendItem(createItem(_type, _name), parentItem, _content);
             break;
         }
@@ -217,6 +229,12 @@ void StructureModel::addDocument(Domain::DocumentObjectType _type, const QString
             break;
         }
     }
+
+    //
+    // Вставка идёт в конец, но в корневом элементе учитываем корзину, поэтому смещаем на 2
+    //
+    const int indexDelta = parentItem == d->rootItem ? 2 : 1;
+    return index(parentItem->childCount() - indexDelta, 0, indexForItem(parentItem));
 }
 
 void StructureModel::prependItem(StructureModelItem* _item, StructureModelItem* _parentItem)
@@ -276,7 +294,7 @@ void StructureModel::appendItem(StructureModelItem* _item, StructureModelItem* _
     _parentItem->insertItem(itemRowIndex, _item);
     endInsertRows();
 
-    emit documentAdded(_item->uuid(), _item->type(), _item->name(), _content);
+    emit documentAdded(_item->uuid(), _parentItem->uuid(), _item->type(), _item->name(), _content);
 }
 
 void StructureModel::insertItem(StructureModelItem* _item, StructureModelItem* _afterSiblingItem)
@@ -414,26 +432,44 @@ int StructureModel::rowCount(const QModelIndex& _parent) const
 Qt::ItemFlags StructureModel::flags(const QModelIndex& _index) const
 {
     const auto item = itemForIndex(_index);
+    const auto defaultFlags = Qt::ItemIsEnabled | Qt::ItemIsSelectable;
     switch (item->type()) {
-        case Domain::DocumentObjectType::Project:
-        case Domain::DocumentObjectType::Characters:
-        case Domain::DocumentObjectType::Locations:
-        case Domain::DocumentObjectType::RecycleBin: {
-            return Qt::ItemIsEnabled | Qt::ItemIsSelectable | Qt::ItemIsDropEnabled;
-        }
-
+        //
+        // Элемент можно перемещать и вставлять внутрь другие
+        //
+        case Domain::DocumentObjectType::Screenplay:
         case Domain::DocumentObjectType::Character:
         case Domain::DocumentObjectType::Location:
-        case Domain::DocumentObjectType::Screenplay: {
-            return Qt::ItemIsEnabled | Qt::ItemIsSelectable | Qt::ItemIsDragEnabled | Qt::ItemIsDropEnabled;
+        case Domain::DocumentObjectType::Folder: {
+            return defaultFlags | Qt::ItemIsDragEnabled | Qt::ItemIsDropEnabled;
         }
 
+        //
+        // В элемент можно только вставлять другие
+        //
+        case Domain::DocumentObjectType::Project:
+        case Domain::DocumentObjectType::RecycleBin:
+        case Domain::DocumentObjectType::Characters:
+        case Domain::DocumentObjectType::Locations: {
+            return defaultFlags | Qt::ItemIsDropEnabled;
+        }
+
+        //
+        // Элемент можно только перемещать
+        //
+        case Domain::DocumentObjectType::Text: {
+            return defaultFlags | Qt::ItemIsDragEnabled;
+        }
+
+        //
+        // Элемент нельзя ни перемещать ни вставлять внутрь другие
+        //
         case Domain::DocumentObjectType::ScreenplayTitlePage:
         case Domain::DocumentObjectType::ScreenplaySynopsis:
         case Domain::DocumentObjectType::ScreenplayTreatment:
         case Domain::DocumentObjectType::ScreenplayText:
         case Domain::DocumentObjectType::ScreenplayStatistics: {
-            return Qt::ItemIsEnabled | Qt::ItemIsSelectable;
+            return defaultFlags;
         }
 
         default: {
@@ -482,10 +518,65 @@ bool StructureModel::canDropMimeData(const QMimeData* _data, Qt::DropAction _act
     }
 
     //
+    // Проверяем, что перемещаются данные из модели
+    //
+    QByteArray encodedData = _data->data(kMimeType);
+    QDataStream stream(&encodedData, QIODevice::ReadOnly);
+    int row = 0;
+    while (!stream.atEnd()) {
+        QUuid itemUuid;
+        stream >> itemUuid;
+        if (itemUuid != d->lastMimeItems[row]->uuid()) {
+            //
+            // ... если это какие-то внешние данные, то ничего не делаем
+            //
+            return false;
+        }
+
+        ++row;
+    }
+
+    //
+    // Смотрим, что за данные перемещаются
+    //
+    bool hasCharacters = false;
+    bool hasLocations = false;
+    for (const auto item : std::as_const(d->lastMimeItems)) {
+        if (!hasCharacters
+            && item->type() == Domain::DocumentObjectType::Character) {
+            hasCharacters = true;
+        }
+        if (!hasLocations
+            && item->type() == Domain::DocumentObjectType::Location) {
+            hasLocations = true;
+        }
+    }
+
+    //
     // Обработка конкретных случаев что куда можно бросать
     //
     const auto dropTarget = itemForIndex(_parent);
+    //
+    // ... eсли среди перемещаемых элементов есть и локации и персонажи, то запрещаем перемещение
+    //
+    if (hasCharacters && hasLocations) {
+        return false;
+    }
+    //
+    // ... персонажей и локации можно перетаскивать только внутри родительского элемента
+    //
+    else if (hasCharacters) {
+        return dropTarget->type() == Domain::DocumentObjectType::Characters;
+    } else if (hasLocations) {
+        return dropTarget->type() == Domain::DocumentObjectType::Locations;
+    }
+    //
+    // ... остальные случаи
+    //
     switch (dropTarget->type()) {
+        //
+        // ... внутрь сценария ничего нельзя вложить
+        //
         case Domain::DocumentObjectType::Screenplay: {
             return false;
         }
@@ -705,6 +796,21 @@ StructureModelItem* StructureModel::itemForUuid(const QUuid& _uuid) const
     return search(d->rootItem);
 }
 
+StructureModelItem* StructureModel::itemForType(Domain::DocumentObjectType _type) const
+{
+    //
+    // Ищем только по верхнеуровневым элементам
+    //
+    for (int itemIndex = 0; itemIndex < d->rootItem->childCount(); ++itemIndex) {
+        auto item = d->rootItem->childAt(itemIndex);
+        if (item->type() == _type) {
+            return item;
+        }
+    }
+
+    return nullptr;
+}
+
 void StructureModel::moveItemToRecycleBin(StructureModelItem* _item)
 {
     if (_item == nullptr) {
@@ -714,14 +820,8 @@ void StructureModel::moveItemToRecycleBin(StructureModelItem* _item)
     //
     // Идём снизу, т.к. обычно корзина находится внизу
     //
-    StructureModelItem* recycleBin = nullptr;
-    for (int itemIndex = d->rootItem->childCount() - 1; itemIndex >= 0; --itemIndex) {
-        auto item = d->rootItem->childAt(itemIndex);
-        if (item->type() == Domain::DocumentObjectType::RecycleBin) {
-            recycleBin = item;
-            break;
-        }
-    }
+    StructureModelItem* recycleBin = itemForType(Domain::DocumentObjectType::RecycleBin);
+    Q_ASSERT(recycleBin);
 
     //
     // Собственно перемещаем элемент в корзину

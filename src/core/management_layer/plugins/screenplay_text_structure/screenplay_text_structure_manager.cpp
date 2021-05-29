@@ -4,9 +4,7 @@
 #include "ui/screenplay_text_structure_view.h"
 
 #include <business_layer/model/screenplay/text/screenplay_text_model.h>
-
-#include <QApplication>
-#include <QFileDialog>
+#include <business_layer/model/screenplay/screenplay_information_model.h>
 
 
 namespace ManagementLayer
@@ -27,6 +25,14 @@ public:
      * @brief Текущая модель сценария
      */
     BusinessLayer::ScreenplayTextModel* model = nullptr;
+
+    /**
+     * @brief Индекс модели, который необходимо выделить
+     * @note Используется в случаях, когда в навигаторе установлена не та модель, что отображается
+     *       в редакторе, когда будет установлена нужная модель, в навигаторе будет выделен элемент
+     *       с данным индексом
+     */
+    QModelIndex modelIndexToSelect;
 
     /**
      * @brief Модель отображения структуры сценария
@@ -97,6 +103,7 @@ void ScreenplayTextStructureManager::setModel(BusinessLayer::AbstractModel* _mod
         d->structureModel = new BusinessLayer::ScreenplayTextStructureModel(d->view);
         d->view->setModel(d->structureModel);
     }
+
     //
     // Помещаем модель с данными в прокси
     //
@@ -106,18 +113,16 @@ void ScreenplayTextStructureManager::setModel(BusinessLayer::AbstractModel* _mod
     // Настраиваем соединения с новой моделью
     //
     if (d->model != nullptr) {
-//        d->view->setName(d->model->name());
-//        d->view->setText(d->model->text());
+        d->view->setTitle(d->model->informationModel()->name());
+        connect(d->model->informationModel(), &BusinessLayer::ScreenplayInformationModel::nameChanged,
+                d->view, &Ui::ScreenplayTextStructureView::setTitle);
+    }
 
-//        connect(d->model, &BusinessLayer::ScreenplayTextModel::nameChanged,
-//                d->view, &Ui::ScreenplayTextView::setName);
-//        connect(d->model, &BusinessLayer::ScreenplayTextModel::textChanged,
-//                d->view, &Ui::ScreenplayTextView::setText);
-//        //
-//        connect(d->view, &Ui::ScreenplayTextView::nameChanged,
-//                d->model, &BusinessLayer::ScreenplayTextModel::setName);
-//        connect(d->view, &Ui::ScreenplayTextView::textChanged,
-//                d->model, &BusinessLayer::ScreenplayTextModel::setText);
+    //
+    // Если элемент к выделению уже задан, выберем его в структуре
+    //
+    if (d->modelIndexToSelect.isValid()) {
+        setCurrentModelIndex(d->modelIndexToSelect);
     }
 }
 
@@ -131,8 +136,9 @@ QWidget* ScreenplayTextStructureManager::createView()
     return d->createView();
 }
 
-void ScreenplayTextStructureManager::reconfigure()
+void ScreenplayTextStructureManager::reconfigure(const QStringList& _changedSettingsKeys)
 {
+    Q_UNUSED(_changedSettingsKeys);
     d->view->reconfigure();
 }
 
@@ -150,6 +156,11 @@ void ScreenplayTextStructureManager::setCurrentModelIndex(const QModelIndex& _in
         return;
     }
 
+    if (d->model != _index.model()) {
+        d->modelIndexToSelect = _index;
+        return;
+    }
+
     QSignalBlocker signalBlocker(this);
 
     //
@@ -157,6 +168,7 @@ void ScreenplayTextStructureManager::setCurrentModelIndex(const QModelIndex& _in
     // сцен или папок, которые как раз и отображаются в навигаторе
     //
     d->view->setCurrentModelIndex(d->structureModel->mapFromSource(_index.parent()));
+    d->modelIndexToSelect = {};
 }
 
 } // namespace ManagementLayer

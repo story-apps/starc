@@ -162,20 +162,13 @@ void ComboBox::setCurrentIndex(const QModelIndex& _index)
     setText(_index.data().toString());
 }
 
-bool ComboBox::event(QEvent* _event)
+void ComboBox::reconfigure()
 {
-    switch (static_cast<int>(_event->type())) {
-        case static_cast<QEvent::Type>(EventType::DesignSystemChangeEvent): {
-            d->popup->setBackgroundColor(Ui::DesignSystem::color().background());
-            d->popupContent->setBackgroundColor(Ui::DesignSystem::color().background());
-            d->popupContent->setTextColor(Ui::DesignSystem::color().onBackground());
-            Q_FALLTHROUGH();
-        }
+    TextField::reconfigure();
 
-        default: {
-            return TextField::event(_event);
-        }
-    }
+    d->popup->setBackgroundColor(Ui::DesignSystem::color().background());
+    d->popupContent->setBackgroundColor(Ui::DesignSystem::color().background());
+    d->popupContent->setTextColor(Ui::DesignSystem::color().onBackground());
 }
 
 void ComboBox::focusOutEvent(QFocusEvent* _event)
@@ -211,5 +204,5 @@ void ComboBox::mousePressEvent(QMouseEvent* _event)
 
 void ComboBox::mouseMoveEvent(QMouseEvent* _event)
 {
-    QTextEdit::mouseMoveEvent(_event);
+    TextField::mouseMoveEvent(_event);
 }

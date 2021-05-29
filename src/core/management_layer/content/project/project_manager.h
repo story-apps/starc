@@ -33,7 +33,7 @@ public:
      * @brief Перенастроить плагины
      */
     void reconfigureAll();
-    void reconfigureScreenplayEditor();
+    void reconfigureScreenplayEditor(const QStringList& _changedSettingsKeys);
     void reconfigureScreenplayNavigator();
     void reconfigureScreenplayDuration();
 
@@ -68,6 +68,16 @@ public:
     void addScreenplay(const QString& _name, const QString& _titlePage, const QString& _synopsis,
                        const QString& _treatment, const QString& _text);
 
+    /**
+     * @brief Модель текущего документа
+     */
+    BusinessLayer::AbstractModel* currentModel() const;
+
+    /**
+     * @brief Представление текущего документа
+     */
+    QString currentModelViewMimeType() const;
+
 signals:
     /**
      * @brief Запрос на отображение меню
@@ -94,6 +104,11 @@ signals:
      */
     void projectCoverChanged(const QPixmap& _cover);
 
+    /**
+     * @brief Сменилась текущая модель документа
+     */
+    void currentModelChanged(BusinessLayer::AbstractModel* _model);
+
 private:
     /**
      * @brief Обработать изменение модели
@@ -115,6 +130,12 @@ private:
      * @note Если индекс невалидный, то отображается навигатор по проекту
      */
     void showNavigator(const QModelIndex& _itemIndex, const QString& _viewMimeType = {});
+
+private:
+    /**
+     * @brief Обновить значение текущей модели и её представления
+     */
+    void updateCurrentDocument(BusinessLayer::AbstractModel* _model, const QString& _viewMimeType);
 
 private:
     class Implementation;

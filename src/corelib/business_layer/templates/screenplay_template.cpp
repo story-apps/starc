@@ -1,7 +1,5 @@
 #include "screenplay_template.h"
 
-#include "screenplay_template_facade.h"
-
 #include <ui/widgets/text_edit/page/page_metrics.h>
 #include <ui/widgets/text_edit/page/page_text_edit.h>
 
@@ -13,45 +11,35 @@
 #include <QTextBlock>
 #include <QTextBlockFormat>
 #include <QXmlStreamAttributes>
+#include <QUuid>
 
 
 namespace BusinessLayer
 {
 
 namespace {
-    const QHash<ScreenplayParagraphType, QString> kScreenplayParagraphTypeToString
-            = {{ ScreenplayParagraphType::UnformattedText, QLatin1String("unformatted_text") },
-               { ScreenplayParagraphType::SceneHeading, QLatin1String("scene_heading") },
-               { ScreenplayParagraphType::SceneCharacters, QLatin1String("scene_characters") },
-               { ScreenplayParagraphType::Action, QLatin1String("action") },
-               { ScreenplayParagraphType::Character, QLatin1String("character") },
-               { ScreenplayParagraphType::Parenthetical, QLatin1String("parenthetical") },
-               { ScreenplayParagraphType::Dialogue, QLatin1String("dialogue") },
-               { ScreenplayParagraphType::Lyrics, QLatin1String("lyrics") },
-               { ScreenplayParagraphType::Transition, QLatin1String("transition") },
-               { ScreenplayParagraphType::Shot, QLatin1String("shot") },
-               { ScreenplayParagraphType::InlineNote, QLatin1String("inline_note") },
-               { ScreenplayParagraphType::FolderHeader, QLatin1String("folder_header") },
-               { ScreenplayParagraphType::FolderFooter, QLatin1String("folder_footer") },
-               { ScreenplayParagraphType::PageSplitter, QLatin1String("page_splitter") }};
 
-    const QHash<ScreenplayBlockStyle::LineSpacingType, QString> kLineSpacingToString
-            = {{ ScreenplayBlockStyle::LineSpacingType::SingleLineSpacing, "single" },
-               { ScreenplayBlockStyle::LineSpacingType::OneAndHalfLineSpacing, "oneandhalf" },
-               { ScreenplayBlockStyle::LineSpacingType::DoubleLineSpacing, "double" },
-               { ScreenplayBlockStyle::LineSpacingType::FixedLineSpacing, "fixed" }};
-}
+const QHash<ScreenplayParagraphType, QString> kScreenplayParagraphTypeToString
+        = {{ ScreenplayParagraphType::UnformattedText, QLatin1String("unformatted_text") },
+           { ScreenplayParagraphType::SceneHeading, QLatin1String("scene_heading") },
+           { ScreenplayParagraphType::SceneCharacters, QLatin1String("scene_characters") },
+           { ScreenplayParagraphType::Action, QLatin1String("action") },
+           { ScreenplayParagraphType::Character, QLatin1String("character") },
+           { ScreenplayParagraphType::Parenthetical, QLatin1String("parenthetical") },
+           { ScreenplayParagraphType::Dialogue, QLatin1String("dialogue") },
+           { ScreenplayParagraphType::Lyrics, QLatin1String("lyrics") },
+           { ScreenplayParagraphType::Transition, QLatin1String("transition") },
+           { ScreenplayParagraphType::Shot, QLatin1String("shot") },
+           { ScreenplayParagraphType::InlineNote, QLatin1String("inline_note") },
+           { ScreenplayParagraphType::FolderHeader, QLatin1String("folder_header") },
+           { ScreenplayParagraphType::FolderFooter, QLatin1String("folder_footer") },
+           { ScreenplayParagraphType::PageSplitter, QLatin1String("page_splitter") }};
 
-
-QString toString(ScreenplayParagraphType _type)
-{
-    return kScreenplayParagraphTypeToString.value(_type);
-}
-
-ScreenplayParagraphType screenplayParagraphTypeFromString(const QString& _text)
-{
-    return kScreenplayParagraphTypeToString.key(_text, ScreenplayParagraphType::Undefined);
-}
+const QHash<ScreenplayBlockStyle::LineSpacingType, QString> kLineSpacingToString
+        = {{ ScreenplayBlockStyle::LineSpacingType::SingleLineSpacing, "single" },
+           { ScreenplayBlockStyle::LineSpacingType::OneAndHalfLineSpacing, "oneandhalf" },
+           { ScreenplayBlockStyle::LineSpacingType::DoubleLineSpacing, "double" },
+           { ScreenplayBlockStyle::LineSpacingType::FixedLineSpacing, "fixed" }};
 
 QString toString(ScreenplayBlockStyle::LineSpacingType _type)
 {
@@ -61,6 +49,38 @@ QString toString(ScreenplayBlockStyle::LineSpacingType _type)
 ScreenplayBlockStyle::LineSpacingType lineSpacingFromString(const QString& _lineSpacing)
 {
     return kLineSpacingToString.key(_lineSpacing);
+}
+
+} // namespace
+
+
+QString toString(ScreenplayParagraphType _type)
+{
+    return kScreenplayParagraphTypeToString.value(_type);
+}
+
+QString toDisplayString(ScreenplayParagraphType _type)
+{
+    switch (_type) {
+        case ScreenplayParagraphType::SceneHeading: return QCoreApplication::translate("BusinessLayer::ScreenplayTemplate", "Scene heading");
+        case ScreenplayParagraphType::SceneCharacters: return QCoreApplication::translate("BusinessLayer::ScreenplayTemplate", "Scene characters");
+        case ScreenplayParagraphType::Action: return QCoreApplication::translate("BusinessLayer::ScreenplayTemplate", "Action");
+        case ScreenplayParagraphType::Character: return QCoreApplication::translate("BusinessLayer::ScreenplayTemplate", "Character");
+        case ScreenplayParagraphType::Parenthetical: return QCoreApplication::translate("BusinessLayer::ScreenplayTemplate", "Parenthetical");
+        case ScreenplayParagraphType::Dialogue: return QCoreApplication::translate("BusinessLayer::ScreenplayTemplate", "Dialogue");
+        case ScreenplayParagraphType::Lyrics: return QCoreApplication::translate("BusinessLayer::ScreenplayTemplate", "Lyrics");
+        case ScreenplayParagraphType::Shot: return QCoreApplication::translate("BusinessLayer::ScreenplayTemplate", "Shot");
+        case ScreenplayParagraphType::Transition: return QCoreApplication::translate("BusinessLayer::ScreenplayTemplate", "Transition");
+        case ScreenplayParagraphType::InlineNote: return QCoreApplication::translate("BusinessLayer::ScreenplayTemplate", "Inline note");
+        case ScreenplayParagraphType::UnformattedText: return QCoreApplication::translate("BusinessLayer::ScreenplayTemplate", "Unformatted text");
+        case ScreenplayParagraphType::FolderHeader: return QCoreApplication::translate("BusinessLayer::ScreenplayTemplate", "Folder");
+        default: return QCoreApplication::translate("BusinessLayer::ScreenplayTemplate", "Undefined");
+    }
+}
+
+ScreenplayParagraphType screenplayParagraphTypeFromString(const QString& _text)
+{
+    return kScreenplayParagraphTypeToString.key(_text, ScreenplayParagraphType::Undefined);
 }
 
 
@@ -100,16 +120,6 @@ bool ScreenplayBlockStyle::isActive() const
 void ScreenplayBlockStyle::setActive(bool _active)
 {
     m_isActive = _active;
-}
-
-bool ScreenplayBlockStyle::isExportable() const
-{
-    return m_isExportable;
-}
-
-void ScreenplayBlockStyle::setExportable(bool _exportable)
-{
-    m_isExportable = _exportable;
 }
 
 bool ScreenplayBlockStyle::isStartFromNewPage() const
@@ -252,6 +262,11 @@ void ScreenplayBlockStyle::setMarginsOnHalfPage(const QMarginsF& _margins)
     }
 }
 
+void ScreenplayBlockStyle::setPageSplitterWidth(qreal _width)
+{
+    m_charFormat.setProperty(QTextFormat::TableCellLeftPadding, _width);
+}
+
 int ScreenplayBlockStyle::linesAfter() const
 {
     return m_linesAfter;
@@ -288,24 +303,9 @@ void ScreenplayBlockStyle::setTextColor(const QColor& _color)
     m_charFormat.setForeground(_color);
 }
 
-bool ScreenplayBlockStyle::isFirstUppercase() const
-{
-    return m_charFormat.boolProperty(ScreenplayBlockStyle::PropertyIsFirstUppercase);
-}
-
 bool ScreenplayBlockStyle::isCanModify() const
 {
     return m_charFormat.boolProperty(ScreenplayBlockStyle::PropertyIsCanModify);
-}
-
-void ScreenplayBlockStyle::setCanModify(bool _can)
-{
-    m_charFormat.setProperty(ScreenplayBlockStyle::PropertyIsCanModify, _can);
-}
-
-bool ScreenplayBlockStyle::hasDecoration() const
-{
-    return !prefix().isEmpty() || !postfix().isEmpty();
 }
 
 QString ScreenplayBlockStyle::prefix() const
@@ -313,39 +313,9 @@ QString ScreenplayBlockStyle::prefix() const
     return m_charFormat.stringProperty(ScreenplayBlockStyle::PropertyPrefix);
 }
 
-void ScreenplayBlockStyle::setPrefix(const QString& _prefix)
-{
-    m_charFormat.setProperty(ScreenplayBlockStyle::PropertyPrefix, _prefix);
-}
-
 QString ScreenplayBlockStyle::postfix() const
 {
     return m_charFormat.stringProperty(ScreenplayBlockStyle::PropertyPostfix);
-}
-
-void ScreenplayBlockStyle::setPostfix(const QString& _postfix)
-{
-    m_charFormat.setProperty(ScreenplayBlockStyle::PropertyPostfix, _postfix);
-}
-
-bool ScreenplayBlockStyle::isEmbeddable() const
-{
-    return m_type == ScreenplayParagraphType::FolderHeader
-           || m_type == ScreenplayParagraphType::FolderFooter;
-}
-
-bool ScreenplayBlockStyle::isEmbeddableHeader() const
-{
-    return m_type == ScreenplayParagraphType::FolderHeader;
-}
-
-ScreenplayParagraphType ScreenplayBlockStyle::embeddableFooter() const
-{
-    if (m_type == ScreenplayParagraphType::FolderHeader) {
-        return ScreenplayParagraphType::FolderFooter;
-    } else {
-        return ScreenplayParagraphType::Undefined;
-    }
 }
 
 ScreenplayBlockStyle::ScreenplayBlockStyle(const QXmlStreamAttributes& _blockAttributes)
@@ -357,7 +327,6 @@ ScreenplayBlockStyle::ScreenplayBlockStyle(const QXmlStreamAttributes& _blockAtt
     //
     m_type = screenplayParagraphTypeFromString(_blockAttributes.value("id").toString());
     m_isActive = _blockAttributes.value("active").toString() == "true";
-    m_isExportable = _blockAttributes.value("exportable").toString() == "true";
     m_isStartFromNewPage = _blockAttributes.value("starts_from_new_page").toString() == "true";
     //
     // ... настройки шрифта
@@ -521,7 +490,6 @@ void ScreenplayTemplate::saveToFile(const QString& _filePath) const
         writer.writeStartElement("block");
         writer.writeAttribute("id", toString(blockStyle.type()));
         writer.writeAttribute("active", ::toString(blockStyle.isActive()));
-        writer.writeAttribute("exportable", ::toString(blockStyle.isExportable()));
         writer.writeAttribute("starts_from_new_page", ::toString(blockStyle.isStartFromNewPage()));
         writer.writeAttribute("font_family", blockStyle.font().family());
         writer.writeAttribute("font_size", ::toString(blockStyle.font().pointSize()));
@@ -544,6 +512,11 @@ void ScreenplayTemplate::saveToFile(const QString& _filePath) const
     templateFile.close();
 }
 
+QString ScreenplayTemplate::id() const
+{
+    return m_id;
+}
+
 bool ScreenplayTemplate::isDefault() const
 {
     return m_isDefault;
@@ -551,6 +524,31 @@ bool ScreenplayTemplate::isDefault() const
 
 QString ScreenplayTemplate::name() const
 {
+    if (m_name.isEmpty()) {
+        if (m_id == "world_cp") {
+            return QApplication::translate("BusinessLayer::ScreenplayTemplate",
+                                           "International template (page: A4; font: Courier Prime)");
+        } else if (m_id == "world_cn") {
+            return QApplication::translate("BusinessLayer::ScreenplayTemplate",
+                                           "International template (page: A4; font: Courier New)");
+        } else if (m_id == "ar") {
+            return QApplication::translate("BusinessLayer::ScreenplayTemplate",
+                                           "Arabic template (page: A4; font: Courier New)");
+        } else if (m_id == "he") {
+            return QApplication::translate("BusinessLayer::ScreenplayTemplate",
+                                           "Hebrew template (page: A4; font: Arial)");
+        } else if (m_id == "ru") {
+            return QApplication::translate("BusinessLayer::ScreenplayTemplate",
+                                           "Russian template (page: A4; font: Courier New)");
+        } else if (m_id == "tamil") {
+            return QApplication::translate("BusinessLayer::ScreenplayTemplate",
+                                           "Tamil template (page: A4; font: Mukta Malar)");
+        } else if (m_id == "us") {
+            return QApplication::translate("BusinessLayer::ScreenplayTemplate",
+                                           "US template (page: Letter; font: Courier Prime)");
+        }
+    }
+
     return m_name;
 }
 
@@ -632,14 +630,8 @@ void ScreenplayTemplate::setBlockStyle(const ScreenplayBlockStyle& _blockStyle)
     m_blockStyles.insert(_blockStyle.type(), _blockStyle);
 }
 
-void ScreenplayTemplate::updateBlocksColors()
-{
-    //
-    // TODO:
-    //
-}
-
 ScreenplayTemplate::ScreenplayTemplate(const QString& _fromFile)
+    : m_id(QUuid::createUuid().toString())
 {
     load(_fromFile);
 }
@@ -664,6 +656,9 @@ void ScreenplayTemplate::load(const QString& _fromFile)
     // Считываем атрибуты шаблона
     //
     QXmlStreamAttributes templateAttributes = reader.attributes();
+    if (templateAttributes.hasAttribute("id")) {
+        m_id = templateAttributes.value("id").toString();
+    }
     m_isDefault = templateAttributes.value("default").toString() == "true";
     m_name = templateAttributes.value("name").toString();
     m_description = templateAttributes.value("description").toString();
@@ -678,6 +673,7 @@ void ScreenplayTemplate::load(const QString& _fromFile)
     while (reader.readNextStartElement() && reader.name() == "block")
     {
         ScreenplayBlockStyle blockStyle(reader.attributes());
+        blockStyle.setPageSplitterWidth(pageSplitterWidth());
         m_blockStyles.insert(blockStyle.type(), blockStyle);
 
         //

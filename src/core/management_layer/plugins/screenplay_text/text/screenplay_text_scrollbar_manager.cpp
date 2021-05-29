@@ -100,9 +100,9 @@ void ScreenplayTextScrollBarManager::setModel(BusinessLayer::ScreenplayTextModel
 
     if (d->model) {
         auto updateTimeline = [this] { d->timeline->setMaximum(d->model->duration()); };
-        connect(d->model, &QAbstractItemModel::rowsInserted, this, updateTimeline);
-        connect(d->model, &QAbstractItemModel::rowsRemoved, this, updateTimeline);
-        connect(d->model, &QAbstractItemModel::dataChanged, this, updateTimeline);
+        connect(d->model, &QAbstractItemModel::rowsInserted, this, updateTimeline, Qt::QueuedConnection);
+        connect(d->model, &QAbstractItemModel::rowsRemoved, this, updateTimeline, Qt::QueuedConnection);
+        connect(d->model, &QAbstractItemModel::dataChanged, this, updateTimeline, Qt::QueuedConnection);
         updateTimeline();
     } else {
         d->timeline->update();

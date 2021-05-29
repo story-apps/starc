@@ -45,7 +45,13 @@ protected:
     /**
      * @brief Реализуем включение переключателя при клике на нём
      */
+    void mousePressEvent(QMouseEvent* _event) override;
     void mouseReleaseEvent(QMouseEvent* _event) override;
+
+    /**
+     * @brief Переопределяем, чтобы нажатие пробела и энтера активировало кнопку
+     */
+    void keyPressEvent(QKeyEvent* _event) override;
 
     /**
      * @brief Переопределяем для обработки события смены дизайн-системы

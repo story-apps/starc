@@ -25,6 +25,11 @@ public:
     void setActionCustomWidth(QAction* _action, int _width);
 
     /**
+     * @brief Сбросить кастомную ширину для действия и использовать стандартную
+     */
+    void clearActionCustomWidth(QAction* _action);
+
+    /**
      * @brief Получишь ширину области для отрисовки действия
      */
     int actionCustomWidth(QAction* _action) const;

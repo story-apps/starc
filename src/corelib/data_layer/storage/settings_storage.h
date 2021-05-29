@@ -73,6 +73,8 @@ namespace {
     const QString kProjectOpenFolderKey = kProjectKey + "/open-folder";
     // папка импорта проектов
     const QString kProjectImportFolderKey = kProjectKey + "/import-folder";
+    // папка экспорта проектов
+    const QString kProjectExportFolderKey = kProjectKey + "/export-folder";
     // путь до свойств конкретного проекта
     QString projectKey(const QString& _path) {
         return kProjectKey + "/concrete/" + _path;
@@ -99,10 +101,22 @@ namespace {
     //
     const QString kComponentsGroupKey = QStringLiteral("components");
     //
+    // текст
+    const QString kComponentsSimpleTextKey = kComponentsGroupKey + QStringLiteral("/simple-text");
+    // ... редактор
+    const QString kComponentsSimpleTextEditorKey = kComponentsSimpleTextKey + QStringLiteral("/editor");
+    const QString kComponentsSimpleTextEditorDefaultTemplateKey = kComponentsSimpleTextEditorKey + QStringLiteral("/default-template");
+    const QString kComponentsSimpleTextEditorHighlightCurrentLineKey = kComponentsSimpleTextEditorKey + QStringLiteral("/highlight-current-line");
+    // ... навигатор
+    const QString kComponentsSimpleTextNavigatorKey = kComponentsSimpleTextKey + QStringLiteral("/navigator");
+    const QString kComponentsSimpleTextNavigatorShowSceneTextKey = kComponentsSimpleTextNavigatorKey + QStringLiteral("/show-scene-text");
+    const QString kComponentsSimpleTextNavigatorSceneTextLinesKey = kComponentsSimpleTextNavigatorKey + QStringLiteral("/scene-text-lines");
+    //
     // сценарий
     const QString kComponentsScreenplayKey = kComponentsGroupKey + QStringLiteral("/screenplay");
     // ... редактор
     const QString kComponentsScreenplayEditorKey = kComponentsScreenplayKey + QStringLiteral("/editor");
+    const QString kComponentsScreenplayEditorDefaultTemplateKey = kComponentsScreenplayEditorKey + QStringLiteral("/default-template");
     const QString kComponentsScreenplayEditorShowSceneNumbersKey = kComponentsScreenplayEditorKey + QStringLiteral("/show-scene-numbers");
     const QString kComponentsScreenplayEditorShowSceneNumbersOnRightKey = kComponentsScreenplayEditorKey + QStringLiteral("/show-scene-numbers-on-left");
     const QString kComponentsScreenplayEditorShowSceneNumberOnLeftKey = kComponentsScreenplayEditorKey + QStringLiteral("/show-scene-number-on-right");

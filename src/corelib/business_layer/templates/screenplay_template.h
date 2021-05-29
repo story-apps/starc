@@ -49,6 +49,7 @@ CORE_LIBRARY_EXPORT inline uint qHash(ScreenplayParagraphType _type)
  * @brief Получить текстовое представление типа блока
  */
 CORE_LIBRARY_EXPORT QString toString(ScreenplayParagraphType _type);
+CORE_LIBRARY_EXPORT QString toDisplayString(ScreenplayParagraphType _type);
 
 /**
  * @brief Получить тип блока из текстового представления
@@ -124,12 +125,6 @@ public:
     void setActive(bool _isActive);
 
     /**
-     * @brief Экспортируется ли блок
-     */
-    bool isExportable() const;
-    void setExportable(bool _isExportable);
-
-    /**
      * @brief Располагается ли блок с начала страницы
      */
     bool isStartFromNewPage() const;
@@ -178,6 +173,11 @@ public:
     void setMarginsOnHalfPage(const QMarginsF& _margins);
 
     /**
+     * @brief Настроить стиль в соответствии с шириной разделителя страницы
+     */
+    void setPageSplitterWidth(qreal _width);
+
+    /**
      * @brief Отступ снизу, линий
      */
     int linesAfter() const;
@@ -198,47 +198,19 @@ public:
 
 
     /**
-     * @brief Первый символ заглавный
-     */
-    bool isFirstUppercase() const;
-
-    /**
      * @brief Разрешено изменять текст блока
      */
     bool isCanModify() const;
-    void setCanModify(bool _can);
-
-    /**
-     * @brief Имеет ли стиль обрамление
-     */
-    bool hasDecoration() const;
 
     /**
      * @brief Префикс стиля
      */
     QString prefix() const;
-    void setPrefix(const QString& _prefix);
 
     /**
      * @brief Постфикс стиля
      */
     QString postfix() const;
-    void setPostfix(const QString& _postfix);
-
-    /**
-     * @brief Является ли блок частью группы
-     */
-    bool isEmbeddable() const;
-
-    /**
-     * @brief Является ли блок заголовком группы
-     */
-    bool isEmbeddableHeader() const;
-
-    /**
-     * @brief Блок закрывающий группу
-     */
-    ScreenplayParagraphType embeddableFooter() const;
 
 private:
     /**
@@ -272,11 +244,6 @@ private:
      * @brief Активен ли блок
      */
     bool m_isActive = false;
-
-    /**
-     * @brief Будет ли экспортироваться блок
-     */
-    bool m_isExportable = true;
 
     /**
      * @brief Начинается ли блок с начала страницы
@@ -353,6 +320,11 @@ public:
     void saveToFile(const QString& _filePath) const;
 
     /**
+     * @brief Идентификатор шаблона
+     */
+    QString id() const;
+
+    /**
      * @brief Является ли шаблон умолчальным
      */
     bool isDefault() const;
@@ -405,14 +377,10 @@ public:
     ScreenplayBlockStyle blockStyle(const QTextBlock& _forBlock) const;
     void setBlockStyle(const ScreenplayBlockStyle& _blockStyle);
 
-    /**
-     * @brief Обновить цвета прорисовки блоков
-     */
-    void updateBlocksColors();
-
 private:
     explicit ScreenplayTemplate(const QString& _fromFile);
     friend class ScreenplayTemplateFacade;
+    friend class TemplatesFacade;
 
     /**
      * @brief Загрузить шаблон из файла
@@ -420,6 +388,11 @@ private:
     void load(const QString& _fromFile);
 
 private:
+    /**
+     * @brief Идентификатор
+     */
+    QString m_id;
+
     /**
      * @brief Является ли шаблон умолчальным
      */

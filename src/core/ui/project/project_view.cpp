@@ -79,6 +79,8 @@ ProjectView::ProjectView(QWidget* _parent)
     : StackWidget(_parent),
       d(new Implementation(this))
 {
+    setAnimationType(AnimationType::FadeThrough);
+
     addWidget(d->defaultPage);
     addWidget(d->notImplementedPage);
 
@@ -114,6 +116,8 @@ void ProjectView::updateTranslations()
 void ProjectView::designSystemChangeEvent(DesignSystemChangeEvent* _event)
 {
     StackWidget::designSystemChangeEvent(_event);
+
+    setBackgroundColor(Ui::DesignSystem::color().surface());
 
     d->defaultPage->setBackgroundColor(Ui::DesignSystem::color().surface());
     d->defaultPageBodyLabel->setContentsMargins(0, static_cast<int>(Ui::DesignSystem::layout().px16()),

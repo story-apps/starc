@@ -1,14 +1,17 @@
 #pragma once
 
 #include <QObject>
+#include <QUuid>
 
 namespace BusinessLayer {
 class AbstractImageWrapper;
 class AbstractModel;
+class StructureModel;
 }
 
 namespace Domain {
 class DocumentObject;
+enum class DocumentObjectType;
 }
 
 
@@ -23,7 +26,8 @@ class ProjectModelsFacade : public QObject
     Q_OBJECT
 
 public:
-    explicit ProjectModelsFacade(BusinessLayer::AbstractImageWrapper* _imageWrapper, QObject* _parent = nullptr);
+    explicit ProjectModelsFacade(BusinessLayer::StructureModel* _projectStructureModel,
+        BusinessLayer::AbstractImageWrapper* _imageWrapper, QObject* _parent = nullptr);
     ~ProjectModelsFacade() override;
 
     /**
@@ -34,7 +38,14 @@ public:
     /**
      * @brief Получить модель для заданного документа
      */
+    BusinessLayer::AbstractModel* modelFor(const QUuid& _uuid);
+    BusinessLayer::AbstractModel* modelFor(Domain::DocumentObjectType _type);
     BusinessLayer::AbstractModel* modelFor(Domain::DocumentObject* _document);
+
+    /**
+     * @brief Получить список всех моделей заданного типа
+     */
+    QVector<BusinessLayer::AbstractModel*> modelsFor(Domain::DocumentObjectType _type);
 
     /**
      * @brief Удалить модель для заданного документа
@@ -44,7 +55,7 @@ public:
     /**
      * @brief Получить список загруженных моделей документов
      */
-    QVector<BusinessLayer::AbstractModel*> models()  const;
+    QVector<BusinessLayer::AbstractModel*> loadedModels()  const;
 
 signals:
     /**
@@ -78,16 +89,6 @@ signals:
     void projectCoverChanged(const QPixmap& _cover);
 
     /**
-     * @brief Необходимо создать персонажа с заданным именем
-     */
-    void createCharacterRequested(const QString& _name, const QByteArray& _content);
-
-    /**
-     * @brief Неоходимо создать локацию с заданным именем
-     */
-    void createLocationRequested(const QString& _name, const QByteArray& _content);
-
-    /**
      * @brief Сменилась видимость элемента сценария
      */
     /** @{ */
@@ -97,6 +98,26 @@ signals:
     void screenplayTextVisibilityChanged(BusinessLayer::AbstractModel* _screenplayModel, bool _visible);
     void screenplayStatisticsVisibilityChanged(BusinessLayer::AbstractModel* _screenplayModel, bool _visible);
     /** @} */
+
+    /**
+     * @brief Необходимо создать персонажа с заданным именем
+     */
+    void createCharacterRequested(const QString& _name, const QByteArray& _content);
+
+    /**
+     * @brief Изменилось имя персонажа
+     */
+    void characterNameChanged(const QString& _oldName, const QString& _newName);
+
+    /**
+     * @brief Неоходимо создать локацию с заданным именем
+     */
+    void createLocationRequested(const QString& _name, const QByteArray& _content);
+
+    /**
+     * @brief Изменилось название локации
+     */
+    void locationNameChanged(const QString& _oldName, const QString& _newName);
 
 private:
     class Implementation;

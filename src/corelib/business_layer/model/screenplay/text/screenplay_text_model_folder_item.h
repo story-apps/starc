@@ -6,7 +6,6 @@
 
 #include <chrono>
 
-class QDomElement;
 class QXmlStreamReader;
 
 
@@ -24,6 +23,7 @@ public:
      */
     enum DataRole {
         FolderNameRole = Qt::UserRole + 1,
+        FolderDurationRole
     };
 
 public:

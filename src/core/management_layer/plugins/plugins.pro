@@ -6,4 +6,18 @@ SUBDIRS = \
     screenplay_parameters \
     screenplay_text \
     screenplay_text_structure \
-    text
+    screenplay_title_page \
+    simple_text \
+    simple_text_structure
+
+exists (character_information/character_information.pro) {
+    SUBDIRS += character_information
+}
+
+exists (location_information/location_information.pro) {
+    SUBDIRS += location_information
+}
+
+exists (screenplay_statistics/screenplay_statistics.pro) {
+    SUBDIRS += screenplay_statistics
+}

@@ -17,6 +17,11 @@ public:
     ~ScreenplayTextCommentRepliesView() override;
 
     /**
+     * @brief Индекс текущего отображаемого комментария
+     */
+    QModelIndex commentIndex() const;
+
+    /**
      * @brief Установить индекс комментария для отображения
      */
     void setCommentIndex(const QModelIndex& _index);

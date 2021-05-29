@@ -19,12 +19,12 @@
 class TextField::Implementation
 {
 public:
-    Implementation();
+    explicit Implementation(TextField* _q);
 
     /**
      * @brief Переконфигурировать виджет при смене параметров дизайн системы
      */
-    void reconfigure(TextField* _textField);
+    void reconfigure();
 
     /**
      * @brief Анимировать лейбл
@@ -49,25 +49,37 @@ public:
      * @brief Определить область декорирования для заданного размера
      */
     /** @{ */
-    QRectF decorationRect(const QSize& _textFieldSize) const;
-    QRectF decorationRectInFocus(const QSize& _textFieldSize) const;
+    QRectF decorationRect() const;
+    QRectF decorationRectInFocus() const;
     /** @} */
 
     /**
-     * @brief Определить область для отрисовки плейсхолдера
+     * @brief Определяем смещение для картинки
      */
-    QRectF placeholderRect(const QSize& _size) const;
+    int trailingIconOffset() const;
+
+    /**
+     * @brief Стандартный область для текстового поля
+     */
+    QRectF inputTextRect() const;
+
+    /**
+     * @brief Определить область для отрисовки лейбла
+     */
+    QRectF labelRect(const qreal fontHeight) const;
 
     /**
      * @brief Определить область для отрисовки суффикса
      */
-    QRectF suffixRect(const QSize& _size) const;
+    QRectF suffixRect() const;
 
     /**
      * @brief Определить область для отрисовки иконки
      */
     QRectF iconRect(int _width) const;
 
+
+    TextField* q = nullptr;
 
     QColor backgroundInactiveColor = Qt::red;
     QColor backgroundActiveColor = Qt::red;
@@ -88,6 +100,7 @@ public:
     bool isUnderlineDecorationVisible = true;
     bool isTitleVisible = true;
     bool isDefaultMarginsEnabled = true;
+    QMarginsF customMargins;
 
     QVariantAnimation labelColorAnimation;
     QVariantAnimation labelFontSizeAnimation;
@@ -95,7 +108,8 @@ public:
     QVariantAnimation decorationAnimation;
 };
 
-TextField::Implementation::Implementation()
+TextField::Implementation::Implementation(TextField* _q)
+    : q(_q)
 {
     labelColorAnimation.setDuration(200);
     labelColorAnimation.setEasingCurve(QEasingCurve::OutQuad);
@@ -107,51 +121,69 @@ TextField::Implementation::Implementation()
     decorationAnimation.setEasingCurve(QEasingCurve::OutQuad);
 }
 
-void TextField::Implementation::reconfigure(TextField* _textField)
+void TextField::Implementation::reconfigure()
 {
-    QSignalBlocker signalBlocker(_textField);
+    QSignalBlocker signalBlocker(q);
 
-    _textField->setFont(Ui::DesignSystem::font().body1());
-    _textField->setCursorWidth(Ui::DesignSystem::layout().px4());
+    q->setFont(Ui::DesignSystem::font().body1());
+    q->setCursorWidth(Ui::DesignSystem::layout().px4());
 
-    QPalette palette = _textField->palette();
+    QPalette palette = q->palette();
     palette.setColor(QPalette::Base, Qt::transparent);
     palette.setColor(QPalette::Text, textColor);
     palette.setColor(QPalette::Disabled, QPalette::Text, textDisabledColor);
     palette.setColor(QPalette::Highlight, Ui::DesignSystem::color().secondary());
     palette.setColor(QPalette::HighlightedText, Ui::DesignSystem::color().onSecondary());
-    _textField->setPalette(palette);
+    q->setPalette(palette);
 
-    QTextFrameFormat frameFormat = _textField->document()->rootFrame()->frameFormat();
+    QTextFrameFormat frameFormat = q->document()->rootFrame()->frameFormat();
     frameFormat.setLeftMargin(contentMargins().left()
-                              + margins().left());
+                              + margins().left()
+                              + (trailingIcon.isEmpty() || q->isLeftToRight()
+                                 ? 0
+                                 : trailingIconOffset())
+                              + (!suffix.isEmpty() && q->isRightToLeft()
+                                 ? suffixRect().width() + Ui::DesignSystem::textField().spacing()
+                                 : 0));
     frameFormat.setTopMargin(contentMargins().top()
                              + margins().top());
     frameFormat.setRightMargin(contentMargins().right()
                                + margins().right()
-                               + (trailingIcon.isEmpty()
+                               + (trailingIcon.isEmpty() || q->isRightToLeft()
                                   ? 0
-                                  : Ui::DesignSystem::textField().iconSize().width()
-                                    + Ui::DesignSystem::textField().spacing()));
+                                  : trailingIconOffset()));
     frameFormat.setBottomMargin(contentMargins().bottom()
                                 + margins().bottom());
-    _textField->document()->rootFrame()->setFrameFormat(frameFormat);
+    q->document()->rootFrame()->setFrameFormat(frameFormat);
 
     //
     // Переконфигурируем цвет и размер лейблов
     //
-    if (_textField->hasFocus()) {
+    if (q->hasFocus()) {
         labelColorAnimation.setEndValue(Ui::DesignSystem::color().secondary());
     } else {
         labelColorAnimation.setEndValue(textDisabledColor);
     }
-    if (_textField->text().isEmpty() && _textField->placeholderText().isEmpty()) {
+    if (q->text().isEmpty() && q->placeholderText().isEmpty()) {
         animateLabelToBottom();
     } else {
         animateLabelToTop();
     }
     labelFontSizeAnimation.setCurrentTime(labelFontSizeAnimation.duration());
     labelTopLeftAnimation.setCurrentTime(labelTopLeftAnimation.duration());
+
+    //
+    //Анимация лейбла
+    //
+    const int offset = trailingIconOffset();
+    const QPointF labelNewTopLeft = Ui::DesignSystem::textField().labelTopLeft()
+                                    + QPointF(contentMargins().left() + (q->isRightToLeft() ? offset : 0),
+                                              contentMargins().top());
+    const QPointF labelCurrentTopLeft(labelNewTopLeft.x(),
+                                      contentMargins().top()
+                                      + margins().top());
+    labelTopLeftAnimation.setStartValue(labelCurrentTopLeft);
+    labelTopLeftAnimation.setEndValue(labelNewTopLeft);
 }
 
 void TextField::Implementation::animateLabelToTop()
@@ -161,14 +193,8 @@ void TextField::Implementation::animateLabelToTop()
     labelFontSizeAnimation.start();
 
     labelTopLeftAnimation.stop();
-    const QPointF labelNewTopLeft = Ui::DesignSystem::textField().labelTopLeft()
-                                    + QPointF(contentMargins().left(),
-                                              contentMargins().top());
-    const QPointF labelCurrentTopLeft(labelNewTopLeft.x(),
-                                      contentMargins().top()
-                                      + margins().top());
-    labelTopLeftAnimation.setStartValue(labelCurrentTopLeft);
-    labelTopLeftAnimation.setEndValue(labelNewTopLeft);
+
+    labelTopLeftAnimation.setDirection(QVariantAnimation::Forward);
     labelTopLeftAnimation.start();
 }
 
@@ -178,14 +204,7 @@ void TextField::Implementation::animateLabelToBottom()
     labelFontSizeAnimation.setEndValue(Ui::DesignSystem::font().body1().pixelSize());
     labelFontSizeAnimation.start();
 
-    const QPointF labelCurrentTopLeft = Ui::DesignSystem::textField().labelTopLeft()
-                                        + QPointF(contentMargins().left(),
-                                                  contentMargins().top());
-    const QPointF labelNewTopLeft(labelCurrentTopLeft.x(),
-                                  contentMargins().top()
-                                  + margins().top());
-    labelTopLeftAnimation.setStartValue(labelCurrentTopLeft);
-    labelTopLeftAnimation.setEndValue(labelNewTopLeft);
+    labelTopLeftAnimation.setDirection(QVariantAnimation::Backward);
     labelTopLeftAnimation.start();
 }
 
@@ -202,7 +221,8 @@ void TextField::Implementation::finishAnimationIfInvisible(TextField* _textField
 
 QMarginsF TextField::Implementation::contentMargins() const
 {
-    return isDefaultMarginsEnabled ? Ui::DesignSystem::textField().contentsMargins() : QMarginsF();
+    return isDefaultMarginsEnabled ? Ui::DesignSystem::textField().contentsMargins()
+                                   : customMargins;
 }
 
 QMarginsF TextField::Implementation::margins() const
@@ -210,9 +230,9 @@ QMarginsF TextField::Implementation::margins() const
     return Ui::DesignSystem::textField().margins(isTitleVisible);
 }
 
-QRectF TextField::Implementation::decorationRect(const QSize& _textFieldSize) const
+QRectF TextField::Implementation::decorationRect() const
 {
-    qreal top = _textFieldSize.height()
+    qreal top = q->height()
                 - Ui::DesignSystem::textField().underlineHeight()
                 - contentMargins().top()
                 - contentMargins().bottom();
@@ -221,15 +241,15 @@ QRectF TextField::Implementation::decorationRect(const QSize& _textFieldSize) co
     }
     return QRectF(contentMargins().left(),
                   top,
-                  _textFieldSize.width()
+                  q->width()
                   - contentMargins().left()
                   - contentMargins().right(),
                   Ui::DesignSystem::textField().underlineHeight());
 }
 
-QRectF TextField::Implementation::decorationRectInFocus(const QSize& _textFieldSize) const
+QRectF TextField::Implementation::decorationRectInFocus() const
 {
-    qreal top = _textFieldSize.height()
+    qreal top = q->height()
                 - Ui::DesignSystem::textField().underlineHeightInFocus()
                 - contentMargins().top()
                 - contentMargins().bottom();
@@ -238,56 +258,83 @@ QRectF TextField::Implementation::decorationRectInFocus(const QSize& _textFieldS
     }
     return QRectF(contentMargins().left(),
                   top,
-                  _textFieldSize.width()
+                  q->width()
                   - contentMargins().left()
                   - contentMargins().right(),
                   Ui::DesignSystem::textField().underlineHeightInFocus());
 }
 
-QRectF TextField::Implementation::placeholderRect(const QSize& _size) const
+int TextField::Implementation::trailingIconOffset() const
 {
-    const qreal placeholderWidth = TextHelper::fineTextWidth(placeholder, Ui::DesignSystem::font().body1());
-    QPointF labelTopLeft = Ui::DesignSystem::textField().labelTopLeft()
-                           + QPointF(contentMargins().left(),
-                                     contentMargins().top());
-    labelTopLeft.setY(margins().top());
-
-
-    return QRectF(QPointF(contentMargins().left()
-                          + margins().left(),
-                          margins().top()),
-                  QSizeF(placeholderWidth,
-                         _size.height()
-                         - margins().top()
-                         - margins().bottom()));
+    return  trailingIcon.isEmpty()
+            ? 0
+            : Ui::DesignSystem::textField().iconSize().width()
+              + Ui::DesignSystem::textField().spacing();
 }
 
-QRectF TextField::Implementation::suffixRect(const QSize& _size) const
+QRectF TextField::Implementation::inputTextRect() const
 {
-    const qreal suffixWidth = TextHelper::fineTextWidth(suffix, Ui::DesignSystem::font().body1());
+    const int offset = trailingIconOffset();
+    QPointF labelTopLeft = QPointF(Ui::DesignSystem::textField().labelTopLeft().x(), 0)
+            + QPointF(contentMargins().left() + (q->isRightToLeft() ? offset : 0),
+                      contentMargins().top() + margins().top());
+
+    return QRectF(labelTopLeft, QSizeF(q->width()
+                                       - labelTopLeft.x()
+                                       - contentMargins().left()
+                                       - margins().right()
+                                       - (q->isRightToLeft() ? 0 : offset),
+                                       q->height()
+                                       - margins().top()
+                                       - margins().bottom()));
+}
+
+QRectF TextField::Implementation::labelRect(const qreal fontHeight) const
+{
+    const int offset = trailingIconOffset();
     QPointF labelTopLeft = Ui::DesignSystem::textField().labelTopLeft()
-                           + QPointF(contentMargins().left(),
-                                     contentMargins().top());
-    labelTopLeft.setY(margins().top());
+            + QPointF(contentMargins().left() + (q->isRightToLeft() ? offset : 0),
+                      contentMargins().top());
 
+    if (!labelTopLeftAnimation.currentValue().isNull()) {
+        labelTopLeft = labelTopLeftAnimation.currentValue().toPointF();
+    } else if (!q->hasFocus() && q->text().isEmpty() && placeholder.isEmpty()) {
+        labelTopLeft.setY(margins().top());
+    }
+    return QRectF(labelTopLeft, QSizeF(q->width()
+                                       - labelTopLeft.x()
+                                       - contentMargins().left()
+                                       - margins().right()
+                                       - (q->isRightToLeft() ? 0 : offset),
+                                       fontHeight));
+}
 
-    return QRectF(QPointF(_size.width()
-                          - contentMargins().right()
-                          - margins().right()
-                          - suffixWidth,
-                          margins().top()),
-                  QSizeF(suffixWidth,
-                         _size.height()
-                         - margins().top()
-                         - margins().bottom()));
+QRectF TextField::Implementation::suffixRect() const
+{
+    QPointF topLeft;
+    const qreal suffixWidth = TextHelper::fineTextWidthF(suffix, Ui::DesignSystem::font().body1());
+
+    if (q->isRightToLeft()) {
+        topLeft = QPointF(contentMargins().right() + margins().right(), margins().top());
+    } else {
+        topLeft =  QPointF(q->width() - contentMargins().right() - margins().right() - suffixWidth, margins().top());
+    }
+
+    return QRectF(topLeft, QSizeF(suffixWidth, q->height() - margins().top() - margins().bottom()));
 }
 
 QRectF TextField::Implementation::iconRect(int _width) const
 {
-    return QRectF(QPointF(_width
-                          - contentMargins().right()
-                          - margins().right()
-                          - Ui::DesignSystem::textField().iconSize().width(),
+    int topLeft = 0;
+    if (q->isRightToLeft()) {
+        topLeft = contentMargins().left() + margins().left();
+    } else {
+        topLeft = _width
+                - contentMargins().right()
+                - margins().right()
+                - Ui::DesignSystem::textField().iconSize().width();
+    }
+    return QRectF(QPointF(topLeft,
                           Ui::DesignSystem::textField().iconTop()),
                   Ui::DesignSystem::textField().iconSize());
 }
@@ -298,7 +345,7 @@ QRectF TextField::Implementation::iconRect(int _width) const
 
 TextField::TextField(QWidget* _parent)
     : QTextEdit(_parent),
-      d(new Implementation)
+      d(new Implementation(this))
 {
     setAttribute(Qt::WA_Hover);
     setContextMenuPolicy(Qt::CustomContextMenu);
@@ -313,7 +360,7 @@ TextField::TextField(QWidget* _parent)
     policy.setHeightForWidth(true);
     setSizePolicy(policy);
 
-    d->reconfigure(this);
+    reconfigure();
 
     connect(&d->labelColorAnimation, &QVariantAnimation::valueChanged, this, [this] { update(); });
     connect(&d->labelFontSizeAnimation, &QVariantAnimation::valueChanged, this, [this] { update(); });
@@ -334,7 +381,7 @@ void TextField::setBackgroundColor(const QColor& _color)
     d->backgroundInactiveColor.setAlphaF(Ui::DesignSystem::textField().backgroundInactiveColorOpacity());
     d->backgroundActiveColor = _color;
     d->backgroundActiveColor.setAlphaF(Ui::DesignSystem::textField().backgroundActiveColorOpacity());
-    d->reconfigure(this);
+    reconfigure();
 }
 
 void TextField::setTextColor(const QColor& _color)
@@ -346,7 +393,7 @@ void TextField::setTextColor(const QColor& _color)
     d->textColor = _color;
     d->textDisabledColor = d->textColor;
     d->textDisabledColor.setAlphaF(Ui::DesignSystem::disabledTextOpacity());
-    d->reconfigure(this);
+    reconfigure();
 }
 
 void TextField::setLabel(const QString& _text)
@@ -414,6 +461,7 @@ void TextField::setSuffix(const QString& _suffix)
     }
 
     d->suffix = _suffix;
+    reconfigure();
     updateGeometry();
     update();
 }
@@ -454,8 +502,23 @@ void TextField::setTrailingIcon(const QString& _icon)
     }
 
     d->trailingIcon = _icon;
-    d->reconfigure(this);
+    reconfigure();
     update();
+}
+
+void TextField::setTrailingIconColor(const QColor& _color)
+{
+    if (d->trailingIconColor == _color) {
+        return;
+    }
+
+    d->trailingIconColor = _color;
+    update();
+}
+
+QColor TextField::trailingIconColor() const
+{
+    return d->trailingIconColor;
 }
 
 void TextField::setPasswordModeEnabled(bool _enable)
@@ -500,6 +563,23 @@ void TextField::setDefaultMarginsEnabled(bool _enable)
     }
 
     d->isDefaultMarginsEnabled = _enable;
+    reconfigure();
+    updateGeometry();
+    update();
+}
+
+void TextField::setCustomMargins(const QMarginsF& _margins)
+{
+    if (d->customMargins == _margins) {
+        return;
+    }
+
+    d->customMargins = _margins;
+    if (d->isDefaultMarginsEnabled) {
+        d->isDefaultMarginsEnabled = false;
+    }
+    reconfigure();
+    updateGeometry();
     update();
 }
 
@@ -535,18 +615,22 @@ QSize TextField::sizeHint() const
 {
     const QFontMetrics fontMetrics(Ui::DesignSystem::font().body1());
     QSizeF size(TextHelper::fineTextWidth(!text().isEmpty() ? text() : d->placeholder,
-                                         Ui::DesignSystem::font().body1()),
-               fontMetrics.height());
+                                          Ui::DesignSystem::font().body1()),
+                fontMetrics.height());
     if (!d->suffix.isEmpty()) {
-        const auto suffixWidth = TextHelper::fineTextWidth(d->suffix, Ui::DesignSystem::font().body1())
+        const auto suffixWidth = TextHelper::fineTextWidthF(d->suffix, Ui::DesignSystem::font().body1())
                                 + Ui::DesignSystem::textField().spacing();
         size += {suffixWidth, 0};
     }
+    if (!d->label.isEmpty()) {
+        const auto labelWidth = TextHelper::fineTextWidthF(d->label, Ui::DesignSystem::font().caption());
+        size = size.expandedTo({labelWidth, 1});
+    }
     if (!d->error.isEmpty()) {
-        const auto errorWidth = TextHelper::fineTextWidth(d->error, Ui::DesignSystem::font().caption());
+        const auto errorWidth = TextHelper::fineTextWidthF(d->error, Ui::DesignSystem::font().caption());
         size = size.expandedTo({errorWidth, 1});
     } else if (!d->helper.isEmpty()) {
-        const auto helperWidth = TextHelper::fineTextWidth(d->helper, Ui::DesignSystem::font().caption());
+        const auto helperWidth = TextHelper::fineTextWidthF(d->helper, Ui::DesignSystem::font().caption());
         size = size.expandedTo({helperWidth, 1});
     }
     size += QSizeF(d->margins().left()
@@ -588,21 +672,16 @@ int TextField::heightForWidth(int _width) const
     return static_cast<int>(height);
 }
 
-void TextField::setTrailingIconColor(const QColor& _color)
+void TextField::reconfigure()
 {
-    if (d->trailingIconColor == _color) {
-        return;
-    }
-
-    d->trailingIconColor = _color;
-    update();
+    d->reconfigure();
 }
 
 bool TextField::event(QEvent* _event)
 {
     switch (static_cast<int>(_event->type())) {
         case static_cast<QEvent::Type>(EventType::DesignSystemChangeEvent): {
-            d->reconfigure(this);
+            reconfigure();
             updateGeometry();
             update();
             return true;
@@ -646,18 +725,8 @@ void TextField::paintEvent(QPaintEvent* _event)
         painter.begin(viewport());
         painter.setFont(Ui::DesignSystem::font().body1());
         painter.setPen(d->textColor);
-
-        QPointF labelTopLeft = Ui::DesignSystem::textField().labelTopLeft()
-                               + QPointF(d->contentMargins().left(),
-                                         d->contentMargins().top());
-        labelTopLeft.setY(d->margins().top());
-        const QRectF labelRect(labelTopLeft,
-                               QSizeF(width()
-                                      - labelTopLeft.x(),
-                                      height()
-                                      - d->margins().top()
-                                      - d->margins().bottom()));
-        painter.drawText(labelRect, Qt::AlignLeft | Qt::AlignBottom,
+        const auto passwdRect = d->inputTextRect();
+        painter.drawText(passwdRect, Qt::AlignLeft | Qt::AlignBottom,
                          QString(text().length(), QString("●").front()));
         painter.end();
     }
@@ -686,16 +755,7 @@ void TextField::paintEvent(QPaintEvent* _event)
             labelColor = d->labelColorAnimation.currentValue().value<QColor>();
         }
         painter.setPen(labelColor);
-
-        QPointF labelTopLeft = Ui::DesignSystem::textField().labelTopLeft()
-                               + QPointF(d->contentMargins().left(),
-                                         d->contentMargins().top());
-        if (!d->labelTopLeftAnimation.currentValue().isNull()) {
-            labelTopLeft = d->labelTopLeftAnimation.currentValue().toPointF();
-        } else if (!hasFocus() && text().isEmpty() && d->placeholder.isEmpty()) {
-            labelTopLeft.setY(d->margins().top());
-        }
-        const QRectF labelRect(labelTopLeft, QSizeF(width() - labelTopLeft.x(), QFontMetricsF(labelFont).lineSpacing()));
+        const auto labelRect = d->labelRect(QFontMetricsF(labelFont).lineSpacing());
         painter.drawText(labelRect, Qt::AlignLeft | Qt::AlignVCenter, d->label);
     }
     //
@@ -704,7 +764,7 @@ void TextField::paintEvent(QPaintEvent* _event)
     if (text().isEmpty() && !d->placeholder.isEmpty()) {
         painter.setFont(Ui::DesignSystem::font().body1());
         painter.setPen(d->textDisabledColor);
-        const QRectF placeholderRect = d->placeholderRect(size());
+        const auto placeholderRect = d->inputTextRect();
         painter.drawText(placeholderRect, Qt::AlignLeft | Qt::AlignVCenter, d->placeholder);
     }
     //
@@ -713,7 +773,7 @@ void TextField::paintEvent(QPaintEvent* _event)
     if (!d->suffix.isEmpty()) {
         painter.setFont(Ui::DesignSystem::font().body1());
         painter.setPen(d->textDisabledColor);
-        const QRectF suffixRect = d->suffixRect(size());
+        const auto suffixRect = d->suffixRect();
         painter.drawText(suffixRect, Qt::AlignLeft | Qt::AlignVCenter, d->suffix);
     }
     //
@@ -724,7 +784,7 @@ void TextField::paintEvent(QPaintEvent* _event)
         painter.setPen(d->trailingIconColor.isValid()
                        ? d->trailingIconColor
                        : palette().color(QPalette::Text));
-        const QRectF iconRect = d->iconRect(width());
+        const auto iconRect = d->iconRect(width());
         painter.drawText(iconRect.toRect(), Qt::AlignCenter, d->trailingIcon);
     }
     //
@@ -735,7 +795,7 @@ void TextField::paintEvent(QPaintEvent* _event)
         // ... в обычном состоянии
         //
         {
-            const QRectF decorationRect = d->decorationRect(size());
+            const QRectF decorationRect = d->decorationRect();
             const QColor decorationColor = !d->error.isEmpty() ? Ui::DesignSystem::color().error()
                                                                : palette().color(QPalette::Text);
             painter.fillRect(decorationRect, decorationColor);
@@ -745,7 +805,7 @@ void TextField::paintEvent(QPaintEvent* _event)
         //
         if (d->decorationAnimation.currentValue().isValid()) {
             QRectF decorationRect = d->decorationAnimation.currentValue().toRectF();
-            decorationRect.moveTop(d->decorationRectInFocus(size()).top());
+            decorationRect.moveTop(d->decorationRectInFocus().top());
             const QColor decorationColor = !d->error.isEmpty() ? Ui::DesignSystem::color().error()
                                                                : Ui::DesignSystem::color().secondary();
             painter.fillRect(decorationRect, decorationColor);
@@ -783,7 +843,7 @@ void TextField::resizeEvent(QResizeEvent* _event)
     // Если виджет в фокусе, корректируем размер полосы декорации под текстом
     //
     if (hasFocus()) {
-        const QRectF decorationRect = d->decorationRectInFocus(size());
+        const QRectF decorationRect = d->decorationRectInFocus();
         d->decorationAnimation.setEndValue(decorationRect);
     }
 }
@@ -800,7 +860,7 @@ void TextField::focusInEvent(QFocusEvent* _event)
         d->animateLabelToTop();
     }
 
-    const QRectF decorationRect = d->decorationRectInFocus(size());
+    const QRectF decorationRect = d->decorationRectInFocus();
     const qreal contentsWidth = (width()
                                  - d->contentMargins().left()
                                  - d->contentMargins().right()) / 2;
@@ -821,7 +881,7 @@ void TextField::focusOutEvent(QFocusEvent* _event)
         d->animateLabelToBottom();
     }
 
-    const QRectF decorationRect = d->decorationRectInFocus(size());
+    const QRectF decorationRect = d->decorationRectInFocus();
     d->decorationAnimation.setStartValue(decorationRect);
     const qreal contentsWidth = (width()
                                  - d->contentMargins().left()
@@ -846,6 +906,9 @@ void TextField::mouseMoveEvent(QMouseEvent* _event)
     QTextEdit::mouseMoveEvent(_event);
 
     if (d->trailingIcon.isEmpty()) {
+        if (viewport()->cursor() != Qt::IBeamCursor) {
+            viewport()->setCursor(Qt::IBeamCursor);
+        }
         return;
     }
 
@@ -867,6 +930,19 @@ void TextField::keyPressEvent(QKeyEvent* _event)
     }
 
     QTextEdit::keyPressEvent(_event);
+}
+
+void TextField::changeEvent(QEvent *_event)
+{
+    switch (_event->type()) {
+    case QEvent::LayoutDirectionChange:
+        reconfigure();
+        break;
+    default:
+        break;
+    }
+
+    return QTextEdit::changeEvent(_event);
 }
 
 void TextField::insertFromMimeData(const QMimeData* _source)

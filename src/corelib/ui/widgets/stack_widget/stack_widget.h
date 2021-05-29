@@ -16,6 +16,7 @@ public:
      */
     enum class AnimationType {
         Fade,
+        FadeThrough,
         Slide,
         Expand
     };

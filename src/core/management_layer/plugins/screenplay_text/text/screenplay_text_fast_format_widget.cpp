@@ -3,7 +3,6 @@
 #include "screenplay_text_edit.h"
 
 #include <business_layer/templates/screenplay_template.h>
-#include <business_layer/templates/screenplay_template_facade.h>
 
 #include <ui/design_system/design_system.h>
 #include <ui/widgets/button/button.h>
@@ -76,7 +75,7 @@ void FormatButton::setShortcut(const QString& _shortcut)
 
 QSize FormatButton::sizeHint() const
 {
-    const auto shortcutWidth = TextHelper::fineTextWidth(m_shortcut, Ui::DesignSystem::font().overline());
+    const auto shortcutWidth = TextHelper::fineTextWidthF(m_shortcut, Ui::DesignSystem::font().overline());
     return Button::sizeHint() + QSize(shortcutWidth + DesignSystem::button().spacing(), 0);
 }
 

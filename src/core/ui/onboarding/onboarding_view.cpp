@@ -97,16 +97,20 @@ void OnboardingView::Implementation::initLanguagePage()
     };
     RadioButton* azerbaijaniLanguage = initLanguageButton("Azərbaycan", QLocale::Azerbaijani);
     RadioButton* belarusianLanguage = initLanguageButton("Беларуский", QLocale::Belarusian);
+    RadioButton* danishLanguage = initLanguageButton("Dansk", QLocale::Danish);
     RadioButton* englishLanguage = initLanguageButton("English", QLocale::English);
     RadioButton* frenchLanguage = initLanguageButton("Français", QLocale::French);
+    RadioButton* galicianLanguage = initLanguageButton("Galego", QLocale::Galician);
     RadioButton* germanLanguage = initLanguageButton("Deutsch", QLocale::German);
     RadioButton* hebrewLanguage = initLanguageButton("עִבְרִית", QLocale::Hebrew);
     RadioButton* hindiLanguage = initLanguageButton("हिन्दी", QLocale::Hindi);
     RadioButton* hungarianLanguage = initLanguageButton("Magyar", QLocale::Hungarian);
     RadioButton* indonesianLanguage = initLanguageButton("Indonesian", QLocale::Indonesian);
     RadioButton* italianLanguage = initLanguageButton("Italiano", QLocale::Italian);
+    RadioButton* persianLanguage = initLanguageButton("فارسی", QLocale::Persian);
     RadioButton* polishLanguage = initLanguageButton("Polski", QLocale::Polish);
     RadioButton* portugueseBrazilLanguage = initLanguageButton("Português Brasileiro", QLocale::Portuguese);
+    RadioButton* romanianLanguage = initLanguageButton("Română", QLocale::Romanian);
     RadioButton* russianLanguage = initLanguageButton("Русский", QLocale::Russian);
     RadioButton* slovenianLanguage = initLanguageButton("Slovenski", QLocale::Slovenian);
     RadioButton* spanishLanguage = initLanguageButton("Español", QLocale::Spanish);
@@ -116,7 +120,7 @@ void OnboardingView::Implementation::initLanguagePage()
     // Если мы умеем в язык системы, то оставляем выбранным его
     //
     bool isSystemLanguageSupported = false;
-    for (auto language : languageButtons) {
+    for (auto language : std::as_const(languageButtons)) {
         if (language->isChecked()) {
             isSystemLanguageSupported = true;
             break;
@@ -130,9 +134,43 @@ void OnboardingView::Implementation::initLanguagePage()
     }
 
     RadioButtonGroup* languagesGroup = new RadioButtonGroup(languagePage);
-    for (auto languageButton : languageButtons) {
+    for (auto languageButton : std::as_const(languageButtons)) {
         languagesGroup->add(languageButton);
     }
+
+    //
+    // Настроим цепочку переходов фокуса
+    //
+    auto buildFocusChain = [] (const QVector<RadioButton*>& _buttons) {
+        RadioButton* previousButton = nullptr;
+        for (auto button : _buttons) {
+            if (previousButton != nullptr) {
+                setTabOrder(previousButton, button);
+            }
+            previousButton = button;
+        }
+    };
+    buildFocusChain({ azerbaijaniLanguage,
+                      belarusianLanguage,
+                      danishLanguage,
+                      germanLanguage,
+                      englishLanguage,
+                      spanishLanguage,
+                      frenchLanguage,
+                      galicianLanguage,
+                      indonesianLanguage,
+                      italianLanguage,
+                      hungarianLanguage,
+                      polishLanguage,
+                      portugueseBrazilLanguage,
+                      romanianLanguage,
+                      russianLanguage,
+                      slovenianLanguage,
+                      turkishLanguage,
+                      ukrainianLanguage,
+                      hebrewLanguage,
+                      hindiLanguage,
+                      persianLanguage });
 
     languageHowToAddLink = new Body1LinkLabel(languagePage);
     languageHowToAddLink->setLink(QUrl("https://github.com/dimkanovikov/starc/wiki/How-to-add-the-translation-of-Story-Architect-to-your-native-language-or-improve-one-of-existing%3F"));
@@ -155,16 +193,19 @@ void OnboardingView::Implementation::initLanguagePage()
     languagePageLayout->addWidget(languageTitleLabel, row++, 0, 1, 4);
     languagePageLayout->addWidget(azerbaijaniLanguage, row++, 0);
     languagePageLayout->addWidget(belarusianLanguage, row++, 0);
+    languagePageLayout->addWidget(danishLanguage, row++, 0);
     languagePageLayout->addWidget(germanLanguage, row++, 0);
     languagePageLayout->addWidget(englishLanguage, row++, 0);
     languagePageLayout->addWidget(spanishLanguage, row++, 0);
     languagePageLayout->addWidget(frenchLanguage, row++, 0);
+    languagePageLayout->addWidget(galicianLanguage, row++, 0);
     languagePageLayout->addWidget(indonesianLanguage, row++, 0);
-    languagePageLayout->addWidget(italianLanguage, row++, 0);
     int rowForSecondColumn = 1;
+    languagePageLayout->addWidget(italianLanguage, rowForSecondColumn++, 1);
     languagePageLayout->addWidget(hungarianLanguage, rowForSecondColumn++, 1);
     languagePageLayout->addWidget(polishLanguage, rowForSecondColumn++, 1);
     languagePageLayout->addWidget(portugueseBrazilLanguage, rowForSecondColumn++, 1);
+    languagePageLayout->addWidget(romanianLanguage, rowForSecondColumn++, 1);
     languagePageLayout->addWidget(russianLanguage, rowForSecondColumn++, 1);
     languagePageLayout->addWidget(slovenianLanguage, rowForSecondColumn++, 1);
     languagePageLayout->addWidget(turkishLanguage, rowForSecondColumn++, 1);
@@ -172,6 +213,7 @@ void OnboardingView::Implementation::initLanguagePage()
     int rowForThirdColumn = 1;
     languagePageLayout->addWidget(hebrewLanguage, rowForThirdColumn++, 2);
     languagePageLayout->addWidget(hindiLanguage, rowForThirdColumn++, 2);
+    languagePageLayout->addWidget(persianLanguage, rowForThirdColumn++, 2);
     languagePageLayout->setRowStretch(row++, 1);
     languagePageLayout->setColumnStretch(3, 1);
     languagePageLayout->addWidget(languageHowToAddLink, row++, 0, 1, 4);
@@ -186,7 +228,7 @@ void OnboardingView::Implementation::updateLanguagePageUi()
     languageTitleLabel->setContentsMargins(Ui::DesignSystem::label().margins().toMargins());
     languageTitleLabel->setBackgroundColor(DesignSystem::color().surface());
     languageTitleLabel->setTextColor(DesignSystem::color().onSurface());
-    for (auto languageButton : languageButtons) {
+    for (auto languageButton : std::as_const(languageButtons)) {
         languageButton->setBackgroundColor(DesignSystem::color().surface());
         languageButton->setTextColor(DesignSystem::color().onSurface());
     }
@@ -198,7 +240,8 @@ void OnboardingView::Implementation::updateLanguagePageUi()
     skipOnboardingButton->setBackgroundColor(DesignSystem::color().secondary());
     skipOnboardingButton->setTextColor(DesignSystem::color().secondary());
     languagePageButtonsLayout->setSpacing(static_cast<int>(Ui::DesignSystem::layout().buttonsSpacing()));
-    languagePageButtonsLayout->setContentsMargins({static_cast<int>(Ui::DesignSystem::layout().px24()), 0, 0,
+    languagePageButtonsLayout->setContentsMargins({static_cast<int>(Ui::DesignSystem::layout().px24()), 0,
+                                                   static_cast<int>(Ui::DesignSystem::layout().px24()),
                                                    static_cast<int>(Ui::DesignSystem::layout().px12())});
 }
 
@@ -233,10 +276,10 @@ void OnboardingView::Implementation::initThemePage()
 
     scaleFactorTitleLabel = new H6Label(themePage);
     scaleFactorSlider = new Slider(themePage);
-    scaleFactorSlider->setMaximumValue(4000);
-    scaleFactorSlider->setValue(1000);
+    scaleFactorSlider->setMaximumValue(3500);
+    scaleFactorSlider->setValue(500);
     QObject::connect(scaleFactorSlider, &Slider::valueChanged, q, [this] (int _value) {
-        emit q->scaleFactorChanged(static_cast<qreal>(std::max(1, _value)) / 1000.0);
+        emit q->scaleFactorChanged(0.5 + static_cast<qreal>(_value) / 1000.0);
     });
     scaleFactorSmallInfoLabel = new Body2Label(themePage);
     scaleFactorBigInfoLabel = new Body2Label(themePage);
@@ -306,7 +349,8 @@ void OnboardingView::Implementation::updateThemePageUi()
     finishOnboardingButton->setBackgroundColor(DesignSystem::color().secondary());
     finishOnboardingButton->setTextColor(DesignSystem::color().onSecondary());
     themePageButtonsLayout->setSpacing(static_cast<int>(Ui::DesignSystem::layout().buttonsSpacing()));
-    themePageButtonsLayout->setContentsMargins({static_cast<int>(Ui::DesignSystem::layout().px24()), 0, 0,
+    themePageButtonsLayout->setContentsMargins({static_cast<int>(Ui::DesignSystem::layout().px24()), 0,
+                                                static_cast<int>(Ui::DesignSystem::layout().px24()),
                                                 static_cast<int>(Ui::DesignSystem::layout().px12())});
 }
 
@@ -320,6 +364,7 @@ OnboardingView::OnboardingView(QWidget* _parent)
 {
     showLanguagePage();
 
+    updateTranslations();
     designSystemChangeEvent(nullptr);
 }
 

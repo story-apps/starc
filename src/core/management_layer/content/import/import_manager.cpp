@@ -1,12 +1,12 @@
 #include "import_manager.h"
 
-#include <business_layer/import/celtx_importer.h>
-#include <business_layer/import/document_importer.h>
-#include <business_layer/import/fdx_importer.h>
-#include <business_layer/import/fountain_importer.h>
-#include <business_layer/import/import_options.h>
-#include <business_layer/import/kit_scenarist_importer.h>
-#include <business_layer/import/trelby_importer.h>
+#include <business_layer/import/screenplay/celtx_importer.h>
+#include <business_layer/import/screenplay/document_importer.h>
+#include <business_layer/import/screenplay/fdx_importer.h>
+#include <business_layer/import/screenplay/fountain_importer.h>
+#include <business_layer/import/screenplay/screenlay_import_options.h>
+#include <business_layer/import/screenplay/kit_scenarist_importer.h>
+#include <business_layer/import/screenplay/trelby_importer.h>
 
 #include <data_layer/storage/settings_storage.h>
 #include <data_layer/storage/storage_facade.h>
@@ -18,7 +18,6 @@
 #include <utils/helpers/extension_helper.h>
 
 #include <QFileDialog>
-
 
 namespace ManagementLayer
 {
@@ -36,7 +35,7 @@ public:
     /**
      * @brief Импортировать данные из заданного файла
      */
-    void import(const BusinessLayer::ImportOptions& _options);
+    void import(const BusinessLayer::ScreenplayImportOptions& _options);
 
     //
     // Данные
@@ -83,12 +82,12 @@ void ImportManager::Implementation::showImportDialogFor(const QString& _path)
     importDialog->showDialog();
 }
 
-void ImportManager::Implementation::import(const BusinessLayer::ImportOptions& _options)
+void ImportManager::Implementation::import(const BusinessLayer::ScreenplayImportOptions& _options)
 {
     //
     // Определим нужный импортер
     //
-    QScopedPointer<BusinessLayer::AbstractImporter> importer;
+    QScopedPointer<BusinessLayer::AbstractScreenplayImporter> importer;
     {
         const auto importFilePath = _options.filePath.toLower();
         if (importFilePath.endsWith(ExtensionHelper::kitScenarist())) {
@@ -148,14 +147,14 @@ void ImportManager::import()
     //
     // Предоставим пользователю возможность выбрать файл, который он хочет импортировать
     //
-    const auto projectOpenFolder
+    const auto projectImportFolder
             = DataStorageLayer::StorageFacade::settingsStorage()->value(
                   DataStorageLayer::kProjectImportFolderKey,
                   DataStorageLayer::SettingsStorage::SettingsPlace::Application)
               .toString();
     const auto importFilePath
             = QFileDialog::getOpenFileName(d->topLevelWidget, tr("Choose the file to import"),
-                    projectOpenFolder, DialogHelper::importFilters());
+                    projectImportFolder, DialogHelper::importFilters());
     if (importFilePath.isEmpty()) {
         return;
     }
@@ -163,7 +162,7 @@ void ImportManager::import()
     //
     // Если файл был выбран
     //
-    // ... обновим папку, откуда в следующий раз он предположительно опять будет открывать проекты
+    // ... обновим папку, откуда в следующий раз он предположительно опять будет импортировать проекты
     //
     DataStorageLayer::StorageFacade::settingsStorage()->setValue(
                 DataStorageLayer::kProjectImportFolderKey,
@@ -173,6 +172,13 @@ void ImportManager::import()
     // ... и переходим к подготовке импорта
     //
     d->showImportDialogFor(importFilePath);
+}
+
+void ImportManager::import(const QString& _filePath)
+{
+    BusinessLayer::ScreenplayImportOptions options;
+    options.filePath = _filePath;
+    d->import(options);
 }
 
 } // namespace ManagementLayer

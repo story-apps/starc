@@ -14,7 +14,7 @@ using Ui::ScreenplayTextEdit;
 namespace KeyProcessingLayer
 {
 
-UnformattedTextHandler::UnformattedTextHandler(ScreenplayTextEdit* _editor)
+UnformattedTextHandler::UnformattedTextHandler(Ui::ScreenplayTextEdit* _editor)
     : StandardKeyHandler(_editor)
 {
 }

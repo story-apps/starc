@@ -131,6 +131,11 @@ QWidget* RenewSubscriptionDialog::focusedWidgetAfterShow() const
     return d->renew1Month;
 }
 
+QWidget* RenewSubscriptionDialog::lastFocusableWidget() const
+{
+    return d->cancelButton;
+}
+
 void RenewSubscriptionDialog::updateTranslations()
 {
     setTitle(tr("Renew cloud service subscription for"));

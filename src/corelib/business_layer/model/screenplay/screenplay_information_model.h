@@ -22,6 +22,10 @@ public:
     Q_SIGNAL void nameChanged(const QString& _name);
     void setDocumentName(const QString &_name) override;
 
+    const QString& tagline() const;
+    void setTagline(const QString& _tagline);
+    Q_SIGNAL void taglineChanged(const QString& _logline);
+
     const QString& logline() const;
     void setLogline(const QString& _logline);
     Q_SIGNAL void loglineChanged(const QString& _logline);

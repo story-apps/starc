@@ -34,6 +34,16 @@ public:
     void invertTextUnderline();
     /** @} */
 
+    /**
+     * @brief Задать шрифт выделенного текста
+     */
+    void setTextFont(const QFont& _font);
+
+    /**
+     * @brief Задать выравнивание выделенного текста
+     */
+    void setTextAlignment(Qt::Alignment _alignment);
+
 protected:
     /**
      * @brief Перенастраиваем виджет при обновлении дизайн системы

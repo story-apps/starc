@@ -1,6 +1,7 @@
 #include "settings_view.h"
 
 #include <business_layer/chronometry/chronometer.h>
+#include <business_layer/templates/templates_facade.h>
 
 #include <ui/design_system/design_system.h>
 #include <ui/widgets/button/button.h>
@@ -151,6 +152,7 @@ const QVector<QString> kSpellCheckerLanguagesNameToCode = {
     "sv-FI",
     "sv",
     "sw",
+    "ta",
     "te",
     "th",
     "tk",
@@ -257,6 +259,8 @@ public:
     // ... Screenplay editor
     //
     H6Label* screenplayEditorTitle = nullptr;
+    ComboBox* screenplayEditorDefaultTemplate = nullptr;
+    IconsMidLabel* screenplayEditorDefaultTemplateOptions = nullptr;
     CheckBox* screenplayEditorShowSceneNumber = nullptr;
     CheckBox* screenplayEditorShowSceneNumberOnLeft = nullptr;
     CheckBox* screenplayEditorShowSceneNumberOnRight = nullptr;
@@ -325,6 +329,8 @@ SettingsView::Implementation::Implementation(QWidget* _parent)
       screenplayCardLayout(new QGridLayout),
       screenplayTitle(new H5Label(screenplayCard)),
       screenplayEditorTitle(new H6Label(screenplayCard)),
+      screenplayEditorDefaultTemplate(new ComboBox(screenplayCard)),
+      screenplayEditorDefaultTemplateOptions(new IconsMidLabel(screenplayCard)),
       screenplayEditorShowSceneNumber(new CheckBox(screenplayCard)),
       screenplayEditorShowSceneNumberOnLeft(new CheckBox(screenplayCard)),
       screenplayEditorShowSceneNumberOnRight(new CheckBox(screenplayCard)),
@@ -382,8 +388,9 @@ void SettingsView::Implementation::initApplicationCard()
 {
     spellCheckerLanguage->setEnabled(false);
     spellCheckerLanguage->setModel(spellCheckerLanguagesModel);
-    scaleFactor->setMaximumValue(4000);
-    scaleFactor->setValue(1000);
+    // 0 - 0.5, 500 - 1, 3500 - 4
+    scaleFactor->setMaximumValue(3500);
+    scaleFactor->setValue(500);
     backupsFolderPath->setEnabled(false);
     backupsFolderPath->setTrailingIcon(u8"\U000f0256");
 
@@ -451,6 +458,10 @@ void SettingsView::Implementation::initApplicationCard()
 
 void SettingsView::Implementation::initScreenplayCard()
 {
+    screenplayEditorDefaultTemplate->setModel(BusinessLayer::TemplatesFacade::screenplayTemplates());
+    screenplayEditorDefaultTemplateOptions->setText(u8"\U000F01D9");
+    screenplayEditorDefaultTemplateOptions->setAlignment(Qt::AlignCenter);
+    screenplayEditorDefaultTemplateOptions->hide();
     screenplayEditorShowSceneNumberOnLeft->setEnabled(false);
     screenplayEditorShowSceneNumberOnLeft->setChecked(true);
     screenplayEditorShowSceneNumberOnRight->setEnabled(false);
@@ -490,6 +501,12 @@ void SettingsView::Implementation::initScreenplayCard()
     // ... редактор сценария
     //
     screenplayCardLayout->addWidget(screenplayEditorTitle, itemIndex++, 0);
+    {
+        auto layout = makeLayout();
+        layout->addWidget(screenplayEditorDefaultTemplate, 1);
+        layout->addWidget(screenplayEditorDefaultTemplateOptions);
+        screenplayCardLayout->addLayout(layout, itemIndex++, 0);
+    }
     {
         auto layout = makeLayout();
         layout->addWidget(screenplayEditorShowSceneNumber);
@@ -590,7 +607,7 @@ SettingsView::SettingsView(QWidget* _parent)
     // Приложение
     //
     connect(d->useSpellChecker, &CheckBox::checkedChanged, d->spellCheckerLanguage, &ComboBox::setEnabled);
-    connect(d->saveBackups, &CheckBox::checkedChanged, d->backupsFolderPath, &ComboBox::setEnabled);
+    connect(d->saveBackups, &CheckBox::checkedChanged, d->backupsFolderPath, &TextField::setEnabled);
     connect(d->backupsFolderPath, &TextField::trailingIconPressed, this, [this] {
         const auto path =
                 QFileDialog::getExistingDirectory(
@@ -614,7 +631,7 @@ SettingsView::SettingsView(QWidget* _parent)
     });
     connect(d->changeTheme, &Button::clicked, this, &SettingsView::applicationThemePressed);
     connect(d->scaleFactor, &Slider::valueChanged, this, [this] (int _value) {
-        emit applicationScaleFactorChanged(static_cast<qreal>(std::max(1, _value)) / 1000.0);
+        emit applicationScaleFactorChanged(0.5 + static_cast<qreal>(_value) / 1000.0);
     });
     connect(d->autoSave, &CheckBox::checkedChanged, this, &SettingsView::applicationUseAutoSaveChanged);
     connect(d->saveBackups, &CheckBox::checkedChanged, this, &SettingsView::applicationSaveBackupsChanged);
@@ -638,6 +655,9 @@ SettingsView::SettingsView(QWidget* _parent)
     connect(d->screenplayEditorShowSceneNumberOnLeft, &CheckBox::checkedChanged, this, screenplayEditorCorrectShownSceneNumber);
     connect(d->screenplayEditorShowSceneNumberOnRight, &CheckBox::checkedChanged, this, screenplayEditorCorrectShownSceneNumber);
     //
+    connect(d->screenplayEditorDefaultTemplate, &ComboBox::currentIndexChanged, this, [this] (const QModelIndex& _index) {
+        emit screenplayEditorDefaultTemplateChanged(_index.data(BusinessLayer::TemplatesFacade::kTemplateIdRole).toString());
+    });
     auto notifyScreenplayEditorShowSceneNumbersChanged = [this] {
         emit screenplayEditorShowSceneNumberChanged(d->screenplayEditorShowSceneNumber->isChecked(),
                                                     d->screenplayEditorShowSceneNumberOnLeft->isChecked(),
@@ -750,11 +770,17 @@ void SettingsView::setApplicationLanguage(int _language)
             case QLocale::Belarusian: {
                 return "Беларуский";
             }
+            case QLocale::Danish: {
+                return "Dansk";
+            }
             case QLocale::English: {
                 return "English";
             }
             case QLocale::French: {
                 return "Français";
+            }
+            case QLocale::Galician: {
+                return "Galego";
             }
             case QLocale::German: {
                 return "Deutsch";
@@ -774,11 +800,17 @@ void SettingsView::setApplicationLanguage(int _language)
             case QLocale::Italian: {
                 return "Italiano";
             }
+            case QLocale::Persian: {
+                return "فارسی";
+            }
             case QLocale::Polish: {
                 return "Polski";
             }
             case QLocale::Portuguese: {
                 return "Português Brasileiro";
+            }
+            case QLocale::Romanian: {
+                return "Română";
             }
             case QLocale::Russian: {
                 return "Русский";
@@ -849,7 +881,7 @@ void SettingsView::setApplicationTheme(int _theme)
 
 void SettingsView::setApplicationScaleFactor(qreal _scaleFactor)
 {
-    d->scaleFactor->setValue(std::max(1, static_cast<int>(_scaleFactor * 1000)));
+    d->scaleFactor->setValue((_scaleFactor - 0.5) * 1000.0);
 }
 
 void SettingsView::setApplicationUseAutoSave(bool _use)
@@ -865,6 +897,20 @@ void SettingsView::setApplicationSaveBackups(bool _save)
 void SettingsView::setApplicationBackupsFolder(const QString& _path)
 {
     d->backupsFolderPath->setText(_path);
+}
+
+void SettingsView::setScreenplayEditorDefaultTemplate(const QString& _templateId)
+{
+    using namespace BusinessLayer;
+    for (int row = 0; row < TemplatesFacade::screenplayTemplates()->rowCount(); ++row) {
+        auto item = TemplatesFacade::screenplayTemplates()->item(row);
+        if (item->data(TemplatesFacade::kTemplateIdRole).toString() != _templateId) {
+            continue;
+        }
+
+        d->screenplayEditorDefaultTemplate->setCurrentIndex(item->index());
+        break;
+    }
 }
 
 void SettingsView::setScreenplayEditorShowSceneNumber(bool _show, bool _atLeft, bool _atRight)
@@ -1074,6 +1120,7 @@ void SettingsView::updateTranslations()
                                       tr("Swedish (Finland)"),
                                       tr("Swedish"),
                                       tr("Swahili"),
+                                      tr("Tamil"),
                                       tr("Telugu"),
                                       tr("Thai"),
                                       tr("Turkmen"),
@@ -1101,8 +1148,12 @@ void SettingsView::updateTranslations()
 
     d->componentsTitle->setText(tr("Components"));
     //
+    BusinessLayer::TemplatesFacade::updateTranslations();
+    //
     d->screenplayTitle->setText(tr("Screenplay"));
     d->screenplayEditorTitle->setText(tr("Text editor"));
+    d->screenplayEditorDefaultTemplate->setLabel(tr("Default template"));
+    d->screenplayEditorDefaultTemplateOptions->setToolTip(tr("Available actions for the selected template"));
     d->screenplayEditorShowSceneNumber->setText(tr("Show scene number"));
     d->screenplayEditorShowSceneNumberOnLeft->setText(tr("on the left"));
     d->screenplayEditorShowSceneNumberOnRight->setText(tr("on the right"));
@@ -1170,13 +1221,22 @@ void SettingsView::designSystemChangeEvent(DesignSystemChangeEvent* _event)
     auto labelMargins = Ui::DesignSystem::label().margins().toMargins();
     labelMargins.setTop(static_cast<int>(Ui::DesignSystem::button().shadowMargins().top()));
     labelMargins.setBottom(static_cast<int>(Ui::DesignSystem::button().shadowMargins().bottom()));
-    for (auto label : QVector<Widget*>{ d->language,
-                                        d->theme,
-                                        d->scaleFactorTitle, d->scaleFactorSmallInfo, d->scaleFactorBigInfo,
-                                        }) {
+    for (auto label : QVector<Widget*>{
+         d->language,
+         d->theme,
+         d->scaleFactorTitle, d->scaleFactorSmallInfo, d->scaleFactorBigInfo }) {
         label->setBackgroundColor(DesignSystem::color().background());
         label->setTextColor(DesignSystem::color().onBackground());
         label->setContentsMargins(labelMargins);
+    }
+
+    auto iconLabelMargins = labelMargins;
+    iconLabelMargins.setLeft(0);
+    for (auto iconLabel : QVector<Widget*>{
+         d->screenplayEditorDefaultTemplateOptions }) {
+        iconLabel->setBackgroundColor(DesignSystem::color().background());
+        iconLabel->setTextColor(DesignSystem::color().onBackground());
+        iconLabel->setContentsMargins(iconLabelMargins);
     }
 
     for (auto checkBox : {
@@ -1213,6 +1273,7 @@ void SettingsView::designSystemChangeEvent(DesignSystemChangeEvent* _event)
     for (auto textField : QVector<TextField*>{
          d->spellCheckerLanguage,
          d->backupsFolderPath,
+         d->screenplayEditorDefaultTemplate,
          d->screenplayDurationByPagePage,
          d->screenplayDurationByPageDuration,
          d->screenplayDurationByCharactersCharacters,
@@ -1221,8 +1282,9 @@ void SettingsView::designSystemChangeEvent(DesignSystemChangeEvent* _event)
         textField->setTextColor(DesignSystem::color().onBackground());
     }
 
-    for (auto button : { d->changeLanuage,
-                         d->changeTheme }) {
+    for (auto button : {
+         d->changeLanuage,
+         d->changeTheme }) {
         button->setBackgroundColor(DesignSystem::color().secondary());
         button->setTextColor(DesignSystem::color().secondary());
     }
@@ -1230,6 +1292,9 @@ void SettingsView::designSystemChangeEvent(DesignSystemChangeEvent* _event)
     d->scaleFactor->setBackgroundColor(DesignSystem::color().background());
     d->scaleFactor->setContentsMargins({static_cast<int>(Ui::DesignSystem::layout().px24()), 0,
                                            static_cast<int>(Ui::DesignSystem::layout().px24()), 0});
+//    d->screenplayEditorDefaultTemplateOptions->setContentsMargins({});
+    d->screenplayEditorDefaultTemplateOptions->setAlignment(Qt::AlignCenter);
+
 
     d->applicationCardLayout->setRowMinimumHeight(d->applicationCardBottomSpacerIndex,
                                                   static_cast<int>(Ui::DesignSystem::layout().px24()));

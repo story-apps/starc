@@ -24,6 +24,7 @@ public:
     Card* screenplayInfo = nullptr;
     QGridLayout* screenplayInfoLayout = nullptr;
     TextField* screenplayName = nullptr;
+    TextField* screenplayTagline = nullptr;
     TextField* screenplayLogline = nullptr;
     CheckBox* titlePageVisiblity = nullptr;
     CheckBox* synopsisVisiblity = nullptr;
@@ -37,6 +38,7 @@ ScreenplayInformationView::Implementation::Implementation(QWidget* _parent)
       screenplayInfo(new Card(_parent)),
       screenplayInfoLayout(new QGridLayout),
       screenplayName(new TextField(screenplayInfo)),
+      screenplayTagline(new TextField(screenplayInfo)),
       screenplayLogline(new TextField(screenplayInfo)),
       titlePageVisiblity(new CheckBox(screenplayInfo)),
       synopsisVisiblity(new CheckBox(screenplayInfo)),
@@ -54,15 +56,17 @@ ScreenplayInformationView::Implementation::Implementation(QWidget* _parent)
 
     screenplayInfoLayout->setContentsMargins({});
     screenplayInfoLayout->setSpacing(0);
-    screenplayInfoLayout->setRowMinimumHeight(0, 1); // добавляем пустую строку сверху
-    screenplayInfoLayout->addWidget(screenplayName, 1, 0);
-    screenplayInfoLayout->addWidget(screenplayLogline, 2, 0);
-    screenplayInfoLayout->addWidget(titlePageVisiblity, 3, 0);
-    screenplayInfoLayout->addWidget(synopsisVisiblity, 4, 0);
-    screenplayInfoLayout->addWidget(treatmentVisiblity, 5, 0);
-    screenplayInfoLayout->addWidget(screenplayTextVisiblity, 6, 0);
-    screenplayInfoLayout->addWidget(screenplayStatisticsVisiblity, 7, 0);
-    screenplayInfoLayout->setRowMinimumHeight(8, 1); // добавляем пустую строку внизу
+    int row = 0;
+    screenplayInfoLayout->setRowMinimumHeight(row++, 1); // добавляем пустую строку сверху
+    screenplayInfoLayout->addWidget(screenplayName, row++, 0);
+    screenplayInfoLayout->addWidget(screenplayTagline, row++, 0);
+    screenplayInfoLayout->addWidget(screenplayLogline, row++, 0);
+    screenplayInfoLayout->addWidget(titlePageVisiblity, row++, 0);
+    screenplayInfoLayout->addWidget(synopsisVisiblity, row++, 0);
+    screenplayInfoLayout->addWidget(treatmentVisiblity, row++, 0);
+    screenplayInfoLayout->addWidget(screenplayTextVisiblity, row++, 0);
+    screenplayInfoLayout->addWidget(screenplayStatisticsVisiblity, row++, 0);
+    screenplayInfoLayout->setRowMinimumHeight(row++, 1); // добавляем пустую строку внизу
     screenplayInfoLayout->setColumnStretch(0, 1);
     screenplayInfo->setLayoutReimpl(screenplayInfoLayout);
 
@@ -96,6 +100,9 @@ ScreenplayInformationView::ScreenplayInformationView(QWidget* _parent)
     connect(d->screenplayName, &TextField::textChanged, this, [this] {
         emit nameChanged(d->screenplayName->text());
     });
+    connect(d->screenplayTagline, &TextField::textChanged, this, [this] {
+        emit taglineChanged(d->screenplayTagline->text());
+    });
     connect(d->screenplayLogline, &TextField::textChanged, this, [this] {
         emit loglineChanged(d->screenplayLogline->text());
     });
@@ -123,6 +130,15 @@ void ScreenplayInformationView::setName(const QString& _name)
     }
 
     d->screenplayName->setText(_name);
+}
+
+void ScreenplayInformationView::setTagline(const QString& _tagline)
+{
+    if (d->screenplayTagline->text() == _tagline) {
+        return;
+    }
+
+    d->screenplayTagline->setText(_tagline);
 }
 
 void ScreenplayInformationView::setLogline(const QString& _logline)
@@ -162,11 +178,12 @@ void ScreenplayInformationView::setScreenplayStatisticsVisible(bool _visible)
 void ScreenplayInformationView::updateTranslations()
 {
     d->screenplayName->setLabel(tr("Screenplay name"));
+    d->screenplayTagline->setLabel(tr("Tagline"));
     d->screenplayLogline->setLabel(tr("Logline"));
     d->titlePageVisiblity->setText(tr("Title page"));
     d->synopsisVisiblity->setText(tr("Synopsis"));
     d->treatmentVisiblity->setText(tr("Treatment"));
-    d->screenplayTextVisiblity->setText(tr("Text"));
+    d->screenplayTextVisiblity->setText(tr("Screenplay"));
     d->screenplayStatisticsVisiblity->setText(tr("Statistics"));
 }
 
@@ -185,6 +202,7 @@ void ScreenplayInformationView::designSystemChangeEvent(DesignSystemChangeEvent*
 
     d->screenplayInfo->setBackgroundColor(DesignSystem::color().background());
     for (auto textField : { d->screenplayName,
+                            d->screenplayTagline,
                             d->screenplayLogline }) {
         textField->setBackgroundColor(Ui::DesignSystem::color().onBackground());
         textField->setTextColor(Ui::DesignSystem::color().onBackground());
@@ -199,7 +217,8 @@ void ScreenplayInformationView::designSystemChangeEvent(DesignSystemChangeEvent*
     }
     d->screenplayInfoLayout->setVerticalSpacing(static_cast<int>(Ui::DesignSystem::layout().px16()));
     d->screenplayInfoLayout->setRowMinimumHeight(0, static_cast<int>(Ui::DesignSystem::layout().px24()));
-    d->screenplayInfoLayout->setRowMinimumHeight(8, static_cast<int>(Ui::DesignSystem::layout().px24()));
+    d->screenplayInfoLayout->setRowMinimumHeight(d->screenplayInfoLayout->rowCount() - 1,
+                                                 static_cast<int>(Ui::DesignSystem::layout().px24()));
 }
 
 } // namespace Ui

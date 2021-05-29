@@ -9,6 +9,11 @@ class Hunspell;
 class QStringList;
 class QTextCodec;
 
+//
+// Списки орфографических словарей и тезаурусов
+// https://wiki.documentfoundation.org/Language/Support
+// https://wiki.openoffice.org/w/index.php?title=Dictionaries&oldid=229123#Tamil_.28India.29
+//
 
 /**
  * @brief Класс проверяющего орфографию

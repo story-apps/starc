@@ -16,8 +16,6 @@ ProjectTreeDelegate::ProjectTreeDelegate(QObject* _parent)
 
 void ProjectTreeDelegate::paint(QPainter* _painter, const QStyleOptionViewItem& _option, const QModelIndex& _index) const
 {
-    TreeDelegate::paint(_painter, _option, _index);
-
     //
     // Получим настройки стиля
     //
@@ -25,13 +23,39 @@ void ProjectTreeDelegate::paint(QPainter* _painter, const QStyleOptionViewItem& 
     initStyleOption(&opt, _index);
 
     //
+    // Если есть навигатор, немного уменьшаем область для отрисовки текста
+    //
+    const auto hasDecoration
+            = opt.state.testFlag(QStyle::State_Selected)
+              && _index.data(static_cast<int>(BusinessLayer::StructureModelDataRole::IsNavigatorAvailable)).toBool();
+    const auto decorationWidth = Ui::DesignSystem::treeOneLineItem().iconSize().width();
+    const auto canDrawDecoration = opt.rect.width() > decorationWidth * 2;
+    if (hasDecoration && canDrawDecoration) {
+        opt.rect = opt.rect.adjusted(0, 0, -1 * decorationWidth, 0);
+    }
+
+    //
+    // Рисуем базовую информацию
+    //
+    TreeDelegate::paint(_painter, opt, _index);
+
+    //
     // Рисуем иконку перехода в навигатор
     //
-    if (opt.state.testFlag(QStyle::State_Selected)
-        && _index.data(static_cast<int>(BusinessLayer::StructureModelDataRole::IsNavigatorAvailable)).toBool()) {
+    if (hasDecoration && canDrawDecoration) {
+        //
+        // Заливаем область под иконкой самостоятельно
+        //
+        _painter->fillRect(QRect(opt.rect.topRight() + QPoint(1, 0), // 1 пиксель, чтобы области не накладывались
+                                 QSize(decorationWidth, opt.rect.height())),
+                           opt.palette.color(QPalette::Highlight));
+
+        //
+        // Рисуем декорацию
+        //
         const auto textColor = opt.palette.color(QPalette::HighlightedText);
         _painter->setPen(textColor);
-        const QRectF backgroundRect = opt.rect;
+        const QRectF backgroundRect = opt.rect.adjusted(0, 0, decorationWidth, 0);
         auto iconRect = QRectF(QPointF(backgroundRect.right()
                                        - Ui::DesignSystem::treeOneLineItem().iconSize().width()
                                        - Ui::DesignSystem::treeOneLineItem().margins().right(),

@@ -1,7 +1,12 @@
 <RCC>
     <qresource prefix="/">
-        <file>templates/screenplay/fd_a4</file>
-        <file>templates/screenplay/fd_letter</file>
+        <file>templates/screenplay/world_cp</file>
+        <file>templates/screenplay/us</file>
         <file>templates/screenplay/ru</file>
+        <file>templates/screenplay/world_cn</file>
+        <file>templates/screenplay/he</file>
+        <file>templates/screenplay/ar</file>
+        <file>templates/text/mono_cp_a4</file>
+        <file>templates/screenplay/tamil</file>
     </qresource>
 </RCC>

@@ -4,12 +4,15 @@
 
 
 namespace BusinessLayer {
-    class ScreenplayTextModel;
+class ScreenplayTextModel;
 }
 
 namespace Ui
 {
 
+/**
+ * @brief Представление редактора документа сценария
+ */
 class ScreenplayTextView : public Widget
 {
     Q_OBJECT
@@ -21,7 +24,7 @@ public:
     /**
      * @brief Настроить редактор сценария в соответствии с параметрами заданными в настройках
      */
-    void reconfigure();
+    void reconfigure(const QStringList& _changedSettingsKeys);
 
     /**
      * @brief Работа с параметрами отображения представления

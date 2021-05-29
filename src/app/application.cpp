@@ -4,6 +4,7 @@
 
 #include <interfaces/management_layer/i_application_manager.h>
 
+#include <QDebug>
 #include <QFileOpenEvent>
 #include <QTimer>
 

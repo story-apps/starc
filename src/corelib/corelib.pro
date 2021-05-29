@@ -2,20 +2,25 @@ TARGET = corelib
 TEMPLATE = lib
 
 CONFIG += c++1z
-QT += widgets widgets-private sql xml
+QT += widgets widgets-private sql xml network
 
 DEFINES += CORE_LIBRARY
 DEFINES += QT_DEPRECATED_WARNINGS
 
-DESTDIR = ../_build
+mac {
+    DESTDIR = ../_build/starcapp.app/Contents/Frameworks
+} else {
+    DESTDIR = ../_build
+}
+LIBSDIR = ../_build/libs
 
 INCLUDEPATH += ..
 
 #
 # Подключаем библиотеку fileformats
 #
-LIBS += -L$$DESTDIR/libs/ -lfileformats
-win32-msvc*:QMAKE_LFLAGS += /WHOLEARCHIVE:$$DESTDIR/libs/fileformats.lib
+LIBS += -L$$LIBSDIR/ -lfileformats
+win32-msvc*:QMAKE_LFLAGS += /WHOLEARCHIVE:$$LIBSDIR/fileformats.lib
 
 INCLUDEPATH += $$PWD/../3rd_party/fileformats
 DEPENDPATH += $$PWD/../3rd_party/fileformats
@@ -27,8 +32,8 @@ mac:LIBS += -lz
 #
 # Подключаем библиотеку HUNSPELL
 #
-LIBS += -L$$DESTDIR/libs/ -lhunspell
-win32-msvc*:QMAKE_LFLAGS += /WHOLEARCHIVE:$$DESTDIR/libs/hunspell.lib
+LIBS += -L$$LIBSDIR/ -lhunspell
+win32-msvc*:QMAKE_LFLAGS += /WHOLEARCHIVE:$$LIBSDIR/hunspell.lib
 
 INCLUDEPATH += $$PWD/../3rd_party/hunspell/src
 DEPENDPATH += $$PWD/../3rd_party/hunspell
@@ -38,25 +43,45 @@ PRE_TARGETDEPS += $$PWD/../3rd_party/hunspell
 #
 # Подключаем библиотеку qgumboparser
 #
-LIBS += -L$$DESTDIR/libs/ -lqgumboparser
-win32-msvc*:QMAKE_LFLAGS += /WHOLEARCHIVE:$$DESTDIR/libs/qgumboparser.lib
+LIBS += -L$$LIBSDIR/ -lqgumboparser
+win32-msvc*:QMAKE_LFLAGS += /WHOLEARCHIVE:$$LIBSDIR/qgumboparser.lib
 
 INCLUDEPATH += $$PWD/../3rd_party/qgumboparser
 DEPENDPATH += $$PWD/../3rd_party/qgumboparser
 PRE_TARGETDEPS += $$PWD/../3rd_party/qgumboparser
 #
 
+#
+# Подключаем библиотеку Webloader
+#
+LIBS += -L$$LIBSDIR/ -lwebloader
+win32-msvc*:QMAKE_LFLAGS += /WHOLEARCHIVE:$$LIBSDIR/webloader.lib
+
+INCLUDEPATH += $$PWD/../3rd_party/webloader/src
+DEPENDPATH += $$PWD/../3rd_party/webloader
+PRE_TARGETDEPS += $$PWD/../3rd_party/webloader
+#
+
 SOURCES += \
     business_layer/chronometry/chronometer.cpp \
-    business_layer/import/abstract_importer.cpp \
-    business_layer/import/celtx_importer.cpp \
-    business_layer/import/document_importer.cpp \
-    business_layer/import/fdx_importer.cpp \
-    business_layer/import/fountain_importer.cpp \
-    business_layer/import/kit_scenarist_importer.cpp \
-    business_layer/import/trelby_importer.cpp \
+    business_layer/document/screenplay/text/screenplay_text_block_data.cpp \
+    business_layer/document/screenplay/text/screenplay_text_corrector.cpp \
+    business_layer/document/screenplay/text/screenplay_text_cursor.cpp \
+    business_layer/document/screenplay/text/screenplay_text_document.cpp \
+    business_layer/document/text/text_block_data.cpp \
+    business_layer/document/text/text_cursor.cpp \
+    business_layer/document/text/text_document.cpp \
+    business_layer/export/screenplay/pdf_exporter.cpp \
+    business_layer/import/screenplay/celtx_importer.cpp \
+    business_layer/import/screenplay/document_importer.cpp \
+    business_layer/import/screenplay/fdx_importer.cpp \
+    business_layer/import/screenplay/fountain_importer.cpp \
+    business_layer/import/screenplay/kit_scenarist_importer.cpp \
+    business_layer/import/screenplay/trelby_importer.cpp \
+    business_layer/import/text/markdown_improter.cpp \
     business_layer/model/abstract_model.cpp \
     business_layer/model/abstract_model_item.cpp \
+    business_layer/model/abstract_model_xml.cpp \
     business_layer/model/characters/character_model.cpp \
     business_layer/model/characters/characters_model.cpp \
     business_layer/model/locations/location_model.cpp \
@@ -76,13 +101,18 @@ SOURCES += \
     business_layer/model/screenplay/text/screenplay_text_model_splitter_item.cpp \
     business_layer/model/screenplay/text/screenplay_text_model_text_item.cpp \
     business_layer/model/screenplay/screenplay_title_page_model.cpp \
-    business_layer/model/screenplay/text/screenplay_text_model_xml.cpp \
+    business_layer/model/screenplay/text/screenplay_text_model_xml_writer.cpp \
     business_layer/model/structure/structure_model.cpp \
     business_layer/model/structure/structure_model_item.cpp \
     business_layer/model/structure/structure_proxy_model.cpp \
     business_layer/model/text/text_model.cpp \
+    business_layer/model/text/text_model_chapter_item.cpp \
+    business_layer/model/text/text_model_item.cpp \
+    business_layer/model/text/text_model_text_item.cpp \
+    business_layer/reports/screenplay/summary_report.cpp \
     business_layer/templates/screenplay_template.cpp \
-    business_layer/templates/screenplay_template_facade.cpp \
+    business_layer/templates/templates_facade.cpp \
+    business_layer/templates/text_template.cpp \
     data_layer/database.cpp \
     data_layer/mapper/abstract_mapper.cpp \
     data_layer/mapper/document_change_mapper.cpp \
@@ -121,6 +151,8 @@ SOURCES += \
     ui/widgets/drawer/drawer.cpp \
     ui/widgets/floating_tool_bar/floating_tool_bar.cpp \
     ui/widgets/floating_tool_bar/floating_toolbar_animator.cpp \
+    ui/widgets/image/image_card.cpp \
+    ui/widgets/image/image_cropping_dialog.cpp \
     ui/widgets/image_cropper/image_cropper.cpp \
     ui/widgets/label/label.cpp \
     ui/widgets/label/link_label.cpp \
@@ -130,7 +162,6 @@ SOURCES += \
     ui/widgets/shadow/shadow.cpp \
     ui/widgets/slider/slider.cpp \
     ui/widgets/splitter/splitter.cpp \
-    ui/widgets/splitter/splitter_handle.cpp \
     ui/widgets/stack_widget/stack_widget.cpp \
     ui/widgets/stepper/stepper.cpp \
     ui/widgets/tab_bar/tab_bar.cpp \
@@ -149,6 +180,7 @@ SOURCES += \
     ui/widgets/toggle_button/toggle_button.cpp \
     ui/widgets/tree/tree.cpp \
     ui/widgets/tree/tree_delegate.cpp \
+    ui/widgets/tree/tree_header_view.cpp \
     ui/widgets/tree/tree_view.cpp \
     ui/widgets/widget/widget.cpp \
     utils/3rd_party/WAF/Animation/Animation.cpp \
@@ -168,6 +200,7 @@ SOURCES += \
     utils/helpers/dialog_helper.cpp \
     utils/helpers/extension_helper.cpp \
     utils/helpers/image_helper.cpp \
+    utils/helpers/measurement_helper.cpp \
     utils/helpers/scroller_helper.cpp \
     utils/helpers/string_helper.cpp \
     utils/helpers/text_helper.cpp \
@@ -181,17 +214,31 @@ SOURCES += \
 
 HEADERS += \
     business_layer/chronometry/chronometer.h \
-    business_layer/import/abstract_importer.h \
-    business_layer/import/celtx_importer.h \
-    business_layer/import/document_importer.h \
-    business_layer/import/fdx_importer.h \
-    business_layer/import/fountain_importer.h \
-    business_layer/import/import_options.h \
-    business_layer/import/kit_scenarist_importer.h \
-    business_layer/import/trelby_importer.h \
+    business_layer/document/screenplay/text/screenplay_text_block_data.h \
+    business_layer/document/screenplay/text/screenplay_text_corrector.h \
+    business_layer/document/screenplay/text/screenplay_text_cursor.h \
+    business_layer/document/screenplay/text/screenplay_text_document.h \
+    business_layer/document/text/text_block_data.h \
+    business_layer/document/text/text_cursor.h \
+    business_layer/document/text/text_document.h \
+    business_layer/export/screenplay/abstract_exporter.h \
+    business_layer/export/screenplay/export_options.h \
+    business_layer/export/screenplay/pdf_exporter.h \
+    business_layer/import/screenplay/abstract_screenplay_importer.h \
+    business_layer/import/screenplay/celtx_importer.h \
+    business_layer/import/screenplay/document_importer.h \
+    business_layer/import/screenplay/fdx_importer.h \
+    business_layer/import/screenplay/fountain_importer.h \
+    business_layer/import/screenplay/kit_scenarist_importer.h \
+    business_layer/import/screenplay/screenlay_import_options.h \
+    business_layer/import/screenplay/trelby_importer.h \
+    business_layer/import/text/abstract_text_importer.h \
+    business_layer/import/text/markdown_improter.h \
+    business_layer/import/text/text_import_options.h \
     business_layer/model/abstract_image_wrapper.h \
     business_layer/model/abstract_model.h \
     business_layer/model/abstract_model_item.h \
+    business_layer/model/abstract_model_xml.h \
     business_layer/model/characters/character_model.h \
     business_layer/model/characters/characters_model.h \
     business_layer/model/locations/location_model.h \
@@ -212,12 +259,20 @@ HEADERS += \
     business_layer/model/screenplay/text/screenplay_text_model_text_item.h \
     business_layer/model/screenplay/screenplay_title_page_model.h \
     business_layer/model/screenplay/text/screenplay_text_model_xml.h \
+    business_layer/model/screenplay/text/screenplay_text_model_xml_writer.h \
     business_layer/model/structure/structure_model.h \
     business_layer/model/structure/structure_model_item.h \
     business_layer/model/structure/structure_proxy_model.h \
     business_layer/model/text/text_model.h \
+    business_layer/model/text/text_model_chapter_item.h \
+    business_layer/model/text/text_model_item.h \
+    business_layer/model/text/text_model_text_item.h \
+    business_layer/model/text/text_model_xml.h \
+    business_layer/reports/abstract_report.h \
+    business_layer/reports/screenplay/summary_report.h \
     business_layer/templates/screenplay_template.h \
-    business_layer/templates/screenplay_template_facade.h \
+    business_layer/templates/templates_facade.h \
+    business_layer/templates/text_template.h \
     corelib_global.h \
     data_layer/database.h \
     data_layer/mapper/abstract_mapper.h \
@@ -258,6 +313,8 @@ HEADERS += \
     ui/widgets/drawer/drawer.h \
     ui/widgets/floating_tool_bar/floating_tool_bar.h \
     ui/widgets/floating_tool_bar/floating_toolbar_animator.h \
+    ui/widgets/image/image_card.h \
+    ui/widgets/image/image_cropping_dialog.h \
     ui/widgets/image_cropper/image_cropper.h \
     ui/widgets/label/label.h \
     ui/widgets/label/link_label.h \
@@ -267,7 +324,6 @@ HEADERS += \
     ui/widgets/shadow/shadow.h \
     ui/widgets/slider/slider.h \
     ui/widgets/splitter/splitter.h \
-    ui/widgets/splitter/splitter_handle.h \
     ui/widgets/stack_widget/stack_widget.h \
     ui/widgets/stepper/stepper.h \
     ui/widgets/tab_bar/tab_bar.h \
@@ -287,6 +343,7 @@ HEADERS += \
     ui/widgets/toggle_button/toggle_button.h \
     ui/widgets/tree/tree.h \
     ui/widgets/tree/tree_delegate.h \
+    ui/widgets/tree/tree_header_view.h \
     ui/widgets/tree/tree_view.h \
     ui/widgets/widget/widget.h \
     utils/3rd_party/WAF/AbstractAnimator.h \
@@ -309,6 +366,7 @@ HEADERS += \
     utils/helpers/dialog_helper.h \
     utils/helpers/extension_helper.h \
     utils/helpers/image_helper.h \
+    utils/helpers/measurement_helper.h \
     utils/helpers/scroller_helper.h \
     utils/helpers/string_helper.h \
     utils/helpers/text_helper.h \

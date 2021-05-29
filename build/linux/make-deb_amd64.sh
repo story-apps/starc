@@ -26,7 +26,7 @@ APP_BIN_DIR="../../src/_build"
 ls -l $APP_BIN_DIR
 cp $APP_BIN_DIR/starcapp $DEB_APP_DIR/starc
 cp $APP_BIN_DIR/libcorelib.so.1 $DEB_APP_DIR/libs/
-cp $APP_BIN_DIR/plugins/* $DEB_APP_DIR/plugins/
+cp $APP_BIN_DIR/plugins/*.so $DEB_APP_DIR/plugins/
 
 #
 # Copy Qt libraries
@@ -40,7 +40,9 @@ cp $Qt5_DIR/lib/libQt5DBus.so.5 $DEB_APP_DIR/libs/
 cp $Qt5_DIR/lib/libQt5Gui.so.5 $DEB_APP_DIR/libs/
 cp $Qt5_DIR/lib/libQt5Multimedia.so.5 $DEB_APP_DIR/libs/
 cp $Qt5_DIR/lib/libQt5Network.so.5 $DEB_APP_DIR/libs/
+cp $Qt5_DIR/lib/libQt5PrintSupport.so.5 $DEB_APP_DIR/libs/
 cp $Qt5_DIR/lib/libQt5Sql.so.5 $DEB_APP_DIR/libs/
+cp $Qt5_DIR/lib/libQt5Svg.so.5 $DEB_APP_DIR/libs/
 cp $Qt5_DIR/lib/libQt5WebSockets.so.5 $DEB_APP_DIR/libs/
 cp $Qt5_DIR/lib/libQt5Widgets.so.5 $DEB_APP_DIR/libs/
 cp $Qt5_DIR/lib/libQt5XcbQpa.so.5 $DEB_APP_DIR/libs/

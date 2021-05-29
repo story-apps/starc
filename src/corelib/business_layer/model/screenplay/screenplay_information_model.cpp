@@ -17,6 +17,7 @@ namespace BusinessLayer
 namespace {
     const QString kDocumentKey = "document";
     const QString kNameKey = "name";
+    const QString kTaglineKey = "tagline";
     const QString kLoglineKey = "logline";
     const QString kTitlePageVisibleKey = "title_page_visible";
     const QString kSynopsisVisibleKey = "synopsis_visible";
@@ -35,6 +36,7 @@ class ScreenplayInformationModel::Implementation
 {
 public:
     QString name;
+    QString tagline;
     QString logline;
     bool titlePageVisible = true;
     bool synopsisVisible = true;
@@ -96,6 +98,21 @@ void ScreenplayInformationModel::setName(const QString& _name)
 void ScreenplayInformationModel::setDocumentName(const QString& _name)
 {
     setName(_name);
+}
+
+const QString& ScreenplayInformationModel::tagline() const
+{
+    return d->tagline;
+}
+
+void ScreenplayInformationModel::setTagline(const QString& _tagline)
+{
+    if (d->tagline == _tagline) {
+        return;
+    }
+
+    d->tagline = _tagline;
+    emit taglineChanged(d->tagline);
 }
 
 const QString& ScreenplayInformationModel::logline() const
@@ -292,6 +309,7 @@ void ScreenplayInformationModel::initDocument()
 
     const auto documentNode = domDocument.firstChildElement(kDocumentKey);
     d->name = documentNode.firstChildElement(kNameKey).text();
+    d->tagline = documentNode.firstChildElement(kTaglineKey).text();
     d->logline = documentNode.firstChildElement(kLoglineKey).text();
     d->titlePageVisible = documentNode.firstChildElement(kTitlePageVisibleKey).text() == "true";
     d->synopsisVisible = documentNode.firstChildElement(kSynopsisVisibleKey).text() == "true";
@@ -335,21 +353,22 @@ QByteArray ScreenplayInformationModel::toXml() const
     }
 
     QByteArray xml = "<?xml version=\"1.0\"?>\n";
-    xml += QString("<%1 mime-type=\"%2\" version=\"1.0\">\n").arg(kDocumentKey, Domain::mimeTypeFor(document()->type()));
-    xml += QString("<%1><![CDATA[%2]]></%1>\n").arg(kNameKey, d->name);
-    xml += QString("<%1><![CDATA[%2]]></%1>\n").arg(kLoglineKey, d->logline);
-    xml += QString("<%1><![CDATA[%2]]></%1>\n").arg(kTitlePageVisibleKey, d->titlePageVisible ? "true" : "false");
-    xml += QString("<%1><![CDATA[%2]]></%1>\n").arg(kSynopsisVisibleKey, d->synopsisVisible ? "true" : "false");
-    xml += QString("<%1><![CDATA[%2]]></%1>\n").arg(kTreatmentVisibleKey, d->treatmentVisible ? "true" : "false");
-    xml += QString("<%1><![CDATA[%2]]></%1>\n").arg(kScreenplayTextVisibleKey, d->screenplayTextVisible ? "true" : "false");
-    xml += QString("<%1><![CDATA[%2]]></%1>\n").arg(kScreenplayStatisticsVisibleKey, d->screenplayStatisticsVisible ? "true" : "false");
-    xml += QString("<%1><![CDATA[%2]]></%1>\n").arg(kHeaderKey, d->header);
-    xml += QString("<%1><![CDATA[%2]]></%1>\n").arg(kPrintHeaderOnTitlePageKey, d->printHeaderOnTitlePage ? "true" : "false");
-    xml += QString("<%1><![CDATA[%2]]></%1>\n").arg(kFooterKey, d->footer);
-    xml += QString("<%1><![CDATA[%2]]></%1>\n").arg(kPrintFooterOnTitlePageKey, d->printFooterOnTitlePage ? "true" : "false");
-    xml += QString("<%1><![CDATA[%2]]></%1>\n").arg(kScenesNumbersPrefixKey, d->scenesNumbersPrefix);
-    xml += QString("<%1><![CDATA[%2]]></%1>\n").arg(kScenesNumberingStartAtKey, QString::number(d->scenesNumberingStartAt));
-    xml += QString("</%1>").arg(kDocumentKey);
+    xml += QString("<%1 mime-type=\"%2\" version=\"1.0\">\n").arg(kDocumentKey, Domain::mimeTypeFor(document()->type())).toUtf8();
+    xml += QString("<%1><![CDATA[%2]]></%1>\n").arg(kNameKey, d->name).toUtf8();
+    xml += QString("<%1><![CDATA[%2]]></%1>\n").arg(kTaglineKey, d->tagline).toUtf8();
+    xml += QString("<%1><![CDATA[%2]]></%1>\n").arg(kLoglineKey, d->logline).toUtf8();
+    xml += QString("<%1><![CDATA[%2]]></%1>\n").arg(kTitlePageVisibleKey, d->titlePageVisible ? "true" : "false").toUtf8();
+    xml += QString("<%1><![CDATA[%2]]></%1>\n").arg(kSynopsisVisibleKey, d->synopsisVisible ? "true" : "false").toUtf8();
+    xml += QString("<%1><![CDATA[%2]]></%1>\n").arg(kTreatmentVisibleKey, d->treatmentVisible ? "true" : "false").toUtf8();
+    xml += QString("<%1><![CDATA[%2]]></%1>\n").arg(kScreenplayTextVisibleKey, d->screenplayTextVisible ? "true" : "false").toUtf8();
+    xml += QString("<%1><![CDATA[%2]]></%1>\n").arg(kScreenplayStatisticsVisibleKey, d->screenplayStatisticsVisible ? "true" : "false").toUtf8();
+    xml += QString("<%1><![CDATA[%2]]></%1>\n").arg(kHeaderKey, d->header).toUtf8();
+    xml += QString("<%1><![CDATA[%2]]></%1>\n").arg(kPrintHeaderOnTitlePageKey, d->printHeaderOnTitlePage ? "true" : "false").toUtf8();
+    xml += QString("<%1><![CDATA[%2]]></%1>\n").arg(kFooterKey, d->footer).toUtf8();
+    xml += QString("<%1><![CDATA[%2]]></%1>\n").arg(kPrintFooterOnTitlePageKey, d->printFooterOnTitlePage ? "true" : "false").toUtf8();
+    xml += QString("<%1><![CDATA[%2]]></%1>\n").arg(kScenesNumbersPrefixKey, d->scenesNumbersPrefix).toUtf8();
+    xml += QString("<%1><![CDATA[%2]]></%1>\n").arg(kScenesNumberingStartAtKey, QString::number(d->scenesNumberingStartAt)).toUtf8();
+    xml += QString("</%1>").arg(kDocumentKey).toUtf8();
     return xml;
 }
 

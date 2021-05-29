@@ -1,9 +1,9 @@
 #include "screenplay_text_search_manager.h"
 
-#include "screenplay_text_cursor.h"
 #include "screenplay_text_edit.h"
 #include "screenplay_text_search_toolbar.h"
 
+#include <business_layer/document/screenplay/text/screenplay_text_cursor.h>
 #include <business_layer/templates/screenplay_template.h>
 
 #include <utils/helpers/text_helper.h>
@@ -163,6 +163,8 @@ ScreenplayTextSearchManager::ScreenplayTextSearchManager(QWidget* _parent, Ui::S
 {
     connect(d->toolbar, &Ui::ScreenplayTextSearchToolbar::closePressed,
             this, &ScreenplayTextSearchManager::hideToolbarRequested);
+    connect(d->toolbar, &Ui::ScreenplayTextSearchToolbar::focusTextRequested,
+            _parent, qOverload<>(&QWidget::setFocus));
     connect(d->toolbar, &Ui::ScreenplayTextSearchToolbar::findTextRequested, this, [this] {
         d->findText();
     });

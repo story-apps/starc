@@ -61,6 +61,10 @@ void TreeDelegate::paint(QPainter* _painter, const QStyleOptionViewItem& _option
     _painter->setPen(textColor);
     QRectF iconRect;
     if (_index.data(Qt::DecorationRole).isValid()) {
+        if (_index.data(Qt::DecorationPropertyRole).isValid()) {
+            _painter->setPen(_index.data(Qt::DecorationPropertyRole).value<QColor>());
+        }
+
         iconRect = QRectF(QPointF(std::max(backgroundRect.left(),
                                            Ui::DesignSystem::treeOneLineItem().margins().left()),
                                   backgroundRect.top()),
@@ -73,6 +77,7 @@ void TreeDelegate::paint(QPainter* _painter, const QStyleOptionViewItem& _option
     //
     // ... текст
     //
+    _painter->setPen(textColor);
     _painter->setFont(Ui::DesignSystem::font().subtitle2());
     const qreal textLeft = iconRect.isValid()
                            ? iconRect.right() + Ui::DesignSystem::treeOneLineItem().spacing()
@@ -90,6 +95,8 @@ QSize TreeDelegate::sizeHint(const QStyleOptionViewItem& _option, const QModelIn
     Q_UNUSED(_option)
     Q_UNUSED(_index)
 
-    return { TextHelper::fineTextWidth(_index.data().toString(), Ui::DesignSystem::font().subtitle2()),
-             static_cast<int>(Ui::DesignSystem::treeOneLineItem().height()) };
+    return QSizeF(TextHelper::fineTextWidthF(_index.data().toString(),
+                                            Ui::DesignSystem::font().subtitle2()),
+                  Ui::DesignSystem::treeOneLineItem().height())
+            .toSize();
 }

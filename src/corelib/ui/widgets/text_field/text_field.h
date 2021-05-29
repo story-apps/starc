@@ -70,6 +70,12 @@ public:
     void setTrailingIcon(const QString& _icon);
 
     /**
+     * @brief Задать цвет иконки действия (по-умолчанию используется цвет текста)
+     */
+    void setTrailingIconColor(const QColor& _color);
+    QColor trailingIconColor() const;
+
+    /**
      * @brief Включить/отключить режим ввода пароля
      */
     void setPasswordModeEnabled(bool _enable);
@@ -89,6 +95,7 @@ public:
      * @brief Установить использование отступов по-умолчанию
      */
     void setDefaultMarginsEnabled(bool _enable);
+    void setCustomMargins(const QMarginsF& _margins);
 
     /**
      * @brief Установить необходимость добавления новых строк при нажатии Enter'а
@@ -117,9 +124,9 @@ signals:
 
 protected:
     /**
-     * @brief Задать цвет иконки вспомогательного действия
+     * @brief Сконфигурировать виджет при изменении какого-либо из параметров внешнего вида
      */
-    void setTrailingIconColor(const QColor& _color);
+    virtual void reconfigure();
 
     /**
      * @brief Перенастраиваем виджет при обновлении дизайн системы
@@ -158,6 +165,11 @@ protected:
      * @brief Переопределяем для ручной обработки некоторых клавиш
      */
     void keyPressEvent(QKeyEvent* _event) override;
+
+    /**
+     * @brief Ловим LayoutDirectionChanged
+     */
+    void changeEvent(QEvent *_event) override;
 
     /**
      * @brief Разрешаем вставлять только плоский текст

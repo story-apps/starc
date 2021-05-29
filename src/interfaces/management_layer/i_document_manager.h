@@ -7,6 +7,7 @@ class AbstractModel;
 }
 
 class QObject;
+class QStringList;
 class QWidget;
 
 namespace ManagementLayer
@@ -43,7 +44,7 @@ public:
     /**
      * @brief Перенастроить редактор, которым управляет менеджер
      */
-    virtual void reconfigure() {}
+    virtual void reconfigure(const QStringList& _changedSettingsKeys) {}
 
     /**
      * @brief Связать с другим менеджером

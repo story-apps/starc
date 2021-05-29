@@ -52,6 +52,11 @@ public:
      */
     void setProVersion(bool _isPro);
 
+    /**
+     * @brief Установить возможность экспортирования текущего документа
+     */
+    void setCurrentDocumentExportAvailable(bool _available);
+
 signals:
     /**
      * @brief Нажат пункт меню "Проекты"
@@ -76,7 +81,7 @@ signals:
     /**
      * @brief Нажат пункт меню "Сохранить изменения"
      */
-    void saveChangesPressed();
+    void saveProjectChangesPressed();
 
     /**
      * @brief Нажат пункт меню "Сохранить проект как"
@@ -86,7 +91,8 @@ signals:
     /**
      * @brief Нажат пункт меню "Экспортировать"
      */
-    void exportPressed();
+    void exportProjectPressed();
+    void exportCurrentDocumentPressed();
 
     /**
      * @brief Нажат пункт меню "Импортировать"

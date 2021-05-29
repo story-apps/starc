@@ -44,6 +44,7 @@ public:
      * @brief Обновить настройки UI панели инструментов
      */
     void updateToolBarsUi();
+    void updateToolBarsPositon();
 
 
     ProjectsView* q = nullptr;
@@ -108,11 +109,18 @@ void ProjectsView::Implementation::updateProjectsPageUi()
 void ProjectsView::Implementation::updateToolBarsUi()
 {
     toolBar->resize(toolBar->sizeHint());
-    toolBar->move(QPointF(Ui::DesignSystem::layout().px24(),
-                          Ui::DesignSystem::layout().px24()).toPoint());
+    updateToolBarsPositon();
     toolBar->setBackgroundColor(Ui::DesignSystem::color().primary());
     toolBar->setTextColor(Ui::DesignSystem::color().onPrimary());
     toolBar->raise();
+}
+
+void ProjectsView::Implementation::updateToolBarsPositon()
+{
+    toolBar->move(QPointF(q->isLeftToRight()
+                          ? Ui::DesignSystem::layout().px24()
+                          : q->width() - toolBar->width() - Ui::DesignSystem::layout().px24(),
+                          Ui::DesignSystem::layout().px24()).toPoint());
 }
 
 
@@ -168,8 +176,7 @@ void ProjectsView::resizeEvent(QResizeEvent* _event)
 {
     StackWidget::resizeEvent(_event);
 
-    d->toolBar->move(QPointF(Ui::DesignSystem::layout().px24(),
-                             Ui::DesignSystem::layout().px24()).toPoint());
+    d->updateToolBarsPositon();
 }
 
 void ProjectsView::updateTranslations()

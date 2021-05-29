@@ -69,6 +69,11 @@ protected:
     virtual QWidget* focusedWidgetAfterShow() const = 0;
 
     /**
+     * @brief Переход фокуса с заданного виджета будет зацикливаться на первый фокусируемый
+     */
+    virtual QWidget* lastFocusableWidget() const = 0;
+
+    /**
      * @brief Весим фильтр на родительский виджет, чтобы корректировать свои размеры в соответствии с ним
      */
     bool eventFilter(QObject* _watched, QEvent* _event) override;
@@ -82,6 +87,11 @@ protected:
      * @brief Переопределяем отрисовку
      */
     void paintEvent(QPaintEvent* _event) override;
+
+    /**
+     * @brief Обрабатываем клики за пределами области контента диалога
+     */
+    void mousePressEvent(QMouseEvent* _event) override;
 
     /**
      * @brief Обновляем навигатор при изменении дизайн системы

@@ -20,8 +20,9 @@ public:
     /**
      * @brief Определить оптимальную ширину текста
      */
-    static qreal fineTextWidth(const QString& _text, const QFont& _font);
-    static qreal fineTextWidth(const QString& _text, const QFontMetricsF& _metrics);
+    static qreal fineTextWidthF(const QString& _text, const QFont& _font);
+    static qreal fineTextWidthF(const QString& _text, const QFontMetricsF& _metrics);
+    static int fineTextWidth(const QString& _text, const QFont& _font);
 
     /**
      * @brief Определить правильную высоту строки для заданного шрифта
@@ -65,4 +66,9 @@ public:
      */
     static QString smartToLower(const QString& _text);
     static QChar smartToLower(const QChar& _char);
+
+    /**
+     * @brief Определить количество слов в тексте
+     */
+    static int wordsCount(const QString& _text);
 };

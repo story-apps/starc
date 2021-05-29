@@ -24,6 +24,11 @@ public:
      */
     void setSubtitle(const QString& _subtitle);
 
+    /**
+     * @brief Определяем идеальный размер
+     */
+    QSize sizeHint() const override;
+
 protected:
     /**
      * @brief Реализуем собственное рисование
@@ -35,6 +40,11 @@ protected:
      */
     void mousePressEvent(QMouseEvent* _event) override;
     void mouseReleaseEvent(QMouseEvent* _event) override;
+
+    /**
+     * @brief Переопределяем для перерисовки выделенного пункта меню
+     */
+    void mouseMoveEvent(QMouseEvent* _event) override;
 
 private:
     class Implementation;

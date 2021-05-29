@@ -1,11 +1,11 @@
 TEMPLATE = subdirs ordered
 
 SUBDIRS += \
+    app \
     3rd_party \
     corelib \
     core/management_layer/plugins \
     core \
-    app \
     testapp
 
 CONFIG += ordered
@@ -16,22 +16,27 @@ HEADERS += \
 
 TRANSLATIONS += \
     core/translations/_en_source.ts \
-    core/translations/for_use_starc_translation_az.ts \
-    core/translations/for_use_starc_translation_be.ts \
-    core/translations/for_use_starc_translation_de.ts \
-    core/translations/for_use_starc_translation_es.ts \
-    core/translations/for_use_starc_translation_fr.ts \
-    core/translations/for_use_starc_translation_he.ts \
-    core/translations/for_use_starc_translation_hi.ts \
-    core/translations/for_use_starc_translation_hu.ts \
-    core/translations/for_use_starc_translation_id.ts \
-    core/translations/for_use_starc_translation_it.ts \
-    core/translations/for_use_starc_translation_pl.ts \
-    core/translations/for_use_starc_translation_pt_BR.ts \
-    core/translations/for_use_starc_translation_ru.ts \
-    core/translations/for_use_starc_translation_tr.ts \
-    core/translations/for_use_starc_translation_sl.ts \
-    core/translations/for_use_starc_translation_uk.ts
+    core/translations/translation_az.ts \
+    core/translations/translation_be.ts \
+    core/translations/translation_da_DK.ts \
+    core/translations/translation_de.ts \
+    core/translations/translation_en.ts \
+    core/translations/translation_es.ts \
+    core/translations/translation_fa.ts \
+    core/translations/translation_fr.ts \
+    core/translations/translation_gl_ES.ts \
+    core/translations/translation_he.ts \
+    core/translations/translation_hi.ts \
+    core/translations/translation_hu.ts \
+    core/translations/translation_id.ts \
+    core/translations/translation_it.ts \
+    core/translations/translation_pl.ts \
+    core/translations/translation_pt_BR.ts \
+    core/translations/translation_ro_RO.ts \
+    core/translations/translation_ru.ts \
+    core/translations/translation_sl.ts \
+    core/translations/translation_tr.ts \
+    core/translations/translation_uk.ts
 
 #
 # Настраиваем вывод в консоль в Windows в нормальной кодировке

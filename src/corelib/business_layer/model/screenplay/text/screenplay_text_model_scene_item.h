@@ -6,7 +6,6 @@
 
 #include <chrono>
 
-class QDomElement;
 class QXmlStreamReader;
 
 
@@ -49,7 +48,7 @@ public:
      * @brief Номер сцены
      */
     Number number() const;
-    void setNumber(int _number);
+    void setNumber(int _number, const QString& _prefix);
 
     /**
      * @brief Длительность сцены

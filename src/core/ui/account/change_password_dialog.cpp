@@ -104,6 +104,11 @@ QWidget* ChangePasswordDialog::focusedWidgetAfterShow() const
     return d->restorePasswordConfirmationCode;
 }
 
+QWidget* ChangePasswordDialog::lastFocusableWidget() const
+{
+    return d->cancelButton;
+}
+
 void ChangePasswordDialog::updateTranslations()
 {
     setTitle(tr("Change password"));

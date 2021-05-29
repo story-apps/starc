@@ -7,6 +7,8 @@
 
 #include <ui/design_system/design_system.h>
 
+#include <utils/helpers/color_helper.h>
+
 #include <ui/widgets/chat/chat_message.h>
 #include <ui/widgets/chat/chat_messages_view.h>
 #include <ui/widgets/chat/user.h>
@@ -36,6 +38,7 @@ public:
     ScreenplayTextCommentView* headerView = nullptr;
     ChatMessagesView* repliesView = nullptr;
     QScrollArea* repliesViewContainer = nullptr;
+    ScrollBar* repliesViewScrollBar = nullptr;
     Shadow* repliesViewTopShadow = nullptr;
     TextField* replyTextField = nullptr;
 };
@@ -44,6 +47,7 @@ ScreenplayTextCommentRepliesView::Implementation::Implementation(QWidget* _paren
     : headerView(new ScreenplayTextCommentView(_parent)),
       repliesView(new ChatMessagesView),
       repliesViewContainer(new QScrollArea(_parent)),
+      repliesViewScrollBar(new ScrollBar(repliesViewContainer)),
       repliesViewTopShadow(new Shadow(Qt::TopEdge, repliesViewContainer)),
       replyTextField(new TextField(_parent))
 {
@@ -53,7 +57,7 @@ ScreenplayTextCommentRepliesView::Implementation::Implementation(QWidget* _paren
     repliesViewContainer->setPalette(palette);
     repliesViewContainer->setFrameShape(QFrame::NoFrame);
     repliesViewContainer->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
-    repliesViewContainer->setVerticalScrollBar(new ScrollBar);
+    repliesViewContainer->setVerticalScrollBar(repliesViewScrollBar);
     repliesViewContainer->setWidget(repliesView);
     repliesViewContainer->setWidgetResizable(true);
 
@@ -91,15 +95,27 @@ ScreenplayTextCommentRepliesView::ScreenplayTextCommentRepliesView(QWidget* _par
     designSystemChangeEvent(nullptr);
 }
 
+QModelIndex ScreenplayTextCommentRepliesView::commentIndex() const
+{
+    return d->commentIndex;
+}
+
 ScreenplayTextCommentRepliesView::~ScreenplayTextCommentRepliesView() = default;
 
 void ScreenplayTextCommentRepliesView::setCommentIndex(const QModelIndex& _index)
 {
-    if (d->commentIndex != _index) {
+    //
+    // Если сменился индекс, отобразим вверху текущий комментарий
+    //
+    const bool isIndexChanged = d->commentIndex != _index;
+    if (isIndexChanged) {
         d->commentIndex = _index;
         d->headerView->setCommentIndex(d->commentIndex);
     }
 
+    //
+    // Собираем ответы на комментарий и помещаем их во вьюху
+    //
     const auto comments
             = _index.data(ScreenplayTextCommentsModel::ReviewMarkCommentsRole)
                     .value<QVector<BusinessLayer::ScreenplayTextModelTextItem::ReviewComment>>();
@@ -112,6 +128,15 @@ void ScreenplayTextCommentRepliesView::setCommentIndex(const QModelIndex& _index
         replies.append({ QDateTime::fromString(comment.date, Qt::ISODate), comment.text, User(comment.author) });
     }
     d->repliesView->setMessages(replies);
+
+    //
+    // Если это установка нового индекса, то предрасчитаем размер скролбара,
+    // чтобы проскролить его вниз до момента первой отрисовки экрана
+    //
+    if (isIndexChanged) {
+        const auto repliesHeight = d->repliesView->heightForWidth(width());
+        d->repliesViewContainer->verticalScrollBar()->setMaximum(repliesHeight);
+    }
 
     //
     // Отложенно скролим вьюху, чтобы пересчиталась геометрия окна чата
@@ -158,12 +183,15 @@ void ScreenplayTextCommentRepliesView::designSystemChangeEvent(DesignSystemChang
     Widget::designSystemChangeEvent(_event);
 
     setBackgroundColor(Ui::DesignSystem::color().primary());
+    setTextColor(Ui::DesignSystem::color().onPrimary());
 
     d->headerView->setBackgroundColor(Ui::DesignSystem::color().primary());
     d->headerView->setTextColor(Ui::DesignSystem::color().onPrimary());
 
     d->repliesView->setBackgroundColor(Ui::DesignSystem::color().primary());
     d->repliesView->setTextColor(Ui::DesignSystem::color().onPrimary());
+    d->repliesViewScrollBar->setBackgroundColor(ColorHelper::transparent(textColor(), Ui::DesignSystem::elevationEndOpacity()));
+    d->repliesViewScrollBar->setHandleColor(ColorHelper::transparent(textColor(), Ui::DesignSystem::focusBackgroundOpacity()));
 
     d->replyTextField->setBackgroundColor(Ui::DesignSystem::color().onPrimary());
     d->replyTextField->setTextColor(Ui::DesignSystem::color().onPrimary());

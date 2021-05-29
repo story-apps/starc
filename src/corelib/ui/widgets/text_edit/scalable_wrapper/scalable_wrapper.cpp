@@ -7,6 +7,8 @@
 #include <ui/widgets/text_edit/completer/completer_text_edit.h>
 #include <ui/widgets/text_edit/page/page_text_edit.h>
 
+#include <utils/tools/run_once.h>
+
 #include <QAbstractItemView>
 #include <QApplication>
 #include <QGestureEvent>
@@ -410,6 +412,15 @@ void ScalableWrapper::resizeEvent(QResizeEvent* _event)
 
 void ScalableWrapper::callEventWithScrollbarsTweak(std::function<void()> _callback)
 {
+    //
+    // Если твик уже в процессе выполнения, то выполним только колбэк, а твик завершится после
+    //
+    const auto canRun = RunOnce::tryRun(Q_FUNC_INFO);
+    if (!canRun) {
+        _callback();
+        return;
+    }
+
     //
     // Перед событием отключаем синхронизацию полос прокрутки
     //

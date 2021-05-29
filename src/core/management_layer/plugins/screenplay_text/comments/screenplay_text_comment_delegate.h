@@ -11,6 +11,8 @@ namespace Ui
  */
 class ScreenplayTextCommentDelegate : public QStyledItemDelegate
 {
+    Q_OBJECT
+
 public:
     explicit ScreenplayTextCommentDelegate(QObject* _parent = nullptr);
 

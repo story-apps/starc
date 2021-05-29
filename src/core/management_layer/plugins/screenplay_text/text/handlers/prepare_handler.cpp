@@ -3,7 +3,7 @@
 #include "../screenplay_text_edit.h"
 
 #include <business_layer/templates/screenplay_template.h>
-#include <business_layer/templates/screenplay_template_facade.h>
+#include <business_layer/templates/templates_facade.h>
 
 #include <QTextBlock>
 #include <QKeyEvent>
@@ -152,7 +152,7 @@ void PrepareHandler::handleOther(QKeyEvent* _event)
 	//
 	QTextCursor topCursor(editor()->document());
 	topCursor.setPosition(qMin(cursor.selectionStart(), cursor.selectionEnd()));
-    const auto topStyle = BusinessLayer::ScreenplayTemplateFacade::getTemplate().blockStyle(
+    const auto topStyle = BusinessLayer::TemplatesFacade::screenplayTemplate().blockStyle(
                               BusinessLayer::ScreenplayBlockStyle::forBlock(topCursor.block()));
 
 	//
@@ -160,7 +160,7 @@ void PrepareHandler::handleOther(QKeyEvent* _event)
 	//
 	QTextCursor bottomCursor(editor()->document());
 	bottomCursor.setPosition(qMax(cursor.selectionStart(), cursor.selectionEnd()));
-    const auto bottomStyle = BusinessLayer::ScreenplayTemplateFacade::getTemplate().blockStyle(
+    const auto bottomStyle = BusinessLayer::TemplatesFacade::screenplayTemplate().blockStyle(
                                  BusinessLayer::ScreenplayBlockStyle::forBlock(bottomCursor.block()));
 
 	if (!_event->text().isEmpty()) {

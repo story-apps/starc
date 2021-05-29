@@ -31,8 +31,6 @@ QObject* loadApplicationManager()
 
 #if defined(Q_OS_MAC)
     pluginsDir.cdUp();
-//    pluginsDir.cdUp();
-//    pluginsDir.cdUp();
 #endif
 
     //

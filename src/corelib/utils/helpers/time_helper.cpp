@@ -11,3 +11,8 @@ QString TimeHelper::toString(std::chrono::seconds _seconds)
             .arg(minutes.count())
             .arg(QString("0%1").arg(seconds.count()).right(2));
 }
+
+QString TimeHelper::toString(std::chrono::milliseconds _milliseconds)
+{
+    return toString(std::chrono::duration_cast<std::chrono::seconds>(_milliseconds));
+}

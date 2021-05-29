@@ -86,7 +86,7 @@ public:
     /**
      * @brief Параметры шрифтов
      */
-    class CORE_LIBRARY_EXPORT CORE_LIBRARY_EXPORT Font
+    class CORE_LIBRARY_EXPORT Font
     {
     public:
         ~Font();
@@ -108,7 +108,7 @@ public:
         // Cheat sheet - https://cdn.materialdesignicons.com/5.2.45/
         const QFont& iconsSmall() const;
         const QFont& iconsMid() const;
-        const QFont& iconsBig() const;
+        const QFont& iconsForEditors() const;
 
     private:
         explicit Font(qreal _scaleFactor);
@@ -814,7 +814,7 @@ public:
         /**
          * @brief Отступ от иконки до текста пункта меню
          */
-        qreal iconRightMargin() const;
+        qreal spacing() const;
 
         /**
          * @brief Ширина

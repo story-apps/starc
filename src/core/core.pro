@@ -18,14 +18,21 @@ exists("../cloud/cloud.pri") {
 DEFINES += CORE_PLUGIN
 DEFINES += QT_DEPRECATED_WARNINGS
 
-DESTDIR = ../_build/plugins
+mac {
+    DESTDIR = ../_build/starcapp.app/Contents/PlugIns
+    CORELIBDIR = ../_build/starcapp.app/Contents/Frameworks
+} else {
+    DESTDIR = ../_build/plugins
+    CORELIBDIR = ../_build
+}
+LIBSDIR = ../_build/libs
 
 INCLUDEPATH += ..
 
 #
 # Подключаем библиотеку corelib
 #
-LIBS += -L$$DESTDIR/../ -lcorelib
+LIBS += -L$$CORELIBDIR/ -lcorelib
 INCLUDEPATH += $$PWD/../corelib
 DEPENDPATH += $$PWD/../corelib
 #
@@ -33,7 +40,7 @@ DEPENDPATH += $$PWD/../corelib
 #
 # Подключаем библиотеку Webloader
 #
-LIBS += -L$$DESTDIR/../libs/ -lwebloader
+LIBS += -L$$LIBSDIR/ -lwebloader
 INCLUDEPATH += $$PWD/../3rd_party/webloader/src
 DEPENDPATH += $$PWD/../3rd_party/webloader
 #
@@ -41,6 +48,7 @@ DEPENDPATH += $$PWD/../3rd_party/webloader
 SOURCES += \
     management_layer/application_manager.cpp \
     management_layer/content/account/account_manager.cpp \
+    management_layer/content/export/export_manager.cpp \
     management_layer/content/import/import_manager.cpp \
     management_layer/content/onboarding/onboarding_manager.cpp \
     management_layer/content/project/project_manager.cpp \
@@ -60,6 +68,7 @@ SOURCES += \
     ui/account/upgrade_to_pro_dialog.cpp \
     ui/application_style.cpp \
     ui/application_view.cpp \
+    ui/export/export_dialog.cpp \
     ui/import/import_dialog.cpp \
     ui/menu_view.cpp \
     ui/onboarding/onboarding_navigator.cpp \
@@ -85,6 +94,7 @@ HEADERS += \
     core_global.h \
     management_layer/application_manager.h \
     management_layer/content/account/account_manager.h \
+    management_layer/content/export/export_manager.h \
     management_layer/content/import/import_manager.h \
     management_layer/content/onboarding/onboarding_manager.h \
     management_layer/content/project/project_manager.h \
@@ -104,6 +114,7 @@ HEADERS += \
     ui/account/upgrade_to_pro_dialog.h \
     ui/application_style.h \
     ui/application_view.h \
+    ui/export/export_dialog.h \
     ui/import/import_dialog.h \
     ui/menu_view.h \
     ui/onboarding/onboarding_navigator.h \
@@ -130,3 +141,7 @@ RESOURCES += \
     templates.qrc \
     translations.qrc
 
+mac {
+    load(resolve_target)
+    QMAKE_POST_LINK += install_name_tool -change libcorelib.1.dylib @executable_path/../Frameworks/libcorelib.dylib $$QMAKE_RESOLVED_TARGET
+}

@@ -9,6 +9,7 @@ namespace BusinessLayer
 class CharactersModel;
 class LocationsModel;
 class ScreenplayDictionariesModel;
+class ScreenplayInformationModel;
 class ScreenplayTextModelItem;
 
 /**
@@ -92,6 +93,12 @@ public:
     QModelIndex indexForItem(ScreenplayTextModelItem* _item) const;
 
     /**
+     * @brief Задать модель информации о сценарии
+     */
+    void setInformationModel(ScreenplayInformationModel* _model);
+    ScreenplayInformationModel* informationModel() const;
+
+    /**
      * @brief Задать модель справочников сценария
      */
     void setDictionariesModel(ScreenplayDictionariesModel* _model);
@@ -102,6 +109,16 @@ public:
      */
     void setCharactersModel(CharactersModel* _model);
     CharactersModel* charactersModel() const;
+
+    /**
+     * @brief Обновить имя персонажа
+     */
+    void updateCharacterName(const QString& _oldName, const QString& _newName);
+
+    /**
+     * @brief Обновить название локации
+     */
+    void updateLocationName(const QString& _oldName, const QString& _newName);
 
     /**
      * @brief Задать модель локаций проекта

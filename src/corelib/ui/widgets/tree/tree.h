@@ -42,6 +42,16 @@ public:
     QScrollBar* verticalScrollBar() const;
 
     /**
+     * @brief Установить видимость заголовков
+     */
+    void setHeaderVisible(bool _visible);
+
+    /**
+     * @brief Установить ширину колонки
+     */
+    void setColumnWidth(int _column, int _width);
+
+    /**
      * @brief Включить/отключить возможность перетаскивания элементов
      */
     void setDragDropEnabled(bool _enabled);

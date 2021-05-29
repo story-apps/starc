@@ -145,6 +145,7 @@ bool TreeView::eventFilter(QObject* _watched, QEvent* _event)
         d->decorationCenterPosition = event->pos();
         d->decorationRect = visualRect(indexAt(event->pos()));
         d->decorationRect.setLeft(0.0);
+        d->decorationRect.setWidth(width());
         d->decorationRadiusAnimation.setEndValue(d->decorationRect.width());
         d->animateClick();
     }

@@ -11,7 +11,7 @@
 
 #include <utils/3rd_party/WAF/Animation/Animation.h>
 
-#include <QStandardItemModel>
+#include <QAction>
 #include <QTimer>
 #include <QVBoxLayout>
 
@@ -36,11 +36,10 @@ public:
     /**
      * @brief Обновить контекстное меню для заданного списка элементов
      */
-    void updateCommentsViewContextMenu(const QModelIndexList& _indexes);
+    void updateCommentsViewContextMenu(const QModelIndexList& _indexes, ScreenplayTextCommentsView* _view);
 
 
     Tree* commentsView = nullptr;
-    QStandardItemModel* commentsViewContextMenuModel = nullptr;
     ContextMenu* commentsViewContextMenu = nullptr;
 
     ScreenplayTextAddCommentView* addCommentView = nullptr;
@@ -51,7 +50,6 @@ public:
 
 ScreenplayTextCommentsView::Implementation::Implementation(QWidget* _parent)
     : commentsView(new Tree(_parent)),
-      commentsViewContextMenuModel(new QStandardItemModel(commentsView)),
       commentsViewContextMenu(new ContextMenu(commentsView)),
       addCommentView(new ScreenplayTextAddCommentView(_parent)),
       repliesView(new ScreenplayTextCommentRepliesView(_parent))
@@ -60,57 +58,69 @@ ScreenplayTextCommentsView::Implementation::Implementation(QWidget* _parent)
     commentsView->setContextMenuPolicy(Qt::CustomContextMenu);
     commentsView->setItemDelegate(new ScreenplayTextCommentDelegate(commentsView));
     commentsView->setSelectionMode(QAbstractItemView::ExtendedSelection);
-    commentsViewContextMenu->setModel(commentsViewContextMenuModel);
 }
 
-void ScreenplayTextCommentsView::Implementation::updateCommentsViewContextMenu(const QModelIndexList& _indexes)
+void ScreenplayTextCommentsView::Implementation::updateCommentsViewContextMenu(const QModelIndexList& _indexes, ScreenplayTextCommentsView* _view)
 {
     if (_indexes.isEmpty()) {
         return;
     }
 
-    commentsViewContextMenuModel->clear();
+    QVector<QAction*> menuActions;
 
     //
     // Настраиваем контекстное меню для одного элемента
     //
     if (_indexes.size() == 1) {
         if (_indexes.constFirst().data(BusinessLayer::ScreenplayTextCommentsModel::ReviewMarkIsDoneRole).toBool()) {
-            auto markAsUndone = new QStandardItem(tr("Mark as undone"));
-            markAsUndone->setData(u8"\U000F0131", Qt::DecorationRole);
-            markAsUndone->setData(static_cast<int>(ContextMenuAction::MarkAsUndone), Qt::UserRole);
-            commentsViewContextMenuModel->appendRow(markAsUndone);
+            auto markAsUndone = new QAction(tr("Mark as undone"));
+            markAsUndone->setIconText(u8"\U000F0131");
+            connect(markAsUndone, &QAction::triggered, _view, [this, _view] {
+                emit _view->markAsUndoneRequested(commentsView->selectedIndexes());
+            });
+            menuActions.append(markAsUndone);
         } else {
-            auto markAsDone = new QStandardItem(tr("Mark as done"));
-            markAsDone->setData(u8"\U000F0135", Qt::DecorationRole);
-            markAsDone->setData(static_cast<int>(ContextMenuAction::MarkAsDone), Qt::UserRole);
-            commentsViewContextMenuModel->appendRow(markAsDone);
+            auto markAsDone = new QAction(tr("Mark as done"));
+            markAsDone->setIconText(u8"\U000F0135");
+            connect(markAsDone, &QAction::triggered, _view, [this, _view] {
+                emit _view->markAsDoneRequested(commentsView->selectedIndexes());
+            });
+            menuActions.append(markAsDone);
         }
-        auto remove = new QStandardItem(tr("Remove"));
-        remove->setData(u8"\U000F01B4", Qt::DecorationRole);
-        remove->setData(static_cast<int>(ContextMenuAction::Remove), Qt::UserRole);
-        commentsViewContextMenuModel->appendRow(remove);
-
+        auto remove = new QAction(tr("Remove"));
+        remove->setIconText(u8"\U000F01B4");
+        connect(remove, &QAction::triggered, _view, [this, _view] {
+            emit _view->removeRequested(commentsView->selectedIndexes());
+        });
+        menuActions.append(remove);
     }
     //
     // Настраиваем контекстное меню для нескольких выделенных элементов
     //
     else {
-        auto markAsDone = new QStandardItem(tr("Mark selected notes as done"));
-        markAsDone->setData(u8"\U000F0139", Qt::DecorationRole);
-        markAsDone->setData(static_cast<int>(ContextMenuAction::MarkAsDone), Qt::UserRole);
-        commentsViewContextMenuModel->appendRow(markAsDone);
+        auto markAsDone = new QAction(tr("Mark selected notes as done"));
+        markAsDone->setIconText(u8"\U000F0139");
+        connect(markAsDone, &QAction::triggered, _view, [this, _view] {
+            emit _view->markAsDoneRequested(commentsView->selectedIndexes());
+        });
+        menuActions.append(markAsDone);
         //
-        auto markAsUndone = new QStandardItem(tr("Mark selected notes as undone"));
-        markAsUndone->setData(u8"\U000F0137", Qt::DecorationRole);
-        markAsUndone->setData(static_cast<int>(ContextMenuAction::MarkAsUndone), Qt::UserRole);
-        commentsViewContextMenuModel->appendRow(markAsUndone);
+        auto markAsUndone = new QAction(tr("Mark selected notes as undone"));
+        markAsUndone->setIconText(u8"\U000F0137");
+        connect(markAsUndone, &QAction::triggered, _view, [this, _view] {
+            emit _view->markAsUndoneRequested(commentsView->selectedIndexes());
+        });
+        menuActions.append(markAsUndone);
         //
-        auto remove = new QStandardItem(tr("Remove selected notes"));
-        remove->setData(u8"\U000F01B4", Qt::DecorationRole);
-        remove->setData(static_cast<int>(ContextMenuAction::Remove), Qt::UserRole);
-        commentsViewContextMenuModel->appendRow(remove);
+        auto remove = new QAction(tr("Remove selected notes"));
+        remove->setIconText(u8"\U000F01B4");
+        connect(remove, &QAction::triggered, _view, [this, _view] {
+            emit _view->removeRequested(commentsView->selectedIndexes());
+        });
+        menuActions.append(remove);
     }
+
+    commentsViewContextMenu->setActions(menuActions);
 }
 
 
@@ -128,35 +138,15 @@ ScreenplayTextCommentsView::ScreenplayTextCommentsView(QWidget* _parent)
     addWidget(d->repliesView);
 
 
-    connect(d->commentsView, &Tree::currentIndexChanged, this, &ScreenplayTextCommentsView::commentSelected);
+    connect(d->commentsView, &Tree::clicked, this, &ScreenplayTextCommentsView::commentSelected);
     connect(d->commentsView, &Tree::doubleClicked, this, &ScreenplayTextCommentsView::showCommentRepliesView);
     connect(d->commentsView, &Tree::customContextMenuRequested, this, [this] (const QPoint& _pos) {
         if (d->commentsView->selectedIndexes().isEmpty()) {
             return;
         }
 
-        d->updateCommentsViewContextMenu(d->commentsView->selectedIndexes());
+        d->updateCommentsViewContextMenu(d->commentsView->selectedIndexes(), this);
         d->commentsViewContextMenu->showContextMenu(d->commentsView->mapToGlobal(_pos));
-    });
-    connect(d->commentsViewContextMenu, &ContextMenu::clicked, d->commentsViewContextMenu, &ContextMenu::hide);
-    connect(d->commentsViewContextMenu, &ContextMenu::clicked, this, [this] (const QModelIndex& _contextMenuIndex) {
-        const auto action = _contextMenuIndex.data(Qt::UserRole).toInt();
-        switch (static_cast<Implementation::ContextMenuAction>(action)) {
-            case Implementation::ContextMenuAction::MarkAsDone: {
-                emit markAsDoneRequested(d->commentsView->selectedIndexes());
-                break;
-            }
-
-            case Implementation::ContextMenuAction::MarkAsUndone: {
-                emit markAsUndoneRequested(d->commentsView->selectedIndexes());
-                break;
-            }
-
-            case Implementation::ContextMenuAction::Remove: {
-                emit removeRequested(d->commentsView->selectedIndexes());
-                break;
-            }
-        }
     });
     connect(d->addCommentView, &ScreenplayTextAddCommentView::savePressed, this, [this] {
         emit addReviewMarkRequested(d->addCommentColor, d->addCommentView->comment());
@@ -167,7 +157,6 @@ ScreenplayTextCommentsView::ScreenplayTextCommentsView(QWidget* _parent)
     });
     connect(d->repliesView, &ScreenplayTextCommentRepliesView::addReplyPressed, this, [this] (const QString& _reply) {
         emit addReviewMarkCommentRequested(d->commentsView->currentIndex(), _reply);
-
     });
     connect(d->repliesView, &ScreenplayTextCommentRepliesView::closePressed, this, [this] {
         auto animationRect = d->commentsView->visualRect(d->commentsView->currentIndex());
@@ -187,7 +176,19 @@ ScreenplayTextCommentsView::~ScreenplayTextCommentsView() = default;
 
 void ScreenplayTextCommentsView::setModel(QAbstractItemModel* _model)
 {
+    if (d->commentsView->model() != nullptr) {
+        disconnect(d->commentsView->model());
+    }
+
     d->commentsView->setModel(_model);
+
+    if (_model != nullptr) {
+        connect(_model, &QAbstractItemModel::dataChanged, this, [this] (const QModelIndex& _index) {
+            if (_index == d->repliesView->commentIndex()) {
+                d->repliesView->setCommentIndex(_index);
+            }
+        });
+    }
 }
 
 void ScreenplayTextCommentsView::setCurrentIndex(const QModelIndex& _index)

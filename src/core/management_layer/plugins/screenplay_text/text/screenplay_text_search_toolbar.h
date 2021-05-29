@@ -48,6 +48,11 @@ signals:
     void closePressed();
 
     /**
+     * @brief Пользоутель хочет сфокусироваться на текста
+     */
+    void focusTextRequested();
+
+    /**
      * @brief Пользователь хочет найти заданный текст
      */
     void findTextRequested();
@@ -77,6 +82,7 @@ protected:
      * @brief Ловим событие изменения размера родительского виджета, чтобы скорректировать свои размеры
      *        + события потери фокуса для скрытия попапа
      *        + события нажатия ENTER в поле поиска
+     *        + события нажатия ESCAPE в поле поиска
      */
     bool eventFilter(QObject* _watched, QEvent* _event) override;
 

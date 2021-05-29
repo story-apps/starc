@@ -29,6 +29,7 @@ CompleterTextEdit::Implementation::Implementation(QWidget* _parent)
     : completer(new Completer(_parent))
 {
     completer->setWidget(_parent);
+    completer->setMaxVisibleItems(10);
 }
 
 

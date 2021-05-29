@@ -7,6 +7,7 @@
 #include <ui/widgets/button/button.h>
 #include <ui/widgets/label/label.h>
 
+#include <QApplication>
 #include <QGridLayout>
 #include <QPainter>
 #include <QPaintEvent>
@@ -119,11 +120,18 @@ AbstractDialog::AbstractDialog(QWidget* _parent)
     designSystemChangeEvent(nullptr);
 }
 
+AbstractDialog::~AbstractDialog() = default;
+
 void AbstractDialog::showDialog()
 {
     if (parentWidget() == nullptr) {
         return;
     }
+
+    //
+    // Установим обрабочик событий, чтобы перехватывать потерю фокуса и возвращать его в диалог
+    //
+    lastFocusableWidget()->installEventFilter(this);
 
     //
     // Конфигурируем геометрию диалога
@@ -196,10 +204,15 @@ QGridLayout* AbstractDialog::contentsLayout() const
 
 bool AbstractDialog::eventFilter(QObject* _watched, QEvent* _event)
 {
-    if (_watched == parentWidget()
-        && _event->type() == QEvent::Resize) {
+    if (_event->type() == QEvent::Resize
+        && _watched == parentWidget()) {
         auto resizeEvent = static_cast<QResizeEvent*>(_event);
         resize(resizeEvent->size());
+    } else if (_event->type() == QEvent::FocusOut
+               && _watched == lastFocusableWidget()
+               && (QApplication::focusWidget() == nullptr
+                   || !findChildren<QWidget*>().contains(QApplication::focusWidget()))) {
+        focusedWidgetAfterShow()->setFocus();
     }
 
     return QWidget::eventFilter(_watched, _event);
@@ -244,6 +257,20 @@ void AbstractDialog::paintEvent(QPaintEvent* _event)
     }
 }
 
+void AbstractDialog::mousePressEvent(QMouseEvent* _event)
+{
+    //
+    // Если пользователь кликнул вне области контента диалога и есть кнопка отмены, то используем её
+    //
+    if (!d->title->rect().contains(d->title->mapFromGlobal(_event->globalPos()))
+        && !d->content->rect().contains(d->content->mapFromGlobal(_event->globalPos()))) {
+        if (d->rejectButton != nullptr
+            && d->rejectButton->isEnabled()) {
+            d->rejectButton->click();
+        }
+    }
+}
+
 void AbstractDialog::designSystemChangeEvent(DesignSystemChangeEvent* _event)
 {
     Q_UNUSED(_event)
@@ -264,5 +291,3 @@ void AbstractDialog::hide()
 {
     QWidget::hide();
 }
-
-AbstractDialog::~AbstractDialog() = default;

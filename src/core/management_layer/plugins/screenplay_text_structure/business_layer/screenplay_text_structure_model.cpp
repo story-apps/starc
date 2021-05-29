@@ -2,6 +2,8 @@
 
 #include <business_layer/model/screenplay/text/screenplay_text_model.h>
 #include <business_layer/model/screenplay/text/screenplay_text_model_item.h>
+#include <business_layer/model/screenplay/text/screenplay_text_model_text_item.h>
+#include <business_layer/templates/screenplay_template.h>
 
 #include <QApplication>
 
@@ -57,8 +59,26 @@ bool ScreenplayTextStructureModel::filterAcceptsRow(int _sourceRow, const QModel
 
     const auto itemIndex = d->screenplayModel->index(_sourceRow, 0, _sourceParent);
     const auto item = d->screenplayModel->itemForIndex(itemIndex);
-    return item->type() == ScreenplayTextModelItemType::Folder
-            || item->type() == ScreenplayTextModelItemType::Scene;
+
+    //
+    // Показываем папки и сцены
+    //
+    if (item->type() == ScreenplayTextModelItemType::Folder
+        || item->type() == ScreenplayTextModelItemType::Scene) {
+        return true;
+    }
+    //
+    // Из текста показываем только кадры, которые не являются корректировочными блоками
+    //
+    if (item->type() == ScreenplayTextModelItemType::Text) {
+        const auto textItem = static_cast<ScreenplayTextModelTextItem*>(item);
+        return !textItem->isCorrection()
+                && textItem->paragraphType() == ScreenplayParagraphType::Shot;
+    }
+    //
+    // Остальное не показываем
+    //
+    return false;
 }
 
 } // namespace BusinessLayer

@@ -1,16 +1,17 @@
 #include "screenplay_text_edit.h"
 
 #include "handlers/key_press_handler_facade.h"
-#include "screenplay_text_block_data.h"
-#include "screenplay_text_corrector.h"
-#include "screenplay_text_cursor.h"
-#include "screenplay_text_document.h"
 
-#include <business_layer/import/fountain_importer.h>
+#include <business_layer/document/screenplay/text/screenplay_text_block_data.h>
+#include <business_layer/document/screenplay/text/screenplay_text_corrector.h>
+#include <business_layer/document/screenplay/text/screenplay_text_cursor.h>
+#include <business_layer/document/screenplay/text/screenplay_text_document.h>
+#include <business_layer/import/screenplay/fountain_importer.h>
+#include <business_layer/model/screenplay/screenplay_information_model.h>
 #include <business_layer/model/screenplay/text/screenplay_text_model.h>
 #include <business_layer/model/screenplay/text/screenplay_text_model_text_item.h>
 #include <business_layer/templates/screenplay_template.h>
-#include <business_layer/templates/screenplay_template_facade.h>
+#include <business_layer/templates/templates_facade.h>
 
 #include <ui/design_system/design_system.h>
 #include <ui/widgets/context_menu/context_menu.h>
@@ -18,18 +19,18 @@
 #include <utils/helpers/color_helper.h>
 #include <utils/helpers/text_helper.h>
 
+#include <QAction>
 #include <QCoreApplication>
 #include <QLocale>
 #include <QMimeData>
 #include <QPainter>
 #include <QRegularExpression>
 #include <QScrollBar>
-#include <QStandardItemModel>
 #include <QTextTable>
 
 using BusinessLayer::ScreenplayBlockStyle;
 using BusinessLayer::ScreenplayParagraphType;
-using BusinessLayer::ScreenplayTemplateFacade;
+using BusinessLayer::TemplatesFacade;
 
 namespace Ui
 {
@@ -37,6 +38,13 @@ namespace Ui
 class ScreenplayTextEdit::Implementation
 {
 public:
+    explicit Implementation(ScreenplayTextEdit* _q);
+
+    void revertAction(bool previous);
+
+
+    ScreenplayTextEdit* q = nullptr;
+
     BusinessLayer::ScreenplayTextModel* model = nullptr;
     BusinessLayer::ScreenplayTextDocument document;
 
@@ -46,13 +54,47 @@ public:
     bool showDialogueNumber = false;
 };
 
+ScreenplayTextEdit::Implementation::Implementation(ScreenplayTextEdit* _q)
+    : q(_q)
+{
+}
+
+void ScreenplayTextEdit::Implementation::revertAction(bool previous)
+{
+    if (model == nullptr) {
+        return;
+    }
+
+    const auto lastCursorPosition = q->textCursor().position();
+    //
+    if (previous) {
+        model->undo();
+    } else {
+        model->redo();
+    }
+    //
+    if (document.characterCount() > lastCursorPosition) {
+        auto cursor = q->textCursor();
+        cursor.setPosition(lastCursorPosition);
+        q->setTextCursorReimpl(cursor);
+        q->ensureCursorVisible();
+
+        //
+        // При отмене последнего действия позиция курсора могла и не поменяться,
+        // но тип параграфа сменился, поэтому перестраховываемся и говорим будто бы
+        // сменилась позиция курсора, чтобы обновить состояние панелей
+        //
+        emit q->cursorPositionChanged();
+    }
+}
+
 
 // ****
 
 
 ScreenplayTextEdit::ScreenplayTextEdit(QWidget* _parent)
     : BaseTextEdit(_parent),
-      d(new Implementation)
+      d(new Implementation(this))
 {
     setContextMenuPolicy(Qt::CustomContextMenu);
     setFrameShape(QFrame::NoFrame);
@@ -80,18 +122,58 @@ void ScreenplayTextEdit::setShowDialogueNumber(bool _show)
 
 void ScreenplayTextEdit::initWithModel(BusinessLayer::ScreenplayTextModel* _model)
 {
+    if (d->model
+        && d->model->informationModel()) {
+        disconnect(d->model->informationModel());
+    }
     d->model = _model;
 
-    const auto currentTemplate = BusinessLayer::ScreenplayTemplateFacade::getTemplate();
+    //
+    // Сбрасываем модель, чтобы не вылезали изменения документа при изменении параметров страницы
+    //
+    d->document.setModel(nullptr);
+
+    //
+    // Обновляем параметры страницы из шаблона
+    //
+    const auto currentTemplate = TemplatesFacade::screenplayTemplate();
     setPageFormat(currentTemplate.pageSizeId());
     setPageMargins(currentTemplate.pageMargins());
     setPageNumbersAlignment(currentTemplate.pageNumbersAlignment());
-    d->document.setDefaultFont(currentTemplate.blockStyle(ScreenplayParagraphType::SceneHeading).font());
 
     //
     // Документ нужно формировать только после того, как редактор настроен, чтобы избежать лишний изменений
     //
-    d->document.setModel(_model);
+    d->document.setModel(d->model);
+
+    //
+    // Отслеживаем изменения некоторых параметров
+    //
+    if (d->model
+        && d->model->informationModel()) {
+        setHeader(d->model->informationModel()->header());
+        setFooter(d->model->informationModel()->footer());
+
+        connect(d->model->informationModel(), &BusinessLayer::ScreenplayInformationModel::headerChanged,
+                this, &ScreenplayTextEdit::setHeader);
+        connect(d->model->informationModel(), &BusinessLayer::ScreenplayInformationModel::footerChanged,
+                this, &ScreenplayTextEdit::setFooter);
+    }
+}
+
+void ScreenplayTextEdit::reinit()
+{
+    //
+    // Перенастроим всё, что зависит от шаблона
+    //
+    initWithModel(d->model);
+
+    //
+    // Пересчитаем хронометраж
+    //
+    if (d->model != nullptr) {
+        d->model->recalculateDuration();
+    }
 }
 
 BusinessLayer::ScreenplayDictionariesModel* ScreenplayTextEdit::dictionaries() const
@@ -123,38 +205,12 @@ BusinessLayer::LocationsModel* ScreenplayTextEdit::locations() const
 
 void ScreenplayTextEdit::undo()
 {
-    if (d->model == nullptr) {
-        return;
-    }
-
-    const auto lastCursorPosition = textCursor().position();
-    //
-    d->model->undo();
-    //
-    if (d->document.characterCount() > lastCursorPosition) {
-        auto cursor = textCursor();
-        cursor.setPosition(lastCursorPosition);
-        setTextCursorReimpl(cursor);
-        ensureCursorVisible();
-    }
+    d->revertAction(true);
 }
 
 void ScreenplayTextEdit::redo()
 {
-    if (d->model == nullptr) {
-        return;
-    }
-
-    const auto lastCursorPosition = textCursor().position();
-    //
-    d->model->redo();
-    //
-    if (d->document.characterCount() > lastCursorPosition) {
-        auto cursor = textCursor();
-        cursor.setPosition(lastCursorPosition);
-        setTextCursorReimpl(cursor);
-        ensureCursorVisible();
-    }
+    d->revertAction(false);
 }
 
 void ScreenplayTextEdit::addParagraph(BusinessLayer::ScreenplayParagraphType _type)
@@ -508,7 +564,7 @@ void ScreenplayTextEdit::paintEvent(QPaintEvent* _event)
     qreal verticalMargin = 0;
     const qreal splitterX = leftDelta + textLeft
                             + (textRight - textLeft)
-                            * ScreenplayTemplateFacade::getTemplate().leftHalfOfPageWidthPercents() / 100;
+                            * TemplatesFacade::screenplayTemplate().leftHalfOfPageWidthPercents() / 100;
 
 
     //
@@ -826,8 +882,11 @@ void ScreenplayTextEdit::paintEvent(QPaintEvent* _event)
                                                 : pageRight + leftDelta,
                                                 cursorR.bottom());
                             QRectF rect(topLeft, bottomRight);
-                            rect.adjust(0, -4, - QFontMetricsF(cursor.charFormat().font()).horizontalAdvance(".")/2, 0);
-                            painter.setFont(DesignSystem::font().iconsBig());
+                            const auto textFontMetrics = QFontMetricsF(cursor.charFormat().font());
+                            const auto iconFontMetrics = QFontMetricsF(DesignSystem::font().iconsForEditors());
+                            const auto yDelta = (textFontMetrics.lineSpacing() - iconFontMetrics.lineSpacing()) / 2;
+                            rect.adjust(0, yDelta, - textFontMetrics.horizontalAdvance(".")/2, 0);
+                            painter.setFont(DesignSystem::font().iconsForEditors());
                             painter.setPen(palette().text().color());
                             painter.drawText(rect, Qt::AlignRight | Qt::AlignTop, u8"\U000F024B");
                         }
@@ -954,34 +1013,40 @@ void ScreenplayTextEdit::paintEvent(QPaintEvent* _event)
                     }
 
                     //
-                    // Прорисовка префикса блока
+                    // Прорисовка префикса/постфикса для блока текста, если это не пустая декорация
                     //
-                    if (block.charFormat().hasProperty(ScreenplayBlockStyle::PropertyPrefix)) {
-                        painter.setFont(block.charFormat().font());
+                    if (!block.text().isEmpty()
+                        || !block.blockFormat().boolProperty(ScreenplayBlockStyle::PropertyIsCorrection)) {
+                        //
+                        // ... префикс
+                        //
+                        if (block.charFormat().hasProperty(ScreenplayBlockStyle::PropertyPrefix)) {
+                            painter.setFont(block.charFormat().font());
 
-                        const auto prefix = block.charFormat().stringProperty(ScreenplayBlockStyle::PropertyPrefix);
-                        const QPoint topLeft = QPoint(cursorR.left()
-                                                      - painter.fontMetrics().horizontalAdvance(prefix),
-                                                      cursorR.top());
-                        const QPoint bottomRight = QPoint(cursorR.left(),
-                                                          cursorR.bottom());
-                        const QRect rect(topLeft, bottomRight);
-                        painter.drawText(rect, Qt::AlignLeft | Qt::AlignVCenter, prefix);
-                    }
-                    //
-                    // Прорисовка постфикса блока
-                    //
-                    if (block.charFormat().hasProperty(ScreenplayBlockStyle::PropertyPostfix)) {
-                        painter.setFont(block.charFormat().font());
+                            const auto prefix = block.charFormat().stringProperty(ScreenplayBlockStyle::PropertyPrefix);
+                            const QPoint topLeft = QPoint(cursorR.left()
+                                                          - painter.fontMetrics().horizontalAdvance(prefix),
+                                                          cursorR.top());
+                            const QPoint bottomRight = QPoint(cursorR.left(),
+                                                              cursorR.bottom());
+                            const QRect rect(topLeft, bottomRight);
+                            painter.drawText(rect, Qt::AlignLeft | Qt::AlignVCenter, prefix);
+                        }
+                        //
+                        // ... постфикс
+                        //
+                        if (block.charFormat().hasProperty(ScreenplayBlockStyle::PropertyPostfix)) {
+                            painter.setFont(block.charFormat().font());
 
-                        const auto postfix = block.charFormat().stringProperty(ScreenplayBlockStyle::PropertyPostfix);
-                        const QPoint topLeft = QPoint(cursorREnd.left(),
-                                                      cursorREnd.top());
-                        const QPoint bottomRight = QPoint(cursorREnd.left()
-                                                          + painter.fontMetrics().horizontalAdvance(postfix),
-                                                          cursorREnd.bottom());
-                        const QRect rect(topLeft, bottomRight);
-                        painter.drawText(rect, Qt::AlignRight | Qt::AlignVCenter, postfix);
+                            const auto postfix = block.charFormat().stringProperty(ScreenplayBlockStyle::PropertyPostfix);
+                            const QPoint topLeft = QPoint(cursorREnd.left(),
+                                                          cursorREnd.top());
+                            const QPoint bottomRight = QPoint(cursorREnd.left()
+                                                              + painter.fontMetrics().horizontalAdvance(postfix),
+                                                              cursorREnd.bottom());
+                            const QRect rect(topLeft, bottomRight);
+                            painter.drawText(rect, Qt::AlignRight | Qt::AlignVCenter, postfix);
+                        }
                     }
                 }
 
@@ -1067,19 +1132,16 @@ ContextMenu* ScreenplayTextEdit::createContextMenu(const QPoint& _position, QWid
 {
     auto menu = BaseTextEdit::createContextMenu(_position, _parent);
 
-    QStandardItemModel* model = new QStandardItemModel(menu);
-    auto splitAction = new QStandardItem;
+    auto splitAction = new QAction;
+//    splitAction->setSeparator(true);
     if (BusinessLayer::ScreenplayTextCursor cursor = textCursor(); cursor.inTable()) {
         splitAction->setText(tr("Merge paragraph"));
-        splitAction->setData(u8"\U000f10e7", Qt::DecorationRole);
+        splitAction->setIconText(u8"\U000f10e7");
     } else {
         splitAction->setText(tr("Split paragraph"));
-        splitAction->setData(u8"\U000f10e7", Qt::DecorationRole);
+        splitAction->setIconText(u8"\U000f10e7");
     }
-    model->appendRow(splitAction);
-    menu->setModel(model);
-    connect(menu, &ContextMenu::clicked, this, [this, menu] {
-        menu->hideContextMenu();
+    connect(splitAction, &QAction::triggered, this, [this] {
         BusinessLayer::ScreenplayTextCursor cursor = textCursor();
         if (cursor.inTable()) {
             d->document.mergeParagraph(cursor);
@@ -1095,6 +1157,9 @@ ContextMenu* ScreenplayTextEdit::createContextMenu(const QPoint& _position, QWid
             moveCursor(QTextCursor::EndOfBlock);
         }
     });
+
+    Q_ASSERT(menu->actions().size() > 1);
+    menu->insertActions(menu->actions()[1], { splitAction });
 
     return menu;
 }
@@ -1161,8 +1226,19 @@ void ScreenplayTextEdit::insertFromMimeData(const QMimeData* _source)
     //
     // Удаляем выделенный текст
     //
-    if (textCursor().hasSelection()) {
-        textCursor().deleteChar();
+    BusinessLayer::ScreenplayTextCursor cursor = textCursor();
+    if (cursor.hasSelection()) {
+        cursor.removeCharacters(this);
+    }
+
+    //
+    // Если в моменте входа мы в состоянии редактирования (такое возможно в момент дропа),
+    // то запомним это состояние, чтобы восстановить после дропа, а для вставки важно,
+    // чтобы режим редактирования был выключен, т.к. данные будут загружаться через модель
+    //
+    const bool wasInEditBlock = cursor.isInEditBlock();
+    if (wasInEditBlock) {
+        cursor.endEditBlock();
     }
 
     //
@@ -1173,8 +1249,8 @@ void ScreenplayTextEdit::insertFromMimeData(const QMimeData* _source)
     //
     // Если вставляются данные в сценарном формате, то вставляем как положено
     //
-    if (_source->formats().contains(d->model->mimeTypes().first())) {
-        textToInsert = _source->data(d->model->mimeTypes().first());
+    if (_source->formats().contains(d->model->mimeTypes().constFirst())) {
+        textToInsert = _source->data(d->model->mimeTypes().constFirst());
     }
     //
     // Если простой текст, то вставляем его, импортировав с фонтана
@@ -1186,19 +1262,47 @@ void ScreenplayTextEdit::insertFromMimeData(const QMimeData* _source)
         textToInsert = fountainImporter.importScreenplay("\n" + _source->text()).text;
     }
 
+    //
+    // Собственно вставка данных
+    //
     d->document.insertFromMime(textCursor().position(), textToInsert);
+
+    //
+    // Восстанавливаем режим редактирования, если нужно
+    //
+    if (wasInEditBlock) {
+        cursor.beginEditBlock();
+    }
 }
 
 void ScreenplayTextEdit::dropEvent(QDropEvent* _event)
 {
-    if (_event->dropAction() == Qt::MoveAction) {
+    //
+    // Если в момент вставки было выделение
+    //
+    if (textCursor().hasSelection()) {
         BusinessLayer::ScreenplayTextCursor cursor = textCursor();
-        cursor.removeCharacters(this);
+        //
+        // ... и это перемещение содержимого внутри редактора
+        //
+        if (_event->source() == this) {
+            //
+            // ... то удалим выделенный текст
+            //
+            cursor.removeCharacters(this);
+        }
+        //
+        // ... а если контент заносят снаружи
+        //
+        else {
+            //
+            // ... то очистим выделение, чтобы оставить контент
+            //
+            cursor.clearSelection();
+        }
     }
 
-    d->document.startMimeDropping();
     PageTextEdit::dropEvent(_event);
-    d->document.finishMimeDropping();
 }
 
 } // namespace Ui

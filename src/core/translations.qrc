@@ -1,20 +1,25 @@
 <RCC>
     <qresource prefix="/">
-        <file>translations/for_use_starc_translation_uk.qm</file>
-        <file>translations/for_use_starc_translation_sl.qm</file>
-        <file>translations/for_use_starc_translation_ru.qm</file>
-        <file>translations/for_use_starc_translation_it.qm</file>
-        <file>translations/for_use_starc_translation_hu.qm</file>
-        <file>translations/for_use_starc_translation_he.qm</file>
-        <file>translations/for_use_starc_translation_es.qm</file>
-        <file>translations/for_use_starc_translation_de.qm</file>
-        <file>translations/for_use_starc_translation_az.qm</file>
-        <file>translations/for_use_starc_translation_tr.qm</file>
-        <file>translations/for_use_starc_translation_hi.qm</file>
-        <file>translations/for_use_starc_translation_pt_BR.qm</file>
-        <file>translations/for_use_starc_translation_pl.qm</file>
-        <file>translations/for_use_starc_translation_id.qm</file>
-        <file>translations/for_use_starc_translation_fr.qm</file>
-        <file>translations/for_use_starc_translation_be.qm</file>
+        <file>translations/translation_uk.qm</file>
+        <file>translations/translation_sl.qm</file>
+        <file>translations/translation_ru.qm</file>
+        <file>translations/translation_it.qm</file>
+        <file>translations/translation_hu.qm</file>
+        <file>translations/translation_he.qm</file>
+        <file>translations/translation_es.qm</file>
+        <file>translations/translation_de.qm</file>
+        <file>translations/translation_az.qm</file>
+        <file>translations/translation_tr.qm</file>
+        <file>translations/translation_hi.qm</file>
+        <file>translations/translation_pt_BR.qm</file>
+        <file>translations/translation_pl.qm</file>
+        <file>translations/translation_id.qm</file>
+        <file>translations/translation_fr.qm</file>
+        <file>translations/translation_be.qm</file>
+        <file>translations/translation_en.qm</file>
+        <file>translations/translation_ro_RO.qm</file>
+        <file>translations/translation_fa.qm</file>
+        <file>translations/translation_gl_ES.qm</file>
+        <file>translations/translation_da_DK.qm</file>
     </qresource>
 </RCC>

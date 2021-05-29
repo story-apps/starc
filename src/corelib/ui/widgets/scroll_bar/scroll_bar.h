@@ -17,10 +17,19 @@ public:
     ~ScrollBar() override;
 
     /**
+     * @brief  Устанавливаем цвет хэндла
+     */
+    void setHandleColor(const QColor &);
+
+    /**
+     * @brief  Устанавливаем цвет фона
+     */
+    void setBackgroundColor(const QColor &);
+
+    /**
      * @brief Используем размеры из дизайн системы
      */
     QSize sizeHint() const override;
-
 protected:
     /**
      * @brief Реализуем собственное рисование

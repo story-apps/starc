@@ -25,17 +25,27 @@ namespace {
         int position = positionInterval.first;
         const int lastPosition = positionInterval.second;
         while (position < lastPosition) {
-            _cursor.setPosition(position);
-            _cursor.movePosition(QTextCursor::EndOfBlock, QTextCursor::KeepAnchor);
-            if (_cursor.position() > lastPosition) {
-                _cursor.setPosition(lastPosition, QTextCursor::KeepAnchor);
+            const auto block = _cursor.document()->findBlock(position);
+            for (const auto& format : block.textFormats()) {
+                const auto formatStart = block.position() + format.start;
+                const auto formatEnd = formatStart + format.length;
+                if (position >= formatEnd) {
+                    continue;
+                }
+                if (formatStart >= lastPosition) {
+                    break;
+                }
+
+                _cursor.setPosition(std::max(formatStart, position));
+                _cursor.setPosition(std::min(formatEnd, lastPosition), QTextCursor::KeepAnchor);
+
+                const auto newFormat = updateFormat(format.format);
+                _cursor.mergeCharFormat(newFormat);
+
+                _cursor.clearSelection();
+                _cursor.movePosition(QTextCursor::NextCharacter);
+                position = _cursor.position();
             }
-
-            const auto format = updateFormat(_cursor.charFormat());
-            _cursor.mergeCharFormat(format);
-
-            _cursor.movePosition(QTextCursor::NextCharacter);
-            position = _cursor.position();
         }
     }
 
@@ -101,7 +111,7 @@ public:
 
 void BaseTextEdit::Implementation::reconfigure(BaseTextEdit* _textEdit)
 {
-    _textEdit->setCursorWidth(Ui::DesignSystem::layout().px4());
+    _textEdit->setCursorWidth(Ui::DesignSystem::layout().px2());
 }
 
 
@@ -188,6 +198,39 @@ void BaseTextEdit::invertTextUnderline()
     setTextUnderline(!cursor.charFormat().font().underline());
 }
 
+void BaseTextEdit::setTextFont(const QFont& _font)
+{
+    auto buildFormat = [_font](const QTextCharFormat& _format) {
+        auto format = _format;
+        format.setFont(_font);
+        return format;
+    };
+    updateSelectionFormatting(textCursor(), buildFormat);
+}
+
+void BaseTextEdit::setTextAlignment(Qt::Alignment _alignment)
+{
+    auto cursor = textCursor();
+    const auto positionInterval = std::minmax(cursor.selectionStart(), cursor.selectionEnd());
+    const int startPosition = positionInterval.first;
+    const int lastPosition = positionInterval.second;
+    cursor.setPosition(startPosition);
+    do {
+        auto blockFormat = cursor.blockFormat();
+        if (blockFormat.alignment() != _alignment) {
+            blockFormat.setAlignment(_alignment);
+            cursor.setBlockFormat(blockFormat);
+        }
+
+        cursor.movePosition(QTextCursor::EndOfBlock);
+        cursor.movePosition(QTextCursor::NextBlock);
+    } while (!cursor.atEnd()
+             && cursor.position() < lastPosition);
+
+    cursor.setPosition(positionInterval.second);
+    setTextCursor(cursor);
+}
+
 bool BaseTextEdit::event(QEvent* _event)
 {
     switch (static_cast<int>(_event->type())) {
@@ -211,66 +254,42 @@ bool BaseTextEdit::keyPressEventReimpl(QKeyEvent* _event)
     //
     // Переопределяем
     //
-    // ... перевод курсора к следующему символу
+
     //
-    if (_event == QKeySequence::MoveToNextChar) {
-        if (textCursor().block().textDirection() == Qt::LeftToRight) {
-            moveCursor(QTextCursor::NextCharacter);
-        } else {
-            moveCursor(QTextCursor::PreviousCharacter);
-        }
+    // Для форматирования нужно брать значение в стиле у последнего символа из выделения,
+    // т.к. charFormat() отдаёт значение стиля предыдущего перед курсором символа
+    //
+    // ... сделать текст полужирным
+    //
+    if (_event == QKeySequence::Bold) {
+        invertTextBold();
     }
     //
-    // ... перевод курсора к предыдущему символу
+    // ... сделать текст курсивом
     //
-    else if (_event == QKeySequence::MoveToPreviousChar) {
-        if (textCursor().block().textDirection() == Qt::LeftToRight) {
-            moveCursor(QTextCursor::PreviousCharacter);
-        } else {
-            moveCursor(QTextCursor::NextCharacter);
-        }
+    else if (_event == QKeySequence::Italic) {
+        invertTextItalic();
     }
     //
-    // ... перевод курсора к концу строки
+    // ... сделать текст подчёркнутым
     //
-    else if (_event == QKeySequence::MoveToEndOfLine
-             || _event == QKeySequence::SelectEndOfLine) {
-        QTextCursor cursor = textCursor();
-        const int startY = cursorRect(cursor).y();
-        const QTextCursor::MoveMode keepAncor =
-            _event->modifiers().testFlag(Qt::ShiftModifier)
-                ? QTextCursor::KeepAnchor
-                : QTextCursor::MoveAnchor;
-        while (!cursor.atBlockEnd()) {
-            cursor.movePosition(QTextCursor::NextCharacter, keepAncor);
-            if (cursorRect(cursor).y() > startY) {
-                cursor.movePosition(QTextCursor::PreviousCharacter, keepAncor);
-                setTextCursor(cursor);
-                break;
-            }
-        }
-        setTextCursor(cursor);
+    else if (_event == QKeySequence::Underline) {
+        invertTextUnderline();
     }
     //
-    // ... перевод курсора к началу строки
+    // Выравнивание
     //
-    else if (_event == QKeySequence::MoveToStartOfLine
-             || _event == QKeySequence::SelectStartOfLine) {
-        QTextCursor cursor = textCursor();
-        const int startY = cursorRect(cursor).y();
-        const QTextCursor::MoveMode keepAncor =
-            _event->modifiers().testFlag(Qt::ShiftModifier)
-                ? QTextCursor::KeepAnchor
-                : QTextCursor::MoveAnchor;
-        while (!cursor.atBlockStart()) {
-            cursor.movePosition(QTextCursor::PreviousCharacter, keepAncor);
-            if (cursorRect(cursor).y() < startY) {
-                cursor.movePosition(QTextCursor::NextCharacter, keepAncor);
-                setTextCursor(cursor);
-                break;
-            }
-        }
-        setTextCursor(cursor);
+    else if (_event->modifiers().testFlag(Qt::ControlModifier)
+             && _event->key() == Qt::Key_L) {
+        setTextAlignment(Qt::AlignLeft);
+    }
+    else if (_event->modifiers().testFlag(Qt::ControlModifier)
+             && _event->key() == Qt::Key_E) {
+        setTextAlignment(Qt::AlignHCenter);
+    }
+    else if (_event->modifiers().testFlag(Qt::ControlModifier)
+             && _event->key() == Qt::Key_R) {
+        setTextAlignment(Qt::AlignRight);
     }
     //
     // Поднятие/опускание регистра букв
@@ -334,26 +353,66 @@ bool BaseTextEdit::keyPressEventReimpl(QKeyEvent* _event)
         }
         setTextCursor(cursor);
     }
+    // ... перевод курсора к следующему символу
     //
-    // Для форматирования нужно брать значение в стиле у последнего символа из выделения,
-    // т.к. charFormat() отдаёт значение стиля предыдущего перед курсором символа
-    //
-    // ... сделать текст полужирным
-    //
-    else if (_event == QKeySequence::Bold) {
-        invertTextBold();
+    else if (_event == QKeySequence::MoveToNextChar) {
+        if (textCursor().block().textDirection() == Qt::LeftToRight) {
+            moveCursor(QTextCursor::NextCharacter);
+        } else {
+            moveCursor(QTextCursor::PreviousCharacter);
+        }
     }
     //
-    // ... сделать текст курсивом
+    // ... перевод курсора к предыдущему символу
     //
-    else if (_event == QKeySequence::Italic) {
-        invertTextItalic();
+    else if (_event == QKeySequence::MoveToPreviousChar) {
+        if (textCursor().block().textDirection() == Qt::LeftToRight) {
+            moveCursor(QTextCursor::PreviousCharacter);
+        } else {
+            moveCursor(QTextCursor::NextCharacter);
+        }
     }
     //
-    // ... сделать текст подчёркнутым
+    // ... перевод курсора к концу строки
     //
-    else if (_event == QKeySequence::Underline) {
-        invertTextUnderline();
+    else if (_event == QKeySequence::MoveToEndOfLine
+             || _event == QKeySequence::SelectEndOfLine) {
+        QTextCursor cursor = textCursor();
+        const int startY = cursorRect(cursor).y();
+        const QTextCursor::MoveMode keepAncor =
+            _event->modifiers().testFlag(Qt::ShiftModifier)
+                ? QTextCursor::KeepAnchor
+                : QTextCursor::MoveAnchor;
+        while (!cursor.atBlockEnd()) {
+            cursor.movePosition(QTextCursor::NextCharacter, keepAncor);
+            if (cursorRect(cursor).y() > startY) {
+                cursor.movePosition(QTextCursor::PreviousCharacter, keepAncor);
+                setTextCursor(cursor);
+                break;
+            }
+        }
+        setTextCursor(cursor);
+    }
+    //
+    // ... перевод курсора к началу строки
+    //
+    else if (_event == QKeySequence::MoveToStartOfLine
+             || _event == QKeySequence::SelectStartOfLine) {
+        QTextCursor cursor = textCursor();
+        const int startY = cursorRect(cursor).y();
+        const QTextCursor::MoveMode keepAncor =
+            _event->modifiers().testFlag(Qt::ShiftModifier)
+                ? QTextCursor::KeepAnchor
+                : QTextCursor::MoveAnchor;
+        while (!cursor.atBlockStart()) {
+            cursor.movePosition(QTextCursor::PreviousCharacter, keepAncor);
+            if (cursorRect(cursor).y() < startY) {
+                cursor.movePosition(QTextCursor::NextCharacter, keepAncor);
+                setTextCursor(cursor);
+                break;
+            }
+        }
+        setTextCursor(cursor);
     }
 #ifdef Q_OS_MAC
     //

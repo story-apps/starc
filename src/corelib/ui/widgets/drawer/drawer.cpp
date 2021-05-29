@@ -2,7 +2,9 @@
 
 #include <ui/design_system/design_system.h>
 
+#include <utils/helpers/color_helper.h>
 #include <utils/helpers/image_helper.h>
+#include <utils/helpers/text_helper.h>
 
 #include <QAction>
 #include <QPainter>
@@ -123,11 +125,14 @@ Drawer::Drawer(QWidget* _parent)
       d(new Implementation)
 {
     setFocusPolicy(Qt::StrongFocus);
+    setMouseTracking(true);
     setFixedWidth(static_cast<int>(Ui::DesignSystem::drawer().width()));
 
     connect(&d->decorationRadiusAnimation, &QVariantAnimation::valueChanged, this, [this] { update(); });
     connect(&d->decorationOpacityAnimation, &QVariantAnimation::valueChanged, this, [this] { update(); });
 }
+
+Drawer::~Drawer() = default;
 
 void Drawer::setTitle(const QString& _title)
 {
@@ -149,7 +154,39 @@ void Drawer::setSubtitle(const QString& _subtitle)
     update();
 }
 
-Drawer::~Drawer() = default;
+QSize Drawer::sizeHint() const
+{
+    qreal width = 0.0;
+    qreal height = Ui::DesignSystem::drawer().margins().top()
+                   + Ui::DesignSystem::drawer().titleHeight()
+                   + Ui::DesignSystem::drawer().subtitleHeight()
+                   + Ui::DesignSystem::drawer().subtitleBottomMargin();
+    for (int actionIndex = 0; actionIndex < actions().size(); ++actionIndex) {
+        QAction* action = actions().at(actionIndex);
+        if (!action->isVisible()) {
+            continue;
+        }
+
+        if (action->isSeparator()) {
+            height += Ui::DesignSystem::drawer().separatorSpacing() * 2;
+        }
+
+        const qreal actionWidth = Ui::DesignSystem::drawer().actionMargins().left()
+                                  + Ui::DesignSystem::drawer().iconSize().width()
+                                  + Ui::DesignSystem::drawer().spacing()
+                                  + TextHelper::fineTextWidthF(action->text(), Ui::DesignSystem::font().subtitle2())
+                                  + (action->whatsThis().isEmpty()
+                                     ? 0.0
+                                     : Ui::DesignSystem::drawer().spacing()
+                                       + TextHelper::fineTextWidthF(action->whatsThis(), Ui::DesignSystem::font().subtitle2()))
+                                  + Ui::DesignSystem::drawer().actionMargins().right();
+        width = std::max(width, actionWidth);
+
+        height += Ui::DesignSystem::drawer().actionHeight();
+    }
+
+    return QSizeF(width, height).toSize();
+}
 
 void Drawer::paintEvent(QPaintEvent* _event)
 {
@@ -215,6 +252,11 @@ void Drawer::paintEvent(QPaintEvent* _event)
         if (action->isChecked()) {
             painter.fillRect(actionRect.marginsRemoved(Ui::DesignSystem::drawer().selectionMargins()),
                              Ui::DesignSystem::drawer().selectionColor());
+        } else if (action->isEnabled()
+                   && actionRect.contains(mapFromGlobal(QCursor::pos()))) {
+            painter.fillRect(actionRect.marginsRemoved(Ui::DesignSystem::drawer().selectionMargins()),
+                             ColorHelper::transparent(Ui::DesignSystem::color().onPrimary(),
+                                                      Ui::DesignSystem::hoverBackgroundOpacity()));
         }
 
         painter.setPen(action->isChecked() ? Ui::DesignSystem::color().secondary()
@@ -233,7 +275,7 @@ void Drawer::paintEvent(QPaintEvent* _event)
                                       actionRect.top()
                                       + Ui::DesignSystem::drawer().actionMargins().top()),
                               Ui::DesignSystem::drawer().iconSize());
-        if (action->iconText().length() <= 2) {
+        if (action->iconText() != action->text()) {
             auto it = action->iconText(), t = action->text();
             painter.setFont(Ui::DesignSystem::font().iconsMid());
             painter.drawText(iconRect, Qt::AlignCenter, action->iconText());
@@ -242,11 +284,11 @@ void Drawer::paintEvent(QPaintEvent* _event)
         // ... текст
         //
         painter.setFont(Ui::DesignSystem::font().subtitle2());
-        const QRectF textRect(iconRect.right() + Ui::DesignSystem::drawer().iconRightMargin(),
+        const QRectF textRect(iconRect.right() + Ui::DesignSystem::drawer().spacing(),
                               iconRect.top(),
                               width()
                               - iconRect.right()
-                              - Ui::DesignSystem::drawer().iconRightMargin()
+                              - Ui::DesignSystem::drawer().spacing()
                               - Ui::DesignSystem::drawer().actionMargins().right(),
                               Ui::DesignSystem::drawer().actionHeight()
                               - Ui::DesignSystem::drawer().actionMargins().top()
@@ -257,7 +299,8 @@ void Drawer::paintEvent(QPaintEvent* _event)
         // ... горячие клавиши
         //
         if (!action->whatsThis().isEmpty()) {
-            painter.drawText(textRect, Qt::AlignRight | Qt::AlignVCenter, action->whatsThis());
+            painter.drawText(textRect.adjusted(0, 0, -1 * Ui::DesignSystem::layout().px4(), 0),
+                             Qt::AlignRight | Qt::AlignVCenter, action->whatsThis());
         }
 
         actionY += Ui::DesignSystem::drawer().actionHeight();
@@ -282,7 +325,8 @@ void Drawer::paintEvent(QPaintEvent* _event)
 void Drawer::mousePressEvent(QMouseEvent* _event)
 {
     QAction* pressedAction = d->pressedAction(_event->pos(), actions());
-    if (pressedAction == nullptr) {
+    if (pressedAction == nullptr
+        || !pressedAction->isEnabled()) {
         return;
     }
 
@@ -294,15 +338,23 @@ void Drawer::mousePressEvent(QMouseEvent* _event)
 
 void Drawer::mouseReleaseEvent(QMouseEvent* _event)
 {
-    QAction* pressedAction = d->pressedAction(_event->pos(), actions());
-    if (pressedAction == nullptr) {
+    if (!rect().contains(_event->pos())) {
         return;
     }
 
-    if (pressedAction->isChecked()) {
+    QAction* pressedAction = d->pressedAction(_event->pos(), actions());
+    if (pressedAction == nullptr
+        || pressedAction->isChecked()
+        || !pressedAction->isEnabled()) {
         return;
     }
 
     pressedAction->trigger();
+    update();
+}
+
+void Drawer::mouseMoveEvent(QMouseEvent* _event)
+{
+    Q_UNUSED(_event)
     update();
 }

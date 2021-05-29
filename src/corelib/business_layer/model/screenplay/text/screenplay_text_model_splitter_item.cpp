@@ -13,7 +13,6 @@ namespace {
     const QHash<ScreenplayTextModelSplitterItemType, QString> kSplitterTypeToString
         = {{ ScreenplayTextModelSplitterItemType::Undefined, {} },
            { ScreenplayTextModelSplitterItemType::Start, QStringLiteral("start") },
-           { ScreenplayTextModelSplitterItemType::Middle, QStringLiteral("middle") },
            { ScreenplayTextModelSplitterItemType::End, QStringLiteral("end") }};
 }
 

@@ -1,6 +1,6 @@
 #pragma once
 
-#include "../abstract_model.h"
+#include "../text/text_model.h"
 
 
 namespace BusinessLayer
@@ -9,22 +9,17 @@ namespace BusinessLayer
 /**
  * @brief Модель
  */
-class CORE_LIBRARY_EXPORT ScreenplaySynopsisModel : public AbstractModel
+class CORE_LIBRARY_EXPORT ScreenplaySynopsisModel : public TextModel
 {
     Q_OBJECT
 
 public:
     explicit ScreenplaySynopsisModel(QObject* _parent = nullptr);
 
-protected:
     /**
-     * @brief Реализация модели для работы с документами
+     * @brief Игнорируем установку названия документа
      */
-    /** @{ */
-    void initDocument() override;
-    void clearDocument() override;
-    QByteArray toXml() const override;
-    /** @} */
+    void setDocumentName(const QString &_name) override;
 };
 
 } // namespace BusinessLayer

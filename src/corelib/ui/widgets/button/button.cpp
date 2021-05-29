@@ -6,6 +6,7 @@
 #include <utils/helpers/image_helper.h>
 #include <utils/helpers/text_helper.h>
 
+#include <QKeyEvent>
 #include <QPainter>
 #include <QPaintEvent>
 #include <QVariantAnimation>
@@ -276,39 +277,69 @@ void Button::paintEvent(QPaintEvent* _event)
                    : ColorHelper::transparent(textColor(), Ui::DesignSystem::disabledTextOpacity()));
     //
     QRectF buttonInnerRect = contentsRect().marginsRemoved(Ui::DesignSystem::button().margins().toMargins());
-    const qreal textWidth = TextHelper::fineTextWidth(d->text, Ui::DesignSystem::font().button());
+    const qreal textWidth = TextHelper::fineTextWidthF(d->text, Ui::DesignSystem::font().button());
     //
     // ... если иконка задана, рисуем иконку и корректируем область отрисовки текста
     //
     if (!d->icon.isEmpty()) {
         const QSizeF iconSize = Ui::DesignSystem::button().iconSize();
-        const qreal textWithIconWidth = iconSize.width() + Ui::DesignSystem::button().spacing() + textWidth;
-        const qreal iconX = buttonInnerRect.x()
-                            + (d->isContained
-                               ? ((buttonInnerRect.width() - textWithIconWidth) / 2.0)
-                               : 0.0);
+        const qreal textWithIconWidth = iconSize.width()
+                                        + (textWidth > 0 ? Ui::DesignSystem::button().spacing() + textWidth
+                                                         : 0);
+
+        qreal iconX = buttonInnerRect.x();
+        if (isLeftToRight()) {
+            iconX += d->isContained
+                     ? ((buttonInnerRect.width() - textWithIconWidth) / 2.0)
+                     : 0.0;
+        } else {
+            iconX += d->isContained
+                     ? ((buttonInnerRect.width() - textWithIconWidth) / 2.0
+                        + textWidth + Ui::DesignSystem::button().spacing())
+                     : buttonInnerRect.width() - iconSize.width();
+        }
         const QRectF iconRect(QPointF(iconX, buttonInnerRect.top()), QSizeF(iconSize.width(), buttonInnerRect.height()));
         painter.setFont(Ui::DesignSystem::font().iconsMid());
         painter.drawText(iconRect, Qt::AlignCenter, d->icon);
 
-        buttonInnerRect.setX(iconRect.right() + Ui::DesignSystem::button().spacing());
-        buttonInnerRect.setWidth(textWidth);
+        if (isLeftToRight()) {
+            buttonInnerRect.setX(iconRect.right() + Ui::DesignSystem::button().spacing());
+        } else {
+            buttonInnerRect.setX(iconRect.left()
+                                 - Ui::DesignSystem::button().spacing()
+                                 - textWidth);
+        }
     }
     //
     // ... а если иконки нет, то просто корректируем область в которой будет рисоваться текст
     //
     else {
-        const qreal textX = buttonInnerRect.x()
-                            + (d->isContained
-                               ? ((buttonInnerRect.width() - textWidth) / 2.0)
-                               : 0.0);
+        qreal textX = buttonInnerRect.x();
+
+        if (d->isContained) {
+            textX += (buttonInnerRect.width() - textWidth) / 2.0;
+        } else {
+            textX += isLeftToRight()
+                    ? 0.0
+                    : (buttonInnerRect.width() - textWidth);
+        }
+
         buttonInnerRect.setX(textX);
+    }
+    //
+    // ... если ширина текста меньше ширины кнопки, то корректируем обасть для отображения текста,
+    //     т.к. текст рисуется в её центре
+    //
+    auto textAlignment = Qt::AlignLeft | Qt::AlignVCenter;
+    if (buttonInnerRect.width() >= textWidth) {
         buttonInnerRect.setWidth(textWidth);
+        textAlignment = Qt::AlignCenter;
     }
     //
     if (!d->text.isEmpty()) {
         painter.setFont(Ui::DesignSystem::font().button());
-        painter.drawText(buttonInnerRect, Qt::AlignCenter, d->text);
+        painter.drawText(buttonInnerRect, textAlignment,
+                         painter.fontMetrics().elidedText(d->text, Qt::ElideRight, buttonInnerRect.width()));
     }
 }
 
@@ -340,6 +371,17 @@ void Button::mouseReleaseEvent(QMouseEvent* _event)
     }
 
     emit clicked();
+}
+
+void Button::keyPressEvent(QKeyEvent* _event)
+{
+    if (_event->key() == Qt::Key_Space
+        || _event->key() == Qt::Key_Enter
+        || _event->key() == Qt::Key_Return) {
+        _event->accept();
+        emit clicked();
+        return;
+    }
 }
 
 void Button::designSystemChangeEvent(DesignSystemChangeEvent* _event)

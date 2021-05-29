@@ -27,7 +27,7 @@ public:
     /**
      * @brief Задать модель контекстного меню навигатора
      */
-    void setContextMenuModel(QAbstractItemModel* _model);
+    void setContextMenuActions(const QVector<QAction*>& _actions);
 
     /**
      * @brief Сохранить состояние
@@ -38,6 +38,11 @@ public:
      * @brief Восстановить состояние
      */
     void restoreState(const QVariant& _state);
+
+    /**
+     * @brief Выделить элемент с заданным индексом в дереве
+     */
+    void setCurrentIndex(const QModelIndex& _index);
 
     /**
      * @brief Получить индекс выделенного элемента в дереве
@@ -66,14 +71,9 @@ signals:
     void itemDoubleClicked(const QModelIndex& _index);
 
     /**
-     * @brief Пользователь хочет открыть контекстное меню
+     * @brief Пользователь хочет открыть контекстное меню и поэтому нужно обновить контекстное меню
      */
     void contextMenuUpdateRequested(const QModelIndex& _index);
-
-    /**
-     * @brief Пользователь выбрал пункт контекстного меню
-     */
-    void contextMenuItemClicked(const QModelIndex& _contextMenuIndex);
 
     /**
      * @brief Пользователь нажал кнопку добавления документа

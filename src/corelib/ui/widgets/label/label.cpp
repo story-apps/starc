@@ -86,7 +86,14 @@ void AbstractLabel::paintEvent(QPaintEvent* _event)
     painter.setFont(textFont());
     painter.setPen(textColor());
     painter.setOpacity(isEnabled() ? 1.0 : Ui::DesignSystem::disabledTextOpacity());
-    painter.drawText(contentsRect(), d->alignment | Qt::TextWordWrap, d->text);
+
+    painter.drawText(contentsRect(),
+                     d->alignment
+                     | (d->text.isRightToLeft()
+                        ? Qt::TextForceRightToLeft
+                        : Qt::TextForceLeftToRight)
+                     | Qt::TextWordWrap,
+                     d->text);
 }
 
 void AbstractLabel::mouseReleaseEvent(QMouseEvent* _event)

@@ -10,6 +10,7 @@
 #include <ui/design_system/design_system.h>
 #include <ui/widgets/button/button.h>
 #include <ui/widgets/context_menu/context_menu.h>
+#include <ui/widgets/shadow/shadow.h>
 #include <ui/widgets/tree/tree.h>
 
 #include <QAction>
@@ -48,6 +49,9 @@ ProjectNavigator::Implementation::Implementation(QWidget* _parent)
     tree->setContextMenuPolicy(Qt::ContextMenuPolicy::CustomContextMenu);
     addDocumentButton->setFocusPolicy(Qt::NoFocus);
     addDocumentButton->setIcon(u8"\U000f0415");
+
+    new Shadow(Qt::TopEdge, tree);
+    new Shadow(Qt::BottomEdge, tree);
 }
 
 
@@ -86,10 +90,6 @@ ProjectNavigator::ProjectNavigator(QWidget* _parent)
         d->contextMenu->showContextMenu(d->tree->mapToGlobal(_pos));
     });
 
-    connect(d->contextMenu, &ContextMenu::clicked, d->contextMenu, &ContextMenu::hide);
-    connect(d->contextMenu, &ContextMenu::clicked, this, [this] (const QModelIndex& _contextMenuIndex) {
-        emit contextMenuItemClicked(_contextMenuIndex);
-    });
     connect(d->addDocumentButton, &Button::clicked, this, &ProjectNavigator::addDocumentClicked);
 }
 
@@ -98,9 +98,9 @@ void ProjectNavigator::setModel(QAbstractItemModel* _model)
     d->tree->setModel(_model);
 }
 
-void ProjectNavigator::setContextMenuModel(QAbstractItemModel* _model)
+void ProjectNavigator::setContextMenuActions(const QVector<QAction*>& _actions)
 {
-    d->contextMenu->setModel(_model);
+    d->contextMenu->setActions(_actions);
 }
 
 QVariant ProjectNavigator::saveState() const
@@ -116,6 +116,11 @@ void ProjectNavigator::restoreState(const QVariant& _state)
     }
 
     d->tree->restoreState(_state);
+}
+
+void ProjectNavigator::setCurrentIndex(const QModelIndex& _index)
+{
+    d->tree->setCurrentIndex(_index);
 }
 
 QModelIndex ProjectNavigator::currentIndex() const

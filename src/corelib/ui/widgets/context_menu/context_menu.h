@@ -4,8 +4,6 @@
 
 #include <ui/widgets/card/card.h>
 
-class QAbstractItemModel;
-
 
 /**
  * @brief Виджет контекстного меню
@@ -19,9 +17,9 @@ public:
     ~ContextMenu() override;
 
     /**
-     * @brief Задать модель действий контекстного меню
+     * @brief Задать пункты контекстного меню
      */
-    void setModel(QAbstractItemModel* _model);
+    void setActions(const QVector<QAction*>& _actions);
 
     /**
      * @brief Отобразить контекстное меню
@@ -34,24 +32,25 @@ public:
      */
     void hideContextMenu();
 
-signals:
-    /**
-     * @brief Пользователь кликнул на пункт контекстного меню
-     */
-    void clicked(const QModelIndex& _index);
-
 protected:
     /**
-     * @brief Обновляем цвет фона списка действий меню при смене
+     * @brief Реализуем ручную отрисовку пунктов меню
      */
-    void processBackgroundColorChange() override;
+    void paintEvent(QPaintEvent* _event) override;
 
     /**
-     * @brief Обновляем цвет текста списка действий меню при смене
+     * @brief Переопределяем для обработки нажатий пунктов меню
      */
-    void processTextColorChange() override;
+    void mousePressEvent(QMouseEvent* _event) override;
+    void mouseReleaseEvent(QMouseEvent* _event) override;
+
+    /**
+     * @brief Переопределяем для перерисовки выделенного пункта меню
+     */
+    void mouseMoveEvent(QMouseEvent* _event) override;
 
 private:
     class Implementation;
     QScopedPointer<Implementation> d;
 };
+

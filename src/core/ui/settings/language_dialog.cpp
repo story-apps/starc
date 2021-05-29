@@ -30,16 +30,20 @@ public:
 
     RadioButton* azerbaijani = nullptr;
     RadioButton* belarusian = nullptr;
+    RadioButton* danish = nullptr;
     RadioButton* english = nullptr;
     RadioButton* french = nullptr;
+    RadioButton* galician = nullptr;
     RadioButton* german = nullptr;
     RadioButton* hebrew = nullptr;
     RadioButton* hindi = nullptr;
     RadioButton* hungarian = nullptr;
     RadioButton* indonesian = nullptr;
     RadioButton* italian = nullptr;
+    RadioButton* persian = nullptr;
     RadioButton* polish = nullptr;
     RadioButton* portugueseBrazil = nullptr;
+    RadioButton* romanian = nullptr;
     RadioButton* russian = nullptr;
     RadioButton* slovenian = nullptr;
     RadioButton* spanish = nullptr;
@@ -55,16 +59,20 @@ public:
 LanguageDialog::Implementation::Implementation(QWidget* _parent)
     : azerbaijani(new RadioButton(_parent)),
       belarusian(new RadioButton(_parent)),
+      danish(new RadioButton(_parent)),
       english(new RadioButton(_parent)),
       french(new RadioButton(_parent)),
+      galician(new RadioButton(_parent)),
       german(new RadioButton(_parent)),
       hebrew(new RadioButton(_parent)),
       hindi(new RadioButton(_parent)),
       hungarian(new RadioButton(_parent)),
       indonesian(new RadioButton(_parent)),
       italian(new RadioButton(_parent)),
+      persian(new RadioButton(_parent)),
       polish(new RadioButton(_parent)),
       portugueseBrazil(new RadioButton(_parent)),
+      romanian(new RadioButton(_parent)),
       russian(new RadioButton(_parent)),
       slovenian(new RadioButton(_parent)),
       spanish(new RadioButton(_parent)),
@@ -77,11 +85,15 @@ LanguageDialog::Implementation::Implementation(QWidget* _parent)
     azerbaijani->setProperty(kLanguageKey, QLocale::Azerbaijani);
     belarusian->setText("Беларуский");
     belarusian->setProperty(kLanguageKey, QLocale::Belarusian);
+    danish->setText("Dansk");
+    danish->setProperty(kLanguageKey, QLocale::Danish);
     english->setChecked(true);
     english->setText("English");
     english->setProperty(kLanguageKey, QLocale::English);
     french->setText("Français");
     french->setProperty(kLanguageKey, QLocale::French);
+    galician->setText("Galego");
+    galician->setProperty(kLanguageKey, QLocale::Galician);
     german->setText("Deutsch");
     german->setProperty(kLanguageKey, QLocale::German);
     hebrew ->setText("עִבְרִית");
@@ -94,10 +106,14 @@ LanguageDialog::Implementation::Implementation(QWidget* _parent)
     indonesian->setProperty(kLanguageKey, QLocale::Indonesian);
     italian->setText("Italiano");
     italian->setProperty(kLanguageKey, QLocale::Italian);
+    persian->setText("فارسی");
+    persian->setProperty(kLanguageKey, QLocale::Persian);
     polish->setText("Polski");
     polish->setProperty(kLanguageKey, QLocale::Polish);
     portugueseBrazil->setText("Português Brasileiro");
     portugueseBrazil->setProperty(kLanguageKey, QLocale::Portuguese);
+    romanian->setText("Română");
+    romanian->setProperty(kLanguageKey, QLocale::Romanian);
     russian->setText("Русский");
     russian->setProperty(kLanguageKey, QLocale::Russian);
     slovenian->setText("Slovenski");
@@ -127,16 +143,20 @@ QVector<RadioButton*> LanguageDialog::Implementation::languages() const
 {
     return { azerbaijani,
                 belarusian,
+                danish,
                 english,
                 french,
+                galician,
                 german,
                 hebrew,
                 hindi,
                 hungarian,
                 indonesian,
                 italian,
+                persian,
                 polish,
                 portugueseBrazil,
+                romanian,
                 russian,
                 slovenian,
                 spanish,
@@ -152,20 +172,56 @@ LanguageDialog::LanguageDialog(QWidget* _parent)
     : AbstractDialog(_parent),
       d(new Implementation(this))
 {
+    setRejectButton(d->okButton);
+
+    auto buildFocusChain = [] (const QVector<RadioButton*>& _buttons) {
+        RadioButton* previousButton = nullptr;
+        for (auto button : _buttons) {
+            if (previousButton != nullptr) {
+                setTabOrder(previousButton, button);
+            }
+            previousButton = button;
+        }
+    };
+    buildFocusChain({ d->azerbaijani,
+                      d->belarusian,
+                      d->danish,
+                      d->german,
+                      d->english,
+                      d->spanish,
+                      d->french,
+                      d->galician,
+                      d->indonesian,
+                      d->italian,
+                      d->hungarian,
+                      d->polish,
+                      d->portugueseBrazil,
+                      d->romanian,
+                      d->russian,
+                      d->slovenian,
+                      d->turkish,
+                      d->ukrainian,
+                      d->hebrew,
+                      d->hindi,
+                      d->persian });
+
     int row = 0;
     contentsLayout()->addWidget(d->azerbaijani, row++, 0);
     contentsLayout()->addWidget(d->belarusian, row++, 0);
+    contentsLayout()->addWidget(d->danish, row++, 0);
     contentsLayout()->addWidget(d->german, row++, 0);
     contentsLayout()->addWidget(d->english, row++, 0);
     contentsLayout()->addWidget(d->spanish, row++, 0);
     contentsLayout()->addWidget(d->french, row++, 0);
+    contentsLayout()->addWidget(d->galician, row++, 0);
     contentsLayout()->addWidget(d->indonesian, row++, 0);
-    contentsLayout()->addWidget(d->italian, row++, 0);
     //
     int rowForSecondColumn = 0;
+    contentsLayout()->addWidget(d->italian, rowForSecondColumn++, 1);
     contentsLayout()->addWidget(d->hungarian, rowForSecondColumn++, 1);
     contentsLayout()->addWidget(d->polish, rowForSecondColumn++, 1);
     contentsLayout()->addWidget(d->portugueseBrazil, rowForSecondColumn++, 1);
+    contentsLayout()->addWidget(d->romanian, rowForSecondColumn++, 1);
     contentsLayout()->addWidget(d->russian, rowForSecondColumn++, 1);
     contentsLayout()->addWidget(d->slovenian, rowForSecondColumn++, 1);
     contentsLayout()->addWidget(d->turkish, rowForSecondColumn++, 1);
@@ -174,6 +230,7 @@ LanguageDialog::LanguageDialog(QWidget* _parent)
     int rowForThirdColumn = 0;
     contentsLayout()->addWidget(d->hebrew, rowForThirdColumn++, 2);
     contentsLayout()->addWidget(d->hindi, rowForThirdColumn++, 2);
+    contentsLayout()->addWidget(d->persian, rowForThirdColumn++, 2);
     //
     contentsLayout()->setRowStretch(row++, 1);
     contentsLayout()->setColumnStretch(3, 1);
@@ -208,7 +265,12 @@ LanguageDialog::~LanguageDialog() = default;
 
 QWidget* LanguageDialog::focusedWidgetAfterShow() const
 {
-    return d->english;
+    return d->azerbaijani;
+}
+
+QWidget* LanguageDialog::lastFocusableWidget() const
+{
+    return d->okButton;
 }
 
 void LanguageDialog::updateTranslations()

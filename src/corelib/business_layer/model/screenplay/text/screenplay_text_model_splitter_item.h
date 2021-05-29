@@ -4,7 +4,6 @@
 
 #include <QHash>
 
-class QDomElement;
 class QXmlStreamReader;
 
 
@@ -17,7 +16,6 @@ namespace BusinessLayer
 enum class ScreenplayTextModelSplitterItemType {
     Undefined,
     Start,
-    Middle,
     End
 };
 

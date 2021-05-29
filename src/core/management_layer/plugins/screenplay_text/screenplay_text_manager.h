@@ -31,7 +31,7 @@ public:
     void setModel(BusinessLayer::AbstractModel* _model) override;
     QWidget* view() override;
     QWidget* createView() override;
-    void reconfigure() override;
+    void reconfigure(const QStringList& _changedSettingsKeys) override;
     void bind(IDocumentManager* _manager) override;
     void saveSettings() override;
     /** @} */

@@ -1,6 +1,6 @@
 #include "import_dialog.h"
 
-#include <business_layer/import/import_options.h>
+#include <business_layer/import/screenplay/screenlay_import_options.h>
 
 #include <ui/design_system/design_system.h>
 #include <ui/widgets/button/button.h>
@@ -31,8 +31,8 @@ public:
     CheckBox* keepSceneNumbers = nullptr;
 
     QHBoxLayout* buttonsLayout = nullptr;
-    Button* importButton = nullptr;
     Button* cancelButton = nullptr;
+    Button* importButton = nullptr;
 };
 
 
@@ -45,8 +45,8 @@ ImportDialog::Implementation::Implementation(const QString& _importFilePath, QWi
       importScreenplay(new CheckBox(_parent)),
       keepSceneNumbers(new CheckBox(_parent)),
       buttonsLayout(new QHBoxLayout),
-      importButton(new Button(_parent)),
-      cancelButton(new Button(_parent))
+      cancelButton(new Button(_parent)),
+      importButton(new Button(_parent))
 {
     for (auto checkBox : { importCharacters, importLocations,
                            importScreenplay, keepSceneNumbers }) {
@@ -70,8 +70,6 @@ ImportDialog::ImportDialog(const QString& _importFilePath, QWidget* _parent)
     : AbstractDialog(_parent),
       d(new Implementation(_importFilePath, this))
 {
-    d->importButton->installEventFilter(this);
-
     setAcceptButton(d->importButton);
     setRejectButton(d->cancelButton);
 
@@ -103,9 +101,9 @@ ImportDialog::ImportDialog(const QString& _importFilePath, QWidget* _parent)
 
 ImportDialog::~ImportDialog() = default;
 
-BusinessLayer::ImportOptions ImportDialog::importOptions() const
+BusinessLayer::ScreenplayImportOptions ImportDialog::importOptions() const
 {
-    BusinessLayer::ImportOptions options;
+    BusinessLayer::ScreenplayImportOptions options;
     options.filePath = d->importFilePath;
     options.importCharacters = d->importCharacters->isChecked();
     options.importLocations = d->importLocations->isChecked();
@@ -117,6 +115,11 @@ BusinessLayer::ImportOptions ImportDialog::importOptions() const
 QWidget* ImportDialog::focusedWidgetAfterShow() const
 {
     return d->importCharacters;
+}
+
+QWidget* ImportDialog::lastFocusableWidget() const
+{
+    return d->importButton;
 }
 
 void ImportDialog::updateTranslations()
@@ -165,19 +168,6 @@ void ImportDialog::designSystemChangeEvent(DesignSystemChangeEvent* _event)
                                                    Ui::DesignSystem::layout().px12(),
                                                    Ui::DesignSystem::layout().px16(),
                                                    Ui::DesignSystem::layout().px8()).toMargins());
-}
-
-bool ImportDialog::eventFilter(QObject* _watched, QEvent* _event)
-{
-    //
-    // Зацикливаем фокус, чтобы он всегда оставался внутри диалога
-    //
-    if (_watched == d->importButton
-        && _event->type() == QEvent::FocusOut) {
-        focusedWidgetAfterShow()->setFocus();
-    }
-
-    return AbstractDialog::eventFilter(_watched, _event);
 }
 
 } //namespace Ui

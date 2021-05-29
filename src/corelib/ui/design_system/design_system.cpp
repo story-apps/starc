@@ -285,15 +285,15 @@ public:
 
     QFont iconsSmall = QFont("Material Design Icons");
     QFont iconsMid = QFont("Material Design Icons");
-    QFont iconsBig = QFont("Material Design Icons");
+    QFont iconsForEditors = QFont("Material Design Icons");
 };
 
 DesignSystem::Font::Implementation::Implementation(qreal _scaleFactor)
 {
     QString fontFamily = QLatin1String("Roboto");
     const QSet<QLocale::Language> notoLanguages = { QLocale::Hebrew,
-                                          QLocale::Hindi,
-                                          QLocale::Persian };
+                                                    QLocale::Hindi,
+                                                    QLocale::Persian };
     if (notoLanguages.contains(QLocale().language())) {
         fontFamily = QLatin1String("Noto Sans");
     }
@@ -322,7 +322,14 @@ DesignSystem::Font::Implementation::Implementation(qreal _scaleFactor)
 
     iconsSmall.setPixelSize(static_cast<int>(16 * _scaleFactor));
     iconsMid.setPixelSize(static_cast<int>(24 * _scaleFactor));
-    iconsBig.setPixelSize(static_cast<int>(34 * _scaleFactor));
+
+    iconsForEditors.setPixelSize(
+            #ifdef Q_OS_WIN
+                22
+            #else
+                34
+            #endif
+                );
 }
 
 // **
@@ -404,9 +411,9 @@ const QFont& DesignSystem::Font::iconsMid() const
     return d->iconsMid;
 }
 
-const QFont& DesignSystem::Font::iconsBig() const
+const QFont& DesignSystem::Font::iconsForEditors() const
 {
-    return d->iconsBig;
+    return d->iconsForEditors;
 }
 
 DesignSystem::Font::Font(qreal _scaleFactor)
@@ -640,7 +647,7 @@ public:
     explicit Implementation(qreal _scaleFactor);
 
     qreal height = 38.0;
-    qreal minimumWidth = 64.0;
+    qreal minimumWidth = 56.0;
     QMarginsF margins = {16.0, 0.0, 16.0, 0.0};
     qreal spacing = 16.0;
     QMarginsF shadowMargins = {8.0, 8.0, 8.0, 10.0};
@@ -1404,7 +1411,7 @@ public:
     QMarginsF actionMargins = {16.0, 12.0, 12.0, 12.0};
     QMarginsF selectionMargins = {8.0, 4.0, 8.0, 4.0};
     qreal subtitleBottomMargin = 18.0;
-    qreal iconRightMargin = 32.0;
+    qreal spacing = 32.0;
     qreal width = 304.0;
     qreal titleHeight = 26.0;
     qreal subtitleHeight = 20.0;
@@ -1421,7 +1428,7 @@ DesignSystem::Drawer::Implementation::Implementation(qreal _scaleFactor, const C
     actionMargins *= _scaleFactor;
     selectionMargins *= _scaleFactor;
     subtitleBottomMargin *= _scaleFactor;
-    iconRightMargin *= _scaleFactor;
+    spacing *= _scaleFactor;
     width *= _scaleFactor;
     titleHeight *= _scaleFactor;
     subtitleHeight *= _scaleFactor;
@@ -1457,9 +1464,9 @@ qreal DesignSystem::Drawer::subtitleBottomMargin() const
     return d->subtitleBottomMargin;
 }
 
-qreal DesignSystem::Drawer::iconRightMargin() const
+qreal DesignSystem::Drawer::spacing() const
 {
-    return d->iconRightMargin;
+    return d->spacing;
 }
 
 qreal DesignSystem::Drawer::width() const
@@ -1851,8 +1858,8 @@ public:
     qreal pageSpacing = 16.0;
     qreal inactiveTextOpacity = 0.68;
     qreal disabledTextOpacity = 0.46;
-    qreal hoverBackgroundOpacity = 0.18;
-    qreal focusBackgroundOpacity = 0.28;
+    qreal hoverBackgroundOpacity = 0.12;
+    qreal focusBackgroundOpacity = 0.20;
     qreal elevationStartOpacity = 0.04;
     qreal elevationEndOpacity = 0.08;
 

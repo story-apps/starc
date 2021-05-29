@@ -40,6 +40,11 @@ protected:
     QWidget* focusedWidgetAfterShow() const override;
 
     /**
+     * @brief Опеределим последний фокусируемый виджет в диалоге
+     */
+    QWidget* lastFocusableWidget() const override;
+
+    /**
      * @brief Обновить переводы
      */
     void updateTranslations() override;

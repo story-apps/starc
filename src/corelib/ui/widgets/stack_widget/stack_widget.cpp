@@ -15,8 +15,128 @@
 namespace {
 
 /**
- * @brief Анимация разъезжающегося контейнера
- *        https://material.io/design/motion/the-motion-system.html#container-transform
+ * @brief Анимация появляющихся панелей
+ * @link https://material.io/design/motion/the-motion-system.html#fade-through
+ */
+class FadeAnimation : public QSequentialAnimationGroup
+{
+public:
+    explicit FadeAnimation(QObject* _parent = nullptr);
+
+    QVariantAnimation outgoingContentFadeOut;
+
+    QVariantAnimation incomingContentFadeIn;
+    QVariantAnimation incomingContentGeometry;
+    QParallelAnimationGroup incomingContentGroup;
+
+protected:
+    /**
+     * @brief Устанавливаем текущие значения анимаций в изначальные при старте
+     */
+    void updateState(QAbstractAnimation::State _newState,
+                     QAbstractAnimation::State _oldState) override;
+};
+
+FadeAnimation::FadeAnimation(QObject* _parent)
+    : QSequentialAnimationGroup(_parent)
+{
+    outgoingContentFadeOut.setDuration(90);
+    outgoingContentFadeOut.setEasingCurve(QEasingCurve::InQuad);
+    outgoingContentFadeOut.setStartValue(1.0);
+    outgoingContentFadeOut.setEndValue(0.0);
+    addAnimation(&outgoingContentFadeOut);
+
+    incomingContentFadeIn.setDuration(210);
+    incomingContentFadeIn.setEasingCurve(QEasingCurve::OutQuart);
+    incomingContentFadeIn.setStartValue(0.0);
+    incomingContentFadeIn.setEndValue(1.0);
+    //
+    incomingContentGeometry.setDuration(210);
+    incomingContentGeometry.setEasingCurve(QEasingCurve::OutQuart);
+    //
+    incomingContentGroup.addAnimation(&incomingContentFadeIn);
+    incomingContentGroup.addAnimation(&incomingContentGeometry);
+    addAnimation(&incomingContentGroup);
+}
+
+void FadeAnimation::updateState(QAbstractAnimation::State _newState, QAbstractAnimation::State _oldState)
+{
+    QSequentialAnimationGroup::updateState(_newState, _oldState);
+
+    if (_newState == QAbstractAnimation::Running) {
+        outgoingContentFadeOut.setCurrentTime(0);
+        incomingContentFadeIn.setCurrentTime(0);
+        incomingContentGeometry.setCurrentTime(0);
+    }
+}
+
+/**
+ * @brief Анимация скользящих панелей
+ * @link https://material.io/design/motion/the-motion-system.html#shared-axis
+ */
+class SlideAnimation : public QParallelAnimationGroup
+{
+public:
+    explicit SlideAnimation(QObject* _parent = nullptr);
+
+    QVariantAnimation outgoingContentFadeOut;
+    QVariantAnimation incomingContentFadeIn;
+    QSequentialAnimationGroup contentFadeGroup;
+
+    QVariantAnimation outgoingContentPosition;
+    QVariantAnimation incomingContentPosition;
+
+protected:
+    /**
+     * @brief Устанавливаем текущие значения анимаций в изначальные при старте
+     */
+    void updateState(QAbstractAnimation::State _newState,
+                     QAbstractAnimation::State _oldState) override;
+};
+
+SlideAnimation::SlideAnimation(QObject* _parent)
+    : QParallelAnimationGroup(_parent)
+{
+    outgoingContentFadeOut.setDuration(90);
+    outgoingContentFadeOut.setEasingCurve(QEasingCurve::InQuad);
+    outgoingContentFadeOut.setStartValue(1.0);
+    outgoingContentFadeOut.setEndValue(0.0);
+    //
+    incomingContentFadeIn.setDuration(210);
+    incomingContentFadeIn.setEasingCurve(QEasingCurve::OutQuart);
+    incomingContentFadeIn.setStartValue(0.0);
+    incomingContentFadeIn.setEndValue(1.0);
+    //
+    contentFadeGroup.addAnimation(&outgoingContentFadeOut);
+    contentFadeGroup.addAnimation(&incomingContentFadeIn);
+    addAnimation(&contentFadeGroup);
+
+    outgoingContentPosition.setDuration(300);
+    outgoingContentPosition.setEasingCurve(QEasingCurve::OutQuart);
+    outgoingContentPosition.setStartValue(0.0);
+    addAnimation(&outgoingContentPosition);
+
+    incomingContentPosition.setDuration(300);
+    incomingContentPosition.setEasingCurve(QEasingCurve::InOutQuad);
+    incomingContentPosition.setEndValue(0.0);
+    addAnimation(&incomingContentPosition);
+}
+
+void SlideAnimation::updateState(QAbstractAnimation::State _newState, QAbstractAnimation::State _oldState)
+{
+    QParallelAnimationGroup::updateState(_newState, _oldState);
+
+    if (_newState == QAbstractAnimation::Running) {
+        outgoingContentFadeOut.setCurrentTime(0);
+        incomingContentFadeIn.setCurrentTime(0);
+        outgoingContentPosition.setCurrentTime(0);
+        incomingContentPosition.setCurrentTime(0);
+    }
+}
+
+/**
+ * @brief Анимация разъезжающегося элемента
+ * @link https://material.io/design/motion/the-motion-system.html#container-transform
  */
 class ExpandAnimation : public QParallelAnimationGroup
 {
@@ -37,7 +157,13 @@ protected:
     /**
       * @brief Обновим настройки анимаций, при смене направления анимирования
       */
-     void updateDirection(QAbstractAnimation::Direction _direction) override;
+    void updateDirection(QAbstractAnimation::Direction _direction) override;
+
+    /**
+     * @brief Устанавливаем текущие значения анимаций в изначальные при старте
+     */
+    void updateState(QAbstractAnimation::State _newState,
+                     QAbstractAnimation::State _oldState) override;
 };
 
 ExpandAnimation::ExpandAnimation(QObject* _parent)
@@ -95,14 +221,24 @@ void ExpandAnimation::updateDirection(QAbstractAnimation::Direction _direction)
     }
 }
 
+void ExpandAnimation::updateState(QAbstractAnimation::State _newState, QAbstractAnimation::State _oldState)
+{
+    QParallelAnimationGroup::updateState(_newState, _oldState);
+
+    if (_newState == QAbstractAnimation::Running) {
+        outgoingContentFadeOut.setCurrentTime(0);
+        incomingContentFadeIn.setCurrentTime(0);
+        contentGeometry.setCurrentTime(0);
+        scrimFadeIn.setCurrentTime(0);
+    }
 }
+
+} // namespace
 
 
 class StackWidget::Implementation
 {
 public:
-    explicit Implementation();
-
     const QAbstractAnimation& currentAnimation() const;
 
 
@@ -114,31 +250,17 @@ public:
     QPixmap currentWidgetImage;
 
     AnimationType animationType = AnimationType::Fade;
-    QVariantAnimation fadeAnimation;
-    QVariantAnimation slideAnimation;
+    FadeAnimation fadeAnimation;
+    SlideAnimation slideAnimation;
     ExpandAnimation expandAnimation;
 };
-
-StackWidget::Implementation::Implementation()
-{
-    //
-    // TODO: Сделать эти анимации тоже по гайдам
-    //
-
-    fadeAnimation.setDuration(240);
-    fadeAnimation.setEasingCurve(QEasingCurve::OutQuad);
-    fadeAnimation.setStartValue(0.0);
-    fadeAnimation.setEndValue(1.0);
-
-    slideAnimation.setDuration(160);
-    slideAnimation.setEasingCurve(QEasingCurve::OutQuad);
-}
 
 const QAbstractAnimation& StackWidget::Implementation::currentAnimation() const
 {
     switch (animationType) {
         default:
-        case AnimationType::Fade: {
+        case AnimationType::Fade:
+        case AnimationType::FadeThrough: {
             return fadeAnimation;
         }
 
@@ -161,11 +283,16 @@ StackWidget::StackWidget(QWidget *_parent)
     auto update = [this] { this->update(); };
     auto showCurrentWidget = [this] { d->currentWidget->show(); };
 
-    connect(&d->fadeAnimation, &QVariantAnimation::valueChanged, this, update);
-    connect(&d->fadeAnimation, &QVariantAnimation::finished, this, showCurrentWidget);
+    connect(&d->fadeAnimation.outgoingContentFadeOut, &QVariantAnimation::valueChanged, this, update);
+    connect(&d->fadeAnimation.incomingContentFadeIn, &QVariantAnimation::valueChanged, this, update);
+    connect(&d->fadeAnimation.incomingContentGeometry, &QVariantAnimation::valueChanged, this, update);
+    connect(&d->fadeAnimation, &FadeAnimation::finished, this, showCurrentWidget);
 
-    connect(&d->slideAnimation, &QVariantAnimation::valueChanged, this, update);
-    connect(&d->slideAnimation, &QVariantAnimation::finished, this, showCurrentWidget);
+    connect(&d->slideAnimation.outgoingContentFadeOut, &QVariantAnimation::valueChanged, this, update);
+    connect(&d->slideAnimation.incomingContentFadeIn, &QVariantAnimation::valueChanged, this, update);
+    connect(&d->slideAnimation.outgoingContentPosition, &QVariantAnimation::valueChanged, this, update);
+    connect(&d->slideAnimation.incomingContentPosition, &QVariantAnimation::valueChanged, this, update);
+    connect(&d->slideAnimation, &SlideAnimation::finished, this, showCurrentWidget);
 
     connect(&d->expandAnimation.outgoingContentFadeOut, &QVariantAnimation::valueChanged, this, update);
     connect(&d->expandAnimation.incomingContentFadeIn, &QVariantAnimation::valueChanged, this, update);
@@ -173,6 +300,8 @@ StackWidget::StackWidget(QWidget *_parent)
     connect(&d->expandAnimation.scrimFadeIn, &QVariantAnimation::valueChanged, this, update);
     connect(&d->expandAnimation, &ExpandAnimation::finished, this, showCurrentWidget);
 }
+
+StackWidget::~StackWidget() = default;
 
 void StackWidget::setAnimationType(StackWidget::AnimationType _type)
 {
@@ -196,8 +325,6 @@ void StackWidget::addWidget(QWidget* _widget)
     _widget->hide();
 }
 
-StackWidget::~StackWidget() = default;
-
 void StackWidget::setCurrentWidget(QWidget *_widget)
 {
     if (d->currentWidget == _widget) {
@@ -205,11 +332,10 @@ void StackWidget::setCurrentWidget(QWidget *_widget)
     }
 
     //
-    // Сделать снимок текущего виджета
+    // Сохраняем виджет, который был активным до момента установки нового
     //
     if (d->currentWidget != nullptr) {
         d->previousWidget = d->currentWidget;
-        d->previousWidgetImage = d->previousWidget->grab();
         d->previousWidget->hide();
     }
 
@@ -234,9 +360,21 @@ void StackWidget::setCurrentWidget(QWidget *_widget)
     //
     // А если виджет виден, то запускаем анимацию отображения нового текущего виджета
     //
+    if (d->previousWidget != nullptr) {
+        d->previousWidgetImage = d->previousWidget->grab();
+    }
     d->currentWidgetImage = d->currentWidget->grab();
     d->currentWidget->hide();
     switch (d->animationType) {
+        case AnimationType::FadeThrough: {
+            const qreal widthDelta = width() * 0.02;
+            const qreal heightDelta = height() * 0.02;
+            const auto startGeometry = QRectF(rect()).adjusted(widthDelta, heightDelta,
+                                                               -widthDelta, -heightDelta);
+            d->fadeAnimation.incomingContentGeometry.setStartValue(startGeometry);
+            d->fadeAnimation.incomingContentGeometry.setEndValue(QRectF(rect()));
+            Q_FALLTHROUGH();
+        }
         case AnimationType::Fade: {
             d->fadeAnimation.start();
             break;
@@ -245,12 +383,13 @@ void StackWidget::setCurrentWidget(QWidget *_widget)
         case AnimationType::Slide: {
             const int previousIndex = d->widgets.indexOf(d->previousWidget);
             const int currentIndex = d->widgets.indexOf(d->currentWidget);
+            const qreal delta = 30 * Ui::DesignSystem::scaleFactor();
             if (currentIndex > previousIndex) {
-                d->slideAnimation.setStartValue(width());
-                d->slideAnimation.setEndValue(0);
+                d->slideAnimation.outgoingContentPosition.setEndValue(-delta);
+                d->slideAnimation.incomingContentPosition.setStartValue(delta);
             } else {
-                d->slideAnimation.setStartValue(-width());
-                d->slideAnimation.setEndValue(0);
+                d->slideAnimation.outgoingContentPosition.setEndValue(delta);
+                d->slideAnimation.incomingContentPosition.setStartValue(-delta);
             }
             d->slideAnimation.start();
             break;
@@ -282,7 +421,7 @@ QWidget* StackWidget::currentWidget() const
 QSize StackWidget::sizeHint() const
 {
     QSize sizeHint;
-    for (auto widget : d->widgets) {
+    for (auto widget : std::as_const(d->widgets)) {
         sizeHint.setWidth(std::max(sizeHint.width(), widget->sizeHint().width()));
         sizeHint.setHeight(std::max(sizeHint.height(), widget->sizeHint().height()));
     }
@@ -310,29 +449,36 @@ void StackWidget::paintEvent(QPaintEvent *_event)
     //
     QPainter painter(this);
     switch (d->animationType) {
-        case AnimationType::Fade: {
+        case AnimationType::Fade:
+        case AnimationType::FadeThrough: {
             if (!d->previousWidgetImage.isNull()) {
+                painter.setOpacity(d->fadeAnimation.outgoingContentFadeOut.currentValue().toReal());
                 painter.drawPixmap(0, 0, d->previousWidgetImage);
             }
             if (!d->currentWidgetImage.isNull()) {
-                painter.setOpacity(d->fadeAnimation.currentValue().toReal());
-                painter.drawPixmap(0, 0, d->currentWidgetImage);
+                painter.setOpacity(d->fadeAnimation.incomingContentFadeIn.currentValue().toReal());
+                if (d->animationType == AnimationType::FadeThrough) {
+                    const auto targetRect = d->fadeAnimation.incomingContentGeometry.currentValue().toRectF();
+                    const auto targetPos = targetRect.topLeft();
+                    const auto targetSize = targetRect.size() * devicePixelRatio();
+                    painter.drawPixmap(targetPos, d->currentWidgetImage.scaled(targetSize.toSize()));
+                } else {
+                    painter.drawPixmap(0, 0, d->currentWidgetImage);
+                }
             }
             break;
         }
 
         case AnimationType::Slide: {
             if (!d->previousWidgetImage.isNull()) {
-                int x = 0;
-                if (d->slideAnimation.startValue().toInt() < d->slideAnimation.endValue().toInt()) {
-                    x = (width() + d->slideAnimation.currentValue().toInt()) / 3;
-                } else {
-                    x = (d->slideAnimation.currentValue().toInt() - width()) / 3;
-                }
-                painter.drawPixmap(x, 0, d->previousWidgetImage);
+                painter.setOpacity(d->slideAnimation.outgoingContentFadeOut.currentValue().toReal());
+                painter.drawPixmap(QPointF(d->slideAnimation.outgoingContentPosition.currentValue().toReal(), 0.0),
+                                   d->previousWidgetImage);
             }
             if (!d->currentWidgetImage.isNull()) {
-                painter.drawPixmap(d->slideAnimation.currentValue().toInt(), 0, d->currentWidgetImage);
+                painter.setOpacity(d->slideAnimation.incomingContentFadeIn.currentValue().toReal());
+                painter.drawPixmap(QPointF(d->slideAnimation.incomingContentPosition.currentValue().toReal(), 0.0),
+                                   d->currentWidgetImage);
             }
             break;
         }

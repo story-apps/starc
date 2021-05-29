@@ -1,20 +1,12 @@
 #pragma once
 
-#include <QStringRef>
-#include <QXmlStreamReader>
+#include <business_layer/model/abstract_model_xml.h>
 
 
 namespace BusinessLayer
 {
 namespace xml
 {
-
-//
-// Документ
-//
-const QString kDocumentTag = QLatin1String("document");
-const QString kMimeTypeAttribute = QLatin1String("mime-type");
-const QString kVersionAttribute = QLatin1String("version");
 
 //
 // Папка и сцена
@@ -30,7 +22,6 @@ const QString kNumberGroupAttribute = QLatin1String("group");
 const QString kNumberGroupIndexAttribute = QLatin1String("group_index");
 const QString kStampTag = QLatin1String("stamp");
 const QString kPlannedDurationTag = QLatin1String("planned_duration");
-const QString kContentTag = QLatin1String("content");
 
 //
 // Разделитель
@@ -61,17 +52,7 @@ const QString kBoldAttribute = QLatin1String("bold");
 const QString kItalicAttribute = QLatin1String("italic");
 const QString kUnderlineAttribute = QLatin1String("underline");
 const QString kAlignAttribute = QLatin1String("align");
-
-/**
- * @brief Привести xml в читаемый парсером вид
- */
-QString prepareXml(const QString& _xml);
-
-//
-// Вспомогательные методы для чтения контента из потока
-//
-QStringRef readContent(QXmlStreamReader& _reader);
-QStringRef readNextElement(QXmlStreamReader& _reader);
+const QString kInFirstColumn = QLatin1String("ifc");
 
 } // namespace xml
 } // namespace BusinessLayer

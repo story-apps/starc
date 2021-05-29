@@ -14,7 +14,13 @@
 class AppBar::Implementation
 {
 public:
-    Implementation();
+    explicit Implementation(AppBar* _q);
+
+
+    /**
+     * @brief Владелец данных
+     */
+    AppBar* q = nullptr;
 
     /**
      * @brief Анимировать клик
@@ -39,7 +45,8 @@ public:
     QVariantAnimation decorationOpacityAnimation;
 };
 
-AppBar::Implementation::Implementation()
+AppBar::Implementation::Implementation(AppBar* _q)
+    : q(_q)
 {
     decorationRadiusAnimation.setEasingCurve(QEasingCurve::OutQuad);
     decorationRadiusAnimation.setDuration(160);
@@ -59,8 +66,13 @@ void AppBar::Implementation::animateClick()
 
 QAction* AppBar::Implementation::pressedAction(const QPoint& _coordinate, const QList<QAction*>& _actions) const
 {
-    qreal actionLeft = Ui::DesignSystem::appBar().margins().left()
-                       - (Ui::DesignSystem::appBar().iconsSpacing() / 2.0);
+    qreal actionLeft = q->isLeftToRight()
+                       ? Ui::DesignSystem::appBar().margins().left()
+                         - (Ui::DesignSystem::appBar().iconsSpacing() / 2.0)
+                       : q->width()
+                         - (Ui::DesignSystem::appBar().iconsSpacing() / 2.0)
+                         - Ui::DesignSystem::appBar().iconSize().width()
+                         - Ui::DesignSystem::appBar().margins().left();
     //
     // Берём увеличенный регион для удобства клика в области кнопки
     //
@@ -73,7 +85,9 @@ QAction* AppBar::Implementation::pressedAction(const QPoint& _coordinate, const 
             return action;
         }
 
-        actionLeft = actionRight;
+        actionLeft = q->isLeftToRight()
+                     ? actionRight
+                     : actionLeft - actionWidth;
     }
 
     return nullptr;
@@ -85,7 +99,7 @@ QAction* AppBar::Implementation::pressedAction(const QPoint& _coordinate, const 
 
 AppBar::AppBar(QWidget* _parent)
     : Widget(_parent),
-      d(new Implementation)
+      d(new Implementation(this))
 {
     connect(&d->decorationRadiusAnimation, &QVariantAnimation::valueChanged, this, [this] { update(); });
     connect(&d->decorationOpacityAnimation, &QVariantAnimation::valueChanged, this, [this] { update(); });
@@ -137,7 +151,9 @@ void AppBar::paintEvent(QPaintEvent* _event)
     // Рисуем иконки
     //
     painter.setFont(Ui::DesignSystem::font().iconsMid());
-    qreal actionX = Ui::DesignSystem::appBar().margins().left();
+    qreal actionX = isLeftToRight()
+                    ? Ui::DesignSystem::appBar().margins().left()
+                    : width() - Ui::DesignSystem::appBar().iconSize().width() - Ui::DesignSystem::appBar().margins().right();
     const qreal actionY = Ui::DesignSystem::appBar().margins().top();
     const QSizeF actionSize = Ui::DesignSystem::appBar().iconSize();
     const QColor iconInactiveColor = ColorHelper::colorBetween(textColor(), backgroundColor());
@@ -163,7 +179,8 @@ void AppBar::paintEvent(QPaintEvent* _event)
             painter.setOpacity(1.0);
         }
 
-        actionX += actionRect.width() + Ui::DesignSystem::appBar().iconsSpacing();
+        actionX += (isLeftToRight() ? 1 : -1)
+                   * (actionRect.width() + Ui::DesignSystem::appBar().iconsSpacing());
     }
 }
 
