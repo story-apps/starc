@@ -57,6 +57,11 @@ public:
      */
     void setCurrentDocumentExportAvailable(bool _available);
 
+    /**
+     * @brief Закрытие меню
+     */
+    void closeMenu();
+
 signals:
     /**
      * @brief Нажат пункт меню "Проекты"
@@ -114,6 +119,11 @@ protected:
      * @brief Обновить переводы
      */
     void updateTranslations() override;
+
+    /**
+     * @brief Обработка нажатия клавиатуры (Закрытие при нажатии esc)
+     */
+    void keyPressEvent(QKeyEvent* _event) override;
 
 private:
     class Implementation;
