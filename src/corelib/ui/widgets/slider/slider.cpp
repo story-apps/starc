@@ -7,8 +7,7 @@
 #include <QPainter>
 #include <QPaintEvent>
 #include <QVariantAnimation>
-#include <QDebug>
-
+#include <optional>
 
 class Slider::Implementation
 {
@@ -28,8 +27,9 @@ public:
     const int minimum = 0;
     int maximum = 100;
     int current = 50;
-    int startPosition = 500;
-    int eps = 25;
+
+    std::optional<int> defaultPosition = 500;
+    std::optional<int> defaultPositionDelta = 25;
 
     /**
      * @brief  Декорации слайдера при клике
@@ -98,9 +98,9 @@ void Slider::setValue(int _value)
         return;
     }
 
-    if (_value >= d->startPosition - d->eps && _value <= d->startPosition + d->eps)
-    {
-        d->current = d->startPosition;
+    if (d->defaultPosition && _value >= d->defaultPosition.value() - d->defaultPositionDelta.value()
+            && _value <= d->defaultPosition.value() + d->defaultPositionDelta.value()) {
+        d->current = d->defaultPosition.value();
     } else {
         d->current = _value;
     }
@@ -109,15 +109,14 @@ void Slider::setValue(int _value)
     update();
 }
 
-void Slider::setStartPosition(int _value)
+void Slider::setDefaultPosition(int _value)
 {
-    if (d->minimum > _value || _value > d->maximum)
-    {
+    if (d->minimum > _value || _value > d->maximum) {
         return;
     }
 
-    d->startPosition = _value;
-    d->eps = _value * 0.05;
+    d->defaultPosition = _value;
+    d->defaultPositionDelta = d->maximum * 0.01;
 }
 
 QSize Slider::sizeHint() const
@@ -145,7 +144,6 @@ void Slider::paintEvent(QPaintEvent* _event)
     const int leftMargin = contentsRect().left();
     const qreal trackWidth = contentsRect().width();
     const qreal leftTrackWidth = trackWidth * d->current / d->maximum;
-    const qreal startTrackWidth = trackWidth * d->startPosition / d->maximum;
     const QRectF leftTrackRect(QPointF(isRightToLeft() ? trackWidth - leftTrackWidth + leftMargin : leftMargin,
                                        (height() - Ui::DesignSystem::slider().trackHeight()) / 2.0),
                                QSizeF(leftTrackWidth, Ui::DesignSystem::slider().trackHeight()));
@@ -160,17 +158,21 @@ void Slider::paintEvent(QPaintEvent* _event)
     rightTrackColor.setAlphaF(Ui::DesignSystem::slider().unfilledPartOpacity());
     painter.fillRect(rightTrackRect, rightTrackColor);
 
-    const QPointF startCenter(isRightToLeft() ? trackWidth - startTrackWidth + leftMargin
-                                              : leftMargin + startTrackWidth,
-                                                rightTrackRect.center().y());
+    if (d->defaultPosition) {
+        const qreal startTrackWidth = trackWidth * d->defaultPosition.value() / d->maximum;
 
-    const qreal startPointRadious = 4;
+        const QPointF startCenter(isRightToLeft() ? trackWidth - startTrackWidth + leftMargin
+                                                  : leftMargin + startTrackWidth,
+                                  rightTrackRect.center().y());
 
-    painter.setPen(Qt::NoPen);
-    painter.setBrush(Ui::DesignSystem::color().secondary());
-    painter.drawEllipse(startCenter,
-                        startPointRadious,
-                        startPointRadious);
+        const qreal startPointRadious = Ui::DesignSystem::slider().thumbRadius() / 2;
+
+        painter.setPen(Qt::NoPen);
+        painter.setBrush(Ui::DesignSystem::color().secondary());
+        painter.drawEllipse(startCenter,
+                            startPointRadious,
+                            startPointRadious);
+    }
 
     const QPointF thumbCenter(isRightToLeft() ? rightTrackRect.right() : rightTrackRect.left(), rightTrackRect.center().y());
 

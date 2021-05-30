@@ -25,9 +25,9 @@ public:
     void setValue(int _value);
 
     /**
-     * @brief Задать стартовую позицию слайдера
+     * @brief Задать позицию по-умолчанию слайдера
      */
-    void setStartPosition(int _value);
+    void setDefaultPosition(int _value);
 
     /**
      * @brief Переопределяем для корректного подсчёта размера в компоновщиках
