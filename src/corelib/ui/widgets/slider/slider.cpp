@@ -9,6 +9,8 @@
 #include <QVariantAnimation>
 #include <optional>
 
+#include <QDebug>
+
 class Slider::Implementation
 {
 public:
@@ -29,7 +31,7 @@ public:
     int current = 50;
 
     std::optional<int> defaultPosition = 500;
-    std::optional<int> defaultPositionDelta = 25;
+    qreal defaultPositionDelta = 25;
 
     /**
      * @brief  Декорации слайдера при клике
@@ -87,6 +89,14 @@ void Slider::setMaximumValue(int _maximum)
         return;
     }
 
+    qDebug("SetMaximumValue");
+    if (d->defaultPosition)
+    {
+        qDebug("Default position");
+        setDefaultPosition(d->defaultPosition.value() * _maximum / d->maximum);
+        qDebug() << "Maximum value " << _maximum << " Default position " << d->defaultPosition.value();
+    }
+
     d->maximum = _maximum;
     update();
 }
@@ -98,8 +108,8 @@ void Slider::setValue(int _value)
         return;
     }
 
-    if (d->defaultPosition && _value >= d->defaultPosition.value() - d->defaultPositionDelta.value()
-            && _value <= d->defaultPosition.value() + d->defaultPositionDelta.value()) {
+    if ((d->defaultPosition && _value >= d->defaultPosition.value() - d->defaultPositionDelta)
+            && (_value <= d->defaultPosition.value() + d->defaultPositionDelta)) {
         d->current = d->defaultPosition.value();
     } else {
         d->current = _value;
@@ -117,6 +127,11 @@ void Slider::setDefaultPosition(int _value)
 
     d->defaultPosition = _value;
     d->defaultPositionDelta = d->maximum * 0.01;
+}
+
+void Slider::resetDefaultPosition()
+{
+    d->defaultPosition.reset();
 }
 
 QSize Slider::sizeHint() const
@@ -165,13 +180,13 @@ void Slider::paintEvent(QPaintEvent* _event)
                                                   : leftMargin + startTrackWidth,
                                   rightTrackRect.center().y());
 
-        const qreal startPointRadious = Ui::DesignSystem::slider().thumbRadius() / 2;
+        const qreal defaultPointRadious = Ui::DesignSystem::slider().thumbRadius() / 2;
 
         painter.setPen(Qt::NoPen);
         painter.setBrush(Ui::DesignSystem::color().secondary());
         painter.drawEllipse(startCenter,
-                            startPointRadious,
-                            startPointRadious);
+                            defaultPointRadious,
+                            defaultPointRadious);
     }
 
     const QPointF thumbCenter(isRightToLeft() ? rightTrackRect.right() : rightTrackRect.left(), rightTrackRect.center().y());
