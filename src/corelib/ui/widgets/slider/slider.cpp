@@ -9,8 +9,6 @@
 #include <QVariantAnimation>
 #include <optional>
 
-#include <QDebug>
-
 class Slider::Implementation
 {
 public:
@@ -89,15 +87,14 @@ void Slider::setMaximumValue(int _maximum)
         return;
     }
 
-    qDebug("SetMaximumValue");
+    const int oldMaximum = d->maximum;
+    d->maximum = _maximum;
+
     if (d->defaultPosition)
     {
-        qDebug("Default position");
-        setDefaultPosition(d->defaultPosition.value() * _maximum / d->maximum);
-        qDebug() << "Maximum value " << _maximum << " Default position " << d->defaultPosition.value();
+        setDefaultPosition((d->defaultPosition.value() * (_maximum - d->minimum)) / (oldMaximum - d->minimum));
     }
 
-    d->maximum = _maximum;
     update();
 }
 
