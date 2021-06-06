@@ -1,0 +1,22 @@
+name: ClangFormat
+
+on: [push]
+
+jobs:
+  check:
+    name: Check code formatting
+    runs-on: ubuntu-latest
+    steps:
+    - name: Checkout Sources
+      uses: actions/checkout@master
+      with:
+        token: ${{ secrets.ACTION_RUNNER }}
+        submodules: recursive
+
+    - name: Running clang-format
+      uses: DoozyX/clang-format-lint-action@v0.12
+      with:
+        source: 'src'
+        exclude: 'src/3rd_party'
+        extensions: 'h,hpp,c,cpp'
+        clangFormatVersion: 12
