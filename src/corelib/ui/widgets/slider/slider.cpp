@@ -7,6 +7,7 @@
 #include <QPainter>
 #include <QPaintEvent>
 #include <QVariantAnimation>
+
 #include <optional>
 
 class Slider::Implementation
@@ -24,12 +25,17 @@ public:
      */
     int calcValue(int _mousePosition, int _trackWidth, bool _isRightToLeft);
 
+    /**
+     * @brief Вычислить значение defaultPositionDelta
+     */
+    void calcDefaultPositionDelta();
+
     const int minimum = 0;
     int maximum = 100;
     int current = 50;
 
-    std::optional<int> defaultPosition = 500;
-    qreal defaultPositionDelta = 25;
+    std::optional<int> defaultPosition;
+    qreal defaultPositionDelta = 0;
 
     /**
      * @brief  Декорации слайдера при клике
@@ -63,6 +69,11 @@ int Slider::Implementation::calcValue(int _mousePosition, int _trackWidth, bool 
     return _isRightToLeft ? maximum - value : value;
 }
 
+void Slider::Implementation::calcDefaultPositionDelta()
+{
+    defaultPositionDelta = maximum * 0.01;
+}
+
 
 // ****
 
@@ -87,12 +98,10 @@ void Slider::setMaximumValue(int _maximum)
         return;
     }
 
-    const int oldMaximum = d->maximum;
     d->maximum = _maximum;
 
-    if (d->defaultPosition)
-    {
-        setDefaultPosition((d->defaultPosition.value() * (_maximum - d->minimum)) / (oldMaximum - d->minimum));
+    if (d->defaultPosition.has_value()) {
+        d->calcDefaultPositionDelta();
     }
 
     update();
@@ -105,7 +114,8 @@ void Slider::setValue(int _value)
         return;
     }
 
-    if ((d->defaultPosition && _value >= d->defaultPosition.value() - d->defaultPositionDelta)
+    if (d->defaultPosition.has_value()
+            && (_value >= d->defaultPosition.value() - d->defaultPositionDelta)
             && (_value <= d->defaultPosition.value() + d->defaultPositionDelta)) {
         d->current = d->defaultPosition.value();
     } else {
@@ -116,14 +126,14 @@ void Slider::setValue(int _value)
     update();
 }
 
-void Slider::setDefaultPosition(int _value)
+void Slider::calcDefaultPosition(int _value)
 {
     if (d->minimum > _value || _value > d->maximum) {
         return;
     }
 
     d->defaultPosition = _value;
-    d->defaultPositionDelta = d->maximum * 0.01;
+    d->calcDefaultPositionDelta();
 }
 
 void Slider::resetDefaultPosition()
@@ -170,7 +180,7 @@ void Slider::paintEvent(QPaintEvent* _event)
     rightTrackColor.setAlphaF(Ui::DesignSystem::slider().unfilledPartOpacity());
     painter.fillRect(rightTrackRect, rightTrackColor);
 
-    if (d->defaultPosition) {
+    if (d->defaultPosition.has_value()) {
         const qreal startTrackWidth = trackWidth * d->defaultPosition.value() / d->maximum;
 
         const QPointF startCenter(isRightToLeft() ? trackWidth - startTrackWidth + leftMargin

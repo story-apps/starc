@@ -27,10 +27,10 @@ public:
     /**
      * @brief Задать позицию по-умолчанию слайдера
      */
-    void setDefaultPosition(int _value);
+    void calcDefaultPosition(int _value);
 
     /**
-     * @brief Сбросить позицию по-умолчанию слайдера
+     * @brief Отменить использование позиции по-умолчанию
      */
     void resetDefaultPosition();
 
