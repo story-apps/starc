@@ -8,6 +8,7 @@
 #include <QPaintEvent>
 #include <QVariantAnimation>
 
+#include <optional>
 
 class Slider::Implementation
 {
@@ -24,9 +25,17 @@ public:
      */
     int calcValue(int _mousePosition, int _trackWidth, bool _isRightToLeft);
 
+    /**
+     * @brief Вычислить значение defaultPositionDelta
+     */
+    void calcDefaultPositionDelta();
+
     const int minimum = 0;
     int maximum = 100;
     int current = 50;
+
+    std::optional<int> defaultPosition;
+    qreal defaultPositionDelta = 0;
 
     /**
      * @brief  Декорации слайдера при клике
@@ -60,6 +69,11 @@ int Slider::Implementation::calcValue(int _mousePosition, int _trackWidth, bool 
     return _isRightToLeft ? maximum - value : value;
 }
 
+void Slider::Implementation::calcDefaultPositionDelta()
+{
+    defaultPositionDelta = maximum * 0.01;
+}
+
 
 // ****
 
@@ -85,6 +99,11 @@ void Slider::setMaximumValue(int _maximum)
     }
 
     d->maximum = _maximum;
+
+    if (d->defaultPosition.has_value()) {
+        d->calcDefaultPositionDelta();
+    }
+
     update();
 }
 
@@ -95,9 +114,31 @@ void Slider::setValue(int _value)
         return;
     }
 
-    d->current = _value;
+    if (d->defaultPosition.has_value()
+            && (_value >= d->defaultPosition.value() - d->defaultPositionDelta)
+            && (_value <= d->defaultPosition.value() + d->defaultPositionDelta)) {
+        d->current = d->defaultPosition.value();
+    } else {
+        d->current = _value;
+    }
+
     emit valueChanged(d->current);
     update();
+}
+
+void Slider::calcDefaultPosition(int _value)
+{
+    if (d->minimum > _value || _value > d->maximum) {
+        return;
+    }
+
+    d->defaultPosition = _value;
+    d->calcDefaultPositionDelta();
+}
+
+void Slider::resetDefaultPosition()
+{
+    d->defaultPosition.reset();
 }
 
 QSize Slider::sizeHint() const
@@ -138,6 +179,22 @@ void Slider::paintEvent(QPaintEvent* _event)
     QColor rightTrackColor = Ui::DesignSystem::color().secondary();
     rightTrackColor.setAlphaF(Ui::DesignSystem::slider().unfilledPartOpacity());
     painter.fillRect(rightTrackRect, rightTrackColor);
+
+    if (d->defaultPosition.has_value()) {
+        const qreal startTrackWidth = trackWidth * d->defaultPosition.value() / d->maximum;
+
+        const QPointF startCenter(isRightToLeft() ? trackWidth - startTrackWidth + leftMargin
+                                                  : leftMargin + startTrackWidth,
+                                  rightTrackRect.center().y());
+
+        const qreal defaultPointRadious = Ui::DesignSystem::slider().thumbRadius() / 2;
+
+        painter.setPen(Qt::NoPen);
+        painter.setBrush(Ui::DesignSystem::color().secondary());
+        painter.drawEllipse(startCenter,
+                            defaultPointRadious,
+                            defaultPointRadious);
+    }
 
     const QPointF thumbCenter(isRightToLeft() ? rightTrackRect.right() : rightTrackRect.left(), rightTrackRect.center().y());
 

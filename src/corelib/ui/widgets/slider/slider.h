@@ -25,6 +25,16 @@ public:
     void setValue(int _value);
 
     /**
+     * @brief Задать позицию по-умолчанию слайдера
+     */
+    void calcDefaultPosition(int _value);
+
+    /**
+     * @brief Отменить использование позиции по-умолчанию
+     */
+    void resetDefaultPosition();
+
+    /**
      * @brief Переопределяем для корректного подсчёта размера в компоновщиках
      */
     QSize sizeHint() const override;
