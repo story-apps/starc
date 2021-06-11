@@ -1,19 +1,18 @@
 #pragma once
 
-#include <corelib_global.h>
-
 #include <business_layer/model/abstract_model_item.h>
+
+#include <corelib_global.h>
 
 class QColor;
 class QUuid;
 
 namespace Domain {
-    enum class DocumentObjectType;
+enum class DocumentObjectType;
 }
 
 
-namespace BusinessLayer
-{
+namespace BusinessLayer {
 
 /**
  * @brief Элемент структуры проекта
@@ -22,7 +21,7 @@ class CORE_LIBRARY_EXPORT StructureModelItem : public AbstractModelItem
 {
 public:
     explicit StructureModelItem(const QUuid& _uuid, Domain::DocumentObjectType _type,
-         const QString& _name, const QColor& _color, bool _visible);
+                                const QString& _name, const QColor& _color, bool _visible);
     explicit StructureModelItem(const StructureModelItem& _other);
     ~StructureModelItem() override;
 

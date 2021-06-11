@@ -5,23 +5,22 @@
 
 #include <business_layer/templates/screenplay_template.h>
 #include <business_layer/templates/templates_facade.h>
-
 #include <ui/widgets/text_edit/base/base_text_edit.h>
-
 #include <utils/shugar.h>
 
 #include <QTextTable>
-
 #include <QtGui/private/qtextdocument_p.h>
 
 
 namespace BusinessLayer {
 
 namespace {
-ScreenplayTextBlockData* cloneBlockData(const QTextBlock& _block) {
+ScreenplayTextBlockData* cloneBlockData(const QTextBlock& _block)
+{
     ScreenplayTextBlockData* clonedBlockData = nullptr;
     if (_block.userData() != nullptr) {
-        const auto blockData = static_cast<BusinessLayer::ScreenplayTextBlockData*>(_block.userData());
+        const auto blockData
+            = static_cast<BusinessLayer::ScreenplayTextBlockData*>(_block.userData());
         if (blockData != nullptr) {
             clonedBlockData = new ScreenplayTextBlockData(blockData);
         }
@@ -112,16 +111,14 @@ void ScreenplayTextCursor::removeCharacters(bool _backward, BaseTextEdit* _edito
         //
         // Если в начале документа нажат backspace
         //
-        if (cursor.atStart()
-            && _backward == true) {
+        if (cursor.atStart() && _backward == true) {
             return;
         }
 
         //
         // Если в конце документа нажат delete
         //
-        if (cursor.atEnd()
-            && _backward == false) {
+        if (cursor.atEnd() && _backward == false) {
             return;
         }
     }
@@ -144,15 +141,16 @@ void ScreenplayTextCursor::removeCharacters(bool _backward, BaseTextEdit* _edito
             //
             // ... переходим через корректирующие блоки блоки вперёд
             //
-            if (!_backward
-                && checkCursor.atBlockEnd()) {
+            if (!_backward && checkCursor.atBlockEnd()) {
                 //
                 // ... в разрыве, удаляем символы в оторванном абзаце
                 //
-                if (checkCursor.blockFormat().boolProperty(ScreenplayBlockStyle::PropertyIsBreakCorrectionStart)) {
+                if (checkCursor.blockFormat().boolProperty(
+                        ScreenplayBlockStyle::PropertyIsBreakCorrectionStart)) {
                     checkCursor.movePosition(QTextCursor::NextBlock);
                     while (!checkCursor.atEnd()
-                           && checkCursor.blockFormat().boolProperty(ScreenplayBlockStyle::PropertyIsCorrection)) {
+                           && checkCursor.blockFormat().boolProperty(
+                               ScreenplayBlockStyle::PropertyIsCorrection)) {
                         checkCursor.movePosition(QTextCursor::EndOfBlock);
                         checkCursor.movePosition(QTextCursor::NextCharacter);
                     }
@@ -163,10 +161,12 @@ void ScreenplayTextCursor::removeCharacters(bool _backward, BaseTextEdit* _edito
                 //
                 // ... в смещении блоков, удаляем все декорации
                 //
-                else if (checkCursor.block().next().blockFormat().boolProperty(ScreenplayBlockStyle::PropertyIsCorrection)) {
+                else if (checkCursor.block().next().blockFormat().boolProperty(
+                             ScreenplayBlockStyle::PropertyIsCorrection)) {
                     checkCursor.movePosition(QTextCursor::NextBlock);
                     while (!checkCursor.atEnd()
-                           && checkCursor.blockFormat().boolProperty(ScreenplayBlockStyle::PropertyIsCorrection)) {
+                           && checkCursor.blockFormat().boolProperty(
+                               ScreenplayBlockStyle::PropertyIsCorrection)) {
                         checkCursor.movePosition(QTextCursor::EndOfBlock);
                         checkCursor.movePosition(QTextCursor::NextCharacter);
                     }
@@ -177,15 +177,17 @@ void ScreenplayTextCursor::removeCharacters(bool _backward, BaseTextEdit* _edito
             //
             // ... назад
             //
-            else if (_backward
-                     && checkCursor.atBlockEnd()) {
+            else if (_backward && checkCursor.atBlockEnd()) {
                 //
                 // ... в разрыве, удаляем символы в оторванном абзаце
                 //
-                if (checkCursor.blockFormat().boolProperty(ScreenplayBlockStyle::PropertyIsBreakCorrectionStart)
-                    || checkCursor.block().next().blockFormat().boolProperty(ScreenplayBlockStyle::PropertyIsBreakCorrectionEnd)) {
+                if (checkCursor.blockFormat().boolProperty(
+                        ScreenplayBlockStyle::PropertyIsBreakCorrectionStart)
+                    || checkCursor.block().next().blockFormat().boolProperty(
+                        ScreenplayBlockStyle::PropertyIsBreakCorrectionEnd)) {
                     while (!checkCursor.atStart()
-                           && checkCursor.blockFormat().boolProperty(ScreenplayBlockStyle::PropertyIsCorrection)) {
+                           && checkCursor.blockFormat().boolProperty(
+                               ScreenplayBlockStyle::PropertyIsCorrection)) {
                         checkCursor.movePosition(QTextCursor::PreviousBlock);
                     }
                     checkCursor.movePosition(QTextCursor::EndOfBlock);
@@ -197,9 +199,11 @@ void ScreenplayTextCursor::removeCharacters(bool _backward, BaseTextEdit* _edito
                 //
                 // ... в смещении блоков, удаляем все декорации
                 //
-                else if (checkCursor.blockFormat().boolProperty(ScreenplayBlockStyle::PropertyIsCorrection)) {
+                else if (checkCursor.blockFormat().boolProperty(
+                             ScreenplayBlockStyle::PropertyIsCorrection)) {
                     while (!checkCursor.atStart()
-                           && checkCursor.blockFormat().boolProperty(ScreenplayBlockStyle::PropertyIsCorrection)) {
+                           && checkCursor.blockFormat().boolProperty(
+                               ScreenplayBlockStyle::PropertyIsCorrection)) {
                         checkCursor.movePosition(QTextCursor::PreviousBlock);
                     }
                     checkCursor.movePosition(QTextCursor::EndOfBlock);
@@ -221,18 +225,20 @@ void ScreenplayTextCursor::removeCharacters(bool _backward, BaseTextEdit* _edito
             auto topBlock = document()->findBlock(topCursorPosition);
             auto bottomBlock = document()->findBlock(bottomCursorPosition);
             if (ScreenplayBlockStyle::forBlock(topBlock) == ScreenplayParagraphType::FolderHeader
-                    && ScreenplayBlockStyle::forBlock(bottomBlock) == ScreenplayParagraphType::FolderFooter
-                    && topBlock == document()->begin()
-                    && bottomBlock.next() == document()->end()) {
+                && ScreenplayBlockStyle::forBlock(bottomBlock)
+                    == ScreenplayParagraphType::FolderFooter
+                && topBlock == document()->begin() && bottomBlock.next() == document()->end()) {
                 //
                 // Нельзя просто взять и удалить весь текст, потому что тогда останется блок
-                // окончания папки, с которым ничего нельзя сделать, поэтому действуем последовательно:
+                // окончания папки, с которым ничего нельзя сделать, поэтому действуем
+                // последовательно:
                 // - делаем первый блок временем и местом
                 // - помещаем туда символ, чтобы при удалении, Qt оставил в блоке и данные и формат
                 // - удаляем весь остальной контент и заодно вставленный на предыдущем шаге символ
                 //
                 cursor.movePosition(QTextCursor::Start);
-                auto screenplayDocument = dynamic_cast<BusinessLayer::ScreenplayTextDocument*>(document());
+                auto screenplayDocument
+                    = dynamic_cast<BusinessLayer::ScreenplayTextDocument*>(document());
                 Q_ASSERT(screenplayDocument);
                 screenplayDocument->setParagraphType(ScreenplayParagraphType::SceneHeading, cursor);
                 cursor.movePosition(QTextCursor::EndOfBlock, QTextCursor::KeepAnchor);
@@ -255,10 +261,12 @@ void ScreenplayTextCursor::removeCharacters(bool _backward, BaseTextEdit* _edito
                 if (checkCursor.inTable() && !checkCursor.inFirstColumn()) {
                     //
                     // ... если нет выделения, значит нажат делит в конце последней ячейки левой
-                    //     колонки, или бекспейс в начале первой ячейки правой колонки - удалим таблицу
+                    //     колонки, или бекспейс в начале первой ячейки правой колонки - удалим
+                    //     таблицу
                     //
                     if (!cursor.hasSelection()) {
-                        auto screenplayDocument = dynamic_cast<BusinessLayer::ScreenplayTextDocument*>(document());
+                        auto screenplayDocument
+                            = dynamic_cast<BusinessLayer::ScreenplayTextDocument*>(document());
                         screenplayDocument->mergeParagraph(cursor);
                         return;
                     }
@@ -335,8 +343,7 @@ void ScreenplayTextCursor::removeCharacters(bool _backward, BaseTextEdit* _edito
     // Если в верхнем блоке нет текста, а в нижнем есть
     // Или верхний блок полностью удаляется, а нижний не полностью
     //
-    else if ((topBlock.text().isEmpty()
-              && !bottomBlock.text().isEmpty())
+    else if ((topBlock.text().isEmpty() && !bottomBlock.text().isEmpty())
              || (topBlock.position() == topCursorPosition
                  && topBlock.position() + topBlock.text().length() < bottomCursorPosition
                  && bottomBlock.position() + bottomBlock.text().length() > bottomCursorPosition)) {
@@ -423,7 +430,8 @@ ScreenplayTextCursor::FoldersToDelete ScreenplayTextCursor::findFoldersToDelete(
     FoldersToDelete foldersToDelete;
     while (cursor.position() <= _bottomCursorPosition) {
         //
-        // Если последний блок не будет удалён, то пропускаем его, т.к. он останется с текущим стилем
+        // Если последний блок не будет удалён, то пропускаем его, т.к. он останется с текущим
+        // стилем
         //
         if (cursor.block().position() <= _bottomCursorPosition
             && cursor.block().position() + cursor.block().text().length() >= _bottomCursorPosition
@@ -487,8 +495,9 @@ ScreenplayTextCursor::FoldersToDelete ScreenplayTextCursor::findFoldersToDelete(
     return foldersToDelete;
 }
 
-void ScreenplayTextCursor::removeGroupsPairs(int _cursorPosition,
-    const ScreenplayTextCursor::FoldersToDelete& _foldersToDelete, bool isTopBlockShouldBeRemoved)
+void ScreenplayTextCursor::removeGroupsPairs(
+    int _cursorPosition, const ScreenplayTextCursor::FoldersToDelete& _foldersToDelete,
+    bool isTopBlockShouldBeRemoved)
 {
     //
     // Удалим пары из последующего текста
@@ -619,4 +628,4 @@ void ScreenplayTextCursor::removeGroupsPairs(int _cursorPosition,
     }
 }
 
-} // namespace Ui
+} // namespace BusinessLayer

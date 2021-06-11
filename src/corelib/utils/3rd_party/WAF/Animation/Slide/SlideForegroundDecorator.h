@@ -24,36 +24,35 @@
 /**
  * Widgets Animation Framework
  */
-namespace WAF
+namespace WAF {
+/**
+ * @brief Класс перекрывающий передний план выкатываемого виджета
+ * @note Делается это для того, чтобы скрыть деформации компоновщика, при изменении размера виджета
+ */
+class SlideForegroundDecorator : public QWidget
 {
-	/**
-	 * @brief Класс перекрывающий передний план выкатываемого виджета
-	 * @note Делается это для того, чтобы скрыть деформации компоновщика, при изменении размера виджета
-	 */
-	class SlideForegroundDecorator : public QWidget
-	{
-		Q_OBJECT
+    Q_OBJECT
 
-	public:
-		explicit SlideForegroundDecorator(QWidget* _parent);
+public:
+    explicit SlideForegroundDecorator(QWidget* _parent);
 
-		/**
-		 * @brief Сохранить изображение родительского виджета
-		 */
-		void grabParent(const QSize& _size);
+    /**
+     * @brief Сохранить изображение родительского виджета
+     */
+    void grabParent(const QSize& _size);
 
-	protected:
-		/**
-		 * @brief Переопределяется для прорисовки декорации
-		 */
-		void paintEvent(QPaintEvent* _event);
+protected:
+    /**
+     * @brief Переопределяется для прорисовки декорации
+     */
+    void paintEvent(QPaintEvent* _event);
 
-	private:
-		/**
-		 * @brief Фоновое изображение
-		 */
-		QPixmap m_foreground;
-	};
-}
+private:
+    /**
+     * @brief Фоновое изображение
+     */
+    QPixmap m_foreground;
+};
+} // namespace WAF
 
 #endif // SLIDEBACKGROUNDDECORATOR_H

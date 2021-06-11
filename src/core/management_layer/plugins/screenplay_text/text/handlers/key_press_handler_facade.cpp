@@ -1,10 +1,11 @@
 #include "key_press_handler_facade.h"
 
+#include "../screenplay_text_edit.h"
 #include "action_handler.h"
 #include "character_handler.h"
 #include "dialog_handler.h"
-#include "folder_header_handler.h"
 #include "folder_footer_handler.h"
+#include "folder_header_handler.h"
 #include "inline_note_handler.h"
 #include "lyrics_handler.h"
 #include "parenthetical_handler.h"
@@ -16,18 +17,15 @@
 #include "transition_handler.h"
 #include "unformatted_text_handler.h"
 
-#include "../screenplay_text_edit.h"
-
 #include <business_layer/templates/screenplay_template.h>
 
-#include <QTextBlock>
 #include <QKeyEvent>
+#include <QTextBlock>
 
 using BusinessLayer::ScreenplayParagraphType;
 using Ui::ScreenplayTextEdit;
 
-namespace KeyProcessingLayer
-{
+namespace KeyProcessingLayer {
 
 class KeyPressHandlerFacade::Implementation
 {
@@ -54,22 +52,22 @@ public:
 };
 
 KeyPressHandlerFacade::Implementation::Implementation(Ui::ScreenplayTextEdit* _editor)
-    : m_editor(_editor),
-      m_prepareHandler(new PrepareHandler(_editor)),
-      m_preHandler(new PreHandler(_editor)),
-      m_unformattedTextHandler(new UnformattedTextHandler(_editor)),
-      m_sceneHeaderHandler(new SceneHeadingHandler(_editor)),
-      m_sceneCharactersHandler(new SceneCharactersHandler(_editor)),
-      m_actionHandler(new ActionHandler(_editor)),
-      m_characterHandler(new CharacterHandler(_editor)),
-      m_parentheticalHandler(new ParentheticalHandler(_editor)),
-      m_dialogHandler(new DialogHandler(_editor)),
-      m_lyricsHandler(new LyricsHandler(_editor)),
-      m_transitionHandler(new TransitionHandler(_editor)),
-      m_shotHandler(new ShotHandler(_editor)),
-      m_inlineNoteHandler(new InlineNoteHandler(_editor)),
-      m_folderHeaderHandler(new FolderHeaderHandler(_editor)),
-      m_folderFooterHandler(new FolderFooterHandler(_editor))
+    : m_editor(_editor)
+    , m_prepareHandler(new PrepareHandler(_editor))
+    , m_preHandler(new PreHandler(_editor))
+    , m_unformattedTextHandler(new UnformattedTextHandler(_editor))
+    , m_sceneHeaderHandler(new SceneHeadingHandler(_editor))
+    , m_sceneCharactersHandler(new SceneCharactersHandler(_editor))
+    , m_actionHandler(new ActionHandler(_editor))
+    , m_characterHandler(new CharacterHandler(_editor))
+    , m_parentheticalHandler(new ParentheticalHandler(_editor))
+    , m_dialogHandler(new DialogHandler(_editor))
+    , m_lyricsHandler(new LyricsHandler(_editor))
+    , m_transitionHandler(new TransitionHandler(_editor))
+    , m_shotHandler(new ShotHandler(_editor))
+    , m_inlineNoteHandler(new InlineNoteHandler(_editor))
+    , m_folderHeaderHandler(new FolderHeaderHandler(_editor))
+    , m_folderFooterHandler(new FolderFooterHandler(_editor))
 {
 }
 
@@ -145,61 +143,61 @@ KeyPressHandlerFacade::KeyPressHandlerFacade(ScreenplayTextEdit* _editor)
 AbstractKeyHandler* KeyPressHandlerFacade::handlerFor(ScreenplayParagraphType _type)
 {
     switch (_type) {
-        case ScreenplayParagraphType::UnformattedText: {
-            return d->m_unformattedTextHandler.data();
-        }
+    case ScreenplayParagraphType::UnformattedText: {
+        return d->m_unformattedTextHandler.data();
+    }
 
-        case ScreenplayParagraphType::SceneHeading: {
-            return d->m_sceneHeaderHandler.data();
-        }
+    case ScreenplayParagraphType::SceneHeading: {
+        return d->m_sceneHeaderHandler.data();
+    }
 
-        case ScreenplayParagraphType::SceneCharacters: {
-            return d->m_sceneCharactersHandler.data();
-        }
+    case ScreenplayParagraphType::SceneCharacters: {
+        return d->m_sceneCharactersHandler.data();
+    }
 
-        case ScreenplayParagraphType::Action: {
-            return d->m_actionHandler.data();
-        }
+    case ScreenplayParagraphType::Action: {
+        return d->m_actionHandler.data();
+    }
 
-        case ScreenplayParagraphType::Character: {
-            return d->m_characterHandler.data();
-        }
+    case ScreenplayParagraphType::Character: {
+        return d->m_characterHandler.data();
+    }
 
-        case ScreenplayParagraphType::Parenthetical: {
-            return d->m_parentheticalHandler.data();
-        }
+    case ScreenplayParagraphType::Parenthetical: {
+        return d->m_parentheticalHandler.data();
+    }
 
-        case ScreenplayParagraphType::Dialogue: {
-            return d->m_dialogHandler.data();
-        }
+    case ScreenplayParagraphType::Dialogue: {
+        return d->m_dialogHandler.data();
+    }
 
-        case ScreenplayParagraphType::Lyrics: {
-            return d->m_lyricsHandler.data();
-        }
+    case ScreenplayParagraphType::Lyrics: {
+        return d->m_lyricsHandler.data();
+    }
 
-        case ScreenplayParagraphType::Transition: {
-            return d->m_transitionHandler.data();
-        }
+    case ScreenplayParagraphType::Transition: {
+        return d->m_transitionHandler.data();
+    }
 
-        case ScreenplayParagraphType::Shot: {
-            return d->m_shotHandler.data();
-        }
+    case ScreenplayParagraphType::Shot: {
+        return d->m_shotHandler.data();
+    }
 
-        case ScreenplayParagraphType::InlineNote: {
-            return d->m_inlineNoteHandler.data();
-        }
+    case ScreenplayParagraphType::InlineNote: {
+        return d->m_inlineNoteHandler.data();
+    }
 
-        case ScreenplayParagraphType::FolderHeader: {
-            return d->m_folderHeaderHandler.data();
-        }
+    case ScreenplayParagraphType::FolderHeader: {
+        return d->m_folderHeaderHandler.data();
+    }
 
-        case ScreenplayParagraphType::FolderFooter: {
-            return d->m_folderFooterHandler.data();
-        }
+    case ScreenplayParagraphType::FolderFooter: {
+        return d->m_folderFooterHandler.data();
+    }
 
-        default: {
-            return nullptr;
-        }
+    default: {
+        return nullptr;
+    }
     }
 }
 

@@ -1,12 +1,11 @@
 #pragma once
 
-#include <corelib_global.h>
-
 #include <QVector>
 
+#include <corelib_global.h>
 
-namespace BusinessLayer
-{
+
+namespace BusinessLayer {
 
 struct TextImportOptions;
 

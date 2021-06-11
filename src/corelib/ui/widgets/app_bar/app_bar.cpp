@@ -1,12 +1,11 @@
 #include "app_bar.h"
 
 #include <ui/design_system/design_system.h>
-
 #include <utils/helpers/color_helper.h>
 
 #include <QAction>
-#include <QPainter>
 #include <QPaintEvent>
+#include <QPainter>
 #include <QToolTip>
 #include <QVariantAnimation>
 
@@ -64,20 +63,20 @@ void AppBar::Implementation::animateClick()
     decorationOpacityAnimation.start();
 }
 
-QAction* AppBar::Implementation::pressedAction(const QPoint& _coordinate, const QList<QAction*>& _actions) const
+QAction* AppBar::Implementation::pressedAction(const QPoint& _coordinate,
+                                               const QList<QAction*>& _actions) const
 {
     qreal actionLeft = q->isLeftToRight()
-                       ? Ui::DesignSystem::appBar().margins().left()
-                         - (Ui::DesignSystem::appBar().iconsSpacing() / 2.0)
-                       : q->width()
-                         - (Ui::DesignSystem::appBar().iconsSpacing() / 2.0)
-                         - Ui::DesignSystem::appBar().iconSize().width()
-                         - Ui::DesignSystem::appBar().margins().left();
+        ? Ui::DesignSystem::appBar().margins().left()
+            - (Ui::DesignSystem::appBar().iconsSpacing() / 2.0)
+        : q->width() - (Ui::DesignSystem::appBar().iconsSpacing() / 2.0)
+            - Ui::DesignSystem::appBar().iconSize().width()
+            - Ui::DesignSystem::appBar().margins().left();
     //
     // Берём увеличенный регион для удобства клика в области кнопки
     //
-    const qreal actionWidth = Ui::DesignSystem::appBar().iconSize().width()
-                              + Ui::DesignSystem::appBar().iconsSpacing();
+    const qreal actionWidth
+        = Ui::DesignSystem::appBar().iconSize().width() + Ui::DesignSystem::appBar().iconsSpacing();
     for (QAction* action : _actions) {
         const qreal actionRight = actionLeft + actionWidth;
 
@@ -85,9 +84,7 @@ QAction* AppBar::Implementation::pressedAction(const QPoint& _coordinate, const 
             return action;
         }
 
-        actionLeft = q->isLeftToRight()
-                     ? actionRight
-                     : actionLeft - actionWidth;
+        actionLeft = q->isLeftToRight() ? actionRight : actionLeft - actionWidth;
     }
 
     return nullptr;
@@ -98,11 +95,13 @@ QAction* AppBar::Implementation::pressedAction(const QPoint& _coordinate, const 
 
 
 AppBar::AppBar(QWidget* _parent)
-    : Widget(_parent),
-      d(new Implementation(this))
+    : Widget(_parent)
+    , d(new Implementation(this))
 {
-    connect(&d->decorationRadiusAnimation, &QVariantAnimation::valueChanged, this, [this] { update(); });
-    connect(&d->decorationOpacityAnimation, &QVariantAnimation::valueChanged, this, [this] { update(); });
+    connect(&d->decorationRadiusAnimation, &QVariantAnimation::valueChanged, this,
+            [this] { update(); });
+    connect(&d->decorationOpacityAnimation, &QVariantAnimation::valueChanged, this,
+            [this] { update(); });
 
     designSystemChangeEvent(nullptr);
 }
@@ -110,12 +109,12 @@ AppBar::AppBar(QWidget* _parent)
 QSize AppBar::minimumSizeHint() const
 {
     const qreal width = Ui::DesignSystem::appBar().margins().left()
-                        + Ui::DesignSystem::appBar().iconSize().width() * actions().size()
-                        + Ui::DesignSystem::appBar().iconsSpacing() * (actions().size() - 1)
-                        + Ui::DesignSystem::appBar().margins().right();
+        + Ui::DesignSystem::appBar().iconSize().width() * actions().size()
+        + Ui::DesignSystem::appBar().iconsSpacing() * (actions().size() - 1)
+        + Ui::DesignSystem::appBar().margins().right();
     const qreal height = Ui::DesignSystem::appBar().margins().top()
-                         + Ui::DesignSystem::appBar().iconSize().height()
-                         + Ui::DesignSystem::appBar().margins().bottom();
+        + Ui::DesignSystem::appBar().iconSize().height()
+        + Ui::DesignSystem::appBar().margins().bottom();
     return QSizeF(width, height).toSize();
 }
 
@@ -126,8 +125,7 @@ bool AppBar::event(QEvent* _event)
     if (_event->type() == QEvent::ToolTip) {
         QHelpEvent* event = static_cast<QHelpEvent*>(_event);
         QAction* action = d->pressedAction(event->pos(), actions());
-        if (action != nullptr
-            && action->toolTip() != action->iconText()) {
+        if (action != nullptr && action->toolTip() != action->iconText()) {
             QToolTip::showText(event->globalPos(), action->toolTip());
         } else {
             QToolTip::hideText();
@@ -151,9 +149,9 @@ void AppBar::paintEvent(QPaintEvent* _event)
     // Рисуем иконки
     //
     painter.setFont(Ui::DesignSystem::font().iconsMid());
-    qreal actionX = isLeftToRight()
-                    ? Ui::DesignSystem::appBar().margins().left()
-                    : width() - Ui::DesignSystem::appBar().iconSize().width() - Ui::DesignSystem::appBar().margins().right();
+    qreal actionX = isLeftToRight() ? Ui::DesignSystem::appBar().margins().left()
+                                    : width() - Ui::DesignSystem::appBar().iconSize().width()
+            - Ui::DesignSystem::appBar().margins().right();
     const qreal actionY = Ui::DesignSystem::appBar().margins().top();
     const QSizeF actionSize = Ui::DesignSystem::appBar().iconSize();
     const QColor iconInactiveColor = ColorHelper::colorBetween(textColor(), backgroundColor());
@@ -162,7 +160,8 @@ void AppBar::paintEvent(QPaintEvent* _event)
         // ... сама иконка
         //
         const QRectF actionRect(QPointF(actionX, actionY), actionSize);
-        painter.setPen((!action->isCheckable() || action->isChecked()) ? textColor() : iconInactiveColor);
+        painter.setPen((!action->isCheckable() || action->isChecked()) ? textColor()
+                                                                       : iconInactiveColor);
         painter.drawText(actionRect, Qt::AlignCenter, action->text());
 
         //
@@ -174,13 +173,14 @@ void AppBar::paintEvent(QPaintEvent* _event)
             painter.setPen(Qt::NoPen);
             painter.setBrush(Ui::DesignSystem::color().secondary());
             painter.setOpacity(d->decorationOpacityAnimation.currentValue().toReal());
-            painter.drawEllipse(actionRect.center(), d->decorationRadiusAnimation.currentValue().toReal(),
+            painter.drawEllipse(actionRect.center(),
+                                d->decorationRadiusAnimation.currentValue().toReal(),
                                 d->decorationRadiusAnimation.currentValue().toReal());
             painter.setOpacity(1.0);
         }
 
         actionX += (isLeftToRight() ? 1 : -1)
-                   * (actionRect.width() + Ui::DesignSystem::appBar().iconsSpacing());
+            * (actionRect.width() + Ui::DesignSystem::appBar().iconsSpacing());
     }
 }
 
@@ -228,7 +228,8 @@ void AppBar::designSystemChangeEvent(DesignSystemChangeEvent* _event)
 {
     Q_UNUSED(_event)
 
-    d->decorationRadiusAnimation.setStartValue(Ui::DesignSystem::appBar().iconSize().height() / 2.0);
+    d->decorationRadiusAnimation.setStartValue(Ui::DesignSystem::appBar().iconSize().height()
+                                               / 2.0);
     d->decorationRadiusAnimation.setEndValue(Ui::DesignSystem::appBar().heightRegular() / 2.5);
 
     updateGeometry();

@@ -7,8 +7,7 @@ struct ScreenplayImportOptions;
 }
 
 
-namespace Ui
-{
+namespace Ui {
 
 /**
  * @brief Диалог настройки параметров импорта

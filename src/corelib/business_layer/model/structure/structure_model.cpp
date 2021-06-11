@@ -3,7 +3,6 @@
 #include "structure_model_item.h"
 
 #include <domain/document_object.h>
-
 #include <utils/helpers/text_helper.h>
 
 #include <QColor>
@@ -13,19 +12,18 @@
 #include <QSet>
 
 
-namespace BusinessLayer
-{
+namespace BusinessLayer {
 
 namespace {
-    const char* kMimeType = "application/x-starc/document";
-    const QString kDocumentKey = QLatin1String("document");
-    const QString kItemKey = QLatin1String("item");
-    const QString kUuidAttribute = QLatin1String("uuid");
-    const QString kTypeAttribute = QLatin1String("type");
-    const QString kNameAttribute = QLatin1String("name");
-    const QString kColorAttribute = QLatin1String("color");
-    const QString kVisibleAttribute = QLatin1String("visible");
-}
+const char* kMimeType = "application/x-starc/document";
+const QString kDocumentKey = QLatin1String("document");
+const QString kItemKey = QLatin1String("item");
+const QString kUuidAttribute = QLatin1String("uuid");
+const QString kTypeAttribute = QLatin1String("type");
+const QString kNameAttribute = QLatin1String("name");
+const QString kColorAttribute = QLatin1String("color");
+const QString kVisibleAttribute = QLatin1String("visible");
+} // namespace
 
 class StructureModel::Implementation
 {
@@ -76,12 +74,12 @@ void StructureModel::Implementation::buildModel(Domain::DocumentObject* _structu
     }
 
     std::function<void(const QDomElement&, StructureModelItem*)> buildItem;
-    buildItem = [&buildItem] (const QDomElement& _node, StructureModelItem* _parent) {
-        auto item = new StructureModelItem(_node.attribute(kUuidAttribute),
-                                           Domain::typeFor(_node.attribute(kTypeAttribute).toUtf8()),
-                                           TextHelper::fromHtmlEscaped(_node.attribute(kNameAttribute)),
-                                           _node.attribute(kColorAttribute),
-                                           _node.attribute(kVisibleAttribute) == "true");
+    buildItem = [&buildItem](const QDomElement& _node, StructureModelItem* _parent) {
+        auto item = new StructureModelItem(
+            _node.attribute(kUuidAttribute),
+            Domain::typeFor(_node.attribute(kTypeAttribute).toUtf8()),
+            TextHelper::fromHtmlEscaped(_node.attribute(kNameAttribute)),
+            _node.attribute(kColorAttribute), _node.attribute(kVisibleAttribute) == "true");
         _parent->appendItem(item);
 
         auto child = _node.firstChildElement();
@@ -112,16 +110,16 @@ QByteArray StructureModel::Implementation::toXml(Domain::DocumentObject* _struct
     //
 
     QByteArray xml = "<?xml version=\"1.0\"?>\n";
-    xml += QString("<%1 mime-type=\"%2\" version=\"1.0\">\n").arg(kDocumentKey, Domain::mimeTypeFor(_structure->type()));
+    xml += QString("<%1 mime-type=\"%2\" version=\"1.0\">\n")
+               .arg(kDocumentKey, Domain::mimeTypeFor(_structure->type()));
     std::function<void(StructureModelItem*)> writeItemXml;
-    writeItemXml = [&xml, &writeItemXml] (StructureModelItem* _item) {
+    writeItemXml = [&xml, &writeItemXml](StructureModelItem* _item) {
         xml += QString("<%1 %2=\"%3\" %4=\"%5\" %6=\"%7\" %8=\"%9\" %10=\"%11\"")
-               .arg(kItemKey,
-                    kUuidAttribute, _item->uuid().toString(),
-                    kTypeAttribute, Domain::mimeTypeFor(_item->type()),
-                    kNameAttribute, TextHelper::toHtmlEscaped(_item->name()),
-                    kColorAttribute, _item->color().name(),
-                    kVisibleAttribute, (_item->visible() ? "true" : "false"));
+                   .arg(kItemKey, kUuidAttribute, _item->uuid().toString(), kTypeAttribute,
+                        Domain::mimeTypeFor(_item->type()), kNameAttribute,
+                        TextHelper::toHtmlEscaped(_item->name()), kColorAttribute,
+                        _item->color().name(), kVisibleAttribute,
+                        (_item->visible() ? "true" : "false"));
         if (!_item->hasChildren()) {
             xml += "/>\n";
             return;
@@ -145,8 +143,8 @@ QByteArray StructureModel::Implementation::toXml(Domain::DocumentObject* _struct
 
 
 StructureModel::StructureModel(QObject* _parent)
-    : AbstractModel({}, _parent),
-      d(new Implementation)
+    : AbstractModel({}, _parent)
+    , d(new Implementation)
 {
 }
 
@@ -158,15 +156,16 @@ void StructureModel::setProjectName(const QString& _name)
 }
 
 QModelIndex StructureModel::addDocument(Domain::DocumentObjectType _type, const QString& _name,
-    const QModelIndex& _parent, const QByteArray& _content)
+                                        const QModelIndex& _parent, const QByteArray& _content)
 {
     //
-    // ATTENTION: В ProjectManager::addScreenplay есть копипаста отсюда, быть внимательным при обновлении
+    // ATTENTION: В ProjectManager::addScreenplay есть копипаста отсюда, быть внимательным при
+    // обновлении
     //
 
     using namespace Domain;
 
-    auto createItem = [] (DocumentObjectType _type, const QString& _name) {
+    auto createItem = [](DocumentObjectType _type, const QString& _name) {
         auto uuid = QUuid::createUuid();
         const auto visible = true;
         return new StructureModelItem(uuid, _type, _name, {}, visible);
@@ -175,59 +174,65 @@ QModelIndex StructureModel::addDocument(Domain::DocumentObjectType _type, const 
     auto parentItem = itemForIndex(_parent);
 
     switch (_type) {
-        case DocumentObjectType::Project: {
-            appendItem(createItem(_type, d->projectName), parentItem, _content);
-            break;
-        }
+    case DocumentObjectType::Project: {
+        appendItem(createItem(_type, d->projectName), parentItem, _content);
+        break;
+    }
 
-        case DocumentObjectType::RecycleBin: {
-            appendItem(createItem(_type, tr("Recycle bin")), parentItem, _content);
-            break;
-        }
+    case DocumentObjectType::RecycleBin: {
+        appendItem(createItem(_type, tr("Recycle bin")), parentItem, _content);
+        break;
+    }
 
-        case DocumentObjectType::Screenplay: {
-            auto screenplayItem = createItem(DocumentObjectType::Screenplay, !_name.isEmpty() ? _name : tr("Screenplay"));
-            appendItem(screenplayItem, parentItem);
-            appendItem(createItem(DocumentObjectType::ScreenplayTitlePage, tr("Title page")), screenplayItem);
-            appendItem(createItem(DocumentObjectType::ScreenplaySynopsis, tr("Synopsis")), screenplayItem);
-            appendItem(createItem(DocumentObjectType::ScreenplayTreatment, tr("Treatment")), screenplayItem);
-            appendItem(createItem(DocumentObjectType::ScreenplayText, tr("Screenplay")), screenplayItem);
-            appendItem(createItem(DocumentObjectType::ScreenplayStatistics, tr("Statistics")), screenplayItem);
-            break;
-        }
+    case DocumentObjectType::Screenplay: {
+        auto screenplayItem = createItem(DocumentObjectType::Screenplay,
+                                         !_name.isEmpty() ? _name : tr("Screenplay"));
+        appendItem(screenplayItem, parentItem);
+        appendItem(createItem(DocumentObjectType::ScreenplayTitlePage, tr("Title page")),
+                   screenplayItem);
+        appendItem(createItem(DocumentObjectType::ScreenplaySynopsis, tr("Synopsis")),
+                   screenplayItem);
+        appendItem(createItem(DocumentObjectType::ScreenplayTreatment, tr("Treatment")),
+                   screenplayItem);
+        appendItem(createItem(DocumentObjectType::ScreenplayText, tr("Screenplay")),
+                   screenplayItem);
+        appendItem(createItem(DocumentObjectType::ScreenplayStatistics, tr("Statistics")),
+                   screenplayItem);
+        break;
+    }
 
-        case DocumentObjectType::Characters: {
-            appendItem(createItem(_type, tr("Characters")), parentItem, _content);
-            break;
-        }
-        case DocumentObjectType::Character: {
-            parentItem = itemForType(Domain::DocumentObjectType::Characters);
-            Q_ASSERT(parentItem);
-            appendItem(createItem(_type, _name.toUpper()), parentItem, _content);
-            break;
-        }
+    case DocumentObjectType::Characters: {
+        appendItem(createItem(_type, tr("Characters")), parentItem, _content);
+        break;
+    }
+    case DocumentObjectType::Character: {
+        parentItem = itemForType(Domain::DocumentObjectType::Characters);
+        Q_ASSERT(parentItem);
+        appendItem(createItem(_type, _name.toUpper()), parentItem, _content);
+        break;
+    }
 
-        case DocumentObjectType::Locations: {
-            appendItem(createItem(_type, tr("Locations")), parentItem, _content);
-            break;
-        }
-        case DocumentObjectType::Location: {
-            parentItem = itemForType(Domain::DocumentObjectType::Locations);
-            Q_ASSERT(parentItem);
-            appendItem(createItem(_type, _name.toUpper()), parentItem, _content);
-            break;
-        }
+    case DocumentObjectType::Locations: {
+        appendItem(createItem(_type, tr("Locations")), parentItem, _content);
+        break;
+    }
+    case DocumentObjectType::Location: {
+        parentItem = itemForType(Domain::DocumentObjectType::Locations);
+        Q_ASSERT(parentItem);
+        appendItem(createItem(_type, _name.toUpper()), parentItem, _content);
+        break;
+    }
 
-        case DocumentObjectType::Folder:
-        case DocumentObjectType::Text: {
-            appendItem(createItem(_type, _name), parentItem, _content);
-            break;
-        }
+    case DocumentObjectType::Folder:
+    case DocumentObjectType::Text: {
+        appendItem(createItem(_type, _name), parentItem, _content);
+        break;
+    }
 
-        default: {
-            Q_ASSERT(false);
-            break;
-        }
+    default: {
+        Q_ASSERT(false);
+        break;
+    }
     }
 
     //
@@ -259,7 +264,7 @@ void StructureModel::prependItem(StructureModelItem* _item, StructureModelItem* 
 }
 
 void StructureModel::appendItem(StructureModelItem* _item, StructureModelItem* _parentItem,
-    const QByteArray& _content)
+                                const QByteArray& _content)
 {
     if (_item == nullptr) {
         return;
@@ -278,8 +283,7 @@ void StructureModel::appendItem(StructureModelItem* _item, StructureModelItem* _
     // для этого определим смещение по индексу для добавляемого элемента
     //
     int recycleBinDelta = 0;
-    if (_parentItem == d->rootItem
-        && _parentItem->hasChildren()
+    if (_parentItem == d->rootItem && _parentItem->hasChildren()
         && _parentItem->childAt(_parentItem->childCount() - 1)->type()
             == Domain::DocumentObjectType::RecycleBin) {
         recycleBinDelta = -1;
@@ -299,8 +303,7 @@ void StructureModel::appendItem(StructureModelItem* _item, StructureModelItem* _
 
 void StructureModel::insertItem(StructureModelItem* _item, StructureModelItem* _afterSiblingItem)
 {
-    if (_item == nullptr
-        || _afterSiblingItem == nullptr
+    if (_item == nullptr || _afterSiblingItem == nullptr
         || _afterSiblingItem->parent() == nullptr) {
         return;
     }
@@ -320,8 +323,7 @@ void StructureModel::insertItem(StructureModelItem* _item, StructureModelItem* _
 
 void StructureModel::moveItem(StructureModelItem* _item, StructureModelItem* _parentItem)
 {
-    if (_item == nullptr
-        || _parentItem == nullptr) {
+    if (_item == nullptr || _parentItem == nullptr) {
         return;
     }
 
@@ -333,7 +335,8 @@ void StructureModel::moveItem(StructureModelItem* _item, StructureModelItem* _pa
     const auto itemIndex = indexForItem(_item);
     const auto sourceParentIndex = indexForItem(sourceParent);
     const auto destinationIndex = indexForItem(_parentItem);
-    beginMoveRows(sourceParentIndex, itemIndex.row(), itemIndex.row(), destinationIndex, _parentItem->childCount());
+    beginMoveRows(sourceParentIndex, itemIndex.row(), itemIndex.row(), destinationIndex,
+                  _parentItem->childCount());
     sourceParent->takeItem(_item);
     _parentItem->appendItem(_item);
     endMoveRows();
@@ -341,8 +344,7 @@ void StructureModel::moveItem(StructureModelItem* _item, StructureModelItem* _pa
 
 void StructureModel::removeItem(StructureModelItem* _item)
 {
-    if (_item == nullptr
-        || _item->parent() == nullptr) {
+    if (_item == nullptr || _item->parent() == nullptr) {
         return;
     }
 
@@ -356,8 +358,7 @@ void StructureModel::removeItem(StructureModelItem* _item)
 
 void StructureModel::updateItem(StructureModelItem* _item)
 {
-    if (_item == nullptr
-        || _item->parent() == nullptr) {
+    if (_item == nullptr || _item->parent() == nullptr) {
         return;
     }
 
@@ -367,10 +368,7 @@ void StructureModel::updateItem(StructureModelItem* _item)
 
 QModelIndex StructureModel::index(int _row, int _column, const QModelIndex& _parent) const
 {
-    if (_row < 0
-        || _row > rowCount(_parent)
-        || _column < 0
-        || _column > columnCount(_parent)
+    if (_row < 0 || _row > rowCount(_parent) || _column < 0 || _column > columnCount(_parent)
         || (_parent.isValid() && (_parent.column() != 0))) {
         return {};
     }
@@ -394,8 +392,7 @@ QModelIndex StructureModel::parent(const QModelIndex& _child) const
 
     auto childItem = itemForIndex(_child);
     auto parentItem = childItem->parent();
-    if (parentItem == nullptr
-        || parentItem == d->rootItem) {
+    if (parentItem == nullptr || parentItem == d->rootItem) {
         return {};
     }
 
@@ -416,8 +413,7 @@ int StructureModel::columnCount(const QModelIndex& _parent) const
 
 int StructureModel::rowCount(const QModelIndex& _parent) const
 {
-    if (_parent.isValid()
-        && _parent.column() != 0) {
+    if (_parent.isValid() && _parent.column() != 0) {
         return 0;
     }
 
@@ -434,47 +430,47 @@ Qt::ItemFlags StructureModel::flags(const QModelIndex& _index) const
     const auto item = itemForIndex(_index);
     const auto defaultFlags = Qt::ItemIsEnabled | Qt::ItemIsSelectable;
     switch (item->type()) {
-        //
-        // Элемент можно перемещать и вставлять внутрь другие
-        //
-        case Domain::DocumentObjectType::Screenplay:
-        case Domain::DocumentObjectType::Character:
-        case Domain::DocumentObjectType::Location:
-        case Domain::DocumentObjectType::Folder: {
-            return defaultFlags | Qt::ItemIsDragEnabled | Qt::ItemIsDropEnabled;
-        }
+    //
+    // Элемент можно перемещать и вставлять внутрь другие
+    //
+    case Domain::DocumentObjectType::Screenplay:
+    case Domain::DocumentObjectType::Character:
+    case Domain::DocumentObjectType::Location:
+    case Domain::DocumentObjectType::Folder: {
+        return defaultFlags | Qt::ItemIsDragEnabled | Qt::ItemIsDropEnabled;
+    }
 
-        //
-        // В элемент можно только вставлять другие
-        //
-        case Domain::DocumentObjectType::Project:
-        case Domain::DocumentObjectType::RecycleBin:
-        case Domain::DocumentObjectType::Characters:
-        case Domain::DocumentObjectType::Locations: {
-            return defaultFlags | Qt::ItemIsDropEnabled;
-        }
+    //
+    // В элемент можно только вставлять другие
+    //
+    case Domain::DocumentObjectType::Project:
+    case Domain::DocumentObjectType::RecycleBin:
+    case Domain::DocumentObjectType::Characters:
+    case Domain::DocumentObjectType::Locations: {
+        return defaultFlags | Qt::ItemIsDropEnabled;
+    }
 
-        //
-        // Элемент можно только перемещать
-        //
-        case Domain::DocumentObjectType::Text: {
-            return defaultFlags | Qt::ItemIsDragEnabled;
-        }
+    //
+    // Элемент можно только перемещать
+    //
+    case Domain::DocumentObjectType::Text: {
+        return defaultFlags | Qt::ItemIsDragEnabled;
+    }
 
-        //
-        // Элемент нельзя ни перемещать ни вставлять внутрь другие
-        //
-        case Domain::DocumentObjectType::ScreenplayTitlePage:
-        case Domain::DocumentObjectType::ScreenplaySynopsis:
-        case Domain::DocumentObjectType::ScreenplayTreatment:
-        case Domain::DocumentObjectType::ScreenplayText:
-        case Domain::DocumentObjectType::ScreenplayStatistics: {
-            return defaultFlags;
-        }
+    //
+    // Элемент нельзя ни перемещать ни вставлять внутрь другие
+    //
+    case Domain::DocumentObjectType::ScreenplayTitlePage:
+    case Domain::DocumentObjectType::ScreenplaySynopsis:
+    case Domain::DocumentObjectType::ScreenplayTreatment:
+    case Domain::DocumentObjectType::ScreenplayText:
+    case Domain::DocumentObjectType::ScreenplayStatistics: {
+        return defaultFlags;
+    }
 
-        default: {
-            return Qt::ItemIsDropEnabled;
-        }
+    default: {
+        return Qt::ItemIsDropEnabled;
+    }
     }
 }
 
@@ -487,7 +483,8 @@ QVariant StructureModel::data(const QModelIndex& _index, int _role) const
     //
     // Кастомные данные модели
     //
-    if (static_cast<StructureModelDataRole>(_role) == StructureModelDataRole::IsNavigatorAvailable) {
+    if (static_cast<StructureModelDataRole>(_role)
+        == StructureModelDataRole::IsNavigatorAvailable) {
         return d->navigatorAvailableIndexes.contains(_index);
     }
 
@@ -504,7 +501,7 @@ QVariant StructureModel::data(const QModelIndex& _index, int _role) const
 }
 
 bool StructureModel::canDropMimeData(const QMimeData* _data, Qt::DropAction _action, int _row,
-    int _column, const QModelIndex& _parent) const
+                                     int _column, const QModelIndex& _parent) const
 {
     Q_UNUSED(_action)
     Q_UNUSED(_row)
@@ -542,12 +539,10 @@ bool StructureModel::canDropMimeData(const QMimeData* _data, Qt::DropAction _act
     bool hasCharacters = false;
     bool hasLocations = false;
     for (const auto item : std::as_const(d->lastMimeItems)) {
-        if (!hasCharacters
-            && item->type() == Domain::DocumentObjectType::Character) {
+        if (!hasCharacters && item->type() == Domain::DocumentObjectType::Character) {
             hasCharacters = true;
         }
-        if (!hasLocations
-            && item->type() == Domain::DocumentObjectType::Location) {
+        if (!hasLocations && item->type() == Domain::DocumentObjectType::Location) {
             hasLocations = true;
         }
     }
@@ -574,24 +569,24 @@ bool StructureModel::canDropMimeData(const QMimeData* _data, Qt::DropAction _act
     // ... остальные случаи
     //
     switch (dropTarget->type()) {
-        //
-        // ... внутрь сценария ничего нельзя вложить
-        //
-        case Domain::DocumentObjectType::Screenplay: {
-            return false;
-        }
+    //
+    // ... внутрь сценария ничего нельзя вложить
+    //
+    case Domain::DocumentObjectType::Screenplay: {
+        return false;
+    }
 
-        //
-        // Во всех остальных случаях можно
-        //
-        default: {
-            return true;
-        }
+    //
+    // Во всех остальных случаях можно
+    //
+    default: {
+        return true;
+    }
     }
 }
 
 bool StructureModel::dropMimeData(const QMimeData* _data, Qt::DropAction _action, int _row,
-    int _column, const QModelIndex& _parent)
+                                  int _column, const QModelIndex& _parent)
 {
     if (!canDropMimeData(_data, _action, _row, _column, _parent)) {
         return false;
@@ -629,8 +624,7 @@ bool StructureModel::dropMimeData(const QMimeData* _data, Qt::DropAction _action
     //
     // Добавляем после всех элементов выбранного
     //
-    if (_row == -1
-        || _row == parentItem->childCount()) {
+    if (_row == -1 || _row == parentItem->childCount()) {
         //
         // Если вставляем перед корзиной, то добавляем дельту
         //
@@ -645,8 +639,8 @@ bool StructureModel::dropMimeData(const QMimeData* _data, Qt::DropAction _action
                 continue;
             }
 
-            emit beginMoveRows(itemIndex.parent(), itemIndex.row(), itemIndex.row(),
-                               _parent, parentItem->childCount() + recycleBinIndexDelta);
+            emit beginMoveRows(itemIndex.parent(), itemIndex.row(), itemIndex.row(), _parent,
+                               parentItem->childCount() + recycleBinIndexDelta);
             item->parent()->takeItem(item);
             parentItem->insertItem(parentItem->childCount() + recycleBinIndexDelta, item);
             emit endMoveRows();
@@ -707,30 +701,30 @@ QMimeData* StructureModel::mimeData(const QModelIndexList& _indexes) const
     // ... и упорядочиваем его
     //
     std::sort(d->lastMimeItems.begin(), d->lastMimeItems.end(),
-              [] (StructureModelItem* _lhs, StructureModelItem* _rhs) {
-        //
-        // Для элементов находящихся на одном уровне сравниваем их позиции
-        //
-        if (_lhs->parent() == _rhs->parent()) {
-            return _lhs->parent()->rowOfChild(_lhs) < _rhs->parent()->rowOfChild(_rhs);
-        }
+              [](StructureModelItem* _lhs, StructureModelItem* _rhs) {
+                  //
+                  // Для элементов находящихся на одном уровне сравниваем их позиции
+                  //
+                  if (_lhs->parent() == _rhs->parent()) {
+                      return _lhs->parent()->rowOfChild(_lhs) < _rhs->parent()->rowOfChild(_rhs);
+                  }
 
-        //
-        // Для разноуровневых элементов определяем путь до верха и сравниваем пути
-        //
-        auto buildPath = [] (StructureModelItem* _item) {
-            QString path;
-            auto child = _item;
-            auto parent = child->parent();
-            while (parent != nullptr) {
-                path.prepend(QString("0000%1").arg(parent->rowOfChild(child)).right(5));
-                child = parent;
-                parent = child->parent();
-            }
-            return path;
-        };
-        return buildPath(_lhs) < buildPath(_rhs);
-    });
+                  //
+                  // Для разноуровневых элементов определяем путь до верха и сравниваем пути
+                  //
+                  auto buildPath = [](StructureModelItem* _item) {
+                      QString path;
+                      auto child = _item;
+                      auto parent = child->parent();
+                      while (parent != nullptr) {
+                          path.prepend(QString("0000%1").arg(parent->rowOfChild(child)).right(5));
+                          child = parent;
+                          parent = child->parent();
+                      }
+                      return path;
+                  };
+                  return buildPath(_lhs) < buildPath(_rhs);
+              });
 
     //
     // Помещаем индексы перемещаемых элементов в майм
@@ -741,7 +735,7 @@ QMimeData* StructureModel::mimeData(const QModelIndexList& _indexes) const
         stream << item->uuid();
     }
 
-    QMimeData *mimeData = new QMimeData();
+    QMimeData* mimeData = new QMimeData();
     mimeData->setData(kMimeType, encodedData);
     return mimeData;
 }
@@ -778,7 +772,7 @@ StructureModelItem* StructureModel::itemForIndex(const QModelIndex& _index) cons
 StructureModelItem* StructureModel::itemForUuid(const QUuid& _uuid) const
 {
     std::function<StructureModelItem*(StructureModelItem*)> search;
-    search = [&search, _uuid] (StructureModelItem* _parent) -> StructureModelItem* {
+    search = [&search, _uuid](StructureModelItem* _parent) -> StructureModelItem* {
         for (int itemRow = 0; itemRow < _parent->childCount(); ++itemRow) {
             auto item = _parent->childAt(itemRow);
             if (item->uuid() == _uuid) {
@@ -918,8 +912,7 @@ QModelIndex StructureModel::indexForItem(StructureModelItem* _item) const
 
     int row = 0;
     QModelIndex parent;
-    if (_item->hasParent()
-        && _item->parent()->hasParent()) {
+    if (_item->hasParent() && _item->parent()->hasParent()) {
         row = _item->parent()->rowOfChild(_item);
         parent = indexForItem(_item->parent());
     } else {

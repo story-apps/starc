@@ -7,8 +7,7 @@ enum class TextParagraphType;
 }
 
 
-namespace Ui
-{
+namespace Ui {
 class SimpleTextEdit;
 
 /**

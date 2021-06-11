@@ -3,8 +3,7 @@
 #include "../abstract_model.h"
 
 
-namespace BusinessLayer
-{
+namespace BusinessLayer {
 
 /**
  * @brief Модель данных персонажа
@@ -20,7 +19,7 @@ public:
     const QString& name() const;
     void setName(const QString& _name);
     Q_SIGNAL void nameChanged(const QString& _newName, const QString& _oldName);
-    void setDocumentName(const QString &_name) override;
+    void setDocumentName(const QString& _name) override;
 
     int storyRole() const;
     void setStoryRole(int _role);

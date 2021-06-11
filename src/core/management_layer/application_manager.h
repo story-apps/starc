@@ -1,14 +1,13 @@
 #pragma once
 
-#include <core_global.h>
-
 #include <interfaces/management_layer/i_application_manager.h>
 
 #include <QObject>
 
+#include <core_global.h>
 
-namespace ManagementLayer
-{
+
+namespace ManagementLayer {
 
 /**
  * @brief Менеджер приложения

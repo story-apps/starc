@@ -6,8 +6,7 @@
 #include <business_layer/model/text/text_model.h>
 
 
-namespace ManagementLayer
-{
+namespace ManagementLayer {
 
 class SimpleTextStructureManager::Implementation
 {
@@ -65,13 +64,13 @@ Ui::SimpleTextStructureView* SimpleTextStructureManager::Implementation::createV
 
 
 SimpleTextStructureManager::SimpleTextStructureManager(QObject* _parent)
-    : QObject(_parent),
-      d(new Implementation)
+    : QObject(_parent)
+    , d(new Implementation)
 {
     connect(d->view, &Ui::SimpleTextStructureView::currentModelIndexChanged, this,
-            [this] (const QModelIndex& _index) {
-        emit currentModelIndexChanged(d->structureModel->mapToSource(_index));
-    });
+            [this](const QModelIndex& _index) {
+                emit currentModelIndexChanged(d->structureModel->mapToSource(_index));
+            });
 }
 
 SimpleTextStructureManager::~SimpleTextStructureManager() = default;
@@ -113,8 +112,8 @@ void SimpleTextStructureManager::setModel(BusinessLayer::AbstractModel* _model)
     //
     if (d->model != nullptr) {
         d->view->setTitle(d->model->name());
-        connect(d->model, &BusinessLayer::TextModel::nameChanged,
-                d->view, &Ui::SimpleTextStructureView::setTitle);
+        connect(d->model, &BusinessLayer::TextModel::nameChanged, d->view,
+                &Ui::SimpleTextStructureView::setTitle);
     }
 
     //
@@ -145,8 +144,8 @@ void SimpleTextStructureManager::bind(IDocumentManager* _manager)
 {
     Q_ASSERT(_manager);
 
-    connect(_manager->asQObject(), SIGNAL(currentModelIndexChanged(QModelIndex)),
-            this, SLOT(setCurrentModelIndex(QModelIndex)), Qt::UniqueConnection);
+    connect(_manager->asQObject(), SIGNAL(currentModelIndexChanged(QModelIndex)), this,
+            SLOT(setCurrentModelIndex(QModelIndex)), Qt::UniqueConnection);
 }
 
 void SimpleTextStructureManager::setCurrentModelIndex(const QModelIndex& _index)

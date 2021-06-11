@@ -6,15 +6,14 @@
 
 #include <QAction>
 #include <QApplication>
-#include <QHBoxLayout>
 #include <QEvent>
+#include <QHBoxLayout>
 #include <QKeyEvent>
 #include <QStringListModel>
 #include <QVariantAnimation>
 
 
-namespace Ui
-{
+namespace Ui {
 
 class SimpleTextSearchToolbar::Implementation
 {
@@ -37,22 +36,21 @@ public:
     Button* replace = nullptr;
     QAction* replaceAllAction = nullptr;
     Button* replaceAll = nullptr;
-
 };
 
 SimpleTextSearchToolbar::Implementation::Implementation(QWidget* _parent)
-    : closeAction(new QAction),
-      searchTextAction(new QAction),
-      searchText(new TextField(_parent)),
-      goToNextAction(new QAction),
-      goToPreviousAction(new QAction),
-      matchCaseAction(new QAction),
-      replaceTextAction(new QAction),
-      replaceText(new TextField(_parent)),
-      replaceAction(new QAction),
-      replace(new Button(_parent)),
-      replaceAllAction(new QAction),
-      replaceAll(new Button(_parent))
+    : closeAction(new QAction)
+    , searchTextAction(new QAction)
+    , searchText(new TextField(_parent))
+    , goToNextAction(new QAction)
+    , goToPreviousAction(new QAction)
+    , matchCaseAction(new QAction)
+    , replaceTextAction(new QAction)
+    , replaceText(new TextField(_parent))
+    , replaceAction(new QAction)
+    , replace(new Button(_parent))
+    , replaceAllAction(new QAction)
+    , replaceAll(new Button(_parent))
 {
     searchText->setUnderlineDecorationVisible(false);
 
@@ -67,8 +65,8 @@ SimpleTextSearchToolbar::Implementation::Implementation(QWidget* _parent)
 
 
 SimpleTextSearchToolbar::SimpleTextSearchToolbar(QWidget* _parent)
-    : FloatingToolBar(_parent),
-      d(new Implementation(this))
+    : FloatingToolBar(_parent)
+    , d(new Implementation(this))
 {
     _parent->installEventFilter(this);
     d->searchText->installEventFilter(this);
@@ -100,19 +98,23 @@ SimpleTextSearchToolbar::SimpleTextSearchToolbar(QWidget* _parent)
     d->goToPreviousAction->setIconText(u8"\U000f0143");
     d->goToPreviousAction->setShortcut(QKeySequence::FindPrevious);
     addAction(d->goToPreviousAction);
-    connect(d->goToPreviousAction, &QAction::triggered, this, &SimpleTextSearchToolbar::findPreviousRequested);
+    connect(d->goToPreviousAction, &QAction::triggered, this,
+            &SimpleTextSearchToolbar::findPreviousRequested);
     d->goToNextAction->setIconText(u8"\U000f0140");
     d->goToNextAction->setShortcut(QKeySequence::FindNext);
     addAction(d->goToNextAction);
-    connect(d->goToNextAction, &QAction::triggered, this, &SimpleTextSearchToolbar::findNextRequested);
+    connect(d->goToNextAction, &QAction::triggered, this,
+            &SimpleTextSearchToolbar::findNextRequested);
     d->matchCaseAction->setIconText(u8"\U000f0b34");
     d->matchCaseAction->setCheckable(true);
     addAction(d->matchCaseAction);
     connect(d->matchCaseAction, &QAction::toggled, this, [this] {
-        d->matchCaseAction->setToolTip(d->matchCaseAction->isChecked() ? tr("Search without case sensitive")
-                                                                       : tr("Search with case sensitive"));
+        d->matchCaseAction->setToolTip(d->matchCaseAction->isChecked()
+                                           ? tr("Search without case sensitive")
+                                           : tr("Search with case sensitive"));
     });
-    connect(d->matchCaseAction, &QAction::toggled, this, &SimpleTextSearchToolbar::findTextRequested);
+    connect(d->matchCaseAction, &QAction::toggled, this,
+            &SimpleTextSearchToolbar::findTextRequested);
 
     addAction(d->replaceTextAction);
     addAction(d->replaceAction);
@@ -149,36 +151,36 @@ QString SimpleTextSearchToolbar::replaceText() const
 bool SimpleTextSearchToolbar::eventFilter(QObject* _watched, QEvent* _event)
 {
     switch (_event->type()) {
-        case QEvent::Resize: {
-            if (_watched == parent()) {
-                designSystemChangeEvent(nullptr);
-            }
-            break;
+    case QEvent::Resize: {
+        if (_watched == parent()) {
+            designSystemChangeEvent(nullptr);
         }
+        break;
+    }
 
-        case QEvent::KeyPress: {
-            if (_watched == d->searchText) {
-                const auto keyEvent = static_cast<QKeyEvent*>(_event);
-                if ((keyEvent->key() == Qt::Key_Enter
-                     || keyEvent->key() == Qt::Key_Return)
-                    && !d->searchText->text().isEmpty()) {
-                    emit findTextRequested();
-                }
+    case QEvent::KeyPress: {
+        if (_watched == d->searchText) {
+            const auto keyEvent = static_cast<QKeyEvent*>(_event);
+            if ((keyEvent->key() == Qt::Key_Enter || keyEvent->key() == Qt::Key_Return)
+                && !d->searchText->text().isEmpty()) {
+                emit findTextRequested();
             }
-            break;
         }
+        break;
+    }
 
-        case QEvent::KeyRelease: {
-            if (_watched == d->searchText) {
-                const auto keyEvent = static_cast<QKeyEvent*>(_event);
-                if (keyEvent->key() == Qt::Key_Escape) {
-                    emit focusTextRequested();
-                }
+    case QEvent::KeyRelease: {
+        if (_watched == d->searchText) {
+            const auto keyEvent = static_cast<QKeyEvent*>(_event);
+            if (keyEvent->key() == Qt::Key_Escape) {
+                emit focusTextRequested();
             }
-            break;
         }
+        break;
+    }
 
-        default: break;
+    default:
+        break;
     }
 
     return FloatingToolBar::eventFilter(_watched, _event);
@@ -202,16 +204,23 @@ void SimpleTextSearchToolbar::processTextColorChange()
 
 void SimpleTextSearchToolbar::updateTranslations()
 {
-    d->closeAction->setToolTip(tr("Exit from search")
-                                + QString(" (%1)").arg(QKeySequence(QKeySequence::Find).toString(QKeySequence::NativeText)));
+    d->closeAction->setToolTip(
+        tr("Exit from search")
+        + QString(" (%1)").arg(
+            QKeySequence(QKeySequence::Find).toString(QKeySequence::NativeText)));
     d->searchText->setLabel(tr("Search"));
     d->searchText->setPlaceholderText(tr("Enter search phrase here"));
-    d->goToNextAction->setToolTip(tr("Go to the next search result")
-                                  + QString(" (%1)").arg(QKeySequence(QKeySequence::FindNext).toString(QKeySequence::NativeText)));
-    d->goToPreviousAction->setToolTip(tr("Go to the previous search result")
-                                      + QString(" (%1)").arg(QKeySequence(QKeySequence::FindPrevious).toString(QKeySequence::NativeText)));
-    d->matchCaseAction->setToolTip(d->matchCaseAction->isChecked() ? tr("Search without case sensitive")
-                                                                   : tr("Search with case sensitive"));
+    d->goToNextAction->setToolTip(
+        tr("Go to the next search result")
+        + QString(" (%1)").arg(
+            QKeySequence(QKeySequence::FindNext).toString(QKeySequence::NativeText)));
+    d->goToPreviousAction->setToolTip(
+        tr("Go to the previous search result")
+        + QString(" (%1)").arg(
+            QKeySequence(QKeySequence::FindPrevious).toString(QKeySequence::NativeText)));
+    d->matchCaseAction->setToolTip(d->matchCaseAction->isChecked()
+                                       ? tr("Search without case sensitive")
+                                       : tr("Search with case sensitive"));
 
     d->replaceText->setLabel(tr("Replace with"));
     d->replaceText->setPlaceholderText(tr("Enter phrase to replace"));
@@ -227,14 +236,17 @@ void SimpleTextSearchToolbar::designSystemChangeEvent(DesignSystemChangeEvent* _
     // Рассчитываем размер полей поиска и замены
     //
     d->replace->resize(d->replace->sizeHint());
-    const auto replaceActionWidth = d->replace->sizeHint().width() - Ui::DesignSystem::floatingToolBar().spacing();
+    const auto replaceActionWidth
+        = d->replace->sizeHint().width() - Ui::DesignSystem::floatingToolBar().spacing();
     d->replaceAll->resize(d->replaceAll->sizeHint());
-    const auto replaceAllActionWidth = d->replaceAll->sizeHint().width() - Ui::DesignSystem::floatingToolBar().spacing();
+    const auto replaceAllActionWidth
+        = d->replaceAll->sizeHint().width() - Ui::DesignSystem::floatingToolBar().spacing();
     auto textFieldWidth = parentWidget()->width() * 0.8;
     textFieldWidth -= (Ui::DesignSystem::floatingToolBar().iconSize().width()
-                       + Ui::DesignSystem::floatingToolBar().spacing()) * 4 // 4 обычных кнопки
-                      + replaceActionWidth // кнопка единичной замены
-                      + replaceAllActionWidth; // кнопка полной замены
+                       + Ui::DesignSystem::floatingToolBar().spacing())
+            * 4 // 4 обычных кнопки
+        + replaceActionWidth // кнопка единичной замены
+        + replaceAllActionWidth; // кнопка полной замены
     textFieldWidth /= 2; // делим поровну
     if (textFieldWidth < 0) {
         return;
@@ -246,26 +258,31 @@ void SimpleTextSearchToolbar::designSystemChangeEvent(DesignSystemChangeEvent* _
     setActionCustomWidth(d->searchTextAction, textFieldWidth);
     d->searchText->setFixedWidth(textFieldWidth);
     const auto searchLeft = Ui::DesignSystem::floatingToolBar().shadowMargins().left()
-                            + Ui::DesignSystem::floatingToolBar().iconSize().width()
-                            + Ui::DesignSystem::floatingToolBar().spacing();
+        + Ui::DesignSystem::floatingToolBar().iconSize().width()
+        + Ui::DesignSystem::floatingToolBar().spacing();
     d->searchText->move(searchLeft, Ui::DesignSystem::floatingToolBar().shadowMargins().top());
 
-    const auto replaceLeft = searchLeft + d->searchText->width() + Ui::DesignSystem::floatingToolBar().spacing()
-                             + (Ui::DesignSystem::floatingToolBar().iconSize().width()
-                                + Ui::DesignSystem::floatingToolBar().spacing()) * 3
-                             + Ui::DesignSystem::floatingToolBar().spacing();
+    const auto replaceLeft = searchLeft + d->searchText->width()
+        + Ui::DesignSystem::floatingToolBar().spacing()
+        + (Ui::DesignSystem::floatingToolBar().iconSize().width()
+           + Ui::DesignSystem::floatingToolBar().spacing())
+            * 3
+        + Ui::DesignSystem::floatingToolBar().spacing();
 
     setActionCustomWidth(d->replaceTextAction, textFieldWidth);
     d->replaceText->setFixedWidth(textFieldWidth);
     d->replaceText->move(replaceLeft, Ui::DesignSystem::floatingToolBar().shadowMargins().top());
     //
     setActionCustomWidth(d->replaceAction, replaceActionWidth);
-    d->replace->move(d->replaceText->geometry().right() + Ui::DesignSystem::floatingToolBar().spacing(),
+    d->replace->move(d->replaceText->geometry().right()
+                         + Ui::DesignSystem::floatingToolBar().spacing(),
                      Ui::DesignSystem::floatingToolBar().shadowMargins().top());
     setActionCustomWidth(d->replaceAllAction, replaceAllActionWidth);
-    d->replaceAll->move(d->replace->geometry().right()
-                        /*+ Ui::DesignSystem::floatingToolBar().spacing() / 2*/, // тут ручками подобрал, чтобы красиво было
-                        Ui::DesignSystem::floatingToolBar().shadowMargins().top());
+    d->replaceAll->move(
+        d->replace->geometry().right()
+        /*+ Ui::DesignSystem::floatingToolBar().spacing() / 2*/, // тут ручками подобрал, чтобы
+                                                                 // красиво было
+        Ui::DesignSystem::floatingToolBar().shadowMargins().top());
 
     resize(sizeHint());
 }

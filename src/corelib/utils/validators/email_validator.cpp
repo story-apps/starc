@@ -1,7 +1,7 @@
 #include "email_validator.h"
 
 
-bool EmailValidator::isValid(const QString &_email)
+bool EmailValidator::isValid(const QString& _email)
 {
     //
     // Для валидатора нужна неконстантная ссылка,

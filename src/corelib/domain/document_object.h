@@ -97,7 +97,7 @@ QByteArray CORE_LIBRARY_EXPORT mimeTypeFor(DocumentObjectType _type);
 /**
  * @brief Получить тип объекта по майм-типу
  */
-DocumentObjectType CORE_LIBRARY_EXPORT typeFor(const QByteArray &_mime);
+DocumentObjectType CORE_LIBRARY_EXPORT typeFor(const QByteArray& _mime);
 
 /**
  * @brief Получить иконку по типу объекта
@@ -121,8 +121,8 @@ public:
     /**
      * @brief Уникальный идентификатор
      */
-    const QUuid &uuid() const;
-    void setUuid(const QUuid &_uuid);
+    const QUuid& uuid() const;
+    void setUuid(const QUuid& _uuid);
 
     /**
      * @brief Тип документа
@@ -133,12 +133,12 @@ public:
     /**
      * @brief Содержимое документа
      */
-    const QByteArray &content() const;
-    void setContent(const QByteArray &_content);
+    const QByteArray& content() const;
+    void setContent(const QByteArray& _content);
 
 private:
-    explicit DocumentObject(const Identifier &_id, const QUuid &_uuid, DocumentObjectType _type,
-                            const QByteArray &_content);
+    explicit DocumentObject(const Identifier& _id, const QUuid& _uuid, DocumentObjectType _type,
+                            const QByteArray& _content);
     friend class ObjectsBuilder;
 
     /**

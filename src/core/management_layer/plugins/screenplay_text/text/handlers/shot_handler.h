@@ -3,8 +3,7 @@
 #include "standard_key_handler.h"
 
 
-namespace KeyProcessingLayer
-{
+namespace KeyProcessingLayer {
 
 /**
  * @brief Класс выполняющий обработку нажатия клавиш в блоке кадр

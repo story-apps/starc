@@ -1,23 +1,21 @@
 #include "location_model.h"
 
 #include <business_layer/model/abstract_image_wrapper.h>
-
 #include <domain/document_object.h>
 
 #include <QDomDocument>
 
 
-namespace BusinessLayer
-{
+namespace BusinessLayer {
 
 namespace {
-    const QString kDocumentKey = QStringLiteral("document");
-    const QString kNameKey = QStringLiteral("name");
-    const QString kStoryRoleKey = QStringLiteral("story_role");
-    const QString kOneSentenceDescriptionKey = QStringLiteral("one_sentence_description");
-    const QString kLongDescriptionKey = QStringLiteral("long_description");
-    const QString kMainPhotoKey = QStringLiteral("main_photo");
-}
+const QString kDocumentKey = QStringLiteral("document");
+const QString kNameKey = QStringLiteral("name");
+const QString kStoryRoleKey = QStringLiteral("story_role");
+const QString kOneSentenceDescriptionKey = QStringLiteral("one_sentence_description");
+const QString kLongDescriptionKey = QStringLiteral("long_description");
+const QString kMainPhotoKey = QStringLiteral("main_photo");
+} // namespace
 
 class LocationModel::Implementation
 {
@@ -34,14 +32,15 @@ public:
 
 
 LocationModel::LocationModel(QObject* _parent)
-    : AbstractModel({ kDocumentKey, kNameKey },
-                    _parent),
-      d(new Implementation)
+    : AbstractModel({ kDocumentKey, kNameKey }, _parent)
+    , d(new Implementation)
 {
     connect(this, &LocationModel::nameChanged, this, &LocationModel::updateDocumentContent);
     connect(this, &LocationModel::storyRoleChanged, this, &LocationModel::updateDocumentContent);
-    connect(this, &LocationModel::oneSentenceDescriptionChanged, this, &LocationModel::updateDocumentContent);
-    connect(this, &LocationModel::longDescriptionChanged, this, &LocationModel::updateDocumentContent);
+    connect(this, &LocationModel::oneSentenceDescriptionChanged, this,
+            &LocationModel::updateDocumentContent);
+    connect(this, &LocationModel::longDescriptionChanged, this,
+            &LocationModel::updateDocumentContent);
     connect(this, &LocationModel::mainPhotoChanged, this, &LocationModel::updateDocumentContent);
 }
 
@@ -135,10 +134,10 @@ void LocationModel::initDocument()
     QDomDocument domDocument;
     domDocument.setContent(document()->content());
     const auto documentNode = domDocument.firstChildElement(kDocumentKey);
-    auto contains = [&documentNode] (const QString& _key) {
+    auto contains = [&documentNode](const QString& _key) {
         return !documentNode.firstChildElement(_key).isNull();
     };
-    auto load = [&documentNode] (const QString& _key) {
+    auto load = [&documentNode](const QString& _key) {
         return documentNode.firstChildElement(_key).text();
     };
     d->name = load(kNameKey);
@@ -168,8 +167,10 @@ QByteArray LocationModel::toXml() const
     }
 
     QByteArray xml = "<?xml version=\"1.0\"?>\n";
-    xml += QString("<%1 mime-type=\"%2\" version=\"1.0\">\n").arg(kDocumentKey, Domain::mimeTypeFor(document()->type())).toUtf8();
-    auto save = [&xml] (const QString& _key, const QString& _value) {
+    xml += QString("<%1 mime-type=\"%2\" version=\"1.0\">\n")
+               .arg(kDocumentKey, Domain::mimeTypeFor(document()->type()))
+               .toUtf8();
+    auto save = [&xml](const QString& _key, const QString& _value) {
         xml += QString("<%1><![CDATA[%2]]></%1>\n").arg(_key, _value).toUtf8();
     };
     save(kNameKey, d->name);

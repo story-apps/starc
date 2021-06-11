@@ -1,7 +1,7 @@
 #include "spell_check_text_edit.h"
 
-#include "spell_checker.h"
 #include "spell_check_highlighter.h"
+#include "spell_checker.h"
 
 #include <QApplication>
 #include <QContextMenuEvent>
@@ -9,16 +9,15 @@
 #include <QMenu>
 #include <QStandardPaths>
 #include <QTimer>
-
 #include <QtGui/private/qtextdocument_p.h>
 
 
 namespace {
-    /**
-     * @brief Максимальное кол-во подсказок для проверки орфографии
-     */
-    const int kSuggestionsActionsMaxCount = 5;
-}
+/**
+ * @brief Максимальное кол-во подсказок для проверки орфографии
+ */
+const int kSuggestionsActionsMaxCount = 5;
+} // namespace
 
 class SpellCheckTextEdit::Implementation
 {
@@ -67,7 +66,8 @@ SpellCheckTextEdit::Implementation::Implementation()
 {
 }
 
-SpellCheckHighlighter* SpellCheckTextEdit::Implementation::spellCheckHighlighter(QTextDocument* _document)
+SpellCheckHighlighter* SpellCheckTextEdit::Implementation::spellCheckHighlighter(
+    QTextDocument* _document)
 {
     if (m_spellCheckHighlighter.isNull()) {
         m_spellCheckHighlighter = new SpellCheckHighlighter(_document, spellChecker);
@@ -79,11 +79,12 @@ SpellCheckHighlighter* SpellCheckTextEdit::Implementation::spellCheckHighlighter
 // ****
 
 
-SpellCheckTextEdit::SpellCheckTextEdit(QWidget *_parent)
-    : PageTextEdit(_parent),
-      d(new Implementation)
+SpellCheckTextEdit::SpellCheckTextEdit(QWidget* _parent)
+    : PageTextEdit(_parent)
+    , d(new Implementation)
 {
-    connect(this, &SpellCheckTextEdit::cursorPositionChanged, this, &SpellCheckTextEdit::rehighlighWithNewCursor);
+    connect(this, &SpellCheckTextEdit::cursorPositionChanged, this,
+            &SpellCheckTextEdit::rehighlighWithNewCursor);
 }
 
 SpellCheckTextEdit::~SpellCheckTextEdit() = default;
@@ -141,7 +142,8 @@ void SpellCheckTextEdit::ignoreWord() const
     //
     // Скорректируем регистр слова
     //
-    const QString wordUnderCursorWithoutPunctInCorrectRegister = wordUnderCursorWithoutPunct.toLower();
+    const QString wordUnderCursorWithoutPunctInCorrectRegister
+        = wordUnderCursorWithoutPunct.toLower();
 
     //
     // Объявляем проверяющему о том, что это слово нужно игнорировать
@@ -169,7 +171,8 @@ void SpellCheckTextEdit::addWordToUserDictionary() const
     //
     // Приведем к нижнему регистру
     //
-    const QString wordUnderCursorWithoutPunctInCorrectRegister = wordUnderCursorWithoutPunct.toLower();
+    const QString wordUnderCursorWithoutPunctInCorrectRegister
+        = wordUnderCursorWithoutPunct.toLower();
 
     //
     // Объявляем проверяющему о том, что это слово нужно добавить в пользовательский словарь
@@ -188,7 +191,8 @@ void SpellCheckTextEdit::replaceWordOnSuggestion()
         QTextCursor cursor = cursorForPosition(d->lastCursorPosition);
         cursor = moveCursorToStartWord(cursor);
         QTextCursor endCursor = moveCursorToEndWord(cursor);
-        cursor.movePosition(QTextCursor::NextCharacter, QTextCursor::KeepAnchor, endCursor.positionInBlock() - cursor.positionInBlock());
+        cursor.movePosition(QTextCursor::NextCharacter, QTextCursor::KeepAnchor,
+                            endCursor.positionInBlock() - cursor.positionInBlock());
         cursor.beginEditBlock();
         cursor.removeSelectedText();
         cursor.insertText(suggestAction->text());
@@ -220,15 +224,13 @@ QTextCursor SpellCheckTextEdit::moveCursorToStartWord(QTextCursor cursor) const
     // Примеры "кто-" - еще не закончив печатать слово, получим
     // его подсветку
     //
-    while (cursor.positionInBlock() > 0
-           && text.length() > cursor.positionInBlock()
-           && (text[cursor.positionInBlock()] == '\''
-               || text[cursor.positionInBlock()] == "’"
+    while (cursor.positionInBlock() > 0 && text.length() > cursor.positionInBlock()
+           && (text[cursor.positionInBlock()] == '\'' || text[cursor.positionInBlock()] == "’"
                || text[cursor.positionInBlock()] == '-'
                || text[cursor.positionInBlock() - 1] == '\''
                || text[cursor.positionInBlock() - 1] == '-')) {
-            cursor.movePosition(QTextCursor::PreviousCharacter);
-            cursor.movePosition(QTextCursor::StartOfWord);
+        cursor.movePosition(QTextCursor::PreviousCharacter);
+        cursor.movePosition(QTextCursor::StartOfWord);
     }
     return cursor;
 }
@@ -239,9 +241,10 @@ QTextCursor SpellCheckTextEdit::moveCursorToEndWord(QTextCursor cursor) const
     splitWord.indexIn(cursor.block().text(), cursor.positionInBlock());
     int pos = splitWord.pos();
     if (pos == -1) {
-        pos= cursor.block().text().length();
+        pos = cursor.block().text().length();
     }
-    cursor.movePosition(QTextCursor::NextCharacter, QTextCursor::MoveAnchor, pos - cursor.positionInBlock());
+    cursor.movePosition(QTextCursor::NextCharacter, QTextCursor::MoveAnchor,
+                        pos - cursor.positionInBlock());
     return cursor;
 }
 
@@ -268,8 +271,7 @@ void SpellCheckTextEdit::rehighlighWithNewCursor()
     //
     // Если сменился параграф, перепроверим орфографию в том блоке, где курсор был прежде
     //
-    if (d->previousBlockUnderCursor.isValid()
-        && d->previousBlockUnderCursor != cursor.block()) {
+    if (d->previousBlockUnderCursor.isValid() && d->previousBlockUnderCursor != cursor.block()) {
         //
         // ... сбросим значение курсора в блоке, чтобы блок проверился полностью
         //
@@ -292,10 +294,11 @@ QString SpellCheckTextEdit::wordOnPosition(const QPoint& _position) const
     const QTextCursor cursorWordStart = moveCursorToStartWord(cursorForPosition(_position));
     const QTextCursor cursorWordEnd = moveCursorToEndWord(cursorWordStart);
     const QString text = cursorWordStart.block().text();
-    return text.mid(cursorWordStart.positionInBlock(), cursorWordEnd.positionInBlock() - cursorWordStart.positionInBlock());
+    return text.mid(cursorWordStart.positionInBlock(),
+                    cursorWordEnd.positionInBlock() - cursorWordStart.positionInBlock());
 }
 
-QString SpellCheckTextEdit::removePunctutaion(const QString &_word) const
+QString SpellCheckTextEdit::removePunctutaion(const QString& _word) const
 {
     //
     // Убираем знаки препинания окружающие слово
@@ -303,11 +306,11 @@ QString SpellCheckTextEdit::removePunctutaion(const QString &_word) const
     QString wordWithoutPunct = _word.trimmed();
     while (!wordWithoutPunct.isEmpty()
            && (wordWithoutPunct.at(0).isPunct()
-               || wordWithoutPunct.at(wordWithoutPunct.length()-1).isPunct())) {
+               || wordWithoutPunct.at(wordWithoutPunct.length() - 1).isPunct())) {
         if (wordWithoutPunct.at(0).isPunct()) {
             wordWithoutPunct = wordWithoutPunct.mid(1);
         } else {
-            wordWithoutPunct = wordWithoutPunct.left(wordWithoutPunct.length()-1);
+            wordWithoutPunct = wordWithoutPunct.left(wordWithoutPunct.length() - 1);
         }
     }
     return wordWithoutPunct;

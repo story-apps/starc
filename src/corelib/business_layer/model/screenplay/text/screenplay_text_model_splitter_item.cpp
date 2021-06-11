@@ -6,14 +6,13 @@
 #include <QXmlStreamReader>
 
 
-namespace BusinessLayer
-{
+namespace BusinessLayer {
 
 namespace {
-    const QHash<ScreenplayTextModelSplitterItemType, QString> kSplitterTypeToString
-        = {{ ScreenplayTextModelSplitterItemType::Undefined, {} },
-           { ScreenplayTextModelSplitterItemType::Start, QStringLiteral("start") },
-           { ScreenplayTextModelSplitterItemType::End, QStringLiteral("end") }};
+const QHash<ScreenplayTextModelSplitterItemType, QString> kSplitterTypeToString
+    = { { ScreenplayTextModelSplitterItemType::Undefined, {} },
+        { ScreenplayTextModelSplitterItemType::Start, QStringLiteral("start") },
+        { ScreenplayTextModelSplitterItemType::End, QStringLiteral("end") } };
 }
 
 class ScreenplayTextModelSplitterItem::Implementation
@@ -25,7 +24,8 @@ public:
     ScreenplayTextModelSplitterItemType type = ScreenplayTextModelSplitterItemType::Undefined;
 };
 
-ScreenplayTextModelSplitterItem::Implementation::Implementation(ScreenplayTextModelSplitterItemType _type)
+ScreenplayTextModelSplitterItem::Implementation::Implementation(
+    ScreenplayTextModelSplitterItemType _type)
     : type(_type)
 {
 }
@@ -34,19 +34,21 @@ ScreenplayTextModelSplitterItem::Implementation::Implementation(ScreenplayTextMo
 // ****
 
 
-ScreenplayTextModelSplitterItem::ScreenplayTextModelSplitterItem(ScreenplayTextModelSplitterItemType _type)
-    : ScreenplayTextModelItem(ScreenplayTextModelItemType::Splitter),
-      d(new Implementation(_type))
+ScreenplayTextModelSplitterItem::ScreenplayTextModelSplitterItem(
+    ScreenplayTextModelSplitterItemType _type)
+    : ScreenplayTextModelItem(ScreenplayTextModelItemType::Splitter)
+    , d(new Implementation(_type))
 {
 }
 
 ScreenplayTextModelSplitterItem::ScreenplayTextModelSplitterItem(QXmlStreamReader& _contentReader)
-    : ScreenplayTextModelItem(ScreenplayTextModelItemType::Splitter),
-      d(new Implementation)
+    : ScreenplayTextModelItem(ScreenplayTextModelItemType::Splitter)
+    , d(new Implementation)
 {
     Q_ASSERT(_contentReader.name() == xml::kSplitterTag);
 
-    d->type = kSplitterTypeToString.key(_contentReader.attributes().value(xml::kTypeAttribute).toString());
+    d->type = kSplitterTypeToString.key(
+        _contentReader.attributes().value(xml::kTypeAttribute).toString());
 
     xml::readNextElement(_contentReader); // end
     xml::readNextElement(_contentReader); // next
@@ -67,7 +69,8 @@ QByteArray ScreenplayTextModelSplitterItem::toXml() const
     }
 
     return QString("<%1 %2=\"%3\"/>\n")
-            .arg(xml::kSplitterTag, xml::kTypeAttribute, kSplitterTypeToString.value(d->type)).toUtf8();
+        .arg(xml::kSplitterTag, xml::kTypeAttribute, kSplitterTypeToString.value(d->type))
+        .toUtf8();
 }
 
 void ScreenplayTextModelSplitterItem::copyFrom(ScreenplayTextModelItem* _item)
@@ -80,8 +83,7 @@ void ScreenplayTextModelSplitterItem::copyFrom(ScreenplayTextModelItem* _item)
 
 bool ScreenplayTextModelSplitterItem::isEqual(ScreenplayTextModelItem* _item) const
 {
-    if (_item == nullptr
-        || type() != _item->type()) {
+    if (_item == nullptr || type() != _item->type()) {
         return false;
     }
 

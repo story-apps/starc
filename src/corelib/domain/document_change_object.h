@@ -6,8 +6,7 @@
 #include <QUuid>
 
 
-namespace Domain
-{
+namespace Domain {
 
 /**
  * @brief Класс изменения документа
@@ -59,8 +58,9 @@ public:
 
 private:
     explicit DocumentChangeObject(const Identifier& _id, const QUuid& _documentUuid,
-        const QUuid& _uuid, const QByteArray& _undoPatch, const QByteArray& _redoPatch,
-        const QDateTime& _dateTime, const QString& _userEmail, const QString& _userName);
+                                  const QUuid& _uuid, const QByteArray& _undoPatch,
+                                  const QByteArray& _redoPatch, const QDateTime& _dateTime,
+                                  const QString& _userEmail, const QString& _userName);
     friend class ObjectsBuilder;
 
     QUuid m_documentUuid;
@@ -73,4 +73,3 @@ private:
 };
 
 } // namespace Domain
-

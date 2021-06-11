@@ -5,14 +5,11 @@
 #include <business_layer/model/text/text_model.h>
 #include <business_layer/model/text/text_model_chapter_item.h>
 #include <business_layer/model/text/text_model_text_item.h>
-#include <business_layer/templates/text_template.h>
 #include <business_layer/templates/templates_facade.h>
-
+#include <business_layer/templates/text_template.h>
 #include <data_layer/storage/settings_storage.h>
 #include <data_layer/storage/storage_facade.h>
-
 #include <ui/widgets/text_edit/page/page_text_edit.h>
-
 #include <utils/helpers/text_helper.h>
 #include <utils/shugar.h>
 
@@ -20,21 +17,14 @@
 #include <QScopedValueRollback>
 #include <QTextTable>
 
-using BusinessLayer::TextBlockStyle;
 using BusinessLayer::TemplatesFacade;
+using BusinessLayer::TextBlockStyle;
 using BusinessLayer::TextParagraphType;
 
 
-namespace BusinessLayer
-{
+namespace BusinessLayer {
 
-enum class DocumentState {
-    Undefined,
-    Loading,
-    Changing,
-    Correcting,
-    Ready
-};
+enum class DocumentState { Undefined, Loading, Changing, Correcting, Ready };
 
 
 class TextDocument::Implementation
@@ -45,22 +35,23 @@ public:
     /**
      * @brief Скорректировать позиции элементов на заданную дистанцию
      */
-    void correctPositionsToItems(std::map<int, BusinessLayer::TextModelItem*>::iterator _from, int _distance);
+    void correctPositionsToItems(std::map<int, BusinessLayer::TextModelItem*>::iterator _from,
+                                 int _distance);
     void correctPositionsToItems(int _fromPosition, int _distance);
 
     /**
      * @brief Считать содержимое элмента модели с заданным индексом
      *        и вставить считанные данные в текущее положение курсора
      */
-    void readModelItemContent(int _itemRow, const QModelIndex& _parent,
-        QTextCursor& _cursor, bool& _isFirstParagraph);
+    void readModelItemContent(int _itemRow, const QModelIndex& _parent, QTextCursor& _cursor,
+                              bool& _isFirstParagraph);
 
     /**
      * @brief Считать содержимое вложенных в заданный индекс элементов
      *        и вставить считанные данные в текущее положение курсора
      */
     void readModelItemsContent(const QModelIndex& _parent, QTextCursor& _cursor,
-        bool& _isFirstParagraph);
+                               bool& _isFirstParagraph);
 
 
     TextDocument* q = nullptr;
@@ -85,10 +76,11 @@ void TextDocument::Implementation::correctPositionsToItems(
     }
 
     if (_distance > 0) {
-        auto reversed = [] (std::map<int, BusinessLayer::TextModelItem*>::iterator iter) {
+        auto reversed = [](std::map<int, BusinessLayer::TextModelItem*>::iterator iter) {
             return std::prev(std::make_reverse_iterator(iter));
         };
-        for (auto iter = positionsToItems.rbegin(); iter != std::make_reverse_iterator(_from); ++iter) {
+        for (auto iter = positionsToItems.rbegin(); iter != std::make_reverse_iterator(_from);
+             ++iter) {
             auto itemToUpdate = positionsToItems.extract(iter->first);
             itemToUpdate.key() = itemToUpdate.key() + _distance;
             iter = reversed(positionsToItems.insert(std::move(itemToUpdate)).position);
@@ -107,119 +99,123 @@ void TextDocument::Implementation::correctPositionsToItems(int _fromPosition, in
     correctPositionsToItems(positionsToItems.lower_bound(_fromPosition), _distance);
 }
 
-void TextDocument::Implementation::readModelItemContent(int _itemRow,
-    const QModelIndex& _parent, QTextCursor& _cursor, bool& _isFirstParagraph)
+void TextDocument::Implementation::readModelItemContent(int _itemRow, const QModelIndex& _parent,
+                                                        QTextCursor& _cursor,
+                                                        bool& _isFirstParagraph)
 {
     const auto itemIndex = model->index(_itemRow, 0, _parent);
     const auto item = model->itemForIndex(itemIndex);
     switch (item->type()) {
-        case TextModelItemType::Chapter: {
-            break;
+    case TextModelItemType::Chapter: {
+        break;
+    }
+
+    case TextModelItemType::Text: {
+        const auto textItem = static_cast<TextModelTextItem*>(item);
+
+        //
+        // При корректировке положений блоков нужно учитывать перенос строки
+        //
+        int additionalDistance = 1;
+        //
+        // Если это не первый абзац, вставим блок для него
+        //
+        if (!_isFirstParagraph) {
+            _cursor.insertBlock();
+        }
+        //
+        // ... в противном же случае, новый блок нет необходимости вставлять
+        //
+        else {
+            _isFirstParagraph = false;
+            additionalDistance = 0;
         }
 
-        case TextModelItemType::Text: {
-            const auto textItem = static_cast<TextModelTextItem*>(item);
+        //
+        // Запомним позицию элемента
+        //
+        correctPositionsToItems(_cursor.position(), textItem->text().length() + additionalDistance);
+        positionsToItems.emplace(_cursor.position(), textItem);
 
-            //
-            // При корректировке положений блоков нужно учитывать перенос строки
-            //
-            int additionalDistance = 1;
-            //
-            // Если это не первый абзац, вставим блок для него
-            //
-            if (!_isFirstParagraph) {
-                _cursor.insertBlock();
-            }
-            //
-            // ... в противном же случае, новый блок нет необходимости вставлять
-            //
-            else {
-                _isFirstParagraph = false;
-                additionalDistance = 0;
-            }
+        //
+        // Установим стиль блока
+        //
+        const auto currentStyle
+            = TemplatesFacade::textTemplate(templateId).blockStyle(textItem->paragraphType());
+        _cursor.setBlockFormat(currentStyle.blockFormat());
+        _cursor.setBlockCharFormat(currentStyle.charFormat());
+        _cursor.setCharFormat(currentStyle.charFormat());
 
-            //
-            // Запомним позицию элемента
-            //
-            correctPositionsToItems(_cursor.position(), textItem->text().length() + additionalDistance);
-            positionsToItems.emplace(_cursor.position(), textItem);
-
-            //
-            // Установим стиль блока
-            //
-            const auto currentStyle
-                    = TemplatesFacade::textTemplate(templateId).blockStyle(
-                          textItem->paragraphType());
-            _cursor.setBlockFormat(currentStyle.blockFormat());
-            _cursor.setBlockCharFormat(currentStyle.charFormat());
-            _cursor.setCharFormat(currentStyle.charFormat());
-
-            //
-            // ... выравнивание
-            //
-            if (textItem->alignment().has_value()) {
-                auto blockFormat = _cursor.blockFormat();
-                blockFormat.setAlignment(textItem->alignment().value());
-                _cursor.setBlockFormat(blockFormat);
-            }
-
-            //
-            // Вставим текст абзаца
-            //
-            const auto textToInsert = TextHelper::fromHtmlEscaped(textItem->text());
-            _cursor.insertText(textToInsert);
-
-            //
-            // Вставим данные блока
-            //
-            auto blockData = new TextBlockData(textItem);
-            _cursor.block().setUserData(blockData);
-
-            //
-            // Вставим форматирование
-            //
-            auto formatCursor = _cursor;
-            for (const auto& format : textItem->formats()) {
-                formatCursor.setPosition(formatCursor.block().position() + format.from);
-                formatCursor.movePosition(QTextCursor::NextCharacter, QTextCursor::KeepAnchor, format.length);
-                formatCursor.mergeCharFormat(format.charFormat());
-            }
-
-            //
-            // Обновим высоту блока, если требуется
-            //
-            qreal blockHeight = 0.0;
-            const auto formats = formatCursor.block().textFormats();
-            for (const auto& format : formats) {
-                blockHeight = std::max(blockHeight, TextHelper::fineLineSpacing(format.format.font()));
-            }
-            if (!qFuzzyCompare(formatCursor.blockFormat().lineHeight(), blockHeight)) {
-                auto blockFormat = formatCursor.blockFormat();
-                blockFormat.setLineHeight(blockHeight, QTextBlockFormat::FixedHeight);
-                formatCursor.setBlockFormat(blockFormat);
-            }
-
-            //
-            // Вставим редакторские заметки
-            //
-            auto reviewCursor = _cursor;
-            for (const auto& reviewMark : textItem->reviewMarks()) {
-                reviewCursor.setPosition(reviewCursor.block().position() + reviewMark.from);
-                reviewCursor.movePosition(QTextCursor::NextCharacter, QTextCursor::KeepAnchor, reviewMark.length);
-                reviewCursor.mergeCharFormat(reviewMark.charFormat());
-            }
-
-            break;
+        //
+        // ... выравнивание
+        //
+        if (textItem->alignment().has_value()) {
+            auto blockFormat = _cursor.blockFormat();
+            blockFormat.setAlignment(textItem->alignment().value());
+            _cursor.setBlockFormat(blockFormat);
         }
 
-        default: {
-            Q_ASSERT(false);
-            break;
+        //
+        // Вставим текст абзаца
+        //
+        const auto textToInsert = TextHelper::fromHtmlEscaped(textItem->text());
+        _cursor.insertText(textToInsert);
+
+        //
+        // Вставим данные блока
+        //
+        auto blockData = new TextBlockData(textItem);
+        _cursor.block().setUserData(blockData);
+
+        //
+        // Вставим форматирование
+        //
+        auto formatCursor = _cursor;
+        for (const auto& format : textItem->formats()) {
+            formatCursor.setPosition(formatCursor.block().position() + format.from);
+            formatCursor.movePosition(QTextCursor::NextCharacter, QTextCursor::KeepAnchor,
+                                      format.length);
+            formatCursor.mergeCharFormat(format.charFormat());
         }
+
+        //
+        // Обновим высоту блока, если требуется
+        //
+        qreal blockHeight = 0.0;
+        const auto formats = formatCursor.block().textFormats();
+        for (const auto& format : formats) {
+            blockHeight = std::max(blockHeight, TextHelper::fineLineSpacing(format.format.font()));
+        }
+        if (!qFuzzyCompare(formatCursor.blockFormat().lineHeight(), blockHeight)) {
+            auto blockFormat = formatCursor.blockFormat();
+            blockFormat.setLineHeight(blockHeight, QTextBlockFormat::FixedHeight);
+            formatCursor.setBlockFormat(blockFormat);
+        }
+
+        //
+        // Вставим редакторские заметки
+        //
+        auto reviewCursor = _cursor;
+        for (const auto& reviewMark : textItem->reviewMarks()) {
+            reviewCursor.setPosition(reviewCursor.block().position() + reviewMark.from);
+            reviewCursor.movePosition(QTextCursor::NextCharacter, QTextCursor::KeepAnchor,
+                                      reviewMark.length);
+            reviewCursor.mergeCharFormat(reviewMark.charFormat());
+        }
+
+        break;
+    }
+
+    default: {
+        Q_ASSERT(false);
+        break;
+    }
     }
 }
 
-void TextDocument::Implementation::readModelItemsContent(const QModelIndex& _parent, QTextCursor& _cursor, bool& _isFirstParagraph)
+void TextDocument::Implementation::readModelItemsContent(const QModelIndex& _parent,
+                                                         QTextCursor& _cursor,
+                                                         bool& _isFirstParagraph)
 {
     for (int itemRow = 0; itemRow < model->rowCount(_parent); ++itemRow) {
         readModelItemContent(itemRow, _parent, _cursor, _isFirstParagraph);
@@ -236,9 +232,9 @@ void TextDocument::Implementation::readModelItemsContent(const QModelIndex& _par
 // ****
 
 
-TextDocument::TextDocument(QObject *_parent)
-    : QTextDocument(_parent),
-      d(new Implementation(this))
+TextDocument::TextDocument(QObject* _parent)
+    : QTextDocument(_parent)
+    , d(new Implementation(this))
 {
     connect(this, &TextDocument::contentsChange, this, &TextDocument::updateModelOnContentChange);
 }
@@ -281,9 +277,8 @@ void TextDocument::setModel(BusinessLayer::TextModel* _model, bool _canChangeMod
     //
     // Обновим шрифт документа, в моменте когда текста нет
     //
-    const auto templateDefaultFont = TemplatesFacade::textTemplate(d->templateId)
-                                     .blockStyle(TextParagraphType::Text)
-                                     .font();
+    const auto templateDefaultFont
+        = TemplatesFacade::textTemplate(d->templateId).blockStyle(TextParagraphType::Text).font();
     if (defaultFont() != templateDefaultFont) {
         setDefaultFont(templateDefaultFont);
     }
@@ -311,288 +306,299 @@ void TextDocument::setModel(BusinessLayer::TextModel* _model, bool _canChangeMod
         QSignalBlocker signalBlocker(this);
         setModel(d->model);
     });
-    connect(d->model, &TextModel::dataChanged, this, [this] (const QModelIndex& _topLeft, const QModelIndex& _bottomRight) {
-        if (d->state != DocumentState::Ready) {
-            return;
-        }
+    connect(d->model, &TextModel::dataChanged, this,
+            [this](const QModelIndex& _topLeft, const QModelIndex& _bottomRight) {
+                if (d->state != DocumentState::Ready) {
+                    return;
+                }
 
-        Q_ASSERT(_topLeft == _bottomRight);
+                Q_ASSERT(_topLeft == _bottomRight);
 
-        QScopedValueRollback temporatryState(d->state, DocumentState::Changing);
+                QScopedValueRollback temporatryState(d->state, DocumentState::Changing);
 
-        const auto position = itemStartPosition(_topLeft);
-        if (position < 0) {
-            return;
-        }
+                const auto position = itemStartPosition(_topLeft);
+                if (position < 0) {
+                    return;
+                }
 
-        const auto item = d->model->itemForIndex(_topLeft);
-        if (item->type() != TextModelItemType::Text) {
-            return;
-        }
+                const auto item = d->model->itemForIndex(_topLeft);
+                if (item->type() != TextModelItemType::Text) {
+                    return;
+                }
 
-        const auto textItem = static_cast<TextModelTextItem*>(item);
+                const auto textItem = static_cast<TextModelTextItem*>(item);
 
-        QTextCursor cursor(this);
-        cursor.setPosition(position);
-        cursor.beginEditBlock();
+                QTextCursor cursor(this);
+                cursor.setPosition(position);
+                cursor.beginEditBlock();
 
-        //
-        // Обновим элемент
-        //
-        // ... тип параграфа
-        //
-        if (TextBlockStyle::forBlock(cursor.block()) != textItem->paragraphType()) {
-            applyParagraphType(textItem->paragraphType(), cursor);
-        }
-        //
-        // ... выравнивание
-        //
-        if (textItem->alignment().has_value()
-            && cursor.blockFormat().alignment() != textItem->alignment()) {
-            auto blockFormat = cursor.blockFormat();
-            blockFormat.setAlignment(textItem->alignment().value());
-            cursor.setBlockFormat(blockFormat);
-        }
-        //
-        // ... текст
-        //
-        if (cursor.block().text() != textItem->text()) {
-            //
-            // Корректируем позиции всех элментов идущих за обновляемым
-            //
-            const auto distanse = textItem->text().length() - cursor.block().text().length();
-            d->correctPositionsToItems(position + 1, distanse);
+                //
+                // Обновим элемент
+                //
+                // ... тип параграфа
+                //
+                if (TextBlockStyle::forBlock(cursor.block()) != textItem->paragraphType()) {
+                    applyParagraphType(textItem->paragraphType(), cursor);
+                }
+                //
+                // ... выравнивание
+                //
+                if (textItem->alignment().has_value()
+                    && cursor.blockFormat().alignment() != textItem->alignment()) {
+                    auto blockFormat = cursor.blockFormat();
+                    blockFormat.setAlignment(textItem->alignment().value());
+                    cursor.setBlockFormat(blockFormat);
+                }
+                //
+                // ... текст
+                //
+                if (cursor.block().text() != textItem->text()) {
+                    //
+                    // Корректируем позиции всех элментов идущих за обновляемым
+                    //
+                    const auto distanse
+                        = textItem->text().length() - cursor.block().text().length();
+                    d->correctPositionsToItems(position + 1, distanse);
 
-            //
-            // TODO: Сделать более умный алгоритм, который заменяет только изменённые части текста
-            //
-            cursor.movePosition(QTextCursor::StartOfBlock);
-            cursor.movePosition(QTextCursor::EndOfBlock, QTextCursor::KeepAnchor);
-            cursor.insertText(textItem->text());
-        }
-        //
-        // ... редакторские заметки и форматирование
-        //
-        {
-            //
-            // TODO: придумать, как не перезаписывать форматирование каждый раз
-            //
+                    //
+                    // TODO: Сделать более умный алгоритм, который заменяет только изменённые части
+                    // текста
+                    //
+                    cursor.movePosition(QTextCursor::StartOfBlock);
+                    cursor.movePosition(QTextCursor::EndOfBlock, QTextCursor::KeepAnchor);
+                    cursor.insertText(textItem->text());
+                }
+                //
+                // ... редакторские заметки и форматирование
+                //
+                {
+                    //
+                    // TODO: придумать, как не перезаписывать форматирование каждый раз
+                    //
 
-            //
-            // Сбросим текущее форматирование
-            //
-            cursor.movePosition(QTextCursor::StartOfBlock);
-            cursor.movePosition(QTextCursor::EndOfBlock, QTextCursor::KeepAnchor);
-            const auto blockType = TextBlockStyle::forBlock(cursor.block());
-            const auto blockStyle = TemplatesFacade::textTemplate(d->templateId).blockStyle(blockType);
-            cursor.setBlockCharFormat(blockStyle.charFormat());
-            cursor.setCharFormat(blockStyle.charFormat());
+                    //
+                    // Сбросим текущее форматирование
+                    //
+                    cursor.movePosition(QTextCursor::StartOfBlock);
+                    cursor.movePosition(QTextCursor::EndOfBlock, QTextCursor::KeepAnchor);
+                    const auto blockType = TextBlockStyle::forBlock(cursor.block());
+                    const auto blockStyle
+                        = TemplatesFacade::textTemplate(d->templateId).blockStyle(blockType);
+                    cursor.setBlockCharFormat(blockStyle.charFormat());
+                    cursor.setCharFormat(blockStyle.charFormat());
 
-            //
-            // Применяем форматирование из редакторских заметок элемента
-            //
-            for (const auto& reviewMark : textItem->reviewMarks()) {
-                cursor.movePosition(QTextCursor::StartOfBlock);
-                cursor.movePosition(QTextCursor::NextCharacter, QTextCursor::MoveAnchor, reviewMark.from);
-                cursor.movePosition(QTextCursor::NextCharacter, QTextCursor::KeepAnchor, reviewMark.length);
-                cursor.mergeCharFormat(reviewMark.charFormat());
-            }
-            for (const auto& format : textItem->formats()) {
-                cursor.movePosition(QTextCursor::StartOfBlock);
-                cursor.movePosition(QTextCursor::NextCharacter, QTextCursor::MoveAnchor, format.from);
-                cursor.movePosition(QTextCursor::NextCharacter, QTextCursor::KeepAnchor, format.length);
-                cursor.mergeCharFormat(format.charFormat());
-            }
+                    //
+                    // Применяем форматирование из редакторских заметок элемента
+                    //
+                    for (const auto& reviewMark : textItem->reviewMarks()) {
+                        cursor.movePosition(QTextCursor::StartOfBlock);
+                        cursor.movePosition(QTextCursor::NextCharacter, QTextCursor::MoveAnchor,
+                                            reviewMark.from);
+                        cursor.movePosition(QTextCursor::NextCharacter, QTextCursor::KeepAnchor,
+                                            reviewMark.length);
+                        cursor.mergeCharFormat(reviewMark.charFormat());
+                    }
+                    for (const auto& format : textItem->formats()) {
+                        cursor.movePosition(QTextCursor::StartOfBlock);
+                        cursor.movePosition(QTextCursor::NextCharacter, QTextCursor::MoveAnchor,
+                                            format.from);
+                        cursor.movePosition(QTextCursor::NextCharacter, QTextCursor::KeepAnchor,
+                                            format.length);
+                        cursor.mergeCharFormat(format.charFormat());
+                    }
 
-            //
-            // Обновим высоту блока, если требуется
-            //
-            qreal blockHeight = 0.0;
-            const auto formats = cursor.block().textFormats();
-            for (const auto& format : formats) {
-                blockHeight = std::max(blockHeight, TextHelper::fineLineSpacing(format.format.font()));
-            }
-            if (!qFuzzyCompare(cursor.blockFormat().lineHeight(), blockHeight)) {
-                auto blockFormat = cursor.blockFormat();
-                blockFormat.setLineHeight(blockHeight, QTextBlockFormat::FixedHeight);
-                cursor.setBlockFormat(blockFormat);
-            }
-        }
+                    //
+                    // Обновим высоту блока, если требуется
+                    //
+                    qreal blockHeight = 0.0;
+                    const auto formats = cursor.block().textFormats();
+                    for (const auto& format : formats) {
+                        blockHeight = std::max(blockHeight,
+                                               TextHelper::fineLineSpacing(format.format.font()));
+                    }
+                    if (!qFuzzyCompare(cursor.blockFormat().lineHeight(), blockHeight)) {
+                        auto blockFormat = cursor.blockFormat();
+                        blockFormat.setLineHeight(blockHeight, QTextBlockFormat::FixedHeight);
+                        cursor.setBlockFormat(blockFormat);
+                    }
+                }
 
-        cursor.endEditBlock();
-    });
-    connect(d->model, &TextModel::rowsInserted, this, [this] (const QModelIndex& _parent, int _from, int _to) {
-        if (d->state != DocumentState::Ready) {
-            return;
-        }
+                cursor.endEditBlock();
+            });
+    connect(d->model, &TextModel::rowsInserted, this,
+            [this](const QModelIndex& _parent, int _from, int _to) {
+                if (d->state != DocumentState::Ready) {
+                    return;
+                }
 
-        QScopedValueRollback temporatryState(d->state, DocumentState::Changing);
+                QScopedValueRollback temporatryState(d->state, DocumentState::Changing);
 
-        //
-        // Игнорируем добавление пустых глав
-        //
-        const auto item = d->model->itemForIndex(d->model->index(_from, 0, _parent));
-        if (item->type() == TextModelItemType::Chapter
-            && !item->hasChildren()) {
-            return;
-        }
+                //
+                // Игнорируем добавление пустых глав
+                //
+                const auto item = d->model->itemForIndex(d->model->index(_from, 0, _parent));
+                if (item->type() == TextModelItemType::Chapter && !item->hasChildren()) {
+                    return;
+                }
 
-        //
-        // Определим позицию курсора откуда нужно начинать вставку
-        //
-        QModelIndex cursorItemIndex;
-        if (_from > 0) {
-            cursorItemIndex = d->model->index(_from - 1, 0, _parent);
-        } else {
-            cursorItemIndex = d->model->index(_parent.row() - 1, 0, _parent.parent());
-        }
-        //
-        bool isFirstParagraph = !cursorItemIndex.isValid();
-        const int cursorPosition = isFirstParagraph ? 0
-                                                    : itemEndPosition(cursorItemIndex);
-        if (cursorPosition < 0) {
-            return;
-        }
+                //
+                // Определим позицию курсора откуда нужно начинать вставку
+                //
+                QModelIndex cursorItemIndex;
+                if (_from > 0) {
+                    cursorItemIndex = d->model->index(_from - 1, 0, _parent);
+                } else {
+                    cursorItemIndex = d->model->index(_parent.row() - 1, 0, _parent.parent());
+                }
+                //
+                bool isFirstParagraph = !cursorItemIndex.isValid();
+                const int cursorPosition = isFirstParagraph ? 0 : itemEndPosition(cursorItemIndex);
+                if (cursorPosition < 0) {
+                    return;
+                }
 
-        //
-        // Собственно вставляем контент
-        //
-        QTextCursor cursor(this);
-        cursor.beginEditBlock();
+                //
+                // Собственно вставляем контент
+                //
+                QTextCursor cursor(this);
+                cursor.beginEditBlock();
 
-        cursor.setPosition(cursorPosition);
-        if (isFirstParagraph) {
-            //
-            // Если первый параграф, то нужно перенести блок со своими данными дальше
-            //
-            TextBlockData* blockData = nullptr;
-            auto block = cursor.block();
-            if (block.userData() != nullptr) {
-                blockData = new TextBlockData(static_cast<TextBlockData*>(block.userData()));
-                block.setUserData(nullptr);
-            }
-            cursor.insertBlock();
-            cursor.block().setUserData(blockData);
-            //
-            // И вернуться назад, для вставки данныхшт
-            //
-            cursor.movePosition(QTextCursor::PreviousBlock);
-            //
-            // Корректируем позиции всех блоков на один символ
-            //
-            d->correctPositionsToItems(0, 1);
-        } else {
-            cursor.movePosition(QTextCursor::EndOfBlock);
-        }
+                cursor.setPosition(cursorPosition);
+                if (isFirstParagraph) {
+                    //
+                    // Если первый параграф, то нужно перенести блок со своими данными дальше
+                    //
+                    TextBlockData* blockData = nullptr;
+                    auto block = cursor.block();
+                    if (block.userData() != nullptr) {
+                        blockData
+                            = new TextBlockData(static_cast<TextBlockData*>(block.userData()));
+                        block.setUserData(nullptr);
+                    }
+                    cursor.insertBlock();
+                    cursor.block().setUserData(blockData);
+                    //
+                    // И вернуться назад, для вставки данныхшт
+                    //
+                    cursor.movePosition(QTextCursor::PreviousBlock);
+                    //
+                    // Корректируем позиции всех блоков на один символ
+                    //
+                    d->correctPositionsToItems(0, 1);
+                } else {
+                    cursor.movePosition(QTextCursor::EndOfBlock);
+                }
 
-        for (int itemRow = _from; itemRow <= _to; ++itemRow) {
-            d->readModelItemContent(itemRow, _parent, cursor, isFirstParagraph);
+                for (int itemRow = _from; itemRow <= _to; ++itemRow) {
+                    d->readModelItemContent(itemRow, _parent, cursor, isFirstParagraph);
 
-            //
-            // Считываем информацию о детях
-            //
-            const auto itemIndex = d->model->index(itemRow, 0, _parent);
-            d->readModelItemsContent(itemIndex, cursor, isFirstParagraph);
-        }
+                    //
+                    // Считываем информацию о детях
+                    //
+                    const auto itemIndex = d->model->index(itemRow, 0, _parent);
+                    d->readModelItemsContent(itemIndex, cursor, isFirstParagraph);
+                }
 
-        cursor.endEditBlock();
-    });
-    connect(d->model, &TextModel::rowsAboutToBeRemoved, this, [this] (const QModelIndex& _parent, int _from, int _to) {
-        if (d->state != DocumentState::Ready) {
-            return;
-        }
+                cursor.endEditBlock();
+            });
+    connect(d->model, &TextModel::rowsAboutToBeRemoved, this,
+            [this](const QModelIndex& _parent, int _from, int _to) {
+                if (d->state != DocumentState::Ready) {
+                    return;
+                }
 
-        QScopedValueRollback temporatryState(d->state, DocumentState::Changing);
+                QScopedValueRollback temporatryState(d->state, DocumentState::Changing);
 
-        const QModelIndex fromIndex = d->model->index(_from, 0, _parent);
-        if (!fromIndex.isValid()) {
-            return;
-        }
-        auto fromPosition = itemStartPosition(fromIndex);
-        if (fromPosition < 0) {
-            return;
-        }
+                const QModelIndex fromIndex = d->model->index(_from, 0, _parent);
+                if (!fromIndex.isValid()) {
+                    return;
+                }
+                auto fromPosition = itemStartPosition(fromIndex);
+                if (fromPosition < 0) {
+                    return;
+                }
 
-        const QModelIndex toIndex = d->model->index(_to, 0, _parent);
-        if (!toIndex.isValid()) {
-            return;
-        }
-        const auto toPosition = itemEndPosition(toIndex);
-        if (toPosition < 0) {
-            return;
-        }
+                const QModelIndex toIndex = d->model->index(_to, 0, _parent);
+                if (!toIndex.isValid()) {
+                    return;
+                }
+                const auto toPosition = itemEndPosition(toIndex);
+                if (toPosition < 0) {
+                    return;
+                }
 
-        QTextCursor cursor(this);
-        cursor.setPosition(fromPosition);
-        cursor.setPosition(toPosition, QTextCursor::KeepAnchor);
-        cursor.movePosition(QTextCursor::EndOfBlock, QTextCursor::KeepAnchor);
-        if (!cursor.hasSelection()
-            && !cursor.block().text().isEmpty()) {
-            return;
-        }
+                QTextCursor cursor(this);
+                cursor.setPosition(fromPosition);
+                cursor.setPosition(toPosition, QTextCursor::KeepAnchor);
+                cursor.movePosition(QTextCursor::EndOfBlock, QTextCursor::KeepAnchor);
+                if (!cursor.hasSelection() && !cursor.block().text().isEmpty()) {
+                    return;
+                }
 
-        //
-        // Корректируем карту позиций элементов
-        //
-        const auto selectionInterval = std::minmax(cursor.selectionStart(), cursor.selectionEnd());
-        auto fromIter = d->positionsToItems.lower_bound(selectionInterval.first);
-        auto endIter = d->positionsToItems.lower_bound(selectionInterval.second);
-        //
-        // ... если удаление заканчивается на пустом абзаце, берём следующий за ним элемент
-        //
-        if (cursor.block().text().isEmpty()) {
-            endIter = std::next(endIter);
-        }
-        //
-        // ... определим дистанцию занимаемую удаляемыми элементами
-        //
-        const auto distance = endIter->first - fromIter->first;
-        //
-        // ... удаляем сами элементы из карты
-        //
-        d->positionsToItems.erase(fromIter, endIter);
-        //
-        // ... корректируем позиции остальных элементов
-        //
-        d->correctPositionsToItems(selectionInterval.second, -1 * distance);
+                //
+                // Корректируем карту позиций элементов
+                //
+                const auto selectionInterval
+                    = std::minmax(cursor.selectionStart(), cursor.selectionEnd());
+                auto fromIter = d->positionsToItems.lower_bound(selectionInterval.first);
+                auto endIter = d->positionsToItems.lower_bound(selectionInterval.second);
+                //
+                // ... если удаление заканчивается на пустом абзаце, берём следующий за ним элемент
+                //
+                if (cursor.block().text().isEmpty()) {
+                    endIter = std::next(endIter);
+                }
+                //
+                // ... определим дистанцию занимаемую удаляемыми элементами
+                //
+                const auto distance = endIter->first - fromIter->first;
+                //
+                // ... удаляем сами элементы из карты
+                //
+                d->positionsToItems.erase(fromIter, endIter);
+                //
+                // ... корректируем позиции остальных элементов
+                //
+                d->correctPositionsToItems(selectionInterval.second, -1 * distance);
 
-        cursor.beginEditBlock();
-        if (cursor.hasSelection()) {
-            cursor.deleteChar();
-        }
+                cursor.beginEditBlock();
+                if (cursor.hasSelection()) {
+                    cursor.deleteChar();
+                }
 
-        //
-        // Если это самый первый блок, то нужно удалить на один символ больше, чтобы удалить сам блок
-        //
-        if (fromPosition == 0
-            && toPosition != characterCount()) {
-            cursor.deleteChar();
-        }
-        //
-        // Если это не самый первый блок, то нужно взять на один символ назад, чтобы удалить сам блок
-        //
-        else if (fromPosition > 0) {
-            //
-            // ... и при этом нужно сохранить данные блока и его формат
-            //
-            TextBlockData* blockData = nullptr;
-            auto block = cursor.block().previous();
-            if (block.userData() != nullptr) {
-                blockData = new TextBlockData(static_cast<TextBlockData*>(block.userData()));
-            }
-            const auto blockFormat = cursor.block().previous().blockFormat();
-            cursor.deletePreviousChar();
-            cursor.block().setUserData(blockData);
-            cursor.setBlockFormat(blockFormat);
-        }
-        cursor.endEditBlock();
-    });
+                //
+                // Если это самый первый блок, то нужно удалить на один символ больше, чтобы удалить
+                // сам блок
+                //
+                if (fromPosition == 0 && toPosition != characterCount()) {
+                    cursor.deleteChar();
+                }
+                //
+                // Если это не самый первый блок, то нужно взять на один символ назад, чтобы удалить
+                // сам блок
+                //
+                else if (fromPosition > 0) {
+                    //
+                    // ... и при этом нужно сохранить данные блока и его формат
+                    //
+                    TextBlockData* blockData = nullptr;
+                    auto block = cursor.block().previous();
+                    if (block.userData() != nullptr) {
+                        blockData
+                            = new TextBlockData(static_cast<TextBlockData*>(block.userData()));
+                    }
+                    const auto blockFormat = cursor.block().previous().blockFormat();
+                    cursor.deletePreviousChar();
+                    cursor.block().setUserData(blockData);
+                    cursor.setBlockFormat(blockFormat);
+                }
+                cursor.endEditBlock();
+            });
     //
     // Группируем массовые изменения, чтобы не мелькать пользователю перед глазами
     //
-    connect(d->model, &TextModel::rowsAboutToBeChanged, this, [this] {
-        QTextCursor(this).beginEditBlock();
-    });
+    connect(d->model, &TextModel::rowsAboutToBeChanged, this,
+            [this] { QTextCursor(this).beginEditBlock(); });
     connect(d->model, &TextModel::rowsChanged, this, [this] {
         d->state = DocumentState::Changing;
         QTextCursor(this).endEditBlock();
@@ -610,8 +616,7 @@ int TextDocument::itemPosition(const QModelIndex& _index, bool _fromStart)
     }
 
     while (item->childCount() > 0) {
-        item = item->childAt(_fromStart ? 0
-                                        : item->childCount() - 1);
+        item = item->childAt(_fromStart ? 0 : item->childCount() - 1);
     }
     for (const auto& [key, value] : d->positionsToItems) {
         if (value == item) {
@@ -644,8 +649,7 @@ QString TextDocument::chapterNumber(const QTextBlock& _forBlock) const
     }
 
     auto itemParent = blockData->item()->parent();
-    if (itemParent == nullptr
-        || itemParent->type() != TextModelItemType::Chapter) {
+    if (itemParent == nullptr || itemParent->type() != TextModelItemType::Chapter) {
         return {};
     }
 
@@ -678,8 +682,8 @@ QString TextDocument::mimeFromSelection(int _fromPosition, int _toPosition) cons
     const auto toPositionInBlock = _toPosition - toBlock.position();
 
     const bool clearUuid = true;
-    return d->model->mimeFromSelection(fromItemIndex, fromPositionInBlock,
-                                       toItemIndex, toPositionInBlock, clearUuid);
+    return d->model->mimeFromSelection(fromItemIndex, fromPositionInBlock, toItemIndex,
+                                       toPositionInBlock, clearUuid);
 }
 
 void TextDocument::insertFromMime(int _position, const QString& _mimeData)
@@ -753,7 +757,8 @@ void TextDocument::addParagraph(BusinessLayer::TextParagraphType _type, QTextCur
     _cursor.endEditBlock();
 }
 
-void TextDocument::setParagraphType(BusinessLayer::TextParagraphType _type, const QTextCursor& _cursor)
+void TextDocument::setParagraphType(BusinessLayer::TextParagraphType _type,
+                                    const QTextCursor& _cursor)
 {
     const auto currentParagraphType = TextBlockStyle::forBlock(_cursor.block());
     if (currentParagraphType == _type) {
@@ -777,7 +782,7 @@ void TextDocument::setParagraphType(BusinessLayer::TextParagraphType _type, cons
 }
 
 void TextDocument::applyParagraphType(BusinessLayer::TextParagraphType _type,
-    const QTextCursor& _cursor)
+                                      const QTextCursor& _cursor)
 {
     auto cursor = _cursor;
     cursor.beginEditBlock();
@@ -799,7 +804,8 @@ void TextDocument::applyParagraphType(BusinessLayer::TextParagraphType _type,
         cursor.movePosition(QTextCursor::StartOfBlock);
 
         //
-        // Если в блоке есть выделения, обновляем цвет только тех частей, которые не входят в выделения
+        // Если в блоке есть выделения, обновляем цвет только тех частей, которые не входят в
+        // выделения
         //
         QTextBlock currentBlock = cursor.block();
         if (!currentBlock.textFormats().isEmpty()) {
@@ -828,7 +834,7 @@ void TextDocument::applyParagraphType(BusinessLayer::TextParagraphType _type,
 }
 
 void TextDocument::addReviewMark(const QColor& _textColor, const QColor& _backgroundColor,
-    const QString& _comment, const QTextCursor& _cursor)
+                                 const QString& _comment, const QTextCursor& _cursor)
 {
     TextModelTextItem::ReviewMark reviewMark;
     if (_textColor.isValid()) {
@@ -838,8 +844,7 @@ void TextDocument::addReviewMark(const QColor& _textColor, const QColor& _backgr
         reviewMark.backgroundColor = _backgroundColor;
     }
     reviewMark.comments.append({ DataStorageLayer::StorageFacade::settingsStorage()->userName(),
-                                 QDateTime::currentDateTime().toString(Qt::ISODate),
-                                 _comment });
+                                 QDateTime::currentDateTime().toString(Qt::ISODate), _comment });
 
     auto cursor = _cursor;
     cursor.mergeCharFormat(reviewMark.charFormat());
@@ -855,8 +860,7 @@ void TextDocument::updateModelOnContentChange(int _position, int _charsRemoved, 
         return;
     }
 
-    if (d->state != DocumentState::Ready
-        && d->state != DocumentState::Correcting) {
+    if (d->state != DocumentState::Ready && d->state != DocumentState::Correcting) {
         return;
     }
 
@@ -913,13 +917,12 @@ void TextDocument::updateModelOnContentChange(int _position, int _charsRemoved, 
                 bool needToDeleteParent = false;
                 if (item->type() == TextModelItemType::Text) {
                     const auto textItem = static_cast<TextModelTextItem*>(item);
-                    needToDeleteParent
-                            = textItem->paragraphType() == TextParagraphType::Heading1
-                              || textItem->paragraphType() == TextParagraphType::Heading2
-                              || textItem->paragraphType() == TextParagraphType::Heading3
-                              || textItem->paragraphType() == TextParagraphType::Heading4
-                              || textItem->paragraphType() == TextParagraphType::Heading5
-                              || textItem->paragraphType() == TextParagraphType::Heading6;
+                    needToDeleteParent = textItem->paragraphType() == TextParagraphType::Heading1
+                        || textItem->paragraphType() == TextParagraphType::Heading2
+                        || textItem->paragraphType() == TextParagraphType::Heading3
+                        || textItem->paragraphType() == TextParagraphType::Heading4
+                        || textItem->paragraphType() == TextParagraphType::Heading5
+                        || textItem->paragraphType() == TextParagraphType::Heading6;
                 }
 
                 //
@@ -937,8 +940,8 @@ void TextDocument::updateModelOnContentChange(int _position, int _charsRemoved, 
                     //
                     TextModelItem* previousItem = nullptr;
                     const int itemRow = itemParent->hasParent()
-                                        ? itemParent->parent()->rowOfChild(itemParent)
-                                        : 0;
+                        ? itemParent->parent()->rowOfChild(itemParent)
+                        : 0;
                     if (itemRow > 0) {
                         const int previousItemRow = itemRow - 1;
                         previousItem = itemParent->parent()->childAt(previousItemRow);
@@ -977,20 +980,21 @@ void TextDocument::updateModelOnContentChange(int _position, int _charsRemoved, 
                                     d->model->appendItem(childItem, previousItem);
                                 }
                                 //
-                                // Если перед удаляемым внутри родителя нет ни одного элемента, то вставляем в начало к деду
+                                // Если перед удаляемым внутри родителя нет ни одного элемента, то
+                                // вставляем в начало к деду
                                 //
                                 else if (previousItem == nullptr
                                          && itemParent->parent() != nullptr) {
                                     d->model->prependItem(childItem, itemParent->parent());
                                 }
                                 //
-                                // Во всех остальных случаях просто кладём на один уровень с предыдущим элементом
+                                // Во всех остальных случаях просто кладём на один уровень с
+                                // предыдущим элементом
                                 //
                                 else {
                                     d->model->insertItem(childItem, previousItem);
                                 }
-                            }
-                            else {
+                            } else {
                                 d->model->insertItem(childItem, lastMovedItem);
                             }
                         }
@@ -1004,12 +1008,15 @@ void TextDocument::updateModelOnContentChange(int _position, int _charsRemoved, 
                     d->model->removeItem(itemParent);
 
                     //
-                    // Если после удаляемого элемента есть текстовые элементы, пробуем их встроить в предыдущую главу
+                    // Если после удаляемого элемента есть текстовые элементы, пробуем их встроить в
+                    // предыдущую главу
                     //
                     if (previousItem != nullptr
                         && previousItem->type() == TextModelItemType::Chapter) {
-                        const auto previousItemRow = previousItem->parent()->rowOfChild(previousItem);
-                        if (previousItemRow >= 0 && previousItemRow < previousItem->parent()->childCount() - 1) {
+                        const auto previousItemRow
+                            = previousItem->parent()->rowOfChild(previousItem);
+                        if (previousItemRow >= 0
+                            && previousItemRow < previousItem->parent()->childCount() - 1) {
                             const int nextItemRow = previousItemRow + 1;
                             auto nextItem = previousItem->parent()->childAt(nextItemRow);
                             while (nextItem != nullptr
@@ -1061,23 +1068,21 @@ void TextDocument::updateModelOnContentChange(int _position, int _charsRemoved, 
     //
     // ... определим элемент модели для предыдущего блока
     //
-    auto previousItem = [block] () -> TextModelItem* {
+    auto previousItem = [block]() -> TextModelItem* {
         if (!block.isValid()) {
             return nullptr;
         }
 
         auto previousBlock = block.previous();
-        if (!previousBlock.isValid()
-            || previousBlock.userData() == nullptr) {
+        if (!previousBlock.isValid() || previousBlock.userData() == nullptr) {
             return nullptr;
         }
 
         auto blockData = static_cast<TextBlockData*>(previousBlock.userData());
         return blockData->item();
-    } ();
+    }();
 
-    while (block.isValid()
-           && block.position() <= _position + _charsAdded) {
+    while (block.isValid() && block.position() <= _position + _charsAdded) {
         const auto paragraphType = TextBlockStyle::forBlock(block);
 
         //
@@ -1089,17 +1094,18 @@ void TextDocument::updateModelOnContentChange(int _position, int _charsRemoved, 
             //
             TextModelItem* parentItem = nullptr;
             switch (paragraphType) {
-                case TextParagraphType::Heading1:
-                case TextParagraphType::Heading2:
-                case TextParagraphType::Heading3:
-                case TextParagraphType::Heading4:
-                case TextParagraphType::Heading5:
-                case TextParagraphType::Heading6: {
-                    parentItem = new TextModelChapterItem;
-                    break;
-                }
+            case TextParagraphType::Heading1:
+            case TextParagraphType::Heading2:
+            case TextParagraphType::Heading3:
+            case TextParagraphType::Heading4:
+            case TextParagraphType::Heading5:
+            case TextParagraphType::Heading6: {
+                parentItem = new TextModelChapterItem;
+                break;
+            }
 
-                default: break;
+            default:
+                break;
             }
 
             //
@@ -1131,14 +1137,15 @@ void TextDocument::updateModelOnContentChange(int _position, int _charsRemoved, 
                     // Если элемент вставляется после главы с таким же уровнем,
                     // то вставляем его на том же уровне, что и предыдущий
                     //
-                    auto previousChapterItem = static_cast<TextModelChapterItem*>(previousTextItemParent);
+                    auto previousChapterItem
+                        = static_cast<TextModelChapterItem*>(previousTextItemParent);
                     if (previousChapterItem->level() == parentItemLevel) {
                         d->model->insertItem(parentItem, previousTextItemParent);
                     }
                     //
                     // Если уровень новой главы ниже уровня предыдущей, вставим внутрь
                     //
-                    else if (previousChapterItem->level() < parentItemLevel){
+                    else if (previousChapterItem->level() < parentItemLevel) {
                         d->model->insertItem(parentItem, previousItem);
                     }
                     //
@@ -1147,8 +1154,10 @@ void TextDocument::updateModelOnContentChange(int _position, int _charsRemoved, 
                     else {
                         auto previousChapterItemParent = previousChapterItem->parent();
                         while (previousChapterItemParent != nullptr) {
-                            Q_ASSERT(previousChapterItemParent->type() == TextModelItemType::Chapter);
-                            const auto grandPreviousChapterItem = static_cast<TextModelChapterItem*>(previousChapterItemParent);
+                            Q_ASSERT(previousChapterItemParent->type()
+                                     == TextModelItemType::Chapter);
+                            const auto grandPreviousChapterItem
+                                = static_cast<TextModelChapterItem*>(previousChapterItemParent);
 
                             //
                             // Если уровень деда такой же, то вставляем его на том же уровне
@@ -1245,7 +1254,8 @@ void TextDocument::updateModelOnContentChange(int _position, int _charsRemoved, 
                     while (grandParentItem->childCount() > itemIndex) {
                         auto grandParentChildItem = grandParentItem->childAt(itemIndex);
                         if (grandParentChildItem->type() == TextModelItemType::Chapter) {
-                            auto grandParentChildChapter = static_cast<TextModelChapterItem*>(grandParentChildItem);
+                            auto grandParentChildChapter
+                                = static_cast<TextModelChapterItem*>(grandParentChildItem);
                             if (grandParentChildChapter->level() <= parentItemLevel) {
                                 break;
                             }
@@ -1314,4 +1324,4 @@ void TextDocument::updateModelOnContentChange(int _position, int _charsRemoved, 
     }
 }
 
-} // namespace Ui
+} // namespace BusinessLayer

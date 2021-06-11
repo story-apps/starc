@@ -1,17 +1,15 @@
 #include "menu_view.h"
 
 #include <ui/design_system/design_system.h>
-
 #include <utils/3rd_party/WAF/Animation/Animation.h>
 
 #include <QAction>
-#include <QApplication>
 #include <QActionGroup>
+#include <QApplication>
 #include <QKeyEvent>
 
 
-namespace Ui
-{
+namespace Ui {
 
 class MenuView::Implementation
 {
@@ -95,8 +93,8 @@ MenuView::Implementation::Implementation(QWidget* _parent)
 
 
 MenuView::MenuView(QWidget* _parent)
-    : Drawer(_parent),
-      d(new Implementation(this))
+    : Drawer(_parent)
+    , d(new Implementation(this))
 {
     setTitle("STARC");
     setProVersion(false);
@@ -119,7 +117,8 @@ MenuView::MenuView(QWidget* _parent)
     connect(d->saveProject, &QAction::triggered, this, &MenuView::saveProjectChangesPressed);
     connect(d->saveProjectAs, &QAction::triggered, this, &MenuView::saveProjectAsPressed);
     connect(d->importProject, &QAction::triggered, this, &MenuView::importPressed);
-    connect(d->exportCurrentDocument, &QAction::triggered, this, &MenuView::exportCurrentDocumentPressed);
+    connect(d->exportCurrentDocument, &QAction::triggered, this,
+            &MenuView::exportCurrentDocumentPressed);
     connect(d->settings, &QAction::triggered, this, &MenuView::settingsPressed);
     connect(d->help, &QAction::triggered, this, &MenuView::helpPressed);
 
@@ -178,8 +177,7 @@ void MenuView::markChangesSaved(bool _saved)
 void MenuView::setProVersion(bool _isPro)
 {
     setSubtitle(QString("Story Architect v.%1 %2")
-                .arg(QApplication::applicationVersion(),
-                     (_isPro ? "PRO" : "free")));
+                    .arg(QApplication::applicationVersion(), (_isPro ? "PRO" : "free")));
     d->help->setVisible(!_isPro);
 }
 
@@ -198,18 +196,21 @@ void MenuView::updateTranslations()
     d->projects->setText(tr("Stories"));
     d->createProject->setText(tr("Create story"));
     d->openProject->setText(tr("Open story"));
-    d->saveProject->setText(d->saveProject->isEnabled() ? tr("Save changes") : tr("All changes saved"));
-    d->saveProject->setWhatsThis(QKeySequence(QKeySequence::Save).toString(QKeySequence::NativeText));
+    d->saveProject->setText(d->saveProject->isEnabled() ? tr("Save changes")
+                                                        : tr("All changes saved"));
+    d->saveProject->setWhatsThis(
+        QKeySequence(QKeySequence::Save).toString(QKeySequence::NativeText));
     d->saveProjectAs->setText(tr("Save current story as..."));
     d->importProject->setText(tr("Import..."));
     d->importProject->setWhatsThis(QKeySequence("Alt+I").toString(QKeySequence::NativeText));
     d->exportCurrentDocument->setText(tr("Export current document..."));
-    d->exportCurrentDocument->setWhatsThis(QKeySequence("Alt+E").toString(QKeySequence::NativeText));
+    d->exportCurrentDocument->setWhatsThis(
+        QKeySequence("Alt+E").toString(QKeySequence::NativeText));
     d->settings->setText(tr("Application settings"));
     d->help->setText(tr("How to use the application"));
 }
 
-void MenuView::keyPressEvent(QKeyEvent *_event)
+void MenuView::keyPressEvent(QKeyEvent* _event)
 {
     if (_event->key() == Qt::Key_Escape) {
         closeMenu();

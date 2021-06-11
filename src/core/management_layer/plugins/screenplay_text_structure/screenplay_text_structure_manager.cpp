@@ -3,12 +3,11 @@
 #include "business_layer/screenplay_text_structure_model.h"
 #include "ui/screenplay_text_structure_view.h"
 
-#include <business_layer/model/screenplay/text/screenplay_text_model.h>
 #include <business_layer/model/screenplay/screenplay_information_model.h>
+#include <business_layer/model/screenplay/text/screenplay_text_model.h>
 
 
-namespace ManagementLayer
-{
+namespace ManagementLayer {
 
 class ScreenplayTextStructureManager::Implementation
 {
@@ -66,13 +65,13 @@ Ui::ScreenplayTextStructureView* ScreenplayTextStructureManager::Implementation:
 
 
 ScreenplayTextStructureManager::ScreenplayTextStructureManager(QObject* _parent)
-    : QObject(_parent),
-      d(new Implementation)
+    : QObject(_parent)
+    , d(new Implementation)
 {
     connect(d->view, &Ui::ScreenplayTextStructureView::currentModelIndexChanged, this,
-            [this] (const QModelIndex& _index) {
-        emit currentModelIndexChanged(d->structureModel->mapToSource(_index));
-    });
+            [this](const QModelIndex& _index) {
+                emit currentModelIndexChanged(d->structureModel->mapToSource(_index));
+            });
 }
 
 ScreenplayTextStructureManager::~ScreenplayTextStructureManager() = default;
@@ -114,8 +113,9 @@ void ScreenplayTextStructureManager::setModel(BusinessLayer::AbstractModel* _mod
     //
     if (d->model != nullptr) {
         d->view->setTitle(d->model->informationModel()->name());
-        connect(d->model->informationModel(), &BusinessLayer::ScreenplayInformationModel::nameChanged,
-                d->view, &Ui::ScreenplayTextStructureView::setTitle);
+        connect(d->model->informationModel(),
+                &BusinessLayer::ScreenplayInformationModel::nameChanged, d->view,
+                &Ui::ScreenplayTextStructureView::setTitle);
     }
 
     //
@@ -146,8 +146,8 @@ void ScreenplayTextStructureManager::bind(IDocumentManager* _manager)
 {
     Q_ASSERT(_manager);
 
-    connect(_manager->asQObject(), SIGNAL(currentModelIndexChanged(const QModelIndex&)),
-            this, SLOT(setCurrentModelIndex(const QModelIndex&)), Qt::UniqueConnection);
+    connect(_manager->asQObject(), SIGNAL(currentModelIndexChanged(const QModelIndex&)), this,
+            SLOT(setCurrentModelIndex(const QModelIndex&)), Qt::UniqueConnection);
 }
 
 void ScreenplayTextStructureManager::setCurrentModelIndex(const QModelIndex& _index)

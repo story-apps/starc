@@ -2,7 +2,6 @@
 
 #include <ui/widgets/text_edit/page/page_metrics.h>
 #include <ui/widgets/text_edit/page/page_text_edit.h>
-
 #include <utils/helpers/string_helper.h>
 #include <utils/helpers/text_helper.h>
 
@@ -10,30 +9,29 @@
 #include <QFontMetricsF>
 #include <QTextBlock>
 #include <QTextBlockFormat>
-#include <QXmlStreamAttributes>
 #include <QUuid>
+#include <QXmlStreamAttributes>
 
 
-namespace BusinessLayer
-{
+namespace BusinessLayer {
 
 namespace {
 
 const QHash<TextParagraphType, QString> kTextParagraphTypeToString
-        = {{ TextParagraphType::Heading1, QLatin1String("heading_1") },
-           { TextParagraphType::Heading2, QLatin1String("heading_2") },
-           { TextParagraphType::Heading3, QLatin1String("heading_3") },
-           { TextParagraphType::Heading4, QLatin1String("heading_4") },
-           { TextParagraphType::Heading5, QLatin1String("heading_5") },
-           { TextParagraphType::Heading6, QLatin1String("heading_6") },
-           { TextParagraphType::Text, QLatin1String("text") },
-           { TextParagraphType::InlineNote, QLatin1String("inline_note") }};
+    = { { TextParagraphType::Heading1, QLatin1String("heading_1") },
+        { TextParagraphType::Heading2, QLatin1String("heading_2") },
+        { TextParagraphType::Heading3, QLatin1String("heading_3") },
+        { TextParagraphType::Heading4, QLatin1String("heading_4") },
+        { TextParagraphType::Heading5, QLatin1String("heading_5") },
+        { TextParagraphType::Heading6, QLatin1String("heading_6") },
+        { TextParagraphType::Text, QLatin1String("text") },
+        { TextParagraphType::InlineNote, QLatin1String("inline_note") } };
 
 const QHash<TextBlockStyle::LineSpacingType, QString> kLineSpacingToString
-        = {{ TextBlockStyle::LineSpacingType::SingleLineSpacing, "single" },
-           { TextBlockStyle::LineSpacingType::OneAndHalfLineSpacing, "oneandhalf" },
-           { TextBlockStyle::LineSpacingType::DoubleLineSpacing, "double" },
-           { TextBlockStyle::LineSpacingType::FixedLineSpacing, "fixed" }};
+    = { { TextBlockStyle::LineSpacingType::SingleLineSpacing, "single" },
+        { TextBlockStyle::LineSpacingType::OneAndHalfLineSpacing, "oneandhalf" },
+        { TextBlockStyle::LineSpacingType::DoubleLineSpacing, "double" },
+        { TextBlockStyle::LineSpacingType::FixedLineSpacing, "fixed" } };
 
 QString toString(TextBlockStyle::LineSpacingType _type)
 {
@@ -66,7 +64,8 @@ TextParagraphType TextBlockStyle::forBlock(const QTextBlock& _block)
 {
     TextParagraphType blockType = TextParagraphType::Undefined;
     if (_block.blockFormat().hasProperty(TextBlockStyle::PropertyType)) {
-        blockType = static_cast<TextParagraphType>(_block.blockFormat().intProperty(TextBlockStyle::PropertyType));
+        blockType = static_cast<TextParagraphType>(
+            _block.blockFormat().intProperty(TextBlockStyle::PropertyType));
     }
     return blockType;
 }
@@ -273,7 +272,8 @@ TextBlockStyle::TextBlockStyle(const QXmlStreamAttributes& _blockAttributes)
     m_font.setItalic(_blockAttributes.value("italic").toString() == "true");
     m_font.setUnderline(_blockAttributes.value("underline").toString() == "true");
     m_font.setCapitalization(_blockAttributes.value("uppercase").toString() == "true"
-                             ? QFont::AllUppercase : QFont::MixedCase);
+                                 ? QFont::AllUppercase
+                                 : QFont::MixedCase);
     //
     // ... расположение блока
     //
@@ -293,7 +293,7 @@ TextBlockStyle::TextBlockStyle(const QXmlStreamAttributes& _blockAttributes)
     m_blockFormat.setLeftMargin(PageMetrics::mmToPx(m_margins.left()));
     m_blockFormat.setRightMargin(PageMetrics::mmToPx(m_margins.right()));
     m_blockFormat.setPageBreakPolicy(m_isStartFromNewPage ? QTextFormat::PageBreak_AlwaysBefore
-                                                           : QTextFormat::PageBreak_Auto);
+                                                          : QTextFormat::PageBreak_Auto);
     updateLineHeight();
     //
     // ... текста
@@ -311,25 +311,25 @@ void TextBlockStyle::updateLineHeight()
 {
     qreal lineHeight = TextHelper::fineLineSpacing(m_font);
     switch (m_lineSpacing.type) {
-        case LineSpacingType::FixedLineSpacing: {
-            lineHeight = PageMetrics::mmToPx(m_lineSpacing.value);
-            break;
-        }
+    case LineSpacingType::FixedLineSpacing: {
+        lineHeight = PageMetrics::mmToPx(m_lineSpacing.value);
+        break;
+    }
 
-        case LineSpacingType::DoubleLineSpacing: {
-            lineHeight *= 2.0;
-            break;
-        }
+    case LineSpacingType::DoubleLineSpacing: {
+        lineHeight *= 2.0;
+        break;
+    }
 
-        case LineSpacingType::OneAndHalfLineSpacing: {
-            lineHeight *= 1.5;
-            break;
-        }
+    case LineSpacingType::OneAndHalfLineSpacing: {
+        lineHeight *= 1.5;
+        break;
+    }
 
-        case LineSpacingType::SingleLineSpacing:
-        default: {
-            break;
-        }
+    case LineSpacingType::SingleLineSpacing:
+    default: {
+        break;
+    }
     }
     m_blockFormat.setLineHeight(lineHeight, QTextBlockFormat::FixedHeight);
 
@@ -390,7 +390,8 @@ void TextTemplate::saveToFile(const QString& _filePath) const
         writer.writeAttribute("bold", ::toString(blockStyle.font().bold()));
         writer.writeAttribute("italic", ::toString(blockStyle.font().italic()));
         writer.writeAttribute("underline", ::toString(blockStyle.font().underline()));
-        writer.writeAttribute("uppercase", ::toString(blockStyle.font().capitalization() == QFont::AllUppercase));
+        writer.writeAttribute(
+            "uppercase", ::toString(blockStyle.font().capitalization() == QFont::AllUppercase));
         writer.writeAttribute("alignment", toString(blockStyle.align()));
         writer.writeAttribute("line_spacing", toString(blockStyle.lineSpacingType()));
         writer.writeAttribute("line_spacing_value", ::toString(blockStyle.lineSpacingValue()));
@@ -525,15 +526,16 @@ void TextTemplate::load(const QString& _fromFile)
     m_isDefault = templateAttributes.value("default").toString() == "true";
     m_name = templateAttributes.value("name").toString();
     m_description = templateAttributes.value("description").toString();
-    m_pageSizeId = PageMetrics::pageSizeIdFromString(templateAttributes.value("page_format").toString());
+    m_pageSizeId
+        = PageMetrics::pageSizeIdFromString(templateAttributes.value("page_format").toString());
     m_pageMargins = marginsFromString(templateAttributes.value("page_margins").toString());
-    m_pageNumbersAlignment = alignmentFromString(templateAttributes.value("page_numbers_alignment").toString());
+    m_pageNumbersAlignment
+        = alignmentFromString(templateAttributes.value("page_numbers_alignment").toString());
 
     //
     // Считываем настройки оформления блоков текста
     //
-    while (reader.readNextStartElement() && reader.name() == "block")
-    {
+    while (reader.readNextStartElement() && reader.name() == "block") {
         const TextBlockStyle blockStyle(reader.attributes());
         m_blockStyles.insert(blockStyle.type(), blockStyle);
 

@@ -1,8 +1,8 @@
 #pragma once
 
-#include <corelib_global.h>
-
 #include <QTreeView>
+
+#include <corelib_global.h>
 
 
 /**

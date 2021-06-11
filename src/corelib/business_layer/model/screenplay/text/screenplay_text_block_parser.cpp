@@ -2,16 +2,14 @@
 
 #include <business_layer/templates/screenplay_template.h>
 #include <business_layer/templates/templates_facade.h>
-
 #include <utils/helpers/text_helper.h>
 
+#include <QRegularExpression>
 #include <QString>
 #include <QStringList>
-#include <QRegularExpression>
 
 
-namespace BusinessLayer
-{
+namespace BusinessLayer {
 
 CharacterParser::Section CharacterParser::section(const QString& _text)
 {
@@ -135,15 +133,14 @@ QStringList SceneCharactersParser::characters(const QString& _text)
     //
     // Удалим потенциальные приставку и окончание
     //
-    const auto style = TemplatesFacade::screenplayTemplate().blockStyle(ScreenplayParagraphType::SceneCharacters);
+    const auto style = TemplatesFacade::screenplayTemplate().blockStyle(
+        ScreenplayParagraphType::SceneCharacters);
     QString stylePrefix = style.prefix();
-    if (!stylePrefix.isEmpty()
-        && characters.startsWith(stylePrefix)) {
+    if (!stylePrefix.isEmpty() && characters.startsWith(stylePrefix)) {
         characters.remove(QRegularExpression(QString("^[%1]").arg(stylePrefix)));
     }
     QString stylePostfix = style.postfix();
-    if (!stylePostfix.isEmpty()
-        && characters.endsWith(stylePostfix)) {
+    if (!stylePostfix.isEmpty() && characters.endsWith(stylePostfix)) {
         characters.remove(QRegularExpression(QString("[%1]$").arg(stylePostfix)));
     }
 

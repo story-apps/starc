@@ -11,11 +11,7 @@ class CORE_LIBRARY_EXPORT Dialog : public AbstractDialog
     Q_OBJECT
 
 public:
-    enum ButtonType {
-        NormalButton,
-        AcceptButton,
-        RejectButton
-    };
+    enum ButtonType { NormalButton, AcceptButton, RejectButton };
 
     /**
      * @brief Структура для описания кнопок в диалоге
@@ -33,7 +29,8 @@ public:
     /**
      * @brief Показать диалог с заданными заголовком, описанием и списком кнопок
      */
-    void showDialog(const QString& _title, const QString& _supportingText, const QVector<ButtonInfo>& _buttons);
+    void showDialog(const QString& _title, const QString& _supportingText,
+                    const QVector<ButtonInfo>& _buttons);
 
 signals:
     /**

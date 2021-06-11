@@ -5,15 +5,14 @@
 #include <QMap>
 
 namespace Domain {
-    class DomainObject;
+class DomainObject;
 }
 
 class QSqlRecord;
 class QSqlQuery;
 
 
-namespace DataMappingLayer
-{
+namespace DataMappingLayer {
 
 /**
  * @brief The AbstractMapper class
@@ -40,7 +39,8 @@ protected:
     /**
      * @brief Создать объект с заданным идентификатором из sql-записи
      */
-    virtual Domain::DomainObject* doLoad(const Domain::Identifier& _id, const QSqlRecord& _record) = 0;
+    virtual Domain::DomainObject* doLoad(const Domain::Identifier& _id, const QSqlRecord& _record)
+        = 0;
 
     /**
      * @brief Обновить параметры заданного объекта из sql-записи
@@ -48,7 +48,7 @@ protected:
     virtual void doLoad(Domain::DomainObject* _object, const QSqlRecord& _record) = 0;
 
 protected:
-    Domain::DomainObject * abstractFind(const Domain::Identifier& _id);
+    Domain::DomainObject* abstractFind(const Domain::Identifier& _id);
     QVector<Domain::DomainObject*> abstractFind(const QString& _filter);
     void abstractInsert(Domain::DomainObject* _object);
     bool abstractUpdate(Domain::DomainObject* _object);
@@ -94,4 +94,3 @@ private:
 };
 
 } // namespace DataMappingLayer
-

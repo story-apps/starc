@@ -3,8 +3,7 @@
 #include <QSortFilterProxyModel>
 
 
-namespace BusinessLayer
-{
+namespace BusinessLayer {
 
 /**
  * @brief Прокси модель для отображения структуры сценария в навигаторе

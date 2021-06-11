@@ -8,14 +8,13 @@
 #include <QVector>
 
 
-namespace BusinessLayer
-{
+namespace BusinessLayer {
 
 class StructureModelItem::Implementation
 {
 public:
-    explicit Implementation(const QUuid& _uuid, Domain::DocumentObjectType _type, const QString& _name,
-        const QColor& _color, bool _visible);
+    explicit Implementation(const QUuid& _uuid, Domain::DocumentObjectType _type,
+                            const QString& _name, const QColor& _color, bool _visible);
 
     const QUuid uuid;
     Domain::DocumentObjectType type;
@@ -24,13 +23,15 @@ public:
     bool visible = true;
 };
 
-StructureModelItem::Implementation::Implementation(const QUuid& _uuid, Domain::DocumentObjectType _type,
-    const QString& _name, const QColor& _color, bool _visible)
-    : uuid(_uuid),
-      type(_type),
-      name(_name),
-      color(_color),
-      visible(_visible)
+StructureModelItem::Implementation::Implementation(const QUuid& _uuid,
+                                                   Domain::DocumentObjectType _type,
+                                                   const QString& _name, const QColor& _color,
+                                                   bool _visible)
+    : uuid(_uuid)
+    , type(_type)
+    , name(_name)
+    , color(_color)
+    , visible(_visible)
 {
 }
 
@@ -39,15 +40,16 @@ StructureModelItem::Implementation::Implementation(const QUuid& _uuid, Domain::D
 
 
 StructureModelItem::StructureModelItem(const QUuid& _uuid, Domain::DocumentObjectType _type,
-    const QString& _name, const QColor& _color, bool _visible)
-    : AbstractModelItem(),
-      d(new Implementation(_uuid, _type, _name, _color, _visible))
+                                       const QString& _name, const QColor& _color, bool _visible)
+    : AbstractModelItem()
+    , d(new Implementation(_uuid, _type, _name, _color, _visible))
 {
 }
 
 StructureModelItem::StructureModelItem(const StructureModelItem& _other)
-    : AbstractModelItem(),
-      d(new Implementation(_other.d->uuid, _other.d->type, _other.d->name, _other.d->color, _other.d->visible))
+    : AbstractModelItem()
+    , d(new Implementation(_other.d->uuid, _other.d->type, _other.d->name, _other.d->color,
+                           _other.d->visible))
 {
 }
 
@@ -91,21 +93,21 @@ void StructureModelItem::setVisible(bool _visible)
 QVariant StructureModelItem::data(int _role) const
 {
     switch (_role) {
-        case Qt::DisplayRole: {
-            return name();
-        }
+    case Qt::DisplayRole: {
+        return name();
+    }
 
-        case Qt::DecorationRole: {
-            return Domain::iconForType(type());
-        }
+    case Qt::DecorationRole: {
+        return Domain::iconForType(type());
+    }
 
-        case Qt::BackgroundRole: {
-            return color();
-        }
+    case Qt::BackgroundRole: {
+        return color();
+    }
 
-        default: {
-            return {};
-        }
+    default: {
+        return {};
+    }
     }
 }
 

@@ -1,14 +1,13 @@
 #pragma once
 
-#include <corelib_global.h>
-
 #include <QScopedPointer>
+
+#include <corelib_global.h>
 
 class QVariant;
 
 
-namespace BusinessLayer
-{
+namespace BusinessLayer {
 
 /**
  * @brief Абстрактный класс элемента древовидной модели
@@ -100,7 +99,9 @@ protected:
     /**
      * @brief Возможность обработки изменния для дочерних классов
      */
-    virtual void handleChange() {}
+    virtual void handleChange()
+    {
+    }
 
 private:
     class Implementation;

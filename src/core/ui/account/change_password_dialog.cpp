@@ -1,15 +1,13 @@
 #include "change_password_dialog.h"
 
 #include <ui/design_system/design_system.h>
-
 #include <ui/widgets/button/button.h>
 #include <ui/widgets/text_field/text_field.h>
 
 #include <QEvent>
 #include <QGridLayout>
 
-namespace Ui
-{
+namespace Ui {
 
 class ChangePasswordDialog::Implementation
 {
@@ -25,11 +23,11 @@ public:
 };
 
 ChangePasswordDialog::Implementation::Implementation(QWidget* _parent)
-    : restorePasswordConfirmationCode(new TextField(_parent)),
-      password(new TextField(_parent)),
-      buttonsLayout(new QHBoxLayout),
-      changePasswordButton(new Button(_parent)),
-      cancelButton(new Button(_parent))
+    : restorePasswordConfirmationCode(new TextField(_parent))
+    , password(new TextField(_parent))
+    , buttonsLayout(new QHBoxLayout)
+    , changePasswordButton(new Button(_parent))
+    , cancelButton(new Button(_parent))
 {
     restorePasswordConfirmationCode->setTabChangesFocus(true);
 
@@ -52,8 +50,8 @@ ChangePasswordDialog::Implementation::Implementation(QWidget* _parent)
 
 
 ChangePasswordDialog::ChangePasswordDialog(QWidget* _parent)
-    : AbstractDialog(_parent),
-      d(new Implementation(this))
+    : AbstractDialog(_parent)
+    , d(new Implementation(this))
 {
     d->cancelButton->installEventFilter(this);
 
@@ -61,12 +59,15 @@ ChangePasswordDialog::ChangePasswordDialog(QWidget* _parent)
     contentsLayout()->addWidget(d->password, 1, 0);
     contentsLayout()->addLayout(d->buttonsLayout, 2, 0);
 
-    connect(d->restorePasswordConfirmationCode, &TextField::textChanged, this, &ChangePasswordDialog::confirmationCodeEntered);
+    connect(d->restorePasswordConfirmationCode, &TextField::textChanged, this,
+            &ChangePasswordDialog::confirmationCodeEntered);
     connect(d->password, &TextField::trailingIconPressed, d->password, [password = d->password] {
         password->setPasswordModeEnabled(!password->isPasswordModeEnabled());
-        password->setTrailingIcon(password->isPasswordModeEnabled() ? u8"\U000f06d1" : u8"\U000f06d0");
+        password->setTrailingIcon(password->isPasswordModeEnabled() ? u8"\U000f06d1"
+                                                                    : u8"\U000f06d0");
     });
-    connect(d->changePasswordButton, &Button::clicked, this, &ChangePasswordDialog::changePasswordRequested);
+    connect(d->changePasswordButton, &Button::clicked, this,
+            &ChangePasswordDialog::changePasswordRequested);
     connect(d->cancelButton, &Button::clicked, this, &ChangePasswordDialog::canceled);
 
     updateTranslations();
@@ -129,10 +130,10 @@ void ChangePasswordDialog::designSystemChangeEvent(DesignSystemChangeEvent* _eve
     }
 
     contentsLayout()->setSpacing(static_cast<int>(Ui::DesignSystem::layout().px8()));
-    d->buttonsLayout->setContentsMargins(QMarginsF(Ui::DesignSystem::layout().px12(),
-                                                   Ui::DesignSystem::layout().px12(),
-                                                   Ui::DesignSystem::layout().px16(),
-                                                   Ui::DesignSystem::layout().px8()).toMargins());
+    d->buttonsLayout->setContentsMargins(
+        QMarginsF(Ui::DesignSystem::layout().px12(), Ui::DesignSystem::layout().px12(),
+                  Ui::DesignSystem::layout().px16(), Ui::DesignSystem::layout().px8())
+            .toMargins());
 }
 
 bool ChangePasswordDialog::eventFilter(QObject* _watched, QEvent* _event)
@@ -140,8 +141,7 @@ bool ChangePasswordDialog::eventFilter(QObject* _watched, QEvent* _event)
     //
     // Зацикливаем фокус, чтобы он всегда оставался внутри диалога
     //
-    if (_watched == d->cancelButton
-        && _event->type() == QEvent::FocusOut) {
+    if (_watched == d->cancelButton && _event->type() == QEvent::FocusOut) {
         d->restorePasswordConfirmationCode->setFocus();
     }
 

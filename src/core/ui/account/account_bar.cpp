@@ -1,7 +1,6 @@
 #include "account_bar.h"
 
 #include <ui/design_system/design_system.h>
-
 #include <utils/helpers/image_helper.h>
 
 #include <QAction>
@@ -9,8 +8,7 @@
 #include <QVariantAnimation>
 
 
-namespace Ui
-{
+namespace Ui {
 
 class AccountBar::Implementation
 {
@@ -43,18 +41,19 @@ AccountBar::Implementation::Implementation()
 
 
 AccountBar::AccountBar(QWidget* _parent)
-    : FloatingToolBar(_parent),
-      d(new Implementation)
+    : FloatingToolBar(_parent)
+    , d(new Implementation)
 {
     d->accountAction->setIconText(u8"\U000f0004");
     addAction(d->accountAction);
     hide();
 
-    connect(&d->notificationAngleAnimation, &QVariantAnimation::valueChanged, this, [this] { update(); });
-    connect(&d->notificationAngleAnimation, &QVariantAnimation::finished, this, [this] {
-        d->notificationOpacityAnimation.start();
-    });
-    connect(&d->notificationOpacityAnimation, &QVariantAnimation::valueChanged, this, [this] { update(); });
+    connect(&d->notificationAngleAnimation, &QVariantAnimation::valueChanged, this,
+            [this] { update(); });
+    connect(&d->notificationAngleAnimation, &QVariantAnimation::finished, this,
+            [this] { d->notificationOpacityAnimation.start(); });
+    connect(&d->notificationOpacityAnimation, &QVariantAnimation::valueChanged, this,
+            [this] { update(); });
     connect(d->accountAction, &QAction::triggered, this, &AccountBar::accountPressed);
 }
 
@@ -109,7 +108,8 @@ void AccountBar::paintEvent(QPaintEvent* _event)
         qreal startAngle = 90 * 16;
         qreal valueCorrected = -1 * d->notificationAngleAnimation.currentValue().toReal();
         qreal spanAngle = valueCorrected * 360 * 16;
-        const QRectF rectangle = QRectF(rect()).marginsRemoved(Ui::DesignSystem::floatingToolBar().shadowMargins());
+        const QRectF rectangle
+            = QRectF(rect()).marginsRemoved(Ui::DesignSystem::floatingToolBar().shadowMargins());
         painter.drawArc(rectangle, static_cast<int>(startAngle), static_cast<int>(spanAngle));
     }
 }

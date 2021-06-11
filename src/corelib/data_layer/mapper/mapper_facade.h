@@ -1,8 +1,7 @@
 #pragma once
 
 
-namespace DataMappingLayer
-{
+namespace DataMappingLayer {
 class DocumentChangeMapper;
 class DocumentMapper;
 class SettingsMapper;
@@ -24,4 +23,3 @@ private:
 };
 
 } // namespace DataMappingLayer
-

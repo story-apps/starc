@@ -7,17 +7,16 @@
 #include <QVBoxLayout>
 
 
-namespace Ui
-{
+namespace Ui {
 
 namespace {
-    const int kApplicationIndex = 0;
-    const int kApplicationUserInterfaceIndex = 0;
-    const int kApplicationSaveAndBackupIndex = 1;
-    const int kComponentsIndex = 1;
-    const int kComponentsScreenplayIndex = 0;
-    const int kShortcutsIndex = 2;
-}
+const int kApplicationIndex = 0;
+const int kApplicationUserInterfaceIndex = 0;
+const int kApplicationSaveAndBackupIndex = 1;
+const int kComponentsIndex = 1;
+const int kComponentsScreenplayIndex = 0;
+const int kShortcutsIndex = 2;
+} // namespace
 
 
 class SettingsNavigator::Implementation
@@ -38,8 +37,8 @@ SettingsNavigator::Implementation::Implementation(QWidget* _parent)
 
 
 SettingsNavigator::SettingsNavigator(QWidget* _parent)
-    : Widget(_parent),
-      d(new Implementation(this))
+    : Widget(_parent)
+    , d(new Implementation(this))
 {
     QVBoxLayout* layout = new QVBoxLayout(this);
     layout->setContentsMargins({});
@@ -47,7 +46,7 @@ SettingsNavigator::SettingsNavigator(QWidget* _parent)
     layout->addWidget(d->tree);
 
 
-    auto createItem = [] (const QString& _icon) {
+    auto createItem = [](const QString& _icon) {
         auto item = new QStandardItem;
         item->setData(_icon, Qt::DecorationRole);
         item->setEditable(false);
@@ -66,61 +65,60 @@ SettingsNavigator::SettingsNavigator(QWidget* _parent)
     d->tree->setCurrentIndex(model->index(0, 0));
     d->tree->expandAll();
 
-    connect(d->tree, &Tree::currentIndexChanged, this, [this] (const QModelIndex& _index) {
+    connect(d->tree, &Tree::currentIndexChanged, this, [this](const QModelIndex& _index) {
         if (_index.parent().isValid()) {
             switch (_index.parent().row()) {
-                case kApplicationIndex: {
-                    switch (_index.row()) {
-                        case kApplicationUserInterfaceIndex: {
-                            emit applicationUserInterfacePressed();
-                            break;
-                        }
-                        case kApplicationSaveAndBackupIndex: {
-                            emit applicationSaveAndBackupsPressed();
-                            break;
-                        }
-                        default: {
-                            break;
-                        }
-                    }
+            case kApplicationIndex: {
+                switch (_index.row()) {
+                case kApplicationUserInterfaceIndex: {
+                    emit applicationUserInterfacePressed();
                     break;
                 }
-                case kComponentsIndex: {
-                    switch (_index.row()) {
-                        case kComponentsScreenplayIndex: {
-                            emit componentsScreenplayPressed();
-                            break;
-                        }
-                        default: {
-                            break;
-                        }
-                    }
+                case kApplicationSaveAndBackupIndex: {
+                    emit applicationSaveAndBackupsPressed();
                     break;
                 }
                 default: {
                     break;
                 }
+                }
+                break;
+            }
+            case kComponentsIndex: {
+                switch (_index.row()) {
+                case kComponentsScreenplayIndex: {
+                    emit componentsScreenplayPressed();
+                    break;
+                }
+                default: {
+                    break;
+                }
+                }
+                break;
+            }
+            default: {
+                break;
+            }
             }
         } else {
             switch (_index.row()) {
-                case kApplicationIndex: {
-                    emit applicationPressed();
-                    break;
-                }
-                case kComponentsIndex: {
-                    emit componentsPressed();
-                    break;
-                }
-                case kShortcutsIndex: {
-                    emit shortcutsPressed();
-                    break;
-                }
-                default: {
-                    break;
-                }
+            case kApplicationIndex: {
+                emit applicationPressed();
+                break;
+            }
+            case kComponentsIndex: {
+                emit componentsPressed();
+                break;
+            }
+            case kShortcutsIndex: {
+                emit shortcutsPressed();
+                break;
+            }
+            default: {
+                break;
+            }
             }
         }
-
     });
 
     designSystemChangeEvent(nullptr);
@@ -130,8 +128,12 @@ void SettingsNavigator::updateTranslations()
 {
     auto model = qobject_cast<QStandardItemModel*>(d->tree->model());
     model->item(kApplicationIndex)->setText(tr("Application settings"));
-    model->item(kApplicationIndex)->child(kApplicationUserInterfaceIndex)->setText(tr("User interface"));
-    model->item(kApplicationIndex)->child(kApplicationSaveAndBackupIndex)->setText(tr("Save changes & backups"));
+    model->item(kApplicationIndex)
+        ->child(kApplicationUserInterfaceIndex)
+        ->setText(tr("User interface"));
+    model->item(kApplicationIndex)
+        ->child(kApplicationSaveAndBackupIndex)
+        ->setText(tr("Save changes & backups"));
     model->item(kComponentsIndex)->setText(tr("Components"));
     model->item(kComponentsIndex)->child(kComponentsScreenplayIndex)->setText(tr("Screenplay"));
     model->item(kShortcutsIndex)->setText(tr("Shortcuts"));

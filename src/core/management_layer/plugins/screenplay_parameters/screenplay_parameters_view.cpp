@@ -10,8 +10,7 @@
 #include <QScrollArea>
 
 
-namespace Ui
-{
+namespace Ui {
 
 class ScreenplayParametersView::Implementation
 {
@@ -32,15 +31,15 @@ public:
 };
 
 ScreenplayParametersView::Implementation::Implementation(QWidget* _parent)
-    : content(new QScrollArea(_parent)),
-      screenplayInfo(new Card(_parent)),
-      screenplayInfoLayout(new QGridLayout),
-      screenplayHeader(new TextField(screenplayInfo)),
-      screenplayPrintHeaderOnTitlePage(new CheckBox(screenplayInfo)),
-      screenplayFooter(new TextField(screenplayInfo)),
-      screenplayPrintFooterOnTitlePage(new CheckBox(screenplayInfo)),
-      scenesNumbersPrefix(new TextField(screenplayInfo)),
-      scenesNumberingStartAt(new TextField(screenplayInfo))
+    : content(new QScrollArea(_parent))
+    , screenplayInfo(new Card(_parent))
+    , screenplayInfoLayout(new QGridLayout)
+    , screenplayHeader(new TextField(screenplayInfo))
+    , screenplayPrintHeaderOnTitlePage(new CheckBox(screenplayInfo))
+    , screenplayFooter(new TextField(screenplayInfo))
+    , screenplayPrintFooterOnTitlePage(new CheckBox(screenplayInfo))
+    , scenesNumbersPrefix(new TextField(screenplayInfo))
+    , scenesNumberingStartAt(new TextField(screenplayInfo))
 {
     QPalette palette;
     palette.setColor(QPalette::Base, Qt::transparent);
@@ -79,8 +78,8 @@ ScreenplayParametersView::Implementation::Implementation(QWidget* _parent)
 
 
 ScreenplayParametersView::ScreenplayParametersView(QWidget* _parent)
-    : Widget(_parent),
-      d(new Implementation(this))
+    : Widget(_parent)
+    , d(new Implementation(this))
 {
     QVBoxLayout* layout = new QVBoxLayout;
     layout->setContentsMargins({});
@@ -88,19 +87,16 @@ ScreenplayParametersView::ScreenplayParametersView(QWidget* _parent)
     layout->addWidget(d->content);
     setLayout(layout);
 
-    connect(d->screenplayHeader, &TextField::textChanged, this, [this] {
-        emit headerChanged(d->screenplayHeader->text());
-    });
-    connect(d->screenplayPrintHeaderOnTitlePage, &CheckBox::checkedChanged,
-            this, &ScreenplayParametersView::printHeaderOnTitlePageChanged);
-    connect(d->screenplayFooter, &TextField::textChanged, this, [this] {
-        emit footerChanged(d->screenplayFooter->text());
-    });
-    connect(d->screenplayPrintFooterOnTitlePage, &CheckBox::checkedChanged,
-            this, &ScreenplayParametersView::printFooterOnTitlePageChanged);
-    connect(d->scenesNumbersPrefix, &TextField::textChanged, this, [this] {
-        emit scenesNumbersPrefixChanged(d->scenesNumbersPrefix->text());
-    });
+    connect(d->screenplayHeader, &TextField::textChanged, this,
+            [this] { emit headerChanged(d->screenplayHeader->text()); });
+    connect(d->screenplayPrintHeaderOnTitlePage, &CheckBox::checkedChanged, this,
+            &ScreenplayParametersView::printHeaderOnTitlePageChanged);
+    connect(d->screenplayFooter, &TextField::textChanged, this,
+            [this] { emit footerChanged(d->screenplayFooter->text()); });
+    connect(d->screenplayPrintFooterOnTitlePage, &CheckBox::checkedChanged, this,
+            &ScreenplayParametersView::printFooterOnTitlePageChanged);
+    connect(d->scenesNumbersPrefix, &TextField::textChanged, this,
+            [this] { emit scenesNumbersPrefixChanged(d->scenesNumbersPrefix->text()); });
     connect(d->scenesNumberingStartAt, &TextField::textChanged, this, [this] {
         bool isNumberValid = false;
         const auto startNumber = d->scenesNumberingStartAt->text().toInt(&isNumberValid);
@@ -190,28 +186,27 @@ void ScreenplayParametersView::designSystemChangeEvent(DesignSystemChangeEvent* 
     setBackgroundColor(Ui::DesignSystem::color().surface());
 
     d->content->widget()->layout()->setContentsMargins(
-                QMarginsF(Ui::DesignSystem::layout().px24(),
-                          Ui::DesignSystem::layout().topContentMargin(),
-                          Ui::DesignSystem::layout().px24(),
-                          Ui::DesignSystem::layout().px24())
-                .toMargins());
+        QMarginsF(Ui::DesignSystem::layout().px24(), Ui::DesignSystem::layout().topContentMargin(),
+                  Ui::DesignSystem::layout().px24(), Ui::DesignSystem::layout().px24())
+            .toMargins());
 
     d->screenplayInfo->setBackgroundColor(DesignSystem::color().background());
-    for (auto textField : { d->screenplayHeader,
-                            d->screenplayFooter,
-                            d->scenesNumbersPrefix,
+    for (auto textField : { d->screenplayHeader, d->screenplayFooter, d->scenesNumbersPrefix,
                             d->scenesNumberingStartAt }) {
         textField->setBackgroundColor(Ui::DesignSystem::color().onBackground());
         textField->setTextColor(Ui::DesignSystem::color().onBackground());
     }
-    for (auto checkBox : { d->screenplayPrintHeaderOnTitlePage,
-                            d->screenplayPrintFooterOnTitlePage }) {
+    for (auto checkBox :
+         { d->screenplayPrintHeaderOnTitlePage, d->screenplayPrintFooterOnTitlePage }) {
         checkBox->setBackgroundColor(Ui::DesignSystem::color().background());
         checkBox->setTextColor(Ui::DesignSystem::color().onBackground());
     }
-    d->screenplayInfoLayout->setVerticalSpacing(static_cast<int>(Ui::DesignSystem::layout().px16()));
-    d->screenplayInfoLayout->setRowMinimumHeight(0, static_cast<int>(Ui::DesignSystem::layout().px24()));
-    d->screenplayInfoLayout->setRowMinimumHeight(7, static_cast<int>(Ui::DesignSystem::layout().px24()));
+    d->screenplayInfoLayout->setVerticalSpacing(
+        static_cast<int>(Ui::DesignSystem::layout().px16()));
+    d->screenplayInfoLayout->setRowMinimumHeight(
+        0, static_cast<int>(Ui::DesignSystem::layout().px24()));
+    d->screenplayInfoLayout->setRowMinimumHeight(
+        7, static_cast<int>(Ui::DesignSystem::layout().px24()));
 }
 
 } // namespace Ui

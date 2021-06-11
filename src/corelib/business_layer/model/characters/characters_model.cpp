@@ -5,8 +5,7 @@
 #include <QDomDocument>
 
 
-namespace BusinessLayer
-{
+namespace BusinessLayer {
 
 class CharactersModel::Implementation
 {
@@ -19,8 +18,8 @@ public:
 
 
 CharactersModel::CharactersModel(QObject* _parent)
-    : AbstractModel({}, _parent),
-      d(new Implementation)
+    : AbstractModel({}, _parent)
+    , d(new Implementation)
 {
 }
 
@@ -84,10 +83,7 @@ bool CharactersModel::exists(const QString& _name) const
 
 QModelIndex CharactersModel::index(int _row, int _column, const QModelIndex& _parent) const
 {
-    if (_row < 0
-        || _row > rowCount(_parent)
-        || _column < 0
-        || _column > columnCount(_parent)
+    if (_row < 0 || _row > rowCount(_parent) || _column < 0 || _column > columnCount(_parent)
         || (_parent.isValid() && (_parent.column() != 0))) {
         return {};
     }
@@ -130,14 +126,14 @@ QVariant CharactersModel::data(const QModelIndex& _index, int _role) const
     }
 
     switch (_role) {
-        case Qt::DisplayRole:
-        case Qt::EditRole: {
-            return d->characterModels.at(_index.row())->name();
-        }
+    case Qt::DisplayRole:
+    case Qt::EditRole: {
+        return d->characterModels.at(_index.row())->name();
+    }
 
-        default: {
-            return {};
-        }
+    default: {
+        return {};
+    }
     }
 }
 

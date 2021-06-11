@@ -17,12 +17,11 @@ using BusinessLayer::ScreenplayParagraphType;
 using Ui::ScreenplayTextEdit;
 
 
-namespace KeyProcessingLayer
-{
+namespace KeyProcessingLayer {
 
 SceneHeadingHandler::SceneHeadingHandler(Ui::ScreenplayTextEdit* _editor)
-    : StandardKeyHandler(_editor),
-      m_completerModel(new QStringListModel(_editor))
+    : StandardKeyHandler(_editor)
+    , m_completerModel(new QStringListModel(_editor))
 {
 }
 
@@ -63,14 +62,14 @@ void SceneHeadingHandler::handleEnter(QKeyEvent* _event)
         // Дописать необходимые символы
         //
         switch (currentSection) {
-            case SceneHeadingParser::SectionSceneIntro: {
-                cursor.insertText(" ");
-                break;
-            }
+        case SceneHeadingParser::SectionSceneIntro: {
+            cursor.insertText(" ");
+            break;
+        }
 
-            default: {
-                break;
-            }
+        default: {
+            break;
+        }
         }
 
         //
@@ -107,14 +106,14 @@ void SceneHeadingHandler::handleEnter(QKeyEvent* _event)
         } else {
             //! Нет выделения
 
-            if (cursorBackwardText.isEmpty()
-                && cursorForwardText.isEmpty()) {
+            if (cursorBackwardText.isEmpty() && cursorForwardText.isEmpty()) {
                 //! Текст пуст
 
                 //
                 // Меняем в соответствии с настройками
                 //
-                editor()->setCurrentParagraphType(changeForEnter(ScreenplayParagraphType::SceneHeading));
+                editor()->setCurrentParagraphType(
+                    changeForEnter(ScreenplayParagraphType::SceneHeading));
             } else {
                 //! Текст не пуст
 
@@ -187,14 +186,14 @@ void SceneHeadingHandler::handleTab(QKeyEvent*)
         } else {
             //! Нет выделения
 
-            if (cursorBackwardText.isEmpty()
-                && cursorForwardText.isEmpty()) {
+            if (cursorBackwardText.isEmpty() && cursorForwardText.isEmpty()) {
                 //! Текст пуст
 
                 //
                 // Если строка пуста, то сменить стиль на описание действия
                 //
-                editor()->setCurrentParagraphType(changeForTab(ScreenplayParagraphType::SceneHeading));
+                editor()->setCurrentParagraphType(
+                    changeForTab(ScreenplayParagraphType::SceneHeading));
             } else {
                 //! Текст не пуст
 
@@ -210,7 +209,8 @@ void SceneHeadingHandler::handleTab(QKeyEvent*)
                     //
                     // Если в секции локации, то добавление " - " и отображение подсказки
                     //
-                    if (SceneHeadingParser::section(cursorBackwardText) == SceneHeadingParser::SectionLocation) {
+                    if (SceneHeadingParser::section(cursorBackwardText)
+                        == SceneHeadingParser::SectionLocation) {
                         //
                         // Добавим необходимый текст в зависимости от того, что ввёл пользователь
                         //
@@ -297,7 +297,8 @@ void SceneHeadingHandler::handleInput(QInputMethodEvent* _event)
     complete(currentBlockText, cursorBackwardText);
 }
 
-void SceneHeadingHandler::complete(const QString& _currentBlockText, const QString& _cursorBackwardText)
+void SceneHeadingHandler::complete(const QString& _currentBlockText,
+                                   const QString& _cursorBackwardText)
 {
     //
     // Текущая секция
@@ -314,61 +315,63 @@ void SceneHeadingHandler::complete(const QString& _currentBlockText, const QStri
     QString sectionText;
 
     switch (currentSection) {
-        case SceneHeadingParser::SectionSceneIntro: {
-            m_completerModel->setStringList(editor()->dictionaries()->sceneIntros().toList());
+    case SceneHeadingParser::SectionSceneIntro: {
+        m_completerModel->setStringList(editor()->dictionaries()->sceneIntros().toList());
+        sectionModel = m_completerModel;
+        sectionText = SceneHeadingParser::sceneIntro(_currentBlockText);
+        break;
+    }
+
+    case SceneHeadingParser::SectionLocation: {
+        sectionModel = editor()->locations();
+        sectionText = SceneHeadingParser::location(_currentBlockText);
+        break;
+    }
+
+    case SceneHeadingParser::SectionStoryDay: {
+        m_completerModel->setStringList(editor()->dictionaries()->storyDays().toList());
+        sectionModel = m_completerModel;
+        sectionText = SceneHeadingParser::storyDay(_currentBlockText);
+        break;
+    }
+
+    case SceneHeadingParser::SectionSceneTime: {
+        //
+        // Возможно пользователь предпочитает обозначать локации и подлокации через минус,
+        // поэтому проверяем нет ли уже сохранённых локаций такого рода, и если есть, и они
+        // подходят под дополнение, то используем их
+        //
+        bool useLocations = false;
+        const bool force = true;
+        const QString locationFromBlock = SceneHeadingParser::location(_currentBlockText, force);
+        const auto locationsModel = editor()->locations();
+        for (int locationRow = 0; locationRow < locationsModel->rowCount(); ++locationRow) {
+            const auto location
+                = locationsModel->data(locationsModel->index(locationRow, 0), Qt::DisplayRole)
+                      .toString();
+            if (location.startsWith(locationFromBlock, Qt::CaseInsensitive)) {
+                useLocations = true;
+                break;
+            }
+        }
+        if (useLocations) {
+            sectionModel = locationsModel;
+            sectionText = locationFromBlock;
+        }
+        //
+        // Во всех остальных случаях используем дополнение по времени действия
+        //
+        else {
+            m_completerModel->setStringList(editor()->dictionaries()->sceneTimes().toList());
             sectionModel = m_completerModel;
-            sectionText = SceneHeadingParser::sceneIntro(_currentBlockText);
-            break;
+            sectionText = SceneHeadingParser::sceneTime(_currentBlockText);
         }
+        break;
+    }
 
-        case SceneHeadingParser::SectionLocation: {
-            sectionModel = editor()->locations();
-            sectionText = SceneHeadingParser::location(_currentBlockText);
-            break;
-        }
-
-        case SceneHeadingParser::SectionStoryDay: {
-            m_completerModel->setStringList(editor()->dictionaries()->storyDays().toList());
-            sectionModel = m_completerModel;
-            sectionText = SceneHeadingParser::storyDay(_currentBlockText);
-            break;
-        }
-
-        case SceneHeadingParser::SectionSceneTime: {
-            //
-            // Возможно пользователь предпочитает обозначать локации и подлокации через минус,
-            // поэтому проверяем нет ли уже сохранённых локаций такого рода, и если есть, и они
-            // подходят под дополнение, то используем их
-            //
-            bool useLocations = false;
-            const bool force = true;
-            const QString locationFromBlock = SceneHeadingParser::location(_currentBlockText, force);
-            const auto locationsModel = editor()->locations();
-            for (int locationRow = 0; locationRow < locationsModel->rowCount(); ++locationRow) {
-                const auto location = locationsModel->data(locationsModel->index(locationRow, 0), Qt::DisplayRole).toString();
-                if (location.startsWith(locationFromBlock, Qt::CaseInsensitive)) {
-                    useLocations = true;
-                    break;
-                }
-            }
-            if (useLocations) {
-                sectionModel = locationsModel;
-                sectionText = locationFromBlock;
-            }
-            //
-            // Во всех остальных случаях используем дополнение по времени действия
-            //
-            else {
-                m_completerModel->setStringList(editor()->dictionaries()->sceneTimes().toList());
-                sectionModel = m_completerModel;
-                sectionText = SceneHeadingParser::sceneTime(_currentBlockText);
-            }
-            break;
-        }
-
-        default: {
-            break;
-        }
+    default: {
+        break;
+    }
     }
 
     //

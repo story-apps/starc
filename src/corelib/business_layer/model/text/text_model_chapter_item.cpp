@@ -4,7 +4,6 @@
 #include "text_model_xml.h"
 
 #include <business_layer/templates/text_template.h>
-
 #include <utils/helpers/text_helper.h>
 
 #include <QLocale>
@@ -15,8 +14,7 @@
 #include <optional>
 
 
-namespace BusinessLayer
-{
+namespace BusinessLayer {
 
 class TextModelChapterItem::Implementation
 {
@@ -81,15 +79,15 @@ bool TextModelChapterItem::Number::operator==(const TextModelChapterItem::Number
 }
 
 TextModelChapterItem::TextModelChapterItem()
-    : TextModelItem(TextModelItemType::Chapter),
-      d(new Implementation)
+    : TextModelItem(TextModelItemType::Chapter)
+    , d(new Implementation)
 {
     d->uuid = QUuid::createUuid();
 }
 
 TextModelChapterItem::TextModelChapterItem(QXmlStreamReader& _contentReader)
-    : TextModelItem(TextModelItemType::Chapter),
-      d(new Implementation)
+    : TextModelItem(TextModelItemType::Chapter)
+    , d(new Implementation)
 {
     Q_ASSERT(_contentReader.name() == xml::kChapterTag);
 
@@ -121,16 +119,14 @@ TextModelChapterItem::TextModelChapterItem(QXmlStreamReader& _contentReader)
             //
             // Проглатываем закрывающий контентный тэг
             //
-            if (currentTag == xml::kContentTag
-                && _contentReader.isEndElement()) {
+            if (currentTag == xml::kContentTag && _contentReader.isEndElement()) {
                 xml::readNextElement(_contentReader);
                 continue;
             }
             //
             // Если дошли до конца сцены, выходим из обработки
             //
-            else if (currentTag == xml::kChapterTag
-                && _contentReader.isEndElement()) {
+            else if (currentTag == xml::kChapterTag && _contentReader.isEndElement()) {
                 xml::readNextElement(_contentReader);
                 break;
             }
@@ -165,9 +161,8 @@ TextModelChapterItem::Number TextModelChapterItem::number() const
 void TextModelChapterItem::setNumber(int _number)
 {
     const auto newNumber = QString(QLocale().textDirection() == Qt::LeftToRight ? "%1." : ".%1")
-                           .arg(QString::number(_number));
-    if (d->number.has_value()
-        && d->number->value == newNumber) {
+                               .arg(QString::number(_number));
+    if (d->number.has_value() && d->number->value == newNumber) {
         return;
     }
 
@@ -197,40 +192,40 @@ int TextModelChapterItem::wordsCount() const
 QVariant TextModelChapterItem::data(int _role) const
 {
     switch (_role) {
-        case Qt::DecorationRole: {
-            return u8"\U000f021a";
-        }
+    case Qt::DecorationRole: {
+        return u8"\U000f021a";
+    }
 
-        case ChapterNumberRole: {
-            if (d->number.has_value()) {
-                return d->number->value;
-            }
-            return {};
+    case ChapterNumberRole: {
+        if (d->number.has_value()) {
+            return d->number->value;
         }
+        return {};
+    }
 
-        case ChapterHeadingRole: {
-            return d->heading;
-        }
+    case ChapterHeadingRole: {
+        return d->heading;
+    }
 
-        case ChapterTextRole: {
-            return d->text;
-        }
+    case ChapterTextRole: {
+        return d->text;
+    }
 
-        case ChapterInlineNotesSizeRole: {
-            return d->inlineNotesSize;
-        }
+    case ChapterInlineNotesSizeRole: {
+        return d->inlineNotesSize;
+    }
 
-        case ChapterReviewMarksSizeRole: {
-            return d->reviewMarksSize;
-        }
+    case ChapterReviewMarksSizeRole: {
+        return d->reviewMarksSize;
+    }
 
-        case ChapterWordsCountRole: {
-            return d->wordsCount;
-        }
+    case ChapterWordsCountRole: {
+        return d->wordsCount;
+    }
 
-        default: {
-            return TextModelItem::data(_role);
-        }
+    default: {
+        return TextModelItem::data(_role);
+    }
     }
 }
 
@@ -239,8 +234,8 @@ QByteArray TextModelChapterItem::toXml() const
     return toXml(nullptr, 0, nullptr, 0, false);
 }
 
-QByteArray TextModelChapterItem::toXml(TextModelItem* _from, int _fromPosition,
-    TextModelItem* _to, int _toPosition, bool _clearUuid) const
+QByteArray TextModelChapterItem::toXml(TextModelItem* _from, int _fromPosition, TextModelItem* _to,
+                                       int _toPosition, bool _clearUuid) const
 {
     QByteArray xml;
     xml += xmlHeader(_clearUuid);
@@ -284,15 +279,16 @@ QByteArray TextModelChapterItem::xmlHeader(bool _clearUuid) const
 {
     QByteArray xml;
     if (_clearUuid) {
-        xml += QString("<%1>\n")
-               .arg(xml::kChapterTag).toUtf8();
+        xml += QString("<%1>\n").arg(xml::kChapterTag).toUtf8();
     } else {
         xml += QString("<%1 %2=\"%3\">\n")
-               .arg(xml::kChapterTag,
-                    xml::kUuidAttribute, d->uuid.toString()).toUtf8();
+                   .arg(xml::kChapterTag, xml::kUuidAttribute, d->uuid.toString())
+                   .toUtf8();
     }
     if (!d->stamp.isEmpty()) {
-        xml += QString("<%1><![CDATA[%2]]></%1>\n").arg(xml::kStampTag, TextHelper::toHtmlEscaped(d->stamp)).toUtf8();
+        xml += QString("<%1><![CDATA[%2]]></%1>\n")
+                   .arg(xml::kStampTag, TextHelper::toHtmlEscaped(d->stamp))
+                   .toUtf8();
     }
     xml += QString("<%1>\n").arg(xml::kContentTag).toUtf8();
 
@@ -314,14 +310,12 @@ void TextModelChapterItem::copyFrom(TextModelItem* _item)
 
 bool TextModelChapterItem::isEqual(TextModelItem* _item) const
 {
-    if (_item == nullptr
-        || type() != _item->type()) {
+    if (_item == nullptr || type() != _item->type()) {
         return false;
     }
 
     const auto chapterItem = static_cast<TextModelChapterItem*>(_item);
-    return d->uuid == chapterItem->d->uuid
-            && d->stamp == chapterItem->d->stamp;
+    return d->uuid == chapterItem->d->uuid && d->stamp == chapterItem->d->stamp;
 }
 
 void TextModelChapterItem::handleChange()
@@ -335,52 +329,52 @@ void TextModelChapterItem::handleChange()
     for (int childIndex = 0; childIndex < childCount(); ++childIndex) {
         auto child = childAt(childIndex);
         switch (child->type()) {
-            case TextModelItemType::Chapter: {
-                auto childChapterItem = static_cast<TextModelChapterItem*>(child);
-                const int maxTextLength = 1000;
-                if (d->text.length() < maxTextLength) {
-                    d->text.append(childChapterItem->heading() + " " + childChapterItem->text());
-                } else if (d->text.length() > maxTextLength) {
-                    d->text = d->text.left(maxTextLength);
-                }
-                d->wordsCount += childChapterItem->wordsCount();
+        case TextModelItemType::Chapter: {
+            auto childChapterItem = static_cast<TextModelChapterItem*>(child);
+            const int maxTextLength = 1000;
+            if (d->text.length() < maxTextLength) {
+                d->text.append(childChapterItem->heading() + " " + childChapterItem->text());
+            } else if (d->text.length() > maxTextLength) {
+                d->text = d->text.left(maxTextLength);
+            }
+            d->wordsCount += childChapterItem->wordsCount();
+            break;
+        }
+
+        case TextModelItemType::Text: {
+            auto childTextItem = static_cast<TextModelTextItem*>(child);
+            switch (childTextItem->paragraphType()) {
+            case TextParagraphType::Heading1:
+            case TextParagraphType::Heading2:
+            case TextParagraphType::Heading3:
+            case TextParagraphType::Heading4:
+            case TextParagraphType::Heading5:
+            case TextParagraphType::Heading6: {
+                d->level = static_cast<int>(childTextItem->paragraphType());
+                d->heading = childTextItem->text();
+                d->wordsCount += childTextItem->text().count(' ') + 1;
                 break;
             }
 
-            case TextModelItemType::Text: {
-                auto childTextItem = static_cast<TextModelTextItem*>(child);
-                switch (childTextItem->paragraphType()) {
-                    case TextParagraphType::Heading1:
-                    case TextParagraphType::Heading2:
-                    case TextParagraphType::Heading3:
-                    case TextParagraphType::Heading4:
-                    case TextParagraphType::Heading5:
-                    case TextParagraphType::Heading6: {
-                        d->level = static_cast<int>(childTextItem->paragraphType());
-                        d->heading = childTextItem->text();
-                        d->wordsCount += childTextItem->text().count(' ') + 1;
-                        break;
-                    }
-
-                    case TextParagraphType::InlineNote: {
-                        ++d->inlineNotesSize;
-                        break;
-                    }
-
-                    default: {
-                        d->text.append(childTextItem->text() + " ");
-                        d->wordsCount += childTextItem->text().count(' ') + 1;
-                        d->reviewMarksSize += std::count_if(childTextItem->reviewMarks().begin(),
-                                                            childTextItem->reviewMarks().end(),
-                                                            [] (const TextModelTextItem::ReviewMark& _reviewMark) {
-                                                                return !_reviewMark.isDone;
-                                                            });
-                        break;
-                    }
-                }
-
+            case TextParagraphType::InlineNote: {
+                ++d->inlineNotesSize;
                 break;
             }
+
+            default: {
+                d->text.append(childTextItem->text() + " ");
+                d->wordsCount += childTextItem->text().count(' ') + 1;
+                d->reviewMarksSize += std::count_if(
+                    childTextItem->reviewMarks().begin(), childTextItem->reviewMarks().end(),
+                    [](const TextModelTextItem::ReviewMark& _reviewMark) {
+                        return !_reviewMark.isDone;
+                    });
+                break;
+            }
+            }
+
+            break;
+        }
         }
     }
 }

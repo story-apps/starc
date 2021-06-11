@@ -4,12 +4,11 @@
 #include <QObject>
 
 namespace Ui {
-    enum class ApplicationTheme;
+enum class ApplicationTheme;
 }
 
 
-namespace ManagementLayer
-{
+namespace ManagementLayer {
 
 /**
  * @brief Менеджер посадочного экрана

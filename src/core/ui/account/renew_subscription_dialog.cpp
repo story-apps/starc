@@ -1,7 +1,6 @@
 #include "renew_subscription_dialog.h"
 
 #include <ui/design_system/design_system.h>
-
 #include <ui/widgets/button/button.h>
 #include <ui/widgets/radio_button/radio_button.h>
 #include <ui/widgets/radio_button/radio_button_group.h>
@@ -32,17 +31,17 @@ public:
 };
 
 RenewSubscriptionDialog::Implementation::Implementation(QWidget* _parent)
-    : renew1Month(new RadioButton(_parent)),
-      renew2Month(new RadioButton(_parent)),
-      renew3Month(new RadioButton(_parent)),
-      renew6Month(new RadioButton(_parent)),
-      renew12Month(new RadioButton(_parent)),
-      paypal(new RadioButton(_parent)),
-      bankCard(new RadioButton(_parent)),
-      yandexMoney(new RadioButton(_parent)),
-      buttonsLayout(new QHBoxLayout),
-      renewButton(new Button(_parent)),
-      cancelButton(new Button(_parent))
+    : renew1Month(new RadioButton(_parent))
+    , renew2Month(new RadioButton(_parent))
+    , renew3Month(new RadioButton(_parent))
+    , renew6Month(new RadioButton(_parent))
+    , renew12Month(new RadioButton(_parent))
+    , paypal(new RadioButton(_parent))
+    , bankCard(new RadioButton(_parent))
+    , yandexMoney(new RadioButton(_parent))
+    , buttonsLayout(new QHBoxLayout)
+    , renewButton(new Button(_parent))
+    , cancelButton(new Button(_parent))
 {
     renew1Month->setChecked(true);
     paypal->setChecked(true);
@@ -77,8 +76,8 @@ RenewSubscriptionDialog::Implementation::Implementation(QWidget* _parent)
 
 
 RenewSubscriptionDialog::RenewSubscriptionDialog(QWidget* _parent)
-    : AbstractDialog(_parent),
-      d(new Implementation(this))
+    : AbstractDialog(_parent)
+    , d(new Implementation(this))
 {
     contentsLayout()->addWidget(d->renew1Month, 0, 0);
     contentsLayout()->addWidget(d->renew2Month, 1, 0);
@@ -139,11 +138,11 @@ QWidget* RenewSubscriptionDialog::lastFocusableWidget() const
 void RenewSubscriptionDialog::updateTranslations()
 {
     setTitle(tr("Renew cloud service subscription for"));
-//    d->renew1Month->setText(tr("1 month by $3.99"));
-//    d->renew2Month->setText(tr("2 month by $7.99"));
-//    d->renew3Month->setText(tr("3 month by $11.99"));
-//    d->renew6Month->setText(tr("6 month by $21.99"));
-//    d->renew12Month->setText(tr("12 month by $41.99"));
+    //    d->renew1Month->setText(tr("1 month by $3.99"));
+    //    d->renew2Month->setText(tr("2 month by $7.99"));
+    //    d->renew3Month->setText(tr("3 month by $11.99"));
+    //    d->renew6Month->setText(tr("6 month by $21.99"));
+    //    d->renew12Month->setText(tr("12 month by $41.99"));
     d->paypal->setText(tr("via PayPal"));
     d->bankCard->setText(tr("via bank card"));
     d->yandexMoney->setText(tr("via Yandex.Money"));
@@ -155,8 +154,8 @@ void RenewSubscriptionDialog::designSystemChangeEvent(DesignSystemChangeEvent* _
 {
     AbstractDialog::designSystemChangeEvent(_event);
 
-    for (auto radioButton : { d->renew1Month, d->renew2Month, d->renew3Month, d->renew6Month, d->renew12Month,
-                              d->paypal, d->bankCard, d->yandexMoney }) {
+    for (auto radioButton : { d->renew1Month, d->renew2Month, d->renew3Month, d->renew6Month,
+                              d->renew12Month, d->paypal, d->bankCard, d->yandexMoney }) {
         radioButton->setBackgroundColor(Ui::DesignSystem::color().background());
         radioButton->setTextColor(Ui::DesignSystem::color().onBackground());
     }
@@ -171,10 +170,10 @@ void RenewSubscriptionDialog::designSystemChangeEvent(DesignSystemChangeEvent* _
     }
 
     contentsLayout()->setSpacing(static_cast<int>(Ui::DesignSystem::layout().px8()));
-    d->buttonsLayout->setContentsMargins(QMarginsF(Ui::DesignSystem::layout().px12(),
-                                                   Ui::DesignSystem::layout().px12(),
-                                                   Ui::DesignSystem::layout().px16(),
-                                                   Ui::DesignSystem::layout().px8()).toMargins());
+    d->buttonsLayout->setContentsMargins(
+        QMarginsF(Ui::DesignSystem::layout().px12(), Ui::DesignSystem::layout().px12(),
+                  Ui::DesignSystem::layout().px16(), Ui::DesignSystem::layout().px8())
+            .toMargins());
 }
 
 } // namespace Ui

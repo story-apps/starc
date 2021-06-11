@@ -3,17 +3,16 @@
 #include <ui/widgets/text_edit/base/base_text_edit.h>
 
 namespace BusinessLayer {
-    class CharactersModel;
-    class LocationsModel;
-    class ScreenplayDictionariesModel;
-    class ScreenplayTextCursor;
-    class ScreenplayTextModel;
-    enum class ScreenplayParagraphType;
-}
+class CharactersModel;
+class LocationsModel;
+class ScreenplayDictionariesModel;
+class ScreenplayTextCursor;
+class ScreenplayTextModel;
+enum class ScreenplayParagraphType;
+} // namespace BusinessLayer
 
 
-namespace Ui
-{
+namespace Ui {
 
 /**
  * @brief Текстовый редактор сценария
@@ -112,7 +111,8 @@ public:
     /**
      * @brief Добавить редакторскую заметку для текущего выделения
      */
-    void addReviewMark(const QColor& _textColor, const QColor& _backgroundColor, const QString& _comment);
+    void addReviewMark(const QColor& _textColor, const QColor& _backgroundColor,
+                       const QString& _comment);
 
 signals:
     /**

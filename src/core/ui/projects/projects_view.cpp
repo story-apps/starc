@@ -12,8 +12,7 @@
 #include <QVBoxLayout>
 
 
-namespace Ui
-{
+namespace Ui {
 
 class ProjectsView::Implementation
 {
@@ -59,10 +58,10 @@ public:
 };
 
 ProjectsView::Implementation::Implementation(ProjectsView* _parent)
-    : q(_parent),
-      toolBar(new FloatingToolBar(_parent)),
-      emptyPage(new Widget(_parent)),
-      projectsPage(new ProjectsCards(_parent))
+    : q(_parent)
+    , toolBar(new FloatingToolBar(_parent))
+    , emptyPage(new Widget(_parent))
+    , projectsPage(new ProjectsCards(_parent))
 {
     initEmptyPage();
     initProjectsPage();
@@ -118,9 +117,10 @@ void ProjectsView::Implementation::updateToolBarsUi()
 void ProjectsView::Implementation::updateToolBarsPositon()
 {
     toolBar->move(QPointF(q->isLeftToRight()
-                          ? Ui::DesignSystem::layout().px24()
-                          : q->width() - toolBar->width() - Ui::DesignSystem::layout().px24(),
-                          Ui::DesignSystem::layout().px24()).toPoint());
+                              ? Ui::DesignSystem::layout().px24()
+                              : q->width() - toolBar->width() - Ui::DesignSystem::layout().px24(),
+                          Ui::DesignSystem::layout().px24())
+                      .toPoint());
 }
 
 
@@ -128,8 +128,8 @@ void ProjectsView::Implementation::updateToolBarsPositon()
 
 
 ProjectsView::ProjectsView(QWidget* _parent)
-    : StackWidget(_parent),
-      d(new Implementation(this))
+    : StackWidget(_parent)
+    , d(new Implementation(this))
 {
     QAction* createProjectAction = new QAction;
     createProjectAction->setIconText(u8"\U000f0415");
@@ -140,15 +140,21 @@ ProjectsView::ProjectsView(QWidget* _parent)
     d->toolBar->addAction(openProjectAction);
     connect(openProjectAction, &QAction::triggered, this, &ProjectsView::openProjectPressed);
 
-    connect(d->emptyPageCreateProjectButton, &Button::clicked, this, &ProjectsView::createProjectPressed);
+    connect(d->emptyPageCreateProjectButton, &Button::clicked, this,
+            &ProjectsView::createProjectPressed);
 
     connect(d->projectsPage, &ProjectsCards::hideRequested, this, &ProjectsView::showEmptyPage);
     connect(d->projectsPage, &ProjectsCards::showRequested, this, &ProjectsView::showProjectsPage);
-    connect(d->projectsPage, &ProjectsCards::openProjectRequested, this, &ProjectsView::openProjectRequested);
-    connect(d->projectsPage, &ProjectsCards::moveProjectToCloudRequested, this, &ProjectsView::moveProjectToCloudRequested);
-    connect(d->projectsPage, &ProjectsCards::hideProjectRequested, this, &ProjectsView::hideProjectRequested);
-    connect(d->projectsPage, &ProjectsCards::changeProjectNameRequested, this, &ProjectsView::changeProjectNameRequested);
-    connect(d->projectsPage, &ProjectsCards::removeProjectRequested, this, &ProjectsView::removeProjectRequested);
+    connect(d->projectsPage, &ProjectsCards::openProjectRequested, this,
+            &ProjectsView::openProjectRequested);
+    connect(d->projectsPage, &ProjectsCards::moveProjectToCloudRequested, this,
+            &ProjectsView::moveProjectToCloudRequested);
+    connect(d->projectsPage, &ProjectsCards::hideProjectRequested, this,
+            &ProjectsView::hideProjectRequested);
+    connect(d->projectsPage, &ProjectsCards::changeProjectNameRequested, this,
+            &ProjectsView::changeProjectNameRequested);
+    connect(d->projectsPage, &ProjectsCards::removeProjectRequested, this,
+            &ProjectsView::removeProjectRequested);
 
     showEmptyPage();
 

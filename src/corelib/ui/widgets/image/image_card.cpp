@@ -4,12 +4,9 @@
 
 #include <ui/design_system/design_system.h>
 #include <ui/widgets/context_menu/context_menu.h>
-
 #include <utils/helpers/color_helper.h>
 #include <utils/helpers/image_helper.h>
 #include <utils/helpers/text_helper.h>
-
-#include <NetworkRequestLoader.h>
 
 #include <QAction>
 #include <QApplication>
@@ -19,6 +16,8 @@
 #include <QPainter>
 #include <QResizeEvent>
 #include <QVariantAnimation>
+
+#include <NetworkRequestLoader.h>
 
 
 class ImageCard::Implementation
@@ -72,12 +71,12 @@ public:
 };
 
 ImageCard::Implementation::Implementation(ImageCard* _parent)
-    : q(_parent),
-      contextMenu(new ContextMenu(_parent)),
-      changeImageAction(new QAction(contextMenu)),
-      clearImageAction(new QAction(contextMenu)),
-      copyImageAction(new QAction(contextMenu)),
-      pasteImageAction(new QAction(contextMenu))
+    : q(_parent)
+    , contextMenu(new ContextMenu(_parent))
+    , changeImageAction(new QAction(contextMenu))
+    , clearImageAction(new QAction(contextMenu))
+    , copyImageAction(new QAction(contextMenu))
+    , pasteImageAction(new QAction(contextMenu))
 {
     dragIndicationOpacityAnimation.setStartValue(0.0);
     dragIndicationOpacityAnimation.setEndValue(1.0);
@@ -86,7 +85,8 @@ ImageCard::Implementation::Implementation(ImageCard* _parent)
     decorationColorAnimation.setDuration(240);
     decorationColorAnimation.setEasingCurve(QEasingCurve::OutQuad);
 
-    contextMenu->setActions({ changeImageAction, clearImageAction, copyImageAction, pasteImageAction });
+    contextMenu->setActions(
+        { changeImageAction, clearImageAction, copyImageAction, pasteImageAction });
 }
 
 void ImageCard::Implementation::prepareImageForDisplaing(const QSize& _size)
@@ -98,20 +98,23 @@ void ImageCard::Implementation::prepareImageForDisplaing(const QSize& _size)
     //
     // Добавляем небольшую дельту, чтобы постер занимал всё доступное пространство
     //
-    const auto sizeCorrected = QRect({}, _size)
-                               .marginsRemoved(Ui::DesignSystem::card().shadowMargins().toMargins()).size();
+    const auto sizeCorrected
+        = QRect({}, _size)
+              .marginsRemoved(Ui::DesignSystem::card().shadowMargins().toMargins())
+              .size();
     if (image.display.size() == sizeCorrected) {
         return;
     }
 
-    image.display = image.source.scaled(sizeCorrected, Qt::KeepAspectRatioByExpanding, Qt::SmoothTransformation);
+    image.display = image.source.scaled(sizeCorrected, Qt::KeepAspectRatioByExpanding,
+                                        Qt::SmoothTransformation);
 }
 
 void ImageCard::Implementation::chooseImageFromFile()
 {
-    const QString imagePath
-            = QFileDialog::getOpenFileName(q->window(), tr("Choose image"), {},
-                                           QString("%1 (*.png *.jpeg *.jpg *.bmp *.tiff *.tif *.gif)").arg(tr("Images")));
+    const QString imagePath = QFileDialog::getOpenFileName(
+        q->window(), tr("Choose image"), {},
+        QString("%1 (*.png *.jpeg *.jpg *.bmp *.tiff *.tif *.gif)").arg(tr("Images")));
     if (imagePath.isEmpty()) {
         return;
     }
@@ -149,14 +152,14 @@ void ImageCard::Implementation::prepareContextMenu()
 
 
 ImageCard::ImageCard(QWidget* _parent)
-    : Card(_parent),
-      d(new Implementation(this))
+    : Card(_parent)
+    , d(new Implementation(this))
 {
     setAcceptDrops(true);
     setAttribute(Qt::WA_Hover);
     setContextMenuPolicy(Qt::CustomContextMenu);
 
-    connect(this, &ImageCard::customContextMenuRequested, this, [this] (const QPoint& _pos) {
+    connect(this, &ImageCard::customContextMenuRequested, this, [this](const QPoint& _pos) {
         //
         // Настроим контекстное меню
         //
@@ -174,17 +177,18 @@ ImageCard::ImageCard(QWidget* _parent)
     });
     connect(d->changeImageAction, &QAction::triggered, this, [this] { d->chooseImageFromFile(); });
     connect(d->clearImageAction, &QAction::triggered, this, [this] { setImage({}); });
-    connect(d->copyImageAction, &QAction::triggered, this, [this] {
-        QApplication::clipboard()->setPixmap(d->image.source);
-    });
+    connect(d->copyImageAction, &QAction::triggered, this,
+            [this] { QApplication::clipboard()->setPixmap(d->image.source); });
     connect(d->pasteImageAction, &QAction::triggered, this, [this] {
         const auto image = QApplication::clipboard()->pixmap();
         if (!image.isNull()) {
             d->cropImage(image);
         }
     });
-    connect(&d->dragIndicationOpacityAnimation, &QVariantAnimation::valueChanged, this, qOverload<>(&ImageCard::update));
-    connect(&d->decorationColorAnimation, &QVariantAnimation::valueChanged, this, qOverload<>(&ImageCard::update));
+    connect(&d->dragIndicationOpacityAnimation, &QVariantAnimation::valueChanged, this,
+            qOverload<>(&ImageCard::update));
+    connect(&d->decorationColorAnimation, &QVariantAnimation::valueChanged, this,
+            qOverload<>(&ImageCard::update));
 
     updateTranslations();
     designSystemChangeEvent(nullptr);
@@ -255,22 +259,21 @@ void ImageCard::paintEvent(QPaintEvent* _event)
     //
     if (d->image.display.isNull()) {
         const auto decorationColor = d->decorationColorAnimation.currentValue().isValid()
-                                     ? d->decorationColorAnimation.currentValue().value<QColor>()
-                                     : d->decorationColorAnimation.startValue().value<QColor>();
+            ? d->decorationColorAnimation.currentValue().value<QColor>()
+            : d->decorationColorAnimation.startValue().value<QColor>();
         painter.setPen(decorationColor);
         painter.setBrush(Qt::NoBrush);
         auto iconFont = Ui::DesignSystem::font().iconsForEditors();
-        iconFont.setPixelSize(Ui::DesignSystem::scaleFactor() * Ui::DesignSystem::layout().px48() * 2);
+        iconFont.setPixelSize(Ui::DesignSystem::scaleFactor() * Ui::DesignSystem::layout().px48()
+                              * 2);
         const auto iconHeight = TextHelper::fineLineSpacing(iconFont);
         const auto textHeight = TextHelper::fineLineSpacing(Ui::DesignSystem::font().button());
         const auto decorationHeight = iconHeight + textHeight;
-        const auto iconRect = QRectF(0.0, (height() - decorationHeight) / 2.0,
-                                     width(), iconHeight);
+        const auto iconRect = QRectF(0.0, (height() - decorationHeight) / 2.0, width(), iconHeight);
         painter.setFont(iconFont);
         painter.drawText(iconRect, Qt::AlignCenter, d->decorationIcon);
         //
-        const auto textRect = QRectF(0.0, iconRect.bottom(),
-                                     width(), textHeight);
+        const auto textRect = QRectF(0.0, iconRect.bottom(), width(), textHeight);
         painter.setFont(Ui::DesignSystem::font().button());
         painter.drawText(textRect, Qt::AlignHCenter, d->decorationText);
     }
@@ -278,7 +281,8 @@ void ImageCard::paintEvent(QPaintEvent* _event)
     // Если задано изображение, то рисуем его
     //
     else {
-        const auto imageRect = rect().marginsRemoved(Ui::DesignSystem::card().shadowMargins().toMargins());
+        const auto imageRect
+            = rect().marginsRemoved(Ui::DesignSystem::card().shadowMargins().toMargins());
         const auto borderRadius = Ui::DesignSystem::card().borderRadius();
         ImageHelper::drawRoundedImage(painter, imageRect, d->image.display, borderRadius);
     }
@@ -292,18 +296,19 @@ void ImageCard::paintEvent(QPaintEvent* _event)
         //
         painter.setPen(Qt::NoPen);
         painter.setBrush(Ui::DesignSystem::color().secondary());
-        const auto cardRect = rect().marginsRemoved(Ui::DesignSystem::card().shadowMargins().toMargins());
+        const auto cardRect
+            = rect().marginsRemoved(Ui::DesignSystem::card().shadowMargins().toMargins());
         const auto borderRadius = Ui::DesignSystem::card().borderRadius();
         painter.drawRoundedRect(cardRect, borderRadius, borderRadius);
         //
         painter.setPen(Ui::DesignSystem::color().onSecondary());
         painter.setBrush(Qt::NoBrush);
         auto iconFont = Ui::DesignSystem::font().iconsForEditors();
-        iconFont.setPixelSize(Ui::DesignSystem::scaleFactor() * Ui::DesignSystem::layout().px48() * 2);
+        iconFont.setPixelSize(Ui::DesignSystem::scaleFactor() * Ui::DesignSystem::layout().px48()
+                              * 2);
         const auto icon = u8"\U000F01DA";
         const auto iconHeight = QFontMetricsF(iconFont).boundingRect(icon).height();
-        const auto iconRect = QRectF(0.0, (height() - iconHeight) / 2.0,
-                                     width(), iconHeight);
+        const auto iconRect = QRectF(0.0, (height() - iconHeight) / 2.0, width(), iconHeight);
         painter.setFont(iconFont);
         painter.drawText(iconRect, Qt::AlignCenter, icon);
         //
@@ -368,7 +373,7 @@ void ImageCard::dragLeaveEvent(QDragLeaveEvent* _event)
 void ImageCard::dropEvent(QDropEvent* _event)
 {
     QPixmap droppedImage;
-    const QMimeData *mimeData = _event->mimeData();
+    const QMimeData* mimeData = _event->mimeData();
     //
     // Первым делом проверяем список ссылок, возможно выбраны сразу несколько фотогафий
     //
@@ -378,12 +383,9 @@ void ImageCard::dropEvent(QDropEvent* _event)
             // Обрабатываем только изображения
             //
             const QString urlString = url.toString().toLower();
-            if (urlString.contains(".png")
-                || urlString.contains(".jpg")
-                || urlString.contains(".jpeg")
-                || urlString.contains(".gif")
-                || urlString.contains(".tiff")
-                || urlString.contains(".bmp")) {
+            if (urlString.contains(".png") || urlString.contains(".jpg")
+                || urlString.contains(".jpeg") || urlString.contains(".gif")
+                || urlString.contains(".tiff") || urlString.contains(".bmp")) {
                 //
                 // ... локальные считываем из файла
                 //
@@ -426,10 +428,8 @@ void ImageCard::designSystemChangeEvent(DesignSystemChangeEvent* _event)
 {
     Card::designSystemChangeEvent(_event);
 
-    d->decorationColorAnimation.setStartValue(
-                ColorHelper::transparent(
-                    Ui::DesignSystem::color().onBackground(),
-                    Ui::DesignSystem::disabledTextOpacity()));
+    d->decorationColorAnimation.setStartValue(ColorHelper::transparent(
+        Ui::DesignSystem::color().onBackground(), Ui::DesignSystem::disabledTextOpacity()));
     d->decorationColorAnimation.setEndValue(Ui::DesignSystem::color().secondary());
 
     d->contextMenu->setBackgroundColor(Ui::DesignSystem::color().background());

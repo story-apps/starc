@@ -3,8 +3,7 @@
 #include <QObject>
 
 
-namespace ManagementLayer
-{
+namespace ManagementLayer {
 
 class Project;
 
@@ -103,7 +102,7 @@ signals:
      * @brief Пользователь хочет создать локальный проект
      */
     void createLocalProjectRequested(const QString& _projectName, const QString& _projectFilePath,
-        const QString& _importFilePath);
+                                     const QString& _importFilePath);
 
     /**
      * @brief Пользователь хочет создать проект в облаке

@@ -4,7 +4,7 @@
 
 class QString;
 
-template <typename T>
+template<typename T>
 class QVector;
 
 namespace BusinessLayer {
@@ -12,8 +12,7 @@ enum class TextParagraphType;
 }
 
 
-namespace KeyProcessingLayer
-{
+namespace KeyProcessingLayer {
 
 /**
  * @brief Реализация стандартного обработчика
@@ -29,9 +28,12 @@ protected:
      */
     /** @{ */
     static BusinessLayer::TextParagraphType jumpForTab(BusinessLayer::TextParagraphType _blockType);
-    static BusinessLayer::TextParagraphType jumpForEnter(BusinessLayer::TextParagraphType _blockType);
-    static BusinessLayer::TextParagraphType changeForTab(BusinessLayer::TextParagraphType _blockType);
-    static BusinessLayer::TextParagraphType changeForEnter(BusinessLayer::TextParagraphType _blockType);
+    static BusinessLayer::TextParagraphType jumpForEnter(
+        BusinessLayer::TextParagraphType _blockType);
+    static BusinessLayer::TextParagraphType changeForTab(
+        BusinessLayer::TextParagraphType _blockType);
+    static BusinessLayer::TextParagraphType changeForEnter(
+        BusinessLayer::TextParagraphType _blockType);
     /** @} */
 
     /**

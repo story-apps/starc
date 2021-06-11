@@ -7,8 +7,7 @@
 #include <QVBoxLayout>
 
 
-namespace Ui
-{
+namespace Ui {
 
 class ProjectView::Implementation
 {
@@ -26,13 +25,13 @@ public:
 };
 
 ProjectView::Implementation::Implementation(QWidget* _parent)
-    : defaultPage(new Widget(_parent)),
-      defaultPageTitleLabel(new H6Label(defaultPage)),
-      defaultPageBodyLabel(new Body1Label(defaultPage)),
-      defaultPageAddItemButton(new Body1LinkLabel(defaultPage)),
-      notImplementedPage(new Widget(_parent)),
-      notImplementedPageTitleLabel(new H6Label(notImplementedPage)),
-      notImplementedPageBodyLabel(new Body1Label(notImplementedPage))
+    : defaultPage(new Widget(_parent))
+    , defaultPageTitleLabel(new H6Label(defaultPage))
+    , defaultPageBodyLabel(new Body1Label(defaultPage))
+    , defaultPageAddItemButton(new Body1LinkLabel(defaultPage))
+    , notImplementedPage(new Widget(_parent))
+    , notImplementedPageTitleLabel(new H6Label(notImplementedPage))
+    , notImplementedPageBodyLabel(new Body1Label(notImplementedPage))
 {
     defaultPageBodyLabel->setAlignment(Qt::AlignCenter);
     notImplementedPageBodyLabel->setAlignment(Qt::AlignCenter);
@@ -76,8 +75,8 @@ ProjectView::Implementation::Implementation(QWidget* _parent)
 
 
 ProjectView::ProjectView(QWidget* _parent)
-    : StackWidget(_parent),
-      d(new Implementation(this))
+    : StackWidget(_parent)
+    , d(new Implementation(this))
 {
     setAnimationType(AnimationType::FadeThrough);
 
@@ -86,7 +85,8 @@ ProjectView::ProjectView(QWidget* _parent)
 
     showDefaultPage();
 
-    connect(d->defaultPageAddItemButton, &Body1LinkLabel::clicked, this, &ProjectView::createNewItemPressed);
+    connect(d->defaultPageAddItemButton, &Body1LinkLabel::clicked, this,
+            &ProjectView::createNewItemPressed);
 
     designSystemChangeEvent(nullptr);
 }
@@ -105,12 +105,15 @@ void ProjectView::showNotImplementedPage()
 
 void ProjectView::updateTranslations()
 {
-    d->defaultPageTitleLabel->setText(tr("Here will be an editor of the document you choose in the navigator (at left)."));
+    d->defaultPageTitleLabel->setText(
+        tr("Here will be an editor of the document you choose in the navigator (at left)."));
     d->defaultPageBodyLabel->setText(tr("Choose an item to edit, or"));
     d->defaultPageAddItemButton->setText(tr("create a new one"));
 
-    d->notImplementedPageTitleLabel->setText(tr("Ooops... looks like editor of this document not implemented yet."));
-    d->notImplementedPageBodyLabel->setText(tr("But don't worry, it will be here in one of the future updates!"));
+    d->notImplementedPageTitleLabel->setText(
+        tr("Ooops... looks like editor of this document not implemented yet."));
+    d->notImplementedPageBodyLabel->setText(
+        tr("But don't worry, it will be here in one of the future updates!"));
 }
 
 void ProjectView::designSystemChangeEvent(DesignSystemChangeEvent* _event)
@@ -120,21 +123,24 @@ void ProjectView::designSystemChangeEvent(DesignSystemChangeEvent* _event)
     setBackgroundColor(Ui::DesignSystem::color().surface());
 
     d->defaultPage->setBackgroundColor(Ui::DesignSystem::color().surface());
-    d->defaultPageBodyLabel->setContentsMargins(0, static_cast<int>(Ui::DesignSystem::layout().px16()),
-                                                static_cast<int>(Ui::DesignSystem::layout().px4()), 0);
+    d->defaultPageBodyLabel->setContentsMargins(
+        0, static_cast<int>(Ui::DesignSystem::layout().px16()),
+        static_cast<int>(Ui::DesignSystem::layout().px4()), 0);
     for (auto label : QVector<Widget*>{ d->defaultPageTitleLabel, d->defaultPageBodyLabel }) {
         label->setBackgroundColor(Ui::DesignSystem::color().surface());
         label->setTextColor(Ui::DesignSystem::color().onSurface());
     }
-    d->defaultPageAddItemButton->setContentsMargins(0, static_cast<int>(Ui::DesignSystem::layout().px16()),
-                                                    0, 0);
+    d->defaultPageAddItemButton->setContentsMargins(
+        0, static_cast<int>(Ui::DesignSystem::layout().px16()), 0, 0);
     d->defaultPageAddItemButton->setBackgroundColor(Ui::DesignSystem::color().surface());
     d->defaultPageAddItemButton->setTextColor(Ui::DesignSystem::color().secondary());
 
     d->notImplementedPage->setBackgroundColor(Ui::DesignSystem::color().surface());
-    d->notImplementedPageBodyLabel->setContentsMargins(0, static_cast<int>(Ui::DesignSystem::layout().px16()),
-                                                static_cast<int>(Ui::DesignSystem::layout().px4()), 0);
-    for (auto label : QVector<Widget*>{ d->notImplementedPageTitleLabel, d->notImplementedPageBodyLabel }) {
+    d->notImplementedPageBodyLabel->setContentsMargins(
+        0, static_cast<int>(Ui::DesignSystem::layout().px16()),
+        static_cast<int>(Ui::DesignSystem::layout().px4()), 0);
+    for (auto label :
+         QVector<Widget*>{ d->notImplementedPageTitleLabel, d->notImplementedPageBodyLabel }) {
         label->setBackgroundColor(Ui::DesignSystem::color().surface());
         label->setTextColor(Ui::DesignSystem::color().onSurface());
     }

@@ -7,8 +7,7 @@ namespace Domain {
 enum class DocumentObjectType;
 }
 
-namespace BusinessLayer
-{
+namespace BusinessLayer {
 
 class StructureModelItem;
 
@@ -16,9 +15,7 @@ class StructureModelItem;
 /**
  * @brief Список ролей дополнительных данных для навигатора
  */
-enum class StructureModelDataRole {
-    IsNavigatorAvailable = Qt::UserRole + 1
-};
+enum class StructureModelDataRole { IsNavigatorAvailable = Qt::UserRole + 1 };
 
 
 /**
@@ -41,7 +38,7 @@ public:
      * @brief Добавить документ
      */
     QModelIndex addDocument(Domain::DocumentObjectType _type, const QString& _name = {},
-        const QModelIndex& _parent = {}, const QByteArray& _content = {});
+                            const QModelIndex& _parent = {}, const QByteArray& _content = {});
 
     /**
      * @brief Добавить элемент в начало
@@ -51,7 +48,8 @@ public:
     /**
      * @brief Добавить элемент в конец
      */
-    void appendItem(StructureModelItem* _item, StructureModelItem* _parentItem = nullptr, const QByteArray& _content = {});
+    void appendItem(StructureModelItem* _item, StructureModelItem* _parentItem = nullptr,
+                    const QByteArray& _content = {});
 
     /**
      * @brief Вставить элемент после родственика
@@ -79,13 +77,15 @@ public:
     /** @{ */
     QModelIndex index(int _row, int _column, const QModelIndex& _parent = {}) const override;
     QModelIndex parent(const QModelIndex& _child) const override;
-    int columnCount( const QModelIndex& _parent = {}) const override;
+    int columnCount(const QModelIndex& _parent = {}) const override;
     int rowCount(const QModelIndex& _parent = {}) const override;
     Qt::ItemFlags flags(const QModelIndex& _index) const override;
     QVariant data(const QModelIndex& _index, int _role) const override;
     //! Реализация перетаскивания элементов
-    bool canDropMimeData(const QMimeData* _data, Qt::DropAction _action, int _row, int _column, const QModelIndex& _parent = {}) const override;
-    bool dropMimeData(const QMimeData* _data, Qt::DropAction _action, int _row, int _column, const QModelIndex& _parent = {}) override;
+    bool canDropMimeData(const QMimeData* _data, Qt::DropAction _action, int _row, int _column,
+                         const QModelIndex& _parent = {}) const override;
+    bool dropMimeData(const QMimeData* _data, Qt::DropAction _action, int _row, int _column,
+                      const QModelIndex& _parent = {}) override;
     QMimeData* mimeData(const QModelIndexList& _indexes) const override;
     QStringList mimeTypes() const override;
     Qt::DropActions supportedDragActions() const override;
@@ -133,7 +133,8 @@ signals:
      * @brief Был добавлен документ с заданным идентификатором, типом и содержимым
      */
     void documentAdded(const QUuid& _uuid, const QUuid& _parentUuid,
-        Domain::DocumentObjectType _type, const QString& _name, const QByteArray& _content);
+                       Domain::DocumentObjectType _type, const QString& _name,
+                       const QByteArray& _content);
 
 protected:
     /**

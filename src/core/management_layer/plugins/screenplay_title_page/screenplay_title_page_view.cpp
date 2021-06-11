@@ -5,17 +5,14 @@
 
 #include <business_layer/document/text/text_block_data.h>
 #include <business_layer/document/text/text_cursor.h>
-#include <business_layer/templates/text_template.h>
 #include <business_layer/templates/templates_facade.h>
-
+#include <business_layer/templates/text_template.h>
 #include <data_layer/storage/settings_storage.h>
 #include <data_layer/storage/storage_facade.h>
-
 #include <ui/design_system/design_system.h>
 #include <ui/widgets/floating_tool_bar/floating_toolbar_animator.h>
 #include <ui/widgets/scroll_bar/scroll_bar.h>
 #include <ui/widgets/text_edit/scalable_wrapper/scalable_wrapper.h>
-
 #include <utils/helpers/text_helper.h>
 
 #include <QStandardItem>
@@ -23,18 +20,17 @@
 #include <QVBoxLayout>
 
 
-namespace Ui
-{
+namespace Ui {
 
 namespace {
-    const int kTypeDataRole = Qt::UserRole + 100;
+const int kTypeDataRole = Qt::UserRole + 100;
 
-    const QString kSettingsKey = "simple-text";
-    const QString kScaleFactorKey = kSettingsKey + "/scale-factor";
-    const QString kSidebarStateKey = kSettingsKey + "/sidebar-state";
-    const QString kIsFastFormatPanelVisibleKey = kSettingsKey + "/is-fast-format-panel-visible";
-    const QString kIsCommentsModeEnabledKey = kSettingsKey + "/is-comments-mode-enabled";
-}
+const QString kSettingsKey = "simple-text";
+const QString kScaleFactorKey = kSettingsKey + "/scale-factor";
+const QString kSidebarStateKey = kSettingsKey + "/sidebar-state";
+const QString kIsFastFormatPanelVisibleKey = kSettingsKey + "/is-fast-format-panel-visible";
+const QString kIsCommentsModeEnabledKey = kSettingsKey + "/is-comments-mode-enabled";
+} // namespace
 
 class ScreenplayTitlePageView::Implementation
 {
@@ -58,14 +54,15 @@ public:
     ScreenplayTitlePageEditToolbar* toolbar = nullptr;
     FloatingToolbarAnimator* toolbarAnimation = nullptr;
     QHash<BusinessLayer::TextParagraphType, QString> typesToDisplayNames;
-    BusinessLayer::TextParagraphType currentParagraphType = BusinessLayer::TextParagraphType::Undefined;
+    BusinessLayer::TextParagraphType currentParagraphType
+        = BusinessLayer::TextParagraphType::Undefined;
 };
 
 ScreenplayTitlePageView::Implementation::Implementation(QWidget* _parent)
-    : textEdit(new ScreenplayTitlePageEdit(_parent)),
-      scalableWrapper(new ScalableWrapper(textEdit, _parent)),
-      toolbar(new ScreenplayTitlePageEditToolbar(scalableWrapper)),
-      toolbarAnimation(new FloatingToolbarAnimator(_parent))
+    : textEdit(new ScreenplayTitlePageEdit(_parent))
+    , scalableWrapper(new ScalableWrapper(textEdit, _parent))
+    , toolbar(new ScreenplayTitlePageEditToolbar(scalableWrapper))
+    , toolbarAnimation(new FloatingToolbarAnimator(_parent))
 {
     textEdit->setVerticalScrollBar(new ScrollBar);
     textEdit->setHorizontalScrollBar(new ScrollBar);
@@ -78,8 +75,8 @@ ScreenplayTitlePageView::Implementation::Implementation(QWidget* _parent)
 
 void ScreenplayTitlePageView::Implementation::updateToolBarUi()
 {
-    toolbar->move(QPointF(Ui::DesignSystem::layout().px24(),
-                          Ui::DesignSystem::layout().px24()).toPoint());
+    toolbar->move(
+        QPointF(Ui::DesignSystem::layout().px24(), Ui::DesignSystem::layout().px24()).toPoint());
     toolbar->setBackgroundColor(Ui::DesignSystem::color().primary());
     toolbar->setTextColor(Ui::DesignSystem::color().onPrimary());
     toolbar->raise();
@@ -98,8 +95,8 @@ void ScreenplayTitlePageView::Implementation::updateToolBarCurrentParagraphTypeN
 
 
 ScreenplayTitlePageView::ScreenplayTitlePageView(QWidget* _parent)
-    : Widget(_parent),
-      d(new Implementation(this))
+    : Widget(_parent)
+    , d(new Implementation(this))
 {
     setFocusProxy(d->scalableWrapper);
     d->scalableWrapper->installEventFilter(this);
@@ -109,36 +106,42 @@ ScreenplayTitlePageView::ScreenplayTitlePageView(QWidget* _parent)
     layout->setSpacing(0);
     layout->addWidget(d->scalableWrapper);
 
-    connect(d->toolbar, &ScreenplayTitlePageEditToolbar::undoPressed, d->textEdit, &ScreenplayTitlePageEdit::undo);
-    connect(d->toolbar, &ScreenplayTitlePageEditToolbar::redoPressed, d->textEdit, &ScreenplayTitlePageEdit::redo);
-    connect(d->toolbar, &ScreenplayTitlePageEditToolbar::fontChanged, this, [this] (const QFont& _font) {
-        //
-        // Применяем шрифт
-        //
-        d->textEdit->setTextFont(_font);
-        //
-        // Обновим высоту блока, если требуется
-        //
-        auto cursor = d->textEdit->textCursor();
-        qreal blockHeight = 0.0;
-        const auto formats = cursor.block().textFormats();
-        for (const auto& format : formats) {
-            blockHeight = std::max(blockHeight, TextHelper::fineLineSpacing(format.format.font()));
-        }
-        if (!qFuzzyCompare(cursor.blockFormat().lineHeight(), blockHeight)) {
-            auto blockFormat = cursor.blockFormat();
-            blockFormat.setLineHeight(blockHeight, QTextBlockFormat::FixedHeight);
-            cursor.setBlockFormat(blockFormat);
-        }
-        //
-        // Возвращем фокус в редактор текста
-        //
-        d->scalableWrapper->setFocus();
-    });
+    connect(d->toolbar, &ScreenplayTitlePageEditToolbar::undoPressed, d->textEdit,
+            &ScreenplayTitlePageEdit::undo);
+    connect(d->toolbar, &ScreenplayTitlePageEditToolbar::redoPressed, d->textEdit,
+            &ScreenplayTitlePageEdit::redo);
+    connect(d->toolbar, &ScreenplayTitlePageEditToolbar::fontChanged, this,
+            [this](const QFont& _font) {
+                //
+                // Применяем шрифт
+                //
+                d->textEdit->setTextFont(_font);
+                //
+                // Обновим высоту блока, если требуется
+                //
+                auto cursor = d->textEdit->textCursor();
+                qreal blockHeight = 0.0;
+                const auto formats = cursor.block().textFormats();
+                for (const auto& format : formats) {
+                    blockHeight
+                        = std::max(blockHeight, TextHelper::fineLineSpacing(format.format.font()));
+                }
+                if (!qFuzzyCompare(cursor.blockFormat().lineHeight(), blockHeight)) {
+                    auto blockFormat = cursor.blockFormat();
+                    blockFormat.setLineHeight(blockHeight, QTextBlockFormat::FixedHeight);
+                    cursor.setBlockFormat(blockFormat);
+                }
+                //
+                // Возвращем фокус в редактор текста
+                //
+                d->scalableWrapper->setFocus();
+            });
     //
     auto handleCursorPositionChanged = [this] { d->updateToolBarCurrentParagraphTypeName(); };
-    connect(d->textEdit, &ScreenplayTitlePageEdit::paragraphTypeChanged, this, handleCursorPositionChanged);
-    connect(d->textEdit, &ScreenplayTitlePageEdit::cursorPositionChanged, this, handleCursorPositionChanged);
+    connect(d->textEdit, &ScreenplayTitlePageEdit::paragraphTypeChanged, this,
+            handleCursorPositionChanged);
+    connect(d->textEdit, &ScreenplayTitlePageEdit::cursorPositionChanged, this,
+            handleCursorPositionChanged);
 
     updateTranslations();
     designSystemChangeEvent(nullptr);
@@ -152,31 +155,35 @@ void ScreenplayTitlePageView::reconfigure(const QStringList& _changedSettingsKey
 {
     using namespace BusinessLayer;
 
-    auto settingsValue = [] (const QString& _key) {
+    auto settingsValue = [](const QString& _key) {
         return DataStorageLayer::StorageFacade::settingsStorage()->value(
-                    _key, DataStorageLayer::SettingsStorage::SettingsPlace::Application);
+            _key, DataStorageLayer::SettingsStorage::SettingsPlace::Application);
     };
 
     const bool useSpellChecker
-            = settingsValue(DataStorageLayer::kApplicationUseSpellCheckerKey).toBool();
+        = settingsValue(DataStorageLayer::kApplicationUseSpellCheckerKey).toBool();
     d->textEdit->setUseSpellChecker(useSpellChecker);
     if (useSpellChecker) {
         const QString languageCode
-                = settingsValue(DataStorageLayer::kApplicationSpellCheckerLanguageKey).toString();
+            = settingsValue(DataStorageLayer::kApplicationSpellCheckerLanguageKey).toString();
         d->textEdit->setSpellCheckLanguage(languageCode);
     }
 
     if (_changedSettingsKeys.isEmpty()
-        || _changedSettingsKeys.contains(DataStorageLayer::kComponentsScreenplayEditorDefaultTemplateKey)) {
+        || _changedSettingsKeys.contains(
+            DataStorageLayer::kComponentsScreenplayEditorDefaultTemplateKey)) {
         TemplatesFacade::setDefaultTextTemplate(
-                    settingsValue(DataStorageLayer::kComponentsSimpleTextEditorDefaultTemplateKey).toString());
+            settingsValue(DataStorageLayer::kComponentsSimpleTextEditorDefaultTemplateKey)
+                .toString());
         d->textEdit->reinit();
     }
 
     if (_changedSettingsKeys.isEmpty()
-        || _changedSettingsKeys.contains(DataStorageLayer::kComponentsScreenplayEditorHighlightCurrentLineKey)) {
+        || _changedSettingsKeys.contains(
+            DataStorageLayer::kComponentsScreenplayEditorHighlightCurrentLineKey)) {
         d->textEdit->setHighlightCurrentLine(
-            settingsValue(DataStorageLayer::kComponentsSimpleTextEditorHighlightCurrentLineKey).toBool());
+            settingsValue(DataStorageLayer::kComponentsSimpleTextEditorHighlightCurrentLineKey)
+                .toBool());
     }
 }
 
@@ -185,8 +192,9 @@ void ScreenplayTitlePageView::loadViewSettings()
     using namespace DataStorageLayer;
 
     const auto scaleFactor
-            = StorageFacade::settingsStorage()->value(
-                  kScaleFactorKey, SettingsStorage::SettingsPlace::Application, 1.0).toReal();
+        = StorageFacade::settingsStorage()
+              ->value(kScaleFactorKey, SettingsStorage::SettingsPlace::Application, 1.0)
+              .toReal();
     d->scalableWrapper->setZoomRange(scaleFactor);
 }
 
@@ -194,8 +202,8 @@ void ScreenplayTitlePageView::saveViewSettings()
 {
     using namespace DataStorageLayer;
 
-    StorageFacade::settingsStorage()->setValue(
-        kScaleFactorKey, d->scalableWrapper->zoomRange(), SettingsStorage::SettingsPlace::Application);
+    StorageFacade::settingsStorage()->setValue(kScaleFactorKey, d->scalableWrapper->zoomRange(),
+                                               SettingsStorage::SettingsPlace::Application);
 }
 
 void ScreenplayTitlePageView::setModel(BusinessLayer::TextModel* _model)
@@ -221,22 +229,22 @@ void ScreenplayTitlePageView::resizeEvent(QResizeEvent* _event)
 {
     Widget::resizeEvent(_event);
 
-    const auto toolbarPosition = QPointF(Ui::DesignSystem::layout().px24(),
-                                         Ui::DesignSystem::layout().px24()).toPoint();
+    const auto toolbarPosition
+        = QPointF(Ui::DesignSystem::layout().px24(), Ui::DesignSystem::layout().px24()).toPoint();
     d->toolbar->move(toolbarPosition);
 }
 
 void ScreenplayTitlePageView::updateTranslations()
 {
-    using namespace  BusinessLayer;
-    d->typesToDisplayNames = {{ TextParagraphType::Heading1, tr("Heading 1") },
-                              { TextParagraphType::Heading2, tr("Heading 2") },
-                              { TextParagraphType::Heading3, tr("Heading 3") },
-                              { TextParagraphType::Heading4, tr("Heading 4") },
-                              { TextParagraphType::Heading5, tr("Heading 5") },
-                              { TextParagraphType::Heading6, tr("Heading 6") },
-                              { TextParagraphType::Text, tr("Text") },
-                              { TextParagraphType::InlineNote, tr("Inline note") }};
+    using namespace BusinessLayer;
+    d->typesToDisplayNames = { { TextParagraphType::Heading1, tr("Heading 1") },
+                               { TextParagraphType::Heading2, tr("Heading 2") },
+                               { TextParagraphType::Heading3, tr("Heading 3") },
+                               { TextParagraphType::Heading4, tr("Heading 4") },
+                               { TextParagraphType::Heading5, tr("Heading 5") },
+                               { TextParagraphType::Heading6, tr("Heading 6") },
+                               { TextParagraphType::Text, tr("Text") },
+                               { TextParagraphType::InlineNote, tr("Inline note") } };
 }
 
 void ScreenplayTitlePageView::designSystemChangeEvent(DesignSystemChangeEvent* _event)
@@ -256,7 +264,6 @@ void ScreenplayTitlePageView::designSystemChangeEvent(DesignSystemChangeEvent* _
     palette.setColor(QPalette::HighlightedText, Ui::DesignSystem::color().onSecondary());
     d->scalableWrapper->setPalette(palette);
     d->textEdit->setPalette(palette);
-
 }
 
 } // namespace Ui

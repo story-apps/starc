@@ -1,7 +1,6 @@
 #include "import_dialog.h"
 
 #include <business_layer/import/screenplay/screenlay_import_options.h>
-
 #include <ui/design_system/design_system.h>
 #include <ui/widgets/button/button.h>
 #include <ui/widgets/check_box/check_box.h>
@@ -12,8 +11,7 @@
 #include <QGridLayout>
 
 
-namespace Ui
-{
+namespace Ui {
 
 class ImportDialog::Implementation
 {
@@ -37,19 +35,19 @@ public:
 
 
 ImportDialog::Implementation::Implementation(const QString& _importFilePath, QWidget* _parent)
-    : importFilePath(_importFilePath),
-      documentsTitle(new OverlineLabel(_parent)),
-      importCharacters(new CheckBox(_parent)),
-      importLocations(new CheckBox(_parent)),
-      screenplayTitle(new OverlineLabel(_parent)),
-      importScreenplay(new CheckBox(_parent)),
-      keepSceneNumbers(new CheckBox(_parent)),
-      buttonsLayout(new QHBoxLayout),
-      cancelButton(new Button(_parent)),
-      importButton(new Button(_parent))
+    : importFilePath(_importFilePath)
+    , documentsTitle(new OverlineLabel(_parent))
+    , importCharacters(new CheckBox(_parent))
+    , importLocations(new CheckBox(_parent))
+    , screenplayTitle(new OverlineLabel(_parent))
+    , importScreenplay(new CheckBox(_parent))
+    , keepSceneNumbers(new CheckBox(_parent))
+    , buttonsLayout(new QHBoxLayout)
+    , cancelButton(new Button(_parent))
+    , importButton(new Button(_parent))
 {
-    for (auto checkBox : { importCharacters, importLocations,
-                           importScreenplay, keepSceneNumbers }) {
+    for (auto checkBox :
+         { importCharacters, importLocations, importScreenplay, keepSceneNumbers }) {
         checkBox->setChecked(true);
     }
 
@@ -67,8 +65,8 @@ ImportDialog::Implementation::Implementation(const QString& _importFilePath, QWi
 
 
 ImportDialog::ImportDialog(const QString& _importFilePath, QWidget* _parent)
-    : AbstractDialog(_parent),
-      d(new Implementation(_importFilePath, this))
+    : AbstractDialog(_parent)
+    , d(new Implementation(_importFilePath, this))
 {
     setAcceptButton(d->importButton);
     setRejectButton(d->cancelButton);
@@ -89,8 +87,8 @@ ImportDialog::ImportDialog(const QString& _importFilePath, QWidget* _parent)
     connect(d->importCharacters, &CheckBox::checkedChanged, this, configureImportAvailability);
     connect(d->importLocations, &CheckBox::checkedChanged, this, configureImportAvailability);
     connect(d->importScreenplay, &CheckBox::checkedChanged, this, configureImportAvailability);
-    connect(d->importScreenplay, &CheckBox::checkedChanged, this, [this] (bool _checked) {
-//        d->keepSceneNumbers->setVisible(_checked);
+    connect(d->importScreenplay, &CheckBox::checkedChanged, this, [this](bool _checked) {
+        //        d->keepSceneNumbers->setVisible(_checked);
     });
     connect(d->importButton, &Button::clicked, this, &ImportDialog::importRequested);
     connect(d->cancelButton, &Button::clicked, this, &ImportDialog::canceled);
@@ -151,23 +149,22 @@ void ImportDialog::designSystemChangeEvent(DesignSystemChangeEvent* _event)
         label->setTextColor(Ui::DesignSystem::color().onBackground());
     }
 
-    for (auto checkBox : { d->importCharacters, d->importLocations,
-                           d->importScreenplay, d->keepSceneNumbers }) {
+    for (auto checkBox :
+         { d->importCharacters, d->importLocations, d->importScreenplay, d->keepSceneNumbers }) {
         checkBox->setBackgroundColor(Ui::DesignSystem::color().background());
         checkBox->setTextColor(Ui::DesignSystem::color().onBackground());
     }
 
-    for (auto button : { d->importButton,
-                         d->cancelButton }) {
+    for (auto button : { d->importButton, d->cancelButton }) {
         button->setBackgroundColor(Ui::DesignSystem::color().secondary());
         button->setTextColor(Ui::DesignSystem::color().secondary());
     }
 
     contentsLayout()->setSpacing(static_cast<int>(Ui::DesignSystem::layout().px8()));
-    d->buttonsLayout->setContentsMargins(QMarginsF(Ui::DesignSystem::layout().px12(),
-                                                   Ui::DesignSystem::layout().px12(),
-                                                   Ui::DesignSystem::layout().px16(),
-                                                   Ui::DesignSystem::layout().px8()).toMargins());
+    d->buttonsLayout->setContentsMargins(
+        QMarginsF(Ui::DesignSystem::layout().px12(), Ui::DesignSystem::layout().px12(),
+                  Ui::DesignSystem::layout().px16(), Ui::DesignSystem::layout().px8())
+            .toMargins());
 }
 
-} //namespace Ui
+} // namespace Ui

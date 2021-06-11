@@ -3,8 +3,7 @@
 #include <ui/widgets/floating_tool_bar/floating_tool_bar.h>
 
 
-namespace Ui
-{
+namespace Ui {
 
 /**
  * @brief Виджет панели инструментов аккаунта (вход в личный кабинет + чаты)

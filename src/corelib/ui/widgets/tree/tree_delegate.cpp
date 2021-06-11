@@ -1,7 +1,6 @@
 #include "tree_delegate.h"
 
 #include <ui/design_system/design_system.h>
-
 #include <utils/helpers/text_helper.h>
 
 #include <QPainter>
@@ -12,7 +11,8 @@ TreeDelegate::TreeDelegate(QObject* _parent)
 {
 }
 
-void TreeDelegate::paint(QPainter* _painter, const QStyleOptionViewItem& _option, const QModelIndex& _index) const
+void TreeDelegate::paint(QPainter* _painter, const QStyleOptionViewItem& _option,
+                         const QModelIndex& _index) const
 {
     //
     // Получим настройки стиля
@@ -80,13 +80,14 @@ void TreeDelegate::paint(QPainter* _painter, const QStyleOptionViewItem& _option
     _painter->setPen(textColor);
     _painter->setFont(Ui::DesignSystem::font().subtitle2());
     const qreal textLeft = iconRect.isValid()
-                           ? iconRect.right() + Ui::DesignSystem::treeOneLineItem().spacing()
-                           : backgroundRect.left() + Ui::DesignSystem::treeOneLineItem().margins().left();
-    const QRectF textRect(QPointF(textLeft,
-                                  backgroundRect.top()),
-                          QSizeF(backgroundRect.right() - textLeft - Ui::DesignSystem::treeOneLineItem().margins().right(),
+        ? iconRect.right() + Ui::DesignSystem::treeOneLineItem().spacing()
+        : backgroundRect.left() + Ui::DesignSystem::treeOneLineItem().margins().left();
+    const QRectF textRect(QPointF(textLeft, backgroundRect.top()),
+                          QSizeF(backgroundRect.right() - textLeft
+                                     - Ui::DesignSystem::treeOneLineItem().margins().right(),
                                  backgroundRect.height()));
-    const auto text = _painter->fontMetrics().elidedText(_index.data().toString(), Qt::ElideRight, static_cast<int>(textRect.width()));
+    const auto text = _painter->fontMetrics().elidedText(_index.data().toString(), Qt::ElideRight,
+                                                         static_cast<int>(textRect.width()));
     _painter->drawText(textRect, Qt::AlignLeft | Qt::AlignVCenter, text);
 }
 
@@ -96,7 +97,7 @@ QSize TreeDelegate::sizeHint(const QStyleOptionViewItem& _option, const QModelIn
     Q_UNUSED(_index)
 
     return QSizeF(TextHelper::fineTextWidthF(_index.data().toString(),
-                                            Ui::DesignSystem::font().subtitle2()),
+                                             Ui::DesignSystem::font().subtitle2()),
                   Ui::DesignSystem::treeOneLineItem().height())
-            .toSize();
+        .toSize();
 }

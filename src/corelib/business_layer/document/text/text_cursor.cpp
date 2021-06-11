@@ -58,4 +58,4 @@ void TextCursor::restartEditBlock()
     }
 }
 
-} // namespace Ui
+} // namespace BusinessLayer

@@ -5,9 +5,7 @@
 #include "color_palette.h"
 
 #include <ui/design_system/design_system.h>
-
 #include <ui/widgets/button/button.h>
-
 
 #include <QVBoxLayout>
 
@@ -26,12 +24,12 @@ public:
 };
 
 ColorPicker::Implementation::Implementation(QWidget* _parent)
-    : colorPallete(new ColorPallete(_parent)),
-      customColorPanel(new Widget(_parent)),
-      colorSlider(new color_widgets::Color2DSlider(_parent)),
-      colorHueSlider(new ColorHueSlider(_parent)),
-      cancelButton(new Button(_parent)),
-      addButton(new Button(_parent))
+    : colorPallete(new ColorPallete(_parent))
+    , customColorPanel(new Widget(_parent))
+    , colorSlider(new color_widgets::Color2DSlider(_parent))
+    , colorHueSlider(new ColorHueSlider(_parent))
+    , cancelButton(new Button(_parent))
+    , addButton(new Button(_parent))
 {
     customColorPanel->hide();
     cancelButton->setFocusPolicy(Qt::NoFocus);
@@ -43,8 +41,8 @@ ColorPicker::Implementation::Implementation(QWidget* _parent)
 
 
 ColorPicker::ColorPicker(QWidget* _parent)
-    : StackWidget(_parent),
-      d(new Implementation(this))
+    : StackWidget(_parent)
+    , d(new Implementation(this))
 {
     QHBoxLayout* buttonsLayout = new QHBoxLayout;
     buttonsLayout->setContentsMargins({});
@@ -66,15 +64,11 @@ ColorPicker::ColorPicker(QWidget* _parent)
     d->colorHueSlider->setHue(d->colorSlider->hue());
 
     connect(d->colorPallete, &ColorPallete::colorSelected, this, &ColorPicker::colorSelected);
-    connect(d->colorPallete, &ColorPallete::addCustomColorPressed, this, [this] {
-        setCurrentWidget(d->customColorPanel);
-    });
-    connect(d->colorHueSlider, &ColorHueSlider::hueChanged, this, [this] (qreal _hue) {
-        d->colorSlider->setHue(_hue);
-    });
-    connect(d->cancelButton, &Button::clicked, this, [this] {
-        setCurrentWidget(d->colorPallete);
-    });
+    connect(d->colorPallete, &ColorPallete::addCustomColorPressed, this,
+            [this] { setCurrentWidget(d->customColorPanel); });
+    connect(d->colorHueSlider, &ColorHueSlider::hueChanged, this,
+            [this](qreal _hue) { d->colorSlider->setHue(_hue); });
+    connect(d->cancelButton, &Button::clicked, this, [this] { setCurrentWidget(d->colorPallete); });
     connect(d->addButton, &Button::clicked, this, [this] {
         d->colorPallete->addCustormColor(d->colorSlider->color());
         setCurrentWidget(d->colorPallete);

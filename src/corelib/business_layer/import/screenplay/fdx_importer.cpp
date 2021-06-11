@@ -6,9 +6,7 @@
 #include <business_layer/model/screenplay/text/screenplay_text_model_text_item.h>
 #include <business_layer/model/screenplay/text/screenplay_text_model_xml.h>
 #include <business_layer/templates/screenplay_template.h>
-
 #include <domain/document_object.h>
-
 #include <utils/helpers/text_helper.h>
 
 #include <QDomDocument>
@@ -19,10 +17,10 @@
 #include <set>
 
 
-namespace BusinessLayer
-{
+namespace BusinessLayer {
 
-AbstractScreenplayImporter::Documents FdxImporter::importDocuments(const ScreenplayImportOptions& _options) const
+AbstractScreenplayImporter::Documents FdxImporter::importDocuments(
+    const ScreenplayImportOptions& _options) const
 {
     //
     // Открываем файл
@@ -83,35 +81,36 @@ AbstractScreenplayImporter::Documents FdxImporter::importDocuments(const Screenp
         }
 
         switch (blockType) {
-            case ScreenplayParagraphType::SceneHeading: {
-                if (!_options.importLocations) {
-                    break;
-                }
-
-                const auto locationName = SceneHeadingParser::location(paragraphText);
-                if (locationName.isEmpty()) {
-                    break;
-                }
-
-                locationNames.emplace(locationName);
+        case ScreenplayParagraphType::SceneHeading: {
+            if (!_options.importLocations) {
                 break;
             }
 
-            case ScreenplayParagraphType::Character: {
-                if (!_options.importCharacters) {
-                    break;
-                }
-
-                const auto characterName = CharacterParser::name(paragraphText);
-                if (characterName.isEmpty()) {
-                    break;
-                }
-
-                characterNames.emplace(characterName);
+            const auto locationName = SceneHeadingParser::location(paragraphText);
+            if (locationName.isEmpty()) {
                 break;
             }
 
-            default: break;
+            locationNames.emplace(locationName);
+            break;
+        }
+
+        case ScreenplayParagraphType::Character: {
+            if (!_options.importCharacters) {
+                break;
+            }
+
+            const auto characterName = CharacterParser::name(paragraphText);
+            if (characterName.isEmpty()) {
+                break;
+            }
+
+            characterNames.emplace(characterName);
+            break;
+        }
+
+        default:
+            break;
         }
 
         //
@@ -130,7 +129,8 @@ AbstractScreenplayImporter::Documents FdxImporter::importDocuments(const Screenp
     return documents;
 }
 
-QVector<AbstractScreenplayImporter::Screenplay> FdxImporter::importScreenplays(const ScreenplayImportOptions& _options) const
+QVector<AbstractScreenplayImporter::Screenplay> FdxImporter::importScreenplays(
+    const ScreenplayImportOptions& _options) const
 {
     Screenplay result;
     result.name = QFileInfo(_options.filePath).completeBaseName();
@@ -154,7 +154,8 @@ QVector<AbstractScreenplayImporter::Screenplay> FdxImporter::importScreenplays(c
     QXmlStreamWriter writer(&result.text);
     writer.writeStartDocument();
     writer.writeStartElement(xml::kDocumentTag);
-    writer.writeAttribute(xml::kMimeTypeAttribute, Domain::mimeTypeFor(Domain::DocumentObjectType::ScreenplayText));
+    writer.writeAttribute(xml::kMimeTypeAttribute,
+                          Domain::mimeTypeFor(Domain::DocumentObjectType::ScreenplayText));
     writer.writeAttribute(xml::kVersionAttribute, "1.0");
 
     //
@@ -233,12 +234,10 @@ QVector<AbstractScreenplayImporter::Screenplay> FdxImporter::importScreenplays(c
             // Корректируем при необходимости
             //
             if (blockType == ScreenplayParagraphType::Parenthetical) {
-                if (!paragraphText.isEmpty()
-                    && paragraphText.front() == "(") {
+                if (!paragraphText.isEmpty() && paragraphText.front() == "(") {
                     paragraphText.remove(0, 1);
                 }
-                if (!paragraphText.isEmpty()
-                    && paragraphText.back() == ")") {
+                if (!paragraphText.isEmpty() && paragraphText.back() == ")") {
                     paragraphText.chop(1);
                 }
             }
@@ -309,7 +308,7 @@ QVector<AbstractScreenplayImporter::Screenplay> FdxImporter::importScreenplays(c
         writer.writeEndElement(); // value
         if (!formats.isEmpty()) {
             writer.writeStartElement(xml::kFormatsTag);
-            for (const auto& format : std::as_const(formats)){
+            for (const auto& format : std::as_const(formats)) {
                 writer.writeStartElement(xml::kFormatTag);
                 //
                 // Данные пользовательского форматирования
@@ -318,7 +317,8 @@ QVector<AbstractScreenplayImporter::Screenplay> FdxImporter::importScreenplays(c
                 writer.writeAttribute(xml::kLengthAttribute, QString::number(format.length));
                 writer.writeAttribute(xml::kBoldAttribute, format.isBold ? "true" : "false");
                 writer.writeAttribute(xml::kItalicAttribute, format.isItalic ? "true" : "false");
-                writer.writeAttribute(xml::kUnderlineAttribute, format.isUnderline ? "true" : "false");
+                writer.writeAttribute(xml::kUnderlineAttribute,
+                                      format.isUnderline ? "true" : "false");
                 //
                 writer.writeEndElement(); // format
             }

@@ -7,8 +7,7 @@
 #include <QPainter>
 
 
-namespace Ui
-{
+namespace Ui {
 
 class ScreenplayTextCommentView::Implementation
 {
@@ -34,8 +33,8 @@ QStyleOptionViewItem ScreenplayTextCommentView::Implementation::option(const Wid
 
 
 ScreenplayTextCommentView::ScreenplayTextCommentView(QWidget* _parent)
-    : Widget(_parent),
-      d(new Implementation)
+    : Widget(_parent)
+    , d(new Implementation)
 {
     auto sizePolicy = this->sizePolicy();
     sizePolicy.setHeightForWidth(true);

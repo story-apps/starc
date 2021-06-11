@@ -5,28 +5,22 @@
 /**
  * Widgets Animation Framework
  */
-namespace WAF
-{
-	/**
-	 * @brief Края приложения
-	 */
-	enum ApplicationSide {
-		LeftSide,
-		TopSide,
-		RightSide,
-		BottomSide
-	};
+namespace WAF {
+/**
+ * @brief Края приложения
+ */
+enum ApplicationSide { LeftSide, TopSide, RightSide, BottomSide };
 
-	/**
-	 * @brief Направление анимации
-	 */
-	enum AnimationDirection {
-		Undefined,
-		FromLeftToRight,
-		FromTopToBottom,
-		FromRightToLeft,
-		FromBottomToTop
-	};
-}
+/**
+ * @brief Направление анимации
+ */
+enum AnimationDirection {
+    Undefined,
+    FromLeftToRight,
+    FromTopToBottom,
+    FromRightToLeft,
+    FromBottomToTop
+};
+} // namespace WAF
 
 #endif // WAF_H

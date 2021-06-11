@@ -3,8 +3,7 @@
 #include <business_layer/model/abstract_model.h>
 
 
-namespace BusinessLayer
-{
+namespace BusinessLayer {
 
 class CharactersModel;
 class LocationsModel;
@@ -31,7 +30,8 @@ public:
     /**
      * @brief Добавить элемент в начало
      */
-    void prependItem(ScreenplayTextModelItem* _item, ScreenplayTextModelItem* _parentItem = nullptr);
+    void prependItem(ScreenplayTextModelItem* _item,
+                     ScreenplayTextModelItem* _parentItem = nullptr);
 
     /**
      * @brief Вставить элемент после заданного
@@ -59,13 +59,15 @@ public:
     /** @{ */
     QModelIndex index(int _row, int _column, const QModelIndex& _parent = {}) const override;
     QModelIndex parent(const QModelIndex& _child) const override;
-    int columnCount( const QModelIndex& _parent = {}) const override;
-    int rowCount(const QModelIndex &_parent = {}) const override;
-    Qt::ItemFlags flags(const QModelIndex &_index) const override;
-    QVariant data(const QModelIndex &_index, int _role) const override;
+    int columnCount(const QModelIndex& _parent = {}) const override;
+    int rowCount(const QModelIndex& _parent = {}) const override;
+    Qt::ItemFlags flags(const QModelIndex& _index) const override;
+    QVariant data(const QModelIndex& _index, int _role) const override;
     //! Реализация перетаскивания элементов
-    bool canDropMimeData(const QMimeData* _data, Qt::DropAction _action, int _row, int _column, const QModelIndex& _parent = {}) const override;
-    bool dropMimeData(const QMimeData* _data, Qt::DropAction _action, int _row, int _column, const QModelIndex& _parent = {}) override;
+    bool canDropMimeData(const QMimeData* _data, Qt::DropAction _action, int _row, int _column,
+                         const QModelIndex& _parent = {}) const override;
+    bool dropMimeData(const QMimeData* _data, Qt::DropAction _action, int _row, int _column,
+                      const QModelIndex& _parent = {}) override;
     QMimeData* mimeData(const QModelIndexList& _indexes) const override;
     QStringList mimeTypes() const override;
     Qt::DropActions supportedDragActions() const override;
@@ -75,7 +77,8 @@ public:
     /**
      * @brief Сформировать mime-данные сценария в заданном диапазоне
      */
-    QString mimeFromSelection(const QModelIndex& _from, int _fromPosition, const QModelIndex& _to, int _toPosition, bool _clearUuid) const;
+    QString mimeFromSelection(const QModelIndex& _from, int _fromPosition, const QModelIndex& _to,
+                              int _toPosition, bool _clearUuid) const;
 
     /**
      * @brief Вставить контент из mime-данных со сценарием в заданной позиции

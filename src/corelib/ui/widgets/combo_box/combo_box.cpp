@@ -1,7 +1,6 @@
 #include "combo_box.h"
 
 #include <include/custom_events.h>
-
 #include <ui/design_system/design_system.h>
 #include <ui/widgets/card/card.h>
 #include <ui/widgets/tree/tree.h>
@@ -35,8 +34,8 @@ public:
 };
 
 ComboBox::Implementation::Implementation(QWidget* _parent)
-    : popup(new Card(_parent)),
-      popupContent(new Tree(popup))
+    : popup(new Card(_parent))
+    , popupContent(new Tree(popup))
 {
     popup->setWindowFlags(Qt::SplashScreen | Qt::FramelessWindowHint | Qt::NoDropShadowWindowHint);
     popup->setAttribute(Qt::WA_Hover, false);
@@ -66,13 +65,12 @@ void ComboBox::Implementation::showPopup(QWidget* _parent)
 
     isPopupShown = true;
 
-    auto width = _parent->width()
-                 - Ui::DesignSystem::textField().margins().left()
-                 - Ui::DesignSystem::textField().margins().right();
+    auto width = _parent->width() - Ui::DesignSystem::textField().margins().left()
+        - Ui::DesignSystem::textField().margins().right();
     popup->resize(static_cast<int>(width), 0);
     auto pos = _parent->mapToGlobal(_parent->rect().bottomLeft())
-               + QPointF(Ui::DesignSystem::textField().margins().left(),
-                         - Ui::DesignSystem::textField().margins().bottom());
+        + QPointF(Ui::DesignSystem::textField().margins().left(),
+                  -Ui::DesignSystem::textField().margins().bottom());
     popup->move(pos.toPoint());
     popup->show();
 
@@ -82,8 +80,8 @@ void ComboBox::Implementation::showPopup(QWidget* _parent)
     popupHeightAnimation.setDirection(QVariantAnimation::Forward);
     const auto itemsCount = std::min(popupContent->model()->rowCount(), maxPopupItems);
     const auto height = Ui::DesignSystem::treeOneLineItem().height() * itemsCount
-                        + Ui::DesignSystem::card().shadowMargins().top()
-                        + Ui::DesignSystem::card().shadowMargins().bottom();
+        + Ui::DesignSystem::card().shadowMargins().top()
+        + Ui::DesignSystem::card().shadowMargins().bottom();
     popupHeightAnimation.setEndValue(static_cast<int>(height));
     popupHeightAnimation.start();
 }
@@ -101,25 +99,26 @@ void ComboBox::Implementation::hidePopup()
 
 
 ComboBox::ComboBox(QWidget* _parent)
-    : TextField(_parent),
-      d(new Implementation(this))
+    : TextField(_parent)
+    , d(new Implementation(this))
 {
     setReadOnly(true);
     setTrailingIcon(u8"\U000f035d");
     viewport()->setCursor(Qt::ArrowCursor);
     viewport()->setMouseTracking(false);
 
-    connect(&d->popupHeightAnimation, &QVariantAnimation::valueChanged, this, [this] (const QVariant& _value) {
-        const auto height = _value.toInt();
-        d->popup->resize(d->popup->width(), height);
-    });
+    connect(&d->popupHeightAnimation, &QVariantAnimation::valueChanged, this,
+            [this](const QVariant& _value) {
+                const auto height = _value.toInt();
+                d->popup->resize(d->popup->width(), height);
+            });
     connect(&d->popupHeightAnimation, &QVariantAnimation::finished, this, [this] {
         if (!d->isPopupShown) {
             d->popup->hide();
         }
     });
 
-    connect(d->popupContent, &Tree::currentIndexChanged, this, [this] (const QModelIndex& _index) {
+    connect(d->popupContent, &Tree::currentIndexChanged, this, [this](const QModelIndex& _index) {
         setText(_index.data().toString());
         d->hidePopup();
         emit currentIndexChanged(_index);
@@ -136,10 +135,9 @@ void ComboBox::setModel(QAbstractItemModel* _model)
 
     d->popupContent->setModel(_model);
 
-    if (_model != nullptr
-        && _model->rowCount() > 0) {
+    if (_model != nullptr && _model->rowCount() > 0) {
         d->popupContent->setCurrentIndex(_model->index(0, 0));
-        connect(_model, &QAbstractItemModel::dataChanged, this, [this] (const QModelIndex& _index) {
+        connect(_model, &QAbstractItemModel::dataChanged, this, [this](const QModelIndex& _index) {
             if (d->popupContent->currentIndex() == _index) {
                 setText(_index.data().toString());
             }

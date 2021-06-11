@@ -1,23 +1,17 @@
 #pragma once
 
-#include <corelib_global.h>
-
 #include <business_layer/model/abstract_model_item.h>
 
+#include <corelib_global.h>
 
-namespace BusinessLayer
-{
+
+namespace BusinessLayer {
 
 
 /**
  * @brief Перечисление типов элементов модели сценария
  */
-enum class ScreenplayTextModelItemType {
-    Folder,
-    Scene,
-    Text,
-    Splitter
-};
+enum class ScreenplayTextModelItemType { Folder, Scene, Text, Splitter };
 
 
 /**

@@ -6,8 +6,7 @@
 /**
  * @brief Типы дополнительных событий
  */
-enum class EventType
-{
+enum class EventType {
     //
     // Событие простоя приложения
     //
@@ -25,7 +24,10 @@ enum class EventType
 class IdleEvent : public QEvent
 {
 public:
-    IdleEvent() : QEvent(static_cast<QEvent::Type>(EventType::IdleEvent)) {}
+    IdleEvent()
+        : QEvent(static_cast<QEvent::Type>(EventType::IdleEvent))
+    {
+    }
 };
 
 /**
@@ -34,5 +36,8 @@ public:
 class DesignSystemChangeEvent : public QEvent
 {
 public:
-    DesignSystemChangeEvent() : QEvent(static_cast<QEvent::Type>(EventType::DesignSystemChangeEvent)) {}
+    DesignSystemChangeEvent()
+        : QEvent(static_cast<QEvent::Type>(EventType::DesignSystemChangeEvent))
+    {
+    }
 };

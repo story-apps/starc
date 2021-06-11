@@ -1,11 +1,9 @@
 #include "settings_storage.h"
 
-#include <business_layer/templates/text_template.h>
 #include <business_layer/templates/screenplay_template.h>
-
+#include <business_layer/templates/text_template.h>
 #include <data_layer/mapper/mapper_facade.h>
 #include <data_layer/mapper/settings_mapper.h>
-
 #include <ui/design_system/design_system.h>
 
 #include <QDir>
@@ -16,27 +14,27 @@
 using DataMappingLayer::MapperFacade;
 
 
-namespace DataStorageLayer
-{
+namespace DataStorageLayer {
 
 namespace {
-    /**
-     * @brief Имя пользователя из системы
-     */
-    static QString systemUserName() {
-        QString name = qgetenv("USER");
+/**
+ * @brief Имя пользователя из системы
+ */
+static QString systemUserName()
+{
+    QString name = qgetenv("USER");
+    if (name.isEmpty()) {
+        //
+        // Windows
+        //
+        name = QString::fromLocal8Bit(qgetenv("USERNAME"));
         if (name.isEmpty()) {
-            //
-            // Windows
-            //
-            name = QString::fromLocal8Bit(qgetenv("USERNAME"));
-            if (name.isEmpty()) {
-                name = "user";
-            }
+            name = "user";
         }
-        return name;
     }
+    return name;
 }
+} // namespace
 
 class SettingsStorage::Implementation
 {
@@ -87,92 +85,88 @@ SettingsStorage::Implementation::Implementation()
     defaultValues.insert(kApplicationConfiguredKey, false);
     defaultValues.insert(kApplicationLanguagedKey, QLocale::AnyLanguage);
     defaultValues.insert(kApplicationThemeKey, static_cast<int>(Ui::ApplicationTheme::Light));
-    defaultValues.insert(kApplicationCustomThemeColorsKey,
-                         "323740ffffff2ab177f8f8f2272b34f8f8f222262ef8f8f2ec3740f8f8f2000000f8f8f2");
+    defaultValues.insert(
+        kApplicationCustomThemeColorsKey,
+        "323740ffffff2ab177f8f8f2272b34f8f8f222262ef8f8f2ec3740f8f8f2000000f8f8f2");
     defaultValues.insert(kApplicationScaleFactorKey, 1.0);
     defaultValues.insert(kApplicationUseTypewriterSoundKey, false);
     defaultValues.insert(kApplicationUseAutoSaveKey, true);
     defaultValues.insert(kApplicationSaveBackupsKey, true);
     defaultValues.insert(kApplicationBackupsFolderKey,
-        QStandardPaths::writableLocation(QStandardPaths::DocumentsLocation) + "/starc/backups");
+                         QStandardPaths::writableLocation(QStandardPaths::DocumentsLocation)
+                             + "/starc/backups");
     defaultValues.insert(kProjectSaveFolderKey,
-        QStandardPaths::writableLocation(QStandardPaths::DocumentsLocation) + "/starc/projects");
+                         QStandardPaths::writableLocation(QStandardPaths::DocumentsLocation)
+                             + "/starc/projects");
     defaultValues.insert(kProjectImportFolderKey,
-        QStandardPaths::writableLocation(QStandardPaths::DownloadLocation));
+                         QStandardPaths::writableLocation(QStandardPaths::DownloadLocation));
     defaultValues.insert(kProjectExportFolderKey,
-        QStandardPaths::writableLocation(QStandardPaths::DownloadLocation));
+                         QStandardPaths::writableLocation(QStandardPaths::DownloadLocation));
     //
     // Параметры редактора текста
     //
     {
         const QString kSimpleTextEditorKey = "simple-text/editor";
         auto addSimpleTextEditorStylesAction
-                = [this, kSimpleTextEditorKey] (const QString& _actionType, const QString& _actionKey,
-                  TextParagraphType _from, TextParagraphType _to) {
-            defaultValues.insert(
-                        QString("%1/styles-%2/from-%3-by-%4").arg(kSimpleTextEditorKey, _actionType, toString(_from), _actionKey),
-                        toString(_to));
-        };
+            = [this, kSimpleTextEditorKey](const QString& _actionType, const QString& _actionKey,
+                                           TextParagraphType _from, TextParagraphType _to) {
+                  defaultValues.insert(
+                      QString("%1/styles-%2/from-%3-by-%4")
+                          .arg(kSimpleTextEditorKey, _actionType, toString(_from), _actionKey),
+                      toString(_to));
+              };
         auto addSimpleTextEditorStylesActionByTab
-                = [addSimpleTextEditorStylesAction] (const QString& _actionType,
-                  TextParagraphType _from, TextParagraphType _to) {
-            addSimpleTextEditorStylesAction(_actionType, "tab", _from, _to);
-        };
+            = [addSimpleTextEditorStylesAction](const QString& _actionType, TextParagraphType _from,
+                                                TextParagraphType _to) {
+                  addSimpleTextEditorStylesAction(_actionType, "tab", _from, _to);
+              };
         auto addSimpleTextEditorStylesActionByEnter
-                = [addSimpleTextEditorStylesAction] (const QString& _actionType,
-                  TextParagraphType _from, TextParagraphType _to) {
-            addSimpleTextEditorStylesAction(_actionType, "enter", _from, _to);
-        };
+            = [addSimpleTextEditorStylesAction](const QString& _actionType, TextParagraphType _from,
+                                                TextParagraphType _to) {
+                  addSimpleTextEditorStylesAction(_actionType, "enter", _from, _to);
+              };
         //
-        auto addSimpleTextEditorStylesJumpByTab
-                = [addSimpleTextEditorStylesActionByTab] (TextParagraphType _from, TextParagraphType _to) {
-            addSimpleTextEditorStylesActionByTab("jumping", _from, _to);
-        };
+        auto addSimpleTextEditorStylesJumpByTab =
+            [addSimpleTextEditorStylesActionByTab](TextParagraphType _from, TextParagraphType _to) {
+                addSimpleTextEditorStylesActionByTab("jumping", _from, _to);
+            };
         auto addSimpleTextEditorStylesJumpByEnter
-                = [addSimpleTextEditorStylesActionByEnter] (TextParagraphType _from, TextParagraphType _to) {
-            addSimpleTextEditorStylesActionByEnter("jumping", _from, _to);
-        };
+            = [addSimpleTextEditorStylesActionByEnter](TextParagraphType _from,
+                                                       TextParagraphType _to) {
+                  addSimpleTextEditorStylesActionByEnter("jumping", _from, _to);
+              };
         addSimpleTextEditorStylesJumpByTab(TextParagraphType::Heading1,
                                            TextParagraphType::Heading2);
-        addSimpleTextEditorStylesJumpByEnter(TextParagraphType::Heading1,
-                                             TextParagraphType::Text);
+        addSimpleTextEditorStylesJumpByEnter(TextParagraphType::Heading1, TextParagraphType::Text);
         addSimpleTextEditorStylesJumpByTab(TextParagraphType::Heading2,
                                            TextParagraphType::Heading3);
-        addSimpleTextEditorStylesJumpByEnter(TextParagraphType::Heading2,
-                                             TextParagraphType::Text);
+        addSimpleTextEditorStylesJumpByEnter(TextParagraphType::Heading2, TextParagraphType::Text);
         addSimpleTextEditorStylesJumpByTab(TextParagraphType::Heading3,
                                            TextParagraphType::Heading4);
-        addSimpleTextEditorStylesJumpByEnter(TextParagraphType::Heading3,
-                                             TextParagraphType::Text);
+        addSimpleTextEditorStylesJumpByEnter(TextParagraphType::Heading3, TextParagraphType::Text);
         addSimpleTextEditorStylesJumpByTab(TextParagraphType::Heading4,
                                            TextParagraphType::Heading5);
-        addSimpleTextEditorStylesJumpByEnter(TextParagraphType::Heading4,
-                                             TextParagraphType::Text);
+        addSimpleTextEditorStylesJumpByEnter(TextParagraphType::Heading4, TextParagraphType::Text);
         addSimpleTextEditorStylesJumpByTab(TextParagraphType::Heading5,
                                            TextParagraphType::Heading6);
-        addSimpleTextEditorStylesJumpByEnter(TextParagraphType::Heading5,
-                                             TextParagraphType::Text);
-        addSimpleTextEditorStylesJumpByTab(TextParagraphType::Heading6,
-                                           TextParagraphType::Text);
-        addSimpleTextEditorStylesJumpByEnter(TextParagraphType::Heading6,
-                                             TextParagraphType::Text);
-        addSimpleTextEditorStylesJumpByTab(TextParagraphType::Text,
-                                           TextParagraphType::Text);
-        addSimpleTextEditorStylesJumpByEnter(TextParagraphType::Text,
-                                             TextParagraphType::Text);
-        addSimpleTextEditorStylesJumpByTab(TextParagraphType::InlineNote,
-                                           TextParagraphType::Text);
+        addSimpleTextEditorStylesJumpByEnter(TextParagraphType::Heading5, TextParagraphType::Text);
+        addSimpleTextEditorStylesJumpByTab(TextParagraphType::Heading6, TextParagraphType::Text);
+        addSimpleTextEditorStylesJumpByEnter(TextParagraphType::Heading6, TextParagraphType::Text);
+        addSimpleTextEditorStylesJumpByTab(TextParagraphType::Text, TextParagraphType::Text);
+        addSimpleTextEditorStylesJumpByEnter(TextParagraphType::Text, TextParagraphType::Text);
+        addSimpleTextEditorStylesJumpByTab(TextParagraphType::InlineNote, TextParagraphType::Text);
         addSimpleTextEditorStylesJumpByEnter(TextParagraphType::InlineNote,
                                              TextParagraphType::Text);
         //
-        auto addSimpleTextEditorStylesChangeByTab
-                = [addSimpleTextEditorStylesActionByTab] (TextParagraphType _from, TextParagraphType _to) {
-            addSimpleTextEditorStylesActionByTab("changing", _from, _to);
-        };
+        auto addSimpleTextEditorStylesChangeByTab =
+            [addSimpleTextEditorStylesActionByTab](TextParagraphType _from, TextParagraphType _to) {
+                addSimpleTextEditorStylesActionByTab("changing", _from, _to);
+            };
         auto addSimpleTextEditorStylesChangeByEnter
-                = [addSimpleTextEditorStylesActionByEnter] (TextParagraphType _from, TextParagraphType _to) {
-            addSimpleTextEditorStylesActionByEnter("changing", _from, _to);
-        };
+            = [addSimpleTextEditorStylesActionByEnter](TextParagraphType _from,
+                                                       TextParagraphType _to) {
+                  addSimpleTextEditorStylesActionByEnter("changing", _from, _to);
+              };
         addSimpleTextEditorStylesChangeByTab(TextParagraphType::Heading1,
                                              TextParagraphType::Heading2);
         addSimpleTextEditorStylesChangeByEnter(TextParagraphType::Heading1,
@@ -193,8 +187,7 @@ SettingsStorage::Implementation::Implementation()
                                              TextParagraphType::Heading6);
         addSimpleTextEditorStylesChangeByEnter(TextParagraphType::Heading5,
                                                TextParagraphType::Heading4);
-        addSimpleTextEditorStylesChangeByTab(TextParagraphType::Heading6,
-                                             TextParagraphType::Text);
+        addSimpleTextEditorStylesChangeByTab(TextParagraphType::Heading6, TextParagraphType::Text);
         addSimpleTextEditorStylesChangeByEnter(TextParagraphType::Heading6,
                                                TextParagraphType::Heading5);
         addSimpleTextEditorStylesChangeByTab(TextParagraphType::Text,
@@ -206,11 +199,11 @@ SettingsStorage::Implementation::Implementation()
         addSimpleTextEditorStylesChangeByEnter(TextParagraphType::InlineNote,
                                                TextParagraphType::InlineNote);
         //
-        auto addShortcut = [this, kSimpleTextEditorKey] (BusinessLayer::TextParagraphType _type,
-                           const QString& _shortcut) {
-            defaultValues.insert(
-                        QString("%1/shortcuts/%2").arg(kSimpleTextEditorKey, BusinessLayer::toString(_type)),
-                        QKeySequence(_shortcut).toString(QKeySequence::NativeText));
+        auto addShortcut = [this, kSimpleTextEditorKey](BusinessLayer::TextParagraphType _type,
+                                                        const QString& _shortcut) {
+            defaultValues.insert(QString("%1/shortcuts/%2")
+                                     .arg(kSimpleTextEditorKey, BusinessLayer::toString(_type)),
+                                 QKeySequence(_shortcut).toString(QKeySequence::NativeText));
         };
         addShortcut(BusinessLayer::TextParagraphType::Heading1, "Ctrl+1");
         addShortcut(BusinessLayer::TextParagraphType::Heading2, "Ctrl+2");
@@ -234,31 +227,37 @@ SettingsStorage::Implementation::Implementation()
     {
         const QString kScreenplayEditorKey = "screenplay-editor";
         auto addSimpleTextEditorStylesAction
-                = [this, kScreenplayEditorKey] (const QString& _actionType, const QString& _actionKey,
-                  ScreenplayParagraphType _from, ScreenplayParagraphType _to) {
-            defaultValues.insert(
-                        QString("%1/styles-%2/from-%3-by-%4").arg(kScreenplayEditorKey, _actionType, toString(_from), _actionKey),
-                        toString(_to));
-        };
+            = [this, kScreenplayEditorKey](const QString& _actionType, const QString& _actionKey,
+                                           ScreenplayParagraphType _from,
+                                           ScreenplayParagraphType _to) {
+                  defaultValues.insert(
+                      QString("%1/styles-%2/from-%3-by-%4")
+                          .arg(kScreenplayEditorKey, _actionType, toString(_from), _actionKey),
+                      toString(_to));
+              };
         auto addSimpleTextEditorStylesActionByTab
-                = [addSimpleTextEditorStylesAction] (const QString& _actionType,
-                  ScreenplayParagraphType _from, ScreenplayParagraphType _to) {
-            addSimpleTextEditorStylesAction(_actionType, "tab", _from, _to);
-        };
+            = [addSimpleTextEditorStylesAction](const QString& _actionType,
+                                                ScreenplayParagraphType _from,
+                                                ScreenplayParagraphType _to) {
+                  addSimpleTextEditorStylesAction(_actionType, "tab", _from, _to);
+              };
         auto addSimpleTextEditorStylesActionByEnter
-                = [addSimpleTextEditorStylesAction] (const QString& _actionType,
-                  ScreenplayParagraphType _from, ScreenplayParagraphType _to) {
-            addSimpleTextEditorStylesAction(_actionType, "enter", _from, _to);
-        };
+            = [addSimpleTextEditorStylesAction](const QString& _actionType,
+                                                ScreenplayParagraphType _from,
+                                                ScreenplayParagraphType _to) {
+                  addSimpleTextEditorStylesAction(_actionType, "enter", _from, _to);
+              };
         //
         auto addSimpleTextEditorStylesJumpByTab
-                = [addSimpleTextEditorStylesActionByTab] (ScreenplayParagraphType _from, ScreenplayParagraphType _to) {
-            addSimpleTextEditorStylesActionByTab("jumping", _from, _to);
-        };
+            = [addSimpleTextEditorStylesActionByTab](ScreenplayParagraphType _from,
+                                                     ScreenplayParagraphType _to) {
+                  addSimpleTextEditorStylesActionByTab("jumping", _from, _to);
+              };
         auto addSimpleTextEditorStylesJumpByEnter
-                = [addSimpleTextEditorStylesActionByEnter] (ScreenplayParagraphType _from, ScreenplayParagraphType _to) {
-            addSimpleTextEditorStylesActionByEnter("jumping", _from, _to);
-        };
+            = [addSimpleTextEditorStylesActionByEnter](ScreenplayParagraphType _from,
+                                                       ScreenplayParagraphType _to) {
+                  addSimpleTextEditorStylesActionByEnter("jumping", _from, _to);
+              };
         addSimpleTextEditorStylesJumpByTab(ScreenplayParagraphType::UnformattedText,
                                            ScreenplayParagraphType::UnformattedText);
         addSimpleTextEditorStylesJumpByEnter(ScreenplayParagraphType::UnformattedText,
@@ -309,13 +308,15 @@ SettingsStorage::Implementation::Implementation()
                                              ScreenplayParagraphType::SceneHeading);
         //
         auto addSimpleTextEditorStylesChangeByTab
-                = [addSimpleTextEditorStylesActionByTab] (ScreenplayParagraphType _from, ScreenplayParagraphType _to) {
-            addSimpleTextEditorStylesActionByTab("changing", _from, _to);
-        };
+            = [addSimpleTextEditorStylesActionByTab](ScreenplayParagraphType _from,
+                                                     ScreenplayParagraphType _to) {
+                  addSimpleTextEditorStylesActionByTab("changing", _from, _to);
+              };
         auto addSimpleTextEditorStylesChangeByEnter
-                = [addSimpleTextEditorStylesActionByEnter] (ScreenplayParagraphType _from, ScreenplayParagraphType _to) {
-            addSimpleTextEditorStylesActionByEnter("changing", _from, _to);
-        };
+            = [addSimpleTextEditorStylesActionByEnter](ScreenplayParagraphType _from,
+                                                       ScreenplayParagraphType _to) {
+                  addSimpleTextEditorStylesActionByEnter("changing", _from, _to);
+              };
         addSimpleTextEditorStylesChangeByTab(ScreenplayParagraphType::UnformattedText,
                                              ScreenplayParagraphType::UnformattedText);
         addSimpleTextEditorStylesChangeByEnter(ScreenplayParagraphType::UnformattedText,
@@ -365,11 +366,12 @@ SettingsStorage::Implementation::Implementation()
         addSimpleTextEditorStylesChangeByEnter(ScreenplayParagraphType::FolderHeader,
                                                ScreenplayParagraphType::FolderHeader);
         //
-        auto addShortcut = [this, kScreenplayEditorKey] (BusinessLayer::ScreenplayParagraphType _type,
-                           const QString& _shortcut) {
-            defaultValues.insert(
-                        QString("%1/shortcuts/%2").arg(kScreenplayEditorKey, BusinessLayer::toString(_type)),
-                        QKeySequence(_shortcut).toString(QKeySequence::NativeText));
+        auto addShortcut = [this,
+                            kScreenplayEditorKey](BusinessLayer::ScreenplayParagraphType _type,
+                                                  const QString& _shortcut) {
+            defaultValues.insert(QString("%1/shortcuts/%2")
+                                     .arg(kScreenplayEditorKey, BusinessLayer::toString(_type)),
+                                 QKeySequence(_shortcut).toString(QKeySequence::NativeText));
         };
         addShortcut(BusinessLayer::ScreenplayParagraphType::UnformattedText, "Ctrl+0");
         addShortcut(BusinessLayer::ScreenplayParagraphType::SceneHeading, "Ctrl+1");
@@ -407,19 +409,20 @@ SettingsStorage::Implementation::Implementation()
 }
 
 QVariant SettingsStorage::Implementation::cachedValue(const QString& _key,
-    SettingsStorage::SettingsPlace _settingsPlace, bool& _ok) const
+                                                      SettingsStorage::SettingsPlace _settingsPlace,
+                                                      bool& _ok) const
 {
     const QVariantMap& cachedValues
-            = _settingsPlace == SettingsPlace::Application ? cachedValuesApp : cachedValuesDb;
+        = _settingsPlace == SettingsPlace::Application ? cachedValuesApp : cachedValuesDb;
     _ok = cachedValues.contains(_key);
     return cachedValuesApp.value(_key);
 }
 
 void SettingsStorage::Implementation::cacheValue(const QString& _key, const QVariant& _value,
-    SettingsStorage::SettingsPlace _settingsPlace)
+                                                 SettingsStorage::SettingsPlace _settingsPlace)
 {
     QVariantMap& cachedValues
-            = _settingsPlace == SettingsPlace::Application ? cachedValuesApp : cachedValuesDb;
+        = _settingsPlace == SettingsPlace::Application ? cachedValuesApp : cachedValuesDb;
     cachedValues.insert(_key, _value);
 }
 
@@ -430,7 +433,7 @@ void SettingsStorage::Implementation::cacheValue(const QString& _key, const QVar
 SettingsStorage::~SettingsStorage() = default;
 
 void SettingsStorage::setValue(const QString& _key, const QVariant& _value,
-    SettingsStorage::SettingsPlace _settingsPlace)
+                               SettingsStorage::SettingsPlace _settingsPlace)
 {
     //
     // Кэшируем значение
@@ -449,7 +452,7 @@ void SettingsStorage::setValue(const QString& _key, const QVariant& _value,
 }
 
 void SettingsStorage::setValues(const QString& _valuesGroup, const QVariantMap& _values,
-    SettingsStorage::SettingsPlace _settingsPlace)
+                                SettingsStorage::SettingsPlace _settingsPlace)
 {
     //
     // Кэшируем значение
@@ -498,10 +501,10 @@ void SettingsStorage::setValues(const QString& _valuesGroup, const QVariantMap& 
     else {
         Q_ASSERT_X(0, Q_FUNC_INFO, "Database settings can't save group of settings");
     }
-
 }
 
-QVariant SettingsStorage::value(const QString& _key, SettingsStorage::SettingsPlace _settingsPlace, const QVariant& _defaultValue) const
+QVariant SettingsStorage::value(const QString& _key, SettingsStorage::SettingsPlace _settingsPlace,
+                                const QVariant& _defaultValue) const
 {
     //
     // Пробуем получить значение из кэша
@@ -550,7 +553,8 @@ QVariant SettingsStorage::value(const QString& _key, SettingsStorage::SettingsPl
     return d->defaultValues.value(_key);
 }
 
-QVariantMap SettingsStorage::values(const QString& _valuesGroup, SettingsStorage::SettingsPlace _settingsPlace)
+QVariantMap SettingsStorage::values(const QString& _valuesGroup,
+                                    SettingsStorage::SettingsPlace _settingsPlace)
 {
     //
     // Пробуем получить значение из кэша
@@ -580,7 +584,7 @@ QVariantMap SettingsStorage::values(const QString& _valuesGroup, SettingsStorage
         // Получим все значения
         //
         for (const QString& key : keys) {
-             values.insert(QByteArray::fromHex(key.toUtf8()), d->appSettings.value(key));
+            values.insert(QByteArray::fromHex(key.toUtf8()), d->appSettings.value(key));
         }
 
         //

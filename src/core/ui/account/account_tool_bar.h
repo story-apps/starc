@@ -3,8 +3,7 @@
 #include <ui/widgets/app_bar/app_bar.h>
 
 
-namespace Ui
-{
+namespace Ui {
 
 /**
  * @brief Панель инструментов личного кабинета

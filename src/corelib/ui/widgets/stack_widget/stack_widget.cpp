@@ -1,9 +1,7 @@
 #include "stack_widget.h"
 
 #include <ui/design_system/design_system.h>
-
 #include <utils/helpers/color_helper.h>
-
 #include <utils/tools/run_once.h>
 
 #include <QPainter>
@@ -59,7 +57,8 @@ FadeAnimation::FadeAnimation(QObject* _parent)
     addAnimation(&incomingContentGroup);
 }
 
-void FadeAnimation::updateState(QAbstractAnimation::State _newState, QAbstractAnimation::State _oldState)
+void FadeAnimation::updateState(QAbstractAnimation::State _newState,
+                                QAbstractAnimation::State _oldState)
 {
     QSequentialAnimationGroup::updateState(_newState, _oldState);
 
@@ -122,7 +121,8 @@ SlideAnimation::SlideAnimation(QObject* _parent)
     addAnimation(&incomingContentPosition);
 }
 
-void SlideAnimation::updateState(QAbstractAnimation::State _newState, QAbstractAnimation::State _oldState)
+void SlideAnimation::updateState(QAbstractAnimation::State _newState,
+                                 QAbstractAnimation::State _oldState)
 {
     QParallelAnimationGroup::updateState(_newState, _oldState);
 
@@ -155,8 +155,8 @@ public:
 
 protected:
     /**
-      * @brief Обновим настройки анимаций, при смене направления анимирования
-      */
+     * @brief Обновим настройки анимаций, при смене направления анимирования
+     */
     void updateDirection(QAbstractAnimation::Direction _direction) override;
 
     /**
@@ -221,7 +221,8 @@ void ExpandAnimation::updateDirection(QAbstractAnimation::Direction _direction)
     }
 }
 
-void ExpandAnimation::updateState(QAbstractAnimation::State _newState, QAbstractAnimation::State _oldState)
+void ExpandAnimation::updateState(QAbstractAnimation::State _newState,
+                                  QAbstractAnimation::State _oldState)
 {
     QParallelAnimationGroup::updateState(_newState, _oldState);
 
@@ -242,9 +243,9 @@ public:
     const QAbstractAnimation& currentAnimation() const;
 
 
-    QVector<QWidget *> widgets;
-    QWidget *previousWidget = nullptr;
-    QWidget *currentWidget = nullptr;
+    QVector<QWidget*> widgets;
+    QWidget* previousWidget = nullptr;
+    QWidget* currentWidget = nullptr;
 
     QPixmap previousWidgetImage;
     QPixmap currentWidgetImage;
@@ -258,44 +259,53 @@ public:
 const QAbstractAnimation& StackWidget::Implementation::currentAnimation() const
 {
     switch (animationType) {
-        default:
-        case AnimationType::Fade:
-        case AnimationType::FadeThrough: {
-            return fadeAnimation;
-        }
+    default:
+    case AnimationType::Fade:
+    case AnimationType::FadeThrough: {
+        return fadeAnimation;
+    }
 
-        case AnimationType::Slide: {
-            return slideAnimation;
-        }
+    case AnimationType::Slide: {
+        return slideAnimation;
+    }
 
-        case AnimationType::Expand: {
-            return expandAnimation;
-        }
+    case AnimationType::Expand: {
+        return expandAnimation;
+    }
     }
 }
 
 // ****
 
-StackWidget::StackWidget(QWidget *_parent)
+StackWidget::StackWidget(QWidget* _parent)
     : Widget(_parent)
     , d(new Implementation)
 {
     auto update = [this] { this->update(); };
     auto showCurrentWidget = [this] { d->currentWidget->show(); };
 
-    connect(&d->fadeAnimation.outgoingContentFadeOut, &QVariantAnimation::valueChanged, this, update);
-    connect(&d->fadeAnimation.incomingContentFadeIn, &QVariantAnimation::valueChanged, this, update);
-    connect(&d->fadeAnimation.incomingContentGeometry, &QVariantAnimation::valueChanged, this, update);
+    connect(&d->fadeAnimation.outgoingContentFadeOut, &QVariantAnimation::valueChanged, this,
+            update);
+    connect(&d->fadeAnimation.incomingContentFadeIn, &QVariantAnimation::valueChanged, this,
+            update);
+    connect(&d->fadeAnimation.incomingContentGeometry, &QVariantAnimation::valueChanged, this,
+            update);
     connect(&d->fadeAnimation, &FadeAnimation::finished, this, showCurrentWidget);
 
-    connect(&d->slideAnimation.outgoingContentFadeOut, &QVariantAnimation::valueChanged, this, update);
-    connect(&d->slideAnimation.incomingContentFadeIn, &QVariantAnimation::valueChanged, this, update);
-    connect(&d->slideAnimation.outgoingContentPosition, &QVariantAnimation::valueChanged, this, update);
-    connect(&d->slideAnimation.incomingContentPosition, &QVariantAnimation::valueChanged, this, update);
+    connect(&d->slideAnimation.outgoingContentFadeOut, &QVariantAnimation::valueChanged, this,
+            update);
+    connect(&d->slideAnimation.incomingContentFadeIn, &QVariantAnimation::valueChanged, this,
+            update);
+    connect(&d->slideAnimation.outgoingContentPosition, &QVariantAnimation::valueChanged, this,
+            update);
+    connect(&d->slideAnimation.incomingContentPosition, &QVariantAnimation::valueChanged, this,
+            update);
     connect(&d->slideAnimation, &SlideAnimation::finished, this, showCurrentWidget);
 
-    connect(&d->expandAnimation.outgoingContentFadeOut, &QVariantAnimation::valueChanged, this, update);
-    connect(&d->expandAnimation.incomingContentFadeIn, &QVariantAnimation::valueChanged, this, update);
+    connect(&d->expandAnimation.outgoingContentFadeOut, &QVariantAnimation::valueChanged, this,
+            update);
+    connect(&d->expandAnimation.incomingContentFadeIn, &QVariantAnimation::valueChanged, this,
+            update);
     connect(&d->expandAnimation.contentGeometry, &QVariantAnimation::valueChanged, this, update);
     connect(&d->expandAnimation.scrimFadeIn, &QVariantAnimation::valueChanged, this, update);
     connect(&d->expandAnimation, &ExpandAnimation::finished, this, showCurrentWidget);
@@ -325,7 +335,7 @@ void StackWidget::addWidget(QWidget* _widget)
     _widget->hide();
 }
 
-void StackWidget::setCurrentWidget(QWidget *_widget)
+void StackWidget::setCurrentWidget(QWidget* _widget)
 {
     if (d->currentWidget == _widget) {
         return;
@@ -366,50 +376,52 @@ void StackWidget::setCurrentWidget(QWidget *_widget)
     d->currentWidgetImage = d->currentWidget->grab();
     d->currentWidget->hide();
     switch (d->animationType) {
-        case AnimationType::FadeThrough: {
-            const qreal widthDelta = width() * 0.02;
-            const qreal heightDelta = height() * 0.02;
-            const auto startGeometry = QRectF(rect()).adjusted(widthDelta, heightDelta,
-                                                               -widthDelta, -heightDelta);
-            d->fadeAnimation.incomingContentGeometry.setStartValue(startGeometry);
-            d->fadeAnimation.incomingContentGeometry.setEndValue(QRectF(rect()));
-            Q_FALLTHROUGH();
-        }
-        case AnimationType::Fade: {
-            d->fadeAnimation.start();
-            break;
-        }
+    case AnimationType::FadeThrough: {
+        const qreal widthDelta = width() * 0.02;
+        const qreal heightDelta = height() * 0.02;
+        const auto startGeometry
+            = QRectF(rect()).adjusted(widthDelta, heightDelta, -widthDelta, -heightDelta);
+        d->fadeAnimation.incomingContentGeometry.setStartValue(startGeometry);
+        d->fadeAnimation.incomingContentGeometry.setEndValue(QRectF(rect()));
+        Q_FALLTHROUGH();
+    }
+    case AnimationType::Fade: {
+        d->fadeAnimation.start();
+        break;
+    }
 
-        case AnimationType::Slide: {
-            const int previousIndex = d->widgets.indexOf(d->previousWidget);
-            const int currentIndex = d->widgets.indexOf(d->currentWidget);
-            const qreal delta = 30 * Ui::DesignSystem::scaleFactor();
-            if (currentIndex > previousIndex) {
-                d->slideAnimation.outgoingContentPosition.setEndValue(-delta);
-                d->slideAnimation.incomingContentPosition.setStartValue(delta);
-            } else {
-                d->slideAnimation.outgoingContentPosition.setEndValue(delta);
-                d->slideAnimation.incomingContentPosition.setStartValue(-delta);
-            }
-            d->slideAnimation.start();
-            break;
+    case AnimationType::Slide: {
+        const int previousIndex = d->widgets.indexOf(d->previousWidget);
+        const int currentIndex = d->widgets.indexOf(d->currentWidget);
+        const qreal delta = 30 * Ui::DesignSystem::scaleFactor();
+        if (currentIndex > previousIndex) {
+            d->slideAnimation.outgoingContentPosition.setEndValue(-delta);
+            d->slideAnimation.incomingContentPosition.setStartValue(delta);
+        } else {
+            d->slideAnimation.outgoingContentPosition.setEndValue(delta);
+            d->slideAnimation.incomingContentPosition.setStartValue(-delta);
         }
+        d->slideAnimation.start();
+        break;
+    }
 
-        case AnimationType::Expand: {
-            QAbstractAnimation::Direction direction;
-            if (d->expandAnimation.widgetToRect.contains(d->previousWidget)) {
-                d->expandAnimation.contentGeometry.setStartValue(d->expandAnimation.widgetToRect[d->previousWidget]);
-                d->expandAnimation.contentGeometry.setEndValue(rect());
-                direction = QAbstractAnimation::Forward;
-            } else {
-                d->expandAnimation.contentGeometry.setStartValue(d->expandAnimation.widgetToRect[d->currentWidget]);
-                d->expandAnimation.contentGeometry.setEndValue(rect());
-                direction = QAbstractAnimation::Backward;
-            }
-            d->expandAnimation.setDirection(direction);
-            d->expandAnimation.start();
-            break;
+    case AnimationType::Expand: {
+        QAbstractAnimation::Direction direction;
+        if (d->expandAnimation.widgetToRect.contains(d->previousWidget)) {
+            d->expandAnimation.contentGeometry.setStartValue(
+                d->expandAnimation.widgetToRect[d->previousWidget]);
+            d->expandAnimation.contentGeometry.setEndValue(rect());
+            direction = QAbstractAnimation::Forward;
+        } else {
+            d->expandAnimation.contentGeometry.setStartValue(
+                d->expandAnimation.widgetToRect[d->currentWidget]);
+            d->expandAnimation.contentGeometry.setEndValue(rect());
+            direction = QAbstractAnimation::Backward;
         }
+        d->expandAnimation.setDirection(direction);
+        d->expandAnimation.start();
+        break;
+    }
     }
 }
 
@@ -433,7 +445,7 @@ int StackWidget::animationDuration() const
     return d->currentAnimation().duration();
 }
 
-void StackWidget::paintEvent(QPaintEvent *_event)
+void StackWidget::paintEvent(QPaintEvent* _event)
 {
     Widget::paintEvent(_event);
 
@@ -449,88 +461,92 @@ void StackWidget::paintEvent(QPaintEvent *_event)
     //
     QPainter painter(this);
     switch (d->animationType) {
-        case AnimationType::Fade:
-        case AnimationType::FadeThrough: {
-            if (!d->previousWidgetImage.isNull()) {
-                painter.setOpacity(d->fadeAnimation.outgoingContentFadeOut.currentValue().toReal());
-                painter.drawPixmap(0, 0, d->previousWidgetImage);
+    case AnimationType::Fade:
+    case AnimationType::FadeThrough: {
+        if (!d->previousWidgetImage.isNull()) {
+            painter.setOpacity(d->fadeAnimation.outgoingContentFadeOut.currentValue().toReal());
+            painter.drawPixmap(0, 0, d->previousWidgetImage);
+        }
+        if (!d->currentWidgetImage.isNull()) {
+            painter.setOpacity(d->fadeAnimation.incomingContentFadeIn.currentValue().toReal());
+            if (d->animationType == AnimationType::FadeThrough) {
+                const auto targetRect
+                    = d->fadeAnimation.incomingContentGeometry.currentValue().toRectF();
+                const auto targetPos = targetRect.topLeft();
+                const auto targetSize = targetRect.size() * devicePixelRatio();
+                painter.drawPixmap(targetPos, d->currentWidgetImage.scaled(targetSize.toSize()));
+            } else {
+                painter.drawPixmap(0, 0, d->currentWidgetImage);
             }
-            if (!d->currentWidgetImage.isNull()) {
-                painter.setOpacity(d->fadeAnimation.incomingContentFadeIn.currentValue().toReal());
-                if (d->animationType == AnimationType::FadeThrough) {
-                    const auto targetRect = d->fadeAnimation.incomingContentGeometry.currentValue().toRectF();
-                    const auto targetPos = targetRect.topLeft();
-                    const auto targetSize = targetRect.size() * devicePixelRatio();
-                    painter.drawPixmap(targetPos, d->currentWidgetImage.scaled(targetSize.toSize()));
-                } else {
-                    painter.drawPixmap(0, 0, d->currentWidgetImage);
-                }
-            }
+        }
+        break;
+    }
+
+    case AnimationType::Slide: {
+        if (!d->previousWidgetImage.isNull()) {
+            painter.setOpacity(d->slideAnimation.outgoingContentFadeOut.currentValue().toReal());
+            painter.drawPixmap(
+                QPointF(d->slideAnimation.outgoingContentPosition.currentValue().toReal(), 0.0),
+                d->previousWidgetImage);
+        }
+        if (!d->currentWidgetImage.isNull()) {
+            painter.setOpacity(d->slideAnimation.incomingContentFadeIn.currentValue().toReal());
+            painter.drawPixmap(
+                QPointF(d->slideAnimation.incomingContentPosition.currentValue().toReal(), 0.0),
+                d->currentWidgetImage);
+        }
+        break;
+    }
+
+    case AnimationType::Expand: {
+        if (d->previousWidgetImage.isNull() || d->currentWidgetImage.isNull()) {
             break;
         }
 
-        case AnimationType::Slide: {
-            if (!d->previousWidgetImage.isNull()) {
-                painter.setOpacity(d->slideAnimation.outgoingContentFadeOut.currentValue().toReal());
-                painter.drawPixmap(QPointF(d->slideAnimation.outgoingContentPosition.currentValue().toReal(), 0.0),
-                                   d->previousWidgetImage);
-            }
-            if (!d->currentWidgetImage.isNull()) {
-                painter.setOpacity(d->slideAnimation.incomingContentFadeIn.currentValue().toReal());
-                painter.drawPixmap(QPointF(d->slideAnimation.incomingContentPosition.currentValue().toReal(), 0.0),
-                                   d->currentWidgetImage);
-            }
-            break;
+        const auto backgroundImage
+            = d->currentAnimation().direction() == QAbstractAnimation::Forward
+            ? d->previousWidgetImage
+            : d->currentWidgetImage;
+        const auto foregroundImage
+            = d->currentAnimation().direction() == QAbstractAnimation::Forward
+            ? d->currentWidgetImage
+            : d->previousWidgetImage;
+
+        //
+        // Фоновое изображение старого виджета
+        //
+        painter.drawPixmap(0, 0, backgroundImage);
+        //
+        // Затемнение
+        //
+        painter.setOpacity(d->expandAnimation.scrimFadeIn.currentValue().toReal());
+        painter.fillRect(rect(), Ui::DesignSystem::color().shadow());
+        painter.setOpacity(1.0);
+        //
+        // Анимируемая область
+        //
+        const auto animatedRect = d->expandAnimation.contentGeometry.currentValue().toRect();
+        painter.fillRect(animatedRect, backgroundColor());
+        //
+        // Часть старого виджета
+        //
+        if (d->expandAnimation.outgoingContentFadeOut.state() == QAbstractAnimation::Running) {
+            painter.setOpacity(d->expandAnimation.outgoingContentFadeOut.currentValue().toReal());
+            painter.drawPixmap(animatedRect.topLeft(), backgroundImage,
+                               d->expandAnimation.contentGeometry.startValue().toRect());
         }
-
-        case AnimationType::Expand: {
-            if (d->previousWidgetImage.isNull() || d->currentWidgetImage.isNull()) {
-                break;
-            }
-
-            const auto backgroundImage
-                    = d->currentAnimation().direction() == QAbstractAnimation::Forward
-                      ? d->previousWidgetImage
-                      : d->currentWidgetImage;
-            const auto foregroundImage
-                    = d->currentAnimation().direction() == QAbstractAnimation::Forward
-                      ? d->currentWidgetImage
-                      : d->previousWidgetImage;
-
-            //
-            // Фоновое изображение старого виджета
-            //
-            painter.drawPixmap(0, 0, backgroundImage);
-            //
-            // Затемнение
-            //
-            painter.setOpacity(d->expandAnimation.scrimFadeIn.currentValue().toReal());
-            painter.fillRect(rect(), Ui::DesignSystem::color().shadow());
-            painter.setOpacity(1.0);
-            //
-            // Анимируемая область
-            //
-            const auto animatedRect = d->expandAnimation.contentGeometry.currentValue().toRect();
-            painter.fillRect(animatedRect, backgroundColor());
-            //
-            // Часть старого виджета
-            //
-            if (d->expandAnimation.outgoingContentFadeOut.state() == QAbstractAnimation::Running) {
-                painter.setOpacity(d->expandAnimation.outgoingContentFadeOut.currentValue().toReal());
-                painter.drawPixmap(animatedRect.topLeft(), backgroundImage, d->expandAnimation.contentGeometry.startValue().toRect());
-            }
-            //
-            // Новый виджет
-            //
-            painter.setOpacity(d->expandAnimation.incomingContentFadeIn.currentValue().toReal());
-            const auto currentWidgetRect = QRect(QPoint(0, 0), animatedRect.size());
-            painter.drawPixmap(animatedRect.topLeft(), foregroundImage, currentWidgetRect);
-            break;
-        }
+        //
+        // Новый виджет
+        //
+        painter.setOpacity(d->expandAnimation.incomingContentFadeIn.currentValue().toReal());
+        const auto currentWidgetRect = QRect(QPoint(0, 0), animatedRect.size());
+        painter.drawPixmap(animatedRect.topLeft(), foregroundImage, currentWidgetRect);
+        break;
+    }
     }
 }
 
-void StackWidget::resizeEvent(QResizeEvent *_event)
+void StackWidget::resizeEvent(QResizeEvent* _event)
 {
     if (d->currentWidget == nullptr) {
         return;

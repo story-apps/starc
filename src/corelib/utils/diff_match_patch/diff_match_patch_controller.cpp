@@ -8,21 +8,25 @@ namespace {
 /**
  * @brief Является ли строка тэгом
  */
-static bool isTag(const QString& _tag) {
-    return !_tag.isEmpty() && _tag.startsWith(QLatin1String("<")) && _tag.endsWith(QLatin1String(">"));
+static bool isTag(const QString& _tag)
+{
+    return !_tag.isEmpty() && _tag.startsWith(QLatin1String("<"))
+        && _tag.endsWith(QLatin1String(">"));
 }
 
 /**
  * @brief Является ли тэг открывающим
  */
-static bool isOpenTag(const QString& _tag) {
+static bool isOpenTag(const QString& _tag)
+{
     return isTag(_tag) && !_tag.contains(QLatin1String("/"));
 }
 
 /**
  * @brief Является ли тэг закрывающим
  */
-static bool isCloseTag(const QString& _tag) {
+static bool isCloseTag(const QString& _tag)
+{
     return isTag(_tag) && _tag.contains(QLatin1String("/"));
 }
 
@@ -75,14 +79,12 @@ DiffMatchPatchController::Implementation::Implementation(const QVector<QString>&
     // для генерации служебных символов для карты тэгов
     //
     uint characterIndex = 0xE000;
-    auto nextCharacter = [&characterIndex] {
-        return QChar(characterIndex++);
-    };
+    auto nextCharacter = [&characterIndex] { return QChar(characterIndex++); };
 
     //
     // Добавить заданный тэг в карту служебных символов
     //
-    auto addTag = [this, nextCharacter] (const QString& _tag) {
+    auto addTag = [this, nextCharacter](const QString& _tag) {
         tagsMap.insert("<" + _tag + ">", nextCharacter());
         tagsMap.insert("</" + _tag + ">", nextCharacter());
     };
@@ -109,39 +111,31 @@ QString DiffMatchPatchController::Implementation::plainToXml(const QString& _pla
     return xml;
 }
 
-QString DiffMatchPatchController::Implementation::makePatchPlain(const QString& _plain1, const QString& _plain2)
+QString DiffMatchPatchController::Implementation::makePatchPlain(const QString& _plain1,
+                                                                 const QString& _plain2)
 {
     diff_match_patch dmp;
     return dmp.patch_toText(dmp.patch_make(_plain1, _plain2));
 }
 
-QString DiffMatchPatchController::Implementation::makePatchXml(const QString& _xml1, const QString& _xml2)
+QString DiffMatchPatchController::Implementation::makePatchXml(const QString& _xml1,
+                                                               const QString& _xml2)
 {
-    return
-            plainToXml(
-                makePatchPlain(
-                    xmlToPlain(_xml1),
-                    xmlToPlain(_xml2)
-                    )
-                );
+    return plainToXml(makePatchPlain(xmlToPlain(_xml1), xmlToPlain(_xml2)));
 }
 
-QString DiffMatchPatchController::Implementation::applyPatchPlain(const QString& _plain, const QString& _patch)
+QString DiffMatchPatchController::Implementation::applyPatchPlain(const QString& _plain,
+                                                                  const QString& _patch)
 {
     diff_match_patch dmp;
     QList<Patch> patches = dmp.patch_fromText(_patch);
     return dmp.patch_apply(patches, _plain).first;
 }
 
-QString DiffMatchPatchController::Implementation::applyPatchXml(const QString& _xml, const QString& _patch)
+QString DiffMatchPatchController::Implementation::applyPatchXml(const QString& _xml,
+                                                                const QString& _patch)
 {
-    return
-            plainToXml(
-                applyPatchPlain(
-                    xmlToPlain(_xml),
-                    xmlToPlain(_patch)
-                    )
-                );
+    return plainToXml(applyPatchPlain(xmlToPlain(_xml), xmlToPlain(_patch)));
 }
 
 
@@ -160,12 +154,15 @@ QByteArray DiffMatchPatchController::makePatch(const QString& _lhs, const QStrin
     return d->makePatchXml(_lhs, _rhs).toUtf8();
 }
 
-QByteArray DiffMatchPatchController::applyPatch(const QByteArray& _content, const QByteArray& _patch) const
+QByteArray DiffMatchPatchController::applyPatch(const QByteArray& _content,
+                                                const QByteArray& _patch) const
 {
     return d->applyPatchXml(_content, _patch).toUtf8();
 }
 
-QPair<DiffMatchPatchController::Change, DiffMatchPatchController::Change> DiffMatchPatchController::changedXml(const QString& _xml, const QString& _patch) const {
+QPair<DiffMatchPatchController::Change, DiffMatchPatchController::Change> DiffMatchPatchController::
+    changedXml(const QString& _xml, const QString& _patch) const
+{
     //
     // Применим патчи
     //
@@ -200,24 +197,20 @@ QPair<DiffMatchPatchController::Change, DiffMatchPatchController::Change> DiffMa
         //
         // ... для старого
         //
-        if (oldStartPos == -1
-            || patch.start1 < oldStartPos) {
+        if (oldStartPos == -1 || patch.start1 < oldStartPos) {
             oldStartPos = patch.start1;
         }
-        if (oldEndPos == -1
-            || oldEndPos < (patch.start1 + patch.length1 - oldDistance)) {
+        if (oldEndPos == -1 || oldEndPos < (patch.start1 + patch.length1 - oldDistance)) {
             oldEndPos = patch.start1 + patch.length1 - oldDistance;
         }
         oldDistance += patch.length2 - patch.length1;
         //
         // ... для нового
         //
-        if (newStartPos == -1
-            || patch.start2 < newStartPos) {
+        if (newStartPos == -1 || patch.start2 < newStartPos) {
             newStartPos = patch.start2;
         }
-        if (newEndPos == -1
-            || newEndPos < (patch.start2 + patch.length2)) {
+        if (newEndPos == -1 || newEndPos < (patch.start2 + patch.length2)) {
             newEndPos = patch.start2 + patch.length2;
         }
     }
@@ -256,7 +249,8 @@ QPair<DiffMatchPatchController::Change, DiffMatchPatchController::Change> DiffMa
             break;
         }
     }
-    const QString oldXmlForUpdate = oldXmlPlain.mid(oldStartPosForXmlPlain, oldEndPosForXml - oldStartPosForXmlPlain);
+    const QString oldXmlForUpdate
+        = oldXmlPlain.mid(oldStartPosForXmlPlain, oldEndPosForXml - oldStartPosForXmlPlain);
 
 
     //
@@ -281,9 +275,12 @@ QPair<DiffMatchPatchController::Change, DiffMatchPatchController::Change> DiffMa
             break;
         }
     }
-    const QString newXmlForUpdate = newXmlPlain.mid(newStartPosForXmlPlain, newEndPosForXml - newStartPosForXmlPlain);
+    const QString newXmlForUpdate
+        = newXmlPlain.mid(newStartPosForXmlPlain, newEndPosForXml - newStartPosForXmlPlain);
 
 
-    return {{ d->plainToXml(oldXmlForUpdate), d->plainToXml(oldXmlPlain.left(oldStartPosForXmlPlain)).length()},
-            { d->plainToXml(newXmlForUpdate), d->plainToXml(newXmlPlain.left(newStartPosForXmlPlain)).length()} };
+    return { { d->plainToXml(oldXmlForUpdate),
+               d->plainToXml(oldXmlPlain.left(oldStartPosForXmlPlain)).length() },
+             { d->plainToXml(newXmlForUpdate),
+               d->plainToXml(newXmlPlain.left(newStartPosForXmlPlain)).length() } };
 }

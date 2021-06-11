@@ -10,8 +10,7 @@ class QObject;
 class QStringList;
 class QWidget;
 
-namespace ManagementLayer
-{
+namespace ManagementLayer {
 
 /**
  * @brief Интерфейс менеджера документа
@@ -24,7 +23,10 @@ public:
     /**
      * @brief Вернуть указатель на себя как QObject, если менеджер является наследником  QObject
      */
-    virtual QObject* asQObject() { return nullptr; }
+    virtual QObject* asQObject()
+    {
+        return nullptr;
+    }
 
     /**
      * @brief Задать модель документа
@@ -44,17 +46,23 @@ public:
     /**
      * @brief Перенастроить редактор, которым управляет менеджер
      */
-    virtual void reconfigure(const QStringList& _changedSettingsKeys) {}
+    virtual void reconfigure(const QStringList& _changedSettingsKeys)
+    {
+    }
 
     /**
      * @brief Связать с другим менеджером
      */
-    virtual void bind(IDocumentManager*) {}
+    virtual void bind(IDocumentManager*)
+    {
+    }
 
     /**
      * @brief Сохранить параметры плагина
      */
-    virtual void saveSettings() {}
+    virtual void saveSettings()
+    {
+    }
 };
 
 } // namespace ManagementLayer

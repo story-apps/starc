@@ -1,8 +1,8 @@
 #pragma once
 
-#include <corelib_global.h>
-
 #include <ui/widgets/stack_widget/stack_widget.h>
+
+#include <corelib_global.h>
 
 
 /**
@@ -35,10 +35,9 @@ signals:
 protected:
     void updateTranslations() override;
 
-    void designSystemChangeEvent(DesignSystemChangeEvent *_event) override;
+    void designSystemChangeEvent(DesignSystemChangeEvent* _event) override;
 
 private:
     class Implementation;
     QScopedPointer<Implementation> d;
 };
-

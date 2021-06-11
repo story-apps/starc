@@ -3,8 +3,7 @@
 #include <ui/widgets/dialog/abstract_dialog.h>
 
 
-namespace Ui
-{
+namespace Ui {
 
 /**
  * @brief Диалог регистрации/авторизации в личном кабинете пользователя

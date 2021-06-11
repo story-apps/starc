@@ -6,8 +6,7 @@ namespace BusinessLayer {
 class TextModel;
 }
 
-namespace Ui
-{
+namespace Ui {
 
 /**
  * @brief Представление редактора текстового документа

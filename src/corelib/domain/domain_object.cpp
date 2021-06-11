@@ -1,11 +1,10 @@
 #include "domain_object.h"
 
-namespace Domain
-{
+namespace Domain {
 
-DomainObject::DomainObject(const Identifier& _id) :
-    m_id(_id),
-    m_isChangesStored(_id.isValid())
+DomainObject::DomainObject(const Identifier& _id)
+    : m_id(_id)
+    , m_isChangesStored(_id.isValid())
 {
 }
 

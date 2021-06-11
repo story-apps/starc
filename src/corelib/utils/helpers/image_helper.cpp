@@ -1,7 +1,7 @@
 #include "image_helper.h"
 
-#include <QByteArray>
 #include <QBuffer>
+#include <QByteArray>
 #include <QCache>
 #include <QIcon>
 #include <QPainter>
@@ -10,19 +10,19 @@
 #include <QtMath>
 
 namespace {
-    /**
-     * @brief Максимальные размеры изображения
-     */
-    /** @{ */
-    const int kImageMaxWidth = 2688;
-    const int kImageMaxHeight = 2688;
-    /** @} */
+/**
+ * @brief Максимальные размеры изображения
+ */
+/** @{ */
+const int kImageMaxWidth = 2688;
+const int kImageMaxHeight = 2688;
+/** @} */
 
-    /**
-     * @brief Используем низкое качество изображения (всё-таки у нас приложение не для фотографов)
-     */
-    const int kImageFileQuality = 80;
-}
+/**
+ * @brief Используем низкое качество изображения (всё-таки у нас приложение не для фотографов)
+ */
+const int kImageFileQuality = 80;
+} // namespace
 
 QByteArray ImageHelper::bytesFromImage(const QPixmap& _image)
 {
@@ -34,9 +34,9 @@ QByteArray ImageHelper::bytesFromImage(const QPixmap& _image)
     // Если необходимо корректируем размер изображения
     //
     QPixmap imageScaled = _image;
-    if (imageScaled.width() > kImageMaxWidth
-        || imageScaled.height() > kImageMaxHeight) {
-        imageScaled = imageScaled.scaled(kImageMaxWidth, kImageMaxHeight, Qt::KeepAspectRatio, Qt::SmoothTransformation);
+    if (imageScaled.width() > kImageMaxWidth || imageScaled.height() > kImageMaxHeight) {
+        imageScaled = imageScaled.scaled(kImageMaxWidth, kImageMaxHeight, Qt::KeepAspectRatio,
+                                         Qt::SmoothTransformation);
     }
 
     //
@@ -68,7 +68,7 @@ QPixmap ImageHelper::loadSvg(const QString& _svgPath, const QSize& _size)
     //
     // Ищем изображение в кэше
     //
-    const CacheKey imageKey{_svgPath, {_size.width(), _size.height()}};
+    const CacheKey imageKey{ _svgPath, { _size.width(), _size.height() } };
     if (s_imagesCache.contains(imageKey)) {
         return *s_imagesCache[imageKey];
     }
@@ -92,7 +92,7 @@ QPixmap ImageHelper::loadSvg(const QString& _svgPath, const QSize& _size, const 
     //
     // Ищем изображение в кэше
     //
-    const CacheKey imageKey{_svgPath, {_size.width(), {_size.height(), _color.rgb()}}};
+    const CacheKey imageKey{ _svgPath, { _size.width(), { _size.height(), _color.rgb() } } };
     if (s_imagesCache.contains(imageKey)) {
         return *s_imagesCache[imageKey];
     }
@@ -130,7 +130,8 @@ bool ImageHelper::isImagesEqual(const QPixmap& _lhs, const QPixmap& _rhs)
     return bytesFromImage(_lhs) == bytesFromImage(_rhs);
 }
 
-QPixmap ImageHelper::makeAvatar(const QString& _text, const QFont& _font, const QSize& _size, const QColor& _color)
+QPixmap ImageHelper::makeAvatar(const QString& _text, const QFont& _font, const QSize& _size,
+                                const QColor& _color)
 {
     //
     // Кэш аватарок
@@ -141,7 +142,7 @@ QPixmap ImageHelper::makeAvatar(const QString& _text, const QFont& _font, const 
     //
     // Ищем аватарку в кэше
     //
-    const CacheKey avatarKey{_text, {_size.width(), {_font.pixelSize(), _color.rgb()}}};
+    const CacheKey avatarKey{ _text, { _size.width(), { _font.pixelSize(), _color.rgb() } } };
     if (s_avatarsCache.contains(avatarKey)) {
         return *s_avatarsCache[avatarKey];
     }
@@ -209,7 +210,7 @@ QPixmap ImageHelper::makeAvatar(const QPixmap& _pixmap, const QSize& _size)
     //
     // Ищем аватарку в кэше
     //
-    const CacheKey avatarKey{_pixmap.cacheKey(), _size.width()};
+    const CacheKey avatarKey{ _pixmap.cacheKey(), _size.width() };
     if (s_avatarsCache.contains(avatarKey)) {
         return *s_avatarsCache[avatarKey];
     }
@@ -222,12 +223,11 @@ QPixmap ImageHelper::makeAvatar(const QPixmap& _pixmap, const QSize& _size)
     QPainter painter(&avatar);
     painter.setRenderHint(QPainter::Antialiasing, true);
     QPainterPath circleClipPath;
-    circleClipPath.addEllipse(avatar.rect().adjusted(1,1,0,0).center(),
-                              avatar.width()/2, avatar.height()/2);
+    circleClipPath.addEllipse(avatar.rect().adjusted(1, 1, 0, 0).center(), avatar.width() / 2,
+                              avatar.height() / 2);
     painter.setClipPath(circleClipPath);
-    painter.drawPixmap(0, 0, _pixmap.scaled(_size,
-                                            Qt::KeepAspectRatioByExpanding,
-                                            Qt::SmoothTransformation));
+    painter.drawPixmap(
+        0, 0, _pixmap.scaled(_size, Qt::KeepAspectRatioByExpanding, Qt::SmoothTransformation));
     painter.end();
 
     //
@@ -238,7 +238,8 @@ QPixmap ImageHelper::makeAvatar(const QPixmap& _pixmap, const QSize& _size)
     return *avatarPixmap;
 }
 
-QPixmap ImageHelper::makeAvatar(const QPixmap& _pixmap, const QSize& _size, const QColor& _backgroundColor)
+QPixmap ImageHelper::makeAvatar(const QPixmap& _pixmap, const QSize& _size,
+                                const QColor& _backgroundColor)
 {
     //
     // Кэш аватарок
@@ -249,7 +250,7 @@ QPixmap ImageHelper::makeAvatar(const QPixmap& _pixmap, const QSize& _size, cons
     //
     // Ищем аватарку в кэше
     //
-    const CacheKey avatarKey{_pixmap.cacheKey(), {_size.width(), _backgroundColor.rgba()}};
+    const CacheKey avatarKey{ _pixmap.cacheKey(), { _size.width(), _backgroundColor.rgba() } };
     if (s_avatarsCache.contains(avatarKey)) {
         return *s_avatarsCache[avatarKey];
     }
@@ -273,9 +274,9 @@ QPixmap ImageHelper::makeAvatar(const QPixmap& _pixmap, const QSize& _size, cons
     //
     // Рисуем в центре заданное изображение
     //
-    const QRectF pixmapRect(QPointF(_size.width() - _pixmap.width(),
-                                    _size.height() - _pixmap.height()) / 2.0,
-                            _pixmap.size());
+    const QRectF pixmapRect(
+        QPointF(_size.width() - _pixmap.width(), _size.height() - _pixmap.height()) / 2.0,
+        _pixmap.size());
     painter.drawPixmap(pixmapRect.toRect(), _pixmap);
     painter.end();
 
@@ -288,10 +289,12 @@ QPixmap ImageHelper::makeAvatar(const QPixmap& _pixmap, const QSize& _size, cons
 }
 
 QT_BEGIN_NAMESPACE
-extern void qt_blurImage(QPainter *p, QImage &blurImage, qreal radius, bool quality, bool alphaOnly, int transposed = 0);
+extern void qt_blurImage(QPainter* p, QImage& blurImage, qreal radius, bool quality, bool alphaOnly,
+                         int transposed = 0);
 QT_END_NAMESPACE
 
-QPixmap ImageHelper::dropShadow(const QPixmap& _sourcePixmap, const QMarginsF& _shadowMargins, qreal _blurRadius, const QColor& _color, bool _useCache)
+QPixmap ImageHelper::dropShadow(const QPixmap& _sourcePixmap, const QMarginsF& _shadowMargins,
+                                qreal _blurRadius, const QColor& _color, bool _useCache)
 {
     if (_sourcePixmap.isNull()) {
         return QPixmap();
@@ -306,7 +309,9 @@ QPixmap ImageHelper::dropShadow(const QPixmap& _sourcePixmap, const QMarginsF& _
     //
     // Ищем тень в кэше
     //
-    const CacheKey shadowKey{_sourcePixmap.width(), {_sourcePixmap.height(), {qCeil(_blurRadius * 100.0), _color.rgba()}}};
+    const CacheKey shadowKey{ _sourcePixmap.width(),
+                              { _sourcePixmap.height(),
+                                { qCeil(_blurRadius * 100.0), _color.rgba() } } };
     if (_useCache && s_shadowsCache.contains(shadowKey)) {
         return *s_shadowsCache[shadowKey];
     }
@@ -316,7 +321,8 @@ QPixmap ImageHelper::dropShadow(const QPixmap& _sourcePixmap, const QMarginsF& _
     //
     const QSizeF deltaSize(_shadowMargins.left() + _shadowMargins.right(),
                            _shadowMargins.top() + _shadowMargins.bottom());
-    QImage shadowedImage(_sourcePixmap.size() + deltaSize.toSize(), QImage::Format_ARGB32_Premultiplied);
+    QImage shadowedImage(_sourcePixmap.size() + deltaSize.toSize(),
+                         QImage::Format_ARGB32_Premultiplied);
     shadowedImage.fill(0);
     //
     // ...  рисуем исходное изображение
@@ -351,7 +357,7 @@ QPixmap ImageHelper::dropShadow(const QPixmap& _sourcePixmap, const QMarginsF& _
 }
 
 void ImageHelper::drawRoundedImage(QPainter& _painter, const QRectF& _rect, const QPixmap& _image,
-    qreal _roundingRadius, int _notRoundedEdge)
+                                   qreal _roundingRadius, int _notRoundedEdge)
 {
     if (_rect.isEmpty()) {
         return;
@@ -372,7 +378,7 @@ void ImageHelper::drawRoundedImage(QPainter& _painter, const QRectF& _rect, cons
     if (_notRoundedEdge != 0) {
         int dx1 = 0, dy1 = 0, dx2 = 0, dy2 = 0;
         int edge = Qt::TopEdge;
-        for (auto diff : {&dy1, &dx1, &dx2, &dy2}) {
+        for (auto diff : { &dy1, &dx1, &dx2, &dy2 }) {
             if (_notRoundedEdge & edge) {
                 // удвоение даёт достаточный запас, когда ширина или высота меньше радиуса
                 *diff = _roundingRadius * 2;

@@ -1,24 +1,21 @@
 #include "project_information_model.h"
 
 #include <business_layer/model/abstract_image_wrapper.h>
-
 #include <domain/document_object.h>
-
 #include <utils/helpers/image_helper.h>
 #include <utils/helpers/text_helper.h>
 
 #include <QDomDocument>
 
 
-namespace BusinessLayer
-{
+namespace BusinessLayer {
 
 namespace {
-    const QString kDocumentKey = QStringLiteral("document");
-    const QString kNameKey = QStringLiteral("name");
-    const QString kLoglineKey = QStringLiteral("logline");
-    const QString kCoverKey = QStringLiteral("cover");
-}
+const QString kDocumentKey = QStringLiteral("document");
+const QString kNameKey = QStringLiteral("name");
+const QString kLoglineKey = QStringLiteral("logline");
+const QString kCoverKey = QStringLiteral("cover");
+} // namespace
 
 class ProjectInformationModel::Implementation
 {
@@ -33,13 +30,15 @@ public:
 
 
 ProjectInformationModel::ProjectInformationModel(QObject* _parent)
-    : AbstractModel({ kDocumentKey, kNameKey, kLoglineKey, kCoverKey },
-                    _parent),
-      d(new Implementation)
+    : AbstractModel({ kDocumentKey, kNameKey, kLoglineKey, kCoverKey }, _parent)
+    , d(new Implementation)
 {
-    connect(this, &ProjectInformationModel::nameChanged, this, &ProjectInformationModel::updateDocumentContent);
-    connect(this, &ProjectInformationModel::loglineChanged, this, &ProjectInformationModel::updateDocumentContent);
-    connect(this, &ProjectInformationModel::coverChanged, this, &ProjectInformationModel::updateDocumentContent);
+    connect(this, &ProjectInformationModel::nameChanged, this,
+            &ProjectInformationModel::updateDocumentContent);
+    connect(this, &ProjectInformationModel::loglineChanged, this,
+            &ProjectInformationModel::updateDocumentContent);
+    connect(this, &ProjectInformationModel::coverChanged, this,
+            &ProjectInformationModel::updateDocumentContent);
 }
 
 ProjectInformationModel::~ProjectInformationModel() = default;
@@ -123,7 +122,9 @@ QByteArray ProjectInformationModel::toXml() const
     }
 
     QByteArray xml = "<?xml version=\"1.0\"?>\n";
-    xml += QString("<%1 mime-type=\"%2\" version=\"1.0\">\n").arg(kDocumentKey, Domain::mimeTypeFor(document()->type())).toUtf8();
+    xml += QString("<%1 mime-type=\"%2\" version=\"1.0\">\n")
+               .arg(kDocumentKey, Domain::mimeTypeFor(document()->type()))
+               .toUtf8();
     xml += QString("<%1><![CDATA[%2]]></%1>\n").arg(kNameKey, d->name).toUtf8();
     xml += QString("<%1><![CDATA[%2]]></%1>\n").arg(kLoglineKey, d->logline).toUtf8();
     xml += QString("<%1><![CDATA[%2]]></%1>\n").arg(kCoverKey, d->cover.uuid.toString()).toUtf8();

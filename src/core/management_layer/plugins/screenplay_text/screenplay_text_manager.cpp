@@ -3,10 +3,8 @@
 #include "screenplay_text_view.h"
 
 #include <business_layer/model/screenplay/text/screenplay_text_model.h>
-
 #include <data_layer/storage/settings_storage.h>
 #include <data_layer/storage/storage_facade.h>
-
 #include <domain/document_object.h>
 
 #include <QApplication>
@@ -14,15 +12,15 @@
 #include <QTimer>
 
 
-namespace ManagementLayer
-{
+namespace ManagementLayer {
 
-namespace  {
-    const QString kSettingsKey = "screenplay-text";
-    QString cursorPositionFor(Domain::DocumentObject* _item) {
-        return QString("%1/%2/last-cursor").arg(kSettingsKey, _item->uuid().toString());
-    }
+namespace {
+const QString kSettingsKey = "screenplay-text";
+QString cursorPositionFor(Domain::DocumentObject* _item)
+{
+    return QString("%1/%2/last-cursor").arg(kSettingsKey, _item->uuid().toString());
 }
+} // namespace
 
 class ScreenplayTextManager::Implementation
 {
@@ -88,18 +86,19 @@ void ScreenplayTextManager::Implementation::saveViewSettings()
 void ScreenplayTextManager::Implementation::loadModelSettings()
 {
     using namespace DataStorageLayer;
-    const auto cursorPosition
-            = StorageFacade::settingsStorage()->value(
-                  cursorPositionFor(model->document()), SettingsStorage::SettingsPlace::Application, 0).toInt();
+    const auto cursorPosition = StorageFacade::settingsStorage()
+                                    ->value(cursorPositionFor(model->document()),
+                                            SettingsStorage::SettingsPlace::Application, 0)
+                                    .toInt();
     view->setCursorPosition(cursorPosition);
 }
 
 void ScreenplayTextManager::Implementation::saveModelSettings()
 {
     using namespace DataStorageLayer;
-    StorageFacade::settingsStorage()->setValue(
-        cursorPositionFor(model->document()), view->cursorPosition(),
-        SettingsStorage::SettingsPlace::Application);
+    StorageFacade::settingsStorage()->setValue(cursorPositionFor(model->document()),
+                                               view->cursorPosition(),
+                                               SettingsStorage::SettingsPlace::Application);
 }
 
 
@@ -107,11 +106,11 @@ void ScreenplayTextManager::Implementation::saveModelSettings()
 
 
 ScreenplayTextManager::ScreenplayTextManager(QObject* _parent)
-    : QObject(_parent),
-      d(new Implementation)
+    : QObject(_parent)
+    , d(new Implementation)
 {
-    connect(d->view, &Ui::ScreenplayTextView::currentModelIndexChanged,
-            this, &ScreenplayTextManager::currentModelIndexChanged);
+    connect(d->view, &Ui::ScreenplayTextView::currentModelIndexChanged, this,
+            &ScreenplayTextManager::currentModelIndexChanged);
 }
 
 ScreenplayTextManager::~ScreenplayTextManager() = default;
@@ -154,18 +153,18 @@ void ScreenplayTextManager::setModel(BusinessLayer::AbstractModel* _model)
         //
         // ... настраиваем соединения
         //
-//        d->view->setName(d->model->name());
-//        d->view->setText(d->model->text());
+        //        d->view->setName(d->model->name());
+        //        d->view->setText(d->model->text());
 
-//        connect(d->model, &BusinessLayer::ScreenplayTextModel::nameChanged,
-//                d->view, &Ui::ScreenplayTextView::setName);
-//        connect(d->model, &BusinessLayer::ScreenplayTextModel::textChanged,
-//                d->view, &Ui::ScreenplayTextView::setText);
-//        //
-//        connect(d->view, &Ui::ScreenplayTextView::nameChanged,
-//                d->model, &BusinessLayer::ScreenplayTextModel::setName);
-//        connect(d->view, &Ui::ScreenplayTextView::textChanged,
-//                d->model, &BusinessLayer::ScreenplayTextModel::setText);
+        //        connect(d->model, &BusinessLayer::ScreenplayTextModel::nameChanged,
+        //                d->view, &Ui::ScreenplayTextView::setName);
+        //        connect(d->model, &BusinessLayer::ScreenplayTextModel::textChanged,
+        //                d->view, &Ui::ScreenplayTextView::setText);
+        //        //
+        //        connect(d->view, &Ui::ScreenplayTextView::nameChanged,
+        //                d->model, &BusinessLayer::ScreenplayTextModel::setName);
+        //        connect(d->view, &Ui::ScreenplayTextView::textChanged,
+        //                d->model, &BusinessLayer::ScreenplayTextModel::setText);
     }
 }
 
@@ -189,17 +188,16 @@ void ScreenplayTextManager::bind(IDocumentManager* _manager)
     Q_ASSERT(_manager);
 
     const auto isConnectedFirstTime
-            = connect(_manager->asQObject(), SIGNAL(currentModelIndexChanged(const QModelIndex&)),
-                      this, SLOT(setCurrentModelIndex(const QModelIndex&)), Qt::UniqueConnection);
+        = connect(_manager->asQObject(), SIGNAL(currentModelIndexChanged(const QModelIndex&)), this,
+                  SLOT(setCurrentModelIndex(const QModelIndex&)), Qt::UniqueConnection);
 
     //
     // Ставим в очередь событие нотификацию о смене текущей сцены,
     // чтобы навигатор отобразил её при первом открытии
     //
     if (isConnectedFirstTime) {
-        QTimer::singleShot(0, this, [this] {
-            emit currentModelIndexChanged(d->view->currentModelIndex());
-        });
+        QTimer::singleShot(0, this,
+                           [this] { emit currentModelIndexChanged(d->view->currentModelIndex()); });
     }
 }
 

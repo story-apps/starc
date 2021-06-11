@@ -1,7 +1,6 @@
 #include "abstract_mapper.h"
 
 #include <data_layer/database.h>
-
 #include <domain/domain_object.h>
 
 #include <QDebug>
@@ -16,8 +15,7 @@ using Domain::DomainObject;
 using Domain::Identifier;
 
 
-namespace DataMappingLayer
-{
+namespace DataMappingLayer {
 
 void AbstractMapper::clear()
 {

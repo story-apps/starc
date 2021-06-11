@@ -21,11 +21,11 @@ public:
 };
 
 ImageCroppingDialog::Implementation::Implementation(QWidget* _parent)
-    : imageCropper(new ImageCropper(_parent)),
-      imageCroppingLabel(new Body1Label(_parent)),
-      buttonsLayout(new QHBoxLayout),
-      cancelButton(new Button(_parent)),
-      selectButton(new Button(_parent))
+    : imageCropper(new ImageCropper(_parent))
+    , imageCroppingLabel(new Body1Label(_parent))
+    , buttonsLayout(new QHBoxLayout)
+    , cancelButton(new Button(_parent))
+    , selectButton(new Button(_parent))
 {
     buttonsLayout->setContentsMargins({});
     buttonsLayout->setSpacing(0);
@@ -39,8 +39,8 @@ ImageCroppingDialog::Implementation::Implementation(QWidget* _parent)
 
 
 ImageCroppingDialog::ImageCroppingDialog(QWidget* _parent)
-    : AbstractDialog(_parent),
-      d(new Implementation(this))
+    : AbstractDialog(_parent)
+    , d(new Implementation(this))
 {
     contentsLayout()->setContentsMargins({});
     contentsLayout()->setSpacing(0);
@@ -107,21 +107,18 @@ void ImageCroppingDialog::designSystemChangeEvent(DesignSystemChangeEvent* _even
 
     d->imageCroppingLabel->setTextColor(Ui::DesignSystem::color().onBackground());
     d->imageCroppingLabel->setBackgroundColor(Ui::DesignSystem::color().background());
-    d->imageCroppingLabel->setContentsMargins(
-                QMarginsF(Ui::DesignSystem::layout().px24(),
-                          Ui::DesignSystem::layout().px12(),
-                          Ui::DesignSystem::layout().px24(),
-                          0.0)
-                .toMargins());
+    d->imageCroppingLabel->setContentsMargins(QMarginsF(Ui::DesignSystem::layout().px24(),
+                                                        Ui::DesignSystem::layout().px12(),
+                                                        Ui::DesignSystem::layout().px24(), 0.0)
+                                                  .toMargins());
 
-    for (auto button : { d->cancelButton,
-                         d->selectButton }) {
+    for (auto button : { d->cancelButton, d->selectButton }) {
         button->setBackgroundColor(Ui::DesignSystem::color().secondary());
         button->setTextColor(Ui::DesignSystem::color().secondary());
     }
 
-    d->buttonsLayout->setContentsMargins(QMarginsF(Ui::DesignSystem::layout().px12(),
-                                                   Ui::DesignSystem::layout().px12(),
-                                                   Ui::DesignSystem::layout().px16(),
-                                                   Ui::DesignSystem::layout().px8()).toMargins());
+    d->buttonsLayout->setContentsMargins(
+        QMarginsF(Ui::DesignSystem::layout().px12(), Ui::DesignSystem::layout().px12(),
+                  Ui::DesignSystem::layout().px16(), Ui::DesignSystem::layout().px8())
+            .toMargins());
 }

@@ -15,7 +15,8 @@ public:
     /**
      * @brief Добавляем отрисовку дополнительных элементов
      */
-    void paint(QPainter* _painter, const QStyleOptionViewItem& _option, const QModelIndex& _index) const;
+    void paint(QPainter* _painter, const QStyleOptionViewItem& _option,
+               const QModelIndex& _index) const;
 };
 
 } // namespace Ui

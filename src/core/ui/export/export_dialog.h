@@ -6,8 +6,7 @@ namespace BusinessLayer {
 struct ExportOptions;
 }
 
-namespace Ui
-{
+namespace Ui {
 
 /**
  * @brief Диалог настройки параметров экспорта

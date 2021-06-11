@@ -1,8 +1,8 @@
 #pragma once
 
-#include <corelib_global.h>
-
 #include <QTextEdit>
+
+#include <corelib_global.h>
 
 class QValidator;
 
@@ -169,7 +169,7 @@ protected:
     /**
      * @brief Ловим LayoutDirectionChanged
      */
-    void changeEvent(QEvent *_event) override;
+    void changeEvent(QEvent* _event) override;
 
     /**
      * @brief Разрешаем вставлять только плоский текст
@@ -180,4 +180,3 @@ private:
     class Implementation;
     QScopedPointer<Implementation> d;
 };
-

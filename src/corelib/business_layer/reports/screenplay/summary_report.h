@@ -6,13 +6,12 @@
 
 #include <chrono>
 
-namespace BusinessLayer
-{
+namespace BusinessLayer {
 
 /**
  * @brief Сводный отчёт по сценарию
  */
-class ScreenplaySummaryReport : public AbstractReport
+class CORE_LIBRARY_EXPORT ScreenplaySummaryReport : public AbstractReport
 {
 public:
     ScreenplaySummaryReport();

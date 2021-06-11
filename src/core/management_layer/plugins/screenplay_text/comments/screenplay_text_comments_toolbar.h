@@ -3,8 +3,7 @@
 #include <ui/widgets/floating_tool_bar/floating_tool_bar.h>
 
 
-namespace Ui
-{
+namespace Ui {
 
 /**
  * @brief Панель инструментов рецензирования

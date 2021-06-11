@@ -1,8 +1,8 @@
 #include "completer.h"
 
 #include <ui/design_system/design_system.h>
-#include <ui/widgets/tree/tree_view.h>
 #include <ui/widgets/tree/tree_delegate.h>
+#include <ui/widgets/tree/tree_view.h>
 
 #include <QElapsedTimer>
 #include <QEvent>
@@ -53,8 +53,8 @@ public:
 };
 
 Completer::Implementation::Implementation(QWidget* _parent)
-    : popup(new TreeView(_parent)),
-      popupDelegate(new TreeDelegate(popup))
+    : popup(new TreeView(_parent))
+    , popupDelegate(new TreeDelegate(popup))
 {
     popup->setHeaderHidden(true);
     popup->setRootIsDecorated(false);
@@ -68,13 +68,13 @@ Completer::Implementation::Implementation(QWidget* _parent)
     popupHeightAnimation.setStartValue(0);
     popupHeightAnimation.setEndValue(0);
 
-    connect(&popupHeightAnimation, &QVariantAnimation::valueChanged, popup, [this] (const QVariant& _value) {
-        const auto height = _value.toInt();
-        popup->resize(popup->width(), height);
-    });
-    connect(&popupHeightAnimation, &QVariantAnimation::finished, &popupHeightAnimation, [this] {
-        popupHeightAnimation.setStartValue(popupHeightAnimation.endValue());
-    });
+    connect(&popupHeightAnimation, &QVariantAnimation::valueChanged, popup,
+            [this](const QVariant& _value) {
+                const auto height = _value.toInt();
+                popup->resize(popup->width(), height);
+            });
+    connect(&popupHeightAnimation, &QVariantAnimation::finished, &popupHeightAnimation,
+            [this] { popupHeightAnimation.setStartValue(popupHeightAnimation.endValue()); });
 }
 
 void Completer::Implementation::reconfigurePopup()
@@ -96,8 +96,8 @@ void Completer::Implementation::reconfigurePopup()
 
 
 Completer::Completer(QWidget* _parent)
-    : QCompleter(_parent),
-      d(new Implementation(_parent))
+    : QCompleter(_parent)
+    , d(new Implementation(_parent))
 {
     d->popup->installEventFilter(this);
 

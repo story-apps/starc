@@ -16,8 +16,8 @@
 
 #pragma once
 
-#include "../../WAF.h"
 #include "../../AbstractAnimator.h"
+#include "../../WAF.h"
 
 class QPropertyAnimation;
 
@@ -25,81 +25,80 @@ class QPropertyAnimation;
 /**
  * Widgets Animation Framework
  */
-namespace WAF
+namespace WAF {
+class CircleTransparentDecorator;
+
+/**
+ * @brief Аниматор заполнения цветным кругом
+ */
+class CircleTransparentAnimator : public AbstractAnimator
 {
-    class CircleTransparentDecorator;
+    Q_OBJECT
+
+public:
+    explicit CircleTransparentAnimator(QWidget* _widgetForFill);
 
     /**
-     * @brief Аниматор заполнения цветным кругом
+     * @brief Установить точку начала анимации
      */
-    class CircleTransparentAnimator : public AbstractAnimator
-    {
-        Q_OBJECT
+    void setStartPoint(const QPoint& _globalPoint);
 
-    public:
-        explicit CircleTransparentAnimator(QWidget* _widgetForFill);
+    /**
+     * @brief Установить картинку заливки
+     */
+    void setFillImage(const QPixmap& _image);
 
-        /**
-         * @brief Установить точку начала анимации
-         */
-        void setStartPoint(const QPoint& _globalPoint);
+    /**
+     * @brief Скрывать ли декоратор после окончания анимации
+     */
+    void setHideAfterFinish(bool _hide);
 
-        /**
-         * @brief Установить картинку заливки
-         */
-        void setFillImage(const QPixmap& _image);
+    /**
+     * @brief Длительность анимации
+     */
+    int animationDuration() const;
 
-        /**
-         * @brief Скрывать ли декоратор после окончания анимации
-         */
-        void setHideAfterFinish(bool _hide);
+    /**
+     * @brief Заполнить виджет
+     */
+    /** @{ */
+    void animateForward();
+    void fillIn();
+    /** @} */
 
-        /**
-         * @brief Длительность анимации
-         */
-        int animationDuration() const;
+    /**
+     * @brief Свернуть цветовой круг - очистить виджет
+     */
+    /** @{ */
+    void animateBackward();
+    void fillOut();
+    /** @} */
 
-        /**
-         * @brief Заполнить виджет
-         */
-        /** @{ */
-        void animateForward();
-        void fillIn();
-        /** @} */
+private:
+    /**
+     * @brief Завершить выполнение анимации
+     */
+    void finalize();
 
-        /**
-         * @brief Свернуть цветовой круг - очистить виджет
-         */
-        /** @{ */
-        void animateBackward();
-        void fillOut();
-        /** @} */
+    /**
+     * @brief Получить виджет, который нужно заполнить
+     */
+    QWidget* widgetForFill() const;
 
-    private:
-        /**
-         * @brief Завершить выполнение анимации
-         */
-        void finalize();
+private:
+    /**
+     * @brief Декоратор, рисующий заполнение
+     */
+    CircleTransparentDecorator* m_decorator;
 
-        /**
-         * @brief Получить виджет, который нужно заполнить
-         */
-        QWidget* widgetForFill() const;
+    /**
+     * @brief Объект для анимирования декоратора
+     */
+    QPropertyAnimation* m_animation;
 
-    private:
-        /**
-         * @brief Декоратор, рисующий заполнение
-         */
-        CircleTransparentDecorator* m_decorator;
-
-        /**
-         * @brief Объект для анимирования декоратора
-         */
-        QPropertyAnimation* m_animation;
-
-        /**
-         * @brief Скрывать ли декоратор после завершения анимации
-         */
-        bool m_hideAfterFinish = true;
-    };
-}
+    /**
+     * @brief Скрывать ли декоратор после завершения анимации
+     */
+    bool m_hideAfterFinish = true;
+};
+} // namespace WAF

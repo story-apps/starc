@@ -5,8 +5,7 @@
 #include <ui/onboarding/onboarding_view.h>
 
 
-namespace ManagementLayer
-{
+namespace ManagementLayer {
 
 class OnboardingManager::Implementation
 {
@@ -19,9 +18,9 @@ public:
 };
 
 OnboardingManager::Implementation::Implementation(QWidget* _parent)
-    : toolBar(new Ui::OnboardingToolBar(_parent)),
-      navigator(new Ui::OnboardingNavigator(_parent)),
-      view(new Ui::OnboardingView(_parent))
+    : toolBar(new Ui::OnboardingToolBar(_parent))
+    , navigator(new Ui::OnboardingNavigator(_parent))
+    , view(new Ui::OnboardingView(_parent))
 {
     toolBar->hide();
     navigator->hide();
@@ -33,28 +32,34 @@ OnboardingManager::Implementation::Implementation(QWidget* _parent)
 
 
 OnboardingManager::OnboardingManager(QObject* _parent, QWidget* _parentWidget)
-    : QObject(_parent),
-      d(new Implementation(_parentWidget))
+    : QObject(_parent)
+    , d(new Implementation(_parentWidget))
 {
-    connect(d->navigator, &Ui::OnboardingNavigator::currentIndexChanged, this, [this] (int _currentIndex) {
-        switch (_currentIndex) {
-            case 0: {
-                d->view->showLanguagePage();
-                break;
-            }
+    connect(d->navigator, &Ui::OnboardingNavigator::currentIndexChanged, this,
+            [this](int _currentIndex) {
+                switch (_currentIndex) {
+                case 0: {
+                    d->view->showLanguagePage();
+                    break;
+                }
 
-            case 1: {
-                d->view->showThemePage();
-                break;
-            }
-        }
-    });
-    connect(d->view, &Ui::OnboardingView::languageChanged, this, &OnboardingManager::languageChanged);
-    connect(d->view, &Ui::OnboardingView::showThemePageRequested, d->navigator, &Ui::OnboardingNavigator::showThemeStep);
+                case 1: {
+                    d->view->showThemePage();
+                    break;
+                }
+                }
+            });
+    connect(d->view, &Ui::OnboardingView::languageChanged, this,
+            &OnboardingManager::languageChanged);
+    connect(d->view, &Ui::OnboardingView::showThemePageRequested, d->navigator,
+            &Ui::OnboardingNavigator::showThemeStep);
     connect(d->view, &Ui::OnboardingView::themeChanged, this, &OnboardingManager::themeChanged);
-    connect(d->view, &Ui::OnboardingView::scaleFactorChanged, this, &OnboardingManager::scaleFactorChanged);
-    connect(d->view, &Ui::OnboardingView::skipOnboardingRequested, this, &OnboardingManager::finished);
-    connect(d->view, &Ui::OnboardingView::finishOnboardingRequested, this, &OnboardingManager::finished);
+    connect(d->view, &Ui::OnboardingView::scaleFactorChanged, this,
+            &OnboardingManager::scaleFactorChanged);
+    connect(d->view, &Ui::OnboardingView::skipOnboardingRequested, this,
+            &OnboardingManager::finished);
+    connect(d->view, &Ui::OnboardingView::finishOnboardingRequested, this,
+            &OnboardingManager::finished);
 }
 
 QWidget* OnboardingManager::toolBar() const

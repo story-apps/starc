@@ -4,18 +4,16 @@
 
 #include <business_layer/model/text/text_model_xml.h>
 #include <business_layer/templates/text_template.h>
-
 #include <domain/document_object.h>
-
 #include <utils/helpers/text_helper.h>
 
 #include <QFileInfo>
 #include <QXmlStreamWriter>
 
-namespace BusinessLayer
-{
+namespace BusinessLayer {
 
-AbstractTextImporter::Document MarkdownImporter::importDocument(const TextImportOptions& _options) const
+AbstractTextImporter::Document MarkdownImporter::importDocument(
+    const TextImportOptions& _options) const
 {
     //
     // Открываем файл
@@ -52,7 +50,8 @@ AbstractTextImporter::Document MarkdownImporter::importDocument(const QString& _
     QXmlStreamWriter writer(&textDocument.text);
     writer.writeStartDocument();
     writer.writeStartElement(xml::kDocumentTag);
-    writer.writeAttribute(xml::kMimeTypeAttribute, Domain::mimeTypeFor(Domain::DocumentObjectType::Text));
+    writer.writeAttribute(xml::kMimeTypeAttribute,
+                          Domain::mimeTypeFor(Domain::DocumentObjectType::Text));
     writer.writeAttribute(xml::kVersionAttribute, "1.0");
 
     const QStringList paragraphs = QString(_text).split("\n");

@@ -37,11 +37,11 @@ CompleterTextEdit::Implementation::Implementation(QWidget* _parent)
 
 
 CompleterTextEdit::CompleterTextEdit(QWidget* _parent)
-    : SpellCheckTextEdit(_parent),
-      d(new Implementation(this))
+    : SpellCheckTextEdit(_parent)
+    , d(new Implementation(this))
 {
-    connect(d->completer, qOverload<const QString&>(&QCompleter::activated),
-            this, qOverload<const QString&>(&CompleterTextEdit::applyCompletion));
+    connect(d->completer, qOverload<const QString&>(&QCompleter::activated), this,
+            qOverload<const QString&>(&CompleterTextEdit::applyCompletion));
 }
 
 CompleterTextEdit::~CompleterTextEdit() = default;
@@ -66,7 +66,8 @@ bool CompleterTextEdit::complete(QAbstractItemModel* _model, const QString& _com
     return complete(_model, _completionPrefix, _completionPrefix.length());
 }
 
-bool CompleterTextEdit::complete(QAbstractItemModel* _model, const QString& _completionPrefix, int _cursorMovement)
+bool CompleterTextEdit::complete(QAbstractItemModel* _model, const QString& _completionPrefix,
+                                 int _cursorMovement)
 {
     if (!d->useCompleter) {
         return false;
@@ -88,7 +89,8 @@ bool CompleterTextEdit::complete(QAbstractItemModel* _model, const QString& _com
     // Если в модели для дополнения нет элементов, или она уже полностью дополнена
     //
     const bool hasCompletions = d->completer->completionModel()->rowCount() > 0;
-    const bool alreadyComplete = _completionPrefix.endsWith(d->completer->currentCompletion(), Qt::CaseInsensitive);
+    const bool alreadyComplete
+        = _completionPrefix.endsWith(d->completer->currentCompletion(), Qt::CaseInsensitive);
     if (!hasCompletions || alreadyComplete) {
         //
         // ... скроем завершателя, если был показан
@@ -105,8 +107,7 @@ bool CompleterTextEdit::complete(QAbstractItemModel* _model, const QString& _com
     cursor.movePosition(QTextCursor::PreviousCharacter, QTextCursor::KeepAnchor, _cursorMovement);
     QRect rect = cursorRect(cursor);
     rect.moveLeft(rect.left() + verticalScrollBar()->width() + viewportMargins().left());
-    rect.moveTop(rect.top()
-                 + cursor.block().layout()->boundingRect().height()
+    rect.moveTop(rect.top() + cursor.block().layout()->boundingRect().height()
                  + Ui::DesignSystem::layout().px16());
     rect.setWidth(Ui::DesignSystem::treeOneLineItem().margins().left()
                   + d->completer->popup()->sizeHintForColumn(0)
@@ -145,7 +146,8 @@ void CompleterTextEdit::applyCompletion(const QString& _completion)
     //
     while (!textCursor().atBlockEnd()) {
         QTextCursor cursor = textCursor();
-        cursor.movePosition(QTextCursor::PreviousCharacter, QTextCursor::KeepAnchor, completionStartFrom);
+        cursor.movePosition(QTextCursor::PreviousCharacter, QTextCursor::KeepAnchor,
+                            completionStartFrom);
         if (cursor.selectedText().endsWith(d->completer->completionPrefix(), Qt::CaseInsensitive)) {
             break;
         }

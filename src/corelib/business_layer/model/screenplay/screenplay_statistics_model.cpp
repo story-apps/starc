@@ -5,8 +5,7 @@
 #include <business_layer/reports/screenplay/summary_report.h>
 
 
-namespace BusinessLayer
-{
+namespace BusinessLayer {
 
 class ScreenplayStatisticsModel::Implementation
 {
@@ -20,8 +19,8 @@ public:
 };
 
 ScreenplayStatisticsModel::ScreenplayStatisticsModel(QObject* _parent)
-    : AbstractModel({}, _parent),
-      d(new Implementation)
+    : AbstractModel({}, _parent)
+    , d(new Implementation)
 {
 }
 

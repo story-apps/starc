@@ -8,12 +8,10 @@
 #include <business_layer/import/text/markdown_improter.h>
 #include <business_layer/model/text/text_model.h>
 #include <business_layer/model/text/text_model_text_item.h>
-#include <business_layer/templates/text_template.h>
 #include <business_layer/templates/templates_facade.h>
-
+#include <business_layer/templates/text_template.h>
 #include <ui/design_system/design_system.h>
 #include <ui/widgets/context_menu/context_menu.h>
-
 #include <utils/helpers/color_helper.h>
 #include <utils/helpers/text_helper.h>
 
@@ -31,8 +29,7 @@ using BusinessLayer::TextBlockStyle;
 using BusinessLayer::TextCursor;
 using BusinessLayer::TextParagraphType;
 
-namespace Ui
-{
+namespace Ui {
 
 class SimpleTextEdit::Implementation
 {
@@ -92,8 +89,8 @@ void SimpleTextEdit::Implementation::revertAction(bool previous)
 
 
 SimpleTextEdit::SimpleTextEdit(QWidget* _parent)
-    : BaseTextEdit(_parent),
-      d(new Implementation(this))
+    : BaseTextEdit(_parent)
+    , d(new Implementation(this))
 {
     setContextMenuPolicy(Qt::CustomContextMenu);
     setFrameShape(QFrame::NoFrame);
@@ -115,7 +112,8 @@ void SimpleTextEdit::initWithModel(BusinessLayer::TextModel* _model)
     setPageNumbersAlignment(currentTemplate.pageNumbersAlignment());
 
     //
-    // Документ нужно формировать только после того, как редактор настроен, чтобы избежать лишний изменений
+    // Документ нужно формировать только после того, как редактор настроен, чтобы избежать лишний
+    // изменений
     //
     d->document.setModel(d->model);
 }
@@ -198,7 +196,8 @@ int SimpleTextEdit::positionForModelIndex(const QModelIndex& _index)
     return d->document.itemStartPosition(_index);
 }
 
-void SimpleTextEdit::addReviewMark(const QColor& _textColor, const QColor& _backgroundColor, const QString& _comment)
+void SimpleTextEdit::addReviewMark(const QColor& _textColor, const QColor& _backgroundColor,
+                                   const QString& _comment)
 {
     QTextCursor cursor(textCursor());
     if (!cursor.hasSelection()) {
@@ -312,15 +311,14 @@ bool SimpleTextEdit::keyPressEventReimpl(QKeyEvent* _event)
     //
     // ... перевод курсора к следующему символу
     //
-    else  if (_event == QKeySequence::MoveToNextChar) {
+    else if (_event == QKeySequence::MoveToNextChar) {
         if (textCursor().block().textDirection() == Qt::LeftToRight) {
             moveCursor(QTextCursor::NextCharacter);
         } else {
             moveCursor(QTextCursor::PreviousCharacter);
         }
 
-        while (!textCursor().atEnd()
-               && !textCursor().block().isVisible()) {
+        while (!textCursor().atEnd() && !textCursor().block().isVisible()) {
             moveCursor(QTextCursor::NextBlock);
         }
     }
@@ -333,8 +331,7 @@ bool SimpleTextEdit::keyPressEventReimpl(QKeyEvent* _event)
         } else {
             moveCursor(QTextCursor::NextCharacter);
         }
-        while (!textCursor().atStart()
-               && !textCursor().block().isVisible()) {
+        while (!textCursor().atStart() && !textCursor().block().isVisible()) {
             moveCursor(QTextCursor::StartOfBlock);
             if (textCursor().block().textDirection() == Qt::LeftToRight) {
                 moveCursor(QTextCursor::PreviousCharacter);
@@ -386,8 +383,7 @@ bool SimpleTextEdit::updateEnteredText(const QString& _eventText)
     // Определяем необходимость установки верхнего регистра для первого символа блока
     //
     if (currentCharFormat.boolProperty(TextBlockStyle::PropertyIsFirstUppercase)
-        && cursorBackwardText != " "
-        && cursorBackwardText == _eventText
+        && cursorBackwardText != " " && cursorBackwardText == _eventText
         && _eventText[0] != TextHelper::smartToUpper(_eventText[0])) {
         //
         // Сформируем правильное представление строки
@@ -446,8 +442,7 @@ bool SimpleTextEdit::updateEnteredText(const QString& _eventText)
     // Если была попытка ввести несколько пробелов подряд, или пробел в начале строки,
     // удаляем этот лишний пробел
     //
-    if (cursorBackwardText == " "
-        || cursorBackwardText.endsWith("  ")) {
+    if (cursorBackwardText == " " || cursorBackwardText.endsWith("  ")) {
         cursor.deletePreviousChar();
 
         return true;
@@ -466,13 +461,12 @@ void SimpleTextEdit::paintEvent(QPaintEvent* _event)
     const bool isLeftToRight = QLocale().textDirection() == Qt::LeftToRight;
     const qreal pageLeft = 0;
     const qreal pageRight = viewport()->width();
-    const qreal spaceBetweenSceneNumberAndText = 10 * Ui::DesignSystem::scaleFactor();;
-    const qreal textLeft = pageLeft
-                           - (isLeftToRight ? 0 : horizontalScrollBar()->maximum())
-                           + document()->rootFrame()->frameFormat().leftMargin() - spaceBetweenSceneNumberAndText;
-    const qreal textRight = pageRight
-                            + (isLeftToRight ? horizontalScrollBar()->maximum() : 0)
-                            - document()->rootFrame()->frameFormat().rightMargin() + spaceBetweenSceneNumberAndText;
+    const qreal spaceBetweenSceneNumberAndText = 10 * Ui::DesignSystem::scaleFactor();
+    ;
+    const qreal textLeft = pageLeft - (isLeftToRight ? 0 : horizontalScrollBar()->maximum())
+        + document()->rootFrame()->frameFormat().leftMargin() - spaceBetweenSceneNumberAndText;
+    const qreal textRight = pageRight + (isLeftToRight ? horizontalScrollBar()->maximum() : 0)
+        - document()->rootFrame()->frameFormat().rightMargin() + spaceBetweenSceneNumberAndText;
     const qreal leftDelta = (isLeftToRight ? -1 : 1) * horizontalScrollBar()->value();
     qreal verticalMargin = 0;
 
@@ -483,7 +477,7 @@ void SimpleTextEdit::paintEvent(QPaintEvent* _event)
     QTextBlock topBlock = document()->lastBlock();
     {
         QTextCursor topCursor;
-        for (int delta = 0; delta < viewport()->height()/4; delta += 10) {
+        for (int delta = 0; delta < viewport()->height() / 4; delta += 10) {
             topCursor = cursorForPosition(viewport()->mapFromParent(QPoint(0, delta)));
             if (topBlock.blockNumber() > topCursor.block().blockNumber()) {
                 topBlock = topCursor.block();
@@ -509,7 +503,7 @@ void SimpleTextEdit::paintEvent(QPaintEvent* _event)
     QTextBlock bottomBlock = document()->firstBlock();
     {
         QTextCursor bottomCursor;
-        for (int delta = viewport()->height(); delta > viewport()->height()*3/4; delta -= 10) {
+        for (int delta = viewport()->height(); delta > viewport()->height() * 3 / 4; delta -= 10) {
             bottomCursor = cursorForPosition(viewport()->mapFromParent(QPoint(0, delta)));
             if (bottomBlock.blockNumber() < bottomCursor.block().blockNumber()) {
                 bottomBlock = bottomCursor.block();
@@ -567,13 +561,11 @@ void SimpleTextEdit::paintEvent(QPaintEvent* _event)
                         //
                         // Определим область для отрисовки и выведем символ в редактор
                         //
-                        const QPointF topLeft(isLeftToRight
-                                              ? pageLeft + leftDelta
-                                              : textRight + leftDelta,
+                        const QPointF topLeft(isLeftToRight ? pageLeft + leftDelta
+                                                            : textRight + leftDelta,
                                               cursorR.top());
-                        const QPointF bottomRight(isLeftToRight
-                                                  ? textLeft + leftDelta
-                                                  : pageRight + leftDelta,
+                        const QPointF bottomRight(isLeftToRight ? textLeft + leftDelta
+                                                                : pageRight + leftDelta,
                                                   cursorR.bottom() + 2);
                         const QRectF rect(topLeft, bottomRight);
                         painter.drawText(rect, Qt::AlignRight | Qt::AlignTop, emptyLineMark);
@@ -590,8 +582,7 @@ void SimpleTextEdit::paintEvent(QPaintEvent* _event)
 
 bool SimpleTextEdit::canInsertFromMimeData(const QMimeData* _source) const
 {
-    return _source->formats().contains(d->model->mimeTypes().first())
-            || _source->hasText();
+    return _source->formats().contains(d->model->mimeTypes().first()) || _source->hasText();
 }
 
 QMimeData* SimpleTextEdit::createMimeDataFromSelection() const
@@ -621,10 +612,9 @@ QMimeData* SimpleTextEdit::createMimeDataFromSelection() const
                 text.append("\r\n");
             }
             text.append(cursor.blockCharFormat().fontCapitalization() == QFont::AllUppercase
-                        ? TextHelper::smartToUpper(cursor.selectedText())
-                        : cursor.selectedText());
-        } while (cursor.position() < textCursor().selectionEnd()
-                 && !cursor.atEnd()
+                            ? TextHelper::smartToUpper(cursor.selectedText())
+                            : cursor.selectedText());
+        } while (cursor.position() < textCursor().selectionEnd() && !cursor.atEnd()
                  && cursor.movePosition(QTextCursor::NextBlock));
 
         mimeData->setData("text/plain", text);
@@ -634,8 +624,9 @@ QMimeData* SimpleTextEdit::createMimeDataFromSelection() const
     // Поместим в буфер данные о тексте в специальном формате
     //
     {
-        mimeData->setData(d->model->mimeTypes().first(),
-                          d->document.mimeFromSelection(selection.first, selection.second).toUtf8());
+        mimeData->setData(
+            d->model->mimeTypes().first(),
+            d->document.mimeFromSelection(selection.first, selection.second).toUtf8());
     }
 
     return mimeData;

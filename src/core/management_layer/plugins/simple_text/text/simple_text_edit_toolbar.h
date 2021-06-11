@@ -5,8 +5,7 @@
 class QAbstractItemModel;
 
 
-namespace Ui
-{
+namespace Ui {
 
 /**
  * @brief Панель инструментов редактора текста

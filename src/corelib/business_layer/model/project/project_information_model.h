@@ -3,8 +3,7 @@
 #include "../abstract_model.h"
 
 
-namespace BusinessLayer
-{
+namespace BusinessLayer {
 
 class CORE_LIBRARY_EXPORT ProjectInformationModel : public AbstractModel
 {
@@ -17,7 +16,7 @@ public:
     const QString& name() const;
     void setName(const QString& _name);
     Q_SIGNAL void nameChanged(const QString& _name);
-    void setDocumentName(const QString &_name) override;
+    void setDocumentName(const QString& _name) override;
 
     const QString& logline() const;
     void setLogline(const QString& _logline);

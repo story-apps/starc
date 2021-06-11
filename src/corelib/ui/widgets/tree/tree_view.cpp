@@ -60,14 +60,20 @@ void TreeView::Implementation::animateClick()
 
 
 TreeView::TreeView(QWidget* _parent)
-    : QTreeView(_parent),
-      d(new Implementation)
+    : QTreeView(_parent)
+    , d(new Implementation)
 {
     setVerticalScrollMode(TreeView::ScrollPerPixel);
     viewport()->installEventFilter(this);
 
-    connect(&d->decorationRadiusAnimation, &QVariantAnimation::valueChanged, this, [this] { update(); viewport()->update(); });
-    connect(&d->decorationOpacityAnimation, &QVariantAnimation::valueChanged, this, [this] { update(); viewport()->update(); });
+    connect(&d->decorationRadiusAnimation, &QVariantAnimation::valueChanged, this, [this] {
+        update();
+        viewport()->update();
+    });
+    connect(&d->decorationOpacityAnimation, &QVariantAnimation::valueChanged, this, [this] {
+        update();
+        viewport()->update();
+    });
 }
 
 void TreeView::setAutoAdjustSize(bool _auto)
@@ -78,7 +84,7 @@ void TreeView::setAutoAdjustSize(bool _auto)
 void TreeView::restoreState(const QVariant& _state)
 {
     std::function<void(const QDomElement&, const QModelIndex&)> readItem;
-    readItem = [this, &readItem] (const QDomElement& _node, const QModelIndex& _parent) {
+    readItem = [this, &readItem](const QDomElement& _node, const QModelIndex& _parent) {
         const auto index = model()->index(_node.attribute("row").toInt(), 0, _parent);
         if (_node.hasAttribute("current")) {
             setCurrentIndex(index);
@@ -111,9 +117,10 @@ QVariant TreeView::saveState() const
     QByteArray state;
     state += "<items>";
     std::function<void(int, const QModelIndex&)> writeRow;
-    writeRow = [this, &state, &writeRow] (int _row, const QModelIndex& _parent) {
+    writeRow = [this, &state, &writeRow](int _row, const QModelIndex& _parent) {
         const auto index = model()->index(_row, 0, _parent);
-        const auto attributes = " row=\"" + QString::number(_row) + "\"" + (index == currentIndex() ? " current=\"true\"" : "");
+        const auto attributes = " row=\"" + QString::number(_row) + "\""
+            + (index == currentIndex() ? " current=\"true\"" : "");
         if (isExpanded(index)) {
             state += "<item" + attributes + ">";
             for (int row = 0; row < model()->rowCount(index); ++row) {
@@ -168,7 +175,8 @@ void TreeView::paintEvent(QPaintEvent* _event)
         painter.setPen(Qt::NoPen);
         painter.setBrush(palette().highlightedText());
         painter.setOpacity(d->decorationOpacityAnimation.currentValue().toReal());
-        painter.drawEllipse(d->decorationCenterPosition, d->decorationRadiusAnimation.currentValue().toReal(),
+        painter.drawEllipse(d->decorationCenterPosition,
+                            d->decorationRadiusAnimation.currentValue().toReal(),
                             d->decorationRadiusAnimation.currentValue().toReal());
         painter.setOpacity(1.0);
         painter.setClipRect(QRect(), Qt::NoClip);

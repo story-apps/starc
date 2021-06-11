@@ -6,16 +6,15 @@ class QEvent;
 class QKeyEvent;
 
 namespace BusinessLayer {
-    enum class ScreenplayParagraphType;
+enum class ScreenplayParagraphType;
 }
 
 namespace Ui {
-    class ScreenplayTextEdit;
+class ScreenplayTextEdit;
 }
 
 
-namespace KeyProcessingLayer
-{
+namespace KeyProcessingLayer {
 
 class AbstractKeyHandler;
 

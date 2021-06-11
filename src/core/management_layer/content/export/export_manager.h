@@ -6,8 +6,7 @@ namespace BusinessLayer {
 class AbstractModel;
 }
 
-namespace ManagementLayer
-{
+namespace ManagementLayer {
 
 /**
  * @brief Управляющий экспортом документов

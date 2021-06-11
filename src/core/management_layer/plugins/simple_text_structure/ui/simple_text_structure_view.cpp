@@ -4,7 +4,6 @@
 
 #include <data_layer/storage/settings_storage.h>
 #include <data_layer/storage/storage_facade.h>
-
 #include <ui/design_system/design_system.h>
 #include <ui/widgets/label/label.h>
 #include <ui/widgets/scroll_bar/scroll_bar.h>
@@ -14,8 +13,7 @@
 #include <QVBoxLayout>
 
 
-namespace Ui
-{
+namespace Ui {
 
 class SimpleTextStructureView::Implementation
 {
@@ -30,10 +28,10 @@ public:
 };
 
 SimpleTextStructureView::Implementation::Implementation(QWidget* _parent)
-    : backIcon(new IconsMidLabel(_parent)),
-      backText(new Subtitle2Label(_parent)),
-      content(new Tree(_parent)),
-      contentDelegate(new SimpleTextStructureDelegate(content))
+    : backIcon(new IconsMidLabel(_parent))
+    , backText(new Subtitle2Label(_parent))
+    , content(new Tree(_parent))
+    , contentDelegate(new SimpleTextStructureDelegate(content))
 {
     backIcon->setText(u8"\U000f0141");
 
@@ -49,8 +47,8 @@ SimpleTextStructureView::Implementation::Implementation(QWidget* _parent)
 
 
 SimpleTextStructureView::SimpleTextStructureView(QWidget* _parent)
-    : AbstractNavigator(_parent),
-      d(new Implementation(this))
+    : AbstractNavigator(_parent)
+    , d(new Implementation(this))
 {
     QHBoxLayout* topLayout = new QHBoxLayout;
     topLayout->setContentsMargins({});
@@ -67,7 +65,8 @@ SimpleTextStructureView::SimpleTextStructureView(QWidget* _parent)
 
     connect(d->backIcon, &AbstractLabel::clicked, this, &SimpleTextStructureView::backPressed);
     connect(d->backText, &AbstractLabel::clicked, this, &SimpleTextStructureView::backPressed);
-    connect(d->content, &Tree::currentIndexChanged, this, &SimpleTextStructureView::currentModelIndexChanged);
+    connect(d->content, &Tree::currentIndexChanged, this,
+            &SimpleTextStructureView::currentModelIndexChanged);
 
     updateTranslations();
     designSystemChangeEvent(nullptr);
@@ -79,18 +78,19 @@ SimpleTextStructureView::~SimpleTextStructureView() = default;
 
 void SimpleTextStructureView::reconfigure()
 {
-    auto settingsValue = [] (const QString& _key) {
+    auto settingsValue = [](const QString& _key) {
         return DataStorageLayer::StorageFacade::settingsStorage()->value(
-                    _key, DataStorageLayer::SettingsStorage::SettingsPlace::Application);
+            _key, DataStorageLayer::SettingsStorage::SettingsPlace::Application);
     };
 
     const bool showSceneText
-            = settingsValue(DataStorageLayer::kComponentsSimpleTextNavigatorShowSceneTextKey).toBool();
+        = settingsValue(DataStorageLayer::kComponentsSimpleTextNavigatorShowSceneTextKey).toBool();
     if (showSceneText == false) {
         d->contentDelegate->setTextLinesSize(0);
     } else {
         const int sceneTextLines
-                = settingsValue(DataStorageLayer::kComponentsSimpleTextNavigatorSceneTextLinesKey).toInt();
+            = settingsValue(DataStorageLayer::kComponentsSimpleTextNavigatorSceneTextLinesKey)
+                  .toInt();
         d->contentDelegate->setTextLinesSize(sceneTextLines);
     }
 
@@ -133,17 +133,13 @@ void SimpleTextStructureView::designSystemChangeEvent(DesignSystemChangeEvent* _
     d->content->setTextColor(DesignSystem::color().onPrimary());
 
     d->backIcon->setContentsMargins(
-                QMarginsF(Ui::DesignSystem::layout().px12(),
-                          Ui::DesignSystem::layout().px8(),
-                          Ui::DesignSystem::layout().px4(),
-                          Ui::DesignSystem::layout().px8())
-                .toMargins());
-    d->backText->setContentsMargins(
-                QMarginsF(0,
-                          Ui::DesignSystem::layout().px12(),
-                          Ui::DesignSystem::layout().px16(),
-                          Ui::DesignSystem::layout().px12())
-                .toMargins());
+        QMarginsF(Ui::DesignSystem::layout().px12(), Ui::DesignSystem::layout().px8(),
+                  Ui::DesignSystem::layout().px4(), Ui::DesignSystem::layout().px8())
+            .toMargins());
+    d->backText->setContentsMargins(QMarginsF(0, Ui::DesignSystem::layout().px12(),
+                                              Ui::DesignSystem::layout().px16(),
+                                              Ui::DesignSystem::layout().px12())
+                                        .toMargins());
 }
 
 } // namespace Ui

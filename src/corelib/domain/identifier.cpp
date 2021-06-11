@@ -1,24 +1,22 @@
 #include "identifier.h"
 
-namespace Domain
-{
+namespace Domain {
 
 namespace {
-    const int kInvalidValue = -1;
+const int kInvalidValue = -1;
 }
 
-Identifier::Identifier() :
-    m_id(kInvalidValue),
-    m_version(kInvalidValue),
-    m_isValid(false)
+Identifier::Identifier()
+    : m_id(kInvalidValue)
+    , m_version(kInvalidValue)
+    , m_isValid(false)
 {
-
 }
 
-Identifier::Identifier(int _id, int _version) :
-    m_id(_id),
-    m_version(_version),
-    m_isValid(false)
+Identifier::Identifier(int _id, int _version)
+    : m_id(_id)
+    , m_version(_version)
+    , m_isValid(false)
 {
     if (_id != kInvalidValue && _version != kInvalidValue)
         m_isValid = true;

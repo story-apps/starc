@@ -10,8 +10,7 @@ class AbstractModel;
 class QWidget;
 
 
-namespace ManagementLayer
-{
+namespace ManagementLayer {
 
 /**
  * @brief Билдер управляющая созданием плагинов редакторов

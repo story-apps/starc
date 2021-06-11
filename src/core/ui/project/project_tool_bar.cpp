@@ -5,8 +5,7 @@
 #include <QAction>
 
 
-namespace Ui
-{
+namespace Ui {
 
 ProjectToolBar::ProjectToolBar(QWidget* _parent)
     : AppBar(_parent)
@@ -34,7 +33,8 @@ void ProjectToolBar::clearViews()
     update();
 }
 
-void ProjectToolBar::addView(const QString& _mimeType, const QString& _icon, const QString& _tooltip, bool _isActive)
+void ProjectToolBar::addView(const QString& _mimeType, const QString& _icon,
+                             const QString& _tooltip, bool _isActive)
 {
     QAction* viewAction = new QAction(this);
     viewAction->setText(_icon);
@@ -43,9 +43,8 @@ void ProjectToolBar::addView(const QString& _mimeType, const QString& _icon, con
     viewAction->setChecked(_isActive);
     viewAction->setData(_mimeType);
     addAction(viewAction);
-    connect(viewAction, &QAction::toggled, this, [this, _mimeType] {
-        emit viewPressed(_mimeType);
-    });
+    connect(viewAction, &QAction::toggled, this,
+            [this, _mimeType] { emit viewPressed(_mimeType); });
 
     update();
 }

@@ -1,7 +1,6 @@
 #include "context_menu.h"
 
 #include <ui/design_system/design_system.h>
-
 #include <utils/helpers/color_helper.h>
 #include <utils/helpers/text_helper.h>
 
@@ -9,8 +8,8 @@
 #include <QMouseEvent>
 #include <QPainter>
 #include <QScreen>
-#include <QWidgetAction>
 #include <QVariantAnimation>
+#include <QWidgetAction>
 
 
 class ContextMenu::Implementation
@@ -64,7 +63,7 @@ ContextMenu::Implementation::Implementation()
     positionAnimation.setEasingCurve(QEasingCurve::OutQuint);
     //
     sizeAnimation.setEasingCurve(QEasingCurve::OutQuint);
-    sizeAnimation.setStartValue(QSize(1,1));
+    sizeAnimation.setStartValue(QSize(1, 1));
 
     decorationRadiusAnimation.setEasingCurve(QEasingCurve::InQuad);
     decorationRadiusAnimation.setStartValue(1.0);
@@ -98,21 +97,18 @@ QSize ContextMenu::Implementation::sizeHint(const QList<QAction*>& _actions) con
             // TODO: учитывать ширину шортката
             //
             const auto iconWidth = action->iconText() == action->text()
-                                   ? 0.0
-                                   : Ui::DesignSystem::treeOneLineItem().iconSize().width();
+                ? 0.0
+                : Ui::DesignSystem::treeOneLineItem().iconSize().width();
             const auto actionWidth = Ui::DesignSystem::treeOneLineItem().margins().left()
-                                     + iconWidth
-                                     + Ui::DesignSystem::treeOneLineItem().spacing()
-                                     + TextHelper::fineTextWidthF(action->text(),
-                                                                 Ui::DesignSystem::font().subtitle2())
-                                     + Ui::DesignSystem::treeOneLineItem().margins().right();
+                + iconWidth + Ui::DesignSystem::treeOneLineItem().spacing()
+                + TextHelper::fineTextWidthF(action->text(), Ui::DesignSystem::font().subtitle2())
+                + Ui::DesignSystem::treeOneLineItem().margins().right();
             width = std::max(width, actionWidth);
             height += Ui::DesignSystem::treeOneLineItem().height();
         }
     }
-    width += Ui::DesignSystem::card().shadowMargins().left()
-             + Ui::DesignSystem::layout().px62()
-             + Ui::DesignSystem::card().shadowMargins().right();
+    width += Ui::DesignSystem::card().shadowMargins().left() + Ui::DesignSystem::layout().px62()
+        + Ui::DesignSystem::card().shadowMargins().right();
     height += Ui::DesignSystem::card().shadowMargins().bottom();
 
     return QSizeF(width, height).toSize();
@@ -135,7 +131,8 @@ void ContextMenu::Implementation::relayoutWidgetActions(ContextMenu* _menu) cons
     }
 }
 
-QAction* ContextMenu::Implementation::pressedAction(const QPoint& _coordinate, const QList<QAction*>& _actions) const
+QAction* ContextMenu::Implementation::pressedAction(const QPoint& _coordinate,
+                                                    const QList<QAction*>& _actions) const
 {
     auto actionTop = Ui::DesignSystem::card().shadowMargins().top();
     for (auto action : _actions) {
@@ -163,7 +160,8 @@ QAction* ContextMenu::Implementation::pressedAction(const QPoint& _coordinate, c
     return nullptr;
 }
 
-QRectF ContextMenu::Implementation::actionRect(const QAction* _action, const QList<QAction*>& _actions, int _width) const
+QRectF ContextMenu::Implementation::actionRect(const QAction* _action,
+                                               const QList<QAction*>& _actions, int _width) const
 {
     auto actionTop = Ui::DesignSystem::card().shadowMargins().top();
     for (auto action : _actions) {
@@ -182,11 +180,9 @@ QRectF ContextMenu::Implementation::actionRect(const QAction* _action, const QLi
             actionBottom += Ui::DesignSystem::treeOneLineItem().height();
         }
         if (action == _action) {
-            return QRectF(Ui::DesignSystem::card().shadowMargins().left(),
-                          actionTop,
-                          _width
-                          - Ui::DesignSystem::card().shadowMargins().left()
-                          - Ui::DesignSystem::card().shadowMargins().right(),
+            return QRectF(Ui::DesignSystem::card().shadowMargins().left(), actionTop,
+                          _width - Ui::DesignSystem::card().shadowMargins().left()
+                              - Ui::DesignSystem::card().shadowMargins().right(),
                           actionBottom - actionTop);
         }
 
@@ -207,8 +203,8 @@ void ContextMenu::Implementation::animateClick()
 // ****
 
 ContextMenu::ContextMenu(QWidget* _parent)
-    : Card(_parent),
-      d(new Implementation)
+    : Card(_parent)
+    , d(new Implementation)
 {
     setWindowFlags(Qt::Popup | Qt::FramelessWindowHint | Qt::NoDropShadowWindowHint);
     setAttribute(Qt::WA_Hover, false);
@@ -218,12 +214,10 @@ ContextMenu::ContextMenu(QWidget* _parent)
     setMouseTracking(true);
     hide();
 
-    connect(&d->positionAnimation, &QVariantAnimation::valueChanged, this, [this] (const QVariant& _value) {
-        move(_value.toPoint());
-    });
-    connect(&d->sizeAnimation, &QVariantAnimation::valueChanged, this, [this] (const QVariant& _value) {
-        resize(_value.toSize());
-    });
+    connect(&d->positionAnimation, &QVariantAnimation::valueChanged, this,
+            [this](const QVariant& _value) { move(_value.toPoint()); });
+    connect(&d->sizeAnimation, &QVariantAnimation::valueChanged, this,
+            [this](const QVariant& _value) { resize(_value.toSize()); });
     connect(&d->sizeAnimation, &QVariantAnimation::finished, this, [this] {
         //
         // После завершении анимации скрытия скрываем сам виджет контекстного меню
@@ -233,8 +227,10 @@ ContextMenu::ContextMenu(QWidget* _parent)
         }
     });
     //
-    connect(&d->decorationRadiusAnimation, &QVariantAnimation::valueChanged, this, [this] { update(); });
-    connect(&d->decorationOpacityAnimation, &QVariantAnimation::valueChanged, this, [this] { update(); });
+    connect(&d->decorationRadiusAnimation, &QVariantAnimation::valueChanged, this,
+            [this] { update(); });
+    connect(&d->decorationOpacityAnimation, &QVariantAnimation::valueChanged, this,
+            [this] { update(); });
 }
 
 ContextMenu::~ContextMenu() = default;
@@ -272,8 +268,9 @@ void ContextMenu::showContextMenu(const QPoint& _pos)
     d->positionAnimation.stop();
     d->positionAnimation.setDirection(QVariantAnimation::Forward);
     d->positionAnimation.setDuration(240);
-    auto position = _pos - QPointF(Ui::DesignSystem::card().shadowMargins().left(),
-                                   Ui::DesignSystem::card().shadowMargins().top());
+    auto position = _pos
+        - QPointF(Ui::DesignSystem::card().shadowMargins().left(),
+                  Ui::DesignSystem::card().shadowMargins().top());
     auto endPosition = position;
     const auto screen = QApplication::screenAt(position.toPoint());
     if (screen == nullptr) {
@@ -285,8 +282,7 @@ void ContextMenu::showContextMenu(const QPoint& _pos)
     //
     if (endPosition.x() + sizeHint.width() > screenGeometry.right()) {
         position.setX(position.x() - this->width());
-        endPosition.setX(endPosition.x()
-                         - sizeHint.width()
+        endPosition.setX(endPosition.x() - sizeHint.width()
                          + Ui::DesignSystem::card().shadowMargins().left()
                          + Ui::DesignSystem::card().shadowMargins().right());
     }
@@ -295,8 +291,7 @@ void ContextMenu::showContextMenu(const QPoint& _pos)
     //
     if (endPosition.y() + sizeHint.height() > screenGeometry.bottom()) {
         position.setY(position.y() - this->height());
-        endPosition.setY(endPosition.y()
-                         - sizeHint.height()
+        endPosition.setY(endPosition.y() - sizeHint.height()
                          + Ui::DesignSystem::card().shadowMargins().top()
                          + Ui::DesignSystem::card().shadowMargins().bottom());
     }
@@ -344,9 +339,8 @@ void ContextMenu::paintEvent(QPaintEvent* _event)
     // Рисуем пункты меню
     //
     const auto actionX = Ui::DesignSystem::card().shadowMargins().left();
-    const auto actionWidth = width()
-                             - Ui::DesignSystem::card().shadowMargins().left()
-                             - Ui::DesignSystem::card().shadowMargins().right();
+    const auto actionWidth = width() - Ui::DesignSystem::card().shadowMargins().left()
+        - Ui::DesignSystem::card().shadowMargins().right();
     auto actionY = Ui::DesignSystem::card().shadowMargins().top();
     for (int actionIndex = 0; actionIndex < actions().size(); ++actionIndex) {
         QAction* action = actions().at(actionIndex);
@@ -371,15 +365,15 @@ void ContextMenu::paintEvent(QPaintEvent* _event)
         //
         // ... фон
         //
-        const QRectF actionRect(actionX, actionY, actionWidth, Ui::DesignSystem::treeOneLineItem().height());
-        if (action->isEnabled()
-            && actionRect.contains(mapFromGlobal(QCursor::pos()))) {
-            painter.fillRect(actionRect,
-                             ColorHelper::transparent(textColor(), Ui::DesignSystem::hoverBackgroundOpacity()));
+        const QRectF actionRect(actionX, actionY, actionWidth,
+                                Ui::DesignSystem::treeOneLineItem().height());
+        if (action->isEnabled() && actionRect.contains(mapFromGlobal(QCursor::pos()))) {
+            painter.fillRect(
+                actionRect,
+                ColorHelper::transparent(textColor(), Ui::DesignSystem::hoverBackgroundOpacity()));
         }
 
-        painter.setPen(action->isChecked() ? Ui::DesignSystem::color().secondary()
-                                           : textColor());
+        painter.setPen(action->isChecked() ? Ui::DesignSystem::color().secondary() : textColor());
         if (action->isChecked()) {
             painter.setOpacity(1.0);
         } else if (!action->isEnabled()) {
@@ -392,10 +386,11 @@ void ContextMenu::paintEvent(QPaintEvent* _event)
         //
         QRectF iconRect;
         if (action->iconText() != action->text()) {
-            iconRect = QRectF(QPointF(actionX + Ui::DesignSystem::treeOneLineItem().margins().left(),
-                                      actionRect.top()),
-                              QSizeF(Ui::DesignSystem::treeOneLineItem().iconSize().width(),
-                                     actionRect.height()));
+            iconRect
+                = QRectF(QPointF(actionX + Ui::DesignSystem::treeOneLineItem().margins().left(),
+                                 actionRect.top()),
+                         QSizeF(Ui::DesignSystem::treeOneLineItem().iconSize().width(),
+                                actionRect.height()));
             auto it = action->iconText(), t = action->text();
             painter.setFont(Ui::DesignSystem::font().iconsMid());
             painter.drawText(iconRect, Qt::AlignCenter, action->iconText());
@@ -405,12 +400,9 @@ void ContextMenu::paintEvent(QPaintEvent* _event)
         //
         painter.setFont(Ui::DesignSystem::font().subtitle2());
         const auto textX = iconRect.isEmpty()
-                           ? actionX + Ui::DesignSystem::treeOneLineItem().margins().left()
-                           : iconRect.right() + Ui::DesignSystem::treeOneLineItem().spacing();
-        const QRectF textRect(textX,
-                              actionRect.top(),
-                              actionWidth - textX,
-                              actionRect.height());
+            ? actionX + Ui::DesignSystem::treeOneLineItem().margins().left()
+            : iconRect.right() + Ui::DesignSystem::treeOneLineItem().spacing();
+        const QRectF textRect(textX, actionRect.top(), actionWidth - textX, actionRect.height());
         painter.drawText(textRect, Qt::AlignLeft | Qt::AlignVCenter, action->text());
 
         //
@@ -432,7 +424,8 @@ void ContextMenu::paintEvent(QPaintEvent* _event)
         painter.setPen(Qt::NoPen);
         painter.setBrush(Ui::DesignSystem::color().secondary());
         painter.setOpacity(d->decorationOpacityAnimation.currentValue().toReal());
-        painter.drawEllipse(d->decorationCenterPosition, d->decorationRadiusAnimation.currentValue().toReal(),
+        painter.drawEllipse(d->decorationCenterPosition,
+                            d->decorationRadiusAnimation.currentValue().toReal(),
                             d->decorationRadiusAnimation.currentValue().toReal());
         painter.setOpacity(1.0);
         painter.setClipRect(QRect(), Qt::NoClip);
@@ -447,8 +440,7 @@ void ContextMenu::mousePressEvent(QMouseEvent* _event)
     }
 
     QAction* pressedAction = d->pressedAction(_event->pos(), actions());
-    if (pressedAction == nullptr
-        || !pressedAction->isEnabled()) {
+    if (pressedAction == nullptr || !pressedAction->isEnabled()) {
         return;
     }
 
@@ -469,9 +461,7 @@ void ContextMenu::mouseReleaseEvent(QMouseEvent* _event)
     }
 
     QAction* pressedAction = d->pressedAction(_event->pos(), actions());
-    if (pressedAction == nullptr
-        || !pressedAction->isEnabled()
-        || pressedAction->isChecked()) {
+    if (pressedAction == nullptr || !pressedAction->isEnabled() || pressedAction->isChecked()) {
         return;
     }
 

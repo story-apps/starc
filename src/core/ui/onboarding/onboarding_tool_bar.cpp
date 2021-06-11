@@ -3,8 +3,7 @@
 #include <ui/design_system/design_system.h>
 
 
-namespace Ui
-{
+namespace Ui {
 
 OnboardingToolBar::OnboardingToolBar(QWidget* _parent)
     : Widget(_parent)

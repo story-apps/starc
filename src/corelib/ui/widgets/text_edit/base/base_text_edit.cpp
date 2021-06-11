@@ -1,9 +1,7 @@
 #include "base_text_edit.h"
 
 #include <include/custom_events.h>
-
 #include <ui/design_system/design_system.h>
-
 #include <utils/helpers/text_helper.h>
 
 #include <QKeyEvent>
@@ -12,90 +10,98 @@
 #include <QTextBlock>
 
 namespace {
-    /**
-     * @brief Обновить форматированние выделенного блока в соответствии с заданным функтором
-     */
-    template<typename Func>
-    void updateSelectionFormatting(QTextCursor _cursor, Func updateFormat) {
-        if (!_cursor.hasSelection()) {
-            return;
-        }
-
-        const auto positionInterval = std::minmax(_cursor.selectionStart(), _cursor.selectionEnd());
-        int position = positionInterval.first;
-        const int lastPosition = positionInterval.second;
-        while (position < lastPosition) {
-            const auto block = _cursor.document()->findBlock(position);
-            for (const auto& format : block.textFormats()) {
-                const auto formatStart = block.position() + format.start;
-                const auto formatEnd = formatStart + format.length;
-                if (position >= formatEnd) {
-                    continue;
-                }
-                if (formatStart >= lastPosition) {
-                    break;
-                }
-
-                _cursor.setPosition(std::max(formatStart, position));
-                _cursor.setPosition(std::min(formatEnd, lastPosition), QTextCursor::KeepAnchor);
-
-                const auto newFormat = updateFormat(format.format);
-                _cursor.mergeCharFormat(newFormat);
-
-                _cursor.clearSelection();
-                _cursor.movePosition(QTextCursor::NextCharacter);
-                position = _cursor.position();
-            }
-        }
+/**
+ * @brief Обновить форматированние выделенного блока в соответствии с заданным функтором
+ */
+template<typename Func>
+void updateSelectionFormatting(QTextCursor _cursor, Func updateFormat)
+{
+    if (!_cursor.hasSelection()) {
+        return;
     }
 
-    /**
-     * @brief Оканчивается ли строка сокращением
-     */
-    bool stringEndsWithAbbrev(const QString& _text)
-    {
-        Q_UNUSED(_text);
-
-        //
-        // TODO: Добавить словарь сокращений. Возможно его можно вытащить из ханспела
-        //
-
-        return false;
-    }
-
-    /**
-     * @brief Функции для получения корректных кавычек в зависимости от локали приложения
-     */
-    /** @{ */
-    QString localeQuote(bool _open) {
-        switch (QLocale().language()) {
-            default: {
-                return "\"";
+    const auto positionInterval = std::minmax(_cursor.selectionStart(), _cursor.selectionEnd());
+    int position = positionInterval.first;
+    const int lastPosition = positionInterval.second;
+    while (position < lastPosition) {
+        const auto block = _cursor.document()->findBlock(position);
+        for (const auto& format : block.textFormats()) {
+            const auto formatStart = block.position() + format.start;
+            const auto formatEnd = formatStart + format.length;
+            if (position >= formatEnd) {
+                continue;
+            }
+            if (formatStart >= lastPosition) {
+                break;
             }
 
-            case QLocale::Russian:
-            case QLocale::Spanish:
-            case QLocale::French: {
-                if (_open) {
-                    return "«";
-                } else {
-                    return "»";
-                }
-            }
+            _cursor.setPosition(std::max(formatStart, position));
+            _cursor.setPosition(std::min(formatEnd, lastPosition), QTextCursor::KeepAnchor);
 
-            case QLocale::English: {
-                if (_open) {
-                    return "“";
-                } else {
-                    return "”";
-                }
-            }
+            const auto newFormat = updateFormat(format.format);
+            _cursor.mergeCharFormat(newFormat);
+
+            _cursor.clearSelection();
+            _cursor.movePosition(QTextCursor::NextCharacter);
+            position = _cursor.position();
         }
     }
-    QString localOpenQuote() { return localeQuote(true); }
-    QString localCloseQuote() { return localeQuote(false); }
-    /** @{ */
 }
+
+/**
+ * @brief Оканчивается ли строка сокращением
+ */
+bool stringEndsWithAbbrev(const QString& _text)
+{
+    Q_UNUSED(_text);
+
+    //
+    // TODO: Добавить словарь сокращений. Возможно его можно вытащить из ханспела
+    //
+
+    return false;
+}
+
+/**
+ * @brief Функции для получения корректных кавычек в зависимости от локали приложения
+ */
+/** @{ */
+QString localeQuote(bool _open)
+{
+    switch (QLocale().language()) {
+    default: {
+        return "\"";
+    }
+
+    case QLocale::Russian:
+    case QLocale::Spanish:
+    case QLocale::French: {
+        if (_open) {
+            return "«";
+        } else {
+            return "»";
+        }
+    }
+
+    case QLocale::English: {
+        if (_open) {
+            return "“";
+        } else {
+            return "”";
+        }
+    }
+    }
+}
+QString localOpenQuote()
+{
+    return localeQuote(true);
+}
+QString localCloseQuote()
+{
+    return localeQuote(false);
+}
+/** @{ */
+} // namespace
 
 
 class BaseTextEdit::Implementation
@@ -119,8 +125,8 @@ void BaseTextEdit::Implementation::reconfigure(BaseTextEdit* _textEdit)
 
 
 BaseTextEdit::BaseTextEdit(QWidget* _parent)
-    : CompleterTextEdit(_parent),
-      d(new Implementation)
+    : CompleterTextEdit(_parent)
+    , d(new Implementation)
 {
     d->reconfigure(this);
 }
@@ -224,8 +230,7 @@ void BaseTextEdit::setTextAlignment(Qt::Alignment _alignment)
 
         cursor.movePosition(QTextCursor::EndOfBlock);
         cursor.movePosition(QTextCursor::NextBlock);
-    } while (!cursor.atEnd()
-             && cursor.position() < lastPosition);
+    } while (!cursor.atEnd() && cursor.position() < lastPosition);
 
     cursor.setPosition(positionInterval.second);
     setTextCursor(cursor);
@@ -234,16 +239,16 @@ void BaseTextEdit::setTextAlignment(Qt::Alignment _alignment)
 bool BaseTextEdit::event(QEvent* _event)
 {
     switch (static_cast<int>(_event->type())) {
-        case static_cast<QEvent::Type>(EventType::DesignSystemChangeEvent): {
-            d->reconfigure(this);
-            updateGeometry();
-            update();
-            return true;
-        }
+    case static_cast<QEvent::Type>(EventType::DesignSystemChangeEvent): {
+        d->reconfigure(this);
+        updateGeometry();
+        update();
+        return true;
+    }
 
-        default: {
-            return CompleterTextEdit::event(_event);
-        }
+    default: {
+        return CompleterTextEdit::event(_event);
+    }
     }
 }
 
@@ -279,16 +284,11 @@ bool BaseTextEdit::keyPressEventReimpl(QKeyEvent* _event)
     //
     // Выравнивание
     //
-    else if (_event->modifiers().testFlag(Qt::ControlModifier)
-             && _event->key() == Qt::Key_L) {
+    else if (_event->modifiers().testFlag(Qt::ControlModifier) && _event->key() == Qt::Key_L) {
         setTextAlignment(Qt::AlignLeft);
-    }
-    else if (_event->modifiers().testFlag(Qt::ControlModifier)
-             && _event->key() == Qt::Key_E) {
+    } else if (_event->modifiers().testFlag(Qt::ControlModifier) && _event->key() == Qt::Key_E) {
         setTextAlignment(Qt::AlignHCenter);
-    }
-    else if (_event->modifiers().testFlag(Qt::ControlModifier)
-             && _event->key() == Qt::Key_R) {
+    } else if (_event->modifiers().testFlag(Qt::ControlModifier) && _event->key() == Qt::Key_R) {
         setTextAlignment(Qt::AlignRight);
     }
     //
@@ -299,8 +299,7 @@ bool BaseTextEdit::keyPressEventReimpl(QKeyEvent* _event)
     // 3. все строчные
     //
     else if (_event->modifiers().testFlag(Qt::ControlModifier)
-             && (_event->key() == Qt::Key_Up
-                 || _event->key() == Qt::Key_Down)) {
+             && (_event->key() == Qt::Key_Up || _event->key() == Qt::Key_Down)) {
         //
         // Нужно ли убирать выделение после операции
         //
@@ -318,7 +317,8 @@ bool BaseTextEdit::keyPressEventReimpl(QKeyEvent* _event)
         QString selectedText = cursor.selectedText();
         const QChar firstChar = selectedText.at(0);
         const bool firstToUpper = TextHelper::smartToUpper(firstChar) != firstChar;
-        const bool textInUpper = (selectedText.length() > 1) && (TextHelper::smartToUpper(selectedText) == selectedText);
+        const bool textInUpper = (selectedText.length() > 1)
+            && (TextHelper::smartToUpper(selectedText) == selectedText);
         const int fromPosition = qMin(cursor.selectionStart(), cursor.selectionEnd());
         const int toPosition = qMax(cursor.selectionStart(), cursor.selectionEnd());
         const bool toUpper = _event->key() == Qt::Key_Up;
@@ -330,16 +330,14 @@ bool BaseTextEdit::keyPressEventReimpl(QKeyEvent* _event)
                 //
                 // Поднимаем для всего текста, или только для первого символа
                 //
-                if (!firstToUpper
-                    || (firstToUpper && position == fromPosition)) {
+                if (!firstToUpper || (firstToUpper && position == fromPosition)) {
                     cursor.insertText(TextHelper::smartToUpper(selectedText));
                 }
             } else {
                 //
                 // Опускаем для всего текста, или для всех символов, кроме первого
                 //
-                if (!textInUpper
-                    || (textInUpper && position != fromPosition)) {
+                if (!textInUpper || (textInUpper && position != fromPosition)) {
                     cursor.insertText(TextHelper::smartToLower(selectedText));
                 }
             }
@@ -375,14 +373,12 @@ bool BaseTextEdit::keyPressEventReimpl(QKeyEvent* _event)
     //
     // ... перевод курсора к концу строки
     //
-    else if (_event == QKeySequence::MoveToEndOfLine
-             || _event == QKeySequence::SelectEndOfLine) {
+    else if (_event == QKeySequence::MoveToEndOfLine || _event == QKeySequence::SelectEndOfLine) {
         QTextCursor cursor = textCursor();
         const int startY = cursorRect(cursor).y();
-        const QTextCursor::MoveMode keepAncor =
-            _event->modifiers().testFlag(Qt::ShiftModifier)
-                ? QTextCursor::KeepAnchor
-                : QTextCursor::MoveAnchor;
+        const QTextCursor::MoveMode keepAncor = _event->modifiers().testFlag(Qt::ShiftModifier)
+            ? QTextCursor::KeepAnchor
+            : QTextCursor::MoveAnchor;
         while (!cursor.atBlockEnd()) {
             cursor.movePosition(QTextCursor::NextCharacter, keepAncor);
             if (cursorRect(cursor).y() > startY) {
@@ -400,10 +396,9 @@ bool BaseTextEdit::keyPressEventReimpl(QKeyEvent* _event)
              || _event == QKeySequence::SelectStartOfLine) {
         QTextCursor cursor = textCursor();
         const int startY = cursorRect(cursor).y();
-        const QTextCursor::MoveMode keepAncor =
-            _event->modifiers().testFlag(Qt::ShiftModifier)
-                ? QTextCursor::KeepAnchor
-                : QTextCursor::MoveAnchor;
+        const QTextCursor::MoveMode keepAncor = _event->modifiers().testFlag(Qt::ShiftModifier)
+            ? QTextCursor::KeepAnchor
+            : QTextCursor::MoveAnchor;
         while (!cursor.atBlockStart()) {
             cursor.movePosition(QTextCursor::PreviousCharacter, keepAncor);
             if (cursorRect(cursor).y() < startY) {
@@ -420,8 +415,7 @@ bool BaseTextEdit::keyPressEventReimpl(QKeyEvent* _event)
     //
     else if (_event->modifiers().testFlag(Qt::MetaModifier)
              && _event->modifiers().testFlag(Qt::AltModifier)
-             && (_event->key() == Qt::Key_Period
-                 || _event->key() == 1070)) {
+             && (_event->key() == Qt::Key_Period || _event->key() == 1070)) {
         insertPlainText(".");
     }
     //
@@ -429,8 +423,7 @@ bool BaseTextEdit::keyPressEventReimpl(QKeyEvent* _event)
     //
     else if (_event->modifiers().testFlag(Qt::MetaModifier)
              && _event->modifiers().testFlag(Qt::AltModifier)
-             && (_event->key() == Qt::Key_Comma
-                || _event->key() == 1041)) {
+             && (_event->key() == Qt::Key_Comma || _event->key() == 1041)) {
         insertPlainText(",");
     }
 #endif
@@ -467,9 +460,7 @@ bool BaseTextEdit::updateEnteredText(const QString& _eventText)
     //
     // Определяем необходимость установки верхнего регистра для первого символа блока
     //
-    if (d->capitalizeWords
-        && cursorBackwardText != " "
-        && cursorBackwardText == _eventText
+    if (d->capitalizeWords && cursorBackwardText != " " && cursorBackwardText == _eventText
         && _eventText[0] != TextHelper::smartToUpper(_eventText[0])) {
         //
         // Сформируем правильное представление строки
@@ -499,10 +490,8 @@ bool BaseTextEdit::updateEnteredText(const QString& _eventText)
     // и после курсора нет текста (для ремарки допустима скобка)
     //
     const QString endOfSentancePattern = QString("([.]|[?]|[!]|[…]) %1$").arg(_eventText);
-    if (d->capitalizeWords
-        && cursorBackwardText.contains(QRegularExpression(endOfSentancePattern))
-        && !stringEndsWithAbbrev(cursorBackwardText)
-        && cursorForwardText.isEmpty()
+    if (d->capitalizeWords && cursorBackwardText.contains(QRegularExpression(endOfSentancePattern))
+        && !stringEndsWithAbbrev(cursorBackwardText) && cursorForwardText.isEmpty()
         && _eventText[0] != TextHelper::smartToUpper(_eventText[0])) {
         //
         // Сделаем первую букву заглавной
@@ -535,8 +524,7 @@ bool BaseTextEdit::updateEnteredText(const QString& _eventText)
         //
         // Если две из трёх последних букв находятся в верхнем регистре, то это наш случай
         //
-        if (!right3Characters.contains(" ")
-            && right3Characters.length() == 3
+        if (!right3Characters.contains(" ") && right3Characters.length() == 3
             && right3Characters != TextHelper::smartToUpper(right3Characters)
             && right3Characters.left(2) == TextHelper::smartToUpper(right3Characters.left(2))
             && right3Characters.left(2).at(0).isLetter()
@@ -546,7 +534,8 @@ bool BaseTextEdit::updateEnteredText(const QString& _eventText)
             // Сделаем предпоследнюю букву строчной
             //
             QString correctedText = right3Characters;
-            correctedText[correctedText.length() - 2] = correctedText[correctedText.length() - 2].toLower();
+            correctedText[correctedText.length() - 2]
+                = correctedText[correctedText.length() - 2].toLower();
 
             //
             // Стираем предыдущий введённый текст
@@ -568,9 +557,7 @@ bool BaseTextEdit::updateEnteredText(const QString& _eventText)
     //
     // Заменяем три точки символом многоточия
     //
-    if (d->replaceThreeDots
-        && _eventText == "."
-        && cursorBackwardText.endsWith("...")) {
+    if (d->replaceThreeDots && _eventText == "." && cursorBackwardText.endsWith("...")) {
         //
         // Три последних символа
         //
@@ -583,9 +570,7 @@ bool BaseTextEdit::updateEnteredText(const QString& _eventText)
     //
     // Корректируем кавычки
     //
-    if (d->smartQuotes
-        && _eventText == "\""
-        && localOpenQuote() != "\"") {
+    if (d->smartQuotes && _eventText == "\"" && localOpenQuote() != "\"") {
         //
         // Выделим введённый символ
         //
@@ -598,7 +583,7 @@ bool BaseTextEdit::updateEnteredText(const QString& _eventText)
         cursorCopy.movePosition(QTextCursor::StartOfBlock, QTextCursor::KeepAnchor);
 
         if (cursorCopy.selectedText().isEmpty()
-            || QStringList({" ", "("}).contains(cursorCopy.selectedText().right(1))) {
+            || QStringList({ " ", "(" }).contains(cursorCopy.selectedText().right(1))) {
             cursor.insertText(localOpenQuote());
         } else {
             cursor.insertText(localCloseQuote());

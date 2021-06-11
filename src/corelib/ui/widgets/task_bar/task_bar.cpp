@@ -46,11 +46,13 @@ void TaskBar::Implementation::correctGeometry(QWidget* _taskBar)
 {
     _taskBar->setFixedSize(Ui::DesignSystem::taskBar().width(),
                            Ui::DesignSystem::taskBar().margins().top()
-                           + Ui::DesignSystem::taskBar().taskHeight() * tasks.size()
-                           + Ui::DesignSystem::taskBar().margins().bottom());
+                               + Ui::DesignSystem::taskBar().taskHeight() * tasks.size()
+                               + Ui::DesignSystem::taskBar().margins().bottom());
 
-    const int x = _taskBar->parentWidget()->width() - _taskBar->width() - Ui::DesignSystem::layout().px4();
-    const int y = _taskBar->parentWidget()->height() - _taskBar->height() - Ui::DesignSystem::layout().px4();
+    const int x
+        = _taskBar->parentWidget()->width() - _taskBar->width() - Ui::DesignSystem::layout().px4();
+    const int y = _taskBar->parentWidget()->height() - _taskBar->height()
+        - Ui::DesignSystem::layout().px4();
     _taskBar->move(x, y);
 }
 
@@ -58,7 +60,8 @@ void TaskBar::Implementation::correctGeometry(QWidget* _taskBar)
 // ****
 
 
-void TaskBar::registerTaskBar(QWidget* _parent, const QColor& _backgroundColor, const QColor& _textColor, const QColor& _barColor)
+void TaskBar::registerTaskBar(QWidget* _parent, const QColor& _backgroundColor,
+                              const QColor& _textColor, const QColor& _barColor)
 {
     Q_ASSERT(_parent);
 
@@ -81,7 +84,7 @@ void TaskBar::addTask(const QString& _taskId)
 
     auto& tasks = Implementation::instance->d->tasks;
     if (std::find_if(tasks.begin(), tasks.end(),
-                     [_taskId] (const auto& _task) { return _task.id == _taskId; })
+                     [_taskId](const auto& _task) { return _task.id == _taskId; })
         != tasks.end()) {
         return;
     }
@@ -127,7 +130,7 @@ void TaskBar::finishTask(const QString& _taskId)
 
     auto& tasks = Implementation::instance->d->tasks;
     tasks.erase(std::remove_if(tasks.begin(), tasks.end(),
-                               [_taskId] (const auto& _task) { return _task.id == _taskId; }));
+                               [_taskId](const auto& _task) { return _task.id == _taskId; }));
 
     Implementation::instance->d->correctGeometry(Implementation::instance);
 
@@ -148,8 +151,7 @@ void TaskBar::setBarColor(const QColor& _color)
 
 bool TaskBar::eventFilter(QObject* _watched, QEvent* _event)
 {
-    if (_watched == parentWidget()
-        && _event->type() == QEvent::Resize) {
+    if (_watched == parentWidget() && _event->type() == QEvent::Resize) {
         d->correctGeometry(this);
     }
 
@@ -159,8 +161,8 @@ bool TaskBar::eventFilter(QObject* _watched, QEvent* _event)
 TaskBar::~TaskBar() = default;
 
 TaskBar::TaskBar(QWidget* _parent)
-    : Card(_parent),
-      d(new Implementation)
+    : Card(_parent)
+    , d(new Implementation)
 {
     hide();
 }
@@ -179,11 +181,9 @@ void TaskBar::paintEvent(QPaintEvent* _event)
         // Заголовок
         //
         painter.setPen(textColor());
-        const QRectF titleRect(Ui::DesignSystem::taskBar().margins().left(),
-                               lastTop,
-                               width()
-                               - Ui::DesignSystem::taskBar().margins().left()
-                               - Ui::DesignSystem::taskBar().margins().right(),
+        const QRectF titleRect(Ui::DesignSystem::taskBar().margins().left(), lastTop,
+                               width() - Ui::DesignSystem::taskBar().margins().left()
+                                   - Ui::DesignSystem::taskBar().margins().right(),
                                Ui::DesignSystem::taskBar().taskTitleHeight());
         painter.drawText(titleRect, Qt::AlignLeft | Qt::AlignVCenter, task.title);
 
@@ -195,17 +195,15 @@ void TaskBar::paintEvent(QPaintEvent* _event)
         //
         // ... подложка
         //
-        const QRectF progressBackgroundRect(titleRect.left(),
-                                            titleRect.bottom() + Ui::DesignSystem::taskBar().spacing(),
-                                            titleRect.width(),
-                                            Ui::DesignSystem::progressBar().linearTrackHeight());
+        const QRectF progressBackgroundRect(
+            titleRect.left(), titleRect.bottom() + Ui::DesignSystem::taskBar().spacing(),
+            titleRect.width(), Ui::DesignSystem::progressBar().linearTrackHeight());
         painter.setOpacity(Ui::DesignSystem::progressBar().unfilledPartOpacity());
         painter.drawRoundedRect(progressBackgroundRect, progressRadius, progressRadius);
         //
         // ... заполненная часть
         //
-        const QRectF progressRect(progressBackgroundRect.left(),
-                                  progressBackgroundRect.top(),
+        const QRectF progressRect(progressBackgroundRect.left(), progressBackgroundRect.top(),
                                   progressBackgroundRect.width() * task.progress / 100.0,
                                   progressBackgroundRect.height());
         painter.setOpacity(1.0);

@@ -1,17 +1,16 @@
 #pragma once
 
-#include <corelib_global.h>
-
 #include <QTextDocument>
+
+#include <corelib_global.h>
 
 
 namespace BusinessLayer {
-    class TextModel;
-    enum class TextParagraphType;
-}
+class TextModel;
+enum class TextParagraphType;
+} // namespace BusinessLayer
 
-namespace BusinessLayer
-{
+namespace BusinessLayer {
 
 /**
  * @brief Класс текстового документа
@@ -61,26 +60,23 @@ public:
     /**
      * @brief Вставить новый блок заданного типа
      */
-    void addParagraph(BusinessLayer::TextParagraphType _type,
-        QTextCursor _cursor);
+    void addParagraph(BusinessLayer::TextParagraphType _type, QTextCursor _cursor);
 
     /**
      * @brief Установить тип блока для заданного курсора
      */
-    void setParagraphType(BusinessLayer::TextParagraphType _type,
-        const QTextCursor& _cursor);
+    void setParagraphType(BusinessLayer::TextParagraphType _type, const QTextCursor& _cursor);
 
     /**
      * @brief Применить заданный тип блока к тексту, на который указывает курсор
      */
-    void applyParagraphType(BusinessLayer::TextParagraphType _type,
-        const QTextCursor& _cursor);
+    void applyParagraphType(BusinessLayer::TextParagraphType _type, const QTextCursor& _cursor);
 
     /**
      * @brief Добавить редакторсую заметку в текущее выделение
      */
     void addReviewMark(const QColor& _textColor, const QColor& _backgroundColor,
-        const QString& _comment, const QTextCursor& _cursor);
+                       const QString& _comment, const QTextCursor& _cursor);
 
 private:
     /**
@@ -93,4 +89,4 @@ private:
     QScopedPointer<Implementation> d;
 };
 
-} // namespace Ui
+} // namespace BusinessLayer

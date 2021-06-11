@@ -5,8 +5,7 @@
 #include <QAction>
 
 
-namespace Ui
-{
+namespace Ui {
 
 ProjectsToolBar::ProjectsToolBar(QWidget* _parent)
     : AppBar(_parent)

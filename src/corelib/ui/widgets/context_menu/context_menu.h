@@ -1,8 +1,8 @@
 #pragma once
 
-#include <corelib_global.h>
-
 #include <ui/widgets/card/card.h>
+
+#include <corelib_global.h>
 
 
 /**
@@ -53,4 +53,3 @@ private:
     class Implementation;
     QScopedPointer<Implementation> d;
 };
-

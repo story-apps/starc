@@ -1,19 +1,17 @@
 #pragma once
 
-#include <corelib_global.h>
-
 #include <QColor>
 #include <QString>
 
+#include <corelib_global.h>
 
-namespace BusinessLayer
-{
+
+namespace BusinessLayer {
 
 /**
  * @brief Опции экспорта
  */
-struct CORE_LIBRARY_EXPORT ExportOptions
-{
+struct CORE_LIBRARY_EXPORT ExportOptions {
     /**
      * @brief Путь к файлу
      */

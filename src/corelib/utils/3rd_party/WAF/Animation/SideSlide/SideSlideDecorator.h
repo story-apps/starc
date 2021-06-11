@@ -8,78 +8,77 @@
 /**
  * Widgets Animation Framework
  */
-namespace WAF
+namespace WAF {
+/**
+ * @brief Класс декорирующий анимацию выкатывания
+ */
+class SideSlideDecorator : public QWidget
 {
+    Q_OBJECT
+
+    Q_PROPERTY(QPoint slidePos READ slidePos WRITE setSlidePos)
+
+public:
+    explicit SideSlideDecorator(QWidget* _parent);
+
     /**
-     * @brief Класс декорирующий анимацию выкатывания
+     * @brief Сохранить изображение родительского виджета
      */
-    class SideSlideDecorator : public QWidget
-    {
-        Q_OBJECT
+    void grabParentSize();
 
-        Q_PROPERTY(QPoint slidePos READ slidePos WRITE setSlidePos)
+    /**
+     * @brief Задекорировать фон
+     */
+    void decorate(bool _dark);
 
-    public:
-        explicit SideSlideDecorator(QWidget* _parent);
+    /**
+     * @brief Получить позицию выкатываемого виджета
+     */
+    QPoint slidePos() const;
 
-        /**
-         * @brief Сохранить изображение родительского виджета
-         */
-        void grabParentSize();
+    /**
+     * @brief Установить позицию выкатываемого виджета
+     */
+    void setSlidePos(const QPoint& _pos);
 
-        /**
-         * @brief Задекорировать фон
-         */
-        void decorate(bool _dark);
+signals:
+    /**
+     * @brief На виджете произведён щелчёк мышью
+     */
+    void clicked();
 
-        /**
-         * @brief Получить позицию выкатываемого виджета
-         */
-        QPoint slidePos() const;
+protected:
+    /**
+     * @brief Переопределяется для прорисовки декорации
+     */
+    void paintEvent(QPaintEvent* _event);
 
-        /**
-         * @brief Установить позицию выкатываемого виджета
-         */
-        void setSlidePos(const QPoint& _pos);
+    /**
+     * @brief Переопределяется для отлавливания щелчка мышью
+     */
+    void mousePressEvent(QMouseEvent* _event);
 
-    signals:
-        /**
-         * @brief На виджете произведён щелчёк мышью
-         */
-        void clicked();
+private:
+    /**
+     * @brief Позиция выкатываемого виджета
+     */
+    QPoint m_slidePos;
 
-    protected:
-        /**
-         * @brief Переопределяется для прорисовки декорации
-         */
-        void paintEvent(QPaintEvent* _event);
+    /**
+     * @brief Таймлайн для реализации анимированного декорирования
+     */
+    QTimeLine m_timeline;
 
-        /**
-         * @brief Переопределяется для отлавливания щелчка мышью
-         */
-        void mousePressEvent(QMouseEvent* _event);
+    /**
+     * @brief Фоновое изображение
+     */
+    QPixmap m_backgroundPixmap;
 
-    private:
-        /**
-         * @brief Позиция выкатываемого виджета
-         */
-        QPoint m_slidePos;
-
-        /**
-         * @brief Таймлайн для реализации анимированного декорирования
-         */
-        QTimeLine m_timeline;
-
-        /**
-         * @brief Фоновое изображение
-         */
-        QPixmap m_backgroundPixmap;
-
-        /**
-         * @brief Цвет декорирования фона
-         */
-        QColor m_decorationColor;
-    };
-}
+    /**
+     * @brief Цвет декорирования фона
+     */
+    QColor m_decorationColor;
+};
+} // namespace WAF
 
 #endif // SIDESLIDEDECORATOR_H

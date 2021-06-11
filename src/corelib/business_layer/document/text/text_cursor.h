@@ -1,8 +1,8 @@
 #pragma once
 
-#include <corelib_global.h>
-
 #include <QTextCursor>
+
+#include <corelib_global.h>
 
 class BaseTextEdit;
 
@@ -16,7 +16,7 @@ class CORE_LIBRARY_EXPORT TextCursor : public QTextCursor
 {
 public:
     TextCursor();
-    TextCursor(const QTextCursor &other);
+    TextCursor(const QTextCursor& other);
     explicit TextCursor(QTextDocument* _document);
     ~TextCursor();
 
@@ -40,4 +40,4 @@ public:
     void restartEditBlock();
 };
 
-} // namespace Ui
+} // namespace BusinessLayer
