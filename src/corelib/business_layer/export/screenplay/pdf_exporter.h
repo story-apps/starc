@@ -3,8 +3,7 @@
 #include "abstract_exporter.h"
 
 
-namespace BusinessLayer
-{
+namespace BusinessLayer {
 
 class CORE_LIBRARY_EXPORT PdfExporter : public AbstractExporter
 {

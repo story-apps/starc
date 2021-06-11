@@ -7,9 +7,9 @@
 #include <QEvent>
 #include <QFont>
 #include <QFontMetricsF>
+#include <QIcon>
 #include <QJsonDocument>
 #include <QJsonObject>
-#include <QIcon>
 #include <QMarginsF>
 #include <QPixmap>
 #include <QPointF>
@@ -23,8 +23,7 @@
 #endif
 
 
-namespace Ui
-{
+namespace Ui {
 
 class DesignSystem::Color::Implementation
 {
@@ -108,7 +107,7 @@ DesignSystem::Color& DesignSystem::Color::operator=(const DesignSystem::Color& _
 
 QString DesignSystem::Color::toString() const
 {
-    QString  colorsString;
+    QString colorsString;
     colorsString += d->primary.name();
     colorsString += d->onPrimary.name();
     colorsString += d->secondary.name();
@@ -291,20 +290,20 @@ public:
 DesignSystem::Font::Implementation::Implementation(qreal _scaleFactor)
 {
     QString fontFamily = QLatin1String("Roboto");
-    const QSet<QLocale::Language> notoLanguages = { QLocale::Hebrew,
-                                                    QLocale::Hindi,
-                                                    QLocale::Persian };
+    const QSet<QLocale::Language> notoLanguages
+        = { QLocale::Hebrew, QLocale::Hindi, QLocale::Persian };
     if (notoLanguages.contains(QLocale().language())) {
         fontFamily = QLatin1String("Noto Sans");
     }
-    auto initFont = [_scaleFactor, fontFamily] (QFont::Weight _weight, QFont::Capitalization _capitalization,
-            int _pixelSize, qreal _letterSpacing, QFont& _font) {
-        _font.setFamily(fontFamily);
-        _font.setWeight(_weight);
-        _font.setCapitalization(_capitalization);
-        _font.setPixelSize(static_cast<int>(_pixelSize * _scaleFactor));
-        _font.setLetterSpacing(QFont::AbsoluteSpacing, _letterSpacing * _scaleFactor);
-    };
+    auto initFont
+        = [_scaleFactor, fontFamily](QFont::Weight _weight, QFont::Capitalization _capitalization,
+                                     int _pixelSize, qreal _letterSpacing, QFont& _font) {
+              _font.setFamily(fontFamily);
+              _font.setWeight(_weight);
+              _font.setCapitalization(_capitalization);
+              _font.setPixelSize(static_cast<int>(_pixelSize * _scaleFactor));
+              _font.setLetterSpacing(QFont::AbsoluteSpacing, _letterSpacing * _scaleFactor);
+          };
 
     initFont(QFont::Light, QFont::Capitalization::MixedCase, 96, -1.5, h1);
     initFont(QFont::Light, QFont::Capitalization::MixedCase, 60, -0.5, h2);
@@ -324,12 +323,12 @@ DesignSystem::Font::Implementation::Implementation(qreal _scaleFactor)
     iconsMid.setPixelSize(static_cast<int>(24 * _scaleFactor));
 
     iconsForEditors.setPixelSize(
-            #ifdef Q_OS_WIN
-                22
-            #else
-                34
-            #endif
-                );
+#ifdef Q_OS_WIN
+        22
+#else
+        34
+#endif
+    );
 }
 
 // **
@@ -361,7 +360,7 @@ const QFont& DesignSystem::Font::h5() const
     return d->h5;
 }
 
-const QFont&DesignSystem::Font::h6() const
+const QFont& DesignSystem::Font::h6() const
 {
     return d->h6;
 }
@@ -526,15 +525,15 @@ class DesignSystem::AppBar::Implementation
 public:
     explicit Implementation(qreal _scaleFactor);
 
-    QMarginsF margins = {16.0, 16.0, 16.0, 16.0};
-    QMarginsF bigIconMargins = {0.0, 8.0, 16.0, 8.0};
+    QMarginsF margins = { 16.0, 16.0, 16.0, 16.0 };
+    QMarginsF bigIconMargins = { 0.0, 8.0, 16.0, 8.0 };
     qreal heightRegular = 56.0;
-    QSizeF iconSize = {24.0, 24.0};
-    QSizeF bigIconSize = {40.0, 40.0};
+    QSizeF iconSize = { 24.0, 24.0 };
+    QSizeF bigIconSize = { 40.0, 40.0 };
     qreal iconsSpacing = 24.0;
     qreal leftTitleMargin = 72.0;
     qreal shadowRadius = 12.0;
-    QPointF shadowOffset = {0.0, 3.0};
+    QPointF shadowOffset = { 0.0, 3.0 };
 };
 
 DesignSystem::AppBar::Implementation::Implementation(qreal _scaleFactor)
@@ -613,7 +612,7 @@ class DesignSystem::Label::Implementation
 public:
     explicit Implementation(qreal _scaleFactor);
 
-    QMarginsF margins = {24.0, 24.0, 24.0, 24.0};
+    QMarginsF margins = { 24.0, 24.0, 24.0, 24.0 };
 };
 
 DesignSystem::Label::Implementation::Implementation(qreal _scaleFactor)
@@ -648,13 +647,13 @@ public:
 
     qreal height = 38.0;
     qreal minimumWidth = 56.0;
-    QMarginsF margins = {16.0, 0.0, 16.0, 0.0};
+    QMarginsF margins = { 16.0, 0.0, 16.0, 0.0 };
     qreal spacing = 16.0;
-    QMarginsF shadowMargins = {8.0, 8.0, 8.0, 10.0};
+    QMarginsF shadowMargins = { 8.0, 8.0, 8.0, 10.0 };
     qreal minimumShadowBlurRadius = 8.0;
     qreal maximumShadowBlurRadius = 22.0;
     qreal borderRadius = 4.0;
-    QSizeF iconSize = {22.0, 22.0};
+    QSizeF iconSize = { 22.0, 22.0 };
 };
 
 DesignSystem::Button::Implementation::Implementation(qreal _scaleFactor)
@@ -703,7 +702,7 @@ const QMarginsF& DesignSystem::Button::shadowMargins() const
 
 qreal DesignSystem::Button::minimumShadowBlurRadius() const
 {
-    return  d->minimumShadowBlurRadius;
+    return d->minimumShadowBlurRadius;
 }
 
 qreal DesignSystem::Button::maximumShadowBlurRadius() const
@@ -735,9 +734,9 @@ class DesignSystem::ToggleButton::Implementation
 public:
     explicit Implementation(qreal _scaleFactor);
 
-    QSizeF size = {48.0, 48.0};
-    QMarginsF margins = {12.0, 12.0, 12.0, 12.0};
-    QSizeF iconSize = {24.0, 24.0};
+    QSizeF size = { 48.0, 48.0 };
+    QMarginsF margins = { 12.0, 12.0, 12.0, 12.0 };
+    QSizeF iconSize = { 24.0, 24.0 };
 };
 
 DesignSystem::ToggleButton::Implementation::Implementation(qreal _scaleFactor)
@@ -783,10 +782,9 @@ public:
     explicit Implementation(qreal _scaleFactor);
 
     qreal height = 48.0;
-    QMarginsF margins = {24.0, 13.0, 24.0, 13.0};
-    QSizeF iconSize = {22.0, 22.0};
+    QMarginsF margins = { 24.0, 13.0, 24.0, 13.0 };
+    QSizeF iconSize = { 22.0, 22.0 };
     qreal spacing = 16.0;
-
 };
 
 DesignSystem::RadioButton::Implementation::Implementation(qreal _scaleFactor)
@@ -836,10 +834,9 @@ public:
     explicit Implementation(qreal _scaleFactor);
 
     qreal height = 48.0;
-    QMarginsF margins = {24.0, 13.0, 24.0, 13.0};
-    QSizeF iconSize = {22.0, 22.0};
+    QMarginsF margins = { 24.0, 13.0, 24.0, 13.0 };
+    QSizeF iconSize = { 22.0, 22.0 };
     qreal spacing = 16.0;
-
 };
 
 DesignSystem::CheckBox::Implementation::Implementation(qreal _scaleFactor)
@@ -990,12 +987,12 @@ public:
     qreal backgroundInactiveColorOpacity = 0.06;
     qreal backgroundActiveColorOpacity = 0.1;
     qreal textColorOpacity = 0.4;
-    QMarginsF contentsMargins = {24.0, 0.0, 24.0, 0.0};
-    QMarginsF margins = {12.0, 26.0, 12.0, 12.0};
-    QMarginsF marginsWithoutTitle = {12.0, 18.0, 12.0, 18.0};
-    QPointF labelTopLeft = {12.0, 6.0};
+    QMarginsF contentsMargins = { 24.0, 0.0, 24.0, 0.0 };
+    QMarginsF margins = { 12.0, 26.0, 12.0, 12.0 };
+    QMarginsF marginsWithoutTitle = { 12.0, 18.0, 12.0, 18.0 };
+    QPointF labelTopLeft = { 12.0, 6.0 };
     qreal iconTop = 16.0;
-    QSizeF iconSize = {24.0, 24.0};
+    QSizeF iconSize = { 24.0, 24.0 };
     qreal spacing = 12.0;
     qreal underlineHeight = 1.0;
     qreal underlineHeightInFocus = 2.0;
@@ -1096,7 +1093,7 @@ public:
 
     QColor backgroundColor;
     QColor handleColor;
-    QMarginsF margins = {2.0, 2.0, 2.0, 2.0};
+    QMarginsF margins = { 2.0, 2.0, 2.0, 2.0 };
     qreal minimumSize = 6.0;
     qreal maximumSize = 18.0;
     qreal minimumHandleLength = 26.0;
@@ -1161,13 +1158,13 @@ class DesignSystem::FloatingToolBar::Implementation
 public:
     explicit Implementation(qreal _scaleFactor);
 
-    QMarginsF margins = {16.0, 16.0, 16.0, 16.0};
-    QMarginsF shadowMargins = {14.0, 14.0, 14.0, 16.0};
+    QMarginsF margins = { 16.0, 16.0, 16.0, 16.0 };
+    QMarginsF shadowMargins = { 14.0, 14.0, 14.0, 16.0 };
     qreal minimumShadowBlurRadius = 8.0;
     qreal maximumShadowBlurRadius = 32.0;
     qreal borderRadius = 4.0;
     qreal height = 56.0;
-    QSizeF iconSize = {24.0, 24.0};
+    QSizeF iconSize = { 24.0, 24.0 };
     qreal spacing = 24.0;
 };
 
@@ -1241,8 +1238,8 @@ public:
     qreal heightWithText = 48.0;
     qreal heightWithIcon = 48.0;
     qreal heightWithTextAndIcon = 72.0;
-    QMarginsF margins = {16.0, 12.0, 16.0, 12.0};
-    QSizeF iconSize = {24.0, 24.0};
+    QMarginsF margins = { 16.0, 12.0, 16.0, 12.0 };
+    QSizeF iconSize = { 24.0, 24.0 };
 };
 
 DesignSystem::Tab::Implementation::Implementation(qreal _scaleFactor)
@@ -1342,8 +1339,8 @@ public:
     explicit Implementation(qreal _scaleFactor);
 
     qreal stepHeight = 72.0;
-    QMarginsF margins = {24.0, 24.0, 24.0, 24.0};
-    QSizeF iconSize = {24.0, 24.0};
+    QMarginsF margins = { 24.0, 24.0, 24.0, 24.0 };
+    QSizeF iconSize = { 24.0, 24.0 };
     qreal spacing = 12.0;
     qreal pathSpacing = 8.0;
     qreal pathWidth = 2.0;
@@ -1407,16 +1404,16 @@ class DesignSystem::Drawer::Implementation
 public:
     explicit Implementation(qreal _scaleFactor, const Color& _color);
 
-    QMarginsF margins = {16.0, 16.0, 16.0, 16.0};
-    QMarginsF actionMargins = {16.0, 12.0, 12.0, 12.0};
-    QMarginsF selectionMargins = {8.0, 4.0, 8.0, 4.0};
+    QMarginsF margins = { 16.0, 16.0, 16.0, 16.0 };
+    QMarginsF actionMargins = { 16.0, 12.0, 12.0, 12.0 };
+    QMarginsF selectionMargins = { 8.0, 4.0, 8.0, 4.0 };
     qreal subtitleBottomMargin = 18.0;
     qreal spacing = 32.0;
     qreal width = 304.0;
     qreal titleHeight = 26.0;
     qreal subtitleHeight = 20.0;
     qreal actionHeight = 48.0;
-    QSizeF iconSize = {24.0, 24.0};
+    QSizeF iconSize = { 24.0, 24.0 };
     qreal separatorHeight = 0.5;
     qreal separatorSpacing = 8.0;
     QColor selectionColor;
@@ -1523,11 +1520,11 @@ class DesignSystem::TreeOneLineItem::Implementation
 public:
     explicit Implementation(qreal _scaleFactor);
 
-    QMarginsF margins = {16.0, 16.0, 16.0, 16.0};
+    QMarginsF margins = { 16.0, 16.0, 16.0, 16.0 };
     qreal height = 56.0;
     qreal spacing = 16.0;
-    QSizeF iconSize = {32.0, 32.0};
-    QSizeF avatarSize = {40.0, 40.0};
+    QSizeF iconSize = { 32.0, 32.0 };
+    QSizeF avatarSize = { 40.0, 40.0 };
 };
 
 DesignSystem::TreeOneLineItem::Implementation::Implementation(qreal _scaleFactor)
@@ -1584,7 +1581,7 @@ class DesignSystem::Tree::Implementation
 public:
     explicit Implementation(qreal _scaleFactor, const Color& _color);
 
-    QMarginsF margins = {0.0, 24.0, 0.0, 24.0};
+    QMarginsF margins = { 0.0, 24.0, 0.0, 24.0 };
     qreal indicatorWidth = 40.0;
     qreal arrowHeight = 5.0;
     qreal arrowHalfWidth = 4.0;
@@ -1645,7 +1642,7 @@ public:
     explicit Implementation(qreal _scaleFactor);
 
     qreal borderRadius = 4.0;
-    QMarginsF shadowMargins = {14.0, 14.0, 14.0, 16.0};
+    QMarginsF shadowMargins = { 14.0, 14.0, 14.0, 16.0 };
     qreal minimumShadowBlurRadius = 8.0;
     qreal maximumShadowBlurRadius = 32.0;
 };
@@ -1698,7 +1695,7 @@ class DesignSystem::Dialog::Implementation
 public:
     explicit Implementation(qreal _scaleFactor);
 
-    QMarginsF margins = {24.0, 24.0, 24.0, 12.0};
+    QMarginsF margins = { 24.0, 24.0, 24.0, 12.0 };
     qreal minimumWidth = 420.0;
     qreal infoMaximumWidth = 500.0;
 };
@@ -1742,12 +1739,11 @@ class DesignSystem::TaskBar::Implementation
 public:
     explicit Implementation(qreal _scaleFactor);
 
-    QMarginsF margins = {24, 24, 24, 24};
+    QMarginsF margins = { 24, 24, 24, 24 };
     qreal width = 260;
     qreal taskHeight = 32;
     qreal taskTitleHeight = 18;
     qreal spacing = 4;
-
 };
 
 DesignSystem::TaskBar::Implementation::Implementation(qreal _scaleFactor)
@@ -1803,8 +1799,8 @@ class DesignSystem::ProjectCard::Implementation
 public:
     explicit Implementation(qreal _scaleFactor);
 
-    QSizeF size = {400, 230};
-    QMarginsF margins = {24, 116, 24, 24};
+    QSizeF size = { 400, 230 };
+    QMarginsF margins = { 24, 116, 24, 24 };
     qreal spacing = 10;
 };
 
@@ -1849,12 +1845,12 @@ class DesignSystemPrivate
 {
 public:
     explicit DesignSystemPrivate(ApplicationTheme _theme = ApplicationTheme::DarkAndLight,
-        qreal _scaleFactor = 1.0, const DesignSystem::Color& _color = {});
+                                 qreal _scaleFactor = 1.0, const DesignSystem::Color& _color = {});
 
     ApplicationTheme theme = ApplicationTheme::DarkAndLight;
     qreal scaleFactor = 1.0;
 
-    QMarginsF pageMargins = {16.0, 26.0, 16.0, 16.0};
+    QMarginsF pageMargins = { 16.0, 26.0, 16.0, 16.0 };
     qreal pageSpacing = 16.0;
     qreal inactiveTextOpacity = 0.68;
     qreal disabledTextOpacity = 0.46;
@@ -1890,33 +1886,33 @@ public:
 };
 
 DesignSystemPrivate::DesignSystemPrivate(ApplicationTheme _theme, qreal _scaleFactor,
-    const DesignSystem::Color& _color)
-    : theme(_theme),
-      scaleFactor(_scaleFactor),
-      color(_color),
-      font(_scaleFactor),
-      layout(_scaleFactor),
-      appBar(_scaleFactor),
-      label(_scaleFactor),
-      button(_scaleFactor),
-      toggleButton(_scaleFactor),
-      radioButton(_scaleFactor),
-      checkBox(_scaleFactor),
-      slider(_scaleFactor),
-      progressBar(_scaleFactor),
-      textField(_scaleFactor),
-      scrollBar(_scaleFactor, _color),
-      floatingToolBar(_scaleFactor),
-      tab(_scaleFactor),
-      tabBar(_scaleFactor),
-      stepper(_scaleFactor),
-      drawer(_scaleFactor, _color),
-      treeOneLineItem(_scaleFactor),
-      tree(_scaleFactor, _color),
-      card(_scaleFactor),
-      dialog(_scaleFactor),
-      taskBar(_scaleFactor),
-      projectCard(_scaleFactor)
+                                         const DesignSystem::Color& _color)
+    : theme(_theme)
+    , scaleFactor(_scaleFactor)
+    , color(_color)
+    , font(_scaleFactor)
+    , layout(_scaleFactor)
+    , appBar(_scaleFactor)
+    , label(_scaleFactor)
+    , button(_scaleFactor)
+    , toggleButton(_scaleFactor)
+    , radioButton(_scaleFactor)
+    , checkBox(_scaleFactor)
+    , slider(_scaleFactor)
+    , progressBar(_scaleFactor)
+    , textField(_scaleFactor)
+    , scrollBar(_scaleFactor, _color)
+    , floatingToolBar(_scaleFactor)
+    , tab(_scaleFactor)
+    , tabBar(_scaleFactor)
+    , stepper(_scaleFactor)
+    , drawer(_scaleFactor, _color)
+    , treeOneLineItem(_scaleFactor)
+    , tree(_scaleFactor, _color)
+    , card(_scaleFactor)
+    , dialog(_scaleFactor)
+    , taskBar(_scaleFactor)
+    , projectCard(_scaleFactor)
 {
     pageMargins *= _scaleFactor;
     pageSpacing *= _scaleFactor;
@@ -1959,66 +1955,72 @@ void DesignSystem::setTheme(ApplicationTheme _theme)
     QColor onError;
 
     switch (_theme) {
-        case Ui::ApplicationTheme::DarkAndLight: {
-            primary = "#323740";
-            secondary = "#448aff";
-            background = "#ffffff";
-            surface = "#f3f3f3";
-            error = "#b00020";
-            shadow = [] { QColor color = "#000000";
-                          color.setAlphaF(0.36);
-                          return color; } ();
-            onPrimary = "#ffffff";
-            onSecondary = "#ffffff";
-            onBackground = "#000000";
-            onSurface = "#000000";
-            onError = "#ffffff";
-            onShadow = "#FFFFFF";
-            break;
-        }
+    case Ui::ApplicationTheme::DarkAndLight: {
+        primary = "#323740";
+        secondary = "#448aff";
+        background = "#ffffff";
+        surface = "#f3f3f3";
+        error = "#b00020";
+        shadow = [] {
+            QColor color = "#000000";
+            color.setAlphaF(0.36);
+            return color;
+        }();
+        onPrimary = "#ffffff";
+        onSecondary = "#ffffff";
+        onBackground = "#000000";
+        onSurface = "#000000";
+        onError = "#ffffff";
+        onShadow = "#FFFFFF";
+        break;
+    }
 
-        case Ui::ApplicationTheme::Dark: {
-            primary = "#323740";
-            secondary = "#5796ff";
-            background = "#272b34";
-            surface = "#22262e";
-            error = "#ec3740";
-            shadow = [] { QColor color = "#000000";
-                          color.setAlphaF(0.68);
-                          return color; } ();
-            onPrimary = "#ffffff";
-            onSecondary = "#f8f8f2";
-            onBackground = "#f8f8f2";
-            onSurface = "#f8f8f2";
-            onError = "#f8f8f2";
-            onShadow = "#f8f8f2";
-            break;
-        }
+    case Ui::ApplicationTheme::Dark: {
+        primary = "#323740";
+        secondary = "#5796ff";
+        background = "#272b34";
+        surface = "#22262e";
+        error = "#ec3740";
+        shadow = [] {
+            QColor color = "#000000";
+            color.setAlphaF(0.68);
+            return color;
+        }();
+        onPrimary = "#ffffff";
+        onSecondary = "#f8f8f2";
+        onBackground = "#f8f8f2";
+        onSurface = "#f8f8f2";
+        onError = "#f8f8f2";
+        onShadow = "#f8f8f2";
+        break;
+    }
 
-        case Ui::ApplicationTheme::Light: {
-            primary = "#e4e4e4";
-            secondary = "#448aff";
-            background = "#ffffff";
-            surface = "#f3f3f3";
-            error = "#b00020";
-            shadow = [] { QColor color = "#000000";
-                          color.setAlphaF(0.36);
-                          return color; } ();
-            onPrimary = "#38393a";
-            onSecondary = "#ffffff";
-            onBackground = "#000000";
-            onSurface = "#000000";
-            onError = "#ffffff";
-            onShadow = "#FFFFFF";
-            break;
-        }
+    case Ui::ApplicationTheme::Light: {
+        primary = "#e4e4e4";
+        secondary = "#448aff";
+        background = "#ffffff";
+        surface = "#f3f3f3";
+        error = "#b00020";
+        shadow = [] {
+            QColor color = "#000000";
+            color.setAlphaF(0.36);
+            return color;
+        }();
+        onPrimary = "#38393a";
+        onSecondary = "#ffffff";
+        onBackground = "#000000";
+        onSurface = "#000000";
+        onError = "#ffffff";
+        onShadow = "#FFFFFF";
+        break;
+    }
 
-        case Ui::ApplicationTheme::Custom: {
-            //
-            // Кастомная палитра должна следом загрузиться из параметров приложения
-            //
-            return;
-        }
+    case Ui::ApplicationTheme::Custom: {
+        //
+        // Кастомная палитра должна следом загрузиться из параметров приложения
+        //
+        return;
+    }
     }
 
     auto newColor(instance()->d->color);
@@ -2121,7 +2123,7 @@ const DesignSystem::Label& DesignSystem::label()
     return instance()->d->label;
 }
 
-const DesignSystem::Button&DesignSystem::button()
+const DesignSystem::Button& DesignSystem::button()
 {
     return instance()->d->button;
 }

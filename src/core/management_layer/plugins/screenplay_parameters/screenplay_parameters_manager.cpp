@@ -8,8 +8,7 @@
 #include <QFileDialog>
 
 
-namespace ManagementLayer
-{
+namespace ManagementLayer {
 
 class ScreenplayParametersManager::Implementation
 {
@@ -54,8 +53,8 @@ Ui::ScreenplayParametersView* ScreenplayParametersManager::Implementation::creat
 
 
 ScreenplayParametersManager::ScreenplayParametersManager(QObject* _parent)
-    : QObject(_parent),
-      d(new Implementation)
+    : QObject(_parent)
+    , d(new Implementation)
 {
 }
 
@@ -86,12 +85,12 @@ void ScreenplayParametersManager::setModel(BusinessLayer::AbstractModel* _model)
         d->view->setScenesNumbersPrefix(d->model->scenesNumbersPrefix());
         d->view->setScenesNumbersingStartAt(d->model->scenesNumberingStartAt());
 
-        connect(d->model, &BusinessLayer::ScreenplayInformationModel::headerChanged,
-                d->view, &Ui::ScreenplayParametersView::setHeader);
+        connect(d->model, &BusinessLayer::ScreenplayInformationModel::headerChanged, d->view,
+                &Ui::ScreenplayParametersView::setHeader);
         connect(d->model, &BusinessLayer::ScreenplayInformationModel::printHeaderOnTitlePageChanged,
                 d->view, &Ui::ScreenplayParametersView::setPrintHeaderOnTitlePage);
-        connect(d->model, &BusinessLayer::ScreenplayInformationModel::footerChanged,
-                d->view, &Ui::ScreenplayParametersView::setFooter);
+        connect(d->model, &BusinessLayer::ScreenplayInformationModel::footerChanged, d->view,
+                &Ui::ScreenplayParametersView::setFooter);
         connect(d->model, &BusinessLayer::ScreenplayInformationModel::printFooterOnTitlePageChanged,
                 d->view, &Ui::ScreenplayParametersView::setPrintFooterOnTitlePage);
         connect(d->model, &BusinessLayer::ScreenplayInformationModel::scenesNumbersPrefixChanged,
@@ -99,18 +98,18 @@ void ScreenplayParametersManager::setModel(BusinessLayer::AbstractModel* _model)
         connect(d->model, &BusinessLayer::ScreenplayInformationModel::scenesNumberingStartAtChanged,
                 d->view, &Ui::ScreenplayParametersView::setScenesNumbersingStartAt);
         //
-        connect(d->view, &Ui::ScreenplayParametersView::headerChanged,
-                d->model, &BusinessLayer::ScreenplayInformationModel::setHeader);
-        connect(d->view, &Ui::ScreenplayParametersView::printHeaderOnTitlePageChanged,
-                d->model, &BusinessLayer::ScreenplayInformationModel::setPrintHeaderOnTitlePage);
-        connect(d->view, &Ui::ScreenplayParametersView::footerChanged,
-                d->model, &BusinessLayer::ScreenplayInformationModel::setFooter);
-        connect(d->view, &Ui::ScreenplayParametersView::printFooterOnTitlePageChanged,
-                d->model, &BusinessLayer::ScreenplayInformationModel::setPrintFooterOnTitlePage);
-        connect(d->view, &Ui::ScreenplayParametersView::scenesNumbersPrefixChanged,
-                d->model, &BusinessLayer::ScreenplayInformationModel::setScenesNumbersPrefix);
-        connect(d->view, &Ui::ScreenplayParametersView::scenesNumberingStartAtChanged,
-                d->model, &BusinessLayer::ScreenplayInformationModel::setScenesNumberingStartAt);
+        connect(d->view, &Ui::ScreenplayParametersView::headerChanged, d->model,
+                &BusinessLayer::ScreenplayInformationModel::setHeader);
+        connect(d->view, &Ui::ScreenplayParametersView::printHeaderOnTitlePageChanged, d->model,
+                &BusinessLayer::ScreenplayInformationModel::setPrintHeaderOnTitlePage);
+        connect(d->view, &Ui::ScreenplayParametersView::footerChanged, d->model,
+                &BusinessLayer::ScreenplayInformationModel::setFooter);
+        connect(d->view, &Ui::ScreenplayParametersView::printFooterOnTitlePageChanged, d->model,
+                &BusinessLayer::ScreenplayInformationModel::setPrintFooterOnTitlePage);
+        connect(d->view, &Ui::ScreenplayParametersView::scenesNumbersPrefixChanged, d->model,
+                &BusinessLayer::ScreenplayInformationModel::setScenesNumbersPrefix);
+        connect(d->view, &Ui::ScreenplayParametersView::scenesNumberingStartAtChanged, d->model,
+                &BusinessLayer::ScreenplayInformationModel::setScenesNumberingStartAt);
     }
 }
 

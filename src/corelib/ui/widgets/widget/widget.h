@@ -1,8 +1,8 @@
 #pragma once
 
-#include <corelib_global.h>
-
 #include <QWidget>
+
+#include <corelib_global.h>
 
 class DesignSystemChangeEvent;
 
@@ -50,8 +50,12 @@ protected:
     /**
      * @brief Интерфейс для наследников, чтобы можно было отреагировать на смену цвета
      */
-    virtual void processBackgroundColorChange() {}
-    virtual void processTextColorChange() {}
+    virtual void processBackgroundColorChange()
+    {
+    }
+    virtual void processTextColorChange()
+    {
+    }
 
     /**
      * @brief Переопределяем для обработки события обновления дизайн системы
@@ -66,7 +70,9 @@ protected:
     /**
      * @brief Предоставляем интерфейс для наследников, чтобы обновить перевод
      */
-    virtual void updateTranslations() {}
+    virtual void updateTranslations()
+    {
+    }
 
     /**
      * @brief Переопределяем для собственной реализации отрисовки - по сути заливаем цветом фона

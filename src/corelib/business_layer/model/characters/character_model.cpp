@@ -1,26 +1,24 @@
 #include "character_model.h"
 
 #include <business_layer/model/abstract_image_wrapper.h>
-
 #include <domain/document_object.h>
 
 #include <QDomDocument>
 
 
-namespace BusinessLayer
-{
+namespace BusinessLayer {
 
 namespace {
-    const QString kDocumentKey = QStringLiteral("document");
-    const QString kNameKey = QStringLiteral("name");
-    const QString kStoryRoleKey = QStringLiteral("story_role");
-    const QString kOneSentenceDescriptionKey = QStringLiteral("one_sentence_description");
-    const QString kLongDescriptionKey = QStringLiteral("long_description");
-    const QString kMainPhotoKey = QStringLiteral("main_photo");
-    //
-    const QString kAgeKey = QStringLiteral("age");
-    const QString kGenderKey = QStringLiteral("gender");
-}
+const QString kDocumentKey = QStringLiteral("document");
+const QString kNameKey = QStringLiteral("name");
+const QString kStoryRoleKey = QStringLiteral("story_role");
+const QString kOneSentenceDescriptionKey = QStringLiteral("one_sentence_description");
+const QString kLongDescriptionKey = QStringLiteral("long_description");
+const QString kMainPhotoKey = QStringLiteral("main_photo");
+//
+const QString kAgeKey = QStringLiteral("age");
+const QString kGenderKey = QStringLiteral("gender");
+} // namespace
 
 class CharacterModel::Implementation
 {
@@ -40,14 +38,15 @@ public:
 
 
 CharacterModel::CharacterModel(QObject* _parent)
-    : AbstractModel({ kDocumentKey, kNameKey },
-                    _parent),
-      d(new Implementation)
+    : AbstractModel({ kDocumentKey, kNameKey }, _parent)
+    , d(new Implementation)
 {
     connect(this, &CharacterModel::nameChanged, this, &CharacterModel::updateDocumentContent);
     connect(this, &CharacterModel::storyRoleChanged, this, &CharacterModel::updateDocumentContent);
-    connect(this, &CharacterModel::oneSentenceDescriptionChanged, this, &CharacterModel::updateDocumentContent);
-    connect(this, &CharacterModel::longDescriptionChanged, this, &CharacterModel::updateDocumentContent);
+    connect(this, &CharacterModel::oneSentenceDescriptionChanged, this,
+            &CharacterModel::updateDocumentContent);
+    connect(this, &CharacterModel::longDescriptionChanged, this,
+            &CharacterModel::updateDocumentContent);
     connect(this, &CharacterModel::mainPhotoChanged, this, &CharacterModel::updateDocumentContent);
     connect(this, &CharacterModel::ageChanged, this, &CharacterModel::updateDocumentContent);
     connect(this, &CharacterModel::genderChanged, this, &CharacterModel::updateDocumentContent);
@@ -173,10 +172,10 @@ void CharacterModel::initDocument()
     QDomDocument domDocument;
     domDocument.setContent(document()->content());
     const auto documentNode = domDocument.firstChildElement(kDocumentKey);
-    auto contains = [&documentNode] (const QString& _key) {
+    auto contains = [&documentNode](const QString& _key) {
         return !documentNode.firstChildElement(_key).isNull();
     };
-    auto load = [&documentNode] (const QString& _key) {
+    auto load = [&documentNode](const QString& _key) {
         return documentNode.firstChildElement(_key).text();
     };
     d->name = load(kNameKey);
@@ -211,8 +210,10 @@ QByteArray CharacterModel::toXml() const
     }
 
     QByteArray xml = "<?xml version=\"1.0\"?>\n";
-    xml += QString("<%1 mime-type=\"%2\" version=\"1.0\">\n").arg(kDocumentKey, Domain::mimeTypeFor(document()->type())).toUtf8();
-    auto save = [&xml] (const QString& _key, const QString& _value) {
+    xml += QString("<%1 mime-type=\"%2\" version=\"1.0\">\n")
+               .arg(kDocumentKey, Domain::mimeTypeFor(document()->type()))
+               .toUtf8();
+    auto save = [&xml](const QString& _key, const QString& _value) {
         xml += QString("<%1><![CDATA[%2]]></%1>\n").arg(_key, _value).toUtf8();
     };
     save(kNameKey, d->name);

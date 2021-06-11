@@ -5,11 +5,9 @@
 #include "text_model_xml.h"
 
 #include <business_layer/templates/text_template.h>
-
 #include <domain/document_object.h>
-
-#include <utils/shugar.h>
 #include <utils/diff_match_patch/diff_match_patch_controller.h>
+#include <utils/shugar.h>
 #include <utils/tools/edit_distance.h>
 #include <utils/tools/model_index_path.h>
 
@@ -20,8 +18,7 @@
 #define XML_CHECKS
 #endif
 
-namespace BusinessLayer
-{
+namespace BusinessLayer {
 
 namespace {
 
@@ -44,7 +41,7 @@ TextModelItem* firstTextItem(TextModelItem* _item)
     return nullptr;
 };
 
-} // namesapce
+} // namespace
 
 class TextModel::Implementation
 {
@@ -139,18 +136,19 @@ void TextModel::Implementation::updateNumbering()
 {
     int sceneNumber = 1;
     std::function<void(const TextModelItem*)> updateChildNumbering;
-    updateChildNumbering = [&sceneNumber, &updateChildNumbering] (const TextModelItem* _item) {
+    updateChildNumbering = [&sceneNumber, &updateChildNumbering](const TextModelItem* _item) {
         for (int childIndex = 0; childIndex < _item->childCount(); ++childIndex) {
             auto childItem = _item->childAt(childIndex);
             switch (childItem->type()) {
-                case TextModelItemType::Chapter: {
-                    updateChildNumbering(childItem);
-                    auto chapterItem = static_cast<TextModelChapterItem*>(childItem);
-                    chapterItem->setNumber(sceneNumber++);
-                    break;
-                }
+            case TextModelItemType::Chapter: {
+                updateChildNumbering(childItem);
+                auto chapterItem = static_cast<TextModelChapterItem*>(childItem);
+                chapterItem->setNumber(sceneNumber++);
+                break;
+            }
 
-                default: break;
+            default:
+                break;
             }
         }
     };
@@ -162,18 +160,13 @@ void TextModel::Implementation::updateNumbering()
 
 
 TextModel::TextModel(QObject* _parent)
-    : AbstractModel({ xml::kDocumentTag,
-                      xml::kChapterTag,
-                      toString(TextParagraphType::Heading1),
-                      toString(TextParagraphType::Heading2),
-                      toString(TextParagraphType::Heading3),
-                      toString(TextParagraphType::Heading4),
-                      toString(TextParagraphType::Heading5),
-                      toString(TextParagraphType::Heading6),
-                      toString(TextParagraphType::Text),
+    : AbstractModel({ xml::kDocumentTag, xml::kChapterTag, toString(TextParagraphType::Heading1),
+                      toString(TextParagraphType::Heading2), toString(TextParagraphType::Heading3),
+                      toString(TextParagraphType::Heading4), toString(TextParagraphType::Heading5),
+                      toString(TextParagraphType::Heading6), toString(TextParagraphType::Text),
                       toString(TextParagraphType::InlineNote) },
-                    _parent),
-      d(new Implementation)
+                    _parent)
+    , d(new Implementation)
 {
 }
 
@@ -191,8 +184,7 @@ void TextModel::setName(const QString& _name)
     }
 
     const auto item = firstTextItem(d->rootItem);
-    if (item != nullptr
-        && item->type() == TextModelItemType::Text) {
+    if (item != nullptr && item->type() == TextModelItemType::Text) {
         auto textItem = static_cast<TextModelTextItem*>(item);
         textItem->setText(_name);
     }
@@ -256,8 +248,7 @@ void TextModel::prependItem(TextModelItem* _item, TextModelItem* _parentItem)
 
 void TextModel::insertItem(TextModelItem* _item, TextModelItem* _afterSiblingItem)
 {
-    if (_item == nullptr
-        || _afterSiblingItem == nullptr
+    if (_item == nullptr || _afterSiblingItem == nullptr
         || _afterSiblingItem->parent() == nullptr) {
         return;
     }
@@ -303,8 +294,7 @@ void TextModel::takeItem(TextModelItem* _item, TextModelItem* _parentItem)
 
 void TextModel::removeItem(TextModelItem* _item)
 {
-    if (_item == nullptr
-        || _item->parent() == nullptr) {
+    if (_item == nullptr || _item->parent() == nullptr) {
         return;
     }
 
@@ -321,8 +311,7 @@ void TextModel::removeItem(TextModelItem* _item)
 
 void TextModel::updateItem(TextModelItem* _item)
 {
-    if (_item == nullptr
-        || !_item->isChanged()) {
+    if (_item == nullptr || !_item->isChanged()) {
         return;
     }
 
@@ -339,8 +328,7 @@ void TextModel::updateItem(TextModelItem* _item)
     //
     if (_item == d->rootItem) {
         const auto item = firstTextItem(d->rootItem);
-        if (item == nullptr
-            || item->type() != TextModelItemType::Text) {
+        if (item == nullptr || item->type() != TextModelItemType::Text) {
             setDocumentName({});
         } else {
             const auto textItem = static_cast<TextModelTextItem*>(item);
@@ -351,10 +339,7 @@ void TextModel::updateItem(TextModelItem* _item)
 
 QModelIndex TextModel::index(int _row, int _column, const QModelIndex& _parent) const
 {
-    if (_row < 0
-        || _row > rowCount(_parent)
-        || _column < 0
-        || _column > columnCount(_parent)
+    if (_row < 0 || _row > rowCount(_parent) || _column < 0 || _column > columnCount(_parent)
         || (_parent.isValid() && (_parent.column() != 0))) {
         return {};
     }
@@ -378,8 +363,7 @@ QModelIndex TextModel::parent(const QModelIndex& _child) const
 
     auto childItem = itemForIndex(_child);
     auto parentItem = childItem->parent();
-    if (parentItem == nullptr
-        || parentItem == d->rootItem) {
+    if (parentItem == nullptr || parentItem == d->rootItem) {
         return {};
     }
 
@@ -400,8 +384,7 @@ int TextModel::columnCount(const QModelIndex& _parent) const
 
 int TextModel::rowCount(const QModelIndex& _parent) const
 {
-    if (_parent.isValid()
-        && _parent.column() != 0) {
+    if (_parent.isValid() && _parent.column() != 0) {
         return 0;
     }
 
@@ -419,12 +402,13 @@ Qt::ItemFlags TextModel::flags(const QModelIndex& _index) const
 
     const auto item = itemForIndex(_index);
     switch (item->type()) {
-        case TextModelItemType::Chapter: {
-            flags |= Qt::ItemIsDragEnabled | Qt::ItemIsDropEnabled;
-            break;
-        }
+    case TextModelItemType::Chapter: {
+        flags |= Qt::ItemIsDragEnabled | Qt::ItemIsDropEnabled;
+        break;
+    }
 
-        default: break;
+    default:
+        break;
     }
 
     return flags;
@@ -444,7 +428,8 @@ QVariant TextModel::data(const QModelIndex& _index, int _role) const
     return item->data(_role);
 }
 
-bool TextModel::canDropMimeData(const QMimeData* _data, Qt::DropAction _action, int _row, int _column, const QModelIndex& _parent) const
+bool TextModel::canDropMimeData(const QMimeData* _data, Qt::DropAction _action, int _row,
+                                int _column, const QModelIndex& _parent) const
 {
     Q_UNUSED(_action);
     Q_UNUSED(_row);
@@ -458,7 +443,8 @@ bool TextModel::canDropMimeData(const QMimeData* _data, Qt::DropAction _action, 
     return _data->formats().contains(mimeTypes().constFirst());
 }
 
-bool TextModel::dropMimeData(const QMimeData* _data, Qt::DropAction _action, int _row, int _column, const QModelIndex& _parent)
+bool TextModel::dropMimeData(const QMimeData* _data, Qt::DropAction _action, int _row, int _column,
+                             const QModelIndex& _parent)
 {
     //
     // FIXME: возможен кейс, когда юзер тащит два заголовка один например
@@ -473,214 +459,214 @@ bool TextModel::dropMimeData(const QMimeData* _data, Qt::DropAction _action, int
     Q_UNUSED(_column);
 
     //
-    // _row - индекс, куда вставлять, если в папку, то он равен -1 и если в самый низ списка, то он тоже равен -1
+    // _row - индекс, куда вставлять, если в папку, то он равен -1 и если в самый низ списка, то он
+    // тоже равен -1
     //
 
-    if (_data == 0
-        || !canDropMimeData(_data, _action, _row, _column, _parent)) {
+    if (_data == 0 || !canDropMimeData(_data, _action, _row, _column, _parent)) {
         return false;
     }
 
     switch (_action) {
-        case Qt::IgnoreAction: {
-            return true;
-        }
+    case Qt::IgnoreAction: {
+        return true;
+    }
 
-        case Qt::MoveAction:
-        case Qt::CopyAction: {
-            //
-            // Определим элемент после которого планируется вставить данные
-            //
-            QModelIndex insertAnchorIndex;
-            //
-            // ... вкладывается первым
-            //
-            if (_row == 0) {
+    case Qt::MoveAction:
+    case Qt::CopyAction: {
+        //
+        // Определим элемент после которого планируется вставить данные
+        //
+        QModelIndex insertAnchorIndex;
+        //
+        // ... вкладывается первым
+        //
+        if (_row == 0) {
+            insertAnchorIndex = _parent;
+        }
+        //
+        // ... вкладывается в конец
+        //
+        else if (_row == -1) {
+            if (_parent.isValid()) {
                 insertAnchorIndex = _parent;
+            } else {
+                insertAnchorIndex = index(d->rootItem->childCount() - 1, 0);
             }
-            //
-            // ... вкладывается в конец
-            //
-            else if (_row == -1) {
-                if (_parent.isValid()) {
-                    insertAnchorIndex = _parent;
-                } else {
-                    insertAnchorIndex = index(d->rootItem->childCount() - 1, 0);
-                }
-            }
-            //
-            // ... устанавливается после заданного
-            //
-            else {
-                int delta = 1;
-                if (_parent.isValid()
-                    && rowCount(_parent) == _row) {
-                    //
-                    // ... для папок, при вставке в самый конец также нужно учитывать
-                    //     текстовый блок закрывающий папку
-                    //
-                    ++delta;
-                }
-                insertAnchorIndex = index(_row - delta, 0, _parent);
-            }
-            if (d->lastMime.from == insertAnchorIndex
-                || d->lastMime.to == insertAnchorIndex) {
-                return false;
-            }
-            TextModelItem* insertAnchorItem = itemForIndex(insertAnchorIndex);
-
-            //
-            // Начинаем операцию изменения модели
-            //
-            emit rowsAboutToBeChanged();
-
-            //
-            // Если это перемещение внутри модели, то удалим старые элементы
-            //
-            if (d->lastMime.data == _data) {
-                for (int row = d->lastMime.to.row(); row >= d->lastMime.from.row(); --row) {
-                    const auto& itemIndex = index(row, 0, d->lastMime.from.parent());
-                    auto item = itemForIndex(itemIndex);
-                    removeItem(item);
-                }
-                d->lastMime = {};
-            }
-
-            //
-            // Вставим перемещаемые элементы
-            //
-            // ... cчитываем данные и последовательно вставляем в модель
-            //
-            QXmlStreamReader contentReader(_data->data(mimeTypes().constFirst()));
-            contentReader.readNextStartElement(); // document
-            contentReader.readNextStartElement();
-            bool isFirstItemHandled = false;
-            TextModelItem* lastItem = insertAnchorItem;
-            while (!contentReader.atEnd()) {
-                const auto currentTag = contentReader.name();
-                if (currentTag == xml::kDocumentTag) {
-                    break;
-                }
-
-                //
-                // ... вставляем главу
-                //
-                if (currentTag == xml::kChapterTag) {
-                    auto newChapterItem = new TextModelChapterItem(contentReader);
-
-                    if (!isFirstItemHandled) {
-                        isFirstItemHandled = true;
-                        //
-                        // Вставить в начало главы
-                        //
-                        if (_row == 0) {
-                            prependItem(newChapterItem, lastItem);
-                        }
-                        //
-                        // Вставить в конец или середину главы
-                        //
-                        else {
-                            //
-                            // Если вставки идёт в конец, берём за якорь последний вложенный элемент
-                            //
-                            if (_row == -1) {
-                                lastItem = lastItem->childAt(lastItem->childCount() - 1);
-                            }
-
-                            //
-                            // Если вставка идёт после главы
-                            //
-                            if (lastItem->type() == TextModelItemType::Chapter) {
-                                auto lastChapterItem = static_cast<TextModelChapterItem*>(lastItem);
-                                //
-                                // ... и её уровень ниже, либо равен вставляемой
-                                //
-                                if (lastChapterItem->level() >= newChapterItem->level()) {
-                                    //
-                                    // ... то вставляем новую главу после неё
-                                    //
-                                    insertItem(newChapterItem, lastChapterItem);
-                                }
-                                //
-                                // ... а если уровень вставляемой ниже
-                                //
-                                else {
-                                    //
-                                    // ... то вставляем внутрь
-                                    //
-                                    lastItem = lastChapterItem->childAt(lastChapterItem->childCount() - 1);
-                                    while (lastItem->type() == TextModelItemType::Chapter) {
-                                        lastChapterItem = static_cast<TextModelChapterItem*>(lastItem);
-                                        if (lastChapterItem->level() >= newChapterItem->level()) {
-                                            insertItem(newChapterItem, lastChapterItem);
-                                            break;
-                                        }
-
-                                        lastItem = lastChapterItem->childAt(lastChapterItem->childCount() - 1);
-                                    }
-                                    if (lastItem->type() != TextModelItemType::Chapter) {
-                                        insertItem(newChapterItem, lastItem);
-                                    }
-                                }
-                            }
-                            //
-                            // А если вставка идёт после текстового элемента, то добавим после него
-                            //
-                            else {
-                                insertItem(newChapterItem, lastItem);
-                            }
-                        }
-                    } else {
-                        insertItem(newChapterItem, lastItem);
-                    }
-
-                    lastItem = newChapterItem;
-                }
-                //
-                // ... вставляем текст
-                //
-                else {
-                    auto newTextItem = new TextModelTextItem(contentReader);
-
-                    if (!isFirstItemHandled) {
-                        isFirstItemHandled = true;
-                        //
-                        // Вставить в начало lastItem
-                        //
-                        if (_row == 0) {
-                            prependItem(newTextItem, lastItem);
-                        }
-                        //
-                        // Вставить в конец lastItem
-                        //
-                        else if (_row == -1) {
-                            appendItem(newTextItem, lastItem);
-                        }
-                        //
-                        // Вставить после lastItem
-                        //
-                        else {
-                            insertItem(newTextItem, lastItem);
-                        }
-                    } else {
-                        insertItem(newTextItem, lastItem);
-                    }
-
-                    lastItem = newTextItem;
-                }
-            }
-
-            //
-            // Операция изменения завершена
-            //
-            emit rowsChanged();
-
-            return true;
         }
-
-        default: {
+        //
+        // ... устанавливается после заданного
+        //
+        else {
+            int delta = 1;
+            if (_parent.isValid() && rowCount(_parent) == _row) {
+                //
+                // ... для папок, при вставке в самый конец также нужно учитывать
+                //     текстовый блок закрывающий папку
+                //
+                ++delta;
+            }
+            insertAnchorIndex = index(_row - delta, 0, _parent);
+        }
+        if (d->lastMime.from == insertAnchorIndex || d->lastMime.to == insertAnchorIndex) {
             return false;
         }
+        TextModelItem* insertAnchorItem = itemForIndex(insertAnchorIndex);
+
+        //
+        // Начинаем операцию изменения модели
+        //
+        emit rowsAboutToBeChanged();
+
+        //
+        // Если это перемещение внутри модели, то удалим старые элементы
+        //
+        if (d->lastMime.data == _data) {
+            for (int row = d->lastMime.to.row(); row >= d->lastMime.from.row(); --row) {
+                const auto& itemIndex = index(row, 0, d->lastMime.from.parent());
+                auto item = itemForIndex(itemIndex);
+                removeItem(item);
+            }
+            d->lastMime = {};
+        }
+
+        //
+        // Вставим перемещаемые элементы
+        //
+        // ... cчитываем данные и последовательно вставляем в модель
+        //
+        QXmlStreamReader contentReader(_data->data(mimeTypes().constFirst()));
+        contentReader.readNextStartElement(); // document
+        contentReader.readNextStartElement();
+        bool isFirstItemHandled = false;
+        TextModelItem* lastItem = insertAnchorItem;
+        while (!contentReader.atEnd()) {
+            const auto currentTag = contentReader.name();
+            if (currentTag == xml::kDocumentTag) {
+                break;
+            }
+
+            //
+            // ... вставляем главу
+            //
+            if (currentTag == xml::kChapterTag) {
+                auto newChapterItem = new TextModelChapterItem(contentReader);
+
+                if (!isFirstItemHandled) {
+                    isFirstItemHandled = true;
+                    //
+                    // Вставить в начало главы
+                    //
+                    if (_row == 0) {
+                        prependItem(newChapterItem, lastItem);
+                    }
+                    //
+                    // Вставить в конец или середину главы
+                    //
+                    else {
+                        //
+                        // Если вставки идёт в конец, берём за якорь последний вложенный элемент
+                        //
+                        if (_row == -1) {
+                            lastItem = lastItem->childAt(lastItem->childCount() - 1);
+                        }
+
+                        //
+                        // Если вставка идёт после главы
+                        //
+                        if (lastItem->type() == TextModelItemType::Chapter) {
+                            auto lastChapterItem = static_cast<TextModelChapterItem*>(lastItem);
+                            //
+                            // ... и её уровень ниже, либо равен вставляемой
+                            //
+                            if (lastChapterItem->level() >= newChapterItem->level()) {
+                                //
+                                // ... то вставляем новую главу после неё
+                                //
+                                insertItem(newChapterItem, lastChapterItem);
+                            }
+                            //
+                            // ... а если уровень вставляемой ниже
+                            //
+                            else {
+                                //
+                                // ... то вставляем внутрь
+                                //
+                                lastItem
+                                    = lastChapterItem->childAt(lastChapterItem->childCount() - 1);
+                                while (lastItem->type() == TextModelItemType::Chapter) {
+                                    lastChapterItem = static_cast<TextModelChapterItem*>(lastItem);
+                                    if (lastChapterItem->level() >= newChapterItem->level()) {
+                                        insertItem(newChapterItem, lastChapterItem);
+                                        break;
+                                    }
+
+                                    lastItem = lastChapterItem->childAt(
+                                        lastChapterItem->childCount() - 1);
+                                }
+                                if (lastItem->type() != TextModelItemType::Chapter) {
+                                    insertItem(newChapterItem, lastItem);
+                                }
+                            }
+                        }
+                        //
+                        // А если вставка идёт после текстового элемента, то добавим после него
+                        //
+                        else {
+                            insertItem(newChapterItem, lastItem);
+                        }
+                    }
+                } else {
+                    insertItem(newChapterItem, lastItem);
+                }
+
+                lastItem = newChapterItem;
+            }
+            //
+            // ... вставляем текст
+            //
+            else {
+                auto newTextItem = new TextModelTextItem(contentReader);
+
+                if (!isFirstItemHandled) {
+                    isFirstItemHandled = true;
+                    //
+                    // Вставить в начало lastItem
+                    //
+                    if (_row == 0) {
+                        prependItem(newTextItem, lastItem);
+                    }
+                    //
+                    // Вставить в конец lastItem
+                    //
+                    else if (_row == -1) {
+                        appendItem(newTextItem, lastItem);
+                    }
+                    //
+                    // Вставить после lastItem
+                    //
+                    else {
+                        insertItem(newTextItem, lastItem);
+                    }
+                } else {
+                    insertItem(newTextItem, lastItem);
+                }
+
+                lastItem = newTextItem;
+            }
+        }
+
+        //
+        // Операция изменения завершена
+        //
+        emit rowsChanged();
+
+        return true;
+    }
+
+    default: {
+        return false;
+    }
     }
 }
 
@@ -731,7 +717,8 @@ QMimeData* TextModel::mimeData(const QModelIndexList& _indexes) const
 
     auto mimeData = new QMimeData;
     const bool clearUuid = false;
-    mimeData->setData(mimeTypes().constFirst(), mimeFromSelection(fromIndex, 0, toIndex, 1, clearUuid).toUtf8());
+    mimeData->setData(mimeTypes().constFirst(),
+                      mimeFromSelection(fromIndex, 0, toIndex, 1, clearUuid).toUtf8());
 
     d->lastMime = { fromIndex, toIndex, mimeData };
 
@@ -754,7 +741,7 @@ Qt::DropActions TextModel::supportedDropActions() const
 }
 
 QString TextModel::mimeFromSelection(const QModelIndex& _from, int _fromPosition,
-    const QModelIndex& _to, int _toPosition, bool _clearUuid) const
+                                     const QModelIndex& _to, int _toPosition, bool _clearUuid) const
 {
     if (document() == nullptr) {
         return {};
@@ -777,44 +764,45 @@ QString TextModel::mimeFromSelection(const QModelIndex& _from, int _fromPosition
 
 
     QByteArray xml = "<?xml version=\"1.0\"?>\n";
-    xml += "<document mime-type=\"" + Domain::mimeTypeFor(document()->type()) + "\" version=\"1.0\">\n";
+    xml += "<document mime-type=\"" + Domain::mimeTypeFor(document()->type())
+        + "\" version=\"1.0\">\n";
 
-    auto buildXmlFor = [&xml, fromItem, _fromPosition, toItem, _toPosition, _clearUuid]
-                       (TextModelItem* _fromItemParent, int _fromItemRow)
-    {
-        for (int childIndex = _fromItemRow; childIndex < _fromItemParent->childCount(); ++childIndex) {
+    auto buildXmlFor = [&xml, fromItem, _fromPosition, toItem, _toPosition,
+                        _clearUuid](TextModelItem* _fromItemParent, int _fromItemRow) {
+        for (int childIndex = _fromItemRow; childIndex < _fromItemParent->childCount();
+             ++childIndex) {
             const auto childItem = _fromItemParent->childAt(childIndex);
 
             switch (childItem->type()) {
-                case TextModelItemType::Chapter: {
-                    const auto folderItem = static_cast<TextModelChapterItem*>(childItem);
-                    xml += folderItem->toXml(fromItem, _fromPosition, toItem, _toPosition, _clearUuid);
-                    break;
-                }
+            case TextModelItemType::Chapter: {
+                const auto folderItem = static_cast<TextModelChapterItem*>(childItem);
+                xml += folderItem->toXml(fromItem, _fromPosition, toItem, _toPosition, _clearUuid);
+                break;
+            }
 
-                case TextModelItemType::Text: {
-                    const auto textItem = static_cast<TextModelTextItem*>(childItem);
-                    if (textItem == fromItem && textItem == toItem) {
-                        xml += textItem->toXml(_fromPosition, _toPosition - _fromPosition);
-                    } else if (textItem == fromItem) {
-                        xml += textItem->toXml(_fromPosition, textItem->text().length() - _fromPosition);
-                    } else if (textItem == toItem) {
-                        xml += textItem->toXml(0, _toPosition);
-                    } else {
-                        xml += textItem->toXml();
-                    }
-                    break;
+            case TextModelItemType::Text: {
+                const auto textItem = static_cast<TextModelTextItem*>(childItem);
+                if (textItem == fromItem && textItem == toItem) {
+                    xml += textItem->toXml(_fromPosition, _toPosition - _fromPosition);
+                } else if (textItem == fromItem) {
+                    xml += textItem->toXml(_fromPosition,
+                                           textItem->text().length() - _fromPosition);
+                } else if (textItem == toItem) {
+                    xml += textItem->toXml(0, _toPosition);
+                } else {
+                    xml += textItem->toXml();
                 }
+                break;
+            }
 
-                default: {
-                    xml += childItem->toXml();
-                    break;
-                }
+            default: {
+                xml += childItem->toXml();
+                break;
+            }
             }
 
             const bool recursively = true;
-            if (childItem == toItem
-                || childItem->hasChild(toItem, recursively)) {
+            if (childItem == toItem || childItem->hasChild(toItem, recursively)) {
                 return true;
             }
         }
@@ -824,7 +812,8 @@ QString TextModel::mimeFromSelection(const QModelIndex& _from, int _fromPosition
     auto fromItemParent = fromItem->parent();
     auto fromItemRow = fromItemParent->rowOfChild(fromItem);
     //
-    // Если построить нужно начиная с заголовка сцены или папки, то нужно захватить и саму сцену/папку
+    // Если построить нужно начиная с заголовка сцены или папки, то нужно захватить и саму
+    // сцену/папку
     //
     if (fromItem->type() == TextModelItemType::Text) {
         const auto textItem = static_cast<TextModelTextItem*>(fromItem);
@@ -845,14 +834,16 @@ QString TextModel::mimeFromSelection(const QModelIndex& _from, int _fromPosition
     while (buildXmlFor(fromItemParent, fromItemRow) != true) {
         auto newFromItem = fromItemParent;
         fromItemParent = fromItemParent->parent();
-        fromItemRow = fromItemParent->rowOfChild(newFromItem) + 1; // +1, т.к. текущий мы уже обработали
+        fromItemRow
+            = fromItemParent->rowOfChild(newFromItem) + 1; // +1, т.к. текущий мы уже обработали
     }
 
     xml += "</document>";
     return xml;
 }
 
-void TextModel::insertFromMime(const QModelIndex& _index, int _positionInBlock, const QString& _mimeData)
+void TextModel::insertFromMime(const QModelIndex& _index, int _positionInBlock,
+                               const QString& _mimeData)
 {
     if (!_index.isValid()) {
         return;
@@ -897,7 +888,8 @@ void TextModel::insertFromMime(const QModelIndex& _index, int _positionInBlock, 
         //
         else {
             //
-            // Если вставка идёт в самое начало блока, то просто переносим блок после вставляемого фрагмента
+            // Если вставка идёт в самое начало блока, то просто переносим блок после вставляемого
+            // фрагмента
             //
             if (_positionInBlock == 0) {
                 lastItemsFromSourceScene.append(textItem);
@@ -907,8 +899,8 @@ void TextModel::insertFromMime(const QModelIndex& _index, int _positionInBlock, 
             //
             else if (textItem->text().length() > _positionInBlock) {
                 const bool clearUuid = true;
-                sourceBlockEndContent = mimeFromSelection(_index, _positionInBlock,
-                                                          _index, textItem->text().length(), clearUuid);
+                sourceBlockEndContent = mimeFromSelection(_index, _positionInBlock, _index,
+                                                          textItem->text().length(), clearUuid);
                 textItem->removeText(_positionInBlock);
                 updateItem(textItem);
             }
@@ -937,8 +929,7 @@ void TextModel::insertFromMime(const QModelIndex& _index, int _positionInBlock, 
             //
             // Если вставляется текстовый элемент внутрь уже существующего элемента
             //
-            if (!isFirstTextItemHandled
-                && item->type() == TextModelItemType::Text) {
+            if (!isFirstTextItemHandled && item->type() == TextModelItemType::Text) {
                 //
                 // ... то просто объединим их
                 //
@@ -1071,8 +1062,7 @@ QModelIndex TextModel::indexForItem(TextModelItem* _item) const
 
     int row = 0;
     QModelIndex parent;
-    if (_item->hasParent()
-        && _item->parent()->hasParent()) {
+    if (_item->hasParent() && _item->parent()->hasParent()) {
         row = _item->parent()->rowOfChild(_item);
         parent = indexForItem(_item->parent());
     } else {
@@ -1147,7 +1137,7 @@ void TextModel::applyPatch(const QByteArray& _patch)
     //
     // Считываем элементы из обоих изменений для дальнейшего определения необходимых изменений
     //
-    auto readItems = [] (const QString& _xml) {
+    auto readItems = [](const QString& _xml) {
         QXmlStreamReader _reader(_xml);
         xml::readNextElement(_reader); // document
         xml::readNextElement(_reader);
@@ -1180,12 +1170,12 @@ void TextModel::applyPatch(const QByteArray& _patch)
     // Раскладываем элементы в плоские списки для сравнения
     //
     std::function<QVector<TextModelItem*>(const QVector<TextModelItem*>&)> makeItemsPlain;
-    makeItemsPlain = [&makeItemsPlain] (const QVector<TextModelItem*>& _items) {
+    makeItemsPlain = [&makeItemsPlain](const QVector<TextModelItem*>& _items) {
         QVector<TextModelItem*> itemsPlain;
         for (auto item : _items) {
             itemsPlain.append(item);
             for (int row = 0; row < item->childCount(); ++row) {
-                itemsPlain.append(makeItemsPlain({item->childAt(row)}));
+                itemsPlain.append(makeItemsPlain({ item->childAt(row) }));
             }
         }
         return itemsPlain;
@@ -1198,12 +1188,12 @@ void TextModel::applyPatch(const QByteArray& _patch)
     //
     auto length = [this] {
         QByteArray xml = "<?xml version=\"1.0\"?>\n";
-        xml += "<document mime-type=\"" + Domain::mimeTypeFor(document()->type()) + "\" version=\"1.0\">\n";
+        xml += "<document mime-type=\"" + Domain::mimeTypeFor(document()->type())
+            + "\" version=\"1.0\">\n";
         return xml.length();
-    } ();
+    }();
     std::function<TextModelItem*(TextModelItem*)> findStartItem;
-    findStartItem = [changes, &length, &findStartItem] (TextModelItem* _item) -> TextModelItem*
-    {
+    findStartItem = [changes, &length, &findStartItem](TextModelItem* _item) -> TextModelItem* {
         if (changes.first.from == 0) {
             return _item->childAt(0);
         }
@@ -1215,8 +1205,7 @@ void TextModel::applyPatch(const QByteArray& _patch)
             //
             // В этом элементе начинается изменение
             //
-            if (changes.first.from >= length
-                && changes.first.from < length + childLength) {
+            if (changes.first.from >= length && changes.first.from < length + childLength) {
                 //
                 // Если есть дети, то уточняем поиск
                 //
@@ -1226,8 +1215,7 @@ void TextModel::applyPatch(const QByteArray& _patch)
                     headerLength = QString(folder->xmlHeader()).length();
                 }
 
-                if (child->hasChildren()
-                    && changes.first.from >= length + headerLength) {
+                if (child->hasChildren() && changes.first.from >= length + headerLength) {
                     length += headerLength;
                     return findStartItem(child);
                 }
@@ -1235,7 +1223,7 @@ void TextModel::applyPatch(const QByteArray& _patch)
                 // В противном случае завершаем поиск
                 //
                 else {
-                   return child;
+                    return child;
                 }
             }
 
@@ -1249,12 +1237,10 @@ void TextModel::applyPatch(const QByteArray& _patch)
     //
     // Если были вставлены сцены или папки при балансировке xml, опустим их
     //
-    while (oldItemsPlain.size() > 1
-           && oldItemsPlain.constFirst()->type() != modelItem->type()) {
+    while (oldItemsPlain.size() > 1 && oldItemsPlain.constFirst()->type() != modelItem->type()) {
         oldItemsPlain.removeFirst();
     }
-    while (newItemsPlain.size() > 1
-           && newItemsPlain.constFirst()->type() != modelItem->type()
+    while (newItemsPlain.size() > 1 && newItemsPlain.constFirst()->type() != modelItem->type()
            && changes.second.from > 0) {
         newItemsPlain.removeFirst();
     }
@@ -1287,8 +1273,8 @@ void TextModel::applyPatch(const QByteArray& _patch)
     const auto operations = edit_distance::editDistance(oldItemsPlain, newItemsPlain);
     //
     std::function<TextModelItem*(TextModelItem*, bool)> findNextItemWithChildren;
-    findNextItemWithChildren = [&findNextItemWithChildren] (TextModelItem* _item, bool _searchInChildren) -> TextModelItem*
-    {
+    findNextItemWithChildren = [&findNextItemWithChildren](
+                                   TextModelItem* _item, bool _searchInChildren) -> TextModelItem* {
         if (_item == nullptr) {
             return nullptr;
         }
@@ -1329,7 +1315,7 @@ void TextModel::applyPatch(const QByteArray& _patch)
             return findNextItemWithChildren(parent, false);
         }
     };
-    auto findNextItem = [&findNextItemWithChildren] (TextModelItem* _item) {
+    auto findNextItem = [&findNextItemWithChildren](TextModelItem* _item) {
         return findNextItemWithChildren(_item, true);
     };
     //
@@ -1338,22 +1324,20 @@ void TextModel::applyPatch(const QByteArray& _patch)
     emit rowsAboutToBeChanged();
     TextModelItem* previousModelItem = nullptr;
     //
-    // В некоторых ситуациях мы не знаем сразу, куда будут извлечены элементы из удаляемого элемента,
-    // или когда элемент вставляется посреди и отрезает часть вложенных элементов, поэтому упаковываем
-    // их в список для размещения в правильном месте в следующем проходе
+    // В некоторых ситуациях мы не знаем сразу, куда будут извлечены элементы из удаляемого
+    // элемента, или когда элемент вставляется посреди и отрезает часть вложенных элементов, поэтому
+    // упаковываем их в список для размещения в правильном месте в следующем проходе
     //
     QVector<TextModelItem*> movedSiblingItems;
-    auto updateItemPlacement = [this, &modelItem, &previousModelItem, newItemsPlain, &movedSiblingItems]
-                               (TextModelItem* _newItem, TextModelItem* _item)
-    {
+    auto updateItemPlacement = [this, &modelItem, &previousModelItem, newItemsPlain,
+                                &movedSiblingItems](TextModelItem* _newItem, TextModelItem* _item) {
         //
         // Определим предыдущий элемент из списка новых, в дальнейшем будем опираться
         // на его расположение относительно текущего нового
         //
         const auto newItemIndex = newItemsPlain.indexOf(_newItem);
-        TextModelItem* previousNewItem = newItemIndex > 0
-                                                   ? newItemsPlain.at(newItemIndex - 1)
-                                                   : nullptr;
+        TextModelItem* previousNewItem
+            = newItemIndex > 0 ? newItemsPlain.at(newItemIndex - 1) : nullptr;
         //
         // У элемента нет родителя, то это вставка нового элемента
         //
@@ -1364,7 +1348,8 @@ void TextModel::applyPatch(const QByteArray& _patch)
             if (previousNewItem == nullptr) {
                 const int modelItemIndex = modelItem->parent()->rowOfChild(modelItem);
                 //
-                // Если нужно вставить перед первым элементом, то это случай вставки в начало документа
+                // Если нужно вставить перед первым элементом, то это случай вставки в начало
+                // документа
                 //
                 if (modelItemIndex == 0) {
                     prependItem(_item);
@@ -1401,7 +1386,9 @@ void TextModel::applyPatch(const QByteArray& _patch)
                 //
                 else {
                     auto previousNewItemParent = previousNewItem->parent()->parent();
-                    auto insertAfterItem = previousModelItem->parent(); // этот на один уровень опаздывает за предыдущим
+                    auto insertAfterItem
+                        = previousModelItem
+                              ->parent(); // этот на один уровень опаздывает за предыдущим
                     while (previousNewItemParent != _newItem->parent()) {
                         previousNewItemParent = previousNewItemParent->parent();
                         insertAfterItem = insertAfterItem->parent();
@@ -1410,13 +1397,15 @@ void TextModel::applyPatch(const QByteArray& _patch)
                     insertItem(_item, insertAfterItem);
 
                     //
-                    // И вытаскиваем все последующие элементы на уровень нового, если есть откуда вытянуть конечно же
+                    // И вытаскиваем все последующие элементы на уровень нового, если есть откуда
+                    // вытянуть конечно же
                     //
                     if (modelItem != nullptr) {
                         auto modelItemParent = modelItem->parent();
                         const int modelItemIndex = modelItemParent->rowOfChild(modelItem);
                         while (modelItemParent->childCount() > modelItemIndex) {
-                            auto childItem = modelItemParent->childAt(modelItemParent->childCount() - 1);
+                            auto childItem
+                                = modelItemParent->childAt(modelItemParent->childCount() - 1);
                             takeItem(childItem, modelItemParent);
                             insertItem(childItem, _item);
                             movedSiblingItems.prepend(childItem);
@@ -1484,7 +1473,8 @@ void TextModel::applyPatch(const QByteArray& _patch)
             //
             else {
                 auto previousNewItemParent = previousNewItem->parent()->parent();
-                auto insertAfterItem = previousModelItem->parent(); // этот на один уровень опаздывает за предыдущим
+                auto insertAfterItem
+                    = previousModelItem->parent(); // этот на один уровень опаздывает за предыдущим
                 while (previousNewItemParent != _newItem->parent()) {
                     previousNewItemParent = previousNewItemParent->parent();
                     insertAfterItem = insertAfterItem->parent();
@@ -1522,8 +1512,7 @@ void TextModel::applyPatch(const QByteArray& _patch)
         //
         // Если у нас в буфере есть перенесённые элементы и текущий является их предводителем
         //
-        if (!movedSiblingItems.isEmpty()
-            && movedSiblingItems.constFirst() == _item) {
+        if (!movedSiblingItems.isEmpty() && movedSiblingItems.constFirst() == _item) {
             //
             // Удалим сам якорный элемент
             //
@@ -1548,91 +1537,91 @@ void TextModel::applyPatch(const QByteArray& _patch)
     for (const auto& operation : operations) {
         auto newItem = operation.value;
         switch (operation.type) {
-            case edit_distance::OperationType::Skip: {
-                //
-                // Корректируем позицию
-                //
-                updateItemPlacement(newItem, modelItem);
-                //
-                // ... и просто переходим к следующему элементу
-                //
-                previousModelItem = modelItem;
-                modelItem = findNextItem(modelItem);
+        case edit_distance::OperationType::Skip: {
+            //
+            // Корректируем позицию
+            //
+            updateItemPlacement(newItem, modelItem);
+            //
+            // ... и просто переходим к следующему элементу
+            //
+            previousModelItem = modelItem;
+            modelItem = findNextItem(modelItem);
+            break;
+        }
+
+        case edit_distance::OperationType::Remove: {
+            //
+            // Выносим детей на предыдущий уровень
+            //
+            while (modelItem->hasChildren()) {
+                auto childItem = modelItem->childAt(modelItem->childCount() - 1);
+                takeItem(childItem, modelItem);
+                insertItem(childItem, modelItem);
+                movedSiblingItems.prepend(childItem);
+            }
+            //
+            // ... и удаляем сам элемент
+            //
+            auto nextItem = findNextItem(modelItem);
+            removeItem(modelItem);
+            modelItem = nextItem;
+            break;
+        }
+
+        case edit_distance::OperationType::Insert: {
+            //
+            // Создаём новый элемент
+            //
+            TextModelItem* itemToInsert = nullptr;
+            switch (newItem->type()) {
+            case TextModelItemType::Chapter: {
+                itemToInsert = new TextModelChapterItem;
                 break;
             }
 
-            case edit_distance::OperationType::Remove: {
-                //
-                // Выносим детей на предыдущий уровень
-                //
-                while (modelItem->hasChildren()) {
-                    auto childItem = modelItem->childAt(modelItem->childCount() - 1);
-                    takeItem(childItem, modelItem);
-                    insertItem(childItem, modelItem);
-                    movedSiblingItems.prepend(childItem);
-                }
-                //
-                // ... и удаляем сам элемент
-                //
-                auto nextItem = findNextItem(modelItem);
-                removeItem(modelItem);
-                modelItem = nextItem;
+            case TextModelItemType::Text: {
+                itemToInsert = new TextModelTextItem;
                 break;
             }
+            }
+            itemToInsert->copyFrom(newItem);
 
-            case edit_distance::OperationType::Insert: {
-                //
-                // Создаём новый элемент
-                //
-                TextModelItem* itemToInsert = nullptr;
-                switch (newItem->type()) {
-                    case TextModelItemType::Chapter: {
-                        itemToInsert = new TextModelChapterItem;
-                        break;
-                    }
+            //
+            // ... и вставляем в нужного родителя
+            //
+            updateItemPlacement(newItem, itemToInsert);
 
-                    case TextModelItemType::Text: {
-                        itemToInsert = new TextModelTextItem;
-                        break;
-                    }
-                }
-                itemToInsert->copyFrom(newItem);
+            previousModelItem = itemToInsert;
+            break;
+        }
 
-                //
-                // ... и вставляем в нужного родителя
-                //
-                updateItemPlacement(newItem, itemToInsert);
-
-                previousModelItem = itemToInsert;
-                break;
+        case edit_distance::OperationType::Replace: {
+            //
+            // Обновляем элемент
+            //
+            Q_ASSERT(modelItem->type() == newItem->type());
+            if (!modelItem->isEqual(newItem)) {
+                modelItem->copyFrom(newItem);
             }
 
-            case edit_distance::OperationType::Replace: {
-                //
-                // Обновляем элемент
-                //
-                Q_ASSERT(modelItem->type() == newItem->type());
-                if (!modelItem->isEqual(newItem)) {
-                    modelItem->copyFrom(newItem);
-                }
+            auto nextItem = findNextItem(modelItem);
 
-                auto nextItem = findNextItem(modelItem);
-
-                //
-                // Если элемент был перемещён, скорректируем его позицию
-                //
-                const auto isPlacementChanged = updateItemPlacement(newItem, modelItem);
-                //
-                // В противном случае просто обновим его в модели
-                //
-                if (!isPlacementChanged) {
-                    updateItem(modelItem);
-                }
-
-                previousModelItem = modelItem;
-                modelItem = nextItem;
-                break;
+            //
+            // Если элемент был перемещён, скорректируем его позицию
+            //
+            const auto isPlacementChanged = updateItemPlacement(newItem, modelItem);
+            //
+            // В противном случае просто обновим его в модели
+            //
+            if (!isPlacementChanged) {
+                updateItem(modelItem);
             }
+
+            previousModelItem = modelItem;
+            modelItem = nextItem;
+            break;
+        }
         }
     }
 
@@ -1658,4 +1647,3 @@ void TextModel::applyPatch(const QByteArray& _patch)
 }
 
 } // namespace BusinessLayer
-

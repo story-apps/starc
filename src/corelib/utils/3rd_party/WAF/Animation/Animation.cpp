@@ -15,23 +15,22 @@
  */
 
 #include "Animation.h"
-#include "AnimationPrivate.h"
 
 #include "../AbstractAnimator.h"
-
+#include "AnimationPrivate.h"
 #include "CircleFill/CircleFillAnimator.h"
 #include "CircleTransparent/CircleTransparentAnimator.h"
 #include "Expand/ExpandAnimator.h"
 #include "SideSlide/SideSlideAnimator.h"
 #include "Slide/SlideAnimator.h"
 
+using WAF::AbstractAnimator;
 using WAF::Animation;
 using WAF::AnimationPrivate;
-using WAF::AbstractAnimator;
-using WAF::SideSlideAnimator;
-using WAF::SlideAnimator;
 using WAF::CircleFillAnimator;
 using WAF::ExpandAnimator;
+using WAF::SideSlideAnimator;
+using WAF::SlideAnimator;
 
 
 int Animation::sideSlideIn(QWidget* _widget, WAF::ApplicationSide _side, bool _decorateBackground)
@@ -46,7 +45,8 @@ int Animation::sideSlideOut(QWidget* _widget, WAF::ApplicationSide _side, bool _
     return sideSlide(_widget, _side, _decorateBackground, OUT);
 }
 
-int Animation::sideSlide(QWidget* _widget, WAF::ApplicationSide _side, bool _decorateBackground, bool _in)
+int Animation::sideSlide(QWidget* _widget, WAF::ApplicationSide _side, bool _decorateBackground,
+                         bool _in)
 {
     const AnimationPrivate::AnimatorType animatorType = AnimationPrivate::SideSlide;
     AbstractAnimator* animator = 0;
@@ -68,19 +68,22 @@ int Animation::sideSlide(QWidget* _widget, WAF::ApplicationSide _side, bool _dec
     return runAnimation(animator, _in);
 }
 
-int Animation::slideIn(QWidget* _widget, WAF::AnimationDirection _direction, bool _fixBackground, bool _fixStartSize)
+int Animation::slideIn(QWidget* _widget, WAF::AnimationDirection _direction, bool _fixBackground,
+                       bool _fixStartSize)
 {
     const bool IN = true;
     return slide(_widget, _direction, _fixBackground, _fixStartSize, IN);
 }
 
-int Animation::slideOut(QWidget* _widget, WAF::AnimationDirection _direction, bool _fixBackground, bool _fixStartSize)
+int Animation::slideOut(QWidget* _widget, WAF::AnimationDirection _direction, bool _fixBackground,
+                        bool _fixStartSize)
 {
     const bool OUT = false;
     return slide(_widget, _direction, _fixBackground, _fixStartSize, OUT);
 }
 
-int Animation::slide(QWidget* _widget, WAF::AnimationDirection _direction, bool _fixBackground, bool _fixStartSize, bool _in)
+int Animation::slide(QWidget* _widget, WAF::AnimationDirection _direction, bool _fixBackground,
+                     bool _fixStartSize, bool _in)
 {
     const AnimationPrivate::AnimatorType animatorType = AnimationPrivate::Slide;
     AbstractAnimator* animator = 0;
@@ -104,19 +107,22 @@ int Animation::slide(QWidget* _widget, WAF::AnimationDirection _direction, bool 
     return runAnimation(animator, _in);
 }
 
-int Animation::circleFillIn(QWidget* _widget, const QPoint& _startPoint, const QColor& _fillColor, bool _hideAfterFinish)
+int Animation::circleFillIn(QWidget* _widget, const QPoint& _startPoint, const QColor& _fillColor,
+                            bool _hideAfterFinish)
 {
     const bool IN = true;
     return circleFill(_widget, _startPoint, _fillColor, _hideAfterFinish, IN);
 }
 
-int Animation::circleFillOut(QWidget* _widget, const QPoint& _startPoint, const QColor& _fillColor, bool _hideAfterFinish)
+int Animation::circleFillOut(QWidget* _widget, const QPoint& _startPoint, const QColor& _fillColor,
+                             bool _hideAfterFinish)
 {
     const bool OUT = false;
     return circleFill(_widget, _startPoint, _fillColor, _hideAfterFinish, OUT);
 }
 
-int Animation::circleFill(QWidget* _widget, const QPoint& _startPoint, const QColor& _fillColor, bool _hideAfterFinish, bool _in)
+int Animation::circleFill(QWidget* _widget, const QPoint& _startPoint, const QColor& _fillColor,
+                          bool _hideAfterFinish, bool _in)
 {
     const AnimationPrivate::AnimatorType animatorType = AnimationPrivate::CircleFill;
     AbstractAnimator* animator = 0;
@@ -140,19 +146,22 @@ int Animation::circleFill(QWidget* _widget, const QPoint& _startPoint, const QCo
     return runAnimation(animator, _in);
 }
 
-int Animation::circleTransparentIn(QWidget* _widget, const QPoint& _startPoint, const QPixmap& _fillImage, bool _hideAfterFinish)
+int Animation::circleTransparentIn(QWidget* _widget, const QPoint& _startPoint,
+                                   const QPixmap& _fillImage, bool _hideAfterFinish)
 {
     const bool IN = true;
     return circleTransparent(_widget, _startPoint, _fillImage, _hideAfterFinish, IN);
 }
 
-int Animation::circleTransparentOut(QWidget* _widget, const QPoint& _startPoint, const QPixmap& _fillImage, bool _hideAfterFinish)
+int Animation::circleTransparentOut(QWidget* _widget, const QPoint& _startPoint,
+                                    const QPixmap& _fillImage, bool _hideAfterFinish)
 {
     const bool OUT = false;
     return circleTransparent(_widget, _startPoint, _fillImage, _hideAfterFinish, OUT);
 }
 
-int Animation::circleTransparent(QWidget* _widget, const QPoint& _startPoint, const QPixmap& _fillImage, bool _hideAfterFinish, bool _in)
+int Animation::circleTransparent(QWidget* _widget, const QPoint& _startPoint,
+                                 const QPixmap& _fillImage, bool _hideAfterFinish, bool _in)
 {
     const AnimationPrivate::AnimatorType animatorType = AnimationPrivate::CircleTransparent;
     AbstractAnimator* animator = 0;
@@ -176,7 +185,8 @@ int Animation::circleTransparent(QWidget* _widget, const QPoint& _startPoint, co
     return runAnimation(animator, _in);
 }
 
-int Animation::expand(QWidget* _widget, const QRect& _expandRect, const QColor& _fillColor, bool _in)
+int Animation::expand(QWidget* _widget, const QRect& _expandRect, const QColor& _fillColor,
+                      bool _in)
 {
     const AnimationPrivate::AnimatorType animatorType = AnimationPrivate::Expand;
     AbstractAnimator* animator = 0;

@@ -1,8 +1,8 @@
 #pragma once
 
-#include <corelib_global.h>
-
 #include <QScopedPointer>
+
+#include <corelib_global.h>
 
 class QColor;
 

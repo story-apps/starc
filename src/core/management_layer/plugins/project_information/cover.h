@@ -3,8 +3,7 @@
 #include <ui/widgets/widget/widget.h>
 
 
-namespace Ui
-{
+namespace Ui {
 
 /**
  * @brief Виджет для отображения обложки проекта
@@ -32,7 +31,7 @@ protected:
     /**
      * @brief Реализуем отрисовку
      */
-    void paintEvent(QPaintEvent *_event) override;
+    void paintEvent(QPaintEvent* _event) override;
 
     /**
      * @brief Реализуем эффекст отображения оверлея при наведении мыши
@@ -53,7 +52,7 @@ protected:
     /**
      * @brief Кореектируем размер постера
      */
-    void designSystemChangeEvent(DesignSystemChangeEvent *_event) override;
+    void designSystemChangeEvent(DesignSystemChangeEvent* _event) override;
 
 private:
     class Implementation;

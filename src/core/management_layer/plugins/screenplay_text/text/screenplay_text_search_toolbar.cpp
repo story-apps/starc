@@ -8,15 +8,14 @@
 
 #include <QAction>
 #include <QApplication>
-#include <QHBoxLayout>
 #include <QEvent>
+#include <QHBoxLayout>
 #include <QKeyEvent>
 #include <QStringListModel>
 #include <QVariantAnimation>
 
 
-namespace Ui
-{
+namespace Ui {
 
 class ScreenplayTextSearchToolbar::Implementation
 {
@@ -55,25 +54,24 @@ public:
     Button* replace = nullptr;
     QAction* replaceAllAction = nullptr;
     Button* replaceAll = nullptr;
-
 };
 
 ScreenplayTextSearchToolbar::Implementation::Implementation(QWidget* _parent)
-    : closeAction(new QAction),
-      searchTextAction(new QAction),
-      searchText(new TextField(_parent)),
-      goToNextAction(new QAction),
-      goToPreviousAction(new QAction),
-      matchCaseAction(new QAction),
-      searchInAction(new QAction),
-      popup(new Card(_parent)),
-      popupContent(new Tree(popup)),
-      replaceTextAction(new QAction),
-      replaceText(new TextField(_parent)),
-      replaceAction(new QAction),
-      replace(new Button(_parent)),
-      replaceAllAction(new QAction),
-      replaceAll(new Button(_parent))
+    : closeAction(new QAction)
+    , searchTextAction(new QAction)
+    , searchText(new TextField(_parent))
+    , goToNextAction(new QAction)
+    , goToPreviousAction(new QAction)
+    , matchCaseAction(new QAction)
+    , searchInAction(new QAction)
+    , popup(new Card(_parent))
+    , popupContent(new Tree(popup))
+    , replaceTextAction(new QAction)
+    , replaceText(new TextField(_parent))
+    , replaceAction(new QAction)
+    , replace(new Button(_parent))
+    , replaceAllAction(new QAction)
+    , replaceAll(new Button(_parent))
 {
     searchText->setUnderlineDecorationVisible(false);
 
@@ -111,21 +109,22 @@ void ScreenplayTextSearchToolbar::Implementation::showPopup(ScreenplayTextSearch
     isPopupShown = true;
 
     const auto popupWidth = Ui::DesignSystem::floatingToolBar().spacing() * 2
-                            + _parent->actionCustomWidth(searchInAction);
+        + _parent->actionCustomWidth(searchInAction);
     popup->resize(static_cast<int>(popupWidth), 0);
 
-    const auto left = QPoint(Ui::DesignSystem::floatingToolBar().shadowMargins().left()
-                             + Ui::DesignSystem::floatingToolBar().margins().left()
-                             + searchText->width() + Ui::DesignSystem::floatingToolBar().spacing()
-                             + (Ui::DesignSystem::floatingToolBar().iconSize().width()
-                                + Ui::DesignSystem::floatingToolBar().spacing()) * 4
-                             - Ui::DesignSystem::floatingToolBar().spacing()
-                             - Ui::DesignSystem::card().shadowMargins().left(),
-                             _parent->rect().bottom()
-                             - Ui::DesignSystem::floatingToolBar().shadowMargins().bottom());
+    const auto left = QPoint(
+        Ui::DesignSystem::floatingToolBar().shadowMargins().left()
+            + Ui::DesignSystem::floatingToolBar().margins().left() + searchText->width()
+            + Ui::DesignSystem::floatingToolBar().spacing()
+            + (Ui::DesignSystem::floatingToolBar().iconSize().width()
+               + Ui::DesignSystem::floatingToolBar().spacing())
+                * 4
+            - Ui::DesignSystem::floatingToolBar().spacing()
+            - Ui::DesignSystem::card().shadowMargins().left(),
+        _parent->rect().bottom() - Ui::DesignSystem::floatingToolBar().shadowMargins().bottom());
     const auto pos = _parent->mapToGlobal(left)
-                     + QPointF(Ui::DesignSystem::textField().margins().left(),
-                               - Ui::DesignSystem::textField().margins().bottom());
+        + QPointF(Ui::DesignSystem::textField().margins().left(),
+                  -Ui::DesignSystem::textField().margins().bottom());
     popup->move(pos.toPoint());
     popup->show();
 
@@ -134,8 +133,8 @@ void ScreenplayTextSearchToolbar::Implementation::showPopup(ScreenplayTextSearch
     popupHeightAnimation.setDirection(QVariantAnimation::Forward);
     const auto itemsCount = popupContent->model()->rowCount();
     const auto height = Ui::DesignSystem::treeOneLineItem().height() * itemsCount
-                        + Ui::DesignSystem::card().shadowMargins().top()
-                        + Ui::DesignSystem::card().shadowMargins().bottom();
+        + Ui::DesignSystem::card().shadowMargins().top()
+        + Ui::DesignSystem::card().shadowMargins().bottom();
     popupHeightAnimation.setEndValue(static_cast<int>(height));
     popupHeightAnimation.start();
 }
@@ -153,8 +152,8 @@ void ScreenplayTextSearchToolbar::Implementation::hidePopup()
 
 
 ScreenplayTextSearchToolbar::ScreenplayTextSearchToolbar(QWidget* _parent)
-    : FloatingToolBar(_parent),
-      d(new Implementation(this))
+    : FloatingToolBar(_parent)
+    , d(new Implementation(this))
 {
     _parent->installEventFilter(this);
     d->searchText->installEventFilter(this);
@@ -186,37 +185,41 @@ ScreenplayTextSearchToolbar::ScreenplayTextSearchToolbar(QWidget* _parent)
     d->goToPreviousAction->setIconText(u8"\U000f0143");
     d->goToPreviousAction->setShortcut(QKeySequence::FindPrevious);
     addAction(d->goToPreviousAction);
-    connect(d->goToPreviousAction, &QAction::triggered, this, &ScreenplayTextSearchToolbar::findPreviousRequested);
+    connect(d->goToPreviousAction, &QAction::triggered, this,
+            &ScreenplayTextSearchToolbar::findPreviousRequested);
     d->goToNextAction->setIconText(u8"\U000f0140");
     d->goToNextAction->setShortcut(QKeySequence::FindNext);
     addAction(d->goToNextAction);
-    connect(d->goToNextAction, &QAction::triggered, this, &ScreenplayTextSearchToolbar::findNextRequested);
+    connect(d->goToNextAction, &QAction::triggered, this,
+            &ScreenplayTextSearchToolbar::findNextRequested);
     d->matchCaseAction->setIconText(u8"\U000f0b34");
     d->matchCaseAction->setCheckable(true);
     addAction(d->matchCaseAction);
     connect(d->matchCaseAction, &QAction::toggled, this, [this] {
-        d->matchCaseAction->setToolTip(d->matchCaseAction->isChecked() ? tr("Search without case sensitive")
-                                                                       : tr("Search with case sensitive"));
+        d->matchCaseAction->setToolTip(d->matchCaseAction->isChecked()
+                                           ? tr("Search without case sensitive")
+                                           : tr("Search with case sensitive"));
     });
-    connect(d->matchCaseAction, &QAction::toggled, this, &ScreenplayTextSearchToolbar::findTextRequested);
+    connect(d->matchCaseAction, &QAction::toggled, this,
+            &ScreenplayTextSearchToolbar::findTextRequested);
     //
     d->searchInAction->setText(tr("In the whole text"));
     d->searchInAction->setIconText(u8"\U000f035d");
     auto _model = new QStringListModel(d->popupContent);
     d->popupContent->setModel(_model);
-    connect(_model, &QAbstractItemModel::rowsInserted, this, [this] {
-        designSystemChangeEvent(nullptr);
-    });
-    connect(&d->popupHeightAnimation, &QVariantAnimation::valueChanged, this, [this] (const QVariant& _value) {
-        const auto height = _value.toInt();
-        d->popup->resize(d->popup->width(), height);
-    });
+    connect(_model, &QAbstractItemModel::rowsInserted, this,
+            [this] { designSystemChangeEvent(nullptr); });
+    connect(&d->popupHeightAnimation, &QVariantAnimation::valueChanged, this,
+            [this](const QVariant& _value) {
+                const auto height = _value.toInt();
+                d->popup->resize(d->popup->width(), height);
+            });
     connect(&d->popupHeightAnimation, &QVariantAnimation::finished, this, [this] {
         if (!d->isPopupShown) {
             d->popup->hide();
         }
     });
-    connect(d->popupContent, &Tree::currentIndexChanged, this, [this] (const QModelIndex& _index) {
+    connect(d->popupContent, &Tree::currentIndexChanged, this, [this](const QModelIndex& _index) {
         d->searchInAction->setText(_index.data().toString());
         d->hidePopup();
         update();
@@ -275,45 +278,45 @@ QString ScreenplayTextSearchToolbar::replaceText() const
 bool ScreenplayTextSearchToolbar::eventFilter(QObject* _watched, QEvent* _event)
 {
     switch (_event->type()) {
-        case QEvent::Resize: {
-            if (_watched == parent()) {
-                designSystemChangeEvent(nullptr);
-            }
-            break;
+    case QEvent::Resize: {
+        if (_watched == parent()) {
+            designSystemChangeEvent(nullptr);
         }
+        break;
+    }
 
-        case QEvent::FocusOut: {
-            if ((QApplication::focusWidget() == nullptr
-                 || QApplication::focusWidget()->parent() != this)
-                && d->popup->isVisible()) {
-                d->searchInAction->trigger();
-            }
-            break;
+    case QEvent::FocusOut: {
+        if ((QApplication::focusWidget() == nullptr
+             || QApplication::focusWidget()->parent() != this)
+            && d->popup->isVisible()) {
+            d->searchInAction->trigger();
         }
+        break;
+    }
 
-        case QEvent::KeyPress: {
-            if (_watched == d->searchText) {
-                const auto keyEvent = static_cast<QKeyEvent*>(_event);
-                if ((keyEvent->key() == Qt::Key_Enter
-                     || keyEvent->key() == Qt::Key_Return)
-                    && !d->searchText->text().isEmpty()) {
-                    emit findTextRequested();
-                }
+    case QEvent::KeyPress: {
+        if (_watched == d->searchText) {
+            const auto keyEvent = static_cast<QKeyEvent*>(_event);
+            if ((keyEvent->key() == Qt::Key_Enter || keyEvent->key() == Qt::Key_Return)
+                && !d->searchText->text().isEmpty()) {
+                emit findTextRequested();
             }
-            break;
         }
+        break;
+    }
 
-        case QEvent::KeyRelease: {
-            if (_watched == d->searchText) {
-                const auto keyEvent = static_cast<QKeyEvent*>(_event);
-                if (keyEvent->key() == Qt::Key_Escape) {
-                    emit focusTextRequested();
-                }
+    case QEvent::KeyRelease: {
+        if (_watched == d->searchText) {
+            const auto keyEvent = static_cast<QKeyEvent*>(_event);
+            if (keyEvent->key() == Qt::Key_Escape) {
+                emit focusTextRequested();
             }
-            break;
         }
+        break;
+    }
 
-        default: break;
+    default:
+        break;
     }
 
     return FloatingToolBar::eventFilter(_watched, _event);
@@ -337,24 +340,28 @@ void ScreenplayTextSearchToolbar::processTextColorChange()
 
 void ScreenplayTextSearchToolbar::updateTranslations()
 {
-    d->closeAction->setToolTip(tr("Exit from search")
-                                + QString(" (%1)").arg(QKeySequence(QKeySequence::Find).toString(QKeySequence::NativeText)));
+    d->closeAction->setToolTip(
+        tr("Exit from search")
+        + QString(" (%1)").arg(
+            QKeySequence(QKeySequence::Find).toString(QKeySequence::NativeText)));
     d->searchText->setLabel(tr("Search"));
     d->searchText->setPlaceholderText(tr("Enter search phrase here"));
     if (auto model = qobject_cast<QStringListModel*>(d->popupContent->model())) {
-        model->setStringList({ tr("In the whole text"),
-                               tr("In scene heading"),
-                               tr("In action"),
-                               tr("In character"),
-                               tr("In dialogue") });
+        model->setStringList({ tr("In the whole text"), tr("In scene heading"), tr("In action"),
+                               tr("In character"), tr("In dialogue") });
         d->popupContent->setCurrentIndex(model->index(0, 0));
     }
-    d->goToNextAction->setToolTip(tr("Go to the next search result")
-                                  + QString(" (%1)").arg(QKeySequence(QKeySequence::FindNext).toString(QKeySequence::NativeText)));
-    d->goToPreviousAction->setToolTip(tr("Go to the previous search result")
-                                      + QString(" (%1)").arg(QKeySequence(QKeySequence::FindPrevious).toString(QKeySequence::NativeText)));
-    d->matchCaseAction->setToolTip(d->matchCaseAction->isChecked() ? tr("Search without case sensitive")
-                                                                   : tr("Search with case sensitive"));
+    d->goToNextAction->setToolTip(
+        tr("Go to the next search result")
+        + QString(" (%1)").arg(
+            QKeySequence(QKeySequence::FindNext).toString(QKeySequence::NativeText)));
+    d->goToPreviousAction->setToolTip(
+        tr("Go to the previous search result")
+        + QString(" (%1)").arg(
+            QKeySequence(QKeySequence::FindPrevious).toString(QKeySequence::NativeText)));
+    d->matchCaseAction->setToolTip(d->matchCaseAction->isChecked()
+                                       ? tr("Search without case sensitive")
+                                       : tr("Search with case sensitive"));
 
     d->replaceText->setLabel(tr("Replace with"));
     d->replaceText->setPlaceholderText(tr("Enter phrase to replace"));
@@ -370,18 +377,21 @@ void ScreenplayTextSearchToolbar::designSystemChangeEvent(DesignSystemChangeEven
     // Рассчитываем размер полей поиска и замены
     //
     const auto searchInActionWidth = Ui::DesignSystem::treeOneLineItem().margins().left()
-                                     + d->popupContent->sizeHintForColumn(0)
-                                     + Ui::DesignSystem::treeOneLineItem().margins().right();
+        + d->popupContent->sizeHintForColumn(0)
+        + Ui::DesignSystem::treeOneLineItem().margins().right();
     d->replace->resize(d->replace->sizeHint());
-    const auto replaceActionWidth = d->replace->sizeHint().width() - Ui::DesignSystem::floatingToolBar().spacing();
+    const auto replaceActionWidth
+        = d->replace->sizeHint().width() - Ui::DesignSystem::floatingToolBar().spacing();
     d->replaceAll->resize(d->replaceAll->sizeHint());
-    const auto replaceAllActionWidth = d->replaceAll->sizeHint().width() - Ui::DesignSystem::floatingToolBar().spacing();
+    const auto replaceAllActionWidth
+        = d->replaceAll->sizeHint().width() - Ui::DesignSystem::floatingToolBar().spacing();
     auto textFieldWidth = parentWidget()->width() * 0.8;
     textFieldWidth -= (Ui::DesignSystem::floatingToolBar().iconSize().width()
-                       + Ui::DesignSystem::floatingToolBar().spacing()) * 4 // 4 обычных кнопки
-                      + searchInActionWidth // выпадающий список мест поиска
-                      + replaceActionWidth // кнопка единичной замены
-                      + replaceAllActionWidth; // кнопка полной замены
+                       + Ui::DesignSystem::floatingToolBar().spacing())
+            * 4 // 4 обычных кнопки
+        + searchInActionWidth // выпадающий список мест поиска
+        + replaceActionWidth // кнопка единичной замены
+        + replaceAllActionWidth; // кнопка полной замены
     textFieldWidth /= 2; // делим поровну
     if (textFieldWidth < 0) {
         return;
@@ -393,8 +403,8 @@ void ScreenplayTextSearchToolbar::designSystemChangeEvent(DesignSystemChangeEven
     setActionCustomWidth(d->searchTextAction, textFieldWidth);
     d->searchText->setFixedWidth(textFieldWidth);
     const auto searchLeft = Ui::DesignSystem::floatingToolBar().shadowMargins().left()
-                            + Ui::DesignSystem::floatingToolBar().iconSize().width()
-                            + Ui::DesignSystem::floatingToolBar().spacing();
+        + Ui::DesignSystem::floatingToolBar().iconSize().width()
+        + Ui::DesignSystem::floatingToolBar().spacing();
     d->searchText->move(searchLeft, Ui::DesignSystem::floatingToolBar().shadowMargins().top());
     //
     setActionCustomWidth(d->searchInAction, static_cast<int>(searchInActionWidth));
@@ -404,22 +414,27 @@ void ScreenplayTextSearchToolbar::designSystemChangeEvent(DesignSystemChangeEven
     d->popupContent->setTextColor(Ui::DesignSystem::color().onPrimary());
 
 
-    const auto replaceLeft = searchLeft + d->searchText->width() + Ui::DesignSystem::floatingToolBar().spacing()
-                             + (Ui::DesignSystem::floatingToolBar().iconSize().width()
-                                + Ui::DesignSystem::floatingToolBar().spacing()) * 3
-                             + actionCustomWidth(d->searchInAction) + Ui::DesignSystem::floatingToolBar().spacing();
+    const auto replaceLeft = searchLeft + d->searchText->width()
+        + Ui::DesignSystem::floatingToolBar().spacing()
+        + (Ui::DesignSystem::floatingToolBar().iconSize().width()
+           + Ui::DesignSystem::floatingToolBar().spacing())
+            * 3
+        + actionCustomWidth(d->searchInAction) + Ui::DesignSystem::floatingToolBar().spacing();
 
     setActionCustomWidth(d->replaceTextAction, textFieldWidth);
     d->replaceText->setFixedWidth(textFieldWidth);
     d->replaceText->move(replaceLeft, Ui::DesignSystem::floatingToolBar().shadowMargins().top());
     //
     setActionCustomWidth(d->replaceAction, replaceActionWidth);
-    d->replace->move(d->replaceText->geometry().right() + Ui::DesignSystem::floatingToolBar().spacing(),
+    d->replace->move(d->replaceText->geometry().right()
+                         + Ui::DesignSystem::floatingToolBar().spacing(),
                      Ui::DesignSystem::floatingToolBar().shadowMargins().top());
     setActionCustomWidth(d->replaceAllAction, replaceAllActionWidth);
-    d->replaceAll->move(d->replace->geometry().right()
-                        /*+ Ui::DesignSystem::floatingToolBar().spacing() / 2*/, // тут ручками подобрал, чтобы красиво было
-                        Ui::DesignSystem::floatingToolBar().shadowMargins().top());
+    d->replaceAll->move(
+        d->replace->geometry().right()
+        /*+ Ui::DesignSystem::floatingToolBar().spacing() / 2*/, // тут ручками подобрал, чтобы
+                                                                 // красиво было
+        Ui::DesignSystem::floatingToolBar().shadowMargins().top());
 
     resize(sizeHint());
 }

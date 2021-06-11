@@ -4,21 +4,17 @@
 
 #include <QDir>
 #include <QFile>
-#include <QStringList>
 #include <QStandardPaths>
+#include <QStringList>
 #include <QTextCodec>
 
 
 namespace {
-    /**
-     * @brief Тип словаря
-     */
-    enum class SpellCheckerFileType {
-        Affinity,
-        Indexes,
-        Dictionary
-    };
-}
+/**
+ * @brief Тип словаря
+ */
+enum class SpellCheckerFileType { Affinity, Indexes, Dictionary };
+} // namespace
 
 
 class SpellChecker::Implementation
@@ -68,9 +64,12 @@ public:
 
 SpellChecker::Implementation::Implementation()
 {
-    const QString appDataFolderPath = QStandardPaths::writableLocation(QStandardPaths::DataLocation);
-    const QString hunspellDictionariesFolderPath = appDataFolderPath + QDir::separator() + "hunspell";
-    userDictionaryPath = hunspellDictionariesFolderPath + QDir::separator() + "user_dictionary.dict";
+    const QString appDataFolderPath
+        = QStandardPaths::writableLocation(QStandardPaths::DataLocation);
+    const QString hunspellDictionariesFolderPath
+        = appDataFolderPath + QDir::separator() + "hunspell";
+    userDictionaryPath
+        = hunspellDictionariesFolderPath + QDir::separator() + "user_dictionary.dict";
 }
 
 QString SpellChecker::Implementation::hunspellFilePath(SpellCheckerFileType _fileType) const
@@ -90,16 +89,18 @@ QString SpellChecker::Implementation::hunspellFilePath(SpellCheckerFileType _fil
     //
     // ... определяемся с именем файла
     //
-    const QString appDataFolderPath = QStandardPaths::writableLocation(QStandardPaths::DataLocation);
-    const QString hunspellDictionariesFolderPath = appDataFolderPath + QDir::separator() + "hunspell";
-    const QString dictionaryFilePath = hunspellDictionariesFolderPath + QDir::separator() + fileName;
+    const QString appDataFolderPath
+        = QStandardPaths::writableLocation(QStandardPaths::DataLocation);
+    const QString hunspellDictionariesFolderPath
+        = appDataFolderPath + QDir::separator() + "hunspell";
+    const QString dictionaryFilePath
+        = hunspellDictionariesFolderPath + QDir::separator() + fileName;
     return dictionaryFilePath;
 }
 
 void SpellChecker::Implementation::addWordToChecker(const QString& _word) const
 {
-    if (checker == nullptr
-        || checkerTextCodec == nullptr) {
+    if (checker == nullptr || checkerTextCodec == nullptr) {
         return;
     }
 
@@ -124,8 +125,7 @@ SpellChecker::~SpellChecker() = default;
 
 void SpellChecker::setSpellingLanguage(const QString& _languageCode)
 {
-    if (d->languageCode == _languageCode
-        && d->checker && d->checkerTextCodec) {
+    if (d->languageCode == _languageCode && d->checker && d->checkerTextCodec) {
         return;
     }
 
@@ -141,8 +141,8 @@ void SpellChecker::setSpellingLanguage(const QString& _languageCode)
     //
     const QFileInfo affFileInfo(d->hunspellFilePath(SpellCheckerFileType::Affinity));
     const QFileInfo dicFileInfo(d->hunspellFilePath(SpellCheckerFileType::Dictionary));
-    if (!affFileInfo.exists() || affFileInfo.size() == 0
-        || !dicFileInfo.exists() || dicFileInfo.size() == 0) {
+    if (!affFileInfo.exists() || affFileInfo.size() == 0 || !dicFileInfo.exists()
+        || dicFileInfo.size() == 0) {
         return;
     }
 
@@ -150,7 +150,7 @@ void SpellChecker::setSpellingLanguage(const QString& _languageCode)
     // Создаём нового проверяющего
     //
     d->checker.reset(new Hunspell(affFileInfo.absoluteFilePath().toLocal8Bit().constData(),
-                                    dicFileInfo.absoluteFilePath().toLocal8Bit().constData()));
+                                  dicFileInfo.absoluteFilePath().toLocal8Bit().constData()));
     if (d->checker.isNull()) {
         return;
     }
@@ -180,8 +180,7 @@ bool SpellChecker::spellCheckWord(const QString& _word) const
     //
     // Если проверяющего орфографию не удалось настроить, то и проверять нет смысла
     //
-    if (d->checker == nullptr
-        || d->checkerTextCodec == nullptr) {
+    if (d->checker == nullptr || d->checkerTextCodec == nullptr) {
         return false;
     }
 
@@ -197,7 +196,8 @@ bool SpellChecker::spellCheckWord(const QString& _word) const
     //
     QString correctedWord = _word;
     //
-    // Для слов заканчивающихся на s с апострофом убираем апостроф в конце, т.к. ханспел его не умеет
+    // Для слов заканчивающихся на s с апострофом убираем апостроф в конце, т.к. ханспел его не
+    // умеет
     //
     if (d->languageCode.startsWith("en")
         && (correctedWord.endsWith("s'", Qt::CaseInsensitive)
@@ -215,8 +215,7 @@ bool SpellChecker::spellCheckWord(const QString& _word) const
 
 QStringList SpellChecker::suggestionsForWord(const QString& _word) const
 {
-    if (d->checker == nullptr
-        || d->checkerTextCodec == nullptr) {
+    if (d->checker == nullptr || d->checkerTextCodec == nullptr) {
         return {};
     }
 
@@ -230,7 +229,7 @@ QStringList SpellChecker::suggestionsForWord(const QString& _word) const
     //
     // Получим массив вариантов
     //
-    char ** suggestionsArray;
+    char** suggestionsArray;
     const QByteArray encodedWordData = d->checkerTextCodec->fromUnicode(_word);
     const char* encodedWord = encodedWordData.constData();
     int suggestionsCount = d->checker->suggest(&suggestionsArray, encodedWord);
@@ -289,4 +288,3 @@ SpellChecker::SpellChecker()
     : d(new Implementation)
 {
 }
-

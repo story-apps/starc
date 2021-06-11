@@ -1,8 +1,8 @@
 #pragma once
 
-#include <corelib_global.h>
-
 #include <QString>
+
+#include <corelib_global.h>
 
 
 /*
@@ -26,9 +26,16 @@ public:
      * @brief Цитата известного автора
      */
     struct Quote {
-        Quote() : index(kInvalidIndex) {}
+        Quote()
+            : index(kInvalidIndex)
+        {
+        }
         Quote(int _index, const QString& _text, const QString& _author)
-            : index(_index), text(_text), author(_author) {}
+            : index(_index)
+            , text(_text)
+            , author(_author)
+        {
+        }
 
         int index;
         QString text;
@@ -36,7 +43,8 @@ public:
     };
 
     /**
-     * @brief Сформировать цитату, или извлечь цитату под заданным индексом (необходимо при изменении языка)
+     * @brief Сформировать цитату, или извлечь цитату под заданным индексом (необходимо при
+     * изменении языка)
      */
     static Quote generateQuote(int _index = kInvalidIndex);
 

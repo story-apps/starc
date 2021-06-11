@@ -14,12 +14,11 @@ using BusinessLayer::ScreenplayParagraphType;
 using Ui::ScreenplayTextEdit;
 
 
-namespace KeyProcessingLayer
-{
+namespace KeyProcessingLayer {
 
 TransitionHandler::TransitionHandler(Ui::ScreenplayTextEdit* _editor)
-    : StandardKeyHandler(_editor),
-      m_completerModel(new QStringListModel(_editor))
+    : StandardKeyHandler(_editor)
+    , m_completerModel(new QStringListModel(_editor))
 {
 }
 
@@ -75,14 +74,14 @@ void TransitionHandler::handleEnter(QKeyEvent* _event)
         } else {
             //! Нет выделения
 
-            if (cursorBackwardText.isEmpty()
-                && cursorForwardText.isEmpty()) {
+            if (cursorBackwardText.isEmpty() && cursorForwardText.isEmpty()) {
                 //! Текст пуст
 
                 //
                 // Сменить стиль
                 //
-                editor()->setCurrentParagraphType(changeForEnter(ScreenplayParagraphType::Transition));
+                editor()->setCurrentParagraphType(
+                    changeForEnter(ScreenplayParagraphType::Transition));
             } else {
                 //! Текст не пуст
 
@@ -155,14 +154,14 @@ void TransitionHandler::handleTab(QKeyEvent*)
         } else {
             //! Нет выделения
 
-            if (cursorBackwardText.isEmpty()
-                && cursorForwardText.isEmpty()) {
+            if (cursorBackwardText.isEmpty() && cursorForwardText.isEmpty()) {
                 //! Текст пуст
 
                 //
                 // Сменить стиль
                 //
-                editor()->setCurrentParagraphType(changeForTab(ScreenplayParagraphType::Transition));
+                editor()->setCurrentParagraphType(
+                    changeForTab(ScreenplayParagraphType::Transition));
             } else {
                 //! Текст не пуст
 
@@ -239,7 +238,8 @@ void TransitionHandler::handleInput(QInputMethodEvent* _event)
     complete(currentBlockText, cursorBackwardText);
 }
 
-void TransitionHandler::complete(const QString& _currentBlockText, const QString& _cursorBackwardText)
+void TransitionHandler::complete(const QString& _currentBlockText,
+                                 const QString& _cursorBackwardText)
 {
     Q_UNUSED(_cursorBackwardText)
 

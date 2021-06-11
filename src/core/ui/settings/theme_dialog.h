@@ -4,8 +4,7 @@
 #include <ui/widgets/dialog/abstract_dialog.h>
 
 
-namespace Ui
-{
+namespace Ui {
 
 enum class ApplicationTheme;
 

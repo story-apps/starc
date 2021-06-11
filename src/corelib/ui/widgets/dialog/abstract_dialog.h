@@ -74,7 +74,8 @@ protected:
     virtual QWidget* lastFocusableWidget() const = 0;
 
     /**
-     * @brief Весим фильтр на родительский виджет, чтобы корректировать свои размеры в соответствии с ним
+     * @brief Весим фильтр на родительский виджет, чтобы корректировать свои размеры в соответствии
+     * с ним
      */
     bool eventFilter(QObject* _watched, QEvent* _event) override;
 

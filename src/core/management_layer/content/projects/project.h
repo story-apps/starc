@@ -3,29 +3,17 @@
 #include <QAbstractListModel>
 
 
-namespace ManagementLayer
-{
+namespace ManagementLayer {
 
 /**
  * @brief Тип проекта
  */
-enum class ProjectType {
-    Invalid,
-    Local,
-    Remote
-};
+enum class ProjectType { Invalid, Local, Remote };
 
 /**
  * @brief Роли для данных проекта в модели
  */
-enum ProjectDataRole {
-    Type,
-    Path,
-    PosterPath,
-    Name,
-    Logline,
-    LastEditTime
-};
+enum ProjectDataRole { Type, Path, PosterPath, Name, Logline, LastEditTime };
 
 /**
  * @brief Файл проекта

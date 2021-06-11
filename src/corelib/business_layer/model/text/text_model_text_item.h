@@ -2,15 +2,14 @@
 
 #include "text_model_item.h"
 
-#include <optional>
-
 #include <QTextLayout>
+
+#include <optional>
 
 class QXmlStreamReader;
 
 
-namespace BusinessLayer
-{
+namespace BusinessLayer {
 
 enum class TextParagraphType;
 
@@ -79,7 +78,8 @@ public:
     void setText(const QString& _text);
 
     /**
-     * @brief Удалить текст, начиная с заданной позиции, при этом корректируется и остальной контент блока
+     * @brief Удалить текст, начиная с заданной позиции, при этом корректируется и остальной контент
+     * блока
      */
     void removeText(int _from);
 

@@ -5,14 +5,11 @@
 #include <QString>
 
 namespace {
-    const QHash<Qt::Alignment, QString> kAlignmentToString
-    = {{ Qt::AlignLeft, "left" },
-       { Qt::AlignHCenter, "hcenter" },
-       { Qt::AlignRight, "right" },
-       { Qt::AlignJustify, "justify" },
-       { Qt::AlignTop, "top" },
-       { Qt::AlignVCenter, "vcenter" },
-       { Qt::AlignBottom, "bottom" }};
+const QHash<Qt::Alignment, QString> kAlignmentToString
+    = { { Qt::AlignLeft, "left" },    { Qt::AlignHCenter, "hcenter" },
+        { Qt::AlignRight, "right" },  { Qt::AlignJustify, "justify" },
+        { Qt::AlignTop, "top" },      { Qt::AlignVCenter, "vcenter" },
+        { Qt::AlignBottom, "bottom" } };
 }
 
 
@@ -29,10 +26,9 @@ Qt::Alignment alignmentFromString(const QString& _alignment)
 QMarginsF marginsFromString(const QString& _margins)
 {
     QStringList margins = _margins.split(",");
-    return QMarginsF(margins.value(0, 0).simplified().toDouble(),
-                     margins.value(1, 0).simplified().toDouble(),
-                     margins.value(2, 0).simplified().toDouble(),
-                     margins.value(3, 0).simplified().toDouble());
+    return QMarginsF(
+        margins.value(0, 0).simplified().toDouble(), margins.value(1, 0).simplified().toDouble(),
+        margins.value(2, 0).simplified().toDouble(), margins.value(3, 0).simplified().toDouble());
 }
 
 QString toString(bool _value)
@@ -64,8 +60,8 @@ QString toString(Qt::Alignment _alignment)
 QString toString(const QMarginsF& _margins)
 {
     return QString("%1,%2,%3,%4")
-            .arg(_margins.left())
-            .arg(_margins.top())
-            .arg(_margins.right())
-            .arg(_margins.bottom());
+        .arg(_margins.left())
+        .arg(_margins.top())
+        .arg(_margins.right())
+        .arg(_margins.bottom());
 }

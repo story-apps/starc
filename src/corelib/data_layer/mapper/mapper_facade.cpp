@@ -5,8 +5,7 @@
 #include "settings_mapper.h"
 
 
-namespace DataMappingLayer
-{
+namespace DataMappingLayer {
 
 DocumentChangeMapper* MapperFacade::documentChangeMapper()
 {
@@ -38,4 +37,4 @@ DocumentChangeMapper* MapperFacade::s_documentChangeMapper = nullptr;
 DocumentMapper* MapperFacade::s_documentMapper = nullptr;
 SettingsMapper* MapperFacade::s_settingsMapper = nullptr;
 
-}
+} // namespace DataMappingLayer

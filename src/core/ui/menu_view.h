@@ -3,8 +3,7 @@
 #include <ui/widgets/drawer/drawer.h>
 
 
-namespace Ui
-{
+namespace Ui {
 
 /**
  * @brief Меню приложения

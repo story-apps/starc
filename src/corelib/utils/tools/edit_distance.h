@@ -2,19 +2,13 @@
 
 #include <QVector>
 
-namespace edit_distance
-{
+namespace edit_distance {
 
 //
 // Реализация взята из https://www.geeksforgeeks.org/edit-distance-dp-5/
 //
 
-enum class OperationType {
-    Skip,
-    Insert,
-    Remove,
-    Replace
-};
+enum class OperationType { Skip, Insert, Remove, Replace };
 
 template<typename T>
 struct Operation {
@@ -26,8 +20,11 @@ struct Operation {
 namespace {
 
 template<typename T>
-QVector<Operation<T>> minimumDistance(const QVector<Operation<T>>& _x, const QVector<Operation<T>>& _y, const QVector<Operation<T>>& _z) {
-    auto operationWeight = [] (const QVector<Operation<T>>& _operations) {
+QVector<Operation<T>> minimumDistance(const QVector<Operation<T>>& _x,
+                                      const QVector<Operation<T>>& _y,
+                                      const QVector<Operation<T>>& _z)
+{
+    auto operationWeight = [](const QVector<Operation<T>>& _operations) {
         int weight = 0;
         for (const auto& operation : _operations) {
             //
@@ -53,19 +50,22 @@ QVector<Operation<T>> minimumDistance(const QVector<Operation<T>>& _x, const QVe
 };
 
 template<typename T>
-bool isItemsParentsEqual(T* _lhs, T* _rhs) {
+bool isItemsParentsEqual(T* _lhs, T* _rhs)
+{
     return (_lhs->parent() == nullptr && _rhs->parent() == nullptr)
-            || (_lhs->parent() != nullptr && _rhs->parent() != nullptr && _lhs->parent()->isEqual(_rhs->parent()));
+        || (_lhs->parent() != nullptr && _rhs->parent() != nullptr
+            && _lhs->parent()->isEqual(_rhs->parent()));
 }
 
 template<typename T>
-bool isItemsEqual(T* _lhs, T* _rhs) {
-    return _lhs->isEqual(_rhs)
-            && isItemsParentsEqual(_lhs, _rhs);
+bool isItemsEqual(T* _lhs, T* _rhs)
+{
+    return _lhs->isEqual(_rhs) && isItemsParentsEqual(_lhs, _rhs);
 }
 
 template<typename T>
-int replaceOperationWeight(T* _lhs, T* _rhs) {
+int replaceOperationWeight(T* _lhs, T* _rhs)
+{
     //
     // Исключаем замену элементов разных типов
     //
@@ -93,7 +93,7 @@ QVector<Operation<T>> editDistance(const QVector<T*>& _source, const QVector<T*>
     // is empty then we remove all characters
     for (int i = 1; i <= _source.size(); i++) {
         auto operations = DP[0][i - 1];
-        operations.append({OperationType::Remove, nullptr, 1});
+        operations.append({ OperationType::Remove, nullptr, 1 });
         DP[0][i] = operations;
     }
 
@@ -110,7 +110,7 @@ QVector<Operation<T>> editDistance(const QVector<T*>& _source, const QVector<T*>
             // operation to get second string
             if (j == 0) {
                 auto operations = DP[(i - 1) % 2][j];
-                operations.append({OperationType::Insert, _target[i - 1], 1});
+                operations.append({ OperationType::Insert, _target[i - 1], 1 });
                 DP[i % 2][j] = operations;
             }
 
@@ -120,7 +120,7 @@ QVector<Operation<T>> editDistance(const QVector<T*>& _source, const QVector<T*>
             // the row number.
             else if (isItemsEqual(_source[j - 1], _target[i - 1])) {
                 auto operations = DP[(i - 1) % 2][j - 1];
-                operations.append({OperationType::Skip, _target[i - 1], 0});
+                operations.append({ OperationType::Skip, _target[i - 1], 0 });
                 DP[i % 2][j] = operations;
             }
 
@@ -129,17 +129,17 @@ QVector<Operation<T>> editDistance(const QVector<T*>& _source, const QVector<T*>
             // from three specified operation
             else {
                 auto operationsWithInsert = DP[(i - 1) % 2][j];
-                operationsWithInsert.append({OperationType::Insert, _target[i - 1], 1});
+                operationsWithInsert.append({ OperationType::Insert, _target[i - 1], 1 });
                 //
                 auto operationsWithRemove = DP[i % 2][j - 1];
-                operationsWithRemove.append({OperationType::Remove, nullptr, 1});
+                operationsWithRemove.append({ OperationType::Remove, nullptr, 1 });
                 //
                 auto operationsWithReplace = DP[(i - 1) % 2][j - 1];
-                operationsWithReplace.append({OperationType::Replace, _target[i - 1],
-                                              replaceOperationWeight(_source[j - 1], _target[i - 1])});
+                operationsWithReplace.append(
+                    { OperationType::Replace, _target[i - 1],
+                      replaceOperationWeight(_source[j - 1], _target[i - 1]) });
                 //
-                DP[i % 2][j] = minimumDistance(operationsWithInsert,
-                                               operationsWithRemove,
+                DP[i % 2][j] = minimumDistance(operationsWithInsert, operationsWithRemove,
                                                operationsWithReplace);
             }
         }

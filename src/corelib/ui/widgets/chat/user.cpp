@@ -39,7 +39,7 @@ User::User(const QString& _name)
 }
 
 User::User(const User& _other)
-    : d (new Implementation(_other.name()))
+    : d(new Implementation(_other.name()))
 {
 }
 

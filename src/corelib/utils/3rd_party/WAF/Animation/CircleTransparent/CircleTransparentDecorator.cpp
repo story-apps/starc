@@ -5,9 +5,9 @@
 using WAF::CircleTransparentDecorator;
 
 
-CircleTransparentDecorator::CircleTransparentDecorator(QWidget* _parent) :
-    QWidget(_parent),
-    m_radius(0)
+CircleTransparentDecorator::CircleTransparentDecorator(QWidget* _parent)
+    : QWidget(_parent)
+    , m_radius(0)
 {
 }
 
@@ -62,8 +62,9 @@ void CircleTransparentDecorator::paintEvent(QPaintEvent* _event)
 
     const auto clipRegion = QRegion(rect());
     const auto ellipseSize = m_radius * 2;
-    const auto innerEllipse = QRegion(QRect(m_startPoint - QPoint(m_radius, m_radius),
-                                            QSize(ellipseSize, ellipseSize)), QRegion::Ellipse);
+    const auto innerEllipse
+        = QRegion(QRect(m_startPoint - QPoint(m_radius, m_radius), QSize(ellipseSize, ellipseSize)),
+                  QRegion::Ellipse);
     painter.setClipRegion(clipRegion.xored(innerEllipse));
 
     painter.drawPixmap(0, 0, m_fillImage);

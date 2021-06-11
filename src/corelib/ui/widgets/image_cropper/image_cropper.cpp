@@ -11,8 +11,7 @@ namespace {
 /**
  * @brief Позиция курсора относительно рамки обрезки
  */
-enum class CursorPosition
-{
+enum class CursorPosition {
     Undefined,
     Middle,
     Top,
@@ -24,7 +23,7 @@ enum class CursorPosition
     BottomLeft,
     BottomRight
 };
-}
+} // namespace
 
 class ImageCropper::Implementation
 {
@@ -49,7 +48,8 @@ public:
      * В случае неудачи возвращает null-прямоугольник
      */
     const QRectF calculateGeometry(const QRectF& _sourceGeometry,
-        const CursorPosition _cursorPosition, const QPointF& _mouseDelta);
+                                   const CursorPosition _cursorPosition,
+                                   const QPointF& _mouseDelta);
 
     /**
      * @brief Получить размер виджета после его изменения мышью
@@ -60,7 +60,8 @@ public:
      *    (т.е. при перемещении или изменении размера виджета)
      */
     const QRectF calculateGeometryWithCustomProportions(const QRectF& _sourceGeometry,
-        const CursorPosition _cursorPosition, const QPointF& _mouseDelta);
+                                                        const CursorPosition _cursorPosition,
+                                                        const QPointF& _mouseDelta);
 
     /**
      * @brief Получить размер виджета после его изменения мышью
@@ -70,8 +71,10 @@ public:
      * 1. Метод должен вызываться, только при зажатой кнопке мыши
      *    (т.е. при перемещении или изменении размера виджета)
      */
-    const QRectF calculateGeometryWithFixedProportions(const QRectF &_sourceGeometry,
-        const CursorPosition _cursorPosition, const QPointF &_mouseDelta, const QSizeF &_deltas);
+    const QRectF calculateGeometryWithFixedProportions(const QRectF& _sourceGeometry,
+                                                       const CursorPosition _cursorPosition,
+                                                       const QPointF& _mouseDelta,
+                                                       const QSizeF& _deltas);
 
 
     QPixmap sourceImage;
@@ -89,7 +92,7 @@ public:
 };
 
 CursorPosition ImageCropper::Implementation::cursorPosition(const QRectF& _cropRect,
-    const QPointF& _mousePosition)
+                                                            const QPointF& _mousePosition)
 {
     const qreal indent = 10 * Ui::DesignSystem::scaleFactor();
     if (!_cropRect.adjusted(-indent, -indent, indent, indent).contains(_mousePosition)) {
@@ -97,9 +100,9 @@ CursorPosition ImageCropper::Implementation::cursorPosition(const QRectF& _cropR
     }
 
     // Находится ли точка рядом с координатой стороны
-    auto isPointNearSide = [indent] (qreal _sideCoordinate, qreal _pointCoordinate) {
+    auto isPointNearSide = [indent](qreal _sideCoordinate, qreal _pointCoordinate) {
         return (_sideCoordinate - indent) < _pointCoordinate
-                && _pointCoordinate < (_sideCoordinate + indent);
+            && _pointCoordinate < (_sideCoordinate + indent);
     };
 
     // Двухстороннее направление
@@ -132,55 +135,52 @@ CursorPosition ImageCropper::Implementation::cursorPosition(const QRectF& _cropR
     }
 }
 
-void ImageCropper::Implementation::updateCursorIcon(const QPointF& _mousePosition, QWidget* _forWidget)
+void ImageCropper::Implementation::updateCursorIcon(const QPointF& _mousePosition,
+                                                    QWidget* _forWidget)
 {
     QCursor cursorIcon;
     //
-    switch (cursorPosition(croppingRect, _mousePosition))
-    {
-        case CursorPosition::TopRight:
-        case CursorPosition::BottomLeft:
-            cursorIcon = QCursor(Qt::SizeBDiagCursor);
-            break;
-        case CursorPosition::TopLeft:
-        case CursorPosition::BottomRight:
-            cursorIcon = QCursor(Qt::SizeFDiagCursor);
-            break;
-        case CursorPosition::Top:
-        case CursorPosition::Bottom:
-            cursorIcon = QCursor(Qt::SizeVerCursor);
-            break;
-        case CursorPosition::Left:
-        case CursorPosition::Right:
-            cursorIcon = QCursor(Qt::SizeHorCursor);
-            break;
-        case CursorPosition::Middle:
-            cursorIcon = isMousePressed
-                         ? QCursor(Qt::ClosedHandCursor)
-                         : QCursor(Qt::OpenHandCursor);
-            break;
-        case CursorPosition::Undefined:
-        default:
-            cursorIcon = QCursor(Qt::ArrowCursor);
-            break;
+    switch (cursorPosition(croppingRect, _mousePosition)) {
+    case CursorPosition::TopRight:
+    case CursorPosition::BottomLeft:
+        cursorIcon = QCursor(Qt::SizeBDiagCursor);
+        break;
+    case CursorPosition::TopLeft:
+    case CursorPosition::BottomRight:
+        cursorIcon = QCursor(Qt::SizeFDiagCursor);
+        break;
+    case CursorPosition::Top:
+    case CursorPosition::Bottom:
+        cursorIcon = QCursor(Qt::SizeVerCursor);
+        break;
+    case CursorPosition::Left:
+    case CursorPosition::Right:
+        cursorIcon = QCursor(Qt::SizeHorCursor);
+        break;
+    case CursorPosition::Middle:
+        cursorIcon = isMousePressed ? QCursor(Qt::ClosedHandCursor) : QCursor(Qt::OpenHandCursor);
+        break;
+    case CursorPosition::Undefined:
+    default:
+        cursorIcon = QCursor(Qt::ArrowCursor);
+        break;
     }
 
     _forWidget->setCursor(cursorIcon);
 }
 
 const QRectF ImageCropper::Implementation::calculateGeometry(const QRectF& _sourceGeometry,
-    const CursorPosition _cursorPosition, const QPointF& _mouseDelta)
+                                                             const CursorPosition _cursorPosition,
+                                                             const QPointF& _mouseDelta)
 {
     QRectF resultGeometry;
     //
     if (isProportionFixed) {
-        resultGeometry =
-                calculateGeometryWithFixedProportions(
-                    _sourceGeometry, _cursorPosition, _mouseDelta, deltas);
+        resultGeometry = calculateGeometryWithFixedProportions(_sourceGeometry, _cursorPosition,
+                                                               _mouseDelta, deltas);
     } else {
-        resultGeometry =
-                calculateGeometryWithCustomProportions(
-                    _sourceGeometry, _cursorPosition, _mouseDelta);
+        resultGeometry
+            = calculateGeometryWithCustomProportions(_sourceGeometry, _cursorPosition, _mouseDelta);
     }
     // Если пользователь пытается вывернуть область обрезки наизнанку,
     // возвращаем null-прямоугольник
@@ -197,38 +197,37 @@ const QRectF ImageCropper::Implementation::calculateGeometryWithCustomProportion
 {
     QRectF resultGeometry = _sourceGeometry;
     //
-    switch (_cursorPosition)
-    {
-        case CursorPosition::TopLeft:
-            resultGeometry.setLeft(_sourceGeometry.left() + _mouseDelta.x());
-            resultGeometry.setTop(_sourceGeometry.top() + _mouseDelta.y());
-            break;
-        case CursorPosition::TopRight:
-            resultGeometry.setTop(_sourceGeometry.top() + _mouseDelta.y());
-            resultGeometry.setRight(_sourceGeometry.right() + _mouseDelta.x());
-            break;
-        case CursorPosition::BottomLeft:
-            resultGeometry.setBottom(_sourceGeometry.bottom() + _mouseDelta.y());
-            resultGeometry.setLeft(_sourceGeometry.left() + _mouseDelta.x());
-            break;
-        case CursorPosition::BottomRight:
-            resultGeometry.setBottom(_sourceGeometry.bottom() + _mouseDelta.y());
-            resultGeometry.setRight(_sourceGeometry.right() + _mouseDelta.x());
-            break;
-        case CursorPosition::Top:
-            resultGeometry.setTop(_sourceGeometry.top() + _mouseDelta.y());
-            break;
-        case CursorPosition::Bottom:
-            resultGeometry.setBottom(_sourceGeometry.bottom() + _mouseDelta.y());
-            break;
-        case CursorPosition::Left:
-            resultGeometry.setLeft(_sourceGeometry.left() + _mouseDelta.x());
-            break;
-        case CursorPosition::Right:
-            resultGeometry.setRight(_sourceGeometry.right() + _mouseDelta.x());
-            break;
-        default:
-            break;
+    switch (_cursorPosition) {
+    case CursorPosition::TopLeft:
+        resultGeometry.setLeft(_sourceGeometry.left() + _mouseDelta.x());
+        resultGeometry.setTop(_sourceGeometry.top() + _mouseDelta.y());
+        break;
+    case CursorPosition::TopRight:
+        resultGeometry.setTop(_sourceGeometry.top() + _mouseDelta.y());
+        resultGeometry.setRight(_sourceGeometry.right() + _mouseDelta.x());
+        break;
+    case CursorPosition::BottomLeft:
+        resultGeometry.setBottom(_sourceGeometry.bottom() + _mouseDelta.y());
+        resultGeometry.setLeft(_sourceGeometry.left() + _mouseDelta.x());
+        break;
+    case CursorPosition::BottomRight:
+        resultGeometry.setBottom(_sourceGeometry.bottom() + _mouseDelta.y());
+        resultGeometry.setRight(_sourceGeometry.right() + _mouseDelta.x());
+        break;
+    case CursorPosition::Top:
+        resultGeometry.setTop(_sourceGeometry.top() + _mouseDelta.y());
+        break;
+    case CursorPosition::Bottom:
+        resultGeometry.setBottom(_sourceGeometry.bottom() + _mouseDelta.y());
+        break;
+    case CursorPosition::Left:
+        resultGeometry.setLeft(_sourceGeometry.left() + _mouseDelta.x());
+        break;
+    case CursorPosition::Right:
+        resultGeometry.setRight(_sourceGeometry.right() + _mouseDelta.x());
+        break;
+    default:
+        break;
     }
     //
     return resultGeometry;
@@ -240,62 +239,61 @@ const QRectF ImageCropper::Implementation::calculateGeometryWithFixedProportions
 {
     QRectF resultGeometry = _sourceGeometry;
     //
-    switch (_cursorPosition)
-    {
-        case CursorPosition::Left:
+    switch (_cursorPosition) {
+    case CursorPosition::Left:
+        resultGeometry.setTop(_sourceGeometry.top() + _mouseDelta.x() * _deltas.height());
+        resultGeometry.setLeft(_sourceGeometry.left() + _mouseDelta.x());
+        break;
+    case CursorPosition::Right:
+        resultGeometry.setTop(_sourceGeometry.top() - _mouseDelta.x() * _deltas.height());
+        resultGeometry.setRight(_sourceGeometry.right() + _mouseDelta.x());
+        break;
+    case CursorPosition::Top:
+        resultGeometry.setTop(_sourceGeometry.top() + _mouseDelta.y());
+        resultGeometry.setRight(_sourceGeometry.right() - _mouseDelta.y() * _deltas.width());
+        break;
+    case CursorPosition::Bottom:
+        resultGeometry.setBottom(_sourceGeometry.bottom() + _mouseDelta.y());
+        resultGeometry.setRight(_sourceGeometry.right() + _mouseDelta.y() * _deltas.width());
+        break;
+    case CursorPosition::TopLeft:
+        if ((_mouseDelta.x() * _deltas.height()) < (_mouseDelta.y())) {
             resultGeometry.setTop(_sourceGeometry.top() + _mouseDelta.x() * _deltas.height());
             resultGeometry.setLeft(_sourceGeometry.left() + _mouseDelta.x());
-            break;
-        case CursorPosition::Right:
+        } else {
+            resultGeometry.setTop(_sourceGeometry.top() + _mouseDelta.y());
+            resultGeometry.setLeft(_sourceGeometry.left() + _mouseDelta.y() * _deltas.width());
+        }
+        break;
+    case CursorPosition::TopRight:
+        if ((_mouseDelta.x() * _deltas.height() * -1) < (_mouseDelta.y())) {
             resultGeometry.setTop(_sourceGeometry.top() - _mouseDelta.x() * _deltas.height());
             resultGeometry.setRight(_sourceGeometry.right() + _mouseDelta.x());
-            break;
-        case CursorPosition::Top:
+        } else {
             resultGeometry.setTop(_sourceGeometry.top() + _mouseDelta.y());
             resultGeometry.setRight(_sourceGeometry.right() - _mouseDelta.y() * _deltas.width());
-            break;
-        case CursorPosition::Bottom:
+        }
+        break;
+    case CursorPosition::BottomLeft:
+        if ((_mouseDelta.x() * _deltas.height()) < (_mouseDelta.y() * -1)) {
+            resultGeometry.setBottom(_sourceGeometry.bottom() - _mouseDelta.x() * _deltas.height());
+            resultGeometry.setLeft(_sourceGeometry.left() + _mouseDelta.x());
+        } else {
+            resultGeometry.setBottom(_sourceGeometry.bottom() + _mouseDelta.y());
+            resultGeometry.setLeft(_sourceGeometry.left() - _mouseDelta.y() * _deltas.width());
+        }
+        break;
+    case CursorPosition::BottomRight:
+        if ((_mouseDelta.x() * _deltas.height()) > (_mouseDelta.y())) {
+            resultGeometry.setBottom(_sourceGeometry.bottom() + _mouseDelta.x() * _deltas.height());
+            resultGeometry.setRight(_sourceGeometry.right() + _mouseDelta.x());
+        } else {
             resultGeometry.setBottom(_sourceGeometry.bottom() + _mouseDelta.y());
             resultGeometry.setRight(_sourceGeometry.right() + _mouseDelta.y() * _deltas.width());
-            break;
-        case CursorPosition::TopLeft:
-            if ((_mouseDelta.x() * _deltas.height()) < (_mouseDelta.y())) {
-                resultGeometry.setTop(_sourceGeometry.top() + _mouseDelta.x() * _deltas.height());
-                resultGeometry.setLeft(_sourceGeometry.left() + _mouseDelta.x());
-            } else {
-                resultGeometry.setTop(_sourceGeometry.top() + _mouseDelta.y());
-                resultGeometry.setLeft(_sourceGeometry.left() + _mouseDelta.y() * _deltas.width());
-            }
-            break;
-        case CursorPosition::TopRight:
-            if ((_mouseDelta.x() * _deltas.height() * -1) < (_mouseDelta.y())) {
-                resultGeometry.setTop(_sourceGeometry.top() - _mouseDelta.x() * _deltas.height());
-                resultGeometry.setRight(_sourceGeometry.right() + _mouseDelta.x() );
-            } else {
-                resultGeometry.setTop(_sourceGeometry.top() + _mouseDelta.y());
-                resultGeometry.setRight(_sourceGeometry.right() - _mouseDelta.y() * _deltas.width());
-            }
-            break;
-        case CursorPosition::BottomLeft:
-            if ((_mouseDelta.x() * _deltas.height()) < (_mouseDelta.y() * -1)) {
-                resultGeometry.setBottom(_sourceGeometry.bottom() - _mouseDelta.x() * _deltas.height());
-                resultGeometry.setLeft(_sourceGeometry.left() + _mouseDelta.x());
-            } else {
-                resultGeometry.setBottom(_sourceGeometry.bottom() + _mouseDelta.y());
-                resultGeometry.setLeft(_sourceGeometry.left() - _mouseDelta.y() * _deltas.width());
-            }
-            break;
-        case CursorPosition::BottomRight:
-            if ((_mouseDelta.x() * _deltas.height()) > (_mouseDelta.y())) {
-                resultGeometry.setBottom(_sourceGeometry.bottom() + _mouseDelta.x() * _deltas.height());
-                resultGeometry.setRight(_sourceGeometry.right() + _mouseDelta.x());
-            } else {
-                resultGeometry.setBottom(_sourceGeometry.bottom() + _mouseDelta.y());
-                resultGeometry.setRight(_sourceGeometry.right() + _mouseDelta.y() * _deltas.width());
-            }
-            break;
-        default:
-            break;
+        }
+        break;
+    default:
+        break;
     }
     //
     return resultGeometry;
@@ -305,9 +303,9 @@ const QRectF ImageCropper::Implementation::calculateGeometryWithFixedProportions
 // ****
 
 
-ImageCropper::ImageCropper(QWidget* _parent) :
-    Widget(_parent),
-    d(new Implementation)
+ImageCropper::ImageCropper(QWidget* _parent)
+    : Widget(_parent)
+    , d(new Implementation)
 {
     setMouseTracking(true);
 }
@@ -399,20 +397,20 @@ const QPixmap ImageCropper::croppedImage()
     //
     // Определим пропорцию области обрезки по отношению к исходному изображению
     //
-    const qreal xScale = d->sourceImage.width()  / scaledImageSize.width();
+    const qreal xScale = d->sourceImage.width() / scaledImageSize.width();
     const qreal yScale = d->sourceImage.height() / scaledImageSize.height();
 
     //
     // Расчитаем область обрезки с учётом коррекции размеров исходного изображения
     //
-    QRectF realSizeRect(QPointF(d->croppingRect.left() - leftDelta,
-                                d->croppingRect.top() - topDelta),
-                        d->croppingRect.size());
+    QRectF realSizeRect(
+        QPointF(d->croppingRect.left() - leftDelta, d->croppingRect.top() - topDelta),
+        d->croppingRect.size());
     //
     // ... корректируем левый и верхний края
     //
     realSizeRect.setLeft((d->croppingRect.left() - leftDelta) * xScale);
-    realSizeRect.setTop ((d->croppingRect.top() - topDelta) * yScale);
+    realSizeRect.setTop((d->croppingRect.top() - topDelta) * yScale);
     //
     // ... корректируем размер
     //
@@ -453,13 +451,14 @@ void ImageCropper::paintEvent(QPaintEvent* _event)
     //
     // ... подгоним изображение для отображения по размеру виджета
     //
-    const QPixmap scaledImage = d->sourceImage.scaled(size(), Qt::KeepAspectRatio, Qt::FastTransformation);
+    const QPixmap scaledImage
+        = d->sourceImage.scaled(size(), Qt::KeepAspectRatio, Qt::FastTransformation);
     //
     // ... рисуем изображение по центру виджета
     //
     const QPointF imagePos = height() == scaledImage.height()
-                             ? QPointF((width() - scaledImage.width()) / 2, 0)
-                             : QPointF(0, (height() - scaledImage.height()) / 2);
+        ? QPointF((width() - scaledImage.width()) / 2, 0)
+        : QPointF(0, (height() - scaledImage.height()) / 2);
     painter.drawPixmap(imagePos, scaledImage);
 
     //
@@ -523,18 +522,18 @@ void ImageCropper::paintEvent(QPaintEvent* _event)
     //
     QVector<QRectF> points;
     points
-            // левая сторона
-            << QRectF(QPointF(leftXCoord, topYCoord), pointSize)
-            << QRectF(QPointF(leftXCoord, middleYCoord), pointSize)
-            << QRectF(QPointF(leftXCoord, bottomYCoord), pointSize)
-            // центр
-            << QRectF(QPointF(centerXCoord, topYCoord), pointSize)
-            << QRectF(QPointF(centerXCoord, middleYCoord), pointSize)
-            << QRectF(QPointF(centerXCoord, bottomYCoord), pointSize)
-            // правая сторона
-            << QRectF(QPointF(rightXCoord, topYCoord), pointSize)
-            << QRectF(QPointF(rightXCoord, middleYCoord), pointSize)
-            << QRectF(QPointF(rightXCoord, bottomYCoord), pointSize);
+        // левая сторона
+        << QRectF(QPointF(leftXCoord, topYCoord), pointSize)
+        << QRectF(QPointF(leftXCoord, middleYCoord), pointSize)
+        << QRectF(QPointF(leftXCoord, bottomYCoord), pointSize)
+        // центр
+        << QRectF(QPointF(centerXCoord, topYCoord), pointSize)
+        << QRectF(QPointF(centerXCoord, middleYCoord), pointSize)
+        << QRectF(QPointF(centerXCoord, bottomYCoord), pointSize)
+        // правая сторона
+        << QRectF(QPointF(rightXCoord, topYCoord), pointSize)
+        << QRectF(QPointF(rightXCoord, middleYCoord), pointSize)
+        << QRectF(QPointF(rightXCoord, bottomYCoord), pointSize);
     //
     painter.drawRects(points);
     //
@@ -545,13 +544,11 @@ void ImageCropper::paintEvent(QPaintEvent* _event)
         dashPen.setStyle(Qt::DashLine);
         painter.setPen(dashPen);
         // ... вертикальная
-        painter.drawLine(
-                    QPointF(d->croppingRect.center().x(), d->croppingRect.top()),
-                    QPointF(d->croppingRect.center().x(), d->croppingRect.bottom()) );
+        painter.drawLine(QPointF(d->croppingRect.center().x(), d->croppingRect.top()),
+                         QPointF(d->croppingRect.center().x(), d->croppingRect.bottom()));
         // ... горизонтальная
-        painter.drawLine(
-                    QPointF(d->croppingRect.left(), d->croppingRect.center().y()),
-                    QPointF(d->croppingRect.right(), d->croppingRect.center().y()) );
+        painter.drawLine(QPointF(d->croppingRect.left(), d->croppingRect.center().y()),
+                         QPointF(d->croppingRect.right(), d->croppingRect.center().y()));
     }
 }
 
@@ -591,13 +588,15 @@ void ImageCropper::mouseMoveEvent(QMouseEvent* _event)
     if (mousePos.x() < d->startMousePos.x()) {
         correctedMousePos.setX(std::clamp(mousePos.x(), 0.0, d->startMousePos.x()));
     } else {
-        correctedMousePos.setX(std::clamp(mousePos.x(), d->startMousePos.x(), static_cast<qreal>(width())));
+        correctedMousePos.setX(
+            std::clamp(mousePos.x(), d->startMousePos.x(), static_cast<qreal>(width())));
     }
     //
     if (mousePos.y() < d->startMousePos.y()) {
         correctedMousePos.setY(std::clamp(mousePos.y(), 0.0, d->startMousePos.y()));
     } else {
-        correctedMousePos.setY(std::clamp(mousePos.y(), d->startMousePos.y(), static_cast<qreal>(height())));
+        correctedMousePos.setY(
+            std::clamp(mousePos.y(), d->startMousePos.y(), static_cast<qreal>(height())));
     }
 
     //
@@ -612,7 +611,7 @@ void ImageCropper::mouseMoveEvent(QMouseEvent* _event)
     //
     if (d->currentCursorPosition != CursorPosition::Middle) {
         const QRectF newGeometry
-                = d->calculateGeometry(d->lastStaticCroppingRect, d->currentCursorPosition, mouseDelta);
+            = d->calculateGeometry(d->lastStaticCroppingRect, d->currentCursorPosition, mouseDelta);
 
         //
         // ... пользователь пытается вывернуть область обрезки наизнанку

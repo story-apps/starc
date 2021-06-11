@@ -3,8 +3,7 @@
 #include <ui/widgets/widget/widget.h>
 
 
-namespace Ui
-{
+namespace Ui {
 
 class ScreenplayParametersView : public Widget
 {

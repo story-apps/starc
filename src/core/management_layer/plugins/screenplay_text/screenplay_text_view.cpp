@@ -14,10 +14,8 @@
 #include <business_layer/document/screenplay/text/screenplay_text_cursor.h>
 #include <business_layer/templates/screenplay_template.h>
 #include <business_layer/templates/templates_facade.h>
-
 #include <data_layer/storage/settings_storage.h>
 #include <data_layer/storage/storage_facade.h>
-
 #include <ui/design_system/design_system.h>
 #include <ui/widgets/floating_tool_bar/floating_toolbar_animator.h>
 #include <ui/widgets/scroll_bar/scroll_bar.h>
@@ -27,7 +25,6 @@
 #include <ui/widgets/tab_bar/tab_bar.h>
 #include <ui/widgets/text_edit/completer/completer.h>
 #include <ui/widgets/text_edit/scalable_wrapper/scalable_wrapper.h>
-
 #include <utils/helpers/color_helper.h>
 
 #include <QAction>
@@ -36,22 +33,21 @@
 #include <QTimer>
 #include <QVBoxLayout>
 
-namespace Ui
-{
+namespace Ui {
 
 namespace {
-    const int kTypeDataRole = Qt::UserRole + 100;
+const int kTypeDataRole = Qt::UserRole + 100;
 
-    const int kFastFormatTabIndex = 0;
-    const int kCommentsTabIndex = 1;
+const int kFastFormatTabIndex = 0;
+const int kCommentsTabIndex = 1;
 
-    const QString kSettingsKey = "screenplay-text";
-    const QString kScaleFactorKey = kSettingsKey + "/scale-factor";
-    const QString kSidebarStateKey = kSettingsKey + "/sidebar-state";
-    const QString kIsFastFormatPanelVisibleKey = kSettingsKey + "/is-fast-format-panel-visible";
-    const QString kIsCommentsModeEnabledKey = kSettingsKey + "/is-comments-mode-enabled";
-    const QString kSidebarPanelIndexKey = kSettingsKey + "/sidebar-panel-index";
-}
+const QString kSettingsKey = "screenplay-text";
+const QString kScaleFactorKey = kSettingsKey + "/scale-factor";
+const QString kSidebarStateKey = kSettingsKey + "/sidebar-state";
+const QString kIsFastFormatPanelVisibleKey = kSettingsKey + "/is-fast-format-panel-visible";
+const QString kIsCommentsModeEnabledKey = kSettingsKey + "/is-comments-mode-enabled";
+const QString kSidebarPanelIndexKey = kSettingsKey + "/sidebar-panel-index";
+} // namespace
 
 class ScreenplayTextView::Implementation
 {
@@ -74,14 +70,16 @@ public:
     void updateCommentsToolBar();
 
     /**
-     * @brief Обновить видимость боковой панели (показана, если показана хотя бы одна из вложенных панелей)
+     * @brief Обновить видимость боковой панели (показана, если показана хотя бы одна из вложенных
+     * панелей)
      */
     void updateSideBarVisibility(QWidget* _container);
 
     /**
      * @brief Добавить редакторскую заметку для текущего выделения
      */
-    void addReviewMark(const QColor& _textColor, const QColor& _backgroundColor, const QString& _comment);
+    void addReviewMark(const QColor& _textColor, const QColor& _backgroundColor,
+                       const QString& _comment);
 
 
     BusinessLayer::ScreenplayTextCommentsModel* commentsModel = nullptr;
@@ -95,7 +93,8 @@ public:
     BusinessLayer::ScreenplayTextSearchManager* searchManager = nullptr;
     FloatingToolbarAnimator* toolbarAnimation = nullptr;
     QHash<BusinessLayer::ScreenplayParagraphType, QString> typesToDisplayNames;
-    BusinessLayer::ScreenplayParagraphType currentParagraphType = BusinessLayer::ScreenplayParagraphType::Undefined;
+    BusinessLayer::ScreenplayParagraphType currentParagraphType
+        = BusinessLayer::ScreenplayParagraphType::Undefined;
     QStandardItemModel* paragraphTypesModel = nullptr;
 
     ScreenplayTextCommentsToolbar* commentsToolbar = nullptr;
@@ -113,23 +112,23 @@ public:
 };
 
 ScreenplayTextView::Implementation::Implementation(QWidget* _parent)
-    : commentsModel(new BusinessLayer::ScreenplayTextCommentsModel(_parent)),
-      screenplayText(new ScreenplayTextEdit(_parent)),
-      shortcutsManager(screenplayText),
-      scalableWrapper(new ScalableWrapper(screenplayText, _parent)),
-      screenplayTextScrollbarManager(new ScreenplayTextScrollBarManager(scalableWrapper)),
-      toolbar(new ScreenplayTextEditToolbar(scalableWrapper)),
-      searchManager(new BusinessLayer::ScreenplayTextSearchManager(scalableWrapper, screenplayText)),
-      toolbarAnimation(new FloatingToolbarAnimator(_parent)),
-      paragraphTypesModel(new QStandardItemModel(toolbar)),
-      commentsToolbar(new ScreenplayTextCommentsToolbar(_parent)),
-      sidebarShadow(new Shadow(Qt::RightEdge, scalableWrapper)),
-      sidebarWidget(new Widget(_parent)),
-      sidebarTabs(new TabBar(_parent)),
-      sidebarContent(new StackWidget(_parent)),
-      fastFormatWidget(new ScreenplayTextFastFormatWidget(_parent)),
-      commentsView(new ScreenplayTextCommentsView(_parent)),
-      splitter(new Splitter(_parent))
+    : commentsModel(new BusinessLayer::ScreenplayTextCommentsModel(_parent))
+    , screenplayText(new ScreenplayTextEdit(_parent))
+    , shortcutsManager(screenplayText)
+    , scalableWrapper(new ScalableWrapper(screenplayText, _parent))
+    , screenplayTextScrollbarManager(new ScreenplayTextScrollBarManager(scalableWrapper))
+    , toolbar(new ScreenplayTextEditToolbar(scalableWrapper))
+    , searchManager(new BusinessLayer::ScreenplayTextSearchManager(scalableWrapper, screenplayText))
+    , toolbarAnimation(new FloatingToolbarAnimator(_parent))
+    , paragraphTypesModel(new QStandardItemModel(toolbar))
+    , commentsToolbar(new ScreenplayTextCommentsToolbar(_parent))
+    , sidebarShadow(new Shadow(Qt::RightEdge, scalableWrapper))
+    , sidebarWidget(new Widget(_parent))
+    , sidebarTabs(new TabBar(_parent))
+    , sidebarContent(new StackWidget(_parent))
+    , fastFormatWidget(new ScreenplayTextFastFormatWidget(_parent))
+    , commentsView(new ScreenplayTextCommentsView(_parent))
+    , splitter(new Splitter(_parent))
 
 {
     toolbar->setParagraphTypesModel(paragraphTypesModel);
@@ -166,14 +165,14 @@ ScreenplayTextView::Implementation::Implementation(QWidget* _parent)
 
 void ScreenplayTextView::Implementation::updateToolBarUi()
 {
-    toolbar->move(QPointF(Ui::DesignSystem::layout().px24(),
-                          Ui::DesignSystem::layout().px24()).toPoint());
+    toolbar->move(
+        QPointF(Ui::DesignSystem::layout().px24(), Ui::DesignSystem::layout().px24()).toPoint());
     toolbar->setBackgroundColor(Ui::DesignSystem::color().primary());
     toolbar->setTextColor(Ui::DesignSystem::color().onPrimary());
     toolbar->raise();
 
-    searchManager->toolbar()->move(QPointF(Ui::DesignSystem::layout().px24(),
-                                Ui::DesignSystem::layout().px24()).toPoint());
+    searchManager->toolbar()->move(
+        QPointF(Ui::DesignSystem::layout().px24(), Ui::DesignSystem::layout().px24()).toPoint());
     searchManager->toolbar()->setBackgroundColor(Ui::DesignSystem::color().primary());
     searchManager->toolbar()->setTextColor(Ui::DesignSystem::color().onPrimary());
     searchManager->toolbar()->raise();
@@ -207,7 +206,8 @@ void ScreenplayTextView::Implementation::updateToolBarCurrentParagraphTypeName()
 
     for (int itemRow = 0; itemRow < paragraphTypesModel->rowCount(); ++itemRow) {
         const auto item = paragraphTypesModel->item(itemRow);
-        const auto itemType = static_cast<BusinessLayer::ScreenplayParagraphType>(item->data(kTypeDataRole).toInt());
+        const auto itemType = static_cast<BusinessLayer::ScreenplayParagraphType>(
+            item->data(kTypeDataRole).toInt());
         if (itemType == paragraphType) {
             toolbar->setCurrentParagraphType(paragraphTypesModel->index(itemRow, 0));
             fastFormatWidget->setCurrentParagraphType(paragraphTypesModel->index(itemRow, 0));
@@ -218,8 +218,7 @@ void ScreenplayTextView::Implementation::updateToolBarCurrentParagraphTypeName()
 
 void ScreenplayTextView::Implementation::updateCommentsToolBar()
 {
-    if (!toolbar->isCommentsModeEnabled()
-        || !screenplayText->textCursor().hasSelection()) {
+    if (!toolbar->isCommentsModeEnabled() || !screenplayText->textCursor().hasSelection()) {
         commentsToolbar->hideToolbar();
         return;
     }
@@ -228,22 +227,19 @@ void ScreenplayTextView::Implementation::updateCommentsToolBar()
     // Определяем точку на границе страницы, либо если страница не влезает в экран, то с боку экрана
     //
     const int x = (screenplayText->width() - screenplayText->viewport()->width()) / 2
-                  + screenplayText->viewport()->width()
-                  - commentsToolbar->width();
+        + screenplayText->viewport()->width() - commentsToolbar->width();
     const qreal textRight = scalableWrapper->mapFromEditor(QPoint(x, 0)).x();
     const auto cursorRect = screenplayText->cursorRect();
     const auto globalCursorCenter = screenplayText->mapToGlobal(cursorRect.center());
-    const auto localCursorCenter = commentsToolbar->parentWidget()->mapFromGlobal(globalCursorCenter);
+    const auto localCursorCenter
+        = commentsToolbar->parentWidget()->mapFromGlobal(globalCursorCenter);
     //
     // И смещаем панель рецензирования к этой точке
     //
-    commentsToolbar->moveToolbar(
-                QPoint(std::min(scalableWrapper->width()
-                                - commentsToolbar->width()
-                                - Ui::DesignSystem::layout().px24(),
-                                textRight),
-                       localCursorCenter.y()
-                       - (commentsToolbar->height() / 3)));
+    commentsToolbar->moveToolbar(QPoint(std::min(scalableWrapper->width() - commentsToolbar->width()
+                                                     - Ui::DesignSystem::layout().px24(),
+                                                 textRight),
+                                        localCursorCenter.y() - (commentsToolbar->height() / 3)));
 
     //
     // Если панель ещё не была показана, отобразим её
@@ -253,8 +249,8 @@ void ScreenplayTextView::Implementation::updateCommentsToolBar()
 
 void ScreenplayTextView::Implementation::updateSideBarVisibility(QWidget* _container)
 {
-    const bool isSidebarShouldBeVisible = toolbar->isFastFormatPanelVisible()
-                                          || toolbar->isCommentsModeEnabled();
+    const bool isSidebarShouldBeVisible
+        = toolbar->isFastFormatPanelVisible() || toolbar->isCommentsModeEnabled();
     if (sidebarWidget->isVisible() == isSidebarShouldBeVisible) {
         return;
     }
@@ -269,16 +265,20 @@ void ScreenplayTextView::Implementation::updateSideBarVisibility(QWidget* _conta
     }
 }
 
-void ScreenplayTextView::Implementation::addReviewMark(const QColor& _textColor, const QColor& _backgroundColor, const QString& _comment)
+void ScreenplayTextView::Implementation::addReviewMark(const QColor& _textColor,
+                                                       const QColor& _backgroundColor,
+                                                       const QString& _comment)
 {
     //
     // Добавим заметку
     //
-    const auto textColor = _textColor.isValid() ? _textColor : ColorHelper::contrasted(_backgroundColor);
+    const auto textColor
+        = _textColor.isValid() ? _textColor : ColorHelper::contrasted(_backgroundColor);
     screenplayText->addReviewMark(textColor, _backgroundColor, _comment);
 
     //
-    // Снимем выделение, чтобы пользователь получил обратную связь от приложения, что выделение добавлено
+    // Снимем выделение, чтобы пользователь получил обратную связь от приложения, что выделение
+    // добавлено
     //
     BusinessLayer::ScreenplayTextCursor cursor(screenplayText->textCursor());
     const auto selectionInterval = cursor.selectionInterval();
@@ -302,8 +302,8 @@ void ScreenplayTextView::Implementation::addReviewMark(const QColor& _textColor,
 
 
 ScreenplayTextView::ScreenplayTextView(QWidget* _parent)
-    : Widget(_parent),
-      d(new Implementation(this))
+    : Widget(_parent)
+    , d(new Implementation(this))
 {
     setFocusProxy(d->scalableWrapper);
     d->scalableWrapper->installEventFilter(this);
@@ -322,80 +322,92 @@ ScreenplayTextView::ScreenplayTextView(QWidget* _parent)
     layout->setSpacing(0);
     layout->addWidget(d->splitter);
 
-    connect(d->toolbar, &ScreenplayTextEditToolbar::undoPressed, d->screenplayText, &ScreenplayTextEdit::undo);
-    connect(d->toolbar, &ScreenplayTextEditToolbar::redoPressed, d->screenplayText, &ScreenplayTextEdit::redo);
-    connect(d->toolbar, &ScreenplayTextEditToolbar::paragraphTypeChanged, this, [this] (const QModelIndex& _index) {
-        const auto type = static_cast<BusinessLayer::ScreenplayParagraphType>(_index.data(kTypeDataRole).toInt());
-        d->screenplayText->setCurrentParagraphType(type);
-        d->scalableWrapper->setFocus();
-    });
-    connect(d->toolbar, &ScreenplayTextEditToolbar::fastFormatPanelVisibleChanged, this, [this] (bool _visible) {
-        d->sidebarTabs->setTabVisible(kFastFormatTabIndex, _visible);
-        d->fastFormatWidget->setVisible(_visible);
-        if (_visible) {
-            d->sidebarTabs->setCurrentTab(kFastFormatTabIndex);
-            d->sidebarContent->setCurrentWidget(d->fastFormatWidget);
-        }
-        d->updateSideBarVisibility(this);
-    });
-    connect(d->toolbar, &ScreenplayTextEditToolbar::commentsModeEnabledChanged, this, [this] (bool _enabled) {
-        d->sidebarTabs->setTabVisible(kCommentsTabIndex, _enabled);
-        d->commentsView->setVisible(_enabled);
-        if (_enabled) {
-            d->sidebarTabs->setCurrentTab(kCommentsTabIndex);
-            d->sidebarContent->setCurrentWidget(d->commentsView);
-            d->updateCommentsToolBar();
-        }
-        d->updateSideBarVisibility(this);
-    });
+    connect(d->toolbar, &ScreenplayTextEditToolbar::undoPressed, d->screenplayText,
+            &ScreenplayTextEdit::undo);
+    connect(d->toolbar, &ScreenplayTextEditToolbar::redoPressed, d->screenplayText,
+            &ScreenplayTextEdit::redo);
+    connect(d->toolbar, &ScreenplayTextEditToolbar::paragraphTypeChanged, this,
+            [this](const QModelIndex& _index) {
+                const auto type = static_cast<BusinessLayer::ScreenplayParagraphType>(
+                    _index.data(kTypeDataRole).toInt());
+                d->screenplayText->setCurrentParagraphType(type);
+                d->scalableWrapper->setFocus();
+            });
+    connect(d->toolbar, &ScreenplayTextEditToolbar::fastFormatPanelVisibleChanged, this,
+            [this](bool _visible) {
+                d->sidebarTabs->setTabVisible(kFastFormatTabIndex, _visible);
+                d->fastFormatWidget->setVisible(_visible);
+                if (_visible) {
+                    d->sidebarTabs->setCurrentTab(kFastFormatTabIndex);
+                    d->sidebarContent->setCurrentWidget(d->fastFormatWidget);
+                }
+                d->updateSideBarVisibility(this);
+            });
+    connect(d->toolbar, &ScreenplayTextEditToolbar::commentsModeEnabledChanged, this,
+            [this](bool _enabled) {
+                d->sidebarTabs->setTabVisible(kCommentsTabIndex, _enabled);
+                d->commentsView->setVisible(_enabled);
+                if (_enabled) {
+                    d->sidebarTabs->setCurrentTab(kCommentsTabIndex);
+                    d->sidebarContent->setCurrentWidget(d->commentsView);
+                    d->updateCommentsToolBar();
+                }
+                d->updateSideBarVisibility(this);
+            });
     connect(d->toolbar, &ScreenplayTextEditToolbar::searchPressed, this, [this] {
-        d->toolbarAnimation->switchToolbars(d->toolbar->searchIcon(), d->toolbar->searchIconPosition(),
-                                            d->toolbar, d->searchManager->toolbar());
+        d->toolbarAnimation->switchToolbars(d->toolbar->searchIcon(),
+                                            d->toolbar->searchIconPosition(), d->toolbar,
+                                            d->searchManager->toolbar());
     });
     //
-    connect(d->searchManager, &BusinessLayer::ScreenplayTextSearchManager::hideToolbarRequested, this, [this] {
-        d->toolbarAnimation->switchToolbarsBack();
-    });
+    connect(d->searchManager, &BusinessLayer::ScreenplayTextSearchManager::hideToolbarRequested,
+            this, [this] { d->toolbarAnimation->switchToolbarsBack(); });
     //
-    connect(d->commentsToolbar, &ScreenplayTextCommentsToolbar::textColorChangeRequested,
-            this, [this](const QColor& _color) { d->addReviewMark(_color, {}, {}); });
+    connect(d->commentsToolbar, &ScreenplayTextCommentsToolbar::textColorChangeRequested, this,
+            [this](const QColor& _color) { d->addReviewMark(_color, {}, {}); });
     connect(d->commentsToolbar, &ScreenplayTextCommentsToolbar::textBackgoundColorChangeRequested,
             this, [this](const QColor& _color) { d->addReviewMark({}, _color, {}); });
-    connect(d->commentsToolbar, &ScreenplayTextCommentsToolbar::commentAddRequested, this, [this] (const QColor& _color) {
-        d->sidebarTabs->setCurrentTab(kCommentsTabIndex);
-        d->commentsView->showAddCommentView(_color);
-    });
-    connect(d->commentsView, &ScreenplayTextCommentsView::addReviewMarkRequested, this, [this] (const QColor& _color, const QString& _comment) {
-        d->addReviewMark({}, _color, _comment);
-    });
+    connect(d->commentsToolbar, &ScreenplayTextCommentsToolbar::commentAddRequested, this,
+            [this](const QColor& _color) {
+                d->sidebarTabs->setCurrentTab(kCommentsTabIndex);
+                d->commentsView->showAddCommentView(_color);
+            });
+    connect(d->commentsView, &ScreenplayTextCommentsView::addReviewMarkRequested, this,
+            [this](const QColor& _color, const QString& _comment) {
+                d->addReviewMark({}, _color, _comment);
+            });
     connect(d->commentsView, &ScreenplayTextCommentsView::addReviewMarkCommentRequested, this,
-            [this] (const QModelIndex& _index, const QString& _comment) {
-        QSignalBlocker blocker(d->commentsView);
-        d->commentsModel->addComment(_index, _comment);
-    });
-    connect(d->commentsView, &ScreenplayTextCommentsView::commentSelected, this, [this] (const QModelIndex& _index) {
-        const auto positionHint = d->commentsModel->mapToScreenplay(_index);
-        const auto position = d->screenplayText->positionForModelIndex(positionHint.index)
-                              + positionHint.blockPosition;
-        auto cursor = d->screenplayText->textCursor();
-        cursor.setPosition(position);
-        d->screenplayText->ensureCursorVisible(cursor);
-        d->scalableWrapper->setFocus();
-    });
-    connect(d->commentsView, &ScreenplayTextCommentsView::markAsDoneRequested, this, [this] (const QModelIndexList& _indexes) {
-        QSignalBlocker blocker(d->commentsView);
-        d->commentsModel->markAsDone(_indexes);
-    });
-    connect(d->commentsView, &ScreenplayTextCommentsView::markAsUndoneRequested, this, [this] (const QModelIndexList& _indexes) {
-        QSignalBlocker blocker(d->commentsView);
-        d->commentsModel->markAsUndone(_indexes);
-    });
-    connect(d->commentsView, &ScreenplayTextCommentsView::removeRequested, this, [this] (const QModelIndexList& _indexes) {
-        QSignalBlocker blocker(d->commentsView);
-        d->commentsModel->remove(_indexes);
-    });
+            [this](const QModelIndex& _index, const QString& _comment) {
+                QSignalBlocker blocker(d->commentsView);
+                d->commentsModel->addComment(_index, _comment);
+            });
+    connect(d->commentsView, &ScreenplayTextCommentsView::commentSelected, this,
+            [this](const QModelIndex& _index) {
+                const auto positionHint = d->commentsModel->mapToScreenplay(_index);
+                const auto position = d->screenplayText->positionForModelIndex(positionHint.index)
+                    + positionHint.blockPosition;
+                auto cursor = d->screenplayText->textCursor();
+                cursor.setPosition(position);
+                d->screenplayText->ensureCursorVisible(cursor);
+                d->scalableWrapper->setFocus();
+            });
+    connect(d->commentsView, &ScreenplayTextCommentsView::markAsDoneRequested, this,
+            [this](const QModelIndexList& _indexes) {
+                QSignalBlocker blocker(d->commentsView);
+                d->commentsModel->markAsDone(_indexes);
+            });
+    connect(d->commentsView, &ScreenplayTextCommentsView::markAsUndoneRequested, this,
+            [this](const QModelIndexList& _indexes) {
+                QSignalBlocker blocker(d->commentsView);
+                d->commentsModel->markAsUndone(_indexes);
+            });
+    connect(d->commentsView, &ScreenplayTextCommentsView::removeRequested, this,
+            [this](const QModelIndexList& _indexes) {
+                QSignalBlocker blocker(d->commentsView);
+                d->commentsModel->remove(_indexes);
+            });
     //
-    connect(d->sidebarTabs, &TabBar::currentIndexChanged, this, [this] (int _currentIndex) {
+    connect(d->sidebarTabs, &TabBar::currentIndexChanged, this, [this](int _currentIndex) {
         if (_currentIndex == kFastFormatTabIndex) {
             d->sidebarContent->setCurrentWidget(d->fastFormatWidget);
         } else {
@@ -403,21 +415,21 @@ ScreenplayTextView::ScreenplayTextView(QWidget* _parent)
         }
     });
     //
-    connect(d->fastFormatWidget, &ScreenplayTextFastFormatWidget::paragraphTypeChanged, this, [this](const QModelIndex& _index) {
-        const auto type = static_cast<BusinessLayer::ScreenplayParagraphType>(_index.data(kTypeDataRole).toInt());
-        d->screenplayText->setCurrentParagraphType(type);
-        d->scalableWrapper->setFocus();
-    });
+    connect(d->fastFormatWidget, &ScreenplayTextFastFormatWidget::paragraphTypeChanged, this,
+            [this](const QModelIndex& _index) {
+                const auto type = static_cast<BusinessLayer::ScreenplayParagraphType>(
+                    _index.data(kTypeDataRole).toInt());
+                d->screenplayText->setCurrentParagraphType(type);
+                d->scalableWrapper->setFocus();
+            });
     //
-    connect(d->scalableWrapper->verticalScrollBar(), &QScrollBar::valueChanged, this, [this] {
-        d->updateCommentsToolBar();
-    });
-    connect(d->scalableWrapper->horizontalScrollBar(), &QScrollBar::valueChanged, this, [this] {
-        d->updateCommentsToolBar();
-    });
-    connect(d->scalableWrapper, &ScalableWrapper::zoomRangeChanged, this, [this] {
-        d->updateCommentsToolBar();
-    }, Qt::QueuedConnection);
+    connect(d->scalableWrapper->verticalScrollBar(), &QScrollBar::valueChanged, this,
+            [this] { d->updateCommentsToolBar(); });
+    connect(d->scalableWrapper->horizontalScrollBar(), &QScrollBar::valueChanged, this,
+            [this] { d->updateCommentsToolBar(); });
+    connect(
+        d->scalableWrapper, &ScalableWrapper::zoomRangeChanged, this,
+        [this] { d->updateCommentsToolBar(); }, Qt::QueuedConnection);
     //
     auto handleCursorPositionChanged = [this] {
         //
@@ -433,14 +445,16 @@ ScreenplayTextView::ScreenplayTextView(QWidget* _parent)
         // Если необходимо выберем соответствующий комментарий
         //
         const auto positionInBlock = d->screenplayText->textCursor().positionInBlock();
-        const auto commentModelIndex = d->commentsModel->mapFromScreenplay(screenplayModelIndex, positionInBlock);
+        const auto commentModelIndex
+            = d->commentsModel->mapFromScreenplay(screenplayModelIndex, positionInBlock);
         d->commentsView->setCurrentIndex(commentModelIndex);
     };
-    connect(d->screenplayText, &ScreenplayTextEdit::paragraphTypeChanged, this, handleCursorPositionChanged);
-    connect(d->screenplayText, &ScreenplayTextEdit::cursorPositionChanged, this, handleCursorPositionChanged);
-    connect(d->screenplayText, &ScreenplayTextEdit::selectionChanged, this, [this] {
-        d->updateCommentsToolBar();
-    });
+    connect(d->screenplayText, &ScreenplayTextEdit::paragraphTypeChanged, this,
+            handleCursorPositionChanged);
+    connect(d->screenplayText, &ScreenplayTextEdit::cursorPositionChanged, this,
+            handleCursorPositionChanged);
+    connect(d->screenplayText, &ScreenplayTextEdit::selectionChanged, this,
+            [this] { d->updateCommentsToolBar(); });
 
     updateTranslations();
     designSystemChangeEvent(nullptr);
@@ -457,18 +471,12 @@ void ScreenplayTextView::reconfigure(const QStringList& _changedSettingsKeys)
     using namespace BusinessLayer;
     const auto usedTemplate = BusinessLayer::TemplatesFacade::screenplayTemplate();
     const QVector<ScreenplayParagraphType> types
-            = { ScreenplayParagraphType::SceneHeading,
-                ScreenplayParagraphType::SceneCharacters,
-                ScreenplayParagraphType::Action,
-                ScreenplayParagraphType::Character,
-                ScreenplayParagraphType::Parenthetical,
-                ScreenplayParagraphType::Dialogue,
-                ScreenplayParagraphType::Lyrics,
-                ScreenplayParagraphType::Shot,
-                ScreenplayParagraphType::Transition,
-                ScreenplayParagraphType::InlineNote,
-                ScreenplayParagraphType::UnformattedText,
-                ScreenplayParagraphType::FolderHeader };
+        = { ScreenplayParagraphType::SceneHeading,    ScreenplayParagraphType::SceneCharacters,
+            ScreenplayParagraphType::Action,          ScreenplayParagraphType::Character,
+            ScreenplayParagraphType::Parenthetical,   ScreenplayParagraphType::Dialogue,
+            ScreenplayParagraphType::Lyrics,          ScreenplayParagraphType::Shot,
+            ScreenplayParagraphType::Transition,      ScreenplayParagraphType::InlineNote,
+            ScreenplayParagraphType::UnformattedText, ScreenplayParagraphType::FolderHeader };
     for (const auto type : types) {
         if (!usedTemplate.blockStyle(type).isActive()) {
             continue;
@@ -480,45 +488,55 @@ void ScreenplayTextView::reconfigure(const QStringList& _changedSettingsKeys)
         d->paragraphTypesModel->appendRow(typeItem);
     }
 
-    auto settingsValue = [] (const QString& _key) {
+    auto settingsValue = [](const QString& _key) {
         return DataStorageLayer::StorageFacade::settingsStorage()->value(
-                    _key, DataStorageLayer::SettingsStorage::SettingsPlace::Application);
+            _key, DataStorageLayer::SettingsStorage::SettingsPlace::Application);
     };
 
     const bool useSpellChecker
-            = settingsValue(DataStorageLayer::kApplicationUseSpellCheckerKey).toBool();
+        = settingsValue(DataStorageLayer::kApplicationUseSpellCheckerKey).toBool();
     d->screenplayText->setUseSpellChecker(useSpellChecker);
     if (useSpellChecker) {
         const QString languageCode
-                = settingsValue(DataStorageLayer::kApplicationSpellCheckerLanguageKey).toString();
+            = settingsValue(DataStorageLayer::kApplicationSpellCheckerLanguageKey).toString();
         d->screenplayText->setSpellCheckLanguage(languageCode);
     }
 
     d->shortcutsManager.reconfigure();
 
     if (_changedSettingsKeys.isEmpty()
-        || _changedSettingsKeys.contains(DataStorageLayer::kComponentsScreenplayEditorDefaultTemplateKey)) {
+        || _changedSettingsKeys.contains(
+            DataStorageLayer::kComponentsScreenplayEditorDefaultTemplateKey)) {
         TemplatesFacade::setDefaultScreenplayTemplate(
-                    settingsValue(DataStorageLayer::kComponentsScreenplayEditorDefaultTemplateKey).toString());
+            settingsValue(DataStorageLayer::kComponentsScreenplayEditorDefaultTemplateKey)
+                .toString());
         d->screenplayText->reinit();
     }
 
     if (_changedSettingsKeys.isEmpty()
-        || _changedSettingsKeys.contains(DataStorageLayer::kComponentsScreenplayEditorShowSceneNumbersKey)) {
+        || _changedSettingsKeys.contains(
+            DataStorageLayer::kComponentsScreenplayEditorShowSceneNumbersKey)) {
         d->screenplayText->setShowSceneNumber(
-            settingsValue(DataStorageLayer::kComponentsScreenplayEditorShowSceneNumbersKey).toBool(),
-            settingsValue(DataStorageLayer::kComponentsScreenplayEditorShowSceneNumbersOnRightKey).toBool(),
-            settingsValue(DataStorageLayer::kComponentsScreenplayEditorShowSceneNumberOnLeftKey).toBool());
+            settingsValue(DataStorageLayer::kComponentsScreenplayEditorShowSceneNumbersKey)
+                .toBool(),
+            settingsValue(DataStorageLayer::kComponentsScreenplayEditorShowSceneNumbersOnRightKey)
+                .toBool(),
+            settingsValue(DataStorageLayer::kComponentsScreenplayEditorShowSceneNumberOnLeftKey)
+                .toBool());
     }
     if (_changedSettingsKeys.isEmpty()
-        || _changedSettingsKeys.contains(DataStorageLayer::kComponentsScreenplayEditorShowDialogueNumberKey)) {
+        || _changedSettingsKeys.contains(
+            DataStorageLayer::kComponentsScreenplayEditorShowDialogueNumberKey)) {
         d->screenplayText->setShowDialogueNumber(
-            settingsValue(DataStorageLayer::kComponentsScreenplayEditorShowDialogueNumberKey).toBool());
+            settingsValue(DataStorageLayer::kComponentsScreenplayEditorShowDialogueNumberKey)
+                .toBool());
     }
     if (_changedSettingsKeys.isEmpty()
-        || _changedSettingsKeys.contains(DataStorageLayer::kComponentsScreenplayEditorHighlightCurrentLineKey)) {
+        || _changedSettingsKeys.contains(
+            DataStorageLayer::kComponentsScreenplayEditorHighlightCurrentLineKey)) {
         d->screenplayText->setHighlightCurrentLine(
-            settingsValue(DataStorageLayer::kComponentsScreenplayEditorHighlightCurrentLineKey).toBool());
+            settingsValue(DataStorageLayer::kComponentsScreenplayEditorHighlightCurrentLineKey)
+                .toBool());
     }
 }
 
@@ -527,26 +545,30 @@ void ScreenplayTextView::loadViewSettings()
     using namespace DataStorageLayer;
 
     const auto scaleFactor
-            = StorageFacade::settingsStorage()->value(
-                  kScaleFactorKey, SettingsStorage::SettingsPlace::Application, 1.0).toReal();
+        = StorageFacade::settingsStorage()
+              ->value(kScaleFactorKey, SettingsStorage::SettingsPlace::Application, 1.0)
+              .toReal();
     d->scalableWrapper->setZoomRange(scaleFactor);
 
     const auto isCommentsModeEnabled
-            = StorageFacade::settingsStorage()->value(
-                  kIsCommentsModeEnabledKey, SettingsStorage::SettingsPlace::Application, false).toBool();
+        = StorageFacade::settingsStorage()
+              ->value(kIsCommentsModeEnabledKey, SettingsStorage::SettingsPlace::Application, false)
+              .toBool();
     d->toolbar->setCommentsModeEnabled(isCommentsModeEnabled);
     const auto isFastFormatPanelVisible
-            = StorageFacade::settingsStorage()->value(
-                  kIsFastFormatPanelVisibleKey, SettingsStorage::SettingsPlace::Application, false).toBool();
+        = StorageFacade::settingsStorage()
+              ->value(kIsFastFormatPanelVisibleKey, SettingsStorage::SettingsPlace::Application,
+                      false)
+              .toBool();
     d->toolbar->setFastFormatPanelVisible(isFastFormatPanelVisible);
     const auto sidebarPanelIndex
-            = StorageFacade::settingsStorage()->value(
-                  kSidebarPanelIndexKey, SettingsStorage::SettingsPlace::Application, 0).toInt();
+        = StorageFacade::settingsStorage()
+              ->value(kSidebarPanelIndexKey, SettingsStorage::SettingsPlace::Application, 0)
+              .toInt();
     d->sidebarTabs->setCurrentTab(sidebarPanelIndex);
 
-    const auto sidebarState
-            = StorageFacade::settingsStorage()->value(
-                  kSidebarStateKey, SettingsStorage::SettingsPlace::Application);
+    const auto sidebarState = StorageFacade::settingsStorage()->value(
+        kSidebarStateKey, SettingsStorage::SettingsPlace::Application);
     if (sidebarState.isValid()) {
         d->isSidebarShownFirstTime = false;
         d->splitter->restoreState(sidebarState.toByteArray());
@@ -557,18 +579,20 @@ void ScreenplayTextView::saveViewSettings()
 {
     using namespace DataStorageLayer;
 
-    StorageFacade::settingsStorage()->setValue(
-        kScaleFactorKey, d->scalableWrapper->zoomRange(), SettingsStorage::SettingsPlace::Application);
+    StorageFacade::settingsStorage()->setValue(kScaleFactorKey, d->scalableWrapper->zoomRange(),
+                                               SettingsStorage::SettingsPlace::Application);
 
-    StorageFacade::settingsStorage()->setValue(
-        kIsFastFormatPanelVisibleKey, d->toolbar->isFastFormatPanelVisible(), SettingsStorage::SettingsPlace::Application);
-    StorageFacade::settingsStorage()->setValue(
-        kIsCommentsModeEnabledKey, d->toolbar->isCommentsModeEnabled(), SettingsStorage::SettingsPlace::Application);
-    StorageFacade::settingsStorage()->setValue(
-        kSidebarPanelIndexKey, d->sidebarTabs->currentTab(), SettingsStorage::SettingsPlace::Application);
+    StorageFacade::settingsStorage()->setValue(kIsFastFormatPanelVisibleKey,
+                                               d->toolbar->isFastFormatPanelVisible(),
+                                               SettingsStorage::SettingsPlace::Application);
+    StorageFacade::settingsStorage()->setValue(kIsCommentsModeEnabledKey,
+                                               d->toolbar->isCommentsModeEnabled(),
+                                               SettingsStorage::SettingsPlace::Application);
+    StorageFacade::settingsStorage()->setValue(kSidebarPanelIndexKey, d->sidebarTabs->currentTab(),
+                                               SettingsStorage::SettingsPlace::Application);
 
-    StorageFacade::settingsStorage()->setValue(
-        kSidebarStateKey, d->splitter->saveState(), SettingsStorage::SettingsPlace::Application);
+    StorageFacade::settingsStorage()->setValue(kSidebarStateKey, d->splitter->saveState(),
+                                               SettingsStorage::SettingsPlace::Application);
 }
 
 void ScreenplayTextView::setModel(BusinessLayer::ScreenplayTextModel* _model)
@@ -607,8 +631,7 @@ bool ScreenplayTextView::eventFilter(QObject* _target, QEvent* _event)
     if (_target == d->scalableWrapper) {
         if (_event->type() == QEvent::Resize) {
             QTimer::singleShot(0, this, [this] { d->updateCommentsToolBar(); });
-        } else if (_event->type() == QEvent::KeyPress
-                   && d->searchManager->toolbar()->isVisible()
+        } else if (_event->type() == QEvent::KeyPress && d->searchManager->toolbar()->isVisible()
                    && d->scalableWrapper->hasFocus()) {
             auto keyEvent = static_cast<QKeyEvent*>(_event);
             if (keyEvent->key() == Qt::Key_Escape) {
@@ -624,8 +647,8 @@ void ScreenplayTextView::resizeEvent(QResizeEvent* _event)
 {
     Widget::resizeEvent(_event);
 
-    const auto toolbarPosition = QPointF(Ui::DesignSystem::layout().px24(),
-                                         Ui::DesignSystem::layout().px24()).toPoint();
+    const auto toolbarPosition
+        = QPointF(Ui::DesignSystem::layout().px24(), Ui::DesignSystem::layout().px24()).toPoint();
     d->toolbar->move(toolbarPosition);
     d->searchManager->toolbar()->move(toolbarPosition);
     d->updateCommentsToolBar();
@@ -633,19 +656,19 @@ void ScreenplayTextView::resizeEvent(QResizeEvent* _event)
 
 void ScreenplayTextView::updateTranslations()
 {
-    using namespace  BusinessLayer;
-    d->typesToDisplayNames = {{ ScreenplayParagraphType::SceneHeading, tr("Scene heading") },
-                              { ScreenplayParagraphType::SceneCharacters, tr("Scene characters") },
-                              { ScreenplayParagraphType::Action, tr("Action") },
-                              { ScreenplayParagraphType::Character, tr("Character") },
-                              { ScreenplayParagraphType::Parenthetical, tr("Parenthetical") },
-                              { ScreenplayParagraphType::Dialogue, tr("Dialogue") },
-                              { ScreenplayParagraphType::Lyrics, tr("Lyrics") },
-                              { ScreenplayParagraphType::Shot, tr("Shot") },
-                              { ScreenplayParagraphType::Transition, tr("Transition") },
-                              { ScreenplayParagraphType::InlineNote, tr("Inline note") },
-                              { ScreenplayParagraphType::UnformattedText, tr("Unformatted text") },
-                              { ScreenplayParagraphType::FolderHeader, tr("Folder") }};
+    using namespace BusinessLayer;
+    d->typesToDisplayNames = { { ScreenplayParagraphType::SceneHeading, tr("Scene heading") },
+                               { ScreenplayParagraphType::SceneCharacters, tr("Scene characters") },
+                               { ScreenplayParagraphType::Action, tr("Action") },
+                               { ScreenplayParagraphType::Character, tr("Character") },
+                               { ScreenplayParagraphType::Parenthetical, tr("Parenthetical") },
+                               { ScreenplayParagraphType::Dialogue, tr("Dialogue") },
+                               { ScreenplayParagraphType::Lyrics, tr("Lyrics") },
+                               { ScreenplayParagraphType::Shot, tr("Shot") },
+                               { ScreenplayParagraphType::Transition, tr("Transition") },
+                               { ScreenplayParagraphType::InlineNote, tr("Inline note") },
+                               { ScreenplayParagraphType::UnformattedText, tr("Unformatted text") },
+                               { ScreenplayParagraphType::FolderHeader, tr("Folder") } };
     d->sidebarTabs->setTabName(kFastFormatTabIndex, tr("Formatting"));
     d->sidebarTabs->setTabName(kCommentsTabIndex, tr("Comments"));
 }

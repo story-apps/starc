@@ -3,8 +3,7 @@
 #include <ui/widgets/stack_widget/stack_widget.h>
 
 
-namespace Ui
-{
+namespace Ui {
 
 /**
  * @brief Представление проекта

@@ -6,9 +6,7 @@
 #include <business_layer/model/screenplay/text/screenplay_text_model_text_item.h>
 #include <business_layer/model/screenplay/text/screenplay_text_model_xml.h>
 #include <business_layer/templates/screenplay_template.h>
-
 #include <domain/document_object.h>
-
 #include <utils/helpers/text_helper.h>
 
 #include <QApplication>
@@ -22,8 +20,7 @@
 #include <QXmlStreamWriter>
 
 
-namespace BusinessLayer
-{
+namespace BusinessLayer {
 
 namespace {
 
@@ -55,7 +52,8 @@ enum Type {
 /**
  * @brief Получить простой текст из Html
  */
-QString htmlToPlain(const QString& _html) {
+QString htmlToPlain(const QString& _html)
+{
     QTextDocument document;
     document.setHtml(_html);
     return document.toPlainText().replace("\n", "\n\n");
@@ -64,7 +62,8 @@ QString htmlToPlain(const QString& _html) {
 /**
  * @brief Считать данные о персонаже
  */
-QString readCharacter(const QString& _characterName, const QString& _kitCharacterXml) {
+QString readCharacter(const QString& _characterName, const QString& _kitCharacterXml)
+{
     QDomDocument kitDocument;
     kitDocument.setContent(_kitCharacterXml);
     const auto kitCharacter = kitDocument.firstChildElement();
@@ -73,10 +72,11 @@ QString readCharacter(const QString& _characterName, const QString& _kitCharacte
     QXmlStreamWriter writer(&characterXml);
     writer.writeStartDocument();
     writer.writeStartElement(xml::kDocumentTag);
-    writer.writeAttribute(xml::kMimeTypeAttribute, Domain::mimeTypeFor(Domain::DocumentObjectType::Character));
+    writer.writeAttribute(xml::kMimeTypeAttribute,
+                          Domain::mimeTypeFor(Domain::DocumentObjectType::Character));
     writer.writeAttribute(xml::kVersionAttribute, "1.0");
 
-    auto writeTag = [&writer] (const QString& _tag, const QString& _content) {
+    auto writeTag = [&writer](const QString& _tag, const QString& _content) {
         writer.writeStartElement(_tag);
         writer.writeCDATA(_content);
         writer.writeEndElement();
@@ -99,15 +99,17 @@ QString readCharacter(const QString& _characterName, const QString& _kitCharacte
 /**
  * @brief Считать данные о локации
  */
-QString readLocation(const QString& _locationName, const QString& _kitLocationXml) {
+QString readLocation(const QString& _locationName, const QString& _kitLocationXml)
+{
     QString locationXml;
     QXmlStreamWriter writer(&locationXml);
     writer.writeStartDocument();
     writer.writeStartElement(xml::kDocumentTag);
-    writer.writeAttribute(xml::kMimeTypeAttribute, Domain::mimeTypeFor(Domain::DocumentObjectType::Location));
+    writer.writeAttribute(xml::kMimeTypeAttribute,
+                          Domain::mimeTypeFor(Domain::DocumentObjectType::Location));
     writer.writeAttribute(xml::kVersionAttribute, "1.0");
 
-    auto writeTag = [&writer] (const QString& _tag, const QString& _content) {
+    auto writeTag = [&writer](const QString& _tag, const QString& _content) {
         writer.writeStartElement(_tag);
         writer.writeCDATA(_content);
         writer.writeEndElement();
@@ -126,7 +128,8 @@ QString readLocation(const QString& _locationName, const QString& _kitLocationXm
 /**
  * @brief Сформировать документ сценария из xml сценария КИТа
  */
-AbstractScreenplayImporter::Screenplay readScreenplay(const QString& _kitScreenplayXml) {
+AbstractScreenplayImporter::Screenplay readScreenplay(const QString& _kitScreenplayXml)
+{
     AbstractScreenplayImporter::Screenplay screenplay;
 
     //
@@ -140,7 +143,8 @@ AbstractScreenplayImporter::Screenplay readScreenplay(const QString& _kitScreenp
     QXmlStreamWriter writer(&screenplay.text);
     writer.writeStartDocument();
     writer.writeStartElement(xml::kDocumentTag);
-    writer.writeAttribute(xml::kMimeTypeAttribute, Domain::mimeTypeFor(Domain::DocumentObjectType::ScreenplayText));
+    writer.writeAttribute(xml::kMimeTypeAttribute,
+                          Domain::mimeTypeFor(Domain::DocumentObjectType::ScreenplayText));
     writer.writeAttribute(xml::kVersionAttribute, "1.0");
 
     //
@@ -219,11 +223,14 @@ AbstractScreenplayImporter::Screenplay readScreenplay(const QString& _kitScreenp
                         reviewMark.isDone = reviewNode.attribute("done") == "true";
                         auto reviewCommentNode = reviewNode.firstChildElement("review_comment");
                         while (!reviewCommentNode.isNull()) {
-                            reviewMark.comments.append({ reviewCommentNode.attribute("author"),
-                                                         reviewCommentNode.attribute("date"),
-                                                         TextHelper::toHtmlEscaped(reviewCommentNode.attribute("comment")) });
+                            reviewMark.comments.append(
+                                { reviewCommentNode.attribute("author"),
+                                  reviewCommentNode.attribute("date"),
+                                  TextHelper::toHtmlEscaped(
+                                      reviewCommentNode.attribute("comment")) });
 
-                            reviewCommentNode = reviewCommentNode.nextSiblingElement("review_comment");
+                            reviewCommentNode
+                                = reviewCommentNode.nextSiblingElement("review_comment");
                         }
                         reviewMarks.append(reviewMark);
 
@@ -254,12 +261,10 @@ AbstractScreenplayImporter::Screenplay readScreenplay(const QString& _kitScreenp
             // Корректируем при необходимости
             //
             if (blockType == ScreenplayParagraphType::Parenthetical) {
-                if (!paragraphText.isEmpty()
-                    && paragraphText.front() == "(") {
+                if (!paragraphText.isEmpty() && paragraphText.front() == "(") {
                     paragraphText.remove(0, 1);
                 }
-                if (!paragraphText.isEmpty()
-                    && paragraphText.back() == ")") {
+                if (!paragraphText.isEmpty() && paragraphText.back() == ")") {
                     paragraphText.chop(1);
                 }
             }
@@ -269,48 +274,49 @@ AbstractScreenplayImporter::Screenplay readScreenplay(const QString& _kitScreenp
         // Формируем блок сценария
         //
         switch (blockType) {
-            case ScreenplayParagraphType::FolderHeader: {
-                if (alreadyInScene) {
-                    writer.writeEndElement(); // контент предыдущей сцены
-                    writer.writeEndElement(); // предыдущая сцена
-                }
-
-                alreadyInScene = false; // вышли из сцены
-
-                writer.writeStartElement(xml::kFolderTag);
-                writer.writeAttribute(xml::kUuidAttribute, QUuid::createUuid().toString());
-                writer.writeStartElement(xml::kContentTag);
-                break;
+        case ScreenplayParagraphType::FolderHeader: {
+            if (alreadyInScene) {
+                writer.writeEndElement(); // контент предыдущей сцены
+                writer.writeEndElement(); // предыдущая сцена
             }
 
-            case ScreenplayParagraphType::FolderFooter: {
-                if (alreadyInScene) {
-                    writer.writeEndElement(); // контент предыдущей сцены
-                    writer.writeEndElement(); // предыдущая сцена
-                }
+            alreadyInScene = false; // вышли из сцены
 
-                alreadyInScene = false; // вышли из сцены
+            writer.writeStartElement(xml::kFolderTag);
+            writer.writeAttribute(xml::kUuidAttribute, QUuid::createUuid().toString());
+            writer.writeStartElement(xml::kContentTag);
+            break;
+        }
 
-                writer.writeEndElement(); // контент текущей папки
-                writer.writeEndElement(); // текущая папка
-                break;
+        case ScreenplayParagraphType::FolderFooter: {
+            if (alreadyInScene) {
+                writer.writeEndElement(); // контент предыдущей сцены
+                writer.writeEndElement(); // предыдущая сцена
             }
 
-            case ScreenplayParagraphType::SceneHeading: {
-                if (alreadyInScene) {
-                    writer.writeEndElement(); // контент предыдущей сцены
-                    writer.writeEndElement(); // предыдущая сцена
-                }
+            alreadyInScene = false; // вышли из сцены
 
-                alreadyInScene = true; // вошли в новую сцену
+            writer.writeEndElement(); // контент текущей папки
+            writer.writeEndElement(); // текущая папка
+            break;
+        }
 
-                writer.writeStartElement(xml::kSceneTag);
-                writer.writeAttribute(xml::kUuidAttribute, QUuid::createUuid().toString());
-                writer.writeStartElement(xml::kContentTag);
-                break;
+        case ScreenplayParagraphType::SceneHeading: {
+            if (alreadyInScene) {
+                writer.writeEndElement(); // контент предыдущей сцены
+                writer.writeEndElement(); // предыдущая сцена
             }
 
-            default: break;
+            alreadyInScene = true; // вошли в новую сцену
+
+            writer.writeStartElement(xml::kSceneTag);
+            writer.writeAttribute(xml::kUuidAttribute, QUuid::createUuid().toString());
+            writer.writeStartElement(xml::kContentTag);
+            break;
+        }
+
+        default:
+            break;
         }
         writer.writeStartElement(toString(blockType));
         writer.writeStartElement(xml::kValueTag);
@@ -325,7 +331,8 @@ AbstractScreenplayImporter::Screenplay readScreenplay(const QString& _kitScreenp
                 writer.writeStartElement(xml::kReviewMarkTag);
                 writer.writeAttribute(xml::kFromAttribute, QString::number(reviewMark.from));
                 writer.writeAttribute(xml::kLengthAttribute, QString::number(reviewMark.length));
-                writer.writeAttribute(xml::kBackgroundColorAttribute, reviewMark.backgroundColor.name());
+                writer.writeAttribute(xml::kBackgroundColorAttribute,
+                                      reviewMark.backgroundColor.name());
                 for (const auto& comment : std::as_const(reviewMark.comments)) {
                     writer.writeStartElement(xml::kCommentTag);
                     writer.writeAttribute(xml::kAuthorAttribute, comment.author);
@@ -342,7 +349,7 @@ AbstractScreenplayImporter::Screenplay readScreenplay(const QString& _kitScreenp
         //
         if (!formats.isEmpty()) {
             writer.writeStartElement(xml::kFormatsTag);
-            for (const auto& format : std::as_const(formats)){
+            for (const auto& format : std::as_const(formats)) {
                 writer.writeStartElement(xml::kFormatTag);
                 //
                 // Данные пользовательского форматирования
@@ -351,7 +358,8 @@ AbstractScreenplayImporter::Screenplay readScreenplay(const QString& _kitScreenp
                 writer.writeAttribute(xml::kLengthAttribute, QString::number(format.length));
                 writer.writeAttribute(xml::kBoldAttribute, format.isBold ? "true" : "false");
                 writer.writeAttribute(xml::kItalicAttribute, format.isItalic ? "true" : "false");
-                writer.writeAttribute(xml::kUnderlineAttribute, format.isUnderline ? "true" : "false");
+                writer.writeAttribute(xml::kUnderlineAttribute,
+                                      format.isUnderline ? "true" : "false");
                 //
                 writer.writeEndElement(); // format
             }
@@ -371,7 +379,8 @@ AbstractScreenplayImporter::Screenplay readScreenplay(const QString& _kitScreenp
 
 } // namespace
 
-AbstractScreenplayImporter::Documents KitScenaristImporter::importDocuments(const ScreenplayImportOptions& _options) const
+AbstractScreenplayImporter::Documents KitScenaristImporter::importDocuments(
+    const ScreenplayImportOptions& _options) const
 {
     Documents result;
 
@@ -384,13 +393,15 @@ AbstractScreenplayImporter::Documents KitScenaristImporter::importDocuments(cons
             //
             if (_options.importCharacters) {
                 QSqlQuery charactersQuery(database);
-                charactersQuery.prepare("SELECT name, description FROM research WHERE type = ? ORDER by sort_order");
+                charactersQuery.prepare(
+                    "SELECT name, description FROM research WHERE type = ? ORDER by sort_order");
                 charactersQuery.addBindValue(Character);
                 charactersQuery.exec();
                 while (charactersQuery.next()) {
                     const auto name = charactersQuery.value("name").toString();
-                    const auto content = readCharacter(name, charactersQuery.value("description").toString());
-                    result.characters.append({name, content});
+                    const auto content
+                        = readCharacter(name, charactersQuery.value("description").toString());
+                    result.characters.append({ name, content });
                 }
             }
 
@@ -404,8 +415,9 @@ AbstractScreenplayImporter::Documents KitScenaristImporter::importDocuments(cons
                 locationsQuery.exec();
                 while (locationsQuery.next()) {
                     const auto name = locationsQuery.value("name").toString();
-                    const auto content = readLocation(name, locationsQuery.value("description").toString());
-                    result.locations.append({name, content});
+                    const auto content
+                        = readLocation(name, locationsQuery.value("description").toString());
+                    result.locations.append({ name, content });
                 }
             }
         }
@@ -415,7 +427,8 @@ AbstractScreenplayImporter::Documents KitScenaristImporter::importDocuments(cons
     return result;
 }
 
-QVector<AbstractScreenplayImporter::Screenplay> KitScenaristImporter::importScreenplays(const ScreenplayImportOptions& _options) const
+QVector<AbstractScreenplayImporter::Screenplay> KitScenaristImporter::importScreenplays(
+    const ScreenplayImportOptions& _options) const
 {
     QVector<Screenplay> result;
 
@@ -457,17 +470,19 @@ QVector<AbstractScreenplayImporter::Screenplay> KitScenaristImporter::importScre
                 query.exec("SELECT text FROM scenario WHERE is_draft = 1");
                 query.next();
                 const auto kitScreenplayXml = query.record().value("text").toString();
-                const auto defaultKitScreenplay = "<?xml version=\"1.0\"?>\n"
-                                                  "<scenario version=\"1.0\">\n"
-                                                  "<scene_heading uuid=\"{000000-0000000-000000}\">\n"
-                                                  "<v><![CDATA[]]></v>\n"
-                                                  "</scene_heading>\n"
-                                                  "</scenario>\n";
+                const auto defaultKitScreenplay
+                    = "<?xml version=\"1.0\"?>\n"
+                      "<scenario version=\"1.0\">\n"
+                      "<scene_heading uuid=\"{000000-0000000-000000}\">\n"
+                      "<v><![CDATA[]]></v>\n"
+                      "</scene_heading>\n"
+                      "</scenario>\n";
                 if (kitScreenplayXml != defaultKitScreenplay) {
                     auto screenplay = readScreenplay(kitScreenplayXml);
-                    screenplay.name = QString("%1 (%2)").arg(name,
-                                         //: Draft screenplay imported from KIT Scenarist file
-                                         QApplication::translate("BusinessLayer::KitScenaristImporter", "draft"));
+                    screenplay.name = QString("%1 (%2)").arg(
+                        name,
+                        //: Draft screenplay imported from KIT Scenarist file
+                        QApplication::translate("BusinessLayer::KitScenaristImporter", "draft"));
                     result.append(screenplay);
                 }
             }

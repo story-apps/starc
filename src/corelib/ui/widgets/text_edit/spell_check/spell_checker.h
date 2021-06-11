@@ -1,9 +1,9 @@
 #pragma once
 
-#include <corelib_global.h>
-
 #include <QHash>
 #include <QScopedPointer>
+
+#include <corelib_global.h>
 
 class Hunspell;
 class QStringList;

@@ -1,8 +1,8 @@
 #pragma once
 
-#include <corelib_global.h>
-
 #include <QtGlobal>
+
+#include <corelib_global.h>
 
 class QByteArray;
 class QColor;
@@ -55,7 +55,8 @@ public:
     /**
      * @brief Сделать аватар из заданного текста заданного размера
      */
-    static QPixmap makeAvatar(const QString& _text, const QFont& _font, const QSize& _size, const QColor& _color);
+    static QPixmap makeAvatar(const QString& _text, const QFont& _font, const QSize& _size,
+                              const QColor& _color);
 
     /**
      * @brief Сделать аватар из заданной картинки
@@ -65,17 +66,18 @@ public:
     /**
      * @brief Поместить заданное изображение в круг заданного размера и цвета
      */
-    static QPixmap makeAvatar(const QPixmap& _pixmap, const QSize& _size, const QColor& _backgroundColor);
+    static QPixmap makeAvatar(const QPixmap& _pixmap, const QSize& _size,
+                              const QColor& _backgroundColor);
 
     /**
      * @brief Получить изображение тени для заданного изображения и параметров
      */
     static QPixmap dropShadow(const QPixmap& _sourcePixmap, const QMarginsF& _shadowMargins,
-        qreal _blurRadius, const QColor& _color, bool _useCache = false);
+                              qreal _blurRadius, const QColor& _color, bool _useCache = false);
 
     /**
      * @brief Нарисовать изображение в заданной области со скруглёнными краями
      */
     static void drawRoundedImage(QPainter& _painter, const QRectF& _rect, const QPixmap& _image,
-        qreal _roundingRadius, int _notRoundedEdge = 0);
+                                 qreal _roundingRadius, int _notRoundedEdge = 0);
 };

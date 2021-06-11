@@ -6,12 +6,11 @@
 #include <QObject>
 
 namespace Ui {
-    enum class ApplicationTheme;
+enum class ApplicationTheme;
 }
 
 
-namespace ManagementLayer
-{
+namespace ManagementLayer {
 
 /**
  * @brief Менеджер экрана настроек
@@ -61,7 +60,8 @@ signals:
 
 protected:
     /**
-     * @brief Реализуем фильтр на событие смены языка и дизайн системы, чтобы обновить значения в представлении
+     * @brief Реализуем фильтр на событие смены языка и дизайн системы, чтобы обновить значения в
+     * представлении
      */
     bool eventFilter(QObject* _watched, QEvent* _event) override;
 

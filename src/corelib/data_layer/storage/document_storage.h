@@ -5,17 +5,16 @@
 class QByteArray;
 class QUuid;
 
-template <typename T>
+template<typename T>
 class QVector;
 
 namespace Domain {
-    class DocumentObject;
-    enum class DocumentObjectType;
-}
+class DocumentObject;
+enum class DocumentObjectType;
+} // namespace Domain
 
 
-namespace DataStorageLayer
-{
+namespace DataStorageLayer {
 
 /**
  * @brief Хранилище документов

@@ -3,7 +3,6 @@
 #include "screenplay_text_edit.h"
 
 #include <business_layer/templates/screenplay_template.h>
-
 #include <data_layer/storage/settings_storage.h>
 #include <data_layer/storage/storage_facade.h>
 
@@ -13,8 +12,7 @@
 using BusinessLayer::ScreenplayParagraphType;
 
 
-namespace Ui
-{
+namespace Ui {
 
 class ScreenplayTextEditShortcutsManager::Implementation
 {
@@ -51,7 +49,8 @@ ScreenplayTextEditShortcutsManager::Implementation::Implementation(ScreenplayTex
 {
 }
 
-void ScreenplayTextEditShortcutsManager::Implementation::createOrUpdateShortcut(ScreenplayParagraphType _forBlockType)
+void ScreenplayTextEditShortcutsManager::Implementation::createOrUpdateShortcut(
+    ScreenplayParagraphType _forBlockType)
 {
     if (shortcutsContext == nullptr) {
         return;
@@ -59,11 +58,11 @@ void ScreenplayTextEditShortcutsManager::Implementation::createOrUpdateShortcut(
 
     const auto blockType = static_cast<ScreenplayParagraphType>(_forBlockType);
     const QString typeShortName = BusinessLayer::toString(blockType);
-    const QString keySequenceText =
-            DataStorageLayer::StorageFacade::settingsStorage()->value(
-                QString("screenplay-editor/shortcuts/%1").arg(typeShortName),
-                DataStorageLayer::SettingsStorage::SettingsPlace::Application
-                ).toString();
+    const QString keySequenceText
+        = DataStorageLayer::StorageFacade::settingsStorage()
+              ->value(QString("screenplay-editor/shortcuts/%1").arg(typeShortName),
+                      DataStorageLayer::SettingsStorage::SettingsPlace::Application)
+              .toString();
     const QKeySequence keySequence(keySequenceText);
 
     if (paragraphTypeToShortcut.contains(_forBlockType)) {
@@ -79,8 +78,8 @@ void ScreenplayTextEditShortcutsManager::Implementation::createOrUpdateShortcut(
 
 
 ScreenplayTextEditShortcutsManager::ScreenplayTextEditShortcutsManager(ScreenplayTextEdit* _parent)
-    : QObject(_parent),
-      d(new Implementation(_parent))
+    : QObject(_parent)
+    , d(new Implementation(_parent))
 {
     Q_ASSERT(_parent);
 }
@@ -117,12 +116,12 @@ void ScreenplayTextEditShortcutsManager::setShortcutsContext(QWidget* _context)
     //
     QSignalMapper* mapper = new QSignalMapper(this);
     for (auto shortcutIter = d->paragraphTypeToShortcut.begin();
-         shortcutIter != d->paragraphTypeToShortcut.end();
-         ++shortcutIter) {
-        connect(shortcutIter.value(), &QShortcut::activated, mapper, qOverload<>(&QSignalMapper::map));
+         shortcutIter != d->paragraphTypeToShortcut.end(); ++shortcutIter) {
+        connect(shortcutIter.value(), &QShortcut::activated, mapper,
+                qOverload<>(&QSignalMapper::map));
         mapper->setMapping(shortcutIter.value(), static_cast<int>(shortcutIter.key()));
     }
-    connect(mapper, &QSignalMapper::mappedInt, this, [this] (int _value) {
+    connect(mapper, &QSignalMapper::mappedInt, this, [this](int _value) {
         d->screenplayEditor->setCurrentParagraphType(static_cast<ScreenplayParagraphType>(_value));
     });
 }
@@ -143,7 +142,9 @@ QString ScreenplayTextEditShortcutsManager::shortcut(ScreenplayParagraphType _fo
         return {};
     }
 
-    return d->paragraphTypeToShortcut.value(_forBlockType)->key().toString(QKeySequence::NativeText);
+    return d->paragraphTypeToShortcut.value(_forBlockType)
+        ->key()
+        .toString(QKeySequence::NativeText);
 }
 
 } // namespace Ui

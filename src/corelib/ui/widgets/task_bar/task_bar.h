@@ -15,7 +15,7 @@ public:
      * @brief Зарегистрировать панель уведомлений в заданном виджете
      */
     static void registerTaskBar(QWidget* _parent, const QColor& _backgroundColor,
-        const QColor& _textColor, const QColor& _barColor);
+                                const QColor& _textColor, const QColor& _barColor);
 
     /**
      * @brief Добавить процесс в список активных процессов
@@ -28,7 +28,8 @@ public:
     static void setTaskTitle(const QString& _taskId, const QString& _title);
 
     /**
-     * @brief Задать прогресс выполнения процесса с заданным идентификатором в интервале [0.0, 100.0]
+     * @brief Задать прогресс выполнения процесса с заданным идентификатором в интервале [0.0,
+     * 100.0]
      */
     static void setTaskProgress(const QString& _taskId, qreal _progress);
 

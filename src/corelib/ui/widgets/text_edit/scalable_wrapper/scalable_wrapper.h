@@ -1,8 +1,8 @@
 #pragma once
 
-#include <corelib_global.h>
-
 #include <QGraphicsView>
+
+#include <corelib_global.h>
 
 class QGestureEvent;
 class PageTextEdit;

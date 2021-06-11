@@ -1,17 +1,16 @@
 #pragma once
 
-#include <corelib_global.h>
-
 #include <QHash>
 #include <QPageSize>
 #include <QTextFormat>
+
+#include <corelib_global.h>
 
 class QTextBlock;
 class QXmlStreamAttributes;
 
 
-namespace BusinessLayer
-{
+namespace BusinessLayer {
 
 /**
  * @brief Типы параграфов в текстовом документ
@@ -62,12 +61,12 @@ public:
         //
         // Свойства редакторских заметок
         //
-        PropertyIsReviewMark,    //!< Формат является редакторской правкой
-        PropertyIsHighlight,     //!< Является ли правка аналогом выделения цветом из ворда
-        PropertyIsDone,          //!< Правка помечена как выполненная
-        PropertyComments,        //!< Список комментариев к правке
+        PropertyIsReviewMark, //!< Формат является редакторской правкой
+        PropertyIsHighlight, //!< Является ли правка аналогом выделения цветом из ворда
+        PropertyIsDone, //!< Правка помечена как выполненная
+        PropertyComments, //!< Список комментариев к правке
         PropertyCommentsAuthors, //!< Список авторов комментариев
-        PropertyCommentsDates,   //!< Список дат комментариев
+        PropertyCommentsDates, //!< Список дат комментариев
     };
 
     /**

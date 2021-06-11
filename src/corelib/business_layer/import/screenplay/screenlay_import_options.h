@@ -1,18 +1,16 @@
 #pragma once
 
-#include <corelib_global.h>
-
 #include <QString>
 
+#include <corelib_global.h>
 
-namespace BusinessLayer
-{
+
+namespace BusinessLayer {
 
 /**
  * @brief Опции импорта
  */
-struct CORE_LIBRARY_EXPORT ScreenplayImportOptions
-{
+struct CORE_LIBRARY_EXPORT ScreenplayImportOptions {
     /**
      * @brief Путь файла для импорта
      */

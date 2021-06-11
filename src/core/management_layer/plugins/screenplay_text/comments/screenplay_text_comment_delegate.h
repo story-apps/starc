@@ -3,8 +3,7 @@
 #include <QStyledItemDelegate>
 
 
-namespace Ui
-{
+namespace Ui {
 
 /**
  * @brief Делегат для отрисовки комментариев
@@ -24,7 +23,8 @@ public:
     /**
      * @brief Реализуем собственную отрисовку
      */
-    void paint(QPainter* _painter, const QStyleOptionViewItem& _option, const QModelIndex& _index) const override;
+    void paint(QPainter* _painter, const QStyleOptionViewItem& _option,
+               const QModelIndex& _index) const override;
     QSize sizeHint(const QStyleOptionViewItem& _option, const QModelIndex& _index) const override;
 
 private:

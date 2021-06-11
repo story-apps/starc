@@ -8,8 +8,7 @@
 #include <QGridLayout>
 
 
-namespace Ui
-{
+namespace Ui {
 
 class CoverDialog::Implementation
 {
@@ -24,11 +23,11 @@ public:
 };
 
 CoverDialog::Implementation::Implementation(QWidget* _parent)
-    : imageCropper(new ImageCropper(_parent)),
-      imageCroppingNote(new Body1Label(_parent)),
-      buttonsLayout(new QHBoxLayout),
-      cancelButton(new Button(_parent)),
-      selectButton(new Button(_parent))
+    : imageCropper(new ImageCropper(_parent))
+    , imageCroppingNote(new Body1Label(_parent))
+    , buttonsLayout(new QHBoxLayout)
+    , cancelButton(new Button(_parent))
+    , selectButton(new Button(_parent))
 {
     imageCropper->setProportion({ 3.0, 4.0 });
     imageCropper->setProportionFixed(true);
@@ -45,8 +44,8 @@ CoverDialog::Implementation::Implementation(QWidget* _parent)
 
 
 CoverDialog::CoverDialog(QWidget* _parent)
-    : AbstractDialog(_parent),
-      d(new Implementation(this))
+    : AbstractDialog(_parent)
+    , d(new Implementation(this))
 {
     contentsLayout()->setContentsMargins({});
     contentsLayout()->setSpacing(0);
@@ -99,23 +98,20 @@ void CoverDialog::designSystemChangeEvent(DesignSystemChangeEvent* _event)
 
     d->imageCroppingNote->setTextColor(Ui::DesignSystem::color().onBackground());
     d->imageCroppingNote->setBackgroundColor(Ui::DesignSystem::color().background());
-    d->imageCroppingNote->setContentsMargins(
-                QMarginsF(Ui::DesignSystem::layout().px24(),
-                          Ui::DesignSystem::layout().px12(),
-                          Ui::DesignSystem::layout().px24(),
-                          0.0)
-                .toMargins());
+    d->imageCroppingNote->setContentsMargins(QMarginsF(Ui::DesignSystem::layout().px24(),
+                                                       Ui::DesignSystem::layout().px12(),
+                                                       Ui::DesignSystem::layout().px24(), 0.0)
+                                                 .toMargins());
 
-    for (auto button : { d->cancelButton,
-                         d->selectButton }) {
+    for (auto button : { d->cancelButton, d->selectButton }) {
         button->setBackgroundColor(Ui::DesignSystem::color().secondary());
         button->setTextColor(Ui::DesignSystem::color().secondary());
     }
 
-    d->buttonsLayout->setContentsMargins(QMarginsF(Ui::DesignSystem::layout().px12(),
-                                                   Ui::DesignSystem::layout().px12(),
-                                                   Ui::DesignSystem::layout().px16(),
-                                                   Ui::DesignSystem::layout().px8()).toMargins());
+    d->buttonsLayout->setContentsMargins(
+        QMarginsF(Ui::DesignSystem::layout().px12(), Ui::DesignSystem::layout().px12(),
+                  Ui::DesignSystem::layout().px16(), Ui::DesignSystem::layout().px8())
+            .toMargins());
 }
 
 } // namespace Ui

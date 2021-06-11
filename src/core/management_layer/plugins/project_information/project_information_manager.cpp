@@ -9,8 +9,7 @@
 #include <QFileDialog>
 
 
-namespace ManagementLayer
-{
+namespace ManagementLayer {
 
 class ProjectInformationManager::Implementation
 {
@@ -55,12 +54,13 @@ Ui::ProjectInformationView* ProjectInformationManager::Implementation::createVie
 
 
 ProjectInformationManager::ProjectInformationManager(QObject* _parent)
-    : QObject(_parent),
-      d(new Implementation)
+    : QObject(_parent)
+    , d(new Implementation)
 {
     connect(d->view, &Ui::ProjectInformationView::selectCoverPressed, this, [this] {
-        const QString coverPath = QFileDialog::getOpenFileName(d->view, tr("Choose cover"), {},
-                                        QString("%1 (*.png *.jpeg *.jpg *.bmp *.tiff *.tif *.gif)").arg(tr("Images")));
+        const QString coverPath = QFileDialog::getOpenFileName(
+            d->view, tr("Choose cover"), {},
+            QString("%1 (*.png *.jpeg *.jpg *.bmp *.tiff *.tif *.gif)").arg(tr("Images")));
         if (coverPath.isEmpty()) {
             return;
         }
@@ -74,7 +74,8 @@ ProjectInformationManager::ProjectInformationManager(QObject* _parent)
         dlg->setCover(cover);
         dlg->showDialog();
         connect(dlg, &Ui::CoverDialog::disappeared, dlg, &Ui::CoverDialog::deleteLater);
-        connect(dlg, &Ui::CoverDialog::coverSelected, d->model, &BusinessLayer::ProjectInformationModel::setCover);
+        connect(dlg, &Ui::CoverDialog::coverSelected, d->model,
+                &BusinessLayer::ProjectInformationModel::setCover);
     });
 }
 
@@ -102,16 +103,16 @@ void ProjectInformationManager::setModel(BusinessLayer::AbstractModel* _model)
         d->view->setLogline(d->model->logline());
         d->view->setCover(d->model->cover());
 
-        connect(d->model, &BusinessLayer::ProjectInformationModel::nameChanged,
-                d->view, &Ui::ProjectInformationView::setName);
-        connect(d->model, &BusinessLayer::ProjectInformationModel::loglineChanged,
-                d->view, &Ui::ProjectInformationView::setLogline);
-        connect(d->model, &BusinessLayer::ProjectInformationModel::coverChanged,
-                d->view, &Ui::ProjectInformationView::setCover);
-        connect(d->view, &Ui::ProjectInformationView::nameChanged,
-                d->model, &BusinessLayer::ProjectInformationModel::setName);
-        connect(d->view, &Ui::ProjectInformationView::loglineChanged,
-                d->model, &BusinessLayer::ProjectInformationModel::setLogline);
+        connect(d->model, &BusinessLayer::ProjectInformationModel::nameChanged, d->view,
+                &Ui::ProjectInformationView::setName);
+        connect(d->model, &BusinessLayer::ProjectInformationModel::loglineChanged, d->view,
+                &Ui::ProjectInformationView::setLogline);
+        connect(d->model, &BusinessLayer::ProjectInformationModel::coverChanged, d->view,
+                &Ui::ProjectInformationView::setCover);
+        connect(d->view, &Ui::ProjectInformationView::nameChanged, d->model,
+                &BusinessLayer::ProjectInformationModel::setName);
+        connect(d->view, &Ui::ProjectInformationView::loglineChanged, d->model,
+                &BusinessLayer::ProjectInformationModel::setLogline);
     }
 }
 

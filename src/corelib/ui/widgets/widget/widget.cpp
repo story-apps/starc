@@ -18,9 +18,9 @@ public:
 // ****
 
 
-Widget::Widget(QWidget *_parent)
-    : QWidget(_parent),
-      d(new Implementation)
+Widget::Widget(QWidget* _parent)
+    : QWidget(_parent)
+    , d(new Implementation)
 {
     setAutoFillBackground(false);
     setAttribute(Qt::WA_NoSystemBackground);
@@ -74,30 +74,30 @@ void Widget::setVisible(bool _visible)
 bool Widget::event(QEvent* _event)
 {
     switch (static_cast<int>(_event->type())) {
-        case static_cast<int>(EventType::DesignSystemChangeEvent): {
-            DesignSystemChangeEvent* event = static_cast<DesignSystemChangeEvent*>(_event);
-            designSystemChangeEvent(event);
-            return false;
-        }
+    case static_cast<int>(EventType::DesignSystemChangeEvent): {
+        DesignSystemChangeEvent* event = static_cast<DesignSystemChangeEvent*>(_event);
+        designSystemChangeEvent(event);
+        return false;
+    }
 
-        default: {
-            return QWidget::event(_event);
-        }
+    default: {
+        return QWidget::event(_event);
+    }
     }
 }
 
 void Widget::changeEvent(QEvent* _event)
 {
     switch (_event->type()) {
-        case QEvent::LanguageChange: {
-            updateTranslations();
-            break;
-        }
+    case QEvent::LanguageChange: {
+        updateTranslations();
+        break;
+    }
 
-        default: {
-            QWidget::changeEvent(_event);
-            break;
-        }
+    default: {
+        QWidget::changeEvent(_event);
+        break;
+    }
     }
 }
 

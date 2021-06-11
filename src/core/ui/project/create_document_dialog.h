@@ -4,11 +4,10 @@
 
 
 namespace Domain {
-    enum class DocumentObjectType;
+enum class DocumentObjectType;
 }
 
-namespace Ui
-{
+namespace Ui {
 
 /**
  * @brief Диалог создания нового документа в проекте

@@ -7,8 +7,7 @@
 class QXmlStreamReader;
 
 
-namespace BusinessLayer
-{
+namespace BusinessLayer {
 
 /**
  * @brief Класс элементов глав модели текста
@@ -77,7 +76,8 @@ public:
      * @brief Определяем интерфейс для получения XML блока
      */
     QByteArray toXml() const override;
-    QByteArray toXml(TextModelItem* _from, int _fromPosition, TextModelItem* _to, int _toPosition, bool _clearUuid) const;
+    QByteArray toXml(TextModelItem* _from, int _fromPosition, TextModelItem* _to, int _toPosition,
+                     bool _clearUuid) const;
     QByteArray xmlHeader(bool _clearUuid = false) const;
 
     /**

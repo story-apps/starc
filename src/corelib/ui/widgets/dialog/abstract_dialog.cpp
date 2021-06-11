@@ -3,14 +3,13 @@
 #include "dialog_content.h"
 
 #include <ui/design_system/design_system.h>
-
 #include <ui/widgets/button/button.h>
 #include <ui/widgets/label/label.h>
 
 #include <QApplication>
 #include <QGridLayout>
-#include <QPainter>
 #include <QPaintEvent>
+#include <QPainter>
 #include <QTimer>
 #include <QVariantAnimation>
 
@@ -44,9 +43,9 @@ public:
 };
 
 AbstractDialog::Implementation::Implementation(QWidget* _parent)
-    : content(new DialogContent(_parent)),
-      title(new H6Label(_parent)),
-      contentsLayout(new QGridLayout)
+    : content(new DialogContent(_parent))
+    , title(new H6Label(_parent))
+    , contentsLayout(new QGridLayout)
 {
     title->hide();
 
@@ -94,8 +93,8 @@ void AbstractDialog::Implementation::animateHide(const QPoint& _pos)
 
 
 AbstractDialog::AbstractDialog(QWidget* _parent)
-    : Widget(_parent),
-      d(new Implementation(this))
+    : Widget(_parent)
+    , d(new Implementation(this))
 {
     Q_ASSERT(_parent);
 
@@ -204,12 +203,10 @@ QGridLayout* AbstractDialog::contentsLayout() const
 
 bool AbstractDialog::eventFilter(QObject* _watched, QEvent* _event)
 {
-    if (_event->type() == QEvent::Resize
-        && _watched == parentWidget()) {
+    if (_event->type() == QEvent::Resize && _watched == parentWidget()) {
         auto resizeEvent = static_cast<QResizeEvent*>(_event);
         resize(resizeEvent->size());
-    } else if (_event->type() == QEvent::FocusOut
-               && _watched == lastFocusableWidget()
+    } else if (_event->type() == QEvent::FocusOut && _watched == lastFocusableWidget()
                && (QApplication::focusWidget() == nullptr
                    || !findChildren<QWidget*>().contains(QApplication::focusWidget()))) {
         focusedWidgetAfterShow()->setFocus();
@@ -222,14 +219,11 @@ bool AbstractDialog::event(QEvent* _event)
 {
     if (_event->type() == QEvent::KeyPress) {
         const auto keyEvent = static_cast<QKeyEvent*>(_event);
-        if (d->acceptButton != nullptr
-            && d->acceptButton->isEnabled()
-            && (keyEvent->key() == Qt::Key_Enter
-                || keyEvent->key() == Qt::Key_Return)) {
+        if (d->acceptButton != nullptr && d->acceptButton->isEnabled()
+            && (keyEvent->key() == Qt::Key_Enter || keyEvent->key() == Qt::Key_Return)) {
             d->acceptButton->click();
             return true;
-        } else if (d->rejectButton != nullptr
-                   && d->rejectButton->isEnabled()
+        } else if (d->rejectButton != nullptr && d->rejectButton->isEnabled()
                    && keyEvent->key() == Qt::Key_Escape) {
             d->rejectButton->click();
             return true;
@@ -264,8 +258,7 @@ void AbstractDialog::mousePressEvent(QMouseEvent* _event)
     //
     if (!d->title->rect().contains(d->title->mapFromGlobal(_event->globalPos()))
         && !d->content->rect().contains(d->content->mapFromGlobal(_event->globalPos()))) {
-        if (d->rejectButton != nullptr
-            && d->rejectButton->isEnabled()) {
+        if (d->rejectButton != nullptr && d->rejectButton->isEnabled()) {
             d->rejectButton->click();
         }
     }

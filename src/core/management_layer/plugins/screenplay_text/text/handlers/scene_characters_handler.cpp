@@ -6,7 +6,6 @@
 #include <business_layer/model/screenplay/text/screenplay_text_block_parser.h>
 #include <business_layer/templates/screenplay_template.h>
 #include <business_layer/templates/templates_facade.h>
-
 #include <utils/helpers/text_helper.h>
 
 #include <QKeyEvent>
@@ -19,133 +18,132 @@ using BusinessLayer::ScreenplayParagraphType;
 using Ui::ScreenplayTextEdit;
 
 
-namespace KeyProcessingLayer
-{
+namespace KeyProcessingLayer {
 
 SceneCharactersHandler::SceneCharactersHandler(ScreenplayTextEdit* _editor)
-    : StandardKeyHandler(_editor),
-      m_filteredCharactersModel(new QStringListModel(_editor))
+    : StandardKeyHandler(_editor)
+    , m_filteredCharactersModel(new QStringListModel(_editor))
 {
 }
 
 void SceneCharactersHandler::handleEnter(QKeyEvent*)
 {
-	//
-	// Получим необходимые значения
-	//
-	// ... курсор в текущем положении
-	QTextCursor cursor = editor()->textCursor();
-	// ... блок текста в котором находится курсор
-	QTextBlock currentBlock = cursor.block();
-	// ... текст до курсора
-	QString cursorBackwardText = currentBlock.text().left(cursor.positionInBlock());
-	// ... текст после курсора
-	QString cursorForwardText = currentBlock.text().mid(cursor.positionInBlock());
-	// ... префикс и постфикс стиля
+    //
+    // Получим необходимые значения
+    //
+    // ... курсор в текущем положении
+    QTextCursor cursor = editor()->textCursor();
+    // ... блок текста в котором находится курсор
+    QTextBlock currentBlock = cursor.block();
+    // ... текст до курсора
+    QString cursorBackwardText = currentBlock.text().left(cursor.positionInBlock());
+    // ... текст после курсора
+    QString cursorForwardText = currentBlock.text().mid(cursor.positionInBlock());
+    // ... префикс и постфикс стиля
     const auto style = BusinessLayer::TemplatesFacade::screenplayTemplate().blockStyle(
-                           ScreenplayParagraphType::SceneCharacters);
-	QString stylePrefix = style.prefix();
-	QString stylePostfix = style.postfix();
+        ScreenplayParagraphType::SceneCharacters);
+    QString stylePrefix = style.prefix();
+    QString stylePostfix = style.postfix();
 
-	//
-	// Обработка
-	//
-	if (editor()->isCompleterVisible()) {
-		//! Если открыт подстановщик
+    //
+    // Обработка
+    //
+    if (editor()->isCompleterVisible()) {
+        //! Если открыт подстановщик
 
-		//
-		// Вставить выбранный вариант
-		//
-		editor()->applyCompletion();
-	} else {
-		//! Подстановщик закрыт
+        //
+        // Вставить выбранный вариант
+        //
+        editor()->applyCompletion();
+    } else {
+        //! Подстановщик закрыт
 
-		if (cursor.hasSelection()) {
-			//! Есть выделение
+        if (cursor.hasSelection()) {
+            //! Есть выделение
 
             //
             // Удаляем всё, но оставляем стилем блока текущий
             //
             editor()->addParagraph(ScreenplayParagraphType::SceneCharacters);
-		} else {
-			//! Нет выделения
+        } else {
+            //! Нет выделения
 
-			if ((cursorBackwardText.isEmpty() && cursorForwardText.isEmpty())
-				|| (cursorBackwardText + cursorForwardText == stylePrefix + stylePostfix)) {
-				//! Текст пуст
+            if ((cursorBackwardText.isEmpty() && cursorForwardText.isEmpty())
+                || (cursorBackwardText + cursorForwardText == stylePrefix + stylePostfix)) {
+                //! Текст пуст
 
-				//
-				// Cменить стиль на описание действия
-				//
-                editor()->setCurrentParagraphType(changeForEnter(ScreenplayParagraphType::SceneCharacters));
-			} else {
-				//! Текст не пуст
+                //
+                // Cменить стиль на описание действия
+                //
+                editor()->setCurrentParagraphType(
+                    changeForEnter(ScreenplayParagraphType::SceneCharacters));
+            } else {
+                //! Текст не пуст
 
-				//
-				// Сохраним персонажей
-				//
-				storeCharacters();
+                //
+                // Сохраним персонажей
+                //
+                storeCharacters();
 
-				if (cursorBackwardText.isEmpty()
-					|| cursorBackwardText == stylePrefix) {
-					//! В начале блока
+                if (cursorBackwardText.isEmpty() || cursorBackwardText == stylePrefix) {
+                    //! В начале блока
 
-					//
-					// Ни чего не делаем
-					//
-				} else if (cursorForwardText.isEmpty()
-						   || cursorForwardText == stylePostfix) {
-					//! В конце блока
+                    //
+                    // Ни чего не делаем
+                    //
+                } else if (cursorForwardText.isEmpty() || cursorForwardText == stylePostfix) {
+                    //! В конце блока
 
-					//
-					// Перейдём к блоку действия
-					//
-					cursor.movePosition(QTextCursor::EndOfBlock);
-					editor()->setTextCursor(cursor);
+                    //
+                    // Перейдём к блоку действия
+                    //
+                    cursor.movePosition(QTextCursor::EndOfBlock);
+                    editor()->setTextCursor(cursor);
                     editor()->addParagraph(jumpForEnter(ScreenplayParagraphType::SceneCharacters));
-				} else {
-					//! Внутри блока
+                } else {
+                    //! Внутри блока
 
-					//
-					// Переместим обрамление в правильное место
-					//
-					cursor.movePosition(QTextCursor::EndOfBlock);
-					if (cursorForwardText.endsWith(stylePostfix)) {
-						for (int deleteReplays = stylePostfix.length(); deleteReplays > 0; --deleteReplays) {
-							cursor.deletePreviousChar();
-						}
-					}
-					cursor = editor()->textCursor();
-					cursor.insertText(stylePostfix);
+                    //
+                    // Переместим обрамление в правильное место
+                    //
+                    cursor.movePosition(QTextCursor::EndOfBlock);
+                    if (cursorForwardText.endsWith(stylePostfix)) {
+                        for (int deleteReplays = stylePostfix.length(); deleteReplays > 0;
+                             --deleteReplays) {
+                            cursor.deletePreviousChar();
+                        }
+                    }
+                    cursor = editor()->textCursor();
+                    cursor.insertText(stylePostfix);
 
-					//
-					// Перейдём к блоку действия
-					//
-					editor()->setTextCursor(cursor);
+                    //
+                    // Перейдём к блоку действия
+                    //
+                    editor()->setTextCursor(cursor);
                     editor()->addParagraph(ScreenplayParagraphType::Action);
-				}
-			}
-		}
-	}
+                }
+            }
+        }
+    }
 }
 
 void SceneCharactersHandler::handleTab(QKeyEvent* _event)
 {
-	handleEnter(_event);
+    handleEnter(_event);
 }
 
 void SceneCharactersHandler::handleOther(QKeyEvent*)
 {
-	//
-	// Получим необходимые значения
-	//
-	// ... курсор в текущем положении
-	QTextCursor cursor = editor()->textCursor();
-	// ... блок текста в котором находится курсор
-	QTextBlock currentBlock = cursor.block();
-	// ... текст блока
-	QString currentBlockText = currentBlock.text();
-	// ... текст до курсора
+    //
+    // Получим необходимые значения
+    //
+    // ... курсор в текущем положении
+    QTextCursor cursor = editor()->textCursor();
+    // ... блок текста в котором находится курсор
+    QTextBlock currentBlock = cursor.block();
+    // ... текст блока
+    QString currentBlockText = currentBlock.text();
+    // ... текст до курсора
     QString cursorBackwardText = currentBlockText.left(cursor.positionInBlock());
 
     //
@@ -176,7 +174,8 @@ void SceneCharactersHandler::handleInput(QInputMethodEvent* _event)
     complete(currentBlockText, cursorBackwardText);
 }
 
-void SceneCharactersHandler::complete(const QString& _currentBlockText, const QString& _cursorBackwardText)
+void SceneCharactersHandler::complete(const QString& _currentBlockText,
+                                      const QString& _cursorBackwardText)
 {
     QString cursorBackwardTextToComma = _cursorBackwardText;
     if (!cursorBackwardTextToComma.split(", ").isEmpty()) {
@@ -184,10 +183,9 @@ void SceneCharactersHandler::complete(const QString& _currentBlockText, const QS
     }
     // ... уберём префикс
     const auto style = BusinessLayer::TemplatesFacade::screenplayTemplate().blockStyle(
-                           ScreenplayParagraphType::SceneCharacters);
+        ScreenplayParagraphType::SceneCharacters);
     QString stylePrefix = style.prefix();
-    if (!stylePrefix.isEmpty()
-        && cursorBackwardTextToComma.startsWith(stylePrefix)) {
+    if (!stylePrefix.isEmpty() && cursorBackwardTextToComma.startsWith(stylePrefix)) {
         cursorBackwardTextToComma.remove(QRegularExpression(QString("^[%1]").arg(stylePrefix)));
     }
 
@@ -208,8 +206,8 @@ void SceneCharactersHandler::complete(const QString& _currentBlockText, const QS
     //
     QStringList filteredCharacters;
     for (int row = 0; row < characterModel->rowCount(); ++row) {
-        const QString characterName
-                = TextHelper::smartToUpper(characterModel->data(characterModel->index(row, 0)).toString());
+        const QString characterName = TextHelper::smartToUpper(
+            characterModel->data(characterModel->index(row, 0)).toString());
         if (!enteredCharacters.contains(characterName)) {
             filteredCharacters.append(characterName);
         }
@@ -220,7 +218,8 @@ void SceneCharactersHandler::complete(const QString& _currentBlockText, const QS
     // Дополним текст
     //
     int cursorMovement = cursorBackwardTextToComma.length();
-    while (!_cursorBackwardText.endsWith(cursorBackwardTextToComma.left(cursorMovement), Qt::CaseInsensitive)) {
+    while (!_cursorBackwardText.endsWith(cursorBackwardTextToComma.left(cursorMovement),
+                                         Qt::CaseInsensitive)) {
         --cursorMovement;
     }
     //
@@ -244,7 +243,8 @@ void SceneCharactersHandler::storeCharacters() const
     // ... текст блока
     QString currentBlockText = currentBlock.text();
     // ... персонажы
-    QStringList enteredCharacters = BusinessLayer::SceneCharactersParser::characters(currentBlockText);
+    QStringList enteredCharacters
+        = BusinessLayer::SceneCharactersParser::characters(currentBlockText);
 
     for (const QString& character : enteredCharacters) {
         editor()->characters()->createCharacter(character);

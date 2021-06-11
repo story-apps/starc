@@ -1,19 +1,20 @@
 #include "CircleFillAnimator.h"
-#include "CircleFillDecorator.h"
 
-#include <cmath>
+#include "CircleFillDecorator.h"
 
 #include <QGraphicsOpacityEffect>
 #include <QPropertyAnimation>
+
+#include <cmath>
 
 using WAF::CircleFillAnimator;
 using WAF::CircleFillDecorator;
 
 
-CircleFillAnimator::CircleFillAnimator(QWidget* _widgetForFill) :
-    AbstractAnimator(_widgetForFill),
-    m_decorator(new CircleFillDecorator(_widgetForFill)),
-    m_animation(new QPropertyAnimation(m_decorator, "radius"))
+CircleFillAnimator::CircleFillAnimator(QWidget* _widgetForFill)
+    : AbstractAnimator(_widgetForFill)
+    , m_decorator(new CircleFillDecorator(_widgetForFill))
+    , m_animation(new QPropertyAnimation(m_decorator, "radius"))
 {
     Q_ASSERT(_widgetForFill);
 
@@ -56,7 +57,8 @@ void CircleFillAnimator::fillIn()
     //
     // Прерываем выполнение, если клиент хочет повторить его
     //
-    if (isAnimated() && isAnimatedForward()) return;
+    if (isAnimated() && isAnimatedForward())
+        return;
     setAnimatedForward();
 
     //
@@ -67,7 +69,7 @@ void CircleFillAnimator::fillIn()
     const QPoint startPoint = widgetForFill()->mapFromGlobal(m_decorator->startPoint());
     const int w = qMax(startPoint.x(), widgetForFill()->width() - startPoint.x());
     const int h = qMax(startPoint.y(), widgetForFill()->height() - startPoint.y());
-    const int finalRadius = sqrt(w*w + h*h);
+    const int finalRadius = sqrt(w * w + h * h);
 
     //
     // Позиционируем декораторы
@@ -108,7 +110,8 @@ void CircleFillAnimator::fillOut()
     //
     // Прерываем выполнение, если клиент хочет повторить его
     //
-    if (isAnimated() && isAnimatedBackward()) return;
+    if (isAnimated() && isAnimatedBackward())
+        return;
     setAnimatedBackward();
 
     //
@@ -157,7 +160,8 @@ void CircleFillAnimator::finalize()
 
 void CircleFillAnimator::hideDecorator()
 {
-    QGraphicsOpacityEffect* hideEffect = qobject_cast<QGraphicsOpacityEffect*>(m_decorator->graphicsEffect());
+    QGraphicsOpacityEffect* hideEffect
+        = qobject_cast<QGraphicsOpacityEffect*>(m_decorator->graphicsEffect());
     if (hideEffect == nullptr) {
         hideEffect = new QGraphicsOpacityEffect(m_decorator);
         m_decorator->setGraphicsEffect(hideEffect);

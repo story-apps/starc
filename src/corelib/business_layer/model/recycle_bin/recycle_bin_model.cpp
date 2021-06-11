@@ -1,8 +1,7 @@
 #include "recycle_bin_model.h"
 
 
-namespace BusinessLayer
-{
+namespace BusinessLayer {
 
 RecycleBinModel::RecycleBinModel(QObject* _parent)
     : AbstractModel({}, _parent)

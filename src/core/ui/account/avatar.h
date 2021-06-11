@@ -3,8 +3,7 @@
 #include <ui/widgets/widget/widget.h>
 
 
-namespace Ui
-{
+namespace Ui {
 
 /**
  * @brief Виджет для отображения аватара в личном кабинете
@@ -32,7 +31,7 @@ protected:
     /**
      * @brief Реализуем отрисовку
      */
-    void paintEvent(QPaintEvent *_event) override;
+    void paintEvent(QPaintEvent* _event) override;
 
     /**
      * @brief Переопределяем для подготовки аватарки к отрисовке

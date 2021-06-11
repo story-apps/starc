@@ -52,7 +52,7 @@ protected:
     /**
      * @brief Переопределяем, чтобы пропустить обработку связанную с курсором редактора TextField'а
      */
-    void mouseMoveEvent(QMouseEvent *_event) override;
+    void mouseMoveEvent(QMouseEvent* _event) override;
 
 private:
     class Implementation;

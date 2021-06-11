@@ -6,10 +6,10 @@
 #include "qtextbrowser.h"
 #endif
 
+#include <qdebug.h>
+#include <qevent.h>
 #include <qfont.h>
 #include <qpainter.h>
-#include <qevent.h>
-#include <qdebug.h>
 #if QT_CONFIG(draganddrop)
 #include <qdrag.h>
 #endif
@@ -22,29 +22,29 @@
 #ifndef QT_NO_ACCESSIBILITY
 #include <qaccessible.h>
 #endif
-#include "private/qtextdocumentlayout_p.h"
-#include "qtextdocument.h"
 #include "private/qtextdocument_p.h"
-#include "qtextlist.h"
+#include "private/qtextdocumentlayout_p.h"
 #include "private/qwidgettextcontrol_p.h"
-
-#include <qtextformat.h>
-#include <qdatetime.h>
-#include <qapplication.h>
-#include <limits.h>
-#include <math.h>
-#include <qtexttable.h>
-#include <qvariant.h>
-#include <qscopedpointer.h>
-#include <qpropertyanimation.h>
+#include "qtextdocument.h"
+#include "qtextlist.h"
 
 #include <ui/design_system/design_system.h>
 #include <ui/widgets/context_menu/context_menu.h>
-
 #include <utils/helpers/color_helper.h>
 #include <utils/helpers/image_helper.h>
 
-static inline bool shouldEnableInputMethod(PageTextEdit *textedit)
+#include <qapplication.h>
+#include <qdatetime.h>
+#include <qpropertyanimation.h>
+#include <qscopedpointer.h>
+#include <qtextformat.h>
+#include <qtexttable.h>
+#include <qvariant.h>
+
+#include <limits.h>
+#include <math.h>
+
+static inline bool shouldEnableInputMethod(PageTextEdit* textedit)
 {
     return !textedit->isReadOnly();
 }
@@ -52,29 +52,36 @@ static inline bool shouldEnableInputMethod(PageTextEdit *textedit)
 class PageTextEditControl : public QWidgetTextControl
 {
 public:
-    inline PageTextEditControl(QObject *parent) : QWidgetTextControl(parent) {}
+    inline PageTextEditControl(QObject* parent)
+        : QWidgetTextControl(parent)
+    {
+    }
 
-    virtual QMimeData *createMimeDataFromSelection() const override {
-        PageTextEdit *ed = qobject_cast<PageTextEdit *>(parent());
+    virtual QMimeData* createMimeDataFromSelection() const override
+    {
+        PageTextEdit* ed = qobject_cast<PageTextEdit*>(parent());
         if (!ed)
             return QWidgetTextControl::createMimeDataFromSelection();
         return ed->createMimeDataFromSelection();
     }
-    virtual bool canInsertFromMimeData(const QMimeData *source) const override {
-        PageTextEdit *ed = qobject_cast<PageTextEdit *>(parent());
+    virtual bool canInsertFromMimeData(const QMimeData* source) const override
+    {
+        PageTextEdit* ed = qobject_cast<PageTextEdit*>(parent());
         if (!ed)
             return QWidgetTextControl::canInsertFromMimeData(source);
         return ed->canInsertFromMimeData(source);
     }
-    virtual void insertFromMimeData(const QMimeData *source) override {
-        PageTextEdit *ed = qobject_cast<PageTextEdit *>(parent());
+    virtual void insertFromMimeData(const QMimeData* source) override
+    {
+        PageTextEdit* ed = qobject_cast<PageTextEdit*>(parent());
         if (!ed)
             QWidgetTextControl::insertFromMimeData(source);
         else
             ed->insertFromMimeData(source);
     }
-    QVariant loadResource(int type, const QUrl &name) override {
-        auto *ed = qobject_cast<PageTextEdit *>(parent());
+    QVariant loadResource(int type, const QUrl& name) override
+    {
+        auto* ed = qobject_cast<PageTextEdit*>(parent());
         if (!ed)
             return QWidgetTextControl::loadResource(type, name);
 
@@ -84,13 +91,19 @@ public:
 };
 
 PageTextEditPrivate::PageTextEditPrivate()
-    : control(nullptr),
-      autoFormatting(PageTextEdit::AutoNone), tabChangesFocus(false),
-      lineWrap(PageTextEdit::WidgetWidth), lineWrapColumnOrWidth(0),
-      wordWrap(QTextOption::WrapAtWordBoundaryOrAnywhere), clickCausedFocus(0),
-      textFormat(Qt::AutoText),
-      m_textSelectionEnabled(true), m_usePageMode(false), m_addBottomSpace(true),
-      m_showPageNumbers(true), m_pageNumbersAlignment(Qt::AlignTop | Qt::AlignRight)
+    : control(nullptr)
+    , autoFormatting(PageTextEdit::AutoNone)
+    , tabChangesFocus(false)
+    , lineWrap(PageTextEdit::WidgetWidth)
+    , lineWrapColumnOrWidth(0)
+    , wordWrap(QTextOption::WrapAtWordBoundaryOrAnywhere)
+    , clickCausedFocus(0)
+    , textFormat(Qt::AutoText)
+    , m_textSelectionEnabled(true)
+    , m_usePageMode(false)
+    , m_addBottomSpace(true)
+    , m_showPageNumbers(true)
+    , m_pageNumbersAlignment(Qt::AlignTop | Qt::AlignRight)
 {
     ignoreAutomaticScrollbarAdjustment = false;
     preferRichText = false;
@@ -120,7 +133,7 @@ void PageTextEditPrivate::createAutoBulletList()
     q->doSetTextCursor(cursor);
 }
 
-void PageTextEditPrivate::init(const QString &html)
+void PageTextEditPrivate::init(const QString& html)
 {
     Q_Q(PageTextEdit);
     control = new PageTextEditControl(q);
@@ -130,8 +143,8 @@ void PageTextEditPrivate::init(const QString &html)
     QObject::connect(control, SIGNAL(documentSizeChanged(QSizeF)), q, SLOT(_q_adjustScrollbars()));
     QObject::connect(control, SIGNAL(updateRequest(QRectF)), q, SLOT(_q_repaintContents(QRectF)));
     QObject::connect(control, SIGNAL(visibilityRequest(QRectF)), q, SLOT(_q_ensureVisible(QRectF)));
-    QObject::connect(control, SIGNAL(currentCharFormatChanged(QTextCharFormat)),
-                     q, SLOT(_q_currentCharFormatChanged(QTextCharFormat)));
+    QObject::connect(control, SIGNAL(currentCharFormatChanged(QTextCharFormat)), q,
+                     SLOT(_q_currentCharFormatChanged(QTextCharFormat)));
 
     QObject::connect(control, SIGNAL(textChanged()), q, SIGNAL(textChanged()));
     QObject::connect(control, SIGNAL(undoAvailable(bool)), q, SIGNAL(undoAvailable(bool)));
@@ -140,12 +153,13 @@ void PageTextEditPrivate::init(const QString &html)
     QObject::connect(control, SIGNAL(selectionChanged()), q, SIGNAL(selectionChanged()));
     QObject::connect(control, SIGNAL(cursorPositionChanged()), q, SLOT(_q_cursorPositionChanged()));
 #if QT_CONFIG(cursor)
-    QObject::connect(control, SIGNAL(blockMarkerHovered(QTextBlock)), q, SLOT(_q_hoveredBlockWithMarkerChanged(QTextBlock)));
+    QObject::connect(control, SIGNAL(blockMarkerHovered(QTextBlock)), q,
+                     SLOT(_q_hoveredBlockWithMarkerChanged(QTextBlock)));
 #endif
 
     QObject::connect(control, SIGNAL(textChanged()), q, SLOT(updateMicroFocus()));
 
-    QTextDocument *doc = control->document();
+    QTextDocument* doc = control->document();
     // set a null page size initially to avoid any relayouting until the textedit
     // is shown. relayoutDocument() will take care of setting the page size to the
     // viewport dimensions later.
@@ -176,7 +190,7 @@ void PageTextEditPrivate::init(const QString &html)
     m_scrollAnimation.setEasingCurve(QEasingCurve::OutQuad);
 }
 
-void PageTextEditPrivate::_q_repaintContents(const QRectF &contentsRect)
+void PageTextEditPrivate::_q_repaintContents(const QRectF& contentsRect)
 {
     if (!contentsRect.isValid()) {
         viewport->update();
@@ -205,7 +219,7 @@ void PageTextEditPrivate::_q_cursorPositionChanged()
 }
 
 #if QT_CONFIG(cursor)
-void PageTextEditPrivate::_q_hoveredBlockWithMarkerChanged(const QTextBlock &block)
+void PageTextEditPrivate::_q_hoveredBlockWithMarkerChanged(const QTextBlock& block)
 {
     Q_Q(PageTextEdit);
     Qt::CursorShape cursor = cursorToRestoreAfterHover;
@@ -250,14 +264,14 @@ void PageTextEditPrivate::pageUpDown(QTextCursor::MoveOperation op, QTextCursor:
 }
 
 #ifndef QT_NO_SCROLLBAR
-static QSize documentSize(QWidgetTextControl *control)
+static QSize documentSize(QWidgetTextControl* control)
 {
-    QTextDocument *doc = control->document();
-    QAbstractTextDocumentLayout *layout = doc->documentLayout();
+    QTextDocument* doc = control->document();
+    QAbstractTextDocumentLayout* layout = doc->documentLayout();
 
     QSize docSize;
 
-    if (QTextDocumentLayout *tlayout = qobject_cast<QTextDocumentLayout *>(layout)) {
+    if (QTextDocumentLayout* tlayout = qobject_cast<QTextDocumentLayout*>(layout)) {
         docSize = tlayout->dynamicDocumentSize().toSize();
         int percentageDone = tlayout->layoutStatus();
         // extrapolate height
@@ -304,9 +318,8 @@ void PageTextEditPrivate::_q_adjustScrollbars()
         //
         else {
             const int SCROLL_DELTA = 800;
-            int maximumValue =
-                    docSize.height() - viewportSize.height()
-                    + (m_addBottomSpace ? SCROLL_DELTA : 0);
+            int maximumValue
+                = docSize.height() - viewportSize.height() + (m_addBottomSpace ? SCROLL_DELTA : 0);
             vbar->setRange(0, maximumValue);
         }
         vbar->setPageStep(viewportSize.height());
@@ -338,8 +351,7 @@ void PageTextEditPrivate::_q_adjustScrollbars()
     //
     // Восстанавливаем значение вертикального ползунка, если были размера скакал перед этим
     //
-    if (vbar->maximum() >= lastVbarValue
-        && vbar->value() != lastVbarValue) {
+    if (vbar->maximum() >= lastVbarValue && vbar->value() != lastVbarValue) {
         vbar->setValue(lastVbarValue);
     }
 
@@ -348,7 +360,7 @@ void PageTextEditPrivate::_q_adjustScrollbars()
 #endif
 
 // rect is in content coordinates
-void PageTextEditPrivate::_q_ensureVisible(const QRectF &_rect)
+void PageTextEditPrivate::_q_ensureVisible(const QRectF& _rect)
 {
     const QRect rect = _rect.toRect();
     if ((vbar->isVisible() && vbar->maximum() < rect.bottom())
@@ -567,7 +579,8 @@ void PageTextEditPrivate::_q_ensureVisible(const QRectF &_rect)
 
     To select (mark) text hold down the Shift key whilst pressing one
     of the movement keystrokes, for example, \e{Shift+Right}
-    will select the character to the right, and \e{Shift+Ctrl+Right} will select the word to the right, etc.
+    will select the character to the right, and \e{Shift+Ctrl+Right} will select the word to the
+   right, etc.
 
     \sa QTextDocument, QTextCursor, {Application Example},
         {Syntax Highlighter Example}, {Rich Text Processing}
@@ -625,7 +638,7 @@ void PageTextEditPrivate::_q_ensureVisible(const QRectF &_rect)
     Constructs an empty PageTextEdit with parent \a
     parent.
 */
-PageTextEdit::PageTextEdit(QWidget *parent)
+PageTextEdit::PageTextEdit(QWidget* parent)
     : QAbstractScrollArea(*new PageTextEditPrivate, parent)
 {
     Q_D(PageTextEdit);
@@ -635,7 +648,7 @@ PageTextEdit::PageTextEdit(QWidget *parent)
 /*!
     \internal
 */
-PageTextEdit::PageTextEdit(PageTextEditPrivate &dd, QWidget *parent)
+PageTextEdit::PageTextEdit(PageTextEditPrivate& dd, QWidget* parent)
     : QAbstractScrollArea(dd, parent)
 {
     Q_D(PageTextEdit);
@@ -646,13 +659,12 @@ PageTextEdit::PageTextEdit(PageTextEditPrivate &dd, QWidget *parent)
     Constructs a PageTextEdit with parent \a parent. The text edit will display
     the text \a text. The text is interpreted as html.
 */
-PageTextEdit::PageTextEdit(const QString &text, QWidget *parent)
+PageTextEdit::PageTextEdit(const QString& text, QWidget* parent)
     : QAbstractScrollArea(*new PageTextEditPrivate, parent)
 {
     Q_D(PageTextEdit);
     d->init(text);
 }
-
 
 
 /*!
@@ -791,7 +803,7 @@ Qt::Alignment PageTextEdit::alignment() const
     remains the owner of the object. If the previously assigned document is a
     child of the editor then it will be deleted.
 */
-void PageTextEdit::setDocument(QTextDocument *document)
+void PageTextEdit::setDocument(QTextDocument* document)
 {
     const auto lastCursorWidth = cursorWidth();
 
@@ -804,7 +816,7 @@ void PageTextEdit::setDocument(QTextDocument *document)
     setCursorWidth(lastCursorWidth);
 }
 
-QTextDocument *PageTextEdit::document() const
+QTextDocument* PageTextEdit::document() const
 {
     Q_D(const PageTextEdit);
     return d->control->document();
@@ -829,7 +841,7 @@ QString PageTextEdit::placeholderText() const
     return d->placeholderText;
 }
 
-void PageTextEdit::setPlaceholderText(const QString &placeholderText)
+void PageTextEdit::setPlaceholderText(const QString& placeholderText)
 {
     Q_D(PageTextEdit);
     if (d->placeholderText != placeholderText) {
@@ -842,7 +854,7 @@ void PageTextEdit::setPlaceholderText(const QString &placeholderText)
 /*!
     Sets the visible \a cursor.
 */
-void PageTextEdit::setTextCursor(const QTextCursor &cursor)
+void PageTextEdit::setTextCursor(const QTextCursor& cursor)
 {
     doSetTextCursor(cursor);
 }
@@ -853,7 +865,7 @@ void PageTextEdit::setTextCursor(const QTextCursor &cursor)
      This provides a hook for subclasses to intercept cursor changes.
 */
 
-void PageTextEdit::doSetTextCursor(const QTextCursor &cursor)
+void PageTextEdit::doSetTextCursor(const QTextCursor& cursor)
 {
     Q_D(PageTextEdit);
     d->control->setTextCursor(cursor);
@@ -875,7 +887,7 @@ QTextCursor PageTextEdit::textCursor() const
 
     \sa fontFamily(), setCurrentFont()
 */
-void PageTextEdit::setFontFamily(const QString &fontFamily)
+void PageTextEdit::setFontFamily(const QString& fontFamily)
 {
     QTextCharFormat fmt;
     fmt.setFontFamily(fontFamily);
@@ -944,7 +956,7 @@ void PageTextEdit::setFontItalic(bool italic)
 
     \sa textColor()
 */
-void PageTextEdit::setTextColor(const QColor &c)
+void PageTextEdit::setTextColor(const QColor& c)
 {
     QTextCharFormat fmt;
     fmt.setForeground(QBrush(c));
@@ -958,7 +970,7 @@ void PageTextEdit::setTextColor(const QColor &c)
 
     \sa textBackgroundColor()
 */
-void PageTextEdit::setTextBackgroundColor(const QColor &c)
+void PageTextEdit::setTextBackgroundColor(const QColor& c)
 {
     QTextCharFormat fmt;
     fmt.setBackground(QBrush(c));
@@ -970,7 +982,7 @@ void PageTextEdit::setTextBackgroundColor(const QColor &c)
 
     \sa currentFont(), setFontPointSize(), setFontFamily()
 */
-void PageTextEdit::setCurrentFont(const QFont &f)
+void PageTextEdit::setCurrentFont(const QFont& f)
 {
     QTextCharFormat fmt;
     fmt.setFont(f);
@@ -1094,23 +1106,23 @@ void PageTextEdit::selectAll()
 }
 
 /*! \internal
-*/
-bool PageTextEdit::event(QEvent *e)
+ */
+bool PageTextEdit::event(QEvent* e)
 {
     Q_D(PageTextEdit);
 #ifndef QT_NO_CONTEXTMENU
     if (e->type() == QEvent::ContextMenu
-        && static_cast<QContextMenuEvent *>(e)->reason() == QContextMenuEvent::Keyboard) {
+        && static_cast<QContextMenuEvent*>(e)->reason() == QContextMenuEvent::Keyboard) {
         Q_D(PageTextEdit);
         ensureCursorVisible();
         const QPoint cursorPos = cursorRect().center();
-        QContextMenuEvent ce(QContextMenuEvent::Keyboard, cursorPos, d->viewport->mapToGlobal(cursorPos));
+        QContextMenuEvent ce(QContextMenuEvent::Keyboard, cursorPos,
+                             d->viewport->mapToGlobal(cursorPos));
         ce.setAccepted(e->isAccepted());
         const bool result = QAbstractScrollArea::event(&ce);
         e->setAccepted(ce.isAccepted());
         return result;
-    } else if (e->type() == QEvent::ShortcutOverride
-               || e->type() == QEvent::ToolTip) {
+    } else if (e->type() == QEvent::ShortcutOverride || e->type() == QEvent::ToolTip) {
         d->sendControlEvent(e);
     }
 #else
@@ -1126,9 +1138,9 @@ bool PageTextEdit::event(QEvent *e)
 }
 
 /*! \internal
-*/
+ */
 
-void PageTextEdit::timerEvent(QTimerEvent *e)
+void PageTextEdit::timerEvent(QTimerEvent* e)
 {
     Q_D(PageTextEdit);
     if (e->timerId() == d->autoScrollTimer.timerId()) {
@@ -1136,12 +1148,13 @@ void PageTextEdit::timerEvent(QTimerEvent *e)
         QPoint pos;
         if (d->inDrag) {
             pos = d->autoScrollDragPos;
-            visible.adjust(qMin(visible.width()/3,20), qMin(visible.height()/3,20),
-                           -qMin(visible.width()/3,20), -qMin(visible.height()/3,20));
+            visible.adjust(qMin(visible.width() / 3, 20), qMin(visible.height() / 3, 20),
+                           -qMin(visible.width() / 3, 20), -qMin(visible.height() / 3, 20));
         } else {
             const QPoint globalPos = QCursor::pos();
             pos = d->viewport->mapFromGlobal(globalPos);
-            QMouseEvent ev(QEvent::MouseMove, pos, mapTo(topLevelWidget(), pos), globalPos, Qt::LeftButton, Qt::LeftButton, Qt::NoModifier);
+            QMouseEvent ev(QEvent::MouseMove, pos, mapTo(topLevelWidget(), pos), globalPos,
+                           Qt::LeftButton, Qt::LeftButton, Qt::NoModifier);
             mouseMoveEvent(&ev);
         }
         int deltaY = qMax(pos.y() - visible.top(), visible.bottom() - pos.y()) - visible.height();
@@ -1154,13 +1167,13 @@ void PageTextEdit::timerEvent(QTimerEvent *e)
             d->autoScrollTimer.start(timeout, this);
 
             if (deltaY > 0)
-                d->vbar->triggerAction(pos.y() < visible.center().y() ?
-                                       QAbstractSlider::SliderSingleStepSub
-                                       : QAbstractSlider::SliderSingleStepAdd);
+                d->vbar->triggerAction(pos.y() < visible.center().y()
+                                           ? QAbstractSlider::SliderSingleStepSub
+                                           : QAbstractSlider::SliderSingleStepAdd);
             if (deltaX > 0)
-                d->hbar->triggerAction(pos.x() < visible.center().x() ?
-                                       QAbstractSlider::SliderSingleStepSub
-                                       : QAbstractSlider::SliderSingleStepAdd);
+                d->hbar->triggerAction(pos.x() < visible.center().x()
+                                           ? QAbstractSlider::SliderSingleStepSub
+                                           : QAbstractSlider::SliderSingleStepAdd);
         }
     }
 #ifdef QT_KEYPAD_NAVIGATION
@@ -1182,7 +1195,7 @@ void PageTextEdit::timerEvent(QTimerEvent *e)
     \sa toPlainText()
 */
 
-void PageTextEdit::setPlainText(const QString &text)
+void PageTextEdit::setPlainText(const QString& text)
 {
     Q_D(PageTextEdit);
     d->control->setPlainText(text);
@@ -1225,7 +1238,7 @@ QString PageTextEdit::toPlainText() const
 */
 
 #ifndef QT_NO_TEXTHTMLPARSER
-void PageTextEdit::setHtml(const QString &text)
+void PageTextEdit::setHtml(const QString& text)
 {
     Q_D(PageTextEdit);
     clear();
@@ -1277,7 +1290,7 @@ QString PageTextEdit::toHtml() const
 #endif
 
 #if QT_CONFIG(textmarkdownreader)
-void PageTextEdit::setMarkdown(const QString &markdown)
+void PageTextEdit::setMarkdown(const QString& markdown)
 {
     Q_D(const PageTextEdit);
     d->control->setMarkdown(markdown);
@@ -1294,65 +1307,65 @@ QString PageTextEdit::toMarkdown(QTextDocument::MarkdownFeatures features) const
 
 
 /*! \reimp
-*/
-void PageTextEdit::keyPressEvent(QKeyEvent *e)
+ */
+void PageTextEdit::keyPressEvent(QKeyEvent* e)
 {
     Q_D(PageTextEdit);
 
 #ifdef QT_KEYPAD_NAVIGATION
     switch (e->key()) {
-        case Qt::Key_Select:
-            if (QApplicationPrivate::keypadNavigationEnabled()) {
-                // code assumes linksaccessible + editable isn't meaningful
-                if (d->control->textInteractionFlags() & Qt::TextEditable) {
-                    setEditFocus(!hasEditFocus());
-                } else {
-                    if (!hasEditFocus())
-                        setEditFocus(true);
-                    else {
-                        QTextCursor cursor = d->control->textCursor();
-                        QTextCharFormat charFmt = cursor.charFormat();
-                        if (!(d->control->textInteractionFlags() & Qt::LinksAccessibleByKeyboard)
-                            || !cursor.hasSelection() || charFmt.anchorHref().isEmpty()) {
-                            e->accept();
-                            return;
-                        }
-                    }
-                }
-            }
-            break;
-        case Qt::Key_Back:
-        case Qt::Key_No:
-            if (!QApplicationPrivate::keypadNavigationEnabled()
-                    || (QApplicationPrivate::keypadNavigationEnabled() && !hasEditFocus())) {
-                e->ignore();
-                return;
-            }
-            break;
-        default:
-            if (QApplicationPrivate::keypadNavigationEnabled()) {
-                if (!hasEditFocus() && !(e->modifiers() & Qt::ControlModifier)) {
-                    if (e->text()[0].isPrint())
-                        setEditFocus(true);
-                    else {
-                        e->ignore();
+    case Qt::Key_Select:
+        if (QApplicationPrivate::keypadNavigationEnabled()) {
+            // code assumes linksaccessible + editable isn't meaningful
+            if (d->control->textInteractionFlags() & Qt::TextEditable) {
+                setEditFocus(!hasEditFocus());
+            } else {
+                if (!hasEditFocus())
+                    setEditFocus(true);
+                else {
+                    QTextCursor cursor = d->control->textCursor();
+                    QTextCharFormat charFmt = cursor.charFormat();
+                    if (!(d->control->textInteractionFlags() & Qt::LinksAccessibleByKeyboard)
+                        || !cursor.hasSelection() || charFmt.anchorHref().isEmpty()) {
+                        e->accept();
                         return;
                     }
                 }
             }
-            break;
+        }
+        break;
+    case Qt::Key_Back:
+    case Qt::Key_No:
+        if (!QApplicationPrivate::keypadNavigationEnabled()
+            || (QApplicationPrivate::keypadNavigationEnabled() && !hasEditFocus())) {
+            e->ignore();
+            return;
+        }
+        break;
+    default:
+        if (QApplicationPrivate::keypadNavigationEnabled()) {
+            if (!hasEditFocus() && !(e->modifiers() & Qt::ControlModifier)) {
+                if (e->text()[0].isPrint())
+                    setEditFocus(true);
+                else {
+                    e->ignore();
+                    return;
+                }
+            }
+        }
+        break;
     }
 #endif
 #ifndef QT_NO_SHORTCUT
 
     Qt::TextInteractionFlags tif = d->control->textInteractionFlags();
 
-    if (tif & Qt::TextSelectableByKeyboard){
+    if (tif & Qt::TextSelectableByKeyboard) {
         if (e == QKeySequence::SelectPreviousPage) {
             e->accept();
             d->pageUpDown(QTextCursor::Up, QTextCursor::KeepAnchor);
             return;
-        } else if (e ==QKeySequence::SelectNextPage) {
+        } else if (e == QKeySequence::SelectNextPage) {
             e->accept();
             d->pageUpDown(QTextCursor::Down, QTextCursor::KeepAnchor);
             return;
@@ -1372,27 +1385,27 @@ void PageTextEdit::keyPressEvent(QKeyEvent *e)
 
     if (!(tif & Qt::TextEditable)) {
         switch (e->key()) {
-            case Qt::Key_Space:
-                e->accept();
-                if (e->modifiers() & Qt::ShiftModifier)
-                    d->vbar->triggerAction(QAbstractSlider::SliderPageStepSub);
-                else
-                    d->vbar->triggerAction(QAbstractSlider::SliderPageStepAdd);
-                break;
-            default:
-                d->sendControlEvent(e);
-                if (!e->isAccepted() && e->modifiers() == Qt::NoModifier) {
-                    if (e->key() == Qt::Key_Home) {
-                        d->vbar->triggerAction(QAbstractSlider::SliderToMinimum);
-                        e->accept();
-                    } else if (e->key() == Qt::Key_End) {
-                        d->vbar->triggerAction(QAbstractSlider::SliderToMaximum);
-                        e->accept();
-                    }
+        case Qt::Key_Space:
+            e->accept();
+            if (e->modifiers() & Qt::ShiftModifier)
+                d->vbar->triggerAction(QAbstractSlider::SliderPageStepSub);
+            else
+                d->vbar->triggerAction(QAbstractSlider::SliderPageStepAdd);
+            break;
+        default:
+            d->sendControlEvent(e);
+            if (!e->isAccepted() && e->modifiers() == Qt::NoModifier) {
+                if (e->key() == Qt::Key_Home) {
+                    d->vbar->triggerAction(QAbstractSlider::SliderToMinimum);
+                    e->accept();
+                } else if (e->key() == Qt::Key_End) {
+                    d->vbar->triggerAction(QAbstractSlider::SliderToMaximum);
+                    e->accept();
                 }
-                if (!e->isAccepted()) {
-                    QAbstractScrollArea::keyPressEvent(e);
-                }
+            }
+            if (!e->isAccepted()) {
+                QAbstractScrollArea::keyPressEvent(e);
+            }
         }
         return;
     }
@@ -1401,9 +1414,7 @@ void PageTextEdit::keyPressEvent(QKeyEvent *e)
     {
         QTextCursor cursor = d->control->textCursor();
         const QString text = e->text();
-        if (cursor.atBlockStart()
-            && (d->autoFormatting & AutoBulletList)
-            && (text.length() == 1)
+        if (cursor.atBlockStart() && (d->autoFormatting & AutoBulletList) && (text.length() == 1)
             && (text.at(0) == QLatin1Char('-') || text.at(0) == QLatin1Char('*'))
             && (!cursor.currentList())) {
 
@@ -1417,51 +1428,52 @@ void PageTextEdit::keyPressEvent(QKeyEvent *e)
 #ifdef QT_KEYPAD_NAVIGATION
     if (!e->isAccepted()) {
         switch (e->key()) {
-            case Qt::Key_Up:
-            case Qt::Key_Down:
+        case Qt::Key_Up:
+        case Qt::Key_Down:
+            if (QApplicationPrivate::keypadNavigationEnabled()) {
+                // Cursor position didn't change, so we want to leave
+                // these keys to change focus.
+                e->ignore();
+                return;
+            }
+            break;
+        case Qt::Key_Back:
+            if (!e->isAutoRepeat()) {
                 if (QApplicationPrivate::keypadNavigationEnabled()) {
-                    // Cursor position didn't change, so we want to leave
-                    // these keys to change focus.
+                    if (document()->isEmpty()
+                        || !(d->control->textInteractionFlags() & Qt::TextEditable)) {
+                        setEditFocus(false);
+                        e->accept();
+                    } else if (!d->deleteAllTimer.isActive()) {
+                        e->accept();
+                        d->deleteAllTimer.start(750, this);
+                    }
+                } else {
                     e->ignore();
                     return;
                 }
-                break;
-            case Qt::Key_Back:
-                if (!e->isAutoRepeat()) {
-                    if (QApplicationPrivate::keypadNavigationEnabled()) {
-                        if (document()->isEmpty() || !(d->control->textInteractionFlags() & Qt::TextEditable)) {
-                            setEditFocus(false);
-                            e->accept();
-                        } else if (!d->deleteAllTimer.isActive()) {
-                            e->accept();
-                            d->deleteAllTimer.start(750, this);
-                        }
-                    } else {
-                        e->ignore();
-                        return;
-                    }
-                }
-                break;
-            default: break;
+            }
+            break;
+        default:
+            break;
         }
     }
 #endif
 }
 
 /*! \reimp
-*/
-void PageTextEdit::keyReleaseEvent(QKeyEvent *e)
+ */
+void PageTextEdit::keyReleaseEvent(QKeyEvent* e)
 {
 #ifdef QT_KEYPAD_NAVIGATION
     Q_D(PageTextEdit);
     if (QApplicationPrivate::keypadNavigationEnabled()) {
-        if (!e->isAutoRepeat() && e->key() == Qt::Key_Back
-            && d->deleteAllTimer.isActive()) {
+        if (!e->isAutoRepeat() && e->key() == Qt::Key_Back && d->deleteAllTimer.isActive()) {
             d->deleteAllTimer.stop();
             QTextCursor cursor = d->control->textCursor();
             QTextBlockFormat blockFmt = cursor.blockFormat();
 
-            QTextList *list = cursor.currentList();
+            QTextList* list = cursor.currentList();
             if (list && cursor.atBlockStart()) {
                 list->remove(cursor.block());
             } else if (cursor.atBlockStart() && blockFmt.indent() > 0) {
@@ -1486,7 +1498,7 @@ void PageTextEdit::keyReleaseEvent(QKeyEvent *e)
 
     \sa QTextDocument::loadResource()
 */
-QVariant PageTextEdit::loadResource(int type, const QUrl &name)
+QVariant PageTextEdit::loadResource(int type, const QUrl& name)
 {
     Q_UNUSED(type);
     Q_UNUSED(name);
@@ -1526,8 +1538,8 @@ void PageTextEditPrivate::updateViewportMargins()
                 const int borderWidth = 4;
                 const int verticalScrollbarWidth = vbar->isVisible() ? vbar->width() : 0;
                 // ... ширина рамки вьюпорта и самого редактора
-                leftMargin = rightMargin =
-                        (q->width() - pageWidth - verticalScrollbarWidth - borderWidth) / 2;
+                leftMargin = rightMargin
+                    = (q->width() - pageWidth - verticalScrollbarWidth - borderWidth) / 2;
             }
 
             const int topMargin = defaultTopMargin;
@@ -1541,8 +1553,8 @@ void PageTextEditPrivate::updateViewportMargins()
             if ((q->height() - documentHeight) > (defaultTopMargin + defaultBottomMargin)) {
                 const int borderHeight = 2;
                 const int horizontalScrollbarHeight = hbar->isVisible() ? hbar->height() : 0;
-                bottomMargin =
-                    q->height() - documentHeight - horizontalScrollbarHeight - defaultTopMargin - borderHeight;
+                bottomMargin = q->height() - documentHeight - horizontalScrollbarHeight
+                    - defaultTopMargin - borderHeight;
             }
 
             //
@@ -1605,17 +1617,16 @@ void PageTextEditPrivate::updateDocumentGeometry()
 }
 
 /*! \reimp
-*/
-void PageTextEdit::resizeEvent(QResizeEvent *e)
+ */
+void PageTextEdit::resizeEvent(QResizeEvent* e)
 {
     Q_D(PageTextEdit);
 
     if (d->lineWrap == NoWrap) {
-        QTextDocument *doc = d->control->document();
+        QTextDocument* doc = d->control->document();
         QVariant alignmentProperty = doc->documentLayout()->property("contentHasAlignment");
 
-        if (!doc->pageSize().isNull()
-            && alignmentProperty.type() == QVariant::Bool
+        if (!doc->pageSize().isNull() && alignmentProperty.type() == QVariant::Bool
             && !alignmentProperty.toBool()) {
 
             d->_q_adjustScrollbars();
@@ -1626,8 +1637,7 @@ void PageTextEdit::resizeEvent(QResizeEvent *e)
     //
     // Если изменился размер
     //
-    if (d->lineWrap != FixedPixelWidth
-        && e->oldSize().width() != e->size().width()) {
+    if (d->lineWrap != FixedPixelWidth && e->oldSize().width() != e->size().width()) {
         //
         // Обновим отступы вьюпорта
         //
@@ -1640,8 +1650,7 @@ void PageTextEdit::resizeEvent(QResizeEvent *e)
         } else {
             d->relayoutDocument();
         }
-    }
-    else
+    } else
         d->_q_adjustScrollbars();
 }
 
@@ -1649,17 +1658,17 @@ void PageTextEditPrivate::relayoutDocument()
 {
     updateViewportMargins();
 
-    QTextDocument *doc = control->document();
-    QAbstractTextDocumentLayout *layout = doc->documentLayout();
+    QTextDocument* doc = control->document();
+    QAbstractTextDocumentLayout* layout = doc->documentLayout();
 
-    if (QTextDocumentLayout *tlayout = qobject_cast<QTextDocumentLayout *>(layout)) {
+    if (QTextDocumentLayout* tlayout = qobject_cast<QTextDocumentLayout*>(layout)) {
         if (lineWrap == PageTextEdit::FixedColumnWidth)
             tlayout->setFixedColumnWidth(lineWrapColumnOrWidth);
         else
             tlayout->setFixedColumnWidth(-1);
     }
 
-    QTextDocumentLayout *tlayout = qobject_cast<QTextDocumentLayout *>(layout);
+    QTextDocumentLayout* tlayout = qobject_cast<QTextDocumentLayout*>(layout);
     QSize lastUsedSize;
     if (tlayout)
         lastUsedSize = tlayout->dynamicDocumentSize().toSize();
@@ -1721,17 +1730,14 @@ void PageTextEditPrivate::relayoutDocument()
     //
     // (if you change this please also check the layoutingLoop() testcase in
     // PageTextEdit's autotests)
-    if (lastUsedSize.isValid()
-        && !vbar->isHidden()
-        && viewport->width() < lastUsedSize.width()
-        && usedSize.height() < lastUsedSize.height()
-        && usedSize.height() <= viewport->height())
+    if (lastUsedSize.isValid() && !vbar->isHidden() && viewport->width() < lastUsedSize.width()
+        && usedSize.height() < lastUsedSize.height() && usedSize.height() <= viewport->height())
         return;
 
     _q_adjustScrollbars();
 }
 
-void PageTextEditPrivate::paintPagesView(QPainter *_painter)
+void PageTextEditPrivate::paintPagesView(QPainter* _painter)
 {
     //
     // Оформление рисуется только тогда, когда редактор находится в постраничном режиме
@@ -1754,7 +1760,8 @@ void PageTextEditPrivate::paintPagesView(QPainter *_painter)
     //
     // Определим нижнюю границу разрыва страниц
     //
-    const qreal firstVisiblePageBottom = pageHeight - (vbar->value() % static_cast<int>(pageHeight));
+    const qreal firstVisiblePageBottom
+        = pageHeight - (vbar->value() % static_cast<int>(pageHeight));
 
     //
     // Смещение по горизонтали, если есть полоса прокрутки
@@ -1771,8 +1778,10 @@ void PageTextEditPrivate::paintPagesView(QPainter *_painter)
     //
     auto currentPageTop = firstVisiblePageBottom - pageHeight;
     while (currentPageTop <= q->height()) {
-        const QRectF pageRect(0 - horizontalDelta, currentPageTop + m_pageSpacing / 2, pageWidth, pageHeight);
-        const QRectF backgroundRect = pageRect.marginsRemoved(Ui::DesignSystem::card().shadowMargins().toMargins());
+        const QRectF pageRect(0 - horizontalDelta, currentPageTop + m_pageSpacing / 2, pageWidth,
+                              pageHeight);
+        const QRectF backgroundRect
+            = pageRect.marginsRemoved(Ui::DesignSystem::card().shadowMargins().toMargins());
         const qreal borderRadius = Ui::DesignSystem::card().borderRadius();
 
         //
@@ -1785,7 +1794,8 @@ void PageTextEditPrivate::paintPagesView(QPainter *_painter)
             QPainter backgroundImagePainter(&backgroundImage);
             backgroundImagePainter.setPen(Qt::NoPen);
             backgroundImagePainter.setBrush(Ui::DesignSystem::color().background());
-            backgroundImagePainter.drawRoundedRect(QRect({0,0}, backgroundImage.size()), borderRadius, borderRadius);
+            backgroundImagePainter.drawRoundedRect(QRect({ 0, 0 }, backgroundImage.size()),
+                                                   borderRadius, borderRadius);
         }
         //
         // ... рисуем тень
@@ -1793,11 +1803,8 @@ void PageTextEditPrivate::paintPagesView(QPainter *_painter)
         const qreal shadowHeight = Ui::DesignSystem::card().minimumShadowBlurRadius();
         const bool useCache = true;
         const QPixmap shadow
-                = ImageHelper::dropShadow(backgroundImage,
-                                          Ui::DesignSystem::card().shadowMargins(),
-                                          shadowHeight,
-                                          Ui::DesignSystem::color().shadow(),
-                                          useCache);
+            = ImageHelper::dropShadow(backgroundImage, Ui::DesignSystem::card().shadowMargins(),
+                                      shadowHeight, Ui::DesignSystem::color().shadow(), useCache);
 
         _painter->drawPixmap(pageRect.topLeft(), shadow);
         //
@@ -1861,7 +1868,9 @@ void PageTextEditPrivate::paintPageMargins(QPainter* _painter)
     // Верхнее поле первой страницы на экране, когда не видно предыдущей страницы
     //
     if (currentPageBottom - pageSize.height() + pageMargins.top() + m_pageSpacing >= 0) {
-        const QRectF topMarginRect(leftMarginPosition, currentPageBottom - pageSize.height() + m_pageSpacing, marginWidth, pageMargins.top());
+        const QRectF topMarginRect(leftMarginPosition,
+                                   currentPageBottom - pageSize.height() + m_pageSpacing,
+                                   marginWidth, pageMargins.top());
         paintHeader(_painter, topMarginRect);
         paintPageNumber(_painter, topMarginRect, true, pageNumber);
     }
@@ -1874,7 +1883,7 @@ void PageTextEditPrivate::paintPageMargins(QPainter* _painter)
         // Определить прямоугольник нижнего поля
         //
         const QRect bottomMarginRect(leftMarginPosition, currentPageBottom - pageMargins.bottom(),
-                               marginWidth, pageMargins.bottom());
+                                     marginWidth, pageMargins.bottom());
         paintFooter(_painter, bottomMarginRect);
         paintPageNumber(_painter, bottomMarginRect, false, pageNumber);
 
@@ -1886,7 +1895,8 @@ void PageTextEditPrivate::paintPageMargins(QPainter* _painter)
         //
         // Определить прямоугольник верхнего поля следующей страницы
         //
-        const QRect topMarginRect(leftMarginPosition, currentPageBottom + m_pageSpacing, marginWidth, pageMargins.top());
+        const QRect topMarginRect(leftMarginPosition, currentPageBottom + m_pageSpacing,
+                                  marginWidth, pageMargins.top());
         paintHeader(_painter, topMarginRect);
         paintPageNumber(_painter, topMarginRect, true, pageNumber);
 
@@ -1903,7 +1913,8 @@ void PageTextEditPrivate::paintPageMargins(QPainter* _painter)
     _painter->restore();
 }
 
-void PageTextEditPrivate::paintPageNumber(QPainter* _painter, const QRectF& _rect, bool _isHeader, int _number)
+void PageTextEditPrivate::paintPageNumber(QPainter* _painter, const QRectF& _rect, bool _isHeader,
+                                          int _number)
 {
     //
     // Верхнее поле
@@ -1914,7 +1925,7 @@ void PageTextEditPrivate::paintPageNumber(QPainter* _painter, const QRectF& _rec
         //
         if (m_pageNumbersAlignment.testFlag(Qt::AlignTop)) {
             _painter->drawText(_rect, Qt::AlignVCenter | (m_pageNumbersAlignment ^ Qt::AlignTop),
-                QString("%1.").arg(_number));
+                               QString("%1.").arg(_number));
         }
     }
     //
@@ -1926,7 +1937,7 @@ void PageTextEditPrivate::paintPageNumber(QPainter* _painter, const QRectF& _rec
         //
         if (m_pageNumbersAlignment.testFlag(Qt::AlignBottom)) {
             _painter->drawText(_rect, Qt::AlignVCenter | (m_pageNumbersAlignment ^ Qt::AlignBottom),
-                QString("%1.").arg(_number));
+                               QString("%1.").arg(_number));
         }
     }
 }
@@ -1968,7 +1979,8 @@ void PageTextEditPrivate::paintHighlights(QPainter* _painter)
         const qreal highlightLeft = pageMargins.left() - hbar->value();
         const qreal highlightWidth = pageSize.width() - pageMargins.left() - pageMargins.right();
         const QRect highlightRect(highlightLeft, cursorR.top(), highlightWidth, cursorR.height());
-        _painter->fillRect(highlightRect, ColorHelper::transparent(q->palette().highlight().color(), 0.14));
+        _painter->fillRect(highlightRect,
+                           ColorHelper::transparent(q->palette().highlight().color(), 0.14));
     }
 }
 
@@ -1977,7 +1989,8 @@ void PageTextEditPrivate::clipPageDecorationRegions(QPainter* _painter)
     Q_Q(PageTextEdit);
 
     //
-    // Область обрезается только тогда, когда редактор находится в постраничном режиме и если заданы поля
+    // Область обрезается только тогда, когда редактор находится в постраничном режиме и если заданы
+    // поля
     //
     if (!m_usePageMode || m_pageMetrics.pxPageMargins().isNull()) {
         return;
@@ -2009,7 +2022,8 @@ void PageTextEditPrivate::clipPageDecorationRegions(QPainter* _painter)
     // Верхнее поле первой страницы на экране, когда не видно предыдущей страницы
     //
     if (curHeight - pageMargins.top() >= 0) {
-        QRect topMarginRect(leftMarginPosition, curHeight - pageSize.height(), marginWidth, pageMargins.top());
+        QRect topMarginRect(leftMarginPosition, curHeight - pageSize.height(), marginWidth,
+                            pageMargins.top());
         clipPath = clipPath.xored(topMarginRect);
     }
 
@@ -2018,9 +2032,11 @@ void PageTextEditPrivate::clipPageDecorationRegions(QPainter* _painter)
     //
     while (curHeight < q->height()) {
         //
-        // Определить прямоугольник начинающийся от начала нижнего поля и до конца верхнего поля следующей страницы
+        // Определить прямоугольник начинающийся от начала нижнего поля и до конца верхнего поля
+        // следующей страницы
         //
-        QRect bottomMarginRect(leftMarginPosition, curHeight - pageMargins.bottom(), marginWidth, pageMargins.bottom() + pageMargins.top());
+        QRect bottomMarginRect(leftMarginPosition, curHeight - pageMargins.bottom(), marginWidth,
+                               pageMargins.bottom() + pageMargins.top());
         clipPath = clipPath.xored(bottomMarginRect);
 
         curHeight += pageSize.height();
@@ -2029,7 +2045,8 @@ void PageTextEditPrivate::clipPageDecorationRegions(QPainter* _painter)
     //
     // Определить прямоугольник нижнего поля когда на экране одна страница
     //
-    QRect bottomMarginRect(leftMarginPosition, curHeight - pageMargins.bottom(), marginWidth, pageMargins.bottom());
+    QRect bottomMarginRect(leftMarginPosition, curHeight - pageMargins.bottom(), marginWidth,
+                           pageMargins.bottom());
     clipPath = clipPath.xored(bottomMarginRect);
 
     _painter->setClipRegion(clipPath);
@@ -2037,8 +2054,8 @@ void PageTextEditPrivate::clipPageDecorationRegions(QPainter* _painter)
 
 void PageTextEditPrivate::sendControlMouseEvent(QMouseEvent* e)
 {
-    QScopedPointer<QMouseEvent> correctedEvent(
-        new QMouseEvent(e->type(), correctMousePosition(e->pos()), e->button(), e->buttons(), e->modifiers()));
+    QScopedPointer<QMouseEvent> correctedEvent(new QMouseEvent(
+        e->type(), correctMousePosition(e->pos()), e->button(), e->buttons(), e->modifiers()));
     sendControlEvent(correctedEvent.data());
     if (correctedEvent->isAccepted()) {
         e->accept();
@@ -2098,8 +2115,7 @@ QPoint PageTextEditPrivate::correctMousePosition(const QPoint& _eventPos)
         // Идём в обратном направлении, пока не выйдем из текущей ячейки и ищем блок,
         // наиболее близкий к позиции курсора и корректируем высоту координаты
         //
-        while (!cursor.atStart()
-               && cursor.currentTable() != nullptr) {
+        while (!cursor.atStart() && cursor.currentTable() != nullptr) {
             const auto cursorRect = q->cursorRect(cursor);
             const int topDelta = std::abs(localPos.y() - cursorRect.top());
             if (topDelta < bestTopDelta) {
@@ -2125,8 +2141,7 @@ QPoint PageTextEditPrivate::correctMousePosition(const QPoint& _eventPos)
     //  Перед таблицей
     //
     if (nextBlockCursor.currentTable() != nullptr) {
-        while (!nextBlockCursor.atEnd()
-               && nextBlockCursor.currentTable() != nullptr) {
+        while (!nextBlockCursor.atEnd() && nextBlockCursor.currentTable() != nullptr) {
             const auto cursorRect = q->cursorRect(nextBlockCursor);
             const int topDelta = localPos.y() - cursorRect.top();
             const int leftDelta = std::abs(localPos.x() - cursorRect.left());
@@ -2155,8 +2170,7 @@ QPoint PageTextEditPrivate::correctMousePosition(const QPoint& _eventPos)
     //
     if (previousBlockCursor.currentTable() != nullptr) {
         previousBlockCursor.movePosition(QTextCursor::EndOfBlock);
-        while (!previousBlockCursor.atStart()
-               && previousBlockCursor.currentTable() != nullptr) {
+        while (!previousBlockCursor.atStart() && previousBlockCursor.currentTable() != nullptr) {
             const auto cursorRect = q->cursorRect(previousBlockCursor);
             const int topDelta = localPos.y() - cursorRect.top();
             const int leftDelta = std::abs(localPos.x() - cursorRect.left());
@@ -2191,7 +2205,7 @@ QPoint PageTextEditPrivate::correctMousePosition(const QPoint& _eventPos)
     return localPos;
 }
 
-void PageTextEditPrivate::paint(QPainter *p, QPaintEvent *e)
+void PageTextEditPrivate::paint(QPainter* p, QPaintEvent* e)
 {
     paintPagesView(p);
     paintPageMargins(p);
@@ -2202,8 +2216,8 @@ void PageTextEditPrivate::paint(QPainter *p, QPaintEvent *e)
 
     p->translate(-xOffset, -yOffset);
 
-    QTextDocument *doc = control->document();
-    QTextDocumentLayout *layout = qobject_cast<QTextDocumentLayout *>(doc->documentLayout());
+    QTextDocument* doc = control->document();
+    QTextDocumentLayout* layout = qobject_cast<QTextDocumentLayout*>(doc->documentLayout());
 
     // the layout might need to expand the root frame to
     // the viewport if NoWrap is set
@@ -2221,7 +2235,8 @@ void PageTextEditPrivate::paint(QPainter *p, QPaintEvent *e)
         const QColor col = control->palette().placeholderText().color();
         p->setPen(col);
         const int margin = int(doc->documentMargin());
-        p->drawText(viewport->rect().adjusted(margin, margin, -margin, -margin), Qt::AlignTop | Qt::TextWordWrap, placeholderText);
+        p->drawText(viewport->rect().adjusted(margin, margin, -margin, -margin),
+                    Qt::AlignTop | Qt::TextWordWrap, placeholderText);
     }
 }
 
@@ -2233,14 +2248,14 @@ It is usually unnecessary to reimplement this function in a subclass of PageText
 \warning The underlying text document must not be modified from within a reimplementation
 of this function.
 */
-void PageTextEdit::paintEvent(QPaintEvent *e)
+void PageTextEdit::paintEvent(QPaintEvent* e)
 {
     Q_D(PageTextEdit);
     QPainter p(d->viewport);
     d->paint(&p, e);
 }
 
-void PageTextEditPrivate::_q_currentCharFormatChanged(const QTextCharFormat &fmt)
+void PageTextEditPrivate::_q_currentCharFormatChanged(const QTextCharFormat& fmt)
 {
     Q_Q(PageTextEdit);
     emit q->currentCharFormatChanged(fmt);
@@ -2248,7 +2263,7 @@ void PageTextEditPrivate::_q_currentCharFormatChanged(const QTextCharFormat &fmt
 
 void PageTextEditPrivate::updateDefaultTextOption()
 {
-    QTextDocument *doc = control->document();
+    QTextDocument* doc = control->document();
 
     QTextOption opt = doc->defaultTextOption();
     QTextOption::WrapMode oldWrapMode = opt.wrapMode();
@@ -2263,8 +2278,8 @@ void PageTextEditPrivate::updateDefaultTextOption()
 }
 
 /*! \reimp
-*/
-void PageTextEdit::mousePressEvent(QMouseEvent *e)
+ */
+void PageTextEdit::mousePressEvent(QMouseEvent* e)
 {
     Q_D(PageTextEdit);
 #ifdef QT_KEYPAD_NAVIGATION
@@ -2275,8 +2290,8 @@ void PageTextEdit::mousePressEvent(QMouseEvent *e)
 }
 
 /*! \reimp
-*/
-void PageTextEdit::mouseMoveEvent(QMouseEvent *e)
+ */
+void PageTextEdit::mouseMoveEvent(QMouseEvent* e)
 {
     Q_D(PageTextEdit);
     if (!d->m_textSelectionEnabled) {
@@ -2298,8 +2313,8 @@ void PageTextEdit::mouseMoveEvent(QMouseEvent *e)
 }
 
 /*! \reimp
-*/
-void PageTextEdit::mouseReleaseEvent(QMouseEvent *e)
+ */
+void PageTextEdit::mouseReleaseEvent(QMouseEvent* e)
 {
     Q_D(PageTextEdit);
     d->sendControlMouseEvent(e);
@@ -2313,15 +2328,15 @@ void PageTextEdit::mouseReleaseEvent(QMouseEvent *e)
 }
 
 /*! \reimp
-*/
-void PageTextEdit::mouseDoubleClickEvent(QMouseEvent *e)
+ */
+void PageTextEdit::mouseDoubleClickEvent(QMouseEvent* e)
 {
     Q_D(PageTextEdit);
     d->sendControlMouseEvent(e);
 }
 
 /*! \reimp
-*/
+ */
 bool PageTextEdit::focusNextPrevChild(bool next)
 {
     Q_D(const PageTextEdit);
@@ -2346,7 +2361,7 @@ bool PageTextEdit::focusNextPrevChild(bool next)
 
   \snippet code/src_gui_widgets_PageTextEdit.cpp 0
 */
-void PageTextEdit::contextMenuEvent(QContextMenuEvent *e)
+void PageTextEdit::contextMenuEvent(QContextMenuEvent* e)
 {
     Q_D(PageTextEdit);
     d->sendControlContextMenuEvent(e);
@@ -2355,8 +2370,8 @@ void PageTextEdit::contextMenuEvent(QContextMenuEvent *e)
 
 #if QT_CONFIG(draganddrop)
 /*! \reimp
-*/
-void PageTextEdit::dragEnterEvent(QDragEnterEvent *e)
+ */
+void PageTextEdit::dragEnterEvent(QDragEnterEvent* e)
 {
     Q_D(PageTextEdit);
     d->inDrag = true;
@@ -2364,8 +2379,8 @@ void PageTextEdit::dragEnterEvent(QDragEnterEvent *e)
 }
 
 /*! \reimp
-*/
-void PageTextEdit::dragLeaveEvent(QDragLeaveEvent *e)
+ */
+void PageTextEdit::dragLeaveEvent(QDragLeaveEvent* e)
 {
     Q_D(PageTextEdit);
     d->inDrag = false;
@@ -2374,8 +2389,8 @@ void PageTextEdit::dragLeaveEvent(QDragLeaveEvent *e)
 }
 
 /*! \reimp
-*/
-void PageTextEdit::dragMoveEvent(QDragMoveEvent *e)
+ */
+void PageTextEdit::dragMoveEvent(QDragMoveEvent* e)
 {
     Q_D(PageTextEdit);
     d->autoScrollDragPos = e->pos();
@@ -2385,8 +2400,8 @@ void PageTextEdit::dragMoveEvent(QDragMoveEvent *e)
 }
 
 /*! \reimp
-*/
-void PageTextEdit::dropEvent(QDropEvent *e)
+ */
+void PageTextEdit::dropEvent(QDropEvent* e)
 {
     Q_D(PageTextEdit);
     d->inDrag = false;
@@ -2398,14 +2413,13 @@ void PageTextEdit::dropEvent(QDropEvent *e)
 
 /*! \reimp
  */
-void PageTextEdit::inputMethodEvent(QInputMethodEvent *e)
+void PageTextEdit::inputMethodEvent(QInputMethodEvent* e)
 {
 
 #ifdef QT_KEYPAD_NAVIGATION
     Q_D(PageTextEdit);
     if (d->control->textInteractionFlags() & Qt::TextEditable
-        && QApplicationPrivate::keypadNavigationEnabled()
-        && !hasEditFocus())
+        && QApplicationPrivate::keypadNavigationEnabled() && !hasEditFocus())
         setEditFocus(true);
 #endif
     //
@@ -2418,7 +2432,7 @@ void PageTextEdit::inputMethodEvent(QInputMethodEvent *e)
 }
 
 /*!\reimp
-*/
+ */
 void PageTextEdit::scrollContentsBy(int dx, int dy)
 {
     Q_D(PageTextEdit);
@@ -2429,7 +2443,7 @@ void PageTextEdit::scrollContentsBy(int dx, int dy)
 }
 
 /*!\reimp
-*/
+ */
 QVariant PageTextEdit::inputMethodQuery(Qt::InputMethodQuery property) const
 {
     return inputMethodQuery(property, QVariant());
@@ -2441,8 +2455,8 @@ QVariant PageTextEdit::inputMethodQuery(Qt::InputMethodQuery query, QVariant arg
 {
     Q_D(const PageTextEdit);
     switch (query) {
-        case Qt::ImHints:
-        case Qt::ImInputItemClipRectangle:
+    case Qt::ImHints:
+    case Qt::ImInputItemClipRectangle:
         return QWidget::inputMethodQuery(query);
     default:
         break;
@@ -2483,8 +2497,8 @@ QVariant PageTextEdit::inputMethodQuery(Qt::InputMethodQuery query, QVariant arg
 }
 
 /*! \reimp
-*/
-void PageTextEdit::focusInEvent(QFocusEvent *e)
+ */
+void PageTextEdit::focusInEvent(QFocusEvent* e)
 {
     Q_D(PageTextEdit);
     if (e->reason() == Qt::MouseFocusReason) {
@@ -2495,8 +2509,8 @@ void PageTextEdit::focusInEvent(QFocusEvent *e)
 }
 
 /*! \reimp
-*/
-void PageTextEdit::focusOutEvent(QFocusEvent *e)
+ */
+void PageTextEdit::focusOutEvent(QFocusEvent* e)
 {
     Q_D(PageTextEdit);
     QAbstractScrollArea::focusOutEvent(e);
@@ -2504,8 +2518,8 @@ void PageTextEdit::focusOutEvent(QFocusEvent *e)
 }
 
 /*! \reimp
-*/
-void PageTextEdit::showEvent(QShowEvent *)
+ */
+void PageTextEdit::showEvent(QShowEvent*)
 {
     Q_D(PageTextEdit);
     if (!d->anchorToScrollToWhenVisible.isEmpty()) {
@@ -2519,15 +2533,14 @@ void PageTextEdit::showEvent(QShowEvent *)
 }
 
 /*! \reimp
-*/
-void PageTextEdit::changeEvent(QEvent *e)
+ */
+void PageTextEdit::changeEvent(QEvent* e)
 {
     Q_D(PageTextEdit);
     QAbstractScrollArea::changeEvent(e);
-    if (e->type() == QEvent::ApplicationFontChange
-        || e->type() == QEvent::FontChange) {
+    if (e->type() == QEvent::ApplicationFontChange || e->type() == QEvent::FontChange) {
         d->control->document()->setDefaultFont(font());
-    }  else if(e->type() == QEvent::ActivationChange) {
+    } else if (e->type() == QEvent::ActivationChange) {
         if (!isActiveWindow())
             d->autoScrollTimer.stop();
     } else if (e->type() == QEvent::EnabledChange) {
@@ -2542,9 +2555,9 @@ void PageTextEdit::changeEvent(QEvent *e)
 }
 
 /*! \reimp
-*/
+ */
 #if QT_CONFIG(wheelevent)
-void PageTextEdit::wheelEvent(QWheelEvent *e)
+void PageTextEdit::wheelEvent(QWheelEvent* e)
 {
     Q_D(PageTextEdit);
     if (!(d->control->textInteractionFlags() & Qt::TextEditable)) {
@@ -2569,7 +2582,7 @@ void PageTextEdit::wheelEvent(QWheelEvent *e)
   which will enable the actions that are sensitive to where the user clicked.
 */
 
-QMenu *PageTextEdit::createStandardContextMenu()
+QMenu* PageTextEdit::createStandardContextMenu()
 {
     Q_D(PageTextEdit);
     return d->control->createStandardContextMenu(QPoint(), this);
@@ -2585,7 +2598,7 @@ QMenu *PageTextEdit::createStandardContextMenu()
   The popup menu's ownership is transferred to the caller.
 */
 
-QMenu *PageTextEdit::createStandardContextMenu(const QPoint &position)
+QMenu* PageTextEdit::createStandardContextMenu(const QPoint& position)
 {
     Q_D(PageTextEdit);
     return d->control->createStandardContextMenu(position, this);
@@ -2595,7 +2608,7 @@ QMenu *PageTextEdit::createStandardContextMenu(const QPoint &position)
 /*!
   returns a QTextCursor at position \a pos (in viewport coordinates).
 */
-QTextCursor PageTextEdit::cursorForPosition(const QPoint &pos) const
+QTextCursor PageTextEdit::cursorForPosition(const QPoint& pos) const
 {
     Q_D(const PageTextEdit);
     return d->control->cursorForPosition(d->mapToContents(pos));
@@ -2605,14 +2618,14 @@ QTextCursor PageTextEdit::cursorForPosition(const QPoint &pos) const
   returns a rectangle (in viewport coordinates) that includes the
   \a cursor.
  */
-QRect PageTextEdit::cursorRect(const QTextCursor &cursor) const
+QRect PageTextEdit::cursorRect(const QTextCursor& cursor) const
 {
     Q_D(const PageTextEdit);
     if (cursor.isNull())
         return QRect();
 
     QRect r = d->control->cursorRect(cursor).toRect();
-    r.translate(-d->horizontalOffset(),-d->verticalOffset());
+    r.translate(-d->horizontalOffset(), -d->verticalOffset());
     return r;
 }
 
@@ -2624,7 +2637,7 @@ QRect PageTextEdit::cursorRect() const
 {
     Q_D(const PageTextEdit);
     QRect r = d->control->cursorRect().toRect();
-    r.translate(-d->horizontalOffset(),-d->verticalOffset());
+    r.translate(-d->horizontalOffset(), -d->verticalOffset());
     return r;
 }
 
@@ -2781,7 +2794,7 @@ void PageTextEdit::setAcceptRichText(bool accept)
 
     \sa PageTextEdit::ExtraSelection, extraSelections()
 */
-void PageTextEdit::setExtraSelections(const QList<ExtraSelection> &selections)
+void PageTextEdit::setExtraSelections(const QList<ExtraSelection>& selections)
 {
     Q_D(PageTextEdit);
     QList<QTextEdit::ExtraSelection> extraSelections;
@@ -2818,7 +2831,7 @@ QList<PageTextEdit::ExtraSelection> PageTextEdit::extraSelections() const
     QMimeData object is passed to the caller. The selection can be retrieved
     by using the textCursor() function.
 */
-QMimeData *PageTextEdit::createMimeDataFromSelection() const
+QMimeData* PageTextEdit::createMimeDataFromSelection() const
 {
     Q_D(const PageTextEdit);
     return d->control->QWidgetTextControl::createMimeDataFromSelection();
@@ -2833,7 +2846,7 @@ QMimeData *PageTextEdit::createMimeDataFromSelection() const
 
     Reimplement this function to enable drag and drop support for additional MIME types.
  */
-bool PageTextEdit::canInsertFromMimeData(const QMimeData *source) const
+bool PageTextEdit::canInsertFromMimeData(const QMimeData* source) const
 {
     Q_D(const PageTextEdit);
     return d->control->QWidgetTextControl::canInsertFromMimeData(source);
@@ -2848,7 +2861,7 @@ bool PageTextEdit::canInsertFromMimeData(const QMimeData *source) const
 
     Reimplement this function to enable drag and drop support for additional MIME types.
  */
-void PageTextEdit::insertFromMimeData(const QMimeData *source)
+void PageTextEdit::insertFromMimeData(const QMimeData* source)
 {
     Q_D(PageTextEdit);
     d->control->QWidgetTextControl::insertFromMimeData(source);
@@ -2877,7 +2890,7 @@ void PageTextEdit::setReadOnly(bool ro)
     if (ro) {
         flags = Qt::TextSelectableByMouse;
 #if QT_CONFIG(textbrowser)
-        if (qobject_cast<QTextBrowser *>(this))
+        if (qobject_cast<QTextBrowser*>(this))
             flags |= Qt::TextBrowserInteraction;
 #endif
     } else {
@@ -2919,7 +2932,7 @@ Qt::TextInteractionFlags PageTextEdit::textInteractionFlags() const
 
     \sa QTextCursor::mergeCharFormat()
  */
-void PageTextEdit::mergeCurrentCharFormat(const QTextCharFormat &modifier)
+void PageTextEdit::mergeCurrentCharFormat(const QTextCharFormat& modifier)
 {
     Q_D(PageTextEdit);
     d->control->mergeCurrentCharFormat(modifier);
@@ -2931,7 +2944,7 @@ void PageTextEdit::mergeCurrentCharFormat(const QTextCharFormat &modifier)
     cursor.  If the editor has a selection then the char format is
     directly applied to the selection.
  */
-void PageTextEdit::setCurrentCharFormat(const QTextCharFormat &format)
+void PageTextEdit::setCurrentCharFormat(const QTextCharFormat& format)
 {
     Q_D(PageTextEdit);
     d->control->setCurrentCharFormat(format);
@@ -2978,7 +2991,7 @@ void PageTextEdit::setAutoFormatting(AutoFormatting features)
 
     \snippet code/src_gui_widgets_PageTextEdit.cpp 1
  */
-void PageTextEdit::insertPlainText(const QString &text)
+void PageTextEdit::insertPlainText(const QString& text)
 {
     Q_D(PageTextEdit);
     d->control->insertPlainText(text);
@@ -2998,7 +3011,7 @@ void PageTextEdit::insertPlainText(const QString &text)
     instead.
  */
 #ifndef QT_NO_TEXTHTMLPARSER
-void PageTextEdit::insertHtml(const QString &text)
+void PageTextEdit::insertHtml(const QString& text)
 {
     Q_D(PageTextEdit);
     d->control->insertHtml(text);
@@ -3010,7 +3023,7 @@ void PageTextEdit::insertHtml(const QString &text)
     visible; does nothing if the \a name is empty, or is already
     visible, or isn't found.
 */
-void PageTextEdit::scrollToAnchor(const QString &name)
+void PageTextEdit::scrollToAnchor(const QString& name)
 {
     Q_D(PageTextEdit);
     if (name.isEmpty())
@@ -3023,7 +3036,7 @@ void PageTextEdit::scrollToAnchor(const QString &name)
 
     QPointF p = d->control->anchorPosition(name);
     const int newPosition = qRound(p.y());
-    if ( d->vbar->maximum() < newPosition )
+    if (d->vbar->maximum() < newPosition)
         d->_q_adjustScrollbars();
     d->vbar->setValue(newPosition);
 }
@@ -3108,7 +3121,7 @@ bool PageTextEdit::canPaste() const
     \sa QTextDocument::print()
 */
 #ifndef QT_NO_PRINTER
-void PageTextEdit::print(QPagedPaintDevice *printer) const
+void PageTextEdit::print(QPagedPaintDevice* printer) const
 {
     Q_D(const PageTextEdit);
     d->control->print(printer);
@@ -3231,7 +3244,7 @@ void PageTextEdit::setWordWrapMode(QTextOption::WrapMode mode)
     \a options. Returns \c true if \a exp was found and changes the
     cursor to select the match; otherwise returns \c false.
 */
-bool PageTextEdit::find(const QString &exp, QTextDocument::FindFlags options)
+bool PageTextEdit::find(const QString& exp, QTextDocument::FindFlags options)
 {
     Q_D(PageTextEdit);
     return d->control->find(exp, options);
@@ -3251,7 +3264,7 @@ bool PageTextEdit::find(const QString &exp, QTextDocument::FindFlags options)
     otherwise returns \c false.
 */
 #ifndef QT_NO_REGEXP
-bool PageTextEdit::find(const QRegExp &exp, QTextDocument::FindFlags options)
+bool PageTextEdit::find(const QRegExp& exp, QTextDocument::FindFlags options)
 {
     Q_D(PageTextEdit);
     return d->control->find(exp, options);
@@ -3272,7 +3285,7 @@ bool PageTextEdit::find(const QRegExp &exp, QTextDocument::FindFlags options)
     otherwise returns \c false.
 */
 #if QT_CONFIG(regularexpression)
-bool PageTextEdit::find(const QRegularExpression &exp, QTextDocument::FindFlags options)
+bool PageTextEdit::find(const QRegularExpression& exp, QTextDocument::FindFlags options)
 {
     Q_D(PageTextEdit);
     return d->control->find(exp, options);
@@ -3331,7 +3344,7 @@ bool PageTextEdit::find(const QRegularExpression &exp, QTextDocument::FindFlags 
 
     \sa toPlainText(), toHtml()
 */
-void PageTextEdit::setText(const QString &text)
+void PageTextEdit::setText(const QString& text)
 {
     Q_D(PageTextEdit);
     Qt::TextFormat format = d->textFormat;
@@ -3357,11 +3370,11 @@ void PageTextEdit::setText(const QString &text)
     \sa currentCharFormat(), QTextCursor::blockFormat()
 */
 
-void PageTextEdit::append(const QString &text)
+void PageTextEdit::append(const QString& text)
 {
     Q_D(PageTextEdit);
-    const bool atBottom = isReadOnly() ?  d->verticalOffset() >= d->vbar->maximum() :
-            d->control->textCursor().atEnd();
+    const bool atBottom = isReadOnly() ? d->verticalOffset() >= d->vbar->maximum()
+                                       : d->control->textCursor().atEnd();
     d->control->append(text);
     if (atBottom)
         d->vbar->setValue(d->vbar->maximum());
@@ -3376,7 +3389,8 @@ void PageTextEdit::ensureCursorVisible()
     Q_D(PageTextEdit);
 
     //
-    // Если курсор в невидимом блоке, откручиваем его назад до тех пор пока он не войдёт в видимый блок
+    // Если курсор в невидимом блоке, откручиваем его назад до тех пор пока он не войдёт в видимый
+    // блок
     //
     {
         QTextCursor cursor = textCursor();
@@ -3400,8 +3414,7 @@ void PageTextEdit::ensureCursorVisible()
         QRect cursorRect = this->cursorRect();
         if (cursorRect.y() - DETECT_DELTA <= 0) {
             d->vbar->setValue(d->vbar->value() - SCROLL_DELTA);
-        }
-        else if (cursorRect.height() + cursorRect.y() + DETECT_DELTA >= d->viewport->height()) {
+        } else if (cursorRect.height() + cursorRect.y() + DETECT_DELTA >= d->viewport->height()) {
             //
             // Если можем, прокручиваем вниз на SCROLL_DELTA
             //
@@ -3479,8 +3492,6 @@ void PageTextEdit::ensureCursorVisible(const QTextCursor& _cursor, bool _animate
     This signal is emitted whenever redo operations become available
     (\a available is true) or unavailable (\a available is false).
 */
-
-
 
 
 //
@@ -3621,8 +3632,7 @@ ContextMenu* PageTextEdit::createContextMenu(const QPoint& _position, QWidget* _
 {
     auto cursor = cursorForPosition(_position);
     const auto selection = std::minmax(textCursor().selectionStart(), textCursor().selectionEnd());
-    if (selection.first <= cursor.position()
-        && cursor.position() <= selection.second) {
+    if (selection.first <= cursor.position() && cursor.position() <= selection.second) {
         //
         // Оставляем выделение как есть
         //
@@ -3660,15 +3670,12 @@ ContextMenu* PageTextEdit::createContextMenu(const QPoint& _position, QWidget* _
     selectAllAction->setSeparator(true);
     selectAllAction->setText(tr("Select all"));
     selectAllAction->setIconText(u8"\U000F09ED");
-    selectAllAction->setWhatsThis(QKeySequence(QKeySequence::SelectAll).toString(QKeySequence::NativeText));
+    selectAllAction->setWhatsThis(
+        QKeySequence(QKeySequence::SelectAll).toString(QKeySequence::NativeText));
     connect(selectAllAction, &QAction::triggered, this, &PageTextEdit::selectAll);
 
     auto menu = new ContextMenu(_parent == nullptr ? this : _parent);
-    menu->addActions({ formattingAction,
-                       cutAction,
-                       copyAction,
-                       pasteAction,
-                       selectAllAction });
+    menu->addActions({ formattingAction, cutAction, copyAction, pasteAction, selectAllAction });
     menu->setBackgroundColor(Ui::DesignSystem::color().background());
     menu->setTextColor(Ui::DesignSystem::color().onBackground());
     return menu;

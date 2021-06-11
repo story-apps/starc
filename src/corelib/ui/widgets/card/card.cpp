@@ -1,13 +1,12 @@
 #include "card.h"
 
 #include <ui/design_system/design_system.h>
-
 #include <utils/helpers/image_helper.h>
 
 #include <QApplication>
 #include <QPainter>
-#include <QVariantAnimation>
 #include <QVBoxLayout>
+#include <QVariantAnimation>
 
 
 class Card::Implementation
@@ -38,8 +37,8 @@ Card::Implementation::Implementation()
 
 
 Card::Card(QWidget* _parent)
-    : Widget(_parent),
-      d(new Implementation)
+    : Widget(_parent)
+    , d(new Implementation)
 {
     setAttribute(Qt::WA_Hover);
 
@@ -69,7 +68,8 @@ void Card::paintEvent(QPaintEvent* _event)
 {
     Q_UNUSED(_event)
 
-    const QRectF backgroundRect = rect().marginsRemoved(Ui::DesignSystem::card().shadowMargins().toMargins());
+    const QRectF backgroundRect
+        = rect().marginsRemoved(Ui::DesignSystem::card().shadowMargins().toMargins());
     if (!backgroundRect.isValid()) {
         return;
     }
@@ -83,19 +83,18 @@ void Card::paintEvent(QPaintEvent* _event)
     backgroundImagePainter.setPen(Qt::NoPen);
     backgroundImagePainter.setBrush(backgroundColor());
     const auto borderRadius = Ui::DesignSystem::card().borderRadius();
-    backgroundImagePainter.drawRoundedRect(QRect({0,0}, backgroundImage.size()), borderRadius, borderRadius);
+    backgroundImagePainter.drawRoundedRect(QRect({ 0, 0 }, backgroundImage.size()), borderRadius,
+                                           borderRadius);
     //
     // ... рисуем тень
     //
     const auto shadowHeight = std::max(Ui::DesignSystem::card().minimumShadowBlurRadius(),
                                        d->shadowHeightAnimation.currentValue().toReal());
-    const auto cacheShadow = qFuzzyCompare(shadowHeight, Ui::DesignSystem::card().minimumShadowBlurRadius());
+    const auto cacheShadow
+        = qFuzzyCompare(shadowHeight, Ui::DesignSystem::card().minimumShadowBlurRadius());
     const auto shadow
-            = ImageHelper::dropShadow(backgroundImage,
-                                      Ui::DesignSystem::card().shadowMargins(),
-                                      shadowHeight,
-                                      Ui::DesignSystem::color().shadow(),
-                                      cacheShadow);
+        = ImageHelper::dropShadow(backgroundImage, Ui::DesignSystem::card().shadowMargins(),
+                                  shadowHeight, Ui::DesignSystem::color().shadow(), cacheShadow);
 
     QPainter painter(this);
     painter.drawPixmap(0, 0, shadow);

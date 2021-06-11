@@ -45,8 +45,8 @@ SpellCheckHighlighter::Implementation::Implementation(const SpellChecker& _check
 
 
 SpellCheckHighlighter::SpellCheckHighlighter(QTextDocument* _parent, const SpellChecker& _checker)
-    : SyntaxHighlighter(_parent),
-      d(new Implementation(_checker))
+    : SyntaxHighlighter(_parent)
+    , d(new Implementation(_checker))
 {
 }
 
@@ -121,8 +121,7 @@ void SpellCheckHighlighter::highlightBlock(const QString& _text)
             //
             // Не проверяем слово, которое сейчас пишется
             //
-            if (isChanged()
-                && positionInText <= d->cursorPosition
+            if (isChanged() && positionInText <= d->cursorPosition
                 && positionInText + wordToCheck.length() > d->cursorPosition) {
                 continue;
             }

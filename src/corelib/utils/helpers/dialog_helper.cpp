@@ -10,7 +10,8 @@ namespace {
  * @brief Сформировать строку-фильтр для файла с заданными заголовком и расширением
  */
 /** @{ */
-QString makeFilter(const QString& _title, const QStringList& _extensions) {
+QString makeFilter(const QString& _title, const QStringList& _extensions)
+{
     QString extensionsValue;
     for (const auto& extension : _extensions) {
         if (!extensionsValue.isEmpty()) {
@@ -20,11 +21,12 @@ QString makeFilter(const QString& _title, const QStringList& _extensions) {
     }
     return QString("%1 (%2)").arg(_title, extensionsValue);
 }
-QString makeFilter(const QString& _title, const QString& _extension) {
+QString makeFilter(const QString& _title, const QString& _extension)
+{
     return makeFilter(_title, QStringList{ _extension });
 }
 /** @} */
-}
+} // namespace
 
 QString DialogHelper::starcProjectFilter()
 {
@@ -59,7 +61,7 @@ QString DialogHelper::trelbyFilter()
 QString DialogHelper::msWordFilter()
 {
     return makeFilter(QApplication::translate("DialogHelper", "Office Open XML"),
-                      { ExtensionHelper::msOfficeOpenXml(), ExtensionHelper::msOfficeBinary()});
+                      { ExtensionHelper::msOfficeOpenXml(), ExtensionHelper::msOfficeBinary() });
 }
 
 QString DialogHelper::openDocumentXmlFilter()
@@ -76,7 +78,7 @@ QString DialogHelper::fountainFilter()
 
 QString DialogHelper::celtxFilter()
 {
-    return makeFilter(QApplication::translate("DialogHelper",  "Celtx project"),
+    return makeFilter(QApplication::translate("DialogHelper", "Celtx project"),
                       ExtensionHelper::celtx());
 }
 
@@ -95,16 +97,17 @@ QString DialogHelper::pdfFilter()
 QString DialogHelper::importFilters()
 {
     QString filters;
-    filters.append(makeFilter(QApplication::translate("DialogHelper", "All supported files"),
-                              { ExtensionHelper::kitScenarist(), ExtensionHelper::finalDraft(),
-                                ExtensionHelper::finalDraftTemplate(), ExtensionHelper::trelby(),
-                                ExtensionHelper::msOfficeBinary(), ExtensionHelper::msOfficeOpenXml(),
-                                ExtensionHelper::openDocumentXml(), ExtensionHelper::fountain(),
-                                ExtensionHelper::celtx(), ExtensionHelper::plainText() }));
-    for (const auto& filter : { kitScenaristFilter(), finalDraftFilter(),
-                                finalDraftTemplateFilter(), trelbyFilter(), msWordFilter(),
-                                openDocumentXmlFilter(), fountainFilter(), celtxFilter(),
-                                plainTextFilter() }) {
+    filters.append(
+        makeFilter(QApplication::translate("DialogHelper", "All supported files"),
+                   { ExtensionHelper::kitScenarist(), ExtensionHelper::finalDraft(),
+                     ExtensionHelper::finalDraftTemplate(), ExtensionHelper::trelby(),
+                     ExtensionHelper::msOfficeBinary(), ExtensionHelper::msOfficeOpenXml(),
+                     ExtensionHelper::openDocumentXml(), ExtensionHelper::fountain(),
+                     ExtensionHelper::celtx(), ExtensionHelper::plainText() }));
+    for (const auto& filter :
+         { kitScenaristFilter(), finalDraftFilter(), finalDraftTemplateFilter(), trelbyFilter(),
+           msWordFilter(), openDocumentXmlFilter(), fountainFilter(), celtxFilter(),
+           plainTextFilter() }) {
         filters.append(";;");
         filters.append(filter);
     }

@@ -17,8 +17,8 @@
 #ifndef EXPANDANIMATOR_H
 #define EXPANDANIMATOR_H
 
-#include "../../WAF.h"
 #include "../../AbstractAnimator.h"
+#include "../../WAF.h"
 
 #include <QRect>
 
@@ -28,79 +28,78 @@ class QPropertyAnimation;
 /**
  * Widgets Animation Framework
  */
-namespace WAF
+namespace WAF {
+class ExpandDecorator;
+
+/**
+ * @brief Аниматор выводящий элемент на передний план и заполняющий пространство
+ */
+class ExpandAnimator : public AbstractAnimator
 {
-    class ExpandDecorator;
+    Q_OBJECT
+
+public:
+    explicit ExpandAnimator(QWidget* _widgetForFill);
 
     /**
-     * @brief Аниматор выводящий элемент на передний план и заполняющий пространство
+     * @brief Установить область для выведения на передний план
      */
-    class ExpandAnimator : public AbstractAnimator
-    {
-        Q_OBJECT
+    void setExpandRect(const QRect& _rect);
 
-    public:
-        explicit ExpandAnimator(QWidget* _widgetForFill);
+    /**
+     * @brief Установить цвет заливки
+     */
+    void setFillColor(const QColor& _color);
 
-        /**
-         * @brief Установить область для выведения на передний план
-         */
-        void setExpandRect(const QRect& _rect);
+    /**
+     * @brief Длительность анимации
+     */
+    int animationDuration() const;
 
-        /**
-         * @brief Установить цвет заливки
-         */
-        void setFillColor(const QColor& _color);
+    /**
+     * @brief Заполнить виджет
+     */
+    /** @{ */
+    void animateForward();
+    void expandIn();
+    /** @} */
 
-        /**
-         * @brief Длительность анимации
-         */
-        int animationDuration() const;
+    /**
+     * @brief Свернуть цветовой круг - очистить виджет
+     */
+    /** @{ */
+    void animateBackward();
+    void expandOut();
+    /** @} */
 
-        /**
-         * @brief Заполнить виджет
-         */
-        /** @{ */
-        void animateForward();
-        void expandIn();
-        /** @} */
+protected:
+    /**
+     * @brief Переопределяется, чтобы корректировать размер перекрывающего виджета
+     */
+    bool eventFilter(QObject* _object, QEvent* _event);
 
-        /**
-         * @brief Свернуть цветовой круг - очистить виджет
-         */
-        /** @{ */
-        void animateBackward();
-        void expandOut();
-        /** @} */
+private:
+    /**
+     * @brief Получить виджет, который нужно заполнить
+     */
+    QWidget* widgetForFill() const;
 
-    protected:
-        /**
-         * @brief Переопределяется, чтобы корректировать размер перекрывающего виджета
-         */
-        bool eventFilter(QObject* _object, QEvent* _event);
+private:
+    /**
+     * @brief Исходная область для выдвижения
+     */
+    QRect m_expandRect;
 
-    private:
-        /**
-         * @brief Получить виджет, который нужно заполнить
-         */
-        QWidget* widgetForFill() const;
+    /**
+     * @brief Декоратор, рисующий заполнение
+     */
+    ExpandDecorator* m_decorator;
 
-    private:
-        /**
-         * @brief Исходная область для выдвижения
-         */
-        QRect m_expandRect;
-
-        /**
-         * @brief Декоратор, рисующий заполнение
-         */
-        ExpandDecorator* m_decorator;
-
-        /**
-         * @brief Объект для анимирования декоратора
-         */
-        QPropertyAnimation* m_animation;
-    };
-}
+    /**
+     * @brief Объект для анимирования декоратора
+     */
+    QPropertyAnimation* m_animation;
+};
+} // namespace WAF
 
 #endif // EXPANDANIMATOR_H

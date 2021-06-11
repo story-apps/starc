@@ -32,10 +32,11 @@ class Color2DSlider : public Widget
 {
     Q_OBJECT
 
-    Q_PROPERTY(QColor color READ color WRITE setColor NOTIFY colorChanged DESIGNABLE true STORED false )
-    Q_PROPERTY(qreal hue READ hue WRITE setHue DESIGNABLE false )
-    Q_PROPERTY(qreal saturation READ saturation WRITE setSaturation DESIGNABLE false )
-    Q_PROPERTY(qreal value READ value WRITE setValue DESIGNABLE false )
+    Q_PROPERTY(
+        QColor color READ color WRITE setColor NOTIFY colorChanged DESIGNABLE true STORED false)
+    Q_PROPERTY(qreal hue READ hue WRITE setHue DESIGNABLE false)
+    Q_PROPERTY(qreal saturation READ saturation WRITE setSaturation DESIGNABLE false)
+    Q_PROPERTY(qreal value READ value WRITE setValue DESIGNABLE false)
     /**
      * \brief Which color component is used on the x axis
      */
@@ -47,12 +48,10 @@ class Color2DSlider : public Widget
 
 
 public:
-    enum Component {
-        Hue, Saturation, Value
-    };
+    enum Component { Hue, Saturation, Value };
     Q_ENUMS(Component)
 
-    explicit Color2DSlider(QWidget *parent = nullptr);
+    explicit Color2DSlider(QWidget* parent = nullptr);
     ~Color2DSlider();
 
     /// Get current color
@@ -119,7 +118,7 @@ protected:
 
 private:
     class Private;
-    Private * const p;
+    Private* const p;
 };
 
 } // namespace color_widgets

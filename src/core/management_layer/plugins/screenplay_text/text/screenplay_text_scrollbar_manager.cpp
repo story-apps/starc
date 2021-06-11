@@ -1,9 +1,7 @@
 #include "screenplay_text_scrollbar_manager.h"
 
 #include <business_layer/model/screenplay/text/screenplay_text_model.h>
-
 #include <ui/design_system/design_system.h>
-
 #include <utils/helpers/color_helper.h>
 #include <utils/helpers/time_helper.h>
 
@@ -12,8 +10,7 @@
 #include <QResizeEvent>
 
 
-namespace Ui
-{
+namespace Ui {
 
 class ScreenplayTextScrollBarManager::Implementation
 {
@@ -28,8 +25,8 @@ public:
 };
 
 ScreenplayTextScrollBarManager::Implementation::Implementation(QWidget* _parent)
-    : scrollbar(new QScrollBar(_parent)),
-      timeline(new ScreenplayTextTimeline(_parent))
+    : scrollbar(new QScrollBar(_parent))
+    , timeline(new ScreenplayTextTimeline(_parent))
 {
 }
 
@@ -44,8 +41,8 @@ void ScreenplayTextScrollBarManager::Implementation::updateTimelineGeometry()
 
 
 ScreenplayTextScrollBarManager::ScreenplayTextScrollBarManager(QAbstractScrollArea* _parent)
-    : QObject(_parent),
-      d(new Implementation(_parent))
+    : QObject(_parent)
+    , d(new Implementation(_parent))
 {
     Q_ASSERT(_parent);
 
@@ -61,7 +58,7 @@ ScreenplayTextScrollBarManager::~ScreenplayTextScrollBarManager() = default;
 
 void ScreenplayTextScrollBarManager::initScrollBarsSyncing()
 {
-    connect(d->scrollbar, &QScrollBar::rangeChanged, this, [this] (int _minimum, int _maximum) {
+    connect(d->scrollbar, &QScrollBar::rangeChanged, this, [this](int _minimum, int _maximum) {
         d->timeline->setScrollable(_minimum < _maximum);
     });
     auto updateTimelineValue = [this] {
@@ -80,9 +77,12 @@ void ScreenplayTextScrollBarManager::initScrollBarsSyncing()
         }
     };
     connect(d->scrollbar, &QScrollBar::valueChanged, this, updateTimelineValue);
-    connect(d->timeline, &ScreenplayTextTimeline::valueChanged, this, [this] (std::chrono::milliseconds _value) {
-        d->scrollbar->setValue(d->scrollbar->maximum() * _value / std::chrono::duration_cast<std::chrono::milliseconds>(d->model->duration()));
-    });
+    connect(d->timeline, &ScreenplayTextTimeline::valueChanged, this,
+            [this](std::chrono::milliseconds _value) {
+                d->scrollbar->setValue(
+                    d->scrollbar->maximum() * _value
+                    / std::chrono::duration_cast<std::chrono::milliseconds>(d->model->duration()));
+            });
     connect(d->timeline, &ScreenplayTextTimeline::updateValueRequested, this, updateTimelineValue);
 }
 
@@ -100,9 +100,12 @@ void ScreenplayTextScrollBarManager::setModel(BusinessLayer::ScreenplayTextModel
 
     if (d->model) {
         auto updateTimeline = [this] { d->timeline->setMaximum(d->model->duration()); };
-        connect(d->model, &QAbstractItemModel::rowsInserted, this, updateTimeline, Qt::QueuedConnection);
-        connect(d->model, &QAbstractItemModel::rowsRemoved, this, updateTimeline, Qt::QueuedConnection);
-        connect(d->model, &QAbstractItemModel::dataChanged, this, updateTimeline, Qt::QueuedConnection);
+        connect(d->model, &QAbstractItemModel::rowsInserted, this, updateTimeline,
+                Qt::QueuedConnection);
+        connect(d->model, &QAbstractItemModel::rowsRemoved, this, updateTimeline,
+                Qt::QueuedConnection);
+        connect(d->model, &QAbstractItemModel::dataChanged, this, updateTimeline,
+                Qt::QueuedConnection);
         updateTimeline();
     } else {
         d->timeline->update();
@@ -111,10 +114,8 @@ void ScreenplayTextScrollBarManager::setModel(BusinessLayer::ScreenplayTextModel
 
 bool ScreenplayTextScrollBarManager::eventFilter(QObject* _watched, QEvent* _event)
 {
-    if ((_watched == d->timeline
-         || _watched == d->timeline->parentWidget())
-            && (_event->type() == QEvent::Resize
-                || _event->type() == QEvent::Show)) {
+    if ((_watched == d->timeline || _watched == d->timeline->parentWidget())
+        && (_event->type() == QEvent::Resize || _event->type() == QEvent::Show)) {
         d->updateTimelineGeometry();
     }
 
@@ -125,12 +126,13 @@ bool ScreenplayTextScrollBarManager::eventFilter(QObject* _watched, QEvent* _eve
 // ****
 
 
-class ScreenplayTextTimeline::Implementation {
+class ScreenplayTextTimeline::Implementation
+{
 public:
     bool scrollable = true;
-    const std::chrono::milliseconds minimum = std::chrono::seconds{0};
-    std::chrono::milliseconds maximum = std::chrono::seconds{10};
-    std::chrono::milliseconds current = std::chrono::seconds{5};
+    const std::chrono::milliseconds minimum = std::chrono::seconds{ 0 };
+    std::chrono::milliseconds maximum = std::chrono::seconds{ 10 };
+    std::chrono::milliseconds current = std::chrono::seconds{ 5 };
 };
 
 
@@ -138,8 +140,8 @@ public:
 
 
 ScreenplayTextTimeline::ScreenplayTextTimeline(QWidget* _parent)
-    : Widget(_parent),
-      d(new Implementation)
+    : Widget(_parent)
+    , d(new Implementation)
 {
 }
 
@@ -172,8 +174,7 @@ void ScreenplayTextTimeline::setMaximum(std::chrono::milliseconds _maximum)
 
 void ScreenplayTextTimeline::setValue(std::chrono::milliseconds _value)
 {
-    if (d->minimum > _value || _value > d->maximum
-        || d->current == _value) {
+    if (d->minimum > _value || _value > d->maximum || d->current == _value) {
         return;
     }
 
@@ -185,11 +186,14 @@ void ScreenplayTextTimeline::setValue(std::chrono::milliseconds _value)
 QSize ScreenplayTextTimeline::sizeHint() const
 {
     const QSize marginsDelta = QSizeF(Ui::DesignSystem::scrollBar().margins().left()
-                                      + Ui::DesignSystem::scrollBar().margins().right(),
+                                          + Ui::DesignSystem::scrollBar().margins().right(),
                                       Ui::DesignSystem::scrollBar().margins().top()
-                                      + Ui::DesignSystem::scrollBar().margins().bottom()).toSize();
-    return QSize(static_cast<int>(Ui::DesignSystem::layout().px48() + Ui::DesignSystem::layout().px16()),
-                 10) + marginsDelta;
+                                          + Ui::DesignSystem::scrollBar().margins().bottom())
+                                   .toSize();
+    return QSize(static_cast<int>(Ui::DesignSystem::layout().px48()
+                                  + Ui::DesignSystem::layout().px16()),
+                 10)
+        + marginsDelta;
 }
 
 void ScreenplayTextTimeline::paintEvent(QPaintEvent* _event)
@@ -221,15 +225,16 @@ void ScreenplayTextTimeline::paintEvent(QPaintEvent* _event)
     // Рисуем хэндл
     //
     const qreal handleX = scrollbarRect.center().x();
-    const qreal handleY = d->maximum > std::chrono::milliseconds{0}
-                          ? ((height() - painter.fontMetrics().lineSpacing()) * d->current / d->maximum
-                             + painter.fontMetrics().lineSpacing() / 2)
-                          : 0;
+    const qreal handleY = d->maximum > std::chrono::milliseconds{ 0 }
+        ? ((height() - painter.fontMetrics().lineSpacing()) * d->current / d->maximum
+           + painter.fontMetrics().lineSpacing() / 2)
+        : 0;
     const qreal handleSize = Ui::DesignSystem::layout().px12();
-    const QRectF handleRect = QRectF(handleX - handleSize / 2, handleY - handleSize / 2,
-                                     handleSize, handleSize);
+    const QRectF handleRect
+        = QRectF(handleX - handleSize / 2, handleY - handleSize / 2, handleSize, handleSize);
     if (d->scrollable) {
-        painter.setPen(QPen(Ui::DesignSystem::color().onBackground(), Ui::DesignSystem::layout().px2()));
+        painter.setPen(
+            QPen(Ui::DesignSystem::color().onBackground(), Ui::DesignSystem::layout().px2()));
         painter.drawEllipse(handleRect);
     }
 
@@ -249,22 +254,23 @@ void ScreenplayTextTimeline::paintEvent(QPaintEvent* _event)
     const auto markWidth = contentRect.width() - handleTextLeft;
     const qreal marksSpacing = painter.fontMetrics().lineSpacing() * 4;
     const int marksCount = (height() - painter.fontMetrics().lineSpacing()) / marksSpacing;
-    const qreal marksSpacingCorrected = static_cast<qreal>(height() - painter.fontMetrics().lineSpacing()) / marksCount;
+    const qreal marksSpacingCorrected
+        = static_cast<qreal>(height() - painter.fontMetrics().lineSpacing()) / marksCount;
     qreal top = 0.0;
     for (int markIndex = 0; markIndex <= marksCount; ++markIndex) {
-        const QRectF markTextRect(handleTextLeft, top,
-                                  markWidth, painter.fontMetrics().lineSpacing());
+        const QRectF markTextRect(handleTextLeft, top, markWidth,
+                                  painter.fontMetrics().lineSpacing());
         const auto duartionAtMark = d->maximum * (static_cast<qreal>(markIndex) / marksCount);
-        if (d->scrollable
-            && markTextRect.intersects(handleTextRect)) {
+        if (d->scrollable && markTextRect.intersects(handleTextRect)) {
             painter.setOpacity(Ui::DesignSystem::focusBackgroundOpacity());
         }
         painter.setPen(QPen(scrollbarColor, Ui::DesignSystem::layout().px2()));
-        painter.drawLine(scrollbarRect.right(), markTextRect.center().y(),
-                         tickRight, markTextRect.center().y());
+        painter.drawLine(scrollbarRect.right(), markTextRect.center().y(), tickRight,
+                         markTextRect.center().y());
         painter.setPen(markColor);
-        painter.drawText(markTextRect, Qt::AlignLeft | Qt::AlignVCenter,
-                         TimeHelper::toString(std::chrono::duration_cast<std::chrono::seconds>(duartionAtMark)));
+        painter.drawText(
+            markTextRect, Qt::AlignLeft | Qt::AlignVCenter,
+            TimeHelper::toString(std::chrono::duration_cast<std::chrono::seconds>(duartionAtMark)));
         if (markTextRect.intersects(handleTextRect)) {
             painter.setOpacity(1.0);
         }
@@ -277,7 +283,9 @@ void ScreenplayTextTimeline::paintEvent(QPaintEvent* _event)
     //
     if (d->scrollable) {
         painter.setPen(Ui::DesignSystem::color().onBackground());
-        painter.drawText(handleTextRect, Qt::AlignLeft | Qt::AlignVCenter,TimeHelper::toString(std::chrono::duration_cast<std::chrono::seconds>(d->current)));
+        painter.drawText(
+            handleTextRect, Qt::AlignLeft | Qt::AlignVCenter,
+            TimeHelper::toString(std::chrono::duration_cast<std::chrono::seconds>(d->current)));
     }
 }
 
@@ -325,7 +333,8 @@ void ScreenplayTextTimeline::wheelEvent(QWheelEvent* _event)
         return;
     }
 
-    auto cloneEvent = new QWheelEvent(_event->pos(), _event->delta(), _event->buttons(), _event->modifiers(), _event->orientation());
+    auto cloneEvent = new QWheelEvent(_event->pos(), _event->delta(), _event->buttons(),
+                                      _event->modifiers(), _event->orientation());
     QApplication::postEvent(scrollArea->verticalScrollBar(), cloneEvent);
 }
 
@@ -341,7 +350,8 @@ void ScreenplayTextTimeline::updateValue(const QPoint& _mousePosition)
     const qreal trackHeight = contentsRect().height();
     const qreal mousePosition = _mousePosition.y() - contentsMargins().left();
     const auto value = d->maximum * mousePosition / trackHeight;
-    setValue(qBound(d->minimum, std::chrono::duration_cast<std::chrono::milliseconds>(value), d->maximum));
+    setValue(qBound(d->minimum, std::chrono::duration_cast<std::chrono::milliseconds>(value),
+                    d->maximum));
 }
 
 } // namespace Ui

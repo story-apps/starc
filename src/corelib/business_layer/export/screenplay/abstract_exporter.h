@@ -3,8 +3,7 @@
 #include <corelib_global.h>
 
 
-namespace BusinessLayer
-{
+namespace BusinessLayer {
 
 struct ExportOptions;
 class ScreenplayTextModel;
@@ -15,12 +14,15 @@ class ScreenplayTextModel;
 class CORE_LIBRARY_EXPORT AbstractExporter
 {
 public:
-    virtual ~AbstractExporter() {}
+    virtual ~AbstractExporter()
+    {
+    }
 
     /**
      * @brief Экспорт сценария в файл
      */
-    virtual void exportTo(ScreenplayTextModel* _model, const ExportOptions& _exportOptions) const = 0;
+    virtual void exportTo(ScreenplayTextModel* _model,
+                          const ExportOptions& _exportOptions) const = 0;
 };
 
 } // namespace BusinessLayer

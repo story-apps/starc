@@ -3,8 +3,7 @@
 #include "standard_key_handler.h"
 
 
-namespace KeyProcessingLayer
-{
+namespace KeyProcessingLayer {
 
 /**
  * @brief Класс выполняющий обработку нажатия клавиш в блоке реплики
@@ -21,7 +20,7 @@ protected:
     /** @{ */
     void handleEnter(QKeyEvent* _event = 0);
     void handleTab(QKeyEvent* _event = 0);
-    void handleOther(QKeyEvent *_event);
+    void handleOther(QKeyEvent* _event);
     /** @} */
 };
 

@@ -1,19 +1,18 @@
 #pragma once
 
-#include <corelib_global.h>
-
 #include <QScopedPointer>
+
+#include <corelib_global.h>
 
 class QDateTime;
 class QUuid;
 
 namespace Domain {
-    class DocumentChangeObject;
+class DocumentChangeObject;
 }
 
 
-namespace DataStorageLayer
-{
+namespace DataStorageLayer {
 
 /**
  * @brief Хранилище изменений документов
@@ -26,8 +25,9 @@ public:
     /**
      * @brief Сохранить документ
      */
-    Domain::DocumentChangeObject* appendDocumentChange(const QUuid& _documentUuid,
-        const QUuid& _uuid, const QByteArray& _undoPatch, const QByteArray& _redoPatch, const QString& _userEmail, const QString& _userName);
+    Domain::DocumentChangeObject* appendDocumentChange(
+        const QUuid& _documentUuid, const QUuid& _uuid, const QByteArray& _undoPatch,
+        const QByteArray& _redoPatch, const QString& _userEmail, const QString& _userName);
 
     /**
      * @brief Получить изменение документа с заданным индексом

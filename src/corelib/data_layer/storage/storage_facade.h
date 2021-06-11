@@ -3,8 +3,7 @@
 #include <corelib_global.h>
 
 
-namespace DataStorageLayer
-{
+namespace DataStorageLayer {
 
 class DocumentChangeStorage;
 class DocumentStorage;

@@ -5,8 +5,7 @@
 #include <QAction>
 
 
-namespace Ui
-{
+namespace Ui {
 
 AccountToolBar::AccountToolBar(QWidget* _parent)
     : AppBar(_parent)

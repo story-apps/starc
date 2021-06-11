@@ -5,8 +5,7 @@
 #include <QPixmap>
 
 
-namespace ManagementLayer
-{
+namespace ManagementLayer {
 
 class Project::Implementation
 {
@@ -146,17 +145,19 @@ void Project::setPosterPath(const QString& _path)
 QString Project::displayLastEditTime() const
 {
     switch (d->lastEditTime.daysTo(QDateTime::currentDateTime())) {
-        case 0: {
-            return QApplication::translate("Domain::Project", "today at") + d->lastEditTime.toString(" hh:mm");
-        }
+    case 0: {
+        return QApplication::translate("Domain::Project", "today at")
+            + d->lastEditTime.toString(" hh:mm");
+    }
 
-        case 1: {
-            return QApplication::translate("Domain::Project", "yesterday at") + d->lastEditTime.toString(" hh:mm");
-        }
+    case 1: {
+        return QApplication::translate("Domain::Project", "yesterday at")
+            + d->lastEditTime.toString(" hh:mm");
+    }
 
-        default: {
-            return d->lastEditTime.toString("dd.MM.yyyy hh:mm");
-        }
+    default: {
+        return d->lastEditTime.toString("dd.MM.yyyy hh:mm");
+    }
     }
 }
 
@@ -183,44 +184,41 @@ void Project::setId(int _id)
 QVariant Project::data(int _role) const
 {
     switch (_role) {
-        case ProjectDataRole::Type: {
-            return static_cast<int>(type());
-        }
+    case ProjectDataRole::Type: {
+        return static_cast<int>(type());
+    }
 
-        case ProjectDataRole::Path: {
-            return path();
-        }
+    case ProjectDataRole::Path: {
+        return path();
+    }
 
-        case ProjectDataRole::PosterPath: {
-            return posterPath();
-        }
+    case ProjectDataRole::PosterPath: {
+        return posterPath();
+    }
 
-        case ProjectDataRole::Name: {
-            return name();
-        }
+    case ProjectDataRole::Name: {
+        return name();
+    }
 
-        case ProjectDataRole::Logline: {
-            return logline();
-        }
+    case ProjectDataRole::Logline: {
+        return logline();
+    }
 
-        case ProjectDataRole::LastEditTime: {
-            return lastEditTime();
-        }
+    case ProjectDataRole::LastEditTime: {
+        return lastEditTime();
+    }
 
-        default: {
-            return {};
-        }
+    default: {
+        return {};
+    }
     }
 }
 
 bool operator==(const Project& _lhs, const Project& _rhs)
 {
-    return _lhs.type() == _rhs.type()
-            && _lhs.path() == _rhs.path()
-            && _lhs.posterPath() == _rhs.posterPath()
-            && _lhs.name() == _rhs.name()
-            && _lhs.logline() == _rhs.logline()
-            && _lhs.lastEditTime() == _rhs.lastEditTime();
+    return _lhs.type() == _rhs.type() && _lhs.path() == _rhs.path()
+        && _lhs.posterPath() == _rhs.posterPath() && _lhs.name() == _rhs.name()
+        && _lhs.logline() == _rhs.logline() && _lhs.lastEditTime() == _rhs.lastEditTime();
 }
 
 
@@ -238,8 +236,8 @@ public:
 
 
 ProjectsModel::ProjectsModel(QObject* _parent)
-    : QAbstractListModel(_parent),
-      d(new Implementation)
+    : QAbstractListModel(_parent)
+    , d(new Implementation)
 {
 }
 
@@ -251,7 +249,7 @@ const Project& ProjectsModel::projectAt(int _row) const
 
 ProjectsModel::~ProjectsModel() = default;
 
-void ProjectsModel::append(const Project &_project)
+void ProjectsModel::append(const Project& _project)
 {
     beginInsertRows({}, d->projects.size(), d->projects.size());
     d->projects.append(_project);
@@ -276,7 +274,7 @@ void ProjectsModel::prepend(const Project& _project)
     endInsertRows();
 }
 
-void ProjectsModel::remove(const Project &_project)
+void ProjectsModel::remove(const Project& _project)
 {
     const int kInvalidIndex = -1;
     const int projectIndex = d->projects.indexOf(_project);
@@ -348,9 +346,9 @@ bool ProjectsModel::moveProject(const Project& _moved, const Project& _insertAft
     // Перемещаем
     //
     beginMoveRows({}, movedProjectIndex, movedProjectIndex, {}, insertAfterProjectIndex + 1);
-    d->projects.move(movedProjectIndex, movedProjectIndex > insertAfterProjectIndex
-                                        ? insertAfterProjectIndex + 1
-                                        : insertAfterProjectIndex);
+    d->projects.move(movedProjectIndex,
+                     movedProjectIndex > insertAfterProjectIndex ? insertAfterProjectIndex + 1
+                                                                 : insertAfterProjectIndex);
     endMoveRows();
     return true;
 }
@@ -384,8 +382,7 @@ QVariant ProjectsModel::data(const QModelIndex& _index, int _role) const
     }
 
     const int projectIndex = _index.row();
-    if (projectIndex < 0
-        || projectIndex >= d->projects.size()) {
+    if (projectIndex < 0 || projectIndex >= d->projects.size()) {
         return {};
     }
 

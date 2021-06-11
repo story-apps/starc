@@ -1,12 +1,11 @@
 #pragma once
 
-#include <corelib_global.h>
-
 #include <QVector>
 
+#include <corelib_global.h>
 
-namespace BusinessLayer
-{
+
+namespace BusinessLayer {
 
 struct ScreenplayImportOptions;
 
@@ -52,7 +51,8 @@ public:
     /**
      * @brief Импорт сценариев из заданного документа
      */
-    virtual QVector<Screenplay> importScreenplays(const ScreenplayImportOptions& _options) const = 0;
+    virtual QVector<Screenplay> importScreenplays(
+        const ScreenplayImportOptions& _options) const = 0;
 };
 
 } // namespace BusinessLayer

@@ -3,8 +3,7 @@
 #include "abstract_screenplay_importer.h"
 
 
-namespace BusinessLayer
-{
+namespace BusinessLayer {
 
 /**
  * @brief Импортер сценария из файлов Celtx

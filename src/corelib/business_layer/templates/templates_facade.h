@@ -1,15 +1,14 @@
 #pragma once
 
-#include <corelib_global.h>
-
 #include <QScopedPointer>
 #include <QString>
+
+#include <corelib_global.h>
 
 class QStandardItemModel;
 
 
-namespace BusinessLayer
-{
+namespace BusinessLayer {
 
 class ScreenplayTemplate;
 class TextTemplate;
@@ -31,17 +30,18 @@ public:
     static QStandardItemModel* textTemplates();
     static QStandardItemModel* screenplayTemplates();
 
-//    /**
-//     * @brief Проверить существование шаблона с заданным именем
-//     */
-//    static bool containsTemplate(const QString& _templateName);
+    //    /**
+    //     * @brief Проверить существование шаблона с заданным именем
+    //     */
+    //    static bool containsTemplate(const QString& _templateName);
 
     /**
      * @brief Получить шаблон в соответствии с заданным идентификатором
      * @note Если id не задан, возвращается стандартный шаблон
      */
     static const BusinessLayer::TextTemplate& textTemplate(const QString& _templateId = {});
-    static const BusinessLayer::ScreenplayTemplate& screenplayTemplate(const QString& _templateId = {});
+    static const BusinessLayer::ScreenplayTemplate& screenplayTemplate(const QString& _templateId
+                                                                       = {});
 
     /**
      * @brief Задать стандартный шаблон
@@ -49,23 +49,23 @@ public:
     static void setDefaultTextTemplate(const QString& _templateId);
     static void setDefaultScreenplayTemplate(const QString& _templateId);
 
-//    /**
-//     * @brief Сохранить стиль в библиотеке шаблонов
-//     */
-//    /** @{ */
-//    static void saveTemplate(const ScenarioTemplate& _template);
-//    static bool saveTemplate(const QString& _templateFilePath);
-//    /** @} */
+    //    /**
+    //     * @brief Сохранить стиль в библиотеке шаблонов
+    //     */
+    //    /** @{ */
+    //    static void saveTemplate(const ScenarioTemplate& _template);
+    //    static bool saveTemplate(const QString& _templateFilePath);
+    //    /** @} */
 
-//    /**
-//     * @brief Удалить шаблон по заданному имены
-//     */
-//    static void removeTemplate(const QString& _templateName);
+    //    /**
+    //     * @brief Удалить шаблон по заданному имены
+    //     */
+    //    static void removeTemplate(const QString& _templateName);
 
-//    /**
-//     * @brief Обновить цвета блоков текста для всех шаблонов
-//     */
-//    static void updateTemplatesColors();
+    //    /**
+    //     * @brief Обновить цвета блоков текста для всех шаблонов
+    //     */
+    //    static void updateTemplatesColors();
 
     /**
      * @brief Обновить переводы
@@ -84,4 +84,4 @@ private:
     QScopedPointer<Implementation> d;
 };
 
-} // namespace BusinssLayer
+} // namespace BusinessLayer

@@ -7,17 +7,12 @@
 class QXmlStreamReader;
 
 
-namespace BusinessLayer
-{
+namespace BusinessLayer {
 
 /**
  * @brief Тип разделителя
  */
-enum class ScreenplayTextModelSplitterItemType {
-    Undefined,
-    Start,
-    End
-};
+enum class ScreenplayTextModelSplitterItemType { Undefined, Start, End };
 
 /**
  * @brief Определим метод для возможности использовать типы в виде ключей в словарях

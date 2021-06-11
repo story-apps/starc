@@ -11,7 +11,8 @@ class ScreenplayTextModelXmlWriter::Implementation
 {
 public:
     /**
-     * @brief Записать данные текстового элемента в xml, объединяя с последним незаписанным элементом
+     * @brief Записать данные текстового элемента в xml, объединяя с последним незаписанным
+     * элементом
      */
     void writeTextItemData(const TextItemData& _data = {});
 
@@ -30,7 +31,8 @@ public:
 void ScreenplayTextModelXmlWriter::Implementation::writeTextItemData(const TextItemData& _data)
 {
     auto writeLastTextItemDataAndDestroy = [this] {
-        data += lastTextItemData.item->toXml(lastTextItemData.fromPosition, lastTextItemData.toPosition);
+        data += lastTextItemData.item->toXml(lastTextItemData.fromPosition,
+                                             lastTextItemData.toPosition);
         delete lastTextItemData.item;
         lastTextItemData = {};
     };

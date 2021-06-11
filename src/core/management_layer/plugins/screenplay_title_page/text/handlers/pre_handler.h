@@ -3,8 +3,7 @@
 #include "standard_key_handler.h"
 
 
-namespace KeyProcessingLayer
-{
+namespace KeyProcessingLayer {
 
 /**
  * @brief Класс выполняющий предварительную обработку нажатия клавиш в любом блоке
@@ -16,15 +15,27 @@ public:
 
 protected:
     /**
- * @brief Реализация интерфейса AbstractKeyHandler
- */
+     * @brief Реализация интерфейса AbstractKeyHandler
+     */
     /** @{ */
-    void handleEnter(QKeyEvent* = 0) {}
-    void handleTab(QKeyEvent* = 0) {}
-    void handleBackspace(QKeyEvent* = 0) {}
-    void handleEscape(QKeyEvent* = 0) {}
-    void handleUp(QKeyEvent* = 0) {}
-    void handleDown(QKeyEvent* = 0) {}
+    void handleEnter(QKeyEvent* = 0)
+    {
+    }
+    void handleTab(QKeyEvent* = 0)
+    {
+    }
+    void handleBackspace(QKeyEvent* = 0)
+    {
+    }
+    void handleEscape(QKeyEvent* = 0)
+    {
+    }
+    void handleUp(QKeyEvent* = 0)
+    {
+    }
+    void handleDown(QKeyEvent* = 0)
+    {
+    }
 
     void handleDelete(QKeyEvent* _event = 0);
     void handleOther(QKeyEvent* _event = 0);

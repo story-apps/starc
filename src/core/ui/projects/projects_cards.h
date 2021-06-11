@@ -3,13 +3,12 @@
 #include <QGraphicsView>
 
 namespace ManagementLayer {
-    class Project;
-    class ProjectsModel;
-}
+class Project;
+class ProjectsModel;
+} // namespace ManagementLayer
 
 
-namespace Ui
-{
+namespace Ui {
 
 /**
  * @brief Сцена для отображения списка проектов
@@ -137,7 +136,6 @@ private:
     class Implementation;
     QScopedPointer<Implementation> d;
 };
-
 
 
 } // namespace Ui

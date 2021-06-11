@@ -5,7 +5,6 @@
 #include <business_layer/model/screenplay/text/screenplay_text_block_parser.h>
 #include <business_layer/model/screenplay/text/screenplay_text_model_xml.h>
 #include <business_layer/templates/screenplay_template.h>
-
 #include <domain/document_object.h>
 
 #include <QFile>
@@ -15,10 +14,10 @@
 #include <set>
 
 
-namespace BusinessLayer
-{
+namespace BusinessLayer {
 
-AbstractScreenplayImporter::Documents TrelbyImporter::importDocuments(const ScreenplayImportOptions& _options) const
+AbstractScreenplayImporter::Documents TrelbyImporter::importDocuments(
+    const ScreenplayImportOptions& _options) const
 {
     //
     // Открываем файл
@@ -33,7 +32,7 @@ AbstractScreenplayImporter::Documents TrelbyImporter::importDocuments(const Scre
     //
     const QStringList paragraphs = QString(trelbyFile.readAll()).split("\n");
     QString paragraphText;
-    const QStringList blockChecker = {">", "&", "|", "." };
+    const QStringList blockChecker = { ">", "&", "|", "." };
     std::set<QString> characterNames;
     std::set<QString> locationNames;
     for (const QString& paragraph : paragraphs) {
@@ -42,8 +41,7 @@ AbstractScreenplayImporter::Documents TrelbyImporter::importDocuments(const Scre
         //
         // Если строка пуста, или не является текстовым блоком, пропускаем её
         //
-        if (paragraphType.isEmpty()
-            || !blockChecker.contains(paragraphType[0])) {
+        if (paragraphType.isEmpty() || !blockChecker.contains(paragraphType[0])) {
             continue;
         }
 
@@ -70,35 +68,36 @@ AbstractScreenplayImporter::Documents TrelbyImporter::importDocuments(const Scre
         //
         if (paragraphType.startsWith(".")) {
             switch (blockType) {
-                case ScreenplayParagraphType::SceneHeading: {
-                    if (!_options.importLocations) {
-                        break;
-                    }
-
-                    const auto locationName = SceneHeadingParser::location(paragraphText);
-                    if (locationName.isEmpty()) {
-                        break;
-                    }
-
-                    locationNames.emplace(locationName);
+            case ScreenplayParagraphType::SceneHeading: {
+                if (!_options.importLocations) {
                     break;
                 }
 
-                case ScreenplayParagraphType::Character: {
-                    if (!_options.importCharacters) {
-                        break;
-                    }
-
-                    const auto characterName = CharacterParser::name(paragraphText);
-                    if (characterName.isEmpty()) {
-                        break;
-                    }
-
-                    characterNames.emplace(characterName);
+                const auto locationName = SceneHeadingParser::location(paragraphText);
+                if (locationName.isEmpty()) {
                     break;
                 }
 
-                default: break;
+                locationNames.emplace(locationName);
+                break;
+            }
+
+            case ScreenplayParagraphType::Character: {
+                if (!_options.importCharacters) {
+                    break;
+                }
+
+                const auto characterName = CharacterParser::name(paragraphText);
+                if (characterName.isEmpty()) {
+                    break;
+                }
+
+                characterNames.emplace(characterName);
+                break;
+            }
+
+            default:
+                break;
             }
 
             //
@@ -118,7 +117,8 @@ AbstractScreenplayImporter::Documents TrelbyImporter::importDocuments(const Scre
     return documents;
 }
 
-QVector<AbstractScreenplayImporter::Screenplay> TrelbyImporter::importScreenplays(const ScreenplayImportOptions& _options) const
+QVector<AbstractScreenplayImporter::Screenplay> TrelbyImporter::importScreenplays(
+    const ScreenplayImportOptions& _options) const
 {
     if (_options.importScreenplay == false) {
         return {};
@@ -143,7 +143,8 @@ QVector<AbstractScreenplayImporter::Screenplay> TrelbyImporter::importScreenplay
     QXmlStreamWriter writer(&result.text);
     writer.writeStartDocument();
     writer.writeStartElement(xml::kDocumentTag);
-    writer.writeAttribute(xml::kMimeTypeAttribute, Domain::mimeTypeFor(Domain::DocumentObjectType::ScreenplayText));
+    writer.writeAttribute(xml::kMimeTypeAttribute,
+                          Domain::mimeTypeFor(Domain::DocumentObjectType::ScreenplayText));
     writer.writeAttribute(xml::kVersionAttribute, "1.0");
 
     //
@@ -151,7 +152,7 @@ QVector<AbstractScreenplayImporter::Screenplay> TrelbyImporter::importScreenplay
     //
     const QStringList paragraphs = QString(trelbyFile.readAll()).split("\n");
     QString paragraphText;
-    const QStringList blockChecker = {">", "&", "|", "." };
+    const QStringList blockChecker = { ">", "&", "|", "." };
     bool alreadyInScene = false;
     for (const QString& paragraph : paragraphs) {
         const QString paragraphType = paragraph.left(2);
@@ -159,8 +160,7 @@ QVector<AbstractScreenplayImporter::Screenplay> TrelbyImporter::importScreenplay
         //
         // Если строка пуста, или не является текстовым блоком, пропускаем её
         //
-        if (paragraphType.isEmpty()
-            || !blockChecker.contains(paragraphType[0])) {
+        if (paragraphType.isEmpty() || !blockChecker.contains(paragraphType[0])) {
             continue;
         }
 
@@ -198,12 +198,10 @@ QVector<AbstractScreenplayImporter::Screenplay> TrelbyImporter::importScreenplay
         // Корректируем при необходимости
         //
         if (blockType == ScreenplayParagraphType::Parenthetical) {
-            if (!paragraphText.isEmpty()
-                && paragraphText.front() == "(") {
+            if (!paragraphText.isEmpty() && paragraphText.front() == "(") {
                 paragraphText.remove(0, 1);
             }
-            if (!paragraphText.isEmpty()
-                && paragraphText.back() == ")") {
+            if (!paragraphText.isEmpty() && paragraphText.back() == ")") {
                 paragraphText.chop(1);
             }
         }

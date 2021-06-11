@@ -10,8 +10,7 @@
 #include <QUrl>
 
 
-namespace Ui
-{
+namespace Ui {
 
 namespace {
 const char* kLanguageKey = "language";
@@ -57,29 +56,29 @@ public:
 };
 
 LanguageDialog::Implementation::Implementation(QWidget* _parent)
-    : azerbaijani(new RadioButton(_parent)),
-      belarusian(new RadioButton(_parent)),
-      danish(new RadioButton(_parent)),
-      english(new RadioButton(_parent)),
-      french(new RadioButton(_parent)),
-      galician(new RadioButton(_parent)),
-      german(new RadioButton(_parent)),
-      hebrew(new RadioButton(_parent)),
-      hindi(new RadioButton(_parent)),
-      hungarian(new RadioButton(_parent)),
-      indonesian(new RadioButton(_parent)),
-      italian(new RadioButton(_parent)),
-      persian(new RadioButton(_parent)),
-      polish(new RadioButton(_parent)),
-      portugueseBrazil(new RadioButton(_parent)),
-      romanian(new RadioButton(_parent)),
-      russian(new RadioButton(_parent)),
-      slovenian(new RadioButton(_parent)),
-      spanish(new RadioButton(_parent)),
-      turkish(new RadioButton(_parent)),
-      ukrainian(new RadioButton(_parent)),
-      languageHowToAddLink(new Body1LinkLabel(_parent)),
-      okButton(new Button(_parent))
+    : azerbaijani(new RadioButton(_parent))
+    , belarusian(new RadioButton(_parent))
+    , danish(new RadioButton(_parent))
+    , english(new RadioButton(_parent))
+    , french(new RadioButton(_parent))
+    , galician(new RadioButton(_parent))
+    , german(new RadioButton(_parent))
+    , hebrew(new RadioButton(_parent))
+    , hindi(new RadioButton(_parent))
+    , hungarian(new RadioButton(_parent))
+    , indonesian(new RadioButton(_parent))
+    , italian(new RadioButton(_parent))
+    , persian(new RadioButton(_parent))
+    , polish(new RadioButton(_parent))
+    , portugueseBrazil(new RadioButton(_parent))
+    , romanian(new RadioButton(_parent))
+    , russian(new RadioButton(_parent))
+    , slovenian(new RadioButton(_parent))
+    , spanish(new RadioButton(_parent))
+    , turkish(new RadioButton(_parent))
+    , ukrainian(new RadioButton(_parent))
+    , languageHowToAddLink(new Body1LinkLabel(_parent))
+    , okButton(new Button(_parent))
 {
     azerbaijani->setText("Azərbaycan");
     azerbaijani->setProperty(kLanguageKey, QLocale::Azerbaijani);
@@ -96,9 +95,9 @@ LanguageDialog::Implementation::Implementation(QWidget* _parent)
     galician->setProperty(kLanguageKey, QLocale::Galician);
     german->setText("Deutsch");
     german->setProperty(kLanguageKey, QLocale::German);
-    hebrew ->setText("עִבְרִית");
+    hebrew->setText("עִבְרִית");
     hebrew->setProperty(kLanguageKey, QLocale::Hebrew);
-    hindi ->setText("हिन्दी");
+    hindi->setText("हिन्दी");
     hindi->setProperty(kLanguageKey, QLocale::Hindi);
     hungarian->setText("Magyar");
     hungarian->setProperty(kLanguageKey, QLocale::Hungarian);
@@ -125,7 +124,9 @@ LanguageDialog::Implementation::Implementation(QWidget* _parent)
     ukrainian->setText("Українська");
     ukrainian->setProperty(kLanguageKey, QLocale::Ukrainian);
 
-    languageHowToAddLink->setLink(QUrl("https://github.com/dimkanovikov/starc/wiki/How-to-add-the-translation-of-Story-Architect-to-your-native-language-or-improve-one-of-existing%3F"));
+    languageHowToAddLink->setLink(QUrl("https://github.com/dimkanovikov/starc/wiki/"
+                                       "How-to-add-the-translation-of-Story-Architect-to-your-"
+                                       "native-language-or-improve-one-of-existing%3F"));
 
     buttonsLayout = new QHBoxLayout;
     buttonsLayout->setContentsMargins({});
@@ -141,27 +142,9 @@ LanguageDialog::Implementation::Implementation(QWidget* _parent)
 
 QVector<RadioButton*> LanguageDialog::Implementation::languages() const
 {
-    return { azerbaijani,
-                belarusian,
-                danish,
-                english,
-                french,
-                galician,
-                german,
-                hebrew,
-                hindi,
-                hungarian,
-                indonesian,
-                italian,
-                persian,
-                polish,
-                portugueseBrazil,
-                romanian,
-                russian,
-                slovenian,
-                spanish,
-                turkish,
-                ukrainian };
+    return { azerbaijani,      belarusian, danish,    english,    french,  galician, german,
+             hebrew,           hindi,      hungarian, indonesian, italian, persian,  polish,
+             portugueseBrazil, romanian,   russian,   slovenian,  spanish, turkish,  ukrainian };
 }
 
 
@@ -169,12 +152,12 @@ QVector<RadioButton*> LanguageDialog::Implementation::languages() const
 
 
 LanguageDialog::LanguageDialog(QWidget* _parent)
-    : AbstractDialog(_parent),
-      d(new Implementation(this))
+    : AbstractDialog(_parent)
+    , d(new Implementation(this))
 {
     setRejectButton(d->okButton);
 
-    auto buildFocusChain = [] (const QVector<RadioButton*>& _buttons) {
+    auto buildFocusChain = [](const QVector<RadioButton*>& _buttons) {
         RadioButton* previousButton = nullptr;
         for (auto button : _buttons) {
             if (previousButton != nullptr) {
@@ -183,26 +166,10 @@ LanguageDialog::LanguageDialog(QWidget* _parent)
             previousButton = button;
         }
     };
-    buildFocusChain({ d->azerbaijani,
-                      d->belarusian,
-                      d->danish,
-                      d->german,
-                      d->english,
-                      d->spanish,
-                      d->french,
-                      d->galician,
-                      d->indonesian,
-                      d->italian,
-                      d->hungarian,
-                      d->polish,
-                      d->portugueseBrazil,
-                      d->romanian,
-                      d->russian,
-                      d->slovenian,
-                      d->turkish,
-                      d->ukrainian,
-                      d->hebrew,
-                      d->hindi,
+    buildFocusChain({ d->azerbaijani, d->belarusian, d->danish,           d->german,     d->english,
+                      d->spanish,     d->french,     d->galician,         d->indonesian, d->italian,
+                      d->hungarian,   d->polish,     d->portugueseBrazil, d->romanian,   d->russian,
+                      d->slovenian,   d->turkish,    d->ukrainian,        d->hebrew,     d->hindi,
                       d->persian });
 
     int row = 0;
@@ -238,12 +205,13 @@ LanguageDialog::LanguageDialog(QWidget* _parent)
     contentsLayout()->addLayout(d->buttonsLayout, row++, 0, 1, 4);
 
     for (auto radioButton : d->languages()) {
-        connect(radioButton, &RadioButton::checkedChanged, this, [this, radioButton] (bool _checked) {
-            if (_checked) {
-                auto language = radioButton->property(kLanguageKey).toInt();
-                emit languageChanged(static_cast<QLocale::Language>(language));
-            }
-        });
+        connect(radioButton, &RadioButton::checkedChanged, this,
+                [this, radioButton](bool _checked) {
+                    if (_checked) {
+                        auto language = radioButton->property(kLanguageKey).toInt();
+                        emit languageChanged(static_cast<QLocale::Language>(language));
+                    }
+                });
     }
     connect(d->okButton, &Button::clicked, this, &LanguageDialog::hideDialog);
 
@@ -277,7 +245,8 @@ void LanguageDialog::updateTranslations()
 {
     setTitle(tr("Change application language"));
 
-    d->languageHowToAddLink->setText(tr("Did not find your preffered language? Read how you can add it yourself."));
+    d->languageHowToAddLink->setText(
+        tr("Did not find your preffered language? Read how you can add it yourself."));
 
     d->okButton->setText(tr("Close"));
 }
@@ -299,10 +268,10 @@ void LanguageDialog::designSystemChangeEvent(DesignSystemChangeEvent* _event)
     d->okButton->setTextColor(Ui::DesignSystem::color().secondary());
 
     contentsLayout()->setSpacing(static_cast<int>(Ui::DesignSystem::layout().px8()));
-    d->buttonsLayout->setContentsMargins(QMarginsF(Ui::DesignSystem::layout().px12(),
-                                                   Ui::DesignSystem::layout().px12(),
-                                                   Ui::DesignSystem::layout().px16(),
-                                                   Ui::DesignSystem::layout().px8()).toMargins());
+    d->buttonsLayout->setContentsMargins(
+        QMarginsF(Ui::DesignSystem::layout().px12(), Ui::DesignSystem::layout().px12(),
+                  Ui::DesignSystem::layout().px16(), Ui::DesignSystem::layout().px8())
+            .toMargins());
 }
 
 } // namespace Ui

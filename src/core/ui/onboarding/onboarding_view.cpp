@@ -14,8 +14,7 @@
 #include <QUrl>
 
 
-namespace Ui
-{
+namespace Ui {
 
 class OnboardingView::Implementation
 {
@@ -69,9 +68,9 @@ public:
 };
 
 OnboardingView::Implementation::Implementation(OnboardingView* _parent)
-    : q(_parent),
-      languagePage(new Widget(_parent)),
-      themePage(new Widget(_parent))
+    : q(_parent)
+    , languagePage(new Widget(_parent))
+    , themePage(new Widget(_parent))
 {
     initLanguagePage();
     initThemePage();
@@ -81,17 +80,16 @@ void OnboardingView::Implementation::initLanguagePage()
 {
     languageTitleLabel = new H5Label(languagePage);
 
-    auto initLanguageButton = [this] (const QString& _name, QLocale::Language _language) {
+    auto initLanguageButton = [this](const QString& _name, QLocale::Language _language) {
         RadioButton* languageButton = new RadioButton(languagePage);
         languageButton->setText(_name);
         languageButton->setChecked(QLocale().system().language() == _language);
         QObject::connect(languageButton, &RadioButton::checkedChanged, q,
-            [this, _language] (bool _checked)
-        {
-            if (_checked) {
-                emit q->languageChanged(_language);
-            }
-        });
+                         [this, _language](bool _checked) {
+                             if (_checked) {
+                                 emit q->languageChanged(_language);
+                             }
+                         });
         languageButtons.append(languageButton);
         return languageButton;
     };
@@ -109,7 +107,8 @@ void OnboardingView::Implementation::initLanguagePage()
     RadioButton* italianLanguage = initLanguageButton("Italiano", QLocale::Italian);
     RadioButton* persianLanguage = initLanguageButton("فارسی", QLocale::Persian);
     RadioButton* polishLanguage = initLanguageButton("Polski", QLocale::Polish);
-    RadioButton* portugueseBrazilLanguage = initLanguageButton("Português Brasileiro", QLocale::Portuguese);
+    RadioButton* portugueseBrazilLanguage
+        = initLanguageButton("Português Brasileiro", QLocale::Portuguese);
     RadioButton* romanianLanguage = initLanguageButton("Română", QLocale::Romanian);
     RadioButton* russianLanguage = initLanguageButton("Русский", QLocale::Russian);
     RadioButton* slovenianLanguage = initLanguageButton("Slovenski", QLocale::Slovenian);
@@ -141,7 +140,7 @@ void OnboardingView::Implementation::initLanguagePage()
     //
     // Настроим цепочку переходов фокуса
     //
-    auto buildFocusChain = [] (const QVector<RadioButton*>& _buttons) {
+    auto buildFocusChain = [](const QVector<RadioButton*>& _buttons) {
         RadioButton* previousButton = nullptr;
         for (auto button : _buttons) {
             if (previousButton != nullptr) {
@@ -150,36 +149,25 @@ void OnboardingView::Implementation::initLanguagePage()
             previousButton = button;
         }
     };
-    buildFocusChain({ azerbaijaniLanguage,
-                      belarusianLanguage,
-                      danishLanguage,
-                      germanLanguage,
-                      englishLanguage,
-                      spanishLanguage,
-                      frenchLanguage,
-                      galicianLanguage,
-                      indonesianLanguage,
-                      italianLanguage,
-                      hungarianLanguage,
-                      polishLanguage,
-                      portugueseBrazilLanguage,
-                      romanianLanguage,
-                      russianLanguage,
-                      slovenianLanguage,
-                      turkishLanguage,
-                      ukrainianLanguage,
-                      hebrewLanguage,
-                      hindiLanguage,
-                      persianLanguage });
+    buildFocusChain({ azerbaijaniLanguage,      belarusianLanguage, danishLanguage,
+                      germanLanguage,           englishLanguage,    spanishLanguage,
+                      frenchLanguage,           galicianLanguage,   indonesianLanguage,
+                      italianLanguage,          hungarianLanguage,  polishLanguage,
+                      portugueseBrazilLanguage, romanianLanguage,   russianLanguage,
+                      slovenianLanguage,        turkishLanguage,    ukrainianLanguage,
+                      hebrewLanguage,           hindiLanguage,      persianLanguage });
 
     languageHowToAddLink = new Body1LinkLabel(languagePage);
-    languageHowToAddLink->setLink(QUrl("https://github.com/dimkanovikov/starc/wiki/How-to-add-the-translation-of-Story-Architect-to-your-native-language-or-improve-one-of-existing%3F"));
+    languageHowToAddLink->setLink(QUrl("https://github.com/dimkanovikov/starc/wiki/"
+                                       "How-to-add-the-translation-of-Story-Architect-to-your-"
+                                       "native-language-or-improve-one-of-existing%3F"));
 
     goToThemeButton = new Button(languagePage);
     goToThemeButton->setContained(true);
     QObject::connect(goToThemeButton, &Button::clicked, q, &OnboardingView::showThemePageRequested);
     skipOnboardingButton = new Button(languagePage);
-    QObject::connect(skipOnboardingButton, &Button::clicked, q, &OnboardingView::skipOnboardingRequested);
+    QObject::connect(skipOnboardingButton, &Button::clicked, q,
+                     &OnboardingView::skipOnboardingRequested);
     languagePageButtonsLayout = new QHBoxLayout;
     languagePageButtonsLayout->addWidget(goToThemeButton);
     languagePageButtonsLayout->addWidget(skipOnboardingButton);
@@ -239,25 +227,26 @@ void OnboardingView::Implementation::updateLanguagePageUi()
     goToThemeButton->setTextColor(DesignSystem::color().onSecondary());
     skipOnboardingButton->setBackgroundColor(DesignSystem::color().secondary());
     skipOnboardingButton->setTextColor(DesignSystem::color().secondary());
-    languagePageButtonsLayout->setSpacing(static_cast<int>(Ui::DesignSystem::layout().buttonsSpacing()));
-    languagePageButtonsLayout->setContentsMargins({static_cast<int>(Ui::DesignSystem::layout().px24()), 0,
-                                                   static_cast<int>(Ui::DesignSystem::layout().px24()),
-                                                   static_cast<int>(Ui::DesignSystem::layout().px12())});
+    languagePageButtonsLayout->setSpacing(
+        static_cast<int>(Ui::DesignSystem::layout().buttonsSpacing()));
+    languagePageButtonsLayout->setContentsMargins(
+        { static_cast<int>(Ui::DesignSystem::layout().px24()), 0,
+          static_cast<int>(Ui::DesignSystem::layout().px24()),
+          static_cast<int>(Ui::DesignSystem::layout().px12()) });
 }
 
 void OnboardingView::Implementation::initThemePage()
 {
     themeTitleLabel = new H5Label(themePage);
 
-    auto initThemeButton = [this] (ApplicationTheme _theme) {
+    auto initThemeButton = [this](ApplicationTheme _theme) {
         RadioButton* radioButton = new RadioButton(themePage);
         QObject::connect(radioButton, &RadioButton::checkedChanged, q,
-            [this, _theme] (bool _checked)
-        {
-            if (_checked) {
-                emit q->themeChanged(_theme);
-            }
-        });
+                         [this, _theme](bool _checked) {
+                             if (_checked) {
+                                 emit q->themeChanged(_theme);
+                             }
+                         });
         return radioButton;
     };
     lightThemeButton = initThemeButton(ApplicationTheme::Light);
@@ -278,7 +267,7 @@ void OnboardingView::Implementation::initThemePage()
     scaleFactorSlider = new Slider(themePage);
     scaleFactorSlider->setMaximumValue(3500);
     scaleFactorSlider->setValue(500);
-    QObject::connect(scaleFactorSlider, &Slider::valueChanged, q, [this] (int _value) {
+    QObject::connect(scaleFactorSlider, &Slider::valueChanged, q, [this](int _value) {
         emit q->scaleFactorChanged(0.5 + static_cast<qreal>(_value) / 1000.0);
     });
     scaleFactorSmallInfoLabel = new Body2Label(themePage);
@@ -286,7 +275,8 @@ void OnboardingView::Implementation::initThemePage()
 
     finishOnboardingButton = new Button(themePage);
     finishOnboardingButton->setContained(true);
-    QObject::connect(finishOnboardingButton, &Button::clicked, q, &OnboardingView::finishOnboardingRequested);
+    QObject::connect(finishOnboardingButton, &Button::clicked, q,
+                     &OnboardingView::finishOnboardingRequested);
     themePageButtonsLayout = new QHBoxLayout;
     themePageButtonsLayout->addWidget(finishOnboardingButton);
     themePageButtonsLayout->addStretch();
@@ -319,7 +309,7 @@ void OnboardingView::Implementation::updateThemePageUi()
     themeTitleLabel->setContentsMargins(Ui::DesignSystem::label().margins().toMargins());
     themeTitleLabel->setBackgroundColor(DesignSystem::color().surface());
     themeTitleLabel->setTextColor(DesignSystem::color().onSurface());
-    for (auto themeButton : {darkAndLightThemeButton, darkThemeButton, lightThemeButton}) {
+    for (auto themeButton : { darkAndLightThemeButton, darkThemeButton, lightThemeButton }) {
         themeButton->setBackgroundColor(DesignSystem::color().surface());
         themeButton->setTextColor(DesignSystem::color().onSurface());
     }
@@ -328,7 +318,7 @@ void OnboardingView::Implementation::updateThemePageUi()
     themeInfoLabelMargins.setTop(0);
     QColor themeInfoLabelTextColor = DesignSystem::color().onSurface();
     themeInfoLabelTextColor.setAlphaF(Ui::DesignSystem::disabledTextOpacity());
-    for (auto label : {darkAndLightThemeInfoLabel, darkThemeInfoLabel, lightThemeInfoLabel}) {
+    for (auto label : { darkAndLightThemeInfoLabel, darkThemeInfoLabel, lightThemeInfoLabel }) {
         label->setContentsMargins(themeInfoLabelMargins.toMargins());
         label->setBackgroundColor(DesignSystem::color().surface());
         label->setTextColor(themeInfoLabelTextColor);
@@ -337,21 +327,24 @@ void OnboardingView::Implementation::updateThemePageUi()
     scaleFactorTitleLabel->setBackgroundColor(DesignSystem::color().surface());
     scaleFactorTitleLabel->setTextColor(DesignSystem::color().onSurface());
     scaleFactorSlider->setBackgroundColor(DesignSystem::color().surface());
-    scaleFactorSlider->setContentsMargins({static_cast<int>(Ui::DesignSystem::layout().px24()), 0,
-                                           static_cast<int>(Ui::DesignSystem::layout().px24()), 0});
+    scaleFactorSlider->setContentsMargins({ static_cast<int>(Ui::DesignSystem::layout().px24()), 0,
+                                            static_cast<int>(Ui::DesignSystem::layout().px24()),
+                                            0 });
     QMarginsF themeScaleFactorInfoLabelMargins = Ui::DesignSystem::label().margins();
     themeScaleFactorInfoLabelMargins.setTop(0);
-    for (auto label : {scaleFactorSmallInfoLabel, scaleFactorBigInfoLabel}) {
+    for (auto label : { scaleFactorSmallInfoLabel, scaleFactorBigInfoLabel }) {
         label->setContentsMargins(themeScaleFactorInfoLabelMargins.toMargins());
         label->setBackgroundColor(DesignSystem::color().surface());
         label->setTextColor(themeInfoLabelTextColor);
     }
     finishOnboardingButton->setBackgroundColor(DesignSystem::color().secondary());
     finishOnboardingButton->setTextColor(DesignSystem::color().onSecondary());
-    themePageButtonsLayout->setSpacing(static_cast<int>(Ui::DesignSystem::layout().buttonsSpacing()));
-    themePageButtonsLayout->setContentsMargins({static_cast<int>(Ui::DesignSystem::layout().px24()), 0,
-                                                static_cast<int>(Ui::DesignSystem::layout().px24()),
-                                                static_cast<int>(Ui::DesignSystem::layout().px12())});
+    themePageButtonsLayout->setSpacing(
+        static_cast<int>(Ui::DesignSystem::layout().buttonsSpacing()));
+    themePageButtonsLayout->setContentsMargins(
+        { static_cast<int>(Ui::DesignSystem::layout().px24()), 0,
+          static_cast<int>(Ui::DesignSystem::layout().px24()),
+          static_cast<int>(Ui::DesignSystem::layout().px12()) });
 }
 
 
@@ -359,8 +352,8 @@ void OnboardingView::Implementation::updateThemePageUi()
 
 
 OnboardingView::OnboardingView(QWidget* _parent)
-    : StackWidget(_parent),
-      d(new Implementation(this))
+    : StackWidget(_parent)
+    , d(new Implementation(this))
 {
     showLanguagePage();
 
@@ -383,15 +376,19 @@ void OnboardingView::showThemePage()
 void OnboardingView::updateTranslations()
 {
     d->languageTitleLabel->setText(tr("Choose preferred language"));
-    d->languageHowToAddLink->setText(tr("Did not find your preffered language? Read how you can add it yourself."));
+    d->languageHowToAddLink->setText(
+        tr("Did not find your preffered language? Read how you can add it yourself."));
     d->goToThemeButton->setText(tr("Continue"));
     d->skipOnboardingButton->setText(tr("Skip initial setup"));
 
     d->themeTitleLabel->setText(tr("Choose application theme"));
     d->darkAndLightThemeButton->setText(tr("Dark & light theme"));
-    d->darkAndLightThemeInfoLabel->setText(tr("Modern theme which combines dark and light colors for better concentration on the documents you work."));
+    d->darkAndLightThemeInfoLabel->setText(
+        tr("Modern theme which combines dark and light colors for better concentration on the "
+           "documents you work."));
     d->darkThemeButton->setText(tr("Dark theme"));
-    d->darkThemeInfoLabel->setText(tr("Theme is more suitable for work in dimly lit rooms, and also in the evening or night."));
+    d->darkThemeInfoLabel->setText(tr(
+        "Theme is more suitable for work in dimly lit rooms, and also in the evening or night."));
     d->lightThemeButton->setText(tr("Light theme"));
     d->lightThemeInfoLabel->setText(tr("Theme is convenient for work with sufficient light."));
     d->scaleFactorTitleLabel->setText(tr("Setup size of the user interface elements"));

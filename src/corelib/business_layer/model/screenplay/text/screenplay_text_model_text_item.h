@@ -2,17 +2,16 @@
 
 #include "screenplay_text_model_item.h"
 
-#include <optional>
-
 #include <QColor>
 #include <QString>
 #include <QTextLayout>
 
+#include <optional>
+
 class QXmlStreamReader;
 
 
-namespace BusinessLayer
-{
+namespace BusinessLayer {
 
 enum class ScreenplayParagraphType;
 
@@ -131,7 +130,8 @@ public:
     void setText(const QString& _text);
 
     /**
-     * @brief Удалить текст, начиная с заданной позиции, при этом корректируется и остальной контент блока
+     * @brief Удалить текст, начиная с заданной позиции, при этом корректируется и остальной контент
+     * блока
      */
     void removeText(int _from);
 

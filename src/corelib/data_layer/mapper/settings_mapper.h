@@ -3,8 +3,7 @@
 class QString;
 
 
-namespace DataMappingLayer
-{
+namespace DataMappingLayer {
 
 /**
  * @brief Отображатель данных в таблицу проекта

@@ -4,8 +4,7 @@
 #include "structure_model_item.h"
 
 
-namespace BusinessLayer
-{
+namespace BusinessLayer {
 
 StructureProxyModel::StructureProxyModel(StructureModel* _parent)
     : QSortFilterProxyModel(_parent)

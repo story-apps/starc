@@ -27,8 +27,8 @@ void RadioButtonGroup::Implementation::updateRadioButtonsState(RadioButton* _che
 
 
 RadioButtonGroup::RadioButtonGroup(QObject* _parent)
-    : QObject(_parent),
-      d(new Implementation)
+    : QObject(_parent)
+    , d(new Implementation)
 {
 }
 
@@ -39,7 +39,7 @@ void RadioButtonGroup::add(RadioButton* _radioButton)
     }
 
     d->radioButtons.append(_radioButton);
-    connect(_radioButton, &RadioButton::checkedChanged, this, [this] (bool _checked) {
+    connect(_radioButton, &RadioButton::checkedChanged, this, [this](bool _checked) {
         if (!_checked) {
             return;
         }

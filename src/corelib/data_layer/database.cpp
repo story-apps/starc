@@ -67,7 +67,7 @@ static QString invertedApplicationVersionKey()
 }
 } // namespace
 
-bool Database::canOpenFile(const QString &_databaseFileName)
+bool Database::canOpenFile(const QString& _databaseFileName)
 {
     bool canOpen = true;
 
@@ -87,9 +87,9 @@ bool Database::canOpenFile(const QString &_databaseFileName)
             && q_checker.value("value").toString().split(" ").first()
                 > QApplication::applicationVersion()) {
             canOpen = false;
-            s_openFileError
-                = QApplication::translate("DatabaseLayer::Database",
-                        "Project was modified in a newer version. Update to the latest version to open it.");
+            s_openFileError = QApplication::translate("DatabaseLayer::Database",
+                                                      "Project was modified in a newer version. "
+                                                      "Update to the latest version to open it.");
         }
     }
 
@@ -113,14 +113,14 @@ QString Database::lastError()
     return s_lastError;
 }
 
-void Database::setLastError(const QString &_error)
+void Database::setLastError(const QString& _error)
 {
     if (s_lastError != _error) {
         s_lastError = _error;
     }
 }
 
-void Database::setCurrentFile(const QString &_databaseFileName)
+void Database::setCurrentFile(const QString& _databaseFileName)
 {
     //
     // Если использовалась база данных, то удалим старое соединение
@@ -203,8 +203,8 @@ QSqlDatabase Database::instanse()
     return database;
 }
 
-void Database::open(QSqlDatabase &_database, const QString &_connectionName,
-                    const QString &_databaseName)
+void Database::open(QSqlDatabase& _database, const QString& _connectionName,
+                    const QString& _databaseName)
 {
     s_lastError.clear();
 
@@ -231,7 +231,7 @@ void Database::open(QSqlDatabase &_database, const QString &_connectionName,
 // - БД имеет старую версию
 // - БД имеет последнюю версию
 // - и т.д.
-Database::States Database::checkState(QSqlDatabase &_database)
+Database::States Database::checkState(QSqlDatabase& _database)
 {
     QSqlQuery q_checker(_database);
     Database::States states = Database::EmptyFlag;
@@ -274,7 +274,7 @@ Database::States Database::checkState(QSqlDatabase &_database)
     return states;
 }
 
-void Database::createTables(QSqlDatabase &_database)
+void Database::createTables(QSqlDatabase& _database)
 {
     QSqlQuery query(_database);
     _database.transaction();
@@ -317,7 +317,7 @@ void Database::createTables(QSqlDatabase &_database)
     _database.commit();
 }
 
-void Database::createIndexes(QSqlDatabase &_database)
+void Database::createIndexes(QSqlDatabase& _database)
 {
     QSqlQuery query(_database);
     _database.transaction();
@@ -333,12 +333,12 @@ void Database::createIndexes(QSqlDatabase &_database)
     _database.commit();
 }
 
-void Database::createEnums(QSqlDatabase &_database)
+void Database::createEnums(QSqlDatabase& _database)
 {
     Q_UNUSED(_database)
 }
 
-void Database::updateDatabase(QSqlDatabase &_database)
+void Database::updateDatabase(QSqlDatabase& _database)
 {
     QSqlQuery query(_database);
 
@@ -368,7 +368,7 @@ void Database::updateDatabase(QSqlDatabase &_database)
         //            databaseVersion = "Y.Y.Y";
         //        }
     }
-    const QStringList &versionParts = databaseVersion.split(".");
+    const QStringList& versionParts = databaseVersion.split(".");
     const int versionMajor = versionParts.value(0, "0").toInt();
     const int versionMinor = versionParts.value(1, "0").toInt();
     const int versionBuild = versionParts.value(2, "1").split(" ").value(0, "1").toInt();

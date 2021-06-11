@@ -7,8 +7,7 @@
 #include <QObject>
 
 
-namespace ManagementLayer
-{
+namespace ManagementLayer {
 
 /**
  * @brief Менеджер информации о сценарии
@@ -44,7 +43,8 @@ signals:
 
 private:
     /**
-     * @brief Установить в редакторе курсор на позицию соответствующую элементу с заданным индексом в модели
+     * @brief Установить в редакторе курсор на позицию соответствующую элементу с заданным индексом
+     * в модели
      */
     Q_SLOT void setCurrentModelIndex(const QModelIndex& _index);
 

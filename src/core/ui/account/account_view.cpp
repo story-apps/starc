@@ -8,22 +8,20 @@
 #include <ui/widgets/floating_tool_bar/floating_tool_bar.h>
 #include <ui/widgets/label/label.h>
 #include <ui/widgets/text_field/text_field.h>
-
 #include <utils/tools/debouncer.h>
 
 #include <QAction>
 #include <QGridLayout>
 
 
-namespace Ui
-{
+namespace Ui {
 
 class AccountView::Implementation
 {
 public:
     explicit Implementation(QWidget* _parent);
 
-    Debouncer changeNameDebouncer{500};
+    Debouncer changeNameDebouncer{ 500 };
 
     FloatingToolBar* toolBar = nullptr;
     QAction* changePasswordAction = nullptr;
@@ -38,15 +36,15 @@ public:
 };
 
 AccountView::Implementation::Implementation(QWidget* _parent)
-    : toolBar(new FloatingToolBar(_parent)),
-      changePasswordAction(new QAction(toolBar)),
-      logoutAction(new QAction(toolBar)),
-      userInfo(new Card(_parent)),
-      userInfoLayout(new QGridLayout),
-      email(new H6Label(userInfo)),
-      userName(new TextField(userInfo)),
-      receiveEmailNotifications(new CheckBox(userInfo)),
-      avatar(new Avatar(userInfo))
+    : toolBar(new FloatingToolBar(_parent))
+    , changePasswordAction(new QAction(toolBar))
+    , logoutAction(new QAction(toolBar))
+    , userInfo(new Card(_parent))
+    , userInfoLayout(new QGridLayout)
+    , email(new H6Label(userInfo))
+    , userName(new TextField(userInfo))
+    , receiveEmailNotifications(new CheckBox(userInfo))
+    , avatar(new Avatar(userInfo))
 {
     changePasswordAction->setIconText(u8"\U000f0773");
     toolBar->addAction(changePasswordAction);
@@ -69,8 +67,8 @@ AccountView::Implementation::Implementation(QWidget* _parent)
 
 
 AccountView::AccountView(QWidget* _parent)
-    : Widget(_parent),
-      d(new Implementation(this))
+    : Widget(_parent)
+    , d(new Implementation(this))
 {
     QVBoxLayout* layout = new QVBoxLayout;
     layout->setContentsMargins({});
@@ -79,7 +77,8 @@ AccountView::AccountView(QWidget* _parent)
     layout->addStretch();
     setLayout(layout);
 
-    connect(d->changePasswordAction, &QAction::triggered, this, &AccountView::changePasswordPressed);
+    connect(d->changePasswordAction, &QAction::triggered, this,
+            &AccountView::changePasswordPressed);
     connect(d->logoutAction, &QAction::triggered, this, &AccountView::logoutPressed);
 
     connect(d->userName, &TextField::textChanged, &d->changeNameDebouncer, &Debouncer::orderWork);
@@ -92,7 +91,8 @@ AccountView::AccountView(QWidget* _parent)
         d->userName->setError({});
         emit userNameChanged(d->userName->text());
     });
-    connect(d->receiveEmailNotifications, &CheckBox::checkedChanged, this, &AccountView::receiveEmailNotificationsChanged);
+    connect(d->receiveEmailNotifications, &CheckBox::checkedChanged, this,
+            &AccountView::receiveEmailNotificationsChanged);
     connect(d->avatar, &Avatar::clicked, this, &AccountView::avatarChoosePressed);
 }
 
@@ -123,8 +123,8 @@ AccountView::~AccountView() = default;
 void AccountView::resizeEvent(QResizeEvent* _event)
 {
     Widget::resizeEvent(_event);
-    d->toolBar->move(QPointF(Ui::DesignSystem::layout().px24(),
-                             Ui::DesignSystem::layout().px24()).toPoint());
+    d->toolBar->move(
+        QPointF(Ui::DesignSystem::layout().px24(), Ui::DesignSystem::layout().px24()).toPoint());
 }
 
 void AccountView::updateTranslations()
@@ -140,12 +140,14 @@ void AccountView::designSystemChangeEvent(DesignSystemChangeEvent* _event)
     Q_UNUSED(_event)
 
     setBackgroundColor(DesignSystem::color().surface());
-    layout()->setContentsMargins(QMarginsF(Ui::DesignSystem::layout().px24(), Ui::DesignSystem::layout().topContentMargin(),
-                                           Ui::DesignSystem::layout().px24(), Ui::DesignSystem::layout().px24()).toMargins());
+    layout()->setContentsMargins(
+        QMarginsF(Ui::DesignSystem::layout().px24(), Ui::DesignSystem::layout().topContentMargin(),
+                  Ui::DesignSystem::layout().px24(), Ui::DesignSystem::layout().px24())
+            .toMargins());
 
     d->toolBar->resize(d->toolBar->sizeHint());
-    d->toolBar->move(QPointF(Ui::DesignSystem::layout().px24(),
-                          Ui::DesignSystem::layout().px24()).toPoint());
+    d->toolBar->move(
+        QPointF(Ui::DesignSystem::layout().px24(), Ui::DesignSystem::layout().px24()).toPoint());
     d->toolBar->setBackgroundColor(Ui::DesignSystem::color().primary());
     d->toolBar->setTextColor(Ui::DesignSystem::color().onPrimary());
     d->toolBar->raise();

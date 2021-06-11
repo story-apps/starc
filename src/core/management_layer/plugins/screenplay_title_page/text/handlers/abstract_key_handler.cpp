@@ -8,8 +8,7 @@
 using Ui::ScreenplayTitlePageEdit;
 
 
-namespace KeyProcessingLayer
-{
+namespace KeyProcessingLayer {
 
 AbstractKeyHandler::AbstractKeyHandler(Ui::ScreenplayTitlePageEdit* _editor)
     : m_editor(_editor)
@@ -50,15 +49,13 @@ void AbstractKeyHandler::handleKeyEvent(QKeyEvent* _event)
     // или Shift и событие не добавляет текст и не является выделением части текста
     // или Shift + Delete (вырезание)
     //
-    static const QList<Qt::Key> keyboardNavigation({
-        Qt::Key_Left, Qt::Key_Up, Qt::Key_Right, Qt::Key_Down , Qt::Key_PageUp, Qt::Key_PageDown
-    });
+    static const QList<Qt::Key> keyboardNavigation({ Qt::Key_Left, Qt::Key_Up, Qt::Key_Right,
+                                                     Qt::Key_Down, Qt::Key_PageUp,
+                                                     Qt::Key_PageDown });
     if (pressedModifiers.testFlag(Qt::ControlModifier)
-        || (pressedModifiers.testFlag(Qt::ShiftModifier)
-            && !keyboardNavigation.contains(pressedKey)
+        || (pressedModifiers.testFlag(Qt::ShiftModifier) && !keyboardNavigation.contains(pressedKey)
             && _event->text().isEmpty())
-        || (pressedModifiers.testFlag(Qt::ShiftModifier)
-            && pressedKey == Qt::Key_Delete)) {
+        || (pressedModifiers.testFlag(Qt::ShiftModifier) && pressedKey == Qt::Key_Delete)) {
         //
         // Ни чего не делаем, обработкой сочетаний клавиш занимаются ответственные за это классы
         //
@@ -67,8 +64,7 @@ void AbstractKeyHandler::handleKeyEvent(QKeyEvent* _event)
     //
     // Нажата клавиша "Enter"
     //
-    else if (pressedKey == Qt::Key_Enter
-             || pressedKey == Qt::Key_Return) {
+    else if (pressedKey == Qt::Key_Enter || pressedKey == Qt::Key_Return) {
         handleEnter(_event);
     }
 

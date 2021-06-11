@@ -4,9 +4,7 @@
 
 #include <business_layer/model/structure/structure_model.h>
 #include <business_layer/model/structure/structure_model_item.h>
-
 #include <domain/document_object.h>
-
 #include <ui/design_system/design_system.h>
 #include <ui/widgets/button/button.h>
 #include <ui/widgets/context_menu/context_menu.h>
@@ -19,8 +17,7 @@
 #include <QVBoxLayout>
 
 
-namespace Ui
-{
+namespace Ui {
 
 class ProjectNavigator::Implementation
 {
@@ -37,12 +34,12 @@ public:
 };
 
 ProjectNavigator::Implementation::Implementation(QWidget* _parent)
-    : navigatorPage(new Widget(_parent)),
-      tree(new Tree(_parent)),
-      treeDelegate(new ProjectTreeDelegate(tree)),
-      contextMenu(new ContextMenu(tree)),
-      buttonsLayout(new QHBoxLayout),
-      addDocumentButton(new Button(_parent))
+    : navigatorPage(new Widget(_parent))
+    , tree(new Tree(_parent))
+    , treeDelegate(new ProjectTreeDelegate(tree))
+    , contextMenu(new ContextMenu(tree))
+    , buttonsLayout(new QHBoxLayout)
+    , addDocumentButton(new Button(_parent))
 {
     tree->setDragDropEnabled(true);
     tree->setSelectionMode(QAbstractItemView::ExtendedSelection);
@@ -59,8 +56,8 @@ ProjectNavigator::Implementation::Implementation(QWidget* _parent)
 
 
 ProjectNavigator::ProjectNavigator(QWidget* _parent)
-    : StackWidget(_parent),
-      d(new Implementation(this))
+    : StackWidget(_parent)
+    , d(new Implementation(this))
 {
     setAnimationType(AnimationType::Slide);
 
@@ -78,7 +75,7 @@ ProjectNavigator::ProjectNavigator(QWidget* _parent)
 
     connect(d->tree, &Tree::currentIndexChanged, this, &ProjectNavigator::itemSelected);
     connect(d->tree, &Tree::doubleClicked, this, &ProjectNavigator::itemDoubleClicked);
-    connect(d->tree, &Tree::customContextMenuRequested, this, [this] (const QPoint& _pos) {
+    connect(d->tree, &Tree::customContextMenuRequested, this, [this](const QPoint& _pos) {
         //
         // Уведомляем менеджер, что необходимо обновить модель контекстного меню
         //
@@ -111,7 +108,7 @@ QVariant ProjectNavigator::saveState() const
 void ProjectNavigator::restoreState(const QVariant& _state)
 {
     if (!_state.isValid()) {
-        d->tree->setCurrentIndex(d->tree->model()->index(0,0));
+        d->tree->setCurrentIndex(d->tree->model()->index(0, 0));
         return;
     }
 
@@ -158,10 +155,9 @@ void ProjectNavigator::designSystemChangeEvent(DesignSystemChangeEvent* _event)
     d->contextMenu->setTextColor(DesignSystem::color().onBackground());
 
 
-    d->buttonsLayout->setContentsMargins(DesignSystem::layout().px12(),
-                                         DesignSystem::layout().px12(),
-                                         DesignSystem::layout().px12(),
-                                         DesignSystem::layout().px12());
+    d->buttonsLayout->setContentsMargins(
+        DesignSystem::layout().px12(), DesignSystem::layout().px12(), DesignSystem::layout().px12(),
+        DesignSystem::layout().px12());
     d->addDocumentButton->setBackgroundColor(DesignSystem::color().secondary());
     d->addDocumentButton->setTextColor(DesignSystem::color().secondary());
 }

@@ -3,8 +3,7 @@
 #include "../abstract_model.h"
 
 
-namespace BusinessLayer
-{
+namespace BusinessLayer {
 
 class ScreenplaySummaryReport;
 class ScreenplayTextModel;

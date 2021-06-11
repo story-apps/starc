@@ -1,8 +1,8 @@
 #pragma once
 
-#include <corelib_global.h>
-
 #include <QScrollBar>
+
+#include <corelib_global.h>
 
 
 /**
@@ -19,17 +19,18 @@ public:
     /**
      * @brief  Устанавливаем цвет хэндла
      */
-    void setHandleColor(const QColor &);
+    void setHandleColor(const QColor&);
 
     /**
      * @brief  Устанавливаем цвет фона
      */
-    void setBackgroundColor(const QColor &);
+    void setBackgroundColor(const QColor&);
 
     /**
      * @brief Используем размеры из дизайн системы
      */
     QSize sizeHint() const override;
+
 protected:
     /**
      * @brief Реализуем собственное рисование

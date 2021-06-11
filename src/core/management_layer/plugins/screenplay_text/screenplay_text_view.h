@@ -7,8 +7,7 @@ namespace BusinessLayer {
 class ScreenplayTextModel;
 }
 
-namespace Ui
-{
+namespace Ui {
 
 /**
  * @brief Представление редактора документа сценария

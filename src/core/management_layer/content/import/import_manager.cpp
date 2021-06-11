@@ -4,23 +4,19 @@
 #include <business_layer/import/screenplay/document_importer.h>
 #include <business_layer/import/screenplay/fdx_importer.h>
 #include <business_layer/import/screenplay/fountain_importer.h>
-#include <business_layer/import/screenplay/screenlay_import_options.h>
 #include <business_layer/import/screenplay/kit_scenarist_importer.h>
+#include <business_layer/import/screenplay/screenlay_import_options.h>
 #include <business_layer/import/screenplay/trelby_importer.h>
-
 #include <data_layer/storage/settings_storage.h>
 #include <data_layer/storage/storage_facade.h>
-
 #include <ui/import/import_dialog.h>
 #include <ui/widgets/dialog/standard_dialog.h>
-
 #include <utils/helpers/dialog_helper.h>
 #include <utils/helpers/extension_helper.h>
 
 #include <QFileDialog>
 
-namespace ManagementLayer
-{
+namespace ManagementLayer {
 
 class ImportManager::Implementation
 {
@@ -49,8 +45,8 @@ public:
 };
 
 ImportManager::Implementation::Implementation(ImportManager* _parent, QWidget* _topLevelWidget)
-    : q(_parent),
-      topLevelWidget(_topLevelWidget)
+    : q(_parent)
+    , topLevelWidget(_topLevelWidget)
 {
 }
 
@@ -62,7 +58,8 @@ void ImportManager::Implementation::showImportDialogFor(const QString& _path)
     //
     if (_path.toLower().endsWith(ExtensionHelper::msOfficeBinary())) {
         StandardDialog::information(topLevelWidget, tr("File format not supported"),
-            tr("Importing from DOC files is not supported. You need to save the file in DOCX format and repeat the import."));
+                                    tr("Importing from DOC files is not supported. You need to "
+                                       "save the file in DOCX format and repeat the import."));
         return;
     }
 
@@ -72,7 +69,8 @@ void ImportManager::Implementation::showImportDialogFor(const QString& _path)
             importDialog->hideDialog();
             import(importDialog->importOptions());
         });
-        connect(importDialog, &Ui::ImportDialog::canceled, importDialog, &Ui::ImportDialog::hideDialog);
+        connect(importDialog, &Ui::ImportDialog::canceled, importDialog,
+                &Ui::ImportDialog::hideDialog);
         connect(importDialog, &Ui::ImportDialog::disappeared, importDialog, [this] {
             importDialog->deleteLater();
             importDialog = nullptr;
@@ -134,10 +132,9 @@ void ImportManager::Implementation::import(const BusinessLayer::ScreenplayImport
 
 
 ImportManager::ImportManager(QObject* _parent, QWidget* _parentWidget)
-    : QObject(_parent),
-      d(new Implementation(this, _parentWidget))
+    : QObject(_parent)
+    , d(new Implementation(this, _parentWidget))
 {
-
 }
 
 ImportManager::~ImportManager() = default;
@@ -148,13 +145,13 @@ void ImportManager::import()
     // Предоставим пользователю возможность выбрать файл, который он хочет импортировать
     //
     const auto projectImportFolder
-            = DataStorageLayer::StorageFacade::settingsStorage()->value(
-                  DataStorageLayer::kProjectImportFolderKey,
-                  DataStorageLayer::SettingsStorage::SettingsPlace::Application)
+        = DataStorageLayer::StorageFacade::settingsStorage()
+              ->value(DataStorageLayer::kProjectImportFolderKey,
+                      DataStorageLayer::SettingsStorage::SettingsPlace::Application)
               .toString();
     const auto importFilePath
-            = QFileDialog::getOpenFileName(d->topLevelWidget, tr("Choose the file to import"),
-                    projectImportFolder, DialogHelper::importFilters());
+        = QFileDialog::getOpenFileName(d->topLevelWidget, tr("Choose the file to import"),
+                                       projectImportFolder, DialogHelper::importFilters());
     if (importFilePath.isEmpty()) {
         return;
     }
@@ -162,12 +159,12 @@ void ImportManager::import()
     //
     // Если файл был выбран
     //
-    // ... обновим папку, откуда в следующий раз он предположительно опять будет импортировать проекты
+    // ... обновим папку, откуда в следующий раз он предположительно опять будет импортировать
+    // проекты
     //
     DataStorageLayer::StorageFacade::settingsStorage()->setValue(
-                DataStorageLayer::kProjectImportFolderKey,
-                importFilePath,
-                DataStorageLayer::SettingsStorage::SettingsPlace::Application);
+        DataStorageLayer::kProjectImportFolderKey, importFilePath,
+        DataStorageLayer::SettingsStorage::SettingsPlace::Application);
     //
     // ... и переходим к подготовке импорта
     //

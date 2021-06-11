@@ -18,7 +18,7 @@ public:
      * @brief Анимировать переход от одного тулбара к другому
      */
     void switchToolbars(const QString& _targetIcon, const QPointF _targetIconStartPosition,
-        QWidget* _sourceWidget, QWidget* _targetWidget);
+                        QWidget* _sourceWidget, QWidget* _targetWidget);
 
     /**
      * @brief Осуществить обратный переход

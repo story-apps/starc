@@ -15,5 +15,7 @@ public:
     static void information(QWidget* _parent, const QString& _title, const QString& _text);
 
 private:
-    StandardDialog() {}
+    StandardDialog()
+    {
+    }
 };

@@ -21,8 +21,8 @@
 using WAF::SideSlideDecorator;
 
 
-SideSlideDecorator::SideSlideDecorator(QWidget* _parent) :
-    QWidget(_parent)
+SideSlideDecorator::SideSlideDecorator(QWidget* _parent)
+    : QWidget(_parent)
 {
     resize(_parent->size());
 
@@ -37,8 +37,8 @@ SideSlideDecorator::SideSlideDecorator(QWidget* _parent) :
     //
     // Анимируем затемнение/осветление
     //
-    connect(&m_timeline, &QTimeLine::frameChanged, [this](int _value){
-        m_decorationColor = QColor(0, 0, 0, _value/100);
+    connect(&m_timeline, &QTimeLine::frameChanged, [this](int _value) {
+        m_decorationColor = QColor(0, 0, 0, _value / 100);
         update();
     });
 }
@@ -80,10 +80,9 @@ void SideSlideDecorator::paintEvent(QPaintEvent* _event)
     QWidget::paintEvent(_event);
 }
 
-void SideSlideDecorator::mousePressEvent(QMouseEvent *_event)
+void SideSlideDecorator::mousePressEvent(QMouseEvent* _event)
 {
     emit clicked();
 
     QWidget::mousePressEvent(_event);
 }
-

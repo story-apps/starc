@@ -4,16 +4,15 @@
 
 class QString;
 
-template <typename T>
+template<typename T>
 class QVector;
 
 namespace BusinessLayer {
-    enum class ScreenplayParagraphType;
+enum class ScreenplayParagraphType;
 }
 
 
-namespace KeyProcessingLayer
-{
+namespace KeyProcessingLayer {
 
 /**
  * @brief Реализация стандартного обработчика
@@ -28,10 +27,14 @@ protected:
      * @brief Получить стиль блока к которому переходить
      */
     /** @{ */
-    static BusinessLayer::ScreenplayParagraphType jumpForTab(BusinessLayer::ScreenplayParagraphType _blockType);
-    static BusinessLayer::ScreenplayParagraphType jumpForEnter(BusinessLayer::ScreenplayParagraphType _blockType);
-    static BusinessLayer::ScreenplayParagraphType changeForTab(BusinessLayer::ScreenplayParagraphType _blockType);
-    static BusinessLayer::ScreenplayParagraphType changeForEnter(BusinessLayer::ScreenplayParagraphType _blockType);
+    static BusinessLayer::ScreenplayParagraphType jumpForTab(
+        BusinessLayer::ScreenplayParagraphType _blockType);
+    static BusinessLayer::ScreenplayParagraphType jumpForEnter(
+        BusinessLayer::ScreenplayParagraphType _blockType);
+    static BusinessLayer::ScreenplayParagraphType changeForTab(
+        BusinessLayer::ScreenplayParagraphType _blockType);
+    static BusinessLayer::ScreenplayParagraphType changeForEnter(
+        BusinessLayer::ScreenplayParagraphType _blockType);
     /** @} */
 
     /**

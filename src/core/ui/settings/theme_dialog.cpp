@@ -6,7 +6,6 @@
 #include <ui/widgets/radio_button/radio_button.h>
 #include <ui/widgets/radio_button/radio_button_group.h>
 #include <ui/widgets/text_field/text_field.h>
-
 #include <utils/helpers/color_helper.h>
 
 #include <QColorDialog>
@@ -16,8 +15,7 @@
 #include <QVariant>
 
 
-namespace Ui
-{
+namespace Ui {
 
 namespace {
 const char* kThemeKey = "theme";
@@ -69,25 +67,25 @@ public:
 };
 
 ThemeDialog::Implementation::Implementation(QWidget* _parent)
-    : light(new RadioButton(_parent)),
-      darkAndLight(new RadioButton(_parent)),
-      dark(new RadioButton(_parent)),
-      custom(new RadioButton(_parent)),
-      customPalette(new Widget(_parent)),
-      primary(new Subtitle2Label(_parent)),
-      onPrimary(new Subtitle2Label(_parent)),
-      secondary(new Subtitle2Label(_parent)),
-      onSecondary(new Subtitle2Label(_parent)),
-      background(new Subtitle2Label(_parent)),
-      onBackground(new Subtitle2Label(_parent)),
-      surface(new Subtitle2Label(_parent)),
-      onSurface(new Subtitle2Label(_parent)),
-      error(new Subtitle2Label(_parent)),
-      onError(new Subtitle2Label(_parent)),
-      shadow(new Subtitle2Label(_parent)),
-      onShadow(new Subtitle2Label(_parent)),
-      customThemeHash(new TextField(_parent)),
-      okButton(new Button(_parent))
+    : light(new RadioButton(_parent))
+    , darkAndLight(new RadioButton(_parent))
+    , dark(new RadioButton(_parent))
+    , custom(new RadioButton(_parent))
+    , customPalette(new Widget(_parent))
+    , primary(new Subtitle2Label(_parent))
+    , onPrimary(new Subtitle2Label(_parent))
+    , secondary(new Subtitle2Label(_parent))
+    , onSecondary(new Subtitle2Label(_parent))
+    , background(new Subtitle2Label(_parent))
+    , onBackground(new Subtitle2Label(_parent))
+    , surface(new Subtitle2Label(_parent))
+    , onSurface(new Subtitle2Label(_parent))
+    , error(new Subtitle2Label(_parent))
+    , onError(new Subtitle2Label(_parent))
+    , shadow(new Subtitle2Label(_parent))
+    , onShadow(new Subtitle2Label(_parent))
+    , customThemeHash(new TextField(_parent))
+    , okButton(new Button(_parent))
 {
     light->setChecked(true);
     light->setProperty(kThemeKey, static_cast<int>(ApplicationTheme::Light));
@@ -142,17 +140,13 @@ void ThemeDialog::Implementation::setPaletteReadOnly(bool _readOnly)
 
 QVector<RadioButton*> ThemeDialog::Implementation::themes() const
 {
-    return { darkAndLight,
-             dark,
-             light,
-             custom };
+    return { darkAndLight, dark, light, custom };
 }
 
 QVector<Subtitle2Label*> ThemeDialog::Implementation::colors() const
 {
-    return { primary, onPrimary, secondary, onSecondary,
-             background, onBackground, surface, onSurface,
-             error, onError, shadow, onShadow };
+    return { primary, onPrimary, secondary, onSecondary, background, onBackground,
+             surface, onSurface, error,     onError,     shadow,     onShadow };
 }
 
 
@@ -160,8 +154,8 @@ QVector<Subtitle2Label*> ThemeDialog::Implementation::colors() const
 
 
 ThemeDialog::ThemeDialog(QWidget* _parent)
-    : AbstractDialog(_parent),
-      d(new Implementation(this))
+    : AbstractDialog(_parent)
+    , d(new Implementation(this))
 {
     setRejectButton(d->okButton);
 
@@ -175,18 +169,18 @@ ThemeDialog::ThemeDialog(QWidget* _parent)
     contentsLayout()->addLayout(d->buttonsLayout, 3, 0, 1, 4);
 
     for (auto radioButton : d->themes()) {
-        connect(radioButton, &RadioButton::checkedChanged, this, [this, radioButton] (bool _checked) {
-            if (!_checked) {
-                return;
-            }
+        connect(radioButton, &RadioButton::checkedChanged, this,
+                [this, radioButton](bool _checked) {
+                    if (!_checked) {
+                        return;
+                    }
 
-            const auto theme = radioButton->property(kThemeKey).toInt();
-            emit themeChanged(static_cast<ApplicationTheme>(theme));
-        });
+                    const auto theme = radioButton->property(kThemeKey).toInt();
+                    emit themeChanged(static_cast<ApplicationTheme>(theme));
+                });
     }
-    connect(d->custom, &RadioButton::checkedChanged, this, [this] (bool _checked) {
-        d->setPaletteReadOnly(!_checked);
-    });
+    connect(d->custom, &RadioButton::checkedChanged, this,
+            [this](bool _checked) { d->setPaletteReadOnly(!_checked); });
     auto updateColorLabel = [this] {
         auto colorLabel = qobject_cast<Widget*>(sender());
         if (colorLabel == nullptr) {
@@ -298,7 +292,8 @@ void ThemeDialog::updateTranslations()
     d->onShadow->setText(tr("text on shadow"));
 
     d->customThemeHash->setLabel(tr("Theme HASH"));
-    d->customThemeHash->setHelper(tr("Copy theme HASH to share your custom theme with others, or paste HASH here to apply it"));
+    d->customThemeHash->setHelper(tr(
+        "Copy theme HASH to share your custom theme with others, or paste HASH here to apply it"));
 
     d->okButton->setText(tr("Close"));
 }
@@ -314,7 +309,7 @@ void ThemeDialog::designSystemChangeEvent(DesignSystemChangeEvent* _event)
 
     d->customPalette->setBackgroundColor(Ui::DesignSystem::color().background());
 
-    auto initColorLabel = [] (const QColor& _color, Widget* _label) {
+    auto initColorLabel = [](const QColor& _color, Widget* _label) {
         _label->setBackgroundColor(_color);
         _label->setTextColor(ColorHelper::contrasted(_color));
     };
@@ -333,9 +328,10 @@ void ThemeDialog::designSystemChangeEvent(DesignSystemChangeEvent* _event)
 
     const auto minimumSize = static_cast<int>(Ui::DesignSystem::layout().px24() * 4);
     for (auto color : d->colors()) {
-        color->setMinimumSize(minimumSize*2, minimumSize);
+        color->setMinimumSize(minimumSize * 2, minimumSize);
     }
-    d->customPaletteLayout->setRowMinimumHeight(3, static_cast<int>(Ui::DesignSystem::layout().px24()));
+    d->customPaletteLayout->setRowMinimumHeight(
+        3, static_cast<int>(Ui::DesignSystem::layout().px24()));
     d->customThemeHash->setBackgroundColor(Ui::DesignSystem::color().background());
     d->customThemeHash->setTextColor(Ui::DesignSystem::color().onBackground());
     {
@@ -347,10 +343,10 @@ void ThemeDialog::designSystemChangeEvent(DesignSystemChangeEvent* _event)
     d->okButton->setTextColor(Ui::DesignSystem::color().secondary());
 
     contentsLayout()->setSpacing(static_cast<int>(Ui::DesignSystem::layout().px8()));
-    d->buttonsLayout->setContentsMargins(QMarginsF(Ui::DesignSystem::layout().px12(),
-                                                   Ui::DesignSystem::layout().px12(),
-                                                   Ui::DesignSystem::layout().px16(),
-                                                   Ui::DesignSystem::layout().px8()).toMargins());
+    d->buttonsLayout->setContentsMargins(
+        QMarginsF(Ui::DesignSystem::layout().px12(), Ui::DesignSystem::layout().px12(),
+                  Ui::DesignSystem::layout().px16(), Ui::DesignSystem::layout().px8())
+            .toMargins());
 }
 
 } // namespace Ui

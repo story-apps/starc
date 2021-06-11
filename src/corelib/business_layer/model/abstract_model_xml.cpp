@@ -1,16 +1,14 @@
 #include "abstract_model_xml.h"
 
-namespace BusinessLayer
-{
-namespace xml
-{
+namespace BusinessLayer {
+namespace xml {
 
 QString prepareXml(const QString& _xml)
 {
     //
     // Балансируем xml
     //
-    auto readParentTag = [_xml] (int _index) {
+    auto readParentTag = [_xml](int _index) {
         Q_ASSERT(_index != -1);
         _index += kContentTag.length() + 2; // закрывающий тэг знак и перенос строки
         Q_ASSERT(_xml[_index] == '<');
@@ -18,8 +16,7 @@ QString prepareXml(const QString& _xml)
         Q_ASSERT(_xml[_index] == '/');
         ++_index;
         QString parentTag;
-        while (_xml[_index] != '>'
-               && _index < _xml.length()) {
+        while (_xml[_index] != '>' && _index < _xml.length()) {
             parentTag += _xml[_index];
             ++_index;
         }
@@ -96,9 +93,7 @@ QStringRef readNextElement(QXmlStreamReader& _reader)
 {
     do {
         _reader.readNext();
-    } while (!_reader.isStartElement()
-             && !_reader.isEndElement()
-             && !_reader.atEnd());
+    } while (!_reader.isStartElement() && !_reader.isEndElement() && !_reader.atEnd());
     return _reader.name();
 }
 

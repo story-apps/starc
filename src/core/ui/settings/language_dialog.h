@@ -5,8 +5,7 @@
 #include <QLocale>
 
 
-namespace Ui
-{
+namespace Ui {
 
 class LanguageDialog : public AbstractDialog
 {

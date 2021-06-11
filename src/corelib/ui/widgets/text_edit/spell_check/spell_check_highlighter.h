@@ -1,8 +1,8 @@
 #pragma once
 
-#include <corelib_global.h>
-
 #include "syntax_highlighter.h"
+
+#include <corelib_global.h>
 
 class SpellChecker;
 

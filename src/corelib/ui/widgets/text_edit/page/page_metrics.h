@@ -1,9 +1,9 @@
 #pragma once
 
-#include <corelib_global.h>
-
 #include <QMarginsF>
 #include <QPageSize>
+
+#include <corelib_global.h>
 
 class QPaintDevice;
 
@@ -40,7 +40,8 @@ public:
     static QString stringFromPageSizeId(QPageSize::PageSizeId _pageSize);
 
 public:
-    PageMetrics(QPageSize::PageSizeId _pageFormat = QPageSize::A4, const QMarginsF& _mmMargins = {});
+    PageMetrics(QPageSize::PageSizeId _pageFormat = QPageSize::A4,
+                const QMarginsF& _mmMargins = {});
     ~PageMetrics();
 
     /**

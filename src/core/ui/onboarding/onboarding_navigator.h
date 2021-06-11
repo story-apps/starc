@@ -3,8 +3,7 @@
 #include <ui/widgets/stepper/stepper.h>
 
 
-namespace Ui
-{
+namespace Ui {
 
 /**
  * @brief Навигатор по посадочным страницам

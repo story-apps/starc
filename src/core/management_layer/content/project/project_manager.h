@@ -11,8 +11,7 @@ namespace Domain {
 enum class DocumentObjectType;
 }
 
-namespace ManagementLayer
-{
+namespace ManagementLayer {
 
 /**
  * @brief Управляющий открытым проектом
@@ -113,7 +112,8 @@ private:
     /**
      * @brief Обработать изменение модели
      */
-    void handleModelChange(BusinessLayer::AbstractModel* _model, const QByteArray& _undo, const QByteArray& _redo);
+    void handleModelChange(BusinessLayer::AbstractModel* _model, const QByteArray& _undo,
+                           const QByteArray& _redo);
 
     /**
      * @brief Отменить последнее изменение в модели с заданным индексом
@@ -142,4 +142,4 @@ private:
     QScopedPointer<Implementation> d;
 };
 
-}
+} // namespace ManagementLayer

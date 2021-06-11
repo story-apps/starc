@@ -2,35 +2,31 @@
 
 #include "screenlay_import_options.h"
 
-#include <qgumbodocument.h>
-#include <qgumbonode.h>
-
 #include <business_layer/model/screenplay/text/screenplay_text_block_parser.h>
 #include <business_layer/model/screenplay/text/screenplay_text_model_text_item.h>
 #include <business_layer/model/screenplay/text/screenplay_text_model_xml.h>
 #include <business_layer/templates/screenplay_template.h>
-
 #include <domain/document_object.h>
-
 #include <utils/helpers/text_helper.h>
-
-#include <qtzip/QtZipReader>
 
 #include <QFileInfo>
 #include <QXmlStreamWriter>
+#include <qgumbodocument.h>
+#include <qgumbonode.h>
+#include <qtzip/QtZipReader>
 
 #include <set>
 
 
-namespace BusinessLayer
-{
+namespace BusinessLayer {
 
 namespace {
 
 /**
  * @brief Считать текст файла-сценария из архива celtx-файла
  */
-QString readScript(const QString& _filePath) {
+QString readScript(const QString& _filePath)
+{
     //
     // Открыть архив и извлечь содержимое файла, название которого начинается со "script"
     //
@@ -56,9 +52,10 @@ QString readScript(const QString& _filePath) {
     return scriptHtml;
 }
 
-}
+} // namespace
 
-AbstractScreenplayImporter::Documents CeltxImporter::importDocuments(const ScreenplayImportOptions& _options) const
+AbstractScreenplayImporter::Documents CeltxImporter::importDocuments(
+    const ScreenplayImportOptions& _options) const
 {
     //
     // Открываем файл
@@ -91,35 +88,36 @@ AbstractScreenplayImporter::Documents CeltxImporter::importDocuments(const Scree
         QString paragraphText = pNode.innerText().simplified();
 
         switch (blockType) {
-            case ScreenplayParagraphType::SceneHeading: {
-                if (!_options.importLocations) {
-                    break;
-                }
-
-                const auto locationName = SceneHeadingParser::location(paragraphText);
-                if (locationName.isEmpty()) {
-                    break;
-                }
-
-                locationNames.emplace(locationName);
+        case ScreenplayParagraphType::SceneHeading: {
+            if (!_options.importLocations) {
                 break;
             }
 
-            case ScreenplayParagraphType::Character: {
-                if (!_options.importCharacters) {
-                    break;
-                }
-
-                const auto characterName = CharacterParser::name(paragraphText);
-                if (characterName.isEmpty()) {
-                    break;
-                }
-
-                characterNames.emplace(characterName);
+            const auto locationName = SceneHeadingParser::location(paragraphText);
+            if (locationName.isEmpty()) {
                 break;
             }
 
-            default: break;
+            locationNames.emplace(locationName);
+            break;
+        }
+
+        case ScreenplayParagraphType::Character: {
+            if (!_options.importCharacters) {
+                break;
+            }
+
+            const auto characterName = CharacterParser::name(paragraphText);
+            if (characterName.isEmpty()) {
+                break;
+            }
+
+            characterNames.emplace(characterName);
+            break;
+        }
+
+        default:
+            break;
         }
     }
 
@@ -133,7 +131,8 @@ AbstractScreenplayImporter::Documents CeltxImporter::importDocuments(const Scree
     return documents;
 }
 
-QVector<AbstractScreenplayImporter::Screenplay> CeltxImporter::importScreenplays(const ScreenplayImportOptions& _options) const
+QVector<AbstractScreenplayImporter::Screenplay> CeltxImporter::importScreenplays(
+    const ScreenplayImportOptions& _options) const
 {
     if (_options.importScreenplay == false) {
         return {};
@@ -158,7 +157,8 @@ QVector<AbstractScreenplayImporter::Screenplay> CeltxImporter::importScreenplays
     QXmlStreamWriter writer(&result.text);
     writer.writeStartDocument();
     writer.writeStartElement(xml::kDocumentTag);
-    writer.writeAttribute(xml::kMimeTypeAttribute, Domain::mimeTypeFor(Domain::DocumentObjectType::ScreenplayText));
+    writer.writeAttribute(xml::kMimeTypeAttribute,
+                          Domain::mimeTypeFor(Domain::DocumentObjectType::ScreenplayText));
     writer.writeAttribute(xml::kVersionAttribute, "1.0");
 
     //
@@ -196,12 +196,10 @@ QVector<AbstractScreenplayImporter::Screenplay> CeltxImporter::importScreenplays
         // Корректируем при необходимости
         //
         if (blockType == ScreenplayParagraphType::Parenthetical) {
-            if (!paragraphText.isEmpty()
-                && paragraphText.front() == "(") {
+            if (!paragraphText.isEmpty() && paragraphText.front() == "(") {
                 paragraphText.remove(0, 1);
             }
-            if (!paragraphText.isEmpty()
-                && paragraphText.back() == ")") {
+            if (!paragraphText.isEmpty() && paragraphText.back() == ")") {
                 paragraphText.chop(1);
             }
         }
@@ -226,8 +224,12 @@ QVector<AbstractScreenplayImporter::Screenplay> CeltxImporter::importScreenplays
                     ScreenplayTextModelTextItem::ReviewMark note;
                     note.from = 0;
                     note.length = paragraphText.length();
-                    note.backgroundColor = QColor(colorComponents[0].toInt(), colorComponents[1].toInt(), colorComponents[2].toInt());
-                    note.comments.append({ "celtx user", QDateTime::currentDateTime().toString(Qt::ISODate), child.getAttribute("text") });
+                    note.backgroundColor
+                        = QColor(colorComponents[0].toInt(), colorComponents[1].toInt(),
+                                 colorComponents[2].toInt());
+                    note.comments.append({ "celtx user",
+                                           QDateTime::currentDateTime().toString(Qt::ISODate),
+                                           child.getAttribute("text") });
                     reviewMarks.append(note);
                 }
             }
@@ -279,7 +281,8 @@ QVector<AbstractScreenplayImporter::Screenplay> CeltxImporter::importScreenplays
                 writer.writeStartElement(xml::kReviewMarkTag);
                 writer.writeAttribute(xml::kFromAttribute, QString::number(reviewMark.from));
                 writer.writeAttribute(xml::kLengthAttribute, QString::number(reviewMark.length));
-                writer.writeAttribute(xml::kBackgroundColorAttribute, reviewMark.backgroundColor.name());
+                writer.writeAttribute(xml::kBackgroundColorAttribute,
+                                      reviewMark.backgroundColor.name());
                 for (const auto& comment : std::as_const(reviewMark.comments)) {
                     writer.writeStartElement(xml::kCommentTag);
                     writer.writeAttribute(xml::kAuthorAttribute, comment.author);

@@ -46,7 +46,8 @@ void ScrollerHelper::addScroller(QWidget* _forWidget)
     //
     // ... секция настроек завершения прокрутки и отскока от границы
     //
-    QVariant overshootPolicy = QVariant::fromValue<QScrollerProperties::OvershootPolicy>(QScrollerProperties::OvershootAlwaysOff);
+    QVariant overshootPolicy = QVariant::fromValue<QScrollerProperties::OvershootPolicy>(
+        QScrollerProperties::OvershootAlwaysOff);
     properties.setScrollMetric(QScrollerProperties::HorizontalOvershootPolicy, overshootPolicy);
     properties.setScrollMetric(QScrollerProperties::OvershootDragResistanceFactor, 0.3);
     properties.setScrollMetric(QScrollerProperties::OvershootDragDistanceFactor, 0.02);

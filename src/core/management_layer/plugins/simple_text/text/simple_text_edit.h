@@ -3,13 +3,12 @@
 #include <ui/widgets/text_edit/base/base_text_edit.h>
 
 namespace BusinessLayer {
-    class TextModel;
-    enum class TextParagraphType;
-}
+class TextModel;
+enum class TextParagraphType;
+} // namespace BusinessLayer
 
 
-namespace Ui
-{
+namespace Ui {
 
 /**
  * @brief Текстовый редактор
@@ -83,7 +82,8 @@ public:
     /**
      * @brief Добавить редакторскую заметку для текущего выделения
      */
-    void addReviewMark(const QColor& _textColor, const QColor& _backgroundColor, const QString& _comment);
+    void addReviewMark(const QColor& _textColor, const QColor& _backgroundColor,
+                       const QString& _comment);
 
 signals:
     /**

@@ -7,16 +7,15 @@ namespace BusinessLayer {
 class AbstractImageWrapper;
 class AbstractModel;
 class StructureModel;
-}
+} // namespace BusinessLayer
 
 namespace Domain {
 class DocumentObject;
 enum class DocumentObjectType;
-}
+} // namespace Domain
 
 
-namespace ManagementLayer
-{
+namespace ManagementLayer {
 
 /**
  * @brief Фасад для работы с моделями документов проекта
@@ -27,7 +26,8 @@ class ProjectModelsFacade : public QObject
 
 public:
     explicit ProjectModelsFacade(BusinessLayer::StructureModel* _projectStructureModel,
-        BusinessLayer::AbstractImageWrapper* _imageWrapper, QObject* _parent = nullptr);
+                                 BusinessLayer::AbstractImageWrapper* _imageWrapper,
+                                 QObject* _parent = nullptr);
     ~ProjectModelsFacade() override;
 
     /**
@@ -55,7 +55,7 @@ public:
     /**
      * @brief Получить список загруженных моделей документов
      */
-    QVector<BusinessLayer::AbstractModel*> loadedModels()  const;
+    QVector<BusinessLayer::AbstractModel*> loadedModels() const;
 
 signals:
     /**
@@ -66,7 +66,8 @@ signals:
     /**
      * @brief Изменился контент модели
      */
-    void modelContentChanged(BusinessLayer::AbstractModel* _model, const QByteArray& _undo, const QByteArray& _redo);
+    void modelContentChanged(BusinessLayer::AbstractModel* _model, const QByteArray& _undo,
+                             const QByteArray& _redo);
 
     /**
      * @brief Запрос на отмену последнего действия в модели
@@ -92,11 +93,16 @@ signals:
      * @brief Сменилась видимость элемента сценария
      */
     /** @{ */
-    void screenplayTitlePageVisibilityChanged(BusinessLayer::AbstractModel* _screenplayModel, bool _visible);
-    void screenplaySynopsisVisibilityChanged(BusinessLayer::AbstractModel* _screenplayModel, bool _visible);
-    void screenplayTreatmentVisibilityChanged(BusinessLayer::AbstractModel* _screenplayModel, bool _visible);
-    void screenplayTextVisibilityChanged(BusinessLayer::AbstractModel* _screenplayModel, bool _visible);
-    void screenplayStatisticsVisibilityChanged(BusinessLayer::AbstractModel* _screenplayModel, bool _visible);
+    void screenplayTitlePageVisibilityChanged(BusinessLayer::AbstractModel* _screenplayModel,
+                                              bool _visible);
+    void screenplaySynopsisVisibilityChanged(BusinessLayer::AbstractModel* _screenplayModel,
+                                             bool _visible);
+    void screenplayTreatmentVisibilityChanged(BusinessLayer::AbstractModel* _screenplayModel,
+                                              bool _visible);
+    void screenplayTextVisibilityChanged(BusinessLayer::AbstractModel* _screenplayModel,
+                                         bool _visible);
+    void screenplayStatisticsVisibilityChanged(BusinessLayer::AbstractModel* _screenplayModel,
+                                               bool _visible);
     /** @} */
 
     /**

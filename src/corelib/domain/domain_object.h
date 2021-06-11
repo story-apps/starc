@@ -5,8 +5,7 @@
 #include <QAbstractItemModel>
 
 
-namespace Domain
-{
+namespace Domain {
 
 /**
  * @brief Базовый класс для объектов извлекаемых из базы данных
@@ -54,7 +53,8 @@ private:
 /**
  * @brief Интерфейс класса для загрузки/сохранения изображений в БД
  */
-class AbstractImageWrapper {
+class AbstractImageWrapper
+{
 public:
     virtual ~AbstractImageWrapper() = default;
 

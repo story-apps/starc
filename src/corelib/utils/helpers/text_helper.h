@@ -1,8 +1,8 @@
 #pragma once
 
-#include <corelib_global.h>
-
 #include <QtGlobal>
+
+#include <corelib_global.h>
 
 class QChar;
 class QFont;

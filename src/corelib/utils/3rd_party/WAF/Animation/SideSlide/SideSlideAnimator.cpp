@@ -15,6 +15,7 @@
  */
 
 #include "SideSlideAnimator.h"
+
 #include "SideSlideDecorator.h"
 
 #include <QEvent>
@@ -26,11 +27,11 @@ using WAF::SideSlideAnimator;
 using WAF::SideSlideDecorator;
 
 
-SideSlideAnimator::SideSlideAnimator(QWidget* _widgetForSlide) :
-    AbstractAnimator(_widgetForSlide),
-    m_decorateBackground(true),
-    m_decorator(new SideSlideDecorator(_widgetForSlide->parentWidget())),
-    m_animation(new QPropertyAnimation(_widgetForSlide, "pos"))
+SideSlideAnimator::SideSlideAnimator(QWidget* _widgetForSlide)
+    : AbstractAnimator(_widgetForSlide)
+    , m_decorateBackground(true)
+    , m_decorator(new SideSlideDecorator(_widgetForSlide->parentWidget()))
+    , m_animation(new QPropertyAnimation(_widgetForSlide, "pos"))
 {
     Q_ASSERT(_widgetForSlide);
     _widgetForSlide->parentWidget()->installEventFilter(this);
@@ -87,12 +88,14 @@ void SideSlideAnimator::slideIn()
     //
     // Не выполняем анимацию, если она и так уже выполнена
     //
-    if (m_decorator->isVisible() && !isAnimated()) return;
+    if (m_decorator->isVisible() && !isAnimated())
+        return;
 
     //
     // Прерываем выполнение, если клиент хочет повторить его
     //
-    if (isAnimated() && isAnimatedForward()) return;
+    if (isAnimated() && isAnimatedForward())
+        return;
     setAnimatedForward();
 
     //
@@ -117,33 +120,33 @@ void SideSlideAnimator::slideIn()
     QSize finalSize = widgetForSlide()->size();
     QPoint startPosition, finalPosition;
     switch (m_side) {
-        case WAF::LeftSide: {
-            finalSize.setHeight(topWidget->height());
-            startPosition = QPoint(-finalSize.width(), 0);
-            finalPosition = QPoint(0, 0);
-            break;
-        }
+    case WAF::LeftSide: {
+        finalSize.setHeight(topWidget->height());
+        startPosition = QPoint(-finalSize.width(), 0);
+        finalPosition = QPoint(0, 0);
+        break;
+    }
 
-        case WAF::TopSide: {
-            finalSize.setWidth(topWidget->width());
-            startPosition = QPoint(0, -finalSize.height());
-            finalPosition = QPoint(0, 0);
-            break;
-        }
+    case WAF::TopSide: {
+        finalSize.setWidth(topWidget->width());
+        startPosition = QPoint(0, -finalSize.height());
+        finalPosition = QPoint(0, 0);
+        break;
+    }
 
-        case WAF::RightSide: {
-            finalSize.setHeight(topWidget->height());
-            startPosition = QPoint(topWidget->width(), 0);
-            finalPosition = QPoint(topWidget->width() - finalSize.width(), 0);
-            break;
-        }
+    case WAF::RightSide: {
+        finalSize.setHeight(topWidget->height());
+        startPosition = QPoint(topWidget->width(), 0);
+        finalPosition = QPoint(topWidget->width() - finalSize.width(), 0);
+        break;
+    }
 
-        case WAF::BottomSide: {
-            finalSize.setWidth(topWidget->width());
-            startPosition = QPoint(0, topWidget->height());
-            finalPosition = QPoint(0, topWidget->height() - finalSize.height());
-            break;
-        }
+    case WAF::BottomSide: {
+        finalSize.setWidth(topWidget->width());
+        startPosition = QPoint(0, topWidget->height());
+        finalPosition = QPoint(0, topWidget->height() - finalSize.height());
+        break;
+    }
     }
 
     //
@@ -203,16 +206,17 @@ void SideSlideAnimator::slideOut()
     //
     // Не выполняем анимацию, если она и так уже выполнена
     //
-    if (!m_decorator->isVisible() && !isAnimated()) return;
+    if (!m_decorator->isVisible() && !isAnimated())
+        return;
 
     //
     // Прерываем выполнение, если клиент хочет повторить его
     //
-    if (isAnimated() && isAnimatedBackward()) return;
+    if (isAnimated() && isAnimatedBackward())
+        return;
     setAnimatedBackward();
 
-    if (widgetForSlide()->isVisible()
-        || m_decorator->isVisible()) {
+    if (widgetForSlide()->isVisible() || m_decorator->isVisible()) {
         //
         // Определим самый верхний виджет
         //
@@ -227,29 +231,29 @@ void SideSlideAnimator::slideOut()
         const QSize finalSize = widgetForSlide()->size();
         QPoint startPosition = widgetForSlide()->pos(), finalPosition;
         switch (m_side) {
-            case WAF::LeftSide: {
-                startPosition = QPoint(0, 0);
-                finalPosition = QPoint(-finalSize.width(), 0);
-                break;
-            }
+        case WAF::LeftSide: {
+            startPosition = QPoint(0, 0);
+            finalPosition = QPoint(-finalSize.width(), 0);
+            break;
+        }
 
-            case WAF::TopSide: {
-                startPosition = QPoint(0, 0);
-                finalPosition = QPoint(0, -finalSize.height());
-                break;
-            }
+        case WAF::TopSide: {
+            startPosition = QPoint(0, 0);
+            finalPosition = QPoint(0, -finalSize.height());
+            break;
+        }
 
-            case WAF::RightSide: {
-                startPosition = QPoint(topWidget->width() - finalSize.width(), 0);
-                finalPosition = QPoint(topWidget->width(), 0);
-                break;
-            }
+        case WAF::RightSide: {
+            startPosition = QPoint(topWidget->width() - finalSize.width(), 0);
+            finalPosition = QPoint(topWidget->width(), 0);
+            break;
+        }
 
-            case WAF::BottomSide: {
-                startPosition = QPoint(0, topWidget->height() - finalSize.height());
-                finalPosition = QPoint(0, topWidget->height());
-                break;
-            }
+        case WAF::BottomSide: {
+            startPosition = QPoint(0, topWidget->height() - finalSize.height());
+            finalPosition = QPoint(0, topWidget->height());
+            break;
+        }
         }
 
         //
@@ -285,33 +289,32 @@ void SideSlideAnimator::slideOut()
 
 bool SideSlideAnimator::eventFilter(QObject* _object, QEvent* _event)
 {
-    if (_object == widgetForSlide()->parentWidget()
-        && _event->type() == QEvent::Resize) {
+    if (_object == widgetForSlide()->parentWidget() && _event->type() == QEvent::Resize) {
         QWidget* widgetForSlideParent = widgetForSlide()->parentWidget();
         switch (m_side) {
-            case WAF::RightSide: {
-                widgetForSlide()->move(widgetForSlideParent->width() - widgetForSlide()->width(), 0);
-                //
-                // Проваливаемся, для корректировки высоты
-                //
-                Q_FALLTHROUGH();
-            }
-            case WAF::LeftSide: {
-                widgetForSlide()->resize(widgetForSlide()->width(), widgetForSlideParent->height());
-                break;
-            }
+        case WAF::RightSide: {
+            widgetForSlide()->move(widgetForSlideParent->width() - widgetForSlide()->width(), 0);
+            //
+            // Проваливаемся, для корректировки высоты
+            //
+            Q_FALLTHROUGH();
+        }
+        case WAF::LeftSide: {
+            widgetForSlide()->resize(widgetForSlide()->width(), widgetForSlideParent->height());
+            break;
+        }
 
-            case WAF::BottomSide: {
-                widgetForSlide()->move(0, widgetForSlideParent->height() - widgetForSlide()->height());
-                //
-                // Проваливаемся, для корректировки ширины
-                //
-                Q_FALLTHROUGH();
-            }
-            case WAF::TopSide: {
-                widgetForSlide()->resize(widgetForSlideParent->width(), widgetForSlide()->height());
-                break;
-            }
+        case WAF::BottomSide: {
+            widgetForSlide()->move(0, widgetForSlideParent->height() - widgetForSlide()->height());
+            //
+            // Проваливаемся, для корректировки ширины
+            //
+            Q_FALLTHROUGH();
+        }
+        case WAF::TopSide: {
+            widgetForSlide()->resize(widgetForSlideParent->width(), widgetForSlide()->height());
+            break;
+        }
         }
 
         //

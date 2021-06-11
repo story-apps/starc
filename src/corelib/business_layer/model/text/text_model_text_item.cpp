@@ -2,9 +2,8 @@
 
 #include "text_model_xml.h"
 
-#include <business_layer/templates/text_template.h>
 #include <business_layer/templates/templates_facade.h>
-
+#include <business_layer/templates/text_template.h>
 #include <utils/helpers/measurement_helper.h>
 #include <utils/helpers/string_helper.h>
 #include <utils/helpers/text_helper.h>
@@ -16,8 +15,7 @@
 
 #include <optional>
 
-namespace BusinessLayer
-{
+namespace BusinessLayer {
 
 class TextModelTextItem::Implementation
 {
@@ -73,7 +71,8 @@ TextModelTextItem::Implementation::Implementation(QXmlStreamReader& _contentRead
     Q_ASSERT(paragraphType != TextParagraphType::Undefined);
 
     if (_contentReader.attributes().hasAttribute(xml::kAlignAttribute)) {
-        alignment = alignmentFromString(_contentReader.attributes().value(xml::kAlignAttribute).toString());
+        alignment = alignmentFromString(
+            _contentReader.attributes().value(xml::kAlignAttribute).toString());
     }
 
     auto currentTag = xml::readNextElement(_contentReader);
@@ -91,8 +90,7 @@ TextModelTextItem::Implementation::Implementation(QXmlStreamReader& _contentRead
             //
             // Прекращаем обработку, если дошли до конца редакторских заметок
             //
-            if (currentTag == xml::kReviewMarksTag
-                && _contentReader.isEndElement()) {
+            if (currentTag == xml::kReviewMarksTag && _contentReader.isEndElement()) {
                 currentTag = xml::readNextElement(_contentReader);
                 break;
             }
@@ -105,10 +103,12 @@ TextModelTextItem::Implementation::Implementation(QXmlStreamReader& _contentRead
                 reviewMark.from = reviewMarkAttributes.value(xml::kFromAttribute).toInt();
                 reviewMark.length = reviewMarkAttributes.value(xml::kLengthAttribute).toInt();
                 if (reviewMarkAttributes.hasAttribute(xml::kColorAttribute)) {
-                    reviewMark.textColor = reviewMarkAttributes.value(xml::kColorAttribute).toString();
+                    reviewMark.textColor
+                        = reviewMarkAttributes.value(xml::kColorAttribute).toString();
                 }
                 if (reviewMarkAttributes.hasAttribute(xml::kBackgroundColorAttribute)) {
-                    reviewMark.backgroundColor = reviewMarkAttributes.value(xml::kBackgroundColorAttribute).toString();
+                    reviewMark.backgroundColor
+                        = reviewMarkAttributes.value(xml::kBackgroundColorAttribute).toString();
                 }
                 reviewMark.isDone = reviewMarkAttributes.hasAttribute(xml::kDoneAttribute);
 
@@ -119,9 +119,12 @@ TextModelTextItem::Implementation::Implementation(QXmlStreamReader& _contentRead
                     }
 
                     const auto commentAttributes = _contentReader.attributes();
-                    reviewMark.comments.append({ TextHelper::fromHtmlEscaped(commentAttributes.value(xml::kAuthorAttribute).toString()),
-                                                 commentAttributes.value(xml::kDateAttribute).toString(),
-                                                 TextHelper::fromHtmlEscaped(xml::readContent(_contentReader).toString()) });
+                    reviewMark.comments.append(
+                        { TextHelper::fromHtmlEscaped(
+                              commentAttributes.value(xml::kAuthorAttribute).toString()),
+                          commentAttributes.value(xml::kDateAttribute).toString(),
+                          TextHelper::fromHtmlEscaped(
+                              xml::readContent(_contentReader).toString()) });
 
                     xml::readNextElement(_contentReader); // end
                 } while (!_contentReader.atEnd());
@@ -138,8 +141,7 @@ TextModelTextItem::Implementation::Implementation(QXmlStreamReader& _contentRead
             //
             // Прекращаем обработку, если дошли до конца форматов
             //
-            if (currentTag == xml::kFormatsTag
-                && _contentReader.isEndElement()) {
+            if (currentTag == xml::kFormatsTag && _contentReader.isEndElement()) {
                 currentTag = xml::readNextElement(_contentReader);
                 break;
             }
@@ -151,7 +153,8 @@ TextModelTextItem::Implementation::Implementation(QXmlStreamReader& _contentRead
                 format.length = formatAttributes.value(xml::kLengthAttribute).toInt();
                 if (formatAttributes.hasAttribute(xml::kFontAttribute)) {
                     format.font = QFont(formatAttributes.value(xml::kFontAttribute).toString());
-                    format.font->setPixelSize(MeasurementHelper::ptToPx(formatAttributes.value(xml::kFontSizeAttribute).toDouble()));
+                    format.font->setPixelSize(MeasurementHelper::ptToPx(
+                        formatAttributes.value(xml::kFontSizeAttribute).toDouble()));
                 }
                 format.isBold = formatAttributes.hasAttribute(xml::kBoldAttribute);
                 format.isItalic = formatAttributes.hasAttribute(xml::kItalicAttribute);
@@ -178,13 +181,14 @@ QByteArray TextModelTextItem::Implementation::buildXml(int _from, int _length)
 
     QByteArray xml;
     xml += QString("<%1%2>")
-           .arg(toString(paragraphType),
-                (alignment.has_value()
-                 ? QString(" %1=\"%2\"").arg(xml::kAlignAttribute, toString(*alignment))
-                 : "")).toUtf8();
+               .arg(toString(paragraphType),
+                    (alignment.has_value()
+                         ? QString(" %1=\"%2\"").arg(xml::kAlignAttribute, toString(*alignment))
+                         : ""))
+               .toUtf8();
     xml += QString("<%1><![CDATA[%2]]></%1>")
-           .arg(xml::kValueTag,
-                TextHelper::toHtmlEscaped(text.mid(_from, _length))).toUtf8();
+               .arg(xml::kValueTag, TextHelper::toHtmlEscaped(text.mid(_from, _length)))
+               .toUtf8();
 
     //
     // Сохранить редакторские заметки
@@ -218,26 +222,29 @@ QByteArray TextModelTextItem::Implementation::buildXml(int _from, int _length)
         xml += QString("<%1>").arg(xml::kReviewMarksTag).toUtf8();
         for (const auto& reviewMark : std::as_const(reviewMarksToSave)) {
             xml += QString("<%1 %2=\"%3\" %4=\"%5\" %6%7%9")
-                   .arg(xml::kReviewMarkTag,
-                        xml::kFromAttribute, QString::number(reviewMark.from),
-                        xml::kLengthAttribute, QString::number(reviewMark.length),
-                        (reviewMark.textColor.isValid()
-                         ? QString(" %1=\"%2\"").arg(xml::kColorAttribute, reviewMark.textColor.name())
-                         : ""),
-                        (reviewMark.backgroundColor.isValid()
-                         ? QString(" %1=\"%2\"").arg(xml::kBackgroundColorAttribute, reviewMark.backgroundColor.name())
-                         : ""),
-                        (reviewMark.isDone
-                         ? QString(" %1=\"true\"").arg(xml::kDoneAttribute)
-                         : "")).toUtf8();
+                       .arg(xml::kReviewMarkTag, xml::kFromAttribute,
+                            QString::number(reviewMark.from), xml::kLengthAttribute,
+                            QString::number(reviewMark.length),
+                            (reviewMark.textColor.isValid()
+                                 ? QString(" %1=\"%2\"")
+                                       .arg(xml::kColorAttribute, reviewMark.textColor.name())
+                                 : ""),
+                            (reviewMark.backgroundColor.isValid()
+                                 ? QString(" %1=\"%2\"")
+                                       .arg(xml::kBackgroundColorAttribute,
+                                            reviewMark.backgroundColor.name())
+                                 : ""),
+                            (reviewMark.isDone ? QString(" %1=\"true\"").arg(xml::kDoneAttribute)
+                                               : ""))
+                       .toUtf8();
             if (!reviewMark.comments.isEmpty()) {
                 xml += ">";
                 for (const auto& comment : std::as_const(reviewMark.comments)) {
                     xml += QString("<%1 %2=\"%3\" %4=\"%5\"><![CDATA[%6]]></%1>")
-                           .arg(xml::kCommentTag,
-                                xml::kAuthorAttribute, TextHelper::toHtmlEscaped(comment.author),
-                                xml::kDateAttribute, comment.date,
-                                TextHelper::toHtmlEscaped(comment.text)).toUtf8();
+                               .arg(xml::kCommentTag, xml::kAuthorAttribute,
+                                    TextHelper::toHtmlEscaped(comment.author), xml::kDateAttribute,
+                                    comment.date, TextHelper::toHtmlEscaped(comment.text))
+                               .toUtf8();
                 }
                 xml += QString("</%1>").arg(xml::kReviewMarkTag).toUtf8();
             } else {
@@ -279,23 +286,22 @@ QByteArray TextModelTextItem::Implementation::buildXml(int _from, int _length)
         xml += QString("<%1>").arg(xml::kFormatsTag).toUtf8();
         for (const auto& format : std::as_const(formatsToSave)) {
             xml += QString("<%1 %2=\"%3\" %4=\"%5\" %6%7%8%9/>")
-                   .arg(xml::kFormatTag,
-                        xml::kFromAttribute, QString::number(format.from),
-                        xml::kLengthAttribute, QString::number(format.length),
-                        (format.font.has_value()
-                         ? QString(" %1=\"%2\" %3=\"%4\"")
-                           .arg(xml::kFontAttribute, format.font->family(),
-                                xml::kFontSizeAttribute, QString::number(MeasurementHelper::pxToPt(format.font->pixelSize())))
-                         : ""),
-                        (format.isBold
-                         ? QString(" %1=\"true\"").arg(xml::kBoldAttribute)
-                         : ""),
-                        (format.isItalic
-                         ? QString(" %1=\"true\"").arg(xml::kItalicAttribute)
-                         : ""),
-                        (format.isUnderline
-                         ? QString(" %1=\"true\"").arg(xml::kUnderlineAttribute)
-                         : "")).toUtf8();
+                       .arg(xml::kFormatTag, xml::kFromAttribute, QString::number(format.from),
+                            xml::kLengthAttribute, QString::number(format.length),
+                            (format.font.has_value()
+                                 ? QString(" %1=\"%2\" %3=\"%4\"")
+                                       .arg(xml::kFontAttribute, format.font->family(),
+                                            xml::kFontSizeAttribute,
+                                            QString::number(MeasurementHelper::pxToPt(
+                                                format.font->pixelSize())))
+                                 : ""),
+                            (format.isBold ? QString(" %1=\"true\"").arg(xml::kBoldAttribute) : ""),
+                            (format.isItalic ? QString(" %1=\"true\"").arg(xml::kItalicAttribute)
+                                             : ""),
+                            (format.isUnderline
+                                 ? QString(" %1=\"true\"").arg(xml::kUnderlineAttribute)
+                                 : ""))
+                       .toUtf8();
         }
         xml += QString("</%1>").arg(xml::kFormatsTag).toUtf8();
     }
@@ -314,25 +320,19 @@ QByteArray TextModelTextItem::Implementation::buildXml(int _from, int _length)
 
 int TextModelTextItem::TextPart::end() const
 {
-     return from + length;
+    return from + length;
 }
 
 bool TextModelTextItem::TextFormat::operator==(const TextModelTextItem::TextFormat& _other) const
 {
-    return from == _other.from
-            && length == _other.length
-            && font == _other.font
-            && isBold == _other.isBold
-            && isItalic == _other.isItalic
-            && isUnderline == _other.isUnderline;
+    return from == _other.from && length == _other.length && font == _other.font
+        && isBold == _other.isBold && isItalic == _other.isItalic
+        && isUnderline == _other.isUnderline;
 }
 
 bool TextModelTextItem::TextFormat::isValid() const
 {
-    return font.has_value()
-            || isBold != false
-            || isItalic != false
-            || isUnderline != false;
+    return font.has_value() || isBold != false || isItalic != false || isUnderline != false;
 }
 
 QTextCharFormat TextModelTextItem::TextFormat::charFormat() const
@@ -357,21 +357,17 @@ QTextCharFormat TextModelTextItem::TextFormat::charFormat() const
     return format;
 }
 
-bool TextModelTextItem::ReviewComment::operator==(const TextModelTextItem::ReviewComment& _other) const
+bool TextModelTextItem::ReviewComment::operator==(
+    const TextModelTextItem::ReviewComment& _other) const
 {
-    return author == _other.author
-            && date == _other.date
-            && text == _other.text;
+    return author == _other.author && date == _other.date && text == _other.text;
 }
 
 bool TextModelTextItem::ReviewMark::operator==(const TextModelTextItem::ReviewMark& _other) const
 {
-    return from == _other.from
-            && length == _other.length
-            && textColor == _other.textColor
-            && backgroundColor == _other.backgroundColor
-            && isDone == _other.isDone
-            && comments == _other.comments;
+    return from == _other.from && length == _other.length && textColor == _other.textColor
+        && backgroundColor == _other.backgroundColor && isDone == _other.isDone
+        && comments == _other.comments;
 }
 
 QTextCharFormat TextModelTextItem::ReviewMark::charFormat() const
@@ -398,15 +394,15 @@ QTextCharFormat TextModelTextItem::ReviewMark::charFormat() const
 }
 
 TextModelTextItem::TextModelTextItem()
-    : TextModelItem(TextModelItemType::Text),
-      d(new Implementation)
+    : TextModelItem(TextModelItemType::Text)
+    , d(new Implementation)
 {
     d->updateXml();
 }
 
 TextModelTextItem::TextModelTextItem(QXmlStreamReader& _contentReaded)
-    : TextModelItem(TextModelItemType::Text),
-      d(new Implementation(_contentReaded))
+    : TextModelItem(TextModelItemType::Text)
+    , d(new Implementation(_contentReaded))
 {
     d->updateXml();
 }
@@ -436,8 +432,7 @@ std::optional<Qt::Alignment> TextModelTextItem::alignment() const
 
 void TextModelTextItem::setAlignment(Qt::Alignment _align)
 {
-    if (d->alignment.has_value()
-        && d->alignment == _align) {
+    if (d->alignment.has_value() && d->alignment == _align) {
         return;
     }
 
@@ -523,8 +518,7 @@ void TextModelTextItem::setFormats(const QVector<QTextLayout::FormatRange>& _for
     QVector<TextFormat> newFormats;
     const auto defaultBlockFormat = TemplatesFacade::textTemplate().blockStyle(d->paragraphType);
     for (const auto& format : _formats) {
-        if (format.start == 0
-            && format.length == d->text.length()
+        if (format.start == 0 && format.length == d->text.length()
             && format.format == defaultBlockFormat.charFormat()) {
             continue;
         }
@@ -591,11 +585,15 @@ void TextModelTextItem::setReviewMarks(const QVector<QTextLayout::FormatRange>& 
             newReviewMark.backgroundColor = reviewMark.format.background().color();
         }
         newReviewMark.isDone = reviewMark.format.boolProperty(TextBlockStyle::PropertyIsDone);
-        const QStringList comments = reviewMark.format.property(TextBlockStyle::PropertyComments).toStringList();
-        const QStringList dates = reviewMark.format.property(TextBlockStyle::PropertyCommentsDates).toStringList();
-        const QStringList authors = reviewMark.format.property(TextBlockStyle::PropertyCommentsAuthors).toStringList();
+        const QStringList comments
+            = reviewMark.format.property(TextBlockStyle::PropertyComments).toStringList();
+        const QStringList dates
+            = reviewMark.format.property(TextBlockStyle::PropertyCommentsDates).toStringList();
+        const QStringList authors
+            = reviewMark.format.property(TextBlockStyle::PropertyCommentsAuthors).toStringList();
         for (int commentIndex = 0; commentIndex < comments.size(); ++commentIndex) {
-            newReviewMark.comments.append({ authors.at(commentIndex), dates.at(commentIndex), comments.at(commentIndex) });
+            newReviewMark.comments.append(
+                { authors.at(commentIndex), dates.at(commentIndex), comments.at(commentIndex) });
         }
 
         newReviewMarks.append(newReviewMark);
@@ -606,8 +604,7 @@ void TextModelTextItem::setReviewMarks(const QVector<QTextLayout::FormatRange>& 
 
 void TextModelTextItem::mergeWith(const TextModelTextItem* _other)
 {
-    if (_other == nullptr
-        || _other->text().isEmpty()) {
+    if (_other == nullptr || _other->text().isEmpty()) {
         return;
     }
 
@@ -629,17 +626,17 @@ void TextModelTextItem::mergeWith(const TextModelTextItem* _other)
 QVariant TextModelTextItem::data(int _role) const
 {
     switch (_role) {
-        case Qt::DecorationRole: {
-            return u8"\U000F09A8";
-        }
+    case Qt::DecorationRole: {
+        return u8"\U000F09A8";
+    }
 
-        case Qt::DisplayRole: {
-            return d->text;
-        }
+    case Qt::DisplayRole: {
+        return d->text;
+    }
 
-        default: {
-            return TextModelItem::data(_role);
-        }
+    default: {
+        return TextModelItem::data(_role);
+    }
     }
 }
 
@@ -680,17 +677,14 @@ void TextModelTextItem::copyFrom(TextModelItem* _item)
 
 bool TextModelTextItem::isEqual(TextModelItem* _item) const
 {
-    if (_item == nullptr
-        || type() != _item->type()) {
+    if (_item == nullptr || type() != _item->type()) {
         return false;
     }
 
     const auto textItem = static_cast<TextModelTextItem*>(_item);
-    return d->paragraphType == textItem->d->paragraphType
-            && d->alignment == textItem->d->alignment
-            && d->text == textItem->d->text
-            && d->reviewMarks == textItem->d->reviewMarks
-            && d->formats == textItem->d->formats;
+    return d->paragraphType == textItem->d->paragraphType && d->alignment == textItem->d->alignment
+        && d->text == textItem->d->text && d->reviewMarks == textItem->d->reviewMarks
+        && d->formats == textItem->d->formats;
 }
 
 void TextModelTextItem::markChanged()

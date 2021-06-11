@@ -3,8 +3,7 @@
 #include <QVector>
 
 
-namespace BusinessLayer
-{
+namespace BusinessLayer {
 
 class AbstractModelItem::Implementation
 {
@@ -150,8 +149,7 @@ void AbstractModelItem::setChanged(bool _changed)
 {
     d->changed = _changed;
 
-    if (_changed
-        && d->parent != nullptr) {
+    if (_changed && d->parent != nullptr) {
         d->parent->setChanged(_changed);
     }
 

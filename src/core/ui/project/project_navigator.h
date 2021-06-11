@@ -5,8 +5,7 @@
 class QAbstractItemModel;
 
 
-namespace Ui
-{
+namespace Ui {
 
 /**
  * @brief Навигатор по структуре проекта
@@ -96,4 +95,4 @@ private:
     QScopedPointer<Implementation> d;
 };
 
-}
+} // namespace Ui

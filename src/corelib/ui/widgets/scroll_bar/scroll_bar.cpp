@@ -48,13 +48,14 @@ void ScrollBar::Implementation::minimizeScrollbar()
 
 
 ScrollBar::ScrollBar(QWidget* _parent)
-    : QScrollBar(_parent),
-      d(new Implementation)
+    : QScrollBar(_parent)
+    , d(new Implementation)
 {
     setAutoFillBackground(false);
     setAttribute(Qt::WA_NoSystemBackground);
 
-    connect(&d->widthAnimation, &QVariantAnimation::valueChanged, this, [this] { updateGeometry(); });
+    connect(&d->widthAnimation, &QVariantAnimation::valueChanged, this,
+            [this] { updateGeometry(); });
 }
 
 ScrollBar::~ScrollBar() = default;
@@ -62,9 +63,10 @@ ScrollBar::~ScrollBar() = default;
 QSize ScrollBar::sizeHint() const
 {
     const QSize marginsDelta = QSizeF(Ui::DesignSystem::scrollBar().margins().left()
-                                      + Ui::DesignSystem::scrollBar().margins().right(),
+                                          + Ui::DesignSystem::scrollBar().margins().right(),
                                       Ui::DesignSystem::scrollBar().margins().top()
-                                      + Ui::DesignSystem::scrollBar().margins().bottom()).toSize();
+                                          + Ui::DesignSystem::scrollBar().margins().bottom())
+                                   .toSize();
     const qreal directedSize = std::max(Ui::DesignSystem::scrollBar().minimumSize(),
                                         d->widthAnimation.currentValue().toReal());
     if (orientation() == Qt::Vertical) {
@@ -74,7 +76,7 @@ QSize ScrollBar::sizeHint() const
     }
 }
 
-void ScrollBar::setHandleColor(const QColor & _handleColor)
+void ScrollBar::setHandleColor(const QColor& _handleColor)
 {
     if (d->handleColor == _handleColor) {
         return;
@@ -84,7 +86,7 @@ void ScrollBar::setHandleColor(const QColor & _handleColor)
     update();
 }
 
-void ScrollBar::setBackgroundColor(const QColor & _backgroundColor)
+void ScrollBar::setBackgroundColor(const QColor& _backgroundColor)
 {
     if (d->backgroundColor == _backgroundColor) {
         return;
@@ -111,37 +113,37 @@ void ScrollBar::paintEvent(QPaintEvent* _event)
     // Рисуем фон скролбара
     //
     const auto backgroundColor = d->backgroundColor.isValid()
-                                 ? d->backgroundColor
-                                 : Ui::DesignSystem::scrollBar().backgroundColor();
-    const QRectF contentRect = QRectF(rect()).marginsRemoved(Ui::DesignSystem::scrollBar().margins());
+        ? d->backgroundColor
+        : Ui::DesignSystem::scrollBar().backgroundColor();
+    const QRectF contentRect
+        = QRectF(rect()).marginsRemoved(Ui::DesignSystem::scrollBar().margins());
     painter.fillRect(contentRect, backgroundColor);
 
     //
     // Рисуем хэндл
     //
-    qreal handleDelta = (Qt::Horizontal == orientation() ? contentRect.width()
-                                                         : contentRect.height())
-                        / static_cast<qreal>(maximum() - minimum() + pageStep() - 1);
-    qreal additionalHandleMovement = orientation() == Qt::Horizontal
-                                     ? contentRect.left()
-                                     : contentRect.top();
+    qreal handleDelta
+        = (Qt::Horizontal == orientation() ? contentRect.width() : contentRect.height())
+        / static_cast<qreal>(maximum() - minimum() + pageStep() - 1);
+    qreal additionalHandleMovement
+        = orientation() == Qt::Horizontal ? contentRect.left() : contentRect.top();
     if (pageStep() * handleDelta < Ui::DesignSystem::scrollBar().minimumHandleLength()) {
-        handleDelta = (Qt::Horizontal == orientation() ? contentRect.width()
-                                                       : contentRect.height())
-                      / static_cast<qreal>(maximum() - minimum());
+        handleDelta = (Qt::Horizontal == orientation() ? contentRect.width() : contentRect.height())
+            / static_cast<qreal>(maximum() - minimum());
         additionalHandleMovement -= Ui::DesignSystem::scrollBar().minimumHandleLength() * value()
-                                    / static_cast<qreal>(maximum() - minimum());
+            / static_cast<qreal>(maximum() - minimum());
     }
     const QRectF handle = orientation() == Qt::Horizontal
-                          ? QRectF(sliderPosition() * handleDelta + additionalHandleMovement, contentRect.top(),
-                                   std::max(pageStep() * handleDelta,
-                                            Ui::DesignSystem::scrollBar().minimumHandleLength()), contentRect.height())
-                          : QRectF(contentRect.left(), sliderPosition() * handleDelta + additionalHandleMovement,
-                                   contentRect.width(), std::max(pageStep() * handleDelta,
-                                                                 Ui::DesignSystem::scrollBar().minimumHandleLength()));
-    const auto handleColor = d->handleColor.isValid()
-                             ? d->handleColor
-                             : Ui::DesignSystem::scrollBar().handleColor();
+        ? QRectF(
+            sliderPosition() * handleDelta + additionalHandleMovement, contentRect.top(),
+            std::max(pageStep() * handleDelta, Ui::DesignSystem::scrollBar().minimumHandleLength()),
+            contentRect.height())
+        : QRectF(contentRect.left(), sliderPosition() * handleDelta + additionalHandleMovement,
+                 contentRect.width(),
+                 std::max(pageStep() * handleDelta,
+                          Ui::DesignSystem::scrollBar().minimumHandleLength()));
+    const auto handleColor
+        = d->handleColor.isValid() ? d->handleColor : Ui::DesignSystem::scrollBar().handleColor();
     painter.fillRect(handle, handleColor);
 }
 

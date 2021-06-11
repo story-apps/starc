@@ -5,8 +5,7 @@
 #include <QDomDocument>
 
 
-namespace BusinessLayer
-{
+namespace BusinessLayer {
 
 class LocationsModel::Implementation
 {
@@ -19,8 +18,8 @@ public:
 
 
 LocationsModel::LocationsModel(QObject* _parent)
-    : AbstractModel({}, _parent),
-      d(new Implementation)
+    : AbstractModel({}, _parent)
+    , d(new Implementation)
 {
 }
 
@@ -73,10 +72,7 @@ void LocationsModel::createLocation(const QString& _name, const QByteArray& _con
 
 QModelIndex LocationsModel::index(int _row, int _column, const QModelIndex& _parent) const
 {
-    if (_row < 0
-        || _row > rowCount(_parent)
-        || _column < 0
-        || _column > columnCount(_parent)
+    if (_row < 0 || _row > rowCount(_parent) || _column < 0 || _column > columnCount(_parent)
         || (_parent.isValid() && (_parent.column() != 0))) {
         return {};
     }
@@ -119,14 +115,14 @@ QVariant LocationsModel::data(const QModelIndex& _index, int _role) const
     }
 
     switch (_role) {
-        case Qt::DisplayRole:
-        case Qt::EditRole: {
-            return d->locationModels.at(_index.row())->name();
-        }
+    case Qt::DisplayRole:
+    case Qt::EditRole: {
+        return d->locationModels.at(_index.row())->name();
+    }
 
-        default: {
-            return {};
-        }
+    default: {
+        return {};
+    }
     }
 }
 

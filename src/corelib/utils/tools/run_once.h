@@ -1,8 +1,8 @@
 #pragma once
 
-#include <corelib_global.h>
-
 #include <QSet>
+
+#include <corelib_global.h>
 
 
 /**
@@ -13,7 +13,10 @@ class CORE_LIBRARY_EXPORT RunOnceLock
 public:
     ~RunOnceLock();
 
-    inline operator bool() const { return !m_key.isNull(); }
+    inline operator bool() const
+    {
+        return !m_key.isNull();
+    }
 
 private:
     /**
@@ -64,4 +67,3 @@ private:
      */
     friend class RunOnceLock;
 };
-

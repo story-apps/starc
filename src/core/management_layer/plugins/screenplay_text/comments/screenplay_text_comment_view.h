@@ -2,8 +2,7 @@
 
 #include <ui/widgets/widget/widget.h>
 
-namespace Ui
-{
+namespace Ui {
 
 /**
  * @brief Виджет отобразающий информацию о заголовке комментария

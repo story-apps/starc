@@ -12,8 +12,7 @@ using BusinessLayer::ScreenplayParagraphType;
 using Ui::ScreenplayTextEdit;
 
 
-namespace KeyProcessingLayer
-{
+namespace KeyProcessingLayer {
 
 LyricsHandler::LyricsHandler(ScreenplayTextEdit* _editor)
     : StandardKeyHandler(_editor)
@@ -59,8 +58,7 @@ void LyricsHandler::handleEnter(QKeyEvent*)
         } else {
             //! Нет выделения
 
-            if (cursorBackwardText.isEmpty()
-                && cursorForwardText.isEmpty()) {
+            if (cursorBackwardText.isEmpty() && cursorForwardText.isEmpty()) {
                 //! Текст пуст
 
                 //
@@ -97,16 +95,21 @@ void LyricsHandler::handleEnter(QKeyEvent*)
                         {
                             QTextCursor cursor = editor()->textCursor();
                             QTextBlock cursorBlock = cursor.block();
-                            while ((ScreenplayBlockStyle::forBlock(cursorBlock) != ScreenplayParagraphType::Character
-                                    || ScreenplayBlockStyle::forBlock(cursorBlock) == ScreenplayParagraphType::Dialogue
-                                    || ScreenplayBlockStyle::forBlock(cursorBlock) == ScreenplayParagraphType::Parenthetical
-                                    || ScreenplayBlockStyle::forBlock(cursorBlock) == ScreenplayParagraphType::Lyrics)
+                            while ((ScreenplayBlockStyle::forBlock(cursorBlock)
+                                        != ScreenplayParagraphType::Character
+                                    || ScreenplayBlockStyle::forBlock(cursorBlock)
+                                        == ScreenplayParagraphType::Dialogue
+                                    || ScreenplayBlockStyle::forBlock(cursorBlock)
+                                        == ScreenplayParagraphType::Parenthetical
+                                    || ScreenplayBlockStyle::forBlock(cursorBlock)
+                                        == ScreenplayParagraphType::Lyrics)
                                    && !cursor.atStart()) {
                                 cursor.movePosition(QTextCursor::PreviousBlock);
                                 cursorBlock = cursor.block();
                             }
 
-                            if (ScreenplayBlockStyle::forBlock(cursorBlock) == ScreenplayParagraphType::Character) {
+                            if (ScreenplayBlockStyle::forBlock(cursorBlock)
+                                == ScreenplayParagraphType::Character) {
                                 characterName = cursorBlock.text().simplified();
                             }
                         }
@@ -164,8 +167,7 @@ void LyricsHandler::handleTab(QKeyEvent*)
         } else {
             //! Нет выделения
 
-            if (cursorBackwardText.isEmpty()
-                && cursorForwardText.isEmpty()) {
+            if (cursorBackwardText.isEmpty() && cursorForwardText.isEmpty()) {
                 //! Текст пуст
 
                 //
@@ -236,9 +238,7 @@ void LyricsHandler::handleOther(QKeyEvent* _event)
     //
     // Обработка
     //
-    if (cursorBackwardText.endsWith("(")
-        && _event != 0
-        && _event->text() == "(") {
+    if (cursorBackwardText.endsWith("(") && _event != 0 && _event->text() == "(") {
         //! Если нажата открывающая скобка
 
         //
@@ -246,8 +246,7 @@ void LyricsHandler::handleOther(QKeyEvent* _event)
         //
         editor()->textCursor().deletePreviousChar();
 
-        if (cursorForwardText.isEmpty()
-            && cursorBackwardText == "(") {
+        if (cursorForwardText.isEmpty() && cursorBackwardText == "(") {
             //! Если текст пуст
 
             //

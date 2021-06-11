@@ -2,13 +2,11 @@
 
 #include <data_layer/mapper/document_mapper.h>
 #include <data_layer/mapper/mapper_facade.h>
-
 #include <domain/document_object.h>
 #include <domain/objects_builder.h>
 
 
-namespace DataStorageLayer
-{
+namespace DataStorageLayer {
 
 Domain::DocumentObject* DocumentStorage::document(const QUuid& _uuid)
 {
@@ -29,7 +27,8 @@ QVector<Domain::DocumentObject*> DocumentStorage::documents(Domain::DocumentObje
     return DataMappingLayer::MapperFacade::documentMapper()->findAll(_type);
 }
 
-Domain::DocumentObject* DocumentStorage::storeDocument(const QUuid& _uuid, Domain::DocumentObjectType _type)
+Domain::DocumentObject* DocumentStorage::storeDocument(const QUuid& _uuid,
+                                                       Domain::DocumentObjectType _type)
 {
     auto newDocument = Domain::ObjectsBuilder::createDocument({}, _uuid, _type, {});
     DataMappingLayer::MapperFacade::documentMapper()->insert(newDocument);

@@ -8,8 +8,7 @@
 #include <QApplication>
 
 
-namespace BusinessLayer
-{
+namespace BusinessLayer {
 
 class ScreenplayTextStructureModel::Implementation
 {
@@ -22,8 +21,8 @@ public:
 
 
 ScreenplayTextStructureModel::ScreenplayTextStructureModel(QObject* _parent)
-    : QSortFilterProxyModel(_parent),
-      d(new Implementation)
+    : QSortFilterProxyModel(_parent)
+    , d(new Implementation)
 {
 }
 
@@ -45,13 +44,13 @@ void ScreenplayTextStructureModel::setSourceModel(QAbstractItemModel* _sourceMod
         //        видимо не успевает происходить какая-то внутренняя магия при синхронном удалении
         //        и последующей вставки элементов в модели
         //
-        connect(d->screenplayModel, &ScreenplayTextModel::rowsRemoved, this, [] {
-            QApplication::processEvents(QEventLoop::ExcludeUserInputEvents);
-        });
+        connect(d->screenplayModel, &ScreenplayTextModel::rowsRemoved, this,
+                [] { QApplication::processEvents(QEventLoop::ExcludeUserInputEvents); });
     }
 }
 
-bool ScreenplayTextStructureModel::filterAcceptsRow(int _sourceRow, const QModelIndex& _sourceParent) const
+bool ScreenplayTextStructureModel::filterAcceptsRow(int _sourceRow,
+                                                    const QModelIndex& _sourceParent) const
 {
     if (d->screenplayModel == nullptr) {
         return false;
@@ -73,7 +72,7 @@ bool ScreenplayTextStructureModel::filterAcceptsRow(int _sourceRow, const QModel
     if (item->type() == ScreenplayTextModelItemType::Text) {
         const auto textItem = static_cast<ScreenplayTextModelTextItem*>(item);
         return !textItem->isCorrection()
-                && textItem->paragraphType() == ScreenplayParagraphType::Shot;
+            && textItem->paragraphType() == ScreenplayParagraphType::Shot;
     }
     //
     // Остальное не показываем

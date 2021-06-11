@@ -14,20 +14,15 @@ public:
     /**
      * @brief Тип анимации контента
      */
-    enum class AnimationType {
-        Fade,
-        FadeThrough,
-        Slide,
-        Expand
-    };
+    enum class AnimationType { Fade, FadeThrough, Slide, Expand };
 
 public:
     explicit StackWidget(QWidget* _parent = nullptr);
     ~StackWidget() override;
 
     /**
-      * @brief Установить тип анимации виджета
-      */
+     * @brief Установить тип анимации виджета
+     */
     void setAnimationType(AnimationType _type);
 
     /**

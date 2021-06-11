@@ -60,7 +60,7 @@ protected:
     /**
      * @brief При изменении дизайн системы, нужно перестроить палитру
      */
-    void designSystemChangeEvent(DesignSystemChangeEvent *_event) override;
+    void designSystemChangeEvent(DesignSystemChangeEvent* _event) override;
 
 private:
     class Implementation;
