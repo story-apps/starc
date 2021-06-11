@@ -7,6 +7,7 @@
 #include <QAction>
 #include <QApplication>
 #include <QActionGroup>
+#include <QKeyEvent>
 
 
 namespace Ui
@@ -90,7 +91,6 @@ MenuView::Implementation::Implementation(QWidget* _parent)
     actions->addAction(help);
 }
 
-
 // ****
 
 
@@ -123,16 +123,15 @@ MenuView::MenuView(QWidget* _parent)
     connect(d->settings, &QAction::triggered, this, &MenuView::settingsPressed);
     connect(d->help, &QAction::triggered, this, &MenuView::helpPressed);
 
-    auto closeMenu = [this] { WAF::Animation::sideSlideOut(this); };
-    connect(this, &MenuView::projectsPressed, this, closeMenu);
-    connect(this, &MenuView::createProjectPressed, this, closeMenu);
-    connect(this, &MenuView::openProjectPressed, this, closeMenu);
-    connect(this, &MenuView::projectPressed, this, closeMenu);
-    connect(this, &MenuView::saveProjectAsPressed, this, closeMenu);
-    connect(this, &MenuView::importPressed, this, closeMenu);
-    connect(this, &MenuView::exportCurrentDocumentPressed, this, closeMenu);
-    connect(this, &MenuView::settingsPressed, this, closeMenu);
-    connect(this, &MenuView::helpPressed, this, closeMenu);
+    connect(this, &MenuView::projectsPressed, this, &MenuView::closeMenu);
+    connect(this, &MenuView::createProjectPressed, this, &MenuView::closeMenu);
+    connect(this, &MenuView::openProjectPressed, this, &MenuView::closeMenu);
+    connect(this, &MenuView::projectPressed, this, &MenuView::closeMenu);
+    connect(this, &MenuView::saveProjectAsPressed, this, &MenuView::closeMenu);
+    connect(this, &MenuView::importPressed, this, &MenuView::closeMenu);
+    connect(this, &MenuView::exportCurrentDocumentPressed, this, &MenuView::closeMenu);
+    connect(this, &MenuView::settingsPressed, this, &MenuView::closeMenu);
+    connect(this, &MenuView::helpPressed, this, &MenuView::closeMenu);
 
     setVisible(false);
 }
@@ -189,6 +188,11 @@ void MenuView::setCurrentDocumentExportAvailable(bool _available)
     d->exportCurrentDocument->setEnabled(_available);
 }
 
+void MenuView::closeMenu()
+{
+    WAF::Animation::sideSlideOut(this);
+}
+
 void MenuView::updateTranslations()
 {
     d->projects->setText(tr("Stories"));
@@ -203,6 +207,15 @@ void MenuView::updateTranslations()
     d->exportCurrentDocument->setWhatsThis(QKeySequence("Alt+E").toString(QKeySequence::NativeText));
     d->settings->setText(tr("Application settings"));
     d->help->setText(tr("How to use the application"));
+}
+
+void MenuView::keyPressEvent(QKeyEvent *_event)
+{
+    if (_event->key() == Qt::Key_Escape) {
+        closeMenu();
+    }
+
+    Drawer::keyPressEvent(_event);
 }
 
 MenuView::~MenuView() = default;
