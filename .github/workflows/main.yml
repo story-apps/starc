@@ -3,7 +3,7 @@ name: Build
 env:
   APP_VERSION: 0.0.7
 
-on: [push]
+on: [push, pull_request]
 
 jobs:
   build_linux:

@@ -1,6 +1,6 @@
 name: ClangFormat
 
-on: [push]
+on: [push, pull_request]
 
 jobs:
   check:
