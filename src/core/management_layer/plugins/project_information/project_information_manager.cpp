@@ -1,9 +1,9 @@
 #include "project_information_manager.h"
 
-#include "cover_dialog.h"
 #include "project_information_view.h"
 
 #include <business_layer/model/project/project_information_model.h>
+#include <ui/widgets/image/image_cropping_dialog.h>
 
 #include <QApplication>
 #include <QFileDialog>
@@ -70,11 +70,12 @@ ProjectInformationManager::ProjectInformationManager(QObject* _parent)
             return;
         }
 
-        auto dlg = new Ui::CoverDialog(d->view->window());
-        dlg->setCover(cover);
+        auto dlg = new ImageCroppingDialog(d->view->window());
+        dlg->setImage(cover);
         dlg->showDialog();
-        connect(dlg, &Ui::CoverDialog::disappeared, dlg, &Ui::CoverDialog::deleteLater);
-        connect(dlg, &Ui::CoverDialog::coverSelected, d->model,
+
+        connect(dlg, &ImageCroppingDialog::disappeared, dlg, &ImageCroppingDialog::deleteLater);
+        connect(dlg, &ImageCroppingDialog::imageSelected, d->model,
                 &BusinessLayer::ProjectInformationModel::setCover);
     });
 }
