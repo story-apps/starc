@@ -6,7 +6,7 @@
 /**
  * @brief Диалог обрезки изображения
  */
-class ImageCroppingDialog : public AbstractDialog
+class CORE_LIBRARY_EXPORT ImageCroppingDialog : public AbstractDialog
 {
     Q_OBJECT
 
