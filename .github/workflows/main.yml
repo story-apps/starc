@@ -3,7 +3,10 @@ name: Build
 env:
   APP_VERSION: 0.0.7
 
-on: [push, pull_request]
+on:
+  push:
+    branch: master
+  pull_request:
 
 jobs:
   build_linux:
@@ -11,11 +14,16 @@ jobs:
     runs-on: ubuntu-18.04
     timeout-minutes: 60
     steps:
-      - name: Checkout Sources
+      - name: Checkout Sources for push event
+        if: ${{ github.event_name == 'push' }}
         uses: actions/checkout@master
         with:
           token: ${{ secrets.ACTION_RUNNER }}
           submodules: recursive
+
+      - name: Checkout Sources for pull request event
+        if: ${{ github.event_name == 'pull_request' }}
+        uses: actions/checkout@master
 
       - name: Install Qt
         uses: jurplel/install-qt-action@v2
@@ -52,11 +60,16 @@ jobs:
     runs-on: windows-latest
     timeout-minutes: 60
     steps:
-      - name: Checkout Sources
+      - name: Checkout Sources for push event
+        if: ${{ github.event_name == 'push' }}
         uses: actions/checkout@master
         with:
           token: ${{ secrets.ACTION_RUNNER }}
           submodules: recursive
+
+      - name: Checkout Sources for pull request event
+        if: ${{ github.event_name == 'pull_request' }}
+        uses: actions/checkout@master
 
       - name: Install Qt
         uses: jurplel/install-qt-action@v2
@@ -117,11 +130,16 @@ jobs:
     runs-on: windows-latest
     timeout-minutes: 60
     steps:
-      - name: Checkout Sources
+      - name: Checkout Sources for push event
+        if: ${{ github.event_name == 'push' }}
         uses: actions/checkout@master
         with:
           token: ${{ secrets.ACTION_RUNNER }}
           submodules: recursive
+
+      - name: Checkout Sources for pull request event
+        if: ${{ github.event_name == 'pull_request' }}
+        uses: actions/checkout@master
 
       - name: Install Qt
         uses: jurplel/install-qt-action@v2
