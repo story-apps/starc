@@ -316,7 +316,7 @@ QRectF TextField::Implementation::iconRect(int _width) const
 
 
 TextField::TextField(QWidget* _parent)
-    : QTextEdit(_parent)
+    : BaseTextEdit(_parent)
     , d(new Implementation(this))
 {
     setAttribute(Qt::WA_Hover);
@@ -664,7 +664,7 @@ bool TextField::event(QEvent* _event)
     }
 
     default: {
-        return QTextEdit::event(_event);
+        return BaseTextEdit::event(_event);
     }
     }
 }
@@ -692,7 +692,7 @@ void TextField::paintEvent(QPaintEvent* _event)
     // QTextEdit
     //
     if (!d->isPasswordModeEnabled) {
-        QTextEdit::paintEvent(_event);
+        BaseTextEdit::paintEvent(_event);
     }
     //
     // В противном случае, самостоятельно рисуем звёздочки вместо букв
@@ -809,7 +809,7 @@ void TextField::paintEvent(QPaintEvent* _event)
 
 void TextField::resizeEvent(QResizeEvent* _event)
 {
-    QTextEdit::resizeEvent(_event);
+    BaseTextEdit::resizeEvent(_event);
 
     //
     // Если виджет в фокусе, корректируем размер полосы декорации под текстом
@@ -822,7 +822,7 @@ void TextField::resizeEvent(QResizeEvent* _event)
 
 void TextField::focusInEvent(QFocusEvent* _event)
 {
-    QTextEdit::focusInEvent(_event);
+    BaseTextEdit::focusInEvent(_event);
 
     d->labelColorAnimation.setStartValue(d->textDisabledColor);
     d->labelColorAnimation.setEndValue(Ui::DesignSystem::color().secondary());
@@ -843,7 +843,7 @@ void TextField::focusInEvent(QFocusEvent* _event)
 
 void TextField::focusOutEvent(QFocusEvent* _event)
 {
-    QTextEdit::focusOutEvent(_event);
+    BaseTextEdit::focusOutEvent(_event);
 
     d->labelColorAnimation.setStartValue(Ui::DesignSystem::color().secondary());
     d->labelColorAnimation.setEndValue(d->textDisabledColor);
@@ -869,13 +869,13 @@ void TextField::mouseReleaseEvent(QMouseEvent* _event)
         emit trailingIconPressed();
         _event->accept();
     } else {
-        QTextEdit::mouseReleaseEvent(_event);
+        BaseTextEdit::mouseReleaseEvent(_event);
     }
 }
 
 void TextField::mouseMoveEvent(QMouseEvent* _event)
 {
-    QTextEdit::mouseMoveEvent(_event);
+    BaseTextEdit::mouseMoveEvent(_event);
 
     if (d->trailingIcon.isEmpty()) {
         if (viewport()->cursor() != Qt::IBeamCursor) {
@@ -900,7 +900,7 @@ void TextField::keyPressEvent(QKeyEvent* _event)
         return;
     }
 
-    QTextEdit::keyPressEvent(_event);
+    BaseTextEdit::keyPressEvent(_event);
 }
 
 void TextField::changeEvent(QEvent* _event)
@@ -913,7 +913,7 @@ void TextField::changeEvent(QEvent* _event)
         break;
     }
 
-    return QTextEdit::changeEvent(_event);
+    return BaseTextEdit::changeEvent(_event);
 }
 
 void TextField::insertFromMimeData(const QMimeData* _source)

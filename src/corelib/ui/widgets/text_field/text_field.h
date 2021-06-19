@@ -1,5 +1,7 @@
 #pragma once
 
+#include "../text_edit/base/base_text_edit.h"
+
 #include <QTextEdit>
 
 #include <corelib_global.h>
@@ -10,7 +12,7 @@ class QValidator;
 /**
  * @brief Виджет текстового поля
  */
-class CORE_LIBRARY_EXPORT TextField : public QTextEdit
+class CORE_LIBRARY_EXPORT TextField : public BaseTextEdit
 {
     Q_OBJECT
 
