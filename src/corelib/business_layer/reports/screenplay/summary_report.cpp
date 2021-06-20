@@ -147,7 +147,7 @@ void ScreenplaySummaryReport::build(QAbstractItemModel* _model)
         textEdit.setUsePageMode(true);
         textEdit.setPageSpacing(0);
         textEdit.setPageFormat(screenplayTemplate.pageSizeId());
-        textEdit.setPageMargins(screenplayTemplate.pageMargins());
+        textEdit.setPageMarginsMm(screenplayTemplate.pageMargins());
         ScreenplayTextDocument screenplayDocument;
         screenplayDocument.setTemplateId(screenplayTemplate.id());
         textEdit.setDocument(&screenplayDocument);

@@ -3515,7 +3515,7 @@ void PageTextEdit::setPageFormat(QPageSize::PageSizeId _pageFormat)
     d->relayoutDocument();
 }
 
-void PageTextEdit::setPageMargins(const QMarginsF& _margins)
+void PageTextEdit::setPageMarginsMm(const QMarginsF& _margins)
 {
     Q_D(PageTextEdit);
     if (d->m_pageMetrics.mmPageMargins() == _margins) {
@@ -3523,6 +3523,17 @@ void PageTextEdit::setPageMargins(const QMarginsF& _margins)
     }
 
     d->m_pageMetrics.update(d->m_pageMetrics.pageFormat(), _margins);
+    d->relayoutDocument();
+}
+
+void PageTextEdit::setPageMarginsPx(const QMarginsF& _margins)
+{
+    Q_D(PageTextEdit);
+    if (d->m_pageMetrics.pxPageMargins() == _margins) {
+        return;
+    }
+
+    d->m_pageMetrics.update(d->m_pageMetrics.pageFormat(), {}, _margins);
     d->relayoutDocument();
 }
 

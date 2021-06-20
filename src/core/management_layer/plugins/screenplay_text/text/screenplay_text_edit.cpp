@@ -134,7 +134,7 @@ void ScreenplayTextEdit::initWithModel(BusinessLayer::ScreenplayTextModel* _mode
     //
     const auto currentTemplate = TemplatesFacade::screenplayTemplate();
     setPageFormat(currentTemplate.pageSizeId());
-    setPageMargins(currentTemplate.pageMargins());
+    setPageMarginsMm(currentTemplate.pageMargins());
     setPageNumbersAlignment(currentTemplate.pageNumbersAlignment());
 
     //

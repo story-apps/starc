@@ -108,7 +108,7 @@ void ScreenplayTitlePageEdit::initWithModel(BusinessLayer::TextModel* _model)
 
     const auto currentTemplate = TemplatesFacade::textTemplate();
     setPageFormat(currentTemplate.pageSizeId());
-    setPageMargins(currentTemplate.pageMargins());
+    setPageMarginsMm(currentTemplate.pageMargins());
     setPageNumbersAlignment(currentTemplate.pageNumbersAlignment());
 
     //

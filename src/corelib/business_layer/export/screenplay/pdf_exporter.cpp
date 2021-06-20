@@ -436,7 +436,7 @@ void PdfExporter::exportTo(ScreenplayTextModel* _model, const ExportOptions& _ex
     //
     const auto exportTemplate = TemplatesFacade::screenplayTemplate(_exportOptions.templateId);
     textEdit.setPageFormat(exportTemplate.pageSizeId());
-    textEdit.setPageMargins(exportTemplate.pageMargins());
+    textEdit.setPageMarginsMm(exportTemplate.pageMargins());
     textEdit.setPageNumbersAlignment(exportTemplate.pageNumbersAlignment());
     //
     // ... формируем текст сценария
