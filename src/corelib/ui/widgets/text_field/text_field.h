@@ -1,10 +1,6 @@
 #pragma once
 
-#include "../text_edit/base/base_text_edit.h"
-
-#include <QTextEdit>
-
-#include <corelib_global.h>
+#include "ui/widgets/text_edit/base/base_text_edit.h"
 
 class QValidator;
 
