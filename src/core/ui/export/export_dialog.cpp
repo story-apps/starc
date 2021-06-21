@@ -61,10 +61,12 @@ ExportDialog::Implementation::Implementation(QWidget* _parent)
 {
     using namespace BusinessLayer;
 
+    fileFormat->setSpellCheckPolicy(SpellCheckPolicy::Manual);
     auto formatsModel = new QStringListModel({ "PDF" /*, "DOCX", "FDX", "Fontain" */ });
     fileFormat->setModel(formatsModel);
     fileFormat->setCurrentIndex(formatsModel->index(0, 0));
 
+    screenplayTemplate->setSpellCheckPolicy(SpellCheckPolicy::Manual);
     screenplayTemplate->setModel(TemplatesFacade::screenplayTemplates());
     for (int row = 0; row < TemplatesFacade::screenplayTemplates()->rowCount(); ++row) {
         auto item = TemplatesFacade::screenplayTemplates()->item(row);
@@ -84,6 +86,8 @@ ExportDialog::Implementation::Implementation(QWidget* _parent)
            printSceneNumbersOnRight, printReviewMarks, openDocumentAfterExport }) {
         checkBox->setChecked(true);
     }
+
+    watermark->setSpellCheckPolicy(SpellCheckPolicy::Manual);
 
     buttonsLayout->setContentsMargins({});
     buttonsLayout->setSpacing(0);

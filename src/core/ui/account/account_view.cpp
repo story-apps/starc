@@ -60,6 +60,8 @@ AccountView::Implementation::Implementation(QWidget* _parent)
     userInfoLayout->addWidget(avatar, 0, 1, 4, 1);
     userInfoLayout->setColumnStretch(0, 1);
     userInfo->setLayoutReimpl(userInfoLayout);
+
+    userName->setSpellCheckPolicy(SpellCheckPolicy::Manual);
 }
 
 

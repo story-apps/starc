@@ -29,8 +29,11 @@ ChangePasswordDialog::Implementation::Implementation(QWidget* _parent)
     , changePasswordButton(new Button(_parent))
     , cancelButton(new Button(_parent))
 {
+
+    restorePasswordConfirmationCode->setSpellCheckPolicy(SpellCheckPolicy::Manual);
     restorePasswordConfirmationCode->setTabChangesFocus(true);
 
+    password->setSpellCheckPolicy(SpellCheckPolicy::Manual);
     password->setTabChangesFocus(true);
     password->setPasswordModeEnabled(true);
     password->setTrailingIcon(u8"\U000f06d1");

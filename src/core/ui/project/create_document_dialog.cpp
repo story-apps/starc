@@ -66,6 +66,8 @@ CreateDocumentDialog::Implementation::Implementation(QWidget* _parent)
     documentType->setModel(typesModel);
     documentType->setCurrentIndex(typesModel->index(0, 0));
 
+    documentName->setSpellCheckPolicy(SpellCheckPolicy::Manual);
+
     insertIntoParent->hide();
 
     buttonsLayout = new QHBoxLayout;

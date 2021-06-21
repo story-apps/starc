@@ -47,13 +47,17 @@ LoginDialog::Implementation::Implementation(QWidget* _parent)
     , loginButton(new Button(_parent))
     , cancelButton(new Button(_parent))
 {
+    email->setSpellCheckPolicy(SpellCheckPolicy::Manual);
     email->setTabChangesFocus(true);
 
+    password->setSpellCheckPolicy(SpellCheckPolicy::Manual);
     password->setTabChangesFocus(true);
     password->setPasswordModeEnabled(true);
     password->setTrailingIcon(u8"\U000f06d1");
 
+    registrationConfirmationCode->setSpellCheckPolicy(SpellCheckPolicy::Manual);
     registrationConfirmationCode->setTabChangesFocus(true);
+    restorePasswordConfirmationCode->setSpellCheckPolicy(SpellCheckPolicy::Manual);
     restorePasswordConfirmationCode->setTabChangesFocus(true);
 
     buttonsLayout->setContentsMargins({});

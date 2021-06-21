@@ -4,6 +4,7 @@
 #include <ui/widgets/button/button.h>
 #include <ui/widgets/scroll_bar/scroll_bar.h>
 #include <ui/widgets/text_field/text_field.h>
+#include <utils/helpers/ui_helper.h>
 
 #include <QKeyEvent>
 #include <QScrollArea>
@@ -39,6 +40,7 @@ ScreenplayTextAddCommentView::Implementation::Implementation(QWidget* _parent)
     content->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
     content->setVerticalScrollBar(new ScrollBar);
 
+    UiHelper::initSpellingFor(comment);
     comment->setEnterMakesNewLine(true);
 
     buttonsLayout->setContentsMargins({});

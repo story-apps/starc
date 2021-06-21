@@ -117,6 +117,8 @@ ThemeDialog::Implementation::Implementation(QWidget* _parent)
         color->setAlignment(Qt::AlignCenter);
     }
 
+    customThemeHash->setSpellCheckPolicy(SpellCheckPolicy::Manual);
+
     buttonsLayout = new QHBoxLayout;
     buttonsLayout->setContentsMargins({});
     buttonsLayout->setSpacing(0);
