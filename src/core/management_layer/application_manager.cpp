@@ -24,6 +24,7 @@
 #include <ui/menu_view.h>
 #include <ui/widgets/dialog/dialog.h>
 #include <ui/widgets/dialog/standard_dialog.h>
+#include <ui/widgets/text_edit/spell_check/spell_check_text_edit.h>
 #include <utils/3rd_party/WAF/Animation/Animation.h>
 #include <utils/helpers/dialog_helper.h>
 #include <utils/tools/backup_builder.h>
@@ -1290,8 +1291,23 @@ bool ApplicationManager::event(QEvent* _event)
         //
         // Уведомляем все виджеты о том, что сменилась дизайн система
         //
-        for (auto widget : d->applicationView->findChildren<QWidget*>()) {
+        const auto widgets = d->applicationView->findChildren<QWidget*>();
+        for (auto widget : widgets) {
             QApplication::sendEvent(widget, _event);
+        }
+        QApplication::sendEvent(d->applicationView, _event);
+
+        _event->accept();
+        return true;
+    }
+
+    case static_cast<QEvent::Type>(EventType::SpellingChangeEvent): {
+        //
+        // Уведомляем все редакторы текста о том, что сменились опции проверки орфографии
+        //
+        const auto textEdits = d->applicationView->findChildren<SpellCheckTextEdit*>();
+        for (auto textEdit : textEdits) {
+            QApplication::sendEvent(textEdit, _event);
         }
         QApplication::sendEvent(d->applicationView, _event);
 
@@ -1462,10 +1478,23 @@ void ApplicationManager::initConnections()
             [this] { d->showLastContent(); });
     connect(d->settingsManager.data(), &SettingsManager::applicationLanguageChanged, this,
             [this](QLocale::Language _language) { d->setTranslation(_language); });
+    //
+    auto postSpellingChangeEvent = [this] {
+        auto settingsValue = [](const QString& _key) {
+            return DataStorageLayer::StorageFacade::settingsStorage()->value(
+                _key, DataStorageLayer::SettingsStorage::SettingsPlace::Application);
+        };
+        const auto useSpellChecker
+            = settingsValue(DataStorageLayer::kApplicationUseSpellCheckerKey).toBool();
+        const auto spellingLanguage
+            = settingsValue(DataStorageLayer::kApplicationSpellCheckerLanguageKey).toString();
+        QApplication::postEvent(this, new SpellingChangeEvent(useSpellChecker, spellingLanguage));
+    };
     connect(d->settingsManager.data(), &SettingsManager::applicationUseSpellCheckerChanged, this,
-            [this] { d->projectManager->reconfigureAll(); });
+            postSpellingChangeEvent);
     connect(d->settingsManager.data(), &SettingsManager::applicationSpellCheckerLanguageChanged,
-            this, [this] { d->projectManager->reconfigureAll(); });
+            this, postSpellingChangeEvent);
+    //
     connect(d->settingsManager.data(), &SettingsManager::applicationThemeChanged, this,
             [this](Ui::ApplicationTheme _theme) {
                 d->setTheme(_theme);

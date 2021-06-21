@@ -12,6 +12,7 @@
 #include <ui/settings/theme_dialog.h>
 #include <ui/widgets/task_bar/task_bar.h>
 
+#include <QApplication>
 #include <QDir>
 #include <QEvent>
 #include <QFileInfo>

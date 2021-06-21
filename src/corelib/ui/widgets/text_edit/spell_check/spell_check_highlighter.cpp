@@ -97,7 +97,7 @@ void SpellCheckHighlighter::highlightBlock(const QString& _text)
     // Проверяем каждое слово
     //
     int wordPos = 0;
-    int notWordPos = notWord.pos(0);
+    int notWordPos = 0;
     for (wordPos = 0; wordPos < _text.length(); wordPos = notWordPos + 1) {
         //
         // Получим окончание слова

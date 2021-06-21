@@ -3,6 +3,8 @@
 #include "spell_check_highlighter.h"
 #include "spell_checker.h"
 
+#include <include/custom_events.h>
+
 #include <QApplication>
 #include <QContextMenuEvent>
 #include <QDir>
@@ -43,6 +45,11 @@ public:
     QAction* addWordToUserDictionaryAction;
     QList<QAction*> suggestionsActions;
     /** @} */
+
+    /**
+     * @brief Политика обновления состояния проверки орфографии
+     */
+    SpellCheckPolicy policy = SpellCheckPolicy::Auto;
 
     /**
      * @brief Последняя позиция курсора, при открытии контекстного меню
@@ -89,6 +96,11 @@ SpellCheckTextEdit::SpellCheckTextEdit(QWidget* _parent)
 
 SpellCheckTextEdit::~SpellCheckTextEdit() = default;
 
+void SpellCheckTextEdit::setSpellCheckPolicy(SpellCheckPolicy _policy)
+{
+    d->policy = _policy;
+}
+
 void SpellCheckTextEdit::setUseSpellChecker(bool _use)
 {
     d->spellCheckHighlighter(document())->setUseSpellChecker(_use);
@@ -125,6 +137,24 @@ void SpellCheckTextEdit::setHighlighterDocument(QTextDocument* _document)
 {
     d->previousBlockUnderCursor = QTextBlock();
     d->spellCheckHighlighter(document())->setDocument(_document);
+}
+
+bool SpellCheckTextEdit::event(QEvent* _event)
+{
+    switch (static_cast<int>(_event->type())) {
+    case static_cast<int>(EventType::SpellingChangeEvent): {
+        if (d->policy == SpellCheckPolicy::Auto) {
+            const auto event = static_cast<SpellingChangeEvent*>(_event);
+            setUseSpellChecker(event->enabled);
+            setSpellCheckLanguage(event->languageCode);
+        }
+        return false;
+    }
+
+    default: {
+        return PageTextEdit::event(_event);
+    }
+    }
 }
 
 void SpellCheckTextEdit::ignoreWord() const

@@ -206,6 +206,7 @@ SOURCES += \
     utils/helpers/text_helper.cpp \
     utils/helpers/quotes_helper.cpp \
     utils/helpers/time_helper.cpp \
+    utils/helpers/ui_helper.cpp \
     utils/tools/backup_builder.cpp \
     utils/tools/debouncer.cpp \
     utils/tools/model_index_path.cpp \
@@ -372,6 +373,7 @@ HEADERS += \
     utils/helpers/text_helper.h \
     utils/helpers/quotes_helper.h \
     utils/helpers/time_helper.h \
+    utils/helpers/ui_helper.h \
     utils/shugar.h \
     utils/tools/backup_builder.h \
     utils/tools/debouncer.h \

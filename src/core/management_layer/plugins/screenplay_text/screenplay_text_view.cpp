@@ -26,6 +26,7 @@
 #include <ui/widgets/text_edit/completer/completer.h>
 #include <ui/widgets/text_edit/scalable_wrapper/scalable_wrapper.h>
 #include <utils/helpers/color_helper.h>
+#include <utils/helpers/ui_helper.h>
 
 #include <QAction>
 #include <QStandardItem>
@@ -488,21 +489,14 @@ void ScreenplayTextView::reconfigure(const QStringList& _changedSettingsKeys)
         d->paragraphTypesModel->appendRow(typeItem);
     }
 
+    UiHelper::initSpellingFor(d->screenplayText);
+
+    d->shortcutsManager.reconfigure();
+
     auto settingsValue = [](const QString& _key) {
         return DataStorageLayer::StorageFacade::settingsStorage()->value(
             _key, DataStorageLayer::SettingsStorage::SettingsPlace::Application);
     };
-
-    const bool useSpellChecker
-        = settingsValue(DataStorageLayer::kApplicationUseSpellCheckerKey).toBool();
-    d->screenplayText->setUseSpellChecker(useSpellChecker);
-    if (useSpellChecker) {
-        const QString languageCode
-            = settingsValue(DataStorageLayer::kApplicationSpellCheckerLanguageKey).toString();
-        d->screenplayText->setSpellCheckLanguage(languageCode);
-    }
-
-    d->shortcutsManager.reconfigure();
 
     if (_changedSettingsKeys.isEmpty()
         || _changedSettingsKeys.contains(
