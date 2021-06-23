@@ -36,6 +36,8 @@
 #include <QJsonDocument>
 #include <QKeyEvent>
 #include <QLocale>
+#include <QLockFile>
+#include <QScopedPointer>
 #include <QShortcut>
 #include <QSoundEffect>
 #include <QStyleFactory>
@@ -216,6 +218,11 @@ public:
     //
 
     ApplicationManager* q = nullptr;
+
+    //
+    // Используем для блокировки файла во время работы
+    //
+    QScopedPointer<QLockFile> lockFile;
 
     /**
      * @brief Интерфейс приложения
@@ -974,6 +981,20 @@ void ApplicationManager::Implementation::openProject(const QString& _path)
     //
     closeCurrentProject();
 
+    lockFile.reset(new QLockFile(_path + ".lock"));
+
+    //
+    // проверяем открыт ли файл в другом приложении
+    //
+    if (!lockFile->tryLock()) {
+        StandardDialog::information(applicationView, "",
+                                    tr("This file can't be open at this moment,\
+                                        because it is already open in another copy of the application."));
+        return;
+    }
+
+    lockFile->setStaleLockTime(0);
+
     //
     // ... переключаемся на работу с выбранным файлом
     //
@@ -1026,6 +1047,12 @@ void ApplicationManager::Implementation::closeCurrentProject()
     if (!projectsManager->currentProject().isValid()) {
         return;
     }
+
+    Q_ASSERT(!lockFile.isNull());
+    Q_ASSERT(lockFile->isLocked());
+
+    lockFile->unlock();
+    lockFile.reset();
 
     state = ApplicationState::ProjectClosing;
 
