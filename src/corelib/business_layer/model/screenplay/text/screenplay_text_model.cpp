@@ -855,6 +855,8 @@ void ScreenplayTextModel::insertFromMime(const QModelIndex& _index, int _positio
                 updateItem(textItem);
             }
         }
+    } else {
+        qDebug("here");
     }
 
     //
@@ -913,7 +915,9 @@ void ScreenplayTextModel::insertFromMime(const QModelIndex& _index, int _positio
                 //
                 isFirstTextItemHandled = true;
                 auto textItem = static_cast<ScreenplayTextModelTextItem*>(item);
-                if (!textItem->text().isEmpty()) {
+                if (textItem->paragraphType() == ScreenplayParagraphType::FolderHeader
+                    || textItem->paragraphType() == ScreenplayParagraphType::SceneHeading
+                    || !textItem->text().isEmpty()) {
                     textItem->mergeWith(newTextItem);
                 } else {
                     textItem->copyFrom(newTextItem);
