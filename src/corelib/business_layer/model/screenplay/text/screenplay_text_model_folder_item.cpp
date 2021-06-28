@@ -226,13 +226,10 @@ QByteArray ScreenplayTextModelFolderItem::toXml(ScreenplayTextModelItem* _from, 
 QByteArray ScreenplayTextModelFolderItem::xmlHeader(bool _clearUuid) const
 {
     QByteArray xml;
-    if (_clearUuid) {
-        xml += QString("<%1>\n").arg(xml::kFolderTag).toUtf8();
-    } else {
-        xml += QString("<%1 %2=\"%3\">\n")
-                   .arg(xml::kFolderTag, xml::kUuidAttribute, d->uuid.toString())
-                   .toUtf8();
-    }
+    xml += QString("<%1 %2=\"%3\">\n")
+               .arg(xml::kFolderTag, xml::kUuidAttribute,
+                    _clearUuid ? QUuid::createUuid().toString() : d->uuid.toString())
+               .toUtf8();
     xml += QString("<%1>\n").arg(xml::kContentTag).toUtf8();
 
     return xml;

@@ -292,18 +292,12 @@ QByteArray ScreenplayTextModelSceneItem::xmlHeader(bool _clearUuid) const
     //
     // TODO: plots
     //
-    if (_clearUuid) {
-        xml += QString("<%1 %2=\"%3\" %4>\n")
-                   .arg(xml::kSceneTag, xml::kPlotsAttribute, {},
-                        (d->isOmited ? QString("%1=\"true\"").arg(xml::kOmitedAttribute) : ""))
-                   .toUtf8();
-    } else {
-        xml += QString("<%1 %2=\"%3\" %4=\"%5\" %6>\n")
-                   .arg(xml::kSceneTag, xml::kUuidAttribute, d->uuid.toString(),
-                        xml::kPlotsAttribute, {},
-                        (d->isOmited ? QString("%1=\"true\"").arg(xml::kOmitedAttribute) : ""))
-                   .toUtf8();
-    }
+    xml += QString("<%1 %2=\"%3\" %4=\"%5\" %6>\n")
+               .arg(xml::kSceneTag, xml::kUuidAttribute,
+                    _clearUuid ? QUuid::createUuid().toString() : d->uuid.toString(),
+                    xml::kPlotsAttribute, {},
+                    (d->isOmited ? QString("%1=\"true\"").arg(xml::kOmitedAttribute) : ""))
+               .toUtf8();
     //
     // TODO: Номера будем сохранять только когда они кастомные или фиксированные
     //

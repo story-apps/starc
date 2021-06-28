@@ -1226,8 +1226,8 @@ QMimeData* ScreenplayTextEdit::createMimeDataFromSelection() const
                 text.append("\r\n");
             }
             text.append(cursor.blockCharFormat().fontCapitalization() == QFont::AllUppercase
-                            ? TextHelper::smartToUpper(cursor.selectedText())
-                            : cursor.selectedText());
+                            ? TextHelper::smartToUpper(cursor.selectedText()).toUtf8()
+                            : cursor.selectedText().toUtf8());
         } while (cursor.position() < textCursor().selectionEnd() && !cursor.atEnd()
                  && cursor.movePosition(QTextCursor::NextBlock));
 
