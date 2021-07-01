@@ -72,6 +72,8 @@ ProjectInformationManager::ProjectInformationManager(QObject* _parent)
 
         auto dlg = new ImageCroppingDialog(d->view->window());
         dlg->setImage(cover);
+        dlg->setImageProportion({ 3.0, 4.0 });
+        dlg->setImageProportionFixed(true);
         dlg->showDialog();
 
         connect(dlg, &ImageCroppingDialog::disappeared, dlg, &ImageCroppingDialog::deleteLater);
