@@ -28,3 +28,12 @@ void UiHelper::initSpellingFor(const QVector<SpellCheckTextEdit*>& _edits)
         }
     }
 }
+
+void UiHelper::setFocusPolicyRecursively(QWidget* _widget, Qt::FocusPolicy _policy)
+{
+    _widget->setFocusPolicy(_policy);
+    const auto childWidgets = _widget->findChildren<QWidget*>();
+    for (auto childWidget : childWidgets) {
+        childWidget->setFocusPolicy(_policy);
+    }
+}
