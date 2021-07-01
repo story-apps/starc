@@ -4,6 +4,7 @@
 
 #include <ui/design_system/design_system.h>
 #include <ui/widgets/context_menu/context_menu.h>
+#include <ui/widgets/dialog/dialog.h>
 #include <utils/helpers/color_helper.h>
 #include <utils/helpers/image_helper.h>
 #include <utils/helpers/text_helper.h>
@@ -12,9 +13,11 @@
 #include <QApplication>
 #include <QClipboard>
 #include <QFileDialog>
+#include <QHelpEvent>
 #include <QMimeData>
 #include <QPainter>
 #include <QResizeEvent>
+#include <QToolTip>
 #include <QVariantAnimation>
 
 #include <NetworkRequestLoader.h>
@@ -41,6 +44,16 @@ public:
     void cropImage(const QPixmap& _image);
 
     /**
+     * @brief Получить область отображения иконки очистки изображения
+     */
+    QRectF clearButtonRect() const;
+
+    /**
+     * @brief Находится ли мышка над кнопкой очистки изображения
+     */
+    bool isInsideClearButton(const QPoint _position) const;
+
+    /**
      * @brief Подготовить контекстное меню к отображению
      */
     void prepareContextMenu();
@@ -53,7 +66,9 @@ public:
 
     bool isDragActive = false;
     QString decorationIcon = u8"\U000F0513";
-    QString decorationText;
+    QString emptyImageText;
+    QString imageText;
+    QString clearImageQuestion;
     QString imageCroppingText;
     struct {
         QPixmap source;
@@ -68,6 +83,7 @@ public:
 
     QVariantAnimation dragIndicationOpacityAnimation;
     QVariantAnimation decorationColorAnimation;
+    QVariantAnimation overlayOpacityAnimation;
 };
 
 ImageCard::Implementation::Implementation(ImageCard* _parent)
@@ -84,6 +100,10 @@ ImageCard::Implementation::Implementation(ImageCard* _parent)
     dragIndicationOpacityAnimation.setEasingCurve(QEasingCurve::OutQuad);
     decorationColorAnimation.setDuration(240);
     decorationColorAnimation.setEasingCurve(QEasingCurve::OutQuad);
+    overlayOpacityAnimation.setDuration(240);
+    overlayOpacityAnimation.setEasingCurve(QEasingCurve::OutQuad);
+    overlayOpacityAnimation.setStartValue(0.0);
+    overlayOpacityAnimation.setEndValue(1.0);
 
     contextMenu->setActions(
         { changeImageAction, clearImageAction, copyImageAction, pasteImageAction });
@@ -140,6 +160,21 @@ void ImageCard::Implementation::cropImage(const QPixmap& _image)
     dlg->showDialog();
 }
 
+QRectF ImageCard::Implementation::clearButtonRect() const
+{
+    const qreal iconMargin = Ui::DesignSystem::layout().px12();
+    const qreal iconSize = Ui::DesignSystem::layout().px24();
+    const qreal left
+        = q->width() - Ui::DesignSystem::card().shadowMargins().right() - iconSize - iconMargin;
+    const qreal top = Ui::DesignSystem::card().shadowMargins().top() + iconMargin;
+    return { left, top, iconSize, iconSize };
+}
+
+bool ImageCard::Implementation::isInsideClearButton(const QPoint _position) const
+{
+    return clearButtonRect().contains(_position);
+}
+
 void ImageCard::Implementation::prepareContextMenu()
 {
     const auto hasImage = !image.source.isNull();
@@ -176,7 +211,23 @@ ImageCard::ImageCard(QWidget* _parent)
         d->decorationColorAnimation.start();
     });
     connect(d->changeImageAction, &QAction::triggered, this, [this] { d->chooseImageFromFile(); });
-    connect(d->clearImageAction, &QAction::triggered, this, [this] { setImage({}); });
+    connect(d->clearImageAction, &QAction::triggered, this, [this] {
+        const int kNoButtonId = 0;
+        const int kYesButtonId = 1;
+        auto dialog = new Dialog(topLevelWidget());
+        dialog->showDialog({}, d->clearImageQuestion,
+                           { { kNoButtonId, tr("No"), Dialog::RejectButton },
+                             { kYesButtonId, tr("Yes, delete"), Dialog::AcceptButton } });
+        QObject::connect(dialog, &Dialog::finished,
+                         [this, kYesButtonId, dialog](const Dialog::ButtonInfo& _buttonInfo) {
+                             dialog->hideDialog();
+
+                             if (_buttonInfo.id == kYesButtonId) {
+                                 setImage({});
+                             }
+                         });
+        QObject::connect(dialog, &Dialog::disappeared, dialog, &Dialog::deleteLater);
+    });
     connect(d->copyImageAction, &QAction::triggered, this,
             [this] { QApplication::clipboard()->setPixmap(d->image.source); });
     connect(d->pasteImageAction, &QAction::triggered, this, [this] {
@@ -188,6 +239,8 @@ ImageCard::ImageCard(QWidget* _parent)
     connect(&d->dragIndicationOpacityAnimation, &QVariantAnimation::valueChanged, this,
             qOverload<>(&ImageCard::update));
     connect(&d->decorationColorAnimation, &QVariantAnimation::valueChanged, this,
+            qOverload<>(&ImageCard::update));
+    connect(&d->overlayOpacityAnimation, &QVariantAnimation::valueChanged, this,
             qOverload<>(&ImageCard::update));
 
     updateTranslations();
@@ -210,18 +263,21 @@ void ImageCard::setDecorationIcon(const QString& _icon)
     update();
 }
 
-void ImageCard::setDecorationText(const QString& _text)
+void ImageCard::setSupportingText(const QString& _emptyImageText, const QString& _imageText,
+                                  const QString& _clearImageQuestion)
 {
-    if (d->decorationText == _text) {
+    if (d->emptyImageText == _emptyImageText && d->imageText == _imageText
+        && d->clearImageQuestion == _clearImageQuestion) {
         return;
     }
 
-    d->decorationText = _text;
-    if (!d->image.source.isNull()) {
-        return;
-    }
+    d->emptyImageText = _emptyImageText;
+    d->imageText = _imageText;
+    d->clearImageQuestion = _clearImageQuestion;
 
-    update();
+    if (d->image.source.isNull() || underMouse()) {
+        update();
+    }
 }
 
 void ImageCard::setImageCroppingText(const QString& _text)
@@ -246,6 +302,25 @@ void ImageCard::setImage(const QPixmap& _image)
     update();
 
     emit imageChanged(d->image.source);
+}
+
+bool ImageCard::event(QEvent* _event)
+{
+    //
+    // Показываем тултип над кнопкой очистки изображения, только если задано само изображение
+    // и мы сейчас не находимся в режиме drag&drop
+    //
+    if (_event->type() == QEvent::ToolTip && !d->image.display.isNull() && !d->isDragActive
+        && d->dragIndicationOpacityAnimation.state() != QVariantAnimation::Running) {
+        QHelpEvent* event = static_cast<QHelpEvent*>(_event);
+        if (d->isInsideClearButton(event->pos())) {
+            QToolTip::showText(event->globalPos(), tr("Delete image"));
+        } else {
+            QToolTip::hideText();
+        }
+    }
+
+    return Card::event(_event);
 }
 
 void ImageCard::paintEvent(QPaintEvent* _event)
@@ -275,16 +350,43 @@ void ImageCard::paintEvent(QPaintEvent* _event)
         //
         const auto textRect = QRectF(0.0, iconRect.bottom(), width(), textHeight);
         painter.setFont(Ui::DesignSystem::font().button());
-        painter.drawText(textRect, Qt::AlignHCenter, d->decorationText);
+        painter.drawText(textRect, Qt::AlignHCenter, d->emptyImageText);
     }
     //
     // Если задано изображение, то рисуем его
     //
     else {
+        //
+        // ... собственно изображение
+        //
         const auto imageRect
             = rect().marginsRemoved(Ui::DesignSystem::card().shadowMargins().toMargins());
         const auto borderRadius = Ui::DesignSystem::card().borderRadius();
         ImageHelper::drawRoundedImage(painter, imageRect, d->image.display, borderRadius);
+
+        if (d->overlayOpacityAnimation.currentValue().toReal() > 0) {
+            painter.setOpacity(d->overlayOpacityAnimation.currentValue().toReal());
+
+            //
+            // ... затемнение сверху изображения
+            //
+            painter.setPen(Qt::NoPen);
+            painter.setBrush(Ui::DesignSystem::color().shadow());
+            painter.drawRoundedRect(imageRect, borderRadius, borderRadius);
+
+            //
+            // ... вспомогательный текст
+            //
+            painter.setPen(Ui::DesignSystem::color().onShadow());
+            painter.setFont(Ui::DesignSystem::font().button());
+            painter.drawText(imageRect, Qt::AlignCenter, d->imageText);
+
+            //
+            // ... кнопка очистки
+            //
+            painter.setFont(Ui::DesignSystem::font().iconsMid());
+            painter.drawText(d->clearButtonRect(), Qt::AlignCenter, u8"\U000F0156");
+        }
     }
 
     //
@@ -329,6 +431,8 @@ void ImageCard::enterEvent(QEvent* _event)
 
     d->decorationColorAnimation.setDirection(QVariantAnimation::Forward);
     d->decorationColorAnimation.start();
+    d->overlayOpacityAnimation.setDirection(QVariantAnimation::Forward);
+    d->overlayOpacityAnimation.start();
 }
 
 void ImageCard::leaveEvent(QEvent* _event)
@@ -337,6 +441,8 @@ void ImageCard::leaveEvent(QEvent* _event)
 
     d->decorationColorAnimation.setDirection(QVariantAnimation::Backward);
     d->decorationColorAnimation.start();
+    d->overlayOpacityAnimation.setDirection(QVariantAnimation::Backward);
+    d->overlayOpacityAnimation.start();
 }
 
 void ImageCard::mousePressEvent(QMouseEvent* _event)
@@ -344,7 +450,11 @@ void ImageCard::mousePressEvent(QMouseEvent* _event)
     Card::mousePressEvent(_event);
 
     if (_event->button() == Qt::LeftButton) {
-        d->chooseImageFromFile();
+        if (d->isInsideClearButton(_event->pos())) {
+            d->clearImageAction->trigger();
+        } else {
+            d->chooseImageFromFile();
+        }
     }
 }
 
