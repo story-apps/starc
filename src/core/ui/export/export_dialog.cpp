@@ -299,7 +299,7 @@ void ExportDialog::designSystemChangeEvent(DesignSystemChangeEvent* _event)
     }
 
     contentsLayout()->setSpacing(static_cast<int>(Ui::DesignSystem::layout().px8()));
-    d->buttonsLayout->setContentsMargins(QMarginsF(0.0, Ui::DesignSystem::layout().px12(),
+    d->buttonsLayout->setContentsMargins(QMarginsF(0.0, Ui::DesignSystem::layout().px24(),
                                                    Ui::DesignSystem::layout().px16(),
                                                    Ui::DesignSystem::layout().px8())
                                              .toMargins());

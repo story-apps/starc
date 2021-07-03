@@ -1016,9 +1016,8 @@ void writeComments(QtZipWriter* _zip, const QMap<int, QStringList>& _comments)
                     "<w:p><w:r><w:rPr></w:rPr><w:t>%4</w:t></w:r></w:p>"
                     "</w:comment>")
                 .arg(commentIndex++)
-                .arg(comment.at(commentAuthorIndex))
-                .arg(comment.at(commentDateIndex))
-                .arg(TextHelper::toHtmlEscaped(comment.at(commentTextIndex))));
+                .arg(comment.at(commentAuthorIndex), comment.at(commentDateIndex),
+                     TextHelper::toHtmlEscaped(comment.at(commentTextIndex))));
     }
 
     headerXml.append("</w:comments>");
