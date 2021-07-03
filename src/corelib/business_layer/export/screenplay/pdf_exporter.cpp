@@ -417,9 +417,6 @@ static void printDocument(QTextDocument* _document, QPdfWriter* _printer,
 
 } // namespace
 
-PdfExporter::PdfExporter()
-{
-}
 
 void PdfExporter::exportTo(ScreenplayTextModel* _model, const ExportOptions& _exportOptions) const
 {

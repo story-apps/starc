@@ -5,10 +5,10 @@
 
 namespace BusinessLayer {
 
-class CORE_LIBRARY_EXPORT PdfExporter : public AbstractExporter
+class CORE_LIBRARY_EXPORT DocxExporter : public AbstractExporter
 {
 public:
-    PdfExporter() = default;
+    DocxExporter() = default;
 
     /**
      * @brief Экспортировать сценарий

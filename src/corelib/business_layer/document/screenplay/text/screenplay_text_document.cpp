@@ -165,6 +165,11 @@ void ScreenplayTextDocument::Implementation::readModelItemContent(int _itemRow,
                 _cursor.setCharFormat(style.charFormat());
             };
             insertPageSplitter();
+            //
+            // ... и сохраним данные блока
+            //
+            auto blockData = new ScreenplayTextBlockData(splitterItem);
+            _cursor.block().setUserData(blockData);
 
             //
             // Вставляем таблицу
@@ -195,8 +200,18 @@ void ScreenplayTextDocument::Implementation::readModelItemContent(int _itemRow,
         }
 
         case ScreenplayTextModelSplitterItemType::End: {
+            //
+            // Блок завершения таблицы уже был вставлен, при вставке начала и самой таблицы,
+            // поэтому тут лишь сохраняем его в карту позиций элементов
+            //
             _cursor.movePosition(QTextCursor::NextBlock);
             positionsToItems.emplace(_cursor.position(), splitterItem);
+            //
+            // ... и сохраняем в блоке информацию об элементе
+            //
+            auto blockData = new ScreenplayTextBlockData(splitterItem);
+            _cursor.block().setUserData(blockData);
+
             break;
         }
 

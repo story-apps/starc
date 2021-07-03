@@ -62,7 +62,7 @@ ExportDialog::Implementation::Implementation(QWidget* _parent)
     using namespace BusinessLayer;
 
     fileFormat->setSpellCheckPolicy(SpellCheckPolicy::Manual);
-    auto formatsModel = new QStringListModel({ "PDF" /*, "DOCX", "FDX", "Fontain" */ });
+    auto formatsModel = new QStringListModel({ "PDF", "DOCX" /*, "FDX", "Fontain" */ });
     fileFormat->setModel(formatsModel);
     fileFormat->setCurrentIndex(formatsModel->index(0, 0));
 
@@ -217,6 +217,8 @@ ExportDialog::~ExportDialog() = default;
 BusinessLayer::ExportOptions ExportDialog::exportOptions() const
 {
     BusinessLayer::ExportOptions options;
+    options.fileFormat
+        = static_cast<BusinessLayer::ExportFileFormat>(d->fileFormat->currentIndex().row());
     options.templateId = d->screenplayTemplate->currentIndex()
                              .data(BusinessLayer::TemplatesFacade::kTemplateIdRole)
                              .toString();

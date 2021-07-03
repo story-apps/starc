@@ -153,7 +153,9 @@ void ScreenplayTextModel::Implementation::updateNumbering()
             case ScreenplayTextModelItemType::Scene: {
                 updateChildNumbering(childItem);
                 auto sceneItem = static_cast<ScreenplayTextModelSceneItem*>(childItem);
-                sceneItem->setNumber(sceneNumber++, informationModel->scenesNumbersPrefix());
+                if (sceneItem->setNumber(sceneNumber, informationModel->scenesNumbersPrefix())) {
+                    sceneNumber++;
+                }
                 break;
             }
 

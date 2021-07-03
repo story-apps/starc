@@ -178,12 +178,33 @@ ScreenplayTextModelSceneItem::Number ScreenplayTextModelSceneItem::number() cons
     return *d->number;
 }
 
-void ScreenplayTextModelSceneItem::setNumber(int _number, const QString& _prefix)
+bool ScreenplayTextModelSceneItem::setNumber(int _number, const QString& _prefix)
 {
+    if (childCount() == 0) {
+        return false;
+    }
+
+    bool hasContent = false;
+    for (int childIndex = 0; childIndex < childCount(); ++childIndex) {
+        const auto child = childAt(childIndex);
+        if (child->type() != ScreenplayTextModelItemType::Text) {
+            continue;
+        }
+
+        const auto textItemChild = static_cast<const ScreenplayTextModelTextItem*>(child);
+        if (!textItemChild->isCorrection()) {
+            hasContent = true;
+            break;
+        }
+    }
+    if (!hasContent) {
+        return false;
+    }
+
     const auto newNumber = QString(QLocale().textDirection() == Qt::LeftToRight ? "%1%2." : ".%2%1")
                                .arg(_prefix, QString::number(_number));
     if (d->number.has_value() && d->number->value == newNumber) {
-        return;
+        return true;
     }
 
     d->number = { newNumber };
@@ -191,6 +212,8 @@ void ScreenplayTextModelSceneItem::setNumber(int _number, const QString& _prefix
     // Т.к. пока мы не сохраняем номера, в указании, что произошли изменения нет смысла
     //
     //    setChanged(true);
+
+    return true;
 }
 
 std::chrono::milliseconds ScreenplayTextModelSceneItem::duration() const
