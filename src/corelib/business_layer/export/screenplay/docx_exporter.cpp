@@ -444,11 +444,21 @@ QString docxText(QMap<int, QStringList>& _comments, const ScreenplayTextCursor& 
             }
         }
 
+        //
+        // ... пишем стиль блока
+        //
         const QString suffix = _cursor.inTable() ? "_splitted" : "";
         documentXml.append(QString("<w:p><w:pPr><w:pStyle w:val=\"%1\"/>")
                                .arg(paragraphTypeName(correctedBlockType, suffix)));
 
-        if (_cursor.atStart()) {
+        //
+        // ... если это самый первый блок в документе,
+        //     или блок с текстом ПРОД., вставляемый на обрыве реплики,
+        //     принудительно убираем отступ сверху у абзаца
+        //
+        if (_cursor.atStart()
+            || _cursor.blockFormat().hasProperty(
+                ScreenplayBlockStyle::PropertyIsCorrectionContinued)) {
             documentXml.append("<w:spacing w:before=\"0\"/>");
         }
 

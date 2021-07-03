@@ -93,6 +93,12 @@ public:
     void setCorrection(bool _correction);
 
     /**
+     * @brief Является ли блок корректировкой вида (CONT) внутри разорванной реплики
+     */
+    bool isCorrectionContinued() const;
+    void setCorrectionContinued(bool _continued);
+
+    /**
      * @brief Разорван ли текст блока между страницами
      */
     bool isBroken() const;

@@ -296,6 +296,11 @@ void ScreenplayTextDocument::Implementation::readModelItemContent(int _itemRow,
         if (textItem->isCorrection()) {
             auto decorationFormat = _cursor.block().blockFormat();
             decorationFormat.setProperty(ScreenplayBlockStyle::PropertyIsCorrection, true);
+            if (textItem->isCorrectionContinued()) {
+                decorationFormat.setProperty(ScreenplayBlockStyle::PropertyIsCorrectionContinued,
+                                             true);
+                decorationFormat.setTopMargin(0);
+            }
             decorationFormat.setProperty(PageTextEdit::PropertyDontShowCursor, true);
             _cursor.setBlockFormat(decorationFormat);
         }
@@ -1820,6 +1825,8 @@ void ScreenplayTextDocument::updateModelOnContentChange(int _position, int _char
             auto textItem = new ScreenplayTextModelTextItem;
             textItem->setCorrection(
                 block.blockFormat().boolProperty(ScreenplayBlockStyle::PropertyIsCorrection));
+            textItem->setCorrectionContinued(block.blockFormat().boolProperty(
+                ScreenplayBlockStyle::PropertyIsCorrectionContinued));
             textItem->setBroken(block.blockFormat().boolProperty(
                 ScreenplayBlockStyle::PropertyIsBreakCorrectionStart));
             if (tableInfo.inTable) {
@@ -2033,6 +2040,8 @@ void ScreenplayTextDocument::updateModelOnContentChange(int _position, int _char
                 auto textItem = static_cast<ScreenplayTextModelTextItem*>(item);
                 textItem->setCorrection(
                     block.blockFormat().boolProperty(ScreenplayBlockStyle::PropertyIsCorrection));
+                textItem->setCorrectionContinued(block.blockFormat().boolProperty(
+                    ScreenplayBlockStyle::PropertyIsCorrectionContinued));
                 textItem->setBroken(block.blockFormat().boolProperty(
                     ScreenplayBlockStyle::PropertyIsBreakCorrectionStart));
                 if (tableInfo.inTable) {

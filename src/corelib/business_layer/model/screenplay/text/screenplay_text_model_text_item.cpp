@@ -50,6 +50,11 @@ public:
     bool isCorrection = false;
 
     /**
+     * @brief Является ли блок корректировкой вида (CONT) внутри разорванной реплики
+     */
+    bool isCorrectionContinued = false;
+
+    /**
      * @brief Разорван ли блок на разрыве страниц
      */
     bool isBroken = false;
@@ -548,6 +553,20 @@ void ScreenplayTextModelTextItem::setCorrection(bool _correction)
     } else {
         d->updateXml();
     }
+}
+
+bool ScreenplayTextModelTextItem::isCorrectionContinued() const
+{
+    return d->isCorrectionContinued;
+}
+
+void ScreenplayTextModelTextItem::setCorrectionContinued(bool _continued)
+{
+    if (d->isCorrectionContinued == _continued) {
+        return;
+    }
+
+    d->isCorrectionContinued = _continued;
 }
 
 bool ScreenplayTextModelTextItem::isBroken() const
