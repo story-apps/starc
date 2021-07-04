@@ -12,7 +12,7 @@ class Pie::Implementation
 {
 public:
     Implementation();
-    Implementation(const QAbstractItemModel* model, const int valueColumn);
+    Implementation(const QAbstractItemModel* _model, const int _valueColumn);
 
     /**
      * @brief Расчиать геометрию кусочка
@@ -76,9 +76,9 @@ Pie::Implementation::Implementation()
     sliceOpacityAnimation.setDuration(250);
 }
 
-Pie::Implementation::Implementation(const QAbstractItemModel* model, const int valueColumn)
-    : model(model)
-    , valueColumn(valueColumn)
+Pie::Implementation::Implementation(const QAbstractItemModel* _model, const int _valueColumn)
+    : model(_model)
+    , valueColumn(_valueColumn)
 {
     sliceOpacityAnimation.setEasingCurve(QEasingCurve::InQuad);
     sliceOpacityAnimation.setStartValue(1.0);
@@ -156,13 +156,13 @@ Pie::Pie(QWidget* _parent)
             [this] { update(); });
 }
 
-Pie::Pie(const QAbstractItemModel* model, const int valueColumn, QWidget* _parent)
+Pie::Pie(const QAbstractItemModel* _model, const int _valueColumn, QWidget* _parent)
     : Widget(_parent)
-    , d(new Implementation(model, valueColumn))
+    , d(new Implementation(_model, _valueColumn))
 {
     this->setMouseTracking(true);
 
-    connectSignals(model);
+    connectSignals(_model);
 
     connect(&d->sliceOpacityAnimation, &QVariantAnimation::valueChanged, this,
             [this] { update(); });
@@ -241,14 +241,14 @@ void Pie::recalculateSlices()
     update();
 }
 
-void Pie::insertSlices(const QModelIndex& parent, int first, int last)
+void Pie::insertSlices(const QModelIndex& _parent, int _first, int _last)
 {
-    Q_UNUSED(parent)
+    Q_UNUSED(_parent)
 
     auto iter = d->slices.begin();
-    std::advance(iter, first);
+    std::advance(iter, _first);
 
-    for (int i = first; i <= last; i++) {
+    for (int i = _first; i <= _last; i++) {
         auto slice = new Implementation::Slice();
         auto ok = false;
 
@@ -265,15 +265,15 @@ void Pie::insertSlices(const QModelIndex& parent, int first, int last)
     updateSelectedSlice();
 }
 
-void Pie::removeSlices(const QModelIndex& parent, int first, int last)
+void Pie::removeSlices(const QModelIndex& _parent, int _first, int _last)
 {
-    Q_UNUSED(parent)
+    Q_UNUSED(_parent)
 
     auto rangeBegin = d->slices.begin();
     auto rangeEnd = d->slices.begin();
 
-    std::advance(rangeBegin, first);
-    std::advance(rangeEnd, last);
+    std::advance(rangeBegin, _first);
+    std::advance(rangeEnd, _last);
 
     d->slices.erase(rangeBegin, rangeEnd);
     d->invalidteSelectedSlice();
@@ -282,18 +282,18 @@ void Pie::removeSlices(const QModelIndex& parent, int first, int last)
     updateSelectedSlice();
 }
 
-void Pie::changeData(const QModelIndex& topLeft, const QModelIndex& bottomRight,
-                     const QVector<int>& roles)
+void Pie::changeData(const QModelIndex& _topLeft, const QModelIndex& _bottomRight,
+                     const QVector<int>& _roles)
 {
 
-    auto isContainsColor = roles.contains(Qt::DecorationPropertyRole);
+    auto isContainsColor = _roles.contains(Qt::DecorationPropertyRole);
     auto isSomethingChanged = false;
 
-    for (int i = topLeft.row(); i <= bottomRight.row(); i++) {
+    for (int i = _topLeft.row(); i <= _bottomRight.row(); i++) {
         auto iter = d->slices.begin();
         std::advance(iter, i);
 
-        for (int j = topLeft.column(); j <= bottomRight.column(); j++) {
+        for (int j = _topLeft.column(); j <= _bottomRight.column(); j++) {
             if (j == d->valueColumn) {
                 auto ok = false;
 
@@ -328,23 +328,23 @@ void Pie::updateSelectedSlice()
     mouseMoveEvent(&event);
 }
 
-void Pie::connectSignals(const QAbstractItemModel* model)
+void Pie::connectSignals(const QAbstractItemModel* _model)
 {
-    assert(model && "model is nullptr");
+    assert(_model && "model is nullptr");
 
-    connect(model, &QAbstractItemModel::rowsInserted, this, &Pie::insertSlices);
-    connect(model, &QAbstractItemModel::rowsRemoved, this, &Pie::removeSlices);
-    connect(model, &QAbstractItemModel::dataChanged, this, &Pie::changeData);
+    connect(_model, &QAbstractItemModel::rowsInserted, this, &Pie::insertSlices);
+    connect(_model, &QAbstractItemModel::rowsRemoved, this, &Pie::removeSlices);
+    connect(_model, &QAbstractItemModel::dataChanged, this, &Pie::changeData);
 }
 
-void Pie::setModel(const QAbstractItemModel* model, const int valueColumn)
+void Pie::setModel(const QAbstractItemModel* _model, const int _valueColumn)
 {
-    assert(model && "model is nullptr");
-    assert(valueColumn < model->columnCount() && "value index more than model column count");
+    assert(_model && "model is nullptr");
+    assert(_valueColumn < _model->columnCount() && "value index more than model column count");
 
-    connectSignals(model);
+    connectSignals(_model);
 
-    d.reset(new Implementation(model, valueColumn));
+    d.reset(new Implementation(_model, _valueColumn));
     connect(&d->sliceOpacityAnimation, &QVariantAnimation::valueChanged, this,
             [this] { update(); });
 
@@ -355,7 +355,7 @@ void Pie::setModel(const QAbstractItemModel* model, const int valueColumn)
         slice->index = d->model->index(i, 0);
         slice->color
             = d->model->data(d->model->index(i, 0), Qt::DecorationPropertyRole).value<QColor>();
-        slice->value = d->model->data(d->model->index(i, valueColumn)).toDouble(&ok);
+        slice->value = d->model->data(d->model->index(i, _valueColumn)).toDouble(&ok);
 
         assert(ok && "can't cast value to double");
 

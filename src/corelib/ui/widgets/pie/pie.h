@@ -11,14 +11,14 @@ class CORE_LIBRARY_EXPORT Pie : public Widget
 
 public:
     explicit Pie(QWidget* _parent = nullptr);
-    explicit Pie(const QAbstractItemModel* model, const int valueColumn,
+    explicit Pie(const QAbstractItemModel* _model, const int _valueColumn,
                  QWidget* _parent = nullptr);
     ~Pie() override;
 
     /**
      * @brief Установить модель
      */
-    void setModel(const QAbstractItemModel* model, const int valueColumn);
+    void setModel(const QAbstractItemModel* _model, const int _valueColumn);
 
     /**
      * @brief Вырезать отверстие в пироге
@@ -29,7 +29,7 @@ signals:
     /**
      * @brief Навели машкой на кусочек пирога
      */
-    void itemSelected(const QModelIndex& index);
+    void itemSelected(const QModelIndex& _index);
 
 protected:
     /**
@@ -61,24 +61,24 @@ private:
     /**
      * @brief Подключаемся к сигналам модели
      */
-    void connectSignals(const QAbstractItemModel* model);
+    void connectSignals(const QAbstractItemModel* _model);
 
 private slots:
     /**
      * @brief В модель пришли новые данные
      */
-    void insertSlices(const QModelIndex& parent, int first, int last);
+    void insertSlices(const QModelIndex& _parent, int _first, int _last);
 
     /**
      * @brief Из модели удалили данные
      */
-    void removeSlices(const QModelIndex& parent, int first, int last);
+    void removeSlices(const QModelIndex& _parent, int _first, int _last);
 
     /**
      * @brief В моделе изменились данные
      */
-    void changeData(const QModelIndex& topLeft, const QModelIndex& bottomRight,
-                    const QVector<int>& roles);
+    void changeData(const QModelIndex& _topLeft, const QModelIndex& _bottomRight,
+                    const QVector<int>& _roles);
 
 private:
     class Implementation;
