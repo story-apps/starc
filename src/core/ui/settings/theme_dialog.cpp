@@ -332,7 +332,7 @@ void ThemeDialog::designSystemChangeEvent(DesignSystemChangeEvent* _event)
     }
     d->customPaletteLayout->setRowMinimumHeight(
         3, static_cast<int>(Ui::DesignSystem::layout().px24()));
-    d->customThemeHash->setBackgroundColor(Ui::DesignSystem::color().background());
+    d->customThemeHash->setBackgroundColor(Ui::DesignSystem::color().onBackground());
     d->customThemeHash->setTextColor(Ui::DesignSystem::color().onBackground());
     {
         QSignalBlocker blocker(d->customThemeHash);
