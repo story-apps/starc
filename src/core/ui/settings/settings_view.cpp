@@ -292,6 +292,7 @@ void SettingsView::Implementation::initApplicationCard()
     // 0 - 0.5, 500 - 1, 3500 - 4
     scaleFactor->setMaximumValue(3500);
     scaleFactor->setValue(500);
+    scaleFactor->calcDefaultPosition(500);
     backupsFolderPath->setEnabled(false);
     backupsFolderPath->setTrailingIcon(u8"\U000f0256");
 
