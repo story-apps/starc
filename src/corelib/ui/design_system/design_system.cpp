@@ -639,6 +639,33 @@ DesignSystem::Label::Label(qreal _scaleFactor)
 
 // ****
 
+class DesignSystem::ContextMenu::Implementation
+{
+public:
+    explicit Implementation(qreal _scaleFactor);
+
+    QMarginsF margin = { 8.0, 8.0, 8.0, 8.0 };
+};
+
+DesignSystem::ContextMenu::Implementation::Implementation(qreal _scaleFactor)
+{
+    margin *= _scaleFactor;
+}
+
+DesignSystem::ContextMenu::~ContextMenu() = default;
+
+DesignSystem::ContextMenu::ContextMenu(qreal _scaleFactor)
+    : d(new Implementation(_scaleFactor))
+{
+}
+
+const QMarginsF& DesignSystem::ContextMenu::margins() const
+{
+    return d->margin;
+}
+
+// ****
+
 
 class DesignSystem::Button::Implementation
 {
@@ -1863,6 +1890,7 @@ public:
     DesignSystem::Font font;
     DesignSystem::Layout layout;
     DesignSystem::AppBar appBar;
+    DesignSystem::ContextMenu contextMenu;
     DesignSystem::Label label;
     DesignSystem::Button button;
     DesignSystem::ToggleButton toggleButton;
@@ -1893,6 +1921,7 @@ DesignSystemPrivate::DesignSystemPrivate(ApplicationTheme _theme, qreal _scaleFa
     , font(_scaleFactor)
     , layout(_scaleFactor)
     , appBar(_scaleFactor)
+    , contextMenu(_scaleFactor)
     , label(_scaleFactor)
     , button(_scaleFactor)
     , toggleButton(_scaleFactor)
@@ -2116,6 +2145,11 @@ const DesignSystem::Layout& DesignSystem::layout()
 const DesignSystem::AppBar& DesignSystem::appBar()
 {
     return instance()->d->appBar;
+}
+
+const DesignSystem::ContextMenu& DesignSystem::contextMenu()
+{
+    return instance()->d->contextMenu;
 }
 
 const DesignSystem::Label& DesignSystem::label()
