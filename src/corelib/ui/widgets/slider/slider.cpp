@@ -126,7 +126,7 @@ void Slider::setValue(int _value)
     update();
 }
 
-void Slider::calcDefaultPosition(int _value)
+void Slider::setDefaultPosition(int _value)
 {
     if (d->minimum > _value || _value > d->maximum) {
         return;

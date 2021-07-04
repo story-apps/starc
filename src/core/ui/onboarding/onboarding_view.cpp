@@ -267,7 +267,7 @@ void OnboardingView::Implementation::initThemePage()
     scaleFactorSlider = new Slider(themePage);
     scaleFactorSlider->setMaximumValue(3500);
     scaleFactorSlider->setValue(500);
-    scaleFactorSlider->calcDefaultPosition(500);
+    scaleFactorSlider->setDefaultPosition(500);
     QObject::connect(scaleFactorSlider, &Slider::valueChanged, q, [this](int _value) {
         emit q->scaleFactorChanged(0.5 + static_cast<qreal>(_value) / 1000.0);
     });

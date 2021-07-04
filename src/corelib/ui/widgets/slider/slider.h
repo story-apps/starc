@@ -27,7 +27,7 @@ public:
     /**
      * @brief Задать позицию по-умолчанию слайдера
      */
-    void calcDefaultPosition(int _value);
+    void setDefaultPosition(int _value);
 
     /**
      * @brief Отменить использование позиции по-умолчанию
