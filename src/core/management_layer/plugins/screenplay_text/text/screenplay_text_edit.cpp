@@ -1163,7 +1163,6 @@ ContextMenu* ScreenplayTextEdit::createContextMenu(const QPoint& _position, QWid
     auto menu = BaseTextEdit::createContextMenu(_position, _parent);
 
     auto splitAction = new QAction;
-    //    splitAction->setSeparator(true);
     if (BusinessLayer::ScreenplayTextCursor cursor = textCursor(); cursor.inTable()) {
         splitAction->setText(tr("Merge paragraph"));
         splitAction->setIconText(u8"\U000f10e7");
@@ -1188,8 +1187,10 @@ ContextMenu* ScreenplayTextEdit::createContextMenu(const QPoint& _position, QWid
         }
     });
 
-    Q_ASSERT(menu->actions().size() > 1);
-    menu->insertActions(menu->actions()[1], { splitAction });
+    auto actions = menu->actions().toVector();
+    actions.first()->setSeparator(true);
+    actions.prepend(splitAction);
+    menu->setActions(actions);
 
     return menu;
 }

@@ -3653,13 +3653,7 @@ ContextMenu* PageTextEdit::createContextMenu(const QPoint& _position, QWidget* _
         setTextCursor(cursor);
     }
 
-    auto formattingAction = new QAction;
-    formattingAction->setVisible(false);
-    formattingAction->setText(tr(""));
-    formattingAction->setIconText(u8"\U000f10e7");
-
     auto cutAction = new QAction;
-    cutAction->setSeparator(true);
     cutAction->setEnabled(textCursor().hasSelection());
     cutAction->setText(tr("Cut"));
     cutAction->setIconText(u8"\U000F0190");
@@ -3688,7 +3682,7 @@ ContextMenu* PageTextEdit::createContextMenu(const QPoint& _position, QWidget* _
     connect(selectAllAction, &QAction::triggered, this, &PageTextEdit::selectAll);
 
     auto menu = new ContextMenu(_parent == nullptr ? this : _parent);
-    menu->addActions({ formattingAction, cutAction, copyAction, pasteAction, selectAllAction });
+    menu->setActions({ cutAction, copyAction, pasteAction, selectAllAction });
     menu->setBackgroundColor(Ui::DesignSystem::color().background());
     menu->setTextColor(Ui::DesignSystem::color().onBackground());
     return menu;
