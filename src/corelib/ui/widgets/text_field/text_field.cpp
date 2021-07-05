@@ -2,6 +2,7 @@
 
 #include <include/custom_events.h>
 #include <ui/design_system/design_system.h>
+#include <ui/widgets/context_menu/context_menu.h>
 #include <utils/helpers/color_helper.h>
 #include <utils/helpers/image_helper.h>
 #include <utils/helpers/text_helper.h>
@@ -335,6 +336,10 @@ TextField::TextField(QWidget* _parent)
 
     reconfigure();
 
+    connect(this, &TextField::customContextMenuRequested, this, [this](const QPoint& _position) {
+        auto menu = createContextMenu(_position);
+        menu->showContextMenu(mapToGlobal(_position));
+    });
     connect(&d->labelColorAnimation, &QVariantAnimation::valueChanged, this, [this] { update(); });
     connect(&d->labelFontSizeAnimation, &QVariantAnimation::valueChanged, this,
             [this] { update(); });
