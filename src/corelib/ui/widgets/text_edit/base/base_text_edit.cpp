@@ -243,7 +243,6 @@ ContextMenu* BaseTextEdit::createContextMenu(const QPoint& _position, QWidget* _
     auto menu = CompleterTextEdit::createContextMenu(_position, _parent);
 
     auto formattingAction = new QAction;
-    formattingAction->setSeparator(true);
     formattingAction->setText(tr("Formatting"));
     formattingAction->setIconText(u8"\U000F0284");
     {
@@ -288,8 +287,16 @@ ContextMenu* BaseTextEdit::createContextMenu(const QPoint& _position, QWidget* _
                 [this] { setTextAlignment(Qt::AlignRight); });
     }
 
+    //
+    // В зависимости от того, есть ли меню проверки орфографии добавляем пункт меню форматирования
+    //
     auto actions = menu->actions().toVector();
-    actions.insert(3, formattingAction);
+    if (actions.at(1)->isSeparator()) {
+        actions.insert(1, formattingAction);
+    } else {
+        actions.first()->setSeparator(true);
+        actions.prepend(formattingAction);
+    }
     menu->setActions(actions);
 
     return menu;

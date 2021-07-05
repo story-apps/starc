@@ -55,6 +55,11 @@ public:
      */
     void prepareToClear() override;
 
+    /**
+     * @brief Добавляем опции проверки орфографии в контекстное меню
+     */
+    ContextMenu* createContextMenu(const QPoint& _position, QWidget* _parent = nullptr) override;
+
 protected:
     /**
      * @brief Пересоздание подсвечивающего класса
