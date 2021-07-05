@@ -7,6 +7,7 @@
 #include <utils/helpers/image_helper.h>
 #include <utils/helpers/text_helper.h>
 
+#include <QAction>
 #include <QEvent>
 #include <QKeyEvent>
 #include <QMimeData>
@@ -338,6 +339,17 @@ TextField::TextField(QWidget* _parent)
 
     connect(this, &TextField::customContextMenuRequested, this, [this](const QPoint& _position) {
         auto menu = createContextMenu(_position);
+        auto actions = menu->actions().toVector();
+        //
+        // Убираем возможности форматирования (пока)
+        //
+        if (isMispelledWordUnderCursor(_position)) {
+            actions.takeAt(1)->deleteLater();
+        } else {
+            actions.takeFirst()->deleteLater();
+            actions.first()->setSeparator(false);
+        }
+        menu->setActions(actions);
         menu->showContextMenu(mapToGlobal(_position));
     });
     connect(&d->labelColorAnimation, &QVariantAnimation::valueChanged, this, [this] { update(); });

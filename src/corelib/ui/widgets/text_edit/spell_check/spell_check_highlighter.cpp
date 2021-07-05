@@ -3,6 +3,12 @@
 #include "spell_checker.h"
 
 #include <QTextDocument>
+#include <QTimer>
+
+
+namespace {
+const int kInvalidCursorPosition = -1;
+}
 
 
 class SpellCheckHighlighter::Implementation
@@ -27,7 +33,12 @@ public:
     /**
      * @brief Позиция курсора в блоке
      */
-    int cursorPosition = -1;
+    int cursorPosition = kInvalidCursorPosition;
+
+    /**
+     * @brief Таймер перепроверки текущего абзаца после изменения положения курсора
+     */
+    QTimer recheckTimer;
 };
 
 SpellCheckHighlighter::Implementation::Implementation(const SpellChecker& _checker)
@@ -38,6 +49,9 @@ SpellCheckHighlighter::Implementation::Implementation(const SpellChecker& _check
     //
     misspeledCharFormat.setUnderlineStyle(QTextCharFormat::WaveUnderline);
     misspeledCharFormat.setUnderlineColor(Qt::red);
+
+    recheckTimer.setInterval(1600);
+    recheckTimer.setSingleShot(true);
 }
 
 
@@ -48,6 +62,15 @@ SpellCheckHighlighter::SpellCheckHighlighter(QTextDocument* _parent, const Spell
     : SyntaxHighlighter(_parent)
     , d(new Implementation(_checker))
 {
+    connect(&d->recheckTimer, &QTimer::timeout, this, [this] {
+        if (d->cursorPosition == kInvalidCursorPosition) {
+            return;
+        }
+
+        const auto blockToRecheck = document()->findBlock(d->cursorPosition);
+        d->cursorPosition = kInvalidCursorPosition;
+        rehighlightBlock(blockToRecheck);
+    });
 }
 
 SpellCheckHighlighter::~SpellCheckHighlighter() = default;
@@ -76,6 +99,7 @@ bool SpellCheckHighlighter::useSpellChecker() const
 void SpellCheckHighlighter::setCursorPosition(int _position)
 {
     d->cursorPosition = _position;
+    d->recheckTimer.start();
 }
 
 void SpellCheckHighlighter::highlightBlock(const QString& _text)

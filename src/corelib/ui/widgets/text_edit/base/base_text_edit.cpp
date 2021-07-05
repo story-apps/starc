@@ -291,7 +291,7 @@ ContextMenu* BaseTextEdit::createContextMenu(const QPoint& _position, QWidget* _
     // В зависимости от того, есть ли меню проверки орфографии добавляем пункт меню форматирования
     //
     auto actions = menu->actions().toVector();
-    if (actions.at(1)->isSeparator()) {
+    if (isMispelledWordUnderCursor(_position)) {
         actions.insert(1, formattingAction);
     } else {
         actions.first()->setSeparator(true);
