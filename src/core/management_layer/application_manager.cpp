@@ -9,6 +9,8 @@
 #include "content/projects/projects_manager.h"
 #include "content/settings/settings_manager.h"
 
+#include <ui/widgets/text_edit/scalable_wrapper/scalable_wrapper.h>
+
 #ifdef CLOUD_SERVICE_MANAGER
 #include <cloud/cloud_service_manager.h>
 #endif
@@ -1335,6 +1337,10 @@ bool ApplicationManager::event(QEvent* _event)
         const auto textEdits = d->applicationView->findChildren<SpellCheckTextEdit*>();
         for (auto textEdit : textEdits) {
             QApplication::sendEvent(textEdit, _event);
+        }
+        const auto scalableWrappers = d->applicationView->findChildren<ScalableWrapper*>();
+        for (auto scalableWrapper : scalableWrappers) {
+            QApplication::sendEvent(scalableWrapper, _event);
         }
         QApplication::sendEvent(d->applicationView, _event);
 
