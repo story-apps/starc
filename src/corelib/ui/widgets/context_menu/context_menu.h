@@ -47,6 +47,7 @@ protected:
     /**
      * @brief Переопределяем для перерисовки выделенного пункта меню
      */
+    void leaveEvent(QEvent* _event) override;
     void mouseMoveEvent(QMouseEvent* _event) override;
 
 private:

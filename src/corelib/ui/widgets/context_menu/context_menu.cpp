@@ -30,7 +30,7 @@ public:
     /**
      * @brief Получить пункт меню по координате
      */
-    QAction* pressedAction(const QPoint& _coordinate, const QList<QAction*>& _actions) const;
+    QAction* actionForPosition(const QPoint& _coordinate, const QList<QAction*>& _actions) const;
 
     /**
      * @brief Определить область действия
@@ -42,6 +42,16 @@ public:
      */
     void animateClick();
 
+
+    /**
+     * @brief Действие над которым сейчас мышка
+     */
+    QAction* hoveredAction = nullptr;
+
+    /**
+     * @brief Вложенные менюшки
+     */
+    QHash<QAction*, ContextMenu*> actionToSubmenu;
 
     /**
      * @brief Анимирование геометрии
@@ -131,8 +141,8 @@ void ContextMenu::Implementation::relayoutWidgetActions(ContextMenu* _menu) cons
     }
 }
 
-QAction* ContextMenu::Implementation::pressedAction(const QPoint& _coordinate,
-                                                    const QList<QAction*>& _actions) const
+QAction* ContextMenu::Implementation::actionForPosition(const QPoint& _coordinate,
+                                                        const QList<QAction*>& _actions) const
 {
     auto actionTop = Ui::DesignSystem::card().shadowMargins().top();
     for (auto action : _actions) {
@@ -237,11 +247,33 @@ ContextMenu::~ContextMenu() = default;
 
 void ContextMenu::setActions(const QVector<QAction*>& _actions)
 {
+    //
+    // Удаляем старые
+    //
     while (!actions().isEmpty()) {
-        removeAction(actions().constFirst());
+        auto action = actions().constFirst();
+        if (d->actionToSubmenu.contains(action)) {
+            d->actionToSubmenu[action]->deleteLater();
+            d->actionToSubmenu.remove(action);
+        }
+
+        removeAction(action);
     }
 
-    addActions(_actions.toList());
+    //
+    // Сохраняем новые
+    //
+    for (auto* action : _actions) {
+        addAction(action);
+
+        const auto subactions
+            = action->findChildren<QAction*>(QString(), Qt::FindDirectChildrenOnly);
+        if (!subactions.isEmpty()) {
+            auto submenu = new ContextMenu(this);
+            submenu->setActions(subactions.toVector());
+            d->actionToSubmenu.insert(action, submenu);
+        }
+    }
 }
 
 void ContextMenu::showContextMenu(const QPoint& _pos)
@@ -362,17 +394,6 @@ void ContextMenu::paintEvent(QPaintEvent* _event)
             actionY += Ui::DesignSystem::drawer().separatorSpacing();
         }
 
-        //
-        // ... фон
-        //
-        const QRectF actionRect(actionX, actionY, actionWidth,
-                                Ui::DesignSystem::treeOneLineItem().height());
-        if (action->isEnabled() && actionRect.contains(mapFromGlobal(QCursor::pos()))) {
-            painter.fillRect(
-                actionRect,
-                ColorHelper::transparent(textColor(), Ui::DesignSystem::hoverBackgroundOpacity()));
-        }
-
         painter.setPen(action->isChecked() ? Ui::DesignSystem::color().secondary() : textColor());
         if (action->isChecked()) {
             painter.setOpacity(1.0);
@@ -381,6 +402,18 @@ void ContextMenu::paintEvent(QPaintEvent* _event)
         } else {
             painter.setOpacity(Ui::DesignSystem::inactiveTextOpacity());
         }
+
+        //
+        // ... фон
+        //
+        const QRectF actionRect(actionX, actionY, actionWidth,
+                                Ui::DesignSystem::treeOneLineItem().height());
+        if (action->isEnabled() && action == d->hoveredAction) {
+            painter.fillRect(
+                actionRect,
+                ColorHelper::transparent(textColor(), Ui::DesignSystem::hoverBackgroundOpacity()));
+        }
+
         //
         // ... иконка
         //
@@ -439,7 +472,7 @@ void ContextMenu::mousePressEvent(QMouseEvent* _event)
         return;
     }
 
-    QAction* pressedAction = d->pressedAction(_event->pos(), actions());
+    QAction* pressedAction = d->actionForPosition(_event->pos(), actions());
     if (pressedAction == nullptr || !pressedAction->isEnabled()) {
         return;
     }
@@ -460,7 +493,7 @@ void ContextMenu::mouseReleaseEvent(QMouseEvent* _event)
         return;
     }
 
-    QAction* pressedAction = d->pressedAction(_event->pos(), actions());
+    QAction* pressedAction = d->actionForPosition(_event->pos(), actions());
     if (pressedAction == nullptr || !pressedAction->isEnabled() || pressedAction->isChecked()) {
         return;
     }
@@ -471,6 +504,28 @@ void ContextMenu::mouseReleaseEvent(QMouseEvent* _event)
 
 void ContextMenu::mouseMoveEvent(QMouseEvent* _event)
 {
-    Q_UNUSED(_event)
+    if (!rect().contains(_event->pos())) {
+        d->hoveredAction = nullptr;
+        return;
+    }
+
+    auto hoveredAction = d->actionForPosition(_event->pos(), actions());
+    if (hoveredAction == d->hoveredAction) {
+        return;
+    }
+
+    d->hoveredAction = hoveredAction;
+    if (d->hoveredAction != nullptr) {
+        d->hoveredAction->hover();
+    }
+
+    update();
+}
+
+void ContextMenu::leaveEvent(QEvent* _event)
+{
+    Card::leaveEvent(_event);
+
+    d->hoveredAction = nullptr;
     update();
 }
