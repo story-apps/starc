@@ -325,7 +325,7 @@ void ContextMenu::setActions(const QVector<QAction*>& _actions)
                 //
                 // ... обработать случай, если не влезаем по ширине
                 //
-                if (submenuPosition.x() + submenuSizeHint.width() > screenGeometry.width()) {
+                if (submenuPosition.x() + submenuSizeHint.width() > screenGeometry.right()) {
                     submenuPosition.setX(submenuPosition.x() - actionRect.width()
                                          - submenuSizeHint.width()
                                          + Ui::DesignSystem::card().shadowMargins().left()
@@ -334,8 +334,8 @@ void ContextMenu::setActions(const QVector<QAction*>& _actions)
                 //
                 // ... обработать случай, если не влезаем по высоте
                 //
-                if (submenuPosition.y() + submenuSizeHint.height() > screenGeometry.height()) {
-                    submenuPosition.setY(screenGeometry.height() - submenuSizeHint.height());
+                if (submenuPosition.y() + submenuSizeHint.height() > screenGeometry.bottom()) {
+                    submenuPosition.setY(screenGeometry.bottom() - submenuSizeHint.height());
                 }
 
                 submenu->showContextMenu(submenuPosition);
