@@ -33,7 +33,10 @@ public:
     /**
      * @brief Позиция курсора в блоке
      */
-    int cursorPosition = kInvalidCursorPosition;
+    struct {
+        int inDocument = kInvalidCursorPosition;
+        int inBlock = kInvalidCursorPosition;
+    } cursorPosition;
 
     /**
      * @brief Таймер перепроверки текущего абзаца после изменения положения курсора
@@ -47,7 +50,7 @@ SpellCheckHighlighter::Implementation::Implementation(const SpellChecker& _check
     //
     // Настроим стиль выделения текста не прошедшего проверку
     //
-    misspeledCharFormat.setUnderlineStyle(QTextCharFormat::WaveUnderline);
+    misspeledCharFormat.setUnderlineStyle(QTextCharFormat::SpellCheckUnderline);
     misspeledCharFormat.setUnderlineColor(Qt::red);
 
     recheckTimer.setInterval(1600);
@@ -63,12 +66,12 @@ SpellCheckHighlighter::SpellCheckHighlighter(QTextDocument* _parent, const Spell
     , d(new Implementation(_checker))
 {
     connect(&d->recheckTimer, &QTimer::timeout, this, [this] {
-        if (d->cursorPosition == kInvalidCursorPosition) {
+        if (d->cursorPosition.inDocument == kInvalidCursorPosition) {
             return;
         }
 
-        const auto blockToRecheck = document()->findBlock(d->cursorPosition);
-        d->cursorPosition = kInvalidCursorPosition;
+        const auto blockToRecheck = document()->findBlock(d->cursorPosition.inDocument);
+        d->cursorPosition = {};
         rehighlightBlock(blockToRecheck);
     });
 }
@@ -98,7 +101,8 @@ bool SpellCheckHighlighter::useSpellChecker() const
 
 void SpellCheckHighlighter::setCursorPosition(int _position)
 {
-    d->cursorPosition = _position;
+    d->cursorPosition.inDocument = _position;
+    d->cursorPosition.inBlock = _position - document()->findBlock(_position).position();
     d->recheckTimer.start();
 }
 
@@ -145,8 +149,8 @@ void SpellCheckHighlighter::highlightBlock(const QString& _text)
             //
             // Не проверяем слово, которое сейчас пишется
             //
-            if (isChanged() && positionInText <= d->cursorPosition
-                && positionInText + wordToCheck.length() > d->cursorPosition) {
+            if (isChanged() && positionInText <= d->cursorPosition.inBlock
+                && positionInText + wordToCheck.length() > d->cursorPosition.inBlock) {
                 continue;
             }
 

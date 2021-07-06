@@ -385,7 +385,7 @@ void SpellCheckTextEdit::rehighlighWithNewCursor()
     //
     // А затем проверим орфографию в текущем абзаце, чтобы перепроверить слово под курсором
     //
-    d->spellCheckHighlighter(document())->setCursorPosition(cursor.positionInBlock());
+    d->spellCheckHighlighter(document())->setCursorPosition(cursor.position());
     d->spellCheckHighlighter(document())->rehighlightBlock(textCursor().block());
     //
     // И на последок запомним, абзац, в которым был курсор
