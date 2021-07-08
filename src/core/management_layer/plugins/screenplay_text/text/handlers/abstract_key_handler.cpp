@@ -21,9 +21,13 @@ AbstractKeyHandler::~AbstractKeyHandler() = default;
 void AbstractKeyHandler::handle(QEvent* _event)
 {
     if (_event->type() == QEvent::KeyPress) {
+        qDebug("press");
         handleKeyEvent(static_cast<QKeyEvent*>(_event));
     } else if (_event->type() == QEvent::InputMethod) {
+        qDebug("input");
         handleInput(static_cast<QInputMethodEvent*>(_event));
+    } else if (_event->type() == QEvent::InputMethod) {
+        qDebug("quesry");
     }
 }
 

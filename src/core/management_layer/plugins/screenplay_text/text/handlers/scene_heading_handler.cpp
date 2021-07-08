@@ -300,6 +300,7 @@ void SceneHeadingHandler::handleInput(QInputMethodEvent* _event)
 void SceneHeadingHandler::complete(const QString& _currentBlockText,
                                    const QString& _cursorBackwardText)
 {
+    qDebug("comp");
     //
     // Текущая секция
     //

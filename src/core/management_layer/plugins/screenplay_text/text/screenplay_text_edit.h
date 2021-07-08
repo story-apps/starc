@@ -125,6 +125,7 @@ protected:
      * @brief Нажатия многих клавиш обрабатываются вручную
      */
     void keyPressEvent(QKeyEvent* _event) override;
+    void inputMethodEvent(QInputMethodEvent* _event) override;
 
     /**
      * @brief Обрабатываем специфичные ситуации для редактора сценария
