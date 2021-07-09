@@ -1,9 +1,9 @@
 #pragma once
 
-#include <corelib_global.h>
-
 #include <QLocale>
 #include <QScopedPointer>
+
+#include <corelib_global.h>
 
 class QColor;
 class QFont;
@@ -13,18 +13,11 @@ class QPointF;
 class QSizeF;
 
 
-namespace Ui
-{
+namespace Ui {
 /**
  * @brief Тема приложения
  */
-enum class ApplicationTheme
-{
-    Dark,
-    Light,
-    DarkAndLight,
-    Custom
-};
+enum class ApplicationTheme { Dark, Light, DarkAndLight, Custom };
 
 /**
  * @brief Дизайн система приложения
@@ -1121,6 +1114,11 @@ public:
      * @brief Прозрачность неактивного текста
      */
     static qreal inactiveTextOpacity();
+
+    /**
+     * @brief Прозрачность неактивного элемента
+     */
+    static qreal inactiveItemOpacity();
 
     /**
      * @brief Прозрачность недоступного текста
