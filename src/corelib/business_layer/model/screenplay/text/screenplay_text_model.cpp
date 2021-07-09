@@ -1403,7 +1403,7 @@ void ScreenplayTextModel::applyPatch(const QByteArray& _patch)
                 if (textItem->isCorrection()) {
                     continue;
                 }
-                if (textItem->isBroken()) {
+                if (textItem->isBreakCorrectionStart()) {
                     lastBrokenItem = textItem;
                     lastBrokenItemCopy.reset(new ScreenplayTextModelTextItem);
                     lastBrokenItemCopy->copyFrom(lastBrokenItem);
@@ -1782,7 +1782,7 @@ void ScreenplayTextModel::applyPatch(const QByteArray& _patch)
         //
         if (modelItem != nullptr && modelItem->type() == ScreenplayTextModelItemType::Text) {
             auto textItem = static_cast<ScreenplayTextModelTextItem*>(modelItem);
-            if (textItem->isBroken()) {
+            if (textItem->isBreakCorrectionStart()) {
                 auto nextItem = findNextItemWithChildren(textItem, false);
                 ;
                 while (nextItem != nullptr
@@ -1797,7 +1797,7 @@ void ScreenplayTextModel::applyPatch(const QByteArray& _patch)
 
                     textItem->setText(textItem->text() + " ");
                     textItem->mergeWith(nextTextItem);
-                    textItem->setBroken(false);
+                    textItem->setBreakCorrectionStart(false);
                     updateItem(textItem);
                     removeItem(nextItem);
                     break;

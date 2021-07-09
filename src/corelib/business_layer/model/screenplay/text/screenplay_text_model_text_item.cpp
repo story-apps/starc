@@ -57,7 +57,8 @@ public:
     /**
      * @brief Разорван ли блок на разрыве страниц
      */
-    bool isBroken = false;
+    bool isBreakCorrectionStart = false;
+    bool isBreakCorrectionEnd = false;
 
     /**
      * @brief Находится ли элемент в таблице, и если находится, то в какой колонке
@@ -569,18 +570,32 @@ void ScreenplayTextModelTextItem::setCorrectionContinued(bool _continued)
     d->isCorrectionContinued = _continued;
 }
 
-bool ScreenplayTextModelTextItem::isBroken() const
+bool ScreenplayTextModelTextItem::isBreakCorrectionStart() const
 {
-    return d->isBroken;
+    return d->isBreakCorrectionStart;
 }
 
-void ScreenplayTextModelTextItem::setBroken(bool _broken)
+void ScreenplayTextModelTextItem::setBreakCorrectionStart(bool _broken)
 {
-    if (d->isBroken == _broken) {
+    if (d->isBreakCorrectionStart == _broken) {
         return;
     }
 
-    d->isBroken = _broken;
+    d->isBreakCorrectionStart = _broken;
+}
+
+bool ScreenplayTextModelTextItem::isBreakCorrectionEnd() const
+{
+    return d->isBreakCorrectionEnd;
+}
+
+void ScreenplayTextModelTextItem::setBreakCorrectionEnd(bool _broken)
+{
+    if (d->isBreakCorrectionEnd == _broken) {
+        return;
+    }
+
+    d->isBreakCorrectionEnd = _broken;
 }
 
 std::optional<bool> ScreenplayTextModelTextItem::isInFirstColumn() const

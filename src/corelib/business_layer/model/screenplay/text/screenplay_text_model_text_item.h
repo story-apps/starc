@@ -101,8 +101,10 @@ public:
     /**
      * @brief Разорван ли текст блока между страницами
      */
-    bool isBroken() const;
-    void setBroken(bool _broken);
+    bool isBreakCorrectionStart() const;
+    void setBreakCorrectionStart(bool _broken);
+    bool isBreakCorrectionEnd() const;
+    void setBreakCorrectionEnd(bool _broken);
 
     /**
      * @brief Находится ли элемент в первой колонке таблицы

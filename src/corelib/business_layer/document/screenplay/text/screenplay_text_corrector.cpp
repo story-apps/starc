@@ -192,10 +192,10 @@ public:
     struct {
         bool isValid = false;
         int position = 0;
-        int changed = 0;
+        int lenght = 0;
         int end() const
         {
-            return position + changed;
+            return position + lenght;
         }
     } plannedCorrection;
 
@@ -1868,14 +1868,14 @@ void ScreenplayTextCorrector::planCorrection(int _position, int _charsRemoved, i
     //
     else if (d->plannedCorrection.position > _position) {
         const auto newPosition = _position;
-        const auto newChanged = std::max(_charsRemoved, _charsAdded);
+        const auto newLenght = std::max(_charsRemoved, _charsAdded);
         if (newPosition < d->plannedCorrection.position) {
-            d->plannedCorrection.changed += d->plannedCorrection.position - newPosition;
+            d->plannedCorrection.lenght += d->plannedCorrection.position - newPosition;
             d->plannedCorrection.position = newPosition;
         }
-        const auto newEnd = newPosition + newChanged;
+        const auto newEnd = newPosition + newLenght;
         if (newEnd > d->plannedCorrection.end()) {
-            d->plannedCorrection.changed = newEnd - d->plannedCorrection.position;
+            d->plannedCorrection.lenght = newEnd - d->plannedCorrection.position;
         }
     }
 }
@@ -1886,7 +1886,7 @@ void ScreenplayTextCorrector::makePlannedCorrection()
         return;
     }
 
-    correct(d->plannedCorrection.position, d->plannedCorrection.changed);
+    correct(d->plannedCorrection.position, d->plannedCorrection.lenght);
     d->plannedCorrection = {};
 }
 

@@ -293,17 +293,23 @@ void ScreenplayTextDocument::Implementation::readModelItemContent(int _itemRow,
         //
         // Для докараций, добавим дополнительные флаги
         //
+        auto decorationFormat = _cursor.block().blockFormat();
         if (textItem->isCorrection()) {
-            auto decorationFormat = _cursor.block().blockFormat();
             decorationFormat.setProperty(ScreenplayBlockStyle::PropertyIsCorrection, true);
-            if (textItem->isCorrectionContinued()) {
-                decorationFormat.setProperty(ScreenplayBlockStyle::PropertyIsCorrectionContinued,
-                                             true);
-                decorationFormat.setTopMargin(0);
-            }
             decorationFormat.setProperty(PageTextEdit::PropertyDontShowCursor, true);
-            _cursor.setBlockFormat(decorationFormat);
         }
+        if (textItem->isCorrectionContinued()) {
+            decorationFormat.setProperty(ScreenplayBlockStyle::PropertyIsCorrectionContinued, true);
+            decorationFormat.setTopMargin(0);
+        }
+        if (textItem->isBreakCorrectionStart()) {
+            decorationFormat.setProperty(ScreenplayBlockStyle::PropertyIsBreakCorrectionStart,
+                                         true);
+        }
+        if (textItem->isBreakCorrectionEnd()) {
+            decorationFormat.setProperty(ScreenplayBlockStyle::PropertyIsBreakCorrectionEnd, true);
+        }
+        _cursor.setBlockFormat(decorationFormat);
 
         //
         // ... выравнивание
@@ -583,7 +589,7 @@ void ScreenplayTextDocument::setModel(BusinessLayer::ScreenplayTextModel* _model
                 //
                 if (cursor.blockFormat().boolProperty(
                         ScreenplayBlockStyle::PropertyIsBreakCorrectionStart)
-                    && !textItem->isBroken()) {
+                    && !textItem->isBreakCorrectionStart()) {
                     auto clearFormat = cursor.blockFormat();
                     clearFormat.clearProperty(ScreenplayBlockStyle::PropertyIsBreakCorrectionStart);
                     cursor.setBlockFormat(clearFormat);
@@ -1827,8 +1833,10 @@ void ScreenplayTextDocument::updateModelOnContentChange(int _position, int _char
                 block.blockFormat().boolProperty(ScreenplayBlockStyle::PropertyIsCorrection));
             textItem->setCorrectionContinued(block.blockFormat().boolProperty(
                 ScreenplayBlockStyle::PropertyIsCorrectionContinued));
-            textItem->setBroken(block.blockFormat().boolProperty(
+            textItem->setBreakCorrectionStart(block.blockFormat().boolProperty(
                 ScreenplayBlockStyle::PropertyIsBreakCorrectionStart));
+            textItem->setBreakCorrectionEnd(block.blockFormat().boolProperty(
+                ScreenplayBlockStyle::PropertyIsBreakCorrectionEnd));
             if (tableInfo.inTable) {
                 textItem->setInFirstColumn(tableInfo.inFirstColumn);
             } else {
@@ -2042,8 +2050,10 @@ void ScreenplayTextDocument::updateModelOnContentChange(int _position, int _char
                     block.blockFormat().boolProperty(ScreenplayBlockStyle::PropertyIsCorrection));
                 textItem->setCorrectionContinued(block.blockFormat().boolProperty(
                     ScreenplayBlockStyle::PropertyIsCorrectionContinued));
-                textItem->setBroken(block.blockFormat().boolProperty(
+                textItem->setBreakCorrectionStart(block.blockFormat().boolProperty(
                     ScreenplayBlockStyle::PropertyIsBreakCorrectionStart));
+                textItem->setBreakCorrectionEnd(block.blockFormat().boolProperty(
+                    ScreenplayBlockStyle::PropertyIsBreakCorrectionEnd));
                 if (tableInfo.inTable) {
                     textItem->setInFirstColumn(tableInfo.inFirstColumn);
                 } else {
