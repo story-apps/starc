@@ -498,6 +498,7 @@ void ScreenplayTextCorrector::Implementation::correctPageBreaks(int _position)
     //
     qreal lastBlockHeight = 0.0;
     currentBlockInfo = {};
+    bool isFirstChangedBlock = true;
     while (block.isValid()) {
         //
         // Запомним самый нижний блок, когда находимся в таблице
@@ -638,18 +639,30 @@ void ScreenplayTextCorrector::Implementation::correctPageBreaks(int _position)
 
 
         //
-        // Если в блоке сменилось расположение или высота, проверяем также ближайшие блоки,
-        // чтобы корректно обработать ситуацию, когда в блоке удалили текст и теперь он может
-        // быть помещён на предыдущей странице
+        // Если это первый из блоков, в котором сменилось расположение или высота, проверяем также
+        // ближайшие блоки, чтобы корректно обработать ситуацию, когда в блоке удалили текст
+        // и теперь он может быть помещён на предыдущей странице
         //
-        if (blockItems[currentBlockInfo.number].isValid()) {
+        if (isFirstChangedBlock && blockItems[currentBlockInfo.number].isValid()) {
+            isFirstChangedBlock = false;
+            int topIndex = currentBlockInfo.number;
             const auto maxDecorationBlocks = 2;
-            const int topIndex = std::max(0, currentBlockInfo.number - maxDecorationBlocks);
-            if (topIndex == 0) {
-                block = document->begin();
-                lastBlockHeight = 0;
-            } else {
-                block = block.previous().previous();
+            for (int i = 0; i < maxDecorationBlocks; ++i) {
+                if (topIndex == 0) {
+                    lastBlockHeight = 0;
+                    break;
+                }
+
+                //
+                // Контролируем, чтобы расположение блоков не переходило через границу таблицы
+                //
+                if (ScreenplayBlockStyle::forBlock(block.previous())
+                    == ScreenplayParagraphType::PageSplitter) {
+                    break;
+                }
+
+                block = block.previous();
+                --topIndex;
                 lastBlockHeight = blockItems[topIndex].top;
             }
             currentBlockInfo.number = topIndex;
