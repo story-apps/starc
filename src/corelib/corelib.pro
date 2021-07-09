@@ -71,6 +71,7 @@ SOURCES += \
     business_layer/document/text/text_block_data.cpp \
     business_layer/document/text/text_cursor.cpp \
     business_layer/document/text/text_document.cpp \
+    business_layer/export/screenplay/abstract_exporter.cpp \
     business_layer/export/screenplay/docx_exporter.cpp \
     business_layer/export/screenplay/pdf_exporter.cpp \
     business_layer/import/screenplay/celtx_importer.cpp \

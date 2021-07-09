@@ -423,100 +423,12 @@ void PdfExporter::exportTo(ScreenplayTextModel* _model, const ExportOptions& _ex
     //
     // Настраиваем документ
     //
-    PageTextEdit textEdit;
-    textEdit.setUsePageMode(true);
-    textEdit.setPageSpacing(0);
-    ScreenplayTextDocument screenplayText;
-    textEdit.setDocument(&screenplayText);
-    //
-    // ... параметры страницы
-    //
-    const auto exportTemplate = TemplatesFacade::screenplayTemplate(_exportOptions.templateId);
-    textEdit.setPageFormat(exportTemplate.pageSizeId());
-    textEdit.setPageMarginsMm(exportTemplate.pageMargins());
-    textEdit.setPageNumbersAlignment(exportTemplate.pageNumbersAlignment());
-    //
-    // ... формируем текст сценария
-    //
-    screenplayText.setTemplateId(_exportOptions.templateId);
-    screenplayText.setModel(_model, false);
-    //
-    // ... отсоединяем документ от модели, что изменения в документе не привели к изменениям модели
-    //
-    screenplayText.disconnect(_model);
-    //
-    // ... корректируем текст сценария
-    //
-    {
-        ScreenplayTextCursor cursor(&screenplayText);
-        do {
-            const auto blockType = ScreenplayBlockStyle::forBlock(cursor.block());
-
-            //
-            // Если не нужно печатать папки, то удаляем их
-            //
-            if (!_exportOptions.printFolders) {
-                if (blockType == ScreenplayParagraphType::FolderHeader
-                    || blockType == ScreenplayParagraphType::FolderFooter) {
-                    cursor.movePosition(QTextCursor::EndOfBlock, QTextCursor::KeepAnchor);
-                    if (cursor.hasSelection()) {
-                        cursor.deleteChar();
-                    }
-                    cursor.deleteChar();
-                    continue;
-                }
-            }
-            //
-            // В противном случае подставляем текст для пустых завершающих блоков
-            //
-            else if (blockType == ScreenplayParagraphType::FolderFooter) {
-                if (cursor.block().text().isEmpty()) {
-                    auto headerBlock = cursor.block().previous();
-                    int openedFolders = 0;
-                    while (headerBlock.isValid()) {
-                        const auto headerBlockType = ScreenplayBlockStyle::forBlock(headerBlock);
-                        if (headerBlockType == ScreenplayParagraphType::FolderHeader) {
-                            if (openedFolders > 0) {
-                                --openedFolders;
-                            } else {
-                                break;
-                            }
-                        } else if (headerBlockType == ScreenplayParagraphType::FolderFooter) {
-                            ++openedFolders;
-                        }
-
-                        headerBlock = headerBlock.previous();
-                    }
-
-                    const auto footerText = QString("%1 %2").arg(
-                        QApplication::translate("KeyProcessingLayer::FolderFooterHandler",
-                                                "END OF"),
-                        headerBlock.text());
-                    cursor.insertText(footerText);
-                }
-            }
-
-            //
-            // Если не нужно печатать заметки по тексту, то удаляем их
-            //
-            if (!_exportOptions.printInlineNotes
-                && blockType == ScreenplayParagraphType::InlineNote) {
-                cursor.movePosition(QTextCursor::EndOfBlock, QTextCursor::KeepAnchor);
-                if (cursor.hasSelection()) {
-                    cursor.deleteChar();
-                }
-                cursor.deleteChar();
-                continue;
-            }
-
-            cursor.movePosition(QTextCursor::EndOfBlock);
-            cursor.movePosition(QTextCursor::NextBlock);
-        } while (!cursor.atEnd());
-    }
+    QScopedPointer<ScreenplayTextDocument> screenplayText(prepareDocument(_model, _exportOptions));
 
     //
     // Настраиваем принтер
     //
+    const auto exportTemplate = TemplatesFacade::screenplayTemplate(_exportOptions.templateId);
     QPdfWriter printer(_exportOptions.filePath);
     printer.setPageSize(QPageSize(exportTemplate.pageSizeId()));
     printer.setPageMargins({});
@@ -531,7 +443,7 @@ void PdfExporter::exportTo(ScreenplayTextModel* _model, const ExportOptions& _ex
     //
     // Печатаем документ
     //
-    printDocument(&screenplayText, &printer, exportTemplate, exportOptions);
+    printDocument(screenplayText.data(), &printer, exportTemplate, exportOptions);
 }
 
 } // namespace BusinessLayer

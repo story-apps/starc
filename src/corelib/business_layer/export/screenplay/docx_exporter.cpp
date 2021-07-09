@@ -902,7 +902,7 @@ void writeFooter(QtZipWriter* _zip, const ExportOptions& _exportOptions)
     _zip->addFile(QString::fromLatin1("word/footer1.xml"), footerXml.toUtf8());
 }
 
-void writeDocument(QtZipWriter* _zip, ScreenplayTextModel* _model,
+void writeDocument(QtZipWriter* _zip, ScreenplayTextDocument* _screenplayText,
                    QMap<int, QStringList>& _comments, const ExportOptions& _exportOptions)
 {
     QString documentXml
@@ -916,17 +916,10 @@ void writeDocument(QtZipWriter* _zip, ScreenplayTextModel* _model,
           "<w:body>";
 
     //
-    // Сформируем документ
-    //
-    ScreenplayTextDocument screenplayText;
-    screenplayText.setTemplateId(_exportOptions.templateId);
-    screenplayText.setModel(_model, false);
-
-    //
     // Данные считываются из исходного документа, определяется тип блока
     // и записываются прямо в файл
     //
-    ScreenplayTextCursor documentCursor(&screenplayText);
+    ScreenplayTextCursor documentCursor(_screenplayText);
     while (!documentCursor.atEnd()) {
         documentXml.append(docxText(_comments, documentCursor, _exportOptions));
 
@@ -1064,7 +1057,8 @@ void DocxExporter::exportTo(ScreenplayTextModel* _model, const ExportOptions& _e
         // ... документ
         //
         QMap<int, QStringList> comments;
-        writeDocument(&zip, _model, comments, _exportOptions);
+        QScopedPointer<ScreenplayTextDocument> document(prepareDocument(_model, _exportOptions));
+        writeDocument(&zip, document.data(), comments, _exportOptions);
         //
         // ... комментарии
         //
