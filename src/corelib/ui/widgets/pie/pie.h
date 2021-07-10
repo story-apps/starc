@@ -4,14 +4,17 @@
 
 class QAbstractItemModel;
 
+/**
+ * @brief Рисует график в виде пирога или бублика
+ */
 class CORE_LIBRARY_EXPORT Pie : public Widget
 {
 
     Q_OBJECT
 
 public:
-    explicit Pie(QWidget* _parent = nullptr);
-    explicit Pie(const QAbstractItemModel* _model, const int _valueColumn,
+    explicit Pie(QWidget* _parent = nullptr, double _hole = 0);
+    explicit Pie(const QAbstractItemModel* _model, int _valueColumn, double _hole = 0,
                  QWidget* _parent = nullptr);
     ~Pie() override;
 
@@ -22,14 +25,18 @@ public:
 
     /**
      * @brief Вырезать отверстие в пироге
+     *
+     * Значение указывается от 0 до 1.
+     * Означает соотношение диаметра
+     * выреза на диаметр пирога.
      */
-    void setHole(const double _hole);
+    void setHole(double _hole);
 
 signals:
     /**
      * @brief Навели машкой на кусочек пирога
      */
-    void itemSelected(const QModelIndex& _index);
+    void itemSelected(const QModelIndex& _index) const;
 
 protected:
     /**
@@ -47,22 +54,6 @@ protected:
      */
     void mouseMoveEvent(QMouseEvent* _event) override;
 
-private:
-    /**
-     * @brief Обновить размеры кусочков
-     */
-    void recalculateSlices();
-
-    /**
-     * @brief Ищем выбранный кусочек
-     */
-    void updateSelectedSlice();
-
-    /**
-     * @brief Подключаемся к сигналам модели
-     */
-    void connectSignals(const QAbstractItemModel* _model);
-
 private slots:
     /**
      * @brief В модель пришли новые данные
@@ -75,10 +66,11 @@ private slots:
     void removeSlices(const QModelIndex& _parent, int _first, int _last);
 
     /**
-     * @brief В моделе изменились данные
+     * @brief В модели изменились данные
      */
     void changeData(const QModelIndex& _topLeft, const QModelIndex& _bottomRight,
                     const QVector<int>& _roles);
+
 
 private:
     class Implementation;
