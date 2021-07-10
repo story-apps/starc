@@ -14,24 +14,24 @@ public:
     struct Slice {
         QModelIndex index;
 
-        double value;
+        qreal value;
 
         QPainterPath path;
         QColor color;
     };
 
-    Implementation(Pie* _q, double _hole = 0);
-    Implementation(Pie* _q, const QAbstractItemModel* _model, int _valueColumn, double _hole = 0);
+    Implementation(Pie* _q, qreal _hole = 0);
+    Implementation(Pie* _q, const QAbstractItemModel* _model, int _valueColumn, qreal _hole = 0);
 
     /**
      * @brief Сбрасываем модель
      */
-    void reset(const QAbstractItemModel* _model, const int _valueColumn);
+    void reset(const QAbstractItemModel* _model, int _valueColumn);
 
     /**
      * @brief Установить модель
      */
-    void setModel(const QAbstractItemModel* _model, const int _valueColumn);
+    void setModel(const QAbstractItemModel* _model, int _valueColumn);
 
     /**
      * @brief В модель пришли новые данные
@@ -46,18 +46,18 @@ public:
     /**
      * @brief В модели изменились данные
      */
-    void changeData(const QModelIndex& _topLeft, const QModelIndex& _bottomRight,
-                    const QVector<int>& _roles);
+    void updateSlices(const QModelIndex& _topLeft, const QModelIndex& _bottomRight,
+                      const QVector<int>& _roles);
 
     /**
      * @brief Подключаемся к сигналам модели
      */
-    void connectSignals();
+    void connectToModel();
 
     /**
      * @brief Найти выбранный кусочек
      */
-    Slice* findSelectedSlice(QPoint point);
+    Slice* findSelectedSlice(const QPoint& point);
 
     /**
      * @brief Обновляем выбранный кусочек
@@ -104,12 +104,12 @@ public:
     const QAbstractItemModel* model;
     int valueColumn;
 
-    double hole;
+    qreal hole;
 
     QVariantAnimation sliceOpacityAnimation;
 };
 
-Pie::Implementation::Implementation(Pie* _q, double _hole)
+Pie::Implementation::Implementation(Pie* _q, qreal _hole)
     : q(_q)
     , selectedSlice(nullptr)
     , lastSelectedSlice(nullptr)
@@ -127,7 +127,7 @@ Pie::Implementation::Implementation(Pie* _q, double _hole)
 }
 
 Pie::Implementation::Implementation(Pie* _q, const QAbstractItemModel* _model, int _valueColumn,
-                                    double _hole)
+                                    qreal _hole)
     : q(_q)
     , selectedSlice(nullptr)
     , lastSelectedSlice(nullptr)
@@ -140,7 +140,7 @@ Pie::Implementation::Implementation(Pie* _q, const QAbstractItemModel* _model, i
     sliceOpacityAnimation.setEndValue(Ui::DesignSystem::inactiveItemOpacity());
     sliceOpacityAnimation.setDuration(250);
 
-    connectSignals();
+    connectToModel();
 
     connect(&sliceOpacityAnimation, &QVariantAnimation::valueChanged, q, qOverload<>(&Pie::update));
 }
@@ -148,9 +148,7 @@ Pie::Implementation::Implementation(Pie* _q, const QAbstractItemModel* _model, i
 void Pie::Implementation::reset(const QAbstractItemModel* _model, int _valueColumn)
 {
     if (model) {
-        disconnect(model, &QAbstractItemModel::rowsInserted, q, &Pie::insertSlices);
-        disconnect(model, &QAbstractItemModel::rowsRemoved, q, &Pie::removeSlices);
-        disconnect(model, &QAbstractItemModel::dataChanged, q, &Pie::changeData);
+        model->disconnect(q);
     }
 
     model = _model;
@@ -162,15 +160,14 @@ void Pie::Implementation::reset(const QAbstractItemModel* _model, int _valueColu
     slices.clear();
 }
 
-void Pie::Implementation::setModel(const QAbstractItemModel* _model, const int _valueColumn)
+void Pie::Implementation::setModel(const QAbstractItemModel* _model, int _valueColumn)
 {
-    if (!_model) {
-        reset(nullptr, 0);
+    reset(_model, _valueColumn);
+    if (_model == nullptr) {
         return;
     }
 
-    reset(_model, _valueColumn);
-    connectSignals();
+    connectToModel();
 
 
     for (int i = 0; i < model->rowCount(); ++i) {
@@ -235,8 +232,8 @@ void Pie::Implementation::removeSlices(const QModelIndex& _parent, int _first, i
     q->update();
 }
 
-void Pie::Implementation::changeData(const QModelIndex& _topLeft, const QModelIndex& _bottomRight,
-                                     const QVector<int>& _roles)
+void Pie::Implementation::updateSlices(const QModelIndex& _topLeft, const QModelIndex& _bottomRight,
+                                       const QVector<int>& _roles)
 {
     auto isContainsColor = _roles.contains(Qt::DecorationPropertyRole);
     auto isSomethingChanged = false;
@@ -274,14 +271,24 @@ void Pie::Implementation::changeData(const QModelIndex& _topLeft, const QModelIn
     }
 }
 
-void Pie::Implementation::connectSignals()
+void Pie::Implementation::connectToModel()
 {
-    connect(model, &QAbstractItemModel::rowsInserted, q, &Pie::insertSlices);
-    connect(model, &QAbstractItemModel::rowsRemoved, q, &Pie::removeSlices);
-    connect(model, &QAbstractItemModel::dataChanged, q, &Pie::changeData);
+    connect(model, &QAbstractItemModel::rowsInserted, q,
+            [this](const QModelIndex& _parent, int _first, int _last) {
+                insertSlices(_parent, _first, _last);
+            });
+    connect(model, &QAbstractItemModel::rowsRemoved, q,
+            [this](const QModelIndex& _parent, int _first, int _last) {
+                removeSlices(_parent, _first, _last);
+            });
+    connect(model, &QAbstractItemModel::dataChanged, q,
+            [this](const QModelIndex& _topLeft, const QModelIndex& _bottomRight,
+                   const QVector<int>& _roles = QVector<int>()) {
+                updateSlices(_topLeft, _bottomRight, _roles);
+            });
 }
 
-Pie::Implementation::Slice* Pie::Implementation::findSelectedSlice(QPoint point)
+Pie::Implementation::Slice* Pie::Implementation::findSelectedSlice(const QPoint& point)
 {
     for (const auto& slice : slices) {
         if (slice->path.contains(point)) {
@@ -294,15 +301,15 @@ Pie::Implementation::Slice* Pie::Implementation::findSelectedSlice(QPoint point)
 
 void Pie::Implementation::updateSelectedSlice()
 {
-    auto seletedSlice = findSelectedSlice(q->QWidget::mapFromGlobal(QCursor::pos()));
-    if (selectedSlice == seletedSlice) {
+    auto selectedSlice = findSelectedSlice(q->QWidget::mapFromGlobal(QCursor::pos()));
+    if (this->selectedSlice == selectedSlice) {
         return;
     }
 
-    selectedSlice = seletedSlice;
-    lastSelectedSlice = seletedSlice;
+    this->selectedSlice = selectedSlice;
+    this->lastSelectedSlice = selectedSlice;
 
-    emit q->itemSelected(selectedSlice->index);
+    emit q->itemSelected(this->selectedSlice->index);
 
     return;
 }
@@ -335,11 +342,12 @@ void Pie::Implementation::recalculateSlices()
                             QSize{ min, min } };
     const auto total
         = std::accumulate(slices.begin(), slices.end(), 0.0,
-                          [](const double a, const std::unique_ptr<Implementation::Slice>& b) {
+                          [](const qreal a, const std::unique_ptr<Implementation::Slice>& b) {
                               return a + b->value;
                           });
 
-    for (auto [it, start] = std::tuple{ slices.begin(), 0.0 }; it != slices.end(); ++it) {
+    qreal start = 0.0;
+    for (auto it = slices.begin(); it != slices.end(); ++it) {
         const auto length = (circle * it->get()->value) / total;
         it->get()->path = pieSlice(region, start, length, hole);
 
@@ -377,14 +385,14 @@ void Pie::Implementation::animateDeselectedSlice()
     sliceOpacityAnimation.start();
 }
 
-Pie::Pie(QWidget* _parent, double _hole)
+Pie::Pie(QWidget* _parent, qreal _hole)
     : Widget(_parent)
     , d(new Implementation(this, _hole))
 {
     setMouseTracking(true);
 }
 
-Pie::Pie(const QAbstractItemModel* _model, int _valueColumn, double _hole, QWidget* _parent)
+Pie::Pie(const QAbstractItemModel* _model, int _valueColumn, qreal _hole, QWidget* _parent)
     : Widget(_parent)
     , d(new Implementation(this, _model, _valueColumn, _hole))
 {
@@ -423,6 +431,7 @@ void Pie::resizeEvent(QResizeEvent* _event)
 {
     Q_UNUSED(_event);
     d->recalculateSlices();
+    update();
 }
 
 void Pie::mouseMoveEvent(QMouseEvent* _event)
@@ -453,28 +462,18 @@ void Pie::mouseMoveEvent(QMouseEvent* _event)
     return;
 }
 
-void Pie::insertSlices(const QModelIndex& _parent, int _first, int _last)
-{
-    d->insertSlices(_parent, _first, _last);
-}
-
-void Pie::removeSlices(const QModelIndex& _parent, int _first, int _last)
-{
-    d->removeSlices(_parent, _first, _last);
-}
-
-void Pie::changeData(const QModelIndex& _topLeft, const QModelIndex& _bottomRight,
-                     const QVector<int>& _roles)
-{
-    d->changeData(_topLeft, _bottomRight, _roles);
-}
-
-void Pie::setModel(const QAbstractItemModel* _model, const int _valueColumn)
+void Pie::setModel(const QAbstractItemModel* _model, int _valueColumn)
 {
     d->setModel(_model, _valueColumn);
 }
 
-void Pie::setHole(double _hole)
+void Pie::setHole(qreal _hole)
 {
+    if (d->hole == _hole) {
+        return;
+    }
+
     d->hole = _hole;
+    d->recalculateSlices();
+    update();
 }

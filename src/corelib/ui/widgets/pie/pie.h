@@ -13,15 +13,15 @@ class CORE_LIBRARY_EXPORT Pie : public Widget
     Q_OBJECT
 
 public:
-    explicit Pie(QWidget* _parent = nullptr, double _hole = 0);
-    explicit Pie(const QAbstractItemModel* _model, int _valueColumn, double _hole = 0,
+    explicit Pie(QWidget* _parent = nullptr, qreal _hole = 0);
+    explicit Pie(const QAbstractItemModel* _model, int _valueColumn, qreal _hole = 0,
                  QWidget* _parent = nullptr);
     ~Pie() override;
 
     /**
      * @brief Установить модель
      */
-    void setModel(const QAbstractItemModel* _model, const int _valueColumn);
+    void setModel(const QAbstractItemModel* _model, int _valueColumn);
 
     /**
      * @brief Вырезать отверстие в пироге
@@ -30,7 +30,7 @@ public:
      * Означает соотношение диаметра
      * выреза на диаметр пирога.
      */
-    void setHole(double _hole);
+    void setHole(qreal _hole);
 
 signals:
     /**
@@ -53,23 +53,6 @@ protected:
      * @brief Переопределяем для выделения кусочка пирога
      */
     void mouseMoveEvent(QMouseEvent* _event) override;
-
-private slots:
-    /**
-     * @brief В модель пришли новые данные
-     */
-    void insertSlices(const QModelIndex& _parent, int _first, int _last);
-
-    /**
-     * @brief Из модели удалили данные
-     */
-    void removeSlices(const QModelIndex& _parent, int _first, int _last);
-
-    /**
-     * @brief В модели изменились данные
-     */
-    void changeData(const QModelIndex& _topLeft, const QModelIndex& _bottomRight,
-                    const QVector<int>& _roles);
 
 
 private:
