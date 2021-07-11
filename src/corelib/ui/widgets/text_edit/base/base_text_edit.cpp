@@ -2,8 +2,10 @@
 
 #include <include/custom_events.h>
 #include <ui/design_system/design_system.h>
+#include <ui/widgets/context_menu/context_menu.h>
 #include <utils/helpers/text_helper.h>
 
+#include <QAction>
 #include <QKeyEvent>
 #include <QLocale>
 #include <QRegularExpression>
@@ -234,6 +236,70 @@ void BaseTextEdit::setTextAlignment(Qt::Alignment _alignment)
 
     cursor.setPosition(positionInterval.second);
     setTextCursor(cursor);
+}
+
+ContextMenu* BaseTextEdit::createContextMenu(const QPoint& _position, QWidget* _parent)
+{
+    auto menu = CompleterTextEdit::createContextMenu(_position, _parent);
+
+    auto formattingAction = new QAction;
+    formattingAction->setText(tr("Formatting"));
+    formattingAction->setIconText(u8"\U000F0284");
+    {
+        auto boldAction = new QAction(formattingAction);
+        boldAction->setText(tr("Bold"));
+        boldAction->setWhatsThis(
+            QKeySequence(QKeySequence::Bold).toString(QKeySequence::NativeText));
+        boldAction->setEnabled(textCursor().hasSelection());
+        connect(boldAction, &QAction::triggered, this, &BaseTextEdit::invertTextBold);
+        //
+        auto italicAction = new QAction(formattingAction);
+        italicAction->setText(tr("Italic"));
+        italicAction->setWhatsThis(
+            QKeySequence(QKeySequence::Italic).toString(QKeySequence::NativeText));
+        italicAction->setEnabled(textCursor().hasSelection());
+        connect(italicAction, &QAction::triggered, this, &BaseTextEdit::invertTextItalic);
+        //
+        auto underlineAction = new QAction(formattingAction);
+        underlineAction->setText(tr("Underline"));
+        underlineAction->setWhatsThis(
+            QKeySequence(QKeySequence::Underline).toString(QKeySequence::NativeText));
+        underlineAction->setEnabled(textCursor().hasSelection());
+        connect(underlineAction, &QAction::triggered, this, &BaseTextEdit::invertTextUnderline);
+
+        auto alignLeftAction = new QAction(formattingAction);
+        alignLeftAction->setSeparator(true);
+        alignLeftAction->setText(tr("Align left"));
+        alignLeftAction->setWhatsThis(QKeySequence("Ctrl+L").toString(QKeySequence::NativeText));
+        connect(alignLeftAction, &QAction::triggered, this,
+                [this] { setTextAlignment(Qt::AlignLeft); });
+        //
+        auto alignCenterAction = new QAction(formattingAction);
+        alignCenterAction->setText(tr("Align center"));
+        alignCenterAction->setWhatsThis(QKeySequence("Ctrl+E").toString(QKeySequence::NativeText));
+        connect(alignCenterAction, &QAction::triggered, this,
+                [this] { setTextAlignment(Qt::AlignHCenter); });
+        //
+        auto alignRightAction = new QAction(formattingAction);
+        alignRightAction->setText(tr("Align right"));
+        alignRightAction->setWhatsThis(QKeySequence("Ctrl+R").toString(QKeySequence::NativeText));
+        connect(alignRightAction, &QAction::triggered, this,
+                [this] { setTextAlignment(Qt::AlignRight); });
+    }
+
+    //
+    // В зависимости от того, есть ли меню проверки орфографии добавляем пункт меню форматирования
+    //
+    auto actions = menu->actions().toVector();
+    if (isMispelledWordUnderCursor(_position)) {
+        actions.insert(1, formattingAction);
+    } else {
+        actions.first()->setSeparator(true);
+        actions.prepend(formattingAction);
+    }
+    menu->setActions(actions);
+
+    return menu;
 }
 
 bool BaseTextEdit::event(QEvent* _event)

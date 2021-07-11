@@ -165,6 +165,11 @@ void ScreenplayTextDocument::Implementation::readModelItemContent(int _itemRow,
                 _cursor.setCharFormat(style.charFormat());
             };
             insertPageSplitter();
+            //
+            // ... и сохраним данные блока
+            //
+            auto blockData = new ScreenplayTextBlockData(splitterItem);
+            _cursor.block().setUserData(blockData);
 
             //
             // Вставляем таблицу
@@ -195,8 +200,18 @@ void ScreenplayTextDocument::Implementation::readModelItemContent(int _itemRow,
         }
 
         case ScreenplayTextModelSplitterItemType::End: {
+            //
+            // Блок завершения таблицы уже был вставлен, при вставке начала и самой таблицы,
+            // поэтому тут лишь сохраняем его в карту позиций элементов
+            //
             _cursor.movePosition(QTextCursor::NextBlock);
             positionsToItems.emplace(_cursor.position(), splitterItem);
+            //
+            // ... и сохраняем в блоке информацию об элементе
+            //
+            auto blockData = new ScreenplayTextBlockData(splitterItem);
+            _cursor.block().setUserData(blockData);
+
             break;
         }
 
@@ -278,12 +293,23 @@ void ScreenplayTextDocument::Implementation::readModelItemContent(int _itemRow,
         //
         // Для докараций, добавим дополнительные флаги
         //
+        auto decorationFormat = _cursor.block().blockFormat();
         if (textItem->isCorrection()) {
-            auto decorationFormat = _cursor.block().blockFormat();
             decorationFormat.setProperty(ScreenplayBlockStyle::PropertyIsCorrection, true);
             decorationFormat.setProperty(PageTextEdit::PropertyDontShowCursor, true);
-            _cursor.setBlockFormat(decorationFormat);
         }
+        if (textItem->isCorrectionContinued()) {
+            decorationFormat.setProperty(ScreenplayBlockStyle::PropertyIsCorrectionContinued, true);
+            decorationFormat.setTopMargin(0);
+        }
+        if (textItem->isBreakCorrectionStart()) {
+            decorationFormat.setProperty(ScreenplayBlockStyle::PropertyIsBreakCorrectionStart,
+                                         true);
+        }
+        if (textItem->isBreakCorrectionEnd()) {
+            decorationFormat.setProperty(ScreenplayBlockStyle::PropertyIsBreakCorrectionEnd, true);
+        }
+        _cursor.setBlockFormat(decorationFormat);
 
         //
         // ... выравнивание
@@ -563,7 +589,7 @@ void ScreenplayTextDocument::setModel(BusinessLayer::ScreenplayTextModel* _model
                 //
                 if (cursor.blockFormat().boolProperty(
                         ScreenplayBlockStyle::PropertyIsBreakCorrectionStart)
-                    && !textItem->isBroken()) {
+                    && !textItem->isBreakCorrectionStart()) {
                     auto clearFormat = cursor.blockFormat();
                     clearFormat.clearProperty(ScreenplayBlockStyle::PropertyIsBreakCorrectionStart);
                     cursor.setBlockFormat(clearFormat);
@@ -1805,8 +1831,12 @@ void ScreenplayTextDocument::updateModelOnContentChange(int _position, int _char
             auto textItem = new ScreenplayTextModelTextItem;
             textItem->setCorrection(
                 block.blockFormat().boolProperty(ScreenplayBlockStyle::PropertyIsCorrection));
-            textItem->setBroken(block.blockFormat().boolProperty(
+            textItem->setCorrectionContinued(block.blockFormat().boolProperty(
+                ScreenplayBlockStyle::PropertyIsCorrectionContinued));
+            textItem->setBreakCorrectionStart(block.blockFormat().boolProperty(
                 ScreenplayBlockStyle::PropertyIsBreakCorrectionStart));
+            textItem->setBreakCorrectionEnd(block.blockFormat().boolProperty(
+                ScreenplayBlockStyle::PropertyIsBreakCorrectionEnd));
             if (tableInfo.inTable) {
                 textItem->setInFirstColumn(tableInfo.inFirstColumn);
             } else {
@@ -2018,8 +2048,12 @@ void ScreenplayTextDocument::updateModelOnContentChange(int _position, int _char
                 auto textItem = static_cast<ScreenplayTextModelTextItem*>(item);
                 textItem->setCorrection(
                     block.blockFormat().boolProperty(ScreenplayBlockStyle::PropertyIsCorrection));
-                textItem->setBroken(block.blockFormat().boolProperty(
+                textItem->setCorrectionContinued(block.blockFormat().boolProperty(
+                    ScreenplayBlockStyle::PropertyIsCorrectionContinued));
+                textItem->setBreakCorrectionStart(block.blockFormat().boolProperty(
                     ScreenplayBlockStyle::PropertyIsBreakCorrectionStart));
+                textItem->setBreakCorrectionEnd(block.blockFormat().boolProperty(
+                    ScreenplayBlockStyle::PropertyIsBreakCorrectionEnd));
                 if (tableInfo.inTable) {
                     textItem->setInFirstColumn(tableInfo.inFirstColumn);
                 } else {

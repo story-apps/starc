@@ -92,21 +92,36 @@ PageMetrics::PageMetrics(QPageSize::PageSizeId _pageFormat, const QMarginsF& _mm
 
 PageMetrics::~PageMetrics() = default;
 
-void PageMetrics::update(QPageSize::PageSizeId _pageFormat, const QMarginsF& _mmPageMargins)
+void PageMetrics::update(QPageSize::PageSizeId _pageFormat, const QMarginsF& _mmPageMargins,
+                         const QMarginsF& _pxPageMargins)
 {
+    //
+    // Должно быть задано только одно из измерений, либо оба пустые
+    //
+    Q_ASSERT((_mmPageMargins.isNull() && _pxPageMargins.isNull())
+             || (_mmPageMargins.isNull() && !_pxPageMargins.isNull())
+             || (!_mmPageMargins.isNull() && _pxPageMargins.isNull()));
+
     d->pageFormat = _pageFormat;
 
-    d->mmPageSize = QPageSize(d->pageFormat).rect(QPageSize::Millimeter).size();
-    d->mmPageMargins = _mmPageMargins;
-
-    //
-    // Рассчитываем значения в пикселах
-    //
     const bool x = true, y = false;
+    d->mmPageSize = QPageSize(d->pageFormat).rect(QPageSize::Millimeter).size();
     d->pxPageSize = QSizeF(mmToPx(d->mmPageSize.width(), x), mmToPx(d->mmPageSize.height(), y));
-    d->pxPageMargins
-        = QMarginsF(mmToPx(d->mmPageMargins.left(), x), mmToPx(d->mmPageMargins.top(), y),
-                    mmToPx(d->mmPageMargins.right(), x), mmToPx(d->mmPageMargins.bottom(), y));
+
+    if (!_mmPageMargins.isNull()) {
+        d->mmPageMargins = _mmPageMargins;
+        d->pxPageMargins
+            = QMarginsF(mmToPx(d->mmPageMargins.left(), x), mmToPx(d->mmPageMargins.top(), y),
+                        mmToPx(d->mmPageMargins.right(), x), mmToPx(d->mmPageMargins.bottom(), y));
+    } else if (!_pxPageMargins.isNull()) {
+        d->pxPageMargins = _pxPageMargins;
+        d->mmPageMargins
+            = QMarginsF(pxToMm(d->pxPageMargins.left(), x), pxToMm(d->pxPageMargins.top(), y),
+                        pxToMm(d->pxPageMargins.right(), x), pxToMm(d->pxPageMargins.bottom(), y));
+    } else {
+        d->mmPageMargins = {};
+        d->pxPageMargins = {};
+    }
 }
 
 QPageSize::PageSizeId PageMetrics::pageFormat() const

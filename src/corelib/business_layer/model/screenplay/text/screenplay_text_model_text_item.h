@@ -93,10 +93,18 @@ public:
     void setCorrection(bool _correction);
 
     /**
+     * @brief Является ли блок корректировкой вида (CONT) внутри разорванной реплики
+     */
+    bool isCorrectionContinued() const;
+    void setCorrectionContinued(bool _continued);
+
+    /**
      * @brief Разорван ли текст блока между страницами
      */
-    bool isBroken() const;
-    void setBroken(bool _broken);
+    bool isBreakCorrectionStart() const;
+    void setBreakCorrectionStart(bool _broken);
+    bool isBreakCorrectionEnd() const;
+    void setBreakCorrectionEnd(bool _broken);
 
     /**
      * @brief Находится ли элемент в первой колонке таблицы

@@ -52,8 +52,10 @@ SimpleTextSearchToolbar::Implementation::Implementation(QWidget* _parent)
     , replaceAllAction(new QAction)
     , replaceAll(new Button(_parent))
 {
+    searchText->setSpellCheckPolicy(SpellCheckPolicy::Manual);
     searchText->setUnderlineDecorationVisible(false);
 
+    replaceText->setSpellCheckPolicy(SpellCheckPolicy::Manual);
     replaceText->setUnderlineDecorationVisible(false);
 
     replace->setFocusPolicy(Qt::NoFocus);

@@ -59,7 +59,14 @@ void LocationModel::setName(const QString& _name)
 
     const auto oldName = d->name;
     d->name = _name;
-    emit nameChanged(d->name, oldName);
+
+    //
+    // Имя может быть пустым только при созданием персонажа,
+    // поэтому не испускаем сигнал в этом случае
+    //
+    if (!oldName.isEmpty()) {
+        emit nameChanged(d->name, oldName);
+    }
     emit documentNameChanged(d->name);
 }
 

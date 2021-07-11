@@ -61,6 +61,8 @@ ScreenplayInformationModel::ScreenplayInformationModel(QObject* _parent)
 {
     connect(this, &ScreenplayInformationModel::nameChanged, this,
             &ScreenplayInformationModel::updateDocumentContent);
+    connect(this, &ScreenplayInformationModel::taglineChanged, this,
+            &ScreenplayInformationModel::updateDocumentContent);
     connect(this, &ScreenplayInformationModel::loglineChanged, this,
             &ScreenplayInformationModel::updateDocumentContent);
     connect(this, &ScreenplayInformationModel::titlePageVisibleChanged, this,

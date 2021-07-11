@@ -8,6 +8,7 @@
 #include <ui/widgets/shadow/shadow.h>
 #include <ui/widgets/text_field/text_field.h>
 #include <ui/widgets/tree/tree.h>
+#include <utils/helpers/ui_helper.h>
 
 #include <QGridLayout>
 #include <QStandardItemModel>
@@ -63,8 +64,11 @@ CreateDocumentDialog::Implementation::Implementation(QWidget* _parent)
     typesModel->appendRow(makeItem(Domain::DocumentObjectType::Location));
     typesModel->appendRow(makeItem(Domain::DocumentObjectType::Screenplay));
 
+    UiHelper::setFocusPolicyRecursively(documentType, Qt::NoFocus);
     documentType->setModel(typesModel);
     documentType->setCurrentIndex(typesModel->index(0, 0));
+
+    documentName->setSpellCheckPolicy(SpellCheckPolicy::Manual);
 
     insertIntoParent->hide();
 
@@ -118,7 +122,10 @@ CreateDocumentDialog::CreateDocumentDialog(QWidget* _parent)
     contentsLayout()->setColumnStretch(0, 1);
     contentsLayout()->setColumnStretch(1, 2);
 
-    connect(d->documentType, &Tree::currentIndexChanged, this, [this] { d->updateDocumentInfo(); });
+    connect(d->documentType, &Tree::currentIndexChanged, this, [this] {
+        d->documentName->setFocus();
+        d->updateDocumentInfo();
+    });
     connect(d->createButton, &Button::clicked, this, [this] {
         const auto documentTypeData = d->documentType->currentIndex().data(kMimeTypeRole);
         Q_ASSERT(documentTypeData.isValid());

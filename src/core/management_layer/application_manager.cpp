@@ -9,6 +9,8 @@
 #include "content/projects/projects_manager.h"
 #include "content/settings/settings_manager.h"
 
+#include <ui/widgets/text_edit/scalable_wrapper/scalable_wrapper.h>
+
 #ifdef CLOUD_SERVICE_MANAGER
 #include <cloud/cloud_service_manager.h>
 #endif
@@ -24,6 +26,7 @@
 #include <ui/menu_view.h>
 #include <ui/widgets/dialog/dialog.h>
 #include <ui/widgets/dialog/standard_dialog.h>
+#include <ui/widgets/text_edit/spell_check/spell_check_text_edit.h>
 #include <utils/3rd_party/WAF/Animation/Animation.h>
 #include <utils/helpers/dialog_helper.h>
 #include <utils/tools/backup_builder.h>
@@ -36,6 +39,8 @@
 #include <QJsonDocument>
 #include <QKeyEvent>
 #include <QLocale>
+#include <QLockFile>
+#include <QScopedPointer>
 #include <QShortcut>
 #include <QSoundEffect>
 #include <QStyleFactory>
@@ -216,6 +221,11 @@ public:
     //
 
     ApplicationManager* q = nullptr;
+
+    //
+    // Используем для блокировки файла во время работы
+    //
+    QScopedPointer<QLockFile> lockFile;
 
     /**
      * @brief Интерфейс приложения
@@ -974,6 +984,20 @@ void ApplicationManager::Implementation::openProject(const QString& _path)
     //
     closeCurrentProject();
 
+    lockFile.reset(new QLockFile(_path + ".lock"));
+
+    //
+    // проверяем открыт ли файл в другом приложении
+    //
+    if (!lockFile->tryLock()) {
+        StandardDialog::information(applicationView, "",
+                                    tr("This file can't be open at this moment,\
+                                        because it is already open in another copy of the application."));
+        return;
+    }
+
+    lockFile->setStaleLockTime(0);
+
     //
     // ... переключаемся на работу с выбранным файлом
     //
@@ -1026,6 +1050,12 @@ void ApplicationManager::Implementation::closeCurrentProject()
     if (!projectsManager->currentProject().isValid()) {
         return;
     }
+
+    Q_ASSERT(!lockFile.isNull());
+    Q_ASSERT(lockFile->isLocked());
+
+    lockFile->unlock();
+    lockFile.reset();
 
     state = ApplicationState::ProjectClosing;
 
@@ -1290,8 +1320,27 @@ bool ApplicationManager::event(QEvent* _event)
         //
         // Уведомляем все виджеты о том, что сменилась дизайн система
         //
-        for (auto widget : d->applicationView->findChildren<QWidget*>()) {
+        const auto widgets = d->applicationView->findChildren<QWidget*>();
+        for (auto widget : widgets) {
             QApplication::sendEvent(widget, _event);
+        }
+        QApplication::sendEvent(d->applicationView, _event);
+
+        _event->accept();
+        return true;
+    }
+
+    case static_cast<QEvent::Type>(EventType::SpellingChangeEvent): {
+        //
+        // Уведомляем все редакторы текста о том, что сменились опции проверки орфографии
+        //
+        const auto textEdits = d->applicationView->findChildren<SpellCheckTextEdit*>();
+        for (auto textEdit : textEdits) {
+            QApplication::sendEvent(textEdit, _event);
+        }
+        const auto scalableWrappers = d->applicationView->findChildren<ScalableWrapper*>();
+        for (auto scalableWrapper : scalableWrappers) {
+            QApplication::sendEvent(scalableWrapper, _event);
         }
         QApplication::sendEvent(d->applicationView, _event);
 
@@ -1462,10 +1511,23 @@ void ApplicationManager::initConnections()
             [this] { d->showLastContent(); });
     connect(d->settingsManager.data(), &SettingsManager::applicationLanguageChanged, this,
             [this](QLocale::Language _language) { d->setTranslation(_language); });
+    //
+    auto postSpellingChangeEvent = [this] {
+        auto settingsValue = [](const QString& _key) {
+            return DataStorageLayer::StorageFacade::settingsStorage()->value(
+                _key, DataStorageLayer::SettingsStorage::SettingsPlace::Application);
+        };
+        const auto useSpellChecker
+            = settingsValue(DataStorageLayer::kApplicationUseSpellCheckerKey).toBool();
+        const auto spellingLanguage
+            = settingsValue(DataStorageLayer::kApplicationSpellCheckerLanguageKey).toString();
+        QApplication::postEvent(this, new SpellingChangeEvent(useSpellChecker, spellingLanguage));
+    };
     connect(d->settingsManager.data(), &SettingsManager::applicationUseSpellCheckerChanged, this,
-            [this] { d->projectManager->reconfigureAll(); });
+            postSpellingChangeEvent);
     connect(d->settingsManager.data(), &SettingsManager::applicationSpellCheckerLanguageChanged,
-            this, [this] { d->projectManager->reconfigureAll(); });
+            this, postSpellingChangeEvent);
+    //
     connect(d->settingsManager.data(), &SettingsManager::applicationThemeChanged, this,
             [this](Ui::ApplicationTheme _theme) {
                 d->setTheme(_theme);

@@ -15,6 +15,7 @@ public:
 
     ImageCropper* imageCropper = nullptr;
     Body1Label* imageCroppingLabel = nullptr;
+    // Body1Label* imageCroppingNote = nullptr;
     QHBoxLayout* buttonsLayout = nullptr;
     Button* cancelButton = nullptr;
     Button* selectButton = nullptr;
@@ -42,11 +43,14 @@ ImageCroppingDialog::ImageCroppingDialog(QWidget* _parent)
     : AbstractDialog(_parent)
     , d(new Implementation(this))
 {
+    setRejectButton(d->cancelButton);
+
     contentsLayout()->setContentsMargins({});
     contentsLayout()->setSpacing(0);
     contentsLayout()->addWidget(d->imageCropper, 0, 0);
-    contentsLayout()->addWidget(d->imageCroppingLabel, 1, 0);
-    contentsLayout()->addLayout(d->buttonsLayout, 2, 0);
+    // contentsLayout()->addWidget(d->imageCroppingNote, 1, 0);
+    contentsLayout()->addWidget(d->imageCroppingLabel, 2, 0);
+    contentsLayout()->addLayout(d->buttonsLayout, 3, 0);
 
     connect(d->cancelButton, &Button::clicked, this, &ImageCroppingDialog::hideDialog);
     connect(d->selectButton, &Button::clicked, this, [this] {
@@ -94,6 +98,7 @@ void ImageCroppingDialog::updateTranslations()
 {
     d->cancelButton->setText(tr("Cancel"));
     d->selectButton->setText(tr("Select"));
+    d->imageCroppingLabel->setText(tr("Select an area for project cover"));
 }
 
 void ImageCroppingDialog::designSystemChangeEvent(DesignSystemChangeEvent* _event)

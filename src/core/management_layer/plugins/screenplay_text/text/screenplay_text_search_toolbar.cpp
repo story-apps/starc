@@ -73,6 +73,7 @@ ScreenplayTextSearchToolbar::Implementation::Implementation(QWidget* _parent)
     , replaceAllAction(new QAction)
     , replaceAll(new Button(_parent))
 {
+    searchText->setSpellCheckPolicy(SpellCheckPolicy::Manual);
     searchText->setUnderlineDecorationVisible(false);
 
     popup->setWindowFlags(Qt::SplashScreen | Qt::FramelessWindowHint | Qt::NoDropShadowWindowHint);
@@ -94,6 +95,7 @@ ScreenplayTextSearchToolbar::Implementation::Implementation(QWidget* _parent)
     popupHeightAnimation.setStartValue(0);
     popupHeightAnimation.setEndValue(0);
 
+    replaceText->setSpellCheckPolicy(SpellCheckPolicy::Manual);
     replaceText->setUnderlineDecorationVisible(false);
 
     replace->setFocusPolicy(Qt::NoFocus);

@@ -15,6 +15,7 @@
 #include <ui/widgets/floating_tool_bar/floating_toolbar_animator.h>
 #include <ui/widgets/scroll_bar/scroll_bar.h>
 #include <ui/widgets/text_edit/scalable_wrapper/scalable_wrapper.h>
+#include <utils/helpers/ui_helper.h>
 
 #include <QStandardItem>
 #include <QStandardItemModel>
@@ -201,21 +202,14 @@ void SimpleTextView::reconfigure(const QStringList& _changedSettingsKeys)
         d->paragraphTypesModel->appendRow(typeItem);
     }
 
+    UiHelper::initSpellingFor(d->textEdit);
+
+    d->shortcutsManager.reconfigure();
+
     auto settingsValue = [](const QString& _key) {
         return DataStorageLayer::StorageFacade::settingsStorage()->value(
             _key, DataStorageLayer::SettingsStorage::SettingsPlace::Application);
     };
-
-    const bool useSpellChecker
-        = settingsValue(DataStorageLayer::kApplicationUseSpellCheckerKey).toBool();
-    d->textEdit->setUseSpellChecker(useSpellChecker);
-    if (useSpellChecker) {
-        const QString languageCode
-            = settingsValue(DataStorageLayer::kApplicationSpellCheckerLanguageKey).toString();
-        d->textEdit->setSpellCheckLanguage(languageCode);
-    }
-
-    d->shortcutsManager.reconfigure();
 
     if (_changedSettingsKeys.isEmpty()
         || _changedSettingsKeys.contains(

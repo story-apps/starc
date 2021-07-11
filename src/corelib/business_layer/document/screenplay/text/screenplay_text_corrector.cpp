@@ -192,10 +192,10 @@ public:
     struct {
         bool isValid = false;
         int position = 0;
-        int changed = 0;
+        int lenght = 0;
         int end() const
         {
-            return position + changed;
+            return position + lenght;
         }
     } plannedCorrection;
 
@@ -498,6 +498,7 @@ void ScreenplayTextCorrector::Implementation::correctPageBreaks(int _position)
     //
     qreal lastBlockHeight = 0.0;
     currentBlockInfo = {};
+    bool isFirstChangedBlock = true;
     while (block.isValid()) {
         //
         // Запомним самый нижний блок, когда находимся в таблице
@@ -638,18 +639,30 @@ void ScreenplayTextCorrector::Implementation::correctPageBreaks(int _position)
 
 
         //
-        // Если в блоке сменилось расположение или высота, проверяем также ближайшие блоки,
-        // чтобы корректно обработать ситуацию, когда в блоке удалили текст и теперь он может
-        // быть помещён на предыдущей странице
+        // Если это первый из блоков, в котором сменилось расположение или высота, проверяем также
+        // ближайшие блоки, чтобы корректно обработать ситуацию, когда в блоке удалили текст
+        // и теперь он может быть помещён на предыдущей странице
         //
-        if (blockItems[currentBlockInfo.number].isValid()) {
+        if (isFirstChangedBlock && blockItems[currentBlockInfo.number].isValid()) {
+            isFirstChangedBlock = false;
+            int topIndex = currentBlockInfo.number;
             const auto maxDecorationBlocks = 2;
-            const int topIndex = std::max(0, currentBlockInfo.number - maxDecorationBlocks);
-            if (topIndex == 0) {
-                block = document->begin();
-                lastBlockHeight = 0;
-            } else {
-                block = block.previous().previous();
+            for (int i = 0; i < maxDecorationBlocks; ++i) {
+                if (topIndex == 0) {
+                    lastBlockHeight = 0;
+                    break;
+                }
+
+                //
+                // Контролируем, чтобы расположение блоков не переходило через границу таблицы
+                //
+                if (ScreenplayBlockStyle::forBlock(block.previous())
+                    == ScreenplayParagraphType::PageSplitter) {
+                    break;
+                }
+
+                block = block.previous();
+                --topIndex;
                 lastBlockHeight = blockItems[topIndex].top;
             }
             currentBlockInfo.number = topIndex;
@@ -1868,14 +1881,14 @@ void ScreenplayTextCorrector::planCorrection(int _position, int _charsRemoved, i
     //
     else if (d->plannedCorrection.position > _position) {
         const auto newPosition = _position;
-        const auto newChanged = std::max(_charsRemoved, _charsAdded);
+        const auto newLenght = std::max(_charsRemoved, _charsAdded);
         if (newPosition < d->plannedCorrection.position) {
-            d->plannedCorrection.changed += d->plannedCorrection.position - newPosition;
+            d->plannedCorrection.lenght += d->plannedCorrection.position - newPosition;
             d->plannedCorrection.position = newPosition;
         }
-        const auto newEnd = newPosition + newChanged;
+        const auto newEnd = newPosition + newLenght;
         if (newEnd > d->plannedCorrection.end()) {
-            d->plannedCorrection.changed = newEnd - d->plannedCorrection.position;
+            d->plannedCorrection.lenght = newEnd - d->plannedCorrection.position;
         }
     }
 }
@@ -1886,7 +1899,7 @@ void ScreenplayTextCorrector::makePlannedCorrection()
         return;
     }
 
-    correct(d->plannedCorrection.position, d->plannedCorrection.changed);
+    correct(d->plannedCorrection.position, d->plannedCorrection.lenght);
     d->plannedCorrection = {};
 }
 

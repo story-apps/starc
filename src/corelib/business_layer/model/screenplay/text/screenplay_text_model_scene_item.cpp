@@ -178,12 +178,33 @@ ScreenplayTextModelSceneItem::Number ScreenplayTextModelSceneItem::number() cons
     return *d->number;
 }
 
-void ScreenplayTextModelSceneItem::setNumber(int _number, const QString& _prefix)
+bool ScreenplayTextModelSceneItem::setNumber(int _number, const QString& _prefix)
 {
+    if (childCount() == 0) {
+        return false;
+    }
+
+    bool hasContent = false;
+    for (int childIndex = 0; childIndex < childCount(); ++childIndex) {
+        const auto child = childAt(childIndex);
+        if (child->type() != ScreenplayTextModelItemType::Text) {
+            continue;
+        }
+
+        const auto textItemChild = static_cast<const ScreenplayTextModelTextItem*>(child);
+        if (!textItemChild->isCorrection()) {
+            hasContent = true;
+            break;
+        }
+    }
+    if (!hasContent) {
+        return false;
+    }
+
     const auto newNumber = QString(QLocale().textDirection() == Qt::LeftToRight ? "%1%2." : ".%2%1")
                                .arg(_prefix, QString::number(_number));
     if (d->number.has_value() && d->number->value == newNumber) {
-        return;
+        return true;
     }
 
     d->number = { newNumber };
@@ -191,6 +212,8 @@ void ScreenplayTextModelSceneItem::setNumber(int _number, const QString& _prefix
     // Т.к. пока мы не сохраняем номера, в указании, что произошли изменения нет смысла
     //
     //    setChanged(true);
+
+    return true;
 }
 
 std::chrono::milliseconds ScreenplayTextModelSceneItem::duration() const
@@ -292,18 +315,12 @@ QByteArray ScreenplayTextModelSceneItem::xmlHeader(bool _clearUuid) const
     //
     // TODO: plots
     //
-    if (_clearUuid) {
-        xml += QString("<%1 %2=\"%3\" %4>\n")
-                   .arg(xml::kSceneTag, xml::kPlotsAttribute, {},
-                        (d->isOmited ? QString("%1=\"true\"").arg(xml::kOmitedAttribute) : ""))
-                   .toUtf8();
-    } else {
-        xml += QString("<%1 %2=\"%3\" %4=\"%5\" %6>\n")
-                   .arg(xml::kSceneTag, xml::kUuidAttribute, d->uuid.toString(),
-                        xml::kPlotsAttribute, {},
-                        (d->isOmited ? QString("%1=\"true\"").arg(xml::kOmitedAttribute) : ""))
-                   .toUtf8();
-    }
+    xml += QString("<%1 %2=\"%3\" %4=\"%5\" %6>\n")
+               .arg(xml::kSceneTag, xml::kUuidAttribute,
+                    _clearUuid ? QUuid::createUuid().toString() : d->uuid.toString(),
+                    xml::kPlotsAttribute, {},
+                    (d->isOmited ? QString("%1=\"true\"").arg(xml::kOmitedAttribute) : ""))
+               .toUtf8();
     //
     // TODO: Номера будем сохранять только когда они кастомные или фиксированные
     //

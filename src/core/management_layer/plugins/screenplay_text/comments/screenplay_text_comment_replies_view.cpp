@@ -12,6 +12,7 @@
 #include <ui/widgets/shadow/shadow.h>
 #include <ui/widgets/text_field/text_field.h>
 #include <utils/helpers/color_helper.h>
+#include <utils/helpers/ui_helper.h>
 
 #include <QBoxLayout>
 #include <QDateTime>
@@ -57,6 +58,7 @@ ScreenplayTextCommentRepliesView::Implementation::Implementation(QWidget* _paren
     repliesViewContainer->setWidget(repliesView);
     repliesViewContainer->setWidgetResizable(true);
 
+    UiHelper::initSpellingFor(replyTextField);
     replyTextField->setEnterMakesNewLine(true);
     replyTextField->setTrailingIcon(u8"\U000f048A");
     replyTextField->setUnderlineDecorationVisible(false);

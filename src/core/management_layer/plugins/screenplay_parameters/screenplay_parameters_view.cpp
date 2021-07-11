@@ -62,6 +62,11 @@ ScreenplayParametersView::Implementation::Implementation(QWidget* _parent)
     screenplayInfoLayout->setColumnStretch(0, 1);
     screenplayInfo->setLayoutReimpl(screenplayInfoLayout);
 
+    screenplayHeader->setSpellCheckPolicy(SpellCheckPolicy::Manual);
+    screenplayFooter->setSpellCheckPolicy(SpellCheckPolicy::Manual);
+    scenesNumbersPrefix->setSpellCheckPolicy(SpellCheckPolicy::Manual);
+    scenesNumberingStartAt->setSpellCheckPolicy(SpellCheckPolicy::Manual);
+
     QWidget* contentWidget = new QWidget;
     content->setWidget(contentWidget);
     content->setWidgetResizable(true);

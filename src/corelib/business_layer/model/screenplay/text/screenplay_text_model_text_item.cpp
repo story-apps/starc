@@ -50,9 +50,15 @@ public:
     bool isCorrection = false;
 
     /**
+     * @brief Является ли блок корректировкой вида (CONT) внутри разорванной реплики
+     */
+    bool isCorrectionContinued = false;
+
+    /**
      * @brief Разорван ли блок на разрыве страниц
      */
-    bool isBroken = false;
+    bool isBreakCorrectionStart = false;
+    bool isBreakCorrectionEnd = false;
 
     /**
      * @brief Находится ли элемент в таблице, и если находится, то в какой колонке
@@ -550,18 +556,46 @@ void ScreenplayTextModelTextItem::setCorrection(bool _correction)
     }
 }
 
-bool ScreenplayTextModelTextItem::isBroken() const
+bool ScreenplayTextModelTextItem::isCorrectionContinued() const
 {
-    return d->isBroken;
+    return d->isCorrectionContinued;
 }
 
-void ScreenplayTextModelTextItem::setBroken(bool _broken)
+void ScreenplayTextModelTextItem::setCorrectionContinued(bool _continued)
 {
-    if (d->isBroken == _broken) {
+    if (d->isCorrectionContinued == _continued) {
         return;
     }
 
-    d->isBroken = _broken;
+    d->isCorrectionContinued = _continued;
+}
+
+bool ScreenplayTextModelTextItem::isBreakCorrectionStart() const
+{
+    return d->isBreakCorrectionStart;
+}
+
+void ScreenplayTextModelTextItem::setBreakCorrectionStart(bool _broken)
+{
+    if (d->isBreakCorrectionStart == _broken) {
+        return;
+    }
+
+    d->isBreakCorrectionStart = _broken;
+}
+
+bool ScreenplayTextModelTextItem::isBreakCorrectionEnd() const
+{
+    return d->isBreakCorrectionEnd;
+}
+
+void ScreenplayTextModelTextItem::setBreakCorrectionEnd(bool _broken)
+{
+    if (d->isBreakCorrectionEnd == _broken) {
+        return;
+    }
+
+    d->isBreakCorrectionEnd = _broken;
 }
 
 std::optional<bool> ScreenplayTextModelTextItem::isInFirstColumn() const

@@ -1997,12 +1997,13 @@ void PageTextEditPrivate::clipPageDecorationRegions(QPainter* _painter)
     }
 
     QSizeF pageSize(m_pageMetrics.pxPageSize());
+    pageSize.setHeight(pageSize.height() + m_pageSpacing);
     QMarginsF pageMargins(m_pageMetrics.pxPageMargins());
 
     //
     // Текущие высота и ширина которые отображаются на экране
     //
-    qreal curHeight = pageSize.height() - (vbar->value() % int(pageSize.height()));
+    qreal currentPageBottom = pageSize.height() - (vbar->value() % int(pageSize.height()));
 
     //
     // Начало поля должно учитывать смещение полосы прокрутки
@@ -2021,8 +2022,9 @@ void PageTextEditPrivate::clipPageDecorationRegions(QPainter* _painter)
     //
     // Верхнее поле первой страницы на экране, когда не видно предыдущей страницы
     //
-    if (curHeight - pageMargins.top() >= 0) {
-        QRect topMarginRect(leftMarginPosition, curHeight - pageSize.height(), marginWidth,
+    if (currentPageBottom - pageSize.height() + pageMargins.top() + m_pageSpacing >= 0) {
+        QRect topMarginRect(leftMarginPosition,
+                            currentPageBottom - pageSize.height() + m_pageSpacing, marginWidth,
                             pageMargins.top());
         clipPath = clipPath.xored(topMarginRect);
     }
@@ -2030,24 +2032,24 @@ void PageTextEditPrivate::clipPageDecorationRegions(QPainter* _painter)
     //
     // Для всех видимых страниц
     //
-    while (curHeight < q->height()) {
+    while (currentPageBottom - pageMargins.bottom() < q->height()) {
         //
         // Определить прямоугольник начинающийся от начала нижнего поля и до конца верхнего поля
         // следующей страницы
         //
-        QRect bottomMarginRect(leftMarginPosition, curHeight - pageMargins.bottom(), marginWidth,
-                               pageMargins.bottom() + pageMargins.top());
+        const QRect bottomMarginRect(leftMarginPosition, currentPageBottom - pageMargins.bottom(),
+                                     marginWidth, pageMargins.bottom() + pageMargins.top());
         clipPath = clipPath.xored(bottomMarginRect);
 
-        curHeight += pageSize.height();
-    }
+        //
+        // Определить прямоугольник верхнего поля следующей страницы
+        //
+        const QRect topMarginRect(leftMarginPosition, currentPageBottom + m_pageSpacing,
+                                  marginWidth, pageMargins.top());
+        clipPath = clipPath.xored(topMarginRect);
 
-    //
-    // Определить прямоугольник нижнего поля когда на экране одна страница
-    //
-    QRect bottomMarginRect(leftMarginPosition, curHeight - pageMargins.bottom(), marginWidth,
-                           pageMargins.bottom());
-    clipPath = clipPath.xored(bottomMarginRect);
+        currentPageBottom += pageSize.height();
+    }
 
     _painter->setClipRegion(clipPath);
 }
@@ -3515,7 +3517,7 @@ void PageTextEdit::setPageFormat(QPageSize::PageSizeId _pageFormat)
     d->relayoutDocument();
 }
 
-void PageTextEdit::setPageMargins(const QMarginsF& _margins)
+void PageTextEdit::setPageMarginsMm(const QMarginsF& _margins)
 {
     Q_D(PageTextEdit);
     if (d->m_pageMetrics.mmPageMargins() == _margins) {
@@ -3523,6 +3525,17 @@ void PageTextEdit::setPageMargins(const QMarginsF& _margins)
     }
 
     d->m_pageMetrics.update(d->m_pageMetrics.pageFormat(), _margins);
+    d->relayoutDocument();
+}
+
+void PageTextEdit::setPageMarginsPx(const QMarginsF& _margins)
+{
+    Q_D(PageTextEdit);
+    if (d->m_pageMetrics.pxPageMargins() == _margins) {
+        return;
+    }
+
+    d->m_pageMetrics.update(d->m_pageMetrics.pageFormat(), {}, _margins);
     d->relayoutDocument();
 }
 
@@ -3640,13 +3653,7 @@ ContextMenu* PageTextEdit::createContextMenu(const QPoint& _position, QWidget* _
         setTextCursor(cursor);
     }
 
-    auto formattingAction = new QAction;
-    formattingAction->setVisible(false);
-    formattingAction->setText(tr(""));
-    formattingAction->setIconText(u8"\U000f10e7");
-
     auto cutAction = new QAction;
-    cutAction->setSeparator(true);
     cutAction->setEnabled(textCursor().hasSelection());
     cutAction->setText(tr("Cut"));
     cutAction->setIconText(u8"\U000F0190");
@@ -3675,7 +3682,7 @@ ContextMenu* PageTextEdit::createContextMenu(const QPoint& _position, QWidget* _
     connect(selectAllAction, &QAction::triggered, this, &PageTextEdit::selectAll);
 
     auto menu = new ContextMenu(_parent == nullptr ? this : _parent);
-    menu->addActions({ formattingAction, cutAction, copyAction, pasteAction, selectAllAction });
+    menu->setActions({ cutAction, copyAction, pasteAction, selectAllAction });
     menu->setBackgroundColor(Ui::DesignSystem::color().background());
     menu->setTextColor(Ui::DesignSystem::color().onBackground());
     return menu;
