@@ -1880,6 +1880,7 @@ public:
     QMarginsF pageMargins = { 16.0, 26.0, 16.0, 16.0 };
     qreal pageSpacing = 16.0;
     qreal inactiveTextOpacity = 0.68;
+    qreal inactiveItemOpacity = 0.4;
     qreal disabledTextOpacity = 0.46;
     qreal hoverBackgroundOpacity = 0.12;
     qreal focusBackgroundOpacity = 0.20;
@@ -2095,6 +2096,11 @@ qreal DesignSystem::pageSpacing()
 qreal DesignSystem::inactiveTextOpacity()
 {
     return instance()->d->inactiveTextOpacity;
+}
+
+qreal DesignSystem::inactiveItemOpacity()
+{
+    return instance()->d->inactiveItemOpacity;
 }
 
 qreal DesignSystem::disabledTextOpacity()

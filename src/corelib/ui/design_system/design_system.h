@@ -1137,6 +1137,11 @@ public:
     static qreal inactiveTextOpacity();
 
     /**
+     * @brief Прозрачность неактивного элемента
+     */
+    static qreal inactiveItemOpacity();
+
+    /**
      * @brief Прозрачность недоступного текста
      */
     static qreal disabledTextOpacity();

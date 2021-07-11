@@ -158,6 +158,7 @@ SOURCES += \
     ui/widgets/image_cropper/image_cropper.cpp \
     ui/widgets/label/label.cpp \
     ui/widgets/label/link_label.cpp \
+    ui/widgets/pie/pie.cpp \
     ui/widgets/radio_button/radio_button.cpp \
     ui/widgets/radio_button/radio_button_group.cpp \
     ui/widgets/scroll_bar/scroll_bar.cpp \
@@ -322,6 +323,7 @@ HEADERS += \
     ui/widgets/image_cropper/image_cropper.h \
     ui/widgets/label/label.h \
     ui/widgets/label/link_label.h \
+    ui/widgets/pie/pie.h \
     ui/widgets/radio_button/radio_button.h \
     ui/widgets/radio_button/radio_button_group.h \
     ui/widgets/scroll_bar/scroll_bar.h \
