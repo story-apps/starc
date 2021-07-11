@@ -195,7 +195,7 @@ void Pie::Implementation::insertSlices(const QModelIndex& _parent, int _first, i
     auto iter = slices.begin();
     std::advance(iter, _first);
 
-    for (int i = _first; i <= _last; i++) {
+    for (int i = _first; i <= _last; ++i) {
         auto slice = new Implementation::Slice();
         auto ok = false;
 
@@ -373,14 +373,12 @@ void Pie::Implementation::invalidteSelectedSlice()
 
 void Pie::Implementation::animateSelectedSlice()
 {
-    sliceOpacityAnimation.setCurrentTime(0);
     sliceOpacityAnimation.setDirection(QVariantAnimation::Forward);
     sliceOpacityAnimation.start();
 }
 
 void Pie::Implementation::animateDeselectedSlice()
 {
-    sliceOpacityAnimation.setCurrentTime(0);
     sliceOpacityAnimation.setDirection(QVariantAnimation::Backward);
     sliceOpacityAnimation.start();
 }
