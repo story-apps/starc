@@ -984,11 +984,12 @@ void ApplicationManager::Implementation::openProject(const QString& _path)
     //
     closeCurrentProject();
 
-    lockFile.reset(new QLockFile(_path + ".lock"));
-
     //
-    // проверяем открыт ли файл в другом приложении
+    // ... проверяем открыт ли файл в другом приложении
     //
+    const QFileInfo projectFileInfo(_path);
+    lockFile.reset(new QLockFile(
+        QString("%1/.~lock.%2").arg(projectFileInfo.absolutePath(), projectFileInfo.fileName())));
     if (!lockFile->tryLock()) {
         StandardDialog::information(applicationView, "",
                                     tr("This file can't be open at this moment,\
