@@ -239,6 +239,27 @@ public:
     };
 
     /**
+     * @brief Параметры контекстного меню
+     */
+    class CORE_LIBRARY_EXPORT ContextMenu
+    {
+    public:
+        ~ContextMenu();
+
+        /**
+         * @brief Отступы контента
+         */
+        const QMarginsF& margins() const;
+
+    private:
+        explicit ContextMenu(qreal _scaleFactor);
+        friend class DesignSystemPrivate;
+
+        class Implementation;
+        QScopedPointer<Implementation> d;
+    };
+
+    /**
      * @brief Параметры виджета текстовой метки
      */
     class CORE_LIBRARY_EXPORT Label
@@ -1164,6 +1185,11 @@ public:
      * @brief Параметры текстовой метки
      */
     static const Label& label();
+
+    /**
+     * @brief Параметры контестного меню
+     */
+    static const ContextMenu& contextMenu();
 
     /**
      * @brief Параметры кнопки
