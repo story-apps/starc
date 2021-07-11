@@ -83,7 +83,7 @@ public:
     /**
      * @brief Определяем существует ли выделенный кусочек
      */
-    void invalidteSelectedSlice();
+    void invalidateSelectedSlice();
 
     /**
      * @brief Анимировать выбор кусочка
@@ -224,7 +224,7 @@ void Pie::Implementation::removeSlices(const QModelIndex& _parent, int _first, i
     std::advance(rangeEnd, _last);
 
     slices.erase(rangeBegin, rangeEnd);
-    invalidteSelectedSlice();
+    invalidateSelectedSlice();
 
     recalculateSlices();
     updateSelectedSlice();
@@ -262,7 +262,7 @@ void Pie::Implementation::updateSlices(const QModelIndex& _topLeft, const QModel
     }
 
     if (isSomethingChanged) {
-        invalidteSelectedSlice();
+        invalidateSelectedSlice();
 
         recalculateSlices();
         updateSelectedSlice();
@@ -355,7 +355,7 @@ void Pie::Implementation::recalculateSlices()
     }
 }
 
-void Pie::Implementation::invalidteSelectedSlice()
+void Pie::Implementation::invalidateSelectedSlice()
 {
     if (!selectedSlice) {
         return;
