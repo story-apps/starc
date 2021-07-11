@@ -80,7 +80,7 @@ SOURCES += \
     business_layer/import/screenplay/fountain_importer.cpp \
     business_layer/import/screenplay/kit_scenarist_importer.cpp \
     business_layer/import/screenplay/trelby_importer.cpp \
-    business_layer/import/text/markdown_improter.cpp \
+    business_layer/import/text/markdown_importer.cpp \
     business_layer/model/abstract_model.cpp \
     business_layer/model/abstract_model_item.cpp \
     business_layer/model/abstract_model_xml.cpp \
@@ -237,7 +237,7 @@ HEADERS += \
     business_layer/import/screenplay/screenlay_import_options.h \
     business_layer/import/screenplay/trelby_importer.h \
     business_layer/import/text/abstract_text_importer.h \
-    business_layer/import/text/markdown_improter.h \
+    business_layer/import/text/markdown_importer.h \
     business_layer/import/text/text_import_options.h \
     business_layer/model/abstract_image_wrapper.h \
     business_layer/model/abstract_model.h \
