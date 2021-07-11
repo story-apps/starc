@@ -42,10 +42,10 @@ public:
 };
 
 Splitter::Implementation::Implementation(QWidget* _parent)
-    : handle(new Widget(_parent)),
-      showHiddenPanelToolbar(new FloatingToolBar(_parent)),
-      showLeftPanelAction(new QAction(showHiddenPanelToolbar)),
-      showRightPanelAction(new QAction(showHiddenPanelToolbar))
+    : handle(new Widget(_parent))
+    , showHiddenPanelToolbar(new FloatingToolBar(_parent))
+    , showLeftPanelAction(new QAction(showHiddenPanelToolbar))
+    , showRightPanelAction(new QAction(showHiddenPanelToolbar))
 {
     handle->setBackgroundColor(Qt::transparent);
     handle->setCursor(Qt::SplitHCursor);
@@ -64,9 +64,7 @@ QVector<int> Splitter::Implementation::widgetsSizes() const
 {
     QVector<int> sizes;
     for (auto widget : widgets) {
-        sizes.append(orientation == Qt::Horizontal
-                     ? widget->width()
-                     : widget->height());
+        sizes.append(orientation == Qt::Horizontal ? widget->width() : widget->height());
     }
     return sizes;
 }
@@ -102,14 +100,15 @@ void Splitter::Implementation::animateShowHiddenPanelToolbar(const QPointF& _fin
         }
 
         showHiddenPanelToolbarPositionAnimation.setDirection(QVariantAnimation::Forward);
-        const QPointF startPosition(_finalPosition.x() < 0
-                                    ? -1 * showHiddenPanelToolbar->width()
-                                    : _finalPosition.x() + (showHiddenPanelToolbar->width() / 2),
+        const QPointF startPosition(_finalPosition.x() < 0 ? -1 * showHiddenPanelToolbar->width()
+                                                           : _finalPosition.x()
+                                            + (showHiddenPanelToolbar->width() / 2),
                                     _finalPosition.y());
         showHiddenPanelToolbarPositionAnimation.setStartValue(startPosition);
         showHiddenPanelToolbarPositionAnimation.setEndValue(_finalPosition);
 
-        showHiddenPanelToolbar->move(showHiddenPanelToolbarPositionAnimation.startValue().toPointF().toPoint());
+        showHiddenPanelToolbar->move(
+            showHiddenPanelToolbarPositionAnimation.startValue().toPointF().toPoint());
         showHiddenPanelToolbar->show();
     }
     //
@@ -124,8 +123,9 @@ void Splitter::Implementation::animateShowHiddenPanelToolbar(const QPointF& _fin
 
         showHiddenPanelToolbarPositionAnimation.setDirection(QVariantAnimation::Backward);
         const QPointF startPosition(showHiddenPanelToolbar->pos().x() < 0
-                                    ? -1 * showHiddenPanelToolbar->width()
-                                    : showHiddenPanelToolbar->pos().x() + (showHiddenPanelToolbar->width() / 2),
+                                        ? -1 * showHiddenPanelToolbar->width()
+                                        : showHiddenPanelToolbar->pos().x()
+                                            + (showHiddenPanelToolbar->width() / 2),
                                     showHiddenPanelToolbar->pos().y());
         showHiddenPanelToolbarPositionAnimation.setStartValue(startPosition);
         showHiddenPanelToolbarPositionAnimation.setEndValue(QPointF(showHiddenPanelToolbar->pos()));
@@ -139,21 +139,25 @@ void Splitter::Implementation::animateShowHiddenPanelToolbar(const QPointF& _fin
 
 
 Splitter::Splitter(QWidget* _parent)
-    : Widget(_parent),
-      d(new Implementation(this))
+    : Widget(_parent)
+    , d(new Implementation(this))
 {
     d->handle->installEventFilter(this);
 
     connect(d->showLeftPanelAction, &QAction::triggered, this, [this] { setSizes({ 2, 7 }); });
     connect(d->showRightPanelAction, &QAction::triggered, this, [this] { setSizes({ 7, 2 }); });
-    connect(&d->showHiddenPanelToolbarPositionAnimation, &QVariantAnimation::valueChanged, this, [this] {
-        d->showHiddenPanelToolbar->move(d->showHiddenPanelToolbarPositionAnimation.currentValue().toPoint());
-    });
-    connect(&d->showHiddenPanelToolbarPositionAnimation, &QVariantAnimation::finished, this, [this] {
-        if (d->showHiddenPanelToolbarPositionAnimation.direction() == QVariantAnimation::Backward) {
-            d->showHiddenPanelToolbar->hide();
-        }
-    });
+    connect(&d->showHiddenPanelToolbarPositionAnimation, &QVariantAnimation::valueChanged, this,
+            [this] {
+                d->showHiddenPanelToolbar->move(
+                    d->showHiddenPanelToolbarPositionAnimation.currentValue().toPoint());
+            });
+    connect(&d->showHiddenPanelToolbarPositionAnimation, &QVariantAnimation::finished, this,
+            [this] {
+                if (d->showHiddenPanelToolbarPositionAnimation.direction()
+                    == QVariantAnimation::Backward) {
+                    d->showHiddenPanelToolbar->hide();
+                }
+            });
 
     updateTranslations();
     designSystemChangeEvent(nullptr);
@@ -175,7 +179,7 @@ void Splitter::setWidgets(QWidget* _first, QWidget* _second)
     //
     // Сохраняем виджеты
     //
-    auto addWidget = [this] (QWidget* _widget){
+    auto addWidget = [this](QWidget* _widget) {
         d->widgets.append(_widget);
         if (_widget->parent() != this) {
             _widget->setParent(this);
@@ -188,8 +192,7 @@ void Splitter::setWidgets(QWidget* _first, QWidget* _second)
     //
     // Настроим дефолтный размер
     //
-    setSizes({ _first->isVisible() ? 1 : 0,
-               _second->isVisible() ? 1 : 0 });
+    setSizes({ _first->isVisible() ? 1 : 0, _second->isVisible() ? 1 : 0 });
 
     //
     // Поднимем хендл, чтобы не терять управление
@@ -261,8 +264,7 @@ void Splitter::setSizes(const QVector<int>& _sizes)
     //
     // Позиционируем хэндл
     //
-    const QRect handleGeometry(widgets.constFirst()->geometry().right() - 2, 0,
-                               5, height());
+    const QRect handleGeometry(widgets.constFirst()->geometry().right() - 2, 0, 5, height());
     d->handle->setGeometry(handleGeometry);
     //
     // ... и кнопку отображения скрытой панели
@@ -270,18 +272,19 @@ void Splitter::setSizes(const QVector<int>& _sizes)
     if ((widgets.constFirst()->geometry().isEmpty() && widgets.constFirst()->isVisible())
         || (widgets.constLast()->geometry().isEmpty() && widgets.constLast()->isVisible())) {
         if (_sizes.constFirst() == 0) {
-            d->showHiddenPanelToolbar->setActionCustomWidth(d->showRightPanelAction, Ui::DesignSystem::layout().px8());
+            d->showHiddenPanelToolbar->setActionCustomWidth(d->showRightPanelAction,
+                                                            Ui::DesignSystem::layout().px8());
             d->showHiddenPanelToolbar->clearActionCustomWidth(d->showLeftPanelAction);
         } else {
-            d->showHiddenPanelToolbar->setActionCustomWidth(d->showLeftPanelAction, Ui::DesignSystem::layout().px8());
+            d->showHiddenPanelToolbar->setActionCustomWidth(d->showLeftPanelAction,
+                                                            Ui::DesignSystem::layout().px8());
             d->showHiddenPanelToolbar->clearActionCustomWidth(d->showRightPanelAction);
         }
         d->showHiddenPanelToolbar->resize(d->showHiddenPanelToolbar->sizeHint());
 
-        d->animateShowHiddenPanelToolbar(QPointF(handleGeometry.center().x()
-                                                 - (d->showHiddenPanelToolbar->width() / 2),
-                                                 (height()
-                                                  - d->showHiddenPanelToolbar->height()) / 2));
+        d->animateShowHiddenPanelToolbar(
+            QPointF(handleGeometry.center().x() - (d->showHiddenPanelToolbar->width() / 2),
+                    (height() - d->showHiddenPanelToolbar->height()) / 2));
     } else {
         d->animateShowHiddenPanelToolbar({});
     }
@@ -328,18 +331,19 @@ bool Splitter::event(QEvent* _event)
     // чтобы перекомпоновать содержимое
     //
     switch (_event->type()) {
-        case QEvent::LayoutDirectionChange: {
-            setSizes(d->widgetsSizes());
-            break;
-        }
+    case QEvent::LayoutDirectionChange: {
+        setSizes(d->widgetsSizes());
+        break;
+    }
 
-        case QEvent::WindowStateChange: {
-            const auto event = static_cast<QWindowStateChangeEvent*>(_event);
-//            event->
-            break;
-        }
+    case QEvent::WindowStateChange: {
+        const auto event = static_cast<QWindowStateChangeEvent*>(_event);
+        //            event->
+        break;
+    }
 
-        default: break;
+    default:
+        break;
     }
 
     return Widget::event(_event);
@@ -364,78 +368,80 @@ bool Splitter::eventFilter(QObject* _watched, QEvent* _event)
     const char* lastSizeKey = "last-size";
 
     switch (_event->type()) {
-        //
-        // При смещении разделителя, корректируем размеры вложенных виджетов
-        //
-        case QEvent::MouseMove: {
-            if (_watched == d->handle) {
-                auto mouseEvent = static_cast<QMouseEvent*>(_event);
-                const auto maxSize = d->orientation == Qt::Horizontal ? width() : height();
-                const auto firstWidgetSize = std::min(std::max(0, mapFromGlobal(mouseEvent->globalPos()).x()),
-                                                      maxSize + 1); // Без единицы от второго виджета торчит однопиксельный край
-                if (isLeftToRight()) {
-                    setSizes({ firstWidgetSize, maxSize - firstWidgetSize });
-                } else {
-                    setSizes({ maxSize - firstWidgetSize, firstWidgetSize });
-                }
-            }
-            break;
-        }
-
-        //
-        // При отображении одного из вложенных виджетов, пробуем восстановить его размер
-        //
-        case QEvent::Show: {
-            auto widget = qobject_cast<QWidget*>(_watched);
-            const auto widgetIndex = d->widgets.indexOf(widget);
-            if (widgetIndex == -1) {
-                break;
-            }
-
-            if (d->sizes.at(widgetIndex) > 0) {
-                break;
-            }
-
-            int widgetSize = widget->property(lastSizeKey).toInt();
-            if (widgetSize <= 0) {
-                const auto widgetSizeHint = widget->sizeHint();
-                widgetSize = d->orientation == Qt::Horizontal ? widgetSizeHint.width()
-                                                              : widgetSizeHint.height();
-            }
+    //
+    // При смещении разделителя, корректируем размеры вложенных виджетов
+    //
+    case QEvent::MouseMove: {
+        if (_watched == d->handle) {
+            auto mouseEvent = static_cast<QMouseEvent*>(_event);
             const auto maxSize = d->orientation == Qt::Horizontal ? width() : height();
-            if (widget == d->widgets.constFirst()) {
-                setSizes({ widgetSize, maxSize - widgetSize });
+            const auto firstWidgetSize = std::min(
+                std::max(0, mapFromGlobal(mouseEvent->globalPos()).x()),
+                maxSize + 1); // Без единицы от второго виджета торчит однопиксельный край
+            if (isLeftToRight()) {
+                setSizes({ firstWidgetSize, maxSize - firstWidgetSize });
             } else {
-                setSizes({ maxSize - widgetSize, widgetSize });
+                setSizes({ maxSize - firstWidgetSize, firstWidgetSize });
             }
+        }
+        break;
+    }
+
+    //
+    // При отображении одного из вложенных виджетов, пробуем восстановить его размер
+    //
+    case QEvent::Show: {
+        auto widget = qobject_cast<QWidget*>(_watched);
+        const auto widgetIndex = d->widgets.indexOf(widget);
+        if (widgetIndex == -1) {
             break;
         }
 
-        //
-        // При скрытии одного из вложенных виджетов, используем занимаемую им область под видимый
-        //
-        case QEvent::Hide: {
-            auto widget = qobject_cast<QWidget*>(_watched);
-            const auto widgetIndex = d->widgets.indexOf(widget);
-            if (widgetIndex == -1) {
-                break;
-            }
-
-            if (d->sizes.at(widgetIndex) == 0) {
-                break;
-            }
-
-            widget->setProperty(lastSizeKey, d->orientation == Qt::Horizontal ? widget->width()
-                                                                              : widget->height());
-            if (widget == d->widgets.constFirst()) {
-                setSizes({ 0, 1 });
-            } else {
-                setSizes({ 1, 0 });
-            }
+        if (d->sizes.at(widgetIndex) > 0) {
             break;
         }
 
-        default: break;
+        int widgetSize = widget->property(lastSizeKey).toInt();
+        if (widgetSize <= 0) {
+            const auto widgetSizeHint = widget->sizeHint();
+            widgetSize = d->orientation == Qt::Horizontal ? widgetSizeHint.width()
+                                                          : widgetSizeHint.height();
+        }
+        const auto maxSize = d->orientation == Qt::Horizontal ? width() : height();
+        if (widget == d->widgets.constFirst()) {
+            setSizes({ widgetSize, maxSize - widgetSize });
+        } else {
+            setSizes({ maxSize - widgetSize, widgetSize });
+        }
+        break;
+    }
+
+    //
+    // При скрытии одного из вложенных виджетов, используем занимаемую им область под видимый
+    //
+    case QEvent::Hide: {
+        auto widget = qobject_cast<QWidget*>(_watched);
+        const auto widgetIndex = d->widgets.indexOf(widget);
+        if (widgetIndex == -1) {
+            break;
+        }
+
+        if (d->sizes.at(widgetIndex) == 0) {
+            break;
+        }
+
+        widget->setProperty(lastSizeKey,
+                            d->orientation == Qt::Horizontal ? widget->width() : widget->height());
+        if (widget == d->widgets.constFirst()) {
+            setSizes({ 0, 1 });
+        } else {
+            setSizes({ 1, 0 });
+        }
+        break;
+    }
+
+    default:
+        break;
     }
 
     return Widget::eventFilter(_watched, _event);

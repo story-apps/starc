@@ -6,13 +6,12 @@
 
 #include <chrono>
 
-namespace BusinessLayer
-{
+namespace BusinessLayer {
 
 /**
  * @brief Сводный отчёт по сценарию
  */
-class ScreenplaySummaryReport : public AbstractReport
+class CORE_LIBRARY_EXPORT ScreenplaySummaryReport : public AbstractReport
 {
 public:
     ScreenplaySummaryReport();
@@ -53,6 +52,21 @@ public:
      * @brief Получить информацию о тексте
      */
     QAbstractItemModel* textInfoModel() const;
+
+    /**
+     * @brief Получить информацию о сценах
+     */
+    QAbstractItemModel* scenesInfoModel() const;
+
+    /**
+     * @brief Получить информацию о локациях
+     */
+    QAbstractItemModel* locationsInfoModel() const;
+
+    /**
+     * @brief Получить информацию о персонажах
+     */
+    QAbstractItemModel* charactersInfoModel() const;
 
 private:
     class Implementation;

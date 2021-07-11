@@ -7,8 +7,7 @@
 #include <QVariantAnimation>
 
 
-namespace Ui
-{
+namespace Ui {
 
 class Cover::Implementation
 {
@@ -54,12 +53,13 @@ void Cover::Implementation::prepreCoverForPainting(const QSize& _size)
 
 
 Cover::Cover(QWidget* _parent)
-    : Widget(_parent),
-      d(new Implementation)
+    : Widget(_parent)
+    , d(new Implementation)
 {
     setAttribute(Qt::WA_Hover);
 
-    connect(&d->overlayOpacityAnimation, &QVariantAnimation::valueChanged, this, [this] { update(); });
+    connect(&d->overlayOpacityAnimation, &QVariantAnimation::valueChanged, this,
+            [this] { update(); });
 
     updateTranslations();
     designSystemChangeEvent(nullptr);

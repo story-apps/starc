@@ -37,7 +37,7 @@ protected:
     /**
      * @brief Реализуем отрисовку
      */
-    void paintEvent(QPaintEvent *_event) override;
+    void paintEvent(QPaintEvent* _event) override;
 
     /**
      * @brief Реализуем включение переключателя при клике на нём
@@ -59,4 +59,3 @@ private:
     class Implementation;
     QScopedPointer<Implementation> d;
 };
-

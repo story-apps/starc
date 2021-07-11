@@ -8,8 +8,7 @@
 #include <QFileDialog>
 
 
-namespace ManagementLayer
-{
+namespace ManagementLayer {
 
 class ScreenplayInformationManager::Implementation
 {
@@ -54,8 +53,8 @@ Ui::ScreenplayInformationView* ScreenplayInformationManager::Implementation::cre
 
 
 ScreenplayInformationManager::ScreenplayInformationManager(QObject* _parent)
-    : QObject(_parent),
-      d(new Implementation)
+    : QObject(_parent)
+    , d(new Implementation)
 {
 }
 
@@ -88,12 +87,12 @@ void ScreenplayInformationManager::setModel(BusinessLayer::AbstractModel* _model
         d->view->setScreenplayTextVisible(d->model->screenplayTextVisible());
         d->view->setScreenplayStatisticsVisible(d->model->screenplayStatisticsVisible());
 
-        connect(d->model, &BusinessLayer::ScreenplayInformationModel::nameChanged,
-                d->view, &Ui::ScreenplayInformationView::setName);
-        connect(d->model, &BusinessLayer::ScreenplayInformationModel::taglineChanged,
-                d->view, &Ui::ScreenplayInformationView::setTagline);
-        connect(d->model, &BusinessLayer::ScreenplayInformationModel::loglineChanged,
-                d->view, &Ui::ScreenplayInformationView::setLogline);
+        connect(d->model, &BusinessLayer::ScreenplayInformationModel::nameChanged, d->view,
+                &Ui::ScreenplayInformationView::setName);
+        connect(d->model, &BusinessLayer::ScreenplayInformationModel::taglineChanged, d->view,
+                &Ui::ScreenplayInformationView::setTagline);
+        connect(d->model, &BusinessLayer::ScreenplayInformationModel::loglineChanged, d->view,
+                &Ui::ScreenplayInformationView::setLogline);
         connect(d->model, &BusinessLayer::ScreenplayInformationModel::titlePageVisibleChanged,
                 d->view, &Ui::ScreenplayInformationView::setTitlePageVisible);
         connect(d->model, &BusinessLayer::ScreenplayInformationModel::synopsisVisibleChanged,
@@ -102,25 +101,27 @@ void ScreenplayInformationManager::setModel(BusinessLayer::AbstractModel* _model
                 d->view, &Ui::ScreenplayInformationView::setTreatmentVisible);
         connect(d->model, &BusinessLayer::ScreenplayInformationModel::screenplayTextVisibleChanged,
                 d->view, &Ui::ScreenplayInformationView::setScreenplayTextVisible);
-        connect(d->model, &BusinessLayer::ScreenplayInformationModel::screenplayStatisticsVisibleChanged,
+        connect(d->model,
+                &BusinessLayer::ScreenplayInformationModel::screenplayStatisticsVisibleChanged,
                 d->view, &Ui::ScreenplayInformationView::setScreenplayStatisticsVisible);
         //
-        connect(d->view, &Ui::ScreenplayInformationView::nameChanged,
-                d->model, &BusinessLayer::ScreenplayInformationModel::setName);
-        connect(d->view, &Ui::ScreenplayInformationView::taglineChanged,
-                d->model, &BusinessLayer::ScreenplayInformationModel::setTagline);
-        connect(d->view, &Ui::ScreenplayInformationView::loglineChanged,
-                d->model, &BusinessLayer::ScreenplayInformationModel::setLogline);
-        connect(d->view, &Ui::ScreenplayInformationView::titlePageVisibleChanged,
-                d->model, &BusinessLayer::ScreenplayInformationModel::setTitlePageVisible);
-        connect(d->view, &Ui::ScreenplayInformationView::synopsisVisibleChanged,
-                d->model, &BusinessLayer::ScreenplayInformationModel::setSynopsisVisible);
-        connect(d->view, &Ui::ScreenplayInformationView::treatmentVisibleChanged,
-                d->model, &BusinessLayer::ScreenplayInformationModel::setTreatmentVisible);
-        connect(d->view, &Ui::ScreenplayInformationView::screenplayTextVisibleChanged,
-                d->model, &BusinessLayer::ScreenplayInformationModel::setScreenplayTextVisible);
+        connect(d->view, &Ui::ScreenplayInformationView::nameChanged, d->model,
+                &BusinessLayer::ScreenplayInformationModel::setName);
+        connect(d->view, &Ui::ScreenplayInformationView::taglineChanged, d->model,
+                &BusinessLayer::ScreenplayInformationModel::setTagline);
+        connect(d->view, &Ui::ScreenplayInformationView::loglineChanged, d->model,
+                &BusinessLayer::ScreenplayInformationModel::setLogline);
+        connect(d->view, &Ui::ScreenplayInformationView::titlePageVisibleChanged, d->model,
+                &BusinessLayer::ScreenplayInformationModel::setTitlePageVisible);
+        connect(d->view, &Ui::ScreenplayInformationView::synopsisVisibleChanged, d->model,
+                &BusinessLayer::ScreenplayInformationModel::setSynopsisVisible);
+        connect(d->view, &Ui::ScreenplayInformationView::treatmentVisibleChanged, d->model,
+                &BusinessLayer::ScreenplayInformationModel::setTreatmentVisible);
+        connect(d->view, &Ui::ScreenplayInformationView::screenplayTextVisibleChanged, d->model,
+                &BusinessLayer::ScreenplayInformationModel::setScreenplayTextVisible);
         connect(d->view, &Ui::ScreenplayInformationView::screenplayStatisticsVisibleChanged,
-                d->model, &BusinessLayer::ScreenplayInformationModel::setScreenplayStatisticsVisible);
+                d->model,
+                &BusinessLayer::ScreenplayInformationModel::setScreenplayStatisticsVisible);
     }
 }
 

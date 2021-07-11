@@ -9,16 +9,14 @@
 #include <ui/widgets/radio_button/radio_button_group.h>
 #include <ui/widgets/text_field/text_field.h>
 #include <ui/widgets/toggle_button/toggle_button.h>
-
 #include <utils/helpers/dialog_helper.h>
 
-#include <QGridLayout>
 #include <QFileDialog>
+#include <QGridLayout>
 #include <QTimer>
 
 
-namespace Ui
-{
+namespace Ui {
 
 class CreateProjectDialog::Implementation
 {
@@ -42,21 +40,25 @@ public:
 };
 
 CreateProjectDialog::Implementation::Implementation(QWidget* _parent)
-    : projectName(new TextField(_parent)),
-      localProject(new RadioButton(_parent)),
-      cloudProject(new RadioButton(_parent)),
-      cloudProjectCreationNote(new Body1Label(_parent)),
-      cloudProjectCreationAction(new Body1LinkLabel(_parent)),
-      cloudProjectCreationActionNote(new Body1Label(_parent)),
-      projectFolder(new TextField(_parent)),
-      importFilePath(new TextField(_parent)),
-      advancedSettingsButton(new ToggleButton(_parent)),
-      cancelButton(new Button(_parent)),
-      createButton(new Button(_parent))
+    : projectName(new TextField(_parent))
+    , localProject(new RadioButton(_parent))
+    , cloudProject(new RadioButton(_parent))
+    , cloudProjectCreationNote(new Body1Label(_parent))
+    , cloudProjectCreationAction(new Body1LinkLabel(_parent))
+    , cloudProjectCreationActionNote(new Body1Label(_parent))
+    , projectFolder(new TextField(_parent))
+    , importFilePath(new TextField(_parent))
+    , advancedSettingsButton(new ToggleButton(_parent))
+    , cancelButton(new Button(_parent))
+    , createButton(new Button(_parent))
 {
+    projectName->setSpellCheckPolicy(SpellCheckPolicy::Manual);
+
     localProject->setChecked(true);
 
+    projectFolder->setSpellCheckPolicy(SpellCheckPolicy::Manual);
     projectFolder->setTrailingIcon(u8"\U000f0256");
+    importFilePath->setSpellCheckPolicy(SpellCheckPolicy::Manual);
     importFilePath->setTrailingIcon(u8"\U000f0256");
     advancedSettingsButton->setIcon(u8"\U000f0493");
 
@@ -81,8 +83,8 @@ CreateProjectDialog::Implementation::Implementation(QWidget* _parent)
 
 
 CreateProjectDialog::CreateProjectDialog(QWidget* _parent)
-    : AbstractDialog(_parent),
-      d(new Implementation(this))
+    : AbstractDialog(_parent)
+    , d(new Implementation(this))
 {
     setAcceptButton(d->createButton);
     setRejectButton(d->cancelButton);
@@ -101,45 +103,43 @@ CreateProjectDialog::CreateProjectDialog(QWidget* _parent)
     contentsLayout()->setRowStretch(7, 1);
     contentsLayout()->addLayout(d->buttonsLayout, 8, 0, 1, 2);
 
-    connect(d->projectName, &TextField::textChanged, this, [this] {
-        d->projectName->setError({});
-    });
-    connect(d->localProject, &RadioButton::checkedChanged, this, [this] (bool _checked) {
+    connect(d->projectName, &TextField::textChanged, this,
+            [this] { d->projectName->setError({}); });
+    connect(d->localProject, &RadioButton::checkedChanged, this, [this](bool _checked) {
         d->projectFolder->setVisible(_checked && d->advancedSettingsButton->isChecked());
     });
-    connect(d->advancedSettingsButton, &ToggleButton::checkedChanged, this, [this] (bool _checked) {
+    connect(d->advancedSettingsButton, &ToggleButton::checkedChanged, this, [this](bool _checked) {
         d->projectFolder->setVisible(_checked && d->localProject->isChecked());
         d->importFilePath->setVisible(_checked);
     });
     connect(d->projectFolder, &TextField::trailingIconPressed, this, [this] {
-       const auto path
-               = QFileDialog::getExistingDirectory(this,
-                    tr("Choose the folder where new story will be saved"), d->projectFolder->text());
-       if (!path.isEmpty()) {
-           d->projectFolder->setText(path);
-       }
+        const auto path = QFileDialog::getExistingDirectory(
+            this, tr("Choose the folder where new story will be saved"), d->projectFolder->text());
+        if (!path.isEmpty()) {
+            d->projectFolder->setText(path);
+        }
     });
     connect(d->importFilePath, &TextField::trailingIconPressed, this, [this] {
-       const auto path
-               = QFileDialog::getOpenFileName(this, tr("Choose the file to import"),
-                        d->importFolder, DialogHelper::importFilters());
-       if (path.isEmpty()) {
-           return;
-       }
+        const auto path = QFileDialog::getOpenFileName(
+            this, tr("Choose the file to import"), d->importFolder, DialogHelper::importFilters());
+        if (path.isEmpty()) {
+            return;
+        }
 
-       //
-       // Старый вордовский формат не поддерживаем
-       //
-       if (path.endsWith(".doc", Qt::CaseInsensitive)) {
-           StandardDialog::information(parentWidget(), tr("File format not supported"),
-               tr("Importing from DOC files is not supported. You need to save the file in DOCX format and repeat the import."));
-           return;
-       }
+        //
+        // Старый вордовский формат не поддерживаем
+        //
+        if (path.endsWith(".doc", Qt::CaseInsensitive)) {
+            StandardDialog::information(parentWidget(), tr("File format not supported"),
+                                        tr("Importing from DOC files is not supported. You need to "
+                                           "save the file in DOCX format and repeat the import."));
+            return;
+        }
 
-       //
-       // Если всё в порядке, принимаем файл к импорту
-       //
-       d->importFilePath->setText(path);
+        //
+        // Если всё в порядке, принимаем файл к импорту
+        //
+        d->importFilePath->setText(path);
     });
     connect(d->cancelButton, &Button::clicked, this, &CreateProjectDialog::hideDialog);
     connect(d->createButton, &Button::clicked, this, [this] {
@@ -159,7 +159,8 @@ CreateProjectDialog::CreateProjectDialog(QWidget* _parent)
     designSystemChangeEvent(nullptr);
 }
 
-void CreateProjectDialog::configureCloudProjectCreationAbility(bool _isLogged, bool _isSubscriptionActive)
+void CreateProjectDialog::configureCloudProjectCreationAbility(bool _isLogged,
+                                                               bool _isSubscriptionActive)
 {
 
     //
@@ -193,18 +194,18 @@ void CreateProjectDialog::configureCloudProjectCreationAbility(bool _isLogged, b
     d->cloudProjectCreationActionNote->setText(tr("to create stories on the cloud."));
     if (_isLogged) {
         d->cloudProjectCreationAction->setText(tr("Renew subscription"));
-        connect(d->cloudProjectCreationAction, &Body1LinkLabel::clicked,
-                this, &CreateProjectDialog::renewSubscriptionPressed);
+        connect(d->cloudProjectCreationAction, &Body1LinkLabel::clicked, this,
+                &CreateProjectDialog::renewSubscriptionPressed);
     } else {
         d->cloudProjectCreationAction->setText(tr("Sign in"));
-        connect(d->cloudProjectCreationAction, &Body1LinkLabel::clicked,
-                this, &CreateProjectDialog::loginPressed);
+        connect(d->cloudProjectCreationAction, &Body1LinkLabel::clicked, this,
+                &CreateProjectDialog::loginPressed);
     }
 
     //
     // FIXME: открыть, когда будет работать облако
     //
-//    d->cloudProjectCreationNote->hide();
+    //    d->cloudProjectCreationNote->hide();
     d->cloudProjectCreationAction->hide();
     d->cloudProjectCreationActionNote->hide();
     return;
@@ -273,10 +274,10 @@ void CreateProjectDialog::designSystemChangeEvent(DesignSystemChangeEvent* _even
 {
     AbstractDialog::designSystemChangeEvent(_event);
 
-    for (auto widget : QVector<Widget*>{ d->localProject, d->cloudProjectCreationNote, d->cloudProject,
-                                         d->cloudProjectCreationAction,
-                                         d->cloudProjectCreationActionNote,
-                                         d->advancedSettingsButton }) {
+    for (auto widget :
+         QVector<Widget*>{ d->localProject, d->cloudProjectCreationNote, d->cloudProject,
+                           d->cloudProjectCreationAction, d->cloudProjectCreationActionNote,
+                           d->advancedSettingsButton }) {
         widget->setTextColor(Ui::DesignSystem::color().onBackground());
         widget->setBackgroundColor(Ui::DesignSystem::color().background());
     }
@@ -286,36 +287,29 @@ void CreateProjectDialog::designSystemChangeEvent(DesignSystemChangeEvent* _even
         textField->setBackgroundColor(Ui::DesignSystem::color().onBackground());
     }
 
-    d->cloudProjectCreationNote->setContentsMargins(
-                QMarginsF(Ui::DesignSystem::layout().px24(),
-                          Ui::DesignSystem::layout().px12(),
-                          Ui::DesignSystem::layout().px24(),
-                          0)
-                .toMargins());
+    d->cloudProjectCreationNote->setContentsMargins(QMarginsF(Ui::DesignSystem::layout().px24(),
+                                                              Ui::DesignSystem::layout().px12(),
+                                                              Ui::DesignSystem::layout().px24(), 0)
+                                                        .toMargins());
     d->cloudProjectCreationAction->setContentsMargins(
-                QMarginsF(Ui::DesignSystem::layout().px24(),
-                          Ui::DesignSystem::layout().px2(),
-                          Ui::DesignSystem::layout().px4(),
-                          Ui::DesignSystem::layout().px12())
-                .toMargins());
+        QMarginsF(Ui::DesignSystem::layout().px24(), Ui::DesignSystem::layout().px2(),
+                  Ui::DesignSystem::layout().px4(), Ui::DesignSystem::layout().px12())
+            .toMargins());
     d->cloudProjectCreationAction->setTextColor(Ui::DesignSystem::color().secondary());
     d->cloudProjectCreationActionNote->setContentsMargins(
-                QMarginsF(0,
-                          Ui::DesignSystem::layout().px2(),
-                          Ui::DesignSystem::layout().px24(),
-                          Ui::DesignSystem::layout().px12())
-                .toMargins());
-    for (auto button : { d->cancelButton,
-                         d->createButton }) {
+        QMarginsF(0, Ui::DesignSystem::layout().px2(), Ui::DesignSystem::layout().px24(),
+                  Ui::DesignSystem::layout().px12())
+            .toMargins());
+    for (auto button : { d->cancelButton, d->createButton }) {
         button->setBackgroundColor(Ui::DesignSystem::color().secondary());
         button->setTextColor(Ui::DesignSystem::color().secondary());
     }
 
     contentsLayout()->setVerticalSpacing(static_cast<int>(Ui::DesignSystem::layout().px8()));
-    d->buttonsLayout->setContentsMargins(QMarginsF(Ui::DesignSystem::layout().px12(),
-                                                   Ui::DesignSystem::layout().px12(),
-                                                   Ui::DesignSystem::layout().px16(),
-                                                   Ui::DesignSystem::layout().px8()).toMargins());
+    d->buttonsLayout->setContentsMargins(
+        QMarginsF(Ui::DesignSystem::layout().px12(), Ui::DesignSystem::layout().px12(),
+                  Ui::DesignSystem::layout().px16(), Ui::DesignSystem::layout().px8())
+            .toMargins());
 }
 
 } // namespace Ui

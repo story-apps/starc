@@ -3,10 +3,8 @@
 #include "screenplay_title_page_view.h"
 
 #include <business_layer/model/text/text_model.h>
-
 #include <data_layer/storage/settings_storage.h>
 #include <data_layer/storage/storage_facade.h>
-
 #include <domain/document_object.h>
 
 #include <QApplication>
@@ -14,15 +12,15 @@
 #include <QTimer>
 
 
-namespace ManagementLayer
-{
+namespace ManagementLayer {
 
-namespace  {
+namespace {
 const QString kSettingsKey = "simple-text";
-QString cursorPositionFor(Domain::DocumentObject* _item) {
+QString cursorPositionFor(Domain::DocumentObject* _item)
+{
     return QString("%1/%2/last-cursor").arg(kSettingsKey, _item->uuid().toString());
 }
-}
+} // namespace
 
 class ScreenplayTitlePageManager::Implementation
 {
@@ -88,18 +86,19 @@ void ScreenplayTitlePageManager::Implementation::saveViewSettings()
 void ScreenplayTitlePageManager::Implementation::loadModelSettings()
 {
     using namespace DataStorageLayer;
-    const auto cursorPosition
-            = StorageFacade::settingsStorage()->value(
-                  cursorPositionFor(model->document()), SettingsStorage::SettingsPlace::Application, 0).toInt();
+    const auto cursorPosition = StorageFacade::settingsStorage()
+                                    ->value(cursorPositionFor(model->document()),
+                                            SettingsStorage::SettingsPlace::Application, 0)
+                                    .toInt();
     view->setCursorPosition(cursorPosition);
 }
 
 void ScreenplayTitlePageManager::Implementation::saveModelSettings()
 {
     using namespace DataStorageLayer;
-    StorageFacade::settingsStorage()->setValue(
-        cursorPositionFor(model->document()), view->cursorPosition(),
-        SettingsStorage::SettingsPlace::Application);
+    StorageFacade::settingsStorage()->setValue(cursorPositionFor(model->document()),
+                                               view->cursorPosition(),
+                                               SettingsStorage::SettingsPlace::Application);
 }
 
 
@@ -107,8 +106,8 @@ void ScreenplayTitlePageManager::Implementation::saveModelSettings()
 
 
 ScreenplayTitlePageManager::ScreenplayTitlePageManager(QObject* _parent)
-    : QObject(_parent),
-      d(new Implementation)
+    : QObject(_parent)
+    , d(new Implementation)
 {
 }
 

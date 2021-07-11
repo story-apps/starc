@@ -4,10 +4,11 @@
 
 #include <QApplication>
 #include <QMouseEvent>
-#include <QPainter>
 #include <QPaintEvent>
+#include <QPainter>
 #include <QVariantAnimation>
 
+#include <optional>
 
 class Slider::Implementation
 {
@@ -24,9 +25,17 @@ public:
      */
     int calcValue(int _mousePosition, int _trackWidth, bool _isRightToLeft);
 
+    /**
+     * @brief Вычислить значение defaultPositionDelta
+     */
+    void calcDefaultPositionDelta();
+
     const int minimum = 0;
     int maximum = 100;
     int current = 50;
+
+    std::optional<int> defaultPosition;
+    qreal defaultPositionDelta = 0;
 
     /**
      * @brief  Декорации слайдера при клике
@@ -60,44 +69,76 @@ int Slider::Implementation::calcValue(int _mousePosition, int _trackWidth, bool 
     return _isRightToLeft ? maximum - value : value;
 }
 
+void Slider::Implementation::calcDefaultPositionDelta()
+{
+    defaultPositionDelta = maximum * 0.01;
+}
+
 
 // ****
 
 
 Slider::Slider(QWidget* _parent)
-    : Widget(_parent),
-      d(new Implementation)
+    : Widget(_parent)
+    , d(new Implementation)
 {
     setAttribute(Qt::WA_Hover);
     setFocusPolicy(Qt::StrongFocus);
 
-    connect(&d->decorationRadiusAnimation, &QVariantAnimation::valueChanged, this, [this] { update(); });
-    connect(&d->decorationOpacityAnimation, &QVariantAnimation::valueChanged, this, [this] { update(); });
+    connect(&d->decorationRadiusAnimation, &QVariantAnimation::valueChanged, this,
+            [this] { update(); });
+    connect(&d->decorationOpacityAnimation, &QVariantAnimation::valueChanged, this,
+            [this] { update(); });
 
     designSystemChangeEvent(nullptr);
 }
 
 void Slider::setMaximumValue(int _maximum)
 {
-    if (_maximum <= 0
-        || d->maximum == _maximum) {
+    if (_maximum <= 0 || d->maximum == _maximum) {
         return;
     }
 
     d->maximum = _maximum;
+
+    if (d->defaultPosition.has_value()) {
+        d->calcDefaultPositionDelta();
+    }
+
     update();
 }
 
 void Slider::setValue(int _value)
 {
-    if (d->minimum > _value || _value > d->maximum
-        || d->current == _value) {
+    if (d->minimum > _value || _value > d->maximum || d->current == _value) {
         return;
     }
 
-    d->current = _value;
+    if (d->defaultPosition.has_value()
+        && (_value >= d->defaultPosition.value() - d->defaultPositionDelta)
+        && (_value <= d->defaultPosition.value() + d->defaultPositionDelta)) {
+        d->current = d->defaultPosition.value();
+    } else {
+        d->current = _value;
+    }
+
     emit valueChanged(d->current);
     update();
+}
+
+void Slider::setDefaultPosition(int _value)
+{
+    if (d->minimum > _value || _value > d->maximum) {
+        return;
+    }
+
+    d->defaultPosition = _value;
+    d->calcDefaultPositionDelta();
+}
+
+void Slider::resetDefaultPosition()
+{
+    d->defaultPosition.reset();
 }
 
 QSize Slider::sizeHint() const
@@ -125,21 +166,38 @@ void Slider::paintEvent(QPaintEvent* _event)
     const int leftMargin = contentsRect().left();
     const qreal trackWidth = contentsRect().width();
     const qreal leftTrackWidth = trackWidth * d->current / d->maximum;
-    const QRectF leftTrackRect(QPointF(isRightToLeft() ? trackWidth - leftTrackWidth + leftMargin : leftMargin,
-                                       (height() - Ui::DesignSystem::slider().trackHeight()) / 2.0),
-                               QSizeF(leftTrackWidth, Ui::DesignSystem::slider().trackHeight()));
+    const QRectF leftTrackRect(
+        QPointF(isRightToLeft() ? trackWidth - leftTrackWidth + leftMargin : leftMargin,
+                (height() - Ui::DesignSystem::slider().trackHeight()) / 2.0),
+        QSizeF(leftTrackWidth, Ui::DesignSystem::slider().trackHeight()));
     painter.fillRect(leftTrackRect, Ui::DesignSystem::color().secondary());
 
     //
     // ... справа
     //
-    const QRectF rightTrackRect(isRightToLeft() ? QPointF(leftMargin, leftTrackRect.y()) : leftTrackRect.topRight(),
+    const QRectF rightTrackRect(isRightToLeft() ? QPointF(leftMargin, leftTrackRect.y())
+                                                : leftTrackRect.topRight(),
                                 QSizeF(trackWidth - leftTrackWidth, leftTrackRect.height()));
     QColor rightTrackColor = Ui::DesignSystem::color().secondary();
     rightTrackColor.setAlphaF(Ui::DesignSystem::slider().unfilledPartOpacity());
     painter.fillRect(rightTrackRect, rightTrackColor);
 
-    const QPointF thumbCenter(isRightToLeft() ? rightTrackRect.right() : rightTrackRect.left(), rightTrackRect.center().y());
+    if (d->defaultPosition.has_value()) {
+        const qreal startTrackWidth = trackWidth * d->defaultPosition.value() / d->maximum;
+
+        const QPointF startCenter(isRightToLeft() ? trackWidth - startTrackWidth + leftMargin
+                                                  : leftMargin + startTrackWidth,
+                                  rightTrackRect.center().y());
+
+        const qreal defaultPointRadious = Ui::DesignSystem::slider().thumbRadius() / 2;
+
+        painter.setPen(Qt::NoPen);
+        painter.setBrush(Ui::DesignSystem::color().secondary());
+        painter.drawEllipse(startCenter, defaultPointRadious, defaultPointRadious);
+    }
+
+    const QPointF thumbCenter(isRightToLeft() ? rightTrackRect.right() : rightTrackRect.left(),
+                              rightTrackRect.center().y());
 
     //
     // Рисуем hower
@@ -182,8 +240,7 @@ void Slider::paintEvent(QPaintEvent* _event)
     //
     painter.setPen(Qt::NoPen);
     painter.setBrush(Ui::DesignSystem::color().secondary());
-    painter.drawEllipse(thumbCenter,
-                        Ui::DesignSystem::slider().thumbRadius(),
+    painter.drawEllipse(thumbCenter, Ui::DesignSystem::slider().thumbRadius(),
                         Ui::DesignSystem::slider().thumbRadius());
 }
 
@@ -213,14 +270,14 @@ void Slider::mouseReleaseEvent(QMouseEvent* _event)
     update();
 }
 
-void Slider::keyPressEvent(QKeyEvent *_event)
+void Slider::keyPressEvent(QKeyEvent* _event)
 {
     switch (_event->key()) {
     case Qt::Key_Left:
-        setValue(d->current + (isRightToLeft()? 1: -1));
+        setValue(d->current + (isRightToLeft() ? 1 : -1));
         break;
     case Qt::Key_Right:
-        setValue(d->current + (isRightToLeft()? -1: 1));
+        setValue(d->current + (isRightToLeft() ? -1 : 1));
         break;
     default:
         break;

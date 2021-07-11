@@ -1,19 +1,15 @@
 #include "login_dialog.h"
 
 #include <ui/design_system/design_system.h>
-
 #include <ui/widgets/button/button.h>
 #include <ui/widgets/text_field/text_field.h>
-
 #include <utils/tools/debouncer.h>
-
 #include <utils/validators/email_validator.h>
 
 #include <QEvent>
 #include <QGridLayout>
 
-namespace Ui
-{
+namespace Ui {
 
 class LoginDialog::Implementation
 {
@@ -23,8 +19,8 @@ public:
     void checkEmail();
 
 
-    Debouncer checkEmailDebouncer{500};
-    Debouncer notifyEmailDebouncer{300};
+    Debouncer checkEmailDebouncer{ 500 };
+    Debouncer notifyEmailDebouncer{ 300 };
 
     TextField* email = nullptr;
     TextField* password = nullptr;
@@ -40,24 +36,28 @@ public:
 };
 
 LoginDialog::Implementation::Implementation(QWidget* _parent)
-    : email(new TextField(_parent)),
-      password(new TextField(_parent)),
-      registrationConfirmationCode(new TextField(_parent)),
-      restorePasswordConfirmationCode(new TextField(_parent)),
-      buttonsLayout(new QHBoxLayout),
-      registrationButton(new Button(_parent)),
-      restorePasswordButton(new Button(_parent)),
-      changePasswordButton(new Button(_parent)),
-      loginButton(new Button(_parent)),
-      cancelButton(new Button(_parent))
+    : email(new TextField(_parent))
+    , password(new TextField(_parent))
+    , registrationConfirmationCode(new TextField(_parent))
+    , restorePasswordConfirmationCode(new TextField(_parent))
+    , buttonsLayout(new QHBoxLayout)
+    , registrationButton(new Button(_parent))
+    , restorePasswordButton(new Button(_parent))
+    , changePasswordButton(new Button(_parent))
+    , loginButton(new Button(_parent))
+    , cancelButton(new Button(_parent))
 {
+    email->setSpellCheckPolicy(SpellCheckPolicy::Manual);
     email->setTabChangesFocus(true);
 
+    password->setSpellCheckPolicy(SpellCheckPolicy::Manual);
     password->setTabChangesFocus(true);
     password->setPasswordModeEnabled(true);
     password->setTrailingIcon(u8"\U000f06d1");
 
+    registrationConfirmationCode->setSpellCheckPolicy(SpellCheckPolicy::Manual);
     registrationConfirmationCode->setTabChangesFocus(true);
+    restorePasswordConfirmationCode->setSpellCheckPolicy(SpellCheckPolicy::Manual);
     restorePasswordConfirmationCode->setTabChangesFocus(true);
 
     buttonsLayout->setContentsMargins({});
@@ -106,8 +106,8 @@ void LoginDialog::Implementation::checkEmail()
 
 
 LoginDialog::LoginDialog(QWidget* _parent)
-    : AbstractDialog(_parent),
-      d(new Implementation(this))
+    : AbstractDialog(_parent)
+    , d(new Implementation(this))
 {
     d->cancelButton->installEventFilter(this);
 
@@ -122,11 +122,15 @@ LoginDialog::LoginDialog(QWidget* _parent)
     connect(&d->notifyEmailDebouncer, &Debouncer::gotWork, this, &LoginDialog::emailEntered);
     connect(d->password, &TextField::trailingIconPressed, d->password, [password = d->password] {
         password->setPasswordModeEnabled(!password->isPasswordModeEnabled());
-        password->setTrailingIcon(password->isPasswordModeEnabled() ? u8"\U000f06d1" : u8"\U000f06d0");
+        password->setTrailingIcon(password->isPasswordModeEnabled() ? u8"\U000f06d1"
+                                                                    : u8"\U000f06d0");
     });
-    connect(d->registrationConfirmationCode, &TextField::textChanged, this, &LoginDialog::registrationConfirmationCodeEntered);
-    connect(d->restorePasswordConfirmationCode, &TextField::textChanged, this, &LoginDialog::passwordRestoringConfirmationCodeEntered);
-    connect(d->restorePasswordButton, &Button::clicked, this, &LoginDialog::restorePasswordRequested);
+    connect(d->registrationConfirmationCode, &TextField::textChanged, this,
+            &LoginDialog::registrationConfirmationCodeEntered);
+    connect(d->restorePasswordConfirmationCode, &TextField::textChanged, this,
+            &LoginDialog::passwordRestoringConfirmationCodeEntered);
+    connect(d->restorePasswordButton, &Button::clicked, this,
+            &LoginDialog::restorePasswordRequested);
     connect(d->changePasswordButton, &Button::clicked, this, &LoginDialog::changePasswordRequested);
     connect(d->registrationButton, &Button::clicked, this, &LoginDialog::registrationRequested);
     connect(d->loginButton, &Button::clicked, this, &LoginDialog::loginRequested);
@@ -250,20 +254,17 @@ void LoginDialog::designSystemChangeEvent(DesignSystemChangeEvent* _event)
 {
     AbstractDialog::designSystemChangeEvent(_event);
 
-    for (auto button : { d->registrationButton,
-                         d->restorePasswordButton,
-                         d->changePasswordButton,
-                         d->loginButton,
-                         d->cancelButton }) {
+    for (auto button : { d->registrationButton, d->restorePasswordButton, d->changePasswordButton,
+                         d->loginButton, d->cancelButton }) {
         button->setBackgroundColor(Ui::DesignSystem::color().secondary());
         button->setTextColor(Ui::DesignSystem::color().secondary());
     }
 
     contentsLayout()->setSpacing(static_cast<int>(Ui::DesignSystem::layout().px8()));
-    d->buttonsLayout->setContentsMargins(QMarginsF(Ui::DesignSystem::layout().px12(),
-                                                   Ui::DesignSystem::layout().px12(),
-                                                   Ui::DesignSystem::layout().px16(),
-                                                   Ui::DesignSystem::layout().px8()).toMargins());
+    d->buttonsLayout->setContentsMargins(
+        QMarginsF(Ui::DesignSystem::layout().px12(), Ui::DesignSystem::layout().px12(),
+                  Ui::DesignSystem::layout().px16(), Ui::DesignSystem::layout().px8())
+            .toMargins());
 }
 
 bool LoginDialog::eventFilter(QObject* _watched, QEvent* _event)
@@ -271,12 +272,11 @@ bool LoginDialog::eventFilter(QObject* _watched, QEvent* _event)
     //
     // Зацикливаем фокус, чтобы он всегда оставался внутри диалога
     //
-    if (_watched == d->cancelButton
-        && _event->type() == QEvent::FocusOut) {
+    if (_watched == d->cancelButton && _event->type() == QEvent::FocusOut) {
         d->email->setFocus();
     }
 
     return AbstractDialog::eventFilter(_watched, _event);
 }
 
-}
+} // namespace Ui

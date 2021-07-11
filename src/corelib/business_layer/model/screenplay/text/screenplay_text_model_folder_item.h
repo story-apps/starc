@@ -9,8 +9,7 @@
 class QXmlStreamReader;
 
 
-namespace BusinessLayer
-{
+namespace BusinessLayer {
 
 /**
  * @brief Класс элементов папок модели сценария
@@ -21,10 +20,7 @@ public:
     /**
      * @brief Роли данных из модели
      */
-    enum DataRole {
-        FolderNameRole = Qt::UserRole + 1,
-        FolderDurationRole
-    };
+    enum DataRole { FolderNameRole = Qt::UserRole + 1, FolderDurationRole };
 
 public:
     ScreenplayTextModelFolderItem();
@@ -45,7 +41,8 @@ public:
      * @brief Определяем интерфейс для получения XML блока
      */
     QByteArray toXml() const override;
-    QByteArray toXml(ScreenplayTextModelItem* _from, int _fromPosition, ScreenplayTextModelItem* _to, int _toPosition, bool _clearUuid) const;
+    QByteArray toXml(ScreenplayTextModelItem* _from, int _fromPosition,
+                     ScreenplayTextModelItem* _to, int _toPosition, bool _clearUuid) const;
     QByteArray xmlHeader(bool _clearUuid = false) const;
 
     /**

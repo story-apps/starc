@@ -3,8 +3,7 @@
 #include "abstract_key_handler.h"
 
 
-namespace KeyProcessingLayer
-{
+namespace KeyProcessingLayer {
 
 /**
  * @brief Класс подготавливающий к обработке нажатия клавиш

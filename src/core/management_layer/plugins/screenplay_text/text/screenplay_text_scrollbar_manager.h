@@ -7,11 +7,10 @@
 
 
 namespace BusinessLayer {
-    class ScreenplayTextModel;
+class ScreenplayTextModel;
 }
 
-namespace Ui
-{
+namespace Ui {
 
 /**
  * @brief Управляющий скролбаром сценария
@@ -114,7 +113,8 @@ protected:
     void mouseReleaseEvent(QMouseEvent* _event) override;
 
     /**
-     * @brief Прокидываем событие прокрутки в виджет, к которому привязан таймлайн, чтобы не обрабатывать вручную
+     * @brief Прокидываем событие прокрутки в виджет, к которому привязан таймлайн, чтобы не
+     * обрабатывать вручную
      */
     void wheelEvent(QWheelEvent* _event) override;
 

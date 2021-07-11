@@ -1,25 +1,22 @@
 #include "export_manager.h"
 
+#include <business_layer/export/screenplay/docx_exporter.h>
 #include <business_layer/export/screenplay/export_options.h>
 #include <business_layer/export/screenplay/pdf_exporter.h>
+#include <business_layer/model/screenplay/screenplay_information_model.h>
 #include <business_layer/model/screenplay/text/screenplay_text_model.h>
-
 #include <data_layer/storage/settings_storage.h>
 #include <data_layer/storage/storage_facade.h>
-
 #include <domain/document_object.h>
-
 #include <ui/export/export_dialog.h>
 #include <ui/widgets/dialog/standard_dialog.h>
-
 #include <utils/helpers/dialog_helper.h>
 #include <utils/helpers/extension_helper.h>
 
 #include <QDesktopServices>
 #include <QFileDialog>
 
-namespace ManagementLayer
-{
+namespace ManagementLayer {
 
 class ExportManager::Implementation
 {
@@ -43,14 +40,15 @@ public:
 };
 
 ExportManager::Implementation::Implementation(ExportManager* _parent, QWidget* _topLevelWidget)
-    : q(_parent),
-      topLevelWidget(_topLevelWidget)
+    : q(_parent)
+    , topLevelWidget(_topLevelWidget)
 {
-
 }
 
 void ExportManager::Implementation::exportScreenplay(BusinessLayer::AbstractModel* _model)
 {
+    using namespace BusinessLayer;
+
     if (exportDialog == nullptr) {
         exportDialog = new Ui::ExportDialog(topLevelWidget);
         connect(exportDialog, &Ui::ExportDialog::exportRequested, exportDialog, [this, _model] {
@@ -60,43 +58,45 @@ void ExportManager::Implementation::exportScreenplay(BusinessLayer::AbstractMode
             // Предоставим пользователю возможность выбрать файл, куда он будет экспортировать
             //
             const auto projectExportFolder
-                    = DataStorageLayer::StorageFacade::settingsStorage()->value(
-                          DataStorageLayer::kProjectExportFolderKey,
-                          DataStorageLayer::SettingsStorage::SettingsPlace::Application)
+                = DataStorageLayer::StorageFacade::settingsStorage()
+                      ->value(DataStorageLayer::kProjectExportFolderKey,
+                              DataStorageLayer::SettingsStorage::SettingsPlace::Application)
                       .toString();
             QString exportFilter;
             QString exportExtension;
             switch (exportOptions.fileFormat) {
-                default:
-                case 0: {
-                    exportFilter = DialogHelper::pdfFilter();
-                    exportExtension = ExtensionHelper::pdf();
-                    break;
-                }
-                case 1: {
-                    exportFilter = DialogHelper::msWordFilter();
-                    exportExtension = ExtensionHelper::msOfficeOpenXml();
-                    break;
-                }
-                case 2: {
-                    exportFilter = DialogHelper::finalDraftFilter();
-                    exportExtension = ExtensionHelper::finalDraft();
-                    break;
-                }
-                case 3: {
-                    exportFilter = DialogHelper::fountainFilter();
-                    exportExtension = ExtensionHelper::fountain();
-                    break;
-                }
+            default:
+            case ExportFileFormat::Pdf: {
+                exportFilter = DialogHelper::pdfFilter();
+                exportExtension = ExtensionHelper::pdf();
+                break;
             }
-            auto exportFilePath
-                    = QFileDialog::getSaveFileName(topLevelWidget, tr("Choose the file to export"),
-                            projectExportFolder, exportFilter);
+            case ExportFileFormat::Docx: {
+                exportFilter = DialogHelper::msWordFilter();
+                exportExtension = ExtensionHelper::msOfficeOpenXml();
+                break;
+            }
+            case ExportFileFormat::Fdx: {
+                exportFilter = DialogHelper::finalDraftFilter();
+                exportExtension = ExtensionHelper::finalDraft();
+                break;
+            }
+            case ExportFileFormat::Fountain: {
+                exportFilter = DialogHelper::fountainFilter();
+                exportExtension = ExtensionHelper::fountain();
+                break;
+            }
+            }
+            const auto screenplayTextModel
+                = qobject_cast<BusinessLayer::ScreenplayTextModel*>(_model);
+            const auto projectExportFile
+                = QString("%1/%2.%3")
+                      .arg(projectExportFolder, screenplayTextModel->informationModel()->name(),
+                           exportExtension);
+            auto exportFilePath = QFileDialog::getSaveFileName(
+                topLevelWidget, tr("Choose the file to export"), projectExportFile, exportFilter);
             if (exportFilePath.isEmpty()) {
                 return;
-            }
-            if (!exportFilePath.endsWith(exportExtension, Qt::CaseInsensitive)) {
-                exportFilePath += "." + exportExtension;
             }
 
             //
@@ -104,37 +104,43 @@ void ExportManager::Implementation::exportScreenplay(BusinessLayer::AbstractMode
             //
             exportOptions.filePath = exportFilePath;
             //
-            // ... обновим папку, куда в следующий раз он предположительно опять будет экспортировать
+            // ... донастроим параметры экспорта
+            //
+            exportOptions.header = screenplayTextModel->informationModel()->header();
+            exportOptions.footer = screenplayTextModel->informationModel()->footer();
+            //
+            // ... обновим папку, куда в следующий раз он предположительно опять будет
+            //     экспортировать
             //
             DataStorageLayer::StorageFacade::settingsStorage()->setValue(
-                        DataStorageLayer::kProjectExportFolderKey,
-                        exportFilePath,
-                        DataStorageLayer::SettingsStorage::SettingsPlace::Application);
+                DataStorageLayer::kProjectExportFolderKey,
+                QFileInfo(exportFilePath).dir().absolutePath(),
+                DataStorageLayer::SettingsStorage::SettingsPlace::Application);
             //
             // ... и экспортируем документ
             //
             QScopedPointer<BusinessLayer::AbstractExporter> exporter;
             switch (exportOptions.fileFormat) {
-                default:
-                case 0: {
-                    exporter.reset(new BusinessLayer::PdfExporter);
-                    break;
-                }
-                case 1: {
-                    break;
-                }
-                case 2: {
-                    break;
-                }
-                case 3: {
-                    break;
-                }
+            default:
+            case ExportFileFormat::Pdf: {
+                exporter.reset(new BusinessLayer::PdfExporter);
+                break;
+            }
+            case ExportFileFormat::Docx: {
+                exporter.reset(new BusinessLayer::DocxExporter);
+                break;
+            }
+            case ExportFileFormat::Fdx: {
+                break;
+            }
+            case ExportFileFormat::Fountain: {
+                break;
+            }
             }
             if (exporter.isNull()) {
                 return;
             }
-            exporter->exportTo(qobject_cast<BusinessLayer::ScreenplayTextModel*>(_model),
-                               exportOptions);
+            exporter->exportTo(screenplayTextModel, exportOptions);
 
             //
             // Если необходимо, откроем экспортированный документ
@@ -147,7 +153,8 @@ void ExportManager::Implementation::exportScreenplay(BusinessLayer::AbstractMode
             //
             exportDialog->hideDialog();
         });
-        connect(exportDialog, &Ui::ExportDialog::canceled, exportDialog, &Ui::ExportDialog::hideDialog);
+        connect(exportDialog, &Ui::ExportDialog::canceled, exportDialog,
+                &Ui::ExportDialog::hideDialog);
         connect(exportDialog, &Ui::ExportDialog::disappeared, exportDialog, [this] {
             exportDialog->deleteLater();
             exportDialog = nullptr;
@@ -162,28 +169,25 @@ void ExportManager::Implementation::exportScreenplay(BusinessLayer::AbstractMode
 
 
 ExportManager::ExportManager(QObject* _parent, QWidget* _parentWidget)
-    : QObject(_parent),
-      d(new Implementation(this, _parentWidget))
+    : QObject(_parent)
+    , d(new Implementation(this, _parentWidget))
 {
-
 }
 
 ExportManager::~ExportManager() = default;
 
 bool ExportManager::canExportDocument(BusinessLayer::AbstractModel* _model) const
 {
-    if (_model == nullptr
-        || _model->document() == nullptr) {
+    if (_model == nullptr || _model->document() == nullptr) {
         return false;
     }
 
-    switch (_model->document()->type())
-    {
-        case Domain::DocumentObjectType::ScreenplayText:
-            return true;
+    switch (_model->document()->type()) {
+    case Domain::DocumentObjectType::ScreenplayText:
+        return true;
 
-        default:
-            return false;
+    default:
+        return false;
     }
 }
 
@@ -193,14 +197,14 @@ void ExportManager::exportDocument(BusinessLayer::AbstractModel* _model)
         return;
     }
 
-    switch (_model->document()->type())
-    {
-        case Domain::DocumentObjectType::ScreenplayText: {
-            d->exportScreenplay(_model);
-            break;
-        }
+    switch (_model->document()->type()) {
+    case Domain::DocumentObjectType::ScreenplayText: {
+        d->exportScreenplay(_model);
+        break;
+    }
 
-        default: break;
+    default:
+        break;
     }
 }
 

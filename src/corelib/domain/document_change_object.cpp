@@ -1,8 +1,7 @@
 #include "document_change_object.h"
 
 
-namespace Domain
-{
+namespace Domain {
 
 const QUuid& DocumentChangeObject::documentUuid() const
 {
@@ -81,7 +80,7 @@ void DocumentChangeObject::setDateTime(const QDateTime& _dateTime)
 
 const QString& DocumentChangeObject::userName() const
 {
-    return  m_userName;
+    return m_userName;
 }
 
 void DocumentChangeObject::setUserName(const QString& _name)
@@ -110,16 +109,17 @@ void DocumentChangeObject::setUserEmail(const QString& _email)
 }
 
 DocumentChangeObject::DocumentChangeObject(const Identifier& _id, const QUuid& _documentUuid,
-    const QUuid& _uuid, const QByteArray& _undoPatch, const QByteArray& _redoPatch,
-    const QDateTime& _dateTime, const QString& _userName, const QString& _userEmail)
-    : DomainObject(_id),
-      m_documentUuid(_documentUuid),
-      m_uuid(_uuid),
-      m_undoPatch(_undoPatch),
-      m_redoPatch(_redoPatch),
-      m_dateTime(_dateTime),
-      m_userName(_userName),
-      m_userEmail(_userEmail)
+                                           const QUuid& _uuid, const QByteArray& _undoPatch,
+                                           const QByteArray& _redoPatch, const QDateTime& _dateTime,
+                                           const QString& _userName, const QString& _userEmail)
+    : DomainObject(_id)
+    , m_documentUuid(_documentUuid)
+    , m_uuid(_uuid)
+    , m_undoPatch(_undoPatch)
+    , m_redoPatch(_redoPatch)
+    , m_dateTime(_dateTime)
+    , m_userName(_userName)
+    , m_userEmail(_userEmail)
 {
 }
 

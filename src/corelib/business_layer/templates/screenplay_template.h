@@ -1,17 +1,16 @@
 #pragma once
 
-#include <corelib_global.h>
-
 #include <QHash>
 #include <QPageSize>
 #include <QTextFormat>
+
+#include <corelib_global.h>
 
 class QTextBlock;
 class QXmlStreamAttributes;
 
 
-namespace BusinessLayer
-{
+namespace BusinessLayer {
 
 /**
  * @brief Типы параграфов в сценарии
@@ -32,7 +31,7 @@ enum class ScreenplayParagraphType {
     FolderHeader,
     FolderFooter,
     //
-    SceneHeadingShadow,	//!< Время и место, для вспомогательных разрывов
+    SceneHeadingShadow, //!< Время и место, для вспомогательных разрывов
     //
     PageSplitter, //!< Разделитель страницы (для блоков внутри которых находятся таблицы)
 };
@@ -68,30 +67,31 @@ public:
      */
     enum Property {
         PropertyType = QTextFormat::UserProperty + 100, //!< Тип блока
-        PropertyHeaderType,       //!< Тип блока заголовка
-        PropertyHeader,           //!< Текст заголовка блока (а-ля "ТИТР:")
-        PropertyPrefix,           //!< Префикс блока
-        PropertyPostfix,          //!< Постфикс блока
+        PropertyHeaderType, //!< Тип блока заголовка
+        PropertyHeader, //!< Текст заголовка блока (а-ля "ТИТР:")
+        PropertyPrefix, //!< Префикс блока
+        PropertyPostfix, //!< Постфикс блока
         PropertyIsFirstUppercase, //!< Необходимо ли первый символ поднимать в верхний регистр
-        PropertyIsCanModify,      //!< Редактируемый ли блок
+        PropertyIsCanModify, //!< Редактируемый ли блок
         //
         // Свойства редакторских заметок
         //
-        PropertyIsReviewMark,    //!< Формат является редакторской правкой
-        PropertyIsHighlight,     //!< Является ли правка аналогом выделения цветом из ворда
-        PropertyIsDone,          //!< Правка помечена как выполненная
-        PropertyComments,        //!< Список комментариев к правке
+        PropertyIsReviewMark, //!< Формат является редакторской правкой
+        PropertyIsDone, //!< Правка помечена как выполненная
+        PropertyComments, //!< Список комментариев к правке
         PropertyCommentsAuthors, //!< Список авторов комментариев
-        PropertyCommentsDates,   //!< Список дат комментариев
+        PropertyCommentsDates, //!< Список дат комментариев
         //
         // Свойства корректирующих текст блоков
         //
-        PropertyIsCorrection,           //!< Не разрывающий текст блок (пустые блоки в конце страницы, блоки с текстом ПРОД, или именем персонажа)
-        PropertyIsCorrectionContinued,	//!< Блок с текстом ПРОД., вставляемый на обрыве реплики
-        PropertyIsCorrectionCharacter,	//!< Блок с именем персонажа, вставляемый на новой странице
-        PropertyIsBreakCorrectionStart,	//!< Разрывающий текст блок в начале разрыва
-        PropertyIsBreakCorrectionEnd,	//!< Разрывающий текст блок в конце разрыва
-        PropertyIsCharacterContinued,   //!< Имя персонажа для которого необходимо отображать допольнительный текст ПРОД., не пишем в xml
+        PropertyIsCorrection, //!< Не разрывающий текст блок (пустые блоки в конце страницы, блоки с
+                              //!< текстом ПРОД, или именем персонажа)
+        PropertyIsCorrectionContinued, //!< Блок с текстом ПРОД., вставляемый на обрыве реплики
+        PropertyIsCorrectionCharacter, //!< Блок с именем персонажа, вставляемый на новой странице
+        PropertyIsBreakCorrectionStart, //!< Разрывающий текст блок в начале разрыва
+        PropertyIsBreakCorrectionEnd, //!< Разрывающий текст блок в конце разрыва
+        PropertyIsCharacterContinued, //!< Имя персонажа для которого необходимо отображать
+                                      //!< допольнительный текст ПРОД., не пишем в xml
     };
 
     /**

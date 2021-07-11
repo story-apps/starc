@@ -2,16 +2,14 @@
 
 #include <business_layer/templates/screenplay_template.h>
 #include <business_layer/templates/templates_facade.h>
-
 #include <utils/helpers/text_helper.h>
 
+#include <QRegularExpression>
 #include <QString>
 #include <QStringList>
-#include <QRegularExpression>
 
 
-namespace BusinessLayer
-{
+namespace BusinessLayer {
 
 CharacterParser::Section CharacterParser::section(const QString& _text)
 {
@@ -51,7 +49,7 @@ QString CharacterParser::extension(const QString& _text)
         state = match.captured(0);
         state = state.remove("(").remove(")");
     }
-    return TextHelper::smartToUpper(state);
+    return TextHelper::smartToUpper(state).simplified();
 }
 
 // ****
@@ -84,7 +82,7 @@ QString SceneHeadingParser::sceneIntro(const QString& _text)
         placeName = _text.split(". ").value(0);
     }
 
-    return TextHelper::smartToUpper(placeName);
+    return TextHelper::smartToUpper(placeName).simplified();
 }
 
 QString SceneHeadingParser::location(const QString& _text, bool _force)
@@ -100,7 +98,7 @@ QString SceneHeadingParser::location(const QString& _text, bool _force)
         }
     }
 
-    return TextHelper::smartToUpper(locationName);
+    return TextHelper::smartToUpper(locationName).simplified();
 }
 
 QString SceneHeadingParser::storyDay(const QString& _text)
@@ -111,7 +109,7 @@ QString SceneHeadingParser::storyDay(const QString& _text)
         scenarioDayName = _text.split(", ").last();
     }
 
-    return TextHelper::smartToUpper(scenarioDayName);
+    return TextHelper::smartToUpper(scenarioDayName).simplified();
 }
 
 QString SceneHeadingParser::sceneTime(const QString& _text)
@@ -123,7 +121,7 @@ QString SceneHeadingParser::sceneTime(const QString& _text)
         timeName = timeName.simplified();
     }
 
-    return TextHelper::smartToUpper(timeName);
+    return TextHelper::smartToUpper(timeName).simplified();
 }
 
 // ****
@@ -135,19 +133,18 @@ QStringList SceneCharactersParser::characters(const QString& _text)
     //
     // Удалим потенциальные приставку и окончание
     //
-    const auto style = TemplatesFacade::screenplayTemplate().blockStyle(ScreenplayParagraphType::SceneCharacters);
+    const auto style = TemplatesFacade::screenplayTemplate().blockStyle(
+        ScreenplayParagraphType::SceneCharacters);
     QString stylePrefix = style.prefix();
-    if (!stylePrefix.isEmpty()
-        && characters.startsWith(stylePrefix)) {
+    if (!stylePrefix.isEmpty() && characters.startsWith(stylePrefix)) {
         characters.remove(QRegularExpression(QString("^[%1]").arg(stylePrefix)));
     }
     QString stylePostfix = style.postfix();
-    if (!stylePostfix.isEmpty()
-        && characters.endsWith(stylePostfix)) {
+    if (!stylePostfix.isEmpty() && characters.endsWith(stylePostfix)) {
         characters.remove(QRegularExpression(QString("[%1]$").arg(stylePostfix)));
     }
 
-    QStringList charactersList = characters.split(",", QString::SkipEmptyParts);
+    QStringList charactersList = characters.split(",", Qt::SkipEmptyParts);
 
     //
     // Убираем символы пробелов

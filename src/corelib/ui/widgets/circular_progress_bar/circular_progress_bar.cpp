@@ -2,8 +2,8 @@
 
 #include <ui/design_system/design_system.h>
 
-#include <QPainter>
 #include <QPaintEvent>
+#include <QPainter>
 
 
 class CircularProgressBar::Implementation
@@ -15,8 +15,8 @@ public:
 };
 
 CircularProgressBar::CircularProgressBar(QWidget* _parent)
-    : Widget(_parent),
-      d(new Implementation)
+    : Widget(_parent)
+    , d(new Implementation)
 {
 }
 
@@ -72,11 +72,10 @@ void CircularProgressBar::paintEvent(QPaintEvent* _event)
     //
 
     const qreal minSideLength = qMin(contentsRect().width(), contentsRect().height())
-                                - Ui::DesignSystem::progressBar().circularTrackHeight();
+        - Ui::DesignSystem::progressBar().circularTrackHeight();
     const QRectF rectangle(contentsRect().left() + (contentsRect().width() - minSideLength) / 2,
                            contentsRect().top() + (contentsRect().height() - minSideLength) / 2,
-                           minSideLength,
-                           minSideLength);
+                           minSideLength, minSideLength);
 
     QPen pen;
     pen.setColor(d->barColor);
@@ -109,7 +108,6 @@ void CircularProgressBar::paintEvent(QPaintEvent* _event)
     pen.setColor(textColor());
     painter.setPen(pen);
     painter.setFont(Ui::DesignSystem::font().button());
-    painter.drawText(rectangle, Qt::AlignCenter, d->text.isEmpty()
-                                                 ? QString::number(d->value * 100, 'f', 1) + "%"
-                                                 : d->text);
+    painter.drawText(rectangle, Qt::AlignCenter,
+                     d->text.isEmpty() ? QString::number(d->value * 100, 'f', 1) + "%" : d->text);
 }

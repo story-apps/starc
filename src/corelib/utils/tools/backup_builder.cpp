@@ -12,7 +12,8 @@ void BackupBuilder::save(const QString& _filePath, const QString& _backupDir)
     return save(_filePath, _backupDir, {});
 }
 
-void BackupBuilder::save(const QString& _filePath, const QString& _backupDir, const QString& _newName)
+void BackupBuilder::save(const QString& _filePath, const QString& _backupDir,
+                         const QString& _newName)
 {
     //
     // Создаём папку для хранения резервных копий, если такой ещё нет
@@ -38,11 +39,10 @@ void BackupBuilder::save(const QString& _filePath, const QString& _backupDir, co
 
     QFileInfo fileInfo(_filePath);
     const QString backupBaseName = _newName.isEmpty() ? fileInfo.completeBaseName() : _newName;
-    auto backupFileNameFor = [backupPath, backupBaseName, fileInfo] (const QDate& _date) {
-        return QString("%1%2_%3.%4").arg(backupPath,
-                                         backupBaseName,
-                                         _date.toString("yyyy_MM_dd"),
-                                         fileInfo.completeSuffix());
+    auto backupFileNameFor = [backupPath, backupBaseName, fileInfo](const QDate& _date) {
+        return QString("%1%2_%3.%4")
+            .arg(backupPath, backupBaseName, _date.toString("yyyy_MM_dd"),
+                 fileInfo.completeSuffix());
     };
 
     //
@@ -50,7 +50,7 @@ void BackupBuilder::save(const QString& _filePath, const QString& _backupDir, co
     //
     const auto today = QDate::currentDate();
     const QString tmpBackupFileName
-            = QString("%1%2.tmp.%3").arg(backupPath, backupBaseName, fileInfo.completeSuffix());
+        = QString("%1%2.tmp.%3").arg(backupPath, backupBaseName, fileInfo.completeSuffix());
     //
     // ... копируем файл во временную резервную копию
     //
@@ -68,7 +68,8 @@ void BackupBuilder::save(const QString& _filePath, const QString& _backupDir, co
     //
     const auto nameFilter = QString("%1_*.%2").arg(backupBaseName, fileInfo.completeSuffix());
     std::set<QString> backups;
-    for (auto file : QDir(_backupDir).entryInfoList({ nameFilter }, QDir::Files)) {
+    const auto files = QDir(_backupDir).entryInfoList({ nameFilter }, QDir::Files);
+    for (const auto& file : files) {
         backups.insert(file.absoluteFilePath());
     }
 
@@ -102,10 +103,8 @@ void BackupBuilder::save(const QString& _filePath, const QString& _backupDir, co
     {
         std::set<QString> lastWeekBackups;
         std::copy(backupsToRemove.lower_bound(backupFileNameFor(today.addDays(-13))),
-                  backupsToRemove.end(),
-                  std::inserter(lastWeekBackups, lastWeekBackups.begin()));
-        while (itemsToRemove > 0
-               && lastWeekBackups.size() > 1) {
+                  backupsToRemove.end(), std::inserter(lastWeekBackups, lastWeekBackups.begin()));
+        while (itemsToRemove > 0 && lastWeekBackups.size() > 1) {
             const auto backup = *lastWeekBackups.rbegin();
             lastWeekBackups.erase(backup);
             QFile::remove(backup);
@@ -121,8 +120,7 @@ void BackupBuilder::save(const QString& _filePath, const QString& _backupDir, co
         std::copy(backupsToRemove.begin(),
                   backupsToRemove.lower_bound(backupFileNameFor(today.addDays(-13))),
                   std::inserter(oldBackups, oldBackups.begin()));
-        while (itemsToRemove > 0
-               && oldBackups.size() > 1) {
+        while (itemsToRemove > 0 && oldBackups.size() > 1) {
             const auto backup = *oldBackups.begin();
             oldBackups.erase(backup);
             QFile::remove(backup);

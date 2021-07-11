@@ -5,13 +5,11 @@
 using WAF::CircleFillDecorator;
 
 
-
-CircleFillDecorator::CircleFillDecorator(QWidget* _parent) :
-    QWidget(_parent),
-    m_radius(0),
-    m_fillColor(Qt::white)
+CircleFillDecorator::CircleFillDecorator(QWidget* _parent)
+    : QWidget(_parent)
+    , m_radius(0)
+    , m_fillColor(Qt::white)
 {
-
 }
 
 void CircleFillDecorator::setStartPoint(const QPoint& _globalPoint)

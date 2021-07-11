@@ -3,8 +3,7 @@
 #include <ui/widgets/drawer/drawer.h>
 
 
-namespace Ui
-{
+namespace Ui {
 
 /**
  * @brief Меню приложения
@@ -56,6 +55,11 @@ public:
      * @brief Установить возможность экспортирования текущего документа
      */
     void setCurrentDocumentExportAvailable(bool _available);
+
+    /**
+     * @brief Закрытие меню
+     */
+    void closeMenu();
 
 signals:
     /**
@@ -114,6 +118,11 @@ protected:
      * @brief Обновить переводы
      */
     void updateTranslations() override;
+
+    /**
+     * @brief Обработка нажатия клавиатуры (Закрытие при нажатии esc)
+     */
+    void keyPressEvent(QKeyEvent* _event) override;
 
 private:
     class Implementation;

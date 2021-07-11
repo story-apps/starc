@@ -34,25 +34,24 @@ DialogContent::Implementation::Implementation()
 
 
 DialogContent::DialogContent(QWidget* _parent)
-    : Widget(_parent),
-      d(new Implementation)
+    : Widget(_parent)
+    , d(new Implementation)
 {
-    connect(&d->sizeAnimationStartTimer, &QTimer::timeout, this, [this] { d->sizeAnimation.start(); });
-    connect(&d->moveAnimationStartTimer, &QTimer::timeout, this, [this] { d->moveAnimation.start(); });
-    connect(&d->sizeAnimation, &QVariantAnimation::valueChanged, this, [this] (const QVariant& _value) {
-        resize(_value.toSize());
-    });
-    connect(&d->moveAnimation, &QVariantAnimation::valueChanged, this, [this] (const QVariant& _value) {
-        move(_value.toPoint());
-    });
+    connect(&d->sizeAnimationStartTimer, &QTimer::timeout, this,
+            [this] { d->sizeAnimation.start(); });
+    connect(&d->moveAnimationStartTimer, &QTimer::timeout, this,
+            [this] { d->moveAnimation.start(); });
+    connect(&d->sizeAnimation, &QVariantAnimation::valueChanged, this,
+            [this](const QVariant& _value) { resize(_value.toSize()); });
+    connect(&d->moveAnimation, &QVariantAnimation::valueChanged, this,
+            [this](const QVariant& _value) { move(_value.toPoint()); });
 }
 
 DialogContent::~DialogContent() = default;
 
 void DialogContent::resizeEvent(QResizeEvent* _event)
 {
-    if (!isVisible()
-        || !_event->oldSize().isValid()
+    if (!isVisible() || !_event->oldSize().isValid()
         || d->sizeAnimation.state() == QVariantAnimation::Running) {
         return;
     }
@@ -79,7 +78,8 @@ void DialogContent::resizeEvent(QResizeEvent* _event)
     //
     else {
         //
-        // ... и это пришло событие, которое мы сами запустили, чтобы размер виджета пока не дёргался
+        // ... и это пришло событие, которое мы сами запустили, чтобы размер виджета пока не
+        // дёргался
         //
         if (d->sizeAnimation.startValue().toSize() == _event->size()
             && d->sizeAnimation.endValue().toSize() == _event->oldSize()) {
@@ -106,8 +106,7 @@ void DialogContent::resizeEvent(QResizeEvent* _event)
 
 void DialogContent::moveEvent(QMoveEvent* _event)
 {
-    if (!isVisible()
-        || _event->oldPos().isNull()
+    if (!isVisible() || _event->oldPos().isNull()
         || d->moveAnimation.state() == QVariantAnimation::Running) {
         return;
     }
@@ -134,7 +133,8 @@ void DialogContent::moveEvent(QMoveEvent* _event)
     //
     else {
         //
-        // ... и это пришло событие, которое мы сами запустили, чтобы размер виджета пока не дёргался
+        // ... и это пришло событие, которое мы сами запустили, чтобы размер виджета пока не
+        // дёргался
         //
         if (d->moveAnimation.startValue().toPoint() == _event->pos()
             && d->moveAnimation.endValue().toPoint() == _event->oldPos()) {

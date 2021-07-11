@@ -1,14 +1,13 @@
 #pragma once
 
-#include <corelib_global.h>
-
-#include <QString>
 #include <QHash>
+#include <QString>
 #include <QVariant>
 
+#include <corelib_global.h>
 
-namespace Domain
-{
+
+namespace Domain {
 /**
  * @brief Класс идентификатора объектов в базе данных
  */
@@ -56,8 +55,7 @@ private:
 
 inline bool operator==(const Identifier& _id1, const Identifier& _id2)
 {
-    return _id1.value() == _id2.value()
-           && _id1.version() == _id2.version();
+    return _id1.value() == _id2.value() && _id1.version() == _id2.version();
 }
 inline bool operator!=(const Identifier& _id1, const Identifier& _id2)
 {

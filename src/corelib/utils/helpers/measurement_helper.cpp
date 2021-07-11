@@ -1,8 +1,8 @@
 #include "measurement_helper.h"
 
 #include <QApplication>
-#include <QScreen>
 #include <QPageSize>
+#include <QScreen>
 #include <QtMath>
 
 
@@ -12,12 +12,13 @@ qreal MeasurementHelper::mmToPx(qreal _mm, bool _x)
         const auto density = QApplication::primaryScreen()->physicalDotsPerInchX();
         const auto pageSize = QPageSize(QPageSize::A4);
         return pageSize.sizePixels(density).width() / pageSize.size(QPageSize::Millimeter).width();
-    } ();
+    }();
     static qreal yCoefficient = [] {
         const auto density = QApplication::primaryScreen()->physicalDotsPerInchY();
         const auto pageSize = QPageSize(QPageSize::A4);
-        return pageSize.sizePixels(density).height() / pageSize.size(QPageSize::Millimeter).height();
-    } ();
+        return pageSize.sizePixels(density).height()
+            / pageSize.size(QPageSize::Millimeter).height();
+    }();
 
     return _mm * (_x ? xCoefficient : yCoefficient);
 }
@@ -32,11 +33,11 @@ qreal MeasurementHelper::ptToPx(qreal _pt, bool _x)
     static qreal xCoefficient = [] {
         const auto density = QApplication::primaryScreen()->physicalDotsPerInchX();
         return 72 / density;
-    } ();
+    }();
     static qreal yCoefficient = [] {
         const auto density = QApplication::primaryScreen()->physicalDotsPerInchY();
         return 72 / density;
-    } ();
+    }();
 
     return _pt / (_x ? xCoefficient : yCoefficient);
 }

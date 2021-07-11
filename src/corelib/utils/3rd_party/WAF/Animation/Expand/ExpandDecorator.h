@@ -24,60 +24,59 @@
 /**
  * Widgets Animation Framework
  */
-namespace WAF
+namespace WAF {
+/**
+ * @brief Класс рисующий выезжание области, с последующим заполнением пространства
+ */
+class ExpandDecorator : public QWidget
 {
-	/**
-	 * @brief Класс рисующий выезжание области, с последующим заполнением пространства
-	 */
-	class ExpandDecorator : public QWidget
-	{
-		Q_OBJECT
+    Q_OBJECT
 
-		Q_PROPERTY(QRect expandRect READ expandRect WRITE setExpandRect)
+    Q_PROPERTY(QRect expandRect READ expandRect WRITE setExpandRect)
 
-	public:
-		explicit ExpandDecorator(QWidget* _parent);
+public:
+    explicit ExpandDecorator(QWidget* _parent);
 
-		/**
-		 * @brief Радиус рисуемой окружности
-		 */
-		/** @{ */
-		QRect expandRect() const;
-		void setExpandRect(QRect _expandRect);
-		/** @} */
+    /**
+     * @brief Радиус рисуемой окружности
+     */
+    /** @{ */
+    QRect expandRect() const;
+    void setExpandRect(QRect _expandRect);
+    /** @} */
 
-		/**
-		 * @brief Сохранить изображение расширяемой области, для последующего его смещения
-		 */
-		void grabExpandRect();
+    /**
+     * @brief Сохранить изображение расширяемой области, для последующего его смещения
+     */
+    void grabExpandRect();
 
-		/**
-		 * @brief Установить цвет заливки
-		 */
-		void setFillColor(const QColor& _fillColor);
+    /**
+     * @brief Установить цвет заливки
+     */
+    void setFillColor(const QColor& _fillColor);
 
-	protected:
-		/**
-		 * @brief Переопределяется для прорисовки декорации
-		 */
-		void paintEvent(QPaintEvent* _event);
+protected:
+    /**
+     * @brief Переопределяется для прорисовки декорации
+     */
+    void paintEvent(QPaintEvent* _event);
 
-	private:
-		/**
-		 * @brief Точка из которой начинается заполенние
-		 */
-		QPixmap m_expandRectPixmap;
+private:
+    /**
+     * @brief Точка из которой начинается заполенние
+     */
+    QPixmap m_expandRectPixmap;
 
-		/**
-		 * @brief Прозрачность изображения виджета для прорисовки
-		 */
-		QRect m_expandRect;
+    /**
+     * @brief Прозрачность изображения виджета для прорисовки
+     */
+    QRect m_expandRect;
 
-		/**
-		 * @brief Цвет растворения
-		 */
-		QColor m_fillColor;
-	};
-}
+    /**
+     * @brief Цвет растворения
+     */
+    QColor m_fillColor;
+};
+} // namespace WAF
 
 #endif // EXPANDDECORATOR_H

@@ -75,8 +75,8 @@ public:
     /**
      * @brief Реализация модели списка
      */
-    int rowCount(const QModelIndex &_parent = {}) const override;
-    QVariant data(const QModelIndex &_index, int _role) const override;
+    int rowCount(const QModelIndex& _parent = {}) const override;
+    QVariant data(const QModelIndex& _index, int _role) const override;
 
 private:
     class Implementation;

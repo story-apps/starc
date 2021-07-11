@@ -18,8 +18,8 @@ public:
 
 
 AbstractLinkLabel::AbstractLinkLabel(QWidget* _parent)
-    : AbstractLabel(_parent),
-      d(new Implementation)
+    : AbstractLabel(_parent)
+    , d(new Implementation)
 {
     setCursor(Qt::PointingHandCursor);
 }

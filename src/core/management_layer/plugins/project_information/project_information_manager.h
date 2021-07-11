@@ -7,8 +7,7 @@
 #include <QObject>
 
 
-namespace ManagementLayer
-{
+namespace ManagementLayer {
 
 /**
  * @brief Менеджер информации о проекте

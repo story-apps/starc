@@ -1,17 +1,16 @@
 #pragma once
 
-#include <corelib_global.h>
-
 #include <QTextDocument>
+
+#include <corelib_global.h>
 
 
 namespace BusinessLayer {
-    class ScreenplayTextModel;
-    enum class ScreenplayParagraphType;
-}
+class ScreenplayTextModel;
+enum class ScreenplayParagraphType;
+} // namespace BusinessLayer
 
-namespace BusinessLayer
-{
+namespace BusinessLayer {
 class ScreenplayTextCursor;
 
 /**
@@ -67,14 +66,13 @@ public:
     /**
      * @brief Вставить новый блок заданного типа
      */
-    void addParagraph(BusinessLayer::ScreenplayParagraphType _type,
-        ScreenplayTextCursor _cursor);
+    void addParagraph(BusinessLayer::ScreenplayParagraphType _type, ScreenplayTextCursor _cursor);
 
     /**
      * @brief Установить тип блока для заданного курсора
      */
     void setParagraphType(BusinessLayer::ScreenplayParagraphType _type,
-        const ScreenplayTextCursor& _cursor);
+                          const ScreenplayTextCursor& _cursor);
 
     /**
      * @brief Очистить текущий блок от установленного в нём типа
@@ -85,7 +83,7 @@ public:
      * @brief Применить заданный тип блока к тексту, на который указывает курсор
      */
     void applyParagraphType(BusinessLayer::ScreenplayParagraphType _type,
-        const ScreenplayTextCursor& _cursor);
+                            const ScreenplayTextCursor& _cursor);
 
     /**
      * @brief Разделить параграф на два
@@ -106,7 +104,7 @@ public:
      * @brief Добавить редакторсую заметку в текущее выделение
      */
     void addReviewMark(const QColor& _textColor, const QColor& _backgroundColor,
-        const QString& _comment, const ScreenplayTextCursor& _cursor);
+                       const QString& _comment, const ScreenplayTextCursor& _cursor);
 
 private:
     /**
@@ -124,4 +122,4 @@ private:
     QScopedPointer<Implementation> d;
 };
 
-} // namespace Ui
+} // namespace BusinessLayer

@@ -24,65 +24,64 @@
 /**
  * Widgets Animation Framework
  */
-namespace WAF
+namespace WAF {
+/**
+ * @brief Класс рисующий круг, заполняющий пространство
+ */
+class CircleFillDecorator : public QWidget
 {
-	/**
-	 * @brief Класс рисующий круг, заполняющий пространство
-	 */
-	class CircleFillDecorator : public QWidget
-	{
-		Q_OBJECT
+    Q_OBJECT
 
-		Q_PROPERTY(int radius READ radius WRITE setRadius)
+    Q_PROPERTY(int radius READ radius WRITE setRadius)
 
-	public:
-		explicit CircleFillDecorator(QWidget* _parent);
+public:
+    explicit CircleFillDecorator(QWidget* _parent);
 
-		/**
-		 * @brief Установить точку центра круга
-		 */
-        void setStartPoint(const QPoint& _globalPoint);
+    /**
+     * @brief Установить точку центра круга
+     */
+    void setStartPoint(const QPoint& _globalPoint);
 
-        /**
-         * @brief Получить точку центра круга в глобальных координатах
-         */
-        QPoint startPoint() const;
+    /**
+     * @brief Получить точку центра круга в глобальных координатах
+     */
+    QPoint startPoint() const;
 
-		/**
-		 * @brief Радиус рисуемой окружности
-		 */
-		/** @{ */
-		int radius() const;
-		void setRadius(int _radius);
-		/** @} */
+    /**
+     * @brief Радиус рисуемой окружности
+     */
+    /** @{ */
+    int radius() const;
+    void setRadius(int _radius);
+    /** @} */
 
-		/**
-		 * @brief Установить цвет заливки
-		 */
-		void setFillColor(const QColor& _fillColor);
+    /**
+     * @brief Установить цвет заливки
+     */
+    void setFillColor(const QColor& _fillColor);
 
-	protected:
-		/**
-		 * @brief Переопределяется для прорисовки декорации
-		 */
-		void paintEvent(QPaintEvent* _event);
+protected:
+    /**
+     * @brief Переопределяется для прорисовки декорации
+     */
+    void paintEvent(QPaintEvent* _event);
 
-	private:
-		/**
-		 * @brief Точка из которой начинается заполенние
-		 */
-		QPoint m_startPoint;
+private:
+    /**
+     * @brief Точка из которой начинается заполенние
+     */
+    QPoint m_startPoint;
 
-		/**
-		 * @brief Прозрачность изображения виджета для прорисовки
-		 */
-		int m_radius;
+    /**
+     * @brief Прозрачность изображения виджета для прорисовки
+     */
+    int m_radius;
 
-		/**
-		 * @brief Цвет растворения
-		 */
-		QColor m_fillColor;
-	};
-}
+    /**
+     * @brief Цвет растворения
+     */
+    QColor m_fillColor;
+};
+} // namespace WAF
 
 #endif // CIRCLEFILLDECORATOR_H

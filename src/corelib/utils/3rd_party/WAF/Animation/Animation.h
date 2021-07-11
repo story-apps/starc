@@ -17,9 +17,9 @@
 #ifndef ANIMATION_H
 #define ANIMATION_H
 
-#include <corelib_global.h>
-
 #include "../WAF.h"
+
+#include <corelib_global.h>
 
 class QColor;
 class QPixmap;
@@ -31,105 +31,118 @@ class QWidget;
 /**
  * Widgets Animation Framework
  */
-namespace WAF
+namespace WAF {
+class AbstractAnimator;
+class AnimationPrivate;
+
+/**
+ * @brief Фасад доступа к анимациям
+ */
+class CORE_LIBRARY_EXPORT Animation
 {
-    class AbstractAnimator;
-    class AnimationPrivate;
+public:
+    /**
+     * @brief Выкатить виджет из-за стороны приложения
+     */
+    static int sideSlideIn(QWidget* _widget, ApplicationSide _side = LeftSide,
+                           bool _decorateBackground = true);
 
     /**
-     * @brief Фасад доступа к анимациям
+     * @brief Закатить виджет из-за стороны приложения
      */
-    class CORE_LIBRARY_EXPORT Animation
-    {
-    public:
-        /**
-         * @brief Выкатить виджет из-за стороны приложения
-         */
-        static int sideSlideIn(QWidget* _widget, ApplicationSide _side = LeftSide, bool _decorateBackground = true);
+    static int sideSlideOut(QWidget* _widget, ApplicationSide _side = LeftSide,
+                            bool _decorateBackground = true);
 
-        /**
-         * @brief Закатить виджет из-за стороны приложения
-         */
-        static int sideSlideOut(QWidget* _widget, ApplicationSide _side = LeftSide, bool _decorateBackground = true);
+    /**
+     * @brief Выкатить/закатить виджет из-за стороны приложения
+     */
+    static int sideSlide(QWidget* _widget, ApplicationSide _side = LeftSide,
+                         bool _decorateBackground = true, bool _in = true);
 
-        /**
-         * @brief Выкатить/закатить виджет из-за стороны приложения
-         */
-        static int sideSlide(QWidget* _widget, ApplicationSide _side = LeftSide, bool _decorateBackground = true, bool _in = true);
+    /****/
 
-        /****/
+    /**
+     * @brief Выкатить виджет
+     */
+    static int slideIn(QWidget* _widget, AnimationDirection _direction, bool _fixBackground = true,
+                       bool _fixStartSize = false);
 
-        /**
-         * @brief Выкатить виджет
-         */
-        static int slideIn(QWidget* _widget, AnimationDirection _direction, bool _fixBackground = true, bool _fixStartSize = false);
+    /**
+     * @brief Закатить виджет
+     */
+    static int slideOut(QWidget* _widget, AnimationDirection _direction, bool _fixBackground = true,
+                        bool _fixStartSize = false);
 
-        /**
-         * @brief Закатить виджет
-         */
-        static int slideOut(QWidget* _widget, AnimationDirection _direction, bool _fixBackground = true, bool _fixStartSize = false);
+    /**
+     * @brief Выкатить/закатить виджет
+     */
+    static int slide(QWidget* _widget, AnimationDirection _direction, bool _fixBackground = true,
+                     bool _fixStartSize = false, bool _in = true);
 
-        /**
-         * @brief Выкатить/закатить виджет
-         */
-        static int slide(QWidget* _widget, AnimationDirection _direction, bool _fixBackground = true, bool _fixStartSize = false, bool _in = true);
+    /****/
 
-        /****/
+    /**
+     * @brief Заполнить цветовым кругом
+     */
+    static int circleFillIn(QWidget* _widget, const QPoint& _startPoint, const QColor& _fillColor,
+                            bool _hideAfterFinish = true);
 
-        /**
-         * @brief Заполнить цветовым кругом
-         */
-        static int circleFillIn(QWidget* _widget, const QPoint& _startPoint, const QColor& _fillColor, bool _hideAfterFinish = true);
+    /**
+     * @brief Очистить цветовым кругом
+     */
+    static int circleFillOut(QWidget* _widget, const QPoint& _startPoint, const QColor& _fillColor,
+                             bool _hideAfterFinish = true);
 
-        /**
-         * @brief Очистить цветовым кругом
-         */
-        static int circleFillOut(QWidget* _widget, const QPoint& _startPoint, const QColor& _fillColor, bool _hideAfterFinish = true);
+    /**
+     * @brief Заполнить/очистить цветовым кругом
+     */
+    static int circleFill(QWidget* _widget, const QPoint& _startPoint, const QColor& _fillColor,
+                          bool _hideAfterFinish = true, bool _in = true);
 
-        /**
-         * @brief Заполнить/очистить цветовым кругом
-         */
-        static int circleFill(QWidget* _widget, const QPoint& _startPoint, const QColor& _fillColor, bool _hideAfterFinish = true, bool _in = true);
+    /****/
 
-        /****/
+    /**
+     * @brief Очистить кругом изображения
+     */
+    static int circleTransparentIn(QWidget* _widget, const QPoint& _startPoint,
+                                   const QPixmap& _fillImage, bool _hideAfterFinish = true);
 
-        /**
-         * @brief Очистить кругом изображения
-         */
-        static int circleTransparentIn(QWidget* _widget, const QPoint& _startPoint, const QPixmap& _fillImage, bool _hideAfterFinish = true);
+    /**
+     * @brief Заполнить кругом изображения
+     */
+    static int circleTransparentOut(QWidget* _widget, const QPoint& _startPoint,
+                                    const QPixmap& _fillImage, bool _hideAfterFinish = true);
 
-        /**
-         * @brief Заполнить кругом изображения
-         */
-        static int circleTransparentOut(QWidget* _widget, const QPoint& _startPoint, const QPixmap& _fillImage, bool _hideAfterFinish = true);
+    /**
+     * @brief Заполнить/очистить кругом изображения
+     */
+    static int circleTransparent(QWidget* _widget, const QPoint& _startPoint,
+                                 const QPixmap& _fillImage, bool _hideAfterFinish = true,
+                                 bool _in = true);
 
-        /**
-         * @brief Заполнить/очистить кругом изображения
-         */
-        static int circleTransparent(QWidget* _widget, const QPoint& _startPoint, const QPixmap& _fillImage, bool _hideAfterFinish = true, bool _in = true);
+    /****/
 
-        /****/
+    /**
+     * @brief Вытолкнуть заданную область наверх, затемнив остальную часть экрана
+     */
+    static int expand(QWidget* _widget, const QRect& _expandRect, const QColor& _fillColor,
+                      bool _in = true);
 
-        /**
-         * @brief Вытолкнуть заданную область наверх, затемнив остальную часть экрана
-         */
-        static int expand(QWidget* _widget, const QRect& _expandRect, const QColor& _fillColor, bool _in = true);
+private:
+    /**
+     * @brief Запустить заданную анимацию в заданном направлении
+     */
+    static int runAnimation(AbstractAnimator* _animator, bool _in);
 
-    private:
-        /**
-         * @brief Запустить заданную анимацию в заданном направлении
-         */
-        static int runAnimation(AbstractAnimator* _animator, bool _in);
-
-    private:
-        /**
-         * @brief Данные
-         */
-        /** @{ */
-        static AnimationPrivate* m_pimpl;
-        static AnimationPrivate* pimpl();
-        /** @} */
-    };
-}
+private:
+    /**
+     * @brief Данные
+     */
+    /** @{ */
+    static AnimationPrivate* m_pimpl;
+    static AnimationPrivate* pimpl();
+    /** @} */
+};
+} // namespace WAF
 
 #endif // ANIMATION_H

@@ -5,8 +5,7 @@
 class QAbstractItemModel;
 
 
-namespace Ui
-{
+namespace Ui {
 
 class ScreenplayTextStructureView : public AbstractNavigator
 {

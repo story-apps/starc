@@ -1,14 +1,15 @@
 #pragma once
 
+#include <corelib_global.h>
+
 class QAbstractItemModel;
 
-namespace BusinessLayer
-{
+namespace BusinessLayer {
 
 /**
  * @brief Базовый класс для отчётов
  */
-class AbstractReport
+class CORE_LIBRARY_EXPORT AbstractReport
 {
 public:
     virtual ~AbstractReport() = default;

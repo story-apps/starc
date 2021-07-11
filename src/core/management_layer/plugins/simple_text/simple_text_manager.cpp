@@ -3,10 +3,8 @@
 #include "simple_text_view.h"
 
 #include <business_layer/model/text/text_model.h>
-
 #include <data_layer/storage/settings_storage.h>
 #include <data_layer/storage/storage_facade.h>
-
 #include <domain/document_object.h>
 
 #include <QApplication>
@@ -14,15 +12,15 @@
 #include <QTimer>
 
 
-namespace ManagementLayer
-{
+namespace ManagementLayer {
 
-namespace  {
+namespace {
 const QString kSettingsKey = "simple-text";
-QString cursorPositionFor(Domain::DocumentObject* _item) {
+QString cursorPositionFor(Domain::DocumentObject* _item)
+{
     return QString("%1/%2/last-cursor").arg(kSettingsKey, _item->uuid().toString());
 }
-}
+} // namespace
 
 class SimpleTextManager::Implementation
 {
@@ -88,18 +86,19 @@ void SimpleTextManager::Implementation::saveViewSettings()
 void SimpleTextManager::Implementation::loadModelSettings()
 {
     using namespace DataStorageLayer;
-    const auto cursorPosition
-            = StorageFacade::settingsStorage()->value(
-                  cursorPositionFor(model->document()), SettingsStorage::SettingsPlace::Application, 0).toInt();
+    const auto cursorPosition = StorageFacade::settingsStorage()
+                                    ->value(cursorPositionFor(model->document()),
+                                            SettingsStorage::SettingsPlace::Application, 0)
+                                    .toInt();
     view->setCursorPosition(cursorPosition);
 }
 
 void SimpleTextManager::Implementation::saveModelSettings()
 {
     using namespace DataStorageLayer;
-    StorageFacade::settingsStorage()->setValue(
-        cursorPositionFor(model->document()), view->cursorPosition(),
-        SettingsStorage::SettingsPlace::Application);
+    StorageFacade::settingsStorage()->setValue(cursorPositionFor(model->document()),
+                                               view->cursorPosition(),
+                                               SettingsStorage::SettingsPlace::Application);
 }
 
 
@@ -107,11 +106,11 @@ void SimpleTextManager::Implementation::saveModelSettings()
 
 
 SimpleTextManager::SimpleTextManager(QObject* _parent)
-    : QObject(_parent),
-      d(new Implementation)
+    : QObject(_parent)
+    , d(new Implementation)
 {
-    connect(d->view, &Ui::SimpleTextView::currentModelIndexChanged,
-         this, &SimpleTextManager::currentModelIndexChanged);
+    connect(d->view, &Ui::SimpleTextView::currentModelIndexChanged, this,
+            &SimpleTextManager::currentModelIndexChanged);
 }
 
 SimpleTextManager::~SimpleTextManager() = default;
@@ -175,17 +174,16 @@ void SimpleTextManager::bind(IDocumentManager* _manager)
     Q_ASSERT(_manager);
 
     const auto isConnectedFirstTime
-            = connect(_manager->asQObject(), SIGNAL(currentModelIndexChanged(const QModelIndex&)),
-                      this, SLOT(setCurrentModelIndex(const QModelIndex&)), Qt::UniqueConnection);
+        = connect(_manager->asQObject(), SIGNAL(currentModelIndexChanged(const QModelIndex&)), this,
+                  SLOT(setCurrentModelIndex(const QModelIndex&)), Qt::UniqueConnection);
 
     //
     // Ставим в очередь событие нотификацию о смене текущей главы,
     // чтобы навигатор отобразил её при первом открытии
     //
     if (isConnectedFirstTime) {
-        QTimer::singleShot(0, this, [this] {
-            emit currentModelIndexChanged(d->view->currentModelIndex());
-        });
+        QTimer::singleShot(0, this,
+                           [this] { emit currentModelIndexChanged(d->view->currentModelIndex()); });
     }
 }
 

@@ -1,7 +1,6 @@
 #include "tab_bar.h"
 
 #include <ui/design_system/design_system.h>
-
 #include <utils/helpers/scroller_helper.h>
 
 #include <QMouseEvent>
@@ -19,7 +18,7 @@ struct Tab {
     bool visible;
 };
 
-}
+} // namespace
 
 class TabBar::Implementation
 {
@@ -71,24 +70,23 @@ qreal TabBar::Implementation::tabWidthHint(const Tab& _tab) const
 {
     return qMax(Ui::DesignSystem::tab().minimumWidth(),
                 QFontMetricsF(Ui::DesignSystem::font().button()).boundingRect(_tab.name).width()
-                + Ui::DesignSystem::tab().margins().top()
-                + Ui::DesignSystem::tab().margins().top());
+                    + Ui::DesignSystem::tab().margins().top()
+                    + Ui::DesignSystem::tab().margins().top());
 }
 
 qreal TabBar::Implementation::tabWidthHintForFixed(int _width) const
 {
-    const int visibleTabs = std::count_if(tabs.begin(), tabs.end(),
-                                          [] (const Tab& _tab) { return _tab.visible; });
+    const int visibleTabs
+        = std::count_if(tabs.begin(), tabs.end(), [](const Tab& _tab) { return _tab.visible; });
     return _width / visibleTabs;
 }
 
 qreal TabBar::Implementation::tabHeightHint(const Tab& _tab) const
 {
     return !_tab.name.isEmpty() && !_tab.icon.isNull()
-            ? Ui::DesignSystem::tab().heightWithTextAndIcon()
-            : !_tab.name.isEmpty()
-              ? Ui::DesignSystem::tab().heightWithText()
-              : Ui::DesignSystem::tab().heightWithIcon();
+        ? Ui::DesignSystem::tab().heightWithTextAndIcon()
+        : !_tab.name.isEmpty() ? Ui::DesignSystem::tab().heightWithText()
+                               : Ui::DesignSystem::tab().heightWithIcon();
 }
 
 QSizeF TabBar::Implementation::tabSizeHint(const Tab& _tab) const
@@ -117,8 +115,8 @@ qreal TabBar::Implementation::contentWidth() const
 
 
 TabBar::TabBar(QWidget* _parent)
-    : Widget(_parent),
-      d(new Implementation)
+    : Widget(_parent)
+    , d(new Implementation)
 {
     setFocusPolicy(Qt::StrongFocus);
 
@@ -127,17 +125,18 @@ TabBar::TabBar(QWidget* _parent)
     //
     // Анимируем прокручивание вьюпорта при смене текущей вкладки
     //
-    connect(&d->scrollingAnimation, &QVariantAnimation::valueChanged, this, [this] (const QVariant& _value) {
-        const qreal scrollValue = _value.toReal();
-        if (scrollValue < 0.0) {
-            d->scrollState.current = 0.0;
-        } else if (scrollValue > d->scrollState.maximum) {
-            d->scrollState.current = d->scrollState.maximum;
-        } else {
-            d->scrollState.current = scrollValue;
-        }
-        update();
-    });
+    connect(&d->scrollingAnimation, &QVariantAnimation::valueChanged, this,
+            [this](const QVariant& _value) {
+                const qreal scrollValue = _value.toReal();
+                if (scrollValue < 0.0) {
+                    d->scrollState.current = 0.0;
+                } else if (scrollValue > d->scrollState.maximum) {
+                    d->scrollState.current = d->scrollState.maximum;
+                } else {
+                    d->scrollState.current = scrollValue;
+                }
+                update();
+            });
 
     //
     // При обновлении положения декорации обновим отрисовку
@@ -161,7 +160,7 @@ void TabBar::setFixed(bool fixed)
 
 void TabBar::addTab(const QString& _tabName)
 {
-    d->tabs.append({_tabName, QPixmap(), true});
+    d->tabs.append({ _tabName, QPixmap(), true });
 
     updateGeometry();
     update();
@@ -197,8 +196,7 @@ void TabBar::setTabVisible(int _tabIndex, bool _visible)
     //
     // Если скрывается выделенная вкладка, ищем, какую можно сделать текущей
     //
-    if (d->currentTabIndex == _tabIndex
-        && _visible == false) {
+    if (d->currentTabIndex == _tabIndex && _visible == false) {
         //
         // Спарва ищем назад
         //
@@ -231,8 +229,7 @@ void TabBar::setTabVisible(int _tabIndex, bool _visible)
     //
     // Если все вкладки были скрыты, а эта становится видимой, то сделаем её текущей
     //
-    if (_visible == true
-        && d->tabs.value(d->currentTabIndex).visible == false) {
+    if (_visible == true && d->tabs.value(d->currentTabIndex).visible == false) {
         setCurrentTab(_tabIndex);
     }
 
@@ -242,8 +239,7 @@ void TabBar::setTabVisible(int _tabIndex, bool _visible)
 
 void TabBar::setCurrentTab(int _index)
 {
-    if (0 > _index || _index >= d->tabs.size()
-        || d->currentTabIndex == _index) {
+    if (0 > _index || _index >= d->tabs.size() || d->currentTabIndex == _index) {
         return;
     }
 
@@ -338,26 +334,26 @@ QSize TabBar::sizeHint() const
 bool TabBar::event(QEvent* _event)
 {
     switch (static_cast<int>(_event->type())) {
-        case QEvent::Scroll: {
-            QScrollEvent* event = static_cast<QScrollEvent*>(_event);
-            d->scrollState.current = event->contentPos().x();
-            update();
-            event->accept();
-            return true;
-        }
+    case QEvent::Scroll: {
+        QScrollEvent* event = static_cast<QScrollEvent*>(_event);
+        d->scrollState.current = event->contentPos().x();
+        update();
+        event->accept();
+        return true;
+    }
 
-        case QEvent::ScrollPrepare: {
-            QScrollPrepareEvent* event = static_cast<QScrollPrepareEvent*>(_event);
-            event->setViewportSize(QSizeF(d->contentWidth(), height()));
-            event->setContentPosRange(QRectF(0, 0, d->scrollState.maximum, 0));
-            event->setContentPos(QPointF(d->scrollState.current, 0));
-            event->accept();
-            return true;
-        }
+    case QEvent::ScrollPrepare: {
+        QScrollPrepareEvent* event = static_cast<QScrollPrepareEvent*>(_event);
+        event->setViewportSize(QSizeF(d->contentWidth(), height()));
+        event->setContentPosRange(QRectF(0, 0, d->scrollState.maximum, 0));
+        event->setContentPos(QPointF(d->scrollState.current, 0));
+        event->accept();
+        return true;
+    }
 
-        default: {
-            return QWidget::event(_event);
-        }
+    default: {
+        return QWidget::event(_event);
+    }
     }
 }
 
@@ -399,9 +395,7 @@ void TabBar::paintEvent(QPaintEvent* _event)
         //
         // Определим область для отрисовки таба
         //
-        const qreal tabWidth = d->isFixed
-                               ? d->tabWidthHintForFixed(width())
-                               : d->tabWidthHint(tab);
+        const qreal tabWidth = d->isFixed ? d->tabWidthHintForFixed(width()) : d->tabWidthHint(tab);
         const QRectF tabBoundingRect = QRectF(QPointF(tabX, 0.0), QSizeF(tabWidth, height()));
 
         //
@@ -417,8 +411,9 @@ void TabBar::paintEvent(QPaintEvent* _event)
         // ... текст
         //
         const qreal heightDelta = height() - d->tabHeightHint(tab);
-        const QRectF tabTextRect = QRectF(QPointF(tabBoundingRect.x(), tabBoundingRect.y() + heightDelta),
-                                          tabBoundingRect.adjusted(0, 0, 0, -heightDelta).size());
+        const QRectF tabTextRect
+            = QRectF(QPointF(tabBoundingRect.x(), tabBoundingRect.y() + heightDelta),
+                     tabBoundingRect.adjusted(0, 0, 0, -heightDelta).size());
         painter.drawText(tabTextRect, Qt::AlignCenter, tab.name);
         painter.setOpacity(1.0);
 
@@ -426,10 +421,10 @@ void TabBar::paintEvent(QPaintEvent* _event)
         // Подчёркивание
         //
         if (isTabCurrent) {
-            const QRectF decorationRect = QRectF(QPointF(tabBoundingRect.left(),
-                                                         tabBoundingRect.bottom()
-                                                         - Ui::DesignSystem::tabBar().underlineHeight()),
-                                                 tabBoundingRect.bottomRight());
+            const QRectF decorationRect = QRectF(
+                QPointF(tabBoundingRect.left(),
+                        tabBoundingRect.bottom() - Ui::DesignSystem::tabBar().underlineHeight()),
+                tabBoundingRect.bottomRight());
 
             if (d->decorationAnimation.state() != QAbstractAnimation::Running) {
                 d->decorationAnimation.setStartValue(decorationRect);
@@ -438,12 +433,11 @@ void TabBar::paintEvent(QPaintEvent* _event)
             }
 
             const QRectF currentDecorationRect
-                    = d->decorationAnimation.state() == QAbstractAnimation::Running
-                      && d->decorationAnimation.currentValue().isValid()
-                        ? d->decorationAnimation.currentValue().toRectF()
-                        : decorationRect;
+                = d->decorationAnimation.state() == QAbstractAnimation::Running
+                    && d->decorationAnimation.currentValue().isValid()
+                ? d->decorationAnimation.currentValue().toRectF()
+                : decorationRect;
             painter.fillRect(currentDecorationRect, painter.pen().color());
-
         }
 
         tabX += tabBoundingRect.width();

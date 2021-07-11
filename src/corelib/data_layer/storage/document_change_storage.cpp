@@ -3,15 +3,12 @@
 #include <data_layer/database.h>
 #include <data_layer/mapper/document_change_mapper.h>
 #include <data_layer/mapper/mapper_facade.h>
-
 #include <domain/document_change_object.h>
 #include <domain/objects_builder.h>
-
 #include <utils/shugar.h>
 
 
-namespace DataStorageLayer
-{
+namespace DataStorageLayer {
 
 class DocumentChangeStorage::Implementation
 {
@@ -25,24 +22,25 @@ public:
 
 DocumentChangeStorage::~DocumentChangeStorage() = default;
 
-Domain::DocumentChangeObject* DocumentChangeStorage::appendDocumentChange(const QUuid& _documentUuid,
-    const QUuid& _uuid, const QByteArray& _undoPatch, const QByteArray& _redoPatch,
-    const QString& _userEmail, const QString& _userName)
+Domain::DocumentChangeObject* DocumentChangeStorage::appendDocumentChange(
+    const QUuid& _documentUuid, const QUuid& _uuid, const QByteArray& _undoPatch,
+    const QByteArray& _redoPatch, const QString& _userEmail, const QString& _userName)
 {
-    auto newDocumentChange
-            = Domain::ObjectsBuilder::createDocumentChange({}, _documentUuid, _uuid, _undoPatch,
-                    _redoPatch, QDateTime::currentDateTimeUtc(), _userEmail, _userName);
+    auto newDocumentChange = Domain::ObjectsBuilder::createDocumentChange(
+        {}, _documentUuid, _uuid, _undoPatch, _redoPatch, QDateTime::currentDateTimeUtc(),
+        _userEmail, _userName);
     d->newDocumentChanges.append(newDocumentChange);
     return newDocumentChange;
 }
 
-Domain::DocumentChangeObject* DocumentChangeStorage::documentChangeAt(const QUuid& _documentUuid, int _changeIndex)
+Domain::DocumentChangeObject* DocumentChangeStorage::documentChangeAt(const QUuid& _documentUuid,
+                                                                      int _changeIndex)
 {
     //
     // TODO: Изменения только от текущего пользователя
     //
-//    StorageFacade::settingsStorage()->userName(),
-//    StorageFacade::settingsStorage()->userEmail()
+    //    StorageFacade::settingsStorage()->userName(),
+    //    StorageFacade::settingsStorage()->userEmail()
 
     auto correctedChangeIndex = _changeIndex;
 
@@ -61,14 +59,16 @@ Domain::DocumentChangeObject* DocumentChangeStorage::documentChangeAt(const QUui
         }
     }
 
-    return DataMappingLayer::MapperFacade::documentChangeMapper()->find(_documentUuid, correctedChangeIndex);
+    return DataMappingLayer::MapperFacade::documentChangeMapper()->find(_documentUuid,
+                                                                        correctedChangeIndex);
 }
 
 void DocumentChangeStorage::store()
 {
     DatabaseLayer::Database::transaction();
     while (!d->newDocumentChanges.isEmpty()) {
-        DataMappingLayer::MapperFacade::documentChangeMapper()->insert(d->newDocumentChanges.takeFirst());
+        DataMappingLayer::MapperFacade::documentChangeMapper()->insert(
+            d->newDocumentChanges.takeFirst());
     }
     DatabaseLayer::Database::commit();
 }

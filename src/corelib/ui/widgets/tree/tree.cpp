@@ -1,11 +1,11 @@
 #include "tree.h"
+
 #include "tree_delegate.h"
 #include "tree_header_view.h"
 #include "tree_view.h"
 
 #include <ui/design_system/design_system.h>
 #include <ui/widgets/scroll_bar/scroll_bar.h>
-
 #include <utils/helpers/color_helper.h>
 
 #include <QVBoxLayout>
@@ -23,10 +23,10 @@ public:
 };
 
 Tree::Implementation::Implementation(QWidget* _parent)
-    : tree(new TreeView(_parent)),
-      header(new TreeHeaderView(_parent)),
-      delegate(new TreeDelegate(_parent)),
-      treeScrollBar(new ScrollBar(tree))
+    : tree(new TreeView(_parent))
+    , header(new TreeHeaderView(_parent))
+    , delegate(new TreeDelegate(_parent))
+    , treeScrollBar(new ScrollBar(tree))
 {
     tree->setHeader(header);
     tree->setHeaderHidden(true);
@@ -47,8 +47,8 @@ Tree::Implementation::Implementation(QWidget* _parent)
 
 
 Tree::Tree(QWidget* _parent)
-    : Widget(_parent),
-      d(new Implementation(this))
+    : Widget(_parent)
+    , d(new Implementation(this))
 {
     QVBoxLayout* layout = new QVBoxLayout(this);
     layout->setContentsMargins({});
@@ -66,13 +66,15 @@ Tree::~Tree() = default;
 void Tree::setModel(QAbstractItemModel* _model)
 {
     if (model() != nullptr) {
-        disconnect(d->tree->selectionModel(), &QItemSelectionModel::currentChanged, this, &Tree::currentIndexChanged);
+        disconnect(d->tree->selectionModel(), &QItemSelectionModel::currentChanged, this,
+                   &Tree::currentIndexChanged);
     }
 
     d->tree->setModel(_model);
 
     if (model() != nullptr) {
-        connect(d->tree->selectionModel(), &QItemSelectionModel::currentChanged, this, &Tree::currentIndexChanged);
+        connect(d->tree->selectionModel(), &QItemSelectionModel::currentChanged, this,
+                &Tree::currentIndexChanged);
     }
 }
 
@@ -111,7 +113,8 @@ void Tree::setDragDropEnabled(bool _enabled)
 {
     d->tree->setAcceptDrops(_enabled);
     d->tree->setDragEnabled(_enabled);
-    d->tree->setDragDropMode(_enabled ? QAbstractItemView::DragDrop : QAbstractItemView::NoDragDrop);
+    d->tree->setDragDropMode(_enabled ? QAbstractItemView::DragDrop
+                                      : QAbstractItemView::NoDragDrop);
     d->tree->setDropIndicatorShown(_enabled);
 }
 
@@ -210,6 +213,8 @@ void Tree::designSystemChangeEvent(DesignSystemChangeEvent* _event)
 
     d->header->setPalette(palette);
 
-    d->treeScrollBar->setBackgroundColor(ColorHelper::transparent(textColor(), Ui::DesignSystem::elevationEndOpacity()));
-    d->treeScrollBar->setHandleColor(ColorHelper::transparent(textColor(), Ui::DesignSystem::focusBackgroundOpacity()));
+    d->treeScrollBar->setBackgroundColor(
+        ColorHelper::transparent(textColor(), Ui::DesignSystem::elevationEndOpacity()));
+    d->treeScrollBar->setHandleColor(
+        ColorHelper::transparent(textColor(), Ui::DesignSystem::focusBackgroundOpacity()));
 }

@@ -9,32 +9,28 @@
 #include "content/projects/projects_manager.h"
 #include "content/settings/settings_manager.h"
 
+#include <ui/widgets/text_edit/scalable_wrapper/scalable_wrapper.h>
+
 #ifdef CLOUD_SERVICE_MANAGER
 #include <cloud/cloud_service_manager.h>
 #endif
 
 #include <business_layer/model/abstract_model.h>
-
 #include <data_layer/database.h>
 #include <data_layer/storage/settings_storage.h>
 #include <data_layer/storage/storage_facade.h>
-
 #include <include/custom_events.h>
-
 #include <ui/application_style.h>
 #include <ui/application_view.h>
-#include <ui/menu_view.h>
-
 #include <ui/design_system/design_system.h>
+#include <ui/menu_view.h>
 #include <ui/widgets/dialog/dialog.h>
 #include <ui/widgets/dialog/standard_dialog.h>
-
+#include <ui/widgets/text_edit/spell_check/spell_check_text_edit.h>
 #include <utils/3rd_party/WAF/Animation/Animation.h>
 #include <utils/helpers/dialog_helper.h>
 #include <utils/tools/backup_builder.h>
 #include <utils/tools/run_once.h>
-
-#include <NetworkRequest.h>
 
 #include <QApplication>
 #include <QDir>
@@ -43,30 +39,28 @@
 #include <QJsonDocument>
 #include <QKeyEvent>
 #include <QLocale>
+#include <QLockFile>
+#include <QScopedPointer>
 #include <QShortcut>
 #include <QSoundEffect>
 #include <QStyleFactory>
-#include <QtConcurrentRun>
 #include <QTimer>
 #include <QTranslator>
 #include <QUuid>
 #include <QVariant>
 #include <QWidget>
+#include <QtConcurrentRun>
+
+#include <NetworkRequest.h>
 
 namespace ManagementLayer {
 
-namespace  {
-    /**
-     * @brief Состояние приложения
-     */
-    enum class ApplicationState {
-        Initializing,
-        ProjectLoading,
-        ProjectClosing,
-        Working,
-        Importing
-    };
-}
+namespace {
+/**
+ * @brief Состояние приложения
+ */
+enum class ApplicationState { Initializing, ProjectLoading, ProjectClosing, Working, Importing };
+} // namespace
 
 class ApplicationManager::Implementation
 {
@@ -180,7 +174,8 @@ public:
      * @brief Создать проект
      */
     void createProject();
-    void createLocalProject(const QString& _projectName, const QString& _projectPath, const QString& _importFilePath);
+    void createLocalProject(const QString& _projectName, const QString& _projectPath,
+                            const QString& _importFilePath);
 
     /**
      * @brief Открыть проект по заданному пути
@@ -189,8 +184,8 @@ public:
     void openProject(const QString& _path);
 
     /**
-      * @brief Перейти к редактированию текущего проекта
-      */
+     * @brief Перейти к редактированию текущего проекта
+     */
     void goToEditCurrentProject(const QString& _importFilePath = {});
 
     /**
@@ -226,6 +221,11 @@ public:
     //
 
     ApplicationManager* q = nullptr;
+
+    //
+    // Используем для блокировки файла во время работы
+    //
+    QScopedPointer<QLockFile> lockFile;
 
     /**
      * @brief Интерфейс приложения
@@ -271,16 +271,16 @@ private:
 };
 
 ApplicationManager::Implementation::Implementation(ApplicationManager* _q)
-    : q(_q),
-      applicationView(new Ui::ApplicationView),
-      menuView(new Ui::MenuView(applicationView)),
-      accountManager(new AccountManager(nullptr, applicationView)),
-      onboardingManager(new OnboardingManager(nullptr, applicationView)),
-      projectsManager(new ProjectsManager(nullptr, applicationView)),
-      projectManager(new ProjectManager(nullptr, applicationView)),
-      importManager(new ImportManager(nullptr, applicationView)),
-      exportManager(new ExportManager(nullptr, applicationView)),
-      settingsManager(new SettingsManager(nullptr, applicationView))
+    : q(_q)
+    , applicationView(new Ui::ApplicationView)
+    , menuView(new Ui::MenuView(applicationView))
+    , accountManager(new AccountManager(nullptr, applicationView))
+    , onboardingManager(new OnboardingManager(nullptr, applicationView))
+    , projectsManager(new ProjectsManager(nullptr, applicationView))
+    , projectManager(new ProjectManager(nullptr, applicationView))
+    , importManager(new ImportManager(nullptr, applicationView))
+    , exportManager(new ExportManager(nullptr, applicationView))
+    , settingsManager(new SettingsManager(nullptr, applicationView))
 #ifdef CLOUD_SERVICE_MANAGER
     , cloudServiceManager(new CloudServiceManager)
 #endif
@@ -304,13 +304,13 @@ ApplicationManager::Implementation::~Implementation()
 QVariant ApplicationManager::Implementation::settingsValue(const QString& _key) const
 {
     return DataStorageLayer::StorageFacade::settingsStorage()->value(
-                _key, DataStorageLayer::SettingsStorage::SettingsPlace::Application);
+        _key, DataStorageLayer::SettingsStorage::SettingsPlace::Application);
 }
 
 QVariantMap ApplicationManager::Implementation::settingsValues(const QString& _key) const
 {
     return DataStorageLayer::StorageFacade::settingsStorage()->values(
-                _key, DataStorageLayer::SettingsStorage::SettingsPlace::Application);
+        _key, DataStorageLayer::SettingsStorage::SettingsPlace::Application);
 }
 
 void ApplicationManager::Implementation::checkNewVersion()
@@ -322,9 +322,8 @@ void ApplicationManager::Implementation::checkNewVersion()
     if (applicationUuidValue.isNull()) {
         applicationUuidValue = QUuid::createUuid();
         DataStorageLayer::StorageFacade::settingsStorage()->setValue(
-                    DataStorageLayer::kApplicationUuidKey,
-                    applicationUuidValue,
-                    DataStorageLayer::SettingsStorage::SettingsPlace::Application);
+            DataStorageLayer::kApplicationUuidKey, applicationUuidValue,
+            DataStorageLayer::SettingsStorage::SettingsPlace::Application);
     }
 
     //
@@ -341,15 +340,15 @@ void ApplicationManager::Implementation::checkNewVersion()
     data["application_language"] = QLocale::languageToString(QLocale().language());
     data["system_type"] =
 #ifdef Q_OS_WIN
-            "windows"
+        "windows"
 #elif defined Q_OS_LINUX
-            "linux"
+        "linux"
 #elif defined Q_OS_MAC
-            "mac"
+        "mac"
 #else
-            QSysInfo::kernelType()
+        QSysInfo::kernelType()
 #endif
-            ;
+        ;
     data["system_name"] = QSysInfo::prettyProductName();
     data["system_language"] = QLocale::languageToString(QLocale::system().language());
     data["action_name"] = "startup";
@@ -365,7 +364,7 @@ void ApplicationManager::Implementation::configureAutoSave()
 
     if (settingsValue(DataStorageLayer::kApplicationUseAutoSaveKey).toBool()) {
         QObject::connect(&autosaveTimer, &QTimer::timeout, [this] { saveChanges(); });
-        autosaveTimer.start(std::chrono::minutes{3});
+        autosaveTimer.start(std::chrono::minutes{ 3 });
     }
 }
 
@@ -434,8 +433,7 @@ void ApplicationManager::Implementation::showSettings()
 
 void ApplicationManager::Implementation::showLastContent()
 {
-    if (lastContent.toolBar == nullptr
-        || lastContent.navigator == nullptr
+    if (lastContent.toolBar == nullptr || lastContent.navigator == nullptr
         || lastContent.view == nullptr) {
         return;
     }
@@ -448,116 +446,115 @@ void ApplicationManager::Implementation::setTranslation(QLocale::Language _langu
     //
     // Определим файл перевода
     //
-    const QLocale::Language currentLanguage = _language != QLocale::AnyLanguage
-                                        ? _language
-                                        : QLocale::system().language();
+    const QLocale::Language currentLanguage
+        = _language != QLocale::AnyLanguage ? _language : QLocale::system().language();
     QString translation;
     switch (currentLanguage) {
-        default:
-        case QLocale::English: {
-            translation = "en";
-            break;
-        }
+    default:
+    case QLocale::English: {
+        translation = "en";
+        break;
+    }
 
-        case QLocale::Azerbaijani: {
-            translation = "az";
-            break;
-        }
+    case QLocale::Azerbaijani: {
+        translation = "az";
+        break;
+    }
 
-        case QLocale::Belarusian: {
-            translation = "be";
-            break;
-        }
+    case QLocale::Belarusian: {
+        translation = "be";
+        break;
+    }
 
-        case QLocale::Danish: {
-            translation = "da_DK";
-            break;
-        }
+    case QLocale::Danish: {
+        translation = "da_DK";
+        break;
+    }
 
-        case QLocale::French: {
-            translation = "fr";
-            break;
-        }
+    case QLocale::French: {
+        translation = "fr";
+        break;
+    }
 
-        case QLocale::Galician: {
-            translation = "gl_ES";
-            break;
-        }
+    case QLocale::Galician: {
+        translation = "gl_ES";
+        break;
+    }
 
-        case QLocale::German: {
-            translation = "de";
-            break;
-        }
+    case QLocale::German: {
+        translation = "de";
+        break;
+    }
 
-        case QLocale::Hebrew: {
-            translation = "he";
-            break;
-        }
+    case QLocale::Hebrew: {
+        translation = "he";
+        break;
+    }
 
-        case QLocale::Hindi: {
-            translation = "hi";
-            break;
-        }
+    case QLocale::Hindi: {
+        translation = "hi";
+        break;
+    }
 
-        case QLocale::Hungarian: {
-            translation = "hu";
-            break;
-        }
+    case QLocale::Hungarian: {
+        translation = "hu";
+        break;
+    }
 
-        case QLocale::Indonesian: {
-            translation = "id";
-            break;
-        }
+    case QLocale::Indonesian: {
+        translation = "id";
+        break;
+    }
 
-        case QLocale::Italian: {
-            translation = "it";
-            break;
-        }
+    case QLocale::Italian: {
+        translation = "it";
+        break;
+    }
 
-        case QLocale::Persian: {
-            translation = "fa";
-            break;
-        }
+    case QLocale::Persian: {
+        translation = "fa";
+        break;
+    }
 
-        case QLocale::Polish: {
-            translation = "pl";
-            break;
-        }
+    case QLocale::Polish: {
+        translation = "pl";
+        break;
+    }
 
-        case QLocale::Portuguese: {
-            translation = "pt_BR";
-            break;
-        }
+    case QLocale::Portuguese: {
+        translation = "pt_BR";
+        break;
+    }
 
-        case QLocale::Romanian: {
-            translation = "ro_RO";
-            break;
-        }
+    case QLocale::Romanian: {
+        translation = "ro_RO";
+        break;
+    }
 
-        case QLocale::Russian: {
-            translation = "ru";
-            break;
-        }
+    case QLocale::Russian: {
+        translation = "ru";
+        break;
+    }
 
-        case QLocale::Slovenian: {
-            translation = "sl";
-            break;
-        }
+    case QLocale::Slovenian: {
+        translation = "sl";
+        break;
+    }
 
-        case QLocale::Spanish: {
-            translation = "es";
-            break;
-        }
+    case QLocale::Spanish: {
+        translation = "es";
+        break;
+    }
 
-        case QLocale::Turkish: {
-            translation = "tr";
-            break;
-        }
+    case QLocale::Turkish: {
+        translation = "tr";
+        break;
+    }
 
-        case QLocale::Ukrainian: {
-            translation = "uk";
-            break;
-        }
+    case QLocale::Ukrainian: {
+        translation = "uk";
+        break;
+    }
     }
 
     QLocale::setDefault(QLocale(currentLanguage));
@@ -567,12 +564,13 @@ void ApplicationManager::Implementation::setTranslation(QLocale::Language _langu
     //
     static QTranslator* appTranslator = [] {
         //
-        // ... небольшой workaround для того, чтобы при запуске приложения кинуть событие о смене языка
+        // ... небольшой workaround для того, чтобы при запуске приложения кинуть событие о смене
+        // языка
         //
         QTranslator* translator = new QTranslator;
         QApplication::installTranslator(translator);
         return translator;
-    } ();
+    }();
     //
     QApplication::removeTranslator(appTranslator);
     if (!translation.isEmpty()) {
@@ -583,8 +581,7 @@ void ApplicationManager::Implementation::setTranslation(QLocale::Language _langu
     //
     // Для языков, которые пишутся справа-налево настроим соответствующее выравнивание интерфейса
     //
-    if (currentLanguage == QLocale::Persian
-        || currentLanguage == QLocale::Hebrew) {
+    if (currentLanguage == QLocale::Persian || currentLanguage == QLocale::Hebrew) {
         QApplication::setLayoutDirection(Qt::RightToLeft);
     } else {
         QApplication::setLayoutDirection(Qt::LeftToRight);
@@ -599,7 +596,8 @@ void ApplicationManager::Implementation::setTranslation(QLocale::Language _langu
 void ApplicationManager::Implementation::setTheme(Ui::ApplicationTheme _theme)
 {
     if (state == ApplicationState::Working) {
-        WAF::Animation::circleTransparentIn(applicationView, QCursor::pos(), applicationView->grab());
+        WAF::Animation::circleTransparentIn(applicationView, QCursor::pos(),
+                                            applicationView->grab());
     }
     Ui::DesignSystem::setTheme(_theme);
     QApplication::postEvent(q, new DesignSystemChangeEvent);
@@ -612,7 +610,8 @@ void ApplicationManager::Implementation::setCustomThemeColors(const Ui::DesignSy
     }
 
     if (state == ApplicationState::Working) {
-        WAF::Animation::circleTransparentIn(applicationView, QCursor::pos(), applicationView->grab());
+        WAF::Animation::circleTransparentIn(applicationView, QCursor::pos(),
+                                            applicationView->grab());
     }
     Ui::DesignSystem::setColor(_color);
     QApplication::postEvent(q, new DesignSystemChangeEvent);
@@ -632,8 +631,7 @@ void ApplicationManager::Implementation::updateWindowTitle()
     }
 
     applicationView->setWindowTitle(
-                QString("[*]%1 - Story Architect")
-                .arg(projectsManager->currentProject().name()));
+        QString("[*]%1 - Story Architect").arg(projectsManager->currentProject().name()));
 
     if (applicationView->isWindowModified()) {
         markChangesSaved(false);
@@ -642,12 +640,11 @@ void ApplicationManager::Implementation::updateWindowTitle()
 
 void ApplicationManager::Implementation::markChangesSaved(bool _saved)
 {
-    const QString suffix = QApplication::translate("ManagementLayer::ApplicationManager", " - changed");
-    if (_saved
-        && applicationView->windowTitle().endsWith(suffix)) {
+    const QString suffix
+        = QApplication::translate("ManagementLayer::ApplicationManager", " - changed");
+    if (_saved && applicationView->windowTitle().endsWith(suffix)) {
         applicationView->setWindowTitle(applicationView->windowTitle().remove(suffix));
-    } else if (!_saved
-               && !applicationView->windowTitle().endsWith(suffix)) {
+    } else if (!_saved && !applicationView->windowTitle().endsWith(suffix)) {
         applicationView->setWindowTitle(applicationView->windowTitle() + suffix);
     }
 
@@ -697,7 +694,8 @@ void ApplicationManager::Implementation::saveChanges()
 #endif
 
     //
-    // Если произошла ошибка сохранения, то делаем дополнительные проверки и работаем с пользователем
+    // Если произошла ошибка сохранения, то делаем дополнительные проверки и работаем с
+    // пользователем
     //
     if (DatabaseLayer::Database::hasError()) {
         //
@@ -708,10 +706,10 @@ void ApplicationManager::Implementation::saveChanges()
             // ... то у нас случилась какая-то внутренняя ошибка базы данных
             //
             StandardDialog::information(
-                        applicationView, tr("Saving error"),
-                        tr("Changes can't be written. There is an internal database error: \"%1\" "
-                           "Please check, if your file exists and if you have permission to write.")
-                        .arg(DatabaseLayer::Database::lastError()));
+                applicationView, tr("Saving error"),
+                tr("Changes can't be written. There is an internal database error: \"%1\" "
+                   "Please check, if your file exists and if you have permission to write.")
+                    .arg(DatabaseLayer::Database::lastError()));
 
             //
             // TODO: пока хер знает, как реагировать на данную проблему...
@@ -723,13 +721,14 @@ void ApplicationManager::Implementation::saveChanges()
         //
         else {
             //
-            // ... возможно файл был на флешке, а она отошла, или файл был переименован во время работы программы
+            // ... возможно файл был на флешке, а она отошла, или файл был переименован во время
+            // работы программы
             //
             StandardDialog::information(
-                        applicationView, tr("Saving error"),
-                        tr("Changes can't be written because the story located at \"%1\" doesn't exist. "
-                           "Please move the file back and retry saving.")
-                        .arg(DatabaseLayer::Database::currentFile()));
+                applicationView, tr("Saving error"),
+                tr("Changes can't be written because the story located at \"%1\" doesn't exist. "
+                   "Please move the file back and retry saving.")
+                    .arg(DatabaseLayer::Database::currentFile()));
         }
         return;
     }
@@ -749,12 +748,12 @@ void ApplicationManager::Implementation::saveChanges()
         if (currentProject.isRemote()) {
             //
             // Для удаленных проектов имя бекапа - имя проекта + id проекта
-            // В случае, если имя удаленного проекта изменилось, то бэкапы со старым именем останутся навсегда
+            // В случае, если имя удаленного проекта изменилось, то бэкапы со старым именем
+            // останутся навсегда
             //
             baseBackupName = QString("%1 [%2]").arg(currentProject.name()).arg(currentProject.id());
         }
-        QtConcurrent::run(&BackupBuilder::save,
-                          projectsManager->currentProject().path(),
+        QtConcurrent::run(&BackupBuilder::save, projectsManager->currentProject().path(),
                           settingsValue(DataStorageLayer::kApplicationBackupsFolderKey).toString(),
                           baseBackupName);
     }
@@ -771,38 +770,37 @@ void ApplicationManager::Implementation::saveIfNeeded(std::function<void()> _cal
     const int kNoButtonId = 1;
     const int kYesButtonId = 2;
     auto dialog = new Dialog(applicationView);
-    dialog->showDialog({},
-                       tr("Project was modified. Save changes?"),
-                       {{ kCancelButtonId, tr("Cancel"), Dialog::RejectButton },
-                        { kNoButtonId, tr("Don't save"), Dialog::NormalButton },
-                        { kYesButtonId, tr("Save"), Dialog::AcceptButton }});
+    dialog->showDialog({}, tr("Project was modified. Save changes?"),
+                       { { kCancelButtonId, tr("Cancel"), Dialog::RejectButton },
+                         { kNoButtonId, tr("Don't save"), Dialog::NormalButton },
+                         { kYesButtonId, tr("Save"), Dialog::AcceptButton } });
     QObject::connect(dialog, &Dialog::finished,
-                     [this, _callback, kCancelButtonId, kNoButtonId, dialog] (const Dialog::ButtonInfo& _buttonInfo)
-    {
-        dialog->hideDialog();
+                     [this, _callback, kCancelButtonId, kNoButtonId,
+                      dialog](const Dialog::ButtonInfo& _buttonInfo) {
+                         dialog->hideDialog();
 
-        //
-        // Пользователь передумал сохранять
-        //
-        if (_buttonInfo.id == kCancelButtonId) {
-            return;
-        }
+                         //
+                         // Пользователь передумал сохранять
+                         //
+                         if (_buttonInfo.id == kCancelButtonId) {
+                             return;
+                         }
 
-        //
-        // Пользователь не хочет сохранять изменения
-        //
-        if (_buttonInfo.id == kNoButtonId) {
-            markChangesSaved(true);
-        }
-        //
-        // ... пользователь хочет сохранить изменения перед следующим действием
-        //
-        else {
-            saveChanges();
-        }
+                         //
+                         // Пользователь не хочет сохранять изменения
+                         //
+                         if (_buttonInfo.id == kNoButtonId) {
+                             markChangesSaved(true);
+                         }
+                         //
+                         // ... пользователь хочет сохранить изменения перед следующим действием
+                         //
+                         else {
+                             saveChanges();
+                         }
 
-        _callback();
-    });
+                         _callback();
+                     });
     QObject::connect(dialog, &Dialog::disappeared, dialog, &Dialog::deleteLater);
 
     QApplication::alert(applicationView);
@@ -821,24 +819,23 @@ void ApplicationManager::Implementation::saveAs()
         // и сохраняем в папку вновь создаваемых проектов
         //
         const auto projectsFolderPath
-                = DataStorageLayer::StorageFacade::settingsStorage()->value(
-                      DataStorageLayer::kProjectSaveFolderKey,
-                      DataStorageLayer::SettingsStorage::SettingsPlace::Application)
+            = DataStorageLayer::StorageFacade::settingsStorage()
+                  ->value(DataStorageLayer::kProjectSaveFolderKey,
+                          DataStorageLayer::SettingsStorage::SettingsPlace::Application)
                   .toString();
         projectPath = projectsFolderPath + QDir::separator()
-                      + QString("%1 [%2]%3").arg(currentProject.name())
-                                            .arg(currentProject.id())
-                                            .arg(Project::extension());
+            + QString("%1 [%2]%3")
+                  .arg(currentProject.name())
+                  .arg(currentProject.id())
+                  .arg(Project::extension());
     }
 
     //
     // Получим имя файла для сохранения
     //
     QString saveAsProjectFilePath
-            = QFileDialog::getSaveFileName(applicationView,
-                                           tr("Choose file to save story"),
-                                           projectPath,
-                                           DialogHelper::starcProjectFilter());
+        = QFileDialog::getSaveFileName(applicationView, tr("Choose file to save story"),
+                                       projectPath, DialogHelper::starcProjectFilter());
     if (saveAsProjectFilePath.isEmpty()) {
         return;
     }
@@ -874,9 +871,10 @@ void ApplicationManager::Implementation::saveAs()
     //
     const auto isCopied = QFile::copy(currentProject.path(), saveAsProjectFilePath);
     if (!isCopied) {
-        StandardDialog::information(applicationView, tr("Saving error"),
+        StandardDialog::information(
+            applicationView, tr("Saving error"),
             tr("Can't save the story to the file %1. Please check permissions and retry.")
-                                    .arg(saveAsProjectFilePath));
+                .arg(saveAsProjectFilePath));
         return;
     }
 
@@ -893,7 +891,8 @@ void ApplicationManager::Implementation::createProject()
 }
 
 void ApplicationManager::Implementation::createLocalProject(const QString& _projectName,
-    const QString& _projectPath, const QString& _importFilePath)
+                                                            const QString& _projectPath,
+                                                            const QString& _importFilePath)
 {
     if (_projectPath.isEmpty()) {
         return;
@@ -924,18 +923,18 @@ void ApplicationManager::Implementation::createLocalProject(const QString& _proj
         const QFileInfo fileInfo(_projectPath);
         QString errorMessage;
         if (!fileInfo.dir().exists()) {
-            errorMessage =
-                tr("You tried to create a project in nonexistent folder %1. "
-                   "Please, choose another location for the new project.")
-                .arg(fileInfo.dir().absolutePath());
+            errorMessage = tr("You tried to create a project in nonexistent folder %1. "
+                              "Please, choose another location for the new project.")
+                               .arg(fileInfo.dir().absolutePath());
         } else if (fileInfo.exists()) {
-            errorMessage =
-                tr("The file can't be written. Looks like it is opened by another application. "
-                   "Please close it and retry to create a new project.");
+            errorMessage
+                = tr("The file can't be written. Looks like it is opened by another application. "
+                     "Please close it and retry to create a new project.");
         } else {
-            errorMessage =
-                tr("The file can't be written. Please, check and give permissions to the app "
-                   "to write into the selected folder, or choose another folder for saving a new project.");
+            errorMessage
+                = tr("The file can't be written. Please, check and give permissions to the app "
+                     "to write into the selected folder, or choose another folder for saving a new "
+                     "project.");
         }
         StandardDialog::information(applicationView, tr("Create project error"), errorMessage);
         return;
@@ -984,6 +983,20 @@ void ApplicationManager::Implementation::openProject(const QString& _path)
     // ... закроем текущий проект
     //
     closeCurrentProject();
+
+    lockFile.reset(new QLockFile(_path + ".lock"));
+
+    //
+    // проверяем открыт ли файл в другом приложении
+    //
+    if (!lockFile->tryLock()) {
+        StandardDialog::information(applicationView, "",
+                                    tr("This file can't be open at this moment,\
+                                        because it is already open in another copy of the application."));
+        return;
+    }
+
+    lockFile->setStaleLockTime(0);
 
     //
     // ... переключаемся на работу с выбранным файлом
@@ -1038,6 +1051,12 @@ void ApplicationManager::Implementation::closeCurrentProject()
         return;
     }
 
+    Q_ASSERT(!lockFile.isNull());
+    Q_ASSERT(lockFile->isLocked());
+
+    lockFile->unlock();
+    lockFile.reset();
+
     state = ApplicationState::ProjectClosing;
 
     //
@@ -1072,12 +1091,12 @@ void ApplicationManager::Implementation::imitateTypewriterSound(QKeyEvent* _even
     // ... и если опция озвучивания печати включена
     //
     const auto keyboardSoundEnabled
-            = settingsValue(DataStorageLayer::kApplicationUseTypewriterSoundKey).toBool();
+        = settingsValue(DataStorageLayer::kApplicationUseTypewriterSoundKey).toBool();
     if (!keyboardSoundEnabled) {
         return;
     }
 
-    auto makeSound = [this] (const QString& path) {
+    auto makeSound = [this](const QString& path) {
         QSoundEffect* sound = new QSoundEffect(applicationView);
         sound->setSource(QUrl::fromLocalFile(path));
         return sound;
@@ -1085,42 +1104,41 @@ void ApplicationManager::Implementation::imitateTypewriterSound(QKeyEvent* _even
     static auto s_returnSound = makeSound(":/audio/return");
     static auto s_spaceSound = makeSound(":/audio/space");
     static auto s_deleteSound = makeSound(":/audio/backspace");
-    static QVector<QSoundEffect*> s_keySounds = { makeSound(":/audio/key-01"),
-                                                  makeSound(":/audio/key-02"),
-                                                  makeSound(":/audio/key-03"),
-                                                  makeSound(":/audio/key-04") };
+    static QVector<QSoundEffect*> s_keySounds
+        = { makeSound(":/audio/key-01"), makeSound(":/audio/key-02"), makeSound(":/audio/key-03"),
+            makeSound(":/audio/key-04") };
     switch (_event->key()) {
-        case Qt::Key_Return:
-        case Qt::Key_Enter: {
-            s_returnSound->play();
+    case Qt::Key_Return:
+    case Qt::Key_Enter: {
+        s_returnSound->play();
+        break;
+    }
+
+    case Qt::Key_Space: {
+        s_spaceSound->play();
+        break;
+    }
+
+    case Qt::Key_Backspace:
+    case Qt::Key_Delete: {
+        s_deleteSound->play();
+        break;
+    }
+
+    default: {
+        if (_event->text().isEmpty()) {
             break;
         }
 
-        case Qt::Key_Space: {
-            s_spaceSound->play();
-            break;
+        const int firstSoundId = 0;
+        const int maxSoundId = 3;
+        static int lastSoundId = firstSoundId;
+        if (lastSoundId > maxSoundId) {
+            lastSoundId = firstSoundId;
         }
-
-        case Qt::Key_Backspace:
-        case Qt::Key_Delete: {
-            s_deleteSound->play();
-            break;
-        }
-
-        default: {
-            if (_event->text().isEmpty()) {
-                break;
-            }
-
-            const int firstSoundId = 0;
-            const int maxSoundId = 3;
-            static int lastSoundId = firstSoundId;
-            if (lastSoundId > maxSoundId) {
-                lastSoundId = firstSoundId;
-            }
-            s_keySounds[lastSoundId++]->play();
-            break;
-        }
+        s_keySounds[lastSoundId++]->play();
+        break;
+    }
     }
 }
 
@@ -1135,9 +1153,8 @@ void ApplicationManager::Implementation::exit()
     // Сохраняем состояние приложения
     //
     DataStorageLayer::StorageFacade::settingsStorage()->setValues(
-                DataStorageLayer::kApplicationViewStateKey,
-                applicationView->saveState(),
-                DataStorageLayer::SettingsStorage::SettingsPlace::Application);
+        DataStorageLayer::kApplicationViewStateKey, applicationView->saveState(),
+        DataStorageLayer::SettingsStorage::SettingsPlace::Application);
 
     //
     // Сохраним расположение проектов
@@ -1154,9 +1171,7 @@ void ApplicationManager::Implementation::exit()
 template<typename Manager>
 void ApplicationManager::Implementation::showContent(Manager* _manager)
 {
-    applicationView->showContent(_manager->toolBar(),
-                                 _manager->navigator(),
-                                 _manager->view());
+    applicationView->showContent(_manager->toolBar(), _manager->navigator(), _manager->view());
 }
 
 template<typename Manager>
@@ -1172,8 +1187,8 @@ void ApplicationManager::Implementation::saveLastContent(Manager* _manager)
 
 
 ApplicationManager::ApplicationManager(QObject* _parent)
-    : QObject(_parent),
-      IApplicationManager()
+    : QObject(_parent)
+    , IApplicationManager()
 {
     QApplication::setApplicationVersion("0.0.7");
 
@@ -1228,9 +1243,12 @@ void ApplicationManager::exec(const QString& _fileToOpenPath)
     //
     // ... затем пробуем загрузить геометрию и состояние приложения
     //
-    d->setTranslation(d->settingsValue(DataStorageLayer::kApplicationLanguagedKey).value<QLocale::Language>());
-    d->setTheme(static_cast<Ui::ApplicationTheme>(d->settingsValue(DataStorageLayer::kApplicationThemeKey).toInt()));
-    d->setCustomThemeColors(Ui::DesignSystem::Color(d->settingsValue(DataStorageLayer::kApplicationCustomThemeColorsKey).toString()));
+    d->setTranslation(
+        d->settingsValue(DataStorageLayer::kApplicationLanguagedKey).value<QLocale::Language>());
+    d->setTheme(static_cast<Ui::ApplicationTheme>(
+        d->settingsValue(DataStorageLayer::kApplicationThemeKey).toInt()));
+    d->setCustomThemeColors(Ui::DesignSystem::Color(
+        d->settingsValue(DataStorageLayer::kApplicationCustomThemeColorsKey).toString()));
     d->setScaleFactor(d->settingsValue(DataStorageLayer::kApplicationScaleFactorKey).toReal());
     d->applicationView->restoreState(d->settingsValues(DataStorageLayer::kApplicationViewStateKey));
 
@@ -1286,45 +1304,64 @@ void ApplicationManager::openProject(const QString& _path)
 bool ApplicationManager::event(QEvent* _event)
 {
     switch (static_cast<int>(_event->type())) {
-        case static_cast<QEvent::Type>(EventType::IdleEvent): {
-            //
-            // Сохраняем только если пользователь желает делать это автоматически
-            //
-            if (d->autosaveTimer.isActive()) {
-                d->saveChanges();
-            }
-
-            _event->accept();
-            return true;
+    case static_cast<QEvent::Type>(EventType::IdleEvent): {
+        //
+        // Сохраняем только если пользователь желает делать это автоматически
+        //
+        if (d->autosaveTimer.isActive()) {
+            d->saveChanges();
         }
 
-        case static_cast<QEvent::Type>(EventType::DesignSystemChangeEvent): {
-            //
-            // Уведомляем все виджеты о том, что сменилась дизайн система
-            //
-            for (auto widget : d->applicationView->findChildren<QWidget*>()) {
-                QApplication::sendEvent(widget, _event);
-            }
-            QApplication::sendEvent(d->applicationView, _event);
+        _event->accept();
+        return true;
+    }
 
-            _event->accept();
-            return true;
+    case static_cast<QEvent::Type>(EventType::DesignSystemChangeEvent): {
+        //
+        // Уведомляем все виджеты о том, что сменилась дизайн система
+        //
+        const auto widgets = d->applicationView->findChildren<QWidget*>();
+        for (auto widget : widgets) {
+            QApplication::sendEvent(widget, _event);
         }
+        QApplication::sendEvent(d->applicationView, _event);
 
-        case QEvent::KeyPress: {
-            const auto keyEvent = static_cast<QKeyEvent*>(_event);
+        _event->accept();
+        return true;
+    }
 
-            //
-            // Музицируем
-            //
-            d->imitateTypewriterSound(keyEvent);
-
-            return false;
+    case static_cast<QEvent::Type>(EventType::SpellingChangeEvent): {
+        //
+        // Уведомляем все редакторы текста о том, что сменились опции проверки орфографии
+        //
+        const auto textEdits = d->applicationView->findChildren<SpellCheckTextEdit*>();
+        for (auto textEdit : textEdits) {
+            QApplication::sendEvent(textEdit, _event);
         }
-
-        default: {
-            return QObject::event(_event);
+        const auto scalableWrappers = d->applicationView->findChildren<ScalableWrapper*>();
+        for (auto scalableWrapper : scalableWrappers) {
+            QApplication::sendEvent(scalableWrapper, _event);
         }
+        QApplication::sendEvent(d->applicationView, _event);
+
+        _event->accept();
+        return true;
+    }
+
+    case QEvent::KeyPress: {
+        const auto keyEvent = static_cast<QKeyEvent*>(_event);
+
+        //
+        // Музицируем
+        //
+        d->imitateTypewriterSound(keyEvent);
+
+        return false;
+    }
+
+    default: {
+        return QObject::event(_event);
+    }
     }
 }
 
@@ -1348,9 +1385,7 @@ void ApplicationManager::initConnections()
     //
     // Представление приложения
     //
-    connect(d->applicationView, &Ui::ApplicationView::closeRequested, this,
-            [this]
-    {
+    connect(d->applicationView, &Ui::ApplicationView::closeRequested, this, [this] {
         auto callback = [this] { d->exit(); };
         d->saveIfNeeded(callback);
     });
@@ -1362,48 +1397,48 @@ void ApplicationManager::initConnections()
     connect(d->menuView, &Ui::MenuView::createProjectPressed, this, [this] { d->createProject(); });
     connect(d->menuView, &Ui::MenuView::openProjectPressed, this, [this] { d->openProject(); });
     connect(d->menuView, &Ui::MenuView::projectPressed, this, [this] { d->showProject(); });
-    connect(d->menuView, &Ui::MenuView::saveProjectChangesPressed, this, [this] { d->saveChanges(); });
+    connect(d->menuView, &Ui::MenuView::saveProjectChangesPressed, this,
+            [this] { d->saveChanges(); });
     connect(d->menuView, &Ui::MenuView::saveProjectAsPressed, this, [this] {
         auto callback = [this] { d->saveAs(); };
         d->saveIfNeeded(callback);
     });
     connect(d->menuView, &Ui::MenuView::importPressed, this, [this] { d->importProject(); });
-    connect(d->menuView, &Ui::MenuView::exportCurrentDocumentPressed, this, [this] { d->exportCurrentDocument(); });
+    connect(d->menuView, &Ui::MenuView::exportCurrentDocumentPressed, this,
+            [this] { d->exportCurrentDocument(); });
     connect(d->menuView, &Ui::MenuView::settingsPressed, this, [this] { d->showSettings(); });
 
     //
     // Менеджер посадки
     //
     connect(d->onboardingManager.data(), &OnboardingManager::languageChanged, this,
-            [this] (QLocale::Language _language) { d->setTranslation(_language); });
+            [this](QLocale::Language _language) { d->setTranslation(_language); });
     connect(d->onboardingManager.data(), &OnboardingManager::themeChanged, this,
-            [this] (Ui::ApplicationTheme _theme) { d->setTheme(_theme); });
+            [this](Ui::ApplicationTheme _theme) { d->setTheme(_theme); });
     connect(d->onboardingManager.data(), &OnboardingManager::scaleFactorChanged, this,
-            [this] (qreal _scaleFactor)
-    {
-        d->setScaleFactor(_scaleFactor);
-        d->settingsManager->updateScaleFactor();
-    });
-    connect(d->onboardingManager.data(), &OnboardingManager::finished, this,
-            [this]
-    {
-        auto setSettingsValue = [] (const QString& _key, const QVariant& _value) {
+            [this](qreal _scaleFactor) {
+                d->setScaleFactor(_scaleFactor);
+                d->settingsManager->updateScaleFactor();
+            });
+    connect(d->onboardingManager.data(), &OnboardingManager::finished, this, [this] {
+        auto setSettingsValue = [](const QString& _key, const QVariant& _value) {
             DataStorageLayer::StorageFacade::settingsStorage()->setValue(
-                        _key,
-                        _value,
-                        DataStorageLayer::SettingsStorage::SettingsPlace::Application);
+                _key, _value, DataStorageLayer::SettingsStorage::SettingsPlace::Application);
         };
         setSettingsValue(DataStorageLayer::kApplicationConfiguredKey, true);
         setSettingsValue(DataStorageLayer::kApplicationLanguagedKey, QLocale::system().language());
-        setSettingsValue(DataStorageLayer::kApplicationThemeKey, static_cast<int>(Ui::DesignSystem::theme()));
-        setSettingsValue(DataStorageLayer::kApplicationScaleFactorKey, Ui::DesignSystem::scaleFactor());
+        setSettingsValue(DataStorageLayer::kApplicationThemeKey,
+                         static_cast<int>(Ui::DesignSystem::theme()));
+        setSettingsValue(DataStorageLayer::kApplicationScaleFactorKey,
+                         Ui::DesignSystem::scaleFactor());
         d->showContent();
     });
 
     //
     // Менеджер аккаунта
     //
-    connect(d->accountManager.data(), &AccountManager::showAccountRequested, this, [this] { d->showAccount(); });
+    connect(d->accountManager.data(), &AccountManager::showAccountRequested, this,
+            [this] { d->showAccount(); });
     connect(d->accountManager.data(), &AccountManager::closeAccountRequested, this, [this] {
         d->accountManager->accountBar()->show();
         d->showLastContent();
@@ -1419,23 +1454,22 @@ void ApplicationManager::initConnections()
     connect(d->projectsManager.data(), &ProjectsManager::createProjectRequested, this,
             [this] { d->createProject(); });
     connect(d->projectsManager.data(), &ProjectsManager::createLocalProjectRequested, this,
-            [this] (const QString& _projectName,const QString& _projectPath, const QString& _importFilePath)
-    {
-        d->createLocalProject(_projectName, _projectPath, _importFilePath);
-    });
+            [this](const QString& _projectName, const QString& _projectPath,
+                   const QString& _importFilePath) {
+                d->createLocalProject(_projectName, _projectPath, _importFilePath);
+            });
     connect(d->projectsManager.data(), &ProjectsManager::openProjectRequested, this,
             [this] { d->openProject(); });
     connect(d->projectsManager.data(), &ProjectsManager::openChoosedProjectRequested, this,
-            [this] (const QString& _path)
-    {
-        if (d->projectsManager->currentProject().path() == _path) {
-            d->showProject();
-            return;
-        }
+            [this](const QString& _path) {
+                if (d->projectsManager->currentProject().path() == _path) {
+                    d->showProject();
+                    return;
+                }
 
-        auto callback = [this, _path] { openProject(_path); };
-        d->saveIfNeeded(callback);
-    });
+                auto callback = [this, _path] { openProject(_path); };
+                d->saveIfNeeded(callback);
+            });
 
     //
     // Менеджер проекта
@@ -1445,30 +1479,30 @@ void ApplicationManager::initConnections()
     connect(d->projectManager.data(), &ProjectManager::contentsChanged, this,
             [this] { d->markChangesSaved(false); });
     connect(d->projectManager.data(), &ProjectManager::projectNameChanged, this,
-            [this] (const QString& _name)
-    {
-        d->projectsManager->setCurrentProjectName(_name);
-        d->menuView->setProjectTitle(_name);
-        d->updateWindowTitle();
-    });
+            [this](const QString& _name) {
+                d->projectsManager->setCurrentProjectName(_name);
+                d->menuView->setProjectTitle(_name);
+                d->updateWindowTitle();
+            });
     connect(d->projectManager.data(), &ProjectManager::projectLoglineChanged,
             d->projectsManager.data(), &ProjectsManager::setCurrentProjectLogline);
     connect(d->projectManager.data(), &ProjectManager::projectCoverChanged,
             d->projectsManager.data(), &ProjectsManager::setCurrentProjectCover);
     connect(d->projectManager.data(), &ProjectManager::currentModelChanged, this,
-            [this] (BusinessLayer::AbstractModel* _model) {
-        d->menuView->setCurrentDocumentExportAvailable(d->exportManager->canExportDocument(_model));
-    });
+            [this](BusinessLayer::AbstractModel* _model) {
+                d->menuView->setCurrentDocumentExportAvailable(
+                    d->exportManager->canExportDocument(_model));
+            });
 
     //
     // Менеджер импорта
     //
-    connect(d->importManager.data(), &ImportManager::characterImported,
-            d->projectManager.data(), &ProjectManager::addCharacter);
-    connect(d->importManager.data(), &ImportManager::locationImported,
-            d->projectManager.data(), &ProjectManager::addLocation);
-    connect(d->importManager.data(), &ImportManager::screenplayImported,
-            d->projectManager.data(), &ProjectManager::addScreenplay);
+    connect(d->importManager.data(), &ImportManager::characterImported, d->projectManager.data(),
+            &ProjectManager::addCharacter);
+    connect(d->importManager.data(), &ImportManager::locationImported, d->projectManager.data(),
+            &ProjectManager::addLocation);
+    connect(d->importManager.data(), &ImportManager::screenplayImported, d->projectManager.data(),
+            &ProjectManager::addScreenplay);
 
     //
     // Менеджер настроек
@@ -1476,33 +1510,47 @@ void ApplicationManager::initConnections()
     connect(d->settingsManager.data(), &SettingsManager::closeSettingsRequested, this,
             [this] { d->showLastContent(); });
     connect(d->settingsManager.data(), &SettingsManager::applicationLanguageChanged, this,
-            [this] (QLocale::Language _language) { d->setTranslation(_language); });
+            [this](QLocale::Language _language) { d->setTranslation(_language); });
+    //
+    auto postSpellingChangeEvent = [this] {
+        auto settingsValue = [](const QString& _key) {
+            return DataStorageLayer::StorageFacade::settingsStorage()->value(
+                _key, DataStorageLayer::SettingsStorage::SettingsPlace::Application);
+        };
+        const auto useSpellChecker
+            = settingsValue(DataStorageLayer::kApplicationUseSpellCheckerKey).toBool();
+        const auto spellingLanguage
+            = settingsValue(DataStorageLayer::kApplicationSpellCheckerLanguageKey).toString();
+        QApplication::postEvent(this, new SpellingChangeEvent(useSpellChecker, spellingLanguage));
+    };
     connect(d->settingsManager.data(), &SettingsManager::applicationUseSpellCheckerChanged, this,
-            [this] { d->projectManager->reconfigureAll(); });
-    connect(d->settingsManager.data(), &SettingsManager::applicationSpellCheckerLanguageChanged, this,
-            [this] { d->projectManager->reconfigureAll(); });
+            postSpellingChangeEvent);
+    connect(d->settingsManager.data(), &SettingsManager::applicationSpellCheckerLanguageChanged,
+            this, postSpellingChangeEvent);
+    //
     connect(d->settingsManager.data(), &SettingsManager::applicationThemeChanged, this,
-            [this] (Ui::ApplicationTheme _theme)
-    {
-        d->setTheme(_theme);
-        //
-        // ... если применяется кастомная тема, то нужно загрузить её цвета
-        //
-        if (_theme == Ui::ApplicationTheme::Custom) {
-            d->setCustomThemeColors(Ui::DesignSystem::Color(d->settingsValue(DataStorageLayer::kApplicationCustomThemeColorsKey).toString()));
-        }
-    });
+            [this](Ui::ApplicationTheme _theme) {
+                d->setTheme(_theme);
+                //
+                // ... если применяется кастомная тема, то нужно загрузить её цвета
+                //
+                if (_theme == Ui::ApplicationTheme::Custom) {
+                    d->setCustomThemeColors(Ui::DesignSystem::Color(
+                        d->settingsValue(DataStorageLayer::kApplicationCustomThemeColorsKey)
+                            .toString()));
+                }
+            });
     connect(d->settingsManager.data(), &SettingsManager::applicationCustomThemeColorsChanged, this,
-            [this] (const Ui::DesignSystem::Color& _color) { d->setCustomThemeColors(_color); });
+            [this](const Ui::DesignSystem::Color& _color) { d->setCustomThemeColors(_color); });
     connect(d->settingsManager.data(), &SettingsManager::applicationScaleFactorChanged, this,
-            [this] (qreal _scaleFactor) { d->setScaleFactor(_scaleFactor); });
+            [this](qreal _scaleFactor) { d->setScaleFactor(_scaleFactor); });
     connect(d->settingsManager.data(), &SettingsManager::applicationUseAutoSaveChanged, this,
             [this] { d->configureAutoSave(); });
     //
     connect(d->settingsManager.data(), &SettingsManager::screenplayEditorChanged, this,
-            [this] (const QStringList& _changedSettingsKeys) {
-        d->projectManager->reconfigureScreenplayEditor(_changedSettingsKeys);
-    });
+            [this](const QStringList& _changedSettingsKeys) {
+                d->projectManager->reconfigureScreenplayEditor(_changedSettingsKeys);
+            });
     connect(d->settingsManager.data(), &SettingsManager::screenplayNavigatorChanged, this,
             [this] { d->projectManager->reconfigureScreenplayNavigator(); });
     connect(d->settingsManager.data(), &SettingsManager::screenplayDurationChanged, this,
@@ -1539,8 +1587,9 @@ void ApplicationManager::initConnections()
                 d->cloudServiceManager.data(), &CloudServiceManager::registerAccount);
         connect(d->accountManager.data(), &AccountManager::registrationConfirmationCodeEntered,
                 d->cloudServiceManager.data(), &CloudServiceManager::confirmRegistration);
-        connect(d->cloudServiceManager.data(), &CloudServiceManager::registrationConfiramtionCodeSended,
-                d->accountManager.data(), &AccountManager::prepareToEnterRegistrationConfirmationCode);
+        connect(d->cloudServiceManager.data(),
+                &CloudServiceManager::registrationConfiramtionCodeSended, d->accountManager.data(),
+                &AccountManager::prepareToEnterRegistrationConfirmationCode);
         connect(d->cloudServiceManager.data(), &CloudServiceManager::registrationConfirmationError,
                 d->accountManager.data(), &AccountManager::setRegistrationConfirmationError);
         connect(d->cloudServiceManager.data(), &CloudServiceManager::registrationCompleted,
@@ -1555,9 +1604,12 @@ void ApplicationManager::initConnections()
                 d->cloudServiceManager.data(), &CloudServiceManager::confirmPasswordRestoring);
         connect(d->accountManager.data(), &AccountManager::changePasswordRequested,
                 d->cloudServiceManager.data(), &CloudServiceManager::changePassword);
-        connect(d->cloudServiceManager.data(), &CloudServiceManager::passwordRestoringConfirmationCodeSended,
-                d->accountManager.data(), &AccountManager::prepareToEnterRestorePasswordConfirmationCode);
-        connect(d->cloudServiceManager.data(), &CloudServiceManager::passwordRestoringConfirmationSucceed,
+        connect(d->cloudServiceManager.data(),
+                &CloudServiceManager::passwordRestoringConfirmationCodeSended,
+                d->accountManager.data(),
+                &AccountManager::prepareToEnterRestorePasswordConfirmationCode);
+        connect(d->cloudServiceManager.data(),
+                &CloudServiceManager::passwordRestoringConfirmationSucceed,
                 d->accountManager.data(), &AccountManager::allowChangePassword);
         connect(d->cloudServiceManager.data(), &CloudServiceManager::registrationConfirmationError,
                 d->accountManager.data(), &AccountManager::setRestorePasswordConfirmationError);

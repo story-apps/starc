@@ -5,7 +5,6 @@
 
 #include <business_layer/document/text/text_cursor.h>
 #include <business_layer/templates/text_template.h>
-
 #include <utils/helpers/text_helper.h>
 
 #include <QTextBlock>
@@ -13,7 +12,8 @@
 
 namespace BusinessLayer {
 
-class SimpleTextSearchManager::Implementation {
+class SimpleTextSearchManager::Implementation
+{
 public:
     Implementation(QWidget* _parent, Ui::SimpleTextEdit* _textEdit);
 
@@ -39,9 +39,10 @@ public:
     QString m_lastSearchText;
 };
 
-SimpleTextSearchManager::Implementation::Implementation(QWidget* _parent, Ui::SimpleTextEdit* _textEdit)
-    : toolbar(new Ui::SimpleTextSearchToolbar(_parent)),
-      textEdit(_textEdit)
+SimpleTextSearchManager::Implementation::Implementation(QWidget* _parent,
+                                                        Ui::SimpleTextEdit* _textEdit)
+    : toolbar(new Ui::SimpleTextSearchToolbar(_parent))
+    , textEdit(_textEdit)
 {
     toolbar->hide();
 }
@@ -129,19 +130,17 @@ void SimpleTextSearchManager::Implementation::findText(bool _backward)
 
 
 SimpleTextSearchManager::SimpleTextSearchManager(QWidget* _parent, Ui::SimpleTextEdit* _textEdit)
-    : QObject(_parent),
-      d(new Implementation(_parent, _textEdit))
+    : QObject(_parent)
+    , d(new Implementation(_parent, _textEdit))
 {
-    connect(d->toolbar, &Ui::SimpleTextSearchToolbar::closePressed,
-            this, &SimpleTextSearchManager::hideToolbarRequested);
-    connect(d->toolbar, &Ui::SimpleTextSearchToolbar::focusTextRequested,
-            _parent, qOverload<>(&QWidget::setFocus));
-    connect(d->toolbar, &Ui::SimpleTextSearchToolbar::findTextRequested, this, [this] {
-        d->findText();
-    });
-    connect(d->toolbar, &Ui::SimpleTextSearchToolbar::findNextRequested, this, [this] {
-        d->findText();
-    });
+    connect(d->toolbar, &Ui::SimpleTextSearchToolbar::closePressed, this,
+            &SimpleTextSearchManager::hideToolbarRequested);
+    connect(d->toolbar, &Ui::SimpleTextSearchToolbar::focusTextRequested, _parent,
+            qOverload<>(&QWidget::setFocus));
+    connect(d->toolbar, &Ui::SimpleTextSearchToolbar::findTextRequested, this,
+            [this] { d->findText(); });
+    connect(d->toolbar, &Ui::SimpleTextSearchToolbar::findNextRequested, this,
+            [this] { d->findText(); });
     connect(d->toolbar, &Ui::SimpleTextSearchToolbar::findPreviousRequested, this, [this] {
         const bool backward = true;
         d->findText(backward);
@@ -150,8 +149,9 @@ SimpleTextSearchManager::SimpleTextSearchManager(QWidget* _parent, Ui::SimpleTex
         const QString searchText = d->toolbar->searchText();
         auto cursor = d->textEdit->textCursor();
         bool selectedTextEqual = d->toolbar->isCaseSensitive()
-                                 ? cursor.selectedText() == searchText
-                                 : TextHelper::smartToLower(cursor.selectedText()) == TextHelper::smartToLower(searchText);
+            ? cursor.selectedText() == searchText
+            : TextHelper::smartToLower(cursor.selectedText())
+                == TextHelper::smartToLower(searchText);
         if (selectedTextEqual) {
             cursor.insertText(d->toolbar->replaceText());
             d->findText();
@@ -175,7 +175,8 @@ SimpleTextSearchManager::SimpleTextSearchManager(QWidget* _parent, Ui::SimpleTex
             cursor = d->textEdit->textCursor();
 
             //
-            // Корректируем начальную позицию поиска, для корректного завершения при втором проходе по документу
+            // Корректируем начальную позицию поиска, для корректного завершения при втором проходе
+            // по документу
             //
             if (cursor.selectionStart() < firstCursorPosition) {
                 firstCursorPosition += diffSize;
@@ -183,8 +184,8 @@ SimpleTextSearchManager::SimpleTextSearchManager(QWidget* _parent, Ui::SimpleTex
 
             //
             // Прерываем случай, когда пользователь пытается заменить слово без учёта регистра
-            // на такое же, например "иван" на "Иван" или когда заменяемое слово является частью нового,
-            // но т.к. поиск производится без учёта регистра, он зацикливается
+            // на такое же, например "иван" на "Иван" или когда заменяемое слово является частью
+            // нового, но т.к. поиск производится без учёта регистра, он зацикливается
             //
             if (cursor.selectionStart() == firstCursorPosition) {
                 break;
@@ -201,4 +202,4 @@ Widget* SimpleTextSearchManager::toolbar() const
     return d->toolbar;
 }
 
-}
+} // namespace BusinessLayer

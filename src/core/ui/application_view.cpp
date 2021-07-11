@@ -13,13 +13,12 @@
 #include <QVBoxLayout>
 
 
-namespace Ui
-{
+namespace Ui {
 
 namespace {
-    const QString kSplitterState = "splitter/state";
-    const QString kViewGeometry = "view/geometry";
-}
+const QString kSplitterState = "splitter/state";
+const QString kViewGeometry = "view/geometry";
+} // namespace
 
 class ApplicationView::Implementation
 {
@@ -37,11 +36,11 @@ public:
 };
 
 ApplicationView::Implementation::Implementation(QWidget* _parent)
-    : navigationWidget(new Widget(_parent)),
-      toolBar(new StackWidget(_parent)),
-      navigator(new StackWidget(_parent)),
-      view(new StackWidget(_parent)),
-      splitter(new Splitter(_parent))
+    : navigationWidget(new Widget(_parent))
+    , toolBar(new StackWidget(_parent))
+    , navigator(new StackWidget(_parent))
+    , view(new StackWidget(_parent))
+    , splitter(new Splitter(_parent))
 {
     new Shadow(view);
 }
@@ -51,8 +50,8 @@ ApplicationView::Implementation::Implementation(QWidget* _parent)
 
 
 ApplicationView::ApplicationView(QWidget* _parent)
-    : Widget(_parent),
-      d(new Implementation(this))
+    : Widget(_parent)
+    , d(new Implementation(this))
 {
     d->view->installEventFilter(this);
 
@@ -63,7 +62,7 @@ ApplicationView::ApplicationView(QWidget* _parent)
     navigationLayout->addWidget(d->navigator);
 
     d->splitter->setWidgets(d->navigationWidget, d->view);
-    d->splitter->setSizes({3, 7});
+    d->splitter->setSizes({ 3, 7 });
 
     QVBoxLayout* layout = new QVBoxLayout(this);
     layout->setContentsMargins({});
@@ -107,15 +106,13 @@ void ApplicationView::setAccountBar(Widget* _accountBar)
 
 bool ApplicationView::eventFilter(QObject* _target, QEvent* _event)
 {
-    if (d->accountBar != nullptr
-        && _target == d->view
-        && _event->type() == QEvent::Resize) {
+    if (d->accountBar != nullptr && _target == d->view && _event->type() == QEvent::Resize) {
         QResizeEvent* event = static_cast<QResizeEvent*>(_event);
         d->accountBar->move(d->view->mapTo(this, QPoint())
-                            + QPointF(event->size().width()
-                                      - d->accountBar->width()
-                                      - Ui::DesignSystem::layout().px24(),
-                                      Ui::DesignSystem::layout().px24()).toPoint());
+                            + QPointF(event->size().width() - d->accountBar->width()
+                                          - Ui::DesignSystem::layout().px24(),
+                                      Ui::DesignSystem::layout().px24())
+                                  .toPoint());
     }
 
     return Widget::eventFilter(_target, _event);
@@ -152,16 +149,17 @@ void ApplicationView::designSystemChangeEvent(DesignSystemChangeEvent* _event)
 
     if (d->accountBar != nullptr) {
         d->accountBar->resize(d->accountBar->sizeHint());
-        d->accountBar->move(QPointF(size().width()
-                                    - d->accountBar->width()
-                                    - Ui::DesignSystem::layout().px24(),
-                                    Ui::DesignSystem::layout().px24()).toPoint());
+        d->accountBar->move(
+            QPointF(size().width() - d->accountBar->width() - Ui::DesignSystem::layout().px24(),
+                    Ui::DesignSystem::layout().px24())
+                .toPoint());
         d->accountBar->setBackgroundColor(Ui::DesignSystem::color().primary());
         d->accountBar->setTextColor(Ui::DesignSystem::color().onPrimary());
     }
 
     TaskBar::registerTaskBar(this, Ui::DesignSystem::color().primary(),
-        Ui::DesignSystem::color().onPrimary(), Ui::DesignSystem::color().secondary());
+                             Ui::DesignSystem::color().onPrimary(),
+                             Ui::DesignSystem::color().secondary());
 }
 
 } // namespace Ui

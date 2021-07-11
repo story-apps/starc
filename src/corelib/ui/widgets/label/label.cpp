@@ -1,12 +1,11 @@
 #include "label.h"
 
 #include <ui/design_system/design_system.h>
-
 #include <utils/helpers/text_helper.h>
 
 #include <QFontMetrics>
-#include <QPainter>
 #include <QPaintEvent>
+#include <QPainter>
 
 
 class AbstractLabel::Implementation
@@ -21,8 +20,8 @@ public:
 
 
 AbstractLabel::AbstractLabel(QWidget* _parent)
-    : Widget(_parent),
-      d(new Implementation)
+    : Widget(_parent)
+    , d(new Implementation)
 {
     QSizePolicy sizePolicy(QSizePolicy::Preferred, QSizePolicy::Preferred);
     sizePolicy.setHeightForWidth(true);
@@ -61,13 +60,14 @@ QSize AbstractLabel::sizeHint() const
 {
     const int width = TextHelper::fineTextWidth(d->text, textFont());
     const int height = QFontMetrics(textFont()).lineSpacing();
-    return QRect(QPoint(0,0), QSize(width, height)).marginsAdded(contentsMargins()).size();
+    return QRect(QPoint(0, 0), QSize(width, height)).marginsAdded(contentsMargins()).size();
 }
 
 int AbstractLabel::heightForWidth(int _width) const
 {
     const int textWidth = _width - contentsMargins().left() - contentsMargins().right();
-    const int textHeight  = static_cast<int>(TextHelper::heightForWidth(d->text, textFont(), textWidth));
+    const int textHeight
+        = static_cast<int>(TextHelper::heightForWidth(d->text, textFont(), textWidth));
     return contentsMargins().top() + textHeight + contentsMargins().bottom();
 }
 
@@ -87,13 +87,12 @@ void AbstractLabel::paintEvent(QPaintEvent* _event)
     painter.setPen(textColor());
     painter.setOpacity(isEnabled() ? 1.0 : Ui::DesignSystem::disabledTextOpacity());
 
-    painter.drawText(contentsRect(),
-                     d->alignment
-                     | (d->text.isRightToLeft()
-                        ? Qt::TextForceRightToLeft
-                        : Qt::TextForceLeftToRight)
-                     | Qt::TextWordWrap,
-                     d->text);
+    painter.drawText(
+        contentsRect(),
+        d->alignment
+            | (d->text.isRightToLeft() ? Qt::TextForceRightToLeft : Qt::TextForceLeftToRight)
+            | Qt::TextWordWrap,
+        d->text);
 }
 
 void AbstractLabel::mouseReleaseEvent(QMouseEvent* _event)
@@ -182,7 +181,7 @@ Body1Label::Body1Label(QWidget* _parent)
 {
 }
 
-const QFont&Body1Label::textFont() const
+const QFont& Body1Label::textFont() const
 {
     return Ui::DesignSystem::font().body1();
 }

@@ -1,24 +1,22 @@
 #include "screenplay_text_comments_toolbar.h"
 
 #include <ui/design_system/design_system.h>
-
 #include <ui/widgets/card/card.h>
 #include <ui/widgets/color_picker/color_picker.h>
 
 #include <QAction>
 #include <QHBoxLayout>
-#include <QPainter>
 #include <QPaintEvent>
-#include <QTimer>
+#include <QPainter>
 #include <QSettings>
+#include <QTimer>
 #include <QVariantAnimation>
 
 
-namespace Ui
-{
+namespace Ui {
 
 namespace {
-    const QString kColorKey = QLatin1String("widgets/screenplay-text-comments-toolbar/color");
+const QString kColorKey = QLatin1String("widgets/screenplay-text-comments-toolbar/color");
 }
 
 class ScreenplayTextCommentsToolbar::Implementation
@@ -69,12 +67,12 @@ public:
 };
 
 ScreenplayTextCommentsToolbar::Implementation::Implementation(QWidget* _parent)
-    : textColorAction(new QAction),
-      textBackgroundColorAction(new QAction),
-      commentAction(new QAction),
-      colorAction(new QAction),
-      popup(new Card(_parent)),
-      popupContent(new ColorPicker(_parent))
+    : textColorAction(new QAction)
+    , textBackgroundColorAction(new QAction)
+    , commentAction(new QAction)
+    , colorAction(new QAction)
+    , popup(new Card(_parent))
+    , popupContent(new ColorPicker(_parent))
 {
     opacityAnimation.setDuration(220);
     opacityAnimation.setEasingCurve(QEasingCurve::OutQuad);
@@ -120,7 +118,8 @@ void ScreenplayTextCommentsToolbar::Implementation::animateHide()
     hideTimer.start();
 }
 
-void ScreenplayTextCommentsToolbar::Implementation::animateMove(const QPoint& _from, const QPoint& _to)
+void ScreenplayTextCommentsToolbar::Implementation::animateMove(const QPoint& _from,
+                                                                const QPoint& _to)
 {
     if (moveAnimation.state() == QVariantAnimation::Running) {
         if (moveAnimation.endValue().toPoint() == _to) {
@@ -141,9 +140,9 @@ void ScreenplayTextCommentsToolbar::Implementation::showPopup(QWidget* _parent)
 
     popup->resize(static_cast<int>(popup->sizeHint().width()), 0);
 
-    const auto left = QPoint(_parent->rect().center().x() - popup->width() / 2,
-                             _parent->rect().bottom()
-                             - Ui::DesignSystem::textField().margins().bottom());
+    const auto left
+        = QPoint(_parent->rect().center().x() - popup->width() / 2,
+                 _parent->rect().bottom() - Ui::DesignSystem::textField().margins().bottom());
     const auto pos = _parent->mapToGlobal(left);
     popup->move(pos);
     popup->show();
@@ -167,8 +166,8 @@ void ScreenplayTextCommentsToolbar::Implementation::hidePopup()
 
 
 ScreenplayTextCommentsToolbar::ScreenplayTextCommentsToolbar(QWidget* _parent)
-    : FloatingToolBar(_parent),
-      d(new Implementation(this))
+    : FloatingToolBar(_parent)
+    , d(new Implementation(this))
 {
     setOrientation(Qt::Vertical);
 
@@ -190,15 +189,12 @@ ScreenplayTextCommentsToolbar::ScreenplayTextCommentsToolbar(QWidget* _parent)
     }
 
 
-    connect(d->textColorAction, &QAction::triggered, this, [this] {
-        emit textColorChangeRequested(actionColor(d->colorAction));
-    });
-    connect(d->textBackgroundColorAction, &QAction::triggered, this, [this] {
-        emit textBackgoundColorChangeRequested(actionColor(d->colorAction));
-    });
-    connect(d->commentAction, &QAction::triggered, this, [this] {
-        emit commentAddRequested(actionColor(d->colorAction));
-    });
+    connect(d->textColorAction, &QAction::triggered, this,
+            [this] { emit textColorChangeRequested(actionColor(d->colorAction)); });
+    connect(d->textBackgroundColorAction, &QAction::triggered, this,
+            [this] { emit textBackgoundColorChangeRequested(actionColor(d->colorAction)); });
+    connect(d->commentAction, &QAction::triggered, this,
+            [this] { emit commentAddRequested(actionColor(d->colorAction)); });
     connect(d->colorAction, &QAction::triggered, this, [this] {
         if (d->isPopupShown) {
             d->hidePopup();
@@ -206,7 +202,7 @@ ScreenplayTextCommentsToolbar::ScreenplayTextCommentsToolbar(QWidget* _parent)
             d->showPopup(this);
         }
     });
-    connect(d->popupContent, &ColorPicker::colorSelected, this, [this] (const QColor& _color) {
+    connect(d->popupContent, &ColorPicker::colorSelected, this, [this](const QColor& _color) {
         setActionColor(d->colorAction, _color);
         d->hidePopup();
 
@@ -217,12 +213,13 @@ ScreenplayTextCommentsToolbar::ScreenplayTextCommentsToolbar(QWidget* _parent)
     connect(&d->opacityAnimation, &QVariantAnimation::valueChanged, this, [this] { update(); });
     connect(&d->hideTimer, &QTimer::timeout, this, &Widget::hide);
     connect(&d->moveAnimation, &QVariantAnimation::valueChanged, this,
-            [this] (const QVariant& _value) { move(_value.toPoint()); });
+            [this](const QVariant& _value) { move(_value.toPoint()); });
 
-    connect(&d->popupHeightAnimation, &QVariantAnimation::valueChanged, this, [this] (const QVariant& _value) {
-        const auto height = _value.toInt();
-        d->popup->resize(d->popup->width(), height);
-    });
+    connect(&d->popupHeightAnimation, &QVariantAnimation::valueChanged, this,
+            [this](const QVariant& _value) {
+                const auto height = _value.toInt();
+                d->popup->resize(d->popup->width(), height);
+            });
     connect(&d->popupHeightAnimation, &QVariantAnimation::finished, this, [this] {
         if (!d->isPopupShown) {
             d->popup->hide();

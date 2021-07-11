@@ -1,17 +1,15 @@
 #include "onboarding_navigator.h"
 
 #include <ui/design_system/design_system.h>
-
 #include <utils/helpers/color_helper.h>
 
 namespace {
-    const int kLanguageStepIndex = 0;
-    const int kThemeStepIndex = 1;
-}
+const int kLanguageStepIndex = 0;
+const int kThemeStepIndex = 1;
+} // namespace
 
 
-namespace Ui
-{
+namespace Ui {
 
 OnboardingNavigator::OnboardingNavigator(QWidget* _parent)
     : Stepper(_parent)
@@ -41,9 +39,9 @@ void OnboardingNavigator::designSystemChangeEvent(DesignSystemChangeEvent* _even
 
     setBackgroundColor(DesignSystem::color().primary());
     setTextColor(DesignSystem::color().onPrimary());
-    setInactiveStepNumberBackgroundColor(
-                ColorHelper::colorBetween(DesignSystem::color().primary(), DesignSystem::color().onPrimary()));
-//    setInactiveStepNumberBackgroundColor(DesignSystem::color().shadow().lighter(300));
+    setInactiveStepNumberBackgroundColor(ColorHelper::colorBetween(
+        DesignSystem::color().primary(), DesignSystem::color().onPrimary()));
+    //    setInactiveStepNumberBackgroundColor(DesignSystem::color().shadow().lighter(300));
 }
 
 } // namespace Ui

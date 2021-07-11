@@ -30,25 +30,30 @@ public:
 
 void ColorHueSlider::Implementation::buildGradient(int _width)
 {
-    gradient = QLinearGradient(Ui::DesignSystem::layout().px8(), 0, _width - Ui::DesignSystem::layout().px8(), 0);
+    gradient = QLinearGradient(Ui::DesignSystem::layout().px8(), 0,
+                               _width - Ui::DesignSystem::layout().px8(), 0);
     const qreal steps = 10;
     for (int step = 0; step <= steps; ++step) {
-        gradient.setColorAt(step/steps, QColor::fromHsvF(step/steps, 1.0, 1.0));
+        gradient.setColorAt(step / steps, QColor::fromHsvF(step / steps, 1.0, 1.0));
     }
 }
 
 QPointF ColorHueSlider::Implementation::selectorPos(const QSize& _size)
 {
-    const QSizeF sizeCorrected = _size - QSizeF(Ui::DesignSystem::layout().px16(), Ui::DesignSystem::layout().px16());
+    const QSizeF sizeCorrected
+        = _size - QSizeF(Ui::DesignSystem::layout().px16(), Ui::DesignSystem::layout().px16());
     return QPointF(Ui::DesignSystem::layout().px8() + sizeCorrected.width() * hue,
-                   Ui::DesignSystem::layout().px8() + sizeCorrected.height()/2);
+                   Ui::DesignSystem::layout().px8() + sizeCorrected.height() / 2);
 }
 
 void ColorHueSlider::Implementation::updateHue(const QPoint& _pos, const QSize& _size)
 {
-    const QPoint pointCorrected = _pos - QPoint(Ui::DesignSystem::layout().px8(), Ui::DesignSystem::layout().px8());
-    const QSizeF sizeCorrected = _size - QSizeF(Ui::DesignSystem::layout().px16(), Ui::DesignSystem::layout().px16());
-    const QRectF hueRect(QPointF(Ui::DesignSystem::layout().px8(), Ui::DesignSystem::layout().px8()), sizeCorrected);
+    const QPoint pointCorrected
+        = _pos - QPoint(Ui::DesignSystem::layout().px8(), Ui::DesignSystem::layout().px8());
+    const QSizeF sizeCorrected
+        = _size - QSizeF(Ui::DesignSystem::layout().px16(), Ui::DesignSystem::layout().px16());
+    const QRectF hueRect(
+        QPointF(Ui::DesignSystem::layout().px8(), Ui::DesignSystem::layout().px8()), sizeCorrected);
     hue = qBound(0.0, qreal(pointCorrected.x()) / sizeCorrected.width(), 1.0);
 }
 
@@ -57,8 +62,8 @@ void ColorHueSlider::Implementation::updateHue(const QPoint& _pos, const QSize& 
 
 
 ColorHueSlider::ColorHueSlider(QWidget* _parent)
-    : Widget(_parent),
-      d(new Implementation)
+    : Widget(_parent)
+    , d(new Implementation)
 {
     designSystemChangeEvent(nullptr);
 }
@@ -80,9 +85,10 @@ void ColorHueSlider::paintEvent(QPaintEvent* _event)
 
     painter.setPen(Qt::NoPen);
     painter.setBrush(d->gradient);
-    painter.drawRoundedRect(rect().adjusted(Ui::DesignSystem::layout().px8(), Ui::DesignSystem::layout().px8(),
-                                            -Ui::DesignSystem::layout().px8(), -Ui::DesignSystem::layout().px8()),
-                            Ui::DesignSystem::layout().px4(), Ui::DesignSystem::layout().px4());
+    painter.drawRoundedRect(
+        rect().adjusted(Ui::DesignSystem::layout().px8(), Ui::DesignSystem::layout().px8(),
+                        -Ui::DesignSystem::layout().px8(), -Ui::DesignSystem::layout().px8()),
+        Ui::DesignSystem::layout().px4(), Ui::DesignSystem::layout().px4());
 
     painter.setPen(QPen(textColor(), Ui::DesignSystem::layout().px2()));
     painter.setBrush(QColor::fromHsvF(d->hue, 1.0, 1.0));

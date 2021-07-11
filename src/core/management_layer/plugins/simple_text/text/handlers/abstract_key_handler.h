@@ -9,8 +9,7 @@ class SimpleTextEdit;
 }
 
 
-namespace KeyProcessingLayer
-{
+namespace KeyProcessingLayer {
 
 /**
  * @brief Базовый класс обработчика нажатия клавиш
@@ -24,7 +23,9 @@ public:
     /**
      * @brief Предварительная обработка
      */
-    virtual void prehandle() {}
+    virtual void prehandle()
+    {
+    }
 
     /**
      * @brief Обработка события нажатия клавиши
@@ -35,7 +36,9 @@ protected:
     /**
      * @brief Подготовка к обработке
      */
-    virtual void prepareForHandle(QKeyEvent* = nullptr) {}
+    virtual void prepareForHandle(QKeyEvent* = nullptr)
+    {
+    }
 
     /**
      * @brief Необходимые действия при нажатии конкретной клавиши/сочетания
@@ -51,7 +54,9 @@ protected:
     virtual void handlePageUp(QKeyEvent* _event = nullptr) = 0;
     virtual void handlePageDown(QKeyEvent* _event = nullptr) = 0;
     virtual void handleOther(QKeyEvent* _event = nullptr) = 0;
-    virtual void handleInput(QInputMethodEvent*) {}
+    virtual void handleInput(QInputMethodEvent*)
+    {
+    }
     /** @} */
 
 protected:

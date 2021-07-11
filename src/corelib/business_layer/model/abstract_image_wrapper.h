@@ -12,7 +12,9 @@ namespace BusinessLayer {
 class AbstractImageWrapper
 {
 public:
-    virtual ~AbstractImageWrapper() {}
+    virtual ~AbstractImageWrapper()
+    {
+    }
 
     /**
      * @brief Получить изображение по заданному индентификатору

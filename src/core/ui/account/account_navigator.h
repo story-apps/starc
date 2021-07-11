@@ -3,8 +3,7 @@
 #include <ui/widgets/widget/widget.h>
 
 
-namespace Ui
-{
+namespace Ui {
 
 /**
  * @brief Навигатор личного кабинета
@@ -50,4 +49,3 @@ private:
 };
 
 } // namespace Ui
-

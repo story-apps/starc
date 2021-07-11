@@ -3,12 +3,12 @@
 #include <ui/widgets/stack_widget/stack_widget.h>
 
 class QAbstractItemModel;
-template<typename T> class QList;
+template<typename T>
+class QList;
 typedef QList<QModelIndex> QModelIndexList;
 
 
-namespace Ui
-{
+namespace Ui {
 
 /**
  * @brief Виджет комментариев сценария
@@ -81,4 +81,3 @@ private:
 };
 
 } // namespace Ui
-

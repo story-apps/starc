@@ -4,8 +4,7 @@
 
 class QString;
 
-namespace ManagementLayer
-{
+namespace ManagementLayer {
 
 /**
  * @brief Интерфейс менеджера приложения
@@ -28,4 +27,5 @@ public:
 
 } // namespace ManagementLayer
 
-Q_DECLARE_INTERFACE(ManagementLayer::IApplicationManager, "app.starc.ManagementLayer.IApplicationManager")
+Q_DECLARE_INTERFACE(ManagementLayer::IApplicationManager,
+                    "app.starc.ManagementLayer.IApplicationManager")

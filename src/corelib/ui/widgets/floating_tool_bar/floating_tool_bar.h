@@ -53,7 +53,7 @@ protected:
     /**
      * @brief Переопределяем для отображения тултипов кнопок
      */
-    bool event(QEvent *_event) override;
+    bool event(QEvent* _event) override;
 
     /**
      * @brief Реализуем собственное рисование

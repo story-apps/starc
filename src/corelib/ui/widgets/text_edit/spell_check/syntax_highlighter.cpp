@@ -1,12 +1,13 @@
 #include "syntax_highlighter.h"
 
 #include "qapplication.h"
+
+#include <qdebug.h>
+#include <qpointer.h>
+#include <qtextcursor.h>
 #include <qtextdocument.h>
 #include <qtextlayout.h>
-#include <qpointer.h>
 #include <qtextobject.h>
-#include <qtextcursor.h>
-#include <qdebug.h>
 #include <qtimer.h>
 
 
@@ -14,7 +15,7 @@ void SyntaxHighlighterPrivate::applyFormatChanges()
 {
     bool formatsChanged = false;
 
-    QTextLayout *layout = currentBlock.layout();
+    QTextLayout* layout = currentBlock.layout();
 
     QVector<QTextLayout::FormatRange> ranges = layout->formats();
 
@@ -83,8 +84,7 @@ void SyntaxHighlighterPrivate::_q_reformatBlocks(int from, int charsRemoved, int
         // нужно обновить одну лишь папку/группу
         //
         isDocumentChangedFormLastEdit = true;
-        if (charsAdded > 300
-            && charsRemoved > 300) {
+        if (charsAdded > 300 && charsRemoved > 300) {
             //
             // Сперва проверим начало группирующего элемента
             //
@@ -148,9 +148,10 @@ void SyntaxHighlighterPrivate::reformatBlocks(int from, int charsRemoved, int ch
     formatChanges.clear();
 }
 
-void SyntaxHighlighterPrivate::reformatBlock(const QTextBlock &block)
+void SyntaxHighlighterPrivate::reformatBlock(const QTextBlock& block)
 {
-    Q_ASSERT_X(!currentBlock.isValid(), "QSyntaxHighlighter::reformatBlock()", "reFormatBlock() called recursively");
+    Q_ASSERT_X(!currentBlock.isValid(), "QSyntaxHighlighter::reformatBlock()",
+               "reFormatBlock() called recursively");
 
     currentBlock = block;
 
@@ -256,12 +257,12 @@ void SyntaxHighlighterPrivate::reformatBlock(const QTextBlock &block)
     parents document. The specified QTextEdit also becomes the owner of
     the QSyntaxHighlighter.
 */
-SyntaxHighlighter::SyntaxHighlighter(QObject *parent)
-    : QObject(parent),
-      d(new SyntaxHighlighterPrivate(parent, this))
+SyntaxHighlighter::SyntaxHighlighter(QObject* parent)
+    : QObject(parent)
+    , d(new SyntaxHighlighterPrivate(parent, this))
 {
     if (parent->inherits("QTextEdit")) {
-        QTextDocument *doc = parent->property("document").value<QTextDocument *>();
+        QTextDocument* doc = parent->property("document").value<QTextDocument*>();
         if (doc)
             setDocument(doc);
     }
@@ -272,9 +273,9 @@ SyntaxHighlighter::SyntaxHighlighter(QObject *parent)
     The specified QTextDocument also becomes the owner of the
     QSyntaxHighlighter.
 */
-SyntaxHighlighter::SyntaxHighlighter(QTextDocument *parent)
-    : QObject(parent),
-      d(new SyntaxHighlighterPrivate(parent, this))
+SyntaxHighlighter::SyntaxHighlighter(QTextDocument* parent)
+    : QObject(parent)
+    , d(new SyntaxHighlighterPrivate(parent, this))
 {
     setDocument(parent);
 }
@@ -292,27 +293,32 @@ SyntaxHighlighter::~SyntaxHighlighter()
     Installs the syntax highlighter on the given QTextDocument \a doc.
     A QSyntaxHighlighter can only be used with one document at a time.
 */
-void SyntaxHighlighter::setDocument(QTextDocument *doc)
+void SyntaxHighlighter::setDocument(QTextDocument* doc)
 {
     if (d->doc) {
-        disconnect(d->doc, SIGNAL(contentsChange(int,int,int)),
-                   d, SLOT(_q_reformatBlocks(int,int,int)));
+        disconnect(d->doc, &QTextDocument::contentsChange, d,
+                   &SyntaxHighlighterPrivate::_q_reformatBlocks);
 
         if (!d->doc->isEmpty()) {
             QTextCursor cursor(d->doc);
             cursor.beginEditBlock();
             for (QTextBlock blk = d->doc->begin(); blk.isValid(); blk = blk.next())
-                blk.layout()->clearAdditionalFormats();
+                blk.layout()->clearFormats();
             cursor.endEditBlock();
         }
     }
     d->doc = doc;
     if (d->doc) {
-        connect(d->doc, SIGNAL(contentsChange(int,int,int)),
-                d, SLOT(_q_reformatBlocks(int,int,int)));
+        connect(d->doc, &QTextDocument::contentsChange, d,
+                &SyntaxHighlighterPrivate::_q_reformatBlocks);
         d->rehighlightPending = true;
         if (!d->doc->isEmpty()) {
-            rehighlight();
+            //
+            // Вызываем отложенно, т.к. установка документа также осуществляется в конструкторе, в
+            // момент, когда таблица виртуальных функций ещё не создана и нельзя вызвать метод
+            // SyntaxHighlighter::highlightBlock наследника
+            //
+            QMetaObject::invokeMethod(this, &SyntaxHighlighter::rehighlight, Qt::QueuedConnection);
         }
     }
 }
@@ -321,7 +327,7 @@ void SyntaxHighlighter::setDocument(QTextDocument *doc)
     Returns the QTextDocument on which this syntax highlighter is
     installed.
 */
-QTextDocument *SyntaxHighlighter::document() const
+QTextDocument* SyntaxHighlighter::document() const
 {
     return d->doc;
 }
@@ -349,7 +355,7 @@ void SyntaxHighlighter::rehighlight()
 
     \sa rehighlight()
 */
-void SyntaxHighlighter::rehighlightBlock(const QTextBlock &block)
+void SyntaxHighlighter::rehighlightBlock(const QTextBlock& block)
 {
     if (!d->doc || !block.isValid() || block.document() != d->doc)
         return;
@@ -432,7 +438,7 @@ void SyntaxHighlighter::setChanged(bool _changed)
 
     \sa format(), highlightBlock()
 */
-void SyntaxHighlighter::setFormat(int start, int count, const QTextCharFormat &format)
+void SyntaxHighlighter::setFormat(int start, int count, const QTextCharFormat& format)
 {
     if (start < 0 || start >= d->formatChanges.count())
         return;
@@ -453,7 +459,7 @@ void SyntaxHighlighter::setFormat(int start, int count, const QTextCharFormat &f
 
     \sa format(), highlightBlock()
 */
-void SyntaxHighlighter::setFormat(int start, int count, const QColor &color)
+void SyntaxHighlighter::setFormat(int start, int count, const QColor& color)
 {
     QTextCharFormat format;
     format.setForeground(color);
@@ -471,7 +477,7 @@ void SyntaxHighlighter::setFormat(int start, int count, const QColor &color)
 
     \sa format(), highlightBlock()
 */
-void SyntaxHighlighter::setFormat(int start, int count, const QFont &font)
+void SyntaxHighlighter::setFormat(int start, int count, const QFont& font)
 {
     QTextCharFormat format;
     format.setFont(font);
@@ -569,7 +575,7 @@ void SyntaxHighlighter::setCurrentBlockState(int newState)
 
     \sa QTextBlock::setUserData()
 */
-void SyntaxHighlighter::setCurrentBlockUserData(QTextBlockUserData *data)
+void SyntaxHighlighter::setCurrentBlockUserData(QTextBlockUserData* data)
 {
     if (!d->currentBlock.isValid())
         return;
@@ -583,7 +589,7 @@ void SyntaxHighlighter::setCurrentBlockUserData(QTextBlockUserData *data)
 
     \sa QTextBlock::userData(), setCurrentBlockUserData()
 */
-QTextBlockUserData *SyntaxHighlighter::currentBlockUserData() const
+QTextBlockUserData* SyntaxHighlighter::currentBlockUserData() const
 {
     if (!d->currentBlock.isValid())
         return 0;

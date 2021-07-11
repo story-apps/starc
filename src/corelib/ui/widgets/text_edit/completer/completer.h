@@ -1,8 +1,8 @@
 #pragma once
 
-#include <corelib_global.h>
-
 #include <QCompleter>
+
+#include <corelib_global.h>
 
 
 /**

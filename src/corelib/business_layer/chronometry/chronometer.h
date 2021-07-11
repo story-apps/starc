@@ -1,24 +1,19 @@
 #pragma once
 
-#include <corelib_global.h>
-
 #include <chrono>
+#include <corelib_global.h>
 
 class QTextBlock;
 
 
-namespace BusinessLayer
-{
+namespace BusinessLayer {
 
 enum class ScreenplayParagraphType;
 
 /**
  * @brief Тип счётчика хронометража
  */
-enum class CORE_LIBRARY_EXPORT ChronometerType {
-    Page,
-    Characters
-};
+enum class CORE_LIBRARY_EXPORT ChronometerType { Page, Characters };
 
 /**
  * @brief Фасад для вычисления хронометража способом, настроенным пользователем

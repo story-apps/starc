@@ -2,10 +2,8 @@
 
 #include <business_layer/model/abstract_model_xml.h>
 
-namespace BusinessLayer
-{
-namespace xml
-{
+namespace BusinessLayer {
+namespace xml {
 
 //
 // Глава

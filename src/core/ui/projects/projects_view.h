@@ -3,13 +3,12 @@
 #include <ui/widgets/stack_widget/stack_widget.h>
 
 namespace ManagementLayer {
-    class Project;
-    class ProjectsModel;
-}
+class Project;
+class ProjectsModel;
+} // namespace ManagementLayer
 
 
-namespace Ui
-{
+namespace Ui {
 
 /**
  * @brief Представление списка проектов

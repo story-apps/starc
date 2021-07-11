@@ -8,12 +8,10 @@
 #include <business_layer/import/text/markdown_improter.h>
 #include <business_layer/model/text/text_model.h>
 #include <business_layer/model/text/text_model_text_item.h>
-#include <business_layer/templates/text_template.h>
 #include <business_layer/templates/templates_facade.h>
-
+#include <business_layer/templates/text_template.h>
 #include <ui/design_system/design_system.h>
 #include <ui/widgets/context_menu/context_menu.h>
-
 #include <utils/helpers/color_helper.h>
 #include <utils/helpers/text_helper.h>
 
@@ -31,8 +29,7 @@ using BusinessLayer::TextBlockStyle;
 using BusinessLayer::TextCursor;
 using BusinessLayer::TextParagraphType;
 
-namespace Ui
-{
+namespace Ui {
 
 class ScreenplayTitlePageEdit::Implementation
 {
@@ -92,8 +89,8 @@ void ScreenplayTitlePageEdit::Implementation::revertAction(bool previous)
 
 
 ScreenplayTitlePageEdit::ScreenplayTitlePageEdit(QWidget* _parent)
-    : BaseTextEdit(_parent),
-      d(new Implementation(this))
+    : BaseTextEdit(_parent)
+    , d(new Implementation(this))
 {
     setContextMenuPolicy(Qt::CustomContextMenu);
     setFrameShape(QFrame::NoFrame);
@@ -111,11 +108,12 @@ void ScreenplayTitlePageEdit::initWithModel(BusinessLayer::TextModel* _model)
 
     const auto currentTemplate = TemplatesFacade::textTemplate();
     setPageFormat(currentTemplate.pageSizeId());
-    setPageMargins(currentTemplate.pageMargins());
+    setPageMarginsMm(currentTemplate.pageMargins());
     setPageNumbersAlignment(currentTemplate.pageNumbersAlignment());
 
     //
-    // Документ нужно формировать только после того, как редактор настроен, чтобы избежать лишний изменений
+    // Документ нужно формировать только после того, как редактор настроен, чтобы избежать лишний
+    // изменений
     //
     d->document.setModel(d->model);
 }
@@ -198,7 +196,8 @@ int ScreenplayTitlePageEdit::positionForModelIndex(const QModelIndex& _index)
     return d->document.itemStartPosition(_index);
 }
 
-void ScreenplayTitlePageEdit::addReviewMark(const QColor& _textColor, const QColor& _backgroundColor, const QString& _comment)
+void ScreenplayTitlePageEdit::addReviewMark(const QColor& _textColor,
+                                            const QColor& _backgroundColor, const QString& _comment)
 {
     QTextCursor cursor(textCursor());
     if (!cursor.hasSelection()) {
@@ -312,15 +311,14 @@ bool ScreenplayTitlePageEdit::keyPressEventReimpl(QKeyEvent* _event)
     //
     // ... перевод курсора к следующему символу
     //
-    else  if (_event == QKeySequence::MoveToNextChar) {
+    else if (_event == QKeySequence::MoveToNextChar) {
         if (textCursor().block().textDirection() == Qt::LeftToRight) {
             moveCursor(QTextCursor::NextCharacter);
         } else {
             moveCursor(QTextCursor::PreviousCharacter);
         }
 
-        while (!textCursor().atEnd()
-               && !textCursor().block().isVisible()) {
+        while (!textCursor().atEnd() && !textCursor().block().isVisible()) {
             moveCursor(QTextCursor::NextBlock);
         }
     }
@@ -333,8 +331,7 @@ bool ScreenplayTitlePageEdit::keyPressEventReimpl(QKeyEvent* _event)
         } else {
             moveCursor(QTextCursor::NextCharacter);
         }
-        while (!textCursor().atStart()
-               && !textCursor().block().isVisible()) {
+        while (!textCursor().atStart() && !textCursor().block().isVisible()) {
             moveCursor(QTextCursor::StartOfBlock);
             if (textCursor().block().textDirection() == Qt::LeftToRight) {
                 moveCursor(QTextCursor::PreviousCharacter);
@@ -362,8 +359,7 @@ bool ScreenplayTitlePageEdit::keyPressEventReimpl(QKeyEvent* _event)
 
 bool ScreenplayTitlePageEdit::canInsertFromMimeData(const QMimeData* _source) const
 {
-    return _source->formats().contains(d->model->mimeTypes().first())
-            || _source->hasText();
+    return _source->formats().contains(d->model->mimeTypes().first()) || _source->hasText();
 }
 
 QMimeData* ScreenplayTitlePageEdit::createMimeDataFromSelection() const
@@ -393,10 +389,9 @@ QMimeData* ScreenplayTitlePageEdit::createMimeDataFromSelection() const
                 text.append("\r\n");
             }
             text.append(cursor.blockCharFormat().fontCapitalization() == QFont::AllUppercase
-                        ? TextHelper::smartToUpper(cursor.selectedText())
-                        : cursor.selectedText());
-        } while (cursor.position() < textCursor().selectionEnd()
-                 && !cursor.atEnd()
+                            ? TextHelper::smartToUpper(cursor.selectedText())
+                            : cursor.selectedText());
+        } while (cursor.position() < textCursor().selectionEnd() && !cursor.atEnd()
                  && cursor.movePosition(QTextCursor::NextBlock));
 
         mimeData->setData("text/plain", text);
@@ -406,8 +401,9 @@ QMimeData* ScreenplayTitlePageEdit::createMimeDataFromSelection() const
     // Поместим в буфер данные о тексте в специальном формате
     //
     {
-        mimeData->setData(d->model->mimeTypes().first(),
-                          d->document.mimeFromSelection(selection.first, selection.second).toUtf8());
+        mimeData->setData(
+            d->model->mimeTypes().first(),
+            d->document.mimeFromSelection(selection.first, selection.second).toUtf8());
     }
 
     return mimeData;

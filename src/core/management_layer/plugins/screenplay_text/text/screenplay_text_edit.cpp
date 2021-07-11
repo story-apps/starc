@@ -12,10 +12,8 @@
 #include <business_layer/model/screenplay/text/screenplay_text_model_text_item.h>
 #include <business_layer/templates/screenplay_template.h>
 #include <business_layer/templates/templates_facade.h>
-
 #include <ui/design_system/design_system.h>
 #include <ui/widgets/context_menu/context_menu.h>
-
 #include <utils/helpers/color_helper.h>
 #include <utils/helpers/text_helper.h>
 
@@ -32,8 +30,7 @@ using BusinessLayer::ScreenplayBlockStyle;
 using BusinessLayer::ScreenplayParagraphType;
 using BusinessLayer::TemplatesFacade;
 
-namespace Ui
-{
+namespace Ui {
 
 class ScreenplayTextEdit::Implementation
 {
@@ -93,8 +90,8 @@ void ScreenplayTextEdit::Implementation::revertAction(bool previous)
 
 
 ScreenplayTextEdit::ScreenplayTextEdit(QWidget* _parent)
-    : BaseTextEdit(_parent),
-      d(new Implementation(this))
+    : BaseTextEdit(_parent)
+    , d(new Implementation(this))
 {
     setContextMenuPolicy(Qt::CustomContextMenu);
     setFrameShape(QFrame::NoFrame);
@@ -122,8 +119,7 @@ void ScreenplayTextEdit::setShowDialogueNumber(bool _show)
 
 void ScreenplayTextEdit::initWithModel(BusinessLayer::ScreenplayTextModel* _model)
 {
-    if (d->model
-        && d->model->informationModel()) {
+    if (d->model && d->model->informationModel()) {
         disconnect(d->model->informationModel());
     }
     d->model = _model;
@@ -138,26 +134,28 @@ void ScreenplayTextEdit::initWithModel(BusinessLayer::ScreenplayTextModel* _mode
     //
     const auto currentTemplate = TemplatesFacade::screenplayTemplate();
     setPageFormat(currentTemplate.pageSizeId());
-    setPageMargins(currentTemplate.pageMargins());
+    setPageMarginsMm(currentTemplate.pageMargins());
     setPageNumbersAlignment(currentTemplate.pageNumbersAlignment());
 
     //
-    // Документ нужно формировать только после того, как редактор настроен, чтобы избежать лишний изменений
+    // Документ нужно формировать только после того, как редактор настроен, чтобы избежать лишний
+    // изменений
     //
     d->document.setModel(d->model);
 
     //
     // Отслеживаем изменения некоторых параметров
     //
-    if (d->model
-        && d->model->informationModel()) {
+    if (d->model && d->model->informationModel()) {
         setHeader(d->model->informationModel()->header());
         setFooter(d->model->informationModel()->footer());
 
-        connect(d->model->informationModel(), &BusinessLayer::ScreenplayInformationModel::headerChanged,
-                this, &ScreenplayTextEdit::setHeader);
-        connect(d->model->informationModel(), &BusinessLayer::ScreenplayInformationModel::footerChanged,
-                this, &ScreenplayTextEdit::setFooter);
+        connect(d->model->informationModel(),
+                &BusinessLayer::ScreenplayInformationModel::headerChanged, this,
+                &ScreenplayTextEdit::setHeader);
+        connect(d->model->informationModel(),
+                &BusinessLayer::ScreenplayInformationModel::footerChanged, this,
+                &ScreenplayTextEdit::setFooter);
     }
 }
 
@@ -280,7 +278,8 @@ int ScreenplayTextEdit::positionForModelIndex(const QModelIndex& _index)
     return d->document.itemStartPosition(_index);
 }
 
-void ScreenplayTextEdit::addReviewMark(const QColor& _textColor, const QColor& _backgroundColor, const QString& _comment)
+void ScreenplayTextEdit::addReviewMark(const QColor& _textColor, const QColor& _backgroundColor,
+                                       const QString& _comment)
 {
     BusinessLayer::ScreenplayTextCursor cursor(textCursor());
     if (!cursor.hasSelection()) {
@@ -394,7 +393,7 @@ bool ScreenplayTextEdit::keyPressEventReimpl(QKeyEvent* _event)
     //
     // ... перевод курсора к следующему символу
     //
-    else  if (_event == QKeySequence::MoveToNextChar) {
+    else if (_event == QKeySequence::MoveToNextChar) {
         if (textCursor().block().textDirection() == Qt::LeftToRight) {
             moveCursor(QTextCursor::NextCharacter);
         } else {
@@ -403,8 +402,10 @@ bool ScreenplayTextEdit::keyPressEventReimpl(QKeyEvent* _event)
 
         while (!textCursor().atEnd()
                && (!textCursor().block().isVisible()
-                   || ScreenplayBlockStyle::forBlock(textCursor().block()) == ScreenplayParagraphType::PageSplitter
-                   || textCursor().blockFormat().boolProperty(ScreenplayBlockStyle::PropertyIsCorrection))) {
+                   || ScreenplayBlockStyle::forBlock(textCursor().block())
+                       == ScreenplayParagraphType::PageSplitter
+                   || textCursor().blockFormat().boolProperty(
+                       ScreenplayBlockStyle::PropertyIsCorrection))) {
             moveCursor(QTextCursor::NextBlock);
         }
     }
@@ -419,8 +420,10 @@ bool ScreenplayTextEdit::keyPressEventReimpl(QKeyEvent* _event)
         }
         while (!textCursor().atStart()
                && (!textCursor().block().isVisible()
-                   || ScreenplayBlockStyle::forBlock(textCursor().block()) == ScreenplayParagraphType::PageSplitter
-                   || textCursor().blockFormat().boolProperty(ScreenplayBlockStyle::PropertyIsCorrection))) {
+                   || ScreenplayBlockStyle::forBlock(textCursor().block())
+                       == ScreenplayParagraphType::PageSplitter
+                   || textCursor().blockFormat().boolProperty(
+                       ScreenplayBlockStyle::PropertyIsCorrection))) {
             moveCursor(QTextCursor::StartOfBlock);
             if (textCursor().block().textDirection() == Qt::LeftToRight) {
                 moveCursor(QTextCursor::PreviousCharacter);
@@ -472,8 +475,7 @@ bool ScreenplayTextEdit::updateEnteredText(const QString& _eventText)
     // Определяем необходимость установки верхнего регистра для первого символа блока
     //
     if (currentCharFormat.boolProperty(ScreenplayBlockStyle::PropertyIsFirstUppercase)
-        && cursorBackwardText != " "
-        && cursorBackwardText == _eventText
+        && cursorBackwardText != " " && cursorBackwardText == _eventText
         && _eventText[0] != TextHelper::smartToUpper(_eventText[0])) {
         //
         // Сформируем правильное представление строки
@@ -532,8 +534,7 @@ bool ScreenplayTextEdit::updateEnteredText(const QString& _eventText)
     // Если была попытка ввести несколько пробелов подряд, или пробел в начале строки,
     // удаляем этот лишний пробел
     //
-    if (cursorBackwardText == " "
-        || cursorBackwardText.endsWith("  ")) {
+    if (cursorBackwardText == " " || cursorBackwardText.endsWith("  ")) {
         cursor.deletePreviousChar();
 
         return true;
@@ -552,19 +553,18 @@ void ScreenplayTextEdit::paintEvent(QPaintEvent* _event)
     const bool isLeftToRight = QLocale().textDirection() == Qt::LeftToRight;
     const qreal pageLeft = 0;
     const qreal pageRight = viewport()->width();
-    const qreal spaceBetweenSceneNumberAndText = 10 * Ui::DesignSystem::scaleFactor();;
-    const qreal textLeft = pageLeft
-                           - (isLeftToRight ? 0 : horizontalScrollBar()->maximum())
-                           + document()->rootFrame()->frameFormat().leftMargin() - spaceBetweenSceneNumberAndText;
-    const qreal textRight = pageRight
-                            + (isLeftToRight ? horizontalScrollBar()->maximum() : 0)
-                            - document()->rootFrame()->frameFormat().rightMargin() + spaceBetweenSceneNumberAndText;
+    const qreal spaceBetweenSceneNumberAndText = 10 * Ui::DesignSystem::scaleFactor();
+    ;
+    const qreal textLeft = pageLeft - (isLeftToRight ? 0 : horizontalScrollBar()->maximum())
+        + document()->rootFrame()->frameFormat().leftMargin() - spaceBetweenSceneNumberAndText;
+    const qreal textRight = pageRight + (isLeftToRight ? horizontalScrollBar()->maximum() : 0)
+        - document()->rootFrame()->frameFormat().rightMargin() + spaceBetweenSceneNumberAndText;
     const qreal leftDelta = (isLeftToRight ? -1 : 1) * horizontalScrollBar()->value();
-//    int colorRectWidth = 0;
+    //    int colorRectWidth = 0;
     qreal verticalMargin = 0;
     const qreal splitterX = leftDelta + textLeft
-                            + (textRight - textLeft)
-                            * TemplatesFacade::screenplayTemplate().leftHalfOfPageWidthPercents() / 100;
+        + (textRight - textLeft)
+            * TemplatesFacade::screenplayTemplate().leftHalfOfPageWidthPercents() / 100;
 
 
     //
@@ -573,7 +573,7 @@ void ScreenplayTextEdit::paintEvent(QPaintEvent* _event)
     QTextBlock topBlock = document()->lastBlock();
     {
         QTextCursor topCursor;
-        for (int delta = 0; delta < viewport()->height()/4; delta += 10) {
+        for (int delta = 0; delta < viewport()->height() / 4; delta += 10) {
             topCursor = cursorForPosition(viewport()->mapFromParent(QPoint(0, delta)));
             if (topBlock.blockNumber() > topCursor.block().blockNumber()) {
                 topBlock = topCursor.block();
@@ -595,7 +595,7 @@ void ScreenplayTextEdit::paintEvent(QPaintEvent* _event)
     QTextBlock bottomBlock = document()->firstBlock();
     {
         BusinessLayer::ScreenplayTextCursor bottomCursor;
-        for (int delta = viewport()->height(); delta > viewport()->height()*3/4; delta -= 10) {
+        for (int delta = viewport()->height(); delta > viewport()->height() * 3 / 4; delta -= 10) {
             bottomCursor = cursorForPosition(viewport()->mapFromParent(QPoint(0, delta)));
             if (bottomBlock.blockNumber() < bottomCursor.block().blockNumber()) {
                 bottomBlock = bottomCursor.block();
@@ -652,71 +652,78 @@ void ScreenplayTextEdit::paintEvent(QPaintEvent* _event)
                 //
                 verticalMargin = cursorR.height() / 2;
 
-//                //
-//                // Определим цвет сцены
-//                //
-//                if (blockType == ScenarioBlockStyle::SceneHeading
-//                    || blockType == ScenarioBlockStyle::FolderHeader) {
-//                    lastSceneBlockBottom = cursorR.top();
-//                    colorRectWidth = QFontMetrics(cursor.charFormat().font()).width(".");
-//                    lastSceneColor = QColor();
-//                    if (SceneHeadingBlockInfo* info = dynamic_cast<SceneHeadingBlockInfo*>(block.userData())) {
-//                        if (!info->colors().isEmpty()) {
-//                            lastSceneColor = QColor(info->colors().split(";").first());
-//                        }
-//                    }
-//                }
+                //                //
+                //                // Определим цвет сцены
+                //                //
+                //                if (blockType == ScenarioBlockStyle::SceneHeading
+                //                    || blockType == ScenarioBlockStyle::FolderHeader) {
+                //                    lastSceneBlockBottom = cursorR.top();
+                //                    colorRectWidth =
+                //                    QFontMetrics(cursor.charFormat().font()).width(".");
+                //                    lastSceneColor = QColor();
+                //                    if (SceneHeadingBlockInfo* info =
+                //                    dynamic_cast<SceneHeadingBlockInfo*>(block.userData())) {
+                //                        if (!info->colors().isEmpty()) {
+                //                            lastSceneColor =
+                //                            QColor(info->colors().split(";").first());
+                //                        }
+                //                    }
+                //                }
 
-//                //
-//                // Нарисуем цвет сцены
-//                //
-//                if (lastSceneColor.isValid()) {
-//                    const QPointF topLeft(isLeftToRight
-//                                    ? textRight + leftDelta
-//                                    : textLeft - colorRectWidth + leftDelta,
-//                                    lastSceneBlockBottom - verticalMargin);
-//                    const QPointF bottomRight(isLeftToRight
-//                                        ? textRight + colorRectWidth + leftDelta
-//                                        : textLeft + leftDelta,
-//                                        cursorREnd.bottom() + verticalMargin);
-//                    const QRectF rect(topLeft, bottomRight);
-//                    painter.fillRect(rect, lastSceneColor);
-//                }
+                //                //
+                //                // Нарисуем цвет сцены
+                //                //
+                //                if (lastSceneColor.isValid()) {
+                //                    const QPointF topLeft(isLeftToRight
+                //                                    ? textRight + leftDelta
+                //                                    : textLeft - colorRectWidth + leftDelta,
+                //                                    lastSceneBlockBottom - verticalMargin);
+                //                    const QPointF bottomRight(isLeftToRight
+                //                                        ? textRight + colorRectWidth + leftDelta
+                //                                        : textLeft + leftDelta,
+                //                                        cursorREnd.bottom() + verticalMargin);
+                //                    const QRectF rect(topLeft, bottomRight);
+                //                    painter.fillRect(rect, lastSceneColor);
+                //                }
 
-//                //
-//                // Определим цвет персонажа
-//                //
-//                if (blockType == ScenarioBlockStyle::Character) {
-//                    lastCharacterBlockBottom = cursorR.top();
-//                    colorRectWidth = QFontMetrics(cursor.charFormat().font()).width(".");
-//                    lastCharacterColor = QColor();
-//                    const QString characterName = BusinessLogic::CharacterParser::name(block.text());
-//                    if (auto character = DataStorageLayer::StorageFacade::researchStorage()->character(characterName)) {
-//                        if (character->color().isValid()) {
-//                            lastCharacterColor = character->color();
-//                        }
-//                    }
-//                } else if (blockType != ScenarioBlockStyle::Parenthetical
-//                           && blockType != ScenarioBlockStyle::Dialogue
-//                           && blockType != ScenarioBlockStyle::Lyrics) {
-//                    lastCharacterColor = QColor();
-//                }
+                //                //
+                //                // Определим цвет персонажа
+                //                //
+                //                if (blockType == ScenarioBlockStyle::Character) {
+                //                    lastCharacterBlockBottom = cursorR.top();
+                //                    colorRectWidth =
+                //                    QFontMetrics(cursor.charFormat().font()).width(".");
+                //                    lastCharacterColor = QColor();
+                //                    const QString characterName =
+                //                    BusinessLogic::CharacterParser::name(block.text()); if (auto
+                //                    character =
+                //                    DataStorageLayer::StorageFacade::researchStorage()->character(characterName))
+                //                    {
+                //                        if (character->color().isValid()) {
+                //                            lastCharacterColor = character->color();
+                //                        }
+                //                    }
+                //                } else if (blockType != ScenarioBlockStyle::Parenthetical
+                //                           && blockType != ScenarioBlockStyle::Dialogue
+                //                           && blockType != ScenarioBlockStyle::Lyrics) {
+                //                    lastCharacterColor = QColor();
+                //                }
 
-//                //
-//                // Нарисуем цвет персонажа
-//                //
-//                if (lastCharacterColor.isValid()) {
-//                    const QPointF topLeft(isLeftToRight
-//                                    ? textLeft - colorRectWidth + leftDelta
-//                                    : textRight + leftDelta,
-//                                    lastCharacterBlockBottom - verticalMargin);
-//                    const QPointF bottomRight(isLeftToRight
-//                                        ? textLeft + leftDelta
-//                                        : textRight + colorRectWidth + leftDelta,
-//                                        cursorREnd.bottom() + verticalMargin);
-//                    const QRectF rect(topLeft, bottomRight);
-//                    painter.fillRect(rect, lastCharacterColor);
-//                }
+                //                //
+                //                // Нарисуем цвет персонажа
+                //                //
+                //                if (lastCharacterColor.isValid()) {
+                //                    const QPointF topLeft(isLeftToRight
+                //                                    ? textLeft - colorRectWidth + leftDelta
+                //                                    : textRight + leftDelta,
+                //                                    lastCharacterBlockBottom - verticalMargin);
+                //                    const QPointF bottomRight(isLeftToRight
+                //                                        ? textLeft + leftDelta
+                //                                        : textRight + colorRectWidth + leftDelta,
+                //                                        cursorREnd.bottom() + verticalMargin);
+                //                    const QRectF rect(topLeft, bottomRight);
+                //                    painter.fillRect(rect, lastCharacterColor);
+                //                }
 
                 //
                 // Курсор на экране
@@ -726,60 +733,66 @@ void ScreenplayTextEdit::paintEvent(QPaintEvent* _event)
                     // ... и выше нижней
                     && cursorR.top() < viewportGeometry.bottom()) {
 
-//                    //
-//                    // Прорисовка закладок
-//                    //
-//                    if (blockInfo != nullptr
-//                        && blockInfo->hasBookmark()) {
-//                        //
-//                        // Определим область для отрисовки и выведем закладку в редактор
-//                        //
-//                        QPointF topLeft(isLeftToRight
-//                                        ? pageLeft + leftDelta
-//                                        : textRight + leftDelta,
-//                                        cursorR.top());
-//                        QPointF bottomRight(isLeftToRight
-//                                            ? textLeft + leftDelta
-//                                            : pageRight + leftDelta,
-//                                            cursorR.bottom());
-//                        QRectF rect(topLeft, bottomRight);
-//                        painter.setBrush(blockInfo->bookmarkColor());
-//                        painter.setPen(Qt::transparent);
-//                        painter.drawRect(rect);
-//                        painter.setPen(Qt::white);
-//                    } else {
-//                        painter.setPen(palette().text().color());
-//                    }
+                    //                    //
+                    //                    // Прорисовка закладок
+                    //                    //
+                    //                    if (blockInfo != nullptr
+                    //                        && blockInfo->hasBookmark()) {
+                    //                        //
+                    //                        // Определим область для отрисовки и выведем закладку
+                    //                        в редактор
+                    //                        //
+                    //                        QPointF topLeft(isLeftToRight
+                    //                                        ? pageLeft + leftDelta
+                    //                                        : textRight + leftDelta,
+                    //                                        cursorR.top());
+                    //                        QPointF bottomRight(isLeftToRight
+                    //                                            ? textLeft + leftDelta
+                    //                                            : pageRight + leftDelta,
+                    //                                            cursorR.bottom());
+                    //                        QRectF rect(topLeft, bottomRight);
+                    //                        painter.setBrush(blockInfo->bookmarkColor());
+                    //                        painter.setPen(Qt::transparent);
+                    //                        painter.drawRect(rect);
+                    //                        painter.setPen(Qt::white);
+                    //                    } else {
+                    //                        painter.setPen(palette().text().color());
+                    //                    }
 
-//                    //
-//                    // Новый способ отрисовки
-//                    //
-//                    //
-//                    // Определим область для отрисовки и выведем номер сцены в редактор в зависимости от стороны
-//                    //
-//                    QPointF topLeft(isLeftToRight
-//                                    ? pageLeft + leftDelta
-//                                    : textRight + leftDelta,
-//                                    cursorR.top());
-//                    QPointF bottomRight(isLeftToRight
-//                                        ? textLeft + leftDelta
-//                                        : pageRight + leftDelta,
-//                                        cursorR.bottom());
-//                    QRectF rect(topLeft, bottomRight);
-//                    rect.adjust(38, 0, 0, 0);
-//                    painter.setFont(DesignSystem::font().iconsMid());
-//                    const int size = painter.fontMetrics().lineSpacing();
-//                    QRectF circle(rect.left() - size, rect.top() - size, size * 3, size * 3);
-//                    painter.setBrush(ColorHelper::transparent(palette().text().color(), Ui::DesignSystem::hoverBackgroundOpacity()));
-//                    painter.setPen(Qt::NoPen);
-//                    painter.drawRect(circle);
-//                    painter.setPen(palette().text().color());
-//                    painter.drawText(rect, Qt::AlignLeft | Qt::AlignTop, u8"\U000F024B");
+                    //                    //
+                    //                    // Новый способ отрисовки
+                    //                    //
+                    //                    //
+                    //                    // Определим область для отрисовки и выведем номер сцены в
+                    //                    редактор в зависимости от стороны
+                    //                    //
+                    //                    QPointF topLeft(isLeftToRight
+                    //                                    ? pageLeft + leftDelta
+                    //                                    : textRight + leftDelta,
+                    //                                    cursorR.top());
+                    //                    QPointF bottomRight(isLeftToRight
+                    //                                        ? textLeft + leftDelta
+                    //                                        : pageRight + leftDelta,
+                    //                                        cursorR.bottom());
+                    //                    QRectF rect(topLeft, bottomRight);
+                    //                    rect.adjust(38, 0, 0, 0);
+                    //                    painter.setFont(DesignSystem::font().iconsMid());
+                    //                    const int size = painter.fontMetrics().lineSpacing();
+                    //                    QRectF circle(rect.left() - size, rect.top() - size, size
+                    //                    * 3, size * 3);
+                    //                    painter.setBrush(ColorHelper::transparent(palette().text().color(),
+                    //                    Ui::DesignSystem::hoverBackgroundOpacity()));
+                    //                    painter.setPen(Qt::NoPen);
+                    //                    painter.drawRect(circle);
+                    //                    painter.setPen(palette().text().color());
+                    //                    painter.drawText(rect, Qt::AlignLeft | Qt::AlignTop,
+                    //                    u8"\U000F024B");
 
                     //
                     // Прорисовка декораций пустой строки
                     //
-                    if (!block.blockFormat().boolProperty(ScreenplayBlockStyle::PropertyIsCorrection)
+                    if (!block.blockFormat().boolProperty(
+                            ScreenplayBlockStyle::PropertyIsCorrection)
                         && blockType != ScreenplayParagraphType::PageSplitter
                         && block.text().simplified().isEmpty()) {
                         //
@@ -794,14 +807,16 @@ void ScreenplayTextEdit::paintEvent(QPaintEvent* _event)
                             auto headerBlock = block.previous();
                             int openedFolders = 0;
                             while (headerBlock.isValid()) {
-                                const auto headerBlockType = ScreenplayBlockStyle::forBlock(headerBlock);
+                                const auto headerBlockType
+                                    = ScreenplayBlockStyle::forBlock(headerBlock);
                                 if (headerBlockType == ScreenplayParagraphType::FolderHeader) {
                                     if (openedFolders > 0) {
                                         --openedFolders;
                                     } else {
                                         break;
                                     }
-                                } else if (headerBlockType == ScreenplayParagraphType::FolderFooter) {
+                                } else if (headerBlockType
+                                           == ScreenplayParagraphType::FolderFooter) {
                                     ++openedFolders;
                                 }
 
@@ -811,20 +826,19 @@ void ScreenplayTextEdit::paintEvent(QPaintEvent* _event)
                             //
                             // Определим область для отрисовки плейсхолдера
                             //
-                            const auto placeholderText
-                                    = QString("%1 %2")
-                                      .arg(QCoreApplication::translate("KeyProcessingLayer::FolderFooterHandler", "END OF"),
-                                           headerBlock.text());
-                            const QPoint topLeft = QPoint(textLeft
-                                                          + leftDelta
-                                                          + spaceBetweenSceneNumberAndText,
-                                                          cursorR.top());
-                            const QPoint bottomRight = QPoint(textRight
-                                                              + leftDelta
-                                                              - spaceBetweenSceneNumberAndText,
-                                                              cursorR.bottom());
+                            const auto placeholderText = QString("%1 %2").arg(
+                                QCoreApplication::translate(
+                                    "KeyProcessingLayer::FolderFooterHandler", "END OF"),
+                                headerBlock.text());
+                            const QPoint topLeft
+                                = QPoint(textLeft + leftDelta + spaceBetweenSceneNumberAndText,
+                                         cursorR.top());
+                            const QPoint bottomRight
+                                = QPoint(textRight + leftDelta - spaceBetweenSceneNumberAndText,
+                                         cursorR.bottom());
                             const QRect rect(topLeft, bottomRight);
-                            painter.drawText(rect, block.blockFormat().alignment(), placeholderText);
+                            painter.drawText(rect, block.blockFormat().alignment(),
+                                             placeholderText);
                         }
                         //
                         // В остальных случаях рисуем индикатор пустой строки
@@ -838,27 +852,29 @@ void ScreenplayTextEdit::paintEvent(QPaintEvent* _event)
                             // ... в тексте или в первой колоке таблички
                             //
                             if (!cursor.inTable() || cursor.inFirstColumn()) {
-                                const QPointF topLeft(isLeftToRight
-                                                      ? pageLeft + leftDelta
-                                                      : textRight + leftDelta,
+                                const QPointF topLeft(isLeftToRight ? pageLeft + leftDelta
+                                                                    : textRight + leftDelta,
                                                       cursorR.top());
-                                const QPointF bottomRight(isLeftToRight
-                                                          ? textLeft + leftDelta
-                                                          : pageRight + leftDelta,
+                                const QPointF bottomRight(isLeftToRight ? textLeft + leftDelta
+                                                                        : pageRight + leftDelta,
                                                           cursorR.bottom() + 2);
                                 const QRectF rect(topLeft, bottomRight);
-                                painter.drawText(rect, Qt::AlignRight | Qt::AlignTop, emptyLineMark);
+                                painter.drawText(rect, Qt::AlignRight | Qt::AlignTop,
+                                                 emptyLineMark);
                             }
                             //
                             // ... во второй колонке таблички
                             //
                             else {
-                                const qreal x = splitterX - cursor.currentTable()->format().border();
-                                const QPointF topLeft(x - painter.fontMetrics().horizontalAdvance(emptyLineMark),
-                                                      cursorR.top());
+                                const qreal x
+                                    = splitterX - cursor.currentTable()->format().border();
+                                const QPointF topLeft(
+                                    x - painter.fontMetrics().horizontalAdvance(emptyLineMark),
+                                    cursorR.top());
                                 const QPointF bottomRight(x, cursorR.bottom() + 2);
                                 const QRectF rect(topLeft, bottomRight);
-                                painter.drawText(rect, Qt::AlignRight | Qt::AlignTop, emptyLineMark);
+                                painter.drawText(rect, Qt::AlignRight | Qt::AlignTop,
+                                                 emptyLineMark);
                             }
                         }
                     }
@@ -871,21 +887,23 @@ void ScreenplayTextEdit::paintEvent(QPaintEvent* _event)
                         //
                         if (blockType == ScreenplayParagraphType::FolderHeader) {
                             //
-                            // Определим область для отрисовки и выведем номер сцены в редактор в зависимости от стороны
+                            // Определим область для отрисовки и выведем номер сцены в редактор в
+                            // зависимости от стороны
                             //
-                            QPointF topLeft(isLeftToRight
-                                            ? pageLeft + leftDelta
-                                            : textRight + leftDelta,
+                            QPointF topLeft(isLeftToRight ? pageLeft + leftDelta
+                                                          : textRight + leftDelta,
                                             cursorR.top());
-                            QPointF bottomRight(isLeftToRight
-                                                ? textLeft + leftDelta
-                                                : pageRight + leftDelta,
+                            QPointF bottomRight(isLeftToRight ? textLeft + leftDelta
+                                                              : pageRight + leftDelta,
                                                 cursorR.bottom());
                             QRectF rect(topLeft, bottomRight);
                             const auto textFontMetrics = QFontMetricsF(cursor.charFormat().font());
-                            const auto iconFontMetrics = QFontMetricsF(DesignSystem::font().iconsForEditors());
-                            const auto yDelta = (textFontMetrics.lineSpacing() - iconFontMetrics.lineSpacing()) / 2;
-                            rect.adjust(0, yDelta, - textFontMetrics.horizontalAdvance(".")/2, 0);
+                            const auto iconFontMetrics
+                                = QFontMetricsF(DesignSystem::font().iconsForEditors());
+                            const auto yDelta
+                                = (textFontMetrics.lineSpacing() - iconFontMetrics.lineSpacing())
+                                / 2;
+                            rect.adjust(0, yDelta, -textFontMetrics.horizontalAdvance(".") / 2, 0);
                             painter.setFont(DesignSystem::font().iconsForEditors());
                             painter.setPen(palette().text().color());
                             painter.drawText(rect, Qt::AlignRight | Qt::AlignTop, u8"\U000F024B");
@@ -901,33 +919,32 @@ void ScreenplayTextEdit::paintEvent(QPaintEvent* _event)
                             const auto sceneNumber = d->document.sceneNumber(block);
                             if (!sceneNumber.isEmpty()) {
                                 //
-                                // Определим область для отрисовки и выведем номер сцены в редактор в зависимости от стороны
+                                // Определим область для отрисовки и выведем номер сцены в редактор
+                                // в зависимости от стороны
                                 //
                                 if (d->showSceneNumberOnLeft) {
-                                    QPointF topLeft(isLeftToRight
-                                                    ? pageLeft + leftDelta
-                                                    : textRight + leftDelta,
+                                    QPointF topLeft(isLeftToRight ? pageLeft + leftDelta
+                                                                  : textRight + leftDelta,
                                                     cursorR.top());
-                                    QPointF bottomRight(isLeftToRight
-                                                        ? textLeft + leftDelta
-                                                        : pageRight + leftDelta,
+                                    QPointF bottomRight(isLeftToRight ? textLeft + leftDelta
+                                                                      : pageRight + leftDelta,
                                                         cursorR.bottom());
                                     QRectF rect(topLeft, bottomRight);
                                     painter.setFont(cursor.charFormat().font());
-                                    painter.drawText(rect, Qt::AlignRight | Qt::AlignTop, sceneNumber);
+                                    painter.drawText(rect, Qt::AlignRight | Qt::AlignTop,
+                                                     sceneNumber);
                                 }
                                 if (d->showSceneNumberOnRight) {
-                                    QPointF topLeft(isLeftToRight
-                                                    ? textRight - leftDelta
-                                                    : pageLeft - leftDelta,
+                                    QPointF topLeft(isLeftToRight ? textRight - leftDelta
+                                                                  : pageLeft - leftDelta,
                                                     cursorR.top());
-                                    QPointF bottomRight(isLeftToRight
-                                                        ? pageRight - leftDelta
-                                                        : textLeft - leftDelta,
+                                    QPointF bottomRight(isLeftToRight ? pageRight - leftDelta
+                                                                      : textLeft - leftDelta,
                                                         cursorR.bottom());
                                     QRectF rect(topLeft, bottomRight);
                                     painter.setFont(cursor.charFormat().font());
-                                    painter.drawText(rect, Qt::AlignLeft | Qt::AlignTop, sceneNumber);
+                                    painter.drawText(rect, Qt::AlignLeft | Qt::AlignTop,
+                                                     sceneNumber);
                                 }
                             }
                         }
@@ -942,10 +959,12 @@ void ScreenplayTextEdit::paintEvent(QPaintEvent* _event)
                             const auto dialogueNumber = d->document.dialogueNumber(block);
                             if (!dialogueNumber.isEmpty()) {
                                 //
-                                // Определим область для отрисовки и выведем номер реплики в редактор
+                                // Определим область для отрисовки и выведем номер реплики в
+                                // редактор
                                 //
                                 painter.setFont(cursor.charFormat().font());
-                                const int numberDelta = painter.fontMetrics().horizontalAdvance(dialogueNumber);
+                                const int numberDelta
+                                    = painter.fontMetrics().horizontalAdvance(dialogueNumber);
                                 QRectF rect;
                                 //
                                 // Если имя персонажа находится не с самого края листа
@@ -955,13 +974,17 @@ void ScreenplayTextEdit::paintEvent(QPaintEvent* _event)
                                     // ... то поместим номер реплики внутри текстовой области,
                                     //     чтобы их было удобно отличать от номеров сцен
                                     //
-                                    QPointF topLeft(isLeftToRight
-                                                    ? textLeft + leftDelta + spaceBetweenSceneNumberAndText
-                                                    : textRight + leftDelta - spaceBetweenSceneNumberAndText - numberDelta,
-                                                    cursorR.top());
-                                    QPointF bottomRight(isLeftToRight
-                                                        ? textLeft + leftDelta + spaceBetweenSceneNumberAndText + numberDelta
-                                                        : textRight + leftDelta - spaceBetweenSceneNumberAndText,
+                                    QPointF topLeft(
+                                        isLeftToRight
+                                            ? textLeft + leftDelta + spaceBetweenSceneNumberAndText
+                                            : textRight + leftDelta - spaceBetweenSceneNumberAndText
+                                                - numberDelta,
+                                        cursorR.top());
+                                    QPointF bottomRight(isLeftToRight ? textLeft + leftDelta
+                                                                + spaceBetweenSceneNumberAndText
+                                                                + numberDelta
+                                                                      : textRight + leftDelta
+                                                                - spaceBetweenSceneNumberAndText,
                                                         cursorR.bottom());
                                     rect = QRectF(topLeft, bottomRight);
                                 }
@@ -970,19 +993,19 @@ void ScreenplayTextEdit::paintEvent(QPaintEvent* _event)
                                 //
                                 else {
                                     //
-                                    // ... позиционируем номера реплик на полях, так же как и номера сцен
+                                    // ... позиционируем номера реплик на полях, так же как и номера
+                                    // сцен
                                     //
-                                    QPointF topLeft(isLeftToRight
-                                                    ? pageLeft + leftDelta
-                                                    : textRight + leftDelta,
+                                    QPointF topLeft(isLeftToRight ? pageLeft + leftDelta
+                                                                  : textRight + leftDelta,
                                                     cursorR.top());
-                                    QPointF bottomRight(isLeftToRight
-                                                        ? textLeft + leftDelta
-                                                        : pageRight + leftDelta,
+                                    QPointF bottomRight(isLeftToRight ? textLeft + leftDelta
+                                                                      : pageRight + leftDelta,
                                                         cursorR.bottom());
                                     rect = QRectF(topLeft, bottomRight);
                                 }
-                                painter.drawText(rect, Qt::AlignRight | Qt::AlignTop, dialogueNumber);
+                                painter.drawText(rect, Qt::AlignRight | Qt::AlignTop,
+                                                 dialogueNumber);
                             }
                         }
 
@@ -990,25 +1013,27 @@ void ScreenplayTextEdit::paintEvent(QPaintEvent* _event)
                         // Прорисовка автоматических (ПРОД) для реплик
                         //
                         if (blockType == ScreenplayParagraphType::Character
-                            && block.blockFormat().boolProperty(ScreenplayBlockStyle::PropertyIsCharacterContinued)
-                            && !block.blockFormat().boolProperty(ScreenplayBlockStyle::PropertyIsCorrection)) {
+                            && block.blockFormat().boolProperty(
+                                ScreenplayBlockStyle::PropertyIsCharacterContinued)
+                            && !block.blockFormat().boolProperty(
+                                ScreenplayBlockStyle::PropertyIsCorrection)) {
                             painter.setFont(cursor.charFormat().font());
 
                             //
                             // Определим место положение конца имени персонажа
                             //
-                            const int continuedTermWidth
-                                    = painter.fontMetrics().horizontalAdvance(
-                                          BusinessLayer::ScreenplayTextCorrector::continuedTerm());
+                            const int continuedTermWidth = painter.fontMetrics().horizontalAdvance(
+                                BusinessLayer::ScreenplayTextCorrector::continuedTerm());
                             const QPoint topLeft = isLeftToRight
-                                                   ? cursorREnd.topLeft()
-                                                   : cursorREnd.topRight() - QPoint(continuedTermWidth, 0);
+                                ? cursorREnd.topLeft()
+                                : cursorREnd.topRight() - QPoint(continuedTermWidth, 0);
                             const QPoint bottomRight = isLeftToRight
-                                                       ? cursorREnd.bottomRight() + QPoint(continuedTermWidth, 0)
-                                                       : cursorREnd.bottomLeft();
+                                ? cursorREnd.bottomRight() + QPoint(continuedTermWidth, 0)
+                                : cursorREnd.bottomLeft();
                             const QRect rect(topLeft, bottomRight);
-                            painter.drawText(rect, Qt::AlignRight | Qt::AlignTop,
-                                             BusinessLayer::ScreenplayTextCorrector::continuedTerm());
+                            painter.drawText(
+                                rect, Qt::AlignRight | Qt::AlignTop,
+                                BusinessLayer::ScreenplayTextCorrector::continuedTerm());
                         }
                     }
 
@@ -1016,19 +1041,20 @@ void ScreenplayTextEdit::paintEvent(QPaintEvent* _event)
                     // Прорисовка префикса/постфикса для блока текста, если это не пустая декорация
                     //
                     if (!block.text().isEmpty()
-                        || !block.blockFormat().boolProperty(ScreenplayBlockStyle::PropertyIsCorrection)) {
+                        || !block.blockFormat().boolProperty(
+                            ScreenplayBlockStyle::PropertyIsCorrection)) {
                         //
                         // ... префикс
                         //
                         if (block.charFormat().hasProperty(ScreenplayBlockStyle::PropertyPrefix)) {
                             painter.setFont(block.charFormat().font());
 
-                            const auto prefix = block.charFormat().stringProperty(ScreenplayBlockStyle::PropertyPrefix);
-                            const QPoint topLeft = QPoint(cursorR.left()
-                                                          - painter.fontMetrics().horizontalAdvance(prefix),
-                                                          cursorR.top());
-                            const QPoint bottomRight = QPoint(cursorR.left(),
-                                                              cursorR.bottom());
+                            const auto prefix = block.charFormat().stringProperty(
+                                ScreenplayBlockStyle::PropertyPrefix);
+                            const QPoint topLeft = QPoint(
+                                cursorR.left() - painter.fontMetrics().horizontalAdvance(prefix),
+                                cursorR.top());
+                            const QPoint bottomRight = QPoint(cursorR.left(), cursorR.bottom());
                             const QRect rect(topLeft, bottomRight);
                             painter.drawText(rect, Qt::AlignLeft | Qt::AlignVCenter, prefix);
                         }
@@ -1038,12 +1064,13 @@ void ScreenplayTextEdit::paintEvent(QPaintEvent* _event)
                         if (block.charFormat().hasProperty(ScreenplayBlockStyle::PropertyPostfix)) {
                             painter.setFont(block.charFormat().font());
 
-                            const auto postfix = block.charFormat().stringProperty(ScreenplayBlockStyle::PropertyPostfix);
-                            const QPoint topLeft = QPoint(cursorREnd.left(),
-                                                          cursorREnd.top());
-                            const QPoint bottomRight = QPoint(cursorREnd.left()
-                                                              + painter.fontMetrics().horizontalAdvance(postfix),
-                                                              cursorREnd.bottom());
+                            const auto postfix = block.charFormat().stringProperty(
+                                ScreenplayBlockStyle::PropertyPostfix);
+                            const QPoint topLeft = QPoint(cursorREnd.left(), cursorREnd.top());
+                            const QPoint bottomRight
+                                = QPoint(cursorREnd.left()
+                                             + painter.fontMetrics().horizontalAdvance(postfix),
+                                         cursorREnd.bottom());
                             const QRect rect(topLeft, bottomRight);
                             painter.drawText(rect, Qt::AlignRight | Qt::AlignVCenter, postfix);
                         }
@@ -1056,75 +1083,78 @@ void ScreenplayTextEdit::paintEvent(QPaintEvent* _event)
             }
         }
 
-//        //
-//        // Курсоры соавторов
-//        //
-//        {
-//            //
-//            // Ширина области курсора, для отображения имени автора курсора
-//            //
-//            const unsigned cursorAreaWidth = 20;
+        //        //
+        //        // Курсоры соавторов
+        //        //
+        //        {
+        //            //
+        //            // Ширина области курсора, для отображения имени автора курсора
+        //            //
+        //            const unsigned cursorAreaWidth = 20;
 
-//            if (!m_additionalCursors.isEmpty()
-//                && m_document != nullptr) {
-//                QPainter painter(viewport());
-//                painter.setFont(QFont("Sans", 8));
-//                painter.setPen(Qt::white);
+        //            if (!m_additionalCursors.isEmpty()
+        //                && m_document != nullptr) {
+        //                QPainter painter(viewport());
+        //                painter.setFont(QFont("Sans", 8));
+        //                painter.setPen(Qt::white);
 
-//                const QRectF viewportGeometry = viewport()->geometry();
-//                QPoint mouseCursorPos = mapFromGlobal(QCursor::pos());
-//                mouseCursorPos.setY(mouseCursorPos.y() + viewport()->mapFromParent(QPoint(0,0)).y());
-//                int cursorIndex = 0;
-//                foreach (const QString& username, m_additionalCursorsCorrected.keys()) {
-//                    QTextCursor cursor(m_document);
-//                    m_document->setCursorPosition(cursor, m_additionalCursorsCorrected.value(username));
-//                    const QRect cursorR = cursorRect(cursor).adjusted(0, 0, 1, 0);
+        //                const QRectF viewportGeometry = viewport()->geometry();
+        //                QPoint mouseCursorPos = mapFromGlobal(QCursor::pos());
+        //                mouseCursorPos.setY(mouseCursorPos.y() +
+        //                viewport()->mapFromParent(QPoint(0,0)).y()); int cursorIndex = 0; foreach
+        //                (const QString& username, m_additionalCursorsCorrected.keys()) {
+        //                    QTextCursor cursor(m_document);
+        //                    m_document->setCursorPosition(cursor,
+        //                    m_additionalCursorsCorrected.value(username)); const QRect cursorR =
+        //                    cursorRect(cursor).adjusted(0, 0, 1, 0);
 
-//                    //
-//                    // Если курсор на экране
-//                    //
-//                    // ... ниже верхней границы
-//                    if ((cursorR.top() > 0 || cursorR.bottom() > 0)
-//                        // ... и выше нижней
-//                        && cursorR.top() < viewportGeometry.bottom()) {
-//                        //
-//                        // ... рисуем его
-//                        //
-//                        painter.fillRect(cursorR, ColorHelper::cursorColor(cursorIndex));
+        //                    //
+        //                    // Если курсор на экране
+        //                    //
+        //                    // ... ниже верхней границы
+        //                    if ((cursorR.top() > 0 || cursorR.bottom() > 0)
+        //                        // ... и выше нижней
+        //                        && cursorR.top() < viewportGeometry.bottom()) {
+        //                        //
+        //                        // ... рисуем его
+        //                        //
+        //                        painter.fillRect(cursorR, ColorHelper::cursorColor(cursorIndex));
 
-//                        //
-//                        // ... декорируем
-//                        //
-//                        {
-//                            //
-//                            // Если мышь около него, то выводим имя соавтора
-//                            //
-//                            QRect extandedCursorR = cursorR;
-//                            extandedCursorR.setLeft(extandedCursorR.left() - cursorAreaWidth/2);
-//                            extandedCursorR.setWidth(cursorAreaWidth);
-//                            if (extandedCursorR.contains(mouseCursorPos)) {
-//                                const QRect usernameRect(
-//                                    cursorR.left() - 1,
-//                                    cursorR.top() - painter.fontMetrics().height() - 2,
-//                                    painter.fontMetrics().width(username) + 2,
-//                                    painter.fontMetrics().height() + 2);
-//                                painter.fillRect(usernameRect, ColorHelper::cursorColor(cursorIndex));
-//                                painter.drawText(usernameRect, Qt::AlignCenter, username);
-//                            }
-//                            //
-//                            // Если нет, то рисуем небольшой квадратик
-//                            //
-//                            else {
-//                                painter.fillRect(cursorR.left() - 2, cursorR.top() - 5, 5, 5,
-//                                    ColorHelper::cursorColor(cursorIndex));
-//                            }
-//                        }
-//                    }
+        //                        //
+        //                        // ... декорируем
+        //                        //
+        //                        {
+        //                            //
+        //                            // Если мышь около него, то выводим имя соавтора
+        //                            //
+        //                            QRect extandedCursorR = cursorR;
+        //                            extandedCursorR.setLeft(extandedCursorR.left() -
+        //                            cursorAreaWidth/2); extandedCursorR.setWidth(cursorAreaWidth);
+        //                            if (extandedCursorR.contains(mouseCursorPos)) {
+        //                                const QRect usernameRect(
+        //                                    cursorR.left() - 1,
+        //                                    cursorR.top() - painter.fontMetrics().height() - 2,
+        //                                    painter.fontMetrics().width(username) + 2,
+        //                                    painter.fontMetrics().height() + 2);
+        //                                painter.fillRect(usernameRect,
+        //                                ColorHelper::cursorColor(cursorIndex));
+        //                                painter.drawText(usernameRect, Qt::AlignCenter, username);
+        //                            }
+        //                            //
+        //                            // Если нет, то рисуем небольшой квадратик
+        //                            //
+        //                            else {
+        //                                painter.fillRect(cursorR.left() - 2, cursorR.top() - 5, 5,
+        //                                5,
+        //                                    ColorHelper::cursorColor(cursorIndex));
+        //                            }
+        //                        }
+        //                    }
 
-//                    ++cursorIndex;
-//                }
-//            }
-//        }
+        //                    ++cursorIndex;
+        //                }
+        //            }
+        //        }
     }
 }
 
@@ -1133,7 +1163,6 @@ ContextMenu* ScreenplayTextEdit::createContextMenu(const QPoint& _position, QWid
     auto menu = BaseTextEdit::createContextMenu(_position, _parent);
 
     auto splitAction = new QAction;
-//    splitAction->setSeparator(true);
     if (BusinessLayer::ScreenplayTextCursor cursor = textCursor(); cursor.inTable()) {
         splitAction->setText(tr("Merge paragraph"));
         splitAction->setIconText(u8"\U000f10e7");
@@ -1158,16 +1187,17 @@ ContextMenu* ScreenplayTextEdit::createContextMenu(const QPoint& _position, QWid
         }
     });
 
-    Q_ASSERT(menu->actions().size() > 1);
-    menu->insertActions(menu->actions()[1], { splitAction });
+    auto actions = menu->actions().toVector();
+    actions.first()->setSeparator(true);
+    actions.prepend(splitAction);
+    menu->setActions(actions);
 
     return menu;
 }
 
 bool ScreenplayTextEdit::canInsertFromMimeData(const QMimeData* _source) const
 {
-    return _source->formats().contains(d->model->mimeTypes().first())
-            || _source->hasText();
+    return _source->formats().contains(d->model->mimeTypes().first()) || _source->hasText();
 }
 
 QMimeData* ScreenplayTextEdit::createMimeDataFromSelection() const
@@ -1197,10 +1227,9 @@ QMimeData* ScreenplayTextEdit::createMimeDataFromSelection() const
                 text.append("\r\n");
             }
             text.append(cursor.blockCharFormat().fontCapitalization() == QFont::AllUppercase
-                        ? TextHelper::smartToUpper(cursor.selectedText())
-                        : cursor.selectedText());
-        } while (cursor.position() < textCursor().selectionEnd()
-                 && !cursor.atEnd()
+                            ? TextHelper::smartToUpper(cursor.selectedText()).toUtf8()
+                            : cursor.selectedText().toUtf8());
+        } while (cursor.position() < textCursor().selectionEnd() && !cursor.atEnd()
                  && cursor.movePosition(QTextCursor::NextBlock));
 
         mimeData->setData("text/plain", text);

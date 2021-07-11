@@ -1,14 +1,13 @@
 #pragma once
 
-#include <corelib_global.h>
-
 #include <business_layer/model/abstract_image_wrapper.h>
 
 #include <QScopedPointer>
 
+#include <corelib_global.h>
 
-namespace DataStorageLayer
-{
+
+namespace DataStorageLayer {
 
 class CORE_LIBRARY_EXPORT DocumentDataStorage : public BusinessLayer::AbstractImageWrapper
 {

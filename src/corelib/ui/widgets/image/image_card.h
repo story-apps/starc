@@ -19,9 +19,11 @@ public:
     void setDecorationIcon(const QString& _icon);
 
     /**
-     * @brief Задать текст отображаемый под декорацией
+     * @brief Задать всмомогательный текст отображаемый когда нет изображения, при наведении на
+     *        установленное изображение и для вопроса об удалении изображения
      */
-    void setDecorationText(const QString& _text);
+    void setSupportingText(const QString& _emptyImageText, const QString& _imageText,
+                           const QString& _clearImageQuestion);
 
     /**
      * @brief Задать подсказку для диалога обрезки изображения
@@ -40,6 +42,11 @@ signals:
     void imageChanged(const QPixmap& _image);
 
 protected:
+    /**
+     * @brief Переопределяем для реализации тултипа
+     */
+    bool event(QEvent* _event) override;
+
     /**
      * @brief Реализуем отрисовку
      */
@@ -79,10 +86,9 @@ protected:
     /**
      * @brief Кореектируем размер постера
      */
-    void designSystemChangeEvent(DesignSystemChangeEvent *_event) override;
+    void designSystemChangeEvent(DesignSystemChangeEvent* _event) override;
 
 private:
     class Implementation;
     QScopedPointer<Implementation> d;
 };
-

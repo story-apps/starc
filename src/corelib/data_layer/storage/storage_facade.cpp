@@ -5,8 +5,7 @@
 #include "settings_storage.h"
 
 
-namespace DataStorageLayer
-{
+namespace DataStorageLayer {
 
 void StorageFacade::clearStorages()
 {

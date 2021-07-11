@@ -1,8 +1,8 @@
 #include "text_helper.h"
 
 #include <QFontMetricsF>
-#include <QtMath>
 #include <QTextLayout>
+#include <QtMath>
 
 
 qreal TextHelper::fineTextWidthF(const QString& _text, const QFont& _font)
@@ -32,22 +32,21 @@ int TextHelper::fineTextWidth(const QString& _text, const QFont& _font)
 qreal TextHelper::fineLineSpacing(const QFont& _font)
 {
     return fineLineSpacing(QFontMetricsF(_font));
-
 }
 
 qreal TextHelper::fineLineSpacing(const QFontMetricsF& _metrics)
 {
     const qreal platformDelta =
 #ifdef Q_OS_LINUX
-            //
-            // 09.04.2020 Ubuntu 18.04.4
-            // Не знаю почему, но ручками пришлось подобрать данный коэффициент,
-            // только при нём получается такой же вывод как и в ворде для разных шрифтов
-            // тестировал как минимум на Courier New, Courier Prime и ещё паре каких были в системе
-            //
-            0.4;
+        //
+        // 09.04.2020 Ubuntu 18.04.4
+        // Не знаю почему, но ручками пришлось подобрать данный коэффициент,
+        // только при нём получается такой же вывод как и в ворде для разных шрифтов
+        // тестировал как минимум на Courier New, Courier Prime и ещё паре каких были в системе
+        //
+        0.4;
 #else
-            0;
+        0;
 #endif
     return _metrics.lineSpacing() + platformDelta;
 }
@@ -71,7 +70,8 @@ qreal TextHelper::heightForWidth(const QString& _text, const QFont& _font, qreal
     textOption.setWrapMode(QTextOption::WrapAtWordBoundaryOrAnywhere);
     textLayout.setTextOption(textOption);
     textLayout.beginLayout();
-    forever {
+    forever
+    {
         QTextLine line = textLayout.createLine();
         if (!line.isValid()) {
             break;
@@ -103,7 +103,8 @@ QString TextHelper::elidedText(const QString& _text, const QFont& _font, const Q
     QString elidedText;
     QTextLayout textLayout(correctedText, _font);
     textLayout.beginLayout();
-    forever {
+    forever
+    {
         QTextLine line = textLayout.createLine();
         if (!line.isValid()) {
             break;
@@ -131,8 +132,7 @@ QString TextHelper::elidedText(const QString& _text, const QFont& _font, const Q
             //
             // ... если весь текст влез, не надо добавлять многоточие в конце
             //
-            if (metrics.horizontalAdvance(lastLine) <= _rect.width()
-                && _text.endsWith(lastLine)) {
+            if (metrics.horizontalAdvance(lastLine) <= _rect.width() && _text.endsWith(lastLine)) {
                 elidedText += lastLine;
                 break;
             }
@@ -141,8 +141,7 @@ QString TextHelper::elidedText(const QString& _text, const QFont& _font, const Q
             // ... многоточим
             //
             lastLine += "…";
-            while (lastLine.length() > 1
-                   && metrics.horizontalAdvance(lastLine) > _rect.width()) {
+            while (lastLine.length() > 1 && metrics.horizontalAdvance(lastLine) > _rect.width()) {
                 lastLine.remove(lastLine.length() - 2, 1);
             }
             elidedText += lastLine;
@@ -156,11 +155,11 @@ QString TextHelper::elidedText(const QString& _text, const QFont& _font, const Q
 
 QString TextHelper::toHtmlEscaped(const QString& _text)
 {
-    const QHash<QChar, QString> map = {{ QLatin1Char('<'), QLatin1String("&lt;") },
-                                       { QLatin1Char('>'), QLatin1String("&gt;") },
-                                       { QLatin1Char('&'), QLatin1String("&amp;") },
-                                       { QLatin1Char('"'), QLatin1String("&quot;") },
-                                       { QLatin1Char('\n'), QLatin1String("&#10;") }};
+    const QHash<QChar, QString> map = { { QLatin1Char('<'), QLatin1String("&lt;") },
+                                        { QLatin1Char('>'), QLatin1String("&gt;") },
+                                        { QLatin1Char('&'), QLatin1String("&amp;") },
+                                        { QLatin1Char('"'), QLatin1String("&quot;") },
+                                        { QLatin1Char('\n'), QLatin1String("&#10;") } };
 
     QString escaped;
     const int textLength = _text.length();
@@ -175,11 +174,11 @@ QString TextHelper::toHtmlEscaped(const QString& _text)
 
 QString TextHelper::fromHtmlEscaped(const QString& _escaped)
 {
-    const QHash<QString, QString> map = {{ QLatin1String("&lt;"), QLatin1String("<") },
-                                         { QLatin1String("&gt;"), QLatin1String(">") },
-                                         { QLatin1String("&amp;"), QLatin1String("&") },
-                                         { QLatin1String("&quot;"), QLatin1String("\"") },
-                                         { QLatin1String("&#10;"), QLatin1String("\n") }};
+    const QHash<QString, QString> map = { { QLatin1String("&lt;"), QLatin1String("<") },
+                                          { QLatin1String("&gt;"), QLatin1String(">") },
+                                          { QLatin1String("&amp;"), QLatin1String("&") },
+                                          { QLatin1String("&quot;"), QLatin1String("\"") },
+                                          { QLatin1String("&#10;"), QLatin1String("\n") } };
 
     QString text;
     const int textLength = _escaped.length();
@@ -192,8 +191,7 @@ QString TextHelper::fromHtmlEscaped(const QString& _escaped)
         }
 
         int j = i + 1;
-        while (j < textLength
-               && _escaped.at(j) != QLatin1Char(';')) {
+        while (j < textLength && _escaped.at(j) != QLatin1Char(';')) {
             ++j;
         }
         const QString middle = _escaped.mid(i, j - i + 1);
@@ -247,4 +245,3 @@ int TextHelper::wordsCount(const QString& _text)
     //
     return _text.split(" ", Qt::SkipEmptyParts).count();
 }
-

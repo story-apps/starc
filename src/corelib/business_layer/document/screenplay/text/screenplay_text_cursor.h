@@ -1,8 +1,8 @@
 #pragma once
 
-#include <corelib_global.h>
-
 #include <QTextCursor>
+
+#include <corelib_global.h>
 
 class BaseTextEdit;
 
@@ -16,7 +16,7 @@ class CORE_LIBRARY_EXPORT ScreenplayTextCursor : public QTextCursor
 {
 public:
     ScreenplayTextCursor();
-    ScreenplayTextCursor(const QTextCursor &other);
+    ScreenplayTextCursor(const QTextCursor& other);
     explicit ScreenplayTextCursor(QTextDocument* _document);
     ~ScreenplayTextCursor();
 
@@ -72,7 +72,7 @@ private:
         int footers = 0;
     };
     FoldersToDelete findFoldersToDelete(int _topCursorPosition, int _bottomCursorPosition,
-        bool isTopBlockShouldBeRemoved);
+                                        bool isTopBlockShouldBeRemoved);
 
     /**
      * @brief Удалить пары стёртых групп
@@ -81,7 +81,7 @@ private:
      * @param _groupFootersCount
      */
     void removeGroupsPairs(int _cursorPosition, const FoldersToDelete& _foldersToDelete,
-        bool isTopBlockShouldBeRemoved);
+                           bool isTopBlockShouldBeRemoved);
 };
 
-} // namespace Ui
+} // namespace BusinessLayer

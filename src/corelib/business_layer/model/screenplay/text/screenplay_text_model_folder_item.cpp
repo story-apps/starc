@@ -7,7 +7,6 @@
 #include "screenplay_text_model_xml_writer.h"
 
 #include <business_layer/templates/screenplay_template.h>
-
 #include <utils/helpers/text_helper.h>
 
 #include <QUuid>
@@ -15,8 +14,7 @@
 #include <QXmlStreamReader>
 
 
-namespace BusinessLayer
-{
+namespace BusinessLayer {
 
 class ScreenplayTextModelFolderItem::Implementation
 {
@@ -38,7 +36,7 @@ public:
     /**
      * @brief Длительность папки
      */
-    std::chrono::milliseconds duration = std::chrono::milliseconds{0};
+    std::chrono::milliseconds duration = std::chrono::milliseconds{ 0 };
 };
 
 
@@ -46,15 +44,15 @@ public:
 
 
 ScreenplayTextModelFolderItem::ScreenplayTextModelFolderItem()
-    : ScreenplayTextModelItem(ScreenplayTextModelItemType::Folder),
-      d(new Implementation)
+    : ScreenplayTextModelItem(ScreenplayTextModelItemType::Folder)
+    , d(new Implementation)
 {
     d->uuid = QUuid::createUuid();
 }
 
 ScreenplayTextModelFolderItem::ScreenplayTextModelFolderItem(QXmlStreamReader& _contentReader)
-    : ScreenplayTextModelItem(ScreenplayTextModelItemType::Folder),
-      d(new Implementation)
+    : ScreenplayTextModelItem(ScreenplayTextModelItemType::Folder)
+    , d(new Implementation)
 {
     Q_ASSERT(_contentReader.name() == xml::kFolderTag);
 
@@ -71,16 +69,14 @@ ScreenplayTextModelFolderItem::ScreenplayTextModelFolderItem(QXmlStreamReader& _
             //
             // Проглатываем закрывающий контентный тэг
             //
-            if (currentTag == xml::kContentTag
-                && _contentReader.isEndElement()) {
+            if (currentTag == xml::kContentTag && _contentReader.isEndElement()) {
                 xml::readNextElement(_contentReader);
                 continue;
             }
             //
             // Если дошли до конца папки, выходим из обработки
             //
-            else if (currentTag == xml::kFolderTag
-                && _contentReader.isEndElement()) {
+            else if (currentTag == xml::kFolderTag && _contentReader.isEndElement()) {
                 xml::readNextElement(_contentReader);
                 break;
             }
@@ -115,22 +111,22 @@ std::chrono::milliseconds ScreenplayTextModelFolderItem::duration() const
 QVariant ScreenplayTextModelFolderItem::data(int _role) const
 {
     switch (_role) {
-        case Qt::DecorationRole: {
-            return u8"\U000f024b";
-        }
+    case Qt::DecorationRole: {
+        return u8"\U000f024b";
+    }
 
-        case FolderNameRole: {
-            return d->name;
-        }
+    case FolderNameRole: {
+        return d->name;
+    }
 
-        case FolderDurationRole: {
-            const int duration = std::chrono::duration_cast<std::chrono::seconds>(d->duration).count();
-            return duration;
-        }
+    case FolderDurationRole: {
+        const int duration = std::chrono::duration_cast<std::chrono::seconds>(d->duration).count();
+        return duration;
+    }
 
-        default: {
-            return ScreenplayTextModelItem::data(_role);
-        }
+    default: {
+        return ScreenplayTextModelItem::data(_role);
+    }
     }
 }
 
@@ -139,7 +135,9 @@ QByteArray ScreenplayTextModelFolderItem::toXml() const
     return toXml(nullptr, 0, nullptr, 0, false);
 }
 
-QByteArray ScreenplayTextModelFolderItem::toXml(ScreenplayTextModelItem* _from, int _fromPosition, ScreenplayTextModelItem* _to, int _toPosition, bool _clearUuid) const
+QByteArray ScreenplayTextModelFolderItem::toXml(ScreenplayTextModelItem* _from, int _fromPosition,
+                                                ScreenplayTextModelItem* _to, int _toPosition,
+                                                bool _clearUuid) const
 {
     auto folderFooterXml = [] {
         ScreenplayTextModelTextItem item;
@@ -228,13 +226,10 @@ QByteArray ScreenplayTextModelFolderItem::toXml(ScreenplayTextModelItem* _from, 
 QByteArray ScreenplayTextModelFolderItem::xmlHeader(bool _clearUuid) const
 {
     QByteArray xml;
-    if (_clearUuid) {
-        xml += QString("<%1>\n").arg(xml::kFolderTag).toUtf8();
-    } else {
-        xml += QString("<%1 %2=\"%3\">\n")
-               .arg(xml::kFolderTag,
-                    xml::kUuidAttribute, d->uuid.toString()).toUtf8();
-    }
+    xml += QString("<%1 %2=\"%3\">\n")
+               .arg(xml::kFolderTag, xml::kUuidAttribute,
+                    _clearUuid ? QUuid::createUuid().toString() : d->uuid.toString())
+               .toUtf8();
     xml += QString("<%1>\n").arg(xml::kContentTag).toUtf8();
 
     return xml;
@@ -253,8 +248,7 @@ void ScreenplayTextModelFolderItem::copyFrom(ScreenplayTextModelItem* _item)
 
 bool ScreenplayTextModelFolderItem::isEqual(ScreenplayTextModelItem* _item) const
 {
-    if (_item == nullptr
-        || type() != _item->type()) {
+    if (_item == nullptr || type() != _item->type()) {
         return false;
     }
 
@@ -265,33 +259,34 @@ bool ScreenplayTextModelFolderItem::isEqual(ScreenplayTextModelItem* _item) cons
 void ScreenplayTextModelFolderItem::handleChange()
 {
     d->name.clear();
-    d->duration = std::chrono::seconds{0};
+    d->duration = std::chrono::seconds{ 0 };
 
     for (int childIndex = 0; childIndex < childCount(); ++childIndex) {
         auto child = childAt(childIndex);
         switch (child->type()) {
-            case ScreenplayTextModelItemType::Folder: {
-                auto childItem = static_cast<ScreenplayTextModelFolderItem*>(child);
-                d->duration += childItem->duration();
-                break;
-            }
+        case ScreenplayTextModelItemType::Folder: {
+            auto childItem = static_cast<ScreenplayTextModelFolderItem*>(child);
+            d->duration += childItem->duration();
+            break;
+        }
 
-            case ScreenplayTextModelItemType::Scene: {
-                auto childItem = static_cast<ScreenplayTextModelSceneItem*>(child);
-                d->duration += childItem->duration();
-                break;
-            }
+        case ScreenplayTextModelItemType::Scene: {
+            auto childItem = static_cast<ScreenplayTextModelSceneItem*>(child);
+            d->duration += childItem->duration();
+            break;
+        }
 
-            case ScreenplayTextModelItemType::Text: {
-                auto childItem = static_cast<ScreenplayTextModelTextItem*>(child);
-                if (childItem->paragraphType() == ScreenplayParagraphType::FolderHeader) {
-                    d->name = TextHelper::smartToUpper(childItem->text());
-                }
-                d->duration += childItem->duration();
-                break;
+        case ScreenplayTextModelItemType::Text: {
+            auto childItem = static_cast<ScreenplayTextModelTextItem*>(child);
+            if (childItem->paragraphType() == ScreenplayParagraphType::FolderHeader) {
+                d->name = TextHelper::smartToUpper(childItem->text());
             }
+            d->duration += childItem->duration();
+            break;
+        }
 
-            default: break;
+        default:
+            break;
         }
     }
 }

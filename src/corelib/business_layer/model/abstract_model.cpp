@@ -3,15 +3,13 @@
 #include "abstract_image_wrapper.h"
 
 #include <domain/document_object.h>
-
 #include <utils/diff_match_patch/diff_match_patch_controller.h>
 #include <utils/tools/debouncer.h>
 
 #include <QScopedValueRollback>
 
 
-namespace BusinessLayer
-{
+namespace BusinessLayer {
 
 class AbstractModel::Implementation
 {
@@ -61,8 +59,8 @@ public:
 };
 
 AbstractModel::Implementation::Implementation(const QVector<QString>& _tags)
-    : dmpController(_tags),
-      updateDocumentContentDebouncer(300)
+    : dmpController(_tags)
+    , updateDocumentContentDebouncer(300)
 {
 }
 
@@ -71,10 +69,11 @@ AbstractModel::Implementation::Implementation(const QVector<QString>& _tags)
 
 
 AbstractModel::AbstractModel(const QVector<QString>& _tags, QObject* _parent)
-    : QAbstractItemModel(_parent),
-      d(new Implementation(_tags))
+    : QAbstractItemModel(_parent)
+    , d(new Implementation(_tags))
 {
-    connect(&d->updateDocumentContentDebouncer, &Debouncer::gotWork, this, &AbstractModel::saveChanges);
+    connect(&d->updateDocumentContentDebouncer, &Debouncer::gotWork, this,
+            &AbstractModel::saveChanges);
 
     connect(this, &AbstractModel::modelReset, this, &AbstractModel::updateDocumentContent);
     connect(this, &AbstractModel::rowsInserted, this, &AbstractModel::updateDocumentContent);
@@ -175,7 +174,7 @@ void AbstractModel::undoChange(const QByteArray& _undo, const QByteArray& _redo)
     applyPatch(_undo);
     saveChanges();
 
-    d->undoedChanges.append({_undo, _redo});
+    d->undoedChanges.append({ _undo, _redo });
     d->undoStep += 2;
 }
 

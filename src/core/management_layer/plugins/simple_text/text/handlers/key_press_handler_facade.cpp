@@ -1,23 +1,21 @@
 #include "key_press_handler_facade.h"
 
+#include "../simple_text_edit.h"
+#include "heading_handler.h"
 #include "inline_note_handler.h"
 #include "pre_handler.h"
 #include "prepare_handler.h"
-#include "heading_handler.h"
 #include "text_handler.h"
-
-#include "../simple_text_edit.h"
 
 #include <business_layer/templates/text_template.h>
 
-#include <QTextBlock>
 #include <QKeyEvent>
+#include <QTextBlock>
 
 using BusinessLayer::TextParagraphType;
 using Ui::SimpleTextEdit;
 
-namespace KeyProcessingLayer
-{
+namespace KeyProcessingLayer {
 
 class KeyPressHandlerFacade::Implementation
 {
@@ -34,12 +32,12 @@ public:
 };
 
 KeyPressHandlerFacade::Implementation::Implementation(Ui::SimpleTextEdit* _editor)
-    : editor(_editor),
-      prepareHandler(new PrepareHandler(_editor)),
-      preHandler(new PreHandler(_editor)),
-      headingHandler(new HeadingHandler(_editor)),
-      textHandler(new TextHandler(_editor)),
-      inlineNoteHandler(new InlineNoteHandler(_editor))
+    : editor(_editor)
+    , prepareHandler(new PrepareHandler(_editor))
+    , preHandler(new PreHandler(_editor))
+    , headingHandler(new HeadingHandler(_editor))
+    , textHandler(new TextHandler(_editor))
+    , inlineNoteHandler(new InlineNoteHandler(_editor))
 {
 }
 
@@ -114,26 +112,26 @@ KeyPressHandlerFacade::KeyPressHandlerFacade(SimpleTextEdit* _editor)
 AbstractKeyHandler* KeyPressHandlerFacade::handlerFor(TextParagraphType _type)
 {
     switch (_type) {
-        case TextParagraphType::Heading1:
-        case TextParagraphType::Heading2:
-        case TextParagraphType::Heading3:
-        case TextParagraphType::Heading4:
-        case TextParagraphType::Heading5:
-        case TextParagraphType::Heading6: {
-            return d->headingHandler.data();
-        }
+    case TextParagraphType::Heading1:
+    case TextParagraphType::Heading2:
+    case TextParagraphType::Heading3:
+    case TextParagraphType::Heading4:
+    case TextParagraphType::Heading5:
+    case TextParagraphType::Heading6: {
+        return d->headingHandler.data();
+    }
 
-        case TextParagraphType::Text: {
-            return d->textHandler.data();
-        }
+    case TextParagraphType::Text: {
+        return d->textHandler.data();
+    }
 
-        case TextParagraphType::InlineNote: {
-            return d->inlineNoteHandler.data();
-        }
+    case TextParagraphType::InlineNote: {
+        return d->inlineNoteHandler.data();
+    }
 
-        default: {
-            return nullptr;
-        }
+    default: {
+        return nullptr;
+    }
     }
 }
 

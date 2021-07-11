@@ -13,8 +13,7 @@ using BusinessLayer::TextParagraphType;
 using Ui::SimpleTextEdit;
 
 
-namespace KeyProcessingLayer
-{
+namespace KeyProcessingLayer {
 
 HeadingHandler::HeadingHandler(Ui::SimpleTextEdit* _editor)
     : StandardKeyHandler(_editor)
@@ -49,8 +48,7 @@ void HeadingHandler::handleEnter(QKeyEvent* _event)
     } else {
         //! Нет выделения
 
-        if (cursorBackwardText.isEmpty()
-            && cursorForwardText.isEmpty()) {
+        if (cursorBackwardText.isEmpty() && cursorForwardText.isEmpty()) {
             //! Текст пуст
 
             //
@@ -123,8 +121,7 @@ void HeadingHandler::handleTab(QKeyEvent*)
         } else {
             //! Нет выделения
 
-            if (cursorBackwardText.isEmpty()
-                && cursorForwardText.isEmpty()) {
+            if (cursorBackwardText.isEmpty() && cursorForwardText.isEmpty()) {
                 //! Текст пуст
 
                 //

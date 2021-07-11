@@ -6,8 +6,7 @@ class QString;
 class QStringList;
 
 
-namespace BusinessLayer
-{
+namespace BusinessLayer {
 
 /**
  * @brief Парсер текста блока персонаж
@@ -22,8 +21,8 @@ public:
      */
     enum Section {
         SectionUndefined, //!< Неопределённое
-        SectionName,	  //!< ИМЯ
-        SectionState	  //!< СОСТОЯНИЕ
+        SectionName, //!< ИМЯ
+        SectionState //!< СОСТОЯНИЕ
     };
 
 public:
@@ -56,11 +55,11 @@ public:
      * @note [МЕСТО]. [ЛОКАЦИЯ] - [ВРЕМЯ], [ДЕНЬ ИСТОРИИ]
      */
     enum Section {
-        SectionUndefined,	 //!< Неопределённое
-        SectionSceneIntro,	 //!< МЕСТО
-        SectionLocation,	 //!< ЛОКАЦИЯ
-        SectionSceneTime,    //!< ВРЕМЯ
-        SectionStoryDay,	 //!< ДЕНЬ ИСТОРИИ
+        SectionUndefined, //!< Неопределённое
+        SectionSceneIntro, //!< МЕСТО
+        SectionLocation, //!< ЛОКАЦИЯ
+        SectionSceneTime, //!< ВРЕМЯ
+        SectionStoryDay, //!< ДЕНЬ ИСТОРИИ
     };
 
 public:

@@ -2,8 +2,8 @@
 
 #include <ui/design_system/design_system.h>
 
-#include <QPainter>
 #include <QPaintEvent>
+#include <QPainter>
 #include <QVariantAnimation>
 
 
@@ -50,14 +50,16 @@ void ToggleButton::Implementation::animateClick()
 // ****
 
 ToggleButton::ToggleButton(QWidget* _parent)
-    : Widget(_parent),
-      d(new Implementation)
+    : Widget(_parent)
+    , d(new Implementation)
 {
     setFocusPolicy(Qt::StrongFocus);
     setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed);
 
-    connect(&d->decorationRadiusAnimation, &QVariantAnimation::valueChanged, this, [this] { update(); });
-    connect(&d->decorationOpacityAnimation, &QVariantAnimation::valueChanged, this, [this] { update(); });
+    connect(&d->decorationRadiusAnimation, &QVariantAnimation::valueChanged, this,
+            [this] { update(); });
+    connect(&d->decorationOpacityAnimation, &QVariantAnimation::valueChanged, this,
+            [this] { update(); });
 
     designSystemChangeEvent(nullptr);
 }
@@ -145,8 +147,10 @@ void ToggleButton::designSystemChangeEvent(DesignSystemChangeEvent* _event)
 {
     Q_UNUSED(_event);
 
-    d->decorationRadiusAnimation.setStartValue(Ui::DesignSystem::toggleButton().iconSize().height() / 2.0);
-    d->decorationRadiusAnimation.setEndValue(Ui::DesignSystem::toggleButton().size().height() / 2.5);
+    d->decorationRadiusAnimation.setStartValue(Ui::DesignSystem::toggleButton().iconSize().height()
+                                               / 2.0);
+    d->decorationRadiusAnimation.setEndValue(Ui::DesignSystem::toggleButton().size().height()
+                                             / 2.5);
 
     updateGeometry();
     update();

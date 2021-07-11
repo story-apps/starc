@@ -12,16 +12,13 @@
 #include <business_layer/model/structure/structure_model.h>
 #include <business_layer/model/structure/structure_model_item.h>
 #include <business_layer/model/structure/structure_proxy_model.h>
-
 #include <data_layer/storage/document_change_storage.h>
 #include <data_layer/storage/document_data_storage.h>
 #include <data_layer/storage/document_storage.h>
 #include <data_layer/storage/settings_storage.h>
 #include <data_layer/storage/storage_facade.h>
-
 #include <domain/document_change_object.h>
 #include <domain/document_object.h>
-
 #include <ui/abstract_navigator.h>
 #include <ui/design_system/design_system.h>
 #include <ui/project/create_document_dialog.h>
@@ -39,8 +36,7 @@
 #include <QVariantAnimation>
 
 
-namespace ManagementLayer
-{
+namespace ManagementLayer {
 
 class ProjectManager::Implementation
 {
@@ -50,11 +46,7 @@ public:
     /**
      * @brief Действия контекстного меню
      */
-    enum class ContextMenuAction {
-        AddDocument,
-        RemoveDocument,
-        EmptyRecycleBin
-    };
+    enum class ContextMenuAction { AddDocument, RemoveDocument, EmptyRecycleBin };
 
     /**
      * @brief Обновить модель действий контекстного меню навигатора
@@ -70,7 +62,8 @@ public:
      * @brief Добавить документ в заданный контейнер
      */
     void addDocumentToContainer(Domain::DocumentObjectType _containerType,
-        Domain::DocumentObjectType _documentType, const QString& _documentName, const QByteArray& _content = {});
+                                Domain::DocumentObjectType _documentType,
+                                const QString& _documentName, const QByteArray& _content = {});
 
     /**
      * @brief Удалить документ
@@ -112,13 +105,13 @@ public:
 };
 
 ProjectManager::Implementation::Implementation(QWidget* _parent)
-    : topLevelWidget(_parent),
-      toolBar(new Ui::ProjectToolBar(_parent)),
-      navigator(new Ui::ProjectNavigator(_parent)),
-      view(new Ui::ProjectView(_parent)),
-      projectStructureModel(new BusinessLayer::StructureModel(navigator)),
-      projectStructureProxyModel(new BusinessLayer::StructureProxyModel(projectStructureModel)),
-      modelsFacade(projectStructureModel, &documentDataStorage)
+    : topLevelWidget(_parent)
+    , toolBar(new Ui::ProjectToolBar(_parent))
+    , navigator(new Ui::ProjectNavigator(_parent))
+    , view(new Ui::ProjectView(_parent))
+    , projectStructureModel(new BusinessLayer::StructureModel(navigator))
+    , projectStructureProxyModel(new BusinessLayer::StructureProxyModel(projectStructureModel))
+    , modelsFacade(projectStructureModel, &documentDataStorage)
 {
     toolBar->hide();
     navigator->hide();
@@ -141,9 +134,8 @@ void ProjectManager::Implementation::updateNavigatorContextMenu(const QModelInde
         if (currentItem->hasChildren()) {
             auto emptyRecycleBin = new QAction(tr("Empty recycle bin"));
             emptyRecycleBin->setIconText(u8"\U000f05e8");
-            connect(emptyRecycleBin, &QAction::triggered, [this, currentItemIndex] {
-                this->emptyRecycleBin(currentItemIndex);
-            });
+            connect(emptyRecycleBin, &QAction::triggered,
+                    [this, currentItemIndex] { this->emptyRecycleBin(currentItemIndex); });
             menuActions.append(emptyRecycleBin);
         }
     }
@@ -153,26 +145,24 @@ void ProjectManager::Implementation::updateNavigatorContextMenu(const QModelInde
     else {
         auto addDocument = new QAction(tr("Add document"));
         addDocument->setIconText(u8"\U000f0415");
-        connect(addDocument, &QAction::triggered, [this, currentItemIndex] {
-            this->addDocument(currentItemIndex);
-        });
+        connect(addDocument, &QAction::triggered,
+                [this, currentItemIndex] { this->addDocument(currentItemIndex); });
         menuActions.append(addDocument);
 
         const QSet<Domain::DocumentObjectType> cantBeRemovedItems
-                = { Domain::DocumentObjectType::Project,
-                    Domain::DocumentObjectType::Characters,
-                    Domain::DocumentObjectType::Locations,
-                    Domain::DocumentObjectType::ScreenplayTitlePage,
-                    Domain::DocumentObjectType::ScreenplaySynopsis,
-                    Domain::DocumentObjectType::ScreenplayTreatment,
-                    Domain::DocumentObjectType::ScreenplayText,
-                    Domain::DocumentObjectType::ScreenplayStatistics };
+            = { Domain::DocumentObjectType::Project,
+                Domain::DocumentObjectType::Characters,
+                Domain::DocumentObjectType::Locations,
+                Domain::DocumentObjectType::ScreenplayTitlePage,
+                Domain::DocumentObjectType::ScreenplaySynopsis,
+                Domain::DocumentObjectType::ScreenplayTreatment,
+                Domain::DocumentObjectType::ScreenplayText,
+                Domain::DocumentObjectType::ScreenplayStatistics };
         if (_index.isValid() && !cantBeRemovedItems.contains(currentItem->type())) {
             auto removeDocument = new QAction(tr("Remove document"));
             removeDocument->setIconText(u8"\U000f01b4");
-            connect(removeDocument, &QAction::triggered, [this, currentItemIndex] {
-                this->removeDocument(currentItemIndex);
-            });
+            connect(removeDocument, &QAction::triggered,
+                    [this, currentItemIndex] { this->removeDocument(currentItemIndex); });
             menuActions.append(removeDocument);
         }
     }
@@ -189,21 +179,23 @@ void ProjectManager::Implementation::addDocument(const QModelIndex& _itemIndex)
     auto dialog = new Ui::CreateDocumentDialog(topLevelWidget);
 
     connect(dialog, &Ui::CreateDocumentDialog::createPressed, navigator,
-            [this, dialog] (Domain::DocumentObjectType _type, const QString& _name)
-    {
-        const auto addedItemIndex = projectStructureModel->addDocument(_type, _name);
-        const auto mappedAddedItemIndex = projectStructureProxyModel->mapFromSource(addedItemIndex);
-        navigator->setCurrentIndex(mappedAddedItemIndex);
+            [this, dialog](Domain::DocumentObjectType _type, const QString& _name) {
+                const auto addedItemIndex = projectStructureModel->addDocument(_type, _name);
+                const auto mappedAddedItemIndex
+                    = projectStructureProxyModel->mapFromSource(addedItemIndex);
+                navigator->setCurrentIndex(mappedAddedItemIndex);
 
-        dialog->hideDialog();
-    });
-    connect(dialog, &Ui::CreateDocumentDialog::disappeared, dialog, &Ui::CreateDocumentDialog::deleteLater);
+                dialog->hideDialog();
+            });
+    connect(dialog, &Ui::CreateDocumentDialog::disappeared, dialog,
+            &Ui::CreateDocumentDialog::deleteLater);
 
     dialog->showDialog();
 }
 
-void ProjectManager::Implementation::addDocumentToContainer(Domain::DocumentObjectType _containerType,
-    Domain::DocumentObjectType _documentType, const QString& _documentName, const QByteArray& _content)
+void ProjectManager::Implementation::addDocumentToContainer(
+    Domain::DocumentObjectType _containerType, Domain::DocumentObjectType _documentType,
+    const QString& _documentName, const QByteArray& _content)
 {
     for (int itemRow = 0; itemRow < projectStructureModel->rowCount(); ++itemRow) {
         const auto itemIndex = projectStructureModel->index(itemRow, 0);
@@ -247,31 +239,31 @@ void ProjectManager::Implementation::removeDocument(const QModelIndex& _itemInde
     const int kCancelButtonId = 0;
     const int kRemoveButtonId = 1;
     auto dialog = new Dialog(topLevelWidget);
-    dialog->showDialog({},
-                       tr("Do you really want to permanently remove document?"),
-                       {{ kCancelButtonId, tr("No"), Dialog::RejectButton },
-                        { kRemoveButtonId, tr("Yes, remove"), Dialog::NormalButton }});
-    QObject::connect(dialog, &Dialog::finished,
-                     [this, item, kCancelButtonId, dialog] (const Dialog::ButtonInfo& _buttonInfo)
-    {
-        dialog->hideDialog();
+    dialog->showDialog({}, tr("Do you really want to permanently remove document?"),
+                       { { kCancelButtonId, tr("No"), Dialog::RejectButton },
+                         { kRemoveButtonId, tr("Yes, remove"), Dialog::NormalButton } });
+    QObject::connect(
+        dialog, &Dialog::finished,
+        [this, item, kCancelButtonId, dialog](const Dialog::ButtonInfo& _buttonInfo) {
+            dialog->hideDialog();
 
-        //
-        // Пользователь передумал удалять
-        //
-        if (_buttonInfo.id == kCancelButtonId) {
-            return;
-        }
+            //
+            // Пользователь передумал удалять
+            //
+            if (_buttonInfo.id == kCancelButtonId) {
+                return;
+            }
 
-        //
-        // Если таки хочет, то удаляем документ
-        // NOTE: порядок удаления важен
-        //
-        auto document = DataStorageLayer::StorageFacade::documentStorage()->document(item->uuid());
-        modelsFacade.removeModelFor(document);
-        DataStorageLayer::StorageFacade::documentStorage()->removeDocument(document);
-        projectStructureModel->removeItem(item);
-    });
+            //
+            // Если таки хочет, то удаляем документ
+            // NOTE: порядок удаления важен
+            //
+            auto document
+                = DataStorageLayer::StorageFacade::documentStorage()->document(item->uuid());
+            modelsFacade.removeModelFor(document);
+            DataStorageLayer::StorageFacade::documentStorage()->removeDocument(document);
+            projectStructureModel->removeItem(item);
+        });
     QObject::connect(dialog, &Dialog::disappeared, dialog, &Dialog::deleteLater);
 }
 
@@ -288,36 +280,39 @@ void ProjectManager::Implementation::emptyRecycleBin(const QModelIndex& _recycle
     const int kCancelButtonId = 0;
     const int kEmptyButtonId = 1;
     auto dialog = new Dialog(topLevelWidget);
-    dialog->showDialog({},
-                       tr("Do you really want to permanently remove all documents from the recycle bin?"),
-                       {{ kCancelButtonId, tr("No"), Dialog::RejectButton },
-                        { kEmptyButtonId, tr("Yes, remove"), Dialog::NormalButton }});
-    QObject::connect(dialog, &Dialog::finished,
-                     [this, recycleBin, kCancelButtonId, dialog] (const Dialog::ButtonInfo& _buttonInfo)
-    {
-        dialog->hideDialog();
+    dialog->showDialog(
+        {}, tr("Do you really want to permanently remove all documents from the recycle bin?"),
+        { { kCancelButtonId, tr("No"), Dialog::RejectButton },
+          { kEmptyButtonId, tr("Yes, remove"), Dialog::NormalButton } });
+    QObject::connect(
+        dialog, &Dialog::finished,
+        [this, recycleBin, kCancelButtonId, dialog](const Dialog::ButtonInfo& _buttonInfo) {
+            dialog->hideDialog();
 
-        //
-        // Пользователь передумал очищать корзину
-        //
-        if (_buttonInfo.id == kCancelButtonId) {
-            return;
-        }
-
-        //
-        // Если таки хочет, то удаляем все вложенные документы
-        // NOTE: порядок удаления важен
-        //
-        while (recycleBin->hasChildren()) {
-            auto itemToRemove = recycleBin->childAt(0);
-            auto documentToRemove = DataStorageLayer::StorageFacade::documentStorage()->document(itemToRemove->uuid());
-            if (documentToRemove != nullptr) {
-                modelsFacade.removeModelFor(documentToRemove);
-                DataStorageLayer::StorageFacade::documentStorage()->removeDocument(documentToRemove);
+            //
+            // Пользователь передумал очищать корзину
+            //
+            if (_buttonInfo.id == kCancelButtonId) {
+                return;
             }
-            projectStructureModel->removeItem(itemToRemove);
-        }
-    });
+
+            //
+            // Если таки хочет, то удаляем все вложенные документы
+            // NOTE: порядок удаления важен
+            //
+            while (recycleBin->hasChildren()) {
+                auto itemToRemove = recycleBin->childAt(0);
+                auto documentToRemove
+                    = DataStorageLayer::StorageFacade::documentStorage()->document(
+                        itemToRemove->uuid());
+                if (documentToRemove != nullptr) {
+                    modelsFacade.removeModelFor(documentToRemove);
+                    DataStorageLayer::StorageFacade::documentStorage()->removeDocument(
+                        documentToRemove);
+                }
+                projectStructureModel->removeItem(itemToRemove);
+            }
+        });
     QObject::connect(dialog, &Dialog::disappeared, dialog, &Dialog::deleteLater);
 }
 
@@ -326,11 +321,11 @@ void ProjectManager::Implementation::emptyRecycleBin(const QModelIndex& _recycle
 
 
 ProjectManager::ProjectManager(QObject* _parent, QWidget* _parentWidget)
-    : QObject(_parent),
-      d(new Implementation(_parentWidget))
+    : QObject(_parent)
+    , d(new Implementation(_parentWidget))
 {
     connect(d->toolBar, &Ui::ProjectToolBar::menuPressed, this, &ProjectManager::menuRequested);
-    connect(d->toolBar, &Ui::ProjectToolBar::viewPressed, this, [this] (const QString& _mimeType) {
+    connect(d->toolBar, &Ui::ProjectToolBar::viewPressed, this, [this](const QString& _mimeType) {
         showView(d->navigator->currentIndex(), _mimeType);
     });
 
@@ -338,165 +333,175 @@ ProjectManager::ProjectManager(QObject* _parent, QWidget* _parentWidget)
     // Отображаем необходимый редактор при выборе документа в списке
     //
     connect(d->navigator, &Ui::ProjectNavigator::itemSelected, this,
-            [this] (const QModelIndex& _index)
-    {
-        if (!_index.isValid()) {
-            d->view->showDefaultPage();
-            return;
-        }
+            [this](const QModelIndex& _index) {
+                if (!_index.isValid()) {
+                    d->view->showDefaultPage();
+                    return;
+                }
 
-        //
-        // Определим выделенный элемент и скорректируем интерфейс
-        //
-        const auto mappedIndex = d->projectStructureProxyModel->mapToSource(_index);
-        const auto item = d->projectStructureModel->itemForIndex(mappedIndex);
-        const auto documentMimeType = Domain::mimeTypeFor(item->type());
-        //
-        // ... настроим иконки представлений
-        //
-        d->toolBar->clearViews();
-        const auto views = d->pluginsBuilder.editorsInfoFor(documentMimeType);
-        for (auto view : views) {
-            const auto tooltip = d->pluginsBuilder.editorDescription(view.mimeType);
-            const bool isActive = view.mimeType == views.first().mimeType;
-            d->toolBar->addView(view.mimeType, view.icon, tooltip, isActive);
-        }
+                //
+                // Определим выделенный элемент и скорректируем интерфейс
+                //
+                const auto mappedIndex = d->projectStructureProxyModel->mapToSource(_index);
+                const auto item = d->projectStructureModel->itemForIndex(mappedIndex);
+                const auto documentMimeType = Domain::mimeTypeFor(item->type());
+                //
+                // ... настроим иконки представлений
+                //
+                d->toolBar->clearViews();
+                const auto views = d->pluginsBuilder.editorsInfoFor(documentMimeType);
+                for (auto view : views) {
+                    const auto tooltip = d->pluginsBuilder.editorDescription(view.mimeType);
+                    const bool isActive = view.mimeType == views.first().mimeType;
+                    d->toolBar->addView(view.mimeType, view.icon, tooltip, isActive);
+                }
 
-        //
-        // Откроем документ на редактирование в первом из представлений
-        //
-        if (views.isEmpty()) {
-            d->view->showNotImplementedPage();
-            return;
-        }
-        showView(_index, views.first().mimeType);
-    });
+                //
+                // Откроем документ на редактирование в первом из представлений
+                //
+                if (views.isEmpty()) {
+                    d->view->showNotImplementedPage();
+                    return;
+                }
+                showView(_index, views.first().mimeType);
+            });
     //
     // Отображаем навигатор выбранного элемента
     //
     connect(d->navigator, &Ui::ProjectNavigator::itemDoubleClicked, this,
-            [this] (const QModelIndex& _index)
-    {
-        const auto mappedIndex = d->projectStructureProxyModel->mapToSource(_index);
-        if (!d->projectStructureModel->data(mappedIndex,
-                static_cast<int>(BusinessLayer::StructureModelDataRole::IsNavigatorAvailable)).toBool()) {
-            return;
-        }
+            [this](const QModelIndex& _index) {
+                const auto mappedIndex = d->projectStructureProxyModel->mapToSource(_index);
+                if (!d->projectStructureModel
+                         ->data(mappedIndex,
+                                static_cast<int>(
+                                    BusinessLayer::StructureModelDataRole::IsNavigatorAvailable))
+                         .toBool()) {
+                    return;
+                }
 
-        showNavigator(_index);
-    });
+                showNavigator(_index);
+            });
     connect(d->navigator, &Ui::ProjectNavigator::contextMenuUpdateRequested, this,
-            [this] (const QModelIndex& _index) { d->updateNavigatorContextMenu(_index); });
-    connect(d->navigator, &Ui::ProjectNavigator::addDocumentClicked, this, [this] { d->addDocument({}); });
+            [this](const QModelIndex& _index) { d->updateNavigatorContextMenu(_index); });
+    connect(d->navigator, &Ui::ProjectNavigator::addDocumentClicked, this,
+            [this] { d->addDocument({}); });
 
     //
     // Соединения с моделью структуры проекта
     //
     connect(d->projectStructureModel, &BusinessLayer::StructureModel::documentAdded,
-            [this] (const QUuid& _uuid, const QUuid& _parentUuid, Domain::DocumentObjectType _type,
-                    const QString& _name, const QByteArray& _content)
-    {
-        Q_UNUSED(_parentUuid);
+            [this](const QUuid& _uuid, const QUuid& _parentUuid, Domain::DocumentObjectType _type,
+                   const QString& _name, const QByteArray& _content) {
+                Q_UNUSED(_parentUuid);
 
-        auto document = DataStorageLayer::StorageFacade::documentStorage()->storeDocument(_uuid, _type);
-        if (!_content.isNull()) {
-            document->setContent(_content);
-        }
+                auto document = DataStorageLayer::StorageFacade::documentStorage()->storeDocument(
+                    _uuid, _type);
+                if (!_content.isNull()) {
+                    document->setContent(_content);
+                }
 
-        auto documentModel = d->modelsFacade.modelFor(document);
-        documentModel->setDocumentName(_name);
+                auto documentModel = d->modelsFacade.modelFor(document);
+                documentModel->setDocumentName(_name);
 
-        switch (_type) {
-            case Domain::DocumentObjectType::Character: {
-                auto charactersDocument = DataStorageLayer::StorageFacade::documentStorage()->document(
-                                              Domain::DocumentObjectType::Characters);
-                auto charactersModel = static_cast<BusinessLayer::CharactersModel*>(d->modelsFacade.modelFor(charactersDocument));
-                auto characterModel = static_cast<BusinessLayer::CharacterModel*>(documentModel);
-                charactersModel->addCharacterModel(characterModel);
+                switch (_type) {
+                case Domain::DocumentObjectType::Character: {
+                    auto charactersDocument
+                        = DataStorageLayer::StorageFacade::documentStorage()->document(
+                            Domain::DocumentObjectType::Characters);
+                    auto charactersModel = static_cast<BusinessLayer::CharactersModel*>(
+                        d->modelsFacade.modelFor(charactersDocument));
+                    auto characterModel
+                        = static_cast<BusinessLayer::CharacterModel*>(documentModel);
+                    charactersModel->addCharacterModel(characterModel);
 
-                break;
-            }
+                    break;
+                }
 
-            case Domain::DocumentObjectType::Location: {
-                auto locationsDocument = DataStorageLayer::StorageFacade::documentStorage()->document(
-                                             Domain::DocumentObjectType::Locations);
-                auto locationsModel = static_cast<BusinessLayer::LocationsModel*>(d->modelsFacade.modelFor(locationsDocument));
-                auto locationModel = static_cast<BusinessLayer::LocationModel*>(documentModel);
-                locationsModel->addLocationModel(locationModel);
+                case Domain::DocumentObjectType::Location: {
+                    auto locationsDocument
+                        = DataStorageLayer::StorageFacade::documentStorage()->document(
+                            Domain::DocumentObjectType::Locations);
+                    auto locationsModel = static_cast<BusinessLayer::LocationsModel*>(
+                        d->modelsFacade.modelFor(locationsDocument));
+                    auto locationModel = static_cast<BusinessLayer::LocationModel*>(documentModel);
+                    locationsModel->addLocationModel(locationModel);
 
-                break;
-            }
+                    break;
+                }
 
-            default: break;
-        }
-    });
+                default:
+                    break;
+                }
+            });
     connect(d->projectStructureModel, &BusinessLayer::StructureModel::contentsChanged, this,
-            [this] (const QByteArray& _undo, const QByteArray& _redo)
-    {
-        handleModelChange(d->projectStructureModel, _undo, _redo);
-    });
+            [this](const QByteArray& _undo, const QByteArray& _redo) {
+                handleModelChange(d->projectStructureModel, _undo, _redo);
+            });
 
     //
     // Соединения представления
     //
-    connect(d->view, &Ui::ProjectView::createNewItemPressed, this, [this] {
-        d->addDocument({});
-    });
+    connect(d->view, &Ui::ProjectView::createNewItemPressed, this, [this] { d->addDocument({}); });
 
     //
     // Соединения со строителем моделей
     //
     connect(&d->modelsFacade, &ProjectModelsFacade::modelNameChanged, this,
-            [this] (BusinessLayer::AbstractModel* _model, const QString& _name)
-    {
-        auto item = d->projectStructureModel->itemForUuid(_model->document()->uuid());
-        d->projectStructureModel->setItemName(item, _name);
-    });
-    connect(&d->modelsFacade, &ProjectModelsFacade::modelContentChanged, this, &ProjectManager::handleModelChange);
-    connect(&d->modelsFacade, &ProjectModelsFacade::modelUndoRequested, this, &ProjectManager::undoModelChange);
-    connect(&d->modelsFacade, &ProjectModelsFacade::projectNameChanged, this, &ProjectManager::projectNameChanged);
-    connect(&d->modelsFacade, &ProjectModelsFacade::projectLoglineChanged, this, &ProjectManager::projectLoglineChanged);
-    connect(&d->modelsFacade, &ProjectModelsFacade::projectCoverChanged, this, &ProjectManager::projectCoverChanged);
+            [this](BusinessLayer::AbstractModel* _model, const QString& _name) {
+                auto item = d->projectStructureModel->itemForUuid(_model->document()->uuid());
+                d->projectStructureModel->setItemName(item, _name);
+            });
+    connect(&d->modelsFacade, &ProjectModelsFacade::modelContentChanged, this,
+            &ProjectManager::handleModelChange);
+    connect(&d->modelsFacade, &ProjectModelsFacade::modelUndoRequested, this,
+            &ProjectManager::undoModelChange);
+    connect(&d->modelsFacade, &ProjectModelsFacade::projectNameChanged, this,
+            &ProjectManager::projectNameChanged);
+    connect(&d->modelsFacade, &ProjectModelsFacade::projectLoglineChanged, this,
+            &ProjectManager::projectLoglineChanged);
+    connect(&d->modelsFacade, &ProjectModelsFacade::projectCoverChanged, this,
+            &ProjectManager::projectCoverChanged);
     connect(&d->modelsFacade, &ProjectModelsFacade::createCharacterRequested, this,
-            [this] (const QString& _name, const QByteArray& _content)
-    {
-        d->addDocumentToContainer(Domain::DocumentObjectType::Characters,
-                                  Domain::DocumentObjectType::Character,
-                                  _name, _content);
-    });
+            [this](const QString& _name, const QByteArray& _content) {
+                d->addDocumentToContainer(Domain::DocumentObjectType::Characters,
+                                          Domain::DocumentObjectType::Character, _name, _content);
+            });
     connect(&d->modelsFacade, &ProjectModelsFacade::characterNameChanged, this,
-            [this] (const QString& _newName, const QString& _oldName) {
-        //
-        // Найти все модели где может встречаться персонаж и заменить в них его имя со старого на новое
-        //
-        const auto models = d->modelsFacade.modelsFor(Domain::DocumentObjectType::ScreenplayText);
-        for (auto model : models) {
-            auto screenplay = static_cast<BusinessLayer::ScreenplayTextModel*>(model);
-            screenplay->updateCharacterName(_oldName, _newName);
-        }
-    });
+            [this](const QString& _newName, const QString& _oldName) {
+                //
+                // Найти все модели где может встречаться персонаж и заменить в них его имя со
+                // старого на новое
+                //
+                const auto models
+                    = d->modelsFacade.modelsFor(Domain::DocumentObjectType::ScreenplayText);
+                for (auto model : models) {
+                    auto screenplay = static_cast<BusinessLayer::ScreenplayTextModel*>(model);
+                    screenplay->updateCharacterName(_oldName, _newName);
+                }
+            });
     connect(&d->modelsFacade, &ProjectModelsFacade::createLocationRequested, this,
-            [this] (const QString& _name, const QByteArray& _content)
-    {
-        d->addDocumentToContainer(Domain::DocumentObjectType::Locations,
-                                  Domain::DocumentObjectType::Location,
-                                  _name, _content);
-    });
+            [this](const QString& _name, const QByteArray& _content) {
+                d->addDocumentToContainer(Domain::DocumentObjectType::Locations,
+                                          Domain::DocumentObjectType::Location, _name, _content);
+            });
     connect(&d->modelsFacade, &ProjectModelsFacade::locationNameChanged, this,
-            [this] (const QString& _newName, const QString& _oldName) {
-        //
-        // Найти все модели где может встречаться персонаж и заменить в них его имя со старого на новое
-        //
-        const auto models = d->modelsFacade.modelsFor(Domain::DocumentObjectType::ScreenplayText);
-        for (auto model : models) {
-            auto screenplay = static_cast<BusinessLayer::ScreenplayTextModel*>(model);
-            screenplay->updateLocationName(_oldName, _newName);
-        }
-    });
+            [this](const QString& _newName, const QString& _oldName) {
+                //
+                // Найти все модели где может встречаться персонаж и заменить в них его имя со
+                // старого на новое
+                //
+                const auto models
+                    = d->modelsFacade.modelsFor(Domain::DocumentObjectType::ScreenplayText);
+                for (auto model : models) {
+                    auto screenplay = static_cast<BusinessLayer::ScreenplayTextModel*>(model);
+                    screenplay->updateLocationName(_oldName, _newName);
+                }
+            });
     //
-    auto setDocumentVisible = [this] (BusinessLayer::AbstractModel* _screenplayModel,
-                                      Domain::DocumentObjectType _type, bool _visible) {
-        auto screenplayItem = d->projectStructureModel->itemForUuid(_screenplayModel->document()->uuid());
+    auto setDocumentVisible = [this](BusinessLayer::AbstractModel* _screenplayModel,
+                                     Domain::DocumentObjectType _type, bool _visible) {
+        auto screenplayItem
+            = d->projectStructureModel->itemForUuid(_screenplayModel->document()->uuid());
         for (int childIndex = 0; childIndex < screenplayItem->childCount(); ++childIndex) {
             auto childItem = screenplayItem->childAt(childIndex);
             if (childItem->type() == _type) {
@@ -506,30 +511,30 @@ ProjectManager::ProjectManager(QObject* _parent, QWidget* _parentWidget)
         }
     };
     connect(&d->modelsFacade, &ProjectModelsFacade::screenplayTitlePageVisibilityChanged, this,
-            [setDocumentVisible] (BusinessLayer::AbstractModel* _screenplayModel, bool _visible)
-    {
-        setDocumentVisible(_screenplayModel, Domain::DocumentObjectType::ScreenplayTitlePage, _visible);
-    });
+            [setDocumentVisible](BusinessLayer::AbstractModel* _screenplayModel, bool _visible) {
+                setDocumentVisible(_screenplayModel,
+                                   Domain::DocumentObjectType::ScreenplayTitlePage, _visible);
+            });
     connect(&d->modelsFacade, &ProjectModelsFacade::screenplaySynopsisVisibilityChanged, this,
-            [setDocumentVisible] (BusinessLayer::AbstractModel* _screenplayModel, bool _visible)
-    {
-        setDocumentVisible(_screenplayModel, Domain::DocumentObjectType::ScreenplaySynopsis, _visible);
-    });
+            [setDocumentVisible](BusinessLayer::AbstractModel* _screenplayModel, bool _visible) {
+                setDocumentVisible(_screenplayModel, Domain::DocumentObjectType::ScreenplaySynopsis,
+                                   _visible);
+            });
     connect(&d->modelsFacade, &ProjectModelsFacade::screenplayTreatmentVisibilityChanged, this,
-            [setDocumentVisible] (BusinessLayer::AbstractModel* _screenplayModel, bool _visible)
-    {
-        setDocumentVisible(_screenplayModel, Domain::DocumentObjectType::ScreenplayTreatment, _visible);
-    });
+            [setDocumentVisible](BusinessLayer::AbstractModel* _screenplayModel, bool _visible) {
+                setDocumentVisible(_screenplayModel,
+                                   Domain::DocumentObjectType::ScreenplayTreatment, _visible);
+            });
     connect(&d->modelsFacade, &ProjectModelsFacade::screenplayTextVisibilityChanged, this,
-            [setDocumentVisible] (BusinessLayer::AbstractModel* _screenplayModel, bool _visible)
-    {
-        setDocumentVisible(_screenplayModel, Domain::DocumentObjectType::ScreenplayText, _visible);
-    });
+            [setDocumentVisible](BusinessLayer::AbstractModel* _screenplayModel, bool _visible) {
+                setDocumentVisible(_screenplayModel, Domain::DocumentObjectType::ScreenplayText,
+                                   _visible);
+            });
     connect(&d->modelsFacade, &ProjectModelsFacade::screenplayStatisticsVisibilityChanged, this,
-            [setDocumentVisible] (BusinessLayer::AbstractModel* _screenplayModel, bool _visible)
-    {
-        setDocumentVisible(_screenplayModel, Domain::DocumentObjectType::ScreenplayStatistics, _visible);
-    });
+            [setDocumentVisible](BusinessLayer::AbstractModel* _screenplayModel, bool _visible) {
+                setDocumentVisible(_screenplayModel,
+                                   Domain::DocumentObjectType::ScreenplayStatistics, _visible);
+            });
 }
 
 ProjectManager::~ProjectManager() = default;
@@ -583,16 +588,15 @@ void ProjectManager::loadCurrentProject(const QString& _name, const QString& _pa
     //
     d->projectStructureModel->setProjectName(_name);
     d->projectStructureModel->setDocument(
-        DataStorageLayer::StorageFacade::documentStorage()->document(Domain::DocumentObjectType::Structure));
+        DataStorageLayer::StorageFacade::documentStorage()->document(
+            Domain::DocumentObjectType::Structure));
 
     //
     // Загружаем информацию о проекте
     //
-    auto projectInformationModel
-            = static_cast<BusinessLayer::ProjectInformationModel*>(
-                  d->modelsFacade.modelFor(
-                      DataStorageLayer::StorageFacade::documentStorage()->document(
-                          Domain::DocumentObjectType::Project)));
+    auto projectInformationModel = static_cast<BusinessLayer::ProjectInformationModel*>(
+        d->modelsFacade.modelFor(DataStorageLayer::StorageFacade::documentStorage()->document(
+            Domain::DocumentObjectType::Project)));
     if (projectInformationModel->name().isEmpty()) {
         projectInformationModel->setName(_name);
     } else {
@@ -614,16 +618,16 @@ void ProjectManager::loadCurrentProject(const QString& _name, const QString& _pa
     // Загрузить состояние дерева
     //
     d->navigator->restoreState(DataStorageLayer::StorageFacade::settingsStorage()->value(
-                                   DataStorageLayer::projectStructureKey(_path),
-                                   DataStorageLayer::SettingsStorage::SettingsPlace::Application));
+        DataStorageLayer::projectStructureKey(_path),
+        DataStorageLayer::SettingsStorage::SettingsPlace::Application));
 
     //
     // При необходимости открыть навигатор по документу
     //
     const auto isProjectStructureVisible
-            = DataStorageLayer::StorageFacade::settingsStorage()->value(
-                  DataStorageLayer::projectStructureVisibleKey(_path),
-                  DataStorageLayer::SettingsStorage::SettingsPlace::Application);
+        = DataStorageLayer::StorageFacade::settingsStorage()->value(
+            DataStorageLayer::projectStructureVisibleKey(_path),
+            DataStorageLayer::SettingsStorage::SettingsPlace::Application);
     if (isProjectStructureVisible.isValid() && !isProjectStructureVisible.toBool()) {
         showNavigator(d->navigator->currentIndex());
     }
@@ -643,13 +647,12 @@ void ProjectManager::closeCurrentProject(const QString& _path)
     // Сохранить состояние дерева
     //
     DataStorageLayer::StorageFacade::settingsStorage()->setValue(
-                DataStorageLayer::projectStructureKey(_path),
-                d->navigator->saveState(),
-                DataStorageLayer::SettingsStorage::SettingsPlace::Application);
+        DataStorageLayer::projectStructureKey(_path), d->navigator->saveState(),
+        DataStorageLayer::SettingsStorage::SettingsPlace::Application);
     DataStorageLayer::StorageFacade::settingsStorage()->setValue(
-                DataStorageLayer::projectStructureVisibleKey(_path),
-                d->navigator->isProjectNavigatorShown(),
-                DataStorageLayer::SettingsStorage::SettingsPlace::Application);
+        DataStorageLayer::projectStructureVisibleKey(_path),
+        d->navigator->isProjectNavigatorShown(),
+        DataStorageLayer::SettingsStorage::SettingsPlace::Application);
 
     //
     // Очищаем структуру
@@ -700,7 +703,8 @@ void ProjectManager::saveChanges()
 
 void ProjectManager::addCharacter(const QString& _name, const QString& _content)
 {
-    auto document = DataStorageLayer::StorageFacade::documentStorage()->document(Domain::DocumentObjectType::Characters);
+    auto document = DataStorageLayer::StorageFacade::documentStorage()->document(
+        Domain::DocumentObjectType::Characters);
     auto model = d->modelsFacade.modelFor(document);
     auto charactersModel = qobject_cast<BusinessLayer::CharactersModel*>(model);
     if (charactersModel == nullptr) {
@@ -712,7 +716,8 @@ void ProjectManager::addCharacter(const QString& _name, const QString& _content)
 
 void ProjectManager::addLocation(const QString& _name, const QString& _content)
 {
-    auto document = DataStorageLayer::StorageFacade::documentStorage()->document(Domain::DocumentObjectType::Locations);
+    auto document = DataStorageLayer::StorageFacade::documentStorage()->document(
+        Domain::DocumentObjectType::Locations);
     auto model = d->modelsFacade.modelFor(document);
     auto charactersModel = qobject_cast<BusinessLayer::LocationsModel*>(model);
     if (charactersModel == nullptr) {
@@ -723,7 +728,8 @@ void ProjectManager::addLocation(const QString& _name, const QString& _content)
 }
 
 void ProjectManager::addScreenplay(const QString& _name, const QString& _titlePage,
-    const QString& _synopsis, const QString& _treatment, const QString& _text)
+                                   const QString& _synopsis, const QString& _treatment,
+                                   const QString& _text)
 {
     //
     // ATTENTION: Копипаста из StructureModel::addDocument, быть внимательным при обновлении
@@ -731,7 +737,7 @@ void ProjectManager::addScreenplay(const QString& _name, const QString& _titlePa
 
     using namespace Domain;
 
-    auto createItem = [] (DocumentObjectType _type, const QString& _name) {
+    auto createItem = [](DocumentObjectType _type, const QString& _name) {
         auto uuid = QUuid::createUuid();
         const auto visible = true;
         return new BusinessLayer::StructureModelItem(uuid, _type, _name, {}, visible);
@@ -741,11 +747,20 @@ void ProjectManager::addScreenplay(const QString& _name, const QString& _titlePa
     auto screenplayItem = createItem(DocumentObjectType::Screenplay, _name);
     d->projectStructureModel->appendItem(screenplayItem, rootItem);
 
-    d->projectStructureModel->appendItem(createItem(DocumentObjectType::ScreenplayTitlePage, tr("Title page")), screenplayItem, _titlePage.toUtf8());
-    d->projectStructureModel->appendItem(createItem(DocumentObjectType::ScreenplaySynopsis, tr("Synopsis")), screenplayItem, _synopsis.toUtf8());
-    d->projectStructureModel->appendItem(createItem(DocumentObjectType::ScreenplayTreatment, tr("Treatment")), screenplayItem, _treatment.toUtf8());
-    d->projectStructureModel->appendItem(createItem(DocumentObjectType::ScreenplayText, tr("Screenplay")), screenplayItem, _text.toUtf8());
-    d->projectStructureModel->appendItem(createItem(DocumentObjectType::ScreenplayStatistics, tr("Statistics")), screenplayItem, {});
+    d->projectStructureModel->appendItem(
+        createItem(DocumentObjectType::ScreenplayTitlePage, tr("Title page")), screenplayItem,
+        _titlePage.toUtf8());
+    d->projectStructureModel->appendItem(
+        createItem(DocumentObjectType::ScreenplaySynopsis, tr("Synopsis")), screenplayItem,
+        _synopsis.toUtf8());
+    d->projectStructureModel->appendItem(
+        createItem(DocumentObjectType::ScreenplayTreatment, tr("Treatment")), screenplayItem,
+        _treatment.toUtf8());
+    d->projectStructureModel->appendItem(
+        createItem(DocumentObjectType::ScreenplayText, tr("Screenplay")), screenplayItem,
+        _text.toUtf8());
+    d->projectStructureModel->appendItem(
+        createItem(DocumentObjectType::ScreenplayStatistics, tr("Statistics")), screenplayItem, {});
 }
 
 BusinessLayer::AbstractModel* ProjectManager::currentModel() const
@@ -759,7 +774,7 @@ QString ProjectManager::currentModelViewMimeType() const
 }
 
 void ProjectManager::handleModelChange(BusinessLayer::AbstractModel* _model,
-    const QByteArray& _undo, const QByteArray& _redo)
+                                       const QByteArray& _undo, const QByteArray& _redo)
 {
     using namespace DataStorageLayer;
     StorageFacade::documentChangeStorage()->appendDocumentChange(
@@ -773,7 +788,7 @@ void ProjectManager::handleModelChange(BusinessLayer::AbstractModel* _model,
 void ProjectManager::undoModelChange(BusinessLayer::AbstractModel* _model, int _undoStep)
 {
     const auto change = DataStorageLayer::StorageFacade::documentChangeStorage()->documentChangeAt(
-                            _model->document()->uuid(), _undoStep);
+        _model->document()->uuid(), _undoStep);
     if (change == nullptr) {
         return;
     }
@@ -795,8 +810,7 @@ void ProjectManager::showView(const QModelIndex& _itemIndex, const QString& _vie
     //
     // Определим модель
     //
-    updateCurrentDocument(d->modelsFacade.modelFor(item->uuid()),
-                          _viewMimeType);
+    updateCurrentDocument(d->modelsFacade.modelFor(item->uuid()), _viewMimeType);
     if (d->currentDocument.model == nullptr) {
         d->view->showNotImplementedPage();
         return;
@@ -816,10 +830,12 @@ void ProjectManager::showView(const QModelIndex& _itemIndex, const QString& _vie
     // Настроим возможность перехода в навигатор
     //
     const auto navigatorMimeType = d->pluginsBuilder.navigatorMimeTypeFor(_viewMimeType);
-    d->projectStructureModel->setNavigatorAvailableFor(mappedItemIndex, !navigatorMimeType.isEmpty());
+    d->projectStructureModel->setNavigatorAvailableFor(mappedItemIndex,
+                                                       !navigatorMimeType.isEmpty());
 
     //
-    // Если в данный момент отображён кастомный навигатов, откроем навигатор соответствующий редактору
+    // Если в данный момент отображён кастомный навигатов, откроем навигатор соответствующий
+    // редактору
     //
     if (!d->navigator->isProjectNavigatorShown()) {
         showNavigator(_itemIndex, _viewMimeType);
@@ -848,9 +864,8 @@ void ProjectManager::showNavigator(const QModelIndex& _itemIndex, const QString&
     //
     // Определим представление и отобразим
     //
-    const auto viewMimeType = !_viewMimeType.isEmpty()
-                              ? _viewMimeType
-                              : d->toolBar->currentViewMimeType();
+    const auto viewMimeType
+        = !_viewMimeType.isEmpty() ? _viewMimeType : d->toolBar->currentViewMimeType();
     const auto navigatorMimeType = d->pluginsBuilder.navigatorMimeTypeFor(viewMimeType);
     auto view = d->pluginsBuilder.activateView(navigatorMimeType, model);
     if (view == nullptr) {
@@ -867,13 +882,13 @@ void ProjectManager::showNavigator(const QModelIndex& _itemIndex, const QString&
     // Настраиваем возможность перехода к навигатору проекта
     //
     auto navigatorView = qobject_cast<Ui::AbstractNavigator*>(view);
-    connect(navigatorView, &Ui::AbstractNavigator::backPressed,
-            d->navigator, &Ui::ProjectNavigator::showProjectNavigator,
-            Qt::UniqueConnection);
+    connect(navigatorView, &Ui::AbstractNavigator::backPressed, d->navigator,
+            &Ui::ProjectNavigator::showProjectNavigator, Qt::UniqueConnection);
     d->navigator->setCurrentWidget(view);
 }
 
-void ProjectManager::updateCurrentDocument(BusinessLayer::AbstractModel* _model, const QString& _viewMimeType)
+void ProjectManager::updateCurrentDocument(BusinessLayer::AbstractModel* _model,
+                                           const QString& _viewMimeType)
 {
     d->currentDocument.model = _model;
     d->currentDocument.viewMimeType = _viewMimeType;

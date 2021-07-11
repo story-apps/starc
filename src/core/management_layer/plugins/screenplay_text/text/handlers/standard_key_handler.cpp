@@ -5,7 +5,6 @@
 #include <business_layer/document/screenplay/text/screenplay_text_block_data.h>
 #include <business_layer/document/screenplay/text/screenplay_text_cursor.h>
 #include <business_layer/templates/screenplay_template.h>
-
 #include <data_layer/storage/settings_storage.h>
 #include <data_layer/storage/storage_facade.h>
 
@@ -17,24 +16,23 @@ using BusinessLayer::ScreenplayParagraphType;
 using Ui::ScreenplayTextEdit;
 
 
-namespace KeyProcessingLayer
-{
+namespace KeyProcessingLayer {
 
 namespace {
 /**
  * @brief Получить тип перехода/смены в зависимости от заданных параметров
  */
-static ScreenplayParagraphType actionFor(bool _tab, bool _jump, ScreenplayParagraphType _blockType) {
-    const QString settingsKey =
-            QString("screenplay-editor/styles-%1/from-%2-by-%3")
-            .arg(_jump ? "jumping" : "changing")
-            .arg(BusinessLayer::toString(_blockType))
-            .arg(_tab ? "tab" : "enter");
+static ScreenplayParagraphType actionFor(bool _tab, bool _jump, ScreenplayParagraphType _blockType)
+{
+    const QString settingsKey = QString("screenplay-editor/styles-%1/from-%2-by-%3")
+                                    .arg(_jump ? "jumping" : "changing")
+                                    .arg(BusinessLayer::toString(_blockType))
+                                    .arg(_tab ? "tab" : "enter");
 
-    const auto typeString =
-            DataStorageLayer::StorageFacade::settingsStorage()->value(
-                settingsKey, DataStorageLayer::SettingsStorage::SettingsPlace::Application
-                ).toString();
+    const auto typeString
+        = DataStorageLayer::StorageFacade::settingsStorage()
+              ->value(settingsKey, DataStorageLayer::SettingsStorage::SettingsPlace::Application)
+              .toString();
 
     return BusinessLayer::screenplayParagraphTypeFromString(typeString);
 }
@@ -48,11 +46,11 @@ const bool kEnter = false;
 const bool kJump = true;
 const bool kChange = false;
 /** @} */
-}
+} // namespace
 
 
-StandardKeyHandler::StandardKeyHandler(Ui::ScreenplayTextEdit* _editor) :
-    AbstractKeyHandler(_editor)
+StandardKeyHandler::StandardKeyHandler(Ui::ScreenplayTextEdit* _editor)
+    : AbstractKeyHandler(_editor)
 {
 }
 
@@ -121,8 +119,8 @@ void StandardKeyHandler::handleUp(QKeyEvent* _event)
     // Если подстановщик скрыт - имитируем действие обычного редактора
     //
     const bool isShiftPressed = _event->modifiers().testFlag(Qt::ShiftModifier);
-    const QTextCursor::MoveMode cursorMoveMode =
-            isShiftPressed ? QTextCursor::KeepAnchor : QTextCursor::MoveAnchor;
+    const QTextCursor::MoveMode cursorMoveMode
+        = isShiftPressed ? QTextCursor::KeepAnchor : QTextCursor::MoveAnchor;
 
     QTextCursor cursor = editor()->textCursor();
 
@@ -137,14 +135,10 @@ void StandardKeyHandler::handleUp(QKeyEvent* _event)
     int marginFromLineStart = 0;
     {
         int currentLineYCoordinate = editor()->cursorRect(cursor).y();
-        while (!cursor.atStart()
-               && editor()->cursorRect(cursor).y() == currentLineYCoordinate) {
+        while (!cursor.atStart() && editor()->cursorRect(cursor).y() == currentLineYCoordinate) {
             cursor.movePosition(QTextCursor::PreviousCharacter, cursorMoveMode);
         }
-        marginFromLineStart =
-                initCursorPosition
-                - cursor.position()
-                - (cursor.atStart() ? 0 : 1);
+        marginFromLineStart = initCursorPosition - cursor.position() - (cursor.atStart() ? 0 : 1);
     }
 
     //
@@ -153,13 +147,16 @@ void StandardKeyHandler::handleUp(QKeyEvent* _event)
 
     if (!cursor.atStart()) {
         //
-        // Если мы поднялись на строку вверх, но попали в невидимый блок, перейдём к предыдущему видимому
+        // Если мы поднялись на строку вверх, но попали в невидимый блок, перейдём к предыдущему
+        // видимому
         //
         const QTextBlock firstDocumentBlock = cursor.document()->firstBlock();
-        while (cursor.block() != firstDocumentBlock
-               && (!cursor.block().isVisible()
-                   || ScreenplayBlockStyle::forBlock(cursor.block()) == ScreenplayParagraphType::PageSplitter
-                   || cursor.blockFormat().boolProperty(ScreenplayBlockStyle::PropertyIsCorrection))) {
+        while (
+            cursor.block() != firstDocumentBlock
+            && (!cursor.block().isVisible()
+                || ScreenplayBlockStyle::forBlock(cursor.block())
+                    == ScreenplayParagraphType::PageSplitter
+                || cursor.blockFormat().boolProperty(ScreenplayBlockStyle::PropertyIsCorrection))) {
             cursor.movePosition(QTextCursor::PreviousBlock, cursorMoveMode);
             cursor.movePosition(QTextCursor::EndOfBlock, cursorMoveMode);
         }
@@ -176,7 +173,8 @@ void StandardKeyHandler::handleUp(QKeyEvent* _event)
             }
 
             //
-            // Возвратим курсор на одну позицию назад, т.к. в предыдущем цикле мы перешли на новую строку
+            // Возвратим курсор на одну позицию назад, т.к. в предыдущем цикле мы перешли на новую
+            // строку
             //
             if (!cursor.atStart()) {
                 cursor.movePosition(QTextCursor::NextCharacter, cursorMoveMode);
@@ -184,7 +182,8 @@ void StandardKeyHandler::handleUp(QKeyEvent* _event)
 
             int currentLineStartPosition = cursor.position();
             if (currentLineStartPosition + marginFromLineStart < currentLineEndPosition) {
-                cursor.movePosition(QTextCursor::NextCharacter, cursorMoveMode, marginFromLineStart);
+                cursor.movePosition(QTextCursor::NextCharacter, cursorMoveMode,
+                                    marginFromLineStart);
             } else {
                 cursor.setPosition(currentLineEndPosition, cursorMoveMode);
             }
@@ -204,8 +203,8 @@ void StandardKeyHandler::handleDown(QKeyEvent* _event)
     // Если подстановщик скрыт - имитируем действие обычного редактора
     //
     const bool isShiftPressed = _event->modifiers().testFlag(Qt::ShiftModifier);
-    const QTextCursor::MoveMode cursorMoveMode =
-            isShiftPressed ? QTextCursor::KeepAnchor : QTextCursor::MoveAnchor;
+    const QTextCursor::MoveMode cursorMoveMode
+        = isShiftPressed ? QTextCursor::KeepAnchor : QTextCursor::MoveAnchor;
 
     QTextCursor cursor = editor()->textCursor();
 
@@ -220,14 +219,10 @@ void StandardKeyHandler::handleDown(QKeyEvent* _event)
     int marginFromLineStart = 0;
     {
         int currentLineYCoordinate = editor()->cursorRect(cursor).y();
-        while (!cursor.atStart()
-               && editor()->cursorRect(cursor).y() == currentLineYCoordinate) {
+        while (!cursor.atStart() && editor()->cursorRect(cursor).y() == currentLineYCoordinate) {
             cursor.movePosition(QTextCursor::PreviousCharacter, cursorMoveMode);
         }
-        marginFromLineStart =
-                initCursorPosition
-                - cursor.position()
-                - (cursor.atStart() ? 0 : 1);
+        marginFromLineStart = initCursorPosition - cursor.position() - (cursor.atStart() ? 0 : 1);
     }
 
     //
@@ -240,8 +235,7 @@ void StandardKeyHandler::handleDown(QKeyEvent* _event)
     //
     {
         int currentLineYCoordinate = editor()->cursorRect(cursor).y();
-        while (!cursor.atEnd()
-               && editor()->cursorRect(cursor).y() == currentLineYCoordinate) {
+        while (!cursor.atEnd() && editor()->cursorRect(cursor).y() == currentLineYCoordinate) {
             cursor.movePosition(QTextCursor::NextCharacter, cursorMoveMode);
         }
     }
@@ -252,12 +246,15 @@ void StandardKeyHandler::handleDown(QKeyEvent* _event)
 
     if (!cursor.atEnd()) {
         //
-        // Если мы опустились на строку вниз, но попали в невидимый блок, перейдём к следующему видимому
+        // Если мы опустились на строку вниз, но попали в невидимый блок, перейдём к следующему
+        // видимому
         //
-        while (!cursor.atEnd()
-               && (!cursor.block().isVisible()
-                   || ScreenplayBlockStyle::forBlock(cursor.block()) == ScreenplayParagraphType::PageSplitter
-                   || cursor.blockFormat().boolProperty(ScreenplayBlockStyle::PropertyIsCorrection))) {
+        while (
+            !cursor.atEnd()
+            && (!cursor.block().isVisible()
+                || ScreenplayBlockStyle::forBlock(cursor.block())
+                    == ScreenplayParagraphType::PageSplitter
+                || cursor.blockFormat().boolProperty(ScreenplayBlockStyle::PropertyIsCorrection))) {
             cursor.movePosition(QTextCursor::NextBlock, cursorMoveMode);
             cursor.movePosition(QTextCursor::EndOfBlock, cursorMoveMode);
         }
@@ -268,13 +265,13 @@ void StandardKeyHandler::handleDown(QKeyEvent* _event)
         {
             int currentLineStartPosition = cursor.position();
             int currentLineYCoordinate = editor()->cursorRect(cursor).y();
-            while (!cursor.atEnd()
-                   && editor()->cursorRect(cursor).y() == currentLineYCoordinate) {
+            while (!cursor.atEnd() && editor()->cursorRect(cursor).y() == currentLineYCoordinate) {
                 cursor.movePosition(QTextCursor::NextCharacter, cursorMoveMode);
             }
 
             //
-            // Возвратим курсор на одну позицию назад, т.к. в предыдущем цикле мы перешли на новую строку
+            // Возвратим курсор на одну позицию назад, т.к. в предыдущем цикле мы перешли на новую
+            // строку
             //
             if (!cursor.atEnd()) {
                 cursor.movePosition(QTextCursor::PreviousCharacter, cursorMoveMode);
@@ -282,7 +279,8 @@ void StandardKeyHandler::handleDown(QKeyEvent* _event)
 
             int currentLineEndPosition = cursor.position();
             if (currentLineStartPosition + marginFromLineStart < currentLineEndPosition) {
-                const int moveRepeats = currentLineEndPosition - currentLineStartPosition - marginFromLineStart;
+                const int moveRepeats
+                    = currentLineEndPosition - currentLineStartPosition - marginFromLineStart;
                 cursor.movePosition(QTextCursor::PreviousCharacter, cursorMoveMode, moveRepeats);
             } else {
                 cursor.setPosition(currentLineEndPosition, cursorMoveMode);

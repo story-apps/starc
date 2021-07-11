@@ -5,13 +5,13 @@
 #include <ui/widgets/check_box/check_box.h>
 #include <ui/widgets/scroll_bar/scroll_bar.h>
 #include <ui/widgets/text_field/text_field.h>
+#include <utils/helpers/ui_helper.h>
 
 #include <QGridLayout>
 #include <QScrollArea>
 
 
-namespace Ui
-{
+namespace Ui {
 
 class ScreenplayInformationView::Implementation
 {
@@ -34,17 +34,17 @@ public:
 };
 
 ScreenplayInformationView::Implementation::Implementation(QWidget* _parent)
-    : content(new QScrollArea(_parent)),
-      screenplayInfo(new Card(_parent)),
-      screenplayInfoLayout(new QGridLayout),
-      screenplayName(new TextField(screenplayInfo)),
-      screenplayTagline(new TextField(screenplayInfo)),
-      screenplayLogline(new TextField(screenplayInfo)),
-      titlePageVisiblity(new CheckBox(screenplayInfo)),
-      synopsisVisiblity(new CheckBox(screenplayInfo)),
-      treatmentVisiblity(new CheckBox(screenplayInfo)),
-      screenplayTextVisiblity(new CheckBox(screenplayInfo)),
-      screenplayStatisticsVisiblity(new CheckBox(screenplayInfo))
+    : content(new QScrollArea(_parent))
+    , screenplayInfo(new Card(_parent))
+    , screenplayInfoLayout(new QGridLayout)
+    , screenplayName(new TextField(screenplayInfo))
+    , screenplayTagline(new TextField(screenplayInfo))
+    , screenplayLogline(new TextField(screenplayInfo))
+    , titlePageVisiblity(new CheckBox(screenplayInfo))
+    , synopsisVisiblity(new CheckBox(screenplayInfo))
+    , treatmentVisiblity(new CheckBox(screenplayInfo))
+    , screenplayTextVisiblity(new CheckBox(screenplayInfo))
+    , screenplayStatisticsVisiblity(new CheckBox(screenplayInfo))
 {
     QPalette palette;
     palette.setColor(QPalette::Base, Qt::transparent);
@@ -70,6 +70,8 @@ ScreenplayInformationView::Implementation::Implementation(QWidget* _parent)
     screenplayInfoLayout->setColumnStretch(0, 1);
     screenplayInfo->setLayoutReimpl(screenplayInfoLayout);
 
+    screenplayName->setSpellCheckPolicy(SpellCheckPolicy::Manual);
+    UiHelper::initSpellingFor({ screenplayTagline, screenplayLogline });
     screenplayLogline->setEnterMakesNewLine(true);
 
     QWidget* contentWidget = new QWidget;
@@ -88,8 +90,8 @@ ScreenplayInformationView::Implementation::Implementation(QWidget* _parent)
 
 
 ScreenplayInformationView::ScreenplayInformationView(QWidget* _parent)
-    : Widget(_parent),
-      d(new Implementation(this))
+    : Widget(_parent)
+    , d(new Implementation(this))
 {
     QVBoxLayout* layout = new QVBoxLayout;
     layout->setContentsMargins({});
@@ -97,25 +99,22 @@ ScreenplayInformationView::ScreenplayInformationView(QWidget* _parent)
     layout->addWidget(d->content);
     setLayout(layout);
 
-    connect(d->screenplayName, &TextField::textChanged, this, [this] {
-        emit nameChanged(d->screenplayName->text());
-    });
-    connect(d->screenplayTagline, &TextField::textChanged, this, [this] {
-        emit taglineChanged(d->screenplayTagline->text());
-    });
-    connect(d->screenplayLogline, &TextField::textChanged, this, [this] {
-        emit loglineChanged(d->screenplayLogline->text());
-    });
-    connect(d->titlePageVisiblity, &CheckBox::checkedChanged,
-            this, &ScreenplayInformationView::titlePageVisibleChanged);
-    connect(d->synopsisVisiblity, &CheckBox::checkedChanged,
-            this, &ScreenplayInformationView::synopsisVisibleChanged);
-    connect(d->treatmentVisiblity, &CheckBox::checkedChanged,
-            this, &ScreenplayInformationView::treatmentVisibleChanged);
-    connect(d->screenplayTextVisiblity, &CheckBox::checkedChanged,
-            this, &ScreenplayInformationView::screenplayTextVisibleChanged);
-    connect(d->screenplayStatisticsVisiblity, &CheckBox::checkedChanged,
-            this, &ScreenplayInformationView::screenplayStatisticsVisibleChanged);
+    connect(d->screenplayName, &TextField::textChanged, this,
+            [this] { emit nameChanged(d->screenplayName->text()); });
+    connect(d->screenplayTagline, &TextField::textChanged, this,
+            [this] { emit taglineChanged(d->screenplayTagline->text()); });
+    connect(d->screenplayLogline, &TextField::textChanged, this,
+            [this] { emit loglineChanged(d->screenplayLogline->text()); });
+    connect(d->titlePageVisiblity, &CheckBox::checkedChanged, this,
+            &ScreenplayInformationView::titlePageVisibleChanged);
+    connect(d->synopsisVisiblity, &CheckBox::checkedChanged, this,
+            &ScreenplayInformationView::synopsisVisibleChanged);
+    connect(d->treatmentVisiblity, &CheckBox::checkedChanged, this,
+            &ScreenplayInformationView::treatmentVisibleChanged);
+    connect(d->screenplayTextVisiblity, &CheckBox::checkedChanged, this,
+            &ScreenplayInformationView::screenplayTextVisibleChanged);
+    connect(d->screenplayStatisticsVisiblity, &CheckBox::checkedChanged, this,
+            &ScreenplayInformationView::screenplayStatisticsVisibleChanged);
 
     updateTranslations();
     designSystemChangeEvent(nullptr);
@@ -194,31 +193,27 @@ void ScreenplayInformationView::designSystemChangeEvent(DesignSystemChangeEvent*
     setBackgroundColor(Ui::DesignSystem::color().surface());
 
     d->content->widget()->layout()->setContentsMargins(
-                QMarginsF(Ui::DesignSystem::layout().px24(),
-                          Ui::DesignSystem::layout().topContentMargin(),
-                          Ui::DesignSystem::layout().px24(),
-                          Ui::DesignSystem::layout().px24())
-                .toMargins());
+        QMarginsF(Ui::DesignSystem::layout().px24(), Ui::DesignSystem::layout().topContentMargin(),
+                  Ui::DesignSystem::layout().px24(), Ui::DesignSystem::layout().px24())
+            .toMargins());
 
     d->screenplayInfo->setBackgroundColor(DesignSystem::color().background());
-    for (auto textField : { d->screenplayName,
-                            d->screenplayTagline,
-                            d->screenplayLogline }) {
+    for (auto textField : { d->screenplayName, d->screenplayTagline, d->screenplayLogline }) {
         textField->setBackgroundColor(Ui::DesignSystem::color().onBackground());
         textField->setTextColor(Ui::DesignSystem::color().onBackground());
     }
-    for (auto checkBox : { d->titlePageVisiblity,
-                           d->synopsisVisiblity,
-                           d->treatmentVisiblity,
-                           d->screenplayTextVisiblity,
-                           d->screenplayStatisticsVisiblity }) {
+    for (auto checkBox : { d->titlePageVisiblity, d->synopsisVisiblity, d->treatmentVisiblity,
+                           d->screenplayTextVisiblity, d->screenplayStatisticsVisiblity }) {
         checkBox->setBackgroundColor(Ui::DesignSystem::color().background());
         checkBox->setTextColor(Ui::DesignSystem::color().onBackground());
     }
-    d->screenplayInfoLayout->setVerticalSpacing(static_cast<int>(Ui::DesignSystem::layout().px16()));
-    d->screenplayInfoLayout->setRowMinimumHeight(0, static_cast<int>(Ui::DesignSystem::layout().px24()));
-    d->screenplayInfoLayout->setRowMinimumHeight(d->screenplayInfoLayout->rowCount() - 1,
-                                                 static_cast<int>(Ui::DesignSystem::layout().px24()));
+    d->screenplayInfoLayout->setVerticalSpacing(
+        static_cast<int>(Ui::DesignSystem::layout().px16()));
+    d->screenplayInfoLayout->setRowMinimumHeight(
+        0, static_cast<int>(Ui::DesignSystem::layout().px24()));
+    d->screenplayInfoLayout->setRowMinimumHeight(
+        d->screenplayInfoLayout->rowCount() - 1,
+        static_cast<int>(Ui::DesignSystem::layout().px24()));
 }
 
 } // namespace Ui

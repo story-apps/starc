@@ -3,8 +3,7 @@
 #include <business_layer/model/abstract_model.h>
 
 
-namespace BusinessLayer
-{
+namespace BusinessLayer {
 
 class TextModelItem;
 
@@ -24,7 +23,7 @@ public:
      */
     QString name() const;
     void setName(const QString& _name);
-    void setDocumentName(const QString &_name) override;
+    void setDocumentName(const QString& _name) override;
     Q_SIGNAL void nameChanged(const QString& _name);
 
     /**
@@ -63,13 +62,15 @@ public:
     /** @{ */
     QModelIndex index(int _row, int _column, const QModelIndex& _parent = {}) const override;
     QModelIndex parent(const QModelIndex& _child) const override;
-    int columnCount( const QModelIndex& _parent = {}) const override;
-    int rowCount(const QModelIndex &_parent = {}) const override;
-    Qt::ItemFlags flags(const QModelIndex &_index) const override;
-    QVariant data(const QModelIndex &_index, int _role) const override;
+    int columnCount(const QModelIndex& _parent = {}) const override;
+    int rowCount(const QModelIndex& _parent = {}) const override;
+    Qt::ItemFlags flags(const QModelIndex& _index) const override;
+    QVariant data(const QModelIndex& _index, int _role) const override;
     //! Реализация перетаскивания элементов
-    bool canDropMimeData(const QMimeData* _data, Qt::DropAction _action, int _row, int _column, const QModelIndex& _parent = {}) const override;
-    bool dropMimeData(const QMimeData* _data, Qt::DropAction _action, int _row, int _column, const QModelIndex& _parent = {}) override;
+    bool canDropMimeData(const QMimeData* _data, Qt::DropAction _action, int _row, int _column,
+                         const QModelIndex& _parent = {}) const override;
+    bool dropMimeData(const QMimeData* _data, Qt::DropAction _action, int _row, int _column,
+                      const QModelIndex& _parent = {}) override;
     QMimeData* mimeData(const QModelIndexList& _indexes) const override;
     QStringList mimeTypes() const override;
     Qt::DropActions supportedDragActions() const override;
@@ -79,7 +80,8 @@ public:
     /**
      * @brief Сформировать mime-данные текста в заданном диапазоне
      */
-    QString mimeFromSelection(const QModelIndex& _from, int _fromPosition, const QModelIndex& _to, int _toPosition, bool _clearUuid) const;
+    QString mimeFromSelection(const QModelIndex& _from, int _fromPosition, const QModelIndex& _to,
+                              int _toPosition, bool _clearUuid) const;
 
     /**
      * @brief Вставить контент из mime-данных с текстом в заданной позиции
@@ -113,4 +115,3 @@ private:
 };
 
 } // namespace BusinessLayer
-

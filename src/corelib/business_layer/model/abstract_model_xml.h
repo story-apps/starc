@@ -5,10 +5,8 @@
 
 class QXmlStreamReader;
 
-namespace BusinessLayer
-{
-namespace xml
-{
+namespace BusinessLayer {
+namespace xml {
 
 //
 // Документ

@@ -18,8 +18,8 @@ public:
 };
 
 Dialog::Implementation::Implementation(QWidget* _parent)
-    : supportingText(new Body1Label(_parent)),
-      buttonsLayout(new QHBoxLayout)
+    : supportingText(new Body1Label(_parent))
+    , buttonsLayout(new QHBoxLayout)
 {
     buttonsLayout->setContentsMargins({});
     buttonsLayout->setSpacing(0);
@@ -30,8 +30,8 @@ Dialog::Implementation::Implementation(QWidget* _parent)
 // ****
 
 Dialog::Dialog(QWidget* _parent)
-    : AbstractDialog(_parent),
-      d(new Implementation(this))
+    : AbstractDialog(_parent)
+    , d(new Implementation(this))
 {
     contentsLayout()->addWidget(d->supportingText, 0, 0);
     contentsLayout()->addLayout(d->buttonsLayout, 1, 0);
@@ -40,7 +40,7 @@ Dialog::Dialog(QWidget* _parent)
 Dialog::~Dialog() = default;
 
 void Dialog::showDialog(const QString& _title, const QString& _supportingText,
-    const QVector<ButtonInfo>& _buttons)
+                        const QVector<ButtonInfo>& _buttons)
 {
     Q_ASSERT(!_buttons.isEmpty());
 
@@ -51,7 +51,7 @@ void Dialog::showDialog(const QString& _title, const QString& _supportingText,
         button->setText(buttonInfo.text);
         d->buttons.append(button);
         d->buttonsLayout->addWidget(button);
-        connect(button, &Button::clicked,  this, [this, buttonInfo] { emit finished(buttonInfo); });
+        connect(button, &Button::clicked, this, [this, buttonInfo] { emit finished(buttonInfo); });
         if (buttonInfo.type == Dialog::AcceptButton) {
             setAcceptButton(button);
         } else if (buttonInfo.type == Dialog::RejectButton) {
@@ -79,11 +79,10 @@ void Dialog::designSystemChangeEvent(DesignSystemChangeEvent* _event)
     AbstractDialog::designSystemChangeEvent(_event);
 
     d->supportingText->setContentsMargins(
-                QMarginsF(Ui::DesignSystem::layout().px24(),
-                          title().isEmpty() ? Ui::DesignSystem::layout().px24() : 0,
-                          Ui::DesignSystem::layout().px24(),
-                          0)
-                .toMargins());
+        QMarginsF(Ui::DesignSystem::layout().px24(),
+                  title().isEmpty() ? Ui::DesignSystem::layout().px24() : 0,
+                  Ui::DesignSystem::layout().px24(), 0)
+            .toMargins());
     d->supportingText->setBackgroundColor(Ui::DesignSystem::color().background());
     d->supportingText->setTextColor(Ui::DesignSystem::color().onBackground());
 
@@ -93,9 +92,7 @@ void Dialog::designSystemChangeEvent(DesignSystemChangeEvent* _event)
     }
 
     d->buttonsLayout->setContentsMargins(
-                QMarginsF(Ui::DesignSystem::layout().px12(),
-                          Ui::DesignSystem::layout().px12(),
-                          Ui::DesignSystem::layout().px16(),
-                          Ui::DesignSystem::layout().px8())
-                .toMargins());
+        QMarginsF(Ui::DesignSystem::layout().px12(), Ui::DesignSystem::layout().px12(),
+                  Ui::DesignSystem::layout().px16(), Ui::DesignSystem::layout().px8())
+            .toMargins());
 }

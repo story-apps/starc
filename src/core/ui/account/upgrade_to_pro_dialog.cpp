@@ -1,7 +1,6 @@
 #include "upgrade_to_pro_dialog.h"
 
 #include <ui/design_system/design_system.h>
-
 #include <ui/widgets/button/button.h>
 #include <ui/widgets/radio_button/radio_button.h>
 #include <ui/widgets/radio_button/radio_button_group.h>
@@ -26,12 +25,12 @@ public:
 };
 
 UpgradeToProDialog::Implementation::Implementation(QWidget* _parent)
-    : paypal(new RadioButton(_parent)),
-      bankCard(new RadioButton(_parent)),
-      yandexMoney(new RadioButton(_parent)),
-      buttonsLayout(new QHBoxLayout),
-      upgradeButton(new Button(_parent)),
-      cancelButton(new Button(_parent))
+    : paypal(new RadioButton(_parent))
+    , bankCard(new RadioButton(_parent))
+    , yandexMoney(new RadioButton(_parent))
+    , buttonsLayout(new QHBoxLayout)
+    , upgradeButton(new Button(_parent))
+    , cancelButton(new Button(_parent))
 {
     paypal->setChecked(true);
 
@@ -58,8 +57,8 @@ UpgradeToProDialog::Implementation::Implementation(QWidget* _parent)
 
 
 UpgradeToProDialog::UpgradeToProDialog(QWidget* _parent)
-    : AbstractDialog(_parent),
-      d(new Implementation(this))
+    : AbstractDialog(_parent)
+    , d(new Implementation(this))
 {
     contentsLayout()->addWidget(d->paypal, 0, 0);
     contentsLayout()->addWidget(d->bankCard, 1, 0);
@@ -87,7 +86,7 @@ QWidget* UpgradeToProDialog::lastFocusableWidget() const
 
 void UpgradeToProDialog::updateTranslations()
 {
-//    setTitle(tr("Upgrade to pro for $39.99 lifetime"));
+    //    setTitle(tr("Upgrade to pro for $39.99 lifetime"));
     d->paypal->setText(tr("via PayPal"));
     d->bankCard->setText(tr("via bank card"));
     d->yandexMoney->setText(tr("via Yandex.Money"));
@@ -110,10 +109,10 @@ void UpgradeToProDialog::designSystemChangeEvent(DesignSystemChangeEvent* _event
     }
 
     contentsLayout()->setSpacing(static_cast<int>(Ui::DesignSystem::layout().px8()));
-    d->buttonsLayout->setContentsMargins(QMarginsF(Ui::DesignSystem::layout().px12(),
-                                                   Ui::DesignSystem::layout().px12(),
-                                                   Ui::DesignSystem::layout().px16(),
-                                                   Ui::DesignSystem::layout().px8()).toMargins());
+    d->buttonsLayout->setContentsMargins(
+        QMarginsF(Ui::DesignSystem::layout().px12(), Ui::DesignSystem::layout().px12(),
+                  Ui::DesignSystem::layout().px16(), Ui::DesignSystem::layout().px8())
+            .toMargins());
 }
 
 } // namespace Ui

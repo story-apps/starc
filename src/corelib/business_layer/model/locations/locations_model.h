@@ -3,8 +3,7 @@
 #include "../abstract_model.h"
 
 
-namespace BusinessLayer
-{
+namespace BusinessLayer {
 
 class LocationModel;
 
@@ -40,10 +39,10 @@ public:
     /** @{ */
     QModelIndex index(int _row, int _column, const QModelIndex& _parent = {}) const override;
     QModelIndex parent(const QModelIndex& _child) const override;
-    int columnCount( const QModelIndex& _parent = {}) const override;
-    int rowCount(const QModelIndex &_parent = {}) const override;
-    Qt::ItemFlags flags(const QModelIndex &_index) const override;
-    QVariant data(const QModelIndex &_index, int _role) const override;
+    int columnCount(const QModelIndex& _parent = {}) const override;
+    int rowCount(const QModelIndex& _parent = {}) const override;
+    Qt::ItemFlags flags(const QModelIndex& _index) const override;
+    QVariant data(const QModelIndex& _index, int _role) const override;
     /** @} */
 
 signals:

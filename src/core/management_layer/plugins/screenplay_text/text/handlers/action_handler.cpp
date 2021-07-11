@@ -5,7 +5,6 @@
 #include <business_layer/model/characters/characters_model.h>
 #include <business_layer/model/screenplay/screenplay_dictionaries_model.h>
 #include <business_layer/templates/screenplay_template.h>
-
 #include <utils/helpers/text_helper.h>
 
 #include <QKeyEvent>
@@ -14,8 +13,7 @@
 using BusinessLayer::ScreenplayParagraphType;
 using Ui::ScreenplayTextEdit;
 
-namespace KeyProcessingLayer
-{
+namespace KeyProcessingLayer {
 
 ActionHandler::ActionHandler(ScreenplayTextEdit* _editor)
     : StandardKeyHandler(_editor)
@@ -24,30 +22,30 @@ ActionHandler::ActionHandler(ScreenplayTextEdit* _editor)
 
 void ActionHandler::handleEnter(QKeyEvent*)
 {
-	//
-	// Получим необходимые значения
-	//
-	// ... курсор в текущем положении
-	QTextCursor cursor = editor()->textCursor();
-	// ... блок текста в котором находится курсор
-	QTextBlock currentBlock = cursor.block();
-	// ... текст до курсора
-	QString cursorBackwardText = currentBlock.text().left(cursor.positionInBlock());
-	// ... текст после курсора
-	QString cursorForwardText = currentBlock.text().mid(cursor.positionInBlock());
+    //
+    // Получим необходимые значения
+    //
+    // ... курсор в текущем положении
+    QTextCursor cursor = editor()->textCursor();
+    // ... блок текста в котором находится курсор
+    QTextBlock currentBlock = cursor.block();
+    // ... текст до курсора
+    QString cursorBackwardText = currentBlock.text().left(cursor.positionInBlock());
+    // ... текст после курсора
+    QString cursorForwardText = currentBlock.text().mid(cursor.positionInBlock());
 
 
-	//
-	// Обработка
-	//
-	if (editor()->isCompleterVisible()) {
-		//! Если открыт подстановщик
+    //
+    // Обработка
+    //
+    if (editor()->isCompleterVisible()) {
+        //! Если открыт подстановщик
 
-		//
-		// Ни чего не делаем
-		//
-	} else {
-		//! Подстановщик закрыт
+        //
+        // Ни чего не делаем
+        //
+    } else {
+        //! Подстановщик закрыт
 
         if (cursor.hasSelection()) {
             //! Есть выделение
@@ -59,8 +57,7 @@ void ActionHandler::handleEnter(QKeyEvent*)
         } else {
             //! Нет выделения
 
-            if (cursorBackwardText.isEmpty()
-                && cursorForwardText.isEmpty()) {
+            if (cursorBackwardText.isEmpty() && cursorForwardText.isEmpty()) {
                 //! Текст пуст
 
                 //
@@ -86,114 +83,109 @@ void ActionHandler::handleEnter(QKeyEvent*)
                 }
             }
         }
-	}
+    }
 }
 
 void ActionHandler::handleTab(QKeyEvent*)
 {
-	//
-	// Получим необходимые значения
-	//
-	// ... курсор в текущем положении
-	QTextCursor cursor = editor()->textCursor();
-	// ... блок текста в котором находится курсор
-	QTextBlock currentBlock = cursor.block();
-	// ... текст до курсора
-	QString cursorBackwardText = currentBlock.text().left(cursor.positionInBlock());
-	// ... текст после курсора
-	QString cursorForwardText = currentBlock.text().mid(cursor.positionInBlock());
+    //
+    // Получим необходимые значения
+    //
+    // ... курсор в текущем положении
+    QTextCursor cursor = editor()->textCursor();
+    // ... блок текста в котором находится курсор
+    QTextBlock currentBlock = cursor.block();
+    // ... текст до курсора
+    QString cursorBackwardText = currentBlock.text().left(cursor.positionInBlock());
+    // ... текст после курсора
+    QString cursorForwardText = currentBlock.text().mid(cursor.positionInBlock());
 
 
-	//
-	// Обработка
-	//
-	if (editor()->isCompleterVisible()) {
-		//! Если открыт подстановщик
+    //
+    // Обработка
+    //
+    if (editor()->isCompleterVisible()) {
+        //! Если открыт подстановщик
 
-		//
-		// Ни чего не делаем
-		//
-	} else {
-		//! Подстановщик закрыт
+        //
+        // Ни чего не делаем
+        //
+    } else {
+        //! Подстановщик закрыт
 
-		if (cursor.hasSelection()) {
-			//! Есть выделение
+        if (cursor.hasSelection()) {
+            //! Есть выделение
 
-			//
-			// Ни чего не делаем
-			//
-		} else {
-			//! Нет выделения
+            //
+            // Ни чего не делаем
+            //
+        } else {
+            //! Нет выделения
 
-			if (cursorBackwardText.isEmpty()
-				&& cursorForwardText.isEmpty()) {
-				//! Текст пуст
+            if (cursorBackwardText.isEmpty() && cursorForwardText.isEmpty()) {
+                //! Текст пуст
 
-				//
-				// Если строка пуста, то сменить стиль на имя героя
-				//
+                //
+                // Если строка пуста, то сменить стиль на имя героя
+                //
                 editor()->setCurrentParagraphType(changeForTab(ScreenplayParagraphType::Action));
-			} else {
-				//! Текст не пуст
+            } else {
+                //! Текст не пуст
 
-				if (cursorBackwardText.isEmpty()) {
-					//! В начале блока
+                if (cursorBackwardText.isEmpty()) {
+                    //! В начале блока
 
-					//
-					// Меняем на блок персонажа
-					//
+                    //
+                    // Меняем на блок персонажа
+                    //
                     editor()->setCurrentParagraphType(ScreenplayParagraphType::Character);
-				} else if (cursorForwardText.isEmpty()) {
-					//! В конце блока
+                } else if (cursorForwardText.isEmpty()) {
+                    //! В конце блока
 
-					//
-					// Вставляем блок персонажа
-					//
+                    //
+                    // Вставляем блок персонажа
+                    //
                     editor()->addParagraph(jumpForTab(ScreenplayParagraphType::Action));
-				} else {
-					//! Внутри блока
+                } else {
+                    //! Внутри блока
 
-					//
-					// Ни чего не делаем
-					//
-				}
-			}
-		}
-	}
+                    //
+                    // Ни чего не делаем
+                    //
+                }
+            }
+        }
+    }
 }
 
 void ActionHandler::handleOther(QKeyEvent* _event)
 {
-	//
-	// Получим необходимые значения
-	//
-	// ... курсор в текущем положении
-	QTextCursor cursor = editor()->textCursor();
-	// ... блок текста в котором находится курсор
-	QTextBlock currentBlock = cursor.block();
-	// ... текст до курсора
-	QString cursorBackwardText = currentBlock.text().left(cursor.positionInBlock());
+    //
+    // Получим необходимые значения
+    //
+    // ... курсор в текущем положении
+    QTextCursor cursor = editor()->textCursor();
+    // ... блок текста в котором находится курсор
+    QTextBlock currentBlock = cursor.block();
+    // ... текст до курсора
+    QString cursorBackwardText = currentBlock.text().left(cursor.positionInBlock());
 
 
-	//
-	// Обработка
-	//
-	if (cursorBackwardText.endsWith(".")
-		&& _event != 0
-		&& _event->text() == ".") {
-		//! Если нажата точка
+    //
+    // Обработка
+    //
+    if (cursorBackwardText.endsWith(".") && _event != 0 && _event->text() == ".") {
+        //! Если нажата точка
 
-		//
-		// Если было введено какое-либо значение из списка мест (ИНТ./НАТ. и т.п.)
-		// то необходимо преобразовать блок во время и место
-		//
+        //
+        // Если было введено какое-либо значение из списка мест (ИНТ./НАТ. и т.п.)
+        // то необходимо преобразовать блок во время и место
+        //
         const QString maybeSceneIntro = TextHelper::smartToUpper(cursorBackwardText);
         if (editor()->dictionaries()->sceneIntros().contains(maybeSceneIntro)) {
             editor()->setCurrentParagraphType(ScreenplayParagraphType::SceneHeading);
-		}
-    } else if (cursorBackwardText.endsWith(":")
-               && _event != 0
-               && _event->text() == ":") {
+        }
+    } else if (cursorBackwardText.endsWith(":") && _event != 0 && _event->text() == ":") {
         //! Если нажата двоеточие
 
         //
@@ -205,10 +197,10 @@ void ActionHandler::handleOther(QKeyEvent* _event)
             editor()->setCurrentParagraphType(ScreenplayParagraphType::Transition);
         }
     } else {
-		//! В противном случае, обрабатываем в базовом классе
+        //! В противном случае, обрабатываем в базовом классе
 
-		StandardKeyHandler::handleOther(_event);
-	}
+        StandardKeyHandler::handleOther(_event);
+    }
 }
 
 } // namespace KeyProcessingLayer

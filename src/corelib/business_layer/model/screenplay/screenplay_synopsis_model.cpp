@@ -1,8 +1,7 @@
 #include "screenplay_synopsis_model.h"
 
 
-namespace BusinessLayer
-{
+namespace BusinessLayer {
 
 ScreenplaySynopsisModel::ScreenplaySynopsisModel(QObject* _parent)
     : TextModel(_parent)

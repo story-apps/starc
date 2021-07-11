@@ -1,8 +1,7 @@
 #include "screenplay_treatment_model.h"
 
 
-namespace BusinessLayer
-{
+namespace BusinessLayer {
 
 ScreenplayTreatmentModel::ScreenplayTreatmentModel(QObject* _parent)
     : AbstractModel({}, _parent)

@@ -1,14 +1,13 @@
 #include "drawer.h"
 
 #include <ui/design_system/design_system.h>
-
 #include <utils/helpers/color_helper.h>
 #include <utils/helpers/image_helper.h>
 #include <utils/helpers/text_helper.h>
 
 #include <QAction>
-#include <QPainter>
 #include <QMouseEvent>
+#include <QPainter>
 #include <QVariantAnimation>
 
 
@@ -57,12 +56,12 @@ Drawer::Implementation::Implementation()
     decorationOpacityAnimation.setDuration(420);
 }
 
-QAction* Drawer::Implementation::pressedAction(const QPoint& _coordinate, const QList<QAction*>& _actions) const
+QAction* Drawer::Implementation::pressedAction(const QPoint& _coordinate,
+                                               const QList<QAction*>& _actions) const
 {
     qreal actionTop = Ui::DesignSystem::drawer().margins().top()
-                      + Ui::DesignSystem::drawer().titleHeight()
-                      + Ui::DesignSystem::drawer().subtitleHeight()
-                      + Ui::DesignSystem::drawer().subtitleBottomMargin();
+        + Ui::DesignSystem::drawer().titleHeight() + Ui::DesignSystem::drawer().subtitleHeight()
+        + Ui::DesignSystem::drawer().subtitleBottomMargin();
     for (QAction* action : _actions) {
         if (!action->isVisible()) {
             continue;
@@ -83,12 +82,12 @@ QAction* Drawer::Implementation::pressedAction(const QPoint& _coordinate, const 
     return nullptr;
 }
 
-QRectF Drawer::Implementation::actionRect(const QAction* _action, const QList<QAction*>& _actions, int _width) const
+QRectF Drawer::Implementation::actionRect(const QAction* _action, const QList<QAction*>& _actions,
+                                          int _width) const
 {
     qreal actionTop = Ui::DesignSystem::drawer().margins().top()
-                      + Ui::DesignSystem::drawer().titleHeight()
-                      + Ui::DesignSystem::drawer().subtitleHeight()
-                      + Ui::DesignSystem::drawer().subtitleBottomMargin();
+        + Ui::DesignSystem::drawer().titleHeight() + Ui::DesignSystem::drawer().subtitleHeight()
+        + Ui::DesignSystem::drawer().subtitleBottomMargin();
     for (QAction* action : _actions) {
         if (!action->isVisible()) {
             continue;
@@ -121,15 +120,17 @@ void Drawer::Implementation::animateClick()
 
 
 Drawer::Drawer(QWidget* _parent)
-    : Widget(_parent),
-      d(new Implementation)
+    : Widget(_parent)
+    , d(new Implementation)
 {
     setFocusPolicy(Qt::StrongFocus);
     setMouseTracking(true);
     setFixedWidth(static_cast<int>(Ui::DesignSystem::drawer().width()));
 
-    connect(&d->decorationRadiusAnimation, &QVariantAnimation::valueChanged, this, [this] { update(); });
-    connect(&d->decorationOpacityAnimation, &QVariantAnimation::valueChanged, this, [this] { update(); });
+    connect(&d->decorationRadiusAnimation, &QVariantAnimation::valueChanged, this,
+            [this] { update(); });
+    connect(&d->decorationOpacityAnimation, &QVariantAnimation::valueChanged, this,
+            [this] { update(); });
 }
 
 Drawer::~Drawer() = default;
@@ -158,9 +159,8 @@ QSize Drawer::sizeHint() const
 {
     qreal width = 0.0;
     qreal height = Ui::DesignSystem::drawer().margins().top()
-                   + Ui::DesignSystem::drawer().titleHeight()
-                   + Ui::DesignSystem::drawer().subtitleHeight()
-                   + Ui::DesignSystem::drawer().subtitleBottomMargin();
+        + Ui::DesignSystem::drawer().titleHeight() + Ui::DesignSystem::drawer().subtitleHeight()
+        + Ui::DesignSystem::drawer().subtitleBottomMargin();
     for (int actionIndex = 0; actionIndex < actions().size(); ++actionIndex) {
         QAction* action = actions().at(actionIndex);
         if (!action->isVisible()) {
@@ -172,14 +172,13 @@ QSize Drawer::sizeHint() const
         }
 
         const qreal actionWidth = Ui::DesignSystem::drawer().actionMargins().left()
-                                  + Ui::DesignSystem::drawer().iconSize().width()
-                                  + Ui::DesignSystem::drawer().spacing()
-                                  + TextHelper::fineTextWidthF(action->text(), Ui::DesignSystem::font().subtitle2())
-                                  + (action->whatsThis().isEmpty()
-                                     ? 0.0
-                                     : Ui::DesignSystem::drawer().spacing()
-                                       + TextHelper::fineTextWidthF(action->whatsThis(), Ui::DesignSystem::font().subtitle2()))
-                                  + Ui::DesignSystem::drawer().actionMargins().right();
+            + Ui::DesignSystem::drawer().iconSize().width() + Ui::DesignSystem::drawer().spacing()
+            + TextHelper::fineTextWidthF(action->text(), Ui::DesignSystem::font().subtitle2())
+            + (action->whatsThis().isEmpty() ? 0.0
+                                             : Ui::DesignSystem::drawer().spacing()
+                       + TextHelper::fineTextWidthF(action->whatsThis(),
+                                                    Ui::DesignSystem::font().subtitle2()))
+            + Ui::DesignSystem::drawer().actionMargins().right();
         width = std::max(width, actionWidth);
 
         height += Ui::DesignSystem::drawer().actionHeight();
@@ -206,9 +205,8 @@ void Drawer::paintEvent(QPaintEvent* _event)
     painter.setFont(Ui::DesignSystem::font().h6());
     const QRectF titleRect(Ui::DesignSystem::drawer().margins().left(),
                            Ui::DesignSystem::drawer().margins().top(),
-                           width()
-                           - Ui::DesignSystem::drawer().margins().left()
-                           - Ui::DesignSystem::drawer().margins().right(),
+                           width() - Ui::DesignSystem::drawer().margins().left()
+                               - Ui::DesignSystem::drawer().margins().right(),
                            Ui::DesignSystem::drawer().titleHeight());
     painter.drawText(titleRect, Qt::AlignLeft | Qt::AlignVCenter, d->title);
     //
@@ -216,8 +214,8 @@ void Drawer::paintEvent(QPaintEvent* _event)
     //
     painter.setFont(Ui::DesignSystem::font().body2());
     painter.setOpacity(Ui::DesignSystem::inactiveTextOpacity());
-    const QRectF subtitleRect(titleRect.left(), titleRect.bottom(),
-                              titleRect.width(), Ui::DesignSystem::drawer().subtitleHeight());
+    const QRectF subtitleRect(titleRect.left(), titleRect.bottom(), titleRect.width(),
+                              Ui::DesignSystem::drawer().subtitleHeight());
     painter.drawText(subtitleRect, Qt::AlignLeft | Qt::AlignVCenter, d->subtitle);
     painter.setOpacity(1.0);
 
@@ -250,13 +248,14 @@ void Drawer::paintEvent(QPaintEvent* _event)
         //
         const QRectF actionRect(0.0, actionY, width(), Ui::DesignSystem::drawer().actionHeight());
         if (action->isChecked()) {
-            painter.fillRect(actionRect.marginsRemoved(Ui::DesignSystem::drawer().selectionMargins()),
-                             Ui::DesignSystem::drawer().selectionColor());
-        } else if (action->isEnabled()
-                   && actionRect.contains(mapFromGlobal(QCursor::pos()))) {
-            painter.fillRect(actionRect.marginsRemoved(Ui::DesignSystem::drawer().selectionMargins()),
-                             ColorHelper::transparent(Ui::DesignSystem::color().onPrimary(),
-                                                      Ui::DesignSystem::hoverBackgroundOpacity()));
+            painter.fillRect(
+                actionRect.marginsRemoved(Ui::DesignSystem::drawer().selectionMargins()),
+                Ui::DesignSystem::drawer().selectionColor());
+        } else if (action->isEnabled() && actionRect.contains(mapFromGlobal(QCursor::pos()))) {
+            painter.fillRect(
+                actionRect.marginsRemoved(Ui::DesignSystem::drawer().selectionMargins()),
+                ColorHelper::transparent(Ui::DesignSystem::color().onPrimary(),
+                                         Ui::DesignSystem::hoverBackgroundOpacity()));
         }
 
         painter.setPen(action->isChecked() ? Ui::DesignSystem::color().secondary()
@@ -271,10 +270,10 @@ void Drawer::paintEvent(QPaintEvent* _event)
         //
         // ... иконка
         //
-        const QRectF iconRect(QPointF(Ui::DesignSystem::drawer().actionMargins().left(),
-                                      actionRect.top()
-                                      + Ui::DesignSystem::drawer().actionMargins().top()),
-                              Ui::DesignSystem::drawer().iconSize());
+        const QRectF iconRect(
+            QPointF(Ui::DesignSystem::drawer().actionMargins().left(),
+                    actionRect.top() + Ui::DesignSystem::drawer().actionMargins().top()),
+            Ui::DesignSystem::drawer().iconSize());
         if (action->iconText() != action->text()) {
             auto it = action->iconText(), t = action->text();
             painter.setFont(Ui::DesignSystem::font().iconsMid());
@@ -286,13 +285,11 @@ void Drawer::paintEvent(QPaintEvent* _event)
         painter.setFont(Ui::DesignSystem::font().subtitle2());
         const QRectF textRect(iconRect.right() + Ui::DesignSystem::drawer().spacing(),
                               iconRect.top(),
-                              width()
-                              - iconRect.right()
-                              - Ui::DesignSystem::drawer().spacing()
-                              - Ui::DesignSystem::drawer().actionMargins().right(),
+                              width() - iconRect.right() - Ui::DesignSystem::drawer().spacing()
+                                  - Ui::DesignSystem::drawer().actionMargins().right(),
                               Ui::DesignSystem::drawer().actionHeight()
-                              - Ui::DesignSystem::drawer().actionMargins().top()
-                              - Ui::DesignSystem::drawer().actionMargins().bottom());
+                                  - Ui::DesignSystem::drawer().actionMargins().top()
+                                  - Ui::DesignSystem::drawer().actionMargins().bottom());
         painter.drawText(textRect, Qt::AlignLeft | Qt::AlignVCenter, action->text());
 
         //
@@ -315,7 +312,8 @@ void Drawer::paintEvent(QPaintEvent* _event)
         painter.setPen(Qt::NoPen);
         painter.setBrush(Ui::DesignSystem::color().secondary());
         painter.setOpacity(d->decorationOpacityAnimation.currentValue().toReal());
-        painter.drawEllipse(d->decorationCenterPosition, d->decorationRadiusAnimation.currentValue().toReal(),
+        painter.drawEllipse(d->decorationCenterPosition,
+                            d->decorationRadiusAnimation.currentValue().toReal(),
                             d->decorationRadiusAnimation.currentValue().toReal());
         painter.setOpacity(1.0);
         painter.setClipRect(QRect(), Qt::NoClip);
@@ -325,8 +323,7 @@ void Drawer::paintEvent(QPaintEvent* _event)
 void Drawer::mousePressEvent(QMouseEvent* _event)
 {
     QAction* pressedAction = d->pressedAction(_event->pos(), actions());
-    if (pressedAction == nullptr
-        || !pressedAction->isEnabled()) {
+    if (pressedAction == nullptr || !pressedAction->isEnabled()) {
         return;
     }
 
@@ -343,9 +340,7 @@ void Drawer::mouseReleaseEvent(QMouseEvent* _event)
     }
 
     QAction* pressedAction = d->pressedAction(_event->pos(), actions());
-    if (pressedAction == nullptr
-        || pressedAction->isChecked()
-        || !pressedAction->isEnabled()) {
+    if (pressedAction == nullptr || pressedAction->isChecked() || !pressedAction->isEnabled()) {
         return;
     }
 

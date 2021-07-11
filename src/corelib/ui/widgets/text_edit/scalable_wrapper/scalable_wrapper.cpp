@@ -1,12 +1,10 @@
 #include "scalable_wrapper.h"
 
 #include <include/custom_events.h>
-
 #include <ui/widgets/context_menu/context_menu.h>
 #include <ui/widgets/text_edit/completer/completer.h>
 #include <ui/widgets/text_edit/completer/completer_text_edit.h>
 #include <ui/widgets/text_edit/page/page_text_edit.h>
-
 #include <utils/tools/run_once.h>
 
 #include <QAbstractItemView>
@@ -17,10 +15,10 @@
 #include <QShortcut>
 
 namespace {
-    const qreal kDefaultZoomRange = 1.;
-    const qreal kMinimumZoomRange = 0.1;
-    const qreal kMaximumZoomRange = 10.;
-}
+const qreal kDefaultZoomRange = 1.;
+const qreal kMinimumZoomRange = 0.1;
+const qreal kMaximumZoomRange = 10.;
+} // namespace
 
 
 class ScalableWrapper::Implementation
@@ -63,12 +61,11 @@ public:
      * @brief Включена ли синхронизация полос прокрутки с редактором текста
      */
     bool isScrollingSynchronizationActive = false;
-
 };
 
 ScalableWrapper::Implementation::Implementation(PageTextEdit* _editor)
-    : scene(new QGraphicsScene),
-      editor(_editor)
+    : scene(new QGraphicsScene)
+    , editor(_editor)
 {
     Q_ASSERT(editor);
 }
@@ -78,15 +75,16 @@ ScalableWrapper::Implementation::Implementation(PageTextEdit* _editor)
 
 
 ScalableWrapper::ScalableWrapper(PageTextEdit* _editor, QWidget* _parent)
-    : QGraphicsView(_parent),
-      d(new Implementation(_editor))
+    : QGraphicsView(_parent)
+    , d(new Implementation(_editor))
 {
     setFrameShape(QFrame::NoFrame);
 
     //
     // Настраиваем лучшее опции прорисовки
     //
-    setRenderHints(QPainter::Antialiasing | QPainter::TextAntialiasing | QPainter::SmoothPixmapTransform);
+    setRenderHints(QPainter::Antialiasing | QPainter::TextAntialiasing
+                   | QPainter::SmoothPixmapTransform);
     setViewportUpdateMode(QGraphicsView::FullViewportUpdate);
     setTransformationAnchor(AnchorUnderMouse);
 
@@ -126,7 +124,8 @@ ScalableWrapper::ScalableWrapper(PageTextEdit* _editor, QWidget* _parent)
             editor->completer()->popup()->move(mapToGlobal(mapFromScene(point)));
         });
     }
-    connect(d->editor.data(), &PageTextEdit::cursorPositionChanged, this, &ScalableWrapper::cursorPositionChanged);
+    connect(d->editor.data(), &PageTextEdit::cursorPositionChanged, this,
+            &ScalableWrapper::cursorPositionChanged);
 
     //
     // Настроим синхронизацию полос прокрутки
@@ -158,8 +157,7 @@ ScalableWrapper::~ScalableWrapper() = default;
 
 void ScalableWrapper::setZoomRange(qreal _zoomRange)
 {
-    if (d->zoomRange != _zoomRange
-        && _zoomRange >= kMinimumZoomRange
+    if (d->zoomRange != _zoomRange && _zoomRange >= kMinimumZoomRange
         && _zoomRange <= kMaximumZoomRange) {
         d->zoomRange = _zoomRange;
         emit zoomRangeChanged(d->zoomRange);
@@ -189,59 +187,60 @@ bool ScalableWrapper::event(QEvent* _event)
 {
     bool result = true;
     switch (static_cast<int>(_event->type())) {
+    //
+    // Определяем особый обработчик для жестов
+    //
+    case QEvent::Gesture: {
+        gestureEvent(static_cast<QGestureEvent*>(_event));
+        break;
+    }
+
+    //
+    // Во время события paint корректируем размер встроенного редактора
+    //
+    case QEvent::Paint: {
+        updateTextEditSize();
+        result = QGraphicsView::event(_event);
+        break;
+    }
+
+    //
+    // После события обновления компоновки, полностью перенастраиваем полосы прокрутки
+    //
+    case QEvent::LayoutRequest: {
+        setupScrollingSynchronization(false);
+
+        result = QGraphicsView::event(_event);
+
+        syncScrollBarWithTextEdit();
+        setupScrollingSynchronization(true);
+        break;
+    }
+
+    case static_cast<QEvent::Type>(EventType::DesignSystemChangeEvent):
+    case static_cast<QEvent::Type>(EventType::SpellingChangeEvent): {
+        QApplication::sendEvent(d->editor.data(), _event);
+        break;
+    }
+
+    //
+    // Прочие стандартные обработчики событий
+    //
+    default: {
+        result = QGraphicsView::event(_event);
+
         //
-        // Определяем особый обработчик для жестов
+        // Переустанавливаем фокус в редактор, иначе в нём пропадает курсор
         //
-        case QEvent::Gesture: {
-            gestureEvent(static_cast<QGestureEvent*>(_event));
-            break;
+        if (_event->type() == QEvent::FocusIn) {
+            d->editor->clearFocus();
+            d->editor->setFocus();
+        } else if (_event->type() == QEvent::FocusOut) {
+            d->editor->clearFocus();
         }
 
-        //
-        // Во время события paint корректируем размер встроенного редактора
-        //
-        case QEvent::Paint: {
-            updateTextEditSize();
-            result = QGraphicsView::event(_event);
-            break;
-        }
-
-        //
-        // После события обновления компоновки, полностью перенастраиваем полосы прокрутки
-        //
-        case QEvent::LayoutRequest: {
-            setupScrollingSynchronization(false);
-
-            result = QGraphicsView::event(_event);
-
-            syncScrollBarWithTextEdit();
-            setupScrollingSynchronization(true);
-            break;
-        }
-
-        case static_cast<QEvent::Type>(EventType::DesignSystemChangeEvent): {
-            QApplication::sendEvent(d->editor.data(), _event);
-            break;
-        }
-
-        //
-        // Прочие стандартные обработчики событий
-        //
-        default: {
-            result = QGraphicsView::event(_event);
-
-            //
-            // Переустанавливаем фокус в редактор, иначе в нём пропадает курсор
-            //
-            if (_event->type() == QEvent::FocusIn) {
-                d->editor->clearFocus();
-                d->editor->setFocus();
-            } else if (_event->type() == QEvent::FocusOut) {
-                d->editor->clearFocus();
-            }
-
-            break;
-        }
+        break;
+    }
     }
 
     return result;
@@ -289,7 +288,7 @@ void ScalableWrapper::gestureEvent(QGestureEvent* _event)
         return;
     }
 
-    auto pinch = qobject_cast<QPinchGesture *>(gesture);
+    auto pinch = qobject_cast<QPinchGesture*>(gesture);
     if (pinch == nullptr) {
         return;
     }
@@ -343,25 +342,25 @@ bool ScalableWrapper::eventFilter(QObject* _object, QEvent* _event)
     bool needShowMenu = false;
     QPoint cursorGlobalPos = QCursor::pos();
     switch (_event->type()) {
-        case QEvent::ContextMenu: {
-            QContextMenuEvent* contextMenuEvent = static_cast<QContextMenuEvent*>(_event);
-            cursorGlobalPos = contextMenuEvent->globalPos();
+    case QEvent::ContextMenu: {
+        QContextMenuEvent* contextMenuEvent = static_cast<QContextMenuEvent*>(_event);
+        cursorGlobalPos = contextMenuEvent->globalPos();
+        needShowMenu = true;
+        break;
+    }
+
+    case QEvent::MouseButtonPress: {
+        QMouseEvent* mouseEvent = static_cast<QMouseEvent*>(_event);
+        if (mouseEvent->button() == Qt::RightButton) {
+            cursorGlobalPos = mouseEvent->globalPos();
             needShowMenu = true;
-            break;
         }
+        break;
+    }
 
-        case QEvent::MouseButtonPress: {
-            QMouseEvent* mouseEvent = static_cast<QMouseEvent*>(_event);
-            if (mouseEvent->button() == Qt::RightButton) {
-                cursorGlobalPos = mouseEvent->globalPos();
-                needShowMenu = true;
-            }
-            break;
-        }
-
-        default: {
-            break;
-        }
+    default: {
+        break;
+    }
     }
 
     bool result = false;
@@ -373,7 +372,8 @@ bool ScalableWrapper::eventFilter(QObject* _object, QEvent* _event)
         //
         // TODO: реализовать работу с новым контекстным меню
         //
-        auto menu = d->editor->createContextMenu(d->editor->viewport()->mapFromGlobal(cursorGlobalPos), this);
+        auto menu = d->editor->createContextMenu(
+            d->editor->viewport()->mapFromGlobal(cursorGlobalPos), this);
         menu->showContextMenu(QCursor::pos());
 
         //
@@ -388,8 +388,7 @@ bool ScalableWrapper::eventFilter(QObject* _object, QEvent* _event)
         //
         // Возвращаем фокус редактору, если он его потерял
         //
-        if (_object == d->editor.data()
-            && _event->type() == QEvent::FocusOut) {
+        if (_object == d->editor.data() && _event->type() == QEvent::FocusOut) {
             d->editor->clearFocus();
             d->editor->setFocus();
         }
@@ -456,31 +455,35 @@ void ScalableWrapper::setupScrollingSynchronization(bool _needSync)
     d->isScrollingSynchronizationActive = _needSync;
 
     if (_needSync) {
-        connect(d->editor->verticalScrollBar(), &QScrollBar::rangeChanged, this, &ScalableWrapper::updateTextEditSize);
-        connect(d->editor->horizontalScrollBar(), &QScrollBar::rangeChanged, this, &ScalableWrapper::updateTextEditSize);
+        connect(d->editor->verticalScrollBar(), &QScrollBar::rangeChanged, this,
+                &ScalableWrapper::updateTextEditSize);
+        connect(d->editor->horizontalScrollBar(), &QScrollBar::rangeChanged, this,
+                &ScalableWrapper::updateTextEditSize);
         //
-        connect(verticalScrollBar(), SIGNAL(valueChanged(int)),
-                d->editor->verticalScrollBar(), SLOT(setValue(int)));
-        connect(horizontalScrollBar(), SIGNAL(valueChanged(int)),
-                d->editor->horizontalScrollBar(), SLOT(setValue(int)));
+        connect(verticalScrollBar(), SIGNAL(valueChanged(int)), d->editor->verticalScrollBar(),
+                SLOT(setValue(int)));
+        connect(horizontalScrollBar(), SIGNAL(valueChanged(int)), d->editor->horizontalScrollBar(),
+                SLOT(setValue(int)));
         // --
-        connect(d->editor->verticalScrollBar(), SIGNAL(valueChanged(int)),
-                verticalScrollBar(), SLOT(setValue(int)));
-        connect(d->editor->horizontalScrollBar(), SIGNAL(valueChanged(int)),
-                horizontalScrollBar(), SLOT(setValue(int)));
+        connect(d->editor->verticalScrollBar(), SIGNAL(valueChanged(int)), verticalScrollBar(),
+                SLOT(setValue(int)));
+        connect(d->editor->horizontalScrollBar(), SIGNAL(valueChanged(int)), horizontalScrollBar(),
+                SLOT(setValue(int)));
     } else {
-        disconnect(d->editor->verticalScrollBar(), &QScrollBar::rangeChanged, this, &ScalableWrapper::updateTextEditSize);
-        disconnect(d->editor->horizontalScrollBar(), &QScrollBar::rangeChanged, this, &ScalableWrapper::updateTextEditSize);
+        disconnect(d->editor->verticalScrollBar(), &QScrollBar::rangeChanged, this,
+                   &ScalableWrapper::updateTextEditSize);
+        disconnect(d->editor->horizontalScrollBar(), &QScrollBar::rangeChanged, this,
+                   &ScalableWrapper::updateTextEditSize);
         //
-        disconnect(verticalScrollBar(), SIGNAL(valueChanged(int)),
-                d->editor->verticalScrollBar(), SLOT(setValue(int)));
+        disconnect(verticalScrollBar(), SIGNAL(valueChanged(int)), d->editor->verticalScrollBar(),
+                   SLOT(setValue(int)));
         disconnect(horizontalScrollBar(), SIGNAL(valueChanged(int)),
-                d->editor->horizontalScrollBar(), SLOT(setValue(int)));
+                   d->editor->horizontalScrollBar(), SLOT(setValue(int)));
         // --
-        disconnect(d->editor->verticalScrollBar(), SIGNAL(valueChanged(int)),
-                verticalScrollBar(), SLOT(setValue(int)));
+        disconnect(d->editor->verticalScrollBar(), SIGNAL(valueChanged(int)), verticalScrollBar(),
+                   SLOT(setValue(int)));
         disconnect(d->editor->horizontalScrollBar(), SIGNAL(valueChanged(int)),
-                horizontalScrollBar(), SLOT(setValue(int)));
+                   horizontalScrollBar(), SLOT(setValue(int)));
     }
 }
 
@@ -521,17 +524,15 @@ void ScalableWrapper::updateTextEditSize()
     // При смене необходимо отключать синхронизацию, если она была активирована,
     // чтобы не происходило отбрасывание в нулевую позицию соседнего скролбара
     //
-    auto setScrollBarVisibility = [this] (bool _isVerticalScrollBar, Qt::ScrollBarPolicy _policy) {
+    auto setScrollBarVisibility = [this](bool _isVerticalScrollBar, Qt::ScrollBarPolicy _policy) {
         const bool needSync = d->isScrollingSynchronizationActive;
         if (needSync) {
             setupScrollingSynchronization(false);
         }
 
-        if (_isVerticalScrollBar
-            && verticalScrollBarPolicy() != _policy) {
+        if (_isVerticalScrollBar && verticalScrollBarPolicy() != _policy) {
             setVerticalScrollBarPolicy(_policy);
-        } else if (!_isVerticalScrollBar
-                   && horizontalScrollBarPolicy() != _policy) {
+        } else if (!_isVerticalScrollBar && horizontalScrollBarPolicy() != _policy) {
             setHorizontalScrollBarPolicy(_policy);
         }
 
@@ -562,14 +563,15 @@ void ScalableWrapper::updateTextEditSize()
     // Размер редактора устанавливается таким образом, чтобы спрятать масштабированные полосы
     // прокрутки (скрывать их нельзя, т.к. тогда теряются значения, которые необходимо проксировать)
     //
-    const int scrollBarsDiff = 2; // Считаем, что скролбар редактора на 2 пикселя шире скролбара обёртки
+    const int scrollBarsDiff
+        = 2; // Считаем, что скролбар редактора на 2 пикселя шире скролбара обёртки
     const int editorWidth = width() / d->zoomRange + vbarWidth + d->zoomRange - scrollBarsDiff;
     const int editorHeight = height() / d->zoomRange + hbarHeight + d->zoomRange - scrollBarsDiff;
     const QSize editorSize(editorWidth, editorHeight);
     if (d->editorProxy->size() != editorSize) {
         d->editorProxy->resize(editorSize);
         if (QLocale().textDirection() == Qt::RightToLeft) {
-            const QPointF delta(vbarWidth * d->zoomRange,  0);
+            const QPointF delta(vbarWidth * d->zoomRange, 0);
             d->editorProxy->setPos(-delta);
         }
     }

@@ -3,12 +3,10 @@
 #include "screenlay_import_options.h"
 
 #include <business_layer/model/screenplay/text/screenplay_text_block_parser.h>
-#include <business_layer/model/screenplay/text/screenplay_text_model_xml.h>
 #include <business_layer/model/screenplay/text/screenplay_text_model_text_item.h>
+#include <business_layer/model/screenplay/text/screenplay_text_model_xml.h>
 #include <business_layer/templates/screenplay_template.h>
-
 #include <domain/document_object.h>
-
 #include <utils/helpers/text_helper.h>
 
 #include <QApplication>
@@ -21,24 +19,24 @@
 #include <set>
 
 
-namespace BusinessLayer
-{
+namespace BusinessLayer {
 
 namespace {
 
 /**
-  * @brief С чего может начинаться название сцены
-  */
-const QStringList kSceneHeadings = { QApplication::translate("BusinessLayer::FountainImporter", "INT"),
-                                     QApplication::translate("BusinessLayer::FountainImporter", "EXT"),
-                                     QApplication::translate("BusinessLayer::FountainImporter", "EST"),
-                                     QApplication::translate("BusinessLayer::FountainImporter", "INT./EXT"),
-                                     QApplication::translate("BusinessLayer::FountainImporter", "INT/EXT"),
-                                     QApplication::translate("BusinessLayer::FountainImporter", "I/E") };
+ * @brief С чего может начинаться название сцены
+ */
+const QStringList kSceneHeadings
+    = { QApplication::translate("BusinessLayer::FountainImporter", "INT"),
+        QApplication::translate("BusinessLayer::FountainImporter", "EXT"),
+        QApplication::translate("BusinessLayer::FountainImporter", "EST"),
+        QApplication::translate("BusinessLayer::FountainImporter", "INT./EXT"),
+        QApplication::translate("BusinessLayer::FountainImporter", "INT/EXT"),
+        QApplication::translate("BusinessLayer::FountainImporter", "I/E") };
 
 /**
-  * @brief Ключит титульной страницы
-  */
+ * @brief Ключит титульной страницы
+ */
 const QHash<QString, QString> kTitleKeys({ std::make_pair(QString("Title"), QString("name")),
                                            std::make_pair(QString("Author"), QString("author")),
                                            std::make_pair(QString("Authors"), QString("author")),
@@ -46,12 +44,13 @@ const QHash<QString, QString> kTitleKeys({ std::make_pair(QString("Title"), QStr
                                            std::make_pair(QString("Copyright"), QString("year")),
                                            std::make_pair(QString("Contact"), QString("contacts")),
                                            std::make_pair(QString("Credit"), QString("genre")),
-                                           std::make_pair(QString("Source"), QString("additional_info")) });
+                                           std::make_pair(QString("Source"),
+                                                          QString("additional_info")) });
 
 const QString kTripleWhitespace = QLatin1String("   ");
 const QString kDoubleWhitespace = QLatin1String("  ");
 
-}
+} // namespace
 
 class FountainImporter::Implementation
 {
@@ -84,7 +83,7 @@ public:
      *        в текущей позиции (true), или захватывает последний символ (false)
      */
     bool processFormat(bool _italics, bool _bold, bool _underline, bool _forCurrentCharacter,
-        bool _isCanStartEmphasis, bool _isCanEndEmphasis);
+                       bool _isCanStartEmphasis, bool _isCanEndEmphasis);
 
     /**
      * @brief Может ли предыдущий символ быть началом форматирования
@@ -155,10 +154,10 @@ public:
 };
 
 void FountainImporter::Implementation::processBlock(const QString& _paragraphText,
-    ScreenplayParagraphType _type, QXmlStreamWriter& _writer)
+                                                    ScreenplayParagraphType _type,
+                                                    QXmlStreamWriter& _writer)
 {
-    if (!isNotation
-        && !isCommenting) {
+    if (!isNotation && !isCommenting) {
         //
         // Начинается новая сущность
         //
@@ -199,136 +198,124 @@ void FountainImporter::Implementation::processBlock(const QString& _paragraphTex
 
         char curSymbol = _paragraphText[i].toLatin1();
         switch (curSymbol) {
-            case '\\':
-            {
-                break;
-            }
+        case '\\': {
+            break;
+        }
 
-            case '/':
-            {
-                if (prevSymbol == '*'
-                    && isCommenting) {
-                    //
-                    // Заканчивается комментирование
-                    //
-                    --asteriskLen;
-                    isCommenting = false;
-                    noteStartPos += noteLen;
-                    noteLen = blockText.size();
-
-                    //
-                    // Закроем предыдущий блок, добавим текущий
-                    //
-                    _writer.writeEndElement();
-                    appendBlock(blockText.left(blockText.size()),
-                                ScreenplayParagraphType::InlineNote, _writer);
-                    blockText.clear();
-                } else {
-                    if (isNotation) {
-                        note.append('/');
-                    } else {
-                        blockText.append('/');
-                    }
-                }
-                break;
-            }
-
-            case '*':
-            {
-                if (prevSymbol == '/'
-                    && !isCommenting
-                    && !isNotation) {
-                    //
-                    // Начинается комментирование
-                    //
-                    isCommenting = true;
-                    noteStartPos += noteLen;
-                    noteLen = blockText.size() - 1;
-
-                    //
-                    // Закроем предыдущий блок и, если комментирование начинается в середние текущего блока
-                    // то добавим этот текущий блок
-                    //
-                    _writer.writeEndElement();
-                    if (blockText.size() != 1) {
-                        appendBlock(blockText.left(blockText.size() - 1), _type, _writer);
-                        appendComments(_writer);
-                        notes.clear();
-                    }
-                    blockText.clear();
-                } else {
-                    if (isNotation) {
-                        note.append('*');
-                    } else {
-                        ++asteriskLen;
-                    }
-                }
-                break;
-            }
-
-            case '[':
-            {
-                if (prevSymbol == '['
-                        && !isCommenting
-                        && !isNotation) {
-                    //
-                    // Начинается редакторская заметка
-                    //
-                    isNotation = true;
-                    noteLen = blockText.size() - 1 - noteStartPos;
-                    blockText = blockText.left(blockText.size() - 1);
-                } else {
-                    if (isNotation) {
-                        note.append('[');
-                    } else {
-                        blockText.append('[');
-                    }
-                }
-                break;
-            }
-
-            case ']':
-            {
-                if (prevSymbol == ']'
-                        && isNotation) {
-                    //
-                    // Закончилась редакторская заметка. Добавим ее в список редакторских заметок к текущему блоку
-                    //
-                    isNotation = false;
-                    notes.append(std::make_tuple(note.left(note.size() - 1), noteStartPos, noteLen));
-                    noteStartPos += noteLen;
-                    noteLen = 0;
-                    note.clear();
-                } else {
-                    if (isNotation) {
-                        note.append(']');
-                    } else {
-                        blockText.append(']');
-                    }
-                }
-                break;
-            }
-
-            case '_':
-            {
+        case '/': {
+            if (prevSymbol == '*' && isCommenting) {
                 //
-                // Подчеркивания обрабатываются в другом месте, поэтому тут игнорируем его обработку
+                // Заканчивается комментирование
                 //
-                break;
-            }
+                --asteriskLen;
+                isCommenting = false;
+                noteStartPos += noteLen;
+                noteLen = blockText.size();
 
-            default:
-            {
                 //
-                // Самый обычный символ
+                // Закроем предыдущий блок, добавим текущий
                 //
+                _writer.writeEndElement();
+                appendBlock(blockText.left(blockText.size()), ScreenplayParagraphType::InlineNote,
+                            _writer);
+                blockText.clear();
+            } else {
                 if (isNotation) {
-                    note.append(_paragraphText[i]);
+                    note.append('/');
                 } else {
-                    blockText.append(_paragraphText[i]);
+                    blockText.append('/');
                 }
-                break;
             }
+            break;
+        }
+
+        case '*': {
+            if (prevSymbol == '/' && !isCommenting && !isNotation) {
+                //
+                // Начинается комментирование
+                //
+                isCommenting = true;
+                noteStartPos += noteLen;
+                noteLen = blockText.size() - 1;
+
+                //
+                // Закроем предыдущий блок и, если комментирование начинается в середние текущего
+                // блока то добавим этот текущий блок
+                //
+                _writer.writeEndElement();
+                if (blockText.size() != 1) {
+                    appendBlock(blockText.left(blockText.size() - 1), _type, _writer);
+                    appendComments(_writer);
+                    notes.clear();
+                }
+                blockText.clear();
+            } else {
+                if (isNotation) {
+                    note.append('*');
+                } else {
+                    ++asteriskLen;
+                }
+            }
+            break;
+        }
+
+        case '[': {
+            if (prevSymbol == '[' && !isCommenting && !isNotation) {
+                //
+                // Начинается редакторская заметка
+                //
+                isNotation = true;
+                noteLen = blockText.size() - 1 - noteStartPos;
+                blockText = blockText.left(blockText.size() - 1);
+            } else {
+                if (isNotation) {
+                    note.append('[');
+                } else {
+                    blockText.append('[');
+                }
+            }
+            break;
+        }
+
+        case ']': {
+            if (prevSymbol == ']' && isNotation) {
+                //
+                // Закончилась редакторская заметка. Добавим ее в список редакторских заметок к
+                // текущему блоку
+                //
+                isNotation = false;
+                notes.append(std::make_tuple(note.left(note.size() - 1), noteStartPos, noteLen));
+                noteStartPos += noteLen;
+                noteLen = 0;
+                note.clear();
+            } else {
+                if (isNotation) {
+                    note.append(']');
+                } else {
+                    blockText.append(']');
+                }
+            }
+            break;
+        }
+
+        case '_': {
+            //
+            // Подчеркивания обрабатываются в другом месте, поэтому тут игнорируем его обработку
+            //
+            break;
+        }
+
+        default: {
+            //
+            // Самый обычный символ
+            //
+            if (isNotation) {
+                note.append(_paragraphText[i]);
+            } else {
+                blockText.append(_paragraphText[i]);
+            }
+            break;
+        }
         }
 
         const bool isCanStartEmphasis = canStartEmphasis();
@@ -337,7 +324,8 @@ void FountainImporter::Implementation::processBlock(const QString& _paragraphTex
         // Underline
         //
         if (prevSymbol == '_') {
-            if (!processFormat(false, false, true, curSymbol == '*', isCanStartEmphasis, isCanEndEmphasis)) {
+            if (!processFormat(false, false, true, curSymbol == '*', isCanStartEmphasis,
+                               isCanEndEmphasis)) {
                 blockText.insert(std::max(0, blockText.size() - 1), prevSymbol);
             }
         }
@@ -345,34 +333,35 @@ void FountainImporter::Implementation::processBlock(const QString& _paragraphTex
         if (curSymbol != '*') {
             bool success = false;
             switch (asteriskLen) {
-                //
-                // Italics
-                //
-                case 1:
-                {
-                    success = processFormat(true, false, false, curSymbol == '_', isCanStartEmphasis, isCanEndEmphasis);
-                    break;
-                }
+            //
+            // Italics
+            //
+            case 1: {
+                success = processFormat(true, false, false, curSymbol == '_', isCanStartEmphasis,
+                                        isCanEndEmphasis);
+                break;
+            }
 
-                //
-                // Bold
-                //
-                case 2:
-                {
-                    success = processFormat(false, true, false, curSymbol == '_', isCanStartEmphasis, isCanEndEmphasis);
-                    break;
-                }
+            //
+            // Bold
+            //
+            case 2: {
+                success = processFormat(false, true, false, curSymbol == '_', isCanStartEmphasis,
+                                        isCanEndEmphasis);
+                break;
+            }
 
-                //
-                // Bold & Italics
-                //
-                case 3:
-                {
-                    success = processFormat(true, true, false, curSymbol == '_', isCanStartEmphasis, isCanEndEmphasis);
-                    break;
-                }
+            //
+            // Bold & Italics
+            //
+            case 3: {
+                success = processFormat(true, true, false, curSymbol == '_', isCanStartEmphasis,
+                                        isCanEndEmphasis);
+                break;
+            }
 
-                default: break;
+            default:
+                break;
             }
             if (!success) {
                 for (int i = 0; i != asteriskLen; ++i) {
@@ -395,35 +384,33 @@ void FountainImporter::Implementation::processBlock(const QString& _paragraphTex
     }
 
     bool success = false;
-    switch(asteriskLen) {
-        //
-        // Italics
-        //
-        case 1:
-        {
-            success = processFormat(true, false, false, true, false, true);
-            break;
-        }
+    switch (asteriskLen) {
+    //
+    // Italics
+    //
+    case 1: {
+        success = processFormat(true, false, false, true, false, true);
+        break;
+    }
 
-        //
-        // Bold
-        //
-        case 2:
-        {
-            success = processFormat(false, true, false, true, false, true);
-            break;
-        }
+    //
+    // Bold
+    //
+    case 2: {
+        success = processFormat(false, true, false, true, false, true);
+        break;
+    }
 
-        //
-        // Bold & Italics
-        //
-        case 3:
-        {
-            success = processFormat(true, true, false, true, false, true);
-            break;
-        }
+    //
+    // Bold & Italics
+    //
+    case 3: {
+        success = processFormat(true, true, false, true, false, true);
+        break;
+    }
 
-        default: break;
+    default:
+        break;
     }
 
     if (!success) {
@@ -434,8 +421,7 @@ void FountainImporter::Implementation::processBlock(const QString& _paragraphTex
     asteriskLen = 0;
 
 
-    if (!isNotation
-        && !isCommenting) {
+    if (!isNotation && !isCommenting) {
         //
         // Если блок действительно закончился
         //
@@ -465,12 +451,13 @@ void FountainImporter::Implementation::processBlock(const QString& _paragraphTex
     }
 }
 
-void FountainImporter::Implementation::appendBlock(const QString& _paragraphText, ScreenplayParagraphType _type, QXmlStreamWriter& _writer)
+void FountainImporter::Implementation::appendBlock(const QString& _paragraphText,
+                                                   ScreenplayParagraphType _type,
+                                                   QXmlStreamWriter& _writer)
 {
     int leadSpaceCount = 0;
     QString paragraphText = _paragraphText;
-    while (!paragraphText.isEmpty()
-           && paragraphText.startsWith(" ")) {
+    while (!paragraphText.isEmpty() && paragraphText.startsWith(" ")) {
         ++leadSpaceCount;
         paragraphText = paragraphText.mid(1);
     }
@@ -491,14 +478,16 @@ void FountainImporter::Implementation::appendBlock(const QString& _paragraphText
                 if (lastFormat.isBold) {
                     if (!format.isBold) {
                         //
-                        // Формат, начиная отсюда не является жирным. Значит, предыдущий был открывающим
-                        // Значит, на место предыдущего надо вернуть звездочки, а жирный незакрытый мы больше не ищем
+                        // Формат, начиная отсюда не является жирным. Значит, предыдущий был
+                        // открывающим Значит, на место предыдущего надо вернуть звездочки, а жирный
+                        // незакрытый мы больше не ищем
                         //
                         lastFormat.isBold = false;
                         removed.isBold = true;
                     } else {
                         //
-                        // Формат здесь все еще является жирным, значит просто перестаем его таковым считать
+                        // Формат здесь все еще является жирным, значит просто перестаем его таковым
+                        // считать
                         //
                         format.isBold = false;
                     }
@@ -511,8 +500,7 @@ void FountainImporter::Implementation::appendBlock(const QString& _paragraphText
                     if (!format.isItalic) {
                         lastFormat.isItalic = false;
                         removed.isItalic = true;
-                    }
-                    else {
+                    } else {
                         format.isItalic = false;
                     }
                 }
@@ -527,7 +515,8 @@ void FountainImporter::Implementation::appendBlock(const QString& _paragraphText
                 }
 
                 //
-                // У нас есть формат, который мы удалили (нам важна его позиция, чтобы вернуть символы)
+                // У нас есть формат, который мы удалили (нам важна его позиция, чтобы вернуть
+                // символы)
                 //
                 if (removed.isValid()) {
                     removed.from = lastFormat.from;
@@ -548,7 +537,6 @@ void FountainImporter::Implementation::appendBlock(const QString& _paragraphText
                 if (!lastFormat.isValid()) {
                     break;
                 }
-
             }
         }
 
@@ -580,7 +568,7 @@ void FountainImporter::Implementation::appendBlock(const QString& _paragraphText
             //
             for (auto& innerFormat : formats) {
                 if (innerFormat.from < format.from
-                        && innerFormat.from + innerFormat.length >= format.from) {
+                    && innerFormat.from + innerFormat.length >= format.from) {
                     innerFormat.length += addedStr.size();
                 } else if (innerFormat.from >= format.from) {
                     innerFormat.from += addedStr.size();
@@ -594,48 +582,49 @@ void FountainImporter::Implementation::appendBlock(const QString& _paragraphText
     // Формируем блок сценария
     //
     switch (_type) {
-        case ScreenplayParagraphType::FolderHeader: {
-            if (alreadyInScene) {
-                _writer.writeEndElement(); // контент предыдущей сцены
-                _writer.writeEndElement(); // предыдущая сцена
-            }
-
-            alreadyInScene = false; // вышли из сцены
-
-            _writer.writeStartElement(xml::kFolderTag);
-            _writer.writeAttribute(xml::kUuidAttribute, QUuid::createUuid().toString());
-            _writer.writeStartElement(xml::kContentTag);
-            break;
+    case ScreenplayParagraphType::FolderHeader: {
+        if (alreadyInScene) {
+            _writer.writeEndElement(); // контент предыдущей сцены
+            _writer.writeEndElement(); // предыдущая сцена
         }
 
-        case ScreenplayParagraphType::FolderFooter: {
-            if (alreadyInScene) {
-                _writer.writeEndElement(); // контент предыдущей сцены
-                _writer.writeEndElement(); // предыдущая сцена
-            }
+        alreadyInScene = false; // вышли из сцены
 
-            alreadyInScene = false; // вышли из сцены
+        _writer.writeStartElement(xml::kFolderTag);
+        _writer.writeAttribute(xml::kUuidAttribute, QUuid::createUuid().toString());
+        _writer.writeStartElement(xml::kContentTag);
+        break;
+    }
 
-            _writer.writeEndElement(); // контент текущей папки
-            _writer.writeEndElement(); // текущая папка
-            break;
+    case ScreenplayParagraphType::FolderFooter: {
+        if (alreadyInScene) {
+            _writer.writeEndElement(); // контент предыдущей сцены
+            _writer.writeEndElement(); // предыдущая сцена
         }
 
-        case ScreenplayParagraphType::SceneHeading: {
-            if (alreadyInScene) {
-                _writer.writeEndElement(); // контент предыдущей сцены
-                _writer.writeEndElement(); // предыдущая сцена
-            }
+        alreadyInScene = false; // вышли из сцены
 
-            alreadyInScene = true; // вошли в новую сцену
+        _writer.writeEndElement(); // контент текущей папки
+        _writer.writeEndElement(); // текущая папка
+        break;
+    }
 
-            _writer.writeStartElement(xml::kSceneTag);
-            _writer.writeAttribute(xml::kUuidAttribute, QUuid::createUuid().toString());
-            _writer.writeStartElement(xml::kContentTag);
-            break;
+    case ScreenplayParagraphType::SceneHeading: {
+        if (alreadyInScene) {
+            _writer.writeEndElement(); // контент предыдущей сцены
+            _writer.writeEndElement(); // предыдущая сцена
         }
 
-        default: break;
+        alreadyInScene = true; // вошли в новую сцену
+
+        _writer.writeStartElement(xml::kSceneTag);
+        _writer.writeAttribute(xml::kUuidAttribute, QUuid::createUuid().toString());
+        _writer.writeStartElement(xml::kContentTag);
+        break;
+    }
+
+    default:
+        break;
     }
     _writer.writeStartElement(toString(_type));
     _writer.writeStartElement(xml::kValueTag);
@@ -652,7 +641,8 @@ void FountainImporter::Implementation::appendBlock(const QString& _paragraphText
             //
             // Данные пользовательского форматирования
             //
-            _writer.writeAttribute(xml::kFromAttribute, QString::number(format.from - leadSpaceCount));
+            _writer.writeAttribute(xml::kFromAttribute,
+                                   QString::number(format.from - leadSpaceCount));
             _writer.writeAttribute(xml::kLengthAttribute, QString::number(format.length));
             if (format.isBold) {
                 _writer.writeAttribute(xml::kBoldAttribute, "true");
@@ -695,7 +685,8 @@ void FountainImporter::Implementation::appendComments(QXmlStreamWriter& _writer)
         }
         _writer.writeStartElement(xml::kCommentTag);
         _writer.writeAttribute(xml::kAuthorAttribute, "fountain author");
-        _writer.writeAttribute(xml::kDateAttribute, QDateTime::currentDateTime().toString(Qt::ISODate));
+        _writer.writeAttribute(xml::kDateAttribute,
+                               QDateTime::currentDateTime().toString(Qt::ISODate));
         _writer.writeCDATA(TextHelper::toHtmlEscaped(std::get<0>(notes[i])));
         _writer.writeEndElement(); // comment
     }
@@ -710,18 +701,13 @@ QString FountainImporter::Implementation::simplify(const QString& _value)
 {
     QString res;
     for (int i = 0; i != _value.size(); ++i) {
-        if (_value[i] == '*'
-            || _value[i] == '_'
-            || _value[i] == '\\') {
-            if (i == 0
-                || (i > 0
-                    && _value[i-1] != '\\')) {
+        if (_value[i] == '*' || _value[i] == '_' || _value[i] == '\\') {
+            if (i == 0 || (i > 0 && _value[i - 1] != '\\')) {
                 continue;
             } else {
                 res += _value[i];
             }
-        }
-        else {
+        } else {
             res += _value[i];
         }
     }
@@ -729,7 +715,9 @@ QString FountainImporter::Implementation::simplify(const QString& _value)
 }
 
 bool FountainImporter::Implementation::processFormat(bool _italics, bool _bold, bool _underline,
-    bool _forCurrentCharacter, bool _isCanStartEmphasis, bool _isCanEndEmphasis)
+                                                     bool _forCurrentCharacter,
+                                                     bool _isCanStartEmphasis,
+                                                     bool _isCanEndEmphasis)
 {
     //
     // Новый формат, который еще не начат
@@ -752,8 +740,7 @@ bool FountainImporter::Implementation::processFormat(bool _italics, bool _bold, 
     // Формат уже начат
     //
     else {
-        if ((lastFormat.isBold & _bold) == _bold
-            && (lastFormat.isItalic & _italics) == _italics
+        if ((lastFormat.isBold & _bold) == _bold && (lastFormat.isItalic & _italics) == _italics
             && (lastFormat.isUnderline & _underline) == _underline) {
             //
             // Если тут появилось что то новенькое, то может ли это быть началом
@@ -783,8 +770,7 @@ bool FountainImporter::Implementation::processFormat(bool _italics, bool _bold, 
         //
         // Если необходимо, созданим новый, частично унаследованный от текущего
         //
-        if (lastFormat.isBold != _bold
-            || lastFormat.isItalic != _italics
+        if (lastFormat.isBold != _bold || lastFormat.isItalic != _italics
             || lastFormat.isUnderline != _underline) {
             lastFormat.isItalic = lastFormat.isItalic ^ _italics;
             lastFormat.isBold = lastFormat.isBold ^ _bold;
@@ -803,14 +789,12 @@ bool FountainImporter::Implementation::processFormat(bool _italics, bool _bold, 
 
 bool FountainImporter::Implementation::canStartEmphasis() const
 {
-    return blockText.size() <= 1
-            || !blockText[blockText.size() - 2].isLetterOrNumber();
+    return blockText.size() <= 1 || !blockText[blockText.size() - 2].isLetterOrNumber();
 }
 
 bool FountainImporter::Implementation::canEndEmphasis(const QString& _paragraphText, int _pos) const
 {
-    return _pos >= _paragraphText.size()
-            || !_paragraphText[_pos].isLetterOrNumber();
+    return _pos >= _paragraphText.size() || !_paragraphText[_pos].isLetterOrNumber();
 }
 
 
@@ -824,7 +808,8 @@ FountainImporter::FountainImporter()
 
 FountainImporter::~FountainImporter() = default;
 
-AbstractScreenplayImporter::Documents FountainImporter::importDocuments(const ScreenplayImportOptions& _options) const
+AbstractScreenplayImporter::Documents FountainImporter::importDocuments(
+    const ScreenplayImportOptions& _options) const
 {
     //
     // Открываем файл
@@ -894,10 +879,53 @@ AbstractScreenplayImporter::Documents FountainImporter::importDocuments(const Sc
         blockType = ScreenplayParagraphType::Undefined;
         QString paragraphText;
 
-        switch(paragraphs[i][0].toLatin1()) {
-            case '.':
-            {
+        switch (paragraphs[i][0].toLatin1()) {
+        case '.': {
+            blockType = ScreenplayParagraphType::SceneHeading;
+            //
+            // TODO: номера сцен игнорируем, поскольку в фонтане они являются строками
+            //
+            int sharpPos = paragraphs[i].size();
+            if (paragraphs[i].endsWith("#")) {
+                sharpPos = paragraphs[i].lastIndexOf('#', paragraphs[i].size() - 2);
+            }
+            if (sharpPos == -1) {
+                sharpPos = paragraphs[i].size();
+            }
+            paragraphText = paragraphs[i].mid(1, sharpPos - 1);
+            break;
+        }
+
+        case '@': {
+            blockType = ScreenplayParagraphType::Character;
+            paragraphText = paragraphs[i].mid(1);
+            break;
+        }
+
+        case '!':
+        case '>':
+        case '=':
+        case '~':
+        case '#': {
+            continue;
+        }
+
+        default: {
+            bool startsWithHeading = false;
+            for (const QString& sceneHeading : kSceneHeadings) {
+                if (paragraphs[i].startsWith(sceneHeading)) {
+                    startsWithHeading = true;
+                    break;
+                }
+            }
+
+            if (startsWithHeading && i + 1 < paragraphsCount && paragraphs[i + 1].isEmpty()) {
+                //
+                // Если начинается с одного из времен действия, а после обязательно пустая строка
+                // Значит это заголовок сцены
+                //
                 blockType = ScreenplayParagraphType::SceneHeading;
+
                 //
                 // TODO: номера сцен игнорируем, поскольку в фонтане они являются строками
                 //
@@ -908,127 +936,72 @@ AbstractScreenplayImporter::Documents FountainImporter::importDocuments(const Sc
                 if (sharpPos == -1) {
                     sharpPos = paragraphs[i].size();
                 }
-                paragraphText = paragraphs[i].mid(1, sharpPos - 1);
-                break;
-            }
-
-            case '@':
-            {
+                paragraphText = paragraphs[i].left(sharpPos);
+            } else if (paragraphs[i].startsWith("[[") && paragraphs[i].endsWith("]]")) {
+                continue;
+            } else if (paragraphs[i].startsWith("/*")) {
+                continue;
+            } else if (paragraphs[i] == TextHelper::smartToUpper(paragraphs[i]) && i != 0
+                       && paragraphs[i - 1].isEmpty() && i + 1 < paragraphsCount
+                       && paragraphs[i + 1].isEmpty() && paragraphs[i].endsWith("TO:")) {
+                continue;
+            } else if (paragraphs[i].startsWith("(") && paragraphs[i].endsWith(")")
+                       && (prevBlockType == ScreenplayParagraphType::Character
+                           || prevBlockType == ScreenplayParagraphType::Dialogue)) {
+                continue;
+            } else if (paragraphs[i] == TextHelper::smartToUpper(paragraphs[i]) && i != 0
+                       && paragraphs[i - 1].isEmpty() && i + 1 < paragraphsCount
+                       && !paragraphs[i + 1].isEmpty()) {
+                //
+                // Если состоит из только из заглавных букв, впереди не пустая строка, а перед
+                // пустая Значит это имя персонажа (для реплики)
+                //
                 blockType = ScreenplayParagraphType::Character;
-                paragraphText = paragraphs[i].mid(1);
-                break;
-            }
-
-            case '!':
-            case '>':
-            case '=':
-            case '~':
-            case '#':
-            {
+                if (paragraphs[i].endsWith("^")) {
+                    //
+                    // Двойной диалог, который мы пока что не умеем обрабатывать
+                    //
+                    paragraphText = paragraphs[i].left(paragraphs[i].size() - 1);
+                } else {
+                    paragraphText = paragraphs[i];
+                }
+            } else {
                 continue;
             }
-
-            default:
-            {
-                bool startsWithHeading = false;
-                for (const QString &sceneHeading : kSceneHeadings) {
-                    if (paragraphs[i].startsWith(sceneHeading)) {
-                        startsWithHeading = true;
-                        break;
-                    }
-                }
-
-                if (startsWithHeading
-                    && i + 1 < paragraphsCount
-                    && paragraphs[i + 1].isEmpty()) {
-                    //
-                    // Если начинается с одного из времен действия, а после обязательно пустая строка
-                    // Значит это заголовок сцены
-                    //
-                    blockType = ScreenplayParagraphType::SceneHeading;
-
-                    //
-                    // TODO: номера сцен игнорируем, поскольку в фонтане они являются строками
-                    //
-                    int sharpPos = paragraphs[i].size();
-                    if (paragraphs[i].endsWith("#")) {
-                        sharpPos = paragraphs[i].lastIndexOf('#', paragraphs[i].size() - 2);
-                    }
-                    if (sharpPos == -1) {
-                        sharpPos = paragraphs[i].size();
-                    }
-                    paragraphText = paragraphs[i].left(sharpPos);
-                } else if (paragraphs[i].startsWith("[[")
-                           && paragraphs[i].endsWith("]]")) {
-                    continue;
-                } else if (paragraphs[i].startsWith("/*")) {
-                    continue;
-                } else if (paragraphs[i] == TextHelper::smartToUpper(paragraphs[i])
-                           && i != 0
-                           && paragraphs[i-1].isEmpty()
-                           && i + 1 < paragraphsCount
-                           && paragraphs[i+1].isEmpty()
-                           && paragraphs[i].endsWith("TO:")) {
-                    continue;
-                } else if (paragraphs[i].startsWith("(")
-                           && paragraphs[i].endsWith(")")
-                           && (prevBlockType == ScreenplayParagraphType::Character
-                               || prevBlockType == ScreenplayParagraphType::Dialogue)) {
-                    continue;
-                } else if (paragraphs[i] == TextHelper::smartToUpper(paragraphs[i])
-                           && i != 0
-                           && paragraphs[i-1].isEmpty()
-                           && i + 1 < paragraphsCount
-                           && !paragraphs[i+1].isEmpty()) {
-                    //
-                    // Если состоит из только из заглавных букв, впереди не пустая строка, а перед пустая
-                    // Значит это имя персонажа (для реплики)
-                    //
-                    blockType = ScreenplayParagraphType::Character;
-                    if (paragraphs[i].endsWith("^")) {
-                        //
-                        // Двойной диалог, который мы пока что не умеем обрабатывать
-                        //
-                        paragraphText = paragraphs[i].left(paragraphs[i].size() - 1);
-                    } else {
-                        paragraphText = paragraphs[i];
-                    }
-                } else {
-                    continue;
-                }
-            }
+        }
         }
 
         switch (blockType) {
-            case ScreenplayParagraphType::SceneHeading: {
-                if (!_options.importLocations) {
-                    break;
-                }
-
-                const auto locationName = SceneHeadingParser::location(paragraphText);
-                if (locationName.isEmpty()) {
-                    break;
-                }
-
-                locationNames.emplace(locationName);
+        case ScreenplayParagraphType::SceneHeading: {
+            if (!_options.importLocations) {
                 break;
             }
 
-            case ScreenplayParagraphType::Character: {
-                if (!_options.importCharacters) {
-                    break;
-                }
-
-                const auto characterName = CharacterParser::name(paragraphText);
-                if (characterName.isEmpty()) {
-                    break;
-                }
-
-                characterNames.emplace(characterName);
+            const auto locationName = SceneHeadingParser::location(paragraphText);
+            if (locationName.isEmpty()) {
                 break;
             }
 
-            default: break;
+            locationNames.emplace(locationName);
+            break;
+        }
+
+        case ScreenplayParagraphType::Character: {
+            if (!_options.importCharacters) {
+                break;
+            }
+
+            const auto characterName = CharacterParser::name(paragraphText);
+            if (characterName.isEmpty()) {
+                break;
+            }
+
+            characterNames.emplace(characterName);
+            break;
+        }
+
+        default:
+            break;
         }
 
         //
@@ -1047,7 +1020,8 @@ AbstractScreenplayImporter::Documents FountainImporter::importDocuments(const Sc
     return documents;
 }
 
-QVector<AbstractScreenplayImporter::Screenplay> FountainImporter::importScreenplays(const ScreenplayImportOptions& _options) const
+QVector<AbstractScreenplayImporter::Screenplay> FountainImporter::importScreenplays(
+    const ScreenplayImportOptions& _options) const
 {
     if (_options.importScreenplay == false) {
         return {};
@@ -1072,7 +1046,8 @@ QVector<AbstractScreenplayImporter::Screenplay> FountainImporter::importScreenpl
     return { screenplay };
 }
 
-AbstractScreenplayImporter::Screenplay FountainImporter::importScreenplay(const QString& _screenplayText) const
+AbstractScreenplayImporter::Screenplay FountainImporter::importScreenplay(
+    const QString& _screenplayText) const
 {
     if (_screenplayText.simplified().isEmpty()) {
         return {};
@@ -1088,7 +1063,8 @@ AbstractScreenplayImporter::Screenplay FountainImporter::importScreenplay(const 
     QXmlStreamWriter writer(&result.text);
     writer.writeStartDocument();
     writer.writeStartElement(xml::kDocumentTag);
-    writer.writeAttribute(xml::kMimeTypeAttribute, Domain::mimeTypeFor(Domain::DocumentObjectType::ScreenplayText));
+    writer.writeAttribute(xml::kMimeTypeAttribute,
+                          Domain::mimeTypeFor(Domain::DocumentObjectType::ScreenplayText));
     writer.writeAttribute(xml::kVersionAttribute, "1.0");
 
     //
@@ -1144,8 +1120,7 @@ AbstractScreenplayImporter::Screenplay FountainImporter::importScreenplay(const 
     QStack<QString> dirs;
     ScreenplayParagraphType blockType;
     for (int i = 0; i != paragraphsCount; ++i) {
-        if (d->isNotation
-            || d->isCommenting) {
+        if (d->isNotation || d->isCommenting) {
             //
             // Если мы комментируем или делаем заметку, то продолжим это
             //
@@ -1160,10 +1135,135 @@ AbstractScreenplayImporter::Screenplay FountainImporter::importScreenplay(const 
         blockType = ScreenplayParagraphType::Action;
         QString paragraphText;
 
-        switch(paragraphs[i][0].toLatin1()) {
-            case '.':
-            {
+        switch (paragraphs[i][0].toLatin1()) {
+        case '.': {
+            blockType = ScreenplayParagraphType::SceneHeading;
+            //
+            // TODO: номера сцен игнорируем, поскольку в фонтане они являются строками
+            //
+            int sharpPos = paragraphs[i].size();
+            if (paragraphs[i].endsWith("#")) {
+                sharpPos = paragraphs[i].lastIndexOf('#', paragraphs[i].size() - 2);
+            }
+            if (sharpPos == -1) {
+                sharpPos = paragraphs[i].size();
+            }
+            paragraphText = paragraphs[i].mid(1, sharpPos - 1);
+            break;
+        }
+
+        case '!': {
+            blockType = ScreenplayParagraphType::Action;
+            paragraphText = paragraphs[i].mid(1);
+            break;
+        }
+
+        case '@': {
+            blockType = ScreenplayParagraphType::Character;
+            paragraphText = paragraphs[i].mid(1);
+            break;
+        }
+
+        case '>': {
+            if (paragraphs[i].endsWith("<")) {
+                blockType = ScreenplayParagraphType::Action;
+                paragraphText = paragraphs[i].mid(1, paragraphs[i].size() - 2);
+            } else {
+                blockType = ScreenplayParagraphType::Transition;
+                paragraphText = paragraphs[i].mid(1);
+            }
+            break;
+        }
+
+        case '=': {
+            bool isPageBreak = false;
+            if (paragraphs[i].startsWith("===")) {
+                isPageBreak = true;
+                for (int j = 3; j != paragraphs[i].size(); ++j) {
+                    if (paragraphs[i][j] != '=') {
+                        isPageBreak = false;
+                        break;
+                    }
+                }
+
+                //
+                // Если состоит из трех или более '=', то это PageBreak
+                // TODO: У нас такого сейчас нет
+                //
+                continue;
+            }
+            if (!isPageBreak) {
+                //
+                // TODO: тритмент подгружается тут
+                //
+                continue;
+                //                    blockType = ScreenplayParagraphType::SceneDescription;
+                //                    paragraphText = paragraphs[i].mid(1);
+            }
+            break;
+        }
+
+        case '~': {
+            //
+            // Лирика
+            //
+            blockType = ScreenplayParagraphType::Lyrics;
+            paragraphText = paragraphs[i].mid(1);
+            break;
+        }
+
+        case '#': {
+            //
+            // Директории
+            //
+            int sharpCount = 0;
+            while (paragraphs[i][sharpCount] == '#') {
+                ++sharpCount;
+            }
+
+            if (sharpCount <= dirs.size()) {
+                //
+                // Закроем нужное число раз уже открытые
+                //
+                unsigned toClose = dirs.size() - sharpCount + 1;
+                for (unsigned i = 0; i != toClose; ++i) {
+                    d->processBlock({}, ScreenplayParagraphType::FolderFooter, writer);
+                    dirs.pop();
+                }
+                prevBlockType = ScreenplayParagraphType::FolderFooter;
+            }
+            //
+            // И откроем новую
+            //
+            QString text = paragraphs[i].mid(sharpCount);
+            d->processBlock(text, ScreenplayParagraphType::FolderHeader, writer);
+            dirs.push(text);
+            prevBlockType = ScreenplayParagraphType::FolderHeader;
+
+            //
+            // Поскольку директории добавляются прямо здесь без обработки, то в конец цикла идти не
+            // надо
+            //
+            continue;
+            break;
+        }
+
+        default: {
+            bool startsWithHeading = false;
+            for (const QString& sceneHeading : kSceneHeadings) {
+                if (paragraphs[i].startsWith(sceneHeading)) {
+                    startsWithHeading = true;
+                    break;
+                }
+            }
+
+            if (startsWithHeading && i + 1 < paragraphsCount && paragraphs[i + 1].isEmpty()) {
+                //
+                // Если начинается с одного из времен действия, а после обязательно пустая строка
+                // Значит это заголовок сцены
+                //
                 blockType = ScreenplayParagraphType::SceneHeading;
+
                 //
                 // TODO: номера сцен игнорируем, поскольку в фонтане они являются строками
                 //
@@ -1174,212 +1274,71 @@ AbstractScreenplayImporter::Screenplay FountainImporter::importScreenplay(const 
                 if (sharpPos == -1) {
                     sharpPos = paragraphs[i].size();
                 }
-                paragraphText = paragraphs[i].mid(1, sharpPos - 1);
-                break;
-            }
-
-            case '!':
-            {
-                blockType = ScreenplayParagraphType::Action;
-                paragraphText = paragraphs[i].mid(1);
-                break;
-            }
-
-            case '@':
-            {
-                blockType = ScreenplayParagraphType::Character;
-                paragraphText = paragraphs[i].mid(1);
-                break;
-            }
-
-            case '>':
-            {
-                if (paragraphs[i].endsWith("<")) {
-                    blockType = ScreenplayParagraphType::Action;
-                    paragraphText = paragraphs[i].mid(1, paragraphs[i].size() - 2);
-                } else {
-                    blockType = ScreenplayParagraphType::Transition;
-                    paragraphText = paragraphs[i].mid(1);
-                }
-                break;
-            }
-
-            case '=':
-            {
-                bool isPageBreak = false;
-                if (paragraphs[i].startsWith("===")) {
-                    isPageBreak = true;
-                    for (int j = 3; j != paragraphs[i].size(); ++j) {
-                        if (paragraphs[i][j] != '=') {
-                            isPageBreak = false;
-                            break;
-                        }
-                    }
-
-                    //
-                    // Если состоит из трех или более '=', то это PageBreak
-                    // TODO: У нас такого сейчас нет
-                    //
-                    continue;
-                }
-                if (!isPageBreak) {
-                    //
-                    // TODO: тритмент подгружается тут
-                    //
-                    continue;
-//                    blockType = ScreenplayParagraphType::SceneDescription;
-//                    paragraphText = paragraphs[i].mid(1);
-                }
-                break;
-            }
-
-            case '~':
-            {
+                paragraphText = paragraphs[i].left(sharpPos);
+            } else if (paragraphs[i].startsWith("[[") && paragraphs[i].endsWith("]]")) {
                 //
-                // Лирика
+                // Редакторская заметка
                 //
-                blockType = ScreenplayParagraphType::Lyrics;
-                paragraphText = paragraphs[i].mid(1);
-                break;
-            }
-
-            case '#':
-            {
-                //
-                // Директории
-                //
-                int sharpCount = 0;
-                while (paragraphs[i][sharpCount] == '#') {
-                    ++sharpCount;
-                }
-
-                if (sharpCount <= dirs.size()) {
-                    //
-                    // Закроем нужное число раз уже открытые
-                    //
-                    unsigned toClose = dirs.size() - sharpCount + 1;
-                    for (unsigned i = 0; i != toClose; ++i) {
-                        d->processBlock({}, ScreenplayParagraphType::FolderFooter, writer);
-                        dirs.pop();
-                    }
-                    prevBlockType = ScreenplayParagraphType::FolderFooter;
-                }
-                //
-                // И откроем новую
-                //
-                QString text = paragraphs[i].mid(sharpCount);
-                d->processBlock(text, ScreenplayParagraphType::FolderHeader, writer);
-                dirs.push(text);
-                prevBlockType = ScreenplayParagraphType::FolderHeader;
-
-                //
-                // Поскольку директории добавляются прямо здесь без обработки, то в конец цикла идти не надо
-                //
+                d->notes.append(std::make_tuple(paragraphs[i].mid(2, paragraphs[i].size() - 4),
+                                                d->noteStartPos, d->noteLen));
+                d->noteStartPos += d->noteLen;
+                d->noteLen = 0;
                 continue;
-                break;
-            }
-
-            default:
-            {
-                bool startsWithHeading = false;
-                for (const QString &sceneHeading : kSceneHeadings) {
-                    if (paragraphs[i].startsWith(sceneHeading)) {
-                        startsWithHeading = true;
-                        break;
-                    }
-                }
-
-                if (startsWithHeading
-                        && i + 1 < paragraphsCount
-                        && paragraphs[i + 1].isEmpty()) {
+            } else if (paragraphs[i].startsWith("/*")) {
+                //
+                // Начинается комментарий
+                paragraphText = paragraphs[i];
+            } else if (paragraphs[i] == TextHelper::smartToUpper(paragraphs[i]) && i != 0
+                       && paragraphs[i - 1].isEmpty() && i + 1 < paragraphsCount
+                       && paragraphs[i + 1].isEmpty() && paragraphs[i].endsWith("TO:")) {
+                //
+                // Если состоит только из заглавных букв, предыдущая и следующая строки пустые
+                // и заканчивается "TO:", то это переход
+                //
+                blockType = ScreenplayParagraphType::Transition;
+                paragraphText = paragraphs[i].left(paragraphs[i].size() - 4);
+            } else if (paragraphs[i].startsWith("(") && paragraphs[i].endsWith(")")
+                       && (prevBlockType == ScreenplayParagraphType::Character
+                           || prevBlockType == ScreenplayParagraphType::Dialogue)) {
+                //
+                // Если текущий блок обернут в (), то это ремарка
+                //
+                blockType = ScreenplayParagraphType::Parenthetical;
+                paragraphText = paragraphs[i].mid(1, paragraphs[i].length() - 2);
+            } else if (paragraphs[i] == TextHelper::smartToUpper(paragraphs[i]) && i != 0
+                       && paragraphs[i - 1].isEmpty() && i + 1 < paragraphsCount
+                       && !paragraphs[i + 1].isEmpty()) {
+                //
+                // Если состоит из только из заглавных букв, впереди не пустая строка, а перед
+                // пустая Значит это имя персонажа (для реплики)
+                //
+                blockType = ScreenplayParagraphType::Character;
+                if (paragraphs[i].endsWith("^")) {
                     //
-                    // Если начинается с одного из времен действия, а после обязательно пустая строка
-                    // Значит это заголовок сцены
+                    // Двойной диалог, который мы пока что не умеем обрабатывать
                     //
-                    blockType = ScreenplayParagraphType::SceneHeading;
-
-                    //
-                    // TODO: номера сцен игнорируем, поскольку в фонтане они являются строками
-                    //
-                    int sharpPos = paragraphs[i].size();
-                    if (paragraphs[i].endsWith("#")) {
-                        sharpPos = paragraphs[i].lastIndexOf('#', paragraphs[i].size() - 2);
-                    }
-                    if (sharpPos == -1) {
-                        sharpPos = paragraphs[i].size();
-                    }
-                    paragraphText = paragraphs[i].left(sharpPos);
-                } else if (paragraphs[i].startsWith("[[")
-                           && paragraphs[i].endsWith("]]")) {
-                    //
-                    // Редакторская заметка
-                    //
-                    d->notes.append(std::make_tuple(paragraphs[i].mid(2, paragraphs[i].size() - 4), d->noteStartPos, d->noteLen));
-                    d->noteStartPos += d->noteLen;
-                    d->noteLen = 0;
-                    continue;
-                } else if (paragraphs[i].startsWith("/*")) {
-                    //
-                    // Начинается комментарий
-                    paragraphText = paragraphs[i];
-                } else if (paragraphs[i] == TextHelper::smartToUpper(paragraphs[i])
-                           && i != 0
-                           && paragraphs[i-1].isEmpty()
-                           && i + 1 < paragraphsCount
-                           && paragraphs[i+1].isEmpty()
-                           && paragraphs[i].endsWith("TO:")) {
-                    //
-                    // Если состоит только из заглавных букв, предыдущая и следующая строки пустые
-                    // и заканчивается "TO:", то это переход
-                    //
-                    blockType = ScreenplayParagraphType::Transition;
-                    paragraphText = paragraphs[i].left(paragraphs[i].size()-4);
-                } else if (paragraphs[i].startsWith("(")
-                           && paragraphs[i].endsWith(")")
-                           && (prevBlockType == ScreenplayParagraphType::Character
-                               || prevBlockType == ScreenplayParagraphType::Dialogue)) {
-                    //
-                    // Если текущий блок обернут в (), то это ремарка
-                    //
-                    blockType = ScreenplayParagraphType::Parenthetical;
-                    paragraphText = paragraphs[i].mid(1, paragraphs[i].length() - 2);
-                } else if (paragraphs[i] == TextHelper::smartToUpper(paragraphs[i])
-                           && i != 0
-                           && paragraphs[i-1].isEmpty()
-                           && i + 1 < paragraphsCount
-                           && !paragraphs[i+1].isEmpty()) {
-                    //
-                    // Если состоит из только из заглавных букв, впереди не пустая строка, а перед пустая
-                    // Значит это имя персонажа (для реплики)
-                    //
-                    blockType = ScreenplayParagraphType::Character;
-                    if (paragraphs[i].endsWith("^")) {
-                        //
-                        // Двойной диалог, который мы пока что не умеем обрабатывать
-                        //
-                        paragraphText = paragraphs[i].left(paragraphs[i].size() - 1);
-                    } else {
-                        paragraphText = paragraphs[i];
-                    }
-                } else if (prevBlockType == ScreenplayParagraphType::Character
-                           || prevBlockType == ScreenplayParagraphType::Parenthetical
-                           || (prevBlockType == ScreenplayParagraphType::Dialogue
-                               && i > 0
-                               && !paragraphs[i-1].isEmpty())) {
-                    //
-                    // Если предыдущий блок - имя персонажа или ремарка, то сейчас диалог
-                    // Или предыдущая строка является диалогом
-                    //
-                    blockType = ScreenplayParagraphType::Dialogue;
-                    paragraphText = paragraphs[i];
+                    paragraphText = paragraphs[i].left(paragraphs[i].size() - 1);
                 } else {
-                    //
-                    // Во всех остальных случаях - Action
-                    //
-                    blockType = ScreenplayParagraphType::Action;
                     paragraphText = paragraphs[i];
                 }
+            } else if (prevBlockType == ScreenplayParagraphType::Character
+                       || prevBlockType == ScreenplayParagraphType::Parenthetical
+                       || (prevBlockType == ScreenplayParagraphType::Dialogue && i > 0
+                           && !paragraphs[i - 1].isEmpty())) {
+                //
+                // Если предыдущий блок - имя персонажа или ремарка, то сейчас диалог
+                // Или предыдущая строка является диалогом
+                //
+                blockType = ScreenplayParagraphType::Dialogue;
+                paragraphText = paragraphs[i];
+            } else {
+                //
+                // Во всех остальных случаях - Action
+                //
+                blockType = ScreenplayParagraphType::Action;
+                paragraphText = paragraphs[i];
             }
+        }
         }
         //
         // Отправим блок на обработку

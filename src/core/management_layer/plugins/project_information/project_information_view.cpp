@@ -6,13 +6,13 @@
 #include <ui/widgets/card/card.h>
 #include <ui/widgets/scroll_bar/scroll_bar.h>
 #include <ui/widgets/text_field/text_field.h>
+#include <utils/helpers/ui_helper.h>
 
 #include <QGridLayout>
 #include <QScrollArea>
 
 
-namespace Ui
-{
+namespace Ui {
 
 class ProjectInformationView::Implementation
 {
@@ -30,12 +30,12 @@ public:
 };
 
 ProjectInformationView::Implementation::Implementation(QWidget* _parent)
-    : content(new QScrollArea(_parent)),
-      projectInfo(new Card(_parent)),
-      projectInfoLayout(new QGridLayout),
-      projectName(new TextField(projectInfo)),
-      projectLogline(new TextField(projectInfo)),
-      projectCover(new Cover(projectInfo))
+    : content(new QScrollArea(_parent))
+    , projectInfo(new Card(_parent))
+    , projectInfoLayout(new QGridLayout)
+    , projectName(new TextField(projectInfo))
+    , projectLogline(new TextField(projectInfo))
+    , projectCover(new Cover(projectInfo))
 {
     QPalette palette;
     palette.setColor(QPalette::Base, Qt::transparent);
@@ -56,6 +56,9 @@ ProjectInformationView::Implementation::Implementation(QWidget* _parent)
     projectInfoLayout->setColumnStretch(0, 1);
     projectInfo->setLayoutReimpl(projectInfoLayout);
 
+    projectName->setSpellCheckPolicy(SpellCheckPolicy::Manual);
+    UiHelper::initSpellingFor(projectLogline);
+
     QWidget* contentWidget = new QWidget;
     content->setWidget(contentWidget);
     content->setWidgetResizable(true);
@@ -72,8 +75,8 @@ ProjectInformationView::Implementation::Implementation(QWidget* _parent)
 
 
 ProjectInformationView::ProjectInformationView(QWidget* _parent)
-    : Widget(_parent),
-      d(new Implementation(this))
+    : Widget(_parent)
+    , d(new Implementation(this))
 {
     QVBoxLayout* layout = new QVBoxLayout;
     layout->setContentsMargins({});
@@ -81,12 +84,10 @@ ProjectInformationView::ProjectInformationView(QWidget* _parent)
     layout->addWidget(d->content);
     setLayout(layout);
 
-    connect(d->projectName, &TextField::textChanged, this, [this] {
-        emit nameChanged(d->projectName->text());
-    });
-    connect(d->projectLogline, &TextField::textChanged, this, [this] {
-        emit loglineChanged(d->projectLogline->text());
-    });
+    connect(d->projectName, &TextField::textChanged, this,
+            [this] { emit nameChanged(d->projectName->text()); });
+    connect(d->projectLogline, &TextField::textChanged, this,
+            [this] { emit loglineChanged(d->projectLogline->text()); });
     connect(d->projectCover, &Cover::clicked, this, &ProjectInformationView::selectCoverPressed);
 
     updateTranslations();
@@ -115,9 +116,7 @@ void ProjectInformationView::setLogline(const QString& _logline)
 
 void ProjectInformationView::setCover(const QPixmap& _cover)
 {
-    d->projectCover->setCover(_cover.isNull()
-                              ? QPixmap(":/images/movie-poster")
-                              : _cover);
+    d->projectCover->setCover(_cover.isNull() ? QPixmap(":/images/movie-poster") : _cover);
 }
 
 void ProjectInformationView::updateTranslations()
@@ -134,11 +133,9 @@ void ProjectInformationView::designSystemChangeEvent(DesignSystemChangeEvent* _e
     setBackgroundColor(Ui::DesignSystem::color().surface());
 
     d->content->widget()->layout()->setContentsMargins(
-                QMarginsF(Ui::DesignSystem::layout().px24(),
-                          Ui::DesignSystem::layout().topContentMargin(),
-                          Ui::DesignSystem::layout().px24(),
-                          Ui::DesignSystem::layout().px24())
-                .toMargins());
+        QMarginsF(Ui::DesignSystem::layout().px24(), Ui::DesignSystem::layout().topContentMargin(),
+                  Ui::DesignSystem::layout().px24(), Ui::DesignSystem::layout().px24())
+            .toMargins());
 
     d->projectInfo->setBackgroundColor(DesignSystem::color().background());
     for (auto textField : { d->projectName, d->projectLogline }) {
@@ -146,8 +143,10 @@ void ProjectInformationView::designSystemChangeEvent(DesignSystemChangeEvent* _e
         textField->setTextColor(Ui::DesignSystem::color().onBackground());
     }
     d->projectInfoLayout->setVerticalSpacing(static_cast<int>(Ui::DesignSystem::layout().px16()));
-    d->projectInfoLayout->setRowMinimumHeight(0, static_cast<int>(Ui::DesignSystem::layout().px8()));
-    d->projectInfoLayout->setRowMinimumHeight(3, static_cast<int>(Ui::DesignSystem::layout().px8()));
+    d->projectInfoLayout->setRowMinimumHeight(0,
+                                              static_cast<int>(Ui::DesignSystem::layout().px8()));
+    d->projectInfoLayout->setRowMinimumHeight(3,
+                                              static_cast<int>(Ui::DesignSystem::layout().px8()));
 }
 
 } // namespace Ui

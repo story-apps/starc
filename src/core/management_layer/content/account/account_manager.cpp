@@ -1,7 +1,5 @@
 #include "account_manager.h"
 
-#include <ui/design_system/design_system.h>
-
 #include <ui/account/account_bar.h>
 #include <ui/account/account_navigator.h>
 #include <ui/account/account_tool_bar.h>
@@ -10,15 +8,14 @@
 #include <ui/account/login_dialog.h>
 #include <ui/account/renew_subscription_dialog.h>
 #include <ui/account/upgrade_to_pro_dialog.h>
-
+#include <ui/design_system/design_system.h>
 #include <utils/helpers/image_helper.h>
 
 #include <QFileDialog>
 #include <QWidget>
 
 
-namespace ManagementLayer
-{
+namespace ManagementLayer {
 
 class AccountManager::Implementation
 {
@@ -53,11 +50,11 @@ public:
 };
 
 AccountManager::Implementation::Implementation(QWidget* _parent)
-    : topLevelWidget(_parent),
-      accountBar(new Ui::AccountBar(topLevelWidget)),
-      toolBar(new Ui::AccountToolBar(topLevelWidget)),
-      navigator(new Ui::AccountNavigator(topLevelWidget)),
-      view(new Ui::AccountView(topLevelWidget))
+    : topLevelWidget(_parent)
+    , accountBar(new Ui::AccountBar(topLevelWidget))
+    , toolBar(new Ui::AccountToolBar(topLevelWidget))
+    , navigator(new Ui::AccountNavigator(topLevelWidget))
+    , view(new Ui::AccountView(topLevelWidget))
 {
     toolBar->hide();
     navigator->hide();
@@ -69,8 +66,8 @@ AccountManager::Implementation::Implementation(QWidget* _parent)
 
 
 AccountManager::AccountManager(QObject* _parent, QWidget* _parentWidget)
-    : QObject(_parent),
-      d(new Implementation(_parentWidget))
+    : QObject(_parent)
+    , d(new Implementation(_parentWidget))
 {
     initAccountBarConnections();
     initToolBarConnections();
@@ -190,7 +187,8 @@ void AccountManager::completeLogout()
 }
 
 void AccountManager::setAccountParameters(qint64 _availableSpace, const QString& _email,
-    qint64 _monthPrice, bool _receiveEmailNotifications, const QString& _userName, const QByteArray& _avatar)
+                                          qint64 _monthPrice, bool _receiveEmailNotifications,
+                                          const QString& _userName, const QByteArray& _avatar)
 {
     d->monthPrice = _monthPrice;
     d->availableSpace = _availableSpace;
@@ -290,28 +288,35 @@ void AccountManager::initAccountBarConnections()
         //
         if (d->loginDialog == nullptr) {
             d->loginDialog = new Ui::LoginDialog(d->topLevelWidget);
-            connect(d->loginDialog, &Ui::LoginDialog::emailEntered, this, [this] {
-                emit emailEntered(d->loginDialog->email());
-            });
-            connect(d->loginDialog, &Ui::LoginDialog::restorePasswordRequested, this, [this] {
-                emit restorePasswordRequested(d->loginDialog->email());
-            });
-            connect(d->loginDialog, &Ui::LoginDialog::passwordRestoringConfirmationCodeEntered, this, [this] {
-                emit passwordRestoringConfirmationCodeEntered(d->loginDialog->email(), d->loginDialog->restorePasswordConfirmationCode());
-            });
+            connect(d->loginDialog, &Ui::LoginDialog::emailEntered, this,
+                    [this] { emit emailEntered(d->loginDialog->email()); });
+            connect(d->loginDialog, &Ui::LoginDialog::restorePasswordRequested, this,
+                    [this] { emit restorePasswordRequested(d->loginDialog->email()); });
+            connect(d->loginDialog, &Ui::LoginDialog::passwordRestoringConfirmationCodeEntered,
+                    this, [this] {
+                        emit passwordRestoringConfirmationCodeEntered(
+                            d->loginDialog->email(),
+                            d->loginDialog->restorePasswordConfirmationCode());
+                    });
             connect(d->loginDialog, &Ui::LoginDialog::changePasswordRequested, this, [this] {
-                emit changePasswordRequested(d->loginDialog->email(), d->loginDialog->restorePasswordConfirmationCode(), d->loginDialog->password());
+                emit changePasswordRequested(d->loginDialog->email(),
+                                             d->loginDialog->restorePasswordConfirmationCode(),
+                                             d->loginDialog->password());
             });
             connect(d->loginDialog, &Ui::LoginDialog::registrationRequested, this, [this] {
                 emit registrationRequested(d->loginDialog->email(), d->loginDialog->password());
             });
-            connect(d->loginDialog, &Ui::LoginDialog::registrationConfirmationCodeEntered, this, [this] {
-                emit registrationConfirmationCodeEntered(d->loginDialog->email(), d->loginDialog->registractionConfirmationCode());
-            });
+            connect(d->loginDialog, &Ui::LoginDialog::registrationConfirmationCodeEntered, this,
+                    [this] {
+                        emit registrationConfirmationCodeEntered(
+                            d->loginDialog->email(),
+                            d->loginDialog->registractionConfirmationCode());
+                    });
             connect(d->loginDialog, &Ui::LoginDialog::loginRequested, this, [this] {
                 emit loginRequested(d->loginDialog->email(), d->loginDialog->password());
             });
-            connect(d->loginDialog, &Ui::LoginDialog::canceled, d->loginDialog, &Ui::LoginDialog::hideDialog);
+            connect(d->loginDialog, &Ui::LoginDialog::canceled, d->loginDialog,
+                    &Ui::LoginDialog::hideDialog);
             connect(d->loginDialog, &Ui::LoginDialog::disappeared, this, [this] {
                 d->loginDialog->deleteLater();
                 d->loginDialog = nullptr;
@@ -324,7 +329,8 @@ void AccountManager::initAccountBarConnections()
 
 void AccountManager::initToolBarConnections()
 {
-    connect(d->toolBar, &Ui::AccountToolBar::backPressed, this, &AccountManager::closeAccountRequested);
+    connect(d->toolBar, &Ui::AccountToolBar::backPressed, this,
+            &AccountManager::closeAccountRequested);
 }
 
 void AccountManager::initNavigatorConnections()
@@ -332,7 +338,8 @@ void AccountManager::initNavigatorConnections()
     connect(d->navigator, &Ui::AccountNavigator::upgradeToProPressed, this, [this] {
         if (d->upgradeToProDialog == nullptr) {
             d->upgradeToProDialog = new Ui::UpgradeToProDialog(d->topLevelWidget);
-            connect(d->upgradeToProDialog, &Ui::UpgradeToProDialog::canceled, d->upgradeToProDialog, &Ui::UpgradeToProDialog::hideDialog);
+            connect(d->upgradeToProDialog, &Ui::UpgradeToProDialog::canceled, d->upgradeToProDialog,
+                    &Ui::UpgradeToProDialog::hideDialog);
             connect(d->upgradeToProDialog, &Ui::UpgradeToProDialog::disappeared, this, [this] {
                 d->upgradeToProDialog->deleteLater();
                 d->upgradeToProDialog = nullptr;
@@ -344,16 +351,19 @@ void AccountManager::initNavigatorConnections()
     connect(d->navigator, &Ui::AccountNavigator::renewSubscriptionPressed, this, [this] {
         if (d->renewSubscriptionDialog == nullptr) {
             d->renewSubscriptionDialog = new Ui::RenewSubscriptionDialog(d->topLevelWidget);
-            connect(d->renewSubscriptionDialog, &Ui::RenewSubscriptionDialog::renewPressed, this, [this] {
-               emit renewSubscriptionRequested(d->renewSubscriptionDialog->monthCount(),
-                                               d->renewSubscriptionDialog->paymentType());
-                d->renewSubscriptionDialog->hideDialog();
-            });
-            connect(d->renewSubscriptionDialog, &Ui::RenewSubscriptionDialog::canceled, d->renewSubscriptionDialog, &Ui::RenewSubscriptionDialog::hideDialog);
-            connect(d->renewSubscriptionDialog, &Ui::RenewSubscriptionDialog::disappeared, this, [this] {
-                d->renewSubscriptionDialog->deleteLater();
-                d->renewSubscriptionDialog = nullptr;
-            });
+            connect(d->renewSubscriptionDialog, &Ui::RenewSubscriptionDialog::renewPressed, this,
+                    [this] {
+                        emit renewSubscriptionRequested(d->renewSubscriptionDialog->monthCount(),
+                                                        d->renewSubscriptionDialog->paymentType());
+                        d->renewSubscriptionDialog->hideDialog();
+                    });
+            connect(d->renewSubscriptionDialog, &Ui::RenewSubscriptionDialog::canceled,
+                    d->renewSubscriptionDialog, &Ui::RenewSubscriptionDialog::hideDialog);
+            connect(d->renewSubscriptionDialog, &Ui::RenewSubscriptionDialog::disappeared, this,
+                    [this] {
+                        d->renewSubscriptionDialog->deleteLater();
+                        d->renewSubscriptionDialog = nullptr;
+                    });
         }
 
         d->renewSubscriptionDialog->showDialog();
@@ -365,13 +375,18 @@ void AccountManager::initViewConnections()
     connect(d->view, &Ui::AccountView::changePasswordPressed, this, [this] {
         if (d->changePasswordDialog == nullptr) {
             d->changePasswordDialog = new Ui::ChangePasswordDialog(d->topLevelWidget);
-            connect(d->changePasswordDialog, &Ui::ChangePasswordDialog::confirmationCodeEntered, this, [this] {
-                emit passwordRestoringConfirmationCodeEntered(d->email, d->changePasswordDialog->code());
-            });
-            connect(d->changePasswordDialog, &Ui::ChangePasswordDialog::changePasswordRequested, this, [this] {
-                emit changePasswordRequested(d->email, d->changePasswordDialog->code(), d->changePasswordDialog->password());
-            });
-            connect(d->changePasswordDialog, &Ui::ChangePasswordDialog::canceled, d->changePasswordDialog, &Ui::ChangePasswordDialog::hideDialog);
+            connect(d->changePasswordDialog, &Ui::ChangePasswordDialog::confirmationCodeEntered,
+                    this, [this] {
+                        emit passwordRestoringConfirmationCodeEntered(
+                            d->email, d->changePasswordDialog->code());
+                    });
+            connect(d->changePasswordDialog, &Ui::ChangePasswordDialog::changePasswordRequested,
+                    this, [this] {
+                        emit changePasswordRequested(d->email, d->changePasswordDialog->code(),
+                                                     d->changePasswordDialog->password());
+                    });
+            connect(d->changePasswordDialog, &Ui::ChangePasswordDialog::canceled,
+                    d->changePasswordDialog, &Ui::ChangePasswordDialog::hideDialog);
             connect(d->changePasswordDialog, &Ui::ChangePasswordDialog::disappeared, this, [this] {
                 d->changePasswordDialog->deleteLater();
                 d->changePasswordDialog = nullptr;
@@ -383,11 +398,13 @@ void AccountManager::initViewConnections()
         emit restorePasswordRequested(d->email);
     });
     connect(d->view, &Ui::AccountView::logoutPressed, this, &AccountManager::logoutRequested);
-    connect(d->view, &Ui::AccountView::userNameChanged, this, &AccountManager::changeUserNameRequested);
-    connect(d->view, &Ui::AccountView::receiveEmailNotificationsChanged,
-            this, &AccountManager::changeReceiveEmailNotificationsRequested);
+    connect(d->view, &Ui::AccountView::userNameChanged, this,
+            &AccountManager::changeUserNameRequested);
+    connect(d->view, &Ui::AccountView::receiveEmailNotificationsChanged, this,
+            &AccountManager::changeReceiveEmailNotificationsRequested);
     connect(d->view, &Ui::AccountView::avatarChoosePressed, this, [this] {
-        const QString avatarPath = QFileDialog::getOpenFileName(d->view, tr("Choose avatar"), {}, "");
+        const QString avatarPath
+            = QFileDialog::getOpenFileName(d->view, tr("Choose avatar"), {}, "");
         if (avatarPath.isEmpty()) {
             return;
         }

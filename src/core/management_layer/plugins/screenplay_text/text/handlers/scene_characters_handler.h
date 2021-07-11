@@ -5,8 +5,7 @@
 class QStringListModel;
 
 
-namespace KeyProcessingLayer
-{
+namespace KeyProcessingLayer {
 
 /**
  * @brief Класс выполняющий обработку нажатия клавиш в блоке участники сцени

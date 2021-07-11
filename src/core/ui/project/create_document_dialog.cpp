@@ -1,24 +1,23 @@
 #include "create_document_dialog.h"
 
 #include <domain/document_object.h>
-
 #include <ui/design_system/design_system.h>
 #include <ui/widgets/button/button.h>
 #include <ui/widgets/check_box/check_box.h>
 #include <ui/widgets/label/label.h>
+#include <ui/widgets/shadow/shadow.h>
 #include <ui/widgets/text_field/text_field.h>
 #include <ui/widgets/tree/tree.h>
-#include <ui/widgets/shadow/shadow.h>
+#include <utils/helpers/ui_helper.h>
 
 #include <QGridLayout>
 #include <QStandardItemModel>
 
 
-namespace Ui
-{
+namespace Ui {
 
 namespace {
-    const int kMimeTypeRole = Qt::UserRole + 1;
+const int kMimeTypeRole = Qt::UserRole + 1;
 }
 
 class CreateDocumentDialog::Implementation
@@ -41,17 +40,17 @@ public:
 };
 
 CreateDocumentDialog::Implementation::Implementation(QWidget* _parent)
-    : typesModel(new QStandardItemModel(_parent)),
-      documentType(new Tree(_parent)),
-      documentName(new TextField(_parent)),
-      documentInfo(new Body1Label(_parent)),
-      insertIntoParent(new CheckBox(_parent)),
-      cancelButton(new Button(_parent)),
-      createButton(new Button(_parent))
+    : typesModel(new QStandardItemModel(_parent))
+    , documentType(new Tree(_parent))
+    , documentName(new TextField(_parent))
+    , documentInfo(new Body1Label(_parent))
+    , insertIntoParent(new CheckBox(_parent))
+    , cancelButton(new Button(_parent))
+    , createButton(new Button(_parent))
 {
     new Shadow(Qt::TopEdge, documentType);
 
-    auto makeItem = [] (Domain::DocumentObjectType _type) {
+    auto makeItem = [](Domain::DocumentObjectType _type) {
         auto item = new QStandardItem;
         item->setData(Domain::iconForType(_type), Qt::DecorationRole);
         item->setData(static_cast<int>(_type), kMimeTypeRole);
@@ -65,8 +64,11 @@ CreateDocumentDialog::Implementation::Implementation(QWidget* _parent)
     typesModel->appendRow(makeItem(Domain::DocumentObjectType::Location));
     typesModel->appendRow(makeItem(Domain::DocumentObjectType::Screenplay));
 
+    UiHelper::setFocusPolicyRecursively(documentType, Qt::NoFocus);
     documentType->setModel(typesModel);
     documentType->setCurrentIndex(typesModel->index(0, 0));
+
+    documentName->setSpellCheckPolicy(SpellCheckPolicy::Manual);
 
     insertIntoParent->hide();
 
@@ -80,30 +82,31 @@ CreateDocumentDialog::Implementation::Implementation(QWidget* _parent)
 void CreateDocumentDialog::Implementation::updateDocumentInfo()
 {
     const QHash<Domain::DocumentObjectType, QString> documenTypeToInfo
-            = {{ Domain::DocumentObjectType::Folder,
-                 tr("Create a folder to group documents inside the story.") },
-               { Domain::DocumentObjectType::Text,
-                 tr("Create a plain text document to write out ideas and notes.") },
-               { Domain::DocumentObjectType::Character,
-                 tr("Create a document with full Character's description to track his relations "
-                    "and follow his journey within the story.") },
-               { Domain::DocumentObjectType::Location,
-                 tr("Create a document to note down the Location's description "
-                    "and keep the details.") },
-               { Domain::DocumentObjectType::Screenplay,
-                 tr("Create a document set to streamline your work on the feature film, "
-                    "series, or animation.") }};
+        = { { Domain::DocumentObjectType::Folder,
+              tr("Create a folder to group documents inside the story.") },
+            { Domain::DocumentObjectType::Text,
+              tr("Create a plain text document to write out ideas and notes.") },
+            { Domain::DocumentObjectType::Character,
+              tr("Create a document with full Character's description to track his relations "
+                 "and follow his journey within the story.") },
+            { Domain::DocumentObjectType::Location,
+              tr("Create a document to note down the Location's description "
+                 "and keep the details.") },
+            { Domain::DocumentObjectType::Screenplay,
+              tr("Create a document set to streamline your work on the feature film, "
+                 "series, or animation.") } };
 
     const auto documentTypeData = documentType->currentIndex().data(kMimeTypeRole).toInt();
-    documentInfo->setText(documenTypeToInfo.value(static_cast<Domain::DocumentObjectType>(documentTypeData)));
+    documentInfo->setText(
+        documenTypeToInfo.value(static_cast<Domain::DocumentObjectType>(documentTypeData)));
 }
 
 
 // ****
 
-CreateDocumentDialog::CreateDocumentDialog(QWidget *_parent)
-    : AbstractDialog(_parent),
-      d(new Implementation(this))
+CreateDocumentDialog::CreateDocumentDialog(QWidget* _parent)
+    : AbstractDialog(_parent)
+    , d(new Implementation(this))
 {
     setAcceptButton(d->createButton);
     setRejectButton(d->cancelButton);
@@ -119,7 +122,10 @@ CreateDocumentDialog::CreateDocumentDialog(QWidget *_parent)
     contentsLayout()->setColumnStretch(0, 1);
     contentsLayout()->setColumnStretch(1, 2);
 
-    connect(d->documentType, &Tree::currentIndexChanged, this, [this] { d->updateDocumentInfo(); });
+    connect(d->documentType, &Tree::currentIndexChanged, this, [this] {
+        d->documentName->setFocus();
+        d->updateDocumentInfo();
+    });
     connect(d->createButton, &Button::clicked, this, [this] {
         const auto documentTypeData = d->documentType->currentIndex().data(kMimeTypeRole);
         Q_ASSERT(documentTypeData.isValid());
@@ -156,7 +162,7 @@ void CreateDocumentDialog::updateTranslations()
 
     d->documentName->setLabel(tr("Name"));
     d->updateDocumentInfo();
-//    d->insertIntoParent->setText(tr("Insert into parent"));
+    //    d->insertIntoParent->setText(tr("Insert into parent"));
     d->cancelButton->setText(tr("Cancel"));
     d->createButton->setText(tr("Create"));
 }
@@ -182,16 +188,15 @@ void CreateDocumentDialog::designSystemChangeEvent(DesignSystemChangeEvent* _eve
     d->insertIntoParent->setTextColor(Ui::DesignSystem::color().onBackground());
     d->insertIntoParent->setBackgroundColor(Ui::DesignSystem::color().background());
 
-    for (auto button : { d->cancelButton,
-                         d->createButton }) {
+    for (auto button : { d->cancelButton, d->createButton }) {
         button->setBackgroundColor(Ui::DesignSystem::color().secondary());
         button->setTextColor(Ui::DesignSystem::color().secondary());
     }
 
-    d->buttonsLayout->setContentsMargins(QMarginsF(Ui::DesignSystem::layout().px12(),
-                                                   Ui::DesignSystem::layout().px12(),
-                                                   Ui::DesignSystem::layout().px16(),
-                                                   Ui::DesignSystem::layout().px8()).toMargins());
+    d->buttonsLayout->setContentsMargins(
+        QMarginsF(Ui::DesignSystem::layout().px12(), Ui::DesignSystem::layout().px12(),
+                  Ui::DesignSystem::layout().px16(), Ui::DesignSystem::layout().px8())
+            .toMargins());
 }
 
 } // namespace Ui

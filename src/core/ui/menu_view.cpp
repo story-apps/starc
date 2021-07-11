@@ -1,16 +1,15 @@
 #include "menu_view.h"
 
 #include <ui/design_system/design_system.h>
-
 #include <utils/3rd_party/WAF/Animation/Animation.h>
 
 #include <QAction>
-#include <QApplication>
 #include <QActionGroup>
+#include <QApplication>
+#include <QKeyEvent>
 
 
-namespace Ui
-{
+namespace Ui {
 
 class MenuView::Implementation
 {
@@ -90,13 +89,12 @@ MenuView::Implementation::Implementation(QWidget* _parent)
     actions->addAction(help);
 }
 
-
 // ****
 
 
 MenuView::MenuView(QWidget* _parent)
-    : Drawer(_parent),
-      d(new Implementation(this))
+    : Drawer(_parent)
+    , d(new Implementation(this))
 {
     setTitle("STARC");
     setProVersion(false);
@@ -119,20 +117,20 @@ MenuView::MenuView(QWidget* _parent)
     connect(d->saveProject, &QAction::triggered, this, &MenuView::saveProjectChangesPressed);
     connect(d->saveProjectAs, &QAction::triggered, this, &MenuView::saveProjectAsPressed);
     connect(d->importProject, &QAction::triggered, this, &MenuView::importPressed);
-    connect(d->exportCurrentDocument, &QAction::triggered, this, &MenuView::exportCurrentDocumentPressed);
+    connect(d->exportCurrentDocument, &QAction::triggered, this,
+            &MenuView::exportCurrentDocumentPressed);
     connect(d->settings, &QAction::triggered, this, &MenuView::settingsPressed);
     connect(d->help, &QAction::triggered, this, &MenuView::helpPressed);
 
-    auto closeMenu = [this] { WAF::Animation::sideSlideOut(this); };
-    connect(this, &MenuView::projectsPressed, this, closeMenu);
-    connect(this, &MenuView::createProjectPressed, this, closeMenu);
-    connect(this, &MenuView::openProjectPressed, this, closeMenu);
-    connect(this, &MenuView::projectPressed, this, closeMenu);
-    connect(this, &MenuView::saveProjectAsPressed, this, closeMenu);
-    connect(this, &MenuView::importPressed, this, closeMenu);
-    connect(this, &MenuView::exportCurrentDocumentPressed, this, closeMenu);
-    connect(this, &MenuView::settingsPressed, this, closeMenu);
-    connect(this, &MenuView::helpPressed, this, closeMenu);
+    connect(this, &MenuView::projectsPressed, this, &MenuView::closeMenu);
+    connect(this, &MenuView::createProjectPressed, this, &MenuView::closeMenu);
+    connect(this, &MenuView::openProjectPressed, this, &MenuView::closeMenu);
+    connect(this, &MenuView::projectPressed, this, &MenuView::closeMenu);
+    connect(this, &MenuView::saveProjectAsPressed, this, &MenuView::closeMenu);
+    connect(this, &MenuView::importPressed, this, &MenuView::closeMenu);
+    connect(this, &MenuView::exportCurrentDocumentPressed, this, &MenuView::closeMenu);
+    connect(this, &MenuView::settingsPressed, this, &MenuView::closeMenu);
+    connect(this, &MenuView::helpPressed, this, &MenuView::closeMenu);
 
     setVisible(false);
 }
@@ -179,8 +177,7 @@ void MenuView::markChangesSaved(bool _saved)
 void MenuView::setProVersion(bool _isPro)
 {
     setSubtitle(QString("Story Architect v.%1 %2")
-                .arg(QApplication::applicationVersion(),
-                     (_isPro ? "PRO" : "free")));
+                    .arg(QApplication::applicationVersion(), (_isPro ? "PRO" : "free")));
     d->help->setVisible(!_isPro);
 }
 
@@ -189,20 +186,37 @@ void MenuView::setCurrentDocumentExportAvailable(bool _available)
     d->exportCurrentDocument->setEnabled(_available);
 }
 
+void MenuView::closeMenu()
+{
+    WAF::Animation::sideSlideOut(this);
+}
+
 void MenuView::updateTranslations()
 {
     d->projects->setText(tr("Stories"));
     d->createProject->setText(tr("Create story"));
     d->openProject->setText(tr("Open story"));
-    d->saveProject->setText(d->saveProject->isEnabled() ? tr("Save changes") : tr("All changes saved"));
-    d->saveProject->setWhatsThis(QKeySequence(QKeySequence::Save).toString(QKeySequence::NativeText));
+    d->saveProject->setText(d->saveProject->isEnabled() ? tr("Save changes")
+                                                        : tr("All changes saved"));
+    d->saveProject->setWhatsThis(
+        QKeySequence(QKeySequence::Save).toString(QKeySequence::NativeText));
     d->saveProjectAs->setText(tr("Save current story as..."));
     d->importProject->setText(tr("Import..."));
     d->importProject->setWhatsThis(QKeySequence("Alt+I").toString(QKeySequence::NativeText));
     d->exportCurrentDocument->setText(tr("Export current document..."));
-    d->exportCurrentDocument->setWhatsThis(QKeySequence("Alt+E").toString(QKeySequence::NativeText));
+    d->exportCurrentDocument->setWhatsThis(
+        QKeySequence("Alt+E").toString(QKeySequence::NativeText));
     d->settings->setText(tr("Application settings"));
     d->help->setText(tr("How to use the application"));
+}
+
+void MenuView::keyPressEvent(QKeyEvent* _event)
+{
+    if (_event->key() == Qt::Key_Escape) {
+        closeMenu();
+    }
+
+    Drawer::keyPressEvent(_event);
 }
 
 MenuView::~MenuView() = default;

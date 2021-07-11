@@ -3,8 +3,7 @@
 #include "../text/text_model.h"
 
 
-namespace BusinessLayer
-{
+namespace BusinessLayer {
 
 /**
  * @brief Модель
@@ -19,7 +18,7 @@ public:
     /**
      * @brief Игнорируем установку названия документа
      */
-    void setDocumentName(const QString &_name) override;
+    void setDocumentName(const QString& _name) override;
 
 protected:
     /**

@@ -3,8 +3,8 @@
 #include <ui/design_system/design_system.h>
 
 #include <QMouseEvent>
-#include <QPainter>
 #include <QPaintEvent>
+#include <QPainter>
 
 
 class Stepper::Implementation
@@ -22,8 +22,8 @@ public:
 
 
 Stepper::Stepper(QWidget* _parent)
-    : Widget(_parent),
-      d(new Implementation)
+    : Widget(_parent)
+    , d(new Implementation)
 {
     setFocusPolicy(Qt::StrongFocus);
 }
@@ -48,8 +48,7 @@ void Stepper::addStep(const QString& _stepName)
 
 void Stepper::setStepName(int _index, const QString& _name)
 {
-    if (0 > _index || _index >= d->steps.size()
-        || d->steps[_index] == _name) {
+    if (0 > _index || _index >= d->steps.size() || d->steps[_index] == _name) {
         return;
     }
 
@@ -60,8 +59,7 @@ void Stepper::setStepName(int _index, const QString& _name)
 
 void Stepper::setCurrentStep(int _index)
 {
-    if (0 > _index || _index >= d->steps.size()
-        || d->currentStepIndex == _index) {
+    if (0 > _index || _index >= d->steps.size() || d->currentStepIndex == _index) {
         return;
     }
 
@@ -127,8 +125,8 @@ void Stepper::paintEvent(QPaintEvent* _event)
     // Отрисовываем шаги
     //
     for (int stepIndex = 0; stepIndex < d->steps.size(); ++stepIndex) {
-        const QRectF stepRect(0, stepIndex * Ui::DesignSystem::stepper().height(),
-                              width(), Ui::DesignSystem::stepper().height());
+        const QRectF stepRect(0, stepIndex * Ui::DesignSystem::stepper().height(), width(),
+                              Ui::DesignSystem::stepper().height());
 
         //
         // Проверяем нужно ли рисовать текущий шаг
@@ -146,32 +144,31 @@ void Stepper::paintEvent(QPaintEvent* _event)
         qreal stepTextRectX = 0;
 
         if (isLeftToRight()) {
-            stepNumberBackgroundRect.setRect(stepRect.left() + Ui::DesignSystem::stepper().margins().left(),
-                                             stepRect.top() + Ui::DesignSystem::stepper().margins().top(),
-                                             Ui::DesignSystem::stepper().iconSize().width(),
-                                             Ui::DesignSystem::stepper().iconSize().height());
-            stepTextRectX = stepNumberBackgroundRect.right() + Ui::DesignSystem::stepper().spacing();
-            stepTextRect.setRect(stepTextRectX, stepRect.top(), stepRect.right()
-                                 - stepTextRectX
-                                 - Ui::DesignSystem::stepper().margins().right(),
+            stepNumberBackgroundRect.setRect(
+                stepRect.left() + Ui::DesignSystem::stepper().margins().left(),
+                stepRect.top() + Ui::DesignSystem::stepper().margins().top(),
+                Ui::DesignSystem::stepper().iconSize().width(),
+                Ui::DesignSystem::stepper().iconSize().height());
+            stepTextRectX
+                = stepNumberBackgroundRect.right() + Ui::DesignSystem::stepper().spacing();
+            stepTextRect.setRect(stepTextRectX, stepRect.top(),
+                                 stepRect.right() - stepTextRectX
+                                     - Ui::DesignSystem::stepper().margins().right(),
                                  stepRect.height());
 
         } else {
             stepTextRectX = stepRect.left() + Ui::DesignSystem::stepper().margins().left();
             stepTextRect.setRect(stepTextRectX, stepRect.top(),
-                                 width()
-                                 - Ui::DesignSystem::stepper().margins().left()
-                                 - Ui::DesignSystem::stepper().iconSize().width()
-                                 - Ui::DesignSystem::stepper().spacing()
-                                 - Ui::DesignSystem::stepper().margins().right(),
+                                 width() - Ui::DesignSystem::stepper().margins().left()
+                                     - Ui::DesignSystem::stepper().iconSize().width()
+                                     - Ui::DesignSystem::stepper().spacing()
+                                     - Ui::DesignSystem::stepper().margins().right(),
                                  stepRect.height());
-            stepNumberBackgroundRect.setRect(stepTextRect.right()
-                                             + Ui::DesignSystem::stepper().spacing(),
-                                             stepRect.top()
-                                             + Ui::DesignSystem::stepper().margins().top(),
-                                             Ui::DesignSystem::stepper().iconSize().width(),
-                                             Ui::DesignSystem::stepper().iconSize().height());
-
+            stepNumberBackgroundRect.setRect(
+                stepTextRect.right() + Ui::DesignSystem::stepper().spacing(),
+                stepRect.top() + Ui::DesignSystem::stepper().margins().top(),
+                Ui::DesignSystem::stepper().iconSize().width(),
+                Ui::DesignSystem::stepper().iconSize().height());
         }
 
         //
@@ -182,10 +179,9 @@ void Stepper::paintEvent(QPaintEvent* _event)
         //
         // Кружок
         //
-        const QColor stepNumberBackgroundColor
-                = !d->isFinished && stepIndex > d->currentStepIndex
-                  ? d->inactiveStepNumberBackgroundColor
-                  : Ui::DesignSystem::color().secondary();
+        const QColor stepNumberBackgroundColor = !d->isFinished && stepIndex > d->currentStepIndex
+            ? d->inactiveStepNumberBackgroundColor
+            : Ui::DesignSystem::color().secondary();
         painter.setPen(stepNumberBackgroundColor);
         painter.setBrush(stepNumberBackgroundColor);
         painter.drawEllipse(stepNumberBackgroundRect);
@@ -209,12 +205,13 @@ void Stepper::paintEvent(QPaintEvent* _event)
         // Текст
         //
         painter.setPen(!d->isFinished && stepIndex > d->currentStepIndex
-                       ? d->inactiveStepNumberBackgroundColor
-                       : textColor());
+                           ? d->inactiveStepNumberBackgroundColor
+                           : textColor());
         QFont textFont = Ui::DesignSystem::font().subtitle2();
         textFont.setWeight(stepIndex == d->currentStepIndex ? QFont::Medium : QFont::Normal);
         painter.setFont(textFont);
-        const QString stepText = QFontMetricsF(textFont).elidedText(d->steps.at(stepIndex), Qt::ElideRight, stepTextRect.width());
+        const QString stepText = QFontMetricsF(textFont).elidedText(
+            d->steps.at(stepIndex), Qt::ElideRight, stepTextRect.width());
         painter.drawText(stepTextRect, Qt::AlignVCenter, stepText);
 
         //
@@ -222,17 +219,22 @@ void Stepper::paintEvent(QPaintEvent* _event)
         //
         // ... сверху
         //
-        painter.setPen(QPen(d->inactiveStepNumberBackgroundColor, Ui::DesignSystem::stepper().pathWidth()));
+        painter.setPen(
+            QPen(d->inactiveStepNumberBackgroundColor, Ui::DesignSystem::stepper().pathWidth()));
         const qreal pathX = stepNumberBackgroundRect.center().x();
         if (stepIndex > 0) {
-            painter.drawLine(QPointF(pathX, stepNumberBackgroundRect.top() - Ui::DesignSystem::stepper().pathSpacing()),
-                             QPointF(pathX, stepRect.top()));
+            painter.drawLine(
+                QPointF(pathX,
+                        stepNumberBackgroundRect.top() - Ui::DesignSystem::stepper().pathSpacing()),
+                QPointF(pathX, stepRect.top()));
         }
         //
         // ... снизу
         //
         if (stepIndex < d->steps.size() - 1) {
-            painter.drawLine(QPointF(pathX, stepNumberBackgroundRect.bottom() + Ui::DesignSystem::stepper().pathSpacing()),
+            painter.drawLine(QPointF(pathX,
+                                     stepNumberBackgroundRect.bottom()
+                                         + Ui::DesignSystem::stepper().pathSpacing()),
                              QPointF(pathX, stepRect.bottom()));
         }
     }
@@ -241,8 +243,8 @@ void Stepper::paintEvent(QPaintEvent* _event)
 void Stepper::mouseReleaseEvent(QMouseEvent* _event)
 {
     for (int stepIndex = 0; stepIndex < d->steps.size(); ++stepIndex) {
-        const QRectF stepRect(0, stepIndex * Ui::DesignSystem::stepper().height(),
-                              width(), Ui::DesignSystem::stepper().height());
+        const QRectF stepRect(0, stepIndex * Ui::DesignSystem::stepper().height(), width(),
+                              Ui::DesignSystem::stepper().height());
         if (stepRect.contains(_event->pos())) {
             setCurrentStep(stepIndex);
             return;

@@ -5,13 +5,12 @@
 
 #include <QApplication>
 #include <QDir>
-#include <QString>
 #include <QStandardItemModel>
 #include <QStandardPaths>
+#include <QString>
 
 
-namespace BusinessLayer
-{
+namespace BusinessLayer {
 
 namespace {
 
@@ -19,7 +18,8 @@ namespace {
  * @brief Параметры группы шаблонов
  */
 template<typename TemplateType>
-class TemplateInfo {
+class TemplateInfo
+{
 public:
     /**
      * @brief Шаблон по умолчанию
@@ -71,7 +71,8 @@ TemplateInfo<TextTemplate>& TemplatesFacade::Implementation::templateInfo<TextTe
     return text;
 }
 template<>
-TemplateInfo<ScreenplayTemplate>& TemplatesFacade::Implementation::templateInfo<ScreenplayTemplate>()
+TemplateInfo<ScreenplayTemplate>& TemplatesFacade::Implementation::templateInfo<
+    ScreenplayTemplate>()
 {
     return screenplay;
 }
@@ -88,8 +89,7 @@ const TemplateType& TemplatesFacade::Implementation::getTemplate(const QString& 
     //
     // Если id шаблона задан и он есть в списке доступных шаблонов, возвращаем искомый
     //
-    if (!_templateId.isEmpty()
-        && templateInfo<TemplateType>().templates.contains(_templateId)) {
+    if (!_templateId.isEmpty() && templateInfo<TemplateType>().templates.contains(_templateId)) {
         return templateInfo<TemplateType>().templates[_templateId];
     }
 
@@ -102,12 +102,12 @@ const TemplateType& TemplatesFacade::Implementation::getTemplate(const QString& 
 template<typename TemplateType>
 void TemplatesFacade::Implementation::setDefaultTemplate(const QString& _templateId)
 {
-    if (_templateId.isEmpty()
-        || !templateInfo<TemplateType>().templates.contains(_templateId)) {
+    if (_templateId.isEmpty() || !templateInfo<TemplateType>().templates.contains(_templateId)) {
         return;
     }
 
-    templateInfo<TemplateType>().defaultTemplate = templateInfo<TemplateType>().templates[_templateId];
+    templateInfo<TemplateType>().defaultTemplate
+        = templateInfo<TemplateType>().templates[_templateId];
 }
 
 template<typename TemplateType>
@@ -123,12 +123,13 @@ void TemplatesFacade::Implementation::updateTranslations()
 
 template<typename TemplateType>
 void TemplatesFacade::Implementation::loadTemplates(const QString& _templatesDir,
-    const QVector<QString> _templateNames)
+                                                    const QVector<QString> _templateNames)
 {
     //
     // Настроим путь к папке с шаблонами
     //
-    const QString appDataFolderPath = QStandardPaths::writableLocation(QStandardPaths::DataLocation);
+    const QString appDataFolderPath
+        = QStandardPaths::writableLocation(QStandardPaths::DataLocation);
     const QString templatesFolderPath = QString("%1/%2").arg(appDataFolderPath, _templatesDir);
     //
     // ... создаём папку для пользовательских файлов
@@ -139,8 +140,10 @@ void TemplatesFacade::Implementation::loadTemplates(const QString& _templatesDir
     //
     // Обновить шаблон по умолчанию
     //
-    auto updateDefaultTemplate = [_templatesDir, templatesFolderPath] (const QString& _templateName) -> QString {
-        const QString defaultTemplatePath = QString("%1/%2").arg(templatesFolderPath, _templateName);
+    auto updateDefaultTemplate
+        = [_templatesDir, templatesFolderPath](const QString& _templateName) -> QString {
+        const QString defaultTemplatePath
+            = QString("%1/%2").arg(templatesFolderPath, _templateName);
         QFile defaultTemplateFile(defaultTemplatePath);
         if (!defaultTemplateFile.open(QIODevice::WriteOnly | QIODevice::Truncate)) {
             return {};
@@ -187,9 +190,9 @@ void TemplatesFacade::Implementation::loadTemplates(const QString& _templatesDir
     //
     auto sortedTemplates = templateInfo.templates.values();
     std::sort(sortedTemplates.begin(), sortedTemplates.end(),
-              [] (const TemplateType& _lhs, const TemplateType& _rhs) {
-        return _lhs.name() < _rhs.name();
-    });
+              [](const TemplateType& _lhs, const TemplateType& _rhs) {
+                  return _lhs.name() < _rhs.name();
+              });
     for (const auto& screenplayTemplate : std::as_const(sortedTemplates)) {
         auto item = new QStandardItem(screenplayTemplate.name());
         item->setData(screenplayTemplate.id(), kTemplateIdRole);
@@ -243,17 +246,12 @@ TemplatesFacade::TemplatesFacade()
     : d(new Implementation)
 {
     d->loadTemplates<TextTemplate>(QLatin1String("templates/text"),
-                                   { QLatin1String("mono_cp_a4"),
-                                     QLatin1String("mono_cn_a4"),
+                                   { QLatin1String("mono_cp_a4"), QLatin1String("mono_cn_a4"),
                                      QLatin1String("mono_cp_letter") });
-    d->loadTemplates<ScreenplayTemplate>(QLatin1String("templates/screenplay"),
-                                   { QLatin1String("world_cp"),
-                                     QLatin1String("world_cn"),
-                                     QLatin1String("ar"),
-                                     QLatin1String("he"),
-                                     QLatin1String("ru"),
-                                     QLatin1String("tamil"),
-                                     QLatin1String("us") });
+    d->loadTemplates<ScreenplayTemplate>(
+        QLatin1String("templates/screenplay"),
+        { QLatin1String("world_cp"), QLatin1String("world_cn"), QLatin1String("ar"),
+          QLatin1String("he"), QLatin1String("ru"), QLatin1String("tamil"), QLatin1String("us") });
 }
 
 TemplatesFacade& TemplatesFacade::instance()
@@ -265,4 +263,4 @@ TemplatesFacade& TemplatesFacade::instance()
     return *facade;
 }
 
-} // namespace BusinssLayer
+} // namespace BusinessLayer

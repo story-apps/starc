@@ -5,8 +5,7 @@
 using Ui::ScreenplayTitlePageEdit;
 
 
-namespace KeyProcessingLayer
-{
+namespace KeyProcessingLayer {
 
 TextHandler::TextHandler(ScreenplayTitlePageEdit* _editor)
     : StandardKeyHandler(_editor)

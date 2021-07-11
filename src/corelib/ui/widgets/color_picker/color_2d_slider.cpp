@@ -24,8 +24,8 @@
 #include <ui/design_system/design_system.h>
 
 #include <QImage>
-#include <QPainter>
 #include <QMouseEvent>
+#include <QPainter>
 #include <QResizeEvent>
 
 namespace color_widgets {
@@ -42,95 +42,115 @@ public:
 
     qreal PixHue(float x, float y)
     {
-        if ( comp_x == Hue )
+        if (comp_x == Hue)
             return x;
-        if ( comp_y == Hue )
+        if (comp_y == Hue)
             return y;
         return hue;
     }
 
     qreal PixSat(float x, float y)
     {
-        if ( comp_x == Saturation )
+        if (comp_x == Saturation)
             return x;
-        if ( comp_y == Saturation )
+        if (comp_y == Saturation)
             return y;
         return sat;
     }
 
     qreal PixVal(float x, float y)
     {
-        if ( comp_x == Value )
+        if (comp_x == Value)
             return x;
-        if ( comp_y == Value )
+        if (comp_y == Value)
             return y;
         return val;
     }
 
     void renderSquare(const QSize& size)
     {
-        const QSize sizeCorrected = size - QSize(Ui::DesignSystem::layout().px16(), Ui::DesignSystem::layout().px16());
+        const QSize sizeCorrected
+            = size - QSize(Ui::DesignSystem::layout().px16(), Ui::DesignSystem::layout().px16());
         square = QImage(sizeCorrected, QImage::Format_RGB32);
 
-        for ( int y = 0; y < sizeCorrected.height(); ++y )
-        {
+        for (int y = 0; y < sizeCorrected.height(); ++y) {
             qreal yfloat = 1 - qreal(y) / sizeCorrected.height();
-            for ( int x = 0; x < sizeCorrected.width(); ++x )
-            {
+            for (int x = 0; x < sizeCorrected.width(); ++x) {
                 qreal xfloat = qreal(x) / sizeCorrected.width();
-                square.setPixel( x, y, QColor::fromHsvF(
-                    PixHue(xfloat, yfloat),
-                    PixSat(xfloat, yfloat),
-                    PixVal(xfloat, yfloat)
-                ).rgb());
+                square.setPixel(x, y,
+                                QColor::fromHsvF(PixHue(xfloat, yfloat), PixSat(xfloat, yfloat),
+                                                 PixVal(xfloat, yfloat))
+                                    .rgb());
             }
         }
     }
 
     QPointF selectorPos(const QSize& size)
     {
-        const QSize sizeCorrected = size - QSize(Ui::DesignSystem::layout().px16(), Ui::DesignSystem::layout().px16());
+        const QSize sizeCorrected
+            = size - QSize(Ui::DesignSystem::layout().px16(), Ui::DesignSystem::layout().px16());
         QPointF pt;
-        switch ( comp_x )
-        {
-            case Hue:       pt.setX(sizeCorrected.width()*hue); break;
-            case Saturation:pt.setX(sizeCorrected.width()*sat); break;
-            case Value:     pt.setX(sizeCorrected.width()*val); break;
+        switch (comp_x) {
+        case Hue:
+            pt.setX(sizeCorrected.width() * hue);
+            break;
+        case Saturation:
+            pt.setX(sizeCorrected.width() * sat);
+            break;
+        case Value:
+            pt.setX(sizeCorrected.width() * val);
+            break;
         }
-        switch ( comp_y )
-        {
-            case Hue:       pt.setY(sizeCorrected.height()*(1-hue)); break;
-            case Saturation:pt.setY(sizeCorrected.height()*(1-sat)); break;
-            case Value:     pt.setY(sizeCorrected.height()*(1-val)); break;
+        switch (comp_y) {
+        case Hue:
+            pt.setY(sizeCorrected.height() * (1 - hue));
+            break;
+        case Saturation:
+            pt.setY(sizeCorrected.height() * (1 - sat));
+            break;
+        case Value:
+            pt.setY(sizeCorrected.height() * (1 - val));
+            break;
         }
         return pt + QPointF(Ui::DesignSystem::layout().px8(), Ui::DesignSystem::layout().px8());
     }
 
     void setColorFromPos(const QPoint& pt, const QSize& size)
     {
-        const QPoint pointCorrected = pt - QPoint(Ui::DesignSystem::layout().px8(), Ui::DesignSystem::layout().px8());
-        const QSize sizeCorrected = size - QSize(Ui::DesignSystem::layout().px16(), Ui::DesignSystem::layout().px16());
-        QPointF ptfloat(
-            qBound(0.0, qreal(pointCorrected.x()) / sizeCorrected.width(), 1.0),
-            qBound(0.0, 1 - qreal(pointCorrected.y()) / sizeCorrected.height(), 1.0)
-        );
-        switch ( comp_x )
-        {
-            case Hue:       hue = ptfloat.x(); break;
-            case Saturation:sat = ptfloat.x(); break;
-            case Value:     val = ptfloat.x(); break;
+        const QPoint pointCorrected
+            = pt - QPoint(Ui::DesignSystem::layout().px8(), Ui::DesignSystem::layout().px8());
+        const QSize sizeCorrected
+            = size - QSize(Ui::DesignSystem::layout().px16(), Ui::DesignSystem::layout().px16());
+        QPointF ptfloat(qBound(0.0, qreal(pointCorrected.x()) / sizeCorrected.width(), 1.0),
+                        qBound(0.0, 1 - qreal(pointCorrected.y()) / sizeCorrected.height(), 1.0));
+        switch (comp_x) {
+        case Hue:
+            hue = ptfloat.x();
+            break;
+        case Saturation:
+            sat = ptfloat.x();
+            break;
+        case Value:
+            val = ptfloat.x();
+            break;
         }
-        switch ( comp_y )
-        {
-            case Hue:       hue = ptfloat.y(); break;
-            case Saturation:sat = ptfloat.y(); break;
-            case Value:     val = ptfloat.y(); break;
+        switch (comp_y) {
+        case Hue:
+            hue = ptfloat.y();
+            break;
+        case Saturation:
+            sat = ptfloat.y();
+            break;
+        case Value:
+            val = ptfloat.y();
+            break;
         }
     }
 };
 
 Color2DSlider::Color2DSlider(QWidget* parent)
-    : Widget(parent), p(new Private)
+    : Widget(parent)
+    , p(new Private)
 {
 }
 
@@ -146,7 +166,7 @@ QColor Color2DSlider::color() const
 
 QSize Color2DSlider::sizeHint() const
 {
-    return {128, 128};
+    return { 128, 128 };
 }
 
 qreal Color2DSlider::hue() const
@@ -210,8 +230,7 @@ void Color2DSlider::setValue(qreal v)
 
 void Color2DSlider::setComponentX(Color2DSlider::Component componentX)
 {
-    if ( componentX != p->comp_x )
-    {
+    if (componentX != p->comp_x) {
         p->comp_x = componentX;
         p->renderSquare(size());
         update();
@@ -221,8 +240,7 @@ void Color2DSlider::setComponentX(Color2DSlider::Component componentX)
 
 void Color2DSlider::setComponentY(Color2DSlider::Component componentY)
 {
-    if ( componentY != p->comp_y )
-    {
+    if (componentY != p->comp_y) {
         p->comp_y = componentY;
         p->renderSquare(size());
         update();
@@ -244,8 +262,8 @@ void Color2DSlider::paintEvent(QPaintEvent* _event)
     brush.setTransform(brushTransform);
     painter.setBrush(brush);
     painter.drawRoundedRect(Ui::DesignSystem::layout().px8(), Ui::DesignSystem::layout().px8(),
-                            p->square.width(), p->square.height(),
-                            Ui::DesignSystem::layout().px4(), Ui::DesignSystem::layout().px4());
+                            p->square.width(), p->square.height(), Ui::DesignSystem::layout().px4(),
+                            Ui::DesignSystem::layout().px4());
 
     painter.setPen(QPen(textColor(), Ui::DesignSystem::layout().px2()));
     painter.setBrush(color());

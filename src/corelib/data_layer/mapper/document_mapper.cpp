@@ -1,31 +1,31 @@
 #include "document_mapper.h"
 
 #include <data_layer/database.h>
-
 #include <domain/document_object.h>
 #include <domain/objects_builder.h>
 
 #include <QSqlRecord>
 
-using Domain::DomainObject;
-using Domain::Identifier;
 using Domain::DocumentObject;
 using Domain::DocumentObjectType;
+using Domain::DomainObject;
+using Domain::Identifier;
 
 
-namespace DataMappingLayer
-{
+namespace DataMappingLayer {
 
 namespace {
-    const QString kColumns = " id, uuid, type, content ";
-    const QString kTableName = " documents ";
-    QString uuidFilter(const QUuid& _uuid) {
-        return QString(" WHERE uuid = '%1' ").arg(_uuid.toString());
-    }
-    QString typeFilter(Domain::DocumentObjectType _type) {
-        return QString(" WHERE type = %1 ").arg(static_cast<int>(_type));
-    }
+const QString kColumns = " id, uuid, type, content ";
+const QString kTableName = " documents ";
+QString uuidFilter(const QUuid& _uuid)
+{
+    return QString(" WHERE uuid = '%1' ").arg(_uuid.toString());
 }
+QString typeFilter(Domain::DocumentObjectType _type)
+{
+    return QString(" WHERE type = %1 ").arg(static_cast<int>(_type));
+}
+} // namespace
 
 
 DocumentObject* DocumentMapper::find(const Identifier& _id)
@@ -84,12 +84,9 @@ void DocumentMapper::remove(DocumentObject* _object)
 
 QString DocumentMapper::findStatement(const Identifier& _id) const
 {
-    QString findStatement =
-            QString("SELECT " + kColumns +
-                    " FROM " + kTableName +
-                    " WHERE id = %1 "
-                    )
-            .arg(_id.value());
+    QString findStatement
+        = QString("SELECT " + kColumns + " FROM " + kTableName + " WHERE id = %1 ")
+              .arg(_id.value());
     return findStatement;
 }
 
@@ -101,16 +98,16 @@ QString DocumentMapper::findAllStatement() const
 QString DocumentMapper::findLastOneStatement() const
 {
     return findAllStatement()
-            + QString("WHERE id IN (SELECT id FROM %1 ORDER BY id DESC LIMIT %2)").arg(kTableName).arg(1);
+        + QString("WHERE id IN (SELECT id FROM %1 ORDER BY id DESC LIMIT %2)")
+              .arg(kTableName)
+              .arg(1);
 }
 
 QString DocumentMapper::insertStatement(DomainObject* _object, QVariantList& _insertValues) const
 {
-    const QString insertStatement
-            = QString("INSERT INTO " + kTableName +
-                      " (" + kColumns + ") "
-                      " VALUES(?, ?, ?, ?) "
-                      );
+    const QString insertStatement = QString("INSERT INTO " + kTableName + " (" + kColumns
+                                            + ") "
+                                              " VALUES(?, ?, ?, ?) ");
 
     const auto documentObject = dynamic_cast<DocumentObject*>(_object);
     _insertValues.clear();
@@ -124,13 +121,11 @@ QString DocumentMapper::insertStatement(DomainObject* _object, QVariantList& _in
 
 QString DocumentMapper::updateStatement(DomainObject* _object, QVariantList& _updateValues) const
 {
-    const QString updateStatement
-            = QString("UPDATE " + kTableName +
-                      " SET uuid = ?, "
-                      " type = ?, "
-                      " content = ? "
-                      " WHERE id = ? "
-                      );
+    const QString updateStatement = QString("UPDATE " + kTableName
+                                            + " SET uuid = ?, "
+                                              " type = ?, "
+                                              " content = ? "
+                                              " WHERE id = ? ");
 
     const auto documentObject = dynamic_cast<DocumentObject*>(_object);
     _updateValues.clear();

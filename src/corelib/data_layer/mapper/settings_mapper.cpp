@@ -7,8 +7,7 @@
 #include <QVariant>
 
 
-namespace DataMappingLayer
-{
+namespace DataMappingLayer {
 
 void SettingsMapper::setValue(const QString& _key, const QString& _value)
 {

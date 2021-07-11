@@ -3,8 +3,7 @@
 #include <ui/widgets/widget/widget.h>
 
 
-namespace Ui
-{
+namespace Ui {
 
 /**
  * @brief Интерфейс менеджера документа
@@ -14,7 +13,10 @@ class CORE_LIBRARY_EXPORT AbstractNavigator : public Widget
     Q_OBJECT
 
 public:
-    explicit AbstractNavigator(QWidget* _parent = nullptr) : Widget(_parent) {}
+    explicit AbstractNavigator(QWidget* _parent = nullptr)
+        : Widget(_parent)
+    {
+    }
 
     /**
      * @brief Задать заголовок навигатора

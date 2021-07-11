@@ -1,8 +1,8 @@
 #pragma once
 
-#include <corelib_global.h>
-
 #include <ui/widgets/card/card.h>
+
+#include <corelib_global.h>
 
 
 /**
@@ -34,6 +34,12 @@ public:
 
 protected:
     /**
+     * @brief Переопределяем для обновления цветов подменю
+     */
+    void processBackgroundColorChange() override;
+    void processTextColorChange() override;
+
+    /**
      * @brief Реализуем ручную отрисовку пунктов меню
      */
     void paintEvent(QPaintEvent* _event) override;
@@ -48,9 +54,14 @@ protected:
      * @brief Переопределяем для перерисовки выделенного пункта меню
      */
     void mouseMoveEvent(QMouseEvent* _event) override;
+    void leaveEvent(QEvent* _event) override;
+
+    /**
+     * @brief Отлавливаем события курсора, когда отображено подменю
+     */
+    bool eventFilter(QObject* _watched, QEvent* _event) override;
 
 private:
     class Implementation;
     QScopedPointer<Implementation> d;
 };
-

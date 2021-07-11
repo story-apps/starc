@@ -83,4 +83,3 @@ private:
     class Implementation;
     QScopedPointer<Implementation> d;
 };
-

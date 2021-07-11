@@ -3,16 +3,15 @@
 #include "abstract_exporter.h"
 
 
-namespace BusinessLayer
-{
+namespace BusinessLayer {
 
 class CORE_LIBRARY_EXPORT PdfExporter : public AbstractExporter
 {
 public:
-    PdfExporter();
+    PdfExporter() = default;
 
     /**
-     * @brief Экспортировать сценарий в PDF
+     * @brief Экспортировать сценарий
      */
     void exportTo(ScreenplayTextModel* _model, const ExportOptions& _exportOptions) const override;
 };

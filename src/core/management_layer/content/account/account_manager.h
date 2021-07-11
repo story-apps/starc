@@ -6,8 +6,7 @@ class PaymentInfo;
 class Widget;
 
 
-namespace ManagementLayer
-{
+namespace ManagementLayer {
 
 /**
  * @brief Менеджер личного кабинета пользователя
@@ -84,7 +83,8 @@ public:
      * @brief Установить параметры аккаунта
      */
     void setAccountParameters(qint64 _availableSpace, const QString& _email, qint64 _monthPrice,
-        bool _receiveEmailNotifications, const QString& _userName, const QByteArray& _avatar);
+                              bool _receiveEmailNotifications, const QString& _userName,
+                              const QByteArray& _avatar);
     void setPaymentInfo(const PaymentInfo& _info);
     void setSubscriptionEnd(const QString& _subscriptionEnd);
     void setUserName(const QString& _userName);
@@ -126,7 +126,8 @@ signals:
     /**
      * @brief Пользователь хочет сменить пароль
      */
-    void changePasswordRequested(const QString& _email, const QString& _code, const QString& _password);
+    void changePasswordRequested(const QString& _email, const QString& _code,
+                                 const QString& _password);
 
     /**
      * @brief Пользователь хочет зарегистрироваться

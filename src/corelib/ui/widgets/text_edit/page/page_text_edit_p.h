@@ -1,19 +1,18 @@
 #pragma once
 
-#include "private/qabstractscrollarea_p.h"
-#include "QtGui/qtextdocumentfragment.h"
-#include "QtWidgets/qscrollbar.h"
-#include "QtGui/qtextcursor.h"
-#include "QtGui/qtextformat.h"
-#include "QtWidgets/qmenu.h"
-#include "QtGui/qabstracttextdocumentlayout.h"
 #include "QtCore/qbasictimer.h"
 #include "QtCore/qpropertyanimation.h"
 #include "QtCore/qurl.h"
-#include "private/qwidgettextcontrol_p.h"
-
-#include "page_text_edit.h"
+#include "QtGui/qabstracttextdocumentlayout.h"
+#include "QtGui/qtextcursor.h"
+#include "QtGui/qtextdocumentfragment.h"
+#include "QtGui/qtextformat.h"
+#include "QtWidgets/qmenu.h"
+#include "QtWidgets/qscrollbar.h"
 #include "page_metrics.h"
+#include "page_text_edit.h"
+#include "private/qabstractscrollarea_p.h"
+#include "private/qwidgettextcontrol_p.h"
 
 class QMimeData;
 class PageTextEditPrivate : public QAbstractScrollAreaPrivate
@@ -22,39 +21,49 @@ class PageTextEditPrivate : public QAbstractScrollAreaPrivate
 public:
     PageTextEditPrivate();
 
-    void init(const QString &html = QString());
-    void paint(QPainter *p, QPaintEvent *e);
-    void _q_repaintContents(const QRectF &contentsRect);
+    void init(const QString& html = QString());
+    void paint(QPainter* p, QPaintEvent* e);
+    void _q_repaintContents(const QRectF& contentsRect);
 
-    inline QPoint mapToContents(const QPoint &point) const
-    { return QPoint(point.x() + horizontalOffset(), point.y() + verticalOffset()); }
+    inline QPoint mapToContents(const QPoint& point) const
+    {
+        return QPoint(point.x() + horizontalOffset(), point.y() + verticalOffset());
+    }
 
     void _q_adjustScrollbars();
-    void _q_ensureVisible(const QRectF &rect);
+    void _q_ensureVisible(const QRectF& rect);
     void relayoutDocument();
 
     void createAutoBulletList();
     void pageUpDown(QTextCursor::MoveOperation op, QTextCursor::MoveMode moveMode);
 
     inline int horizontalOffset() const
-    { return q_func()->isRightToLeft() ? (hbar->maximum() - hbar->value()) : hbar->value(); }
+    {
+        return q_func()->isRightToLeft() ? (hbar->maximum() - hbar->value()) : hbar->value();
+    }
     inline int verticalOffset() const
-    { return vbar->value(); }
+    {
+        return vbar->value();
+    }
 
-    inline void sendControlEvent(QEvent *e)
-    { control->processEvent(e, QPointF(horizontalOffset(), verticalOffset()), viewport); }
+    inline void sendControlEvent(QEvent* e)
+    {
+        control->processEvent(e, QPointF(horizontalOffset(), verticalOffset()), viewport);
+    }
 
-    void _q_currentCharFormatChanged(const QTextCharFormat &format);
+    void _q_currentCharFormatChanged(const QTextCharFormat& format);
     void _q_cursorPositionChanged();
-    void _q_hoveredBlockWithMarkerChanged(const QTextBlock &block);
+    void _q_hoveredBlockWithMarkerChanged(const QTextBlock& block);
 
     void updateDefaultTextOption();
 
     // re-implemented by QTextBrowser, called by QTextDocument::loadResource
-    virtual QUrl resolveUrl(const QUrl &url) const
-    { return url; }
+    virtual QUrl resolveUrl(const QUrl& url) const
+    {
+        return url;
+    }
 
-    QWidgetTextControl *control;
+    QWidgetTextControl* control;
 
     PageTextEdit::AutoFormatting autoFormatting;
     bool tabChangesFocus;
@@ -198,8 +207,8 @@ public:
      * @brief Отправить скорректированное событие о взаимодействии мышью
      */
     /** @{ */
-    void sendControlMouseEvent(QMouseEvent *e);
-    void sendControlContextMenuEvent(QContextMenuEvent *e);
+    void sendControlMouseEvent(QMouseEvent* e);
+    void sendControlContextMenuEvent(QContextMenuEvent* e);
     /** @} */
 
 private:

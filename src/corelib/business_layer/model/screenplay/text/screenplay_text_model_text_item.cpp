@@ -5,7 +5,6 @@
 #include <business_layer/chronometry/chronometer.h>
 #include <business_layer/templates/screenplay_template.h>
 #include <business_layer/templates/templates_facade.h>
-
 #include <utils/helpers/string_helper.h>
 #include <utils/helpers/text_helper.h>
 
@@ -16,8 +15,7 @@
 
 #include <optional>
 
-namespace BusinessLayer
-{
+namespace BusinessLayer {
 
 class ScreenplayTextModelTextItem::Implementation
 {
@@ -44,7 +42,7 @@ public:
     /**
      * @brief Длительность сцены
      */
-    std::chrono::milliseconds duration = std::chrono::milliseconds{0};
+    std::chrono::milliseconds duration = std::chrono::milliseconds{ 0 };
 
     /**
      * @brief Является ли блок декорацией
@@ -52,9 +50,15 @@ public:
     bool isCorrection = false;
 
     /**
+     * @brief Является ли блок корректировкой вида (CONT) внутри разорванной реплики
+     */
+    bool isCorrectionContinued = false;
+
+    /**
      * @brief Разорван ли блок на разрыве страниц
      */
-    bool isBroken = false;
+    bool isBreakCorrectionStart = false;
+    bool isBreakCorrectionEnd = false;
 
     /**
      * @brief Находится ли элемент в таблице, и если находится, то в какой колонке
@@ -108,10 +112,12 @@ ScreenplayTextModelTextItem::Implementation::Implementation(QXmlStreamReader& _c
     Q_ASSERT(paragraphType != ScreenplayParagraphType::Undefined);
 
     if (_contentReader.attributes().hasAttribute(xml::kAlignAttribute)) {
-        alignment = alignmentFromString(_contentReader.attributes().value(xml::kAlignAttribute).toString());
+        alignment = alignmentFromString(
+            _contentReader.attributes().value(xml::kAlignAttribute).toString());
     }
     if (_contentReader.attributes().hasAttribute(xml::kInFirstColumn)) {
-        isInFirstColumn = _contentReader.attributes().value(xml::kInFirstColumn).toString() == "true";
+        isInFirstColumn
+            = _contentReader.attributes().value(xml::kInFirstColumn).toString() == "true";
     }
 
     auto currentTag = xml::readNextElement(_contentReader);
@@ -136,8 +142,7 @@ ScreenplayTextModelTextItem::Implementation::Implementation(QXmlStreamReader& _c
             //
             // Прекращаем обработку, если дошли до конца редакторских заметок
             //
-            if (currentTag == xml::kReviewMarksTag
-                && _contentReader.isEndElement()) {
+            if (currentTag == xml::kReviewMarksTag && _contentReader.isEndElement()) {
                 currentTag = xml::readNextElement(_contentReader);
                 break;
             }
@@ -150,10 +155,12 @@ ScreenplayTextModelTextItem::Implementation::Implementation(QXmlStreamReader& _c
                 reviewMark.from = reviewMarkAttributes.value(xml::kFromAttribute).toInt();
                 reviewMark.length = reviewMarkAttributes.value(xml::kLengthAttribute).toInt();
                 if (reviewMarkAttributes.hasAttribute(xml::kColorAttribute)) {
-                    reviewMark.textColor = reviewMarkAttributes.value(xml::kColorAttribute).toString();
+                    reviewMark.textColor
+                        = reviewMarkAttributes.value(xml::kColorAttribute).toString();
                 }
                 if (reviewMarkAttributes.hasAttribute(xml::kBackgroundColorAttribute)) {
-                    reviewMark.backgroundColor = reviewMarkAttributes.value(xml::kBackgroundColorAttribute).toString();
+                    reviewMark.backgroundColor
+                        = reviewMarkAttributes.value(xml::kBackgroundColorAttribute).toString();
                 }
                 reviewMark.isDone = reviewMarkAttributes.hasAttribute(xml::kDoneAttribute);
 
@@ -164,9 +171,12 @@ ScreenplayTextModelTextItem::Implementation::Implementation(QXmlStreamReader& _c
                     }
 
                     const auto commentAttributes = _contentReader.attributes();
-                    reviewMark.comments.append({ TextHelper::fromHtmlEscaped(commentAttributes.value(xml::kAuthorAttribute).toString()),
-                                                 commentAttributes.value(xml::kDateAttribute).toString(),
-                                                 TextHelper::fromHtmlEscaped(xml::readContent(_contentReader).toString()) });
+                    reviewMark.comments.append(
+                        { TextHelper::fromHtmlEscaped(
+                              commentAttributes.value(xml::kAuthorAttribute).toString()),
+                          commentAttributes.value(xml::kDateAttribute).toString(),
+                          TextHelper::fromHtmlEscaped(
+                              xml::readContent(_contentReader).toString()) });
 
                     xml::readNextElement(_contentReader); // end
                 } while (!_contentReader.atEnd());
@@ -183,8 +193,7 @@ ScreenplayTextModelTextItem::Implementation::Implementation(QXmlStreamReader& _c
             //
             // Прекращаем обработку, если дошли до конца форматов
             //
-            if (currentTag == xml::kFormatsTag
-                && _contentReader.isEndElement()) {
+            if (currentTag == xml::kFormatsTag && _contentReader.isEndElement()) {
                 currentTag = xml::readNextElement(_contentReader);
                 break;
             }
@@ -207,14 +216,14 @@ ScreenplayTextModelTextItem::Implementation::Implementation(QXmlStreamReader& _c
 
     if (currentTag == xml::kRevisionsTag) {
         Q_ASSERT(false);
-//        auto revisionNode = revisionsNode.firstChildElement();
-//        while (!revisionNode.isNull()) {
-//            revisions.append({{ revisionNode.attribute(xml::kFromAttribute).toInt(),
-//                                revisionNode.attribute(xml::kLengthAttribute).toInt()},
-//                               revisionNode.attribute(xml::kColorAttribute) });
-//            //
-//            revisionNode = revisionNode.nextSiblingElement();
-//        }
+        //        auto revisionNode = revisionsNode.firstChildElement();
+        //        while (!revisionNode.isNull()) {
+        //            revisions.append({{ revisionNode.attribute(xml::kFromAttribute).toInt(),
+        //                                revisionNode.attribute(xml::kLengthAttribute).toInt()},
+        //                               revisionNode.attribute(xml::kColorAttribute) });
+        //            //
+        //            revisionNode = revisionNode.nextSiblingElement();
+        //        }
     }
 
     xml::readNextElement(_contentReader); // next
@@ -235,22 +244,24 @@ QByteArray ScreenplayTextModelTextItem::Implementation::buildXml(int _from, int 
 
     QByteArray xml;
     xml += QString("<%1%2%3>")
-           .arg(toString(paragraphType),
-                (alignment.has_value()
-                 ? QString(" %1=\"%2\"").arg(xml::kAlignAttribute, toString(*alignment))
-                 : ""),
-                (isInFirstColumn.has_value()
-                 ? QString(" %1=\"%2\"").arg(xml::kInFirstColumn, *isInFirstColumn ? "true" : "false")
-                 : "")).toUtf8();
+               .arg(toString(paragraphType),
+                    (alignment.has_value()
+                         ? QString(" %1=\"%2\"").arg(xml::kAlignAttribute, toString(*alignment))
+                         : ""),
+                    (isInFirstColumn.has_value()
+                         ? QString(" %1=\"%2\"")
+                               .arg(xml::kInFirstColumn, *isInFirstColumn ? "true" : "false")
+                         : ""))
+               .toUtf8();
     if (bookmark.has_value()) {
         xml += QString("<%1 %2=\"%3\"><![CDATA[%4]]></%1>")
-               .arg(xml::kBookmarkTag,
-                    xml::kColorAttribute, bookmark->color.name(),
-                    TextHelper::toHtmlEscaped(bookmark->text)).toUtf8();
+                   .arg(xml::kBookmarkTag, xml::kColorAttribute, bookmark->color.name(),
+                        TextHelper::toHtmlEscaped(bookmark->text))
+                   .toUtf8();
     }
     xml += QString("<%1><![CDATA[%2]]></%1>")
-           .arg(xml::kValueTag,
-                TextHelper::toHtmlEscaped(text.mid(_from, _length))).toUtf8();
+               .arg(xml::kValueTag, TextHelper::toHtmlEscaped(text.mid(_from, _length)))
+               .toUtf8();
 
     //
     // Сохранить редакторские заметки
@@ -284,26 +295,29 @@ QByteArray ScreenplayTextModelTextItem::Implementation::buildXml(int _from, int 
         xml += QString("<%1>").arg(xml::kReviewMarksTag).toUtf8();
         for (const auto& reviewMark : std::as_const(reviewMarksToSave)) {
             xml += QString("<%1 %2=\"%3\" %4=\"%5\" %6%7%9")
-                   .arg(xml::kReviewMarkTag,
-                        xml::kFromAttribute, QString::number(reviewMark.from),
-                        xml::kLengthAttribute, QString::number(reviewMark.length),
-                        (reviewMark.textColor.isValid()
-                         ? QString(" %1=\"%2\"").arg(xml::kColorAttribute, reviewMark.textColor.name())
-                         : ""),
-                        (reviewMark.backgroundColor.isValid()
-                         ? QString(" %1=\"%2\"").arg(xml::kBackgroundColorAttribute, reviewMark.backgroundColor.name())
-                         : ""),
-                        (reviewMark.isDone
-                         ? QString(" %1=\"true\"").arg(xml::kDoneAttribute)
-                         : "")).toUtf8();
+                       .arg(xml::kReviewMarkTag, xml::kFromAttribute,
+                            QString::number(reviewMark.from), xml::kLengthAttribute,
+                            QString::number(reviewMark.length),
+                            (reviewMark.textColor.isValid()
+                                 ? QString(" %1=\"%2\"")
+                                       .arg(xml::kColorAttribute, reviewMark.textColor.name())
+                                 : ""),
+                            (reviewMark.backgroundColor.isValid()
+                                 ? QString(" %1=\"%2\"")
+                                       .arg(xml::kBackgroundColorAttribute,
+                                            reviewMark.backgroundColor.name())
+                                 : ""),
+                            (reviewMark.isDone ? QString(" %1=\"true\"").arg(xml::kDoneAttribute)
+                                               : ""))
+                       .toUtf8();
             if (!reviewMark.comments.isEmpty()) {
                 xml += ">";
                 for (const auto& comment : std::as_const(reviewMark.comments)) {
                     xml += QString("<%1 %2=\"%3\" %4=\"%5\"><![CDATA[%6]]></%1>")
-                           .arg(xml::kCommentTag,
-                                xml::kAuthorAttribute, TextHelper::toHtmlEscaped(comment.author),
-                                xml::kDateAttribute, comment.date,
-                                TextHelper::toHtmlEscaped(comment.text)).toUtf8();
+                               .arg(xml::kCommentTag, xml::kAuthorAttribute,
+                                    TextHelper::toHtmlEscaped(comment.author), xml::kDateAttribute,
+                                    comment.date, TextHelper::toHtmlEscaped(comment.text))
+                               .toUtf8();
                 }
                 xml += QString("</%1>").arg(xml::kReviewMarkTag).toUtf8();
             } else {
@@ -345,18 +359,15 @@ QByteArray ScreenplayTextModelTextItem::Implementation::buildXml(int _from, int 
         xml += QString("<%1>").arg(xml::kFormatsTag).toUtf8();
         for (const auto& format : std::as_const(formatsToSave)) {
             xml += QString("<%1 %2=\"%3\" %4=\"%5\" %6%7%8/>")
-                   .arg(xml::kFormatTag,
-                        xml::kFromAttribute, QString::number(format.from),
-                        xml::kLengthAttribute, QString::number(format.length),
-                        (format.isBold
-                         ? QString(" %1=\"true\"").arg(xml::kBoldAttribute)
-                         : ""),
-                        (format.isItalic
-                         ? QString(" %1=\"true\"").arg(xml::kItalicAttribute)
-                         : ""),
-                        (format.isUnderline
-                         ? QString(" %1=\"true\"").arg(xml::kUnderlineAttribute)
-                         : "")).toUtf8();
+                       .arg(xml::kFormatTag, xml::kFromAttribute, QString::number(format.from),
+                            xml::kLengthAttribute, QString::number(format.length),
+                            (format.isBold ? QString(" %1=\"true\"").arg(xml::kBoldAttribute) : ""),
+                            (format.isItalic ? QString(" %1=\"true\"").arg(xml::kItalicAttribute)
+                                             : ""),
+                            (format.isUnderline
+                                 ? QString(" %1=\"true\"").arg(xml::kUnderlineAttribute)
+                                 : ""))
+                       .toUtf8();
         }
         xml += QString("</%1>").arg(xml::kFormatsTag).toUtf8();
     }
@@ -368,10 +379,10 @@ QByteArray ScreenplayTextModelTextItem::Implementation::buildXml(int _from, int 
         xml += QString("<%1>").arg(xml::kRevisionsTag).toUtf8();
         for (const auto& revision : std::as_const(revisions)) {
             xml += QString("<%1 %2=\"%3\" %4=\"%5\" %6=\"%7\"/>")
-                   .arg(xml::kRevisionTag,
-                        xml::kFromAttribute, QString::number(revision.from),
-                        xml::kLengthAttribute, QString::number(revision.length),
-                        xml::kColorAttribute, revision.color.name()).toUtf8();
+                       .arg(xml::kRevisionTag, xml::kFromAttribute, QString::number(revision.from),
+                            xml::kLengthAttribute, QString::number(revision.length),
+                            xml::kColorAttribute, revision.color.name())
+                       .toUtf8();
         }
         xml += QString("</%1>").arg(xml::kRevisionsTag).toUtf8();
     }
@@ -390,23 +401,19 @@ QByteArray ScreenplayTextModelTextItem::Implementation::buildXml(int _from, int 
 
 int ScreenplayTextModelTextItem::TextPart::end() const
 {
-     return from + length;
+    return from + length;
 }
 
-bool ScreenplayTextModelTextItem::TextFormat::operator==(const ScreenplayTextModelTextItem::TextFormat& _other) const
+bool ScreenplayTextModelTextItem::TextFormat::operator==(
+    const ScreenplayTextModelTextItem::TextFormat& _other) const
 {
-    return from == _other.from
-            && length == _other.length
-            && isBold == _other.isBold
-            && isItalic == _other.isItalic
-            && isUnderline == _other.isUnderline;
+    return from == _other.from && length == _other.length && isBold == _other.isBold
+        && isItalic == _other.isItalic && isUnderline == _other.isUnderline;
 }
 
 bool ScreenplayTextModelTextItem::TextFormat::isValid() const
 {
-    return isBold != false
-            || isItalic != false
-            || isUnderline != false;
+    return isBold != false || isItalic != false || isUnderline != false;
 }
 
 QTextCharFormat ScreenplayTextModelTextItem::TextFormat::charFormat() const
@@ -428,21 +435,18 @@ QTextCharFormat ScreenplayTextModelTextItem::TextFormat::charFormat() const
     return format;
 }
 
-bool ScreenplayTextModelTextItem::ReviewComment::operator==(const ScreenplayTextModelTextItem::ReviewComment& _other) const
+bool ScreenplayTextModelTextItem::ReviewComment::operator==(
+    const ScreenplayTextModelTextItem::ReviewComment& _other) const
 {
-    return author == _other.author
-            && date == _other.date
-            && text == _other.text;
+    return author == _other.author && date == _other.date && text == _other.text;
 }
 
-bool ScreenplayTextModelTextItem::ReviewMark::operator==(const ScreenplayTextModelTextItem::ReviewMark& _other) const
+bool ScreenplayTextModelTextItem::ReviewMark::operator==(
+    const ScreenplayTextModelTextItem::ReviewMark& _other) const
 {
-    return from == _other.from
-            && length == _other.length
-            && textColor == _other.textColor
-            && backgroundColor == _other.backgroundColor
-            && isDone == _other.isDone
-            && comments == _other.comments;
+    return from == _other.from && length == _other.length && textColor == _other.textColor
+        && backgroundColor == _other.backgroundColor && isDone == _other.isDone
+        && comments == _other.comments;
 }
 
 QTextCharFormat ScreenplayTextModelTextItem::ReviewMark::charFormat() const
@@ -468,29 +472,27 @@ QTextCharFormat ScreenplayTextModelTextItem::ReviewMark::charFormat() const
     return format;
 }
 
-bool ScreenplayTextModelTextItem::Bookmark::operator==(const ScreenplayTextModelTextItem::Bookmark& _other) const
+bool ScreenplayTextModelTextItem::Bookmark::operator==(
+    const ScreenplayTextModelTextItem::Bookmark& _other) const
 {
-    return color == _other.color
-            && text == _other.text;
+    return color == _other.color && text == _other.text;
 }
 
 bool ScreenplayTextModelTextItem::Revision::operator==(const Revision& _other) const
 {
-    return from == _other.from
-            && length == _other.length
-            && color == _other.color;
+    return from == _other.from && length == _other.length && color == _other.color;
 }
 
 ScreenplayTextModelTextItem::ScreenplayTextModelTextItem()
-    : ScreenplayTextModelItem(ScreenplayTextModelItemType::Text),
-      d(new Implementation)
+    : ScreenplayTextModelItem(ScreenplayTextModelItemType::Text)
+    , d(new Implementation)
 {
     d->updateXml();
 }
 
 ScreenplayTextModelTextItem::ScreenplayTextModelTextItem(QXmlStreamReader& _contentReaded)
-    : ScreenplayTextModelItem(ScreenplayTextModelItemType::Text),
-      d(new Implementation(_contentReaded))
+    : ScreenplayTextModelItem(ScreenplayTextModelItemType::Text)
+    , d(new Implementation(_contentReaded))
 {
     d->updateXml();
     updateDuration();
@@ -505,9 +507,9 @@ std::optional<ScreenplayTextModelTextItem::Number> ScreenplayTextModelTextItem::
 
 void ScreenplayTextModelTextItem::setNumber(int _number)
 {
-    const auto newNumber = QString(QLocale().textDirection() == Qt::LeftToRight ? "%1:" : ":%1").arg(_number);
-    if (d->number.has_value()
-        && d->number->value == newNumber) {
+    const auto newNumber
+        = QString(QLocale().textDirection() == Qt::LeftToRight ? "%1:" : ":%1").arg(_number);
+    if (d->number.has_value() && d->number->value == newNumber) {
         return;
     }
 
@@ -554,18 +556,46 @@ void ScreenplayTextModelTextItem::setCorrection(bool _correction)
     }
 }
 
-bool ScreenplayTextModelTextItem::isBroken() const
+bool ScreenplayTextModelTextItem::isCorrectionContinued() const
 {
-    return d->isBroken;
+    return d->isCorrectionContinued;
 }
 
-void ScreenplayTextModelTextItem::setBroken(bool _broken)
+void ScreenplayTextModelTextItem::setCorrectionContinued(bool _continued)
 {
-    if (d->isBroken == _broken) {
+    if (d->isCorrectionContinued == _continued) {
         return;
     }
 
-    d->isBroken = _broken;
+    d->isCorrectionContinued = _continued;
+}
+
+bool ScreenplayTextModelTextItem::isBreakCorrectionStart() const
+{
+    return d->isBreakCorrectionStart;
+}
+
+void ScreenplayTextModelTextItem::setBreakCorrectionStart(bool _broken)
+{
+    if (d->isBreakCorrectionStart == _broken) {
+        return;
+    }
+
+    d->isBreakCorrectionStart = _broken;
+}
+
+bool ScreenplayTextModelTextItem::isBreakCorrectionEnd() const
+{
+    return d->isBreakCorrectionEnd;
+}
+
+void ScreenplayTextModelTextItem::setBreakCorrectionEnd(bool _broken)
+{
+    if (d->isBreakCorrectionEnd == _broken) {
+        return;
+    }
+
+    d->isBreakCorrectionEnd = _broken;
 }
 
 std::optional<bool> ScreenplayTextModelTextItem::isInFirstColumn() const
@@ -608,8 +638,7 @@ std::optional<Qt::Alignment> ScreenplayTextModelTextItem::alignment() const
 
 void ScreenplayTextModelTextItem::setAlignment(Qt::Alignment _align)
 {
-    if (d->alignment.has_value()
-        && d->alignment == _align) {
+    if (d->alignment.has_value() && d->alignment == _align) {
         return;
     }
 
@@ -623,10 +652,10 @@ std::optional<ScreenplayTextModelTextItem::Bookmark> ScreenplayTextModelTextItem
     return d->bookmark;
 }
 
-void ScreenplayTextModelTextItem::setBookmark(const ScreenplayTextModelTextItem::Bookmark& _bookmark)
+void ScreenplayTextModelTextItem::setBookmark(
+    const ScreenplayTextModelTextItem::Bookmark& _bookmark)
 {
-    if (d->bookmark.has_value()
-        && d->bookmark->color == _bookmark.color
+    if (d->bookmark.has_value() && d->bookmark->color == _bookmark.color
         && d->bookmark->text == _bookmark.text) {
         return;
     }
@@ -718,10 +747,10 @@ const QVector<ScreenplayTextModelTextItem::TextFormat>& ScreenplayTextModelTextI
 void ScreenplayTextModelTextItem::setFormats(const QVector<QTextLayout::FormatRange>& _formats)
 {
     QVector<TextFormat> newFormats;
-    const auto defaultBlockFormat = TemplatesFacade::screenplayTemplate().blockStyle(d->paragraphType);
+    const auto defaultBlockFormat
+        = TemplatesFacade::screenplayTemplate().blockStyle(d->paragraphType);
     for (const auto& format : _formats) {
-        if (format.start == 0
-            && format.length == d->text.length()
+        if (format.start == 0 && format.length == d->text.length()
             && format.format == defaultBlockFormat.charFormat()) {
             continue;
         }
@@ -751,12 +780,14 @@ void ScreenplayTextModelTextItem::setFormats(const QVector<QTextLayout::FormatRa
     markChanged();
 }
 
-const QVector<ScreenplayTextModelTextItem::ReviewMark>& ScreenplayTextModelTextItem::reviewMarks() const
+const QVector<ScreenplayTextModelTextItem::ReviewMark>& ScreenplayTextModelTextItem::reviewMarks()
+    const
 {
     return d->reviewMarks;
 }
 
-void ScreenplayTextModelTextItem::setReviewMarks(const QVector<ScreenplayTextModelTextItem::ReviewMark>& _reviewMarks)
+void ScreenplayTextModelTextItem::setReviewMarks(
+    const QVector<ScreenplayTextModelTextItem::ReviewMark>& _reviewMarks)
 {
     if (d->reviewMarks == _reviewMarks) {
         return;
@@ -767,7 +798,8 @@ void ScreenplayTextModelTextItem::setReviewMarks(const QVector<ScreenplayTextMod
     markChanged();
 }
 
-void ScreenplayTextModelTextItem::setReviewMarks(const QVector<QTextLayout::FormatRange>& _reviewMarks)
+void ScreenplayTextModelTextItem::setReviewMarks(
+    const QVector<QTextLayout::FormatRange>& _reviewMarks)
 {
     QVector<ReviewMark> newReviewMarks;
     for (const auto& reviewMark : _reviewMarks) {
@@ -785,11 +817,17 @@ void ScreenplayTextModelTextItem::setReviewMarks(const QVector<QTextLayout::Form
             newReviewMark.backgroundColor = reviewMark.format.background().color();
         }
         newReviewMark.isDone = reviewMark.format.boolProperty(ScreenplayBlockStyle::PropertyIsDone);
-        const QStringList comments = reviewMark.format.property(ScreenplayBlockStyle::PropertyComments).toStringList();
-        const QStringList dates = reviewMark.format.property(ScreenplayBlockStyle::PropertyCommentsDates).toStringList();
-        const QStringList authors = reviewMark.format.property(ScreenplayBlockStyle::PropertyCommentsAuthors).toStringList();
+        const QStringList comments
+            = reviewMark.format.property(ScreenplayBlockStyle::PropertyComments).toStringList();
+        const QStringList dates
+            = reviewMark.format.property(ScreenplayBlockStyle::PropertyCommentsDates)
+                  .toStringList();
+        const QStringList authors
+            = reviewMark.format.property(ScreenplayBlockStyle::PropertyCommentsAuthors)
+                  .toStringList();
         for (int commentIndex = 0; commentIndex < comments.size(); ++commentIndex) {
-            newReviewMark.comments.append({ authors.at(commentIndex), dates.at(commentIndex), comments.at(commentIndex) });
+            newReviewMark.comments.append(
+                { authors.at(commentIndex), dates.at(commentIndex), comments.at(commentIndex) });
         }
 
         newReviewMarks.append(newReviewMark);
@@ -805,8 +843,7 @@ const QVector<ScreenplayTextModelTextItem::Revision>& ScreenplayTextModelTextIte
 
 void ScreenplayTextModelTextItem::mergeWith(const ScreenplayTextModelTextItem* _other)
 {
-    if (_other == nullptr
-        || _other->text().isEmpty()) {
+    if (_other == nullptr || _other->text().isEmpty()) {
         return;
     }
 
@@ -829,19 +866,17 @@ void ScreenplayTextModelTextItem::mergeWith(const ScreenplayTextModelTextItem* _
 QVariant ScreenplayTextModelTextItem::data(int _role) const
 {
     switch (_role) {
-        case Qt::DecorationRole: {
-            return d->paragraphType == ScreenplayParagraphType::Shot
-                    ? u8"\U000F0332"
-                    : u8"\U000F09A8";
-        }
+    case Qt::DecorationRole: {
+        return d->paragraphType == ScreenplayParagraphType::Shot ? u8"\U000F0332" : u8"\U000F09A8";
+    }
 
-        case Qt::DisplayRole: {
-            return d->text;
-        }
+    case Qt::DisplayRole: {
+        return d->text;
+    }
 
-        default: {
-            return ScreenplayTextModelItem::data(_role);
-        }
+    default: {
+        return ScreenplayTextModelItem::data(_role);
+    }
     }
 }
 
@@ -886,20 +921,16 @@ void ScreenplayTextModelTextItem::copyFrom(ScreenplayTextModelItem* _item)
 
 bool ScreenplayTextModelTextItem::isEqual(ScreenplayTextModelItem* _item) const
 {
-    if (_item == nullptr
-        || type() != _item->type()) {
+    if (_item == nullptr || type() != _item->type()) {
         return false;
     }
 
     const auto textItem = static_cast<ScreenplayTextModelTextItem*>(_item);
     return d->isInFirstColumn == textItem->d->isInFirstColumn
-            && d->paragraphType == textItem->d->paragraphType
-            && d->alignment == textItem->d->alignment
-            && d->bookmark == textItem->d->bookmark
-            && d->text == textItem->d->text
-            && d->reviewMarks == textItem->d->reviewMarks
-            && d->formats == textItem->d->formats
-            && d->revisions == textItem->d->revisions;
+        && d->paragraphType == textItem->d->paragraphType && d->alignment == textItem->d->alignment
+        && d->bookmark == textItem->d->bookmark && d->text == textItem->d->text
+        && d->reviewMarks == textItem->d->reviewMarks && d->formats == textItem->d->formats
+        && d->revisions == textItem->d->revisions;
 }
 
 void ScreenplayTextModelTextItem::markChanged()

@@ -1,19 +1,27 @@
 #pragma once
 
-#include <corelib_global.h>
-
 #include <QColor>
 #include <QString>
 
+#include <corelib_global.h>
 
-namespace BusinessLayer
-{
+
+namespace BusinessLayer {
+
+/**
+ * @brief Формат экспортируемого файла
+ */
+enum class ExportFileFormat {
+    Pdf,
+    Docx,
+    Fdx,
+    Fountain,
+};
 
 /**
  * @brief Опции экспорта
  */
-struct CORE_LIBRARY_EXPORT ExportOptions
-{
+struct CORE_LIBRARY_EXPORT ExportOptions {
     /**
      * @brief Путь к файлу
      */
@@ -22,7 +30,7 @@ struct CORE_LIBRARY_EXPORT ExportOptions
     /**
      * @brief Формат файла
      */
-    int fileFormat = 0;
+    ExportFileFormat fileFormat = ExportFileFormat::Pdf;
 
     /**
      * @brief Идентификатор шаблона экспорта
@@ -65,12 +73,23 @@ struct CORE_LIBRARY_EXPORT ExportOptions
      * @brief Водяной знак
      */
     QString watermark;
+    /**
+     * @brief Цвет водяного знака
+     */
     QColor watermarkColor;
+
 
     //
     // Параметры самого документа
     //
+
+    /**
+     * @brief Верхний колонтитул
+     */
     QString header;
+    /**
+     * @brief Нижний колонтитул
+     */
     QString footer;
 };
 

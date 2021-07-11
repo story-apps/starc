@@ -2,10 +2,8 @@
 
 #include <data_layer/mapper/document_mapper.h>
 #include <data_layer/mapper/mapper_facade.h>
-
 #include <domain/document_object.h>
 #include <domain/objects_builder.h>
-
 #include <utils/helpers/image_helper.h>
 
 #include <QCache>
@@ -13,14 +11,13 @@
 #include <QPixmap>
 
 
-namespace DataStorageLayer
-{
+namespace DataStorageLayer {
 
 class DocumentDataStorage::Implementation
 {
-public:/**
-     * @brief Кэш загруженных изображений
-     */
+public: /**
+         * @brief Кэш загруженных изображений
+         */
     mutable QCache<QUuid, QPixmap> cachedImages;
 
     /**
@@ -42,8 +39,7 @@ QPixmap DocumentDataStorage::load(const QUuid& _uuid) const
         return {};
     }
 
-    if (auto imageIter = d->newImages.find(_uuid);
-        imageIter != d->newImages.end()) {
+    if (auto imageIter = d->newImages.find(_uuid); imageIter != d->newImages.end()) {
         return imageIter.value();
     }
 
@@ -92,9 +88,9 @@ void DocumentDataStorage::clear()
 void DocumentDataStorage::saveChanges()
 {
     for (auto imageIter = d->newImages.begin(); imageIter != d->newImages.end(); ++imageIter) {
-        auto newDocument
-                = Domain::ObjectsBuilder::createDocument({}, imageIter.key(),
-                        Domain::DocumentObjectType::ImageData, ImageHelper::bytesFromImage(imageIter.value()));
+        auto newDocument = Domain::ObjectsBuilder::createDocument(
+            {}, imageIter.key(), Domain::DocumentObjectType::ImageData,
+            ImageHelper::bytesFromImage(imageIter.value()));
         DataMappingLayer::MapperFacade::documentMapper()->insert(newDocument);
     }
 

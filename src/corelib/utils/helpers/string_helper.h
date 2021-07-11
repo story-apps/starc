@@ -1,8 +1,8 @@
 #pragma once
 
-#include <corelib_global.h>
-
 #include <qnamespace.h>
+
+#include <corelib_global.h>
 
 class QMarginsF;
 

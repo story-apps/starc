@@ -1,16 +1,15 @@
 #pragma once
 
-#include <corelib_global.h>
-
 #include <QObject>
+
+#include <corelib_global.h>
 
 class QTextBlock;
 class QTextBlockFormat;
 class QTextDocument;
 
 
-namespace BusinessLayer
-{
+namespace BusinessLayer {
 
 class ScreenplayTextCursor;
 
@@ -67,4 +66,4 @@ private:
     QScopedPointer<Implementation> d;
 };
 
-} // namespace Ui
+} // namespace BusinessLayer

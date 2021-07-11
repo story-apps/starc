@@ -2,7 +2,6 @@
 
 #include <business_layer/chronometry/chronometer.h>
 #include <business_layer/templates/templates_facade.h>
-
 #include <ui/design_system/design_system.h>
 #include <ui/widgets/button/button.h>
 #include <ui/widgets/card/card.h>
@@ -23,15 +22,15 @@
 #include <QVariantAnimation>
 
 
-namespace Ui
-{
+namespace Ui {
 
 namespace {
 
 /**
  * @brief Сформиовать компоновщик для строки настроек
  */
-QHBoxLayout* makeLayout() {
+QHBoxLayout* makeLayout()
+{
     auto layout = new QHBoxLayout;
     layout->setContentsMargins({});
     layout->setSpacing(0);
@@ -45,122 +44,19 @@ QHBoxLayout* makeLayout() {
  * @link https://www.softmaker.com/en/dictionaries
  */
 const QVector<QString> kSpellCheckerLanguagesNameToCode = {
-    "af",
-    "an",
-    "ar",
-    "az",
-    "be",
-    "bg",
-    "bn",
-    "bo",
-    "br",
-    "bs",
-    "ca-valencia",
-    "ca",
-    "cs",
-    "cy",
-    "da",
-    "de-AT",
-    "de-CH",
-    "de",
-    "el-polyton",
-    "el",
-    "en-AU",
-    "en-CA",
-    "en-GB",
-    "en-NZ",
-    "en-ZA",
-    "en",
-    "eo",
-    "es-AR",
-    "es-BO",
-    "es-CL",
-    "es-CO",
-    "es-CR",
-    "es-CU",
-    "es-DO",
-    "es-EC",
-    "es-GT",
-    "es-HN",
-    "es-MX",
-    "es-NI",
-    "es-PA",
-    "es-PE",
-    "es-PH",
-    "es-PR",
-    "es-PY",
-    "es-SV",
-    "es-US",
-    "es-UY",
-    "es-VE",
-    "es",
-    "et",
-    "eu",
-    "fa",
-    "fo",
-    "fr",
-    "fur",
-    "fy",
-    "ga",
-    "gd",
-    "gl",
-    "gu",
-    "gug",
-    "he",
-    "hi",
-    "hr",
-    "hu",
-    "hy",
-    "hyw",
-    "ia",
-    "id",
-    "is",
-    "it",
-    "ka",
-    "kk",
-    "kmr",
-    "ko",
-    "la",
-    "lb",
-    "lo",
-    "lt",
-    "ltg",
-    "lv",
-    "mk",
-    "mn",
-    "mt",
-    "nb",
-    "nds",
-    "ne",
-    "nl",
-    "nn",
-    "oc",
-    "pl",
-    "pt-BR",
-    "pt",
-    "qu",
-    "ro",
-    "ru-yo",
-    "ru",
-    "rw",
-    "si",
-    "sk",
-    "sl",
-    "sq",
-    "sr-Latn",
-    "sr",
-    "sv-FI",
-    "sv",
-    "sw",
-    "ta",
-    "te",
-    "th",
-    "tk",
-    "tlh-Latn",
-    "tlh",
-    "tr",
-    "uk",
-    "vi"
+    "af",         "an",          "ar",    "az",       "be",    "bg",    "bn",    "bo",    "br",
+    "bs",         "ca-valencia", "ca",    "cs",       "cy",    "da",    "de-AT", "de-CH", "de",
+    "el-polyton", "el",          "en-AU", "en-CA",    "en-GB", "en-NZ", "en-ZA", "en",    "eo",
+    "es-AR",      "es-BO",       "es-CL", "es-CO",    "es-CR", "es-CU", "es-DO", "es-EC", "es-GT",
+    "es-HN",      "es-MX",       "es-NI", "es-PA",    "es-PE", "es-PH", "es-PR", "es-PY", "es-SV",
+    "es-US",      "es-UY",       "es-VE", "es",       "et",    "eu",    "fa",    "fo",    "fr",
+    "fur",        "fy",          "ga",    "gd",       "gl",    "gu",    "gug",   "he",    "hi",
+    "hr",         "hu",          "hy",    "hyw",      "ia",    "id",    "is",    "it",    "ka",
+    "kk",         "kmr",         "ko",    "la",       "lb",    "lo",    "lt",    "ltg",   "lv",
+    "mk",         "mn",          "mt",    "nb",       "nds",   "ne",    "nl",    "nn",    "oc",
+    "pl",         "pt-BR",       "pt",    "qu",       "ro",    "ru-yo", "ru",    "rw",    "si",
+    "sk",         "sl",          "sq",    "sr-Latn",  "sr",    "sv-FI", "sv",    "sw",    "ta",
+    "te",         "th",          "tk",    "tlh-Latn", "tlh",   "tr",    "uk",    "vi"
 };
 
 /**
@@ -171,7 +67,8 @@ const int kSpellCheckerLanguageCodeRole = Qt::UserRole + 1;
 /**
  * @brief Построить модель для всех доступных справочников проверки орфографии
  */
-QStandardItemModel* buildSpellCheckerLanguagesModel(QObject* _parent) {
+QStandardItemModel* buildSpellCheckerLanguagesModel(QObject* _parent)
+{
     auto model = new QStandardItemModel(_parent);
     for (const auto& language : kSpellCheckerLanguagesNameToCode) {
         auto item = new QStandardItem(language);
@@ -181,7 +78,7 @@ QStandardItemModel* buildSpellCheckerLanguagesModel(QObject* _parent) {
     return model;
 }
 
-}
+} // namespace
 
 class SettingsView::Implementation
 {
@@ -300,62 +197,66 @@ public:
 };
 
 SettingsView::Implementation::Implementation(QWidget* _parent)
-    : content(new QScrollArea(_parent)),
-      //
-      applicationCard(new Card(content)),
-      applicationCardLayout(new QGridLayout),
-      applicationTitle(new H5Label(applicationCard)),
-      language(new Body1Label(applicationCard)),
-      changeLanuage(new Button(applicationCard)),
-      useTypewriterSound(new CheckBox(applicationCard)),
-      useSpellChecker(new CheckBox(applicationCard)),
-      spellCheckerLanguage(new ComboBox(applicationCard)),
-      spellCheckerLanguagesModel(buildSpellCheckerLanguagesModel(spellCheckerLanguage)),
-      applicationUserInterfaceTitle(new H6Label(applicationCard)),
-      theme(new Body1Label(applicationCard)),
-      changeTheme(new Button(applicationCard)),
-      scaleFactorTitle(new Body1Label(applicationCard)),
-      scaleFactor(new Slider(applicationCard)),
-      scaleFactorSmallInfo(new Body2Label(applicationCard)),
-      scaleFactorBigInfo(new Body2Label(applicationCard)),
-      applicationSaveAndBackupTitle(new H6Label(applicationCard)),
-      autoSave(new CheckBox(applicationCard)),
-      saveBackups(new CheckBox(applicationCard)),
-      backupsFolderPath(new TextField(applicationCard)),
-      //
-      componentsTitle(new H4Label(content)),
-      //
-      screenplayCard(new Card(content)),
-      screenplayCardLayout(new QGridLayout),
-      screenplayTitle(new H5Label(screenplayCard)),
-      screenplayEditorTitle(new H6Label(screenplayCard)),
-      screenplayEditorDefaultTemplate(new ComboBox(screenplayCard)),
-      screenplayEditorDefaultTemplateOptions(new IconsMidLabel(screenplayCard)),
-      screenplayEditorShowSceneNumber(new CheckBox(screenplayCard)),
-      screenplayEditorShowSceneNumberOnLeft(new CheckBox(screenplayCard)),
-      screenplayEditorShowSceneNumberOnRight(new CheckBox(screenplayCard)),
-      screenplayEditorShowDialogueNumber(new CheckBox(screenplayCard)),
-      screenplayEditorHighlightCurrentLine(new CheckBox(screenplayCard)),
-      screenplayNavigatorTitle(new H6Label(screenplayCard)),
-      screenplayNavigatorShowSceneNumber(new CheckBox(screenplayCard)),
-      screenplayNavigatorShowSceneText(new CheckBox(screenplayCard)),
-      screenplayNavigatorSceneDescriptionLines1(new RadioButton(screenplayCard)),
-      screenplayNavigatorSceneDescriptionLines2(new RadioButton(screenplayCard)),
-      screenplayNavigatorSceneDescriptionLines3(new RadioButton(screenplayCard)),
-      screenplayNavigatorSceneDescriptionLines4(new RadioButton(screenplayCard)),
-      screenplayNavigatorSceneDescriptionLines5(new RadioButton(screenplayCard)),
-      screenplayDurationTitle(new H6Label(screenplayCard)),
-      screenplayDurationByPage(new RadioButton(screenplayCard)),
-      screenplayDurationByPagePage(new TextField(screenplayCard)),
-      screenplayDurationByPageDuration(new TextField(screenplayCard)),
-      screenplayDurationByCharacters(new RadioButton(screenplayCard)),
-      screenplayDurationByCharactersCharacters(new TextField(screenplayCard)),
-      screenplayDurationByCharactersIncludingSpaces(new CheckBox(screenplayCard)),
-      screenplayDurationByCharactersDuration(new TextField(screenplayCard)),
-      //
-      shortcutsCard(new Card(content)),
-      shortcutsCardLayout(new QGridLayout),
-      shortcutsTitle(new H5Label(shortcutsCard))
+    : content(new QScrollArea(_parent))
+    ,
+    //
+    applicationCard(new Card(content))
+    , applicationCardLayout(new QGridLayout)
+    , applicationTitle(new H5Label(applicationCard))
+    , language(new Body1Label(applicationCard))
+    , changeLanuage(new Button(applicationCard))
+    , useTypewriterSound(new CheckBox(applicationCard))
+    , useSpellChecker(new CheckBox(applicationCard))
+    , spellCheckerLanguage(new ComboBox(applicationCard))
+    , spellCheckerLanguagesModel(buildSpellCheckerLanguagesModel(spellCheckerLanguage))
+    , applicationUserInterfaceTitle(new H6Label(applicationCard))
+    , theme(new Body1Label(applicationCard))
+    , changeTheme(new Button(applicationCard))
+    , scaleFactorTitle(new Body1Label(applicationCard))
+    , scaleFactor(new Slider(applicationCard))
+    , scaleFactorSmallInfo(new Body2Label(applicationCard))
+    , scaleFactorBigInfo(new Body2Label(applicationCard))
+    , applicationSaveAndBackupTitle(new H6Label(applicationCard))
+    , autoSave(new CheckBox(applicationCard))
+    , saveBackups(new CheckBox(applicationCard))
+    , backupsFolderPath(new TextField(applicationCard))
+    ,
+    //
+    componentsTitle(new H4Label(content))
+    ,
+    //
+    screenplayCard(new Card(content))
+    , screenplayCardLayout(new QGridLayout)
+    , screenplayTitle(new H5Label(screenplayCard))
+    , screenplayEditorTitle(new H6Label(screenplayCard))
+    , screenplayEditorDefaultTemplate(new ComboBox(screenplayCard))
+    , screenplayEditorDefaultTemplateOptions(new IconsMidLabel(screenplayCard))
+    , screenplayEditorShowSceneNumber(new CheckBox(screenplayCard))
+    , screenplayEditorShowSceneNumberOnLeft(new CheckBox(screenplayCard))
+    , screenplayEditorShowSceneNumberOnRight(new CheckBox(screenplayCard))
+    , screenplayEditorShowDialogueNumber(new CheckBox(screenplayCard))
+    , screenplayEditorHighlightCurrentLine(new CheckBox(screenplayCard))
+    , screenplayNavigatorTitle(new H6Label(screenplayCard))
+    , screenplayNavigatorShowSceneNumber(new CheckBox(screenplayCard))
+    , screenplayNavigatorShowSceneText(new CheckBox(screenplayCard))
+    , screenplayNavigatorSceneDescriptionLines1(new RadioButton(screenplayCard))
+    , screenplayNavigatorSceneDescriptionLines2(new RadioButton(screenplayCard))
+    , screenplayNavigatorSceneDescriptionLines3(new RadioButton(screenplayCard))
+    , screenplayNavigatorSceneDescriptionLines4(new RadioButton(screenplayCard))
+    , screenplayNavigatorSceneDescriptionLines5(new RadioButton(screenplayCard))
+    , screenplayDurationTitle(new H6Label(screenplayCard))
+    , screenplayDurationByPage(new RadioButton(screenplayCard))
+    , screenplayDurationByPagePage(new TextField(screenplayCard))
+    , screenplayDurationByPageDuration(new TextField(screenplayCard))
+    , screenplayDurationByCharacters(new RadioButton(screenplayCard))
+    , screenplayDurationByCharactersCharacters(new TextField(screenplayCard))
+    , screenplayDurationByCharactersIncludingSpaces(new CheckBox(screenplayCard))
+    , screenplayDurationByCharactersDuration(new TextField(screenplayCard))
+    ,
+    //
+    shortcutsCard(new Card(content))
+    , shortcutsCardLayout(new QGridLayout)
+    , shortcutsTitle(new H5Label(shortcutsCard))
 {
     QPalette palette;
     palette.setColor(QPalette::Base, Qt::transparent);
@@ -386,11 +287,14 @@ SettingsView::Implementation::Implementation(QWidget* _parent)
 
 void SettingsView::Implementation::initApplicationCard()
 {
+    spellCheckerLanguage->setSpellCheckPolicy(SpellCheckPolicy::Manual);
     spellCheckerLanguage->setEnabled(false);
     spellCheckerLanguage->setModel(spellCheckerLanguagesModel);
     // 0 - 0.5, 500 - 1, 3500 - 4
     scaleFactor->setMaximumValue(3500);
     scaleFactor->setValue(500);
+    scaleFactor->setDefaultPosition(500);
+    backupsFolderPath->setSpellCheckPolicy(SpellCheckPolicy::Manual);
     backupsFolderPath->setEnabled(false);
     backupsFolderPath->setTrailingIcon(u8"\U000f0256");
 
@@ -458,7 +362,9 @@ void SettingsView::Implementation::initApplicationCard()
 
 void SettingsView::Implementation::initScreenplayCard()
 {
-    screenplayEditorDefaultTemplate->setModel(BusinessLayer::TemplatesFacade::screenplayTemplates());
+    screenplayEditorDefaultTemplate->setSpellCheckPolicy(SpellCheckPolicy::Manual);
+    screenplayEditorDefaultTemplate->setModel(
+        BusinessLayer::TemplatesFacade::screenplayTemplates());
     screenplayEditorDefaultTemplateOptions->setText(u8"\U000F01D9");
     screenplayEditorDefaultTemplateOptions->setAlignment(Qt::AlignCenter);
     screenplayEditorDefaultTemplateOptions->hide();
@@ -483,10 +389,14 @@ void SettingsView::Implementation::initScreenplayCard()
     durationGroup->add(screenplayDurationByPage);
     durationGroup->add(screenplayDurationByCharacters);
     screenplayDurationByPage->setChecked(true);
+    screenplayDurationByPagePage->setSpellCheckPolicy(SpellCheckPolicy::Manual);
     screenplayDurationByPagePage->setText("1");
     screenplayDurationByPagePage->setReadOnly(true);
+    screenplayDurationByPageDuration->setSpellCheckPolicy(SpellCheckPolicy::Manual);
+    screenplayDurationByCharactersCharacters->setSpellCheckPolicy(SpellCheckPolicy::Manual);
     screenplayDurationByCharactersCharacters->setEnabled(false);
     screenplayDurationByCharactersIncludingSpaces->setEnabled(false);
+    screenplayDurationByCharactersDuration->setSpellCheckPolicy(SpellCheckPolicy::Manual);
     screenplayDurationByCharactersDuration->setEnabled(false);
 
 
@@ -545,7 +455,8 @@ void SettingsView::Implementation::initScreenplayCard()
         layout->addStretch();
         screenplayCardLayout->addLayout(layout, itemIndex++, 0);
     }
-    screenplayCardLayout->addWidget(screenplayDurationByCharacters, itemIndex++, 0, Qt::AlignBottom);
+    screenplayCardLayout->addWidget(screenplayDurationByCharacters, itemIndex++, 0,
+                                    Qt::AlignBottom);
     {
         auto layout = makeLayout();
         layout->addWidget(screenplayDurationByCharactersCharacters);
@@ -572,11 +483,11 @@ void SettingsView::Implementation::initShortcutsCard()
 void SettingsView::Implementation::scrollToWidget(QWidget* childWidget)
 {
     const QRect microFocus = childWidget->inputMethodQuery(Qt::ImCursorRectangle).toRect();
-    const QRect defaultMicroFocus =
-        childWidget->QWidget::inputMethodQuery(Qt::ImCursorRectangle).toRect();
+    const QRect defaultMicroFocus
+        = childWidget->QWidget::inputMethodQuery(Qt::ImCursorRectangle).toRect();
     QRect focusRect = (microFocus != defaultMicroFocus)
         ? QRect(childWidget->mapTo(content->widget(), microFocus.topLeft()), microFocus.size())
-        : QRect(childWidget->mapTo(content->widget(), QPoint(0,0)), childWidget->size());
+        : QRect(childWidget->mapTo(content->widget(), QPoint(0, 0)), childWidget->size());
     const QRect visibleRect(-content->widget()->pos(), content->viewport()->size());
 
     focusRect.adjust(-50, -50, 50, 50);
@@ -591,8 +502,8 @@ void SettingsView::Implementation::scrollToWidget(QWidget* childWidget)
 
 
 SettingsView::SettingsView(QWidget* _parent)
-    : Widget(_parent),
-      d(new Implementation(this))
+    : Widget(_parent)
+    , d(new Implementation(this))
 {
     QVBoxLayout* layout = new QVBoxLayout;
     layout->setContentsMargins({});
@@ -600,84 +511,110 @@ SettingsView::SettingsView(QWidget* _parent)
     layout->addWidget(d->content);
     setLayout(layout);
 
-    connect(&d->scrollAnimation, &QVariantAnimation::valueChanged, this, [this] (const QVariant& _value) {
-        d->content->verticalScrollBar()->setValue(_value.toInt());
-    });
+    connect(&d->scrollAnimation, &QVariantAnimation::valueChanged, this,
+            [this](const QVariant& _value) {
+                d->content->verticalScrollBar()->setValue(_value.toInt());
+            });
     //
     // Приложение
     //
-    connect(d->useSpellChecker, &CheckBox::checkedChanged, d->spellCheckerLanguage, &ComboBox::setEnabled);
-    connect(d->saveBackups, &CheckBox::checkedChanged, d->backupsFolderPath, &TextField::setEnabled);
+    connect(d->useSpellChecker, &CheckBox::checkedChanged, d->spellCheckerLanguage,
+            &ComboBox::setEnabled);
+    connect(d->saveBackups, &CheckBox::checkedChanged, d->backupsFolderPath,
+            &TextField::setEnabled);
     connect(d->backupsFolderPath, &TextField::trailingIconPressed, this, [this] {
-        const auto path =
-                QFileDialog::getExistingDirectory(
-                    this, tr("Choose the folder where backups will be saved"), d->backupsFolderPath->text());
+        const auto path = QFileDialog::getExistingDirectory(
+            this, tr("Choose the folder where backups will be saved"),
+            d->backupsFolderPath->text());
         if (!path.isEmpty()) {
             d->backupsFolderPath->setText(path);
         }
     });
     //
     connect(d->changeLanuage, &Button::clicked, this, &SettingsView::applicationLanguagePressed);
-    connect(d->useTypewriterSound, &CheckBox::checkedChanged, this, &SettingsView::applicationUseTypewriterSoundChanged);
-    connect(d->useSpellChecker, &CheckBox::checkedChanged, this, [this] (bool _checked) {
+    connect(d->useTypewriterSound, &CheckBox::checkedChanged, this,
+            &SettingsView::applicationUseTypewriterSoundChanged);
+    connect(d->useSpellChecker, &CheckBox::checkedChanged, this, [this](bool _checked) {
         emit applicationUseSpellCheckerChanged(_checked);
         if (_checked) {
-            emit applicationSpellCheckerLanguageChanged(
-                d->spellCheckerLanguage->currentIndex().data(kSpellCheckerLanguageCodeRole).toString());
+            emit applicationSpellCheckerLanguageChanged(d->spellCheckerLanguage->currentIndex()
+                                                            .data(kSpellCheckerLanguageCodeRole)
+                                                            .toString());
         }
     });
-    connect(d->spellCheckerLanguage, &ComboBox::currentIndexChanged, this, [this] (const QModelIndex& _index) {
-        emit applicationSpellCheckerLanguageChanged(_index.data(kSpellCheckerLanguageCodeRole).toString());
-    });
+    connect(d->spellCheckerLanguage, &ComboBox::currentIndexChanged, this,
+            [this](const QModelIndex& _index) {
+                emit applicationSpellCheckerLanguageChanged(
+                    _index.data(kSpellCheckerLanguageCodeRole).toString());
+            });
     connect(d->changeTheme, &Button::clicked, this, &SettingsView::applicationThemePressed);
-    connect(d->scaleFactor, &Slider::valueChanged, this, [this] (int _value) {
+    connect(d->scaleFactor, &Slider::valueChanged, this, [this](int _value) {
         emit applicationScaleFactorChanged(0.5 + static_cast<qreal>(_value) / 1000.0);
     });
-    connect(d->autoSave, &CheckBox::checkedChanged, this, &SettingsView::applicationUseAutoSaveChanged);
-    connect(d->saveBackups, &CheckBox::checkedChanged, this, &SettingsView::applicationSaveBackupsChanged);
-    connect(d->backupsFolderPath, &TextField::textChanged, this, [this] {
-        emit applicationBackupsFolderChanged(d->backupsFolderPath->text());
-    });
+    connect(d->autoSave, &CheckBox::checkedChanged, this,
+            &SettingsView::applicationUseAutoSaveChanged);
+    connect(d->saveBackups, &CheckBox::checkedChanged, this,
+            &SettingsView::applicationSaveBackupsChanged);
+    connect(d->backupsFolderPath, &TextField::textChanged, this,
+            [this] { emit applicationBackupsFolderChanged(d->backupsFolderPath->text()); });
 
     //
     // Компоненты
     //
     // ... Редактор сценария
     //
-    connect(d->screenplayEditorShowSceneNumber, &CheckBox::checkedChanged, d->screenplayEditorShowSceneNumberOnLeft, &CheckBox::setEnabled);
-    connect(d->screenplayEditorShowSceneNumber, &CheckBox::checkedChanged, d->screenplayEditorShowSceneNumberOnRight, &CheckBox::setEnabled);
+    connect(d->screenplayEditorShowSceneNumber, &CheckBox::checkedChanged,
+            d->screenplayEditorShowSceneNumberOnLeft, &CheckBox::setEnabled);
+    connect(d->screenplayEditorShowSceneNumber, &CheckBox::checkedChanged,
+            d->screenplayEditorShowSceneNumberOnRight, &CheckBox::setEnabled);
     auto screenplayEditorCorrectShownSceneNumber = [this] {
         if (!d->screenplayEditorShowSceneNumberOnLeft->isChecked()
             && !d->screenplayEditorShowSceneNumberOnRight->isChecked()) {
             d->screenplayEditorShowSceneNumberOnLeft->setChecked(true);
         }
     };
-    connect(d->screenplayEditorShowSceneNumberOnLeft, &CheckBox::checkedChanged, this, screenplayEditorCorrectShownSceneNumber);
-    connect(d->screenplayEditorShowSceneNumberOnRight, &CheckBox::checkedChanged, this, screenplayEditorCorrectShownSceneNumber);
+    connect(d->screenplayEditorShowSceneNumberOnLeft, &CheckBox::checkedChanged, this,
+            screenplayEditorCorrectShownSceneNumber);
+    connect(d->screenplayEditorShowSceneNumberOnRight, &CheckBox::checkedChanged, this,
+            screenplayEditorCorrectShownSceneNumber);
     //
-    connect(d->screenplayEditorDefaultTemplate, &ComboBox::currentIndexChanged, this, [this] (const QModelIndex& _index) {
-        emit screenplayEditorDefaultTemplateChanged(_index.data(BusinessLayer::TemplatesFacade::kTemplateIdRole).toString());
-    });
+    connect(d->screenplayEditorDefaultTemplate, &ComboBox::currentIndexChanged, this,
+            [this](const QModelIndex& _index) {
+                emit screenplayEditorDefaultTemplateChanged(
+                    _index.data(BusinessLayer::TemplatesFacade::kTemplateIdRole).toString());
+            });
     auto notifyScreenplayEditorShowSceneNumbersChanged = [this] {
-        emit screenplayEditorShowSceneNumberChanged(d->screenplayEditorShowSceneNumber->isChecked(),
-                                                    d->screenplayEditorShowSceneNumberOnLeft->isChecked(),
-                                                    d->screenplayEditorShowSceneNumberOnRight->isChecked());
+        emit screenplayEditorShowSceneNumberChanged(
+            d->screenplayEditorShowSceneNumber->isChecked(),
+            d->screenplayEditorShowSceneNumberOnLeft->isChecked(),
+            d->screenplayEditorShowSceneNumberOnRight->isChecked());
     };
-    connect(d->screenplayEditorShowSceneNumber, &CheckBox::checkedChanged, this, notifyScreenplayEditorShowSceneNumbersChanged);
-    connect(d->screenplayEditorShowSceneNumberOnLeft, &CheckBox::checkedChanged, this, notifyScreenplayEditorShowSceneNumbersChanged);
-    connect(d->screenplayEditorShowSceneNumberOnRight, &CheckBox::checkedChanged, this, notifyScreenplayEditorShowSceneNumbersChanged);
-    connect(d->screenplayEditorShowDialogueNumber, &CheckBox::checkedChanged, this, &SettingsView::screenplayEditorShowDialogueNumberChanged);
-    connect(d->screenplayEditorHighlightCurrentLine, &CheckBox::checkedChanged, this, &SettingsView::screenplayEditorHighlightCurrentLineChanged);
+    connect(d->screenplayEditorShowSceneNumber, &CheckBox::checkedChanged, this,
+            notifyScreenplayEditorShowSceneNumbersChanged);
+    connect(d->screenplayEditorShowSceneNumberOnLeft, &CheckBox::checkedChanged, this,
+            notifyScreenplayEditorShowSceneNumbersChanged);
+    connect(d->screenplayEditorShowSceneNumberOnRight, &CheckBox::checkedChanged, this,
+            notifyScreenplayEditorShowSceneNumbersChanged);
+    connect(d->screenplayEditorShowDialogueNumber, &CheckBox::checkedChanged, this,
+            &SettingsView::screenplayEditorShowDialogueNumberChanged);
+    connect(d->screenplayEditorHighlightCurrentLine, &CheckBox::checkedChanged, this,
+            &SettingsView::screenplayEditorHighlightCurrentLineChanged);
     //
     // ... навигатор сценария
     //
-    connect(d->screenplayNavigatorShowSceneText, &CheckBox::checkedChanged, d->screenplayNavigatorSceneDescriptionLines1, &RadioButton::setEnabled);
-    connect(d->screenplayNavigatorShowSceneText, &CheckBox::checkedChanged, d->screenplayNavigatorSceneDescriptionLines2, &RadioButton::setEnabled);
-    connect(d->screenplayNavigatorShowSceneText, &CheckBox::checkedChanged, d->screenplayNavigatorSceneDescriptionLines3, &RadioButton::setEnabled);
-    connect(d->screenplayNavigatorShowSceneText, &CheckBox::checkedChanged, d->screenplayNavigatorSceneDescriptionLines4, &RadioButton::setEnabled);
-    connect(d->screenplayNavigatorShowSceneText, &CheckBox::checkedChanged, d->screenplayNavigatorSceneDescriptionLines5, &RadioButton::setEnabled);
+    connect(d->screenplayNavigatorShowSceneText, &CheckBox::checkedChanged,
+            d->screenplayNavigatorSceneDescriptionLines1, &RadioButton::setEnabled);
+    connect(d->screenplayNavigatorShowSceneText, &CheckBox::checkedChanged,
+            d->screenplayNavigatorSceneDescriptionLines2, &RadioButton::setEnabled);
+    connect(d->screenplayNavigatorShowSceneText, &CheckBox::checkedChanged,
+            d->screenplayNavigatorSceneDescriptionLines3, &RadioButton::setEnabled);
+    connect(d->screenplayNavigatorShowSceneText, &CheckBox::checkedChanged,
+            d->screenplayNavigatorSceneDescriptionLines4, &RadioButton::setEnabled);
+    connect(d->screenplayNavigatorShowSceneText, &CheckBox::checkedChanged,
+            d->screenplayNavigatorSceneDescriptionLines5, &RadioButton::setEnabled);
     //
-    connect(d->screenplayNavigatorShowSceneNumber, &CheckBox::checkedChanged, this, &SettingsView::screenplayNavigatorShowSceneNumberChanged);
+    connect(d->screenplayNavigatorShowSceneNumber, &CheckBox::checkedChanged, this,
+            &SettingsView::screenplayNavigatorShowSceneNumberChanged);
     auto notifyScreenplayNavigatorShowSceneTextChanged = [this] {
         int sceneTextLines = 1;
         if (d->screenplayNavigatorSceneDescriptionLines2->isChecked()) {
@@ -689,22 +626,34 @@ SettingsView::SettingsView(QWidget* _parent)
         } else if (d->screenplayNavigatorSceneDescriptionLines5->isChecked()) {
             sceneTextLines = 5;
         }
-        emit screenplayNavigatorShowSceneTextChanged(d->screenplayNavigatorShowSceneText->isChecked(), sceneTextLines);
+        emit screenplayNavigatorShowSceneTextChanged(
+            d->screenplayNavigatorShowSceneText->isChecked(), sceneTextLines);
     };
-    connect(d->screenplayNavigatorShowSceneText, &CheckBox::checkedChanged, this, notifyScreenplayNavigatorShowSceneTextChanged);
-    connect(d->screenplayNavigatorSceneDescriptionLines1, &RadioButton::checkedChanged, this, notifyScreenplayNavigatorShowSceneTextChanged);
-    connect(d->screenplayNavigatorSceneDescriptionLines2, &RadioButton::checkedChanged, this, notifyScreenplayNavigatorShowSceneTextChanged);
-    connect(d->screenplayNavigatorSceneDescriptionLines3, &RadioButton::checkedChanged, this, notifyScreenplayNavigatorShowSceneTextChanged);
-    connect(d->screenplayNavigatorSceneDescriptionLines4, &RadioButton::checkedChanged, this, notifyScreenplayNavigatorShowSceneTextChanged);
-    connect(d->screenplayNavigatorSceneDescriptionLines5, &RadioButton::checkedChanged, this, notifyScreenplayNavigatorShowSceneTextChanged);
+    connect(d->screenplayNavigatorShowSceneText, &CheckBox::checkedChanged, this,
+            notifyScreenplayNavigatorShowSceneTextChanged);
+    connect(d->screenplayNavigatorSceneDescriptionLines1, &RadioButton::checkedChanged, this,
+            notifyScreenplayNavigatorShowSceneTextChanged);
+    connect(d->screenplayNavigatorSceneDescriptionLines2, &RadioButton::checkedChanged, this,
+            notifyScreenplayNavigatorShowSceneTextChanged);
+    connect(d->screenplayNavigatorSceneDescriptionLines3, &RadioButton::checkedChanged, this,
+            notifyScreenplayNavigatorShowSceneTextChanged);
+    connect(d->screenplayNavigatorSceneDescriptionLines4, &RadioButton::checkedChanged, this,
+            notifyScreenplayNavigatorShowSceneTextChanged);
+    connect(d->screenplayNavigatorSceneDescriptionLines5, &RadioButton::checkedChanged, this,
+            notifyScreenplayNavigatorShowSceneTextChanged);
     //
     // ... хронометраж
     //
-    connect(d->screenplayDurationByPage, &RadioButton::checkedChanged, d->screenplayDurationByPagePage, &TextField::setEnabled);
-    connect(d->screenplayDurationByPage, &RadioButton::checkedChanged, d->screenplayDurationByPageDuration, &TextField::setEnabled);
-    connect(d->screenplayDurationByCharacters, &RadioButton::checkedChanged, d->screenplayDurationByCharactersCharacters, &TextField::setEnabled);
-    connect(d->screenplayDurationByCharacters, &RadioButton::checkedChanged, d->screenplayDurationByCharactersIncludingSpaces, &RadioButton::setEnabled);
-    connect(d->screenplayDurationByCharacters, &RadioButton::checkedChanged, d->screenplayDurationByCharactersDuration, &TextField::setEnabled);
+    connect(d->screenplayDurationByPage, &RadioButton::checkedChanged,
+            d->screenplayDurationByPagePage, &TextField::setEnabled);
+    connect(d->screenplayDurationByPage, &RadioButton::checkedChanged,
+            d->screenplayDurationByPageDuration, &TextField::setEnabled);
+    connect(d->screenplayDurationByCharacters, &RadioButton::checkedChanged,
+            d->screenplayDurationByCharactersCharacters, &TextField::setEnabled);
+    connect(d->screenplayDurationByCharacters, &RadioButton::checkedChanged,
+            d->screenplayDurationByCharactersIncludingSpaces, &RadioButton::setEnabled);
+    connect(d->screenplayDurationByCharacters, &RadioButton::checkedChanged,
+            d->screenplayDurationByCharactersDuration, &TextField::setEnabled);
     //
     auto notifyScreenplayDurationTypeChanged = [this] {
         using namespace BusinessLayer;
@@ -714,17 +663,23 @@ SettingsView::SettingsView(QWidget* _parent)
             emit screenplayDurationTypeChanged(static_cast<int>(ChronometerType::Characters));
         }
     };
-    connect(d->screenplayDurationByPage, &RadioButton::checkedChanged, this, notifyScreenplayDurationTypeChanged);
-    connect(d->screenplayDurationByCharacters, &RadioButton::checkedChanged, this, notifyScreenplayDurationTypeChanged);
+    connect(d->screenplayDurationByPage, &RadioButton::checkedChanged, this,
+            notifyScreenplayDurationTypeChanged);
+    connect(d->screenplayDurationByCharacters, &RadioButton::checkedChanged, this,
+            notifyScreenplayDurationTypeChanged);
     connect(d->screenplayDurationByPageDuration, &TextField::textChanged, this, [this] {
-        emit screenplayDurationByPageDurationChanged(d->screenplayDurationByPageDuration->text().toInt());
+        emit screenplayDurationByPageDurationChanged(
+            d->screenplayDurationByPageDuration->text().toInt());
     });
     connect(d->screenplayDurationByCharactersCharacters, &TextField::textChanged, this, [this] {
-        emit screenplayDurationByCharactersCharactersChanged(d->screenplayDurationByCharactersCharacters->text().toInt());
+        emit screenplayDurationByCharactersCharactersChanged(
+            d->screenplayDurationByCharactersCharacters->text().toInt());
     });
-    connect(d->screenplayDurationByCharactersIncludingSpaces, &CheckBox::checkedChanged, this, &SettingsView::screenplayDurationByCharactersIncludeSpacesChanged);
+    connect(d->screenplayDurationByCharactersIncludingSpaces, &CheckBox::checkedChanged, this,
+            &SettingsView::screenplayDurationByCharactersIncludeSpacesChanged);
     connect(d->screenplayDurationByCharactersDuration, &TextField::textChanged, this, [this] {
-        emit screenplayDurationByCharactersDurationChanged(d->screenplayDurationByCharactersDuration->text().toInt());
+        emit screenplayDurationByCharactersDurationChanged(
+            d->screenplayDurationByCharactersDuration->text().toInt());
     });
 
     designSystemChangeEvent(nullptr);
@@ -762,74 +717,74 @@ void SettingsView::showShortcuts()
 
 void SettingsView::setApplicationLanguage(int _language)
 {
-    auto languageString = [_language] () -> QString {
+    auto languageString = [_language]() -> QString {
         switch (_language) {
-            case QLocale::Azerbaijani: {
-                return "Azərbaycan";
-            }
-            case QLocale::Belarusian: {
-                return "Беларуский";
-            }
-            case QLocale::Danish: {
-                return "Dansk";
-            }
-            case QLocale::English: {
-                return "English";
-            }
-            case QLocale::French: {
-                return "Français";
-            }
-            case QLocale::Galician: {
-                return "Galego";
-            }
-            case QLocale::German: {
-                return "Deutsch";
-            }
-            case QLocale::Hebrew: {
-                return "עִבְרִית";
-            }
-            case QLocale::Hindi: {
-                return "हिन्दी";
-            }
-            case QLocale::Hungarian: {
-                return "Magyar";
-            }
-            case QLocale::Indonesian: {
-                return "Indonesian";
-            }
-            case QLocale::Italian: {
-                return "Italiano";
-            }
-            case QLocale::Persian: {
-                return "فارسی";
-            }
-            case QLocale::Polish: {
-                return "Polski";
-            }
-            case QLocale::Portuguese: {
-                return "Português Brasileiro";
-            }
-            case QLocale::Romanian: {
-                return "Română";
-            }
-            case QLocale::Russian: {
-                return "Русский";
-            }
-            case QLocale::Slovenian: {
-                return "Slovenski";
-            }
-            case QLocale::Spanish: {
-                return "Español";
-            }
-            case QLocale::Turkish: {
-                return "Türkçe";
-            }
-            case QLocale::Ukrainian: {
-                return "Українська";
-            }
-            default: {
-                return QLocale::languageToString(static_cast<QLocale::Language>(_language));
-            }
+        case QLocale::Azerbaijani: {
+            return "Azərbaycan";
+        }
+        case QLocale::Belarusian: {
+            return "Беларуский";
+        }
+        case QLocale::Danish: {
+            return "Dansk";
+        }
+        case QLocale::English: {
+            return "English";
+        }
+        case QLocale::French: {
+            return "Français";
+        }
+        case QLocale::Galician: {
+            return "Galego";
+        }
+        case QLocale::German: {
+            return "Deutsch";
+        }
+        case QLocale::Hebrew: {
+            return "עִבְרִית";
+        }
+        case QLocale::Hindi: {
+            return "हिन्दी";
+        }
+        case QLocale::Hungarian: {
+            return "Magyar";
+        }
+        case QLocale::Indonesian: {
+            return "Indonesian";
+        }
+        case QLocale::Italian: {
+            return "Italiano";
+        }
+        case QLocale::Persian: {
+            return "فارسی";
+        }
+        case QLocale::Polish: {
+            return "Polski";
+        }
+        case QLocale::Portuguese: {
+            return "Português Brasileiro";
+        }
+        case QLocale::Romanian: {
+            return "Română";
+        }
+        case QLocale::Russian: {
+            return "Русский";
+        }
+        case QLocale::Slovenian: {
+            return "Slovenski";
+        }
+        case QLocale::Spanish: {
+            return "Español";
+        }
+        case QLocale::Turkish: {
+            return "Türkçe";
+        }
+        case QLocale::Ukrainian: {
+            return "Українська";
+        }
+        default: {
+            return QLocale::languageToString(static_cast<QLocale::Language>(_language));
+        }
         }
     };
     d->changeLanuage->setText(languageString());
@@ -862,18 +817,18 @@ void SettingsView::setApplicationTheme(int _theme)
 {
     auto themeString = [_theme] {
         switch (static_cast<Ui::ApplicationTheme>(_theme)) {
-            case Ui::ApplicationTheme::Dark: {
-                return tr("Dark", "Theme, will be used in case \"Theme: Dark\"");
-            }
-            case Ui::ApplicationTheme::Light: {
-                return tr("Light", "Theme, will be used in case \"Theme: Light\"");
-            }
-            case Ui::ApplicationTheme::DarkAndLight: {
-                return tr("Dark and light", "Theme, will be used in case \"Theme: Dark and light\"");
-            }
-            default: {
-                return tr("Custom", "Theme, will be used in case \"Theme: Custom\"");
-            }
+        case Ui::ApplicationTheme::Dark: {
+            return tr("Dark", "Theme, will be used in case \"Theme: Dark\"");
+        }
+        case Ui::ApplicationTheme::Light: {
+            return tr("Light", "Theme, will be used in case \"Theme: Light\"");
+        }
+        case Ui::ApplicationTheme::DarkAndLight: {
+            return tr("Dark and light", "Theme, will be used in case \"Theme: Dark and light\"");
+        }
+        default: {
+            return tr("Custom", "Theme, will be used in case \"Theme: Custom\"");
+        }
         }
     };
     d->changeTheme->setText(themeString());
@@ -940,31 +895,31 @@ void SettingsView::setScreenplayNavigatorShowSceneNumber(bool _show)
 void SettingsView::setScreenplayNavigatorShowSceneText(bool _show, int _lines)
 {
     d->screenplayNavigatorShowSceneText->setChecked(_show);
-    switch(_lines) {
-        case 1: {
-            d->screenplayNavigatorSceneDescriptionLines1->setChecked(true);
-            break;
-        }
+    switch (_lines) {
+    case 1: {
+        d->screenplayNavigatorSceneDescriptionLines1->setChecked(true);
+        break;
+    }
 
-        case 2: {
-            d->screenplayNavigatorSceneDescriptionLines2->setChecked(true);
-            break;
-        }
+    case 2: {
+        d->screenplayNavigatorSceneDescriptionLines2->setChecked(true);
+        break;
+    }
 
-        case 3: {
-            d->screenplayNavigatorSceneDescriptionLines3->setChecked(true);
-            break;
-        }
+    case 3: {
+        d->screenplayNavigatorSceneDescriptionLines3->setChecked(true);
+        break;
+    }
 
-        case 4: {
-            d->screenplayNavigatorSceneDescriptionLines4->setChecked(true);
-            break;
-        }
+    case 4: {
+        d->screenplayNavigatorSceneDescriptionLines4->setChecked(true);
+        break;
+    }
 
-        case 5: {
-            d->screenplayNavigatorSceneDescriptionLines5->setChecked(true);
-            break;
-        }
+    case 5: {
+        d->screenplayNavigatorSceneDescriptionLines5->setChecked(true);
+        break;
+    }
     }
 }
 
@@ -972,15 +927,15 @@ void SettingsView::setScreenplayDurationType(int _type)
 {
     using namespace BusinessLayer;
     switch (static_cast<ChronometerType>(_type)) {
-        case ChronometerType::Page: {
-            d->screenplayDurationByPage->setChecked(true);
-            break;
-        }
+    case ChronometerType::Page: {
+        d->screenplayDurationByPage->setChecked(true);
+        break;
+    }
 
-        case ChronometerType::Characters: {
-            d->screenplayDurationByCharacters->setChecked(true);
-            break;
-        }
+    case ChronometerType::Characters: {
+        d->screenplayDurationByCharacters->setChecked(true);
+        break;
+    }
     }
 }
 
@@ -1140,9 +1095,10 @@ void SettingsView::updateTranslations()
     d->scaleFactorBigInfo->setText(tr("big"));
     d->applicationSaveAndBackupTitle->setText(tr("Save changes & backups"));
     d->autoSave->setText(tr("Automatically save changes as soon as possible"));
-    d->autoSave->setToolTip(tr("Autosave works very accurately.\n"
-                               "It saves the project every 3 seconds if you do not use your mouse or keyboard.\n"
-                               "If you work with no interruptions it saves the project every 3 minutes."));
+    d->autoSave->setToolTip(
+        tr("Autosave works very accurately.\n"
+           "It saves the project every 3 seconds if you do not use your mouse or keyboard.\n"
+           "If you work with no interruptions it saves the project every 3 minutes."));
     d->saveBackups->setText(tr("Save backups"));
     d->backupsFolderPath->setLabel(tr("Backups folder path"));
 
@@ -1153,7 +1109,8 @@ void SettingsView::updateTranslations()
     d->screenplayTitle->setText(tr("Screenplay"));
     d->screenplayEditorTitle->setText(tr("Text editor"));
     d->screenplayEditorDefaultTemplate->setLabel(tr("Default template"));
-    d->screenplayEditorDefaultTemplateOptions->setToolTip(tr("Available actions for the selected template"));
+    d->screenplayEditorDefaultTemplateOptions->setToolTip(
+        tr("Available actions for the selected template"));
     d->screenplayEditorShowSceneNumber->setText(tr("Show scene number"));
     d->screenplayEditorShowSceneNumberOnLeft->setText(tr("on the left"));
     d->screenplayEditorShowSceneNumberOnRight->setText(tr("on the right"));
@@ -1173,7 +1130,8 @@ void SettingsView::updateTranslations()
     d->screenplayDurationByPagePage->setSuffix(tr("pages"));
     d->screenplayDurationByPageDuration->setLabel(tr("has duration"));
     d->screenplayDurationByPageDuration->setSuffix(tr("seconds"));
-    d->screenplayDurationByCharacters->setText(tr("Calculate duration based on the count of letters"));
+    d->screenplayDurationByCharacters->setText(
+        tr("Calculate duration based on the count of letters"));
     d->screenplayDurationByCharactersCharacters->setLabel(tr("at the rate of"));
     d->screenplayDurationByCharactersCharacters->setSuffix(tr("letters"));
     d->screenplayDurationByCharactersIncludingSpaces->setText(tr("including spaces"));
@@ -1190,8 +1148,10 @@ void SettingsView::designSystemChangeEvent(DesignSystemChangeEvent* _event)
     Widget::designSystemChangeEvent(_event);
 
     setBackgroundColor(DesignSystem::color().surface());
-    d->content->widget()->layout()->setContentsMargins(QMarginsF(Ui::DesignSystem::layout().px24(), Ui::DesignSystem::layout().topContentMargin(),
-                                                                 Ui::DesignSystem::layout().px24(), Ui::DesignSystem::layout().px24()).toMargins());
+    d->content->widget()->layout()->setContentsMargins(
+        QMarginsF(Ui::DesignSystem::layout().px24(), Ui::DesignSystem::layout().topContentMargin(),
+                  Ui::DesignSystem::layout().px24(), Ui::DesignSystem::layout().px24())
+            .toMargins());
 
     for (auto card : { d->applicationCard, d->screenplayCard, d->shortcutsCard }) {
         card->setBackgroundColor(DesignSystem::color().background());
@@ -1199,20 +1159,15 @@ void SettingsView::designSystemChangeEvent(DesignSystemChangeEvent* _event)
 
     auto titleColor = DesignSystem::color().onBackground();
     titleColor.setAlphaF(DesignSystem::inactiveTextOpacity());
-    for (auto cardTitle : QVector<Widget*>{
-         d->applicationTitle,
-         d->applicationUserInterfaceTitle,
-         d->applicationSaveAndBackupTitle,
-         d->screenplayTitle,
-         d->screenplayEditorTitle,
-         d->screenplayNavigatorTitle,
-         d->screenplayDurationTitle,
-         d->shortcutsTitle }) {
+    for (auto cardTitle : QVector<Widget*>{ d->applicationTitle, d->applicationUserInterfaceTitle,
+                                            d->applicationSaveAndBackupTitle, d->screenplayTitle,
+                                            d->screenplayEditorTitle, d->screenplayNavigatorTitle,
+                                            d->screenplayDurationTitle, d->shortcutsTitle }) {
         cardTitle->setBackgroundColor(DesignSystem::color().background());
         cardTitle->setTextColor(titleColor);
         cardTitle->setContentsMargins(Ui::DesignSystem::label().margins().toMargins());
     }
-    for (auto title : QVector<Widget*>{ d->componentsTitle } ) {
+    for (auto title : QVector<Widget*>{ d->componentsTitle }) {
         title->setBackgroundColor(DesignSystem::color().surface());
         title->setTextColor(DesignSystem::color().onSurface());
         title->setContentsMargins(Ui::DesignSystem::label().margins().toMargins());
@@ -1221,10 +1176,8 @@ void SettingsView::designSystemChangeEvent(DesignSystemChangeEvent* _event)
     auto labelMargins = Ui::DesignSystem::label().margins().toMargins();
     labelMargins.setTop(static_cast<int>(Ui::DesignSystem::button().shadowMargins().top()));
     labelMargins.setBottom(static_cast<int>(Ui::DesignSystem::button().shadowMargins().bottom()));
-    for (auto label : QVector<Widget*>{
-         d->language,
-         d->theme,
-         d->scaleFactorTitle, d->scaleFactorSmallInfo, d->scaleFactorBigInfo }) {
+    for (auto label : QVector<Widget*>{ d->language, d->theme, d->scaleFactorTitle,
+                                        d->scaleFactorSmallInfo, d->scaleFactorBigInfo }) {
         label->setBackgroundColor(DesignSystem::color().background());
         label->setTextColor(DesignSystem::color().onBackground());
         label->setContentsMargins(labelMargins);
@@ -1232,82 +1185,69 @@ void SettingsView::designSystemChangeEvent(DesignSystemChangeEvent* _event)
 
     auto iconLabelMargins = labelMargins;
     iconLabelMargins.setLeft(0);
-    for (auto iconLabel : QVector<Widget*>{
-         d->screenplayEditorDefaultTemplateOptions }) {
+    for (auto iconLabel : QVector<Widget*>{ d->screenplayEditorDefaultTemplateOptions }) {
         iconLabel->setBackgroundColor(DesignSystem::color().background());
         iconLabel->setTextColor(DesignSystem::color().onBackground());
         iconLabel->setContentsMargins(iconLabelMargins);
     }
 
-    for (auto checkBox : {
-         d->useTypewriterSound,
-         d->useSpellChecker,
-         //
-         d->autoSave,
-         d->saveBackups,
-         //
-         d->screenplayEditorShowSceneNumber,
-         d->screenplayEditorShowSceneNumberOnLeft,
-         d->screenplayEditorShowSceneNumberOnRight,
-         d->screenplayEditorShowDialogueNumber,
-         d->screenplayEditorHighlightCurrentLine,
-         d->screenplayNavigatorShowSceneNumber,
-         d->screenplayNavigatorShowSceneText,
-         d->screenplayDurationByCharactersIncludingSpaces }) {
+    for (auto checkBox :
+         { d->useTypewriterSound, d->useSpellChecker,
+           //
+           d->autoSave, d->saveBackups,
+           //
+           d->screenplayEditorShowSceneNumber, d->screenplayEditorShowSceneNumberOnLeft,
+           d->screenplayEditorShowSceneNumberOnRight, d->screenplayEditorShowDialogueNumber,
+           d->screenplayEditorHighlightCurrentLine, d->screenplayNavigatorShowSceneNumber,
+           d->screenplayNavigatorShowSceneText,
+           d->screenplayDurationByCharactersIncludingSpaces }) {
         checkBox->setBackgroundColor(DesignSystem::color().background());
         checkBox->setTextColor(DesignSystem::color().onBackground());
     }
 
-    for (auto radioButton : {
-         d->screenplayNavigatorSceneDescriptionLines1,
-         d->screenplayNavigatorSceneDescriptionLines2,
-         d->screenplayNavigatorSceneDescriptionLines3,
-         d->screenplayNavigatorSceneDescriptionLines4,
-         d->screenplayNavigatorSceneDescriptionLines5,
-         d->screenplayDurationByPage,
-         d->screenplayDurationByCharacters }) {
+    for (auto radioButton : { d->screenplayNavigatorSceneDescriptionLines1,
+                              d->screenplayNavigatorSceneDescriptionLines2,
+                              d->screenplayNavigatorSceneDescriptionLines3,
+                              d->screenplayNavigatorSceneDescriptionLines4,
+                              d->screenplayNavigatorSceneDescriptionLines5,
+                              d->screenplayDurationByPage, d->screenplayDurationByCharacters }) {
         radioButton->setBackgroundColor(DesignSystem::color().background());
         radioButton->setTextColor(DesignSystem::color().onBackground());
     }
 
     for (auto textField : QVector<TextField*>{
-         d->spellCheckerLanguage,
-         d->backupsFolderPath,
-         d->screenplayEditorDefaultTemplate,
-         d->screenplayDurationByPagePage,
-         d->screenplayDurationByPageDuration,
-         d->screenplayDurationByCharactersCharacters,
-         d->screenplayDurationByCharactersDuration }) {
+             d->spellCheckerLanguage, d->backupsFolderPath, d->screenplayEditorDefaultTemplate,
+             d->screenplayDurationByPagePage, d->screenplayDurationByPageDuration,
+             d->screenplayDurationByCharactersCharacters,
+             d->screenplayDurationByCharactersDuration }) {
         textField->setBackgroundColor(DesignSystem::color().onBackground());
         textField->setTextColor(DesignSystem::color().onBackground());
     }
 
-    for (auto button : {
-         d->changeLanuage,
-         d->changeTheme }) {
+    for (auto button : { d->changeLanuage, d->changeTheme }) {
         button->setBackgroundColor(DesignSystem::color().secondary());
         button->setTextColor(DesignSystem::color().secondary());
     }
 
     d->scaleFactor->setBackgroundColor(DesignSystem::color().background());
-    d->scaleFactor->setContentsMargins({static_cast<int>(Ui::DesignSystem::layout().px24()), 0,
-                                           static_cast<int>(Ui::DesignSystem::layout().px24()), 0});
-//    d->screenplayEditorDefaultTemplateOptions->setContentsMargins({});
+    d->scaleFactor->setContentsMargins({ static_cast<int>(Ui::DesignSystem::layout().px24()), 0,
+                                         static_cast<int>(Ui::DesignSystem::layout().px24()), 0 });
+    //    d->screenplayEditorDefaultTemplateOptions->setContentsMargins({});
     d->screenplayEditorDefaultTemplateOptions->setAlignment(Qt::AlignCenter);
 
 
-    d->applicationCardLayout->setRowMinimumHeight(d->applicationCardBottomSpacerIndex,
-                                                  static_cast<int>(Ui::DesignSystem::layout().px24()));
+    d->applicationCardLayout->setRowMinimumHeight(
+        d->applicationCardBottomSpacerIndex, static_cast<int>(Ui::DesignSystem::layout().px24()));
     //
-    d->screenplayCardLayout->setRowMinimumHeight(d->screenplayCardBottomSpacerIndex,
-                                                  static_cast<int>(Ui::DesignSystem::layout().px24()));
-    const auto screenplayDurationByCharactersRow = d->screenplayCardLayout->indexOf(d->screenplayDurationByCharacters);
-    d->screenplayCardLayout->setRowMinimumHeight(screenplayDurationByCharactersRow,
-                                                 static_cast<int>(Ui::DesignSystem::layout().px24()*3));
+    d->screenplayCardLayout->setRowMinimumHeight(
+        d->screenplayCardBottomSpacerIndex, static_cast<int>(Ui::DesignSystem::layout().px24()));
+    const auto screenplayDurationByCharactersRow
+        = d->screenplayCardLayout->indexOf(d->screenplayDurationByCharacters);
+    d->screenplayCardLayout->setRowMinimumHeight(
+        screenplayDurationByCharactersRow, static_cast<int>(Ui::DesignSystem::layout().px24() * 3));
     //
-    d->shortcutsCardLayout->setRowMinimumHeight(d->shortcutsCardBottomSpacerIndex,
-                                                  static_cast<int>(Ui::DesignSystem::layout().px24()));
-
+    d->shortcutsCardLayout->setRowMinimumHeight(
+        d->shortcutsCardBottomSpacerIndex, static_cast<int>(Ui::DesignSystem::layout().px24()));
 }
 
 } // namespace Ui

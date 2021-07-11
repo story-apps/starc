@@ -8,7 +8,6 @@
 #include <ui/design_system/design_system.h>
 #include <ui/widgets/context_menu/context_menu.h>
 #include <ui/widgets/tree/tree.h>
-
 #include <utils/3rd_party/WAF/Animation/Animation.h>
 
 #include <QAction>
@@ -16,8 +15,7 @@
 #include <QVBoxLayout>
 
 
-namespace Ui
-{
+namespace Ui {
 
 class ScreenplayTextCommentsView::Implementation
 {
@@ -27,16 +25,13 @@ public:
     /**
      * @brief Действия контекстного меню
      */
-    enum class ContextMenuAction {
-        MarkAsDone,
-        MarkAsUndone,
-        Remove
-    };
+    enum class ContextMenuAction { MarkAsDone, MarkAsUndone, Remove };
 
     /**
      * @brief Обновить контекстное меню для заданного списка элементов
      */
-    void updateCommentsViewContextMenu(const QModelIndexList& _indexes, ScreenplayTextCommentsView* _view);
+    void updateCommentsViewContextMenu(const QModelIndexList& _indexes,
+                                       ScreenplayTextCommentsView* _view);
 
 
     Tree* commentsView = nullptr;
@@ -49,10 +44,10 @@ public:
 };
 
 ScreenplayTextCommentsView::Implementation::Implementation(QWidget* _parent)
-    : commentsView(new Tree(_parent)),
-      commentsViewContextMenu(new ContextMenu(commentsView)),
-      addCommentView(new ScreenplayTextAddCommentView(_parent)),
-      repliesView(new ScreenplayTextCommentRepliesView(_parent))
+    : commentsView(new Tree(_parent))
+    , commentsViewContextMenu(new ContextMenu(commentsView))
+    , addCommentView(new ScreenplayTextAddCommentView(_parent))
+    , repliesView(new ScreenplayTextCommentRepliesView(_parent))
 {
     commentsView->setAutoAdjustSize(true);
     commentsView->setContextMenuPolicy(Qt::CustomContextMenu);
@@ -60,7 +55,8 @@ ScreenplayTextCommentsView::Implementation::Implementation(QWidget* _parent)
     commentsView->setSelectionMode(QAbstractItemView::ExtendedSelection);
 }
 
-void ScreenplayTextCommentsView::Implementation::updateCommentsViewContextMenu(const QModelIndexList& _indexes, ScreenplayTextCommentsView* _view)
+void ScreenplayTextCommentsView::Implementation::updateCommentsViewContextMenu(
+    const QModelIndexList& _indexes, ScreenplayTextCommentsView* _view)
 {
     if (_indexes.isEmpty()) {
         return;
@@ -72,7 +68,9 @@ void ScreenplayTextCommentsView::Implementation::updateCommentsViewContextMenu(c
     // Настраиваем контекстное меню для одного элемента
     //
     if (_indexes.size() == 1) {
-        if (_indexes.constFirst().data(BusinessLayer::ScreenplayTextCommentsModel::ReviewMarkIsDoneRole).toBool()) {
+        if (_indexes.constFirst()
+                .data(BusinessLayer::ScreenplayTextCommentsModel::ReviewMarkIsDoneRole)
+                .toBool()) {
             auto markAsUndone = new QAction(tr("Mark as undone"));
             markAsUndone->setIconText(u8"\U000F0131");
             connect(markAsUndone, &QAction::triggered, _view, [this, _view] {
@@ -89,9 +87,8 @@ void ScreenplayTextCommentsView::Implementation::updateCommentsViewContextMenu(c
         }
         auto remove = new QAction(tr("Remove"));
         remove->setIconText(u8"\U000F01B4");
-        connect(remove, &QAction::triggered, _view, [this, _view] {
-            emit _view->removeRequested(commentsView->selectedIndexes());
-        });
+        connect(remove, &QAction::triggered, _view,
+                [this, _view] { emit _view->removeRequested(commentsView->selectedIndexes()); });
         menuActions.append(remove);
     }
     //
@@ -114,9 +111,8 @@ void ScreenplayTextCommentsView::Implementation::updateCommentsViewContextMenu(c
         //
         auto remove = new QAction(tr("Remove selected notes"));
         remove->setIconText(u8"\U000F01B4");
-        connect(remove, &QAction::triggered, _view, [this, _view] {
-            emit _view->removeRequested(commentsView->selectedIndexes());
-        });
+        connect(remove, &QAction::triggered, _view,
+                [this, _view] { emit _view->removeRequested(commentsView->selectedIndexes()); });
         menuActions.append(remove);
     }
 
@@ -128,8 +124,8 @@ void ScreenplayTextCommentsView::Implementation::updateCommentsViewContextMenu(c
 
 
 ScreenplayTextCommentsView::ScreenplayTextCommentsView(QWidget* _parent)
-    : StackWidget(_parent),
-      d(new Implementation(this))
+    : StackWidget(_parent)
+    , d(new Implementation(this))
 {
     setAnimationType(StackWidget::AnimationType::Slide);
 
@@ -139,8 +135,9 @@ ScreenplayTextCommentsView::ScreenplayTextCommentsView(QWidget* _parent)
 
 
     connect(d->commentsView, &Tree::clicked, this, &ScreenplayTextCommentsView::commentSelected);
-    connect(d->commentsView, &Tree::doubleClicked, this, &ScreenplayTextCommentsView::showCommentRepliesView);
-    connect(d->commentsView, &Tree::customContextMenuRequested, this, [this] (const QPoint& _pos) {
+    connect(d->commentsView, &Tree::doubleClicked, this,
+            &ScreenplayTextCommentsView::showCommentRepliesView);
+    connect(d->commentsView, &Tree::customContextMenuRequested, this, [this](const QPoint& _pos) {
         if (d->commentsView->selectedIndexes().isEmpty()) {
             return;
         }
@@ -152,20 +149,19 @@ ScreenplayTextCommentsView::ScreenplayTextCommentsView(QWidget* _parent)
         emit addReviewMarkRequested(d->addCommentColor, d->addCommentView->comment());
         setCurrentWidget(d->commentsView);
     });
-    connect(d->addCommentView, &ScreenplayTextAddCommentView::cancelPressed, this, [this] {
-        setCurrentWidget(d->commentsView);
-    });
-    connect(d->repliesView, &ScreenplayTextCommentRepliesView::addReplyPressed, this, [this] (const QString& _reply) {
-        emit addReviewMarkCommentRequested(d->commentsView->currentIndex(), _reply);
-    });
+    connect(d->addCommentView, &ScreenplayTextAddCommentView::cancelPressed, this,
+            [this] { setCurrentWidget(d->commentsView); });
+    connect(d->repliesView, &ScreenplayTextCommentRepliesView::addReplyPressed, this,
+            [this](const QString& _reply) {
+                emit addReviewMarkCommentRequested(d->commentsView->currentIndex(), _reply);
+            });
     connect(d->repliesView, &ScreenplayTextCommentRepliesView::closePressed, this, [this] {
         auto animationRect = d->commentsView->visualRect(d->commentsView->currentIndex());
         animationRect.setLeft(0);
         setAnimationRect(d->commentsView, animationRect);
         setCurrentWidget(d->commentsView);
-        QTimer::singleShot(animationDuration(), [this] {
-            setAnimationType(StackWidget::AnimationType::Slide);
-        });
+        QTimer::singleShot(animationDuration(),
+                           [this] { setAnimationType(StackWidget::AnimationType::Slide); });
     });
 
 
@@ -183,7 +179,7 @@ void ScreenplayTextCommentsView::setModel(QAbstractItemModel* _model)
     d->commentsView->setModel(_model);
 
     if (_model != nullptr) {
-        connect(_model, &QAbstractItemModel::dataChanged, this, [this] (const QModelIndex& _index) {
+        connect(_model, &QAbstractItemModel::dataChanged, this, [this](const QModelIndex& _index) {
             if (_index == d->repliesView->commentIndex()) {
                 d->repliesView->setCommentIndex(_index);
             }
@@ -202,7 +198,8 @@ void ScreenplayTextCommentsView::showAddCommentView(const QColor& _withColor)
     d->addCommentColor = _withColor;
     d->addCommentView->setComment({});
     setCurrentWidget(d->addCommentView);
-    QTimer::singleShot(animationDuration(), d->addCommentView, qOverload<>(&ScreenplayTextAddCommentView::setFocus));
+    QTimer::singleShot(animationDuration(), d->addCommentView,
+                       qOverload<>(&ScreenplayTextAddCommentView::setFocus));
 }
 
 void ScreenplayTextCommentsView::showCommentRepliesView(const QModelIndex& _commentIndex)
@@ -218,7 +215,8 @@ void ScreenplayTextCommentsView::showCommentRepliesView(const QModelIndex& _comm
         animationRect.setLeft(0);
         setAnimationRect(d->commentsView, animationRect);
         setCurrentWidget(d->repliesView);
-        QTimer::singleShot(animationDuration(), d->repliesView, qOverload<>(&ScreenplayTextAddCommentView::setFocus));
+        QTimer::singleShot(animationDuration(), d->repliesView,
+                           qOverload<>(&ScreenplayTextAddCommentView::setFocus));
     });
 }
 

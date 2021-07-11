@@ -4,8 +4,8 @@ RunOnceLock::RunOnceLock()
 {
 }
 
-RunOnceLock::RunOnceLock(const QString& _key) :
-    m_key(_key)
+RunOnceLock::RunOnceLock(const QString& _key)
+    : m_key(_key)
 {
 }
 

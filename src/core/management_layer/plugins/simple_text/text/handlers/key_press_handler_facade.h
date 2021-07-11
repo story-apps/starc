@@ -6,16 +6,15 @@ class QEvent;
 class QKeyEvent;
 
 namespace BusinessLayer {
-    enum class TextParagraphType;
+enum class TextParagraphType;
 }
 
 namespace Ui {
-    class SimpleTextEdit;
+class SimpleTextEdit;
 }
 
 
-namespace KeyProcessingLayer
-{
+namespace KeyProcessingLayer {
 
 class AbstractKeyHandler;
 

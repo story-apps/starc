@@ -1,18 +1,17 @@
 #include "screenplay_text_add_comment_view.h"
 
 #include <ui/design_system/design_system.h>
-
 #include <ui/widgets/button/button.h>
 #include <ui/widgets/scroll_bar/scroll_bar.h>
 #include <ui/widgets/text_field/text_field.h>
+#include <utils/helpers/ui_helper.h>
 
 #include <QKeyEvent>
 #include <QScrollArea>
 #include <QVBoxLayout>
 
 
-namespace Ui
-{
+namespace Ui {
 
 class ScreenplayTextAddCommentView::Implementation
 {
@@ -27,11 +26,11 @@ public:
 };
 
 ScreenplayTextAddCommentView::Implementation::Implementation(QWidget* _parent)
-    : content(new QScrollArea(_parent)),
-      comment(new TextField(_parent)),
-      buttonsLayout(new QHBoxLayout),
-      cancelButton(new Button(_parent)),
-      saveButton(new Button(_parent))
+    : content(new QScrollArea(_parent))
+    , comment(new TextField(_parent))
+    , buttonsLayout(new QHBoxLayout)
+    , cancelButton(new Button(_parent))
+    , saveButton(new Button(_parent))
 {
     QPalette palette;
     palette.setColor(QPalette::Base, Qt::transparent);
@@ -41,6 +40,7 @@ ScreenplayTextAddCommentView::Implementation::Implementation(QWidget* _parent)
     content->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
     content->setVerticalScrollBar(new ScrollBar);
 
+    UiHelper::initSpellingFor(comment);
     comment->setEnterMakesNewLine(true);
 
     buttonsLayout->setContentsMargins({});
@@ -55,8 +55,8 @@ ScreenplayTextAddCommentView::Implementation::Implementation(QWidget* _parent)
 
 
 ScreenplayTextAddCommentView::ScreenplayTextAddCommentView(QWidget* _parent)
-    : Widget(_parent),
-      d(new Implementation(this))
+    : Widget(_parent)
+    , d(new Implementation(this))
 {
     setFocusProxy(d->comment);
 
@@ -112,8 +112,7 @@ bool ScreenplayTextAddCommentView::eventFilter(QObject* _watched, QEvent* _event
         if (keyEvent->key() == Qt::Key_Escape) {
             emit cancelPressed();
         } else if (!keyEvent->modifiers().testFlag(Qt::ShiftModifier)
-                   && (keyEvent->key() == Qt::Key_Return
-                       || keyEvent->key() == Qt::Key_Enter)) {
+                   && (keyEvent->key() == Qt::Key_Return || keyEvent->key() == Qt::Key_Enter)) {
             emit savePressed();
             return true;
         }
@@ -142,11 +141,12 @@ void ScreenplayTextAddCommentView::designSystemChangeEvent(DesignSystemChangeEve
     d->comment->setTextColor(Ui::DesignSystem::color().onPrimary());
 
 
-    d->buttonsLayout->setContentsMargins(0, 0, Ui::DesignSystem::layout().px12() + Ui::DesignSystem::layout().px2(), 0);
+    d->buttonsLayout->setContentsMargins(
+        0, 0, Ui::DesignSystem::layout().px12() + Ui::DesignSystem::layout().px2(), 0);
     d->cancelButton->setBackgroundColor(Ui::DesignSystem::color().secondary());
     d->cancelButton->setTextColor(Ui::DesignSystem::color().secondary());
     d->saveButton->setBackgroundColor(Ui::DesignSystem::color().secondary());
     d->saveButton->setTextColor(Ui::DesignSystem::color().secondary());
 }
 
-} // nmaespace Ui
+} // namespace Ui

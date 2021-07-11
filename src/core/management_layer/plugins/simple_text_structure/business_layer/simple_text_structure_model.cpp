@@ -8,8 +8,7 @@
 #include <QApplication>
 
 
-namespace BusinessLayer
-{
+namespace BusinessLayer {
 
 class SimpleTextStructureModel::Implementation
 {
@@ -22,8 +21,8 @@ public:
 
 
 SimpleTextStructureModel::SimpleTextStructureModel(QObject* _parent)
-    : QSortFilterProxyModel(_parent),
-      d(new Implementation)
+    : QSortFilterProxyModel(_parent)
+    , d(new Implementation)
 {
 }
 
@@ -45,13 +44,13 @@ void SimpleTextStructureModel::setSourceModel(QAbstractItemModel* _sourceModel)
         //        видимо не успевает происходить какая-то внутренняя магия при синхронном удалении
         //        и последующей вставки элементов в модели
         //
-        connect(d->textModel, &TextModel::rowsRemoved, this, [] {
-            QApplication::processEvents(QEventLoop::ExcludeUserInputEvents);
-        });
+        connect(d->textModel, &TextModel::rowsRemoved, this,
+                [] { QApplication::processEvents(QEventLoop::ExcludeUserInputEvents); });
     }
 }
 
-bool SimpleTextStructureModel::filterAcceptsRow(int _sourceRow, const QModelIndex& _sourceParent) const
+bool SimpleTextStructureModel::filterAcceptsRow(int _sourceRow,
+                                                const QModelIndex& _sourceParent) const
 {
     if (d->textModel == nullptr) {
         return false;

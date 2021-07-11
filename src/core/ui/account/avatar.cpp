@@ -7,8 +7,7 @@
 #include <QVariantAnimation>
 
 
-namespace Ui
-{
+namespace Ui {
 
 class Avatar::Implementation
 {
@@ -50,12 +49,13 @@ void Avatar::Implementation::prepreAvatarForPainting(const QSize& _size)
 
 
 Avatar::Avatar(QWidget* _parent)
-    : Widget(_parent),
-      d(new Implementation)
+    : Widget(_parent)
+    , d(new Implementation)
 {
     setAttribute(Qt::WA_Hover);
 
-    connect(&d->overlayOpacityAnimation, &QVariantAnimation::valueChanged, this, [this] { update(); });
+    connect(&d->overlayOpacityAnimation, &QVariantAnimation::valueChanged, this,
+            [this] { update(); });
 }
 
 Avatar::~Avatar() = default;

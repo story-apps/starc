@@ -3,8 +3,7 @@
 #include <QVariant>
 
 
-namespace BusinessLayer
-{
+namespace BusinessLayer {
 
 class ScreenplayTextModelItem::Implementation
 {

@@ -5,8 +5,7 @@
 #include <QAction>
 
 
-namespace Ui
-{
+namespace Ui {
 
 SettingsToolBar::SettingsToolBar(QWidget* _parent)
     : AppBar(_parent)

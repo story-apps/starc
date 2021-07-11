@@ -10,8 +10,7 @@
 #include <QVariantAnimation>
 
 
-namespace Ui
-{
+namespace Ui {
 
 class SimpleTextEditToolbar::Implementation
 {
@@ -43,14 +42,14 @@ public:
 };
 
 SimpleTextEditToolbar::Implementation::Implementation(QWidget* _parent)
-    : undoAction(new QAction),
-      redoAction(new QAction),
-      paragraphTypeAction(new QAction),
-      fastFormatAction(new QAction),
-      searchAction(new QAction),
-      commentsAction(new QAction),
-      popup(new Card(_parent)),
-      popupContent(new Tree(popup))
+    : undoAction(new QAction)
+    , redoAction(new QAction)
+    , paragraphTypeAction(new QAction)
+    , fastFormatAction(new QAction)
+    , searchAction(new QAction)
+    , commentsAction(new QAction)
+    , popup(new Card(_parent))
+    , popupContent(new Tree(popup))
 {
     popup->setWindowFlags(Qt::SplashScreen | Qt::FramelessWindowHint | Qt::NoDropShadowWindowHint);
     popup->setAttribute(Qt::WA_Hover, false);
@@ -81,19 +80,19 @@ void SimpleTextEditToolbar::Implementation::showPopup(SimpleTextEditToolbar* _pa
     isPopupShown = true;
 
     const auto popupWidth = Ui::DesignSystem::floatingToolBar().spacing() * 2
-                            + _parent->actionCustomWidth(paragraphTypeAction);
+        + _parent->actionCustomWidth(paragraphTypeAction);
     popup->resize(static_cast<int>(popupWidth), 0);
 
     const auto left = QPoint(Ui::DesignSystem::floatingToolBar().shadowMargins().left()
-                             + Ui::DesignSystem::floatingToolBar().margins().left()
-                             + Ui::DesignSystem::floatingToolBar().iconSize().width() * 2
-                             + Ui::DesignSystem::floatingToolBar().spacing()
-                             - Ui::DesignSystem::card().shadowMargins().left(),
+                                 + Ui::DesignSystem::floatingToolBar().margins().left()
+                                 + Ui::DesignSystem::floatingToolBar().iconSize().width() * 2
+                                 + Ui::DesignSystem::floatingToolBar().spacing()
+                                 - Ui::DesignSystem::card().shadowMargins().left(),
                              _parent->rect().bottom()
-                             - Ui::DesignSystem::floatingToolBar().shadowMargins().bottom());
+                                 - Ui::DesignSystem::floatingToolBar().shadowMargins().bottom());
     const auto pos = _parent->mapToGlobal(left)
-                     + QPointF(Ui::DesignSystem::textField().margins().left(),
-                               - Ui::DesignSystem::textField().margins().bottom());
+        + QPointF(Ui::DesignSystem::textField().margins().left(),
+                  -Ui::DesignSystem::textField().margins().bottom());
     popup->move(pos.toPoint());
     popup->show();
 
@@ -102,8 +101,8 @@ void SimpleTextEditToolbar::Implementation::showPopup(SimpleTextEditToolbar* _pa
     popupHeightAnimation.setDirection(QVariantAnimation::Forward);
     const auto itemsCount = popupContent->model()->rowCount();
     const auto height = Ui::DesignSystem::treeOneLineItem().height() * itemsCount
-                        + Ui::DesignSystem::card().shadowMargins().top()
-                        + Ui::DesignSystem::card().shadowMargins().bottom();
+        + Ui::DesignSystem::card().shadowMargins().top()
+        + Ui::DesignSystem::card().shadowMargins().bottom();
     popupHeightAnimation.setEndValue(static_cast<int>(height));
     popupHeightAnimation.start();
 }
@@ -121,8 +120,8 @@ void SimpleTextEditToolbar::Implementation::hidePopup()
 
 
 SimpleTextEditToolbar::SimpleTextEditToolbar(QWidget* _parent)
-    : FloatingToolBar(_parent),
-      d(new Implementation(this))
+    : FloatingToolBar(_parent)
+    , d(new Implementation(this))
 {
     d->undoAction->setIconText(u8"\U000f054c");
     addAction(d->undoAction);
@@ -149,9 +148,11 @@ SimpleTextEditToolbar::SimpleTextEditToolbar(QWidget* _parent)
     d->fastFormatAction->setIconText(u8"\U000f0328");
     d->fastFormatAction->setCheckable(true);
     addAction(d->fastFormatAction);
-    connect(d->fastFormatAction, &QAction::toggled, this, &SimpleTextEditToolbar::updateTranslations);
-    connect(d->fastFormatAction, &QAction::toggled, this, &SimpleTextEditToolbar::fastFormatPanelVisibleChanged);
-    connect(d->fastFormatAction, &QAction::toggled, [this] (bool _checked) {
+    connect(d->fastFormatAction, &QAction::toggled, this,
+            &SimpleTextEditToolbar::updateTranslations);
+    connect(d->fastFormatAction, &QAction::toggled, this,
+            &SimpleTextEditToolbar::fastFormatPanelVisibleChanged);
+    connect(d->fastFormatAction, &QAction::toggled, [this](bool _checked) {
         d->paragraphTypeAction->setVisible(!_checked);
         designSystemChangeEvent(nullptr);
     });
@@ -166,19 +167,21 @@ SimpleTextEditToolbar::SimpleTextEditToolbar(QWidget* _parent)
     d->commentsAction->setCheckable(true);
     addAction(d->commentsAction);
     connect(d->commentsAction, &QAction::toggled, this, &SimpleTextEditToolbar::updateTranslations);
-    connect(d->commentsAction, &QAction::toggled, this, &SimpleTextEditToolbar::commentsModeEnabledChanged);
+    connect(d->commentsAction, &QAction::toggled, this,
+            &SimpleTextEditToolbar::commentsModeEnabledChanged);
 
-    connect(&d->popupHeightAnimation, &QVariantAnimation::valueChanged, this, [this] (const QVariant& _value) {
-        const auto height = _value.toInt();
-        d->popup->resize(d->popup->width(), height);
-    });
+    connect(&d->popupHeightAnimation, &QVariantAnimation::valueChanged, this,
+            [this](const QVariant& _value) {
+                const auto height = _value.toInt();
+                d->popup->resize(d->popup->width(), height);
+            });
     connect(&d->popupHeightAnimation, &QVariantAnimation::finished, this, [this] {
         if (!d->isPopupShown) {
             d->popup->hide();
         }
     });
 
-    connect(d->popupContent, &Tree::currentIndexChanged, this, [this] (const QModelIndex& _index) {
+    connect(d->popupContent, &Tree::currentIndexChanged, this, [this](const QModelIndex& _index) {
         d->paragraphTypeAction->setText(_index.data().toString());
         d->hidePopup();
         update();
@@ -201,9 +204,8 @@ void SimpleTextEditToolbar::setParagraphTypesModel(QAbstractItemModel* _model)
     d->popupContent->setModel(_model);
 
     if (_model != nullptr) {
-        connect(_model, &QAbstractItemModel::rowsInserted, this, [this] {
-            designSystemChangeEvent(nullptr);
-        });
+        connect(_model, &QAbstractItemModel::rowsInserted, this,
+                [this] { designSystemChangeEvent(nullptr); });
         if (_model->rowCount() > 0) {
             d->popupContent->setCurrentIndex(_model->index(0, 0));
         }
@@ -244,15 +246,17 @@ QString SimpleTextEditToolbar::searchIcon() const
 QPointF SimpleTextEditToolbar::searchIconPosition() const
 {
     const auto allActions = actions();
-    const auto visibleActionsSize = std::count_if(allActions.begin(), allActions.end(),
-                                                  [] (QAction* _action) { return _action->isVisible(); }) - 2;
+    const auto visibleActionsSize
+        = std::count_if(allActions.begin(), allActions.end(),
+                        [](QAction* _action) { return _action->isVisible(); })
+        - 2;
     qreal width = Ui::DesignSystem::floatingToolBar().shadowMargins().left()
-                  + Ui::DesignSystem::floatingToolBar().margins().left()
-                  + (Ui::DesignSystem::floatingToolBar().iconSize().width()
-                     + Ui::DesignSystem::floatingToolBar().spacing()) * visibleActionsSize;
+        + Ui::DesignSystem::floatingToolBar().margins().left()
+        + (Ui::DesignSystem::floatingToolBar().iconSize().width()
+           + Ui::DesignSystem::floatingToolBar().spacing())
+            * visibleActionsSize;
     for (const auto action : actions()) {
-        if (!action->isVisible()
-            || action->isSeparator()) {
+        if (!action->isVisible() || action->isSeparator()) {
             continue;
         }
 
@@ -264,7 +268,7 @@ QPointF SimpleTextEditToolbar::searchIconPosition() const
 
     return QPointF(width,
                    Ui::DesignSystem::floatingToolBar().shadowMargins().top()
-                   + Ui::DesignSystem::floatingToolBar().margins().top());
+                       + Ui::DesignSystem::floatingToolBar().margins().top());
 }
 
 bool SimpleTextEditToolbar::isCommentsModeEnabled() const
@@ -287,24 +291,35 @@ void SimpleTextEditToolbar::focusOutEvent(QFocusEvent* _event)
 
 void SimpleTextEditToolbar::updateTranslations()
 {
-    d->undoAction->setToolTip(tr("Undo last action") + QString(" (%1)").arg(QKeySequence(QKeySequence::Undo).toString(QKeySequence::NativeText)));
-    d->redoAction->setToolTip(tr("Redo last action") + QString(" (%1)").arg(QKeySequence(QKeySequence::Redo).toString(QKeySequence::NativeText)));
+    d->undoAction->setToolTip(
+        tr("Undo last action")
+        + QString(" (%1)").arg(
+            QKeySequence(QKeySequence::Undo).toString(QKeySequence::NativeText)));
+    d->redoAction->setToolTip(
+        tr("Redo last action")
+        + QString(" (%1)").arg(
+            QKeySequence(QKeySequence::Redo).toString(QKeySequence::NativeText)));
     d->paragraphTypeAction->setToolTip(tr("Current paragraph format"));
-    d->fastFormatAction->setToolTip(d->fastFormatAction->isChecked() ? tr("Hide fast format panel")
-                                                                     : tr("Show fast format panel"));
-    d->searchAction->setToolTip(tr("Search text") + QString(" (%1)").arg(QKeySequence(QKeySequence::Find).toString(QKeySequence::NativeText)));
+    d->fastFormatAction->setToolTip(d->fastFormatAction->isChecked()
+                                        ? tr("Hide fast format panel")
+                                        : tr("Show fast format panel"));
+    d->searchAction->setToolTip(
+        tr("Search text")
+        + QString(" (%1)").arg(
+            QKeySequence(QKeySequence::Find).toString(QKeySequence::NativeText)));
     d->commentsAction->setToolTip(d->commentsAction->isChecked() ? tr("Disable review mode")
-                                                             : tr("Enable review mode"));
+                                                                 : tr("Enable review mode"));
 }
 
 void SimpleTextEditToolbar::designSystemChangeEvent(DesignSystemChangeEvent* _event)
 {
     FloatingToolBar::designSystemChangeEvent(_event);
 
-    setActionCustomWidth(d->paragraphTypeAction,
-                   static_cast<int>(Ui::DesignSystem::treeOneLineItem().margins().left())
-                   + d->popupContent->sizeHintForColumn(0)
-                   + static_cast<int>(Ui::DesignSystem::treeOneLineItem().margins().right()));
+    setActionCustomWidth(
+        d->paragraphTypeAction,
+        static_cast<int>(Ui::DesignSystem::treeOneLineItem().margins().left())
+            + d->popupContent->sizeHintForColumn(0)
+            + static_cast<int>(Ui::DesignSystem::treeOneLineItem().margins().right()));
 
     d->popup->setBackgroundColor(Ui::DesignSystem::color().primary());
     d->popupContent->setBackgroundColor(Ui::DesignSystem::color().primary());

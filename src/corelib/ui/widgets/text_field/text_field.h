@@ -1,8 +1,6 @@
 #pragma once
 
-#include <corelib_global.h>
-
-#include <QTextEdit>
+#include <ui/widgets/text_edit/base/base_text_edit.h>
 
 class QValidator;
 
@@ -10,7 +8,7 @@ class QValidator;
 /**
  * @brief Виджет текстового поля
  */
-class CORE_LIBRARY_EXPORT TextField : public QTextEdit
+class CORE_LIBRARY_EXPORT TextField : public BaseTextEdit
 {
     Q_OBJECT
 
@@ -169,7 +167,7 @@ protected:
     /**
      * @brief Ловим LayoutDirectionChanged
      */
-    void changeEvent(QEvent *_event) override;
+    void changeEvent(QEvent* _event) override;
 
     /**
      * @brief Разрешаем вставлять только плоский текст
@@ -180,4 +178,3 @@ private:
     class Implementation;
     QScopedPointer<Implementation> d;
 };
-
