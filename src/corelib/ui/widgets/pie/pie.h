@@ -14,8 +14,6 @@ class CORE_LIBRARY_EXPORT Pie : public Widget
 
 public:
     explicit Pie(QWidget* _parent = nullptr, qreal _hole = 0);
-    explicit Pie(const QAbstractItemModel* _model, int _valueColumn, qreal _hole = 0,
-                 QWidget* _parent = nullptr);
     ~Pie() override;
 
     /**

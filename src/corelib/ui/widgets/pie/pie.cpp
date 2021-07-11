@@ -21,7 +21,6 @@ public:
     };
 
     Implementation(Pie* _q, qreal _hole = 0);
-    Implementation(Pie* _q, const QAbstractItemModel* _model, int _valueColumn, qreal _hole = 0);
 
     /**
      * @brief Сбрасываем модель
@@ -95,26 +94,22 @@ public:
      */
     void animateDeselectedSlice();
 
-    Pie* q;
+    Pie* q = nullptr;
 
     std::list<std::unique_ptr<Slice>> slices;
-    const Slice* selectedSlice;
-    const Slice* lastSelectedSlice;
+    const Slice* selectedSlice = nullptr;
+    const Slice* lastSelectedSlice = nullptr;
 
-    const QAbstractItemModel* model;
-    int valueColumn;
+    const QAbstractItemModel* model = nullptr;
+    int valueColumn = 0;
 
-    qreal hole;
+    qreal hole = 0;
 
     QVariantAnimation sliceOpacityAnimation;
 };
 
 Pie::Implementation::Implementation(Pie* _q, qreal _hole)
     : q(_q)
-    , selectedSlice(nullptr)
-    , lastSelectedSlice(nullptr)
-    , model(nullptr)
-    , valueColumn(0)
     , hole(_hole)
 {
     sliceOpacityAnimation.setEasingCurve(QEasingCurve::InQuad);
@@ -122,25 +117,6 @@ Pie::Implementation::Implementation(Pie* _q, qreal _hole)
     sliceOpacityAnimation.setEndValue(Ui::DesignSystem::inactiveItemOpacity());
     sliceOpacityAnimation.setDuration(250);
 
-
-    connect(&sliceOpacityAnimation, &QVariantAnimation::valueChanged, q, qOverload<>(&Pie::update));
-}
-
-Pie::Implementation::Implementation(Pie* _q, const QAbstractItemModel* _model, int _valueColumn,
-                                    qreal _hole)
-    : q(_q)
-    , selectedSlice(nullptr)
-    , lastSelectedSlice(nullptr)
-    , model(_model)
-    , valueColumn(_valueColumn)
-    , hole(_hole)
-{
-    sliceOpacityAnimation.setEasingCurve(QEasingCurve::InQuad);
-    sliceOpacityAnimation.setStartValue(1.0);
-    sliceOpacityAnimation.setEndValue(Ui::DesignSystem::inactiveItemOpacity());
-    sliceOpacityAnimation.setDuration(250);
-
-    connectToModel();
 
     connect(&sliceOpacityAnimation, &QVariantAnimation::valueChanged, q, qOverload<>(&Pie::update));
 }
@@ -386,13 +362,6 @@ void Pie::Implementation::animateDeselectedSlice()
 Pie::Pie(QWidget* _parent, qreal _hole)
     : Widget(_parent)
     , d(new Implementation(this, _hole))
-{
-    setMouseTracking(true);
-}
-
-Pie::Pie(const QAbstractItemModel* _model, int _valueColumn, qreal _hole, QWidget* _parent)
-    : Widget(_parent)
-    , d(new Implementation(this, _model, _valueColumn, _hole))
 {
     setMouseTracking(true);
 }
