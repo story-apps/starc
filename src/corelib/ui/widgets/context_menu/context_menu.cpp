@@ -96,7 +96,8 @@ ContextMenu::Implementation::Implementation(ContextMenu* _q)
 QSize ContextMenu::Implementation::sizeHint() const
 {
     auto width = 0.0;
-    auto height = Ui::DesignSystem::card().shadowMargins().top();
+    auto height = Ui::DesignSystem::card().shadowMargins().top()
+        + Ui::DesignSystem::contextMenu().margins().top();
     for (auto action : q->actions()) {
         if (!action->isVisible()) {
             continue;
@@ -127,7 +128,8 @@ QSize ContextMenu::Implementation::sizeHint() const
     }
     width += Ui::DesignSystem::card().shadowMargins().left() + Ui::DesignSystem::layout().px62()
         + Ui::DesignSystem::card().shadowMargins().right();
-    height += Ui::DesignSystem::card().shadowMargins().bottom();
+    height += Ui::DesignSystem::card().shadowMargins().bottom()
+        + Ui::DesignSystem::contextMenu().margins().top();
 
     return QSizeF(width, height).toSize();
 }
@@ -151,7 +153,8 @@ void ContextMenu::Implementation::relayoutWidgetActions() const
 
 QAction* ContextMenu::Implementation::actionForPosition(const QPoint& _coordinate) const
 {
-    auto actionTop = Ui::DesignSystem::card().shadowMargins().top();
+    auto actionTop = Ui::DesignSystem::card().shadowMargins().top()
+        + Ui::DesignSystem::contextMenu().margins().top();
     for (auto action : q->actions()) {
         if (!action->isVisible()) {
             continue;
@@ -179,7 +182,8 @@ QAction* ContextMenu::Implementation::actionForPosition(const QPoint& _coordinat
 
 QRectF ContextMenu::Implementation::actionRect(const QAction* _action) const
 {
-    auto actionTop = Ui::DesignSystem::card().shadowMargins().top();
+    auto actionTop = Ui::DesignSystem::card().shadowMargins().top()
+        + Ui::DesignSystem::contextMenu().margins().top();
     for (auto action : q->actions()) {
         if (!action->isVisible()) {
             continue;
@@ -473,7 +477,9 @@ void ContextMenu::paintEvent(QPaintEvent* _event)
     const auto actionX = Ui::DesignSystem::card().shadowMargins().left();
     const auto actionWidth = width() - Ui::DesignSystem::card().shadowMargins().left()
         - Ui::DesignSystem::card().shadowMargins().right();
-    auto actionY = Ui::DesignSystem::card().shadowMargins().top();
+    auto actionY = Ui::DesignSystem::card().shadowMargins().top()
+        + Ui::DesignSystem::contextMenu().margins().top();
+
     for (int actionIndex = 0; actionIndex < actions().size(); ++actionIndex) {
         QAction* action = actions().at(actionIndex);
         if (!action->isVisible()) {
