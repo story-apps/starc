@@ -8,6 +8,10 @@
 #include <QPainterPath>
 #include <QVariantAnimation>
 
+namespace {
+int kInvalidIndex = -1;
+}
+
 class Pie::Implementation
 {
 public:
@@ -92,8 +96,8 @@ public:
     Pie* q = nullptr;
 
     std::vector<Slice> slices;
-    int selectedSlice = -1;
-    int lastSelectedSlice = -1;
+    int selectedSlice = kInvalidIndex;
+    int lastSelectedSlice = kInvalidIndex;
 
     const QAbstractItemModel* model = nullptr;
     int valueColumn = 0;
@@ -125,8 +129,8 @@ void Pie::Implementation::reset(const QAbstractItemModel* _model, int _valueColu
     model = _model;
     valueColumn = _valueColumn;
 
-    selectedSlice = -1;
-    lastSelectedSlice = -1;
+    selectedSlice = kInvalidIndex;
+    lastSelectedSlice = kInvalidIndex;
 
     slices.clear();
 }
@@ -202,8 +206,8 @@ void Pie::Implementation::removeSlices(const QModelIndex& _parent, int _first, i
     slices.erase(rangeBegin, rangeEnd);
 
     if (_first >= selectedSlice || _last <= selectedSlice) {
-        selectedSlice = -1;
-        lastSelectedSlice = slices.size() ? 0 : -1;
+        selectedSlice = kInvalidIndex;
+        lastSelectedSlice = slices.size() ? 0 : kInvalidIndex;
     }
 
     recalculateSlices();
@@ -273,7 +277,7 @@ int Pie::Implementation::findSelectedSlice(const QPoint& point)
         }
     }
 
-    return -1;
+    return kInvalidIndex;
 }
 
 
@@ -284,7 +288,7 @@ void Pie::Implementation::updateSelectedSlice()
         return;
     }
 
-    if (selectedSlice > -1) {
+    if (selectedSlice != kInvalidIndex) {
         this->selectedSlice = selectedSlice;
         this->lastSelectedSlice = selectedSlice;
 
@@ -363,21 +367,22 @@ void Pie::paintEvent(QPaintEvent* _event)
 
     if (d->sliceOpacityAnimation.state() == QVariantAnimation::Running) {
         painter.setOpacity(d->sliceOpacityAnimation.currentValue().toReal());
-    } else if (d->selectedSlice > -1) {
+    } else if (d->selectedSlice != kInvalidIndex) {
         painter.setOpacity(d->sliceOpacityAnimation.endValue().toReal());
     }
 
     for (decltype(d->slices)::size_type i = 0;
-         d->lastSelectedSlice > -1 && i < d->lastSelectedSlice; ++i) {
+         d->lastSelectedSlice != kInvalidIndex && i < d->lastSelectedSlice; ++i) {
         painter.fillPath(d->slices[i].path, d->slices[i].color);
     }
 
-    for (decltype(d->slices)::size_type i = d->lastSelectedSlice > -1 ? d->lastSelectedSlice : 0;
+    for (decltype(d->slices)::size_type i
+         = d->lastSelectedSlice != kInvalidIndex ? d->lastSelectedSlice : 0;
          i < d->slices.size(); ++i) {
         painter.fillPath(d->slices[i].path, d->slices[i].color);
     }
 
-    if (d->lastSelectedSlice > -1) {
+    if (d->lastSelectedSlice != kInvalidIndex) {
         painter.setOpacity(1.0);
         painter.fillPath(d->slices[d->lastSelectedSlice].path,
                          d->slices[d->lastSelectedSlice].color);
@@ -399,14 +404,14 @@ void Pie::mouseMoveEvent(QMouseEvent* _event)
         return;
     }
 
-    if (selectedSlice < 0) {
-        d->selectedSlice = -1;
+    if (selectedSlice == kInvalidIndex) {
+        d->selectedSlice = kInvalidIndex;
         d->animateDeselectedSlice();
         return;
     }
 
     auto isUpdate = false;
-    if (d->selectedSlice > -1) {
+    if (d->selectedSlice != kInvalidIndex) {
         isUpdate = true;
     }
 
