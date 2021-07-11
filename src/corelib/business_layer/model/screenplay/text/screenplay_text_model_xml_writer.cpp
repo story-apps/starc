@@ -126,7 +126,7 @@ void ScreenplayTextModelXmlWriter::operator+=(const TextItemData& _data)
     //
     // Если элемент разорван, то сохраняем его и пока не записываем
     //
-    if (_data.item->isBroken()) {
+    if (_data.item->isBreakCorrectionStart()) {
         auto textItem = new ScreenplayTextModelTextItem;
         textItem->copyFrom(_data.item);
         d->lastTextItemData = { textItem, _data.fromPosition, _data.toPosition };

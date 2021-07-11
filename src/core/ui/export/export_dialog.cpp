@@ -61,10 +61,12 @@ ExportDialog::Implementation::Implementation(QWidget* _parent)
 {
     using namespace BusinessLayer;
 
-    auto formatsModel = new QStringListModel({ "PDF" /*, "DOCX", "FDX", "Fontain" */ });
+    fileFormat->setSpellCheckPolicy(SpellCheckPolicy::Manual);
+    auto formatsModel = new QStringListModel({ "PDF", "DOCX" /*, "FDX", "Fontain" */ });
     fileFormat->setModel(formatsModel);
     fileFormat->setCurrentIndex(formatsModel->index(0, 0));
 
+    screenplayTemplate->setSpellCheckPolicy(SpellCheckPolicy::Manual);
     screenplayTemplate->setModel(TemplatesFacade::screenplayTemplates());
     for (int row = 0; row < TemplatesFacade::screenplayTemplates()->rowCount(); ++row) {
         auto item = TemplatesFacade::screenplayTemplates()->item(row);
@@ -84,6 +86,8 @@ ExportDialog::Implementation::Implementation(QWidget* _parent)
            printSceneNumbersOnRight, printReviewMarks, openDocumentAfterExport }) {
         checkBox->setChecked(true);
     }
+
+    watermark->setSpellCheckPolicy(SpellCheckPolicy::Manual);
 
     buttonsLayout->setContentsMargins({});
     buttonsLayout->setSpacing(0);
@@ -213,6 +217,8 @@ ExportDialog::~ExportDialog() = default;
 BusinessLayer::ExportOptions ExportDialog::exportOptions() const
 {
     BusinessLayer::ExportOptions options;
+    options.fileFormat
+        = static_cast<BusinessLayer::ExportFileFormat>(d->fileFormat->currentIndex().row());
     options.templateId = d->screenplayTemplate->currentIndex()
                              .data(BusinessLayer::TemplatesFacade::kTemplateIdRole)
                              .toString();
@@ -293,7 +299,7 @@ void ExportDialog::designSystemChangeEvent(DesignSystemChangeEvent* _event)
     }
 
     contentsLayout()->setSpacing(static_cast<int>(Ui::DesignSystem::layout().px8()));
-    d->buttonsLayout->setContentsMargins(QMarginsF(0.0, Ui::DesignSystem::layout().px12(),
+    d->buttonsLayout->setContentsMargins(QMarginsF(0.0, Ui::DesignSystem::layout().px24(),
                                                    Ui::DesignSystem::layout().px16(),
                                                    Ui::DesignSystem::layout().px8())
                                              .toMargins());

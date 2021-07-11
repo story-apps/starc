@@ -47,7 +47,7 @@ public:
      * @brief Номер сцены
      */
     Number number() const;
-    void setNumber(int _number, const QString& _prefix);
+    bool setNumber(int _number, const QString& _prefix);
 
     /**
      * @brief Длительность сцены

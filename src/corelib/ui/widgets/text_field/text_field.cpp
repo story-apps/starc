@@ -2,10 +2,12 @@
 
 #include <include/custom_events.h>
 #include <ui/design_system/design_system.h>
+#include <ui/widgets/context_menu/context_menu.h>
 #include <utils/helpers/color_helper.h>
 #include <utils/helpers/image_helper.h>
 #include <utils/helpers/text_helper.h>
 
+#include <QAction>
 #include <QEvent>
 #include <QKeyEvent>
 #include <QMimeData>
@@ -134,19 +136,18 @@ void TextField::Implementation::reconfigure()
     palette.setColor(QPalette::HighlightedText, Ui::DesignSystem::color().onSecondary());
     q->setPalette(palette);
 
-    QTextFrameFormat frameFormat = q->document()->rootFrame()->frameFormat();
-    frameFormat.setLeftMargin(
-        contentMargins().left() + margins().left()
-        + (trailingIcon.isEmpty() || q->isLeftToRight() ? 0 : trailingIconOffset())
-        + (!suffix.isEmpty() && q->isRightToLeft()
-               ? suffixRect().width() + Ui::DesignSystem::textField().spacing()
-               : 0));
-    frameFormat.setTopMargin(contentMargins().top() + margins().top());
-    frameFormat.setRightMargin(
+    QMarginsF frameMargins;
+    frameMargins.setLeft(contentMargins().left() + margins().left()
+                         + (trailingIcon.isEmpty() || q->isLeftToRight() ? 0 : trailingIconOffset())
+                         + (!suffix.isEmpty() && q->isRightToLeft()
+                                ? suffixRect().width() + Ui::DesignSystem::textField().spacing()
+                                : 0));
+    frameMargins.setTop(contentMargins().top() + margins().top());
+    frameMargins.setRight(
         contentMargins().right() + margins().right()
         + (trailingIcon.isEmpty() || q->isRightToLeft() ? 0 : trailingIconOffset()));
-    frameFormat.setBottomMargin(contentMargins().bottom() + margins().bottom());
-    q->document()->rootFrame()->setFrameFormat(frameFormat);
+    frameMargins.setBottom(contentMargins().bottom() + margins().bottom());
+    q->setPageMarginsPx(frameMargins);
 
     //
     // Переконфигурируем цвет и размер лейблов
@@ -316,13 +317,15 @@ QRectF TextField::Implementation::iconRect(int _width) const
 
 
 TextField::TextField(QWidget* _parent)
-    : QTextEdit(_parent)
+    : BaseTextEdit(_parent)
     , d(new Implementation(this))
 {
     setAttribute(Qt::WA_Hover);
+    setAddSpaceToBottom(false);
     setContextMenuPolicy(Qt::CustomContextMenu);
     setFrameShape(QFrame::NoFrame);
     setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
+    setPageSpacing(0);
     setTabChangesFocus(true);
     setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
     setWordWrapMode(QTextOption::WrapAtWordBoundaryOrAnywhere);
@@ -334,6 +337,21 @@ TextField::TextField(QWidget* _parent)
 
     reconfigure();
 
+    connect(this, &TextField::customContextMenuRequested, this, [this](const QPoint& _position) {
+        auto menu = createContextMenu(_position);
+        auto actions = menu->actions().toVector();
+        //
+        // Убираем возможности форматирования (пока)
+        //
+        if (isMispelledWordUnderCursor(_position)) {
+            actions.takeAt(1)->deleteLater();
+        } else {
+            actions.takeFirst()->deleteLater();
+            actions.first()->setSeparator(false);
+        }
+        menu->setActions(actions);
+        menu->showContextMenu(mapToGlobal(_position));
+    });
     connect(&d->labelColorAnimation, &QVariantAnimation::valueChanged, this, [this] { update(); });
     connect(&d->labelFontSizeAnimation, &QVariantAnimation::valueChanged, this,
             [this] { update(); });
@@ -664,7 +682,7 @@ bool TextField::event(QEvent* _event)
     }
 
     default: {
-        return QTextEdit::event(_event);
+        return BaseTextEdit::event(_event);
     }
     }
 }
@@ -689,10 +707,10 @@ void TextField::paintEvent(QPaintEvent* _event)
 
     //
     // Если не включён режим отображения пароля, то отрисовкой текста и курсора занимается сам
-    // QTextEdit
+    // BaseTextEdit
     //
     if (!d->isPasswordModeEnabled) {
-        QTextEdit::paintEvent(_event);
+        BaseTextEdit::paintEvent(_event);
     }
     //
     // В противном случае, самостоятельно рисуем звёздочки вместо букв
@@ -809,7 +827,7 @@ void TextField::paintEvent(QPaintEvent* _event)
 
 void TextField::resizeEvent(QResizeEvent* _event)
 {
-    QTextEdit::resizeEvent(_event);
+    BaseTextEdit::resizeEvent(_event);
 
     //
     // Если виджет в фокусе, корректируем размер полосы декорации под текстом
@@ -822,7 +840,7 @@ void TextField::resizeEvent(QResizeEvent* _event)
 
 void TextField::focusInEvent(QFocusEvent* _event)
 {
-    QTextEdit::focusInEvent(_event);
+    BaseTextEdit::focusInEvent(_event);
 
     d->labelColorAnimation.setStartValue(d->textDisabledColor);
     d->labelColorAnimation.setEndValue(Ui::DesignSystem::color().secondary());
@@ -843,7 +861,7 @@ void TextField::focusInEvent(QFocusEvent* _event)
 
 void TextField::focusOutEvent(QFocusEvent* _event)
 {
-    QTextEdit::focusOutEvent(_event);
+    BaseTextEdit::focusOutEvent(_event);
 
     d->labelColorAnimation.setStartValue(Ui::DesignSystem::color().secondary());
     d->labelColorAnimation.setEndValue(d->textDisabledColor);
@@ -869,13 +887,13 @@ void TextField::mouseReleaseEvent(QMouseEvent* _event)
         emit trailingIconPressed();
         _event->accept();
     } else {
-        QTextEdit::mouseReleaseEvent(_event);
+        BaseTextEdit::mouseReleaseEvent(_event);
     }
 }
 
 void TextField::mouseMoveEvent(QMouseEvent* _event)
 {
-    QTextEdit::mouseMoveEvent(_event);
+    BaseTextEdit::mouseMoveEvent(_event);
 
     if (d->trailingIcon.isEmpty()) {
         if (viewport()->cursor() != Qt::IBeamCursor) {
@@ -900,7 +918,7 @@ void TextField::keyPressEvent(QKeyEvent* _event)
         return;
     }
 
-    QTextEdit::keyPressEvent(_event);
+    BaseTextEdit::keyPressEvent(_event);
 }
 
 void TextField::changeEvent(QEvent* _event)
@@ -913,7 +931,7 @@ void TextField::changeEvent(QEvent* _event)
         break;
     }
 
-    return QTextEdit::changeEvent(_event);
+    return BaseTextEdit::changeEvent(_event);
 }
 
 void TextField::insertFromMimeData(const QMimeData* _source)

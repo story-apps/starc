@@ -71,6 +71,8 @@ SOURCES += \
     business_layer/document/text/text_block_data.cpp \
     business_layer/document/text/text_cursor.cpp \
     business_layer/document/text/text_document.cpp \
+    business_layer/export/screenplay/abstract_exporter.cpp \
+    business_layer/export/screenplay/docx_exporter.cpp \
     business_layer/export/screenplay/pdf_exporter.cpp \
     business_layer/import/screenplay/celtx_importer.cpp \
     business_layer/import/screenplay/document_importer.cpp \
@@ -206,6 +208,7 @@ SOURCES += \
     utils/helpers/text_helper.cpp \
     utils/helpers/quotes_helper.cpp \
     utils/helpers/time_helper.cpp \
+    utils/helpers/ui_helper.cpp \
     utils/tools/backup_builder.cpp \
     utils/tools/debouncer.cpp \
     utils/tools/model_index_path.cpp \
@@ -222,6 +225,7 @@ HEADERS += \
     business_layer/document/text/text_cursor.h \
     business_layer/document/text/text_document.h \
     business_layer/export/screenplay/abstract_exporter.h \
+    business_layer/export/screenplay/docx_exporter.h \
     business_layer/export/screenplay/export_options.h \
     business_layer/export/screenplay/pdf_exporter.h \
     business_layer/import/screenplay/abstract_screenplay_importer.h \
@@ -372,6 +376,7 @@ HEADERS += \
     utils/helpers/text_helper.h \
     utils/helpers/quotes_helper.h \
     utils/helpers/time_helper.h \
+    utils/helpers/ui_helper.h \
     utils/shugar.h \
     utils/tools/backup_builder.h \
     utils/tools/debouncer.h \

@@ -6,6 +6,7 @@
 namespace BusinessLayer {
 
 struct ExportOptions;
+class ScreenplayTextDocument;
 class ScreenplayTextModel;
 
 /**
@@ -23,6 +24,14 @@ public:
      */
     virtual void exportTo(ScreenplayTextModel* _model,
                           const ExportOptions& _exportOptions) const = 0;
+
+protected:
+    /**
+     * @brief Подготовить документ к экспорту в соответствии с заданными опциями
+     * @note Владение документом передаётся клиенту
+     */
+    ScreenplayTextDocument* prepareDocument(ScreenplayTextModel* _model,
+                                            const ExportOptions& _exportOptions) const;
 };
 
 } // namespace BusinessLayer

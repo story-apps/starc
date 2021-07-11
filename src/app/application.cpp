@@ -77,8 +77,16 @@ void Application::startUp()
     //
     // Получим имя файла, который пользователь возможно хочет открыть
     //
-    if (d->fileToOpen.isEmpty() && arguments().size() > 1) {
-        d->fileToOpen = arguments().first();
+    auto arguments = this->arguments();
+    //
+    // ... удаляем путь до программы из списка аргументов
+    //
+    arguments.removeFirst();
+    //
+    // ... если пользователь задал файл, который нужно открыть, сохраним его
+    //
+    if (d->fileToOpen.isEmpty() && !arguments.isEmpty()) {
+        d->fileToOpen = arguments.constFirst();
     }
 
     manager->exec(d->fileToOpen);

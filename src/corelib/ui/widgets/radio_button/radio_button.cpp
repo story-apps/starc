@@ -200,13 +200,14 @@ void RadioButton::mouseReleaseEvent(QMouseEvent* _event)
 
 void RadioButton::keyPressEvent(QKeyEvent* _event)
 {
-    if (_event->key() == Qt::Key_Space || _event->key() == Qt::Key_Enter
-        || _event->key() == Qt::Key_Return) {
+    if (_event->key() == Qt::Key_Space) {
         _event->accept();
         d->animateClick();
         setChecked(true);
         return;
     }
+
+    Widget::keyPressEvent(_event);
 }
 
 void RadioButton::designSystemChangeEvent(DesignSystemChangeEvent* _event)

@@ -334,12 +334,13 @@ public:
     void setPageFormat(QPageSize::PageSizeId _pageFormat);
 
     /**
-     * @brief Настроить поля страницы, мм
+     * @brief Настроить поля страницы
      */
-    void setPageMargins(const QMarginsF& _margins);
+    void setPageMarginsMm(const QMarginsF& _margins);
+    void setPageMarginsPx(const QMarginsF& _margins);
 
     /**
-     * @brief Задать отступ между страницами
+     * @brief Задать отступ между страницами, пикселей
      */
     void setPageSpacing(qreal _spacing);
 

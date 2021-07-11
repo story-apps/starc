@@ -207,13 +207,14 @@ void CheckBox::mouseReleaseEvent(QMouseEvent* _event)
 
 void CheckBox::keyPressEvent(QKeyEvent* _event)
 {
-    if (_event->key() == Qt::Key_Space || _event->key() == Qt::Key_Enter
-        || _event->key() == Qt::Key_Return) {
+    if (_event->key() == Qt::Key_Space) {
         _event->accept();
         d->animateClick();
         setChecked(!isChecked());
         return;
     }
+
+    Widget::keyPressEvent(_event);
 }
 
 void CheckBox::designSystemChangeEvent(DesignSystemChangeEvent* _event)

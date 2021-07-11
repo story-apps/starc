@@ -47,7 +47,8 @@ public:
     /**
      * @brief Обновить метрики
      */
-    void update(QPageSize::PageSizeId _pageFormat, const QMarginsF& _mmPageMargins = {});
+    void update(QPageSize::PageSizeId _pageFormat, const QMarginsF& _mmPageMargins = {},
+                const QMarginsF& _pxPageMargins = {});
 
     /**
      * @brief Методы доступа к параметрам страницы

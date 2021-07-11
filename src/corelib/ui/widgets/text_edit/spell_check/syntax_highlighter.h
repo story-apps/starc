@@ -31,7 +31,6 @@ public:
     void setDocument(QTextDocument* doc);
     QTextDocument* document() const;
 
-public Q_SLOTS:
     void rehighlight();
     void rehighlightBlock(const QTextBlock& block);
 

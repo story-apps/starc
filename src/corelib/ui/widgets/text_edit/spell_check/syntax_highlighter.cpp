@@ -296,24 +296,29 @@ SyntaxHighlighter::~SyntaxHighlighter()
 void SyntaxHighlighter::setDocument(QTextDocument* doc)
 {
     if (d->doc) {
-        disconnect(d->doc, SIGNAL(contentsChange(int, int, int)), d,
-                   SLOT(_q_reformatBlocks(int, int, int)));
+        disconnect(d->doc, &QTextDocument::contentsChange, d,
+                   &SyntaxHighlighterPrivate::_q_reformatBlocks);
 
         if (!d->doc->isEmpty()) {
             QTextCursor cursor(d->doc);
             cursor.beginEditBlock();
             for (QTextBlock blk = d->doc->begin(); blk.isValid(); blk = blk.next())
-                blk.layout()->clearAdditionalFormats();
+                blk.layout()->clearFormats();
             cursor.endEditBlock();
         }
     }
     d->doc = doc;
     if (d->doc) {
-        connect(d->doc, SIGNAL(contentsChange(int, int, int)), d,
-                SLOT(_q_reformatBlocks(int, int, int)));
+        connect(d->doc, &QTextDocument::contentsChange, d,
+                &SyntaxHighlighterPrivate::_q_reformatBlocks);
         d->rehighlightPending = true;
         if (!d->doc->isEmpty()) {
-            rehighlight();
+            //
+            // Вызываем отложенно, т.к. установка документа также осуществляется в конструкторе, в
+            // момент, когда таблица виртуальных функций ещё не создана и нельзя вызвать метод
+            // SyntaxHighlighter::highlightBlock наследника
+            //
+            QMetaObject::invokeMethod(this, &SyntaxHighlighter::rehighlight, Qt::QueuedConnection);
         }
     }
 }

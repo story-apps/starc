@@ -68,7 +68,8 @@ void BackupBuilder::save(const QString& _filePath, const QString& _backupDir,
     //
     const auto nameFilter = QString("%1_*.%2").arg(backupBaseName, fileInfo.completeSuffix());
     std::set<QString> backups;
-    for (auto file : QDir(_backupDir).entryInfoList({ nameFilter }, QDir::Files)) {
+    const auto files = QDir(_backupDir).entryInfoList({ nameFilter }, QDir::Files);
+    for (const auto& file : files) {
         backups.insert(file.absoluteFilePath());
     }
 

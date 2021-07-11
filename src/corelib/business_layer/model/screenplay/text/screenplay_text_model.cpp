@@ -153,7 +153,9 @@ void ScreenplayTextModel::Implementation::updateNumbering()
             case ScreenplayTextModelItemType::Scene: {
                 updateChildNumbering(childItem);
                 auto sceneItem = static_cast<ScreenplayTextModelSceneItem*>(childItem);
-                sceneItem->setNumber(sceneNumber++, informationModel->scenesNumbersPrefix());
+                if (sceneItem->setNumber(sceneNumber, informationModel->scenesNumbersPrefix())) {
+                    sceneNumber++;
+                }
                 break;
             }
 
@@ -855,6 +857,8 @@ void ScreenplayTextModel::insertFromMime(const QModelIndex& _index, int _positio
                 updateItem(textItem);
             }
         }
+    } else {
+        qDebug("here");
     }
 
     //
@@ -913,7 +917,9 @@ void ScreenplayTextModel::insertFromMime(const QModelIndex& _index, int _positio
                 //
                 isFirstTextItemHandled = true;
                 auto textItem = static_cast<ScreenplayTextModelTextItem*>(item);
-                if (!textItem->text().isEmpty()) {
+                if (textItem->paragraphType() == ScreenplayParagraphType::FolderHeader
+                    || textItem->paragraphType() == ScreenplayParagraphType::SceneHeading
+                    || !textItem->text().isEmpty()) {
                     textItem->mergeWith(newTextItem);
                 } else {
                     textItem->copyFrom(newTextItem);
@@ -1397,7 +1403,7 @@ void ScreenplayTextModel::applyPatch(const QByteArray& _patch)
                 if (textItem->isCorrection()) {
                     continue;
                 }
-                if (textItem->isBroken()) {
+                if (textItem->isBreakCorrectionStart()) {
                     lastBrokenItem = textItem;
                     lastBrokenItemCopy.reset(new ScreenplayTextModelTextItem);
                     lastBrokenItemCopy->copyFrom(lastBrokenItem);
@@ -1776,7 +1782,7 @@ void ScreenplayTextModel::applyPatch(const QByteArray& _patch)
         //
         if (modelItem != nullptr && modelItem->type() == ScreenplayTextModelItemType::Text) {
             auto textItem = static_cast<ScreenplayTextModelTextItem*>(modelItem);
-            if (textItem->isBroken()) {
+            if (textItem->isBreakCorrectionStart()) {
                 auto nextItem = findNextItemWithChildren(textItem, false);
                 ;
                 while (nextItem != nullptr
@@ -1791,7 +1797,7 @@ void ScreenplayTextModel::applyPatch(const QByteArray& _patch)
 
                     textItem->setText(textItem->text() + " ");
                     textItem->mergeWith(nextTextItem);
-                    textItem->setBroken(false);
+                    textItem->setBreakCorrectionStart(false);
                     updateItem(textItem);
                     removeItem(nextItem);
                     break;

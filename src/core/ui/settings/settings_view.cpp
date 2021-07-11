@@ -287,11 +287,14 @@ SettingsView::Implementation::Implementation(QWidget* _parent)
 
 void SettingsView::Implementation::initApplicationCard()
 {
+    spellCheckerLanguage->setSpellCheckPolicy(SpellCheckPolicy::Manual);
     spellCheckerLanguage->setEnabled(false);
     spellCheckerLanguage->setModel(spellCheckerLanguagesModel);
     // 0 - 0.5, 500 - 1, 3500 - 4
     scaleFactor->setMaximumValue(3500);
     scaleFactor->setValue(500);
+    scaleFactor->setDefaultPosition(500);
+    backupsFolderPath->setSpellCheckPolicy(SpellCheckPolicy::Manual);
     backupsFolderPath->setEnabled(false);
     backupsFolderPath->setTrailingIcon(u8"\U000f0256");
 
@@ -359,6 +362,7 @@ void SettingsView::Implementation::initApplicationCard()
 
 void SettingsView::Implementation::initScreenplayCard()
 {
+    screenplayEditorDefaultTemplate->setSpellCheckPolicy(SpellCheckPolicy::Manual);
     screenplayEditorDefaultTemplate->setModel(
         BusinessLayer::TemplatesFacade::screenplayTemplates());
     screenplayEditorDefaultTemplateOptions->setText(u8"\U000F01D9");
@@ -385,10 +389,14 @@ void SettingsView::Implementation::initScreenplayCard()
     durationGroup->add(screenplayDurationByPage);
     durationGroup->add(screenplayDurationByCharacters);
     screenplayDurationByPage->setChecked(true);
+    screenplayDurationByPagePage->setSpellCheckPolicy(SpellCheckPolicy::Manual);
     screenplayDurationByPagePage->setText("1");
     screenplayDurationByPagePage->setReadOnly(true);
+    screenplayDurationByPageDuration->setSpellCheckPolicy(SpellCheckPolicy::Manual);
+    screenplayDurationByCharactersCharacters->setSpellCheckPolicy(SpellCheckPolicy::Manual);
     screenplayDurationByCharactersCharacters->setEnabled(false);
     screenplayDurationByCharactersIncludingSpaces->setEnabled(false);
+    screenplayDurationByCharactersDuration->setSpellCheckPolicy(SpellCheckPolicy::Manual);
     screenplayDurationByCharactersDuration->setEnabled(false);
 
 

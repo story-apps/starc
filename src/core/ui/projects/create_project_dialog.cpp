@@ -52,9 +52,13 @@ CreateProjectDialog::Implementation::Implementation(QWidget* _parent)
     , cancelButton(new Button(_parent))
     , createButton(new Button(_parent))
 {
+    projectName->setSpellCheckPolicy(SpellCheckPolicy::Manual);
+
     localProject->setChecked(true);
 
+    projectFolder->setSpellCheckPolicy(SpellCheckPolicy::Manual);
     projectFolder->setTrailingIcon(u8"\U000f0256");
+    importFilePath->setSpellCheckPolicy(SpellCheckPolicy::Manual);
     importFilePath->setTrailingIcon(u8"\U000f0256");
     advancedSettingsButton->setIcon(u8"\U000f0493");
 

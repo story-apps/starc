@@ -6,6 +6,7 @@
 #include <ui/widgets/card/card.h>
 #include <ui/widgets/scroll_bar/scroll_bar.h>
 #include <ui/widgets/text_field/text_field.h>
+#include <utils/helpers/ui_helper.h>
 
 #include <QGridLayout>
 #include <QScrollArea>
@@ -54,6 +55,9 @@ ProjectInformationView::Implementation::Implementation(QWidget* _parent)
     projectInfoLayout->addWidget(projectCover, 0, 1, 4, 1, Qt::AlignTop);
     projectInfoLayout->setColumnStretch(0, 1);
     projectInfo->setLayoutReimpl(projectInfoLayout);
+
+    projectName->setSpellCheckPolicy(SpellCheckPolicy::Manual);
+    UiHelper::initSpellingFor(projectLogline);
 
     QWidget* contentWidget = new QWidget;
     content->setWidget(contentWidget);

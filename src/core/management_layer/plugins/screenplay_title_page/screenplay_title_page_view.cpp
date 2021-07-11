@@ -14,6 +14,7 @@
 #include <ui/widgets/scroll_bar/scroll_bar.h>
 #include <ui/widgets/text_edit/scalable_wrapper/scalable_wrapper.h>
 #include <utils/helpers/text_helper.h>
+#include <utils/helpers/ui_helper.h>
 
 #include <QStandardItem>
 #include <QStandardItemModel>
@@ -155,19 +156,12 @@ void ScreenplayTitlePageView::reconfigure(const QStringList& _changedSettingsKey
 {
     using namespace BusinessLayer;
 
+    UiHelper::initSpellingFor(d->textEdit);
+
     auto settingsValue = [](const QString& _key) {
         return DataStorageLayer::StorageFacade::settingsStorage()->value(
             _key, DataStorageLayer::SettingsStorage::SettingsPlace::Application);
     };
-
-    const bool useSpellChecker
-        = settingsValue(DataStorageLayer::kApplicationUseSpellCheckerKey).toBool();
-    d->textEdit->setUseSpellChecker(useSpellChecker);
-    if (useSpellChecker) {
-        const QString languageCode
-            = settingsValue(DataStorageLayer::kApplicationSpellCheckerLanguageKey).toString();
-        d->textEdit->setSpellCheckLanguage(languageCode);
-    }
 
     if (_changedSettingsKeys.isEmpty()
         || _changedSettingsKeys.contains(

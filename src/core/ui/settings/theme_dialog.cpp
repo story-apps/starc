@@ -8,9 +8,12 @@
 #include <ui/widgets/text_field/text_field.h>
 #include <utils/helpers/color_helper.h>
 
+#include <QClipboard>
 #include <QColorDialog>
 #include <QGridLayout>
+#include <QGuiApplication>
 #include <QTimer>
+#include <QToolTip>
 #include <QUrl>
 #include <QVariant>
 
@@ -72,6 +75,7 @@ ThemeDialog::Implementation::Implementation(QWidget* _parent)
     , dark(new RadioButton(_parent))
     , custom(new RadioButton(_parent))
     , customPalette(new Widget(_parent))
+    , customPaletteLayout(new QGridLayout)
     , primary(new Subtitle2Label(_parent))
     , onPrimary(new Subtitle2Label(_parent))
     , secondary(new Subtitle2Label(_parent))
@@ -93,7 +97,6 @@ ThemeDialog::Implementation::Implementation(QWidget* _parent)
     dark->setProperty(kThemeKey, static_cast<int>(ApplicationTheme::Dark));
     custom->setProperty(kThemeKey, static_cast<int>(ApplicationTheme::Custom));
 
-    customPaletteLayout = new QGridLayout;
     customPaletteLayout->setContentsMargins({});
     customPaletteLayout->setSpacing(0);
     customPaletteLayout->addWidget(primary, 0, 0);
@@ -116,6 +119,9 @@ ThemeDialog::Implementation::Implementation(QWidget* _parent)
     for (auto color : colors()) {
         color->setAlignment(Qt::AlignCenter);
     }
+
+    customThemeHash->setSpellCheckPolicy(SpellCheckPolicy::Manual);
+    customThemeHash->setTrailingIcon(u8"\U000F018F");
 
     buttonsLayout = new QHBoxLayout;
     buttonsLayout->setContentsMargins({});
@@ -242,6 +248,10 @@ ThemeDialog::ThemeDialog(QWidget* _parent)
         d->customThemeHash->setError({});
         emit customThemeColorsChanged(Ui::DesignSystem::Color(hash));
     });
+    connect(d->customThemeHash, &TextField::trailingIconPressed, this, [this] {
+        QGuiApplication::clipboard()->setText(d->customThemeHash->text());
+        QToolTip::showText(QCursor::pos(), tr("HASH copied."), nullptr, {}, 1600);
+    });
     connect(d->okButton, &Button::clicked, this, &ThemeDialog::hideDialog);
 
     updateTranslations();
@@ -332,7 +342,7 @@ void ThemeDialog::designSystemChangeEvent(DesignSystemChangeEvent* _event)
     }
     d->customPaletteLayout->setRowMinimumHeight(
         3, static_cast<int>(Ui::DesignSystem::layout().px24()));
-    d->customThemeHash->setBackgroundColor(Ui::DesignSystem::color().background());
+    d->customThemeHash->setBackgroundColor(Ui::DesignSystem::color().onBackground());
     d->customThemeHash->setTextColor(Ui::DesignSystem::color().onBackground());
     {
         QSignalBlocker blocker(d->customThemeHash);

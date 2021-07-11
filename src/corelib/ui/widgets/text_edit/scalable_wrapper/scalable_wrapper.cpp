@@ -217,7 +217,8 @@ bool ScalableWrapper::event(QEvent* _event)
         break;
     }
 
-    case static_cast<QEvent::Type>(EventType::DesignSystemChangeEvent): {
+    case static_cast<QEvent::Type>(EventType::DesignSystemChangeEvent):
+    case static_cast<QEvent::Type>(EventType::SpellingChangeEvent): {
         QApplication::sendEvent(d->editor.data(), _event);
         break;
     }
