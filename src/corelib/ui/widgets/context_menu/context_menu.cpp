@@ -96,7 +96,8 @@ ContextMenu::Implementation::Implementation(ContextMenu* _q)
 QSize ContextMenu::Implementation::sizeHint() const
 {
     auto width = 0.0;
-    auto height = Ui::DesignSystem::card().shadowMargins().top();
+    auto height = Ui::DesignSystem::card().shadowMargins().top()
+        + Ui::DesignSystem::contextMenu().margins().top();
     for (auto action : q->actions()) {
         if (!action->isVisible()) {
             continue;
@@ -478,7 +479,7 @@ void ContextMenu::paintEvent(QPaintEvent* _event)
         - Ui::DesignSystem::card().shadowMargins().right();
     auto actionY = Ui::DesignSystem::card().shadowMargins().top()
         + Ui::DesignSystem::contextMenu().margins().top();
-    ;
+
     for (int actionIndex = 0; actionIndex < actions().size(); ++actionIndex) {
         QAction* action = actions().at(actionIndex);
         if (!action->isVisible()) {
