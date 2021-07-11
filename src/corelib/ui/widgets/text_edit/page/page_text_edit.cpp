@@ -3645,7 +3645,9 @@ ContextMenu* PageTextEdit::createContextMenu(const QPoint& _position, QWidget* _
 {
     auto cursor = cursorForPosition(_position);
     const auto selection = std::minmax(textCursor().selectionStart(), textCursor().selectionEnd());
-    if (selection.first <= cursor.position() && cursor.position() <= selection.second) {
+    const int startPosition = selection.first;
+    const int lastPosition = selection.second;
+    if (startPosition <= cursor.position() && cursor.position() <= lastPosition) {
         //
         // Оставляем выделение как есть
         //

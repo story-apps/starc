@@ -1,6 +1,7 @@
 #include "text_document.h"
 
 #include "text_block_data.h"
+#include "text_cursor.h"
 
 #include <business_layer/model/text/text_model.h>
 #include <business_layer/model/text/text_model_chapter_item.h>
@@ -527,7 +528,7 @@ void TextDocument::setModel(BusinessLayer::TextModel* _model, bool _canChangeMod
                     return;
                 }
 
-                QTextCursor cursor(this);
+                TextCursor cursor(this);
                 cursor.setPosition(fromPosition);
                 cursor.setPosition(toPosition, QTextCursor::KeepAnchor);
                 cursor.movePosition(QTextCursor::EndOfBlock, QTextCursor::KeepAnchor);
@@ -538,10 +539,9 @@ void TextDocument::setModel(BusinessLayer::TextModel* _model, bool _canChangeMod
                 //
                 // Корректируем карту позиций элементов
                 //
-                const auto selectionInterval
-                    = std::minmax(cursor.selectionStart(), cursor.selectionEnd());
-                auto fromIter = d->positionsToItems.lower_bound(selectionInterval.first);
-                auto endIter = d->positionsToItems.lower_bound(selectionInterval.second);
+                const auto selectionInterval = cursor.selectionInterval();
+                auto fromIter = d->positionsToItems.lower_bound(selectionInterval.from);
+                auto endIter = d->positionsToItems.lower_bound(selectionInterval.to);
                 //
                 // ... если удаление заканчивается на пустом абзаце, берём следующий за ним элемент
                 //
@@ -559,7 +559,7 @@ void TextDocument::setModel(BusinessLayer::TextModel* _model, bool _canChangeMod
                 //
                 // ... корректируем позиции остальных элементов
                 //
-                d->correctPositionsToItems(selectionInterval.second, -1 * distance);
+                d->correctPositionsToItems(selectionInterval.to, -1 * distance);
 
                 cursor.beginEditBlock();
                 if (cursor.hasSelection()) {

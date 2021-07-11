@@ -369,8 +369,8 @@ QMimeData* ScreenplayTitlePageEdit::createMimeDataFromSelection() const
     }
 
     QMimeData* mimeData = new QMimeData;
-    QTextCursor cursor = textCursor();
-    const auto selection = std::minmax(cursor.selectionStart(), cursor.selectionEnd());
+    TextCursor cursor = textCursor();
+    const auto selection = cursor.selectionInterval();
 
     //
     // Сформируем в текстовом виде, для вставки наружу
@@ -379,18 +379,18 @@ QMimeData* ScreenplayTitlePageEdit::createMimeDataFromSelection() const
     {
         QByteArray text;
         auto cursor = textCursor();
-        cursor.setPosition(selection.first);
+        cursor.setPosition(selection.from);
         do {
             cursor.movePosition(QTextCursor::EndOfBlock, QTextCursor::KeepAnchor);
-            if (cursor.position() > selection.second) {
-                cursor.setPosition(selection.second, QTextCursor::KeepAnchor);
+            if (cursor.position() > selection.to) {
+                cursor.setPosition(selection.to, QTextCursor::KeepAnchor);
             }
             if (!text.isEmpty()) {
                 text.append("\r\n");
             }
             text.append(cursor.blockCharFormat().fontCapitalization() == QFont::AllUppercase
-                            ? TextHelper::smartToUpper(cursor.selectedText())
-                            : cursor.selectedText());
+                            ? TextHelper::smartToUpper(cursor.selectedText()).toUtf8()
+                            : cursor.selectedText().toUtf8());
         } while (cursor.position() < textCursor().selectionEnd() && !cursor.atEnd()
                  && cursor.movePosition(QTextCursor::NextBlock));
 
@@ -401,9 +401,8 @@ QMimeData* ScreenplayTitlePageEdit::createMimeDataFromSelection() const
     // Поместим в буфер данные о тексте в специальном формате
     //
     {
-        mimeData->setData(
-            d->model->mimeTypes().first(),
-            d->document.mimeFromSelection(selection.first, selection.second).toUtf8());
+        mimeData->setData(d->model->mimeTypes().first(),
+                          d->document.mimeFromSelection(selection.from, selection.to).toUtf8());
     }
 
     return mimeData;
