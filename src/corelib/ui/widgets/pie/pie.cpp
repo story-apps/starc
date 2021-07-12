@@ -63,6 +63,11 @@ public:
     int findSelectedSlice(const QPoint& point);
 
     /**
+     * @brief Выделить заданный слайс
+     */
+    void selectSlice(int _index);
+
+    /**
      * @brief Обновляем выбранный кусочек
      */
     void updateSelectedSlice();
@@ -280,6 +285,32 @@ int Pie::Implementation::findSelectedSlice(const QPoint& point)
     return kInvalidIndex;
 }
 
+void Pie::Implementation::selectSlice(int _sliceIndex)
+{
+    if (selectedSlice == _sliceIndex) {
+        return;
+    }
+
+    if (_sliceIndex == kInvalidIndex || _sliceIndex >= static_cast<int>(slices.size())) {
+        selectedSlice = kInvalidIndex;
+        animateDeselectedSlice();
+        emit q->currentIndexChanged({});
+        return;
+    }
+
+    auto isUpdate = false;
+    if (selectedSlice != kInvalidIndex) {
+        isUpdate = true;
+    }
+
+    selectedSlice = _sliceIndex;
+    lastSelectedSlice = _sliceIndex;
+
+    isUpdate ? q->update() : animateSelectedSlice();
+
+    emit q->currentIndexChanged(slices[selectedSlice].index);
+}
+
 
 void Pie::Implementation::updateSelectedSlice()
 {
@@ -292,7 +323,7 @@ void Pie::Implementation::updateSelectedSlice()
         this->selectedSlice = selectedSlice;
         this->lastSelectedSlice = selectedSlice;
 
-        emit q->itemSelected(slices[selectedSlice].index);
+        emit q->currentIndexChanged(slices[selectedSlice].index);
     }
 
     return;
@@ -371,8 +402,7 @@ void Pie::paintEvent(QPaintEvent* _event)
         painter.setOpacity(d->sliceOpacityAnimation.endValue().toReal());
     }
 
-    for (decltype(d->slices)::size_type i = 0;
-         d->lastSelectedSlice != kInvalidIndex && i < d->lastSelectedSlice; ++i) {
+    for (int i = 0; d->lastSelectedSlice != kInvalidIndex && i < d->lastSelectedSlice; ++i) {
         painter.fillPath(d->slices[i].path, d->slices[i].color);
     }
 
@@ -399,34 +429,17 @@ void Pie::resizeEvent(QResizeEvent* _event)
 void Pie::mouseMoveEvent(QMouseEvent* _event)
 {
     auto selectedSlice = d->findSelectedSlice(_event->pos());
-
-    if (selectedSlice == d->selectedSlice) {
-        return;
-    }
-
-    if (selectedSlice == kInvalidIndex) {
-        d->selectedSlice = kInvalidIndex;
-        d->animateDeselectedSlice();
-        return;
-    }
-
-    auto isUpdate = false;
-    if (d->selectedSlice != kInvalidIndex) {
-        isUpdate = true;
-    }
-
-    d->selectedSlice = selectedSlice;
-    d->lastSelectedSlice = selectedSlice;
-
-    isUpdate ? update() : d->animateSelectedSlice();
-
-    emit itemSelected(d->slices[d->selectedSlice].index);
-    return;
+    d->selectSlice(selectedSlice);
 }
 
 void Pie::setModel(const QAbstractItemModel* _model, int _valueColumn)
 {
     d->setModel(_model, _valueColumn);
+}
+
+void Pie::setCurrentItem(const QModelIndex& _index)
+{
+    d->selectSlice(_index.row());
 }
 
 void Pie::setHole(qreal _hole)

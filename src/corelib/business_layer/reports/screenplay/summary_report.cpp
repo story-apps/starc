@@ -236,10 +236,14 @@ void ScreenplaySummaryReport::build(QAbstractItemModel* _model)
         //
         for (int index = 0; index < paragraphTypes.size(); ++index) {
             const auto& paragraphType = paragraphTypes.at(index);
+            const auto& paragraphCounters = paragraphsToCounters[paragraphType];
+            if (paragraphCounters.occurrences == 0) {
+                continue;
+            }
+
             auto paragraphItem = createModelItem(toDisplayString(paragraphType));
             paragraphItem->setData(u8"\U000F0766", Qt::DecorationRole);
             paragraphItem->setData(makeColor(index), Qt::DecorationPropertyRole);
-            const auto& paragraphCounters = paragraphsToCounters[paragraphType];
 
             d->textInfoModel->appendRow(
                 { paragraphItem, createModelItem(QString::number(paragraphCounters.words)),
@@ -375,7 +379,7 @@ void ScreenplaySummaryReport::build(QAbstractItemModel* _model)
         //
         d->locationsInfoModel->setHeaderData(
             0, Qt::Horizontal,
-            QCoreApplication::translate("BusinessLayer::ScreenplaySummaryReport", "Scene time"),
+            QCoreApplication::translate("BusinessLayer::ScreenplaySummaryReport", "Scene intro"),
             Qt::DisplayRole);
         d->locationsInfoModel->setHeaderData(
             1, Qt::Horizontal,

@@ -22,6 +22,11 @@ public:
     void setModel(const QAbstractItemModel* _model, int _valueColumn);
 
     /**
+     * @brief Установить текущий элемент
+     */
+    void setCurrentItem(const QModelIndex& _index);
+
+    /**
      * @brief Вырезать отверстие в пироге
      *
      * Значение указывается от 0 до 1.
@@ -34,7 +39,7 @@ signals:
     /**
      * @brief Навели машкой на кусочек пирога
      */
-    void itemSelected(const QModelIndex& _index) const;
+    void currentIndexChanged(const QModelIndex& _index) const;
 
 protected:
     /**
@@ -51,7 +56,6 @@ protected:
      * @brief Переопределяем для выделения кусочка пирога
      */
     void mouseMoveEvent(QMouseEvent* _event) override;
-
 
 private:
     class Implementation;
