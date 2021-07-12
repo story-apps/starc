@@ -565,6 +565,7 @@ void ImageCropper::mousePressEvent(QMouseEvent* _event)
 
 void ImageCropper::mouseMoveEvent(QMouseEvent* _event)
 {
+    const int cropperBoundaryShift = 1 * Ui::DesignSystem::scaleFactor();
     //
     // Позиция относительно себя
     //
@@ -610,7 +611,7 @@ void ImageCropper::mouseMoveEvent(QMouseEvent* _event)
     // ... изменяем размер области обрезки
     //
     if (d->currentCursorPosition != CursorPosition::Middle) {
-        const QRectF newGeometry
+        QRectF newGeometry
             = d->calculateGeometry(d->lastStaticCroppingRect, d->currentCursorPosition, mouseDelta);
 
         //
@@ -620,10 +621,59 @@ void ImageCropper::mouseMoveEvent(QMouseEvent* _event)
             return;
         }
 
+        const int boundCroppingArea = 10;
         //
         // ... пользователь пытается вытянуть область обрезки за пределы виджета
         //
         if (!QRectF(rect()).contains(newGeometry)) {
+            if (d->currentCursorPosition == CursorPosition::Left) {
+                if (newGeometry.x() - boundCroppingArea <= 0) {
+                    newGeometry.setLeft(0);
+                }
+            } else if (d->currentCursorPosition == CursorPosition::Right) {
+                if (newGeometry.x() + newGeometry.width() + boundCroppingArea >= width()) {
+                    newGeometry.setRight(width() - cropperBoundaryShift);
+                }
+            } else if (d->currentCursorPosition == CursorPosition::Top) {
+                if (newGeometry.y() - boundCroppingArea <= 0) {
+                    newGeometry.setTop(0);
+                }
+            } else if (d->currentCursorPosition == CursorPosition::Bottom) {
+                if (newGeometry.y() + newGeometry.height() + boundCroppingArea >= height()) {
+                    newGeometry.setBottom(height() - cropperBoundaryShift);
+                }
+            } else if (d->currentCursorPosition == CursorPosition::TopLeft) {
+                if (newGeometry.y() - boundCroppingArea <= 0) {
+                    newGeometry.setTop(0);
+                }
+                if (newGeometry.x() - boundCroppingArea <= 0) {
+                    newGeometry.setLeft(0);
+                }
+            } else if (d->currentCursorPosition == CursorPosition::TopRight) {
+                if (newGeometry.y() - boundCroppingArea <= 0) {
+                    newGeometry.setTop(0);
+                }
+                if (newGeometry.x() + newGeometry.width() + boundCroppingArea >= width()) {
+                    newGeometry.setRight(width() - cropperBoundaryShift);
+                }
+            } else if (d->currentCursorPosition == CursorPosition::BottomLeft) {
+                if (newGeometry.y() + newGeometry.height() + boundCroppingArea >= height()) {
+                    newGeometry.setBottom(height() - cropperBoundaryShift);
+                }
+                if (newGeometry.x() - boundCroppingArea <= 0) {
+                    newGeometry.setLeft(0);
+                }
+            } else if (d->currentCursorPosition == CursorPosition::BottomRight) {
+                if (newGeometry.y() + newGeometry.height() + boundCroppingArea >= height()) {
+                    newGeometry.setBottom(height() - cropperBoundaryShift);
+                }
+                if (newGeometry.x() + newGeometry.width() + boundCroppingArea >= width()) {
+                    newGeometry.setRight(width() - cropperBoundaryShift);
+                }
+            }
+
+            d->croppingRect = newGeometry;
+            update();
             return;
         }
 
@@ -637,8 +687,10 @@ void ImageCropper::mouseMoveEvent(QMouseEvent* _event)
     //
     else {
         auto newPos = d->lastStaticCroppingRect.topLeft() + mouseDelta;
-        newPos.setX(std::clamp(newPos.x(), 0.0, width() - d->croppingRect.width()));
-        newPos.setY(std::clamp(newPos.y(), 0.0, height() - d->croppingRect.height()));
+        newPos.setX(
+            std::clamp(newPos.x(), 0.0, width() - d->croppingRect.width() - cropperBoundaryShift));
+        newPos.setY(std::clamp(newPos.y(), 0.0,
+                               height() - d->croppingRect.height() - cropperBoundaryShift));
         d->croppingRect.moveTo(newPos);
     }
 
@@ -652,4 +704,64 @@ void ImageCropper::mouseReleaseEvent(QMouseEvent* _event)
 {
     d->isMousePressed = false;
     d->updateCursorIcon(_event->pos(), this);
+}
+
+void ImageCropper::mouseDoubleClickEvent(QMouseEvent* _event)
+{
+    Q_UNUSED(_event)
+
+    const qreal frameShift = 1 * Ui::DesignSystem::scaleFactor();
+    int nwidth = height() * d->proportion.width() / d->proportion.height();
+    int delta = 0;
+    QSizeF rectSize = d->croppingRect.size();
+
+    if (!d->isProportionFixed) {
+        d->croppingRect.setRect(0, 0, width() - frameShift, height() - frameShift);
+        update();
+        return;
+    }
+
+    if (nwidth > width()) {
+        int nheight = width() * d->proportion.height() / d->proportion.width();
+        delta = (nheight - d->croppingRect.height()) / 2;
+
+        if ((d->croppingRect.height() == nheight
+             || d->croppingRect.height() == nheight - frameShift)
+            && d->croppingRect.width() == width()) {
+            return;
+        }
+
+        if (d->croppingRect.y() - delta < 0) {
+            rectSize.scale(width(), nheight, Qt::IgnoreAspectRatio);
+            d->croppingRect.moveTopLeft(QPointF(0, 0));
+        } else if (d->croppingRect.y() + nheight > height()) {
+            rectSize.scale(width(), nheight, Qt::IgnoreAspectRatio);
+            d->croppingRect.moveTopLeft(QPointF(0, height() - nheight - frameShift));
+        } else {
+            rectSize.scale(width(), nheight, Qt::IgnoreAspectRatio);
+            d->croppingRect.moveTopLeft(QPointF(0, d->croppingRect.y() - delta));
+        }
+    } else {
+        int nwidth = height() * d->proportion.width() / d->proportion.height();
+        delta = (width() - nwidth) / 2;
+
+        if ((d->croppingRect.width() == nwidth || d->croppingRect.width() == nwidth - frameShift)
+            && d->croppingRect.height() == height()) {
+            return;
+        }
+
+        if (d->croppingRect.x() + nwidth > width()) {
+            rectSize.scale(nwidth, height(), Qt::IgnoreAspectRatio);
+            d->croppingRect.moveTopLeft(QPointF(width() - nwidth - frameShift, 0));
+        } else if (d->croppingRect.x() - delta < 0) {
+            rectSize.scale(nwidth, height(), Qt::IgnoreAspectRatio);
+            d->croppingRect.moveTopLeft(QPointF(0, 0));
+        } else {
+            rectSize.scale(nwidth, height(), Qt::IgnoreAspectRatio);
+            d->croppingRect.moveTopLeft(QPointF(d->croppingRect.x() - delta, 0));
+        }
+    }
+
+    d->croppingRect.setSize(rectSize);
+    update();
 }

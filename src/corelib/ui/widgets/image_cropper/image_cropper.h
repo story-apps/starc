@@ -44,6 +44,7 @@ protected:
     void mousePressEvent(QMouseEvent* _event) override;
     void mouseMoveEvent(QMouseEvent* _event) override;
     void mouseReleaseEvent(QMouseEvent* _event) override;
+    void mouseDoubleClickEvent(QMouseEvent* _event) override;
 
 private:
     class Implementation;
