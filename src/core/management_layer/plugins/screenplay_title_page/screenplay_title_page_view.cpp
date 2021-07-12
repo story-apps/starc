@@ -166,7 +166,7 @@ void ScreenplayTitlePageView::reconfigure(const QStringList& _changedSettingsKey
     if (_changedSettingsKeys.isEmpty()
         || _changedSettingsKeys.contains(
             DataStorageLayer::kComponentsScreenplayEditorDefaultTemplateKey)) {
-        TemplatesFacade::setDefaultTextTemplate(
+        TemplatesFacade::setDefaultSimpleTextTemplate(
             settingsValue(DataStorageLayer::kComponentsSimpleTextEditorDefaultTemplateKey)
                 .toString());
         d->textEdit->reinit();

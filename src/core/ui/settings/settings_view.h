@@ -25,6 +25,7 @@ public:
     void showApplicationUserInterface();
     void showApplicationSaveAndBackups();
     void showComponents();
+    void showComponentsSimpleText();
     void showComponentsScreenplay();
     void showShortcuts();
 
@@ -42,6 +43,14 @@ public:
     void setApplicationBackupsFolder(const QString& _path);
 
     //
+    // Задание параметров редактора текста
+    //
+    void setSimpleTextEditorDefaultTemplate(const QString& _templateId);
+    void setSimpleTextEditorHighlightCurrentLine(bool _highlight);
+    //
+    void setSimpleTextNavigatorShowSceneText(bool _show, int _lines);
+
+    //
     // Задание параметров редактора сценария
     //
     void setScreenplayEditorDefaultTemplate(const QString& _templateId);
@@ -49,12 +58,8 @@ public:
     void setScreenplayEditorShowDialogueNumber(bool _show);
     void setScreenplayEditorHighlightCurrentLine(bool _highlight);
     //
-    // Задание параметров навигатора сценария
-    //
     void setScreenplayNavigatorShowSceneNumber(bool _show);
     void setScreenplayNavigatorShowSceneText(bool _show, int _lines);
-    //
-    // Задание параметров хронометража
     //
     void setScreenplayDurationType(int _type);
     void setScreenplayDurationByPageDuration(int _duration);
@@ -85,6 +90,14 @@ signals:
     void applicationBackupsFolderChanged(const QString& _path);
 
     //
+    // Уведомление об изменении параметров редактора текста
+    //
+    void simpleTextEditorDefaultTemplateChanged(const QString& _templateId);
+    void simpleTextEditorHighlightCurrentLineChanged(bool _highlight);
+    //
+    void simpleTextNavigatorShowSceneTextChanged(bool _show, int _lines);
+
+    //
     // Уведомление об изменении параметров редактора сценария
     //
     void screenplayEditorDefaultTemplateChanged(const QString& _templateId);
@@ -92,12 +105,8 @@ signals:
     void screenplayEditorShowDialogueNumberChanged(bool _show);
     void screenplayEditorHighlightCurrentLineChanged(bool _highlight);
     //
-    // Уведомление об изменении параметров навигатора сценария
-    //
     void screenplayNavigatorShowSceneNumberChanged(bool _show);
     void screenplayNavigatorShowSceneTextChanged(bool _show, int _lines);
-    //
-    // Уведомление об изменении параметров хронометража сценария
     //
     void screenplayDurationTypeChanged(int _type);
     void screenplayDurationByPageDurationChanged(int _duration);

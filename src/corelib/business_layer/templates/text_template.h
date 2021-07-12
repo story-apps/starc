@@ -165,7 +165,7 @@ private:
      * @brief Инициилизация возможна только в классе стиля сценария
      */
     explicit TextBlockStyle(const QXmlStreamAttributes& _blockAttributes);
-    friend class TextTemplate;
+    friend class SimpleTextTemplate;
 
     /**
      * @brief Обновить межстрочный интервал блока
@@ -244,12 +244,12 @@ private:
 
 
 /**
- * @brief Класс шаблона сценария
+ * @brief Класс шаблона текстового документа
  */
-class CORE_LIBRARY_EXPORT TextTemplate
+class CORE_LIBRARY_EXPORT SimpleTextTemplate
 {
 public:
-    TextTemplate() = default;
+    SimpleTextTemplate() = default;
 
     /**
      * @brief Назначить шаблон новым
@@ -309,7 +309,7 @@ public:
     void setBlockStyle(const TextBlockStyle& _blockStyle);
 
 private:
-    explicit TextTemplate(const QString& _fromFile);
+    explicit SimpleTextTemplate(const QString& _fromFile);
     friend class TemplatesFacade;
 
     /**

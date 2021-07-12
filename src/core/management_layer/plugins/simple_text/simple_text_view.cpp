@@ -213,8 +213,8 @@ void SimpleTextView::reconfigure(const QStringList& _changedSettingsKeys)
 
     if (_changedSettingsKeys.isEmpty()
         || _changedSettingsKeys.contains(
-            DataStorageLayer::kComponentsScreenplayEditorDefaultTemplateKey)) {
-        TemplatesFacade::setDefaultTextTemplate(
+            DataStorageLayer::kComponentsSimpleTextEditorDefaultTemplateKey)) {
+        TemplatesFacade::setDefaultSimpleTextTemplate(
             settingsValue(DataStorageLayer::kComponentsSimpleTextEditorDefaultTemplateKey)
                 .toString());
         d->textEdit->reinit();
@@ -222,7 +222,7 @@ void SimpleTextView::reconfigure(const QStringList& _changedSettingsKeys)
 
     if (_changedSettingsKeys.isEmpty()
         || _changedSettingsKeys.contains(
-            DataStorageLayer::kComponentsScreenplayEditorHighlightCurrentLineKey)) {
+            DataStorageLayer::kComponentsSimpleTextEditorHighlightCurrentLineKey)) {
         d->textEdit->setHighlightCurrentLine(
             settingsValue(DataStorageLayer::kComponentsSimpleTextEditorHighlightCurrentLineKey)
                 .toBool());

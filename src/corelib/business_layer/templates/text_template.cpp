@@ -353,14 +353,14 @@ void TextBlockStyle::updateBottomMargin()
 // ****
 
 
-void TextTemplate::setIsNew()
+void SimpleTextTemplate::setIsNew()
 {
     m_isDefault = false;
     m_name.prepend(QApplication::translate("BusinessLayer::ScriptTemplate", "Copy of "));
     m_description.clear();
 }
 
-void TextTemplate::saveToFile(const QString& _filePath) const
+void SimpleTextTemplate::saveToFile(const QString& _filePath) const
 {
     QFile templateFile(_filePath);
     if (!templateFile.open(QIODevice::WriteOnly | QIODevice::Truncate)) {
@@ -406,17 +406,17 @@ void TextTemplate::saveToFile(const QString& _filePath) const
     templateFile.close();
 }
 
-QString TextTemplate::id() const
+QString SimpleTextTemplate::id() const
 {
     return m_id;
 }
 
-bool TextTemplate::isDefault() const
+bool SimpleTextTemplate::isDefault() const
 {
     return m_isDefault;
 }
 
-QString TextTemplate::name() const
+QString SimpleTextTemplate::name() const
 {
     if (m_name.isEmpty()) {
         if (m_id == "mono_cp_a4") {
@@ -434,73 +434,73 @@ QString TextTemplate::name() const
     return m_name;
 }
 
-void TextTemplate::setName(const QString& _name)
+void SimpleTextTemplate::setName(const QString& _name)
 {
     m_name = _name;
 }
 
-QString TextTemplate::description() const
+QString SimpleTextTemplate::description() const
 {
     return m_description;
 }
 
-void TextTemplate::setDescription(const QString& _description)
+void SimpleTextTemplate::setDescription(const QString& _description)
 {
     m_description = _description;
 }
 
-QPageSize::PageSizeId TextTemplate::pageSizeId() const
+QPageSize::PageSizeId SimpleTextTemplate::pageSizeId() const
 {
     return m_pageSizeId;
 }
 
-void TextTemplate::setPageSizeId(QPageSize::PageSizeId _pageSizeId)
+void SimpleTextTemplate::setPageSizeId(QPageSize::PageSizeId _pageSizeId)
 {
     m_pageSizeId = _pageSizeId;
 }
 
-QMarginsF TextTemplate::pageMargins() const
+QMarginsF SimpleTextTemplate::pageMargins() const
 {
     return m_pageMargins;
 }
 
-void TextTemplate::setPageMargins(const QMarginsF& _pageMargins)
+void SimpleTextTemplate::setPageMargins(const QMarginsF& _pageMargins)
 {
     m_pageMargins = _pageMargins;
 }
 
-Qt::Alignment TextTemplate::pageNumbersAlignment() const
+Qt::Alignment SimpleTextTemplate::pageNumbersAlignment() const
 {
     return m_pageNumbersAlignment;
 }
 
-void TextTemplate::setPageNumbersAlignment(Qt::Alignment _alignment)
+void SimpleTextTemplate::setPageNumbersAlignment(Qt::Alignment _alignment)
 {
     m_pageNumbersAlignment = _alignment;
 }
 
-TextBlockStyle TextTemplate::blockStyle(TextParagraphType _forType) const
+TextBlockStyle SimpleTextTemplate::blockStyle(TextParagraphType _forType) const
 {
     return m_blockStyles.value(_forType);
 }
 
-TextBlockStyle TextTemplate::blockStyle(const QTextBlock& _forBlock) const
+TextBlockStyle SimpleTextTemplate::blockStyle(const QTextBlock& _forBlock) const
 {
     return blockStyle(TextBlockStyle::forBlock(_forBlock));
 }
 
-void TextTemplate::setBlockStyle(const TextBlockStyle& _blockStyle)
+void SimpleTextTemplate::setBlockStyle(const TextBlockStyle& _blockStyle)
 {
     m_blockStyles.insert(_blockStyle.type(), _blockStyle);
 }
 
-TextTemplate::TextTemplate(const QString& _fromFile)
+SimpleTextTemplate::SimpleTextTemplate(const QString& _fromFile)
     : m_id(QUuid::createUuid().toString())
 {
     load(_fromFile);
 }
 
-void TextTemplate::load(const QString& _fromFile)
+void SimpleTextTemplate::load(const QString& _fromFile)
 {
     QFile xmlData(_fromFile);
     if (!xmlData.open(QIODevice::ReadOnly)) {

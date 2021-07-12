@@ -24,6 +24,7 @@ signals:
     void applicationUserInterfacePressed();
     void applicationSaveAndBackupsPressed();
     void componentsPressed();
+    void componentsSimpleTextPressed();
     void componentsScreenplayPressed();
     void shortcutsPressed();
 

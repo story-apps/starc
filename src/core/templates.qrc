@@ -8,5 +8,7 @@
         <file>templates/screenplay/ar</file>
         <file>templates/text/mono_cp_a4</file>
         <file>templates/screenplay/tamil</file>
+        <file>templates/text/mono_cp_letter</file>
+        <file>templates/text/mono_cn_a4</file>
     </qresource>
 </RCC>

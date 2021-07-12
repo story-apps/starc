@@ -559,6 +559,16 @@ void ProjectManager::reconfigureAll()
     d->pluginsBuilder.reconfigureAll();
 }
 
+void ProjectManager::reconfigureSimpleTextEditor(const QStringList& _changedSettingsKeys)
+{
+    d->pluginsBuilder.reconfigureSimpleTextEditor(_changedSettingsKeys);
+}
+
+void ProjectManager::reconfigureSimpleTextNavigator()
+{
+    d->pluginsBuilder.reconfigureSimpleTextNavigator();
+}
+
 void ProjectManager::reconfigureScreenplayEditor(const QStringList& _changedSettingsKeys)
 {
     d->pluginsBuilder.reconfigureScreenplayEditor(_changedSettingsKeys);

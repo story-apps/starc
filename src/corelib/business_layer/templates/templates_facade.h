@@ -11,7 +11,7 @@ class QStandardItemModel;
 namespace BusinessLayer {
 
 class ScreenplayTemplate;
-class TextTemplate;
+class SimpleTextTemplate;
 
 /**
  * @brief Фасад доступа к шаблонам текстовых редакторов
@@ -27,7 +27,7 @@ public:
     /**
      * @brief Получить список шаблонов
      */
-    static QStandardItemModel* textTemplates();
+    static QStandardItemModel* simpleTextTemplates();
     static QStandardItemModel* screenplayTemplates();
 
     //    /**
@@ -39,14 +39,14 @@ public:
      * @brief Получить шаблон в соответствии с заданным идентификатором
      * @note Если id не задан, возвращается стандартный шаблон
      */
-    static const BusinessLayer::TextTemplate& textTemplate(const QString& _templateId = {});
+    static const BusinessLayer::SimpleTextTemplate& textTemplate(const QString& _templateId = {});
     static const BusinessLayer::ScreenplayTemplate& screenplayTemplate(const QString& _templateId
                                                                        = {});
 
     /**
      * @brief Задать стандартный шаблон
      */
-    static void setDefaultTextTemplate(const QString& _templateId);
+    static void setDefaultSimpleTextTemplate(const QString& _templateId);
     static void setDefaultScreenplayTemplate(const QString& _templateId);
 
     //    /**

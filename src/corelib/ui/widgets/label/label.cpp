@@ -237,6 +237,11 @@ IconsMidLabel::IconsMidLabel(QWidget* _parent)
 {
 }
 
+void IconsMidLabel::setIcon(const QString& _icon)
+{
+    setText(_icon);
+}
+
 const QFont& IconsMidLabel::textFont() const
 {
     return Ui::DesignSystem::font().iconsMid();

@@ -1548,6 +1548,13 @@ void ApplicationManager::initConnections()
     connect(d->settingsManager.data(), &SettingsManager::applicationUseAutoSaveChanged, this,
             [this] { d->configureAutoSave(); });
     //
+    connect(d->settingsManager.data(), &SettingsManager::simpleTextEditorChanged, this,
+            [this](const QStringList& _changedSettingsKeys) {
+                d->projectManager->reconfigureSimpleTextEditor(_changedSettingsKeys);
+            });
+    connect(d->settingsManager.data(), &SettingsManager::simpleTextNavigatorChanged, this,
+            [this] { d->projectManager->reconfigureSimpleTextNavigator(); });
+    //
     connect(d->settingsManager.data(), &SettingsManager::screenplayEditorChanged, this,
             [this](const QStringList& _changedSettingsKeys) {
                 d->projectManager->reconfigureScreenplayEditor(_changedSettingsKeys);

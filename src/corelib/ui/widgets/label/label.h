@@ -188,6 +188,11 @@ class CORE_LIBRARY_EXPORT IconsMidLabel : public AbstractLabel
 public:
     explicit IconsMidLabel(QWidget* _parent = nullptr);
 
+    /**
+     * @brief Установить иконку
+     */
+    void setIcon(const QString& _icon);
+
 protected:
     const QFont& textFont() const override;
 };

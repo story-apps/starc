@@ -260,24 +260,35 @@ void ProjectPluginsBuilder::reconfigureAll()
     }
 }
 
-void ProjectPluginsBuilder::reconfigureScreenplayEditor(const QStringList& _changedSettingsKeys)
+void ProjectPluginsBuilder::reconfigurePlugin(const QString& _mimeType,
+                                              const QStringList& _changedSettingsKeys)
 {
-    auto screenplayEditor = d->plugins.find(kScreenplayTextEditorMime);
-    if (screenplayEditor == d->plugins.end()) {
+    auto plugin = d->plugins.find(_mimeType);
+    if (plugin == d->plugins.end()) {
         return;
     }
 
-    screenplayEditor.value()->reconfigure(_changedSettingsKeys);
+    plugin.value()->reconfigure(_changedSettingsKeys);
+}
+
+void ProjectPluginsBuilder::reconfigureSimpleTextEditor(const QStringList& _changedSettingsKeys)
+{
+    reconfigurePlugin(kSimpleTextEditorMime, _changedSettingsKeys);
+}
+
+void ProjectPluginsBuilder::reconfigureSimpleTextNavigator()
+{
+    reconfigurePlugin(kSimpleTextNavigatorMime, {});
+}
+
+void ProjectPluginsBuilder::reconfigureScreenplayEditor(const QStringList& _changedSettingsKeys)
+{
+    reconfigurePlugin(kScreenplayTextEditorMime, _changedSettingsKeys);
 }
 
 void ProjectPluginsBuilder::reconfigureScreenplayNavigator()
 {
-    auto screenplayNavigator = d->plugins.find(kScreenplayTextNavigatorMime);
-    if (screenplayNavigator == d->plugins.end()) {
-        return;
-    }
-
-    screenplayNavigator.value()->reconfigure({});
+    reconfigurePlugin(kScreenplayTextNavigatorMime, {});
 }
 
 void ProjectPluginsBuilder::reset()

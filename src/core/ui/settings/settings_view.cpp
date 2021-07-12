@@ -93,6 +93,7 @@ public:
     /**
      * @brief Настроить карточку параметров компонентов
      */
+    void initSimpleTextCard();
     void initScreenplayCard();
 
     /**
@@ -149,6 +150,33 @@ public:
     //
     // Comonents
     //
+    // Simple text
+    //
+    Card* simpleTextCard = nullptr;
+    QGridLayout* simpleTextCardLayout = nullptr;
+    H5Label* simpleTextTitle = nullptr;
+    //
+    // ... simpleText editor
+    //
+    H6Label* simpleTextEditorTitle = nullptr;
+    ComboBox* simpleTextEditorDefaultTemplate = nullptr;
+    IconsMidLabel* simpleTextEditorDefaultTemplateOptions = nullptr;
+    CheckBox* simpleTextEditorHighlightCurrentLine = nullptr;
+    //
+    // ... simpleText navigator
+    //
+    H6Label* simpleTextNavigatorTitle = nullptr;
+    CheckBox* simpleTextNavigatorShowSceneText = nullptr;
+    RadioButton* simpleTextNavigatorSceneDescriptionLines1 = nullptr;
+    RadioButton* simpleTextNavigatorSceneDescriptionLines2 = nullptr;
+    RadioButton* simpleTextNavigatorSceneDescriptionLines3 = nullptr;
+    RadioButton* simpleTextNavigatorSceneDescriptionLines4 = nullptr;
+    RadioButton* simpleTextNavigatorSceneDescriptionLines5 = nullptr;
+    //
+    int simpleTextCardBottomSpacerIndex = 0;
+    //
+    // Screenplay
+    //
     Card* screenplayCard = nullptr;
     QGridLayout* screenplayCardLayout = nullptr;
     H5Label* screenplayTitle = nullptr;
@@ -198,9 +226,8 @@ public:
 
 SettingsView::Implementation::Implementation(QWidget* _parent)
     : content(new QScrollArea(_parent))
-    ,
     //
-    applicationCard(new Card(content))
+    , applicationCard(new Card(content))
     , applicationCardLayout(new QGridLayout)
     , applicationTitle(new H5Label(applicationCard))
     , language(new Body1Label(applicationCard))
@@ -220,12 +247,25 @@ SettingsView::Implementation::Implementation(QWidget* _parent)
     , autoSave(new CheckBox(applicationCard))
     , saveBackups(new CheckBox(applicationCard))
     , backupsFolderPath(new TextField(applicationCard))
-    ,
     //
-    componentsTitle(new H4Label(content))
-    ,
+    , componentsTitle(new H4Label(content))
     //
-    screenplayCard(new Card(content))
+    , simpleTextCard(new Card(content))
+    , simpleTextCardLayout(new QGridLayout)
+    , simpleTextTitle(new H5Label(simpleTextCard))
+    , simpleTextEditorTitle(new H6Label(simpleTextCard))
+    , simpleTextEditorDefaultTemplate(new ComboBox(simpleTextCard))
+    , simpleTextEditorDefaultTemplateOptions(new IconsMidLabel(simpleTextCard))
+    , simpleTextEditorHighlightCurrentLine(new CheckBox(simpleTextCard))
+    , simpleTextNavigatorTitle(new H6Label(simpleTextCard))
+    , simpleTextNavigatorShowSceneText(new CheckBox(simpleTextCard))
+    , simpleTextNavigatorSceneDescriptionLines1(new RadioButton(simpleTextCard))
+    , simpleTextNavigatorSceneDescriptionLines2(new RadioButton(simpleTextCard))
+    , simpleTextNavigatorSceneDescriptionLines3(new RadioButton(simpleTextCard))
+    , simpleTextNavigatorSceneDescriptionLines4(new RadioButton(simpleTextCard))
+    , simpleTextNavigatorSceneDescriptionLines5(new RadioButton(simpleTextCard))
+    //
+    , screenplayCard(new Card(content))
     , screenplayCardLayout(new QGridLayout)
     , screenplayTitle(new H5Label(screenplayCard))
     , screenplayEditorTitle(new H6Label(screenplayCard))
@@ -252,9 +292,8 @@ SettingsView::Implementation::Implementation(QWidget* _parent)
     , screenplayDurationByCharactersCharacters(new TextField(screenplayCard))
     , screenplayDurationByCharactersIncludingSpaces(new CheckBox(screenplayCard))
     , screenplayDurationByCharactersDuration(new TextField(screenplayCard))
-    ,
     //
-    shortcutsCard(new Card(content))
+    , shortcutsCard(new Card(content))
     , shortcutsCardLayout(new QGridLayout)
     , shortcutsTitle(new H5Label(shortcutsCard))
 {
@@ -269,6 +308,7 @@ SettingsView::Implementation::Implementation(QWidget* _parent)
     scrollAnimation.setDuration(180);
 
     initApplicationCard();
+    initSimpleTextCard();
     initScreenplayCard();
     initShortcutsCard();
 
@@ -280,6 +320,7 @@ SettingsView::Implementation::Implementation(QWidget* _parent)
     layout->setSpacing(0);
     layout->addWidget(applicationCard);
     layout->addWidget(componentsTitle);
+    layout->addWidget(simpleTextCard);
     layout->addWidget(screenplayCard);
     layout->addWidget(shortcutsCard);
     layout->addStretch();
@@ -360,12 +401,73 @@ void SettingsView::Implementation::initApplicationCard()
     applicationCard->setLayoutReimpl(applicationCardLayout);
 }
 
+void SettingsView::Implementation::initSimpleTextCard()
+{
+    simpleTextEditorDefaultTemplate->setSpellCheckPolicy(SpellCheckPolicy::Manual);
+    simpleTextEditorDefaultTemplate->setModel(
+        BusinessLayer::TemplatesFacade::simpleTextTemplates());
+    simpleTextEditorDefaultTemplateOptions->setIcon(u8"\U000F01D9");
+    simpleTextEditorDefaultTemplateOptions->setAlignment(Qt::AlignCenter);
+    simpleTextEditorDefaultTemplateOptions->hide();
+    //
+    auto linesGroup = new RadioButtonGroup(simpleTextCard);
+    linesGroup->add(simpleTextNavigatorSceneDescriptionLines1);
+    linesGroup->add(simpleTextNavigatorSceneDescriptionLines2);
+    linesGroup->add(simpleTextNavigatorSceneDescriptionLines3);
+    linesGroup->add(simpleTextNavigatorSceneDescriptionLines4);
+    linesGroup->add(simpleTextNavigatorSceneDescriptionLines5);
+    simpleTextNavigatorSceneDescriptionLines1->setEnabled(false);
+    simpleTextNavigatorSceneDescriptionLines1->setChecked(true);
+    simpleTextNavigatorSceneDescriptionLines2->setEnabled(false);
+    simpleTextNavigatorSceneDescriptionLines3->setEnabled(false);
+    simpleTextNavigatorSceneDescriptionLines4->setEnabled(false);
+    simpleTextNavigatorSceneDescriptionLines5->setEnabled(false);
+
+
+    //
+    // Компоновка
+    //
+    simpleTextCardLayout->setContentsMargins({});
+    simpleTextCardLayout->setSpacing(0);
+    int itemIndex = 0;
+    simpleTextCardLayout->addWidget(simpleTextTitle, itemIndex++, 0);
+    //
+    // ... редактор текста
+    //
+    simpleTextCardLayout->addWidget(simpleTextEditorTitle, itemIndex++, 0);
+    {
+        auto layout = makeLayout();
+        layout->addWidget(simpleTextEditorDefaultTemplate, 1);
+        layout->addWidget(simpleTextEditorDefaultTemplateOptions);
+        simpleTextCardLayout->addLayout(layout, itemIndex++, 0);
+    }
+    simpleTextCardLayout->addWidget(simpleTextEditorHighlightCurrentLine, itemIndex++, 0);
+    //
+    // ... навигатор текста
+    //
+    simpleTextCardLayout->addWidget(simpleTextNavigatorTitle, itemIndex++, 0);
+    {
+        auto layout = makeLayout();
+        layout->addWidget(simpleTextNavigatorShowSceneText);
+        layout->addWidget(simpleTextNavigatorSceneDescriptionLines1);
+        layout->addWidget(simpleTextNavigatorSceneDescriptionLines2);
+        layout->addWidget(simpleTextNavigatorSceneDescriptionLines3);
+        layout->addWidget(simpleTextNavigatorSceneDescriptionLines4);
+        layout->addWidget(simpleTextNavigatorSceneDescriptionLines5);
+        layout->addStretch();
+        simpleTextCardLayout->addLayout(layout, itemIndex++, 0);
+    }
+    //
+    simpleTextCardBottomSpacerIndex = itemIndex;
+    simpleTextCard->setLayoutReimpl(simpleTextCardLayout);
+}
+
 void SettingsView::Implementation::initScreenplayCard()
 {
     screenplayEditorDefaultTemplate->setSpellCheckPolicy(SpellCheckPolicy::Manual);
     screenplayEditorDefaultTemplate->setModel(
         BusinessLayer::TemplatesFacade::screenplayTemplates());
-    screenplayEditorDefaultTemplateOptions->setText(u8"\U000F01D9");
+    screenplayEditorDefaultTemplateOptions->setIcon(u8"\U000F01D9");
     screenplayEditorDefaultTemplateOptions->setAlignment(Qt::AlignCenter);
     screenplayEditorDefaultTemplateOptions->hide();
     screenplayEditorShowSceneNumberOnLeft->setEnabled(false);
@@ -561,6 +663,56 @@ SettingsView::SettingsView(QWidget* _parent)
     //
     // Компоненты
     //
+    // ... Редактор текста
+    //
+    connect(d->simpleTextEditorDefaultTemplate, &ComboBox::currentIndexChanged, this,
+            [this](const QModelIndex& _index) {
+                emit simpleTextEditorDefaultTemplateChanged(
+                    _index.data(BusinessLayer::TemplatesFacade::kTemplateIdRole).toString());
+            });
+    connect(d->simpleTextEditorHighlightCurrentLine, &CheckBox::checkedChanged, this,
+            &SettingsView::simpleTextEditorHighlightCurrentLineChanged);
+    //
+    // ... навигатор сценария
+    //
+    connect(d->simpleTextNavigatorShowSceneText, &CheckBox::checkedChanged,
+            d->simpleTextNavigatorSceneDescriptionLines1, &RadioButton::setEnabled);
+    connect(d->simpleTextNavigatorShowSceneText, &CheckBox::checkedChanged,
+            d->simpleTextNavigatorSceneDescriptionLines2, &RadioButton::setEnabled);
+    connect(d->simpleTextNavigatorShowSceneText, &CheckBox::checkedChanged,
+            d->simpleTextNavigatorSceneDescriptionLines3, &RadioButton::setEnabled);
+    connect(d->simpleTextNavigatorShowSceneText, &CheckBox::checkedChanged,
+            d->simpleTextNavigatorSceneDescriptionLines4, &RadioButton::setEnabled);
+    connect(d->simpleTextNavigatorShowSceneText, &CheckBox::checkedChanged,
+            d->simpleTextNavigatorSceneDescriptionLines5, &RadioButton::setEnabled);
+    //
+    auto notifysimpleTextNavigatorShowSceneTextChanged = [this] {
+        int sceneTextLines = 1;
+        if (d->simpleTextNavigatorSceneDescriptionLines2->isChecked()) {
+            sceneTextLines = 2;
+        } else if (d->simpleTextNavigatorSceneDescriptionLines3->isChecked()) {
+            sceneTextLines = 3;
+        } else if (d->simpleTextNavigatorSceneDescriptionLines4->isChecked()) {
+            sceneTextLines = 4;
+        } else if (d->simpleTextNavigatorSceneDescriptionLines5->isChecked()) {
+            sceneTextLines = 5;
+        }
+        emit simpleTextNavigatorShowSceneTextChanged(
+            d->simpleTextNavigatorShowSceneText->isChecked(), sceneTextLines);
+    };
+    connect(d->simpleTextNavigatorShowSceneText, &CheckBox::checkedChanged, this,
+            notifysimpleTextNavigatorShowSceneTextChanged);
+    connect(d->simpleTextNavigatorSceneDescriptionLines1, &RadioButton::checkedChanged, this,
+            notifysimpleTextNavigatorShowSceneTextChanged);
+    connect(d->simpleTextNavigatorSceneDescriptionLines2, &RadioButton::checkedChanged, this,
+            notifysimpleTextNavigatorShowSceneTextChanged);
+    connect(d->simpleTextNavigatorSceneDescriptionLines3, &RadioButton::checkedChanged, this,
+            notifysimpleTextNavigatorShowSceneTextChanged);
+    connect(d->simpleTextNavigatorSceneDescriptionLines4, &RadioButton::checkedChanged, this,
+            notifysimpleTextNavigatorShowSceneTextChanged);
+    connect(d->simpleTextNavigatorSceneDescriptionLines5, &RadioButton::checkedChanged, this,
+            notifysimpleTextNavigatorShowSceneTextChanged);
+    //
     // ... Редактор сценария
     //
     connect(d->screenplayEditorShowSceneNumber, &CheckBox::checkedChanged,
@@ -703,6 +855,11 @@ void SettingsView::showApplicationSaveAndBackups()
 void SettingsView::showComponents()
 {
     d->scrollToWidget(d->componentsTitle);
+}
+
+void SettingsView::showComponentsSimpleText()
+{
+    d->scrollToWidget(d->simpleTextTitle);
 }
 
 void SettingsView::showComponentsScreenplay()
@@ -854,6 +1011,39 @@ void SettingsView::setApplicationBackupsFolder(const QString& _path)
     d->backupsFolderPath->setText(_path);
 }
 
+void SettingsView::setSimpleTextEditorDefaultTemplate(const QString& _templateId)
+{
+    using namespace BusinessLayer;
+    for (int row = 0; row < TemplatesFacade::simpleTextTemplates()->rowCount(); ++row) {
+        auto item = TemplatesFacade::simpleTextTemplates()->item(row);
+        if (item->data(TemplatesFacade::kTemplateIdRole).toString() != _templateId) {
+            continue;
+        }
+
+        d->simpleTextEditorDefaultTemplate->setCurrentIndex(item->index());
+        break;
+    }
+}
+
+void SettingsView::setSimpleTextEditorHighlightCurrentLine(bool _highlight)
+{
+    d->simpleTextEditorHighlightCurrentLine->setChecked(_highlight);
+}
+
+void SettingsView::setSimpleTextNavigatorShowSceneText(bool _show, int _lines)
+{
+    d->simpleTextNavigatorShowSceneText->setChecked(_show);
+    if (_show) {
+        const QHash<int, RadioButton*> buttons
+            = { { 1, d->simpleTextNavigatorSceneDescriptionLines1 },
+                { 2, d->simpleTextNavigatorSceneDescriptionLines2 },
+                { 3, d->simpleTextNavigatorSceneDescriptionLines3 },
+                { 4, d->simpleTextNavigatorSceneDescriptionLines4 },
+                { 5, d->simpleTextNavigatorSceneDescriptionLines5 } };
+        buttons[_lines]->setChecked(true);
+    }
+}
+
 void SettingsView::setScreenplayEditorDefaultTemplate(const QString& _templateId)
 {
     using namespace BusinessLayer;
@@ -895,31 +1085,14 @@ void SettingsView::setScreenplayNavigatorShowSceneNumber(bool _show)
 void SettingsView::setScreenplayNavigatorShowSceneText(bool _show, int _lines)
 {
     d->screenplayNavigatorShowSceneText->setChecked(_show);
-    switch (_lines) {
-    case 1: {
-        d->screenplayNavigatorSceneDescriptionLines1->setChecked(true);
-        break;
-    }
-
-    case 2: {
-        d->screenplayNavigatorSceneDescriptionLines2->setChecked(true);
-        break;
-    }
-
-    case 3: {
-        d->screenplayNavigatorSceneDescriptionLines3->setChecked(true);
-        break;
-    }
-
-    case 4: {
-        d->screenplayNavigatorSceneDescriptionLines4->setChecked(true);
-        break;
-    }
-
-    case 5: {
-        d->screenplayNavigatorSceneDescriptionLines5->setChecked(true);
-        break;
-    }
+    if (_show) {
+        const QHash<int, RadioButton*> buttons
+            = { { 1, d->screenplayNavigatorSceneDescriptionLines1 },
+                { 2, d->screenplayNavigatorSceneDescriptionLines2 },
+                { 3, d->screenplayNavigatorSceneDescriptionLines3 },
+                { 4, d->screenplayNavigatorSceneDescriptionLines4 },
+                { 5, d->screenplayNavigatorSceneDescriptionLines5 } };
+        buttons[_lines]->setChecked(true);
     }
 }
 
@@ -1106,7 +1279,21 @@ void SettingsView::updateTranslations()
     //
     BusinessLayer::TemplatesFacade::updateTranslations();
     //
-    d->screenplayTitle->setText(tr("Screenplay"));
+    d->simpleTextTitle->setText(tr("Simple Text module"));
+    d->simpleTextEditorTitle->setText(tr("Text editor"));
+    d->simpleTextEditorDefaultTemplate->setLabel(tr("Default template"));
+    d->simpleTextEditorDefaultTemplateOptions->setToolTip(
+        tr("Available actions for the selected template"));
+    d->simpleTextEditorHighlightCurrentLine->setText(tr("Highlight current line"));
+    d->simpleTextNavigatorTitle->setText(tr("Navigator"));
+    d->simpleTextNavigatorShowSceneText->setText(tr("Show chapter text, lines"));
+    d->simpleTextNavigatorSceneDescriptionLines1->setText("1");
+    d->simpleTextNavigatorSceneDescriptionLines2->setText("2");
+    d->simpleTextNavigatorSceneDescriptionLines3->setText("3");
+    d->simpleTextNavigatorSceneDescriptionLines4->setText("4");
+    d->simpleTextNavigatorSceneDescriptionLines5->setText("5");
+    //
+    d->screenplayTitle->setText(tr("Screenplay module"));
     d->screenplayEditorTitle->setText(tr("Text editor"));
     d->screenplayEditorDefaultTemplate->setLabel(tr("Default template"));
     d->screenplayEditorDefaultTemplateOptions->setToolTip(
@@ -1153,19 +1340,23 @@ void SettingsView::designSystemChangeEvent(DesignSystemChangeEvent* _event)
                   Ui::DesignSystem::layout().px24(), Ui::DesignSystem::layout().px24())
             .toMargins());
 
-    for (auto card : { d->applicationCard, d->screenplayCard, d->shortcutsCard }) {
+    for (auto card :
+         { d->applicationCard, d->simpleTextCard, d->screenplayCard, d->shortcutsCard }) {
         card->setBackgroundColor(DesignSystem::color().background());
     }
 
     auto titleColor = DesignSystem::color().onBackground();
     titleColor.setAlphaF(DesignSystem::inactiveTextOpacity());
-    for (auto cardTitle : QVector<Widget*>{ d->applicationTitle, d->applicationUserInterfaceTitle,
-                                            d->applicationSaveAndBackupTitle, d->screenplayTitle,
-                                            d->screenplayEditorTitle, d->screenplayNavigatorTitle,
-                                            d->screenplayDurationTitle, d->shortcutsTitle }) {
+    auto titleMargins = Ui::DesignSystem::label().margins().toMargins();
+    titleMargins.setBottom(Ui::DesignSystem::layout().px12());
+    for (auto cardTitle : QVector<Widget*>{
+             d->applicationTitle, d->applicationUserInterfaceTitle,
+             d->applicationSaveAndBackupTitle, d->simpleTextTitle, d->simpleTextEditorTitle,
+             d->simpleTextNavigatorTitle, d->screenplayTitle, d->screenplayEditorTitle,
+             d->screenplayNavigatorTitle, d->screenplayDurationTitle, d->shortcutsTitle }) {
         cardTitle->setBackgroundColor(DesignSystem::color().background());
         cardTitle->setTextColor(titleColor);
-        cardTitle->setContentsMargins(Ui::DesignSystem::label().margins().toMargins());
+        cardTitle->setContentsMargins(titleMargins);
     }
     for (auto title : QVector<Widget*>{ d->componentsTitle }) {
         title->setBackgroundColor(DesignSystem::color().surface());
@@ -1185,7 +1376,8 @@ void SettingsView::designSystemChangeEvent(DesignSystemChangeEvent* _event)
 
     auto iconLabelMargins = labelMargins;
     iconLabelMargins.setLeft(0);
-    for (auto iconLabel : QVector<Widget*>{ d->screenplayEditorDefaultTemplateOptions }) {
+    for (auto iconLabel : QVector<Widget*>{ d->simpleTextEditorDefaultTemplateOptions,
+                                            d->screenplayEditorDefaultTemplateOptions }) {
         iconLabel->setBackgroundColor(DesignSystem::color().background());
         iconLabel->setTextColor(DesignSystem::color().onBackground());
         iconLabel->setContentsMargins(iconLabelMargins);
@@ -1196,6 +1388,8 @@ void SettingsView::designSystemChangeEvent(DesignSystemChangeEvent* _event)
            //
            d->autoSave, d->saveBackups,
            //
+           d->simpleTextEditorHighlightCurrentLine, d->simpleTextNavigatorShowSceneText,
+           //
            d->screenplayEditorShowSceneNumber, d->screenplayEditorShowSceneNumberOnLeft,
            d->screenplayEditorShowSceneNumberOnRight, d->screenplayEditorShowDialogueNumber,
            d->screenplayEditorHighlightCurrentLine, d->screenplayNavigatorShowSceneNumber,
@@ -1205,7 +1399,12 @@ void SettingsView::designSystemChangeEvent(DesignSystemChangeEvent* _event)
         checkBox->setTextColor(DesignSystem::color().onBackground());
     }
 
-    for (auto radioButton : { d->screenplayNavigatorSceneDescriptionLines1,
+    for (auto radioButton : { d->simpleTextNavigatorSceneDescriptionLines1,
+                              d->simpleTextNavigatorSceneDescriptionLines2,
+                              d->simpleTextNavigatorSceneDescriptionLines3,
+                              d->simpleTextNavigatorSceneDescriptionLines4,
+                              d->simpleTextNavigatorSceneDescriptionLines5,
+                              d->screenplayNavigatorSceneDescriptionLines1,
                               d->screenplayNavigatorSceneDescriptionLines2,
                               d->screenplayNavigatorSceneDescriptionLines3,
                               d->screenplayNavigatorSceneDescriptionLines4,
@@ -1216,9 +1415,9 @@ void SettingsView::designSystemChangeEvent(DesignSystemChangeEvent* _event)
     }
 
     for (auto textField : QVector<TextField*>{
-             d->spellCheckerLanguage, d->backupsFolderPath, d->screenplayEditorDefaultTemplate,
-             d->screenplayDurationByPagePage, d->screenplayDurationByPageDuration,
-             d->screenplayDurationByCharactersCharacters,
+             d->spellCheckerLanguage, d->backupsFolderPath, d->simpleTextEditorDefaultTemplate,
+             d->screenplayEditorDefaultTemplate, d->screenplayDurationByPagePage,
+             d->screenplayDurationByPageDuration, d->screenplayDurationByCharactersCharacters,
              d->screenplayDurationByCharactersDuration }) {
         textField->setBackgroundColor(DesignSystem::color().onBackground());
         textField->setTextColor(DesignSystem::color().onBackground());
@@ -1232,19 +1431,19 @@ void SettingsView::designSystemChangeEvent(DesignSystemChangeEvent* _event)
     d->scaleFactor->setBackgroundColor(DesignSystem::color().background());
     d->scaleFactor->setContentsMargins({ static_cast<int>(Ui::DesignSystem::layout().px24()), 0,
                                          static_cast<int>(Ui::DesignSystem::layout().px24()), 0 });
-    //    d->screenplayEditorDefaultTemplateOptions->setContentsMargins({});
-    d->screenplayEditorDefaultTemplateOptions->setAlignment(Qt::AlignCenter);
-
 
     d->applicationCardLayout->setRowMinimumHeight(
         d->applicationCardBottomSpacerIndex, static_cast<int>(Ui::DesignSystem::layout().px24()));
+    //
+    d->simpleTextCardLayout->setRowMinimumHeight(
+        d->simpleTextCardBottomSpacerIndex, static_cast<int>(Ui::DesignSystem::layout().px24()));
     //
     d->screenplayCardLayout->setRowMinimumHeight(
         d->screenplayCardBottomSpacerIndex, static_cast<int>(Ui::DesignSystem::layout().px24()));
     const auto screenplayDurationByCharactersRow
         = d->screenplayCardLayout->indexOf(d->screenplayDurationByCharacters);
     d->screenplayCardLayout->setRowMinimumHeight(
-        screenplayDurationByCharactersRow, static_cast<int>(Ui::DesignSystem::layout().px24() * 3));
+        screenplayDurationByCharactersRow, static_cast<int>(Ui::DesignSystem::layout().px62()));
     //
     d->shortcutsCardLayout->setRowMinimumHeight(
         d->shortcutsCardBottomSpacerIndex, static_cast<int>(Ui::DesignSystem::layout().px24()));

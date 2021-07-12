@@ -49,6 +49,7 @@ public:
      * @brief Загрузить настройки компонентов
      */
     void loadComponentsSettings();
+    void loadSimpleTextSettings();
     void loadScreenplaySettings();
 
 
@@ -101,7 +102,23 @@ void SettingsManager::Implementation::loadApplicationSettings()
 
 void SettingsManager::Implementation::loadComponentsSettings()
 {
+    loadSimpleTextSettings();
     loadScreenplaySettings();
+}
+
+void SettingsManager::Implementation::loadSimpleTextSettings()
+{
+    const auto defaultTemplate
+        = settingsValue(DataStorageLayer::kComponentsSimpleTextEditorDefaultTemplateKey).toString();
+    view->setSimpleTextEditorDefaultTemplate(defaultTemplate);
+    BusinessLayer::TemplatesFacade::setDefaultSimpleTextTemplate(defaultTemplate);
+    view->setSimpleTextEditorHighlightCurrentLine(
+        settingsValue(DataStorageLayer::kComponentsSimpleTextEditorHighlightCurrentLineKey)
+            .toBool());
+    //
+    view->setSimpleTextNavigatorShowSceneText(
+        settingsValue(DataStorageLayer::kComponentsSimpleTextNavigatorShowSceneTextKey).toBool(),
+        settingsValue(DataStorageLayer::kComponentsSimpleTextNavigatorSceneTextLinesKey).toInt());
 }
 
 void SettingsManager::Implementation::loadScreenplaySettings()
@@ -166,6 +183,8 @@ SettingsManager::SettingsManager(QObject* _parent, QWidget* _parentWidget)
             &Ui::SettingsView::showApplicationSaveAndBackups);
     connect(d->navigator, &Ui::SettingsNavigator::componentsPressed, d->view,
             &Ui::SettingsView::showComponents);
+    connect(d->navigator, &Ui::SettingsNavigator::componentsSimpleTextPressed, d->view,
+            &Ui::SettingsView::showComponentsSimpleText);
     connect(d->navigator, &Ui::SettingsNavigator::componentsScreenplayPressed, d->view,
             &Ui::SettingsView::showComponentsScreenplay);
     connect(d->navigator, &Ui::SettingsNavigator::shortcutsPressed, d->view,
@@ -211,6 +230,15 @@ SettingsManager::SettingsManager(QObject* _parent, QWidget* _parentWidget)
             &SettingsManager::setApplicationBackupsFolder);
     //
     //
+    connect(d->view, &Ui::SettingsView::simpleTextEditorDefaultTemplateChanged, this,
+            &SettingsManager::setSimpleTextEditorDefaultTemplate);
+    connect(d->view, &Ui::SettingsView::simpleTextEditorHighlightCurrentLineChanged, this,
+            &SettingsManager::setSimpleTextEditorHighlightCurrentLine);
+    //
+    connect(d->view, &Ui::SettingsView::simpleTextNavigatorShowSceneTextChanged, this,
+            &SettingsManager::setSimpleTextNavigatorShowSceneText);
+    //
+    //
     connect(d->view, &Ui::SettingsView::screenplayEditorDefaultTemplateChanged, this,
             &SettingsManager::setScreenplayEditorDefaultTemplate);
     connect(d->view, &Ui::SettingsView::screenplayEditorShowSceneNumberChanged, this,
@@ -235,39 +263,6 @@ SettingsManager::SettingsManager(QObject* _parent, QWidget* _parentWidget)
             &SettingsManager::setScreenplayDurationByCharactersIncludeSpaces);
     connect(d->view, &Ui::SettingsView::screenplayDurationByCharactersDurationChanged, this,
             &SettingsManager::setScreenplayDurationByCharactersDuration);
-
-    //
-    // Нотификации об изменении параметров
-    //
-    connect(d->view, &Ui::SettingsView::applicationScaleFactorChanged, this,
-            &SettingsManager::applicationScaleFactorChanged);
-    connect(d->view, &Ui::SettingsView::applicationUseSpellCheckerChanged, this,
-            &SettingsManager::applicationUseSpellCheckerChanged);
-    connect(d->view, &Ui::SettingsView::applicationSpellCheckerLanguageChanged, this,
-            &SettingsManager::applicationSpellCheckerLanguageChanged);
-    connect(d->view, &Ui::SettingsView::applicationUseAutoSaveChanged, this,
-            &SettingsManager::applicationUseAutoSaveChanged);
-    connect(d->view, &Ui::SettingsView::applicationSaveBackupsChanged, this,
-            &SettingsManager::applicationSaveBackupsChanged);
-    connect(d->view, &Ui::SettingsView::applicationBackupsFolderChanged, this,
-            &SettingsManager::applicationBackupsFolderChanged);
-    //
-    //
-    connect(d->view, &Ui::SettingsView::screenplayNavigatorShowSceneNumberChanged, this,
-            &SettingsManager::screenplayNavigatorChanged);
-    connect(d->view, &Ui::SettingsView::screenplayNavigatorShowSceneTextChanged, this,
-            &SettingsManager::screenplayNavigatorChanged);
-    //
-    connect(d->view, &Ui::SettingsView::screenplayDurationTypeChanged, this,
-            &SettingsManager::screenplayDurationChanged);
-    connect(d->view, &Ui::SettingsView::screenplayDurationByPageDurationChanged, this,
-            &SettingsManager::screenplayDurationChanged);
-    connect(d->view, &Ui::SettingsView::screenplayDurationByCharactersCharactersChanged, this,
-            &SettingsManager::screenplayDurationChanged);
-    connect(d->view, &Ui::SettingsView::screenplayDurationByCharactersIncludeSpacesChanged, this,
-            &SettingsManager::screenplayDurationChanged);
-    connect(d->view, &Ui::SettingsView::screenplayDurationByCharactersDurationChanged, this,
-            &SettingsManager::screenplayDurationChanged);
 }
 
 SettingsManager::~SettingsManager() = default;
@@ -321,6 +316,7 @@ void SettingsManager::setApplicationUseTypeWriterSound(bool _use)
 void SettingsManager::setApplicationUseSpellChecker(bool _use)
 {
     d->setSettingsValue(DataStorageLayer::kApplicationUseSpellCheckerKey, _use);
+    emit applicationUseSpellCheckerChanged(_use);
 }
 
 void SettingsManager::setApplicationSpellCheckerLanguage(const QString& _languageCode)
@@ -348,6 +344,7 @@ void SettingsManager::setApplicationSpellCheckerLanguage(const QString& _languag
     // Если словарь установлен, просто будем использовать его
     //
     if (affFileInfo.exists() && dicFileInfo.exists()) {
+        emit applicationSpellCheckerLanguageChanged(_languageCode);
         return;
     }
 
@@ -510,21 +507,49 @@ void SettingsManager::setApplicationCustomThemeColors(const Ui::DesignSystem::Co
 void SettingsManager::setApplicationScaleFactor(qreal _scaleFactor)
 {
     d->setSettingsValue(DataStorageLayer::kApplicationScaleFactorKey, _scaleFactor);
+    emit applicationScaleFactorChanged(_scaleFactor);
 }
 
 void SettingsManager::setApplicationUseAutoSave(bool _use)
 {
     d->setSettingsValue(DataStorageLayer::kApplicationUseAutoSaveKey, _use);
+    emit applicationUseAutoSaveChanged(_use);
 }
 
 void SettingsManager::setApplicationSaveBackups(bool _save)
 {
     d->setSettingsValue(DataStorageLayer::kApplicationSaveBackupsKey, _save);
+    emit applicationSaveBackupsChanged(_save);
 }
 
 void SettingsManager::setApplicationBackupsFolder(const QString& _path)
 {
     d->setSettingsValue(DataStorageLayer::kApplicationBackupsFolderKey, _path);
+    emit applicationBackupsFolderChanged(_path);
+}
+
+void SettingsManager::setSimpleTextEditorDefaultTemplate(const QString& _templateId)
+{
+    d->setSettingsValue(DataStorageLayer::kComponentsSimpleTextEditorDefaultTemplateKey,
+                        _templateId);
+    BusinessLayer::TemplatesFacade::setDefaultSimpleTextTemplate(_templateId);
+    emit simpleTextEditorChanged(
+        { DataStorageLayer::kComponentsSimpleTextEditorDefaultTemplateKey });
+}
+
+void SettingsManager::setSimpleTextEditorHighlightCurrentLine(bool _highlight)
+{
+    d->setSettingsValue(DataStorageLayer::kComponentsSimpleTextEditorHighlightCurrentLineKey,
+                        _highlight);
+    emit simpleTextEditorChanged(
+        { DataStorageLayer::kComponentsSimpleTextEditorHighlightCurrentLineKey });
+}
+
+void SettingsManager::setSimpleTextNavigatorShowSceneText(bool _show, int _lines)
+{
+    d->setSettingsValue(DataStorageLayer::kComponentsSimpleTextNavigatorShowSceneTextKey, _show);
+    d->setSettingsValue(DataStorageLayer::kComponentsSimpleTextNavigatorSceneTextLinesKey, _lines);
+    emit simpleTextNavigatorChanged();
 }
 
 void SettingsManager::setScreenplayEditorDefaultTemplate(const QString& _templateId)
@@ -567,41 +592,48 @@ void SettingsManager::setScreenplayEditorHighlightCurrentLine(bool _highlight)
 void SettingsManager::setScreenplayNavigatorShowSceneNumber(bool _show)
 {
     d->setSettingsValue(DataStorageLayer::kComponentsScreenplayNavigatorShowSceneNumberKey, _show);
+    emit screenplayNavigatorChanged();
 }
 
 void SettingsManager::setScreenplayNavigatorShowSceneText(bool _show, int _lines)
 {
     d->setSettingsValue(DataStorageLayer::kComponentsScreenplayNavigatorShowSceneTextKey, _show);
     d->setSettingsValue(DataStorageLayer::kComponentsScreenplayNavigatorSceneTextLinesKey, _lines);
+    emit screenplayNavigatorChanged();
 }
 
 void SettingsManager::setScreenplayDurationType(int _type)
 {
     d->setSettingsValue(DataStorageLayer::kComponentsScreenplayDurationTypeKey, _type);
+    emit screenplayDurationChanged();
 }
 
 void SettingsManager::setScreenplayDurationByPageDuration(int _duration)
 {
     d->setSettingsValue(DataStorageLayer::kComponentsScreenplayDurationByPageDurationKey,
                         _duration);
+    emit screenplayDurationChanged();
 }
 
 void SettingsManager::setScreenplayDurationByCharactersCharacters(int _characters)
 {
     d->setSettingsValue(DataStorageLayer::kComponentsScreenplayDurationByCharactersCharactersKey,
                         _characters);
+    emit screenplayDurationChanged();
 }
 
 void SettingsManager::setScreenplayDurationByCharactersIncludeSpaces(bool _include)
 {
     d->setSettingsValue(DataStorageLayer::kComponentsScreenplayDurationByCharactersIncludeSpacesKey,
                         _include);
+    emit screenplayDurationChanged();
 }
 
 void SettingsManager::setScreenplayDurationByCharactersDuration(int _duration)
 {
     d->setSettingsValue(DataStorageLayer::kComponentsScreenplayDurationByCharactersDurationKey,
                         _duration);
+    emit screenplayDurationChanged();
 }
 
 } // namespace ManagementLayer

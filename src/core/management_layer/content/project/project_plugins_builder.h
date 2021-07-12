@@ -60,6 +60,9 @@ public:
      * @brief Перенастроить плагины
      */
     void reconfigureAll();
+    void reconfigurePlugin(const QString& _mimeType, const QStringList& _changedSettingsKeys);
+    void reconfigureSimpleTextEditor(const QStringList& _changedSettingsKeys);
+    void reconfigureSimpleTextNavigator();
     void reconfigureScreenplayEditor(const QStringList& _changedSettingsKeys);
     void reconfigureScreenplayNavigator();
 

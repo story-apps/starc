@@ -14,7 +14,8 @@ const int kApplicationIndex = 0;
 const int kApplicationUserInterfaceIndex = 0;
 const int kApplicationSaveAndBackupIndex = 1;
 const int kComponentsIndex = 1;
-const int kComponentsScreenplayIndex = 0;
+const int kComponentsSimpleTextIndex = 0;
+const int kComponentsScreenplayIndex = 1;
 const int kShortcutsIndex = 2;
 } // namespace
 
@@ -58,6 +59,7 @@ SettingsNavigator::SettingsNavigator(QWidget* _parent)
     applicationItem->appendRow(createItem(u8"\U000f061b"));
     model->appendRow(applicationItem);
     auto componentsItem = createItem(u8"\U000f09ac");
+    componentsItem->appendRow(createItem(u8"\U000F021A"));
     componentsItem->appendRow(createItem(u8"\U000f0bc2"));
     model->appendRow(componentsItem);
     model->appendRow(createItem(u8"\U000f030c"));
@@ -86,6 +88,10 @@ SettingsNavigator::SettingsNavigator(QWidget* _parent)
             }
             case kComponentsIndex: {
                 switch (_index.row()) {
+                case kComponentsSimpleTextIndex: {
+                    emit componentsSimpleTextPressed();
+                    break;
+                }
                 case kComponentsScreenplayIndex: {
                     emit componentsScreenplayPressed();
                     break;
@@ -135,6 +141,7 @@ void SettingsNavigator::updateTranslations()
         ->child(kApplicationSaveAndBackupIndex)
         ->setText(tr("Save changes & backups"));
     model->item(kComponentsIndex)->setText(tr("Components"));
+    model->item(kComponentsIndex)->child(kComponentsSimpleTextIndex)->setText(tr("Simple text"));
     model->item(kComponentsIndex)->child(kComponentsScreenplayIndex)->setText(tr("Screenplay"));
     model->item(kShortcutsIndex)->setText(tr("Shortcuts"));
 }

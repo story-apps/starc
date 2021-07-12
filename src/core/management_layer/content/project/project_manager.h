@@ -32,6 +32,8 @@ public:
      * @brief Перенастроить плагины
      */
     void reconfigureAll();
+    void reconfigureSimpleTextEditor(const QStringList& _changedSettingsKeys);
+    void reconfigureSimpleTextNavigator();
     void reconfigureScreenplayEditor(const QStringList& _changedSettingsKeys);
     void reconfigureScreenplayNavigator();
     void reconfigureScreenplayDuration();

@@ -61,12 +61,13 @@ public:
     void loadTemplates(const QString& _templatesDir, const QVector<QString> _templateNames);
 
 
-    TemplateInfo<TextTemplate> text;
+    TemplateInfo<SimpleTextTemplate> text;
     TemplateInfo<ScreenplayTemplate> screenplay;
 };
 
 template<>
-TemplateInfo<TextTemplate>& TemplatesFacade::Implementation::templateInfo<TextTemplate>()
+TemplateInfo<SimpleTextTemplate>& TemplatesFacade::Implementation::templateInfo<
+    SimpleTextTemplate>()
 {
     return text;
 }
@@ -204,9 +205,9 @@ void TemplatesFacade::Implementation::loadTemplates(const QString& _templatesDir
 // ****
 
 
-QStandardItemModel* TemplatesFacade::textTemplates()
+QStandardItemModel* TemplatesFacade::simpleTextTemplates()
 {
-    return instance().d->templatesModel<TextTemplate>();
+    return instance().d->templatesModel<SimpleTextTemplate>();
 }
 
 QStandardItemModel* TemplatesFacade::screenplayTemplates()
@@ -214,9 +215,9 @@ QStandardItemModel* TemplatesFacade::screenplayTemplates()
     return instance().d->templatesModel<ScreenplayTemplate>();
 }
 
-const TextTemplate& TemplatesFacade::textTemplate(const QString& _templateId)
+const SimpleTextTemplate& TemplatesFacade::textTemplate(const QString& _templateId)
 {
-    return instance().d->getTemplate<TextTemplate>(_templateId);
+    return instance().d->getTemplate<SimpleTextTemplate>(_templateId);
 }
 
 const ScreenplayTemplate& TemplatesFacade::screenplayTemplate(const QString& _templateId)
@@ -224,9 +225,9 @@ const ScreenplayTemplate& TemplatesFacade::screenplayTemplate(const QString& _te
     return instance().d->getTemplate<ScreenplayTemplate>(_templateId);
 }
 
-void TemplatesFacade::setDefaultTextTemplate(const QString& _templateId)
+void TemplatesFacade::setDefaultSimpleTextTemplate(const QString& _templateId)
 {
-    instance().d->setDefaultTemplate<TextTemplate>(_templateId);
+    instance().d->setDefaultTemplate<SimpleTextTemplate>(_templateId);
 }
 
 void TemplatesFacade::setDefaultScreenplayTemplate(const QString& _templateId)
@@ -236,7 +237,7 @@ void TemplatesFacade::setDefaultScreenplayTemplate(const QString& _templateId)
 
 void TemplatesFacade::updateTranslations()
 {
-    instance().d->updateTranslations<TextTemplate>();
+    instance().d->updateTranslations<SimpleTextTemplate>();
     instance().d->updateTranslations<ScreenplayTemplate>();
 }
 
@@ -245,9 +246,9 @@ TemplatesFacade::~TemplatesFacade() = default;
 TemplatesFacade::TemplatesFacade()
     : d(new Implementation)
 {
-    d->loadTemplates<TextTemplate>(QLatin1String("templates/text"),
-                                   { QLatin1String("mono_cp_a4"), QLatin1String("mono_cn_a4"),
-                                     QLatin1String("mono_cp_letter") });
+    d->loadTemplates<SimpleTextTemplate>(QLatin1String("templates/text"),
+                                         { QLatin1String("mono_cp_a4"), QLatin1String("mono_cn_a4"),
+                                           QLatin1String("mono_cp_letter") });
     d->loadTemplates<ScreenplayTemplate>(
         QLatin1String("templates/screenplay"),
         { QLatin1String("world_cp"), QLatin1String("world_cn"), QLatin1String("ar"),
