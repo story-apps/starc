@@ -121,12 +121,13 @@ QSize ContextMenu::Implementation::sizeHint() const
             const auto actionWidth = Ui::DesignSystem::treeOneLineItem().margins().left()
                 + iconWidth + Ui::DesignSystem::treeOneLineItem().spacing()
                 + TextHelper::fineTextWidthF(action->text(), Ui::DesignSystem::font().subtitle2())
+                + Ui::DesignSystem::layout().px62()
                 + Ui::DesignSystem::treeOneLineItem().margins().right();
             width = std::max(width, actionWidth);
             height += Ui::DesignSystem::treeOneLineItem().height();
         }
     }
-    width += Ui::DesignSystem::card().shadowMargins().left() + Ui::DesignSystem::layout().px62()
+    width += Ui::DesignSystem::card().shadowMargins().left()
         + Ui::DesignSystem::card().shadowMargins().right();
     height += Ui::DesignSystem::card().shadowMargins().bottom()
         + Ui::DesignSystem::contextMenu().margins().top();
@@ -136,15 +137,17 @@ QSize ContextMenu::Implementation::sizeHint() const
 
 void ContextMenu::Implementation::relayoutWidgetActions() const
 {
-    auto y = Ui::DesignSystem::card().shadowMargins().top();
+    auto y = Ui::DesignSystem::card().shadowMargins().top()
+        + Ui::DesignSystem::contextMenu().margins().top();
     for (auto action : q->actions()) {
         if (auto widgetAction = qobject_cast<QWidgetAction*>(action)) {
             auto widget = widgetAction->defaultWidget();
             widget->setParent(q);
-            widget->move(0, y);
-            const auto widgetSizeHint = widgetAction->defaultWidget()->sizeHint();
-            widget->resize(q->width(), widgetSizeHint.height());
-            y += widgetSizeHint.height();
+            widget->move(Ui::DesignSystem::card().shadowMargins().left(), y);
+            widget->resize(widget->sizeHint());
+            widget->setVisible(true);
+            widget->installEventFilter(q);
+            y += widget->height();
         } else {
             y += Ui::DesignSystem::treeOneLineItem().height();
         }
@@ -281,7 +284,20 @@ ContextMenu::ContextMenu(QWidget* _parent)
             [this] { update(); });
 }
 
-ContextMenu::~ContextMenu() = default;
+ContextMenu::~ContextMenu()
+{
+    while (!actions().isEmpty()) {
+        auto action = actions().constFirst();
+        if (d->actionToSubmenu.contains(action)) {
+            d->actionToSubmenu[action]->deleteLater();
+            d->actionToSubmenu.remove(action);
+        }
+
+        removeAction(action);
+
+        action->deleteLater();
+    }
+}
 
 void ContextMenu::setActions(const QVector<QAction*>& _actions)
 {
@@ -296,6 +312,11 @@ void ContextMenu::setActions(const QVector<QAction*>& _actions)
         }
 
         removeAction(action);
+
+        if (auto widgetAction = qobject_cast<QWidgetAction*>(action)) {
+            widgetAction->defaultWidget()->deleteLater();
+        }
+        action->deleteLater();
     }
 
     //
@@ -323,6 +344,7 @@ void ContextMenu::setActions(const QVector<QAction*>& _actions)
                 //
                 const auto submenuSizeHint = submenu->d->sizeHint();
                 auto submenuPosition = mapToGlobal(actionRect.topRight().toPoint());
+                submenuPosition += QPoint(0, -Ui::DesignSystem::contextMenu().margins().top());
                 const auto screen = QApplication::screenAt(submenuPosition);
                 Q_ASSERT(screen);
                 const auto screenGeometry = screen->geometry();
@@ -429,7 +451,7 @@ void ContextMenu::hideContextMenu()
     //
     // Сперва скрываем все подменю
     //
-    for (auto submenu : d->actionToSubmenu) {
+    for (auto submenu : std::as_const(d->actionToSubmenu)) {
         submenu->hideContextMenu();
     }
 
@@ -610,6 +632,10 @@ void ContextMenu::mouseReleaseEvent(QMouseEvent* _event)
         return;
     }
 
+    if (qobject_cast<QWidgetAction*>(pressedAction) != nullptr) {
+        return;
+    }
+
     pressedAction->trigger();
     hideContextMenu();
 }
@@ -628,6 +654,9 @@ void ContextMenu::leaveEvent(QEvent* _event)
 
 bool ContextMenu::eventFilter(QObject* _watched, QEvent* _event)
 {
+    //
+    // Подменю
+    //
     if (auto contextMenu = qobject_cast<ContextMenu*>(_watched);
         d->actionToSubmenu.key(contextMenu, nullptr) != nullptr) {
         switch (_event->type()) {
@@ -656,12 +685,26 @@ bool ContextMenu::eventFilter(QObject* _watched, QEvent* _event)
         // Нажатие на элементе подменю
         //
         case QEvent::MouseButtonRelease: {
-            QMetaObject::invokeMethod(this, &ContextMenu::hideContextMenu, Qt::QueuedConnection);
+            const auto event = static_cast<QMouseEvent*>(_event);
+            const auto triggeredAction = contextMenu->d->actionForPosition(event->pos());
+            if (qobject_cast<const QWidgetAction*>(triggeredAction) == nullptr) {
+                QMetaObject::invokeMethod(this, &ContextMenu::hideContextMenu,
+                                          Qt::QueuedConnection);
+            }
             break;
         }
 
         default:
             break;
+        }
+    }
+    //
+    // Вложенный в действие виджет
+    //
+    else if (qobject_cast<Widget*>(_watched) != nullptr) {
+        if (_event->type() == QEvent::Enter) {
+            d->hoveredAction = nullptr;
+            update();
         }
     }
 

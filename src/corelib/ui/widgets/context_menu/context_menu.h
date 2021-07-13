@@ -18,6 +18,7 @@ public:
 
     /**
      * @brief Задать пункты контекстного меню
+     * @note Меню забирает себе владение объектами действий
      */
     void setActions(const QVector<QAction*>& _actions);
 
