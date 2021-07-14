@@ -70,7 +70,7 @@ ColorPicker::ColorPicker(QWidget* _parent)
             [this](qreal _hue) { d->colorSlider->setHue(_hue); });
     connect(d->cancelButton, &Button::clicked, this, [this] { setCurrentWidget(d->colorPallete); });
     connect(d->addButton, &Button::clicked, this, [this] {
-        d->colorPallete->addCustormColor(d->colorSlider->color());
+        d->colorPallete->addCustomColor(d->colorSlider->color());
         setCurrentWidget(d->colorPallete);
     });
 
@@ -79,6 +79,11 @@ ColorPicker::ColorPicker(QWidget* _parent)
 }
 
 ColorPicker::~ColorPicker() = default;
+
+void ColorPicker::setSelectedColor(const QColor& _color)
+{
+    d->colorPallete->setSelectedColor(_color);
+}
 
 void ColorPicker::updateTranslations()
 {

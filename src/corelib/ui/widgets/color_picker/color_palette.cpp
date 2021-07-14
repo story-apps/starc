@@ -157,19 +157,23 @@ void ColorPallete::setSelectedColor(const QColor& _color)
         return;
     }
 
-    for (const auto& color : d->colorsPalette) {
-        if (color.color != _color) {
-            continue;
-        }
+    if (!_color.isValid()) {
+        d->selectedColor = {};
+    } else {
+        for (const auto& color : std::as_const(d->colorsPalette)) {
+            if (color.color != _color) {
+                continue;
+            }
 
-        d->selectedColor = color;
-        break;
+            d->selectedColor = color;
+            break;
+        }
     }
 
     update();
 }
 
-void ColorPallete::addCustormColor(const QColor& _color)
+void ColorPallete::addCustomColor(const QColor& _color)
 {
     const auto colorInRgb = _color.toRgb();
 
@@ -305,7 +309,7 @@ void ColorPallete::mousePressEvent(QMouseEvent* _event)
         return;
     }
 
-    for (const auto& color : d->colorsPalette) {
+    for (const auto& color : std::as_const(d->colorsPalette)) {
         if (!color.rect.contains(_event->pos())) {
             continue;
         }

@@ -68,13 +68,13 @@ ColorHueSlider::ColorHueSlider(QWidget* _parent)
     designSystemChangeEvent(nullptr);
 }
 
+ColorHueSlider::~ColorHueSlider() = default;
+
 void ColorHueSlider::setHue(qreal _hue)
 {
     d->hue = qBound(0.0, _hue, 1.0);
     update();
 }
-
-ColorHueSlider::~ColorHueSlider() = default;
 
 void ColorHueSlider::paintEvent(QPaintEvent* _event)
 {

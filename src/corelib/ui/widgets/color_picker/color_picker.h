@@ -16,6 +16,11 @@ public:
     explicit ColorPicker(QWidget* _parent = nullptr);
     ~ColorPicker() override;
 
+    /**
+     * @brief Задать текущий выбранный цвет
+     */
+    void setSelectedColor(const QColor& _color);
+
 signals:
     /**
      * @brief Пользователь выбрал цвет
@@ -23,18 +28,19 @@ signals:
     void colorSelected(const QColor& _color);
 
     /**
-     * @brief Пользователь хочет добавить заданный цвет
-     */
-    void addColorPressed(const QColor& _color);
-
-    /**
      * @brief Пользователь передумал добавлять цвет
      */
     void cancelPressed();
 
 protected:
+    /**
+     * @brief Обновить переводы
+     */
     void updateTranslations() override;
 
+    /**
+     * @brief Настроить внешний вид в соответствии с дизайн системой
+     */
     void designSystemChangeEvent(DesignSystemChangeEvent* _event) override;
 
 private:

@@ -23,7 +23,7 @@ public:
     /**
      * @brief Добавить кастомный цвет
      */
-    void addCustormColor(const QColor& _color);
+    void addCustomColor(const QColor& _color);
 
     /**
      * @brief Сами определяем идеальный размер для виджета
