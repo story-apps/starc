@@ -126,7 +126,6 @@ void TextField::Implementation::reconfigure()
     QSignalBlocker signalBlocker(q);
 
     q->setFont(Ui::DesignSystem::font().body1());
-    q->setCursorWidth(Ui::DesignSystem::layout().px4());
 
     QPalette palette = q->palette();
     palette.setColor(QPalette::Base, Qt::transparent);
