@@ -37,6 +37,21 @@ public:
     std::optional<Number> number;
 
     /**
+     * @brief Цвет сцены
+     */
+    QColor color;
+
+    //    /**
+    //     * @brief Тэги сцены
+    //     */
+    //    QVector<Tag> tags;
+
+    //    /**
+    //     * @brief Сюжетные линии сцены
+    //     */
+    //    QVector<StoryLine> storyLines;
+
+    /**
      * @brief Штамп на сцене
      */
     QString stamp;
@@ -113,6 +128,12 @@ ScreenplayTextModelSceneItem::ScreenplayTextModelSceneItem(QXmlStreamReader& _co
     auto currentTag = _contentReader.name();
     if (currentTag == xml::kNumberTag) {
         d->number = { _contentReader.attributes().value(xml::kNumberValueAttribute).toString() };
+        xml::readNextElement(_contentReader); // end
+        currentTag = xml::readNextElement(_contentReader); // next
+    }
+
+    if (currentTag == xml::kColorTag) {
+        d->color = xml::readContent(_contentReader).toString();
         xml::readNextElement(_contentReader); // end
         currentTag = xml::readNextElement(_contentReader); // next
     }
@@ -216,6 +237,21 @@ bool ScreenplayTextModelSceneItem::setNumber(int _number, const QString& _prefix
     return true;
 }
 
+QColor ScreenplayTextModelSceneItem::color() const
+{
+    return d->color;
+}
+
+void ScreenplayTextModelSceneItem::setColor(const QColor& _color)
+{
+    if (d->color == _color) {
+        return;
+    }
+
+    d->color = _color;
+    setChanged(true);
+}
+
 std::chrono::milliseconds ScreenplayTextModelSceneItem::duration() const
 {
     return d->duration;
@@ -233,6 +269,10 @@ QVariant ScreenplayTextModelSceneItem::data(int _role) const
             return d->number->value;
         }
         return {};
+    }
+
+    case SceneColorRole: {
+        return d->color;
     }
 
     case SceneHeadingRole: {
@@ -328,6 +368,9 @@ QByteArray ScreenplayTextModelSceneItem::xmlHeader(bool _clearUuid) const
     //        xml += QString("<%1 %2=\"%3\"/>\n")
     //               .arg(xml::kNumberTag, xml::kNumberValueAttribute, d->number->value).toUtf8();
     //    }
+    if (d->color.isValid()) {
+        xml += QString("<%1><![CDATA[%2]]></%1>\n").arg(xml::kColorTag, d->color.name()).toUtf8();
+    }
     if (!d->stamp.isEmpty()) {
         xml += QString("<%1><![CDATA[%2]]></%1>\n")
                    .arg(xml::kStampTag, TextHelper::toHtmlEscaped(d->stamp))
@@ -354,6 +397,7 @@ void ScreenplayTextModelSceneItem::copyFrom(ScreenplayTextModelItem* _item)
     d->uuid = sceneItem->d->uuid;
     d->isOmited = sceneItem->d->isOmited;
     d->number = sceneItem->d->number;
+    d->color = sceneItem->d->color;
     d->stamp = sceneItem->d->stamp;
     d->plannedDuration = sceneItem->d->plannedDuration;
 }
@@ -371,7 +415,8 @@ bool ScreenplayTextModelSceneItem::isEqual(ScreenplayTextModelItem* _item) const
         // TODO: тут нужно сравнивать, только когда номера зафиксированы
         //
         //            && d->number == sceneItem->d->number
-        && d->stamp == sceneItem->d->stamp && d->plannedDuration == sceneItem->d->plannedDuration;
+        && d->color == sceneItem->d->color && d->stamp == sceneItem->d->stamp
+        && d->plannedDuration == sceneItem->d->plannedDuration;
 }
 
 void ScreenplayTextModelSceneItem::handleChange()

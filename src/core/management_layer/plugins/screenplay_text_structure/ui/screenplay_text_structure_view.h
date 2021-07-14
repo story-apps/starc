@@ -3,6 +3,7 @@
 #include <ui/abstract_navigator.h>
 
 class QAbstractItemModel;
+typedef QList<QModelIndex> QModelIndexList;
 
 
 namespace Ui {
@@ -34,6 +35,11 @@ public:
      * @brief Установить текущий выделенный элемент в модели
      */
     void setCurrentModelIndex(const QModelIndex& _index);
+
+    /**
+     * @brief Список выделенных элементов
+     */
+    QModelIndexList selectedIndexes() const;
 
 signals:
     /**

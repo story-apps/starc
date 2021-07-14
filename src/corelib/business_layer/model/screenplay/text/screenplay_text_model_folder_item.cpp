@@ -24,6 +24,11 @@ public:
      */
     QUuid uuid;
 
+    /**
+     * @brief Цвет сцены
+     */
+    QColor color;
+
     //
     // Ридонли свойства, которые формируются по ходу работы со сценарием
     //
@@ -59,7 +64,13 @@ ScreenplayTextModelFolderItem::ScreenplayTextModelFolderItem(QXmlStreamReader& _
     if (_contentReader.attributes().hasAttribute(xml::kUuidAttribute)) {
         d->uuid = _contentReader.attributes().value(xml::kUuidAttribute).toString();
     }
-    auto currentTag = xml::readNextElement(_contentReader); // content
+    auto currentTag = xml::readNextElement(_contentReader); // next
+
+    if (currentTag == xml::kColorTag) {
+        d->color = xml::readContent(_contentReader).toString();
+        xml::readNextElement(_contentReader); // end
+        currentTag = xml::readNextElement(_contentReader); // next
+    }
 
     if (currentTag == xml::kContentTag) {
         xml::readNextElement(_contentReader); // next item
@@ -103,6 +114,21 @@ ScreenplayTextModelFolderItem::ScreenplayTextModelFolderItem(QXmlStreamReader& _
 
 ScreenplayTextModelFolderItem::~ScreenplayTextModelFolderItem() = default;
 
+QColor ScreenplayTextModelFolderItem::color() const
+{
+    return d->color;
+}
+
+void ScreenplayTextModelFolderItem::setColor(const QColor& _color)
+{
+    if (d->color == _color) {
+        return;
+    }
+
+    d->color = _color;
+    setChanged(true);
+}
+
 std::chrono::milliseconds ScreenplayTextModelFolderItem::duration() const
 {
     return d->duration;
@@ -117,6 +143,10 @@ QVariant ScreenplayTextModelFolderItem::data(int _role) const
 
     case FolderNameRole: {
         return d->name;
+    }
+
+    case FolderColorRole: {
+        return d->color;
     }
 
     case FolderDurationRole: {
@@ -230,6 +260,9 @@ QByteArray ScreenplayTextModelFolderItem::xmlHeader(bool _clearUuid) const
                .arg(xml::kFolderTag, xml::kUuidAttribute,
                     _clearUuid ? QUuid::createUuid().toString() : d->uuid.toString())
                .toUtf8();
+    if (d->color.isValid()) {
+        xml += QString("<%1><![CDATA[%2]]></%1>\n").arg(xml::kColorTag, d->color.name()).toUtf8();
+    }
     xml += QString("<%1>\n").arg(xml::kContentTag).toUtf8();
 
     return xml;
@@ -244,6 +277,7 @@ void ScreenplayTextModelFolderItem::copyFrom(ScreenplayTextModelItem* _item)
 
     auto folderItem = static_cast<ScreenplayTextModelFolderItem*>(_item);
     d->uuid = folderItem->d->uuid;
+    d->color = folderItem->d->color;
 }
 
 bool ScreenplayTextModelFolderItem::isEqual(ScreenplayTextModelItem* _item) const
@@ -253,7 +287,7 @@ bool ScreenplayTextModelFolderItem::isEqual(ScreenplayTextModelItem* _item) cons
     }
 
     const auto folderItem = static_cast<ScreenplayTextModelFolderItem*>(_item);
-    return d->uuid == folderItem->d->uuid;
+    return d->uuid == folderItem->d->uuid && d->color == folderItem->d->color;
 }
 
 void ScreenplayTextModelFolderItem::handleChange()

@@ -54,6 +54,11 @@ public:
     QString dialogueNumber(const QTextBlock& _forBlock) const;
 
     /**
+     * @brief Получить цвет сцены/папки для заданного блока
+     */
+    QColor itemColor(const QTextBlock& _forBlock) const;
+
+    /**
      * @brief Сформировать mime-данные сценария в заданном диапазоне
      */
     QString mimeFromSelection(int _fromPosition, int _toPosition) const;

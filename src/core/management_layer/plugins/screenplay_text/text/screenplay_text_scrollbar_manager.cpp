@@ -99,7 +99,10 @@ void ScreenplayTextScrollBarManager::setModel(BusinessLayer::ScreenplayTextModel
     d->model = _model;
 
     if (d->model) {
-        auto updateTimeline = [this] { d->timeline->setMaximum(d->model->duration()); };
+        auto updateTimeline = [this] {
+            d->timeline->setMaximum(d->model->duration());
+            d->timeline->setColors(d->model->itemsColors());
+        };
         connect(d->model, &QAbstractItemModel::rowsInserted, this, updateTimeline,
                 Qt::QueuedConnection);
         connect(d->model, &QAbstractItemModel::rowsRemoved, this, updateTimeline,
@@ -133,6 +136,7 @@ public:
     const std::chrono::milliseconds minimum = std::chrono::seconds{ 0 };
     std::chrono::milliseconds maximum = std::chrono::seconds{ 10 };
     std::chrono::milliseconds current = std::chrono::seconds{ 5 };
+    std::map<std::chrono::milliseconds, QColor> colors;
 };
 
 
@@ -183,6 +187,16 @@ void ScreenplayTextTimeline::setValue(std::chrono::milliseconds _value)
     update();
 }
 
+void ScreenplayTextTimeline::setColors(const std::map<std::chrono::milliseconds, QColor>& _colors)
+{
+    if (d->colors == _colors) {
+        return;
+    }
+
+    d->colors = _colors;
+    update();
+}
+
 QSize ScreenplayTextTimeline::sizeHint() const
 {
     const QSize marginsDelta = QSizeF(Ui::DesignSystem::scrollBar().margins().left()
@@ -217,6 +231,43 @@ void ScreenplayTextTimeline::paintEvent(QPaintEvent* _event)
                                Ui::DesignSystem::layout().px8(), contentRect.height());
     const auto scrollbarColor = ColorHelper::nearby(Ui::DesignSystem::color().surface());
     painter.fillRect(scrollbarRect, scrollbarColor);
+    //
+    // Рисуем дополнительные цвета скролбара
+    //
+    if (d->colors.size() > 0) {
+        painter.setOpacity(DesignSystem::inactiveTextOpacity());
+
+        auto startDuration = d->colors.begin()->first;
+        auto endDuration = startDuration;
+        QColor color = d->colors.begin()->second;
+        auto paintColor = [this, &painter, scrollbarRect, &startDuration, &endDuration, &color] {
+            if (!color.isValid()) {
+                return;
+            }
+
+            const QRectF colorRect(
+                QPointF(scrollbarRect.left(),
+                        (height() - painter.fontMetrics().lineSpacing()) * startDuration
+                                / d->maximum
+                            + painter.fontMetrics().lineSpacing() / 2),
+                QPointF(scrollbarRect.right(),
+                        (height() - painter.fontMetrics().lineSpacing()) * endDuration / d->maximum
+                            + painter.fontMetrics().lineSpacing() / 2));
+            painter.fillRect(colorRect, color);
+        };
+        for (auto iter = std::next(d->colors.begin()); iter != d->colors.end(); ++iter) {
+            endDuration = iter->first;
+            paintColor();
+
+            startDuration = endDuration;
+            color = iter->second;
+        }
+
+        endDuration = d->maximum;
+        paintColor();
+
+        painter.setOpacity(1.0);
+    }
     const QRectF scrollbarBackgroundRect(scrollbarRect.right(), scrollbarRect.top(),
                                          Ui::DesignSystem::layout().px62(), scrollbarRect.height());
     painter.fillRect(scrollbarBackgroundRect, Ui::DesignSystem::color().surface());

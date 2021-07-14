@@ -5,6 +5,15 @@
 
 #include <business_layer/model/screenplay/screenplay_information_model.h>
 #include <business_layer/model/screenplay/text/screenplay_text_model.h>
+#include <business_layer/model/screenplay/text/screenplay_text_model_folder_item.h>
+#include <business_layer/model/screenplay/text/screenplay_text_model_scene_item.h>
+#include <ui/design_system/design_system.h>
+#include <ui/widgets/color_picker/color_picker.h>
+#include <ui/widgets/context_menu/context_menu.h>
+
+#include <QAction>
+#include <QTimer>
+#include <QWidgetAction>
 
 
 namespace ManagementLayer {
@@ -18,6 +27,11 @@ public:
      * @brief Создать представление
      */
     Ui::ScreenplayTextStructureView* createView();
+
+    /**
+     * @brief Настроить контекстное меню
+     */
+    void updateContextMenu(const QModelIndexList& _indexes);
 
 
     /**
@@ -44,6 +58,11 @@ public:
     Ui::ScreenplayTextStructureView* view = nullptr;
 
     /**
+     * @brief Контекстное меню для элементов навигатора
+     */
+    ContextMenu* contextMenu = nullptr;
+
+    /**
      * @brief Все созданные представления
      */
     QVector<Ui::ScreenplayTextStructureView*> allViews;
@@ -52,12 +71,89 @@ public:
 ScreenplayTextStructureManager::Implementation::Implementation()
 {
     view = createView();
+    contextMenu = new ContextMenu(view);
 }
 
 Ui::ScreenplayTextStructureView* ScreenplayTextStructureManager::Implementation::createView()
 {
     allViews.append(new Ui::ScreenplayTextStructureView);
     return allViews.last();
+}
+
+void ScreenplayTextStructureManager::Implementation::updateContextMenu(
+    const QModelIndexList& _indexes)
+{
+    if (_indexes.isEmpty()) {
+        return;
+    }
+
+    //
+    // Настроим внешний вид меню
+    //
+    contextMenu->setBackgroundColor(Ui::DesignSystem::color().background());
+    contextMenu->setTextColor(Ui::DesignSystem::color().onBackground());
+
+    //
+    // Настроим действия меню
+    //
+    QVector<QAction*> actions;
+    //
+    // ... для одного элемента
+    //
+    if (_indexes.size() == 1) {
+        const auto itemIndex = structureModel->mapToSource(_indexes.constFirst());
+        std::optional<QColor> itemColor;
+        const auto item = model->itemForIndex(itemIndex);
+        if (item->type() == BusinessLayer::ScreenplayTextModelItemType::Folder) {
+            const auto folderItem
+                = static_cast<BusinessLayer::ScreenplayTextModelFolderItem*>(item);
+            itemColor = folderItem->color();
+        } else if (item->type() == BusinessLayer::ScreenplayTextModelItemType::Scene) {
+            const auto sceneItem = static_cast<BusinessLayer::ScreenplayTextModelSceneItem*>(item);
+            itemColor = sceneItem->color();
+        }
+        if (itemColor.has_value()) {
+            auto colorMenu = new QAction;
+            colorMenu->setText(tr("Color"));
+            actions.append(colorMenu);
+
+            auto colorAction = new QWidgetAction(colorMenu);
+            auto colorPicker = new ColorPicker;
+            colorAction->setDefaultWidget(colorPicker);
+            colorPicker->setSelectedColor(itemColor.value());
+            connect(colorPicker, &ColorPicker::colorSelected, view,
+                    [this, itemColor, item](const QColor& _color) {
+                        auto newColor = _color;
+                        if (itemColor.value() == newColor) {
+                            newColor = QColor(QColor::Invalid);
+                        }
+
+                        if (item->type() == BusinessLayer::ScreenplayTextModelItemType::Folder) {
+                            const auto folderItem
+                                = static_cast<BusinessLayer::ScreenplayTextModelFolderItem*>(item);
+                            folderItem->setColor(newColor);
+                        } else if (item->type()
+                                   == BusinessLayer::ScreenplayTextModelItemType::Scene) {
+                            const auto sceneItem
+                                = static_cast<BusinessLayer::ScreenplayTextModelSceneItem*>(item);
+                            sceneItem->setColor(newColor);
+                        }
+
+                        model->updateItem(item);
+                        contextMenu->hideContextMenu();
+                    });
+        }
+    }
+    //
+    // ... для нескольких
+    //
+    else {
+        //
+        // Цвета показываем только для папок и сцен
+        //
+    }
+
+    contextMenu->setActions(actions);
 }
 
 
@@ -71,6 +167,15 @@ ScreenplayTextStructureManager::ScreenplayTextStructureManager(QObject* _parent)
     connect(d->view, &Ui::ScreenplayTextStructureView::currentModelIndexChanged, this,
             [this](const QModelIndex& _index) {
                 emit currentModelIndexChanged(d->structureModel->mapToSource(_index));
+            });
+    connect(d->view, &Ui::ScreenplayTextStructureView::customContextMenuRequested, this,
+            [this](const QPoint& _pos) {
+                if (d->view->selectedIndexes().isEmpty()) {
+                    return;
+                }
+
+                d->updateContextMenu(d->view->selectedIndexes());
+                d->contextMenu->showContextMenu(d->view->mapToGlobal(_pos));
             });
 }
 

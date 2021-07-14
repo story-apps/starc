@@ -76,6 +76,11 @@ public:
     void setValue(std::chrono::milliseconds _value);
 
     /**
+     * @brief Задать цвета слайдера
+     */
+    void setColors(const std::map<std::chrono::milliseconds, QColor>& _colors);
+
+    /**
      * @brief Переопределяем для корректного подсчёта размера в компоновщиках
      */
     QSize sizeHint() const override;

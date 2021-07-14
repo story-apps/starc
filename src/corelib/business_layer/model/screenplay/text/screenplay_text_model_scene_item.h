@@ -6,6 +6,7 @@
 
 #include <chrono>
 
+class QColor;
 class QXmlStreamReader;
 
 
@@ -33,9 +34,10 @@ public:
         SceneNumberRole = Qt::UserRole + 1,
         SceneHeadingRole,
         SceneTextRole,
+        SceneColorRole,
         SceneInlineNotesSizeRole,
         SceneReviewMarksSizeRole,
-        SceneDurationRole
+        SceneDurationRole,
     };
 
 public:
@@ -48,6 +50,12 @@ public:
      */
     Number number() const;
     bool setNumber(int _number, const QString& _prefix);
+
+    /**
+     * @brief Цвет сцены
+     */
+    QColor color() const;
+    void setColor(const QColor& _color);
 
     /**
      * @brief Длительность сцены

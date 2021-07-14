@@ -36,6 +36,7 @@ ScreenplayTextStructureView::Implementation::Implementation(QWidget* _parent)
 {
     backIcon->setText(u8"\U000f0141");
 
+    content->setContextMenuPolicy(Qt::CustomContextMenu);
     content->setDragDropEnabled(true);
     content->setSelectionMode(QAbstractItemView::ContiguousSelection);
     content->setItemDelegate(contentDelegate);
@@ -68,6 +69,9 @@ ScreenplayTextStructureView::ScreenplayTextStructureView(QWidget* _parent)
     connect(d->backText, &AbstractLabel::clicked, this, &ScreenplayTextStructureView::backPressed);
     connect(d->content, &Tree::currentIndexChanged, this,
             &ScreenplayTextStructureView::currentModelIndexChanged);
+    connect(d->content, &Tree::customContextMenuRequested, this, [this](const QPoint& _pos) {
+        emit customContextMenuRequested(d->content->mapToParent(_pos));
+    });
 
     updateTranslations();
     designSystemChangeEvent(nullptr);
@@ -117,6 +121,11 @@ void ScreenplayTextStructureView::setModel(QAbstractItemModel* _model)
 void ScreenplayTextStructureView::setCurrentModelIndex(const QModelIndex& _index)
 {
     d->content->setCurrentIndex(_index);
+}
+
+QModelIndexList ScreenplayTextStructureView::selectedIndexes() const
+{
+    return d->content->selectedIndexes();
 }
 
 void ScreenplayTextStructureView::updateTranslations()

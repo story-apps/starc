@@ -1004,18 +1004,18 @@ QString ScreenplayTextDocument::sceneNumber(const QTextBlock& _forBlock) const
         return {};
     }
 
-    auto blockData = static_cast<ScreenplayTextBlockData*>(_forBlock.userData());
+    const auto blockData = static_cast<ScreenplayTextBlockData*>(_forBlock.userData());
     if (blockData == nullptr) {
         return {};
     }
 
-    auto itemParent = blockData->item()->parent();
+    const auto itemParent = blockData->item()->parent();
     if (itemParent == nullptr || itemParent->type() != ScreenplayTextModelItemType::Scene) {
         return {};
     }
 
-    auto itemScene = static_cast<ScreenplayTextModelSceneItem*>(itemParent);
-    return itemScene->number().value;
+    const auto sceneItem = static_cast<const ScreenplayTextModelSceneItem*>(itemParent);
+    return sceneItem->number().value;
 }
 
 QString ScreenplayTextDocument::dialogueNumber(const QTextBlock& _forBlock) const
@@ -1024,18 +1024,45 @@ QString ScreenplayTextDocument::dialogueNumber(const QTextBlock& _forBlock) cons
         return {};
     }
 
-    auto blockData = static_cast<ScreenplayTextBlockData*>(_forBlock.userData());
+    const auto blockData = static_cast<ScreenplayTextBlockData*>(_forBlock.userData());
     if (blockData == nullptr) {
         return {};
     }
 
-    auto item = blockData->item();
+    const auto item = blockData->item();
     if (item == nullptr || item->type() != ScreenplayTextModelItemType::Text) {
         return {};
     }
 
-    auto itemScene = static_cast<ScreenplayTextModelTextItem*>(item);
-    return itemScene->number().value_or(ScreenplayTextModelTextItem::Number()).value;
+    const auto sceneItem = static_cast<const ScreenplayTextModelTextItem*>(item);
+    return sceneItem->number().value_or(ScreenplayTextModelTextItem::Number()).value;
+}
+
+QColor ScreenplayTextDocument::itemColor(const QTextBlock& _forBlock) const
+{
+    if (_forBlock.userData() == nullptr) {
+        return {};
+    }
+
+    const auto blockData = static_cast<ScreenplayTextBlockData*>(_forBlock.userData());
+    if (blockData == nullptr) {
+        return {};
+    }
+
+    const auto itemParent = blockData->item()->parent();
+    if (itemParent == nullptr) {
+        return {};
+    }
+    QColor color;
+    if (itemParent->type() == ScreenplayTextModelItemType::Folder) {
+        const auto folderItem = static_cast<const ScreenplayTextModelFolderItem*>(itemParent);
+        color = folderItem->color();
+    } else if (itemParent->type() == ScreenplayTextModelItemType::Scene) {
+        const auto sceneItem = static_cast<const ScreenplayTextModelSceneItem*>(itemParent);
+        color = sceneItem->color();
+    }
+
+    return color;
 }
 
 QString ScreenplayTextDocument::mimeFromSelection(int _fromPosition, int _toPosition) const

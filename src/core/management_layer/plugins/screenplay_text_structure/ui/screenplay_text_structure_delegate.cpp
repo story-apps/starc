@@ -18,10 +18,16 @@ class ScreenplayTextStructureDelegate::Implementation
 {
 public:
     /**
+     * @brief Нарисовать цвет элемента
+     */
+    void paintItemColor(QPainter* _painter, const QStyleOptionViewItem& _option,
+                        const QVariant& _color) const;
+
+    /**
      * @brief Нарисовать хронометраж
      */
-    QRectF paintDuration(QPainter* _painter, const QStyleOptionViewItem& _option,
-                         const std::chrono::seconds& _duration) const;
+    QRectF paintItemDuration(QPainter* _painter, const QStyleOptionViewItem& _option,
+                             const std::chrono::seconds& _duration) const;
 
     /**
      * @brief Нарисовать элемент
@@ -45,7 +51,25 @@ public:
     int textLines = 2;
 };
 
-QRectF ScreenplayTextStructureDelegate::Implementation::paintDuration(
+void ScreenplayTextStructureDelegate::Implementation::paintItemColor(
+    QPainter* _painter, const QStyleOptionViewItem& _option, const QVariant& _color) const
+{
+    if (_color.isNull() || !_color.canConvert<QColor>()) {
+        return;
+    }
+
+    const QColor color = _color.value<QColor>();
+    if (!color.isValid()) {
+        return;
+    }
+
+    const auto backgroundRect = _option.rect;
+    const QRectF sceneColorRect(0.0, backgroundRect.top(), Ui::DesignSystem::layout().px4(),
+                                backgroundRect.height());
+    _painter->fillRect(sceneColorRect, color);
+}
+
+QRectF ScreenplayTextStructureDelegate::Implementation::paintItemDuration(
     QPainter* _painter, const QStyleOptionViewItem& _option,
     const std::chrono::seconds& _duration) const
 {
@@ -104,8 +128,9 @@ void ScreenplayTextStructureDelegate::Implementation::paintFolder(
     _painter->fillRect(backgroundRect, backgroundColor);
 
     //
-    // ... TODO: цвет папки
+    // ... цвет папки
     //
+    paintItemColor(_painter, _option, _index.data(ScreenplayTextModelFolderItem::FolderColorRole));
 
     //
     // ... иконка
@@ -131,7 +156,7 @@ void ScreenplayTextStructureDelegate::Implementation::paintFolder(
     const std::chrono::seconds duration{
         _index.data(ScreenplayTextModelFolderItem::FolderDurationRole).toInt()
     };
-    const auto folderDurationRect = paintDuration(_painter, _option, duration);
+    const auto folderDurationRect = paintItemDuration(_painter, _option, duration);
 
     //
     // ... название папки
@@ -186,8 +211,9 @@ void ScreenplayTextStructureDelegate::Implementation::paintScene(
     _painter->fillRect(backgroundRect, backgroundColor);
 
     //
-    // ... TODO: цвет сцены
+    // ... цвет сцены
     //
+    paintItemColor(_painter, _option, _index.data(ScreenplayTextModelSceneItem::SceneColorRole));
 
     //
     // ... иконка
@@ -213,7 +239,7 @@ void ScreenplayTextStructureDelegate::Implementation::paintScene(
     const std::chrono::seconds duration{
         _index.data(ScreenplayTextModelSceneItem::SceneDurationRole).toInt()
     };
-    const auto sceneDurationRect = paintDuration(_painter, _option, duration);
+    const auto sceneDurationRect = paintItemDuration(_painter, _option, duration);
 
     //
     // ... заголовок сцены

@@ -6,6 +6,7 @@
 
 #include <chrono>
 
+class QColor;
 class QXmlStreamReader;
 
 
@@ -20,7 +21,11 @@ public:
     /**
      * @brief Роли данных из модели
      */
-    enum DataRole { FolderNameRole = Qt::UserRole + 1, FolderDurationRole };
+    enum DataRole {
+        FolderNameRole = Qt::UserRole + 1,
+        FolderColorRole,
+        FolderDurationRole,
+    };
 
 public:
     ScreenplayTextModelFolderItem();
@@ -28,12 +33,18 @@ public:
     ~ScreenplayTextModelFolderItem() override;
 
     /**
-     * @brief Длительность сцены
+     * @brief Цвет папки
+     */
+    QColor color() const;
+    void setColor(const QColor& _color);
+
+    /**
+     * @brief Длительность папки
      */
     std::chrono::milliseconds duration() const;
 
     /**
-     * @brief Определяем интерфейс получения данных сцены
+     * @brief Определяем интерфейс получения данных папки
      */
     QVariant data(int _role) const override;
 
@@ -57,7 +68,7 @@ public:
 
 protected:
     /**
-     * @brief Обновляем текст сцены при изменении кого-то из детей
+     * @brief Обновляем текст папки при изменении кого-то из детей
      */
     void handleChange() override;
 

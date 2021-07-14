@@ -635,6 +635,7 @@ void ScreenplayTextEdit::paintEvent(QPaintEvent* _event)
             const QRectF viewportGeometry = viewport()->geometry();
             int lastSceneBlockBottom = 0;
             QColor lastSceneColor;
+            bool isLastBlockSceneHeadingWithNumberAtRight = false;
             int lastCharacterBlockBottom = 0;
             QColor lastCharacterColor;
 
@@ -652,39 +653,39 @@ void ScreenplayTextEdit::paintEvent(QPaintEvent* _event)
                 //
                 verticalMargin = cursorR.height() / 2;
 
-                //                //
-                //                // Определим цвет сцены
-                //                //
-                //                if (blockType == ScenarioBlockStyle::SceneHeading
-                //                    || blockType == ScenarioBlockStyle::FolderHeader) {
-                //                    lastSceneBlockBottom = cursorR.top();
-                //                    colorRectWidth =
-                //                    QFontMetrics(cursor.charFormat().font()).width(".");
-                //                    lastSceneColor = QColor();
-                //                    if (SceneHeadingBlockInfo* info =
-                //                    dynamic_cast<SceneHeadingBlockInfo*>(block.userData())) {
-                //                        if (!info->colors().isEmpty()) {
-                //                            lastSceneColor =
-                //                            QColor(info->colors().split(";").first());
-                //                        }
-                //                    }
-                //                }
+                //
+                // Определим цвет сцены
+                //
+                if (blockType == ScreenplayParagraphType::SceneHeading
+                    || blockType == ScreenplayParagraphType::FolderHeader) {
+                    lastSceneBlockBottom = cursorR.top();
+                    lastSceneColor = d->document.itemColor(block);
+                }
 
-                //                //
-                //                // Нарисуем цвет сцены
-                //                //
-                //                if (lastSceneColor.isValid()) {
-                //                    const QPointF topLeft(isLeftToRight
-                //                                    ? textRight + leftDelta
-                //                                    : textLeft - colorRectWidth + leftDelta,
-                //                                    lastSceneBlockBottom - verticalMargin);
-                //                    const QPointF bottomRight(isLeftToRight
-                //                                        ? textRight + colorRectWidth + leftDelta
-                //                                        : textLeft + leftDelta,
-                //                                        cursorREnd.bottom() + verticalMargin);
-                //                    const QRectF rect(topLeft, bottomRight);
-                //                    painter.fillRect(rect, lastSceneColor);
-                //                }
+                //
+                // Нарисуем цвет сцены
+                //
+                if (lastSceneColor.isValid()) {
+                    const auto isBlockSceneHeadingWithNumberAtRight
+                        = blockType == ScreenplayParagraphType::SceneHeading && d->showSceneNumber
+                        && d->showSceneNumberOnRight;
+                    if (!isBlockSceneHeadingWithNumberAtRight) {
+                        const QPointF topLeft(
+                            isLeftToRight ? textRight + leftDelta + DesignSystem::layout().px8()
+                                          : (textLeft - DesignSystem::layout().px4() + leftDelta),
+                            isLastBlockSceneHeadingWithNumberAtRight
+                                ? cursorR.top() - verticalMargin
+                                : lastSceneBlockBottom - verticalMargin);
+                        const QPointF bottomRight(isLeftToRight ? textRight
+                                                          + DesignSystem::layout().px4() + leftDelta
+                                                                : textLeft + leftDelta,
+                                                  cursorREnd.bottom() + verticalMargin);
+                        const QRectF rect(topLeft, bottomRight);
+                        painter.fillRect(rect, lastSceneColor);
+                    }
+
+                    isLastBlockSceneHeadingWithNumberAtRight = isBlockSceneHeadingWithNumberAtRight;
+                }
 
                 //                //
                 //                // Определим цвет персонажа
@@ -943,8 +944,14 @@ void ScreenplayTextEdit::paintEvent(QPaintEvent* _event)
                                                         cursorR.bottom());
                                     QRectF rect(topLeft, bottomRight);
                                     painter.setFont(cursor.charFormat().font());
+                                    if (lastSceneColor.isValid()) {
+                                        painter.setPen(lastSceneColor);
+                                    }
                                     painter.drawText(rect, Qt::AlignLeft | Qt::AlignTop,
                                                      sceneNumber);
+                                    if (lastSceneColor.isValid()) {
+                                        painter.setPen(palette().text().color());
+                                    }
                                 }
                             }
                         }

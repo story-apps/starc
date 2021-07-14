@@ -18,6 +18,7 @@ const QString kNumberTag = QLatin1String("number");
 const QString kNumberValueAttribute = QLatin1String("value");
 const QString kNumberGroupAttribute = QLatin1String("group");
 const QString kNumberGroupIndexAttribute = QLatin1String("group_index");
+const QString kColorTag = QLatin1String("color");
 const QString kStampTag = QLatin1String("stamp");
 const QString kPlannedDurationTag = QLatin1String("planned_duration");
 

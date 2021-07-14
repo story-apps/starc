@@ -1224,6 +1224,37 @@ std::chrono::milliseconds ScreenplayTextModel::duration() const
     return d->rootItem->duration();
 }
 
+std::map<std::chrono::milliseconds, QColor> ScreenplayTextModel::itemsColors() const
+{
+    std::chrono::milliseconds lastItemDuration{ 0 };
+    std::map<std::chrono::milliseconds, QColor> colors;
+    std::function<void(const ScreenplayTextModelItem*)> collectChildColors;
+    collectChildColors = [&collectChildColors, &lastItemDuration,
+                          &colors](const ScreenplayTextModelItem* _item) {
+        for (int childIndex = 0; childIndex < _item->childCount(); ++childIndex) {
+            auto childItem = _item->childAt(childIndex);
+            switch (childItem->type()) {
+            case ScreenplayTextModelItemType::Folder: {
+                collectChildColors(childItem);
+                break;
+            }
+
+            case ScreenplayTextModelItemType::Scene: {
+                const auto sceneItem = static_cast<const ScreenplayTextModelSceneItem*>(childItem);
+                colors.emplace(lastItemDuration, sceneItem->color());
+                lastItemDuration += sceneItem->duration();
+                break;
+            }
+
+            default:
+                break;
+            }
+        }
+    };
+    collectChildColors(d->rootItem);
+    return colors;
+}
+
 void ScreenplayTextModel::recalculateDuration()
 {
     std::function<void(const ScreenplayTextModelItem*)> updateChildDuration;

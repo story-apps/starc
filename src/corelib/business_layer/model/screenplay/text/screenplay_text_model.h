@@ -135,6 +135,11 @@ public:
     std::chrono::milliseconds duration() const;
 
     /**
+     * @brief Получить цвета элементов сценария
+     */
+    std::map<std::chrono::milliseconds, QColor> itemsColors() const;
+
+    /**
      * @brief Пересчитать хронометраж
      */
     void recalculateDuration();
