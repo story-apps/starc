@@ -125,6 +125,7 @@ public:
     CheckBox* useSpellChecker = nullptr;
     ComboBox* spellCheckerLanguage = nullptr;
     QStandardItemModel* spellCheckerLanguagesModel = nullptr;
+    IconsMidLabel* spellCheckerUserDictionary = nullptr;
     //
     // ... User interface
     //
@@ -236,6 +237,7 @@ SettingsView::Implementation::Implementation(QWidget* _parent)
     , useSpellChecker(new CheckBox(applicationCard))
     , spellCheckerLanguage(new ComboBox(applicationCard))
     , spellCheckerLanguagesModel(buildSpellCheckerLanguagesModel(spellCheckerLanguage))
+    , spellCheckerUserDictionary(new IconsMidLabel(applicationCard))
     , applicationUserInterfaceTitle(new H6Label(applicationCard))
     , theme(new Body1Label(applicationCard))
     , changeTheme(new Button(applicationCard))
@@ -331,6 +333,9 @@ void SettingsView::Implementation::initApplicationCard()
     spellCheckerLanguage->setSpellCheckPolicy(SpellCheckPolicy::Manual);
     spellCheckerLanguage->setEnabled(false);
     spellCheckerLanguage->setModel(spellCheckerLanguagesModel);
+    spellCheckerUserDictionary->setIcon(u8"\U000F0900");
+    spellCheckerUserDictionary->setAlignment(Qt::AlignCenter);
+    spellCheckerUserDictionary->hide();
     // 0 - 0.5, 500 - 1, 3500 - 4
     scaleFactor->setMaximumValue(3500);
     scaleFactor->setValue(500);
@@ -360,6 +365,7 @@ void SettingsView::Implementation::initApplicationCard()
         auto layout = makeLayout();
         layout->addWidget(useSpellChecker, 0, Qt::AlignCenter);
         layout->addWidget(spellCheckerLanguage);
+        layout->addWidget(spellCheckerUserDictionary);
         applicationCardLayout->addLayout(layout, itemIndex++, 0);
     }
     //
@@ -1262,6 +1268,7 @@ void SettingsView::updateTranslations()
         d->spellCheckerLanguagesModel->sort(0);
     }
     d->applicationUserInterfaceTitle->setText(tr("User interface"));
+    d->spellCheckerUserDictionary->setToolTip(tr("Manage user dictionary"));
     d->theme->setText(tr("Theme"));
     d->scaleFactorTitle->setText(tr("Size of the user interface elements:"));
     d->scaleFactorSmallInfo->setText(tr("small"));
@@ -1376,8 +1383,9 @@ void SettingsView::designSystemChangeEvent(DesignSystemChangeEvent* _event)
 
     auto iconLabelMargins = labelMargins;
     iconLabelMargins.setLeft(0);
-    for (auto iconLabel : QVector<Widget*>{ d->simpleTextEditorDefaultTemplateOptions,
-                                            d->screenplayEditorDefaultTemplateOptions }) {
+    for (auto iconLabel :
+         QVector<Widget*>{ d->spellCheckerUserDictionary, d->simpleTextEditorDefaultTemplateOptions,
+                           d->screenplayEditorDefaultTemplateOptions }) {
         iconLabel->setBackgroundColor(DesignSystem::color().background());
         iconLabel->setTextColor(DesignSystem::color().onBackground());
         iconLabel->setContentsMargins(iconLabelMargins);
