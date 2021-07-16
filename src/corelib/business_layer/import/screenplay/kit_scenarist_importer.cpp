@@ -232,6 +232,9 @@ AbstractScreenplayImporter::Screenplay readScreenplay(const QString& _kitScreenp
                             reviewCommentNode
                                 = reviewCommentNode.nextSiblingElement("review_comment");
                         }
+                        if (reviewMark.comments.isEmpty()) {
+                            reviewMark.comments.append({ QString(), QString(), QString() });
+                        }
                         reviewMarks.append(reviewMark);
 
                         reviewNode = reviewNode.nextSiblingElement("review");
