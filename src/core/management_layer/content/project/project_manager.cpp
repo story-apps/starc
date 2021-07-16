@@ -394,7 +394,7 @@ ProjectManager::ProjectManager(QObject* _parent, QWidget* _parentWidget)
                    const QString& _name, const QByteArray& _content) {
                 Q_UNUSED(_parentUuid);
 
-                auto document = DataStorageLayer::StorageFacade::documentStorage()->storeDocument(
+                auto document = DataStorageLayer::StorageFacade::documentStorage()->createDocument(
                     _uuid, _type);
                 if (!_content.isNull()) {
                     document->setContent(_content);
@@ -691,13 +691,13 @@ void ProjectManager::saveChanges()
     // Сохраняем структуру
     //
     const auto structure = d->projectStructureModel->document();
-    DataStorageLayer::StorageFacade::documentStorage()->updateDocument(structure);
+    DataStorageLayer::StorageFacade::documentStorage()->saveDocument(structure);
 
     //
     // Сохраняем остальные документы
     //
     for (auto model : d->modelsFacade.loadedModels()) {
-        DataStorageLayer::StorageFacade::documentStorage()->updateDocument(model->document());
+        DataStorageLayer::StorageFacade::documentStorage()->saveDocument(model->document());
     }
 
     //

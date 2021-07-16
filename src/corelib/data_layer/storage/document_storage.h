@@ -1,5 +1,7 @@
 #pragma once
 
+#include <QScopedPointer>
+
 #include <corelib_global.h>
 
 class QByteArray;
@@ -22,6 +24,8 @@ namespace DataStorageLayer {
 class CORE_LIBRARY_EXPORT DocumentStorage
 {
 public:
+    ~DocumentStorage();
+
     /**
      * @brief Получить документ по uuid'у
      */
@@ -41,12 +45,12 @@ public:
     /**
      * @brief Сохранить документ
      */
-    Domain::DocumentObject* storeDocument(const QUuid& _uuid, Domain::DocumentObjectType _type);
+    Domain::DocumentObject* createDocument(const QUuid& _uuid, Domain::DocumentObjectType _type);
 
     /**
      * @brief Обновить документ
      */
-    void updateDocument(Domain::DocumentObject* _document);
+    void saveDocument(Domain::DocumentObject* _document);
 
     /**
      * @brief Удалить документ
@@ -59,8 +63,11 @@ public:
     void clear();
 
 private:
-    DocumentStorage() = default;
+    DocumentStorage();
     friend class StorageFacade;
+
+    class Implementation;
+    QScopedPointer<Implementation> d;
 };
 
 } // namespace DataStorageLayer
