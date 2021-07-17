@@ -9,6 +9,7 @@
 
 #include <QColor>
 #include <QDateTime>
+#include <QPointer>
 
 
 namespace BusinessLayer {
@@ -49,7 +50,7 @@ public:
     /**
      * @brief Модель сценария, на основе которой строится модель заметок
      */
-    ScreenplayTextModel* model = nullptr;
+    QPointer<ScreenplayTextModel> model;
     /**
      * @brief Список всех текстовых элементов модели, для того, чтобы понимать их последовательность
      */

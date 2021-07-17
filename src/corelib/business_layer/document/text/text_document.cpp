@@ -15,6 +15,7 @@
 #include <utils/shugar.h>
 
 #include <QDateTime>
+#include <QPointer>
 #include <QScopedValueRollback>
 #include <QTextTable>
 
@@ -59,7 +60,7 @@ public:
 
     DocumentState state = DocumentState::Undefined;
     QString templateId;
-    BusinessLayer::TextModel* model = nullptr;
+    QPointer<BusinessLayer::TextModel> model;
     bool canChangeModel = true;
     std::map<int, BusinessLayer::TextModelItem*> positionsToItems;
 };
@@ -266,9 +267,12 @@ void TextDocument::setModel(BusinessLayer::TextModel* _model, bool _canChangeMod
     //
     // Аккуратно очищаем текст, чтобы не сломать форматирование самого документа
     //
-    QTextCursor cursor(this);
+    TextCursor cursor(this);
+    cursor.beginEditBlock();
     cursor.select(QTextCursor::Document);
     cursor.deleteChar();
+    cursor.block().setUserData(nullptr);
+    cursor.endEditBlock();
 
     if (d->model == nullptr) {
         d->state = DocumentState::Ready;

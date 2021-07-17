@@ -18,6 +18,7 @@
 #include <utils/shugar.h>
 
 #include <QDateTime>
+#include <QPointer>
 #include <QScopedValueRollback>
 #include <QTextTable>
 
@@ -67,7 +68,7 @@ public:
 
     DocumentState state = DocumentState::Undefined;
     QString templateId;
-    BusinessLayer::ScreenplayTextModel* model = nullptr;
+    QPointer<BusinessLayer::ScreenplayTextModel> model;
     bool canChangeModel = true;
     std::map<int, BusinessLayer::ScreenplayTextModelItem*> positionsToItems;
     ScreenplayTextCorrector corrector;
@@ -439,8 +440,11 @@ void ScreenplayTextDocument::setModel(BusinessLayer::ScreenplayTextModel* _model
     // Аккуратно очищаем текст, чтобы не сломать форматирование самого документа
     //
     ScreenplayTextCursor cursor(this);
+    cursor.beginEditBlock();
     cursor.select(QTextCursor::Document);
     cursor.deleteChar();
+    cursor.block().setUserData(nullptr);
+    cursor.endEditBlock();
 
     if (d->model == nullptr) {
         d->state = DocumentState::Ready;

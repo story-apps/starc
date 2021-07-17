@@ -22,6 +22,7 @@
 #include <QLocale>
 #include <QMimeData>
 #include <QPainter>
+#include <QPointer>
 #include <QRegularExpression>
 #include <QScrollBar>
 #include <QTextTable>
@@ -42,7 +43,7 @@ public:
 
     ScreenplayTextEdit* q = nullptr;
 
-    BusinessLayer::ScreenplayTextModel* model = nullptr;
+    QPointer<BusinessLayer::ScreenplayTextModel> model;
     BusinessLayer::ScreenplayTextDocument document;
 
     bool showSceneNumber = false;

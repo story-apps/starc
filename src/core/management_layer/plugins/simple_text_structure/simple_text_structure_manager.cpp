@@ -22,7 +22,7 @@ public:
     /**
      * @brief Текущая модель документа
      */
-    BusinessLayer::TextModel* model = nullptr;
+    QPointer<BusinessLayer::TextModel> model;
 
     /**
      * @brief Индекс модели, который необходимо выделить

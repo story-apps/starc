@@ -48,7 +48,7 @@ public:
     /**
      * @brief Текущая модель представления основного окна
      */
-    BusinessLayer::TextModel* model = nullptr;
+    QPointer<BusinessLayer::TextModel> model;
 
     /**
      * @brief Предаставление для основного окна

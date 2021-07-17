@@ -25,7 +25,7 @@ public:
     /**
      * @brief Текущая модель представления основного окна
      */
-    BusinessLayer::ProjectInformationModel* model = nullptr;
+    QPointer<BusinessLayer::ProjectInformationModel> model;
 
     /**
      * @brief Предаставление для основного окна

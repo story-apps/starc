@@ -7,6 +7,7 @@
 
 #include <QApplication>
 #include <QPainter>
+#include <QPointer>
 #include <QResizeEvent>
 
 
@@ -19,7 +20,7 @@ public:
 
     void updateTimelineGeometry();
 
-    BusinessLayer::ScreenplayTextModel* model = nullptr;
+    QPointer<BusinessLayer::ScreenplayTextModel> model;
     QScrollBar* scrollbar = nullptr;
     ScreenplayTextTimeline* timeline = nullptr;
 };

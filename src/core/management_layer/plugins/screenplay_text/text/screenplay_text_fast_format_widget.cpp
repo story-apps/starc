@@ -11,6 +11,7 @@
 
 #include <QAbstractItemModel>
 #include <QPainter>
+#include <QPointer>
 #include <QVBoxLayout>
 
 
@@ -118,7 +119,7 @@ public:
     /**
      * @brief Модель типов форматов блоков
      */
-    QAbstractItemModel* model = nullptr;
+    QPointer<QAbstractItemModel> model;
 
     /**
      * @brief Список кнопок

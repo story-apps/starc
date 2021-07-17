@@ -39,7 +39,7 @@ public:
     /**
      * @brief Текущая модель сценария
      */
-    BusinessLayer::ScreenplayTextModel* model = nullptr;
+    QPointer<BusinessLayer::ScreenplayTextModel> model;
 
     /**
      * @brief Индекс модели, который необходимо выделить

@@ -48,7 +48,7 @@ public:
     /**
      * @brief Текущая модель представления основного окна
      */
-    BusinessLayer::ScreenplayTextModel* model = nullptr;
+    QPointer<BusinessLayer::ScreenplayTextModel> model;
 
     /**
      * @brief Предаставление для основного окна
