@@ -15,6 +15,8 @@
 #include <QTimer>
 #include <QWidgetAction>
 
+#include <optional>
+
 
 namespace ManagementLayer {
 
