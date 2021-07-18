@@ -31,7 +31,7 @@ public:
      * @return Пара: 1) текст, который был изменён; 2) текст замены
      */
     struct Change {
-        QString xml;
+        QByteArray xml;
         int from = 0;
     };
     QPair<Change, Change> changedXml(const QString& _xml, const QString& _patch) const;

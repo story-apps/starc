@@ -48,12 +48,14 @@ QString toString(qreal _value)
 
 QString toString(Qt::Alignment _alignment)
 {
-    QString result;
-    result += kAlignmentToString.value(_alignment & Qt::AlignHorizontal_Mask);
-    if (!result.isEmpty()) {
-        result.append(",");
+    auto result = kAlignmentToString.value(_alignment & Qt::AlignHorizontal_Mask);
+    const auto vAlign = kAlignmentToString.value(_alignment & Qt::AlignVertical_Mask);
+    if (!vAlign.isEmpty()) {
+        if (!result.isEmpty()) {
+            result.append(",");
+        }
+        result += vAlign;
     }
-    result += kAlignmentToString.value(_alignment & Qt::AlignVertical_Mask);
     return result;
 }
 

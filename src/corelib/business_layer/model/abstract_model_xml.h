@@ -23,7 +23,7 @@ const QString kContentTag = QLatin1String("content");
 /**
  * @brief Привести xml в читаемый парсером вид
  */
-QString prepareXml(const QString& _xml);
+QByteArray prepareXml(const QString& _xml);
 
 //
 // Вспомогательные методы для чтения контента из потока

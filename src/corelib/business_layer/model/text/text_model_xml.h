@@ -17,6 +17,7 @@ const QString kStampTag = QLatin1String("stamp");
 //
 // Текст
 //
+const QString kTextParametersTag = QLatin1String("params");
 const QString kValueTag = QLatin1String("v");
 const QString kReviewMarksTag = QLatin1String("rms");
 const QString kReviewMarkTag = QLatin1String("rm");

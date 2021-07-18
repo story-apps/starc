@@ -70,6 +70,7 @@ public:
      */
     std::optional<Qt::Alignment> alignment() const;
     void setAlignment(Qt::Alignment _align);
+    void clearAlignment();
 
     /**
      * @brief Текст элемента

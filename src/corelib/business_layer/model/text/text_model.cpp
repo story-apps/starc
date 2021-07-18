@@ -1128,9 +1128,9 @@ void TextModel::applyPatch(const QByteArray& _patch)
     changes.second.xml = xml::prepareXml(changes.second.xml);
 
 #ifdef XML_CHECKS
-    qDebug(changes.first.xml.toUtf8());
+    qDebug(changes.first.xml);
     qDebug("************************");
-    qDebug(changes.second.xml.toUtf8());
+    qDebug(changes.second.xml);
     qDebug("\n\n\n");
 #endif
 

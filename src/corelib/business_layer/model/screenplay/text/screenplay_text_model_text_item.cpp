@@ -111,16 +111,21 @@ ScreenplayTextModelTextItem::Implementation::Implementation(QXmlStreamReader& _c
     paragraphType = screenplayParagraphTypeFromString(_contentReader.name().toString());
     Q_ASSERT(paragraphType != ScreenplayParagraphType::Undefined);
 
-    if (_contentReader.attributes().hasAttribute(xml::kAlignAttribute)) {
-        alignment = alignmentFromString(
-            _contentReader.attributes().value(xml::kAlignAttribute).toString());
-    }
-    if (_contentReader.attributes().hasAttribute(xml::kInFirstColumn)) {
-        isInFirstColumn
-            = _contentReader.attributes().value(xml::kInFirstColumn).toString() == "true";
+    auto currentTag = xml::readNextElement(_contentReader);
+
+    if (currentTag == xml::kParametersTag) {
+        if (_contentReader.attributes().hasAttribute(xml::kAlignAttribute)) {
+            alignment = alignmentFromString(
+                _contentReader.attributes().value(xml::kAlignAttribute).toString());
+        }
+        if (_contentReader.attributes().hasAttribute(xml::kInFirstColumn)) {
+            isInFirstColumn
+                = _contentReader.attributes().value(xml::kInFirstColumn).toString() == "true";
+        }
+        xml::readNextElement(_contentReader); // end
+        currentTag = xml::readNextElement(_contentReader); // next
     }
 
-    auto currentTag = xml::readNextElement(_contentReader);
     if (currentTag == xml::kBookmarkTag) {
         const auto attributes = _contentReader.attributes();
         bookmark = { attributes.value(xml::kColorAttribute).toString(),
@@ -243,16 +248,19 @@ QByteArray ScreenplayTextModelTextItem::Implementation::buildXml(int _from, int 
     const auto _end = _from + _length;
 
     QByteArray xml;
-    xml += QString("<%1%2%3>")
-               .arg(toString(paragraphType),
-                    (alignment.has_value()
-                         ? QString(" %1=\"%2\"").arg(xml::kAlignAttribute, toString(*alignment))
-                         : ""),
-                    (isInFirstColumn.has_value()
-                         ? QString(" %1=\"%2\"")
-                               .arg(xml::kInFirstColumn, *isInFirstColumn ? "true" : "false")
-                         : ""))
-               .toUtf8();
+    xml += QString("<%1>").arg(toString(paragraphType)).toUtf8();
+    if (alignment.has_value() || isInFirstColumn.has_value()) {
+        xml += QString("<%1%2%3/>")
+                   .arg(xml::kParametersTag,
+                        (alignment.has_value()
+                             ? QString(" %1=\"%2\"").arg(xml::kAlignAttribute, toString(*alignment))
+                             : ""),
+                        (isInFirstColumn.has_value()
+                             ? QString(" %1=\"%2\"")
+                                   .arg(xml::kInFirstColumn, *isInFirstColumn ? "true" : "false")
+                             : ""))
+                   .toUtf8();
+    }
     if (bookmark.has_value()) {
         xml += QString("<%1 %2=\"%3\"><![CDATA[%4]]></%1>")
                    .arg(xml::kBookmarkTag, xml::kColorAttribute, bookmark->color.name(),
@@ -643,6 +651,17 @@ void ScreenplayTextModelTextItem::setAlignment(Qt::Alignment _align)
     }
 
     d->alignment = _align;
+    d->updateXml();
+    markChanged();
+}
+
+void ScreenplayTextModelTextItem::clearAlignment()
+{
+    if (!d->alignment.has_value()) {
+        return;
+    }
+
+    d->alignment.reset();
     d->updateXml();
     markChanged();
 }

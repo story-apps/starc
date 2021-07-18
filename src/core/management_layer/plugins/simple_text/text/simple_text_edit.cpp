@@ -107,7 +107,7 @@ void SimpleTextEdit::initWithModel(BusinessLayer::TextModel* _model)
 {
     d->model = _model;
 
-    const auto currentTemplate = TemplatesFacade::textTemplate();
+    const auto currentTemplate = TemplatesFacade::simpleTextTemplate();
     setPageFormat(currentTemplate.pageSizeId());
     setPageMarginsMm(currentTemplate.pageMargins());
     setPageNumbersAlignment(currentTemplate.pageNumbersAlignment());

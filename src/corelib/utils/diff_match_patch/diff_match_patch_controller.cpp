@@ -279,8 +279,8 @@ QPair<DiffMatchPatchController::Change, DiffMatchPatchController::Change> DiffMa
         = newXmlPlain.mid(newStartPosForXmlPlain, newEndPosForXml - newStartPosForXmlPlain);
 
 
-    return { { d->plainToXml(oldXmlForUpdate),
+    return { { d->plainToXml(oldXmlForUpdate).toUtf8(),
                d->plainToXml(oldXmlPlain.left(oldStartPosForXmlPlain)).length() },
-             { d->plainToXml(newXmlForUpdate),
+             { d->plainToXml(newXmlForUpdate).toUtf8(),
                d->plainToXml(newXmlPlain.left(newStartPosForXmlPlain)).length() } };
 }

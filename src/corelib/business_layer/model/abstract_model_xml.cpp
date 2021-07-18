@@ -3,7 +3,7 @@
 namespace BusinessLayer {
 namespace xml {
 
-QString prepareXml(const QString& _xml)
+QByteArray prepareXml(const QString& _xml)
 {
     //
     // Балансируем xml
@@ -80,7 +80,7 @@ QString prepareXml(const QString& _xml)
         }
         preparedXml.append(documentFooter);
     }
-    return preparedXml;
+    return preparedXml.toUtf8();
 }
 
 QStringRef readContent(QXmlStreamReader& _reader)

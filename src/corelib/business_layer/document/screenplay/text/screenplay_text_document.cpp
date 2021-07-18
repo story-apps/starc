@@ -38,6 +38,11 @@ public:
     explicit Implementation(ScreenplayTextDocument* _document);
 
     /**
+     * @brief Получить шаблон оформления текущего документа
+     */
+    const ScreenplayTemplate& documentTemplate() const;
+
+    /**
      * @brief Скорректировать позиции элементов на заданную дистанцию
      */
     void correctPositionsToItems(
@@ -78,6 +83,11 @@ ScreenplayTextDocument::Implementation::Implementation(ScreenplayTextDocument* _
     : q(_document)
     , corrector(_document)
 {
+}
+
+const ScreenplayTemplate& ScreenplayTextDocument::Implementation::documentTemplate() const
+{
+    return TemplatesFacade::screenplayTemplate(templateId);
 }
 
 void ScreenplayTextDocument::Implementation::correctPositionsToItems(
@@ -159,8 +169,8 @@ void ScreenplayTextDocument::Implementation::readModelItemContent(int _itemRow,
             // Назначим блоку перед таблицей формат PageSplitter
             //
             auto insertPageSplitter = [&_cursor, this] {
-                const auto style = TemplatesFacade::screenplayTemplate(templateId)
-                                       .blockStyle(ScreenplayParagraphType::PageSplitter);
+                const auto style
+                    = documentTemplate().blockStyle(ScreenplayParagraphType::PageSplitter);
                 _cursor.setBlockFormat(style.blockFormat());
                 _cursor.setBlockCharFormat(style.charFormat());
                 _cursor.setCharFormat(style.charFormat());
@@ -285,8 +295,7 @@ void ScreenplayTextDocument::Implementation::readModelItemContent(int _itemRow,
         //
         // Установим стиль блока
         //
-        const auto currentStyle
-            = TemplatesFacade::screenplayTemplate(templateId).blockStyle(textItem->paragraphType());
+        const auto currentStyle = documentTemplate().blockStyle(textItem->paragraphType());
         _cursor.setBlockFormat(currentStyle.blockFormat(_cursor.inTable()));
         _cursor.setBlockCharFormat(currentStyle.charFormat());
         _cursor.setCharFormat(currentStyle.charFormat());
@@ -454,9 +463,8 @@ void ScreenplayTextDocument::setModel(BusinessLayer::ScreenplayTextModel* _model
     //
     // Обновим шрифт документа, в моменте когда текста нет
     //
-    const auto templateDefaultFont = TemplatesFacade::screenplayTemplate(d->templateId)
-                                         .blockStyle(ScreenplayParagraphType::Action)
-                                         .font();
+    const auto templateDefaultFont
+        = d->documentTemplate().blockStyle(ScreenplayParagraphType::Action).font();
     if (defaultFont() != templateDefaultFont) {
         setDefaultFont(templateDefaultFont);
     }
@@ -526,8 +534,23 @@ void ScreenplayTextDocument::setModel(BusinessLayer::ScreenplayTextModel* _model
                 //
                 if (textItem->alignment().has_value()
                     && cursor.blockFormat().alignment() != textItem->alignment()) {
+                    //
+                    // ... если пользователь задал выравнивание
+                    //
                     auto blockFormat = cursor.blockFormat();
                     blockFormat.setAlignment(textItem->alignment().value());
+                    cursor.setBlockFormat(blockFormat);
+                } else if (!textItem->alignment().has_value()
+                           && cursor.blockFormat().alignment()
+                               != d->documentTemplate()
+                                      .blockStyle(textItem->paragraphType())
+                                      .align()) {
+                    //
+                    // ... если выравнивание должно быть, как в стиле
+                    //
+                    auto blockFormat = cursor.blockFormat();
+                    blockFormat.setAlignment(
+                        d->documentTemplate().blockStyle(textItem->paragraphType()).align());
                     cursor.setBlockFormat(blockFormat);
                 }
                 //
@@ -563,8 +586,7 @@ void ScreenplayTextDocument::setModel(BusinessLayer::ScreenplayTextModel* _model
                     cursor.movePosition(QTextCursor::StartOfBlock);
                     cursor.movePosition(QTextCursor::EndOfBlock, QTextCursor::KeepAnchor);
                     const auto blockType = ScreenplayBlockStyle::forBlock(cursor.block());
-                    const auto blockStyle
-                        = TemplatesFacade::screenplayTemplate(d->templateId).blockStyle(blockType);
+                    const auto blockStyle = d->documentTemplate().blockStyle(blockType);
                     cursor.setBlockCharFormat(blockStyle.charFormat());
                     cursor.setCharFormat(blockStyle.charFormat());
 
@@ -1260,7 +1282,7 @@ void ScreenplayTextDocument::applyParagraphType(BusinessLayer::ScreenplayParagra
     auto cursor = _cursor;
     cursor.beginEditBlock();
 
-    const auto newBlockStyle = TemplatesFacade::screenplayTemplate(d->templateId).blockStyle(_type);
+    const auto newBlockStyle = d->documentTemplate().blockStyle(_type);
 
     //
     // Обновим стили
@@ -1307,8 +1329,8 @@ void ScreenplayTextDocument::applyParagraphType(BusinessLayer::ScreenplayParagra
     // Для заголовка папки нужно создать завершение
     //
     if (_type == ScreenplayParagraphType::FolderHeader) {
-        const auto footerStyle = TemplatesFacade::screenplayTemplate(d->templateId)
-                                     .blockStyle(ScreenplayParagraphType::FolderFooter);
+        const auto footerStyle
+            = d->documentTemplate().blockStyle(ScreenplayParagraphType::FolderFooter);
 
         //
         // Вставляем закрывающий блок
@@ -1874,7 +1896,12 @@ void ScreenplayTextDocument::updateModelOnContentChange(int _position, int _char
                 textItem->setInFirstColumn({});
             }
             textItem->setParagraphType(paragraphType);
-            textItem->setAlignment(block.blockFormat().alignment());
+            if (d->documentTemplate().blockStyle(paragraphType).align()
+                != block.blockFormat().alignment()) {
+                textItem->setAlignment(block.blockFormat().alignment());
+            } else {
+                textItem->clearAlignment();
+            }
             textItem->setText(block.text());
             textItem->setFormats(block.textFormats());
             textItem->setReviewMarks(block.textFormats());
@@ -2091,7 +2118,12 @@ void ScreenplayTextDocument::updateModelOnContentChange(int _position, int _char
                     textItem->setInFirstColumn({});
                 }
                 textItem->setParagraphType(paragraphType);
-                textItem->setAlignment(block.blockFormat().alignment());
+                if (d->documentTemplate().blockStyle(paragraphType).align()
+                    != block.blockFormat().alignment()) {
+                    textItem->setAlignment(block.blockFormat().alignment());
+                } else {
+                    textItem->clearAlignment();
+                }
                 textItem->setText(block.text());
                 textItem->setFormats(block.textFormats());
                 textItem->setReviewMarks(block.textFormats());
@@ -2115,7 +2147,7 @@ void ScreenplayTextDocument::updateModelOnContentChange(int _position, int _char
 
 void ScreenplayTextDocument::insertTable(const ScreenplayTextCursor& _cursor)
 {
-    const auto scriptTemplate = TemplatesFacade::screenplayTemplate(d->templateId);
+    const auto scriptTemplate = d->documentTemplate();
     const auto pageSplitterWidth = scriptTemplate.pageSplitterWidth();
     const int qtTableBorderWidth = 2; // эта однопиксельная рамка никак не убирается...
     const qreal tableWidth = pageSize().width() - rootFrame()->frameFormat().leftMargin()

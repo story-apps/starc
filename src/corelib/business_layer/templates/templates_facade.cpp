@@ -29,7 +29,7 @@ public:
     /**
      * @brief Шаблоны сценариев <id, шаблон>
      */
-    QMap<QString, TemplateType> templates;
+    QHash<QString, TemplateType> templates;
 
     /**
      * @brief Модель шаблонов
@@ -215,7 +215,7 @@ QStandardItemModel* TemplatesFacade::screenplayTemplates()
     return instance().d->templatesModel<ScreenplayTemplate>();
 }
 
-const SimpleTextTemplate& TemplatesFacade::textTemplate(const QString& _templateId)
+const SimpleTextTemplate& TemplatesFacade::simpleTextTemplate(const QString& _templateId)
 {
     return instance().d->getTemplate<SimpleTextTemplate>(_templateId);
 }

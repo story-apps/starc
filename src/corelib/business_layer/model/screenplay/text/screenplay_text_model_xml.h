@@ -31,6 +31,7 @@ const QString kTypeAttribute = QLatin1String("type");
 //
 // Текст
 //
+const QString kParametersTag = QLatin1String("params");
 const QString kBookmarkTag = QLatin1String("bm");
 const QString kValueTag = QLatin1String("v");
 const QString kReviewMarksTag = QLatin1String("rms");

@@ -70,12 +70,16 @@ TextModelTextItem::Implementation::Implementation(QXmlStreamReader& _contentRead
     paragraphType = textParagraphTypeFromString(_contentReader.name().toString());
     Q_ASSERT(paragraphType != TextParagraphType::Undefined);
 
-    if (_contentReader.attributes().hasAttribute(xml::kAlignAttribute)) {
-        alignment = alignmentFromString(
-            _contentReader.attributes().value(xml::kAlignAttribute).toString());
-    }
-
     auto currentTag = xml::readNextElement(_contentReader);
+
+    if (currentTag == xml::kTextParametersTag) {
+        if (_contentReader.attributes().hasAttribute(xml::kAlignAttribute)) {
+            alignment = alignmentFromString(
+                _contentReader.attributes().value(xml::kAlignAttribute).toString());
+        }
+        xml::readNextElement(_contentReader); // end
+        currentTag = xml::readNextElement(_contentReader); // next
+    }
 
     if (currentTag == xml::kValueTag) {
         text = TextHelper::fromHtmlEscaped(xml::readContent(_contentReader).toString());
@@ -180,12 +184,15 @@ QByteArray TextModelTextItem::Implementation::buildXml(int _from, int _length)
     const auto _end = _from + _length;
 
     QByteArray xml;
-    xml += QString("<%1%2>")
-               .arg(toString(paragraphType),
-                    (alignment.has_value()
-                         ? QString(" %1=\"%2\"").arg(xml::kAlignAttribute, toString(*alignment))
-                         : ""))
-               .toUtf8();
+    xml += QString("<%1>").arg(toString(paragraphType)).toUtf8();
+    if (alignment.has_value()) {
+        xml += QString("<%1%2/>")
+                   .arg(xml::kTextParametersTag,
+                        (alignment.has_value()
+                             ? QString(" %1=\"%2\"").arg(xml::kAlignAttribute, toString(*alignment))
+                             : ""))
+                   .toUtf8();
+    }
     xml += QString("<%1><![CDATA[%2]]></%1>")
                .arg(xml::kValueTag, TextHelper::toHtmlEscaped(text.mid(_from, _length)))
                .toUtf8();
@@ -441,6 +448,17 @@ void TextModelTextItem::setAlignment(Qt::Alignment _align)
     markChanged();
 }
 
+void TextModelTextItem::clearAlignment()
+{
+    if (!d->alignment.has_value()) {
+        return;
+    }
+
+    d->alignment.reset();
+    d->updateXml();
+    markChanged();
+}
+
 const QString& TextModelTextItem::text() const
 {
     return d->text;
@@ -516,7 +534,8 @@ const QVector<TextModelTextItem::TextFormat>& TextModelTextItem::formats() const
 void TextModelTextItem::setFormats(const QVector<QTextLayout::FormatRange>& _formats)
 {
     QVector<TextFormat> newFormats;
-    const auto defaultBlockFormat = TemplatesFacade::textTemplate().blockStyle(d->paragraphType);
+    const auto defaultBlockFormat
+        = TemplatesFacade::simpleTextTemplate().blockStyle(d->paragraphType);
     for (const auto& format : _formats) {
         if (format.start == 0 && format.length == d->text.length()
             && format.format == defaultBlockFormat.charFormat()) {

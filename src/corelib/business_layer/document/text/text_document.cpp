@@ -35,6 +35,11 @@ public:
     explicit Implementation(TextDocument* _document);
 
     /**
+     * @brief Получить шаблон документа
+     */
+    const SimpleTextTemplate& documentTemplate() const;
+
+    /**
      * @brief Скорректировать позиции элементов на заданную дистанцию
      */
     void correctPositionsToItems(std::map<int, BusinessLayer::TextModelItem*>::iterator _from,
@@ -68,6 +73,11 @@ public:
 TextDocument::Implementation::Implementation(TextDocument* _document)
     : q(_document)
 {
+}
+
+const SimpleTextTemplate& TextDocument::Implementation::documentTemplate() const
+{
+    return TemplatesFacade::simpleTextTemplate(templateId);
 }
 
 void TextDocument::Implementation::correctPositionsToItems(
@@ -142,8 +152,7 @@ void TextDocument::Implementation::readModelItemContent(int _itemRow, const QMod
         //
         // Установим стиль блока
         //
-        const auto currentStyle
-            = TemplatesFacade::textTemplate(templateId).blockStyle(textItem->paragraphType());
+        const auto currentStyle = documentTemplate().blockStyle(textItem->paragraphType());
         _cursor.setBlockFormat(currentStyle.blockFormat());
         _cursor.setBlockCharFormat(currentStyle.charFormat());
         _cursor.setCharFormat(currentStyle.charFormat());
@@ -283,7 +292,7 @@ void TextDocument::setModel(BusinessLayer::TextModel* _model, bool _canChangeMod
     // Обновим шрифт документа, в моменте когда текста нет
     //
     const auto templateDefaultFont
-        = TemplatesFacade::textTemplate(d->templateId).blockStyle(TextParagraphType::Text).font();
+        = d->documentTemplate().blockStyle(TextParagraphType::Text).font();
     if (defaultFont() != templateDefaultFont) {
         setDefaultFont(templateDefaultFont);
     }
@@ -311,125 +320,137 @@ void TextDocument::setModel(BusinessLayer::TextModel* _model, bool _canChangeMod
         QSignalBlocker signalBlocker(this);
         setModel(d->model);
     });
-    connect(d->model, &TextModel::dataChanged, this,
-            [this](const QModelIndex& _topLeft, const QModelIndex& _bottomRight) {
-                if (d->state != DocumentState::Ready) {
-                    return;
+    connect(
+        d->model, &TextModel::dataChanged, this,
+        [this](const QModelIndex& _topLeft, const QModelIndex& _bottomRight) {
+            if (d->state != DocumentState::Ready) {
+                return;
+            }
+
+            Q_ASSERT(_topLeft == _bottomRight);
+
+            QScopedValueRollback temporatryState(d->state, DocumentState::Changing);
+
+            const auto position = itemStartPosition(_topLeft);
+            if (position < 0) {
+                return;
+            }
+
+            const auto item = d->model->itemForIndex(_topLeft);
+            if (item->type() != TextModelItemType::Text) {
+                return;
+            }
+
+            const auto textItem = static_cast<TextModelTextItem*>(item);
+
+            QTextCursor cursor(this);
+            cursor.setPosition(position);
+            cursor.beginEditBlock();
+
+            //
+            // Обновим элемент
+            //
+            // ... тип параграфа
+            //
+            if (TextBlockStyle::forBlock(cursor.block()) != textItem->paragraphType()) {
+                applyParagraphType(textItem->paragraphType(), cursor);
+            }
+            //
+            // ... выравнивание
+            //
+            if (textItem->alignment().has_value()
+                && cursor.blockFormat().alignment() != textItem->alignment()) {
+                //
+                // ... если пользователь задал выравнивание
+                //
+                auto blockFormat = cursor.blockFormat();
+                blockFormat.setAlignment(textItem->alignment().value());
+                cursor.setBlockFormat(blockFormat);
+            } else if (!textItem->alignment().has_value()
+                       && cursor.blockFormat().alignment()
+                           != d->documentTemplate().blockStyle(textItem->paragraphType()).align()) {
+                //
+                // ... если выравнивание должно быть, как в стиле
+                //
+                auto blockFormat = cursor.blockFormat();
+                blockFormat.setAlignment(
+                    d->documentTemplate().blockStyle(textItem->paragraphType()).align());
+                cursor.setBlockFormat(blockFormat);
+            }
+            //
+            // ... текст
+            //
+            if (cursor.block().text() != textItem->text()) {
+                //
+                // Корректируем позиции всех элментов идущих за обновляемым
+                //
+                const auto distanse = textItem->text().length() - cursor.block().text().length();
+                d->correctPositionsToItems(position + 1, distanse);
+
+                //
+                // TODO: Сделать более умный алгоритм, который заменяет только изменённые части
+                // текста
+                //
+                cursor.movePosition(QTextCursor::StartOfBlock);
+                cursor.movePosition(QTextCursor::EndOfBlock, QTextCursor::KeepAnchor);
+                cursor.insertText(textItem->text());
+            }
+            //
+            // ... редакторские заметки и форматирование
+            //
+            {
+                //
+                // TODO: придумать, как не перезаписывать форматирование каждый раз
+                //
+
+                //
+                // Сбросим текущее форматирование
+                //
+                cursor.movePosition(QTextCursor::StartOfBlock);
+                cursor.movePosition(QTextCursor::EndOfBlock, QTextCursor::KeepAnchor);
+                const auto blockType = TextBlockStyle::forBlock(cursor.block());
+                const auto blockStyle = d->documentTemplate().blockStyle(blockType);
+                cursor.setBlockCharFormat(blockStyle.charFormat());
+                cursor.setCharFormat(blockStyle.charFormat());
+
+                //
+                // Применяем форматирование из редакторских заметок элемента
+                //
+                for (const auto& reviewMark : textItem->reviewMarks()) {
+                    cursor.movePosition(QTextCursor::StartOfBlock);
+                    cursor.movePosition(QTextCursor::NextCharacter, QTextCursor::MoveAnchor,
+                                        reviewMark.from);
+                    cursor.movePosition(QTextCursor::NextCharacter, QTextCursor::KeepAnchor,
+                                        reviewMark.length);
+                    cursor.mergeCharFormat(reviewMark.charFormat());
+                }
+                for (const auto& format : textItem->formats()) {
+                    cursor.movePosition(QTextCursor::StartOfBlock);
+                    cursor.movePosition(QTextCursor::NextCharacter, QTextCursor::MoveAnchor,
+                                        format.from);
+                    cursor.movePosition(QTextCursor::NextCharacter, QTextCursor::KeepAnchor,
+                                        format.length);
+                    cursor.mergeCharFormat(format.charFormat());
                 }
 
-                Q_ASSERT(_topLeft == _bottomRight);
-
-                QScopedValueRollback temporatryState(d->state, DocumentState::Changing);
-
-                const auto position = itemStartPosition(_topLeft);
-                if (position < 0) {
-                    return;
+                //
+                // Обновим высоту блока, если требуется
+                //
+                qreal blockHeight = 0.0;
+                const auto formats = cursor.block().textFormats();
+                for (const auto& format : formats) {
+                    blockHeight
+                        = std::max(blockHeight, TextHelper::fineLineSpacing(format.format.font()));
                 }
-
-                const auto item = d->model->itemForIndex(_topLeft);
-                if (item->type() != TextModelItemType::Text) {
-                    return;
-                }
-
-                const auto textItem = static_cast<TextModelTextItem*>(item);
-
-                QTextCursor cursor(this);
-                cursor.setPosition(position);
-                cursor.beginEditBlock();
-
-                //
-                // Обновим элемент
-                //
-                // ... тип параграфа
-                //
-                if (TextBlockStyle::forBlock(cursor.block()) != textItem->paragraphType()) {
-                    applyParagraphType(textItem->paragraphType(), cursor);
-                }
-                //
-                // ... выравнивание
-                //
-                if (textItem->alignment().has_value()
-                    && cursor.blockFormat().alignment() != textItem->alignment()) {
+                if (!qFuzzyCompare(cursor.blockFormat().lineHeight(), blockHeight)) {
                     auto blockFormat = cursor.blockFormat();
-                    blockFormat.setAlignment(textItem->alignment().value());
+                    blockFormat.setLineHeight(blockHeight, QTextBlockFormat::FixedHeight);
                     cursor.setBlockFormat(blockFormat);
                 }
-                //
-                // ... текст
-                //
-                if (cursor.block().text() != textItem->text()) {
-                    //
-                    // Корректируем позиции всех элментов идущих за обновляемым
-                    //
-                    const auto distanse
-                        = textItem->text().length() - cursor.block().text().length();
-                    d->correctPositionsToItems(position + 1, distanse);
+            }
 
-                    //
-                    // TODO: Сделать более умный алгоритм, который заменяет только изменённые части
-                    // текста
-                    //
-                    cursor.movePosition(QTextCursor::StartOfBlock);
-                    cursor.movePosition(QTextCursor::EndOfBlock, QTextCursor::KeepAnchor);
-                    cursor.insertText(textItem->text());
-                }
-                //
-                // ... редакторские заметки и форматирование
-                //
-                {
-                    //
-                    // TODO: придумать, как не перезаписывать форматирование каждый раз
-                    //
-
-                    //
-                    // Сбросим текущее форматирование
-                    //
-                    cursor.movePosition(QTextCursor::StartOfBlock);
-                    cursor.movePosition(QTextCursor::EndOfBlock, QTextCursor::KeepAnchor);
-                    const auto blockType = TextBlockStyle::forBlock(cursor.block());
-                    const auto blockStyle
-                        = TemplatesFacade::textTemplate(d->templateId).blockStyle(blockType);
-                    cursor.setBlockCharFormat(blockStyle.charFormat());
-                    cursor.setCharFormat(blockStyle.charFormat());
-
-                    //
-                    // Применяем форматирование из редакторских заметок элемента
-                    //
-                    for (const auto& reviewMark : textItem->reviewMarks()) {
-                        cursor.movePosition(QTextCursor::StartOfBlock);
-                        cursor.movePosition(QTextCursor::NextCharacter, QTextCursor::MoveAnchor,
-                                            reviewMark.from);
-                        cursor.movePosition(QTextCursor::NextCharacter, QTextCursor::KeepAnchor,
-                                            reviewMark.length);
-                        cursor.mergeCharFormat(reviewMark.charFormat());
-                    }
-                    for (const auto& format : textItem->formats()) {
-                        cursor.movePosition(QTextCursor::StartOfBlock);
-                        cursor.movePosition(QTextCursor::NextCharacter, QTextCursor::MoveAnchor,
-                                            format.from);
-                        cursor.movePosition(QTextCursor::NextCharacter, QTextCursor::KeepAnchor,
-                                            format.length);
-                        cursor.mergeCharFormat(format.charFormat());
-                    }
-
-                    //
-                    // Обновим высоту блока, если требуется
-                    //
-                    qreal blockHeight = 0.0;
-                    const auto formats = cursor.block().textFormats();
-                    for (const auto& format : formats) {
-                        blockHeight = std::max(blockHeight,
-                                               TextHelper::fineLineSpacing(format.format.font()));
-                    }
-                    if (!qFuzzyCompare(cursor.blockFormat().lineHeight(), blockHeight)) {
-                        auto blockFormat = cursor.blockFormat();
-                        blockFormat.setLineHeight(blockHeight, QTextBlockFormat::FixedHeight);
-                        cursor.setBlockFormat(blockFormat);
-                    }
-                }
-
-                cursor.endEditBlock();
-            });
+            cursor.endEditBlock();
+        });
     connect(d->model, &TextModel::rowsInserted, this,
             [this](const QModelIndex& _parent, int _from, int _to) {
                 if (d->state != DocumentState::Ready) {
@@ -791,7 +812,7 @@ void TextDocument::applyParagraphType(BusinessLayer::TextParagraphType _type,
     auto cursor = _cursor;
     cursor.beginEditBlock();
 
-    const auto newBlockStyle = TemplatesFacade::textTemplate(d->templateId).blockStyle(_type);
+    const auto newBlockStyle = d->documentTemplate().blockStyle(_type);
 
     //
     // Обновим стили
@@ -1118,6 +1139,12 @@ void TextDocument::updateModelOnContentChange(int _position, int _charsRemoved, 
             auto textItem = new TextModelTextItem;
             textItem->setParagraphType(paragraphType);
             textItem->setAlignment(block.blockFormat().alignment());
+            if (d->documentTemplate().blockStyle(paragraphType).align()
+                != block.blockFormat().alignment()) {
+                textItem->setAlignment(block.blockFormat().alignment());
+            } else {
+                textItem->clearAlignment();
+            }
             textItem->setText(block.text());
             textItem->setFormats(block.textFormats());
             textItem->setReviewMarks(block.textFormats());
@@ -1306,7 +1333,12 @@ void TextDocument::updateModelOnContentChange(int _position, int _charsRemoved, 
             if (item->type() == TextModelItemType::Text) {
                 auto textItem = static_cast<TextModelTextItem*>(item);
                 textItem->setParagraphType(paragraphType);
-                textItem->setAlignment(block.blockFormat().alignment());
+                if (d->documentTemplate().blockStyle(paragraphType).align()
+                    != block.blockFormat().alignment()) {
+                    textItem->setAlignment(block.blockFormat().alignment());
+                } else {
+                    textItem->clearAlignment();
+                }
                 textItem->setText(block.text());
                 textItem->setFormats(block.textFormats());
                 textItem->setReviewMarks(block.textFormats());
