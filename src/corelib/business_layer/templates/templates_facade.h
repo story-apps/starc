@@ -39,7 +39,8 @@ public:
      * @brief Получить шаблон в соответствии с заданным идентификатором
      * @note Если id не задан, возвращается стандартный шаблон
      */
-    static const BusinessLayer::SimpleTextTemplate& simpleTextTemplate(const QString& _templateId = {});
+    static const BusinessLayer::SimpleTextTemplate& simpleTextTemplate(const QString& _templateId
+                                                                       = {});
     static const BusinessLayer::ScreenplayTemplate& screenplayTemplate(const QString& _templateId
                                                                        = {});
 

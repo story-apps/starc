@@ -194,8 +194,16 @@ void TextDocument::Implementation::readModelItemContent(int _itemRow, const QMod
         //
         qreal blockHeight = 0.0;
         const auto formats = formatCursor.block().textFormats();
-        for (const auto& format : formats) {
-            blockHeight = std::max(blockHeight, TextHelper::fineLineSpacing(format.format.font()));
+        if (formats.isEmpty()) {
+            blockHeight = documentTemplate()
+                              .blockStyle(textItem->paragraphType())
+                              .blockFormat()
+                              .lineHeight();
+        } else {
+            for (const auto& format : formats) {
+                blockHeight
+                    = std::max(blockHeight, TextHelper::fineLineSpacing(format.format.font()));
+            }
         }
         if (!qFuzzyCompare(formatCursor.blockFormat().lineHeight(), blockHeight)) {
             auto blockFormat = formatCursor.blockFormat();
@@ -432,21 +440,28 @@ void TextDocument::setModel(BusinessLayer::TextModel* _model, bool _canChangeMod
                                         format.length);
                     cursor.mergeCharFormat(format.charFormat());
                 }
+            }
 
-                //
-                // Обновим высоту блока, если требуется
-                //
-                qreal blockHeight = 0.0;
-                const auto formats = cursor.block().textFormats();
+            //
+            // Обновим высоту блока, если требуется
+            //
+            qreal blockHeight = 0.0;
+            const auto formats = cursor.block().textFormats();
+            if (formats.isEmpty()) {
+                blockHeight = d->documentTemplate()
+                                  .blockStyle(textItem->paragraphType())
+                                  .blockFormat()
+                                  .lineHeight();
+            } else {
                 for (const auto& format : formats) {
                     blockHeight
                         = std::max(blockHeight, TextHelper::fineLineSpacing(format.format.font()));
                 }
-                if (!qFuzzyCompare(cursor.blockFormat().lineHeight(), blockHeight)) {
-                    auto blockFormat = cursor.blockFormat();
-                    blockFormat.setLineHeight(blockHeight, QTextBlockFormat::FixedHeight);
-                    cursor.setBlockFormat(blockFormat);
-                }
+            }
+            if (!qFuzzyCompare(cursor.blockFormat().lineHeight(), blockHeight)) {
+                auto blockFormat = cursor.blockFormat();
+                blockFormat.setLineHeight(blockHeight, QTextBlockFormat::FixedHeight);
+                cursor.setBlockFormat(blockFormat);
             }
 
             cursor.endEditBlock();
