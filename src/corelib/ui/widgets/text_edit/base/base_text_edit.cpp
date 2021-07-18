@@ -12,6 +12,33 @@
 #include <QTextBlock>
 
 namespace {
+
+/**
+ * @brief Расположить курсор так, чтобы извлечь форматирование для последующего инвертирования
+ */
+QTextCursor cursorForFormatInversion(const QTextCursor& _cursor)
+{
+    if (!_cursor.hasSelection()) {
+        return _cursor;
+    }
+
+    auto cursor = _cursor;
+    //
+    // Максимум, потому что позиция в начале выделения имеет формат предыдущего символа
+    //
+    cursor.setPosition(std::max(_cursor.selectionStart(), _cursor.selectionEnd()));
+    //
+    // Если конец выделения попал в блок, в котором нет форматов, идём назад, в поисках блока,
+    // обладающего форматированием, и тогда мы сможем из него извлечь необходимую информацию
+    // для последующего инвертирования
+    //
+    const auto startPosition = std::min(_cursor.selectionStart(), _cursor.selectionEnd());
+    while (cursor.block().textFormats().isEmpty() && cursor.position() > startPosition) {
+        cursor.movePosition(QTextCursor::PreviousCharacter);
+    }
+    return cursor;
+}
+
 /**
  * @brief Обновить форматированние выделенного блока в соответствии с заданным функтором
  */
@@ -22,18 +49,31 @@ void updateSelectionFormatting(QTextCursor _cursor, Func updateFormat)
         return;
     }
 
+    _cursor.beginEditBlock();
+
     const auto positionInterval = std::minmax(_cursor.selectionStart(), _cursor.selectionEnd());
     int position = positionInterval.first;
     const int lastPosition = positionInterval.second;
     while (position < lastPosition) {
         const auto block = _cursor.document()->findBlock(position);
+
+        //
+        // В пустых блоках форматы могут отсутствовать
+        //
+        if (block.textFormats().isEmpty()) {
+            position = block.next().position();
+            continue;
+        }
+
         for (const auto& format : block.textFormats()) {
             const auto formatStart = block.position() + format.start;
             const auto formatEnd = formatStart + format.length;
-            if (position >= formatEnd) {
+            if (position > formatEnd) {
                 continue;
-            }
-            if (formatStart >= lastPosition) {
+            } else if (position == formatEnd) {
+                ++position;
+                break;
+            } else if (formatStart >= lastPosition) {
                 break;
             }
 
@@ -48,6 +88,8 @@ void updateSelectionFormatting(QTextCursor _cursor, Func updateFormat)
             position = _cursor.position();
         }
     }
+
+    _cursor.endEditBlock();
 }
 
 /**
@@ -102,7 +144,8 @@ QString localCloseQuote()
 {
     return localeQuote(false);
 }
-/** @{ */
+/** @} */
+
 } // namespace
 
 
@@ -187,23 +230,17 @@ void BaseTextEdit::setTextUnderline(bool _underline)
 
 void BaseTextEdit::invertTextBold()
 {
-    auto cursor = textCursor();
-    cursor.setPosition(std::max(cursor.selectionStart(), cursor.selectionEnd()));
-    setTextBold(!cursor.charFormat().font().bold());
+    setTextBold(!cursorForFormatInversion(textCursor()).charFormat().font().bold());
 }
 
 void BaseTextEdit::invertTextItalic()
 {
-    auto cursor = textCursor();
-    cursor.setPosition(std::max(cursor.selectionStart(), cursor.selectionEnd()));
-    setTextItalic(!cursor.charFormat().font().italic());
+    setTextItalic(!cursorForFormatInversion(textCursor()).charFormat().font().italic());
 }
 
 void BaseTextEdit::invertTextUnderline()
 {
-    auto cursor = textCursor();
-    cursor.setPosition(std::max(cursor.selectionStart(), cursor.selectionEnd()));
-    setTextUnderline(!cursor.charFormat().font().underline());
+    setTextUnderline(!cursorForFormatInversion(textCursor()).charFormat().font().underline());
 }
 
 void BaseTextEdit::setTextFont(const QFont& _font)
