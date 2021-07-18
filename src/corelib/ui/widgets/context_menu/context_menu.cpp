@@ -294,8 +294,6 @@ ContextMenu::~ContextMenu()
         }
 
         removeAction(action);
-
-        action->deleteLater();
     }
 }
 
@@ -312,11 +310,6 @@ void ContextMenu::setActions(const QVector<QAction*>& _actions)
         }
 
         removeAction(action);
-
-        if (auto widgetAction = qobject_cast<QWidgetAction*>(action)) {
-            widgetAction->defaultWidget()->deleteLater();
-        }
-        action->deleteLater();
     }
 
     //
