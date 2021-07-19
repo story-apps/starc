@@ -126,10 +126,29 @@ CreateDocumentDialog::CreateDocumentDialog(QWidget* _parent)
         d->documentName->setFocus();
         d->updateDocumentInfo();
     });
+    connect(d->documentName, &TextField::textChanged, this,
+            [this] { d->documentName->setError({}); });
     connect(d->createButton, &Button::clicked, this, [this] {
         const auto documentTypeData = d->documentType->currentIndex().data(kMimeTypeRole);
         Q_ASSERT(documentTypeData.isValid());
         const auto documentType = static_cast<Domain::DocumentObjectType>(documentTypeData.toInt());
+
+        //
+        // Персонажи и локации нельзя создавать без названия
+        //
+        if (d->documentName->text().isEmpty()) {
+            QString errorMessage;
+            if (documentType == Domain::DocumentObjectType::Character) {
+                errorMessage = tr("The character should have a name");
+            } else if (documentType == Domain::DocumentObjectType::Location) {
+                errorMessage = tr("The location should have a name");
+            }
+            if (!errorMessage.isEmpty()) {
+                d->documentName->setError(errorMessage);
+                return;
+            }
+        }
+
         emit createPressed(documentType, d->documentName->text());
     });
     connect(d->cancelButton, &Button::clicked, this, &CreateDocumentDialog::hideDialog);
