@@ -24,8 +24,6 @@
 namespace Ui {
 
 namespace {
-const int kTypeDataRole = Qt::UserRole + 100;
-
 const QString kSettingsKey = "simple-text";
 const QString kScaleFactorKey = kSettingsKey + "/scale-factor";
 const QString kSidebarStateKey = kSettingsKey + "/sidebar-state";

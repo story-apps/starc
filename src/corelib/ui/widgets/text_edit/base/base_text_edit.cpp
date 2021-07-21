@@ -56,23 +56,11 @@ void updateSelectionFormatting(QTextCursor _cursor, Func updateFormat)
     const int lastPosition = positionInterval.second;
     while (position < lastPosition) {
         const auto block = _cursor.document()->findBlock(position);
-
-        //
-        // В пустых блоках форматы могут отсутствовать
-        //
-        if (block.textFormats().isEmpty()) {
-            position = block.next().position();
-            continue;
-        }
-
         for (const auto& format : block.textFormats()) {
             const auto formatStart = block.position() + format.start;
             const auto formatEnd = formatStart + format.length;
-            if (position > formatEnd) {
+            if (position >= formatEnd) {
                 continue;
-            } else if (position == formatEnd) {
-                ++position;
-                break;
             } else if (formatStart >= lastPosition) {
                 break;
             }
@@ -87,6 +75,12 @@ void updateSelectionFormatting(QTextCursor _cursor, Func updateFormat)
             _cursor.movePosition(QTextCursor::NextCharacter);
             position = _cursor.position();
         }
+
+        if (!block.next().isValid()) {
+            break;
+        }
+
+        position = block.next().position();
     }
 
     _cursor.endEditBlock();

@@ -43,7 +43,7 @@ public:
     SimpleTextEdit* q = nullptr;
 
     QPointer<BusinessLayer::TextModel> model;
-    BusinessLayer::TextDocument document;
+    BusinessLayer::SimpleTextDocument document;
 
     bool showSceneNumber = false;
     bool showSceneNumberOnLeft = false;

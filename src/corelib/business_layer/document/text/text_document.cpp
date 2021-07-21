@@ -29,10 +29,10 @@ namespace BusinessLayer {
 enum class DocumentState { Undefined, Loading, Changing, Correcting, Ready };
 
 
-class TextDocument::Implementation
+class SimpleTextDocument::Implementation
 {
 public:
-    explicit Implementation(TextDocument* _document);
+    explicit Implementation(SimpleTextDocument* _document);
 
     /**
      * @brief Получить шаблон документа
@@ -61,7 +61,7 @@ public:
                                bool& _isFirstParagraph);
 
 
-    TextDocument* q = nullptr;
+    SimpleTextDocument* q = nullptr;
 
     DocumentState state = DocumentState::Undefined;
     QString templateId;
@@ -70,17 +70,17 @@ public:
     std::map<int, BusinessLayer::TextModelItem*> positionsToItems;
 };
 
-TextDocument::Implementation::Implementation(TextDocument* _document)
+SimpleTextDocument::Implementation::Implementation(SimpleTextDocument* _document)
     : q(_document)
 {
 }
 
-const SimpleTextTemplate& TextDocument::Implementation::documentTemplate() const
+const SimpleTextTemplate& SimpleTextDocument::Implementation::documentTemplate() const
 {
     return TemplatesFacade::simpleTextTemplate(templateId);
 }
 
-void TextDocument::Implementation::correctPositionsToItems(
+void SimpleTextDocument::Implementation::correctPositionsToItems(
     std::map<int, BusinessLayer::TextModelItem*>::iterator _from, int _distance)
 {
     if (_from == positionsToItems.end()) {
@@ -106,14 +106,15 @@ void TextDocument::Implementation::correctPositionsToItems(
     }
 }
 
-void TextDocument::Implementation::correctPositionsToItems(int _fromPosition, int _distance)
+void SimpleTextDocument::Implementation::correctPositionsToItems(int _fromPosition, int _distance)
 {
     correctPositionsToItems(positionsToItems.lower_bound(_fromPosition), _distance);
 }
 
-void TextDocument::Implementation::readModelItemContent(int _itemRow, const QModelIndex& _parent,
-                                                        QTextCursor& _cursor,
-                                                        bool& _isFirstParagraph)
+void SimpleTextDocument::Implementation::readModelItemContent(int _itemRow,
+                                                              const QModelIndex& _parent,
+                                                              QTextCursor& _cursor,
+                                                              bool& _isFirstParagraph)
 {
     const auto itemIndex = model->index(_itemRow, 0, _parent);
     const auto item = model->itemForIndex(itemIndex);
@@ -232,9 +233,9 @@ void TextDocument::Implementation::readModelItemContent(int _itemRow, const QMod
     }
 }
 
-void TextDocument::Implementation::readModelItemsContent(const QModelIndex& _parent,
-                                                         QTextCursor& _cursor,
-                                                         bool& _isFirstParagraph)
+void SimpleTextDocument::Implementation::readModelItemsContent(const QModelIndex& _parent,
+                                                               QTextCursor& _cursor,
+                                                               bool& _isFirstParagraph)
 {
     for (int itemRow = 0; itemRow < model->rowCount(_parent); ++itemRow) {
         readModelItemContent(itemRow, _parent, _cursor, _isFirstParagraph);
@@ -251,16 +252,17 @@ void TextDocument::Implementation::readModelItemsContent(const QModelIndex& _par
 // ****
 
 
-TextDocument::TextDocument(QObject* _parent)
+SimpleTextDocument::SimpleTextDocument(QObject* _parent)
     : QTextDocument(_parent)
     , d(new Implementation(this))
 {
-    connect(this, &TextDocument::contentsChange, this, &TextDocument::updateModelOnContentChange);
+    connect(this, &SimpleTextDocument::contentsChange, this,
+            &SimpleTextDocument::updateModelOnContentChange);
 }
 
-TextDocument::~TextDocument() = default;
+SimpleTextDocument::~SimpleTextDocument() = default;
 
-void TextDocument::setTemplateId(const QString& _templateId)
+void SimpleTextDocument::setTemplateId(const QString& _templateId)
 {
     if (d->templateId == _templateId) {
         return;
@@ -269,7 +271,7 @@ void TextDocument::setTemplateId(const QString& _templateId)
     d->templateId = _templateId;
 }
 
-void TextDocument::setModel(BusinessLayer::TextModel* _model, bool _canChangeModel)
+void SimpleTextDocument::setModel(BusinessLayer::TextModel* _model, bool _canChangeModel)
 {
     d->state = DocumentState::Loading;
 
@@ -648,7 +650,7 @@ void TextDocument::setModel(BusinessLayer::TextModel* _model, bool _canChangeMod
     d->state = DocumentState::Ready;
 }
 
-int TextDocument::itemPosition(const QModelIndex& _index, bool _fromStart)
+int SimpleTextDocument::itemPosition(const QModelIndex& _index, bool _fromStart)
 {
     auto item = d->model->itemForIndex(_index);
     if (item == nullptr) {
@@ -667,17 +669,17 @@ int TextDocument::itemPosition(const QModelIndex& _index, bool _fromStart)
     return -1;
 }
 
-int TextDocument::itemStartPosition(const QModelIndex& _index)
+int SimpleTextDocument::itemStartPosition(const QModelIndex& _index)
 {
     return itemPosition(_index, true);
 }
 
-int TextDocument::itemEndPosition(const QModelIndex& _index)
+int SimpleTextDocument::itemEndPosition(const QModelIndex& _index)
 {
     return itemPosition(_index, false);
 }
 
-QString TextDocument::chapterNumber(const QTextBlock& _forBlock) const
+QString SimpleTextDocument::chapterNumber(const QTextBlock& _forBlock) const
 {
     if (_forBlock.userData() == nullptr) {
         return {};
@@ -697,7 +699,7 @@ QString TextDocument::chapterNumber(const QTextBlock& _forBlock) const
     return itemScene->number().value;
 }
 
-QString TextDocument::mimeFromSelection(int _fromPosition, int _toPosition) const
+QString SimpleTextDocument::mimeFromSelection(int _fromPosition, int _toPosition) const
 {
     const auto fromBlock = findBlock(_fromPosition);
     if (fromBlock.userData() == nullptr) {
@@ -726,7 +728,7 @@ QString TextDocument::mimeFromSelection(int _fromPosition, int _toPosition) cons
                                        toPositionInBlock, clearUuid);
 }
 
-void TextDocument::insertFromMime(int _position, const QString& _mimeData)
+void SimpleTextDocument::insertFromMime(int _position, const QString& _mimeData)
 {
     const auto block = findBlock(_position);
     if (block.userData() == nullptr) {
@@ -743,7 +745,7 @@ void TextDocument::insertFromMime(int _position, const QString& _mimeData)
     d->model->insertFromMime(itemIndex, positionInBlock, _mimeData);
 }
 
-void TextDocument::addParagraph(BusinessLayer::TextParagraphType _type, QTextCursor _cursor)
+void SimpleTextDocument::addParagraph(BusinessLayer::TextParagraphType _type, QTextCursor _cursor)
 {
     _cursor.beginEditBlock();
 
@@ -797,8 +799,8 @@ void TextDocument::addParagraph(BusinessLayer::TextParagraphType _type, QTextCur
     _cursor.endEditBlock();
 }
 
-void TextDocument::setParagraphType(BusinessLayer::TextParagraphType _type,
-                                    const QTextCursor& _cursor)
+void SimpleTextDocument::setParagraphType(BusinessLayer::TextParagraphType _type,
+                                          const QTextCursor& _cursor)
 {
     const auto currentParagraphType = TextBlockStyle::forBlock(_cursor.block());
     if (currentParagraphType == _type) {
@@ -821,8 +823,8 @@ void TextDocument::setParagraphType(BusinessLayer::TextParagraphType _type,
     cursor.endEditBlock();
 }
 
-void TextDocument::applyParagraphType(BusinessLayer::TextParagraphType _type,
-                                      const QTextCursor& _cursor)
+void SimpleTextDocument::applyParagraphType(BusinessLayer::TextParagraphType _type,
+                                            const QTextCursor& _cursor)
 {
     auto cursor = _cursor;
     cursor.beginEditBlock();
@@ -873,8 +875,8 @@ void TextDocument::applyParagraphType(BusinessLayer::TextParagraphType _type,
     cursor.endEditBlock();
 }
 
-void TextDocument::addReviewMark(const QColor& _textColor, const QColor& _backgroundColor,
-                                 const QString& _comment, const QTextCursor& _cursor)
+void SimpleTextDocument::addReviewMark(const QColor& _textColor, const QColor& _backgroundColor,
+                                       const QString& _comment, const QTextCursor& _cursor)
 {
     TextModelTextItem::ReviewMark reviewMark;
     if (_textColor.isValid()) {
@@ -890,7 +892,8 @@ void TextDocument::addReviewMark(const QColor& _textColor, const QColor& _backgr
     cursor.mergeCharFormat(reviewMark.charFormat());
 }
 
-void TextDocument::updateModelOnContentChange(int _position, int _charsRemoved, int _charsAdded)
+void SimpleTextDocument::updateModelOnContentChange(int _position, int _charsRemoved,
+                                                    int _charsAdded)
 {
     if (d->model == nullptr) {
         return;
@@ -1153,7 +1156,6 @@ void TextDocument::updateModelOnContentChange(int _position, int _charsRemoved, 
             //
             auto textItem = new TextModelTextItem;
             textItem->setParagraphType(paragraphType);
-            textItem->setAlignment(block.blockFormat().alignment());
             if (d->documentTemplate().blockStyle(paragraphType).align()
                 != block.blockFormat().alignment()) {
                 textItem->setAlignment(block.blockFormat().alignment());
@@ -1367,6 +1369,30 @@ void TextDocument::updateModelOnContentChange(int _position, int _charsRemoved, 
         // Запомним новый блок, или обновим старый
         //
         d->positionsToItems.insert_or_assign(block.position(), previousItem);
+
+        //
+        // Скорректируем высоту блока, если нужно
+        //
+        {
+            qreal blockHeight = 0.0;
+            const auto formats = block.textFormats();
+            if (formats.isEmpty()) {
+                blockHeight
+                    = d->documentTemplate().blockStyle(paragraphType).blockFormat().lineHeight();
+            } else {
+                for (const auto& format : formats) {
+                    blockHeight
+                        = std::max(blockHeight, TextHelper::fineLineSpacing(format.format.font()));
+                }
+            }
+            if (!qFuzzyCompare(block.blockFormat().lineHeight(), blockHeight)) {
+                auto blockFormat = block.blockFormat();
+                blockFormat.setLineHeight(blockHeight, QTextBlockFormat::FixedHeight);
+                auto cursor = TextCursor(this);
+                cursor.setPosition(block.position());
+                cursor.setBlockFormat(blockFormat);
+            }
+        }
 
         //
         // Переходим к обработке следующего блока

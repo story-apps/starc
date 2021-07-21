@@ -15,13 +15,13 @@ namespace BusinessLayer {
 /**
  * @brief Класс текстового документа
  */
-class CORE_LIBRARY_EXPORT TextDocument : public QTextDocument
+class CORE_LIBRARY_EXPORT SimpleTextDocument : public QTextDocument
 {
     Q_OBJECT
 
 public:
-    explicit TextDocument(QObject* _parent = nullptr);
-    ~TextDocument() override;
+    explicit SimpleTextDocument(QObject* _parent = nullptr);
+    ~SimpleTextDocument() override;
 
     /**
      * @brief Задать идентификатор шаблона, с которым работает документ
