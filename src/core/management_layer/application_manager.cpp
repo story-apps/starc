@@ -591,6 +591,7 @@ void ApplicationManager::Implementation::setTranslation(QLocale::Language _langu
     // Настроим дизайн систему так, чтобы она использовала шрифт подходящий для используемого языка
     //
     Ui::DesignSystem::updateLanguage();
+    QApplication::postEvent(q, new DesignSystemChangeEvent);
 }
 
 void ApplicationManager::Implementation::setTheme(Ui::ApplicationTheme _theme)

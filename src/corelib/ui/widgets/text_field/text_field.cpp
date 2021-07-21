@@ -278,8 +278,8 @@ QRectF TextField::Implementation::labelRect(const qreal fontHeight) const
         labelTopLeft.setY(margins().top());
     }
     return QRectF(labelTopLeft,
-                  QSizeF(q->width() - labelTopLeft.x() - contentMargins().left() - margins().right()
-                             - (q->isRightToLeft() ? 0 : offset),
+                  QSizeF(q->width() - labelTopLeft.x() - contentMargins().right()
+                             - margins().right() - (q->isRightToLeft() ? 0 : offset),
                          fontHeight));
 }
 
