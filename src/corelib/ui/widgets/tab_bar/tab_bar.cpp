@@ -46,38 +46,65 @@ public:
      */
     qreal contentWidth() const;
 
+    /**
+     * @brief Анимировать клик
+     */
+    void animateClick();
+
 
     bool isFixed = false;
     QVector<Tab> tabs;
     int currentTabIndex = 0;
+    int hoverTabIndex = -1;
     struct ScrollState {
         qreal maximum = 0.0;
         qreal current = 0.0;
     } scrollState;
     QVariantAnimation scrollingAnimation;
-    QVariantAnimation decorationAnimation;
+
+    /**
+     * @brief Декорация подчёркивания активной вкладки
+     */
+    QVariantAnimation activeTabIndicatorAnimation;
+
+    /**
+     * @brief  Декорации таба при клике
+     */
+    QPointF decorationCenterPosition;
+    QVariantAnimation decorationRadiusAnimation;
+    QVariantAnimation decorationOpacityAnimation;
 };
 
 TabBar::Implementation::Implementation()
 {
     scrollingAnimation.setDuration(160);
     scrollingAnimation.setEasingCurve(QEasingCurve::OutQuad);
-    decorationAnimation.setDuration(160);
-    decorationAnimation.setEasingCurve(QEasingCurve::OutQuad);
+    activeTabIndicatorAnimation.setDuration(160);
+    activeTabIndicatorAnimation.setEasingCurve(QEasingCurve::OutQuad);
+
+    decorationRadiusAnimation.setEasingCurve(QEasingCurve::InQuad);
+    decorationRadiusAnimation.setStartValue(1.0);
+    decorationRadiusAnimation.setDuration(240);
+
+    decorationOpacityAnimation.setEasingCurve(QEasingCurve::InQuad);
+    decorationOpacityAnimation.setStartValue(0.5);
+    decorationOpacityAnimation.setEndValue(0.0);
+    decorationOpacityAnimation.setDuration(420);
 }
 
 qreal TabBar::Implementation::tabWidthHint(const Tab& _tab) const
 {
     return qMax(Ui::DesignSystem::tab().minimumWidth(),
                 QFontMetricsF(Ui::DesignSystem::font().button()).boundingRect(_tab.name).width()
-                    + Ui::DesignSystem::tab().margins().top()
-                    + Ui::DesignSystem::tab().margins().top());
+                    + Ui::DesignSystem::tab().margins().left()
+                    + Ui::DesignSystem::tab().margins().right());
 }
 
 qreal TabBar::Implementation::tabWidthHintForFixed(int _width) const
 {
     const int visibleTabs
         = std::count_if(tabs.begin(), tabs.end(), [](const Tab& _tab) { return _tab.visible; });
+    Q_ASSERT(visibleTabs != 0);
     return _width / visibleTabs;
 }
 
@@ -110,6 +137,13 @@ qreal TabBar::Implementation::contentWidth() const
     return contentWidth;
 }
 
+void TabBar::Implementation::animateClick()
+{
+    decorationOpacityAnimation.setCurrentTime(0);
+    decorationRadiusAnimation.start();
+    decorationOpacityAnimation.start();
+}
+
 
 // ****
 
@@ -119,6 +153,7 @@ TabBar::TabBar(QWidget* _parent)
     , d(new Implementation)
 {
     setFocusPolicy(Qt::StrongFocus);
+    setMouseTracking(true);
 
     ScrollerHelper::addScroller(this);
 
@@ -134,6 +169,12 @@ TabBar::TabBar(QWidget* _parent)
                     d->scrollState.current = d->scrollState.maximum;
                 } else {
                     d->scrollState.current = scrollValue;
+
+                    //
+                    // дополнительно коррктируем позицию центра декорации, куда кликнул пользователь
+                    //
+                    d->decorationCenterPosition
+                        += QPointF(d->scrollState.current - scrollValue, 0.0);
                 }
                 update();
             });
@@ -141,7 +182,12 @@ TabBar::TabBar(QWidget* _parent)
     //
     // При обновлении положения декорации обновим отрисовку
     //
-    connect(&d->decorationAnimation, &QVariantAnimation::valueChanged, this, [this] { update(); });
+    connect(&d->activeTabIndicatorAnimation, &QVariantAnimation::valueChanged, this,
+            qOverload<>(&TabBar::update));
+    connect(&d->decorationRadiusAnimation, &QVariantAnimation::valueChanged, this,
+            qOverload<>(&TabBar::update));
+    connect(&d->decorationOpacityAnimation, &QVariantAnimation::valueChanged, this,
+            qOverload<>(&TabBar::update));
 }
 
 TabBar::~TabBar() = default;
@@ -250,7 +296,7 @@ void TabBar::setCurrentTab(int _index)
     d->currentTabIndex = _index;
 
     //
-    // Если вкладки не растянуты на всю ширину, пробуем сместить выбранную вкладку в центр
+    // Если вкладки не растянуты на всю ширину, смещаем выбранную вкладку, чтобы она была видна
     //
     if (!d->isFixed) {
         //
@@ -269,9 +315,16 @@ void TabBar::setCurrentTab(int _index)
         const qreal tabWidth = d->tabWidthHint(d->tabs.at(_index));
         const qreal currentTabCenter = tabX + tabWidth / 2.0;
         //
-        // ... таб должен быть расположен в центре экрана
+        // ... таб должен быть расположен внутри видимой области
         //
-        const qreal targetTabCenter = width() / 2.0;
+        qreal targetTabCenter = 0.0;
+        if (tabX < Ui::DesignSystem::layout().px48()) {
+            targetTabCenter = Ui::DesignSystem::layout().px48() + tabWidth / 2.0;
+        } else if (tabX + tabWidth > width() - Ui::DesignSystem::layout().px48()) {
+            targetTabCenter = width() - Ui::DesignSystem::layout().px48() - tabWidth / 2.0;
+        } else {
+            targetTabCenter = currentTabCenter;
+        }
         //
         // ... рассчитаем на сколько нужно сместить вьюпорт
         //
@@ -287,7 +340,7 @@ void TabBar::setCurrentTab(int _index)
     //
     // Запустим анимацию декорации
     //
-    d->decorationAnimation.start();
+    d->activeTabIndicatorAnimation.start();
 
     //
     // Надо бы перерисоваться
@@ -399,6 +452,34 @@ void TabBar::paintEvent(QPaintEvent* _event)
         const QRectF tabBoundingRect = QRectF(QPointF(tabX, 0.0), QSizeF(tabWidth, height()));
 
         //
+        // Ховер
+        //
+        if (isTabCurrent && hasFocus()) {
+            painter.setOpacity(Ui::DesignSystem::focusBackgroundOpacity());
+            painter.fillRect(tabBoundingRect, Ui::DesignSystem::color().secondary());
+        } else if (underMouse() && tabBoundingRect.contains(mapFromGlobal(QCursor::pos()))) {
+            painter.setOpacity(Ui::DesignSystem::hoverBackgroundOpacity());
+            painter.fillRect(tabBoundingRect, Ui::DesignSystem::color().secondary());
+        }
+
+        //
+        // Декорация
+        //
+        if (isTabCurrent
+            && (d->decorationRadiusAnimation.state() == QVariantAnimation::Running
+                || d->decorationOpacityAnimation.state() == QVariantAnimation::Running)) {
+            painter.setClipRect(tabBoundingRect);
+            painter.setPen(Qt::NoPen);
+            painter.setBrush(Ui::DesignSystem::color().secondary());
+            painter.setOpacity(d->decorationOpacityAnimation.currentValue().toReal());
+            painter.drawEllipse(d->decorationCenterPosition,
+                                d->decorationRadiusAnimation.currentValue().toReal(),
+                                d->decorationRadiusAnimation.currentValue().toReal());
+            painter.setOpacity(1.0);
+            painter.setClipRect(QRect(), Qt::NoClip);
+        }
+
+        //
         // Иконка и текст
         //
         painter.setPen(isTabCurrent ? Ui::DesignSystem::color().secondary() : textColor());
@@ -426,16 +507,16 @@ void TabBar::paintEvent(QPaintEvent* _event)
                         tabBoundingRect.bottom() - Ui::DesignSystem::tabBar().underlineHeight()),
                 tabBoundingRect.bottomRight());
 
-            if (d->decorationAnimation.state() != QAbstractAnimation::Running) {
-                d->decorationAnimation.setStartValue(decorationRect);
+            if (d->activeTabIndicatorAnimation.state() != QAbstractAnimation::Running) {
+                d->activeTabIndicatorAnimation.setStartValue(decorationRect);
             } else {
-                d->decorationAnimation.setEndValue(decorationRect);
+                d->activeTabIndicatorAnimation.setEndValue(decorationRect);
             }
 
             const QRectF currentDecorationRect
-                = d->decorationAnimation.state() == QAbstractAnimation::Running
-                    && d->decorationAnimation.currentValue().isValid()
-                ? d->decorationAnimation.currentValue().toRectF()
+                = d->activeTabIndicatorAnimation.state() == QAbstractAnimation::Running
+                    && d->activeTabIndicatorAnimation.currentValue().isValid()
+                ? d->activeTabIndicatorAnimation.currentValue().toRectF()
                 : decorationRect;
             painter.fillRect(currentDecorationRect, painter.pen().color());
         }
@@ -446,6 +527,55 @@ void TabBar::paintEvent(QPaintEvent* _event)
     painter.setOpacity(Ui::DesignSystem::disabledTextOpacity());
     painter.setPen(Ui::DesignSystem::color().shadow());
     painter.drawLine(rect().bottomLeft(), rect().bottomRight());
+}
+
+void TabBar::enterEvent(QEvent* _event)
+{
+    Q_UNUSED(_event);
+    update();
+}
+
+void TabBar::leaveEvent(QEvent* _event)
+{
+    Q_UNUSED(_event)
+    d->hoverTabIndex = -1;
+    update();
+}
+
+void TabBar::mouseMoveEvent(QMouseEvent* _event)
+{
+    qreal tabX = d->isFixed ? 0 : Ui::DesignSystem::tabBar().scrollableLeftMargin();
+    tabX -= d->scrollState.current;
+    for (int tabIndex = 0; tabIndex < d->tabs.size(); ++tabIndex) {
+        const Tab& tab = d->tabs.at(tabIndex);
+        if (!tab.visible) {
+            continue;
+        }
+
+        const qreal tabWidth = d->isFixed ? width() / d->tabs.size() : d->tabWidthHint(tab);
+        if (tabX < _event->pos().x() && _event->pos().x() < tabX + tabWidth) {
+            if (d->hoverTabIndex != tabIndex) {
+                d->hoverTabIndex = tabIndex;
+                update();
+            }
+            return;
+        }
+
+        tabX += tabWidth;
+    }
+
+    if (d->hoverTabIndex != -1) {
+        d->hoverTabIndex = -1;
+        update();
+    }
+}
+
+void TabBar::mousePressEvent(QMouseEvent* _event)
+{
+    d->decorationCenterPosition = _event->pos();
+    d->decorationRadiusAnimation.setEndValue(
+        static_cast<qreal>(d->tabSizeHint(d->tabs[d->currentTabIndex]).width()));
+    d->animateClick();
 }
 
 void TabBar::mouseReleaseEvent(QMouseEvent* _event)

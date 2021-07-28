@@ -75,6 +75,19 @@ protected:
     void paintEvent(QPaintEvent* _event) override;
 
     /**
+     * @brief Обновляем виджет для корректного отображения ховер элемента
+     */
+    void enterEvent(QEvent* _event) override;
+    void leaveEvent(QEvent* _event) override;
+
+    /**
+     * @brief Обновление отрисовки при смене элемента на который наведена мышь
+     */
+    void mouseMoveEvent(QMouseEvent* _event) override;
+
+    void mousePressEvent(QMouseEvent* _event) override;
+
+    /**
      * @brief Смена активной вкладки при клике мышкой
      */
     void mouseReleaseEvent(QMouseEvent* _event) override;
