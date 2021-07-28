@@ -153,6 +153,7 @@ SOURCES += \
     ui/widgets/drawer/drawer.cpp \
     ui/widgets/floating_tool_bar/floating_tool_bar.cpp \
     ui/widgets/floating_tool_bar/floating_toolbar_animator.cpp \
+    ui/widgets/icon_button/icon_button.cpp \
     ui/widgets/image/image_card.cpp \
     ui/widgets/image/image_cropping_dialog.cpp \
     ui/widgets/image_cropper/image_cropper.cpp \
@@ -180,7 +181,6 @@ SOURCES += \
     ui/widgets/text_edit/spell_check/spell_checker.cpp \
     ui/widgets/text_edit/spell_check/syntax_highlighter.cpp \
     ui/widgets/text_field/text_field.cpp \
-    ui/widgets/toggle_button/toggle_button.cpp \
     ui/widgets/tree/tree.cpp \
     ui/widgets/tree/tree_delegate.cpp \
     ui/widgets/tree/tree_header_view.cpp \
@@ -318,6 +318,7 @@ HEADERS += \
     ui/widgets/drawer/drawer.h \
     ui/widgets/floating_tool_bar/floating_tool_bar.h \
     ui/widgets/floating_tool_bar/floating_toolbar_animator.h \
+    ui/widgets/icon_button/icon_button.h \
     ui/widgets/image/image_card.h \
     ui/widgets/image/image_cropping_dialog.h \
     ui/widgets/image_cropper/image_cropper.h \
@@ -346,7 +347,6 @@ HEADERS += \
     ui/widgets/text_edit/spell_check/spell_checker.h \
     ui/widgets/text_edit/spell_check/syntax_highlighter.h \
     ui/widgets/text_field/text_field.h \
-    ui/widgets/toggle_button/toggle_button.h \
     ui/widgets/tree/tree.h \
     ui/widgets/tree/tree_delegate.h \
     ui/widgets/tree/tree_header_view.h \

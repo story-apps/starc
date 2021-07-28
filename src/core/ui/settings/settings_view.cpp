@@ -7,6 +7,8 @@
 #include <ui/widgets/card/card.h>
 #include <ui/widgets/check_box/check_box.h>
 #include <ui/widgets/combo_box/combo_box.h>
+#include <ui/widgets/context_menu/context_menu.h>
+#include <ui/widgets/icon_button/icon_button.h>
 #include <ui/widgets/label/label.h>
 #include <ui/widgets/radio_button/radio_button.h>
 #include <ui/widgets/radio_button/radio_button_group.h>
@@ -14,6 +16,7 @@
 #include <ui/widgets/slider/slider.h>
 #include <ui/widgets/text_field/text_field.h>
 
+#include <QAction>
 #include <QFileDialog>
 #include <QGridLayout>
 #include <QLocale>
@@ -109,6 +112,7 @@ public:
 
     QScrollArea* content = nullptr;
     QVariantAnimation scrollAnimation;
+    ContextMenu* contextMenu = nullptr;
 
     //
     // Application
@@ -125,7 +129,7 @@ public:
     CheckBox* useSpellChecker = nullptr;
     ComboBox* spellCheckerLanguage = nullptr;
     QStandardItemModel* spellCheckerLanguagesModel = nullptr;
-    IconsMidLabel* spellCheckerUserDictionary = nullptr;
+    IconButton* spellCheckerUserDictionary = nullptr;
     //
     // ... User interface
     //
@@ -161,7 +165,7 @@ public:
     //
     H6Label* simpleTextEditorTitle = nullptr;
     ComboBox* simpleTextEditorDefaultTemplate = nullptr;
-    IconsMidLabel* simpleTextEditorDefaultTemplateOptions = nullptr;
+    IconButton* simpleTextEditorDefaultTemplateOptions = nullptr;
     CheckBox* simpleTextEditorHighlightCurrentLine = nullptr;
     //
     // ... simpleText navigator
@@ -186,7 +190,7 @@ public:
     //
     H6Label* screenplayEditorTitle = nullptr;
     ComboBox* screenplayEditorDefaultTemplate = nullptr;
-    IconsMidLabel* screenplayEditorDefaultTemplateOptions = nullptr;
+    IconButton* screenplayEditorDefaultTemplateOptions = nullptr;
     CheckBox* screenplayEditorShowSceneNumber = nullptr;
     CheckBox* screenplayEditorShowSceneNumberOnLeft = nullptr;
     CheckBox* screenplayEditorShowSceneNumberOnRight = nullptr;
@@ -227,6 +231,7 @@ public:
 
 SettingsView::Implementation::Implementation(QWidget* _parent)
     : content(new QScrollArea(_parent))
+    , contextMenu(new ContextMenu(_parent))
     //
     , applicationCard(new Card(content))
     , applicationCardLayout(new QGridLayout)
@@ -237,7 +242,7 @@ SettingsView::Implementation::Implementation(QWidget* _parent)
     , useSpellChecker(new CheckBox(applicationCard))
     , spellCheckerLanguage(new ComboBox(applicationCard))
     , spellCheckerLanguagesModel(buildSpellCheckerLanguagesModel(spellCheckerLanguage))
-    , spellCheckerUserDictionary(new IconsMidLabel(applicationCard))
+    , spellCheckerUserDictionary(new IconButton(applicationCard))
     , applicationUserInterfaceTitle(new H6Label(applicationCard))
     , theme(new Body1Label(applicationCard))
     , changeTheme(new Button(applicationCard))
@@ -257,7 +262,7 @@ SettingsView::Implementation::Implementation(QWidget* _parent)
     , simpleTextTitle(new H5Label(simpleTextCard))
     , simpleTextEditorTitle(new H6Label(simpleTextCard))
     , simpleTextEditorDefaultTemplate(new ComboBox(simpleTextCard))
-    , simpleTextEditorDefaultTemplateOptions(new IconsMidLabel(simpleTextCard))
+    , simpleTextEditorDefaultTemplateOptions(new IconButton(simpleTextCard))
     , simpleTextEditorHighlightCurrentLine(new CheckBox(simpleTextCard))
     , simpleTextNavigatorTitle(new H6Label(simpleTextCard))
     , simpleTextNavigatorShowSceneText(new CheckBox(simpleTextCard))
@@ -272,7 +277,7 @@ SettingsView::Implementation::Implementation(QWidget* _parent)
     , screenplayTitle(new H5Label(screenplayCard))
     , screenplayEditorTitle(new H6Label(screenplayCard))
     , screenplayEditorDefaultTemplate(new ComboBox(screenplayCard))
-    , screenplayEditorDefaultTemplateOptions(new IconsMidLabel(screenplayCard))
+    , screenplayEditorDefaultTemplateOptions(new IconButton(screenplayCard))
     , screenplayEditorShowSceneNumber(new CheckBox(screenplayCard))
     , screenplayEditorShowSceneNumberOnLeft(new CheckBox(screenplayCard))
     , screenplayEditorShowSceneNumberOnRight(new CheckBox(screenplayCard))
@@ -334,7 +339,6 @@ void SettingsView::Implementation::initApplicationCard()
     spellCheckerLanguage->setEnabled(false);
     spellCheckerLanguage->setModel(spellCheckerLanguagesModel);
     spellCheckerUserDictionary->setIcon(u8"\U000F0900");
-    spellCheckerUserDictionary->setAlignment(Qt::AlignCenter);
     spellCheckerUserDictionary->hide();
     // 0 - 0.5, 500 - 1, 3500 - 4
     scaleFactor->setMaximumValue(3500);
@@ -413,7 +417,6 @@ void SettingsView::Implementation::initSimpleTextCard()
     simpleTextEditorDefaultTemplate->setModel(
         BusinessLayer::TemplatesFacade::simpleTextTemplates());
     simpleTextEditorDefaultTemplateOptions->setIcon(u8"\U000F01D9");
-    simpleTextEditorDefaultTemplateOptions->setAlignment(Qt::AlignCenter);
     simpleTextEditorDefaultTemplateOptions->hide();
     //
     auto linesGroup = new RadioButtonGroup(simpleTextCard);
@@ -474,8 +477,6 @@ void SettingsView::Implementation::initScreenplayCard()
     screenplayEditorDefaultTemplate->setModel(
         BusinessLayer::TemplatesFacade::screenplayTemplates());
     screenplayEditorDefaultTemplateOptions->setIcon(u8"\U000F01D9");
-    screenplayEditorDefaultTemplateOptions->setAlignment(Qt::AlignCenter);
-    screenplayEditorDefaultTemplateOptions->hide();
     screenplayEditorShowSceneNumberOnLeft->setEnabled(false);
     screenplayEditorShowSceneNumberOnLeft->setChecked(true);
     screenplayEditorShowSceneNumberOnRight->setEnabled(false);
@@ -610,14 +611,11 @@ void SettingsView::Implementation::scrollToWidget(QWidget* childWidget)
 
 
 SettingsView::SettingsView(QWidget* _parent)
-    : Widget(_parent)
+    : StackWidget(_parent)
     , d(new Implementation(this))
 {
-    QVBoxLayout* layout = new QVBoxLayout;
-    layout->setContentsMargins({});
-    layout->setSpacing(0);
-    layout->addWidget(d->content);
-    setLayout(layout);
+    setAnimationType(StackWidget::AnimationType::FadeThrough);
+    showDefaultPage();
 
     connect(&d->scrollAnimation, &QVariantAnimation::valueChanged, this,
             [this](const QVariant& _value) {
@@ -679,7 +677,7 @@ SettingsView::SettingsView(QWidget* _parent)
     connect(d->simpleTextEditorHighlightCurrentLine, &CheckBox::checkedChanged, this,
             &SettingsView::simpleTextEditorHighlightCurrentLineChanged);
     //
-    // ... навигатор сценария
+    // ... навигатор текста
     //
     connect(d->simpleTextNavigatorShowSceneText, &CheckBox::checkedChanged,
             d->simpleTextNavigatorSceneDescriptionLines1, &RadioButton::setEnabled);
@@ -721,6 +719,16 @@ SettingsView::SettingsView(QWidget* _parent)
     //
     // ... Редактор сценария
     //
+    connect(d->screenplayEditorDefaultTemplateOptions, &IconButton::clicked, this, [this] {
+        auto editAction = new QAction(tr("Edit"));
+        connect(editAction, &QAction::triggered, this,
+                &SettingsView::editCurrentScreenplayEditorTemplate);
+        auto copyAction = new QAction(tr("Duplicate"));
+        auto saveAction = new QAction(tr("Save"));
+        auto loadAction = new QAction(tr("Load"));
+        d->contextMenu->setActions({ editAction, copyAction, saveAction, loadAction });
+        d->contextMenu->showContextMenu(QCursor::pos());
+    });
     connect(d->screenplayEditorShowSceneNumber, &CheckBox::checkedChanged,
             d->screenplayEditorShowSceneNumberOnLeft, &CheckBox::setEnabled);
     connect(d->screenplayEditorShowSceneNumber, &CheckBox::checkedChanged,
@@ -841,6 +849,11 @@ SettingsView::SettingsView(QWidget* _parent)
     });
 
     designSystemChangeEvent(nullptr);
+}
+
+void SettingsView::showDefaultPage()
+{
+    setCurrentWidget(d->content);
 }
 
 void SettingsView::showApplication()
@@ -1339,13 +1352,15 @@ SettingsView::~SettingsView() = default;
 
 void SettingsView::designSystemChangeEvent(DesignSystemChangeEvent* _event)
 {
-    Widget::designSystemChangeEvent(_event);
+    StackWidget::designSystemChangeEvent(_event);
 
     setBackgroundColor(DesignSystem::color().surface());
     d->content->widget()->layout()->setContentsMargins(
         QMarginsF(Ui::DesignSystem::layout().px24(), Ui::DesignSystem::layout().topContentMargin(),
                   Ui::DesignSystem::layout().px24(), Ui::DesignSystem::layout().px24())
             .toMargins());
+    d->contextMenu->setBackgroundColor(Ui::DesignSystem::color().background());
+    d->contextMenu->setTextColor(Ui::DesignSystem::color().onBackground());
 
     for (auto card :
          { d->applicationCard, d->simpleTextCard, d->screenplayCard, d->shortcutsCard }) {
@@ -1429,6 +1444,16 @@ void SettingsView::designSystemChangeEvent(DesignSystemChangeEvent* _event)
              d->screenplayDurationByCharactersDuration }) {
         textField->setBackgroundColor(DesignSystem::color().onBackground());
         textField->setTextColor(DesignSystem::color().onBackground());
+    }
+    for (auto textField :
+         { /*d->simpleTextEditorDefaultTemplate,*/ d->screenplayEditorDefaultTemplate }) {
+        textField->setCustomMargins({ isLeftToRight() ? Ui::DesignSystem::layout().px24() : 0, 0,
+                                      isLeftToRight() ? 0 : Ui::DesignSystem::layout().px24(), 0 });
+    }
+    for (auto icon :
+         { d->simpleTextEditorDefaultTemplateOptions, d->screenplayEditorDefaultTemplateOptions }) {
+        icon->setContentsMargins(isLeftToRight() ? 0 : Ui::DesignSystem::layout().px16(), 0,
+                                 isLeftToRight() ? Ui::DesignSystem::layout().px16() : 0, 0);
     }
 
     for (auto button : { d->changeLanuage, d->changeTheme }) {

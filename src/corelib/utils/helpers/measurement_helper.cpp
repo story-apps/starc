@@ -46,3 +46,13 @@ int MeasurementHelper::pxToPt(qreal _px, bool _x)
 {
     return qCeil(_px / ptToPx(1, _x));
 }
+
+qreal MeasurementHelper::mmToInch(qreal _mm)
+{
+    return _mm / 25.4;
+}
+
+qreal MeasurementHelper::inchToMm(qreal _inch)
+{
+    return _inch * 25.4;
+}

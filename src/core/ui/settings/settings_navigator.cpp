@@ -38,14 +38,10 @@ SettingsNavigator::Implementation::Implementation(QWidget* _parent)
 
 
 SettingsNavigator::SettingsNavigator(QWidget* _parent)
-    : Widget(_parent)
+    : StackWidget(_parent)
     , d(new Implementation(this))
 {
-    QVBoxLayout* layout = new QVBoxLayout(this);
-    layout->setContentsMargins({});
-    layout->setSpacing(0);
-    layout->addWidget(d->tree);
-
+    showDefaultPage();
 
     auto createItem = [](const QString& _icon) {
         auto item = new QStandardItem;
@@ -130,6 +126,11 @@ SettingsNavigator::SettingsNavigator(QWidget* _parent)
     designSystemChangeEvent(nullptr);
 }
 
+void SettingsNavigator::showDefaultPage()
+{
+    setCurrentWidget(d->tree);
+}
+
 void SettingsNavigator::updateTranslations()
 {
     auto model = qobject_cast<QStandardItemModel*>(d->tree->model());
@@ -150,6 +151,7 @@ void SettingsNavigator::designSystemChangeEvent(DesignSystemChangeEvent* _event)
 {
     Widget::designSystemChangeEvent(_event);
 
+    setBackgroundColor(DesignSystem::color().primary());
     d->tree->setBackgroundColor(DesignSystem::color().primary());
     d->tree->setTextColor(DesignSystem::color().onPrimary());
 }

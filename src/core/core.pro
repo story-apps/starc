@@ -56,6 +56,7 @@ SOURCES += \
     management_layer/content/project/project_plugins_builder.cpp \
     management_layer/content/projects/project.cpp \
     management_layer/content/projects/projects_manager.cpp \
+    management_layer/content/settings/screenplay_template_manager.cpp \
     management_layer/content/settings/settings_manager.cpp \
     ui/account/account_bar.cpp \
     ui/account/account_navigator.cpp \
@@ -85,10 +86,15 @@ SOURCES += \
     ui/projects/projects_tool_bar.cpp \
     ui/projects/projects_view.cpp \
     ui/settings/language_dialog.cpp \
+    ui/settings/screenplay_template/screenplay_template_navigator.cpp \
+    ui/settings/screenplay_template/screenplay_template_page_view.cpp \
+    ui/settings/screenplay_template/screenplay_template_paragraphs_view.cpp \
+    ui/settings/screenplay_template/screenplay_template_tool_bar.cpp \
     ui/settings/settings_navigator.cpp \
     ui/settings/settings_tool_bar.cpp \
     ui/settings/settings_view.cpp \
-    ui/settings/theme_dialog.cpp
+    ui/settings/theme_dialog.cpp \
+    ui/settings/widgets/page_layout.cpp
 
 HEADERS += \
     core_global.h \
@@ -102,6 +108,7 @@ HEADERS += \
     management_layer/content/project/project_plugins_builder.h \
     management_layer/content/projects/project.h \
     management_layer/content/projects/projects_manager.h \
+    management_layer/content/settings/screenplay_template_manager.h \
     management_layer/content/settings/settings_manager.h \
     ui/account/account_bar.h \
     ui/account/account_navigator.h \
@@ -131,10 +138,15 @@ HEADERS += \
     ui/projects/projects_tool_bar.h \
     ui/projects/projects_view.h \
     ui/settings/language_dialog.h \
+    ui/settings/screenplay_template/screenplay_template_navigator.h \
+    ui/settings/screenplay_template/screenplay_template_page_view.h \
+    ui/settings/screenplay_template/screenplay_template_paragraphs_view.h \
+    ui/settings/screenplay_template/screenplay_template_tool_bar.h \
     ui/settings/settings_navigator.h \
     ui/settings/settings_tool_bar.h \
     ui/settings/settings_view.h \
-    ui/settings/theme_dialog.h
+    ui/settings/theme_dialog.h \
+    ui/settings/widgets/page_layout.h
 
 RESOURCES += \
     resources.qrc \

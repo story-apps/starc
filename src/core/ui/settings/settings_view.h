@@ -1,6 +1,6 @@
 #pragma once
 
-#include <ui/widgets/widget/widget.h>
+#include <ui/widgets/stack_widget/stack_widget.h>
 
 class QAbstractItemModel;
 
@@ -10,13 +10,18 @@ namespace Ui {
 /**
  * @brief Представление настроек
  */
-class SettingsView : public Widget
+class SettingsView : public StackWidget
 {
     Q_OBJECT
 
 public:
     explicit SettingsView(QWidget* _parent = nullptr);
     ~SettingsView() override;
+
+    /**
+     * @brief Показать основную страницу
+     */
+    void showDefaultPage();
 
     /**
      * @brief По возможности сфокусировать на экране заданный виджет
@@ -113,6 +118,11 @@ signals:
     void screenplayDurationByCharactersCharactersChanged(int _characters);
     void screenplayDurationByCharactersIncludeSpacesChanged(bool _include);
     void screenplayDurationByCharactersDurationChanged(int _duration);
+
+    //
+    // Редактирование шаблонов
+    //
+    void editCurrentScreenplayEditorTemplate();
 
 protected:
     /**

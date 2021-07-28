@@ -93,6 +93,11 @@ Slider::Slider(QWidget* _parent)
     designSystemChangeEvent(nullptr);
 }
 
+int Slider::maximumValue() const
+{
+    return d->maximum;
+}
+
 void Slider::setMaximumValue(int _maximum)
 {
     if (_maximum <= 0 || d->maximum == _maximum) {

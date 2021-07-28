@@ -24,4 +24,10 @@ public:
      */
     static qreal ptToPx(qreal _pt, bool _x = true);
     static int pxToPt(qreal _px, bool _x = true);
+
+    /**
+     * @brief Перевести миллиметры в дюймы и обратно
+     */
+    static qreal mmToInch(qreal _mm);
+    static qreal inchToMm(qreal _inch);
 };

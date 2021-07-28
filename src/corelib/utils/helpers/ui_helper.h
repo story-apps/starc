@@ -4,8 +4,9 @@
 
 #include <corelib_global.h>
 
-class SpellCheckTextEdit;
+class QScrollArea;
 class QWidget;
+class SpellCheckTextEdit;
 
 
 class CORE_LIBRARY_EXPORT UiHelper
@@ -21,4 +22,9 @@ public:
      * @brief Задать политику фокусирования для виджета и всех его детей
      */
     static void setFocusPolicyRecursively(QWidget* _widget, Qt::FocusPolicy _policy);
+
+    /**
+     * @brief Создать виджет скролареи с настроенной палитрой и скролбаром
+     */
+    static QScrollArea* createScrollArea(QWidget* _parent);
 };

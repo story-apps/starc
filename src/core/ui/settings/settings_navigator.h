@@ -1,6 +1,6 @@
 #pragma once
 
-#include <ui/widgets/widget/widget.h>
+#include <ui/widgets/stack_widget/stack_widget.h>
 
 
 namespace Ui {
@@ -8,13 +8,18 @@ namespace Ui {
 /**
  * @brief Навигатор списка настроек
  */
-class SettingsNavigator : public Widget
+class SettingsNavigator : public StackWidget
 {
     Q_OBJECT
 
 public:
     explicit SettingsNavigator(QWidget* _parent = nullptr);
     ~SettingsNavigator() override;
+
+    /**
+     * @brief Показать основную страницу
+     */
+    void showDefaultPage();
 
 signals:
     /**

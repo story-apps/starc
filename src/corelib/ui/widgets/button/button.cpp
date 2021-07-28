@@ -93,11 +93,11 @@ Button::Button(QWidget* _parent)
     setFocusPolicy(Qt::StrongFocus);
 
     connect(&d->decorationRadiusAnimation, &QVariantAnimation::valueChanged, this,
-            [this] { update(); });
+            qOverload<>(&Button::update));
     connect(&d->decorationOpacityAnimation, &QVariantAnimation::valueChanged, this,
-            [this] { update(); });
+            qOverload<>(&Button::update));
     connect(&d->shadowBlurRadiusAnimation, &QVariantAnimation::valueChanged, this,
-            [this] { update(); });
+            qOverload<>(&Button::update));
 
     designSystemChangeEvent(nullptr);
 }

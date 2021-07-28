@@ -1,5 +1,7 @@
 #include "settings_manager.h"
 
+#include "screenplay_template_manager.h"
+
 #include <3rd_party/webloader/src/NetworkRequest.h>
 #include <business_layer/templates/templates_facade.h>
 #include <data_layer/storage/settings_storage.h>
@@ -28,7 +30,7 @@ const QString kSpellCheckerLoadingTaskId = "spell_checker_loading_task_id";
 class SettingsManager::Implementation
 {
 public:
-    explicit Implementation(QWidget* _parent);
+    explicit Implementation(QObject* _parent, QWidget* _parentWidget);
 
     /**
      * @brief Получить значение параметра из настроек по ключу
@@ -56,12 +58,15 @@ public:
     Ui::SettingsToolBar* toolBar = nullptr;
     Ui::SettingsNavigator* navigator = nullptr;
     Ui::SettingsView* view = nullptr;
+
+    ScreenplayTemplateManager* screenplayTemplateManager = nullptr;
 };
 
-SettingsManager::Implementation::Implementation(QWidget* _parent)
-    : toolBar(new Ui::SettingsToolBar(_parent))
-    , navigator(new Ui::SettingsNavigator(_parent))
-    , view(new Ui::SettingsView(_parent))
+SettingsManager::Implementation::Implementation(QObject* _parent, QWidget* _parentWidget)
+    : toolBar(new Ui::SettingsToolBar(_parentWidget))
+    , navigator(new Ui::SettingsNavigator(_parentWidget))
+    , view(new Ui::SettingsView(_parentWidget))
+    , screenplayTemplateManager(new ScreenplayTemplateManager(_parent, _parentWidget))
 {
     toolBar->hide();
     navigator->hide();
@@ -166,7 +171,7 @@ void SettingsManager::Implementation::loadScreenplaySettings()
 
 SettingsManager::SettingsManager(QObject* _parent, QWidget* _parentWidget)
     : QObject(_parent)
-    , d(new Implementation(_parentWidget))
+    , d(new Implementation(this, _parentWidget))
 {
     d->loadApplicationSettings();
     d->loadComponentsSettings();
@@ -263,6 +268,22 @@ SettingsManager::SettingsManager(QObject* _parent, QWidget* _parentWidget)
             &SettingsManager::setScreenplayDurationByCharactersIncludeSpaces);
     connect(d->view, &Ui::SettingsView::screenplayDurationByCharactersDurationChanged, this,
             &SettingsManager::setScreenplayDurationByCharactersDuration);
+
+    //
+    // Работа с шаблонами сценария
+    //
+    connect(d->view, &Ui::SettingsView::editCurrentScreenplayEditorTemplate, this, [this] {
+        d->toolBar->setCurrentWidget(d->screenplayTemplateManager->toolBar());
+        d->navigator->setCurrentWidget(d->screenplayTemplateManager->navigator());
+        d->view->setCurrentWidget(d->screenplayTemplateManager->view());
+    });
+    connect(d->screenplayTemplateManager, &ScreenplayTemplateManager::closeRequested, this, [this] {
+        d->toolBar->showDefaultPage();
+        d->navigator->showDefaultPage();
+        d->view->showDefaultPage();
+    });
+    connect(d->screenplayTemplateManager, &ScreenplayTemplateManager::showViewRequested, d->view,
+            &Ui::SettingsView::setCurrentWidget);
 }
 
 SettingsManager::~SettingsManager() = default;

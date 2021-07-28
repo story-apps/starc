@@ -3,12 +3,12 @@
 #include <ui/design_system/design_system.h>
 #include <ui/widgets/button/button.h>
 #include <ui/widgets/dialog/standard_dialog.h>
+#include <ui/widgets/icon_button/icon_button.h>
 #include <ui/widgets/label/label.h>
 #include <ui/widgets/label/link_label.h>
 #include <ui/widgets/radio_button/radio_button.h>
 #include <ui/widgets/radio_button/radio_button_group.h>
 #include <ui/widgets/text_field/text_field.h>
-#include <ui/widgets/toggle_button/toggle_button.h>
 #include <utils/helpers/dialog_helper.h>
 
 #include <QFileDialog>
@@ -34,7 +34,7 @@ public:
     QString importFolder;
 
     QHBoxLayout* buttonsLayout = nullptr;
-    ToggleButton* advancedSettingsButton = nullptr;
+    IconButton* advancedSettingsButton = nullptr;
     Button* cancelButton = nullptr;
     Button* createButton = nullptr;
 };
@@ -48,7 +48,7 @@ CreateProjectDialog::Implementation::Implementation(QWidget* _parent)
     , cloudProjectCreationActionNote(new Body1Label(_parent))
     , projectFolder(new TextField(_parent))
     , importFilePath(new TextField(_parent))
-    , advancedSettingsButton(new ToggleButton(_parent))
+    , advancedSettingsButton(new IconButton(_parent))
     , cancelButton(new Button(_parent))
     , createButton(new Button(_parent))
 {
@@ -60,6 +60,7 @@ CreateProjectDialog::Implementation::Implementation(QWidget* _parent)
     projectFolder->setTrailingIcon(u8"\U000f0256");
     importFilePath->setSpellCheckPolicy(SpellCheckPolicy::Manual);
     importFilePath->setTrailingIcon(u8"\U000f0256");
+    advancedSettingsButton->setCheckable(true);
     advancedSettingsButton->setIcon(u8"\U000f0493");
 
     buttonsLayout = new QHBoxLayout;
@@ -108,7 +109,7 @@ CreateProjectDialog::CreateProjectDialog(QWidget* _parent)
     connect(d->localProject, &RadioButton::checkedChanged, this, [this](bool _checked) {
         d->projectFolder->setVisible(_checked && d->advancedSettingsButton->isChecked());
     });
-    connect(d->advancedSettingsButton, &ToggleButton::checkedChanged, this, [this](bool _checked) {
+    connect(d->advancedSettingsButton, &IconButton::checkedChanged, this, [this](bool _checked) {
         d->projectFolder->setVisible(_checked && d->localProject->isChecked());
         d->importFilePath->setVisible(_checked);
     });

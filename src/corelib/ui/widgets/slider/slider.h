@@ -17,6 +17,7 @@ public:
     /**
      * @brief Задать максимальное значение слайдера
      */
+    int maximumValue() const;
     void setMaximumValue(int _value);
 
     /**

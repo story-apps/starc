@@ -1265,7 +1265,7 @@ public:
     qreal heightWithText = 48.0;
     qreal heightWithIcon = 48.0;
     qreal heightWithTextAndIcon = 72.0;
-    QMarginsF margins = { 16.0, 12.0, 16.0, 12.0 };
+    QMarginsF margins = { 24.0, 12.0, 24.0, 12.0 };
     QSizeF iconSize = { 24.0, 24.0 };
 };
 
