@@ -364,9 +364,10 @@ TemplatesFacade::~TemplatesFacade() = default;
 TemplatesFacade::TemplatesFacade()
     : d(new Implementation)
 {
-    d->loadTemplates<SimpleTextTemplate>(kTextTemplatesDirectory,
-                                         { QLatin1String("mono_cp_a4"), QLatin1String("mono_cn_a4"),
-                                           QLatin1String("mono_cp_letter") });
+    d->loadTemplates<SimpleTextTemplate>(
+        kTextTemplatesDirectory,
+        { QLatin1String("mono_cp_a4"), QLatin1String("mono_cn_a4"), QLatin1String("mono_cp_letter"),
+          QLatin1String("sans_a4"), QLatin1String("sans_letter") });
     d->loadTemplates<ScreenplayTemplate>(
         kScreenplayTemplatesDirectory,
         { QLatin1String("world_cp"), QLatin1String("world_cn"), QLatin1String("ar"),

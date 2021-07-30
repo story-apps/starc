@@ -428,6 +428,12 @@ QString SimpleTextTemplate::name() const
         } else if (m_id == "mono_cp_letter") {
             return QApplication::translate("BusinessLayer::TextTemplate",
                                            "Monotype template (page: Letter; font: Courier Prime)");
+        } else if (m_id == "sans_a4") {
+            return QApplication::translate("BusinessLayer::TextTemplate",
+                                           "Sans serif template (page: A4; font: Roboto)");
+        } else if (m_id == "sans_letter") {
+            return QApplication::translate("BusinessLayer::TextTemplate",
+                                           "Sans serif template (page: Letter; font: Roboto)");
         }
     }
 
