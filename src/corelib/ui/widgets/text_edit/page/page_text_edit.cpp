@@ -2026,7 +2026,7 @@ void PageTextEditPrivate::clipPageDecorationRegions(QPainter* _painter)
         QRect topMarginRect(leftMarginPosition,
                             currentPageBottom - pageSize.height() + m_pageSpacing, marginWidth,
                             pageMargins.top());
-        clipPath = clipPath.xored(topMarginRect);
+        clipPath = clipPath.subtracted(topMarginRect);
     }
 
     //
@@ -2039,14 +2039,14 @@ void PageTextEditPrivate::clipPageDecorationRegions(QPainter* _painter)
         //
         const QRect bottomMarginRect(leftMarginPosition, currentPageBottom - pageMargins.bottom(),
                                      marginWidth, pageMargins.bottom() + pageMargins.top());
-        clipPath = clipPath.xored(bottomMarginRect);
+        clipPath = clipPath.subtracted(bottomMarginRect);
 
         //
         // Определить прямоугольник верхнего поля следующей страницы
         //
         const QRect topMarginRect(leftMarginPosition, currentPageBottom + m_pageSpacing,
                                   marginWidth, pageMargins.top());
-        clipPath = clipPath.xored(topMarginRect);
+        clipPath = clipPath.subtracted(topMarginRect);
 
         currentPageBottom += pageSize.height();
     }
