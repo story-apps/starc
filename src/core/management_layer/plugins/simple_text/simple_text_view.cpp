@@ -192,7 +192,7 @@ void SimpleTextView::reconfigure(const QStringList& _changedSettingsKeys)
             TextParagraphType::Heading4, TextParagraphType::Heading5,  TextParagraphType::Heading6,
             TextParagraphType::Text,     TextParagraphType::InlineNote };
     for (const auto type : types) {
-        if (!usedTemplate.blockStyle(type).isActive()) {
+        if (!usedTemplate.paragraphStyle(type).isActive()) {
             continue;
         }
 

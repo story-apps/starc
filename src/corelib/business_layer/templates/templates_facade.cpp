@@ -14,6 +14,9 @@ namespace BusinessLayer {
 
 namespace {
 
+const QLatin1String kTextTemplatesDirectory("templates/text");
+const QLatin1String kScreenplayTemplatesDirectory("templates/screenplay");
+
 /**
  * @brief Параметры группы шаблонов
  */
@@ -59,6 +62,12 @@ public:
 
     template<typename TemplateType>
     void loadTemplates(const QString& _templatesDir, const QVector<QString> _templateNames);
+
+    template<typename TemplateType>
+    void saveTemplate(const QString& _templatesDir, const TemplateType& _template);
+
+    template<typename TemplateType>
+    void removeTemplate(const QString& _templatesDir, const QString& _templateId);
 
 
     TemplateInfo<SimpleTextTemplate> text;
@@ -116,9 +125,12 @@ void TemplatesFacade::Implementation::updateTranslations()
 {
     auto& templatesModel = this->templateInfo<TemplateType>().model;
     for (int row = 0; row < templatesModel.rowCount(); ++row) {
-        auto templateItem = templatesModel.item(row);
-        const auto templateId = templateItem->data(kTemplateIdRole).toString();
-        templateItem->setText(getTemplate<TemplateType>(templateId).name());
+        auto templateModelItem = templatesModel.item(row);
+        const auto templateId = templateModelItem->data(kTemplateIdRole).toString();
+        const auto templateItem = getTemplate<TemplateType>(templateId);
+        if (templateItem.isDefault()) {
+            templateModelItem->setText(templateItem.name());
+        }
     }
 }
 
@@ -194,10 +206,106 @@ void TemplatesFacade::Implementation::loadTemplates(const QString& _templatesDir
               [](const TemplateType& _lhs, const TemplateType& _rhs) {
                   return _lhs.name() < _rhs.name();
               });
-    for (const auto& screenplayTemplate : std::as_const(sortedTemplates)) {
-        auto item = new QStandardItem(screenplayTemplate.name());
-        item->setData(screenplayTemplate.id(), kTemplateIdRole);
+    for (const auto& templateItem : std::as_const(sortedTemplates)) {
+        auto item = new QStandardItem(templateItem.name());
+        item->setData(templateItem.id(), kTemplateIdRole);
         templateInfo.model.appendRow(item);
+    }
+}
+
+template<typename TemplateType>
+void TemplatesFacade::Implementation::saveTemplate(const QString& _templatesDir,
+                                                   const TemplateType& _template)
+{
+    //
+    // Сохраним шаблон в файл
+    //
+    const QString appDataFolderPath
+        = QStandardPaths::writableLocation(QStandardPaths::DataLocation);
+    const QString templatesFolderPath = QString("%1/%2").arg(appDataFolderPath, _templatesDir);
+    _template.saveToFile(QString("%1/%2").arg(templatesFolderPath, _template.id()));
+
+    auto& templateInfo = this->templateInfo<TemplateType>();
+
+    //
+    // Если это обновление дефолтного шаблона, обновим и его тоже
+    //
+    if (templateInfo.defaultTemplate.id() == _template.id()) {
+        templateInfo.defaultTemplate = _template;
+    }
+
+    //
+    // Добавим шаблон в список, если ещё не был добавлен
+    //
+    const auto hasTemplate = templateInfo.templates.contains(_template.id());
+    templateInfo.templates[_template.id()] = _template;
+
+    //
+    // Удаляем старую версию шаблона из модели, т.к. могло измениться название
+    //
+    bool isNameChanged = false;
+    if (hasTemplate) {
+        for (int row = 0; row < templateInfo.model.rowCount(); ++row) {
+            if (templateInfo.model.item(row)->data(kTemplateIdRole).toString() != _template.id()) {
+                continue;
+            }
+
+            if (templateInfo.model.item(row)->text() != _template.name()) {
+                isNameChanged = true;
+                templateInfo.model.removeRow(row);
+            }
+            break;
+        }
+    }
+
+    //
+    // Добавляем шаблон в модель
+    //
+    if (!hasTemplate || isNameChanged) {
+        auto item = new QStandardItem(_template.name());
+        item->setData(_template.id(), kTemplateIdRole);
+        bool itemAdded = false;
+        for (int row = 0; row < templateInfo.model.rowCount(); ++row) {
+            if (templateInfo.model.item(row)->text() > _template.name()) {
+                itemAdded = true;
+                templateInfo.model.insertRow(row, item);
+                break;
+            }
+        }
+        if (!itemAdded) {
+            templateInfo.model.appendRow(item);
+        }
+    }
+}
+
+template<typename TemplateType>
+void TemplatesFacade::Implementation::removeTemplate(const QString& _templatesDir,
+                                                     const QString& _templateId)
+{
+    //
+    // Удаляем файл шаблона
+    //
+    const QString appDataFolderPath
+        = QStandardPaths::writableLocation(QStandardPaths::DataLocation);
+    const QString templatesFolderPath = QString("%1/%2").arg(appDataFolderPath, _templatesDir);
+    QFile::remove(QString("%1/%2").arg(templatesFolderPath, _templateId));
+
+    //
+    // Удаляем шаблон из списке
+    //
+    auto& templateInfo = this->templateInfo<TemplateType>();
+    templateInfo.templates.remove(_templateId);
+
+    //
+    // Удаляем шаблон из модели
+    //
+    for (int row = 0; row < templateInfo.model.rowCount(); ++row) {
+        if (templateInfo.model.item(row)->data(kTemplateIdRole).toString() != _templateId) {
+            continue;
+        }
+
+        templateInfo.model.removeRow(row);
+        break;
     }
 }
 
@@ -235,6 +343,16 @@ void TemplatesFacade::setDefaultScreenplayTemplate(const QString& _templateId)
     instance().d->setDefaultTemplate<ScreenplayTemplate>(_templateId);
 }
 
+void TemplatesFacade::saveScreenplayTemplate(const ScreenplayTemplate& _template)
+{
+    instance().d->saveTemplate<ScreenplayTemplate>(kScreenplayTemplatesDirectory, _template);
+}
+
+void TemplatesFacade::removeScreenplayTemplate(const QString& _templateId)
+{
+    instance().d->removeTemplate<ScreenplayTemplate>(kScreenplayTemplatesDirectory, _templateId);
+}
+
 void TemplatesFacade::updateTranslations()
 {
     instance().d->updateTranslations<SimpleTextTemplate>();
@@ -246,11 +364,11 @@ TemplatesFacade::~TemplatesFacade() = default;
 TemplatesFacade::TemplatesFacade()
     : d(new Implementation)
 {
-    d->loadTemplates<SimpleTextTemplate>(QLatin1String("templates/text"),
+    d->loadTemplates<SimpleTextTemplate>(kTextTemplatesDirectory,
                                          { QLatin1String("mono_cp_a4"), QLatin1String("mono_cn_a4"),
                                            QLatin1String("mono_cp_letter") });
     d->loadTemplates<ScreenplayTemplate>(
-        QLatin1String("templates/screenplay"),
+        kScreenplayTemplatesDirectory,
         { QLatin1String("world_cp"), QLatin1String("world_cn"), QLatin1String("ar"),
           QLatin1String("he"), QLatin1String("ru"), QLatin1String("tamil"), QLatin1String("us") });
 }

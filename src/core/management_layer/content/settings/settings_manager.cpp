@@ -270,20 +270,46 @@ SettingsManager::SettingsManager(QObject* _parent, QWidget* _parentWidget)
             &SettingsManager::setScreenplayDurationByCharactersDuration);
 
     //
-    // Работа с шаблонами сценария
+    // Работа с библиотекой шаблонов сценария
     //
-    connect(d->view, &Ui::SettingsView::editCurrentScreenplayEditorTemplate, this, [this] {
+    auto showScreenplayTemplateEditor = [this] {
         d->toolBar->setCurrentWidget(d->screenplayTemplateManager->toolBar());
         d->navigator->setCurrentWidget(d->screenplayTemplateManager->navigator());
         d->view->setCurrentWidget(d->screenplayTemplateManager->view());
-    });
+        d->screenplayTemplateManager->viewToolBar()->setParent(d->view);
+        d->screenplayTemplateManager->viewToolBar()->show();
+    };
+    connect(d->view, &Ui::SettingsView::editCurrentScreenplayEditorTemplateRequested, this,
+            [this, showScreenplayTemplateEditor](const QString& _templateId) {
+                d->screenplayTemplateManager->editTemplate(_templateId);
+                showScreenplayTemplateEditor();
+            });
+    connect(d->view, &Ui::SettingsView::duplicateCurrentScreenplayEditorTemplateRequested, this,
+            [this, showScreenplayTemplateEditor](const QString& _templateId) {
+                d->screenplayTemplateManager->duplicateTemplate(_templateId);
+                showScreenplayTemplateEditor();
+            });
+    connect(d->view, &Ui::SettingsView::removeCurrentScreenplayEditorTemplateRequested, this,
+            [](const QString& _templateId) {
+                BusinessLayer::TemplatesFacade::removeScreenplayTemplate(_templateId);
+            });
     connect(d->screenplayTemplateManager, &ScreenplayTemplateManager::closeRequested, this, [this] {
         d->toolBar->showDefaultPage();
         d->navigator->showDefaultPage();
         d->view->showDefaultPage();
+        d->screenplayTemplateManager->viewToolBar()->hide();
+
+        //
+        // После закрытия уведомляем клиентов о том, что текущий шаблон обновился
+        //
+        emit screenplayEditorChanged(
+            { DataStorageLayer::kComponentsScreenplayEditorDefaultTemplateKey });
     });
-    connect(d->screenplayTemplateManager, &ScreenplayTemplateManager::showViewRequested, d->view,
-            &Ui::SettingsView::setCurrentWidget);
+    connect(d->screenplayTemplateManager, &ScreenplayTemplateManager::showViewRequested, this,
+            [this](QWidget* _view) {
+                d->view->setCurrentWidget(_view);
+                d->screenplayTemplateManager->viewToolBar()->raise();
+            });
 }
 
 SettingsManager::~SettingsManager() = default;

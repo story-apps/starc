@@ -50,18 +50,15 @@ public:
     static void setDefaultSimpleTextTemplate(const QString& _templateId);
     static void setDefaultScreenplayTemplate(const QString& _templateId);
 
-    //    /**
-    //     * @brief Сохранить стиль в библиотеке шаблонов
-    //     */
-    //    /** @{ */
-    //    static void saveTemplate(const ScenarioTemplate& _template);
-    //    static bool saveTemplate(const QString& _templateFilePath);
-    //    /** @} */
+    /**
+     * @brief Сохранить стиль в библиотеке шаблонов
+     */
+    static void saveScreenplayTemplate(const ScreenplayTemplate& _template);
 
-    //    /**
-    //     * @brief Удалить шаблон по заданному имены
-    //     */
-    //    static void removeTemplate(const QString& _templateName);
+    /**
+     * @brief Удалить шаблон по заданному имены
+     */
+    static void removeScreenplayTemplate(const QString& _templateId);
 
     //    /**
     //     * @brief Обновить цвета блоков текста для всех шаблонов

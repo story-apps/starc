@@ -133,7 +133,7 @@ QStringList SceneCharactersParser::characters(const QString& _text)
     //
     // Удалим потенциальные приставку и окончание
     //
-    const auto style = TemplatesFacade::screenplayTemplate().blockStyle(
+    const auto style = TemplatesFacade::screenplayTemplate().paragraphStyle(
         ScreenplayParagraphType::SceneCharacters);
     QString stylePrefix = style.prefix();
     if (!stylePrefix.isEmpty() && characters.startsWith(stylePrefix)) {

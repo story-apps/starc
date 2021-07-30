@@ -153,7 +153,7 @@ void SimpleTextDocument::Implementation::readModelItemContent(int _itemRow,
         //
         // Установим стиль блока
         //
-        const auto currentStyle = documentTemplate().blockStyle(textItem->paragraphType());
+        const auto currentStyle = documentTemplate().paragraphStyle(textItem->paragraphType());
         _cursor.setBlockFormat(currentStyle.blockFormat());
         _cursor.setBlockCharFormat(currentStyle.charFormat());
         _cursor.setCharFormat(currentStyle.charFormat());
@@ -197,7 +197,7 @@ void SimpleTextDocument::Implementation::readModelItemContent(int _itemRow,
         const auto formats = formatCursor.block().textFormats();
         if (formats.isEmpty()) {
             blockHeight = documentTemplate()
-                              .blockStyle(textItem->paragraphType())
+                              .paragraphStyle(textItem->paragraphType())
                               .blockFormat()
                               .lineHeight();
         } else {
@@ -302,7 +302,7 @@ void SimpleTextDocument::setModel(BusinessLayer::TextModel* _model, bool _canCha
     // Обновим шрифт документа, в моменте когда текста нет
     //
     const auto templateDefaultFont
-        = d->documentTemplate().blockStyle(TextParagraphType::Text).font();
+        = d->documentTemplate().paragraphStyle(TextParagraphType::Text).font();
     if (defaultFont() != templateDefaultFont) {
         setDefaultFont(templateDefaultFont);
     }
@@ -378,13 +378,13 @@ void SimpleTextDocument::setModel(BusinessLayer::TextModel* _model, bool _canCha
                 cursor.setBlockFormat(blockFormat);
             } else if (!textItem->alignment().has_value()
                        && cursor.blockFormat().alignment()
-                           != d->documentTemplate().blockStyle(textItem->paragraphType()).align()) {
+                           != d->documentTemplate().paragraphStyle(textItem->paragraphType()).align()) {
                 //
                 // ... если выравнивание должно быть, как в стиле
                 //
                 auto blockFormat = cursor.blockFormat();
                 blockFormat.setAlignment(
-                    d->documentTemplate().blockStyle(textItem->paragraphType()).align());
+                    d->documentTemplate().paragraphStyle(textItem->paragraphType()).align());
                 cursor.setBlockFormat(blockFormat);
             }
             //
@@ -419,7 +419,7 @@ void SimpleTextDocument::setModel(BusinessLayer::TextModel* _model, bool _canCha
                 cursor.movePosition(QTextCursor::StartOfBlock);
                 cursor.movePosition(QTextCursor::EndOfBlock, QTextCursor::KeepAnchor);
                 const auto blockType = TextBlockStyle::forBlock(cursor.block());
-                const auto blockStyle = d->documentTemplate().blockStyle(blockType);
+                const auto blockStyle = d->documentTemplate().paragraphStyle(blockType);
                 cursor.setBlockCharFormat(blockStyle.charFormat());
                 cursor.setCharFormat(blockStyle.charFormat());
 
@@ -451,7 +451,7 @@ void SimpleTextDocument::setModel(BusinessLayer::TextModel* _model, bool _canCha
             const auto formats = cursor.block().textFormats();
             if (formats.isEmpty()) {
                 blockHeight = d->documentTemplate()
-                                  .blockStyle(textItem->paragraphType())
+                                  .paragraphStyle(textItem->paragraphType())
                                   .blockFormat()
                                   .lineHeight();
             } else {
@@ -829,7 +829,7 @@ void SimpleTextDocument::applyParagraphType(BusinessLayer::TextParagraphType _ty
     auto cursor = _cursor;
     cursor.beginEditBlock();
 
-    const auto newBlockStyle = d->documentTemplate().blockStyle(_type);
+    const auto newBlockStyle = d->documentTemplate().paragraphStyle(_type);
 
     //
     // Обновим стили
@@ -1156,7 +1156,7 @@ void SimpleTextDocument::updateModelOnContentChange(int _position, int _charsRem
             //
             auto textItem = new TextModelTextItem;
             textItem->setParagraphType(paragraphType);
-            if (d->documentTemplate().blockStyle(paragraphType).align()
+            if (d->documentTemplate().paragraphStyle(paragraphType).align()
                 != block.blockFormat().alignment()) {
                 textItem->setAlignment(block.blockFormat().alignment());
             } else {
@@ -1350,7 +1350,7 @@ void SimpleTextDocument::updateModelOnContentChange(int _position, int _charsRem
             if (item->type() == TextModelItemType::Text) {
                 auto textItem = static_cast<TextModelTextItem*>(item);
                 textItem->setParagraphType(paragraphType);
-                if (d->documentTemplate().blockStyle(paragraphType).align()
+                if (d->documentTemplate().paragraphStyle(paragraphType).align()
                     != block.blockFormat().alignment()) {
                     textItem->setAlignment(block.blockFormat().alignment());
                 } else {
@@ -1378,7 +1378,7 @@ void SimpleTextDocument::updateModelOnContentChange(int _position, int _charsRem
             const auto formats = block.textFormats();
             if (formats.isEmpty()) {
                 blockHeight
-                    = d->documentTemplate().blockStyle(paragraphType).blockFormat().lineHeight();
+                    = d->documentTemplate().paragraphStyle(paragraphType).blockFormat().lineHeight();
             } else {
                 for (const auto& format : formats) {
                     blockHeight

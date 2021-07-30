@@ -479,7 +479,7 @@ void ScreenplayTextView::reconfigure(const QStringList& _changedSettingsKeys)
             ScreenplayParagraphType::Transition,      ScreenplayParagraphType::InlineNote,
             ScreenplayParagraphType::UnformattedText, ScreenplayParagraphType::FolderHeader };
     for (const auto type : types) {
-        if (!usedTemplate.blockStyle(type).isActive()) {
+        if (!usedTemplate.paragraphStyle(type).isActive()) {
             continue;
         }
 
@@ -501,9 +501,6 @@ void ScreenplayTextView::reconfigure(const QStringList& _changedSettingsKeys)
     if (_changedSettingsKeys.isEmpty()
         || _changedSettingsKeys.contains(
             DataStorageLayer::kComponentsScreenplayEditorDefaultTemplateKey)) {
-        TemplatesFacade::setDefaultScreenplayTemplate(
-            settingsValue(DataStorageLayer::kComponentsScreenplayEditorDefaultTemplateKey)
-                .toString());
         d->screenplayText->reinit();
     }
 

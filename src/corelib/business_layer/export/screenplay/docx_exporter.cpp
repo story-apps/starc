@@ -466,7 +466,7 @@ QString docxText(QMap<int, QStringList>& _comments, const ScreenplayTextCursor& 
         // ... если в блоке кастомное выравнивание, то добавим эту информацию
         //
         if (block.blockFormat().alignment()
-            != exportTemplate(_exportOptions).blockStyle(currentBlockType).align()) {
+            != exportTemplate(_exportOptions).paragraphStyle(currentBlockType).align()) {
             documentXml.append(docxAlignment(block.blockFormat().alignment()));
         }
 
@@ -766,9 +766,9 @@ void writeStyles(QtZipWriter* _zip, const ExportOptions& _exportOptions)
     //
     const auto& screenplayTemplate = exportTemplate(_exportOptions);
     const QString defaultFontFamily
-        = screenplayTemplate.blockStyle(ScreenplayParagraphType::Action).font().family();
+        = screenplayTemplate.paragraphStyle(ScreenplayParagraphType::Action).font().family();
     for (const auto& paragraphType : paragraphTypes()) {
-        const auto blockStyle = screenplayTemplate.blockStyle(paragraphType);
+        const auto blockStyle = screenplayTemplate.paragraphStyle(paragraphType);
         styleXml.append(docxBlockStyle(blockStyle, defaultFontFamily));
         const auto onHalfPage = true;
         styleXml.append(docxBlockStyle(blockStyle, defaultFontFamily, onHalfPage));

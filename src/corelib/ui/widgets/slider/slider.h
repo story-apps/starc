@@ -23,6 +23,7 @@ public:
     /**
      * @brief Задать текущее значение слайдера
      */
+    int value() const;
     void setValue(int _value);
 
     /**

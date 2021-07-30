@@ -90,6 +90,7 @@ SOURCES += \
     ui/settings/screenplay_template/screenplay_template_page_view.cpp \
     ui/settings/screenplay_template/screenplay_template_paragraphs_view.cpp \
     ui/settings/screenplay_template/screenplay_template_tool_bar.cpp \
+    ui/settings/screenplay_template/screenplay_template_view_tool_bar.cpp \
     ui/settings/settings_navigator.cpp \
     ui/settings/settings_tool_bar.cpp \
     ui/settings/settings_view.cpp \
@@ -142,6 +143,7 @@ HEADERS += \
     ui/settings/screenplay_template/screenplay_template_page_view.h \
     ui/settings/screenplay_template/screenplay_template_paragraphs_view.h \
     ui/settings/screenplay_template/screenplay_template_tool_bar.h \
+    ui/settings/screenplay_template/screenplay_template_view_tool_bar.h \
     ui/settings/settings_navigator.h \
     ui/settings/settings_tool_bar.h \
     ui/settings/settings_view.h \

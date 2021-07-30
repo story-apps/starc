@@ -535,7 +535,7 @@ void TextModelTextItem::setFormats(const QVector<QTextLayout::FormatRange>& _for
 {
     QVector<TextFormat> newFormats;
     const auto defaultBlockFormat
-        = TemplatesFacade::simpleTextTemplate().blockStyle(d->paragraphType);
+        = TemplatesFacade::simpleTextTemplate().paragraphStyle(d->paragraphType);
     for (const auto& format : _formats) {
         if (format.start == 0 && format.length == d->text.length()
             && format.format == defaultBlockFormat.charFormat()) {

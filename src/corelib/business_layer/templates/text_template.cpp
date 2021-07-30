@@ -479,19 +479,19 @@ void SimpleTextTemplate::setPageNumbersAlignment(Qt::Alignment _alignment)
     m_pageNumbersAlignment = _alignment;
 }
 
-TextBlockStyle SimpleTextTemplate::blockStyle(TextParagraphType _forType) const
+TextBlockStyle SimpleTextTemplate::paragraphStyle(TextParagraphType _forType) const
 {
     return m_blockStyles.value(_forType);
 }
 
-TextBlockStyle SimpleTextTemplate::blockStyle(const QTextBlock& _forBlock) const
+TextBlockStyle SimpleTextTemplate::paragraphStyle(const QTextBlock& _forBlock) const
 {
-    return blockStyle(TextBlockStyle::forBlock(_forBlock));
+    return paragraphStyle(TextBlockStyle::forBlock(_forBlock));
 }
 
-void SimpleTextTemplate::setBlockStyle(const TextBlockStyle& _blockStyle)
+void SimpleTextTemplate::setParagraphStyle(const TextBlockStyle& _style)
 {
-    m_blockStyles.insert(_blockStyle.type(), _blockStyle);
+    m_blockStyles.insert(_style.type(), _style);
 }
 
 SimpleTextTemplate::SimpleTextTemplate(const QString& _fromFile)

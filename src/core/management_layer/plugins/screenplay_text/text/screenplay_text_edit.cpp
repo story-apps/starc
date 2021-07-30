@@ -932,7 +932,9 @@ void ScreenplayTextEdit::paintEvent(QPaintEvent* _event)
                                                                       : pageRight + leftDelta,
                                                         cursorR.bottom());
                                     QRectF rect(topLeft, bottomRight);
-                                    painter.setFont(cursor.charFormat().font());
+                                    auto font = cursor.charFormat().font();
+                                    font.setUnderline(false);
+                                    painter.setFont(font);
                                     painter.drawText(rect, Qt::AlignRight | Qt::AlignTop,
                                                      sceneNumber);
                                 }
@@ -944,7 +946,9 @@ void ScreenplayTextEdit::paintEvent(QPaintEvent* _event)
                                                                       : textLeft - leftDelta,
                                                         cursorR.bottom());
                                     QRectF rect(topLeft, bottomRight);
-                                    painter.setFont(cursor.charFormat().font());
+                                    auto font = cursor.charFormat().font();
+                                    font.setUnderline(false);
+                                    painter.setFont(font);
                                     if (lastSceneColor.isValid()) {
                                         painter.setPen(lastSceneColor);
                                     }

@@ -19,7 +19,7 @@ public:
     /**
      * @brief Показать попап
      */
-    void showPopup(QWidget* _parent);
+    void showPopup(ComboBox* _parent);
 
     /**
      * @brief Скрыть попап
@@ -57,7 +57,7 @@ ComboBox::Implementation::Implementation(QWidget* _parent)
     popupHeightAnimation.setEndValue(0);
 }
 
-void ComboBox::Implementation::showPopup(QWidget* _parent)
+void ComboBox::Implementation::showPopup(ComboBox* _parent)
 {
     if (popupContent->model() == nullptr) {
         return;
@@ -65,11 +65,17 @@ void ComboBox::Implementation::showPopup(QWidget* _parent)
 
     isPopupShown = true;
 
-    auto width = _parent->width() - Ui::DesignSystem::textField().margins().left()
-        - Ui::DesignSystem::textField().margins().right();
+    auto leftMargin = Ui::DesignSystem::textField().contentsMargins().left();
+    auto rightMargin = Ui::DesignSystem::textField().contentsMargins().right();
+    if (!_parent->isDefaultMarginsEnabled()) {
+        leftMargin = _parent->customMargins().left();
+        rightMargin = _parent->customMargins().right();
+    }
+    auto width = _parent->width() + Ui::DesignSystem::card().shadowMargins().left()
+        + Ui::DesignSystem::card().shadowMargins().right() - leftMargin - rightMargin;
     popup->resize(static_cast<int>(width), 0);
     auto pos = _parent->mapToGlobal(_parent->rect().bottomLeft())
-        + QPointF(Ui::DesignSystem::textField().margins().left(),
+        + QPointF(leftMargin - Ui::DesignSystem::card().shadowMargins().left(),
                   -Ui::DesignSystem::textField().margins().bottom());
     popup->move(pos.toPoint());
     popup->show();

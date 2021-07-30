@@ -73,6 +73,12 @@ ScreenplayTemplateToolBar::ScreenplayTemplateToolBar(QWidget* _parent)
 
 ScreenplayTemplateToolBar::~ScreenplayTemplateToolBar() = default;
 
+void ScreenplayTemplateToolBar::checkPageSettings()
+{
+    QSignalBlocker signalBlocker(this);
+    d->pageSettingsAction->setChecked(true);
+}
+
 void ScreenplayTemplateToolBar::updateTranslations()
 {
     d->backAction->setToolTip(tr("Go back to the previous screen"));

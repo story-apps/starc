@@ -58,6 +58,11 @@ ScreenplayTemplateNavigator::ScreenplayTemplateNavigator(QWidget* _parent)
     designSystemChangeEvent(nullptr);
 }
 
+void ScreenplayTemplateNavigator::checkMm()
+{
+    d->mm->setChecked(true);
+}
+
 void ScreenplayTemplateNavigator::updateTranslations()
 {
     d->title->setText(tr("Edit template parameters"));

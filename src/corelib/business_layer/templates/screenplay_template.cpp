@@ -2,6 +2,7 @@
 
 #include <ui/widgets/text_edit/page/page_metrics.h>
 #include <ui/widgets/text_edit/page/page_text_edit.h>
+#include <utils/helpers/measurement_helper.h>
 #include <utils/helpers/string_helper.h>
 #include <utils/helpers/text_helper.h>
 
@@ -84,6 +85,8 @@ QString toDisplayString(ScreenplayParagraphType _type)
         return QCoreApplication::translate("BusinessLayer::ScreenplayTemplate", "Unformatted text");
     case ScreenplayParagraphType::FolderHeader:
         return QCoreApplication::translate("BusinessLayer::ScreenplayTemplate", "Folder");
+    case ScreenplayParagraphType::FolderFooter:
+        return QCoreApplication::translate("BusinessLayer::ScreenplayTemplate", "Folder footer");
     default:
         return QCoreApplication::translate("BusinessLayer::ScreenplayTemplate", "Undefined");
     }
@@ -477,7 +480,8 @@ void ScreenplayBlockStyle::updateBottomMargin()
 void ScreenplayTemplate::setIsNew()
 {
     m_isDefault = false;
-    m_name.prepend(QApplication::translate("BusinessLayer::ScriptTemplate", "Copy of "));
+    m_name = QApplication::translate("BusinessLayer::ScriptTemplate", "Copy of ") + name();
+    m_id = QUuid::createUuid().toString();
     m_description.clear();
 }
 
@@ -492,13 +496,14 @@ void ScreenplayTemplate::saveToFile(const QString& _filePath) const
     writer.setAutoFormatting(true);
     writer.writeStartDocument();
     writer.writeStartElement("style");
+    writer.writeAttribute("id", m_id);
     writer.writeAttribute("name", m_name);
     writer.writeAttribute("description", m_description);
     writer.writeAttribute("page_format", PageMetrics::stringFromPageSizeId(m_pageSizeId));
     writer.writeAttribute("page_margins", ::toString(m_pageMargins));
     writer.writeAttribute("page_numbers_alignment", ::toString(m_pageNumbersAlignment));
     writer.writeAttribute("left_half_of_page_width", ::toString(m_leftHalfOfPageWidthPercents));
-    for (const auto& blockStyle : m_blockStyles.values()) {
+    for (const auto& blockStyle : std::as_const(m_paragrapsStyles)) {
         if (toString(blockStyle.type()).isEmpty()) {
             continue;
         }
@@ -508,7 +513,8 @@ void ScreenplayTemplate::saveToFile(const QString& _filePath) const
         writer.writeAttribute("active", ::toString(blockStyle.isActive()));
         writer.writeAttribute("starts_from_new_page", ::toString(blockStyle.isStartFromNewPage()));
         writer.writeAttribute("font_family", blockStyle.font().family());
-        writer.writeAttribute("font_size", ::toString(blockStyle.font().pointSize()));
+        writer.writeAttribute("font_size",
+                              ::toString(MeasurementHelper::pxToPt(blockStyle.font().pixelSize())));
         writer.writeAttribute("bold", ::toString(blockStyle.font().bold()));
         writer.writeAttribute("italic", ::toString(blockStyle.font().italic()));
         writer.writeAttribute("underline", ::toString(blockStyle.font().underline()));
@@ -633,19 +639,19 @@ qreal ScreenplayTemplate::pageSplitterWidth() const
     return PageMetrics::mmToPx(5);
 }
 
-ScreenplayBlockStyle ScreenplayTemplate::blockStyle(ScreenplayParagraphType _forType) const
+ScreenplayBlockStyle ScreenplayTemplate::paragraphStyle(ScreenplayParagraphType _forType) const
 {
-    return m_blockStyles.value(_forType);
+    return m_paragrapsStyles.value(_forType);
 }
 
-ScreenplayBlockStyle ScreenplayTemplate::blockStyle(const QTextBlock& _forBlock) const
+ScreenplayBlockStyle ScreenplayTemplate::paragraphStyle(const QTextBlock& _forBlock) const
 {
-    return blockStyle(ScreenplayBlockStyle::forBlock(_forBlock));
+    return paragraphStyle(ScreenplayBlockStyle::forBlock(_forBlock));
 }
 
-void ScreenplayTemplate::setBlockStyle(const ScreenplayBlockStyle& _blockStyle)
+void ScreenplayTemplate::setParagraphStyle(const ScreenplayBlockStyle& _style)
 {
-    m_blockStyles.insert(_blockStyle.type(), _blockStyle);
+    m_paragrapsStyles.insert(_style.type(), _style);
 }
 
 ScreenplayTemplate::ScreenplayTemplate(const QString& _fromFile)
@@ -693,7 +699,7 @@ void ScreenplayTemplate::load(const QString& _fromFile)
     while (reader.readNextStartElement() && reader.name() == "block") {
         ScreenplayBlockStyle blockStyle(reader.attributes());
         blockStyle.setPageSplitterWidth(pageSplitterWidth());
-        m_blockStyles.insert(blockStyle.type(), blockStyle);
+        m_paragrapsStyles.insert(blockStyle.type(), blockStyle);
 
         //
         // Если ещё не находимся в конце элемента, то остальное пропускаем
@@ -708,9 +714,9 @@ void ScreenplayTemplate::load(const QString& _fromFile)
     //
     {
         ScreenplayBlockStyle sceneHeadingShadowStyle
-            = m_blockStyles.value(ScreenplayParagraphType::SceneHeading);
+            = m_paragrapsStyles.value(ScreenplayParagraphType::SceneHeading);
         sceneHeadingShadowStyle.setType(ScreenplayParagraphType::SceneHeadingShadow);
-        setBlockStyle(sceneHeadingShadowStyle);
+        setParagraphStyle(sceneHeadingShadowStyle);
     }
 }
 

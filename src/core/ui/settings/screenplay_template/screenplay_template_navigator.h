@@ -16,6 +16,11 @@ public:
     explicit ScreenplayTemplateNavigator(QWidget* _parent = nullptr);
     ~ScreenplayTemplateNavigator() override;
 
+    /**
+     * @brief Выбрать миллиметры
+     */
+    void checkMm();
+
 signals:
     /**
      * @brief Пользователь выбрал метрическую систему в которой он хочет видеть параметры шаблона

@@ -92,7 +92,9 @@ public:
     /**
      * @brief Установить использование отступов по-умолчанию
      */
+    bool isDefaultMarginsEnabled() const;
     void setDefaultMarginsEnabled(bool _enable);
+    QMarginsF customMargins() const;
     void setCustomMargins(const QMarginsF& _margins);
 
     /**

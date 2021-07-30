@@ -549,6 +549,11 @@ void TextField::setTitleVisible(bool _visible)
     update();
 }
 
+bool TextField::isDefaultMarginsEnabled() const
+{
+    return d->isDefaultMarginsEnabled;
+}
+
 void TextField::setDefaultMarginsEnabled(bool _enable)
 {
     if (d->isDefaultMarginsEnabled == _enable) {
@@ -574,6 +579,11 @@ void TextField::setCustomMargins(const QMarginsF& _margins)
     reconfigure();
     updateGeometry();
     update();
+}
+
+QMarginsF TextField::customMargins() const
+{
+    return d->customMargins;
 }
 
 void TextField::setEnterMakesNewLine(bool _make)

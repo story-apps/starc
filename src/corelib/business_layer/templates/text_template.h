@@ -304,9 +304,9 @@ public:
     /**
      * @brief Получить стиль блока
      */
-    TextBlockStyle blockStyle(TextParagraphType _forType) const;
-    TextBlockStyle blockStyle(const QTextBlock& _forBlock) const;
-    void setBlockStyle(const TextBlockStyle& _blockStyle);
+    TextBlockStyle paragraphStyle(TextParagraphType _forType) const;
+    TextBlockStyle paragraphStyle(const QTextBlock& _forBlock) const;
+    void setParagraphStyle(const TextBlockStyle& _style);
 
 private:
     explicit SimpleTextTemplate(const QString& _fromFile);

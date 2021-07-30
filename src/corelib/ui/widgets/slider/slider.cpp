@@ -113,6 +113,11 @@ void Slider::setMaximumValue(int _maximum)
     update();
 }
 
+int Slider::value() const
+{
+    return d->current;
+}
+
 void Slider::setValue(int _value)
 {
     if (d->minimum > _value || _value > d->maximum || d->current == _value) {

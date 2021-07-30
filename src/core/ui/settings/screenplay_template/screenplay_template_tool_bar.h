@@ -8,13 +8,18 @@ namespace Ui {
 /**
  * @brief Панель инструментов настроек
  */
-class ScreenplayTemplateToolBar : public AppBar
+class CORE_LIBRARY_EXPORT ScreenplayTemplateToolBar : public AppBar
 {
     Q_OBJECT
 
 public:
     explicit ScreenplayTemplateToolBar(QWidget* _parent = nullptr);
     ~ScreenplayTemplateToolBar() override;
+
+    /**
+     * @brief Сделать действие параметров страницы активным
+     */
+    void checkPageSettings();
 
 signals:
     /**

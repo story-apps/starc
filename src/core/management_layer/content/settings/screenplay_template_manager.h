@@ -19,6 +19,17 @@ public:
     QWidget* toolBar() const;
     QWidget* navigator() const;
     QWidget* view() const;
+    QWidget* viewToolBar() const;
+
+    /**
+     * @brief Редактировать заданный шаблон
+     */
+    void editTemplate(const QString& _templateId);
+
+    /**
+     * @brief Дублировать заданный шаблон
+     */
+    void duplicateTemplate(const QString& _templateId);
 
 signals:
     /**

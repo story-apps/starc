@@ -31,11 +31,6 @@ public:
      */
     qreal valueInCurrentMetrics(qreal _value);
 
-    /**
-     * @brief Пересчитать значения в полях с миллиметров на дюймы и наоборот
-     */
-    void setUseMm(bool _mm);
-
 
     bool useMm = true;
 
@@ -161,22 +156,6 @@ qreal ScreenplayTemplatePageView::Implementation::valueInCurrentMetrics(qreal _v
     return useMm ? _value : MeasurementHelper::inchToMm(_value);
 }
 
-void ScreenplayTemplatePageView::Implementation::setUseMm(bool _mm)
-{
-    useMm = _mm;
-
-    auto convert = [_mm](TextField* _textField) {
-        const auto value = _textField->text().toDouble();
-        const auto convertedValue
-            = _mm ? MeasurementHelper::inchToMm(value) : MeasurementHelper::mmToInch(value);
-        _textField->setText(QString::number(convertedValue, 'g', 4));
-    };
-    convert(leftMargin);
-    convert(topMargin);
-    convert(rightMargin);
-    convert(bottomMargin);
-}
-
 
 //****
 
@@ -241,15 +220,85 @@ void ScreenplayTemplatePageView::setUseMm(bool _mm)
         return;
     }
 
-    //
-    // Обновим значения в полях
-    //
-    d->setUseMm(_mm);
+    d->useMm = _mm;
 
     //
     // Обновим переводы
     //
     updateTranslations();
+}
+
+QString ScreenplayTemplatePageView::templateName() const
+{
+    return d->templateName->text();
+}
+
+void ScreenplayTemplatePageView::setTemplateName(const QString& _name)
+{
+    d->templateName->setText(_name);
+}
+
+QPageSize::PageSizeId ScreenplayTemplatePageView::pageSizeId() const
+{
+    return d->pageFormatA4->isChecked() ? QPageSize::A4 : QPageSize::Letter;
+}
+
+void ScreenplayTemplatePageView::setPageSize(QPageSize::PageSizeId _pageSize)
+{
+    if (_pageSize == QPageSize::A4) {
+        d->pageFormatA4->setChecked(true);
+    } else {
+        d->pageFormatLetter->setChecked(true);
+    }
+}
+
+QMarginsF ScreenplayTemplatePageView::pageMargins() const
+{
+    return { d->leftMargin->text().toDouble(), d->topMargin->text().toDouble(),
+             d->rightMargin->text().toDouble(), d->bottomMargin->text().toDouble() };
+}
+
+void ScreenplayTemplatePageView::setPageMargins(const QMarginsF& _margins)
+{
+    d->leftMargin->setText(QString::number(_margins.left()));
+    d->topMargin->setText(QString::number(_margins.top()));
+    d->rightMargin->setText(QString::number(_margins.right()));
+    d->bottomMargin->setText(QString::number(_margins.bottom()));
+}
+
+Qt::Alignment ScreenplayTemplatePageView::pageNumbersAlignment() const
+{
+    return (d->pageNumbersAlignTop->isChecked() ? Qt::AlignTop : Qt::AlignBottom)
+        | (d->pageNumbersAlignLeft->isChecked()
+               ? Qt::AlignLeft
+               : (d->pageNumbersAlignCenter->isChecked() ? Qt::AlignHCenter : Qt::AlignRight));
+}
+
+void ScreenplayTemplatePageView::setPageNumbersAlignment(Qt::Alignment _alignment)
+{
+    if (_alignment.testFlag(Qt::AlignTop)) {
+        d->pageNumbersAlignTop->setChecked(true);
+    } else {
+        d->pageNumbersAlignBottom->setChecked(true);
+    }
+
+    if (_alignment.testFlag(Qt::AlignLeft)) {
+        d->pageNumbersAlignLeft->setChecked(true);
+    } else if (_alignment.testFlag(Qt::AlignHCenter)) {
+        d->pageNumbersAlignCenter->setChecked(true);
+    } else {
+        d->pageNumbersAlignRight->setChecked(true);
+    }
+}
+
+int ScreenplayTemplatePageView::leftHalfOfPageWidthPercents() const
+{
+    return d->pageSplitter->value();
+}
+
+void ScreenplayTemplatePageView::setLeftHalfOfPage(int _value)
+{
+    d->pageSplitter->setValue(_value);
 }
 
 bool ScreenplayTemplatePageView::eventFilter(QObject* _watched, QEvent* _event)

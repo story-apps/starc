@@ -373,9 +373,9 @@ public:
     /**
      * @brief Получить стиль блока
      */
-    ScreenplayBlockStyle blockStyle(ScreenplayParagraphType _forType) const;
-    ScreenplayBlockStyle blockStyle(const QTextBlock& _forBlock) const;
-    void setBlockStyle(const ScreenplayBlockStyle& _blockStyle);
+    ScreenplayBlockStyle paragraphStyle(ScreenplayParagraphType _forType) const;
+    ScreenplayBlockStyle paragraphStyle(const QTextBlock& _forBlock) const;
+    void setParagraphStyle(const ScreenplayBlockStyle& _style);
 
 private:
     explicit ScreenplayTemplate(const QString& _fromFile);
@@ -431,7 +431,7 @@ private:
     /**
      * @brief Стили блоков текста
      */
-    QHash<ScreenplayParagraphType, ScreenplayBlockStyle> m_blockStyles;
+    QHash<ScreenplayParagraphType, ScreenplayBlockStyle> m_paragrapsStyles;
 };
 
 /**

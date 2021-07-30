@@ -2,6 +2,8 @@
 
 #include <ui/widgets/widget/widget.h>
 
+#include <QPageSize>
+
 
 namespace Ui {
 
@@ -21,7 +23,19 @@ public:
      */
     void setUseMm(bool _mm);
 
-signals:
+    //
+    // Параметры шаблона
+    //
+    QString templateName() const;
+    void setTemplateName(const QString& _name);
+    QPageSize::PageSizeId pageSizeId() const;
+    void setPageSize(QPageSize::PageSizeId _pageSize);
+    QMarginsF pageMargins() const;
+    void setPageMargins(const QMarginsF& _margins);
+    Qt::Alignment pageNumbersAlignment() const;
+    void setPageNumbersAlignment(Qt::Alignment _alignment);
+    int leftHalfOfPageWidthPercents() const;
+    void setLeftHalfOfPage(int _value);
 
 protected:
     /**

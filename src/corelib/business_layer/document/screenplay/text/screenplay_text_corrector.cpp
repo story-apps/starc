@@ -1613,7 +1613,7 @@ void ScreenplayTextCorrector::Implementation::breakDialogue(
     // Оформить его, как персонажа, но без отступа сверху
     //
     const auto moreKeywordStyle = TemplatesFacade::screenplayTemplate(templateId)
-                                      .blockStyle(ScreenplayParagraphType::Character);
+                                      .paragraphStyle(ScreenplayParagraphType::Character);
     QTextBlockFormat moreKeywordFormat = moreKeywordStyle.blockFormat(_cursor.inTable());
     moreKeywordFormat.setTopMargin(0);
     moreKeywordFormat.setProperty(ScreenplayBlockStyle::PropertyIsCorrection, true);

@@ -55,7 +55,7 @@ public:
                                              PageMetrics::mmToPx(mmPageMargins.bottom(), y));
         const auto pageHeight = pxPageSize.height() - pxPageMargins.top() - pxPageMargins.bottom();
 
-        const auto blockStyle = currentTemplate.blockStyle(_type);
+        const auto blockStyle = currentTemplate.paragraphStyle(_type);
         const auto mmBlockMargins = blockStyle.margins();
         const auto pxBlockMargins = QMarginsF(PageMetrics::mmToPx(mmBlockMargins.left(), x),
                                               PageMetrics::mmToPx(mmBlockMargins.top(), y),

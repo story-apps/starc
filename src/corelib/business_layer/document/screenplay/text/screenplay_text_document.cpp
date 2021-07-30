@@ -170,7 +170,7 @@ void ScreenplayTextDocument::Implementation::readModelItemContent(int _itemRow,
             //
             auto insertPageSplitter = [&_cursor, this] {
                 const auto style
-                    = documentTemplate().blockStyle(ScreenplayParagraphType::PageSplitter);
+                    = documentTemplate().paragraphStyle(ScreenplayParagraphType::PageSplitter);
                 _cursor.setBlockFormat(style.blockFormat());
                 _cursor.setBlockCharFormat(style.charFormat());
                 _cursor.setCharFormat(style.charFormat());
@@ -295,7 +295,7 @@ void ScreenplayTextDocument::Implementation::readModelItemContent(int _itemRow,
         //
         // Установим стиль блока
         //
-        const auto currentStyle = documentTemplate().blockStyle(textItem->paragraphType());
+        const auto currentStyle = documentTemplate().paragraphStyle(textItem->paragraphType());
         _cursor.setBlockFormat(currentStyle.blockFormat(_cursor.inTable()));
         _cursor.setBlockCharFormat(currentStyle.charFormat());
         _cursor.setCharFormat(currentStyle.charFormat());
@@ -464,7 +464,7 @@ void ScreenplayTextDocument::setModel(BusinessLayer::ScreenplayTextModel* _model
     // Обновим шрифт документа, в моменте когда текста нет
     //
     const auto templateDefaultFont
-        = d->documentTemplate().blockStyle(ScreenplayParagraphType::Action).font();
+        = d->documentTemplate().paragraphStyle(ScreenplayParagraphType::Action).font();
     if (defaultFont() != templateDefaultFont) {
         setDefaultFont(templateDefaultFont);
     }
@@ -543,14 +543,14 @@ void ScreenplayTextDocument::setModel(BusinessLayer::ScreenplayTextModel* _model
                 } else if (!textItem->alignment().has_value()
                            && cursor.blockFormat().alignment()
                                != d->documentTemplate()
-                                      .blockStyle(textItem->paragraphType())
+                                      .paragraphStyle(textItem->paragraphType())
                                       .align()) {
                     //
                     // ... если выравнивание должно быть, как в стиле
                     //
                     auto blockFormat = cursor.blockFormat();
                     blockFormat.setAlignment(
-                        d->documentTemplate().blockStyle(textItem->paragraphType()).align());
+                        d->documentTemplate().paragraphStyle(textItem->paragraphType()).align());
                     cursor.setBlockFormat(blockFormat);
                 }
                 //
@@ -586,7 +586,7 @@ void ScreenplayTextDocument::setModel(BusinessLayer::ScreenplayTextModel* _model
                     cursor.movePosition(QTextCursor::StartOfBlock);
                     cursor.movePosition(QTextCursor::EndOfBlock, QTextCursor::KeepAnchor);
                     const auto blockType = ScreenplayBlockStyle::forBlock(cursor.block());
-                    const auto blockStyle = d->documentTemplate().blockStyle(blockType);
+                    const auto blockStyle = d->documentTemplate().paragraphStyle(blockType);
                     cursor.setBlockCharFormat(blockStyle.charFormat());
                     cursor.setCharFormat(blockStyle.charFormat());
 
@@ -1282,7 +1282,7 @@ void ScreenplayTextDocument::applyParagraphType(BusinessLayer::ScreenplayParagra
     auto cursor = _cursor;
     cursor.beginEditBlock();
 
-    const auto newBlockStyle = d->documentTemplate().blockStyle(_type);
+    const auto newBlockStyle = d->documentTemplate().paragraphStyle(_type);
 
     //
     // Обновим стили
@@ -1330,7 +1330,7 @@ void ScreenplayTextDocument::applyParagraphType(BusinessLayer::ScreenplayParagra
     //
     if (_type == ScreenplayParagraphType::FolderHeader) {
         const auto footerStyle
-            = d->documentTemplate().blockStyle(ScreenplayParagraphType::FolderFooter);
+            = d->documentTemplate().paragraphStyle(ScreenplayParagraphType::FolderFooter);
 
         //
         // Вставляем закрывающий блок
@@ -1896,7 +1896,7 @@ void ScreenplayTextDocument::updateModelOnContentChange(int _position, int _char
                 textItem->setInFirstColumn({});
             }
             textItem->setParagraphType(paragraphType);
-            if (d->documentTemplate().blockStyle(paragraphType).align()
+            if (d->documentTemplate().paragraphStyle(paragraphType).align()
                 != block.blockFormat().alignment()) {
                 textItem->setAlignment(block.blockFormat().alignment());
             } else {
@@ -2118,7 +2118,7 @@ void ScreenplayTextDocument::updateModelOnContentChange(int _position, int _char
                     textItem->setInFirstColumn({});
                 }
                 textItem->setParagraphType(paragraphType);
-                if (d->documentTemplate().blockStyle(paragraphType).align()
+                if (d->documentTemplate().paragraphStyle(paragraphType).align()
                     != block.blockFormat().alignment()) {
                     textItem->setAlignment(block.blockFormat().alignment());
                 } else {

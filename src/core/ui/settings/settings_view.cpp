@@ -1,6 +1,7 @@
 #include "settings_view.h"
 
 #include <business_layer/chronometry/chronometer.h>
+#include <business_layer/templates/screenplay_template.h>
 #include <business_layer/templates/templates_facade.h>
 #include <ui/design_system/design_system.h>
 #include <ui/widgets/button/button.h>
@@ -720,13 +721,37 @@ SettingsView::SettingsView(QWidget* _parent)
     // ... Редактор сценария
     //
     connect(d->screenplayEditorDefaultTemplateOptions, &IconButton::clicked, this, [this] {
-        auto editAction = new QAction(tr("Edit"));
-        connect(editAction, &QAction::triggered, this,
-                &SettingsView::editCurrentScreenplayEditorTemplate);
-        auto copyAction = new QAction(tr("Duplicate"));
-        auto saveAction = new QAction(tr("Save"));
-        auto loadAction = new QAction(tr("Load"));
-        d->contextMenu->setActions({ editAction, copyAction, saveAction, loadAction });
+        QVector<QAction*> actions;
+        const auto templateIndex = d->screenplayEditorDefaultTemplate->currentIndex();
+        const auto templateId
+            = templateIndex.data(BusinessLayer::TemplatesFacade::kTemplateIdRole).toString();
+        const auto isDefaultTemplate
+            = BusinessLayer::TemplatesFacade::screenplayTemplate(templateId).isDefault();
+        if (!isDefaultTemplate) {
+            auto editAction = new QAction(tr("Edit"), d->contextMenu);
+            connect(editAction, &QAction::triggered, this, [this, templateId] {
+                emit editCurrentScreenplayEditorTemplateRequested(templateId);
+            });
+            actions.append(editAction);
+        }
+        //
+        auto duplicateAction = new QAction(tr("Duplicate"), d->contextMenu);
+        connect(duplicateAction, &QAction::triggered, this, [this, templateId] {
+            emit duplicateCurrentScreenplayEditorTemplateRequested(templateId);
+        });
+        actions.append(duplicateAction);
+        //
+        if (!isDefaultTemplate) {
+            auto removeAction = new QAction(tr("Remove"), d->contextMenu);
+            connect(removeAction, &QAction::triggered, this, [this, templateId] {
+                emit removeCurrentScreenplayEditorTemplateRequested(templateId);
+            });
+            actions.append(removeAction);
+        }
+        //        auto exportAction = new QAction(tr("Export"), d->contextMenu);
+        //        auto importAction = new QAction(tr("Import"), d->contextMenu);
+        //        importAction->setSeparator(true);
+        d->contextMenu->setActions(actions);
         d->contextMenu->showContextMenu(QCursor::pos());
     });
     connect(d->screenplayEditorShowSceneNumber, &CheckBox::checkedChanged,

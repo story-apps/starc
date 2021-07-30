@@ -185,7 +185,7 @@ static void printPage(int _pageNumber, QPainter* _painter, const QTextDocument* 
         else {
             _painter->save();
             _painter->setFont(
-                _template.blockStyle(ScreenplayParagraphType::Action).charFormat().font());
+                _template.paragraphStyle(ScreenplayParagraphType::Action).charFormat().font());
 
             //
             // Середины верхнего и нижнего полей
@@ -257,7 +257,7 @@ static void printPage(int _pageNumber, QPainter* _painter, const QTextDocument* 
         else {
             _painter->save();
             _painter->setFont(
-                _template.blockStyle(ScreenplayParagraphType::Action).charFormat().font());
+                _template.paragraphStyle(ScreenplayParagraphType::Action).charFormat().font());
 
             //
             // Середины верхнего и нижнего полей
