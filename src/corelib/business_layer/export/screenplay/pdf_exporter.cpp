@@ -13,6 +13,7 @@
 #include <business_layer/templates/templates_facade.h>
 #include <ui/widgets/text_edit/page/page_metrics.h>
 #include <ui/widgets/text_edit/page/page_text_edit.h>
+#include <utils/helpers/text_helper.h>
 
 #include <QAbstractTextDocumentLayout>
 #include <QApplication>
@@ -72,8 +73,9 @@ static void printPage(int _pageNumber, QPainter* _painter, const QTextDocument* 
             //
             // Покажем номер сцены, если необходимо
             //
-            if (ScreenplayBlockStyle::forBlock(block) == ScreenplayParagraphType::SceneHeading
-                && !block.text().isEmpty() && _exportOptions.printScenesNumbers) {
+            const auto paragraphType = ScreenplayBlockStyle::forBlock(block);
+            if (paragraphType == ScreenplayParagraphType::SceneHeading && !block.text().isEmpty()
+                && _exportOptions.printScenesNumbers) {
                 const auto blockData = dynamic_cast<ScreenplayTextBlockData*>(block.userData());
                 if (blockData != nullptr) {
                     _painter->setFont(block.charFormat().font());
@@ -113,8 +115,8 @@ static void printPage(int _pageNumber, QPainter* _painter, const QTextDocument* 
             //
             // Покажем номер диалога, если необходимо
             //
-            else if (ScreenplayBlockStyle::forBlock(block) == ScreenplayParagraphType::Character
-                     && !block.text().isEmpty() && _exportOptions.printDialoguesNumbers) {
+            else if (paragraphType == ScreenplayParagraphType::Character && !block.text().isEmpty()
+                     && _exportOptions.printDialoguesNumbers) {
                 const auto blockData = dynamic_cast<ScreenplayTextBlockData*>(block.userData());
                 if (blockData != nullptr) {
                     _painter->setFont(block.charFormat().font());
@@ -159,6 +161,62 @@ static void printPage(int _pageNumber, QPainter* _painter, const QTextDocument* 
                     }
                     _painter->drawText(dialogueNumberRect, Qt::AlignRight | Qt::AlignTop,
                                        dialogueNumber);
+                }
+            }
+
+            //
+            // Прорисовка префикса/постфикса для блока текста, если это не пустая декорация
+            //
+            if (!block.text().isEmpty()
+                || !block.blockFormat().boolProperty(ScreenplayBlockStyle::PropertyIsCorrection)) {
+                const auto correctedBlockRect
+                    = QRectF({ block.blockFormat().leftMargin()
+                                   + PageMetrics::mmToPx(_template.pageMargins().left()),
+                               blockRect.top() },
+                             blockRect.size());
+                //
+                // ... префикс
+                //
+                if (block.charFormat().hasProperty(ScreenplayBlockStyle::PropertyPrefix)) {
+                    _painter->setFont(block.charFormat().font());
+
+                    const auto prefix
+                        = block.charFormat().stringProperty(ScreenplayBlockStyle::PropertyPrefix);
+                    auto prefixRect = blockRect;
+                    prefixRect.setWidth(TextHelper::fineTextWidthF(prefix, _painter->font()));
+                    prefixRect.moveLeft(prefixRect.left() + block.blockFormat().leftMargin()
+                                        - prefixRect.width());
+                    prefixRect.setHeight(_painter->fontMetrics().boundingRect(prefix).height());
+                    _painter->drawText(prefixRect, Qt::AlignLeft | Qt::AlignBottom, prefix);
+                }
+                //
+                // ... постфикс
+                //
+                if (block.charFormat().hasProperty(ScreenplayBlockStyle::PropertyPostfix)) {
+                    _painter->setFont(block.charFormat().font());
+
+                    const auto postfix
+                        = block.charFormat().stringProperty(ScreenplayBlockStyle::PropertyPostfix);
+
+                    //
+                    // Почему-то если взять просто ширину последней строки текста, то получается
+                    // слишком широко в некоторых случаях, так, что постфикс рисуется очень далеко
+                    // от текста. Поэтому решил брать текст последней строки, добавлять к нему
+                    // постфикс, считать их совместную ширину и брать её, как конечную точку
+                    //
+                    const auto lastLineText = TextHelper::lastLineText(
+                                                  block.text(), _painter->font(), blockRect.width())
+                        + postfix;
+                    const QPoint bottomRight
+                        = QPoint(blockRect.left() + block.blockFormat().leftMargin()
+                                     + TextHelper::fineTextWidthF(lastLineText, _painter->font()),
+                                 correctedBlockRect.bottom());
+                    const QPoint topLeft = QPoint(
+                        bottomRight.x() - TextHelper::fineTextWidthF(postfix, _painter->font()),
+                        correctedBlockRect.bottom()
+                            - _painter->fontMetrics().boundingRect(postfix).height());
+                    const QRect postfixRect(topLeft, bottomRight);
+                    _painter->drawText(postfixRect, Qt::AlignLeft | Qt::AlignBottom, postfix);
                 }
             }
 

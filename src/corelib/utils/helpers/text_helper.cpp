@@ -85,6 +85,38 @@ qreal TextHelper::heightForWidth(const QString& _text, const QFont& _font, qreal
     return height;
 }
 
+QString TextHelper::lastLineText(const QString& _text, const QFont& _font, qreal _width)
+{
+    //
+    // Корректируем текст, чтобы QTextLayout смог сам обработать переносы строк
+    //
+    QString correctedText = _text;
+    correctedText.replace('\n', QChar::LineSeparator);
+
+    //
+    // Компануем текст и считаем, какой высоты получается результат
+    //
+    QTextLayout textLayout(correctedText, _font);
+    QTextOption textOption;
+    textOption.setWrapMode(QTextOption::WrapAtWordBoundaryOrAnywhere);
+    textLayout.setTextOption(textOption);
+    textLayout.beginLayout();
+    QString lastLineText;
+    forever
+    {
+        QTextLine line = textLayout.createLine();
+        if (!line.isValid()) {
+            break;
+        }
+
+        line.setLineWidth(_width);
+        lastLineText = correctedText.mid(line.textStart(), line.textLength());
+    }
+    textLayout.endLayout();
+
+    return lastLineText;
+}
+
 QString TextHelper::elidedText(const QString& _text, const QFont& _font, const QRectF& _rect)
 {
     const QFontMetricsF metrics(_font);
