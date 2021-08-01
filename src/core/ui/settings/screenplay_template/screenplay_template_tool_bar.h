@@ -8,7 +8,7 @@ namespace Ui {
 /**
  * @brief Панель инструментов настроек
  */
-class CORE_LIBRARY_EXPORT ScreenplayTemplateToolBar : public AppBar
+class ScreenplayTemplateToolBar : public AppBar
 {
     Q_OBJECT
 

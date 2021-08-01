@@ -21,7 +21,7 @@ enum class PageLayoutItem {
 /**
  * @brief Виджет для визуального отображения параметров страницы текста
  */
-class CORE_LIBRARY_EXPORT PageLayout : public Widget
+class PageLayout : public Widget
 {
     Q_OBJECT
 
