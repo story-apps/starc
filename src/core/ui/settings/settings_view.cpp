@@ -926,11 +926,17 @@ void SettingsView::setApplicationLanguage(int _language)
         case QLocale::Belarusian: {
             return "Беларуский";
         }
+        case QLocale::Catalan: {
+            return "Català";
+        }
         case QLocale::Danish: {
             return "Dansk";
         }
         case QLocale::English: {
             return "English";
+        }
+        case QLocale::Esperanto: {
+            return "Esperanto";
         }
         case QLocale::French: {
             return "Français";

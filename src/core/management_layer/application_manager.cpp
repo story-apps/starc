@@ -466,8 +466,18 @@ void ApplicationManager::Implementation::setTranslation(QLocale::Language _langu
         break;
     }
 
+    case QLocale::Catalan: {
+        translation = "ca";
+        break;
+    }
+
     case QLocale::Danish: {
         translation = "da_DK";
+        break;
+    }
+
+    case QLocale::Esperanto: {
+        translation = "eo";
         break;
     }
 

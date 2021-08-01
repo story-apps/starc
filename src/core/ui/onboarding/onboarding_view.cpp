@@ -95,8 +95,10 @@ void OnboardingView::Implementation::initLanguagePage()
     };
     RadioButton* azerbaijaniLanguage = initLanguageButton("Azərbaycan", QLocale::Azerbaijani);
     RadioButton* belarusianLanguage = initLanguageButton("Беларуский", QLocale::Belarusian);
+    RadioButton* catalanLanguage = initLanguageButton("Català", QLocale::Catalan);
     RadioButton* danishLanguage = initLanguageButton("Dansk", QLocale::Danish);
     RadioButton* englishLanguage = initLanguageButton("English", QLocale::English);
+    RadioButton* esperantoLanguage = initLanguageButton("Esperanto", QLocale::Esperanto);
     RadioButton* frenchLanguage = initLanguageButton("Français", QLocale::French);
     RadioButton* galicianLanguage = initLanguageButton("Galego", QLocale::Galician);
     RadioButton* germanLanguage = initLanguageButton("Deutsch", QLocale::German);
@@ -149,13 +151,13 @@ void OnboardingView::Implementation::initLanguagePage()
             previousButton = button;
         }
     };
-    buildFocusChain({ azerbaijaniLanguage,      belarusianLanguage, danishLanguage,
-                      germanLanguage,           englishLanguage,    spanishLanguage,
-                      frenchLanguage,           galicianLanguage,   indonesianLanguage,
-                      italianLanguage,          hungarianLanguage,  polishLanguage,
-                      portugueseBrazilLanguage, romanianLanguage,   russianLanguage,
-                      slovenianLanguage,        turkishLanguage,    ukrainianLanguage,
-                      hebrewLanguage,           hindiLanguage,      persianLanguage });
+    buildFocusChain(
+        { azerbaijaniLanguage, belarusianLanguage, catalanLanguage,          danishLanguage,
+          germanLanguage,      englishLanguage,    spanishLanguage,          esperantoLanguage,
+          frenchLanguage,      galicianLanguage,   indonesianLanguage,       italianLanguage,
+          hungarianLanguage,   polishLanguage,     portugueseBrazilLanguage, romanianLanguage,
+          russianLanguage,     slovenianLanguage,  turkishLanguage,          ukrainianLanguage,
+          hebrewLanguage,      hindiLanguage,      persianLanguage });
 
     languageHowToAddLink = new Body1LinkLabel(languagePage);
     languageHowToAddLink->setLink(QUrl("https://github.com/dimkanovikov/starc/wiki/"
@@ -181,14 +183,16 @@ void OnboardingView::Implementation::initLanguagePage()
     languagePageLayout->addWidget(languageTitleLabel, row++, 0, 1, 4);
     languagePageLayout->addWidget(azerbaijaniLanguage, row++, 0);
     languagePageLayout->addWidget(belarusianLanguage, row++, 0);
+    languagePageLayout->addWidget(catalanLanguage, row++, 0);
     languagePageLayout->addWidget(danishLanguage, row++, 0);
     languagePageLayout->addWidget(germanLanguage, row++, 0);
     languagePageLayout->addWidget(englishLanguage, row++, 0);
     languagePageLayout->addWidget(spanishLanguage, row++, 0);
+    languagePageLayout->addWidget(esperantoLanguage, row++, 0);
     languagePageLayout->addWidget(frenchLanguage, row++, 0);
     languagePageLayout->addWidget(galicianLanguage, row++, 0);
-    languagePageLayout->addWidget(indonesianLanguage, row++, 0);
     int rowForSecondColumn = 1;
+    languagePageLayout->addWidget(indonesianLanguage, rowForSecondColumn++, 1);
     languagePageLayout->addWidget(italianLanguage, rowForSecondColumn++, 1);
     languagePageLayout->addWidget(hungarianLanguage, rowForSecondColumn++, 1);
     languagePageLayout->addWidget(polishLanguage, rowForSecondColumn++, 1);
