@@ -341,6 +341,12 @@ bool isCommentsRangeEnd(const QTextBlock& _block, const QTextLayout::FormatRange
 QString docxText(QMap<int, QStringList>& _comments, const ScreenplayTextCursor& _cursor,
                  const ExportOptions& _exportOptions)
 {
+    //
+    // Блокируем сигналы от документа - по ходу экспорта мы будем изменять документ,
+    // но нам не нужно при этом корректировать переносы в нём
+    //
+    QSignalBlocker documentSignalBlocker(_cursor.document());
+
     const auto& screenplayTemplate = exportTemplate(_exportOptions);
     auto tableWidth = [&screenplayTemplate] {
         const QSizeF paperSize
@@ -481,13 +487,36 @@ QString docxText(QMap<int, QStringList>& _comments, const ScreenplayTextCursor& 
                     = static_cast<ScreenplayTextModelSceneItem*>(blockData->item()->parent());
                 const auto sceneNumber = sceneItem->number().value + " ";
                 const QFontMetrics fontMetrics(block.charFormat().font());
-                documentXml.append(QString("<w:ind w:left=\"0\" w:right=\"0\" w:hanging=\"%1\" />")
-                                       .arg(pxToTwips(fontMetrics.horizontalAdvance(sceneNumber))));
+                documentXml.append(
+                    QString("<w:ind w:left=\"%1\" w:right=\"%2\" w:hanging=\"%3\" />")
+                        .arg(pxToTwips(block.blockFormat().leftMargin()))
+                        .arg(pxToTwips(block.blockFormat().rightMargin()))
+                        .arg(pxToTwips(fontMetrics.horizontalAdvance(sceneNumber))));
 
                 auto cursor = _cursor;
                 cursor.setPosition(block.position());
                 cursor.insertText(sceneNumber, block.charFormat());
             }
+        }
+        //
+        // ... для ремарки подхачиваем отступ перед блоком и ширину самого блока
+        //
+        else if (currentBlockType == ScreenplayParagraphType::Parenthetical
+                 && !block.text().isEmpty()) {
+            const QLatin1String prefix("(");
+            const QLatin1String postfix(")");
+            const QFontMetrics fontMetrics(block.charFormat().font());
+            documentXml.append(QString("<w:ind w:left=\"%1\" w:right=\"%2\" w:hanging=\"%3\" />")
+                                   .arg(pxToTwips(block.blockFormat().leftMargin()))
+                                   .arg(pxToTwips(block.blockFormat().rightMargin()
+                                                  - fontMetrics.horizontalAdvance(postfix)))
+                                   .arg(pxToTwips(fontMetrics.horizontalAdvance(prefix))));
+
+            auto cursor = _cursor;
+            cursor.setPosition(block.position());
+            cursor.insertText(prefix, block.charFormat());
+            cursor.movePosition(ScreenplayTextCursor::EndOfBlock);
+            cursor.insertText(postfix, block.charFormat());
         }
 
 
