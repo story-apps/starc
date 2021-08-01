@@ -309,7 +309,8 @@ void ScreenplayTextCursor::removeCharacters(bool _backward, BaseTextEdit* _edito
     //
     const auto bottomBlock = document()->findBlock(bottomCursorPosition);
     const auto bottomParagraphType = ScreenplayBlockStyle::forBlock(bottomBlock);
-    const auto bottomStyle = TemplatesFacade::screenplayTemplate().paragraphStyle(bottomParagraphType);
+    const auto bottomStyle
+        = TemplatesFacade::screenplayTemplate().paragraphStyle(bottomParagraphType);
 
     //
     // Определим стиль результирующего блока и сохраним его данные
