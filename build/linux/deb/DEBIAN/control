@@ -1,5 +1,5 @@
 Package: starcapp
-Version: 0.0.7
+Version: 0.0.8
 Provides: starcapp
 Maintainer: Dimka Novikov <to@dimkanovikov.pro>
 Architecture: amd64
