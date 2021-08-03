@@ -4,6 +4,7 @@
 #include <utils/helpers/image_helper.h>
 
 #include <QApplication>
+#include <QDesktopWidget>
 #include <QPainter>
 #include <QVBoxLayout>
 #include <QVariantAnimation>
@@ -68,10 +69,48 @@ void Card::paintEvent(QPaintEvent* _event)
 {
     Q_UNUSED(_event)
 
-    const QRectF backgroundRect
+    QRectF backgroundRect
         = rect().marginsRemoved(Ui::DesignSystem::card().shadowMargins().toMargins());
     if (!backgroundRect.isValid()) {
         return;
+    }
+
+    //
+    // Скорректируем геометрию фона, т.к. карточка может занимать несколько экранов
+    // в высоту и нет смысла рисовать такой огромный фон
+    //
+    const auto screenGeometry = QApplication::desktop()->screenGeometry(this);
+    const auto backgroundGlobalTopLeft = mapToGlobal(backgroundRect.topLeft().toPoint());
+    const auto backgroundGlobalTopRight = mapToGlobal(backgroundRect.topLeft().toPoint());
+    const auto backgroundGlobalBottomLeft = mapToGlobal(backgroundRect.bottomLeft().toPoint());
+    const auto backgroundGlobalBottomRight = mapToGlobal(backgroundRect.bottomRight().toPoint());
+    if (backgroundRect.width() > screenGeometry.width()) {
+        if (screenGeometry.contains(backgroundGlobalTopLeft)
+            || screenGeometry.contains(backgroundGlobalBottomLeft)) {
+            backgroundRect.setWidth(screenGeometry.width());
+        } else if (screenGeometry.contains(backgroundGlobalTopRight)
+                   || screenGeometry.contains(backgroundGlobalBottomRight)) {
+            const auto right = backgroundRect.right();
+            backgroundRect.setWidth(screenGeometry.width());
+            backgroundRect.moveRight(right);
+        } else {
+            backgroundRect.setWidth(screenGeometry.width());
+            backgroundRect.moveLeft(mapFromGlobal(screenGeometry.topLeft()).x());
+        }
+    }
+    if (backgroundRect.height() > screenGeometry.height()) {
+        if (screenGeometry.contains(backgroundGlobalTopLeft)
+            || screenGeometry.contains(backgroundGlobalTopRight)) {
+            backgroundRect.setHeight(screenGeometry.height());
+        } else if (screenGeometry.contains(backgroundGlobalBottomLeft)
+                   || screenGeometry.contains(backgroundGlobalBottomRight)) {
+            const auto bottom = backgroundRect.bottom();
+            backgroundRect.setHeight(screenGeometry.height());
+            backgroundRect.moveBottom(bottom);
+        } else {
+            backgroundRect.setHeight(screenGeometry.height());
+            backgroundRect.moveTop(mapFromGlobal(screenGeometry.topLeft()).y());
+        }
     }
 
     //
@@ -97,7 +136,9 @@ void Card::paintEvent(QPaintEvent* _event)
                                   shadowHeight, Ui::DesignSystem::color().shadow(), cacheShadow);
 
     QPainter painter(this);
-    painter.drawPixmap(0, 0, shadow);
+    painter.drawPixmap(
+        backgroundRect.marginsAdded(Ui::DesignSystem::card().shadowMargins().toMargins()).topLeft(),
+        shadow);
     //
     // ... рисуем сам фон
     //
