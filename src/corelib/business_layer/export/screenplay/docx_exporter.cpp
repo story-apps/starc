@@ -782,8 +782,9 @@ void writeStyles(QtZipWriter* _zip, const ExportOptions& _exportOptions)
           "<w:sz w:val=\"22\"/>"
           "<w:szCs w:val=\"22\"/>"
           "<w:lang w:val=\""
-        + languageCode + "\" w:eastAsia=\"" + languageCode
-        + "\" w:bidi=\"ar-SA\"/>"
+        + languageCode + "\" w:eastAsia=\"" + languageCode + "\" w:bidi=\""
+        + (QLocale().language() == QLocale::Hebrew ? "he-IL" : "ar-SA")
+        + "\"/>"
           "</w:rPr>"
           "</w:rPrDefault>"
           "<w:pPrDefault><w:pPr><w:spacing w:after=\"200\" w:line=\"276\" "
