@@ -535,6 +535,26 @@ ProjectManager::ProjectManager(QObject* _parent, QWidget* _parentWidget)
                 setDocumentVisible(_screenplayModel,
                                    Domain::DocumentObjectType::ScreenplayStatistics, _visible);
             });
+    connect(&d->modelsFacade, &ProjectModelsFacade::comicBookTitlePageVisibilityChanged, this,
+            [setDocumentVisible](BusinessLayer::AbstractModel* _comicBookModel, bool _visible) {
+                setDocumentVisible(_comicBookModel, Domain::DocumentObjectType::ComicBookTitlePage,
+                                   _visible);
+            });
+    connect(&d->modelsFacade, &ProjectModelsFacade::comicBookSynopsisVisibilityChanged, this,
+            [setDocumentVisible](BusinessLayer::AbstractModel* _comicBookModel, bool _visible) {
+                setDocumentVisible(_comicBookModel, Domain::DocumentObjectType::ComicBookSynopsis,
+                                   _visible);
+            });
+    connect(&d->modelsFacade, &ProjectModelsFacade::comicBookTextVisibilityChanged, this,
+            [setDocumentVisible](BusinessLayer::AbstractModel* _comicBookModel, bool _visible) {
+                setDocumentVisible(_comicBookModel, Domain::DocumentObjectType::ComicBookText,
+                                   _visible);
+            });
+    connect(&d->modelsFacade, &ProjectModelsFacade::comicBookStatisticsVisibilityChanged, this,
+            [setDocumentVisible](BusinessLayer::AbstractModel* _comicBookModel, bool _visible) {
+                setDocumentVisible(_comicBookModel, Domain::DocumentObjectType::ComicBookStatistics,
+                                   _visible);
+            });
 }
 
 ProjectManager::~ProjectManager() = default;

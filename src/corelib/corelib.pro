@@ -86,6 +86,11 @@ SOURCES += \
     business_layer/model/abstract_model_xml.cpp \
     business_layer/model/characters/character_model.cpp \
     business_layer/model/characters/characters_model.cpp \
+    business_layer/model/comic_book/comic_book_dictionaries_model.cpp \
+    business_layer/model/comic_book/comic_book_information_model.cpp \
+    business_layer/model/comic_book/comic_book_statistics_model.cpp \
+    business_layer/model/comic_book/comic_book_synopsis_model.cpp \
+    business_layer/model/comic_book/comic_book_title_page_model.cpp \
     business_layer/model/locations/location_model.cpp \
     business_layer/model/locations/locations_model.cpp \
     business_layer/model/project/project_information_model.cpp \
@@ -111,7 +116,8 @@ SOURCES += \
     business_layer/model/text/text_model_chapter_item.cpp \
     business_layer/model/text/text_model_item.cpp \
     business_layer/model/text/text_model_text_item.cpp \
-    business_layer/reports/screenplay/summary_report.cpp \
+    business_layer/reports/comic_book/comic_book_summary_report.cpp \
+    business_layer/reports/screenplay/screenplay_summary_report.cpp \
     business_layer/templates/screenplay_template.cpp \
     business_layer/templates/templates_facade.cpp \
     business_layer/templates/text_template.cpp \
@@ -246,6 +252,11 @@ HEADERS += \
     business_layer/model/abstract_model_xml.h \
     business_layer/model/characters/character_model.h \
     business_layer/model/characters/characters_model.h \
+    business_layer/model/comic_book/comic_book_dictionaries_model.h \
+    business_layer/model/comic_book/comic_book_information_model.h \
+    business_layer/model/comic_book/comic_book_statistics_model.h \
+    business_layer/model/comic_book/comic_book_synopsis_model.h \
+    business_layer/model/comic_book/comic_book_title_page_model.h \
     business_layer/model/locations/location_model.h \
     business_layer/model/locations/locations_model.h \
     business_layer/model/project/project_information_model.h \
@@ -274,7 +285,8 @@ HEADERS += \
     business_layer/model/text/text_model_text_item.h \
     business_layer/model/text/text_model_xml.h \
     business_layer/reports/abstract_report.h \
-    business_layer/reports/screenplay/summary_report.h \
+    business_layer/reports/comic_book/comic_book_summary_report.h \
+    business_layer/reports/screenplay/screenplay_summary_report.h \
     business_layer/templates/screenplay_template.h \
     business_layer/templates/templates_facade.h \
     business_layer/templates/text_template.h \

@@ -63,6 +63,7 @@ CreateDocumentDialog::Implementation::Implementation(QWidget* _parent)
     typesModel->appendRow(makeItem(Domain::DocumentObjectType::Character));
     typesModel->appendRow(makeItem(Domain::DocumentObjectType::Location));
     typesModel->appendRow(makeItem(Domain::DocumentObjectType::Screenplay));
+    typesModel->appendRow(makeItem(Domain::DocumentObjectType::ComicBook));
 
     UiHelper::setFocusPolicyRecursively(documentType, Qt::NoFocus);
     documentType->setModel(typesModel);
@@ -94,7 +95,10 @@ void CreateDocumentDialog::Implementation::updateDocumentInfo()
                  "and keep the details.") },
             { Domain::DocumentObjectType::Screenplay,
               tr("Create a document set to streamline your work on the feature film, "
-                 "series, or animation.") } };
+                 "series, or animation.") },
+            { Domain::DocumentObjectType::ComicBook,
+              tr("Create a document set to streamline your work on the comic book, "
+                 "graphic novel, or manga.") } };
 
     const auto documentTypeData = documentType->currentIndex().data(kMimeTypeRole).toInt();
     documentInfo->setText(
@@ -178,6 +182,7 @@ void CreateDocumentDialog::updateTranslations()
     d->typesModel->item(2)->setText(tr("Character"));
     d->typesModel->item(3)->setText(tr("Location"));
     d->typesModel->item(4)->setText(tr("Screenplay"));
+    d->typesModel->item(5)->setText(tr("Comic book"));
 
     d->documentName->setLabel(tr("Name"));
     d->updateDocumentInfo();
@@ -195,7 +200,7 @@ void CreateDocumentDialog::designSystemChangeEvent(DesignSystemChangeEvent* _eve
     d->documentType->setBackgroundColor(DesignSystem::color().background());
     d->documentType->setTextColor(DesignSystem::color().onBackground());
     d->documentType->setMinimumWidth(d->documentType->sizeHintForColumn(0));
-    d->documentType->setMinimumHeight(300 * Ui::DesignSystem::scaleFactor());
+    d->documentType->setMinimumHeight(360 * Ui::DesignSystem::scaleFactor());
 
     d->documentName->setTextColor(Ui::DesignSystem::color().onBackground());
     d->documentName->setBackgroundColor(Ui::DesignSystem::color().onBackground());

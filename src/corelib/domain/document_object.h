@@ -42,6 +42,11 @@ enum class DocumentObjectType {
     ScreenplaySeries = 10110,
     //
     ComicBook = 10200,
+    ComicBookTitlePage = 10201,
+    ComicBookSynopsis = 10202,
+    ComicBookText = 10203,
+    ComicBookDictionaries = 10204,
+    ComicBookStatistics = 10205,
     //
     Novel = 10300,
     //

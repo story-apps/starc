@@ -6,7 +6,6 @@
 #include <utils/helpers/text_helper.h>
 
 #include <QDomDocument>
-#include <QPixmap>
 
 
 namespace BusinessLayer {

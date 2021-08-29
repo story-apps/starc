@@ -1,14 +1,15 @@
 TEMPLATE = subdirs
 
 SUBDIRS = \
+    comic_book_information \
     project_information \
     screenplay_information \
     screenplay_parameters \
     screenplay_text \
     screenplay_text_structure \
-    screenplay_title_page \
     simple_text \
-    simple_text_structure
+    simple_text_structure \
+    title_page
 
 exists (character_information/character_information.pro) {
     SUBDIRS += character_information

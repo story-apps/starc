@@ -2,6 +2,12 @@
 
 #include <business_layer/model/characters/character_model.h>
 #include <business_layer/model/characters/characters_model.h>
+#include <business_layer/model/comic_book/comic_book_dictionaries_model.h>
+#include <business_layer/model/comic_book/comic_book_information_model.h>
+#include <business_layer/model/comic_book/comic_book_statistics_model.h>
+#include <business_layer/model/comic_book/comic_book_synopsis_model.h>
+#include <business_layer/model/comic_book/comic_book_title_page_model.h>
+#include <business_layer/model/comic_book/text/comic_book_text_model.h>
 #include <business_layer/model/locations/location_model.h>
 #include <business_layer/model/locations/locations_model.h>
 #include <business_layer/model/project/project_information_model.h>
@@ -218,6 +224,111 @@ BusinessLayer::AbstractModel* ProjectModelsFacade::modelFor(Domain::DocumentObje
             statisticsModel->setScreenplayTextModel(screenplayModel);
 
             model = statisticsModel;
+            break;
+        }
+
+        case Domain::DocumentObjectType::ComicBook: {
+            auto comicBookModel = new BusinessLayer::ComicBookInformationModel;
+            connect(comicBookModel,
+                    &BusinessLayer::ComicBookInformationModel::titlePageVisibleChanged, this,
+                    [this, comicBookModel](bool _visible) {
+                        emit comicBookTitlePageVisibilityChanged(comicBookModel, _visible);
+                    });
+            connect(comicBookModel,
+                    &BusinessLayer::ComicBookInformationModel::synopsisVisibleChanged, this,
+                    [this, comicBookModel](bool _visible) {
+                        emit comicBookSynopsisVisibilityChanged(comicBookModel, _visible);
+                    });
+            connect(comicBookModel,
+                    &BusinessLayer::ComicBookInformationModel::comicBookTextVisibleChanged, this,
+                    [this, comicBookModel](bool _visible) {
+                        emit comicBookTextVisibilityChanged(comicBookModel, _visible);
+                    });
+            connect(comicBookModel,
+                    &BusinessLayer::ComicBookInformationModel::comicBookStatisticsVisibleChanged,
+                    this, [this, comicBookModel](bool _visible) {
+                        emit comicBookStatisticsVisibilityChanged(comicBookModel, _visible);
+                    });
+
+            model = comicBookModel;
+            break;
+        }
+
+        case Domain::DocumentObjectType::ComicBookTitlePage: {
+            model = new BusinessLayer::ComicBookTitlePageModel;
+            break;
+        }
+
+        case Domain::DocumentObjectType::ComicBookSynopsis: {
+            model = new BusinessLayer::ComicBookSynopsisModel;
+            break;
+        }
+
+        case Domain::DocumentObjectType::ComicBookText: {
+            //            auto comicBookModel = new BusinessLayer::ComicBookTextModel;
+
+            //            const auto comicBookItem =
+            //            d->projectStructureModel->itemForUuid(_document->uuid());
+            //            Q_ASSERT(comicBookItem);
+            //            Q_ASSERT(comicBookItem->parent());
+            //            const auto parentUuid = comicBookItem->parent()->uuid();
+
+            //            //
+            //            // Добавляем в модель комикса, модель информации о комиксе
+            //            //
+            //            auto informationModel
+            //                =
+            //                qobject_cast<BusinessLayer::ComicBookInformationModel*>(modelFor(parentUuid));
+            //            comicBookModel->setInformationModel(informationModel);
+            //            //
+            //            // ... модель справочников
+            //            //
+            //            auto dictionariesModel =
+            //            qobject_cast<BusinessLayer::ComicBookDictionariesModel*>(
+            //                modelFor(Domain::DocumentObjectType::ScreenplayDictionaries));
+            //            comicBookModel->setDictionariesModel(dictionariesModel);
+            //            //
+            //            // ... модель персонажей
+            //            //
+            //            auto charactersModel = qobject_cast<BusinessLayer::CharactersModel*>(
+            //                modelFor(Domain::DocumentObjectType::Characters));
+            //            comicBookModel->setCharactersModel(charactersModel);
+
+            //            model = comicBookModel;
+            model = new BusinessLayer::TextModel;
+            break;
+        }
+
+        case Domain::DocumentObjectType::ComicBookDictionaries: {
+            model = new BusinessLayer::ComicBookDictionariesModel;
+            break;
+        }
+
+        case Domain::DocumentObjectType::ComicBookStatistics: {
+            //            auto statisticsModel = new BusinessLayer::ComicBookStatisticsModel;
+
+            //            const auto statisticsItem =
+            //            d->projectStructureModel->itemForUuid(_document->uuid());
+            //            Q_ASSERT(statisticsItem);
+            //            const auto comicBookItem = statisticsItem->parent();
+            //            Q_ASSERT(comicBookItem);
+            //            QUuid comicBookTextItemUuid;
+            //            for (int childIndex = 0; childIndex < comicBookItem->childCount();
+            //            ++childIndex) {
+            //                const auto childItem = comicBookItem->childAt(childIndex);
+            //                if (childItem->type() == Domain::DocumentObjectType::ComicBookText) {
+            //                    comicBookTextItemUuid = childItem->uuid();
+            //                    break;
+            //                }
+            //            }
+            //            Q_ASSERT(!comicBookTextItemUuid.isNull());
+            //            auto comicBookModel
+            //                =
+            //                qobject_cast<BusinessLayer::ComicBookTextModel*>(modelFor(comicBookTextItemUuid));
+            //            statisticsModel->setComicBookTextModel(comicBookModel);
+
+            //            model = statisticsModel;
+            model = new BusinessLayer::TextModel;
             break;
         }
 

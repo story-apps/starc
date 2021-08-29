@@ -106,6 +106,20 @@ signals:
     /** @} */
 
     /**
+     * @brief Сменилась видимость элемента комикса
+     */
+    /** @{ */
+    void comicBookTitlePageVisibilityChanged(BusinessLayer::AbstractModel* _comicBookModel,
+                                             bool _visible);
+    void comicBookSynopsisVisibilityChanged(BusinessLayer::AbstractModel* _comicookModel,
+                                            bool _visible);
+    void comicBookTextVisibilityChanged(BusinessLayer::AbstractModel* _comicBookModel,
+                                        bool _visible);
+    void comicBookStatisticsVisibilityChanged(BusinessLayer::AbstractModel* _comicBookModel,
+                                              bool _visible);
+    /** @} */
+
+    /**
      * @brief Необходимо создать персонажа с заданным именем
      */
     void createCharacterRequested(const QString& _name, const QByteArray& _content);

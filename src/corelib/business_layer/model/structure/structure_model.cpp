@@ -201,6 +201,20 @@ QModelIndex StructureModel::addDocument(Domain::DocumentObjectType _type, const 
         break;
     }
 
+    case DocumentObjectType::ComicBook: {
+        auto comicBookItem = createItem(DocumentObjectType::ComicBook,
+                                        !_name.isEmpty() ? _name : tr("Comic book"));
+        appendItem(comicBookItem, parentItem);
+        appendItem(createItem(DocumentObjectType::ComicBookTitlePage, tr("Title page")),
+                   comicBookItem);
+        appendItem(createItem(DocumentObjectType::ComicBookSynopsis, tr("Synopsis")),
+                   comicBookItem);
+        appendItem(createItem(DocumentObjectType::ComicBookText, tr("Script")), comicBookItem);
+        appendItem(createItem(DocumentObjectType::ComicBookStatistics, tr("Statistics")),
+                   comicBookItem);
+        break;
+    }
+
     case DocumentObjectType::Characters: {
         appendItem(createItem(_type, tr("Characters")), parentItem, _content);
         break;
@@ -434,6 +448,7 @@ Qt::ItemFlags StructureModel::flags(const QModelIndex& _index) const
     // Элемент можно перемещать и вставлять внутрь другие
     //
     case Domain::DocumentObjectType::Screenplay:
+    case Domain::DocumentObjectType::ComicBook:
     case Domain::DocumentObjectType::Character:
     case Domain::DocumentObjectType::Location:
     case Domain::DocumentObjectType::Folder: {
@@ -464,7 +479,11 @@ Qt::ItemFlags StructureModel::flags(const QModelIndex& _index) const
     case Domain::DocumentObjectType::ScreenplaySynopsis:
     case Domain::DocumentObjectType::ScreenplayTreatment:
     case Domain::DocumentObjectType::ScreenplayText:
-    case Domain::DocumentObjectType::ScreenplayStatistics: {
+    case Domain::DocumentObjectType::ScreenplayStatistics:
+    case Domain::DocumentObjectType::ComicBookTitlePage:
+    case Domain::DocumentObjectType::ComicBookSynopsis:
+    case Domain::DocumentObjectType::ComicBookText:
+    case Domain::DocumentObjectType::ComicBookStatistics: {
         return defaultFlags;
     }
 

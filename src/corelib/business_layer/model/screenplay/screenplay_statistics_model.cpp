@@ -2,7 +2,7 @@
 
 #include "text/screenplay_text_model.h"
 
-#include <business_layer/reports/screenplay/summary_report.h>
+#include <business_layer/reports/screenplay/screenplay_summary_report.h>
 
 
 namespace BusinessLayer {
