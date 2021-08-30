@@ -118,6 +118,7 @@ SOURCES += \
     business_layer/model/text/text_model_text_item.cpp \
     business_layer/reports/comic_book/comic_book_summary_report.cpp \
     business_layer/reports/screenplay/screenplay_summary_report.cpp \
+    business_layer/templates/comic_book_template.cpp \
     business_layer/templates/screenplay_template.cpp \
     business_layer/templates/templates_facade.cpp \
     business_layer/templates/text_template.cpp \
@@ -287,6 +288,7 @@ HEADERS += \
     business_layer/reports/abstract_report.h \
     business_layer/reports/comic_book/comic_book_summary_report.h \
     business_layer/reports/screenplay/screenplay_summary_report.h \
+    business_layer/templates/comic_book_template.h \
     business_layer/templates/screenplay_template.h \
     business_layer/templates/templates_facade.h \
     business_layer/templates/text_template.h \

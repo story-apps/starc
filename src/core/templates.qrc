@@ -12,5 +12,7 @@
         <file>templates/text/mono_cn_a4</file>
         <file>templates/text/sans_letter</file>
         <file>templates/text/sans_a4</file>
+        <file>templates/comicbook/us</file>
+        <file>templates/comicbook/world</file>
     </qresource>
 </RCC>

@@ -1,5 +1,6 @@
 #include "templates_facade.h"
 
+#include "comic_book_template.h"
 #include "screenplay_template.h"
 #include "text_template.h"
 
@@ -16,6 +17,7 @@ namespace {
 
 const QLatin1String kTextTemplatesDirectory("templates/text");
 const QLatin1String kScreenplayTemplatesDirectory("templates/screenplay");
+const QLatin1String kComicBookTemplatesDirectory("templates/comicbook");
 
 /**
  * @brief Параметры группы шаблонов
@@ -323,6 +325,11 @@ QStandardItemModel* TemplatesFacade::screenplayTemplates()
     return instance().d->templatesModel<ScreenplayTemplate>();
 }
 
+QStandardItemModel* TemplatesFacade::comicBookTemplates()
+{
+    return instance().d->templatesModel<ComicBookTemplate>();
+}
+
 const SimpleTextTemplate& TemplatesFacade::simpleTextTemplate(const QString& _templateId)
 {
     return instance().d->getTemplate<SimpleTextTemplate>(_templateId);
@@ -333,6 +340,11 @@ const ScreenplayTemplate& TemplatesFacade::screenplayTemplate(const QString& _te
     return instance().d->getTemplate<ScreenplayTemplate>(_templateId);
 }
 
+const ComicBookTemplate& TemplatesFacade::comicBookTemplate(const QString& _templateId)
+{
+    return instance().d->getTemplate<ComicBookTemplate>(_templateId);
+}
+
 void TemplatesFacade::setDefaultSimpleTextTemplate(const QString& _templateId)
 {
     instance().d->setDefaultTemplate<SimpleTextTemplate>(_templateId);
@@ -341,6 +353,11 @@ void TemplatesFacade::setDefaultSimpleTextTemplate(const QString& _templateId)
 void TemplatesFacade::setDefaultScreenplayTemplate(const QString& _templateId)
 {
     instance().d->setDefaultTemplate<ScreenplayTemplate>(_templateId);
+}
+
+void TemplatesFacade::setDefaultComicBookTemplate(const QString& _templateId)
+{
+    instance().d->setDefaultTemplate<ComicBookTemplate>(_templateId);
 }
 
 void TemplatesFacade::saveScreenplayTemplate(const ScreenplayTemplate& _template)
@@ -357,6 +374,7 @@ void TemplatesFacade::updateTranslations()
 {
     instance().d->updateTranslations<SimpleTextTemplate>();
     instance().d->updateTranslations<ScreenplayTemplate>();
+    instance().d->updateTranslations<ComicBookTemplate>();
 }
 
 TemplatesFacade::~TemplatesFacade() = default;
@@ -372,6 +390,8 @@ TemplatesFacade::TemplatesFacade()
         kScreenplayTemplatesDirectory,
         { QLatin1String("world_cp"), QLatin1String("world_cn"), QLatin1String("ar"),
           QLatin1String("he"), QLatin1String("ru"), QLatin1String("tamil"), QLatin1String("us") });
+    d->loadTemplates<ComicBookTemplate>(kComicBookTemplatesDirectory,
+                                        { QLatin1String("world"), QLatin1String("us") });
 }
 
 TemplatesFacade& TemplatesFacade::instance()

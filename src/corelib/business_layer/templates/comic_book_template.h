@@ -15,23 +15,15 @@ namespace BusinessLayer {
 /**
  * @brief Типы параграфов в сценарии
  */
-enum class ScreenplayParagraphType {
+enum class ComicBookParagraphType {
     Undefined,
     UnformattedText,
-    SceneHeading,
-    SceneCharacters,
-    Action,
+    Page,
+    Panel,
+    Description,
     Character,
-    Parenthetical,
     Dialogue,
-    Lyrics,
-    Transition,
-    Shot,
     InlineNote,
-    FolderHeader,
-    FolderFooter,
-    //
-    SceneHeadingShadow, //!< Время и место, для вспомогательных разрывов
     //
     PageSplitter, //!< Разделитель страницы (для блоков внутри которых находятся таблицы)
 };
@@ -39,7 +31,7 @@ enum class ScreenplayParagraphType {
 /**
  * @brief Определим метод для возможности использовать типы в виде ключей в словарях
  */
-CORE_LIBRARY_EXPORT inline uint qHash(ScreenplayParagraphType _type)
+CORE_LIBRARY_EXPORT inline uint qHash(ComicBookParagraphType _type)
 {
     return ::qHash(static_cast<int>(_type));
 }
@@ -47,19 +39,19 @@ CORE_LIBRARY_EXPORT inline uint qHash(ScreenplayParagraphType _type)
 /**
  * @brief Получить текстовое представление типа блока
  */
-CORE_LIBRARY_EXPORT QString toString(ScreenplayParagraphType _type);
-CORE_LIBRARY_EXPORT QString toDisplayString(ScreenplayParagraphType _type);
+CORE_LIBRARY_EXPORT QString toString(ComicBookParagraphType _type);
+CORE_LIBRARY_EXPORT QString toDisplayString(ComicBookParagraphType _type);
 
 /**
  * @brief Получить тип блока из текстового представления
  */
-CORE_LIBRARY_EXPORT ScreenplayParagraphType screenplayParagraphTypeFromString(const QString& _text);
+CORE_LIBRARY_EXPORT ComicBookParagraphType comicBookParagraphTypeFromString(const QString& _text);
 
 
 /**
  * @brief Класс стиля блока сценария
  */
-class CORE_LIBRARY_EXPORT ScreenplayBlockStyle
+class CORE_LIBRARY_EXPORT ComicBookBlockStyle
 {
 public:
     /**
@@ -67,9 +59,6 @@ public:
      */
     enum Property {
         PropertyType = QTextFormat::UserProperty + 100, //!< Тип блока
-        PropertyHeaderType, //!< Тип блока заголовка
-        PropertyPrefix, //!< Префикс блока
-        PropertyPostfix, //!< Постфикс блока
         PropertyIsFirstUppercase, //!< Необходимо ли первый символ поднимать в верхний регистр
         PropertyIsCanModify, //!< Редактируемый ли блок
         //
@@ -80,17 +69,6 @@ public:
         PropertyComments, //!< Список комментариев к правке
         PropertyCommentsAuthors, //!< Список авторов комментариев
         PropertyCommentsDates, //!< Список дат комментариев
-        //
-        // Свойства корректирующих текст блоков
-        //
-        PropertyIsCorrection, //!< Не разрывающий текст блок (пустые блоки в конце страницы, блоки с
-                              //!< текстом ПРОД, или именем персонажа)
-        PropertyIsCorrectionContinued, //!< Блок с текстом ПРОД., вставляемый на обрыве реплики
-        PropertyIsCorrectionCharacter, //!< Блок с именем персонажа, вставляемый на новой странице
-        PropertyIsBreakCorrectionStart, //!< Разрывающий текст блок в начале разрыва
-        PropertyIsBreakCorrectionEnd, //!< Разрывающий текст блок в конце разрыва
-        PropertyIsCharacterContinued, //!< Имя персонажа для которого необходимо отображать
-                                      //!< допольнительный текст ПРОД., не пишем в xml
     };
 
     /**
@@ -106,16 +84,16 @@ public:
     /**
      * @brief Получить тип блока
      */
-    static ScreenplayParagraphType forBlock(const QTextBlock& _block);
+    static ComicBookParagraphType forBlock(const QTextBlock& _block);
 
 public:
-    ScreenplayBlockStyle() = default;
+    ComicBookBlockStyle() = default;
 
     /**
      * @brief Тип блока
      */
-    ScreenplayParagraphType type() const;
-    void setType(ScreenplayParagraphType _type);
+    ComicBookParagraphType type() const;
+    void setType(ComicBookParagraphType _type);
 
     /**
      * @brief Активен ли стиль блока
@@ -201,22 +179,12 @@ public:
      */
     bool isCanModify() const;
 
-    /**
-     * @brief Префикс стиля
-     */
-    QString prefix() const;
-
-    /**
-     * @brief Постфикс стиля
-     */
-    QString postfix() const;
-
 private:
     /**
      * @brief Инициилизация возможна только в классе стиля сценария
      */
-    explicit ScreenplayBlockStyle(const QXmlStreamAttributes& _blockAttributes);
-    friend class ScreenplayTemplate;
+    explicit ComicBookBlockStyle(const QXmlStreamAttributes& _blockAttributes);
+    friend class ComicBookTemplate;
 
     /**
      * @brief Обновить межстрочный интервал блока
@@ -237,7 +205,7 @@ private:
     /**
      * @brief Тип блока
      */
-    ScreenplayParagraphType m_type = ScreenplayParagraphType::Undefined;
+    ComicBookParagraphType m_type = ComicBookParagraphType::Undefined;
 
     /**
      * @brief Активен ли блок
@@ -303,10 +271,10 @@ private:
 /**
  * @brief Класс шаблона сценария
  */
-class CORE_LIBRARY_EXPORT ScreenplayTemplate
+class CORE_LIBRARY_EXPORT ComicBookTemplate
 {
 public:
-    ScreenplayTemplate() = default;
+    ComicBookTemplate() = default;
 
     /**
      * @brief Назначить шаблон новым
@@ -372,13 +340,13 @@ public:
     /**
      * @brief Получить стиль блока
      */
-    ScreenplayBlockStyle paragraphStyle(ScreenplayParagraphType _forType) const;
-    ScreenplayBlockStyle paragraphStyle(const QTextBlock& _forBlock) const;
-    void setParagraphStyle(const ScreenplayBlockStyle& _style);
+    ComicBookBlockStyle paragraphStyle(ComicBookParagraphType _forType) const;
+    ComicBookBlockStyle paragraphStyle(const QTextBlock& _forBlock) const;
+    void setParagraphStyle(const ComicBookBlockStyle& _style);
 
 private:
-    explicit ScreenplayTemplate(const QString& _fromFile);
-    friend class ScreenplayTemplateFacade;
+    explicit ComicBookTemplate(const QString& _fromFile);
+    friend class ComicBookTemplateFacade;
     friend class TemplatesFacade;
 
     /**
@@ -430,13 +398,13 @@ private:
     /**
      * @brief Стили блоков текста
      */
-    QHash<ScreenplayParagraphType, ScreenplayBlockStyle> m_paragrapsStyles;
+    QHash<ComicBookParagraphType, ComicBookBlockStyle> m_paragrapsStyles;
 };
 
 /**
  * @brief Определим метод для возможности использовать типы в виде ключей в словарях
  */
-CORE_LIBRARY_EXPORT inline uint qHash(ScreenplayBlockStyle::LineSpacingType _type)
+CORE_LIBRARY_EXPORT inline uint qHash(ComicBookBlockStyle::LineSpacingType _type)
 {
     return ::qHash(static_cast<int>(_type));
 }

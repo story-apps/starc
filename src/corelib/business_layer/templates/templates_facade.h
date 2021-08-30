@@ -10,6 +10,7 @@ class QStandardItemModel;
 
 namespace BusinessLayer {
 
+class ComicBookTemplate;
 class ScreenplayTemplate;
 class SimpleTextTemplate;
 
@@ -29,11 +30,7 @@ public:
      */
     static QStandardItemModel* simpleTextTemplates();
     static QStandardItemModel* screenplayTemplates();
-
-    //    /**
-    //     * @brief Проверить существование шаблона с заданным именем
-    //     */
-    //    static bool containsTemplate(const QString& _templateName);
+    static QStandardItemModel* comicBookTemplates();
 
     /**
      * @brief Получить шаблон в соответствии с заданным идентификатором
@@ -43,12 +40,15 @@ public:
                                                                        = {});
     static const BusinessLayer::ScreenplayTemplate& screenplayTemplate(const QString& _templateId
                                                                        = {});
+    static const BusinessLayer::ComicBookTemplate& comicBookTemplate(const QString& _templateId
+                                                                     = {});
 
     /**
      * @brief Задать стандартный шаблон
      */
     static void setDefaultSimpleTextTemplate(const QString& _templateId);
     static void setDefaultScreenplayTemplate(const QString& _templateId);
+    static void setDefaultComicBookTemplate(const QString& _templateId);
 
     /**
      * @brief Сохранить стиль в библиотеке шаблонов
@@ -59,11 +59,6 @@ public:
      * @brief Удалить шаблон по заданному имены
      */
     static void removeScreenplayTemplate(const QString& _templateId);
-
-    //    /**
-    //     * @brief Обновить цвета блоков текста для всех шаблонов
-    //     */
-    //    static void updateTemplatesColors();
 
     /**
      * @brief Обновить переводы
