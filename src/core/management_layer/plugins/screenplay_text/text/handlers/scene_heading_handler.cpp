@@ -12,7 +12,7 @@
 #include <QTextBlock>
 #include <QTimer>
 
-using BusinessLayer::SceneHeadingParser;
+using BusinessLayer::ScreenplaySceneHeadingParser;
 using BusinessLayer::ScreenplayParagraphType;
 using Ui::ScreenplayTextEdit;
 
@@ -39,7 +39,7 @@ void SceneHeadingHandler::handleEnter(QKeyEvent* _event)
     // ... текст после курсора
     QString cursorForwardText = currentBlock.text().mid(cursor.positionInBlock());
     // ... текущая секция
-    SceneHeadingParser::Section currentSection = SceneHeadingParser::section(cursorBackwardText);
+    ScreenplaySceneHeadingParser::Section currentSection = ScreenplaySceneHeadingParser::section(cursorBackwardText);
 
 
     //
@@ -62,7 +62,7 @@ void SceneHeadingHandler::handleEnter(QKeyEvent* _event)
         // Дописать необходимые символы
         //
         switch (currentSection) {
-        case SceneHeadingParser::SectionSceneIntro: {
+        case ScreenplaySceneHeadingParser::SectionSceneIntro: {
             cursor.insertText(" ");
             break;
         }
@@ -81,7 +81,7 @@ void SceneHeadingHandler::handleEnter(QKeyEvent* _event)
         // Если нужно автоматически перепрыгиваем к следующему блоку
         //
         if (_event != nullptr // ... чтобы таб не переводил на новую строку
-            && currentSection == SceneHeadingParser::SectionSceneTime) {
+            && currentSection == ScreenplaySceneHeadingParser::SectionSceneTime) {
             //
             // Сохраним параметры сцены
             //
@@ -209,8 +209,8 @@ void SceneHeadingHandler::handleTab(QKeyEvent*)
                     //
                     // Если в секции локации, то добавление " - " и отображение подсказки
                     //
-                    if (SceneHeadingParser::section(cursorBackwardText)
-                        == SceneHeadingParser::SectionLocation) {
+                    if (ScreenplaySceneHeadingParser::section(cursorBackwardText)
+                        == ScreenplaySceneHeadingParser::SectionLocation) {
                         //
                         // Добавим необходимый текст в зависимости от того, что ввёл пользователь
                         //
@@ -303,7 +303,7 @@ void SceneHeadingHandler::complete(const QString& _currentBlockText,
     //
     // Текущая секция
     //
-    SceneHeadingParser::Section currentSection = SceneHeadingParser::section(_cursorBackwardText);
+    ScreenplaySceneHeadingParser::Section currentSection = ScreenplaySceneHeadingParser::section(_cursorBackwardText);
 
     //
     // Получим модель подсказок для текущей секции и выведем пользователю
@@ -315,27 +315,27 @@ void SceneHeadingHandler::complete(const QString& _currentBlockText,
     QString sectionText;
 
     switch (currentSection) {
-    case SceneHeadingParser::SectionSceneIntro: {
+    case ScreenplaySceneHeadingParser::SectionSceneIntro: {
         m_completerModel->setStringList(editor()->dictionaries()->sceneIntros().toList());
         sectionModel = m_completerModel;
-        sectionText = SceneHeadingParser::sceneIntro(_currentBlockText);
+        sectionText = ScreenplaySceneHeadingParser::sceneIntro(_currentBlockText);
         break;
     }
 
-    case SceneHeadingParser::SectionLocation: {
+    case ScreenplaySceneHeadingParser::SectionLocation: {
         sectionModel = editor()->locations();
-        sectionText = SceneHeadingParser::location(_currentBlockText);
+        sectionText = ScreenplaySceneHeadingParser::location(_currentBlockText);
         break;
     }
 
-    case SceneHeadingParser::SectionStoryDay: {
+    case ScreenplaySceneHeadingParser::SectionStoryDay: {
         m_completerModel->setStringList(editor()->dictionaries()->storyDays().toList());
         sectionModel = m_completerModel;
-        sectionText = SceneHeadingParser::storyDay(_currentBlockText);
+        sectionText = ScreenplaySceneHeadingParser::storyDay(_currentBlockText);
         break;
     }
 
-    case SceneHeadingParser::SectionSceneTime: {
+    case ScreenplaySceneHeadingParser::SectionSceneTime: {
         //
         // Возможно пользователь предпочитает обозначать локации и подлокации через минус,
         // поэтому проверяем нет ли уже сохранённых локаций такого рода, и если есть, и они
@@ -343,7 +343,7 @@ void SceneHeadingHandler::complete(const QString& _currentBlockText,
         //
         bool useLocations = false;
         const bool force = true;
-        const QString locationFromBlock = SceneHeadingParser::location(_currentBlockText, force);
+        const QString locationFromBlock = ScreenplaySceneHeadingParser::location(_currentBlockText, force);
         const auto locationsModel = editor()->locations();
         for (int locationRow = 0; locationRow < locationsModel->rowCount(); ++locationRow) {
             const auto location
@@ -364,7 +364,7 @@ void SceneHeadingHandler::complete(const QString& _currentBlockText,
         else {
             m_completerModel->setStringList(editor()->dictionaries()->sceneTimes().toList());
             sectionModel = m_completerModel;
-            sectionText = SceneHeadingParser::sceneTime(_currentBlockText);
+            sectionText = ScreenplaySceneHeadingParser::sceneTime(_currentBlockText);
         }
         break;
     }
@@ -407,25 +407,25 @@ void SceneHeadingHandler::storeSceneParameters() const
     //
     // Сохраняем время
     //
-    const QString sceneIntro = SceneHeadingParser::sceneIntro(cursorBackwardText);
+    const QString sceneIntro = ScreenplaySceneHeadingParser::sceneIntro(cursorBackwardText);
     editor()->dictionaries()->addSceneIntro(sceneIntro);
 
     //
     // Сохраняем локацию
     //
-    const QString location = SceneHeadingParser::location(cursorBackwardText);
+    const QString location = ScreenplaySceneHeadingParser::location(cursorBackwardText);
     editor()->locations()->createLocation(location);
 
     //
     // Сохраняем место
     //
-    const QString sceneTime = SceneHeadingParser::sceneTime(cursorBackwardText);
+    const QString sceneTime = ScreenplaySceneHeadingParser::sceneTime(cursorBackwardText);
     editor()->dictionaries()->addSceneTime(sceneTime);
 
     //
     // Сохраняем сценарный день
     //
-    const QString storyDay = SceneHeadingParser::storyDay(cursorBackwardText);
+    const QString storyDay = ScreenplaySceneHeadingParser::storyDay(cursorBackwardText);
     editor()->dictionaries()->addStoryDay(storyDay);
 }
 

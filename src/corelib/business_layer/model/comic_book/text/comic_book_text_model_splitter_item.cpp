@@ -1,6 +1,6 @@
-#include "screenplay_text_model_splitter_item.h"
+#include "comic_book_text_model_splitter_item.h"
 
-#include "screenplay_text_model_xml.h"
+#include "comic_book_text_model_xml.h"
 
 #include <QVariant>
 #include <QXmlStreamReader>
@@ -9,23 +9,23 @@
 namespace BusinessLayer {
 
 namespace {
-const QHash<ScreenplayTextModelSplitterItemType, QString> kSplitterTypeToString
-    = { { ScreenplayTextModelSplitterItemType::Undefined, {} },
-        { ScreenplayTextModelSplitterItemType::Start, QStringLiteral("start") },
-        { ScreenplayTextModelSplitterItemType::End, QStringLiteral("end") } };
+const QHash<ComicBookTextModelSplitterItemType, QString> kSplitterTypeToString
+    = { { ComicBookTextModelSplitterItemType::Undefined, {} },
+        { ComicBookTextModelSplitterItemType::Start, QStringLiteral("start") },
+        { ComicBookTextModelSplitterItemType::End, QStringLiteral("end") } };
 }
 
-class ScreenplayTextModelSplitterItem::Implementation
+class ComicBookTextModelSplitterItem::Implementation
 {
 public:
     Implementation() = default;
-    explicit Implementation(ScreenplayTextModelSplitterItemType _type);
+    explicit Implementation(ComicBookTextModelSplitterItemType _type);
 
-    ScreenplayTextModelSplitterItemType type = ScreenplayTextModelSplitterItemType::Undefined;
+    ComicBookTextModelSplitterItemType type = ComicBookTextModelSplitterItemType::Undefined;
 };
 
-ScreenplayTextModelSplitterItem::Implementation::Implementation(
-    ScreenplayTextModelSplitterItemType _type)
+ComicBookTextModelSplitterItem::Implementation::Implementation(
+    ComicBookTextModelSplitterItemType _type)
     : type(_type)
 {
 }
@@ -34,15 +34,15 @@ ScreenplayTextModelSplitterItem::Implementation::Implementation(
 // ****
 
 
-ScreenplayTextModelSplitterItem::ScreenplayTextModelSplitterItem(
-    ScreenplayTextModelSplitterItemType _type)
-    : ScreenplayTextModelItem(ScreenplayTextModelItemType::Splitter)
+ComicBookTextModelSplitterItem::ComicBookTextModelSplitterItem(
+    ComicBookTextModelSplitterItemType _type)
+    : ComicBookTextModelItem(ComicBookTextModelItemType::Splitter)
     , d(new Implementation(_type))
 {
 }
 
-ScreenplayTextModelSplitterItem::ScreenplayTextModelSplitterItem(QXmlStreamReader& _contentReader)
-    : ScreenplayTextModelItem(ScreenplayTextModelItemType::Splitter)
+ComicBookTextModelSplitterItem::ComicBookTextModelSplitterItem(QXmlStreamReader& _contentReader)
+    : ComicBookTextModelItem(ComicBookTextModelItemType::Splitter)
     , d(new Implementation)
 {
     Q_ASSERT(_contentReader.name() == xml::kSplitterTag);
@@ -54,16 +54,16 @@ ScreenplayTextModelSplitterItem::ScreenplayTextModelSplitterItem(QXmlStreamReade
     xml::readNextElement(_contentReader); // next
 }
 
-ScreenplayTextModelSplitterItem::~ScreenplayTextModelSplitterItem() = default;
+ComicBookTextModelSplitterItem::~ComicBookTextModelSplitterItem() = default;
 
-ScreenplayTextModelSplitterItemType ScreenplayTextModelSplitterItem::splitterType() const
+ComicBookTextModelSplitterItemType ComicBookTextModelSplitterItem::splitterType() const
 {
     return d->type;
 }
 
-QByteArray ScreenplayTextModelSplitterItem::toXml() const
+QByteArray ComicBookTextModelSplitterItem::toXml() const
 {
-    if (d->type == ScreenplayTextModelSplitterItemType::Undefined) {
+    if (d->type == ComicBookTextModelSplitterItemType::Undefined) {
         Q_ASSERT(0);
         return {};
     }
@@ -73,21 +73,21 @@ QByteArray ScreenplayTextModelSplitterItem::toXml() const
         .toUtf8();
 }
 
-void ScreenplayTextModelSplitterItem::copyFrom(ScreenplayTextModelItem* _item)
+void ComicBookTextModelSplitterItem::copyFrom(ComicBookTextModelItem* _item)
 {
-    if (_item->type() != ScreenplayTextModelItemType::Splitter) {
+    if (_item->type() != ComicBookTextModelItemType::Splitter) {
         Q_ASSERT(false);
         return;
     }
 }
 
-bool ScreenplayTextModelSplitterItem::isEqual(ScreenplayTextModelItem* _item) const
+bool ComicBookTextModelSplitterItem::isEqual(ComicBookTextModelItem* _item) const
 {
     if (_item == nullptr || type() != _item->type()) {
         return false;
     }
 
-    const auto splitterItem = static_cast<ScreenplayTextModelSplitterItem*>(_item);
+    const auto splitterItem = static_cast<ComicBookTextModelSplitterItem*>(_item);
     return d->type == splitterItem->d->type;
 }
 

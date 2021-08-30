@@ -1,6 +1,6 @@
 #pragma once
 
-#include "screenplay_text_model_item.h"
+#include "comic_book_text_model_item.h"
 
 #include <QHash>
 
@@ -12,12 +12,12 @@ namespace BusinessLayer {
 /**
  * @brief Тип разделителя
  */
-enum class ScreenplayTextModelSplitterItemType { Undefined, Start, End };
+enum class ComicBookTextModelSplitterItemType { Undefined, Start, End };
 
 /**
  * @brief Определим метод для возможности использовать типы в виде ключей в словарях
  */
-CORE_LIBRARY_EXPORT inline uint qHash(ScreenplayTextModelSplitterItemType _type)
+CORE_LIBRARY_EXPORT inline uint qHash(ComicBookTextModelSplitterItemType _type)
 {
     return ::qHash(static_cast<int>(_type));
 }
@@ -26,17 +26,17 @@ CORE_LIBRARY_EXPORT inline uint qHash(ScreenplayTextModelSplitterItemType _type)
 /**
  * @brief Класс элемента разделителя модели сценария
  */
-class CORE_LIBRARY_EXPORT ScreenplayTextModelSplitterItem : public ScreenplayTextModelItem
+class CORE_LIBRARY_EXPORT ComicBookTextModelSplitterItem : public ComicBookTextModelItem
 {
 public:
-    explicit ScreenplayTextModelSplitterItem(ScreenplayTextModelSplitterItemType _type);
-    explicit ScreenplayTextModelSplitterItem(QXmlStreamReader& _contentReader);
-    ~ScreenplayTextModelSplitterItem() override;
+    explicit ComicBookTextModelSplitterItem(ComicBookTextModelSplitterItemType _type);
+    explicit ComicBookTextModelSplitterItem(QXmlStreamReader& _contentReader);
+    ~ComicBookTextModelSplitterItem() override;
 
     /**
      * @brief Тип разделителя
      */
-    ScreenplayTextModelSplitterItemType splitterType() const;
+    ComicBookTextModelSplitterItemType splitterType() const;
 
     /**
      * @brief Определяем интерфейс для получения XML блока
@@ -46,12 +46,12 @@ public:
     /**
      * @brief Скопировать контент с заданного элемента
      */
-    void copyFrom(ScreenplayTextModelItem* _item) override;
+    void copyFrom(ComicBookTextModelItem* _item) override;
 
     /**
      * @brief Проверить равен ли текущий элемент заданному
      */
-    bool isEqual(ScreenplayTextModelItem* _item) const override;
+    bool isEqual(ComicBookTextModelItem* _item) const override;
 
 private:
     class Implementation;

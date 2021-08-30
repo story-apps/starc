@@ -4,8 +4,8 @@
 
 namespace BusinessLayer {
 
-class ScreenplayTextModelItem;
-class ScreenplayTextModelTextItem;
+class ComicBookTextModelItem;
+class ComicBookTextModelTextItem;
 
 namespace xml {
 
@@ -13,18 +13,18 @@ namespace xml {
  * @brief Класс для формирования xml данных документа текста сценария
  * @note Основное предназначение - склеивать разорванные текстовые блоки перед записью
  */
-class ScreenplayTextModelXmlWriter
+class ComicBookTextModelXmlWriter
 {
 public:
-    explicit ScreenplayTextModelXmlWriter(bool _addHeader = false);
-    ~ScreenplayTextModelXmlWriter();
+    explicit ComicBookTextModelXmlWriter(bool _addHeader = false);
+    ~ComicBookTextModelXmlWriter();
 
     void operator+=(const char* _data);
     void operator+=(const QByteArray& _data);
     void operator+=(const QString& _data);
-    void operator+=(ScreenplayTextModelItem* _item);
+    void operator+=(ComicBookTextModelItem* _item);
     struct TextItemData {
-        ScreenplayTextModelTextItem* item = nullptr;
+        ComicBookTextModelTextItem* item = nullptr;
         int fromPosition = 0;
         int toPosition = 0;
     };

@@ -9,44 +9,9 @@ class QStringList;
 namespace BusinessLayer {
 
 /**
- * @brief Парсер текста блока персонаж
- */
-class CORE_LIBRARY_EXPORT CharacterParser
-{
-public:
-    /**
-     * @brief Секции блока персонаж
-     *
-     * @note [ИМЯ ПЕРСОНАЖА] ([СОСТОЯНИЕ])
-     */
-    enum Section {
-        SectionUndefined, //!< Неопределённое
-        SectionName, //!< ИМЯ
-        SectionState //!< СОСТОЯНИЕ
-    };
-
-public:
-    /**
-     * @brief Получить секцию блока
-     */
-    static CharacterParser::Section section(const QString& _text);
-
-    /**
-     * @brief Получить имя персонажа
-     */
-    static QString name(const QString& _text);
-
-    /**
-     * @brief Получить состояние персонажа
-     */
-    static QString extension(const QString& _text);
-};
-
-
-/**
  * @brief Парсер текста блока время и место
  */
-class CORE_LIBRARY_EXPORT SceneHeadingParser
+class CORE_LIBRARY_EXPORT ComicBookPanelParser
 {
 public:
     /**
@@ -66,7 +31,7 @@ public:
     /**
      * @brief Получить секцию блока
      */
-    static SceneHeadingParser::Section section(const QString& _text);
+    static ComicBookPanelParser::Section section(const QString& _text);
 
     /**
      * @brief Получить название места
@@ -89,16 +54,39 @@ public:
     static QString sceneTime(const QString& _text);
 };
 
+
 /**
- * @brief Парсер текста блока участники сцены
+ * @brief Парсер текста блока персонаж
  */
-class CORE_LIBRARY_EXPORT SceneCharactersParser
+class CORE_LIBRARY_EXPORT ComicBookCharacterParser
 {
 public:
     /**
-     * @brief Определить список участников
+     * @brief Секции блока персонаж
+     *
+     * @note [ИМЯ ПЕРСОНАЖА] ([СОСТОЯНИЕ])
      */
-    static QStringList characters(const QString& _text);
+    enum Section {
+        SectionUndefined, //!< Неопределённое
+        SectionName, //!< ИМЯ
+        SectionState //!< СОСТОЯНИЕ
+    };
+
+public:
+    /**
+     * @brief Получить секцию блока
+     */
+    static ComicBookCharacterParser::Section section(const QString& _text);
+
+    /**
+     * @brief Получить имя персонажа
+     */
+    static QString name(const QString& _text);
+
+    /**
+     * @brief Получить состояние персонажа
+     */
+    static QString extension(const QString& _text);
 };
 
 } // namespace BusinessLayer

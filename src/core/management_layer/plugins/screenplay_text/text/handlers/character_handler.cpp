@@ -17,8 +17,8 @@
 #include <QTextBlock>
 #include <QTimer>
 
-using BusinessLayer::CharacterParser;
-using BusinessLayer::SceneCharactersParser;
+using BusinessLayer::ScreenplayCharacterParser;
+using BusinessLayer::ScreenplaySceneCharactersParser;
 using BusinessLayer::ScreenplayBlockStyle;
 using BusinessLayer::ScreenplayParagraphType;
 using Ui::ScreenplayTextEdit;
@@ -64,7 +64,7 @@ void CharacterHandler::handleEnter(QKeyEvent* _event)
     // ... текст после курсора
     QString cursorForwardText = currentBlockText.mid(cursor.positionInBlock());
     // ... текущая секция
-    CharacterParser::Section currentSection = CharacterParser::section(cursorBackwardText);
+    ScreenplayCharacterParser::Section currentSection = ScreenplayCharacterParser::section(cursorBackwardText);
 
 
     //
@@ -87,7 +87,7 @@ void CharacterHandler::handleEnter(QKeyEvent* _event)
         // Дописать необходимые символы
         //
         switch (currentSection) {
-        case CharacterParser::SectionState: {
+        case ScreenplayCharacterParser::SectionState: {
             cursor.insertText(")");
             break;
         }
@@ -101,7 +101,7 @@ void CharacterHandler::handleEnter(QKeyEvent* _event)
         // Если нужно автоматически перепрыгиваем к следующему блоку
         //
         if (_event != 0 // ... чтобы таб не переводил на новую строку
-            && currentSection == CharacterParser::SectionName) {
+            && currentSection == ScreenplayCharacterParser::SectionName) {
             cursor.movePosition(QTextCursor::EndOfBlock);
             editor()->setTextCursor(cursor);
             editor()->addParagraph(jumpForEnter(ScreenplayParagraphType::Character));
@@ -293,8 +293,8 @@ void CharacterHandler::complete(const QString& _currentBlockText,
     QString sectionText;
 
     QTextCursor cursor = editor()->textCursor();
-    switch (CharacterParser::section(_cursorBackwardText)) {
-    case CharacterParser::SectionName: {
+    switch (ScreenplayCharacterParser::section(_cursorBackwardText)) {
+    case ScreenplayCharacterParser::SectionName: {
         QStringList charactersToComplete;
         //
         // Определим персонажей сцены
@@ -305,7 +305,7 @@ void CharacterHandler::complete(const QString& _currentBlockText,
                    != ScreenplayParagraphType::SceneHeading) {
             if (ScreenplayBlockStyle::forBlock(cursor.block())
                 == ScreenplayParagraphType::Character) {
-                const QString characterName = CharacterParser::name(cursor.block().text());
+                const QString characterName = ScreenplayCharacterParser::name(cursor.block().text());
                 if (!characterName.isEmpty() && !charactersToComplete.contains(characterName)) {
                     //
                     // Персонажа, который говорил встречный диалог ставим выше,
@@ -324,7 +324,7 @@ void CharacterHandler::complete(const QString& _currentBlockText,
             } else if (ScreenplayBlockStyle::forBlock(cursor.block())
                        == ScreenplayParagraphType::SceneCharacters) {
                 const QStringList characters
-                    = SceneCharactersParser::characters(cursor.block().text());
+                    = ScreenplaySceneCharactersParser::characters(cursor.block().text());
                 for (const QString& characterName : characters) {
                     if (!charactersToComplete.contains(characterName)) {
                         charactersToComplete.append(characterName);
@@ -350,14 +350,14 @@ void CharacterHandler::complete(const QString& _currentBlockText,
 
         m_completerModel->setStringList(charactersToComplete);
         sectionModel = m_completerModel;
-        sectionText = CharacterParser::name(_currentBlockText);
+        sectionText = ScreenplayCharacterParser::name(_currentBlockText);
         break;
     }
 
-    case CharacterParser::SectionState: {
+    case ScreenplayCharacterParser::SectionState: {
         m_completerModel->setStringList(editor()->dictionaries()->characterExtensions().toList());
         sectionModel = m_completerModel;
-        sectionText = CharacterParser::extension(_currentBlockText);
+        sectionText = ScreenplayCharacterParser::extension(_currentBlockText);
         break;
     }
 
@@ -396,9 +396,9 @@ void CharacterHandler::storeCharacter() const
     // ... текст до курсора
     const QString cursorBackwardText = currentBlockText.left(cursor.positionInBlock());
     // ... имя персонажа
-    const QString characterName = CharacterParser::name(cursorBackwardText);
+    const QString characterName = ScreenplayCharacterParser::name(cursorBackwardText);
     // ... состояние персонажа
-    const QString characterExtension = CharacterParser::extension(cursorBackwardText);
+    const QString characterExtension = ScreenplayCharacterParser::extension(cursorBackwardText);
 
     //
     // Сохраняем персонажа

@@ -69,17 +69,10 @@ void KeyPressHandlerFacade::prehandle()
 
 void KeyPressHandlerFacade::handle(QEvent* _event, bool _pre)
 {
-    const auto currentType = d->editor->currentParagraphType();
-    auto currentHandler = handlerFor(currentType);
-
-    if (currentHandler == nullptr) {
-        return;
-    }
-
     if (_pre) {
-        currentHandler->prehandle();
+        d->textHandler->prehandle();
     } else {
-        currentHandler->handle(_event);
+        d->textHandler->handle(_event);
     }
 }
 
@@ -101,26 +94,6 @@ bool KeyPressHandlerFacade::needPrehandle() const
 KeyPressHandlerFacade::KeyPressHandlerFacade(TitlePageEdit* _editor)
     : d(new Implementation(_editor))
 {
-}
-
-AbstractKeyHandler* KeyPressHandlerFacade::handlerFor(TextParagraphType _type)
-{
-    switch (_type) {
-    case TextParagraphType::Heading1:
-    case TextParagraphType::Heading2:
-    case TextParagraphType::Heading3:
-    case TextParagraphType::Heading4:
-    case TextParagraphType::Heading5:
-    case TextParagraphType::Heading6:
-    case TextParagraphType::Text:
-    case TextParagraphType::InlineNote: {
-        return d->textHandler.data();
-    }
-
-    default: {
-        return nullptr;
-    }
-    }
 }
 
 } // namespace KeyProcessingLayer

@@ -5,10 +5,13 @@
 
 #include <business_layer/document/text/text_block_data.h>
 #include <business_layer/document/text/text_cursor.h>
+#include <business_layer/model/comic_book/comic_book_title_page_model.h>
+#include <business_layer/model/screenplay/screenplay_title_page_model.h>
 #include <business_layer/templates/templates_facade.h>
 #include <business_layer/templates/text_template.h>
 #include <data_layer/storage/settings_storage.h>
 #include <data_layer/storage/storage_facade.h>
+#include <domain/document_object.h>
 #include <ui/design_system/design_system.h>
 #include <ui/widgets/floating_tool_bar/floating_toolbar_animator.h>
 #include <ui/widgets/scroll_bar/scroll_bar.h>
@@ -52,9 +55,10 @@ public:
 
     TitlePageEditToolbar* toolbar = nullptr;
     FloatingToolbarAnimator* toolbarAnimation = nullptr;
-    QHash<BusinessLayer::TextParagraphType, QString> typesToDisplayNames;
     BusinessLayer::TextParagraphType currentParagraphType
         = BusinessLayer::TextParagraphType::Undefined;
+
+    Domain::DocumentObjectType currentModelType = Domain::DocumentObjectType::Undefined;
 };
 
 TitlePageView::Implementation::Implementation(QWidget* _parent)
@@ -155,21 +159,20 @@ void TitlePageView::reconfigure(const QStringList& _changedSettingsKeys)
             _key, DataStorageLayer::SettingsStorage::SettingsPlace::Application);
     };
 
-    if (_changedSettingsKeys.isEmpty()
-        || _changedSettingsKeys.contains(
-            DataStorageLayer::kComponentsScreenplayEditorDefaultTemplateKey)) {
-        TemplatesFacade::setDefaultSimpleTextTemplate(
-            settingsValue(DataStorageLayer::kComponentsSimpleTextEditorDefaultTemplateKey)
-                .toString());
+    const auto defaultTemplateKey
+        = d->currentModelType == Domain::DocumentObjectType::ComicBookTitlePage
+        ? DataStorageLayer::kComponentsComicBookEditorDefaultTemplateKey
+        : DataStorageLayer::kComponentsScreenplayEditorDefaultTemplateKey;
+    if (_changedSettingsKeys.isEmpty() || _changedSettingsKeys.contains(defaultTemplateKey)) {
         d->textEdit->reinit();
     }
 
-    if (_changedSettingsKeys.isEmpty()
-        || _changedSettingsKeys.contains(
-            DataStorageLayer::kComponentsScreenplayEditorHighlightCurrentLineKey)) {
-        d->textEdit->setHighlightCurrentLine(
-            settingsValue(DataStorageLayer::kComponentsSimpleTextEditorHighlightCurrentLineKey)
-                .toBool());
+    const auto highlightCurrentLineKey
+        = d->currentModelType == Domain::DocumentObjectType::ComicBookTitlePage
+        ? DataStorageLayer::kComponentsComicBookEditorHighlightCurrentLineKey
+        : DataStorageLayer::kComponentsScreenplayEditorHighlightCurrentLineKey;
+    if (_changedSettingsKeys.isEmpty() || _changedSettingsKeys.contains(highlightCurrentLineKey)) {
+        d->textEdit->setHighlightCurrentLine(settingsValue(highlightCurrentLineKey).toBool());
     }
 }
 
@@ -194,6 +197,14 @@ void TitlePageView::saveViewSettings()
 
 void TitlePageView::setModel(BusinessLayer::TextModel* _model)
 {
+    if (qobject_cast<BusinessLayer::ComicBookTitlePageModel*>(_model)) {
+        d->currentModelType = Domain::DocumentObjectType::ComicBookTitlePage;
+    } else if (qobject_cast<BusinessLayer::ScreenplayTitlePageModel*>(_model)) {
+        d->currentModelType = Domain::DocumentObjectType::ScreenplayTitlePage;
+    } else {
+        d->currentModelType = Domain::DocumentObjectType::Undefined;
+    }
+
     d->textEdit->initWithModel(_model);
 
     d->updateToolBarCurrentParagraphTypeName();
@@ -218,19 +229,6 @@ void TitlePageView::resizeEvent(QResizeEvent* _event)
     const auto toolbarPosition
         = QPointF(Ui::DesignSystem::layout().px24(), Ui::DesignSystem::layout().px24()).toPoint();
     d->toolbar->move(toolbarPosition);
-}
-
-void TitlePageView::updateTranslations()
-{
-    using namespace BusinessLayer;
-    d->typesToDisplayNames = { { TextParagraphType::Heading1, tr("Heading 1") },
-                               { TextParagraphType::Heading2, tr("Heading 2") },
-                               { TextParagraphType::Heading3, tr("Heading 3") },
-                               { TextParagraphType::Heading4, tr("Heading 4") },
-                               { TextParagraphType::Heading5, tr("Heading 5") },
-                               { TextParagraphType::Heading6, tr("Heading 6") },
-                               { TextParagraphType::Text, tr("Text") },
-                               { TextParagraphType::InlineNote, tr("Inline note") } };
 }
 
 void TitlePageView::designSystemChangeEvent(DesignSystemChangeEvent* _event)

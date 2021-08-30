@@ -30,8 +30,7 @@ public:
     /**
      * @brief Добавить элемент в начало
      */
-    void prependItem(ComicBookTextModelItem* _item,
-                     ComicBookTextModelItem* _parentItem = nullptr);
+    void prependItem(ComicBookTextModelItem* _item, ComicBookTextModelItem* _parentItem = nullptr);
 
     /**
      * @brief Вставить элемент после заданного
@@ -117,11 +116,6 @@ public:
      * @brief Обновить имя персонажа
      */
     void updateCharacterName(const QString& _oldName, const QString& _newName);
-
-    /**
-     * @brief Обновить название локации
-     */
-    void updateLocationName(const QString& _oldName, const QString& _newName);
 
     /**
      * @brief Длительность сценария

@@ -1,12 +1,12 @@
-#include "screenplay_text_model_folder_item.h"
+#include "comic_book_text_model_folder_item.h"
 
-#include "screenplay_text_model_scene_item.h"
-#include "screenplay_text_model_splitter_item.h"
-#include "screenplay_text_model_text_item.h"
-#include "screenplay_text_model_xml.h"
-#include "screenplay_text_model_xml_writer.h"
+#include "comic_book_text_model_scene_item.h"
+#include "comic_book_text_model_splitter_item.h"
+#include "comic_book_text_model_text_item.h"
+#include "comic_book_text_model_xml.h"
+#include "comic_book_text_model_xml_writer.h"
 
-#include <business_layer/templates/screenplay_template.h>
+#include <business_layer/templates/comic_book_template.h>
 #include <utils/helpers/text_helper.h>
 
 #include <QUuid>
@@ -16,7 +16,7 @@
 
 namespace BusinessLayer {
 
-class ScreenplayTextModelFolderItem::Implementation
+class ComicBookTextModelFolderItem::Implementation
 {
 public:
     /**
@@ -48,15 +48,15 @@ public:
 // ****
 
 
-ScreenplayTextModelFolderItem::ScreenplayTextModelFolderItem()
-    : ScreenplayTextModelItem(ScreenplayTextModelItemType::Folder)
+ComicBookTextModelFolderItem::ComicBookTextModelFolderItem()
+    : ComicBookTextModelItem(ComicBookTextModelItemType::Folder)
     , d(new Implementation)
 {
     d->uuid = QUuid::createUuid();
 }
 
-ScreenplayTextModelFolderItem::ScreenplayTextModelFolderItem(QXmlStreamReader& _contentReader)
-    : ScreenplayTextModelItem(ScreenplayTextModelItemType::Folder)
+ComicBookTextModelFolderItem::ComicBookTextModelFolderItem(QXmlStreamReader& _contentReader)
+    : ComicBookTextModelItem(ComicBookTextModelItemType::Folder)
     , d(new Implementation)
 {
     Q_ASSERT(_contentReader.name() == xml::kFolderTag);
@@ -95,13 +95,13 @@ ScreenplayTextModelFolderItem::ScreenplayTextModelFolderItem(QXmlStreamReader& _
             // Считываем вложенный контент
             //
             else if (currentTag == xml::kFolderTag) {
-                appendItem(new ScreenplayTextModelFolderItem(_contentReader));
+                appendItem(new ComicBookTextModelFolderItem(_contentReader));
             } else if (currentTag == xml::kSceneTag) {
-                appendItem(new ScreenplayTextModelSceneItem(_contentReader));
+                appendItem(new ComicBookTextModelSceneItem(_contentReader));
             } else if (currentTag == xml::kSplitterTag) {
-                appendItem(new ScreenplayTextModelSplitterItem(_contentReader));
+                appendItem(new ComicBookTextModelSplitterItem(_contentReader));
             } else {
-                appendItem(new ScreenplayTextModelTextItem(_contentReader));
+                appendItem(new ComicBookTextModelTextItem(_contentReader));
             }
         } while (!_contentReader.atEnd());
     }
@@ -112,14 +112,14 @@ ScreenplayTextModelFolderItem::ScreenplayTextModelFolderItem(QXmlStreamReader& _
     handleChange();
 }
 
-ScreenplayTextModelFolderItem::~ScreenplayTextModelFolderItem() = default;
+ComicBookTextModelFolderItem::~ComicBookTextModelFolderItem() = default;
 
-QColor ScreenplayTextModelFolderItem::color() const
+QColor ComicBookTextModelFolderItem::color() const
 {
     return d->color;
 }
 
-void ScreenplayTextModelFolderItem::setColor(const QColor& _color)
+void ComicBookTextModelFolderItem::setColor(const QColor& _color)
 {
     if (d->color == _color) {
         return;
@@ -129,12 +129,12 @@ void ScreenplayTextModelFolderItem::setColor(const QColor& _color)
     setChanged(true);
 }
 
-std::chrono::milliseconds ScreenplayTextModelFolderItem::duration() const
+std::chrono::milliseconds ComicBookTextModelFolderItem::duration() const
 {
     return d->duration;
 }
 
-QVariant ScreenplayTextModelFolderItem::data(int _role) const
+QVariant ComicBookTextModelFolderItem::data(int _role) const
 {
     switch (_role) {
     case Qt::DecorationRole: {
@@ -155,27 +155,21 @@ QVariant ScreenplayTextModelFolderItem::data(int _role) const
     }
 
     default: {
-        return ScreenplayTextModelItem::data(_role);
+        return ComicBookTextModelItem::data(_role);
     }
     }
 }
 
-QByteArray ScreenplayTextModelFolderItem::toXml() const
+QByteArray ComicBookTextModelFolderItem::toXml() const
 {
     return toXml(nullptr, 0, nullptr, 0, false);
 }
 
-QByteArray ScreenplayTextModelFolderItem::toXml(ScreenplayTextModelItem* _from, int _fromPosition,
-                                                ScreenplayTextModelItem* _to, int _toPosition,
-                                                bool _clearUuid) const
+QByteArray ComicBookTextModelFolderItem::toXml(ComicBookTextModelItem* _from, int _fromPosition,
+                                               ComicBookTextModelItem* _to, int _toPosition,
+                                               bool _clearUuid) const
 {
-    auto folderFooterXml = [] {
-        ScreenplayTextModelTextItem item;
-        item.setParagraphType(ScreenplayParagraphType::FolderFooter);
-        return item.toXml();
-    };
-
-    xml::ScreenplayTextModelXmlWriter xml;
+    xml::ComicBookTextModelXmlWriter xml;
     xml += xmlHeader(_clearUuid);
     for (int childIndex = 0; childIndex < childCount(); ++childIndex) {
         auto child = childAt(childIndex);
@@ -183,33 +177,28 @@ QByteArray ScreenplayTextModelFolderItem::toXml(ScreenplayTextModelItem* _from, 
         //
         // Нетекстовые блоки, просто добавляем к общему xml
         //
-        if (child->type() == ScreenplayTextModelItemType::Splitter) {
+        if (child->type() == ComicBookTextModelItemType::Splitter) {
             xml += child;
             continue;
         }
         //
         // Папки и сцены проверяем на наличие в них завершающего элемента
         //
-        else if (child->type() != ScreenplayTextModelItemType::Text) {
+        else if (child->type() != ComicBookTextModelItemType::Text) {
             //
             // Если конечный элемент содержится в дите, то сохраняем его и завершаем формирование
             //
             const bool recursively = true;
             if (child->hasChild(_to, recursively)) {
-                if (child->type() == ScreenplayTextModelItemType::Folder) {
-                    auto folder = static_cast<ScreenplayTextModelFolderItem*>(child);
+                if (child->type() == ComicBookTextModelItemType::Folder) {
+                    auto folder = static_cast<ComicBookTextModelFolderItem*>(child);
                     xml += folder->toXml(_from, _fromPosition, _to, _toPosition, _clearUuid);
-                } else if (child->type() == ScreenplayTextModelItemType::Scene) {
-                    auto scene = static_cast<ScreenplayTextModelSceneItem*>(child);
+                } else if (child->type() == ComicBookTextModelItemType::Scene) {
+                    auto scene = static_cast<ComicBookTextModelSceneItem*>(child);
                     xml += scene->toXml(_from, _fromPosition, _to, _toPosition, _clearUuid);
                 } else {
                     Q_ASSERT(false);
                 }
-
-                //
-                // Не забываем завершить папку
-                //
-                xml += folderFooterXml();
                 break;
             }
             //
@@ -224,19 +213,12 @@ QByteArray ScreenplayTextModelFolderItem::toXml(ScreenplayTextModelItem* _from, 
         //
         // Текстовые блоки, в зависимости от необходимости вставить блок целиком, или его часть
         //
-        auto textItem = static_cast<ScreenplayTextModelTextItem*>(child);
+        auto textItem = static_cast<ComicBookTextModelTextItem*>(child);
         if (textItem == _to) {
             if (textItem == _from) {
                 xml += { textItem, _fromPosition, _toPosition - _fromPosition };
             } else {
                 xml += { textItem, 0, _toPosition };
-            }
-
-            //
-            // Если папка не была закрыта, добавим корректное завершение для неё
-            //
-            if (textItem->paragraphType() != ScreenplayParagraphType::FolderFooter) {
-                xml += folderFooterXml();
             }
             break;
         }
@@ -253,7 +235,7 @@ QByteArray ScreenplayTextModelFolderItem::toXml(ScreenplayTextModelItem* _from, 
     return xml.data();
 }
 
-QByteArray ScreenplayTextModelFolderItem::xmlHeader(bool _clearUuid) const
+QByteArray ComicBookTextModelFolderItem::xmlHeader(bool _clearUuid) const
 {
     QByteArray xml;
     xml += QString("<%1 %2=\"%3\">\n")
@@ -268,29 +250,29 @@ QByteArray ScreenplayTextModelFolderItem::xmlHeader(bool _clearUuid) const
     return xml;
 }
 
-void ScreenplayTextModelFolderItem::copyFrom(ScreenplayTextModelItem* _item)
+void ComicBookTextModelFolderItem::copyFrom(ComicBookTextModelItem* _item)
 {
-    if (_item->type() != ScreenplayTextModelItemType::Folder) {
+    if (_item->type() != ComicBookTextModelItemType::Folder) {
         Q_ASSERT(false);
         return;
     }
 
-    auto folderItem = static_cast<ScreenplayTextModelFolderItem*>(_item);
+    auto folderItem = static_cast<ComicBookTextModelFolderItem*>(_item);
     d->uuid = folderItem->d->uuid;
     d->color = folderItem->d->color;
 }
 
-bool ScreenplayTextModelFolderItem::isEqual(ScreenplayTextModelItem* _item) const
+bool ComicBookTextModelFolderItem::isEqual(ComicBookTextModelItem* _item) const
 {
     if (_item == nullptr || type() != _item->type()) {
         return false;
     }
 
-    const auto folderItem = static_cast<ScreenplayTextModelFolderItem*>(_item);
+    const auto folderItem = static_cast<ComicBookTextModelFolderItem*>(_item);
     return d->uuid == folderItem->d->uuid && d->color == folderItem->d->color;
 }
 
-void ScreenplayTextModelFolderItem::handleChange()
+void ComicBookTextModelFolderItem::handleChange()
 {
     d->name.clear();
     d->duration = std::chrono::seconds{ 0 };
@@ -298,21 +280,21 @@ void ScreenplayTextModelFolderItem::handleChange()
     for (int childIndex = 0; childIndex < childCount(); ++childIndex) {
         auto child = childAt(childIndex);
         switch (child->type()) {
-        case ScreenplayTextModelItemType::Folder: {
-            auto childItem = static_cast<ScreenplayTextModelFolderItem*>(child);
+        case ComicBookTextModelItemType::Folder: {
+            auto childItem = static_cast<ComicBookTextModelFolderItem*>(child);
             d->duration += childItem->duration();
             break;
         }
 
-        case ScreenplayTextModelItemType::Scene: {
-            auto childItem = static_cast<ScreenplayTextModelSceneItem*>(child);
+        case ComicBookTextModelItemType::Scene: {
+            auto childItem = static_cast<ComicBookTextModelSceneItem*>(child);
             d->duration += childItem->duration();
             break;
         }
 
-        case ScreenplayTextModelItemType::Text: {
-            auto childItem = static_cast<ScreenplayTextModelTextItem*>(child);
-            if (childItem->paragraphType() == ScreenplayParagraphType::FolderHeader) {
+        case ComicBookTextModelItemType::Text: {
+            auto childItem = static_cast<ComicBookTextModelTextItem*>(child);
+            if (childItem->paragraphType() == ComicBookParagraphType::Page) {
                 d->name = TextHelper::smartToUpper(childItem->text());
             }
             d->duration += childItem->duration();

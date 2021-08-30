@@ -11,7 +11,7 @@ namespace BusinessLayer {
 /**
  * @brief Парсер текста блока персонаж
  */
-class CORE_LIBRARY_EXPORT CharacterParser
+class CORE_LIBRARY_EXPORT ScreenplayCharacterParser
 {
 public:
     /**
@@ -29,7 +29,7 @@ public:
     /**
      * @brief Получить секцию блока
      */
-    static CharacterParser::Section section(const QString& _text);
+    static ScreenplayCharacterParser::Section section(const QString& _text);
 
     /**
      * @brief Получить имя персонажа
@@ -46,7 +46,7 @@ public:
 /**
  * @brief Парсер текста блока время и место
  */
-class CORE_LIBRARY_EXPORT SceneHeadingParser
+class CORE_LIBRARY_EXPORT ScreenplaySceneHeadingParser
 {
 public:
     /**
@@ -66,7 +66,7 @@ public:
     /**
      * @brief Получить секцию блока
      */
-    static SceneHeadingParser::Section section(const QString& _text);
+    static ScreenplaySceneHeadingParser::Section section(const QString& _text);
 
     /**
      * @brief Получить название места
@@ -92,7 +92,7 @@ public:
 /**
  * @brief Парсер текста блока участники сцены
  */
-class CORE_LIBRARY_EXPORT SceneCharactersParser
+class CORE_LIBRARY_EXPORT ScreenplaySceneCharactersParser
 {
 public:
     /**

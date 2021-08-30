@@ -11,9 +11,9 @@
 
 namespace BusinessLayer {
 
-CharacterParser::Section CharacterParser::section(const QString& _text)
+ScreenplayCharacterParser::Section ScreenplayCharacterParser::section(const QString& _text)
 {
-    CharacterParser::Section section = SectionUndefined;
+    ScreenplayCharacterParser::Section section = SectionUndefined;
 
     if (_text.split("(").count() == 2) {
         section = SectionState;
@@ -24,7 +24,7 @@ CharacterParser::Section CharacterParser::section(const QString& _text)
     return section;
 }
 
-QString CharacterParser::name(const QString& _text)
+QString ScreenplayCharacterParser::name(const QString& _text)
 {
     //
     // В блоке персонажа так же могут быть указания, что он говорит за кадром и т.п.
@@ -35,7 +35,7 @@ QString CharacterParser::name(const QString& _text)
     return TextHelper::smartToUpper(name.remove(QRegularExpression("[(](.*)")).simplified());
 }
 
-QString CharacterParser::extension(const QString& _text)
+QString ScreenplayCharacterParser::extension(const QString& _text)
 {
     //
     // В блоке персонажа так же могут быть указания, что он говорит за кадром и т.п.
@@ -54,9 +54,9 @@ QString CharacterParser::extension(const QString& _text)
 
 // ****
 
-SceneHeadingParser::Section SceneHeadingParser::section(const QString& _text)
+ScreenplaySceneHeadingParser::Section ScreenplaySceneHeadingParser::section(const QString& _text)
 {
-    SceneHeadingParser::Section section = SectionUndefined;
+    ScreenplaySceneHeadingParser::Section section = SectionUndefined;
 
     if (_text.split(", ").count() == 2) {
         section = SectionStoryDay;
@@ -74,7 +74,7 @@ SceneHeadingParser::Section SceneHeadingParser::section(const QString& _text)
     return section;
 }
 
-QString SceneHeadingParser::sceneIntro(const QString& _text)
+QString ScreenplaySceneHeadingParser::sceneIntro(const QString& _text)
 {
     QString placeName;
 
@@ -85,7 +85,7 @@ QString SceneHeadingParser::sceneIntro(const QString& _text)
     return TextHelper::smartToUpper(placeName).simplified();
 }
 
-QString SceneHeadingParser::location(const QString& _text, bool _force)
+QString ScreenplaySceneHeadingParser::location(const QString& _text, bool _force)
 {
     QString locationName;
 
@@ -101,7 +101,7 @@ QString SceneHeadingParser::location(const QString& _text, bool _force)
     return TextHelper::smartToUpper(locationName).simplified();
 }
 
-QString SceneHeadingParser::storyDay(const QString& _text)
+QString ScreenplaySceneHeadingParser::storyDay(const QString& _text)
 {
     QString scenarioDayName;
 
@@ -112,7 +112,7 @@ QString SceneHeadingParser::storyDay(const QString& _text)
     return TextHelper::smartToUpper(scenarioDayName).simplified();
 }
 
-QString SceneHeadingParser::sceneTime(const QString& _text)
+QString ScreenplaySceneHeadingParser::sceneTime(const QString& _text)
 {
     QString timeName;
 
@@ -126,7 +126,7 @@ QString SceneHeadingParser::sceneTime(const QString& _text)
 
 // ****
 
-QStringList SceneCharactersParser::characters(const QString& _text)
+QStringList ScreenplaySceneCharactersParser::characters(const QString& _text)
 {
     QString characters = _text.simplified();
 

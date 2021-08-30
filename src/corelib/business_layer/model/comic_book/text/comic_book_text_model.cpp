@@ -8,8 +8,8 @@
 #include "comic_book_text_model_xml.h"
 #include "comic_book_text_model_xml_writer.h"
 
-#include <business_layer/model/screenplay/screenplay_information_model.h>
-#include <business_layer/templates/screenplay_template.h>
+#include <business_layer/model/comic_book/comic_book_information_model.h>
+#include <business_layer/templates/comic_book_template.h>
 #include <domain/document_object.h>
 #include <utils/diff_match_patch/diff_match_patch_controller.h>
 #include <utils/helpers/text_helper.h>
@@ -137,7 +137,7 @@ QByteArray ComicBookTextModel::Implementation::toXml(Domain::DocumentObject* _sc
 
 void ComicBookTextModel::Implementation::updateNumbering()
 {
-    int sceneNumber = informationModel->scenesNumberingStartAt();
+    int sceneNumber = 0; // informationModel->scenesNumberingStartAt();
     int dialogueNumber = 1;
     std::function<void(const ComicBookTextModelItem*)> updateChildNumbering;
     updateChildNumbering = [this, &sceneNumber, &dialogueNumber,
@@ -153,7 +153,7 @@ void ComicBookTextModel::Implementation::updateNumbering()
             case ComicBookTextModelItemType::Scene: {
                 updateChildNumbering(childItem);
                 auto sceneItem = static_cast<ComicBookTextModelSceneItem*>(childItem);
-                if (sceneItem->setNumber(sceneNumber, informationModel->scenesNumbersPrefix())) {
+                if (sceneItem->setNumber(sceneNumber, {})) {
                     sceneNumber++;
                 }
                 break;
@@ -182,18 +182,19 @@ void ComicBookTextModel::Implementation::updateNumbering()
 
 ComicBookTextModel::ComicBookTextModel(QObject* _parent)
     : AbstractModel(
-        { xml::kDocumentTag, xml::kFolderTag, xml::kSceneTag,
-          toString(ComicBookParagraphType::UnformattedText),
-          toString(ComicBookParagraphType::SceneHeading),
-          toString(ComicBookParagraphType::SceneCharacters),
-          toString(ComicBookParagraphType::Action), toString(ComicBookParagraphType::Character),
-          toString(ComicBookParagraphType::Parenthetical),
-          toString(ComicBookParagraphType::Dialogue), toString(ComicBookParagraphType::Lyrics),
-          toString(ComicBookParagraphType::Transition), toString(ComicBookParagraphType::Shot),
-          toString(ComicBookParagraphType::InlineNote),
-          toString(ComicBookParagraphType::FolderHeader),
-          toString(ComicBookParagraphType::FolderFooter),
-          toString(ComicBookParagraphType::PageSplitter) },
+        {
+            xml::kDocumentTag,
+            xml::kFolderTag,
+            xml::kSceneTag,
+            toString(ComicBookParagraphType::UnformattedText),
+            toString(ComicBookParagraphType::Page),
+            toString(ComicBookParagraphType::Panel),
+            toString(ComicBookParagraphType::Description),
+            toString(ComicBookParagraphType::Character),
+            toString(ComicBookParagraphType::Dialogue),
+            toString(ComicBookParagraphType::InlineNote),
+            toString(ComicBookParagraphType::PageSplitter),
+        },
         _parent)
     , d(new Implementation)
 {
@@ -202,7 +203,7 @@ ComicBookTextModel::ComicBookTextModel(QObject* _parent)
 ComicBookTextModel::~ComicBookTextModel() = default;
 
 void ComicBookTextModel::appendItem(ComicBookTextModelItem* _item,
-                                     ComicBookTextModelItem* _parentItem)
+                                    ComicBookTextModelItem* _parentItem)
 {
     if (_item == nullptr) {
         return;
@@ -227,7 +228,7 @@ void ComicBookTextModel::appendItem(ComicBookTextModelItem* _item,
 }
 
 void ComicBookTextModel::prependItem(ComicBookTextModelItem* _item,
-                                      ComicBookTextModelItem* _parentItem)
+                                     ComicBookTextModelItem* _parentItem)
 {
     if (_item == nullptr) {
         return;
@@ -251,7 +252,7 @@ void ComicBookTextModel::prependItem(ComicBookTextModelItem* _item,
 }
 
 void ComicBookTextModel::insertItem(ComicBookTextModelItem* _item,
-                                     ComicBookTextModelItem* _afterSiblingItem)
+                                    ComicBookTextModelItem* _afterSiblingItem)
 {
     if (_item == nullptr || _afterSiblingItem == nullptr
         || _afterSiblingItem->parent() == nullptr) {
@@ -274,7 +275,7 @@ void ComicBookTextModel::insertItem(ComicBookTextModelItem* _item,
 }
 
 void ComicBookTextModel::takeItem(ComicBookTextModelItem* _item,
-                                   ComicBookTextModelItem* _parentItem)
+                                  ComicBookTextModelItem* _parentItem)
 {
     if (_item == nullptr) {
         return;
@@ -427,7 +428,7 @@ QVariant ComicBookTextModel::data(const QModelIndex& _index, int _role) const
 }
 
 bool ComicBookTextModel::canDropMimeData(const QMimeData* _data, Qt::DropAction _action, int _row,
-                                          int _column, const QModelIndex& _parent) const
+                                         int _column, const QModelIndex& _parent) const
 {
     Q_UNUSED(_action);
     Q_UNUSED(_row);
@@ -438,7 +439,7 @@ bool ComicBookTextModel::canDropMimeData(const QMimeData* _data, Qt::DropAction 
 }
 
 bool ComicBookTextModel::dropMimeData(const QMimeData* _data, Qt::DropAction _action, int _row,
-                                       int _column, const QModelIndex& _parent)
+                                      int _column, const QModelIndex& _parent)
 {
     Q_UNUSED(_column);
 
@@ -677,8 +678,8 @@ Qt::DropActions ComicBookTextModel::supportedDropActions() const
 }
 
 QString ComicBookTextModel::mimeFromSelection(const QModelIndex& _from, int _fromPosition,
-                                               const QModelIndex& _to, int _toPosition,
-                                               bool _clearUuid) const
+                                              const QModelIndex& _to, int _toPosition,
+                                              bool _clearUuid) const
 {
     if (document() == nullptr) {
         return {};
@@ -727,14 +728,6 @@ QString ComicBookTextModel::mimeFromSelection(const QModelIndex& _from, int _fro
             case ComicBookTextModelItemType::Text: {
                 const auto textItem = static_cast<ComicBookTextModelTextItem*>(childItem);
 
-                //
-                // Не сохраняем закрывающие блоки неоткрытых папок, всё это делается внутри самих
-                // папок
-                //
-                if (textItem->paragraphType() == ComicBookParagraphType::FolderFooter) {
-                    break;
-                }
-
                 if (textItem == fromItem && textItem == toItem) {
                     xml += { textItem, _fromPosition, _toPosition - _fromPosition };
                 } else if (textItem == fromItem) {
@@ -769,8 +762,8 @@ QString ComicBookTextModel::mimeFromSelection(const QModelIndex& _from, int _fro
     //
     if (fromItem->type() == ComicBookTextModelItemType::Text) {
         const auto textItem = static_cast<ComicBookTextModelTextItem*>(fromItem);
-        if (textItem->paragraphType() == ComicBookParagraphType::SceneHeading
-            || textItem->paragraphType() == ComicBookParagraphType::FolderHeader) {
+        if (textItem->paragraphType() == ComicBookParagraphType::Page
+            || textItem->paragraphType() == ComicBookParagraphType::Panel) {
             auto newFromItem = fromItemParent;
             fromItemParent = fromItemParent->parent();
             fromItemRow = fromItemParent->rowOfChild(newFromItem);
@@ -791,7 +784,7 @@ QString ComicBookTextModel::mimeFromSelection(const QModelIndex& _from, int _fro
 }
 
 void ComicBookTextModel::insertFromMime(const QModelIndex& _index, int _positionInBlock,
-                                         const QString& _mimeData)
+                                        const QString& _mimeData)
 {
     if (!_index.isValid()) {
         return;
@@ -821,19 +814,10 @@ void ComicBookTextModel::insertFromMime(const QModelIndex& _index, int _position
         //
         // Если в заголовок папки
         //
-        if (textItem->paragraphType() == ComicBookParagraphType::FolderHeader) {
+        if (textItem->paragraphType() == ComicBookParagraphType::Page) {
             //
             // ... то вставим после него
             //
-        }
-        //
-        // Если завершение папки
-        //
-        else if (textItem->paragraphType() == ComicBookParagraphType::FolderFooter) {
-            //
-            // ... то вставляем после папки
-            //
-            item = item->parent();
         }
         //
         // В остальных случаях
@@ -917,8 +901,8 @@ void ComicBookTextModel::insertFromMime(const QModelIndex& _index, int _position
                 //
                 isFirstTextItemHandled = true;
                 auto textItem = static_cast<ComicBookTextModelTextItem*>(item);
-                if (textItem->paragraphType() == ComicBookParagraphType::FolderHeader
-                    || textItem->paragraphType() == ComicBookParagraphType::SceneHeading
+                if (textItem->paragraphType() == ComicBookParagraphType::Page
+                    || textItem->paragraphType() == ComicBookParagraphType::Panel
                     || !textItem->text().isEmpty()) {
                     textItem->mergeWith(newTextItem);
                 } else {
@@ -1071,12 +1055,14 @@ void ComicBookTextModel::setInformationModel(ComicBookInformationModel* _model)
 
     d->informationModel = _model;
 
-    if (d->informationModel) {
-        connect(d->informationModel, &ComicBookInformationModel::scenesNumberingStartAtChanged,
-                this, [this] { d->updateNumbering(); });
-        connect(d->informationModel, &ComicBookInformationModel::scenesNumbersPrefixChanged, this,
-                [this] { d->updateNumbering(); });
-    }
+    //    if (d->informationModel) {
+    //        connect(d->informationModel,
+    //        &ComicBookInformationModel::scenesNumberingStartAtChanged,
+    //                this, [this] { d->updateNumbering(); });
+    //        connect(d->informationModel, &ComicBookInformationModel::scenesNumbersPrefixChanged,
+    //        this,
+    //                [this] { d->updateNumbering(); });
+    //    }
 }
 
 ComicBookInformationModel* ComicBookTextModel::informationModel() const
@@ -1108,90 +1094,24 @@ void ComicBookTextModel::updateCharacterName(const QString& _oldName, const QStr
 {
     const auto oldName = TextHelper::smartToUpper(_oldName);
     std::function<void(const ComicBookTextModelItem*)> updateCharacterBlock;
-    updateCharacterBlock = [this, oldName, _newName,
-                            &updateCharacterBlock](const ComicBookTextModelItem* _item) {
-        for (int childIndex = 0; childIndex < _item->childCount(); ++childIndex) {
-            auto childItem = _item->childAt(childIndex);
-            switch (childItem->type()) {
-            case ComicBookTextModelItemType::Folder:
-            case ComicBookTextModelItemType::Scene: {
-                updateCharacterBlock(childItem);
-                break;
-            }
-
-            case ComicBookTextModelItemType::Text: {
-                auto textItem = static_cast<ComicBookTextModelTextItem*>(childItem);
-                if (textItem->paragraphType() == ComicBookParagraphType::SceneCharacters
-                    && SceneCharactersParser::characters(textItem->text()).contains(oldName)) {
-                    auto text = textItem->text();
-                    auto nameIndex = TextHelper::smartToUpper(text).indexOf(oldName);
-                    while (nameIndex != -1) {
-                        //
-                        // Убедимся, что выделено именно имя, а не часть другого имени
-                        //
-                        const auto nameEndIndex = nameIndex + oldName.length();
-                        const bool atLeftAllOk = nameIndex == 0 || text.at(nameIndex - 1) == ","
-                            || (nameIndex > 2 && text.midRef(nameIndex - 2, 2) == ", ");
-                        const bool atRightAllOk = nameEndIndex == text.length()
-                            || text.at(nameEndIndex) == ","
-                            || (text.length() > nameEndIndex + 1
-                                && text.mid(nameEndIndex, 2) == " ,");
-                        if (!atLeftAllOk || !atRightAllOk) {
-                            nameIndex = TextHelper::smartToUpper(text).indexOf(oldName, nameIndex);
-                            continue;
-                        }
-
-                        text.remove(nameIndex, oldName.length());
-                        text.insert(nameIndex, _newName);
-                        textItem->setText(text);
-                        updateItem(textItem);
-                        break;
-                    }
-                } else if (textItem->paragraphType() == ComicBookParagraphType::Character
-                           && CharacterParser::name(textItem->text()) == oldName) {
-                    auto text = textItem->text();
-                    text.remove(0, oldName.length());
-                    text.prepend(_newName);
-                    textItem->setText(text);
-                    updateItem(textItem);
-                }
-                break;
-            }
-
-            default:
-                break;
-            }
-        }
-    };
-
-    emit rowsAboutToBeChanged();
-    updateCharacterBlock(d->rootItem);
-    emit rowsChanged();
-}
-
-void ComicBookTextModel::updateLocationName(const QString& _oldName, const QString& _newName)
-{
-    const auto oldName = TextHelper::smartToUpper(_oldName);
-    std::function<void(const ComicBookTextModelItem*)> updateLocationBlock;
-    updateLocationBlock
-        = [this, oldName, _newName, &updateLocationBlock](const ComicBookTextModelItem* _item) {
+    updateCharacterBlock
+        = [this, oldName, _newName, &updateCharacterBlock](const ComicBookTextModelItem* _item) {
               for (int childIndex = 0; childIndex < _item->childCount(); ++childIndex) {
                   auto childItem = _item->childAt(childIndex);
                   switch (childItem->type()) {
                   case ComicBookTextModelItemType::Folder:
                   case ComicBookTextModelItemType::Scene: {
-                      updateLocationBlock(childItem);
+                      updateCharacterBlock(childItem);
                       break;
                   }
 
                   case ComicBookTextModelItemType::Text: {
                       auto textItem = static_cast<ComicBookTextModelTextItem*>(childItem);
-                      if (textItem->paragraphType() == ComicBookParagraphType::SceneHeading
-                          && SceneHeadingParser::location(textItem->text()) == oldName) {
+                      if (textItem->paragraphType() == ComicBookParagraphType::Character
+                          && ComicBookCharacterParser::name(textItem->text()) == oldName) {
                           auto text = textItem->text();
-                          const auto nameIndex = TextHelper::smartToUpper(text).indexOf(oldName);
-                          text.remove(nameIndex, oldName.length());
-                          text.insert(nameIndex, _newName);
+                          text.remove(0, oldName.length());
+                          text.prepend(_newName);
                           textItem->setText(text);
                           updateItem(textItem);
                       }
@@ -1205,13 +1125,8 @@ void ComicBookTextModel::updateLocationName(const QString& _oldName, const QStri
           };
 
     emit rowsAboutToBeChanged();
-    updateLocationBlock(d->rootItem);
+    updateCharacterBlock(d->rootItem);
     emit rowsChanged();
-}
-
-LocationsModel* ComicBookTextModel::locationsModel() const
-{
-    return d->locationModel;
 }
 
 std::chrono::milliseconds ComicBookTextModel::duration() const
@@ -1287,11 +1202,11 @@ void ComicBookTextModel::initDocument()
     // Если документ пустой, создаём первоначальную структуру
     //
     if (document()->content().isEmpty()) {
-        auto sceneHeading = new ComicBookTextModelTextItem;
-        sceneHeading->setParagraphType(ComicBookParagraphType::SceneHeading);
-        auto scene = new ComicBookTextModelSceneItem;
-        scene->appendItem(sceneHeading);
-        appendItem(scene);
+        auto pageText = new ComicBookTextModelTextItem;
+        pageText->setParagraphType(ComicBookParagraphType::Page);
+        auto page = new ComicBookTextModelSceneItem;
+        page->appendItem(pageText);
+        appendItem(page);
     }
     //
     // А если данные есть, то загрузим их из документа
@@ -1529,8 +1444,7 @@ void ComicBookTextModel::applyPatch(const QByteArray& _patch)
     //
     const auto operations = edit_distance::editDistance(oldItemsPlain, newItemsPlain);
     //
-    std::function<ComicBookTextModelItem*(ComicBookTextModelItem*, bool)>
-        findNextItemWithChildren;
+    std::function<ComicBookTextModelItem*(ComicBookTextModelItem*, bool)> findNextItemWithChildren;
     findNextItemWithChildren
         = [&findNextItemWithChildren](ComicBookTextModelItem* _item,
                                       bool _searchInChildren) -> ComicBookTextModelItem* {

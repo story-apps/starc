@@ -49,17 +49,6 @@ public:
     void addParagraph(BusinessLayer::TextParagraphType _type);
 
     /**
-     * @brief Установить тип текущего блока
-     * @param Тип блока
-     */
-    void setCurrentParagraphType(BusinessLayer::TextParagraphType _type);
-
-    /**
-     * @brief Получить тип блока в котором находится курсор
-     */
-    BusinessLayer::TextParagraphType currentParagraphType() const;
-
-    /**
      * @brief Своя реализация установки курсора
      */
     void setTextCursorReimpl(const QTextCursor& _cursor);

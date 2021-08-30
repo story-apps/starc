@@ -68,11 +68,6 @@ public:
 private:
     explicit KeyPressHandlerFacade(Ui::TitlePageEdit* _editor);
 
-    /**
-     * @brief Получить обработчик для заданного типа
-     */
-    AbstractKeyHandler* handlerFor(BusinessLayer::TextParagraphType _type);
-
 private:
     class Implementation;
     QScopedPointer<Implementation> d;

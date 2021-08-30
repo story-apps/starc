@@ -244,7 +244,7 @@ void SceneCharactersHandler::storeCharacters() const
     QString currentBlockText = currentBlock.text();
     // ... персонажы
     QStringList enteredCharacters
-        = BusinessLayer::SceneCharactersParser::characters(currentBlockText);
+        = BusinessLayer::ScreenplaySceneCharactersParser::characters(currentBlockText);
 
     for (const QString& character : enteredCharacters) {
         editor()->characters()->createCharacter(character);

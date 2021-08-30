@@ -74,6 +74,7 @@ public:
 
     TemplateInfo<SimpleTextTemplate> text;
     TemplateInfo<ScreenplayTemplate> screenplay;
+    TemplateInfo<ComicBookTemplate> comicBook;
 };
 
 template<>
@@ -87,6 +88,11 @@ TemplateInfo<ScreenplayTemplate>& TemplatesFacade::Implementation::templateInfo<
     ScreenplayTemplate>()
 {
     return screenplay;
+}
+template<>
+TemplateInfo<ComicBookTemplate>& TemplatesFacade::Implementation::templateInfo<ComicBookTemplate>()
+{
+    return comicBook;
 }
 
 template<typename TemplateType>

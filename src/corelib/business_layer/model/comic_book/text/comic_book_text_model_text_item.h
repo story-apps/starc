@@ -1,6 +1,6 @@
 #pragma once
 
-#include "screenplay_text_model_item.h"
+#include "comic_book_text_model_item.h"
 
 #include <QColor>
 #include <QString>
@@ -13,12 +13,12 @@ class QXmlStreamReader;
 
 namespace BusinessLayer {
 
-enum class ScreenplayParagraphType;
+enum class ComicBookParagraphType;
 
 /**
  * @brief Класс элемента текста модели сценария
  */
-class CORE_LIBRARY_EXPORT ScreenplayTextModelTextItem : public ScreenplayTextModelItem
+class CORE_LIBRARY_EXPORT ComicBookTextModelTextItem : public ComicBookTextModelItem
 {
 public:
     struct CORE_LIBRARY_EXPORT TextPart {
@@ -70,9 +70,9 @@ public:
     };
 
 public:
-    ScreenplayTextModelTextItem();
-    explicit ScreenplayTextModelTextItem(QXmlStreamReader& _contentReaded);
-    ~ScreenplayTextModelTextItem() override;
+    ComicBookTextModelTextItem();
+    explicit ComicBookTextModelTextItem(QXmlStreamReader& _contentReaded);
+    ~ComicBookTextModelTextItem() override;
 
     /**
      * @brief Номер элемента
@@ -116,8 +116,8 @@ public:
     /**
      * @brief Тип параграфа
      */
-    ScreenplayParagraphType paragraphType() const;
-    void setParagraphType(ScreenplayParagraphType _type);
+    ComicBookParagraphType paragraphType() const;
+    void setParagraphType(ComicBookParagraphType _type);
 
     /**
      * @brief Выравнивание текста в блоке
@@ -165,7 +165,7 @@ public:
     /**
      * @brief Объединить с заданным элементом
      */
-    void mergeWith(const ScreenplayTextModelTextItem* _other);
+    void mergeWith(const ComicBookTextModelTextItem* _other);
 
     /**
      * @brief Определяем интерфейс получения данных сцены
@@ -181,12 +181,12 @@ public:
     /**
      * @brief Скопировать контент с заданного элемента
      */
-    void copyFrom(ScreenplayTextModelItem* _item) override;
+    void copyFrom(ComicBookTextModelItem* _item) override;
 
     /**
      * @brief Проверить равен ли текущий элемент заданному
      */
-    bool isEqual(ScreenplayTextModelItem* _item) const override;
+    bool isEqual(ComicBookTextModelItem* _item) const override;
 
 private:
     /**
@@ -202,5 +202,5 @@ private:
 
 } // namespace BusinessLayer
 
-Q_DECLARE_METATYPE(BusinessLayer::ScreenplayTextModelTextItem::ReviewComment)
-Q_DECLARE_METATYPE(QVector<BusinessLayer::ScreenplayTextModelTextItem::ReviewComment>)
+Q_DECLARE_METATYPE(BusinessLayer::ComicBookTextModelTextItem::ReviewComment)
+Q_DECLARE_METATYPE(QVector<BusinessLayer::ComicBookTextModelTextItem::ReviewComment>)

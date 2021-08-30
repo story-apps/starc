@@ -1122,7 +1122,7 @@ void ScreenplayTextModel::updateCharacterName(const QString& _oldName, const QSt
             case ScreenplayTextModelItemType::Text: {
                 auto textItem = static_cast<ScreenplayTextModelTextItem*>(childItem);
                 if (textItem->paragraphType() == ScreenplayParagraphType::SceneCharacters
-                    && SceneCharactersParser::characters(textItem->text()).contains(oldName)) {
+                    && ScreenplaySceneCharactersParser::characters(textItem->text()).contains(oldName)) {
                     auto text = textItem->text();
                     auto nameIndex = TextHelper::smartToUpper(text).indexOf(oldName);
                     while (nameIndex != -1) {
@@ -1148,7 +1148,7 @@ void ScreenplayTextModel::updateCharacterName(const QString& _oldName, const QSt
                         break;
                     }
                 } else if (textItem->paragraphType() == ScreenplayParagraphType::Character
-                           && CharacterParser::name(textItem->text()) == oldName) {
+                           && ScreenplayCharacterParser::name(textItem->text()) == oldName) {
                     auto text = textItem->text();
                     text.remove(0, oldName.length());
                     text.prepend(_newName);
@@ -1187,7 +1187,7 @@ void ScreenplayTextModel::updateLocationName(const QString& _oldName, const QStr
                   case ScreenplayTextModelItemType::Text: {
                       auto textItem = static_cast<ScreenplayTextModelTextItem*>(childItem);
                       if (textItem->paragraphType() == ScreenplayParagraphType::SceneHeading
-                          && SceneHeadingParser::location(textItem->text()) == oldName) {
+                          && ScreenplaySceneHeadingParser::location(textItem->text()) == oldName) {
                           auto text = textItem->text();
                           const auto nameIndex = TextHelper::smartToUpper(text).indexOf(oldName);
                           text.remove(nameIndex, oldName.length());

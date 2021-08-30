@@ -17,7 +17,7 @@
 
 #include <cmath>
 
-using BusinessLayer::CharacterParser;
+using BusinessLayer::ScreenplayCharacterParser;
 using BusinessLayer::ScreenplayBlockStyle;
 using BusinessLayer::ScreenplayParagraphType;
 using BusinessLayer::TemplatesFacade;
@@ -341,7 +341,7 @@ void ScreenplayTextCorrector::Implementation::correctCharactersNames(int _positi
         // Корректируем имя персонажа при необходимости
         //
         else if (blockType == ScreenplayParagraphType::Character) {
-            const QString characterName = CharacterParser::name(block.text());
+            const QString characterName = ScreenplayCharacterParser::name(block.text());
             const bool isStartPositionInBlock = block.position() < startPosition
                 && block.position() + block.length() > startPosition;
             //
@@ -365,7 +365,7 @@ void ScreenplayTextCorrector::Implementation::correctCharactersNames(int _positi
                 // Если второе подряд и ещё не настроено, добавляем вспомогательный текст
                 //
                 else if (characterName == lastCharacterName) {
-                    const QString characterState = CharacterParser::extension(block.text());
+                    const QString characterState = ScreenplayCharacterParser::extension(block.text());
                     QTextBlockFormat characterFormat = block.blockFormat();
                     if (characterState.isEmpty()
                         && !characterFormat.boolProperty(
@@ -1674,7 +1674,7 @@ void ScreenplayTextCorrector::Implementation::breakDialogue(
         //
         // И вставляем текст с именем персонажа
         //
-        const QString characterName = CharacterParser::name(characterBlock.text());
+        const QString characterName = ScreenplayCharacterParser::name(characterBlock.text());
         _cursor.insertText(characterName + continuedTerm());
         _block = _cursor.block();
         //

@@ -214,9 +214,6 @@ void SimpleTextView::reconfigure(const QStringList& _changedSettingsKeys)
     if (_changedSettingsKeys.isEmpty()
         || _changedSettingsKeys.contains(
             DataStorageLayer::kComponentsSimpleTextEditorDefaultTemplateKey)) {
-        TemplatesFacade::setDefaultSimpleTextTemplate(
-            settingsValue(DataStorageLayer::kComponentsSimpleTextEditorDefaultTemplateKey)
-                .toString());
         d->textEdit->reinit();
     }
 

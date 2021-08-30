@@ -210,7 +210,7 @@ static QString clearBlockText(ScreenplayParagraphType _blockType, const QString&
     // * убираем точки в конце названия локации
     //
     if (_blockType == ScreenplayParagraphType::SceneHeading) {
-        const QString location = SceneHeadingParser::location(_blockText);
+        const QString location = ScreenplaySceneHeadingParser::location(_blockText);
         QString clearLocation = location.simplified();
         clearLocation.remove(NOISE_AT_START);
         clearLocation.remove(NOISE_AT_END);
@@ -223,7 +223,7 @@ static QString clearBlockText(ScreenplayParagraphType _blockType, const QString&
     // * убираем точки в конце
     //
     else if (_blockType == ScreenplayParagraphType::Character) {
-        const QString name = CharacterParser::name(_blockText);
+        const QString name = ScreenplayCharacterParser::name(_blockText);
         QString clearName = name.simplified();
         clearName.remove(NOISE_AT_END);
         if (name != clearName) {
@@ -336,7 +336,7 @@ AbstractScreenplayImporter::Documents DocumentImporter::importDocuments(
                     break;
                 }
 
-                const auto locationName = SceneHeadingParser::location(paragraphText);
+                const auto locationName = ScreenplaySceneHeadingParser::location(paragraphText);
                 if (locationName.isEmpty()) {
                     break;
                 }
@@ -350,7 +350,7 @@ AbstractScreenplayImporter::Documents DocumentImporter::importDocuments(
                     break;
                 }
 
-                const auto characterName = CharacterParser::name(paragraphText);
+                const auto characterName = ScreenplayCharacterParser::name(paragraphText);
                 if (characterName.isEmpty()) {
                     break;
                 }

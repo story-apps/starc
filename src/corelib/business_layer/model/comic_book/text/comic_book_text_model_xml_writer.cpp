@@ -1,13 +1,13 @@
-#include "screenplay_text_model_xml_writer.h"
+#include "comic_book_text_model_xml_writer.h"
 
-#include "screenplay_text_model_text_item.h"
+#include "comic_book_text_model_text_item.h"
 
 #include <QString>
 
 namespace BusinessLayer {
 namespace xml {
 
-class ScreenplayTextModelXmlWriter::Implementation
+class ComicBookTextModelXmlWriter::Implementation
 {
 public:
     /**
@@ -28,7 +28,7 @@ public:
     TextItemData lastTextItemData;
 };
 
-void ScreenplayTextModelXmlWriter::Implementation::writeTextItemData(const TextItemData& _data)
+void ComicBookTextModelXmlWriter::Implementation::writeTextItemData(const TextItemData& _data)
 {
     auto writeLastTextItemDataAndDestroy = [this] {
         data += lastTextItemData.item->toXml(lastTextItemData.fromPosition,
@@ -62,7 +62,7 @@ void ScreenplayTextModelXmlWriter::Implementation::writeTextItemData(const TextI
 // ****
 
 
-ScreenplayTextModelXmlWriter::ScreenplayTextModelXmlWriter(bool _addHeader)
+ComicBookTextModelXmlWriter::ComicBookTextModelXmlWriter(bool _addHeader)
     : d(new Implementation)
 {
     if (_addHeader) {
@@ -70,7 +70,7 @@ ScreenplayTextModelXmlWriter::ScreenplayTextModelXmlWriter(bool _addHeader)
     }
 }
 
-void ScreenplayTextModelXmlWriter::operator+=(const char* _data)
+void ComicBookTextModelXmlWriter::operator+=(const char* _data)
 {
     //
     // Если был незаписанный элемент, записываем его
@@ -80,7 +80,7 @@ void ScreenplayTextModelXmlWriter::operator+=(const char* _data)
     d->data += _data;
 }
 
-void ScreenplayTextModelXmlWriter::operator+=(const QByteArray& _data)
+void ComicBookTextModelXmlWriter::operator+=(const QByteArray& _data)
 {
     //
     // Если был незаписанный элемент, записываем его
@@ -90,7 +90,7 @@ void ScreenplayTextModelXmlWriter::operator+=(const QByteArray& _data)
     d->data += _data;
 }
 
-void ScreenplayTextModelXmlWriter::operator+=(const QString& _data)
+void ComicBookTextModelXmlWriter::operator+=(const QString& _data)
 {
     //
     // Если был незаписанный элемент, записываем его
@@ -100,13 +100,13 @@ void ScreenplayTextModelXmlWriter::operator+=(const QString& _data)
     d->data += _data.toUtf8();
 }
 
-void ScreenplayTextModelXmlWriter::operator+=(ScreenplayTextModelItem* _item)
+void ComicBookTextModelXmlWriter::operator+=(ComicBookTextModelItem* _item)
 {
     //
     // Текстовые элементы пишем в специальном методе, т.к. возможно понадобится отложенная запись
     //
-    if (_item->type() == ScreenplayTextModelItemType::Text) {
-        auto textItem = static_cast<ScreenplayTextModelTextItem*>(_item);
+    if (_item->type() == ComicBookTextModelItemType::Text) {
+        auto textItem = static_cast<ComicBookTextModelTextItem*>(_item);
         operator+=({ textItem, 0, textItem->text().length() });
     }
     //
@@ -117,7 +117,7 @@ void ScreenplayTextModelXmlWriter::operator+=(ScreenplayTextModelItem* _item)
     }
 }
 
-void ScreenplayTextModelXmlWriter::operator+=(const TextItemData& _data)
+void ComicBookTextModelXmlWriter::operator+=(const TextItemData& _data)
 {
     if (_data.item->isCorrection()) {
         return;
@@ -127,7 +127,7 @@ void ScreenplayTextModelXmlWriter::operator+=(const TextItemData& _data)
     // Если элемент разорван, то сохраняем его и пока не записываем
     //
     if (_data.item->isBreakCorrectionStart()) {
-        auto textItem = new ScreenplayTextModelTextItem;
+        auto textItem = new ComicBookTextModelTextItem;
         textItem->copyFrom(_data.item);
         d->lastTextItemData = { textItem, _data.fromPosition, _data.toPosition };
     }
@@ -139,7 +139,7 @@ void ScreenplayTextModelXmlWriter::operator+=(const TextItemData& _data)
     }
 }
 
-QByteArray ScreenplayTextModelXmlWriter::data() const
+QByteArray ComicBookTextModelXmlWriter::data() const
 {
     //
     // Если был незаписанный элемент, записываем его
@@ -149,7 +149,7 @@ QByteArray ScreenplayTextModelXmlWriter::data() const
     return d->data;
 }
 
-ScreenplayTextModelXmlWriter::~ScreenplayTextModelXmlWriter() = default;
+ComicBookTextModelXmlWriter::~ComicBookTextModelXmlWriter() = default;
 
 
 } // namespace xml

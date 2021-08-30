@@ -157,6 +157,32 @@ const QString kComponentsScreenplayDurationByCharactersIncludeSpacesKey
     = kComponentsScreenplayDurationKey + QStringLiteral("/by-characters-include-spaces");
 const QString kComponentsScreenplayDurationByCharactersDurationKey
     = kComponentsScreenplayDurationKey + QStringLiteral("/by-characters-duration");
+//
+// комикс
+const QString kComponentsComicBookKey = kComponentsGroupKey + QStringLiteral("/comicbook");
+// ... редактор
+const QString kComponentsComicBookEditorKey = kComponentsComicBookKey + QStringLiteral("/editor");
+const QString kComponentsComicBookEditorDefaultTemplateKey
+    = kComponentsComicBookEditorKey + QStringLiteral("/default-template");
+const QString kComponentsComicBookEditorShowSceneNumbersKey
+    = kComponentsComicBookEditorKey + QStringLiteral("/show-scene-numbers");
+const QString kComponentsComicBookEditorShowSceneNumbersOnRightKey
+    = kComponentsComicBookEditorKey + QStringLiteral("/show-scene-numbers-on-left");
+const QString kComponentsComicBookEditorShowSceneNumberOnLeftKey
+    = kComponentsComicBookEditorKey + QStringLiteral("/show-scene-number-on-right");
+const QString kComponentsComicBookEditorShowDialogueNumberKey
+    = kComponentsComicBookEditorKey + QStringLiteral("/show-dialogue-number");
+const QString kComponentsComicBookEditorHighlightCurrentLineKey
+    = kComponentsComicBookEditorKey + QStringLiteral("/highlight-current-line");
+// ... навигатор
+const QString kComponentsComicBookNavigatorKey
+    = kComponentsComicBookKey + QStringLiteral("/navigator");
+const QString kComponentsComicBookNavigatorShowSceneNumberKey
+    = kComponentsComicBookNavigatorKey + QStringLiteral("/show-scene-number");
+const QString kComponentsComicBookNavigatorShowSceneTextKey
+    = kComponentsComicBookNavigatorKey + QStringLiteral("/show-scene-text");
+const QString kComponentsComicBookNavigatorSceneTextLinesKey
+    = kComponentsComicBookNavigatorKey + QStringLiteral("/scene-text-lines");
 } // namespace
 
 /**

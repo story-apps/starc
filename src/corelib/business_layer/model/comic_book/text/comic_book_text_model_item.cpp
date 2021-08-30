@@ -1,19 +1,19 @@
-#include "screenplay_text_model_item.h"
+#include "comic_book_text_model_item.h"
 
 #include <QVariant>
 
 
 namespace BusinessLayer {
 
-class ScreenplayTextModelItem::Implementation
+class ComicBookTextModelItem::Implementation
 {
 public:
-    explicit Implementation(ScreenplayTextModelItemType _type);
+    explicit Implementation(ComicBookTextModelItemType _type);
 
-    const ScreenplayTextModelItemType type;
+    const ComicBookTextModelItemType type;
 };
 
-ScreenplayTextModelItem::Implementation::Implementation(ScreenplayTextModelItemType _type)
+ComicBookTextModelItem::Implementation::Implementation(ComicBookTextModelItemType _type)
     : type(_type)
 {
 }
@@ -22,29 +22,29 @@ ScreenplayTextModelItem::Implementation::Implementation(ScreenplayTextModelItemT
 // ****
 
 
-ScreenplayTextModelItem::ScreenplayTextModelItem(ScreenplayTextModelItemType _type)
+ComicBookTextModelItem::ComicBookTextModelItem(ComicBookTextModelItemType _type)
     : d(new Implementation(_type))
 {
 }
 
-ScreenplayTextModelItem::~ScreenplayTextModelItem() = default;
+ComicBookTextModelItem::~ComicBookTextModelItem() = default;
 
-ScreenplayTextModelItemType ScreenplayTextModelItem::type() const
+ComicBookTextModelItemType ComicBookTextModelItem::type() const
 {
     return d->type;
 }
 
-ScreenplayTextModelItem* ScreenplayTextModelItem::parent() const
+ComicBookTextModelItem* ComicBookTextModelItem::parent() const
 {
-    return static_cast<ScreenplayTextModelItem*>(AbstractModelItem::parent());
+    return static_cast<ComicBookTextModelItem*>(AbstractModelItem::parent());
 }
 
-ScreenplayTextModelItem* ScreenplayTextModelItem::childAt(int _index) const
+ComicBookTextModelItem* ComicBookTextModelItem::childAt(int _index) const
 {
-    return static_cast<ScreenplayTextModelItem*>(AbstractModelItem::childAt(_index));
+    return static_cast<ComicBookTextModelItem*>(AbstractModelItem::childAt(_index));
 }
 
-QVariant ScreenplayTextModelItem::data(int _role) const
+QVariant ComicBookTextModelItem::data(int _role) const
 {
     if (_role == Qt::UserRole) {
         return static_cast<int>(d->type);

@@ -1,9 +1,9 @@
-#include "screenplay_text_model_text_item.h"
+#include "comic_book_text_model_text_item.h"
 
-#include "screenplay_text_model_xml.h"
+#include "comic_book_text_model_xml.h"
 
 #include <business_layer/chronometry/chronometer.h>
-#include <business_layer/templates/screenplay_template.h>
+#include <business_layer/templates/comic_book_template.h>
 #include <business_layer/templates/templates_facade.h>
 #include <utils/helpers/string_helper.h>
 #include <utils/helpers/text_helper.h>
@@ -17,7 +17,7 @@
 
 namespace BusinessLayer {
 
-class ScreenplayTextModelTextItem::Implementation
+class ComicBookTextModelTextItem::Implementation
 {
 public:
     Implementation() = default;
@@ -68,7 +68,7 @@ public:
     /**
      * @brief Тип параграфа
      */
-    ScreenplayParagraphType paragraphType = ScreenplayParagraphType::UnformattedText;
+    ComicBookParagraphType paragraphType = ComicBookParagraphType::UnformattedText;
 
     /**
      * @brief Выравнивание текста в блоке
@@ -106,10 +106,10 @@ public:
     QByteArray xml;
 };
 
-ScreenplayTextModelTextItem::Implementation::Implementation(QXmlStreamReader& _contentReader)
+ComicBookTextModelTextItem::Implementation::Implementation(QXmlStreamReader& _contentReader)
 {
-    paragraphType = screenplayParagraphTypeFromString(_contentReader.name().toString());
-    Q_ASSERT(paragraphType != ScreenplayParagraphType::Undefined);
+    paragraphType = comicBookParagraphTypeFromString(_contentReader.name().toString());
+    Q_ASSERT(paragraphType != ComicBookParagraphType::Undefined);
 
     auto currentTag = xml::readNextElement(_contentReader);
 
@@ -234,12 +234,12 @@ ScreenplayTextModelTextItem::Implementation::Implementation(QXmlStreamReader& _c
     xml::readNextElement(_contentReader); // next
 }
 
-void ScreenplayTextModelTextItem::Implementation::updateXml()
+void ComicBookTextModelTextItem::Implementation::updateXml()
 {
     xml = buildXml(0, text.length());
 }
 
-QByteArray ScreenplayTextModelTextItem::Implementation::buildXml(int _from, int _length)
+QByteArray ComicBookTextModelTextItem::Implementation::buildXml(int _from, int _length)
 {
     if (isCorrection) {
         return {};
@@ -407,24 +407,24 @@ QByteArray ScreenplayTextModelTextItem::Implementation::buildXml(int _from, int 
 // ****
 
 
-int ScreenplayTextModelTextItem::TextPart::end() const
+int ComicBookTextModelTextItem::TextPart::end() const
 {
     return from + length;
 }
 
-bool ScreenplayTextModelTextItem::TextFormat::operator==(
-    const ScreenplayTextModelTextItem::TextFormat& _other) const
+bool ComicBookTextModelTextItem::TextFormat::operator==(
+    const ComicBookTextModelTextItem::TextFormat& _other) const
 {
     return from == _other.from && length == _other.length && isBold == _other.isBold
         && isItalic == _other.isItalic && isUnderline == _other.isUnderline;
 }
 
-bool ScreenplayTextModelTextItem::TextFormat::isValid() const
+bool ComicBookTextModelTextItem::TextFormat::isValid() const
 {
     return isBold != false || isItalic != false || isUnderline != false;
 }
 
-QTextCharFormat ScreenplayTextModelTextItem::TextFormat::charFormat() const
+QTextCharFormat ComicBookTextModelTextItem::TextFormat::charFormat() const
 {
     if (!isValid()) {
         return {};
@@ -443,77 +443,77 @@ QTextCharFormat ScreenplayTextModelTextItem::TextFormat::charFormat() const
     return format;
 }
 
-bool ScreenplayTextModelTextItem::ReviewComment::operator==(
-    const ScreenplayTextModelTextItem::ReviewComment& _other) const
+bool ComicBookTextModelTextItem::ReviewComment::operator==(
+    const ComicBookTextModelTextItem::ReviewComment& _other) const
 {
     return author == _other.author && date == _other.date && text == _other.text;
 }
 
-bool ScreenplayTextModelTextItem::ReviewMark::operator==(
-    const ScreenplayTextModelTextItem::ReviewMark& _other) const
+bool ComicBookTextModelTextItem::ReviewMark::operator==(
+    const ComicBookTextModelTextItem::ReviewMark& _other) const
 {
     return from == _other.from && length == _other.length && textColor == _other.textColor
         && backgroundColor == _other.backgroundColor && isDone == _other.isDone
         && comments == _other.comments;
 }
 
-QTextCharFormat ScreenplayTextModelTextItem::ReviewMark::charFormat() const
+QTextCharFormat ComicBookTextModelTextItem::ReviewMark::charFormat() const
 {
     QTextCharFormat format;
-    format.setProperty(ScreenplayBlockStyle::PropertyIsReviewMark, true);
+    format.setProperty(ComicBookBlockStyle::PropertyIsReviewMark, true);
     if (textColor.isValid()) {
         format.setForeground(textColor);
     }
     if (backgroundColor.isValid()) {
         format.setBackground(backgroundColor);
     }
-    format.setProperty(ScreenplayBlockStyle::PropertyIsDone, isDone);
+    format.setProperty(ComicBookBlockStyle::PropertyIsDone, isDone);
     QStringList authors, dates, comments;
     for (const auto& comment : this->comments) {
         authors.append(comment.author);
         dates.append(comment.date);
         comments.append(comment.text);
     }
-    format.setProperty(ScreenplayBlockStyle::PropertyCommentsAuthors, authors);
-    format.setProperty(ScreenplayBlockStyle::PropertyCommentsDates, dates);
-    format.setProperty(ScreenplayBlockStyle::PropertyComments, comments);
+    format.setProperty(ComicBookBlockStyle::PropertyCommentsAuthors, authors);
+    format.setProperty(ComicBookBlockStyle::PropertyCommentsDates, dates);
+    format.setProperty(ComicBookBlockStyle::PropertyComments, comments);
     return format;
 }
 
-bool ScreenplayTextModelTextItem::Bookmark::operator==(
-    const ScreenplayTextModelTextItem::Bookmark& _other) const
+bool ComicBookTextModelTextItem::Bookmark::operator==(
+    const ComicBookTextModelTextItem::Bookmark& _other) const
 {
     return color == _other.color && text == _other.text;
 }
 
-bool ScreenplayTextModelTextItem::Revision::operator==(const Revision& _other) const
+bool ComicBookTextModelTextItem::Revision::operator==(const Revision& _other) const
 {
     return from == _other.from && length == _other.length && color == _other.color;
 }
 
-ScreenplayTextModelTextItem::ScreenplayTextModelTextItem()
-    : ScreenplayTextModelItem(ScreenplayTextModelItemType::Text)
+ComicBookTextModelTextItem::ComicBookTextModelTextItem()
+    : ComicBookTextModelItem(ComicBookTextModelItemType::Text)
     , d(new Implementation)
 {
     d->updateXml();
 }
 
-ScreenplayTextModelTextItem::ScreenplayTextModelTextItem(QXmlStreamReader& _contentReaded)
-    : ScreenplayTextModelItem(ScreenplayTextModelItemType::Text)
+ComicBookTextModelTextItem::ComicBookTextModelTextItem(QXmlStreamReader& _contentReaded)
+    : ComicBookTextModelItem(ComicBookTextModelItemType::Text)
     , d(new Implementation(_contentReaded))
 {
     d->updateXml();
     updateDuration();
 }
 
-ScreenplayTextModelTextItem::~ScreenplayTextModelTextItem() = default;
+ComicBookTextModelTextItem::~ComicBookTextModelTextItem() = default;
 
-std::optional<ScreenplayTextModelTextItem::Number> ScreenplayTextModelTextItem::number() const
+std::optional<ComicBookTextModelTextItem::Number> ComicBookTextModelTextItem::number() const
 {
     return d->number;
 }
 
-void ScreenplayTextModelTextItem::setNumber(int _number)
+void ComicBookTextModelTextItem::setNumber(int _number)
 {
     const auto newNumber
         = QString(QLocale().textDirection() == Qt::LeftToRight ? "%1:" : ":%1").arg(_number);
@@ -525,32 +525,32 @@ void ScreenplayTextModelTextItem::setNumber(int _number)
     markChanged();
 }
 
-std::chrono::milliseconds ScreenplayTextModelTextItem::duration() const
+std::chrono::milliseconds ComicBookTextModelTextItem::duration() const
 {
     return d->duration;
 }
 
-void ScreenplayTextModelTextItem::updateDuration()
+void ComicBookTextModelTextItem::updateDuration()
 {
-    const auto duration = Chronometer::duration(d->paragraphType, d->text);
-    if (d->duration == duration) {
-        return;
-    }
+    //    const auto duration = Chronometer::duration(d->paragraphType, d->text);
+    //    if (d->duration == duration) {
+    //        return;
+    //    }
 
-    d->duration = duration;
+    //    d->duration = duration;
 
-    //
-    // Помещаем изменённым для пересчёта хронометража в родительском элементе
-    //
-    markChanged();
+    //    //
+    //    // Помещаем изменённым для пересчёта хронометража в родительском элементе
+    //    //
+    //    markChanged();
 }
 
-bool ScreenplayTextModelTextItem::isCorrection() const
+bool ComicBookTextModelTextItem::isCorrection() const
 {
     return d->isCorrection;
 }
 
-void ScreenplayTextModelTextItem::setCorrection(bool _correction)
+void ComicBookTextModelTextItem::setCorrection(bool _correction)
 {
     if (d->isCorrection == _correction) {
         return;
@@ -564,12 +564,12 @@ void ScreenplayTextModelTextItem::setCorrection(bool _correction)
     }
 }
 
-bool ScreenplayTextModelTextItem::isCorrectionContinued() const
+bool ComicBookTextModelTextItem::isCorrectionContinued() const
 {
     return d->isCorrectionContinued;
 }
 
-void ScreenplayTextModelTextItem::setCorrectionContinued(bool _continued)
+void ComicBookTextModelTextItem::setCorrectionContinued(bool _continued)
 {
     if (d->isCorrectionContinued == _continued) {
         return;
@@ -578,12 +578,12 @@ void ScreenplayTextModelTextItem::setCorrectionContinued(bool _continued)
     d->isCorrectionContinued = _continued;
 }
 
-bool ScreenplayTextModelTextItem::isBreakCorrectionStart() const
+bool ComicBookTextModelTextItem::isBreakCorrectionStart() const
 {
     return d->isBreakCorrectionStart;
 }
 
-void ScreenplayTextModelTextItem::setBreakCorrectionStart(bool _broken)
+void ComicBookTextModelTextItem::setBreakCorrectionStart(bool _broken)
 {
     if (d->isBreakCorrectionStart == _broken) {
         return;
@@ -592,12 +592,12 @@ void ScreenplayTextModelTextItem::setBreakCorrectionStart(bool _broken)
     d->isBreakCorrectionStart = _broken;
 }
 
-bool ScreenplayTextModelTextItem::isBreakCorrectionEnd() const
+bool ComicBookTextModelTextItem::isBreakCorrectionEnd() const
 {
     return d->isBreakCorrectionEnd;
 }
 
-void ScreenplayTextModelTextItem::setBreakCorrectionEnd(bool _broken)
+void ComicBookTextModelTextItem::setBreakCorrectionEnd(bool _broken)
 {
     if (d->isBreakCorrectionEnd == _broken) {
         return;
@@ -606,12 +606,12 @@ void ScreenplayTextModelTextItem::setBreakCorrectionEnd(bool _broken)
     d->isBreakCorrectionEnd = _broken;
 }
 
-std::optional<bool> ScreenplayTextModelTextItem::isInFirstColumn() const
+std::optional<bool> ComicBookTextModelTextItem::isInFirstColumn() const
 {
     return d->isInFirstColumn;
 }
 
-void ScreenplayTextModelTextItem::setInFirstColumn(const std::optional<bool>& _in)
+void ComicBookTextModelTextItem::setInFirstColumn(const std::optional<bool>& _in)
 {
     if (d->isInFirstColumn == _in) {
         return;
@@ -622,12 +622,12 @@ void ScreenplayTextModelTextItem::setInFirstColumn(const std::optional<bool>& _i
     markChanged();
 }
 
-ScreenplayParagraphType ScreenplayTextModelTextItem::paragraphType() const
+ComicBookParagraphType ComicBookTextModelTextItem::paragraphType() const
 {
     return d->paragraphType;
 }
 
-void ScreenplayTextModelTextItem::setParagraphType(ScreenplayParagraphType _type)
+void ComicBookTextModelTextItem::setParagraphType(ComicBookParagraphType _type)
 {
     if (d->paragraphType == _type) {
         return;
@@ -639,12 +639,12 @@ void ScreenplayTextModelTextItem::setParagraphType(ScreenplayParagraphType _type
     markChanged();
 }
 
-std::optional<Qt::Alignment> ScreenplayTextModelTextItem::alignment() const
+std::optional<Qt::Alignment> ComicBookTextModelTextItem::alignment() const
 {
     return d->alignment;
 }
 
-void ScreenplayTextModelTextItem::setAlignment(Qt::Alignment _align)
+void ComicBookTextModelTextItem::setAlignment(Qt::Alignment _align)
 {
     if (d->alignment.has_value() && d->alignment == _align) {
         return;
@@ -655,7 +655,7 @@ void ScreenplayTextModelTextItem::setAlignment(Qt::Alignment _align)
     markChanged();
 }
 
-void ScreenplayTextModelTextItem::clearAlignment()
+void ComicBookTextModelTextItem::clearAlignment()
 {
     if (!d->alignment.has_value()) {
         return;
@@ -666,13 +666,12 @@ void ScreenplayTextModelTextItem::clearAlignment()
     markChanged();
 }
 
-std::optional<ScreenplayTextModelTextItem::Bookmark> ScreenplayTextModelTextItem::bookmark() const
+std::optional<ComicBookTextModelTextItem::Bookmark> ComicBookTextModelTextItem::bookmark() const
 {
     return d->bookmark;
 }
 
-void ScreenplayTextModelTextItem::setBookmark(
-    const ScreenplayTextModelTextItem::Bookmark& _bookmark)
+void ComicBookTextModelTextItem::setBookmark(const ComicBookTextModelTextItem::Bookmark& _bookmark)
 {
     if (d->bookmark.has_value() && d->bookmark->color == _bookmark.color
         && d->bookmark->text == _bookmark.text) {
@@ -684,12 +683,12 @@ void ScreenplayTextModelTextItem::setBookmark(
     markChanged();
 }
 
-const QString& ScreenplayTextModelTextItem::text() const
+const QString& ComicBookTextModelTextItem::text() const
 {
     return d->text;
 }
 
-void ScreenplayTextModelTextItem::setText(const QString& _text)
+void ComicBookTextModelTextItem::setText(const QString& _text)
 {
     if (d->text == _text) {
         return;
@@ -706,7 +705,7 @@ void ScreenplayTextModelTextItem::setText(const QString& _text)
     markChanged();
 }
 
-void ScreenplayTextModelTextItem::removeText(int _from)
+void ComicBookTextModelTextItem::removeText(int _from)
 {
     if (_from >= d->text.length()) {
         return;
@@ -758,16 +757,16 @@ void ScreenplayTextModelTextItem::removeText(int _from)
     markChanged();
 }
 
-const QVector<ScreenplayTextModelTextItem::TextFormat>& ScreenplayTextModelTextItem::formats() const
+const QVector<ComicBookTextModelTextItem::TextFormat>& ComicBookTextModelTextItem::formats() const
 {
     return d->formats;
 }
 
-void ScreenplayTextModelTextItem::setFormats(const QVector<QTextLayout::FormatRange>& _formats)
+void ComicBookTextModelTextItem::setFormats(const QVector<QTextLayout::FormatRange>& _formats)
 {
     QVector<TextFormat> newFormats;
     const auto defaultBlockFormat
-        = TemplatesFacade::screenplayTemplate().paragraphStyle(d->paragraphType);
+        = TemplatesFacade::comicBookTemplate().paragraphStyle(d->paragraphType);
     for (const auto& format : _formats) {
         if (format.start == 0 && format.length == d->text.length()
             && format.format == defaultBlockFormat.charFormat()) {
@@ -799,14 +798,14 @@ void ScreenplayTextModelTextItem::setFormats(const QVector<QTextLayout::FormatRa
     markChanged();
 }
 
-const QVector<ScreenplayTextModelTextItem::ReviewMark>& ScreenplayTextModelTextItem::reviewMarks()
+const QVector<ComicBookTextModelTextItem::ReviewMark>& ComicBookTextModelTextItem::reviewMarks()
     const
 {
     return d->reviewMarks;
 }
 
-void ScreenplayTextModelTextItem::setReviewMarks(
-    const QVector<ScreenplayTextModelTextItem::ReviewMark>& _reviewMarks)
+void ComicBookTextModelTextItem::setReviewMarks(
+    const QVector<ComicBookTextModelTextItem::ReviewMark>& _reviewMarks)
 {
     if (d->reviewMarks == _reviewMarks) {
         return;
@@ -817,12 +816,12 @@ void ScreenplayTextModelTextItem::setReviewMarks(
     markChanged();
 }
 
-void ScreenplayTextModelTextItem::setReviewMarks(
+void ComicBookTextModelTextItem::setReviewMarks(
     const QVector<QTextLayout::FormatRange>& _reviewMarks)
 {
     QVector<ReviewMark> newReviewMarks;
     for (const auto& reviewMark : _reviewMarks) {
-        if (reviewMark.format.boolProperty(ScreenplayBlockStyle::PropertyIsReviewMark) == false) {
+        if (reviewMark.format.boolProperty(ComicBookBlockStyle::PropertyIsReviewMark) == false) {
             continue;
         }
 
@@ -835,14 +834,13 @@ void ScreenplayTextModelTextItem::setReviewMarks(
         if (reviewMark.format.hasProperty(QTextFormat::BackgroundBrush)) {
             newReviewMark.backgroundColor = reviewMark.format.background().color();
         }
-        newReviewMark.isDone = reviewMark.format.boolProperty(ScreenplayBlockStyle::PropertyIsDone);
+        newReviewMark.isDone = reviewMark.format.boolProperty(ComicBookBlockStyle::PropertyIsDone);
         const QStringList comments
-            = reviewMark.format.property(ScreenplayBlockStyle::PropertyComments).toStringList();
+            = reviewMark.format.property(ComicBookBlockStyle::PropertyComments).toStringList();
         const QStringList dates
-            = reviewMark.format.property(ScreenplayBlockStyle::PropertyCommentsDates)
-                  .toStringList();
+            = reviewMark.format.property(ComicBookBlockStyle::PropertyCommentsDates).toStringList();
         const QStringList authors
-            = reviewMark.format.property(ScreenplayBlockStyle::PropertyCommentsAuthors)
+            = reviewMark.format.property(ComicBookBlockStyle::PropertyCommentsAuthors)
                   .toStringList();
         for (int commentIndex = 0; commentIndex < comments.size(); ++commentIndex) {
             newReviewMark.comments.append(
@@ -855,12 +853,12 @@ void ScreenplayTextModelTextItem::setReviewMarks(
     setReviewMarks(newReviewMarks);
 }
 
-const QVector<ScreenplayTextModelTextItem::Revision>& ScreenplayTextModelTextItem::revisions() const
+const QVector<ComicBookTextModelTextItem::Revision>& ComicBookTextModelTextItem::revisions() const
 {
     return d->revisions;
 }
 
-void ScreenplayTextModelTextItem::mergeWith(const ScreenplayTextModelTextItem* _other)
+void ComicBookTextModelTextItem::mergeWith(const ComicBookTextModelTextItem* _other)
 {
     if (_other == nullptr || _other->text().isEmpty()) {
         return;
@@ -882,11 +880,11 @@ void ScreenplayTextModelTextItem::mergeWith(const ScreenplayTextModelTextItem* _
     markChanged();
 }
 
-QVariant ScreenplayTextModelTextItem::data(int _role) const
+QVariant ComicBookTextModelTextItem::data(int _role) const
 {
     switch (_role) {
     case Qt::DecorationRole: {
-        return d->paragraphType == ScreenplayParagraphType::Shot ? u8"\U000F0332" : u8"\U000F09A8";
+        return u8"\U000F09A8";
     }
 
     case Qt::DisplayRole: {
@@ -894,17 +892,17 @@ QVariant ScreenplayTextModelTextItem::data(int _role) const
     }
 
     default: {
-        return ScreenplayTextModelItem::data(_role);
+        return ComicBookTextModelItem::data(_role);
     }
     }
 }
 
-QByteArray ScreenplayTextModelTextItem::toXml() const
+QByteArray ComicBookTextModelTextItem::toXml() const
 {
     return d->xml;
 }
 
-QByteArray ScreenplayTextModelTextItem::toXml(int _from, int _length)
+QByteArray ComicBookTextModelTextItem::toXml(int _from, int _length)
 {
     //
     // Для блока целиком, используем закешированные данные
@@ -916,14 +914,14 @@ QByteArray ScreenplayTextModelTextItem::toXml(int _from, int _length)
     return d->buildXml(_from, _length);
 }
 
-void ScreenplayTextModelTextItem::copyFrom(ScreenplayTextModelItem* _item)
+void ComicBookTextModelTextItem::copyFrom(ComicBookTextModelItem* _item)
 {
-    if (_item->type() != ScreenplayTextModelItemType::Text) {
+    if (_item->type() != ComicBookTextModelItemType::Text) {
         Q_ASSERT(false);
         return;
     }
 
-    auto textItem = static_cast<ScreenplayTextModelTextItem*>(_item);
+    auto textItem = static_cast<ComicBookTextModelTextItem*>(_item);
     d->isInFirstColumn = textItem->d->isInFirstColumn;
     d->paragraphType = textItem->d->paragraphType;
     d->alignment = textItem->d->alignment;
@@ -938,13 +936,13 @@ void ScreenplayTextModelTextItem::copyFrom(ScreenplayTextModelItem* _item)
     markChanged();
 }
 
-bool ScreenplayTextModelTextItem::isEqual(ScreenplayTextModelItem* _item) const
+bool ComicBookTextModelTextItem::isEqual(ComicBookTextModelItem* _item) const
 {
     if (_item == nullptr || type() != _item->type()) {
         return false;
     }
 
-    const auto textItem = static_cast<ScreenplayTextModelTextItem*>(_item);
+    const auto textItem = static_cast<ComicBookTextModelTextItem*>(_item);
     return d->isInFirstColumn == textItem->d->isInFirstColumn
         && d->paragraphType == textItem->d->paragraphType && d->alignment == textItem->d->alignment
         && d->bookmark == textItem->d->bookmark && d->text == textItem->d->text
@@ -952,7 +950,7 @@ bool ScreenplayTextModelTextItem::isEqual(ScreenplayTextModelItem* _item) const
         && d->revisions == textItem->d->revisions;
 }
 
-void ScreenplayTextModelTextItem::markChanged()
+void ComicBookTextModelTextItem::markChanged()
 {
     if (isCorrection()) {
         return;

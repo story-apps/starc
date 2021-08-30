@@ -150,7 +150,7 @@ void ScreenplaySummaryReport::build(QAbstractItemModel* _model)
 
                       case ScreenplayParagraphType::SceneCharacters: {
                           const auto sceneCharacters
-                              = SceneCharactersParser::characters(textItem->text());
+                              = ScreenplaySceneCharactersParser::characters(textItem->text());
                           for (const auto& character : sceneCharacters) {
                               if (!charactersToDialogues.contains(character)) {
                                   charactersToDialogues.insert(character, 0);
@@ -160,7 +160,7 @@ void ScreenplaySummaryReport::build(QAbstractItemModel* _model)
                       }
 
                       case ScreenplayParagraphType::Character: {
-                          lastCharacter = CharacterParser::name(textItem->text());
+                          lastCharacter = ScreenplayCharacterParser::name(textItem->text());
                           if (!charactersToDialogues.contains(lastCharacter)) {
                               charactersToDialogues.insert(lastCharacter, 0);
                           }
@@ -274,7 +274,7 @@ void ScreenplaySummaryReport::build(QAbstractItemModel* _model)
     {
         QHash<QString, int> sceneTimesToCount;
         for (const auto& scene : scenes) {
-            const QString time = SceneHeadingParser::sceneTime(scene);
+            const QString time = ScreenplaySceneHeadingParser::sceneTime(scene);
             if (!sceneTimesToCount.contains(time)) {
                 sceneTimesToCount.insert(time, 0);
             }
@@ -335,7 +335,7 @@ void ScreenplaySummaryReport::build(QAbstractItemModel* _model)
     {
         QMap<QString, int> locationPlacesToCount;
         for (const auto& scene : scenes) {
-            const auto place = SceneHeadingParser::sceneIntro(scene);
+            const auto place = ScreenplaySceneHeadingParser::sceneIntro(scene);
             if (!locationPlacesToCount.contains(place)) {
                 locationPlacesToCount.insert(place, 0);
             }

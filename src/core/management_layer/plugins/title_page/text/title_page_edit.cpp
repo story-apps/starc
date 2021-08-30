@@ -6,8 +6,12 @@
 #include <business_layer/document/text/text_cursor.h>
 #include <business_layer/document/text/text_document.h>
 #include <business_layer/import/text/markdown_importer.h>
+#include <business_layer/model/comic_book/comic_book_title_page_model.h>
+#include <business_layer/model/screenplay/screenplay_title_page_model.h>
 #include <business_layer/model/text/text_model.h>
 #include <business_layer/model/text/text_model_text_item.h>
+#include <business_layer/templates/comic_book_template.h>
+#include <business_layer/templates/screenplay_template.h>
 #include <business_layer/templates/templates_facade.h>
 #include <business_layer/templates/text_template.h>
 #include <ui/design_system/design_system.h>
@@ -44,11 +48,6 @@ public:
 
     QPointer<BusinessLayer::TextModel> model;
     BusinessLayer::SimpleTextDocument document;
-
-    bool showSceneNumber = false;
-    bool showSceneNumberOnLeft = false;
-    bool showSceneNumberOnRight = false;
-    bool showDialogueNumber = false;
 };
 
 TitlePageEdit::Implementation::Implementation(TitlePageEdit* _q)
@@ -107,10 +106,17 @@ void TitlePageEdit::initWithModel(BusinessLayer::TextModel* _model)
 {
     d->model = _model;
 
-    const auto currentTemplate = TemplatesFacade::simpleTextTemplate();
-    setPageFormat(currentTemplate.pageSizeId());
-    setPageMarginsMm(currentTemplate.pageMargins());
-    setPageNumbersAlignment(currentTemplate.pageNumbersAlignment());
+    if (qobject_cast<BusinessLayer::ComicBookTitlePageModel*>(d->model)) {
+        const auto currentTemplate = TemplatesFacade::comicBookTemplate();
+        setPageFormat(currentTemplate.pageSizeId());
+        setPageMarginsMm(currentTemplate.pageMargins());
+        setPageNumbersAlignment(currentTemplate.pageNumbersAlignment());
+    } else if (qobject_cast<BusinessLayer::ScreenplayTitlePageModel*>(d->model)) {
+        const auto currentTemplate = TemplatesFacade::screenplayTemplate();
+        setPageFormat(currentTemplate.pageSizeId());
+        setPageMarginsMm(currentTemplate.pageMargins());
+        setPageNumbersAlignment(currentTemplate.pageNumbersAlignment());
+    }
 
     //
     // Документ нужно формировать только после того, как редактор настроен, чтобы избежать лишний
@@ -142,22 +148,6 @@ void TitlePageEdit::addParagraph(BusinessLayer::TextParagraphType _type)
     d->document.addParagraph(_type, textCursor());
 
     emit paragraphTypeChanged();
-}
-
-void TitlePageEdit::setCurrentParagraphType(BusinessLayer::TextParagraphType _type)
-{
-    if (currentParagraphType() == _type) {
-        return;
-    }
-
-    d->document.setParagraphType(_type, textCursor());
-
-    emit paragraphTypeChanged();
-}
-
-BusinessLayer::TextParagraphType TitlePageEdit::currentParagraphType() const
-{
-    return TextBlockStyle::forBlock(textCursor().block());
 }
 
 void TitlePageEdit::setTextCursorReimpl(const QTextCursor& _cursor)

@@ -11,28 +11,28 @@ namespace BusinessLayer {
 /**
  * @brief Перечисление типов элементов модели сценария
  */
-enum class ScreenplayTextModelItemType { Folder, Scene, Text, Splitter };
+enum class ComicBookTextModelItemType { Folder, Scene, Text, Splitter };
 
 
 /**
  * @brief Базовый класс элемента модели сценария
  */
-class CORE_LIBRARY_EXPORT ScreenplayTextModelItem : public AbstractModelItem
+class CORE_LIBRARY_EXPORT ComicBookTextModelItem : public AbstractModelItem
 {
 public:
-    ScreenplayTextModelItem(ScreenplayTextModelItemType _type);
-    ~ScreenplayTextModelItem() override;
+    ComicBookTextModelItem(ComicBookTextModelItemType _type);
+    ~ComicBookTextModelItem() override;
 
     /**
      * @brief Получить тип элемента
      */
-    ScreenplayTextModelItemType type() const;
+    ComicBookTextModelItemType type() const;
 
     /**
      * @brief Переопределяем интерфейс для возврата элемента собственного класса
      */
-    ScreenplayTextModelItem* parent() const override;
-    ScreenplayTextModelItem* childAt(int _index) const override;
+    ComicBookTextModelItem* parent() const override;
+    ComicBookTextModelItem* childAt(int _index) const override;
 
     /**
      * @brief Определяем интерфейс получения данных элемента
@@ -47,12 +47,12 @@ public:
     /**
      * @brief Скопировать контент с заданного элемента
      */
-    virtual void copyFrom(ScreenplayTextModelItem* _item) = 0;
+    virtual void copyFrom(ComicBookTextModelItem* _item) = 0;
 
     /**
      * @brief Проверить равен ли текущий элемент заданному
      */
-    virtual bool isEqual(ScreenplayTextModelItem* _item) const = 0;
+    virtual bool isEqual(ComicBookTextModelItem* _item) const = 0;
 
 private:
     class Implementation;

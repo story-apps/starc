@@ -73,7 +73,7 @@ AbstractScreenplayImporter::Documents TrelbyImporter::importDocuments(
                     break;
                 }
 
-                const auto locationName = SceneHeadingParser::location(paragraphText);
+                const auto locationName = ScreenplaySceneHeadingParser::location(paragraphText);
                 if (locationName.isEmpty()) {
                     break;
                 }
@@ -87,7 +87,7 @@ AbstractScreenplayImporter::Documents TrelbyImporter::importDocuments(
                     break;
                 }
 
-                const auto characterName = CharacterParser::name(paragraphText);
+                const auto characterName = ScreenplayCharacterParser::name(paragraphText);
                 if (characterName.isEmpty()) {
                     break;
                 }

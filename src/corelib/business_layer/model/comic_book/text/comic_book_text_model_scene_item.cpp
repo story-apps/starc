@@ -1,9 +1,9 @@
-#include "screenplay_text_model_scene_item.h"
+#include "comic_book_text_model_scene_item.h"
 
-#include "screenplay_text_model_splitter_item.h"
-#include "screenplay_text_model_text_item.h"
-#include "screenplay_text_model_xml.h"
-#include "screenplay_text_model_xml_writer.h"
+#include "comic_book_text_model_splitter_item.h"
+#include "comic_book_text_model_text_item.h"
+#include "comic_book_text_model_xml.h"
+#include "comic_book_text_model_xml_writer.h"
 
 #include <business_layer/templates/screenplay_template.h>
 #include <utils/helpers/text_helper.h>
@@ -18,7 +18,7 @@
 
 namespace BusinessLayer {
 
-class ScreenplayTextModelSceneItem::Implementation
+class ComicBookTextModelSceneItem::Implementation
 {
 public:
     /**
@@ -95,21 +95,21 @@ public:
 // ****
 
 
-bool ScreenplayTextModelSceneItem::Number::operator==(
-    const ScreenplayTextModelSceneItem::Number& _other) const
+bool ComicBookTextModelSceneItem::Number::operator==(
+    const ComicBookTextModelSceneItem::Number& _other) const
 {
     return value == _other.value;
 }
 
-ScreenplayTextModelSceneItem::ScreenplayTextModelSceneItem()
-    : ScreenplayTextModelItem(ScreenplayTextModelItemType::Scene)
+ComicBookTextModelSceneItem::ComicBookTextModelSceneItem()
+    : ComicBookTextModelItem(ComicBookTextModelItemType::Scene)
     , d(new Implementation)
 {
     d->uuid = QUuid::createUuid();
 }
 
-ScreenplayTextModelSceneItem::ScreenplayTextModelSceneItem(QXmlStreamReader& _contentReader)
-    : ScreenplayTextModelItem(ScreenplayTextModelItemType::Scene)
+ComicBookTextModelSceneItem::ComicBookTextModelSceneItem(QXmlStreamReader& _contentReader)
+    : ComicBookTextModelItem(ComicBookTextModelItemType::Scene)
     , d(new Implementation)
 {
     Q_ASSERT(_contentReader.name() == xml::kSceneTag);
@@ -173,11 +173,11 @@ ScreenplayTextModelSceneItem::ScreenplayTextModelSceneItem(QXmlStreamReader& _co
             // Считываем вложенный контент
             //
             else if (currentTag == xml::kSceneTag) {
-                appendItem(new ScreenplayTextModelSceneItem(_contentReader));
+                appendItem(new ComicBookTextModelSceneItem(_contentReader));
             } else if (currentTag == xml::kSplitterTag) {
-                appendItem(new ScreenplayTextModelSplitterItem(_contentReader));
+                appendItem(new ComicBookTextModelSplitterItem(_contentReader));
             } else {
-                appendItem(new ScreenplayTextModelTextItem(_contentReader));
+                appendItem(new ComicBookTextModelTextItem(_contentReader));
             }
         } while (!_contentReader.atEnd());
     }
@@ -188,9 +188,9 @@ ScreenplayTextModelSceneItem::ScreenplayTextModelSceneItem(QXmlStreamReader& _co
     handleChange();
 }
 
-ScreenplayTextModelSceneItem::~ScreenplayTextModelSceneItem() = default;
+ComicBookTextModelSceneItem::~ComicBookTextModelSceneItem() = default;
 
-ScreenplayTextModelSceneItem::Number ScreenplayTextModelSceneItem::number() const
+ComicBookTextModelSceneItem::Number ComicBookTextModelSceneItem::number() const
 {
     if (!d->number.has_value()) {
         return {};
@@ -199,7 +199,7 @@ ScreenplayTextModelSceneItem::Number ScreenplayTextModelSceneItem::number() cons
     return *d->number;
 }
 
-bool ScreenplayTextModelSceneItem::setNumber(int _number, const QString& _prefix)
+bool ComicBookTextModelSceneItem::setNumber(int _number, const QString& _prefix)
 {
     if (childCount() == 0) {
         return false;
@@ -208,11 +208,11 @@ bool ScreenplayTextModelSceneItem::setNumber(int _number, const QString& _prefix
     bool hasContent = false;
     for (int childIndex = 0; childIndex < childCount(); ++childIndex) {
         const auto child = childAt(childIndex);
-        if (child->type() != ScreenplayTextModelItemType::Text) {
+        if (child->type() != ComicBookTextModelItemType::Text) {
             continue;
         }
 
-        const auto textItemChild = static_cast<const ScreenplayTextModelTextItem*>(child);
+        const auto textItemChild = static_cast<const ComicBookTextModelTextItem*>(child);
         if (!textItemChild->isCorrection()) {
             hasContent = true;
             break;
@@ -237,12 +237,12 @@ bool ScreenplayTextModelSceneItem::setNumber(int _number, const QString& _prefix
     return true;
 }
 
-QColor ScreenplayTextModelSceneItem::color() const
+QColor ComicBookTextModelSceneItem::color() const
 {
     return d->color;
 }
 
-void ScreenplayTextModelSceneItem::setColor(const QColor& _color)
+void ComicBookTextModelSceneItem::setColor(const QColor& _color)
 {
     if (d->color == _color) {
         return;
@@ -252,12 +252,12 @@ void ScreenplayTextModelSceneItem::setColor(const QColor& _color)
     setChanged(true);
 }
 
-std::chrono::milliseconds ScreenplayTextModelSceneItem::duration() const
+std::chrono::milliseconds ComicBookTextModelSceneItem::duration() const
 {
     return d->duration;
 }
 
-QVariant ScreenplayTextModelSceneItem::data(int _role) const
+QVariant ComicBookTextModelSceneItem::data(int _role) const
 {
     switch (_role) {
     case Qt::DecorationRole: {
@@ -297,21 +297,21 @@ QVariant ScreenplayTextModelSceneItem::data(int _role) const
     }
 
     default: {
-        return ScreenplayTextModelItem::data(_role);
+        return ComicBookTextModelItem::data(_role);
     }
     }
 }
 
-QByteArray ScreenplayTextModelSceneItem::toXml() const
+QByteArray ComicBookTextModelSceneItem::toXml() const
 {
     return toXml(nullptr, 0, nullptr, 0, false);
 }
 
-QByteArray ScreenplayTextModelSceneItem::toXml(ScreenplayTextModelItem* _from, int _fromPosition,
-                                               ScreenplayTextModelItem* _to, int _toPosition,
-                                               bool _clearUuid) const
+QByteArray ComicBookTextModelSceneItem::toXml(ComicBookTextModelItem* _from, int _fromPosition,
+                                              ComicBookTextModelItem* _to, int _toPosition,
+                                              bool _clearUuid) const
 {
-    xml::ScreenplayTextModelXmlWriter xml;
+    xml::ComicBookTextModelXmlWriter xml;
     xml += xmlHeader(_clearUuid);
     for (int childIndex = 0; childIndex < childCount(); ++childIndex) {
         auto child = childAt(childIndex);
@@ -319,7 +319,7 @@ QByteArray ScreenplayTextModelSceneItem::toXml(ScreenplayTextModelItem* _from, i
         //
         // Нетекстовые блоки, просто добавляем к общему xml
         //
-        if (child->type() != ScreenplayTextModelItemType::Text) {
+        if (child->type() != ComicBookTextModelItemType::Text) {
             xml += child;
             continue;
         }
@@ -327,7 +327,7 @@ QByteArray ScreenplayTextModelSceneItem::toXml(ScreenplayTextModelItem* _from, i
         //
         // Текстовые блоки, в зависимости от необходимости вставить блок целиком, или его часть
         //
-        auto textItem = static_cast<ScreenplayTextModelTextItem*>(child);
+        auto textItem = static_cast<ComicBookTextModelTextItem*>(child);
         if (textItem == _to) {
             if (textItem == _from) {
                 xml += { textItem, _fromPosition, _toPosition - _fromPosition };
@@ -349,7 +349,7 @@ QByteArray ScreenplayTextModelSceneItem::toXml(ScreenplayTextModelItem* _from, i
     return xml.data();
 }
 
-QByteArray ScreenplayTextModelSceneItem::xmlHeader(bool _clearUuid) const
+QByteArray ComicBookTextModelSceneItem::xmlHeader(bool _clearUuid) const
 {
     QByteArray xml;
     //
@@ -386,14 +386,14 @@ QByteArray ScreenplayTextModelSceneItem::xmlHeader(bool _clearUuid) const
     return xml;
 }
 
-void ScreenplayTextModelSceneItem::copyFrom(ScreenplayTextModelItem* _item)
+void ComicBookTextModelSceneItem::copyFrom(ComicBookTextModelItem* _item)
 {
-    if (_item->type() != ScreenplayTextModelItemType::Scene) {
+    if (_item->type() != ComicBookTextModelItemType::Scene) {
         Q_ASSERT(false);
         return;
     }
 
-    auto sceneItem = static_cast<ScreenplayTextModelSceneItem*>(_item);
+    auto sceneItem = static_cast<ComicBookTextModelSceneItem*>(_item);
     d->uuid = sceneItem->d->uuid;
     d->isOmited = sceneItem->d->isOmited;
     d->number = sceneItem->d->number;
@@ -402,13 +402,13 @@ void ScreenplayTextModelSceneItem::copyFrom(ScreenplayTextModelItem* _item)
     d->plannedDuration = sceneItem->d->plannedDuration;
 }
 
-bool ScreenplayTextModelSceneItem::isEqual(ScreenplayTextModelItem* _item) const
+bool ComicBookTextModelSceneItem::isEqual(ComicBookTextModelItem* _item) const
 {
     if (_item == nullptr || type() != _item->type()) {
         return false;
     }
 
-    const auto sceneItem = static_cast<ScreenplayTextModelSceneItem*>(_item);
+    const auto sceneItem = static_cast<ComicBookTextModelSceneItem*>(_item);
     return d->uuid == sceneItem->d->uuid
         && d->isOmited == sceneItem->d->isOmited
         //
@@ -419,7 +419,7 @@ bool ScreenplayTextModelSceneItem::isEqual(ScreenplayTextModelItem* _item) const
         && d->plannedDuration == sceneItem->d->plannedDuration;
 }
 
-void ScreenplayTextModelSceneItem::handleChange()
+void ComicBookTextModelSceneItem::handleChange()
 {
     d->heading.clear();
     d->text.clear();
@@ -429,31 +429,31 @@ void ScreenplayTextModelSceneItem::handleChange()
 
     for (int childIndex = 0; childIndex < childCount(); ++childIndex) {
         auto child = childAt(childIndex);
-        if (child->type() != ScreenplayTextModelItemType::Text) {
+        if (child->type() != ComicBookTextModelItemType::Text) {
             continue;
         }
 
-        auto childTextItem = static_cast<ScreenplayTextModelTextItem*>(child);
+        auto childTextItem = static_cast<ComicBookTextModelTextItem*>(child);
 
         //
         // Собираем текст
         //
         switch (childTextItem->paragraphType()) {
-        case ScreenplayParagraphType::SceneHeading: {
-            d->heading = TextHelper::smartToUpper(childTextItem->text());
-            break;
-        }
+            //        case ComicBookParagraphType::SceneHeading: {
+            //            d->heading = TextHelper::smartToUpper(childTextItem->text());
+            //            break;
+            //        }
 
-        case ScreenplayParagraphType::InlineNote: {
-            ++d->inlineNotesSize;
-            break;
-        }
+            //        case ComicBookParagraphType::InlineNote: {
+            //            ++d->inlineNotesSize;
+            //            break;
+            //        }
 
         default: {
             d->text.append(childTextItem->text() + " ");
             d->reviewMarksSize += std::count_if(
                 childTextItem->reviewMarks().begin(), childTextItem->reviewMarks().end(),
-                [](const ScreenplayTextModelTextItem::ReviewMark& _reviewMark) {
+                [](const ComicBookTextModelTextItem::ReviewMark& _reviewMark) {
                     return !_reviewMark.isDone;
                 });
             break;
