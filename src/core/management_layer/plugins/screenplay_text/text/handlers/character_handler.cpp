@@ -17,10 +17,10 @@
 #include <QTextBlock>
 #include <QTimer>
 
-using BusinessLayer::ScreenplayCharacterParser;
-using BusinessLayer::ScreenplaySceneCharactersParser;
 using BusinessLayer::ScreenplayBlockStyle;
+using BusinessLayer::ScreenplayCharacterParser;
 using BusinessLayer::ScreenplayParagraphType;
+using BusinessLayer::ScreenplaySceneCharactersParser;
 using Ui::ScreenplayTextEdit;
 
 
@@ -64,7 +64,8 @@ void CharacterHandler::handleEnter(QKeyEvent* _event)
     // ... текст после курсора
     QString cursorForwardText = currentBlockText.mid(cursor.positionInBlock());
     // ... текущая секция
-    ScreenplayCharacterParser::Section currentSection = ScreenplayCharacterParser::section(cursorBackwardText);
+    ScreenplayCharacterParser::Section currentSection
+        = ScreenplayCharacterParser::section(cursorBackwardText);
 
 
     //
@@ -305,7 +306,8 @@ void CharacterHandler::complete(const QString& _currentBlockText,
                    != ScreenplayParagraphType::SceneHeading) {
             if (ScreenplayBlockStyle::forBlock(cursor.block())
                 == ScreenplayParagraphType::Character) {
-                const QString characterName = ScreenplayCharacterParser::name(cursor.block().text());
+                const QString characterName
+                    = ScreenplayCharacterParser::name(cursor.block().text());
                 if (!characterName.isEmpty() && !charactersToComplete.contains(characterName)) {
                     //
                     // Персонажа, который говорил встречный диалог ставим выше,

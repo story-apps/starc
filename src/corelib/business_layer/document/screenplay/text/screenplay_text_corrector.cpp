@@ -17,8 +17,8 @@
 
 #include <cmath>
 
-using BusinessLayer::ScreenplayCharacterParser;
 using BusinessLayer::ScreenplayBlockStyle;
+using BusinessLayer::ScreenplayCharacterParser;
 using BusinessLayer::ScreenplayParagraphType;
 using BusinessLayer::TemplatesFacade;
 
@@ -365,7 +365,8 @@ void ScreenplayTextCorrector::Implementation::correctCharactersNames(int _positi
                 // Если второе подряд и ещё не настроено, добавляем вспомогательный текст
                 //
                 else if (characterName == lastCharacterName) {
-                    const QString characterState = ScreenplayCharacterParser::extension(block.text());
+                    const QString characterState
+                        = ScreenplayCharacterParser::extension(block.text());
                     QTextBlockFormat characterFormat = block.blockFormat();
                     if (characterState.isEmpty()
                         && !characterFormat.boolProperty(

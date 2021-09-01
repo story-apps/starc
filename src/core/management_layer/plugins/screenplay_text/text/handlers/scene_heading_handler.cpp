@@ -12,8 +12,8 @@
 #include <QTextBlock>
 #include <QTimer>
 
-using BusinessLayer::ScreenplaySceneHeadingParser;
 using BusinessLayer::ScreenplayParagraphType;
+using BusinessLayer::ScreenplaySceneHeadingParser;
 using Ui::ScreenplayTextEdit;
 
 
@@ -39,7 +39,8 @@ void SceneHeadingHandler::handleEnter(QKeyEvent* _event)
     // ... текст после курсора
     QString cursorForwardText = currentBlock.text().mid(cursor.positionInBlock());
     // ... текущая секция
-    ScreenplaySceneHeadingParser::Section currentSection = ScreenplaySceneHeadingParser::section(cursorBackwardText);
+    ScreenplaySceneHeadingParser::Section currentSection
+        = ScreenplaySceneHeadingParser::section(cursorBackwardText);
 
 
     //
@@ -303,7 +304,8 @@ void SceneHeadingHandler::complete(const QString& _currentBlockText,
     //
     // Текущая секция
     //
-    ScreenplaySceneHeadingParser::Section currentSection = ScreenplaySceneHeadingParser::section(_cursorBackwardText);
+    ScreenplaySceneHeadingParser::Section currentSection
+        = ScreenplaySceneHeadingParser::section(_cursorBackwardText);
 
     //
     // Получим модель подсказок для текущей секции и выведем пользователю
@@ -343,7 +345,8 @@ void SceneHeadingHandler::complete(const QString& _currentBlockText,
         //
         bool useLocations = false;
         const bool force = true;
-        const QString locationFromBlock = ScreenplaySceneHeadingParser::location(_currentBlockText, force);
+        const QString locationFromBlock
+            = ScreenplaySceneHeadingParser::location(_currentBlockText, force);
         const auto locationsModel = editor()->locations();
         for (int locationRow = 0; locationRow < locationsModel->rowCount(); ++locationRow) {
             const auto location

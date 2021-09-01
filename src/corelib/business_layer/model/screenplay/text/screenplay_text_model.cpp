@@ -1122,7 +1122,8 @@ void ScreenplayTextModel::updateCharacterName(const QString& _oldName, const QSt
             case ScreenplayTextModelItemType::Text: {
                 auto textItem = static_cast<ScreenplayTextModelTextItem*>(childItem);
                 if (textItem->paragraphType() == ScreenplayParagraphType::SceneCharacters
-                    && ScreenplaySceneCharactersParser::characters(textItem->text()).contains(oldName)) {
+                    && ScreenplaySceneCharactersParser::characters(textItem->text())
+                           .contains(oldName)) {
                     auto text = textItem->text();
                     auto nameIndex = TextHelper::smartToUpper(text).indexOf(oldName);
                     while (nameIndex != -1) {
