@@ -2,10 +2,9 @@
 Version=1.0
 Terminal=false
 Type=Application
-Icon=starc.png
+Icon=starc
 Categories=Office;
 Exec=starc %f
 MimeType=application/x-starc-project;
 Name=Story Architect
 GenericName=Storywriting software
-

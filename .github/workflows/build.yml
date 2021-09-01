@@ -31,6 +31,12 @@ jobs:
           version: 5.15.1
           target: desktop
 
+      - name: Install dependencies
+        shell: bash
+        run: |
+          sudo apt update
+          sudo apt install libgstreamer-plugins-base1.0-0
+
       - name: Run QMake
         shell: bash
         run: |
@@ -43,17 +49,17 @@ jobs:
           cd src
           make -j$(nproc)
 
-      - name: Make deb-package
+      - name: Make AppImage
         shell: bash
         run: |
           cd build/linux
-          ./make-deb_amd64.sh ${{env.APP_VERSION}}
+          ./make-app-image.sh ${{env.APP_VERSION}}
 
       - name: Collect artifacts
         uses: actions/upload-artifact@v2
         with:
           name: linux packages
-          path: build/linux/starc-setup-${{env.APP_VERSION}}_amd64.deb
+          path: build/linux/starc-${{env.APP_VERSION}}.AppImage
 
   build_windows_64:
     name: Build Windows 64 version
@@ -82,7 +88,7 @@ jobs:
         shell: bash
         run: |
           choco install openssl
-          
+
       - name: Configure MSVC
         uses: ilammy/msvc-dev-cmd@v1
         with:
@@ -104,12 +110,12 @@ jobs:
         run: |
           cd build/windows
           ./make-exe_64.sh ${{env.APP_VERSION}}
-          
+
       - name: Make installer
         uses: joncloud/makensis-action@v3.4
         with:
           arguments: "/V3"
-          script-file: "build/windows/starc_64.nsi"  
+          script-file: "build/windows/starc_64.nsi"
 
       - name: Make archive with portable version
         uses: papeloto/action-zip@v1
@@ -194,4 +200,3 @@ jobs:
           path: |
             build/windows/starc-setup-32.exe
             build/windows/starc-32.zip
-      

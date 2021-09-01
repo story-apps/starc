@@ -1,7 +1,0 @@
-#!/bin/sh
-
-TOPDIR="/usr/share/starc"
-
-export LD_LIBRARY_PATH=$TOPDIR/libs
-
-$TOPDIR/starc
