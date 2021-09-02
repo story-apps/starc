@@ -184,6 +184,12 @@ public:
     void openProject(const QString& _path);
 
     /**
+     * @brief Попробовать захватить владение файлом, заблокировав его изменение другими копиями
+     *        приложения
+     */
+    bool tryLockProject(const QString& _path);
+
+    /**
      * @brief Перейти к редактированию текущего проекта
      */
     void goToEditCurrentProject(const QString& _importFilePath = {});
@@ -952,6 +958,13 @@ void ApplicationManager::Implementation::createLocalProject(const QString& _proj
     }
 
     //
+    // ... проверяем не открыт ли файл в другом приложении
+    //
+    if (!tryLockProject(_projectPath)) {
+        return;
+    }
+
+    //
     // Если возможна запись в файл
     //
     // ... создаём новую базу данных в файле и делаем её текущим проектом
@@ -998,17 +1011,9 @@ void ApplicationManager::Implementation::openProject(const QString& _path)
     //
     // ... проверяем открыт ли файл в другом приложении
     //
-    const QFileInfo projectFileInfo(_path);
-    lockFile.reset(new QLockFile(
-        QString("%1/.~lock.%2").arg(projectFileInfo.absolutePath(), projectFileInfo.fileName())));
-    if (!lockFile->tryLock()) {
-        StandardDialog::information(applicationView, "",
-                                    tr("This file can't be open at this moment,\
-                                        because it is already open in another copy of the application."));
+    if (!tryLockProject(_path)) {
         return;
     }
-
-    lockFile->setStaleLockTime(0);
 
     //
     // ... переключаемся на работу с выбранным файлом
@@ -1019,6 +1024,22 @@ void ApplicationManager::Implementation::openProject(const QString& _path)
     // ... перейдём к редактированию
     //
     goToEditCurrentProject();
+}
+
+bool ApplicationManager::Implementation::tryLockProject(const QString& _path)
+{
+    const QFileInfo projectFileInfo(_path);
+    lockFile.reset(new QLockFile(
+        QString("%1/.~lock.%2").arg(projectFileInfo.absolutePath(), projectFileInfo.fileName())));
+    if (!lockFile->tryLock()) {
+        StandardDialog::information(applicationView, "",
+                                    tr("This file can't be open at this moment,\
+                                        because it is already open in another copy of the application."));
+        return false;
+    }
+
+    lockFile->setStaleLockTime(0);
+    return true;
 }
 
 void ApplicationManager::Implementation::goToEditCurrentProject(const QString& _importFilePath)
