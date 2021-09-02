@@ -167,12 +167,10 @@ void TitlePageView::reconfigure(const QStringList& _changedSettingsKeys)
         d->textEdit->reinit();
     }
 
-    const auto highlightCurrentLineKey
-        = d->currentModelType == Domain::DocumentObjectType::ComicBookTitlePage
-        ? DataStorageLayer::kComponentsComicBookEditorHighlightCurrentLineKey
-        : DataStorageLayer::kComponentsScreenplayEditorHighlightCurrentLineKey;
-    if (_changedSettingsKeys.isEmpty() || _changedSettingsKeys.contains(highlightCurrentLineKey)) {
-        d->textEdit->setHighlightCurrentLine(settingsValue(highlightCurrentLineKey).toBool());
+    if (_changedSettingsKeys.isEmpty()
+        || _changedSettingsKeys.contains(DataStorageLayer::kApplicationHighlightCurrentLineKey)) {
+        d->textEdit->setHighlightCurrentLine(
+            settingsValue(DataStorageLayer::kApplicationHighlightCurrentLineKey).toBool());
     }
 }
 

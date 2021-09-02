@@ -28,9 +28,11 @@ signals:
     void applicationPressed();
     void applicationUserInterfacePressed();
     void applicationSaveAndBackupsPressed();
+    void applicationTextEditingPressed();
     void componentsPressed();
     void componentsSimpleTextPressed();
     void componentsScreenplayPressed();
+    void componentsComicBookPressed();
     void shortcutsPressed();
 
 protected:

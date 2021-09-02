@@ -218,11 +218,9 @@ void SimpleTextView::reconfigure(const QStringList& _changedSettingsKeys)
     }
 
     if (_changedSettingsKeys.isEmpty()
-        || _changedSettingsKeys.contains(
-            DataStorageLayer::kComponentsSimpleTextEditorHighlightCurrentLineKey)) {
+        || _changedSettingsKeys.contains(DataStorageLayer::kApplicationHighlightCurrentLineKey)) {
         d->textEdit->setHighlightCurrentLine(
-            settingsValue(DataStorageLayer::kComponentsSimpleTextEditorHighlightCurrentLineKey)
-                .toBool());
+            settingsValue(DataStorageLayer::kApplicationHighlightCurrentLineKey).toBool());
     }
 }
 

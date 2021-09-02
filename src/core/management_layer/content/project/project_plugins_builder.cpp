@@ -27,6 +27,7 @@ const QString kScreenplayTextNavigatorMime = QStringLiteral("application/x-starc
 const QString kScreenplayStatisticsViewMime = QStringLiteral("application/x-starc/view/screenplay/statistics");
 const QString kScreenplayStatisticsNavigatorMime = QStringLiteral("application/x-starc/navigator/screenplay/statistics");
 const QString kComicBookTitlePageEditorMime = QStringLiteral("application/x-starc/editor/comicbook/title-page");
+const QString kComicBookTextEditorMime = QStringLiteral("application/x-starc/editor/comicbook/text");
 
 /**
  * @brief Карта соотвествия майм-типов редактора к навигатору
@@ -270,6 +271,8 @@ void ProjectPluginsBuilder::reconfigurePlugin(const QString& _mimeType,
 void ProjectPluginsBuilder::reconfigureSimpleTextEditor(const QStringList& _changedSettingsKeys)
 {
     reconfigurePlugin(kSimpleTextEditorMime, _changedSettingsKeys);
+    reconfigurePlugin(kScreenplayTitlePageEditorMime, _changedSettingsKeys);
+    reconfigurePlugin(kComicBookTitlePageEditorMime, _changedSettingsKeys);
 }
 
 void ProjectPluginsBuilder::reconfigureSimpleTextNavigator()
@@ -279,12 +282,19 @@ void ProjectPluginsBuilder::reconfigureSimpleTextNavigator()
 
 void ProjectPluginsBuilder::reconfigureScreenplayEditor(const QStringList& _changedSettingsKeys)
 {
+    reconfigurePlugin(kScreenplayTitlePageEditorMime, _changedSettingsKeys);
     reconfigurePlugin(kScreenplayTextEditorMime, _changedSettingsKeys);
 }
 
 void ProjectPluginsBuilder::reconfigureScreenplayNavigator()
 {
     reconfigurePlugin(kScreenplayTextNavigatorMime, {});
+}
+
+void ProjectPluginsBuilder::reconfigureComicBookEditor(const QStringList& _changedSettingsKeys)
+{
+    reconfigurePlugin(kComicBookTitlePageEditorMime, _changedSettingsKeys);
+    reconfigurePlugin(kComicBookTextEditorMime, _changedSettingsKeys);
 }
 
 void ProjectPluginsBuilder::reset()

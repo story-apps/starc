@@ -611,6 +611,11 @@ void ProjectManager::reconfigureScreenplayDuration()
     }
 }
 
+void ProjectManager::reconfigureComicBookEditor(const QStringList& _changedSettingsKeys)
+{
+    d->pluginsBuilder.reconfigureComicBookEditor(_changedSettingsKeys);
+}
+
 void ProjectManager::loadCurrentProject(const QString& _name, const QString& _path)
 {
     //

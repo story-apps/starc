@@ -59,6 +59,7 @@ signals:
     void screenplayEditorChanged(const QStringList& _changedSettingsKeys);
     void screenplayNavigatorChanged();
     void screenplayDurationChanged();
+    void comicBookEditorChanged(const QStringList& _changedSettingsKeys);
 
 protected:
     /**
@@ -72,24 +73,24 @@ private:
     // Сохранение параметров приложения
     //
     void setApplicationLanguage(int _language);
-    void setApplicationUseTypeWriterSound(bool _use);
-    void setApplicationUseSpellChecker(bool _use);
-    void setApplicationSpellCheckerLanguage(const QString& _languageCode);
-    void loadSpellingDictionary(const QString& _languageCode);
-    void loadSpellingDictionaryAffFile(const QString& _languageCode);
-    void loadSpellingDictionaryDicFile(const QString& _languageCode);
     void setApplicationTheme(Ui::ApplicationTheme _theme);
     void setApplicationCustomThemeColors(const Ui::DesignSystem::Color& _color);
     void setApplicationScaleFactor(qreal _scaleFactor);
     void setApplicationUseAutoSave(bool _use);
     void setApplicationSaveBackups(bool _save);
     void setApplicationBackupsFolder(const QString& _path);
+    void setApplicationUseTypeWriterSound(bool _use);
+    void setApplicationUseSpellChecker(bool _use);
+    void setApplicationSpellCheckerLanguage(const QString& _languageCode);
+    void loadSpellingDictionary(const QString& _languageCode);
+    void loadSpellingDictionaryAffFile(const QString& _languageCode);
+    void loadSpellingDictionaryDicFile(const QString& _languageCode);
+    void setApplicationHighlightCurrentLine(bool _highlight);
 
     //
     // Сохранение параметров редактора сценария
     //
     void setSimpleTextEditorDefaultTemplate(const QString& _templateId);
-    void setSimpleTextEditorHighlightCurrentLine(bool _highlight);
     //
     void setSimpleTextNavigatorShowSceneText(bool _show, int _lines);
 
@@ -99,7 +100,6 @@ private:
     void setScreenplayEditorDefaultTemplate(const QString& _templateId);
     void setScreenplayEditorShowSceneNumber(bool _show, bool _atLeft, bool _atRight);
     void setScreenplayEditorShowDialogueNumber(bool _show);
-    void setScreenplayEditorHighlightCurrentLine(bool _highlight);
     //
     void setScreenplayNavigatorShowSceneNumber(bool _show);
     void setScreenplayNavigatorShowSceneText(bool _show, int _lines);
@@ -109,6 +109,11 @@ private:
     void setScreenplayDurationByCharactersCharacters(int _characters);
     void setScreenplayDurationByCharactersIncludeSpaces(bool _include);
     void setScreenplayDurationByCharactersDuration(int _duration);
+
+    //
+    // Сохранение параметров редактора комикса
+    //
+    void setComicBookEditorDefaultTemplate(const QString& _templateId);
 
 private:
     class Implementation;

@@ -65,6 +65,7 @@ public:
     void reconfigureSimpleTextNavigator();
     void reconfigureScreenplayEditor(const QStringList& _changedSettingsKeys);
     void reconfigureScreenplayNavigator();
+    void reconfigureComicBookEditor(const QStringList& _changedSettingsKeys);
 
     /**
      * @brief Сбросить модели для всех плагинов

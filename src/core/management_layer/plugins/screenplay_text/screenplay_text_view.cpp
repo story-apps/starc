@@ -523,11 +523,9 @@ void ScreenplayTextView::reconfigure(const QStringList& _changedSettingsKeys)
                 .toBool());
     }
     if (_changedSettingsKeys.isEmpty()
-        || _changedSettingsKeys.contains(
-            DataStorageLayer::kComponentsScreenplayEditorHighlightCurrentLineKey)) {
+        || _changedSettingsKeys.contains(DataStorageLayer::kApplicationHighlightCurrentLineKey)) {
         d->screenplayText->setHighlightCurrentLine(
-            settingsValue(DataStorageLayer::kComponentsScreenplayEditorHighlightCurrentLineKey)
-                .toBool());
+            settingsValue(DataStorageLayer::kApplicationHighlightCurrentLineKey).toBool());
     }
 }
 

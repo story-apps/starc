@@ -46,18 +46,21 @@ const QString kApplicationCustomThemeColorsKey = kApplicationGroupKey + "/custom
 const QString kApplicationScaleFactorKey = kApplicationGroupKey + "/scale-factor";
 // состояние и геометрия основного окна приложения
 const QString kApplicationViewStateKey = kApplicationGroupKey + "-view/";
-// включены ли звуки печатной машинки при наборе текста
-const QString kApplicationUseTypewriterSoundKey = kApplicationGroupKey + "/typewriter-sound";
-// включена ли проверка орфографии
-const QString kApplicationUseSpellCheckerKey = kApplicationGroupKey + "/use-spell-checker";
-// словарь для проверки орфографии
-const QString kApplicationSpellCheckerLanguageKey = kApplicationGroupKey + "/use-spell-checker";
 // включено ли автосохранение
 const QString kApplicationUseAutoSaveKey = kApplicationGroupKey + "/autosave";
 // включено ли сохранение резервных копий
 const QString kApplicationSaveBackupsKey = kApplicationGroupKey + "/save-backups";
 // папка в которую будут сохраняться резервные копии
 const QString kApplicationBackupsFolderKey = kApplicationGroupKey + "/backups-folder";
+// включены ли звуки печатной машинки при наборе текста
+const QString kApplicationUseTypewriterSoundKey = kApplicationGroupKey + "/typewriter-sound";
+// включена ли проверка орфографии
+const QString kApplicationUseSpellCheckerKey = kApplicationGroupKey + "/use-spell-checker";
+// словарь для проверки орфографии
+const QString kApplicationSpellCheckerLanguageKey = kApplicationGroupKey + "/use-spell-checker";
+// включена ли подсветка текущей строки для текстовых редакторов
+const QString kApplicationHighlightCurrentLineKey
+    = kApplicationGroupKey + "/highlight-current-line";
 // список недавних проектов
 const QString kApplicationProjectsKey = kApplicationGroupKey + "/projects";
 
@@ -109,8 +112,6 @@ const QString kComponentsSimpleTextKey = kComponentsGroupKey + QStringLiteral("/
 const QString kComponentsSimpleTextEditorKey = kComponentsSimpleTextKey + QStringLiteral("/editor");
 const QString kComponentsSimpleTextEditorDefaultTemplateKey
     = kComponentsSimpleTextEditorKey + QStringLiteral("/default-template");
-const QString kComponentsSimpleTextEditorHighlightCurrentLineKey
-    = kComponentsSimpleTextEditorKey + QStringLiteral("/highlight-current-line");
 // ... навигатор
 const QString kComponentsSimpleTextNavigatorKey
     = kComponentsSimpleTextKey + QStringLiteral("/navigator");
@@ -133,8 +134,6 @@ const QString kComponentsScreenplayEditorShowSceneNumberOnLeftKey
     = kComponentsScreenplayEditorKey + QStringLiteral("/show-scene-number-on-right");
 const QString kComponentsScreenplayEditorShowDialogueNumberKey
     = kComponentsScreenplayEditorKey + QStringLiteral("/show-dialogue-number");
-const QString kComponentsScreenplayEditorHighlightCurrentLineKey
-    = kComponentsScreenplayEditorKey + QStringLiteral("/highlight-current-line");
 // ... навигатор
 const QString kComponentsScreenplayNavigatorKey
     = kComponentsScreenplayKey + QStringLiteral("/navigator");
@@ -164,25 +163,6 @@ const QString kComponentsComicBookKey = kComponentsGroupKey + QStringLiteral("/c
 const QString kComponentsComicBookEditorKey = kComponentsComicBookKey + QStringLiteral("/editor");
 const QString kComponentsComicBookEditorDefaultTemplateKey
     = kComponentsComicBookEditorKey + QStringLiteral("/default-template");
-const QString kComponentsComicBookEditorShowSceneNumbersKey
-    = kComponentsComicBookEditorKey + QStringLiteral("/show-scene-numbers");
-const QString kComponentsComicBookEditorShowSceneNumbersOnRightKey
-    = kComponentsComicBookEditorKey + QStringLiteral("/show-scene-numbers-on-left");
-const QString kComponentsComicBookEditorShowSceneNumberOnLeftKey
-    = kComponentsComicBookEditorKey + QStringLiteral("/show-scene-number-on-right");
-const QString kComponentsComicBookEditorShowDialogueNumberKey
-    = kComponentsComicBookEditorKey + QStringLiteral("/show-dialogue-number");
-const QString kComponentsComicBookEditorHighlightCurrentLineKey
-    = kComponentsComicBookEditorKey + QStringLiteral("/highlight-current-line");
-// ... навигатор
-const QString kComponentsComicBookNavigatorKey
-    = kComponentsComicBookKey + QStringLiteral("/navigator");
-const QString kComponentsComicBookNavigatorShowSceneNumberKey
-    = kComponentsComicBookNavigatorKey + QStringLiteral("/show-scene-number");
-const QString kComponentsComicBookNavigatorShowSceneTextKey
-    = kComponentsComicBookNavigatorKey + QStringLiteral("/show-scene-text");
-const QString kComponentsComicBookNavigatorSceneTextLinesKey
-    = kComponentsComicBookNavigatorKey + QStringLiteral("/scene-text-lines");
 } // namespace
 
 /**

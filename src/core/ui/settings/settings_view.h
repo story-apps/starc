@@ -29,29 +29,31 @@ public:
     void showApplication();
     void showApplicationUserInterface();
     void showApplicationSaveAndBackups();
+    void showApplicationTextEditing();
     void showComponents();
     void showComponentsSimpleText();
     void showComponentsScreenplay();
+    void showComponentsComicBook();
     void showShortcuts();
 
     //
     // Задание параметров приложения
     //
     void setApplicationLanguage(int _language);
-    void setApplicationUseTypewriterSound(bool _use);
-    void setApplicationUseSpellChecker(bool _use);
-    void setApplicationSpellCheckerLanguage(const QString& _languageCode);
     void setApplicationTheme(int _theme);
     void setApplicationScaleFactor(qreal _scaleFactor);
     void setApplicationUseAutoSave(bool _use);
     void setApplicationSaveBackups(bool _save);
     void setApplicationBackupsFolder(const QString& _path);
+    void setApplicationUseTypewriterSound(bool _use);
+    void setApplicationUseSpellChecker(bool _use);
+    void setApplicationSpellCheckerLanguage(const QString& _languageCode);
+    void setApplicationHighlightCurrentLine(bool _highlight);
 
     //
     // Задание параметров редактора текста
     //
     void setSimpleTextEditorDefaultTemplate(const QString& _templateId);
-    void setSimpleTextEditorHighlightCurrentLine(bool _highlight);
     //
     void setSimpleTextNavigatorShowSceneText(bool _show, int _lines);
 
@@ -61,7 +63,6 @@ public:
     void setScreenplayEditorDefaultTemplate(const QString& _templateId);
     void setScreenplayEditorShowSceneNumber(bool _show, bool _atLeft, bool _atRight);
     void setScreenplayEditorShowDialogueNumber(bool _show);
-    void setScreenplayEditorHighlightCurrentLine(bool _highlight);
     //
     void setScreenplayNavigatorShowSceneNumber(bool _show);
     void setScreenplayNavigatorShowSceneText(bool _show, int _lines);
@@ -71,6 +72,11 @@ public:
     void setScreenplayDurationByCharactersCharacters(int _characters);
     void setScreenplayDurationByCharactersIncludeSpaces(bool _include);
     void setScreenplayDurationByCharactersDuration(int _duration);
+
+    //
+    // Задание параметров редактора комикса
+    //
+    void setComicBookEditorDefaultTemplate(const QString& _templateId);
 
 signals:
     /**
@@ -86,19 +92,19 @@ signals:
     //
     // Уведомление об изменении параметров приложения
     //
-    void applicationUseTypewriterSoundChanged(bool _use);
-    void applicationUseSpellCheckerChanged(bool _use);
-    void applicationSpellCheckerLanguageChanged(const QString& _languageCode);
     void applicationScaleFactorChanged(qreal _scaleFactor);
     void applicationUseAutoSaveChanged(bool _use);
     void applicationSaveBackupsChanged(bool _save);
     void applicationBackupsFolderChanged(const QString& _path);
+    void applicationUseTypewriterSoundChanged(bool _use);
+    void applicationUseSpellCheckerChanged(bool _use);
+    void applicationSpellCheckerLanguageChanged(const QString& _languageCode);
+    void applicationHighlightCurentLineChanged(bool _highlight);
 
     //
     // Уведомление об изменении параметров редактора текста
     //
     void simpleTextEditorDefaultTemplateChanged(const QString& _templateId);
-    void simpleTextEditorHighlightCurrentLineChanged(bool _highlight);
     //
     void simpleTextNavigatorShowSceneTextChanged(bool _show, int _lines);
 
@@ -108,7 +114,6 @@ signals:
     void screenplayEditorDefaultTemplateChanged(const QString& _templateId);
     void screenplayEditorShowSceneNumberChanged(bool _show, bool _atLeft, bool _atRight);
     void screenplayEditorShowDialogueNumberChanged(bool _show);
-    void screenplayEditorHighlightCurrentLineChanged(bool _highlight);
     //
     void screenplayNavigatorShowSceneNumberChanged(bool _show);
     void screenplayNavigatorShowSceneTextChanged(bool _show, int _lines);
@@ -118,6 +123,11 @@ signals:
     void screenplayDurationByCharactersCharactersChanged(int _characters);
     void screenplayDurationByCharactersIncludeSpacesChanged(bool _include);
     void screenplayDurationByCharactersDurationChanged(int _duration);
+
+    //
+    // Уведомление об изменении параметров редактора комикса
+    //
+    void comicBookEditorDefaultTemplateChanged(const QString& _templateId);
 
     //
     // Редактирование шаблонов

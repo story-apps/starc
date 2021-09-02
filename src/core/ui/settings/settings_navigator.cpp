@@ -13,9 +13,11 @@ namespace {
 const int kApplicationIndex = 0;
 const int kApplicationUserInterfaceIndex = 0;
 const int kApplicationSaveAndBackupIndex = 1;
+const int kApplicationTextEditingIndex = 2;
 const int kComponentsIndex = 1;
 const int kComponentsSimpleTextIndex = 0;
 const int kComponentsScreenplayIndex = 1;
+const int kComponentsComicBookIndex = 2;
 const int kShortcutsIndex = 2;
 } // namespace
 
@@ -53,10 +55,12 @@ SettingsNavigator::SettingsNavigator(QWidget* _parent)
     auto applicationItem = createItem(u8"\U000f0614");
     applicationItem->appendRow(createItem(u8"\U000f062e"));
     applicationItem->appendRow(createItem(u8"\U000f061b"));
+    applicationItem->appendRow(createItem(u8"\U000F05E7"));
     model->appendRow(applicationItem);
     auto componentsItem = createItem(u8"\U000f09ac");
     componentsItem->appendRow(createItem(u8"\U000F021A"));
-    componentsItem->appendRow(createItem(u8"\U000f0bc2"));
+    componentsItem->appendRow(createItem(u8"\U000F0FCE"));
+    componentsItem->appendRow(createItem(u8"\U000F056E"));
     model->appendRow(componentsItem);
     model->appendRow(createItem(u8"\U000f030c"));
     d->tree->setModel(model);
@@ -76,6 +80,10 @@ SettingsNavigator::SettingsNavigator(QWidget* _parent)
                     emit applicationSaveAndBackupsPressed();
                     break;
                 }
+                case kApplicationTextEditingIndex: {
+                    emit applicationTextEditingPressed();
+                    break;
+                }
                 default: {
                     break;
                 }
@@ -90,6 +98,10 @@ SettingsNavigator::SettingsNavigator(QWidget* _parent)
                 }
                 case kComponentsScreenplayIndex: {
                     emit componentsScreenplayPressed();
+                    break;
+                }
+                case kComponentsComicBookIndex: {
+                    emit componentsComicBookPressed();
                     break;
                 }
                 default: {
@@ -141,9 +153,13 @@ void SettingsNavigator::updateTranslations()
     model->item(kApplicationIndex)
         ->child(kApplicationSaveAndBackupIndex)
         ->setText(tr("Save changes & backups"));
+    model->item(kApplicationIndex)
+        ->child(kApplicationTextEditingIndex)
+        ->setText(tr("Text editing"));
     model->item(kComponentsIndex)->setText(tr("Components"));
     model->item(kComponentsIndex)->child(kComponentsSimpleTextIndex)->setText(tr("Simple text"));
     model->item(kComponentsIndex)->child(kComponentsScreenplayIndex)->setText(tr("Screenplay"));
+    model->item(kComponentsIndex)->child(kComponentsComicBookIndex)->setText(tr("Comic book"));
     model->item(kShortcutsIndex)->setText(tr("Shortcuts"));
 }
 

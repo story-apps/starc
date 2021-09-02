@@ -53,6 +53,7 @@ public:
     void loadComponentsSettings();
     void loadSimpleTextSettings();
     void loadScreenplaySettings();
+    void loadComicBookSettings();
 
 
     Ui::SettingsToolBar* toolBar = nullptr;
@@ -88,12 +89,6 @@ void SettingsManager::Implementation::setSettingsValue(const QString& _key, cons
 void SettingsManager::Implementation::loadApplicationSettings()
 {
     view->setApplicationLanguage(settingsValue(DataStorageLayer::kApplicationLanguagedKey).toInt());
-    view->setApplicationUseTypewriterSound(
-        settingsValue(DataStorageLayer::kApplicationUseTypewriterSoundKey).toBool());
-    view->setApplicationUseSpellChecker(
-        settingsValue(DataStorageLayer::kApplicationUseSpellCheckerKey).toBool());
-    view->setApplicationSpellCheckerLanguage(
-        settingsValue(DataStorageLayer::kApplicationSpellCheckerLanguageKey).toString());
     view->setApplicationTheme(settingsValue(DataStorageLayer::kApplicationThemeKey).toInt());
     view->setApplicationScaleFactor(
         settingsValue(DataStorageLayer::kApplicationScaleFactorKey).toReal());
@@ -103,12 +98,21 @@ void SettingsManager::Implementation::loadApplicationSettings()
         settingsValue(DataStorageLayer::kApplicationSaveBackupsKey).toBool());
     view->setApplicationBackupsFolder(
         settingsValue(DataStorageLayer::kApplicationBackupsFolderKey).toString());
+    view->setApplicationUseTypewriterSound(
+        settingsValue(DataStorageLayer::kApplicationUseTypewriterSoundKey).toBool());
+    view->setApplicationUseSpellChecker(
+        settingsValue(DataStorageLayer::kApplicationUseSpellCheckerKey).toBool());
+    view->setApplicationSpellCheckerLanguage(
+        settingsValue(DataStorageLayer::kApplicationSpellCheckerLanguageKey).toString());
+    view->setApplicationHighlightCurrentLine(
+        settingsValue(DataStorageLayer::kApplicationHighlightCurrentLineKey).toBool());
 }
 
 void SettingsManager::Implementation::loadComponentsSettings()
 {
     loadSimpleTextSettings();
     loadScreenplaySettings();
+    loadComicBookSettings();
 }
 
 void SettingsManager::Implementation::loadSimpleTextSettings()
@@ -117,9 +121,6 @@ void SettingsManager::Implementation::loadSimpleTextSettings()
         = settingsValue(DataStorageLayer::kComponentsSimpleTextEditorDefaultTemplateKey).toString();
     view->setSimpleTextEditorDefaultTemplate(defaultTemplate);
     BusinessLayer::TemplatesFacade::setDefaultSimpleTextTemplate(defaultTemplate);
-    view->setSimpleTextEditorHighlightCurrentLine(
-        settingsValue(DataStorageLayer::kComponentsSimpleTextEditorHighlightCurrentLineKey)
-            .toBool());
     //
     view->setSimpleTextNavigatorShowSceneText(
         settingsValue(DataStorageLayer::kComponentsSimpleTextNavigatorShowSceneTextKey).toBool(),
@@ -140,9 +141,6 @@ void SettingsManager::Implementation::loadScreenplaySettings()
             .toBool());
     view->setScreenplayEditorShowDialogueNumber(
         settingsValue(DataStorageLayer::kComponentsScreenplayEditorShowDialogueNumberKey).toBool());
-    view->setScreenplayEditorHighlightCurrentLine(
-        settingsValue(DataStorageLayer::kComponentsScreenplayEditorHighlightCurrentLineKey)
-            .toBool());
     //
     view->setScreenplayNavigatorShowSceneNumber(
         settingsValue(DataStorageLayer::kComponentsScreenplayNavigatorShowSceneNumberKey).toBool());
@@ -163,6 +161,14 @@ void SettingsManager::Implementation::loadScreenplaySettings()
     view->setScreenplayDurationByCharactersDuration(
         settingsValue(DataStorageLayer::kComponentsScreenplayDurationByCharactersDurationKey)
             .toInt());
+}
+
+void SettingsManager::Implementation::loadComicBookSettings()
+{
+    const auto defaultTemplate
+        = settingsValue(DataStorageLayer::kComponentsComicBookEditorDefaultTemplateKey).toString();
+    view->setComicBookEditorDefaultTemplate(defaultTemplate);
+    BusinessLayer::TemplatesFacade::setDefaultComicBookTemplate(defaultTemplate);
 }
 
 
@@ -186,12 +192,16 @@ SettingsManager::SettingsManager(QObject* _parent, QWidget* _parentWidget)
             &Ui::SettingsView::showApplicationUserInterface);
     connect(d->navigator, &Ui::SettingsNavigator::applicationSaveAndBackupsPressed, d->view,
             &Ui::SettingsView::showApplicationSaveAndBackups);
+    connect(d->navigator, &Ui::SettingsNavigator::applicationTextEditingPressed, d->view,
+            &Ui::SettingsView::showApplicationTextEditing);
     connect(d->navigator, &Ui::SettingsNavigator::componentsPressed, d->view,
             &Ui::SettingsView::showComponents);
     connect(d->navigator, &Ui::SettingsNavigator::componentsSimpleTextPressed, d->view,
             &Ui::SettingsView::showComponentsSimpleText);
     connect(d->navigator, &Ui::SettingsNavigator::componentsScreenplayPressed, d->view,
             &Ui::SettingsView::showComponentsScreenplay);
+    connect(d->navigator, &Ui::SettingsNavigator::componentsComicBookPressed, d->view,
+            &Ui::SettingsView::showComponentsComicBook);
     connect(d->navigator, &Ui::SettingsNavigator::shortcutsPressed, d->view,
             &Ui::SettingsView::showShortcuts);
 
@@ -219,12 +229,6 @@ SettingsManager::SettingsManager(QObject* _parent, QWidget* _parentWidget)
                 &SettingsManager::setApplicationCustomThemeColors);
         connect(dialog, &Ui::ThemeDialog::disappeared, dialog, &Ui::ThemeDialog::deleteLater);
     });
-    connect(d->view, &Ui::SettingsView::applicationUseTypewriterSoundChanged, this,
-            &SettingsManager::setApplicationUseTypeWriterSound);
-    connect(d->view, &Ui::SettingsView::applicationUseSpellCheckerChanged, this,
-            &SettingsManager::setApplicationUseSpellChecker);
-    connect(d->view, &Ui::SettingsView::applicationSpellCheckerLanguageChanged, this,
-            &SettingsManager::setApplicationSpellCheckerLanguage);
     connect(d->view, &Ui::SettingsView::applicationScaleFactorChanged, this,
             &SettingsManager::setApplicationScaleFactor);
     connect(d->view, &Ui::SettingsView::applicationUseAutoSaveChanged, this,
@@ -233,12 +237,18 @@ SettingsManager::SettingsManager(QObject* _parent, QWidget* _parentWidget)
             &SettingsManager::setApplicationSaveBackups);
     connect(d->view, &Ui::SettingsView::applicationBackupsFolderChanged, this,
             &SettingsManager::setApplicationBackupsFolder);
+    connect(d->view, &Ui::SettingsView::applicationUseTypewriterSoundChanged, this,
+            &SettingsManager::setApplicationUseTypeWriterSound);
+    connect(d->view, &Ui::SettingsView::applicationUseSpellCheckerChanged, this,
+            &SettingsManager::setApplicationUseSpellChecker);
+    connect(d->view, &Ui::SettingsView::applicationSpellCheckerLanguageChanged, this,
+            &SettingsManager::setApplicationSpellCheckerLanguage);
+    connect(d->view, &Ui::SettingsView::applicationHighlightCurentLineChanged, this,
+            &SettingsManager::setApplicationHighlightCurrentLine);
     //
     //
     connect(d->view, &Ui::SettingsView::simpleTextEditorDefaultTemplateChanged, this,
             &SettingsManager::setSimpleTextEditorDefaultTemplate);
-    connect(d->view, &Ui::SettingsView::simpleTextEditorHighlightCurrentLineChanged, this,
-            &SettingsManager::setSimpleTextEditorHighlightCurrentLine);
     //
     connect(d->view, &Ui::SettingsView::simpleTextNavigatorShowSceneTextChanged, this,
             &SettingsManager::setSimpleTextNavigatorShowSceneText);
@@ -250,8 +260,6 @@ SettingsManager::SettingsManager(QObject* _parent, QWidget* _parentWidget)
             &SettingsManager::setScreenplayEditorShowSceneNumber);
     connect(d->view, &Ui::SettingsView::screenplayEditorShowDialogueNumberChanged, this,
             &SettingsManager::setScreenplayEditorShowDialogueNumber);
-    connect(d->view, &Ui::SettingsView::screenplayEditorHighlightCurrentLineChanged, this,
-            &SettingsManager::setScreenplayEditorHighlightCurrentLine);
     //
     connect(d->view, &Ui::SettingsView::screenplayNavigatorShowSceneNumberChanged, this,
             &SettingsManager::setScreenplayNavigatorShowSceneNumber);
@@ -268,6 +276,10 @@ SettingsManager::SettingsManager(QObject* _parent, QWidget* _parentWidget)
             &SettingsManager::setScreenplayDurationByCharactersIncludeSpaces);
     connect(d->view, &Ui::SettingsView::screenplayDurationByCharactersDurationChanged, this,
             &SettingsManager::setScreenplayDurationByCharactersDuration);
+    //
+    //
+    connect(d->view, &Ui::SettingsView::comicBookEditorDefaultTemplateChanged, this,
+            &SettingsManager::setComicBookEditorDefaultTemplate);
 
     //
     // Работа с библиотекой шаблонов сценария
@@ -353,6 +365,40 @@ bool SettingsManager::eventFilter(QObject* _watched, QEvent* _event)
 void SettingsManager::setApplicationLanguage(int _language)
 {
     d->setSettingsValue(DataStorageLayer::kApplicationLanguagedKey, _language);
+}
+
+void SettingsManager::setApplicationTheme(Ui::ApplicationTheme _theme)
+{
+    d->setSettingsValue(DataStorageLayer::kApplicationThemeKey, static_cast<int>(_theme));
+}
+
+void SettingsManager::setApplicationCustomThemeColors(const Ui::DesignSystem::Color& _color)
+{
+    d->setSettingsValue(DataStorageLayer::kApplicationCustomThemeColorsKey, _color.toString());
+}
+
+void SettingsManager::setApplicationScaleFactor(qreal _scaleFactor)
+{
+    d->setSettingsValue(DataStorageLayer::kApplicationScaleFactorKey, _scaleFactor);
+    emit applicationScaleFactorChanged(_scaleFactor);
+}
+
+void SettingsManager::setApplicationUseAutoSave(bool _use)
+{
+    d->setSettingsValue(DataStorageLayer::kApplicationUseAutoSaveKey, _use);
+    emit applicationUseAutoSaveChanged(_use);
+}
+
+void SettingsManager::setApplicationSaveBackups(bool _save)
+{
+    d->setSettingsValue(DataStorageLayer::kApplicationSaveBackupsKey, _save);
+    emit applicationSaveBackupsChanged(_save);
+}
+
+void SettingsManager::setApplicationBackupsFolder(const QString& _path)
+{
+    d->setSettingsValue(DataStorageLayer::kApplicationBackupsFolderKey, _path);
+    emit applicationBackupsFolderChanged(_path);
 }
 
 void SettingsManager::setApplicationUseTypeWriterSound(bool _use)
@@ -541,38 +587,12 @@ void SettingsManager::loadSpellingDictionaryDicFile(const QString& _languageCode
     dictionaryLoader->loadAsync(hunspellDictionariesFolderUrl + dicFileName);
 }
 
-void SettingsManager::setApplicationTheme(Ui::ApplicationTheme _theme)
+void SettingsManager::setApplicationHighlightCurrentLine(bool _highlight)
 {
-    d->setSettingsValue(DataStorageLayer::kApplicationThemeKey, static_cast<int>(_theme));
-}
-
-void SettingsManager::setApplicationCustomThemeColors(const Ui::DesignSystem::Color& _color)
-{
-    d->setSettingsValue(DataStorageLayer::kApplicationCustomThemeColorsKey, _color.toString());
-}
-
-void SettingsManager::setApplicationScaleFactor(qreal _scaleFactor)
-{
-    d->setSettingsValue(DataStorageLayer::kApplicationScaleFactorKey, _scaleFactor);
-    emit applicationScaleFactorChanged(_scaleFactor);
-}
-
-void SettingsManager::setApplicationUseAutoSave(bool _use)
-{
-    d->setSettingsValue(DataStorageLayer::kApplicationUseAutoSaveKey, _use);
-    emit applicationUseAutoSaveChanged(_use);
-}
-
-void SettingsManager::setApplicationSaveBackups(bool _save)
-{
-    d->setSettingsValue(DataStorageLayer::kApplicationSaveBackupsKey, _save);
-    emit applicationSaveBackupsChanged(_save);
-}
-
-void SettingsManager::setApplicationBackupsFolder(const QString& _path)
-{
-    d->setSettingsValue(DataStorageLayer::kApplicationBackupsFolderKey, _path);
-    emit applicationBackupsFolderChanged(_path);
+    d->setSettingsValue(DataStorageLayer::kApplicationHighlightCurrentLineKey, _highlight);
+    emit simpleTextEditorChanged({ DataStorageLayer::kApplicationHighlightCurrentLineKey });
+    emit screenplayEditorChanged({ DataStorageLayer::kApplicationHighlightCurrentLineKey });
+    emit comicBookEditorChanged({ DataStorageLayer::kApplicationHighlightCurrentLineKey });
 }
 
 void SettingsManager::setSimpleTextEditorDefaultTemplate(const QString& _templateId)
@@ -582,14 +602,6 @@ void SettingsManager::setSimpleTextEditorDefaultTemplate(const QString& _templat
     BusinessLayer::TemplatesFacade::setDefaultSimpleTextTemplate(_templateId);
     emit simpleTextEditorChanged(
         { DataStorageLayer::kComponentsSimpleTextEditorDefaultTemplateKey });
-}
-
-void SettingsManager::setSimpleTextEditorHighlightCurrentLine(bool _highlight)
-{
-    d->setSettingsValue(DataStorageLayer::kComponentsSimpleTextEditorHighlightCurrentLineKey,
-                        _highlight);
-    emit simpleTextEditorChanged(
-        { DataStorageLayer::kComponentsSimpleTextEditorHighlightCurrentLineKey });
 }
 
 void SettingsManager::setSimpleTextNavigatorShowSceneText(bool _show, int _lines)
@@ -626,14 +638,6 @@ void SettingsManager::setScreenplayEditorShowDialogueNumber(bool _show)
     d->setSettingsValue(DataStorageLayer::kComponentsScreenplayEditorShowDialogueNumberKey, _show);
     emit screenplayEditorChanged(
         { DataStorageLayer::kComponentsScreenplayEditorShowDialogueNumberKey });
-}
-
-void SettingsManager::setScreenplayEditorHighlightCurrentLine(bool _highlight)
-{
-    d->setSettingsValue(DataStorageLayer::kComponentsScreenplayEditorHighlightCurrentLineKey,
-                        _highlight);
-    emit screenplayEditorChanged(
-        { DataStorageLayer::kComponentsScreenplayEditorHighlightCurrentLineKey });
 }
 
 void SettingsManager::setScreenplayNavigatorShowSceneNumber(bool _show)
@@ -681,6 +685,15 @@ void SettingsManager::setScreenplayDurationByCharactersDuration(int _duration)
     d->setSettingsValue(DataStorageLayer::kComponentsScreenplayDurationByCharactersDurationKey,
                         _duration);
     emit screenplayDurationChanged();
+}
+
+void SettingsManager::setComicBookEditorDefaultTemplate(const QString& _templateId)
+{
+    d->setSettingsValue(DataStorageLayer::kComponentsComicBookEditorDefaultTemplateKey,
+                        _templateId);
+    BusinessLayer::TemplatesFacade::setDefaultComicBookTemplate(_templateId);
+    emit screenplayEditorChanged(
+        { DataStorageLayer::kComponentsComicBookEditorDefaultTemplateKey });
 }
 
 } // namespace ManagementLayer

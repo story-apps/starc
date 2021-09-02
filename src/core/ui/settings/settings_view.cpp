@@ -99,6 +99,7 @@ public:
      */
     void initSimpleTextCard();
     void initScreenplayCard();
+    void initComicBookCard();
 
     /**
      * @brief Настроить карточку горячих клавиш
@@ -108,12 +109,15 @@ public:
     /**
      * @brief Проскролить представление до заданного виджета
      */
-    void scrollToWidget(QWidget* _widget);
+    void scrollToTitle(AbstractLabel* title);
 
 
     QScrollArea* content = nullptr;
     QVariantAnimation scrollAnimation;
     ContextMenu* contextMenu = nullptr;
+
+    QVariantAnimation colorAnimation;
+    AbstractLabel* colorableTitle = nullptr;
 
     //
     // Application
@@ -126,11 +130,6 @@ public:
     //
     Body1Label* language = nullptr;
     Button* changeLanuage = nullptr;
-    CheckBox* useTypewriterSound = nullptr;
-    CheckBox* useSpellChecker = nullptr;
-    ComboBox* spellCheckerLanguage = nullptr;
-    QStandardItemModel* spellCheckerLanguagesModel = nullptr;
-    IconButton* spellCheckerUserDictionary = nullptr;
     //
     // ... User interface
     //
@@ -148,6 +147,16 @@ public:
     CheckBox* autoSave = nullptr;
     CheckBox* saveBackups = nullptr;
     TextField* backupsFolderPath = nullptr;
+    //
+    // ... Text editing
+    //
+    H6Label* applicationTextEditingTitle = nullptr;
+    CheckBox* useTypewriterSound = nullptr;
+    CheckBox* useSpellChecker = nullptr;
+    ComboBox* spellCheckerLanguage = nullptr;
+    QStandardItemModel* spellCheckerLanguagesModel = nullptr;
+    IconButton* spellCheckerUserDictionary = nullptr;
+    CheckBox* highlightCurrentLine = nullptr;
     //
     int applicationCardBottomSpacerIndex = 0;
 
@@ -167,7 +176,6 @@ public:
     H6Label* simpleTextEditorTitle = nullptr;
     ComboBox* simpleTextEditorDefaultTemplate = nullptr;
     IconButton* simpleTextEditorDefaultTemplateOptions = nullptr;
-    CheckBox* simpleTextEditorHighlightCurrentLine = nullptr;
     //
     // ... simpleText navigator
     //
@@ -196,7 +204,6 @@ public:
     CheckBox* screenplayEditorShowSceneNumberOnLeft = nullptr;
     CheckBox* screenplayEditorShowSceneNumberOnRight = nullptr;
     CheckBox* screenplayEditorShowDialogueNumber = nullptr;
-    CheckBox* screenplayEditorHighlightCurrentLine = nullptr;
     //
     // ... Screenplay navigator
     //
@@ -221,6 +228,20 @@ public:
     TextField* screenplayDurationByCharactersDuration = nullptr;
     //
     int screenplayCardBottomSpacerIndex = 0;
+    //
+    // Comic book
+    //
+    Card* comicBookCard = nullptr;
+    QGridLayout* comicBookCardLayout = nullptr;
+    H5Label* comicBookTitle = nullptr;
+    //
+    // ... comicBook editor
+    //
+    H6Label* comicBookEditorTitle = nullptr;
+    ComboBox* comicBookEditorDefaultTemplate = nullptr;
+    IconButton* comicBookEditorDefaultTemplateOptions = nullptr;
+    //
+    int comicBookCardBottomSpacerIndex = 0;
 
     Card* shortcutsCard = nullptr;
     QGridLayout* shortcutsCardLayout = nullptr;
@@ -239,11 +260,6 @@ SettingsView::Implementation::Implementation(QWidget* _parent)
     , applicationTitle(new H5Label(applicationCard))
     , language(new Body1Label(applicationCard))
     , changeLanuage(new Button(applicationCard))
-    , useTypewriterSound(new CheckBox(applicationCard))
-    , useSpellChecker(new CheckBox(applicationCard))
-    , spellCheckerLanguage(new ComboBox(applicationCard))
-    , spellCheckerLanguagesModel(buildSpellCheckerLanguagesModel(spellCheckerLanguage))
-    , spellCheckerUserDictionary(new IconButton(applicationCard))
     , applicationUserInterfaceTitle(new H6Label(applicationCard))
     , theme(new Body1Label(applicationCard))
     , changeTheme(new Button(applicationCard))
@@ -255,6 +271,13 @@ SettingsView::Implementation::Implementation(QWidget* _parent)
     , autoSave(new CheckBox(applicationCard))
     , saveBackups(new CheckBox(applicationCard))
     , backupsFolderPath(new TextField(applicationCard))
+    , applicationTextEditingTitle(new H6Label(applicationCard))
+    , useTypewriterSound(new CheckBox(applicationCard))
+    , useSpellChecker(new CheckBox(applicationCard))
+    , spellCheckerLanguage(new ComboBox(applicationCard))
+    , spellCheckerLanguagesModel(buildSpellCheckerLanguagesModel(spellCheckerLanguage))
+    , spellCheckerUserDictionary(new IconButton(applicationCard))
+    , highlightCurrentLine(new CheckBox(applicationCard))
     //
     , componentsTitle(new H4Label(content))
     //
@@ -264,7 +287,6 @@ SettingsView::Implementation::Implementation(QWidget* _parent)
     , simpleTextEditorTitle(new H6Label(simpleTextCard))
     , simpleTextEditorDefaultTemplate(new ComboBox(simpleTextCard))
     , simpleTextEditorDefaultTemplateOptions(new IconButton(simpleTextCard))
-    , simpleTextEditorHighlightCurrentLine(new CheckBox(simpleTextCard))
     , simpleTextNavigatorTitle(new H6Label(simpleTextCard))
     , simpleTextNavigatorShowSceneText(new CheckBox(simpleTextCard))
     , simpleTextNavigatorSceneDescriptionLines1(new RadioButton(simpleTextCard))
@@ -283,7 +305,6 @@ SettingsView::Implementation::Implementation(QWidget* _parent)
     , screenplayEditorShowSceneNumberOnLeft(new CheckBox(screenplayCard))
     , screenplayEditorShowSceneNumberOnRight(new CheckBox(screenplayCard))
     , screenplayEditorShowDialogueNumber(new CheckBox(screenplayCard))
-    , screenplayEditorHighlightCurrentLine(new CheckBox(screenplayCard))
     , screenplayNavigatorTitle(new H6Label(screenplayCard))
     , screenplayNavigatorShowSceneNumber(new CheckBox(screenplayCard))
     , screenplayNavigatorShowSceneText(new CheckBox(screenplayCard))
@@ -301,6 +322,13 @@ SettingsView::Implementation::Implementation(QWidget* _parent)
     , screenplayDurationByCharactersIncludingSpaces(new CheckBox(screenplayCard))
     , screenplayDurationByCharactersDuration(new TextField(screenplayCard))
     //
+    , comicBookCard(new Card(content))
+    , comicBookCardLayout(new QGridLayout)
+    , comicBookTitle(new H5Label(comicBookCard))
+    , comicBookEditorTitle(new H6Label(comicBookCard))
+    , comicBookEditorDefaultTemplate(new ComboBox(comicBookCard))
+    , comicBookEditorDefaultTemplateOptions(new IconButton(comicBookCard))
+    //
     , shortcutsCard(new Card(content))
     , shortcutsCardLayout(new QGridLayout)
     , shortcutsTitle(new H5Label(shortcutsCard))
@@ -314,10 +342,13 @@ SettingsView::Implementation::Implementation(QWidget* _parent)
     content->setVerticalScrollBar(new ScrollBar);
     scrollAnimation.setEasingCurve(QEasingCurve::OutQuad);
     scrollAnimation.setDuration(180);
+    colorAnimation.setEasingCurve(QEasingCurve::InBack);
+    colorAnimation.setDuration(1400);
 
     initApplicationCard();
     initSimpleTextCard();
     initScreenplayCard();
+    initComicBookCard();
     initShortcutsCard();
 
     QWidget* contentWidget = new QWidget;
@@ -330,17 +361,13 @@ SettingsView::Implementation::Implementation(QWidget* _parent)
     layout->addWidget(componentsTitle);
     layout->addWidget(simpleTextCard);
     layout->addWidget(screenplayCard);
+    layout->addWidget(comicBookCard);
     layout->addWidget(shortcutsCard);
     layout->addStretch();
 }
 
 void SettingsView::Implementation::initApplicationCard()
 {
-    spellCheckerLanguage->setSpellCheckPolicy(SpellCheckPolicy::Manual);
-    spellCheckerLanguage->setEnabled(false);
-    spellCheckerLanguage->setModel(spellCheckerLanguagesModel);
-    spellCheckerUserDictionary->setIcon(u8"\U000F0900");
-    spellCheckerUserDictionary->hide();
     // 0 - 0.5, 500 - 1, 3500 - 4
     scaleFactor->setMaximumValue(3500);
     scaleFactor->setValue(500);
@@ -348,6 +375,11 @@ void SettingsView::Implementation::initApplicationCard()
     backupsFolderPath->setSpellCheckPolicy(SpellCheckPolicy::Manual);
     backupsFolderPath->setEnabled(false);
     backupsFolderPath->setTrailingIcon(u8"\U000f0256");
+    spellCheckerLanguage->setSpellCheckPolicy(SpellCheckPolicy::Manual);
+    spellCheckerLanguage->setEnabled(false);
+    spellCheckerLanguage->setModel(spellCheckerLanguagesModel);
+    spellCheckerUserDictionary->setIcon(u8"\U000F0900");
+    spellCheckerUserDictionary->hide();
 
     //
     // Компоновка
@@ -361,16 +393,6 @@ void SettingsView::Implementation::initApplicationCard()
         layout->addWidget(language, 0, Qt::AlignCenter);
         layout->addWidget(changeLanuage);
         layout->addStretch();
-        applicationCardLayout->addLayout(layout, itemIndex++, 0);
-    }
-    applicationCardLayout->addWidget(useTypewriterSound, itemIndex++, 0);
-    {
-        spellCheckerLanguage->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Preferred);
-
-        auto layout = makeLayout();
-        layout->addWidget(useSpellChecker, 0, Qt::AlignCenter);
-        layout->addWidget(spellCheckerLanguage);
-        layout->addWidget(spellCheckerUserDictionary);
         applicationCardLayout->addLayout(layout, itemIndex++, 0);
     }
     //
@@ -408,6 +430,22 @@ void SettingsView::Implementation::initApplicationCard()
         layout->addWidget(backupsFolderPath);
         applicationCardLayout->addLayout(layout, itemIndex++, 0);
     }
+    //
+    // ... параметры редакторов текста
+    //
+    applicationCardLayout->addWidget(applicationTextEditingTitle, itemIndex++, 0);
+    applicationCardLayout->addWidget(useTypewriterSound, itemIndex++, 0);
+    {
+        spellCheckerLanguage->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Preferred);
+
+        auto layout = makeLayout();
+        layout->addWidget(useSpellChecker, 0, Qt::AlignCenter);
+        layout->addWidget(spellCheckerLanguage);
+        layout->addWidget(spellCheckerUserDictionary);
+        applicationCardLayout->addLayout(layout, itemIndex++, 0);
+    }
+    applicationCardLayout->addWidget(highlightCurrentLine, itemIndex++, 0);
+
     applicationCardBottomSpacerIndex = itemIndex;
     applicationCard->setLayoutReimpl(applicationCardLayout);
 }
@@ -451,7 +489,6 @@ void SettingsView::Implementation::initSimpleTextCard()
         layout->addWidget(simpleTextEditorDefaultTemplateOptions);
         simpleTextCardLayout->addLayout(layout, itemIndex++, 0);
     }
-    simpleTextCardLayout->addWidget(simpleTextEditorHighlightCurrentLine, itemIndex++, 0);
     //
     // ... навигатор текста
     //
@@ -536,7 +573,6 @@ void SettingsView::Implementation::initScreenplayCard()
         screenplayCardLayout->addLayout(layout, itemIndex++, 0);
     }
     screenplayCardLayout->addWidget(screenplayEditorShowDialogueNumber, itemIndex++, 0);
-    screenplayCardLayout->addWidget(screenplayEditorHighlightCurrentLine, itemIndex++, 0);
     //
     // ... навигатор сценария
     //
@@ -580,6 +616,36 @@ void SettingsView::Implementation::initScreenplayCard()
     screenplayCard->setLayoutReimpl(screenplayCardLayout);
 }
 
+void SettingsView::Implementation::initComicBookCard()
+{
+    comicBookEditorDefaultTemplate->setSpellCheckPolicy(SpellCheckPolicy::Manual);
+    comicBookEditorDefaultTemplate->setModel(BusinessLayer::TemplatesFacade::comicBookTemplates());
+    comicBookEditorDefaultTemplateOptions->setIcon(u8"\U000F01D9");
+    comicBookEditorDefaultTemplateOptions->hide();
+
+
+    //
+    // Компоновка
+    //
+    comicBookCardLayout->setContentsMargins({});
+    comicBookCardLayout->setSpacing(0);
+    int itemIndex = 0;
+    comicBookCardLayout->addWidget(comicBookTitle, itemIndex++, 0);
+    //
+    // ... редактор текста
+    //
+    comicBookCardLayout->addWidget(comicBookEditorTitle, itemIndex++, 0);
+    {
+        auto layout = makeLayout();
+        layout->addWidget(comicBookEditorDefaultTemplate, 1);
+        layout->addWidget(comicBookEditorDefaultTemplateOptions);
+        comicBookCardLayout->addLayout(layout, itemIndex++, 0);
+    }
+    //
+    comicBookCardBottomSpacerIndex = itemIndex;
+    comicBookCard->setLayoutReimpl(comicBookCardLayout);
+}
+
 void SettingsView::Implementation::initShortcutsCard()
 {
     shortcutsCardLayout->setContentsMargins({});
@@ -590,14 +656,14 @@ void SettingsView::Implementation::initShortcutsCard()
     shortcutsCard->setLayoutReimpl(shortcutsCardLayout);
 }
 
-void SettingsView::Implementation::scrollToWidget(QWidget* childWidget)
+void SettingsView::Implementation::scrollToTitle(AbstractLabel* title)
 {
-    const QRect microFocus = childWidget->inputMethodQuery(Qt::ImCursorRectangle).toRect();
+    const QRect microFocus = title->inputMethodQuery(Qt::ImCursorRectangle).toRect();
     const QRect defaultMicroFocus
-        = childWidget->QWidget::inputMethodQuery(Qt::ImCursorRectangle).toRect();
+        = title->QWidget::inputMethodQuery(Qt::ImCursorRectangle).toRect();
     QRect focusRect = (microFocus != defaultMicroFocus)
-        ? QRect(childWidget->mapTo(content->widget(), microFocus.topLeft()), microFocus.size())
-        : QRect(childWidget->mapTo(content->widget(), QPoint(0, 0)), childWidget->size());
+        ? QRect(title->mapTo(content->widget(), microFocus.topLeft()), microFocus.size())
+        : QRect(title->mapTo(content->widget(), QPoint(0, 0)), title->size());
     const QRect visibleRect(-content->widget()->pos(), content->viewport()->size());
 
     focusRect.adjust(-50, -50, 50, 50);
@@ -605,6 +671,14 @@ void SettingsView::Implementation::scrollToWidget(QWidget* childWidget)
     scrollAnimation.setStartValue(content->verticalScrollBar()->value());
     scrollAnimation.setEndValue(focusRect.top());
     scrollAnimation.start();
+
+    colorAnimation.stop();
+    if (colorableTitle != nullptr) {
+        colorableTitle->setTextColor(colorAnimation.endValue().value<QColor>());
+    }
+    colorableTitle = title;
+    colorableTitle->setTextColor(colorAnimation.startValue().value<QColor>());
+    colorAnimation.start();
 }
 
 
@@ -621,6 +695,12 @@ SettingsView::SettingsView(QWidget* _parent)
     connect(&d->scrollAnimation, &QVariantAnimation::valueChanged, this,
             [this](const QVariant& _value) {
                 d->content->verticalScrollBar()->setValue(_value.toInt());
+            });
+    connect(&d->colorAnimation, &QVariantAnimation::valueChanged, this,
+            [this](const QVariant& _value) {
+                if (d->colorableTitle != nullptr) {
+                    d->colorableTitle->setTextColor(_value.value<QColor>());
+                }
             });
     //
     // Приложение
@@ -639,6 +719,16 @@ SettingsView::SettingsView(QWidget* _parent)
     });
     //
     connect(d->changeLanuage, &Button::clicked, this, &SettingsView::applicationLanguagePressed);
+    connect(d->changeTheme, &Button::clicked, this, &SettingsView::applicationThemePressed);
+    connect(d->scaleFactor, &Slider::valueChanged, this, [this](int _value) {
+        emit applicationScaleFactorChanged(0.5 + static_cast<qreal>(_value) / 1000.0);
+    });
+    connect(d->autoSave, &CheckBox::checkedChanged, this,
+            &SettingsView::applicationUseAutoSaveChanged);
+    connect(d->saveBackups, &CheckBox::checkedChanged, this,
+            &SettingsView::applicationSaveBackupsChanged);
+    connect(d->backupsFolderPath, &TextField::textChanged, this,
+            [this] { emit applicationBackupsFolderChanged(d->backupsFolderPath->text()); });
     connect(d->useTypewriterSound, &CheckBox::checkedChanged, this,
             &SettingsView::applicationUseTypewriterSoundChanged);
     connect(d->useSpellChecker, &CheckBox::checkedChanged, this, [this](bool _checked) {
@@ -654,16 +744,8 @@ SettingsView::SettingsView(QWidget* _parent)
                 emit applicationSpellCheckerLanguageChanged(
                     _index.data(kSpellCheckerLanguageCodeRole).toString());
             });
-    connect(d->changeTheme, &Button::clicked, this, &SettingsView::applicationThemePressed);
-    connect(d->scaleFactor, &Slider::valueChanged, this, [this](int _value) {
-        emit applicationScaleFactorChanged(0.5 + static_cast<qreal>(_value) / 1000.0);
-    });
-    connect(d->autoSave, &CheckBox::checkedChanged, this,
-            &SettingsView::applicationUseAutoSaveChanged);
-    connect(d->saveBackups, &CheckBox::checkedChanged, this,
-            &SettingsView::applicationSaveBackupsChanged);
-    connect(d->backupsFolderPath, &TextField::textChanged, this,
-            [this] { emit applicationBackupsFolderChanged(d->backupsFolderPath->text()); });
+    connect(d->highlightCurrentLine, &CheckBox::checkedChanged, this,
+            &SettingsView::applicationHighlightCurentLineChanged);
 
     //
     // Компоненты
@@ -675,8 +757,6 @@ SettingsView::SettingsView(QWidget* _parent)
                 emit simpleTextEditorDefaultTemplateChanged(
                     _index.data(BusinessLayer::TemplatesFacade::kTemplateIdRole).toString());
             });
-    connect(d->simpleTextEditorHighlightCurrentLine, &CheckBox::checkedChanged, this,
-            &SettingsView::simpleTextEditorHighlightCurrentLineChanged);
     //
     // ... навигатор текста
     //
@@ -788,8 +868,6 @@ SettingsView::SettingsView(QWidget* _parent)
             notifyScreenplayEditorShowSceneNumbersChanged);
     connect(d->screenplayEditorShowDialogueNumber, &CheckBox::checkedChanged, this,
             &SettingsView::screenplayEditorShowDialogueNumberChanged);
-    connect(d->screenplayEditorHighlightCurrentLine, &CheckBox::checkedChanged, this,
-            &SettingsView::screenplayEditorHighlightCurrentLineChanged);
     //
     // ... навигатор сценария
     //
@@ -872,6 +950,14 @@ SettingsView::SettingsView(QWidget* _parent)
         emit screenplayDurationByCharactersDurationChanged(
             d->screenplayDurationByCharactersDuration->text().toInt());
     });
+    //
+    // ... Редактор текста
+    //
+    connect(d->comicBookEditorDefaultTemplate, &ComboBox::currentIndexChanged, this,
+            [this](const QModelIndex& _index) {
+                emit comicBookEditorDefaultTemplateChanged(
+                    _index.data(BusinessLayer::TemplatesFacade::kTemplateIdRole).toString());
+            });
 
     designSystemChangeEvent(nullptr);
 }
@@ -883,37 +969,47 @@ void SettingsView::showDefaultPage()
 
 void SettingsView::showApplication()
 {
-    d->scrollToWidget(d->applicationTitle);
+    d->scrollToTitle(d->applicationTitle);
 }
 
 void SettingsView::showApplicationUserInterface()
 {
-    d->scrollToWidget(d->applicationUserInterfaceTitle);
+    d->scrollToTitle(d->applicationUserInterfaceTitle);
 }
 
 void SettingsView::showApplicationSaveAndBackups()
 {
-    d->scrollToWidget(d->applicationSaveAndBackupTitle);
+    d->scrollToTitle(d->applicationSaveAndBackupTitle);
+}
+
+void SettingsView::showApplicationTextEditing()
+{
+    d->scrollToTitle(d->applicationTextEditingTitle);
 }
 
 void SettingsView::showComponents()
 {
-    d->scrollToWidget(d->componentsTitle);
+    d->scrollToTitle(d->componentsTitle);
 }
 
 void SettingsView::showComponentsSimpleText()
 {
-    d->scrollToWidget(d->simpleTextTitle);
+    d->scrollToTitle(d->simpleTextTitle);
 }
 
 void SettingsView::showComponentsScreenplay()
 {
-    d->scrollToWidget(d->screenplayTitle);
+    d->scrollToTitle(d->screenplayTitle);
+}
+
+void SettingsView::showComponentsComicBook()
+{
+    d->scrollToTitle(d->comicBookTitle);
 }
 
 void SettingsView::showShortcuts()
 {
-    d->scrollToWidget(d->shortcutsTitle);
+    d->scrollToTitle(d->shortcutsTitle);
 }
 
 void SettingsView::setApplicationLanguage(int _language)
@@ -997,29 +1093,6 @@ void SettingsView::setApplicationLanguage(int _language)
     d->changeLanuage->setText(languageString());
 }
 
-void SettingsView::setApplicationUseTypewriterSound(bool _use)
-{
-    d->useTypewriterSound->setChecked(_use);
-}
-
-void SettingsView::setApplicationUseSpellChecker(bool _use)
-{
-    d->useSpellChecker->setChecked(_use);
-}
-
-void SettingsView::setApplicationSpellCheckerLanguage(const QString& _languageCode)
-{
-    for (int row = 0; row < d->spellCheckerLanguagesModel->rowCount(); ++row) {
-        auto item = d->spellCheckerLanguagesModel->item(row);
-        if (item->data(kSpellCheckerLanguageCodeRole).toString() != _languageCode) {
-            continue;
-        }
-
-        d->spellCheckerLanguage->setCurrentIndex(item->index());
-        break;
-    }
-}
-
 void SettingsView::setApplicationTheme(int _theme)
 {
     auto themeString = [_theme] {
@@ -1061,6 +1134,34 @@ void SettingsView::setApplicationBackupsFolder(const QString& _path)
     d->backupsFolderPath->setText(_path);
 }
 
+void SettingsView::setApplicationUseTypewriterSound(bool _use)
+{
+    d->useTypewriterSound->setChecked(_use);
+}
+
+void SettingsView::setApplicationUseSpellChecker(bool _use)
+{
+    d->useSpellChecker->setChecked(_use);
+}
+
+void SettingsView::setApplicationSpellCheckerLanguage(const QString& _languageCode)
+{
+    for (int row = 0; row < d->spellCheckerLanguagesModel->rowCount(); ++row) {
+        auto item = d->spellCheckerLanguagesModel->item(row);
+        if (item->data(kSpellCheckerLanguageCodeRole).toString() != _languageCode) {
+            continue;
+        }
+
+        d->spellCheckerLanguage->setCurrentIndex(item->index());
+        break;
+    }
+}
+
+void SettingsView::setApplicationHighlightCurrentLine(bool _highlight)
+{
+    d->highlightCurrentLine->setChecked(_highlight);
+}
+
 void SettingsView::setSimpleTextEditorDefaultTemplate(const QString& _templateId)
 {
     using namespace BusinessLayer;
@@ -1073,11 +1174,6 @@ void SettingsView::setSimpleTextEditorDefaultTemplate(const QString& _templateId
         d->simpleTextEditorDefaultTemplate->setCurrentIndex(item->index());
         break;
     }
-}
-
-void SettingsView::setSimpleTextEditorHighlightCurrentLine(bool _highlight)
-{
-    d->simpleTextEditorHighlightCurrentLine->setChecked(_highlight);
 }
 
 void SettingsView::setSimpleTextNavigatorShowSceneText(bool _show, int _lines)
@@ -1120,11 +1216,6 @@ void SettingsView::setScreenplayEditorShowSceneNumber(bool _show, bool _atLeft, 
 void SettingsView::setScreenplayEditorShowDialogueNumber(bool _show)
 {
     d->screenplayEditorShowDialogueNumber->setChecked(_show);
-}
-
-void SettingsView::setScreenplayEditorHighlightCurrentLine(bool _highlight)
-{
-    d->screenplayEditorHighlightCurrentLine->setChecked(_highlight);
 }
 
 void SettingsView::setScreenplayNavigatorShowSceneNumber(bool _show)
@@ -1182,10 +1273,37 @@ void SettingsView::setScreenplayDurationByCharactersDuration(int _duration)
     d->screenplayDurationByCharactersDuration->setText(QString::number(_duration));
 }
 
+void SettingsView::setComicBookEditorDefaultTemplate(const QString& _templateId)
+{
+    using namespace BusinessLayer;
+    for (int row = 0; row < TemplatesFacade::comicBookTemplates()->rowCount(); ++row) {
+        auto item = TemplatesFacade::comicBookTemplates()->item(row);
+        if (item->data(TemplatesFacade::kTemplateIdRole).toString() != _templateId) {
+            continue;
+        }
+
+        d->comicBookEditorDefaultTemplate->setCurrentIndex(item->index());
+        break;
+    }
+}
+
 void SettingsView::updateTranslations()
 {
     d->applicationTitle->setText(tr("Application settings"));
     d->language->setText(tr("Language"));
+    d->theme->setText(tr("Theme"));
+    d->scaleFactorTitle->setText(tr("Size of the user interface elements:"));
+    d->scaleFactorSmallInfo->setText(tr("small"));
+    d->scaleFactorBigInfo->setText(tr("big"));
+    d->applicationSaveAndBackupTitle->setText(tr("Save changes & backups"));
+    d->autoSave->setText(tr("Automatically save changes as soon as possible"));
+    d->autoSave->setToolTip(
+        tr("Autosave works very accurately.\n"
+           "It saves the project every 3 seconds if you do not use your mouse or keyboard.\n"
+           "If you work with no interruptions it saves the project every 3 minutes."));
+    d->saveBackups->setText(tr("Save backups"));
+    d->backupsFolderPath->setLabel(tr("Backups folder path"));
+    d->applicationTextEditingTitle->setText(tr("Text editing"));
     d->useTypewriterSound->setText(tr("Use typewriter sound for keys pressing"));
     d->useSpellChecker->setText(tr("Spell check"));
     d->spellCheckerLanguage->setLabel(tr("Spelling dictionary"));
@@ -1313,29 +1431,17 @@ void SettingsView::updateTranslations()
     }
     d->applicationUserInterfaceTitle->setText(tr("User interface"));
     d->spellCheckerUserDictionary->setToolTip(tr("Manage user dictionary"));
-    d->theme->setText(tr("Theme"));
-    d->scaleFactorTitle->setText(tr("Size of the user interface elements:"));
-    d->scaleFactorSmallInfo->setText(tr("small"));
-    d->scaleFactorBigInfo->setText(tr("big"));
-    d->applicationSaveAndBackupTitle->setText(tr("Save changes & backups"));
-    d->autoSave->setText(tr("Automatically save changes as soon as possible"));
-    d->autoSave->setToolTip(
-        tr("Autosave works very accurately.\n"
-           "It saves the project every 3 seconds if you do not use your mouse or keyboard.\n"
-           "If you work with no interruptions it saves the project every 3 minutes."));
-    d->saveBackups->setText(tr("Save backups"));
-    d->backupsFolderPath->setLabel(tr("Backups folder path"));
+    d->highlightCurrentLine->setText(tr("Highlight current line"));
 
     d->componentsTitle->setText(tr("Components"));
     //
     BusinessLayer::TemplatesFacade::updateTranslations();
     //
-    d->simpleTextTitle->setText(tr("Simple Text module"));
+    d->simpleTextTitle->setText(tr("Simple text module"));
     d->simpleTextEditorTitle->setText(tr("Text editor"));
     d->simpleTextEditorDefaultTemplate->setLabel(tr("Default template"));
     d->simpleTextEditorDefaultTemplateOptions->setToolTip(
         tr("Available actions for the selected template"));
-    d->simpleTextEditorHighlightCurrentLine->setText(tr("Highlight current line"));
     d->simpleTextNavigatorTitle->setText(tr("Navigator"));
     d->simpleTextNavigatorShowSceneText->setText(tr("Show chapter text, lines"));
     d->simpleTextNavigatorSceneDescriptionLines1->setText("1");
@@ -1353,7 +1459,6 @@ void SettingsView::updateTranslations()
     d->screenplayEditorShowSceneNumberOnLeft->setText(tr("on the left"));
     d->screenplayEditorShowSceneNumberOnRight->setText(tr("on the right"));
     d->screenplayEditorShowDialogueNumber->setText(tr("Show dialogue number"));
-    d->screenplayEditorHighlightCurrentLine->setText(tr("Highlight current line"));
     d->screenplayNavigatorTitle->setText(tr("Navigator"));
     d->screenplayNavigatorShowSceneNumber->setText(tr("Show scene number"));
     d->screenplayNavigatorShowSceneText->setText(tr("Show scene text, lines"));
@@ -1375,6 +1480,12 @@ void SettingsView::updateTranslations()
     d->screenplayDurationByCharactersIncludingSpaces->setText(tr("including spaces"));
     d->screenplayDurationByCharactersDuration->setLabel(tr("has duration"));
     d->screenplayDurationByCharactersDuration->setSuffix(tr("seconds"));
+    //
+    d->comicBookTitle->setText(tr("Comic book module"));
+    d->comicBookEditorTitle->setText(tr("Text editor"));
+    d->comicBookEditorDefaultTemplate->setLabel(tr("Default template"));
+    d->comicBookEditorDefaultTemplateOptions->setToolTip(
+        tr("Available actions for the selected template"));
 
     d->shortcutsTitle->setText(tr("Shortcuts"));
 }
@@ -1393,8 +1504,8 @@ void SettingsView::designSystemChangeEvent(DesignSystemChangeEvent* _event)
     d->contextMenu->setBackgroundColor(Ui::DesignSystem::color().background());
     d->contextMenu->setTextColor(Ui::DesignSystem::color().onBackground());
 
-    for (auto card :
-         { d->applicationCard, d->simpleTextCard, d->screenplayCard, d->shortcutsCard }) {
+    for (auto card : { d->applicationCard, d->simpleTextCard, d->screenplayCard, d->comicBookCard,
+                       d->shortcutsCard }) {
         card->setBackgroundColor(DesignSystem::color().background());
     }
 
@@ -1402,11 +1513,16 @@ void SettingsView::designSystemChangeEvent(DesignSystemChangeEvent* _event)
     titleColor.setAlphaF(DesignSystem::inactiveTextOpacity());
     auto titleMargins = Ui::DesignSystem::label().margins().toMargins();
     titleMargins.setBottom(Ui::DesignSystem::layout().px12());
+    //
+    d->colorAnimation.setStartValue(Ui::DesignSystem::color().secondary());
+    d->colorAnimation.setEndValue(titleColor);
+    //
     for (auto cardTitle : QVector<Widget*>{
              d->applicationTitle, d->applicationUserInterfaceTitle,
-             d->applicationSaveAndBackupTitle, d->simpleTextTitle, d->simpleTextEditorTitle,
-             d->simpleTextNavigatorTitle, d->screenplayTitle, d->screenplayEditorTitle,
-             d->screenplayNavigatorTitle, d->screenplayDurationTitle, d->shortcutsTitle }) {
+             d->applicationSaveAndBackupTitle, d->applicationTextEditingTitle, d->simpleTextTitle,
+             d->simpleTextEditorTitle, d->simpleTextNavigatorTitle, d->screenplayTitle,
+             d->screenplayEditorTitle, d->screenplayNavigatorTitle, d->screenplayDurationTitle,
+             d->comicBookTitle, d->comicBookEditorTitle, d->shortcutsTitle }) {
         cardTitle->setBackgroundColor(DesignSystem::color().background());
         cardTitle->setTextColor(titleColor);
         cardTitle->setContentsMargins(titleMargins);
@@ -1429,25 +1545,25 @@ void SettingsView::designSystemChangeEvent(DesignSystemChangeEvent* _event)
 
     auto iconLabelMargins = labelMargins;
     iconLabelMargins.setLeft(0);
-    for (auto iconLabel :
-         QVector<Widget*>{ d->spellCheckerUserDictionary, d->simpleTextEditorDefaultTemplateOptions,
-                           d->screenplayEditorDefaultTemplateOptions }) {
+    for (auto iconLabel : std::vector<Widget*>{ d->spellCheckerUserDictionary,
+                                                d->simpleTextEditorDefaultTemplateOptions,
+                                                d->screenplayEditorDefaultTemplateOptions,
+                                                d->comicBookEditorDefaultTemplateOptions }) {
         iconLabel->setBackgroundColor(DesignSystem::color().background());
         iconLabel->setTextColor(DesignSystem::color().onBackground());
         iconLabel->setContentsMargins(iconLabelMargins);
     }
 
     for (auto checkBox :
-         { d->useTypewriterSound, d->useSpellChecker,
+         { d->autoSave, d->saveBackups,
            //
-           d->autoSave, d->saveBackups,
+           d->useTypewriterSound, d->useSpellChecker, d->highlightCurrentLine,
            //
-           d->simpleTextEditorHighlightCurrentLine, d->simpleTextNavigatorShowSceneText,
+           d->simpleTextNavigatorShowSceneText,
            //
            d->screenplayEditorShowSceneNumber, d->screenplayEditorShowSceneNumberOnLeft,
            d->screenplayEditorShowSceneNumberOnRight, d->screenplayEditorShowDialogueNumber,
-           d->screenplayEditorHighlightCurrentLine, d->screenplayNavigatorShowSceneNumber,
-           d->screenplayNavigatorShowSceneText,
+           d->screenplayNavigatorShowSceneNumber, d->screenplayNavigatorShowSceneText,
            d->screenplayDurationByCharactersIncludingSpaces }) {
         checkBox->setBackgroundColor(DesignSystem::color().background());
         checkBox->setTextColor(DesignSystem::color().onBackground());
@@ -1469,20 +1585,22 @@ void SettingsView::designSystemChangeEvent(DesignSystemChangeEvent* _event)
     }
 
     for (auto textField : QVector<TextField*>{
-             d->spellCheckerLanguage, d->backupsFolderPath, d->simpleTextEditorDefaultTemplate,
+             d->backupsFolderPath, d->spellCheckerLanguage, d->simpleTextEditorDefaultTemplate,
              d->screenplayEditorDefaultTemplate, d->screenplayDurationByPagePage,
              d->screenplayDurationByPageDuration, d->screenplayDurationByCharactersCharacters,
-             d->screenplayDurationByCharactersDuration }) {
+             d->screenplayDurationByCharactersDuration, d->comicBookEditorDefaultTemplate }) {
         textField->setBackgroundColor(DesignSystem::color().onBackground());
         textField->setTextColor(DesignSystem::color().onBackground());
     }
     for (auto textField :
-         { /*d->simpleTextEditorDefaultTemplate,*/ d->screenplayEditorDefaultTemplate }) {
+         { /*d->simpleTextEditorDefaultTemplate,*/ d->screenplayEditorDefaultTemplate,
+           /*d->comicBookEditorDefaultTemplate*/ }) {
         textField->setCustomMargins({ isLeftToRight() ? Ui::DesignSystem::layout().px24() : 0, 0,
                                       isLeftToRight() ? 0 : Ui::DesignSystem::layout().px24(), 0 });
     }
     for (auto icon :
-         { d->simpleTextEditorDefaultTemplateOptions, d->screenplayEditorDefaultTemplateOptions }) {
+         { d->simpleTextEditorDefaultTemplateOptions, d->screenplayEditorDefaultTemplateOptions,
+           d->comicBookEditorDefaultTemplateOptions }) {
         icon->setContentsMargins(isLeftToRight() ? 0 : Ui::DesignSystem::layout().px16(), 0,
                                  isLeftToRight() ? Ui::DesignSystem::layout().px16() : 0, 0);
     }
@@ -1508,6 +1626,9 @@ void SettingsView::designSystemChangeEvent(DesignSystemChangeEvent* _event)
         = d->screenplayCardLayout->indexOf(d->screenplayDurationByCharacters);
     d->screenplayCardLayout->setRowMinimumHeight(
         screenplayDurationByCharactersRow, static_cast<int>(Ui::DesignSystem::layout().px62()));
+    //
+    d->comicBookCardLayout->setRowMinimumHeight(
+        d->comicBookCardBottomSpacerIndex, static_cast<int>(Ui::DesignSystem::layout().px24()));
     //
     d->shortcutsCardLayout->setRowMinimumHeight(
         d->shortcutsCardBottomSpacerIndex, static_cast<int>(Ui::DesignSystem::layout().px24()));

@@ -37,6 +37,7 @@ public:
     void reconfigureScreenplayEditor(const QStringList& _changedSettingsKeys);
     void reconfigureScreenplayNavigator();
     void reconfigureScreenplayDuration();
+    void reconfigureComicBookEditor(const QStringList& _changedSettingsKeys);
 
     /**
      * @brief Загрузить данные текущего проекта
