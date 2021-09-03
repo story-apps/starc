@@ -13,13 +13,13 @@ class QXmlStreamReader;
 namespace BusinessLayer {
 
 /**
- * @brief Класс элементов сцен модели сценария
+ * @brief Класс элементов панелей модели комикса
  */
-class CORE_LIBRARY_EXPORT ComicBookTextModelSceneItem : public ComicBookTextModelItem
+class CORE_LIBRARY_EXPORT ComicBookTextModelPanelItem : public ComicBookTextModelItem
 {
 public:
     /**
-     * @brief Номер сцены
+     * @brief Номер панели
      */
     struct Number {
         QString value;
@@ -31,39 +31,33 @@ public:
      * @brief Роли данных из модели
      */
     enum DataRole {
-        SceneNumberRole = Qt::UserRole + 1,
-        SceneHeadingRole,
-        SceneTextRole,
-        SceneColorRole,
-        SceneInlineNotesSizeRole,
-        SceneReviewMarksSizeRole,
-        SceneDurationRole,
+        PanelNumberRole = Qt::UserRole + 1,
+        PanelHeadingRole,
+        PanelTextRole,
+        PanelColorRole,
+        PanelInlineNotesSizeRole,
+        PanelReviewMarksSizeRole,
     };
 
 public:
-    ComicBookTextModelSceneItem();
-    explicit ComicBookTextModelSceneItem(QXmlStreamReader& _contentReader);
-    ~ComicBookTextModelSceneItem() override;
+    ComicBookTextModelPanelItem();
+    explicit ComicBookTextModelPanelItem(QXmlStreamReader& _contentReader);
+    ~ComicBookTextModelPanelItem() override;
 
     /**
-     * @brief Номер сцены
+     * @brief Номер панели
      */
     Number number() const;
-    bool setNumber(int _number, const QString& _prefix);
+    bool setNumber(int _number);
 
     /**
-     * @brief Цвет сцены
+     * @brief Цвет панели
      */
     QColor color() const;
     void setColor(const QColor& _color);
 
     /**
-     * @brief Длительность сцены
-     */
-    std::chrono::milliseconds duration() const;
-
-    /**
-     * @brief Определяем интерфейс получения данных сцены
+     * @brief Определяем интерфейс получения данных панели
      */
     QVariant data(int _role) const override;
 
@@ -87,7 +81,7 @@ public:
 
 protected:
     /**
-     * @brief Обновляем текст сцены при изменении кого-то из детей
+     * @brief Обновляем текст панели при изменении кого-то из детей
      */
     void handleChange() override;
 

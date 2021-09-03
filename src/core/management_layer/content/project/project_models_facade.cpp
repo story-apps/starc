@@ -265,37 +265,33 @@ BusinessLayer::AbstractModel* ProjectModelsFacade::modelFor(Domain::DocumentObje
         }
 
         case Domain::DocumentObjectType::ComicBookText: {
-            //            auto comicBookModel = new BusinessLayer::ComicBookTextModel;
+            auto comicBookModel = new BusinessLayer::ComicBookTextModel;
 
-            //            const auto comicBookItem =
-            //            d->projectStructureModel->itemForUuid(_document->uuid());
-            //            Q_ASSERT(comicBookItem);
-            //            Q_ASSERT(comicBookItem->parent());
-            //            const auto parentUuid = comicBookItem->parent()->uuid();
+            const auto comicBookItem = d->projectStructureModel->itemForUuid(_document->uuid());
+            Q_ASSERT(comicBookItem);
+            Q_ASSERT(comicBookItem->parent());
+            const auto parentUuid = comicBookItem->parent()->uuid();
 
-            //            //
-            //            // Добавляем в модель комикса, модель информации о комиксе
-            //            //
-            //            auto informationModel
-            //                =
-            //                qobject_cast<BusinessLayer::ComicBookInformationModel*>(modelFor(parentUuid));
-            //            comicBookModel->setInformationModel(informationModel);
-            //            //
-            //            // ... модель справочников
-            //            //
-            //            auto dictionariesModel =
-            //            qobject_cast<BusinessLayer::ComicBookDictionariesModel*>(
-            //                modelFor(Domain::DocumentObjectType::ScreenplayDictionaries));
-            //            comicBookModel->setDictionariesModel(dictionariesModel);
-            //            //
-            //            // ... модель персонажей
-            //            //
-            //            auto charactersModel = qobject_cast<BusinessLayer::CharactersModel*>(
-            //                modelFor(Domain::DocumentObjectType::Characters));
-            //            comicBookModel->setCharactersModel(charactersModel);
+            //
+            // Добавляем в модель комикса, модель информации о комиксе
+            //
+            auto informationModel
+                = qobject_cast<BusinessLayer::ComicBookInformationModel*>(modelFor(parentUuid));
+            comicBookModel->setInformationModel(informationModel);
+            //
+            // ... модель справочников
+            //
+            auto dictionariesModel = qobject_cast<BusinessLayer::ComicBookDictionariesModel*>(
+                modelFor(Domain::DocumentObjectType::ScreenplayDictionaries));
+            comicBookModel->setDictionariesModel(dictionariesModel);
+            //
+            // ... модель персонажей
+            //
+            auto charactersModel = qobject_cast<BusinessLayer::CharactersModel*>(
+                modelFor(Domain::DocumentObjectType::Characters));
+            comicBookModel->setCharactersModel(charactersModel);
 
-            //            model = comicBookModel;
-            model = new BusinessLayer::TextModel;
+            model = comicBookModel;
             break;
         }
 

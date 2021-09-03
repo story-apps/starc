@@ -10,7 +10,7 @@ class ComicBookTextModelTextItem;
 namespace xml {
 
 /**
- * @brief Класс для формирования xml данных документа текста сценария
+ * @brief Класс для формирования xml данных документа текста комикса
  * @note Основное предназначение - склеивать разорванные текстовые блоки перед записью
  */
 class ComicBookTextModelXmlWriter

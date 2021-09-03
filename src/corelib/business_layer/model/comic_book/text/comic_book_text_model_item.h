@@ -9,18 +9,18 @@ namespace BusinessLayer {
 
 
 /**
- * @brief Перечисление типов элементов модели сценария
+ * @brief Перечисление типов элементов модели комикса
  */
-enum class ComicBookTextModelItemType { Folder, Scene, Text, Splitter };
+enum class ComicBookTextModelItemType { Folder, Page, Panel, Text, Splitter };
 
 
 /**
- * @brief Базовый класс элемента модели сценария
+ * @brief Базовый класс элемента модели комикса
  */
 class CORE_LIBRARY_EXPORT ComicBookTextModelItem : public AbstractModelItem
 {
 public:
-    ComicBookTextModelItem(ComicBookTextModelItemType _type);
+    explicit ComicBookTextModelItem(ComicBookTextModelItemType _type);
     ~ComicBookTextModelItem() override;
 
     /**

@@ -2,7 +2,8 @@
 
 #include "comic_book_text_block_parser.h"
 #include "comic_book_text_model_folder_item.h"
-#include "comic_book_text_model_scene_item.h"
+#include "comic_book_text_model_page_item.h"
+#include "comic_book_text_model_panel_item.h"
 #include "comic_book_text_model_splitter_item.h"
 #include "comic_book_text_model_text_item.h"
 #include "comic_book_text_model_xml.h"
@@ -27,7 +28,7 @@
 namespace BusinessLayer {
 
 namespace {
-const char* kMimeType = "application/x-starc/screenplay/text/item";
+const char* kMimeType = "application/x-starc/comicbook/text/item";
 }
 
 class ComicBookTextModel::Implementation
@@ -38,15 +39,15 @@ public:
     /**
      * @brief Построить модель структуры из xml хранящегося в документе
      */
-    void buildModel(Domain::DocumentObject* _screenplay);
+    void buildModel(Domain::DocumentObject* _comicBook);
 
     /**
      * @brief Сформировать xml из данных модели
      */
-    QByteArray toXml(Domain::DocumentObject* _screenplay) const;
+    QByteArray toXml(Domain::DocumentObject* _comicBook) const;
 
     /**
-     * @brief Обновить номера сцен и реплик
+     * @brief Обновить номера страниц, панелей и реплик
      */
     void updateNumbering();
 
@@ -72,11 +73,6 @@ public:
     CharactersModel* charactersModel = nullptr;
 
     /**
-     * @brief Модель локаций
-     */
-    LocationsModel* locationModel = nullptr;
-
-    /**
      * @brief Последние скопированные данные модели
      */
     struct {
@@ -91,13 +87,13 @@ ComicBookTextModel::Implementation::Implementation()
 {
 }
 
-void ComicBookTextModel::Implementation::buildModel(Domain::DocumentObject* _screenplay)
+void ComicBookTextModel::Implementation::buildModel(Domain::DocumentObject* _comicBook)
 {
-    if (_screenplay == nullptr) {
+    if (_comicBook == nullptr) {
         return;
     }
 
-    QXmlStreamReader contentReader(_screenplay->content());
+    QXmlStreamReader contentReader(_comicBook->content());
     contentReader.readNextStartElement(); // document
     contentReader.readNextStartElement();
     while (!contentReader.atEnd()) {
@@ -108,8 +104,10 @@ void ComicBookTextModel::Implementation::buildModel(Domain::DocumentObject* _scr
 
         if (currentTag == xml::kFolderTag) {
             rootItem->appendItem(new ComicBookTextModelFolderItem(contentReader));
-        } else if (currentTag == xml::kSceneTag) {
-            rootItem->appendItem(new ComicBookTextModelSceneItem(contentReader));
+        } else if (currentTag == xml::kPageTag) {
+            rootItem->appendItem(new ComicBookTextModelPageItem(contentReader));
+        } else if (currentTag == xml::kPanelTag) {
+            rootItem->appendItem(new ComicBookTextModelPanelItem(contentReader));
         } else if (currentTag == xml::kSplitterTag) {
             rootItem->appendItem(new ComicBookTextModelSplitterItem(contentReader));
         } else {
@@ -118,15 +116,15 @@ void ComicBookTextModel::Implementation::buildModel(Domain::DocumentObject* _scr
     }
 }
 
-QByteArray ComicBookTextModel::Implementation::toXml(Domain::DocumentObject* _screenplay) const
+QByteArray ComicBookTextModel::Implementation::toXml(Domain::DocumentObject* _comicBook) const
 {
-    if (_screenplay == nullptr) {
+    if (_comicBook == nullptr) {
         return {};
     }
 
     const bool addXMlHeader = true;
     xml::ComicBookTextModelXmlWriter xml(addXMlHeader);
-    xml += "<document mime-type=\"" + Domain::mimeTypeFor(_screenplay->type())
+    xml += "<document mime-type=\"" + Domain::mimeTypeFor(_comicBook->type())
         + "\" version=\"1.0\">\n";
     for (int childIndex = 0; childIndex < rootItem->childCount(); ++childIndex) {
         xml += rootItem->childAt(childIndex);
@@ -137,10 +135,11 @@ QByteArray ComicBookTextModel::Implementation::toXml(Domain::DocumentObject* _sc
 
 void ComicBookTextModel::Implementation::updateNumbering()
 {
-    int sceneNumber = 0; // informationModel->scenesNumberingStartAt();
+    int pageNumber = 1;
+    int panelNumber = 1;
     int dialogueNumber = 1;
     std::function<void(const ComicBookTextModelItem*)> updateChildNumbering;
-    updateChildNumbering = [this, &sceneNumber, &dialogueNumber,
+    updateChildNumbering = [&pageNumber, &panelNumber, &dialogueNumber,
                             &updateChildNumbering](const ComicBookTextModelItem* _item) {
         for (int childIndex = 0; childIndex < _item->childCount(); ++childIndex) {
             auto childItem = _item->childAt(childIndex);
@@ -150,11 +149,23 @@ void ComicBookTextModel::Implementation::updateNumbering()
                 break;
             }
 
-            case ComicBookTextModelItemType::Scene: {
+            case ComicBookTextModelItemType::Page: {
+                panelNumber = 1;
+                dialogueNumber = 1;
                 updateChildNumbering(childItem);
-                auto sceneItem = static_cast<ComicBookTextModelSceneItem*>(childItem);
-                if (sceneItem->setNumber(sceneNumber, {})) {
-                    sceneNumber++;
+
+                //
+                // TODO: обновить номер страницы
+                //
+                auto pageItem = static_cast<ComicBookTextModelPageItem*>(childItem);
+                break;
+            }
+
+            case ComicBookTextModelItemType::Panel: {
+                updateChildNumbering(childItem);
+                auto panelItem = static_cast<ComicBookTextModelPanelItem*>(childItem);
+                if (panelItem->setNumber(panelNumber)) {
+                    panelNumber++;
                 }
                 break;
             }
@@ -185,7 +196,8 @@ ComicBookTextModel::ComicBookTextModel(QObject* _parent)
         {
             xml::kDocumentTag,
             xml::kFolderTag,
-            xml::kSceneTag,
+            xml::kPageTag,
+            xml::kPanelTag,
             toString(ComicBookParagraphType::UnformattedText),
             toString(ComicBookParagraphType::Page),
             toString(ComicBookParagraphType::Panel),
@@ -193,6 +205,8 @@ ComicBookTextModel::ComicBookTextModel(QObject* _parent)
             toString(ComicBookParagraphType::Character),
             toString(ComicBookParagraphType::Dialogue),
             toString(ComicBookParagraphType::InlineNote),
+            toString(ComicBookParagraphType::FolderHeader),
+            toString(ComicBookParagraphType::FolderFooter),
             toString(ComicBookParagraphType::PageSplitter),
         },
         _parent)
@@ -396,12 +410,13 @@ Qt::ItemFlags ComicBookTextModel::flags(const QModelIndex& _index) const
 
     const auto item = itemForIndex(_index);
     switch (item->type()) {
-    case ComicBookTextModelItemType::Folder: {
+    case ComicBookTextModelItemType::Folder:
+    case ComicBookTextModelItemType::Page: {
         flags |= Qt::ItemIsDragEnabled | Qt::ItemIsDropEnabled;
         break;
     }
 
-    case ComicBookTextModelItemType::Scene: {
+    case ComicBookTextModelItemType::Panel: {
         flags |= Qt::ItemIsDragEnabled;
         break;
     }
@@ -434,6 +449,10 @@ bool ComicBookTextModel::canDropMimeData(const QMimeData* _data, Qt::DropAction 
     Q_UNUSED(_row);
     Q_UNUSED(_column);
     Q_UNUSED(_parent);
+
+    //
+    // TODO: Запретить вставлять страницу в страницу
+    //
 
     return _data->formats().contains(mimeTypes().constFirst());
 }
@@ -534,8 +553,10 @@ bool ComicBookTextModel::dropMimeData(const QMimeData* _data, Qt::DropAction _ac
             ComicBookTextModelItem* newItem = nullptr;
             if (currentTag == xml::kFolderTag) {
                 newItem = new ComicBookTextModelFolderItem(contentReader);
-            } else if (currentTag == xml::kSceneTag) {
-                newItem = new ComicBookTextModelSceneItem(contentReader);
+            } else if (currentTag == xml::kPageTag) {
+                newItem = new ComicBookTextModelPageItem(contentReader);
+            } else if (currentTag == xml::kPanelTag) {
+                newItem = new ComicBookTextModelPanelItem(contentReader);
             } else if (currentTag == xml::kSplitterTag) {
                 newItem = new ComicBookTextModelSplitterItem(contentReader);
             } else {
@@ -719,14 +740,28 @@ QString ComicBookTextModel::mimeFromSelection(const QModelIndex& _from, int _fro
                 break;
             }
 
-            case ComicBookTextModelItemType::Scene: {
-                const auto sceneItem = static_cast<ComicBookTextModelSceneItem*>(childItem);
-                xml += sceneItem->toXml(fromItem, _fromPosition, toItem, _toPosition, _clearUuid);
+            case ComicBookTextModelItemType::Page: {
+                const auto pageItem = static_cast<ComicBookTextModelPageItem*>(childItem);
+                xml += pageItem->toXml(fromItem, _fromPosition, toItem, _toPosition, _clearUuid);
+                break;
+            }
+
+            case ComicBookTextModelItemType::Panel: {
+                const auto panelItem = static_cast<ComicBookTextModelPanelItem*>(childItem);
+                xml += panelItem->toXml(fromItem, _fromPosition, toItem, _toPosition, _clearUuid);
                 break;
             }
 
             case ComicBookTextModelItemType::Text: {
                 const auto textItem = static_cast<ComicBookTextModelTextItem*>(childItem);
+
+                //
+                // Не сохраняем закрывающие блоки неоткрытых папок, всё это делается внутри самих
+                // папок
+                //
+                if (textItem->paragraphType() == ComicBookParagraphType::FolderFooter) {
+                    break;
+                }
 
                 if (textItem == fromItem && textItem == toItem) {
                     xml += { textItem, _fromPosition, _toPosition - _fromPosition };
@@ -757,12 +792,13 @@ QString ComicBookTextModel::mimeFromSelection(const QModelIndex& _from, int _fro
     auto fromItemParent = fromItem->parent();
     auto fromItemRow = fromItemParent->rowOfChild(fromItem);
     //
-    // Если построить нужно начиная с заголовка сцены или папки, то нужно захватить и саму
-    // сцену/папку
+    // Если построить нужно начиная с папки, страницы или панели, то нужно захватить и саму
+    // папку/страницу/панель
     //
     if (fromItem->type() == ComicBookTextModelItemType::Text) {
         const auto textItem = static_cast<ComicBookTextModelTextItem*>(fromItem);
-        if (textItem->paragraphType() == ComicBookParagraphType::Page
+        if (textItem->paragraphType() == ComicBookParagraphType::FolderHeader
+            || textItem->paragraphType() == ComicBookParagraphType::Page
             || textItem->paragraphType() == ComicBookParagraphType::Panel) {
             auto newFromItem = fromItemParent;
             fromItemParent = fromItemParent->parent();
@@ -814,10 +850,19 @@ void ComicBookTextModel::insertFromMime(const QModelIndex& _index, int _position
         //
         // Если в заголовок папки
         //
-        if (textItem->paragraphType() == ComicBookParagraphType::Page) {
+        if (textItem->paragraphType() == ComicBookParagraphType::FolderHeader) {
             //
             // ... то вставим после него
             //
+        }
+        //
+        // Если завершение папки
+        //
+        else if (textItem->paragraphType() == ComicBookParagraphType::FolderFooter) {
+            //
+            // ... то вставляем после папки
+            //
+            item = item->parent();
         }
         //
         // В остальных случаях
@@ -861,13 +906,15 @@ void ComicBookTextModel::insertFromMime(const QModelIndex& _index, int _position
 
         ComicBookTextModelItem* newItem = nullptr;
         //
-        // При входе в папку или сцену, если предыдущий текстовый элемент был в сцене,
-        // то вставлять их будем не после текстового элемента, а после сцены
+        // При входе в папку, сраницу или панель, если предыдущий текстовый элемент был на странице
+        // или панели, то вставлять их будем не после текстового элемента, а после страницы/панели
         //
-        if ((currentTag == xml::kFolderTag || currentTag == xml::kSceneTag)
+        if ((currentTag == xml::kFolderTag || currentTag == xml::kPageTag
+             || currentTag == xml::kPanelTag)
             && (lastItem->type() == ComicBookTextModelItemType::Text
                 || lastItem->type() == ComicBookTextModelItemType::Splitter)
-            && lastItem->parent()->type() == ComicBookTextModelItemType::Scene) {
+            && (lastItem->parent()->type() == ComicBookTextModelItemType::Page
+                || lastItem->parent()->type() == ComicBookTextModelItemType::Panel)) {
             //
             // ... и при этом вырезаем из него все текстовые блоки, идущие до конца сцены/папки
             //
@@ -886,8 +933,10 @@ void ComicBookTextModel::insertFromMime(const QModelIndex& _index, int _position
 
         if (currentTag == xml::kFolderTag) {
             newItem = new ComicBookTextModelFolderItem(contentReader);
-        } else if (currentTag == xml::kSceneTag) {
-            newItem = new ComicBookTextModelSceneItem(contentReader);
+        } else if (currentTag == xml::kPageTag) {
+            newItem = new ComicBookTextModelPageItem(contentReader);
+        } else if (currentTag == xml::kPanelTag) {
+            newItem = new ComicBookTextModelPanelItem(contentReader);
         } else if (currentTag == xml::kSplitterTag) {
             newItem = new ComicBookTextModelSplitterItem(contentReader);
         } else {
@@ -901,7 +950,8 @@ void ComicBookTextModel::insertFromMime(const QModelIndex& _index, int _position
                 //
                 isFirstTextItemHandled = true;
                 auto textItem = static_cast<ComicBookTextModelTextItem*>(item);
-                if (textItem->paragraphType() == ComicBookParagraphType::Page
+                if (textItem->paragraphType() == ComicBookParagraphType::FolderHeader
+                    || textItem->paragraphType() == ComicBookParagraphType::Page
                     || textItem->paragraphType() == ComicBookParagraphType::Panel
                     || !textItem->text().isEmpty()) {
                     textItem->mergeWith(newTextItem);
@@ -996,7 +1046,8 @@ void ComicBookTextModel::insertFromMime(const QModelIndex& _index, int _position
                 continue;
             }
 
-            if (lastItem->type() == ComicBookTextModelItemType::Scene) {
+            if (lastItem->type() == ComicBookTextModelItemType::Page
+                || lastItem->type() == ComicBookTextModelItemType::Panel) {
                 appendItem(item, lastItem);
             } else {
                 insertItem(item, lastItem);
@@ -1054,15 +1105,6 @@ void ComicBookTextModel::setInformationModel(ComicBookInformationModel* _model)
     }
 
     d->informationModel = _model;
-
-    //    if (d->informationModel) {
-    //        connect(d->informationModel,
-    //        &ComicBookInformationModel::scenesNumberingStartAtChanged,
-    //                this, [this] { d->updateNumbering(); });
-    //        connect(d->informationModel, &ComicBookInformationModel::scenesNumbersPrefixChanged,
-    //        this,
-    //                [this] { d->updateNumbering(); });
-    //    }
 }
 
 ComicBookInformationModel* ComicBookTextModel::informationModel() const
@@ -1100,7 +1142,8 @@ void ComicBookTextModel::updateCharacterName(const QString& _oldName, const QStr
                   auto childItem = _item->childAt(childIndex);
                   switch (childItem->type()) {
                   case ComicBookTextModelItemType::Folder:
-                  case ComicBookTextModelItemType::Scene: {
+                  case ComicBookTextModelItemType::Page:
+                  case ComicBookTextModelItemType::Panel: {
                       updateCharacterBlock(childItem);
                       break;
                   }
@@ -1129,73 +1172,6 @@ void ComicBookTextModel::updateCharacterName(const QString& _oldName, const QStr
     emit rowsChanged();
 }
 
-std::chrono::milliseconds ComicBookTextModel::duration() const
-{
-    return d->rootItem->duration();
-}
-
-std::map<std::chrono::milliseconds, QColor> ComicBookTextModel::itemsColors() const
-{
-    std::chrono::milliseconds lastItemDuration{ 0 };
-    std::map<std::chrono::milliseconds, QColor> colors;
-    std::function<void(const ComicBookTextModelItem*)> collectChildColors;
-    collectChildColors = [&collectChildColors, &lastItemDuration,
-                          &colors](const ComicBookTextModelItem* _item) {
-        for (int childIndex = 0; childIndex < _item->childCount(); ++childIndex) {
-            auto childItem = _item->childAt(childIndex);
-            switch (childItem->type()) {
-            case ComicBookTextModelItemType::Folder: {
-                collectChildColors(childItem);
-                break;
-            }
-
-            case ComicBookTextModelItemType::Scene: {
-                const auto sceneItem = static_cast<const ComicBookTextModelSceneItem*>(childItem);
-                colors.emplace(lastItemDuration, sceneItem->color());
-                lastItemDuration += sceneItem->duration();
-                break;
-            }
-
-            default:
-                break;
-            }
-        }
-    };
-    collectChildColors(d->rootItem);
-    return colors;
-}
-
-void ComicBookTextModel::recalculateDuration()
-{
-    std::function<void(const ComicBookTextModelItem*)> updateChildDuration;
-    updateChildDuration = [this, &updateChildDuration](const ComicBookTextModelItem* _item) {
-        for (int childIndex = 0; childIndex < _item->childCount(); ++childIndex) {
-            auto childItem = _item->childAt(childIndex);
-            switch (childItem->type()) {
-            case ComicBookTextModelItemType::Folder:
-            case ComicBookTextModelItemType::Scene: {
-                updateChildDuration(childItem);
-                break;
-            }
-
-            case ComicBookTextModelItemType::Text: {
-                auto textItem = static_cast<ComicBookTextModelTextItem*>(childItem);
-                textItem->updateDuration();
-                updateItem(textItem);
-                break;
-            }
-
-            default:
-                break;
-            }
-        }
-    };
-
-    emit rowsAboutToBeChanged();
-    updateChildDuration(d->rootItem);
-    emit rowsChanged();
-}
-
 void ComicBookTextModel::initDocument()
 {
     //
@@ -1204,7 +1180,7 @@ void ComicBookTextModel::initDocument()
     if (document()->content().isEmpty()) {
         auto pageText = new ComicBookTextModelTextItem;
         pageText->setParagraphType(ComicBookParagraphType::Page);
-        auto page = new ComicBookTextModelSceneItem;
+        auto page = new ComicBookTextModelPageItem;
         page->appendItem(pageText);
         appendItem(page);
     }
@@ -1276,8 +1252,10 @@ void ComicBookTextModel::applyPatch(const QByteArray& _patch)
             ComicBookTextModelItem* item = nullptr;
             if (currentTag == xml::kFolderTag) {
                 item = new ComicBookTextModelFolderItem(_reader);
-            } else if (currentTag == xml::kSceneTag) {
-                item = new ComicBookTextModelSceneItem(_reader);
+            } else if (currentTag == xml::kPageTag) {
+                item = new ComicBookTextModelPageItem(_reader);
+            } else if (currentTag == xml::kPanelTag) {
+                item = new ComicBookTextModelPanelItem(_reader);
             } else if (currentTag == xml::kSplitterTag) {
                 item = new ComicBookTextModelSplitterItem(_reader);
             } else {
@@ -1373,9 +1351,12 @@ void ComicBookTextModel::applyPatch(const QByteArray& _patch)
                 if (child->type() == ComicBookTextModelItemType::Folder) {
                     auto folder = static_cast<ComicBookTextModelFolderItem*>(child);
                     headerLength = QString(folder->xmlHeader()).length();
-                } else if (child->type() == ComicBookTextModelItemType::Scene) {
-                    auto scene = static_cast<ComicBookTextModelSceneItem*>(child);
-                    headerLength = QString(scene->xmlHeader()).length();
+                } else if (child->type() == ComicBookTextModelItemType::Page) {
+                    auto page = static_cast<ComicBookTextModelPageItem*>(child);
+                    headerLength = QString(page->xmlHeader()).length();
+                } else if (child->type() == ComicBookTextModelItemType::Panel) {
+                    auto panel = static_cast<ComicBookTextModelPanelItem*>(child);
+                    headerLength = QString(panel->xmlHeader()).length();
                 }
 
                 if (child->hasChildren() && changes.first.from >= length + headerLength) {
@@ -1793,8 +1774,13 @@ void ComicBookTextModel::applyPatch(const QByteArray& _patch)
                 break;
             }
 
-            case ComicBookTextModelItemType::Scene: {
-                itemToInsert = new ComicBookTextModelSceneItem;
+            case ComicBookTextModelItemType::Page: {
+                itemToInsert = new ComicBookTextModelPageItem;
+                break;
+            }
+
+            case ComicBookTextModelItemType::Panel: {
+                itemToInsert = new ComicBookTextModelPanelItem;
                 break;
             }
 

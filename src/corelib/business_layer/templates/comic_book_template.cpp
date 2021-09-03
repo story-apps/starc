@@ -26,6 +26,8 @@ const QHash<ComicBookParagraphType, QString> kComicBookParagraphTypeToString
         { ComicBookParagraphType::Character, QLatin1String("character") },
         { ComicBookParagraphType::Dialogue, QLatin1String("dialogue") },
         { ComicBookParagraphType::InlineNote, QLatin1String("inline_note") },
+        { ComicBookParagraphType::FolderHeader, QLatin1String("folder_header") },
+        { ComicBookParagraphType::FolderFooter, QLatin1String("forder_footer") },
         { ComicBookParagraphType::PageSplitter, QLatin1String("page_splitter") } };
 
 const QHash<ComicBookBlockStyle::LineSpacingType, QString> kLineSpacingToString
@@ -67,6 +69,10 @@ QString toDisplayString(ComicBookParagraphType _type)
         return QCoreApplication::translate("BusinessLayer::ComicBookTemplate", "Dialogue");
     case ComicBookParagraphType::InlineNote:
         return QCoreApplication::translate("BusinessLayer::ComicBookTemplate", "Inline note");
+    case ComicBookParagraphType::FolderHeader:
+        return QCoreApplication::translate("BusinessLayer::ComicBookTemplate", "Folder header");
+    case ComicBookParagraphType::FolderFooter:
+        return QCoreApplication::translate("BusinessLayer::ComicBookTemplate", "Folder footer");
     case ComicBookParagraphType::UnformattedText:
         return QCoreApplication::translate("BusinessLayer::ComicBookTemplate", "Unformatted text");
     default:

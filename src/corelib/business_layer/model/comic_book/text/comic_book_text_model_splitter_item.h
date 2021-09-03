@@ -24,7 +24,7 @@ CORE_LIBRARY_EXPORT inline uint qHash(ComicBookTextModelSplitterItemType _type)
 
 
 /**
- * @brief Класс элемента разделителя модели сценария
+ * @brief Класс элемента разделителя модели комикса
  */
 class CORE_LIBRARY_EXPORT ComicBookTextModelSplitterItem : public ComicBookTextModelItem
 {

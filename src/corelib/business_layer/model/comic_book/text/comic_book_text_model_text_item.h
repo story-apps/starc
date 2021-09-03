@@ -16,7 +16,7 @@ namespace BusinessLayer {
 enum class ComicBookParagraphType;
 
 /**
- * @brief Класс элемента текста модели сценария
+ * @brief Класс элемента текста модели комикса
  */
 class CORE_LIBRARY_EXPORT ComicBookTextModelTextItem : public ComicBookTextModelItem
 {
@@ -79,12 +79,6 @@ public:
      */
     std::optional<Number> number() const;
     void setNumber(int _number);
-
-    /**
-     * @brief Длительность сцены
-     */
-    std::chrono::milliseconds duration() const;
-    void updateDuration();
 
     /**
      * @brief Является ли блок декорацией

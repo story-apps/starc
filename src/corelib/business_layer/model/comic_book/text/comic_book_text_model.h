@@ -12,7 +12,7 @@ class ComicBookInformationModel;
 class ComicBookTextModelItem;
 
 /**
- * @brief Модель текста сценария
+ * @brief Модель текста комикса
  */
 class CORE_LIBRARY_EXPORT ComicBookTextModel : public AbstractModel
 {
@@ -74,13 +74,13 @@ public:
     /** @} */
 
     /**
-     * @brief Сформировать mime-данные сценария в заданном диапазоне
+     * @brief Сформировать mime-данные комикса в заданном диапазоне
      */
     QString mimeFromSelection(const QModelIndex& _from, int _fromPosition, const QModelIndex& _to,
                               int _toPosition, bool _clearUuid) const;
 
     /**
-     * @brief Вставить контент из mime-данных со сценарием в заданной позиции
+     * @brief Вставить контент из mime-данных с комиксом в заданной позиции
      */
     void insertFromMime(const QModelIndex& _index, int _positionInBlock, const QString& _mimeData);
 
@@ -95,13 +95,13 @@ public:
     QModelIndex indexForItem(ComicBookTextModelItem* _item) const;
 
     /**
-     * @brief Задать модель информации о сценарии
+     * @brief Задать модель информации о комиксе
      */
     void setInformationModel(ComicBookInformationModel* _model);
     ComicBookInformationModel* informationModel() const;
 
     /**
-     * @brief Задать модель справочников сценария
+     * @brief Задать модель справочников комикса
      */
     void setDictionariesModel(ComicBookDictionariesModel* _model);
     ComicBookDictionariesModel* dictionariesModel() const;
@@ -116,21 +116,6 @@ public:
      * @brief Обновить имя персонажа
      */
     void updateCharacterName(const QString& _oldName, const QString& _newName);
-
-    /**
-     * @brief Длительность сценария
-     */
-    std::chrono::milliseconds duration() const;
-
-    /**
-     * @brief Получить цвета элементов сценария
-     */
-    std::map<std::chrono::milliseconds, QColor> itemsColors() const;
-
-    /**
-     * @brief Пересчитать хронометраж
-     */
-    void recalculateDuration();
 
 protected:
     /**

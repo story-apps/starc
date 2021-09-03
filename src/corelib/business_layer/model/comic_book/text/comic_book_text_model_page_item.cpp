@@ -1,6 +1,5 @@
-#include "comic_book_text_model_folder_item.h"
-
 #include "comic_book_text_model_page_item.h"
+
 #include "comic_book_text_model_panel_item.h"
 #include "comic_book_text_model_splitter_item.h"
 #include "comic_book_text_model_text_item.h"
@@ -17,25 +16,25 @@
 
 namespace BusinessLayer {
 
-class ComicBookTextModelFolderItem::Implementation
+class ComicBookTextModelPageItem::Implementation
 {
 public:
     /**
-     * @brief Идентификатор папки
+     * @brief Идентификатор страницы
      */
     QUuid uuid;
 
     /**
-     * @brief Цвет папки
+     * @brief Цвет страницы
      */
     QColor color;
 
     //
-    // Ридонли свойства, которые формируются по ходу работы с текстом
+    // Ридонли свойства, которые формируются по ходу работы со сценарием
     //
 
     /**
-     * @brief Название папки
+     * @brief Название страницы
      */
     QString name;
 };
@@ -44,18 +43,18 @@ public:
 // ****
 
 
-ComicBookTextModelFolderItem::ComicBookTextModelFolderItem()
-    : ComicBookTextModelItem(ComicBookTextModelItemType::Folder)
+ComicBookTextModelPageItem::ComicBookTextModelPageItem()
+    : ComicBookTextModelItem(ComicBookTextModelItemType::Page)
     , d(new Implementation)
 {
     d->uuid = QUuid::createUuid();
 }
 
-ComicBookTextModelFolderItem::ComicBookTextModelFolderItem(QXmlStreamReader& _contentReader)
-    : ComicBookTextModelItem(ComicBookTextModelItemType::Folder)
+ComicBookTextModelPageItem::ComicBookTextModelPageItem(QXmlStreamReader& _contentReader)
+    : ComicBookTextModelItem(ComicBookTextModelItemType::Page)
     , d(new Implementation)
 {
-    Q_ASSERT(_contentReader.name() == xml::kFolderTag);
+    Q_ASSERT(_contentReader.name() == xml::kPageTag);
 
     if (_contentReader.attributes().hasAttribute(xml::kUuidAttribute)) {
         d->uuid = _contentReader.attributes().value(xml::kUuidAttribute).toString();
@@ -83,16 +82,14 @@ ComicBookTextModelFolderItem::ComicBookTextModelFolderItem(QXmlStreamReader& _co
             //
             // Если дошли до конца папки, выходим из обработки
             //
-            else if (currentTag == xml::kFolderTag && _contentReader.isEndElement()) {
+            else if (currentTag == xml::kPageTag && _contentReader.isEndElement()) {
                 xml::readNextElement(_contentReader);
                 break;
             }
             //
             // Считываем вложенный контент
             //
-            else if (currentTag == xml::kFolderTag) {
-                appendItem(new ComicBookTextModelFolderItem(_contentReader));
-            } else if (currentTag == xml::kPageTag) {
+            else if (currentTag == xml::kPageTag) {
                 appendItem(new ComicBookTextModelPageItem(_contentReader));
             } else if (currentTag == xml::kPanelTag) {
                 appendItem(new ComicBookTextModelPanelItem(_contentReader));
@@ -110,14 +107,14 @@ ComicBookTextModelFolderItem::ComicBookTextModelFolderItem(QXmlStreamReader& _co
     handleChange();
 }
 
-ComicBookTextModelFolderItem::~ComicBookTextModelFolderItem() = default;
+ComicBookTextModelPageItem::~ComicBookTextModelPageItem() = default;
 
-QColor ComicBookTextModelFolderItem::color() const
+QColor ComicBookTextModelPageItem::color() const
 {
     return d->color;
 }
 
-void ComicBookTextModelFolderItem::setColor(const QColor& _color)
+void ComicBookTextModelPageItem::setColor(const QColor& _color)
 {
     if (d->color == _color) {
         return;
@@ -127,18 +124,18 @@ void ComicBookTextModelFolderItem::setColor(const QColor& _color)
     setChanged(true);
 }
 
-QVariant ComicBookTextModelFolderItem::data(int _role) const
+QVariant ComicBookTextModelPageItem::data(int _role) const
 {
     switch (_role) {
     case Qt::DecorationRole: {
         return u8"\U000f024b";
     }
 
-    case FolderNameRole: {
+    case PageNameRole: {
         return d->name;
     }
 
-    case FolderColorRole: {
+    case PageColorRole: {
         return d->color;
     }
 
@@ -148,21 +145,15 @@ QVariant ComicBookTextModelFolderItem::data(int _role) const
     }
 }
 
-QByteArray ComicBookTextModelFolderItem::toXml() const
+QByteArray ComicBookTextModelPageItem::toXml() const
 {
     return toXml(nullptr, 0, nullptr, 0, false);
 }
 
-QByteArray ComicBookTextModelFolderItem::toXml(ComicBookTextModelItem* _from, int _fromPosition,
-                                               ComicBookTextModelItem* _to, int _toPosition,
-                                               bool _clearUuid) const
+QByteArray ComicBookTextModelPageItem::toXml(ComicBookTextModelItem* _from, int _fromPosition,
+                                             ComicBookTextModelItem* _to, int _toPosition,
+                                             bool _clearUuid) const
 {
-    auto folderFooterXml = [] {
-        ComicBookTextModelTextItem item;
-        item.setParagraphType(ComicBookParagraphType::FolderFooter);
-        return item.toXml();
-    };
-
     xml::ComicBookTextModelXmlWriter xml;
     xml += xmlHeader(_clearUuid);
     for (int childIndex = 0; childIndex < childCount(); ++childIndex) {
@@ -176,7 +167,7 @@ QByteArray ComicBookTextModelFolderItem::toXml(ComicBookTextModelItem* _from, in
             continue;
         }
         //
-        // Папки и сцены проверяем на наличие в них завершающего элемента
+        // Панели проверяем на наличие в них завершающего элемента
         //
         else if (child->type() != ComicBookTextModelItemType::Text) {
             //
@@ -184,23 +175,12 @@ QByteArray ComicBookTextModelFolderItem::toXml(ComicBookTextModelItem* _from, in
             //
             const bool recursively = true;
             if (child->hasChild(_to, recursively)) {
-                if (child->type() == ComicBookTextModelItemType::Folder) {
-                    auto folder = static_cast<ComicBookTextModelFolderItem*>(child);
-                    xml += folder->toXml(_from, _fromPosition, _to, _toPosition, _clearUuid);
-                } else if (child->type() == ComicBookTextModelItemType::Page) {
-                    auto page = static_cast<ComicBookTextModelPageItem*>(child);
-                    xml += page->toXml(_from, _fromPosition, _to, _toPosition, _clearUuid);
-                } else if (child->type() == ComicBookTextModelItemType::Panel) {
+                if (child->type() == ComicBookTextModelItemType::Panel) {
                     auto panel = static_cast<ComicBookTextModelPanelItem*>(child);
                     xml += panel->toXml(_from, _fromPosition, _to, _toPosition, _clearUuid);
                 } else {
                     Q_ASSERT(false);
                 }
-
-                //
-                // Не забываем завершить папку
-                //
-                xml += folderFooterXml();
                 break;
             }
             //
@@ -222,13 +202,6 @@ QByteArray ComicBookTextModelFolderItem::toXml(ComicBookTextModelItem* _from, in
             } else {
                 xml += { textItem, 0, _toPosition };
             }
-
-            //
-            // Если папка не была закрыта, добавим корректное завершение для неё
-            //
-            if (textItem->paragraphType() != ComicBookParagraphType::FolderFooter) {
-                xml += folderFooterXml();
-            }
             break;
         }
         //
@@ -239,16 +212,16 @@ QByteArray ComicBookTextModelFolderItem::toXml(ComicBookTextModelItem* _from, in
         }
     }
     xml += QString("</%1>\n").arg(xml::kContentTag).toUtf8();
-    xml += QString("</%1>\n").arg(xml::kFolderTag).toUtf8();
+    xml += QString("</%1>\n").arg(xml::kPageTag).toUtf8();
 
     return xml.data();
 }
 
-QByteArray ComicBookTextModelFolderItem::xmlHeader(bool _clearUuid) const
+QByteArray ComicBookTextModelPageItem::xmlHeader(bool _clearUuid) const
 {
     QByteArray xml;
     xml += QString("<%1 %2=\"%3\">\n")
-               .arg(xml::kFolderTag, xml::kUuidAttribute,
+               .arg(xml::kPageTag, xml::kUuidAttribute,
                     _clearUuid ? QUuid::createUuid().toString() : d->uuid.toString())
                .toUtf8();
     if (d->color.isValid()) {
@@ -259,29 +232,29 @@ QByteArray ComicBookTextModelFolderItem::xmlHeader(bool _clearUuid) const
     return xml;
 }
 
-void ComicBookTextModelFolderItem::copyFrom(ComicBookTextModelItem* _item)
+void ComicBookTextModelPageItem::copyFrom(ComicBookTextModelItem* _item)
 {
-    if (_item->type() != ComicBookTextModelItemType::Folder) {
+    if (_item->type() != ComicBookTextModelItemType::Page) {
         Q_ASSERT(false);
         return;
     }
 
-    auto folderItem = static_cast<ComicBookTextModelFolderItem*>(_item);
-    d->uuid = folderItem->d->uuid;
-    d->color = folderItem->d->color;
+    auto pageItem = static_cast<ComicBookTextModelPageItem*>(_item);
+    d->uuid = pageItem->d->uuid;
+    d->color = pageItem->d->color;
 }
 
-bool ComicBookTextModelFolderItem::isEqual(ComicBookTextModelItem* _item) const
+bool ComicBookTextModelPageItem::isEqual(ComicBookTextModelItem* _item) const
 {
     if (_item == nullptr || type() != _item->type()) {
         return false;
     }
 
-    const auto folderItem = static_cast<ComicBookTextModelFolderItem*>(_item);
-    return d->uuid == folderItem->d->uuid && d->color == folderItem->d->color;
+    const auto pageItem = static_cast<ComicBookTextModelPageItem*>(_item);
+    return d->uuid == pageItem->d->uuid && d->color == pageItem->d->color;
 }
 
-void ComicBookTextModelFolderItem::handleChange()
+void ComicBookTextModelPageItem::handleChange()
 {
     d->name.clear();
 
@@ -290,7 +263,7 @@ void ComicBookTextModelFolderItem::handleChange()
         switch (child->type()) {
         case ComicBookTextModelItemType::Text: {
             auto childItem = static_cast<ComicBookTextModelTextItem*>(child);
-            if (childItem->paragraphType() == ComicBookParagraphType::FolderHeader) {
+            if (childItem->paragraphType() == ComicBookParagraphType::Page) {
                 d->name = TextHelper::smartToUpper(childItem->text());
             }
             break;

@@ -13,32 +13,32 @@ class QXmlStreamReader;
 namespace BusinessLayer {
 
 /**
- * @brief Класс элементов папок модели комикса
+ * @brief Класс элементов страниц модели комикса
  */
-class CORE_LIBRARY_EXPORT ComicBookTextModelFolderItem : public ComicBookTextModelItem
+class CORE_LIBRARY_EXPORT ComicBookTextModelPageItem : public ComicBookTextModelItem
 {
 public:
     /**
      * @brief Роли данных из модели
      */
     enum DataRole {
-        FolderNameRole = Qt::UserRole + 1,
-        FolderColorRole,
+        PageNameRole = Qt::UserRole + 1,
+        PageColorRole,
     };
 
 public:
-    ComicBookTextModelFolderItem();
-    explicit ComicBookTextModelFolderItem(QXmlStreamReader& _contentReader);
-    ~ComicBookTextModelFolderItem() override;
+    ComicBookTextModelPageItem();
+    explicit ComicBookTextModelPageItem(QXmlStreamReader& _contentReader);
+    ~ComicBookTextModelPageItem() override;
 
     /**
-     * @brief Цвет папки
+     * @brief Цвет страницы
      */
     QColor color() const;
     void setColor(const QColor& _color);
 
     /**
-     * @brief Определяем интерфейс получения данных папки
+     * @brief Определяем интерфейс получения данных страницы
      */
     QVariant data(int _role) const override;
 
@@ -62,7 +62,7 @@ public:
 
 protected:
     /**
-     * @brief Обновляем текст папки при изменении кого-то из детей
+     * @brief Обновляем текст страницы при изменении кого-то из детей
      */
     void handleChange() override;
 

@@ -20,7 +20,7 @@ enum class ScreenplayTextModelItemType { Folder, Scene, Text, Splitter };
 class CORE_LIBRARY_EXPORT ScreenplayTextModelItem : public AbstractModelItem
 {
 public:
-    ScreenplayTextModelItem(ScreenplayTextModelItemType _type);
+    explicit ScreenplayTextModelItem(ScreenplayTextModelItemType _type);
     ~ScreenplayTextModelItem() override;
 
     /**

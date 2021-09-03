@@ -7,20 +7,19 @@ namespace BusinessLayer {
 namespace xml {
 
 //
-// Папка и сцена
+// Папка, страница и панель
 //
 const QString kFolderTag = QLatin1String("folder");
-const QString kSceneTag = QLatin1String("scene");
+const QString kPageTag = QLatin1String("page");
+const QString kPanelTag = QLatin1String("panel");
 const QString kUuidAttribute = QLatin1String("uuid");
 const QString kPlotsAttribute = QLatin1String("plots");
-const QString kOmitedAttribute = QLatin1String("omited");
 const QString kNumberTag = QLatin1String("number");
 const QString kNumberValueAttribute = QLatin1String("value");
 const QString kNumberGroupAttribute = QLatin1String("group");
 const QString kNumberGroupIndexAttribute = QLatin1String("group_index");
 const QString kColorTag = QLatin1String("color");
 const QString kStampTag = QLatin1String("stamp");
-const QString kPlannedDurationTag = QLatin1String("planned_duration");
 
 //
 // Разделитель

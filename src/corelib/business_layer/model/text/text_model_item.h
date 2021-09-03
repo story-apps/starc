@@ -20,7 +20,7 @@ enum class TextModelItemType { Chapter, Text };
 class CORE_LIBRARY_EXPORT TextModelItem : public AbstractModelItem
 {
 public:
-    TextModelItem(TextModelItemType _type);
+    explicit TextModelItem(TextModelItemType _type);
     ~TextModelItem() override;
 
     /**

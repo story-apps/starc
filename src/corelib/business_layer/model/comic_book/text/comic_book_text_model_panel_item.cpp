@@ -1,11 +1,11 @@
-#include "comic_book_text_model_scene_item.h"
+#include "comic_book_text_model_panel_item.h"
 
 #include "comic_book_text_model_splitter_item.h"
 #include "comic_book_text_model_text_item.h"
 #include "comic_book_text_model_xml.h"
 #include "comic_book_text_model_xml_writer.h"
 
-#include <business_layer/templates/screenplay_template.h>
+#include <business_layer/templates/comic_book_template.h>
 #include <utils/helpers/text_helper.h>
 
 #include <QLocale>
@@ -18,60 +18,50 @@
 
 namespace BusinessLayer {
 
-class ComicBookTextModelSceneItem::Implementation
+class ComicBookTextModelPanelItem::Implementation
 {
 public:
     /**
-     * @brief Идентификатор сцены
+     * @brief Идентификатор панели
      */
     QUuid uuid;
 
     /**
-     * @brief Пропущена ли сцена
-     */
-    bool isOmited = false;
-
-    /**
-     * @brief Номер сцены
+     * @brief Номер панели
      */
     std::optional<Number> number;
 
     /**
-     * @brief Цвет сцены
+     * @brief Цвет панели
      */
     QColor color;
 
     //    /**
-    //     * @brief Тэги сцены
+    //     * @brief Тэги панели
     //     */
     //    QVector<Tag> tags;
 
     //    /**
-    //     * @brief Сюжетные линии сцены
+    //     * @brief Сюжетные линии панели
     //     */
     //    QVector<StoryLine> storyLines;
 
     /**
-     * @brief Штамп на сцене
+     * @brief Штамп на панели
      */
     QString stamp;
 
-    /**
-     * @brief Запланированная длительность сцены
-     */
-    std::optional<int> plannedDuration;
-
     //
-    // Ридонли свойства, которые формируются по ходу работы со сценарием
+    // Ридонли свойства, которые формируются по ходу работы с текстом
     //
 
     /**
-     * @brief Заголовок сцены
+     * @brief Заголовок панели
      */
     QString heading;
 
     /**
-     * @brief Текст сцены
+     * @brief Текст панели
      */
     QString text;
 
@@ -84,35 +74,30 @@ public:
      * @brief Количество редакторских заметок
      */
     int reviewMarksSize = 0;
-
-    /**
-     * @brief Длительность сцены
-     */
-    std::chrono::milliseconds duration = std::chrono::milliseconds{ 0 };
 };
 
 
 // ****
 
 
-bool ComicBookTextModelSceneItem::Number::operator==(
-    const ComicBookTextModelSceneItem::Number& _other) const
+bool ComicBookTextModelPanelItem::Number::operator==(
+    const ComicBookTextModelPanelItem::Number& _other) const
 {
     return value == _other.value;
 }
 
-ComicBookTextModelSceneItem::ComicBookTextModelSceneItem()
-    : ComicBookTextModelItem(ComicBookTextModelItemType::Scene)
+ComicBookTextModelPanelItem::ComicBookTextModelPanelItem()
+    : ComicBookTextModelItem(ComicBookTextModelItemType::Panel)
     , d(new Implementation)
 {
     d->uuid = QUuid::createUuid();
 }
 
-ComicBookTextModelSceneItem::ComicBookTextModelSceneItem(QXmlStreamReader& _contentReader)
-    : ComicBookTextModelItem(ComicBookTextModelItemType::Scene)
+ComicBookTextModelPanelItem::ComicBookTextModelPanelItem(QXmlStreamReader& _contentReader)
+    : ComicBookTextModelItem(ComicBookTextModelItemType::Panel)
     , d(new Implementation)
 {
-    Q_ASSERT(_contentReader.name() == xml::kSceneTag);
+    Q_ASSERT(_contentReader.name() == xml::kPanelTag);
 
     const auto attributes = _contentReader.attributes();
     if (attributes.hasAttribute(xml::kUuidAttribute)) {
@@ -122,7 +107,6 @@ ComicBookTextModelSceneItem::ComicBookTextModelSceneItem(QXmlStreamReader& _cont
     //
     // TODO: plots
     //
-    d->isOmited = attributes.hasAttribute(xml::kOmitedAttribute);
     xml::readNextElement(_contentReader);
 
     auto currentTag = _contentReader.name();
@@ -144,12 +128,6 @@ ComicBookTextModelSceneItem::ComicBookTextModelSceneItem(QXmlStreamReader& _cont
         currentTag = xml::readNextElement(_contentReader); // next
     }
 
-    if (currentTag == xml::kPlannedDurationTag) {
-        d->plannedDuration = xml::readContent(_contentReader).toInt();
-        xml::readNextElement(_contentReader); // end
-        currentTag = xml::readNextElement(_contentReader); // next
-    }
-
     if (currentTag == xml::kContentTag) {
         xml::readNextElement(_contentReader); // next item
         do {
@@ -163,17 +141,17 @@ ComicBookTextModelSceneItem::ComicBookTextModelSceneItem(QXmlStreamReader& _cont
                 continue;
             }
             //
-            // Если дошли до конца сцены, выходим из обработки
+            // Если дошли до конца панели, выходим из обработки
             //
-            else if (currentTag == xml::kSceneTag && _contentReader.isEndElement()) {
+            else if (currentTag == xml::kPanelTag && _contentReader.isEndElement()) {
                 xml::readNextElement(_contentReader);
                 break;
             }
             //
             // Считываем вложенный контент
             //
-            else if (currentTag == xml::kSceneTag) {
-                appendItem(new ComicBookTextModelSceneItem(_contentReader));
+            else if (currentTag == xml::kPanelTag) {
+                appendItem(new ComicBookTextModelPanelItem(_contentReader));
             } else if (currentTag == xml::kSplitterTag) {
                 appendItem(new ComicBookTextModelSplitterItem(_contentReader));
             } else {
@@ -183,14 +161,14 @@ ComicBookTextModelSceneItem::ComicBookTextModelSceneItem(QXmlStreamReader& _cont
     }
 
     //
-    // Соберём заголовок, текст сцены и прочие параметры
+    // Соберём заголовок, текст панели и прочие параметры
     //
     handleChange();
 }
 
-ComicBookTextModelSceneItem::~ComicBookTextModelSceneItem() = default;
+ComicBookTextModelPanelItem::~ComicBookTextModelPanelItem() = default;
 
-ComicBookTextModelSceneItem::Number ComicBookTextModelSceneItem::number() const
+ComicBookTextModelPanelItem::Number ComicBookTextModelPanelItem::number() const
 {
     if (!d->number.has_value()) {
         return {};
@@ -199,7 +177,7 @@ ComicBookTextModelSceneItem::Number ComicBookTextModelSceneItem::number() const
     return *d->number;
 }
 
-bool ComicBookTextModelSceneItem::setNumber(int _number, const QString& _prefix)
+bool ComicBookTextModelPanelItem::setNumber(int _number)
 {
     if (childCount() == 0) {
         return false;
@@ -222,8 +200,8 @@ bool ComicBookTextModelSceneItem::setNumber(int _number, const QString& _prefix)
         return false;
     }
 
-    const auto newNumber = QString(QLocale().textDirection() == Qt::LeftToRight ? "%1%2." : ".%2%1")
-                               .arg(_prefix, QString::number(_number));
+    const auto newNumber
+        = QString(QLocale().textDirection() == Qt::LeftToRight ? "%1." : ".%1").arg(_number);
     if (d->number.has_value() && d->number->value == newNumber) {
         return true;
     }
@@ -237,12 +215,12 @@ bool ComicBookTextModelSceneItem::setNumber(int _number, const QString& _prefix)
     return true;
 }
 
-QColor ComicBookTextModelSceneItem::color() const
+QColor ComicBookTextModelPanelItem::color() const
 {
     return d->color;
 }
 
-void ComicBookTextModelSceneItem::setColor(const QColor& _color)
+void ComicBookTextModelPanelItem::setColor(const QColor& _color)
 {
     if (d->color == _color) {
         return;
@@ -252,48 +230,38 @@ void ComicBookTextModelSceneItem::setColor(const QColor& _color)
     setChanged(true);
 }
 
-std::chrono::milliseconds ComicBookTextModelSceneItem::duration() const
-{
-    return d->duration;
-}
-
-QVariant ComicBookTextModelSceneItem::data(int _role) const
+QVariant ComicBookTextModelPanelItem::data(int _role) const
 {
     switch (_role) {
     case Qt::DecorationRole: {
         return u8"\U000f021a";
     }
 
-    case SceneNumberRole: {
+    case PanelNumberRole: {
         if (d->number.has_value()) {
             return d->number->value;
         }
         return {};
     }
 
-    case SceneColorRole: {
+    case PanelColorRole: {
         return d->color;
     }
 
-    case SceneHeadingRole: {
+    case PanelHeadingRole: {
         return d->heading;
     }
 
-    case SceneTextRole: {
+    case PanelTextRole: {
         return d->text;
     }
 
-    case SceneInlineNotesSizeRole: {
+    case PanelInlineNotesSizeRole: {
         return d->inlineNotesSize;
     }
 
-    case SceneReviewMarksSizeRole: {
+    case PanelReviewMarksSizeRole: {
         return d->reviewMarksSize;
-    }
-
-    case SceneDurationRole: {
-        const int duration = std::chrono::duration_cast<std::chrono::seconds>(d->duration).count();
-        return duration;
     }
 
     default: {
@@ -302,12 +270,12 @@ QVariant ComicBookTextModelSceneItem::data(int _role) const
     }
 }
 
-QByteArray ComicBookTextModelSceneItem::toXml() const
+QByteArray ComicBookTextModelPanelItem::toXml() const
 {
     return toXml(nullptr, 0, nullptr, 0, false);
 }
 
-QByteArray ComicBookTextModelSceneItem::toXml(ComicBookTextModelItem* _from, int _fromPosition,
+QByteArray ComicBookTextModelPanelItem::toXml(ComicBookTextModelItem* _from, int _fromPosition,
                                               ComicBookTextModelItem* _to, int _toPosition,
                                               bool _clearUuid) const
 {
@@ -344,30 +312,22 @@ QByteArray ComicBookTextModelSceneItem::toXml(ComicBookTextModelItem* _from, int
         }
     }
     xml += QString("</%1>\n").arg(xml::kContentTag).toUtf8();
-    xml += QString("</%1>\n").arg(xml::kSceneTag).toUtf8();
+    xml += QString("</%1>\n").arg(xml::kPanelTag).toUtf8();
 
     return xml.data();
 }
 
-QByteArray ComicBookTextModelSceneItem::xmlHeader(bool _clearUuid) const
+QByteArray ComicBookTextModelPanelItem::xmlHeader(bool _clearUuid) const
 {
     QByteArray xml;
     //
     // TODO: plots
     //
-    xml += QString("<%1 %2=\"%3\" %4=\"%5\" %6>\n")
-               .arg(xml::kSceneTag, xml::kUuidAttribute,
+    xml += QString("<%1 %2=\"%3\" %4=\"%5\">\n")
+               .arg(xml::kPanelTag, xml::kUuidAttribute,
                     _clearUuid ? QUuid::createUuid().toString() : d->uuid.toString(),
-                    xml::kPlotsAttribute, {},
-                    (d->isOmited ? QString("%1=\"true\"").arg(xml::kOmitedAttribute) : ""))
+                    xml::kPlotsAttribute, {})
                .toUtf8();
-    //
-    // TODO: Номера будем сохранять только когда они кастомные или фиксированные
-    //
-    //    if (d->number.has_value()) {
-    //        xml += QString("<%1 %2=\"%3\"/>\n")
-    //               .arg(xml::kNumberTag, xml::kNumberValueAttribute, d->number->value).toUtf8();
-    //    }
     if (d->color.isValid()) {
         xml += QString("<%1><![CDATA[%2]]></%1>\n").arg(xml::kColorTag, d->color.name()).toUtf8();
     }
@@ -376,56 +336,42 @@ QByteArray ComicBookTextModelSceneItem::xmlHeader(bool _clearUuid) const
                    .arg(xml::kStampTag, TextHelper::toHtmlEscaped(d->stamp))
                    .toUtf8();
     }
-    if (d->plannedDuration.has_value()) {
-        xml += QString("<%1>%2</%1>\n")
-                   .arg(xml::kPlannedDurationTag, QString::number(*d->plannedDuration))
-                   .toUtf8();
-    }
     xml += QString("<%1>\n").arg(xml::kContentTag).toUtf8();
 
     return xml;
 }
 
-void ComicBookTextModelSceneItem::copyFrom(ComicBookTextModelItem* _item)
+void ComicBookTextModelPanelItem::copyFrom(ComicBookTextModelItem* _item)
 {
-    if (_item->type() != ComicBookTextModelItemType::Scene) {
+    if (_item->type() != ComicBookTextModelItemType::Panel) {
         Q_ASSERT(false);
         return;
     }
 
-    auto sceneItem = static_cast<ComicBookTextModelSceneItem*>(_item);
-    d->uuid = sceneItem->d->uuid;
-    d->isOmited = sceneItem->d->isOmited;
-    d->number = sceneItem->d->number;
-    d->color = sceneItem->d->color;
-    d->stamp = sceneItem->d->stamp;
-    d->plannedDuration = sceneItem->d->plannedDuration;
+    auto panelItem = static_cast<ComicBookTextModelPanelItem*>(_item);
+    d->uuid = panelItem->d->uuid;
+    d->number = panelItem->d->number;
+    d->color = panelItem->d->color;
+    d->stamp = panelItem->d->stamp;
 }
 
-bool ComicBookTextModelSceneItem::isEqual(ComicBookTextModelItem* _item) const
+bool ComicBookTextModelPanelItem::isEqual(ComicBookTextModelItem* _item) const
 {
     if (_item == nullptr || type() != _item->type()) {
         return false;
     }
 
-    const auto sceneItem = static_cast<ComicBookTextModelSceneItem*>(_item);
-    return d->uuid == sceneItem->d->uuid
-        && d->isOmited == sceneItem->d->isOmited
-        //
-        // TODO: тут нужно сравнивать, только когда номера зафиксированы
-        //
-        //            && d->number == sceneItem->d->number
-        && d->color == sceneItem->d->color && d->stamp == sceneItem->d->stamp
-        && d->plannedDuration == sceneItem->d->plannedDuration;
+    const auto panelItem = static_cast<ComicBookTextModelPanelItem*>(_item);
+    return d->uuid == panelItem->d->uuid && d->color == panelItem->d->color
+        && d->stamp == panelItem->d->stamp;
 }
 
-void ComicBookTextModelSceneItem::handleChange()
+void ComicBookTextModelPanelItem::handleChange()
 {
     d->heading.clear();
     d->text.clear();
     d->inlineNotesSize = 0;
     d->reviewMarksSize = 0;
-    d->duration = std::chrono::seconds{ 0 };
 
     for (int childIndex = 0; childIndex < childCount(); ++childIndex) {
         auto child = childAt(childIndex);
@@ -439,15 +385,15 @@ void ComicBookTextModelSceneItem::handleChange()
         // Собираем текст
         //
         switch (childTextItem->paragraphType()) {
-            //        case ComicBookParagraphType::SceneHeading: {
-            //            d->heading = TextHelper::smartToUpper(childTextItem->text());
-            //            break;
-            //        }
+        case ComicBookParagraphType::Panel: {
+            d->heading = TextHelper::smartToUpper(childTextItem->text());
+            break;
+        }
 
-            //        case ComicBookParagraphType::InlineNote: {
-            //            ++d->inlineNotesSize;
-            //            break;
-            //        }
+        case ComicBookParagraphType::InlineNote: {
+            ++d->inlineNotesSize;
+            break;
+        }
 
         default: {
             d->text.append(childTextItem->text() + " ");
@@ -459,11 +405,6 @@ void ComicBookTextModelSceneItem::handleChange()
             break;
         }
         }
-
-        //
-        // Собираем хронометраж
-        //
-        d->duration += childTextItem->duration();
     }
 }
 

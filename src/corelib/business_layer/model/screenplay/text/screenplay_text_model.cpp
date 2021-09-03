@@ -182,18 +182,25 @@ void ScreenplayTextModel::Implementation::updateNumbering()
 
 ScreenplayTextModel::ScreenplayTextModel(QObject* _parent)
     : AbstractModel(
-        { xml::kDocumentTag, xml::kFolderTag, xml::kSceneTag,
-          toString(ScreenplayParagraphType::UnformattedText),
-          toString(ScreenplayParagraphType::SceneHeading),
-          toString(ScreenplayParagraphType::SceneCharacters),
-          toString(ScreenplayParagraphType::Action), toString(ScreenplayParagraphType::Character),
-          toString(ScreenplayParagraphType::Parenthetical),
-          toString(ScreenplayParagraphType::Dialogue), toString(ScreenplayParagraphType::Lyrics),
-          toString(ScreenplayParagraphType::Transition), toString(ScreenplayParagraphType::Shot),
-          toString(ScreenplayParagraphType::InlineNote),
-          toString(ScreenplayParagraphType::FolderHeader),
-          toString(ScreenplayParagraphType::FolderFooter),
-          toString(ScreenplayParagraphType::PageSplitter) },
+        {
+            xml::kDocumentTag,
+            xml::kFolderTag,
+            xml::kSceneTag,
+            toString(ScreenplayParagraphType::UnformattedText),
+            toString(ScreenplayParagraphType::SceneHeading),
+            toString(ScreenplayParagraphType::SceneCharacters),
+            toString(ScreenplayParagraphType::Action),
+            toString(ScreenplayParagraphType::Character),
+            toString(ScreenplayParagraphType::Parenthetical),
+            toString(ScreenplayParagraphType::Dialogue),
+            toString(ScreenplayParagraphType::Lyrics),
+            toString(ScreenplayParagraphType::Transition),
+            toString(ScreenplayParagraphType::Shot),
+            toString(ScreenplayParagraphType::InlineNote),
+            toString(ScreenplayParagraphType::FolderHeader),
+            toString(ScreenplayParagraphType::FolderFooter),
+            toString(ScreenplayParagraphType::PageSplitter),
+        },
         _parent)
     , d(new Implementation)
 {

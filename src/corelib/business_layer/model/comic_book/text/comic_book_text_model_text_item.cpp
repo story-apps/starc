@@ -2,7 +2,6 @@
 
 #include "comic_book_text_model_xml.h"
 
-#include <business_layer/chronometry/chronometer.h>
 #include <business_layer/templates/comic_book_template.h>
 #include <business_layer/templates/templates_facade.h>
 #include <utils/helpers/string_helper.h>
@@ -38,11 +37,6 @@ public:
      * @brief Номер блока
      */
     std::optional<Number> number;
-
-    /**
-     * @brief Длительность сцены
-     */
-    std::chrono::milliseconds duration = std::chrono::milliseconds{ 0 };
 
     /**
      * @brief Является ли блок декорацией
@@ -503,7 +497,6 @@ ComicBookTextModelTextItem::ComicBookTextModelTextItem(QXmlStreamReader& _conten
     , d(new Implementation(_contentReaded))
 {
     d->updateXml();
-    updateDuration();
 }
 
 ComicBookTextModelTextItem::~ComicBookTextModelTextItem() = default;
@@ -523,26 +516,6 @@ void ComicBookTextModelTextItem::setNumber(int _number)
 
     d->number = { newNumber };
     markChanged();
-}
-
-std::chrono::milliseconds ComicBookTextModelTextItem::duration() const
-{
-    return d->duration;
-}
-
-void ComicBookTextModelTextItem::updateDuration()
-{
-    //    const auto duration = Chronometer::duration(d->paragraphType, d->text);
-    //    if (d->duration == duration) {
-    //        return;
-    //    }
-
-    //    d->duration = duration;
-
-    //    //
-    //    // Помещаем изменённым для пересчёта хронометража в родительском элементе
-    //    //
-    //    markChanged();
 }
 
 bool ComicBookTextModelTextItem::isCorrection() const
@@ -635,7 +608,6 @@ void ComicBookTextModelTextItem::setParagraphType(ComicBookParagraphType _type)
 
     d->paragraphType = _type;
     d->updateXml();
-    updateDuration();
     markChanged();
 }
 
@@ -701,7 +673,6 @@ void ComicBookTextModelTextItem::setText(const QString& _text)
 
     d->text = _text;
     d->updateXml();
-    updateDuration();
     markChanged();
 }
 
@@ -753,7 +724,6 @@ void ComicBookTextModelTextItem::removeText(int _from)
     }
 
     d->updateXml();
-    updateDuration();
     markChanged();
 }
 
@@ -876,7 +846,6 @@ void ComicBookTextModelTextItem::mergeWith(const ComicBookTextModelTextItem* _ot
     }
 
     d->updateXml();
-    updateDuration();
     markChanged();
 }
 
@@ -932,7 +901,6 @@ void ComicBookTextModelTextItem::copyFrom(ComicBookTextModelItem* _item)
     d->revisions = textItem->d->revisions;
     d->xml = textItem->d->xml;
 
-    updateDuration();
     markChanged();
 }
 

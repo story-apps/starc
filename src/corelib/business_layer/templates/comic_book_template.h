@@ -24,6 +24,8 @@ enum class ComicBookParagraphType {
     Character,
     Dialogue,
     InlineNote,
+    FolderHeader,
+    FolderFooter,
     //
     PageSplitter, //!< Разделитель страницы (для блоков внутри которых находятся таблицы)
 };
