@@ -28,6 +28,8 @@ enum class ComicBookParagraphType {
     FolderFooter,
     //
     PageSplitter, //!< Разделитель страницы (для блоков внутри которых находятся таблицы)
+    //
+    PanelShadow,
 };
 
 /**
@@ -71,6 +73,17 @@ public:
         PropertyComments, //!< Список комментариев к правке
         PropertyCommentsAuthors, //!< Список авторов комментариев
         PropertyCommentsDates, //!< Список дат комментариев
+        //
+        // Свойства корректирующих текст блоков
+        //
+        PropertyIsCorrection, //!< Не разрывающий текст блок (пустые блоки в конце страницы, блоки с
+                              //!< текстом ПРОД, или именем персонажа)
+        PropertyIsCorrectionContinued, //!< Блок с текстом ПРОД., вставляемый на обрыве реплики
+        PropertyIsCorrectionCharacter, //!< Блок с именем персонажа, вставляемый на новой странице
+        PropertyIsBreakCorrectionStart, //!< Разрывающий текст блок в начале разрыва
+        PropertyIsBreakCorrectionEnd, //!< Разрывающий текст блок в конце разрыва
+        PropertyIsCharacterContinued, //!< Имя персонажа для которого необходимо отображать
+                                      //!< допольнительный текст ПРОД., не пишем в xml
     };
 
     /**
