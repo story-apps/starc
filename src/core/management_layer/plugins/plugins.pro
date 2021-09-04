@@ -2,6 +2,7 @@ TEMPLATE = subdirs
 
 SUBDIRS = \
     comic_book_information \
+    comic_book_text \
     project_information \
     screenplay_information \
     screenplay_parameters \

@@ -16,25 +16,17 @@ public:
     explicit ComicBookDictionariesModel(QObject* _parent = nullptr);
     ~ComicBookDictionariesModel() override;
 
-    const QVector<QString>& sceneIntros() const;
-    void addSceneIntro(const QString& _intro);
-    Q_SIGNAL void sceneIntrosChanged();
+    const QVector<QString>& pageIntros() const;
+    void addPageIntro(const QString& _intro);
+    Q_SIGNAL void pageIntrosChanged();
 
-    const QVector<QString>& sceneTimes() const;
-    void addSceneTime(const QString& _time);
-    Q_SIGNAL void sceneTimesChanged();
-
-    const QVector<QString>& storyDays() const;
-    void addStoryDay(const QString& _day);
-    Q_SIGNAL void storyDaysChanged();
+    const QVector<QString>& panelIntros() const;
+    void addPanelIntro(const QString& _panelIntro);
+    Q_SIGNAL void panelIntroChanged();
 
     const QVector<QString>& characterExtensions() const;
     void addCharacterExtension(const QString& _extension);
     Q_SIGNAL void charactersExtensionsChanged();
-
-    const QVector<QString>& transitions() const;
-    void addTransition(const QString& _transition);
-    Q_SIGNAL void transitionsChanged();
 
 protected:
     /**

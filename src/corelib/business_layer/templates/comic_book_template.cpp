@@ -20,8 +20,8 @@ namespace {
 
 const QHash<ComicBookParagraphType, QString> kComicBookParagraphTypeToString
     = { { ComicBookParagraphType::UnformattedText, QLatin1String("unformatted_text") },
-        { ComicBookParagraphType::Page, QLatin1String("page") },
-        { ComicBookParagraphType::Panel, QLatin1String("panel") },
+        { ComicBookParagraphType::Page, QLatin1String("page_name") },
+        { ComicBookParagraphType::Panel, QLatin1String("panel_name") },
         { ComicBookParagraphType::Description, QLatin1String("description") },
         { ComicBookParagraphType::Character, QLatin1String("character") },
         { ComicBookParagraphType::Dialogue, QLatin1String("dialogue") },

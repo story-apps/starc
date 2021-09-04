@@ -10,11 +10,11 @@ namespace BusinessLayer {
 
 namespace {
 const QString kDocumentKey = "document";
-const QString kSceneIntrosKey = "scene_intros";
+const QString kPageIntrosKey = "scene_intros";
 const QString kSceneTimesKey = "scene_times";
 const QString kStoryDaysKey = "story_days";
 const QString kCharacterExtensionsKey = "character_extensions";
-const QString kTransitionsKey = "transitions";
+const QString kPanelIntrosKey = "transitions";
 const QString kItemKey = "v";
 } // namespace
 
@@ -33,8 +33,8 @@ public:
 
 
 ScreenplayDictionariesModel::ScreenplayDictionariesModel(QObject* _parent)
-    : AbstractModel({ kDocumentKey, kSceneIntrosKey, kSceneTimesKey, kStoryDaysKey,
-                      kCharacterExtensionsKey, kTransitionsKey, kItemKey },
+    : AbstractModel({ kDocumentKey, kPageIntrosKey, kSceneTimesKey, kStoryDaysKey,
+                      kCharacterExtensionsKey, kPanelIntrosKey, kItemKey },
                     _parent)
     , d(new Implementation)
 {
@@ -155,7 +155,7 @@ void ScreenplayDictionariesModel::initDocument()
         }
     };
     const QVector<QString> defaultSceneIntros = { tr("INT."), tr("EXT."), tr("INT./EXT.") };
-    fillDictionary(kSceneIntrosKey, defaultSceneIntros, d->sceneIntros);
+    fillDictionary(kPageIntrosKey, defaultSceneIntros, d->sceneIntros);
     //
     const QVector<QString> defaultSceneTimes
         = { tr("DAY"),   tr("NIGHT"),         tr("MORNING"),    tr("AFTERNOON"),   tr("EVENING"),
@@ -172,7 +172,7 @@ void ScreenplayDictionariesModel::initDocument()
         = { tr("CUT TO:"),       tr("FADE IN:"),     tr("FADE OUT"),
             tr("FADE TO:"),      tr("DISSOLVE TO:"), tr("BACK TO:"),
             tr("MATCH CUT TO:"), tr("JUMP CUT TO:"), tr("FADE TO BLACK") };
-    fillDictionary(kTransitionsKey, defaultTransitions, d->transitions);
+    fillDictionary(kPanelIntrosKey, defaultTransitions, d->transitions);
 }
 
 void ScreenplayDictionariesModel::clearDocument()
@@ -202,11 +202,11 @@ QByteArray ScreenplayDictionariesModel::toXml() const
         }
         xml += QString("</%1>\n").arg(_key);
     };
-    writeDictionary(kSceneIntrosKey, d->sceneIntros);
+    writeDictionary(kPageIntrosKey, d->sceneIntros);
     writeDictionary(kSceneTimesKey, d->sceneTimes);
     writeDictionary(kStoryDaysKey, d->storyDays);
     writeDictionary(kCharacterExtensionsKey, d->characterExtensions);
-    writeDictionary(kTransitionsKey, d->transitions);
+    writeDictionary(kPanelIntrosKey, d->transitions);
     xml += QString("</%1>").arg(kDocumentKey);
     return xml;
 }

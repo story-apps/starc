@@ -10,22 +10,18 @@ namespace BusinessLayer {
 
 namespace {
 const QString kDocumentKey = "document";
-const QString kSceneIntrosKey = "scene_intros";
-const QString kSceneTimesKey = "scene_times";
-const QString kStoryDaysKey = "story_days";
+const QString kPageIntrosKey = "page_intros";
+const QString kPanelIntrosKey = "panel_intros";
 const QString kCharacterExtensionsKey = "character_extensions";
-const QString kTransitionsKey = "transitions";
 const QString kItemKey = "v";
 } // namespace
 
 class ComicBookDictionariesModel::Implementation
 {
 public:
-    QVector<QString> sceneIntros;
-    QVector<QString> sceneTimes;
-    QVector<QString> storyDays;
+    QVector<QString> pageIntros;
+    QVector<QString> panelIntros;
     QVector<QString> characterExtensions;
-    QVector<QString> transitions;
 };
 
 
@@ -33,69 +29,55 @@ public:
 
 
 ComicBookDictionariesModel::ComicBookDictionariesModel(QObject* _parent)
-    : AbstractModel({ kDocumentKey, kSceneIntrosKey, kSceneTimesKey, kStoryDaysKey,
-                      kCharacterExtensionsKey, kTransitionsKey, kItemKey },
-                    _parent)
+    : AbstractModel(
+        {
+            kDocumentKey,
+            kPageIntrosKey,
+            kPanelIntrosKey,
+            kCharacterExtensionsKey,
+            kItemKey,
+        },
+        _parent)
     , d(new Implementation)
 {
-    connect(this, &ComicBookDictionariesModel::sceneIntrosChanged, this,
+    connect(this, &ComicBookDictionariesModel::pageIntrosChanged, this,
             &ComicBookDictionariesModel::updateDocumentContent);
-    connect(this, &ComicBookDictionariesModel::sceneTimesChanged, this,
-            &ComicBookDictionariesModel::updateDocumentContent);
-    connect(this, &ComicBookDictionariesModel::storyDaysChanged, this,
+    connect(this, &ComicBookDictionariesModel::panelIntroChanged, this,
             &ComicBookDictionariesModel::updateDocumentContent);
     connect(this, &ComicBookDictionariesModel::charactersExtensionsChanged, this,
             &ComicBookDictionariesModel::updateDocumentContent);
-    connect(this, &ComicBookDictionariesModel::transitionsChanged, this,
-            &ComicBookDictionariesModel::updateDocumentContent);
 }
 
-const QVector<QString>& ComicBookDictionariesModel::sceneIntros() const
+const QVector<QString>& ComicBookDictionariesModel::pageIntros() const
 {
-    return d->sceneIntros;
+    return d->pageIntros;
 }
 
-void ComicBookDictionariesModel::addSceneIntro(const QString& _intro)
+void ComicBookDictionariesModel::addPageIntro(const QString& _intro)
 {
-    const auto introCorrected = TextHelper::smartToUpper(_intro);
-    if (d->sceneIntros.contains(introCorrected)) {
+    const auto introCorrected = TextHelper::smartToLower(_intro);
+    if (d->pageIntros.contains(introCorrected)) {
         return;
     }
 
-    d->sceneIntros.append(introCorrected);
-    emit sceneIntrosChanged();
+    d->pageIntros.append(introCorrected);
+    emit pageIntrosChanged();
 }
 
-const QVector<QString>& ComicBookDictionariesModel::sceneTimes() const
+const QVector<QString>& ComicBookDictionariesModel::panelIntros() const
 {
-    return d->sceneTimes;
+    return d->panelIntros;
 }
 
-void ComicBookDictionariesModel::addSceneTime(const QString& _time)
+void ComicBookDictionariesModel::addPanelIntro(const QString& _panelIntro)
 {
-    const auto timeCorrected = TextHelper::smartToUpper(_time);
-    if (d->sceneTimes.contains(timeCorrected)) {
+    const auto introCorrected = TextHelper::smartToLower(_panelIntro);
+    if (d->panelIntros.contains(introCorrected)) {
         return;
     }
 
-    d->sceneTimes.append(timeCorrected);
-    emit sceneTimesChanged();
-}
-
-const QVector<QString>& ComicBookDictionariesModel::storyDays() const
-{
-    return d->storyDays;
-}
-
-void ComicBookDictionariesModel::addStoryDay(const QString& _day)
-{
-    const auto dayCorrected = TextHelper::smartToUpper(_day);
-    if (d->storyDays.contains(dayCorrected)) {
-        return;
-    }
-
-    d->storyDays.append(dayCorrected);
-    emit storyDaysChanged();
+    d->panelIntros.append(introCorrected);
+    emit panelIntroChanged();
 }
 
 const QVector<QString>& ComicBookDictionariesModel::characterExtensions() const
@@ -112,22 +94,6 @@ void ComicBookDictionariesModel::addCharacterExtension(const QString& _extension
 
     d->characterExtensions.append(extensionCorrected);
     emit charactersExtensionsChanged();
-}
-
-const QVector<QString>& ComicBookDictionariesModel::transitions() const
-{
-    return d->transitions;
-}
-
-void ComicBookDictionariesModel::addTransition(const QString& _transition)
-{
-    const auto transitionsCorrected = TextHelper::smartToUpper(_transition);
-    if (d->transitions.contains(transitionsCorrected)) {
-        return;
-    }
-
-    d->transitions.append(transitionsCorrected);
-    emit transitionsChanged();
 }
 
 ComicBookDictionariesModel::~ComicBookDictionariesModel() = default;
@@ -154,35 +120,24 @@ void ComicBookDictionariesModel::initDocument()
             _dictionary.append(_defaultItems);
         }
     };
-    const QVector<QString> defaultSceneIntros = { tr("INT."), tr("EXT."), tr("INT./EXT.") };
-    fillDictionary(kSceneIntrosKey, defaultSceneIntros, d->sceneIntros);
+    const QVector<QString> defaultPageIntros = { "page", tr("page"), "pages", tr("pages") };
+    fillDictionary(kPageIntrosKey, defaultPageIntros, d->pageIntros);
     //
-    const QVector<QString> defaultSceneTimes
-        = { tr("DAY"),   tr("NIGHT"),         tr("MORNING"),    tr("AFTERNOON"),   tr("EVENING"),
-            tr("LATER"), tr("MOMENTS LATER"), tr("CONTINUOUS"), tr("THE NEXT DAY") };
-    fillDictionary(kSceneTimesKey, defaultSceneTimes, d->sceneTimes);
-    //
-    fillDictionary(kStoryDaysKey, {}, d->storyDays);
+    const QVector<QString> defaultPanelIntros = { "panel", tr("panel"), "зanels", tr("panels") };
+    fillDictionary(kPanelIntrosKey, defaultPanelIntros, d->panelIntros);
     //
     const QVector<QString> defaultCharacterExtensions
-        = { tr("V.O."), tr("O.S."), tr("O.C."), tr("SUBTITLE"), tr("CONT'D") };
+        = { tr("OFF"), tr("WHISPER"), tr("BURST"), tr("WEAK"), tr("SINGING") };
     fillDictionary(kCharacterExtensionsKey, defaultCharacterExtensions, d->characterExtensions);
-    //
-    const QVector<QString> defaultTransitions
-        = { tr("CUT TO:"),       tr("FADE IN:"),     tr("FADE OUT"),
-            tr("FADE TO:"),      tr("DISSOLVE TO:"), tr("BACK TO:"),
-            tr("MATCH CUT TO:"), tr("JUMP CUT TO:"), tr("FADE TO BLACK") };
-    fillDictionary(kTransitionsKey, defaultTransitions, d->transitions);
 }
 
 void ComicBookDictionariesModel::clearDocument()
 {
     QSignalBlocker signalBlocker(this);
 
-    d->sceneIntros.clear();
-    d->sceneTimes.clear();
+    d->pageIntros.clear();
+    d->panelIntros.clear();
     d->characterExtensions.clear();
-    d->transitions.clear();
 }
 
 QByteArray ComicBookDictionariesModel::toXml() const
@@ -193,21 +148,21 @@ QByteArray ComicBookDictionariesModel::toXml() const
 
     QByteArray xml = "<?xml version=\"1.0\"?>\n";
     xml += QString("<%1 mime-type=\"%2\" version=\"1.0\">\n")
-               .arg(kDocumentKey, Domain::mimeTypeFor(document()->type()));
+               .arg(kDocumentKey, Domain::mimeTypeFor(document()->type()))
+               .toUtf8();
     auto writeDictionary = [&xml](const QString& _key, const QVector<QString>& _values) {
-        xml += QString("<%1>\n").arg(_key);
+        xml += QString("<%1>\n").arg(_key).toUtf8();
         for (const auto& value : _values) {
             xml += QString("<%1><![CDATA[%2]]></%1>\n")
-                       .arg(kItemKey, TextHelper::toHtmlEscaped(value));
+                       .arg(kItemKey, TextHelper::toHtmlEscaped(value))
+                       .toUtf8();
         }
-        xml += QString("</%1>\n").arg(_key);
+        xml += QString("</%1>\n").arg(_key).toUtf8();
     };
-    writeDictionary(kSceneIntrosKey, d->sceneIntros);
-    writeDictionary(kSceneTimesKey, d->sceneTimes);
-    writeDictionary(kStoryDaysKey, d->storyDays);
+    writeDictionary(kPageIntrosKey, d->pageIntros);
+    writeDictionary(kPanelIntrosKey, d->panelIntros);
     writeDictionary(kCharacterExtensionsKey, d->characterExtensions);
-    writeDictionary(kTransitionsKey, d->transitions);
-    xml += QString("</%1>").arg(kDocumentKey);
+    xml += QString("</%1>").arg(kDocumentKey).toUtf8();
     return xml;
 }
 

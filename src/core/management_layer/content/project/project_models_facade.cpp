@@ -282,7 +282,7 @@ BusinessLayer::AbstractModel* ProjectModelsFacade::modelFor(Domain::DocumentObje
             // ... модель справочников
             //
             auto dictionariesModel = qobject_cast<BusinessLayer::ComicBookDictionariesModel*>(
-                modelFor(Domain::DocumentObjectType::ScreenplayDictionaries));
+                modelFor(Domain::DocumentObjectType::ComicBookDictionaries));
             comicBookModel->setDictionariesModel(dictionariesModel);
             //
             // ... модель персонажей
