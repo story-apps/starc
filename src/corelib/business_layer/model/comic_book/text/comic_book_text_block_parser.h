@@ -9,22 +9,20 @@ class QStringList;
 namespace BusinessLayer {
 
 /**
- * @brief Парсер текста блока время и место
+ * @brief Парсер текста блока панель
  */
 class CORE_LIBRARY_EXPORT ComicBookPanelParser
 {
 public:
     /**
-     * @brief Секции блока заголовка сцены
+     * @brief Секции блока панели
      *
-     * @note [МЕСТО]. [ЛОКАЦИЯ] - [ВРЕМЯ], [ДЕНЬ ИСТОРИИ]
+     * @note [Заголовок панели N]: [Описание панели]
      */
     enum Section {
         SectionUndefined, //!< Неопределённое
-        SectionSceneIntro, //!< МЕСТО
-        SectionLocation, //!< ЛОКАЦИЯ
-        SectionSceneTime, //!< ВРЕМЯ
-        SectionStoryDay, //!< ДЕНЬ ИСТОРИИ
+        SectionPanelTitle, //!< Заголовок панели
+        SectionPanelDescription, //!< Описание панели
     };
 
 public:
@@ -34,24 +32,14 @@ public:
     static ComicBookPanelParser::Section section(const QString& _text);
 
     /**
-     * @brief Получить название места
+     * @brief Получить заголовок панели
      */
-    static QString sceneIntro(const QString& _text);
+    static QString panelTitle(const QString& _text);
 
     /**
-     * @brief Получить название локации, если задан \p _force, то берём текст до конца
+     * @brief Получить описание панели
      */
-    static QString location(const QString& _text, bool _force = false);
-
-    /**
-     * @brief Получить название сценарного дня
-     */
-    static QString storyDay(const QString& _text);
-
-    /**
-     * @brief Получить название времени
-     */
-    static QString sceneTime(const QString& _text);
+    static QString panelDescription(const QString& _text);
 };
 
 

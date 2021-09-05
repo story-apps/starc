@@ -9,6 +9,7 @@
 #include <business_layer/templates/comic_book_template.h>
 #include <utils/helpers/text_helper.h>
 
+#include <QLocale>
 #include <QUuid>
 #include <QVariant>
 #include <QXmlStreamReader>
@@ -23,6 +24,11 @@ public:
      * @brief Идентификатор страницы
      */
     QUuid uuid;
+
+    /**
+     * @brief Номер панели
+     */
+    std::optional<Number> number;
 
     /**
      * @brief Цвет страницы
@@ -108,6 +114,40 @@ ComicBookTextModelPageItem::ComicBookTextModelPageItem(QXmlStreamReader& _conten
 }
 
 ComicBookTextModelPageItem::~ComicBookTextModelPageItem() = default;
+
+ComicBookTextModelPageItem::Number ComicBookTextModelPageItem::number() const
+{
+    if (!d->number.has_value()) {
+        return {};
+    }
+
+    return *d->number;
+}
+
+bool ComicBookTextModelPageItem::updateNumber(int& _fromNumber)
+{
+    QString newNumber;
+    if (d->name.startsWith("pages", Qt::CaseInsensitive)) {
+        newNumber = QString(QLocale().textDirection() == Qt::LeftToRight ? "%1-%2" : "%2-%1")
+                        .arg(_fromNumber)
+                        .arg(_fromNumber + 1);
+        _fromNumber += 2;
+    } else {
+        newNumber = QString::number(_fromNumber);
+        _fromNumber += 1;
+    }
+    if (d->number.has_value() && d->number->value == newNumber) {
+        return true;
+    }
+
+    d->number = { newNumber };
+    //
+    // Т.к. пока мы не сохраняем номера, в указании, что произошли изменения нет смысла
+    //
+    //    setChanged(true);
+
+    return true;
+}
 
 QColor ComicBookTextModelPageItem::color() const
 {
@@ -241,6 +281,7 @@ void ComicBookTextModelPageItem::copyFrom(ComicBookTextModelItem* _item)
 
     auto pageItem = static_cast<ComicBookTextModelPageItem*>(_item);
     d->uuid = pageItem->d->uuid;
+    d->number = pageItem->d->number;
     d->color = pageItem->d->color;
 }
 

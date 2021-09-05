@@ -2,7 +2,9 @@
 
 #include "../comic_book_text_edit.h"
 
+#include <business_layer/model/comic_book/comic_book_dictionaries_model.h>
 #include <business_layer/templates/comic_book_template.h>
+#include <utils/helpers/text_helper.h>
 
 #include <QKeyEvent>
 #include <QTextBlock>
@@ -159,6 +161,37 @@ void PanelHandler::handleTab(QKeyEvent*)
                 }
             }
         }
+    }
+}
+
+void PanelHandler::handleOther(QKeyEvent* _event)
+{
+    //
+    // Получим необходимые значения
+    //
+    // ... курсор в текущем положении
+    QTextCursor cursor = editor()->textCursor();
+    // ... блок текста в котором находится курсор
+    QTextBlock currentBlock = cursor.block();
+    // ... текст до курсора
+    QString cursorBackwardText = currentBlock.text().left(cursor.positionInBlock());
+
+    //
+    // Обработка
+    //
+    if (cursorBackwardText.endsWith(" ") && _event != 0 && _event->text() == " ") {
+        //
+        // Потенциально была введена страница
+        //
+        const QString backwardTextCorrected
+            = TextHelper::smartToLower(cursorBackwardText.trimmed());
+        if (editor()->dictionaries()->pageIntros().contains(backwardTextCorrected)) {
+            editor()->setCurrentParagraphType(ComicBookParagraphType::Page);
+        }
+    } else {
+        //! В противном случае, обрабатываем в базовом классе
+
+        StandardKeyHandler::handleOther(_event);
     }
 }
 

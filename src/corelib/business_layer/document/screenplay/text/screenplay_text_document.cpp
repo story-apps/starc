@@ -1563,6 +1563,19 @@ void ScreenplayTextDocument::updateModelOnContentChange(int _position, int _char
         return;
     }
 
+    //
+    // Обновляем формат первого блока, если там нужен был разрыв страницы, чтобы первый блок
+    // документа не перескакивал на вторую страницу
+    //
+    if (_position == 0
+        && begin().blockFormat().pageBreakPolicy() == QTextFormat::PageBreak_AlwaysBefore) {
+        ScreenplayTextCursor cursor(this);
+        cursor.movePosition(ScreenplayTextCursor::Start);
+        auto blockFormat = cursor.blockFormat();
+        blockFormat.setPageBreakPolicy(QTextFormat::PageBreak_Auto);
+        cursor.setBlockFormat(blockFormat);
+    }
+
     if (d->state != DocumentState::Ready && d->state != DocumentState::Correcting) {
         return;
     }

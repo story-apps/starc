@@ -2,7 +2,7 @@
 
 #include "comic_book_text_model_item.h"
 
-#include <Qt>
+#include <QString>
 
 #include <chrono>
 
@@ -19,6 +19,15 @@ class CORE_LIBRARY_EXPORT ComicBookTextModelPageItem : public ComicBookTextModel
 {
 public:
     /**
+     * @brief Номер панели
+     */
+    struct Number {
+        QString value;
+
+        bool operator==(const Number& _other) const;
+    };
+
+    /**
      * @brief Роли данных из модели
      */
     enum DataRole {
@@ -30,6 +39,12 @@ public:
     ComicBookTextModelPageItem();
     explicit ComicBookTextModelPageItem(QXmlStreamReader& _contentReader);
     ~ComicBookTextModelPageItem() override;
+
+    /**
+     * @brief Номер панели
+     */
+    Number number() const;
+    bool updateNumber(int& _fromNumber);
 
     /**
      * @brief Цвет страницы

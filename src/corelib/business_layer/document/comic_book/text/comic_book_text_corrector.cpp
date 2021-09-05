@@ -4,9 +4,11 @@
 #include "comic_book_text_cursor.h"
 
 #include <business_layer/model/comic_book/text/comic_book_text_block_parser.h>
+#include <business_layer/model/comic_book/text/comic_book_text_model_panel_item.h>
 #include <business_layer/templates/comic_book_template.h>
 #include <business_layer/templates/templates_facade.h>
 #include <ui/widgets/text_edit/page/page_text_edit.h>
+#include <utils/shugar.h>
 #include <utils/tools/run_once.h>
 
 #include <QAbstractTextDocumentLayout>
@@ -87,6 +89,11 @@ public:
      * @brief Скорректировать имена персонажей
      */
     void correctCharactersNames(int _position = -1, int _charsChanged = 0);
+
+    /**
+     * @brief Скорректировать номера блоков
+     */
+    void correctBlocksNumbers(int _position = -1, int _charsChanged = 0);
 
     /**
      * @brief Скорректировать текст сценария
@@ -180,6 +187,11 @@ public:
      * @brief Необходимо ли корректировать текст блоков имён персонажей
      */
     bool needToCorrectCharactersNames = true;
+
+    /**
+     * @brief Необходимо ли корректировать номера блоков
+     */
+    bool needToCorrectBlocksNumbers = true;
 
     /**
      * @brief Необходимо ли корректировать текст на разрывах страниц
@@ -380,6 +392,137 @@ void ComicBookTextCorrector::Implementation::correctCharactersNames(int _positio
 
                 lastCharacterName = characterName;
             }
+        }
+
+        block = block.next();
+    } while (block.isValid() && block.position() < endPosition);
+
+    cursor.endEditBlock();
+}
+
+void ComicBookTextCorrector::Implementation::correctBlocksNumbers(int _position, int _charsChanged)
+{
+    //
+    // Определим границы работы алгоритма
+    //
+    int startPosition = 0;
+    int endPosition = document->characterCount();
+
+    //
+    // Начинаем работу с документом
+    //
+    ComicBookTextCursor cursor(document);
+    cursor.beginEditBlock();
+
+    //
+    // Расширим выделение
+    //
+    // ... от начала сцены
+    //
+    QVector<ComicBookParagraphType> sceneBorders
+        = { ComicBookParagraphType::Page, ComicBookParagraphType::Panel,
+            ComicBookParagraphType::FolderHeader, ComicBookParagraphType::FolderFooter };
+    QTextBlock block = document->findBlock(startPosition);
+    while (block != document->begin()) {
+        const auto blockType = ComicBookBlockStyle::forBlock(block);
+        if (sceneBorders.contains(blockType)) {
+            break;
+        }
+
+        block = block.previous();
+    }
+
+    //
+    // Корректируем имена пресонажей в изменённой части документа
+    //
+    QString lastCharacterName;
+    auto itemFromBlock = [](const QTextBlock& _block) -> ComicBookTextModelItem* {
+        if (_block.userData() == nullptr) {
+            return {};
+        }
+
+        const auto blockData = static_cast<ComicBookTextBlockData*>(_block.userData());
+        if (blockData == nullptr) {
+            return {};
+        }
+
+        return blockData->item();
+    };
+    do {
+        const auto blockType = ComicBookBlockStyle::forBlock(block);
+
+        //
+        // Если этот блок редактируется в данный момент, то не трогаем его
+        //
+        const auto changeEnd = _position + _charsChanged;
+        const auto blockEndPosition = block.position() + block.text().length() + 1;
+        if (block.text().isEmpty()
+            || (block.position() <= _position && _position <= blockEndPosition
+                && block.position() <= changeEnd && changeEnd <= blockEndPosition)) {
+            block = block.next();
+            continue;
+        }
+
+        switch (blockType) {
+        case ComicBookParagraphType::Panel: {
+            const auto item = itemFromBlock(block);
+            do {
+                if (item->parent() == nullptr
+                    || item->parent()->type() != ComicBookTextModelItemType::Panel) {
+                    break;
+                }
+
+                const auto panelItem = static_cast<ComicBookTextModelPanelItem*>(item->parent());
+                const auto sourcePanelTitle = ComicBookPanelParser::panelTitle(block.text());
+                auto newPanelTitle = sourcePanelTitle;
+
+                //
+                // При необходимости обновляем номер панели
+                //
+                if (!sourcePanelTitle.endsWith(panelItem->number().value)) {
+                    newPanelTitle.remove(QRegularExpression("\\d*$"));
+                    if (!newPanelTitle.endsWith(' ')) {
+                        newPanelTitle.append(' ');
+                    }
+                    newPanelTitle.append(panelItem->number().value);
+
+                    cursor.setPosition(block.position());
+                    cursor.movePosition(QTextCursor::NextCharacter, QTextCursor::KeepAnchor,
+                                        sourcePanelTitle.length());
+                    cursor.insertText(newPanelTitle);
+                }
+
+                cursor.setPosition(block.position());
+                cursor.movePosition(QTextCursor::NextCharacter, QTextCursor::KeepAnchor,
+                                    newPanelTitle.length());
+                //
+                // Если не в конце, то подвинем ещё на один символ, чтобы захватить двоеточие
+                //
+                if (!cursor.atBlockEnd()) {
+                    cursor.movePosition(QTextCursor::NextCharacter, QTextCursor::KeepAnchor);
+                }
+                auto charFormat = cursor.charFormat();
+                if (charFormat.fontWeight() != QFont::Bold) {
+                    charFormat.setFontWeight(QFont::Bold);
+                    cursor.mergeCharFormat(charFormat);
+                }
+
+                //
+                // Если это абзац с одним только заголовком, то добавим пробл с форматированием, как
+                // в блоке
+                //
+                cursor.clearSelection();
+                if (cursor.atBlockEnd()) {
+                    cursor.insertText(" ", cursor.blockCharFormat());
+                }
+            }
+            once;
+            break;
+        }
+
+        default: {
+            break;
+        }
         }
 
         block = block.next();
@@ -1577,6 +1720,16 @@ void ComicBookTextCorrector::setNeedToCorrectCharactersNames(bool _need)
     correct();
 }
 
+void ComicBookTextCorrector::setNeedToCorrectBlocksNumbers(bool _need)
+{
+    if (d->needToCorrectBlocksNumbers == _need) {
+        return;
+    }
+
+    d->needToCorrectBlocksNumbers = _need;
+    correct();
+}
+
 void ComicBookTextCorrector::setNeedToCorrectPageBreaks(bool _need)
 {
     if (d->needToCorrectPageBreaks == _need) {
@@ -1608,6 +1761,10 @@ void ComicBookTextCorrector::correct(int _position, int _charsChanged)
 
     if (d->needToCorrectCharactersNames) {
         d->correctCharactersNames(_position, _charsChanged);
+    }
+
+    if (d->needToCorrectBlocksNumbers) {
+        d->correctBlocksNumbers(_position, _charsChanged);
     }
 
     if (d->needToCorrectPageBreaks) {

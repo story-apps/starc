@@ -8,6 +8,7 @@
 #include <utils/helpers/text_helper.h>
 
 #include <QKeyEvent>
+#include <QRegularExpression>
 #include <QTextBlock>
 
 using BusinessLayer::ComicBookParagraphType;
@@ -67,19 +68,39 @@ void DescriptionHandler::handleEnter(QKeyEvent*)
                     changeForEnter(ComicBookParagraphType::Description));
             } else {
                 //! Текст не пуст
+                bool isHandled = false;
 
                 //
                 // Если введён персонаж, меняем стиль блока и переходим к реплике
                 //
-                if (cursorForwardText.isEmpty()
-                    && editor()->characters()->exists(cursorBackwardText)) {
-                    editor()->setCurrentParagraphType(ComicBookParagraphType::Character);
-                    editor()->addParagraph(ComicBookParagraphType::Dialogue);
+                if (cursorForwardText.isEmpty()) {
+                    if (editor()->characters()->exists(cursorBackwardText)) {
+                        editor()->setCurrentParagraphType(ComicBookParagraphType::Character);
+                        editor()->addParagraph(ComicBookParagraphType::Dialogue);
+                        isHandled = true;
+                    } else {
+                        //
+                        // Потенциально была введена страница или панель
+                        //
+                        const QString backwardTextCorrected
+                            = TextHelper::smartToLower(cursorBackwardText.trimmed());
+                        if (editor()->dictionaries()->pageIntros().contains(
+                                backwardTextCorrected)) {
+                            editor()->setCurrentParagraphType(ComicBookParagraphType::Page);
+                            editor()->addParagraph(jumpForEnter(ComicBookParagraphType::Page));
+                            isHandled = true;
+                        } else if (editor()->dictionaries()->panelIntros().contains(
+                                       backwardTextCorrected)) {
+                            editor()->setCurrentParagraphType(ComicBookParagraphType::Panel);
+                            editor()->addParagraph(jumpForEnter(ComicBookParagraphType::Panel));
+                            isHandled = true;
+                        }
+                    }
                 }
                 //
                 // Вставляем блок и применяем ему стиль описания действия
                 //
-                else {
+                if (!isHandled) {
                     editor()->addParagraph(jumpForEnter(ComicBookParagraphType::Description));
                 }
             }
@@ -175,13 +196,15 @@ void DescriptionHandler::handleOther(QKeyEvent* _event)
     //
     // Обработка
     //
-    if (cursorBackwardText.endsWith(" ") && _event != 0 && _event->text() == " ") {
-
+    if (cursorBackwardText.contains(QRegularExpression("( |:)$")) && _event != nullptr
+        && (_event->text() == " " || _event->text() == ":")) {
         //
         // Потенциально была введена страница или панель
         //
-        const QString backwardTextCorrected
-            = TextHelper::smartToLower(cursorBackwardText.trimmed());
+        QString backwardTextCorrected = TextHelper::smartToLower(cursorBackwardText.trimmed());
+        if (_event->text() == ":") {
+            backwardTextCorrected.chop(1);
+        }
         if (editor()->dictionaries()->pageIntros().contains(backwardTextCorrected)) {
             editor()->setCurrentParagraphType(ComicBookParagraphType::Page);
         } else if (editor()->dictionaries()->panelIntros().contains(backwardTextCorrected)) {

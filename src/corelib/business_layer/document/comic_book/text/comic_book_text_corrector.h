@@ -41,6 +41,11 @@ public:
     void setNeedToCorrectCharactersNames(bool _need);
 
     /**
+     * @brief Нужно ли автомматически расставлять номера блоков
+     */
+    void setNeedToCorrectBlocksNumbers(bool _need);
+
+    /**
      * @brief Установить необходимость корректировать текст на разрывах страниц
      */
     void setNeedToCorrectPageBreaks(bool _need);

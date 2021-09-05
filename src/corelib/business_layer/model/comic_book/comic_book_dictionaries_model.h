@@ -17,12 +17,10 @@ public:
     ~ComicBookDictionariesModel() override;
 
     const QVector<QString>& pageIntros() const;
-    void addPageIntro(const QString& _intro);
-    Q_SIGNAL void pageIntrosChanged();
 
     const QVector<QString>& panelIntros() const;
-    void addPanelIntro(const QString& _panelIntro);
-    Q_SIGNAL void panelIntroChanged();
+
+    const QVector<QString>& commonCharacters() const;
 
     const QVector<QString>& characterExtensions() const;
     void addCharacterExtension(const QString& _extension);

@@ -1022,7 +1022,27 @@ int ComicBookTextDocument::itemEndPosition(const QModelIndex& _index)
     return itemPosition(_index, false);
 }
 
-QString ComicBookTextDocument::sceneNumber(const QTextBlock& _forBlock) const
+QString ComicBookTextDocument::pageNumber(const QTextBlock& _forBlock) const
+{
+    if (_forBlock.userData() == nullptr) {
+        return {};
+    }
+
+    const auto blockData = static_cast<ComicBookTextBlockData*>(_forBlock.userData());
+    if (blockData == nullptr) {
+        return {};
+    }
+
+    const auto itemParent = blockData->item()->parent();
+    if (itemParent == nullptr || itemParent->type() != ComicBookTextModelItemType::Page) {
+        return {};
+    }
+
+    const auto panelItem = static_cast<const ComicBookTextModelPageItem*>(itemParent);
+    return panelItem->number().value;
+}
+
+QString ComicBookTextDocument::panelNumber(const QTextBlock& _forBlock) const
 {
     if (_forBlock.userData() == nullptr) {
         return {};
@@ -1561,6 +1581,19 @@ void ComicBookTextDocument::updateModelOnContentChange(int _position, int _chars
 
     if (!d->canChangeModel) {
         return;
+    }
+
+    //
+    // Обновляем формат первого блока, если там нужен был разрыв страницы, чтобы первый блок
+    // документа не перескакивал на вторую страницу
+    //
+    if (_position == 0
+        && begin().blockFormat().pageBreakPolicy() == QTextFormat::PageBreak_AlwaysBefore) {
+        ComicBookTextCursor cursor(this);
+        cursor.movePosition(ComicBookTextCursor::Start);
+        auto blockFormat = cursor.blockFormat();
+        blockFormat.setPageBreakPolicy(QTextFormat::PageBreak_Auto);
+        cursor.setBlockFormat(blockFormat);
     }
 
     if (d->state != DocumentState::Ready && d->state != DocumentState::Correcting) {

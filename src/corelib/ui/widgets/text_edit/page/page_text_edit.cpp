@@ -382,10 +382,11 @@ void PageTextEditPrivate::_q_ensureVisible(const QRectF& _rect)
             hbar->setValue(rect.x() + rect.width() - visibleWidth);
     }
 
+    const auto additionalScroll = 200;
     if (rect.y() < verticalOffset())
-        vbar->setValue(rect.y());
+        vbar->setValue(rect.y() - additionalScroll);
     else if (rect.y() + rect.height() > verticalOffset() + visibleHeight)
-        vbar->setValue(rect.y() + rect.height() - visibleHeight);
+        vbar->setValue(rect.y() + rect.height() - visibleHeight + additionalScroll);
 }
 
 /*!

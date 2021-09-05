@@ -13,72 +13,26 @@ namespace BusinessLayer {
 
 ComicBookPanelParser::Section ComicBookPanelParser::section(const QString& _text)
 {
-    ComicBookPanelParser::Section section = SectionUndefined;
-
-    if (_text.split(", ").count() == 2) {
-        section = SectionStoryDay;
-    } else if (_text.split(" - ").count() >= 2) {
-        section = SectionSceneTime;
+    if (_text.split(": ").size() > 1) {
+        return SectionPanelDescription;
     } else {
-        const int splitDotCount = _text.split(". ").count();
-        if (splitDotCount == 1) {
-            section = SectionSceneIntro;
-        } else {
-            section = SectionLocation;
-        }
+        return SectionPanelTitle;
     }
-
-    return section;
 }
 
-QString ComicBookPanelParser::sceneIntro(const QString& _text)
+QString ComicBookPanelParser::panelTitle(const QString& _text)
 {
-    QString placeName;
-
-    if (_text.split(". ").count() > 0) {
-        placeName = _text.split(". ").value(0);
-    }
-
-    return TextHelper::smartToUpper(placeName).simplified();
+    return _text.split(":").constFirst();
 }
 
-QString ComicBookPanelParser::location(const QString& _text, bool _force)
+QString ComicBookPanelParser::panelDescription(const QString& _text)
 {
-    QString locationName;
-
-    if (_text.split(". ").count() > 1) {
-        locationName = _text.mid(_text.indexOf(". ") + 2);
-        if (!_force) {
-            const QString suffix = locationName.split(" - ").last();
-            locationName = locationName.remove(" - " + suffix);
-            locationName = locationName.simplified();
-        }
+    const auto sectionsDividerIndex = _text.indexOf(": ");
+    if (sectionsDividerIndex == -1) {
+        return {};
     }
 
-    return TextHelper::smartToUpper(locationName).simplified();
-}
-
-QString ComicBookPanelParser::storyDay(const QString& _text)
-{
-    QString scenarioDayName;
-
-    if (_text.split(", ").count() == 2) {
-        scenarioDayName = _text.split(", ").last();
-    }
-
-    return TextHelper::smartToUpper(scenarioDayName).simplified();
-}
-
-QString ComicBookPanelParser::sceneTime(const QString& _text)
-{
-    QString timeName;
-
-    if (_text.split(" - ").count() >= 2) {
-        timeName = _text.split(" - ").last().split(",").first();
-        timeName = timeName.simplified();
-    }
-
-    return TextHelper::smartToUpper(timeName).simplified();
+    return _text.mid(sectionsDividerIndex + 2);
 }
 
 // ****
@@ -104,6 +58,9 @@ QString ComicBookCharacterParser::name(const QString& _text)
     //
 
     QString name = _text;
+    if (name.endsWith(':')) {
+        name.chop(1);
+    }
     return TextHelper::smartToUpper(name.remove(QRegularExpression("[(](.*)")).simplified());
 }
 

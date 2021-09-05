@@ -200,6 +200,19 @@ void ComicBookTextEdit::addParagraph(BusinessLayer::ComicBookParagraphType _type
 {
     d->document.addParagraph(_type, textCursor());
 
+    //
+    // Если вставляется персонаж, то разделяем страницу, для добавления реплики
+    //
+    if (_type == BusinessLayer::ComicBookParagraphType::Character) {
+        const auto cursorPosition = textCursor().position();
+        d->document.splitParagraph(textCursor());
+        auto cursor = textCursor();
+        cursor.setPosition(cursorPosition + 1); // +1 чтобы войти внутрь таблицы
+        setTextCursor(cursor);
+        cursor.movePosition(BusinessLayer::ComicBookTextCursor::NextBlock);
+        d->document.setParagraphType(BusinessLayer::ComicBookParagraphType::Dialogue, cursor);
+    }
+
     emit paragraphTypeChanged();
 }
 
@@ -209,6 +222,13 @@ void ComicBookTextEdit::setCurrentParagraphType(BusinessLayer::ComicBookParagrap
         return;
     }
 
+    //
+    // Если раньше это был персонаж, то объединяем блоки, чтобы убрать лишнюю таблицу
+    //
+    if (currentParagraphType() == ComicBookParagraphType::Character) {
+        d->document.mergeParagraph(textCursor());
+    }
+
     d->document.setParagraphType(_type, textCursor());
 
     //
@@ -216,6 +236,18 @@ void ComicBookTextEdit::setCurrentParagraphType(BusinessLayer::ComicBookParagrap
     //
     if (_type == ComicBookParagraphType::FolderHeader) {
         moveCursor(QTextCursor::PreviousBlock);
+    }
+    //
+    // Если вставляется персонаж, то разделяем страницу, для добавления реплики
+    //
+    else if (_type == BusinessLayer::ComicBookParagraphType::Character) {
+        const auto cursorPosition = textCursor().position();
+        d->document.splitParagraph(textCursor());
+        auto cursor = textCursor();
+        cursor.setPosition(cursorPosition + 1); // +1 чтобы войти внутрь таблицы
+        setTextCursor(cursor);
+        cursor.movePosition(BusinessLayer::ComicBookTextCursor::NextBlock);
+        d->document.setParagraphType(BusinessLayer::ComicBookParagraphType::Dialogue, cursor);
     }
 
     emit paragraphTypeChanged();
@@ -879,30 +911,130 @@ void ComicBookTextEdit::paintEvent(QPaintEvent* _event)
                     //
                     else {
                         //
-                        // Прорисовка значков папки (можно использовать для закладок)
+                        // Прорисовка декораций страницы
                         //
-                        if (blockType == ComicBookParagraphType::FolderHeader) {
+                        if (blockType == ComicBookParagraphType::Page) {
                             //
-                            // Определим область для отрисовки и выведем номер сцены в редактор в
-                            // зависимости от стороны
+                            // Количество панелей
                             //
-                            QPointF topLeft(isLeftToRight ? pageLeft + leftDelta
-                                                          : textRight + leftDelta,
-                                            cursorR.top());
-                            QPointF bottomRight(isLeftToRight ? textLeft + leftDelta
-                                                              : pageRight + leftDelta,
-                                                cursorR.bottom());
-                            QRectF rect(topLeft, bottomRight);
-                            const auto textFontMetrics = QFontMetricsF(cursor.charFormat().font());
-                            const auto iconFontMetrics
-                                = QFontMetricsF(DesignSystem::font().iconsForEditors());
-                            const auto yDelta
-                                = (textFontMetrics.lineSpacing() - iconFontMetrics.lineSpacing())
-                                / 2;
-                            rect.adjust(0, yDelta, -textFontMetrics.horizontalAdvance(".") / 2, 0);
-                            painter.setFont(DesignSystem::font().iconsForEditors());
-                            painter.setPen(palette().text().color());
-                            painter.drawText(rect, Qt::AlignRight | Qt::AlignTop, u8"\U000F024B");
+
+                            //                        //
+                            //                        // Прорисовка автоматических (ПРОД) для реплик
+                            //                        //
+                            //                        if (blockType ==
+                            //                        ComicBookParagraphType::Character
+                            //                            && block.blockFormat().boolProperty(
+                            //                                ComicBookBlockStyle::PropertyIsCharacterContinued)
+                            //                            && !block.blockFormat().boolProperty(
+                            //                                ComicBookBlockStyle::PropertyIsCorrection))
+                            //                                {
+                            //                            painter.setFont(cursor.charFormat().font());
+
+                            //                            //
+                            //                            // Определим место положение конца имени
+                            //                            персонажа
+                            //                            //
+                            //                            const int continuedTermWidth =
+                            //                            painter.fontMetrics().horizontalAdvance(
+                            //                                BusinessLayer::ComicBookTextCorrector::continuedTerm());
+                            //                            const QPoint topLeft = isLeftToRight
+                            //                                ? cursorREnd.topLeft()
+                            //                                : cursorREnd.topRight() -
+                            //                                QPoint(continuedTermWidth, 0);
+                            //                            const QPoint bottomRight = isLeftToRight
+                            //                                ? cursorREnd.bottomRight() +
+                            //                                QPoint(continuedTermWidth, 0) :
+                            //                                cursorREnd.bottomLeft();
+                            //                            const QRect rect(topLeft, bottomRight);
+                            //                            painter.drawText(
+                            //                                rect, Qt::AlignRight | Qt::AlignTop,
+                            //                                BusinessLayer::ComicBookTextCorrector::continuedTerm());
+                            //                        }
+
+
+                            //
+                            // Иконка положения страницы
+                            //
+                            {
+                                painter.setFont(DesignSystem::font().iconsForEditors());
+                                painter.setPen(palette().text().color());
+
+                                auto paintLeftPageIcon = [&](const QString& _icon) {
+                                    QPointF topLeft(isLeftToRight ? pageLeft + leftDelta
+                                                                  : textRight + leftDelta,
+                                                    cursorR.top());
+                                    QPointF bottomRight(isLeftToRight ? textLeft + leftDelta
+                                                                      : pageRight + leftDelta,
+                                                        cursorR.bottom());
+                                    QRectF rect(topLeft, bottomRight);
+                                    const auto textFontMetrics
+                                        = QFontMetricsF(cursor.charFormat().font());
+                                    const auto iconFontMetrics
+                                        = QFontMetricsF(DesignSystem::font().iconsForEditors());
+                                    const auto yDelta = (textFontMetrics.lineSpacing()
+                                                         - iconFontMetrics.lineSpacing())
+                                        / 2;
+                                    rect.adjust(0, yDelta,
+                                                -textFontMetrics.horizontalAdvance(".") / 2, 0);
+                                    painter.drawText(rect, Qt::AlignRight | Qt::AlignTop, _icon);
+                                };
+                                auto paintRightPageIcon = [&](const QString& _icon) {
+                                    const int spaceWidth
+                                        = painter.fontMetrics().horizontalAdvance(" ");
+                                    const QPoint topLeft(isLeftToRight
+                                                             ? cursorREnd.left() + spaceWidth
+                                                             : cursorREnd.right() - spaceWidth,
+                                                         cursorREnd.top());
+                                    const QPoint bottomRight(isLeftToRight ? pageRight - leftDelta
+                                                                           : 0 - leftDelta,
+                                                             cursorREnd.bottom());
+                                    QRectF rect(topLeft, bottomRight);
+                                    const auto textFontMetrics
+                                        = QFontMetricsF(cursor.charFormat().font());
+                                    const auto iconFontMetrics
+                                        = QFontMetricsF(DesignSystem::font().iconsForEditors());
+                                    const auto yDelta = (textFontMetrics.lineSpacing()
+                                                         - iconFontMetrics.lineSpacing())
+                                        / 2;
+                                    rect.adjust(0, yDelta,
+                                                -textFontMetrics.horizontalAdvance(".") / 2, 0);
+                                    painter.drawText(rect, Qt::AlignLeft | Qt::AlignTop, _icon);
+                                };
+
+                                const auto pageNumberText = d->document.pageNumber(block);
+                                const auto leftPageIcon = u8"\U000F10AA";
+                                const auto rightPageIcon = u8"\U000F10AB";
+
+                                //
+                                // Два номера
+                                //
+                                if (pageNumberText.contains('-')) {
+                                    auto numbers = pageNumberText.split('-');
+                                    const int firstNumber = numbers.constFirst().toInt();
+                                    if (firstNumber % 2 == 0) {
+                                        painter.setPen(DesignSystem::color().error());
+                                        paintLeftPageIcon(rightPageIcon);
+                                        paintRightPageIcon(leftPageIcon);
+                                    } else {
+                                        paintLeftPageIcon(leftPageIcon);
+                                        paintRightPageIcon(rightPageIcon);
+                                    }
+                                } else {
+                                    const auto pageNumber = pageNumberText.toInt();
+                                    //
+                                    // Правая страница
+                                    //
+                                    if (pageNumber % 2 == 0) {
+                                        paintRightPageIcon(rightPageIcon);
+                                    }
+                                    //
+                                    // Левая страница
+                                    //
+                                    else {
+                                        paintLeftPageIcon(leftPageIcon);
+                                    }
+                                }
+                            }
                         }
                         //                        //
                         //                        // Прорисовка номеров сцен, если необходимо
@@ -1036,33 +1168,6 @@ void ComicBookTextEdit::paintEvent(QPaintEvent* _event)
                                 painter.drawText(rect, Qt::AlignRight | Qt::AlignTop,
                                                  dialogueNumber);
                             }
-                        }
-
-                        //
-                        // Прорисовка автоматических (ПРОД) для реплик
-                        //
-                        if (blockType == ComicBookParagraphType::Character
-                            && block.blockFormat().boolProperty(
-                                ComicBookBlockStyle::PropertyIsCharacterContinued)
-                            && !block.blockFormat().boolProperty(
-                                ComicBookBlockStyle::PropertyIsCorrection)) {
-                            painter.setFont(cursor.charFormat().font());
-
-                            //
-                            // Определим место положение конца имени персонажа
-                            //
-                            const int continuedTermWidth = painter.fontMetrics().horizontalAdvance(
-                                BusinessLayer::ComicBookTextCorrector::continuedTerm());
-                            const QPoint topLeft = isLeftToRight
-                                ? cursorREnd.topLeft()
-                                : cursorREnd.topRight() - QPoint(continuedTermWidth, 0);
-                            const QPoint bottomRight = isLeftToRight
-                                ? cursorREnd.bottomRight() + QPoint(continuedTermWidth, 0)
-                                : cursorREnd.bottomLeft();
-                            const QRect rect(topLeft, bottomRight);
-                            painter.drawText(
-                                rect, Qt::AlignRight | Qt::AlignTop,
-                                BusinessLayer::ComicBookTextCorrector::continuedTerm());
                         }
                     }
 

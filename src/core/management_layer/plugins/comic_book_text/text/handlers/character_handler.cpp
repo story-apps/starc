@@ -103,8 +103,9 @@ void CharacterHandler::handleEnter(QKeyEvent* _event)
         if (_event != 0 // ... чтобы таб не переводил на новую строку
             && currentSection == ComicBookCharacterParser::SectionName) {
             cursor.movePosition(QTextCursor::EndOfBlock);
+            cursor.insertText(":");
             editor()->setTextCursor(cursor);
-            editor()->addParagraph(jumpForEnter(ComicBookParagraphType::Character));
+            editor()->moveCursor(QTextCursor::NextBlock);
         }
     } else {
         //! Подстановщик закрыт
@@ -146,9 +147,9 @@ void CharacterHandler::handleEnter(QKeyEvent* _event)
                     //! В конце блока
 
                     //
-                    // Вставить блок реплики героя
+                    // Переходим к следующему блоку, он уже отформатирован должным образом
                     //
-                    editor()->addParagraph(jumpForEnter(ComicBookParagraphType::Character));
+                    editor()->moveCursor(QTextCursor::NextBlock);
                 } else {
                     //! Внутри блока
 
@@ -224,9 +225,9 @@ void CharacterHandler::handleTab(QKeyEvent*)
                     storeCharacter();
 
                     //
-                    // Вставить блок ремарки
+                    // Переходим к следующему блоку
                     //
-                    editor()->addParagraph(jumpForTab(ComicBookParagraphType::Character));
+                    editor()->moveCursor(QTextCursor::NextBlock);
                 } else {
                     //! Внутри блока
 
@@ -239,7 +240,7 @@ void CharacterHandler::handleTab(QKeyEvent*)
     }
 }
 
-void CharacterHandler::handleOther(QKeyEvent*)
+void CharacterHandler::handleOther(QKeyEvent* _event)
 {
     //
     // Получим необходимые значения
@@ -252,6 +253,13 @@ void CharacterHandler::handleOther(QKeyEvent*)
     const QString currentBlockText = currentBlock.text();
     // ... текст до курсора
     const QString cursorBackwardText = currentBlockText.left(cursor.positionInBlock());
+
+    //
+    // На двоеточии заканчивается ввод имени персонажа
+    //
+    if (cursorBackwardText.endsWith(':') && _event->text() == ":") {
+        editor()->moveCursor(QTextCursor::NextBlock);
+    }
 
     //
     // Покажем подсказку, если это возможно
@@ -305,7 +313,8 @@ void CharacterHandler::complete(const QString& _currentBlockText,
             if (ComicBookBlockStyle::forBlock(cursor.block())
                 == ComicBookParagraphType::Character) {
                 const QString characterName = ComicBookCharacterParser::name(cursor.block().text());
-                if (!characterName.isEmpty() && !charactersToComplete.contains(characterName)) {
+                if (!characterName.isEmpty() && !charactersToComplete.contains(characterName)
+                    && !editor()->dictionaries()->commonCharacters().contains(characterName)) {
                     //
                     // Персонажа, который говорил встречный диалог ставим выше,
                     // т.к. высока вероятность того, что они общаются
@@ -337,6 +346,11 @@ void CharacterHandler::complete(const QString& _currentBlockText,
                 charactersToComplete.append(characterName);
             }
         }
+
+        //
+        // Специфичные для комикса элементы
+        //
+        charactersToComplete.append(editor()->dictionaries()->commonCharacters().toList());
 
         m_completerModel->setStringList(charactersToComplete);
         sectionModel = m_completerModel;
@@ -393,7 +407,9 @@ void CharacterHandler::storeCharacter() const
     //
     // Сохраняем персонажа
     //
-    editor()->characters()->createCharacter(characterName);
+    if (!editor()->dictionaries()->commonCharacters().contains(characterName)) {
+        editor()->characters()->createCharacter(characterName);
+    }
     editor()->dictionaries()->addCharacterExtension(characterExtension);
 }
 

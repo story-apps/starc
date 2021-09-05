@@ -462,6 +462,10 @@ SettingsStorage::Implementation::Implementation()
                                           ComicBookParagraphType::Dialogue);
         addComicBookEditorStylesJumpByEnter(ComicBookParagraphType::Character,
                                             ComicBookParagraphType::Dialogue);
+        addComicBookEditorStylesJumpByTab(ComicBookParagraphType::Dialogue,
+                                          ComicBookParagraphType::Character);
+        addComicBookEditorStylesJumpByEnter(ComicBookParagraphType::Dialogue,
+                                            ComicBookParagraphType::Description);
         addComicBookEditorStylesJumpByTab(ComicBookParagraphType::InlineNote,
                                           ComicBookParagraphType::Description);
         addComicBookEditorStylesJumpByEnter(ComicBookParagraphType::InlineNote,

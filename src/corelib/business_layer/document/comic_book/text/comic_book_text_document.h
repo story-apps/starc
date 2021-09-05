@@ -44,9 +44,14 @@ public:
     int itemEndPosition(const QModelIndex& _index);
 
     /**
-     * @brief Получить номер сцены для заданного блока
+     * @brief Получить номер страницы для заданного блока
      */
-    QString sceneNumber(const QTextBlock& _forBlock) const;
+    QString pageNumber(const QTextBlock& _forBlock) const;
+
+    /**
+     * @brief Получить номер панели для заданного блока
+     */
+    QString panelNumber(const QTextBlock& _forBlock) const;
 
     /**
      * @brief Получить номер реплики для заданного блока

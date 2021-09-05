@@ -157,7 +157,6 @@ public:
 
     /**
      * @brief Своя реализация проверки виден ли курсор на экране
-     * @param Значение true докручивает, как сверху, так и снизу, а false только снизу
      */
     void ensureCursorVisible();
     void ensureCursorVisible(const QTextCursor& _cursor, bool _animate = true);

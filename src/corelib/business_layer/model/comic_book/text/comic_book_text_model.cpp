@@ -154,10 +154,8 @@ void ComicBookTextModel::Implementation::updateNumbering()
                 dialogueNumber = 1;
                 updateChildNumbering(childItem);
 
-                //
-                // TODO: обновить номер страницы
-                //
                 auto pageItem = static_cast<ComicBookTextModelPageItem*>(childItem);
+                pageItem->updateNumber(pageNumber);
                 break;
             }
 
@@ -342,6 +340,8 @@ void ComicBookTextModel::updateItem(ComicBookTextModelItem* _item)
 
     if (_item->parent() != nullptr) {
         updateItem(_item->parent());
+    } else {
+        d->updateNumbering();
     }
 }
 
