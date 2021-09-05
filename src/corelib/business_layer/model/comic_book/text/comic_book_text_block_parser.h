@@ -52,7 +52,7 @@ public:
     /**
      * @brief Секции блока персонаж
      *
-     * @note [ИМЯ ПЕРСОНАЖА] ([СОСТОЯНИЕ])
+     * @note [Номер реплики]. [ИМЯ ПЕРСОНАЖА] ([СОСТОЯНИЕ])
      */
     enum Section {
         SectionUndefined, //!< Неопределённое
@@ -65,6 +65,11 @@ public:
      * @brief Получить секцию блока
      */
     static ComicBookCharacterParser::Section section(const QString& _text);
+
+    /**
+     * @brief Получить номер реплики
+     */
+    static QString number(const QString& _text);
 
     /**
      * @brief Получить имя персонажа

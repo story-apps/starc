@@ -211,6 +211,13 @@ void ComicBookTextEdit::addParagraph(BusinessLayer::ComicBookParagraphType _type
         setTextCursor(cursor);
         cursor.movePosition(BusinessLayer::ComicBookTextCursor::NextBlock);
         d->document.setParagraphType(BusinessLayer::ComicBookParagraphType::Dialogue, cursor);
+        //
+        // Очищаем диалог, от текста, который туда добавляет корректор, пока там был блок персонажа
+        //
+        if (cursor.movePosition(BusinessLayer::ComicBookTextCursor::EndOfBlock,
+                                BusinessLayer::ComicBookTextCursor::KeepAnchor)) {
+            cursor.removeSelectedText();
+        }
     }
 
     emit paragraphTypeChanged();
@@ -248,6 +255,13 @@ void ComicBookTextEdit::setCurrentParagraphType(BusinessLayer::ComicBookParagrap
         setTextCursor(cursor);
         cursor.movePosition(BusinessLayer::ComicBookTextCursor::NextBlock);
         d->document.setParagraphType(BusinessLayer::ComicBookParagraphType::Dialogue, cursor);
+        //
+        // Очищаем диалог, от текста, который туда добавляет корректор, пока там был блок персонажа
+        //
+        if (cursor.movePosition(BusinessLayer::ComicBookTextCursor::EndOfBlock,
+                                BusinessLayer::ComicBookTextCursor::KeepAnchor)) {
+            cursor.removeSelectedText();
+        }
     }
 
     emit paragraphTypeChanged();

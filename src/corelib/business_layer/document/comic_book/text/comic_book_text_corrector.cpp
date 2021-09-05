@@ -4,7 +4,9 @@
 #include "comic_book_text_cursor.h"
 
 #include <business_layer/model/comic_book/text/comic_book_text_block_parser.h>
+#include <business_layer/model/comic_book/text/comic_book_text_model_page_item.h>
 #include <business_layer/model/comic_book/text/comic_book_text_model_panel_item.h>
+#include <business_layer/model/comic_book/text/comic_book_text_model_text_item.h>
 #include <business_layer/templates/comic_book_template.h>
 #include <business_layer/templates/templates_facade.h>
 #include <ui/widgets/text_edit/page/page_text_edit.h>
@@ -192,6 +194,11 @@ public:
      * @brief Необходимо ли корректировать номера блоков
      */
     bool needToCorrectBlocksNumbers = true;
+
+    /**
+     * @brief Нужно ли делать заголовок пнели жирным
+     */
+    bool needToBoldPanelTitle = true;
 
     /**
      * @brief Необходимо ли корректировать текст на разрывах страниц
@@ -492,28 +499,67 @@ void ComicBookTextCorrector::Implementation::correctBlocksNumbers(int _position,
                     cursor.insertText(newPanelTitle);
                 }
 
-                cursor.setPosition(block.position());
-                cursor.movePosition(QTextCursor::NextCharacter, QTextCursor::KeepAnchor,
-                                    newPanelTitle.length());
                 //
-                // Если не в конце, то подвинем ещё на один символ, чтобы захватить двоеточие
+                // Отформатируем заголовок панели жирным
                 //
-                if (!cursor.atBlockEnd()) {
-                    cursor.movePosition(QTextCursor::NextCharacter, QTextCursor::KeepAnchor);
-                }
-                auto charFormat = cursor.charFormat();
-                if (charFormat.fontWeight() != QFont::Bold) {
-                    charFormat.setFontWeight(QFont::Bold);
-                    cursor.mergeCharFormat(charFormat);
+                if (needToBoldPanelTitle) {
+                    cursor.setPosition(block.position());
+                    cursor.movePosition(QTextCursor::NextCharacter, QTextCursor::KeepAnchor,
+                                        newPanelTitle.length());
+                    //
+                    // Если не в конце, то подвинем ещё на один символ, чтобы захватить двоеточие
+                    //
+                    if (!cursor.atBlockEnd()) {
+                        cursor.movePosition(QTextCursor::NextCharacter, QTextCursor::KeepAnchor);
+                    }
+                    auto charFormat = cursor.charFormat();
+                    if (charFormat.fontWeight() != QFont::Bold) {
+                        charFormat.setFontWeight(QFont::Bold);
+                        cursor.mergeCharFormat(charFormat);
+                    }
                 }
 
                 //
-                // Если это абзац с одним только заголовком, то добавим пробл с форматированием, как
-                // в блоке
+                // Если это абзац с одним только заголовком, то добавим пробел с форматированием,
+                // как в блоке
                 //
                 cursor.clearSelection();
                 if (cursor.atBlockEnd()) {
                     cursor.insertText(" ", cursor.blockCharFormat());
+                }
+            }
+            once;
+            break;
+        }
+
+        case ComicBookParagraphType::Character: {
+            const auto item = itemFromBlock(block);
+            do {
+                if (item->type() != ComicBookTextModelItemType::Text) {
+                    break;
+                }
+
+                const auto textItem = static_cast<ComicBookTextModelTextItem*>(item);
+                if (textItem->paragraphType() != ComicBookParagraphType::Character) {
+                    break;
+                }
+
+                const auto sourceDialogueNumber = ComicBookCharacterParser::number(block.text());
+                auto newDialogueNumber = sourceDialogueNumber;
+
+                //
+                // При необходимости обновляем номер диалога
+                //
+                if (sourceDialogueNumber != textItem->number()->value) {
+                    const QString decoration = ". ";
+                    newDialogueNumber = textItem->number()->value + decoration;
+
+                    cursor.setPosition(block.position());
+                    if (!sourceDialogueNumber.isEmpty()) {
+                        cursor.movePosition(QTextCursor::NextCharacter, QTextCursor::KeepAnchor,
+                                            sourceDialogueNumber.length() + decoration.length());
+                    }
+                    cursor.insertText(newDialogueNumber);
                 }
             }
             once;

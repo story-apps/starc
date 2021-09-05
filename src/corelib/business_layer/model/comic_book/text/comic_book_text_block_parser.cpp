@@ -22,7 +22,7 @@ ComicBookPanelParser::Section ComicBookPanelParser::section(const QString& _text
 
 QString ComicBookPanelParser::panelTitle(const QString& _text)
 {
-    return _text.split(":").constFirst();
+    return _text.split(":").constFirst().trimmed();
 }
 
 QString ComicBookPanelParser::panelDescription(const QString& _text)
@@ -39,15 +39,21 @@ QString ComicBookPanelParser::panelDescription(const QString& _text)
 
 ComicBookCharacterParser::Section ComicBookCharacterParser::section(const QString& _text)
 {
-    ComicBookCharacterParser::Section section = SectionUndefined;
-
     if (_text.split("(").count() == 2) {
-        section = SectionState;
+        return SectionState;
     } else {
-        section = SectionName;
+        return SectionName;
+    }
+}
+
+QString ComicBookCharacterParser::number(const QString& _text)
+{
+    const auto dotIndex = _text.indexOf(". ");
+    if (dotIndex == -1) {
+        return {};
     }
 
-    return section;
+    return _text.left(dotIndex);
 }
 
 QString ComicBookCharacterParser::name(const QString& _text)
@@ -61,7 +67,9 @@ QString ComicBookCharacterParser::name(const QString& _text)
     if (name.endsWith(':')) {
         name.chop(1);
     }
-    return TextHelper::smartToUpper(name.remove(QRegularExpression("[(](.*)")).simplified());
+    return TextHelper::smartToUpper(name.remove(QRegularExpression("^\\d*[.]"))
+                                        .remove(QRegularExpression("[(](.*)"))
+                                        .simplified());
 }
 
 QString ComicBookCharacterParser::extension(const QString& _text)

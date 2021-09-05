@@ -508,8 +508,7 @@ std::optional<ComicBookTextModelTextItem::Number> ComicBookTextModelTextItem::nu
 
 void ComicBookTextModelTextItem::setNumber(int _number)
 {
-    const auto newNumber
-        = QString(QLocale().textDirection() == Qt::LeftToRight ? "%1:" : ":%1").arg(_number);
+    const auto newNumber = QString::number(_number);
     if (d->number.has_value() && d->number->value == newNumber) {
         return;
     }
