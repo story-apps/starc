@@ -11,6 +11,7 @@ namespace BusinessLayer {
 
 QString ComicBookPageParser::pageNumber(const QString& _text)
 {
+    return {};
 }
 
 QString ComicBookPanelParser::panelTitle(const QString& _text)
