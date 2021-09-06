@@ -37,6 +37,7 @@ public:
         PanelColorRole,
         PanelInlineNotesSizeRole,
         PanelReviewMarksSizeRole,
+        PanelDialoguesWordsSizeRole,
     };
 
 public:
@@ -55,6 +56,11 @@ public:
      */
     QColor color() const;
     void setColor(const QColor& _color);
+
+    /**
+     * @brief Получить количество слов в репликах
+     */
+    int dialoguesWordsCount() const;
 
     /**
      * @brief Определяем интерфейс получения данных панели

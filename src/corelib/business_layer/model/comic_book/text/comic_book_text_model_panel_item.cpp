@@ -74,6 +74,11 @@ public:
      * @brief Количество редакторских заметок
      */
     int reviewMarksSize = 0;
+
+    /**
+     * @brief Количество слов в диалогах
+     */
+    int dialoguesWordsCount = 0;
 };
 
 
@@ -229,6 +234,11 @@ void ComicBookTextModelPanelItem::setColor(const QColor& _color)
     setChanged(true);
 }
 
+int ComicBookTextModelPanelItem::dialoguesWordsCount() const
+{
+    return d->dialoguesWordsCount;
+}
+
 QVariant ComicBookTextModelPanelItem::data(int _role) const
 {
     switch (_role) {
@@ -261,6 +271,10 @@ QVariant ComicBookTextModelPanelItem::data(int _role) const
 
     case PanelReviewMarksSizeRole: {
         return d->reviewMarksSize;
+    }
+
+    case PanelDialoguesWordsSizeRole: {
+        return d->dialoguesWordsCount;
     }
 
     default: {
@@ -371,6 +385,7 @@ void ComicBookTextModelPanelItem::handleChange()
     d->text.clear();
     d->inlineNotesSize = 0;
     d->reviewMarksSize = 0;
+    d->dialoguesWordsCount = 0;
 
     for (int childIndex = 0; childIndex < childCount(); ++childIndex) {
         auto child = childAt(childIndex);
@@ -386,6 +401,11 @@ void ComicBookTextModelPanelItem::handleChange()
         switch (childTextItem->paragraphType()) {
         case ComicBookParagraphType::Panel: {
             d->heading = TextHelper::smartToUpper(childTextItem->text());
+            break;
+        }
+
+        case ComicBookParagraphType::Dialogue: {
+            d->dialoguesWordsCount += TextHelper::wordsCount(childTextItem->text());
             break;
         }
 

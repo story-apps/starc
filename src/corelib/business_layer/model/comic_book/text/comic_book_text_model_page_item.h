@@ -33,6 +33,8 @@ public:
     enum DataRole {
         PageNameRole = Qt::UserRole + 1,
         PageColorRole,
+        PagePanelsCountRole,
+        PageDialoguesWordsCountRole,
     };
 
 public:
@@ -52,6 +54,16 @@ public:
      */
     QColor color() const;
     void setColor(const QColor& _color);
+
+    /**
+     * @brief Получить количество панелей на странице
+     */
+    int panelsCount() const;
+
+    /**
+     * @brief Получить количество слов
+     */
+    int dialoguesWordsCount() const;
 
     /**
      * @brief Определяем интерфейс получения данных страницы

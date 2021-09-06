@@ -43,6 +43,16 @@ public:
      * @brief Название страницы
      */
     QString name;
+
+    /**
+     * @brief Количество панелей на странице
+     */
+    int panelsCount = 0;
+
+    /**
+     * @brief Количество слов в диалогах
+     */
+    int dialoguesWordsCount = 0;
 };
 
 
@@ -175,6 +185,16 @@ void ComicBookTextModelPageItem::setColor(const QColor& _color)
     setChanged(true);
 }
 
+int ComicBookTextModelPageItem::panelsCount() const
+{
+    return d->panelsCount;
+}
+
+int ComicBookTextModelPageItem::dialoguesWordsCount() const
+{
+    return d->dialoguesWordsCount;
+}
+
 QVariant ComicBookTextModelPageItem::data(int _role) const
 {
     switch (_role) {
@@ -188,6 +208,14 @@ QVariant ComicBookTextModelPageItem::data(int _role) const
 
     case PageColorRole: {
         return d->color;
+    }
+
+    case PagePanelsCountRole: {
+        return d->panelsCount;
+    }
+
+    case PageDialoguesWordsCountRole: {
+        return d->dialoguesWordsCount;
     }
 
     default: {
@@ -309,10 +337,19 @@ bool ComicBookTextModelPageItem::isEqual(ComicBookTextModelItem* _item) const
 void ComicBookTextModelPageItem::handleChange()
 {
     d->name.clear();
+    d->panelsCount = 0;
+    d->dialoguesWordsCount = 0;
 
     for (int childIndex = 0; childIndex < childCount(); ++childIndex) {
         auto child = childAt(childIndex);
         switch (child->type()) {
+        case ComicBookTextModelItemType::Panel: {
+            auto childItem = static_cast<ComicBookTextModelPanelItem*>(child);
+            ++d->panelsCount;
+            d->dialoguesWordsCount += childItem->dialoguesWordsCount();
+            break;
+        }
+
         case ComicBookTextModelItemType::Text: {
             auto childItem = static_cast<ComicBookTextModelTextItem*>(child);
             if (childItem->paragraphType() == ComicBookParagraphType::Page) {

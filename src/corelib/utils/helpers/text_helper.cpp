@@ -1,6 +1,7 @@
 #include "text_helper.h"
 
 #include <QFontMetricsF>
+#include <QRegularExpression>
 #include <QTextLayout>
 #include <QtMath>
 
@@ -275,5 +276,5 @@ int TextHelper::wordsCount(const QString& _text)
     //        - слова разделённые знаками препинания без пробелов
     //        - не учитывать знаки препинания окружённые пробелами, типа " - "
     //
-    return _text.split(" ", Qt::SkipEmptyParts).count();
+    return _text.split(QRegularExpression("[\\s.,!():;]+"), Qt::SkipEmptyParts).count();
 }
