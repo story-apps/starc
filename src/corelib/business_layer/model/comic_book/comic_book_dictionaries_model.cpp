@@ -91,11 +91,13 @@ void ComicBookDictionariesModel::initDocument()
     const auto documentNode = domDocument.firstChildElement(kDocumentKey);
     auto fillDictionary = [documentNode](const QString& _key, const QVector<QString>& _defaultItems,
                                          QVector<QString>& _dictionary) {
-        const auto dictionaryNode = documentNode.firstChildElement(_key);
-        auto itemNode = dictionaryNode.firstChildElement();
-        while (!itemNode.isNull()) {
-            _dictionary.append(TextHelper::fromHtmlEscaped(itemNode.text()));
-            itemNode = itemNode.nextSiblingElement();
+        if (!_key.isEmpty()) {
+            const auto dictionaryNode = documentNode.firstChildElement(_key);
+            auto itemNode = dictionaryNode.firstChildElement();
+            while (!itemNode.isNull()) {
+                _dictionary.append(TextHelper::fromHtmlEscaped(itemNode.text()));
+                itemNode = itemNode.nextSiblingElement();
+            }
         }
 
         if (_dictionary.isEmpty()) {
