@@ -1974,16 +1974,23 @@ void ComicBookTextDocument::updateModelOnContentChange(int _position, int _chars
                     Q_ASSERT(previousTextItemParent);
 
                     //
-                    // Если элемент вставляется после другой сцены, или после окончания папки,
-                    // то вставляем его на том же уровне, что и предыдущий
+                    // Если элемент вставляется после другого элемента того же уровня, или после
+                    // окончания папки, то вставляем его на том же уровне, что и предыдущий
                     //
-                    if (previousTextItemParent->type() == ComicBookTextModelItemType::Page
-                        || previousTextItemParent->type() == ComicBookTextModelItemType::Panel
+                    if (previousTextItemParent->type() == parentItem->type()
                         || previousItemIsFolderFooter) {
                         d->model->insertItem(parentItem, previousTextItemParent);
                     }
                     //
-                    // В противном случае вставляем внутрь папки
+                    //
+                    //
+                    else if (parentItem->type() == ComicBookTextModelItemType::Page
+                             && previousTextItemParent->type()
+                                 == ComicBookTextModelItemType::Panel) {
+                        d->model->insertItem(parentItem, previousTextItemParent->parent());
+                    }
+                    //
+                    // В противном случае вставляем внутрь
                     //
                     else {
                         d->model->insertItem(parentItem, previousItem);
