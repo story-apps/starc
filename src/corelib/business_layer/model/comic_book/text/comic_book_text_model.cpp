@@ -9,6 +9,7 @@
 #include "comic_book_text_model_xml.h"
 #include "comic_book_text_model_xml_writer.h"
 
+#include <business_layer/model/comic_book/comic_book_dictionaries_model.h>
 #include <business_layer/model/comic_book/comic_book_information_model.h>
 #include <business_layer/templates/comic_book_template.h>
 #include <domain/document_object.h>
@@ -139,7 +140,7 @@ void ComicBookTextModel::Implementation::updateNumbering()
     int panelNumber = 1;
     int dialogueNumber = 1;
     std::function<void(const ComicBookTextModelItem*)> updateChildNumbering;
-    updateChildNumbering = [&pageNumber, &panelNumber, &dialogueNumber,
+    updateChildNumbering = [this, &pageNumber, &panelNumber, &dialogueNumber,
                             &updateChildNumbering](const ComicBookTextModelItem* _item) {
         for (int childIndex = 0; childIndex < _item->childCount(); ++childIndex) {
             auto childItem = _item->childAt(childIndex);
@@ -155,7 +156,8 @@ void ComicBookTextModel::Implementation::updateNumbering()
                 updateChildNumbering(childItem);
 
                 auto pageItem = static_cast<ComicBookTextModelPageItem*>(childItem);
-                pageItem->updateNumber(pageNumber);
+                pageItem->updateNumber(pageNumber, dictionariesModel->singlePageIntros(),
+                                       dictionariesModel->multiplePageIntros());
                 break;
             }
 

@@ -10,9 +10,6 @@ namespace BusinessLayer {
 
 namespace {
 const QString kDocumentKey = "document";
-const QString kPageIntrosKey = "page_intros";
-const QString kPanelIntrosKey = "panel_intros";
-const QString kCommonCharactersKey = "common_characters";
 const QString kCharacterExtensionsKey = "character_extensions";
 const QString kItemKey = "v";
 } // namespace
@@ -20,7 +17,8 @@ const QString kItemKey = "v";
 class ComicBookDictionariesModel::Implementation
 {
 public:
-    QVector<QString> pageIntros;
+    QVector<QString> singlePageIntros;
+    QVector<QString> multiplePageIntros;
     QVector<QString> panelIntros;
     QVector<QString> commonCharacters;
     QVector<QString> characterExtensions;
@@ -34,8 +32,6 @@ ComicBookDictionariesModel::ComicBookDictionariesModel(QObject* _parent)
     : AbstractModel(
         {
             kDocumentKey,
-            kPageIntrosKey,
-            kPanelIntrosKey,
             kCharacterExtensionsKey,
             kItemKey,
         },
@@ -46,9 +42,14 @@ ComicBookDictionariesModel::ComicBookDictionariesModel(QObject* _parent)
             &ComicBookDictionariesModel::updateDocumentContent);
 }
 
-const QVector<QString>& ComicBookDictionariesModel::pageIntros() const
+const QVector<QString>& ComicBookDictionariesModel::singlePageIntros() const
 {
-    return d->pageIntros;
+    return d->singlePageIntros;
+}
+
+const QVector<QString>& ComicBookDictionariesModel::multiplePageIntros() const
+{
+    return d->multiplePageIntros;
 }
 
 const QVector<QString>& ComicBookDictionariesModel::panelIntros() const
@@ -101,14 +102,16 @@ void ComicBookDictionariesModel::initDocument()
             _dictionary.append(_defaultItems);
         }
     };
-    const QVector<QString> defaultPageIntros = { "page", tr("page"), "pages", tr("pages") };
-    fillDictionary(kPageIntrosKey, defaultPageIntros, d->pageIntros);
+    const QVector<QString> defaultSinglePageIntros = { "page", tr("page") };
+    fillDictionary({}, defaultSinglePageIntros, d->singlePageIntros);
+    const QVector<QString> defaultMultiplePageIntros = { "pages", tr("pages") };
+    fillDictionary({}, defaultMultiplePageIntros, d->multiplePageIntros);
     //
     const QVector<QString> defaultPanelIntros = { "panel", tr("panel"), "panels", tr("panels") };
-    fillDictionary(kPanelIntrosKey, defaultPanelIntros, d->panelIntros);
+    fillDictionary({}, defaultPanelIntros, d->panelIntros);
     //
-    const QVector<QString> defaultCommonCharacters = { tr("CAPTION"), tr("SFX") };
-    fillDictionary(kCommonCharactersKey, defaultCommonCharacters, d->commonCharacters);
+    const QVector<QString> defaultCommonCharacters = { tr("CAPTION"), tr("NARRATION"), tr("SFX") };
+    fillDictionary({}, defaultCommonCharacters, d->commonCharacters);
     //
     const QVector<QString> defaultCharacterExtensions
         = { tr("OFF"), tr("WHISPER"), tr("BURST"), tr("WEAK"), tr("SINGING") };
@@ -119,7 +122,7 @@ void ComicBookDictionariesModel::clearDocument()
 {
     QSignalBlocker signalBlocker(this);
 
-    d->pageIntros.clear();
+    d->singlePageIntros.clear();
     d->panelIntros.clear();
     d->characterExtensions.clear();
 }
@@ -143,8 +146,6 @@ QByteArray ComicBookDictionariesModel::toXml() const
         }
         xml += QString("</%1>\n").arg(_key).toUtf8();
     };
-    writeDictionary(kPageIntrosKey, d->pageIntros);
-    writeDictionary(kPanelIntrosKey, d->panelIntros);
     writeDictionary(kCharacterExtensionsKey, d->characterExtensions);
     xml += QString("</%1>").arg(kDocumentKey).toUtf8();
     return xml;

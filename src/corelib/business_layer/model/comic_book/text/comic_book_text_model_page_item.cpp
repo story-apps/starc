@@ -124,14 +124,25 @@ ComicBookTextModelPageItem::Number ComicBookTextModelPageItem::number() const
     return *d->number;
 }
 
-bool ComicBookTextModelPageItem::updateNumber(int& _fromNumber)
+bool ComicBookTextModelPageItem::updateNumber(int& _fromNumber,
+                                              const QVector<QString>& _singlePageIntros,
+                                              const QVector<QString>& _multiplePageIntros)
 {
+    const auto pageName = TextHelper::smartToLower(d->name.split(' ').constFirst().trimmed());
+
+    //
+    // TODO: Парсить номера сцен, которые задал пользователь вручную
+    //
+
     QString newNumber;
-    if (d->name.startsWith("pages", Qt::CaseInsensitive)) {
+    if (_multiplePageIntros.contains(pageName)) {
         newNumber = QString(QLocale().textDirection() == Qt::LeftToRight ? "%1-%2" : "%2-%1")
                         .arg(_fromNumber)
                         .arg(_fromNumber + 1);
         _fromNumber += 2;
+    } else if (_singlePageIntros.contains(pageName)) {
+        newNumber = QString::number(_fromNumber);
+        _fromNumber += 1;
     } else {
         newNumber = QString::number(_fromNumber);
         _fromNumber += 1;

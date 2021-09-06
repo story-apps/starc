@@ -135,6 +135,11 @@ void CharacterHandler::handleEnter(QKeyEvent* _event)
                 // Сохраним имя персонажа
                 //
                 storeCharacter();
+                //
+                // ...  добавим двоеточие после имени
+                //
+                cursor.movePosition(QTextCursor::EndOfBlock);
+                cursor.insertText(":");
 
                 if (cursorBackwardText.isEmpty()) {
                     //! В начале блока
@@ -258,6 +263,7 @@ void CharacterHandler::handleOther(QKeyEvent* _event)
     // На двоеточии заканчивается ввод имени персонажа
     //
     if (cursorBackwardText.endsWith(':') && _event->text() == ":") {
+        storeCharacter();
         editor()->moveCursor(QTextCursor::NextBlock);
     }
 

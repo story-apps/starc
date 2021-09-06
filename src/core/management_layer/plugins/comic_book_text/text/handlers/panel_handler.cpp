@@ -185,7 +185,8 @@ void PanelHandler::handleOther(QKeyEvent* _event)
         //
         const QString backwardTextCorrected
             = TextHelper::smartToLower(cursorBackwardText.trimmed());
-        if (editor()->dictionaries()->pageIntros().contains(backwardTextCorrected)) {
+        if (editor()->dictionaries()->singlePageIntros().contains(backwardTextCorrected)
+            || editor()->dictionaries()->multiplePageIntros().contains(backwardTextCorrected)) {
             editor()->setCurrentParagraphType(ComicBookParagraphType::Page);
         }
     } else {

@@ -11,26 +11,21 @@ namespace BusinessLayer {
 /**
  * @brief Парсер текста блока панель
  */
-class CORE_LIBRARY_EXPORT ComicBookPanelParser
+class CORE_LIBRARY_EXPORT ComicBookPageParser
 {
 public:
     /**
-     * @brief Секции блока панели
-     *
-     * @note [Заголовок панели N]: [Описание панели]
+     * @brief Получить номер страницы
      */
-    enum Section {
-        SectionUndefined, //!< Неопределённое
-        SectionPanelTitle, //!< Заголовок панели
-        SectionPanelDescription, //!< Описание панели
-    };
+    static QString pageNumber(const QString& _text);
+};
 
+/**
+ * @brief Парсер текста блока панель
+ */
+class CORE_LIBRARY_EXPORT ComicBookPanelParser
+{
 public:
-    /**
-     * @brief Получить секцию блока
-     */
-    static ComicBookPanelParser::Section section(const QString& _text);
-
     /**
      * @brief Получить заголовок панели
      */

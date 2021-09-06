@@ -16,7 +16,8 @@ public:
     explicit ComicBookDictionariesModel(QObject* _parent = nullptr);
     ~ComicBookDictionariesModel() override;
 
-    const QVector<QString>& pageIntros() const;
+    const QVector<QString>& singlePageIntros() const;
+    const QVector<QString>& multiplePageIntros() const;
 
     const QVector<QString>& panelIntros() const;
 

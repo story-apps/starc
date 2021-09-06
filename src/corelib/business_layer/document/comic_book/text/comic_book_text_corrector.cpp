@@ -471,6 +471,38 @@ void ComicBookTextCorrector::Implementation::correctBlocksNumbers(int _position,
         }
 
         switch (blockType) {
+        case ComicBookParagraphType::Page: {
+            const auto item = itemFromBlock(block);
+            do {
+                if (item->parent() == nullptr
+                    || item->parent()->type() != ComicBookTextModelItemType::Page) {
+                    break;
+                }
+
+                const auto pageItem = static_cast<ComicBookTextModelPageItem*>(item->parent());
+                const auto sourcePageTitle = ComicBookPanelParser::panelTitle(block.text());
+                auto newPageTitle = sourcePageTitle;
+
+                //
+                // При необходимости обновляем номер страницы
+                //
+                if (!sourcePageTitle.endsWith(pageItem->number().value)) {
+                    newPageTitle.remove(QRegularExpression("(\\d|-)*$"));
+                    if (!newPageTitle.endsWith(' ')) {
+                        newPageTitle.append(' ');
+                    }
+                    newPageTitle.append(pageItem->number().value);
+
+                    cursor.setPosition(block.position());
+                    cursor.movePosition(QTextCursor::NextCharacter, QTextCursor::KeepAnchor,
+                                        sourcePageTitle.length());
+                    cursor.insertText(newPageTitle);
+                }
+            }
+            once;
+            break;
+        }
+
         case ComicBookParagraphType::Panel: {
             const auto item = itemFromBlock(block);
             do {

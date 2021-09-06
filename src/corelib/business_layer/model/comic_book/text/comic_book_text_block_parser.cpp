@@ -1,7 +1,5 @@
 #include "comic_book_text_block_parser.h"
 
-#include <business_layer/templates/screenplay_template.h>
-#include <business_layer/templates/templates_facade.h>
 #include <utils/helpers/text_helper.h>
 
 #include <QRegularExpression>
@@ -11,13 +9,8 @@
 
 namespace BusinessLayer {
 
-ComicBookPanelParser::Section ComicBookPanelParser::section(const QString& _text)
+QString ComicBookPageParser::pageNumber(const QString& _text)
 {
-    if (_text.split(": ").size() > 1) {
-        return SectionPanelDescription;
-    } else {
-        return SectionPanelTitle;
-    }
 }
 
 QString ComicBookPanelParser::panelTitle(const QString& _text)
@@ -63,7 +56,7 @@ QString ComicBookCharacterParser::name(const QString& _text)
     // эти указания даются в скобках
     //
 
-    QString name = _text;
+    QString name = _text.trimmed();
     if (name.endsWith(':')) {
         name.chop(1);
     }

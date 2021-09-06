@@ -84,7 +84,9 @@ void DescriptionHandler::handleEnter(QKeyEvent*)
                         //
                         const QString backwardTextCorrected
                             = TextHelper::smartToLower(cursorBackwardText.trimmed());
-                        if (editor()->dictionaries()->pageIntros().contains(
+                        if (editor()->dictionaries()->singlePageIntros().contains(
+                                backwardTextCorrected)
+                            || editor()->dictionaries()->multiplePageIntros().contains(
                                 backwardTextCorrected)) {
                             editor()->setCurrentParagraphType(ComicBookParagraphType::Page);
                             editor()->addParagraph(jumpForEnter(ComicBookParagraphType::Page));
@@ -205,7 +207,8 @@ void DescriptionHandler::handleOther(QKeyEvent* _event)
         if (_event->text() == ":") {
             backwardTextCorrected.chop(1);
         }
-        if (editor()->dictionaries()->pageIntros().contains(backwardTextCorrected)) {
+        if (editor()->dictionaries()->singlePageIntros().contains(backwardTextCorrected)
+            || editor()->dictionaries()->multiplePageIntros().contains(backwardTextCorrected)) {
             editor()->setCurrentParagraphType(ComicBookParagraphType::Page);
         } else if (editor()->dictionaries()->panelIntros().contains(backwardTextCorrected)) {
             editor()->setCurrentParagraphType(ComicBookParagraphType::Panel);

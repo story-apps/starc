@@ -44,7 +44,8 @@ public:
      * @brief Номер панели
      */
     Number number() const;
-    bool updateNumber(int& _fromNumber);
+    bool updateNumber(int& _fromNumber, const QVector<QString>& _singlePageIntros,
+                      const QVector<QString>& _multiplePageIntros);
 
     /**
      * @brief Цвет страницы

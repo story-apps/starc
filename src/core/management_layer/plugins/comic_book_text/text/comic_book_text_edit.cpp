@@ -1029,6 +1029,7 @@ void ComicBookTextEdit::paintEvent(QPaintEvent* _event)
                                         painter.setPen(DesignSystem::color().error());
                                         paintLeftPageIcon(rightPageIcon);
                                         paintRightPageIcon(leftPageIcon);
+                                        painter.setPen(palette().text().color());
                                     } else {
                                         paintLeftPageIcon(leftPageIcon);
                                         paintRightPageIcon(rightPageIcon);
