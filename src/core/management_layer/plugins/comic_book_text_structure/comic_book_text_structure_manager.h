@@ -10,17 +10,17 @@
 namespace ManagementLayer {
 
 /**
- * @brief Менеджер структуры сценария
+ * @brief Менеджер навигатора комикса
  */
-class MANAGER_PLUGIN_EXPORT ScreenplayTextStructureManager : public QObject, public IDocumentManager
+class MANAGER_PLUGIN_EXPORT ComicBookTextStructureManager : public QObject, public IDocumentManager
 {
     Q_OBJECT
     Q_PLUGIN_METADATA(IID "app.starc.ManagementLayer.IDocumentManager")
     Q_INTERFACES(ManagementLayer::IDocumentManager)
 
 public:
-    explicit ScreenplayTextStructureManager(QObject* _parent = nullptr);
-    ~ScreenplayTextStructureManager() override;
+    explicit ComicBookTextStructureManager(QObject* _parent = nullptr);
+    ~ComicBookTextStructureManager() override;
 
     /**
      * @brief Реализуем интерфейс менеджера документа
@@ -36,7 +36,7 @@ public:
 
 signals:
     /**
-     * @brief Пользователь выбрал элемент в навигаторе с заданным индексом в модели сценария
+     * @brief Пользователь выбрал элемент в навигаторе с заданным индексом в модели
      */
     void currentModelIndexChanged(const QModelIndex& _index);
 

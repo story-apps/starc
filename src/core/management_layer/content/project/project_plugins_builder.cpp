@@ -28,6 +28,7 @@ const QString kScreenplayStatisticsViewMime = QStringLiteral("application/x-star
 const QString kScreenplayStatisticsNavigatorMime = QStringLiteral("application/x-starc/navigator/screenplay/statistics");
 const QString kComicBookTitlePageEditorMime = QStringLiteral("application/x-starc/editor/comicbook/title-page");
 const QString kComicBookTextEditorMime = QStringLiteral("application/x-starc/editor/comicbook/text");
+const QString kComicBookTextNavigatorMime = QStringLiteral("application/x-starc/navigator/comicbook/text");
 
 /**
  * @brief Карта соотвествия майм-типов редактора к навигатору
@@ -36,7 +37,8 @@ const QHash<QString, QString> kEditorToNavigator
     = { { kSimpleTextEditorMime, kSimpleTextNavigatorMime },
         { kScreenplayTextEditorMime, kScreenplayTextNavigatorMime },
         { "application/x-starc/editor/screenplay/cards", kScreenplayTextNavigatorMime },
-        { kScreenplayStatisticsViewMime, kScreenplayStatisticsNavigatorMime }
+//        { kScreenplayStatisticsViewMime, kScreenplayStatisticsNavigatorMime },
+        { kComicBookTextEditorMime, kComicBookTextNavigatorMime },
       };
 
 /**
@@ -85,6 +87,7 @@ const QHash<QString, QString> kMimeToPlugin
         { "application/x-starc/editor/comicbook/information", "*comicbookinformationplugin*" },
         { kComicBookTitlePageEditorMime, "*titlepageplugin*" },
         { kComicBookTextEditorMime, "*comicbooktextplugin*" },
+        { kComicBookTextNavigatorMime, "*comicbooktextstructureplugin*" },
         { "application/x-starc/editor/character/information", "*characterinformationplugin*" },
         { "application/x-starc/editor/location/information", "*locationinformationplugin*" },
         { kSimpleTextEditorMime, "*simpletextplugin*" },
@@ -205,6 +208,9 @@ QVector<ProjectPluginsBuilder::EditorInfo> ProjectPluginsBuilder::editorsInfoFor
 
 QString ProjectPluginsBuilder::editorDescription(const QString& _editorMimeType) const
 {
+    //
+    // TODO: добавить все плагины
+    //
     const QHash<QString, QString> descriptions
         = { { "application/x-starc/editor/project/information",
               QApplication::translate("ProjectPluginsBuilder", "Information about project") },
@@ -220,11 +226,11 @@ QString ProjectPluginsBuilder::editorDescription(const QString& _editorMimeType)
               QApplication::translate("ProjectPluginsBuilder", "Text") },
             { "application/x-starc/editor/screenplay/treatment",
               QApplication::translate("ProjectPluginsBuilder", "Treatment text") },
-            { "application/x-starc/editor/screenplay/text",
+            { kScreenplayTextEditorMime,
               QApplication::translate("ProjectPluginsBuilder", "Screenplay text") },
             { "application/x-starc/editor/screenplay/cards",
               QApplication::translate("ProjectPluginsBuilder", "Cards") },
-            { "application/x-starc/editor/screenplay/statistics",
+            { kScreenplayStatisticsViewMime,
               QApplication::translate("ProjectPluginsBuilder", "Statistics") } };
     return descriptions.value(_editorMimeType);
 }
