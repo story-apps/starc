@@ -228,6 +228,11 @@ void CharacterHandler::handleTab(QKeyEvent*)
                     // Сохраним имя персонажа
                     //
                     storeCharacter();
+                    //
+                    // ...  добавим двоеточие после имени
+                    //
+                    cursor.movePosition(QTextCursor::EndOfBlock);
+                    cursor.insertText(":");
 
                     //
                     // Переходим к следующему блоку
