@@ -666,7 +666,7 @@ void ComicBookTextEdit::paintEvent(QPaintEvent* _event)
             QTextBlock block = topBlock;
             const QRectF viewportGeometry = viewport()->geometry();
             int lastSceneBlockBottom = 0;
-            QColor lastSceneColor;
+            QColor lastItemColor;
             bool isLastBlockSceneHeadingWithNumberAtRight = false;
             int lastCharacterBlockBottom = 0;
             QColor lastCharacterColor;
@@ -692,42 +692,33 @@ void ComicBookTextEdit::paintEvent(QPaintEvent* _event)
                     || blockType == ComicBookParagraphType::Panel
                     || blockType == ComicBookParagraphType::FolderHeader) {
                     lastSceneBlockBottom = cursorR.top();
-                    lastSceneColor = d->document.itemColor(block);
+                    lastItemColor = d->document.itemColor(block);
                 }
 
-                //                //
-                //                // Нарисуем цвет сцены
-                //                //
-                //                if (lastSceneColor.isValid()) {
-                //                    const auto isBlockSceneHeadingWithNumberAtRight
-                //                        = blockType == ComicBookParagraphType::Panel &&
-                //                        d->showSceneNumber
-                //                        && d->showSceneNumberOnRight;
-                //                    if (!isBlockSceneHeadingWithNumberAtRight) {
-                //                        const QPointF topLeft(
-                //                            isLeftToRight ? textRight + leftDelta +
-                //                            DesignSystem::layout().px8()
-                //                                          : (textLeft -
-                //                                          DesignSystem::layout().px4() +
-                //                                          leftDelta),
-                //                            isLastBlockSceneHeadingWithNumberAtRight
-                //                                ? cursorR.top() - verticalMargin
-                //                                : lastSceneBlockBottom - verticalMargin);
-                //                        const QPointF bottomRight(isLeftToRight ? textRight
-                //                                                          +
-                //                                                          DesignSystem::layout().px4()
-                //                                                          + leftDelta
-                //                                                                : textLeft +
-                //                                                                leftDelta,
-                //                                                  cursorREnd.bottom() +
-                //                                                  verticalMargin);
-                //                        const QRectF rect(topLeft, bottomRight);
-                //                        painter.fillRect(rect, lastSceneColor);
-                //                    }
+                //
+                // Нарисуем цвет панели
+                //
+                if (lastItemColor.isValid()) {
+                    const auto isBlockSceneHeadingWithNumberAtRight
+                        = blockType == ComicBookParagraphType::Panel && d->showSceneNumber
+                        && d->showSceneNumberOnRight;
+                    if (!isBlockSceneHeadingWithNumberAtRight) {
+                        const QPointF topLeft(
+                            isLeftToRight ? textRight + leftDelta + DesignSystem::layout().px8()
+                                          : (textLeft - DesignSystem::layout().px4() + leftDelta),
+                            isLastBlockSceneHeadingWithNumberAtRight
+                                ? cursorR.top() - verticalMargin
+                                : lastSceneBlockBottom - verticalMargin);
+                        const QPointF bottomRight(isLeftToRight ? textRight
+                                                          + DesignSystem::layout().px4() + leftDelta
+                                                                : textLeft + leftDelta,
+                                                  cursorREnd.bottom() + verticalMargin);
+                        const QRectF rect(topLeft, bottomRight);
+                        painter.fillRect(rect, lastItemColor);
+                    }
 
-                //                    isLastBlockSceneHeadingWithNumberAtRight =
-                //                    isBlockSceneHeadingWithNumberAtRight;
-                //                }
+                    isLastBlockSceneHeadingWithNumberAtRight = isBlockSceneHeadingWithNumberAtRight;
+                }
 
                 //                //
                 //                // Определим цвет персонажа
@@ -1051,190 +1042,7 @@ void ComicBookTextEdit::paintEvent(QPaintEvent* _event)
                                 }
                             }
                         }
-                        //                        //
-                        //                        // Прорисовка номеров сцен, если необходимо
-                        //                        //
-                        //                        if (d->showSceneNumber
-                        //                            && blockType == ComicBookParagraphType::Panel)
-                        //                            {
-                        //                            //
-                        //                            // Определим номер сцены
-                        //                            //
-                        //                            const auto sceneNumber =
-                        //                            d->document.sceneNumber(block); if
-                        //                            (!sceneNumber.isEmpty()) {
-                        //                                //
-                        //                                // Определим область для отрисовки и
-                        //                                выведем номер сцены в редактор
-                        //                                // в зависимости от стороны
-                        //                                //
-                        //                                if (d->showSceneNumberOnLeft) {
-                        //                                    QPointF topLeft(isLeftToRight ?
-                        //                                    pageLeft + leftDelta
-                        //                                                                  :
-                        //                                                                  textRight
-                        //                                                                  +
-                        //                                                                  leftDelta,
-                        //                                                    cursorR.top());
-                        //                                    QPointF bottomRight(isLeftToRight ?
-                        //                                    textLeft + leftDelta
-                        //                                                                      :
-                        //                                                                      pageRight
-                        //                                                                      +
-                        //                                                                      leftDelta,
-                        //                                                        cursorR.bottom());
-                        //                                    QRectF rect(topLeft, bottomRight);
-                        //                                    auto font =
-                        //                                    cursor.charFormat().font();
-                        //                                    font.setUnderline(false);
-                        //                                    painter.setFont(font);
-                        //                                    painter.drawText(rect, Qt::AlignRight
-                        //                                    | Qt::AlignTop,
-                        //                                                     sceneNumber);
-                        //                                }
-                        //                                if (d->showSceneNumberOnRight) {
-                        //                                    QPointF topLeft(isLeftToRight ?
-                        //                                    textRight - leftDelta
-                        //                                                                  :
-                        //                                                                  pageLeft
-                        //                                                                  -
-                        //                                                                  leftDelta,
-                        //                                                    cursorR.top());
-                        //                                    QPointF bottomRight(isLeftToRight ?
-                        //                                    pageRight - leftDelta
-                        //                                                                      :
-                        //                                                                      textLeft
-                        //                                                                      -
-                        //                                                                      leftDelta,
-                        //                                                        cursorR.bottom());
-                        //                                    QRectF rect(topLeft, bottomRight);
-                        //                                    auto font =
-                        //                                    cursor.charFormat().font();
-                        //                                    font.setUnderline(false);
-                        //                                    painter.setFont(font);
-                        //                                    if (lastSceneColor.isValid()) {
-                        //                                        painter.setPen(lastSceneColor);
-                        //                                    }
-                        //                                    painter.drawText(rect, Qt::AlignLeft |
-                        //                                    Qt::AlignTop,
-                        //                                                     sceneNumber);
-                        //                                    if (lastSceneColor.isValid()) {
-                        //                                        painter.setPen(palette().text().color());
-                        //                                    }
-                        //                                }
-                        //                            }
-                        //                        }
-                        //
-                        // Прорисовка номеров реплик, если необходимо
-                        //
-                        if (d->showDialogueNumber
-                            && blockType == ComicBookParagraphType::Character) {
-                            //
-                            // Определим номер реплики
-                            //
-                            const auto dialogueNumber = d->document.dialogueNumber(block);
-                            if (!dialogueNumber.isEmpty()) {
-                                //
-                                // Определим область для отрисовки и выведем номер реплики в
-                                // редактор
-                                //
-                                painter.setFont(cursor.charFormat().font());
-                                const int numberDelta
-                                    = painter.fontMetrics().horizontalAdvance(dialogueNumber);
-                                QRectF rect;
-                                //
-                                // Если имя персонажа находится не с самого края листа
-                                //
-                                if (block.blockFormat().leftMargin() > numberDelta) {
-                                    //
-                                    // ... то поместим номер реплики внутри текстовой области,
-                                    //     чтобы их было удобно отличать от номеров сцен
-                                    //
-                                    QPointF topLeft(
-                                        isLeftToRight
-                                            ? textLeft + leftDelta + spaceBetweenSceneNumberAndText
-                                            : textRight + leftDelta - spaceBetweenSceneNumberAndText
-                                                - numberDelta,
-                                        cursorR.top());
-                                    QPointF bottomRight(isLeftToRight ? textLeft + leftDelta
-                                                                + spaceBetweenSceneNumberAndText
-                                                                + numberDelta
-                                                                      : textRight + leftDelta
-                                                                - spaceBetweenSceneNumberAndText,
-                                                        cursorR.bottom());
-                                    rect = QRectF(topLeft, bottomRight);
-                                }
-                                //
-                                // В противном же случае
-                                //
-                                else {
-                                    //
-                                    // ... позиционируем номера реплик на полях, так же как и номера
-                                    // сцен
-                                    //
-                                    QPointF topLeft(isLeftToRight ? pageLeft + leftDelta
-                                                                  : textRight + leftDelta,
-                                                    cursorR.top());
-                                    QPointF bottomRight(isLeftToRight ? textLeft + leftDelta
-                                                                      : pageRight + leftDelta,
-                                                        cursorR.bottom());
-                                    rect = QRectF(topLeft, bottomRight);
-                                }
-                                painter.drawText(rect, Qt::AlignRight | Qt::AlignTop,
-                                                 dialogueNumber);
-                            }
-                        }
                     }
-
-                    //                    //
-                    //                    // Прорисовка префикса/постфикса для блока текста, если
-                    //                    это не пустая декорация
-                    //                    //
-                    //                    if (!block.text().isEmpty()
-                    //                        || !block.blockFormat().boolProperty(
-                    //                            ComicBookBlockStyle::PropertyIsCorrection)) {
-                    //                        //
-                    //                        // ... префикс
-                    //                        //
-                    //                        if
-                    //                        (block.charFormat().hasProperty(ComicBookBlockStyle::PropertyPrefix))
-                    //                        {
-                    //                            painter.setFont(block.charFormat().font());
-
-                    //                            const auto prefix =
-                    //                            block.charFormat().stringProperty(
-                    //                                ComicBookBlockStyle::PropertyPrefix);
-                    //                            const QPoint topLeft = QPoint(
-                    //                                cursorR.left() -
-                    //                                painter.fontMetrics().horizontalAdvance(prefix),
-                    //                                cursorR.top());
-                    //                            const QPoint bottomRight = QPoint(cursorR.left(),
-                    //                            cursorR.bottom()); const QRect rect(topLeft,
-                    //                            bottomRight); painter.drawText(rect, Qt::AlignLeft
-                    //                            | Qt::AlignVCenter, prefix);
-                    //                        }
-                    //                        //
-                    //                        // ... постфикс
-                    //                        //
-                    //                        if
-                    //                        (block.charFormat().hasProperty(ComicBookBlockStyle::PropertyPostfix))
-                    //                        {
-                    //                            painter.setFont(block.charFormat().font());
-
-                    //                            const auto postfix =
-                    //                            block.charFormat().stringProperty(
-                    //                                ComicBookBlockStyle::PropertyPostfix);
-                    //                            const QPoint topLeft = QPoint(cursorREnd.left(),
-                    //                            cursorREnd.top()); const QPoint bottomRight
-                    //                                = QPoint(cursorREnd.left()
-                    //                                             +
-                    //                                             painter.fontMetrics().horizontalAdvance(postfix),
-                    //                                         cursorREnd.bottom());
-                    //                            const QRect rect(topLeft, bottomRight);
-                    //                            painter.drawText(rect, Qt::AlignRight |
-                    //                            Qt::AlignVCenter, postfix);
-                    //                        }
-                    //                    }
                 }
 
                 lastSceneBlockBottom = cursorREnd.bottom();
