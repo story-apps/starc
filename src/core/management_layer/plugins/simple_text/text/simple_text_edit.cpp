@@ -668,9 +668,7 @@ void SimpleTextEdit::insertFromMimeData(const QMimeData* _source)
         textToInsert = _source->data(d->model->mimeTypes().constFirst());
     }
     //
-    // Если простой текст, то вставляем его, импортировав с фонтана
-    // NOTE: Перед текстом нужно обязательно добавить перенос строки, чтобы он
-    //       не воспринимался как титульная страница
+    // Если простой текст, то вставляем его, импортировав построчно
     //
     else if (_source->hasText()) {
         BusinessLayer::MarkdownImporter markdownImporter;

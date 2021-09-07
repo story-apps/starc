@@ -6,7 +6,7 @@
 namespace BusinessLayer {
 
 /**
- * @brief Импортер сценария из файлов Trelby
+ * @brief Импортер текста из markdown файла
  */
 class CORE_LIBRARY_EXPORT MarkdownImporter : public AbstractTextImporter
 {

@@ -78,6 +78,7 @@ SOURCES += \
     business_layer/export/screenplay/abstract_exporter.cpp \
     business_layer/export/screenplay/docx_exporter.cpp \
     business_layer/export/screenplay/pdf_exporter.cpp \
+    business_layer/import/comic_book/plain_text_importer.cpp \
     business_layer/import/screenplay/celtx_importer.cpp \
     business_layer/import/screenplay/document_importer.cpp \
     business_layer/import/screenplay/fdx_importer.cpp \
@@ -253,6 +254,9 @@ HEADERS += \
     business_layer/export/screenplay/docx_exporter.h \
     business_layer/export/screenplay/export_options.h \
     business_layer/export/screenplay/pdf_exporter.h \
+    business_layer/import/comic_book/abstract_comic_book_importer.h \
+    business_layer/import/comic_book/comic_book_import_options.h \
+    business_layer/import/comic_book/plain_text_importer.h \
     business_layer/import/screenplay/abstract_screenplay_importer.h \
     business_layer/import/screenplay/celtx_importer.h \
     business_layer/import/screenplay/document_importer.h \
