@@ -151,12 +151,12 @@ void StandardKeyHandler::handleUp(QKeyEvent* _event)
         // видимому
         //
         const QTextBlock firstDocumentBlock = cursor.document()->firstBlock();
-        while (
-            cursor.block() != firstDocumentBlock
-            && (!cursor.block().isVisible()
-                || ComicBookBlockStyle::forBlock(cursor.block())
-                    == ComicBookParagraphType::PageSplitter
-                || cursor.blockFormat().boolProperty(ComicBookBlockStyle::PropertyIsCorrection))) {
+        while (cursor.block() != firstDocumentBlock
+               && (!cursor.block().isVisible()
+                   || ComicBookBlockStyle::forBlock(cursor.block())
+                       == ComicBookParagraphType::PageSplitter
+                   || cursor.blockFormat().boolProperty(ComicBookBlockStyle::PropertyIsCorrection)
+                   || cursor.blockFormat().boolProperty(PageTextEdit::PropertyDontShowCursor))) {
             cursor.movePosition(QTextCursor::PreviousBlock, cursorMoveMode);
             cursor.movePosition(QTextCursor::EndOfBlock, cursorMoveMode);
         }
@@ -249,12 +249,12 @@ void StandardKeyHandler::handleDown(QKeyEvent* _event)
         // Если мы опустились на строку вниз, но попали в невидимый блок, перейдём к следующему
         // видимому
         //
-        while (
-            !cursor.atEnd()
-            && (!cursor.block().isVisible()
-                || ComicBookBlockStyle::forBlock(cursor.block())
-                    == ComicBookParagraphType::PageSplitter
-                || cursor.blockFormat().boolProperty(ComicBookBlockStyle::PropertyIsCorrection))) {
+        while (!cursor.atEnd()
+               && (!cursor.block().isVisible()
+                   || ComicBookBlockStyle::forBlock(cursor.block())
+                       == ComicBookParagraphType::PageSplitter
+                   || cursor.blockFormat().boolProperty(ComicBookBlockStyle::PropertyIsCorrection)
+                   || cursor.blockFormat().boolProperty(PageTextEdit::PropertyDontShowCursor))) {
             cursor.movePosition(QTextCursor::NextBlock, cursorMoveMode);
             cursor.movePosition(QTextCursor::EndOfBlock, cursorMoveMode);
         }
@@ -275,6 +275,16 @@ void StandardKeyHandler::handleDown(QKeyEvent* _event)
             //
             if (!cursor.atEnd()) {
                 cursor.movePosition(QTextCursor::PreviousCharacter, cursorMoveMode);
+                while (!cursor.atStart()
+                       && (!cursor.block().isVisible()
+                           || ComicBookBlockStyle::forBlock(cursor.block())
+                               == ComicBookParagraphType::PageSplitter
+                           || cursor.blockFormat().boolProperty(
+                               ComicBookBlockStyle::PropertyIsCorrection)
+                           || cursor.blockFormat().boolProperty(
+                               PageTextEdit::PropertyDontShowCursor))) {
+                    cursor.movePosition(QTextCursor::PreviousCharacter, cursorMoveMode);
+                }
             }
 
             int currentLineEndPosition = cursor.position();
