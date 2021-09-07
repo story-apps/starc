@@ -194,12 +194,14 @@ void DescriptionHandler::handleOther(QKeyEvent* _event)
     QTextBlock currentBlock = cursor.block();
     // ... текст до курсора
     QString cursorBackwardText = currentBlock.text().left(cursor.positionInBlock());
+    // ... текст после курсора
+    QString cursorForwardText = currentBlock.text().mid(cursor.positionInBlock());
 
     //
     // Обработка
     //
     if (cursorBackwardText.contains(QRegularExpression("( |:)$")) && _event != nullptr
-        && (_event->text() == " " || _event->text() == ":")) {
+        && (_event->text() == " " || _event->text() == ":") && cursorForwardText.isEmpty()) {
         //
         // Потенциально была введена страница или панель
         //
