@@ -11,13 +11,13 @@ namespace Ui {
 /**
  * @brief Диалог настройки параметров экспорта
  */
-class ExportDialog : public AbstractDialog
+class ScreenplayExportDialog : public AbstractDialog
 {
     Q_OBJECT
 
 public:
-    explicit ExportDialog(QWidget* _parent = nullptr);
-    ~ExportDialog() override;
+    explicit ScreenplayExportDialog(QWidget* _parent = nullptr);
+    ~ScreenplayExportDialog() override;
 
     /**
      * @brief Получить опции экспорта
@@ -27,7 +27,7 @@ public:
     /**
      * @brief Нужно ли открыть экспортированный документ после экспорта
      */
-    bool openDocumentAfetrExport() const;
+    bool openDocumentAfterExport() const;
 
 signals:
     /**

@@ -1,11 +1,37 @@
-#ifndef COMIC_BOOK_ABSTRACT_EXPORTER_H
-#define COMIC_BOOK_ABSTRACT_EXPORTER_H
+#pragma once
+
+#include <corelib_global.h>
 
 
-class abstract_comic_book_exporter
+namespace BusinessLayer {
+
+struct ComicBookExportOptions;
+class ComicBookTextDocument;
+class ComicBookTextModel;
+
+/**
+ * @brief Базовый класс для реализации экспортера сценария
+ */
+class CORE_LIBRARY_EXPORT ComicBookAbstractExporter
 {
 public:
-    abstract_comic_book_exporter();
+    virtual ~ComicBookAbstractExporter()
+    {
+    }
+
+    /**
+     * @brief Экспорт сценария в файл
+     */
+    virtual void exportTo(ComicBookTextModel* _model,
+                          const ComicBookExportOptions& _exportOptions) const = 0;
+
+protected:
+    /**
+     * @brief Подготовить документ к экспорту в соответствии с заданными опциями
+     * @note Владение документом передаётся клиенту
+     */
+    ComicBookTextDocument* prepareDocument(ComicBookTextModel* _model,
+                                           const ComicBookExportOptions& _exportOptions) const;
 };
 
-#endif // COMIC_BOOK_ABSTRACT_EXPORTER_H
+} // namespace BusinessLayer

@@ -69,7 +69,8 @@ SOURCES += \
     ui/account/upgrade_to_pro_dialog.cpp \
     ui/application_style.cpp \
     ui/application_view.cpp \
-    ui/export/export_dialog.cpp \
+    ui/export/comic_book_export_dialog.cpp \
+    ui/export/screenplay_export_dialog.cpp \
     ui/import/import_dialog.cpp \
     ui/menu_view.cpp \
     ui/onboarding/onboarding_navigator.cpp \
@@ -122,7 +123,8 @@ HEADERS += \
     ui/account/upgrade_to_pro_dialog.h \
     ui/application_style.h \
     ui/application_view.h \
-    ui/export/export_dialog.h \
+    ui/export/comic_book_export_dialog.h \
+    ui/export/screenplay_export_dialog.h \
     ui/import/import_dialog.h \
     ui/menu_view.h \
     ui/onboarding/onboarding_navigator.h \

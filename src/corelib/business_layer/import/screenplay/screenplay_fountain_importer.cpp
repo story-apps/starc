@@ -154,8 +154,8 @@ public:
 };
 
 void ScreenplayFountainImporter::Implementation::processBlock(const QString& _paragraphText,
-                                                    ScreenplayParagraphType _type,
-                                                    QXmlStreamWriter& _writer)
+                                                              ScreenplayParagraphType _type,
+                                                              QXmlStreamWriter& _writer)
 {
     if (!isNotation && !isCommenting) {
         //
@@ -452,8 +452,8 @@ void ScreenplayFountainImporter::Implementation::processBlock(const QString& _pa
 }
 
 void ScreenplayFountainImporter::Implementation::appendBlock(const QString& _paragraphText,
-                                                   ScreenplayParagraphType _type,
-                                                   QXmlStreamWriter& _writer)
+                                                             ScreenplayParagraphType _type,
+                                                             QXmlStreamWriter& _writer)
 {
     int leadSpaceCount = 0;
     QString paragraphText = _paragraphText;
@@ -714,10 +714,11 @@ QString ScreenplayFountainImporter::Implementation::simplify(const QString& _val
     return res;
 }
 
-bool ScreenplayFountainImporter::Implementation::processFormat(bool _italics, bool _bold, bool _underline,
-                                                     bool _forCurrentCharacter,
-                                                     bool _isCanStartEmphasis,
-                                                     bool _isCanEndEmphasis)
+bool ScreenplayFountainImporter::Implementation::processFormat(bool _italics, bool _bold,
+                                                               bool _underline,
+                                                               bool _forCurrentCharacter,
+                                                               bool _isCanStartEmphasis,
+                                                               bool _isCanEndEmphasis)
 {
     //
     // Новый формат, который еще не начат
@@ -792,7 +793,8 @@ bool ScreenplayFountainImporter::Implementation::canStartEmphasis() const
     return blockText.size() <= 1 || !blockText[blockText.size() - 2].isLetterOrNumber();
 }
 
-bool ScreenplayFountainImporter::Implementation::canEndEmphasis(const QString& _paragraphText, int _pos) const
+bool ScreenplayFountainImporter::Implementation::canEndEmphasis(const QString& _paragraphText,
+                                                                int _pos) const
 {
     return _pos >= _paragraphText.size() || !_paragraphText[_pos].isLetterOrNumber();
 }
@@ -806,7 +808,7 @@ ScreenplayFountainImporter::ScreenplayFountainImporter()
 {
 }
 
-FountainImporter::~FountainImporter() = default;
+ScreenplayFountainImporter::~ScreenplayFountainImporter() = default;
 
 ScreenplayAbstractImporter::Documents ScreenplayFountainImporter::importDocuments(
     const ScreenplayImportOptions& _options) const

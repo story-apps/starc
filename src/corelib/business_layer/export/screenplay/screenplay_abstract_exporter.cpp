@@ -16,8 +16,8 @@
 
 namespace BusinessLayer {
 
-ScreenplayTextDocument* ScreenplayAbstractExporter::prepareDocument(ScreenplayTextModel* _model,
-                                                          const ScreenplayExportOptions& _exportOptions) const
+ScreenplayTextDocument* ScreenplayAbstractExporter::prepareDocument(
+    ScreenplayTextModel* _model, const ScreenplayExportOptions& _exportOptions) const
 {
     //
     // Настраиваем документ

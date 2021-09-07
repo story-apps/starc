@@ -1,4 +1,4 @@
-#include "export_dialog.h"
+#include "screenplay_export_dialog.h"
 
 #include <business_layer/export/screenplay/screenplay_export_options.h>
 #include <business_layer/templates/screenplay_template.h>
@@ -18,7 +18,7 @@
 
 namespace Ui {
 
-class ExportDialog::Implementation
+class ScreenplayExportDialog::Implementation
 {
 public:
     explicit Implementation(QWidget* _parent);
@@ -42,7 +42,7 @@ public:
     Button* exportButton = nullptr;
 };
 
-ExportDialog::Implementation::Implementation(QWidget* _parent)
+ScreenplayExportDialog::Implementation::Implementation(QWidget* _parent)
     : fileFormat(new ComboBox(_parent))
     , screenplayTemplate(new ComboBox(_parent))
     , printTitlePage(new CheckBox(_parent))
@@ -101,7 +101,7 @@ ExportDialog::Implementation::Implementation(QWidget* _parent)
 // ****
 
 
-ExportDialog::ExportDialog(QWidget* _parent)
+ScreenplayExportDialog::ScreenplayExportDialog(QWidget* _parent)
     : AbstractDialog(_parent)
     , d(new Implementation(this))
 {
@@ -205,20 +205,20 @@ ExportDialog::ExportDialog(QWidget* _parent)
     connect(d->printSceneNumbersOnRight, &CheckBox::checkedChanged, this,
             screenplayEditorCorrectShownSceneNumber);
 
-    connect(d->exportButton, &Button::clicked, this, &ExportDialog::exportRequested);
-    connect(d->cancelButton, &Button::clicked, this, &ExportDialog::canceled);
+    connect(d->exportButton, &Button::clicked, this, &ScreenplayExportDialog::exportRequested);
+    connect(d->cancelButton, &Button::clicked, this, &ScreenplayExportDialog::canceled);
 
     updateTranslations();
     designSystemChangeEvent(nullptr);
 }
 
-ExportDialog::~ExportDialog() = default;
+ScreenplayExportDialog::~ScreenplayExportDialog() = default;
 
-BusinessLayer::ScreenplayExportOptions ExportDialog::exportOptions() const
+BusinessLayer::ScreenplayExportOptions ScreenplayExportDialog::exportOptions() const
 {
     BusinessLayer::ScreenplayExportOptions options;
-    options.fileFormat
-        = static_cast<BusinessLayer::ScreenplayExportFileFormat>(d->fileFormat->currentIndex().row());
+    options.fileFormat = static_cast<BusinessLayer::ScreenplayExportFileFormat>(
+        d->fileFormat->currentIndex().row());
     options.templateId = d->screenplayTemplate->currentIndex()
                              .data(BusinessLayer::TemplatesFacade::kTemplateIdRole)
                              .toString();
@@ -235,22 +235,22 @@ BusinessLayer::ScreenplayExportOptions ExportDialog::exportOptions() const
     return options;
 }
 
-bool ExportDialog::openDocumentAfetrExport() const
+bool ScreenplayExportDialog::openDocumentAfterExport() const
 {
     return d->openDocumentAfterExport->isChecked();
 }
 
-QWidget* ExportDialog::focusedWidgetAfterShow() const
+QWidget* ScreenplayExportDialog::focusedWidgetAfterShow() const
 {
     return d->fileFormat;
 }
 
-QWidget* ExportDialog::lastFocusableWidget() const
+QWidget* ScreenplayExportDialog::lastFocusableWidget() const
 {
     return d->exportButton;
 }
 
-void ExportDialog::updateTranslations()
+void ScreenplayExportDialog::updateTranslations()
 {
     setTitle(tr("Export screenplay"));
 
@@ -271,7 +271,7 @@ void ExportDialog::updateTranslations()
     d->cancelButton->setText(tr("Cancel"));
 }
 
-void ExportDialog::designSystemChangeEvent(DesignSystemChangeEvent* _event)
+void ScreenplayExportDialog::designSystemChangeEvent(DesignSystemChangeEvent* _event)
 {
     AbstractDialog::designSystemChangeEvent(_event);
 

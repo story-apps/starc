@@ -1,7 +1,7 @@
 #include "screenplay_docx_exporter.h"
 
-#include "screenplay_export_options.h"
 #include "qtzip/QtZipWriter"
+#include "screenplay_export_options.h"
 
 #include <business_layer/document/screenplay/text/screenplay_text_block_data.h>
 #include <business_layer/document/screenplay/text/screenplay_text_cursor.h>
@@ -235,6 +235,12 @@ QString docxBlockStyle(const ScreenplayBlockStyle& _style, const QString& _defau
     //
     blockStyle.append(QString("<w:bidi w:val=\"%1\"/>")
                           .arg(QLocale().textDirection() == Qt::RightToLeft ? "true" : "false"));
+    //
+    // ... начинать с новой страницы
+    //
+    if (_style.blockFormat().pageBreakPolicy() == QTextFormat::PageBreak_AlwaysBefore) {
+        blockStyle.append("<w:pageBreakBefore/>");
+    }
     //
     // ... конец свойств
     //
@@ -1053,7 +1059,8 @@ void writeComments(QtZipWriter* _zip, const QMap<int, QStringList>& _comments)
 
 } // namespace
 
-void ScreenplayDocxExporter::exportTo(ScreenplayTextModel* _model, const ScreenplayExportOptions& _exportOptions) const
+void ScreenplayDocxExporter::exportTo(ScreenplayTextModel* _model,
+                                      const ScreenplayExportOptions& _exportOptions) const
 {
     //
     // Открываем документ на запись

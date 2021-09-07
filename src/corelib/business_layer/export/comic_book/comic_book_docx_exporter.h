@@ -1,11 +1,20 @@
-#ifndef COMIC_BOOK_DOCX_EXPORTER_H
-#define COMIC_BOOK_DOCX_EXPORTER_H
+#pragma once
+
+#include "comic_book_abstract_exporter.h"
 
 
-class docx_comic_book_exporter
+namespace BusinessLayer {
+
+class CORE_LIBRARY_EXPORT ComicBookDocxExporter : public ComicBookAbstractExporter
 {
 public:
-    docx_comic_book_exporter();
+    ComicBookDocxExporter() = default;
+
+    /**
+     * @brief Экспортировать сценарий
+     */
+    void exportTo(ComicBookTextModel* _model,
+                  const ComicBookExportOptions& _exportOptions) const override;
 };
 
-#endif // COMIC_BOOK_DOCX_EXPORTER_H
+} // namespace BusinessLayer
