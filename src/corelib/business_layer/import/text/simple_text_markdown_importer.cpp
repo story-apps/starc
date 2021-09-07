@@ -34,7 +34,8 @@ SimpleTextAbstractImporter::Document SimpleTextMarkdownImporter::importDocument(
     return textDocument;
 }
 
-SimpleTextAbstractImporter::Document SimpleTextMarkdownImporter::importDocument(const QString& _text) const
+SimpleTextAbstractImporter::Document SimpleTextMarkdownImporter::importDocument(
+    const QString& _text) const
 {
     if (_text.simplified().isEmpty()) {
         return {};

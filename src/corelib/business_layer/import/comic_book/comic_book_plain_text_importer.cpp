@@ -34,7 +34,8 @@ ComicBookAbstractImporter::Document ComicBookPlainTextImporter::importComicBook(
     return textDocument;
 }
 
-ComicBookAbstractImporter::Document ComicBookPlainTextImporter::importComicBook(const QString& _text) const
+ComicBookAbstractImporter::Document ComicBookPlainTextImporter::importComicBook(
+    const QString& _text) const
 {
     if (_text.simplified().isEmpty()) {
         return {};

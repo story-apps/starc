@@ -413,7 +413,8 @@ static void printPage(int _pageNumber, QPainter* _painter, const QTextDocument* 
  * @note Адаптация функции QTextDocument::print
  */
 static void printDocument(QTextDocument* _document, QPdfWriter* _printer,
-                          const ScreenplayTemplate& _template, const ScreenplayExportOptions& _exportOptions)
+                          const ScreenplayTemplate& _template,
+                          const ScreenplayExportOptions& _exportOptions)
 {
     QPainter painter(_printer);
     // Check that there is a valid device to print to.
@@ -476,7 +477,8 @@ static void printDocument(QTextDocument* _document, QPdfWriter* _printer,
 } // namespace
 
 
-void ScreenplayPdfExporter::exportTo(ScreenplayTextModel* _model, const ScreenplayExportOptions& _exportOptions) const
+void ScreenplayPdfExporter::exportTo(ScreenplayTextModel* _model,
+                                     const ScreenplayExportOptions& _exportOptions) const
 {
     //
     // Настраиваем документ
