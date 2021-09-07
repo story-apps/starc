@@ -10,7 +10,7 @@ namespace BusinessLayer {
 /**
  * @brief Опции импорта
  */
-struct CORE_LIBRARY_EXPORT TextImportOptions {
+struct CORE_LIBRARY_EXPORT SimpleTextImportOptions {
     /**
      * @brief Путь файла для импорта
      */

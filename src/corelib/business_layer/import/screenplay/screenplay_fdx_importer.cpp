@@ -1,4 +1,4 @@
-#include "fdx_importer.h"
+#include "screenplay_fdx_importer.h"
 
 #include "screenlay_import_options.h"
 
@@ -19,7 +19,7 @@
 
 namespace BusinessLayer {
 
-AbstractScreenplayImporter::Documents FdxImporter::importDocuments(
+ScreenplayAbstractImporter::Documents ScreenplayFdxImporter::importDocuments(
     const ScreenplayImportOptions& _options) const
 {
     //
@@ -129,7 +129,7 @@ AbstractScreenplayImporter::Documents FdxImporter::importDocuments(
     return documents;
 }
 
-QVector<AbstractScreenplayImporter::Screenplay> FdxImporter::importScreenplays(
+QVector<ScreenplayAbstractImporter::Screenplay> ScreenplayFdxImporter::importScreenplays(
     const ScreenplayImportOptions& _options) const
 {
     Screenplay result;

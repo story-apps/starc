@@ -1,6 +1,6 @@
-#include "docx_exporter.h"
+#include "screenplay_docx_exporter.h"
 
-#include "export_options.h"
+#include "screenplay_export_options.h"
 #include "qtzip/QtZipWriter"
 
 #include <business_layer/document/screenplay/text/screenplay_text_block_data.h>
@@ -69,7 +69,7 @@ const QMap<int, ScreenplayParagraphType>& paragraphTypes()
 /**
  * @brief Шаблон экспорта
  */
-const ScreenplayTemplate& exportTemplate(const ExportOptions& _exportOptions)
+const ScreenplayTemplate& exportTemplate(const ScreenplayExportOptions& _exportOptions)
 {
     return TemplatesFacade::screenplayTemplate(_exportOptions.templateId);
 }
@@ -77,7 +77,7 @@ const ScreenplayTemplate& exportTemplate(const ExportOptions& _exportOptions)
 /**
  * @brief Необходимо ли писать верхний колонтитул
  */
-bool needWriteHeader(const ExportOptions& _exportOptions)
+bool needWriteHeader(const ScreenplayExportOptions& _exportOptions)
 {
     return exportTemplate(_exportOptions).pageNumbersAlignment().testFlag(Qt::AlignTop)
         || !_exportOptions.header.isEmpty();
@@ -86,7 +86,7 @@ bool needWriteHeader(const ExportOptions& _exportOptions)
 /**
  * @brief Необходимо ли писать нижний колонтитул
  */
-bool needWriteFooter(const ExportOptions& _exportOptions)
+bool needWriteFooter(const ScreenplayExportOptions& _exportOptions)
 {
     return exportTemplate(_exportOptions).pageNumbersAlignment().testFlag(Qt::AlignBottom)
         || !_exportOptions.footer.isEmpty();
@@ -339,7 +339,7 @@ bool isCommentsRangeEnd(const QTextBlock& _block, const QTextLayout::FormatRange
  * @brief Сформировать текст блока документа в зависимости от его стиля и оформления
  */
 QString docxText(QMap<int, QStringList>& _comments, const ScreenplayTextCursor& _cursor,
-                 const ExportOptions& _exportOptions)
+                 const ScreenplayExportOptions& _exportOptions)
 {
     //
     // Блокируем сигналы от документа - по ходу экспорта мы будем изменять документ,
@@ -659,7 +659,7 @@ QString docxText(QMap<int, QStringList>& _comments, const ScreenplayTextCursor& 
     return documentXml;
 }
 
-void writeStaticData(QtZipWriter* _zip, const ExportOptions& _exportOptions)
+void writeStaticData(QtZipWriter* _zip, const ScreenplayExportOptions& _exportOptions)
 {
     //
     // Перечисление всех компонентов архива
@@ -765,7 +765,7 @@ void writeStaticData(QtZipWriter* _zip, const ExportOptions& _exportOptions)
     _zip->addFile(QString::fromLatin1("word/settings.xml"), wordSettings.toUtf8());
 }
 
-void writeStyles(QtZipWriter* _zip, const ExportOptions& _exportOptions)
+void writeStyles(QtZipWriter* _zip, const ScreenplayExportOptions& _exportOptions)
 {
     //
     // Сформируем xml стилей
@@ -812,7 +812,7 @@ void writeStyles(QtZipWriter* _zip, const ExportOptions& _exportOptions)
     _zip->addFile(QString::fromLatin1("word/styles.xml"), styleXml.toUtf8());
 }
 
-void writeHeader(QtZipWriter* _zip, const ExportOptions& _exportOptions)
+void writeHeader(QtZipWriter* _zip, const ScreenplayExportOptions& _exportOptions)
 {
     const auto& screenplayTemplate = exportTemplate(_exportOptions);
 
@@ -872,7 +872,7 @@ void writeHeader(QtZipWriter* _zip, const ExportOptions& _exportOptions)
     _zip->addFile(QString::fromLatin1("word/header1.xml"), headerXml.toUtf8());
 }
 
-void writeFooter(QtZipWriter* _zip, const ExportOptions& _exportOptions)
+void writeFooter(QtZipWriter* _zip, const ScreenplayExportOptions& _exportOptions)
 {
     const auto& screenplayTemplate = exportTemplate(_exportOptions);
 
@@ -933,7 +933,7 @@ void writeFooter(QtZipWriter* _zip, const ExportOptions& _exportOptions)
 }
 
 void writeDocument(QtZipWriter* _zip, ScreenplayTextDocument* _screenplayText,
-                   QMap<int, QStringList>& _comments, const ExportOptions& _exportOptions)
+                   QMap<int, QStringList>& _comments, const ScreenplayExportOptions& _exportOptions)
 {
     QString documentXml
         = "<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"yes\"?>"
@@ -1053,7 +1053,7 @@ void writeComments(QtZipWriter* _zip, const QMap<int, QStringList>& _comments)
 
 } // namespace
 
-void DocxExporter::exportTo(ScreenplayTextModel* _model, const ExportOptions& _exportOptions) const
+void ScreenplayDocxExporter::exportTo(ScreenplayTextModel* _model, const ScreenplayExportOptions& _exportOptions) const
 {
     //
     // Открываем документ на запись

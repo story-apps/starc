@@ -1,4 +1,4 @@
-#include "fountain_importer.h"
+#include "screenplay_fountain_importer.h"
 
 #include "screenlay_import_options.h"
 
@@ -52,7 +52,7 @@ const QString kDoubleWhitespace = QLatin1String("  ");
 
 } // namespace
 
-class FountainImporter::Implementation
+class ScreenplayFountainImporter::Implementation
 {
 public:
     /**
@@ -153,7 +153,7 @@ public:
     ScreenplayTextModelTextItem::TextFormat lastFormat;
 };
 
-void FountainImporter::Implementation::processBlock(const QString& _paragraphText,
+void ScreenplayFountainImporter::Implementation::processBlock(const QString& _paragraphText,
                                                     ScreenplayParagraphType _type,
                                                     QXmlStreamWriter& _writer)
 {
@@ -451,7 +451,7 @@ void FountainImporter::Implementation::processBlock(const QString& _paragraphTex
     }
 }
 
-void FountainImporter::Implementation::appendBlock(const QString& _paragraphText,
+void ScreenplayFountainImporter::Implementation::appendBlock(const QString& _paragraphText,
                                                    ScreenplayParagraphType _type,
                                                    QXmlStreamWriter& _writer)
 {
@@ -665,7 +665,7 @@ void FountainImporter::Implementation::appendBlock(const QString& _paragraphText
     //
 }
 
-void FountainImporter::Implementation::appendComments(QXmlStreamWriter& _writer)
+void ScreenplayFountainImporter::Implementation::appendComments(QXmlStreamWriter& _writer)
 {
     if (notes.isEmpty()) {
         return;
@@ -697,7 +697,7 @@ void FountainImporter::Implementation::appendComments(QXmlStreamWriter& _writer)
     notes.clear();
 }
 
-QString FountainImporter::Implementation::simplify(const QString& _value)
+QString ScreenplayFountainImporter::Implementation::simplify(const QString& _value)
 {
     QString res;
     for (int i = 0; i != _value.size(); ++i) {
@@ -714,7 +714,7 @@ QString FountainImporter::Implementation::simplify(const QString& _value)
     return res;
 }
 
-bool FountainImporter::Implementation::processFormat(bool _italics, bool _bold, bool _underline,
+bool ScreenplayFountainImporter::Implementation::processFormat(bool _italics, bool _bold, bool _underline,
                                                      bool _forCurrentCharacter,
                                                      bool _isCanStartEmphasis,
                                                      bool _isCanEndEmphasis)
@@ -787,12 +787,12 @@ bool FountainImporter::Implementation::processFormat(bool _italics, bool _bold, 
     }
 }
 
-bool FountainImporter::Implementation::canStartEmphasis() const
+bool ScreenplayFountainImporter::Implementation::canStartEmphasis() const
 {
     return blockText.size() <= 1 || !blockText[blockText.size() - 2].isLetterOrNumber();
 }
 
-bool FountainImporter::Implementation::canEndEmphasis(const QString& _paragraphText, int _pos) const
+bool ScreenplayFountainImporter::Implementation::canEndEmphasis(const QString& _paragraphText, int _pos) const
 {
     return _pos >= _paragraphText.size() || !_paragraphText[_pos].isLetterOrNumber();
 }
@@ -801,14 +801,14 @@ bool FountainImporter::Implementation::canEndEmphasis(const QString& _paragraphT
 // ****
 
 
-FountainImporter::FountainImporter()
+ScreenplayFountainImporter::ScreenplayFountainImporter()
     : d(new Implementation)
 {
 }
 
 FountainImporter::~FountainImporter() = default;
 
-AbstractScreenplayImporter::Documents FountainImporter::importDocuments(
+ScreenplayAbstractImporter::Documents ScreenplayFountainImporter::importDocuments(
     const ScreenplayImportOptions& _options) const
 {
     //
@@ -1020,7 +1020,7 @@ AbstractScreenplayImporter::Documents FountainImporter::importDocuments(
     return documents;
 }
 
-QVector<AbstractScreenplayImporter::Screenplay> FountainImporter::importScreenplays(
+QVector<ScreenplayAbstractImporter::Screenplay> ScreenplayFountainImporter::importScreenplays(
     const ScreenplayImportOptions& _options) const
 {
     if (_options.importScreenplay == false) {
@@ -1046,7 +1046,7 @@ QVector<AbstractScreenplayImporter::Screenplay> FountainImporter::importScreenpl
     return { screenplay };
 }
 
-AbstractScreenplayImporter::Screenplay FountainImporter::importScreenplay(
+ScreenplayAbstractImporter::Screenplay ScreenplayFountainImporter::importScreenplay(
     const QString& _screenplayText) const
 {
     if (_screenplayText.simplified().isEmpty()) {

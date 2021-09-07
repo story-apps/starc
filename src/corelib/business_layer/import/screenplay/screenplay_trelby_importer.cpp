@@ -1,4 +1,4 @@
-#include "trelby_importer.h"
+#include "screenplay_trelby_importer.h"
 
 #include "screenlay_import_options.h"
 
@@ -16,7 +16,7 @@
 
 namespace BusinessLayer {
 
-AbstractScreenplayImporter::Documents TrelbyImporter::importDocuments(
+ScreenplayAbstractImporter::Documents ScreenplayTrelbyImporter::importDocuments(
     const ScreenplayImportOptions& _options) const
 {
     //
@@ -117,7 +117,7 @@ AbstractScreenplayImporter::Documents TrelbyImporter::importDocuments(
     return documents;
 }
 
-QVector<AbstractScreenplayImporter::Screenplay> TrelbyImporter::importScreenplays(
+QVector<ScreenplayAbstractImporter::Screenplay> ScreenplayTrelbyImporter::importScreenplays(
     const ScreenplayImportOptions& _options) const
 {
     if (_options.importScreenplay == false) {

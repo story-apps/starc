@@ -6,7 +6,7 @@
 #include <business_layer/document/comic_book/text/comic_book_text_corrector.h>
 #include <business_layer/document/comic_book/text/comic_book_text_cursor.h>
 #include <business_layer/document/comic_book/text/comic_book_text_document.h>
-#include <business_layer/import/comic_book/plain_text_importer.h>
+#include <business_layer/import/comic_book/comic_book_plain_text_importer.h>
 #include <business_layer/model/comic_book/comic_book_information_model.h>
 #include <business_layer/model/comic_book/text/comic_book_text_model.h>
 #include <business_layer/model/comic_book/text/comic_book_text_model_text_item.h>
@@ -1253,7 +1253,7 @@ void ComicBookTextEdit::insertFromMimeData(const QMimeData* _source)
     // Если простой текст, то вставляем его, импортировав построчно
     //
     else if (_source->hasText()) {
-        BusinessLayer::PlainTextImporter plainTextImporter;
+        BusinessLayer::ComicBookPlainTextImporter plainTextImporter;
         textToInsert = plainTextImporter.importComicBook(_source->text()).text;
     }
 

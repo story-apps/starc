@@ -11,7 +11,7 @@ namespace BusinessLayer {
 /**
  * @brief Формат экспортируемого файла
  */
-enum class ExportFileFormat {
+enum class ScreenplayExportFileFormat {
     Pdf,
     Docx,
     Fdx,
@@ -21,7 +21,7 @@ enum class ExportFileFormat {
 /**
  * @brief Опции экспорта
  */
-struct CORE_LIBRARY_EXPORT ExportOptions {
+struct CORE_LIBRARY_EXPORT ScreenplayExportOptions {
     /**
      * @brief Путь к файлу
      */
@@ -30,7 +30,7 @@ struct CORE_LIBRARY_EXPORT ExportOptions {
     /**
      * @brief Формат файла
      */
-    ExportFileFormat fileFormat = ExportFileFormat::Pdf;
+    ScreenplayExportFileFormat fileFormat = ScreenplayExportFileFormat::Pdf;
 
     /**
      * @brief Идентификатор шаблона экспорта

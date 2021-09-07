@@ -1,17 +1,17 @@
 #pragma once
 
-#include "abstract_screenplay_importer.h"
+#include "screenplay_abstract_importer.h"
 
 
 namespace BusinessLayer {
 
 /**
- * @brief Импортер сценария из файлов КИТа
+ * @brief Импортер сценария из файлов Trelby
  */
-class CORE_LIBRARY_EXPORT KitScenaristImporter : public AbstractScreenplayImporter
+class CORE_LIBRARY_EXPORT ScreenplayDocumentImporter : public ScreenplayAbstractImporter
 {
 public:
-    KitScenaristImporter() = default;
+    ScreenplayDocumentImporter() = default;
 
     /**
      * @brief Импорт докуметов (всех, кроме сценариев)

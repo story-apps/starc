@@ -1,4 +1,4 @@
-#include "kit_scenarist_importer.h"
+#include "screenplay_kit_scenarist_importer.h"
 
 #include "screenlay_import_options.h"
 
@@ -128,9 +128,9 @@ QString readLocation(const QString& _locationName, const QString& _kitLocationXm
 /**
  * @brief Сформировать документ сценария из xml сценария КИТа
  */
-AbstractScreenplayImporter::Screenplay readScreenplay(const QString& _kitScreenplayXml)
+ScreenplayAbstractImporter::Screenplay readScreenplay(const QString& _kitScreenplayXml)
 {
-    AbstractScreenplayImporter::Screenplay screenplay;
+    ScreenplayAbstractImporter::Screenplay screenplay;
 
     //
     // Читаем XML
@@ -382,7 +382,7 @@ AbstractScreenplayImporter::Screenplay readScreenplay(const QString& _kitScreenp
 
 } // namespace
 
-AbstractScreenplayImporter::Documents KitScenaristImporter::importDocuments(
+ScreenplayAbstractImporter::Documents ScreenplayKitScenaristImporter::importDocuments(
     const ScreenplayImportOptions& _options) const
 {
     Documents result;
@@ -430,7 +430,7 @@ AbstractScreenplayImporter::Documents KitScenaristImporter::importDocuments(
     return result;
 }
 
-QVector<AbstractScreenplayImporter::Screenplay> KitScenaristImporter::importScreenplays(
+QVector<ScreenplayAbstractImporter::Screenplay> ScreenplayKitScenaristImporter::importScreenplays(
     const ScreenplayImportOptions& _options) const
 {
     QVector<Screenplay> result;

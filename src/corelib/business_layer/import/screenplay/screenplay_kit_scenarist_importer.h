@@ -1,17 +1,17 @@
 #pragma once
 
-#include "abstract_screenplay_importer.h"
+#include "screenplay_abstract_importer.h"
 
 
 namespace BusinessLayer {
 
 /**
- * @brief Импортер сценария из файлов Celtx
+ * @brief Импортер сценария из файлов КИТа
  */
-class CORE_LIBRARY_EXPORT CeltxImporter : public AbstractScreenplayImporter
+class CORE_LIBRARY_EXPORT ScreenplayKitScenaristImporter : public ScreenplayAbstractImporter
 {
 public:
-    CeltxImporter() = default;
+    ScreenplayKitScenaristImporter() = default;
 
     /**
      * @brief Импорт докуметов (всех, кроме сценариев)

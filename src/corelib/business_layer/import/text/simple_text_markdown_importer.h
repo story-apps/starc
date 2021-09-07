@@ -1,6 +1,6 @@
 #pragma once
 
-#include "abstract_text_importer.h"
+#include "simple_text_abstract_importer.h"
 
 
 namespace BusinessLayer {
@@ -8,15 +8,15 @@ namespace BusinessLayer {
 /**
  * @brief Импортер текста из markdown файла
  */
-class CORE_LIBRARY_EXPORT MarkdownImporter : public AbstractTextImporter
+class CORE_LIBRARY_EXPORT SimpleTextMarkdownImporter : public SimpleTextAbstractImporter
 {
 public:
-    MarkdownImporter() = default;
+    SimpleTextMarkdownImporter() = default;
 
     /**
      * @brief Импорт докуметов (всех, кроме сценариев)
      */
-    Document importDocument(const TextImportOptions& _options) const override;
+    Document importDocument(const SimpleTextImportOptions& _options) const override;
     Document importDocument(const QString& _text) const;
 };
 

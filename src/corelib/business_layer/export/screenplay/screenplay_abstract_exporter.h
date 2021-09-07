@@ -5,17 +5,17 @@
 
 namespace BusinessLayer {
 
-struct ExportOptions;
+struct ScreenplayExportOptions;
 class ScreenplayTextDocument;
 class ScreenplayTextModel;
 
 /**
  * @brief Базовый класс для реализации экспортера сценария
  */
-class CORE_LIBRARY_EXPORT AbstractExporter
+class CORE_LIBRARY_EXPORT ScreenplayAbstractExporter
 {
 public:
-    virtual ~AbstractExporter()
+    virtual ~ScreenplayAbstractExporter()
     {
     }
 
@@ -23,7 +23,7 @@ public:
      * @brief Экспорт сценария в файл
      */
     virtual void exportTo(ScreenplayTextModel* _model,
-                          const ExportOptions& _exportOptions) const = 0;
+                          const ScreenplayExportOptions& _exportOptions) const = 0;
 
 protected:
     /**
@@ -31,7 +31,7 @@ protected:
      * @note Владение документом передаётся клиенту
      */
     ScreenplayTextDocument* prepareDocument(ScreenplayTextModel* _model,
-                                            const ExportOptions& _exportOptions) const;
+                                            const ScreenplayExportOptions& _exportOptions) const;
 };
 
 } // namespace BusinessLayer

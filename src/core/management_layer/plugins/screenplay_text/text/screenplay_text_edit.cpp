@@ -6,7 +6,7 @@
 #include <business_layer/document/screenplay/text/screenplay_text_corrector.h>
 #include <business_layer/document/screenplay/text/screenplay_text_cursor.h>
 #include <business_layer/document/screenplay/text/screenplay_text_document.h>
-#include <business_layer/import/screenplay/fountain_importer.h>
+#include <business_layer/import/screenplay/screenplay_fountain_importer.h>
 #include <business_layer/model/screenplay/screenplay_information_model.h>
 #include <business_layer/model/screenplay/text/screenplay_text_model.h>
 #include <business_layer/model/screenplay/text/screenplay_text_model_text_item.h>
@@ -1299,7 +1299,7 @@ void ScreenplayTextEdit::insertFromMimeData(const QMimeData* _source)
     //       не воспринимался как титульная страница
     //
     else if (_source->hasText()) {
-        BusinessLayer::FountainImporter fountainImporter;
+        BusinessLayer::ScreenplayFountainImporter fountainImporter;
         textToInsert = fountainImporter.importScreenplay("\n" + _source->text()).text;
     }
 

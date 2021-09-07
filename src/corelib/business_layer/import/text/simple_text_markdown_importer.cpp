@@ -1,6 +1,6 @@
-#include "markdown_importer.h"
+#include "simple_text_markdown_importer.h"
 
-#include "text_import_options.h"
+#include "simple_text_import_options.h"
 
 #include <business_layer/model/text/text_model_xml.h>
 #include <business_layer/templates/text_template.h>
@@ -12,8 +12,8 @@
 
 namespace BusinessLayer {
 
-AbstractTextImporter::Document MarkdownImporter::importDocument(
-    const TextImportOptions& _options) const
+SimpleTextAbstractImporter::Document SimpleTextMarkdownImporter::importDocument(
+    const SimpleTextImportOptions& _options) const
 {
     //
     // Открываем файл
@@ -34,7 +34,7 @@ AbstractTextImporter::Document MarkdownImporter::importDocument(
     return textDocument;
 }
 
-AbstractTextImporter::Document MarkdownImporter::importDocument(const QString& _text) const
+SimpleTextAbstractImporter::Document SimpleTextMarkdownImporter::importDocument(const QString& _text) const
 {
     if (_text.simplified().isEmpty()) {
         return {};

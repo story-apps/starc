@@ -1,4 +1,4 @@
-#include "plain_text_importer.h"
+#include "comic_book_plain_text_importer.h"
 
 #include "comic_book_import_options.h"
 
@@ -12,7 +12,7 @@
 
 namespace BusinessLayer {
 
-AbstractComicBookImporter::Document PlainTextImporter::importComicBook(
+ComicBookAbstractImporter::Document ComicBookPlainTextImporter::importComicBook(
     const ComicBookImportOptions& _options) const
 {
     //
@@ -34,7 +34,7 @@ AbstractComicBookImporter::Document PlainTextImporter::importComicBook(
     return textDocument;
 }
 
-AbstractComicBookImporter::Document PlainTextImporter::importComicBook(const QString& _text) const
+ComicBookAbstractImporter::Document ComicBookPlainTextImporter::importComicBook(const QString& _text) const
 {
     if (_text.simplified().isEmpty()) {
         return {};

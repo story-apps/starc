@@ -12,10 +12,10 @@ struct ScreenplayImportOptions;
 /**
  * @brief Базовый класс для реализации импортера документов
  */
-class CORE_LIBRARY_EXPORT AbstractScreenplayImporter
+class CORE_LIBRARY_EXPORT ScreenplayAbstractImporter
 {
 public:
-    virtual ~AbstractScreenplayImporter() = default;
+    virtual ~ScreenplayAbstractImporter() = default;
 
     /**
      * @brief Вспомогательные структуры для хранения данных импортируемых документов

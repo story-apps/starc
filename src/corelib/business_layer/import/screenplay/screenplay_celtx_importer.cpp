@@ -1,4 +1,4 @@
-#include "celtx_importer.h"
+#include "screenplay_celtx_importer.h"
 
 #include "screenlay_import_options.h"
 
@@ -54,7 +54,7 @@ QString readScript(const QString& _filePath)
 
 } // namespace
 
-AbstractScreenplayImporter::Documents CeltxImporter::importDocuments(
+ScreenplayAbstractImporter::Documents ScreenplayCeltxImporter::importDocuments(
     const ScreenplayImportOptions& _options) const
 {
     //
@@ -131,7 +131,7 @@ AbstractScreenplayImporter::Documents CeltxImporter::importDocuments(
     return documents;
 }
 
-QVector<AbstractScreenplayImporter::Screenplay> CeltxImporter::importScreenplays(
+QVector<ScreenplayAbstractImporter::Screenplay> ScreenplayCeltxImporter::importScreenplays(
     const ScreenplayImportOptions& _options) const
 {
     if (_options.importScreenplay == false) {

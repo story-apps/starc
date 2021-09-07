@@ -1,4 +1,4 @@
-#include "document_importer.h"
+#include "screenplay_document_importer.h"
 
 #include "screenlay_import_options.h"
 
@@ -250,7 +250,7 @@ static QString clearBlockText(ScreenplayParagraphType _blockType, const QString&
 
 } // namespace
 
-AbstractScreenplayImporter::Documents DocumentImporter::importDocuments(
+ScreenplayAbstractImporter::Documents ScreenplayDocumentImporter::importDocuments(
     const ScreenplayImportOptions& _options) const
 {
     //
@@ -389,7 +389,7 @@ AbstractScreenplayImporter::Documents DocumentImporter::importDocuments(
     return documents;
 }
 
-QVector<AbstractScreenplayImporter::Screenplay> DocumentImporter::importScreenplays(
+QVector<ScreenplayAbstractImporter::Screenplay> ScreenplayDocumentImporter::importScreenplays(
     const ScreenplayImportOptions& _options) const
 {
     if (_options.importScreenplay == false) {

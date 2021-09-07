@@ -1,6 +1,6 @@
-#include "abstract_exporter.h"
+#include "screenplay_abstract_exporter.h"
 
-#include "export_options.h"
+#include "screenplay_export_options.h"
 
 #include <business_layer/document/screenplay/text/screenplay_text_cursor.h>
 #include <business_layer/document/screenplay/text/screenplay_text_document.h>
@@ -16,8 +16,8 @@
 
 namespace BusinessLayer {
 
-ScreenplayTextDocument* AbstractExporter::prepareDocument(ScreenplayTextModel* _model,
-                                                          const ExportOptions& _exportOptions) const
+ScreenplayTextDocument* ScreenplayAbstractExporter::prepareDocument(ScreenplayTextModel* _model,
+                                                          const ScreenplayExportOptions& _exportOptions) const
 {
     //
     // Настраиваем документ

@@ -1,17 +1,17 @@
 #pragma once
 
-#include "abstract_screenplay_importer.h"
+#include "screenplay_abstract_importer.h"
 
 
 namespace BusinessLayer {
 
 /**
- * @brief Импортер сценария из файлов Final Draft
+ * @brief Импортер сценария из файлов Trelby
  */
-class CORE_LIBRARY_EXPORT FdxImporter : public AbstractScreenplayImporter
+class CORE_LIBRARY_EXPORT ScreenplayTrelbyImporter : public ScreenplayAbstractImporter
 {
 public:
-    FdxImporter() = default;
+    ScreenplayTrelbyImporter() = default;
 
     /**
      * @brief Импорт докуметов (всех, кроме сценариев)

@@ -3,7 +3,7 @@
 #include <ui/widgets/dialog/abstract_dialog.h>
 
 namespace BusinessLayer {
-struct ExportOptions;
+struct ScreenplayExportOptions;
 }
 
 namespace Ui {
@@ -22,7 +22,7 @@ public:
     /**
      * @brief Получить опции экспорта
      */
-    BusinessLayer::ExportOptions exportOptions() const;
+    BusinessLayer::ScreenplayExportOptions exportOptions() const;
 
     /**
      * @brief Нужно ли открыть экспортированный документ после экспорта

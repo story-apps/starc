@@ -75,17 +75,19 @@ SOURCES += \
     business_layer/document/text/text_block_data.cpp \
     business_layer/document/text/text_cursor.cpp \
     business_layer/document/text/text_document.cpp \
-    business_layer/export/screenplay/abstract_exporter.cpp \
-    business_layer/export/screenplay/docx_exporter.cpp \
-    business_layer/export/screenplay/pdf_exporter.cpp \
-    business_layer/import/comic_book/plain_text_importer.cpp \
-    business_layer/import/screenplay/celtx_importer.cpp \
-    business_layer/import/screenplay/document_importer.cpp \
-    business_layer/import/screenplay/fdx_importer.cpp \
-    business_layer/import/screenplay/fountain_importer.cpp \
-    business_layer/import/screenplay/kit_scenarist_importer.cpp \
-    business_layer/import/screenplay/trelby_importer.cpp \
-    business_layer/import/text/markdown_importer.cpp \
+    business_layer/export/comic_book/comic_book_abstract_exporter.cpp \
+    business_layer/export/comic_book/comic_book_docx_exporter.cpp \
+    business_layer/export/screenplay/screenplay_abstract_exporter.cpp \
+    business_layer/export/screenplay/screenplay_docx_exporter.cpp \
+    business_layer/export/screenplay/screenplay_pdf_exporter.cpp \
+    business_layer/import/comic_book/comic_book_plain_text_importer.cpp \
+    business_layer/import/screenplay/screenplay_celtx_importer.cpp \
+    business_layer/import/screenplay/screenplay_document_importer.cpp \
+    business_layer/import/screenplay/screenplay_fdx_importer.cpp \
+    business_layer/import/screenplay/screenplay_fountain_importer.cpp \
+    business_layer/import/screenplay/screenplay_kit_scenarist_importer.cpp \
+    business_layer/import/screenplay/screenplay_trelby_importer.cpp \
+    business_layer/import/text/simple_text_markdown_importer.cpp \
     business_layer/model/abstract_model.cpp \
     business_layer/model/abstract_model_item.cpp \
     business_layer/model/abstract_model_xml.cpp \
@@ -250,24 +252,27 @@ HEADERS += \
     business_layer/document/text/text_block_data.h \
     business_layer/document/text/text_cursor.h \
     business_layer/document/text/text_document.h \
-    business_layer/export/screenplay/abstract_exporter.h \
-    business_layer/export/screenplay/docx_exporter.h \
-    business_layer/export/screenplay/export_options.h \
-    business_layer/export/screenplay/pdf_exporter.h \
-    business_layer/import/comic_book/abstract_comic_book_importer.h \
+    business_layer/export/comic_book/comic_book_abstract_exporter.h \
+    business_layer/export/comic_book/comic_book_docx_exporter.h \
+    business_layer/export/comic_book/comic_book_export_options.h \
+    business_layer/export/screenplay/screenplay_abstract_exporter.h \
+    business_layer/export/screenplay/screenplay_docx_exporter.h \
+    business_layer/export/screenplay/screenplay_export_options.h \
+    business_layer/export/screenplay/screenplay_pdf_exporter.h \
+    business_layer/import/comic_book/comic_book_abstract_importer.h \
     business_layer/import/comic_book/comic_book_import_options.h \
-    business_layer/import/comic_book/plain_text_importer.h \
-    business_layer/import/screenplay/abstract_screenplay_importer.h \
-    business_layer/import/screenplay/celtx_importer.h \
-    business_layer/import/screenplay/document_importer.h \
-    business_layer/import/screenplay/fdx_importer.h \
-    business_layer/import/screenplay/fountain_importer.h \
-    business_layer/import/screenplay/kit_scenarist_importer.h \
+    business_layer/import/comic_book/comic_book_plain_text_importer.h \
     business_layer/import/screenplay/screenlay_import_options.h \
-    business_layer/import/screenplay/trelby_importer.h \
-    business_layer/import/text/abstract_text_importer.h \
-    business_layer/import/text/markdown_importer.h \
-    business_layer/import/text/text_import_options.h \
+    business_layer/import/screenplay/screenplay_abstract_importer.h \
+    business_layer/import/screenplay/screenplay_celtx_importer.h \
+    business_layer/import/screenplay/screenplay_document_importer.h \
+    business_layer/import/screenplay/screenplay_fdx_importer.h \
+    business_layer/import/screenplay/screenplay_fountain_importer.h \
+    business_layer/import/screenplay/screenplay_kit_scenarist_importer.h \
+    business_layer/import/screenplay/screenplay_trelby_importer.h \
+    business_layer/import/text/simple_text_abstract_importer.h \
+    business_layer/import/text/simple_text_import_options.h \
+    business_layer/import/text/simple_text_markdown_importer.h \
     business_layer/model/abstract_image_wrapper.h \
     business_layer/model/abstract_model.h \
     business_layer/model/abstract_model_item.h \

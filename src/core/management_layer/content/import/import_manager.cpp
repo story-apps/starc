@@ -1,12 +1,12 @@
 #include "import_manager.h"
 
-#include <business_layer/import/screenplay/celtx_importer.h>
-#include <business_layer/import/screenplay/document_importer.h>
-#include <business_layer/import/screenplay/fdx_importer.h>
-#include <business_layer/import/screenplay/fountain_importer.h>
-#include <business_layer/import/screenplay/kit_scenarist_importer.h>
+#include <business_layer/import/screenplay/screenplay_celtx_importer.h>
+#include <business_layer/import/screenplay/screenplay_document_importer.h>
+#include <business_layer/import/screenplay/screenplay_fdx_importer.h>
+#include <business_layer/import/screenplay/screenplay_fountain_importer.h>
+#include <business_layer/import/screenplay/screenplay_kit_scenarist_importer.h>
 #include <business_layer/import/screenplay/screenlay_import_options.h>
-#include <business_layer/import/screenplay/trelby_importer.h>
+#include <business_layer/import/screenplay/screenplay_trelby_importer.h>
 #include <data_layer/storage/settings_storage.h>
 #include <data_layer/storage/storage_facade.h>
 #include <ui/import/import_dialog.h>
@@ -85,24 +85,24 @@ void ImportManager::Implementation::import(const BusinessLayer::ScreenplayImport
     //
     // Определим нужный импортер
     //
-    QScopedPointer<BusinessLayer::AbstractScreenplayImporter> importer;
+    QScopedPointer<BusinessLayer::ScreenplayAbstractImporter> importer;
     {
         const auto importFilePath = _options.filePath.toLower();
         if (importFilePath.endsWith(ExtensionHelper::kitScenarist())) {
-            importer.reset(new BusinessLayer::KitScenaristImporter);
+            importer.reset(new BusinessLayer::ScreenplayKitScenaristImporter);
         } else if (importFilePath.endsWith(ExtensionHelper::finalDraft())
                    || importFilePath.endsWith(ExtensionHelper::finalDraftTemplate())) {
-            importer.reset(new BusinessLayer::FdxImporter);
+            importer.reset(new BusinessLayer::ScreenplayFdxImporter);
         } else if (importFilePath.endsWith(ExtensionHelper::trelby())) {
-            importer.reset(new BusinessLayer::TrelbyImporter);
+            importer.reset(new BusinessLayer::ScreenplayTrelbyImporter);
         } else if (importFilePath.endsWith(ExtensionHelper::msOfficeOpenXml())
                    || importFilePath.endsWith(ExtensionHelper::openDocumentXml())) {
-            importer.reset(new BusinessLayer::DocumentImporter);
+            importer.reset(new BusinessLayer::ScreenplayDocumentImporter);
         } else if (importFilePath.endsWith(ExtensionHelper::celtx())) {
-            importer.reset(new BusinessLayer::CeltxImporter);
+            importer.reset(new BusinessLayer::ScreenplayCeltxImporter);
         } else if (importFilePath.endsWith(ExtensionHelper::fountain())
                    || importFilePath.endsWith(ExtensionHelper::plainText())) {
-            importer.reset(new BusinessLayer::FountainImporter);
+            importer.reset(new BusinessLayer::ScreenplayFountainImporter);
         }
     }
 

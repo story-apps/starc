@@ -5,7 +5,7 @@
 #include <business_layer/document/text/text_block_data.h>
 #include <business_layer/document/text/text_cursor.h>
 #include <business_layer/document/text/text_document.h>
-#include <business_layer/import/text/markdown_importer.h>
+#include <business_layer/import/text/simple_text_markdown_importer.h>
 #include <business_layer/model/comic_book/comic_book_title_page_model.h>
 #include <business_layer/model/screenplay/screenplay_title_page_model.h>
 #include <business_layer/model/text/text_model.h>
@@ -440,7 +440,7 @@ void TitlePageEdit::insertFromMimeData(const QMimeData* _source)
     //       не воспринимался как титульная страница
     //
     else if (_source->hasText()) {
-        BusinessLayer::MarkdownImporter markdownImporter;
+        BusinessLayer::SimpleTextMarkdownImporter markdownImporter;
         textToInsert = markdownImporter.importDocument(_source->text()).text;
     }
 

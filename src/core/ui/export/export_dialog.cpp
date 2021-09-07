@@ -1,6 +1,6 @@
 #include "export_dialog.h"
 
-#include <business_layer/export/screenplay/export_options.h>
+#include <business_layer/export/screenplay/screenplay_export_options.h>
 #include <business_layer/templates/screenplay_template.h>
 #include <business_layer/templates/templates_facade.h>
 #include <ui/design_system/design_system.h>
@@ -214,11 +214,11 @@ ExportDialog::ExportDialog(QWidget* _parent)
 
 ExportDialog::~ExportDialog() = default;
 
-BusinessLayer::ExportOptions ExportDialog::exportOptions() const
+BusinessLayer::ScreenplayExportOptions ExportDialog::exportOptions() const
 {
-    BusinessLayer::ExportOptions options;
+    BusinessLayer::ScreenplayExportOptions options;
     options.fileFormat
-        = static_cast<BusinessLayer::ExportFileFormat>(d->fileFormat->currentIndex().row());
+        = static_cast<BusinessLayer::ScreenplayExportFileFormat>(d->fileFormat->currentIndex().row());
     options.templateId = d->screenplayTemplate->currentIndex()
                              .data(BusinessLayer::TemplatesFacade::kTemplateIdRole)
                              .toString();

@@ -5,7 +5,7 @@
 #include <business_layer/document/text/text_block_data.h>
 #include <business_layer/document/text/text_cursor.h>
 #include <business_layer/document/text/text_document.h>
-#include <business_layer/import/text/markdown_importer.h>
+#include <business_layer/import/text/simple_text_markdown_importer.h>
 #include <business_layer/model/text/text_model.h>
 #include <business_layer/model/text/text_model_text_item.h>
 #include <business_layer/templates/templates_facade.h>
@@ -671,7 +671,7 @@ void SimpleTextEdit::insertFromMimeData(const QMimeData* _source)
     // Если простой текст, то вставляем его, импортировав построчно
     //
     else if (_source->hasText()) {
-        BusinessLayer::MarkdownImporter markdownImporter;
+        BusinessLayer::SimpleTextMarkdownImporter markdownImporter;
         textToInsert = markdownImporter.importDocument(_source->text()).text;
     }
 

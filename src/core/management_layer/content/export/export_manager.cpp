@@ -1,8 +1,8 @@
 #include "export_manager.h"
 
-#include <business_layer/export/screenplay/docx_exporter.h>
-#include <business_layer/export/screenplay/export_options.h>
-#include <business_layer/export/screenplay/pdf_exporter.h>
+#include <business_layer/export/screenplay/screenplay_docx_exporter.h>
+#include <business_layer/export/screenplay/screenplay_export_options.h>
+#include <business_layer/export/screenplay/screenplay_pdf_exporter.h>
 #include <business_layer/model/screenplay/screenplay_information_model.h>
 #include <business_layer/model/screenplay/text/screenplay_text_model.h>
 #include <data_layer/storage/settings_storage.h>
@@ -66,22 +66,22 @@ void ExportManager::Implementation::exportScreenplay(BusinessLayer::AbstractMode
             QString exportExtension;
             switch (exportOptions.fileFormat) {
             default:
-            case ExportFileFormat::Pdf: {
+            case ScreenplayExportFileFormat::Pdf: {
                 exportFilter = DialogHelper::pdfFilter();
                 exportExtension = ExtensionHelper::pdf();
                 break;
             }
-            case ExportFileFormat::Docx: {
+            case ScreenplayExportFileFormat::Docx: {
                 exportFilter = DialogHelper::msWordFilter();
                 exportExtension = ExtensionHelper::msOfficeOpenXml();
                 break;
             }
-            case ExportFileFormat::Fdx: {
+            case ScreenplayExportFileFormat::Fdx: {
                 exportFilter = DialogHelper::finalDraftFilter();
                 exportExtension = ExtensionHelper::finalDraft();
                 break;
             }
-            case ExportFileFormat::Fountain: {
+            case ScreenplayExportFileFormat::Fountain: {
                 exportFilter = DialogHelper::fountainFilter();
                 exportExtension = ExtensionHelper::fountain();
                 break;
@@ -119,21 +119,21 @@ void ExportManager::Implementation::exportScreenplay(BusinessLayer::AbstractMode
             //
             // ... и экспортируем документ
             //
-            QScopedPointer<BusinessLayer::AbstractExporter> exporter;
+            QScopedPointer<BusinessLayer::ScreenplayAbstractExporter> exporter;
             switch (exportOptions.fileFormat) {
             default:
-            case ExportFileFormat::Pdf: {
-                exporter.reset(new BusinessLayer::PdfExporter);
+            case ScreenplayExportFileFormat::Pdf: {
+                exporter.reset(new BusinessLayer::ScreenplayPdfExporter);
                 break;
             }
-            case ExportFileFormat::Docx: {
-                exporter.reset(new BusinessLayer::DocxExporter);
+            case ScreenplayExportFileFormat::Docx: {
+                exporter.reset(new BusinessLayer::ScreenplayDocxExporter);
                 break;
             }
-            case ExportFileFormat::Fdx: {
+            case ScreenplayExportFileFormat::Fdx: {
                 break;
             }
-            case ExportFileFormat::Fountain: {
+            case ScreenplayExportFileFormat::Fountain: {
                 break;
             }
             }
