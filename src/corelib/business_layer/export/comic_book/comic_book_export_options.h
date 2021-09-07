@@ -46,21 +46,14 @@ struct CORE_LIBRARY_EXPORT ComicBookExportOptions {
     bool printFolders = true;
 
     /**
+     * @brief Использовать слова вместо цифр для заголовков страниц
+     */
+    bool useWordsInPageHeadings = false;
+
+    /**
      * @brief Печатать ли комментарии по тексту
      */
     bool printInlineNotes = false;
-
-    /**
-     * @brief Печатать номера сцен
-     */
-    bool printScenesNumbers = true;
-    bool printScenesNumbersOnLeft = true;
-    bool printScenesNumbersOnRight = true;
-
-    /**
-     * @brief Печатать номера реплик
-     */
-    bool printDialoguesNumbers = false;
 
     /**
      * @brief Печатать редакторские пометки

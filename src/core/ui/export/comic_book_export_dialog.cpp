@@ -28,11 +28,8 @@ public:
     ComboBox* comicBookTemplate = nullptr;
     CheckBox* printTitlePage = nullptr;
     CheckBox* printFolders = nullptr;
+    CheckBox* useWordsInPageHeadings = nullptr;
     CheckBox* printInlineNotes = nullptr;
-    CheckBox* printSceneNumbers = nullptr;
-    CheckBox* printSceneNumbersOnLeft = nullptr;
-    CheckBox* printSceneNumbersOnRight = nullptr;
-    CheckBox* printDialoguesNumbers = nullptr;
     CheckBox* printReviewMarks = nullptr;
     TextField* watermark = nullptr;
 
@@ -47,11 +44,8 @@ ComicBookExportDialog::Implementation::Implementation(QWidget* _parent)
     , comicBookTemplate(new ComboBox(_parent))
     , printTitlePage(new CheckBox(_parent))
     , printFolders(new CheckBox(_parent))
+    , useWordsInPageHeadings(new CheckBox(_parent))
     , printInlineNotes(new CheckBox(_parent))
-    , printSceneNumbers(new CheckBox(_parent))
-    , printSceneNumbersOnLeft(new CheckBox(_parent))
-    , printSceneNumbersOnRight(new CheckBox(_parent))
-    , printDialoguesNumbers(new CheckBox(_parent))
     , printReviewMarks(new CheckBox(_parent))
     , watermark(new TextField(_parent))
     , buttonsLayout(new QHBoxLayout)
@@ -80,10 +74,10 @@ ComicBookExportDialog::Implementation::Implementation(QWidget* _parent)
     }
 
     printTitlePage->hide();
+    useWordsInPageHeadings->hide();
 
-    for (auto checkBox :
-         { /*printTitlePage,*/ printFolders, printSceneNumbers, printSceneNumbersOnLeft,
-           printSceneNumbersOnRight, printReviewMarks, openDocumentAfterExport }) {
+    for (auto checkBox : { /*printTitlePage,*/ printFolders, useWordsInPageHeadings,
+                           printReviewMarks, openDocumentAfterExport }) {
         checkBox->setChecked(true);
     }
 
@@ -113,17 +107,8 @@ ComicBookExportDialog::ComicBookExportDialog(QWidget* _parent)
     contentsLayout()->addWidget(d->comicBookTemplate, row++, 0);
     contentsLayout()->addWidget(d->printTitlePage, row++, 0);
     contentsLayout()->addWidget(d->printFolders, row++, 0);
+    contentsLayout()->addWidget(d->useWordsInPageHeadings, row++, 0);
     contentsLayout()->addWidget(d->printInlineNotes, row++, 0);
-    {
-        auto layout = new QHBoxLayout;
-        layout->setContentsMargins({});
-        layout->setSpacing(0);
-        layout->addWidget(d->printSceneNumbers);
-        layout->addWidget(d->printSceneNumbersOnLeft);
-        layout->addWidget(d->printSceneNumbersOnRight);
-        contentsLayout()->addLayout(layout, row++, 0);
-    }
-    contentsLayout()->addWidget(d->printDialoguesNumbers, row++, 0);
     contentsLayout()->addWidget(d->printReviewMarks, row++, 0);
     contentsLayout()->addWidget(d->watermark, row++, 0);
     contentsLayout()->addLayout(d->buttonsLayout, row++, 0);
@@ -132,8 +117,6 @@ ComicBookExportDialog::ComicBookExportDialog(QWidget* _parent)
         auto isComicBookTemplateVisible = true;
         auto isPrintFoldersVisible = true;
         auto isPrintInlineNotesVisible = true;
-        auto isPrintScenesNumbersOnVisible = true;
-        auto isPrintDialoguesNumbersVisible = true;
         auto isPrintReviewMarksVisible = true;
         auto isWatermarkVisible = true;
         switch (d->fileFormat->currentIndex().row()) {
@@ -152,32 +135,6 @@ ComicBookExportDialog::ComicBookExportDialog(QWidget* _parent)
         // DOCX
         //
         case 1: {
-            isPrintScenesNumbersOnVisible = false;
-            isWatermarkVisible = false;
-            break;
-        }
-
-        //
-        // FDX
-        //
-        case 2: {
-            isPrintScenesNumbersOnVisible = false;
-            isPrintDialoguesNumbersVisible = false;
-            isPrintReviewMarksVisible = false;
-            isWatermarkVisible = false;
-            break;
-        }
-
-        //
-        // Foumtain
-        //
-        case 3: {
-            isComicBookTemplateVisible = false;
-            isPrintFoldersVisible = false;
-            isPrintInlineNotesVisible = false;
-            isPrintScenesNumbersOnVisible = false;
-            isPrintDialoguesNumbersVisible = false;
-            isPrintReviewMarksVisible = false;
             isWatermarkVisible = false;
             break;
         }
@@ -185,25 +142,9 @@ ComicBookExportDialog::ComicBookExportDialog(QWidget* _parent)
         d->comicBookTemplate->setVisible(isComicBookTemplateVisible);
         d->printFolders->setVisible(isPrintFoldersVisible);
         d->printInlineNotes->setVisible(isPrintInlineNotesVisible);
-        d->printSceneNumbersOnLeft->setVisible(isPrintScenesNumbersOnVisible);
-        d->printSceneNumbersOnRight->setVisible(isPrintScenesNumbersOnVisible);
-        d->printDialoguesNumbers->setVisible(isPrintDialoguesNumbersVisible);
         d->printReviewMarks->setVisible(isPrintReviewMarksVisible);
         d->watermark->setVisible(isWatermarkVisible);
     });
-    connect(d->printSceneNumbers, &CheckBox::checkedChanged, d->printSceneNumbersOnLeft,
-            &CheckBox::setEnabled);
-    connect(d->printSceneNumbers, &CheckBox::checkedChanged, d->printSceneNumbersOnRight,
-            &CheckBox::setEnabled);
-    auto comicBookEditorCorrectShownSceneNumber = [this] {
-        if (!d->printSceneNumbersOnLeft->isChecked() && !d->printSceneNumbersOnRight->isChecked()) {
-            d->printSceneNumbersOnLeft->setChecked(true);
-        }
-    };
-    connect(d->printSceneNumbersOnLeft, &CheckBox::checkedChanged, this,
-            comicBookEditorCorrectShownSceneNumber);
-    connect(d->printSceneNumbersOnRight, &CheckBox::checkedChanged, this,
-            comicBookEditorCorrectShownSceneNumber);
 
     connect(d->exportButton, &Button::clicked, this, &ComicBookExportDialog::exportRequested);
     connect(d->cancelButton, &Button::clicked, this, &ComicBookExportDialog::canceled);
@@ -224,11 +165,8 @@ BusinessLayer::ComicBookExportOptions ComicBookExportDialog::exportOptions() con
                              .toString();
     options.printTiltePage = d->printTitlePage->isChecked();
     options.printFolders = d->printFolders->isChecked();
+    options.useWordsInPageHeadings = d->useWordsInPageHeadings->isChecked();
     options.printInlineNotes = d->printInlineNotes->isChecked();
-    options.printScenesNumbers = d->printSceneNumbers->isChecked();
-    options.printScenesNumbersOnLeft = d->printSceneNumbersOnLeft->isChecked();
-    options.printScenesNumbersOnRight = d->printSceneNumbersOnRight->isChecked();
-    options.printDialoguesNumbers = d->printDialoguesNumbers->isChecked();
     options.printReviewMarks = d->printReviewMarks->isChecked();
     options.watermark = d->watermark->text();
     options.watermarkColor = QColor(100, 100, 100, 30);
@@ -252,17 +190,14 @@ QWidget* ComicBookExportDialog::lastFocusableWidget() const
 
 void ComicBookExportDialog::updateTranslations()
 {
-    setTitle(tr("Export comicBook"));
+    setTitle(tr("Export comic book"));
 
     d->fileFormat->setLabel(tr("Format"));
     d->comicBookTemplate->setLabel(tr("Template"));
     d->printTitlePage->setText(tr("Print title page"));
     d->printFolders->setText(tr("Print folders"));
+    d->useWordsInPageHeadings->setText(tr("Print panels numbers in form of words"));
     d->printInlineNotes->setText(tr("Print inline notes"));
-    d->printSceneNumbers->setText(tr("Print scenes numbers"));
-    d->printSceneNumbersOnLeft->setText(tr("on the left"));
-    d->printSceneNumbersOnRight->setText(tr("on the right"));
-    d->printDialoguesNumbers->setText(tr("Print dialogues numbers"));
     d->printReviewMarks->setText(tr("Print review marks"));
     d->watermark->setLabel(tr("Watermark"));
 
@@ -285,10 +220,8 @@ void ComicBookExportDialog::designSystemChangeEvent(DesignSystemChangeEvent* _ev
         textField->setTextColor(Ui::DesignSystem::color().onBackground());
     }
 
-    for (auto checkBox :
-         { d->printTitlePage, d->printFolders, d->printInlineNotes, d->printSceneNumbers,
-           d->printSceneNumbersOnLeft, d->printSceneNumbersOnRight, d->printDialoguesNumbers,
-           d->printReviewMarks, d->openDocumentAfterExport }) {
+    for (auto checkBox : { d->printTitlePage, d->printFolders, d->useWordsInPageHeadings,
+                           d->printInlineNotes, d->printReviewMarks, d->openDocumentAfterExport }) {
         checkBox->setBackgroundColor(Ui::DesignSystem::color().background());
         checkBox->setTextColor(Ui::DesignSystem::color().onBackground());
     }
