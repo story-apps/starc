@@ -23,14 +23,14 @@ public:
     void build(QAbstractItemModel* _model) override;
 
     /**
-     * @brief Длительность сценария
-     */
-    std::chrono::milliseconds duration() const;
-
-    /**
      * @brief Количество страниц
      */
     int pagesCount() const;
+
+    /**
+     * @brief Количество панелей
+     */
+    int panelsCount() const;
 
     /**
      * @brief Количество слов
@@ -52,21 +52,6 @@ public:
      * @brief Получить информацию о тексте
      */
     QAbstractItemModel* textInfoModel() const;
-
-    /**
-     * @brief Получить информацию о сценах
-     */
-    QAbstractItemModel* scenesInfoModel() const;
-
-    /**
-     * @brief Получить информацию о локациях
-     */
-    QAbstractItemModel* locationsInfoModel() const;
-
-    /**
-     * @brief Получить информацию о персонажах
-     */
-    QAbstractItemModel* charactersInfoModel() const;
 
 private:
     class Implementation;

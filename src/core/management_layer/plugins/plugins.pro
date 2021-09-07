@@ -25,3 +25,7 @@ exists (location_information/location_information.pro) {
 exists (screenplay_statistics/screenplay_statistics.pro) {
     SUBDIRS += screenplay_statistics
 }
+
+exists (comic_book_statistics/comic_book_statistics.pro) {
+    SUBDIRS += comic_book_statistics
+}

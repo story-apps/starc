@@ -10,3 +10,6 @@
 [submodule "src/core/management_layer/plugins/screenplay_statistics"]
 	path = src/core/management_layer/plugins/screenplay_statistics
 	url = https://github.com/dimkanovikov/starc-screenplay-statistics-plugin.git
+[submodule "src/core/management_layer/plugins/comic_book_statistics"]
+	path = src/core/management_layer/plugins/comic_book_statistics
+	url = git@github.com:dimkanovikov/starc-comic-book-statistics-plugin.git

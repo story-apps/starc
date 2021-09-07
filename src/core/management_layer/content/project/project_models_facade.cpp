@@ -301,30 +301,26 @@ BusinessLayer::AbstractModel* ProjectModelsFacade::modelFor(Domain::DocumentObje
         }
 
         case Domain::DocumentObjectType::ComicBookStatistics: {
-            //            auto statisticsModel = new BusinessLayer::ComicBookStatisticsModel;
+            auto statisticsModel = new BusinessLayer::ComicBookStatisticsModel;
 
-            //            const auto statisticsItem =
-            //            d->projectStructureModel->itemForUuid(_document->uuid());
-            //            Q_ASSERT(statisticsItem);
-            //            const auto comicBookItem = statisticsItem->parent();
-            //            Q_ASSERT(comicBookItem);
-            //            QUuid comicBookTextItemUuid;
-            //            for (int childIndex = 0; childIndex < comicBookItem->childCount();
-            //            ++childIndex) {
-            //                const auto childItem = comicBookItem->childAt(childIndex);
-            //                if (childItem->type() == Domain::DocumentObjectType::ComicBookText) {
-            //                    comicBookTextItemUuid = childItem->uuid();
-            //                    break;
-            //                }
-            //            }
-            //            Q_ASSERT(!comicBookTextItemUuid.isNull());
-            //            auto comicBookModel
-            //                =
-            //                qobject_cast<BusinessLayer::ComicBookTextModel*>(modelFor(comicBookTextItemUuid));
-            //            statisticsModel->setComicBookTextModel(comicBookModel);
+            const auto statisticsItem = d->projectStructureModel->itemForUuid(_document->uuid());
+            Q_ASSERT(statisticsItem);
+            const auto comicBookItem = statisticsItem->parent();
+            Q_ASSERT(comicBookItem);
+            QUuid comicBookTextItemUuid;
+            for (int childIndex = 0; childIndex < comicBookItem->childCount(); ++childIndex) {
+                const auto childItem = comicBookItem->childAt(childIndex);
+                if (childItem->type() == Domain::DocumentObjectType::ComicBookText) {
+                    comicBookTextItemUuid = childItem->uuid();
+                    break;
+                }
+            }
+            Q_ASSERT(!comicBookTextItemUuid.isNull());
+            auto comicBookModel
+                = qobject_cast<BusinessLayer::ComicBookTextModel*>(modelFor(comicBookTextItemUuid));
+            statisticsModel->setComicBookTextModel(comicBookModel);
 
-            //            model = statisticsModel;
-            model = new BusinessLayer::TextModel;
+            model = statisticsModel;
             break;
         }
 
