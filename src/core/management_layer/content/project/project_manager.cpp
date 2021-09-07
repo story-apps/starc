@@ -616,6 +616,11 @@ void ProjectManager::reconfigureComicBookEditor(const QStringList& _changedSetti
     d->pluginsBuilder.reconfigureComicBookEditor(_changedSettingsKeys);
 }
 
+void ProjectManager::reconfigureComicBookNavigator()
+{
+    d->pluginsBuilder.reconfigureComicBookNavigator();
+}
+
 void ProjectManager::loadCurrentProject(const QString& _name, const QString& _path)
 {
     //

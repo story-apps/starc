@@ -163,6 +163,13 @@ const QString kComponentsComicBookKey = kComponentsGroupKey + QStringLiteral("/c
 const QString kComponentsComicBookEditorKey = kComponentsComicBookKey + QStringLiteral("/editor");
 const QString kComponentsComicBookEditorDefaultTemplateKey
     = kComponentsComicBookEditorKey + QStringLiteral("/default-template");
+// ... навигатор
+const QString kComponentsComicBookNavigatorKey
+    = kComponentsComicBookKey + QStringLiteral("/navigator");
+const QString kComponentsComicBookNavigatorShowSceneTextKey
+    = kComponentsComicBookNavigatorKey + QStringLiteral("/show-scene-text");
+const QString kComponentsComicBookNavigatorSceneTextLinesKey
+    = kComponentsComicBookNavigatorKey + QStringLiteral("/scene-text-lines");
 } // namespace
 
 /**

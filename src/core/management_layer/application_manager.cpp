@@ -1600,6 +1600,8 @@ void ApplicationManager::initConnections()
             [this](const QStringList& _changedSettingsKeys) {
                 d->projectManager->reconfigureComicBookEditor(_changedSettingsKeys);
             });
+    connect(d->settingsManager.data(), &SettingsManager::comicBookNavigatorChanged, this,
+            [this] { d->projectManager->reconfigureComicBookNavigator(); });
 
 #ifdef CLOUD_SERVICE_MANAGER
     //

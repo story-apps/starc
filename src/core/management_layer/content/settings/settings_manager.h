@@ -60,6 +60,7 @@ signals:
     void screenplayNavigatorChanged();
     void screenplayDurationChanged();
     void comicBookEditorChanged(const QStringList& _changedSettingsKeys);
+    void comicBookNavigatorChanged();
 
 protected:
     /**
@@ -114,6 +115,8 @@ private:
     // Сохранение параметров редактора комикса
     //
     void setComicBookEditorDefaultTemplate(const QString& _templateId);
+    //
+    void setComicBookNavigatorShowSceneText(bool _show, int _lines);
 
 private:
     class Implementation;

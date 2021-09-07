@@ -77,6 +77,8 @@ public:
     // Задание параметров редактора комикса
     //
     void setComicBookEditorDefaultTemplate(const QString& _templateId);
+    //
+    void setComicBookNavigatorShowSceneText(bool _show, int _lines);
 
 signals:
     /**
@@ -128,6 +130,8 @@ signals:
     // Уведомление об изменении параметров редактора комикса
     //
     void comicBookEditorDefaultTemplateChanged(const QString& _templateId);
+    //
+    void comicBookNavigatorShowSceneTextChanged(bool _show, int _lines);
 
     //
     // Редактирование шаблонов

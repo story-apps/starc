@@ -171,13 +171,13 @@ public:
     QGridLayout* simpleTextCardLayout = nullptr;
     H5Label* simpleTextTitle = nullptr;
     //
-    // ... simpleText editor
+    // ... Simple text editor
     //
     H6Label* simpleTextEditorTitle = nullptr;
     ComboBox* simpleTextEditorDefaultTemplate = nullptr;
     IconButton* simpleTextEditorDefaultTemplateOptions = nullptr;
     //
-    // ... simpleText navigator
+    // ... Simple text navigator
     //
     H6Label* simpleTextNavigatorTitle = nullptr;
     CheckBox* simpleTextNavigatorShowSceneText = nullptr;
@@ -235,11 +235,21 @@ public:
     QGridLayout* comicBookCardLayout = nullptr;
     H5Label* comicBookTitle = nullptr;
     //
-    // ... comicBook editor
+    // ... Comic book editor
     //
     H6Label* comicBookEditorTitle = nullptr;
     ComboBox* comicBookEditorDefaultTemplate = nullptr;
     IconButton* comicBookEditorDefaultTemplateOptions = nullptr;
+    //
+    // ... Comic book navigator
+    //
+    H6Label* comicBookNavigatorTitle = nullptr;
+    CheckBox* comicBookNavigatorShowSceneText = nullptr;
+    RadioButton* comicBookNavigatorSceneDescriptionLines1 = nullptr;
+    RadioButton* comicBookNavigatorSceneDescriptionLines2 = nullptr;
+    RadioButton* comicBookNavigatorSceneDescriptionLines3 = nullptr;
+    RadioButton* comicBookNavigatorSceneDescriptionLines4 = nullptr;
+    RadioButton* comicBookNavigatorSceneDescriptionLines5 = nullptr;
     //
     int comicBookCardBottomSpacerIndex = 0;
 
@@ -328,6 +338,13 @@ SettingsView::Implementation::Implementation(QWidget* _parent)
     , comicBookEditorTitle(new H6Label(comicBookCard))
     , comicBookEditorDefaultTemplate(new ComboBox(comicBookCard))
     , comicBookEditorDefaultTemplateOptions(new IconButton(comicBookCard))
+    , comicBookNavigatorTitle(new H6Label(comicBookCard))
+    , comicBookNavigatorShowSceneText(new CheckBox(comicBookCard))
+    , comicBookNavigatorSceneDescriptionLines1(new RadioButton(comicBookCard))
+    , comicBookNavigatorSceneDescriptionLines2(new RadioButton(comicBookCard))
+    , comicBookNavigatorSceneDescriptionLines3(new RadioButton(comicBookCard))
+    , comicBookNavigatorSceneDescriptionLines4(new RadioButton(comicBookCard))
+    , comicBookNavigatorSceneDescriptionLines5(new RadioButton(comicBookCard))
     //
     , shortcutsCard(new Card(content))
     , shortcutsCardLayout(new QGridLayout)
@@ -622,6 +639,19 @@ void SettingsView::Implementation::initComicBookCard()
     comicBookEditorDefaultTemplate->setModel(BusinessLayer::TemplatesFacade::comicBookTemplates());
     comicBookEditorDefaultTemplateOptions->setIcon(u8"\U000F01D9");
     comicBookEditorDefaultTemplateOptions->hide();
+    //
+    auto linesGroup = new RadioButtonGroup(comicBookCard);
+    linesGroup->add(comicBookNavigatorSceneDescriptionLines1);
+    linesGroup->add(comicBookNavigatorSceneDescriptionLines2);
+    linesGroup->add(comicBookNavigatorSceneDescriptionLines3);
+    linesGroup->add(comicBookNavigatorSceneDescriptionLines4);
+    linesGroup->add(comicBookNavigatorSceneDescriptionLines5);
+    comicBookNavigatorSceneDescriptionLines1->setEnabled(false);
+    comicBookNavigatorSceneDescriptionLines1->setChecked(true);
+    comicBookNavigatorSceneDescriptionLines2->setEnabled(false);
+    comicBookNavigatorSceneDescriptionLines3->setEnabled(false);
+    comicBookNavigatorSceneDescriptionLines4->setEnabled(false);
+    comicBookNavigatorSceneDescriptionLines5->setEnabled(false);
 
 
     //
@@ -639,6 +669,21 @@ void SettingsView::Implementation::initComicBookCard()
         auto layout = makeLayout();
         layout->addWidget(comicBookEditorDefaultTemplate, 1);
         layout->addWidget(comicBookEditorDefaultTemplateOptions);
+        comicBookCardLayout->addLayout(layout, itemIndex++, 0);
+    }
+    //
+    // ... навигатор текста
+    //
+    comicBookCardLayout->addWidget(comicBookNavigatorTitle, itemIndex++, 0);
+    {
+        auto layout = makeLayout();
+        layout->addWidget(comicBookNavigatorShowSceneText);
+        layout->addWidget(comicBookNavigatorSceneDescriptionLines1);
+        layout->addWidget(comicBookNavigatorSceneDescriptionLines2);
+        layout->addWidget(comicBookNavigatorSceneDescriptionLines3);
+        layout->addWidget(comicBookNavigatorSceneDescriptionLines4);
+        layout->addWidget(comicBookNavigatorSceneDescriptionLines5);
+        layout->addStretch();
         comicBookCardLayout->addLayout(layout, itemIndex++, 0);
     }
     //
@@ -951,13 +996,54 @@ SettingsView::SettingsView(QWidget* _parent)
             d->screenplayDurationByCharactersDuration->text().toInt());
     });
     //
-    // ... Редактор текста
+    // ... Редактор комикса
     //
     connect(d->comicBookEditorDefaultTemplate, &ComboBox::currentIndexChanged, this,
             [this](const QModelIndex& _index) {
                 emit comicBookEditorDefaultTemplateChanged(
                     _index.data(BusinessLayer::TemplatesFacade::kTemplateIdRole).toString());
             });
+    //
+    // ... навигатор текста
+    //
+    connect(d->comicBookNavigatorShowSceneText, &CheckBox::checkedChanged,
+            d->comicBookNavigatorSceneDescriptionLines1, &RadioButton::setEnabled);
+    connect(d->comicBookNavigatorShowSceneText, &CheckBox::checkedChanged,
+            d->comicBookNavigatorSceneDescriptionLines2, &RadioButton::setEnabled);
+    connect(d->comicBookNavigatorShowSceneText, &CheckBox::checkedChanged,
+            d->comicBookNavigatorSceneDescriptionLines3, &RadioButton::setEnabled);
+    connect(d->comicBookNavigatorShowSceneText, &CheckBox::checkedChanged,
+            d->comicBookNavigatorSceneDescriptionLines4, &RadioButton::setEnabled);
+    connect(d->comicBookNavigatorShowSceneText, &CheckBox::checkedChanged,
+            d->comicBookNavigatorSceneDescriptionLines5, &RadioButton::setEnabled);
+    //
+    auto notifycomicBookNavigatorShowSceneTextChanged = [this] {
+        int sceneTextLines = 1;
+        if (d->comicBookNavigatorSceneDescriptionLines2->isChecked()) {
+            sceneTextLines = 2;
+        } else if (d->comicBookNavigatorSceneDescriptionLines3->isChecked()) {
+            sceneTextLines = 3;
+        } else if (d->comicBookNavigatorSceneDescriptionLines4->isChecked()) {
+            sceneTextLines = 4;
+        } else if (d->comicBookNavigatorSceneDescriptionLines5->isChecked()) {
+            sceneTextLines = 5;
+        }
+        emit comicBookNavigatorShowSceneTextChanged(d->comicBookNavigatorShowSceneText->isChecked(),
+                                                    sceneTextLines);
+    };
+    connect(d->comicBookNavigatorShowSceneText, &CheckBox::checkedChanged, this,
+            notifycomicBookNavigatorShowSceneTextChanged);
+    connect(d->comicBookNavigatorSceneDescriptionLines1, &RadioButton::checkedChanged, this,
+            notifycomicBookNavigatorShowSceneTextChanged);
+    connect(d->comicBookNavigatorSceneDescriptionLines2, &RadioButton::checkedChanged, this,
+            notifycomicBookNavigatorShowSceneTextChanged);
+    connect(d->comicBookNavigatorSceneDescriptionLines3, &RadioButton::checkedChanged, this,
+            notifycomicBookNavigatorShowSceneTextChanged);
+    connect(d->comicBookNavigatorSceneDescriptionLines4, &RadioButton::checkedChanged, this,
+            notifycomicBookNavigatorShowSceneTextChanged);
+    connect(d->comicBookNavigatorSceneDescriptionLines5, &RadioButton::checkedChanged, this,
+            notifycomicBookNavigatorShowSceneTextChanged);
+
 
     designSystemChangeEvent(nullptr);
 }
@@ -1287,6 +1373,20 @@ void SettingsView::setComicBookEditorDefaultTemplate(const QString& _templateId)
     }
 }
 
+void SettingsView::setComicBookNavigatorShowSceneText(bool _show, int _lines)
+{
+    d->comicBookNavigatorShowSceneText->setChecked(_show);
+    if (_show) {
+        const QHash<int, RadioButton*> buttons
+            = { { 1, d->comicBookNavigatorSceneDescriptionLines1 },
+                { 2, d->comicBookNavigatorSceneDescriptionLines2 },
+                { 3, d->comicBookNavigatorSceneDescriptionLines3 },
+                { 4, d->comicBookNavigatorSceneDescriptionLines4 },
+                { 5, d->comicBookNavigatorSceneDescriptionLines5 } };
+        buttons[_lines]->setChecked(true);
+    }
+}
+
 void SettingsView::updateTranslations()
 {
     d->applicationTitle->setText(tr("Application settings"));
@@ -1486,6 +1586,13 @@ void SettingsView::updateTranslations()
     d->comicBookEditorDefaultTemplate->setLabel(tr("Default template"));
     d->comicBookEditorDefaultTemplateOptions->setToolTip(
         tr("Available actions for the selected template"));
+    d->comicBookNavigatorTitle->setText(tr("Navigator"));
+    d->comicBookNavigatorShowSceneText->setText(tr("Show panel text, lines"));
+    d->comicBookNavigatorSceneDescriptionLines1->setText("1");
+    d->comicBookNavigatorSceneDescriptionLines2->setText("2");
+    d->comicBookNavigatorSceneDescriptionLines3->setText("3");
+    d->comicBookNavigatorSceneDescriptionLines4->setText("4");
+    d->comicBookNavigatorSceneDescriptionLines5->setText("5");
 
     d->shortcutsTitle->setText(tr("Shortcuts"));
 }
@@ -1522,7 +1629,8 @@ void SettingsView::designSystemChangeEvent(DesignSystemChangeEvent* _event)
              d->applicationSaveAndBackupTitle, d->applicationTextEditingTitle, d->simpleTextTitle,
              d->simpleTextEditorTitle, d->simpleTextNavigatorTitle, d->screenplayTitle,
              d->screenplayEditorTitle, d->screenplayNavigatorTitle, d->screenplayDurationTitle,
-             d->comicBookTitle, d->comicBookEditorTitle, d->shortcutsTitle }) {
+             d->comicBookTitle, d->comicBookEditorTitle, d->comicBookNavigatorTitle,
+             d->shortcutsTitle }) {
         cardTitle->setBackgroundColor(DesignSystem::color().background());
         cardTitle->setTextColor(titleColor);
         cardTitle->setContentsMargins(titleMargins);
@@ -1564,22 +1672,32 @@ void SettingsView::designSystemChangeEvent(DesignSystemChangeEvent* _event)
            d->screenplayEditorShowSceneNumber, d->screenplayEditorShowSceneNumberOnLeft,
            d->screenplayEditorShowSceneNumberOnRight, d->screenplayEditorShowDialogueNumber,
            d->screenplayNavigatorShowSceneNumber, d->screenplayNavigatorShowSceneText,
-           d->screenplayDurationByCharactersIncludingSpaces }) {
+           d->screenplayDurationByCharactersIncludingSpaces,
+           //
+           d->comicBookNavigatorShowSceneText }) {
         checkBox->setBackgroundColor(DesignSystem::color().background());
         checkBox->setTextColor(DesignSystem::color().onBackground());
     }
 
-    for (auto radioButton : { d->simpleTextNavigatorSceneDescriptionLines1,
-                              d->simpleTextNavigatorSceneDescriptionLines2,
-                              d->simpleTextNavigatorSceneDescriptionLines3,
-                              d->simpleTextNavigatorSceneDescriptionLines4,
-                              d->simpleTextNavigatorSceneDescriptionLines5,
-                              d->screenplayNavigatorSceneDescriptionLines1,
-                              d->screenplayNavigatorSceneDescriptionLines2,
-                              d->screenplayNavigatorSceneDescriptionLines3,
-                              d->screenplayNavigatorSceneDescriptionLines4,
-                              d->screenplayNavigatorSceneDescriptionLines5,
-                              d->screenplayDurationByPage, d->screenplayDurationByCharacters }) {
+    for (auto radioButton : {
+             d->simpleTextNavigatorSceneDescriptionLines1,
+             d->simpleTextNavigatorSceneDescriptionLines2,
+             d->simpleTextNavigatorSceneDescriptionLines3,
+             d->simpleTextNavigatorSceneDescriptionLines4,
+             d->simpleTextNavigatorSceneDescriptionLines5,
+             d->screenplayNavigatorSceneDescriptionLines1,
+             d->screenplayNavigatorSceneDescriptionLines2,
+             d->screenplayNavigatorSceneDescriptionLines3,
+             d->screenplayNavigatorSceneDescriptionLines4,
+             d->screenplayNavigatorSceneDescriptionLines5,
+             d->screenplayDurationByPage,
+             d->screenplayDurationByCharacters,
+             d->comicBookNavigatorSceneDescriptionLines1,
+             d->comicBookNavigatorSceneDescriptionLines2,
+             d->comicBookNavigatorSceneDescriptionLines3,
+             d->comicBookNavigatorSceneDescriptionLines4,
+             d->comicBookNavigatorSceneDescriptionLines5,
+         }) {
         radioButton->setBackgroundColor(DesignSystem::color().background());
         radioButton->setTextColor(DesignSystem::color().onBackground());
     }

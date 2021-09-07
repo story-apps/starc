@@ -169,6 +169,10 @@ void SettingsManager::Implementation::loadComicBookSettings()
         = settingsValue(DataStorageLayer::kComponentsComicBookEditorDefaultTemplateKey).toString();
     view->setComicBookEditorDefaultTemplate(defaultTemplate);
     BusinessLayer::TemplatesFacade::setDefaultComicBookTemplate(defaultTemplate);
+    //
+    view->setComicBookNavigatorShowSceneText(
+        settingsValue(DataStorageLayer::kComponentsComicBookNavigatorShowSceneTextKey).toBool(),
+        settingsValue(DataStorageLayer::kComponentsComicBookNavigatorSceneTextLinesKey).toInt());
 }
 
 
@@ -280,6 +284,9 @@ SettingsManager::SettingsManager(QObject* _parent, QWidget* _parentWidget)
     //
     connect(d->view, &Ui::SettingsView::comicBookEditorDefaultTemplateChanged, this,
             &SettingsManager::setComicBookEditorDefaultTemplate);
+    //
+    connect(d->view, &Ui::SettingsView::comicBookNavigatorShowSceneTextChanged, this,
+            &SettingsManager::setComicBookNavigatorShowSceneText);
 
     //
     // Работа с библиотекой шаблонов сценария
@@ -694,6 +701,13 @@ void SettingsManager::setComicBookEditorDefaultTemplate(const QString& _template
     BusinessLayer::TemplatesFacade::setDefaultComicBookTemplate(_templateId);
     emit screenplayEditorChanged(
         { DataStorageLayer::kComponentsComicBookEditorDefaultTemplateKey });
+}
+
+void SettingsManager::setComicBookNavigatorShowSceneText(bool _show, int _lines)
+{
+    d->setSettingsValue(DataStorageLayer::kComponentsComicBookNavigatorShowSceneTextKey, _show);
+    d->setSettingsValue(DataStorageLayer::kComponentsComicBookNavigatorSceneTextLinesKey, _lines);
+    emit comicBookNavigatorChanged();
 }
 
 } // namespace ManagementLayer

@@ -38,6 +38,7 @@ public:
     void reconfigureScreenplayNavigator();
     void reconfigureScreenplayDuration();
     void reconfigureComicBookEditor(const QStringList& _changedSettingsKeys);
+    void reconfigureComicBookNavigator();
 
     /**
      * @brief Загрузить данные текущего проекта

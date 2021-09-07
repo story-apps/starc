@@ -88,22 +88,16 @@ void ComicBookTextStructureView::reconfigure()
             _key, DataStorageLayer::SettingsStorage::SettingsPlace::Application);
     };
 
-    //    const bool showSceneNumber
-    //        = settingsValue(DataStorageLayer::kComponentsComicBookNavigatorShowSceneNumberKey)
-    //              .toBool();
-    //    d->contentDelegate->showSceneNumber(showSceneNumber);
-
-    //    const bool showSceneText
-    //        =
-    //        settingsValue(DataStorageLayer::kComponentsComicBookNavigatorShowSceneTextKey).toBool();
-    //    if (showSceneText == false) {
-    //        d->contentDelegate->setTextLinesSize(0);
-    //    } else {
-    //        const int sceneTextLines
-    //            = settingsValue(DataStorageLayer::kComponentsComicBookNavigatorSceneTextLinesKey)
-    //                  .toInt();
-    //        d->contentDelegate->setTextLinesSize(sceneTextLines);
-    //    }
+    const bool showSceneText
+        = settingsValue(DataStorageLayer::kComponentsComicBookNavigatorShowSceneTextKey).toBool();
+    if (showSceneText == false) {
+        d->contentDelegate->setTextLinesSize(0);
+    } else {
+        const int sceneTextLines
+            = settingsValue(DataStorageLayer::kComponentsComicBookNavigatorSceneTextLinesKey)
+                  .toInt();
+        d->contentDelegate->setTextLinesSize(sceneTextLines);
+    }
 
     d->content->setItemDelegate(nullptr);
     d->content->setItemDelegate(d->contentDelegate);

@@ -533,6 +533,11 @@ SettingsStorage::Implementation::Implementation()
         addShortcut(BusinessLayer::ComicBookParagraphType::InlineNote, "Ctrl+Esc");
         //
         defaultValues.insert(kComponentsComicBookEditorDefaultTemplateKey, "world");
+        //
+        // Параметры навигатора сценария
+        //
+        defaultValues.insert(kComponentsComicBookNavigatorShowSceneTextKey, true);
+        defaultValues.insert(kComponentsComicBookNavigatorSceneTextLinesKey, 1);
     }
 
 

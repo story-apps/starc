@@ -305,6 +305,11 @@ void ProjectPluginsBuilder::reconfigureComicBookEditor(const QStringList& _chang
     reconfigurePlugin(kComicBookTextEditorMime, _changedSettingsKeys);
 }
 
+void ProjectPluginsBuilder::reconfigureComicBookNavigator()
+{
+    reconfigurePlugin(kComicBookTextNavigatorMime, {});
+}
+
 void ProjectPluginsBuilder::reset()
 {
     for (auto& plugin : d->plugins) {
