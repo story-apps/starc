@@ -75,11 +75,32 @@ void PanelHandler::handleEnter(QKeyEvent*)
                     //
                 } else if (cursorForwardText.isEmpty()) {
                     //! В конце блока
+                    bool isHandled = false;
 
+                    //
+                    // Если введён персонаж, меняем стиль блока и переходим к реплике
+                    //
+                    if (cursorForwardText.isEmpty()) {
+                        //
+                        // Потенциально была введена страница
+                        //
+                        const QString backwardTextCorrected
+                            = TextHelper::smartToLower(cursorBackwardText.trimmed());
+                        if (editor()->dictionaries()->singlePageIntros().contains(
+                                backwardTextCorrected)
+                            || editor()->dictionaries()->multiplePageIntros().contains(
+                                backwardTextCorrected)) {
+                            editor()->setCurrentParagraphType(ComicBookParagraphType::Page);
+                            editor()->addParagraph(jumpForEnter(ComicBookParagraphType::Page));
+                            isHandled = true;
+                        }
+                    }
                     //
                     // Вставляем блок и применяем ему стиль описания действия
                     //
-                    editor()->addParagraph(jumpForEnter(ComicBookParagraphType::Panel));
+                    if (!isHandled) {
+                        editor()->addParagraph(jumpForEnter(ComicBookParagraphType::Panel));
+                    }
                 } else {
                     //! Внутри блока
 

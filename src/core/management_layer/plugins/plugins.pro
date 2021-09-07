@@ -2,6 +2,7 @@ TEMPLATE = subdirs
 
 SUBDIRS = \
     comic_book_information \
+    comic_book_parameters \
     comic_book_text \
     comic_book_text_structure \
     project_information \

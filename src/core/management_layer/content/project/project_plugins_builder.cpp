@@ -29,6 +29,7 @@ const QString kScreenplayStatisticsNavigatorMime = QStringLiteral("application/x
 const QString kComicBookTitlePageEditorMime = QStringLiteral("application/x-starc/editor/comicbook/title-page");
 const QString kComicBookTextEditorMime = QStringLiteral("application/x-starc/editor/comicbook/text");
 const QString kComicBookTextNavigatorMime = QStringLiteral("application/x-starc/navigator/comicbook/text");
+const QString kComicBookStatisticsViewMime = QStringLiteral("application/x-starc/view/comicbook/statistics");
 
 /**
  * @brief Карта соотвествия майм-типов редактора к навигатору
@@ -57,10 +58,12 @@ const QHash<QString, QVector<ProjectPluginsBuilder::EditorInfo>> kDocumentToEdit
         { "application/x-starc/document/screenplay/text",       { { kScreenplayTextEditorMime, u8"\U000f09ed" },
                                                                   { "application/x-starc/editor/screenplay/cards", u8"\U000f0554" } } },
         { "application/x-starc/document/screenplay/statistics", { { kScreenplayStatisticsViewMime, u8"\U000f0127" } } },
-        { "application/x-starc/document/comicbook",  { { "application/x-starc/editor/comicbook/information", u8"\U000f02fd" } } },
+        { "application/x-starc/document/comicbook",  { { "application/x-starc/editor/comicbook/information", u8"\U000f02fd" },
+                                                       { "application/x-starc/editor/comicbook/parameters", u8"\U000f0493" } } },
         { "application/x-starc/document/comicbook/title-page",  { { kComicBookTitlePageEditorMime, u8"\U000f09ed" } } },
         { "application/x-starc/document/comicbook/synopsis",    { { kSimpleTextEditorMime, u8"\U000f09ed" } } },
         { "application/x-starc/document/comicbook/text",        { { kComicBookTextEditorMime, u8"\U000f09ed" } } },
+        { "application/x-starc/document/comicbook/statistics",  { { kComicBookStatisticsViewMime, u8"\U000f09ed" } } },
         { "application/x-starc/document/character",  { { "application/x-starc/editor/character/information", u8"\U000f02fd" } } },
         { "application/x-starc/document/location",   { { "application/x-starc/editor/location/information", u8"\U000f02fd" } } },
         { "application/x-starc/document/folder",     { { kSimpleTextEditorMime, u8"\U000f09ed" } } },
@@ -74,6 +77,8 @@ const QHash<QString, QVector<ProjectPluginsBuilder::EditorInfo>> kDocumentToEdit
  */
 const QHash<QString, QString> kMimeToPlugin
     = { { "application/x-starc/editor/project/information", "*projectinformationplugin*" },
+        { kSimpleTextEditorMime, "*simpletextplugin*" },
+        { kSimpleTextNavigatorMime, "*simpletextstructureplugin*" },
         { "application/x-starc/editor/screenplay/information", "*screenplayinformationplugin*" },
         { "application/x-starc/editor/screenplay/parameters", "*screenplayparametersplugin*" },
         { kScreenplayTitlePageEditorMime, "*titlepageplugin*" },
@@ -85,13 +90,13 @@ const QHash<QString, QString> kMimeToPlugin
         { kScreenplayStatisticsViewMime, "*screenplaystatisticsplugin*" },
         { kScreenplayStatisticsNavigatorMime, "*screenplaystatisticsstructureplugin*" },
         { "application/x-starc/editor/comicbook/information", "*comicbookinformationplugin*" },
+        { "application/x-starc/editor/comicbook/parameters", "*comicbookparametersplugin*" },
         { kComicBookTitlePageEditorMime, "*titlepageplugin*" },
         { kComicBookTextEditorMime, "*comicbooktextplugin*" },
         { kComicBookTextNavigatorMime, "*comicbooktextstructureplugin*" },
         { "application/x-starc/editor/character/information", "*characterinformationplugin*" },
         { "application/x-starc/editor/location/information", "*locationinformationplugin*" },
-        { kSimpleTextEditorMime, "*simpletextplugin*" },
-        { kSimpleTextNavigatorMime, "*simpletextstructureplugin*" }
+        { kComicBookStatisticsViewMime, "*comicbookstatisticsplugin*" },
       };
 // clang-format on
 
@@ -216,14 +221,14 @@ QString ProjectPluginsBuilder::editorDescription(const QString& _editorMimeType)
               QApplication::translate("ProjectPluginsBuilder", "Information about project") },
             { "application/x-starc/editor/project/collaborators",
               QApplication::translate("ProjectPluginsBuilder", "Project collaborators") },
+            { "application/x-starc/editor/text",
+              QApplication::translate("ProjectPluginsBuilder", "Text") },
             { "application/x-starc/editor/screenplay/information",
               QApplication::translate("ProjectPluginsBuilder", "Information about screenplay") },
             { "application/x-starc/editor/screenplay/parameters",
               QApplication::translate("ProjectPluginsBuilder", "Screenplay parameters") },
             { "application/x-starc/editor/screenplay/title-page",
               QApplication::translate("ProjectPluginsBuilder", "Title page text") },
-            { "application/x-starc/editor/text",
-              QApplication::translate("ProjectPluginsBuilder", "Text") },
             { "application/x-starc/editor/screenplay/treatment",
               QApplication::translate("ProjectPluginsBuilder", "Treatment text") },
             { kScreenplayTextEditorMime,
@@ -231,6 +236,18 @@ QString ProjectPluginsBuilder::editorDescription(const QString& _editorMimeType)
             { "application/x-starc/editor/screenplay/cards",
               QApplication::translate("ProjectPluginsBuilder", "Cards") },
             { kScreenplayStatisticsViewMime,
+              QApplication::translate("ProjectPluginsBuilder", "Statistics") },
+            { "application/x-starc/editor/comicbook/information",
+              QApplication::translate("ProjectPluginsBuilder", "Information about comic book") },
+            { "application/x-starc/editor/comicbook/parameters",
+              QApplication::translate("ProjectPluginsBuilder", "Comic book parameters") },
+            { "application/x-starc/editor/comicbook/title-page",
+              QApplication::translate("ProjectPluginsBuilder", "Title page text") },
+            { kComicBookTextEditorMime,
+              QApplication::translate("ProjectPluginsBuilder", "Comic book text") },
+            { "application/x-starc/editor/comicbook/cards",
+              QApplication::translate("ProjectPluginsBuilder", "Cards") },
+            { kComicBookStatisticsViewMime,
               QApplication::translate("ProjectPluginsBuilder", "Statistics") } };
     return descriptions.value(_editorMimeType);
 }
