@@ -81,9 +81,7 @@ void DialogHandler::handleEnter(QKeyEvent*)
                     // Перейдём к следующему блоку
                     //
                     editor()->moveCursor(QTextCursor::NextBlock);
-                    editor()->moveCursor(QTextCursor::NextBlock);
-                    editor()->setCurrentParagraphType(
-                        jumpForEnter(ComicBookParagraphType::Dialogue));
+                    editor()->addParagraph(jumpForEnter(ComicBookParagraphType::Dialogue));
                 } else {
                     //! Внутри блока
 
@@ -191,8 +189,7 @@ void DialogHandler::handleTab(QKeyEvent*)
                     // Вставляем блок ремарки
                     //
                     editor()->moveCursor(QTextCursor::NextBlock);
-                    editor()->moveCursor(QTextCursor::NextBlock);
-                    editor()->setCurrentParagraphType(jumpForTab(ComicBookParagraphType::Dialogue));
+                    editor()->addParagraph(jumpForTab(ComicBookParagraphType::Dialogue));
                 } else {
                     //! Внутри блока
 
