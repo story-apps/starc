@@ -2,7 +2,7 @@
 
 #include <business_layer/export/comic_book/comic_book_docx_exporter.h>
 #include <business_layer/export/comic_book/comic_book_export_options.h>
-//#include <business_layer/export/comic_book/comic_book_pdf_exporter.h>
+#include <business_layer/export/comic_book/comic_book_pdf_exporter.h>
 #include <business_layer/export/screenplay/screenplay_docx_exporter.h>
 #include <business_layer/export/screenplay/screenplay_export_options.h>
 #include <business_layer/export/screenplay/screenplay_pdf_exporter.h>
@@ -157,7 +157,7 @@ void ExportManager::Implementation::exportScreenplay(BusinessLayer::AbstractMode
                 // Если необходимо, откроем экспортированный документ
                 //
                 if (screenplayExportDialog->openDocumentAfterExport()) {
-                    QDesktopServices::openUrl(exportOptions.filePath);
+                    QDesktopServices::openUrl(QUrl::fromLocalFile(exportOptions.filePath));
                 }
                 //
                 // ... и закрываем диалог экспорта
@@ -199,11 +199,11 @@ void ExportManager::Implementation::exportComicBook(BusinessLayer::AbstractModel
                     QString exportExtension;
                     switch (exportOptions.fileFormat) {
                     default:
-                        //                    case ComicBookExportFileFormat::Pdf: {
-                        //                        exportFilter = DialogHelper::pdfFilter();
-                        //                        exportExtension = ExtensionHelper::pdf();
-                        //                        break;
-                        //                    }
+                    case ComicBookExportFileFormat::Pdf: {
+                        exportFilter = DialogHelper::pdfFilter();
+                        exportExtension = ExtensionHelper::pdf();
+                        break;
+                    }
                     case ComicBookExportFileFormat::Docx: {
                         exportFilter = DialogHelper::msWordFilter();
                         exportExtension = ExtensionHelper::msOfficeOpenXml();
@@ -246,10 +246,10 @@ void ExportManager::Implementation::exportComicBook(BusinessLayer::AbstractModel
                     QScopedPointer<BusinessLayer::ComicBookAbstractExporter> exporter;
                     switch (exportOptions.fileFormat) {
                     default:
-                        //                    case ComicBookExportFileFormat::Pdf: {
-                        //                        exporter.reset(new
-                        //                        BusinessLayer::ComicBookPdfExporter); break;
-                        //                    }
+                    case ComicBookExportFileFormat::Pdf: {
+                        exporter.reset(new BusinessLayer::ComicBookPdfExporter);
+                        break;
+                    }
                     case ComicBookExportFileFormat::Docx: {
                         exporter.reset(new BusinessLayer::ComicBookDocxExporter);
                         break;
@@ -264,7 +264,7 @@ void ExportManager::Implementation::exportComicBook(BusinessLayer::AbstractModel
                     // Если необходимо, откроем экспортированный документ
                     //
                     if (comicBookExportDialog->openDocumentAfterExport()) {
-                        QDesktopServices::openUrl(exportOptions.filePath);
+                        QDesktopServices::openUrl(QUrl::fromLocalFile(exportOptions.filePath));
                     }
                     //
                     // ... и закрываем диалог экспорта

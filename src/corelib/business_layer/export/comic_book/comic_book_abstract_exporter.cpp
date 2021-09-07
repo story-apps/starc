@@ -47,6 +47,15 @@ ComicBookTextDocument* ComicBookAbstractExporter::prepareDocument(
     // ... корректируем текст сценария
     //
     ComicBookTextCursor cursor(comicBookText);
+    //
+    // ... для первого блока убираем принудительный перенос страницы, если есть
+    //
+    if (cursor.block().blockFormat().pageBreakPolicy() == QTextFormat::PageBreak_AlwaysBefore) {
+        auto blockFormat = cursor.blockFormat();
+        blockFormat.setPageBreakPolicy(QTextFormat::PageBreak_Auto);
+        cursor.setBlockFormat(blockFormat);
+    }
+    //
     do {
         const auto blockType = ComicBookBlockStyle::forBlock(cursor.block());
 

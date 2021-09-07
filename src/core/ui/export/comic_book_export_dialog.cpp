@@ -62,7 +62,7 @@ ComicBookExportDialog::Implementation::Implementation(QWidget* _parent)
     using namespace BusinessLayer;
 
     fileFormat->setSpellCheckPolicy(SpellCheckPolicy::Manual);
-    auto formatsModel = new QStringListModel({ /*"PDF",*/ "DOCX" /*, "FDX", "Fontain" */ });
+    auto formatsModel = new QStringListModel({ "PDF", "DOCX" /*, "FDX", "Fontain" */ });
     fileFormat->setModel(formatsModel);
     fileFormat->setCurrentIndex(formatsModel->index(0, 0));
 

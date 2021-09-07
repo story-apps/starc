@@ -47,6 +47,15 @@ ScreenplayTextDocument* ScreenplayAbstractExporter::prepareDocument(
     // ... корректируем текст сценария
     //
     ScreenplayTextCursor cursor(screenplayText);
+    //
+    // ... для первого блока убираем принудительный перенос страницы, если есть
+    //
+    if (cursor.block().blockFormat().pageBreakPolicy() == QTextFormat::PageBreak_AlwaysBefore) {
+        auto blockFormat = cursor.blockFormat();
+        blockFormat.setPageBreakPolicy(QTextFormat::PageBreak_Auto);
+        cursor.setBlockFormat(blockFormat);
+    }
+    //
     do {
         const auto blockType = ScreenplayBlockStyle::forBlock(cursor.block());
 
