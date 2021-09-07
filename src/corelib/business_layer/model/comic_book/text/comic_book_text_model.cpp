@@ -448,15 +448,59 @@ bool ComicBookTextModel::canDropMimeData(const QMimeData* _data, Qt::DropAction 
                                          int _column, const QModelIndex& _parent) const
 {
     Q_UNUSED(_action);
-    Q_UNUSED(_row);
     Q_UNUSED(_column);
-    Q_UNUSED(_parent);
+
+    if (!_data->formats().contains(mimeTypes().constFirst())) {
+        return false;
+    }
 
     //
-    // TODO: Запретить вставлять страницу в страницу
+    // Определим родителя, куда будет происходить вставка
     //
+    const auto parentItemType
+        = _parent.isValid() ? itemForIndex(_parent)->type() : ComicBookTextModelItemType::Folder;
 
-    return _data->formats().contains(mimeTypes().constFirst());
+    //
+    // Получим первый из перемещаемых элементов
+    //
+    QXmlStreamReader contentReader(_data->data(mimeTypes().constFirst()));
+    contentReader.readNextStartElement(); // document
+    contentReader.readNextStartElement();
+    ComicBookTextModelItemType firstItemType = ComicBookTextModelItemType::Text;
+    do {
+        const auto currentTag = contentReader.name();
+        if (currentTag == xml::kDocumentTag) {
+            break;
+        }
+
+        if (currentTag == xml::kFolderTag) {
+            firstItemType = ComicBookTextModelItemType::Folder;
+        } else if (currentTag == xml::kPageTag) {
+            firstItemType = ComicBookTextModelItemType::Page;
+        } else if (currentTag == xml::kPanelTag) {
+            firstItemType = ComicBookTextModelItemType::Panel;
+        } else if (currentTag == xml::kSplitterTag) {
+            firstItemType = ComicBookTextModelItemType::Splitter;
+        }
+    }
+    once;
+
+    //
+    // Собственно определяем правила перемещения
+    //
+    switch (firstItemType) {
+    case ComicBookTextModelItemType::Page: {
+        return parentItemType == ComicBookTextModelItemType::Folder;
+    }
+
+    case ComicBookTextModelItemType::Panel: {
+        return parentItemType == ComicBookTextModelItemType::Page;
+    }
+
+    default: {
+        return false;
+    }
+    }
 }
 
 bool ComicBookTextModel::dropMimeData(const QMimeData* _data, Qt::DropAction _action, int _row,
@@ -505,7 +549,8 @@ bool ComicBookTextModel::dropMimeData(const QMimeData* _data, Qt::DropAction _ac
         //
         else {
             int delta = 1;
-            if (_parent.isValid() && rowCount(_parent) == _row) {
+            if (_parent.isValid() && rowCount(_parent) == _row
+                && itemForIndex(_parent)->type() == ComicBookTextModelItemType::Folder) {
                 //
                 // ... для папок, при вставке в самый конец также нужно учитывать
                 //     текстовый блок закрывающий папку
@@ -586,7 +631,7 @@ bool ComicBookTextModel::dropMimeData(const QMimeData* _data, Qt::DropAction _ac
                     }
                 }
                 //
-                // Вставить в конец папки
+                // Вставить в конец
                 //
                 else if (_row == -1) {
                     //
@@ -595,6 +640,9 @@ bool ComicBookTextModel::dropMimeData(const QMimeData* _data, Qt::DropAction _ac
                     if (lastItem->type() == ComicBookTextModelItemType::Folder
                         && _parent.isValid()) {
                         insertItem(newItem, lastItem->childAt(lastItem->childCount() - 2));
+                    } else if (lastItem->type() == ComicBookTextModelItemType::Page
+                               && _parent.isValid()) {
+                        insertItem(newItem, lastItem->childAt(lastItem->childCount() - 1));
                     }
                     //
                     // В остальных случаях просто вставляем после предыдущего
