@@ -55,7 +55,6 @@ public:
     QSize panelSizeHint(const QStyleOptionViewItem& _option, const QModelIndex& _index) const;
 
 
-    bool showSceneNumber = true;
     int textLines = 2;
 };
 
@@ -225,7 +224,6 @@ void ComicBookTextStructureDelegate::Implementation::paintPage(QPainter* _painte
     //
     // ... иконка
     //
-    _painter->setPen(textColor);
     QRectF iconRect;
     if (_index.data(Qt::DecorationRole).isValid()) {
         iconRect
@@ -236,6 +234,9 @@ void ComicBookTextStructureDelegate::Implementation::paintPage(QPainter* _painte
                             Ui::DesignSystem::layout().px16() + Ui::DesignSystem::layout().px24()
                                 + Ui::DesignSystem::layout().px16()));
         _painter->setFont(Ui::DesignSystem::font().iconsMid());
+        _painter->setPen(_index.data(ComicBookTextModelPageItem::PageHasNumberingErrorRole).toBool()
+                             ? DesignSystem::color().error()
+                             : textColor);
         _painter->drawText(iconRect, Qt::AlignLeft | Qt::AlignVCenter,
                            _index.data(Qt::DecorationRole).toString());
     }
@@ -245,25 +246,25 @@ void ComicBookTextStructureDelegate::Implementation::paintPage(QPainter* _painte
     //
     const int wordsCount
         = _index.data(ComicBookTextModelPageItem::PageDialoguesWordsCountRole).toInt();
-    const auto pageDurationRect = paintItemWordsCount(_painter, _option, wordsCount);
+    const auto dialoguesWordsCountRect = paintItemWordsCount(_painter, _option, wordsCount);
 
     //
     // ... название страницы
     //
     _painter->setFont(Ui::DesignSystem::font().subtitle2());
     _painter->setPen(textColor);
-    const qreal folderNameLeft = iconRect.right() + Ui::DesignSystem::layout().px4();
-    const qreal folderNameWidth
-        = pageDurationRect.left() - folderNameLeft - Ui::DesignSystem::treeOneLineItem().spacing();
-    const QRectF folderNameRect(
-        QPointF(folderNameLeft, backgroundRect.top() + Ui::DesignSystem::layout().px16()),
-        QSizeF(folderNameWidth, Ui::DesignSystem::layout().px24()));
+    const qreal pageNameLeft = iconRect.right() + Ui::DesignSystem::layout().px4();
+    const qreal pageNameWidth = dialoguesWordsCountRect.left() - pageNameLeft
+        - Ui::DesignSystem::treeOneLineItem().spacing();
+    const QRectF pageNameRect(
+        QPointF(pageNameLeft, backgroundRect.top() + Ui::DesignSystem::layout().px16()),
+        QSizeF(pageNameWidth, Ui::DesignSystem::layout().px24()));
     const auto pageName = QString("%1 (%2)").arg(
         _index.data(ComicBookTextModelPageItem::PageNameRole).toString(),
         tr("%n PANELS", "", _index.data(ComicBookTextModelPageItem::PagePanelsCountRole).toInt()));
     const auto pageNameCorrected = _painter->fontMetrics().elidedText(
-        pageName, Qt::ElideRight, static_cast<int>(folderNameRect.width()));
-    _painter->drawText(folderNameRect, Qt::AlignLeft | Qt::AlignVCenter, pageNameCorrected);
+        pageName, Qt::ElideRight, static_cast<int>(pageNameRect.width()));
+    _painter->drawText(pageNameRect, Qt::AlignLeft | Qt::AlignVCenter, pageNameCorrected);
 }
 
 void ComicBookTextStructureDelegate::Implementation::paintPanel(QPainter* _painter,
@@ -336,20 +337,16 @@ void ComicBookTextStructureDelegate::Implementation::paintPanel(QPainter* _paint
     // ... заголовок сцены
     //
     _painter->setFont(Ui::DesignSystem::font().subtitle2());
-    const qreal sceneHeadingLeft = iconRect.right() + Ui::DesignSystem::layout().px4();
-    const qreal sceneHeadingWidth = panelDurationRect.left() - sceneHeadingLeft
+    const qreal panelHeadingLeft = iconRect.right() + Ui::DesignSystem::layout().px4();
+    const qreal panelHeadingWidth = panelDurationRect.left() - panelHeadingLeft
         - Ui::DesignSystem::treeOneLineItem().spacing();
-    const QRectF sceneHeadingRect(
-        QPointF(sceneHeadingLeft, backgroundRect.top() + Ui::DesignSystem::layout().px16()),
-        QSizeF(sceneHeadingWidth, Ui::DesignSystem::layout().px24()));
-    auto sceneHeading = _index.data(ComicBookTextModelPanelItem::PanelHeadingRole).toString();
-    if (showSceneNumber) {
-        //        sceneHeading.prepend(_index.data(ComicBookTextModelSceneItem::SceneNumberRole).toString()
-        //                             + " ");
-    }
-    sceneHeading = _painter->fontMetrics().elidedText(sceneHeading, Qt::ElideRight,
-                                                      static_cast<int>(sceneHeadingRect.width()));
-    _painter->drawText(sceneHeadingRect, Qt::AlignLeft | Qt::AlignVCenter, sceneHeading);
+    const QRectF panelHeadingRect(
+        QPointF(panelHeadingLeft, backgroundRect.top() + Ui::DesignSystem::layout().px16()),
+        QSizeF(panelHeadingWidth, Ui::DesignSystem::layout().px24()));
+    auto panelHeading = _index.data(ComicBookTextModelPanelItem::PanelHeadingRole).toString();
+    panelHeading = _painter->fontMetrics().elidedText(panelHeading, Qt::ElideRight,
+                                                      static_cast<int>(panelHeadingRect.width()));
+    _painter->drawText(panelHeadingRect, Qt::AlignLeft | Qt::AlignVCenter, panelHeading);
 
     //
     // ... текст сцены
@@ -358,18 +355,18 @@ void ComicBookTextStructureDelegate::Implementation::paintPanel(QPainter* _paint
     if (panelText.isEmpty()) {
         return;
     }
-    QRectF sceneTextRect;
+    QRectF panelTextRect;
     if (textLines > 0) {
         _painter->setFont(Ui::DesignSystem::font().body2());
-        const qreal sceneTextLeft = iconRect.left();
-        const qreal sceneTextWidth = backgroundRect.right() - sceneTextLeft
+        const qreal panelTextLeft = iconRect.left();
+        const qreal panelTextWidth = backgroundRect.right() - panelTextLeft
             - Ui::DesignSystem::treeOneLineItem().margins().right();
-        sceneTextRect = QRectF(
-            QPointF(sceneTextLeft, sceneHeadingRect.bottom() + Ui::DesignSystem::layout().px8()),
-            QSizeF(sceneTextWidth, _painter->fontMetrics().lineSpacing() * textLines));
+        panelTextRect = QRectF(
+            QPointF(panelTextLeft, panelHeadingRect.bottom() + Ui::DesignSystem::layout().px8()),
+            QSizeF(panelTextWidth, _painter->fontMetrics().lineSpacing() * textLines));
         panelText
-            = TextHelper::elidedText(panelText, Ui::DesignSystem::font().body2(), sceneTextRect);
-        _painter->drawText(sceneTextRect, Qt::TextWordWrap, panelText);
+            = TextHelper::elidedText(panelText, Ui::DesignSystem::font().body2(), panelTextRect);
+        _painter->drawText(panelTextRect, Qt::TextWordWrap, panelText);
     }
 
     //
@@ -378,7 +375,7 @@ void ComicBookTextStructureDelegate::Implementation::paintPanel(QPainter* _paint
     const auto inlineNotesSize
         = _index.data(ComicBookTextModelPanelItem::PanelInlineNotesSizeRole).toInt();
     const qreal notesLeft = iconRect.left();
-    const qreal notesTop = (sceneTextRect.isValid() ? sceneTextRect : sceneHeadingRect).bottom()
+    const qreal notesTop = (panelTextRect.isValid() ? panelTextRect : panelHeadingRect).bottom()
         + Ui::DesignSystem::layout().px8();
     const qreal notesHeight = Ui::DesignSystem::layout().px16();
     QRectF inlineNotesIconRect;
@@ -494,11 +491,6 @@ ComicBookTextStructureDelegate::ComicBookTextStructureDelegate(QObject* _parent)
 }
 
 ComicBookTextStructureDelegate::~ComicBookTextStructureDelegate() = default;
-
-void ComicBookTextStructureDelegate::showSceneNumber(bool _show)
-{
-    d->showSceneNumber = _show;
-}
 
 void ComicBookTextStructureDelegate::setTextLinesSize(int _size)
 {

@@ -243,7 +243,7 @@ QVariant ComicBookTextModelPanelItem::data(int _role) const
 {
     switch (_role) {
     case Qt::DecorationRole: {
-        return u8"\U000f021a";
+        return u8"\U000F0B77";
     }
 
     case PanelNumberRole: {

@@ -199,7 +199,7 @@ QVariant ComicBookTextModelPageItem::data(int _role) const
 {
     switch (_role) {
     case Qt::DecorationRole: {
-        return u8"\U000f024b";
+        return d->number->value.contains('-') ? u8"\U000F0AB7" : u8"\U000f021a";
     }
 
     case PageNameRole: {
@@ -216,6 +216,11 @@ QVariant ComicBookTextModelPageItem::data(int _role) const
 
     case PageDialoguesWordsCountRole: {
         return d->dialoguesWordsCount;
+    }
+
+    case PageHasNumberingErrorRole: {
+        return d->number->value.contains("-")
+            && (d->number->value.split("-").constFirst().toInt() % 2 == 0);
     }
 
     default: {

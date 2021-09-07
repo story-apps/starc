@@ -35,6 +35,7 @@ public:
         PageColorRole,
         PagePanelsCountRole,
         PageDialoguesWordsCountRole,
+        PageHasNumberingErrorRole,
     };
 
 public:

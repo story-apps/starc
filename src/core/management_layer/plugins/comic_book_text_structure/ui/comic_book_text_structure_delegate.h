@@ -15,11 +15,6 @@ public:
     ~ComicBookTextStructureDelegate() override;
 
     /**
-     * @brief Задать необходимость отображать номер сцены
-     */
-    void showSceneNumber(bool _show);
-
-    /**
      * @brief Задать количество строк текста для отображения
      */
     void setTextLinesSize(int _size);
