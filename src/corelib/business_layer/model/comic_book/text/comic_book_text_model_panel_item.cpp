@@ -1,5 +1,6 @@
 #include "comic_book_text_model_panel_item.h"
 
+#include "comic_book_text_block_parser.h"
 #include "comic_book_text_model_splitter_item.h"
 #include "comic_book_text_model_text_item.h"
 #include "comic_book_text_model_xml.h"
@@ -400,7 +401,11 @@ void ComicBookTextModelPanelItem::handleChange()
         //
         switch (childTextItem->paragraphType()) {
         case ComicBookParagraphType::Panel: {
-            d->heading = TextHelper::smartToUpper(childTextItem->text());
+            d->heading
+                = TextHelper::smartToUpper(ComicBookPanelParser::panelTitle(childTextItem->text()));
+            const auto panelDescription
+                = ComicBookPanelParser::panelDescription(childTextItem->text());
+            d->text = panelDescription;
             break;
         }
 
@@ -415,7 +420,10 @@ void ComicBookTextModelPanelItem::handleChange()
         }
 
         default: {
-            d->text.append(childTextItem->text() + " ");
+            if (!d->text.isEmpty() && !childTextItem->text().isEmpty()) {
+                d->text.append(" ");
+            }
+            d->text.append(childTextItem->text());
             d->reviewMarksSize += std::count_if(
                 childTextItem->reviewMarks().begin(), childTextItem->reviewMarks().end(),
                 [](const ComicBookTextModelTextItem::ReviewMark& _reviewMark) {
