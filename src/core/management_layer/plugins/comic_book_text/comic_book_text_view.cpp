@@ -7,7 +7,6 @@
 #include "text/comic_book_text_edit_shortcuts_manager.h"
 #include "text/comic_book_text_edit_toolbar.h"
 #include "text/comic_book_text_fast_format_widget.h"
-#include "text/comic_book_text_scrollbar_manager.h"
 #include "text/comic_book_text_search_manager.h"
 
 #include <business_layer/document/comic_book/text/comic_book_text_block_data.h>
@@ -88,7 +87,6 @@ public:
     ComicBookTextEdit* comicBookText = nullptr;
     ComicBookTextEditShortcutsManager shortcutsManager;
     ScalableWrapper* scalableWrapper = nullptr;
-    ComicBookTextScrollBarManager* comicBookTextScrollbarManager = nullptr;
 
     ComicBookTextEditToolbar* toolbar = nullptr;
     BusinessLayer::ComicBookTextSearchManager* searchManager = nullptr;
@@ -117,7 +115,6 @@ ComicBookTextView::Implementation::Implementation(QWidget* _parent)
     , comicBookText(new ComicBookTextEdit(_parent))
     , shortcutsManager(comicBookText)
     , scalableWrapper(new ScalableWrapper(comicBookText, _parent))
-    , comicBookTextScrollbarManager(new ComicBookTextScrollBarManager(scalableWrapper))
     , toolbar(new ComicBookTextEditToolbar(scalableWrapper))
     , searchManager(new BusinessLayer::ComicBookTextSearchManager(scalableWrapper, comicBookText))
     , toolbarAnimation(new FloatingToolbarAnimator(_parent))
@@ -138,13 +135,10 @@ ComicBookTextView::Implementation::Implementation(QWidget* _parent)
 
     comicBookText->setVerticalScrollBar(new ScrollBar);
     comicBookText->setHorizontalScrollBar(new ScrollBar);
-    shortcutsManager.setShortcutsContext(scalableWrapper);
-    //
-    // Вертикальный скрол настраивается менеджером comicBookTextScrollbarManager
-    //
+    scalableWrapper->setVerticalScrollBar(new ScrollBar);
     scalableWrapper->setHorizontalScrollBar(new ScrollBar);
     scalableWrapper->initScrollBarsSyncing();
-    comicBookTextScrollbarManager->initScrollBarsSyncing();
+    shortcutsManager.setShortcutsContext(scalableWrapper);
 
     comicBookText->setUsePageMode(true);
 
@@ -589,7 +583,6 @@ void ComicBookTextView::saveViewSettings()
 void ComicBookTextView::setModel(BusinessLayer::ComicBookTextModel* _model)
 {
     d->comicBookText->initWithModel(_model);
-    d->comicBookTextScrollbarManager->setModel(_model);
     d->commentsModel->setModel(_model);
 
     d->updateToolBarCurrentParagraphTypeName();
