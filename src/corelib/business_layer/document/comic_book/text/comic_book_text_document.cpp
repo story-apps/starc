@@ -1445,7 +1445,9 @@ void ComicBookTextDocument::splitParagraph(const ComicBookTextCursor& _cursor)
     // Вставляем параграф после таблицы - это обязательное условие, чтобы после таблицы всегда
     // оставался один параграф, чтобы пользователь всегда мог выйти из таблицы
     //
-    addParagraph(ComicBookParagraphType::Description, cursor);
+    if (cursor.atEnd()) {
+        addParagraph(ComicBookParagraphType::Description, cursor);
+    }
 
     //
     // Завершаем редактирование

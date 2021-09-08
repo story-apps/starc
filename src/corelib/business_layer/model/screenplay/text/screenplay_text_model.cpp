@@ -924,13 +924,7 @@ void ScreenplayTextModel::insertFromMime(const QModelIndex& _index, int _positio
                 //
                 isFirstTextItemHandled = true;
                 auto textItem = static_cast<ScreenplayTextModelTextItem*>(item);
-                if (textItem->paragraphType() == ScreenplayParagraphType::FolderHeader
-                    || textItem->paragraphType() == ScreenplayParagraphType::SceneHeading
-                    || !textItem->text().isEmpty()) {
-                    textItem->mergeWith(newTextItem);
-                } else {
-                    textItem->copyFrom(newTextItem);
-                }
+                textItem->mergeWith(newTextItem);
                 updateItem(textItem);
                 delete newTextItem;
                 //

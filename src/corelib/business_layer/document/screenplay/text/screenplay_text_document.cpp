@@ -1424,7 +1424,9 @@ void ScreenplayTextDocument::splitParagraph(const ScreenplayTextCursor& _cursor)
     // Вставляем параграф после таблицы - это обязательное условие, чтобы после таблицы всегда
     // оставался один параграф, чтобы пользователь всегда мог выйти из таблицы
     //
-    addParagraph(ScreenplayParagraphType::Action, cursor);
+    if (cursor.atEnd()) {
+        addParagraph(ScreenplayParagraphType::Action, cursor);
+    }
 
     //
     // Завершаем редактирование

@@ -1000,14 +1000,7 @@ void ComicBookTextModel::insertFromMime(const QModelIndex& _index, int _position
                 //
                 isFirstTextItemHandled = true;
                 auto textItem = static_cast<ComicBookTextModelTextItem*>(item);
-                if (textItem->paragraphType() == ComicBookParagraphType::FolderHeader
-                    || textItem->paragraphType() == ComicBookParagraphType::Page
-                    || textItem->paragraphType() == ComicBookParagraphType::Panel
-                    || !textItem->text().isEmpty()) {
-                    textItem->mergeWith(newTextItem);
-                } else {
-                    textItem->copyFrom(newTextItem);
-                }
+                textItem->mergeWith(newTextItem);
                 updateItem(textItem);
                 delete newTextItem;
                 //

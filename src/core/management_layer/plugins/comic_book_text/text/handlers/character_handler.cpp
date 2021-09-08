@@ -103,7 +103,9 @@ void CharacterHandler::handleEnter(QKeyEvent* _event)
         if (_event != 0 // ... чтобы таб не переводил на новую строку
             && currentSection == ComicBookCharacterParser::SectionName) {
             cursor.movePosition(QTextCursor::EndOfBlock);
-            cursor.insertText(":");
+            if (!cursor.block().text().trimmed().endsWith(":")) {
+                cursor.insertText(":");
+            }
             editor()->setTextCursor(cursor);
             editor()->moveCursor(QTextCursor::NextBlock);
         }
@@ -139,7 +141,9 @@ void CharacterHandler::handleEnter(QKeyEvent* _event)
                 // ...  добавим двоеточие после имени
                 //
                 cursor.movePosition(QTextCursor::EndOfBlock);
-                cursor.insertText(":");
+                if (!cursor.block().text().trimmed().endsWith(":")) {
+                    cursor.insertText(":");
+                }
 
                 if (cursorBackwardText.isEmpty()) {
                     //! В начале блока
@@ -232,7 +236,9 @@ void CharacterHandler::handleTab(QKeyEvent*)
                     // ...  добавим двоеточие после имени
                     //
                     cursor.movePosition(QTextCursor::EndOfBlock);
-                    cursor.insertText(":");
+                    if (!cursor.block().text().trimmed().endsWith(":")) {
+                        cursor.insertText(":");
+                    }
 
                     //
                     // Переходим к следующему блоку

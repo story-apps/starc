@@ -232,9 +232,11 @@ void ComicBookTextEdit::setCurrentParagraphType(BusinessLayer::ComicBookParagrap
     //
     // Если раньше это был персонаж, то объединяем блоки, чтобы убрать лишнюю таблицу
     //
-    if (currentParagraphType() == ComicBookParagraphType::Character) {
-        d->document.mergeParagraph(textCursor());
-    }
+    BusinessLayer::ComicBookTextCursor cursor = textCursor();
+    const auto needSplitParagraph
+        = _type == BusinessLayer::ComicBookParagraphType::Character && !cursor.inTable();
+    const auto needMergeParagraph = currentParagraphType() == ComicBookParagraphType::Character
+        && cursor.inTable() && cursor.inFirstColumn();
 
     d->document.setParagraphType(_type, textCursor());
 
@@ -247,20 +249,27 @@ void ComicBookTextEdit::setCurrentParagraphType(BusinessLayer::ComicBookParagrap
     //
     // Если вставляется персонаж, то разделяем страницу, для добавления реплики
     //
-    else if (_type == BusinessLayer::ComicBookParagraphType::Character) {
-        const auto cursorPosition = textCursor().position();
-        d->document.splitParagraph(textCursor());
-        auto cursor = textCursor();
-        cursor.setPosition(cursorPosition + 1); // +1 чтобы войти внутрь таблицы
-        setTextCursor(cursor);
-        cursor.movePosition(BusinessLayer::ComicBookTextCursor::NextBlock);
-        d->document.setParagraphType(BusinessLayer::ComicBookParagraphType::Dialogue, cursor);
-        //
-        // Очищаем диалог, от текста, который туда добавляет корректор, пока там был блок персонажа
-        //
-        if (cursor.movePosition(BusinessLayer::ComicBookTextCursor::EndOfBlock,
-                                BusinessLayer::ComicBookTextCursor::KeepAnchor)) {
-            cursor.removeSelectedText();
+    else {
+        //        cursor = textCursor();
+        auto cursorPosition = cursor.position();
+        if (needSplitParagraph) {
+            d->document.splitParagraph(textCursor());
+            cursor.setPosition(cursorPosition + 1); // +1 чтобы войти внутрь таблицы
+            setTextCursor(cursor);
+            cursor.movePosition(BusinessLayer::ComicBookTextCursor::NextBlock);
+            d->document.setParagraphType(BusinessLayer::ComicBookParagraphType::Dialogue, cursor);
+            //
+            // Очищаем диалог, от текста, который туда добавляет корректор, пока там был блок
+            // персонажа
+            //
+            if (cursor.movePosition(BusinessLayer::ComicBookTextCursor::EndOfBlock,
+                                    BusinessLayer::ComicBookTextCursor::KeepAnchor)) {
+                cursor.removeSelectedText();
+            }
+        } else if (needMergeParagraph) {
+            d->document.mergeParagraph(textCursor());
+            cursor.setPosition(cursorPosition - 1); // -1 т.к. таблицы больше нет
+            setTextCursor(cursor);
         }
     }
 
