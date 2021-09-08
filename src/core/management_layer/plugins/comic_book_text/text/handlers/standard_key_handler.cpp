@@ -136,7 +136,9 @@ void StandardKeyHandler::handleUp(QKeyEvent* _event)
     {
         int currentLineYCoordinate = editor()->cursorRect(cursor).y();
         while (!cursor.atStart() && editor()->cursorRect(cursor).y() == currentLineYCoordinate) {
-            cursor.movePosition(QTextCursor::PreviousCharacter, cursorMoveMode);
+            if (!cursor.movePosition(QTextCursor::PreviousCharacter, cursorMoveMode)) {
+                break;
+            }
         }
         marginFromLineStart = initCursorPosition - cursor.position() - (cursor.atStart() ? 0 : 1);
     }
@@ -169,7 +171,9 @@ void StandardKeyHandler::handleUp(QKeyEvent* _event)
             int currentLineYCoordinate = editor()->cursorRect(cursor).y();
             while (!cursor.atStart()
                    && editor()->cursorRect(cursor).y() == currentLineYCoordinate) {
-                cursor.movePosition(QTextCursor::PreviousCharacter, cursorMoveMode);
+                if (!cursor.movePosition(QTextCursor::PreviousCharacter, cursorMoveMode)) {
+                    break;
+                }
             }
 
             //
@@ -220,7 +224,9 @@ void StandardKeyHandler::handleDown(QKeyEvent* _event)
     {
         int currentLineYCoordinate = editor()->cursorRect(cursor).y();
         while (!cursor.atStart() && editor()->cursorRect(cursor).y() == currentLineYCoordinate) {
-            cursor.movePosition(QTextCursor::PreviousCharacter, cursorMoveMode);
+            if (!cursor.movePosition(QTextCursor::PreviousCharacter, cursorMoveMode)) {
+                break;
+            }
         }
         marginFromLineStart = initCursorPosition - cursor.position() - (cursor.atStart() ? 0 : 1);
     }
@@ -236,7 +242,9 @@ void StandardKeyHandler::handleDown(QKeyEvent* _event)
     {
         int currentLineYCoordinate = editor()->cursorRect(cursor).y();
         while (!cursor.atEnd() && editor()->cursorRect(cursor).y() == currentLineYCoordinate) {
-            cursor.movePosition(QTextCursor::NextCharacter, cursorMoveMode);
+            if (!cursor.movePosition(QTextCursor::NextCharacter, cursorMoveMode)) {
+                break;
+            }
         }
     }
 
@@ -266,7 +274,9 @@ void StandardKeyHandler::handleDown(QKeyEvent* _event)
             int currentLineStartPosition = cursor.position();
             int currentLineYCoordinate = editor()->cursorRect(cursor).y();
             while (!cursor.atEnd() && editor()->cursorRect(cursor).y() == currentLineYCoordinate) {
-                cursor.movePosition(QTextCursor::NextCharacter, cursorMoveMode);
+                if (!cursor.movePosition(QTextCursor::NextCharacter, cursorMoveMode)) {
+                    break;
+                }
             }
 
             //
@@ -283,7 +293,9 @@ void StandardKeyHandler::handleDown(QKeyEvent* _event)
                                ComicBookBlockStyle::PropertyIsCorrection)
                            || cursor.blockFormat().boolProperty(
                                PageTextEdit::PropertyDontShowCursor))) {
-                    cursor.movePosition(QTextCursor::PreviousCharacter, cursorMoveMode);
+                    if (!cursor.movePosition(QTextCursor::PreviousCharacter, cursorMoveMode)) {
+                        break;
+                    }
                 }
             }
 
