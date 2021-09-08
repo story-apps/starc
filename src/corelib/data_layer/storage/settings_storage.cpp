@@ -451,7 +451,7 @@ SettingsStorage::Implementation::Implementation()
         addComicBookEditorStylesJumpByEnter(ComicBookParagraphType::Page,
                                             ComicBookParagraphType::Panel);
         addComicBookEditorStylesJumpByTab(ComicBookParagraphType::Panel,
-                                          ComicBookParagraphType::Description);
+                                          ComicBookParagraphType::Character);
         addComicBookEditorStylesJumpByEnter(ComicBookParagraphType::Panel,
                                             ComicBookParagraphType::Description);
         addComicBookEditorStylesJumpByTab(ComicBookParagraphType::Description,
