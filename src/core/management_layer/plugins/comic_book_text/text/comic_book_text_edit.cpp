@@ -9,6 +9,7 @@
 #include <business_layer/import/comic_book/comic_book_plain_text_importer.h>
 #include <business_layer/model/comic_book/comic_book_information_model.h>
 #include <business_layer/model/comic_book/text/comic_book_text_model.h>
+#include <business_layer/model/comic_book/text/comic_book_text_model_page_item.h>
 #include <business_layer/model/comic_book/text/comic_book_text_model_text_item.h>
 #include <business_layer/templates/comic_book_template.h>
 #include <business_layer/templates/templates_facade.h>
@@ -602,9 +603,9 @@ void ComicBookTextEdit::paintEvent(QPaintEvent* _event)
     const qreal leftDelta = (isLeftToRight ? -1 : 1) * horizontalScrollBar()->value();
     //    int colorRectWidth = 0;
     qreal verticalMargin = 0;
+    const auto currentTemplate = TemplatesFacade::comicBookTemplate();
     const qreal splitterX = leftDelta + textLeft
-        + (textRight - textLeft)
-            * TemplatesFacade::comicBookTemplate().leftHalfOfPageWidthPercents() / 100;
+        + (textRight - textLeft) * currentTemplate.leftHalfOfPageWidthPercents() / 100;
 
 
     //
@@ -929,42 +930,42 @@ void ComicBookTextEdit::paintEvent(QPaintEvent* _event)
                         //
                         if (blockType == ComicBookParagraphType::Page) {
                             //
-                            // Количество панелей
+                            // Прорисовка количества панелей
                             //
+                            int panelsCountWidth = 0;
+                            if (const auto blockData
+                                = static_cast<BusinessLayer::ComicBookTextBlockData*>(
+                                    block.userData());
+                                blockData != nullptr && blockData->item()->parent() != nullptr) {
+                                const auto itemParent = blockData->item()->parent();
+                                if (itemParent->type()
+                                    == BusinessLayer::ComicBookTextModelItemType::Page) {
+                                    const auto pageItem = static_cast<
+                                        const BusinessLayer::ComicBookTextModelPageItem*>(
+                                        itemParent);
 
-                            //                        //
-                            //                        // Прорисовка автоматических (ПРОД) для реплик
-                            //                        //
-                            //                        if (blockType ==
-                            //                        ComicBookParagraphType::Character
-                            //                            && block.blockFormat().boolProperty(
-                            //                                ComicBookBlockStyle::PropertyIsCharacterContinued)
-                            //                            && !block.blockFormat().boolProperty(
-                            //                                ComicBookBlockStyle::PropertyIsCorrection))
-                            //                                {
-                            //                            painter.setFont(cursor.charFormat().font());
-
-                            //                            //
-                            //                            // Определим место положение конца имени
-                            //                            персонажа
-                            //                            //
-                            //                            const int continuedTermWidth =
-                            //                            painter.fontMetrics().horizontalAdvance(
-                            //                                BusinessLayer::ComicBookTextCorrector::continuedTerm());
-                            //                            const QPoint topLeft = isLeftToRight
-                            //                                ? cursorREnd.topLeft()
-                            //                                : cursorREnd.topRight() -
-                            //                                QPoint(continuedTermWidth, 0);
-                            //                            const QPoint bottomRight = isLeftToRight
-                            //                                ? cursorREnd.bottomRight() +
-                            //                                QPoint(continuedTermWidth, 0) :
-                            //                                cursorREnd.bottomLeft();
-                            //                            const QRect rect(topLeft, bottomRight);
-                            //                            painter.drawText(
-                            //                                rect, Qt::AlignRight | Qt::AlignTop,
-                            //                                BusinessLayer::ComicBookTextCorrector::continuedTerm());
-                            //                        }
-
+                                    auto font = block.charFormat().font();
+                                    font.setCapitalization(QFont::MixedCase);
+                                    painter.setFont(
+                                        currentTemplate
+                                            .paragraphStyle(
+                                                BusinessLayer::ComicBookParagraphType::Description)
+                                            .font());
+                                    const auto panelsCountText = QString(" (%1)").arg(
+                                        tr("%n panels", "", pageItem->panelsCount()));
+                                    panelsCountWidth
+                                        = painter.fontMetrics().horizontalAdvance(panelsCountText);
+                                    const QPoint topLeft = isLeftToRight
+                                        ? cursorREnd.topLeft()
+                                        : cursorREnd.topRight() - QPoint(panelsCountWidth, 0);
+                                    const QPoint bottomRight = isLeftToRight
+                                        ? cursorREnd.bottomRight() + QPoint(panelsCountWidth, 0)
+                                        : cursorREnd.bottomLeft();
+                                    const QRect rect(topLeft, bottomRight);
+                                    painter.drawText(rect, Qt::AlignRight | Qt::AlignVCenter,
+                                                     panelsCountText);
+                                }
+                            }
 
                             //
                             // Иконка положения страницы
@@ -974,8 +975,9 @@ void ComicBookTextEdit::paintEvent(QPaintEvent* _event)
                                 painter.setPen(palette().text().color());
 
                                 auto paintLeftPageIcon = [&](const QString& _icon) {
-                                    QPointF topLeft(isLeftToRight ? pageLeft + leftDelta
-                                                                  : textRight + leftDelta,
+                                    QPointF topLeft(isLeftToRight
+                                                        ? pageLeft + leftDelta
+                                                        : textRight + panelsCountWidth + leftDelta,
                                                     cursorR.top());
                                     QPointF bottomRight(isLeftToRight ? textLeft + leftDelta
                                                                       : pageRight + leftDelta,
@@ -996,7 +998,8 @@ void ComicBookTextEdit::paintEvent(QPaintEvent* _event)
                                     const int spaceWidth
                                         = painter.fontMetrics().horizontalAdvance(" ");
                                     const QPoint topLeft(isLeftToRight
-                                                             ? cursorREnd.left() + spaceWidth
+                                                             ? cursorREnd.left() + panelsCountWidth
+                                                                 + spaceWidth
                                                              : cursorREnd.right() - spaceWidth,
                                                          cursorREnd.top());
                                     const QPoint bottomRight(isLeftToRight ? pageRight - leftDelta
