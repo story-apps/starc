@@ -27,7 +27,6 @@ public:
     ComboBox* fileFormat = nullptr;
     ComboBox* comicBookTemplate = nullptr;
     CheckBox* printTitlePage = nullptr;
-    CheckBox* printFolders = nullptr;
     CheckBox* useWordsInPageHeadings = nullptr;
     CheckBox* printInlineNotes = nullptr;
     CheckBox* printReviewMarks = nullptr;
@@ -43,7 +42,6 @@ ComicBookExportDialog::Implementation::Implementation(QWidget* _parent)
     : fileFormat(new ComboBox(_parent))
     , comicBookTemplate(new ComboBox(_parent))
     , printTitlePage(new CheckBox(_parent))
-    , printFolders(new CheckBox(_parent))
     , useWordsInPageHeadings(new CheckBox(_parent))
     , printInlineNotes(new CheckBox(_parent))
     , printReviewMarks(new CheckBox(_parent))
@@ -76,8 +74,8 @@ ComicBookExportDialog::Implementation::Implementation(QWidget* _parent)
     printTitlePage->hide();
     useWordsInPageHeadings->hide();
 
-    for (auto checkBox : { /*printTitlePage,*/ printFolders, useWordsInPageHeadings,
-                           printReviewMarks, openDocumentAfterExport }) {
+    for (auto checkBox : { /*printTitlePage,*/ useWordsInPageHeadings, printReviewMarks,
+                           openDocumentAfterExport }) {
         checkBox->setChecked(true);
     }
 
@@ -106,7 +104,6 @@ ComicBookExportDialog::ComicBookExportDialog(QWidget* _parent)
     contentsLayout()->addWidget(d->fileFormat, row++, 0);
     contentsLayout()->addWidget(d->comicBookTemplate, row++, 0);
     contentsLayout()->addWidget(d->printTitlePage, row++, 0);
-    contentsLayout()->addWidget(d->printFolders, row++, 0);
     contentsLayout()->addWidget(d->useWordsInPageHeadings, row++, 0);
     contentsLayout()->addWidget(d->printInlineNotes, row++, 0);
     contentsLayout()->addWidget(d->printReviewMarks, row++, 0);
@@ -115,7 +112,6 @@ ComicBookExportDialog::ComicBookExportDialog(QWidget* _parent)
 
     connect(d->fileFormat, &ComboBox::currentIndexChanged, this, [this] {
         auto isComicBookTemplateVisible = true;
-        auto isPrintFoldersVisible = true;
         auto isPrintInlineNotesVisible = true;
         auto isPrintReviewMarksVisible = true;
         auto isWatermarkVisible = true;
@@ -140,7 +136,6 @@ ComicBookExportDialog::ComicBookExportDialog(QWidget* _parent)
         }
         }
         d->comicBookTemplate->setVisible(isComicBookTemplateVisible);
-        d->printFolders->setVisible(isPrintFoldersVisible);
         d->printInlineNotes->setVisible(isPrintInlineNotesVisible);
         d->printReviewMarks->setVisible(isPrintReviewMarksVisible);
         d->watermark->setVisible(isWatermarkVisible);
@@ -164,7 +159,7 @@ BusinessLayer::ComicBookExportOptions ComicBookExportDialog::exportOptions() con
                              .data(BusinessLayer::TemplatesFacade::kTemplateIdRole)
                              .toString();
     options.printTiltePage = d->printTitlePage->isChecked();
-    options.printFolders = d->printFolders->isChecked();
+    options.printFolders = false;
     options.useWordsInPageHeadings = d->useWordsInPageHeadings->isChecked();
     options.printInlineNotes = d->printInlineNotes->isChecked();
     options.printReviewMarks = d->printReviewMarks->isChecked();
@@ -195,7 +190,6 @@ void ComicBookExportDialog::updateTranslations()
     d->fileFormat->setLabel(tr("Format"));
     d->comicBookTemplate->setLabel(tr("Template"));
     d->printTitlePage->setText(tr("Print title page"));
-    d->printFolders->setText(tr("Print folders"));
     d->useWordsInPageHeadings->setText(tr("Print panels numbers in form of words"));
     d->printInlineNotes->setText(tr("Print inline notes"));
     d->printReviewMarks->setText(tr("Print review marks"));
@@ -220,8 +214,8 @@ void ComicBookExportDialog::designSystemChangeEvent(DesignSystemChangeEvent* _ev
         textField->setTextColor(Ui::DesignSystem::color().onBackground());
     }
 
-    for (auto checkBox : { d->printTitlePage, d->printFolders, d->useWordsInPageHeadings,
-                           d->printInlineNotes, d->printReviewMarks, d->openDocumentAfterExport }) {
+    for (auto checkBox : { d->printTitlePage, d->useWordsInPageHeadings, d->printInlineNotes,
+                           d->printReviewMarks, d->openDocumentAfterExport }) {
         checkBox->setBackgroundColor(Ui::DesignSystem::color().background());
         checkBox->setTextColor(Ui::DesignSystem::color().onBackground());
     }
