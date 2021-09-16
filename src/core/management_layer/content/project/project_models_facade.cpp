@@ -176,6 +176,16 @@ BusinessLayer::AbstractModel* ProjectModelsFacade::modelFor(Domain::DocumentObje
                 = qobject_cast<BusinessLayer::ScreenplayInformationModel*>(modelFor(parentUuid));
             screenplayModel->setInformationModel(informationModel);
             //
+            // ... модель титульной страницы
+            //
+            const auto titlePageIndex = 0;
+            auto titlePageItem = screenplayItem->parent()->childAt(titlePageIndex);
+            Q_ASSERT(titlePageItem);
+            Q_ASSERT(titlePageItem->type() == Domain::DocumentObjectType::ScreenplayTitlePage);
+            auto titlePageModel
+                = qobject_cast<BusinessLayer::TextModel*>(modelFor(titlePageItem->uuid()));
+            screenplayModel->setTitlePageModel(titlePageModel);
+            //
             // ... модель справочников сценариев
             //
             auto dictionariesModel = qobject_cast<BusinessLayer::ScreenplayDictionariesModel*>(

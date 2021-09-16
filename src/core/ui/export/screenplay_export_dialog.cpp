@@ -79,11 +79,8 @@ ScreenplayExportDialog::Implementation::Implementation(QWidget* _parent)
         break;
     }
 
-    printTitlePage->hide();
-
-    for (auto checkBox :
-         { /*printTitlePage,*/ printFolders, printSceneNumbers, printSceneNumbersOnLeft,
-           printSceneNumbersOnRight, printReviewMarks, openDocumentAfterExport }) {
+    for (auto checkBox : { printTitlePage, printFolders, printSceneNumbers, printSceneNumbersOnLeft,
+                           printSceneNumbersOnRight, printReviewMarks, openDocumentAfterExport }) {
         checkBox->setChecked(true);
     }
 

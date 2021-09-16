@@ -382,14 +382,45 @@ QString docxText(QMap<int, QStringList>& _comments, const ScreenplayTextCursor& 
         // ... настройки абзаца
         //
         documentXml = "<w:p><w:pPr><w:pStyle w:val=\"Normal\"/>";
+        documentXml.append(
+            QString("<w:rPr><w:rFonts w:ascii=\"%1\" w:hAnsi=\"%1\"/><w:sz w:val=\"%2\"/><w:szCs "
+                    "w:val=\"%2\"/></w:rPr>")
+                .arg(_cursor.charFormat().font().family())
+                .arg(MeasurementHelper::pxToPt(_cursor.charFormat().font().pixelSize()) * 2));
         documentXml.append(docxAlignment(_cursor.blockFormat().alignment()));
-        if (_cursor.blockFormat().rightMargin() > 0 || _cursor.blockFormat().leftMargin() > 0) {
+        if (_cursor.blockFormat().rightMargin() != 0 || _cursor.blockFormat().leftMargin() != 0) {
             documentXml.append(QString("<w:ind w:left=\"%1\" w:right=\"%2\" w:hanging=\"0\" />")
                                    .arg(pxToTwips(_cursor.blockFormat().leftMargin()))
                                    .arg(pxToTwips(_cursor.blockFormat().rightMargin())));
         }
-        documentXml.append(QString("<w:rPr/></w:pPr><w:r><w:rPr/><w:t>%1</w:t></w:r></w:p>")
-                               .arg(TextHelper::toHtmlEscaped(_cursor.block().text())));
+        //
+        // ... интервалы
+        //
+        if (_cursor.blockFormat().topMargin() != 0 || _cursor.blockFormat().bottomMargin() != 0) {
+            documentXml.append(
+                QString("<w:spacing w:before=\"%1\" w:after=\"%2\" w:lineRule=\"auto\"/>")
+                    .arg(pxToTwips(_cursor.blockFormat().topMargin()))
+                    .arg(pxToTwips(_cursor.blockFormat().bottomMargin())));
+        }
+        documentXml.append("<w:rPr/></w:pPr>");
+        //
+        // ... текст блока
+        //
+        const auto textFormats = _cursor.block().textFormats();
+        for (const auto& formatRange : textFormats) {
+            documentXml.append(
+                QString("<w:r><w:rPr><w:rFonts w:ascii=\"%1\" w:hAnsi=\"%1\"/><w:b "
+                        "w:val=\"%2\"/><w:i w:val=\"%3\"/><w:sz w:val=\"%4\"/><w:szCs "
+                        "w:val=\"%4\"/><w:u w:val=\"%5\"/></w:rPr><w:t>%6</w:t></w:r>")
+                    .arg(formatRange.format.font().family())
+                    .arg(formatRange.format.font().bold() ? "true" : "false")
+                    .arg(formatRange.format.font().italic() ? "true" : "false")
+                    .arg(MeasurementHelper::pxToPt(formatRange.format.font().pixelSize()) * 2)
+                    .arg(formatRange.format.font().underline() ? "single" : "none")
+                    .arg(TextHelper::toHtmlEscaped(
+                        _cursor.block().text().mid(formatRange.start, formatRange.length))));
+        }
+        documentXml.append("</w:p>");
     }
     //
     // ... начало и конец таблицы
@@ -464,13 +495,20 @@ QString docxText(QMap<int, QStringList>& _comments, const ScreenplayTextCursor& 
                                .arg(paragraphTypeName(correctedBlockType, suffix)));
 
         //
+        // ... начинать с новой страницы
+        //
+        if (_cursor.blockFormat().pageBreakPolicy() == QTextFormat::PageBreak_AlwaysBefore) {
+            documentXml.append("<w:spacing w:before=\"0\"/>");
+            documentXml.append("<w:pageBreakBefore/>");
+        }
+        //
         // ... если это самый первый блок в документе,
         //     или блок с текстом ПРОД., вставляемый на обрыве реплики,
         //     принудительно убираем отступ сверху у абзаца
         //
-        if (_cursor.atStart()
-            || _cursor.blockFormat().hasProperty(
-                ScreenplayBlockStyle::PropertyIsCorrectionContinued)) {
+        else if (_cursor.atStart()
+                 || _cursor.blockFormat().hasProperty(
+                     ScreenplayBlockStyle::PropertyIsCorrectionContinued)) {
             documentXml.append("<w:spacing w:before=\"0\"/>");
         }
 

@@ -62,6 +62,11 @@ public:
     ScreenplayInformationModel* informationModel = nullptr;
 
     /**
+     * @brief Модель титульной страницы
+     */
+    TextModel* titlePageModel = nullptr;
+
+    /**
      * @brief Модель справочников
      */
     ScreenplayDictionariesModel* dictionariesModel = nullptr;
@@ -1085,6 +1090,16 @@ ScreenplayInformationModel* ScreenplayTextModel::informationModel() const
     return d->informationModel;
 }
 
+void ScreenplayTextModel::setTitlePageModel(TextModel* _model)
+{
+    d->titlePageModel = _model;
+}
+
+TextModel* ScreenplayTextModel::titlePageModel() const
+{
+    return d->titlePageModel;
+}
+
 void ScreenplayTextModel::setDictionariesModel(ScreenplayDictionariesModel* _model)
 {
     d->dictionariesModel = _model;
@@ -1171,6 +1186,16 @@ void ScreenplayTextModel::updateCharacterName(const QString& _oldName, const QSt
     emit rowsChanged();
 }
 
+void ScreenplayTextModel::setLocationsModel(LocationsModel* _model)
+{
+    d->locationModel = _model;
+}
+
+LocationsModel* ScreenplayTextModel::locationsModel() const
+{
+    return d->locationModel;
+}
+
 void ScreenplayTextModel::updateLocationName(const QString& _oldName, const QString& _newName)
 {
     const auto oldName = TextHelper::smartToUpper(_oldName);
@@ -1209,16 +1234,6 @@ void ScreenplayTextModel::updateLocationName(const QString& _oldName, const QStr
     emit rowsAboutToBeChanged();
     updateLocationBlock(d->rootItem);
     emit rowsChanged();
-}
-
-void ScreenplayTextModel::setLocationsModel(LocationsModel* _model)
-{
-    d->locationModel = _model;
-}
-
-LocationsModel* ScreenplayTextModel::locationsModel() const
-{
-    return d->locationModel;
 }
 
 std::chrono::milliseconds ScreenplayTextModel::duration() const

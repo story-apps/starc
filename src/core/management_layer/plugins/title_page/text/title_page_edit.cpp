@@ -106,17 +106,29 @@ void TitlePageEdit::initWithModel(BusinessLayer::TextModel* _model)
 {
     d->model = _model;
 
+    QMarginsF pageMargins;
     if (qobject_cast<BusinessLayer::ComicBookTitlePageModel*>(d->model)) {
         const auto currentTemplate = TemplatesFacade::comicBookTemplate();
         setPageFormat(currentTemplate.pageSizeId());
-        setPageMarginsMm(currentTemplate.pageMargins());
         setPageNumbersAlignment(currentTemplate.pageNumbersAlignment());
+        pageMargins = currentTemplate.pageMargins();
     } else if (qobject_cast<BusinessLayer::ScreenplayTitlePageModel*>(d->model)) {
         const auto currentTemplate = TemplatesFacade::screenplayTemplate();
         setPageFormat(currentTemplate.pageSizeId());
-        setPageMarginsMm(currentTemplate.pageMargins());
         setPageNumbersAlignment(currentTemplate.pageNumbersAlignment());
+        pageMargins = currentTemplate.pageMargins();
     }
+
+    //
+    // Для титульной страницы уравновесим поля в сторону большего,
+    // на случай, если кто-то ещё их печатает и сшивает
+    //
+    if (pageMargins.left() < pageMargins.right()) {
+        pageMargins.setLeft(pageMargins.right());
+    } else if (pageMargins.right() < pageMargins.left()) {
+        pageMargins.setRight(pageMargins.left());
+    }
+    setPageMarginsMm(pageMargins);
 
     //
     // Документ нужно формировать только после того, как редактор настроен, чтобы избежать лишний

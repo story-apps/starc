@@ -10,6 +10,7 @@ class LocationsModel;
 class ScreenplayDictionariesModel;
 class ScreenplayInformationModel;
 class ScreenplayTextModelItem;
+class TextModel;
 
 /**
  * @brief Модель текста сценария
@@ -102,6 +103,12 @@ public:
     ScreenplayInformationModel* informationModel() const;
 
     /**
+     * @brief Задать модель титульной страницы сценария
+     */
+    void setTitlePageModel(TextModel* _model);
+    TextModel* titlePageModel() const;
+
+    /**
      * @brief Задать модель справочников сценария
      */
     void setDictionariesModel(ScreenplayDictionariesModel* _model);
@@ -119,15 +126,15 @@ public:
     void updateCharacterName(const QString& _oldName, const QString& _newName);
 
     /**
-     * @brief Обновить название локации
-     */
-    void updateLocationName(const QString& _oldName, const QString& _newName);
-
-    /**
      * @brief Задать модель локаций проекта
      */
     void setLocationsModel(LocationsModel* _model);
     LocationsModel* locationsModel() const;
+
+    /**
+     * @brief Обновить название локации
+     */
+    void updateLocationName(const QString& _oldName, const QString& _newName);
 
     /**
      * @brief Длительность сценария
