@@ -289,6 +289,16 @@ BusinessLayer::AbstractModel* ProjectModelsFacade::modelFor(Domain::DocumentObje
                 = qobject_cast<BusinessLayer::ComicBookInformationModel*>(modelFor(parentUuid));
             comicBookModel->setInformationModel(informationModel);
             //
+            // ... модель титульной страницы
+            //
+            const auto titlePageIndex = 0;
+            auto titlePageItem = comicBookItem->parent()->childAt(titlePageIndex);
+            Q_ASSERT(titlePageItem);
+            Q_ASSERT(titlePageItem->type() == Domain::DocumentObjectType::ComicBookTitlePage);
+            auto titlePageModel
+                = qobject_cast<BusinessLayer::TextModel*>(modelFor(titlePageItem->uuid()));
+            comicBookModel->setTitlePageModel(titlePageModel);
+            //
             // ... модель справочников
             //
             auto dictionariesModel = qobject_cast<BusinessLayer::ComicBookDictionariesModel*>(

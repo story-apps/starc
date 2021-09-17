@@ -205,95 +205,118 @@ void ExportManager::Implementation::exportComicBook(BusinessLayer::AbstractModel
 
     if (comicBookExportDialog == nullptr) {
         comicBookExportDialog = new Ui::ComicBookExportDialog(topLevelWidget);
-        connect(comicBookExportDialog, &Ui::ComicBookExportDialog::exportRequested,
-                comicBookExportDialog, [this, _model] {
-                    auto exportOptions = comicBookExportDialog->exportOptions();
+        connect(
+            comicBookExportDialog, &Ui::ComicBookExportDialog::exportRequested,
+            comicBookExportDialog, [this, _model] {
+                auto exportOptions = comicBookExportDialog->exportOptions();
 
-                    //
-                    // Предоставим пользователю возможность выбрать файл, куда он будет
-                    // экспортировать
-                    //
-                    const auto projectExportFolder
-                        = DataStorageLayer::StorageFacade::settingsStorage()
-                              ->value(DataStorageLayer::kProjectExportFolderKey,
-                                      DataStorageLayer::SettingsStorage::SettingsPlace::Application)
-                              .toString();
-                    QString exportFilter;
-                    QString exportExtension;
-                    switch (exportOptions.fileFormat) {
-                    default:
-                    case ComicBookExportFileFormat::Pdf: {
-                        exportFilter = DialogHelper::pdfFilter();
-                        exportExtension = ExtensionHelper::pdf();
-                        break;
-                    }
-                    case ComicBookExportFileFormat::Docx: {
-                        exportFilter = DialogHelper::msWordFilter();
-                        exportExtension = ExtensionHelper::msOfficeOpenXml();
-                        break;
-                    }
-                    }
-                    const auto comicBookTextModel
-                        = qobject_cast<BusinessLayer::ComicBookTextModel*>(_model);
-                    const auto projectExportFile
-                        = QString("%1/%2.%3")
-                              .arg(projectExportFolder,
-                                   comicBookTextModel->informationModel()->name(), exportExtension);
-                    auto exportFilePath = QFileDialog::getSaveFileName(
-                        topLevelWidget, tr("Choose the file to export"), projectExportFile,
-                        exportFilter);
-                    if (exportFilePath.isEmpty()) {
-                        return;
-                    }
+                //
+                // Предоставим пользователю возможность выбрать файл, куда он будет
+                // экспортировать
+                //
+                const auto projectExportFolder
+                    = DataStorageLayer::StorageFacade::settingsStorage()
+                          ->value(DataStorageLayer::kProjectExportFolderKey,
+                                  DataStorageLayer::SettingsStorage::SettingsPlace::Application)
+                          .toString();
+                QString exportFilter;
+                QString exportExtension;
+                switch (exportOptions.fileFormat) {
+                default:
+                case ComicBookExportFileFormat::Pdf: {
+                    exportFilter = DialogHelper::pdfFilter();
+                    exportExtension = ExtensionHelper::pdf();
+                    break;
+                }
+                case ComicBookExportFileFormat::Docx: {
+                    exportFilter = DialogHelper::msWordFilter();
+                    exportExtension = ExtensionHelper::msOfficeOpenXml();
+                    break;
+                }
+                }
+                const auto comicBookTextModel
+                    = qobject_cast<BusinessLayer::ComicBookTextModel*>(_model);
+                const auto projectExportFile
+                    = QString("%1/%2.%3")
+                          .arg(projectExportFolder, comicBookTextModel->informationModel()->name(),
+                               exportExtension);
+                auto exportFilePath
+                    = QFileDialog::getSaveFileName(topLevelWidget, tr("Choose the file to export"),
+                                                   projectExportFile, exportFilter);
+                if (exportFilePath.isEmpty()) {
+                    return;
+                }
 
+                //
+                // Если файл был выбран
+                //
+                exportOptions.filePath = exportFilePath;
+                //
+                // ... проверяем возможность записи в файл
+                //
+                QFile file(exportFilePath);
+                const bool canWrite = file.open(QIODevice::WriteOnly);
+                file.close();
+                if (!canWrite) {
                     //
-                    // Если файл был выбран
+                    // ... предупреждаем
                     //
-                    exportOptions.filePath = exportFilePath;
-                    //
-                    // ... донастроим параметры экспорта
-                    //
-                    exportOptions.header = comicBookTextModel->informationModel()->header();
-                    exportOptions.footer = comicBookTextModel->informationModel()->footer();
-                    //
-                    // ... обновим папку, куда в следующий раз он предположительно опять будет
-                    //     экспортировать
-                    //
-                    DataStorageLayer::StorageFacade::settingsStorage()->setValue(
-                        DataStorageLayer::kProjectExportFolderKey,
-                        QFileInfo(exportFilePath).dir().absolutePath(),
-                        DataStorageLayer::SettingsStorage::SettingsPlace::Application);
-                    //
-                    // ... и экспортируем документ
-                    //
-                    QScopedPointer<BusinessLayer::ComicBookAbstractExporter> exporter;
-                    switch (exportOptions.fileFormat) {
-                    default:
-                    case ComicBookExportFileFormat::Pdf: {
-                        exporter.reset(new BusinessLayer::ComicBookPdfExporter);
-                        break;
+                    QString errorMessage;
+                    const QFileInfo fileInfo(exportFilePath);
+                    if (fileInfo.exists()) {
+                        errorMessage = tr("Can't write to file. Looks like it's opened by another "
+                                          "application. Please close it and retry the export.");
+                    } else {
+                        errorMessage = tr("Can't write to file. Check permissions to write in the "
+                                          "chosen folder or choose another folder.");
                     }
-                    case ComicBookExportFileFormat::Docx: {
-                        exporter.reset(new BusinessLayer::ComicBookDocxExporter);
-                        break;
-                    }
-                    }
-                    if (exporter.isNull()) {
-                        return;
-                    }
-                    exporter->exportTo(comicBookTextModel, exportOptions);
+                    StandardDialog::information(topLevelWidget, tr("Export error"), errorMessage);
+                    return;
+                }
+                //
+                // ... донастроим параметры экспорта
+                //
+                exportOptions.header = comicBookTextModel->informationModel()->header();
+                exportOptions.footer = comicBookTextModel->informationModel()->footer();
+                //
+                // ... обновим папку, куда в следующий раз он предположительно опять будет
+                //     экспортировать
+                //
+                DataStorageLayer::StorageFacade::settingsStorage()->setValue(
+                    DataStorageLayer::kProjectExportFolderKey,
+                    QFileInfo(exportFilePath).dir().absolutePath(),
+                    DataStorageLayer::SettingsStorage::SettingsPlace::Application);
+                //
+                // ... и экспортируем документ
+                //
+                QScopedPointer<BusinessLayer::ComicBookAbstractExporter> exporter;
+                switch (exportOptions.fileFormat) {
+                default:
+                case ComicBookExportFileFormat::Pdf: {
+                    exporter.reset(new BusinessLayer::ComicBookPdfExporter);
+                    break;
+                }
+                case ComicBookExportFileFormat::Docx: {
+                    exporter.reset(new BusinessLayer::ComicBookDocxExporter);
+                    break;
+                }
+                }
+                if (exporter.isNull()) {
+                    return;
+                }
+                exporter->exportTo(comicBookTextModel, exportOptions);
 
-                    //
-                    // Если необходимо, откроем экспортированный документ
-                    //
-                    if (comicBookExportDialog->openDocumentAfterExport()) {
-                        QDesktopServices::openUrl(QUrl::fromLocalFile(exportOptions.filePath));
-                    }
-                    //
-                    // ... и закрываем диалог экспорта
-                    //
-                    comicBookExportDialog->hideDialog();
-                });
+                //
+                // Если необходимо, откроем экспортированный документ
+                //
+                if (comicBookExportDialog->openDocumentAfterExport()) {
+                    QDesktopServices::openUrl(QUrl::fromLocalFile(exportOptions.filePath));
+                }
+                //
+                // ... и закрываем диалог экспорта
+                //
+                comicBookExportDialog->hideDialog();
+            });
         connect(comicBookExportDialog, &Ui::ComicBookExportDialog::canceled, comicBookExportDialog,
                 &Ui::ComicBookExportDialog::hideDialog);
         connect(comicBookExportDialog, &Ui::ComicBookExportDialog::disappeared,

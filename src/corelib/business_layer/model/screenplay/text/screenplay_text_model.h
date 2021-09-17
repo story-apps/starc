@@ -103,7 +103,7 @@ public:
     ScreenplayInformationModel* informationModel() const;
 
     /**
-     * @brief Задать модель титульной страницы сценария
+     * @brief Задать модель титульной страницы
      */
     void setTitlePageModel(TextModel* _model);
     TextModel* titlePageModel() const;

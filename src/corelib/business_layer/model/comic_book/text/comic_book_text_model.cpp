@@ -64,6 +64,11 @@ public:
     ComicBookInformationModel* informationModel = nullptr;
 
     /**
+     * @brief Модель титульной страницы
+     */
+    TextModel* titlePageModel = nullptr;
+
+    /**
      * @brief Модель справочников
      */
     ComicBookDictionariesModel* dictionariesModel = nullptr;
@@ -1153,6 +1158,16 @@ void ComicBookTextModel::setInformationModel(ComicBookInformationModel* _model)
 ComicBookInformationModel* ComicBookTextModel::informationModel() const
 {
     return d->informationModel;
+}
+
+void ComicBookTextModel::setTitlePageModel(TextModel* _model)
+{
+    d->titlePageModel = _model;
+}
+
+TextModel* ComicBookTextModel::titlePageModel() const
+{
+    return d->titlePageModel;
 }
 
 void ComicBookTextModel::setDictionariesModel(ComicBookDictionariesModel* _model)

@@ -6,10 +6,10 @@
 namespace BusinessLayer {
 
 class CharactersModel;
-class LocationsModel;
 class ComicBookDictionariesModel;
 class ComicBookInformationModel;
 class ComicBookTextModelItem;
+class TextModel;
 
 /**
  * @brief Модель текста комикса
@@ -99,6 +99,12 @@ public:
      */
     void setInformationModel(ComicBookInformationModel* _model);
     ComicBookInformationModel* informationModel() const;
+
+    /**
+     * @brief Задать модель титульной страницы
+     */
+    void setTitlePageModel(TextModel* _model);
+    TextModel* titlePageModel() const;
 
     /**
      * @brief Задать модель справочников комикса

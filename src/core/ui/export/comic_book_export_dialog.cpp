@@ -54,7 +54,7 @@ ComicBookExportDialog::Implementation::Implementation(QWidget* _parent)
     using namespace BusinessLayer;
 
     fileFormat->setSpellCheckPolicy(SpellCheckPolicy::Manual);
-    auto formatsModel = new QStringListModel({ "PDF", "DOCX" /*, "FDX", "Fontain" */ });
+    auto formatsModel = new QStringListModel({ "PDF", "DOCX" });
     fileFormat->setModel(formatsModel);
     fileFormat->setCurrentIndex(formatsModel->index(0, 0));
 
@@ -71,11 +71,10 @@ ComicBookExportDialog::Implementation::Implementation(QWidget* _parent)
         break;
     }
 
-    printTitlePage->hide();
     useWordsInPageHeadings->hide();
 
-    for (auto checkBox : { /*printTitlePage,*/ useWordsInPageHeadings, printReviewMarks,
-                           openDocumentAfterExport }) {
+    for (auto checkBox :
+         { printTitlePage, useWordsInPageHeadings, printReviewMarks, openDocumentAfterExport }) {
         checkBox->setChecked(true);
     }
 
