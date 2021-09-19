@@ -2,7 +2,7 @@
 
 #include <business_layer/templates/comic_book_template.h>
 #include <business_layer/templates/screenplay_template.h>
-#include <business_layer/templates/text_template.h>
+#include <business_layer/templates/simple_text_template.h>
 #include <data_layer/mapper/mapper_facade.h>
 #include <data_layer/mapper/settings_mapper.h>
 #include <ui/design_system/design_system.h>

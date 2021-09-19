@@ -7,8 +7,8 @@
 #include <business_layer/document/text/text_cursor.h>
 #include <business_layer/model/comic_book/comic_book_title_page_model.h>
 #include <business_layer/model/screenplay/screenplay_title_page_model.h>
+#include <business_layer/templates/simple_text_template.h>
 #include <business_layer/templates/templates_facade.h>
-#include <business_layer/templates/text_template.h>
 #include <data_layer/storage/settings_storage.h>
 #include <data_layer/storage/storage_facade.h>
 #include <domain/document_object.h>
@@ -135,6 +135,8 @@ TitlePageView::TitlePageView(QWidget* _parent)
         //
         d->scalableWrapper->setFocus();
     });
+    connect(d->toolbar, &TitlePageEditToolbar::restoreTitlePagePressed, d->textEdit,
+            &TitlePageEdit::restoreFromTemplate);
     //
     auto handleCursorPositionChanged = [this] { d->updateToolBarCurrentParagraphTypeName(); };
     connect(d->textEdit, &TitlePageEdit::paragraphTypeChanged, this, handleCursorPositionChanged);

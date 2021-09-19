@@ -2162,7 +2162,7 @@ void ScreenplayTextDocument::updateModelOnContentChange(int _position, int _char
 
 void ScreenplayTextDocument::insertTable(const ScreenplayTextCursor& _cursor)
 {
-    const auto scriptTemplate = d->documentTemplate();
+    const auto& scriptTemplate = d->documentTemplate();
     const auto pageSplitterWidth = scriptTemplate.pageSplitterWidth();
     const int qtTableBorderWidth = 2; // эта однопиксельная рамка никак не убирается...
     const qreal tableWidth = pageSize().width() - rootFrame()->frameFormat().leftMargin()

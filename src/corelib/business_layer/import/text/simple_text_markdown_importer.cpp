@@ -3,7 +3,7 @@
 #include "simple_text_import_options.h"
 
 #include <business_layer/model/text/text_model_xml.h>
-#include <business_layer/templates/text_template.h>
+#include <business_layer/templates/simple_text_template.h>
 #include <domain/document_object.h>
 #include <utils/helpers/text_helper.h>
 

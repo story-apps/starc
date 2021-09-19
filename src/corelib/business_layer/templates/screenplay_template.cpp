@@ -1,5 +1,7 @@
 #include "screenplay_template.h"
 
+#include "simple_text_template.h"
+
 #include <ui/widgets/text_edit/page/page_metrics.h>
 #include <ui/widgets/text_edit/page/page_text_edit.h>
 #include <utils/helpers/measurement_helper.h>
@@ -477,12 +479,136 @@ void ScreenplayBlockStyle::updateBottomMargin()
 // ****
 
 
+class ScreenplayTemplate::Implementation
+{
+public:
+    Implementation();
+
+    /**
+     * @brief Сформировать шаблон оформления титульной страницы
+     */
+    void buildTitlePageTemplate();
+
+
+    /**
+     * @brief Идентификатор
+     */
+    QString id;
+
+    /**
+     * @brief Является ли шаблон умолчальным
+     */
+    bool isDefault = false;
+
+    /**
+     * @brief Название
+     */
+    QString name;
+
+    /**
+     * @brief Описание
+     */
+    QString description;
+
+    /**
+     * @brief Формат страницы
+     */
+    QPageSize::PageSizeId pageSizeId;
+
+    /**
+     * @brief Поля страницы в миллиметрах
+     */
+    QMarginsF pageMargins;
+
+    /**
+     * @brief Расположение нумерации
+     */
+    Qt::Alignment pageNumbersAlignment;
+
+    /**
+     * @brief Процент от ширины страницы, которые занимает левая часть разделения
+     */
+    int leftHalfOfPageWidthPercents = 50;
+
+    /**
+     * @brief Шаблон-компаньён, используемый для титульной страницы
+     */
+    SimpleTextTemplate titlePageTemplate;
+
+    /**
+     * @brief Xml титульной страницы
+     */
+    QString titlePage;
+
+    /**
+     * @brief Стили блоков текста
+     */
+    QHash<ScreenplayParagraphType, ScreenplayBlockStyle> paragrapsStyles;
+};
+
+ScreenplayTemplate::Implementation::Implementation()
+    : id(QUuid::createUuid().toString())
+{
+}
+
+void ScreenplayTemplate::Implementation::buildTitlePageTemplate()
+{
+    titlePageTemplate.setPageSizeId(pageSizeId);
+    titlePageTemplate.setPageMargins(pageMargins);
+    titlePageTemplate.setPageNumbersAlignment(pageNumbersAlignment);
+
+    TextBlockStyle defaultBlockStyle;
+    defaultBlockStyle.setActive(true);
+    defaultBlockStyle.setStartFromNewPage(false);
+    const auto actionBlockStyle = paragrapsStyles.value(ScreenplayParagraphType::Action);
+    defaultBlockStyle.setFont(actionBlockStyle.font());
+    defaultBlockStyle.setAlign(actionBlockStyle.align());
+    //
+    for (auto type : {
+             TextParagraphType::Heading1,
+             TextParagraphType::Heading2,
+             TextParagraphType::Heading3,
+             TextParagraphType::Heading4,
+             TextParagraphType::Heading5,
+             TextParagraphType::Heading6,
+             TextParagraphType::Text,
+             TextParagraphType::InlineNote,
+         }) {
+        auto blockStyle = defaultBlockStyle;
+        blockStyle.setType(type);
+        titlePageTemplate.setParagraphStyle(blockStyle);
+    }
+}
+
+// **
+
+ScreenplayTemplate::ScreenplayTemplate()
+    : d(new Implementation)
+{
+}
+
+ScreenplayTemplate::ScreenplayTemplate(const ScreenplayTemplate& _other)
+    : d(new Implementation)
+{
+    *d = *_other.d;
+}
+
+ScreenplayTemplate& ScreenplayTemplate::operator=(const ScreenplayTemplate& _other)
+{
+    if (this != &_other) {
+        *d = *_other.d;
+    }
+    return *this;
+}
+
+ScreenplayTemplate::~ScreenplayTemplate() = default;
+
 void ScreenplayTemplate::setIsNew()
 {
-    m_isDefault = false;
-    m_name = QApplication::translate("BusinessLayer::ScreenplayTemplate", "Copy of ") + name();
-    m_id = QUuid::createUuid().toString();
-    m_description.clear();
+    d->isDefault = false;
+    d->name = QApplication::translate("BusinessLayer::ScreenplayTemplate", "Copy of ") + name();
+    d->id = QUuid::createUuid().toString();
+    d->description.clear();
 }
 
 void ScreenplayTemplate::saveToFile(const QString& _filePath) const
@@ -496,14 +622,18 @@ void ScreenplayTemplate::saveToFile(const QString& _filePath) const
     writer.setAutoFormatting(true);
     writer.writeStartDocument();
     writer.writeStartElement("style");
-    writer.writeAttribute("id", m_id);
-    writer.writeAttribute("name", m_name);
-    writer.writeAttribute("description", m_description);
-    writer.writeAttribute("page_format", PageMetrics::stringFromPageSizeId(m_pageSizeId));
-    writer.writeAttribute("page_margins", ::toString(m_pageMargins));
-    writer.writeAttribute("page_numbers_alignment", ::toString(m_pageNumbersAlignment));
-    writer.writeAttribute("left_half_of_page_width", ::toString(m_leftHalfOfPageWidthPercents));
-    for (const auto& blockStyle : std::as_const(m_paragrapsStyles)) {
+    writer.writeAttribute("id", d->id);
+    writer.writeAttribute("name", d->name);
+    writer.writeAttribute("description", d->description);
+    writer.writeAttribute("page_format", PageMetrics::stringFromPageSizeId(d->pageSizeId));
+    writer.writeAttribute("page_margins", ::toString(d->pageMargins));
+    writer.writeAttribute("page_numbers_alignment", ::toString(d->pageNumbersAlignment));
+    writer.writeAttribute("left_half_of_page_width", ::toString(d->leftHalfOfPageWidthPercents));
+    writer.writeStartElement("titlepage");
+
+    writer.writeEndElement(); // titlepage
+    writer.writeStartElement("blocks");
+    for (const auto& blockStyle : std::as_const(d->paragrapsStyles)) {
         if (toString(blockStyle.type()).isEmpty()) {
             continue;
         }
@@ -511,7 +641,7 @@ void ScreenplayTemplate::saveToFile(const QString& _filePath) const
         writer.writeStartElement("block");
         writer.writeAttribute("id", toString(blockStyle.type()));
         writer.writeAttribute("active", ::toString(blockStyle.isActive()));
-        writer.writeAttribute("starts_from_new_page", ::toString(blockStyle.isStartFromNewPage()));
+        writer.writeAttribute("starts_frod->new_page", ::toString(blockStyle.isStartFromNewPage()));
         writer.writeAttribute("font_family", blockStyle.font().family());
         writer.writeAttribute("font_size",
                               ::toString(MeasurementHelper::pxToPt(blockStyle.font().pixelSize())));
@@ -529,6 +659,7 @@ void ScreenplayTemplate::saveToFile(const QString& _filePath) const
         writer.writeAttribute("lines_after", ::toString(blockStyle.linesAfter()));
         writer.writeEndElement(); // block
     }
+    writer.writeEndElement(); // blocks
     writer.writeEndElement(); // style
     writer.writeEndDocument();
 
@@ -537,98 +668,98 @@ void ScreenplayTemplate::saveToFile(const QString& _filePath) const
 
 QString ScreenplayTemplate::id() const
 {
-    return m_id;
+    return d->id;
 }
 
 bool ScreenplayTemplate::isDefault() const
 {
-    return m_isDefault;
+    return d->isDefault;
 }
 
 QString ScreenplayTemplate::name() const
 {
-    if (m_name.isEmpty()) {
-        if (m_id == "world_cp") {
+    if (d->name.isEmpty()) {
+        if (d->id == "world_cp") {
             return QApplication::translate(
                 "BusinessLayer::ScreenplayTemplate",
                 "International template (page: A4; font: Courier Prime)");
-        } else if (m_id == "world_cn") {
+        } else if (d->id == "world_cn") {
             return QApplication::translate("BusinessLayer::ScreenplayTemplate",
                                            "International template (page: A4; font: Courier New)");
-        } else if (m_id == "ar") {
+        } else if (d->id == "ar") {
             return QApplication::translate("BusinessLayer::ScreenplayTemplate",
                                            "Arabic template (page: A4; font: Courier New)");
-        } else if (m_id == "he") {
+        } else if (d->id == "he") {
             return QApplication::translate("BusinessLayer::ScreenplayTemplate",
                                            "Hebrew template (page: A4; font: Arial)");
-        } else if (m_id == "ru") {
+        } else if (d->id == "ru") {
             return QApplication::translate("BusinessLayer::ScreenplayTemplate",
                                            "Russian template (page: A4; font: Courier New)");
-        } else if (m_id == "tamil") {
+        } else if (d->id == "tamil") {
             return QApplication::translate("BusinessLayer::ScreenplayTemplate",
                                            "Tamil template (page: A4; font: Mukta Malar)");
-        } else if (m_id == "us") {
+        } else if (d->id == "us") {
             return QApplication::translate("BusinessLayer::ScreenplayTemplate",
                                            "US template (page: Letter; font: Courier Prime)");
         }
     }
 
-    return m_name;
+    return d->name;
 }
 
 void ScreenplayTemplate::setName(const QString& _name)
 {
-    m_name = _name;
+    d->name = _name;
 }
 
 QString ScreenplayTemplate::description() const
 {
-    return m_description;
+    return d->description;
 }
 
 void ScreenplayTemplate::setDescription(const QString& _description)
 {
-    m_description = _description;
+    d->description = _description;
 }
 
 QPageSize::PageSizeId ScreenplayTemplate::pageSizeId() const
 {
-    return m_pageSizeId;
+    return d->pageSizeId;
 }
 
 void ScreenplayTemplate::setPageSizeId(QPageSize::PageSizeId _pageSizeId)
 {
-    m_pageSizeId = _pageSizeId;
+    d->pageSizeId = _pageSizeId;
 }
 
 QMarginsF ScreenplayTemplate::pageMargins() const
 {
-    return m_pageMargins;
+    return d->pageMargins;
 }
 
 void ScreenplayTemplate::setPageMargins(const QMarginsF& _pageMargins)
 {
-    m_pageMargins = _pageMargins;
+    d->pageMargins = _pageMargins;
 }
 
 Qt::Alignment ScreenplayTemplate::pageNumbersAlignment() const
 {
-    return m_pageNumbersAlignment;
+    return d->pageNumbersAlignment;
 }
 
 void ScreenplayTemplate::setPageNumbersAlignment(Qt::Alignment _alignment)
 {
-    m_pageNumbersAlignment = _alignment;
+    d->pageNumbersAlignment = _alignment;
 }
 
 int ScreenplayTemplate::leftHalfOfPageWidthPercents() const
 {
-    return m_leftHalfOfPageWidthPercents;
+    return d->leftHalfOfPageWidthPercents;
 }
 
 void ScreenplayTemplate::setLeftHalfOfPageWidthPercents(int _width)
 {
-    m_leftHalfOfPageWidthPercents = _width;
+    d->leftHalfOfPageWidthPercents = _width;
 }
 
 qreal ScreenplayTemplate::pageSplitterWidth() const
@@ -639,9 +770,19 @@ qreal ScreenplayTemplate::pageSplitterWidth() const
     return PageMetrics::mmToPx(5);
 }
 
+const SimpleTextTemplate& ScreenplayTemplate::titlePageTemplate() const
+{
+    return d->titlePageTemplate;
+}
+
+const QString& ScreenplayTemplate::titlePage() const
+{
+    return d->titlePage;
+}
+
 ScreenplayBlockStyle ScreenplayTemplate::paragraphStyle(ScreenplayParagraphType _forType) const
 {
-    return m_paragrapsStyles.value(_forType);
+    return d->paragrapsStyles.value(_forType);
 }
 
 ScreenplayBlockStyle ScreenplayTemplate::paragraphStyle(const QTextBlock& _forBlock) const
@@ -651,23 +792,31 @@ ScreenplayBlockStyle ScreenplayTemplate::paragraphStyle(const QTextBlock& _forBl
 
 void ScreenplayTemplate::setParagraphStyle(const ScreenplayBlockStyle& _style)
 {
-    m_paragrapsStyles.insert(_style.type(), _style);
+    d->paragrapsStyles.insert(_style.type(), _style);
+
+    //
+    // Если сменился стиль описания действия, то надо перестоить шаблон оформления титульного листа,
+    // т.к. она базируется на шрифте из стиля описания действия
+    //
+    if (_style.type() == ScreenplayParagraphType::Action) {
+        d->buildTitlePageTemplate();
+    }
 }
 
 ScreenplayTemplate::ScreenplayTemplate(const QString& _fromFile)
-    : m_id(QUuid::createUuid().toString())
+    : d(new Implementation)
 {
     load(_fromFile);
 }
 
 void ScreenplayTemplate::load(const QString& _fromFile)
 {
-    QFile xmlData(_fromFile);
-    if (!xmlData.open(QIODevice::ReadOnly)) {
+    QFile templateFile(_fromFile);
+    if (!templateFile.open(QIODevice::ReadOnly)) {
         return;
     }
-
-    QXmlStreamReader reader(&xmlData);
+    const QString templateXml = templateFile.readAll();
+    QXmlStreamReader reader(templateXml);
 
     //
     // Считываем данные в соответствии с заданным форматом
@@ -681,25 +830,41 @@ void ScreenplayTemplate::load(const QString& _fromFile)
     //
     QXmlStreamAttributes templateAttributes = reader.attributes();
     if (templateAttributes.hasAttribute("id")) {
-        m_id = templateAttributes.value("id").toString();
+        d->id = templateAttributes.value("id").toString();
     }
-    m_isDefault = templateAttributes.value("default").toString() == "true";
-    m_name = templateAttributes.value("name").toString();
-    m_description = templateAttributes.value("description").toString();
-    m_pageSizeId
+    d->isDefault = templateAttributes.value("default").toString() == "true";
+    d->name = templateAttributes.value("name").toString();
+    d->description = templateAttributes.value("description").toString();
+    d->pageSizeId
         = PageMetrics::pageSizeIdFromString(templateAttributes.value("page_format").toString());
-    m_pageMargins = marginsFromString(templateAttributes.value("page_margins").toString());
-    m_pageNumbersAlignment
+    d->pageMargins = marginsFromString(templateAttributes.value("page_margins").toString());
+    d->pageNumbersAlignment
         = alignmentFromString(templateAttributes.value("page_numbers_alignment").toString());
-    m_leftHalfOfPageWidthPercents = templateAttributes.value("left_half_of_page_width").toInt();
+    d->leftHalfOfPageWidthPercents = templateAttributes.value("left_half_of_page_width").toInt();
+
+    //
+    // Считываем титульную страницу
+    //
+    reader.readNextStartElement();
+    Q_ASSERT(reader.name() == "titlepage");
+    const auto titlePageXmlFrom = reader.characterOffset();
+    reader.readNextStartElement();
+    reader.skipCurrentElement();
+    const auto titlePageXmlEnd = reader.characterOffset();
+    d->titlePage
+        = templateXml.mid(titlePageXmlFrom, titlePageXmlEnd - titlePageXmlFrom).simplified();
+    reader.readNext();
+    reader.readNext();
 
     //
     // Считываем настройки оформления блоков текста
     //
+    reader.readNextStartElement();
+    Q_ASSERT(reader.name() == "blocks");
     while (reader.readNextStartElement() && reader.name() == "block") {
         ScreenplayBlockStyle blockStyle(reader.attributes());
         blockStyle.setPageSplitterWidth(pageSplitterWidth());
-        m_paragrapsStyles.insert(blockStyle.type(), blockStyle);
+        d->paragrapsStyles.insert(blockStyle.type(), blockStyle);
 
         //
         // Если ещё не находимся в конце элемента, то остальное пропускаем
@@ -714,10 +879,15 @@ void ScreenplayTemplate::load(const QString& _fromFile)
     //
     {
         ScreenplayBlockStyle sceneHeadingShadowStyle
-            = m_paragrapsStyles.value(ScreenplayParagraphType::SceneHeading);
+            = d->paragrapsStyles.value(ScreenplayParagraphType::SceneHeading);
         sceneHeadingShadowStyle.setType(ScreenplayParagraphType::SceneHeadingShadow);
         setParagraphStyle(sceneHeadingShadowStyle);
     }
+
+    //
+    // Сформиуем стиль компаньон для титульной страницы
+    //
+    d->buildTitlePageTemplate();
 }
 
 } // namespace BusinessLayer

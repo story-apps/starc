@@ -3,7 +3,7 @@
 #include "text_model_text_item.h"
 #include "text_model_xml.h"
 
-#include <business_layer/templates/text_template.h>
+#include <business_layer/templates/simple_text_template.h>
 #include <utils/helpers/text_helper.h>
 
 #include <QLocale>

@@ -4,7 +4,7 @@
 #include "simple_text_search_toolbar.h"
 
 #include <business_layer/document/text/text_cursor.h>
-#include <business_layer/templates/text_template.h>
+#include <business_layer/templates/simple_text_template.h>
 #include <utils/helpers/text_helper.h>
 
 #include <QTextBlock>

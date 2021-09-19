@@ -2,7 +2,7 @@
 
 #include "comic_book_template.h"
 #include "screenplay_template.h"
-#include "text_template.h"
+#include "simple_text_template.h"
 
 #include <QApplication>
 #include <QDir>
@@ -135,7 +135,7 @@ void TemplatesFacade::Implementation::updateTranslations()
     for (int row = 0; row < templatesModel.rowCount(); ++row) {
         auto templateModelItem = templatesModel.item(row);
         const auto templateId = templateModelItem->data(kTemplateIdRole).toString();
-        const auto templateItem = getTemplate<TemplateType>(templateId);
+        const auto& templateItem = getTemplate<TemplateType>(templateId);
         if (templateItem.isDefault()) {
             templateModelItem->setText(templateItem.name());
         }
@@ -344,6 +344,11 @@ const SimpleTextTemplate& TemplatesFacade::simpleTextTemplate(const QString& _te
 const ScreenplayTemplate& TemplatesFacade::screenplayTemplate(const QString& _templateId)
 {
     return instance().d->getTemplate<ScreenplayTemplate>(_templateId);
+}
+
+const SimpleTextTemplate& TemplatesFacade::screenplayTitlePageTemplate(const QString& _templateId)
+{
+    return screenplayTemplate(_templateId).titlePageTemplate();
 }
 
 const ComicBookTemplate& TemplatesFacade::comicBookTemplate(const QString& _templateId)

@@ -12,8 +12,9 @@
 #include <business_layer/model/text/text_model_text_item.h>
 #include <business_layer/templates/comic_book_template.h>
 #include <business_layer/templates/screenplay_template.h>
+#include <business_layer/templates/simple_text_template.h>
 #include <business_layer/templates/templates_facade.h>
-#include <business_layer/templates/text_template.h>
+#include <domain/document_object.h>
 #include <ui/design_system/design_system.h>
 #include <ui/widgets/context_menu/context_menu.h>
 #include <utils/helpers/color_helper.h>
@@ -107,16 +108,29 @@ void TitlePageEdit::initWithModel(BusinessLayer::TextModel* _model)
     d->model = _model;
 
     QMarginsF pageMargins;
-    if (qobject_cast<BusinessLayer::ComicBookTitlePageModel*>(d->model)) {
-        const auto currentTemplate = TemplatesFacade::comicBookTemplate();
+    if (qobject_cast<BusinessLayer::ScreenplayTitlePageModel*>(d->model)) {
+        const auto& currentTemplate = TemplatesFacade::screenplayTemplate();
         setPageFormat(currentTemplate.pageSizeId());
         setPageNumbersAlignment(currentTemplate.pageNumbersAlignment());
         pageMargins = currentTemplate.pageMargins();
-    } else if (qobject_cast<BusinessLayer::ScreenplayTitlePageModel*>(d->model)) {
-        const auto currentTemplate = TemplatesFacade::screenplayTemplate();
+    } else if (qobject_cast<BusinessLayer::ComicBookTitlePageModel*>(d->model)) {
+        const auto& currentTemplate = TemplatesFacade::comicBookTemplate();
         setPageFormat(currentTemplate.pageSizeId());
         setPageNumbersAlignment(currentTemplate.pageNumbersAlignment());
         pageMargins = currentTemplate.pageMargins();
+    }
+
+    //
+    // Если в модели всего один пустой элемент, значит нужно заменить титульной страницей из шаблона
+    //
+    if (d->model && d->model->rowCount() == 1) {
+        const auto item = d->model->itemForIndex(d->model->index(0, 0));
+        if (item->type() == BusinessLayer::TextModelItemType::Text) {
+            const auto textItem = static_cast<BusinessLayer::TextModelTextItem*>(item);
+            if (textItem->text().isEmpty()) {
+                restoreFromTemplate();
+            }
+        }
     }
 
     //
@@ -153,6 +167,22 @@ void TitlePageEdit::undo()
 void TitlePageEdit::redo()
 {
     d->revertAction(false);
+}
+
+void TitlePageEdit::restoreFromTemplate()
+{
+    if (!d->model) {
+        return;
+    }
+
+    QString titlePage;
+    if (qobject_cast<BusinessLayer::ScreenplayTitlePageModel*>(d->model)) {
+        titlePage = TemplatesFacade::screenplayTemplate().titlePage();
+    } else if (qobject_cast<BusinessLayer::ComicBookTitlePageModel*>(d->model)) {
+        //        titlePage = TemplatesFacade::screenplayTemplate().titlePage();
+    }
+
+    d->model->setDocumentContent(titlePage.toUtf8());
 }
 
 void TitlePageEdit::addParagraph(BusinessLayer::TextParagraphType _type)

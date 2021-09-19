@@ -4,7 +4,7 @@
 #include "text_model_text_item.h"
 #include "text_model_xml.h"
 
-#include <business_layer/templates/text_template.h>
+#include <business_layer/templates/simple_text_template.h>
 #include <domain/document_object.h>
 #include <utils/diff_match_patch/diff_match_patch_controller.h>
 #include <utils/shugar.h>
@@ -197,6 +197,13 @@ void TextModel::setDocumentName(const QString& _name)
 {
     setName(_name);
     emit documentNameChanged(_name);
+}
+
+void TextModel::setDocumentContent(const QByteArray& _content)
+{
+    clearDocument();
+    document()->setContent(_content);
+    initDocument();
 }
 
 void TextModel::appendItem(TextModelItem* _item, TextModelItem* _parentItem)

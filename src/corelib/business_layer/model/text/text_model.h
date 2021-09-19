@@ -27,6 +27,11 @@ public:
     Q_SIGNAL void nameChanged(const QString& _name);
 
     /**
+     * @brief Перезаписать содержимое документа
+     */
+    void setDocumentContent(const QByteArray& _content);
+
+    /**
      * @brief Добавить элемент в конец
      */
     void appendItem(TextModelItem* _item, TextModelItem* _parentItem = nullptr);

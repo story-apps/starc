@@ -42,7 +42,7 @@ public:
                                       .toInt()
             * 1000;
 
-        const auto currentTemplate = BusinessLayer::TemplatesFacade::screenplayTemplate();
+        const auto& currentTemplate = BusinessLayer::TemplatesFacade::screenplayTemplate();
         const auto mmPageSize
             = QPageSize(currentTemplate.pageSizeId()).rect(QPageSize::Millimeter).size();
         const bool x = true, y = false;

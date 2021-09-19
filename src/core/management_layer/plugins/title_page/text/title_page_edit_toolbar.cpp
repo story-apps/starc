@@ -35,6 +35,7 @@ public:
     QAction* redoAction = nullptr;
     QAction* textFontAction = nullptr;
     QAction* textFontSizeAction = nullptr;
+    QAction* restoreTitlePageAction = nullptr;
 
     QStringListModel fontsModel;
     QStringListModel fontSizesModel;
@@ -50,9 +51,16 @@ TitlePageEditToolbar::Implementation::Implementation(QWidget* _parent)
     , redoAction(new QAction)
     , textFontAction(new QAction)
     , textFontSizeAction(new QAction)
+    , restoreTitlePageAction(new QAction)
     , popup(new Card(_parent))
     , popupContent(new Tree(popup))
 {
+    undoAction->setIconText(u8"\U000f054c");
+    redoAction->setIconText(u8"\U000f044e");
+    textFontAction->setIconText(u8"\U000f035d");
+    textFontSizeAction->setIconText(u8"\U000f035d");
+    restoreTitlePageAction->setIconText(u8"\U000F099B");
+
     fontsModel.setStringList(QFontDatabase().families());
     fontSizesModel.setStringList(
         { "8", "9", "10", "11", "12", "14", "18", "24", "30", "36", "48", "60", "72", "96" });
@@ -138,11 +146,9 @@ TitlePageEditToolbar::TitlePageEditToolbar(QWidget* _parent)
     : FloatingToolBar(_parent)
     , d(new Implementation(this))
 {
-    d->undoAction->setIconText(u8"\U000f054c");
     addAction(d->undoAction);
     connect(d->undoAction, &QAction::triggered, this, &TitlePageEditToolbar::undoPressed);
 
-    d->redoAction->setIconText(u8"\U000f044e");
     addAction(d->redoAction);
     connect(d->redoAction, &QAction::triggered, this, &TitlePageEditToolbar::redoPressed);
 
@@ -151,10 +157,8 @@ TitlePageEditToolbar::TitlePageEditToolbar(QWidget* _parent)
     //
     const QFont defaultFont;
     d->textFontAction->setText(defaultFont.family());
-    d->textFontAction->setIconText(u8"\U000f035d");
     addAction(d->textFontAction);
     d->textFontSizeAction->setText(QString::number(defaultFont.pointSize()));
-    d->textFontSizeAction->setIconText(u8"\U000f035d");
     addAction(d->textFontSizeAction);
     auto activatePopup = [this](QAction* _action, QStringListModel* _model) {
         if (!d->isPopupShown) {
@@ -203,6 +207,10 @@ TitlePageEditToolbar::TitlePageEditToolbar(QWidget* _parent)
         emit fontChanged(newFont);
     });
 
+    addAction(d->restoreTitlePageAction);
+    connect(d->restoreTitlePageAction, &QAction::triggered, this,
+            &TitlePageEditToolbar::restoreTitlePagePressed);
+
     updateTranslations();
     designSystemChangeEvent(nullptr);
 }
@@ -241,6 +249,7 @@ void TitlePageEditToolbar::updateTranslations()
             QKeySequence(QKeySequence::Redo).toString(QKeySequence::NativeText)));
     d->textFontAction->setToolTip(tr("Current text font family"));
     d->textFontSizeAction->setToolTip(tr("Current text font size"));
+    d->restoreTitlePageAction->setToolTip(tr("Restore default title page"));
 }
 
 void TitlePageEditToolbar::designSystemChangeEvent(DesignSystemChangeEvent* _event)

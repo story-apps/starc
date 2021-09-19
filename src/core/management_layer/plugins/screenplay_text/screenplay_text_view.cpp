@@ -470,7 +470,7 @@ void ScreenplayTextView::reconfigure(const QStringList& _changedSettingsKeys)
     d->paragraphTypesModel->clear();
 
     using namespace BusinessLayer;
-    const auto usedTemplate = BusinessLayer::TemplatesFacade::screenplayTemplate();
+    const auto& usedTemplate = BusinessLayer::TemplatesFacade::screenplayTemplate();
     const QVector<ScreenplayParagraphType> types
         = { ScreenplayParagraphType::SceneHeading,    ScreenplayParagraphType::SceneCharacters,
             ScreenplayParagraphType::Action,          ScreenplayParagraphType::Character,

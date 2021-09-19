@@ -3,7 +3,7 @@
 #include <business_layer/model/text/text_model.h>
 #include <business_layer/model/text/text_model_item.h>
 #include <business_layer/model/text/text_model_text_item.h>
-#include <business_layer/templates/text_template.h>
+#include <business_layer/templates/simple_text_template.h>
 
 #include <QApplication>
 

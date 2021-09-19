@@ -1,9 +1,66 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <style id="ar" default="true" page_format="A4" page_margins="17,24,38,24" page_numbers_alignment="bottom,left" left_half_of_page_width="50">
+<titlepage>
+    <document mime-type="application/x-starc/document/screenplay/title-page" version="1.0">
+        <text><v><![CDATA[]]></v></text>
+        <text><v><![CDATA[]]></v></text>
+        <text><v><![CDATA[]]></v></text>
+        <text><v><![CDATA[]]></v></text>
+        <text><v><![CDATA[]]></v></text>
+        <text><v><![CDATA[]]></v></text>
+        <text><v><![CDATA[]]></v></text>
+        <text><v><![CDATA[]]></v></text>
+        <text><v><![CDATA[]]></v></text>
+        <text><v><![CDATA[]]></v></text>
+        <text><v><![CDATA[]]></v></text>
+        <text><v><![CDATA[]]></v></text>
+        <text><v><![CDATA[]]></v></text>
+        <text><v><![CDATA[]]></v></text>
+        <text><v><![CDATA[]]></v></text>
+        <text><v><![CDATA[]]></v></text>
+        <text><params align="hcenter"/><v><![CDATA[عنوان النص]]></v><fms><fm from="0" length="12" underline="true"/></fms></text>
+        <text><v><![CDATA[]]></v></text>
+        <text><v><![CDATA[]]></v></text>
+        <text><v><![CDATA[]]></v></text>
+        <text><params align="hcenter"/><v><![CDATA[كتب بواسطة]]></v></text>
+        <text><v><![CDATA[]]></v></text>
+        <text><v><![CDATA[]]></v></text>
+        <text><params align="hcenter"/><v><![CDATA[اسم المؤلف الأول]]></v></text>
+        <text><v><![CDATA[]]></v></text>
+        <text><v><![CDATA[]]></v></text>
+        <text><v><![CDATA[]]></v></text>
+        <text><v><![CDATA[]]></v></text>
+        <text><params align="hcenter"/><v><![CDATA[على أساس ، إن وجدت]]></v></text>
+        <text><v><![CDATA[]]></v></text>
+        <text><v><![CDATA[]]></v></text>
+        <text><v><![CDATA[]]></v></text>
+        <text><v><![CDATA[]]></v></text>
+        <text><v><![CDATA[]]></v></text>
+        <text><v><![CDATA[]]></v></text>
+        <text><v><![CDATA[]]></v></text>
+        <text><v><![CDATA[]]></v></text>
+        <text><v><![CDATA[]]></v></text>
+        <text><v><![CDATA[]]></v></text>
+        <text><v><![CDATA[]]></v></text>
+        <text><v><![CDATA[]]></v></text>
+        <text><v><![CDATA[]]></v></text>
+        <text><v><![CDATA[]]></v></text>
+        <text><v><![CDATA[]]></v></text>
+        <text><v><![CDATA[]]></v></text>
+        <text><v><![CDATA[]]></v></text>
+        <text><v><![CDATA[]]></v></text>
+        <text><v><![CDATA[]]></v></text>
+        <text><v><![CDATA[]]></v></text>
+        <text><v><![CDATA[]]></v></text>
+        <text><v><![CDATA[عنوان]]></v></text>
+        <text><v><![CDATA[رقم الهاتف]]></v></text>
+    </document>
+</titlepage>
+<blocks>
     <block id="unformatted_text" active="true" starts_from_new_page="false" font_family="Courier New" font_size="12" bold="false" italic="true" underline="false" uppercase="false" alignment="left" lines_before="0" lines_after="0" margins="0,0,0,0" margins_on_half_page="0,0,0,0" line_spacing="single" line_spacing_value="0"/>
     <block id="scene_heading" active="true" starts_from_new_page="false" font_family="Courier New" font_size="12" bold="true" italic="false" underline="true" uppercase="true" alignment="left" lines_before="2" lines_after="0" margins="0,0,0,0" margins_on_half_page="0,0,0,0" line_spacing="single" line_spacing_value="0"/>
     <block id="scene_characters" active="true" starts_from_new_page="false" font_family="Courier New" font_size="12" bold="true" italic="false" underline="false" uppercase="true" alignment="left" lines_before="0" lines_after="0" margins="0,0,0,0" margins_on_half_page="0,0,0,0" line_spacing="single" line_spacing_value="0"/>
-    <block id="action" active="true" starts_from_new_page="false" font_family="Courier New" font_size="12" bold="false" italic="true" underline="false" uppercase="false" alignment="left" lines_before="1" lines_after="0" margins="0,0,0,0" margins_on_half_page="0,0,0,0" line_spacing="single" line_spacing_value="0"/>
+    <block id="action" active="true" starts_from_new_page="false" font_family="Courier New" font_size="12" bold="false" italic="false" underline="false" uppercase="false" alignment="left" lines_before="1" lines_after="0" margins="0,0,0,0" margins_on_half_page="0,0,0,0" line_spacing="single" line_spacing_value="0"/>
     <block id="character" active="true" starts_from_new_page="false" font_family="Courier New" font_size="12" bold="true" italic="false" underline="false" uppercase="true" alignment="left" lines_before="1" lines_after="0" margins="5.5,0,80,0" margins_on_half_page="33,0,0,0" line_spacing="single" line_spacing_value="0"/>
     <block id="parenthetical" active="true" starts_from_new_page="false" font_family="Courier New" font_size="12" bold="false" italic="false" underline="false" uppercase="false" alignment="left" lines_before="0" lines_after="0" margins="36,0,52,0" margins_on_half_page="26,0,0,0" line_spacing="single" line_spacing_value="0"/>
     <block id="dialogue" active="true" starts_from_new_page="false" font_family="Courier New" font_size="12" bold="false" italic="false" underline="false" uppercase="false" alignment="left" lines_before="0" lines_after="0" margins="26,0,40,0" margins_on_half_page="0,0,0,0" line_spacing="single" line_spacing_value="0"/>
@@ -14,4 +71,5 @@
     <block id="folder_header" active="true" starts_from_new_page="false" font_family="Courier New" font_size="12" bold="true" italic="false" underline="false" uppercase="true" alignment="left" lines_before="1" lines_after="0" margins="0,0,0,0" margins_on_half_page="0,0,0,0" line_spacing="single" line_spacing_value="0"/>
     <block id="folder_footer" active="true" starts_from_new_page="false" font_family="Courier New" font_size="12" bold="true" italic="false" underline="false" uppercase="true" alignment="left" lines_before="1" lines_after="0" margins="0,0,0,0" margins_on_half_page="0,0,0,0" line_spacing="single" line_spacing_value="0"/>
     <block id="page_splitter" active="false" starts_from_new_page="false" font_family="Courier New" font_size="12" bold="false" italic="false" underline="false" uppercase="false" alignment="left" lines_before="1" lines_after="0" margins="0,0,0,0" margins_on_half_page="0,0,0,0" line_spacing="single" line_spacing_value="0"/>
+</blocks>
 </style>

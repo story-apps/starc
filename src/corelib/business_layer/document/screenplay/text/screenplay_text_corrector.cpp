@@ -403,7 +403,7 @@ void ScreenplayTextCorrector::Implementation::correctPageBreaks(int _position)
     qreal leftHalfWidth = 0.0;
     qreal rightHalfWidth = 0.0;
     {
-        const auto currentTemplate = TemplatesFacade::screenplayTemplate(templateId);
+        const auto& currentTemplate = TemplatesFacade::screenplayTemplate(templateId);
         leftHalfWidth = pageWidth * currentTemplate.leftHalfOfPageWidthPercents() / 100.0
             - currentTemplate.pageSplitterWidth() / 2;
         rightHalfWidth = pageWidth - leftHalfWidth - currentTemplate.pageSplitterWidth();

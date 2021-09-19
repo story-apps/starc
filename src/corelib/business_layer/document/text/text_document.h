@@ -24,11 +24,6 @@ public:
     ~SimpleTextDocument() override;
 
     /**
-     * @brief Задать идентификатор шаблона, с которым работает документ
-     */
-    void setTemplateId(const QString& _templateId);
-
-    /**
      * @brief Задать модель текста
      */
     void setModel(BusinessLayer::TextModel* _model, bool _canChangeModel = true);

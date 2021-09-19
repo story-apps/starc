@@ -1,4 +1,4 @@
-#include "text_template.h"
+#include "simple_text_template.h"
 
 #include <ui/widgets/text_edit/page/page_metrics.h>
 #include <ui/widgets/text_edit/page/page_text_edit.h>
@@ -18,8 +18,7 @@ namespace BusinessLayer {
 namespace {
 
 const QHash<TextParagraphType, QString> kTextParagraphTypeToString
-    = { { TextParagraphType::UnformattedText, QLatin1String("unformatted_text") },
-        { TextParagraphType::Heading1, QLatin1String("heading_1") },
+    = { { TextParagraphType::Heading1, QLatin1String("heading_1") },
         { TextParagraphType::Heading2, QLatin1String("heading_2") },
         { TextParagraphType::Heading3, QLatin1String("heading_3") },
         { TextParagraphType::Heading4, QLatin1String("heading_4") },

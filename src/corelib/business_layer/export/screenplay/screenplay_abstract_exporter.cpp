@@ -32,7 +32,7 @@ ScreenplayTextDocument* ScreenplayAbstractExporter::prepareDocument(
     //
     // ... параметры страницы
     //
-    const auto exportTemplate = TemplatesFacade::screenplayTemplate(_exportOptions.templateId);
+    const auto& exportTemplate = TemplatesFacade::screenplayTemplate(_exportOptions.templateId);
     textEdit.setPageFormat(exportTemplate.pageSizeId());
     textEdit.setPageMarginsMm(exportTemplate.pageMargins());
     textEdit.setPageNumbersAlignment(exportTemplate.pageNumbersAlignment());

@@ -12,6 +12,8 @@ class QXmlStreamAttributes;
 
 namespace BusinessLayer {
 
+class SimpleTextTemplate;
+
 /**
  * @brief Типы параграфов в сценарии
  */
@@ -306,7 +308,10 @@ private:
 class CORE_LIBRARY_EXPORT ScreenplayTemplate
 {
 public:
-    ScreenplayTemplate() = default;
+    ScreenplayTemplate();
+    ScreenplayTemplate(const ScreenplayTemplate& _other);
+    ScreenplayTemplate& operator=(const ScreenplayTemplate& _other);
+    ~ScreenplayTemplate();
 
     /**
      * @brief Назначить шаблон новым
@@ -370,6 +375,16 @@ public:
     qreal pageSplitterWidth() const;
 
     /**
+     * @brief Шаблон оформления титульной страницы
+     */
+    const SimpleTextTemplate& titlePageTemplate() const;
+
+    /**
+     * @brief Стандартный текст титульной страницы
+     */
+    const QString& titlePage() const;
+
+    /**
      * @brief Получить стиль блока
      */
     ScreenplayBlockStyle paragraphStyle(ScreenplayParagraphType _forType) const;
@@ -387,50 +402,8 @@ private:
     void load(const QString& _fromFile);
 
 private:
-    /**
-     * @brief Идентификатор
-     */
-    QString m_id;
-
-    /**
-     * @brief Является ли шаблон умолчальным
-     */
-    bool m_isDefault = false;
-
-    /**
-     * @brief Название
-     */
-    QString m_name;
-
-    /**
-     * @brief Описание
-     */
-    QString m_description;
-
-    /**
-     * @brief Формат страницы
-     */
-    QPageSize::PageSizeId m_pageSizeId;
-
-    /**
-     * @brief Поля страницы в миллиметрах
-     */
-    QMarginsF m_pageMargins;
-
-    /**
-     * @brief Расположение нумерации
-     */
-    Qt::Alignment m_pageNumbersAlignment;
-
-    /**
-     * @brief Процент от ширины страницы, которые занимает левая часть разделения
-     */
-    int m_leftHalfOfPageWidthPercents = 50;
-
-    /**
-     * @brief Стили блоков текста
-     */
-    QHash<ScreenplayParagraphType, ScreenplayBlockStyle> m_paragrapsStyles;
+    class Implementation;
+    QScopedPointer<Implementation> d;
 };
 
 /**

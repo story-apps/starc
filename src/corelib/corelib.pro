@@ -137,8 +137,8 @@ SOURCES += \
     business_layer/reports/screenplay/screenplay_summary_report.cpp \
     business_layer/templates/comic_book_template.cpp \
     business_layer/templates/screenplay_template.cpp \
+    business_layer/templates/simple_text_template.cpp \
     business_layer/templates/templates_facade.cpp \
-    business_layer/templates/text_template.cpp \
     data_layer/database.cpp \
     data_layer/mapper/abstract_mapper.cpp \
     data_layer/mapper/document_change_mapper.cpp \
@@ -328,8 +328,8 @@ HEADERS += \
     business_layer/reports/screenplay/screenplay_summary_report.h \
     business_layer/templates/comic_book_template.h \
     business_layer/templates/screenplay_template.h \
+    business_layer/templates/simple_text_template.h \
     business_layer/templates/templates_facade.h \
-    business_layer/templates/text_template.h \
     corelib_global.h \
     data_layer/database.h \
     data_layer/mapper/abstract_mapper.h \

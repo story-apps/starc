@@ -17,7 +17,6 @@ namespace BusinessLayer {
  */
 enum class TextParagraphType {
     Undefined,
-    UnformattedText,
     Heading1,
     Heading2,
     Heading3,

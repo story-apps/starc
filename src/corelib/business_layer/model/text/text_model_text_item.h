@@ -88,7 +88,8 @@ public:
      * @brief Форматирование в блоке
      */
     const QVector<TextFormat>& formats() const;
-    void setFormats(const QVector<QTextLayout::FormatRange>& _formats);
+    void setFormats(const QVector<QTextLayout::FormatRange>& _formats,
+                    const QTextCharFormat& _blockCharFormat);
 
     /**
      * @brief Редакторские заметки

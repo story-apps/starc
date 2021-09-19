@@ -2,7 +2,7 @@
 
 #include "../simple_text_edit.h"
 
-#include <business_layer/templates/text_template.h>
+#include <business_layer/templates/simple_text_template.h>
 
 #include <QKeyEvent>
 #include <QStringListModel>

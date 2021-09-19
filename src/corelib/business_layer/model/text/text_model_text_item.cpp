@@ -2,8 +2,7 @@
 
 #include "text_model_xml.h"
 
-#include <business_layer/templates/templates_facade.h>
-#include <business_layer/templates/text_template.h>
+#include <business_layer/templates/simple_text_template.h>
 #include <utils/helpers/measurement_helper.h>
 #include <utils/helpers/string_helper.h>
 #include <utils/helpers/text_helper.h>
@@ -531,21 +530,20 @@ const QVector<TextModelTextItem::TextFormat>& TextModelTextItem::formats() const
     return d->formats;
 }
 
-void TextModelTextItem::setFormats(const QVector<QTextLayout::FormatRange>& _formats)
+void TextModelTextItem::setFormats(const QVector<QTextLayout::FormatRange>& _formats,
+                                   const QTextCharFormat& _blockCharFormat)
 {
     QVector<TextFormat> newFormats;
-    const auto defaultBlockFormat
-        = TemplatesFacade::simpleTextTemplate().paragraphStyle(d->paragraphType);
     for (const auto& format : _formats) {
         if (format.start == 0 && format.length == d->text.length()
-            && format.format == defaultBlockFormat.charFormat()) {
+            && format.format == _blockCharFormat) {
             continue;
         }
 
         TextFormat newFormat;
         newFormat.from = format.start;
         newFormat.length = format.length;
-        if (format.format.font() != defaultBlockFormat.font()) {
+        if (format.format.font() != _blockCharFormat.font()) {
             newFormat.font = format.format.font();
         }
         if (format.format.hasProperty(QTextFormat::FontWeight)) {

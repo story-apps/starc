@@ -5,7 +5,7 @@
 #include "prepare_handler.h"
 #include "text_handler.h"
 
-#include <business_layer/templates/text_template.h>
+#include <business_layer/templates/simple_text_template.h>
 
 #include <QKeyEvent>
 #include <QTextBlock>

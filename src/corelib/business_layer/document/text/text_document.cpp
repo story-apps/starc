@@ -6,10 +6,11 @@
 #include <business_layer/model/text/text_model.h>
 #include <business_layer/model/text/text_model_chapter_item.h>
 #include <business_layer/model/text/text_model_text_item.h>
+#include <business_layer/templates/simple_text_template.h>
 #include <business_layer/templates/templates_facade.h>
-#include <business_layer/templates/text_template.h>
 #include <data_layer/storage/settings_storage.h>
 #include <data_layer/storage/storage_facade.h>
+#include <domain/document_object.h>
 #include <ui/widgets/text_edit/page/page_text_edit.h>
 #include <utils/helpers/text_helper.h>
 #include <utils/shugar.h>
@@ -64,7 +65,6 @@ public:
     SimpleTextDocument* q = nullptr;
 
     DocumentState state = DocumentState::Undefined;
-    QString templateId;
     QPointer<BusinessLayer::TextModel> model;
     bool canChangeModel = true;
     std::map<int, BusinessLayer::TextModelItem*> positionsToItems;
@@ -77,7 +77,10 @@ SimpleTextDocument::Implementation::Implementation(SimpleTextDocument* _document
 
 const SimpleTextTemplate& SimpleTextDocument::Implementation::documentTemplate() const
 {
-    return TemplatesFacade::simpleTextTemplate(templateId);
+    if (model->document()->type() == Domain::DocumentObjectType::ScreenplayTitlePage) {
+        return TemplatesFacade::screenplayTitlePageTemplate();
+    }
+    return TemplatesFacade::simpleTextTemplate();
 }
 
 void SimpleTextDocument::Implementation::correctPositionsToItems(
@@ -261,15 +264,6 @@ SimpleTextDocument::SimpleTextDocument(QObject* _parent)
 }
 
 SimpleTextDocument::~SimpleTextDocument() = default;
-
-void SimpleTextDocument::setTemplateId(const QString& _templateId)
-{
-    if (d->templateId == _templateId) {
-        return;
-    }
-
-    d->templateId = _templateId;
-}
 
 void SimpleTextDocument::setModel(BusinessLayer::TextModel* _model, bool _canChangeModel)
 {
@@ -1178,7 +1172,7 @@ void SimpleTextDocument::updateModelOnContentChange(int _position, int _charsRem
                 textItem->clearAlignment();
             }
             textItem->setText(block.text());
-            textItem->setFormats(block.textFormats());
+            textItem->setFormats(block.textFormats(), block.charFormat());
             textItem->setReviewMarks(block.textFormats());
 
             //
@@ -1372,7 +1366,7 @@ void SimpleTextDocument::updateModelOnContentChange(int _position, int _charsRem
                     textItem->clearAlignment();
                 }
                 textItem->setText(block.text());
-                textItem->setFormats(block.textFormats());
+                textItem->setFormats(block.textFormats(), block.charFormat());
                 textItem->setReviewMarks(block.textFormats());
             }
 

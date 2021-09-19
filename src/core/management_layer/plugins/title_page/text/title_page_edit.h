@@ -43,6 +43,11 @@ public:
     void redo();
 
     /**
+     * @brief Восстановить дефолтную титульную страницу из шаблона
+     */
+    void restoreFromTemplate();
+
+    /**
      * @brief Вставить новый блок
      * @param Тип блока
      */

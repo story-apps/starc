@@ -2,7 +2,7 @@
 
 #include "../title_page_edit.h"
 
-#include <business_layer/templates/text_template.h>
+#include <business_layer/templates/simple_text_template.h>
 
 using Ui::TitlePageEdit;
 
@@ -19,7 +19,7 @@ void TextHandler::handleEnter(QKeyEvent*)
     //
     // Вставляем ещё один блок текста
     //
-    editor()->addParagraph(BusinessLayer::TextParagraphType::UnformattedText);
+    editor()->addParagraph(BusinessLayer::TextParagraphType::Text);
 }
 
 void TextHandler::handleTab(QKeyEvent*)

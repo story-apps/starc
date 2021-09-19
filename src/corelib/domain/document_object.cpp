@@ -115,6 +115,11 @@ void DocumentObject::setContent(const QByteArray& _content)
     //
     // NOTE: Тут специально нет проверки, т.к. данные могут быть очень большими
     //
+    const int maximumComparableSize = 3000;
+    if (m_content.size() <= maximumComparableSize && _content.size() <= maximumComparableSize
+        && m_content == _content) {
+        return;
+    }
 
     m_content = _content;
     markChangesNotStored();

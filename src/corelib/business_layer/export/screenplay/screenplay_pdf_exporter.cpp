@@ -488,7 +488,7 @@ void ScreenplayPdfExporter::exportTo(ScreenplayTextModel* _model,
     //
     // Настраиваем принтер
     //
-    const auto exportTemplate = TemplatesFacade::screenplayTemplate(_exportOptions.templateId);
+    const auto& exportTemplate = TemplatesFacade::screenplayTemplate(_exportOptions.templateId);
     QPdfWriter printer(_exportOptions.filePath);
     printer.setPageSize(QPageSize(exportTemplate.pageSizeId()));
     printer.setPageMargins({});

@@ -40,6 +40,8 @@ public:
                                                                        = {});
     static const BusinessLayer::ScreenplayTemplate& screenplayTemplate(const QString& _templateId
                                                                        = {});
+    static const BusinessLayer::SimpleTextTemplate& screenplayTitlePageTemplate(
+        const QString& _templateId = {});
     static const BusinessLayer::ComicBookTemplate& comicBookTemplate(const QString& _templateId
                                                                      = {});
 

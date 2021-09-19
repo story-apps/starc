@@ -27,6 +27,7 @@ signals:
     void undoPressed();
     void redoPressed();
     void fontChanged(const QFont& _font);
+    void restoreTitlePagePressed();
 
 protected:
     /**
