@@ -1241,6 +1241,11 @@ ApplicationManager::ApplicationManager(QObject* _parent)
     fontDatabase.addApplicationFont(":/fonts/noto-sans-bold");
     fontDatabase.addApplicationFont(":/fonts/noto-sans-bold-italic");
     fontDatabase.addApplicationFont(":/fonts/noto-sans-italic");
+    //
+    fontDatabase.addApplicationFont(":/fonts/arial");
+    fontDatabase.addApplicationFont(":/fonts/arial-bold");
+    fontDatabase.addApplicationFont(":/fonts/arial-italic");
+    fontDatabase.addApplicationFont(":/fonts/arial-bold-italic");
     fontDatabase.addApplicationFont(":/fonts/courier-new");
     fontDatabase.addApplicationFont(":/fonts/courier-new-bold");
     fontDatabase.addApplicationFont(":/fonts/courier-new-italic");
