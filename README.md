@@ -1,3 +1,3 @@
 # STARC
 
-## Story Architect application is the best writers friend
+## Story Architect is a writer's best friend
