@@ -20,6 +20,10 @@
         <file alias="courier-new-italic">resources/fonts/courier-new-italic.ttf</file>
         <file alias="muktamalar-bold">resources/fonts/muktamalar-bold.ttf</file>
         <file alias="muktamalar-regular">resources/fonts/muktamalar-regular.ttf</file>
+        <file alias="arial">resources/fonts/arial.ttf</file>
+        <file alias="arial-bold">resources/fonts/arial-bold.ttf</file>
+        <file alias="arial-bold-italic">resources/fonts/arial-bold-italic.ttf</file>
+        <file alias="arial-italic">resources/fonts/arial-italic.ttf</file>
     </qresource>
     <qresource prefix="/images">
         <file alias="movie-poster">resources/images/movie-poster.jpg</file>
