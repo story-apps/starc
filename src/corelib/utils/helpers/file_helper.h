@@ -1,11 +1,13 @@
 #pragma once
 
+#include <corelib_global.h>
+
 class QString;
 
 /**
  * @brief Вспомогательные функции для работы с файлами
  */
-class FileHelper
+class CORE_LIBRARY_EXPORT FileHelper
 {
 public:
     /**
