@@ -9,6 +9,7 @@
 #include "screenplay_text_model_xml_writer.h"
 
 #include <business_layer/model/screenplay/screenplay_information_model.h>
+#include <business_layer/model/screenplay/text/screenplay_text_model_item.h>
 #include <business_layer/templates/screenplay_template.h>
 #include <domain/document_object.h>
 #include <utils/diff_match_patch/diff_match_patch_controller.h>
@@ -17,6 +18,7 @@
 #include <utils/tools/edit_distance.h>
 #include <utils/tools/model_index_path.h>
 
+#include <QDateTime>
 #include <QMimeData>
 #include <QXmlStreamReader>
 
@@ -216,7 +218,13 @@ ScreenplayTextModel::~ScreenplayTextModel() = default;
 void ScreenplayTextModel::appendItem(ScreenplayTextModelItem* _item,
                                      ScreenplayTextModelItem* _parentItem)
 {
-    if (_item == nullptr) {
+    appendItems({ _item }, _parentItem);
+}
+
+void ScreenplayTextModel::appendItems(const QVector<ScreenplayTextModelItem*>& _items,
+                                      ScreenplayTextModelItem* _parentItem)
+{
+    if (_items.isEmpty()) {
         return;
     }
 
@@ -224,14 +232,11 @@ void ScreenplayTextModel::appendItem(ScreenplayTextModelItem* _item,
         _parentItem = d->rootItem;
     }
 
-    if (_parentItem->hasChild(_item)) {
-        return;
-    }
-
     const QModelIndex parentIndex = indexForItem(_parentItem);
-    const int itemRow = _parentItem->childCount();
-    beginInsertRows(parentIndex, itemRow, itemRow);
-    _parentItem->insertItem(itemRow, _item);
+    const int fromItemRow = _parentItem->childCount();
+    const int toItemRow = fromItemRow + _items.size();
+    beginInsertRows(parentIndex, fromItemRow, toItemRow);
+    _parentItem->appendItems({ _items.begin(), _items.end() });
     d->updateNumbering();
     endInsertRows();
 
@@ -265,20 +270,26 @@ void ScreenplayTextModel::prependItem(ScreenplayTextModelItem* _item,
 void ScreenplayTextModel::insertItem(ScreenplayTextModelItem* _item,
                                      ScreenplayTextModelItem* _afterSiblingItem)
 {
-    if (_item == nullptr || _afterSiblingItem == nullptr
-        || _afterSiblingItem->parent() == nullptr) {
+    insertItems({ _item }, _afterSiblingItem);
+}
+
+void ScreenplayTextModel::insertItems(const QVector<ScreenplayTextModelItem*>& _items,
+                                      ScreenplayTextModelItem* _afterSiblingItem)
+{
+    if (_items.isEmpty()) {
+        return;
+    }
+
+    if (_afterSiblingItem == nullptr || _afterSiblingItem->parent() == nullptr) {
         return;
     }
 
     auto parentItem = _afterSiblingItem->parent();
-    if (parentItem->hasChild(_item)) {
-        return;
-    }
-
     const QModelIndex parentIndex = indexForItem(parentItem);
-    const int itemRowIndex = parentItem->rowOfChild(_afterSiblingItem) + 1;
-    beginInsertRows(parentIndex, itemRowIndex, itemRowIndex);
-    parentItem->insertItem(itemRowIndex, _item);
+    const int fromItemRow = parentItem->rowOfChild(_afterSiblingItem) + 1;
+    const int toItemRow = fromItemRow + _items.size();
+    beginInsertRows(parentIndex, fromItemRow, toItemRow);
+    parentItem->insertItems(fromItemRow, { _items.begin(), _items.end() });
     d->updateNumbering();
     endInsertRows();
 
@@ -288,7 +299,14 @@ void ScreenplayTextModel::insertItem(ScreenplayTextModelItem* _item,
 void ScreenplayTextModel::takeItem(ScreenplayTextModelItem* _item,
                                    ScreenplayTextModelItem* _parentItem)
 {
-    if (_item == nullptr) {
+    takeItems(_item, _item, _parentItem);
+}
+
+void ScreenplayTextModel::takeItems(ScreenplayTextModelItem* _fromItem,
+                                    ScreenplayTextModelItem* _toItem,
+                                    ScreenplayTextModelItem* _parentItem)
+{
+    if (_fromItem == nullptr || _toItem == nullptr || _fromItem->parent() != _toItem->parent()) {
         return;
     }
 
@@ -296,14 +314,16 @@ void ScreenplayTextModel::takeItem(ScreenplayTextModelItem* _item,
         _parentItem = d->rootItem;
     }
 
-    if (!_parentItem->hasChild(_item)) {
+    if (!_parentItem->hasChild(_fromItem) || !_parentItem->hasChild(_toItem)) {
         return;
     }
 
-    const QModelIndex parentItemIndex = indexForItem(_item).parent();
-    const int itemRowIndex = _parentItem->rowOfChild(_item);
-    beginRemoveRows(parentItemIndex, itemRowIndex, itemRowIndex);
-    _parentItem->takeItem(_item);
+    const QModelIndex parentItemIndex = indexForItem(_fromItem).parent();
+    const int fromItemRowIndex = _parentItem->rowOfChild(_fromItem);
+    const int toItemRowIndex = _parentItem->rowOfChild(_toItem);
+    Q_ASSERT(fromItemRowIndex <= toItemRowIndex);
+    beginRemoveRows(parentItemIndex, fromItemRowIndex, toItemRowIndex);
+    _parentItem->takeItems(fromItemRowIndex, toItemRowIndex);
     d->updateNumbering();
     endRemoveRows();
 

@@ -1742,13 +1742,27 @@ void ScreenplayTextDocument::updateModelOnContentChange(int _position, int _char
                             && previousItemRow < previousItem->parent()->childCount() - 1) {
                             const int nextItemRow = previousItemRow + 1;
                             auto nextItem = previousItem->parent()->childAt(nextItemRow);
-                            while (
-                                nextItem != nullptr
-                                && (nextItem->type() == ScreenplayTextModelItemType::Text
-                                    || nextItem->type() == ScreenplayTextModelItemType::Splitter)) {
-                                d->model->takeItem(nextItem, nextItem->parent());
-                                d->model->appendItem(nextItem, previousItem);
-                                nextItem = previousItem->parent()->childAt(nextItemRow);
+                            //
+                            // Подготовим элементы для переноса
+                            //
+                            QVector<ScreenplayTextModelItem*> itemsToMove;
+                            for (int itemRow = nextItemRow;
+                                 itemRow < previousItem->parent()->childCount(); ++itemRow) {
+                                if (nextItem == nullptr
+                                    || (nextItem->type() != ScreenplayTextModelItemType::Text
+                                        && nextItem->type()
+                                            != ScreenplayTextModelItemType::Splitter)) {
+                                    break;
+                                }
+
+                                itemsToMove.append(previousItem->parent()->childAt(itemRow));
+                                nextItem = previousItem->parent()->childAt(itemRow);
+                            }
+                            if (!itemsToMove.isEmpty()) {
+                                d->model->takeItems(itemsToMove.constFirst(),
+                                                    itemsToMove.constLast(),
+                                                    previousItem->parent());
+                                d->model->appendItems(itemsToMove, previousItem);
                             }
                         }
                     }
@@ -2025,10 +2039,12 @@ void ScreenplayTextDocument::updateModelOnContentChange(int _position, int _char
                     }();
 
                     //
-                    // Собственно переносим элементы
+                    // Соберём элементы для переноса
                     //
-                    while (grandParentItem->childCount() > itemIndex) {
-                        auto grandParentChildItem = grandParentItem->childAt(itemIndex);
+                    QVector<ScreenplayTextModelItem*> itemsToMove;
+                    for (int childIndex = itemIndex; childIndex < grandParentItem->childCount();
+                         ++childIndex) {
+                        auto grandParentChildItem = grandParentItem->childAt(childIndex);
                         if (grandParentChildItem->type() != ScreenplayTextModelItemType::Text) {
                             break;
                         }
@@ -2040,8 +2056,15 @@ void ScreenplayTextDocument::updateModelOnContentChange(int _position, int _char
                             break;
                         }
 
-                        d->model->takeItem(grandParentChildItem, grandParentItem);
-                        d->model->appendItem(grandParentChildItem, parentItem);
+                        itemsToMove.append(grandParentChildItem);
+                    }
+                    //
+                    // ... собственно переносим элементы
+                    //
+                    if (!itemsToMove.isEmpty()) {
+                        d->model->takeItems(itemsToMove.constFirst(), itemsToMove.constLast(),
+                                            grandParentItem);
+                        d->model->appendItems(itemsToMove, parentItem);
                     }
                 }
                 //
@@ -2052,12 +2075,14 @@ void ScreenplayTextDocument::updateModelOnContentChange(int _position, int _char
                          && previousItem->parent()->type() == ScreenplayTextModelItemType::Scene) {
                     auto grandParentItem = previousItem->parent();
                     const int lastItemIndex = grandParentItem->rowOfChild(previousItem) + 1;
+
                     //
-                    // Собственно переносим элементы
+                    // Соберём элементы для переноса
                     //
-                    while (grandParentItem->childCount() > lastItemIndex) {
-                        auto grandParentChildItem
-                            = grandParentItem->childAt(grandParentItem->childCount() - 1);
+                    QVector<ScreenplayTextModelItem*> itemsToMove;
+                    for (int childIndex = lastItemIndex; childIndex < grandParentItem->childCount();
+                         ++childIndex) {
+                        auto grandParentChildItem = grandParentItem->childAt(childIndex);
                         if (grandParentChildItem->type() != ScreenplayTextModelItemType::Text) {
                             break;
                         }
@@ -2069,8 +2094,15 @@ void ScreenplayTextDocument::updateModelOnContentChange(int _position, int _char
                             break;
                         }
 
-                        d->model->takeItem(grandParentChildItem, grandParentItem);
-                        d->model->insertItem(grandParentChildItem, parentItem);
+                        itemsToMove.append(grandParentChildItem);
+                    }
+                    //
+                    // ... собственно переносим элементы
+                    //
+                    if (!itemsToMove.isEmpty()) {
+                        d->model->takeItems(itemsToMove.constFirst(), itemsToMove.constLast(),
+                                            grandParentItem);
+                        d->model->appendItems(itemsToMove, parentItem);
                     }
                 }
             }

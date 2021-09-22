@@ -1,5 +1,7 @@
 #include "abstract_model_item.h"
 
+#include <utils/shugar.h>
+
 #include <QVector>
 
 
@@ -33,51 +35,99 @@ AbstractModelItem::~AbstractModelItem() = default;
 
 void AbstractModelItem::prependItem(AbstractModelItem* _item)
 {
-    //
-    // Устанавливаем себя родителем
-    //
-    _item->d->parent = this;
+    prependItems({ _item });
+}
 
-    //
-    // Добавляем элемент в список детей
-    //
-    d->children.prepend(_item);
+void AbstractModelItem::prependItems(const QVector<AbstractModelItem*>& _items)
+{
+    for (auto item : _items) {
+        if (item->parent() == this) {
+            continue;
+        }
+
+        item->d->parent = this;
+        d->children.prepend(item);
+    }
+
+    setChanged(true);
 }
 
 void AbstractModelItem::appendItem(AbstractModelItem* _item)
 {
-    //
-    // Устанавливаем себя родителем
-    //
-    _item->d->parent = this;
+    appendItems({ _item });
+}
 
-    //
-    // Добавляем элемент в список детей
-    //
-    d->children.append(_item);
+void AbstractModelItem::appendItems(const QVector<AbstractModelItem*>& _items)
+{
+    for (auto item : _items) {
+        if (item->parent() == this) {
+            continue;
+        }
+
+        item->d->parent = this;
+        d->children.append(item);
+    }
+
+    setChanged(true);
 }
 
 void AbstractModelItem::insertItem(int _index, AbstractModelItem* _item)
 {
-    _item->d->parent = this;
-    d->children.insert(_index, _item);
+    insertItems(_index, { _item });
+}
+
+void AbstractModelItem::insertItems(int _index, const QVector<AbstractModelItem*>& _items)
+{
+    for (auto item : reversed(_items)) {
+        if (item->parent() == this) {
+            continue;
+        }
+
+        item->d->parent = this;
+        d->children.insert(_index, item);
+    }
 
     setChanged(true);
 }
 
 void AbstractModelItem::removeItem(AbstractModelItem* _item)
 {
-    d->children.removeOne(_item);
-    delete _item;
-    _item = nullptr;
+    const auto itemIndex = rowOfChild(_item);
+    removeItems(itemIndex, itemIndex);
+}
+
+void AbstractModelItem::removeItems(int _fromIndex, int _toIndex)
+{
+    for (int index = _toIndex; index >= _fromIndex; --index) {
+        if (d->children[index]->parent() != this) {
+            continue;
+        }
+
+        auto item = d->children[index];
+        d->children.removeAt(index);
+        delete item;
+        item = nullptr;
+    }
 
     setChanged(true);
 }
 
 void AbstractModelItem::takeItem(AbstractModelItem* _item)
 {
-    _item->setParent(nullptr);
-    d->children.removeOne(_item);
+    const auto itemIndex = rowOfChild(_item);
+    takeItems(itemIndex, itemIndex);
+}
+
+void AbstractModelItem::takeItems(int _fromIndex, int _toIndex)
+{
+    for (int index = _toIndex; index >= _fromIndex; --index) {
+        if (d->children[index]->parent() != this) {
+            continue;
+        }
+
+        d->children[index]->setParent(nullptr);
+        d->children.removeAt(index);
+    }
 
     setChanged(true);
 }

@@ -27,6 +27,8 @@ public:
      * @brief Добавить элемент в конец
      */
     void appendItem(ScreenplayTextModelItem* _item, ScreenplayTextModelItem* _parentItem = nullptr);
+    void appendItems(const QVector<ScreenplayTextModelItem*>& _items,
+                     ScreenplayTextModelItem* _parentItem = nullptr);
 
     /**
      * @brief Добавить элемент в начало
@@ -38,11 +40,15 @@ public:
      * @brief Вставить элемент после заданного
      */
     void insertItem(ScreenplayTextModelItem* _item, ScreenplayTextModelItem* _afterSiblingItem);
+    void insertItems(const QVector<ScreenplayTextModelItem*>& _items,
+                     ScreenplayTextModelItem* _afterSiblingItem);
 
     /**
      * @brief Извлечь заданный элемент без удаления
      */
     void takeItem(ScreenplayTextModelItem* _item, ScreenplayTextModelItem* _parentItem = nullptr);
+    void takeItems(ScreenplayTextModelItem* _fromItem, ScreenplayTextModelItem* _toItem,
+                   ScreenplayTextModelItem* _parentItem = nullptr);
 
     /**
      * @brief Удалить заданный элемент

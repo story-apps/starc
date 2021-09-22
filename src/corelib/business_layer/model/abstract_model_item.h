@@ -28,26 +28,31 @@ public:
      * @brief Добавить элемент в начало
      */
     void prependItem(AbstractModelItem* _item);
+    void prependItems(const QVector<AbstractModelItem*>& _items);
 
     /**
      * @brief Добавить элемент в конец
      */
     void appendItem(AbstractModelItem* _item);
+    void appendItems(const QVector<AbstractModelItem*>& _items);
 
     /**
      * @brief Вставить элемент в указанное место
      */
     void insertItem(int _index, AbstractModelItem* _item);
+    void insertItems(int _index, const QVector<AbstractModelItem*>& _items);
 
     /**
      * @brief Удалить элемент
      */
     void removeItem(AbstractModelItem* _item);
+    void removeItems(int _fromIndex, int _toIndex);
 
     /**
      * @brief Извлечь элемент не удаляя его
      */
     void takeItem(AbstractModelItem* _item);
+    void takeItems(int _fromIndex, int _toIndex);
 
     /**
      * @brief Имеет ли элемент родительский элемент
