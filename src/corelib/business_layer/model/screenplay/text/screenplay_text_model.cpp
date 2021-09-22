@@ -901,9 +901,23 @@ void ScreenplayTextModel::insertFromMime(const QModelIndex& _index, int _positio
     contentReader.readNextStartElement();
     bool isFirstTextItemHandled = false;
     ScreenplayTextModelItem* lastItem = item;
+    ScreenplayTextModelItem* insertAfterItem = lastItem;
+    QVector<ScreenplayTextModelItem*> itemsToInsert;
+    auto insertCollectedItems = [this, &insertAfterItem, &itemsToInsert] {
+        insertItems(itemsToInsert, insertAfterItem);
+        itemsToInsert.clear();
+    };
     while (!contentReader.atEnd()) {
         const auto currentTag = contentReader.name();
+
+        //
+        // Если дошли до конца
+        //
         if (currentTag == xml::kDocumentTag) {
+            //
+            // ... поместим в модель, все собранные элементы
+            //
+            insertCollectedItems();
             break;
         }
 
@@ -917,6 +931,10 @@ void ScreenplayTextModel::insertFromMime(const QModelIndex& _index, int _positio
                 || lastItem->type() == ScreenplayTextModelItemType::Splitter)
             && lastItem->parent()->type() == ScreenplayTextModelItemType::Scene) {
             //
+            // ... вставим в модель, всё, что было собрано
+            //
+            insertCollectedItems();
+            //
             // ... и при этом вырезаем из него все текстовые блоки, идущие до конца сцены/папки
             //
             auto lastItemParent = lastItem->parent();
@@ -929,6 +947,7 @@ void ScreenplayTextModel::insertFromMime(const QModelIndex& _index, int _positio
             // Собственно берём родителя вместо самого элемента
             //
             lastItem = lastItemParent;
+            insertAfterItem = lastItemParent;
         }
 
 
@@ -966,7 +985,7 @@ void ScreenplayTextModel::insertFromMime(const QModelIndex& _index, int _positio
         }
 
         if (newItem != nullptr) {
-            insertItem(newItem, lastItem);
+            itemsToInsert.append(newItem);
             lastItem = newItem;
         }
     }
