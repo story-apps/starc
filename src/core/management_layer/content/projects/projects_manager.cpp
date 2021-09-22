@@ -11,6 +11,7 @@
 #include <ui/projects/projects_view.h>
 #include <ui/widgets/dialog/dialog.h>
 #include <utils/helpers/dialog_helper.h>
+#include <utils/helpers/file_helper.h>
 
 #include <QCryptographicHash>
 #include <QDateTime>
@@ -204,8 +205,9 @@ void ProjectsManager::createProject()
             DataStorageLayer::SettingsStorage::SettingsPlace::Application);
 
         if (dialog->isLocal()) {
-            auto projectPath
-                = dialog->projectFolder() + "/" + dialog->projectName() + Project::extension();
+            const auto projectPathPrefix = dialog->projectFolder() + "/"
+                + FileHelper::systemSavebleFileName(dialog->projectName());
+            auto projectPath = projectPathPrefix + Project::extension();
             //
             // Ситуация, что файл с таким названием уже существует крайне редка, хотя и
             // гипотетически возможна
@@ -215,7 +217,7 @@ void ProjectsManager::createProject()
                 // ... в таком случае добавляем метку с датой и временем создания файла, чтобы имена
                 // не пересекались
                 //
-                projectPath = dialog->projectFolder() + "/" + dialog->projectName() + "_"
+                projectPath = projectPathPrefix + "_"
                     + QDateTime::currentDateTime().toString("yyyy_MM_dd_hh_mm_ss")
                     + Project::extension();
             }
