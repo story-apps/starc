@@ -54,6 +54,7 @@ public:
      * @brief Удалить заданный элемент
      */
     void removeItem(ScreenplayTextModelItem* _item);
+    void removeItems(ScreenplayTextModelItem* _fromItem, ScreenplayTextModelItem* _toItem);
 
     /**
      * @brief Обновить заданный элемент

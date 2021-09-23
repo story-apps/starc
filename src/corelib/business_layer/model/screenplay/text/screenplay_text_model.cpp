@@ -234,7 +234,7 @@ void ScreenplayTextModel::appendItems(const QVector<ScreenplayTextModelItem*>& _
 
     const QModelIndex parentIndex = indexForItem(_parentItem);
     const int fromItemRow = _parentItem->childCount();
-    const int toItemRow = fromItemRow + _items.size();
+    const int toItemRow = fromItemRow + _items.size() - 1;
     beginInsertRows(parentIndex, fromItemRow, toItemRow);
     _parentItem->appendItems({ _items.begin(), _items.end() });
     d->updateNumbering();
@@ -287,7 +287,7 @@ void ScreenplayTextModel::insertItems(const QVector<ScreenplayTextModelItem*>& _
     auto parentItem = _afterSiblingItem->parent();
     const QModelIndex parentIndex = indexForItem(parentItem);
     const int fromItemRow = parentItem->rowOfChild(_afterSiblingItem) + 1;
-    const int toItemRow = fromItemRow + _items.size();
+    const int toItemRow = fromItemRow + _items.size() - 1;
     beginInsertRows(parentIndex, fromItemRow, toItemRow);
     parentItem->insertItems(fromItemRow, { _items.begin(), _items.end() });
     d->updateNumbering();
@@ -319,11 +319,11 @@ void ScreenplayTextModel::takeItems(ScreenplayTextModelItem* _fromItem,
     }
 
     const QModelIndex parentItemIndex = indexForItem(_fromItem).parent();
-    const int fromItemRowIndex = _parentItem->rowOfChild(_fromItem);
-    const int toItemRowIndex = _parentItem->rowOfChild(_toItem);
-    Q_ASSERT(fromItemRowIndex <= toItemRowIndex);
-    beginRemoveRows(parentItemIndex, fromItemRowIndex, toItemRowIndex);
-    _parentItem->takeItems(fromItemRowIndex, toItemRowIndex);
+    const int fromItemRow = _parentItem->rowOfChild(_fromItem);
+    const int toItemRow = _parentItem->rowOfChild(_toItem);
+    Q_ASSERT(fromItemRow <= toItemRow);
+    beginRemoveRows(parentItemIndex, fromItemRow, toItemRow);
+    _parentItem->takeItems(fromItemRow, toItemRow);
     d->updateNumbering();
     endRemoveRows();
 
@@ -332,15 +332,24 @@ void ScreenplayTextModel::takeItems(ScreenplayTextModelItem* _fromItem,
 
 void ScreenplayTextModel::removeItem(ScreenplayTextModelItem* _item)
 {
-    if (_item == nullptr || _item->parent() == nullptr) {
+    removeItems(_item, _item);
+}
+
+void ScreenplayTextModel::removeItems(ScreenplayTextModelItem* _fromItem,
+                                      ScreenplayTextModelItem* _toItem)
+{
+    if (_fromItem == nullptr || _fromItem->parent() == nullptr || _toItem == nullptr
+        || _toItem->parent() == nullptr || _fromItem->parent() != _toItem->parent()) {
         return;
     }
 
-    auto parentItem = _item->parent();
-    const QModelIndex itemParentIndex = indexForItem(_item).parent();
-    const int itemRowIndex = parentItem->rowOfChild(_item);
-    beginRemoveRows(itemParentIndex, itemRowIndex, itemRowIndex);
-    parentItem->removeItem(_item);
+    auto parentItem = _fromItem->parent();
+    const QModelIndex itemParentIndex = indexForItem(_fromItem).parent();
+    const int fromItemRow = parentItem->rowOfChild(_fromItem);
+    const int toItemRow = parentItem->rowOfChild(_toItem);
+    Q_ASSERT(fromItemRow <= toItemRow);
+    beginRemoveRows(itemParentIndex, fromItemRow, toItemRow);
+    parentItem->removeItems(fromItemRow, toItemRow);
     d->updateNumbering();
     endRemoveRows();
 
