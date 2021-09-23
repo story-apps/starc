@@ -106,10 +106,14 @@ void ComicBookDictionariesModel::initDocument()
     };
     const QVector<QString> defaultSinglePageIntros = { "page", tr("page") };
     fillDictionary({}, defaultSinglePageIntros, d->singlePageIntros);
-    const QVector<QString> defaultMultiplePageIntros = { "pages", tr("pages") };
+    const QVector<QString> defaultMultiplePageIntros = { "pages",
+                                                         //: Comic book title pages
+                                                         tr("pages") };
     fillDictionary({}, defaultMultiplePageIntros, d->multiplePageIntros);
     //
-    const QVector<QString> defaultPanelIntros = { "panel", tr("panel"), "panels", tr("panels") };
+    const QVector<QString> defaultPanelIntros = { "panel",
+                                                  //: Comic book panel intro
+                                                  tr("panel") };
     fillDictionary({}, defaultPanelIntros, d->panelIntros);
     //
     const QVector<QString> defaultCommonCharacters = { tr("CAPTION"), tr("NARRATION"), tr("SFX") };

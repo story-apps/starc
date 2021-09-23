@@ -10,6 +10,8 @@ namespace Ui {
  */
 class ComicBookTextStructureDelegate : public QStyledItemDelegate
 {
+    Q_OBJECT
+
 public:
     explicit ComicBookTextStructureDelegate(QObject* _parent = nullptr);
     ~ComicBookTextStructureDelegate() override;
