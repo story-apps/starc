@@ -419,7 +419,7 @@
     <message>
         <location filename="../../corelib/business_layer/templates/screenplay_template.cpp" line="69"/>
         <source>Scene characters</source>
-        <translation>Scene characters</translation>
+        <translation>Cast list</translation>
     </message>
     <message>
         <location filename="../../corelib/business_layer/templates/screenplay_template.cpp" line="71"/>
@@ -3446,7 +3446,7 @@ from 2 Gb</translation>
     <message>
         <location filename="../management_layer/plugins/screenplay_text/screenplay_text_view.cpp" line="650"/>
         <source>Scene characters</source>
-        <translation>Scene characters</translation>
+        <translation>Cast list</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/screenplay_text/screenplay_text_view.cpp" line="651"/>
