@@ -3639,9 +3639,8 @@ void PageTextEdit::setHighlightCurrentLine(bool _highlight)
 ContextMenu* PageTextEdit::createContextMenu(const QPoint& _position, QWidget* _parent)
 {
     auto cursor = cursorForPosition(_position);
-    const auto selection = std::minmax(textCursor().selectionStart(), textCursor().selectionEnd());
-    const int startPosition = selection.first;
-    const int lastPosition = selection.second;
+    const int startPosition = std::min(textCursor().selectionStart(), textCursor().selectionEnd());
+    const int lastPosition = std::max(textCursor().selectionStart(), textCursor().selectionEnd());
     if (startPosition <= cursor.position() && cursor.position() <= lastPosition) {
         //
         // Оставляем выделение как есть

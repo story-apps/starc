@@ -51,9 +51,8 @@ void updateSelectionFormatting(QTextCursor _cursor, Func updateFormat)
 
     _cursor.beginEditBlock();
 
-    const auto positionInterval = std::minmax(_cursor.selectionStart(), _cursor.selectionEnd());
-    int position = positionInterval.first;
-    const int lastPosition = positionInterval.second;
+    int position = std::min(_cursor.selectionStart(), _cursor.selectionEnd());
+    const int lastPosition = std::max(_cursor.selectionStart(), _cursor.selectionEnd());
     while (position < lastPosition) {
         const auto block = _cursor.document()->findBlock(position);
         for (const auto& format : block.textFormats()) {
@@ -250,9 +249,8 @@ void BaseTextEdit::setTextFont(const QFont& _font)
 void BaseTextEdit::setTextAlignment(Qt::Alignment _alignment)
 {
     auto cursor = textCursor();
-    const auto positionInterval = std::minmax(cursor.selectionStart(), cursor.selectionEnd());
-    const int startPosition = positionInterval.first;
-    const int lastPosition = positionInterval.second;
+    const int startPosition = std::min(cursor.selectionStart(), cursor.selectionEnd());
+    const int lastPosition = std::max(cursor.selectionStart(), cursor.selectionEnd());
     cursor.setPosition(startPosition);
     do {
         auto blockFormat = cursor.blockFormat();
@@ -265,7 +263,7 @@ void BaseTextEdit::setTextAlignment(Qt::Alignment _alignment)
         cursor.movePosition(QTextCursor::NextBlock);
     } while (!cursor.atEnd() && cursor.position() < lastPosition);
 
-    cursor.setPosition(positionInterval.second);
+    cursor.setPosition(lastPosition);
     setTextCursor(cursor);
 }
 
