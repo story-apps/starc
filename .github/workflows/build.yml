@@ -1,7 +1,7 @@
 name: Build
 
 env:
-  APP_VERSION: 0.0.8
+  APP_VERSION: 0.0.9
 
 on:
   push:
@@ -28,7 +28,7 @@ jobs:
       - name: Install Qt
         uses: jurplel/install-qt-action@v2
         with:
-          version: 5.15.1
+          version: 5.15.2
           target: desktop
 
       - name: Install dependencies
@@ -80,7 +80,7 @@ jobs:
       - name: Install Qt
         uses: jurplel/install-qt-action@v2
         with:
-          version: 5.15.1
+          version: 5.15.2
           arch: win64_msvc2019_64
           target: desktop
 
@@ -150,7 +150,7 @@ jobs:
       - name: Install Qt
         uses: jurplel/install-qt-action@v2
         with:
-          version: 5.15.1
+          version: 5.15.2
           arch: win32_msvc2019
           target: desktop
 
