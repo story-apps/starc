@@ -190,6 +190,11 @@ ScreenplayTextModelSceneItem::ScreenplayTextModelSceneItem(QXmlStreamReader& _co
 
 ScreenplayTextModelSceneItem::~ScreenplayTextModelSceneItem() = default;
 
+QUuid ScreenplayTextModelSceneItem::uuid() const
+{
+    return d->uuid;
+}
+
 ScreenplayTextModelSceneItem::Number ScreenplayTextModelSceneItem::number() const
 {
     if (!d->number.has_value()) {
@@ -250,6 +255,11 @@ void ScreenplayTextModelSceneItem::setColor(const QColor& _color)
 
     d->color = _color;
     setChanged(true);
+}
+
+QString ScreenplayTextModelSceneItem::heading() const
+{
+    return d->heading;
 }
 
 std::chrono::milliseconds ScreenplayTextModelSceneItem::duration() const
