@@ -154,7 +154,6 @@ HEADERS += \
 
 RESOURCES += \
     resources.qrc \
-    templates.qrc \
     translations.qrc
 
 mac {

@@ -439,3 +439,6 @@ HEADERS += \
     utils/tools/model_index_path.h \
     utils/tools/run_once.h \
     utils/validators/email_validator.h
+
+RESOURCES += \
+    templates.qrc

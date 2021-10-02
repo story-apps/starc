@@ -7,6 +7,7 @@
 #include <chrono>
 
 class QColor;
+class QUuid;
 class QXmlStreamReader;
 
 
@@ -46,6 +47,11 @@ public:
     ~ScreenplayTextModelSceneItem() override;
 
     /**
+     * @brief Идентификатор сцены
+     */
+    QUuid uuid() const;
+
+    /**
      * @brief Номер сцены
      */
     Number number() const;
@@ -56,6 +62,11 @@ public:
      */
     QColor color() const;
     void setColor(const QColor& _color);
+
+    /**
+     * @brief Заголовок сцены
+     */
+    QString heading() const;
 
     /**
      * @brief Длительность сцены
