@@ -1,0 +1,62 @@
+name: Build Starc API
+
+env:
+  APP_VERSION: 0.0.1
+
+on:
+  push:
+    branch: master
+  pull_request:
+
+jobs:
+  build_linux:
+    name: Build Linux version
+    runs-on: ubuntu-18.04
+    timeout-minutes: 60
+    steps:
+      - name: Checkout Sources for push event
+        if: ${{ github.event_name == 'push' }}
+        uses: actions/checkout@master
+        with:
+          token: ${{ secrets.ACTION_RUNNER }}
+          submodules: recursive
+
+      - name: Checkout Sources for pull request event
+        if: ${{ github.event_name == 'pull_request' }}
+        uses: actions/checkout@master
+
+      - name: Install Qt
+        uses: jurplel/install-qt-action@v2
+        with:
+          version: 5.15.2
+          target: desktop
+
+      - name: Install dependencies
+        shell: bash
+        run: |
+          sudo apt update
+          sudo apt install libgstreamer-plugins-base1.0-0
+
+      - name: Run QMake
+        shell: bash
+        run: |
+          cd src
+          qmake starc.pro
+
+      - name: Build
+        shell: bash
+        run: |
+          cd src
+          make -j$(nproc)
+
+      - name: Make AppImage
+        shell: bash
+        run: |
+          cd build/linux
+          ./make-starc-api-image.sh ${{env.APP_VERSION}}
+
+      - name: Collect artifacts
+        uses: actions/upload-artifact@v2
+        with:
+          name: linux packages
+          path: build/linux/starc-${{env.APP_VERSION}}.AppImage

@@ -194,7 +194,7 @@ QJsonObject postStories(const QString& _importFileName)
 
 QJsonObject getCharacters(const QString& _starcFileName)
 {
-    const auto starcFilePath = "/tmp/" + _starcFileName;
+    const auto starcFilePath = "/tmp/" + _starcFileName + ".starc";
     if (!QFile::exists(starcFilePath)) {
         return errorResult(Error::DocumentNotFound);
     }
@@ -442,7 +442,7 @@ QJsonObject getCharacters(const QString& _starcFileName)
 
 QJsonObject getCharacter(const QString& _starcFileName, const QString& _characterName)
 {
-    const auto starcFilePath = "/tmp/" + _starcFileName;
+    const auto starcFilePath = "/tmp/" + _starcFileName + ".starc";
     if (!QFile::exists(starcFilePath)) {
         return errorResult(Error::DocumentNotFound);
     }
