@@ -56,6 +56,7 @@ Completer::Implementation::Implementation(QWidget* _parent)
     : popup(new TreeView(_parent))
     , popupDelegate(new TreeDelegate(popup))
 {
+    popup->setEditTriggers(QAbstractItemView::NoEditTriggers);
     popup->setHeaderHidden(true);
     popup->setRootIsDecorated(false);
     popup->setMouseTracking(true);
@@ -150,23 +151,23 @@ void Completer::showCompleter(const QRect& _rect)
     // FIXME: разобраться с проблемами backing store в маке
     // FIXME: в винде тоже не работает как хотелось бы, какие-то моргания
     //
-#ifdef Q_OS_LINUX
-    const int finalHeight = static_cast<int>(std::min(maxVisibleItems(), completionCount())
-                                             * Ui::DesignSystem::treeOneLineItem().height());
-    if (d->popupHeightAnimation.state() == QVariantAnimation::Stopped) {
-        d->popup->resize(d->popup->width(), d->popupHeightAnimation.startValue().toInt());
-        d->popupHeightAnimation.setEndValue(finalHeight);
-        d->popupHeightAnimation.start();
-    } else {
-        d->popup->resize(d->popup->width(), d->popupHeightAnimation.currentValue().toInt());
-        if (d->popupHeightAnimation.endValue().toInt() != finalHeight) {
-            d->popupHeightAnimation.stop();
-            d->popupHeightAnimation.setStartValue(d->popupHeightAnimation.currentValue());
-            d->popupHeightAnimation.setEndValue(finalHeight);
-            d->popupHeightAnimation.start();
-        }
-    }
-#endif
+    //#ifdef Q_OS_LINUX
+    //    const int finalHeight = static_cast<int>(std::min(maxVisibleItems(), completionCount())
+    //                                             * Ui::DesignSystem::treeOneLineItem().height());
+    //    if (d->popupHeightAnimation.state() == QVariantAnimation::Stopped) {
+    //        d->popup->resize(d->popup->width(), d->popupHeightAnimation.startValue().toInt());
+    //        d->popupHeightAnimation.setEndValue(finalHeight);
+    //        d->popupHeightAnimation.start();
+    //    } else {
+    //        d->popup->resize(d->popup->width(), d->popupHeightAnimation.currentValue().toInt());
+    //        if (d->popupHeightAnimation.endValue().toInt() != finalHeight) {
+    //            d->popupHeightAnimation.stop();
+    //            d->popupHeightAnimation.setStartValue(d->popupHeightAnimation.currentValue());
+    //            d->popupHeightAnimation.setEndValue(finalHeight);
+    //            d->popupHeightAnimation.start();
+    //        }
+    //    }
+    //#endif
 }
 
 void Completer::closeCompleter()

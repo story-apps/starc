@@ -357,6 +357,16 @@ void ScreenplayTextEdit::keyPressEvent(QKeyEvent* _event)
     }
 }
 
+void ScreenplayTextEdit::inputMethodEvent(QInputMethodEvent* _event)
+{
+    BaseTextEdit::inputMethodEvent(_event);
+
+    if (!_event->commitString().isEmpty()) {
+        auto handler = KeyProcessingLayer::KeyPressHandlerFacade::instance(this);
+        handler->handle(_event);
+    }
+}
+
 bool ScreenplayTextEdit::keyPressEventReimpl(QKeyEvent* _event)
 {
     bool isEventHandled = true;
