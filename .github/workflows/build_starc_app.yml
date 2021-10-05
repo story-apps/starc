@@ -1,12 +1,13 @@
-name: Build Starc app
+name: Build Starc
 
 env:
   APP_VERSION: 0.0.9
 
 on:
   push:
-    branch: master
+    branches: [ master ]
   pull_request:
+    branches: [ master ]
 
 jobs:
   build_linux:
