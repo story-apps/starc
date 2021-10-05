@@ -1,12 +1,13 @@
-name: Build Starc API
+name: Build
 
 env:
   APP_VERSION: 0.0.1
 
 on:
   push:
-    branch: master
+    branches: [ master ]
   pull_request:
+    branches: [ master ]
 
 jobs:
   build_linux:
@@ -59,4 +60,4 @@ jobs:
         uses: actions/upload-artifact@v2
         with:
           name: linux packages
-          path: build/linux/starc-${{env.APP_VERSION}}.AppImage
+          path: build/linux/starc-api-${{env.APP_VERSION}}.AppImage
