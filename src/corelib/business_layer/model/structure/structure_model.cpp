@@ -580,9 +580,11 @@ bool StructureModel::canDropMimeData(const QMimeData* _data, Qt::DropAction _act
     // ... персонажей и локации можно перетаскивать только внутри родительского элемента
     //
     else if (hasCharacters) {
-        return dropTarget->type() == Domain::DocumentObjectType::Characters;
+        return dropTarget->type() == Domain::DocumentObjectType::Characters
+            || dropTarget->type() == Domain::DocumentObjectType::RecycleBin;
     } else if (hasLocations) {
-        return dropTarget->type() == Domain::DocumentObjectType::Locations;
+        return dropTarget->type() == Domain::DocumentObjectType::Locations
+            || dropTarget->type() == Domain::DocumentObjectType::RecycleBin;
     }
     //
     // ... остальные случаи
