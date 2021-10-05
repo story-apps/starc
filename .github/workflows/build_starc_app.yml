@@ -1,12 +1,13 @@
-name: Build
+name: Build Starc
 
 env:
   APP_VERSION: 0.0.9
 
 on:
   push:
-    branch: master
+    branches: [ master ]
   pull_request:
+    branches: [ master ]
 
 jobs:
   build_linux:
@@ -53,7 +54,7 @@ jobs:
         shell: bash
         run: |
           cd build/linux
-          ./make-app-image.sh ${{env.APP_VERSION}}
+          ./make-starc-app-image.sh ${{env.APP_VERSION}}
 
       - name: Collect artifacts
         uses: actions/upload-artifact@v2

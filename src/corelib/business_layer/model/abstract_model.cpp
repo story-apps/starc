@@ -240,6 +240,7 @@ void AbstractModel::applyPatch(const QByteArray& _patch)
 
 AbstractImageWrapper* AbstractModel::imageWrapper() const
 {
+    Q_ASSERT(d->image);
     return d->image;
 }
 
