@@ -1,0 +1,202 @@
+name: Build Starc app
+
+env:
+  APP_VERSION: 0.0.9
+
+on:
+  push:
+    branch: master
+  pull_request:
+
+jobs:
+  build_linux:
+    name: Build Linux version
+    runs-on: ubuntu-18.04
+    timeout-minutes: 60
+    steps:
+      - name: Checkout Sources for push event
+        if: ${{ github.event_name == 'push' }}
+        uses: actions/checkout@master
+        with:
+          token: ${{ secrets.ACTION_RUNNER }}
+          submodules: recursive
+
+      - name: Checkout Sources for pull request event
+        if: ${{ github.event_name == 'pull_request' }}
+        uses: actions/checkout@master
+
+      - name: Install Qt
+        uses: jurplel/install-qt-action@v2
+        with:
+          version: 5.15.2
+          target: desktop
+
+      - name: Install dependencies
+        shell: bash
+        run: |
+          sudo apt update
+          sudo apt install libgstreamer-plugins-base1.0-0
+
+      - name: Run QMake
+        shell: bash
+        run: |
+          cd src
+          qmake starc.pro
+
+      - name: Build
+        shell: bash
+        run: |
+          cd src
+          make -j$(nproc)
+
+      - name: Make AppImage
+        shell: bash
+        run: |
+          cd build/linux
+          ./make-starc-app-image.sh ${{env.APP_VERSION}}
+
+      - name: Collect artifacts
+        uses: actions/upload-artifact@v2
+        with:
+          name: linux packages
+          path: build/linux/starc-${{env.APP_VERSION}}.AppImage
+
+  build_windows_64:
+    name: Build Windows 64 version
+    runs-on: windows-latest
+    timeout-minutes: 60
+    steps:
+      - name: Checkout Sources for push event
+        if: ${{ github.event_name == 'push' }}
+        uses: actions/checkout@master
+        with:
+          token: ${{ secrets.ACTION_RUNNER }}
+          submodules: recursive
+
+      - name: Checkout Sources for pull request event
+        if: ${{ github.event_name == 'pull_request' }}
+        uses: actions/checkout@master
+
+      - name: Install Qt
+        uses: jurplel/install-qt-action@v2
+        with:
+          version: 5.15.2
+          arch: win64_msvc2019_64
+          target: desktop
+
+      - name: Install dependencies
+        shell: bash
+        run: |
+          choco install openssl
+
+      - name: Configure MSVC
+        uses: ilammy/msvc-dev-cmd@v1
+        with:
+          arch: x64
+
+      - name: Run QMake
+        shell: bash
+        run: |
+          cd src
+          qmake starc.pro CONFIG+=release
+
+      - name: Build
+        run: |
+          cd src
+          nmake
+
+      - name: Prepare installer folder
+        shell: bash
+        run: |
+          cd build/windows
+          ./make-exe_64.sh ${{env.APP_VERSION}}
+
+      - name: Make installer
+        uses: joncloud/makensis-action@v3.4
+        with:
+          arguments: "/V3"
+          script-file: "build/windows/starc_64.nsi"
+
+      - name: Make archive with portable version
+        uses: papeloto/action-zip@v1
+        with:
+          files: build/windows/files_64
+          dest: build/windows/starc-64.zip
+
+      - name: Collect artifacts
+        uses: actions/upload-artifact@v2
+        with:
+          name: windows_64 packages
+          path: |
+            build/windows/starc-setup-64.exe
+            build/windows/starc-64.zip
+
+  build_windows_32:
+    name: Build Windows 32 version
+    runs-on: windows-latest
+    timeout-minutes: 60
+    steps:
+      - name: Checkout Sources for push event
+        if: ${{ github.event_name == 'push' }}
+        uses: actions/checkout@master
+        with:
+          token: ${{ secrets.ACTION_RUNNER }}
+          submodules: recursive
+
+      - name: Checkout Sources for pull request event
+        if: ${{ github.event_name == 'pull_request' }}
+        uses: actions/checkout@master
+
+      - name: Install Qt
+        uses: jurplel/install-qt-action@v2
+        with:
+          version: 5.15.2
+          arch: win32_msvc2019
+          target: desktop
+
+      - name: Install dependencies
+        shell: bash
+        run: |
+          choco install openssl --forcex86
+
+      - name: Configure MSVC
+        uses: ilammy/msvc-dev-cmd@v1
+        with:
+          arch: x86
+
+      - name: Run QMake
+        shell: bash
+        run: |
+          cd src
+          qmake starc.pro CONFIG+=release
+
+      - name: Build
+        run: |
+          cd src
+          nmake
+
+      - name: Prepare installer folder
+        shell: bash
+        run: |
+          cd build/windows
+          ./make-exe_32.sh ${{env.APP_VERSION}}
+
+      - name: Make installer
+        uses: joncloud/makensis-action@v3.4
+        with:
+          arguments: "/V3"
+          script-file: "build/windows/starc_32.nsi"
+
+      - name: Make archive with portable version
+        uses: papeloto/action-zip@v1
+        with:
+          files: build/windows/files_32
+          dest: build/windows/starc-32.zip
+
+      - name: Collect artifacts
+        uses: actions/upload-artifact@v2
+        with:
+          name: windows_32 packages
+          path: |
+            build/windows/starc-setup-32.exe
+            build/windows/starc-32.zip
