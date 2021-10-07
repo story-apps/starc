@@ -48,6 +48,7 @@ enum class Method {
 };
 
 enum class Error {
+    DocumentNotSet,
     DocumentNotFound,
     CharacterNotFound,
 };
@@ -64,6 +65,9 @@ QJsonObject errorResult(Error _error)
     result["error_code"] = static_cast<int>(_error);
     QString errorMessage;
     switch (_error) {
+    case Error::DocumentNotSet:
+        errorMessage = "Document not set";
+        break;
     case Error::DocumentNotFound:
         errorMessage = "Document not found";
         break;
@@ -80,31 +84,36 @@ QJsonObject errorResult(Error _error)
 /**
  * @brief Импортировать история из заданного файла
  */
-QJsonObject postStories(const QString& _importFileName)
+QJsonObject postStories(const QStringList& _importFileNames)
 {
-    const QFileInfo importFileInfo("/tmp/" + _importFileName);
+    if (_importFileNames.isEmpty()) {
+        return errorResult(Error::DocumentNotSet);
+    }
+
     const auto starcFileUuid = QUuid::createUuid().toString();
     const auto starcFileName = starcFileUuid + ".starc";
     const auto starcFilePath = "/tmp/" + starcFileName;
     QDir tmp("/tmp");
 
     //
-    // Есть проект старка ещё не был сформирован для заданного документа, сделаем это
+    // Создаём проект старка и импортируем в него все документы
     //
-    if (tmp.entryList({ starcFileName }).size() == 0) {
+
+    QScopedPointer<BusinessLayer::ScreenplayAbstractImporter> importer;
+    importer.reset(new BusinessLayer::ScreenplayDocumentImporter);
+
+    DataStorageLayer::DocumentDataStorage documentDataStorage;
+    QVector<Domain::DocumentObject*> documents;
+    QVector<BusinessLayer::AbstractModel*> models;
+
+    for (const auto& importFileName : _importFileNames) {
         //
         // Подготовимся к импорту
         //
+        const QFileInfo importFileInfo("/tmp/" + importFileName);
         DatabaseLayer::Database::setCurrentFile(starcFilePath);
         BusinessLayer::ScreenplayImportOptions importOptions;
         importOptions.filePath = importFileInfo.absoluteFilePath();
-
-        QScopedPointer<BusinessLayer::ScreenplayAbstractImporter> importer;
-        importer.reset(new BusinessLayer::ScreenplayDocumentImporter);
-
-        DataStorageLayer::DocumentDataStorage documentDataStorage;
-        QVector<Domain::DocumentObject*> documents;
-        QVector<BusinessLayer::AbstractModel*> models;
 
         //
         // Импортируем персонажей
@@ -153,28 +162,31 @@ QJsonObject postStories(const QString& _importFileName)
         }
 
         //
-        // Ждём, чтобы изменения документов применились под дебаунсером
+        // Удаляем исходный файл
         //
-        QEventLoop eventLoop;
-        QTimer timer;
-        QObject::connect(&timer, &QTimer::timeout, &eventLoop, &QEventLoop::quit);
-        timer.start(std::chrono::seconds{ 1 });
-        eventLoop.exec();
-
-        //
-        // Сохраняем
-        //
-        for (auto document : documents) {
-            DataStorageLayer::StorageFacade::documentStorage()->saveDocument(document);
-        }
-
-        qDeleteAll(models);
-
-        DatabaseLayer::Database::closeCurrentFile();
-        DataStorageLayer::StorageFacade::clearStorages();
-
         QFile::remove(importFileInfo.absoluteFilePath());
     }
+
+    //
+    // Ждём, чтобы изменения документов применились под дебаунсером
+    //
+    QEventLoop eventLoop;
+    QTimer timer;
+    QObject::connect(&timer, &QTimer::timeout, &eventLoop, &QEventLoop::quit);
+    timer.start(std::chrono::seconds{ 1 });
+    eventLoop.exec();
+
+    //
+    // Сохраняем
+    //
+    for (auto document : documents) {
+        DataStorageLayer::StorageFacade::documentStorage()->saveDocument(document);
+    }
+
+    qDeleteAll(models);
+
+    DatabaseLayer::Database::closeCurrentFile();
+    DataStorageLayer::StorageFacade::clearStorages();
 
     //
     // Формируем ответ с краткой сводкой
@@ -607,7 +619,7 @@ int main(int argc, char* argv[])
     QJsonObject result;
     switch (kMethodsDictionary.value(arguments.takeFirst())) {
     case Method::Stories: {
-        result = postStories(arguments.constFirst());
+        result = postStories(arguments);
         break;
     }
 

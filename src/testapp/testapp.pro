@@ -18,5 +18,14 @@ LIBS += -L$$CORELIBDIR/ -lcorelib
 INCLUDEPATH += $$PWD/../corelib
 DEPENDPATH += $$PWD/../corelib
 
+
+#
+# Подключаем библиотеку Webloader
+#
+LIBSDIR = ../_build/libs
+LIBS += -L$$LIBSDIR/ -lwebloader
+INCLUDEPATH += $$PWD/../3rd_party/webloader/src
+DEPENDPATH += $$PWD/../3rd_party/webloader
+#
 SOURCES += \
     main.cpp

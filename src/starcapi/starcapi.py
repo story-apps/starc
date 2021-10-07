@@ -5,8 +5,14 @@ import subprocess
 import json
 
 def run_starc_api(arguments):
+    xdg_runtime_dir = '/tmp/starcapi'
+    if not os.path.exists(xdg_runtime_dir):
+        os.makedirs(xdg_runtime_dir)
     binary_path = os.path.abspath(os.path.dirname(__file__)) + '/bin/'
-    starc_api_command = 'LD_LIBRARY_PATH=' + binary_path + ' ' + binary_path + 'starcapi'
+    starc_api_command = 'XDG_RUNTIME_DIR=' + xdg_runtime_dir \
+                        + ' LD_LIBRARY_PATH=' + binary_path \
+                        + ' QT_QPA_PLATFORM=offscreen ' \
+                        + binary_path + 'starcapi'
     output = subprocess.Popen(starc_api_command + ' ' + arguments,
                               shell=True, stderr=subprocess.PIPE).stderr.read()
     return json.loads(output)
@@ -14,31 +20,34 @@ def run_starc_api(arguments):
 app = Flask(__name__)
 app.config['UPLOAD_FOLDER'] = '/tmp/'
 
-base_route = '/api/v1/'
+starc_api_base_route = '/api/v1/'
 
-@app.route(base_route + '/stories/', methods=['POST'])
+@app.route(starc_api_base_route + '/stories/', methods=['POST'])
 def stories():
     # check if the post request has the file part
-    if 'document' not in request.files:
-        return 'No document part', 400
-    file = request.files['document']
+    documents = request.files.getlist("documents")
+    filenames = []
+    for document in documents:
+        if document.filename != '' and document:
+            filename = secure_filename(document.filename)
+            document.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
+            filenames.append(filename)
     # If the user does not select a file, the browser submits an
     # empty file without a filename.
-    if file.filename == '':
-        return 'No selected document', 400
-    if file:
-        filename = secure_filename(file.filename)
-        file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
+    if not filenames:
+        return 'No document part', 400
     # Run starc API to processing saved document
-    arguments = 'stories ' + filename
+    arguments = 'stories'
+    for filename in filenames:
+        arguments += ' ' + filename
     return jsonify(run_starc_api(arguments))
 
-@app.route(base_route + '/stories/<story>/characters/')
+@app.route(starc_api_base_route + '/stories/<story>/characters/')
 def characters(story):
     arguments = 'characters ' + story
     return jsonify(run_starc_api(arguments))
 
-@app.route(base_route + '/stories/<story>/characters/<character>/')
+@app.route(starc_api_base_route + '/stories/<story>/characters/<character>/')
 def character(story, character):
     arguments = 'character ' + story + ' "' + character + '"'
     return jsonify(run_starc_api(arguments))
