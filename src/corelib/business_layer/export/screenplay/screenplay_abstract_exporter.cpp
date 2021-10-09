@@ -2,10 +2,12 @@
 
 #include "screenplay_export_options.h"
 
+#include <business_layer/document/screenplay/text/screenplay_text_block_data.h>
 #include <business_layer/document/screenplay/text/screenplay_text_cursor.h>
 #include <business_layer/document/screenplay/text/screenplay_text_document.h>
 #include <business_layer/document/text/text_document.h>
 #include <business_layer/model/screenplay/text/screenplay_text_model.h>
+#include <business_layer/model/screenplay/text/screenplay_text_model_scene_item.h>
 #include <business_layer/templates/screenplay_template.h>
 #include <business_layer/templates/templates_facade.h>
 #include <ui/widgets/text_edit/page/page_metrics.h>
@@ -56,8 +58,17 @@ ScreenplayTextDocument* ScreenplayAbstractExporter::prepareDocument(
         //
         // Переносим основной текст на следующую страницу
         //
+        ScreenplayTextBlockData* clonedBlockData = nullptr;
+        if (cursor.block().userData() != nullptr) {
+            const auto blockData
+                = static_cast<BusinessLayer::ScreenplayTextBlockData*>(cursor.block().userData());
+            if (blockData != nullptr) {
+                clonedBlockData = new ScreenplayTextBlockData(blockData);
+            }
+        }
         cursor.insertBlock(cursor.blockFormat(), cursor.blockCharFormat());
         auto blockFormat = cursor.blockFormat();
+        cursor.block().setUserData(clonedBlockData);
         blockFormat.setPageBreakPolicy(QTextFormat::PageBreak_AlwaysBefore);
         blockFormat.setTopMargin(0);
         cursor.setBlockFormat(blockFormat);
@@ -196,6 +207,28 @@ ScreenplayTextDocument* ScreenplayAbstractExporter::prepareDocument(
             }
             cursor.deleteChar();
             continue;
+        }
+
+        //
+        // Если не нужно печатать, эту сцену, то удаляем её
+        //
+        if (!_exportOptions.printScenes.isEmpty()) {
+            const auto blockData
+                = dynamic_cast<ScreenplayTextBlockData*>(cursor.block().userData());
+            if (blockData && blockData->item() && blockData->item()->parent()
+                && blockData->item()->parent()->type() == ScreenplayTextModelItemType::Scene) {
+                const auto sceneItem
+                    = static_cast<ScreenplayTextModelSceneItem*>(blockData->item()->parent());
+                if (!_exportOptions.printScenes.contains(
+                        QString::number(sceneItem->number().value))) {
+                    cursor.movePosition(QTextCursor::EndOfBlock, QTextCursor::KeepAnchor);
+                    if (cursor.hasSelection()) {
+                        cursor.deleteChar();
+                    }
+                    cursor.deleteChar();
+                    continue;
+                }
+            }
         }
 
         cursor.movePosition(QTextCursor::EndOfBlock);

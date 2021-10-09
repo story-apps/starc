@@ -94,7 +94,7 @@ static void printPage(int _pageNumber, QPainter* _painter, const QTextDocument* 
                                 - distanceBetweenSceneNumberAndText,
                             blockRect.height());
                         _painter->drawText(leftSceneNumberRect, Qt::AlignRight | Qt::AlignTop,
-                                           sceneItem->number().value);
+                                           sceneItem->number().text);
                     }
 
                     if (_exportOptions.printScenesNumbersOnRight) {
@@ -108,7 +108,7 @@ static void printPage(int _pageNumber, QPainter* _painter, const QTextDocument* 
                                 - distanceBetweenSceneNumberAndText,
                             blockRect.height());
                         _painter->drawText(rightSceneNumberRect, Qt::AlignLeft | Qt::AlignTop,
-                                           sceneItem->number().value);
+                                           sceneItem->number().text);
                     }
                 }
             }

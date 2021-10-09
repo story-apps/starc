@@ -23,12 +23,18 @@ class ScreenplayExportDialog::Implementation
 public:
     explicit Implementation(QWidget* _parent);
 
+    /**
+     * @brief Получить список сцен для печати
+     */
+    QVector<QString> scenesToPrint() const;
+
 
     ComboBox* fileFormat = nullptr;
     ComboBox* screenplayTemplate = nullptr;
     CheckBox* printTitlePage = nullptr;
     CheckBox* printFolders = nullptr;
     CheckBox* printInlineNotes = nullptr;
+    TextField* printScenes = nullptr;
     CheckBox* printSceneNumbers = nullptr;
     CheckBox* printSceneNumbersOnLeft = nullptr;
     CheckBox* printSceneNumbersOnRight = nullptr;
@@ -48,6 +54,7 @@ ScreenplayExportDialog::Implementation::Implementation(QWidget* _parent)
     , printTitlePage(new CheckBox(_parent))
     , printFolders(new CheckBox(_parent))
     , printInlineNotes(new CheckBox(_parent))
+    , printScenes(new TextField(_parent))
     , printSceneNumbers(new CheckBox(_parent))
     , printSceneNumbersOnLeft(new CheckBox(_parent))
     , printSceneNumbersOnRight(new CheckBox(_parent))
@@ -84,6 +91,7 @@ ScreenplayExportDialog::Implementation::Implementation(QWidget* _parent)
         checkBox->setChecked(true);
     }
 
+    printScenes->setSpellCheckPolicy(SpellCheckPolicy::Manual);
     watermark->setSpellCheckPolicy(SpellCheckPolicy::Manual);
 
     buttonsLayout->setContentsMargins({});
@@ -92,6 +100,32 @@ ScreenplayExportDialog::Implementation::Implementation(QWidget* _parent)
     buttonsLayout->addStretch();
     buttonsLayout->addWidget(cancelButton);
     buttonsLayout->addWidget(exportButton);
+}
+
+QVector<QString> ScreenplayExportDialog::Implementation::scenesToPrint() const
+{
+    QVector<QString> scenes;
+    const auto scenesRanges = printScenes->text().split(',', Qt::SkipEmptyParts);
+    for (const auto& scenesRange : scenesRanges) {
+        if (scenesRange.contains('-')) {
+            const auto range = scenesRange.split('-', Qt::SkipEmptyParts);
+            if (range.size() == 2) {
+                int fromScene = range.constFirst().toInt();
+                int toScene = range.constLast().toInt();
+                if (fromScene > toScene) {
+                    std::swap(fromScene, toScene);
+                }
+                for (int scene = fromScene; scene <= toScene; ++scene) {
+                    scenes.append(QString::number(scene));
+                }
+            } else if (!range.isEmpty()) {
+                scenes.append(range.constFirst());
+            }
+        } else {
+            scenes.append(scenesRange);
+        }
+    }
+    return scenes;
 }
 
 
@@ -109,8 +143,16 @@ ScreenplayExportDialog::ScreenplayExportDialog(QWidget* _parent)
     contentsLayout()->addWidget(d->fileFormat, row++, 0);
     contentsLayout()->addWidget(d->screenplayTemplate, row++, 0);
     contentsLayout()->addWidget(d->printTitlePage, row++, 0);
-    contentsLayout()->addWidget(d->printFolders, row++, 0);
-    contentsLayout()->addWidget(d->printInlineNotes, row++, 0);
+    {
+        auto layout = new QHBoxLayout;
+        layout->setContentsMargins({});
+        layout->setSpacing(0);
+        layout->addWidget(d->printFolders);
+        layout->addWidget(d->printInlineNotes);
+        layout->addStretch();
+        contentsLayout()->addLayout(layout, row++, 0);
+    }
+    contentsLayout()->addWidget(d->printScenes, row++, 0);
     {
         auto layout = new QHBoxLayout;
         layout->setContentsMargins({});
@@ -118,6 +160,7 @@ ScreenplayExportDialog::ScreenplayExportDialog(QWidget* _parent)
         layout->addWidget(d->printSceneNumbers);
         layout->addWidget(d->printSceneNumbersOnLeft);
         layout->addWidget(d->printSceneNumbersOnRight);
+        layout->addStretch();
         contentsLayout()->addLayout(layout, row++, 0);
     }
     contentsLayout()->addWidget(d->printDialoguesNumbers, row++, 0);
@@ -222,6 +265,7 @@ BusinessLayer::ScreenplayExportOptions ScreenplayExportDialog::exportOptions() c
     options.printTiltePage = d->printTitlePage->isChecked();
     options.printFolders = d->printFolders->isChecked();
     options.printInlineNotes = d->printInlineNotes->isChecked();
+    options.printScenes = d->scenesToPrint();
     options.printScenesNumbers = d->printSceneNumbers->isChecked();
     options.printScenesNumbersOnLeft = d->printSceneNumbersOnLeft->isChecked();
     options.printScenesNumbersOnRight = d->printSceneNumbersOnRight->isChecked();
@@ -256,6 +300,8 @@ void ScreenplayExportDialog::updateTranslations()
     d->printTitlePage->setText(tr("Print title page"));
     d->printFolders->setText(tr("Print folders"));
     d->printInlineNotes->setText(tr("Print inline notes"));
+    d->printScenes->setLabel(tr("Print concrete scenes"));
+    d->printScenes->setHelper(tr("Keep empty, if you want to print all scenes"));
     d->printSceneNumbers->setText(tr("Print scenes numbers"));
     d->printSceneNumbersOnLeft->setText(tr("on the left"));
     d->printSceneNumbersOnRight->setText(tr("on the right"));
@@ -276,8 +322,8 @@ void ScreenplayExportDialog::designSystemChangeEvent(DesignSystemChangeEvent* _e
     titleMargins.setTop(Ui::DesignSystem::layout().px8());
     titleMargins.setBottom(0);
 
-    for (auto textField :
-         QVector<TextField*>{ d->fileFormat, d->screenplayTemplate, d->watermark }) {
+    for (auto textField : std::vector<TextField*>{ d->fileFormat, d->screenplayTemplate,
+                                                   d->printScenes, d->watermark }) {
         textField->setBackgroundColor(Ui::DesignSystem::color().onBackground());
         textField->setTextColor(Ui::DesignSystem::color().onBackground());
     }

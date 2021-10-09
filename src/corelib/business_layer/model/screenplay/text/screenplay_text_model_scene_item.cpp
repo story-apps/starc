@@ -98,7 +98,7 @@ public:
 bool ScreenplayTextModelSceneItem::Number::operator==(
     const ScreenplayTextModelSceneItem::Number& _other) const
 {
-    return value == _other.value;
+    return text == _other.text;
 }
 
 ScreenplayTextModelSceneItem::ScreenplayTextModelSceneItem()
@@ -127,7 +127,8 @@ ScreenplayTextModelSceneItem::ScreenplayTextModelSceneItem(QXmlStreamReader& _co
 
     auto currentTag = _contentReader.name();
     if (currentTag == xml::kNumberTag) {
-        d->number = { _contentReader.attributes().value(xml::kNumberValueAttribute).toString() };
+        //        d->number = {
+        //        _contentReader.attributes().value(xml::kNumberValueAttribute).toString() };
         xml::readNextElement(_contentReader); // end
         currentTag = xml::readNextElement(_contentReader); // next
     }
@@ -227,13 +228,14 @@ bool ScreenplayTextModelSceneItem::setNumber(int _number, const QString& _prefix
         return false;
     }
 
-    const auto newNumber = QString(QLocale().textDirection() == Qt::LeftToRight ? "%1%2." : ".%2%1")
-                               .arg(_prefix, QString::number(_number));
-    if (d->number.has_value() && d->number->value == newNumber) {
+    const auto newNumberText
+        = QString(QLocale().textDirection() == Qt::LeftToRight ? "%1%2." : ".%2%1")
+              .arg(_prefix, QString::number(_number));
+    if (d->number.has_value() && d->number->text == newNumberText) {
         return true;
     }
 
-    d->number = { newNumber };
+    d->number = { _number, newNumberText };
     //
     // Т.к. пока мы не сохраняем номера, в указании, что произошли изменения нет смысла
     //
@@ -276,7 +278,7 @@ QVariant ScreenplayTextModelSceneItem::data(int _role) const
 
     case SceneNumberRole: {
         if (d->number.has_value()) {
-            return d->number->value;
+            return d->number->text;
         }
         return {};
     }

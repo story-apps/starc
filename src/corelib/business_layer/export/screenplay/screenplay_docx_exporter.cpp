@@ -529,7 +529,7 @@ QString docxText(QMap<int, QStringList>& _comments, const ScreenplayTextCursor& 
             if (blockData != nullptr) {
                 const auto sceneItem
                     = static_cast<ScreenplayTextModelSceneItem*>(blockData->item()->parent());
-                const auto sceneNumber = sceneItem->number().value + " ";
+                const auto sceneNumber = sceneItem->number().text + " ";
                 const QFontMetrics fontMetrics(block.charFormat().font());
                 documentXml.append(
                     QString("<w:ind w:left=\"%1\" w:right=\"%2\" w:hanging=\"%3\" />")

@@ -23,7 +23,8 @@ public:
      * @brief Номер сцены
      */
     struct Number {
-        QString value;
+        int value = 0;
+        QString text;
 
         bool operator==(const Number& _other) const;
     };

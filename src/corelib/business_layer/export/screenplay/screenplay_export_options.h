@@ -53,6 +53,12 @@ struct CORE_LIBRARY_EXPORT ScreenplayExportOptions {
     bool printInlineNotes = false;
 
     /**
+     * @brief Список сцен для печати
+     * @note Если пустое, значит печатаются все сцены
+     */
+    QVector<QString> printScenes;
+
+    /**
      * @brief Печатать номера сцен
      */
     bool printScenesNumbers = true;
@@ -77,6 +83,16 @@ struct CORE_LIBRARY_EXPORT ScreenplayExportOptions {
      * @brief Цвет водяного знака
      */
     QColor watermarkColor;
+
+    /**
+     * @brief Песонаж, чьи реплики нужно выделить
+     */
+    QString characterToHighlight;
+
+    /**
+     * @brief Цвет для выделения реплик персонажа
+     */
+    QColor characterToHighlightColor;
 
 
     //
