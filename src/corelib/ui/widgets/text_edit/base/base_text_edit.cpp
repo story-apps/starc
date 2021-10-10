@@ -40,52 +40,6 @@ QTextCursor cursorForFormatInversion(const QTextCursor& _cursor)
 }
 
 /**
- * @brief Обновить форматированние выделенного блока в соответствии с заданным функтором
- */
-template<typename Func>
-void updateSelectionFormatting(QTextCursor _cursor, Func updateFormat)
-{
-    if (!_cursor.hasSelection()) {
-        return;
-    }
-
-    _cursor.beginEditBlock();
-
-    int position = std::min(_cursor.selectionStart(), _cursor.selectionEnd());
-    const int lastPosition = std::max(_cursor.selectionStart(), _cursor.selectionEnd());
-    while (position < lastPosition) {
-        const auto block = _cursor.document()->findBlock(position);
-        for (const auto& format : block.textFormats()) {
-            const auto formatStart = block.position() + format.start;
-            const auto formatEnd = formatStart + format.length;
-            if (position >= formatEnd) {
-                continue;
-            } else if (formatStart >= lastPosition) {
-                break;
-            }
-
-            _cursor.setPosition(std::max(formatStart, position));
-            _cursor.setPosition(std::min(formatEnd, lastPosition), QTextCursor::KeepAnchor);
-
-            const auto newFormat = updateFormat(format.format);
-            _cursor.mergeCharFormat(newFormat);
-
-            _cursor.clearSelection();
-            _cursor.movePosition(QTextCursor::NextCharacter);
-            position = _cursor.position();
-        }
-
-        if (!block.next().isValid()) {
-            break;
-        }
-
-        position = block.next().position();
-    }
-
-    _cursor.endEditBlock();
-}
-
-/**
  * @brief Оканчивается ли строка сокращением
  */
 bool stringEndsWithAbbrev(const QString& _text)
@@ -198,7 +152,7 @@ void BaseTextEdit::setTextBold(bool _bold)
         format.setFontWeight(_bold ? QFont::Bold : QFont::Normal);
         return format;
     };
-    updateSelectionFormatting(textCursor(), buildFormat);
+    TextHelper::updateSelectionFormatting(textCursor(), buildFormat);
 }
 
 void BaseTextEdit::setTextItalic(bool _italic)
@@ -208,7 +162,7 @@ void BaseTextEdit::setTextItalic(bool _italic)
         format.setFontItalic(_italic);
         return format;
     };
-    updateSelectionFormatting(textCursor(), buildFormat);
+    TextHelper::updateSelectionFormatting(textCursor(), buildFormat);
 }
 
 void BaseTextEdit::setTextUnderline(bool _underline)
@@ -218,7 +172,7 @@ void BaseTextEdit::setTextUnderline(bool _underline)
         format.setFontUnderline(_underline);
         return format;
     };
-    updateSelectionFormatting(textCursor(), buildFormat);
+    TextHelper::updateSelectionFormatting(textCursor(), buildFormat);
 }
 
 void BaseTextEdit::invertTextBold()
@@ -243,7 +197,7 @@ void BaseTextEdit::setTextFont(const QFont& _font)
         format.setFont(_font);
         return format;
     };
-    updateSelectionFormatting(textCursor(), buildFormat);
+    TextHelper::updateSelectionFormatting(textCursor(), buildFormat);
 }
 
 void BaseTextEdit::setTextAlignment(Qt::Alignment _alignment)

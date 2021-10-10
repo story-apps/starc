@@ -9,6 +9,8 @@ class QFont;
 class QFontMetricsF;
 class QRectF;
 class QString;
+class QTextCharFormat;
+class QTextCursor;
 
 
 /**
@@ -76,4 +78,10 @@ public:
      * @brief Определить количество слов в тексте
      */
     static int wordsCount(const QString& _text);
+
+    /**
+     * @brief Применить заданный функтор форматирования для выделенного текста в курсоре
+     */
+    static void updateSelectionFormatting(
+        QTextCursor _cursor, std::function<QTextCharFormat(const QTextCharFormat&)> updateFormat);
 };

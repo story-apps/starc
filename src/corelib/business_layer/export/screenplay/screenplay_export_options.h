@@ -87,12 +87,12 @@ struct CORE_LIBRARY_EXPORT ScreenplayExportOptions {
     /**
      * @brief Песонаж, чьи реплики нужно выделить
      */
-    QString characterToHighlight;
+    QString highlightCharacter;
 
     /**
      * @brief Цвет для выделения реплик персонажа
      */
-    QColor characterToHighlightColor;
+    QColor highlightCharacterColor;
 
 
     //

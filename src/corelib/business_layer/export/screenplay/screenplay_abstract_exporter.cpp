@@ -6,6 +6,7 @@
 #include <business_layer/document/screenplay/text/screenplay_text_cursor.h>
 #include <business_layer/document/screenplay/text/screenplay_text_document.h>
 #include <business_layer/document/text/text_document.h>
+#include <business_layer/model/screenplay/text/screenplay_text_block_parser.h>
 #include <business_layer/model/screenplay/text/screenplay_text_model.h>
 #include <business_layer/model/screenplay/text/screenplay_text_model_scene_item.h>
 #include <business_layer/templates/screenplay_template.h>
@@ -13,6 +14,7 @@
 #include <ui/widgets/text_edit/page/page_metrics.h>
 #include <ui/widgets/text_edit/page/page_text_edit.h>
 #include <utils/helpers/measurement_helper.h>
+#include <utils/helpers/text_helper.h>
 
 #include <QGuiApplication>
 #include <QTextBlock>
@@ -151,6 +153,7 @@ ScreenplayTextDocument* ScreenplayAbstractExporter::prepareDocument(
         cursor.setBlockFormat(blockFormat);
     }
     //
+    QString currentCharacter;
     do {
         const auto blockType = ScreenplayBlockStyle::forBlock(cursor.block());
 
@@ -228,6 +231,39 @@ ScreenplayTextDocument* ScreenplayAbstractExporter::prepareDocument(
                     cursor.deleteChar();
                     continue;
                 }
+            }
+        }
+
+        //
+        // Если нужно выделить реплики конкретного персонажа, добавим форматирование
+        //
+        if (!_exportOptions.highlightCharacter.isEmpty()) {
+            switch (blockType) {
+            case ScreenplayParagraphType::Character: {
+                currentCharacter = ScreenplayCharacterParser::name(cursor.block().text());
+                Q_FALLTHROUGH();
+            }
+
+            case ScreenplayParagraphType::Parenthetical:
+            case ScreenplayParagraphType::Dialogue:
+            case ScreenplayParagraphType::Lyrics: {
+                if (currentCharacter == _exportOptions.highlightCharacter) {
+                    cursor.movePosition(QTextCursor::StartOfBlock);
+                    cursor.movePosition(QTextCursor::EndOfBlock, QTextCursor::KeepAnchor);
+                    auto updateFormatting = [color = _exportOptions.highlightCharacterColor](
+                                                const QTextCharFormat& _format) {
+                        auto format = _format;
+                        format.setBackground(color);
+                        return format;
+                    };
+                    TextHelper::updateSelectionFormatting(cursor, updateFormatting);
+                }
+                break;
+            }
+
+            default: {
+                break;
+            }
             }
         }
 

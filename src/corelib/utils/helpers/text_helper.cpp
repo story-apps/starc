@@ -2,6 +2,8 @@
 
 #include <QFontMetricsF>
 #include <QRegularExpression>
+#include <QTextBlock>
+#include <QTextDocument>
 #include <QTextLayout>
 #include <QtMath>
 
@@ -277,4 +279,47 @@ int TextHelper::wordsCount(const QString& _text)
     //        - не учитывать знаки препинания окружённые пробелами, типа " - "
     //
     return _text.split(QRegularExpression("[\\s.,!():;]+"), Qt::SkipEmptyParts).count();
+}
+
+void TextHelper::updateSelectionFormatting(
+    QTextCursor _cursor, std::function<QTextCharFormat(const QTextCharFormat&)> updateFormat)
+{
+    if (!_cursor.hasSelection()) {
+        return;
+    }
+
+    _cursor.beginEditBlock();
+
+    int position = std::min(_cursor.selectionStart(), _cursor.selectionEnd());
+    const int lastPosition = std::max(_cursor.selectionStart(), _cursor.selectionEnd());
+    while (position < lastPosition) {
+        const auto block = _cursor.document()->findBlock(position);
+        const auto textFormats = block.textFormats();
+        for (const auto& format : textFormats) {
+            const auto formatStart = block.position() + format.start;
+            const auto formatEnd = formatStart + format.length;
+            if (position >= formatEnd) {
+                continue;
+            } else if (formatStart >= lastPosition) {
+                break;
+            }
+
+            _cursor.setPosition(std::max(formatStart, position));
+            _cursor.setPosition(std::min(formatEnd, lastPosition), QTextCursor::KeepAnchor);
+
+            const auto newFormat = updateFormat(format.format);
+            _cursor.mergeCharFormat(newFormat);
+
+            _cursor.clearSelection();
+            position = _cursor.position();
+        }
+
+        if (!block.next().isValid()) {
+            break;
+        }
+
+        position = block.next().position();
+    }
+
+    _cursor.endEditBlock();
 }
