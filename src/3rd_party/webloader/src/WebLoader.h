@@ -34,7 +34,7 @@ class QNetworkCookieJar;
  */
 class WebLoader : public QThread
 {
-	Q_OBJECT
+    Q_OBJECT
 
 public:
     explicit WebLoader(QObject* _parent = nullptr);
@@ -115,15 +115,17 @@ private:
      */
     void downloadError(QNetworkReply::NetworkError _networkError);
 
+#if QT_CONFIG(ssl)
     /**
      ** @brief Ошибки при защищённом подключении
-	 */
-	void downloadSslErrors(const QList<QSslError>& _errors);
+     */
+    void downloadSslErrors(const QList<QSslError>& _errors);
+#endif
 
     /**
      * @brief Подготовить менеджер загрузок для того, чтобы он работал в текущем потоке
      */
-	void initNetworkManager();
+    void initNetworkManager();
 
 private:
     /**
