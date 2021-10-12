@@ -18,7 +18,7 @@
 #include "WebRequest.h"
 #include "HttpMultiPart.h"
 
-
+#include <QDebug>
 #include <QFile>
 #include <QStringList>
 #include <QSslConfiguration>
