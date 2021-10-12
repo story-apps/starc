@@ -754,7 +754,7 @@ int main(int argc, char* argv[])
     }
     }
 
-    qDebug() << qUtf8Printable(QJsonDocument(result).toJson(QJsonDocument::Indented));
+    QTextStream(stdout) << QString::fromUtf8(QJsonDocument(result).toJson(QJsonDocument::Indented));
 
     return 0;
 }

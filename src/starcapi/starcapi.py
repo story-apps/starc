@@ -14,7 +14,7 @@ def run_starc_api(arguments):
                         + ' QT_QPA_PLATFORM=offscreen ' \
                         + binary_path + 'starcapi'
     output = subprocess.Popen(starc_api_command + ' ' + arguments,
-                              shell=True, stderr=subprocess.PIPE).stderr.read()
+                              shell=True, stdout=subprocess.PIPE).stdout.read()
     return json.loads(output)
 
 app = Flask(__name__)
@@ -54,10 +54,12 @@ def character(story, character):
 
 @app.route(starc_api_base_route + '/stories/<story>/screenplays/<screenplay>/scenes/<scene>/')
 def scene(story, screenplay, scene):
-    arguments = 'scene ' + story + ' ' + screenplay + ' ' + scene + ' ' + request.args.get("character")
+    arguments = 'scene ' + story + ' ' + screenplay + ' ' + scene
+    if 'character' in request.args:
+        arguments += ' ' + request.args.get('character')
     result = run_starc_api(arguments)
-    if "scene_pdf_path" in result:
-        return send_file(result["scene_pdf_path"], mimetype='application/pdf')
+    if 'scene_pdf_path' in result:
+        return send_file(result['scene_pdf_path'], mimetype='application/pdf')
     return jsonify(result)
 
 if __name__ == '__main__':
