@@ -490,6 +490,7 @@ QJsonObject getCharacter(const QString& _starcFileName, const QString& _characte
     QJsonArray screenplays;
     struct SceneData {
         QString uuid;
+        QString number;
         QString heading;
         std::chrono::seconds duration;
         int dialoguesCount = 0;
@@ -516,6 +517,7 @@ QJsonObject getCharacter(const QString& _starcFileName, const QString& _characte
                 scenesData.append(SceneData());
                 auto sceneItem = static_cast<ScreenplayTextModelSceneItem*>(childItem);
                 scenesData.last().uuid = sceneItem->uuid().toString();
+                scenesData.last().number = QString::number(sceneItem->number().value);
                 scenesData.last().heading = sceneItem->heading();
                 scenesData.last().duration
                     = std::chrono::duration_cast<std::chrono::seconds>(sceneItem->duration());
@@ -612,6 +614,7 @@ QJsonObject getCharacter(const QString& _starcFileName, const QString& _characte
 
             QJsonObject scene;
             scene["uid"] = sceneData.uuid;
+            scene["number"] = sceneData.number;
             scene["heading"] = sceneData.heading;
             scene["duration"] = static_cast<int>(sceneData.duration.count());
             scene["dialogues_count"] = sceneData.dialoguesCount;
