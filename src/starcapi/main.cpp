@@ -1,3 +1,5 @@
+#include <business_layer/export/screenplay/screenplay_export_options.h>
+#include <business_layer/export/screenplay/screenplay_pdf_exporter.h>
 #include <business_layer/import/screenplay/screenlay_import_options.h>
 #include <business_layer/import/screenplay/screenplay_document_importer.h>
 #include <business_layer/model/characters/character_model.h>
@@ -45,18 +47,25 @@ enum class Method {
     // Получить информацию по персонажу
     //
     Character,
+    //
+    // Сформировать PDF заданной сцены
+    //
+    Scene,
 };
 
 enum class Error {
     DocumentNotSet,
     DocumentNotFound,
     CharacterNotFound,
+    ScreenplayNotFound,
+    SceneNotFound,
 };
 
 const QHash<QString, Method> kMethodsDictionary = {
     { "stories", Method::Stories },
     { "characters", Method::Characters },
     { "character", Method::Character },
+    { "scene", Method::Scene },
 };
 
 QJsonObject errorResult(Error _error)
@@ -74,11 +83,22 @@ QJsonObject errorResult(Error _error)
     case Error::CharacterNotFound:
         errorMessage = "Character not found";
         break;
+    case Error::ScreenplayNotFound:
+        errorMessage = "Screenplay not found";
+        break;
+    case Error::SceneNotFound:
+        errorMessage = "Scene not found";
+        break;
     default:
         Q_ASSERT(false);
     }
     result["error_message"] = errorMessage;
     return result;
+}
+
+bool isError(const QJsonObject& _object)
+{
+    return !_object["error_code"].isNull() && !_object["error_message"].isNull();
 }
 
 /**
@@ -605,6 +625,90 @@ QJsonObject getCharacter(const QString& _starcFileName, const QString& _characte
     }
     result["screenplays"] = screenplays;
     result["screenplays_count"] = screenplayDocuments.size();
+
+    DatabaseLayer::Database::closeCurrentFile();
+
+    return result;
+}
+
+QJsonObject printScene(const QString& _starcFileName, const QString& _screenplayUuid,
+                       const QString& _sceneUuid, const QString& _characterName)
+{
+    const auto starcFilePath = "/tmp/" + _starcFileName + ".starc";
+    if (!QFile::exists(starcFilePath)) {
+        return errorResult(Error::DocumentNotFound);
+    }
+
+    DatabaseLayer::Database::setCurrentFile(starcFilePath);
+    const auto screenplayDocuments = DataStorageLayer::StorageFacade::documentStorage()->documents(
+        Domain::DocumentObjectType::ScreenplayText);
+    QJsonObject result;
+    QString scenePdfFilePath;
+    for (auto screenplayDocument : screenplayDocuments) {
+        if (screenplayDocument->uuid() != _screenplayUuid) {
+            continue;
+        }
+
+        ScreenplayTextModel screenplayModel;
+        ScreenplayInformationModel informationsModel;
+        screenplayModel.setInformationModel(&informationsModel);
+        screenplayModel.setDocument(screenplayDocument);
+        std::function<QString(const ScreenplayTextModelItem*)> findSceneNumber;
+        findSceneNumber
+            = [&findSceneNumber, _sceneUuid](const ScreenplayTextModelItem* _item) -> QString {
+            for (int childIndex = 0; childIndex < _item->childCount(); ++childIndex) {
+                auto childItem = _item->childAt(childIndex);
+                switch (childItem->type()) {
+                case ScreenplayTextModelItemType::Folder: {
+                    const auto sceneNumber = findSceneNumber(childItem);
+                    if (!sceneNumber.isEmpty()) {
+                        return sceneNumber;
+                    }
+                    break;
+                }
+
+                case ScreenplayTextModelItemType::Scene: {
+                    auto sceneItem = static_cast<ScreenplayTextModelSceneItem*>(childItem);
+                    if (sceneItem->uuid() == _sceneUuid) {
+                        return QString::number(sceneItem->number().value);
+                    }
+                    break;
+                }
+
+                default:
+                    break;
+                }
+            }
+
+            return {};
+        };
+        const auto sceneNumber = findSceneNumber(screenplayModel.itemForIndex({}));
+        if (sceneNumber.isEmpty()) {
+            result = errorResult(Error::SceneNotFound);
+            break;
+        }
+
+        ScreenplayExportOptions exportOptions;
+        QDir::root().mkpath("/tmp/pdf/");
+        exportOptions.filePath = "/tmp/pdf/" + QUuid::createUuid().toString() + ".pdf";
+        exportOptions.printTiltePage = false;
+        exportOptions.printScenes.append(sceneNumber);
+        exportOptions.printReviewMarks = false;
+        exportOptions.highlightCharacter = _characterName;
+        exportOptions.highlightCharacterColor = Qt::yellow;
+        ScreenplayPdfExporter().exportTo(&screenplayModel, exportOptions);
+        result["scene_pdf_path"] = exportOptions.filePath;
+
+        break;
+    }
+
+    if (result.isEmpty()) {
+        result = errorResult(Error::ScreenplayNotFound);
+    }
+
+    DatabaseLayer::Database::closeCurrentFile();
+
+
     return result;
 }
 
@@ -630,6 +734,15 @@ int main(int argc, char* argv[])
 
     case Method::Character: {
         result = getCharacter(arguments.constFirst(), arguments.constLast());
+        break;
+    }
+
+    case Method::Scene: {
+        const auto& documentUuid = arguments.at(0);
+        const auto& screenplayUuid = arguments.at(1);
+        const auto& sceneUuid = arguments.at(2);
+        const auto& characterName = arguments.size() == 4 ? arguments.at(3) : QString();
+        result = printScene(documentUuid, screenplayUuid, sceneUuid, characterName);
         break;
     }
 

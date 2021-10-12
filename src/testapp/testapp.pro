@@ -2,7 +2,7 @@ TEMPLATE = app
 TARGET = testapp
 
 CONFIG += c++11
-QT += core gui widgets
+QT += core gui widgets network
 
 DESTDIR = ../_build/
 

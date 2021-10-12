@@ -1,4 +1,4 @@
-from flask import Flask, request, jsonify
+from flask import Flask, request, jsonify, send_file
 from werkzeug.utils import secure_filename
 import os
 import subprocess
@@ -51,6 +51,14 @@ def characters(story):
 def character(story, character):
     arguments = 'character ' + story + ' "' + character + '"'
     return jsonify(run_starc_api(arguments))
+
+@app.route(starc_api_base_route + '/stories/<story>/screenplays/<screenplay>/scenes/<scene>/')
+def scene(story, screenplay, scene):
+    arguments = 'scene ' + story + ' ' + screenplay + ' ' + scene + ' ' + request.args.get("character")
+    result = run_starc_api(arguments)
+    if "scene_pdf_path" in result:
+        return send_file(result["scene_pdf_path"], mimetype='application/pdf')
+    return jsonify(result)
 
 if __name__ == '__main__':
     app.run()

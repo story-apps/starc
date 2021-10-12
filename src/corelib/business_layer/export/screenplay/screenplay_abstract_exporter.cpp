@@ -218,19 +218,25 @@ ScreenplayTextDocument* ScreenplayAbstractExporter::prepareDocument(
         if (!_exportOptions.printScenes.isEmpty()) {
             const auto blockData
                 = dynamic_cast<ScreenplayTextBlockData*>(cursor.block().userData());
-            if (blockData && blockData->item() && blockData->item()->parent()
-                && blockData->item()->parent()->type() == ScreenplayTextModelItemType::Scene) {
+            bool needRemoveBlock = false;
+            if (!blockData || !blockData->item() || !blockData->item()->parent()
+                || blockData->item()->parent()->type() != ScreenplayTextModelItemType::Scene) {
+                needRemoveBlock = true;
+            } else {
                 const auto sceneItem
                     = static_cast<ScreenplayTextModelSceneItem*>(blockData->item()->parent());
                 if (!_exportOptions.printScenes.contains(
                         QString::number(sceneItem->number().value))) {
-                    cursor.movePosition(QTextCursor::EndOfBlock, QTextCursor::KeepAnchor);
-                    if (cursor.hasSelection()) {
-                        cursor.deleteChar();
-                    }
-                    cursor.deleteChar();
-                    continue;
+                    needRemoveBlock = true;
                 }
+            }
+            if (needRemoveBlock) {
+                cursor.movePosition(QTextCursor::EndOfBlock, QTextCursor::KeepAnchor);
+                if (cursor.hasSelection()) {
+                    cursor.deleteChar();
+                }
+                cursor.deleteChar();
+                continue;
             }
         }
 
