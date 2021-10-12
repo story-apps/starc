@@ -441,4 +441,5 @@ HEADERS += \
     utils/validators/email_validator.h
 
 RESOURCES += \
+    fonts.qrc \
     templates.qrc

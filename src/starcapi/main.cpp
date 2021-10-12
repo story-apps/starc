@@ -721,6 +721,32 @@ int main(int argc, char* argv[])
 {
     QApplication a(argc, argv);
 
+    QFontDatabase fontDatabase;
+    fontDatabase.addApplicationFont(":/fonts/materialdesignicons");
+    fontDatabase.addApplicationFont(":/fonts/roboto-black");
+    fontDatabase.addApplicationFont(":/fonts/roboto-bold");
+    fontDatabase.addApplicationFont(":/fonts/roboto-medium");
+    fontDatabase.addApplicationFont(":/fonts/roboto-regular");
+    fontDatabase.addApplicationFont(":/fonts/roboto-thin");
+    fontDatabase.addApplicationFont(":/fonts/noto-sans");
+    fontDatabase.addApplicationFont(":/fonts/noto-sans-bold");
+    fontDatabase.addApplicationFont(":/fonts/noto-sans-bold-italic");
+    fontDatabase.addApplicationFont(":/fonts/noto-sans-italic");
+    fontDatabase.addApplicationFont(":/fonts/arial");
+    fontDatabase.addApplicationFont(":/fonts/arial-bold");
+    fontDatabase.addApplicationFont(":/fonts/arial-italic");
+    fontDatabase.addApplicationFont(":/fonts/arial-bold-italic");
+    fontDatabase.addApplicationFont(":/fonts/courier-new");
+    fontDatabase.addApplicationFont(":/fonts/courier-new-bold");
+    fontDatabase.addApplicationFont(":/fonts/courier-new-italic");
+    fontDatabase.addApplicationFont(":/fonts/courier-new-bold-italic");
+    fontDatabase.addApplicationFont(":/fonts/courier-prime");
+    fontDatabase.addApplicationFont(":/fonts/courier-prime-bold");
+    fontDatabase.addApplicationFont(":/fonts/courier-prime-italic");
+    fontDatabase.addApplicationFont(":/fonts/courier-prime-bold-italic");
+    fontDatabase.addApplicationFont(":/fonts/muktamalar-bold");
+    fontDatabase.addApplicationFont(":/fonts/muktamalar-regular");
+
     auto arguments = a.arguments();
     arguments.removeFirst();
     QJsonObject result;
