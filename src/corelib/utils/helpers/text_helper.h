@@ -3,6 +3,7 @@
 #include <QtGlobal>
 
 #include <corelib_global.h>
+#include <functional>
 
 class QChar;
 class QFont;
