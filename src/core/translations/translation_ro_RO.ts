@@ -4,37 +4,37 @@
 <context>
     <name>BaseTextEdit</name>
     <message>
-        <location filename="../../corelib/ui/widgets/text_edit/base/base_text_edit.cpp" line="277"/>
+        <location filename="../../corelib/ui/widgets/text_edit/base/base_text_edit.cpp" line="229"/>
         <source>Formatting</source>
         <translation>Formatare</translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/widgets/text_edit/base/base_text_edit.cpp" line="281"/>
+        <location filename="../../corelib/ui/widgets/text_edit/base/base_text_edit.cpp" line="233"/>
         <source>Bold</source>
         <translation>Bold</translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/widgets/text_edit/base/base_text_edit.cpp" line="288"/>
+        <location filename="../../corelib/ui/widgets/text_edit/base/base_text_edit.cpp" line="240"/>
         <source>Italic</source>
         <translation>Italic</translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/widgets/text_edit/base/base_text_edit.cpp" line="295"/>
+        <location filename="../../corelib/ui/widgets/text_edit/base/base_text_edit.cpp" line="247"/>
         <source>Underline</source>
         <translation>Subliniat</translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/widgets/text_edit/base/base_text_edit.cpp" line="303"/>
+        <location filename="../../corelib/ui/widgets/text_edit/base/base_text_edit.cpp" line="255"/>
         <source>Align left</source>
         <translation>Aliniat la stânga</translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/widgets/text_edit/base/base_text_edit.cpp" line="309"/>
+        <location filename="../../corelib/ui/widgets/text_edit/base/base_text_edit.cpp" line="261"/>
         <source>Align center</source>
         <translation>Centrat</translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/widgets/text_edit/base/base_text_edit.cpp" line="315"/>
+        <location filename="../../corelib/ui/widgets/text_edit/base/base_text_edit.cpp" line="267"/>
         <source>Align right</source>
         <translation>Aliniat la dreapta</translation>
     </message>
@@ -71,7 +71,7 @@
     <message>
         <location filename="../../corelib/business_layer/model/comic_book/comic_book_dictionaries_model.cpp" line="119"/>
         <source>SFX</source>
-        <translation>EFECTE DE SUNET</translation>
+        <translation>SFX</translation>
     </message>
     <message>
         <location filename="../../corelib/business_layer/model/comic_book/comic_book_dictionaries_model.cpp" line="123"/>
@@ -157,12 +157,12 @@
     <message>
         <location filename="../../corelib/business_layer/templates/comic_book_template.cpp" line="73"/>
         <source>Folder header</source>
-        <translation>Director / Dosar antet</translation>
+        <translation>Început act</translation>
     </message>
     <message>
         <location filename="../../corelib/business_layer/templates/comic_book_template.cpp" line="75"/>
         <source>Folder footer</source>
-        <translation>Director / Dosar subsol</translation>
+        <translation>Final act</translation>
     </message>
     <message>
         <location filename="../../corelib/business_layer/templates/comic_book_template.cpp" line="77"/>
@@ -414,12 +414,12 @@
     <message>
         <location filename="../../corelib/business_layer/templates/screenplay_template.cpp" line="67"/>
         <source>Scene heading</source>
-        <translation>Locația scenei</translation>
+        <translation>Locația</translation>
     </message>
     <message>
         <location filename="../../corelib/business_layer/templates/screenplay_template.cpp" line="69"/>
         <source>Scene characters</source>
-        <translation>Personajele scenei</translation>
+        <translation>Distribuția</translation>
     </message>
     <message>
         <location filename="../../corelib/business_layer/templates/screenplay_template.cpp" line="71"/>
@@ -469,12 +469,12 @@
     <message>
         <location filename="../../corelib/business_layer/templates/screenplay_template.cpp" line="89"/>
         <source>Folder</source>
-        <translation>Director / Dosar </translation>
+        <translation>Act</translation>
     </message>
     <message>
         <location filename="../../corelib/business_layer/templates/screenplay_template.cpp" line="91"/>
         <source>Folder footer</source>
-        <translation>Director / Dosar  subsol</translation>
+        <translation>Final act</translation>
     </message>
     <message>
         <location filename="../../corelib/business_layer/templates/screenplay_template.cpp" line="93"/>
@@ -866,7 +866,7 @@
     <name>KeyProcessingLayer::FolderFooterHandler</name>
     <message>
         <location filename="../../corelib/business_layer/export/comic_book/comic_book_abstract_exporter.cpp" line="183"/>
-        <location filename="../../corelib/business_layer/export/screenplay/screenplay_abstract_exporter.cpp" line="183"/>
+        <location filename="../../corelib/business_layer/export/screenplay/screenplay_abstract_exporter.cpp" line="197"/>
         <location filename="../management_layer/plugins/comic_book_text/text/comic_book_text_edit.cpp" line="873"/>
         <location filename="../management_layer/plugins/screenplay_text/text/screenplay_text_edit.cpp" line="832"/>
         <source>END OF</source>
@@ -878,7 +878,7 @@
     <message>
         <location filename="../management_layer/content/account/account_manager.cpp" line="407"/>
         <source>Choose avatar</source>
-        <translation>Selecție avatar</translation>
+        <translation>Alege avatar</translation>
     </message>
 </context>
 <context>
@@ -928,7 +928,7 @@
     <message>
         <location filename="../management_layer/application_manager.cpp" line="854"/>
         <source>Choose file to save story</source>
-        <translation>Alege fișierul pentru salvarea povestirii</translation>
+        <translation>Alege fișierul în care vrei să salvezi povestirea</translation>
     </message>
     <message>
         <location filename="../management_layer/application_manager.cpp" line="893"/>
@@ -938,7 +938,7 @@
     <message>
         <location filename="../management_layer/application_manager.cpp" line="943"/>
         <source>You tried to create a project in nonexistent folder %1. Please, choose another location for the new project.</source>
-        <translation>Ați încercat să creați un proiect într-un director care nu există %1. Vă rugăm să selectați o altă locație pentru proiectul nou.</translation>
+        <translation>Ați încercat să creați un proiect într-un folder care nu există %1. Vă rugăm să selectați o altă locație pentru noul proiect.</translation>
     </message>
     <message>
         <location filename="../management_layer/application_manager.cpp" line="948"/>
@@ -948,7 +948,7 @@
     <message>
         <location filename="../management_layer/application_manager.cpp" line="952"/>
         <source>The file can&apos;t be written. Please, check and give permissions to the app to write into the selected folder, or choose another folder for saving a new project.</source>
-        <translation>Fișierul nu este editabil. Vă rugăm să verificați și să acordați permisiunile necesare, pentru ca aplicația să poată scrie în directorul selectat, sau selectați un alt director pentru a salva proiectul nou.</translation>
+        <translation>Fișierul nu poate fi scris. Vă rugăm să verificați și să acordați aplicației permisiunile necesare pentru a scrie în folderul selectat sau selectați un alt folder pentru a salva noul proiect.</translation>
     </message>
     <message>
         <location filename="../management_layer/application_manager.cpp" line="956"/>
@@ -1014,19 +1014,19 @@ Doriți schimbarea?</translation>
         <location filename="../management_layer/content/export/export_manager.cpp" line="130"/>
         <location filename="../management_layer/content/export/export_manager.cpp" line="267"/>
         <source>Can&apos;t write to file. Looks like it&apos;s opened by another application. Please close it and retry the export.</source>
-        <translation type="unfinished"></translation>
+        <translation>Nu se poate scrie fișierul. Se pare că este deschis într-o altă aplicație. Vă rugăm închideți respectiva aplicație și încercați din nou exportul.</translation>
     </message>
     <message>
         <location filename="../management_layer/content/export/export_manager.cpp" line="133"/>
         <location filename="../management_layer/content/export/export_manager.cpp" line="270"/>
         <source>Can&apos;t write to file. Check permissions to write in the chosen folder or choose another folder.</source>
-        <translation type="unfinished"></translation>
+        <translation>Nu se poate scrie în fișier. Verificați dacă aveți permisiunea de a scrie în folderul ales sau alegeți alt folder.</translation>
     </message>
     <message>
         <location filename="../management_layer/content/export/export_manager.cpp" line="136"/>
         <location filename="../management_layer/content/export/export_manager.cpp" line="273"/>
         <source>Export error</source>
-        <translation type="unfinished"></translation>
+        <translation>Eroare la export</translation>
     </message>
 </context>
 <context>
@@ -1044,7 +1044,7 @@ Doriți schimbarea?</translation>
     <message>
         <location filename="../management_layer/content/import/import_manager.cpp" line="153"/>
         <source>Choose the file to import</source>
-        <translation>Selectați fișierul pentru import</translation>
+        <translation>Alege fișierul pe care vrei să-l imporți</translation>
     </message>
 </context>
 <context>
@@ -1071,7 +1071,7 @@ Doriți schimbarea?</translation>
     <message>
         <location filename="../management_layer/plugins/project_information/project_information_manager.cpp" line="62"/>
         <source>Choose cover</source>
-        <translation>Selectați coperta</translation>
+        <translation>Selectează coperta</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/project_information/project_information_manager.cpp" line="63"/>
@@ -1149,7 +1149,7 @@ Doriți schimbarea?</translation>
     <message>
         <location filename="../management_layer/content/projects/projects_manager.cpp" line="251"/>
         <source>Choose the file to open</source>
-        <translation>Selectați fișierul pe care doriți să-l deschideți</translation>
+        <translation>Alege fișierul pe care vrei să-l deschizi</translation>
     </message>
 </context>
 <context>
@@ -1179,22 +1179,22 @@ Doriți schimbarea?</translation>
 <context>
     <name>PageTextEdit</name>
     <message>
-        <location filename="../../corelib/ui/widgets/text_edit/page/page_text_edit.cpp" line="3655"/>
+        <location filename="../../corelib/ui/widgets/text_edit/page/page_text_edit.cpp" line="3654"/>
         <source>Cut</source>
         <translation>Copiază și elimină</translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/widgets/text_edit/page/page_text_edit.cpp" line="3662"/>
+        <location filename="../../corelib/ui/widgets/text_edit/page/page_text_edit.cpp" line="3661"/>
         <source>Copy</source>
         <translation>Copiază</translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/widgets/text_edit/page/page_text_edit.cpp" line="3668"/>
+        <location filename="../../corelib/ui/widgets/text_edit/page/page_text_edit.cpp" line="3667"/>
         <source>Paste</source>
         <translation>Adaugă conținutul copiat</translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/widgets/text_edit/page/page_text_edit.cpp" line="3675"/>
+        <location filename="../../corelib/ui/widgets/text_edit/page/page_text_edit.cpp" line="3674"/>
         <source>Select all</source>
         <translation>Selectează tot</translation>
     </message>
@@ -1482,7 +1482,7 @@ din 2 Gb</translation>
     <message>
         <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="207"/>
         <source>Story role</source>
-        <translation>Rolul povestirii</translation>
+        <translation>Rolul</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="210"/>
@@ -1674,7 +1674,7 @@ din 2 Gb</translation>
     <message>
         <location filename="../management_layer/plugins/comic_book_statistics/comic_book_statistics_view.cpp" line="180"/>
         <source>Characters with/without spaces</source>
-        <translation>Personaje cu/fără spații</translation>
+        <translation>Caractere cu/fără spații</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/comic_book_statistics/comic_book_statistics_view.cpp" line="182"/>
@@ -1733,7 +1733,7 @@ din 2 Gb</translation>
         <location filename="../management_layer/plugins/comic_book_text/comments/comic_book_text_comments_toolbar.cpp" line="312"/>
         <source>Choose color for the action</source>
         <extracomment>This allow user to choose color for the review mode actions like text higlight or comments</extracomment>
-        <translation>Selectare culoare pentru acțiune</translation>
+        <translation>Alege culoarea pentru acțiune</translation>
     </message>
 </context>
 <context>
@@ -1796,7 +1796,7 @@ din 2 Gb</translation>
     <message>
         <location filename="../management_layer/plugins/comic_book_text/text/comic_book_text_edit_toolbar.cpp" line="134"/>
         <source>Scene heading</source>
-        <translation>Locația scenei</translation>
+        <translation>Locația</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/comic_book_text/text/comic_book_text_edit_toolbar.cpp" line="299"/>
@@ -1826,17 +1826,17 @@ din 2 Gb</translation>
     <message>
         <location filename="../management_layer/plugins/comic_book_text/text/comic_book_text_edit_toolbar.cpp" line="311"/>
         <source>Search text</source>
-        <translation>Text de căutat</translation>
+        <translation>Căutare text</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/comic_book_text/text/comic_book_text_edit_toolbar.cpp" line="314"/>
         <source>Disable review mode</source>
-        <translation>Dezactivare mod revizuire</translation>
+        <translation>Dezactivare revizuire</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/comic_book_text/text/comic_book_text_edit_toolbar.cpp" line="315"/>
         <source>Enable review mode</source>
-        <translation>Activare mod revizuire</translation>
+        <translation>Activare revizuire</translation>
     </message>
 </context>
 <context>
@@ -1845,13 +1845,13 @@ din 2 Gb</translation>
         <location filename="../management_layer/plugins/comic_book_text/text/comic_book_text_search_toolbar.cpp" line="202"/>
         <location filename="../management_layer/plugins/comic_book_text/text/comic_book_text_search_toolbar.cpp" line="365"/>
         <source>Search without case sensitive</source>
-        <translation>Căutare fără mărimea literei</translation>
+        <translation>Caută fără a ține cont de mărimea literei</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/comic_book_text/text/comic_book_text_search_toolbar.cpp" line="203"/>
         <location filename="../management_layer/plugins/comic_book_text/text/comic_book_text_search_toolbar.cpp" line="366"/>
         <source>Search with case sensitive</source>
-        <translation>Căutare cu litere mari sau mici</translation>
+        <translation>Caută ținând cont de mărimea literei</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/comic_book_text/text/comic_book_text_search_toolbar.cpp" line="208"/>
@@ -1872,7 +1872,7 @@ din 2 Gb</translation>
     <message>
         <location filename="../management_layer/plugins/comic_book_text/text/comic_book_text_search_toolbar.cpp" line="350"/>
         <source>Enter search phrase here</source>
-        <translation>Introduceți fraza de căutat</translation>
+        <translation>Fraza de căutat</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/comic_book_text/text/comic_book_text_search_toolbar.cpp" line="352"/>
@@ -1912,7 +1912,7 @@ din 2 Gb</translation>
     <message>
         <location filename="../management_layer/plugins/comic_book_text/text/comic_book_text_search_toolbar.cpp" line="369"/>
         <source>Enter phrase to replace</source>
-        <translation>Întroduceți fraza de înlocuit</translation>
+        <translation>Fraza pentru înlocuire</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/comic_book_text/text/comic_book_text_search_toolbar.cpp" line="370"/>
@@ -1988,7 +1988,7 @@ din 2 Gb</translation>
     <message>
         <location filename="../management_layer/plugins/comic_book_text/comic_book_text_view.cpp" line="651"/>
         <source>Folder</source>
-        <translation>Director / Dosar </translation>
+        <translation>Dosar </translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/comic_book_text/comic_book_text_view.cpp" line="652"/>
@@ -2014,22 +2014,22 @@ din 2 Gb</translation>
     <message>
         <location filename="../ui/project/create_document_dialog.cpp" line="87"/>
         <source>Create a folder to group documents inside the story.</source>
-        <translation>Creează un dosar pentru a grupa documentele în cadrul povestirii</translation>
+        <translation>Creează un dosar pentru a grupa documentele în cadrul povestirii.</translation>
     </message>
     <message>
         <location filename="../ui/project/create_document_dialog.cpp" line="89"/>
         <source>Create a plain text document to write out ideas and notes.</source>
-        <translation>Creează un text simplu pentru a nota idei</translation>
+        <translation>Creează un text simplu pentru a nota idei.</translation>
     </message>
     <message>
         <location filename="../ui/project/create_document_dialog.cpp" line="91"/>
         <source>Create a document with full Character&apos;s description to track his relations and follow his journey within the story.</source>
-        <translation>Creează un document cu descrierea completă a personajului, pentru a-i urmări relațiile și parcursul de-a lungul povestirii.</translation>
+        <translation>Creează un document cu descrierea completă a personajului pentru a-i urmări relațiile și parcursul de-a lungul povestirii.</translation>
     </message>
     <message>
         <location filename="../ui/project/create_document_dialog.cpp" line="94"/>
         <source>Create a document to note down the Location&apos;s description and keep the details.</source>
-        <translation>Creează un document pentru a nota descrierea locațiilor și a păstra detaliile.</translation>
+        <translation>Creează un document cu descrierea detaliată a locațiilor.</translation>
     </message>
     <message>
         <location filename="../ui/project/create_document_dialog.cpp" line="97"/>
@@ -2059,7 +2059,7 @@ din 2 Gb</translation>
     <message>
         <location filename="../ui/project/create_document_dialog.cpp" line="180"/>
         <source>Folder</source>
-        <translation>Director / Dosar </translation>
+        <translation>Dosar </translation>
     </message>
     <message>
         <location filename="../ui/project/create_document_dialog.cpp" line="181"/>
@@ -2107,12 +2107,12 @@ din 2 Gb</translation>
     <message>
         <location filename="../ui/projects/create_project_dialog.cpp" line="118"/>
         <source>Choose the folder where new story will be saved</source>
-        <translation>Selectați dosarul unde se va salva noua povestire</translation>
+        <translation>Alege directorul în care se va salva noua povestire.</translation>
     </message>
     <message>
         <location filename="../ui/projects/create_project_dialog.cpp" line="125"/>
         <source>Choose the file to import</source>
-        <translation>Selectați fișierul pentru import</translation>
+        <translation>Alege fișierul pe care vrei să-l imporți</translation>
     </message>
     <message>
         <location filename="../ui/projects/create_project_dialog.cpp" line="134"/>
@@ -2177,7 +2177,7 @@ din 2 Gb</translation>
     <message>
         <location filename="../ui/projects/create_project_dialog.cpp" line="269"/>
         <source>Choose file with story to import</source>
-        <translation>Selectare fișier cu povestire pentru import</translation>
+        <translation>Alege fișierul cu povestirea pe care vrei s-o imporți</translation>
     </message>
     <message>
         <location filename="../ui/projects/create_project_dialog.cpp" line="270"/>
@@ -2266,7 +2266,7 @@ din 2 Gb</translation>
     <message>
         <location filename="../management_layer/plugins/location_information/location_information_view.cpp" line="197"/>
         <source>Story role</source>
-        <translation>Rolul povestirii</translation>
+        <translation>Rolul</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/location_information/location_information_view.cpp" line="200"/>
@@ -2438,7 +2438,7 @@ din 2 Gb</translation>
     <message>
         <location filename="../ui/onboarding/onboarding_navigator.cpp" line="32"/>
         <source>Choose language</source>
-        <translation>Selectare limbă</translation>
+        <translation>Alege limba</translation>
     </message>
     <message>
         <location filename="../ui/onboarding/onboarding_navigator.cpp" line="33"/>
@@ -2451,7 +2451,7 @@ din 2 Gb</translation>
     <message>
         <location filename="../ui/onboarding/onboarding_view.cpp" line="383"/>
         <source>Choose preferred language</source>
-        <translation>Selectare limbă preferată</translation>
+        <translation>Alege limba preferată</translation>
     </message>
     <message>
         <location filename="../ui/onboarding/onboarding_view.cpp" line="385"/>
@@ -2471,7 +2471,7 @@ din 2 Gb</translation>
     <message>
         <location filename="../ui/onboarding/onboarding_view.cpp" line="389"/>
         <source>Choose application theme</source>
-        <translation>Selectarea temei aplicației</translation>
+        <translation>Selectează tema aplicației</translation>
     </message>
     <message>
         <location filename="../ui/onboarding/onboarding_view.cpp" line="390"/>
@@ -2671,77 +2671,87 @@ din 2 Gb</translation>
 <context>
     <name>Ui::ScreenplayExportDialog</name>
     <message>
-        <location filename="../ui/export/screenplay_export_dialog.cpp" line="252"/>
+        <location filename="../ui/export/screenplay_export_dialog.cpp" line="296"/>
         <source>Export screenplay</source>
         <translation>Exportă scenariul</translation>
     </message>
     <message>
-        <location filename="../ui/export/screenplay_export_dialog.cpp" line="254"/>
+        <location filename="../ui/export/screenplay_export_dialog.cpp" line="298"/>
         <source>Format</source>
         <translation>Format</translation>
     </message>
     <message>
-        <location filename="../ui/export/screenplay_export_dialog.cpp" line="255"/>
+        <location filename="../ui/export/screenplay_export_dialog.cpp" line="299"/>
         <source>Template</source>
         <translation>Șablon</translation>
     </message>
     <message>
-        <location filename="../ui/export/screenplay_export_dialog.cpp" line="256"/>
+        <location filename="../ui/export/screenplay_export_dialog.cpp" line="300"/>
         <source>Print title page</source>
         <translation>Printează pagina de titlu</translation>
     </message>
     <message>
-        <location filename="../ui/export/screenplay_export_dialog.cpp" line="257"/>
+        <location filename="../ui/export/screenplay_export_dialog.cpp" line="301"/>
         <source>Print folders</source>
-        <translation>Printează dosarele</translation>
+        <translation>Printează actele</translation>
     </message>
     <message>
-        <location filename="../ui/export/screenplay_export_dialog.cpp" line="258"/>
+        <location filename="../ui/export/screenplay_export_dialog.cpp" line="302"/>
         <source>Print inline notes</source>
         <translation>Printează notele interioare</translation>
     </message>
     <message>
-        <location filename="../ui/export/screenplay_export_dialog.cpp" line="259"/>
+        <location filename="../ui/export/screenplay_export_dialog.cpp" line="303"/>
+        <source>Print concrete scenes</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ui/export/screenplay_export_dialog.cpp" line="304"/>
+        <source>Keep empty, if you want to print all scenes</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ui/export/screenplay_export_dialog.cpp" line="305"/>
         <source>Print scenes numbers</source>
         <translation>Printează numerele scenelor</translation>
     </message>
     <message>
-        <location filename="../ui/export/screenplay_export_dialog.cpp" line="260"/>
+        <location filename="../ui/export/screenplay_export_dialog.cpp" line="306"/>
         <source>on the left</source>
         <translation>în stânga</translation>
     </message>
     <message>
-        <location filename="../ui/export/screenplay_export_dialog.cpp" line="261"/>
+        <location filename="../ui/export/screenplay_export_dialog.cpp" line="307"/>
         <source>on the right</source>
         <translation>în dreapta</translation>
     </message>
     <message>
-        <location filename="../ui/export/screenplay_export_dialog.cpp" line="262"/>
+        <location filename="../ui/export/screenplay_export_dialog.cpp" line="308"/>
         <source>Print dialogues numbers</source>
         <translation>Printează numerele dialogurilor</translation>
     </message>
     <message>
-        <location filename="../ui/export/screenplay_export_dialog.cpp" line="263"/>
+        <location filename="../ui/export/screenplay_export_dialog.cpp" line="309"/>
         <source>Print review marks</source>
         <translation>Printează semnele de revizuire</translation>
     </message>
     <message>
-        <location filename="../ui/export/screenplay_export_dialog.cpp" line="264"/>
+        <location filename="../ui/export/screenplay_export_dialog.cpp" line="310"/>
         <source>Watermark</source>
         <translation>Filigran</translation>
     </message>
     <message>
-        <location filename="../ui/export/screenplay_export_dialog.cpp" line="266"/>
+        <location filename="../ui/export/screenplay_export_dialog.cpp" line="312"/>
         <source>Open document after export</source>
         <translation>Deschide documentul după export</translation>
     </message>
     <message>
-        <location filename="../ui/export/screenplay_export_dialog.cpp" line="267"/>
+        <location filename="../ui/export/screenplay_export_dialog.cpp" line="313"/>
         <source>Export</source>
         <translation>Export</translation>
     </message>
     <message>
-        <location filename="../ui/export/screenplay_export_dialog.cpp" line="268"/>
+        <location filename="../ui/export/screenplay_export_dialog.cpp" line="314"/>
         <source>Cancel</source>
         <translation>Anulare</translation>
     </message>
@@ -2842,7 +2852,7 @@ din 2 Gb</translation>
     <message>
         <location filename="../management_layer/plugins/screenplay_statistics/screenplay_statistics_view.cpp" line="234"/>
         <source>Characters with/without spaces</source>
-        <translation>Personaje cu/fără spații</translation>
+        <translation>Caractere cu/fără spații</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/screenplay_statistics/screenplay_statistics_view.cpp" line="236"/>
@@ -2995,7 +3005,7 @@ din 2 Gb</translation>
     <message>
         <location filename="../ui/settings/screenplay_template/screenplay_template_paragraphs_view.cpp" line="523"/>
         <source>Use UPPERCASE characters for paragraph text</source>
-        <translation>Folosește litere mari pentru textul paragrafului</translation>
+        <translation>Folosește litere MARI pentru textul paragrafului</translation>
     </message>
     <message>
         <location filename="../ui/settings/screenplay_template/screenplay_template_paragraphs_view.cpp" line="524"/>
@@ -3189,7 +3199,7 @@ din 2 Gb</translation>
         <location filename="../management_layer/plugins/screenplay_text/comments/screenplay_text_comments_toolbar.cpp" line="312"/>
         <source>Choose color for the action</source>
         <extracomment>This allow user to choose color for the review mode actions like text higlight or comments</extracomment>
-        <translation>Selectare culoare pentru acțiune</translation>
+        <translation>Alege culoarea pentru acțiune</translation>
     </message>
 </context>
 <context>
@@ -3243,7 +3253,7 @@ din 2 Gb</translation>
     <message>
         <location filename="../management_layer/plugins/screenplay_text/text/screenplay_text_edit_toolbar.cpp" line="134"/>
         <source>Scene heading</source>
-        <translation>Locația scenei</translation>
+        <translation>Locația</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/screenplay_text/text/screenplay_text_edit_toolbar.cpp" line="299"/>
@@ -3273,17 +3283,17 @@ din 2 Gb</translation>
     <message>
         <location filename="../management_layer/plugins/screenplay_text/text/screenplay_text_edit_toolbar.cpp" line="311"/>
         <source>Search text</source>
-        <translation>Text de căutat</translation>
+        <translation>Căutare text</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/screenplay_text/text/screenplay_text_edit_toolbar.cpp" line="314"/>
         <source>Disable review mode</source>
-        <translation>Dezactivare mod revizuire</translation>
+        <translation>Dezactivare revizuire</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/screenplay_text/text/screenplay_text_edit_toolbar.cpp" line="315"/>
         <source>Enable review mode</source>
-        <translation>Activare mod revizuire</translation>
+        <translation>Activare revizuire</translation>
     </message>
 </context>
 <context>
@@ -3292,13 +3302,13 @@ din 2 Gb</translation>
         <location filename="../management_layer/plugins/screenplay_text/text/screenplay_text_search_toolbar.cpp" line="202"/>
         <location filename="../management_layer/plugins/screenplay_text/text/screenplay_text_search_toolbar.cpp" line="365"/>
         <source>Search without case sensitive</source>
-        <translation>Căutare fără mărimea literei</translation>
+        <translation>Caută fără a ține cont de mărimea literei</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/screenplay_text/text/screenplay_text_search_toolbar.cpp" line="203"/>
         <location filename="../management_layer/plugins/screenplay_text/text/screenplay_text_search_toolbar.cpp" line="366"/>
         <source>Search with case sensitive</source>
-        <translation>Căutare cu litere mari sau mici</translation>
+        <translation>Caută ținând cont de mărimea literei</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/screenplay_text/text/screenplay_text_search_toolbar.cpp" line="208"/>
@@ -3319,7 +3329,7 @@ din 2 Gb</translation>
     <message>
         <location filename="../management_layer/plugins/screenplay_text/text/screenplay_text_search_toolbar.cpp" line="350"/>
         <source>Enter search phrase here</source>
-        <translation>Introduceți fraza de căutat</translation>
+        <translation>Fraza de căutat</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/screenplay_text/text/screenplay_text_search_toolbar.cpp" line="352"/>
@@ -3359,7 +3369,7 @@ din 2 Gb</translation>
     <message>
         <location filename="../management_layer/plugins/screenplay_text/text/screenplay_text_search_toolbar.cpp" line="369"/>
         <source>Enter phrase to replace</source>
-        <translation>Introduceți fraza de înlocuit</translation>
+        <translation>Fraza pentru înlocuire</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/screenplay_text/text/screenplay_text_search_toolbar.cpp" line="370"/>
@@ -3377,12 +3387,12 @@ din 2 Gb</translation>
     <message>
         <location filename="../management_layer/plugins/screenplay_text/screenplay_text_view.cpp" line="649"/>
         <source>Scene heading</source>
-        <translation>Locația scenei</translation>
+        <translation>Locația</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/screenplay_text/screenplay_text_view.cpp" line="650"/>
         <source>Scene characters</source>
-        <translation>Personajele scenei</translation>
+        <translation>Distribuția</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/screenplay_text/screenplay_text_view.cpp" line="651"/>
@@ -3432,7 +3442,7 @@ din 2 Gb</translation>
     <message>
         <location filename="../management_layer/plugins/screenplay_text/screenplay_text_view.cpp" line="660"/>
         <source>Folder</source>
-        <translation>Director / Dosar </translation>
+        <translation>Dosar </translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/screenplay_text/screenplay_text_view.cpp" line="661"/>
@@ -3506,7 +3516,7 @@ din 2 Gb</translation>
     <message>
         <location filename="../ui/settings/settings_view.cpp" line="759"/>
         <source>Choose the folder where backups will be saved</source>
-        <translation>Selectați directorul unde vor fi salvate backup-urile</translation>
+        <translation>Alege directorul în care vor fi salvate backup-urile.</translation>
     </message>
     <message>
         <location filename="../ui/settings/settings_view.cpp" line="856"/>
@@ -4360,7 +4370,7 @@ Dacă lucrați fără întrerupere, salvează proiectul la fiecare 3 minute.</tr
     <message>
         <location filename="../management_layer/plugins/simple_text/text/simple_text_edit_toolbar.cpp" line="134"/>
         <source>Scene heading</source>
-        <translation>Locația scenei</translation>
+        <translation>Locația</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/simple_text/text/simple_text_edit_toolbar.cpp" line="295"/>
@@ -4390,17 +4400,17 @@ Dacă lucrați fără întrerupere, salvează proiectul la fiecare 3 minute.</tr
     <message>
         <location filename="../management_layer/plugins/simple_text/text/simple_text_edit_toolbar.cpp" line="307"/>
         <source>Search text</source>
-        <translation>Text de căutat</translation>
+        <translation>Căutare text</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/simple_text/text/simple_text_edit_toolbar.cpp" line="310"/>
         <source>Disable review mode</source>
-        <translation>Dezactivare mod revizuire</translation>
+        <translation>Dezactivare revizuire</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/simple_text/text/simple_text_edit_toolbar.cpp" line="311"/>
         <source>Enable review mode</source>
-        <translation>Activare mod revizuire</translation>
+        <translation>Activare revizuire</translation>
     </message>
 </context>
 <context>
@@ -4409,13 +4419,13 @@ Dacă lucrați fără întrerupere, salvează proiectul la fiecare 3 minute.</tr
         <location filename="../management_layer/plugins/simple_text/text/simple_text_search_toolbar.cpp" line="115"/>
         <location filename="../management_layer/plugins/simple_text/text/simple_text_search_toolbar.cpp" line="224"/>
         <source>Search without case sensitive</source>
-        <translation>Căutare fără mărimea literei</translation>
+        <translation>Caută fără a ține cont de mărimea literei</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/simple_text/text/simple_text_search_toolbar.cpp" line="116"/>
         <location filename="../management_layer/plugins/simple_text/text/simple_text_search_toolbar.cpp" line="225"/>
         <source>Search with case sensitive</source>
-        <translation>Căutare cu litere mari sau mici</translation>
+        <translation>Caută ținând cont de mărimea literei</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/simple_text/text/simple_text_search_toolbar.cpp" line="210"/>
@@ -4430,7 +4440,7 @@ Dacă lucrați fără întrerupere, salvează proiectul la fiecare 3 minute.</tr
     <message>
         <location filename="../management_layer/plugins/simple_text/text/simple_text_search_toolbar.cpp" line="214"/>
         <source>Enter search phrase here</source>
-        <translation>Introduceți fraza de căutat</translation>
+        <translation>Fraza de căutat</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/simple_text/text/simple_text_search_toolbar.cpp" line="216"/>
@@ -4450,7 +4460,7 @@ Dacă lucrați fără întrerupere, salvează proiectul la fiecare 3 minute.</tr
     <message>
         <location filename="../management_layer/plugins/simple_text/text/simple_text_search_toolbar.cpp" line="228"/>
         <source>Enter phrase to replace</source>
-        <translation>Introduceți fraza de înlocuit</translation>
+        <translation>Fraza pentru înlocuire</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/simple_text/text/simple_text_search_toolbar.cpp" line="229"/>
@@ -4644,17 +4654,17 @@ Dacă lucrați fără întrerupere, salvează proiectul la fiecare 3 minute.</tr
     <message>
         <location filename="../management_layer/plugins/title_page/text/title_page_edit_toolbar.cpp" line="250"/>
         <source>Current text font family</source>
-        <translation>Actualul font pentru text</translation>
+        <translation>Fontul pentru text</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/title_page/text/title_page_edit_toolbar.cpp" line="251"/>
         <source>Current text font size</source>
-        <translation>Actuala mărime a fontului pentru text</translation>
+        <translation>Mărimea fontului pentru text</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/title_page/text/title_page_edit_toolbar.cpp" line="252"/>
         <source>Restore default title page</source>
-        <translation type="unfinished"></translation>
+        <translation>Restaurează pagina de titlu la forma inițială</translation>
     </message>
 </context>
 <context>
@@ -4688,7 +4698,7 @@ Dacă lucrați fără întrerupere, salvează proiectul la fiecare 3 minute.</tr
 <context>
     <name>WebLoader</name>
     <message>
-        <location filename="../../3rd_party/webloader/src/WebLoader.cpp" line="310"/>
+        <location filename="../../3rd_party/webloader/src/WebLoader.cpp" line="312"/>
         <source>Sorry, we have some error while loading. Error is: %1</source>
         <translation>Ne pare rău, a apărut o eroare în timpul încărcării. Eroarea este: %1</translation>
     </message>
