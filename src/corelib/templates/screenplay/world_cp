@@ -63,7 +63,7 @@
         </document>
     </titlepage>
     <blocks>
-        <block id="text" active="true" starts_from_new_page="false" font_family="Courier Prime" font_size="12" bold="false" italic="false" underline="false" uppercase="false" alignment="left" lines_before="0" lines_after="0" margins="0,0,0,0" margins_on_half_page="0,0,0,0" line_spacing="single" line_spacing_value="0"/>
+        <block id="unformatted_text" active="true" starts_from_new_page="false" font_family="Courier Prime" font_size="12" bold="false" italic="false" underline="false" uppercase="false" alignment="left" lines_before="0" lines_after="0" margins="0,0,0,0" margins_on_half_page="0,0,0,0" line_spacing="single" line_spacing_value="0"/>
         <block id="scene_heading" active="true" starts_from_new_page="false" font_family="Courier Prime" font_size="12" bold="false" italic="false" underline="false" uppercase="true" alignment="left" lines_before="2" lines_after="0" margins="0,0,0,0" margins_on_half_page="0,0,0,0" line_spacing="single" line_spacing_value="0"/>
         <block id="scene_characters" active="true" starts_from_new_page="false" font_family="Courier Prime" font_size="12" bold="false" italic="false" underline="false" uppercase="true" alignment="left" lines_before="0" lines_after="0" margins="0,0,0,0" margins_on_half_page="0,0,0,0" line_spacing="single" line_spacing_value="0"/>
         <block id="action" active="true" starts_from_new_page="false" font_family="Courier Prime" font_size="12" bold="false" italic="false" underline="false" uppercase="false" alignment="left" lines_before="1" lines_after="0" margins="0,0,0,0" margins_on_half_page="0,0,0,0" line_spacing="single" line_spacing_value="0"/>
