@@ -1,6 +1,5 @@
 #pragma once
 
-#include <QSettings>
 #include <QVariant>
 #include <QVariantMap>
 

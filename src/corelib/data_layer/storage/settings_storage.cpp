@@ -10,6 +10,7 @@
 #include <QDir>
 #include <QKeySequence>
 #include <QLocale>
+#include <QSettings>
 #include <QStandardPaths>
 
 using DataMappingLayer::MapperFacade;
