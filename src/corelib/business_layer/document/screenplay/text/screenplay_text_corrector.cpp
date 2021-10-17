@@ -1599,18 +1599,29 @@ void ScreenplayTextCorrector::Implementation::moveCurrentBlockToNextPage(
     const QTextBlockFormat& _blockFormat, qreal _blockHeight, qreal _pageHeight, qreal _pageWidth,
     ScreenplayTextCursor& _cursor, QTextBlock& _block, qreal& _lastBlockHeight)
 {
-    const qreal sizeToPageEnd = _pageHeight - _lastBlockHeight;
-    moveBlockToNextPage(_block, sizeToPageEnd, _pageHeight, _pageWidth, _cursor);
-    _block = _cursor.block();
+    if (_blockHeight < _pageHeight) {
+        const qreal sizeToPageEnd = _pageHeight - _lastBlockHeight;
+        moveBlockToNextPage(_block, sizeToPageEnd, _pageHeight, _pageWidth, _cursor);
+        _block = _cursor.block();
+    }
+
     //
     // Запоминаем параметры текущего блока
     //
     blockItems[currentBlockInfo.number++] = BlockInfo{ _blockHeight - _blockFormat.topMargin(), 0,
                                                        ScreenplayBlockStyle::forBlock(_block) };
-    //
-    // Обозначаем последнюю высоту, как высоту текущего блока
-    //
-    _lastBlockHeight = _blockHeight - _blockFormat.topMargin();
+
+    if (_blockHeight < _pageHeight) {
+        //
+        // Обозначаем последнюю высоту, как высоту текущего блока
+        //
+        _lastBlockHeight = _blockHeight - _blockFormat.topMargin();
+    } else {
+        _lastBlockHeight = _blockHeight;
+        while (_lastBlockHeight > _pageHeight) {
+            _lastBlockHeight -= _pageHeight;
+        }
+    }
 }
 
 void ScreenplayTextCorrector::Implementation::breakDialogue(

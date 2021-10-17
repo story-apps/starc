@@ -106,6 +106,7 @@ void DialogHandler::handleEnter(QKeyEvent*)
                                         == ScreenplayParagraphType::Lyrics)
                                    && !cursor.atStart()) {
                                 cursor.movePosition(QTextCursor::PreviousBlock);
+                                cursor.movePosition(QTextCursor::StartOfBlock);
                                 cursorBlock = cursor.block();
                             }
 
