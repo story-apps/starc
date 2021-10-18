@@ -224,12 +224,6 @@ jobs:
           version: 5.15.2
           target: desktop
 
-#       - name: Install dependencies
-#         shell: bash
-#         run: |
-#           sudo apt update
-#           sudo apt install libgstreamer-plugins-base1.0-0
-
       - name: Run QMake
         shell: bash
         run: |
@@ -242,14 +236,22 @@ jobs:
           cd src
           make -j$(nproc)
 
-#       - name: Make AppImage
-#         shell: bash
-#         run: |
-#           cd build/linux
-#           ./make-starc-app-image.sh ${{env.APP_VERSION}}
+      - name: Make dmg image
+        shell: bash
+        run: |
+          cd build/mac
+          ./create_dmg.sh ${{env.APP_VERSION}}
+        env:
+          APPLE_CERTIFICATE: ${{ secrets.APPLE_CERTIFICATE }}
+          APPLE_CERTIFICATE_PASSWORD: ${{ secrets.APPLE_CERTIFICATE_PASSWORD }}
+          APPLE_KEYCHAIN_PASSWORD: ${{ secrets.APPLE_KEYCHAIN_PASSWORD }}
+          APPLE_SIGNING_IDENTITY: ${{ secrets.APPLE_SIGNING_IDENTITY }}
+          APPLE_ID: ${{ secrets.APPLE_ID }}
+          APPLE_ID_APP_PASSWORD: ${{ secrets.APPLE_ID_APP_PASSWORD }}
+          APPLE_TEAM_ID: ${{ secrets.APPLE_TEAM_ID }}
 
-#       - name: Collect artifacts
-#         uses: actions/upload-artifact@v2
-#         with:
-#           name: linux packages
-#           path: build/linux/starc-${{env.APP_VERSION}}.AppImage
+      - name: Collect artifacts
+        uses: actions/upload-artifact@v2
+        with:
+          name: mac packages
+          path: build/mac/starc-setup-${{env.APP_VERSION}}.dmg
