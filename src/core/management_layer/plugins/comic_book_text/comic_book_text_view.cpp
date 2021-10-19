@@ -91,7 +91,6 @@ public:
     ComicBookTextEditToolbar* toolbar = nullptr;
     BusinessLayer::ComicBookTextSearchManager* searchManager = nullptr;
     FloatingToolbarAnimator* toolbarAnimation = nullptr;
-    QHash<BusinessLayer::ComicBookParagraphType, QString> typesToDisplayNames;
     BusinessLayer::ComicBookParagraphType currentParagraphType
         = BusinessLayer::ComicBookParagraphType::Undefined;
     QStandardItemModel* paragraphTypesModel = nullptr;
@@ -480,7 +479,7 @@ void ComicBookTextView::reconfigure(const QStringList& _changedSettingsKeys)
             continue;
         }
 
-        auto typeItem = new QStandardItem(d->typesToDisplayNames.value(type));
+        auto typeItem = new QStandardItem(toDisplayString(type));
         typeItem->setData(d->shortcutsManager.shortcut(type), Qt::WhatsThisRole);
         typeItem->setData(static_cast<int>(type), kTypeDataRole);
         d->paragraphTypesModel->appendRow(typeItem);
@@ -640,15 +639,6 @@ void ComicBookTextView::resizeEvent(QResizeEvent* _event)
 
 void ComicBookTextView::updateTranslations()
 {
-    using namespace BusinessLayer;
-    d->typesToDisplayNames = { { ComicBookParagraphType::Page, tr("Page") },
-                               { ComicBookParagraphType::Panel, tr("Panel") },
-                               { ComicBookParagraphType::Description, tr("Description") },
-                               { ComicBookParagraphType::Character, tr("Character") },
-                               { ComicBookParagraphType::Dialogue, tr("Dialogue") },
-                               { ComicBookParagraphType::InlineNote, tr("Inline note") },
-                               { ComicBookParagraphType::UnformattedText, tr("Unformatted text") },
-                               { ComicBookParagraphType::FolderHeader, tr("Folder") } };
     d->sidebarTabs->setTabName(kFastFormatTabIndex, tr("Formatting"));
     d->sidebarTabs->setTabName(kCommentsTabIndex, tr("Comments"));
 }

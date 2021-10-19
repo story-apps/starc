@@ -298,7 +298,7 @@ void ScreenplayExportDialog::updateTranslations()
     d->fileFormat->setLabel(tr("Format"));
     d->screenplayTemplate->setLabel(tr("Template"));
     d->printTitlePage->setText(tr("Print title page"));
-    d->printFolders->setText(tr("Print folders"));
+    d->printFolders->setText(tr("Print sequences headers and footers"));
     d->printInlineNotes->setText(tr("Print inline notes"));
     d->printScenes->setLabel(tr("Print concrete scenes"));
     d->printScenes->setHelper(tr("Keep empty, if you want to print all scenes"));

@@ -93,7 +93,6 @@ public:
     ScreenplayTextEditToolbar* toolbar = nullptr;
     BusinessLayer::ScreenplayTextSearchManager* searchManager = nullptr;
     FloatingToolbarAnimator* toolbarAnimation = nullptr;
-    QHash<BusinessLayer::ScreenplayParagraphType, QString> typesToDisplayNames;
     BusinessLayer::ScreenplayParagraphType currentParagraphType
         = BusinessLayer::ScreenplayParagraphType::Undefined;
     QStandardItemModel* paragraphTypesModel = nullptr;
@@ -483,7 +482,7 @@ void ScreenplayTextView::reconfigure(const QStringList& _changedSettingsKeys)
             continue;
         }
 
-        auto typeItem = new QStandardItem(d->typesToDisplayNames.value(type));
+        auto typeItem = new QStandardItem(toDisplayString(type));
         typeItem->setData(d->shortcutsManager.shortcut(type), Qt::WhatsThisRole);
         typeItem->setData(static_cast<int>(type), kTypeDataRole);
         d->paragraphTypesModel->appendRow(typeItem);
@@ -645,19 +644,6 @@ void ScreenplayTextView::resizeEvent(QResizeEvent* _event)
 
 void ScreenplayTextView::updateTranslations()
 {
-    using namespace BusinessLayer;
-    d->typesToDisplayNames = { { ScreenplayParagraphType::SceneHeading, tr("Scene heading") },
-                               { ScreenplayParagraphType::SceneCharacters, tr("Scene characters") },
-                               { ScreenplayParagraphType::Action, tr("Action") },
-                               { ScreenplayParagraphType::Character, tr("Character") },
-                               { ScreenplayParagraphType::Parenthetical, tr("Parenthetical") },
-                               { ScreenplayParagraphType::Dialogue, tr("Dialogue") },
-                               { ScreenplayParagraphType::Lyrics, tr("Lyrics") },
-                               { ScreenplayParagraphType::Shot, tr("Shot") },
-                               { ScreenplayParagraphType::Transition, tr("Transition") },
-                               { ScreenplayParagraphType::InlineNote, tr("Inline note") },
-                               { ScreenplayParagraphType::UnformattedText, tr("Unformatted text") },
-                               { ScreenplayParagraphType::FolderHeader, tr("Folder") } };
     d->sidebarTabs->setTabName(kFastFormatTabIndex, tr("Formatting"));
     d->sidebarTabs->setTabName(kCommentsTabIndex, tr("Comments"));
 }

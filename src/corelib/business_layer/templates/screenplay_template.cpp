@@ -86,9 +86,9 @@ QString toDisplayString(ScreenplayParagraphType _type)
     case ScreenplayParagraphType::UnformattedText:
         return QCoreApplication::translate("BusinessLayer::ScreenplayTemplate", "Unformatted text");
     case ScreenplayParagraphType::FolderHeader:
-        return QCoreApplication::translate("BusinessLayer::ScreenplayTemplate", "Folder");
+        return QCoreApplication::translate("BusinessLayer::ScreenplayTemplate", "Sequence");
     case ScreenplayParagraphType::FolderFooter:
-        return QCoreApplication::translate("BusinessLayer::ScreenplayTemplate", "Folder footer");
+        return QCoreApplication::translate("BusinessLayer::ScreenplayTemplate", "Sequence footer");
     default:
         return QCoreApplication::translate("BusinessLayer::ScreenplayTemplate", "Undefined");
     }

@@ -69,12 +69,12 @@ QString toDisplayString(ComicBookParagraphType _type)
         return QCoreApplication::translate("BusinessLayer::ComicBookTemplate", "Dialogue");
     case ComicBookParagraphType::InlineNote:
         return QCoreApplication::translate("BusinessLayer::ComicBookTemplate", "Inline note");
-    case ComicBookParagraphType::FolderHeader:
-        return QCoreApplication::translate("BusinessLayer::ComicBookTemplate", "Folder header");
-    case ComicBookParagraphType::FolderFooter:
-        return QCoreApplication::translate("BusinessLayer::ComicBookTemplate", "Folder footer");
     case ComicBookParagraphType::UnformattedText:
         return QCoreApplication::translate("BusinessLayer::ComicBookTemplate", "Unformatted text");
+    case ComicBookParagraphType::FolderHeader:
+        return QCoreApplication::translate("BusinessLayer::ComicBookTemplate", "Sequence");
+    case ComicBookParagraphType::FolderFooter:
+        return QCoreApplication::translate("BusinessLayer::ComicBookTemplate", "Sequence footer");
     default:
         return QCoreApplication::translate("BusinessLayer::ComicBookTemplate", "Undefined");
     }
