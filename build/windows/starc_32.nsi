@@ -55,7 +55,6 @@
 ;Languages
 
   !insertmacro MUI_LANGUAGE "English"
-  !insertmacro MUI_LANGUAGE "Russian"  
 
 ;--------------------------------
 ;Additional includes
