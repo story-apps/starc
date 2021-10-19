@@ -54,9 +54,9 @@ static void printPage(int _pageNumber, QPainter* _painter, const QTextDocument* 
     layout->draw(_painter, ctx);
 
     //
-    // Печатаем номера сцен и реплик, если нужно
+    // Печатаем декорации текста
     //
-    if (_exportOptions.printScenesNumbers || _exportOptions.printDialoguesNumbers) {
+    {
         _painter->save();
         const QRectF fullWidthPageRect(0, pageYPos, _body.width(), _body.height());
         _painter->setClipRect(fullWidthPageRect);
