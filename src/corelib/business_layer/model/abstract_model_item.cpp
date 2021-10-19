@@ -31,7 +31,11 @@ AbstractModelItem::AbstractModelItem()
 {
 }
 
-AbstractModelItem::~AbstractModelItem() = default;
+AbstractModelItem::~AbstractModelItem()
+{
+    qDeleteAll(d->children);
+    d->children.clear();
+};
 
 void AbstractModelItem::prependItem(AbstractModelItem* _item)
 {
