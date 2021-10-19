@@ -149,15 +149,20 @@ void ProjectManager::Implementation::updateNavigatorContextMenu(const QModelInde
                 [this, currentItemIndex] { this->addDocument(currentItemIndex); });
         menuActions.append(addDocument);
 
-        const QSet<Domain::DocumentObjectType> cantBeRemovedItems
-            = { Domain::DocumentObjectType::Project,
-                Domain::DocumentObjectType::Characters,
-                Domain::DocumentObjectType::Locations,
-                Domain::DocumentObjectType::ScreenplayTitlePage,
-                Domain::DocumentObjectType::ScreenplaySynopsis,
-                Domain::DocumentObjectType::ScreenplayTreatment,
-                Domain::DocumentObjectType::ScreenplayText,
-                Domain::DocumentObjectType::ScreenplayStatistics };
+        const QSet<Domain::DocumentObjectType> cantBeRemovedItems = {
+            Domain::DocumentObjectType::Project,
+            Domain::DocumentObjectType::Characters,
+            Domain::DocumentObjectType::Locations,
+            Domain::DocumentObjectType::ScreenplayTitlePage,
+            Domain::DocumentObjectType::ScreenplaySynopsis,
+            Domain::DocumentObjectType::ScreenplayTreatment,
+            Domain::DocumentObjectType::ScreenplayText,
+            Domain::DocumentObjectType::ScreenplayStatistics,
+            Domain::DocumentObjectType::ComicBookTitlePage,
+            Domain::DocumentObjectType::ComicBookSynopsis,
+            Domain::DocumentObjectType::ComicBookText,
+            Domain::DocumentObjectType::ComicBookStatistics,
+        };
         if (_index.isValid() && !cantBeRemovedItems.contains(currentItem->type())) {
             auto removeDocument = new QAction(tr("Remove document"));
             removeDocument->setIconText(u8"\U000f01b4");
