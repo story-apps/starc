@@ -68,6 +68,12 @@ void ComicBookTextCommentsView::Implementation::updateCommentsViewContextMenu(
     // Настраиваем контекстное меню для одного элемента
     //
     if (_indexes.size() == 1) {
+        auto discuss = new QAction(tr("Discuss"));
+        discuss->setIconText(u8"\U000F0860");
+        connect(discuss, &QAction::triggered, _view, [this, _view] {
+            _view->showCommentRepliesView(commentsView->selectedIndexes().constFirst());
+        });
+        menuActions.append(discuss);
         if (_indexes.constFirst()
                 .data(BusinessLayer::ComicBookTextCommentsModel::ReviewMarkIsDoneRole)
                 .toBool()) {
