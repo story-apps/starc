@@ -123,6 +123,7 @@ Drawer::Drawer(QWidget* _parent)
     : Widget(_parent)
     , d(new Implementation)
 {
+    setAttribute(Qt::WA_Hover);
     setFocusPolicy(Qt::StrongFocus);
     setMouseTracking(true);
     setFixedWidth(static_cast<int>(Ui::DesignSystem::drawer().width()));
@@ -251,7 +252,8 @@ void Drawer::paintEvent(QPaintEvent* _event)
             painter.fillRect(
                 actionRect.marginsRemoved(Ui::DesignSystem::drawer().selectionMargins()),
                 Ui::DesignSystem::drawer().selectionColor());
-        } else if (action->isEnabled() && actionRect.contains(mapFromGlobal(QCursor::pos()))) {
+        } else if (underMouse() && action->isEnabled()
+                   && actionRect.contains(mapFromGlobal(QCursor::pos()))) {
             painter.fillRect(
                 actionRect.marginsRemoved(Ui::DesignSystem::drawer().selectionMargins()),
                 ColorHelper::transparent(Ui::DesignSystem::color().onPrimary(),
