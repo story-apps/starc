@@ -37,7 +37,8 @@ public:
     /**
      * @brief Получить описание редактора по заданному майм типу
      */
-    QString editorDescription(const QString& _editorMimeType) const;
+    QString editorDescription(const QString& _documentMimeType,
+                              const QString& _editorMimeType) const;
 
     /**
      * @brief Получить майм-тип навигатора для заданного редактора
