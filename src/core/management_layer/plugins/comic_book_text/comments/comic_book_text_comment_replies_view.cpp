@@ -175,6 +175,8 @@ void ComicBookTextCommentRepliesView::keyPressEvent(QKeyEvent* _event)
 
 void ComicBookTextCommentRepliesView::updateTranslations()
 {
+    d->headerView->setToolTip(tr("Back to comments list"));
+    d->replyTextField->setTrailingIconToolTip(tr("Add comment"));
 }
 
 void ComicBookTextCommentRepliesView::designSystemChangeEvent(DesignSystemChangeEvent* _event)

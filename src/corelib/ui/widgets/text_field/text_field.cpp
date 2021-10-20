@@ -13,6 +13,7 @@
 #include <QMimeData>
 #include <QPainter>
 #include <QTextFrame>
+#include <QToolTip>
 #include <QVariantAnimation>
 
 
@@ -94,6 +95,7 @@ public:
 
     QString trailingIcon;
     QColor trailingIconColor;
+    QString trailingIconToolTip;
 
     bool isPasswordModeEnabled = false;
     bool isEnterMakesNewLine = false;
@@ -514,6 +516,11 @@ QColor TextField::trailingIconColor() const
     return d->trailingIconColor;
 }
 
+void TextField::setTrailingIconToolTip(const QString& _toolTip)
+{
+    d->trailingIconToolTip = _toolTip;
+}
+
 void TextField::setPasswordModeEnabled(bool _enable)
 {
     if (d->isPasswordModeEnabled == _enable) {
@@ -687,6 +694,17 @@ bool TextField::event(QEvent* _event)
         reconfigure();
         updateGeometry();
         update();
+        return true;
+    }
+
+    case QEvent::ToolTip: {
+        QHelpEvent* event = static_cast<QHelpEvent*>(_event);
+        const QRectF iconRect = d->iconRect(width());
+        if (iconRect.contains(event->pos())) {
+            QToolTip::showText(event->globalPos(), d->trailingIconToolTip);
+        } else {
+            QToolTip::hideText();
+        }
         return true;
     }
 

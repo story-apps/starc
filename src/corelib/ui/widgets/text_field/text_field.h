@@ -74,6 +74,11 @@ public:
     QColor trailingIconColor() const;
 
     /**
+     * @brief Задать всплывающую подсказку для иконки действия
+     */
+    void setTrailingIconToolTip(const QString& _toolTip);
+
+    /**
      * @brief Включить/отключить режим ввода пароля
      */
     void setPasswordModeEnabled(bool _enable);

@@ -175,6 +175,8 @@ void ScreenplayTextCommentRepliesView::keyPressEvent(QKeyEvent* _event)
 
 void ScreenplayTextCommentRepliesView::updateTranslations()
 {
+    d->headerView->setToolTip(tr("Back to comments list"));
+    d->replyTextField->setTrailingIconToolTip(tr("Add comment"));
 }
 
 void ScreenplayTextCommentRepliesView::designSystemChangeEvent(DesignSystemChangeEvent* _event)

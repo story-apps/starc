@@ -73,6 +73,9 @@ signals:
     void removeRequested(const QModelIndexList& _indexes);
 
 protected:
+    /**
+     * @brief Обновляем виджет при изменении дизайн системы
+     */
     void designSystemChangeEvent(DesignSystemChangeEvent* _event) override;
 
 private:
