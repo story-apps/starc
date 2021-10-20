@@ -266,7 +266,11 @@ void CreateProjectDialog::updateTranslations()
     d->localProject->setText(tr("Save story in the local computer"));
     d->cloudProject->setText(tr("Save story in the cloud"));
     d->projectFolder->setLabel(tr("Location of the new story file"));
+    d->projectFolder->setTrailingIconToolTip(
+        tr("Choose the folder where the new story will be placed"));
     d->importFilePath->setLabel(tr("Choose file with story to import"));
+    d->importFilePath->setTrailingIconToolTip(tr("Choose file for importing"));
+    d->advancedSettingsButton->setToolTip(tr("Advanced options"));
     d->cancelButton->setText(tr("Cancel"));
     d->createButton->setText(tr("Create"));
 }
