@@ -302,20 +302,33 @@ void ProjectManager::Implementation::emptyRecycleBin(const QModelIndex& _recycle
             }
 
             //
-            // Если таки хочет, то удаляем все вложенные документы
+            // Если таки хочет, то удаляем все вложенные документы рекурсивно
             // NOTE: порядок удаления важен
             //
-            while (recycleBin->hasChildren()) {
-                auto itemToRemove = recycleBin->childAt(0);
+            std::function<void(BusinessLayer::StructureModelItem*)> removeItem;
+            removeItem = [this, &removeItem](BusinessLayer::StructureModelItem* _item) {
+                //
+                // Сначала удаляем детей
+                //
+                while (_item->hasChildren()) {
+                    auto child = _item->childAt(0);
+                    removeItem(child);
+                }
+                //
+                // ... а потом сам элемент
+                //
                 auto documentToRemove
-                    = DataStorageLayer::StorageFacade::documentStorage()->document(
-                        itemToRemove->uuid());
+                    = DataStorageLayer::StorageFacade::documentStorage()->document(_item->uuid());
                 if (documentToRemove != nullptr) {
                     modelsFacade.removeModelFor(documentToRemove);
                     DataStorageLayer::StorageFacade::documentStorage()->removeDocument(
                         documentToRemove);
                 }
-                projectStructureModel->removeItem(itemToRemove);
+                projectStructureModel->removeItem(_item);
+            };
+            while (recycleBin->hasChildren()) {
+                auto itemToRemove = recycleBin->childAt(0);
+                removeItem(itemToRemove);
             }
         });
     QObject::connect(dialog, &Dialog::disappeared, dialog, &Dialog::deleteLater);
