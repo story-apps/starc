@@ -73,6 +73,30 @@ public:
     void setScenesNumberingStartAt(int _startNumber);
     Q_SIGNAL void scenesNumberingStartAtChanged(int _startNumber);
 
+    bool overrideCommonSettings() const;
+    void setOverrideCommonSettings(bool _override);
+    Q_SIGNAL void overrideCommonSettingsChanged(bool _override);
+
+    const QString& screenplayTemplate() const;
+    void setScreenplayTemplate(const QString& _screenplayTemplate);
+    Q_SIGNAL void screenplayTemplateChanged(const QString& _screenplayTemplate);
+
+    bool showSceneNumbers() const;
+    void setShowSceneNumbers(bool _show);
+    Q_SIGNAL void showSceneNumbersChanged(bool _show);
+
+    bool showSceneNumbersOnLeft() const;
+    void setShowSceneNumbersOnLeft(bool _show);
+    Q_SIGNAL void showSceneNumbersOnLeftChanged(bool _show);
+
+    bool showSceneNumbersOnRight() const;
+    void setShowSceneNumbersOnRight(bool _show);
+    Q_SIGNAL void showSceneNumbersOnRightChanged(bool _show);
+
+    bool showDialoguesNumbers() const;
+    void setShowDialoguesNumbers(bool _show);
+    Q_SIGNAL void showDialoguesNumbersChanged(bool _show);
+
 protected:
     /**
      * @brief Реализация модели для работы с документами

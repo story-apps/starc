@@ -26,6 +26,12 @@ const QString kFooterKey = "footer";
 const QString kPrintFooterOnTitlePageKey = "print_footer_on_title";
 const QString kScenesNumbersPrefixKey = "scenes_numbers_prefix";
 const QString kScenesNumberingStartAtKey = "scenes_numbering_start_at";
+const QString kOverrideSystemSettingsKey = "override_system_settings";
+const QString kScreenplayTemplateKey = "screenplay_template";
+const QString kShowScenesNumbersKey = "show_scenes_numbers";
+const QString kShowScenesNumbersOnLeftKey = "show_scenes_numbers_on_left";
+const QString kShowScenesNumbersOnRightKey = "show_scenes_numbers_on_right";
+const QString kShowDialoguesNumbersKey = "show_dialogues_numbers";
 } // namespace
 
 class ScreenplayInformationModel::Implementation
@@ -45,6 +51,12 @@ public:
     bool printFooterOnTitlePage = true;
     QString scenesNumbersPrefix;
     int scenesNumberingStartAt = 1;
+    bool overrideCommonSettings = false;
+    QString screenplayTemplate;
+    bool showSceneNumbers = false;
+    bool showSceneNumbersOnLeft = false;
+    bool showSceneNumbersOnRight = false;
+    bool showDialoguesNumbers = false;
 };
 
 
@@ -85,6 +97,18 @@ ScreenplayInformationModel::ScreenplayInformationModel(QObject* _parent)
     connect(this, &ScreenplayInformationModel::scenesNumbersPrefixChanged, this,
             &ScreenplayInformationModel::updateDocumentContent);
     connect(this, &ScreenplayInformationModel::scenesNumberingStartAtChanged, this,
+            &ScreenplayInformationModel::updateDocumentContent);
+    connect(this, &ScreenplayInformationModel::overrideCommonSettingsChanged, this,
+            &ScreenplayInformationModel::updateDocumentContent);
+    connect(this, &ScreenplayInformationModel::screenplayTemplateChanged, this,
+            &ScreenplayInformationModel::updateDocumentContent);
+    connect(this, &ScreenplayInformationModel::showSceneNumbersChanged, this,
+            &ScreenplayInformationModel::updateDocumentContent);
+    connect(this, &ScreenplayInformationModel::showSceneNumbersOnLeftChanged, this,
+            &ScreenplayInformationModel::updateDocumentContent);
+    connect(this, &ScreenplayInformationModel::showSceneNumbersOnRightChanged, this,
+            &ScreenplayInformationModel::updateDocumentContent);
+    connect(this, &ScreenplayInformationModel::showDialoguesNumbersChanged, this,
             &ScreenplayInformationModel::updateDocumentContent);
 }
 
@@ -306,6 +330,96 @@ void ScreenplayInformationModel::setScenesNumberingStartAt(int _startNumber)
     emit scenesNumberingStartAtChanged(d->scenesNumberingStartAt);
 }
 
+bool ScreenplayInformationModel::overrideCommonSettings() const
+{
+    return d->overrideCommonSettings;
+}
+
+void ScreenplayInformationModel::setOverrideCommonSettings(bool _override)
+{
+    if (d->overrideCommonSettings == _override) {
+        return;
+    }
+
+    d->overrideCommonSettings = _override;
+    emit overrideCommonSettingsChanged(d->overrideCommonSettings);
+}
+
+const QString& ScreenplayInformationModel::screenplayTemplate() const
+{
+    return d->screenplayTemplate;
+}
+
+void ScreenplayInformationModel::setScreenplayTemplate(const QString& _screenplayTemplate)
+{
+    if (d->screenplayTemplate == _screenplayTemplate) {
+        return;
+    }
+
+    d->screenplayTemplate = _screenplayTemplate;
+    emit screenplayTemplateChanged(d->screenplayTemplate);
+}
+
+bool ScreenplayInformationModel::showSceneNumbers() const
+{
+    return d->showSceneNumbers;
+}
+
+void ScreenplayInformationModel::setShowSceneNumbers(bool _show)
+{
+    if (d->showSceneNumbers == _show) {
+        return;
+    }
+
+    d->showSceneNumbers = _show;
+    emit showSceneNumbersChanged(d->showSceneNumbers);
+}
+
+bool ScreenplayInformationModel::showSceneNumbersOnLeft() const
+{
+    return d->showSceneNumbersOnLeft;
+}
+
+void ScreenplayInformationModel::setShowSceneNumbersOnLeft(bool _show)
+{
+    if (d->showSceneNumbersOnLeft == _show) {
+        return;
+    }
+
+    d->showSceneNumbersOnLeft = _show;
+    emit showSceneNumbersOnLeftChanged(d->showSceneNumbersOnLeft);
+}
+
+bool ScreenplayInformationModel::showSceneNumbersOnRight() const
+{
+    return d->showSceneNumbersOnRight;
+}
+
+void ScreenplayInformationModel::setShowSceneNumbersOnRight(bool _show)
+{
+    if (d->showSceneNumbersOnRight == _show) {
+        return;
+    }
+
+    d->showSceneNumbersOnRight = _show;
+    emit showSceneNumbersOnRightChanged(d->showSceneNumbersOnRight);
+}
+
+bool ScreenplayInformationModel::showDialoguesNumbers() const
+{
+    return d->showDialoguesNumbers;
+}
+
+void ScreenplayInformationModel::setShowDialoguesNumbers(bool _show)
+{
+    if (d->showDialoguesNumbers == _show) {
+        return;
+    }
+
+    d->showDialoguesNumbers = _show;
+    emit showDialoguesNumbersChanged(d->showDialoguesNumbers);
+}
+
 void ScreenplayInformationModel::initDocument()
 {
     if (document() == nullptr) {
@@ -341,25 +455,21 @@ void ScreenplayInformationModel::initDocument()
     if (!scenesNumberingStartAtNode.isNull()) {
         d->scenesNumberingStartAt = scenesNumberingStartAtNode.text().toInt();
     }
+    d->overrideCommonSettings
+        = documentNode.firstChildElement(kOverrideSystemSettingsKey).text() == "true";
+    d->screenplayTemplate = documentNode.firstChildElement(kScreenplayTemplateKey).text();
+    d->showSceneNumbers = documentNode.firstChildElement(kShowScenesNumbersKey).text() == "true";
+    d->showSceneNumbersOnLeft
+        = documentNode.firstChildElement(kShowScenesNumbersOnLeftKey).text() == "true";
+    d->showSceneNumbersOnRight
+        = documentNode.firstChildElement(kShowScenesNumbersOnRightKey).text() == "true";
+    d->showDialoguesNumbers
+        = documentNode.firstChildElement(kShowDialoguesNumbersKey).text() == "true";
 }
 
 void ScreenplayInformationModel::clearDocument()
 {
-    QSignalBlocker signalBlocker(this);
-
-    setName({});
-    setLogline({});
-    setTitlePageVisible({});
-    setSynopsisVisible({});
-    setTreatmentVisible({});
-    setScreenplayTextVisible({});
-    setScreenplayStatisticsVisible({});
-    setHeader({});
-    setPrintHeaderOnTitlePage({});
-    setFooter({});
-    setPrintFooterOnTitlePage({});
-    setScenesNumbersPrefix({});
-    setScenesNumberingStartAt({});
+    d.reset(new Implementation);
 }
 
 QByteArray ScreenplayInformationModel::toXml() const
@@ -372,39 +482,32 @@ QByteArray ScreenplayInformationModel::toXml() const
     xml += QString("<%1 mime-type=\"%2\" version=\"1.0\">\n")
                .arg(kDocumentKey, Domain::mimeTypeFor(document()->type()))
                .toUtf8();
-    xml += QString("<%1><![CDATA[%2]]></%1>\n").arg(kNameKey, d->name).toUtf8();
-    xml += QString("<%1><![CDATA[%2]]></%1>\n").arg(kTaglineKey, d->tagline).toUtf8();
-    xml += QString("<%1><![CDATA[%2]]></%1>\n").arg(kLoglineKey, d->logline).toUtf8();
-    xml += QString("<%1><![CDATA[%2]]></%1>\n")
-               .arg(kTitlePageVisibleKey, d->titlePageVisible ? "true" : "false")
-               .toUtf8();
-    xml += QString("<%1><![CDATA[%2]]></%1>\n")
-               .arg(kSynopsisVisibleKey, d->synopsisVisible ? "true" : "false")
-               .toUtf8();
-    xml += QString("<%1><![CDATA[%2]]></%1>\n")
-               .arg(kTreatmentVisibleKey, d->treatmentVisible ? "true" : "false")
-               .toUtf8();
-    xml += QString("<%1><![CDATA[%2]]></%1>\n")
-               .arg(kScreenplayTextVisibleKey, d->screenplayTextVisible ? "true" : "false")
-               .toUtf8();
-    xml += QString("<%1><![CDATA[%2]]></%1>\n")
-               .arg(kScreenplayStatisticsVisibleKey,
-                    d->screenplayStatisticsVisible ? "true" : "false")
-               .toUtf8();
-    xml += QString("<%1><![CDATA[%2]]></%1>\n").arg(kHeaderKey, d->header).toUtf8();
-    xml += QString("<%1><![CDATA[%2]]></%1>\n")
-               .arg(kPrintHeaderOnTitlePageKey, d->printHeaderOnTitlePage ? "true" : "false")
-               .toUtf8();
-    xml += QString("<%1><![CDATA[%2]]></%1>\n").arg(kFooterKey, d->footer).toUtf8();
-    xml += QString("<%1><![CDATA[%2]]></%1>\n")
-               .arg(kPrintFooterOnTitlePageKey, d->printFooterOnTitlePage ? "true" : "false")
-               .toUtf8();
-    xml += QString("<%1><![CDATA[%2]]></%1>\n")
-               .arg(kScenesNumbersPrefixKey, d->scenesNumbersPrefix)
-               .toUtf8();
-    xml += QString("<%1><![CDATA[%2]]></%1>\n")
-               .arg(kScenesNumberingStartAtKey, QString::number(d->scenesNumberingStartAt))
-               .toUtf8();
+    auto writeTag = [&xml](const QString& _key, const QString& _value) {
+        xml += QString("<%1><![CDATA[%2]]></%1>\n").arg(_key, _value).toUtf8();
+    };
+    auto writeBoolTag = [&writeTag](const QString& _key, bool _value) {
+        writeTag(_key, _value ? "true" : "false");
+    };
+    writeTag(kNameKey, d->name);
+    writeTag(kTaglineKey, d->tagline);
+    writeTag(kLoglineKey, d->logline);
+    writeBoolTag(kTitlePageVisibleKey, d->titlePageVisible);
+    writeBoolTag(kSynopsisVisibleKey, d->synopsisVisible);
+    writeBoolTag(kTreatmentVisibleKey, d->treatmentVisible);
+    writeBoolTag(kScreenplayTextVisibleKey, d->screenplayTextVisible);
+    writeBoolTag(kScreenplayStatisticsVisibleKey, d->screenplayStatisticsVisible);
+    writeTag(kHeaderKey, d->header);
+    writeBoolTag(kPrintHeaderOnTitlePageKey, d->printHeaderOnTitlePage);
+    writeTag(kFooterKey, d->footer);
+    writeBoolTag(kPrintFooterOnTitlePageKey, d->printFooterOnTitlePage);
+    writeTag(kScenesNumbersPrefixKey, d->scenesNumbersPrefix);
+    writeTag(kScenesNumberingStartAtKey, QString::number(d->scenesNumberingStartAt));
+    writeBoolTag(kOverrideSystemSettingsKey, d->overrideCommonSettings);
+    writeTag(kScreenplayTemplateKey, d->screenplayTemplate);
+    writeBoolTag(kShowScenesNumbersKey, d->showSceneNumbers);
+    writeBoolTag(kShowScenesNumbersOnLeftKey, d->showSceneNumbersOnLeft);
+    writeBoolTag(kShowScenesNumbersOnRightKey, d->showSceneNumbersOnRight);
+    writeBoolTag(kShowDialoguesNumbersKey, d->showDialoguesNumbers);
     xml += QString("</%1>").arg(kDocumentKey).toUtf8();
     return xml;
 }

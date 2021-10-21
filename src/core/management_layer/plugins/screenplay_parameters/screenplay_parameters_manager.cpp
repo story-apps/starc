@@ -84,6 +84,12 @@ void ScreenplayParametersManager::setModel(BusinessLayer::AbstractModel* _model)
         d->view->setPrintFooterOnTitlePage(d->model->printFooterOnTitlePage());
         d->view->setScenesNumbersPrefix(d->model->scenesNumbersPrefix());
         d->view->setScenesNumbersingStartAt(d->model->scenesNumberingStartAt());
+        d->view->setOverrideCommonSettings(d->model->overrideCommonSettings());
+        d->view->setScreenplayTemplate(d->model->screenplayTemplate());
+        d->view->setShowSceneNumbers(d->model->showSceneNumbers());
+        d->view->setShowSceneNumbersOnLeft(d->model->showSceneNumbersOnLeft());
+        d->view->setShowSceneNumbersOnRight(d->model->showSceneNumbersOnRight());
+        d->view->setShowDialoguesNumbers(d->model->showDialoguesNumbers());
 
         connect(d->model, &BusinessLayer::ScreenplayInformationModel::headerChanged, d->view,
                 &Ui::ScreenplayParametersView::setHeader);
@@ -97,6 +103,19 @@ void ScreenplayParametersManager::setModel(BusinessLayer::AbstractModel* _model)
                 d->view, &Ui::ScreenplayParametersView::setScenesNumbersPrefix);
         connect(d->model, &BusinessLayer::ScreenplayInformationModel::scenesNumberingStartAtChanged,
                 d->view, &Ui::ScreenplayParametersView::setScenesNumbersingStartAt);
+        connect(d->model, &BusinessLayer::ScreenplayInformationModel::overrideCommonSettingsChanged,
+                d->view, &Ui::ScreenplayParametersView::setOverrideCommonSettings);
+        connect(d->model, &BusinessLayer::ScreenplayInformationModel::screenplayTemplateChanged,
+                d->view, &Ui::ScreenplayParametersView::setScreenplayTemplate);
+        connect(d->model, &BusinessLayer::ScreenplayInformationModel::showSceneNumbersChanged,
+                d->view, &Ui::ScreenplayParametersView::setShowSceneNumbers);
+        connect(d->model, &BusinessLayer::ScreenplayInformationModel::showSceneNumbersOnLeftChanged,
+                d->view, &Ui::ScreenplayParametersView::setShowSceneNumbersOnLeft);
+        connect(d->model,
+                &BusinessLayer::ScreenplayInformationModel::showSceneNumbersOnRightChanged, d->view,
+                &Ui::ScreenplayParametersView::setShowSceneNumbersOnRight);
+        connect(d->model, &BusinessLayer::ScreenplayInformationModel::showDialoguesNumbersChanged,
+                d->view, &Ui::ScreenplayParametersView::setShowDialoguesNumbers);
         //
         connect(d->view, &Ui::ScreenplayParametersView::headerChanged, d->model,
                 &BusinessLayer::ScreenplayInformationModel::setHeader);
@@ -110,6 +129,18 @@ void ScreenplayParametersManager::setModel(BusinessLayer::AbstractModel* _model)
                 &BusinessLayer::ScreenplayInformationModel::setScenesNumbersPrefix);
         connect(d->view, &Ui::ScreenplayParametersView::scenesNumberingStartAtChanged, d->model,
                 &BusinessLayer::ScreenplayInformationModel::setScenesNumberingStartAt);
+        connect(d->view, &Ui::ScreenplayParametersView::overrideCommonSettingsChanged, d->model,
+                &BusinessLayer::ScreenplayInformationModel::setOverrideCommonSettings);
+        connect(d->view, &Ui::ScreenplayParametersView::screenplayTemplateChanged, d->model,
+                &BusinessLayer::ScreenplayInformationModel::setScreenplayTemplate);
+        connect(d->view, &Ui::ScreenplayParametersView::showSceneNumbersChanged, d->model,
+                &BusinessLayer::ScreenplayInformationModel::setShowSceneNumbers);
+        connect(d->view, &Ui::ScreenplayParametersView::showSceneNumbersOnLeftChanged, d->model,
+                &BusinessLayer::ScreenplayInformationModel::setShowSceneNumbersOnLeft);
+        connect(d->view, &Ui::ScreenplayParametersView::showSceneNumbersOnRightChanged, d->model,
+                &BusinessLayer::ScreenplayInformationModel::setShowSceneNumbersOnRight);
+        connect(d->view, &Ui::ScreenplayParametersView::showDialoguesNumbersChanged, d->model,
+                &BusinessLayer::ScreenplayInformationModel::setShowDialoguesNumbers);
     }
 }
 
