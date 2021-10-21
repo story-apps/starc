@@ -31,11 +31,11 @@ namespace {
 /**
  * @brief Регулярное выражение для определения блока "Время и место" по наличию слов места
  */
-const QRegularExpression PLACE_CONTAINS_CHECKER("(^|[^\\S])(INT|EXT|ИНТ|НАТ|ПАВ|ЭКСТ)([.]|[ - ])");
+const QRegularExpression kPlaceContainsChecker("(^|[^\\S])(INT|EXT|ИНТ|НАТ|ПАВ|ЭКСТ)([.]|[ - ])");
 /**
  * @brief Регулярное выражение для определения блока "Титр" по наличию ключевых слов
  */
-const QRegularExpression TITLE_CHECKER("(^|[^\\S])(TITLE|ТИТР)([:] )");
+const QRegularExpression kTitleChecker("(^|[^\\S])(TITLE|ТИТР)([:] )");
 
 /**
  * @brief Регулярное выражение для определения блока "Время и место" по началу с номера
@@ -46,12 +46,12 @@ const QRegularExpression kStartFromNumberChecker(
 /**
  * @brief Допущение для блоков, которые по идее вообще не должны иметь отступа в пикселях (16 мм)
  */
-const int LEFT_MARGIN_DELTA = 60;
+const int kLeftMarginDelta = 60;
 
 /**
  * @brief Некоторые программы выравнивают текст при помощи пробелов
  */
-const QString OLD_SCHOOL_CENTERING_PREFIX = "                    ";
+const QString kOldSchoolCenteringPrefix = "                    ";
 
 /**
  * @brief Определить тип блока в текущей позиции курсора
@@ -82,9 +82,10 @@ ScreenplayParagraphType typeForTextCursor(const QTextCursor& _cursor,
     bool textIsUppercase = charFormat.fontCapitalization() == QFont::AllUppercase
         || blockText == TextHelper::smartToUpper(blockText);
     // ... блоки находящиеся в центре
-    bool isCentered = (blockFormat.leftMargin() > LEFT_MARGIN_DELTA + _minLeftMargin)
-        || (blockFormat.alignment() == Qt::AlignCenter)
-        || blockText.startsWith(OLD_SCHOOL_CENTERING_PREFIX);
+    bool isCentered = !blockFormat.alignment().testFlag(Qt::AlignRight)
+        && (((blockFormat.leftMargin() + blockFormat.indent()) > kLeftMarginDelta + _minLeftMargin)
+            || (blockFormat.alignment() == Qt::AlignCenter)
+            || blockText.startsWith(kOldSchoolCenteringPrefix));
 
     //
     // Собственно определение типа
@@ -130,7 +131,7 @@ ScreenplayParagraphType typeForTextCursor(const QTextCursor& _cursor,
                 // 1. текст в верхнем регистре
                 // 2. содержит ключевые сокращения места действия или начинается с номера сцены
                 //
-                if (blockTextUppercase.contains(PLACE_CONTAINS_CHECKER)
+                if (blockTextUppercase.contains(kPlaceContainsChecker)
                     || blockTextUppercase.contains(kStartFromNumberChecker)) {
                     blockType = ScreenplayParagraphType::SceneHeading;
                 }
@@ -169,7 +170,7 @@ ScreenplayParagraphType typeForTextCursor(const QTextCursor& _cursor,
         // Титр (формируем, как описание действия)
         // 1. начинается со слова ТИТР:
         //
-        if (blockTextUppercase.contains(TITLE_CHECKER)) {
+        if (blockTextUppercase.contains(kTitleChecker)) {
             blockType = ScreenplayParagraphType::Action;
         }
     }

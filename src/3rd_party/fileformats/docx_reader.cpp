@@ -470,8 +470,17 @@ void DocxReader::readParagraphProperties(Style& style, bool allowstyles)
                 right_indent = pixelsFromTwips(attributes.value("w:right").toString().toInt());
                 style.block_format.setRightMargin(right_indent);
             }
+            if (attributes.hasAttribute("w:hanging")) {
+                auto t = attributes.value("w:hanging").toString();
+                indent = pixelsFromTwips(attributes.value("w:hanging").toString().toInt());
+                if (indent) {
+                    // В docx этот параметр хранится в инвертированном по отношению к Qt виде
+                    style.block_format.setIndent(-1 * indent);
+                    left_indent = right_indent = 0;
+                }
+            }
             // ECMA-376 2nd edition, ISO/IEC 29500 strict
-            if (attributes.hasAttribute("w:start")) {
+            else if (attributes.hasAttribute("w:start")) {
                 indent = pixelsFromTwips(attributes.value("w:start").toString().toInt());
                 if (indent) {
                     style.block_format.setIndent(indent);
