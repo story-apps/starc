@@ -163,18 +163,20 @@ void TextField::Implementation::reconfigure()
     } else {
         animateLabelToTop();
     }
-    labelFontSizeAnimation.setCurrentTime(labelFontSizeAnimation.duration());
-    labelTopLeftAnimation.setCurrentTime(labelTopLeftAnimation.duration());
+    finishAnimationIfInvisible(q);
 
     //
-    //Анимация лейбла
+    // Анимация лейбла
     //
     const int offset = trailingIconOffset();
     const QPointF labelNewTopLeft = Ui::DesignSystem::textField().labelTopLeft()
         + QPointF(contentMargins().left() + (q->isRightToLeft() ? offset : 0),
                   contentMargins().top());
-    const QPointF labelCurrentTopLeft(labelNewTopLeft.x(),
-                                      contentMargins().top() + margins().top());
+    const qreal backgroundHeight
+        = q->sizeHint().height() - contentMargins().top() - contentMargins().bottom();
+    const QPointF labelCurrentTopLeft(
+        labelNewTopLeft.x(),
+        (backgroundHeight - QFontMetricsF(Ui::DesignSystem::font().body1()).lineSpacing()) / 2);
     labelTopLeftAnimation.setStartValue(labelCurrentTopLeft);
     labelTopLeftAnimation.setEndValue(labelNewTopLeft);
 }
@@ -207,8 +209,14 @@ void TextField::Implementation::finishAnimationIfInvisible(TextField* _textField
     // Если лейбл скрыт, то выполнять всю анимацию ни к чему
     //
     if (!_textField->isVisible()) {
-        labelFontSizeAnimation.setCurrentTime(labelFontSizeAnimation.duration());
-        labelTopLeftAnimation.setCurrentTime(labelTopLeftAnimation.duration());
+        labelFontSizeAnimation.setCurrentTime(labelFontSizeAnimation.direction()
+                                                      == QVariantAnimation::Forward
+                                                  ? labelFontSizeAnimation.duration()
+                                                  : 0);
+        labelTopLeftAnimation.setCurrentTime(labelTopLeftAnimation.direction()
+                                                     == QVariantAnimation::Forward
+                                                 ? labelTopLeftAnimation.duration()
+                                                 : 0);
     }
 }
 
@@ -269,16 +277,16 @@ QRectF TextField::Implementation::inputTextRect() const
 
 QRectF TextField::Implementation::labelRect(const qreal fontHeight) const
 {
-    const int offset = trailingIconOffset();
-    QPointF labelTopLeft = Ui::DesignSystem::textField().labelTopLeft()
-        + QPointF(contentMargins().left() + (q->isRightToLeft() ? offset : 0),
-                  contentMargins().top());
-
+    QPointF labelTopLeft;
     if (!labelTopLeftAnimation.currentValue().isNull()) {
         labelTopLeft = labelTopLeftAnimation.currentValue().toPointF();
     } else if (!q->hasFocus() && q->text().isEmpty() && placeholder.isEmpty()) {
-        labelTopLeft.setY(margins().top());
+        labelTopLeft = labelTopLeftAnimation.startValue().toPointF();
+    } else {
+        labelTopLeft = labelTopLeftAnimation.endValue().toPointF();
     }
+
+    const int offset = trailingIconOffset();
     return QRectF(labelTopLeft,
                   QSizeF(q->width() - labelTopLeft.x() - contentMargins().right()
                              - margins().right() - (q->isRightToLeft() ? 0 : offset),
@@ -473,7 +481,7 @@ void TextField::setText(const QString& _text)
         return;
     }
 
-    const bool needAnimate = text().isEmpty();
+    const bool needAnimate = text().isEmpty() && !_text.isEmpty();
 
     QTextCursor cursor = textCursor();
     cursor.beginEditBlock();
