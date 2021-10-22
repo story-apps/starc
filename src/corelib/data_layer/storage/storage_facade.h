@@ -48,6 +48,6 @@ private:
 /**
  * @brief Вспомогательные функции для удобного доступа к настройкам
  */
-QVariant settingsValue(const QString& _key);
-QVariant settingsValue(const QString& _key, const QVariant& _defaultValue);
-QVariantMap settingsValues(const QString& _key);
+QVariant CORE_LIBRARY_EXPORT settingsValue(const QString& _key);
+QVariant CORE_LIBRARY_EXPORT settingsValue(const QString& _key, const QVariant& _defaultValue);
+QVariantMap CORE_LIBRARY_EXPORT settingsValues(const QString& _key);
