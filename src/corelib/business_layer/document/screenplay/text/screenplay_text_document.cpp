@@ -4,6 +4,7 @@
 #include "screenplay_text_corrector.h"
 #include "screenplay_text_cursor.h"
 
+#include <business_layer/model/screenplay/screenplay_information_model.h>
 #include <business_layer/model/screenplay/text/screenplay_text_model.h>
 #include <business_layer/model/screenplay/text/screenplay_text_model_folder_item.h>
 #include <business_layer/model/screenplay/text/screenplay_text_model_scene_item.h>
@@ -427,6 +428,11 @@ void ScreenplayTextDocument::setTemplateId(const QString& _templateId)
     d->corrector.setTemplateId(_templateId);
 }
 
+QString ScreenplayTextDocument::templateId() const
+{
+    return d->templateId;
+}
+
 void ScreenplayTextDocument::setModel(BusinessLayer::ScreenplayTextModel* _model,
                                       bool _canChangeModel)
 {
@@ -459,6 +465,9 @@ void ScreenplayTextDocument::setModel(BusinessLayer::ScreenplayTextModel* _model
         d->state = DocumentState::Ready;
         return;
     }
+
+    Q_ASSERT(d->model->informationModel());
+    setTemplateId(d->model->informationModel()->screenplayTemplateId());
 
     //
     // Обновим шрифт документа, в моменте когда текста нет
@@ -1858,11 +1867,11 @@ void ScreenplayTextDocument::updateModelOnContentChange(int _position, int _char
                     tableInfo.inTable = true;
                     tableInfo.inFirstColumn = true;
                     splitterItem = new ScreenplayTextModelSplitterItem(
-                        ScreenplayTextModelSplitterItemType::Start);
+                        d->model, ScreenplayTextModelSplitterItemType::Start);
                 } else {
                     tableInfo = {};
                     splitterItem = new ScreenplayTextModelSplitterItem(
-                        ScreenplayTextModelSplitterItemType::End);
+                        d->model, ScreenplayTextModelSplitterItemType::End);
                 }
                 if (previousItem == nullptr) {
                     d->model->prependItem(splitterItem);
@@ -1894,12 +1903,12 @@ void ScreenplayTextDocument::updateModelOnContentChange(int _position, int _char
             ScreenplayTextModelItem* parentItem = nullptr;
             switch (paragraphType) {
             case ScreenplayParagraphType::FolderHeader: {
-                parentItem = new ScreenplayTextModelFolderItem;
+                parentItem = new ScreenplayTextModelFolderItem(d->model);
                 break;
             }
 
             case ScreenplayParagraphType::SceneHeading: {
-                parentItem = new ScreenplayTextModelSceneItem;
+                parentItem = new ScreenplayTextModelSceneItem(d->model);
                 break;
             }
 
@@ -1910,7 +1919,7 @@ void ScreenplayTextDocument::updateModelOnContentChange(int _position, int _char
             //
             // Создаём сам текстовый элемент
             //
-            auto textItem = new ScreenplayTextModelTextItem;
+            auto textItem = new ScreenplayTextModelTextItem(d->model);
             textItem->setCorrection(
                 block.blockFormat().boolProperty(ScreenplayBlockStyle::PropertyIsCorrection));
             textItem->setCorrectionContinued(block.blockFormat().boolProperty(

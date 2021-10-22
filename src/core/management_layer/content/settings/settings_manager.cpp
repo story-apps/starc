@@ -33,11 +33,6 @@ public:
     explicit Implementation(QObject* _parent, QWidget* _parentWidget);
 
     /**
-     * @brief Получить значение параметра из настроек по ключу
-     */
-    QVariant settingsValue(const QString& _key) const;
-
-    /**
      * @brief Сохранить в настройках значение параметр по ключу
      */
     void setSettingsValue(const QString& _key, const QVariant& _value);
@@ -72,12 +67,6 @@ SettingsManager::Implementation::Implementation(QObject* _parent, QWidget* _pare
     toolBar->hide();
     navigator->hide();
     view->hide();
-}
-
-QVariant SettingsManager::Implementation::settingsValue(const QString& _key) const
-{
-    return DataStorageLayer::StorageFacade::settingsStorage()->value(
-        _key, DataStorageLayer::SettingsStorage::SettingsPlace::Application);
 }
 
 void SettingsManager::Implementation::setSettingsValue(const QString& _key, const QVariant& _value)
@@ -137,10 +126,11 @@ void SettingsManager::Implementation::loadScreenplaySettings()
         settingsValue(DataStorageLayer::kComponentsScreenplayEditorShowSceneNumbersKey).toBool(),
         settingsValue(DataStorageLayer::kComponentsScreenplayEditorShowSceneNumbersOnRightKey)
             .toBool(),
-        settingsValue(DataStorageLayer::kComponentsScreenplayEditorShowSceneNumberOnLeftKey)
+        settingsValue(DataStorageLayer::kComponentsScreenplayEditorShowSceneNumbersOnLeftKey)
             .toBool());
     view->setScreenplayEditorShowDialogueNumber(
-        settingsValue(DataStorageLayer::kComponentsScreenplayEditorShowDialogueNumberKey).toBool());
+        settingsValue(DataStorageLayer::kComponentsScreenplayEditorShowDialogueNumbersKey)
+            .toBool());
     //
     view->setScreenplayNavigatorShowSceneNumber(
         settingsValue(DataStorageLayer::kComponentsScreenplayNavigatorShowSceneNumberKey).toBool());
@@ -351,19 +341,17 @@ QWidget* SettingsManager::view() const
 void SettingsManager::updateScaleFactor()
 {
     d->view->setApplicationScaleFactor(
-        d->settingsValue(DataStorageLayer::kApplicationScaleFactorKey).toReal());
+        settingsValue(DataStorageLayer::kApplicationScaleFactorKey).toReal());
 }
 
 bool SettingsManager::eventFilter(QObject* _watched, QEvent* _event)
 {
     if (_event->type() == QEvent::LanguageChange && _watched == d->view) {
         d->view->setApplicationLanguage(
-            d->settingsValue(DataStorageLayer::kApplicationLanguagedKey).toInt());
-        d->view->setApplicationTheme(
-            d->settingsValue(DataStorageLayer::kApplicationThemeKey).toInt());
+            settingsValue(DataStorageLayer::kApplicationLanguagedKey).toInt());
+        d->view->setApplicationTheme(settingsValue(DataStorageLayer::kApplicationThemeKey).toInt());
     } else if (static_cast<EventType>(_event->type()) == EventType::DesignSystemChangeEvent) {
-        d->view->setApplicationTheme(
-            d->settingsValue(DataStorageLayer::kApplicationThemeKey).toInt());
+        d->view->setApplicationTheme(settingsValue(DataStorageLayer::kApplicationThemeKey).toInt());
     }
 
     return QObject::eventFilter(_watched, _event);
@@ -632,19 +620,19 @@ void SettingsManager::setScreenplayEditorShowSceneNumber(bool _show, bool _atLef
     d->setSettingsValue(DataStorageLayer::kComponentsScreenplayEditorShowSceneNumbersKey, _show);
     d->setSettingsValue(DataStorageLayer::kComponentsScreenplayEditorShowSceneNumbersOnRightKey,
                         _atLeft);
-    d->setSettingsValue(DataStorageLayer::kComponentsScreenplayEditorShowSceneNumberOnLeftKey,
+    d->setSettingsValue(DataStorageLayer::kComponentsScreenplayEditorShowSceneNumbersOnLeftKey,
                         _atRight);
     emit screenplayEditorChanged(
         { DataStorageLayer::kComponentsScreenplayEditorShowSceneNumbersKey,
           DataStorageLayer::kComponentsScreenplayEditorShowSceneNumbersOnRightKey,
-          DataStorageLayer::kComponentsScreenplayEditorShowSceneNumberOnLeftKey });
+          DataStorageLayer::kComponentsScreenplayEditorShowSceneNumbersOnLeftKey });
 }
 
 void SettingsManager::setScreenplayEditorShowDialogueNumber(bool _show)
 {
-    d->setSettingsValue(DataStorageLayer::kComponentsScreenplayEditorShowDialogueNumberKey, _show);
+    d->setSettingsValue(DataStorageLayer::kComponentsScreenplayEditorShowDialogueNumbersKey, _show);
     emit screenplayEditorChanged(
-        { DataStorageLayer::kComponentsScreenplayEditorShowDialogueNumberKey });
+        { DataStorageLayer::kComponentsScreenplayEditorShowDialogueNumbersKey });
 }
 
 void SettingsManager::setScreenplayNavigatorShowSceneNumber(bool _show)

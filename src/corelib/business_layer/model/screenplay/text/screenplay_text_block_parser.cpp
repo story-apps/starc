@@ -128,23 +128,8 @@ QString ScreenplaySceneHeadingParser::sceneTime(const QString& _text)
 
 QStringList ScreenplaySceneCharactersParser::characters(const QString& _text)
 {
-    QString characters = _text.simplified();
-
-    //
-    // Удалим потенциальные приставку и окончание
-    //
-    const auto style = TemplatesFacade::screenplayTemplate().paragraphStyle(
-        ScreenplayParagraphType::SceneCharacters);
-    QString stylePrefix = style.prefix();
-    if (!stylePrefix.isEmpty() && characters.startsWith(stylePrefix)) {
-        characters.remove(QRegularExpression(QString("^[%1]").arg(stylePrefix)));
-    }
-    QString stylePostfix = style.postfix();
-    if (!stylePostfix.isEmpty() && characters.endsWith(stylePostfix)) {
-        characters.remove(QRegularExpression(QString("[%1]$").arg(stylePostfix)));
-    }
-
-    QStringList charactersList = characters.split(",", Qt::SkipEmptyParts);
+    const auto characters = _text.simplified();
+    auto charactersList = characters.split(",", Qt::SkipEmptyParts);
 
     //
     // Убираем символы пробелов

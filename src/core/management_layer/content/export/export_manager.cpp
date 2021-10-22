@@ -68,10 +68,7 @@ void ExportManager::Implementation::exportScreenplay(BusinessLayer::AbstractMode
                 // Предоставим пользователю возможность выбрать файл, куда он будет экспортировать
                 //
                 const auto projectExportFolder
-                    = DataStorageLayer::StorageFacade::settingsStorage()
-                          ->value(DataStorageLayer::kProjectExportFolderKey,
-                                  DataStorageLayer::SettingsStorage::SettingsPlace::Application)
-                          .toString();
+                    = settingsValue(DataStorageLayer::kProjectExportFolderKey).toString();
                 QString exportFilter;
                 QString exportExtension;
                 switch (exportOptions.fileFormat) {
@@ -140,8 +137,16 @@ void ExportManager::Implementation::exportScreenplay(BusinessLayer::AbstractMode
                 //
                 // ... донастроим параметры экспорта
                 //
-                exportOptions.header = screenplayTextModel->informationModel()->header();
-                exportOptions.footer = screenplayTextModel->informationModel()->footer();
+                const auto screenplayInformation = screenplayTextModel->informationModel();
+                exportOptions.templateId = screenplayInformation->screenplayTemplateId();
+                exportOptions.showScenesNumbers = screenplayInformation->showSceneNumbers();
+                exportOptions.showScenesNumbersOnLeft
+                    = screenplayInformation->showSceneNumbersOnLeft();
+                exportOptions.showScenesNumbersOnRight
+                    = screenplayInformation->showSceneNumbersOnRight();
+                exportOptions.showDialoguesNumbers = screenplayInformation->showDialoguesNumbers();
+                exportOptions.header = screenplayInformation->header();
+                exportOptions.footer = screenplayInformation->footer();
                 //
                 // ... обновим папку, куда в следующий раз он предположительно опять будет
                 //     экспортировать
@@ -215,10 +220,7 @@ void ExportManager::Implementation::exportComicBook(BusinessLayer::AbstractModel
                 // экспортировать
                 //
                 const auto projectExportFolder
-                    = DataStorageLayer::StorageFacade::settingsStorage()
-                          ->value(DataStorageLayer::kProjectExportFolderKey,
-                                  DataStorageLayer::SettingsStorage::SettingsPlace::Application)
-                          .toString();
+                    = settingsValue(DataStorageLayer::kProjectExportFolderKey).toString();
                 QString exportFilter;
                 QString exportExtension;
                 switch (exportOptions.fileFormat) {

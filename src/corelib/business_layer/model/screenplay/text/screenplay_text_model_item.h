@@ -7,6 +7,7 @@
 
 namespace BusinessLayer {
 
+class ScreenplayTextModel;
 
 /**
  * @brief Перечисление типов элементов модели сценария
@@ -20,13 +21,19 @@ enum class ScreenplayTextModelItemType { Folder, Scene, Text, Splitter };
 class CORE_LIBRARY_EXPORT ScreenplayTextModelItem : public AbstractModelItem
 {
 public:
-    explicit ScreenplayTextModelItem(ScreenplayTextModelItemType _type);
+    explicit ScreenplayTextModelItem(ScreenplayTextModelItemType _type,
+                                     const ScreenplayTextModel* _model);
     ~ScreenplayTextModelItem() override;
 
     /**
      * @brief Получить тип элемента
      */
     ScreenplayTextModelItemType type() const;
+
+    /**
+     * @brief Получить модель сценария, в которой находится данный элемент
+     */
+    const ScreenplayTextModel* model() const;
 
     /**
      * @brief Переопределяем интерфейс для возврата элемента собственного класса

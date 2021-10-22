@@ -156,11 +156,6 @@ void TitlePageView::reconfigure(const QStringList& _changedSettingsKeys)
 
     UiHelper::initSpellingFor(d->textEdit);
 
-    auto settingsValue = [](const QString& _key) {
-        return DataStorageLayer::StorageFacade::settingsStorage()->value(
-            _key, DataStorageLayer::SettingsStorage::SettingsPlace::Application);
-    };
-
     const auto defaultTemplateKey
         = d->currentModelType == Domain::DocumentObjectType::ComicBookTitlePage
         ? DataStorageLayer::kComponentsComicBookEditorDefaultTemplateKey
@@ -180,10 +175,7 @@ void TitlePageView::loadViewSettings()
 {
     using namespace DataStorageLayer;
 
-    const auto scaleFactor
-        = StorageFacade::settingsStorage()
-              ->value(kScaleFactorKey, SettingsStorage::SettingsPlace::Application, 1.0)
-              .toReal();
+    const auto scaleFactor = settingsValue(kScaleFactorKey, 1.0).toReal();
     d->scalableWrapper->setZoomRange(scaleFactor);
 }
 

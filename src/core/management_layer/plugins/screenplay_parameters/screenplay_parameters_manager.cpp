@@ -85,7 +85,7 @@ void ScreenplayParametersManager::setModel(BusinessLayer::AbstractModel* _model)
         d->view->setScenesNumbersPrefix(d->model->scenesNumbersPrefix());
         d->view->setScenesNumbersingStartAt(d->model->scenesNumberingStartAt());
         d->view->setOverrideCommonSettings(d->model->overrideCommonSettings());
-        d->view->setScreenplayTemplate(d->model->screenplayTemplate());
+        d->view->setScreenplayTemplate(d->model->screenplayTemplateId());
         d->view->setShowSceneNumbers(d->model->showSceneNumbers());
         d->view->setShowSceneNumbersOnLeft(d->model->showSceneNumbersOnLeft());
         d->view->setShowSceneNumbersOnRight(d->model->showSceneNumbersOnRight());

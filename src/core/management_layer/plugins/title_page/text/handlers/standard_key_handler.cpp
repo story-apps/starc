@@ -11,7 +11,7 @@
 #include <QKeyEvent>
 #include <QTextBlock>
 
-using BusinessLayer::TextBlockStyle;
+using BusinessLayer::SimpleTextBlockStyle;
 using BusinessLayer::TextParagraphType;
 using Ui::TitlePageEdit;
 
@@ -29,10 +29,7 @@ static TextParagraphType actionFor(bool _tab, bool _jump, TextParagraphType _blo
               .arg((_jump ? "jumping" : "changing"), BusinessLayer::toString(_blockType),
                    (_tab ? "tab" : "enter"));
 
-    const auto typeString
-        = DataStorageLayer::StorageFacade::settingsStorage()
-              ->value(settingsKey, DataStorageLayer::SettingsStorage::SettingsPlace::Application)
-              .toString();
+    const auto typeString = settingsValue(settingsKey).toString();
 
     return BusinessLayer::textParagraphTypeFromString(typeString);
 }

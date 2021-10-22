@@ -75,7 +75,7 @@ static void printPage(int _pageNumber, QPainter* _painter, const QTextDocument* 
             //
             const auto paragraphType = ScreenplayBlockStyle::forBlock(block);
             if (paragraphType == ScreenplayParagraphType::SceneHeading && !block.text().isEmpty()
-                && _exportOptions.printScenesNumbers) {
+                && _exportOptions.showScenesNumbers) {
                 const auto blockData = dynamic_cast<ScreenplayTextBlockData*>(block.userData());
                 if (blockData != nullptr) {
                     _painter->setFont(block.charFormat().font());
@@ -84,7 +84,7 @@ static void printPage(int _pageNumber, QPainter* _painter, const QTextDocument* 
                         = static_cast<ScreenplayTextModelSceneItem*>(blockData->item()->parent());
                     const int distanceBetweenSceneNumberAndText = 10;
 
-                    if (_exportOptions.printScenesNumbersOnLeft) {
+                    if (_exportOptions.showScenesNumbersOnLeft) {
                         const QRectF leftSceneNumberRect(
                             0,
                             blockRect.top() <= pageYPos
@@ -97,7 +97,7 @@ static void printPage(int _pageNumber, QPainter* _painter, const QTextDocument* 
                                            sceneItem->number().text);
                     }
 
-                    if (_exportOptions.printScenesNumbersOnRight) {
+                    if (_exportOptions.showScenesNumbersOnRight) {
                         const QRectF rightSceneNumberRect(
                             _body.width() - PageMetrics::mmToPx(_template.pageMargins().right())
                                 + distanceBetweenSceneNumberAndText,
@@ -116,7 +116,7 @@ static void printPage(int _pageNumber, QPainter* _painter, const QTextDocument* 
             // Покажем номер диалога, если необходимо
             //
             else if (paragraphType == ScreenplayParagraphType::Character && !block.text().isEmpty()
-                     && _exportOptions.printDialoguesNumbers) {
+                     && _exportOptions.showDialoguesNumbers) {
                 const auto blockData = dynamic_cast<ScreenplayTextBlockData*>(block.userData());
                 if (blockData != nullptr) {
                     _painter->setFont(block.charFormat().font());
@@ -232,7 +232,7 @@ static void printPage(int _pageNumber, QPainter* _painter, const QTextDocument* 
         //
         // На титульной и на первой странице сценария
         //
-        if ((_exportOptions.printTiltePage && _pageNumber < 3) || _pageNumber == 1) {
+        if ((_exportOptions.includeTiltePage && _pageNumber < 3) || _pageNumber == 1) {
             //
             // ... не печатаем номер
             //
@@ -288,7 +288,7 @@ static void printPage(int _pageNumber, QPainter* _painter, const QTextDocument* 
             // Рисуем нумерацию в положеном месте (отнимаем единицу, т.к. нумерация
             // должна следовать с единицы для первой страницы текста сценария)
             //
-            int titleDelta = _exportOptions.printTiltePage ? -1 : 0;
+            int titleDelta = _exportOptions.includeTiltePage ? -1 : 0;
             _painter->setClipRect(numberingRect);
             _painter->drawText(numberingRect, numberingAlignment,
                                QString(QLocale().textDirection() == Qt::LeftToRight ? "%1." : ".%1")
@@ -304,7 +304,7 @@ static void printPage(int _pageNumber, QPainter* _painter, const QTextDocument* 
         //
         // пропускаем титульную страницу
         //
-        if (_exportOptions.printTiltePage && _pageNumber == 1) {
+        if (_exportOptions.includeTiltePage && _pageNumber == 1) {
             //
             // ... не печатаем колонтитулы
             //

@@ -29,8 +29,10 @@ CORE_LIBRARY_EXPORT inline uint qHash(ScreenplayTextModelSplitterItemType _type)
 class CORE_LIBRARY_EXPORT ScreenplayTextModelSplitterItem : public ScreenplayTextModelItem
 {
 public:
-    explicit ScreenplayTextModelSplitterItem(ScreenplayTextModelSplitterItemType _type);
-    explicit ScreenplayTextModelSplitterItem(QXmlStreamReader& _contentReader);
+    ScreenplayTextModelSplitterItem(const ScreenplayTextModel* _model,
+                                    ScreenplayTextModelSplitterItemType _type);
+    ScreenplayTextModelSplitterItem(const ScreenplayTextModel* _model,
+                                    QXmlStreamReader& _contentReader);
     ~ScreenplayTextModelSplitterItem() override;
 
     /**

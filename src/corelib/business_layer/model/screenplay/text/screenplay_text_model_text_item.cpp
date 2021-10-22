@@ -1,8 +1,10 @@
 #include "screenplay_text_model_text_item.h"
 
+#include "screenplay_text_model.h"
 #include "screenplay_text_model_xml.h"
 
 #include <business_layer/chronometry/chronometer.h>
+#include <business_layer/model/screenplay/screenplay_information_model.h>
 #include <business_layer/templates/screenplay_template.h>
 #include <business_layer/templates/templates_facade.h>
 #include <utils/helpers/string_helper.h>
@@ -491,15 +493,16 @@ bool ScreenplayTextModelTextItem::Revision::operator==(const Revision& _other) c
     return from == _other.from && length == _other.length && color == _other.color;
 }
 
-ScreenplayTextModelTextItem::ScreenplayTextModelTextItem()
-    : ScreenplayTextModelItem(ScreenplayTextModelItemType::Text)
+ScreenplayTextModelTextItem::ScreenplayTextModelTextItem(const ScreenplayTextModel* _model)
+    : ScreenplayTextModelItem(ScreenplayTextModelItemType::Text, _model)
     , d(new Implementation)
 {
     d->updateXml();
 }
 
-ScreenplayTextModelTextItem::ScreenplayTextModelTextItem(QXmlStreamReader& _contentReaded)
-    : ScreenplayTextModelItem(ScreenplayTextModelItemType::Text)
+ScreenplayTextModelTextItem::ScreenplayTextModelTextItem(const ScreenplayTextModel* _model,
+                                                         QXmlStreamReader& _contentReaded)
+    : ScreenplayTextModelItem(ScreenplayTextModelItemType::Text, _model)
     , d(new Implementation(_contentReaded))
 {
     d->updateXml();
@@ -532,7 +535,8 @@ std::chrono::milliseconds ScreenplayTextModelTextItem::duration() const
 
 void ScreenplayTextModelTextItem::updateDuration()
 {
-    const auto duration = Chronometer::duration(d->paragraphType, d->text);
+    const auto duration = Chronometer::duration(
+        d->paragraphType, d->text, model()->informationModel()->screenplayTemplateId());
     if (d->duration == duration) {
         return;
     }
@@ -766,8 +770,9 @@ const QVector<ScreenplayTextModelTextItem::TextFormat>& ScreenplayTextModelTextI
 void ScreenplayTextModelTextItem::setFormats(const QVector<QTextLayout::FormatRange>& _formats)
 {
     QVector<TextFormat> newFormats;
-    const auto defaultBlockFormat
-        = TemplatesFacade::screenplayTemplate().paragraphStyle(d->paragraphType);
+    const auto& currentTemplate
+        = TemplatesFacade::screenplayTemplate(model()->informationModel()->screenplayTemplateId());
+    const auto defaultBlockFormat = currentTemplate.paragraphStyle(d->paragraphType);
     for (const auto& format : _formats) {
         if (format.start == 0 && format.length == d->text.length()
             && format.format == defaultBlockFormat.charFormat()) {

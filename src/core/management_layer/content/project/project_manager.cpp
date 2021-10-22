@@ -676,17 +676,13 @@ void ProjectManager::loadCurrentProject(const QString& _name, const QString& _pa
     //
     // Загрузить состояние дерева
     //
-    d->navigator->restoreState(DataStorageLayer::StorageFacade::settingsStorage()->value(
-        DataStorageLayer::projectStructureKey(_path),
-        DataStorageLayer::SettingsStorage::SettingsPlace::Application));
+    d->navigator->restoreState(settingsValue(DataStorageLayer::projectStructureKey(_path)));
 
     //
     // При необходимости открыть навигатор по документу
     //
     const auto isProjectStructureVisible
-        = DataStorageLayer::StorageFacade::settingsStorage()->value(
-            DataStorageLayer::projectStructureVisibleKey(_path),
-            DataStorageLayer::SettingsStorage::SettingsPlace::Application);
+        = settingsValue(DataStorageLayer::projectStructureVisibleKey(_path));
     if (isProjectStructureVisible.isValid() && !isProjectStructureVisible.toBool()) {
         showNavigator(d->navigator->currentIndex());
     }

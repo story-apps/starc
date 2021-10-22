@@ -83,11 +83,6 @@ ScreenplayTextStructureView::~ScreenplayTextStructureView() = default;
 
 void ScreenplayTextStructureView::reconfigure()
 {
-    auto settingsValue = [](const QString& _key) {
-        return DataStorageLayer::StorageFacade::settingsStorage()->value(
-            _key, DataStorageLayer::SettingsStorage::SettingsPlace::Application);
-    };
-
     const bool showSceneNumber
         = settingsValue(DataStorageLayer::kComponentsScreenplayNavigatorShowSceneNumberKey)
               .toBool();

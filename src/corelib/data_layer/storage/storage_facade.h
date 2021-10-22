@@ -2,6 +2,8 @@
 
 #include <corelib_global.h>
 
+class QVariant;
+typedef QMap<QString, QVariant> QVariantMap;
 
 namespace DataStorageLayer {
 
@@ -42,3 +44,10 @@ private:
 };
 
 } // namespace DataStorageLayer
+
+/**
+ * @brief Вспомогательные функции для удобного доступа к настройкам
+ */
+QVariant settingsValue(const QString& _key);
+QVariant settingsValue(const QString& _key, const QVariant& _defaultValue);
+QVariantMap settingsValues(const QString& _key);

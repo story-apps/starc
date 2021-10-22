@@ -524,7 +524,7 @@ QString docxText(QMap<int, QStringList>& _comments, const ScreenplayTextCursor& 
         // ... если необходимо, добавляем номер сцены
         //
         if (currentBlockType == ScreenplayParagraphType::SceneHeading
-            && _exportOptions.printScenesNumbers) {
+            && _exportOptions.showScenesNumbers) {
             const auto blockData = dynamic_cast<ScreenplayTextBlockData*>(block.userData());
             if (blockData != nullptr) {
                 const auto sceneItem
@@ -1039,13 +1039,13 @@ void writeDocument(QtZipWriter* _zip, ScreenplayTextDocument* _screenplayText,
     //
     // ... нужна ли титульная страница
     //
-    if (_exportOptions.printTiltePage) {
+    if (_exportOptions.includeTiltePage) {
         documentXml.append("<w:titlePg/>");
     }
     //
     // ... нумерация страниц
     //
-    int pageNumbersStartFrom = _exportOptions.printTiltePage ? 0 : 1;
+    int pageNumbersStartFrom = _exportOptions.includeTiltePage ? 0 : 1;
     documentXml.append(
         QString("<w:pgNumType w:fmt=\"decimal\" w:start=\"%1\"/>").arg(pageNumbersStartFrom));
     //

@@ -40,8 +40,8 @@ void SceneCharactersHandler::handleEnter(QKeyEvent*)
     // ... текст после курсора
     QString cursorForwardText = currentBlock.text().mid(cursor.positionInBlock());
     // ... префикс и постфикс стиля
-    const auto style = BusinessLayer::TemplatesFacade::screenplayTemplate().paragraphStyle(
-        ScreenplayParagraphType::SceneCharacters);
+    const auto style
+        = editor()->screenplayTemplate().paragraphStyle(ScreenplayParagraphType::SceneCharacters);
     QString stylePrefix = style.prefix();
     QString stylePostfix = style.postfix();
 
@@ -182,8 +182,8 @@ void SceneCharactersHandler::complete(const QString& _currentBlockText,
         cursorBackwardTextToComma = cursorBackwardTextToComma.split(", ").last();
     }
     // ... уберём префикс
-    const auto style = BusinessLayer::TemplatesFacade::screenplayTemplate().paragraphStyle(
-        ScreenplayParagraphType::SceneCharacters);
+    const auto style
+        = editor()->screenplayTemplate().paragraphStyle(ScreenplayParagraphType::SceneCharacters);
     QString stylePrefix = style.prefix();
     if (!stylePrefix.isEmpty() && cursorBackwardTextToComma.startsWith(stylePrefix)) {
         cursorBackwardTextToComma.remove(QRegularExpression(QString("^[%1]").arg(stylePrefix)));

@@ -2,7 +2,7 @@
 
 #include "../title_page_edit.h"
 
-#include <business_layer/templates/screenplay_template.h>
+#include <business_layer/templates/simple_text_template.h>
 #include <business_layer/templates/templates_facade.h>
 
 #include <QKeyEvent>
@@ -150,16 +150,16 @@ void PrepareHandler::handleOther(QKeyEvent* _event)
     //
     QTextCursor topCursor(editor()->document());
     topCursor.setPosition(qMin(cursor.selectionStart(), cursor.selectionEnd()));
-    const auto topStyle = BusinessLayer::TemplatesFacade::screenplayTemplate().paragraphStyle(
-        BusinessLayer::ScreenplayBlockStyle::forBlock(topCursor.block()));
+    const auto topStyle = BusinessLayer::TemplatesFacade::simpleTextTemplate().paragraphStyle(
+        BusinessLayer::SimpleTextBlockStyle::forBlock(topCursor.block()));
 
     //
     // Получим стиль последнего блока в выделении
     //
     QTextCursor bottomCursor(editor()->document());
     bottomCursor.setPosition(qMax(cursor.selectionStart(), cursor.selectionEnd()));
-    const auto bottomStyle = BusinessLayer::TemplatesFacade::screenplayTemplate().paragraphStyle(
-        BusinessLayer::ScreenplayBlockStyle::forBlock(bottomCursor.block()));
+    const auto bottomStyle = BusinessLayer::TemplatesFacade::simpleTextTemplate().paragraphStyle(
+        BusinessLayer::SimpleTextBlockStyle::forBlock(bottomCursor.block()));
 
     if (!_event->text().isEmpty()) {
         //

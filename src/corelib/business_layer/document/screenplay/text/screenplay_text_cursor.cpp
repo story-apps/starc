@@ -27,6 +27,7 @@ ScreenplayTextBlockData* cloneBlockData(const QTextBlock& _block)
     }
     return clonedBlockData;
 }
+
 } // namespace
 
 
@@ -303,14 +304,13 @@ void ScreenplayTextCursor::removeCharacters(bool _backward, BaseTextEdit* _edito
     //
     const auto topBlock = document()->findBlock(topCursorPosition);
     const auto topParagraphType = ScreenplayBlockStyle::forBlock(topBlock);
-    const auto topStyle = TemplatesFacade::screenplayTemplate().paragraphStyle(topParagraphType);
+    const auto topStyle = screenplayTemplate().paragraphStyle(topParagraphType);
     //
     // ... и конца
     //
     const auto bottomBlock = document()->findBlock(bottomCursorPosition);
     const auto bottomParagraphType = ScreenplayBlockStyle::forBlock(bottomBlock);
-    const auto bottomStyle
-        = TemplatesFacade::screenplayTemplate().paragraphStyle(bottomParagraphType);
+    const auto bottomStyle = screenplayTemplate().paragraphStyle(bottomParagraphType);
 
     //
     // Определим стиль результирующего блока и сохраним его данные
@@ -337,7 +337,7 @@ void ScreenplayTextCursor::removeCharacters(bool _backward, BaseTextEdit* _edito
         }
         const QTextBlock targetBlock = cursor.block();
         const auto targetBlockType = ScreenplayBlockStyle::forBlock(targetBlock);
-        targetStyle = TemplatesFacade::screenplayTemplate().paragraphStyle(targetBlockType);
+        targetStyle = screenplayTemplate().paragraphStyle(targetBlockType);
         targetBlockData = cloneBlockData(targetBlock);
     }
     //
@@ -627,6 +627,15 @@ void ScreenplayTextCursor::removeGroupsPairs(
             cursor.movePosition(QTextCursor::PreviousBlock);
         } while (groupsToDeleteCount > 0);
     }
+}
+
+const ScreenplayTemplate& ScreenplayTextCursor::screenplayTemplate() const
+{
+    if (auto screenplay = qobject_cast<ScreenplayTextDocument*>(document())) {
+        return TemplatesFacade::screenplayTemplate(screenplay->templateId());
+    }
+
+    return TemplatesFacade::screenplayTemplate();
 }
 
 } // namespace BusinessLayer

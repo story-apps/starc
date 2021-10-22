@@ -145,10 +145,7 @@ void ImportManager::import()
     // Предоставим пользователю возможность выбрать файл, который он хочет импортировать
     //
     const auto projectImportFolder
-        = DataStorageLayer::StorageFacade::settingsStorage()
-              ->value(DataStorageLayer::kProjectImportFolderKey,
-                      DataStorageLayer::SettingsStorage::SettingsPlace::Application)
-              .toString();
+        = settingsValue(DataStorageLayer::kProjectImportFolderKey).toString();
     const auto importFilePath
         = QFileDialog::getOpenFileName(d->topLevelWidget, tr("Choose the file to import"),
                                        projectImportFolder, DialogHelper::importFilters());

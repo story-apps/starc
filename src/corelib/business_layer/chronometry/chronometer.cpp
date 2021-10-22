@@ -22,8 +22,8 @@ class AbstractChronometer
 {
 public:
     virtual ~AbstractChronometer() = default;
-    virtual std::chrono::milliseconds duration(ScreenplayParagraphType _type,
-                                               const QString& _text) const = 0;
+    virtual std::chrono::milliseconds duration(ScreenplayParagraphType _type, const QString& _text,
+                                               const QString& _screenplayTemplateId) const = 0;
 };
 
 /**
@@ -32,17 +32,14 @@ public:
 class PageChronometer : public AbstractChronometer
 {
 public:
-    std::chrono::milliseconds duration(ScreenplayParagraphType _type,
-                                       const QString& _text) const override
+    std::chrono::milliseconds duration(ScreenplayParagraphType _type, const QString& _text,
+                                       const QString& _screenplayTemplateId) const override
     {
         using namespace DataStorageLayer;
-        const auto milliseconds = StorageFacade::settingsStorage()
-                                      ->value(kComponentsScreenplayDurationByPageDurationKey,
-                                              SettingsStorage::SettingsPlace::Application)
-                                      .toInt()
-            * 1000;
+        const auto milliseconds
+            = settingsValue(kComponentsScreenplayDurationByPageDurationKey).toInt() * 1000;
 
-        const auto& currentTemplate = BusinessLayer::TemplatesFacade::screenplayTemplate();
+        const auto& currentTemplate = TemplatesFacade::screenplayTemplate(_screenplayTemplateId);
         const auto mmPageSize
             = QPageSize(currentTemplate.pageSizeId()).rect(QPageSize::Millimeter).size();
         const bool x = true, y = false;
@@ -82,26 +79,19 @@ public:
 class CharactersChronometer : public AbstractChronometer
 {
 public:
-    std::chrono::milliseconds duration(ScreenplayParagraphType _type,
-                                       const QString& _text) const override
+    std::chrono::milliseconds duration(ScreenplayParagraphType _type, const QString& _text,
+                                       const QString& _screenplayTemplateId) const override
     {
         Q_UNUSED(_type)
+        Q_UNUSED(_screenplayTemplateId)
 
         using namespace DataStorageLayer;
-        const int characters = StorageFacade::settingsStorage()
-                                   ->value(kComponentsScreenplayDurationByCharactersCharactersKey,
-                                           SettingsStorage::SettingsPlace::Application)
-                                   .toInt();
+        const int characters
+            = settingsValue(kComponentsScreenplayDurationByCharactersCharactersKey).toInt();
         const bool considerSpaces
-            = StorageFacade::settingsStorage()
-                  ->value(kComponentsScreenplayDurationByCharactersIncludeSpacesKey,
-                          SettingsStorage::SettingsPlace::Application)
-                  .toBool();
-        const int milliseconds = StorageFacade::settingsStorage()
-                                     ->value(kComponentsScreenplayDurationByCharactersDurationKey,
-                                             SettingsStorage::SettingsPlace::Application)
-                                     .toInt()
-            * 1000;
+            = settingsValue(kComponentsScreenplayDurationByCharactersIncludeSpacesKey).toBool();
+        const int milliseconds
+            = settingsValue(kComponentsScreenplayDurationByCharactersDurationKey).toInt() * 1000;
 
         auto text = _text;
         if (!considerSpaces) {
@@ -174,20 +164,18 @@ public:
 } // namespace
 
 
-std::chrono::milliseconds Chronometer::duration(ScreenplayParagraphType _type, const QString& _text)
+std::chrono::milliseconds Chronometer::duration(ScreenplayParagraphType _type, const QString& _text,
+                                                const QString& _screenplayTemplateId)
 {
     const auto chronometerType
-        = DataStorageLayer::StorageFacade::settingsStorage()
-              ->value(DataStorageLayer::kComponentsScreenplayDurationTypeKey,
-                      DataStorageLayer::SettingsStorage::SettingsPlace::Application)
-              .toInt();
+        = settingsValue(DataStorageLayer::kComponentsScreenplayDurationTypeKey).toInt();
     switch (static_cast<ChronometerType>(chronometerType)) {
     case ChronometerType::Page: {
-        return PageChronometer().duration(_type, _text);
+        return PageChronometer().duration(_type, _text, _screenplayTemplateId);
     }
 
     case ChronometerType::Characters: {
-        return CharactersChronometer().duration(_type, _text);
+        return CharactersChronometer().duration(_type, _text, _screenplayTemplateId);
     }
 
     default: {

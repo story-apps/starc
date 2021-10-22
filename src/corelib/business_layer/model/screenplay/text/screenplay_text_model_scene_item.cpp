@@ -101,15 +101,16 @@ bool ScreenplayTextModelSceneItem::Number::operator==(
     return text == _other.text;
 }
 
-ScreenplayTextModelSceneItem::ScreenplayTextModelSceneItem()
-    : ScreenplayTextModelItem(ScreenplayTextModelItemType::Scene)
+ScreenplayTextModelSceneItem::ScreenplayTextModelSceneItem(const ScreenplayTextModel* _model)
+    : ScreenplayTextModelItem(ScreenplayTextModelItemType::Scene, _model)
     , d(new Implementation)
 {
     d->uuid = QUuid::createUuid();
 }
 
-ScreenplayTextModelSceneItem::ScreenplayTextModelSceneItem(QXmlStreamReader& _contentReader)
-    : ScreenplayTextModelItem(ScreenplayTextModelItemType::Scene)
+ScreenplayTextModelSceneItem::ScreenplayTextModelSceneItem(const ScreenplayTextModel* _model,
+                                                           QXmlStreamReader& _contentReader)
+    : ScreenplayTextModelItem(ScreenplayTextModelItemType::Scene, _model)
     , d(new Implementation)
 {
     Q_ASSERT(_contentReader.name() == xml::kSceneTag);
@@ -174,11 +175,11 @@ ScreenplayTextModelSceneItem::ScreenplayTextModelSceneItem(QXmlStreamReader& _co
             // Считываем вложенный контент
             //
             else if (currentTag == xml::kSceneTag) {
-                appendItem(new ScreenplayTextModelSceneItem(_contentReader));
+                appendItem(new ScreenplayTextModelSceneItem(model(), _contentReader));
             } else if (currentTag == xml::kSplitterTag) {
-                appendItem(new ScreenplayTextModelSplitterItem(_contentReader));
+                appendItem(new ScreenplayTextModelSplitterItem(model(), _contentReader));
             } else {
-                appendItem(new ScreenplayTextModelTextItem(_contentReader));
+                appendItem(new ScreenplayTextModelTextItem(model(), _contentReader));
             }
         } while (!_contentReader.atEnd());
     }

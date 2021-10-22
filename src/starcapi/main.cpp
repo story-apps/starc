@@ -694,9 +694,9 @@ QJsonObject printScene(const QString& _starcFileName, const QString& _screenplay
         ScreenplayExportOptions exportOptions;
         QDir::root().mkpath("/tmp/pdf/");
         exportOptions.filePath = "/tmp/pdf/" + QUuid::createUuid().toString() + ".pdf";
-        exportOptions.printTiltePage = false;
-        exportOptions.printScenes.append(sceneNumber);
-        exportOptions.printReviewMarks = false;
+        exportOptions.includeTiltePage = false;
+        exportOptions.exportScenes.append(sceneNumber);
+        exportOptions.includeReviewMarks = false;
         exportOptions.highlightCharacter = _characterName;
         exportOptions.highlightCharacterColor = Qt::yellow;
         ScreenplayPdfExporter().exportTo(&screenplayModel, exportOptions);

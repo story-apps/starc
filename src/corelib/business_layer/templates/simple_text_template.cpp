@@ -27,18 +27,18 @@ const QHash<TextParagraphType, QString> kTextParagraphTypeToString
         { TextParagraphType::Text, QLatin1String("text") },
         { TextParagraphType::InlineNote, QLatin1String("inline_note") } };
 
-const QHash<TextBlockStyle::LineSpacingType, QString> kLineSpacingToString
-    = { { TextBlockStyle::LineSpacingType::SingleLineSpacing, "single" },
-        { TextBlockStyle::LineSpacingType::OneAndHalfLineSpacing, "oneandhalf" },
-        { TextBlockStyle::LineSpacingType::DoubleLineSpacing, "double" },
-        { TextBlockStyle::LineSpacingType::FixedLineSpacing, "fixed" } };
+const QHash<SimpleTextBlockStyle::LineSpacingType, QString> kLineSpacingToString
+    = { { SimpleTextBlockStyle::LineSpacingType::SingleLineSpacing, "single" },
+        { SimpleTextBlockStyle::LineSpacingType::OneAndHalfLineSpacing, "oneandhalf" },
+        { SimpleTextBlockStyle::LineSpacingType::DoubleLineSpacing, "double" },
+        { SimpleTextBlockStyle::LineSpacingType::FixedLineSpacing, "fixed" } };
 
-QString toString(TextBlockStyle::LineSpacingType _type)
+QString toString(SimpleTextBlockStyle::LineSpacingType _type)
 {
     return kLineSpacingToString.value(_type);
 }
 
-TextBlockStyle::LineSpacingType lineSpacingFromString(const QString& _lineSpacing)
+SimpleTextBlockStyle::LineSpacingType lineSpacingFromString(const QString& _lineSpacing)
 {
     return kLineSpacingToString.key(_lineSpacing);
 }
@@ -60,47 +60,47 @@ TextParagraphType textParagraphTypeFromString(const QString& _text)
 // ****
 
 
-TextParagraphType TextBlockStyle::forBlock(const QTextBlock& _block)
+TextParagraphType SimpleTextBlockStyle::forBlock(const QTextBlock& _block)
 {
     TextParagraphType blockType = TextParagraphType::Undefined;
-    if (_block.blockFormat().hasProperty(TextBlockStyle::PropertyType)) {
+    if (_block.blockFormat().hasProperty(SimpleTextBlockStyle::PropertyType)) {
         blockType = static_cast<TextParagraphType>(
-            _block.blockFormat().intProperty(TextBlockStyle::PropertyType));
+            _block.blockFormat().intProperty(SimpleTextBlockStyle::PropertyType));
     }
     return blockType;
 }
 
-TextParagraphType TextBlockStyle::type() const
+TextParagraphType SimpleTextBlockStyle::type() const
 {
     return m_type;
 }
 
-void TextBlockStyle::setType(TextParagraphType _type)
+void SimpleTextBlockStyle::setType(TextParagraphType _type)
 {
     if (m_type == _type) {
         return;
     }
 
     m_type = _type;
-    m_blockFormat.setProperty(TextBlockStyle::PropertyType, static_cast<int>(_type));
+    m_blockFormat.setProperty(SimpleTextBlockStyle::PropertyType, static_cast<int>(_type));
 }
 
-bool TextBlockStyle::isActive() const
+bool SimpleTextBlockStyle::isActive() const
 {
     return m_isActive;
 }
 
-void TextBlockStyle::setActive(bool _active)
+void SimpleTextBlockStyle::setActive(bool _active)
 {
     m_isActive = _active;
 }
 
-bool TextBlockStyle::isStartFromNewPage() const
+bool SimpleTextBlockStyle::isStartFromNewPage() const
 {
     return m_isStartFromNewPage;
 }
 
-void TextBlockStyle::setStartFromNewPage(bool _startFromNewPage)
+void SimpleTextBlockStyle::setStartFromNewPage(bool _startFromNewPage)
 {
     if (m_isStartFromNewPage == _startFromNewPage) {
         return;
@@ -111,12 +111,12 @@ void TextBlockStyle::setStartFromNewPage(bool _startFromNewPage)
                                                           : QTextFormat::PageBreak_Auto);
 }
 
-QFont TextBlockStyle::font() const
+QFont SimpleTextBlockStyle::font() const
 {
     return m_font;
 }
 
-void TextBlockStyle::setFont(const QFont& _font)
+void SimpleTextBlockStyle::setFont(const QFont& _font)
 {
     if (m_font == _font) {
         return;
@@ -127,12 +127,12 @@ void TextBlockStyle::setFont(const QFont& _font)
     updateLineHeight();
 }
 
-Qt::Alignment TextBlockStyle::align() const
+Qt::Alignment SimpleTextBlockStyle::align() const
 {
     return m_align;
 }
 
-void TextBlockStyle::setAlign(Qt::Alignment _align)
+void SimpleTextBlockStyle::setAlign(Qt::Alignment _align)
 {
     if (m_align == _align) {
         return;
@@ -142,12 +142,12 @@ void TextBlockStyle::setAlign(Qt::Alignment _align)
     m_blockFormat.setAlignment(m_align);
 }
 
-TextBlockStyle::LineSpacingType TextBlockStyle::lineSpacingType() const
+SimpleTextBlockStyle::LineSpacingType SimpleTextBlockStyle::lineSpacingType() const
 {
     return m_lineSpacing.type;
 }
 
-void TextBlockStyle::setLineSpacingType(TextBlockStyle::LineSpacingType _type)
+void SimpleTextBlockStyle::setLineSpacingType(SimpleTextBlockStyle::LineSpacingType _type)
 {
     if (m_lineSpacing.type == _type) {
         return;
@@ -157,12 +157,12 @@ void TextBlockStyle::setLineSpacingType(TextBlockStyle::LineSpacingType _type)
     updateLineHeight();
 }
 
-qreal TextBlockStyle::lineSpacingValue() const
+qreal SimpleTextBlockStyle::lineSpacingValue() const
 {
     return m_lineSpacing.value;
 }
 
-void TextBlockStyle::setLineSpacingValue(qreal _value)
+void SimpleTextBlockStyle::setLineSpacingValue(qreal _value)
 {
     if (m_lineSpacing.value == _value) {
         return;
@@ -172,12 +172,12 @@ void TextBlockStyle::setLineSpacingValue(qreal _value)
     updateLineHeight();
 }
 
-int TextBlockStyle::linesBefore() const
+int SimpleTextBlockStyle::linesBefore() const
 {
     return m_linesBefore;
 }
 
-void TextBlockStyle::setLinesBefore(int _linesBefore)
+void SimpleTextBlockStyle::setLinesBefore(int _linesBefore)
 {
     if (m_linesBefore == _linesBefore) {
         return;
@@ -187,12 +187,12 @@ void TextBlockStyle::setLinesBefore(int _linesBefore)
     updateTopMargin();
 }
 
-QMarginsF TextBlockStyle::margins() const
+QMarginsF SimpleTextBlockStyle::margins() const
 {
     return m_margins;
 }
 
-void TextBlockStyle::setMargins(const QMarginsF& _margins)
+void SimpleTextBlockStyle::setMargins(const QMarginsF& _margins)
 {
     if (m_margins.left() != _margins.left()) {
         m_margins.setLeft(_margins.left());
@@ -215,12 +215,12 @@ void TextBlockStyle::setMargins(const QMarginsF& _margins)
     }
 }
 
-int TextBlockStyle::linesAfter() const
+int SimpleTextBlockStyle::linesAfter() const
 {
     return m_linesAfter;
 }
 
-void TextBlockStyle::setLinesAfter(int _linesAfter)
+void SimpleTextBlockStyle::setLinesAfter(int _linesAfter)
 {
     if (m_linesAfter == _linesAfter) {
         return;
@@ -230,27 +230,32 @@ void TextBlockStyle::setLinesAfter(int _linesAfter)
     updateBottomMargin();
 }
 
-QTextBlockFormat TextBlockStyle::blockFormat() const
+QTextBlockFormat SimpleTextBlockStyle::blockFormat() const
 {
     return m_blockFormat;
 }
 
-void TextBlockStyle::setBackgroundColor(const QColor& _color)
+void SimpleTextBlockStyle::setBackgroundColor(const QColor& _color)
 {
     m_blockFormat.setBackground(_color);
 }
 
-QTextCharFormat TextBlockStyle::charFormat() const
+QTextCharFormat SimpleTextBlockStyle::charFormat() const
 {
     return m_charFormat;
 }
 
-void TextBlockStyle::setTextColor(const QColor& _color)
+void SimpleTextBlockStyle::setTextColor(const QColor& _color)
 {
     m_charFormat.setForeground(_color);
 }
 
-TextBlockStyle::TextBlockStyle(const QXmlStreamAttributes& _blockAttributes)
+bool SimpleTextBlockStyle::isCanModify() const
+{
+    return m_charFormat.boolProperty(SimpleTextBlockStyle::PropertyIsCanModify);
+}
+
+SimpleTextBlockStyle::SimpleTextBlockStyle(const QXmlStreamAttributes& _blockAttributes)
 {
     //
     // Считываем параметры
@@ -303,11 +308,11 @@ TextBlockStyle::TextBlockStyle(const QXmlStreamAttributes& _blockAttributes)
     //
     // Запомним в стиле его настройки
     //
-    m_blockFormat.setProperty(TextBlockStyle::PropertyType, static_cast<int>(m_type));
-    m_charFormat.setProperty(TextBlockStyle::PropertyIsFirstUppercase, true);
+    m_blockFormat.setProperty(SimpleTextBlockStyle::PropertyType, static_cast<int>(m_type));
+    m_charFormat.setProperty(SimpleTextBlockStyle::PropertyIsFirstUppercase, true);
 }
 
-void TextBlockStyle::updateLineHeight()
+void SimpleTextBlockStyle::updateLineHeight()
 {
     qreal lineHeight = TextHelper::fineLineSpacing(m_font);
     switch (m_lineSpacing.type) {
@@ -337,13 +342,13 @@ void TextBlockStyle::updateLineHeight()
     updateBottomMargin();
 }
 
-void TextBlockStyle::updateTopMargin()
+void SimpleTextBlockStyle::updateTopMargin()
 {
     m_blockFormat.setTopMargin(m_blockFormat.lineHeight() * m_linesBefore
                                + PageMetrics::mmToPx(m_margins.top()));
 }
 
-void TextBlockStyle::updateBottomMargin()
+void SimpleTextBlockStyle::updateBottomMargin()
 {
     m_blockFormat.setBottomMargin(m_blockFormat.lineHeight() * m_linesAfter
                                   + PageMetrics::mmToPx(m_margins.bottom()));
@@ -485,17 +490,17 @@ void SimpleTextTemplate::setPageNumbersAlignment(Qt::Alignment _alignment)
     m_pageNumbersAlignment = _alignment;
 }
 
-TextBlockStyle SimpleTextTemplate::paragraphStyle(TextParagraphType _forType) const
+SimpleTextBlockStyle SimpleTextTemplate::paragraphStyle(TextParagraphType _forType) const
 {
     return m_blockStyles.value(_forType);
 }
 
-TextBlockStyle SimpleTextTemplate::paragraphStyle(const QTextBlock& _forBlock) const
+SimpleTextBlockStyle SimpleTextTemplate::paragraphStyle(const QTextBlock& _forBlock) const
 {
-    return paragraphStyle(TextBlockStyle::forBlock(_forBlock));
+    return paragraphStyle(SimpleTextBlockStyle::forBlock(_forBlock));
 }
 
-void SimpleTextTemplate::setParagraphStyle(const TextBlockStyle& _style)
+void SimpleTextTemplate::setParagraphStyle(const SimpleTextBlockStyle& _style)
 {
     m_blockStyles.insert(_style.type(), _style);
 }
@@ -542,7 +547,7 @@ void SimpleTextTemplate::load(const QString& _fromFile)
     // Считываем настройки оформления блоков текста
     //
     while (reader.readNextStartElement() && reader.name() == "block") {
-        const TextBlockStyle blockStyle(reader.attributes());
+        const SimpleTextBlockStyle blockStyle(reader.attributes());
         m_blockStyles.insert(blockStyle.type(), blockStyle);
 
         //

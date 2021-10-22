@@ -48,15 +48,16 @@ public:
 // ****
 
 
-ScreenplayTextModelFolderItem::ScreenplayTextModelFolderItem()
-    : ScreenplayTextModelItem(ScreenplayTextModelItemType::Folder)
+ScreenplayTextModelFolderItem::ScreenplayTextModelFolderItem(const ScreenplayTextModel* _model)
+    : ScreenplayTextModelItem(ScreenplayTextModelItemType::Folder, _model)
     , d(new Implementation)
 {
     d->uuid = QUuid::createUuid();
 }
 
-ScreenplayTextModelFolderItem::ScreenplayTextModelFolderItem(QXmlStreamReader& _contentReader)
-    : ScreenplayTextModelItem(ScreenplayTextModelItemType::Folder)
+ScreenplayTextModelFolderItem::ScreenplayTextModelFolderItem(const ScreenplayTextModel* _model,
+                                                             QXmlStreamReader& _contentReader)
+    : ScreenplayTextModelItem(ScreenplayTextModelItemType::Folder, _model)
     , d(new Implementation)
 {
     Q_ASSERT(_contentReader.name() == xml::kFolderTag);
@@ -95,13 +96,13 @@ ScreenplayTextModelFolderItem::ScreenplayTextModelFolderItem(QXmlStreamReader& _
             // Считываем вложенный контент
             //
             else if (currentTag == xml::kFolderTag) {
-                appendItem(new ScreenplayTextModelFolderItem(_contentReader));
+                appendItem(new ScreenplayTextModelFolderItem(model(), _contentReader));
             } else if (currentTag == xml::kSceneTag) {
-                appendItem(new ScreenplayTextModelSceneItem(_contentReader));
+                appendItem(new ScreenplayTextModelSceneItem(model(), _contentReader));
             } else if (currentTag == xml::kSplitterTag) {
-                appendItem(new ScreenplayTextModelSplitterItem(_contentReader));
+                appendItem(new ScreenplayTextModelSplitterItem(model(), _contentReader));
             } else {
-                appendItem(new ScreenplayTextModelTextItem(_contentReader));
+                appendItem(new ScreenplayTextModelTextItem(model(), _contentReader));
             }
         } while (!_contentReader.atEnd());
     }
@@ -169,8 +170,8 @@ QByteArray ScreenplayTextModelFolderItem::toXml(ScreenplayTextModelItem* _from, 
                                                 ScreenplayTextModelItem* _to, int _toPosition,
                                                 bool _clearUuid) const
 {
-    auto folderFooterXml = [] {
-        ScreenplayTextModelTextItem item;
+    auto folderFooterXml = [this] {
+        ScreenplayTextModelTextItem item(model());
         item.setParagraphType(ScreenplayParagraphType::FolderFooter);
         return item.toXml();
     };

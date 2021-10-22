@@ -24,7 +24,8 @@ public:
     /**
      * @brief Определить длительность заданного блока
      */
-    static std::chrono::milliseconds duration(ScreenplayParagraphType _type, const QString& _text);
+    static std::chrono::milliseconds duration(ScreenplayParagraphType _type, const QString& _text,
+                                              const QString& _screenplayTemplateId);
 };
 
 } // namespace BusinessLayer

@@ -59,10 +59,7 @@ void ScreenplayTextEditShortcutsManager::Implementation::createOrUpdateShortcut(
     const auto blockType = static_cast<ScreenplayParagraphType>(_forBlockType);
     const QString typeShortName = BusinessLayer::toString(blockType);
     const QString keySequenceText
-        = DataStorageLayer::StorageFacade::settingsStorage()
-              ->value(QString("screenplay-editor/shortcuts/%1").arg(typeShortName),
-                      DataStorageLayer::SettingsStorage::SettingsPlace::Application)
-              .toString();
+        = settingsValue(QString("screenplay-editor/shortcuts/%1").arg(typeShortName)).toString();
     const QKeySequence keySequence(keySequenceText);
 
     if (paragraphTypeToShortcut.contains(_forBlockType)) {

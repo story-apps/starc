@@ -557,7 +557,7 @@ void ScreenplayTemplate::Implementation::buildTitlePageTemplate()
     titlePageTemplate.setPageMargins(pageMargins);
     titlePageTemplate.setPageNumbersAlignment(pageNumbersAlignment);
 
-    TextBlockStyle defaultBlockStyle;
+    SimpleTextBlockStyle defaultBlockStyle;
     defaultBlockStyle.setActive(true);
     defaultBlockStyle.setStartFromNewPage(false);
     const auto actionBlockStyle = paragrapsStyles.value(ScreenplayParagraphType::Action);

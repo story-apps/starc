@@ -28,8 +28,9 @@ public:
     };
 
 public:
-    ScreenplayTextModelFolderItem();
-    explicit ScreenplayTextModelFolderItem(QXmlStreamReader& _contentReader);
+    explicit ScreenplayTextModelFolderItem(const ScreenplayTextModel* _model);
+    ScreenplayTextModelFolderItem(const ScreenplayTextModel* _model,
+                                  QXmlStreamReader& _contentReader);
     ~ScreenplayTextModelFolderItem() override;
 
     /**

@@ -206,11 +206,6 @@ void SimpleTextView::reconfigure(const QStringList& _changedSettingsKeys)
 
     d->shortcutsManager.reconfigure();
 
-    auto settingsValue = [](const QString& _key) {
-        return DataStorageLayer::StorageFacade::settingsStorage()->value(
-            _key, DataStorageLayer::SettingsStorage::SettingsPlace::Application);
-    };
-
     if (_changedSettingsKeys.isEmpty()
         || _changedSettingsKeys.contains(
             DataStorageLayer::kComponentsSimpleTextEditorDefaultTemplateKey)) {
@@ -228,10 +223,7 @@ void SimpleTextView::loadViewSettings()
 {
     using namespace DataStorageLayer;
 
-    const auto scaleFactor
-        = StorageFacade::settingsStorage()
-              ->value(kScaleFactorKey, SettingsStorage::SettingsPlace::Application, 1.0)
-              .toReal();
+    const auto scaleFactor = settingsValue(kScaleFactorKey, 1.0).toReal();
     d->scalableWrapper->setZoomRange(scaleFactor);
 }
 

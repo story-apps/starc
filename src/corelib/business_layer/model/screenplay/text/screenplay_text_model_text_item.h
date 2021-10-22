@@ -70,8 +70,9 @@ public:
     };
 
 public:
-    ScreenplayTextModelTextItem();
-    explicit ScreenplayTextModelTextItem(QXmlStreamReader& _contentReaded);
+    explicit ScreenplayTextModelTextItem(const ScreenplayTextModel* _model);
+    ScreenplayTextModelTextItem(const ScreenplayTextModel* _model,
+                                QXmlStreamReader& _contentReaded);
     ~ScreenplayTextModelTextItem() override;
 
     /**

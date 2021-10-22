@@ -489,11 +489,6 @@ void ComicBookTextView::reconfigure(const QStringList& _changedSettingsKeys)
 
     d->shortcutsManager.reconfigure();
 
-    auto settingsValue = [](const QString& _key) {
-        return DataStorageLayer::StorageFacade::settingsStorage()->value(
-            _key, DataStorageLayer::SettingsStorage::SettingsPlace::Application);
-    };
-
     if (_changedSettingsKeys.isEmpty()
         || _changedSettingsKeys.contains(
             DataStorageLayer::kComponentsComicBookEditorDefaultTemplateKey)) {
@@ -528,31 +523,18 @@ void ComicBookTextView::loadViewSettings()
 {
     using namespace DataStorageLayer;
 
-    const auto scaleFactor
-        = StorageFacade::settingsStorage()
-              ->value(kScaleFactorKey, SettingsStorage::SettingsPlace::Application, 1.0)
-              .toReal();
+    const auto scaleFactor = settingsValue(kScaleFactorKey, 1.0).toReal();
     d->scalableWrapper->setZoomRange(scaleFactor);
 
-    const auto isCommentsModeEnabled
-        = StorageFacade::settingsStorage()
-              ->value(kIsCommentsModeEnabledKey, SettingsStorage::SettingsPlace::Application, false)
-              .toBool();
+    const auto isCommentsModeEnabled = settingsValue(kIsCommentsModeEnabledKey, false).toBool();
     d->toolbar->setCommentsModeEnabled(isCommentsModeEnabled);
     const auto isFastFormatPanelVisible
-        = StorageFacade::settingsStorage()
-              ->value(kIsFastFormatPanelVisibleKey, SettingsStorage::SettingsPlace::Application,
-                      false)
-              .toBool();
+        = settingsValue(kIsFastFormatPanelVisibleKey, false).toBool();
     d->toolbar->setFastFormatPanelVisible(isFastFormatPanelVisible);
-    const auto sidebarPanelIndex
-        = StorageFacade::settingsStorage()
-              ->value(kSidebarPanelIndexKey, SettingsStorage::SettingsPlace::Application, 0)
-              .toInt();
+    const auto sidebarPanelIndex = settingsValue(kSidebarPanelIndexKey, 0).toInt();
     d->sidebarTabs->setCurrentTab(sidebarPanelIndex);
 
-    const auto sidebarState = StorageFacade::settingsStorage()->value(
-        kSidebarStateKey, SettingsStorage::SettingsPlace::Application);
+    const auto sidebarState = settingsValue(kSidebarStateKey);
     if (sidebarState.isValid()) {
         d->isSidebarShownFirstTime = false;
         d->splitter->restoreState(sidebarState.toByteArray());

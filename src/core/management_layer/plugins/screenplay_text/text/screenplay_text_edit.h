@@ -8,6 +8,7 @@ class LocationsModel;
 class ScreenplayDictionariesModel;
 class ScreenplayTextCursor;
 class ScreenplayTextModel;
+class ScreenplayTemplate;
 enum class ScreenplayParagraphType;
 } // namespace BusinessLayer
 
@@ -45,6 +46,11 @@ public:
      * @note Например в случае смены шаблона оформления сценария
      */
     void reinit();
+
+    /**
+     * @brief Текущий используемый шаблон оформления
+     */
+    const BusinessLayer::ScreenplayTemplate& screenplayTemplate() const;
 
     /**
      * @brief Получить модель справочников сценария

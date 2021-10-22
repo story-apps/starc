@@ -2,8 +2,6 @@
 
 #include <business_layer/templates/screenplay_template.h>
 #include <business_layer/templates/templates_facade.h>
-#include <data_layer/storage/settings_storage.h>
-#include <data_layer/storage/storage_facade.h>
 #include <ui/design_system/design_system.h>
 #include <ui/widgets/card/card.h>
 #include <ui/widgets/check_box/check_box.h>
@@ -172,48 +170,6 @@ ScreenplayParametersView::ScreenplayParametersView(QWidget* _parent)
             &ScreenplayParametersView::showDialoguesNumbersChanged);
 
     connect(d->overrideCommonSettings, &CheckBox::checkedChanged, this, [this](bool _checked) {
-        using namespace BusinessLayer;
-
-        //
-        // При включении перезаписи параметров, настроим их также, как и в общих параметрах
-        //
-        if (_checked) {
-            //
-            // Шаблон
-            //
-            for (int row = 0; row < TemplatesFacade::screenplayTemplates()->rowCount(); ++row) {
-                const auto item = TemplatesFacade::screenplayTemplates()->item(row);
-                if (item->data(TemplatesFacade::kTemplateIdRole).toString()
-                    != TemplatesFacade::screenplayTemplate().id()) {
-                    continue;
-                }
-
-                d->screenplayTemplate->setCurrentIndex(item->index());
-                break;
-            }
-
-            //
-            // Остальные
-            //
-            auto settingsValue = [](const QString& _key) {
-                return DataStorageLayer::StorageFacade::settingsStorage()->value(
-                    _key, DataStorageLayer::SettingsStorage::SettingsPlace::Application);
-            };
-            d->showSceneNumbers->setChecked(
-                settingsValue(DataStorageLayer::kComponentsScreenplayEditorShowSceneNumbersKey)
-                    .toBool());
-            d->showSceneNumbersOnLeft->setChecked(
-                settingsValue(DataStorageLayer::kComponentsScreenplayEditorShowSceneNumberOnLeftKey)
-                    .toBool());
-            d->showSceneNumbersOnRight->setChecked(
-                settingsValue(
-                    DataStorageLayer::kComponentsScreenplayEditorShowSceneNumbersOnRightKey)
-                    .toBool());
-            d->showDialoguesNumbers->setChecked(
-                settingsValue(DataStorageLayer::kComponentsScreenplayEditorShowDialogueNumberKey)
-                    .toBool());
-        }
-
         d->screenplayTemplate->setVisible(_checked);
         d->showSceneNumbers->setVisible(_checked);
         d->showSceneNumbersOnLeft->setVisible(_checked);

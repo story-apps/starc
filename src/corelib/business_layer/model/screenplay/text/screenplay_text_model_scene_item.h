@@ -43,8 +43,9 @@ public:
     };
 
 public:
-    ScreenplayTextModelSceneItem();
-    explicit ScreenplayTextModelSceneItem(QXmlStreamReader& _contentReader);
+    explicit ScreenplayTextModelSceneItem(const ScreenplayTextModel* _model);
+    ScreenplayTextModelSceneItem(const ScreenplayTextModel* _model,
+                                 QXmlStreamReader& _contentReader);
     ~ScreenplayTextModelSceneItem() override;
 
     /**

@@ -21,7 +21,7 @@
 #include <QTextTable>
 
 using BusinessLayer::TemplatesFacade;
-using BusinessLayer::TextBlockStyle;
+using BusinessLayer::SimpleTextBlockStyle;
 using BusinessLayer::TextParagraphType;
 
 
@@ -355,7 +355,7 @@ void SimpleTextDocument::setModel(BusinessLayer::TextModel* _model, bool _canCha
                 //
                 // ... тип параграфа
                 //
-                if (TextBlockStyle::forBlock(cursor.block()) != textItem->paragraphType()) {
+                if (SimpleTextBlockStyle::forBlock(cursor.block()) != textItem->paragraphType()) {
                     applyParagraphType(textItem->paragraphType(), cursor);
                 }
                 //
@@ -414,7 +414,7 @@ void SimpleTextDocument::setModel(BusinessLayer::TextModel* _model, bool _canCha
                     //
                     cursor.movePosition(QTextCursor::StartOfBlock);
                     cursor.movePosition(QTextCursor::EndOfBlock, QTextCursor::KeepAnchor);
-                    const auto blockType = TextBlockStyle::forBlock(cursor.block());
+                    const auto blockType = SimpleTextBlockStyle::forBlock(cursor.block());
                     const auto blockStyle = d->documentTemplate().paragraphStyle(blockType);
                     cursor.setBlockCharFormat(blockStyle.charFormat());
                     cursor.setCharFormat(blockStyle.charFormat());
@@ -798,7 +798,7 @@ void SimpleTextDocument::addParagraph(BusinessLayer::TextParagraphType _type, QT
 void SimpleTextDocument::setParagraphType(BusinessLayer::TextParagraphType _type,
                                           const QTextCursor& _cursor)
 {
-    const auto currentParagraphType = TextBlockStyle::forBlock(_cursor.block());
+    const auto currentParagraphType = SimpleTextBlockStyle::forBlock(_cursor.block());
     if (currentParagraphType == _type) {
         return;
     }
@@ -849,7 +849,7 @@ void SimpleTextDocument::applyParagraphType(BusinessLayer::TextParagraphType _ty
         if (!currentBlock.textFormats().isEmpty()) {
             const auto formats = currentBlock.textFormats();
             for (const auto& range : formats) {
-                if (range.format.boolProperty(TextBlockStyle::PropertyIsReviewMark)) {
+                if (range.format.boolProperty(SimpleTextBlockStyle::PropertyIsReviewMark)) {
                     continue;
                 }
                 cursor.setPosition(currentBlock.position() + range.start);
@@ -1135,7 +1135,7 @@ void SimpleTextDocument::updateModelOnContentChange(int _position, int _charsRem
     }();
 
     while (block.isValid() && block.position() <= _position + _charsAdded) {
-        const auto paragraphType = TextBlockStyle::forBlock(block);
+        const auto paragraphType = SimpleTextBlockStyle::forBlock(block);
 
         //
         // Новый блок

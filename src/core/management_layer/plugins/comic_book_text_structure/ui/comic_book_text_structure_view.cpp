@@ -83,11 +83,6 @@ ComicBookTextStructureView::~ComicBookTextStructureView() = default;
 
 void ComicBookTextStructureView::reconfigure()
 {
-    auto settingsValue = [](const QString& _key) {
-        return DataStorageLayer::StorageFacade::settingsStorage()->value(
-            _key, DataStorageLayer::SettingsStorage::SettingsPlace::Application);
-    };
-
     const bool showSceneText
         = settingsValue(DataStorageLayer::kComponentsComicBookNavigatorShowSceneTextKey).toBool();
     if (showSceneText == false) {

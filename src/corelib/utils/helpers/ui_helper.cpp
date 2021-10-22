@@ -16,10 +16,6 @@ void UiHelper::initSpellingFor(SpellCheckTextEdit* _edit)
 
 void UiHelper::initSpellingFor(const QVector<SpellCheckTextEdit*>& _edits)
 {
-    auto settingsValue = [](const QString& _key) {
-        return DataStorageLayer::StorageFacade::settingsStorage()->value(
-            _key, DataStorageLayer::SettingsStorage::SettingsPlace::Application);
-    };
     const auto useSpellChecker
         = settingsValue(DataStorageLayer::kApplicationUseSpellCheckerKey).toBool();
     const auto spellingLanguage

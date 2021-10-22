@@ -1,6 +1,7 @@
 #include "screenplay_summary_report.h"
 
 #include <business_layer/document/screenplay/text/screenplay_text_document.h>
+#include <business_layer/model/screenplay/screenplay_information_model.h>
 #include <business_layer/model/screenplay/text/screenplay_text_block_parser.h>
 #include <business_layer/model/screenplay/text/screenplay_text_model.h>
 #include <business_layer/model/screenplay/text/screenplay_text_model_text_item.h>
@@ -207,7 +208,8 @@ void ScreenplaySummaryReport::build(QAbstractItemModel* _model)
     {
         d->duration = screenplayModel->duration();
         d->pagesCount = [screenplayModel] {
-            const auto& screenplayTemplate = TemplatesFacade::screenplayTemplate();
+            const auto& screenplayTemplate = TemplatesFacade::screenplayTemplate(
+                screenplayModel->informationModel()->screenplayTemplateId());
 
             PageTextEdit textEdit;
             textEdit.setUsePageMode(true);

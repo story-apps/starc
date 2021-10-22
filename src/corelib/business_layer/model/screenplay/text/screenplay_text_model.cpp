@@ -35,7 +35,7 @@ const char* kMimeType = "application/x-starc/screenplay/text/item";
 class ScreenplayTextModel::Implementation
 {
 public:
-    Implementation();
+    explicit Implementation(ScreenplayTextModel* _q);
 
     /**
      * @brief Построить модель структуры из xml хранящегося в документе
@@ -52,6 +52,11 @@ public:
      */
     void updateNumbering();
 
+
+    /**
+     * @brief Родительский элемент
+     */
+    ScreenplayTextModel* q = nullptr;
 
     /**
      * @brief Корневой элемент дерева
@@ -93,8 +98,9 @@ public:
     } lastMime;
 };
 
-ScreenplayTextModel::Implementation::Implementation()
-    : rootItem(new ScreenplayTextModelFolderItem)
+ScreenplayTextModel::Implementation::Implementation(ScreenplayTextModel* _q)
+    : q(_q)
+    , rootItem(new ScreenplayTextModelFolderItem(q))
 {
 }
 
@@ -114,13 +120,13 @@ void ScreenplayTextModel::Implementation::buildModel(Domain::DocumentObject* _sc
         }
 
         if (currentTag == xml::kFolderTag) {
-            rootItem->appendItem(new ScreenplayTextModelFolderItem(contentReader));
+            rootItem->appendItem(new ScreenplayTextModelFolderItem(q, contentReader));
         } else if (currentTag == xml::kSceneTag) {
-            rootItem->appendItem(new ScreenplayTextModelSceneItem(contentReader));
+            rootItem->appendItem(new ScreenplayTextModelSceneItem(q, contentReader));
         } else if (currentTag == xml::kSplitterTag) {
-            rootItem->appendItem(new ScreenplayTextModelSplitterItem(contentReader));
+            rootItem->appendItem(new ScreenplayTextModelSplitterItem(q, contentReader));
         } else {
-            rootItem->appendItem(new ScreenplayTextModelTextItem(contentReader));
+            rootItem->appendItem(new ScreenplayTextModelTextItem(q, contentReader));
         }
     }
 }
@@ -209,7 +215,7 @@ ScreenplayTextModel::ScreenplayTextModel(QObject* _parent)
             toString(ScreenplayParagraphType::PageSplitter),
         },
         _parent)
-    , d(new Implementation)
+    , d(new Implementation(this))
 {
 }
 
@@ -573,13 +579,13 @@ bool ScreenplayTextModel::dropMimeData(const QMimeData* _data, Qt::DropAction _a
 
             ScreenplayTextModelItem* newItem = nullptr;
             if (currentTag == xml::kFolderTag) {
-                newItem = new ScreenplayTextModelFolderItem(contentReader);
+                newItem = new ScreenplayTextModelFolderItem(this, contentReader);
             } else if (currentTag == xml::kSceneTag) {
-                newItem = new ScreenplayTextModelSceneItem(contentReader);
+                newItem = new ScreenplayTextModelSceneItem(this, contentReader);
             } else if (currentTag == xml::kSplitterTag) {
-                newItem = new ScreenplayTextModelSplitterItem(contentReader);
+                newItem = new ScreenplayTextModelSplitterItem(this, contentReader);
             } else {
-                newItem = new ScreenplayTextModelTextItem(contentReader);
+                newItem = new ScreenplayTextModelTextItem(this, contentReader);
             }
 
             if (!isFirstItemHandled) {
@@ -961,13 +967,13 @@ void ScreenplayTextModel::insertFromMime(const QModelIndex& _index, int _positio
 
 
         if (currentTag == xml::kFolderTag) {
-            newItem = new ScreenplayTextModelFolderItem(contentReader);
+            newItem = new ScreenplayTextModelFolderItem(this, contentReader);
         } else if (currentTag == xml::kSceneTag) {
-            newItem = new ScreenplayTextModelSceneItem(contentReader);
+            newItem = new ScreenplayTextModelSceneItem(this, contentReader);
         } else if (currentTag == xml::kSplitterTag) {
-            newItem = new ScreenplayTextModelSplitterItem(contentReader);
+            newItem = new ScreenplayTextModelSplitterItem(this, contentReader);
         } else {
-            auto newTextItem = new ScreenplayTextModelTextItem(contentReader);
+            auto newTextItem = new ScreenplayTextModelTextItem(this, contentReader);
             //
             // Если вставляется текстовый элемент внутрь уже существующего элемента
             //
@@ -1007,7 +1013,7 @@ void ScreenplayTextModel::insertFromMime(const QModelIndex& _index, int _positio
         contentReader.addData(sourceBlockEndContent);
         contentReader.readNextStartElement(); // document
         contentReader.readNextStartElement(); // text node
-        auto item = new ScreenplayTextModelTextItem(contentReader);
+        auto item = new ScreenplayTextModelTextItem(this, contentReader);
         //
         // ... и последний вставленный элемент был текстовым
         //
@@ -1357,9 +1363,9 @@ void ScreenplayTextModel::initDocument()
     // Если документ пустой, создаём первоначальную структуру
     //
     if (document()->content().isEmpty()) {
-        auto sceneHeading = new ScreenplayTextModelTextItem;
+        auto sceneHeading = new ScreenplayTextModelTextItem(this);
         sceneHeading->setParagraphType(ScreenplayParagraphType::SceneHeading);
-        auto scene = new ScreenplayTextModelSceneItem;
+        auto scene = new ScreenplayTextModelSceneItem(this);
         scene->appendItem(sceneHeading);
         appendItem(scene);
     }
@@ -1420,7 +1426,7 @@ void ScreenplayTextModel::applyPatch(const QByteArray& _patch)
     //
     // Считываем элементы из обоих изменений для дальнейшего определения необходимых изменений
     //
-    auto readItems = [](const QString& _xml) {
+    auto readItems = [this](const QString& _xml) {
         QXmlStreamReader _reader(_xml);
         xml::readNextElement(_reader); // document
         xml::readNextElement(_reader);
@@ -1430,13 +1436,13 @@ void ScreenplayTextModel::applyPatch(const QByteArray& _patch)
             const auto currentTag = _reader.name();
             ScreenplayTextModelItem* item = nullptr;
             if (currentTag == xml::kFolderTag) {
-                item = new ScreenplayTextModelFolderItem(_reader);
+                item = new ScreenplayTextModelFolderItem(this, _reader);
             } else if (currentTag == xml::kSceneTag) {
-                item = new ScreenplayTextModelSceneItem(_reader);
+                item = new ScreenplayTextModelSceneItem(this, _reader);
             } else if (currentTag == xml::kSplitterTag) {
-                item = new ScreenplayTextModelSplitterItem(_reader);
+                item = new ScreenplayTextModelSplitterItem(this, _reader);
             } else {
-                item = new ScreenplayTextModelTextItem(_reader);
+                item = new ScreenplayTextModelTextItem(this, _reader);
             }
             items.append(item);
 
@@ -1481,7 +1487,7 @@ void ScreenplayTextModel::applyPatch(const QByteArray& _patch)
         return xml.length();
     }();
     std::function<ScreenplayTextModelItem*(ScreenplayTextModelItem*)> findStartItem;
-    findStartItem = [changes, &length,
+    findStartItem = [this, changes, &length,
                      &findStartItem](ScreenplayTextModelItem* _item) -> ScreenplayTextModelItem* {
         if (changes.first.from == 0) {
             return _item->childAt(0);
@@ -1501,7 +1507,7 @@ void ScreenplayTextModel::applyPatch(const QByteArray& _patch)
                 }
                 if (textItem->isBreakCorrectionStart()) {
                     lastBrokenItem = textItem;
-                    lastBrokenItemCopy.reset(new ScreenplayTextModelTextItem);
+                    lastBrokenItemCopy.reset(new ScreenplayTextModelTextItem(this));
                     lastBrokenItemCopy->copyFrom(lastBrokenItem);
                     continue;
                 }
@@ -1945,23 +1951,23 @@ void ScreenplayTextModel::applyPatch(const QByteArray& _patch)
             ScreenplayTextModelItem* itemToInsert = nullptr;
             switch (newItem->type()) {
             case ScreenplayTextModelItemType::Folder: {
-                itemToInsert = new ScreenplayTextModelFolderItem;
+                itemToInsert = new ScreenplayTextModelFolderItem(this);
                 break;
             }
 
             case ScreenplayTextModelItemType::Scene: {
-                itemToInsert = new ScreenplayTextModelSceneItem;
+                itemToInsert = new ScreenplayTextModelSceneItem(this);
                 break;
             }
 
             case ScreenplayTextModelItemType::Text: {
-                itemToInsert = new ScreenplayTextModelTextItem;
+                itemToInsert = new ScreenplayTextModelTextItem(this);
                 break;
             }
 
             case ScreenplayTextModelItemType::Splitter: {
                 itemToInsert = new ScreenplayTextModelSplitterItem(
-                    static_cast<ScreenplayTextModelSplitterItem*>(newItem)->splitterType());
+                    this, static_cast<ScreenplayTextModelSplitterItem*>(newItem)->splitterType());
                 break;
             }
             }

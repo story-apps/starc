@@ -6,8 +6,9 @@
 
 class BaseTextEdit;
 
-
 namespace BusinessLayer {
+
+class ScreenplayTemplate;
 
 /**
  * @brief Класс курсора со вспомогательными функциями
@@ -82,6 +83,11 @@ private:
      */
     void removeGroupsPairs(int _cursorPosition, const FoldersToDelete& _foldersToDelete,
                            bool isTopBlockShouldBeRemoved);
+
+    /**
+     * @brief Получить шаблон оформления используемый для документа
+     */
+    const ScreenplayTemplate& screenplayTemplate() const;
 };
 
 } // namespace BusinessLayer

@@ -40,40 +40,40 @@ struct CORE_LIBRARY_EXPORT ScreenplayExportOptions {
     /**
      * @brief Печатать титульную страницу
      */
-    bool printTiltePage = true;
+    bool includeTiltePage = true;
 
     /**
      * @brief Печатать ли блоки папок
      */
-    bool printFolders = true;
+    bool includeFolders = true;
 
     /**
      * @brief Печатать ли комментарии по тексту
      */
-    bool printInlineNotes = false;
+    bool includeInlineNotes = false;
 
     /**
      * @brief Список сцен для печати
      * @note Если пустое, значит печатаются все сцены
      */
-    QVector<QString> printScenes;
+    QVector<QString> exportScenes;
 
     /**
      * @brief Печатать номера сцен
      */
-    bool printScenesNumbers = true;
-    bool printScenesNumbersOnLeft = true;
-    bool printScenesNumbersOnRight = true;
+    bool showScenesNumbers = true;
+    bool showScenesNumbersOnLeft = true;
+    bool showScenesNumbersOnRight = true;
 
     /**
      * @brief Печатать номера реплик
      */
-    bool printDialoguesNumbers = false;
+    bool showDialoguesNumbers = false;
 
     /**
      * @brief Печатать редакторские пометки
      */
-    bool printReviewMarks = true;
+    bool includeReviewMarks = true;
 
     /**
      * @brief Водяной знак

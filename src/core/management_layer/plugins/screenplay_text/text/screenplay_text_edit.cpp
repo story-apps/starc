@@ -38,6 +38,8 @@ class ScreenplayTextEdit::Implementation
 public:
     explicit Implementation(ScreenplayTextEdit* _q);
 
+    const BusinessLayer::ScreenplayTemplate& screenplayTemplate() const;
+
     void revertAction(bool previous);
 
 
@@ -55,6 +57,15 @@ public:
 ScreenplayTextEdit::Implementation::Implementation(ScreenplayTextEdit* _q)
     : q(_q)
 {
+}
+
+const BusinessLayer::ScreenplayTemplate& ScreenplayTextEdit::Implementation::screenplayTemplate()
+    const
+{
+    const auto currentTemplateId = model && model->informationModel()
+        ? model->informationModel()->screenplayTemplateId()
+        : "";
+    return TemplatesFacade::screenplayTemplate(currentTemplateId);
 }
 
 void ScreenplayTextEdit::Implementation::revertAction(bool previous)
@@ -133,7 +144,7 @@ void ScreenplayTextEdit::initWithModel(BusinessLayer::ScreenplayTextModel* _mode
     //
     // Обновляем параметры страницы из шаблона
     //
-    const auto& currentTemplate = TemplatesFacade::screenplayTemplate();
+    const auto& currentTemplate = d->screenplayTemplate();
     setPageFormat(currentTemplate.pageSizeId());
     setPageMarginsMm(currentTemplate.pageMargins());
     setPageNumbersAlignment(currentTemplate.pageNumbersAlignment());
@@ -173,6 +184,11 @@ void ScreenplayTextEdit::reinit()
     if (d->model != nullptr) {
         d->model->recalculateDuration();
     }
+}
+
+const BusinessLayer::ScreenplayTemplate& ScreenplayTextEdit::screenplayTemplate() const
+{
+    return d->screenplayTemplate();
 }
 
 BusinessLayer::ScreenplayDictionariesModel* ScreenplayTextEdit::dictionaries() const
@@ -564,8 +580,7 @@ void ScreenplayTextEdit::paintEvent(QPaintEvent* _event)
     //    int colorRectWidth = 0;
     qreal verticalMargin = 0;
     const qreal splitterX = leftDelta + textLeft
-        + (textRight - textLeft)
-            * TemplatesFacade::screenplayTemplate().leftHalfOfPageWidthPercents() / 100;
+        + (textRight - textLeft) * d->screenplayTemplate().leftHalfOfPageWidthPercents() / 100;
 
 
     //

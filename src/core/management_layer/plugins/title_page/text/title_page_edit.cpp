@@ -30,8 +30,8 @@
 #include <QScrollBar>
 #include <QTextTable>
 
+using BusinessLayer::SimpleTextBlockStyle;
 using BusinessLayer::TemplatesFacade;
-using BusinessLayer::TextBlockStyle;
 using BusinessLayer::TextCursor;
 using BusinessLayer::TextParagraphType;
 

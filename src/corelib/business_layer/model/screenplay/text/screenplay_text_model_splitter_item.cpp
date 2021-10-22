@@ -34,15 +34,15 @@ ScreenplayTextModelSplitterItem::Implementation::Implementation(
 // ****
 
 
-ScreenplayTextModelSplitterItem::ScreenplayTextModelSplitterItem(
-    ScreenplayTextModelSplitterItemType _type)
-    : ScreenplayTextModelItem(ScreenplayTextModelItemType::Splitter)
+ScreenplayTextModelSplitterItem::ScreenplayTextModelSplitterItem(const ScreenplayTextModel* _model, ScreenplayTextModelSplitterItemType _type)
+    : ScreenplayTextModelItem(ScreenplayTextModelItemType::Splitter, _model)
     , d(new Implementation(_type))
 {
 }
 
-ScreenplayTextModelSplitterItem::ScreenplayTextModelSplitterItem(QXmlStreamReader& _contentReader)
-    : ScreenplayTextModelItem(ScreenplayTextModelItemType::Splitter)
+ScreenplayTextModelSplitterItem::ScreenplayTextModelSplitterItem(const ScreenplayTextModel* _model,
+                                                                 QXmlStreamReader& _contentReader)
+    : ScreenplayTextModelItem(ScreenplayTextModelItemType::Splitter, _model)
     , d(new Implementation)
 {
     Q_ASSERT(_contentReader.name() == xml::kSplitterTag);

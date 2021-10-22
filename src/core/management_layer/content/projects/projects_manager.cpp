@@ -109,9 +109,7 @@ QWidget* ProjectsManager::view() const
 
 void ProjectsManager::loadProjects()
 {
-    const auto projectsData = DataStorageLayer::StorageFacade::settingsStorage()->value(
-        DataStorageLayer::kApplicationProjectsKey,
-        DataStorageLayer::SettingsStorage::SettingsPlace::Application);
+    const auto projectsData = settingsValue(DataStorageLayer::kApplicationProjectsKey);
     const auto projectsJson
         = QJsonDocument::fromBinaryData(QByteArray::fromHex(projectsData.toByteArray()));
     QVector<Project> projects;
@@ -182,16 +180,8 @@ void ProjectsManager::createProject()
     //
     auto dialog = new Ui::CreateProjectDialog(d->topLevelWidget);
     dialog->configureCloudProjectCreationAbility(d->isUserAuthorized, d->canCreateCloudProject);
-    dialog->setProjectFolder(
-        DataStorageLayer::StorageFacade::settingsStorage()
-            ->value(DataStorageLayer::kProjectSaveFolderKey,
-                    DataStorageLayer::SettingsStorage::SettingsPlace::Application)
-            .toString());
-    dialog->setImportFolder(
-        DataStorageLayer::StorageFacade::settingsStorage()
-            ->value(DataStorageLayer::kProjectImportFolderKey,
-                    DataStorageLayer::SettingsStorage::SettingsPlace::Application)
-            .toString());
+    dialog->setProjectFolder(settingsValue(DataStorageLayer::kProjectSaveFolderKey).toString());
+    dialog->setImportFolder(settingsValue(DataStorageLayer::kProjectImportFolderKey).toString());
 
     //
     // Настраиваем соединения диалога
@@ -243,10 +233,7 @@ void ProjectsManager::openProject()
     // Предоставим пользователю возможность выбрать файл, который он хочет открыть
     //
     const auto projectOpenFolder
-        = DataStorageLayer::StorageFacade::settingsStorage()
-              ->value(DataStorageLayer::kProjectOpenFolderKey,
-                      DataStorageLayer::SettingsStorage::SettingsPlace::Application)
-              .toString();
+        = settingsValue(DataStorageLayer::kProjectOpenFolderKey).toString();
     const auto projectPath
         = QFileDialog::getOpenFileName(d->topLevelWidget, tr("Choose the file to open"),
                                        projectOpenFolder, DialogHelper::starcProjectFilter());

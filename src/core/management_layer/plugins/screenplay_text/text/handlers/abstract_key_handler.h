@@ -4,6 +4,10 @@ class QEvent;
 class QInputMethodEvent;
 class QKeyEvent;
 
+namespace BusinessLayer {
+class ScreenplayTemplate;
+}
+
 namespace Ui {
 class ScreenplayTextEdit;
 }

@@ -30,16 +30,11 @@ public:
 
 
     ComboBox* fileFormat = nullptr;
-    ComboBox* screenplayTemplate = nullptr;
     CheckBox* printTitlePage = nullptr;
     CheckBox* printFolders = nullptr;
     CheckBox* printInlineNotes = nullptr;
-    TextField* printScenes = nullptr;
-    CheckBox* printSceneNumbers = nullptr;
-    CheckBox* printSceneNumbersOnLeft = nullptr;
-    CheckBox* printSceneNumbersOnRight = nullptr;
-    CheckBox* printDialoguesNumbers = nullptr;
     CheckBox* printReviewMarks = nullptr;
+    TextField* printScenes = nullptr;
     TextField* watermark = nullptr;
 
     QHBoxLayout* buttonsLayout = nullptr;
@@ -50,16 +45,11 @@ public:
 
 ScreenplayExportDialog::Implementation::Implementation(QWidget* _parent)
     : fileFormat(new ComboBox(_parent))
-    , screenplayTemplate(new ComboBox(_parent))
     , printTitlePage(new CheckBox(_parent))
     , printFolders(new CheckBox(_parent))
     , printInlineNotes(new CheckBox(_parent))
-    , printScenes(new TextField(_parent))
-    , printSceneNumbers(new CheckBox(_parent))
-    , printSceneNumbersOnLeft(new CheckBox(_parent))
-    , printSceneNumbersOnRight(new CheckBox(_parent))
-    , printDialoguesNumbers(new CheckBox(_parent))
     , printReviewMarks(new CheckBox(_parent))
+    , printScenes(new TextField(_parent))
     , watermark(new TextField(_parent))
     , buttonsLayout(new QHBoxLayout)
     , openDocumentAfterExport(new CheckBox(_parent))
@@ -73,21 +63,8 @@ ScreenplayExportDialog::Implementation::Implementation(QWidget* _parent)
     fileFormat->setModel(formatsModel);
     fileFormat->setCurrentIndex(formatsModel->index(0, 0));
 
-    screenplayTemplate->setSpellCheckPolicy(SpellCheckPolicy::Manual);
-    screenplayTemplate->setModel(TemplatesFacade::screenplayTemplates());
-    for (int row = 0; row < TemplatesFacade::screenplayTemplates()->rowCount(); ++row) {
-        auto item = TemplatesFacade::screenplayTemplates()->item(row);
-        if (item->data(TemplatesFacade::kTemplateIdRole).toString()
-            != TemplatesFacade::screenplayTemplate().id()) {
-            continue;
-        }
-
-        screenplayTemplate->setCurrentIndex(item->index());
-        break;
-    }
-
-    for (auto checkBox : { printTitlePage, printFolders, printSceneNumbers, printSceneNumbersOnLeft,
-                           printSceneNumbersOnRight, printReviewMarks, openDocumentAfterExport }) {
+    for (auto checkBox :
+         { printTitlePage, printFolders, printReviewMarks, openDocumentAfterExport }) {
         checkBox->setChecked(true);
     }
 
@@ -141,7 +118,6 @@ ScreenplayExportDialog::ScreenplayExportDialog(QWidget* _parent)
 
     int row = 0;
     contentsLayout()->addWidget(d->fileFormat, row++, 0);
-    contentsLayout()->addWidget(d->screenplayTemplate, row++, 0);
     contentsLayout()->addWidget(d->printTitlePage, row++, 0);
     {
         auto layout = new QHBoxLayout;
@@ -152,28 +128,14 @@ ScreenplayExportDialog::ScreenplayExportDialog(QWidget* _parent)
         layout->addStretch();
         contentsLayout()->addLayout(layout, row++, 0);
     }
-    contentsLayout()->addWidget(d->printScenes, row++, 0);
-    {
-        auto layout = new QHBoxLayout;
-        layout->setContentsMargins({});
-        layout->setSpacing(0);
-        layout->addWidget(d->printSceneNumbers);
-        layout->addWidget(d->printSceneNumbersOnLeft);
-        layout->addWidget(d->printSceneNumbersOnRight);
-        layout->addStretch();
-        contentsLayout()->addLayout(layout, row++, 0);
-    }
-    contentsLayout()->addWidget(d->printDialoguesNumbers, row++, 0);
     contentsLayout()->addWidget(d->printReviewMarks, row++, 0);
+    contentsLayout()->addWidget(d->printScenes, row++, 0);
     contentsLayout()->addWidget(d->watermark, row++, 0);
     contentsLayout()->addLayout(d->buttonsLayout, row++, 0);
 
     connect(d->fileFormat, &ComboBox::currentIndexChanged, this, [this] {
-        auto isScreenplayTemplateVisible = true;
         auto isPrintFoldersVisible = true;
         auto isPrintInlineNotesVisible = true;
-        auto isPrintScenesNumbersOnVisible = true;
-        auto isPrintDialoguesNumbersVisible = true;
         auto isPrintReviewMarksVisible = true;
         auto isWatermarkVisible = true;
         switch (d->fileFormat->currentIndex().row()) {
@@ -192,7 +154,6 @@ ScreenplayExportDialog::ScreenplayExportDialog(QWidget* _parent)
         // DOCX
         //
         case 1: {
-            isPrintScenesNumbersOnVisible = false;
             isWatermarkVisible = false;
             break;
         }
@@ -201,8 +162,6 @@ ScreenplayExportDialog::ScreenplayExportDialog(QWidget* _parent)
         // FDX
         //
         case 2: {
-            isPrintScenesNumbersOnVisible = false;
-            isPrintDialoguesNumbersVisible = false;
             isPrintReviewMarksVisible = false;
             isWatermarkVisible = false;
             break;
@@ -212,38 +171,18 @@ ScreenplayExportDialog::ScreenplayExportDialog(QWidget* _parent)
         // Foumtain
         //
         case 3: {
-            isScreenplayTemplateVisible = false;
             isPrintFoldersVisible = false;
             isPrintInlineNotesVisible = false;
-            isPrintScenesNumbersOnVisible = false;
-            isPrintDialoguesNumbersVisible = false;
             isPrintReviewMarksVisible = false;
             isWatermarkVisible = false;
             break;
         }
         }
-        d->screenplayTemplate->setVisible(isScreenplayTemplateVisible);
         d->printFolders->setVisible(isPrintFoldersVisible);
         d->printInlineNotes->setVisible(isPrintInlineNotesVisible);
-        d->printSceneNumbersOnLeft->setVisible(isPrintScenesNumbersOnVisible);
-        d->printSceneNumbersOnRight->setVisible(isPrintScenesNumbersOnVisible);
-        d->printDialoguesNumbers->setVisible(isPrintDialoguesNumbersVisible);
         d->printReviewMarks->setVisible(isPrintReviewMarksVisible);
         d->watermark->setVisible(isWatermarkVisible);
     });
-    connect(d->printSceneNumbers, &CheckBox::checkedChanged, d->printSceneNumbersOnLeft,
-            &CheckBox::setEnabled);
-    connect(d->printSceneNumbers, &CheckBox::checkedChanged, d->printSceneNumbersOnRight,
-            &CheckBox::setEnabled);
-    auto screenplayEditorCorrectShownSceneNumber = [this] {
-        if (!d->printSceneNumbersOnLeft->isChecked() && !d->printSceneNumbersOnRight->isChecked()) {
-            d->printSceneNumbersOnLeft->setChecked(true);
-        }
-    };
-    connect(d->printSceneNumbersOnLeft, &CheckBox::checkedChanged, this,
-            screenplayEditorCorrectShownSceneNumber);
-    connect(d->printSceneNumbersOnRight, &CheckBox::checkedChanged, this,
-            screenplayEditorCorrectShownSceneNumber);
 
     connect(d->exportButton, &Button::clicked, this, &ScreenplayExportDialog::exportRequested);
     connect(d->cancelButton, &Button::clicked, this, &ScreenplayExportDialog::canceled);
@@ -259,18 +198,11 @@ BusinessLayer::ScreenplayExportOptions ScreenplayExportDialog::exportOptions() c
     BusinessLayer::ScreenplayExportOptions options;
     options.fileFormat = static_cast<BusinessLayer::ScreenplayExportFileFormat>(
         d->fileFormat->currentIndex().row());
-    options.templateId = d->screenplayTemplate->currentIndex()
-                             .data(BusinessLayer::TemplatesFacade::kTemplateIdRole)
-                             .toString();
-    options.printTiltePage = d->printTitlePage->isChecked();
-    options.printFolders = d->printFolders->isChecked();
-    options.printInlineNotes = d->printInlineNotes->isChecked();
-    options.printScenes = d->scenesToPrint();
-    options.printScenesNumbers = d->printSceneNumbers->isChecked();
-    options.printScenesNumbersOnLeft = d->printSceneNumbersOnLeft->isChecked();
-    options.printScenesNumbersOnRight = d->printSceneNumbersOnRight->isChecked();
-    options.printDialoguesNumbers = d->printDialoguesNumbers->isChecked();
-    options.printReviewMarks = d->printReviewMarks->isChecked();
+    options.includeTiltePage = d->printTitlePage->isChecked();
+    options.includeFolders = d->printFolders->isChecked();
+    options.includeInlineNotes = d->printInlineNotes->isChecked();
+    options.includeReviewMarks = d->printReviewMarks->isChecked();
+    options.exportScenes = d->scenesToPrint();
     options.watermark = d->watermark->text();
     options.watermarkColor = QColor(100, 100, 100, 30);
     return options;
@@ -296,17 +228,12 @@ void ScreenplayExportDialog::updateTranslations()
     setTitle(tr("Export screenplay"));
 
     d->fileFormat->setLabel(tr("Format"));
-    d->screenplayTemplate->setLabel(tr("Template"));
-    d->printTitlePage->setText(tr("Print title page"));
-    d->printFolders->setText(tr("Print sequences headers and footers"));
-    d->printInlineNotes->setText(tr("Print inline notes"));
-    d->printScenes->setLabel(tr("Print concrete scenes"));
+    d->printTitlePage->setText(tr("Include title page"));
+    d->printFolders->setText(tr("Include sequences headers and footers"));
+    d->printInlineNotes->setText(tr("Include inline notes"));
+    d->printReviewMarks->setText(tr("Include review marks"));
+    d->printScenes->setLabel(tr("Export concrete scenes"));
     d->printScenes->setHelper(tr("Keep empty, if you want to print all scenes"));
-    d->printSceneNumbers->setText(tr("Print scenes numbers"));
-    d->printSceneNumbersOnLeft->setText(tr("on the left"));
-    d->printSceneNumbersOnRight->setText(tr("on the right"));
-    d->printDialoguesNumbers->setText(tr("Print dialogues numbers"));
-    d->printReviewMarks->setText(tr("Print review marks"));
     d->watermark->setLabel(tr("Watermark"));
 
     d->openDocumentAfterExport->setText(tr("Open document after export"));
@@ -322,16 +249,22 @@ void ScreenplayExportDialog::designSystemChangeEvent(DesignSystemChangeEvent* _e
     titleMargins.setTop(Ui::DesignSystem::layout().px8());
     titleMargins.setBottom(0);
 
-    for (auto textField : std::vector<TextField*>{ d->fileFormat, d->screenplayTemplate,
-                                                   d->printScenes, d->watermark }) {
+    for (auto textField : std::vector<TextField*>{
+             d->fileFormat,
+             d->printScenes,
+             d->watermark,
+         }) {
         textField->setBackgroundColor(Ui::DesignSystem::color().onBackground());
         textField->setTextColor(Ui::DesignSystem::color().onBackground());
     }
 
-    for (auto checkBox :
-         { d->printTitlePage, d->printFolders, d->printInlineNotes, d->printSceneNumbers,
-           d->printSceneNumbersOnLeft, d->printSceneNumbersOnRight, d->printDialoguesNumbers,
-           d->printReviewMarks, d->openDocumentAfterExport }) {
+    for (auto checkBox : {
+             d->printTitlePage,
+             d->printFolders,
+             d->printInlineNotes,
+             d->printReviewMarks,
+             d->openDocumentAfterExport,
+         }) {
         checkBox->setBackgroundColor(Ui::DesignSystem::color().background());
         checkBox->setTextColor(Ui::DesignSystem::color().onBackground());
     }

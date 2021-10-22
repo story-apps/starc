@@ -1,6 +1,10 @@
 #include "screenplay_information_model.h"
 
 #include <business_layer/model/abstract_image_wrapper.h>
+#include <business_layer/templates/screenplay_template.h>
+#include <business_layer/templates/templates_facade.h>
+#include <data_layer/storage/settings_storage.h>
+#include <data_layer/storage/storage_facade.h>
 #include <domain/document_object.h>
 #include <utils/helpers/image_helper.h>
 #include <utils/helpers/text_helper.h>
@@ -52,7 +56,7 @@ public:
     QString scenesNumbersPrefix;
     int scenesNumberingStartAt = 1;
     bool overrideCommonSettings = false;
-    QString screenplayTemplate;
+    QString screenplayTemplateId;
     bool showSceneNumbers = false;
     bool showSceneNumbersOnLeft = false;
     bool showSceneNumbersOnRight = false;
@@ -343,26 +347,50 @@ void ScreenplayInformationModel::setOverrideCommonSettings(bool _override)
 
     d->overrideCommonSettings = _override;
     emit overrideCommonSettingsChanged(d->overrideCommonSettings);
+
+    //
+    // При включении/выключении кастомных параметров, сбрасываем до стандартных
+    //
+    setScreenplayTemplate(TemplatesFacade::screenplayTemplate().id());
+    setShowSceneNumbers(
+        settingsValue(DataStorageLayer::kComponentsScreenplayEditorShowSceneNumbersKey).toBool());
+    setShowSceneNumbersOnLeft(
+        settingsValue(DataStorageLayer::kComponentsScreenplayEditorShowSceneNumbersOnLeftKey)
+            .toBool());
+    setShowSceneNumbersOnRight(
+        settingsValue(DataStorageLayer::kComponentsScreenplayEditorShowSceneNumbersOnRightKey)
+            .toBool());
+    setShowDialoguesNumbers(
+        settingsValue(DataStorageLayer::kComponentsScreenplayEditorShowDialogueNumbersKey)
+            .toBool());
 }
 
-const QString& ScreenplayInformationModel::screenplayTemplate() const
+QString ScreenplayInformationModel::screenplayTemplateId() const
 {
-    return d->screenplayTemplate;
+    if (d->overrideCommonSettings) {
+        return d->screenplayTemplateId;
+    }
+
+    return TemplatesFacade::screenplayTemplate().id();
 }
 
 void ScreenplayInformationModel::setScreenplayTemplate(const QString& _screenplayTemplate)
 {
-    if (d->screenplayTemplate == _screenplayTemplate) {
+    if (d->screenplayTemplateId == _screenplayTemplate) {
         return;
     }
 
-    d->screenplayTemplate = _screenplayTemplate;
-    emit screenplayTemplateChanged(d->screenplayTemplate);
+    d->screenplayTemplateId = _screenplayTemplate;
+    emit screenplayTemplateChanged(d->screenplayTemplateId);
 }
 
 bool ScreenplayInformationModel::showSceneNumbers() const
 {
-    return d->showSceneNumbers;
+    if (d->overrideCommonSettings) {
+        return d->showSceneNumbers;
+    }
+
+    return settingsValue(DataStorageLayer::kComponentsScreenplayEditorShowSceneNumbersKey).toBool();
 }
 
 void ScreenplayInformationModel::setShowSceneNumbers(bool _show)
@@ -377,7 +405,12 @@ void ScreenplayInformationModel::setShowSceneNumbers(bool _show)
 
 bool ScreenplayInformationModel::showSceneNumbersOnLeft() const
 {
-    return d->showSceneNumbersOnLeft;
+    if (d->overrideCommonSettings) {
+        return d->showSceneNumbersOnLeft;
+    }
+
+    return settingsValue(DataStorageLayer::kComponentsScreenplayEditorShowSceneNumbersOnLeftKey)
+        .toBool();
 }
 
 void ScreenplayInformationModel::setShowSceneNumbersOnLeft(bool _show)
@@ -392,7 +425,12 @@ void ScreenplayInformationModel::setShowSceneNumbersOnLeft(bool _show)
 
 bool ScreenplayInformationModel::showSceneNumbersOnRight() const
 {
-    return d->showSceneNumbersOnRight;
+    if (d->overrideCommonSettings) {
+        return d->showSceneNumbersOnRight;
+    }
+
+    return settingsValue(DataStorageLayer::kComponentsScreenplayEditorShowSceneNumbersOnRightKey)
+        .toBool();
 }
 
 void ScreenplayInformationModel::setShowSceneNumbersOnRight(bool _show)
@@ -407,7 +445,12 @@ void ScreenplayInformationModel::setShowSceneNumbersOnRight(bool _show)
 
 bool ScreenplayInformationModel::showDialoguesNumbers() const
 {
-    return d->showDialoguesNumbers;
+    if (d->overrideCommonSettings) {
+        return d->showDialoguesNumbers;
+    }
+
+    return settingsValue(DataStorageLayer::kComponentsScreenplayEditorShowDialogueNumbersKey)
+        .toBool();
 }
 
 void ScreenplayInformationModel::setShowDialoguesNumbers(bool _show)
@@ -457,7 +500,7 @@ void ScreenplayInformationModel::initDocument()
     }
     d->overrideCommonSettings
         = documentNode.firstChildElement(kOverrideSystemSettingsKey).text() == "true";
-    d->screenplayTemplate = documentNode.firstChildElement(kScreenplayTemplateKey).text();
+    d->screenplayTemplateId = documentNode.firstChildElement(kScreenplayTemplateKey).text();
     d->showSceneNumbers = documentNode.firstChildElement(kShowScenesNumbersKey).text() == "true";
     d->showSceneNumbersOnLeft
         = documentNode.firstChildElement(kShowScenesNumbersOnLeftKey).text() == "true";
@@ -503,7 +546,7 @@ QByteArray ScreenplayInformationModel::toXml() const
     writeTag(kScenesNumbersPrefixKey, d->scenesNumbersPrefix);
     writeTag(kScenesNumberingStartAtKey, QString::number(d->scenesNumberingStartAt));
     writeBoolTag(kOverrideSystemSettingsKey, d->overrideCommonSettings);
-    writeTag(kScreenplayTemplateKey, d->screenplayTemplate);
+    writeTag(kScreenplayTemplateKey, d->screenplayTemplateId);
     writeBoolTag(kShowScenesNumbersKey, d->showSceneNumbers);
     writeBoolTag(kShowScenesNumbersOnLeftKey, d->showSceneNumbersOnLeft);
     writeBoolTag(kShowScenesNumbersOnRightKey, d->showSceneNumbersOnRight);

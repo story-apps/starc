@@ -12,6 +12,8 @@
 
 #include <business_layer/document/screenplay/text/screenplay_text_block_data.h>
 #include <business_layer/document/screenplay/text/screenplay_text_cursor.h>
+#include <business_layer/model/screenplay/screenplay_information_model.h>
+#include <business_layer/model/screenplay/text/screenplay_text_model.h>
 #include <business_layer/templates/screenplay_template.h>
 #include <business_layer/templates/templates_facade.h>
 #include <data_layer/storage/settings_storage.h>
@@ -29,6 +31,7 @@
 #include <utils/helpers/ui_helper.h>
 
 #include <QAction>
+#include <QPointer>
 #include <QStandardItem>
 #include <QStandardItemModel>
 #include <QTimer>
@@ -54,6 +57,13 @@ class ScreenplayTextView::Implementation
 {
 public:
     explicit Implementation(QWidget* _parent);
+
+    /**
+     * @brief Переконфигурировать представление
+     */
+    void reconfigureScreenplayTemplate();
+    void reconfigureSceneNumbersVisibility();
+    void reconfigureDialoguesNumbersVisibility();
 
     /**
      * @brief Обновить настройки UI панели инструментов
@@ -83,6 +93,7 @@ public:
                        const QString& _comment);
 
 
+    QPointer<BusinessLayer::ScreenplayTextModel> model;
     BusinessLayer::ScreenplayTextCommentsModel* commentsModel = nullptr;
 
     ScreenplayTextEdit* screenplayText = nullptr;
@@ -161,6 +172,63 @@ ScreenplayTextView::Implementation::Implementation(QWidget* _parent)
     fastFormatWidget->setParagraphTypesModel(paragraphTypesModel);
     commentsView->setModel(commentsModel);
     commentsView->hide();
+}
+
+void ScreenplayTextView::Implementation::reconfigureScreenplayTemplate()
+{
+    paragraphTypesModel->clear();
+
+    using namespace BusinessLayer;
+    const auto& usedTemplate = BusinessLayer::TemplatesFacade::screenplayTemplate(
+        model && model->informationModel() ? model->informationModel()->screenplayTemplateId()
+                                           : "");
+    const QVector<ScreenplayParagraphType> types
+        = { ScreenplayParagraphType::SceneHeading,    ScreenplayParagraphType::SceneCharacters,
+            ScreenplayParagraphType::Action,          ScreenplayParagraphType::Character,
+            ScreenplayParagraphType::Parenthetical,   ScreenplayParagraphType::Dialogue,
+            ScreenplayParagraphType::Lyrics,          ScreenplayParagraphType::Shot,
+            ScreenplayParagraphType::Transition,      ScreenplayParagraphType::InlineNote,
+            ScreenplayParagraphType::UnformattedText, ScreenplayParagraphType::FolderHeader };
+    for (const auto type : types) {
+        if (!usedTemplate.paragraphStyle(type).isActive()) {
+            continue;
+        }
+
+        auto typeItem = new QStandardItem(toDisplayString(type));
+        typeItem->setData(shortcutsManager.shortcut(type), Qt::WhatsThisRole);
+        typeItem->setData(static_cast<int>(type), kTypeDataRole);
+        paragraphTypesModel->appendRow(typeItem);
+    }
+
+    shortcutsManager.reconfigure();
+
+    screenplayText->reinit();
+}
+
+void ScreenplayTextView::Implementation::reconfigureSceneNumbersVisibility()
+{
+    if (model && model->informationModel()) {
+        screenplayText->setShowSceneNumber(model->informationModel()->showSceneNumbers(),
+                                           model->informationModel()->showSceneNumbersOnLeft(),
+                                           model->informationModel()->showSceneNumbersOnRight());
+    } else {
+        screenplayText->setShowSceneNumber(
+            settingsValue(DataStorageLayer::kComponentsScreenplayEditorShowSceneNumbersKey)
+                .toBool(),
+            settingsValue(DataStorageLayer::kComponentsScreenplayEditorShowSceneNumbersOnLeftKey)
+                .toBool(),
+            settingsValue(DataStorageLayer::kComponentsScreenplayEditorShowSceneNumbersOnRightKey)
+                .toBool());
+    }
+}
+
+void ScreenplayTextView::Implementation::reconfigureDialoguesNumbersVisibility()
+{
+    screenplayText->setShowDialogueNumber(
+        model && model->informationModel()
+            ? model->informationModel()->showDialoguesNumbers()
+            : settingsValue(DataStorageLayer::kComponentsScreenplayEditorShowDialogueNumbersKey)
+                  .toBool());
 }
 
 void ScreenplayTextView::Implementation::updateToolBarUi()
@@ -466,60 +534,23 @@ ScreenplayTextView::~ScreenplayTextView() = default;
 
 void ScreenplayTextView::reconfigure(const QStringList& _changedSettingsKeys)
 {
-    d->paragraphTypesModel->clear();
-
-    using namespace BusinessLayer;
-    const auto& usedTemplate = BusinessLayer::TemplatesFacade::screenplayTemplate();
-    const QVector<ScreenplayParagraphType> types
-        = { ScreenplayParagraphType::SceneHeading,    ScreenplayParagraphType::SceneCharacters,
-            ScreenplayParagraphType::Action,          ScreenplayParagraphType::Character,
-            ScreenplayParagraphType::Parenthetical,   ScreenplayParagraphType::Dialogue,
-            ScreenplayParagraphType::Lyrics,          ScreenplayParagraphType::Shot,
-            ScreenplayParagraphType::Transition,      ScreenplayParagraphType::InlineNote,
-            ScreenplayParagraphType::UnformattedText, ScreenplayParagraphType::FolderHeader };
-    for (const auto type : types) {
-        if (!usedTemplate.paragraphStyle(type).isActive()) {
-            continue;
-        }
-
-        auto typeItem = new QStandardItem(toDisplayString(type));
-        typeItem->setData(d->shortcutsManager.shortcut(type), Qt::WhatsThisRole);
-        typeItem->setData(static_cast<int>(type), kTypeDataRole);
-        d->paragraphTypesModel->appendRow(typeItem);
-    }
-
     UiHelper::initSpellingFor(d->screenplayText);
-
-    d->shortcutsManager.reconfigure();
-
-    auto settingsValue = [](const QString& _key) {
-        return DataStorageLayer::StorageFacade::settingsStorage()->value(
-            _key, DataStorageLayer::SettingsStorage::SettingsPlace::Application);
-    };
 
     if (_changedSettingsKeys.isEmpty()
         || _changedSettingsKeys.contains(
             DataStorageLayer::kComponentsScreenplayEditorDefaultTemplateKey)) {
-        d->screenplayText->reinit();
+        d->reconfigureScreenplayTemplate();
     }
 
     if (_changedSettingsKeys.isEmpty()
         || _changedSettingsKeys.contains(
             DataStorageLayer::kComponentsScreenplayEditorShowSceneNumbersKey)) {
-        d->screenplayText->setShowSceneNumber(
-            settingsValue(DataStorageLayer::kComponentsScreenplayEditorShowSceneNumbersKey)
-                .toBool(),
-            settingsValue(DataStorageLayer::kComponentsScreenplayEditorShowSceneNumbersOnRightKey)
-                .toBool(),
-            settingsValue(DataStorageLayer::kComponentsScreenplayEditorShowSceneNumberOnLeftKey)
-                .toBool());
+        d->reconfigureSceneNumbersVisibility();
     }
     if (_changedSettingsKeys.isEmpty()
         || _changedSettingsKeys.contains(
-            DataStorageLayer::kComponentsScreenplayEditorShowDialogueNumberKey)) {
-        d->screenplayText->setShowDialogueNumber(
-            settingsValue(DataStorageLayer::kComponentsScreenplayEditorShowDialogueNumberKey)
-                .toBool());
+            DataStorageLayer::kComponentsScreenplayEditorShowDialogueNumbersKey)) {
+        d->reconfigureDialoguesNumbersVisibility();
     }
     if (_changedSettingsKeys.isEmpty()
         || _changedSettingsKeys.contains(DataStorageLayer::kApplicationHighlightCurrentLineKey)) {
@@ -532,31 +563,18 @@ void ScreenplayTextView::loadViewSettings()
 {
     using namespace DataStorageLayer;
 
-    const auto scaleFactor
-        = StorageFacade::settingsStorage()
-              ->value(kScaleFactorKey, SettingsStorage::SettingsPlace::Application, 1.0)
-              .toReal();
+    const auto scaleFactor = settingsValue(kScaleFactorKey, 1.0).toReal();
     d->scalableWrapper->setZoomRange(scaleFactor);
 
-    const auto isCommentsModeEnabled
-        = StorageFacade::settingsStorage()
-              ->value(kIsCommentsModeEnabledKey, SettingsStorage::SettingsPlace::Application, false)
-              .toBool();
+    const auto isCommentsModeEnabled = settingsValue(kIsCommentsModeEnabledKey, false).toBool();
     d->toolbar->setCommentsModeEnabled(isCommentsModeEnabled);
     const auto isFastFormatPanelVisible
-        = StorageFacade::settingsStorage()
-              ->value(kIsFastFormatPanelVisibleKey, SettingsStorage::SettingsPlace::Application,
-                      false)
-              .toBool();
+        = settingsValue(kIsFastFormatPanelVisibleKey, false).toBool();
     d->toolbar->setFastFormatPanelVisible(isFastFormatPanelVisible);
-    const auto sidebarPanelIndex
-        = StorageFacade::settingsStorage()
-              ->value(kSidebarPanelIndexKey, SettingsStorage::SettingsPlace::Application, 0)
-              .toInt();
+    const auto sidebarPanelIndex = settingsValue(kSidebarPanelIndexKey, 0).toInt();
     d->sidebarTabs->setCurrentTab(sidebarPanelIndex);
 
-    const auto sidebarState = StorageFacade::settingsStorage()->value(
-        kSidebarStateKey, SettingsStorage::SettingsPlace::Application);
+    const auto sidebarState = settingsValue(kSidebarStateKey);
     if (sidebarState.isValid()) {
         d->isSidebarShownFirstTime = false;
         d->splitter->restoreState(sidebarState.toByteArray());
@@ -585,9 +603,40 @@ void ScreenplayTextView::saveViewSettings()
 
 void ScreenplayTextView::setModel(BusinessLayer::ScreenplayTextModel* _model)
 {
-    d->screenplayText->initWithModel(_model);
-    d->screenplayTextScrollbarManager->setModel(_model);
-    d->commentsModel->setModel(_model);
+    if (d->model && d->model->informationModel()) {
+        disconnect(d->model->informationModel());
+    }
+
+    d->model = _model;
+
+    //
+    // Отслеживаем изменения некоторых параметров
+    //
+    if (d->model && d->model->informationModel()) {
+        d->reconfigureScreenplayTemplate();
+        d->reconfigureSceneNumbersVisibility();
+        d->reconfigureDialoguesNumbersVisibility();
+
+        connect(d->model->informationModel(),
+                &BusinessLayer::ScreenplayInformationModel::screenplayTemplateChanged, this,
+                [this] { d->reconfigureSceneNumbersVisibility(); });
+        connect(d->model->informationModel(),
+                &BusinessLayer::ScreenplayInformationModel::showSceneNumbersChanged, this,
+                [this] { d->reconfigureSceneNumbersVisibility(); });
+        connect(d->model->informationModel(),
+                &BusinessLayer::ScreenplayInformationModel::showSceneNumbersOnLeftChanged, this,
+                [this] { d->reconfigureSceneNumbersVisibility(); });
+        connect(d->model->informationModel(),
+                &BusinessLayer::ScreenplayInformationModel::showSceneNumbersOnRightChanged, this,
+                [this] { d->reconfigureSceneNumbersVisibility(); });
+        connect(d->model->informationModel(),
+                &BusinessLayer::ScreenplayInformationModel::showDialoguesNumbersChanged, this,
+                [this] { d->reconfigureDialoguesNumbersVisibility(); });
+    }
+
+    d->screenplayText->initWithModel(d->model);
+    d->screenplayTextScrollbarManager->setModel(d->model);
+    d->commentsModel->setModel(d->model);
 
     d->updateToolBarCurrentParagraphTypeName();
 }

@@ -8,13 +8,16 @@ namespace BusinessLayer {
 class ScreenplayTextModelItem::Implementation
 {
 public:
-    explicit Implementation(ScreenplayTextModelItemType _type);
+    Implementation(ScreenplayTextModelItemType _type, const ScreenplayTextModel* _model);
 
     const ScreenplayTextModelItemType type;
+    const ScreenplayTextModel* model = nullptr;
 };
 
-ScreenplayTextModelItem::Implementation::Implementation(ScreenplayTextModelItemType _type)
+ScreenplayTextModelItem::Implementation::Implementation(ScreenplayTextModelItemType _type,
+                                                        const ScreenplayTextModel* _model)
     : type(_type)
+    , model(_model)
 {
 }
 
@@ -22,9 +25,11 @@ ScreenplayTextModelItem::Implementation::Implementation(ScreenplayTextModelItemT
 // ****
 
 
-ScreenplayTextModelItem::ScreenplayTextModelItem(ScreenplayTextModelItemType _type)
-    : d(new Implementation(_type))
+ScreenplayTextModelItem::ScreenplayTextModelItem(ScreenplayTextModelItemType _type,
+                                                 const ScreenplayTextModel* _model)
+    : d(new Implementation(_type, _model))
 {
+    Q_ASSERT(_model);
 }
 
 ScreenplayTextModelItem::~ScreenplayTextModelItem() = default;
@@ -32,6 +37,11 @@ ScreenplayTextModelItem::~ScreenplayTextModelItem() = default;
 ScreenplayTextModelItemType ScreenplayTextModelItem::type() const
 {
     return d->type;
+}
+
+const ScreenplayTextModel* ScreenplayTextModelItem::model() const
+{
+    return d->model;
 }
 
 ScreenplayTextModelItem* ScreenplayTextModelItem::parent() const

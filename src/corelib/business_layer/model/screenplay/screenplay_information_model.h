@@ -77,7 +77,7 @@ public:
     void setOverrideCommonSettings(bool _override);
     Q_SIGNAL void overrideCommonSettingsChanged(bool _override);
 
-    const QString& screenplayTemplate() const;
+    QString screenplayTemplateId() const;
     void setScreenplayTemplate(const QString& _screenplayTemplate);
     Q_SIGNAL void screenplayTemplateChanged(const QString& _screenplayTemplate);
 

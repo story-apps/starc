@@ -56,7 +56,7 @@ ScreenplayTextDocument* ScreenplayAbstractExporter::prepareDocument(
     //
     // ... вставляем титульную страницу
     //
-    if (_exportOptions.printTiltePage) {
+    if (_exportOptions.includeTiltePage) {
         //
         // Переносим основной текст на следующую страницу
         //
@@ -160,7 +160,7 @@ ScreenplayTextDocument* ScreenplayAbstractExporter::prepareDocument(
         //
         // Если не нужно печатать папки, то удаляем их
         //
-        if (!_exportOptions.printFolders) {
+        if (!_exportOptions.includeFolders) {
             if (blockType == ScreenplayParagraphType::FolderHeader
                 || blockType == ScreenplayParagraphType::FolderFooter) {
                 cursor.movePosition(QTextCursor::EndOfBlock, QTextCursor::KeepAnchor);
@@ -203,7 +203,7 @@ ScreenplayTextDocument* ScreenplayAbstractExporter::prepareDocument(
         //
         // Если не нужно печатать заметки по тексту, то удаляем их
         //
-        if (!_exportOptions.printInlineNotes && blockType == ScreenplayParagraphType::InlineNote) {
+        if (!_exportOptions.includeInlineNotes && blockType == ScreenplayParagraphType::InlineNote) {
             cursor.movePosition(QTextCursor::EndOfBlock, QTextCursor::KeepAnchor);
             if (cursor.hasSelection()) {
                 cursor.deleteChar();
@@ -215,7 +215,7 @@ ScreenplayTextDocument* ScreenplayAbstractExporter::prepareDocument(
         //
         // Если не нужно печатать, эту сцену, то удаляем её
         //
-        if (!_exportOptions.printScenes.isEmpty()) {
+        if (!_exportOptions.exportScenes.isEmpty()) {
             const auto blockData
                 = dynamic_cast<ScreenplayTextBlockData*>(cursor.block().userData());
             bool needRemoveBlock = false;
@@ -225,7 +225,7 @@ ScreenplayTextDocument* ScreenplayAbstractExporter::prepareDocument(
             } else {
                 const auto sceneItem
                     = static_cast<ScreenplayTextModelSceneItem*>(blockData->item()->parent());
-                if (!_exportOptions.printScenes.contains(
+                if (!_exportOptions.exportScenes.contains(
                         QString::number(sceneItem->number().value))) {
                     needRemoveBlock = true;
                 }

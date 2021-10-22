@@ -29,10 +29,7 @@ static ComicBookParagraphType actionFor(bool _tab, bool _jump, ComicBookParagrap
                                     .arg(BusinessLayer::toString(_blockType))
                                     .arg(_tab ? "tab" : "enter");
 
-    const auto typeString
-        = DataStorageLayer::StorageFacade::settingsStorage()
-              ->value(settingsKey, DataStorageLayer::SettingsStorage::SettingsPlace::Application)
-              .toString();
+    const auto typeString = settingsValue(settingsKey).toString();
 
     return BusinessLayer::comicBookParagraphTypeFromString(typeString);
 }

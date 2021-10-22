@@ -49,7 +49,7 @@ CORE_LIBRARY_EXPORT TextParagraphType textParagraphTypeFromString(const QString&
 /**
  * @brief Класс стиля блока текста
  */
-class CORE_LIBRARY_EXPORT TextBlockStyle
+class CORE_LIBRARY_EXPORT SimpleTextBlockStyle
 {
 public:
     /**
@@ -58,6 +58,7 @@ public:
     enum Property {
         PropertyType = QTextFormat::UserProperty + 100, //!< Тип блока
         PropertyIsFirstUppercase, //!< Необходимо ли первый символ поднимать в верхний регистр
+        PropertyIsCanModify, //!< Редактируемый ли блок
         //
         // Свойства редакторских заметок
         //
@@ -85,7 +86,7 @@ public:
     static TextParagraphType forBlock(const QTextBlock& _block);
 
 public:
-    TextBlockStyle() = default;
+    SimpleTextBlockStyle() = default;
 
     /**
      * @brief Тип блока
@@ -160,11 +161,17 @@ public:
     QTextCharFormat charFormat() const;
     void setTextColor(const QColor& _color);
 
+
+    /**
+     * @brief Разрешено изменять текст блока
+     */
+    bool isCanModify() const;
+
 private:
     /**
      * @brief Инициилизация возможна только в классе стиля сценария
      */
-    explicit TextBlockStyle(const QXmlStreamAttributes& _blockAttributes);
+    explicit SimpleTextBlockStyle(const QXmlStreamAttributes& _blockAttributes);
     friend class SimpleTextTemplate;
 
     /**
@@ -304,9 +311,9 @@ public:
     /**
      * @brief Получить стиль блока
      */
-    TextBlockStyle paragraphStyle(TextParagraphType _forType) const;
-    TextBlockStyle paragraphStyle(const QTextBlock& _forBlock) const;
-    void setParagraphStyle(const TextBlockStyle& _style);
+    SimpleTextBlockStyle paragraphStyle(TextParagraphType _forType) const;
+    SimpleTextBlockStyle paragraphStyle(const QTextBlock& _forBlock) const;
+    void setParagraphStyle(const SimpleTextBlockStyle& _style);
 
 private:
     explicit SimpleTextTemplate(const QString& _fromFile);
@@ -356,13 +363,13 @@ private:
     /**
      * @brief Стили блоков текста
      */
-    QHash<TextParagraphType, TextBlockStyle> m_blockStyles;
+    QHash<TextParagraphType, SimpleTextBlockStyle> m_blockStyles;
 };
 
 /**
  * @brief Определим метод для возможности использовать типы в виде ключей в словарях
  */
-CORE_LIBRARY_EXPORT inline uint qHash(TextBlockStyle::LineSpacingType _type)
+CORE_LIBRARY_EXPORT inline uint qHash(SimpleTextBlockStyle::LineSpacingType _type)
 {
     return ::qHash(static_cast<int>(_type));
 }

@@ -86,10 +86,7 @@ void ScreenplayTextManager::Implementation::saveViewSettings()
 void ScreenplayTextManager::Implementation::loadModelSettings()
 {
     using namespace DataStorageLayer;
-    const auto cursorPosition = StorageFacade::settingsStorage()
-                                    ->value(cursorPositionFor(model->document()),
-                                            SettingsStorage::SettingsPlace::Application, 0)
-                                    .toInt();
+    const auto cursorPosition = settingsValue(cursorPositionFor(model->document()), 0).toInt();
     view->setCursorPosition(cursorPosition);
 }
 
