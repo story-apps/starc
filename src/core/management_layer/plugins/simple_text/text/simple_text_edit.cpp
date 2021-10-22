@@ -25,8 +25,8 @@
 #include <QScrollBar>
 #include <QTextTable>
 
-using BusinessLayer::TemplatesFacade;
 using BusinessLayer::SimpleTextBlockStyle;
+using BusinessLayer::TemplatesFacade;
 using BusinessLayer::TextCursor;
 using BusinessLayer::TextParagraphType;
 

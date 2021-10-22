@@ -203,7 +203,8 @@ ScreenplayTextDocument* ScreenplayAbstractExporter::prepareDocument(
         //
         // Если не нужно печатать заметки по тексту, то удаляем их
         //
-        if (!_exportOptions.includeInlineNotes && blockType == ScreenplayParagraphType::InlineNote) {
+        if (!_exportOptions.includeInlineNotes
+            && blockType == ScreenplayParagraphType::InlineNote) {
             cursor.movePosition(QTextCursor::EndOfBlock, QTextCursor::KeepAnchor);
             if (cursor.hasSelection()) {
                 cursor.deleteChar();

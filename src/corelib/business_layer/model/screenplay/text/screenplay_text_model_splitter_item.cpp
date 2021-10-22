@@ -34,7 +34,8 @@ ScreenplayTextModelSplitterItem::Implementation::Implementation(
 // ****
 
 
-ScreenplayTextModelSplitterItem::ScreenplayTextModelSplitterItem(const ScreenplayTextModel* _model, ScreenplayTextModelSplitterItemType _type)
+ScreenplayTextModelSplitterItem::ScreenplayTextModelSplitterItem(
+    const ScreenplayTextModel* _model, ScreenplayTextModelSplitterItemType _type)
     : ScreenplayTextModelItem(ScreenplayTextModelItemType::Splitter, _model)
     , d(new Implementation(_type))
 {

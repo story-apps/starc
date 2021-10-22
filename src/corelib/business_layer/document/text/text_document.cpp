@@ -20,8 +20,8 @@
 #include <QScopedValueRollback>
 #include <QTextTable>
 
-using BusinessLayer::TemplatesFacade;
 using BusinessLayer::SimpleTextBlockStyle;
+using BusinessLayer::TemplatesFacade;
 using BusinessLayer::TextParagraphType;
 
 

@@ -605,9 +605,11 @@ void TextModelTextItem::setReviewMarks(const QVector<QTextLayout::FormatRange>& 
         const QStringList comments
             = reviewMark.format.property(SimpleTextBlockStyle::PropertyComments).toStringList();
         const QStringList dates
-            = reviewMark.format.property(SimpleTextBlockStyle::PropertyCommentsDates).toStringList();
+            = reviewMark.format.property(SimpleTextBlockStyle::PropertyCommentsDates)
+                  .toStringList();
         const QStringList authors
-            = reviewMark.format.property(SimpleTextBlockStyle::PropertyCommentsAuthors).toStringList();
+            = reviewMark.format.property(SimpleTextBlockStyle::PropertyCommentsAuthors)
+                  .toStringList();
         for (int commentIndex = 0; commentIndex < comments.size(); ++commentIndex) {
             newReviewMark.comments.append(
                 { authors.at(commentIndex), dates.at(commentIndex), comments.at(commentIndex) });
