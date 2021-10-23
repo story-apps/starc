@@ -310,6 +310,7 @@ SimpleTextBlockStyle::SimpleTextBlockStyle(const QXmlStreamAttributes& _blockAtt
     //
     m_blockFormat.setProperty(SimpleTextBlockStyle::PropertyType, static_cast<int>(m_type));
     m_charFormat.setProperty(SimpleTextBlockStyle::PropertyIsFirstUppercase, true);
+    m_charFormat.setProperty(SimpleTextBlockStyle::PropertyIsCanModify, true);
 }
 
 void SimpleTextBlockStyle::updateLineHeight()
