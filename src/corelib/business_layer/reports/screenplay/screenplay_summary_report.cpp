@@ -209,7 +209,7 @@ void ScreenplaySummaryReport::build(QAbstractItemModel* _model)
         d->duration = screenplayModel->duration();
         d->pagesCount = [screenplayModel] {
             const auto& screenplayTemplate = TemplatesFacade::screenplayTemplate(
-                screenplayModel->informationModel()->screenplayTemplateId());
+                screenplayModel->informationModel()->templateId());
 
             PageTextEdit textEdit;
             textEdit.setUsePageMode(true);

@@ -63,7 +63,7 @@ const BusinessLayer::ScreenplayTemplate& ScreenplayTextEdit::Implementation::scr
     const
 {
     const auto currentTemplateId = model && model->informationModel()
-        ? model->informationModel()->screenplayTemplateId()
+        ? model->informationModel()->templateId()
         : "";
     return TemplatesFacade::screenplayTemplate(currentTemplateId);
 }

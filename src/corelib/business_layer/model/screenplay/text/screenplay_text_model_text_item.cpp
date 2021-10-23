@@ -536,7 +536,7 @@ std::chrono::milliseconds ScreenplayTextModelTextItem::duration() const
 void ScreenplayTextModelTextItem::updateDuration()
 {
     const auto duration = Chronometer::duration(
-        d->paragraphType, d->text, model()->informationModel()->screenplayTemplateId());
+        d->paragraphType, d->text, model()->informationModel()->templateId());
     if (d->duration == duration) {
         return;
     }
@@ -771,7 +771,7 @@ void ScreenplayTextModelTextItem::setFormats(const QVector<QTextLayout::FormatRa
 {
     QVector<TextFormat> newFormats;
     const auto& currentTemplate
-        = TemplatesFacade::screenplayTemplate(model()->informationModel()->screenplayTemplateId());
+        = TemplatesFacade::screenplayTemplate(model()->informationModel()->templateId());
     const auto defaultBlockFormat = currentTemplate.paragraphStyle(d->paragraphType);
     for (const auto& format : _formats) {
         if (format.start == 0 && format.length == d->text.length()

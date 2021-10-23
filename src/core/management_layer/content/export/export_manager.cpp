@@ -138,7 +138,7 @@ void ExportManager::Implementation::exportScreenplay(BusinessLayer::AbstractMode
                 // ... донастроим параметры экспорта
                 //
                 const auto screenplayInformation = screenplayTextModel->informationModel();
-                exportOptions.templateId = screenplayInformation->screenplayTemplateId();
+                exportOptions.templateId = screenplayInformation->templateId();
                 exportOptions.showScenesNumbers = screenplayInformation->showSceneNumbers();
                 exportOptions.showScenesNumbersOnLeft
                     = screenplayInformation->showSceneNumbersOnLeft();

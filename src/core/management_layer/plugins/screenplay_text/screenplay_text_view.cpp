@@ -180,7 +180,7 @@ void ScreenplayTextView::Implementation::reconfigureScreenplayTemplate()
 
     using namespace BusinessLayer;
     const auto& usedTemplate = BusinessLayer::TemplatesFacade::screenplayTemplate(
-        model && model->informationModel() ? model->informationModel()->screenplayTemplateId()
+        model && model->informationModel() ? model->informationModel()->templateId()
                                            : "");
     const QVector<ScreenplayParagraphType> types
         = { ScreenplayParagraphType::SceneHeading,    ScreenplayParagraphType::SceneCharacters,
@@ -618,7 +618,7 @@ void ScreenplayTextView::setModel(BusinessLayer::ScreenplayTextModel* _model)
         d->reconfigureDialoguesNumbersVisibility();
 
         connect(d->model->informationModel(),
-                &BusinessLayer::ScreenplayInformationModel::screenplayTemplateChanged, this,
+                &BusinessLayer::ScreenplayInformationModel::templateIdChanged, this,
                 [this] { d->reconfigureSceneNumbersVisibility(); });
         connect(d->model->informationModel(),
                 &BusinessLayer::ScreenplayInformationModel::showSceneNumbersChanged, this,

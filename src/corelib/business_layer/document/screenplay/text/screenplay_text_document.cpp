@@ -467,7 +467,7 @@ void ScreenplayTextDocument::setModel(BusinessLayer::ScreenplayTextModel* _model
     }
 
     Q_ASSERT(d->model->informationModel());
-    setTemplateId(d->model->informationModel()->screenplayTemplateId());
+    setTemplateId(d->model->informationModel()->templateId());
 
     //
     // Обновим шрифт документа, в моменте когда текста нет

@@ -85,7 +85,7 @@ void ScreenplayParametersManager::setModel(BusinessLayer::AbstractModel* _model)
         d->view->setScenesNumbersPrefix(d->model->scenesNumbersPrefix());
         d->view->setScenesNumbersingStartAt(d->model->scenesNumberingStartAt());
         d->view->setOverrideCommonSettings(d->model->overrideCommonSettings());
-        d->view->setScreenplayTemplate(d->model->screenplayTemplateId());
+        d->view->setScreenplayTemplate(d->model->templateId());
         d->view->setShowSceneNumbers(d->model->showSceneNumbers());
         d->view->setShowSceneNumbersOnLeft(d->model->showSceneNumbersOnLeft());
         d->view->setShowSceneNumbersOnRight(d->model->showSceneNumbersOnRight());
@@ -105,7 +105,7 @@ void ScreenplayParametersManager::setModel(BusinessLayer::AbstractModel* _model)
                 d->view, &Ui::ScreenplayParametersView::setScenesNumbersingStartAt);
         connect(d->model, &BusinessLayer::ScreenplayInformationModel::overrideCommonSettingsChanged,
                 d->view, &Ui::ScreenplayParametersView::setOverrideCommonSettings);
-        connect(d->model, &BusinessLayer::ScreenplayInformationModel::screenplayTemplateChanged,
+        connect(d->model, &BusinessLayer::ScreenplayInformationModel::templateIdChanged,
                 d->view, &Ui::ScreenplayParametersView::setScreenplayTemplate);
         connect(d->model, &BusinessLayer::ScreenplayInformationModel::showSceneNumbersChanged,
                 d->view, &Ui::ScreenplayParametersView::setShowSceneNumbers);
@@ -132,7 +132,7 @@ void ScreenplayParametersManager::setModel(BusinessLayer::AbstractModel* _model)
         connect(d->view, &Ui::ScreenplayParametersView::overrideCommonSettingsChanged, d->model,
                 &BusinessLayer::ScreenplayInformationModel::setOverrideCommonSettings);
         connect(d->view, &Ui::ScreenplayParametersView::screenplayTemplateChanged, d->model,
-                &BusinessLayer::ScreenplayInformationModel::setScreenplayTemplate);
+                &BusinessLayer::ScreenplayInformationModel::setTemplateId);
         connect(d->view, &Ui::ScreenplayParametersView::showSceneNumbersChanged, d->model,
                 &BusinessLayer::ScreenplayInformationModel::setShowSceneNumbers);
         connect(d->view, &Ui::ScreenplayParametersView::showSceneNumbersOnLeftChanged, d->model,
