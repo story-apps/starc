@@ -3,6 +3,8 @@
 #include "text_block_data.h"
 #include "text_cursor.h"
 
+#include <business_layer/model/screenplay/screenplay_information_model.h>
+#include <business_layer/model/screenplay/screenplay_title_page_model.h>
 #include <business_layer/model/text/text_model.h>
 #include <business_layer/model/text/text_model_chapter_item.h>
 #include <business_layer/model/text/text_model_text_item.h>
@@ -77,8 +79,9 @@ SimpleTextDocument::Implementation::Implementation(SimpleTextDocument* _document
 
 const SimpleTextTemplate& SimpleTextDocument::Implementation::documentTemplate() const
 {
-    if (model->document()->type() == Domain::DocumentObjectType::ScreenplayTitlePage) {
-        return TemplatesFacade::screenplayTitlePageTemplate();
+    if (auto titlePageModel = qobject_cast<BusinessLayer::ScreenplayTitlePageModel*>(model)) {
+        return TemplatesFacade::screenplayTitlePageTemplate(
+            titlePageModel->informationModel()->templateId());
     }
     return TemplatesFacade::simpleTextTemplate();
 }

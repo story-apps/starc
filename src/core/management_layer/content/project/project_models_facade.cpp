@@ -147,7 +147,21 @@ BusinessLayer::AbstractModel* ProjectModelsFacade::modelFor(Domain::DocumentObje
         }
 
         case Domain::DocumentObjectType::ScreenplayTitlePage: {
-            model = new BusinessLayer::ScreenplayTitlePageModel;
+            auto titlePageModel = new BusinessLayer::ScreenplayTitlePageModel;
+
+            const auto titlePageItem = d->projectStructureModel->itemForUuid(_document->uuid());
+            Q_ASSERT(titlePageItem);
+            Q_ASSERT(titlePageItem->parent());
+            const auto parentUuid = titlePageItem->parent()->uuid();
+
+            //
+            // Добавляем в модель титульной страницы, модель информации о сценарие
+            //
+            auto informationModel
+                = qobject_cast<BusinessLayer::ScreenplayInformationModel*>(modelFor(parentUuid));
+            titlePageModel->setInformationModel(informationModel);
+
+            model = titlePageModel;
             break;
         }
 

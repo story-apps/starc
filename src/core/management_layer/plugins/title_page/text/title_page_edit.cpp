@@ -7,6 +7,7 @@
 #include <business_layer/document/text/text_document.h>
 #include <business_layer/import/text/simple_text_markdown_importer.h>
 #include <business_layer/model/comic_book/comic_book_title_page_model.h>
+#include <business_layer/model/screenplay/screenplay_information_model.h>
 #include <business_layer/model/screenplay/screenplay_title_page_model.h>
 #include <business_layer/model/text/text_model.h>
 #include <business_layer/model/text/text_model_text_item.h>
@@ -108,8 +109,9 @@ void TitlePageEdit::initWithModel(BusinessLayer::TextModel* _model)
     d->model = _model;
 
     QMarginsF pageMargins;
-    if (qobject_cast<BusinessLayer::ScreenplayTitlePageModel*>(d->model)) {
-        const auto& currentTemplate = TemplatesFacade::screenplayTemplate();
+    if (auto titlePageModel = qobject_cast<BusinessLayer::ScreenplayTitlePageModel*>(d->model)) {
+        const auto& currentTemplate
+            = TemplatesFacade::screenplayTemplate(titlePageModel->informationModel()->templateId());
         setPageFormat(currentTemplate.pageSizeId());
         setPageNumbersAlignment(currentTemplate.pageNumbersAlignment());
         pageMargins = currentTemplate.pageMargins();
@@ -176,8 +178,10 @@ void TitlePageEdit::restoreFromTemplate()
     }
 
     QString titlePage;
-    if (qobject_cast<BusinessLayer::ScreenplayTitlePageModel*>(d->model)) {
-        titlePage = TemplatesFacade::screenplayTemplate().titlePage();
+    if (auto titlePageModel = qobject_cast<BusinessLayer::ScreenplayTitlePageModel*>(d->model)) {
+        titlePage
+            = TemplatesFacade::screenplayTemplate(titlePageModel->informationModel()->templateId())
+                  .titlePage();
     } else if (qobject_cast<BusinessLayer::ComicBookTitlePageModel*>(d->model)) {
         //        titlePage = TemplatesFacade::screenplayTemplate().titlePage();
     }
