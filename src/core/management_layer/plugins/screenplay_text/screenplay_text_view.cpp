@@ -61,7 +61,7 @@ public:
     /**
      * @brief Переконфигурировать представление
      */
-    void reconfigureScreenplayTemplate();
+    void reconfigureTemplate();
     void reconfigureSceneNumbersVisibility();
     void reconfigureDialoguesNumbersVisibility();
 
@@ -174,14 +174,13 @@ ScreenplayTextView::Implementation::Implementation(QWidget* _parent)
     commentsView->hide();
 }
 
-void ScreenplayTextView::Implementation::reconfigureScreenplayTemplate()
+void ScreenplayTextView::Implementation::reconfigureTemplate()
 {
     paragraphTypesModel->clear();
 
     using namespace BusinessLayer;
     const auto& usedTemplate = BusinessLayer::TemplatesFacade::screenplayTemplate(
-        model && model->informationModel() ? model->informationModel()->templateId()
-                                           : "");
+        model && model->informationModel() ? model->informationModel()->templateId() : "");
     const QVector<ScreenplayParagraphType> types
         = { ScreenplayParagraphType::SceneHeading,    ScreenplayParagraphType::SceneCharacters,
             ScreenplayParagraphType::Action,          ScreenplayParagraphType::Character,
@@ -539,7 +538,7 @@ void ScreenplayTextView::reconfigure(const QStringList& _changedSettingsKeys)
     if (_changedSettingsKeys.isEmpty()
         || _changedSettingsKeys.contains(
             DataStorageLayer::kComponentsScreenplayEditorDefaultTemplateKey)) {
-        d->reconfigureScreenplayTemplate();
+        d->reconfigureTemplate();
     }
 
     if (_changedSettingsKeys.isEmpty()
@@ -613,13 +612,13 @@ void ScreenplayTextView::setModel(BusinessLayer::ScreenplayTextModel* _model)
     // Отслеживаем изменения некоторых параметров
     //
     if (d->model && d->model->informationModel()) {
-        d->reconfigureScreenplayTemplate();
+        d->reconfigureTemplate();
         d->reconfigureSceneNumbersVisibility();
         d->reconfigureDialoguesNumbersVisibility();
 
         connect(d->model->informationModel(),
                 &BusinessLayer::ScreenplayInformationModel::templateIdChanged, this,
-                [this] { d->reconfigureSceneNumbersVisibility(); });
+                [this] { d->reconfigureTemplate(); });
         connect(d->model->informationModel(),
                 &BusinessLayer::ScreenplayInformationModel::showSceneNumbersChanged, this,
                 [this] { d->reconfigureSceneNumbersVisibility(); });
