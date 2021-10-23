@@ -105,8 +105,8 @@ void ScreenplayParametersManager::setModel(BusinessLayer::AbstractModel* _model)
                 d->view, &Ui::ScreenplayParametersView::setScenesNumbersingStartAt);
         connect(d->model, &BusinessLayer::ScreenplayInformationModel::overrideCommonSettingsChanged,
                 d->view, &Ui::ScreenplayParametersView::setOverrideCommonSettings);
-        connect(d->model, &BusinessLayer::ScreenplayInformationModel::templateIdChanged,
-                d->view, &Ui::ScreenplayParametersView::setScreenplayTemplate);
+        connect(d->model, &BusinessLayer::ScreenplayInformationModel::templateIdChanged, d->view,
+                &Ui::ScreenplayParametersView::setScreenplayTemplate);
         connect(d->model, &BusinessLayer::ScreenplayInformationModel::showSceneNumbersChanged,
                 d->view, &Ui::ScreenplayParametersView::setShowSceneNumbers);
         connect(d->model, &BusinessLayer::ScreenplayInformationModel::showSceneNumbersOnLeftChanged,

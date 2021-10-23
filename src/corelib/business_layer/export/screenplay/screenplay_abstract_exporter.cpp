@@ -43,7 +43,6 @@ ScreenplayTextDocument* ScreenplayAbstractExporter::prepareDocument(
     //
     // ... формируем текст сценария
     //
-    screenplayText->setTemplateId(_exportOptions.templateId);
     screenplayText->setModel(_model, false);
     //
     // ... отсоединяем документ от модели, что изменения в документе не привели к изменениям модели

@@ -535,8 +535,8 @@ std::chrono::milliseconds ScreenplayTextModelTextItem::duration() const
 
 void ScreenplayTextModelTextItem::updateDuration()
 {
-    const auto duration = Chronometer::duration(
-        d->paragraphType, d->text, model()->informationModel()->templateId());
+    const auto duration = Chronometer::duration(d->paragraphType, d->text,
+                                                model()->informationModel()->templateId());
     if (d->duration == duration) {
         return;
     }

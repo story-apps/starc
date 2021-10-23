@@ -217,7 +217,6 @@ void ScreenplaySummaryReport::build(QAbstractItemModel* _model)
             textEdit.setPageFormat(screenplayTemplate.pageSizeId());
             textEdit.setPageMarginsMm(screenplayTemplate.pageMargins());
             ScreenplayTextDocument screenplayDocument;
-            screenplayDocument.setTemplateId(screenplayTemplate.id());
             textEdit.setDocument(&screenplayDocument);
 
             const bool kCanChangeModel = false;

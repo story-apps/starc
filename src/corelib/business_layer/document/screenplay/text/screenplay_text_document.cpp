@@ -418,16 +418,6 @@ ScreenplayTextDocument::ScreenplayTextDocument(QObject* _parent)
 
 ScreenplayTextDocument::~ScreenplayTextDocument() = default;
 
-void ScreenplayTextDocument::setTemplateId(const QString& _templateId)
-{
-    if (d->templateId == _templateId) {
-        return;
-    }
-
-    d->templateId = _templateId;
-    d->corrector.setTemplateId(_templateId);
-}
-
 QString ScreenplayTextDocument::templateId() const
 {
     return d->templateId;
@@ -467,7 +457,8 @@ void ScreenplayTextDocument::setModel(BusinessLayer::ScreenplayTextModel* _model
     }
 
     Q_ASSERT(d->model->informationModel());
-    setTemplateId(d->model->informationModel()->templateId());
+    d->templateId = d->model->informationModel()->templateId();
+    d->corrector.setTemplateId(d->templateId);
 
     //
     // Обновим шрифт документа, в моменте когда текста нет

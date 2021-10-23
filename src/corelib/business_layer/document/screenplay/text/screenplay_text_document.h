@@ -27,7 +27,6 @@ public:
     /**
      * @brief Идентификатор шаблона, с которым работает документ
      */
-    void setTemplateId(const QString& _templateId);
     QString templateId() const;
 
     /**

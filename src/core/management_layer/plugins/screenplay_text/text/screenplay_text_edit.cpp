@@ -62,9 +62,8 @@ ScreenplayTextEdit::Implementation::Implementation(ScreenplayTextEdit* _q)
 const BusinessLayer::ScreenplayTemplate& ScreenplayTextEdit::Implementation::screenplayTemplate()
     const
 {
-    const auto currentTemplateId = model && model->informationModel()
-        ? model->informationModel()->templateId()
-        : "";
+    const auto currentTemplateId
+        = model && model->informationModel() ? model->informationModel()->templateId() : "";
     return TemplatesFacade::screenplayTemplate(currentTemplateId);
 }
 
