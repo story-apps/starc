@@ -11,6 +11,7 @@ namespace BusinessLayer {
 namespace {
 const QString kDocumentKey = QStringLiteral("document");
 const QString kNameKey = QStringLiteral("name");
+const QString kColorKey = QStringLiteral("color");
 const QString kStoryRoleKey = QStringLiteral("story_role");
 const QString kOneSentenceDescriptionKey = QStringLiteral("one_sentence_description");
 const QString kLongDescriptionKey = QStringLiteral("long_description");
@@ -24,6 +25,7 @@ class CharacterModel::Implementation
 {
 public:
     QString name;
+    QColor color;
     int storyRole = 3;
     QString oneSentenceDescription;
     QString longDescription;
@@ -33,15 +35,26 @@ public:
     QString gender;
 };
 
-
 // ****
 
-
 CharacterModel::CharacterModel(QObject* _parent)
-    : AbstractModel({ kDocumentKey, kNameKey }, _parent)
+    : AbstractModel(
+        {
+            kDocumentKey,
+            kNameKey,
+            kColorKey,
+            kStoryRoleKey,
+            kOneSentenceDescriptionKey,
+            kLongDescriptionKey,
+            kMainPhotoKey,
+            kAgeKey,
+            kGenderKey,
+        },
+        _parent)
     , d(new Implementation)
 {
     connect(this, &CharacterModel::nameChanged, this, &CharacterModel::updateDocumentContent);
+    connect(this, &CharacterModel::colorChanged, this, &CharacterModel::updateDocumentContent);
     connect(this, &CharacterModel::storyRoleChanged, this, &CharacterModel::updateDocumentContent);
     connect(this, &CharacterModel::oneSentenceDescriptionChanged, this,
             &CharacterModel::updateDocumentContent);
@@ -75,6 +88,21 @@ void CharacterModel::setName(const QString& _name)
 void CharacterModel::setDocumentName(const QString& _name)
 {
     setName(_name);
+}
+
+QColor CharacterModel::color() const
+{
+    return d->color;
+}
+
+void CharacterModel::setColor(const QColor& _color)
+{
+    if (d->color == _color) {
+        return;
+    }
+
+    d->color = _color;
+    emit colorChanged(d->color);
 }
 
 int CharacterModel::storyRole() const
@@ -180,6 +208,7 @@ void CharacterModel::initDocument()
         return documentNode.firstChildElement(_key).text();
     };
     d->name = load(kNameKey);
+    d->color = load(kColorKey);
     if (contains(kStoryRoleKey)) {
         d->storyRole = load(kStoryRoleKey).toInt();
     }
@@ -193,15 +222,7 @@ void CharacterModel::initDocument()
 
 void CharacterModel::clearDocument()
 {
-    QSignalBlocker signalBlocker(this);
-
-    setName({});
-    setOneSentenceDescription({});
-    setLongDescription({});
-    setMainPhoto({});
-    //
-    setAge({});
-    setGender({});
+    d.reset(new Implementation);
 }
 
 QByteArray CharacterModel::toXml() const
@@ -218,6 +239,7 @@ QByteArray CharacterModel::toXml() const
         xml += QString("<%1><![CDATA[%2]]></%1>\n").arg(_key, _value).toUtf8();
     };
     save(kNameKey, d->name);
+    save(kColorKey, d->color.name());
     save(kStoryRoleKey, QString::number(d->storyRole));
     save(kOneSentenceDescriptionKey, d->oneSentenceDescription);
     save(kLongDescriptionKey, d->longDescription);

@@ -1,8 +1,7 @@
 #include "comic_book_text_comments_toolbar.h"
 
 #include <ui/design_system/design_system.h>
-#include <ui/widgets/card/card.h>
-#include <ui/widgets/color_picker/color_picker.h>
+#include <ui/widgets/color_picker/color_picker_popup.h>
 
 #include <QAction>
 #include <QHBoxLayout>
@@ -16,7 +15,7 @@
 namespace Ui {
 
 namespace {
-const QString kColorKey = QLatin1String("widgets/screenplay-text-comments-toolbar/color");
+const QString kColorKey = QLatin1String("widgets/comicbook-text-comments-toolbar/color");
 }
 
 class ComicBookTextCommentsToolbar::Implementation
@@ -39,16 +38,6 @@ public:
      */
     void animateMove(const QPoint& _from, const QPoint& _to);
 
-    /**
-     * @brief Показать попап
-     */
-    void showPopup(QWidget* _parent);
-
-    /**
-     * @brief Скрыть попап
-     */
-    void hidePopup();
-
 
     QAction* textColorAction = nullptr;
     QAction* textBackgroundColorAction = nullptr;
@@ -60,10 +49,7 @@ public:
     QPixmap contentPixmap;
     QVariantAnimation moveAnimation;
 
-    bool isPopupShown = false;
-    Card* popup = nullptr;
-    ColorPicker* popupContent = nullptr;
-    QVariantAnimation popupHeightAnimation;
+    ColorPickerPopup* colorPickerPopup = nullptr;
 };
 
 ComicBookTextCommentsToolbar::Implementation::Implementation(QWidget* _parent)
@@ -71,8 +57,7 @@ ComicBookTextCommentsToolbar::Implementation::Implementation(QWidget* _parent)
     , textBackgroundColorAction(new QAction)
     , commentAction(new QAction)
     , colorAction(new QAction)
-    , popup(new Card(_parent))
-    , popupContent(new ColorPicker(_parent))
+    , colorPickerPopup(new ColorPickerPopup(_parent))
 {
     opacityAnimation.setDuration(220);
     opacityAnimation.setEasingCurve(QEasingCurve::OutQuad);
@@ -80,24 +65,6 @@ ComicBookTextCommentsToolbar::Implementation::Implementation(QWidget* _parent)
     hideTimer.setInterval(opacityAnimation.duration());
     moveAnimation.setDuration(420);
     moveAnimation.setEasingCurve(QEasingCurve::OutQuad);
-
-    popup->setFocusPolicy(Qt::StrongFocus);
-    popup->setWindowFlags(Qt::SplashScreen | Qt::FramelessWindowHint | Qt::NoDropShadowWindowHint);
-    popup->setAttribute(Qt::WA_Hover, false);
-    popup->setAttribute(Qt::WA_TranslucentBackground);
-    popup->setAttribute(Qt::WA_ShowWithoutActivating);
-    popup->hide();
-
-    QHBoxLayout* popupLayout = new QHBoxLayout;
-    popupLayout->setMargin({});
-    popupLayout->setSpacing(0);
-    popupLayout->addWidget(popupContent);
-    popup->setLayoutReimpl(popupLayout);
-
-    popupHeightAnimation.setEasingCurve(QEasingCurve::OutQuint);
-    popupHeightAnimation.setDuration(240);
-    popupHeightAnimation.setStartValue(0);
-    popupHeightAnimation.setEndValue(0);
 }
 
 void ComicBookTextCommentsToolbar::Implementation::animateShow()
@@ -132,33 +99,6 @@ void ComicBookTextCommentsToolbar::Implementation::animateMove(const QPoint& _fr
     moveAnimation.setStartValue(_from);
     moveAnimation.setEndValue(_to);
     moveAnimation.start();
-}
-
-void ComicBookTextCommentsToolbar::Implementation::showPopup(QWidget* _parent)
-{
-    isPopupShown = true;
-
-    popup->resize(static_cast<int>(popup->sizeHint().width()), 0);
-
-    const auto left
-        = QPoint(_parent->rect().center().x() - popup->width() / 2,
-                 _parent->rect().bottom() - Ui::DesignSystem::textField().margins().bottom());
-    const auto pos = _parent->mapToGlobal(left);
-    popup->move(pos);
-    popup->show();
-    popup->setFocus();
-
-    popupHeightAnimation.setDirection(QVariantAnimation::Forward);
-    popupHeightAnimation.setEndValue(popup->sizeHint().height());
-    popupHeightAnimation.start();
-}
-
-void ComicBookTextCommentsToolbar::Implementation::hidePopup()
-{
-    isPopupShown = false;
-
-    popupHeightAnimation.setDirection(QVariantAnimation::Backward);
-    popupHeightAnimation.start();
 }
 
 
@@ -196,35 +136,25 @@ ComicBookTextCommentsToolbar::ComicBookTextCommentsToolbar(QWidget* _parent)
     connect(d->commentAction, &QAction::triggered, this,
             [this] { emit commentAddRequested(actionColor(d->colorAction)); });
     connect(d->colorAction, &QAction::triggered, this, [this] {
-        if (d->isPopupShown) {
-            d->hidePopup();
+        if (d->colorPickerPopup->isPopupShown()) {
+            d->colorPickerPopup->hidePopup();
         } else {
-            d->showPopup(this);
+            d->colorPickerPopup->setSelectedColor(actionColor(d->colorAction));
+            d->colorPickerPopup->showPopup(this);
         }
     });
-    connect(d->popupContent, &ColorPicker::colorSelected, this, [this](const QColor& _color) {
-        setActionColor(d->colorAction, _color);
-        d->hidePopup();
+    connect(d->colorPickerPopup, &ColorPickerPopup::colorSelected, this,
+            [this](const QColor& _color) {
+                setActionColor(d->colorAction, _color);
 
-        QSettings settings;
-        settings.setValue(kColorKey, _color);
-    });
+                QSettings settings;
+                settings.setValue(kColorKey, _color);
+            });
 
     connect(&d->opacityAnimation, &QVariantAnimation::valueChanged, this, [this] { update(); });
     connect(&d->hideTimer, &QTimer::timeout, this, &Widget::hide);
     connect(&d->moveAnimation, &QVariantAnimation::valueChanged, this,
             [this](const QVariant& _value) { move(_value.toPoint()); });
-
-    connect(&d->popupHeightAnimation, &QVariantAnimation::valueChanged, this,
-            [this](const QVariant& _value) {
-                const auto height = _value.toInt();
-                d->popup->resize(d->popup->width(), height);
-            });
-    connect(&d->popupHeightAnimation, &QVariantAnimation::finished, this, [this] {
-        if (!d->isPopupShown) {
-            d->popup->hide();
-        }
-    });
 
 
     updateTranslations();
@@ -298,8 +228,8 @@ void ComicBookTextCommentsToolbar::focusOutEvent(QFocusEvent* _event)
 {
     FloatingToolBar::focusOutEvent(_event);
 
-    if (!d->popup->hasFocus()) {
-        d->hidePopup();
+    if (!d->colorPickerPopup->hasFocus()) {
+        d->colorPickerPopup->hidePopup();
     }
 }
 
@@ -318,7 +248,7 @@ void ComicBookTextCommentsToolbar::designSystemChangeEvent(DesignSystemChangeEve
 
     resize(sizeHint());
 
-    d->popup->setBackgroundColor(Ui::DesignSystem::color().background());
+    d->colorPickerPopup->setBackgroundColor(Ui::DesignSystem::color().background());
 }
 
 } // namespace Ui

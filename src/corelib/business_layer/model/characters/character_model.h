@@ -21,6 +21,10 @@ public:
     Q_SIGNAL void nameChanged(const QString& _newName, const QString& _oldName);
     void setDocumentName(const QString& _name) override;
 
+    QColor color() const;
+    void setColor(const QColor& _color);
+    Q_SIGNAL void colorChanged(const QColor& _color);
+
     int storyRole() const;
     void setStoryRole(int _role);
     Q_SIGNAL void storyRoleChanged(int _role);

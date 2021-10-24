@@ -168,6 +168,7 @@ SOURCES += \
     ui/widgets/color_picker/color_hue_slider.cpp \
     ui/widgets/color_picker/color_palette.cpp \
     ui/widgets/color_picker/color_picker.cpp \
+    ui/widgets/color_picker/color_picker_popup.cpp \
     ui/widgets/combo_box/combo_box.cpp \
     ui/widgets/context_menu/context_menu.cpp \
     ui/widgets/dialog/abstract_dialog.cpp \
@@ -362,6 +363,7 @@ HEADERS += \
     ui/widgets/color_picker/color_hue_slider.h \
     ui/widgets/color_picker/color_palette.h \
     ui/widgets/color_picker/color_picker.h \
+    ui/widgets/color_picker/color_picker_popup.h \
     ui/widgets/combo_box/combo_box.h \
     ui/widgets/context_menu/context_menu.h \
     ui/widgets/dialog/abstract_dialog.h \
