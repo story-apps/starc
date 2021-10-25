@@ -504,8 +504,12 @@ void TextField::setTrailingIcon(const QString& _icon)
         return;
     }
 
+    const bool needReconfigure = d->trailingIcon.isEmpty() != _icon.isEmpty();
+
     d->trailingIcon = _icon;
-    reconfigure();
+    if (needReconfigure) {
+        reconfigure();
+    }
     update();
 }
 

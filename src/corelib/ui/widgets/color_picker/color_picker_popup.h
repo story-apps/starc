@@ -32,7 +32,7 @@ public:
     /**
      * @brief Показать попап выбора цвета
      */
-    void showPopup(QWidget* _parent);
+    void showPopup(QWidget* _parent, Qt::Alignment _alignment = Qt::AlignBottom | Qt::AlignHCenter);
 
     /**
      * @brief Скрыть попап выбора цвета

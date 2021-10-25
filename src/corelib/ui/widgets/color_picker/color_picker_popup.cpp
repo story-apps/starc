@@ -80,16 +80,23 @@ bool ColorPickerPopup::isPopupShown() const
     return d->isPopupShown;
 }
 
-void ColorPickerPopup::showPopup(QWidget* _parent)
+void ColorPickerPopup::showPopup(QWidget* _parent, Qt::Alignment _alignment)
 {
     d->isPopupShown = true;
 
     resize(sizeHint().width(), 0);
 
-    const auto left
-        = QPoint(_parent->rect().center().x() - width() / 2,
-                 _parent->rect().bottom() - Ui::DesignSystem::textField().margins().bottom());
-    const auto pos = _parent->mapToGlobal(left);
+    QPoint leftTop;
+    if (_alignment.testFlag(Qt::AlignHCenter)) {
+        leftTop
+            = QPoint(_parent->rect().center().x() - width() / 2,
+                     _parent->rect().bottom() - Ui::DesignSystem::textField().margins().bottom());
+    } else if (_alignment.testFlag(Qt::AlignRight)) {
+        leftTop
+            = QPoint(_parent->rect().right() - width(),
+                     _parent->rect().bottom() - Ui::DesignSystem::textField().margins().bottom());
+    }
+    const auto pos = _parent->mapToGlobal(leftTop);
     move(pos);
     show();
     setFocus();
