@@ -106,6 +106,10 @@ TitlePageEdit::~TitlePageEdit() = default;
 
 void TitlePageEdit::initWithModel(BusinessLayer::TextModel* _model)
 {
+    if (auto titlePageModel = qobject_cast<BusinessLayer::ScreenplayTitlePageModel*>(d->model)) {
+        disconnect(titlePageModel->informationModel());
+    }
+
     d->model = _model;
 
     QMarginsF pageMargins;
@@ -115,6 +119,30 @@ void TitlePageEdit::initWithModel(BusinessLayer::TextModel* _model)
         setPageFormat(currentTemplate.pageSizeId());
         setPageNumbersAlignment(currentTemplate.pageNumbersAlignment());
         pageMargins = currentTemplate.pageMargins();
+
+        auto updateHeader = [this, titlePageModel] {
+            setHeader(titlePageModel->informationModel()->printHeaderOnTitlePage()
+                          ? titlePageModel->informationModel()->header()
+                          : QString());
+        };
+        updateHeader();
+        connect(titlePageModel->informationModel(),
+                &BusinessLayer::ScreenplayInformationModel::printHeaderOnTitlePageChanged, this,
+                updateHeader);
+        connect(titlePageModel->informationModel(),
+                &BusinessLayer::ScreenplayInformationModel::headerChanged, this, updateHeader);
+
+        auto updateFooter = [this, titlePageModel] {
+            setFooter(titlePageModel->informationModel()->printFooterOnTitlePage()
+                          ? titlePageModel->informationModel()->footer()
+                          : QString());
+        };
+        updateFooter();
+        connect(titlePageModel->informationModel(),
+                &BusinessLayer::ScreenplayInformationModel::printFooterOnTitlePageChanged, this,
+                updateFooter);
+        connect(titlePageModel->informationModel(),
+                &BusinessLayer::ScreenplayInformationModel::footerChanged, this, updateFooter);
     } else if (qobject_cast<BusinessLayer::ComicBookTitlePageModel*>(d->model)) {
         const auto& currentTemplate = TemplatesFacade::comicBookTemplate();
         setPageFormat(currentTemplate.pageSizeId());

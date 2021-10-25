@@ -50,9 +50,9 @@ public:
     bool screenplayTextVisible = true;
     bool screenplayStatisticsVisible = true;
     QString header;
-    bool printHeaderOnTitlePage = true;
+    bool printHeaderOnTitlePage = false;
     QString footer;
-    bool printFooterOnTitlePage = true;
+    bool printFooterOnTitlePage = false;
     QString scenesNumbersPrefix;
     int scenesNumberingStartAt = 1;
     bool overrideCommonSettings = false;

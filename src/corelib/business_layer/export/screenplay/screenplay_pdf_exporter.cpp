@@ -301,71 +301,67 @@ static void printPage(int _pageNumber, QPainter* _painter, const QTextDocument* 
     // Печатаем колонтитулы, если необходимо
     //
     if (!_exportOptions.header.isEmpty() || !_exportOptions.footer.isEmpty()) {
-        //
-        // пропускаем титульную страницу
-        //
-        if (_exportOptions.includeTiltePage && _pageNumber == 1) {
-            //
-            // ... не печатаем колонтитулы
-            //
-        }
-        //
-        // Печатаем колонтитулы
-        //
-        else {
-            _painter->save();
-            _painter->setFont(
-                _template.paragraphStyle(ScreenplayParagraphType::Action).charFormat().font());
+        const bool printHeader = _pageNumber > 1 || !_exportOptions.includeTiltePage
+            || _exportOptions.printHeaderOnTitlePage;
+        const bool printFooter = _pageNumber > 1 || !_exportOptions.includeTiltePage
+            || _exportOptions.printFooterOnTitlePage;
 
-            //
-            // Середины верхнего и нижнего полей
-            //
-            qreal headerY = pageYPos + PageMetrics::mmToPx(_template.pageMargins().top()) / 2;
-            qreal footerY = pageYPos + currentPageRect.height()
-                - PageMetrics::mmToPx(_template.pageMargins().bottom()) / 2;
+        _painter->save();
+        _painter->setFont(
+            _template.paragraphStyle(ScreenplayParagraphType::Action).charFormat().font());
 
-            //
-            // Области для прорисовки текста на полях
-            //
-            QRectF headerRect(PageMetrics::mmToPx(_template.pageMargins().left()), headerY,
-                              currentPageRect.width()
-                                  - PageMetrics::mmToPx(_template.pageMargins().left())
-                                  - PageMetrics::mmToPx(_template.pageMargins().right()),
-                              20);
-            QRectF footerRect(PageMetrics::mmToPx(_template.pageMargins().left()), footerY,
-                              currentPageRect.width()
-                                  - PageMetrics::mmToPx(_template.pageMargins().left())
-                                  - PageMetrics::mmToPx(_template.pageMargins().right()),
-                              20);
+        //
+        // Середины верхнего и нижнего полей
+        //
+        qreal headerY = pageYPos + PageMetrics::mmToPx(_template.pageMargins().top()) / 2;
+        qreal footerY = pageYPos + currentPageRect.height()
+            - PageMetrics::mmToPx(_template.pageMargins().bottom()) / 2;
 
-            //
-            // Определяем где положено находиться нумерации
-            //
-            Qt::Alignment headerAlignment = Qt::AlignVCenter;
-            Qt::Alignment footerAlignment = Qt::AlignVCenter;
-            if (_template.pageNumbersAlignment().testFlag(Qt::AlignTop)) {
-                if (_template.pageNumbersAlignment().testFlag(Qt::AlignLeft)) {
-                    headerAlignment |= Qt::AlignRight;
-                } else {
-                    headerAlignment |= Qt::AlignLeft;
-                }
+        //
+        // Области для прорисовки текста на полях
+        //
+        QRectF headerRect(PageMetrics::mmToPx(_template.pageMargins().left()), headerY,
+                          currentPageRect.width()
+                              - PageMetrics::mmToPx(_template.pageMargins().left())
+                              - PageMetrics::mmToPx(_template.pageMargins().right()),
+                          20);
+        QRectF footerRect(PageMetrics::mmToPx(_template.pageMargins().left()), footerY,
+                          currentPageRect.width()
+                              - PageMetrics::mmToPx(_template.pageMargins().left())
+                              - PageMetrics::mmToPx(_template.pageMargins().right()),
+                          20);
+
+        //
+        // Определяем где положено находиться нумерации
+        //
+        Qt::Alignment headerAlignment = Qt::AlignVCenter;
+        Qt::Alignment footerAlignment = Qt::AlignVCenter;
+        if (_template.pageNumbersAlignment().testFlag(Qt::AlignTop)) {
+            if (_template.pageNumbersAlignment().testFlag(Qt::AlignLeft)) {
+                headerAlignment |= Qt::AlignRight;
             } else {
-                if (_template.pageNumbersAlignment().testFlag(Qt::AlignLeft)) {
-                    footerAlignment |= Qt::AlignRight;
-                } else {
-                    footerAlignment |= Qt::AlignLeft;
-                }
+                headerAlignment |= Qt::AlignLeft;
             }
-
-            //
-            // Рисуем колонтитулы
-            //
-            _painter->setClipRect(headerRect);
-            _painter->drawText(headerRect, headerAlignment, _exportOptions.header);
-            _painter->setClipRect(footerRect);
-            _painter->drawText(footerRect, footerAlignment, _exportOptions.footer);
-            _painter->restore();
+        } else {
+            if (_template.pageNumbersAlignment().testFlag(Qt::AlignLeft)) {
+                footerAlignment |= Qt::AlignRight;
+            } else {
+                footerAlignment |= Qt::AlignLeft;
+            }
         }
+
+        //
+        // Рисуем колонтитулы
+        //
+        _painter->setClipRect(headerRect);
+        if (printHeader) {
+            _painter->drawText(headerRect, headerAlignment, _exportOptions.header);
+        }
+        _painter->setClipRect(footerRect);
+        if (printFooter) {
+            _painter->drawText(footerRect, footerAlignment, _exportOptions.footer);
+        }
+        _painter->restore();
     }
 
     _painter->restore();

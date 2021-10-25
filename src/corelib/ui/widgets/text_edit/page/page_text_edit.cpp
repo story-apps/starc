@@ -1829,7 +1829,7 @@ void PageTextEditPrivate::paintPageMargins(QPainter* _painter)
     // Номера страниц рисуются только тогда, когда редактор находится в постраничном режиме,
     // если заданы поля и включена опция отображения номеров
     //
-    if (!m_usePageMode || m_pageMetrics.pxPageMargins().isNull() || !m_showPageNumbers) {
+    if (!m_usePageMode || m_pageMetrics.pxPageMargins().isNull()) {
         return;
     }
 
@@ -1917,6 +1917,10 @@ void PageTextEditPrivate::paintPageMargins(QPainter* _painter)
 void PageTextEditPrivate::paintPageNumber(QPainter* _painter, const QRectF& _rect, bool _isHeader,
                                           int _number)
 {
+    if (!m_showPageNumbers) {
+        return;
+    }
+
     //
     // Верхнее поле
     //

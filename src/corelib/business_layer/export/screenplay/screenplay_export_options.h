@@ -103,10 +103,21 @@ struct CORE_LIBRARY_EXPORT ScreenplayExportOptions {
      * @brief Верхний колонтитул
      */
     QString header;
+
+    /**
+     * @brief Печатать верхний колонтитул на титульной странице
+     */
+    bool printHeaderOnTitlePage = false;
+
     /**
      * @brief Нижний колонтитул
      */
     QString footer;
+
+    /**
+     * @brief Печатать нижий колонтитул на титульной странице
+     */
+    bool printFooterOnTitlePage = false;
 };
 
 } // namespace BusinessLayer

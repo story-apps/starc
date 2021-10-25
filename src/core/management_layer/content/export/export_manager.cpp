@@ -146,7 +146,11 @@ void ExportManager::Implementation::exportScreenplay(BusinessLayer::AbstractMode
                     = screenplayInformation->showSceneNumbersOnRight();
                 exportOptions.showDialoguesNumbers = screenplayInformation->showDialoguesNumbers();
                 exportOptions.header = screenplayInformation->header();
+                exportOptions.printHeaderOnTitlePage
+                    = screenplayInformation->printHeaderOnTitlePage();
                 exportOptions.footer = screenplayInformation->footer();
+                exportOptions.printFooterOnTitlePage
+                    = screenplayInformation->printFooterOnTitlePage();
                 //
                 // ... обновим папку, куда в следующий раз он предположительно опять будет
                 //     экспортировать
