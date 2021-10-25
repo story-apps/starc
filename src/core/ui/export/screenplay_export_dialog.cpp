@@ -12,11 +12,22 @@
 
 #include <QEvent>
 #include <QGridLayout>
+#include <QSettings>
 #include <QStandardItemModel>
 #include <QStringListModel>
 
 
 namespace Ui {
+
+namespace {
+const QString kGroupKey = "widgets/screenplay-export-dialog/";
+const QString kFormatKey = kGroupKey + "format";
+const QString kIncludeTitlePageKey = kGroupKey + "include-title-page";
+const QString kIncludeSequencesKey = kGroupKey + "include-sequences";
+const QString kIncludeInlineNotesKey = kGroupKey + "include-inline-notes";
+const QString kIncludeReviewMarksKey = kGroupKey + "include-review-marks";
+const QString kOpenDocumentAfterExportKey = kGroupKey + "open-document-after-export";
+} // namespace
 
 class ScreenplayExportDialog::Implementation
 {
@@ -30,11 +41,11 @@ public:
 
 
     ComboBox* fileFormat = nullptr;
-    CheckBox* printTitlePage = nullptr;
-    CheckBox* printFolders = nullptr;
-    CheckBox* printInlineNotes = nullptr;
-    CheckBox* printReviewMarks = nullptr;
-    TextField* printScenes = nullptr;
+    CheckBox* includeTitlePage = nullptr;
+    CheckBox* includeSequences = nullptr;
+    CheckBox* includeInlineNotes = nullptr;
+    CheckBox* includeReviewMarks = nullptr;
+    TextField* scenes = nullptr;
     TextField* watermark = nullptr;
 
     QHBoxLayout* buttonsLayout = nullptr;
@@ -45,11 +56,11 @@ public:
 
 ScreenplayExportDialog::Implementation::Implementation(QWidget* _parent)
     : fileFormat(new ComboBox(_parent))
-    , printTitlePage(new CheckBox(_parent))
-    , printFolders(new CheckBox(_parent))
-    , printInlineNotes(new CheckBox(_parent))
-    , printReviewMarks(new CheckBox(_parent))
-    , printScenes(new TextField(_parent))
+    , includeTitlePage(new CheckBox(_parent))
+    , includeSequences(new CheckBox(_parent))
+    , includeInlineNotes(new CheckBox(_parent))
+    , includeReviewMarks(new CheckBox(_parent))
+    , scenes(new TextField(_parent))
     , watermark(new TextField(_parent))
     , buttonsLayout(new QHBoxLayout)
     , openDocumentAfterExport(new CheckBox(_parent))
@@ -63,12 +74,7 @@ ScreenplayExportDialog::Implementation::Implementation(QWidget* _parent)
     fileFormat->setModel(formatsModel);
     fileFormat->setCurrentIndex(formatsModel->index(0, 0));
 
-    for (auto checkBox :
-         { printTitlePage, printFolders, printReviewMarks, openDocumentAfterExport }) {
-        checkBox->setChecked(true);
-    }
-
-    printScenes->setSpellCheckPolicy(SpellCheckPolicy::Manual);
+    scenes->setSpellCheckPolicy(SpellCheckPolicy::Manual);
     watermark->setSpellCheckPolicy(SpellCheckPolicy::Manual);
 
     buttonsLayout->setContentsMargins({});
@@ -81,8 +87,8 @@ ScreenplayExportDialog::Implementation::Implementation(QWidget* _parent)
 
 QVector<QString> ScreenplayExportDialog::Implementation::scenesToPrint() const
 {
-    QVector<QString> scenes;
-    const auto scenesRanges = printScenes->text().split(',', Qt::SkipEmptyParts);
+    QVector<QString> scenesToPrint;
+    const auto scenesRanges = scenes->text().split(',', Qt::SkipEmptyParts);
     for (const auto& scenesRange : scenesRanges) {
         if (scenesRange.contains('-')) {
             const auto range = scenesRange.split('-', Qt::SkipEmptyParts);
@@ -93,16 +99,16 @@ QVector<QString> ScreenplayExportDialog::Implementation::scenesToPrint() const
                     std::swap(fromScene, toScene);
                 }
                 for (int scene = fromScene; scene <= toScene; ++scene) {
-                    scenes.append(QString::number(scene));
+                    scenesToPrint.append(QString::number(scene));
                 }
             } else if (!range.isEmpty()) {
-                scenes.append(range.constFirst());
+                scenesToPrint.append(range.constFirst());
             }
         } else {
-            scenes.append(scenesRange);
+            scenesToPrint.append(scenesRange);
         }
     }
-    return scenes;
+    return scenesToPrint;
 }
 
 
@@ -118,18 +124,18 @@ ScreenplayExportDialog::ScreenplayExportDialog(QWidget* _parent)
 
     int row = 0;
     contentsLayout()->addWidget(d->fileFormat, row++, 0);
-    contentsLayout()->addWidget(d->printTitlePage, row++, 0);
+    contentsLayout()->addWidget(d->includeTitlePage, row++, 0);
     {
         auto layout = new QHBoxLayout;
         layout->setContentsMargins({});
         layout->setSpacing(0);
-        layout->addWidget(d->printFolders);
-        layout->addWidget(d->printInlineNotes);
+        layout->addWidget(d->includeSequences);
+        layout->addWidget(d->includeInlineNotes);
         layout->addStretch();
         contentsLayout()->addLayout(layout, row++, 0);
     }
-    contentsLayout()->addWidget(d->printReviewMarks, row++, 0);
-    contentsLayout()->addWidget(d->printScenes, row++, 0);
+    contentsLayout()->addWidget(d->includeReviewMarks, row++, 0);
+    contentsLayout()->addWidget(d->scenes, row++, 0);
     contentsLayout()->addWidget(d->watermark, row++, 0);
     contentsLayout()->addLayout(d->buttonsLayout, row++, 0);
 
@@ -178,30 +184,50 @@ ScreenplayExportDialog::ScreenplayExportDialog(QWidget* _parent)
             break;
         }
         }
-        d->printFolders->setVisible(isPrintFoldersVisible);
-        d->printInlineNotes->setVisible(isPrintInlineNotesVisible);
-        d->printReviewMarks->setVisible(isPrintReviewMarksVisible);
+        d->includeSequences->setVisible(isPrintFoldersVisible);
+        d->includeInlineNotes->setVisible(isPrintInlineNotesVisible);
+        d->includeReviewMarks->setVisible(isPrintReviewMarksVisible);
         d->watermark->setVisible(isWatermarkVisible);
     });
-
+    //
     connect(d->exportButton, &Button::clicked, this, &ScreenplayExportDialog::exportRequested);
     connect(d->cancelButton, &Button::clicked, this, &ScreenplayExportDialog::canceled);
+
+    QSettings settings;
+    const auto fileFormatIndex
+        = d->fileFormat->model()->index(settings.value(kFormatKey, 0).toInt(), 0);
+    d->fileFormat->setCurrentIndex(fileFormatIndex);
+    d->includeTitlePage->setChecked(settings.value(kIncludeTitlePageKey, true).toBool());
+    d->includeSequences->setChecked(settings.value(kIncludeSequencesKey, true).toBool());
+    d->includeInlineNotes->setChecked(settings.value(kIncludeInlineNotesKey, false).toBool());
+    d->includeReviewMarks->setChecked(settings.value(kIncludeReviewMarksKey, true).toBool());
+    d->openDocumentAfterExport->setChecked(
+        settings.value(kOpenDocumentAfterExportKey, true).toBool());
 
     updateTranslations();
     designSystemChangeEvent(nullptr);
 }
 
-ScreenplayExportDialog::~ScreenplayExportDialog() = default;
+ScreenplayExportDialog::~ScreenplayExportDialog()
+{
+    QSettings settings;
+    settings.setValue(kFormatKey, d->fileFormat->currentIndex().row());
+    settings.setValue(kIncludeTitlePageKey, d->includeTitlePage->isChecked());
+    settings.setValue(kIncludeSequencesKey, d->includeSequences->isChecked());
+    settings.setValue(kIncludeInlineNotesKey, d->includeInlineNotes->isChecked());
+    settings.setValue(kIncludeReviewMarksKey, d->includeReviewMarks->isChecked());
+    settings.setValue(kOpenDocumentAfterExportKey, d->openDocumentAfterExport->isChecked());
+}
 
 BusinessLayer::ScreenplayExportOptions ScreenplayExportDialog::exportOptions() const
 {
     BusinessLayer::ScreenplayExportOptions options;
     options.fileFormat = static_cast<BusinessLayer::ScreenplayExportFileFormat>(
         d->fileFormat->currentIndex().row());
-    options.includeTiltePage = d->printTitlePage->isChecked();
-    options.includeFolders = d->printFolders->isChecked();
-    options.includeInlineNotes = d->printInlineNotes->isChecked();
-    options.includeReviewMarks = d->printReviewMarks->isChecked();
+    options.includeTiltePage = d->includeTitlePage->isChecked();
+    options.includeFolders = d->includeSequences->isChecked();
+    options.includeInlineNotes = d->includeInlineNotes->isChecked();
+    options.includeReviewMarks = d->includeReviewMarks->isChecked();
     options.exportScenes = d->scenesToPrint();
     options.watermark = d->watermark->text();
     options.watermarkColor = QColor(100, 100, 100, 30);
@@ -228,12 +254,12 @@ void ScreenplayExportDialog::updateTranslations()
     setTitle(tr("Export screenplay"));
 
     d->fileFormat->setLabel(tr("Format"));
-    d->printTitlePage->setText(tr("Include title page"));
-    d->printFolders->setText(tr("Include sequences headers and footers"));
-    d->printInlineNotes->setText(tr("Include inline notes"));
-    d->printReviewMarks->setText(tr("Include review marks"));
-    d->printScenes->setLabel(tr("Export concrete scenes"));
-    d->printScenes->setHelper(tr("Keep empty, if you want to print all scenes"));
+    d->includeTitlePage->setText(tr("Include title page"));
+    d->includeSequences->setText(tr("Include sequences headers and footers"));
+    d->includeInlineNotes->setText(tr("Include inline notes"));
+    d->includeReviewMarks->setText(tr("Include review marks"));
+    d->scenes->setLabel(tr("Export concrete scenes"));
+    d->scenes->setHelper(tr("Keep empty, if you want to print all scenes"));
     d->watermark->setLabel(tr("Watermark"));
 
     d->openDocumentAfterExport->setText(tr("Open document after export"));
@@ -251,7 +277,7 @@ void ScreenplayExportDialog::designSystemChangeEvent(DesignSystemChangeEvent* _e
 
     for (auto textField : std::vector<TextField*>{
              d->fileFormat,
-             d->printScenes,
+             d->scenes,
              d->watermark,
          }) {
         textField->setBackgroundColor(Ui::DesignSystem::color().onBackground());
@@ -259,10 +285,10 @@ void ScreenplayExportDialog::designSystemChangeEvent(DesignSystemChangeEvent* _e
     }
 
     for (auto checkBox : {
-             d->printTitlePage,
-             d->printFolders,
-             d->printInlineNotes,
-             d->printReviewMarks,
+             d->includeTitlePage,
+             d->includeSequences,
+             d->includeInlineNotes,
+             d->includeReviewMarks,
              d->openDocumentAfterExport,
          }) {
         checkBox->setBackgroundColor(Ui::DesignSystem::color().background());

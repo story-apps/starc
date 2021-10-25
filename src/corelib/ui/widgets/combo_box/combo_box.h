@@ -17,8 +17,9 @@ public:
     ~ComboBox() override;
 
     /**
-     * @brief Задать модель выпадающего списка
+     * @brief Модель выпадающего списка
      */
+    QAbstractItemModel* model() const;
     void setModel(QAbstractItemModel* _model);
 
     /**

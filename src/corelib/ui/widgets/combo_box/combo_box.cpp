@@ -133,6 +133,11 @@ ComboBox::ComboBox(QWidget* _parent)
 
 ComboBox::~ComboBox() = default;
 
+QAbstractItemModel* ComboBox::model() const
+{
+    return d->popupContent->model();
+}
+
 void ComboBox::setModel(QAbstractItemModel* _model)
 {
     if (d->popupContent->model() != nullptr) {
