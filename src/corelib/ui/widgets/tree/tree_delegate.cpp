@@ -61,7 +61,9 @@ void TreeDelegate::paint(QPainter* _painter, const QStyleOptionViewItem& _option
     _painter->setPen(textColor);
     QRectF iconRect;
     if (_index.data(Qt::DecorationRole).isValid()) {
-        if (_index.data(Qt::DecorationPropertyRole).isValid()) {
+        if (_index.data(Qt::DecorationPropertyRole).isValid()
+            && _index.data(Qt::DecorationPropertyRole).value<QColor>().isValid()) {
+
             _painter->setPen(_index.data(Qt::DecorationPropertyRole).value<QColor>());
         }
 

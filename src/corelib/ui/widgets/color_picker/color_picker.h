@@ -17,6 +17,11 @@ public:
     ~ColorPicker() override;
 
     /**
+     * @brief Текущий выбранный цвет
+     */
+    QColor selectedColor() const;
+
+    /**
      * @brief Задать текущий выбранный цвет
      */
     void setSelectedColor(const QColor& _color);
@@ -25,7 +30,7 @@ signals:
     /**
      * @brief Пользователь выбрал цвет
      */
-    void colorSelected(const QColor& _color);
+    void selectedColorChanged(const QColor& _color);
 
     /**
      * @brief Пользователь передумал добавлять цвет

@@ -7,7 +7,10 @@
 #include <business_layer/document/screenplay/text/screenplay_text_cursor.h>
 #include <business_layer/document/screenplay/text/screenplay_text_document.h>
 #include <business_layer/import/screenplay/screenplay_fountain_importer.h>
+#include <business_layer/model/characters/character_model.h>
+#include <business_layer/model/characters/characters_model.h>
 #include <business_layer/model/screenplay/screenplay_information_model.h>
+#include <business_layer/model/screenplay/text/screenplay_text_block_parser.h>
 #include <business_layer/model/screenplay/text/screenplay_text_model.h>
 #include <business_layer/model/screenplay/text/screenplay_text_model_text_item.h>
 #include <business_layer/templates/screenplay_template.h>
@@ -702,44 +705,43 @@ void ScreenplayTextEdit::paintEvent(QPaintEvent* _event)
                     isLastBlockSceneHeadingWithNumberAtRight = isBlockSceneHeadingWithNumberAtRight;
                 }
 
-                //                //
-                //                // Определим цвет персонажа
-                //                //
-                //                if (blockType == ScenarioBlockStyle::Character) {
-                //                    lastCharacterBlockBottom = cursorR.top();
-                //                    colorRectWidth =
-                //                    QFontMetrics(cursor.charFormat().font()).width(".");
-                //                    lastCharacterColor = QColor();
-                //                    const QString characterName =
-                //                    BusinessLogic::CharacterParser::name(block.text()); if (auto
-                //                    character =
-                //                    DataStorageLayer::StorageFacade::researchStorage()->character(characterName))
-                //                    {
-                //                        if (character->color().isValid()) {
-                //                            lastCharacterColor = character->color();
-                //                        }
-                //                    }
-                //                } else if (blockType != ScenarioBlockStyle::Parenthetical
-                //                           && blockType != ScenarioBlockStyle::Dialogue
-                //                           && blockType != ScenarioBlockStyle::Lyrics) {
-                //                    lastCharacterColor = QColor();
-                //                }
+                //
+                // Определим цвет персонажа
+                //
+                if (blockType == ScreenplayParagraphType::Character) {
+                    lastCharacterBlockBottom = cursorR.top();
+                    lastCharacterColor = QColor();
+                    const QString characterName
+                        = BusinessLayer::ScreenplayCharacterParser::name(block.text());
+                    if (auto character = d->model->charactersModel()->character(characterName)) {
+                        if (character->color().isValid()) {
+                            lastCharacterColor = character->color();
+                        }
+                    }
+                } else if (blockType != ScreenplayParagraphType::Parenthetical
+                           && blockType != ScreenplayParagraphType::Dialogue
+                           && blockType != ScreenplayParagraphType::Lyrics) {
+                    lastCharacterColor = QColor();
+                }
 
-                //                //
-                //                // Нарисуем цвет персонажа
-                //                //
-                //                if (lastCharacterColor.isValid()) {
-                //                    const QPointF topLeft(isLeftToRight
-                //                                    ? textLeft - colorRectWidth + leftDelta
-                //                                    : textRight + leftDelta,
-                //                                    lastCharacterBlockBottom - verticalMargin);
-                //                    const QPointF bottomRight(isLeftToRight
-                //                                        ? textLeft + leftDelta
-                //                                        : textRight + colorRectWidth + leftDelta,
-                //                                        cursorREnd.bottom() + verticalMargin);
-                //                    const QRectF rect(topLeft, bottomRight);
-                //                    painter.fillRect(rect, lastCharacterColor);
-                //                }
+                //
+                // Нарисуем цвет персонажа
+                //
+                if (lastCharacterColor.isValid()) {
+                    const auto isBlockCharacterWithNumber
+                        = blockType == ScreenplayParagraphType::Character && d->showDialogueNumber;
+                    if (!isBlockCharacterWithNumber) {
+                        QPointF topLeft(
+                            isLeftToRight ? textLeft + leftDelta + spaceBetweenSceneNumberAndText
+                                    + DesignSystem::layout().px4()
+                                          : textRight + leftDelta - spaceBetweenSceneNumberAndText,
+                            cursorR.top());
+                        const QPointF bottomRight(topLeft.x() + DesignSystem::layout().px4(),
+                                                  cursorREnd.bottom() + verticalMargin);
+                        const QRectF rect(topLeft, bottomRight);
+                        painter.fillRect(rect, lastCharacterColor);
+                    }
+                }
 
                 //
                 // Курсор на экране
@@ -993,45 +995,31 @@ void ScreenplayTextEdit::paintEvent(QPaintEvent* _event)
                                     = painter.fontMetrics().horizontalAdvance(dialogueNumber);
                                 QRectF rect;
                                 //
-                                // Если имя персонажа находится не с самого края листа
+                                // ... то поместим номер реплики внутри текстовой области,
+                                //     чтобы их было удобно отличать от номеров сцен
                                 //
-                                if (block.blockFormat().leftMargin() > numberDelta) {
-                                    //
-                                    // ... то поместим номер реплики внутри текстовой области,
-                                    //     чтобы их было удобно отличать от номеров сцен
-                                    //
-                                    QPointF topLeft(
-                                        isLeftToRight
-                                            ? textLeft + leftDelta + spaceBetweenSceneNumberAndText
-                                            : textRight + leftDelta - spaceBetweenSceneNumberAndText
-                                                - numberDelta,
-                                        cursorR.top());
-                                    QPointF bottomRight(isLeftToRight ? textLeft + leftDelta
-                                                                + spaceBetweenSceneNumberAndText
-                                                                + numberDelta
-                                                                      : textRight + leftDelta
-                                                                - spaceBetweenSceneNumberAndText,
-                                                        cursorR.bottom());
-                                    rect = QRectF(topLeft, bottomRight);
-                                }
-                                //
-                                // В противном же случае
-                                //
-                                else {
-                                    //
-                                    // ... позиционируем номера реплик на полях, так же как и номера
-                                    // сцен
-                                    //
-                                    QPointF topLeft(isLeftToRight ? pageLeft + leftDelta
-                                                                  : textRight + leftDelta,
-                                                    cursorR.top());
-                                    QPointF bottomRight(isLeftToRight ? textLeft + leftDelta
-                                                                      : pageRight + leftDelta,
-                                                        cursorR.bottom());
-                                    rect = QRectF(topLeft, bottomRight);
+                                QPointF topLeft(
+                                    isLeftToRight
+                                        ? textLeft + leftDelta + spaceBetweenSceneNumberAndText
+                                        : textRight + leftDelta - spaceBetweenSceneNumberAndText
+                                            - numberDelta,
+                                    cursorR.top());
+                                QPointF bottomRight(
+                                    isLeftToRight
+                                        ? textLeft + leftDelta + spaceBetweenSceneNumberAndText
+                                            + numberDelta
+                                        : textRight + leftDelta - spaceBetweenSceneNumberAndText,
+                                    cursorR.bottom());
+                                rect = QRectF(topLeft, bottomRight);
+
+                                if (lastCharacterColor.isValid()) {
+                                    painter.setPen(lastCharacterColor);
                                 }
                                 painter.drawText(rect, Qt::AlignRight | Qt::AlignTop,
                                                  dialogueNumber);
+                                if (lastCharacterColor.isValid()) {
+                                    painter.setPen(palette().text().color());
+                                }
                             }
                         }
 

@@ -143,7 +143,7 @@ ComicBookTextCommentsToolbar::ComicBookTextCommentsToolbar(QWidget* _parent)
             d->colorPickerPopup->showPopup(this);
         }
     });
-    connect(d->colorPickerPopup, &ColorPickerPopup::colorSelected, this,
+    connect(d->colorPickerPopup, &ColorPickerPopup::selectedColorChanged, this,
             [this](const QColor& _color) {
                 setActionColor(d->colorAction, _color);
 

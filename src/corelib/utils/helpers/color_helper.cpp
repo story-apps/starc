@@ -41,3 +41,21 @@ QColor ColorHelper::nearby(const QColor& _color)
 {
     return isColorLight(_color) ? _color.darker(110) : _color.lighter(130);
 }
+
+QString ColorHelper::toString(const QColor& _color)
+{
+    if (!_color.isValid()) {
+        return {};
+    }
+
+    return _color.name();
+}
+
+QColor ColorHelper::fromString(const QString& _colorName)
+{
+    if (_colorName.isEmpty()) {
+        return {};
+    }
+
+    return QColor(_colorName);
+}

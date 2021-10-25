@@ -39,4 +39,14 @@ public:
      * @brief Получить цвет рядом с заданым
      */
     static QColor nearby(const QColor& _color);
+
+    /**
+     * @brief Сформировать строку из цвета
+     */
+    static QString toString(const QColor& _color);
+
+    /**
+     * @brief Сформировать цвет из строки
+     */
+    static QColor fromString(const QString& _colorName);
 };

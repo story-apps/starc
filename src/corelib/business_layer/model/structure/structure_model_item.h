@@ -45,6 +45,7 @@ public:
      * @brief Цвет элемента
      */
     const QColor& color() const;
+    void setColor(const QColor& _color);
 
     /**
      * @brief Должен ли быть виден элемент модели

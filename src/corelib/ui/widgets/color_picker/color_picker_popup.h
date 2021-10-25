@@ -15,6 +15,11 @@ public:
     ~ColorPickerPopup() override;
 
     /**
+     * @brief Выбранный пользователем цвет
+     */
+    QColor selectedColor() const;
+
+    /**
      * @brief Задать выбранный пользователем цвет
      */
     void setSelectedColor(const QColor& _color);
@@ -38,7 +43,7 @@ signals:
     /**
      * @brief Пользователь выбрал цвет
      */
-    void colorSelected(const QColor& _color);
+    void selectedColorChanged(const QColor& _color);
 
 private:
     class Implementation;

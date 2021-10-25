@@ -127,7 +127,7 @@ void ComicBookTextStructureManager::Implementation::updateContextMenu(
             colorAction->setDefaultWidget(colorPicker);
             colorPicker->setSelectedColor(itemColor.value());
             connect(
-                colorPicker, &ColorPicker::colorSelected, view,
+                colorPicker, &ColorPicker::selectedColorChanged, view,
                 [this, itemColor, item](const QColor& _color) {
                     auto newColor = _color;
                     if (itemColor.value() == newColor) {

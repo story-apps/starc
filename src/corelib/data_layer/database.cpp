@@ -284,7 +284,7 @@ void Database::createTables(QSqlDatabase& _database)
     //
     query.exec("CREATE TABLE system_variables "
                "( "
-               "variable TEXT NOT NULL, "
+               "variable TEXT PRIMARY KEY ON CONFLICT REPLACE, "
                "value TEXT NOT NULL "
                "); ");
 
@@ -371,7 +371,7 @@ void Database::updateDatabase(QSqlDatabase& _database)
     const QStringList& versionParts = databaseVersion.split(".");
     const int versionMajor = versionParts.value(0, "0").toInt();
     const int versionMinor = versionParts.value(1, "0").toInt();
-    const int versionBuild = versionParts.value(2, "1").split(" ").value(0, "1").toInt();
+    const int versionBuild = versionParts.value(2, "1").toInt();
 
     //
     // Вызываются необходимые процедуры обновления БД в зависимости от её версии
@@ -383,11 +383,11 @@ void Database::updateDatabase(QSqlDatabase& _database)
         // 0.0.X
         //
         if (versionMinor <= 0) {
-            if (versionMinor < 0 || versionBuild <= 1) {
-                //                updateDatabaseTo_0_0_2(_database);
+            if (versionMinor < 0 || versionBuild <= 9) {
+                updateDatabaseTo_0_0_10(_database);
             }
-            if (versionMinor < 0 || versionBuild <= 4) {
-                //                updateDatabaseTo_0_0_5(_database);
+            if (versionMinor < 0 || versionBuild <= 10) {
+                //                updateDatabaseTo_0_0_11(_database);
             }
         }
         //
@@ -414,6 +414,40 @@ void Database::updateDatabase(QSqlDatabase& _database)
     query.exec(QString("INSERT INTO system_variables VALUES ('%1', '%2')")
                    .arg(applicationVersionKey())
                    .arg(QApplication::applicationVersion()));
+}
+
+void Database::updateDatabaseTo_0_0_10(QSqlDatabase& _database)
+{
+    //
+    // В структуре хранились кривые цвета элементов проекта, поэтому удаляем их
+    //
+
+    QSqlQuery q_updater(_database);
+
+    _database.transaction();
+
+    {
+        //
+        // Извлекаем структуру проекта
+        //
+        q_updater.exec("SELECT content FROM documents WHERE type = 1");
+        QString structure;
+        if (q_updater.next()) {
+            structure = q_updater.record().value("content").toString();
+        }
+        //
+        // ... удаляем цвета
+        //
+        structure = structure.remove("#000000");
+        //
+        // ... обновим данные
+        //
+        q_updater.prepare("UPDATE documents SET content = ? WHERE type = 1");
+        q_updater.addBindValue(structure);
+        q_updater.exec();
+    }
+
+    _database.commit();
 }
 
 } // namespace DatabaseLayer

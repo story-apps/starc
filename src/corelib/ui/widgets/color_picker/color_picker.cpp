@@ -63,7 +63,7 @@ ColorPicker::ColorPicker(QWidget* _parent)
 
     d->colorHueSlider->setHue(d->colorSlider->hue());
 
-    connect(d->colorPallete, &ColorPallete::colorSelected, this, &ColorPicker::colorSelected);
+    connect(d->colorPallete, &ColorPallete::selectedColorChanged, this, &ColorPicker::selectedColorChanged);
     connect(d->colorPallete, &ColorPallete::addCustomColorPressed, this,
             [this] { setCurrentWidget(d->customColorPanel); });
     connect(d->colorHueSlider, &ColorHueSlider::hueChanged, this,
@@ -79,6 +79,11 @@ ColorPicker::ColorPicker(QWidget* _parent)
 }
 
 ColorPicker::~ColorPicker() = default;
+
+QColor ColorPicker::selectedColor() const
+{
+     return d->colorPallete->selectedColor();
+}
 
 void ColorPicker::setSelectedColor(const QColor& _color)
 {

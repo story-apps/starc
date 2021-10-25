@@ -470,6 +470,11 @@ ProjectManager::ProjectManager(QObject* _parent, QWidget* _parentWidget)
                 auto item = d->projectStructureModel->itemForUuid(_model->document()->uuid());
                 d->projectStructureModel->setItemName(item, _name);
             });
+    connect(&d->modelsFacade, &ProjectModelsFacade::modelColorChanged, this,
+            [this](BusinessLayer::AbstractModel* _model, const QColor& _color) {
+                auto item = d->projectStructureModel->itemForUuid(_model->document()->uuid());
+                d->projectStructureModel->setItemColor(item, _color);
+            });
     connect(&d->modelsFacade, &ProjectModelsFacade::modelContentChanged, this,
             &ProjectManager::handleModelChange);
     connect(&d->modelsFacade, &ProjectModelsFacade::modelUndoRequested, this,

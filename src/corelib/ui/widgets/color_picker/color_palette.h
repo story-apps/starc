@@ -34,7 +34,7 @@ signals:
     /**
      * @brief Пользователь выбрал цвет
      */
-    void colorSelected(const QColor& _color);
+    void selectedColorChanged(const QColor& _color);
 
     /**
      * @brief Пользователь хочет добавить кастомный цвет

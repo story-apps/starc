@@ -80,6 +80,11 @@ const QColor& StructureModelItem::color() const
     return d->color;
 }
 
+void StructureModelItem::setColor(const QColor& _color)
+{
+    d->color = _color;
+}
+
 bool StructureModelItem::visible() const
 {
     return d->visible;
@@ -101,7 +106,7 @@ QVariant StructureModelItem::data(int _role) const
         return Domain::iconForType(type());
     }
 
-    case Qt::BackgroundRole: {
+    case Qt::DecorationPropertyRole: {
         return color();
     }
 

@@ -47,6 +47,16 @@ public:
     virtual void setDocumentName(const QString& _name);
 
     /**
+     * @brief Получить цвет документа
+     */
+    virtual QColor documentColor() const;
+
+    /**
+     * @brief Задать цвет документа
+     */
+    virtual void setDocumentColor(const QColor& _color);
+
+    /**
      * @brief Установить загрузчик изображений
      */
     void setImageWrapper(AbstractImageWrapper* _image);
@@ -92,6 +102,11 @@ signals:
      * @brief Изменилось название документа модели
      */
     void documentNameChanged(const QString& _name);
+
+    /**
+     * @brief Сменился цвет документа
+     */
+    void documentColorChanged(const QColor& _color);
 
     /**
      * @brief Модель хочет отменить изменение с заданным индексом изменения в истории

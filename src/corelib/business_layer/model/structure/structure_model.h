@@ -119,6 +119,11 @@ public:
     void setItemName(StructureModelItem* _item, const QString& _name);
 
     /**
+     * @brief Задать цвет элемента
+     */
+    void setItemColor(StructureModelItem* _item, const QColor& _color);
+
+    /**
      * @brief Задать видимость элемента
      */
     void setItemVisible(StructureModelItem* _item, bool _visible);

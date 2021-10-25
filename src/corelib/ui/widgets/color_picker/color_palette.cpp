@@ -315,7 +315,7 @@ void ColorPallete::mousePressEvent(QMouseEvent* _event)
         }
 
         d->selectedColor = color;
-        emit colorSelected(color.color);
+        emit selectedColorChanged(color.color);
 
         update();
 

@@ -47,9 +47,9 @@ ColorPickerPopup::ColorPickerPopup(QWidget* _parent)
     popupLayout->addWidget(d->colorPicker);
     setLayoutReimpl(popupLayout);
 
-    connect(d->colorPicker, &ColorPicker::colorSelected, this, [this](const QColor& _color) {
+    connect(d->colorPicker, &ColorPicker::selectedColorChanged, this, [this](const QColor& _color) {
         hidePopup();
-        emit colorSelected(_color);
+        emit selectedColorChanged(_color);
     });
     connect(&d->heightAnimation, &QVariantAnimation::valueChanged, this,
             [this](const QVariant& _value) {
@@ -64,6 +64,11 @@ ColorPickerPopup::ColorPickerPopup(QWidget* _parent)
 }
 
 ColorPickerPopup::~ColorPickerPopup() = default;
+
+QColor ColorPickerPopup::selectedColor() const
+{
+    return d->colorPicker->selectedColor();
+}
 
 void ColorPickerPopup::setSelectedColor(const QColor& _color)
 {

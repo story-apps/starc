@@ -64,6 +64,11 @@ signals:
     void modelNameChanged(BusinessLayer::AbstractModel* _model, const QString& _name);
 
     /**
+     * @brief Изменился цвет модели
+     */
+    void modelColorChanged(BusinessLayer::AbstractModel* _model, const QColor& _color);
+
+    /**
      * @brief Изменился контент модели
      */
     void modelContentChanged(BusinessLayer::AbstractModel* _model, const QByteArray& _undo,

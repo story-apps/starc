@@ -29,6 +29,14 @@ public:
     void setStoryRole(int _role);
     Q_SIGNAL void storyRoleChanged(int _role);
 
+    const QString& age() const;
+    void setAge(const QString& _age);
+    Q_SIGNAL void ageChanged(const QString& _age);
+
+    int gender() const;
+    void setGender(int _gender);
+    Q_SIGNAL void genderChanged(int _gender);
+
     QString oneSentenceDescription() const;
     void setOneSentenceDescription(const QString& _text);
     Q_SIGNAL void oneSentenceDescriptionChanged(const QString& _text);
@@ -40,14 +48,6 @@ public:
     const QPixmap& mainPhoto() const;
     void setMainPhoto(const QPixmap& _photo);
     Q_SIGNAL void mainPhotoChanged(const QPixmap& _photo);
-
-    const QString& age() const;
-    void setAge(const QString& _text);
-    Q_SIGNAL void ageChanged(const QString& _text);
-
-    const QString& gender() const;
-    void setGender(const QString& _text);
-    Q_SIGNAL void genderChanged(const QString& _text);
 
 protected:
     /**

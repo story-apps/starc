@@ -13,12 +13,11 @@ const QString kDocumentKey = QStringLiteral("document");
 const QString kNameKey = QStringLiteral("name");
 const QString kColorKey = QStringLiteral("color");
 const QString kStoryRoleKey = QStringLiteral("story_role");
+const QString kAgeKey = QStringLiteral("age");
+const QString kGenderKey = QStringLiteral("gender");
 const QString kOneSentenceDescriptionKey = QStringLiteral("one_sentence_description");
 const QString kLongDescriptionKey = QStringLiteral("long_description");
 const QString kMainPhotoKey = QStringLiteral("main_photo");
-//
-const QString kAgeKey = QStringLiteral("age");
-const QString kGenderKey = QStringLiteral("gender");
 } // namespace
 
 class CharacterModel::Implementation
@@ -27,12 +26,11 @@ public:
     QString name;
     QColor color;
     int storyRole = 3;
+    QString age;
+    int gender = 3;
     QString oneSentenceDescription;
     QString longDescription;
     Domain::DocumentImage mainPhoto;
-    //
-    QString age;
-    QString gender;
 };
 
 // ****
@@ -103,6 +101,7 @@ void CharacterModel::setColor(const QColor& _color)
 
     d->color = _color;
     emit colorChanged(d->color);
+    emit documentColorChanged(d->color);
 }
 
 int CharacterModel::storyRole() const
@@ -118,6 +117,36 @@ void CharacterModel::setStoryRole(int _role)
 
     d->storyRole = _role;
     emit storyRoleChanged(d->storyRole);
+}
+
+const QString& CharacterModel::age() const
+{
+    return d->age;
+}
+
+void CharacterModel::setAge(const QString& _age)
+{
+    if (d->age == _age) {
+        return;
+    }
+
+    d->age = _age;
+    emit ageChanged(d->age);
+}
+
+int CharacterModel::gender() const
+{
+    return d->gender;
+}
+
+void CharacterModel::setGender(int _gender)
+{
+    if (d->gender == _gender) {
+        return;
+    }
+
+    d->gender = _gender;
+    emit genderChanged(d->gender);
 }
 
 QString CharacterModel::oneSentenceDescription() const
@@ -162,36 +191,6 @@ void CharacterModel::setMainPhoto(const QPixmap& _photo)
     emit mainPhotoChanged(d->mainPhoto.image);
 }
 
-const QString& CharacterModel::age() const
-{
-    return d->age;
-}
-
-void CharacterModel::setAge(const QString& _text)
-{
-    if (d->age == _text) {
-        return;
-    }
-
-    d->age = _text;
-    emit ageChanged(d->age);
-}
-
-const QString& CharacterModel::gender() const
-{
-    return d->gender;
-}
-
-void CharacterModel::setGender(const QString& _text)
-{
-    if (d->gender == _text) {
-        return;
-    }
-
-    d->gender = _text;
-    emit genderChanged(d->gender);
-}
-
 void CharacterModel::initDocument()
 {
     if (document() == nullptr) {
@@ -208,16 +207,20 @@ void CharacterModel::initDocument()
         return documentNode.firstChildElement(_key).text();
     };
     d->name = load(kNameKey);
-    d->color = load(kColorKey);
+    if (contains(kColorKey)) {
+        d->color = load(kColorKey);
+    }
     if (contains(kStoryRoleKey)) {
         d->storyRole = load(kStoryRoleKey).toInt();
+    }
+    d->age = load(kAgeKey);
+    if (contains(kGenderKey)) {
+        d->gender = load(kGenderKey).toInt();
     }
     d->oneSentenceDescription = load(kOneSentenceDescriptionKey);
     d->longDescription = load(kLongDescriptionKey);
     d->mainPhoto.uuid = load(kMainPhotoKey);
     d->mainPhoto.image = imageWrapper()->load(d->mainPhoto.uuid);
-    d->age = load(kAgeKey);
-    d->gender = load(kGenderKey);
 }
 
 void CharacterModel::clearDocument()
@@ -239,13 +242,15 @@ QByteArray CharacterModel::toXml() const
         xml += QString("<%1><![CDATA[%2]]></%1>\n").arg(_key, _value).toUtf8();
     };
     save(kNameKey, d->name);
-    save(kColorKey, d->color.name());
+    if (d->color.isValid()) {
+        save(kColorKey, d->color.name());
+    }
     save(kStoryRoleKey, QString::number(d->storyRole));
+    save(kAgeKey, d->age);
+    save(kGenderKey, QString::number(d->gender));
     save(kOneSentenceDescriptionKey, d->oneSentenceDescription);
     save(kLongDescriptionKey, d->longDescription);
     save(kMainPhotoKey, d->mainPhoto.uuid.toString());
-    save(kAgeKey, d->age);
-    save(kGenderKey, d->gender);
     xml += QString("</%1>").arg(kDocumentKey).toUtf8();
     return xml;
 }

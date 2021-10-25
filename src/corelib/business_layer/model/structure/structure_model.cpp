@@ -3,6 +3,7 @@
 #include "structure_model_item.h"
 
 #include <domain/document_object.h>
+#include <utils/helpers/color_helper.h>
 #include <utils/helpers/text_helper.h>
 
 #include <QColor>
@@ -75,11 +76,12 @@ void StructureModel::Implementation::buildModel(Domain::DocumentObject* _structu
 
     std::function<void(const QDomElement&, StructureModelItem*)> buildItem;
     buildItem = [&buildItem](const QDomElement& _node, StructureModelItem* _parent) {
-        auto item = new StructureModelItem(
-            _node.attribute(kUuidAttribute),
-            Domain::typeFor(_node.attribute(kTypeAttribute).toUtf8()),
-            TextHelper::fromHtmlEscaped(_node.attribute(kNameAttribute)),
-            _node.attribute(kColorAttribute), _node.attribute(kVisibleAttribute) == "true");
+        auto item
+            = new StructureModelItem(_node.attribute(kUuidAttribute),
+                                     Domain::typeFor(_node.attribute(kTypeAttribute).toUtf8()),
+                                     TextHelper::fromHtmlEscaped(_node.attribute(kNameAttribute)),
+                                     ColorHelper::fromString(_node.attribute(kColorAttribute)),
+                                     _node.attribute(kVisibleAttribute) == "true");
         _parent->appendItem(item);
 
         auto child = _node.firstChildElement();
@@ -111,15 +113,17 @@ QByteArray StructureModel::Implementation::toXml(Domain::DocumentObject* _struct
 
     QByteArray xml = "<?xml version=\"1.0\"?>\n";
     xml += QString("<%1 mime-type=\"%2\" version=\"1.0\">\n")
-               .arg(kDocumentKey, Domain::mimeTypeFor(_structure->type()));
+               .arg(kDocumentKey, Domain::mimeTypeFor(_structure->type()))
+               .toUtf8();
     std::function<void(StructureModelItem*)> writeItemXml;
     writeItemXml = [&xml, &writeItemXml](StructureModelItem* _item) {
         xml += QString("<%1 %2=\"%3\" %4=\"%5\" %6=\"%7\" %8=\"%9\" %10=\"%11\"")
                    .arg(kItemKey, kUuidAttribute, _item->uuid().toString(), kTypeAttribute,
                         Domain::mimeTypeFor(_item->type()), kNameAttribute,
                         TextHelper::toHtmlEscaped(_item->name()), kColorAttribute,
-                        _item->color().name(), kVisibleAttribute,
-                        (_item->visible() ? "true" : "false"));
+                        ColorHelper::toString(_item->color()), kVisibleAttribute,
+                        (_item->visible() ? "true" : "false"))
+                   .toUtf8();
         if (!_item->hasChildren()) {
             xml += "/>\n";
             return;
@@ -129,12 +133,12 @@ QByteArray StructureModel::Implementation::toXml(Domain::DocumentObject* _struct
         for (int childIndex = 0; childIndex < _item->childCount(); ++childIndex) {
             writeItemXml(_item->childAt(childIndex));
         }
-        xml += QString("</%1>\n").arg(kItemKey);
+        xml += QString("</%1>\n").arg(kItemKey).toUtf8();
     };
     for (int childIndex = 0; childIndex < rootItem->childCount(); ++childIndex) {
         writeItemXml(rootItem->childAt(childIndex));
     }
-    xml += QString("</%1>").arg(kDocumentKey);
+    xml += QString("</%1>").arg(kDocumentKey).toUtf8();
     return xml;
 }
 
@@ -863,6 +867,17 @@ void StructureModel::setItemName(StructureModelItem* _item, const QString& _name
 
     const auto itemIndex = indexForItem(_item);
     _item->setName(_name);
+    emit dataChanged(itemIndex, itemIndex);
+}
+
+void StructureModel::setItemColor(StructureModelItem* _item, const QColor& _color)
+{
+    if (_item == nullptr) {
+        return;
+    }
+
+    const auto itemIndex = indexForItem(_item);
+    _item->setColor(_color);
     emit dataChanged(itemIndex, itemIndex);
 }
 

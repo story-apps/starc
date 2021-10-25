@@ -107,7 +107,17 @@ QString AbstractModel::documentName() const
 
 void AbstractModel::setDocumentName(const QString& _name)
 {
-    Q_UNUSED(_name);
+    Q_UNUSED(_name)
+}
+
+QColor AbstractModel::documentColor() const
+{
+    return {};
+}
+
+void AbstractModel::setDocumentColor(const QColor& _color)
+{
+    Q_UNUSED(_color)
 }
 
 void AbstractModel::setImageWrapper(AbstractImageWrapper* _image)

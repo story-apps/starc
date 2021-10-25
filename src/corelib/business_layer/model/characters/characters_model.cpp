@@ -81,6 +81,17 @@ bool CharactersModel::exists(const QString& _name) const
     return false;
 }
 
+CharacterModel* CharactersModel::character(const QString& _name) const
+{
+    for (const auto character : d->characterModels) {
+        if (character->name() == _name) {
+            return character;
+        }
+    }
+
+    return nullptr;
+}
+
 QModelIndex CharactersModel::index(int _row, int _column, const QModelIndex& _parent) const
 {
     if (_row < 0 || _row > rowCount(_parent) || _column < 0 || _column > columnCount(_parent)

@@ -433,6 +433,8 @@ BusinessLayer::AbstractModel* ProjectModelsFacade::modelFor(Domain::DocumentObje
 
         connect(model, &BusinessLayer::AbstractModel::documentNameChanged, this,
                 [this, model](const QString& _name) { emit modelNameChanged(model, _name); });
+        connect(model, &BusinessLayer::AbstractModel::documentColorChanged, this,
+                [this, model](const QColor& _color) { emit modelColorChanged(model, _color); });
         connect(model, &BusinessLayer::AbstractModel::contentsChanged, this,
                 [this, model](const QByteArray& _undo, const QByteArray& _redo) {
                     emit modelContentChanged(model, _undo, _redo);
