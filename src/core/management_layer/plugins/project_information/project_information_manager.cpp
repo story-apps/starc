@@ -112,6 +112,7 @@ void ProjectInformationManager::setModel(BusinessLayer::AbstractModel* _model)
                 &Ui::ProjectInformationView::setLogline);
         connect(d->model, &BusinessLayer::ProjectInformationModel::coverChanged, d->view,
                 &Ui::ProjectInformationView::setCover);
+        //
         connect(d->view, &Ui::ProjectInformationView::nameChanged, d->model,
                 &BusinessLayer::ProjectInformationModel::setName);
         connect(d->view, &Ui::ProjectInformationView::loglineChanged, d->model,
