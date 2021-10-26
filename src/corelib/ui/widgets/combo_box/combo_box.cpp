@@ -7,6 +7,7 @@
 
 #include <QAbstractItemModel>
 #include <QHBoxLayout>
+#include <QKeyEvent>
 #include <QScrollBar>
 #include <QVariantAnimation>
 
@@ -194,6 +195,21 @@ void ComboBox::focusOutEvent(QFocusEvent* _event)
     setTrailingIcon(u8"\U000f035d");
     setTrailingIconColor({});
     d->hidePopup();
+}
+
+void ComboBox::keyPressEvent(QKeyEvent* _event)
+{
+    if (_event->key() == Qt::Key_Up) {
+        if (currentIndex().row() > 0) {
+            setCurrentIndex(model()->index(currentIndex().row() - 1, 0));
+        }
+    } else if (_event->key() == Qt::Key_Down) {
+        if (currentIndex().row() < model()->rowCount() - 1) {
+            setCurrentIndex(model()->index(currentIndex().row() + 1, 0));
+        }
+    }
+
+    TextField::keyPressEvent(_event);
 }
 
 void ComboBox::mousePressEvent(QMouseEvent* _event)

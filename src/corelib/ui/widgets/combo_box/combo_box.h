@@ -46,6 +46,11 @@ protected:
     void focusOutEvent(QFocusEvent* _event) override;
 
     /**
+     * @brief Добавляем обработку кнопок винз/вверх
+     */
+    void keyPressEvent(QKeyEvent* _event) override;
+
+    /**
      * @brief Реализуем отображение/скрытие попапа
      */
     void mousePressEvent(QMouseEvent* _event) override;
