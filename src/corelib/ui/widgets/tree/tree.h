@@ -92,6 +92,21 @@ public:
     QModelIndexList selectedIndexes() const;
 
     /**
+     * @brief Задать возможность раскрывать узлы дерева двойным кликом
+     */
+    void setExpandsOnDoubleClick(bool _expand);
+
+    /**
+     * @brief Развёрнут ли заданный элемент
+     */
+    bool isExpanded(const QModelIndex& _index) const;
+
+    /**
+     * @brief Развернуть заданный элемент
+     */
+    void expand(const QModelIndex& _index);
+
+    /**
      * @brief Развернуть все элементы
      */
     void expandAll();

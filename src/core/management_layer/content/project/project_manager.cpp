@@ -404,8 +404,11 @@ ProjectManager::ProjectManager(QObject* _parent, QWidget* _parentWidget)
                     return;
                 }
 
+                //                if (mappedIndex.child())
                 showNavigator(_index);
             });
+    connect(d->navigator, &Ui::ProjectNavigator::itemNavigationRequested, this,
+            [this](const QModelIndex& _index) { showNavigator(_index); });
     connect(d->navigator, &Ui::ProjectNavigator::contextMenuUpdateRequested, this,
             [this](const QModelIndex& _index) { d->updateNavigatorContextMenu(_index); });
     connect(d->navigator, &Ui::ProjectNavigator::addDocumentClicked, this,

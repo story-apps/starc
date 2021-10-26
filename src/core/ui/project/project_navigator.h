@@ -70,6 +70,11 @@ signals:
     void itemDoubleClicked(const QModelIndex& _index);
 
     /**
+     * @brief Пользователь хочет открыть навигацию по элементу
+     */
+    void itemNavigationRequested(const QModelIndex& _index);
+
+    /**
      * @brief Пользователь хочет открыть контекстное меню и поэтому нужно обновить контекстное меню
      */
     void contextMenuUpdateRequested(const QModelIndex& _index);
@@ -80,6 +85,11 @@ signals:
     void addDocumentClicked();
 
 protected:
+    /**
+     * @brief Отлавливаем события отображения тултипа для дерева документов
+     */
+    bool eventFilter(QObject* _watched, QEvent* _event) override;
+
     /**
      * @brief Обновить переводы
      */

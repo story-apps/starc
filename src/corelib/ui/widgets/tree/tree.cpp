@@ -158,6 +158,21 @@ QModelIndexList Tree::selectedIndexes() const
     return d->tree->selectionModel()->selectedIndexes();
 }
 
+void Tree::setExpandsOnDoubleClick(bool _expand)
+{
+    d->tree->setExpandsOnDoubleClick(_expand);
+}
+
+bool Tree::isExpanded(const QModelIndex& _index) const
+{
+    return d->tree->isExpanded(_index);
+}
+
+void Tree::expand(const QModelIndex& _index)
+{
+    d->tree->expand(_index);
+}
+
 void Tree::expandAll()
 {
     d->tree->expandAll();

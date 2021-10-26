@@ -10,20 +10,30 @@
 #include <ui/widgets/context_menu/context_menu.h>
 #include <ui/widgets/shadow/shadow.h>
 #include <ui/widgets/tree/tree.h>
+#include <utils/shugar.h>
 
 #include <QAction>
 #include <QContextMenuEvent>
+#include <QScrollBar>
 #include <QShortcut>
+#include <QToolTip>
 #include <QUuid>
 #include <QVBoxLayout>
-
 
 namespace Ui {
 
 class ProjectNavigator::Implementation
 {
 public:
-    explicit Implementation(QWidget* _parent);
+    explicit Implementation(ProjectNavigator* _parent);
+
+    /**
+     * @brief Находится ли заданная позиция над иконкой отображения навигатора по документу
+     */
+    bool isOnDocumentNavigatorButton(const QPoint& _position) const;
+
+
+    ProjectNavigator* q = nullptr;
 
     Widget* navigatorPage = nullptr;
     Tree* tree = nullptr;
@@ -35,8 +45,9 @@ public:
     QShortcut* addDocumentShortcut = nullptr;
 };
 
-ProjectNavigator::Implementation::Implementation(QWidget* _parent)
-    : navigatorPage(new Widget(_parent))
+ProjectNavigator::Implementation::Implementation(ProjectNavigator* _parent)
+    : q(_parent)
+    , navigatorPage(new Widget(_parent))
     , tree(new Tree(_parent))
     , treeDelegate(new ProjectTreeDelegate(tree))
     , contextMenu(new ContextMenu(tree))
@@ -47,12 +58,38 @@ ProjectNavigator::Implementation::Implementation(QWidget* _parent)
     tree->setDragDropEnabled(true);
     tree->setSelectionMode(QAbstractItemView::ExtendedSelection);
     tree->setContextMenuPolicy(Qt::ContextMenuPolicy::CustomContextMenu);
+    tree->setExpandsOnDoubleClick(false);
     addDocumentButton->setFocusPolicy(Qt::NoFocus);
     addDocumentButton->setIcon(u8"\U000f0415");
     addDocumentShortcut->setKey(QKeySequence::New);
 
     new Shadow(Qt::TopEdge, tree);
     new Shadow(Qt::BottomEdge, tree);
+}
+
+bool ProjectNavigator::Implementation::isOnDocumentNavigatorButton(const QPoint& _position) const
+{
+    const auto currentIndex = tree->indexAt(_position);
+    if (q->currentIndex() != currentIndex) {
+        return false;
+    }
+
+    const auto isNavigatorAvailable
+        = currentIndex
+              .data(static_cast<int>(BusinessLayer::StructureModelDataRole::IsNavigatorAvailable))
+              .toBool();
+    if (!isNavigatorAvailable) {
+        return false;
+    }
+
+    if (_position.x() < q->width() - tree->verticalScrollBar()->width()
+                - Ui::DesignSystem::treeOneLineItem().spacing()
+                - Ui::DesignSystem::treeOneLineItem().iconSize().width()
+        || _position.x() > q->width() - tree->verticalScrollBar()->width()) {
+        return false;
+    }
+
+    return true;
 }
 
 
@@ -65,6 +102,7 @@ ProjectNavigator::ProjectNavigator(QWidget* _parent)
 {
     setAnimationType(AnimationType::Slide);
 
+    d->tree->installEventFilter(this);
     d->buttonsLayout->setContentsMargins({});
     d->buttonsLayout->setSpacing(0);
     d->buttonsLayout->addWidget(d->addDocumentButton);
@@ -78,7 +116,19 @@ ProjectNavigator::ProjectNavigator(QWidget* _parent)
     showProjectNavigator();
 
     connect(d->tree, &Tree::currentIndexChanged, this, &ProjectNavigator::itemSelected);
-    connect(d->tree, &Tree::doubleClicked, this, &ProjectNavigator::itemDoubleClicked);
+    connect(d->tree, &Tree::clicked, this, [this] {
+        const auto clickPosition = d->tree->mapFromGlobal(QCursor::pos());
+        if (d->isOnDocumentNavigatorButton(clickPosition)) {
+            emit itemNavigationRequested(currentIndex());
+        }
+    });
+    connect(d->tree, &Tree::doubleClicked, this, [this](const QModelIndex& _index) {
+        if (d->tree->model()->rowCount(_index) > 0 && !d->tree->isExpanded(_index)) {
+            d->tree->expand(_index);
+        } else {
+            emit itemDoubleClicked(_index);
+        }
+    });
     connect(d->tree, &Tree::customContextMenuRequested, this, [this](const QPoint& _pos) {
         //
         // Уведомляем менеджер, что необходимо обновить модель контекстного меню
@@ -98,6 +148,8 @@ ProjectNavigator::ProjectNavigator(QWidget* _parent)
         }
     });
 }
+
+ProjectNavigator::~ProjectNavigator() = default;
 
 void ProjectNavigator::setModel(QAbstractItemModel* _model)
 {
@@ -144,12 +196,21 @@ bool ProjectNavigator::isProjectNavigatorShown() const
     return currentWidget() == d->navigatorPage;
 }
 
+bool ProjectNavigator::eventFilter(QObject* _watched, QEvent* _event)
+{
+    if (_watched == d->tree && _event->type() == QEvent::ToolTip) {
+        QHelpEvent* event = static_cast<QHelpEvent*>(_event);
+        if (d->isOnDocumentNavigatorButton(event->pos())) {
+            QToolTip::showText(event->globalPos(), tr("Show document navigator"));
+        }
+    }
+    return StackWidget::eventFilter(_watched, _event);
+}
+
 void ProjectNavigator::updateTranslations()
 {
     d->addDocumentButton->setText(tr("Add document"));
 }
-
-ProjectNavigator::~ProjectNavigator() = default;
 
 void ProjectNavigator::designSystemChangeEvent(DesignSystemChangeEvent* _event)
 {
