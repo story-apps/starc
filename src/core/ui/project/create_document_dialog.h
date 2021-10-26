@@ -20,6 +20,16 @@ public:
     explicit CreateDocumentDialog(QWidget* _parent = nullptr);
     ~CreateDocumentDialog() override;
 
+    /**
+     * @brief Установить возможность вставки элемента в родителя
+     */
+    void setInsertionParent(const QString& _parentName);
+
+    /**
+     * @brief Желает ли пользователь вставлять элемент в заданного родителя
+     */
+    bool needInsertIntoParent() const;
+
 signals:
     /**
      * @brief Пользователь хочет создать документ заданного типа с заданным именем

@@ -56,7 +56,7 @@ public:
     /**
      * @brief Добавить документ в проект
      */
-    void addDocument(const QModelIndex& _itemIndex);
+    void addDocument();
 
     /**
      * @brief Добавить документ в заданный контейнер
@@ -145,8 +145,7 @@ void ProjectManager::Implementation::updateNavigatorContextMenu(const QModelInde
     else {
         auto addDocument = new QAction(tr("Add document"));
         addDocument->setIconText(u8"\U000f0415");
-        connect(addDocument, &QAction::triggered,
-                [this, currentItemIndex] { this->addDocument(currentItemIndex); });
+        connect(addDocument, &QAction::triggered, [this] { this->addDocument(); });
         menuActions.append(addDocument);
 
         const QSet<Domain::DocumentObjectType> cantBeRemovedItems = {
@@ -175,23 +174,30 @@ void ProjectManager::Implementation::updateNavigatorContextMenu(const QModelInde
     navigator->setContextMenuActions(menuActions);
 }
 
-void ProjectManager::Implementation::addDocument(const QModelIndex& _itemIndex)
+void ProjectManager::Implementation::addDocument()
 {
-    //
-    // TODO: вложение в выделенный в дереве элемент
-    //
+    const auto currentItemIndex
+        = projectStructureProxyModel->mapToSource(navigator->currentIndex());
+    const auto currentItem = projectStructureModel->itemForIndex(currentItemIndex);
 
     auto dialog = new Ui::CreateDocumentDialog(topLevelWidget);
+    if (currentItem->type() == Domain::DocumentObjectType::Folder) {
+        dialog->setInsertionParent(currentItem->name());
+    }
 
-    connect(dialog, &Ui::CreateDocumentDialog::createPressed, navigator,
-            [this, dialog](Domain::DocumentObjectType _type, const QString& _name) {
-                const auto addedItemIndex = projectStructureModel->addDocument(_type, _name);
-                const auto mappedAddedItemIndex
-                    = projectStructureProxyModel->mapFromSource(addedItemIndex);
-                navigator->setCurrentIndex(mappedAddedItemIndex);
+    connect(
+        dialog, &Ui::CreateDocumentDialog::createPressed, navigator,
+        [this, currentItemIndex, dialog](Domain::DocumentObjectType _type, const QString& _name) {
+            const auto parentIndex
+                = dialog->needInsertIntoParent() ? currentItemIndex : currentItemIndex.parent();
+            const auto addedItemIndex
+                = projectStructureModel->addDocument(_type, _name, parentIndex);
+            const auto mappedAddedItemIndex
+                = projectStructureProxyModel->mapFromSource(addedItemIndex);
+            navigator->setCurrentIndex(mappedAddedItemIndex);
 
-                dialog->hideDialog();
-            });
+            dialog->hideDialog();
+        });
     connect(dialog, &Ui::CreateDocumentDialog::disappeared, dialog,
             &Ui::CreateDocumentDialog::deleteLater);
 
@@ -403,7 +409,7 @@ ProjectManager::ProjectManager(QObject* _parent, QWidget* _parentWidget)
     connect(d->navigator, &Ui::ProjectNavigator::contextMenuUpdateRequested, this,
             [this](const QModelIndex& _index) { d->updateNavigatorContextMenu(_index); });
     connect(d->navigator, &Ui::ProjectNavigator::addDocumentClicked, this,
-            [this] { d->addDocument({}); });
+            [this] { d->addDocument(); });
 
     //
     // Соединения с моделью структуры проекта
@@ -460,7 +466,7 @@ ProjectManager::ProjectManager(QObject* _parent, QWidget* _parentWidget)
     //
     // Соединения представления
     //
-    connect(d->view, &Ui::ProjectView::createNewItemPressed, this, [this] { d->addDocument({}); });
+    connect(d->view, &Ui::ProjectView::createNewItemPressed, this, [this] { d->addDocument(); });
 
     //
     // Соединения со строителем моделей

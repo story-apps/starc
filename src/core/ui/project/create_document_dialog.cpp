@@ -30,8 +30,8 @@ public:
     QStandardItemModel* typesModel = nullptr;
 
     Tree* documentType = nullptr;
-    TextField* documentName = nullptr;
     Body1Label* documentInfo = nullptr;
+    TextField* documentName = nullptr;
     CheckBox* insertIntoParent = nullptr;
 
     QHBoxLayout* buttonsLayout = nullptr;
@@ -42,8 +42,8 @@ public:
 CreateDocumentDialog::Implementation::Implementation(QWidget* _parent)
     : typesModel(new QStandardItemModel(_parent))
     , documentType(new Tree(_parent))
-    , documentName(new TextField(_parent))
     , documentInfo(new Body1Label(_parent))
+    , documentName(new TextField(_parent))
     , insertIntoParent(new CheckBox(_parent))
     , cancelButton(new Button(_parent))
     , createButton(new Button(_parent))
@@ -118,10 +118,10 @@ CreateDocumentDialog::CreateDocumentDialog(QWidget* _parent)
     contentsLayout()->setContentsMargins({});
     contentsLayout()->setSpacing(0);
     contentsLayout()->addWidget(d->documentType, 0, 0, 5, 1);
-    contentsLayout()->addWidget(d->documentName, 0, 1, 1, 1);
-    contentsLayout()->addWidget(d->documentInfo, 1, 1, 1, 1);
-    contentsLayout()->setRowStretch(2, 1);
-    contentsLayout()->addWidget(d->insertIntoParent, 3, 1, 1, 1);
+    contentsLayout()->addWidget(d->documentInfo, 0, 1, 1, 1);
+    contentsLayout()->addWidget(d->documentName, 1, 1, 1, 1);
+    contentsLayout()->addWidget(d->insertIntoParent, 2, 1, 1, 1);
+    contentsLayout()->setRowStretch(3, 1);
     contentsLayout()->addLayout(d->buttonsLayout, 4, 0, 1, 2);
     contentsLayout()->setColumnStretch(0, 1);
     contentsLayout()->setColumnStretch(1, 2);
@@ -163,6 +163,22 @@ CreateDocumentDialog::CreateDocumentDialog(QWidget* _parent)
 
 CreateDocumentDialog::~CreateDocumentDialog() = default;
 
+void CreateDocumentDialog::setInsertionParent(const QString& _parentName)
+{
+    if (_parentName.isEmpty()) {
+        d->insertIntoParent->hide();
+        return;
+    }
+
+    d->insertIntoParent->setText(QString("%1 \"%2\"").arg(tr("Insert into"), _parentName));
+    d->insertIntoParent->show();
+}
+
+bool CreateDocumentDialog::needInsertIntoParent() const
+{
+    return d->insertIntoParent->isChecked();
+}
+
 QWidget* CreateDocumentDialog::focusedWidgetAfterShow() const
 {
     return d->documentName;
@@ -186,7 +202,6 @@ void CreateDocumentDialog::updateTranslations()
 
     d->documentName->setLabel(tr("Name"));
     d->updateDocumentInfo();
-    //    d->insertIntoParent->setText(tr("Insert into parent"));
     d->cancelButton->setText(tr("Cancel"));
     d->createButton->setText(tr("Create"));
 }
@@ -205,7 +220,9 @@ void CreateDocumentDialog::designSystemChangeEvent(DesignSystemChangeEvent* _eve
     d->documentName->setTextColor(Ui::DesignSystem::color().onBackground());
     d->documentName->setBackgroundColor(Ui::DesignSystem::color().onBackground());
 
-    d->documentInfo->setContentsMargins(Ui::DesignSystem::label().margins().toMargins());
+    auto documentInfoMargins = Ui::DesignSystem::label().margins().toMargins();
+    documentInfoMargins.setTop(0);
+    d->documentInfo->setContentsMargins(documentInfoMargins);
     d->documentInfo->setTextColor(Ui::DesignSystem::color().onBackground());
     d->documentInfo->setBackgroundColor(Ui::DesignSystem::color().background());
 
