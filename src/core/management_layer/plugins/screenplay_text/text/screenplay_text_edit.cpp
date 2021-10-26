@@ -737,7 +737,7 @@ void ScreenplayTextEdit::paintEvent(QPaintEvent* _event)
                                           : textRight + leftDelta - spaceBetweenSceneNumberAndText,
                             cursorR.top());
                         const QPointF bottomRight(topLeft.x() + DesignSystem::layout().px4(),
-                                                  cursorREnd.bottom() + verticalMargin);
+                                                  cursorREnd.bottom());
                         const QRectF rect(topLeft, bottomRight);
                         painter.fillRect(rect, lastCharacterColor);
                     }
