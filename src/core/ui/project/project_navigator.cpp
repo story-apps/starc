@@ -13,6 +13,7 @@
 
 #include <QAction>
 #include <QContextMenuEvent>
+#include <QShortcut>
 #include <QUuid>
 #include <QVBoxLayout>
 
@@ -31,6 +32,7 @@ public:
 
     QHBoxLayout* buttonsLayout = nullptr;
     Button* addDocumentButton = nullptr;
+    QShortcut* addDocumentShortcut = nullptr;
 };
 
 ProjectNavigator::Implementation::Implementation(QWidget* _parent)
@@ -40,12 +42,14 @@ ProjectNavigator::Implementation::Implementation(QWidget* _parent)
     , contextMenu(new ContextMenu(tree))
     , buttonsLayout(new QHBoxLayout)
     , addDocumentButton(new Button(_parent))
+    , addDocumentShortcut(new QShortcut(_parent))
 {
     tree->setDragDropEnabled(true);
     tree->setSelectionMode(QAbstractItemView::ExtendedSelection);
     tree->setContextMenuPolicy(Qt::ContextMenuPolicy::CustomContextMenu);
     addDocumentButton->setFocusPolicy(Qt::NoFocus);
     addDocumentButton->setIcon(u8"\U000f0415");
+    addDocumentShortcut->setKey(QKeySequence::New);
 
     new Shadow(Qt::TopEdge, tree);
     new Shadow(Qt::BottomEdge, tree);
@@ -88,6 +92,11 @@ ProjectNavigator::ProjectNavigator(QWidget* _parent)
     });
 
     connect(d->addDocumentButton, &Button::clicked, this, &ProjectNavigator::addDocumentClicked);
+    connect(d->addDocumentShortcut, &QShortcut::activated, this, [this] {
+        if (d->addDocumentButton->isVisible()) {
+            emit addDocumentClicked();
+        }
+    });
 }
 
 void ProjectNavigator::setModel(QAbstractItemModel* _model)
