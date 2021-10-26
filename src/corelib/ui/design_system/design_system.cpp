@@ -1017,6 +1017,7 @@ public:
     QMarginsF contentsMargins = { 24.0, 0.0, 24.0, 0.0 };
     QMarginsF margins = { 12.0, 26.0, 12.0, 12.0 };
     QMarginsF marginsWithoutTitle = { 12.0, 18.0, 12.0, 18.0 };
+    qreal borderRadius = 4.0;
     QPointF labelTopLeft = { 12.0, 6.0 };
     qreal iconTop = 16.0;
     QSizeF iconSize = { 24.0, 24.0 };
@@ -1031,6 +1032,7 @@ DesignSystem::TextField::Implementation::Implementation(qreal _scaleFactor)
     contentsMargins *= _scaleFactor;
     margins *= _scaleFactor;
     marginsWithoutTitle *= _scaleFactor;
+    borderRadius *= _scaleFactor;
     labelTopLeft *= _scaleFactor;
     iconTop *= _scaleFactor;
     iconSize *= _scaleFactor;
@@ -1067,6 +1069,11 @@ QMarginsF DesignSystem::TextField::contentsMargins() const
 QMarginsF DesignSystem::TextField::margins(bool _withTitle) const
 {
     return _withTitle ? d->margins : d->marginsWithoutTitle;
+}
+
+qreal DesignSystem::TextField::borderRadius() const
+{
+    return d->borderRadius;
 }
 
 QPointF DesignSystem::TextField::labelTopLeft() const

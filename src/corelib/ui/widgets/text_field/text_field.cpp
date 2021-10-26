@@ -12,9 +12,11 @@
 #include <QKeyEvent>
 #include <QMimeData>
 #include <QPainter>
+#include <QPainterPath>
 #include <QTextFrame>
 #include <QToolTip>
 #include <QVariantAnimation>
+#include <QtMath>
 
 
 class TextField::Implementation
@@ -635,10 +637,9 @@ QSize TextField::minimumSizeHint() const
 
 QSize TextField::sizeHint() const
 {
-    const QFontMetrics fontMetrics(Ui::DesignSystem::font().body1());
     QSizeF size(TextHelper::fineTextWidth(!text().isEmpty() ? text() : d->placeholder,
                                           Ui::DesignSystem::font().body1()),
-                fontMetrics.height());
+                TextHelper::fineLineSpacing(Ui::DesignSystem::font().body1()));
     if (!d->suffix.isEmpty()) {
         const auto suffixWidth
             = TextHelper::fineTextWidthF(d->suffix, Ui::DesignSystem::font().body1())
@@ -691,7 +692,7 @@ int TextField::heightForWidth(int _width) const
     if (!d->helper.isEmpty() || !d->error.isEmpty()) {
         height += Ui::DesignSystem::textField().helperHeight();
     }
-    return static_cast<int>(height);
+    return qCeil(height);
 }
 
 void TextField::reconfigure()
@@ -739,9 +740,16 @@ void TextField::paintEvent(QPaintEvent* _event)
         backgroundRect.moveBottom(backgroundRect.bottom()
                                   - Ui::DesignSystem::textField().helperHeight());
     }
-    painter.fillRect(backgroundRect,
-                     hasFocus() || underMouse() ? d->backgroundActiveColor
+    painter.setPen(Qt::NoPen);
+    painter.setBrush(hasFocus() || underMouse() ? d->backgroundActiveColor
                                                 : d->backgroundInactiveColor);
+    QPainterPath backgroundPath;
+    backgroundPath.setFillRule(Qt::WindingFill);
+    backgroundPath.addRoundedRect(backgroundRect, Ui::DesignSystem::textField().borderRadius(),
+                                  Ui::DesignSystem::textField().borderRadius());
+    backgroundPath.addRect(
+        backgroundRect.adjusted(0, Ui::DesignSystem::textField().borderRadius(), 0, 0));
+    painter.drawPath(backgroundPath);
     painter.end();
 
     //

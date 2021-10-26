@@ -545,6 +545,11 @@ public:
         QMarginsF margins(bool _withTitle = true) const;
 
         /**
+         * @brief Радиус скругления верхних углов
+         */
+        qreal borderRadius() const;
+
+        /**
          * @brief Координата отрисовки лейбла
          */
         QPointF labelTopLeft() const;

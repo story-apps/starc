@@ -363,9 +363,6 @@ void ImageHelper::drawRoundedImage(QPainter& _painter, const QRectF& _rect, cons
         return;
     }
 
-    auto s1 = _rect.size();
-    auto s2 = _image.size();
-
     _painter.setPen(Qt::NoPen);
 
     QBrush imageBrush(_image);
