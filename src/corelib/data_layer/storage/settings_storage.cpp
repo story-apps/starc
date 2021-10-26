@@ -391,7 +391,9 @@ SettingsStorage::Implementation::Implementation()
         addShortcut(BusinessLayer::ScreenplayParagraphType::FolderHeader, "Ctrl+Space");
         //
         defaultValues.insert(kComponentsScreenplayEditorDefaultTemplateKey, "world_cp");
+        defaultValues.insert(kComponentsScreenplayEditorShowSceneNumbersKey, false);
         defaultValues.insert(kComponentsScreenplayEditorShowSceneNumbersOnLeftKey, true);
+        defaultValues.insert(kComponentsScreenplayEditorShowSceneNumbersOnRightKey, true);
         //
         // Параметры навигатора сценария
         //
