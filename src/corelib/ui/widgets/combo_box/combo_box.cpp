@@ -38,7 +38,7 @@ ComboBox::Implementation::Implementation(QWidget* _parent)
     : popup(new Card(_parent))
     , popupContent(new Tree(popup))
 {
-    popup->setWindowFlags(Qt::SplashScreen | Qt::FramelessWindowHint | Qt::NoDropShadowWindowHint);
+    popup->setWindowFlags(Qt::Tool | Qt::FramelessWindowHint | Qt::NoDropShadowWindowHint);
     popup->setAttribute(Qt::WA_Hover, false);
     popup->setAttribute(Qt::WA_TranslucentBackground);
     popup->setAttribute(Qt::WA_ShowWithoutActivating);
