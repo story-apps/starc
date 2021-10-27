@@ -249,6 +249,10 @@ QJsonObject getCharacters(const QString& _starcFileName)
         }
         rxPattern.append(characterModel.name());
     }
+    rxPattern.replace(".", "[.]");
+    rxPattern.replace("?", "[?]");
+    rxPattern.replace("*", "[*]");
+    rxPattern.replace("+", "[+]");
     rxPattern.prepend("(^|\\W)(");
     rxPattern.append(")($|\\W)");
     const QRegularExpression rxCharacterFinder(
@@ -260,6 +264,8 @@ QJsonObject getCharacters(const QString& _starcFileName)
     //
     struct CharacterData {
         QString name;
+        QString age = {};
+        QString description = {};
         int nonspeakingScenesCount = 0;
         int speakingScenesCount = 0;
         int dialoguesCount = 0;
@@ -268,16 +274,16 @@ QJsonObject getCharacters(const QString& _starcFileName)
     QStringList characters;
     QStringList sceneSpeakingCharacters;
     QStringList sceneNonspeakingCharacters;
-    std::function<void(const ScreenplayTextModelItem*)> includeInReport;
-    includeInReport = [&includeInReport, &charactersStatistics, &characters,
-                       &sceneSpeakingCharacters, &sceneNonspeakingCharacters,
-                       &rxCharacterFinder](const ScreenplayTextModelItem* _item) {
+    std::function<void(const ScreenplayTextModelItem*)> findCharacters;
+    findCharacters = [&findCharacters, &charactersStatistics, &characters, &sceneSpeakingCharacters,
+                      &sceneNonspeakingCharacters,
+                      &rxCharacterFinder](const ScreenplayTextModelItem* _item) {
         for (int childIndex = 0; childIndex < _item->childCount(); ++childIndex) {
             auto childItem = _item->childAt(childIndex);
             switch (childItem->type()) {
             case ScreenplayTextModelItemType::Folder:
             case ScreenplayTextModelItemType::Scene: {
-                includeInReport(childItem);
+                findCharacters(childItem);
                 break;
             }
 
@@ -414,6 +420,24 @@ QJsonObject getCharacters(const QString& _starcFileName)
                         }
 
                         //
+                        // Определяем возраст по таким паттернам
+                        // ИМЯ_ПЕРСОНАЖА (ВОЗРАСТ)
+                        // ИМЯ_ПЕРСОНАЖА, ВОЗРАСТ
+                        // где возраст может быть указан в виде числа, или диапазона
+                        //
+                        const QRegularExpression characterAgeFinder(
+                            QString("%1( [(][\\d-]{1,}[)]|, [\\d-]{1,})").arg(character),
+                            QRegularExpression::CaseInsensitiveOption);
+                        const auto ageMatch = characterAgeFinder.match(textItem->text());
+                        if (ageMatch.hasMatch()) {
+                            auto age = ageMatch.captured(1);
+                            age = age.remove("(").remove(")").remove(",").simplified();
+                            charactersStatistics[characters.indexOf(character)].age = age;
+                            charactersStatistics[characters.indexOf(character)].description
+                                = textItem->text();
+                        }
+
+                        //
                         // Ищем дальше
                         //
                         match = rxCharacterFinder.match(textItem->text(), match.capturedEnd());
@@ -440,7 +464,7 @@ QJsonObject getCharacters(const QString& _starcFileName)
         ScreenplayInformationModel informationsModel;
         screenplayModel.setInformationModel(&informationsModel);
         screenplayModel.setDocument(screenplayDocument);
-        includeInReport(screenplayModel.itemForIndex({}));
+        findCharacters(screenplayModel.itemForIndex({}));
     }
     DatabaseLayer::Database::closeCurrentFile();
 
@@ -459,6 +483,10 @@ QJsonObject getCharacters(const QString& _starcFileName)
     for (const auto& characterStatistics : charactersStatistics) {
         QJsonObject character;
         character["name"] = characterStatistics.name;
+        if (!characterStatistics.age.isEmpty()) {
+            character["age"] = characterStatistics.age;
+            character["short_description"] = characterStatistics.description;
+        }
         QJsonObject scenesCount;
         scenesCount["speaking"] = characterStatistics.speakingScenesCount;
         scenesCount["nonspeaking"] = characterStatistics.nonspeakingScenesCount;
