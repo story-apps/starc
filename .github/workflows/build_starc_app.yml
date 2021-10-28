@@ -142,8 +142,7 @@ jobs:
         run: |
           mkdir osslsigncode
           cd osslsigncode
-          osslsigncode_version=2.2
-          wget -c -nv "https://github.com/mtrojnar/osslsigncode/releases/download/2.2/osslsigncode_2.2_windows.zip" -O windows.zip
+          gh release download -R mtrojnar/osslsigncode 2.2 -p '*windows.zip'
           unzip -qq *.zip && rm *.zip
           cd ..
           echo "./osslsigncode" >> $GITHUB_PATH
