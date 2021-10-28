@@ -137,20 +137,6 @@ jobs:
     runs-on: windows-latest
     timeout-minutes: 60
     steps:
-      - name: Install dependencies
-        shell: bash
-        run: |
-          mkdir osslsigncode
-          cd osslsigncode
-          echo ${{ secrets.ACTION_RUNNER }} | gh auth login --with-token
-          gh release download -R mtrojnar/osslsigncode 2.2 -p '*windows.zip'
-          unzip -qq *.zip && rm *.zip
-          cd ..
-          echo "./osslsigncode" >> $GITHUB_PATH
-          mkdir /certs
-          echo "${WINDOWS_CERT}" > /certs/bundle.crt
-          echo "${WINDOWS_KEY}" > /certs/codesign.key
-          
       - name: Checkout Sources for push event
         if: ${{ github.event_name == 'push' }}
         uses: actions/checkout@master
@@ -196,18 +182,24 @@ jobs:
           cd build/windows
           ./make-exe_32.sh ${{env.APP_VERSION}}
           
-      - name: Sign main executable file
-        run: |
-          cd build/windows/files_32
-          osslsigncode sign -certs /certs/bundle.crt -key /certs/codesign.key -h sha256 \
-            -n "Story Apps LLC" -i https://starc.app -t http://timestamp.digicert.com \
-            -in starcapp.exe -out starcapp-signed.exe && mv starcapp-signed.exe starcapp.exe
+      - name: Sign app executables
+        uses: dlemstra/code-sign-action@v1
+        with:
+          certificate: '${{ secrets.WINDOWS_CERTIFICATE }}'
+          folder: 'build/windows/files_32'
+          recursive: true
 
       - name: Make installer
         uses: joncloud/makensis-action@v3.4
         with:
           arguments: "/V3"
           script-file: "build/windows/starc_32.nsi"
+          
+      - name: Sign installer
+        uses: dlemstra/code-sign-action@v1
+        with:
+          certificate: '${{ secrets.WINDOWS_CERTIFICATE }}'
+          folder: 'build/windows/'
 
       - name: Make archive with portable version
         uses: papeloto/action-zip@v1
