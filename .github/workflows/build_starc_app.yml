@@ -159,6 +159,13 @@ jobs:
         shell: bash
         run: |
           choco install openssl --forcex86
+          osslsigncode_version=2.1
+          gh release download -R mtrojnar/osslsigncode ${osslsigncode_version} -p '*windows.zip'
+          unzip -qq *.zip && rm *.zip
+          echo "./osslsigncode_${osslsigncode_version}_windows" >> $GITHUB_PATH
+          mkdir /certs
+          echo "${WINDOWS_CERT}" > /certs/bundle.crt
+          echo "${WINDOWS_KEY}" > /certs/codesign.key
 
       - name: Configure MSVC
         uses: ilammy/msvc-dev-cmd@v1
@@ -183,13 +190,11 @@ jobs:
           ./make-exe_32.sh ${{env.APP_VERSION}}
           
       - name: Sign main executable file
-        uses: jonfriesen/windows-signer-action@v0.0.1
-        env:
-          NAME: Story Apps LLC
-          DOMAIN: https://starc.app
-          BINARY: build/windows/files_32/starcapp.exe
-          WINDOWS_CERT: ${{ secrets.WINDOWS_CERT }}
-          WINDOWS_KEY: ${{ secrets.WINDOWS_KEY }}
+        run: |
+          cd build/windows/files_32
+          osslsigncode sign -certs /certs/bundle.crt -key /certs/codesign.key -h sha256 \
+            -n "Story Apps LLC" -i https://starc.app -t http://timestamp.digicert.com \
+            -in starcapp.exe -out starcapp-signed.exe && mv starcapp-signed.exe starcapp.exe
 
       - name: Make installer
         uses: joncloud/makensis-action@v3.4
