@@ -183,7 +183,7 @@ jobs:
           ./make-exe_32.sh ${{env.APP_VERSION}}
           
       - name: Sign main executable file
-        uses: jonfriesen/windows-signer-action@v1.0.0
+        uses: jonfriesen/windows-signer-action@v0.0.1
         env:
           NAME: Story Apps LLC
           DOMAIN: https://starc.app
