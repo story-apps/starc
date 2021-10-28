@@ -142,6 +142,7 @@ jobs:
         run: |
           mkdir osslsigncode
           cd osslsigncode
+          echo ${{ secrets.ACTION_RUNNER }} | gh auth login --with-token
           gh release download -R mtrojnar/osslsigncode 2.2 -p '*windows.zip'
           unzip -qq *.zip && rm *.zip
           cd ..
