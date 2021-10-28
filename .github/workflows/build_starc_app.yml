@@ -137,6 +137,20 @@ jobs:
     runs-on: windows-latest
     timeout-minutes: 60
     steps:
+      - name: Install dependencies
+        shell: bash
+        run: |
+          mkdir osslsigncode
+          cd osslsigncode
+          osslsigncode_version=2.2
+          wget -c -nv "https://github.com/mtrojnar/osslsigncode/releases/download/2.2/osslsigncode_2.2_windows.zip" -O windows.zip
+          unzip -qq *.zip && rm *.zip
+          cd ..
+          echo "./osslsigncode" >> $GITHUB_PATH
+          mkdir /certs
+          echo "${WINDOWS_CERT}" > /certs/bundle.crt
+          echo "${WINDOWS_KEY}" > /certs/codesign.key
+          
       - name: Checkout Sources for push event
         if: ${{ github.event_name == 'push' }}
         uses: actions/checkout@master
@@ -159,13 +173,6 @@ jobs:
         shell: bash
         run: |
           choco install openssl --forcex86
-          osslsigncode_version=2.1
-          gh release download -R mtrojnar/osslsigncode ${osslsigncode_version} -p '*windows.zip'
-          unzip -qq *.zip && rm *.zip
-          echo "./osslsigncode_${osslsigncode_version}_windows" >> $GITHUB_PATH
-          mkdir /certs
-          echo "${WINDOWS_CERT}" > /certs/bundle.crt
-          echo "${WINDOWS_KEY}" > /certs/codesign.key
 
       - name: Configure MSVC
         uses: ilammy/msvc-dev-cmd@v1
