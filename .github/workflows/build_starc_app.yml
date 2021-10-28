@@ -181,6 +181,15 @@ jobs:
         run: |
           cd build/windows
           ./make-exe_32.sh ${{env.APP_VERSION}}
+          
+      - name: Sign main executable file
+        uses: jonfriesen/windows-signer-action@v1.0.0
+        env:
+          NAME: Story Apps LLC
+          DOMAIN: https://starc.app
+          BINARY: build/windows/files_32/starcapp.exe
+          WINDOWS_CERT: ${{ secrets.WINDOWS_CERT }}
+          WINDOWS_KEY: ${{ secrets.WINDOWS_KEY }}
 
       - name: Make installer
         uses: joncloud/makensis-action@v3.4
