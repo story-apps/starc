@@ -32,6 +32,7 @@ public:
     Tree* documentType = nullptr;
     Body1Label* documentInfo = nullptr;
     TextField* documentName = nullptr;
+    bool insertIntoParentEnabled = false;
     CheckBox* insertIntoParent = nullptr;
 
     QHBoxLayout* buttonsLayout = nullptr;
@@ -100,9 +101,15 @@ void CreateDocumentDialog::Implementation::updateDocumentInfo()
               tr("Create a document set to streamline your work on the comic book, "
                  "graphic novel, or manga.") } };
 
-    const auto documentTypeData = documentType->currentIndex().data(kMimeTypeRole).toInt();
-    documentInfo->setText(
-        documenTypeToInfo.value(static_cast<Domain::DocumentObjectType>(documentTypeData)));
+    const auto documentTypeData = static_cast<Domain::DocumentObjectType>(
+        documentType->currentIndex().data(kMimeTypeRole).toInt());
+    documentInfo->setText(documenTypeToInfo.value(documentTypeData));
+    if (documentTypeData == Domain::DocumentObjectType::Character
+        || documentTypeData == Domain::DocumentObjectType::Location) {
+        insertIntoParent->hide();
+    } else {
+        insertIntoParent->setVisible(insertIntoParentEnabled);
+    }
 }
 
 
@@ -166,10 +173,12 @@ CreateDocumentDialog::~CreateDocumentDialog() = default;
 void CreateDocumentDialog::setInsertionParent(const QString& _parentName)
 {
     if (_parentName.isEmpty()) {
+        d->insertIntoParentEnabled = false;
         d->insertIntoParent->hide();
         return;
     }
 
+    d->insertIntoParentEnabled = true;
     d->insertIntoParent->setText(QString("%1 \"%2\"").arg(tr("Insert into"), _parentName));
     d->insertIntoParent->show();
 }
