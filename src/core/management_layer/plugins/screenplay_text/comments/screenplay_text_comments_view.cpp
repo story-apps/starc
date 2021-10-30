@@ -38,7 +38,8 @@ public:
     ContextMenu* commentsViewContextMenu = nullptr;
 
     ScreenplayTextAddCommentView* addCommentView = nullptr;
-    QColor addCommentColor;
+    QModelIndex commentIndex;
+    QColor commentColor;
 
     ScreenplayTextCommentRepliesView* repliesView = nullptr;
 };
@@ -68,6 +69,17 @@ void ScreenplayTextCommentsView::Implementation::updateCommentsViewContextMenu(
     // Настраиваем контекстное меню для одного элемента
     //
     if (_indexes.size() == 1) {
+        auto edit = new QAction(tr("Edit"));
+        edit->setIconText(u8"\U000F03EB");
+        connect(edit, &QAction::triggered, _view, [this, _view] {
+            commentIndex = commentsView->selectedIndexes().constFirst();
+            _view->showAddCommentView(
+                commentIndex.data(BusinessLayer::ScreenplayTextCommentsModel::ReviewMarkColorRole)
+                    .value<QColor>(),
+                commentIndex.data(BusinessLayer::ScreenplayTextCommentsModel::ReviewMarkCommentRole)
+                    .toString());
+        });
+        menuActions.append(edit);
         auto discuss = new QAction(tr("Discuss"));
         discuss->setIconText(u8"\U000F0860");
         connect(discuss, &QAction::triggered, _view, [this, _view] {
@@ -152,14 +164,21 @@ ScreenplayTextCommentsView::ScreenplayTextCommentsView(QWidget* _parent)
         d->commentsViewContextMenu->showContextMenu(d->commentsView->mapToGlobal(_pos));
     });
     connect(d->addCommentView, &ScreenplayTextAddCommentView::savePressed, this, [this] {
-        emit addReviewMarkRequested(d->addCommentColor, d->addCommentView->comment());
+        if (d->commentIndex.isValid()) {
+            emit changeReviewMarkRequested(d->commentIndex, d->addCommentView->comment());
+            d->commentIndex = {};
+        } else {
+            emit addReviewMarkRequested(d->commentColor, d->addCommentView->comment());
+        }
         setCurrentWidget(d->commentsView);
     });
-    connect(d->addCommentView, &ScreenplayTextAddCommentView::cancelPressed, this,
-            [this] { setCurrentWidget(d->commentsView); });
+    connect(d->addCommentView, &ScreenplayTextAddCommentView::cancelPressed, this, [this] {
+        d->commentIndex = {};
+        setCurrentWidget(d->commentsView);
+    });
     connect(d->repliesView, &ScreenplayTextCommentRepliesView::addReplyPressed, this,
             [this](const QString& _reply) {
-                emit addReviewMarkCommentRequested(d->commentsView->currentIndex(), _reply);
+                emit addReviewMarkReplyRequested(d->commentsView->currentIndex(), _reply);
             });
     connect(d->repliesView, &ScreenplayTextCommentRepliesView::closePressed, this, [this] {
         auto animationRect = d->commentsView->visualRect(d->commentsView->currentIndex());
@@ -199,10 +218,11 @@ void ScreenplayTextCommentsView::setCurrentIndex(const QModelIndex& _index)
     d->commentsView->setCurrentIndex(_index);
 }
 
-void ScreenplayTextCommentsView::showAddCommentView(const QColor& _withColor)
+void ScreenplayTextCommentsView::showAddCommentView(const QColor& _withColor,
+                                                    const QString& _withText)
 {
-    d->addCommentColor = _withColor;
-    d->addCommentView->setComment({});
+    d->commentColor = _withColor;
+    d->addCommentView->setComment(_withText);
     setCurrentWidget(d->addCommentView);
     QTimer::singleShot(animationDuration(), d->addCommentView,
                        qOverload<>(&ScreenplayTextAddCommentView::setFocus));

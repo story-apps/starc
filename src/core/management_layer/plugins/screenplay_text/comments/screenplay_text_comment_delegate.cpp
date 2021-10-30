@@ -140,8 +140,11 @@ void ScreenplayTextCommentDelegate::paint(QPainter* _painter, const QStyleOption
     const QRectF dateRect(textRect.bottomLeft(), textRect.size());
     const auto date
         = _index.data(ScreenplayTextCommentsModel::ReviewMarkCreationDateRole).toDateTime();
-    const auto dateText = _painter->fontMetrics().elidedText(
-        date.toString("HH:mm d MMM"), Qt::ElideRight, static_cast<int>(dateRect.width()));
+    auto dateText = _painter->fontMetrics().elidedText(date.toString("HH:mm d MMM"), Qt::ElideRight,
+                                                       static_cast<int>(dateRect.width()));
+    if (_index.data(ScreenplayTextCommentsModel::ReviewMarkIsEditedRole).toBool()) {
+        dateText.append(QString(" (%1)").arg(tr("edited")));
+    }
     _painter->drawText(dateRect, Qt::AlignLeft | Qt::AlignTop, dateText);
 
     //
@@ -172,7 +175,7 @@ void ScreenplayTextCommentDelegate::paint(QPainter* _painter, const QStyleOption
     // ... ответы
     //
     const auto comments
-        = _index.data(ScreenplayTextCommentsModel::ReviewMarkCommentsRole)
+        = _index.data(ScreenplayTextCommentsModel::ReviewMarkRepliesRole)
               .value<QVector<BusinessLayer::ScreenplayTextModelTextItem::ReviewComment>>();
     if (!m_isSingleCommentMode && comments.size() > 1 && !done) {
         const auto avatarSize = Ui::DesignSystem::treeOneLineItem().iconSize();
@@ -325,7 +328,7 @@ QSize ScreenplayTextCommentDelegate::sizeHint(const QStyleOptionViewItem& _optio
     const auto isDone = _index.data(ScreenplayTextCommentsModel::ReviewMarkIsDoneRole).toBool();
     const auto comment = _index.data(ScreenplayTextCommentsModel::ReviewMarkCommentRole).toString();
     const auto comments
-        = _index.data(ScreenplayTextCommentsModel::ReviewMarkCommentsRole)
+        = _index.data(ScreenplayTextCommentsModel::ReviewMarkRepliesRole)
               .value<QVector<BusinessLayer::ScreenplayTextModelTextItem::ReviewComment>>();
 
     //

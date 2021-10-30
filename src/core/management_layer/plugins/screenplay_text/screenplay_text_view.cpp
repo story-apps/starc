@@ -443,10 +443,15 @@ ScreenplayTextView::ScreenplayTextView(QWidget* _parent)
             [this](const QColor& _color, const QString& _comment) {
                 d->addReviewMark({}, _color, _comment);
             });
-    connect(d->commentsView, &ScreenplayTextCommentsView::addReviewMarkCommentRequested, this,
+    connect(d->commentsView, &ScreenplayTextCommentsView::changeReviewMarkRequested, this,
             [this](const QModelIndex& _index, const QString& _comment) {
                 QSignalBlocker blocker(d->commentsView);
-                d->commentsModel->addComment(_index, _comment);
+                d->commentsModel->setComment(_index, _comment);
+            });
+    connect(d->commentsView, &ScreenplayTextCommentsView::addReviewMarkReplyRequested, this,
+            [this](const QModelIndex& _index, const QString& _reply) {
+                QSignalBlocker blocker(d->commentsView);
+                d->commentsModel->addReply(_index, _reply);
             });
     connect(d->commentsView, &ScreenplayTextCommentsView::commentSelected, this,
             [this](const QModelIndex& _index) {

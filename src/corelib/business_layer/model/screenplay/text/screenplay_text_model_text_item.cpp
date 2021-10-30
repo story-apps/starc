@@ -11,6 +11,7 @@
 #include <utils/helpers/text_helper.h>
 
 #include <QColor>
+#include <QDebug>
 #include <QLocale>
 #include <QVariant>
 #include <QXmlStreamReader>
@@ -178,12 +179,15 @@ ScreenplayTextModelTextItem::Implementation::Implementation(QXmlStreamReader& _c
                     }
 
                     const auto commentAttributes = _contentReader.attributes();
+                    const auto is = commentAttributes.hasAttribute(xml::kIsCommentEditedAttribute);
                     reviewMark.comments.append(
                         { TextHelper::fromHtmlEscaped(
                               commentAttributes.value(xml::kAuthorAttribute).toString()),
                           commentAttributes.value(xml::kDateAttribute).toString(),
-                          TextHelper::fromHtmlEscaped(
-                              xml::readContent(_contentReader).toString()) });
+                          TextHelper::fromHtmlEscaped(xml::readContent(_contentReader).toString()),
+                          commentAttributes.hasAttribute(xml::kIsCommentEditedAttribute) });
+                    qDebug() << is
+                             << commentAttributes.hasAttribute(xml::kIsCommentEditedAttribute);
 
                     xml::readNextElement(_contentReader); // end
                 } while (!_contentReader.atEnd());
@@ -323,10 +327,14 @@ QByteArray ScreenplayTextModelTextItem::Implementation::buildXml(int _from, int 
             if (!reviewMark.comments.isEmpty()) {
                 xml += ">";
                 for (const auto& comment : std::as_const(reviewMark.comments)) {
-                    xml += QString("<%1 %2=\"%3\" %4=\"%5\"><![CDATA[%6]]></%1>")
+                    xml += QString("<%1 %2=\"%3\" %4=\"%5\"%6><![CDATA[%7]]></%1>")
                                .arg(xml::kCommentTag, xml::kAuthorAttribute,
                                     TextHelper::toHtmlEscaped(comment.author), xml::kDateAttribute,
-                                    comment.date, TextHelper::toHtmlEscaped(comment.text))
+                                    comment.date,
+                                    (comment.isEdited ? QString(" %1=\"true\"")
+                                                            .arg(xml::kIsCommentEditedAttribute)
+                                                      : ""),
+                                    TextHelper::toHtmlEscaped(comment.text))
                                .toUtf8();
                 }
                 xml += QString("</%1>").arg(xml::kReviewMarkTag).toUtf8();
@@ -448,7 +456,8 @@ QTextCharFormat ScreenplayTextModelTextItem::TextFormat::charFormat() const
 bool ScreenplayTextModelTextItem::ReviewComment::operator==(
     const ScreenplayTextModelTextItem::ReviewComment& _other) const
 {
-    return author == _other.author && date == _other.date && text == _other.text;
+    return author == _other.author && date == _other.date && text == _other.text
+        && isEdited == _other.isEdited;
 }
 
 bool ScreenplayTextModelTextItem::ReviewMark::operator==(
@@ -470,15 +479,17 @@ QTextCharFormat ScreenplayTextModelTextItem::ReviewMark::charFormat() const
         format.setBackground(backgroundColor);
     }
     format.setProperty(ScreenplayBlockStyle::PropertyIsDone, isDone);
-    QStringList authors, dates, comments;
+    QStringList authors, dates, comments, isEdited;
     for (const auto& comment : this->comments) {
         authors.append(comment.author);
         dates.append(comment.date);
         comments.append(comment.text);
+        isEdited.append(QVariant(comment.isEdited).toString());
     }
     format.setProperty(ScreenplayBlockStyle::PropertyCommentsAuthors, authors);
     format.setProperty(ScreenplayBlockStyle::PropertyCommentsDates, dates);
     format.setProperty(ScreenplayBlockStyle::PropertyComments, comments);
+    format.setProperty(ScreenplayBlockStyle::PropertyCommentsIsEdited, isEdited);
     return format;
 }
 
@@ -849,9 +860,13 @@ void ScreenplayTextModelTextItem::setReviewMarks(
         const QStringList authors
             = reviewMark.format.property(ScreenplayBlockStyle::PropertyCommentsAuthors)
                   .toStringList();
+        const QStringList isEdited
+            = reviewMark.format.property(ScreenplayBlockStyle::PropertyCommentsIsEdited)
+                  .toStringList();
         for (int commentIndex = 0; commentIndex < comments.size(); ++commentIndex) {
-            newReviewMark.comments.append(
-                { authors.at(commentIndex), dates.at(commentIndex), comments.at(commentIndex) });
+            newReviewMark.comments.append({ authors.at(commentIndex), dates.at(commentIndex),
+                                            comments.at(commentIndex),
+                                            isEdited.at(commentIndex) == "true" });
         }
 
         newReviewMarks.append(newReviewMark);

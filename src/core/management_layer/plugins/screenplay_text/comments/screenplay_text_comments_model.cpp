@@ -838,6 +838,22 @@ QModelIndex ScreenplayTextCommentsModel::mapFromScreenplay(const QModelIndex& _i
     return {};
 }
 
+void ScreenplayTextCommentsModel::setComment(const QModelIndex& _index, const QString& _comment)
+{
+    auto reviewMarkWrapper = d->reviewMarks.at(_index.row());
+    for (auto textItem : reviewMarkWrapper.items) {
+        auto updatedReviewMarks = textItem->reviewMarks();
+        for (auto& reviewMark : updatedReviewMarks) {
+            if (isReviewMarksPartiallyEqual(reviewMark, reviewMarkWrapper.reviewMark)) {
+                reviewMark.comments.first().text = _comment;
+                reviewMark.comments.first().isEdited = true;
+            }
+        }
+        textItem->setReviewMarks(updatedReviewMarks);
+        d->model->updateItem(textItem);
+    }
+}
+
 void ScreenplayTextCommentsModel::markAsDone(const QModelIndexList& _indexes)
 {
     for (const auto& index : _indexes) {
@@ -872,7 +888,7 @@ void ScreenplayTextCommentsModel::markAsUndone(const QModelIndexList& _indexes)
     }
 }
 
-void ScreenplayTextCommentsModel::addComment(const QModelIndex& _index, const QString& _comment)
+void ScreenplayTextCommentsModel::addReply(const QModelIndex& _index, const QString& _comment)
 {
     const auto reviewMarkWrapper = d->reviewMarks.at(_index.row());
     for (auto textItem : reviewMarkWrapper.items) {
@@ -937,6 +953,10 @@ QVariant ScreenplayTextCommentsModel::data(const QModelIndex& _index, int _role)
         return reviewMarkWrapper.reviewMark.comments.constFirst().text;
     }
 
+    case ReviewMarkIsEditedRole: {
+        return reviewMarkWrapper.reviewMark.comments.constFirst().isEdited;
+    }
+
     case ReviewMarkColorRole: {
         if (reviewMarkWrapper.reviewMark.backgroundColor.isValid()) {
             return reviewMarkWrapper.reviewMark.backgroundColor;
@@ -949,7 +969,7 @@ QVariant ScreenplayTextCommentsModel::data(const QModelIndex& _index, int _role)
         return reviewMarkWrapper.reviewMark.isDone;
     }
 
-    case ReviewMarkCommentsRole: {
+    case ReviewMarkRepliesRole: {
         if (reviewMarkWrapper.reviewMark.comments.isEmpty()) {
             return {};
         }

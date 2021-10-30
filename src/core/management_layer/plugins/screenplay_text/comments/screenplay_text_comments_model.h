@@ -23,9 +23,10 @@ public:
         ReviewMarkAuthorEmailRole = Qt::UserRole + 1,
         ReviewMarkCreationDateRole,
         ReviewMarkCommentRole,
+        ReviewMarkIsEditedRole,
         ReviewMarkColorRole,
         ReviewMarkIsDoneRole,
-        ReviewMarkCommentsRole
+        ReviewMarkRepliesRole
     };
 
 public:
@@ -53,6 +54,11 @@ public:
     QModelIndex mapFromScreenplay(const QModelIndex& _index, int _positionInBlock);
 
     /**
+     * @brief Задать текст комментария с заданным индексом
+     */
+    void setComment(const QModelIndex& _index, const QString& _comment);
+
+    /**
      * @brief Пометить заданные элементы выполнеными
      */
     void markAsDone(const QModelIndexList& _indexes);
@@ -65,7 +71,7 @@ public:
     /**
      * @brief Добавить комментарий к редакторской заметке
      */
-    void addComment(const QModelIndex& _index, const QString& _comment);
+    void addReply(const QModelIndex& _index, const QString& _comment);
 
     /**
      * @brief Удалить выбранные элементы

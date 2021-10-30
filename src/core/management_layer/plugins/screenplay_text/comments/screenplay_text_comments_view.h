@@ -34,7 +34,7 @@ public:
     /**
      * @brief Показать виджет добавления/редактирования комментария
      */
-    void showAddCommentView(const QColor& _withColor);
+    void showAddCommentView(const QColor& _withColor, const QString& _withText = {});
 
     /**
      * @brief Отобразить обуждение комментария
@@ -48,9 +48,14 @@ signals:
     void addReviewMarkRequested(const QColor& _color, const QString& _text);
 
     /**
+     * @brief Пользователь хочет изменить редакторскую заметку
+     */
+    void changeReviewMarkRequested(const QModelIndex& _index, const QString& _text);
+
+    /**
      * @brief Пользователь хочет комментарий к редакторской заметке
      */
-    void addReviewMarkCommentRequested(const QModelIndex& _index, const QString& _text);
+    void addReviewMarkReplyRequested(const QModelIndex& _index, const QString& _text);
 
     /**
      * @brief Пользователь выбрал комментарий

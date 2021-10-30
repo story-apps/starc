@@ -41,6 +41,7 @@ public:
         QString author;
         QString date;
         QString text;
+        bool isEdited = false;
 
         bool operator==(const ReviewComment& _other) const;
     };

@@ -117,7 +117,7 @@ void ScreenplayTextCommentRepliesView::setCommentIndex(const QModelIndex& _index
     // Собираем ответы на комментарий и помещаем их во вьюху
     //
     const auto comments
-        = _index.data(ScreenplayTextCommentsModel::ReviewMarkCommentsRole)
+        = _index.data(ScreenplayTextCommentsModel::ReviewMarkRepliesRole)
               .value<QVector<BusinessLayer::ScreenplayTextModelTextItem::ReviewComment>>();
     QVector<ChatMessage> replies;
     for (auto comment : comments) {

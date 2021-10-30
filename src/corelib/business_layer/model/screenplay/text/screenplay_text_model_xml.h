@@ -48,6 +48,7 @@ const QString kBackgroundColorAttribute = QLatin1String("bgcolor");
 const QString kDoneAttribute = QLatin1String("done");
 const QString kAuthorAttribute = QLatin1String("author");
 const QString kDateAttribute = QLatin1String("date");
+const QString kIsCommentEditedAttribute = QLatin1String("e");
 const QString kBoldAttribute = QLatin1String("bold");
 const QString kItalicAttribute = QLatin1String("italic");
 const QString kUnderlineAttribute = QLatin1String("underline");

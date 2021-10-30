@@ -82,6 +82,7 @@ public:
         PropertyComments, //!< Список комментариев к правке
         PropertyCommentsAuthors, //!< Список авторов комментариев
         PropertyCommentsDates, //!< Список дат комментариев
+        PropertyCommentsIsEdited, //!< Список признаков изменений комментариев
         //
         // Свойства корректирующих текст блоков
         //
