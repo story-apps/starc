@@ -105,6 +105,7 @@ public:
     bool correctDoubleCapitals = true;
     bool replaceThreeDots = false;
     bool smartQuotes = false;
+    bool compressSpaces = false;
 };
 
 void BaseTextEdit::Implementation::reconfigure(BaseTextEdit* _textEdit)
@@ -637,6 +638,16 @@ bool BaseTextEdit::updateEnteredText(const QString& _eventText)
         } else {
             cursor.insertText(localCloseQuote());
         }
+
+        return true;
+    }
+
+    //
+    // Если была попытка ввести несколько пробелов подряд, или пробел в начале строки,
+    // удаляем этот лишний пробел
+    //
+    if (d->compressSpaces && (cursorBackwardText == " " || cursorBackwardText.endsWith("  "))) {
+        cursor.deletePreviousChar();
 
         return true;
     }

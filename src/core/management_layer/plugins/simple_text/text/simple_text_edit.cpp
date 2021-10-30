@@ -409,6 +409,9 @@ bool SimpleTextEdit::updateEnteredText(const QString& _eventText)
     }
 
     //
+    // TODO: Почему-то в наследниках тоже есть этот кусок текста, нужно проверить нельзя ли его
+    // удалить из наследников, оставив только тут
+    //
     // Если перед нами конец предложения
     // и не сокращение
     // и после курсора нет текста (для ремарки допустима скобка)
@@ -435,16 +438,6 @@ bool SimpleTextEdit::updateEnteredText(const QString& _eventText)
         //
         cursor.insertText(correctedText);
         setTextCursor(cursor);
-
-        return true;
-    }
-
-    //
-    // Если была попытка ввести несколько пробелов подряд, или пробел в начале строки,
-    // удаляем этот лишний пробел
-    //
-    if (cursorBackwardText == " " || cursorBackwardText.endsWith("  ")) {
-        cursor.deletePreviousChar();
 
         return true;
     }

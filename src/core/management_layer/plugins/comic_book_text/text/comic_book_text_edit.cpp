@@ -571,16 +571,6 @@ bool ComicBookTextEdit::updateEnteredText(const QString& _eventText)
         return true;
     }
 
-    //
-    // Если была попытка ввести несколько пробелов подряд, или пробел в начале строки,
-    // удаляем этот лишний пробел
-    //
-    if (cursorBackwardText == " " || cursorBackwardText.endsWith("  ")) {
-        cursor.deletePreviousChar();
-
-        return true;
-    }
-
     return BaseTextEdit::updateEnteredText(_eventText);
 }
 
