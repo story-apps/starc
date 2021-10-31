@@ -18,6 +18,10 @@ exists (character_information/character_information.pro) {
     SUBDIRS += character_information
 }
 
+exists (characters_relations/characters_relations.pro) {
+    SUBDIRS += characters_relations
+}
+
 exists (location_information/location_information.pro) {
     SUBDIRS += location_information
 }

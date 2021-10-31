@@ -13,3 +13,6 @@
 [submodule "src/core/management_layer/plugins/comic_book_statistics"]
 	path = src/core/management_layer/plugins/comic_book_statistics
 	url = git@github.com:dimkanovikov/starc-comic-book-statistics-plugin.git
+[submodule "src/core/management_layer/plugins/characters_relations"]
+	path = src/core/management_layer/plugins/characters_relations
+	url = git@github.com:dimkanovikov/starc-characters-relations-plugin.git
