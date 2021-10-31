@@ -1,0 +1,35 @@
+libavoid - Fast, Incremental, Object-avoiding Line Router
+
+Copyright (C) 2004-2009  Monash University
+
+A cross-platform C++ library providing fast, object-avoiding connector
+routing for use in interactive diagram editors.
+
+Documentation is available for libavoid through Doxygen.  Install Doxygen and
+run it in the libavoid directory to generate documentation for the interface.
+
+libavoid is written and maintained by Michael Wybrow, a member of the 
+Adaptive Diagrams and Documents lab at Monash University, Australia.
+
+libavoid is available under the terms of open-source GNU Lesser General Public
+License v2.1.  Commercial licenses are also available, for more information 
+please contact Michael Wybrow <http://www.csse.monash.edu.au/~mwybrow/>.
+
+The algorithms used for the connector routing are described in:
+
+  M. Wybrow, K. Marriott, and P.J. Stuckey. Incremental connector routing.
+  In Proceedings of 13th International Symposium on Graph Drawing, LNCS 3843,
+  pages 446-457. Springer-Verlag, 2006.
+  http://www.csse.monash.edu.au/~mwybrow/papers/wybrow-gd-2005.pdf
+
+  M. Wybrow, K. Marriott, and P.J. Stuckey. Orthogonal connector routing.
+  In Proceedings of 17th International Symposium on Graph Drawing (GD '09),
+  To appear 2010.
+  http://www.csse.monash.edu.au/~mwybrow/papers/wybrow-gd-2009.pdf
+
+libavoid is currently used in the prototype research diagram editor "Dunnart":
+  http://www.csse.monash.edu.au/~mwybrow/dunnart/
+As well as the professional open-source vector graphics editor "Inkscape":
+  http://www.inkscape.org/
+
+
