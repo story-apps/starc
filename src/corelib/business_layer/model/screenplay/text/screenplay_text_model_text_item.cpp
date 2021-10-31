@@ -186,8 +186,6 @@ ScreenplayTextModelTextItem::Implementation::Implementation(QXmlStreamReader& _c
                           commentAttributes.value(xml::kDateAttribute).toString(),
                           TextHelper::fromHtmlEscaped(xml::readContent(_contentReader).toString()),
                           commentAttributes.hasAttribute(xml::kIsCommentEditedAttribute) });
-                    qDebug() << is
-                             << commentAttributes.hasAttribute(xml::kIsCommentEditedAttribute);
 
                     xml::readNextElement(_contentReader); // end
                 } while (!_contentReader.atEnd());

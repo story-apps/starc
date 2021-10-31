@@ -188,8 +188,18 @@ void ProjectManager::Implementation::addDocument()
     connect(
         dialog, &Ui::CreateDocumentDialog::createPressed, navigator,
         [this, currentItemIndex, dialog](Domain::DocumentObjectType _type, const QString& _name) {
-            const auto parentIndex
+            //
+            // Определим индекс родительского элемента, ищем именно папку
+            //
+            auto parentIndex
                 = dialog->needInsertIntoParent() ? currentItemIndex : currentItemIndex.parent();
+            auto parentItem = projectStructureModel->itemForIndex(parentIndex);
+            while (parentIndex.isValid() && parentItem != nullptr
+                   && parentItem->type() != Domain::DocumentObjectType::Folder) {
+                parentIndex = parentIndex.parent();
+                parentItem = projectStructureModel->itemForIndex(parentIndex);
+            }
+
             const auto addedItemIndex
                 = projectStructureModel->addDocument(_type, _name, parentIndex);
             const auto mappedAddedItemIndex
