@@ -1875,6 +1875,67 @@ DesignSystem::ProjectCard::ProjectCard(qreal _scaleFactor)
 // ****
 
 
+class DesignSystem::CharacterCard::Implementation
+{
+public:
+    explicit Implementation(qreal _scaleFactor);
+
+    QSizeF primarySize = { 174, 242 };
+    QSizeF secondarySize = { 154, 162 };
+    QSizeF tertiarySize = { 154, 128 };
+    QSizeF undefinedSize = { 154, 46 };
+    qreal spacing = 12.0;
+};
+
+DesignSystem::CharacterCard::Implementation::Implementation(qreal _scaleFactor)
+{
+    primarySize *= _scaleFactor;
+    secondarySize *= _scaleFactor;
+    tertiarySize *= _scaleFactor;
+    undefinedSize *= _scaleFactor;
+    spacing *= _scaleFactor;
+}
+
+
+// **
+
+
+DesignSystem::CharacterCard::~CharacterCard() = default;
+
+const QSizeF& DesignSystem::CharacterCard::primarySize() const
+{
+    return d->primarySize;
+}
+
+const QSizeF& DesignSystem::CharacterCard::secondarySize() const
+{
+    return d->secondarySize;
+}
+
+const QSizeF& DesignSystem::CharacterCard::tertiarySize() const
+{
+    return d->tertiarySize;
+}
+
+const QSizeF& DesignSystem::CharacterCard::undefinedSize() const
+{
+    return d->undefinedSize;
+}
+
+qreal DesignSystem::CharacterCard::spacing() const
+{
+    return d->spacing;
+}
+
+DesignSystem::CharacterCard::CharacterCard(qreal _scaleFactor)
+    : d(new Implementation(_scaleFactor))
+{
+}
+
+
+// ****
+
+
 class DesignSystemPrivate
 {
 public:
@@ -1919,6 +1980,7 @@ public:
     DesignSystem::Dialog dialog;
     DesignSystem::TaskBar taskBar;
     DesignSystem::ProjectCard projectCard;
+    DesignSystem::CharacterCard characterCard;
 };
 
 DesignSystemPrivate::DesignSystemPrivate(ApplicationTheme _theme, qreal _scaleFactor,
@@ -1950,6 +2012,7 @@ DesignSystemPrivate::DesignSystemPrivate(ApplicationTheme _theme, qreal _scaleFa
     , dialog(_scaleFactor)
     , taskBar(_scaleFactor)
     , projectCard(_scaleFactor)
+    , characterCard(_scaleFactor)
 {
     pageMargins *= _scaleFactor;
     pageSpacing *= _scaleFactor;
@@ -2263,6 +2326,11 @@ const DesignSystem::TaskBar& DesignSystem::taskBar()
 const DesignSystem::ProjectCard& DesignSystem::projectCard()
 {
     return instance()->d->projectCard;
+}
+
+const DesignSystem::CharacterCard& DesignSystem::characterCard()
+{
+    return instance()->d->characterCard;
 }
 
 DesignSystem::~DesignSystem() = default;

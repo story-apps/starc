@@ -2,15 +2,26 @@
 
 #include "character_model.h"
 
+#include <domain/document_object.h>
+
 #include <QDomDocument>
+#include <QPointF>
 
 
 namespace BusinessLayer {
+
+namespace {
+const QLatin1String kDocumentKey("document");
+const QLatin1String kCharacterKey("character");
+const QLatin1String kNameKey("name");
+const QLatin1String kPositionKey("position");
+} // namespace
 
 class CharactersModel::Implementation
 {
 public:
     QVector<CharacterModel*> characterModels;
+    QHash<QString, QPointF> charactersPositions;
 };
 
 
@@ -21,6 +32,8 @@ CharactersModel::CharactersModel(QObject* _parent)
     : AbstractModel({}, _parent)
     , d(new Implementation)
 {
+    connect(this, &CharactersModel::characterPositionChanged, this,
+            &CharactersModel::updateDocumentContent);
 }
 
 void CharactersModel::addCharacterModel(CharacterModel* _characterModel)
@@ -61,7 +74,7 @@ void CharactersModel::createCharacter(const QString& _name, const QByteArray& _c
         return;
     }
 
-    for (const auto character : d->characterModels) {
+    for (const auto character : std::as_const(d->characterModels)) {
         if (character->name() == _name) {
             return;
         }
@@ -72,7 +85,7 @@ void CharactersModel::createCharacter(const QString& _name, const QByteArray& _c
 
 bool CharactersModel::exists(const QString& _name) const
 {
-    for (const auto character : d->characterModels) {
+    for (const auto character : std::as_const(d->characterModels)) {
         if (character->name() == _name) {
             return true;
         }
@@ -83,13 +96,28 @@ bool CharactersModel::exists(const QString& _name) const
 
 CharacterModel* CharactersModel::character(const QString& _name) const
 {
-    for (const auto character : d->characterModels) {
+    for (const auto character : std::as_const(d->characterModels)) {
         if (character->name() == _name) {
             return character;
         }
     }
 
     return nullptr;
+}
+
+QPointF CharactersModel::characterPosition(const QString& _name) const
+{
+    return d->charactersPositions.value(_name);
+}
+
+void CharactersModel::setCharacterPosition(const QString& _name, const QPointF& _position)
+{
+    if (d->charactersPositions.value(_name) == _position) {
+        return;
+    }
+
+    d->charactersPositions[_name] = _position;
+    emit characterPositionChanged(_name, _position);
 }
 
 QModelIndex CharactersModel::index(int _row, int _column, const QModelIndex& _parent) const
@@ -152,9 +180,24 @@ CharactersModel::~CharactersModel() = default;
 
 void CharactersModel::initDocument()
 {
-    //
-    // TODO:
-    //
+    if (document() == nullptr) {
+        return;
+    }
+
+    QDomDocument domDocument;
+    domDocument.setContent(document()->content());
+    const auto documentNode = domDocument.firstChildElement(kDocumentKey);
+    auto characterNode = documentNode.firstChildElement(kCharacterKey);
+    while (!characterNode.isNull()) {
+        const auto characterName = characterNode.attribute(kNameKey);
+        const auto positionText = characterNode.attribute(kPositionKey).split(";");
+        Q_ASSERT(positionText.size() == 2);
+        const QPointF position(positionText.constFirst().toDouble(),
+                               positionText.constLast().toDouble());
+        d->charactersPositions[characterName] = position;
+
+        characterNode = characterNode.nextSiblingElement();
+    }
 }
 
 void CharactersModel::clearDocument()
@@ -164,10 +207,24 @@ void CharactersModel::clearDocument()
 
 QByteArray CharactersModel::toXml() const
 {
-    //
-    // TODO: реализуем, когда сделаем редактор ментальных карт
-    //
-    return {};
+    if (document() == nullptr) {
+        return {};
+    }
+
+    QByteArray xml = "<?xml version=\"1.0\"?>\n";
+    xml += QString("<%1 mime-type=\"%2\" version=\"1.0\">\n")
+               .arg(kDocumentKey, Domain::mimeTypeFor(document()->type()))
+               .toUtf8();
+    for (auto character : std::as_const(d->characterModels)) {
+        const auto characterPosition = this->characterPosition(character->name());
+        xml += QString("<%1 %2=\"%3\" %4=\"%5;%6\"/>\n")
+                   .arg(kCharacterKey, kNameKey, character->name(), kPositionKey,
+                        QString::number(characterPosition.x()),
+                        QString::number(characterPosition.y()))
+                   .toUtf8();
+    }
+    xml += QString("</%1>").arg(kDocumentKey).toUtf8();
+    return xml;
 }
 
 } // namespace BusinessLayer

@@ -6,6 +6,16 @@
 namespace BusinessLayer {
 
 /**
+ * @brief Роль персонажа в истории
+ */
+enum class CharacterStoryRole {
+    Primary,
+    Secondary,
+    Tertiary,
+    Undefined,
+};
+
+/**
  * @brief Модель данных персонажа
  */
 class CORE_LIBRARY_EXPORT CharacterModel : public AbstractModel
@@ -25,9 +35,9 @@ public:
     void setColor(const QColor& _color);
     Q_SIGNAL void colorChanged(const QColor& _color);
 
-    int storyRole() const;
-    void setStoryRole(int _role);
-    Q_SIGNAL void storyRoleChanged(int _role);
+    CharacterStoryRole storyRole() const;
+    void setStoryRole(CharacterStoryRole _role);
+    Q_SIGNAL void storyRoleChanged(CharacterStoryRole _role);
 
     const QString& age() const;
     void setAge(const QString& _age);

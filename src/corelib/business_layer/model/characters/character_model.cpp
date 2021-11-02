@@ -25,7 +25,7 @@ class CharacterModel::Implementation
 public:
     QString name;
     QColor color;
-    int storyRole = 3;
+    CharacterStoryRole storyRole = CharacterStoryRole::Undefined;
     QString age;
     int gender = 3;
     QString oneSentenceDescription;
@@ -104,12 +104,12 @@ void CharacterModel::setColor(const QColor& _color)
     emit documentColorChanged(d->color);
 }
 
-int CharacterModel::storyRole() const
+CharacterStoryRole CharacterModel::storyRole() const
 {
     return d->storyRole;
 }
 
-void CharacterModel::setStoryRole(int _role)
+void CharacterModel::setStoryRole(CharacterStoryRole _role)
 {
     if (d->storyRole == _role) {
         return;
@@ -211,7 +211,7 @@ void CharacterModel::initDocument()
         d->color = load(kColorKey);
     }
     if (contains(kStoryRoleKey)) {
-        d->storyRole = load(kStoryRoleKey).toInt();
+        d->storyRole = static_cast<CharacterStoryRole>(load(kStoryRoleKey).toInt());
     }
     d->age = load(kAgeKey);
     if (contains(kGenderKey)) {
@@ -245,7 +245,7 @@ QByteArray CharacterModel::toXml() const
     if (d->color.isValid()) {
         save(kColorKey, d->color.name());
     }
-    save(kStoryRoleKey, QString::number(d->storyRole));
+    save(kStoryRoleKey, QString::number(static_cast<int>(d->storyRole)));
     save(kAgeKey, d->age);
     save(kGenderKey, QString::number(d->gender));
     save(kOneSentenceDescriptionKey, d->oneSentenceDescription);
