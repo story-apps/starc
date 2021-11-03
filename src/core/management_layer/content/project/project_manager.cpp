@@ -249,6 +249,40 @@ void ProjectManager::Implementation::removeDocument(const QModelIndex& _itemInde
     //
     if (itemTopLevelParent->type() != Domain::DocumentObjectType::RecycleBin) {
         projectStructureModel->moveItemToRecycleBin(item);
+
+        //
+        // Персонажи и локации убираем из родительского списка
+        //
+        switch (item->type()) {
+        case Domain::DocumentObjectType::Character: {
+            const auto charactersDocuments
+                = DataStorageLayer::StorageFacade::documentStorage()->documents(
+                    Domain::DocumentObjectType::Characters);
+            Q_ASSERT(charactersDocuments.size() == 1);
+            auto charactersModel = modelsFacade.modelFor(charactersDocuments.first());
+            auto characters = qobject_cast<BusinessLayer::CharactersModel*>(charactersModel);
+            characters->removeCharacterModel(
+                qobject_cast<BusinessLayer::CharacterModel*>(modelsFacade.modelFor(item->uuid())));
+            break;
+        }
+
+        case Domain::DocumentObjectType::Location: {
+            const auto locationsDocuments
+                = DataStorageLayer::StorageFacade::documentStorage()->documents(
+                    Domain::DocumentObjectType::Locations);
+            Q_ASSERT(locationsDocuments.size() == 1);
+            auto locationsModel = modelsFacade.modelFor(locationsDocuments.first());
+            auto locations = qobject_cast<BusinessLayer::LocationsModel*>(locationsModel);
+            locations->removeLocationModel(
+                qobject_cast<BusinessLayer::LocationModel*>(modelsFacade.modelFor(item->uuid())));
+            break;
+        }
+
+        default: {
+            break;
+        }
+        }
+
         return;
     }
 

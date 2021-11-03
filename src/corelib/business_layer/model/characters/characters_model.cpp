@@ -203,6 +203,7 @@ void CharactersModel::initDocument()
 void CharactersModel::clearDocument()
 {
     d->characterModels.clear();
+    d->charactersPositions.clear();
 }
 
 QByteArray CharactersModel::toXml() const

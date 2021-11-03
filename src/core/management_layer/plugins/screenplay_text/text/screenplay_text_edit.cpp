@@ -698,7 +698,8 @@ void ScreenplayTextEdit::paintEvent(QPaintEvent* _event)
                 //
                 // Определим цвет персонажа
                 //
-                if (blockType == ScreenplayParagraphType::Character) {
+                if (blockType == ScreenplayParagraphType::Character
+                    && d->model->charactersModel() != nullptr) {
                     lastCharacterBlockBottom = cursorR.top();
                     lastCharacterColor = QColor();
                     const QString characterName

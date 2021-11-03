@@ -820,6 +820,7 @@ void ProjectsCards::setProjects(ManagementLayer::ProjectsModel* _projects)
                     d->scene->removeItem(projectCard);
                     d->projectsCardsAnimations.remove(projectCard);
                     delete projectCard;
+                    projectCard = nullptr;
                 }
 
                 //
