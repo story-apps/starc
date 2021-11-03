@@ -187,6 +187,7 @@ SOURCES += \
     ui/widgets/pie/pie.cpp \
     ui/widgets/radio_button/radio_button.cpp \
     ui/widgets/radio_button/radio_button_group.cpp \
+    ui/widgets/scalable_graphics_view/scalable_graphics_view.cpp \
     ui/widgets/scroll_bar/scroll_bar.cpp \
     ui/widgets/shadow/shadow.cpp \
     ui/widgets/slider/slider.cpp \
@@ -382,6 +383,7 @@ HEADERS += \
     ui/widgets/pie/pie.h \
     ui/widgets/radio_button/radio_button.h \
     ui/widgets/radio_button/radio_button_group.h \
+    ui/widgets/scalable_graphics_view/scalable_graphics_view.h \
     ui/widgets/scroll_bar/scroll_bar.h \
     ui/widgets/shadow/shadow.h \
     ui/widgets/slider/slider.h \
