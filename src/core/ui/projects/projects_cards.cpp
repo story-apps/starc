@@ -79,6 +79,7 @@ private:
      */
     QVector<QRectF> actionsRects() const;
 
+
     /**
      * @brief Проект для отображения на карточке
      */
@@ -363,7 +364,16 @@ void ProjectCard::mouseReleaseEvent(QGraphicsSceneMouseEvent* _event)
 {
     QGraphicsRectItem::mouseReleaseEvent(_event);
 
-    bool needReorderCards = true;
+    auto scene = projectsScene();
+
+    //
+    // Возвращаем карточку на место
+    //
+    // Делаем отложенный вызов, чтобы mouseGrabber сцены освободился
+    //
+    QMetaObject::invokeMethod(scene,
+                              [this, scene] { emit scene->reorderProjectCardRequested(this); });
+
     if (m_decorationOpacityAnimation.state() == QVariantAnimation::Running) {
         m_decorationOpacityAnimation.pause();
         m_decorationOpacityAnimation.setEndValue(0.0);
@@ -372,38 +382,33 @@ void ProjectCard::mouseReleaseEvent(QGraphicsSceneMouseEvent* _event)
         const auto iconsRects = actionsRects();
         if (m_project.type() == ManagementLayer::ProjectType::Local) {
             if (iconsRects[0].contains(_event->pos())) {
-                emit projectsScene()->moveProjectToCloudRequested(m_project);
+                emit scene->moveProjectToCloudRequested(m_project);
             } else if (iconsRects[1].contains(_event->pos())) {
-                emit projectsScene()->hideProjectRequested(m_project);
-                needReorderCards = false;
+                emit scene->hideProjectRequested(m_project);
             } else {
-                emit projectsScene()->projectPressed(m_project);
+                //
+                // Отложенно уведомляем о клике на карточке.
+                // NOTE: Важно, чтобы это событие выполнилось после завершения анимации, чтобы
+                // корректно обработать кейс, когда проект был удалён/переименован на компе, в
+                // результате чего, клик на карточке приведёт к её удалению
+                //
+                QMetaObject::invokeMethod(scene,
+                                          [this, scene] { emit scene->projectPressed(m_project); });
             }
         } else {
             if (iconsRects[0].contains(_event->pos())) {
-                emit projectsScene()->changeProjectNameRequested(m_project);
+                emit scene->changeProjectNameRequested(m_project);
             } else if (iconsRects[1].contains(_event->pos())) {
-                emit projectsScene()->removeProjectRequested(m_project);
-                needReorderCards = false;
+                emit scene->removeProjectRequested(m_project);
             } else {
-                emit projectsScene()->projectPressed(m_project);
+                QMetaObject::invokeMethod(scene,
+                                          [this, scene] { emit scene->projectPressed(m_project); });
             }
         }
     } else {
         m_decorationOpacityAnimation.setStartValue(0.15);
         m_decorationOpacityAnimation.setEndValue(0.0);
         m_decorationOpacityAnimation.start();
-    }
-
-    //
-    // Если карточка не была удалена, возвращаем её на место
-    //
-    if (needReorderCards) {
-        //
-        // Делаем отложенный вызов, чтобы mouseGrabber сцены освободился
-        //
-        QTimer::singleShot(0, projectsScene(),
-                           [this] { emit projectsScene()->reorderProjectCardRequested(this); });
     }
 }
 
