@@ -2,6 +2,8 @@
 
 #include "../abstract_model.h"
 
+#include <QColor>
+
 
 namespace BusinessLayer {
 
@@ -21,6 +23,17 @@ enum class CharacterStoryRole {
 class CORE_LIBRARY_EXPORT CharacterModel : public AbstractModel
 {
     Q_OBJECT
+
+public:
+    /**
+     * @brief Отношения с другим персонажем
+     */
+    struct Relation {
+        CharacterModel* character = nullptr;
+        QColor color;
+        QString title;
+        QString description;
+    };
 
 public:
     explicit CharacterModel(QObject* _parent = nullptr);
@@ -58,6 +71,14 @@ public:
     const QPixmap& mainPhoto() const;
     void setMainPhoto(const QPixmap& _photo);
     Q_SIGNAL void mainPhotoChanged(const QPixmap& _photo);
+
+    void setRelationWith(CharacterModel* _character, const QColor& _color, const QString& _title,
+                         const QString& _description);
+    void removeRelationWith(CharacterModel* _character);
+    QVector<Relation> relations() const;
+    Q_SIGNAL void relationAdded(const Relation& _relation);
+    Q_SIGNAL void relationChanged(const Relation& _relation);
+    Q_SIGNAL void relationRemoved(const Relation& _relation);
 
 protected:
     /**

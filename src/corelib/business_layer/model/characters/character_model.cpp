@@ -31,6 +31,7 @@ public:
     QString oneSentenceDescription;
     QString longDescription;
     Domain::DocumentImage mainPhoto;
+    QVector<Relation> relations;
 };
 
 // ****
@@ -54,13 +55,16 @@ CharacterModel::CharacterModel(QObject* _parent)
     connect(this, &CharacterModel::nameChanged, this, &CharacterModel::updateDocumentContent);
     connect(this, &CharacterModel::colorChanged, this, &CharacterModel::updateDocumentContent);
     connect(this, &CharacterModel::storyRoleChanged, this, &CharacterModel::updateDocumentContent);
+    connect(this, &CharacterModel::ageChanged, this, &CharacterModel::updateDocumentContent);
+    connect(this, &CharacterModel::genderChanged, this, &CharacterModel::updateDocumentContent);
     connect(this, &CharacterModel::oneSentenceDescriptionChanged, this,
             &CharacterModel::updateDocumentContent);
     connect(this, &CharacterModel::longDescriptionChanged, this,
             &CharacterModel::updateDocumentContent);
     connect(this, &CharacterModel::mainPhotoChanged, this, &CharacterModel::updateDocumentContent);
-    connect(this, &CharacterModel::ageChanged, this, &CharacterModel::updateDocumentContent);
-    connect(this, &CharacterModel::genderChanged, this, &CharacterModel::updateDocumentContent);
+    connect(this, &CharacterModel::relationAdded, this, &CharacterModel::updateDocumentContent);
+    connect(this, &CharacterModel::relationChanged, this, &CharacterModel::updateDocumentContent);
+    connect(this, &CharacterModel::relationRemoved, this, &CharacterModel::updateDocumentContent);
 }
 
 CharacterModel::~CharacterModel() = default;
@@ -189,6 +193,43 @@ void CharacterModel::setMainPhoto(const QPixmap& _photo)
     d->mainPhoto.image = _photo;
     d->mainPhoto.uuid = imageWrapper()->save(d->mainPhoto.image);
     emit mainPhotoChanged(d->mainPhoto.image);
+}
+
+void CharacterModel::setRelationWith(CharacterModel* _character, const QColor& _color,
+                                     const QString& _title, const QString& _description)
+{
+    for (auto& relation : d->relations) {
+        if (relation.character != _character) {
+            continue;
+        }
+
+        relation.color = _color;
+        relation.title = _title;
+        relation.description = _description;
+        emit relationChanged(relation);
+        return;
+    }
+
+    d->relations.append({ _character, _color, _title, _description });
+    emit relationAdded(d->relations.constLast());
+}
+
+void CharacterModel::removeRelationWith(CharacterModel* _character)
+{
+    for (int index = 0; index < d->relations.size(); ++index) {
+        if (d->relations[index].character != _character) {
+            continue;
+        }
+
+        auto relation = d->relations.takeAt(index);
+        emit relationRemoved(relation);
+        return;
+    }
+}
+
+QVector<CharacterModel::Relation> CharacterModel::relations() const
+{
+    return d->relations;
 }
 
 void CharacterModel::initDocument()
