@@ -2,6 +2,8 @@
 
 #include <business_layer/model/abstract_image_wrapper.h>
 #include <domain/document_object.h>
+#include <utils/helpers/color_helper.h>
+#include <utils/helpers/text_helper.h>
 
 #include <QDomDocument>
 
@@ -18,6 +20,10 @@ const QString kGenderKey = QStringLiteral("gender");
 const QString kOneSentenceDescriptionKey = QStringLiteral("one_sentence_description");
 const QString kLongDescriptionKey = QStringLiteral("long_description");
 const QString kMainPhotoKey = QStringLiteral("main_photo");
+const QString kRelationsKey = QStringLiteral("relations");
+const QString kRelationKey = QStringLiteral("relation");
+const QLatin1String kRelationWithCharacterKey("with");
+const QLatin1String kDescriptionKey("description");
 } // namespace
 
 class CharacterModel::Implementation
@@ -43,11 +49,13 @@ CharacterModel::CharacterModel(QObject* _parent)
             kNameKey,
             kColorKey,
             kStoryRoleKey,
+            kAgeKey,
+            kGenderKey,
             kOneSentenceDescriptionKey,
             kLongDescriptionKey,
             kMainPhotoKey,
-            kAgeKey,
-            kGenderKey,
+            kRelationsKey,
+            kRelationKey,
         },
         _parent)
     , d(new Implementation)
@@ -195,8 +203,8 @@ void CharacterModel::setMainPhoto(const QPixmap& _photo)
     emit mainPhotoChanged(d->mainPhoto.image);
 }
 
-void CharacterModel::setRelationWith(CharacterModel* _character, const QColor& _color,
-                                     const QString& _title, const QString& _description)
+void CharacterModel::setRelationWith(QUuid _character, const QColor& _color, const QString& _title,
+                                     const QString& _description)
 {
     for (auto& relation : d->relations) {
         if (relation.character != _character) {
@@ -204,7 +212,7 @@ void CharacterModel::setRelationWith(CharacterModel* _character, const QColor& _
         }
 
         relation.color = _color;
-        relation.title = _title;
+        relation.name = _title;
         relation.description = _description;
         emit relationChanged(relation);
         return;
@@ -214,7 +222,7 @@ void CharacterModel::setRelationWith(CharacterModel* _character, const QColor& _
     emit relationAdded(d->relations.constLast());
 }
 
-void CharacterModel::removeRelationWith(CharacterModel* _character)
+void CharacterModel::removeRelationWith(QUuid _character)
 {
     for (int index = 0; index < d->relations.size(); ++index) {
         if (d->relations[index].character != _character) {
@@ -262,6 +270,21 @@ void CharacterModel::initDocument()
     d->longDescription = load(kLongDescriptionKey);
     d->mainPhoto.uuid = load(kMainPhotoKey);
     d->mainPhoto.image = imageWrapper()->load(d->mainPhoto.uuid);
+    auto relationsNode = documentNode.firstChildElement(kRelationsKey);
+    if (!relationsNode.isNull()) {
+        auto relationNode = relationsNode.firstChildElement(kRelationKey);
+        while (!relationNode.isNull()) {
+            Relation relation;
+            relation.character = relationNode.firstChildElement(kRelationWithCharacterKey).text();
+            relation.color
+                = ColorHelper::fromString(relationNode.firstChildElement(kColorKey).text());
+            relation.name = relationNode.firstChildElement(kNameKey).text();
+            relation.description = relationNode.firstChildElement(kDescriptionKey).text();
+            d->relations.append(relation);
+
+            relationNode = relationNode.nextSiblingElement();
+        }
+    }
 }
 
 void CharacterModel::clearDocument()
@@ -280,7 +303,9 @@ QByteArray CharacterModel::toXml() const
                .arg(kDocumentKey, Domain::mimeTypeFor(document()->type()))
                .toUtf8();
     auto save = [&xml](const QString& _key, const QString& _value) {
-        xml += QString("<%1><![CDATA[%2]]></%1>\n").arg(_key, _value).toUtf8();
+        xml += QString("<%1><![CDATA[%2]]></%1>\n")
+                   .arg(_key, TextHelper::toHtmlEscaped(_value))
+                   .toUtf8();
     };
     save(kNameKey, d->name);
     if (d->color.isValid()) {
@@ -292,6 +317,20 @@ QByteArray CharacterModel::toXml() const
     save(kOneSentenceDescriptionKey, d->oneSentenceDescription);
     save(kLongDescriptionKey, d->longDescription);
     save(kMainPhotoKey, d->mainPhoto.uuid.toString());
+    if (!d->relations.isEmpty()) {
+        xml += QString("<%1>\n").arg(kRelationsKey).toUtf8();
+        for (const auto& relation : std::as_const(d->relations)) {
+            xml += QString("<%1>\n").arg(kRelationKey).toUtf8();
+            save(kRelationWithCharacterKey, relation.character.toString());
+            if (relation.color.isValid()) {
+                save(kColorKey, relation.color.name());
+            }
+            save(kNameKey, relation.name);
+            save(kDescriptionKey, relation.description);
+            xml += QString("</%1>\n").arg(kRelationKey).toUtf8();
+        }
+        xml += QString("</%1>\n").arg(kRelationsKey).toUtf8();
+    }
     xml += QString("</%1>").arg(kDocumentKey).toUtf8();
     return xml;
 }

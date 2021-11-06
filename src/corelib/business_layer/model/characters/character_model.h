@@ -3,6 +3,7 @@
 #include "../abstract_model.h"
 
 #include <QColor>
+#include <QUuid>
 
 
 namespace BusinessLayer {
@@ -29,9 +30,9 @@ public:
      * @brief Отношения с другим персонажем
      */
     struct Relation {
-        CharacterModel* character = nullptr;
+        QUuid character;
         QColor color;
-        QString title;
+        QString name;
         QString description;
     };
 
@@ -72,9 +73,9 @@ public:
     void setMainPhoto(const QPixmap& _photo);
     Q_SIGNAL void mainPhotoChanged(const QPixmap& _photo);
 
-    void setRelationWith(CharacterModel* _character, const QColor& _color, const QString& _title,
+    void setRelationWith(QUuid _character, const QColor& _color, const QString& _title,
                          const QString& _description);
-    void removeRelationWith(CharacterModel* _character);
+    void removeRelationWith(QUuid _character);
     QVector<Relation> relations() const;
     Q_SIGNAL void relationAdded(const Relation& _relation);
     Q_SIGNAL void relationChanged(const Relation& _relation);
