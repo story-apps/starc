@@ -6,8 +6,8 @@
 #include <utils/diff_match_patch/diff_match_patch_controller.h>
 #include <utils/tools/debouncer.h>
 
+#include <QDebug>
 #include <QScopedValueRollback>
-
 
 namespace BusinessLayer {
 
@@ -156,6 +156,10 @@ void AbstractModel::saveChanges()
     // если содержимое документа было пустым (как правило это кейс после создания документа),
     // то отменять и нечего, поэтому игнорируем такие изменения
     //
+    qDebug() << "\n\n\n";
+    qDebug() << content;
+    qDebug() << "\n\n\n";
+    qDebug() << d->document->content();
     const auto needToNotifyAboutContentChanged = !d->document->content().isEmpty();
     d->document->setContent(content);
     if (needToNotifyAboutContentChanged) {

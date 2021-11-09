@@ -1,5 +1,5 @@
 TEMPLATE = lib
-TARGET = libavoid
+TARGET = avoid
 
 CONFIG += staticlib
 

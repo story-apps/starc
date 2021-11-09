@@ -94,6 +94,17 @@ bool CharactersModel::exists(const QString& _name) const
     return false;
 }
 
+CharacterModel* CharactersModel::character(const QUuid& _uuid) const
+{
+    for (const auto character : std::as_const(d->characterModels)) {
+        if (character->document()->uuid() == _uuid) {
+            return character;
+        }
+    }
+
+    return nullptr;
+}
+
 CharacterModel* CharactersModel::character(const QString& _name) const
 {
     for (const auto character : std::as_const(d->characterModels)) {

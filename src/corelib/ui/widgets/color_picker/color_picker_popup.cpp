@@ -5,6 +5,7 @@
 #include <ui/design_system/design_system.h>
 
 #include <QHBoxLayout>
+#include <QKeyEvent>
 #include <QVariantAnimation>
 
 class ColorPickerPopup::Implementation
@@ -15,6 +16,11 @@ public:
     bool isPopupShown = false;
     ColorPicker* colorPicker = nullptr;
     QVariantAnimation heightAnimation;
+
+    /**
+     * @brief Виджет, за событиями которого мы следим, чтобы при потере фокуса скрыть попап
+     */
+    QWidget* watchedWidget = nullptr;
 };
 
 ColorPickerPopup::Implementation::Implementation(ColorPickerPopup* _q)
@@ -82,6 +88,11 @@ bool ColorPickerPopup::isPopupShown() const
 
 void ColorPickerPopup::showPopup(QWidget* _parent, Qt::Alignment _alignment)
 {
+    if (_parent) {
+        d->watchedWidget = _parent;
+        _parent->installEventFilter(this);
+    }
+
     d->isPopupShown = true;
 
     resize(sizeHint().width(), 0);
@@ -112,4 +123,26 @@ void ColorPickerPopup::hidePopup()
 
     d->heightAnimation.setDirection(QVariantAnimation::Backward);
     d->heightAnimation.start();
+
+    if (d->watchedWidget) {
+        d->watchedWidget->removeEventFilter(this);
+    }
+}
+
+bool ColorPickerPopup::eventFilter(QObject* _watched, QEvent* _event)
+{
+    if (_watched == d->watchedWidget) {
+        if (_event->type() == QEvent::KeyPress) {
+            auto keyEvent = static_cast<QKeyEvent*>(_event);
+            if (keyEvent->key() == Qt::Key_Escape) {
+                hidePopup();
+            }
+        } else if (_event->type() == QEvent::FocusOut) {
+            if (!hasFocus()) {
+                hidePopup();
+            }
+        }
+    }
+
+    return Widget::eventFilter(_watched, _event);
 }

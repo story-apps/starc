@@ -23,8 +23,11 @@ const QString kMainPhotoKey = QStringLiteral("main_photo");
 const QString kRelationsKey = QStringLiteral("relations");
 const QString kRelationKey = QStringLiteral("relation");
 const QLatin1String kRelationWithCharacterKey("with");
-const QLatin1String kDescriptionKey("description");
+const QLatin1String kLineTypeKey("line_type");
+const QLatin1String kFeelingKey("feeling");
+const QLatin1String kDetailsKey("details");
 } // namespace
+
 
 class CharacterModel::Implementation
 {
@@ -37,10 +40,28 @@ public:
     QString oneSentenceDescription;
     QString longDescription;
     Domain::DocumentImage mainPhoto;
-    QVector<Relation> relations;
+    QVector<CharacterRelation> relations;
 };
 
+
 // ****
+
+
+bool CharacterRelation::isValid() const
+{
+    return !character.isNull();
+}
+
+bool CharacterRelation::operator==(const CharacterRelation& _other) const
+{
+    return character == _other.character && lineType == _other.lineType && color == _other.color
+        && feeling == _other.feeling && details == _other.details;
+}
+
+bool CharacterRelation::operator!=(const CharacterRelation& _other) const
+{
+    return !(*this == _other);
+}
 
 CharacterModel::CharacterModel(QObject* _parent)
     : AbstractModel(
@@ -203,23 +224,31 @@ void CharacterModel::setMainPhoto(const QPixmap& _photo)
     emit mainPhotoChanged(d->mainPhoto.image);
 }
 
-void CharacterModel::setRelationWith(QUuid _character, const QColor& _color, const QString& _title,
-                                     const QString& _description)
+void CharacterModel::createRelation(const QUuid& _withCharacter)
+{
+    for (const auto& relation : d->relations) {
+        if (relation.character == _withCharacter) {
+            return;
+        }
+    }
+
+    d->relations.append({ _withCharacter });
+    emit relationAdded(d->relations.constLast());
+}
+
+void CharacterModel::updateRelation(const CharacterRelation& _relation)
 {
     for (auto& relation : d->relations) {
-        if (relation.character != _character) {
+        if (relation.character != _relation.character) {
             continue;
         }
 
-        relation.color = _color;
-        relation.name = _title;
-        relation.description = _description;
-        emit relationChanged(relation);
+        if (relation != _relation) {
+            relation = _relation;
+            emit relationChanged(relation);
+        }
         return;
     }
-
-    d->relations.append({ _character, _color, _title, _description });
-    emit relationAdded(d->relations.constLast());
 }
 
 void CharacterModel::removeRelationWith(QUuid _character)
@@ -235,7 +264,23 @@ void CharacterModel::removeRelationWith(QUuid _character)
     }
 }
 
-QVector<CharacterModel::Relation> CharacterModel::relations() const
+CharacterRelation CharacterModel::relation(const QUuid& _withCharacter)
+{
+    for (auto& relation : d->relations) {
+        if (relation.character == _withCharacter) {
+            return relation;
+        }
+    }
+
+    return {};
+}
+
+CharacterRelation CharacterModel::relation(CharacterModel* _withCharacter)
+{
+    return relation(_withCharacter->document()->uuid());
+}
+
+QVector<CharacterRelation> CharacterModel::relations() const
 {
     return d->relations;
 }
@@ -253,7 +298,7 @@ void CharacterModel::initDocument()
         return !documentNode.firstChildElement(_key).isNull();
     };
     auto load = [&documentNode](const QString& _key) {
-        return documentNode.firstChildElement(_key).text();
+        return TextHelper::fromHtmlEscaped(documentNode.firstChildElement(_key).text());
     };
     d->name = load(kNameKey);
     if (contains(kColorKey)) {
@@ -274,12 +319,15 @@ void CharacterModel::initDocument()
     if (!relationsNode.isNull()) {
         auto relationNode = relationsNode.firstChildElement(kRelationKey);
         while (!relationNode.isNull()) {
-            Relation relation;
+            CharacterRelation relation;
             relation.character = relationNode.firstChildElement(kRelationWithCharacterKey).text();
+            relation.lineType = relationNode.firstChildElement(kLineTypeKey).text().toInt();
             relation.color
                 = ColorHelper::fromString(relationNode.firstChildElement(kColorKey).text());
-            relation.name = relationNode.firstChildElement(kNameKey).text();
-            relation.description = relationNode.firstChildElement(kDescriptionKey).text();
+            relation.feeling
+                = TextHelper::fromHtmlEscaped(relationNode.firstChildElement(kFeelingKey).text());
+            relation.details
+                = TextHelper::fromHtmlEscaped(relationNode.firstChildElement(kDetailsKey).text());
             d->relations.append(relation);
 
             relationNode = relationNode.nextSiblingElement();
@@ -322,11 +370,12 @@ QByteArray CharacterModel::toXml() const
         for (const auto& relation : std::as_const(d->relations)) {
             xml += QString("<%1>\n").arg(kRelationKey).toUtf8();
             save(kRelationWithCharacterKey, relation.character.toString());
+            save(kLineTypeKey, QString::number(relation.lineType));
             if (relation.color.isValid()) {
                 save(kColorKey, relation.color.name());
             }
-            save(kNameKey, relation.name);
-            save(kDescriptionKey, relation.description);
+            save(kFeelingKey, relation.feeling);
+            save(kDetailsKey, relation.details);
             xml += QString("</%1>\n").arg(kRelationKey).toUtf8();
         }
         xml += QString("</%1>\n").arg(kRelationsKey).toUtf8();

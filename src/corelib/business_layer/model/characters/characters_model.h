@@ -39,6 +39,11 @@ public:
     bool exists(const QString& _name) const;
 
     /**
+     * @brief Получить модель персонажа по его идентификатору
+     */
+    CharacterModel* character(const QUuid& _uuid) const;
+
+    /**
      * @brief Получить модель персонажа по его имени
      */
     CharacterModel* character(const QString& _name) const;

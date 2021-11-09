@@ -45,6 +45,12 @@ signals:
      */
     void selectedColorChanged(const QColor& _color);
 
+protected:
+    /**
+     * @brief Следим за событиям потери фокуса в виджете, к которому привязан попап
+     */
+    bool eventFilter(QObject* _watched, QEvent* _event) override;
+
 private:
     class Implementation;
     QScopedPointer<Implementation> d;

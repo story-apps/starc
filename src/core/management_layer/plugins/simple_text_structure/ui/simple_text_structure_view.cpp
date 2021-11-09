@@ -110,7 +110,8 @@ void SimpleTextStructureView::setCurrentModelIndex(const QModelIndex& _index)
 
 void SimpleTextStructureView::updateTranslations()
 {
-    d->backText->setText("Back to navigator");
+    d->backIcon->setToolTip(tr("Back to navigator"));
+    d->backText->setToolTip(tr("Back to navigator"));
 }
 
 void SimpleTextStructureView::designSystemChangeEvent(DesignSystemChangeEvent* _event)

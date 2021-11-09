@@ -17,6 +17,23 @@ enum class CharacterStoryRole {
     Tertiary,
     Undefined,
 };
+/**
+ * @brief Отношения с другим персонажем
+ */
+class CharacterRelation
+{
+public:
+    bool isValid() const;
+
+    bool operator==(const CharacterRelation& _other) const;
+    bool operator!=(const CharacterRelation& _other) const;
+
+    QUuid character;
+    int lineType = Qt::SolidLine;
+    QColor color = {};
+    QString feeling = {};
+    QString details = {};
+};
 
 /**
  * @brief Модель данных персонажа
@@ -24,17 +41,6 @@ enum class CharacterStoryRole {
 class CORE_LIBRARY_EXPORT CharacterModel : public AbstractModel
 {
     Q_OBJECT
-
-public:
-    /**
-     * @brief Отношения с другим персонажем
-     */
-    struct Relation {
-        QUuid character;
-        QColor color;
-        QString name;
-        QString description;
-    };
 
 public:
     explicit CharacterModel(QObject* _parent = nullptr);
@@ -73,13 +79,15 @@ public:
     void setMainPhoto(const QPixmap& _photo);
     Q_SIGNAL void mainPhotoChanged(const QPixmap& _photo);
 
-    void setRelationWith(QUuid _character, const QColor& _color, const QString& _title,
-                         const QString& _description);
+    void createRelation(const QUuid& _withCharacter);
+    void updateRelation(const CharacterRelation& _relation);
     void removeRelationWith(QUuid _character);
-    QVector<Relation> relations() const;
-    Q_SIGNAL void relationAdded(const Relation& _relation);
-    Q_SIGNAL void relationChanged(const Relation& _relation);
-    Q_SIGNAL void relationRemoved(const Relation& _relation);
+    CharacterRelation relation(const QUuid& _withCharacter);
+    CharacterRelation relation(CharacterModel* _withCharacter);
+    QVector<CharacterRelation> relations() const;
+    Q_SIGNAL void relationAdded(const CharacterRelation& _relation);
+    Q_SIGNAL void relationChanged(const CharacterRelation& _relation);
+    Q_SIGNAL void relationRemoved(const CharacterRelation& _relation);
 
 protected:
     /**
