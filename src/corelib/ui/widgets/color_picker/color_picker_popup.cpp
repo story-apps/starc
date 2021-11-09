@@ -35,7 +35,7 @@ ColorPickerPopup::ColorPickerPopup(QWidget* _parent)
     , d(new Implementation(this))
 {
     setFocusPolicy(Qt::StrongFocus);
-    setWindowFlags(Qt::SplashScreen | Qt::FramelessWindowHint | Qt::NoDropShadowWindowHint);
+    setWindowFlags(Qt::Tool | Qt::FramelessWindowHint | Qt::NoDropShadowWindowHint);
     setAttribute(Qt::WA_Hover, false);
     setAttribute(Qt::WA_TranslucentBackground);
     setAttribute(Qt::WA_ShowWithoutActivating);
