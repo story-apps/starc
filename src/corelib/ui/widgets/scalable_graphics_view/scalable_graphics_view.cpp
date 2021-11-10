@@ -158,8 +158,9 @@ void ScalableGraphicsView::keyPressEvent(QKeyEvent* _event)
         return;
     }
 
-    if (_event->key() == Qt::Key_Space) {
+    if (_event->key() == Qt::Key_Space && !_event->isAutoRepeat()) {
         m_inScrolling = true;
+        QApplication::setOverrideCursor(QCursor(Qt::OpenHandCursor));
         return;
     }
 
@@ -168,8 +169,9 @@ void ScalableGraphicsView::keyPressEvent(QKeyEvent* _event)
 
 void ScalableGraphicsView::keyReleaseEvent(QKeyEvent* _event)
 {
-    if (_event->key() == Qt::Key_Space) {
+    if (_event->key() == Qt::Key_Space && !_event->isAutoRepeat()) {
         m_inScrolling = false;
+        QApplication::restoreOverrideCursor();
     }
 
     QGraphicsView::keyReleaseEvent(_event);
