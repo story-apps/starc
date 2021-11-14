@@ -2,9 +2,7 @@
 
 #include <QGraphicsView>
 
-#ifdef MOBILE_OS
-#include <QTimer>
-#endif
+#include <corelib_global.h>
 
 class QGestureEvent;
 
@@ -12,7 +10,7 @@ class QGestureEvent;
 /**
  * @brief Область отрисовки графических элементов с масштабированием и улучшенной прокруткой
  */
-class ScalableGraphicsView : public QGraphicsView
+class CORE_LIBRARY_EXPORT ScalableGraphicsView : public QGraphicsView
 {
     Q_OBJECT
 

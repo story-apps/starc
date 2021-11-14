@@ -20,7 +20,7 @@ enum class CharacterStoryRole {
 /**
  * @brief Отношения с другим персонажем
  */
-class CharacterRelation
+class CORE_LIBRARY_EXPORT CharacterRelation
 {
 public:
     bool isValid() const;
