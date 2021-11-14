@@ -10,6 +10,8 @@ QT -= core gui
 #
 DESTDIR = ../../_build/libs
 
+DEFINES += LIBAVOID_NO_DLL
+
 # Input
 HEADERS += \
     libavoid/actioninfo.h \
