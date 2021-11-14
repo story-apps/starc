@@ -364,42 +364,43 @@ bool BaseTextEdit::keyPressEventReimpl(QKeyEvent* _event)
             clearSelection = true;
         }
 
-        QString selectedText = cursor.selectedText();
-        const QChar firstChar = selectedText.at(0);
-        const bool firstToUpper = TextHelper::smartToUpper(firstChar) != firstChar;
-        const bool textInUpper = (selectedText.length() > 1)
-            && (TextHelper::smartToUpper(selectedText) == selectedText);
-        const int fromPosition = qMin(cursor.selectionStart(), cursor.selectionEnd());
-        const int toPosition = qMax(cursor.selectionStart(), cursor.selectionEnd());
-        const bool toUpper = _event->key() == Qt::Key_Up;
-        for (int position = fromPosition; position < toPosition; ++position) {
-            cursor.setPosition(position);
-            cursor.movePosition(QTextCursor::NextCharacter, QTextCursor::KeepAnchor);
-            selectedText = cursor.selectedText();
-            if (toUpper) {
-                //
-                // Поднимаем для всего текста, или только для первого символа
-                //
-                if (!firstToUpper || (firstToUpper && position == fromPosition)) {
-                    cursor.insertText(TextHelper::smartToUpper(selectedText));
-                }
-            } else {
-                //
-                // Опускаем для всего текста, или для всех символов, кроме первого
-                //
-                if (!textInUpper || (textInUpper && position != fromPosition)) {
-                    cursor.insertText(TextHelper::smartToLower(selectedText));
+        if (QString selectedText = cursor.selectedText(); !selectedText.isEmpty()) {
+            const QChar firstChar = selectedText.at(0);
+            const bool firstToUpper = TextHelper::smartToUpper(firstChar) != firstChar;
+            const bool textInUpper = (selectedText.length() > 1)
+                && (TextHelper::smartToUpper(selectedText) == selectedText);
+            const int fromPosition = qMin(cursor.selectionStart(), cursor.selectionEnd());
+            const int toPosition = qMax(cursor.selectionStart(), cursor.selectionEnd());
+            const bool toUpper = _event->key() == Qt::Key_Up;
+            for (int position = fromPosition; position < toPosition; ++position) {
+                cursor.setPosition(position);
+                cursor.movePosition(QTextCursor::NextCharacter, QTextCursor::KeepAnchor);
+                selectedText = cursor.selectedText();
+                if (toUpper) {
+                    //
+                    // Поднимаем для всего текста, или только для первого символа
+                    //
+                    if (!firstToUpper || (firstToUpper && position == fromPosition)) {
+                        cursor.insertText(TextHelper::smartToUpper(selectedText));
+                    }
+                } else {
+                    //
+                    // Опускаем для всего текста, или для всех символов, кроме первого
+                    //
+                    if (!textInUpper || (textInUpper && position != fromPosition)) {
+                        cursor.insertText(TextHelper::smartToLower(selectedText));
+                    }
                 }
             }
-        }
 
-        if (clearSelection) {
-            cursor.setPosition(sourcePosition);
-        } else {
-            cursor.setPosition(fromPosition);
-            cursor.setPosition(toPosition, QTextCursor::KeepAnchor);
+            if (clearSelection) {
+                cursor.setPosition(sourcePosition);
+            } else {
+                cursor.setPosition(fromPosition);
+                cursor.setPosition(toPosition, QTextCursor::KeepAnchor);
+            }
+            setTextCursor(cursor);
         }
-        setTextCursor(cursor);
     }
     // ... перевод курсора к следующему символу
     //
