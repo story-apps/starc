@@ -94,6 +94,7 @@ public:
     QBasicTimer deleteAllTimer;
 #endif
 
+
     //
     // Дополнения, необходимые для того, чтобы превратить простой QTextEdit в постраничный редактор
     //
@@ -146,9 +147,15 @@ public:
     void clipPageDecorationRegions(QPainter* _painter);
 
     /**
+     * @brief Скорректировать положение блока с курсором для режима печатной машинки
+     */
+    void updateBlockWithCursorPosition();
+
+
+    /**
      * @brief Включена ли возможность выделения текста
      */
-    bool m_textSelectionEnabled = true;
+    bool textSelectionEnabled = true;
 
     /**
      * @brief Режим отображения текста
@@ -156,48 +163,53 @@ public:
      * true - постраничный
      * false - сплошной
      */
-    bool m_usePageMode = false;
+    bool usePageMode = false;
 
     /**
      * @brief Необходимо ли добавлять пространство снизу в обычном режиме
      */
-    bool m_addBottomSpace = false;
+    bool addBottomSpace = false;
 
     /**
      * @brief Необходимо ли показывать номера страниц
      */
-    bool m_showPageNumbers = false;
+    bool showPageNumbers = false;
 
     /**
      * @brief Где показывать номера страниц
      */
-    Qt::Alignment m_pageNumbersAlignment;
+    Qt::Alignment pageNumbersAlignment;
 
     /**
      * @brief Метрика страницы редактора
      */
-    PageMetrics m_pageMetrics;
+    PageMetrics pageMetrics;
 
     /**
      * @brief Расстояние между страницами
      */
-    qreal m_pageSpacing = 10.0;
+    qreal pageSpacing = 10.0;
 
     /**
      * @brief Колонтитулы
      */
-    QString m_header;
-    QString m_footer;
+    QString header;
+    QString footer;
 
     /**
      * @brief Подсвечивать ли текущую строку
      */
-    bool m_highlightCurrentLine = false;
+    bool highlightCurrentLine = false;
+
+    /**
+     * @brief Использовать ли прокрутку в стиле печатной машинки
+     */
+    bool useTypewriterScrolling = false;
 
     /**
      * @brief Анимация скроллирования
      */
-    QPropertyAnimation m_scrollAnimation;
+    QPropertyAnimation scrollAnimation;
 
     //
     // Дополнения для корректной работы с мышью при наличии невидимых текстовых блоков в документе

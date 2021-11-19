@@ -381,6 +381,12 @@ public:
     void setHighlightCurrentLine(bool _highlight);
 
     /**
+     * @brief Использовать режим прокрутки как в печатной машинке
+     */
+    bool useTypewriterScrolling() const;
+    void setUseTypewriterScrolling(bool _use);
+
+    /**
      * @brief Создать контекстное меню в заданной позиции
      */
     virtual ContextMenu* createContextMenu(const QPoint& _position, QWidget* _parent = nullptr);

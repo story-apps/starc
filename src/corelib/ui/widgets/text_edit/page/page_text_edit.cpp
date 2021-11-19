@@ -99,11 +99,11 @@ PageTextEditPrivate::PageTextEditPrivate()
     , wordWrap(QTextOption::WrapAtWordBoundaryOrAnywhere)
     , clickCausedFocus(0)
     , textFormat(Qt::AutoText)
-    , m_textSelectionEnabled(true)
-    , m_usePageMode(false)
-    , m_addBottomSpace(true)
-    , m_showPageNumbers(true)
-    , m_pageNumbersAlignment(Qt::AlignTop | Qt::AlignRight)
+    , textSelectionEnabled(true)
+    , usePageMode(false)
+    , addBottomSpace(true)
+    , showPageNumbers(true)
+    , pageNumbersAlignment(Qt::AlignTop | Qt::AlignRight)
 {
     ignoreAutomaticScrollbarAdjustment = false;
     preferRichText = false;
@@ -186,8 +186,8 @@ void PageTextEditPrivate::init(const QString& html)
     viewport->setCursor(Qt::IBeamCursor);
 #endif
 
-    m_scrollAnimation.setPropertyName("value");
-    m_scrollAnimation.setEasingCurve(QEasingCurve::OutQuad);
+    scrollAnimation.setPropertyName("value");
+    scrollAnimation.setEasingCurve(QEasingCurve::OutQuad);
 }
 
 void PageTextEditPrivate::_q_repaintContents(const QRectF& contentsRect)
@@ -307,8 +307,8 @@ void PageTextEditPrivate::_q_adjustScrollbars()
         //
         // В постраничном режиме показываем страницу целиком
         //
-        if (m_usePageMode) {
-            const int pageHeight = m_pageMetrics.pxPageSize().height() + m_pageSpacing;
+        if (usePageMode) {
+            const int pageHeight = pageMetrics.pxPageSize().height() + pageSpacing;
             const int documentHeight = pageHeight * control->document()->pageCount();
             const int maximumValue = documentHeight - viewport->height();
             vbar->setRange(0, maximumValue);
@@ -319,7 +319,7 @@ void PageTextEditPrivate::_q_adjustScrollbars()
         else {
             const int SCROLL_DELTA = 800;
             int maximumValue
-                = docSize.height() - viewportSize.height() + (m_addBottomSpace ? SCROLL_DELTA : 0);
+                = docSize.height() - viewportSize.height() + (addBottomSpace ? SCROLL_DELTA : 0);
             vbar->setRange(0, maximumValue);
         }
         vbar->setPageStep(viewportSize.height());
@@ -340,7 +340,7 @@ void PageTextEditPrivate::_q_adjustScrollbars()
 
         // make sure the document is layouted if the viewport width changes
         viewportSize = viewport->size();
-        if (viewportSize.width() != oldViewportSize.width() && !m_usePageMode)
+        if (viewportSize.width() != oldViewportSize.width() && !usePageMode)
             relayoutDocument();
 
         docSize = documentSize(control);
@@ -806,6 +806,9 @@ Qt::Alignment PageTextEdit::alignment() const
 */
 void PageTextEdit::setDocument(QTextDocument* document)
 {
+    if (document) {
+        document->disconnect(this);
+    }
     const auto lastCursorWidth = cursorWidth();
 
     Q_D(PageTextEdit);
@@ -815,6 +818,8 @@ void PageTextEdit::setDocument(QTextDocument* document)
     d->relayoutDocument();
 
     setCursorWidth(lastCursorWidth);
+    connect(document, &QTextDocument::contentsChanged, this,
+            [d] { d->updateBlockWithCursorPosition(); });
 }
 
 QTextDocument* PageTextEdit::document() const
@@ -1515,13 +1520,13 @@ void PageTextEditPrivate::updateViewportMargins()
     //
     QMargins viewportMargins;
 
-    if (m_usePageMode) {
+    if (usePageMode) {
         //
         // Настроить размер документа
         //
 
-        const int pageWidth = m_pageMetrics.pxPageSize().width();
-        const int pageHeight = m_pageMetrics.pxPageSize().height() + m_pageSpacing;
+        const int pageWidth = pageMetrics.pxPageSize().width();
+        const int pageHeight = pageMetrics.pxPageSize().height() + pageSpacing;
 
         //
         // Рассчитываем отступы для viewport
@@ -1577,9 +1582,9 @@ void PageTextEditPrivate::updateDocumentGeometry()
     // Определим размер документа
     //
     QSizeF documentSize(q->width() - vbar->width(), -1);
-    if (m_usePageMode) {
-        const int pageWidth = m_pageMetrics.pxPageSize().width();
-        const int pageHeight = m_pageMetrics.pxPageSize().height() + m_pageSpacing;
+    if (usePageMode) {
+        const int pageWidth = pageMetrics.pxPageSize().width();
+        const int pageHeight = pageMetrics.pxPageSize().height() + pageSpacing;
         documentSize = QSizeF(pageWidth, pageHeight);
     }
 
@@ -1602,8 +1607,8 @@ void PageTextEditPrivate::updateDocumentGeometry()
     //
     // ... и настроим поля документа
     //
-    QMarginsF rootFrameMargins = m_pageMetrics.pxPageMargins();
-    rootFrameMargins.setTop(rootFrameMargins.top() + m_pageSpacing);
+    QMarginsF rootFrameMargins = pageMetrics.pxPageMargins();
+    rootFrameMargins.setTop(rootFrameMargins.top() + pageSpacing);
     QTextFrameFormat rootFrameFormat = doc->rootFrame()->frameFormat();
     if (!qFuzzyCompare(rootFrameFormat.leftMargin(), rootFrameMargins.left())
         || !qFuzzyCompare(rootFrameFormat.topMargin(), rootFrameMargins.top())
@@ -1646,7 +1651,7 @@ void PageTextEdit::resizeEvent(QResizeEvent* e)
         //
         // и переформируем документ, если это не постраничный режим
         //
-        if (d->m_usePageMode) {
+        if (d->usePageMode) {
             d->_q_adjustScrollbars();
         } else {
             d->relayoutDocument();
@@ -1696,7 +1701,7 @@ void PageTextEditPrivate::relayoutDocument()
     //
     // Сбрасываем размер, чтобы перерисовка произошла корректно
     //
-    if (m_usePageMode) {
+    if (usePageMode) {
         QSizeF lastSize = doc->pageSize();
         doc->setPageSize(QSize(width, -1));
         doc->setPageSize(lastSize);
@@ -1743,7 +1748,7 @@ void PageTextEditPrivate::paintPagesView(QPainter* _painter)
     //
     // Оформление рисуется только тогда, когда редактор находится в постраничном режиме
     //
-    if (!m_usePageMode) {
+    if (!usePageMode) {
         return;
     }
 
@@ -1755,8 +1760,8 @@ void PageTextEditPrivate::paintPagesView(QPainter* _painter)
     // Нарисовать линии разрыва страниц
     //
 
-    const qreal pageWidth = m_pageMetrics.pxPageSize().width();
-    const qreal pageHeight = m_pageMetrics.pxPageSize().height() + m_pageSpacing;
+    const qreal pageWidth = pageMetrics.pxPageSize().width();
+    const qreal pageHeight = pageMetrics.pxPageSize().height() + pageSpacing;
 
     //
     // Определим нижнюю границу разрыва страниц
@@ -1779,7 +1784,7 @@ void PageTextEditPrivate::paintPagesView(QPainter* _painter)
     //
     auto currentPageTop = firstVisiblePageBottom - pageHeight;
     while (currentPageTop <= q->height()) {
-        const QRectF pageRect(0 - horizontalDelta, currentPageTop + m_pageSpacing / 2, pageWidth,
+        const QRectF pageRect(0 - horizontalDelta, currentPageTop + pageSpacing / 2, pageWidth,
                               pageHeight);
         const QRectF backgroundRect
             = pageRect.marginsRemoved(Ui::DesignSystem::card().shadowMargins().toMargins());
@@ -1829,7 +1834,7 @@ void PageTextEditPrivate::paintPageMargins(QPainter* _painter)
     // Номера страниц рисуются только тогда, когда редактор находится в постраничном режиме,
     // если заданы поля и включена опция отображения номеров
     //
-    if (!m_usePageMode || m_pageMetrics.pxPageMargins().isNull()) {
+    if (!usePageMode || pageMetrics.pxPageMargins().isNull()) {
         return;
     }
 
@@ -1839,9 +1844,9 @@ void PageTextEditPrivate::paintPageMargins(QPainter* _painter)
     // Нарисовать номера страниц
     //
 
-    QSizeF pageSize(m_pageMetrics.pxPageSize());
-    pageSize.setHeight(pageSize.height() + m_pageSpacing);
-    const QMarginsF pageMargins(m_pageMetrics.pxPageMargins());
+    QSizeF pageSize(pageMetrics.pxPageSize());
+    pageSize.setHeight(pageSize.height() + pageSpacing);
+    const QMarginsF pageMargins(pageMetrics.pxPageMargins());
 
     _painter->setFont(control->document()->defaultFont());
     _painter->setPen(control->palette().text().color());
@@ -1868,10 +1873,10 @@ void PageTextEditPrivate::paintPageMargins(QPainter* _painter)
     //
     // Верхнее поле первой страницы на экране, когда не видно предыдущей страницы
     //
-    if (currentPageBottom - pageSize.height() + pageMargins.top() + m_pageSpacing >= 0) {
+    if (currentPageBottom - pageSize.height() + pageMargins.top() + pageSpacing >= 0) {
         const QRectF topMarginRect(leftMarginPosition,
-                                   currentPageBottom - pageSize.height() + m_pageSpacing,
-                                   marginWidth, pageMargins.top());
+                                   currentPageBottom - pageSize.height() + pageSpacing, marginWidth,
+                                   pageMargins.top());
         paintHeader(_painter, topMarginRect);
         paintPageNumber(_painter, topMarginRect, true, pageNumber);
     }
@@ -1896,8 +1901,8 @@ void PageTextEditPrivate::paintPageMargins(QPainter* _painter)
         //
         // Определить прямоугольник верхнего поля следующей страницы
         //
-        const QRect topMarginRect(leftMarginPosition, currentPageBottom + m_pageSpacing,
-                                  marginWidth, pageMargins.top());
+        const QRect topMarginRect(leftMarginPosition, currentPageBottom + pageSpacing, marginWidth,
+                                  pageMargins.top());
         paintHeader(_painter, topMarginRect);
         paintPageNumber(_painter, topMarginRect, true, pageNumber);
 
@@ -1917,7 +1922,7 @@ void PageTextEditPrivate::paintPageMargins(QPainter* _painter)
 void PageTextEditPrivate::paintPageNumber(QPainter* _painter, const QRectF& _rect, bool _isHeader,
                                           int _number)
 {
-    if (!m_showPageNumbers) {
+    if (!showPageNumbers) {
         return;
     }
 
@@ -1928,8 +1933,8 @@ void PageTextEditPrivate::paintPageNumber(QPainter* _painter, const QRectF& _rec
         //
         // Если нумерация рисуется в верхнем поле
         //
-        if (m_pageNumbersAlignment.testFlag(Qt::AlignTop)) {
-            _painter->drawText(_rect, Qt::AlignVCenter | (m_pageNumbersAlignment ^ Qt::AlignTop),
+        if (pageNumbersAlignment.testFlag(Qt::AlignTop)) {
+            _painter->drawText(_rect, Qt::AlignVCenter | (pageNumbersAlignment ^ Qt::AlignTop),
                                QString("%1.").arg(_number));
         }
     }
@@ -1940,8 +1945,8 @@ void PageTextEditPrivate::paintPageNumber(QPainter* _painter, const QRectF& _rec
         //
         // Если нумерация рисуется в нижнем поле
         //
-        if (m_pageNumbersAlignment.testFlag(Qt::AlignBottom)) {
-            _painter->drawText(_rect, Qt::AlignVCenter | (m_pageNumbersAlignment ^ Qt::AlignBottom),
+        if (pageNumbersAlignment.testFlag(Qt::AlignBottom)) {
+            _painter->drawText(_rect, Qt::AlignVCenter | (pageNumbersAlignment ^ Qt::AlignBottom),
                                QString("%1.").arg(_number));
         }
     }
@@ -1950,25 +1955,25 @@ void PageTextEditPrivate::paintPageNumber(QPainter* _painter, const QRectF& _rec
 void PageTextEditPrivate::paintHeader(QPainter* _painter, const QRectF& _rect)
 {
     Qt::Alignment alignment = Qt::AlignVCenter;
-    if (m_pageNumbersAlignment.testFlag(Qt::AlignTop)
-        && m_pageNumbersAlignment.testFlag(Qt::AlignLeft)) {
+    if (pageNumbersAlignment.testFlag(Qt::AlignTop)
+        && pageNumbersAlignment.testFlag(Qt::AlignLeft)) {
         alignment |= Qt::AlignRight;
     } else {
         alignment |= Qt::AlignLeft;
     }
-    _painter->drawText(_rect, alignment, m_header);
+    _painter->drawText(_rect, alignment, header);
 }
 
 void PageTextEditPrivate::paintFooter(QPainter* _painter, const QRectF& _rect)
 {
     Qt::Alignment alignment = Qt::AlignVCenter;
-    if (m_pageNumbersAlignment.testFlag(Qt::AlignBottom)
-        && m_pageNumbersAlignment.testFlag(Qt::AlignLeft)) {
+    if (pageNumbersAlignment.testFlag(Qt::AlignBottom)
+        && pageNumbersAlignment.testFlag(Qt::AlignLeft)) {
         alignment |= Qt::AlignRight;
     } else {
         alignment |= Qt::AlignLeft;
     }
-    _painter->drawText(_rect, alignment, m_footer);
+    _painter->drawText(_rect, alignment, footer);
 }
 
 void PageTextEditPrivate::paintHighlights(QPainter* _painter)
@@ -1976,10 +1981,10 @@ void PageTextEditPrivate::paintHighlights(QPainter* _painter)
     //
     // Подсветка строки
     //
-    if (m_highlightCurrentLine) {
+    if (highlightCurrentLine) {
         Q_Q(PageTextEdit);
         const QRect cursorR = q->cursorRect();
-        const QSizeF pageSize(m_pageMetrics.pxPageSize());
+        const QSizeF pageSize(pageMetrics.pxPageSize());
         const QMarginsF pageMargins = Ui::DesignSystem::card().shadowMargins();
         const qreal highlightLeft = pageMargins.left() - hbar->value();
         const qreal highlightWidth = pageSize.width() - pageMargins.left() - pageMargins.right();
@@ -1997,13 +2002,13 @@ void PageTextEditPrivate::clipPageDecorationRegions(QPainter* _painter)
     // Область обрезается только тогда, когда редактор находится в постраничном режиме и если заданы
     // поля
     //
-    if (!m_usePageMode || m_pageMetrics.pxPageMargins().isNull()) {
+    if (!usePageMode || pageMetrics.pxPageMargins().isNull()) {
         return;
     }
 
-    QSizeF pageSize(m_pageMetrics.pxPageSize());
-    pageSize.setHeight(pageSize.height() + m_pageSpacing);
-    QMarginsF pageMargins(m_pageMetrics.pxPageMargins());
+    QSizeF pageSize(pageMetrics.pxPageSize());
+    pageSize.setHeight(pageSize.height() + pageSpacing);
+    QMarginsF pageMargins(pageMetrics.pxPageMargins());
 
     //
     // Текущие высота и ширина которые отображаются на экране
@@ -2027,10 +2032,9 @@ void PageTextEditPrivate::clipPageDecorationRegions(QPainter* _painter)
     //
     // Верхнее поле первой страницы на экране, когда не видно предыдущей страницы
     //
-    if (currentPageBottom - pageSize.height() + pageMargins.top() + m_pageSpacing >= 0) {
-        QRect topMarginRect(leftMarginPosition,
-                            currentPageBottom - pageSize.height() + m_pageSpacing, marginWidth,
-                            pageMargins.top());
+    if (currentPageBottom - pageSize.height() + pageMargins.top() + pageSpacing >= 0) {
+        QRect topMarginRect(leftMarginPosition, currentPageBottom - pageSize.height() + pageSpacing,
+                            marginWidth, pageMargins.top());
         clipPath = clipPath.subtracted(topMarginRect);
     }
 
@@ -2049,14 +2053,69 @@ void PageTextEditPrivate::clipPageDecorationRegions(QPainter* _painter)
         //
         // Определить прямоугольник верхнего поля следующей страницы
         //
-        const QRect topMarginRect(leftMarginPosition, currentPageBottom + m_pageSpacing,
-                                  marginWidth, pageMargins.top());
+        const QRect topMarginRect(leftMarginPosition, currentPageBottom + pageSpacing, marginWidth,
+                                  pageMargins.top());
         clipPath = clipPath.subtracted(topMarginRect);
 
         currentPageBottom += pageSize.height();
     }
 
     _painter->setClipRegion(clipPath);
+}
+
+void PageTextEditPrivate::updateBlockWithCursorPosition()
+{
+    if (!useTypewriterScrolling) {
+        return;
+    }
+
+    Q_Q(PageTextEdit);
+
+    //
+    // Определить центр виджета
+    //
+    const auto center = q->viewport()->rect().top() + q->height() / 2;
+
+    //
+    // Ищем целевое значение прокрутки
+    //
+    const auto startVbarValue = vbar->value();
+    auto cursorRect = q->cursorRect();
+    if (cursorRect.top() > center) {
+        while (cursorRect.top() > center && vbar->value() < vbar->maximum()) {
+            vbar->setValue(vbar->value() + 1);
+            cursorRect = q->cursorRect();
+        }
+    } else {
+        while (cursorRect.top() < center && vbar->value() > 0) {
+            vbar->setValue(vbar->value() - 1);
+            cursorRect = q->cursorRect();
+        }
+    }
+    const auto endVbarValue = vbar->value();
+    if (startVbarValue == endVbarValue) {
+        return;
+    }
+
+    //
+    // Вернём прокрутку в исходное положение
+    //
+    vbar->setValue(startVbarValue);
+
+    //
+    // Настроим анимацию, если ещё не была настроена
+    //
+    if (scrollAnimation.targetObject() == nullptr) {
+        scrollAnimation.setTargetObject(vbar);
+    }
+    //
+    // И потом запустим анимацию скролирования
+    //
+    scrollAnimation.stop();
+    scrollAnimation.setDuration(120);
+    scrollAnimation.setStartValue(startVbarValue);
+    scrollAnimation.setEndValue(endVbarValue);
+    scrollAnimation.start();
 }
 
 void PageTextEditPrivate::sendControlMouseEvent(QMouseEvent* e)
@@ -2301,7 +2360,7 @@ void PageTextEdit::mousePressEvent(QMouseEvent* e)
 void PageTextEdit::mouseMoveEvent(QMouseEvent* e)
 {
     Q_D(PageTextEdit);
-    if (!d->m_textSelectionEnabled) {
+    if (!d->textSelectionEnabled) {
         return;
     }
 
@@ -3455,19 +3514,19 @@ void PageTextEdit::ensureCursorVisible(const QTextCursor& _cursor, bool _animate
         //
         // Настроим анимацию, если ещё не была настроена
         //
-        if (d->m_scrollAnimation.targetObject() == nullptr) {
-            d->m_scrollAnimation.setTargetObject(d->vbar);
+        if (d->scrollAnimation.targetObject() == nullptr) {
+            d->scrollAnimation.setTargetObject(d->vbar);
         }
 
         qreal delta = log(abs(nextVbarValue - lastVbarValue) / 300) / 2;
         if (delta < 1) {
             delta = 1;
         }
-        d->m_scrollAnimation.stop();
-        d->m_scrollAnimation.setDuration(static_cast<int>(300 * delta));
-        d->m_scrollAnimation.setStartValue(lastVbarValue);
-        d->m_scrollAnimation.setEndValue(std::min(nextVbarValue, d->vbar->maximum()));
-        d->m_scrollAnimation.start();
+        d->scrollAnimation.stop();
+        d->scrollAnimation.setDuration(static_cast<int>(300 * delta));
+        d->scrollAnimation.setStartValue(lastVbarValue);
+        d->scrollAnimation.setEndValue(std::min(nextVbarValue, d->vbar->maximum()));
+        d->scrollAnimation.start();
     } else {
         d->vbar->setValue(nextVbarValue);
     }
@@ -3502,106 +3561,106 @@ void PageTextEdit::ensureCursorVisible(const QTextCursor& _cursor, bool _animate
 void PageTextEdit::setTextSelectionEnabled(bool _enabled)
 {
     Q_D(PageTextEdit);
-    d->m_textSelectionEnabled = _enabled;
+    d->textSelectionEnabled = _enabled;
 }
 
 void PageTextEdit::setPageFormat(QPageSize::PageSizeId _pageFormat)
 {
     Q_D(PageTextEdit);
-    if (d->m_pageMetrics.pageFormat() == _pageFormat) {
+    if (d->pageMetrics.pageFormat() == _pageFormat) {
         return;
     }
 
-    d->m_pageMetrics.update(_pageFormat);
+    d->pageMetrics.update(_pageFormat);
     d->relayoutDocument();
 }
 
 void PageTextEdit::setPageMarginsMm(const QMarginsF& _margins)
 {
     Q_D(PageTextEdit);
-    if (d->m_pageMetrics.mmPageMargins() == _margins) {
+    if (d->pageMetrics.mmPageMargins() == _margins) {
         return;
     }
 
-    d->m_pageMetrics.update(d->m_pageMetrics.pageFormat(), _margins);
+    d->pageMetrics.update(d->pageMetrics.pageFormat(), _margins);
     d->relayoutDocument();
 }
 
 void PageTextEdit::setPageMarginsPx(const QMarginsF& _margins)
 {
     Q_D(PageTextEdit);
-    if (d->m_pageMetrics.pxPageMargins() == _margins) {
+    if (d->pageMetrics.pxPageMargins() == _margins) {
         return;
     }
 
-    d->m_pageMetrics.update(d->m_pageMetrics.pageFormat(), {}, _margins);
+    d->pageMetrics.update(d->pageMetrics.pageFormat(), {}, _margins);
     d->relayoutDocument();
 }
 
 void PageTextEdit::setPageSpacing(qreal _spacing)
 {
     Q_D(PageTextEdit);
-    if (qFuzzyCompare(d->m_pageSpacing, _spacing)) {
+    if (qFuzzyCompare(d->pageSpacing, _spacing)) {
         return;
     }
 
-    d->m_pageSpacing = _spacing;
+    d->pageSpacing = _spacing;
     d->relayoutDocument();
 }
 
 bool PageTextEdit::usePageMode() const
 {
     Q_D(const PageTextEdit);
-    return d->m_usePageMode;
+    return d->usePageMode;
 }
 
 void PageTextEdit::setUsePageMode(bool _use)
 {
     Q_D(PageTextEdit);
-    if (d->m_usePageMode == _use) {
+    if (d->usePageMode == _use) {
         return;
     }
 
-    d->m_usePageMode = _use;
+    d->usePageMode = _use;
     d->relayoutDocument();
 }
 
 int PageTextEdit::cursorPage(const QTextCursor& _cursor)
 {
     Q_D(PageTextEdit);
-    return (cursorRect(_cursor).top() / d->m_pageMetrics.pxPageSize().height()) + 1;
+    return (cursorRect(_cursor).top() / d->pageMetrics.pxPageSize().height()) + 1;
 }
 
 void PageTextEdit::setAddSpaceToBottom(bool _addSpace)
 {
     Q_D(PageTextEdit);
-    if (d->m_addBottomSpace == _addSpace) {
+    if (d->addBottomSpace == _addSpace) {
         return;
     }
 
-    d->m_addBottomSpace = _addSpace;
+    d->addBottomSpace = _addSpace;
     d->relayoutDocument();
 }
 
 void PageTextEdit::setShowPageNumbers(bool _show)
 {
     Q_D(PageTextEdit);
-    if (d->m_showPageNumbers == _show) {
+    if (d->showPageNumbers == _show) {
         return;
     }
 
-    d->m_showPageNumbers = _show;
+    d->showPageNumbers = _show;
     d->relayoutDocument();
 }
 
 void PageTextEdit::setPageNumbersAlignment(Qt::Alignment _align)
 {
     Q_D(PageTextEdit);
-    if (d->m_pageNumbersAlignment == _align) {
+    if (d->pageNumbersAlignment == _align) {
         return;
     }
 
-    d->m_pageNumbersAlignment = _align;
+    d->pageNumbersAlignment = _align;
     d->relayoutDocument();
 }
 
@@ -3609,11 +3668,11 @@ void PageTextEdit::setHeader(const QString& _header)
 {
     Q_D(PageTextEdit);
 
-    if (d->m_header == _header) {
+    if (d->header == _header) {
         return;
     }
 
-    d->m_header = _header;
+    d->header = _header;
     d->relayoutDocument();
 }
 
@@ -3621,23 +3680,40 @@ void PageTextEdit::setFooter(const QString& _footer)
 {
     Q_D(PageTextEdit);
 
-    if (d->m_footer == _footer) {
+    if (d->footer == _footer) {
         return;
     }
 
-    d->m_footer = _footer;
+    d->footer = _footer;
     d->relayoutDocument();
 }
 
 void PageTextEdit::setHighlightCurrentLine(bool _highlight)
 {
     Q_D(PageTextEdit);
-    if (d->m_highlightCurrentLine == _highlight) {
+    if (d->highlightCurrentLine == _highlight) {
         return;
     }
 
-    d->m_highlightCurrentLine = _highlight;
+    d->highlightCurrentLine = _highlight;
     update();
+}
+
+bool PageTextEdit::useTypewriterScrolling() const
+{
+    Q_D(const PageTextEdit);
+    return d->useTypewriterScrolling;
+}
+
+void PageTextEdit::setUseTypewriterScrolling(bool _use)
+{
+    Q_D(PageTextEdit);
+    if (d->useTypewriterScrolling == _use) {
+        return;
+    }
+
+    d->useTypewriterScrolling = _use;
+    d->updateBlockWithCursorPosition();
 }
 
 ContextMenu* PageTextEdit::createContextMenu(const QPoint& _position, QWidget* _parent)
