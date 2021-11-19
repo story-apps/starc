@@ -174,6 +174,16 @@ void TitlePageView::reconfigure(const QStringList& _changedSettingsKeys)
         d->textEdit->setHighlightCurrentLine(
             settingsValue(DataStorageLayer::kApplicationHighlightCurrentLineKey).toBool());
     }
+    if (_changedSettingsKeys.isEmpty()
+        || _changedSettingsKeys.contains(DataStorageLayer::kApplicationFocusCurrentParagraphKey)) {
+        d->textEdit->setFocusCurrentParagraph(
+            settingsValue(DataStorageLayer::kApplicationFocusCurrentParagraphKey).toBool());
+    }
+    if (_changedSettingsKeys.isEmpty()
+        || _changedSettingsKeys.contains(DataStorageLayer::kApplicationUseTypewriterScrollingKey)) {
+        d->textEdit->setUseTypewriterScrolling(
+            settingsValue(DataStorageLayer::kApplicationUseTypewriterScrollingKey).toBool());
+    }
 }
 
 void TitlePageView::loadViewSettings()

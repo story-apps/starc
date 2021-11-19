@@ -818,8 +818,10 @@ void PageTextEdit::setDocument(QTextDocument* document)
     d->relayoutDocument();
 
     setCursorWidth(lastCursorWidth);
-    connect(document, &QTextDocument::contentsChanged, this,
-            [d] { d->updateBlockWithCursorPosition(); });
+    if (document) {
+        connect(document, &QTextDocument::contentsChanged, this,
+                [d] { d->updateBlockWithCursorPlacement(); });
+    }
 }
 
 QTextDocument* PageTextEdit::document() const
@@ -1317,6 +1319,7 @@ QString PageTextEdit::toMarkdown(QTextDocument::MarkdownFeatures features) const
 void PageTextEdit::keyPressEvent(QKeyEvent* e)
 {
     Q_D(PageTextEdit);
+    d->prepareBlockWithCursorPlacementUpdate(e);
 
 #ifdef QT_KEYPAD_NAVIGATION
     switch (e->key()) {
@@ -1471,8 +1474,10 @@ void PageTextEdit::keyPressEvent(QKeyEvent* e)
  */
 void PageTextEdit::keyReleaseEvent(QKeyEvent* e)
 {
-#ifdef QT_KEYPAD_NAVIGATION
     Q_D(PageTextEdit);
+    d->prepareBlockWithCursorPlacementUpdate(e);
+
+#ifdef QT_KEYPAD_NAVIGATION
     if (QApplicationPrivate::keypadNavigationEnabled()) {
         if (!e->isAutoRepeat() && e->key() == Qt::Key_Back && d->deleteAllTimer.isActive()) {
             d->deleteAllTimer.stop();
@@ -2119,13 +2124,29 @@ void PageTextEditPrivate::clipPageDecorationRegions(QPainter* _painter)
     _painter->setClipRegion(clipPath);
 }
 
-void PageTextEditPrivate::updateBlockWithCursorPosition()
+void PageTextEditPrivate::prepareBlockWithCursorPlacementUpdate(QKeyEvent* _event)
+{
+    //
+    // Если включена прокрутка, как в печатной машинке, то регистрируем необходимость скрола
+    // при нажатии кнопки, в которой есть текст
+    //
+    const QSet<int> keys = { Qt::Key_Enter, Qt::Key_Return, Qt::Key_Backspace, Qt::Key_Delete };
+    needUpdateBlockWithCursorPlacement
+        = useTypewriterScrolling && (!_event->text().isEmpty() || keys.contains(_event->key()));
+}
+
+void PageTextEditPrivate::updateBlockWithCursorPlacement()
 {
     if (!useTypewriterScrolling) {
         return;
     }
 
     Q_Q(PageTextEdit);
+
+    if (!needUpdateBlockWithCursorPlacement) {
+        return;
+    }
+    needUpdateBlockWithCursorPlacement = false;
 
     //
     // Определить центр виджета
@@ -3779,7 +3800,6 @@ void PageTextEdit::setUseTypewriterScrolling(bool _use)
     }
 
     d->useTypewriterScrolling = _use;
-    d->updateBlockWithCursorPosition();
 }
 
 ContextMenu* PageTextEdit::createContextMenu(const QPoint& _position, QWidget* _parent)

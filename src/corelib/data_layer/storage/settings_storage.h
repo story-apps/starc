@@ -60,6 +60,12 @@ const QString kApplicationSpellCheckerLanguageKey = kApplicationGroupKey + "/use
 // включена ли подсветка текущей строки для текстовых редакторов
 const QString kApplicationHighlightCurrentLineKey
     = kApplicationGroupKey + "/highlight-current-line";
+// включён ли режим фокусировки на текущем параграфе для текстовых редакторов
+const QString kApplicationFocusCurrentParagraphKey
+    = kApplicationGroupKey + "/focus-current-paragraph";
+// включён ли режим печатной машинки для текстовых редакторов
+const QString kApplicationUseTypewriterScrollingKey
+    = kApplicationGroupKey + "/use-typewriter-scrolling";
 // список недавних проектов
 const QString kApplicationProjectsKey = kApplicationGroupKey + "/projects";
 

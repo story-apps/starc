@@ -99,6 +99,8 @@ SettingsStorage::Implementation::Implementation()
     defaultValues.insert(kApplicationUseTypewriterSoundKey, false);
     defaultValues.insert(kApplicationUseSpellCheckerKey, false);
     defaultValues.insert(kApplicationHighlightCurrentLineKey, false);
+    defaultValues.insert(kApplicationFocusCurrentParagraphKey, false);
+    defaultValues.insert(kApplicationUseTypewriterScrollingKey, false);
     defaultValues.insert(kProjectSaveFolderKey,
                          QStandardPaths::writableLocation(QStandardPaths::DocumentsLocation)
                              + "/starc/projects");

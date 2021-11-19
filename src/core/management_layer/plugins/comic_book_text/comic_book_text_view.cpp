@@ -522,6 +522,16 @@ void ComicBookTextView::reconfigure(const QStringList& _changedSettingsKeys)
         d->comicBookText->setHighlightCurrentLine(
             settingsValue(DataStorageLayer::kApplicationHighlightCurrentLineKey).toBool());
     }
+    if (_changedSettingsKeys.isEmpty()
+        || _changedSettingsKeys.contains(DataStorageLayer::kApplicationFocusCurrentParagraphKey)) {
+        d->comicBookText->setFocusCurrentParagraph(
+            settingsValue(DataStorageLayer::kApplicationFocusCurrentParagraphKey).toBool());
+    }
+    if (_changedSettingsKeys.isEmpty()
+        || _changedSettingsKeys.contains(DataStorageLayer::kApplicationUseTypewriterScrollingKey)) {
+        d->comicBookText->setUseTypewriterScrolling(
+            settingsValue(DataStorageLayer::kApplicationUseTypewriterScrollingKey).toBool());
+    }
 }
 
 void ComicBookTextView::loadViewSettings()

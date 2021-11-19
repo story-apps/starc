@@ -95,6 +95,10 @@ void SettingsManager::Implementation::loadApplicationSettings()
         settingsValue(DataStorageLayer::kApplicationSpellCheckerLanguageKey).toString());
     view->setApplicationHighlightCurrentLine(
         settingsValue(DataStorageLayer::kApplicationHighlightCurrentLineKey).toBool());
+    view->setApplicationFocusCurrentParagraph(
+        settingsValue(DataStorageLayer::kApplicationFocusCurrentParagraphKey).toBool());
+    view->setApplicationUseTypewriterScrolling(
+        settingsValue(DataStorageLayer::kApplicationUseTypewriterScrollingKey).toBool());
 }
 
 void SettingsManager::Implementation::loadComponentsSettings()
@@ -239,6 +243,10 @@ SettingsManager::SettingsManager(QObject* _parent, QWidget* _parentWidget)
             &SettingsManager::setApplicationSpellCheckerLanguage);
     connect(d->view, &Ui::SettingsView::applicationHighlightCurentLineChanged, this,
             &SettingsManager::setApplicationHighlightCurrentLine);
+    connect(d->view, &Ui::SettingsView::applicationFocusCurrentParagraphChanged, this,
+            &SettingsManager::setApplicationFocusCurrentParagraph);
+    connect(d->view, &Ui::SettingsView::applicationUseTypewriterScrollingChanged, this,
+            &SettingsManager::setApplicationUseTypewriterScrolling);
     //
     //
     connect(d->view, &Ui::SettingsView::simpleTextEditorDefaultTemplateChanged, this,
@@ -588,6 +596,22 @@ void SettingsManager::setApplicationHighlightCurrentLine(bool _highlight)
     emit simpleTextEditorChanged({ DataStorageLayer::kApplicationHighlightCurrentLineKey });
     emit screenplayEditorChanged({ DataStorageLayer::kApplicationHighlightCurrentLineKey });
     emit comicBookEditorChanged({ DataStorageLayer::kApplicationHighlightCurrentLineKey });
+}
+
+void SettingsManager::setApplicationFocusCurrentParagraph(bool _focus)
+{
+    d->setSettingsValue(DataStorageLayer::kApplicationFocusCurrentParagraphKey, _focus);
+    emit simpleTextEditorChanged({ DataStorageLayer::kApplicationFocusCurrentParagraphKey });
+    emit screenplayEditorChanged({ DataStorageLayer::kApplicationFocusCurrentParagraphKey });
+    emit comicBookEditorChanged({ DataStorageLayer::kApplicationFocusCurrentParagraphKey });
+}
+
+void SettingsManager::setApplicationUseTypewriterScrolling(bool _use)
+{
+    d->setSettingsValue(DataStorageLayer::kApplicationUseTypewriterScrollingKey, _use);
+    emit simpleTextEditorChanged({ DataStorageLayer::kApplicationUseTypewriterScrollingKey });
+    emit screenplayEditorChanged({ DataStorageLayer::kApplicationUseTypewriterScrollingKey });
+    emit comicBookEditorChanged({ DataStorageLayer::kApplicationUseTypewriterScrollingKey });
 }
 
 void SettingsManager::setSimpleTextEditorDefaultTemplate(const QString& _templateId)

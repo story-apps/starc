@@ -49,6 +49,8 @@ public:
     void setApplicationUseSpellChecker(bool _use);
     void setApplicationSpellCheckerLanguage(const QString& _languageCode);
     void setApplicationHighlightCurrentLine(bool _highlight);
+    void setApplicationFocusCurrentParagraph(bool _focus);
+    void setApplicationUseTypewriterScrolling(bool _use);
 
     //
     // Задание параметров редактора текста
@@ -102,6 +104,8 @@ signals:
     void applicationUseSpellCheckerChanged(bool _use);
     void applicationSpellCheckerLanguageChanged(const QString& _languageCode);
     void applicationHighlightCurentLineChanged(bool _highlight);
+    void applicationFocusCurrentParagraphChanged(bool _focus);
+    void applicationUseTypewriterScrollingChanged(bool _use);
 
     //
     // Уведомление об изменении параметров редактора текста

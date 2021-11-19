@@ -154,7 +154,8 @@ public:
     /**
      * @brief Скорректировать положение блока с курсором для режима печатной машинки
      */
-    void updateBlockWithCursorPosition();
+    void updateBlockWithCursorPlacement();
+    void prepareBlockWithCursorPlacementUpdate(QKeyEvent* _event);
 
 
     /**
@@ -215,6 +216,7 @@ public:
      * @brief Использовать ли прокрутку в стиле печатной машинки
      */
     bool useTypewriterScrolling = false;
+    bool needUpdateBlockWithCursorPlacement = false;
 
     /**
      * @brief Анимация скроллирования

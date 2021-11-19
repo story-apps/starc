@@ -87,6 +87,8 @@ private:
     void loadSpellingDictionaryAffFile(const QString& _languageCode);
     void loadSpellingDictionaryDicFile(const QString& _languageCode);
     void setApplicationHighlightCurrentLine(bool _highlight);
+    void setApplicationFocusCurrentParagraph(bool _focus);
+    void setApplicationUseTypewriterScrolling(bool _use);
 
     //
     // Сохранение параметров редактора сценария

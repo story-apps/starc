@@ -572,6 +572,16 @@ void ScreenplayTextView::reconfigure(const QStringList& _changedSettingsKeys)
         d->screenplayText->setHighlightCurrentLine(
             settingsValue(DataStorageLayer::kApplicationHighlightCurrentLineKey).toBool());
     }
+    if (_changedSettingsKeys.isEmpty()
+        || _changedSettingsKeys.contains(DataStorageLayer::kApplicationFocusCurrentParagraphKey)) {
+        d->screenplayText->setFocusCurrentParagraph(
+            settingsValue(DataStorageLayer::kApplicationFocusCurrentParagraphKey).toBool());
+    }
+    if (_changedSettingsKeys.isEmpty()
+        || _changedSettingsKeys.contains(DataStorageLayer::kApplicationUseTypewriterScrollingKey)) {
+        d->screenplayText->setUseTypewriterScrolling(
+            settingsValue(DataStorageLayer::kApplicationUseTypewriterScrollingKey).toBool());
+    }
 }
 
 void ScreenplayTextView::loadViewSettings()

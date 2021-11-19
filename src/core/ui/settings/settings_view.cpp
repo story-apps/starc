@@ -157,6 +157,8 @@ public:
     QStandardItemModel* spellCheckerLanguagesModel = nullptr;
     IconButton* spellCheckerUserDictionary = nullptr;
     CheckBox* highlightCurrentLine = nullptr;
+    CheckBox* focusCurrentParagraph = nullptr;
+    CheckBox* useTypewriterScrolling = nullptr;
     //
     int applicationCardBottomSpacerIndex = 0;
 
@@ -288,6 +290,8 @@ SettingsView::Implementation::Implementation(QWidget* _parent)
     , spellCheckerLanguagesModel(buildSpellCheckerLanguagesModel(spellCheckerLanguage))
     , spellCheckerUserDictionary(new IconButton(applicationCard))
     , highlightCurrentLine(new CheckBox(applicationCard))
+    , focusCurrentParagraph(new CheckBox(applicationCard))
+    , useTypewriterScrolling(new CheckBox(applicationCard))
     //
     , componentsTitle(new H4Label(content))
     //
@@ -451,7 +455,6 @@ void SettingsView::Implementation::initApplicationCard()
     // ... параметры редакторов текста
     //
     applicationCardLayout->addWidget(applicationTextEditingTitle, itemIndex++, 0);
-    applicationCardLayout->addWidget(useTypewriterSound, itemIndex++, 0);
     {
         spellCheckerLanguage->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Preferred);
 
@@ -461,6 +464,9 @@ void SettingsView::Implementation::initApplicationCard()
         layout->addWidget(spellCheckerUserDictionary);
         applicationCardLayout->addLayout(layout, itemIndex++, 0);
     }
+    applicationCardLayout->addWidget(useTypewriterSound, itemIndex++, 0);
+    applicationCardLayout->addWidget(useTypewriterScrolling, itemIndex++, 0);
+    applicationCardLayout->addWidget(focusCurrentParagraph, itemIndex++, 0);
     applicationCardLayout->addWidget(highlightCurrentLine, itemIndex++, 0);
 
     applicationCardBottomSpacerIndex = itemIndex;
@@ -791,6 +797,10 @@ SettingsView::SettingsView(QWidget* _parent)
             });
     connect(d->highlightCurrentLine, &CheckBox::checkedChanged, this,
             &SettingsView::applicationHighlightCurentLineChanged);
+    connect(d->focusCurrentParagraph, &CheckBox::checkedChanged, this,
+            &SettingsView::applicationFocusCurrentParagraphChanged);
+    connect(d->useTypewriterScrolling, &CheckBox::checkedChanged, this,
+            &SettingsView::applicationUseTypewriterScrollingChanged);
 
     //
     // Компоненты
@@ -1248,6 +1258,16 @@ void SettingsView::setApplicationHighlightCurrentLine(bool _highlight)
     d->highlightCurrentLine->setChecked(_highlight);
 }
 
+void SettingsView::setApplicationFocusCurrentParagraph(bool _focus)
+{
+    d->focusCurrentParagraph->setChecked(_focus);
+}
+
+void SettingsView::setApplicationUseTypewriterScrolling(bool _use)
+{
+    d->useTypewriterScrolling->setChecked(_use);
+}
+
 void SettingsView::setSimpleTextEditorDefaultTemplate(const QString& _templateId)
 {
     using namespace BusinessLayer;
@@ -1532,6 +1552,9 @@ void SettingsView::updateTranslations()
     d->applicationUserInterfaceTitle->setText(tr("User interface"));
     d->spellCheckerUserDictionary->setToolTip(tr("Manage user dictionary"));
     d->highlightCurrentLine->setText(tr("Highlight current line"));
+    d->focusCurrentParagraph->setText(tr("Focus current paragraph"));
+    d->useTypewriterScrolling->setText(
+        tr("Use typewriter scrolling (keeps line with the curson on the screen center)"));
 
     d->componentsTitle->setText(tr("Components"));
     //
@@ -1666,6 +1689,7 @@ void SettingsView::designSystemChangeEvent(DesignSystemChangeEvent* _event)
          { d->autoSave, d->saveBackups,
            //
            d->useTypewriterSound, d->useSpellChecker, d->highlightCurrentLine,
+           d->focusCurrentParagraph, d->useTypewriterScrolling,
            //
            d->simpleTextNavigatorShowSceneText,
            //
