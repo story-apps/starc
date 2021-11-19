@@ -1849,7 +1849,9 @@ void PageTextEditPrivate::paintPageMargins(QPainter* _painter)
     const QMarginsF pageMargins(pageMetrics.pxPageMargins());
 
     _painter->setFont(control->document()->defaultFont());
-    _painter->setPen(control->palette().text().color());
+    _painter->setPen(ColorHelper::transparent(
+        control->palette().text().color(),
+        1.0 - (focusCurrentParagraph ? Ui::DesignSystem::inactiveTextOpacity() : 0.0)));
 
     //
     // Текущие высота и ширина которые отображаются на экране
@@ -1976,21 +1978,75 @@ void PageTextEditPrivate::paintFooter(QPainter* _painter, const QRectF& _rect)
     _painter->drawText(_rect, alignment, footer);
 }
 
-void PageTextEditPrivate::paintHighlights(QPainter* _painter)
+void PageTextEditPrivate::paintLineHighlighting(QPainter* _painter)
 {
     //
     // Подсветка строки
     //
-    if (highlightCurrentLine) {
-        Q_Q(PageTextEdit);
-        const QRect cursorR = q->cursorRect();
-        const QSizeF pageSize(pageMetrics.pxPageSize());
-        const QMarginsF pageMargins = Ui::DesignSystem::card().shadowMargins();
-        const qreal highlightLeft = pageMargins.left() - hbar->value();
-        const qreal highlightWidth = pageSize.width() - pageMargins.left() - pageMargins.right();
-        const QRect highlightRect(highlightLeft, cursorR.top(), highlightWidth, cursorR.height());
-        _painter->fillRect(highlightRect,
-                           ColorHelper::transparent(q->palette().highlight().color(), 0.14));
+    if (!highlightCurrentLine) {
+        return;
+    }
+
+    Q_Q(PageTextEdit);
+    const QRect cursorR = q->cursorRect();
+    const QSizeF pageSize(pageMetrics.pxPageSize());
+    const QMarginsF pageMargins = Ui::DesignSystem::card().shadowMargins();
+    const qreal highlightLeft = pageMargins.left() - hbar->value();
+    const qreal highlightWidth = pageSize.width() - pageMargins.left() - pageMargins.right();
+    const QRect highlightRect(highlightLeft, cursorR.top(), highlightWidth, cursorR.height());
+    _painter->fillRect(highlightRect,
+                       ColorHelper::transparent(q->palette().highlight().color(),
+                                                Ui::DesignSystem::hoverBackgroundOpacity()));
+}
+
+void PageTextEditPrivate::paintTextBlocksOverlay(QPainter* _painter)
+{
+    if (!focusCurrentParagraph) {
+        return;
+    }
+
+    Q_Q(PageTextEdit);
+    const auto overlayColor = ColorHelper::transparent(q->palette().base().color(),
+                                                       Ui::DesignSystem::inactiveTextOpacity());
+
+    //
+    // Идём наверх
+    //
+    auto cursor = q->textCursor();
+    auto block = q->textCursor().block();
+    while (block != q->document()->begin()) {
+        block = block.previous();
+        cursor.setPosition(block.position());
+        const QRectF blockRect(q->cursorRect(cursor).topLeft(),
+                               block.layout()->boundingRect().size());
+        _painter->fillRect(blockRect, overlayColor);
+
+        //
+        // ... прерываем, когда вышли за пределы экрана
+        //
+        if (blockRect.top() < 0) {
+            break;
+        }
+    }
+
+    //
+    // Идём вниз
+    //
+    block = q->textCursor().block().next();
+    while (block != q->document()->end()) {
+        cursor.setPosition(block.position());
+        const QRectF blockRect(q->cursorRect(cursor).topLeft(),
+                               block.layout()->boundingRect().size());
+        _painter->fillRect(blockRect, overlayColor);
+
+        //
+        // ... прерываем, когда вышли за пределы экрана
+        //
+        if (blockRect.top() > q->height()) {
+            break;
+        }
+
+        block = block.next();
     }
 }
 
@@ -2275,11 +2331,11 @@ void PageTextEditPrivate::paint(QPainter* p, QPaintEvent* e)
 {
     paintPagesView(p);
     paintPageMargins(p);
-    paintHighlights(p);
+    paintLineHighlighting(p);
+
 
     const int xOffset = horizontalOffset();
     const int yOffset = verticalOffset();
-
     p->translate(-xOffset, -yOffset);
 
     QTextDocument* doc = control->document();
@@ -2304,6 +2360,11 @@ void PageTextEditPrivate::paint(QPainter* p, QPaintEvent* e)
         p->drawText(viewport->rect().adjusted(margin, margin, -margin, -margin),
                     Qt::AlignTop | Qt::TextWordWrap, placeholderText);
     }
+
+    p->translate(xOffset, yOffset);
+
+
+    paintTextBlocksOverlay(p);
 }
 
 /*! \fn void PageTextEdit::paintEvent(QPaintEvent *event)
@@ -3699,10 +3760,15 @@ void PageTextEdit::setHighlightCurrentLine(bool _highlight)
     update();
 }
 
-bool PageTextEdit::useTypewriterScrolling() const
+void PageTextEdit::setFocusCurrentParagraph(bool _focus)
 {
-    Q_D(const PageTextEdit);
-    return d->useTypewriterScrolling;
+    Q_D(PageTextEdit);
+    if (d->focusCurrentParagraph == _focus) {
+        return;
+    }
+
+    d->focusCurrentParagraph = _focus;
+    update();
 }
 
 void PageTextEdit::setUseTypewriterScrolling(bool _use)

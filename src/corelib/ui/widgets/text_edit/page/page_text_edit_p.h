@@ -137,9 +137,14 @@ public:
     void paintFooter(QPainter* _painter, const QRectF& _rect);
 
     /**
-     * @brief Нарисовать подсветки
+     * @brief Нарисовать подсветку строки
      */
-    void paintHighlights(QPainter* _painter);
+    void paintLineHighlighting(QPainter* _painter);
+
+    /**
+     * @brief Затемнить текст за пределами текущего абзаца
+     */
+    void paintTextBlocksOverlay(QPainter* _painter);
 
     /**
      * @brief Установить область обрезки так, чтобы вырезалось всё, что выходит на поля страницы
@@ -200,6 +205,11 @@ public:
      * @brief Подсвечивать ли текущую строку
      */
     bool highlightCurrentLine = false;
+
+    /**
+     * @brief Фокусировать ли текущий абзац
+     */
+    bool focusCurrentParagraph = false;
 
     /**
      * @brief Использовать ли прокрутку в стиле печатной машинки

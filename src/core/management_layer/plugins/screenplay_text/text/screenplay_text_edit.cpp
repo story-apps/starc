@@ -647,6 +647,14 @@ void ScreenplayTextEdit::paintEvent(QPaintEvent* _event)
             int lastCharacterBlockBottom = 0;
             QColor lastCharacterColor;
 
+            auto setPainterPen = [&painter, &block, this](const QColor& _color) {
+                painter.setPen(ColorHelper::transparent(
+                    _color,
+                    1.0
+                        - (block != textCursor().block() ? Ui::DesignSystem::inactiveTextOpacity()
+                                                         : 0.0)));
+            };
+
             BusinessLayer::ScreenplayTextCursor cursor(document());
             while (block.isValid() && block != bottomBlock) {
                 //
@@ -761,11 +769,11 @@ void ScreenplayTextEdit::paintEvent(QPaintEvent* _event)
                     //                                            cursorR.bottom());
                     //                        QRectF rect(topLeft, bottomRight);
                     //                        painter.setBrush(blockInfo->bookmarkColor());
-                    //                        painter.setPen(Qt::transparent);
+                    //                        setPainterPen(Qt::transparent);
                     //                        painter.drawRect(rect);
-                    //                        painter.setPen(Qt::white);
+                    //                        setPainterPen(Qt::white);
                     //                    } else {
-                    //                        painter.setPen(palette().text().color());
+                    //                        setPainterPen(palette().text().color());
                     //                    }
 
                     //                    //
@@ -791,9 +799,9 @@ void ScreenplayTextEdit::paintEvent(QPaintEvent* _event)
                     //                    * 3, size * 3);
                     //                    painter.setBrush(ColorHelper::transparent(palette().text().color(),
                     //                    Ui::DesignSystem::hoverBackgroundOpacity()));
-                    //                    painter.setPen(Qt::NoPen);
+                    //                    setPainterPen(Qt::NoPen);
                     //                    painter.drawRect(circle);
-                    //                    painter.setPen(palette().text().color());
+                    //                    setPainterPen(palette().text().color());
                     //                    painter.drawText(rect, Qt::AlignLeft | Qt::AlignTop,
                     //                    u8"\U000F024B");
 
@@ -808,6 +816,7 @@ void ScreenplayTextEdit::paintEvent(QPaintEvent* _event)
                         // Для пустого футера рисуем плейсхолдер
                         //
                         if (blockType == ScreenplayParagraphType::FolderFooter) {
+                            setPainterPen(palette().text().color());
                             painter.setFont(block.charFormat().font());
 
                             //
@@ -853,6 +862,7 @@ void ScreenplayTextEdit::paintEvent(QPaintEvent* _event)
                         // В остальных случаях рисуем индикатор пустой строки
                         //
                         else {
+                            setPainterPen(palette().text().color());
                             painter.setFont(block.charFormat().font());
                             const QString emptyLineMark = "» ";
                             //
@@ -895,6 +905,9 @@ void ScreenplayTextEdit::paintEvent(QPaintEvent* _event)
                         // Прорисовка значков папки (можно использовать для закладок)
                         //
                         if (blockType == ScreenplayParagraphType::FolderHeader) {
+                            setPainterPen(palette().text().color());
+                            painter.setFont(DesignSystem::font().iconsForEditors());
+
                             //
                             // Определим область для отрисовки и выведем номер сцены в редактор в
                             // зависимости от стороны
@@ -913,8 +926,7 @@ void ScreenplayTextEdit::paintEvent(QPaintEvent* _event)
                                 = (textFontMetrics.lineSpacing() - iconFontMetrics.lineSpacing())
                                 / 2;
                             rect.adjust(0, yDelta, -textFontMetrics.horizontalAdvance(".") / 2, 0);
-                            painter.setFont(DesignSystem::font().iconsForEditors());
-                            painter.setPen(palette().text().color());
+                            setPainterPen(palette().text().color());
                             painter.drawText(rect, Qt::AlignRight | Qt::AlignTop, u8"\U000F024B");
                         }
                         //
@@ -927,6 +939,11 @@ void ScreenplayTextEdit::paintEvent(QPaintEvent* _event)
                             //
                             const auto sceneNumber = d->document.sceneNumber(block);
                             if (!sceneNumber.isEmpty()) {
+                                setPainterPen(palette().text().color());
+                                auto font = cursor.charFormat().font();
+                                font.setUnderline(false);
+                                painter.setFont(font);
+
                                 //
                                 // Определим область для отрисовки и выведем номер сцены в редактор
                                 // в зависимости от стороны
@@ -939,9 +956,6 @@ void ScreenplayTextEdit::paintEvent(QPaintEvent* _event)
                                                                       : pageRight + leftDelta,
                                                         cursorR.bottom());
                                     QRectF rect(topLeft, bottomRight);
-                                    auto font = cursor.charFormat().font();
-                                    font.setUnderline(false);
-                                    painter.setFont(font);
                                     painter.drawText(rect, Qt::AlignRight | Qt::AlignTop,
                                                      sceneNumber);
                                 }
@@ -953,16 +967,13 @@ void ScreenplayTextEdit::paintEvent(QPaintEvent* _event)
                                                                       : textLeft - leftDelta,
                                                         cursorR.bottom());
                                     QRectF rect(topLeft, bottomRight);
-                                    auto font = cursor.charFormat().font();
-                                    font.setUnderline(false);
-                                    painter.setFont(font);
                                     if (lastSceneColor.isValid()) {
-                                        painter.setPen(lastSceneColor);
+                                        setPainterPen(lastSceneColor);
                                     }
                                     painter.drawText(rect, Qt::AlignLeft | Qt::AlignTop,
                                                      sceneNumber);
                                     if (lastSceneColor.isValid()) {
-                                        painter.setPen(palette().text().color());
+                                        setPainterPen(palette().text().color());
                                     }
                                 }
                             }
@@ -977,11 +988,13 @@ void ScreenplayTextEdit::paintEvent(QPaintEvent* _event)
                             //
                             const auto dialogueNumber = d->document.dialogueNumber(block);
                             if (!dialogueNumber.isEmpty()) {
+                                setPainterPen(palette().text().color());
+                                painter.setFont(cursor.charFormat().font());
+
                                 //
                                 // Определим область для отрисовки и выведем номер реплики в
                                 // редактор
                                 //
-                                painter.setFont(cursor.charFormat().font());
                                 const int numberDelta
                                     = painter.fontMetrics().horizontalAdvance(dialogueNumber);
                                 QRectF rect;
@@ -1004,12 +1017,12 @@ void ScreenplayTextEdit::paintEvent(QPaintEvent* _event)
                                 rect = QRectF(topLeft, bottomRight);
 
                                 if (lastCharacterColor.isValid()) {
-                                    painter.setPen(lastCharacterColor);
+                                    setPainterPen(lastCharacterColor);
                                 }
                                 painter.drawText(rect, Qt::AlignRight | Qt::AlignTop,
                                                  dialogueNumber);
                                 if (lastCharacterColor.isValid()) {
-                                    painter.setPen(palette().text().color());
+                                    setPainterPen(palette().text().color());
                                 }
                             }
                         }
@@ -1022,6 +1035,7 @@ void ScreenplayTextEdit::paintEvent(QPaintEvent* _event)
                                 ScreenplayBlockStyle::PropertyIsCharacterContinued)
                             && !block.blockFormat().boolProperty(
                                 ScreenplayBlockStyle::PropertyIsCorrection)) {
+                            setPainterPen(palette().text().color());
                             painter.setFont(cursor.charFormat().font());
 
                             //
@@ -1048,11 +1062,12 @@ void ScreenplayTextEdit::paintEvent(QPaintEvent* _event)
                     if (!block.text().isEmpty()
                         || !block.blockFormat().boolProperty(
                             ScreenplayBlockStyle::PropertyIsCorrection)) {
+                        setPainterPen(palette().text().color());
+                        painter.setFont(block.charFormat().font());
                         //
                         // ... префикс
                         //
                         if (block.charFormat().hasProperty(ScreenplayBlockStyle::PropertyPrefix)) {
-                            painter.setFont(block.charFormat().font());
 
                             const auto prefix = block.charFormat().stringProperty(
                                 ScreenplayBlockStyle::PropertyPrefix);
@@ -1067,8 +1082,6 @@ void ScreenplayTextEdit::paintEvent(QPaintEvent* _event)
                         // ... постфикс
                         //
                         if (block.charFormat().hasProperty(ScreenplayBlockStyle::PropertyPostfix)) {
-                            painter.setFont(block.charFormat().font());
-
                             const auto postfix = block.charFormat().stringProperty(
                                 ScreenplayBlockStyle::PropertyPostfix);
                             const QPoint topLeft = QPoint(cursorREnd.left(), cursorREnd.top());
@@ -1101,7 +1114,7 @@ void ScreenplayTextEdit::paintEvent(QPaintEvent* _event)
         //                && m_document != nullptr) {
         //                QPainter painter(viewport());
         //                painter.setFont(QFont("Sans", 8));
-        //                painter.setPen(Qt::white);
+        //                setPainterPen(Qt::white);
 
         //                const QRectF viewportGeometry = viewport()->geometry();
         //                QPoint mouseCursorPos = mapFromGlobal(QCursor::pos());

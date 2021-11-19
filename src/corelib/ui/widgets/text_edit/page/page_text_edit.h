@@ -381,9 +381,13 @@ public:
     void setHighlightCurrentLine(bool _highlight);
 
     /**
+     * @brief Установить необходимость фокусировки на текущем абзаце
+     */
+    void setFocusCurrentParagraph(bool _focus);
+
+    /**
      * @brief Использовать режим прокрутки как в печатной машинке
      */
-    bool useTypewriterScrolling() const;
     void setUseTypewriterScrolling(bool _use);
 
     /**
