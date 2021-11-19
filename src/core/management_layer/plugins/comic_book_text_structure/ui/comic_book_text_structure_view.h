@@ -1,5 +1,6 @@
 #pragma once
 
+#include <interfaces/ui/i_document_view.h>
 #include <ui/abstract_navigator.h>
 
 class QAbstractItemModel;
@@ -8,13 +9,18 @@ typedef QList<QModelIndex> QModelIndexList;
 
 namespace Ui {
 
-class ComicBookTextStructureView : public AbstractNavigator
+class ComicBookTextStructureView : public AbstractNavigator, public IDocumentView
 {
     Q_OBJECT
 
 public:
     explicit ComicBookTextStructureView(QWidget* _parent = nullptr);
     ~ComicBookTextStructureView() override;
+
+    /**
+     * @brief Реализация интерфейса IDocumentView
+     */
+    QWidget* asQWidget() override;
 
     /**
      * @brief Настроить навигатор в соответствии с параметрами заданными в настройках

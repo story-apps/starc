@@ -27,8 +27,8 @@ public:
      */
     /** @{ */
     void setModel(BusinessLayer::AbstractModel* _model) override;
-    QWidget* view() override;
-    QWidget* createView() override;
+    Ui::IDocumentView* view() override;
+    Ui::IDocumentView* createView() override;
     /** @} */
 
 private:

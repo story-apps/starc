@@ -32,11 +32,21 @@ public:
     void showContent(QWidget* _toolbar, QWidget* _navigator, QWidget* _view);
 
     /**
+     * @brief Включить/отключить полноэкранный режим
+     */
+    void toggleFullScreen(bool _isFullScreen);
+
+    /**
      * @brief Установить панель инструментов для работы с аккаунтом
      */
     void setAccountBar(Widget* _accountBar);
 
 signals:
+    /**
+     * @brief Запрос на выход из полноэкранного режима
+     */
+    void turnOffFullScreenRequested();
+
     /**
      * @brief Запрос на закрытие приложения
      */
@@ -52,6 +62,11 @@ protected:
      * @brief Переопределяем, чтобы вместо реального закрытия испустить сигнал о данном намерении
      */
     void closeEvent(QCloseEvent* _event) override;
+
+    /**
+     * @brief Обновить переводы
+     */
+    void updateTranslations() override;
 
     /**
      * @brief Обновляем навигатор при изменении дизайн системы

@@ -181,6 +181,11 @@ SimpleTextView::SimpleTextView(QWidget* _parent)
 
 SimpleTextView::~SimpleTextView() = default;
 
+QWidget* SimpleTextView::asQWidget()
+{
+    return this;
+}
+
 void SimpleTextView::reconfigure(const QStringList& _changedSettingsKeys)
 {
     d->paragraphTypesModel->clear();

@@ -1,5 +1,6 @@
 #pragma once
 
+#include <interfaces/ui/i_document_view.h>
 #include <ui/widgets/widget/widget.h>
 
 namespace BusinessLayer {
@@ -11,13 +12,18 @@ namespace Ui {
 /**
  * @brief Представление редактора текстового документа
  */
-class SimpleTextView : public Widget
+class SimpleTextView : public Widget, public IDocumentView
 {
     Q_OBJECT
 
 public:
     explicit SimpleTextView(QWidget* _parent = nullptr);
     ~SimpleTextView() override;
+
+    /**
+     * @brief Реализация интерфейса IDocumentView
+     */
+    QWidget* asQWidget() override;
 
     /**
      * @brief Настроить редактор сценария в соответствии с параметрами заданными в настройках

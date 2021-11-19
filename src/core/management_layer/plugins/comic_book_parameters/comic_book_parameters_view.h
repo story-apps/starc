@@ -1,17 +1,23 @@
 #pragma once
 
+#include <interfaces/ui/i_document_view.h>
 #include <ui/widgets/widget/widget.h>
 
 
 namespace Ui {
 
-class ComicBookParametersView : public Widget
+class ComicBookParametersView : public Widget, public IDocumentView
 {
     Q_OBJECT
 
 public:
     explicit ComicBookParametersView(QWidget* _parent = nullptr);
     ~ComicBookParametersView() override;
+
+    /**
+     * @brief Реализация интерфейса IDocumentView
+     */
+    QWidget* asQWidget() override;
 
     void setHeader(const QString& _header);
     Q_SIGNAL void headerChanged(const QString& _header);

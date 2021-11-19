@@ -76,6 +76,11 @@ SimpleTextStructureView::SimpleTextStructureView(QWidget* _parent)
 
 SimpleTextStructureView::~SimpleTextStructureView() = default;
 
+QWidget* SimpleTextStructureView::asQWidget()
+{
+    return this;
+}
+
 void SimpleTextStructureView::reconfigure()
 {
     const bool showSceneText

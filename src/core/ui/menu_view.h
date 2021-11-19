@@ -104,6 +104,11 @@ signals:
     void importPressed();
 
     /**
+     * @brief Нажат пункт меню "Перейти в/выйти из полноэкранного режима"
+     */
+    void fullscreenPressed();
+
+    /**
      * @brief Нажат пункт меню "Настройки"
      */
     void settingsPressed();

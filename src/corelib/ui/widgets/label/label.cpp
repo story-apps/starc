@@ -246,3 +246,22 @@ const QFont& IconsMidLabel::textFont() const
 {
     return Ui::DesignSystem::font().iconsMid();
 }
+
+
+// ****
+
+
+IconsBigLabel::IconsBigLabel(QWidget* _parent)
+    : AbstractLabel(_parent)
+{
+}
+
+void IconsBigLabel::setIcon(const QString& _icon)
+{
+    setText(_icon);
+}
+
+const QFont& IconsBigLabel::textFont() const
+{
+    return Ui::DesignSystem::font().iconsBig();
+}

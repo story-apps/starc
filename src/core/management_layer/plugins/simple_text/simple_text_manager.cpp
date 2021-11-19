@@ -151,12 +151,12 @@ void SimpleTextManager::setModel(BusinessLayer::AbstractModel* _model)
     }
 }
 
-QWidget* SimpleTextManager::view()
+Ui::IDocumentView* SimpleTextManager::view()
 {
     return d->view;
 }
 
-QWidget* SimpleTextManager::createView()
+Ui::IDocumentView* SimpleTextManager::createView()
 {
     return d->createView();
 }

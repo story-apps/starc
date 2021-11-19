@@ -101,6 +101,7 @@ public:
         // Cheat sheet - https://cdn.materialdesignicons.com/5.2.45/
         const QFont& iconsSmall() const;
         const QFont& iconsMid() const;
+        const QFont& iconsBig() const;
         const QFont& iconsForEditors() const;
 
     private:

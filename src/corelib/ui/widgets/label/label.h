@@ -196,3 +196,21 @@ public:
 protected:
     const QFont& textFont() const override;
 };
+
+
+/**
+ * @brief Текстовая метка со шрифтом iconBig
+ */
+class CORE_LIBRARY_EXPORT IconsBigLabel : public AbstractLabel
+{
+public:
+    explicit IconsBigLabel(QWidget* _parent = nullptr);
+
+    /**
+     * @brief Установить иконку
+     */
+    void setIcon(const QString& _icon);
+
+protected:
+    const QFont& textFont() const override;
+};

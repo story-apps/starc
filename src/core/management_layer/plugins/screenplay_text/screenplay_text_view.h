@@ -1,5 +1,6 @@
 #pragma once
 
+#include <interfaces/ui/i_document_view.h>
 #include <ui/widgets/widget/widget.h>
 
 
@@ -12,13 +13,21 @@ namespace Ui {
 /**
  * @brief Представление редактора документа сценария
  */
-class ScreenplayTextView : public Widget
+class ScreenplayTextView : public Widget, public IDocumentView
 {
     Q_OBJECT
 
 public:
     explicit ScreenplayTextView(QWidget* _parent = nullptr);
     ~ScreenplayTextView() override;
+
+    /**
+     * @brief Реализация интерфейса IDocumentView
+     */
+    /** @{ */
+    QWidget* asQWidget() override;
+    void toggleFullScreen(bool _isFullScreen) override;
+    /** @{ */
 
     /**
      * @brief Настроить редактор сценария в соответствии с параметрами заданными в настройках

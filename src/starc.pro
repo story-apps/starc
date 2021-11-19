@@ -13,7 +13,8 @@ CONFIG += ordered
 
 HEADERS += \
     interfaces/management_layer/i_application_manager.h \
-    interfaces/management_layer/i_document_manager.h
+    interfaces/management_layer/i_document_manager.h \
+    interfaces/ui/i_document_view.h
 
 TRANSLATIONS += \
     core/translations/_en_source.ts \

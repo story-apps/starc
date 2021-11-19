@@ -144,12 +144,12 @@ void ScreenplayParametersManager::setModel(BusinessLayer::AbstractModel* _model)
     }
 }
 
-QWidget* ScreenplayParametersManager::view()
+Ui::IDocumentView* ScreenplayParametersManager::view()
 {
     return d->view;
 }
 
-QWidget* ScreenplayParametersManager::createView()
+Ui::IDocumentView* ScreenplayParametersManager::createView()
 {
     return d->createView();
 }

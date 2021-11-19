@@ -1,17 +1,23 @@
 #pragma once
 
+#include <interfaces/ui/i_document_view.h>
 #include <ui/widgets/widget/widget.h>
 
 
 namespace Ui {
 
-class ComicBookInformationView : public Widget
+class ComicBookInformationView : public Widget, public IDocumentView
 {
     Q_OBJECT
 
 public:
     explicit ComicBookInformationView(QWidget* _parent = nullptr);
     ~ComicBookInformationView() override;
+
+    /**
+     * @brief Реализация интерфейса IDocumentView
+     */
+    QWidget* asQWidget() override;
 
     void setName(const QString& _name);
     Q_SIGNAL void nameChanged(const QString& _name);

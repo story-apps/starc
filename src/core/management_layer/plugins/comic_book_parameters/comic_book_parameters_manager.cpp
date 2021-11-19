@@ -103,12 +103,12 @@ void ComicBookParametersManager::setModel(BusinessLayer::AbstractModel* _model)
     }
 }
 
-QWidget* ComicBookParametersManager::view()
+Ui::IDocumentView* ComicBookParametersManager::view()
 {
     return d->view;
 }
 
-QWidget* ComicBookParametersManager::createView()
+Ui::IDocumentView* ComicBookParametersManager::createView()
 {
     return d->createView();
 }

@@ -39,6 +39,11 @@ public:
     void setModel(BusinessLayer::ScreenplayTextModel* _model);
 
     /**
+     * @brief Настроить видимость скролбара
+     */
+    void setScrollBarVisible(bool _visible);
+
+    /**
      * @brief Ловим события об изменении размера родивиджета,
      *        для коррктировки положения и размера таймлайна
      */

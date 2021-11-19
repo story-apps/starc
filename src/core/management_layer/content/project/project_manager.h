@@ -29,6 +29,11 @@ public:
     QWidget* view() const;
 
     /**
+     * @brief Активировать полноэкранный режим
+     */
+    void toggleFullScreen(bool _isFullScreen);
+
+    /**
      * @brief Перенастроить плагины
      */
     void reconfigureAll();
@@ -75,11 +80,6 @@ public:
      * @brief Модель текущего документа
      */
     BusinessLayer::AbstractModel* currentModel() const;
-
-    /**
-     * @brief Представление текущего документа
-     */
-    QString currentModelViewMimeType() const;
 
 signals:
     /**

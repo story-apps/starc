@@ -536,6 +536,17 @@ ScreenplayTextView::ScreenplayTextView(QWidget* _parent)
 
 ScreenplayTextView::~ScreenplayTextView() = default;
 
+QWidget* ScreenplayTextView::asQWidget()
+{
+    return this;
+}
+
+void ScreenplayTextView::toggleFullScreen(bool _isFullScreen)
+{
+    d->toolbar->setVisible(!_isFullScreen);
+    d->screenplayTextScrollbarManager->setScrollBarVisible(!_isFullScreen);
+}
+
 void ScreenplayTextView::reconfigure(const QStringList& _changedSettingsKeys)
 {
     UiHelper::initSpellingFor(d->screenplayText);

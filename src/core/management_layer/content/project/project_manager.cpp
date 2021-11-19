@@ -19,6 +19,7 @@
 #include <data_layer/storage/storage_facade.h>
 #include <domain/document_change_object.h>
 #include <domain/document_object.h>
+#include <interfaces/ui/i_document_view.h>
 #include <ui/abstract_navigator.h>
 #include <ui/design_system/design_system.h>
 #include <ui/project/create_document_dialog.h>
@@ -651,6 +652,11 @@ QWidget* ProjectManager::view() const
     return d->view;
 }
 
+void ProjectManager::toggleFullScreen(bool _isFullScreen)
+{
+    d->pluginsBuilder.toggleFullScreen(_isFullScreen, d->currentDocument.viewMimeType);
+}
+
 void ProjectManager::reconfigureAll()
 {
     d->pluginsBuilder.reconfigureAll();
@@ -775,7 +781,7 @@ void ProjectManager::closeCurrentProject(const QString& _path)
     //
     // Сбрасываем все плагины
     //
-    d->pluginsBuilder.reset();
+    d->pluginsBuilder.resetModels();
 
     //
     // Очищаем все загруженные модели документов
@@ -881,11 +887,6 @@ BusinessLayer::AbstractModel* ProjectManager::currentModel() const
     return d->currentDocument.model;
 }
 
-QString ProjectManager::currentModelViewMimeType() const
-{
-    return d->currentDocument.viewMimeType;
-}
-
 void ProjectManager::handleModelChange(BusinessLayer::AbstractModel* _model,
                                        const QByteArray& _undo, const QByteArray& _redo)
 {
@@ -937,7 +938,7 @@ void ProjectManager::showView(const QModelIndex& _itemIndex, const QString& _vie
         d->view->showNotImplementedPage();
         return;
     }
-    d->view->setCurrentWidget(view);
+    d->view->setCurrentWidget(view->asQWidget());
 
     //
     // Настроим возможность перехода в навигатор
@@ -994,10 +995,10 @@ void ProjectManager::showNavigator(const QModelIndex& _itemIndex, const QString&
     //
     // Настраиваем возможность перехода к навигатору проекта
     //
-    auto navigatorView = qobject_cast<Ui::AbstractNavigator*>(view);
+    auto navigatorView = qobject_cast<Ui::AbstractNavigator*>(view->asQWidget());
     connect(navigatorView, &Ui::AbstractNavigator::backPressed, d->navigator,
             &Ui::ProjectNavigator::showProjectNavigator, Qt::UniqueConnection);
-    d->navigator->setCurrentWidget(view);
+    d->navigator->setCurrentWidget(navigatorView);
 }
 
 void ProjectManager::updateCurrentDocument(BusinessLayer::AbstractModel* _model,

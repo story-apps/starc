@@ -122,6 +122,11 @@ ScreenplayInformationView::ScreenplayInformationView(QWidget* _parent)
 
 ScreenplayInformationView::~ScreenplayInformationView() = default;
 
+QWidget* ScreenplayInformationView::asQWidget()
+{
+    return this;
+}
+
 void ScreenplayInformationView::setName(const QString& _name)
 {
     if (d->screenplayName->text() == _name) {

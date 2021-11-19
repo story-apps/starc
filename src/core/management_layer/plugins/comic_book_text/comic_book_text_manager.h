@@ -28,8 +28,8 @@ public:
     /** @{ */
     QObject* asQObject() override;
     void setModel(BusinessLayer::AbstractModel* _model) override;
-    QWidget* view() override;
-    QWidget* createView() override;
+    Ui::IDocumentView* view() override;
+    Ui::IDocumentView* createView() override;
     void reconfigure(const QStringList& _changedSettingsKeys) override;
     void bind(IDocumentManager* _manager) override;
     void saveSettings() override;

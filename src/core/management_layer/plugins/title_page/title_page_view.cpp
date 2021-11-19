@@ -150,6 +150,11 @@ TitlePageView::TitlePageView(QWidget* _parent)
 
 TitlePageView::~TitlePageView() = default;
 
+QWidget* TitlePageView::asQWidget()
+{
+    return this;
+}
+
 void TitlePageView::reconfigure(const QStringList& _changedSettingsKeys)
 {
     using namespace BusinessLayer;

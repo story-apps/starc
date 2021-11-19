@@ -233,12 +233,12 @@ void ScreenplayTextStructureManager::setModel(BusinessLayer::AbstractModel* _mod
     }
 }
 
-QWidget* ScreenplayTextStructureManager::view()
+Ui::IDocumentView* ScreenplayTextStructureManager::view()
 {
     return d->view;
 }
 
-QWidget* ScreenplayTextStructureManager::createView()
+Ui::IDocumentView* ScreenplayTextStructureManager::createView()
 {
     return d->createView();
 }

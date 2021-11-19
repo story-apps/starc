@@ -7,8 +7,9 @@ namespace BusinessLayer {
 class AbstractModel;
 }
 
-class QWidget;
-
+namespace Ui {
+class IDocumentView;
+}
 
 namespace ManagementLayer {
 
@@ -49,13 +50,19 @@ public:
     /**
      * @brief Активировать представление заданного типа заданной моделью
      */
-    QWidget* activateView(const QString& _viewMimeType, BusinessLayer::AbstractModel* _model);
+    Ui::IDocumentView* activateView(const QString& _viewMimeType,
+                                    BusinessLayer::AbstractModel* _model);
 
     /**
      * @brief Связать два менеджера
      * @note Обычно используется для связки навигатора и редактора
      */
     void bind(const QString& _viewMimeType, const QString& _navigatorMimeType);
+
+    /**
+     * @brief Активировать полноэкранный режим
+     */
+    void toggleFullScreen(bool _isFullScreen, const QString& _viewMimeType);
 
     /**
      * @brief Перенастроить плагины
@@ -72,7 +79,7 @@ public:
     /**
      * @brief Сбросить модели для всех плагинов
      */
-    void reset();
+    void resetModels();
 
 private:
     class Implementation;

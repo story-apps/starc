@@ -143,12 +143,12 @@ void TitlePageManager::setModel(BusinessLayer::AbstractModel* _model)
     }
 }
 
-QWidget* TitlePageManager::view()
+Ui::IDocumentView* TitlePageManager::view()
 {
     return d->view;
 }
 
-QWidget* TitlePageManager::createView()
+Ui::IDocumentView* TitlePageManager::createView()
 {
     return d->createView();
 }

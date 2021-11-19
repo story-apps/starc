@@ -100,6 +100,10 @@ ComicBookParametersView::ComicBookParametersView(QWidget* _parent)
 
 ComicBookParametersView::~ComicBookParametersView() = default;
 
+QWidget* ComicBookParametersView::asQWidget()
+{
+    return this;
+}
 
 void ComicBookParametersView::setHeader(const QString& _header)
 {

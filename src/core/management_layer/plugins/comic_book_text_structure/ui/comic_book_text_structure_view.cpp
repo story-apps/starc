@@ -81,6 +81,11 @@ ComicBookTextStructureView::ComicBookTextStructureView(QWidget* _parent)
 
 ComicBookTextStructureView::~ComicBookTextStructureView() = default;
 
+QWidget* ComicBookTextStructureView::asQWidget()
+{
+    return this;
+}
+
 void ComicBookTextStructureView::reconfigure()
 {
     const bool showSceneText

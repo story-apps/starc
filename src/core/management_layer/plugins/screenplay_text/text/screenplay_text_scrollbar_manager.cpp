@@ -9,6 +9,8 @@
 #include <QPainter>
 #include <QPointer>
 #include <QResizeEvent>
+#include <QTimer>
+#include <QVariantAnimation>
 
 
 namespace Ui {
@@ -18,23 +20,60 @@ class ScreenplayTextScrollBarManager::Implementation
 public:
     explicit Implementation(QWidget* _parent);
 
+    /**
+     * @brief Скорректировать положение таймлайна в зависимости от родительского виджета
+     */
     void updateTimelineGeometry();
 
+    /**
+     * @brief Запустить анимацию отображения таймлайна
+     */
+    void showTimelineAnimated();
+
+
     QPointer<BusinessLayer::ScreenplayTextModel> model;
+
     QScrollBar* scrollbar = nullptr;
+
     ScreenplayTextTimeline* timeline = nullptr;
+    bool needAnimateTimelineOpacity = false;
+    QTimer timelineHideTimer;
+    QVariantAnimation timelineOpacityAnimation;
 };
 
 ScreenplayTextScrollBarManager::Implementation::Implementation(QWidget* _parent)
     : scrollbar(new QScrollBar(_parent))
     , timeline(new ScreenplayTextTimeline(_parent))
 {
+    timelineHideTimer.setSingleShot(true);
+    timelineHideTimer.setInterval(2000);
+    timelineOpacityAnimation.setEasingCurve(QEasingCurve::OutQuad);
+    timelineOpacityAnimation.setDuration(240);
+    timelineOpacityAnimation.setStartValue(1.0);
+    timelineOpacityAnimation.setEndValue(0.0);
 }
 
 void ScreenplayTextScrollBarManager::Implementation::updateTimelineGeometry()
 {
     timeline->move(timeline->parentWidget()->size().width() - timeline->width(), 0);
     timeline->resize(timeline->sizeHint().width(), timeline->parentWidget()->size().height());
+}
+
+void ScreenplayTextScrollBarManager::Implementation::showTimelineAnimated()
+{
+    if (timelineOpacityAnimation.direction() == QVariantAnimation::Backward) {
+        return;
+    }
+
+    if (timelineOpacityAnimation.state() == QVariantAnimation::Running) {
+        timelineOpacityAnimation.pause();
+    }
+    timelineOpacityAnimation.setDirection(QVariantAnimation::Backward);
+    if (timelineOpacityAnimation.state() == QVariantAnimation::Paused) {
+        timelineOpacityAnimation.resume();
+    } else {
+        timelineOpacityAnimation.start();
+    }
 }
 
 
@@ -53,6 +92,13 @@ ScreenplayTextScrollBarManager::ScreenplayTextScrollBarManager(QAbstractScrollAr
 
     d->timeline->installEventFilter(this);
     d->updateTimelineGeometry();
+
+    connect(&d->timelineHideTimer, &QTimer::timeout, this, [this] {
+        d->timelineOpacityAnimation.setDirection(QVariantAnimation::Forward);
+        d->timelineOpacityAnimation.start();
+    });
+    connect(&d->timelineOpacityAnimation, &QVariantAnimation::valueChanged, this,
+            [this](const QVariant& _value) { d->timeline->setOpacity(_value.toReal()); });
 }
 
 ScreenplayTextScrollBarManager::~ScreenplayTextScrollBarManager() = default;
@@ -116,11 +162,36 @@ void ScreenplayTextScrollBarManager::setModel(BusinessLayer::ScreenplayTextModel
     }
 }
 
+void ScreenplayTextScrollBarManager::setScrollBarVisible(bool _visible)
+{
+    if (_visible) {
+        d->needAnimateTimelineOpacity = false;
+        d->showTimelineAnimated();
+    } else {
+        d->needAnimateTimelineOpacity = true;
+        d->timelineHideTimer.start();
+    }
+}
+
 bool ScreenplayTextScrollBarManager::eventFilter(QObject* _watched, QEvent* _event)
 {
+    //
+    // При отображении и при изменении размера родителя, корректируем позицию таймлайна
+    //
     if ((_watched == d->timeline || _watched == d->timeline->parentWidget())
         && (_event->type() == QEvent::Resize || _event->type() == QEvent::Show)) {
         d->updateTimelineGeometry();
+    }
+    //
+    // Если курсор мыши вошёл в таймлайн, то останавливаем таймер скрытия, а если вышел - запускаем
+    //
+    else if (d->needAnimateTimelineOpacity && _watched == d->timeline) {
+        if (_event->type() == QEvent::Enter) {
+            d->timelineHideTimer.stop();
+            d->showTimelineAnimated();
+        } else if (_event->type() == QEvent::Leave) {
+            d->timelineHideTimer.start();
+        }
     }
 
     return QObject::eventFilter(_watched, _event);
@@ -217,6 +288,7 @@ void ScreenplayTextTimeline::paintEvent(QPaintEvent* _event)
 
     QPainter painter(this);
     painter.setRenderHint(QPainter::Antialiasing);
+    painter.setOpacity(opacity());
     painter.fillRect(rect(), Qt::transparent);
 
     painter.setFont(Ui::DesignSystem::font().caption());
@@ -236,7 +308,7 @@ void ScreenplayTextTimeline::paintEvent(QPaintEvent* _event)
     // Рисуем дополнительные цвета скролбара
     //
     if (d->colors.size() > 0) {
-        painter.setOpacity(DesignSystem::inactiveTextOpacity());
+        painter.setOpacity(opacity() * DesignSystem::inactiveTextOpacity());
 
         auto startDuration = d->colors.begin()->first;
         auto endDuration = startDuration;
@@ -267,7 +339,7 @@ void ScreenplayTextTimeline::paintEvent(QPaintEvent* _event)
         endDuration = d->maximum;
         paintColor();
 
-        painter.setOpacity(1.0);
+        painter.setOpacity(opacity());
     }
     const QRectF scrollbarBackgroundRect(scrollbarRect.right(), scrollbarRect.top(),
                                          Ui::DesignSystem::layout().px62(), scrollbarRect.height());
@@ -314,7 +386,7 @@ void ScreenplayTextTimeline::paintEvent(QPaintEvent* _event)
                                   painter.fontMetrics().lineSpacing());
         const auto duartionAtMark = d->maximum * (static_cast<qreal>(markIndex) / marksCount);
         if (d->scrollable && markTextRect.intersects(handleTextRect)) {
-            painter.setOpacity(Ui::DesignSystem::focusBackgroundOpacity());
+            painter.setOpacity(opacity() * Ui::DesignSystem::focusBackgroundOpacity());
         }
         painter.setPen(QPen(scrollbarColor, Ui::DesignSystem::layout().px2()));
         painter.drawLine(scrollbarRect.right(), markTextRect.center().y(), tickRight,
@@ -324,7 +396,7 @@ void ScreenplayTextTimeline::paintEvent(QPaintEvent* _event)
             markTextRect, Qt::AlignLeft | Qt::AlignVCenter,
             TimeHelper::toString(std::chrono::duration_cast<std::chrono::seconds>(duartionAtMark)));
         if (markTextRect.intersects(handleTextRect)) {
-            painter.setOpacity(1.0);
+            painter.setOpacity(opacity());
         }
 
         top += marksSpacingCorrected;

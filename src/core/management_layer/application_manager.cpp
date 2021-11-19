@@ -203,6 +203,11 @@ public:
      */
     void exportCurrentDocument();
 
+    /**
+     * @brief Активировать полноэкранный режим
+     */
+    void toggleFullScreen();
+
     //
 
     /**
@@ -214,7 +219,6 @@ public:
      * @brief Выйти из приложения
      */
     void exit();
-
 
     //
     // Данные
@@ -732,7 +736,6 @@ void ApplicationManager::Implementation::saveChanges()
         return;
     }
 
-
     //
     // Если изменения сохранились без ошибок, то изменим статус окна на сохранение изменений
     //
@@ -1090,6 +1093,40 @@ void ApplicationManager::Implementation::exportCurrentDocument()
     exportManager->exportDocument(projectManager->currentModel());
 }
 
+void ApplicationManager::Implementation::toggleFullScreen()
+{
+    const bool isFullScreen = !applicationView->isFullScreen();
+
+    //
+    // Настраиваем видимость панели навигации
+    //
+    applicationView->toggleFullScreen(!isFullScreen);
+
+    //
+    // Конфигурируем редактор для отображения в полноэкранном режиме
+    //
+    projectManager->toggleFullScreen(isFullScreen);
+
+    //
+    // Собственно настраиваем состояние окна
+    //
+    const char* isMaximizedKey = "is-window-maximized";
+    if (applicationView->isFullScreen()) {
+        if (applicationView->property(isMaximizedKey).toBool()) {
+            applicationView->showMaximized();
+        } else {
+            applicationView->showNormal();
+        }
+    } else {
+        //
+        // Сохраним состояние окна перед переходом в полноэкранный режим
+        //
+        applicationView->setProperty(isMaximizedKey,
+                                     applicationView->windowState().testFlag(Qt::WindowMaximized));
+        applicationView->showFullScreen();
+    }
+}
+
 void ApplicationManager::Implementation::imitateTypewriterSound(QKeyEvent* _event) const
 {
     //
@@ -1194,9 +1231,7 @@ void ApplicationManager::Implementation::saveLastContent(Manager* _manager)
     lastContent.view = _manager->view();
 }
 
-
 // ****
-
 
 ApplicationManager::ApplicationManager(QObject* _parent)
     : QObject(_parent)
@@ -1398,10 +1433,16 @@ void ApplicationManager::initConnections()
     QShortcut* exportShortcut = new QShortcut(QKeySequence("Alt+E"), d->applicationView);
     exportShortcut->setContext(Qt::ApplicationShortcut);
     connect(exportShortcut, &QShortcut::activated, this, [this] { d->exportCurrentDocument(); });
+    //
+    QShortcut* fullScreenShortcut = new QShortcut(QKeySequence::FullScreen, d->applicationView);
+    fullScreenShortcut->setContext(Qt::ApplicationShortcut);
+    connect(fullScreenShortcut, &QShortcut::activated, this, [this] { d->toggleFullScreen(); });
 
     //
     // Представление приложения
     //
+    connect(d->applicationView, &Ui::ApplicationView::turnOffFullScreenRequested, this,
+            [this] { d->toggleFullScreen(); });
     connect(d->applicationView, &Ui::ApplicationView::closeRequested, this, [this] {
         auto callback = [this] { d->exit(); };
         d->saveIfNeeded(callback);
@@ -1423,6 +1464,7 @@ void ApplicationManager::initConnections()
     connect(d->menuView, &Ui::MenuView::importPressed, this, [this] { d->importProject(); });
     connect(d->menuView, &Ui::MenuView::exportCurrentDocumentPressed, this,
             [this] { d->exportCurrentDocument(); });
+    connect(d->menuView, &Ui::MenuView::fullscreenPressed, this, [this] { d->toggleFullScreen(); });
     connect(d->menuView, &Ui::MenuView::settingsPressed, this, [this] { d->showSettings(); });
 
     //

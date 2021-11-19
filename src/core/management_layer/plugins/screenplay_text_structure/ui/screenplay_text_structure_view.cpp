@@ -81,6 +81,11 @@ ScreenplayTextStructureView::ScreenplayTextStructureView(QWidget* _parent)
 
 ScreenplayTextStructureView::~ScreenplayTextStructureView() = default;
 
+QWidget* ScreenplayTextStructureView::asQWidget()
+{
+    return this;
+}
+
 void ScreenplayTextStructureView::reconfigure()
 {
     const bool showSceneNumber

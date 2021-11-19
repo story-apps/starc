@@ -458,6 +458,11 @@ ComicBookTextView::ComicBookTextView(QWidget* _parent)
 
 ComicBookTextView::~ComicBookTextView() = default;
 
+QWidget* ComicBookTextView::asQWidget()
+{
+    return this;
+}
+
 void ComicBookTextView::reconfigure(const QStringList& _changedSettingsKeys)
 {
     d->paragraphTypesModel->clear();

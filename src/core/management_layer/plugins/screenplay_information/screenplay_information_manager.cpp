@@ -125,12 +125,12 @@ void ScreenplayInformationManager::setModel(BusinessLayer::AbstractModel* _model
     }
 }
 
-QWidget* ScreenplayInformationManager::view()
+Ui::IDocumentView* ScreenplayInformationManager::view()
 {
     return d->view;
 }
 
-QWidget* ScreenplayInformationManager::createView()
+Ui::IDocumentView* ScreenplayInformationManager::createView()
 {
     return d->createView();
 }

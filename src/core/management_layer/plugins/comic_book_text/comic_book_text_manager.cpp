@@ -165,12 +165,12 @@ void ComicBookTextManager::setModel(BusinessLayer::AbstractModel* _model)
     }
 }
 
-QWidget* ComicBookTextManager::view()
+Ui::IDocumentView* ComicBookTextManager::view()
 {
     return d->view;
 }
 
-QWidget* ComicBookTextManager::createView()
+Ui::IDocumentView* ComicBookTextManager::createView()
 {
     return d->createView();
 }

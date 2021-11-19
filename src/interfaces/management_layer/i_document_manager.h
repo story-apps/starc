@@ -6,6 +6,10 @@ namespace BusinessLayer {
 class AbstractModel;
 }
 
+namespace Ui {
+class IDocumentView;
+}
+
 class QObject;
 class QStringList;
 class QWidget;
@@ -36,12 +40,12 @@ public:
     /**
      * @brief Представление документа для основного окна приложения
      */
-    virtual QWidget* view() = 0;
+    virtual Ui::IDocumentView* view() = 0;
 
     /**
      * @brief Представление документа для отдельного окна
      */
-    virtual QWidget* createView() = 0;
+    virtual Ui::IDocumentView* createView() = 0;
 
     /**
      * @brief Перенастроить редактор, которым управляет менеджер

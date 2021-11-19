@@ -31,6 +31,12 @@ public:
     void setTextColor(const QColor& _color);
 
     /**
+     * @brief Прозрачность виджета
+     */
+    qreal opacity() const;
+    void setOpacity(qreal _opacity);
+
+    /**
      * @brief Переопределяем для испускания сигналов моментах, когда виджет стал показан или скрыт
      */
     void setVisible(bool _visible) override;

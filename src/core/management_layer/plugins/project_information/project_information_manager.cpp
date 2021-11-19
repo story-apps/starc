@@ -120,12 +120,12 @@ void ProjectInformationManager::setModel(BusinessLayer::AbstractModel* _model)
     }
 }
 
-QWidget* ProjectInformationManager::view()
+Ui::IDocumentView* ProjectInformationManager::view()
 {
     return d->view;
 }
 
-QWidget* ProjectInformationManager::createView()
+Ui::IDocumentView* ProjectInformationManager::createView()
 {
     return d->createView();
 }

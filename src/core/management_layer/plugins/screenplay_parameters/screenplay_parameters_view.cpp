@@ -194,6 +194,10 @@ ScreenplayParametersView::ScreenplayParametersView(QWidget* _parent)
 
 ScreenplayParametersView::~ScreenplayParametersView() = default;
 
+QWidget* ScreenplayParametersView::asQWidget()
+{
+    return this;
+}
 
 void ScreenplayParametersView::setHeader(const QString& _header)
 {

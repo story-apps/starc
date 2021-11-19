@@ -12,6 +12,7 @@ class Widget::Implementation
 public:
     QColor backgroundColor = Qt::red;
     QColor textColor = Qt::red;
+    qreal opacity = 1.0;
 };
 
 
@@ -60,6 +61,21 @@ void Widget::setTextColor(const QColor& _color)
     update();
 }
 
+qreal Widget::opacity() const
+{
+    return d->opacity;
+}
+
+void Widget::setOpacity(qreal _opacity)
+{
+    if (qFuzzyCompare(d->opacity, _opacity)) {
+        return;
+    }
+
+    d->opacity = _opacity;
+    update();
+}
+
 void Widget::setVisible(bool _visible)
 {
     QWidget::setVisible(_visible);
@@ -104,6 +120,7 @@ void Widget::changeEvent(QEvent* _event)
 void Widget::paintEvent(QPaintEvent* _event)
 {
     QPainter painter(this);
+    painter.setOpacity(d->opacity);
     painter.fillRect(_event->rect(), d->backgroundColor);
 }
 

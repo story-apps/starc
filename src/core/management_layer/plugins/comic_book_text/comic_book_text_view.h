@@ -1,5 +1,6 @@
 #pragma once
 
+#include <interfaces/ui/i_document_view.h>
 #include <ui/widgets/widget/widget.h>
 
 
@@ -12,13 +13,18 @@ namespace Ui {
 /**
  * @brief Представление редактора документа сценария
  */
-class ComicBookTextView : public Widget
+class ComicBookTextView : public Widget, public IDocumentView
 {
     Q_OBJECT
 
 public:
     explicit ComicBookTextView(QWidget* _parent = nullptr);
     ~ComicBookTextView() override;
+
+    /**
+     * @brief Реализация интерфейса IDocumentView
+     */
+    QWidget* asQWidget() override;
 
     /**
      * @brief Настроить редактор сценария в соответствии с параметрами заданными в настройках

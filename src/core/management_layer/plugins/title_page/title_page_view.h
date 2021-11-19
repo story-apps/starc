@@ -1,5 +1,6 @@
 #pragma once
 
+#include <interfaces/ui/i_document_view.h>
 #include <ui/widgets/widget/widget.h>
 
 namespace BusinessLayer {
@@ -11,13 +12,18 @@ namespace Ui {
 /**
  * @brief Представление редактора титульной страницы
  */
-class TitlePageView : public Widget
+class TitlePageView : public Widget, public IDocumentView
 {
     Q_OBJECT
 
 public:
     explicit TitlePageView(QWidget* _parent = nullptr);
     ~TitlePageView() override;
+
+    /**
+     * @brief Реализация интерфейса IDocumentView
+     */
+    QWidget* asQWidget() override;
 
     /**
      * @brief Настроить редактор в соответствии с параметрами заданными в настройках

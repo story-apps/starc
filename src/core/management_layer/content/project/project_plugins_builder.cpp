@@ -1,6 +1,7 @@
 #include "project_plugins_builder.h"
 
 #include <interfaces/management_layer/i_document_manager.h>
+#include <interfaces/ui/i_document_view.h>
 
 #include <QApplication>
 #include <QDebug>
@@ -110,13 +111,8 @@ public:
     /**
      * @brief Активировать плагин заданного типа указанной моделью
      */
-    QWidget* activatePlugin(const QString& _mimeType, BusinessLayer::AbstractModel* _model);
-
-    /**
-     * @brief Получить виджет плагина по заданному типу
-     */
-    QWidget* plugin(const QString& _mimeType, bool _fromCache = true) const;
-
+    Ui::IDocumentView* activatePlugin(const QString& _mimeType,
+                                      BusinessLayer::AbstractModel* _model);
 
     /**
      * @brief Загруженные плагины <mime, plugin>
@@ -124,8 +120,8 @@ public:
     mutable QHash<QString, ManagementLayer::IDocumentManager*> plugins;
 };
 
-QWidget* ProjectPluginsBuilder::Implementation::activatePlugin(const QString& _mimeType,
-                                                               BusinessLayer::AbstractModel* _model)
+Ui::IDocumentView* ProjectPluginsBuilder::Implementation::activatePlugin(
+    const QString& _mimeType, BusinessLayer::AbstractModel* _model)
 {
     if (!plugins.contains(_mimeType)) {
         //
@@ -293,8 +289,8 @@ QString ProjectPluginsBuilder::navigatorMimeTypeFor(const QString& _editorMimeTy
     return kEditorToNavigator.value(_editorMimeType);
 }
 
-QWidget* ProjectPluginsBuilder::activateView(const QString& _viewMimeType,
-                                             BusinessLayer::AbstractModel* _model)
+Ui::IDocumentView* ProjectPluginsBuilder::activateView(const QString& _viewMimeType,
+                                                       BusinessLayer::AbstractModel* _model)
 {
     return d->activatePlugin(_viewMimeType, _model);
 }
@@ -309,6 +305,15 @@ void ProjectPluginsBuilder::bind(const QString& _viewMimeType, const QString& _n
 
     viewPlugin->bind(navigatorPlugin);
     navigatorPlugin->bind(viewPlugin);
+}
+
+void ProjectPluginsBuilder::toggleFullScreen(bool _isFullScreen, const QString& _viewMimeType)
+{
+    if (!d->plugins.contains(_viewMimeType)) {
+        return;
+    }
+
+    d->plugins.value(_viewMimeType)->view()->toggleFullScreen(_isFullScreen);
 }
 
 void ProjectPluginsBuilder::reconfigureAll()
@@ -363,7 +368,7 @@ void ProjectPluginsBuilder::reconfigureComicBookNavigator()
     reconfigurePlugin(kComicBookTextNavigatorMime, {});
 }
 
-void ProjectPluginsBuilder::reset()
+void ProjectPluginsBuilder::resetModels()
 {
     for (auto& plugin : d->plugins) {
         plugin->saveSettings();

@@ -117,6 +117,11 @@ ComicBookInformationView::ComicBookInformationView(QWidget* _parent)
 
 ComicBookInformationView::~ComicBookInformationView() = default;
 
+QWidget* ComicBookInformationView::asQWidget()
+{
+    return this;
+}
+
 void ComicBookInformationView::setName(const QString& _name)
 {
     if (d->screenplayName->text() == _name) {

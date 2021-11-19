@@ -24,6 +24,7 @@ public:
     QAction* saveProjectAs = nullptr;
     QAction* exportCurrentDocument = nullptr;
     QAction* importProject = nullptr;
+    QAction* fullScreen = nullptr;
     QAction* settings = nullptr;
     QAction* help = nullptr;
 };
@@ -70,6 +71,12 @@ MenuView::Implementation::Implementation(QWidget* _parent)
     exportCurrentDocument->setCheckable(false);
     exportCurrentDocument->setVisible(false);
     //
+    fullScreen = new QAction;
+    fullScreen->setIconText(u8"\U000F0293");
+    fullScreen->setCheckable(false);
+    fullScreen->setVisible(false);
+    fullScreen->setSeparator(true);
+    //
     settings = new QAction;
     settings->setIconText(u8"\U000f0493");
     settings->setCheckable(false);
@@ -107,6 +114,7 @@ MenuView::MenuView(QWidget* _parent)
     addAction(d->saveProjectAs);
     addAction(d->importProject);
     addAction(d->exportCurrentDocument);
+    addAction(d->fullScreen);
     addAction(d->settings);
     addAction(d->help);
 
@@ -119,6 +127,7 @@ MenuView::MenuView(QWidget* _parent)
     connect(d->importProject, &QAction::triggered, this, &MenuView::importPressed);
     connect(d->exportCurrentDocument, &QAction::triggered, this,
             &MenuView::exportCurrentDocumentPressed);
+    connect(d->fullScreen, &QAction::triggered, this, &MenuView::fullscreenPressed);
     connect(d->settings, &QAction::triggered, this, &MenuView::settingsPressed);
     connect(d->help, &QAction::triggered, this, &MenuView::helpPressed);
 
@@ -129,6 +138,7 @@ MenuView::MenuView(QWidget* _parent)
     connect(this, &MenuView::saveProjectAsPressed, this, &MenuView::closeMenu);
     connect(this, &MenuView::importPressed, this, &MenuView::closeMenu);
     connect(this, &MenuView::exportCurrentDocumentPressed, this, &MenuView::closeMenu);
+    connect(this, &MenuView::fullscreenPressed, this, &MenuView::closeMenu);
     connect(this, &MenuView::settingsPressed, this, &MenuView::closeMenu);
     connect(this, &MenuView::helpPressed, this, &MenuView::closeMenu);
 
@@ -148,6 +158,7 @@ void MenuView::setProjectActionsVisible(bool _visible)
     d->saveProjectAs->setVisible(_visible);
     d->exportCurrentDocument->setVisible(_visible);
     d->importProject->setVisible(_visible);
+    d->fullScreen->setVisible(_visible);
 }
 
 void MenuView::checkProject()
@@ -206,6 +217,9 @@ void MenuView::updateTranslations()
     d->exportCurrentDocument->setText(tr("Export current document..."));
     d->exportCurrentDocument->setWhatsThis(
         QKeySequence("Alt+E").toString(QKeySequence::NativeText));
+    d->fullScreen->setText(tr("Toggle full screen"));
+    d->fullScreen->setWhatsThis(
+        QKeySequence(QKeySequence::FullScreen).toString(QKeySequence::NativeText));
     d->settings->setText(tr("Application settings"));
     d->help->setText(tr("How to use the application"));
 }

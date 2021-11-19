@@ -96,6 +96,11 @@ ProjectInformationView::ProjectInformationView(QWidget* _parent)
 
 ProjectInformationView::~ProjectInformationView() = default;
 
+QWidget* ProjectInformationView::asQWidget()
+{
+    return this;
+}
+
 void ProjectInformationView::setName(const QString& _name)
 {
     if (d->projectName->text() == _name) {
