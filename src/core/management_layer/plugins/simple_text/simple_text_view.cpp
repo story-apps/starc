@@ -186,6 +186,11 @@ QWidget* SimpleTextView::asQWidget()
     return this;
 }
 
+void SimpleTextView::toggleFullScreen(bool _isFullScreen)
+{
+    d->toolbar->setVisible(!_isFullScreen);
+}
+
 void SimpleTextView::reconfigure(const QStringList& _changedSettingsKeys)
 {
     d->paragraphTypesModel->clear();
