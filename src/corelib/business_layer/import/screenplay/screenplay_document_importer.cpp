@@ -282,7 +282,7 @@ ScreenplayAbstractImporter::Documents ScreenplayDocumentImporter::importDocument
         QTextCursor cursor(&documentForImport);
         while (!cursor.atEnd()) {
             if (minLeftMargin > cursor.blockFormat().leftMargin()) {
-                minLeftMargin = cursor.blockFormat().leftMargin();
+                minLeftMargin = std::max(0.0, cursor.blockFormat().leftMargin());
             }
 
             cursor.movePosition(QTextCursor::NextBlock);
@@ -468,23 +468,28 @@ QVector<ScreenplayAbstractImporter::Screenplay> ScreenplayDocumentImporter::impo
             //
             const auto blockType
                 = typeForTextCursor(cursor, lastBlockType, emptyLines, minLeftMargin);
-            QString paragraphText = cursor.block().text().simplified();
-
             //
             // Если текущий тип "Время и место", то удалим номер сцены
             //
-            if (blockType == ScreenplayParagraphType::SceneHeading) {
-                paragraphText = TextHelper::smartToUpper(paragraphText);
-                const auto match = kStartFromNumberChecker.match(paragraphText);
+            if (blockType == ScreenplayParagraphType::SceneHeading && !_options.keepSceneNumbers) {
+                const auto match
+                    = kStartFromNumberChecker.match(cursor.block().text().simplified());
                 if (match.hasMatch()) {
-                    paragraphText = paragraphText.mid(match.capturedEnd());
+                    cursor.movePosition(QTextCursor::StartOfBlock);
+                    cursor.movePosition(QTextCursor::NextCharacter, QTextCursor::KeepAnchor,
+                                        match.capturedEnd());
+                    if (cursor.hasSelection()) {
+                        cursor.deleteChar();
+                    }
+                    cursor.movePosition(QTextCursor::EndOfBlock);
                 }
             }
 
             //
             // Выполняем корректировки
             //
-            paragraphText = clearBlockText(blockType, paragraphText);
+            const auto paragraphText
+                = clearBlockText(blockType, cursor.block().text().simplified());
 
             //
             // Формируем блок сценария
@@ -574,18 +579,14 @@ QVector<ScreenplayAbstractImporter::Screenplay> ScreenplayDocumentImporter::impo
                 if (!currentBlock.textFormats().isEmpty()) {
                     writer.writeStartElement(xml::kFormatsTag);
                     for (const auto& range : currentBlock.textFormats()) {
-                        if (range.format != currentBlock.charFormat()
-                            && (range.format.fontWeight() != currentBlock.charFormat().fontWeight()
-                                || range.format.fontItalic()
-                                    != currentBlock.charFormat().fontItalic()
-                                || range.format.fontUnderline()
-                                    != currentBlock.charFormat().fontUnderline())) {
+                        if (range.format.fontWeight() != QFont::Normal || range.format.fontItalic()
+                            || range.format.fontUnderline()) {
                             writer.writeEmptyElement(xml::kFormatTag);
                             writer.writeAttribute(xml::kFromAttribute,
                                                   QString::number(range.start));
                             writer.writeAttribute(xml::kLengthAttribute,
                                                   QString::number(range.length));
-                            if (range.format.boolProperty(QTextFormat::FontWeight)) {
+                            if (range.format.fontWeight() != QFont::Normal) {
                                 writer.writeAttribute(xml::kBoldAttribute, "true");
                             }
                             if (range.format.boolProperty(QTextFormat::FontItalic)) {

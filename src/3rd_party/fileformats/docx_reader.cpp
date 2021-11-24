@@ -20,50 +20,50 @@
 #include "docx_reader.h"
 
 #include "format_helpers.h"
-
 #include "qtzip/QtZipReader"
 
 #include <QTextDocument>
 #include <QXmlStreamAttributes>
 
 namespace {
-    qreal pixelsFromTwips(qint32 _twips)
-    {
-        qreal inches = _twips / 1440.0;
-        qreal pixels = inches * 96.0;
-        return pixels;
-    }
+qreal pixelsFromTwips(qint32 _twips)
+{
+    qreal inches = _twips / 1440.0;
+    qreal pixels = inches * 96.0;
+    return pixels;
+}
 
-    static bool readBool(const QStringRef& value)
-    {
-        // ECMA-376, ISO/IEC 29500 strict
-        if (value.isEmpty()) {
-            return true;
-        } else if (value == "false") {
-            return false;
-        } else if (value == "true") {
-            return true;
-        } else if (value == "0") {
-            return false;
-        } else if (value == "1") {
-            return true;
+static bool readBool(const QStringRef& value)
+{
+    // ECMA-376, ISO/IEC 29500 strict
+    if (value.isEmpty()) {
+        return true;
+    } else if (value == "false") {
+        return false;
+    } else if (value == "true") {
+        return true;
+    } else if (value == "0") {
+        return false;
+    } else if (value == "1") {
+        return true;
         // ECMA-376 1st edition, ECMA-376 2nd edition transitional, ISO/IEC 29500 transitional
-        } else if (value == "off") {
-            return false;
-        } else if (value == "on") {
-            return true;
+    } else if (value == "off") {
+        return false;
+    } else if (value == "on") {
+        return true;
         // Invalid, just guess
-        } else {
-            return true;
-        }
+    } else {
+        return true;
     }
 }
+} // namespace
 
 //-----------------------------------------------------------------------------
 
 void DocxReader::Comment::insertIfReady(const QTextCursor& _cursor) const
 {
-    if (start_position != -1 && end_position != -1 && start_position < end_position && !text.isEmpty()) {
+    if (start_position != -1 && end_position != -1 && start_position < end_position
+        && !text.isEmpty()) {
         QTextCursor commentCursor(_cursor);
         commentCursor.setPosition(start_position);
         commentCursor.setPosition(end_position, QTextCursor::KeepAnchor);
@@ -98,8 +98,8 @@ void DocxReader::Comment::insertIfReady(const QTextCursor& _cursor) const
 
 //-----------------------------------------------------------------------------
 
-DocxReader::DocxReader() :
-    m_in_block(false)
+DocxReader::DocxReader()
+    : m_in_block(false)
 {
     m_xml.setNamespaceProcessing(false);
 }
@@ -123,11 +123,9 @@ void DocxReader::readData(QIODevice* device)
 
     // Read archive
     if (zip.isReadable()) {
-        const QString files[] = {
-            QString::fromLatin1("word/styles.xml"),
-            QString::fromLatin1("word/comments.xml"),
-            QString::fromLatin1("word/document.xml")
-        };
+        const QString files[]
+            = { QString::fromLatin1("word/styles.xml"), QString::fromLatin1("word/comments.xml"),
+                QString::fromLatin1("word/document.xml") };
         for (int i = 0; i < 3; ++i) {
             QByteArray data = zip.fileData(files[i]);
             if (data.isEmpty()) {
@@ -231,7 +229,8 @@ void DocxReader::readStyles()
             }
 
             // Determine if this is the default style
-            if (m_xml.attributes().hasAttribute("w:default") && readBool(m_xml.attributes().value("w:default"))) {
+            if (m_xml.attributes().hasAttribute("w:default")
+                && readBool(m_xml.attributes().value("w:default"))) {
                 default_style[style.type] = style_id;
             }
 
@@ -246,7 +245,8 @@ void DocxReader::readStyles()
                     m_xml.skipCurrentElement();
                 } else if (m_xml.qualifiedName() == "w:basedOn") {
                     QString parent_style_id = m_xml.attributes().value("w:val").toString();
-                    if (m_styles.contains(parent_style_id) && (style.type == m_styles[parent_style_id].type)) {
+                    if (m_styles.contains(parent_style_id)
+                        && (style.type == m_styles[parent_style_id].type)) {
                         Style newstyle = m_styles[parent_style_id];
                         newstyle.block_format.merge(style.block_format);
                         newstyle.char_format.merge(style.char_format);
@@ -284,8 +284,10 @@ void DocxReader::readStyles()
     } while (m_xml.readNextStartElement());
 
     // Apply default style
-    m_current_style.block_format.merge(m_styles.value(default_style.value(Style::Paragraph)).block_format);
-    m_current_style.char_format.merge(m_styles.value(default_style.value(Style::Character)).char_format);
+    m_current_style.block_format.merge(
+        m_styles.value(default_style.value(Style::Paragraph)).block_format);
+    m_current_style.char_format.merge(
+        m_styles.value(default_style.value(Style::Character)).char_format);
 }
 
 //-----------------------------------------------------------------------------
@@ -449,12 +451,12 @@ void DocxReader::readParagraphProperties(Style& style, bool allowstyles)
                 style.block_format.setAlignment(Qt::AlignLeft | Qt::AlignAbsolute);
             } else if (value == "right") {
                 style.block_format.setAlignment(Qt::AlignRight | Qt::AlignAbsolute);
-            // ECMA-376, ISO/IEC 29500 strict
+                // ECMA-376, ISO/IEC 29500 strict
             } else if (value == "center") {
                 style.block_format.setAlignment(Qt::AlignCenter);
             } else if (value == "both") {
                 style.block_format.setAlignment(Qt::AlignJustify);
-            // ECMA-376 2nd edition, ISO/IEC 29500 strict
+                // ECMA-376 2nd edition, ISO/IEC 29500 strict
             } else if (value == "start") {
                 style.block_format.setAlignment(Qt::AlignLeft);
             } else if (value == "end") {
@@ -516,18 +518,6 @@ void DocxReader::readParagraphProperties(Style& style, bool allowstyles)
         }
 
         m_xml.skipCurrentElement();
-    }
-
-    if (!indent) {
-        if (style.block_format.layoutDirection() != Qt::RightToLeft) {
-            if (left_indent) {
-                style.block_format.setIndent(left_indent);
-            }
-        } else {
-            if (right_indent) {
-                style.block_format.setIndent(right_indent);
-            }
-        }
     }
 
     if (style.block_format.property(QTextFormat::UserProperty).toInt()) {
@@ -598,22 +588,13 @@ void DocxReader::readRunProperties(Style& style, bool allowstyles)
                 style.char_format.setFontUnderline(true);
             } else if (value == "none") {
                 style.char_format.setFontUnderline(false);
-            } else if ((value == "dash")
-                    || (value == "dashDotDotHeavy")
-                    || (value == "dashDotHeavy")
-                    || (value == "dashedHeavy")
-                    || (value == "dashLong")
-                    || (value == "dashLongHeavy")
-                    || (value == "dotDash")
-                    || (value == "dotDotDash")
-                    || (value == "dotted")
-                    || (value == "dottedHeavy")
-                    || (value == "double")
-                    || (value == "thick")
-                    || (value == "wave")
-                    || (value == "wavyDouble")
-                    || (value == "wavyHeavy")
-                    || (value == "words")) {
+            } else if ((value == "dash") || (value == "dashDotDotHeavy")
+                       || (value == "dashDotHeavy") || (value == "dashedHeavy")
+                       || (value == "dashLong") || (value == "dashLongHeavy")
+                       || (value == "dotDash") || (value == "dotDotDash") || (value == "dotted")
+                       || (value == "dottedHeavy") || (value == "double") || (value == "thick")
+                       || (value == "wave") || (value == "wavyDouble") || (value == "wavyHeavy")
+                       || (value == "words")) {
                 style.char_format.setFontUnderline(true);
             }
         } else if (m_xml.qualifiedName() == "w:strike") {
@@ -699,4 +680,3 @@ void DocxReader::readText()
 }
 
 //-----------------------------------------------------------------------------
-

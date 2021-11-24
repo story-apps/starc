@@ -51,6 +51,7 @@ ImportDialog::Implementation::Implementation(const QString& _importFilePath, QWi
         checkBox->setChecked(true);
     }
 
+    keepSceneNumbers->setChecked(false);
     keepSceneNumbers->hide();
 
     buttonsLayout->setContentsMargins({});

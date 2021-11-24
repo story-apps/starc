@@ -11,7 +11,6 @@
 #include <utils/helpers/text_helper.h>
 
 #include <QColor>
-#include <QDebug>
 #include <QLocale>
 #include <QVariant>
 #include <QXmlStreamReader>
