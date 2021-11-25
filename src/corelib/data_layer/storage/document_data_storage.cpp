@@ -13,7 +13,7 @@
 
 namespace DataStorageLayer {
 
-class DocumentDataStorage::Implementation
+class DocumentImageStorage::Implementation
 {
 public: /**
          * @brief Кэш загруженных изображений
@@ -26,14 +26,14 @@ public: /**
     mutable QHash<QUuid, QPixmap> newImages;
 };
 
-DocumentDataStorage::DocumentDataStorage()
+DocumentImageStorage::DocumentImageStorage()
     : d(new Implementation)
 {
 }
 
-DocumentDataStorage::~DocumentDataStorage() = default;
+DocumentImageStorage::~DocumentImageStorage() = default;
 
-QPixmap DocumentDataStorage::load(const QUuid& _uuid) const
+QPixmap DocumentImageStorage::load(const QUuid& _uuid) const
 {
     if (_uuid.isNull()) {
         return {};
@@ -64,7 +64,7 @@ QPixmap DocumentDataStorage::load(const QUuid& _uuid) const
     return *image;
 }
 
-QUuid DocumentDataStorage::save(const QPixmap& _image)
+QUuid DocumentImageStorage::save(const QPixmap& _image)
 {
     if (_image.isNull()) {
         return {};
@@ -75,17 +75,17 @@ QUuid DocumentDataStorage::save(const QPixmap& _image)
     return uuid;
 }
 
-void DocumentDataStorage::clear()
+void DocumentImageStorage::clear()
 {
     //
-    // Кэш специально не открываем, т.к. есть вероятность, что пользователь опять откроет
+    // Кэш специально не очищаем, т.к. есть вероятность, что пользователь опять откроет
     // тот же проект, в противном же случае айдишники картинок будут уникальны в любом случае
     //
 
     d->newImages.clear();
 }
 
-void DocumentDataStorage::saveChanges()
+void DocumentImageStorage::saveChanges()
 {
     for (auto imageIter = d->newImages.begin(); imageIter != d->newImages.end(); ++imageIter) {
         auto newDocument = Domain::ObjectsBuilder::createDocument(

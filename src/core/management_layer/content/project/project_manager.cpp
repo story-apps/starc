@@ -91,7 +91,7 @@ public:
     BusinessLayer::StructureModel* projectStructureModel = nullptr;
     BusinessLayer::StructureProxyModel* projectStructureProxyModel = nullptr;
 
-    DataStorageLayer::DocumentDataStorage documentDataStorage;
+    DataStorageLayer::DocumentImageStorage documentDataStorage;
 
     ProjectModelsFacade modelsFacade;
     ProjectPluginsBuilder pluginsBuilder;

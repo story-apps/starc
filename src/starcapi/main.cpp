@@ -122,7 +122,7 @@ QJsonObject postStories(const QStringList& _importFileNames)
     QScopedPointer<BusinessLayer::ScreenplayAbstractImporter> importer;
     importer.reset(new BusinessLayer::ScreenplayDocumentImporter);
 
-    DataStorageLayer::DocumentDataStorage documentDataStorage;
+    DataStorageLayer::DocumentImageStorage documentDataStorage;
     QVector<Domain::DocumentObject*> documents;
     QVector<BusinessLayer::AbstractModel*> models;
 
@@ -238,7 +238,7 @@ QJsonObject getCharacters(const QString& _starcFileName)
     //
     // Сформируем регулярное выражение для выуживания молчаливых персонажей
     //
-    DataStorageLayer::DocumentDataStorage documentDataStorage;
+    DataStorageLayer::DocumentImageStorage documentDataStorage;
     QString rxPattern;
     for (auto characterDocument : charactersDocuments) {
         CharacterModel characterModel;

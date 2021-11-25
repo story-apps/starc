@@ -9,11 +9,14 @@
 
 namespace DataStorageLayer {
 
-class CORE_LIBRARY_EXPORT DocumentDataStorage : public BusinessLayer::AbstractImageWrapper
+/**
+ * @brief Хранилище документов-изображений
+ */
+class CORE_LIBRARY_EXPORT DocumentImageStorage : public BusinessLayer::AbstractImageWrapper
 {
 public:
-    DocumentDataStorage();
-    ~DocumentDataStorage() override;
+    DocumentImageStorage();
+    ~DocumentImageStorage() override;
 
     QPixmap load(const QUuid& _uuid) const override;
     QUuid save(const QPixmap& _image) override;

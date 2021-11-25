@@ -46,24 +46,7 @@ static int s_openedTransactions = 0;
  */
 static QString applicationVersionKey()
 {
-    return
-#ifdef MOBILE_OS
-        "application-version-mobile";
-#else
-        "application-version";
-#endif
-}
-/**
- * @brief Инвертированный ключ хранения номера версии, для проверок
- */
-static QString invertedApplicationVersionKey()
-{
-    return
-#ifdef MOBILE_OS
-        "application-version";
-#else
-        "application-version-mobile";
-#endif
+    return "application-version";
 }
 } // namespace
 
@@ -349,16 +332,7 @@ void Database::updateDatabase(QSqlDatabase& _database)
     query.addBindValue(applicationVersionKey());
     query.exec();
     query.next();
-    QString databaseVersion = query.record().value("version").toString();
-    //
-    // ... если версии нет (файл пришёл из другой версии мобильная <-> десктоп), то создадим её
-    //
-    if (databaseVersion.isEmpty()) {
-        query.addBindValue(invertedApplicationVersionKey());
-        query.exec();
-        query.next();
-        databaseVersion = query.record().value("version").toString();
-    }
+    const auto databaseVersion = query.record().value("version").toString();
 
     //
     // Некоторые версии выходили с ошибками, их заменяем на предыдущие

@@ -70,7 +70,7 @@ void AbstractMapper::abstractInsert(DomainObject* _object)
     //
     QSqlQuery insertQuery = Database::query();
     insertQuery.prepare(insertQueryString);
-    for (const QVariant& value : insertValues) {
+    for (const QVariant& value : std::as_const(insertValues)) {
         insertQuery.addBindValue(value);
     }
 
@@ -105,7 +105,7 @@ bool AbstractMapper::abstractUpdate(DomainObject* _object)
     //
     QSqlQuery updateQuery = Database::query();
     updateQuery.prepare(updateQueryString);
-    for (const QVariant& value : updateValues) {
+    for (const QVariant& value : std::as_const(updateValues)) {
         updateQuery.addBindValue(value);
     }
 
@@ -132,7 +132,7 @@ void AbstractMapper::abstractDelete(DomainObject* _object)
     //
     QSqlQuery deleteQuery = Database::query();
     deleteQuery.prepare(deleteQueryString);
-    for (const QVariant& value : deleteValues) {
+    for (const QVariant& value : std::as_const(deleteValues)) {
         deleteQuery.addBindValue(value);
     }
 
@@ -198,7 +198,7 @@ Identifier AbstractMapper::findNextIdentifier()
 
     Identifier maxId(0);
     if (!m_loadedObjectsMap.isEmpty()) {
-        QMap<Identifier, DomainObject*>::const_iterator iter = m_loadedObjectsMap.end();
+        QMap<Identifier, DomainObject*>::const_iterator iter = m_loadedObjectsMap.cend();
         --iter;
         maxId = iter.key();
     }

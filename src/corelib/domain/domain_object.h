@@ -2,8 +2,6 @@
 
 #include "identifier.h"
 
-#include <QAbstractItemModel>
-
 
 namespace Domain {
 
