@@ -651,8 +651,9 @@ void ScreenplayTextEdit::paintEvent(QPaintEvent* _event)
                 painter.setPen(ColorHelper::transparent(
                     _color,
                     1.0
-                        - (block != textCursor().block() ? Ui::DesignSystem::inactiveTextOpacity()
-                                                         : 0.0)));
+                        - (isFocusCurrentParagraph() && block != textCursor().block()
+                               ? Ui::DesignSystem::inactiveTextOpacity()
+                               : 0.0)));
             };
 
             BusinessLayer::ScreenplayTextCursor cursor(document());

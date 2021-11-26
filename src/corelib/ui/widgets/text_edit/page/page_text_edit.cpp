@@ -3781,6 +3781,12 @@ void PageTextEdit::setHighlightCurrentLine(bool _highlight)
     update();
 }
 
+bool PageTextEdit::isFocusCurrentParagraph() const
+{
+    Q_D(const PageTextEdit);
+    return d->focusCurrentParagraph;
+}
+
 void PageTextEdit::setFocusCurrentParagraph(bool _focus)
 {
     Q_D(PageTextEdit);

@@ -383,6 +383,7 @@ public:
     /**
      * @brief Установить необходимость фокусировки на текущем абзаце
      */
+    bool isFocusCurrentParagraph() const;
     void setFocusCurrentParagraph(bool _focus);
 
     /**
