@@ -2385,6 +2385,7 @@ void PageTextEditPrivate::paint(QPainter* p, QPaintEvent* e)
     p->translate(xOffset, yOffset);
 
 
+    clipPageDecorationRegions(p);
     paintTextBlocksOverlay(p);
 }
 
