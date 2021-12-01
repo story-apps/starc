@@ -371,8 +371,9 @@ void ProjectCard::mouseReleaseEvent(QGraphicsSceneMouseEvent* _event)
     //
     // Делаем отложенный вызов, чтобы mouseGrabber сцены освободился
     //
-    QMetaObject::invokeMethod(scene,
-                              [this, scene] { emit scene->reorderProjectCardRequested(this); });
+    QMetaObject::invokeMethod(
+        scene, [this, scene] { emit scene->reorderProjectCardRequested(this); },
+        Qt::QueuedConnection);
 
     if (m_decorationOpacityAnimation.state() == QVariantAnimation::Running) {
         m_decorationOpacityAnimation.pause();
