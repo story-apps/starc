@@ -24,7 +24,12 @@ public:
     /**
      * @brief Установить имя пользователя
      */
-    void setUserName(const QString& _userName);
+    void setName(const QString& _name);
+
+    /**
+     * @brief Установить био пользователя
+     */
+    void setDescription(const QString& _description);
 
     /**
      * @brief Установить необходимость получать уведомления по почте

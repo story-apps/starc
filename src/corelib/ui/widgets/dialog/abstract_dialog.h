@@ -38,6 +38,11 @@ public:
     void setContentMaximumWidth(int _width);
 
     /**
+     * @brief Зафиксировать ширину контента диалога
+     */
+    void setContentFixedWidth(int _width);
+
+    /**
      * @brief Задать кнопку, для нажатия при нажатии Enter в диалоге
      */
     void setAcceptButton(Button* _button);

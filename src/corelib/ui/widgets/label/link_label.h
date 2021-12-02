@@ -17,12 +17,6 @@ public:
      */
     void setLink(const QUrl& _link);
 
-protected:
-    /**
-     * @brief Переопределяем для открытия ссылки при клике на виджет
-     */
-    void mouseReleaseEvent(QMouseEvent* _event) override;
-
 private:
     class Implementation;
     QScopedPointer<Implementation> d;

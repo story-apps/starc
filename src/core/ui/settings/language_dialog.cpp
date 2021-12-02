@@ -132,9 +132,9 @@ LanguageDialog::Implementation::Implementation(QWidget* _parent)
     ukrainian->setText("Українська");
     ukrainian->setProperty(kLanguageKey, QLocale::Ukrainian);
 
-    languageHowToAddLink->setLink(QUrl("https://github.com/dimkanovikov/starc/wiki/"
-                                       "How-to-add-the-translation-of-Story-Architect-to-your-"
-                                       "native-language-or-improve-one-of-existing%3F"));
+    languageHowToAddLink->setLink(QUrl("https://github.com/story-apps/starc/wiki/How-to-"
+                                       "add-the-translation-of-Story-Architect-to-your-native-"
+                                       "language-or-improve-the-existing-version%3F"));
 
     buttonsLayout = new QHBoxLayout;
     buttonsLayout->setContentsMargins({});

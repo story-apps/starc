@@ -17,6 +17,11 @@ public:
     ~MenuView() override;
 
     /**
+     * @brief Задать видимость пункта меню "Авторизоваться"
+     */
+    void setSignInVisible(bool _visible);
+
+    /**
      * @brief Пометить пункт меню проектов выделенным
      */
     void checkProjects();
@@ -62,6 +67,11 @@ public:
     void closeMenu();
 
 signals:
+    /**
+     * @brief Нажат пункт меню "Авторизоваться"
+     */
+    void signInPressed();
+
     /**
      * @brief Нажат пункт меню "Проекты"
      */

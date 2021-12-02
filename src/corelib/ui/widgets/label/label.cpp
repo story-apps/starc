@@ -13,6 +13,7 @@ class AbstractLabel::Implementation
 public:
     QString text;
     Qt::Alignment alignment = Qt::AlignTop | Qt::AlignLeft;
+    bool clickable = false;
 };
 
 
@@ -56,6 +57,17 @@ void AbstractLabel::setAlignment(Qt::Alignment _alignment)
     update();
 }
 
+void AbstractLabel::setClickable(bool _clickable)
+{
+    if (d->clickable == _clickable) {
+        return;
+    }
+
+    setAttribute(Qt::WA_Hover, _clickable);
+    d->clickable = _clickable;
+    update();
+}
+
 QSize AbstractLabel::sizeHint() const
 {
     const int width = TextHelper::fineTextWidth(d->text, textFont());
@@ -83,7 +95,11 @@ void AbstractLabel::paintEvent(QPaintEvent* _event)
     //
     // Рисуем текст
     //
-    painter.setFont(textFont());
+    auto font = textFont();
+    if (d->clickable && underMouse()) {
+        font.setUnderline(true);
+    }
+    painter.setFont(font);
     painter.setPen(textColor());
     painter.setOpacity(isEnabled() ? 1.0 : Ui::DesignSystem::disabledTextOpacity());
 
@@ -98,6 +114,10 @@ void AbstractLabel::paintEvent(QPaintEvent* _event)
 void AbstractLabel::mouseReleaseEvent(QMouseEvent* _event)
 {
     Widget::mouseReleaseEvent(_event);
+
+    if (!rect().contains(_event->pos())) {
+        return;
+    }
 
     emit clicked();
 }

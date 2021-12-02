@@ -16,6 +16,8 @@ class MenuView::Implementation
 public:
     explicit Implementation(QWidget* _parent);
 
+
+    QAction* signIn = nullptr;
     QAction* projects = nullptr;
     QAction* createProject = nullptr;
     QAction* openProject = nullptr;
@@ -26,11 +28,15 @@ public:
     QAction* importProject = nullptr;
     QAction* fullScreen = nullptr;
     QAction* settings = nullptr;
-    QAction* help = nullptr;
 };
 
 MenuView::Implementation::Implementation(QWidget* _parent)
 {
+    signIn = new QAction;
+    signIn->setIconText(u8"\U000F0004");
+    signIn->setCheckable(false);
+    signIn->setVisible(false);
+    //
     projects = new QAction;
     projects->setIconText(u8"\U000f024b");
     projects->setCheckable(true);
@@ -82,18 +88,11 @@ MenuView::Implementation::Implementation(QWidget* _parent)
     settings->setCheckable(false);
     settings->setVisible(true);
     settings->setSeparator(true);
-    //
-    help = new QAction;
-    help->setIconText(u8"\U000f02d7");
-    help->setCheckable(false);
-    help->setChecked(false);
-    help->setSeparator(true);
 
     QActionGroup* actions = new QActionGroup(_parent);
     actions->addAction(projects);
     actions->addAction(project);
     actions->addAction(settings);
-    actions->addAction(help);
 }
 
 // ****
@@ -103,9 +102,15 @@ MenuView::MenuView(QWidget* _parent)
     : Drawer(_parent)
     , d(new Implementation(this))
 {
-    setTitle("STARC");
+
+#ifdef CLOUD_SERVICE_MANAGER
+    d->signIn->setVisible(true);
+    d->projects->setSeparator(true);
+#endif
+
     setProVersion(false);
 
+    addAction(d->signIn);
     addAction(d->projects);
     addAction(d->createProject);
     addAction(d->openProject);
@@ -116,8 +121,8 @@ MenuView::MenuView(QWidget* _parent)
     addAction(d->exportCurrentDocument);
     addAction(d->fullScreen);
     addAction(d->settings);
-    addAction(d->help);
 
+    connect(d->signIn, &QAction::triggered, this, &MenuView::signInPressed);
     connect(d->projects, &QAction::triggered, this, &MenuView::projectsPressed);
     connect(d->createProject, &QAction::triggered, this, &MenuView::createProjectPressed);
     connect(d->openProject, &QAction::triggered, this, &MenuView::openProjectPressed);
@@ -129,8 +134,8 @@ MenuView::MenuView(QWidget* _parent)
             &MenuView::exportCurrentDocumentPressed);
     connect(d->fullScreen, &QAction::triggered, this, &MenuView::fullscreenPressed);
     connect(d->settings, &QAction::triggered, this, &MenuView::settingsPressed);
-    connect(d->help, &QAction::triggered, this, &MenuView::helpPressed);
 
+    connect(this, &MenuView::accountPressed, this, &MenuView::closeMenu);
     connect(this, &MenuView::projectsPressed, this, &MenuView::closeMenu);
     connect(this, &MenuView::createProjectPressed, this, &MenuView::closeMenu);
     connect(this, &MenuView::openProjectPressed, this, &MenuView::closeMenu);
@@ -144,6 +149,13 @@ MenuView::MenuView(QWidget* _parent)
 
     setVisible(false);
 }
+
+void MenuView::setSignInVisible(bool _visible)
+{
+    d->signIn->setVisible(_visible);
+}
+
+MenuView::~MenuView() = default;
 
 void MenuView::checkProjects()
 {
@@ -187,9 +199,8 @@ void MenuView::markChangesSaved(bool _saved)
 
 void MenuView::setProVersion(bool _isPro)
 {
-    setSubtitle(QString("Story Architect v.%1 %2")
-                    .arg(QApplication::applicationVersion(), (_isPro ? "PRO" : "free")));
-    d->help->setVisible(!_isPro);
+    //    setSubtitle(QString("Story Architect v.%1 %2")
+    //                    .arg(QApplication::applicationVersion(), (_isPro ? "PRO" : "free")));
 }
 
 void MenuView::setCurrentDocumentExportAvailable(bool _available)
@@ -204,6 +215,7 @@ void MenuView::closeMenu()
 
 void MenuView::updateTranslations()
 {
+    d->signIn->setText(tr("Sign in"));
     d->projects->setText(tr("Stories"));
     d->createProject->setText(tr("Create story"));
     d->openProject->setText(tr("Open story"));
@@ -221,7 +233,6 @@ void MenuView::updateTranslations()
     d->fullScreen->setWhatsThis(
         QKeySequence(QKeySequence::FullScreen).toString(QKeySequence::NativeText));
     d->settings->setText(tr("Application settings"));
-    d->help->setText(tr("How to use the application"));
 }
 
 void MenuView::keyPressEvent(QKeyEvent* _event)
@@ -232,7 +243,5 @@ void MenuView::keyPressEvent(QKeyEvent* _event)
 
     Drawer::keyPressEvent(_event);
 }
-
-MenuView::~MenuView() = default;
 
 } // namespace Ui

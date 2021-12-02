@@ -1,6 +1,9 @@
 #include "dialog_content.h"
 
+#include <ui/design_system/design_system.h>
+
 #include <QMoveEvent>
+#include <QPainter>
 #include <QResizeEvent>
 #include <QTimer>
 #include <QVariantAnimation>
@@ -157,4 +160,15 @@ void DialogContent::moveEvent(QMoveEvent* _event)
             move(_event->oldPos());
         }
     }
+}
+
+void DialogContent::paintEvent(QPaintEvent* _event)
+{
+    Q_UNUSED(_event)
+
+    QPainter painter(this);
+    painter.setPen(Qt::NoPen);
+    painter.setBrush(backgroundColor());
+    painter.drawRoundedRect(rect(), Ui::DesignSystem::card().borderRadius(),
+                            Ui::DesignSystem::card().borderRadius());
 }

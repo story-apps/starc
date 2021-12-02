@@ -15,19 +15,27 @@ public:
     ~Drawer() override;
 
     /**
-     * @brief Установить заголовок
+     * @brief Установить необходимость использования панели аккаунта
      */
-    void setTitle(const QString& _title);
+    void setAccountVisible(bool _use);
 
     /**
-     * @brief Установить подзаголовок
+     * @brief Параметры панели аккаунта
      */
-    void setSubtitle(const QString& _subtitle);
+    void setAvatar(const QPixmap& _avatar);
+    void setAccountName(const QString& _name);
+    void setAccountEmail(const QString& _email);
 
     /**
      * @brief Определяем идеальный размер
      */
     QSize sizeHint() const override;
+
+signals:
+    /**
+     * @brief Пользователь кликнул на аккаунте
+     */
+    void accountPressed();
 
 protected:
     /**

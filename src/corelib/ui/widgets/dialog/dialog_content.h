@@ -21,6 +21,11 @@ protected:
     void resizeEvent(QResizeEvent* _event) override;
     void moveEvent(QMoveEvent* _event) override;
 
+    /**
+     * @brief Скругляем края
+     */
+    void paintEvent(QPaintEvent* _event) override;
+
 private:
     class Implementation;
     QScopedPointer<Implementation> d;

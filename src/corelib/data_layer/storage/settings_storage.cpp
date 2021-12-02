@@ -748,7 +748,7 @@ QVariantMap SettingsStorage::values(const QString& _valuesGroup,
     return values;
 }
 
-QString SettingsStorage::userName() const
+QString SettingsStorage::accountName() const
 {
     //
     // TODO: получать имя пользователя если он авторизован
@@ -757,7 +757,7 @@ QString SettingsStorage::userName() const
     return value(kSystemUsernameKey, SettingsPlace::Application).toString();
 }
 
-QString SettingsStorage::userEmail() const
+QString SettingsStorage::accountEmail() const
 {
     //
     // TODO

@@ -896,7 +896,7 @@ void ScreenplayTextCommentsModel::addReply(const QModelIndex& _index, const QStr
         for (auto& reviewMark : updatedReviewMarks) {
             if (isReviewMarksPartiallyEqual(reviewMark, reviewMarkWrapper.reviewMark)) {
                 reviewMark.comments.append(
-                    { DataStorageLayer::StorageFacade::settingsStorage()->userName(),
+                    { DataStorageLayer::StorageFacade::settingsStorage()->accountName(),
                       QDateTime::currentDateTime().toString(Qt::ISODate), _comment });
             }
         }

@@ -121,6 +121,11 @@ public:
         ~Layout();
 
         /**
+         * @brief Расстояние с заданным кол-вом пикселей
+         */
+        qreal px(qreal _value) const;
+
+        /**
          * @brief Отступ в 2 пикселя
          */
         qreal px2() const;
@@ -827,11 +832,6 @@ public:
         QMarginsF selectionMargins() const;
 
         /**
-         * @brief Отступ от подзаголовка до первого пункта меню
-         */
-        qreal subtitleBottomMargin() const;
-
-        /**
          * @brief Отступ от иконки до текста пункта меню
          */
         qreal spacing() const;
@@ -840,16 +840,6 @@ public:
          * @brief Ширина
          */
         qreal width() const;
-
-        /**
-         * @brief Высота заголовка
-         */
-        qreal titleHeight() const;
-
-        /**
-         * @brief Высота подзаголовка
-         */
-        qreal subtitleHeight() const;
 
         /**
          * @brief Высота пункта меню
@@ -1019,7 +1009,7 @@ public:
         /**
          * @brief Максимальная ширина информационного диалога
          */
-        qreal infoMaximumWidth() const;
+        qreal maximumWidth() const;
 
     private:
         explicit Dialog(qreal _scaleFactor);

@@ -893,8 +893,8 @@ void ProjectManager::handleModelChange(BusinessLayer::AbstractModel* _model,
     using namespace DataStorageLayer;
     StorageFacade::documentChangeStorage()->appendDocumentChange(
         _model->document()->uuid(), QUuid::createUuid(), _undo, _redo,
-        StorageFacade::settingsStorage()->userName(),
-        StorageFacade::settingsStorage()->userEmail());
+        StorageFacade::settingsStorage()->accountName(),
+        StorageFacade::settingsStorage()->accountEmail());
 
     emit contentsChanged();
 }

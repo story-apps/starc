@@ -1567,7 +1567,7 @@ void ComicBookTextDocument::addReviewMark(const QColor& _textColor, const QColor
     if (_backgroundColor.isValid()) {
         reviewMark.backgroundColor = _backgroundColor;
     }
-    reviewMark.comments.append({ DataStorageLayer::StorageFacade::settingsStorage()->userName(),
+    reviewMark.comments.append({ DataStorageLayer::StorageFacade::settingsStorage()->accountName(),
                                  QDateTime::currentDateTime().toString(Qt::ISODate), _comment });
 
     auto cursor = _cursor;

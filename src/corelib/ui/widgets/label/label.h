@@ -30,6 +30,11 @@ public:
     void setAlignment(Qt::Alignment _alignment);
 
     /**
+     * @brief Возможность кликнуть на лейбле
+     */
+    void setClickable(bool _clickable);
+
+    /**
      * @brief Переопределяем для корректного подсчёта размера в компоновщиках
      */
     QSize sizeHint() const override;

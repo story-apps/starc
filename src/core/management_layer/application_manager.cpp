@@ -71,7 +71,7 @@ public:
     /**
      * @brief Проверить новую версию
      */
-    void checkNewVersion();
+    void sendStartupStatistics();
 
     /**
      * @brief Настроить параметры автосохранения
@@ -289,7 +289,6 @@ ApplicationManager::Implementation::Implementation(ApplicationManager* _q)
     , cloudServiceManager(new CloudServiceManager)
 #endif
 {
-    applicationView->setAccountBar(accountManager->accountBar());
 }
 
 ApplicationManager::Implementation::~Implementation()
@@ -305,16 +304,16 @@ ApplicationManager::Implementation::~Implementation()
 #endif
 }
 
-void ApplicationManager::Implementation::checkNewVersion()
+void ApplicationManager::Implementation::sendStartupStatistics()
 {
     //
     // Сформируем uuid для приложения, по которому будем идентифицировать данного пользователя
     //
-    auto applicationUuidValue = settingsValue(DataStorageLayer::kApplicationUuidKey).toUuid();
-    if (applicationUuidValue.isNull()) {
-        applicationUuidValue = QUuid::createUuid();
+    auto deviceUuidValue = settingsValue(DataStorageLayer::kDeviceUuidKey).toUuid();
+    if (deviceUuidValue.isNull()) {
+        deviceUuidValue = QUuid::createUuid();
         DataStorageLayer::StorageFacade::settingsStorage()->setValue(
-            DataStorageLayer::kApplicationUuidKey, applicationUuidValue,
+            DataStorageLayer::kDeviceUuidKey, deviceUuidValue,
             DataStorageLayer::SettingsStorage::SettingsPlace::Application);
     }
 
@@ -326,7 +325,7 @@ void ApplicationManager::Implementation::checkNewVersion()
     //
     loader->setRequestMethod(NetworkRequestMethod::Post);
     QJsonObject data;
-    data["device_uuid"] = applicationUuidValue.toString();
+    data["device_uuid"] = deviceUuidValue.toString();
     data["application_name"] = QApplication::applicationName();
     data["application_version"] = QApplication::applicationVersion();
     data["application_language"] = QLocale::languageToString(QLocale().language());
@@ -380,13 +379,6 @@ void ApplicationManager::Implementation::showContent()
         // ... а затем уже отобразить
         //
         showProjects();
-
-#ifdef CLOUD_SERVICE_MANAGER
-        //
-        // Если менеджер облака доступен, отобржаем панель для работы с личным кабинетом
-        //
-        accountManager->accountBar()->show();
-#endif
     }
 }
 
@@ -401,7 +393,6 @@ void ApplicationManager::Implementation::showMenu()
 void ApplicationManager::Implementation::showAccount()
 {
     showContent(accountManager.data());
-    accountManager->accountBar()->hide();
 }
 
 void ApplicationManager::Implementation::showProjects()
@@ -1339,7 +1330,7 @@ void ApplicationManager::exec(const QString& _fileToOpenPath)
         //
         // Отправим запрос в статистику
         //
-        d->checkNewVersion();
+        d->sendStartupStatistics();
 
         //
         // Переводим состояние приложение в рабочий режим
@@ -1451,6 +1442,9 @@ void ApplicationManager::initConnections()
     //
     // Представление меню
     //
+    connect(d->menuView, &Ui::MenuView::signInPressed, d->accountManager.data(),
+            &AccountManager::signIn);
+    connect(d->menuView, &Ui::MenuView::accountPressed, this, [this] { d->showAccount(); });
     connect(d->menuView, &Ui::MenuView::projectsPressed, this, [this] { d->showProjects(); });
     connect(d->menuView, &Ui::MenuView::createProjectPressed, this, [this] { d->createProject(); });
     connect(d->menuView, &Ui::MenuView::openProjectPressed, this, [this] { d->openProject(); });
@@ -1498,10 +1492,8 @@ void ApplicationManager::initConnections()
     //
     connect(d->accountManager.data(), &AccountManager::showAccountRequested, this,
             [this] { d->showAccount(); });
-    connect(d->accountManager.data(), &AccountManager::closeAccountRequested, this, [this] {
-        d->accountManager->accountBar()->show();
-        d->showLastContent();
-    });
+    connect(d->accountManager.data(), &AccountManager::closeAccountRequested, this,
+            [this] { d->showLastContent(); });
     connect(d->accountManager.data(), &AccountManager::cloudProjectsCreationAvailabilityChanged,
             d->projectsManager.data(), &ProjectsManager::setProjectsInCloudCanBeCreated);
 
@@ -1629,71 +1621,23 @@ void ApplicationManager::initConnections()
     //
     // Менеджер облака
     //
-    // ... поймали/потеряли связь
-    //
-    connect(d->cloudServiceManager.data(), &CloudServiceManager::connected,
-            d->accountManager.data(), &AccountManager::notifyConnected);
-    connect(d->cloudServiceManager.data(), &CloudServiceManager::disconnected,
-            d->accountManager.data(), &AccountManager::notifyDisconnected);
-    //
     // ... авторизация/регистрация
     //
     {
         //
         // проверка регистрация или вход
         //
-        connect(d->accountManager.data(), &AccountManager::emailEntered,
-                d->cloudServiceManager.data(), &CloudServiceManager::canLogin);
-        connect(d->cloudServiceManager.data(), &CloudServiceManager::registrationAllowed,
-                d->accountManager.data(), &AccountManager::allowRegistration);
-        connect(d->cloudServiceManager.data(), &CloudServiceManager::loginAllowed,
-                d->accountManager.data(), &AccountManager::allowLogin);
-
-        //
-        // регистрация
-        //
-        connect(d->accountManager.data(), &AccountManager::registrationRequested,
-                d->cloudServiceManager.data(), &CloudServiceManager::registerAccount);
-        connect(d->accountManager.data(), &AccountManager::registrationConfirmationCodeEntered,
-                d->cloudServiceManager.data(), &CloudServiceManager::confirmRegistration);
-        connect(d->cloudServiceManager.data(),
-                &CloudServiceManager::registrationConfiramtionCodeSended, d->accountManager.data(),
-                &AccountManager::prepareToEnterRegistrationConfirmationCode);
-        connect(d->cloudServiceManager.data(), &CloudServiceManager::registrationConfirmationError,
-                d->accountManager.data(), &AccountManager::setRegistrationConfirmationError);
-        connect(d->cloudServiceManager.data(), &CloudServiceManager::registrationCompleted,
-                d->accountManager.data(), &AccountManager::login);
-
-        //
-        // восстановление пароля
-        //
-        connect(d->accountManager.data(), &AccountManager::restorePasswordRequested,
-                d->cloudServiceManager.data(), &CloudServiceManager::restorePassword);
-        connect(d->accountManager.data(), &AccountManager::passwordRestoringConfirmationCodeEntered,
-                d->cloudServiceManager.data(), &CloudServiceManager::confirmPasswordRestoring);
-        connect(d->accountManager.data(), &AccountManager::changePasswordRequested,
-                d->cloudServiceManager.data(), &CloudServiceManager::changePassword);
-        connect(d->cloudServiceManager.data(),
-                &CloudServiceManager::passwordRestoringConfirmationCodeSended,
-                d->accountManager.data(),
-                &AccountManager::prepareToEnterRestorePasswordConfirmationCode);
-        connect(d->cloudServiceManager.data(),
-                &CloudServiceManager::passwordRestoringConfirmationSucceed,
-                d->accountManager.data(), &AccountManager::allowChangePassword);
-        connect(d->cloudServiceManager.data(), &CloudServiceManager::registrationConfirmationError,
-                d->accountManager.data(), &AccountManager::setRestorePasswordConfirmationError);
-        connect(d->cloudServiceManager.data(), &CloudServiceManager::passwordChanged,
-                d->accountManager.data(), &AccountManager::login);
-
-        //
-        // авторизация
-        //
-        connect(d->accountManager.data(), &AccountManager::loginRequested,
-                d->cloudServiceManager.data(), &CloudServiceManager::login);
-        connect(d->cloudServiceManager.data(), &CloudServiceManager::loginPasswordError,
-                d->accountManager.data(), &AccountManager::setLoginPasswordError);
+        connect(d->accountManager.data(), &AccountManager::askConfirmationCodeRequested,
+                d->cloudServiceManager.data(), &CloudServiceManager::askConfirmationCode);
+        connect(d->cloudServiceManager.data(), &CloudServiceManager::confirmationCodeInfoRecieved,
+                d->accountManager.data(), &AccountManager::setConfirmationCodeInfo);
+        connect(d->accountManager.data(), &AccountManager::checkConfirmationCodeRequested,
+                d->cloudServiceManager.data(), &CloudServiceManager::checkConfirmationCode);
         connect(d->cloudServiceManager.data(), &CloudServiceManager::loginCompleted,
-                d->accountManager.data(), &AccountManager::completeLogin);
+                d->accountManager.data(), [this](bool _isNewAccount) {
+                    d->cloudServiceManager->askAccountInfo();
+                    d->accountManager->completeSignIn(_isNewAccount);
+                });
 
         //
         // Выход из аккаунта
@@ -1707,8 +1651,15 @@ void ApplicationManager::initConnections()
     //
     // Получены параметры об аккаунте
     //
-    connect(d->cloudServiceManager.data(), &CloudServiceManager::accountParametersLoaded,
-            d->accountManager.data(), &AccountManager::setAccountParameters);
+    connect(d->cloudServiceManager.data(), &CloudServiceManager::accountInfoReceived,
+            d->accountManager.data(), &AccountManager::setAccountInfo);
+    connect(d->cloudServiceManager.data(), &CloudServiceManager::accountInfoReceived, this, [this] {
+        d->menuView->setSignInVisible(false);
+        d->menuView->setAccountVisible(true);
+        d->menuView->setAvatar(d->accountManager->avatar());
+        d->menuView->setAccountName(d->accountManager->name());
+        d->menuView->setAccountEmail(d->accountManager->email());
+    });
     connect(d->cloudServiceManager.data(), &CloudServiceManager::paymentInfoLoaded,
             d->accountManager.data(), &AccountManager::setPaymentInfo);
 
@@ -1730,7 +1681,7 @@ void ApplicationManager::initConnections()
     connect(d->accountManager.data(), &AccountManager::changeAvatarRequested,
             d->cloudServiceManager.data(), &CloudServiceManager::setAvatar);
     connect(d->cloudServiceManager.data(), &CloudServiceManager::userNameChanged,
-            d->accountManager.data(), &AccountManager::setUserName);
+            d->accountManager.data(), &AccountManager::setName);
     connect(d->cloudServiceManager.data(), &CloudServiceManager::receiveEmailNotificationsChanged,
             d->accountManager.data(), &AccountManager::setReceiveEmailNotifications);
     connect(d->cloudServiceManager.data(), &CloudServiceManager::avatarChanged,

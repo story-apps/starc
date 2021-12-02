@@ -17,105 +17,45 @@ public:
     ~LoginDialog() override;
 
     /**
+     * @brief Показать страницу ввода имейла
+     */
+    void showEmailStep();
+
+    /**
      * @brief Email, который ввёл пользователь
      */
     QString email() const;
 
     /**
-     * @brief Пароль, который ввёл пользователь
+     * @brief Показать страницу ввода кода подтверждения
      */
-    QString password() const;
+    void showConfirmationCodeStep();
 
     /**
-     * @brief Код подтверждения для регистрации
+     * @brief Код подтверждения авторизации
      */
-    QString registractionConfirmationCode() const;
+    QString confirmationCode() const;
 
     /**
-     * @brief Код подтверждения для смены пароля
+     * @brief Задать ошибку ввода проверочного кода
      */
-    QString restorePasswordConfirmationCode() const;
-
-    /**
-     * @brief Показать кнопку регистрации пользователя
-     */
-    void showRegistrationButton();
-
-    /**
-     * @brief Показать поле для ввода кода подтвержения регистрации
-     */
-    void showRegistrationConfirmationCodeField();
-
-    /**
-     * @brief Задать ошибку ввода проверочного кода для регистрации
-     */
-    void setRegistrationConfirmationError(const QString& _error);
-
-    /**
-     * @brief Показать кнопки авторизации
-     */
-    void showLoginButtons();
-
-    /**
-     * @brief Показать поле ввода кода подтврждения смены пароля
-     */
-    void showRestorePasswordConfirmationCodeField();
-
-    /**
-     * @brief Задать ошибку ввода проверочного кода для смены пароля
-     */
-    void setRestorePasswordConfirmationError(const QString& _error);
-
-    /**
-     * @brief Показать поле ввода нового пароля и кнопку смены пароля
-     */
-    void showChangePasswordFieldAndButton();
-
-    /**
-     * @brief Задать ошибку ввода пароля
-     */
-    void setPasswordError(const QString& _error);
+    void showConfirmationCodeError();
 
 signals:
     /**
-     * @brief Пользователь ввёл свой email
+     * @brief Пользователь нажал кнопку входа в аккаунт
      */
-    void emailEntered();
+    void signInPressed();
 
     /**
-     * @brief Пользователь хочет восстановить пароль
+     * @brief Пользователь ввёл код подтверждения
      */
-    void restorePasswordRequested();
-
-    /**
-     * @brief Введён код подтверждения регистрации
-     */
-    void passwordRestoringConfirmationCodeEntered();
-
-    /**
-     * @brief Пользователь хочет сменить пароль
-     */
-    void changePasswordRequested();
-
-    /**
-     * @brief Пользователь хочет зарегистрироваться
-     */
-    void registrationRequested();
-
-    /**
-     * @brief Введён код подтверждения регистрации
-     */
-    void registrationConfirmationCodeEntered();
-
-    /**
-     * @brief Пользователь хочет авторизоваться
-     */
-    void loginRequested();
+    void confirmationCodeChanged(const QString& _code);
 
     /**
      * @brief Пользователь передумал авторизовываться
      */
-    void canceled();
+    void cancelPressed();
 
 protected:
     /**
@@ -137,11 +77,6 @@ protected:
      * @brief Обновляем UI при изменении дизайн системы
      */
     void designSystemChangeEvent(DesignSystemChangeEvent* _event) override;
-
-    /**
-     * @brief Переопределяем, для ручной корректировки цепочки фокусирования виджетов
-     */
-    bool eventFilter(QObject* _watched, QEvent* _event) override;
 
 private:
     class Implementation;

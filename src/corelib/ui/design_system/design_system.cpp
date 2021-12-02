@@ -468,6 +468,11 @@ DesignSystem::Layout::Implementation::Implementation(qreal _scaleFactor)
 
 DesignSystem::Layout::~Layout() = default;
 
+qreal DesignSystem::Layout::px(qreal _value) const
+{
+    return Ui::DesignSystem::scaleFactor() * _value;
+}
+
 qreal DesignSystem::Layout::px2() const
 {
     return d->px2;
@@ -1448,11 +1453,8 @@ public:
     QMarginsF margins = { 16.0, 16.0, 16.0, 16.0 };
     QMarginsF actionMargins = { 16.0, 12.0, 12.0, 12.0 };
     QMarginsF selectionMargins = { 8.0, 4.0, 8.0, 4.0 };
-    qreal subtitleBottomMargin = 18.0;
     qreal spacing = 32.0;
     qreal width = 304.0;
-    qreal titleHeight = 26.0;
-    qreal subtitleHeight = 20.0;
     qreal actionHeight = 48.0;
     QSizeF iconSize = { 24.0, 24.0 };
     qreal separatorHeight = 0.5;
@@ -1465,11 +1467,8 @@ DesignSystem::Drawer::Implementation::Implementation(qreal _scaleFactor, const C
     margins *= _scaleFactor;
     actionMargins *= _scaleFactor;
     selectionMargins *= _scaleFactor;
-    subtitleBottomMargin *= _scaleFactor;
     spacing *= _scaleFactor;
     width *= _scaleFactor;
-    titleHeight *= _scaleFactor;
-    subtitleHeight *= _scaleFactor;
     actionHeight *= _scaleFactor;
     iconSize *= _scaleFactor;
     separatorHeight *= _scaleFactor;
@@ -1497,11 +1496,6 @@ QMarginsF DesignSystem::Drawer::selectionMargins() const
     return d->selectionMargins;
 }
 
-qreal DesignSystem::Drawer::subtitleBottomMargin() const
-{
-    return d->subtitleBottomMargin;
-}
-
 qreal DesignSystem::Drawer::spacing() const
 {
     return d->spacing;
@@ -1510,16 +1504,6 @@ qreal DesignSystem::Drawer::spacing() const
 qreal DesignSystem::Drawer::width() const
 {
     return d->width;
-}
-
-qreal DesignSystem::Drawer::titleHeight() const
-{
-    return d->titleHeight;
-}
-
-qreal DesignSystem::Drawer::subtitleHeight() const
-{
-    return d->subtitleHeight;
 }
 
 qreal DesignSystem::Drawer::actionHeight() const
@@ -1738,14 +1722,14 @@ public:
 
     QMarginsF margins = { 24.0, 24.0, 24.0, 12.0 };
     qreal minimumWidth = 420.0;
-    qreal infoMaximumWidth = 500.0;
+    qreal maximumWidth = 560.0;
 };
 
 DesignSystem::Dialog::Implementation::Implementation(qreal _scaleFactor)
 {
     margins *= _scaleFactor;
     minimumWidth *= _scaleFactor;
-    infoMaximumWidth *= _scaleFactor;
+    maximumWidth *= _scaleFactor;
 }
 
 // **
@@ -1762,9 +1746,9 @@ qreal DesignSystem::Dialog::minimumWidth() const
     return d->minimumWidth;
 }
 
-qreal DesignSystem::Dialog::infoMaximumWidth() const
+qreal DesignSystem::Dialog::maximumWidth() const
 {
-    return d->infoMaximumWidth;
+    return d->maximumWidth;
 }
 
 DesignSystem::Dialog::Dialog(qreal _scaleFactor)

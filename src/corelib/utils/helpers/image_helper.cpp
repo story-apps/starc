@@ -131,7 +131,7 @@ bool ImageHelper::isImagesEqual(const QPixmap& _lhs, const QPixmap& _rhs)
 }
 
 QPixmap ImageHelper::makeAvatar(const QString& _text, const QFont& _font, const QSize& _size,
-                                const QColor& _color)
+                                const QColor& _textColor)
 {
     //
     // Кэш аватарок
@@ -142,7 +142,7 @@ QPixmap ImageHelper::makeAvatar(const QString& _text, const QFont& _font, const 
     //
     // Ищем аватарку в кэше
     //
-    const CacheKey avatarKey{ _text, { _size.width(), { _font.pixelSize(), _color.rgb() } } };
+    const CacheKey avatarKey{ _text, { _size.width(), { _font.pixelSize(), _textColor.rgb() } } };
     if (s_avatarsCache.contains(avatarKey)) {
         return *s_avatarsCache[avatarKey];
     }
@@ -186,7 +186,7 @@ QPixmap ImageHelper::makeAvatar(const QString& _text, const QFont& _font, const 
     //
     // Рисуем текст
     //
-    painter.setPen(_color);
+    painter.setPen(_textColor);
     painter.setFont(_font);
     painter.drawText(avatarRect, Qt::AlignCenter, textToDraw);
     painter.end();

@@ -36,7 +36,6 @@ public:
     Splitter* splitter = nullptr;
 
     IconsBigLabel* turnOffFullScreenIcon = nullptr;
-    Widget* accountBar = nullptr;
 };
 
 ApplicationView::Implementation::Implementation(QWidget* _parent)
@@ -140,25 +139,6 @@ void ApplicationView::toggleFullScreen(bool _isFullScreen)
     }
 }
 
-void ApplicationView::setAccountBar(Widget* _accountBar)
-{
-    d->accountBar = _accountBar;
-}
-
-bool ApplicationView::eventFilter(QObject* _target, QEvent* _event)
-{
-    if (d->accountBar != nullptr && _target == d->view && _event->type() == QEvent::Resize) {
-        QResizeEvent* event = static_cast<QResizeEvent*>(_event);
-        d->accountBar->move(d->view->mapTo(this, QPoint())
-                            + QPointF(event->size().width() - d->accountBar->width()
-                                          - Ui::DesignSystem::layout().px24(),
-                                      Ui::DesignSystem::layout().px24())
-                                  .toPoint());
-    }
-
-    return Widget::eventFilter(_target, _event);
-}
-
 void ApplicationView::closeEvent(QCloseEvent* _event)
 {
     //
@@ -199,16 +179,6 @@ void ApplicationView::designSystemChangeEvent(DesignSystemChangeEvent* _event)
     d->turnOffFullScreenIcon->resize(d->turnOffFullScreenIcon->sizeHint());
     d->turnOffFullScreenIcon->move(Ui::DesignSystem::layout().px24(),
                                    Ui::DesignSystem::layout().px24());
-
-    if (d->accountBar != nullptr) {
-        d->accountBar->resize(d->accountBar->sizeHint());
-        d->accountBar->move(
-            QPointF(size().width() - d->accountBar->width() - Ui::DesignSystem::layout().px24(),
-                    Ui::DesignSystem::layout().px24())
-                .toPoint());
-        d->accountBar->setBackgroundColor(Ui::DesignSystem::color().primary());
-        d->accountBar->setTextColor(Ui::DesignSystem::color().onPrimary());
-    }
 
     TaskBar::registerTaskBar(this, Ui::DesignSystem::color().primary(),
                              Ui::DesignSystem::color().onPrimary(),

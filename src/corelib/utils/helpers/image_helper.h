@@ -56,7 +56,7 @@ public:
      * @brief Сделать аватар из заданного текста заданного размера
      */
     static QPixmap makeAvatar(const QString& _text, const QFont& _font, const QSize& _size,
-                              const QColor& _color);
+                              const QColor& _textColor);
 
     /**
      * @brief Сделать аватар из заданной картинки

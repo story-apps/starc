@@ -30,7 +30,8 @@ public:
     Card* userInfo = nullptr;
     QGridLayout* userInfoLayout = nullptr;
     H6Label* email = nullptr;
-    TextField* userName = nullptr;
+    TextField* name = nullptr;
+    TextField* description = nullptr;
     CheckBox* receiveEmailNotifications = nullptr;
     Avatar* avatar = nullptr;
 };
@@ -42,7 +43,8 @@ AccountView::Implementation::Implementation(QWidget* _parent)
     , userInfo(new Card(_parent))
     , userInfoLayout(new QGridLayout)
     , email(new H6Label(userInfo))
-    , userName(new TextField(userInfo))
+    , name(new TextField(userInfo))
+    , description(new TextField(userInfo))
     , receiveEmailNotifications(new CheckBox(userInfo))
     , avatar(new Avatar(userInfo))
 {
@@ -53,15 +55,18 @@ AccountView::Implementation::Implementation(QWidget* _parent)
 
     userInfoLayout->setContentsMargins({});
     userInfoLayout->setSpacing(0);
-    userInfoLayout->addWidget(email, 0, 0);
-    userInfoLayout->addWidget(userName, 1, 0);
-    userInfoLayout->addWidget(receiveEmailNotifications, 2, 0);
-    userInfoLayout->setRowMinimumHeight(3, 1); // добавляем пустую строку, вместо отступа снизу
-    userInfoLayout->addWidget(avatar, 0, 1, 4, 1);
+    int row = 0;
+    userInfoLayout->addWidget(email, row++, 0);
+    userInfoLayout->addWidget(name, row++, 0);
+    userInfoLayout->addWidget(description, row++, 0);
+    userInfoLayout->addWidget(receiveEmailNotifications, row++, 0);
+    userInfoLayout->setRowMinimumHeight(row++, 1); // добавляем пустую строку, вместо отступа снизу
+    userInfoLayout->addWidget(avatar, 0, 1, row, 1);
     userInfoLayout->setColumnStretch(0, 1);
     userInfo->setLayoutReimpl(userInfoLayout);
 
-    userName->setSpellCheckPolicy(SpellCheckPolicy::Manual);
+    name->setSpellCheckPolicy(SpellCheckPolicy::Manual);
+    description->setSpellCheckPolicy(SpellCheckPolicy::Manual);
 }
 
 
@@ -83,15 +88,15 @@ AccountView::AccountView(QWidget* _parent)
             &AccountView::changePasswordPressed);
     connect(d->logoutAction, &QAction::triggered, this, &AccountView::logoutPressed);
 
-    connect(d->userName, &TextField::textChanged, &d->changeNameDebouncer, &Debouncer::orderWork);
+    connect(d->name, &TextField::textChanged, &d->changeNameDebouncer, &Debouncer::orderWork);
     connect(&d->changeNameDebouncer, &Debouncer::gotWork, this, [this] {
-        if (d->userName->text().isEmpty()) {
-            d->userName->setError(tr("Username can't be empty, please fill it"));
+        if (d->name->text().isEmpty()) {
+            d->name->setError(tr("Username can't be empty, please fill it"));
             return;
         }
 
-        d->userName->setError({});
-        emit userNameChanged(d->userName->text());
+        d->name->setError({});
+        emit userNameChanged(d->name->text());
     });
     connect(d->receiveEmailNotifications, &CheckBox::checkedChanged, this,
             &AccountView::receiveEmailNotificationsChanged);
@@ -103,10 +108,16 @@ void AccountView::setEmail(const QString& _email)
     d->email->setText(_email);
 }
 
-void AccountView::setUserName(const QString& _userName)
+void AccountView::setName(const QString& _name)
 {
-    QSignalBlocker blocker(d->userName);
-    d->userName->setText(_userName);
+    QSignalBlocker blocker(d->name);
+    d->name->setText(_name);
+}
+
+void AccountView::setDescription(const QString& _description)
+{
+    QSignalBlocker blocker(d->description);
+    d->description->setText(_description);
 }
 
 void AccountView::setReceiveEmailNotifications(bool _receive)
@@ -133,7 +144,8 @@ void AccountView::updateTranslations()
 {
     d->changePasswordAction->setToolTip(tr("Change password"));
     d->logoutAction->setToolTip(tr("Log out"));
-    d->userName->setLabel(tr("User name"));
+    d->name->setLabel(tr("User name"));
+    d->description->setLabel(tr("User bio"));
     d->receiveEmailNotifications->setText(tr("Receive email notifications"));
 }
 
@@ -161,6 +173,11 @@ void AccountView::designSystemChangeEvent(DesignSystemChangeEvent* _event)
     d->userInfoLayout->setRowMinimumHeight(3, static_cast<int>(Ui::DesignSystem::layout().px8()));
     d->receiveEmailNotifications->setBackgroundColor(DesignSystem::color().background());
     d->receiveEmailNotifications->setTextColor(DesignSystem::color().onBackground());
+
+    for (auto textField : { d->name, d->description }) {
+        textField->setBackgroundColor(Ui::DesignSystem::color().onBackground());
+        textField->setTextColor(Ui::DesignSystem::color().onBackground());
+    }
 }
 
 } // namespace Ui

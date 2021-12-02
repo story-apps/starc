@@ -219,7 +219,7 @@ void CreateDocumentDialog::designSystemChangeEvent(DesignSystemChangeEvent* _eve
 {
     AbstractDialog::designSystemChangeEvent(_event);
 
-    setContentMaximumWidth(600 * Ui::DesignSystem::scaleFactor());
+    setContentMaximumWidth(Ui::DesignSystem::layout().px(600));
 
     d->documentType->setBackgroundColor(DesignSystem::color().background());
     d->documentType->setTextColor(DesignSystem::color().onBackground());

@@ -170,6 +170,12 @@ void AbstractDialog::setContentMaximumWidth(int _width)
     d->content->setMaximumWidth(_width);
 }
 
+void AbstractDialog::setContentFixedWidth(int _width)
+{
+    setContentMinimumWidth(_width);
+    setContentMaximumWidth(_width);
+}
+
 void AbstractDialog::setAcceptButton(Button* _button)
 {
     d->acceptButton = _button;
@@ -270,7 +276,7 @@ void AbstractDialog::designSystemChangeEvent(DesignSystemChangeEvent* _event)
 
     d->content->setMinimumWidth(static_cast<int>(Ui::DesignSystem::dialog().minimumWidth()));
     d->content->setBackgroundColor(Ui::DesignSystem::color().background());
-    d->title->setBackgroundColor(Ui::DesignSystem::color().background());
+    d->title->setBackgroundColor(Qt::transparent);
     d->title->setTextColor(Ui::DesignSystem::color().onBackground());
     d->title->setContentsMargins(Ui::DesignSystem::label().margins().toMargins());
 }

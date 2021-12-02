@@ -880,7 +880,7 @@ void ComicBookTextCommentsModel::addComment(const QModelIndex& _index, const QSt
         for (auto& reviewMark : updatedReviewMarks) {
             if (isReviewMarksPartiallyEqual(reviewMark, reviewMarkWrapper.reviewMark)) {
                 reviewMark.comments.append(
-                    { DataStorageLayer::StorageFacade::settingsStorage()->userName(),
+                    { DataStorageLayer::StorageFacade::settingsStorage()->accountName(),
                       QDateTime::currentDateTime().toString(Qt::ISODate), _comment });
             }
         }

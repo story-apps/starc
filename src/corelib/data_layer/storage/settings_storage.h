@@ -29,10 +29,15 @@ namespace {
 //
 // Приложение
 //
+const QString kDeviceGroupKey = "device";
+//
+// уникальный индентификатор устройства
+const QString kDeviceUuidKey = kDeviceGroupKey + "/uuid";
+//
+// Приложение
+//
 const QString kApplicationGroupKey = "application";
 //
-// уникальный индентификатор приложения
-const QString kApplicationUuidKey = kApplicationGroupKey + "/uuid";
 // первый запуск приложения (false) или оно уже сконфигурировано (true)
 const QString kApplicationConfiguredKey = kApplicationGroupKey + "/configured";
 // язык приложения
@@ -218,12 +223,12 @@ public:
      * @brief Получить имя пользователя (если авторизован - имя пользователя в облаке,
      *        если не авторизован - имя пользователя в системе)
      */
-    QString userName() const;
+    QString accountName() const;
 
     /**
      * @brief Получить имейл пользователя (если не авторизован возвращает пустое значение)
      */
-    QString userEmail() const;
+    QString accountEmail() const;
 
 
     //

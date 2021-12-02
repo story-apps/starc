@@ -19,7 +19,6 @@ public:
     AccountManager(QObject* _parent, QWidget* _parentWidget);
     ~AccountManager() override;
 
-    Widget* accountBar() const;
     QWidget* toolBar() const;
     QWidget* navigator() const;
     QWidget* view() const;
@@ -27,81 +26,45 @@ public:
     /**
      * @brief Войти в личный кабинет
      */
-    void login();
+    void signIn();
 
     /**
-     * @brief Разрешить пользователю зарегистрироваться
+     * @brief Задать параметры кода активации
      */
-    void allowRegistration();
+    void setConfirmationCodeInfo(int _codeLength);
 
     /**
-     * @brief Подготовить диалог авторизации ко вводу кода подтверждения регистрации
+     * @brief Завершить авторизацию (если это новый пользователь, то необходимо перейти в кабинет)
      */
-    void prepareToEnterRegistrationConfirmationCode();
+    void completeSignIn(bool _openAccount);
 
     /**
-     * @brief Задать ошибку ввода проверочного кода при регистрации
+     * @brief Установить параметры аккаунта
      */
-    void setRegistrationConfirmationError(const QString& _error);
+    void setAccountInfo(const QString& _email, const QString& _name, const QString& _description,
+                        const QByteArray& _avatar);
+    QString email() const;
+    QString name() const;
+    void setName(const QString& _name);
+    void setDescription(const QString& _description);
+    QPixmap avatar() const;
+    void setAvatar(const QByteArray& _avatar);
+    void setAvatar(const QPixmap& _avatar);
+    void removeAvatar();
 
-    /**
-     * @brief Разрешить пользователю авторизоваться
-     */
-    void allowLogin();
 
-    /**
-     * @brief Подготовить диалог авторизации ко вводу кода подтверждения смены пароля
-     */
-    void prepareToEnterRestorePasswordConfirmationCode();
+    // ========================
+    // LEGACY
 
-    /**
-     * @brief Разрешить сменить пароль
-     */
-    void allowChangePassword();
-
-    /**
-     * @brief Задать ошибку ввода проверочного кода при сбросе пароля
-     */
-    void setRestorePasswordConfirmationError(const QString& _error);
-
-    /**
-     * @brief Задать ошибку ввода пароля при авторизации
-     */
-    void setLoginPasswordError(const QString& _error);
-
-    /**
-     * @brief Завершить авторизацию
-     */
-    void completeLogin();
 
     /**
      * @brief Завершить выход из аккаунта
      */
     void completeLogout();
 
-    /**
-     * @brief Установить параметры аккаунта
-     */
-    void setAccountParameters(qint64 _availableSpace, const QString& _email, qint64 _monthPrice,
-                              bool _receiveEmailNotifications, const QString& _userName,
-                              const QByteArray& _avatar);
     void setPaymentInfo(const PaymentInfo& _info);
     void setSubscriptionEnd(const QString& _subscriptionEnd);
-    void setUserName(const QString& _userName);
     void setReceiveEmailNotifications(bool _receive);
-    void setAvatar(const QByteArray& _avatar);
-    void setAvatar(const QPixmap& _avatar);
-    void removeAvatar();
-
-    /**
-     * @brief Уведомить о появившемся сетевом соединении
-     */
-    void notifyConnected();
-
-    /**
-     * @brief Уведомить о пропавшем сетевом соединении
-     */
-    void notifyDisconnected();
 
 signals:
     //
@@ -111,38 +74,12 @@ signals:
     /**
      * @brief Email для авторизации был введён пользователем
      */
-    void emailEntered(const QString& _email);
+    void askConfirmationCodeRequested(const QString& _email);
 
     /**
-     * @brief Пользователь хочет восстановить пароль
+     * @brief Код проверки авторизации был введён пользователем
      */
-    void restorePasswordRequested(const QString& _email);
-
-    /**
-     * @brief Введён код подтверждения восстановления пароля
-     */
-    void passwordRestoringConfirmationCodeEntered(const QString& email, const QString& _code);
-
-    /**
-     * @brief Пользователь хочет сменить пароль
-     */
-    void changePasswordRequested(const QString& _email, const QString& _code,
-                                 const QString& _password);
-
-    /**
-     * @brief Пользователь хочет зарегистрироваться
-     */
-    void registrationRequested(const QString& _email, const QString& _password);
-
-    /**
-     * @brief Введён код подтверждения регистрации
-     */
-    void registrationConfirmationCodeEntered(const QString& email, const QString& _code);
-
-    /**
-     * @brief Пользователь хочет авторизоваться
-     */
-    void loginRequested(const QString& _email, const QString& _password);
+    void checkConfirmationCodeRequested(const QString& _code);
 
     //
     // Отображение/скрытие личного кабинета
@@ -157,6 +94,10 @@ signals:
      * @brief Пользователь хочет закрыть личный кабинет
      */
     void closeAccountRequested();
+
+
+    // =============================================
+    // LEGACY
 
     //
     // Оплата услуг
@@ -206,7 +147,6 @@ private:
     /**
      * @brief Настроить соединения зависящие от действий пользователя в интерфейсе
      */
-    void initAccountBarConnections();
     void initToolBarConnections();
     void initNavigatorConnections();
     void initViewConnections();

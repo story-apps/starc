@@ -36,11 +36,6 @@ public:
      */
     void toggleFullScreen(bool _isFullScreen);
 
-    /**
-     * @brief Установить панель инструментов для работы с аккаунтом
-     */
-    void setAccountBar(Widget* _accountBar);
-
 signals:
     /**
      * @brief Запрос на выход из полноэкранного режима
@@ -53,11 +48,6 @@ signals:
     void closeRequested();
 
 protected:
-    /**
-     * @brief Корректируем расположение виджета личного кабинета внутри виджета представления
-     */
-    bool eventFilter(QObject* _target, QEvent* _event) override;
-
     /**
      * @brief Переопределяем, чтобы вместо реального закрытия испустить сигнал о данном намерении
      */
