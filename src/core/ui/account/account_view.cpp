@@ -1,17 +1,17 @@
 #include "account_view.h"
 
-#include "avatar.h"
-
 #include <ui/design_system/design_system.h>
 #include <ui/widgets/card/card.h>
-#include <ui/widgets/check_box/check_box.h>
 #include <ui/widgets/floating_tool_bar/floating_tool_bar.h>
+#include <ui/widgets/image/image_card.h>
 #include <ui/widgets/label/label.h>
+#include <ui/widgets/scroll_bar/scroll_bar.h>
 #include <ui/widgets/text_field/text_field.h>
 #include <utils/tools/debouncer.h>
 
 #include <QAction>
 #include <QGridLayout>
+#include <QScrollArea>
 
 
 namespace Ui {
@@ -21,52 +21,65 @@ class AccountView::Implementation
 public:
     explicit Implementation(QWidget* _parent);
 
-    Debouncer changeNameDebouncer{ 500 };
 
-    FloatingToolBar* toolBar = nullptr;
-    QAction* changePasswordAction = nullptr;
-    QAction* logoutAction = nullptr;
+    QScrollArea* content = nullptr;
 
-    Card* userInfo = nullptr;
-    QGridLayout* userInfoLayout = nullptr;
+    Card* accountInfo = nullptr;
+    QGridLayout* accountInfoLayout = nullptr;
+    int accountInfoLastRow = 0;
     H6Label* email = nullptr;
     TextField* name = nullptr;
+    Debouncer changeNameDebouncer{ 500 };
     TextField* description = nullptr;
-    CheckBox* receiveEmailNotifications = nullptr;
-    Avatar* avatar = nullptr;
+    Debouncer changeDescriptionDebouncer{ 500 };
+
+    ImageCard* avatar = nullptr;
 };
 
 AccountView::Implementation::Implementation(QWidget* _parent)
-    : toolBar(new FloatingToolBar(_parent))
-    , changePasswordAction(new QAction(toolBar))
-    , logoutAction(new QAction(toolBar))
-    , userInfo(new Card(_parent))
-    , userInfoLayout(new QGridLayout)
-    , email(new H6Label(userInfo))
-    , name(new TextField(userInfo))
-    , description(new TextField(userInfo))
-    , receiveEmailNotifications(new CheckBox(userInfo))
-    , avatar(new Avatar(userInfo))
+    : content(new QScrollArea(_parent))
+    , accountInfo(new Card(_parent))
+    , accountInfoLayout(new QGridLayout)
+    , email(new H6Label(accountInfo))
+    , name(new TextField(accountInfo))
+    , description(new TextField(accountInfo))
+    , avatar(new ImageCard(accountInfo))
 {
-    changePasswordAction->setIconText(u8"\U000f0773");
-    toolBar->addAction(changePasswordAction);
-    logoutAction->setIconText(u8"\U000f0343");
-    toolBar->addAction(logoutAction);
-
-    userInfoLayout->setContentsMargins({});
-    userInfoLayout->setSpacing(0);
-    int row = 0;
-    userInfoLayout->addWidget(email, row++, 0);
-    userInfoLayout->addWidget(name, row++, 0);
-    userInfoLayout->addWidget(description, row++, 0);
-    userInfoLayout->addWidget(receiveEmailNotifications, row++, 0);
-    userInfoLayout->setRowMinimumHeight(row++, 1); // добавляем пустую строку, вместо отступа снизу
-    userInfoLayout->addWidget(avatar, 0, 1, row, 1);
-    userInfoLayout->setColumnStretch(0, 1);
-    userInfo->setLayoutReimpl(userInfoLayout);
+    QPalette palette;
+    palette.setColor(QPalette::Base, Qt::transparent);
+    palette.setColor(QPalette::Window, Qt::transparent);
+    content->setPalette(palette);
+    content->setFrameShape(QFrame::NoFrame);
+    content->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
+    content->setVerticalScrollBar(new ScrollBar);
 
     name->setSpellCheckPolicy(SpellCheckPolicy::Manual);
     description->setSpellCheckPolicy(SpellCheckPolicy::Manual);
+    avatar->setDecorationIcon(u8"\U000F0004");
+
+    accountInfoLayout->setContentsMargins({});
+    accountInfoLayout->setSpacing(0);
+    int row = 0;
+    accountInfoLayout->addWidget(email, row++, 0);
+    accountInfoLayout->addWidget(name, row++, 0);
+    accountInfoLayout->addWidget(description, row++, 0);
+    accountInfoLastRow = row;
+    accountInfoLayout->setRowMinimumHeight(row++,
+                                           1); // добавляем пустую строку, вместо отступа снизу
+    accountInfoLayout->addWidget(avatar, 0, 1, row, 1);
+    accountInfoLayout->setColumnStretch(0, 1);
+    accountInfo->setLayoutReimpl(accountInfoLayout);
+
+    auto contentWidget = new QWidget;
+    content->setWidget(contentWidget);
+    content->setWidgetResizable(true);
+    auto layout = new QGridLayout;
+    layout->setContentsMargins({});
+    layout->setSpacing(0);
+    layout->addWidget(accountInfo, 0, 0);
+    layout->addWidget(avatar, 0, 1, 2, 1, Qt::AlignTop);
+    layout->setRowStretch(2, 1);
+    contentWidget->setLayout(layout);
 }
 
 
@@ -80,13 +93,9 @@ AccountView::AccountView(QWidget* _parent)
     QVBoxLayout* layout = new QVBoxLayout;
     layout->setContentsMargins({});
     layout->setSpacing(0);
-    layout->addWidget(d->userInfo);
+    layout->addWidget(d->content);
     layout->addStretch();
     setLayout(layout);
-
-    connect(d->changePasswordAction, &QAction::triggered, this,
-            &AccountView::changePasswordPressed);
-    connect(d->logoutAction, &QAction::triggered, this, &AccountView::logoutPressed);
 
     connect(d->name, &TextField::textChanged, &d->changeNameDebouncer, &Debouncer::orderWork);
     connect(&d->changeNameDebouncer, &Debouncer::gotWork, this, [this] {
@@ -96,12 +105,18 @@ AccountView::AccountView(QWidget* _parent)
         }
 
         d->name->setError({});
-        emit userNameChanged(d->name->text());
+        emit nameChanged(d->name->text());
     });
-    connect(d->receiveEmailNotifications, &CheckBox::checkedChanged, this,
-            &AccountView::receiveEmailNotificationsChanged);
-    connect(d->avatar, &Avatar::clicked, this, &AccountView::avatarChoosePressed);
+    //
+    connect(d->description, &TextField::textChanged, &d->changeDescriptionDebouncer,
+            &Debouncer::orderWork);
+    connect(&d->changeDescriptionDebouncer, &Debouncer::gotWork, this,
+            [this] { emit descriptionChanged(d->description->text()); });
+    //
+    connect(d->avatar, &ImageCard::imageChanged, this, &AccountView::avatarChanged);
 }
+
+AccountView::~AccountView() = default;
 
 void AccountView::setEmail(const QString& _email)
 {
@@ -110,74 +125,72 @@ void AccountView::setEmail(const QString& _email)
 
 void AccountView::setName(const QString& _name)
 {
+    if (d->name->text() == _name) {
+        return;
+    }
+
     QSignalBlocker blocker(d->name);
     d->name->setText(_name);
 }
 
 void AccountView::setDescription(const QString& _description)
 {
+    if (d->description->text() == _description) {
+        return;
+    }
+
     QSignalBlocker blocker(d->description);
     d->description->setText(_description);
 }
 
-void AccountView::setReceiveEmailNotifications(bool _receive)
-{
-    QSignalBlocker blocker(d->receiveEmailNotifications);
-    d->receiveEmailNotifications->setChecked(_receive);
-}
-
 void AccountView::setAvatar(const QPixmap& _avatar)
 {
-    d->avatar->setAvatar(_avatar);
-}
-
-AccountView::~AccountView() = default;
-
-void AccountView::resizeEvent(QResizeEvent* _event)
-{
-    Widget::resizeEvent(_event);
-    d->toolBar->move(
-        QPointF(Ui::DesignSystem::layout().px24(), Ui::DesignSystem::layout().px24()).toPoint());
+    QSignalBlocker blocker(d->avatar);
+    d->avatar->setImage(_avatar);
 }
 
 void AccountView::updateTranslations()
 {
-    d->changePasswordAction->setToolTip(tr("Change password"));
-    d->logoutAction->setToolTip(tr("Log out"));
-    d->name->setLabel(tr("User name"));
-    d->description->setLabel(tr("User bio"));
-    d->receiveEmailNotifications->setText(tr("Receive email notifications"));
+    d->name->setLabel(tr("Your name"));
+    d->description->setLabel(tr("Your bio"));
+    d->avatar->setSupportingText(tr("Add avatar +"), tr("Change avatar..."),
+                                 tr("Do you want to delete your avatar?"));
+    d->avatar->setImageCroppingText(tr("Select an area for the avatar"));
 }
 
 void AccountView::designSystemChangeEvent(DesignSystemChangeEvent* _event)
 {
-    Q_UNUSED(_event)
+    Widget::designSystemChangeEvent(_event);
 
     setBackgroundColor(DesignSystem::color().surface());
-    layout()->setContentsMargins(
+
+    d->content->widget()->layout()->setContentsMargins(
         QMarginsF(Ui::DesignSystem::layout().px24(), Ui::DesignSystem::layout().topContentMargin(),
                   Ui::DesignSystem::layout().px24(), Ui::DesignSystem::layout().px24())
             .toMargins());
 
-    d->toolBar->resize(d->toolBar->sizeHint());
-    d->toolBar->move(
-        QPointF(Ui::DesignSystem::layout().px24(), Ui::DesignSystem::layout().px24()).toPoint());
-    d->toolBar->setBackgroundColor(Ui::DesignSystem::color().primary());
-    d->toolBar->setTextColor(Ui::DesignSystem::color().onPrimary());
-    d->toolBar->raise();
+    for (auto card : { d->accountInfo }) {
+        card->setBackgroundColor(DesignSystem::color().background());
+    }
 
-    d->userInfo->setBackgroundColor(DesignSystem::color().background());
-    d->email->setBackgroundColor(DesignSystem::color().background());
-    d->email->setTextColor(DesignSystem::color().onBackground());
-    d->email->setContentsMargins(Ui::DesignSystem::label().margins().toMargins());
-    d->userInfoLayout->setRowMinimumHeight(3, static_cast<int>(Ui::DesignSystem::layout().px8()));
-    d->receiveEmailNotifications->setBackgroundColor(DesignSystem::color().background());
-    d->receiveEmailNotifications->setTextColor(DesignSystem::color().onBackground());
+    auto titleLabelMargins = Ui::DesignSystem::label().margins();
+    titleLabelMargins.setBottom(0);
+    for (auto title : { d->email }) {
+        title->setBackgroundColor(DesignSystem::color().background());
+        title->setTextColor(DesignSystem::color().onBackground());
+        title->setContentsMargins(titleLabelMargins.toMargins());
+    }
+    d->accountInfoLayout->setSpacing(Ui::DesignSystem::layout().px24());
+    d->accountInfoLayout->setRowMinimumHeight(d->accountInfoLastRow,
+                                              static_cast<int>(Ui::DesignSystem::layout().px24()));
 
     for (auto textField : { d->name, d->description }) {
         textField->setBackgroundColor(Ui::DesignSystem::color().onBackground());
         textField->setTextColor(Ui::DesignSystem::color().onBackground());
     }
+
+    d->avatar->setBackgroundColor(Ui::DesignSystem::color().background());
+    d->avatar->setFixedSize((QSizeF(288, 288) * Ui::DesignSystem::scaleFactor()).toSize());
 }
 
 } // namespace Ui

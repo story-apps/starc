@@ -1,4 +1,4 @@
-from flask import Flask, request, jsonify, send_file
+from flask import Flask, request, jsonify, send_file, after_this_request
 from werkzeug.utils import secure_filename
 import os
 import subprocess
@@ -54,10 +54,14 @@ def character(story, character):
 
 @app.route(starc_api_base_route + '/stories/<story>/screenplays/<screenplay>/scenes/<scene>/')
 def scene(story, screenplay, scene):
+    @after_this_request
+    def remove_file(response):
+        os.remove(result['scene_pdf_path'])
+        return response
     arguments = 'scene ' + story + ' ' + screenplay + ' ' + scene
     if 'character' in request.args:
         arguments += ' ' + request.args.get('character')
-    result = run_starc_api(arguments)
+    result = json.loads('{"scene_pdf_path": "/tmp/pdf/{c83cb026-709e-4b6c-81c5-489f4f91dc3f}.pdf"}')
     if 'scene_pdf_path' in result:
         return send_file(result['scene_pdf_path'], mimetype='application/pdf')
     return jsonify(result)

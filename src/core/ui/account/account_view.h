@@ -22,57 +22,37 @@ public:
     void setEmail(const QString& _email);
 
     /**
-     * @brief Установить имя пользователя
+     * @brief Имя пользователя
      */
     void setName(const QString& _name);
 
     /**
-     * @brief Установить био пользователя
+     * @brief Био пользователя
      */
     void setDescription(const QString& _description);
 
     /**
-     * @brief Установить необходимость получать уведомления по почте
-     */
-    void setReceiveEmailNotifications(bool _receive);
-
-    /**
-     * @brief Установить аватар пользователя
+     * @brief Аватар пользователя
      */
     void setAvatar(const QPixmap& _avatar);
 
 signals:
     /**
-     * @brief Пользователь хочет сменить пароль
-     */
-    void changePasswordPressed();
-
-    /**
-     * @brief Пользователь хочет выйти из аккаунта
-     */
-    void logoutPressed();
-
-    /**
      * @brief Пользователь изменил своё имя
      */
-    void userNameChanged(const QString& _userName);
+    void nameChanged(const QString& _name);
 
     /**
-     * @brief Пользователь изменил желание получать уведомления по почте
+     * @brief Пользователь изменил своё био
      */
-    void receiveEmailNotificationsChanged(bool _receive);
+    void descriptionChanged(const QString& _description);
 
     /**
-     * @brief Пользователь хочет сменить аватарку
+     * @brief Пользователь изменил аватарку
      */
-    void avatarChoosePressed();
+    void avatarChanged(const QPixmap& avatar);
 
 protected:
-    /**
-     * @brief Переопределяем для корректировки положения тулбара действий над проектами
-     */
-    void resizeEvent(QResizeEvent* _event) override;
-
     /**
      * @brief Обновить переводы
      */

@@ -540,8 +540,8 @@ QVector<ScreenplayAbstractImporter::Screenplay> ScreenplayDocumentImporter::impo
                             QStringList authors
                                 = range.format.property(Docx::CommentsAuthors).toStringList();
                             if (authors.isEmpty()) {
-                                authors.append(
-                                    DataStorageLayer::StorageFacade::settingsStorage()->accountName());
+                                authors.append(DataStorageLayer::StorageFacade::settingsStorage()
+                                                   ->accountName());
                             }
                             QStringList dates
                                 = range.format.property(Docx::CommentsDates).toStringList();

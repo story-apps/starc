@@ -1621,35 +1621,24 @@ void ApplicationManager::initConnections()
     //
     // Менеджер облака
     //
-    // ... авторизация/регистрация
-    //
-    {
-        //
-        // проверка регистрация или вход
-        //
-        connect(d->accountManager.data(), &AccountManager::askConfirmationCodeRequested,
-                d->cloudServiceManager.data(), &CloudServiceManager::askConfirmationCode);
-        connect(d->cloudServiceManager.data(), &CloudServiceManager::confirmationCodeInfoRecieved,
-                d->accountManager.data(), &AccountManager::setConfirmationCodeInfo);
-        connect(d->accountManager.data(), &AccountManager::checkConfirmationCodeRequested,
-                d->cloudServiceManager.data(), &CloudServiceManager::checkConfirmationCode);
-        connect(d->cloudServiceManager.data(), &CloudServiceManager::loginCompleted,
-                d->accountManager.data(), [this](bool _isNewAccount) {
-                    d->cloudServiceManager->askAccountInfo();
-                    d->accountManager->completeSignIn(_isNewAccount);
-                });
-
-        //
-        // Выход из аккаунта
-        //
-        connect(d->accountManager.data(), &AccountManager::logoutRequested,
-                d->cloudServiceManager.data(), &CloudServiceManager::logout);
-        connect(d->cloudServiceManager.data(), &CloudServiceManager::logoutCompleted,
-                d->accountManager.data(), &AccountManager::completeLogout);
-    }
 
     //
-    // Получены параметры об аккаунте
+    // Проверка регистрация или вход
+    //
+    connect(d->accountManager.data(), &AccountManager::askConfirmationCodeRequested,
+            d->cloudServiceManager.data(), &CloudServiceManager::askConfirmationCode);
+    connect(d->cloudServiceManager.data(), &CloudServiceManager::confirmationCodeInfoRecieved,
+            d->accountManager.data(), &AccountManager::setConfirmationCodeInfo);
+    connect(d->accountManager.data(), &AccountManager::checkConfirmationCodeRequested,
+            d->cloudServiceManager.data(), &CloudServiceManager::checkConfirmationCode);
+    connect(d->cloudServiceManager.data(), &CloudServiceManager::loginCompleted,
+            d->accountManager.data(), [this](bool _isNewAccount) {
+                d->cloudServiceManager->askAccountInfo();
+                d->accountManager->completeSignIn(_isNewAccount);
+            });
+
+    //
+    // Параметры аккаунта
     //
     connect(d->cloudServiceManager.data(), &CloudServiceManager::accountInfoReceived,
             d->accountManager.data(), &AccountManager::setAccountInfo);
@@ -1660,6 +1649,26 @@ void ApplicationManager::initConnections()
         d->menuView->setAccountName(d->accountManager->name());
         d->menuView->setAccountEmail(d->accountManager->email());
     });
+    connect(d->accountManager.data(), &AccountManager::updateAccountInfoRequested,
+            d->cloudServiceManager.data(), &CloudServiceManager::setAccountInfo);
+
+
+    ////////////////////////////////////////
+    /// LEGACY
+    ///
+
+    // ... авторизация/регистрация
+    //
+    {
+
+        //
+        // Выход из аккаунта
+        //
+        connect(d->accountManager.data(), &AccountManager::logoutRequested,
+                d->cloudServiceManager.data(), &CloudServiceManager::logout);
+        connect(d->cloudServiceManager.data(), &CloudServiceManager::logoutCompleted,
+                d->accountManager.data(), &AccountManager::completeLogout);
+    }
     connect(d->cloudServiceManager.data(), &CloudServiceManager::paymentInfoLoaded,
             d->accountManager.data(), &AccountManager::setPaymentInfo);
 
@@ -1674,12 +1683,6 @@ void ApplicationManager::initConnections()
     //
     // Изменение параметров аккаунта
     //
-    connect(d->accountManager.data(), &AccountManager::changeUserNameRequested,
-            d->cloudServiceManager.data(), &CloudServiceManager::setUserName);
-    connect(d->accountManager.data(), &AccountManager::changeReceiveEmailNotificationsRequested,
-            d->cloudServiceManager.data(), &CloudServiceManager::setNeedNotify);
-    connect(d->accountManager.data(), &AccountManager::changeAvatarRequested,
-            d->cloudServiceManager.data(), &CloudServiceManager::setAvatar);
     connect(d->cloudServiceManager.data(), &CloudServiceManager::userNameChanged,
             d->accountManager.data(), &AccountManager::setName);
     connect(d->cloudServiceManager.data(), &CloudServiceManager::receiveEmailNotificationsChanged,

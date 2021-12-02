@@ -58,11 +58,9 @@ SOURCES += \
     management_layer/content/projects/projects_manager.cpp \
     management_layer/content/settings/screenplay_template_manager.cpp \
     management_layer/content/settings/settings_manager.cpp \
-    ui/account/account_bar.cpp \
     ui/account/account_navigator.cpp \
     ui/account/account_tool_bar.cpp \
     ui/account/account_view.cpp \
-    ui/account/avatar.cpp \
     ui/account/login_dialog.cpp \
     ui/account/renew_subscription_dialog.cpp \
     ui/account/upgrade_to_pro_dialog.cpp \
@@ -111,11 +109,9 @@ HEADERS += \
     management_layer/content/projects/projects_manager.h \
     management_layer/content/settings/screenplay_template_manager.h \
     management_layer/content/settings/settings_manager.h \
-    ui/account/account_bar.h \
     ui/account/account_navigator.h \
     ui/account/account_tool_bar.h \
     ui/account/account_view.h \
-    ui/account/avatar.h \
     ui/account/login_dialog.h \
     ui/account/renew_subscription_dialog.h \
     ui/account/upgrade_to_pro_dialog.h \

@@ -26,6 +26,13 @@ public:
     Implementation(AccountManager* _q, QWidget* _parent);
 
     /**
+     * @brief Настроить соединения зависящие от действий пользователя в интерфейсе
+     */
+    void initToolBarConnections();
+    void initNavigatorConnections();
+    void initViewConnections();
+
+    /**
      * @brief Инициилизировать диалог авторизации
      */
     void initLoginDialog();
@@ -66,6 +73,83 @@ AccountManager::Implementation::Implementation(AccountManager* _q, QWidget* _par
     toolBar->hide();
     navigator->hide();
     view->hide();
+
+    initToolBarConnections();
+    initNavigatorConnections();
+    initViewConnections();
+}
+
+void AccountManager::Implementation::initToolBarConnections()
+{
+    connect(toolBar, &Ui::AccountToolBar::backPressed, q, &AccountManager::closeAccountRequested);
+}
+
+void AccountManager::Implementation::initNavigatorConnections()
+{
+    //    connect(navigator, &Ui::AccountNavigator::upgradeToProPressed, q, [this] {
+    //        if (upgradeToProDialog == nullptr) {
+    //            upgradeToProDialog = new Ui::UpgradeToProDialog(topLevelWidget);
+    //            connect(upgradeToProDialog, &Ui::UpgradeToProDialog::canceled, upgradeToProDialog,
+    //                    &Ui::UpgradeToProDialog::hideDialog);
+    //            connect(upgradeToProDialog, &Ui::UpgradeToProDialog::disappeared, q, [this] {
+    //                upgradeToProDialog->deleteLater();
+    //                upgradeToProDialog = nullptr;
+    //            });
+    //        }
+
+    //        upgradeToProDialog->showDialog();
+    //    });
+    //    connect(navigator, &Ui::AccountNavigator::renewSubscriptionPressed, q, [this] {
+    //        if (renewSubscriptionDialog == nullptr) {
+    //            renewSubscriptionDialog = new Ui::RenewSubscriptionDialog(topLevelWidget);
+    //            connect(renewSubscriptionDialog, &Ui::RenewSubscriptionDialog::renewPressed, q,
+    //                    [this] {
+    //                        emit renewSubscriptionRequested(renewSubscriptionDialog->monthCount(),
+    //                                                        renewSubscriptionDialog->paymentType());
+    //                        renewSubscriptionDialog->hideDialog();
+    //                    });
+    //            connect(renewSubscriptionDialog, &Ui::RenewSubscriptionDialog::canceled,
+    //                    renewSubscriptionDialog, &Ui::RenewSubscriptionDialog::hideDialog);
+    //            connect(renewSubscriptionDialog, &Ui::RenewSubscriptionDialog::disappeared, q,
+    //                    [this] {
+    //                        renewSubscriptionDialog->deleteLater();
+    //                        renewSubscriptionDialog = nullptr;
+    //                    });
+    //        }
+
+    //        renewSubscriptionDialog->showDialog();
+    //    });
+    //    connect(view, &Ui::AccountView::logoutPressed, q, &AccountManager::logoutRequested);
+}
+
+void AccountManager::Implementation::initViewConnections()
+{
+    auto notifyUpdateAccountInfoRequested = [this] {
+        emit q->updateAccountInfoRequested(account.name, account.description,
+                                           ImageHelper::bytesFromImage(account.avatar));
+    };
+
+    connect(view, &Ui::AccountView::nameChanged, q,
+            [this, notifyUpdateAccountInfoRequested](const QString& _name) {
+                account.name = _name;
+                notifyUpdateAccountInfoRequested();
+            });
+    connect(view, &Ui::AccountView::descriptionChanged, q,
+            [this, notifyUpdateAccountInfoRequested](const QString& _description) {
+                account.description = _description;
+                notifyUpdateAccountInfoRequested();
+            });
+    connect(view, &Ui::AccountView::avatarChanged, q,
+            [this, notifyUpdateAccountInfoRequested](const QPixmap& _avatar) {
+                if (!_avatar.isNull()) {
+                    account.avatar
+                        = _avatar.scaled(288, 288, Qt::IgnoreAspectRatio, Qt::SmoothTransformation);
+                } else {
+                    account.avatar = {};
+                }
+
+                notifyUpdateAccountInfoRequested();
+            });
 }
 
 void AccountManager::Implementation::initLoginDialog()
@@ -102,9 +186,6 @@ AccountManager::AccountManager(QObject* _parent, QWidget* _parentWidget)
     : QObject(_parent)
     , d(new Implementation(this, _parentWidget))
 {
-    initToolBarConnections();
-    initNavigatorConnections();
-    initViewConnections();
 }
 
 AccountManager::~AccountManager() = default;
@@ -229,103 +310,6 @@ void AccountManager::setReceiveEmailNotifications(bool _receive)
 {
     //    d->receiveEmailNotifications = _receive;
     //    d->view->setReceiveEmailNotifications(d->receiveEmailNotifications);
-}
-
-void AccountManager::initToolBarConnections()
-{
-    connect(d->toolBar, &Ui::AccountToolBar::backPressed, this,
-            &AccountManager::closeAccountRequested);
-}
-
-void AccountManager::initNavigatorConnections()
-{
-    connect(d->navigator, &Ui::AccountNavigator::upgradeToProPressed, this, [this] {
-        if (d->upgradeToProDialog == nullptr) {
-            d->upgradeToProDialog = new Ui::UpgradeToProDialog(d->topLevelWidget);
-            connect(d->upgradeToProDialog, &Ui::UpgradeToProDialog::canceled, d->upgradeToProDialog,
-                    &Ui::UpgradeToProDialog::hideDialog);
-            connect(d->upgradeToProDialog, &Ui::UpgradeToProDialog::disappeared, this, [this] {
-                d->upgradeToProDialog->deleteLater();
-                d->upgradeToProDialog = nullptr;
-            });
-        }
-
-        d->upgradeToProDialog->showDialog();
-    });
-    connect(d->navigator, &Ui::AccountNavigator::renewSubscriptionPressed, this, [this] {
-        if (d->renewSubscriptionDialog == nullptr) {
-            d->renewSubscriptionDialog = new Ui::RenewSubscriptionDialog(d->topLevelWidget);
-            connect(d->renewSubscriptionDialog, &Ui::RenewSubscriptionDialog::renewPressed, this,
-                    [this] {
-                        emit renewSubscriptionRequested(d->renewSubscriptionDialog->monthCount(),
-                                                        d->renewSubscriptionDialog->paymentType());
-                        d->renewSubscriptionDialog->hideDialog();
-                    });
-            connect(d->renewSubscriptionDialog, &Ui::RenewSubscriptionDialog::canceled,
-                    d->renewSubscriptionDialog, &Ui::RenewSubscriptionDialog::hideDialog);
-            connect(d->renewSubscriptionDialog, &Ui::RenewSubscriptionDialog::disappeared, this,
-                    [this] {
-                        d->renewSubscriptionDialog->deleteLater();
-                        d->renewSubscriptionDialog = nullptr;
-                    });
-        }
-
-        d->renewSubscriptionDialog->showDialog();
-    });
-}
-
-void AccountManager::initViewConnections()
-{
-    //    connect(d->view, &Ui::AccountView::changePasswordPressed, this, [this] {
-    //        if (d->changePasswordDialog == nullptr) {
-    //            d->changePasswordDialog = new Ui::ChangePasswordDialog(d->topLevelWidget);
-    //            connect(d->changePasswordDialog,
-    //            &Ui::ChangePasswordDialog::confirmationCodeEntered,
-    //                    this, [this] {
-    //                        emit passwordRestoringConfirmationCodeEntered(
-    //                            d->email, d->changePasswordDialog->code());
-    //                    });
-    //            connect(d->changePasswordDialog,
-    //            &Ui::ChangePasswordDialog::changePasswordRequested,
-    //                    this, [this] {
-    //                        emit changePasswordRequested(d->email,
-    //                        d->changePasswordDialog->code(),
-    //                                                     d->changePasswordDialog->password());
-    //                    });
-    //            connect(d->changePasswordDialog, &Ui::ChangePasswordDialog::canceled,
-    //                    d->changePasswordDialog, &Ui::ChangePasswordDialog::hideDialog);
-    //            connect(d->changePasswordDialog, &Ui::ChangePasswordDialog::disappeared, this,
-    //            [this] {
-    //                d->changePasswordDialog->deleteLater();
-    //                d->changePasswordDialog = nullptr;
-    //            });
-    //        }
-
-    //        d->changePasswordDialog->showDialog();
-
-    //        emit restorePasswordRequested(d->email);
-    //    });
-    connect(d->view, &Ui::AccountView::logoutPressed, this, &AccountManager::logoutRequested);
-    connect(d->view, &Ui::AccountView::userNameChanged, this,
-            &AccountManager::changeUserNameRequested);
-    connect(d->view, &Ui::AccountView::receiveEmailNotificationsChanged, this,
-            &AccountManager::changeReceiveEmailNotificationsRequested);
-    connect(d->view, &Ui::AccountView::avatarChoosePressed, this, [this] {
-        const QString avatarPath
-            = QFileDialog::getOpenFileName(d->view, tr("Choose avatar"), {}, "");
-        if (avatarPath.isEmpty()) {
-            return;
-        }
-
-        QPixmap avatar(avatarPath);
-        if (avatar.isNull()) {
-            return;
-        }
-
-        setAvatar(avatar.scaled(150, 150, Qt::IgnoreAspectRatio, Qt::SmoothTransformation));
-
-        emit changeAvatarRequested(ImageHelper::bytesFromImage(d->account.avatar));
-    });
 }
 
 } // namespace ManagementLayer

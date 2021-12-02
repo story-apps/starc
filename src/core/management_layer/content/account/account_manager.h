@@ -95,6 +95,13 @@ signals:
      */
     void closeAccountRequested();
 
+    //
+    // Работа с аккаунтом
+    //
+
+    void updateAccountInfoRequested(const QString& _name, const QString& _description,
+                                    const QByteArray& _avatar);
+
 
     // =============================================
     // LEGACY
@@ -117,21 +124,6 @@ signals:
      */
     void logoutRequested();
 
-    /**
-     * @brief Пользователь хочет сменить имя пользователя
-     */
-    void changeUserNameRequested(const QString& _userName);
-
-    /**
-     * @brief Пользователь хочет отключить/включить получение уведомлений по почте
-     */
-    void changeReceiveEmailNotificationsRequested(bool _receive);
-
-    /**
-     * @brief Пользователь хочет сменить аватар
-     */
-    void changeAvatarRequested(const QByteArray& _avatar);
-
     //
     // Информирование о параметрах аккаунта
     //
@@ -142,14 +134,6 @@ signals:
      * @param _ableToCreate - может ли пользователь создавать новые проекты (активна ли подписка)
      */
     void cloudProjectsCreationAvailabilityChanged(bool _authorized, bool _ableToCreate);
-
-private:
-    /**
-     * @brief Настроить соединения зависящие от действий пользователя в интерфейсе
-     */
-    void initToolBarConnections();
-    void initNavigatorConnections();
-    void initViewConnections();
 
 private:
     class Implementation;
