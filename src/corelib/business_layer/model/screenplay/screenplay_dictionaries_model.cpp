@@ -154,24 +154,32 @@ void ScreenplayDictionariesModel::initDocument()
             _dictionary.append(_defaultItems);
         }
     };
-    const QVector<QString> defaultSceneIntros = { tr("INT."), tr("EXT."), tr("INT./EXT.") };
+    const QVector<QString> defaultSceneIntros = {
+        tr("INT."),
+        tr("EXT."),
+        tr("INT./EXT."),
+        tr("EXT./INT."),
+    };
     fillDictionary(kPageIntrosKey, defaultSceneIntros, d->sceneIntros);
     //
-    const QVector<QString> defaultSceneTimes
-        = { tr("DAY"),   tr("NIGHT"),         tr("MORNING"),    tr("AFTERNOON"),   tr("EVENING"),
-            tr("LATER"), tr("MOMENTS LATER"), tr("CONTINUOUS"), tr("THE NEXT DAY") };
+    const QVector<QString> defaultSceneTimes = {
+        tr("DAY"),   tr("NIGHT"),         tr("MORNING"),    tr("AFTERNOON"),    tr("EVENING"),
+        tr("LATER"), tr("MOMENTS LATER"), tr("CONTINUOUS"), tr("THE NEXT DAY"),
+    };
     fillDictionary(kSceneTimesKey, defaultSceneTimes, d->sceneTimes);
     //
     fillDictionary(kStoryDaysKey, {}, d->storyDays);
     //
-    const QVector<QString> defaultCharacterExtensions
-        = { tr("V.O."), tr("O.S."), tr("O.C."), tr("SUBTITLE"), tr("CONT'D") };
+    const QVector<QString> defaultCharacterExtensions = {
+        tr("V.O."), tr("O.S."), tr("O.C."), tr("SUBTITLE"), tr("CONT'D"),
+    };
     fillDictionary(kCharacterExtensionsKey, defaultCharacterExtensions, d->characterExtensions);
     //
-    const QVector<QString> defaultTransitions
-        = { tr("CUT TO:"),       tr("FADE IN:"),     tr("FADE OUT"),
-            tr("FADE TO:"),      tr("DISSOLVE TO:"), tr("BACK TO:"),
-            tr("MATCH CUT TO:"), tr("JUMP CUT TO:"), tr("FADE TO BLACK") };
+    const QVector<QString> defaultTransitions = {
+        tr("CUT TO:"),       tr("FADE IN:"),     tr("FADE OUT"),
+        tr("FADE TO:"),      tr("DISSOLVE TO:"), tr("BACK TO:"),
+        tr("MATCH CUT TO:"), tr("JUMP CUT TO:"), tr("FADE TO BLACK"),
+    };
     fillDictionary(kPanelIntrosKey, defaultTransitions, d->transitions);
 }
 
