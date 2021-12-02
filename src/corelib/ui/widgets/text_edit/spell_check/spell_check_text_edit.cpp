@@ -84,6 +84,14 @@ SpellCheckTextEdit::~SpellCheckTextEdit() = default;
 void SpellCheckTextEdit::setSpellCheckPolicy(SpellCheckPolicy _policy)
 {
     d->policy = _policy;
+
+    //
+    // Если используется ручное управление, то отключим проверку, т.к. она могла быть включена до
+    // установки флага, а дальше клиента сам определит необходимость включения проверки
+    //
+    if (d->policy == SpellCheckPolicy::Manual) {
+        setUseSpellChecker(false);
+    }
 }
 
 void SpellCheckTextEdit::setUseSpellChecker(bool _use)
