@@ -2,6 +2,10 @@
 
 #include <ui/widgets/widget/widget.h>
 
+namespace Domain {
+enum class SubscriptionType;
+}
+
 
 namespace Ui {
 
@@ -17,20 +21,28 @@ public:
     ~AccountNavigator() override;
 
     /**
-     * @brief Задать дату окончания подписки
+     * @brief Задать информацию о подписке
      */
-    void setSubscriptionEnd(const QString& _subscriptionEnd);
+    void setSubscriptionInfo(Domain::SubscriptionType _subscriptionType,
+                             const QDateTime& _subscriptionEnds);
 
 signals:
+    /**
+     * @brief Пользователь хочет перейти в отображению заданных настроек
+     */
+    void accountPressed();
+    void subscriptionPressed();
+    void sessionsPressed();
+
     /**
      * @brief Пользователь хочет купить лицензию
      */
     void upgradeToProPressed();
 
     /**
-     * @brief Пользователь хочет продлить подписку
+     * @brief Пользователь хочет выйти из личного кабинета
      */
-    void renewSubscriptionPressed();
+    void logoutPressed();
 
 protected:
     /**

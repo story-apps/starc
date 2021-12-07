@@ -1,6 +1,6 @@
 #include "account_manager.h"
 
-#include <ui/account/account_bar.h>
+#include <domain/subscription_info.h>
 #include <ui/account/account_navigator.h>
 #include <ui/account/account_tool_bar.h>
 #include <ui/account/account_view.h>
@@ -33,6 +33,13 @@ public:
     void initViewConnections();
 
     /**
+     * @brief Методы работы с аватаром
+     */
+    void setAvatar(const QByteArray& _avatar);
+    void setAvatar(const QPixmap& _avatar);
+    void removeAvatar();
+
+    /**
      * @brief Инициилизировать диалог авторизации
      */
     void initLoginDialog();
@@ -53,7 +60,7 @@ public:
     Ui::AccountView* view = nullptr;
 
     /**
-     * @biref Данные о пользователе
+     * @biref Данные о пользователе, которые могут быть изменены непосредственно в личном кабинете
      */
     struct {
         QString email;
@@ -86,6 +93,12 @@ void AccountManager::Implementation::initToolBarConnections()
 
 void AccountManager::Implementation::initNavigatorConnections()
 {
+    connect(navigator, &Ui::AccountNavigator::accountPressed, view, &Ui::AccountView::showAccount);
+    connect(navigator, &Ui::AccountNavigator::subscriptionPressed, view,
+            &Ui::AccountView::showSubscription);
+    connect(navigator, &Ui::AccountNavigator::sessionsPressed, view,
+            &Ui::AccountView::showSessions);
+
     //    connect(navigator, &Ui::AccountNavigator::upgradeToProPressed, q, [this] {
     //        if (upgradeToProDialog == nullptr) {
     //            upgradeToProDialog = new Ui::UpgradeToProDialog(topLevelWidget);
@@ -99,27 +112,11 @@ void AccountManager::Implementation::initNavigatorConnections()
 
     //        upgradeToProDialog->showDialog();
     //    });
-    //    connect(navigator, &Ui::AccountNavigator::renewSubscriptionPressed, q, [this] {
-    //        if (renewSubscriptionDialog == nullptr) {
-    //            renewSubscriptionDialog = new Ui::RenewSubscriptionDialog(topLevelWidget);
-    //            connect(renewSubscriptionDialog, &Ui::RenewSubscriptionDialog::renewPressed, q,
-    //                    [this] {
-    //                        emit renewSubscriptionRequested(renewSubscriptionDialog->monthCount(),
-    //                                                        renewSubscriptionDialog->paymentType());
-    //                        renewSubscriptionDialog->hideDialog();
-    //                    });
-    //            connect(renewSubscriptionDialog, &Ui::RenewSubscriptionDialog::canceled,
-    //                    renewSubscriptionDialog, &Ui::RenewSubscriptionDialog::hideDialog);
-    //            connect(renewSubscriptionDialog, &Ui::RenewSubscriptionDialog::disappeared, q,
-    //                    [this] {
-    //                        renewSubscriptionDialog->deleteLater();
-    //                        renewSubscriptionDialog = nullptr;
-    //                    });
-    //        }
 
-    //        renewSubscriptionDialog->showDialog();
-    //    });
-    //    connect(view, &Ui::AccountView::logoutPressed, q, &AccountManager::logoutRequested);
+    connect(navigator, &Ui::AccountNavigator::logoutPressed, q, [this] {
+        emit q->logoutRequested();
+        emit q->closeAccountRequested();
+    });
 }
 
 void AccountManager::Implementation::initViewConnections()
@@ -150,6 +147,25 @@ void AccountManager::Implementation::initViewConnections()
 
                 notifyUpdateAccountInfoRequested();
             });
+    connect(view, &Ui::AccountView::terminateSessionRequested, q,
+            &AccountManager::terminateSessionRequested);
+}
+
+void AccountManager::Implementation::setAvatar(const QByteArray& _avatar)
+{
+    setAvatar(ImageHelper::imageFromBytes(_avatar));
+}
+
+void AccountManager::Implementation::setAvatar(const QPixmap& _avatar)
+{
+    account.avatar = _avatar;
+    view->setAvatar(account.avatar);
+}
+
+void AccountManager::Implementation::removeAvatar()
+{
+    account.avatar = {};
+    view->setAvatar({});
 }
 
 void AccountManager::Implementation::initLoginDialog()
@@ -229,13 +245,23 @@ void AccountManager::completeSignIn(bool _openAccount)
 }
 
 void AccountManager::setAccountInfo(const QString& _email, const QString& _name,
-                                    const QString& _description, const QByteArray& _avatar)
+                                    const QString& _description, const QByteArray& _avatar,
+                                    Domain::SubscriptionType _subscriptionType,
+                                    const QDateTime& _subscriptionEnds,
+                                    const QVector<Domain::SessionInfo>& _sessions)
 {
     d->account.email = _email;
     d->view->setEmail(d->account.email);
-    setName(_name);
-    setDescription(_description);
-    setAvatar(_avatar);
+    d->account.name = _name;
+    d->view->setName(d->account.name);
+    d->account.description = _description;
+    d->view->setDescription(d->account.description);
+    d->setAvatar(_avatar);
+
+    d->navigator->setSubscriptionInfo(_subscriptionType, _subscriptionEnds);
+    d->view->setSubscriptionInfo(_subscriptionType, _subscriptionEnds);
+
+    d->view->setSessions(_sessions);
 }
 
 QString AccountManager::email() const
@@ -248,57 +274,28 @@ QString AccountManager::name() const
     return d->account.name;
 }
 
-void AccountManager::setName(const QString& _name)
-{
-    d->account.name = _name;
-    d->view->setName(d->account.name);
-}
-
-void AccountManager::setDescription(const QString& _description)
-{
-    d->account.description = _description;
-    d->view->setDescription(d->account.description);
-}
-
 QPixmap AccountManager::avatar() const
 {
     return d->account.avatar;
 }
 
-void AccountManager::setAvatar(const QByteArray& _avatar)
-{
-    setAvatar(ImageHelper::imageFromBytes(_avatar));
-}
-
-void AccountManager::setAvatar(const QPixmap& _avatar)
-{
-    d->account.avatar = _avatar;
-    d->view->setAvatar(d->account.avatar);
-}
-
-void AccountManager::removeAvatar()
-{
-    d->account.avatar = {};
-    d->view->setAvatar({});
-}
-
 void AccountManager::completeLogout()
 {
     //    setAccountInfo(0, {}, 0, true, {}, {});
-    removeAvatar();
+    d->removeAvatar();
 
     emit cloudProjectsCreationAvailabilityChanged(false, false);
     emit closeAccountRequested();
 }
 
-void AccountManager::setPaymentInfo(const PaymentInfo& _info)
-{
-    Q_UNUSED(_info)
+// void AccountManager::setPaymentInfo(const PaymentInfo& _info)
+//{
+//    Q_UNUSED(_info)
 
-    //
-    // TODO: ждём реализацию валют, а пока просто не используем эту тему
-    //
-}
+//    //
+//    // TODO: ждём реализацию валют, а пока просто не используем эту тему
+//    //
+//}
 
 void AccountManager::setSubscriptionEnd(const QString& _subscriptionEnd)
 {

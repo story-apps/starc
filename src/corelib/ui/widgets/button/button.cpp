@@ -133,7 +133,7 @@ void Button::setContained(bool _contained)
     }
 
     d->isContained = _contained;
-    update();
+    designSystemChangeEvent(nullptr);
 }
 
 void Button::setOutlined(bool _outlined)
@@ -143,7 +143,7 @@ void Button::setOutlined(bool _outlined)
     }
 
     d->isOutlined = _outlined;
-    update();
+    designSystemChangeEvent(nullptr);
 }
 
 void Button::setFlat(bool _flat)
@@ -153,7 +153,7 @@ void Button::setFlat(bool _flat)
     }
 
     d->isFlat = _flat;
-    update();
+    designSystemChangeEvent(nullptr);
 }
 
 void Button::click()
@@ -163,14 +163,21 @@ void Button::click()
 
 QSize Button::sizeHint() const
 {
-    const qreal width = Ui::DesignSystem::button().shadowMargins().left()
-        + std::max(Ui::DesignSystem::button().minimumWidth(),
+    const auto shadowMarginsWidth = d->isContained
+        ? Ui::DesignSystem::button().shadowMargins().left()
+            + Ui::DesignSystem::button().shadowMargins().right()
+        : 0.0;
+    const qreal width
+        = std::max(Ui::DesignSystem::button().minimumWidth(),
                    Ui::DesignSystem::button().margins().left()
                        + TextHelper::fineTextWidth(d->text, Ui::DesignSystem::font().button())
                        + Ui::DesignSystem::button().margins().right())
-        + Ui::DesignSystem::button().shadowMargins().right();
-    const qreal height = Ui::DesignSystem::button().shadowMargins().top()
-        + Ui::DesignSystem::button().height() + Ui::DesignSystem::button().shadowMargins().bottom();
+        + shadowMarginsWidth;
+    const auto shadowMarginsHeight = d->isContained
+        ? Ui::DesignSystem::button().shadowMargins().top()
+            + Ui::DesignSystem::button().shadowMargins().bottom()
+        : 0.0;
+    const qreal height = Ui::DesignSystem::button().height() + shadowMarginsHeight;
     return QSize(static_cast<int>(width), static_cast<int>(height));
 }
 
@@ -178,8 +185,7 @@ void Button::paintEvent(QPaintEvent* _event)
 {
     Q_UNUSED(_event)
 
-    const QRect backgroundRect
-        = rect().marginsRemoved(Ui::DesignSystem::button().shadowMargins().toMargins());
+    const QRect backgroundRect = contentsRect();
     if (!backgroundRect.isValid()) {
         return;
     }
@@ -383,7 +389,8 @@ void Button::designSystemChangeEvent(DesignSystemChangeEvent* _event)
 {
     Q_UNUSED(_event)
 
-    setContentsMargins(Ui::DesignSystem::button().shadowMargins().toMargins());
+    setContentsMargins(d->isContained ? Ui::DesignSystem::button().shadowMargins().toMargins()
+                                      : QMargins());
     d->shadowBlurRadiusAnimation.setStartValue(
         Ui::DesignSystem::button().minimumShadowBlurRadius());
     d->shadowBlurRadiusAnimation.setEndValue(Ui::DesignSystem::button().maximumShadowBlurRadius());

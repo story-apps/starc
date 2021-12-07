@@ -160,6 +160,19 @@ protected:
 
 
 /**
+ * @brief Текстовая метка со шрифтом button
+ */
+class CORE_LIBRARY_EXPORT ButtonLabel : public AbstractLabel
+{
+public:
+    explicit ButtonLabel(QWidget* _parent = nullptr);
+
+protected:
+    const QFont& textFont() const override;
+};
+
+
+/**
  * @brief Текстовая метка со шрифтом caption
  */
 class CORE_LIBRARY_EXPORT CaptionLabel : public AbstractLabel
@@ -179,6 +192,24 @@ class CORE_LIBRARY_EXPORT OverlineLabel : public AbstractLabel
 {
 public:
     explicit OverlineLabel(QWidget* _parent = nullptr);
+
+protected:
+    const QFont& textFont() const override;
+};
+
+
+/**
+ * @brief Текстовая метка со шрифтом iconSmall
+ */
+class CORE_LIBRARY_EXPORT IconsSmallLabel : public AbstractLabel
+{
+public:
+    explicit IconsSmallLabel(QWidget* _parent = nullptr);
+
+    /**
+     * @brief Установить иконку
+     */
+    void setIcon(const QString& _icon);
 
 protected:
     const QFont& textFont() const override;

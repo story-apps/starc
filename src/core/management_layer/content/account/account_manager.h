@@ -2,8 +2,10 @@
 
 #include <QObject>
 
-class PaymentInfo;
-class Widget;
+namespace Domain {
+enum class SubscriptionType;
+struct SessionInfo;
+} // namespace Domain
 
 
 namespace ManagementLayer {
@@ -42,15 +44,12 @@ public:
      * @brief Установить параметры аккаунта
      */
     void setAccountInfo(const QString& _email, const QString& _name, const QString& _description,
-                        const QByteArray& _avatar);
+                        const QByteArray& _avatar, Domain::SubscriptionType _subscriptionType,
+                        const QDateTime& _subscriptionEnds,
+                        const QVector<Domain::SessionInfo>& _sessions);
     QString email() const;
     QString name() const;
-    void setName(const QString& _name);
-    void setDescription(const QString& _description);
     QPixmap avatar() const;
-    void setAvatar(const QByteArray& _avatar);
-    void setAvatar(const QPixmap& _avatar);
-    void removeAvatar();
 
 
     // ========================
@@ -62,7 +61,7 @@ public:
      */
     void completeLogout();
 
-    void setPaymentInfo(const PaymentInfo& _info);
+    //    void setPaymentInfo(const PaymentInfo& _info);
     void setSubscriptionEnd(const QString& _subscriptionEnd);
     void setReceiveEmailNotifications(bool _receive);
 
@@ -99,34 +98,25 @@ signals:
     // Работа с аккаунтом
     //
 
+    /**
+     * @brief Пользователь хочет получить информацию об аккаунте
+     */
     void updateAccountInfoRequested(const QString& _name, const QString& _description,
                                     const QByteArray& _avatar);
 
-
-    // =============================================
-    // LEGACY
-
-    //
-    // Оплата услуг
-    //
-
     /**
-     * @brief Пользователь хочет продлить подписку на облако
+     * @brief Пользователь хочет завершить заданную сессию
      */
-    void renewSubscriptionRequested(int _month, int _paymentType);
-
-    //
-    // Работа с аккаунтом
-    //
+    void terminateSessionRequested(const QString& _sessionKey);
 
     /**
      * @brief Пользователь хочет выйти из аккаунта
      */
     void logoutRequested();
 
-    //
-    // Информирование о параметрах аккаунта
-    //
+
+    // =============================================
+    // LEGACY
 
     /**
      * @brief Изменилась возможность создания проектов в облаке

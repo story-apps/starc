@@ -63,6 +63,7 @@ SOURCES += \
     ui/account/account_view.cpp \
     ui/account/login_dialog.cpp \
     ui/account/renew_subscription_dialog.cpp \
+    ui/account/session_widget.cpp \
     ui/account/upgrade_to_pro_dialog.cpp \
     ui/application_style.cpp \
     ui/application_view.cpp \
@@ -97,6 +98,8 @@ SOURCES += \
 
 HEADERS += \
     core_global.h \
+    domain/session_info.h \
+    domain/subscription_info.h \
     management_layer/application_manager.h \
     management_layer/content/account/account_manager.h \
     management_layer/content/export/export_manager.h \
@@ -114,6 +117,7 @@ HEADERS += \
     ui/account/account_view.h \
     ui/account/login_dialog.h \
     ui/account/renew_subscription_dialog.h \
+    ui/account/session_widget.h \
     ui/account/upgrade_to_pro_dialog.h \
     ui/application_style.h \
     ui/application_view.h \

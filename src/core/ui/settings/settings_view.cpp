@@ -162,7 +162,7 @@ public:
     //
     int applicationCardBottomSpacerIndex = 0;
 
-    H4Label* componentsTitle = nullptr;
+    H5Label* componentsTitle = nullptr;
 
     //
     // Comonents
@@ -293,7 +293,7 @@ SettingsView::Implementation::Implementation(QWidget* _parent)
     , focusCurrentParagraph(new CheckBox(applicationCard))
     , useTypewriterScrolling(new CheckBox(applicationCard))
     //
-    , componentsTitle(new H4Label(content))
+    , componentsTitle(new H5Label(content))
     //
     , simpleTextCard(new Card(content))
     , simpleTextCardLayout(new QGridLayout)
@@ -728,6 +728,7 @@ void SettingsView::Implementation::scrollToTitle(AbstractLabel* title)
         colorableTitle->setTextColor(colorAnimation.endValue().value<QColor>());
     }
     colorableTitle = title;
+    colorAnimation.setEndValue(colorableTitle->textColor());
     colorableTitle->setTextColor(colorAnimation.startValue().value<QColor>());
     colorAnimation.start();
 }
@@ -1634,6 +1635,8 @@ void SettingsView::designSystemChangeEvent(DesignSystemChangeEvent* _event)
     d->contextMenu->setBackgroundColor(Ui::DesignSystem::color().background());
     d->contextMenu->setTextColor(Ui::DesignSystem::color().onBackground());
 
+    d->colorAnimation.setStartValue(Ui::DesignSystem::color().secondary());
+
     for (auto card : { d->applicationCard, d->simpleTextCard, d->screenplayCard, d->comicBookCard,
                        d->shortcutsCard }) {
         card->setBackgroundColor(DesignSystem::color().background());
@@ -1643,11 +1646,7 @@ void SettingsView::designSystemChangeEvent(DesignSystemChangeEvent* _event)
     titleColor.setAlphaF(DesignSystem::inactiveTextOpacity());
     auto titleMargins = Ui::DesignSystem::label().margins().toMargins();
     titleMargins.setBottom(Ui::DesignSystem::layout().px12());
-    //
-    d->colorAnimation.setStartValue(Ui::DesignSystem::color().secondary());
-    d->colorAnimation.setEndValue(titleColor);
-    //
-    for (auto cardTitle : QVector<Widget*>{
+    for (auto cardTitle : std::vector<Widget*>{
              d->applicationTitle, d->applicationUserInterfaceTitle,
              d->applicationSaveAndBackupTitle, d->applicationTextEditingTitle, d->simpleTextTitle,
              d->simpleTextEditorTitle, d->simpleTextNavigatorTitle, d->screenplayTitle,
@@ -1658,10 +1657,11 @@ void SettingsView::designSystemChangeEvent(DesignSystemChangeEvent* _event)
         cardTitle->setTextColor(titleColor);
         cardTitle->setContentsMargins(titleMargins);
     }
-    for (auto title : QVector<Widget*>{ d->componentsTitle }) {
+    titleMargins.setBottom(0);
+    for (auto title : std::vector<Widget*>{ d->componentsTitle }) {
         title->setBackgroundColor(DesignSystem::color().surface());
-        title->setTextColor(DesignSystem::color().onSurface());
-        title->setContentsMargins(Ui::DesignSystem::label().margins().toMargins());
+        title->setTextColor(titleColor);
+        title->setContentsMargins(titleMargins);
     }
 
     auto labelMargins = Ui::DesignSystem::label().margins().toMargins();

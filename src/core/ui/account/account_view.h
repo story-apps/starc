@@ -2,6 +2,11 @@
 
 #include <ui/widgets/widget/widget.h>
 
+namespace Domain {
+enum class SubscriptionType;
+struct SessionInfo;
+} // namespace Domain
+
 
 namespace Ui {
 
@@ -15,6 +20,13 @@ class AccountView : public Widget
 public:
     explicit AccountView(QWidget* _parent = nullptr);
     ~AccountView() override;
+
+    //
+    // По возможности сфокусировать на экране заданный виджет
+    //
+    void showAccount();
+    void showSubscription();
+    void showSessions();
 
     /**
      * @brief Установить имейл пользователя
@@ -36,6 +48,17 @@ public:
      */
     void setAvatar(const QPixmap& _avatar);
 
+    /**
+     * @brief Задать информацию о подписке
+     */
+    void setSubscriptionInfo(Domain::SubscriptionType _subscriptionType,
+                             const QDateTime& _subscriptionEnds);
+
+    /**
+     * @brief Задать список сессий аккаунта
+     */
+    void setSessions(const QVector<Domain::SessionInfo>& _sessions);
+
 signals:
     /**
      * @brief Пользователь изменил своё имя
@@ -51,6 +74,11 @@ signals:
      * @brief Пользователь изменил аватарку
      */
     void avatarChanged(const QPixmap& avatar);
+
+    /**
+     * @brief ПОльзователь хочет завершить заданную сессию
+     */
+    void terminateSessionRequested(const QString& _sessionKey);
 
 protected:
     /**

@@ -224,6 +224,20 @@ const QFont& Body2Label::textFont() const
 // ****
 
 
+ButtonLabel::ButtonLabel(QWidget* _parent)
+    : AbstractLabel(_parent)
+{
+}
+
+const QFont& ButtonLabel::textFont() const
+{
+    return Ui::DesignSystem::font().button();
+}
+
+
+// ****
+
+
 CaptionLabel::CaptionLabel(QWidget* _parent)
     : AbstractLabel(_parent)
 {
@@ -246,6 +260,25 @@ OverlineLabel::OverlineLabel(QWidget* _parent)
 const QFont& OverlineLabel::textFont() const
 {
     return Ui::DesignSystem::font().overline();
+}
+
+
+// ****
+
+
+IconsSmallLabel::IconsSmallLabel(QWidget* _parent)
+    : AbstractLabel(_parent)
+{
+}
+
+void IconsSmallLabel::setIcon(const QString& _icon)
+{
+    setText(_icon);
+}
+
+const QFont& IconsSmallLabel::textFont() const
+{
+    return Ui::DesignSystem::font().iconsSmall();
 }
 
 

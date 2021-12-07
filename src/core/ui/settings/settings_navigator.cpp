@@ -33,25 +33,13 @@ public:
 SettingsNavigator::Implementation::Implementation(QWidget* _parent)
     : tree(new Tree(_parent))
 {
-}
-
-
-// ****
-
-
-SettingsNavigator::SettingsNavigator(QWidget* _parent)
-    : StackWidget(_parent)
-    , d(new Implementation(this))
-{
-    showDefaultPage();
-
     auto createItem = [](const QString& _icon) {
         auto item = new QStandardItem;
         item->setData(_icon, Qt::DecorationRole);
         item->setEditable(false);
         return item;
     };
-    QStandardItemModel* model = new QStandardItemModel(this);
+    QStandardItemModel* model = new QStandardItemModel(tree);
     auto applicationItem = createItem(u8"\U000f0614");
     applicationItem->appendRow(createItem(u8"\U000f062e"));
     applicationItem->appendRow(createItem(u8"\U000f061b"));
@@ -63,9 +51,20 @@ SettingsNavigator::SettingsNavigator(QWidget* _parent)
     componentsItem->appendRow(createItem(u8"\U000F056E"));
     model->appendRow(componentsItem);
     model->appendRow(createItem(u8"\U000f030c"));
-    d->tree->setModel(model);
-    d->tree->setCurrentIndex(model->index(0, 0));
-    d->tree->expandAll();
+    tree->setModel(model);
+    tree->setCurrentIndex(model->index(0, 0));
+    tree->expandAll();
+}
+
+
+// ****
+
+
+SettingsNavigator::SettingsNavigator(QWidget* _parent)
+    : StackWidget(_parent)
+    , d(new Implementation(this))
+{
+    showDefaultPage();
 
     connect(d->tree, &Tree::currentIndexChanged, this, [this](const QModelIndex& _index) {
         if (_index.parent().isValid()) {
@@ -135,6 +134,7 @@ SettingsNavigator::SettingsNavigator(QWidget* _parent)
         }
     });
 
+    updateTranslations();
     designSystemChangeEvent(nullptr);
 }
 

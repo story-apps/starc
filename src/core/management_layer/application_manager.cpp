@@ -678,15 +678,6 @@ void ApplicationManager::Implementation::saveChanges()
     projectManager->saveChanges();
     DatabaseLayer::Database::commit();
 
-#ifdef CLOUD_SERVICE_MANAGER
-    //
-    // Для проекта из облака синхронизируем данные
-    //
-    if (projectsManager->currentProject().isRemote()) {
-        cloudServiceManager->saveChanges();
-    }
-#endif
-
     //
     // Если произошла ошибка сохранения, то делаем дополнительные проверки и работаем с
     // пользователем
@@ -1651,44 +1642,13 @@ void ApplicationManager::initConnections()
     });
     connect(d->accountManager.data(), &AccountManager::updateAccountInfoRequested,
             d->cloudServiceManager.data(), &CloudServiceManager::setAccountInfo);
-
-
-    ////////////////////////////////////////
-    /// LEGACY
-    ///
-
-    // ... авторизация/регистрация
-    //
-    {
-
-        //
-        // Выход из аккаунта
-        //
-        connect(d->accountManager.data(), &AccountManager::logoutRequested,
-                d->cloudServiceManager.data(), &CloudServiceManager::logout);
-        connect(d->cloudServiceManager.data(), &CloudServiceManager::logoutCompleted,
-                d->accountManager.data(), &AccountManager::completeLogout);
-    }
-    connect(d->cloudServiceManager.data(), &CloudServiceManager::paymentInfoLoaded,
-            d->accountManager.data(), &AccountManager::setPaymentInfo);
-
-    //
-    // Оплата услуг
-    //
-    connect(d->accountManager.data(), &AccountManager::renewSubscriptionRequested,
-            d->cloudServiceManager.data(), &CloudServiceManager::renewSubscription);
-    connect(d->cloudServiceManager.data(), &CloudServiceManager::subscriptionRenewed,
-            d->accountManager.data(), &AccountManager::setSubscriptionEnd);
-
-    //
-    // Изменение параметров аккаунта
-    //
-    connect(d->cloudServiceManager.data(), &CloudServiceManager::userNameChanged,
-            d->accountManager.data(), &AccountManager::setName);
-    connect(d->cloudServiceManager.data(), &CloudServiceManager::receiveEmailNotificationsChanged,
-            d->accountManager.data(), &AccountManager::setReceiveEmailNotifications);
-    connect(d->cloudServiceManager.data(), &CloudServiceManager::avatarChanged,
-            d->accountManager.data(), qOverload<const QByteArray&>(&AccountManager::setAvatar));
+    connect(d->accountManager.data(), &AccountManager::terminateSessionRequested,
+            d->cloudServiceManager.data(), &CloudServiceManager::terminateSession);
+    connect(d->accountManager.data(), &AccountManager::logoutRequested, this, [this] {
+        d->menuView->setSignInVisible(true);
+        d->menuView->setAccountVisible(false);
+        d->cloudServiceManager->logout();
+    });
 #endif
 }
 
