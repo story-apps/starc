@@ -9,7 +9,6 @@
 
 #include <QApplication>
 #include <QFileDialog>
-#include <QTimer>
 
 
 namespace ManagementLayer {
@@ -185,16 +184,17 @@ void ComicBookTextManager::bind(IDocumentManager* _manager)
     Q_ASSERT(_manager);
 
     const auto isConnectedFirstTime
-        = connect(_manager->asQObject(), SIGNAL(currentModelIndexChanged(const QModelIndex&)), this,
-                  SLOT(setCurrentModelIndex(const QModelIndex&)), Qt::UniqueConnection);
+        = connect(_manager->asQObject(), SIGNAL(currentModelIndexChanged(QModelIndex)), this,
+                  SLOT(setCurrentModelIndex(QModelIndex)), Qt::UniqueConnection);
 
     //
     // Ставим в очередь событие нотификацию о смене текущей сцены,
     // чтобы навигатор отобразил её при первом открытии
     //
     if (isConnectedFirstTime) {
-        QTimer::singleShot(0, this,
-                           [this] { emit currentModelIndexChanged(d->view->currentModelIndex()); });
+        QMetaObject::invokeMethod(
+            this, [this] { emit currentModelIndexChanged(d->view->currentModelIndex()); },
+            Qt::QueuedConnection);
     }
 }
 

@@ -76,6 +76,11 @@ signals:
     void avatarChanged(const QPixmap& avatar);
 
     /**
+     * @brief Пользователь нажал кнопку обновления подписки
+     */
+    void upgradeSubscriptionPressed();
+
+    /**
      * @brief ПОльзователь хочет завершить заданную сессию
      */
     void terminateSessionRequested(const QString& _sessionKey);

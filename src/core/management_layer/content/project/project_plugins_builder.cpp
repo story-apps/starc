@@ -203,6 +203,16 @@ ProjectPluginsBuilder::ProjectPluginsBuilder()
 
 ProjectPluginsBuilder::~ProjectPluginsBuilder() = default;
 
+IDocumentManager* ProjectPluginsBuilder::plugin(const QString& _mimeType) const
+{
+    auto plugin = d->plugins.find(_mimeType);
+    if (plugin == d->plugins.end()) {
+        return nullptr;
+    }
+
+    return plugin.value();
+}
+
 QVector<ProjectPluginsBuilder::EditorInfo> ProjectPluginsBuilder::editorsInfoFor(
     const QString& _documentMimeType) const
 {
@@ -326,12 +336,12 @@ void ProjectPluginsBuilder::reconfigureAll()
 void ProjectPluginsBuilder::reconfigurePlugin(const QString& _mimeType,
                                               const QStringList& _changedSettingsKeys)
 {
-    auto plugin = d->plugins.find(_mimeType);
-    if (plugin == d->plugins.end()) {
+    auto plugin = this->plugin(_mimeType);
+    if (!plugin) {
         return;
     }
 
-    plugin.value()->reconfigure(_changedSettingsKeys);
+    plugin->reconfigure(_changedSettingsKeys);
 }
 
 void ProjectPluginsBuilder::reconfigureSimpleTextEditor(const QStringList& _changedSettingsKeys)

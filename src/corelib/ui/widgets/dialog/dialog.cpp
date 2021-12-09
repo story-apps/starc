@@ -26,7 +26,6 @@ Dialog::Implementation::Implementation(QWidget* _parent)
     buttonsLayout->addStretch();
 }
 
-
 // ****
 
 Dialog::Dialog(QWidget* _parent)
@@ -83,7 +82,7 @@ void Dialog::designSystemChangeEvent(DesignSystemChangeEvent* _event)
                   title().isEmpty() ? Ui::DesignSystem::layout().px24() : 0,
                   Ui::DesignSystem::layout().px24(), 0)
             .toMargins());
-    d->supportingText->setBackgroundColor(Ui::DesignSystem::color().background());
+    d->supportingText->setBackgroundColor(Qt::transparent);
     d->supportingText->setTextColor(Ui::DesignSystem::color().onBackground());
 
     for (auto button : std::as_const(d->buttons)) {
@@ -93,6 +92,6 @@ void Dialog::designSystemChangeEvent(DesignSystemChangeEvent* _event)
 
     d->buttonsLayout->setContentsMargins(
         QMarginsF(Ui::DesignSystem::layout().px12(), Ui::DesignSystem::layout().px12(),
-                  Ui::DesignSystem::layout().px16(), Ui::DesignSystem::layout().px8())
+                  Ui::DesignSystem::layout().px16(), Ui::DesignSystem::layout().px16())
             .toMargins());
 }

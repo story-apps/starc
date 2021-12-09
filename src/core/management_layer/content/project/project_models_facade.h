@@ -80,6 +80,11 @@ signals:
     void modelUndoRequested(BusinessLayer::AbstractModel* _model, int _undoStep);
 
     /**
+     * @brief Запрос на удаление модели
+     */
+    void modelRemoveRequested(BusinessLayer::AbstractModel* _model);
+
+    /**
      * @brief Изменилось название проекта
      */
     void projectNameChanged(const QString& _name);

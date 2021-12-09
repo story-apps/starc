@@ -125,6 +125,13 @@ signals:
     void rowsAboutToBeChanged();
     void rowsChanged();
 
+    /**
+     * @brief Запрос на удаление модели
+     * @note Используется за пределами доступности модели структуры,
+     *       чтобы удаление модели корректно проходило через корзину
+     */
+    void removeRequested();
+
 protected:
     /**
      * @brief Настроить документ

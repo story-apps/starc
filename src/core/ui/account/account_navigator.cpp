@@ -95,17 +95,17 @@ AccountNavigator::AccountNavigator(QWidget* _parent)
     d->layout->setContentsMargins({});
     d->layout->setSpacing(0);
     int row = 0;
-    d->layout->addWidget(d->tree, row++, 0, 1, 3);
-    d->layout->addWidget(d->freeTitle, row++, 1);
-    d->layout->addWidget(d->upgradeToProButton, row++, 1);
-    d->layout->addWidget(d->proTitle, row++, 1);
-    d->layout->addWidget(d->proSubscriptionEndsLabel, row++, 1);
-    d->layout->addWidget(d->renewProSubscriptionButton, row++, 1);
-    d->layout->addWidget(d->upgradeToProLifetimeButton, row++, 1);
-    d->layout->addWidget(d->upgradeToTeamButton, row++, 1);
-    d->layout->addWidget(d->teamTitle, row++, 1);
+    d->layout->addWidget(d->tree, row++, 0, 1, 4);
+    d->layout->addWidget(d->freeTitle, row++, 2);
+    d->layout->addWidget(d->upgradeToProButton, row++, 2);
+    d->layout->addWidget(d->proTitle, row++, 2);
+    d->layout->addWidget(d->proSubscriptionEndsLabel, row++, 2);
+    d->layout->addWidget(d->renewProSubscriptionButton, row++, 2);
+    d->layout->addWidget(d->upgradeToProLifetimeButton, row++, 2);
+    d->layout->addWidget(d->upgradeToTeamButton, row++, 2);
+    d->layout->addWidget(d->teamTitle, row++, 2);
     d->layout->setRowStretch(row++, 1);
-    d->layout->addWidget(d->logoutButton, row++, 1);
+    d->layout->addWidget(d->logoutButton, row++, 1, 1, 2);
     setLayout(d->layout);
 
     connect(d->tree, &Tree::currentIndexChanged, this, [this](const QModelIndex& _index) {
@@ -161,12 +161,9 @@ void AccountNavigator::setSubscriptionInfo(Domain::SubscriptionType _subscriptio
 
         d->proSubscriptionEndsLabel->show();
         d->updateProSubscriptionEndsLabel();
-        d->renewProSubscriptionButton->show();
-        d->upgradeToProLifetimeButton->show();
-        //
-        // TODO:
-        //
-        d->upgradeToTeamButton->hide();
+        d->renewProSubscriptionButton->hide(); // TODO:
+        d->upgradeToProLifetimeButton->hide(); // TODO:
+        d->upgradeToTeamButton->hide(); // TODO:
         d->teamTitle->hide();
         break;
     }
@@ -178,10 +175,7 @@ void AccountNavigator::setSubscriptionInfo(Domain::SubscriptionType _subscriptio
         d->proSubscriptionEndsLabel->hide();
         d->renewProSubscriptionButton->hide();
         d->upgradeToProLifetimeButton->hide();
-        //
-        // TODO:
-        //
-        d->upgradeToTeamButton->hide();
+        d->upgradeToTeamButton->hide(); // TODO:
         d->teamTitle->hide();
         break;
     }
@@ -276,7 +270,8 @@ void AccountNavigator::designSystemChangeEvent(DesignSystemChangeEvent* _event)
 
     d->layout->setVerticalSpacing(Ui::DesignSystem::layout().px4());
     d->layout->setColumnMinimumWidth(0, Ui::DesignSystem::layout().px12());
-    d->layout->setColumnMinimumWidth(2, Ui::DesignSystem::layout().px12());
+    d->layout->setColumnMinimumWidth(1, Ui::DesignSystem::layout().px16());
+    d->layout->setColumnMinimumWidth(3, Ui::DesignSystem::layout().px12());
     d->layout->setContentsMargins(0, 0, 0, Ui::DesignSystem::layout().px12());
 }
 

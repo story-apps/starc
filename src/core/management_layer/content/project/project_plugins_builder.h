@@ -12,6 +12,7 @@ class IDocumentView;
 }
 
 namespace ManagementLayer {
+class IDocumentManager;
 
 /**
  * @brief Билдер управляющая созданием плагинов редакторов
@@ -21,6 +22,11 @@ class ProjectPluginsBuilder final
 public:
     ProjectPluginsBuilder();
     ~ProjectPluginsBuilder();
+
+    /**
+     * @brief Получить менеджер документа заданного типа
+     */
+    IDocumentManager* plugin(const QString& _mimeType) const;
 
     /**
      * @brief Вспомогательная структура с информацией о плагине редактора

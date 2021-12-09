@@ -88,6 +88,11 @@ signals:
     void menuRequested();
 
     /**
+     * @brief Запрос на апгрейд аккаунта из одного из плагинов
+     */
+    void upgradeRequested();
+
+    /**
      * @brief Изменились данные
      */
     void contentsChanged();

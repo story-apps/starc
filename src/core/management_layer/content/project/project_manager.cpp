@@ -19,6 +19,7 @@
 #include <data_layer/storage/storage_facade.h>
 #include <domain/document_change_object.h>
 #include <domain/document_object.h>
+#include <interfaces/management_layer/i_document_manager.h>
 #include <interfaces/ui/i_document_view.h>
 #include <ui/abstract_navigator.h>
 #include <ui/design_system/design_system.h>
@@ -70,6 +71,7 @@ public:
      * @brief Удалить документ
      */
     void removeDocument(const QModelIndex& _itemIndex);
+    void removeDocument(BusinessLayer::StructureModelItem* _item);
 
     /**
      * @brief Очистить корзину
@@ -236,7 +238,12 @@ void ProjectManager::Implementation::removeDocument(const QModelIndex& _itemInde
         return;
     }
 
-    auto itemTopLevelParent = item->parent();
+    removeDocument(item);
+}
+
+void ProjectManager::Implementation::removeDocument(BusinessLayer::StructureModelItem* _item)
+{
+    auto itemTopLevelParent = _item->parent();
     if (itemTopLevelParent == nullptr) {
         return;
     }
@@ -249,12 +256,12 @@ void ProjectManager::Implementation::removeDocument(const QModelIndex& _itemInde
     // Если документ ещё не в корзине, то переносим его в корзину
     //
     if (itemTopLevelParent->type() != Domain::DocumentObjectType::RecycleBin) {
-        projectStructureModel->moveItemToRecycleBin(item);
+        projectStructureModel->moveItemToRecycleBin(_item);
 
         //
         // Персонажи и локации убираем из родительского списка
         //
-        switch (item->type()) {
+        switch (_item->type()) {
         case Domain::DocumentObjectType::Character: {
             const auto charactersDocuments
                 = DataStorageLayer::StorageFacade::documentStorage()->documents(
@@ -263,7 +270,7 @@ void ProjectManager::Implementation::removeDocument(const QModelIndex& _itemInde
             auto charactersModel = modelsFacade.modelFor(charactersDocuments.first());
             auto characters = qobject_cast<BusinessLayer::CharactersModel*>(charactersModel);
             characters->removeCharacterModel(
-                qobject_cast<BusinessLayer::CharacterModel*>(modelsFacade.modelFor(item->uuid())));
+                qobject_cast<BusinessLayer::CharacterModel*>(modelsFacade.modelFor(_item->uuid())));
             break;
         }
 
@@ -275,7 +282,7 @@ void ProjectManager::Implementation::removeDocument(const QModelIndex& _itemInde
             auto locationsModel = modelsFacade.modelFor(locationsDocuments.first());
             auto locations = qobject_cast<BusinessLayer::LocationsModel*>(locationsModel);
             locations->removeLocationModel(
-                qobject_cast<BusinessLayer::LocationModel*>(modelsFacade.modelFor(item->uuid())));
+                qobject_cast<BusinessLayer::LocationModel*>(modelsFacade.modelFor(_item->uuid())));
             break;
         }
 
@@ -300,7 +307,7 @@ void ProjectManager::Implementation::removeDocument(const QModelIndex& _itemInde
                          { kRemoveButtonId, tr("Yes, remove"), Dialog::NormalButton } });
     QObject::connect(
         dialog, &Dialog::finished,
-        [this, item, kCancelButtonId, dialog](const Dialog::ButtonInfo& _buttonInfo) {
+        [this, _item, kCancelButtonId, dialog](const Dialog::ButtonInfo& _buttonInfo) {
             dialog->hideDialog();
 
             //
@@ -315,10 +322,10 @@ void ProjectManager::Implementation::removeDocument(const QModelIndex& _itemInde
             // NOTE: порядок удаления важен
             //
             auto document
-                = DataStorageLayer::StorageFacade::documentStorage()->document(item->uuid());
+                = DataStorageLayer::StorageFacade::documentStorage()->document(_item->uuid());
             modelsFacade.removeModelFor(document);
             DataStorageLayer::StorageFacade::documentStorage()->removeDocument(document);
-            projectStructureModel->removeItem(item);
+            projectStructureModel->removeItem(_item);
         });
     QObject::connect(dialog, &Dialog::disappeared, dialog, &Dialog::deleteLater);
 }
@@ -533,6 +540,11 @@ ProjectManager::ProjectManager(QObject* _parent, QWidget* _parentWidget)
             &ProjectManager::handleModelChange);
     connect(&d->modelsFacade, &ProjectModelsFacade::modelUndoRequested, this,
             &ProjectManager::undoModelChange);
+    connect(&d->modelsFacade, &ProjectModelsFacade::modelRemoveRequested, this,
+            [this](BusinessLayer::AbstractModel* _model) {
+                auto item = d->projectStructureModel->itemForUuid(_model->document()->uuid());
+                d->removeDocument(item);
+            });
     connect(&d->modelsFacade, &ProjectModelsFacade::projectNameChanged, this,
             &ProjectManager::projectNameChanged);
     connect(&d->modelsFacade, &ProjectModelsFacade::projectLoglineChanged, this,
@@ -953,6 +965,19 @@ void ProjectManager::showView(const QModelIndex& _itemIndex, const QString& _vie
     //
     if (!d->navigator->isProjectNavigatorShown()) {
         showNavigator(_itemIndex, _viewMimeType);
+    }
+
+    //
+    // Настроим уведомления плагина
+    //
+    auto documentManager = d->pluginsBuilder.plugin(_viewMimeType)->asQObject();
+    if (documentManager) {
+        const auto invalidSignalIndex = -1;
+        if (documentManager->metaObject()->indexOfSignal("upgradeRequested()")
+            != invalidSignalIndex) {
+            connect(documentManager, SIGNAL(upgradeRequested()), this, SIGNAL(upgradeRequested()),
+                    Qt::UniqueConnection);
+        }
     }
 }
 

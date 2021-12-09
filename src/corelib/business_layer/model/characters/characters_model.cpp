@@ -49,7 +49,7 @@ void CharactersModel::addCharacterModel(CharacterModel* _characterModel)
     const int itemRowIndex = rowCount();
     beginInsertRows({}, itemRowIndex, itemRowIndex);
     d->characterModels.append(_characterModel);
-    emit endInsertRows();
+    endInsertRows();
 }
 
 void CharactersModel::removeCharacterModel(CharacterModel* _characterModel)

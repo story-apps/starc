@@ -67,6 +67,14 @@ public:
     virtual void saveSettings()
     {
     }
+
+    /**
+     * @brief Перепроверить воможность редактирования
+     * @note Актуально для платных плагинов
+     */
+    virtual void checkAvailabilityToEdit()
+    {
+    }
 };
 
 } // namespace ManagementLayer

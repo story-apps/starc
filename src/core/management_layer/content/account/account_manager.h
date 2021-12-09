@@ -51,19 +51,10 @@ public:
     QString name() const;
     QPixmap avatar() const;
 
-
-    // ========================
-    // LEGACY
-
-
     /**
-     * @brief Завершить выход из аккаунта
+     * @brief Проапгрейдить учётную запись
      */
-    void completeLogout();
-
-    //    void setPaymentInfo(const PaymentInfo& _info);
-    void setSubscriptionEnd(const QString& _subscriptionEnd);
-    void setReceiveEmailNotifications(bool _receive);
+    void upgradeAccount();
 
 signals:
     //

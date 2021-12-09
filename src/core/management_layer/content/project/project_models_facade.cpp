@@ -441,6 +441,8 @@ BusinessLayer::AbstractModel* ProjectModelsFacade::modelFor(Domain::DocumentObje
                 });
         connect(model, &BusinessLayer::AbstractModel::undoRequested, this,
                 [this, model](int _undoStep) { emit modelUndoRequested(model, _undoStep); });
+        connect(model, &BusinessLayer::AbstractModel::removeRequested, this,
+                [this, model] { emit modelRemoveRequested(model); });
 
         d->documentsToModels.insert(_document, model);
     }

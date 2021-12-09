@@ -1518,6 +1518,8 @@ void ApplicationManager::initConnections()
     //
     connect(d->projectManager.data(), &ProjectManager::menuRequested, this,
             [this] { d->showMenu(); });
+    connect(d->projectManager.data(), &ProjectManager::upgradeRequested, d->accountManager.data(),
+            &AccountManager::upgradeAccount);
     connect(d->projectManager.data(), &ProjectManager::contentsChanged, this,
             [this] { d->markChangesSaved(false); });
     connect(d->projectManager.data(), &ProjectManager::projectNameChanged, this,
@@ -1626,6 +1628,9 @@ void ApplicationManager::initConnections()
             d->accountManager.data(), [this](bool _isNewAccount) {
                 d->cloudServiceManager->askAccountInfo();
                 d->accountManager->completeSignIn(_isNewAccount);
+                if (_isNewAccount) {
+                    d->menuView->closeMenu();
+                }
             });
 
     //

@@ -114,6 +114,7 @@ void AccountManager::Implementation::initNavigatorConnections()
     //    });
 
     connect(navigator, &Ui::AccountNavigator::logoutPressed, q, [this] {
+        account = {};
         emit q->logoutRequested();
         emit q->closeAccountRequested();
     });
@@ -279,34 +280,15 @@ QPixmap AccountManager::avatar() const
     return d->account.avatar;
 }
 
-void AccountManager::completeLogout()
+void AccountManager::upgradeAccount()
 {
-    //    setAccountInfo(0, {}, 0, true, {}, {});
-    d->removeAvatar();
-
-    emit cloudProjectsCreationAvailabilityChanged(false, false);
-    emit closeAccountRequested();
-}
-
-// void AccountManager::setPaymentInfo(const PaymentInfo& _info)
-//{
-//    Q_UNUSED(_info)
-
-//    //
-//    // TODO: ждём реализацию валют, а пока просто не используем эту тему
-//    //
-//}
-
-void AccountManager::setSubscriptionEnd(const QString& _subscriptionEnd)
-{
-    //    d->subscriptionEnd = _subscriptionEnd;
-    //    d->navigator->setSubscriptionEnd(d->subscriptionEnd);
-}
-
-void AccountManager::setReceiveEmailNotifications(bool _receive)
-{
-    //    d->receiveEmailNotifications = _receive;
-    //    d->view->setReceiveEmailNotifications(d->receiveEmailNotifications);
+    if (d->account.email.isEmpty()) {
+        signIn();
+    } else {
+        //
+        // Показать диалог с апгрейдом аккаунта
+        //
+    }
 }
 
 } // namespace ManagementLayer

@@ -98,8 +98,6 @@ SOURCES += \
 
 HEADERS += \
     core_global.h \
-    domain/session_info.h \
-    domain/subscription_info.h \
     management_layer/application_manager.h \
     management_layer/content/account/account_manager.h \
     management_layer/content/export/export_manager.h \

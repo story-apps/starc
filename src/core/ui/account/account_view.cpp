@@ -3,13 +3,17 @@
 #include "session_widget.h"
 
 #include <domain/session_info.h>
+#include <domain/subscription_info.h>
 #include <ui/design_system/design_system.h>
+#include <ui/widgets/button/button.h>
 #include <ui/widgets/card/card.h>
 #include <ui/widgets/floating_tool_bar/floating_tool_bar.h>
 #include <ui/widgets/image/image_card.h>
 #include <ui/widgets/label/label.h>
+#include <ui/widgets/label/link_label.h>
 #include <ui/widgets/scroll_bar/scroll_bar.h>
 #include <ui/widgets/text_field/text_field.h>
+#include <utils/helpers/color_helper.h>
 #include <utils/tools/debouncer.h>
 
 #include <QAction>
@@ -51,6 +55,8 @@ public:
     QGridLayout* subscriptionInfoLayout = nullptr;
     int subscriptionInfoLastRow = 0;
     H6Label* subscriptionTitle = nullptr;
+    Body1LinkLabel* subscriptionDetails = nullptr;
+    Button* subscriptionUpgrade = nullptr;
 
     H5Label* sessionsTitle = nullptr;
     QVector<SessionWidget*> sessions;
@@ -67,6 +73,8 @@ AccountView::Implementation::Implementation(QWidget* _parent)
     , subscriptionInfo(new Card(_parent))
     , subscriptionInfoLayout(new QGridLayout)
     , subscriptionTitle(new H6Label(subscriptionInfo))
+    , subscriptionDetails(new Body1LinkLabel(subscriptionInfo))
+    , subscriptionUpgrade(new Button(subscriptionInfo))
     , sessionsTitle(new H5Label(_parent))
 {
     QPalette palette;
@@ -84,7 +92,7 @@ AccountView::Implementation::Implementation(QWidget* _parent)
     name->setSpellCheckPolicy(SpellCheckPolicy::Manual);
     description->setSpellCheckPolicy(SpellCheckPolicy::Manual);
     avatar->setDecorationIcon(u8"\U000F0004");
-
+    //
     accountInfoLayout->setContentsMargins({});
     accountInfoLayout->setSpacing(0);
     int row = 0;
@@ -96,10 +104,14 @@ AccountView::Implementation::Implementation(QWidget* _parent)
                                            1); // добавляем пустую строку, вместо отступа снизу
     accountInfo->setLayoutReimpl(accountInfoLayout);
 
+    subscriptionDetails->setLink(QUrl("https://starc.app/pricing"));
+    //
     subscriptionInfoLayout->setContentsMargins({});
     subscriptionInfoLayout->setSpacing(0);
     row = 0;
-    subscriptionInfoLayout->addWidget(subscriptionTitle, row++, 0);
+    subscriptionInfoLayout->addWidget(subscriptionTitle, row++, 0, 1, 2);
+    subscriptionInfoLayout->addWidget(subscriptionDetails, row, 0);
+    subscriptionInfoLayout->addWidget(subscriptionUpgrade, row++, 1, Qt::AlignRight);
     subscriptionInfoLastRow = row;
     subscriptionInfoLayout->setRowMinimumHeight(subscriptionInfoLastRow,
                                                 1); // добавляем пустую строку, вместо отступа снизу
@@ -196,10 +208,8 @@ AccountView::AccountView(QWidget* _parent)
     //
     // Подписка
     //
-
-    //
-    // Сессии
-    //
+    connect(d->subscriptionUpgrade, &Button::clicked, this,
+            &AccountView::upgradeSubscriptionPressed);
 }
 
 AccountView::~AccountView() = default;
@@ -253,6 +263,32 @@ void AccountView::setAvatar(const QPixmap& _avatar)
 void AccountView::setSubscriptionInfo(Domain::SubscriptionType _subscriptionType,
                                       const QDateTime& _subscriptionEnds)
 {
+    switch (_subscriptionType) {
+    case Domain::SubscriptionType::Free: {
+        d->subscriptionTitle->setText(tr("FREE version"));
+        d->subscriptionUpgrade->setText(tr("Upgrade to PRO"));
+        break;
+    }
+
+    case Domain::SubscriptionType::ProMonthly:
+    case Domain::SubscriptionType::ProLifetime: {
+        d->subscriptionTitle->setText(tr("PRO version"));
+        d->subscriptionUpgrade->hide();
+        break;
+    }
+
+    case Domain::SubscriptionType::TeamMonthly:
+    case Domain::SubscriptionType::TeamLifetime: {
+        d->subscriptionTitle->setText(tr("TEAM version"));
+        d->subscriptionUpgrade->hide();
+        break;
+    }
+
+    case Domain::SubscriptionType::Corporate: {
+        d->subscriptionInfo->hide();
+        break;
+    }
+    }
 }
 
 void AccountView::setSessions(const QVector<Domain::SessionInfo>& _sessions)
@@ -302,6 +338,7 @@ void AccountView::updateTranslations()
                                  tr("Do you want to delete your avatar?"));
     d->avatar->setImageCroppingText(tr("Select an area for the avatar"));
     d->subscriptionTitle->setText(tr("Subscription type"));
+    d->subscriptionDetails->setText(tr("What's included?"));
     d->sessionsTitle->setText(tr("Active sessions"));
 }
 
@@ -346,12 +383,27 @@ void AccountView::designSystemChangeEvent(DesignSystemChangeEvent* _event)
         title->setContentsMargins(titleMargins);
     }
 
+    auto labelMargins = Ui::DesignSystem::label().margins().toMargins();
+    labelMargins.setTop(0);
+    labelMargins.setBottom(0);
+    d->subscriptionDetails->setContentsMargins(labelMargins);
+    d->subscriptionDetails->setBackgroundColor(Ui::DesignSystem::color().background());
+    d->subscriptionDetails->setTextColor(ColorHelper::transparent(
+        Ui::DesignSystem::color().onBackground(), Ui::DesignSystem::inactiveTextOpacity()));
+
     for (auto textField : {
              d->name,
              d->description,
          }) {
         textField->setBackgroundColor(Ui::DesignSystem::color().onBackground());
         textField->setTextColor(Ui::DesignSystem::color().onBackground());
+    }
+
+    for (auto button : {
+             d->subscriptionUpgrade,
+         }) {
+        button->setBackgroundColor(Ui::DesignSystem::color().secondary());
+        button->setTextColor(Ui::DesignSystem::color().secondary());
     }
 
     d->avatar->setBackgroundColor(Ui::DesignSystem::color().background());
@@ -362,7 +414,9 @@ void AccountView::designSystemChangeEvent(DesignSystemChangeEvent* _event)
                                               static_cast<int>(Ui::DesignSystem::layout().px24()));
     d->subscriptionInfoLayout->setSpacing(Ui::DesignSystem::layout().px24());
     d->subscriptionInfoLayout->setRowMinimumHeight(
-        d->subscriptionInfoLastRow, static_cast<int>(Ui::DesignSystem::layout().px24()));
+        d->subscriptionInfoLastRow, static_cast<int>(Ui::DesignSystem::layout().px16()));
+    d->subscriptionInfoLayout->setColumnMinimumWidth(
+        3, static_cast<int>(Ui::DesignSystem::layout().px16()));
 }
 
 } // namespace Ui

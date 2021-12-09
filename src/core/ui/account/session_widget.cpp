@@ -7,7 +7,11 @@
 #include <utils/helpers/color_helper.h>
 
 #include <QDateTime>
+#include <QJsonDocument>
+#include <QJsonObject>
 #include <QVBoxLayout>
+
+#include <NetworkRequestLoader.h>
 
 
 namespace Ui {
@@ -88,6 +92,23 @@ void SessionWidget::setSessionInfo(const Domain::SessionInfo& _sessionInfo)
     d->deviceName->setText(d->sessionInfo.deviceName);
     d->location->setText(d->sessionInfo.location);
     d->lastUsedIcon->setVisible(d->sessionInfo.isCurrentDevice);
+
+    const auto ipToLocationUrl
+        = QString("https://reallyfreegeoip.org/json/%1").arg(d->sessionInfo.location);
+    NetworkRequestLoader::loadAsync(ipToLocationUrl, this, [this](const QByteArray& _data) {
+        const auto json = QJsonDocument::fromJson(_data).object();
+        const auto country = json["country_name"].toString();
+        const auto region = json["region_name"].toString();
+        const auto city = json["city"].toString();
+        QString location = country + ", " + region;
+        if (region != city) {
+            location += ", " + city;
+        }
+        if (country.isEmpty()) {
+            location = "Wizard's world";
+        }
+        d->location->setText(location);
+    });
 
     updateTranslations();
     designSystemChangeEvent(nullptr);
