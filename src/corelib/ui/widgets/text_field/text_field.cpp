@@ -38,9 +38,10 @@ public:
     /** @} */
 
     /**
-     * @brief Закончить анимации, если виджет скрыт
+     * @brief Закончить анимации
      */
-    void finishAnimationIfInvisible(TextField* _textField);
+    void finishAnimation();
+    void finishAnimationIfInvisible();
 
     /**
      * @brief Получить отступы в зависимости от настроек
@@ -99,6 +100,7 @@ public:
     QColor trailingIconColor;
     QString trailingIconToolTip;
 
+    bool isContextMenuShown = false;
     bool isPasswordModeEnabled = false;
     bool isEnterMakesNewLine = false;
     bool isUnderlineDecorationVisible = true;
@@ -165,7 +167,7 @@ void TextField::Implementation::reconfigure()
     } else {
         animateLabelToTop();
     }
-    finishAnimationIfInvisible(q);
+    finishAnimationIfInvisible();
 
     //
     // Анимация лейбла
@@ -205,20 +207,25 @@ void TextField::Implementation::animateLabelToBottom()
     labelTopLeftAnimation.start();
 }
 
-void TextField::Implementation::finishAnimationIfInvisible(TextField* _textField)
+void TextField::Implementation::finishAnimation()
+{
+    labelFontSizeAnimation.setCurrentTime(labelFontSizeAnimation.direction()
+                                                  == QVariantAnimation::Forward
+                                              ? labelFontSizeAnimation.duration()
+                                              : 0);
+    labelTopLeftAnimation.setCurrentTime(labelTopLeftAnimation.direction()
+                                                 == QVariantAnimation::Forward
+                                             ? labelTopLeftAnimation.duration()
+                                             : 0);
+}
+
+void TextField::Implementation::finishAnimationIfInvisible()
 {
     //
     // Если лейбл скрыт, то выполнять всю анимацию ни к чему
     //
-    if (!_textField->isVisible()) {
-        labelFontSizeAnimation.setCurrentTime(labelFontSizeAnimation.direction()
-                                                      == QVariantAnimation::Forward
-                                                  ? labelFontSizeAnimation.duration()
-                                                  : 0);
-        labelTopLeftAnimation.setCurrentTime(labelTopLeftAnimation.direction()
-                                                     == QVariantAnimation::Forward
-                                                 ? labelTopLeftAnimation.duration()
-                                                 : 0);
+    if (!q->isVisible()) {
+        finishAnimation();
     }
 }
 
@@ -354,6 +361,14 @@ TextField::TextField(QWidget* _parent)
             return;
         }
 
+        //
+        // Отслеживаем отображение контекстного меню, чтобы не мельтишить анимацией лейбла,
+        // т.к. после скрытия контекстного меню фокус опять вернётся к полю ввода, безопасно
+        // оставить лейбл в активированном состоянии (поднятым кверху)
+        //
+        d->isContextMenuShown = true;
+        connect(menu, &ContextMenu::disappeared, this, [this] { d->isContextMenuShown = false; });
+
         auto actions = menu->actions().toVector();
         //
         // Убираем возможности форматирования (пока)
@@ -454,7 +469,7 @@ void TextField::setPlaceholderText(const QString& _placeholder)
     //
     if (text().isEmpty() && !d->placeholder.isEmpty()) {
         d->animateLabelToTop();
-        d->finishAnimationIfInvisible(this);
+        d->finishAnimationIfInvisible();
     }
 }
 
@@ -500,7 +515,7 @@ void TextField::setText(const QString& _text)
     //
     if (needAnimate) {
         d->animateLabelToTop();
-        d->finishAnimationIfInvisible(this);
+        d->finishAnimationIfInvisible();
     }
 }
 
@@ -631,7 +646,7 @@ void TextField::clear()
     cursor.deleteChar();
 
     d->animateLabelToBottom();
-    d->finishAnimationIfInvisible(this);
+    d->finishAnimationIfInvisible();
 }
 
 QSize TextField::minimumSizeHint() const
@@ -913,6 +928,10 @@ void TextField::focusInEvent(QFocusEvent* _event)
 void TextField::focusOutEvent(QFocusEvent* _event)
 {
     BaseTextEdit::focusOutEvent(_event);
+
+    if (d->isContextMenuShown) {
+        return;
+    }
 
     d->labelColorAnimation.setStartValue(Ui::DesignSystem::color().secondary());
     d->labelColorAnimation.setEndValue(d->textDisabledColor);
