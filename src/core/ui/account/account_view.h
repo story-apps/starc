@@ -4,6 +4,7 @@
 
 namespace Domain {
 enum class SubscriptionType;
+struct PaymentOption;
 struct SessionInfo;
 } // namespace Domain
 
@@ -52,7 +53,8 @@ public:
      * @brief Задать информацию о подписке
      */
     void setSubscriptionInfo(Domain::SubscriptionType _subscriptionType,
-                             const QDateTime& _subscriptionEnds);
+                             const QDateTime& _subscriptionEnds,
+                             const QVector<Domain::PaymentOption>& _paymentOptions);
 
     /**
      * @brief Задать список сессий аккаунта
@@ -78,7 +80,7 @@ signals:
     /**
      * @brief Пользователь нажал кнопку обновления подписки
      */
-    void upgradeSubscriptionPressed();
+    void upgradeToProPressed();
 
     /**
      * @brief ПОльзователь хочет завершить заданную сессию

@@ -4,6 +4,7 @@
 
 namespace Domain {
 enum class SubscriptionType;
+struct PaymentOption;
 struct SessionInfo;
 } // namespace Domain
 
@@ -46,6 +47,7 @@ public:
     void setAccountInfo(const QString& _email, const QString& _name, const QString& _description,
                         const QByteArray& _avatar, Domain::SubscriptionType _subscriptionType,
                         const QDateTime& _subscriptionEnds,
+                        const QVector<Domain::PaymentOption>& _paymentOptions,
                         const QVector<Domain::SessionInfo>& _sessions);
     QString email() const;
     QString name() const;
@@ -104,6 +106,11 @@ signals:
      * @brief Пользователь хочет выйти из аккаунта
      */
     void logoutRequested();
+
+    /**
+     * @brief Пользователь хочет применить заданную опцию оплаты
+     */
+    void activatePaymentOptionRequested(const Domain::PaymentOption& _paymentOption);
 
 
     // =============================================

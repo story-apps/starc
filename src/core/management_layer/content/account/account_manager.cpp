@@ -1,5 +1,6 @@
 #include "account_manager.h"
 
+#include <domain/payent_info.h>
 #include <domain/subscription_info.h>
 #include <ui/account/account_navigator.h>
 #include <ui/account/account_tool_bar.h>
@@ -8,6 +9,7 @@
 #include <ui/account/renew_subscription_dialog.h>
 #include <ui/account/upgrade_to_pro_dialog.h>
 #include <ui/design_system/design_system.h>
+#include <ui/widgets/dialog/dialog.h>
 #include <utils/helpers/image_helper.h>
 
 #include <QFileDialog>
@@ -68,6 +70,11 @@ public:
         QString description;
         QPixmap avatar;
     } account;
+
+    /**
+     * @brief Доступные опции для покупки
+     */
+    QVector<Domain::PaymentOption> paymentOptions;
 };
 
 AccountManager::Implementation::Implementation(AccountManager* _q, QWidget* _parent)
@@ -98,6 +105,9 @@ void AccountManager::Implementation::initNavigatorConnections()
             &Ui::AccountView::showSubscription);
     connect(navigator, &Ui::AccountNavigator::sessionsPressed, view,
             &Ui::AccountView::showSessions);
+
+    connect(navigator, &Ui::AccountNavigator::upgradeToProPressed, q,
+            &AccountManager::upgradeAccount);
 
     //    connect(navigator, &Ui::AccountNavigator::upgradeToProPressed, q, [this] {
     //        if (upgradeToProDialog == nullptr) {
@@ -148,6 +158,9 @@ void AccountManager::Implementation::initViewConnections()
 
                 notifyUpdateAccountInfoRequested();
             });
+
+    connect(view, &Ui::AccountView::upgradeToProPressed, q, &AccountManager::upgradeAccount);
+
     connect(view, &Ui::AccountView::terminateSessionRequested, q,
             &AccountManager::terminateSessionRequested);
 }
@@ -249,6 +262,7 @@ void AccountManager::setAccountInfo(const QString& _email, const QString& _name,
                                     const QString& _description, const QByteArray& _avatar,
                                     Domain::SubscriptionType _subscriptionType,
                                     const QDateTime& _subscriptionEnds,
+                                    const QVector<Domain::PaymentOption>& _paymentOptions,
                                     const QVector<Domain::SessionInfo>& _sessions)
 {
     d->account.email = _email;
@@ -258,9 +272,10 @@ void AccountManager::setAccountInfo(const QString& _email, const QString& _name,
     d->account.description = _description;
     d->view->setDescription(d->account.description);
     d->setAvatar(_avatar);
+    d->paymentOptions = _paymentOptions;
 
-    d->navigator->setSubscriptionInfo(_subscriptionType, _subscriptionEnds);
-    d->view->setSubscriptionInfo(_subscriptionType, _subscriptionEnds);
+    d->navigator->setSubscriptionInfo(_subscriptionType, _subscriptionEnds, _paymentOptions);
+    d->view->setSubscriptionInfo(_subscriptionType, _subscriptionEnds, _paymentOptions);
 
     d->view->setSessions(_sessions);
 }
@@ -282,12 +297,52 @@ QPixmap AccountManager::avatar() const
 
 void AccountManager::upgradeAccount()
 {
+    //
+    // Если ещё не авторизован, то отправим на авторизацию
+    //
     if (d->account.email.isEmpty()) {
         signIn();
-    } else {
+    }
+    //
+    // Иначе, покажем диалог с апгрейдом аккаунта
+    //
+    else {
         //
-        // Показать диалог с апгрейдом аккаунта
+        // Ищем бесплатную активацию
         //
+        Domain::PaymentOption freeOption;
+        for (const auto& paymentOption : std::as_const(d->paymentOptions)) {
+            if (paymentOption.amount != 0
+                || paymentOption.subscriptionType != Domain::SubscriptionType::ProMonthly) {
+                continue;
+            }
+
+            freeOption = paymentOption;
+            break;
+        }
+
+        //
+        // Если удалось найти бесплатную версию, то предлагаем пользователю активировать бесплатно
+        //
+        if (freeOption.isValid()) {
+            auto dialog = new Dialog(d->view->topLevelWidget());
+            dialog->setContentMaximumWidth(Ui::DesignSystem::dialog().maximumWidth());
+            dialog->showDialog(tr("Try PRO version for free"),
+                               tr("Since we are in the beta test, you can activate the PRO version "
+                                  "for free. When the beta test ends, you'll have the ability to "
+                                  "activate the PRO version for 30 days for free."),
+                               { { 0, tr("Continue with free version"), Dialog::RejectButton },
+                                 { 1, tr("Activate PRO"), Dialog::AcceptButton } });
+            QObject::connect(dialog, &Dialog::finished, this,
+                             [this, dialog, freeOption](const Dialog::ButtonInfo& _presedButton) {
+                                 dialog->hideDialog();
+                                 if (_presedButton.type == Dialog::AcceptButton) {
+                                     emit activatePaymentOptionRequested(freeOption);
+                                 }
+                             });
+            QObject::connect(dialog, &Dialog::disappeared, dialog, &Dialog::deleteLater);
+            return;
+        }
     }
 }
 

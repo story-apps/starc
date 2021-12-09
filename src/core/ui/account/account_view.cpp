@@ -2,6 +2,7 @@
 
 #include "session_widget.h"
 
+#include <domain/payent_info.h>
 #include <domain/session_info.h>
 #include <domain/subscription_info.h>
 #include <ui/design_system/design_system.h>
@@ -56,7 +57,7 @@ public:
     int subscriptionInfoLastRow = 0;
     H6Label* subscriptionTitle = nullptr;
     Body1LinkLabel* subscriptionDetails = nullptr;
-    Button* subscriptionUpgrade = nullptr;
+    Button* subscriptionUpgradeToPro = nullptr;
 
     H5Label* sessionsTitle = nullptr;
     QVector<SessionWidget*> sessions;
@@ -74,7 +75,7 @@ AccountView::Implementation::Implementation(QWidget* _parent)
     , subscriptionInfoLayout(new QGridLayout)
     , subscriptionTitle(new H6Label(subscriptionInfo))
     , subscriptionDetails(new Body1LinkLabel(subscriptionInfo))
-    , subscriptionUpgrade(new Button(subscriptionInfo))
+    , subscriptionUpgradeToPro(new Button(subscriptionInfo))
     , sessionsTitle(new H5Label(_parent))
 {
     QPalette palette;
@@ -111,7 +112,7 @@ AccountView::Implementation::Implementation(QWidget* _parent)
     row = 0;
     subscriptionInfoLayout->addWidget(subscriptionTitle, row++, 0, 1, 2);
     subscriptionInfoLayout->addWidget(subscriptionDetails, row, 0);
-    subscriptionInfoLayout->addWidget(subscriptionUpgrade, row++, 1, Qt::AlignRight);
+    subscriptionInfoLayout->addWidget(subscriptionUpgradeToPro, row++, 1, Qt::AlignRight);
     subscriptionInfoLastRow = row;
     subscriptionInfoLayout->setRowMinimumHeight(subscriptionInfoLastRow,
                                                 1); // добавляем пустую строку, вместо отступа снизу
@@ -208,8 +209,7 @@ AccountView::AccountView(QWidget* _parent)
     //
     // Подписка
     //
-    connect(d->subscriptionUpgrade, &Button::clicked, this,
-            &AccountView::upgradeSubscriptionPressed);
+    connect(d->subscriptionUpgradeToPro, &Button::clicked, this, &AccountView::upgradeToProPressed);
 }
 
 AccountView::~AccountView() = default;
@@ -261,26 +261,36 @@ void AccountView::setAvatar(const QPixmap& _avatar)
 }
 
 void AccountView::setSubscriptionInfo(Domain::SubscriptionType _subscriptionType,
-                                      const QDateTime& _subscriptionEnds)
+                                      const QDateTime& _subscriptionEnds,
+                                      const QVector<Domain::PaymentOption>& _paymentOptions)
 {
     switch (_subscriptionType) {
     case Domain::SubscriptionType::Free: {
         d->subscriptionTitle->setText(tr("FREE version"));
-        d->subscriptionUpgrade->setText(tr("Upgrade to PRO"));
+        d->subscriptionUpgradeToPro->setText(tr("Upgrade to PRO"));
+        for (const auto& paymentOption : _paymentOptions) {
+            if (paymentOption.amount != 0
+                || paymentOption.subscriptionType != Domain::SubscriptionType::ProMonthly) {
+                continue;
+            }
+
+            d->subscriptionUpgradeToPro->setText(tr("Try PRO for free"));
+            break;
+        }
         break;
     }
 
     case Domain::SubscriptionType::ProMonthly:
     case Domain::SubscriptionType::ProLifetime: {
         d->subscriptionTitle->setText(tr("PRO version"));
-        d->subscriptionUpgrade->hide();
+        d->subscriptionUpgradeToPro->hide();
         break;
     }
 
     case Domain::SubscriptionType::TeamMonthly:
     case Domain::SubscriptionType::TeamLifetime: {
         d->subscriptionTitle->setText(tr("TEAM version"));
-        d->subscriptionUpgrade->hide();
+        d->subscriptionUpgradeToPro->hide();
         break;
     }
 
@@ -400,7 +410,7 @@ void AccountView::designSystemChangeEvent(DesignSystemChangeEvent* _event)
     }
 
     for (auto button : {
-             d->subscriptionUpgrade,
+             d->subscriptionUpgradeToPro,
          }) {
         button->setBackgroundColor(Ui::DesignSystem::color().secondary());
         button->setTextColor(Ui::DesignSystem::color().secondary());

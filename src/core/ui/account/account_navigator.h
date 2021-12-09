@@ -4,7 +4,8 @@
 
 namespace Domain {
 enum class SubscriptionType;
-}
+struct PaymentOption;
+} // namespace Domain
 
 
 namespace Ui {
@@ -24,7 +25,8 @@ public:
      * @brief Задать информацию о подписке
      */
     void setSubscriptionInfo(Domain::SubscriptionType _subscriptionType,
-                             const QDateTime& _subscriptionEnds);
+                             const QDateTime& _subscriptionEnds,
+                             const QVector<Domain::PaymentOption>& _paymentOptions);
 
 signals:
     /**
@@ -35,7 +37,7 @@ signals:
     void sessionsPressed();
 
     /**
-     * @brief Пользователь хочет купить лицензию
+     * @brief Пользователь хочет проапгрейдить аккаунт
      */
     void upgradeToProPressed();
 

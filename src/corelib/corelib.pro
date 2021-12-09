@@ -350,6 +350,7 @@ HEADERS += \
     domain/domain_object.h \
     domain/identifier.h \
     domain/objects_builder.h \
+    domain/payent_info.h \
     domain/session_info.h \
     domain/subscription_info.h \
     ui/abstract_navigator.h \

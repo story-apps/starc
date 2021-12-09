@@ -1647,6 +1647,8 @@ void ApplicationManager::initConnections()
     });
     connect(d->accountManager.data(), &AccountManager::updateAccountInfoRequested,
             d->cloudServiceManager.data(), &CloudServiceManager::setAccountInfo);
+    connect(d->accountManager.data(), &AccountManager::activatePaymentOptionRequested,
+            d->cloudServiceManager.data(), &CloudServiceManager::activatePaymentOption);
     connect(d->accountManager.data(), &AccountManager::terminateSessionRequested,
             d->cloudServiceManager.data(), &CloudServiceManager::terminateSession);
     connect(d->accountManager.data(), &AccountManager::logoutRequested, this, [this] {

@@ -1,5 +1,6 @@
 #include "account_navigator.h"
 
+#include <domain/payent_info.h>
 #include <domain/subscription_info.h>
 #include <ui/design_system/design_system.h>
 #include <ui/widgets/button/button.h>
@@ -34,6 +35,7 @@ public:
     Tree* tree = nullptr;
 
     ButtonLabel* freeTitle = nullptr;
+    Button* tryProButton = nullptr;
     Button* upgradeToProButton = nullptr;
 
     ButtonLabel* proTitle = nullptr;
@@ -53,6 +55,7 @@ public:
 AccountNavigator::Implementation::Implementation(QWidget* _parent)
     : tree(new Tree(_parent))
     , freeTitle(new ButtonLabel(_parent))
+    , tryProButton(new Button(_parent))
     , upgradeToProButton(new Button(_parent))
     , proTitle(new ButtonLabel(_parent))
     , proSubscriptionEndsLabel(new Subtitle2Label(_parent))
@@ -97,6 +100,7 @@ AccountNavigator::AccountNavigator(QWidget* _parent)
     int row = 0;
     d->layout->addWidget(d->tree, row++, 0, 1, 4);
     d->layout->addWidget(d->freeTitle, row++, 2);
+    d->layout->addWidget(d->tryProButton, row++, 2);
     d->layout->addWidget(d->upgradeToProButton, row++, 2);
     d->layout->addWidget(d->proTitle, row++, 2);
     d->layout->addWidget(d->proSubscriptionEndsLabel, row++, 2);
@@ -127,6 +131,7 @@ AccountNavigator::AccountNavigator(QWidget* _parent)
         }
         }
     });
+    connect(d->tryProButton, &Button::clicked, this, &AccountNavigator::upgradeToProPressed);
     connect(d->upgradeToProButton, &Button::clicked, this, &AccountNavigator::upgradeToProPressed);
     connect(d->logoutButton, &Button::clicked, this, &AccountNavigator::logoutPressed);
 
@@ -138,12 +143,24 @@ AccountNavigator::AccountNavigator(QWidget* _parent)
 AccountNavigator::~AccountNavigator() = default;
 
 void AccountNavigator::setSubscriptionInfo(Domain::SubscriptionType _subscriptionType,
-                                           const QDateTime& _subscriptionEnds)
+                                           const QDateTime& _subscriptionEnds,
+                                           const QVector<Domain::PaymentOption>& _paymentOptions)
 {
     switch (_subscriptionType) {
     case Domain::SubscriptionType::Free: {
         d->freeTitle->show();
+        d->tryProButton->hide();
         d->upgradeToProButton->show();
+        for (const auto& paymentOption : _paymentOptions) {
+            if (paymentOption.amount != 0
+                || paymentOption.subscriptionType != Domain::SubscriptionType::ProMonthly) {
+                continue;
+            }
+
+            d->tryProButton->show();
+            d->upgradeToProButton->hide();
+            break;
+        }
         d->proTitle->hide();
         d->proSubscriptionEndsLabel->hide();
         d->renewProSubscriptionButton->hide();
@@ -155,12 +172,12 @@ void AccountNavigator::setSubscriptionInfo(Domain::SubscriptionType _subscriptio
 
     case Domain::SubscriptionType::ProMonthly: {
         d->freeTitle->hide();
+        d->tryProButton->hide();
         d->upgradeToProButton->hide();
         d->proTitle->show();
         d->proSubscriptionEnds = _subscriptionEnds;
-
-        d->proSubscriptionEndsLabel->show();
         d->updateProSubscriptionEndsLabel();
+        d->proSubscriptionEndsLabel->show();
         d->renewProSubscriptionButton->hide(); // TODO:
         d->upgradeToProLifetimeButton->hide(); // TODO:
         d->upgradeToTeamButton->hide(); // TODO:
@@ -170,6 +187,7 @@ void AccountNavigator::setSubscriptionInfo(Domain::SubscriptionType _subscriptio
 
     case Domain::SubscriptionType::ProLifetime: {
         d->freeTitle->hide();
+        d->tryProButton->hide();
         d->upgradeToProButton->hide();
         d->proTitle->show();
         d->proSubscriptionEndsLabel->hide();
@@ -183,6 +201,7 @@ void AccountNavigator::setSubscriptionInfo(Domain::SubscriptionType _subscriptio
     case Domain::SubscriptionType::TeamMonthly:
     case Domain::SubscriptionType::TeamLifetime: {
         d->freeTitle->hide();
+        d->tryProButton->hide();
         d->upgradeToProButton->hide();
         d->proTitle->hide();
         d->proSubscriptionEndsLabel->hide();
@@ -195,6 +214,7 @@ void AccountNavigator::setSubscriptionInfo(Domain::SubscriptionType _subscriptio
 
     case Domain::SubscriptionType::Corporate: {
         d->freeTitle->hide();
+        d->tryProButton->hide();
         d->upgradeToProButton->hide();
         d->proTitle->hide();
         d->proSubscriptionEndsLabel->hide();
@@ -214,6 +234,7 @@ void AccountNavigator::updateTranslations()
     model->item(kSubscriptionIndex)->setText(tr("Subscription"));
     model->item(kSessionsIndex)->setText(tr("Sessions"));
     d->freeTitle->setText(tr("FREE version"));
+    d->tryProButton->setText(tr("Try PRO for free"));
     d->upgradeToProButton->setText(tr("Upgrade to PRO"));
     d->proTitle->setText(tr("PRO version"));
     d->updateProSubscriptionEndsLabel();
@@ -258,6 +279,7 @@ void AccountNavigator::designSystemChangeEvent(DesignSystemChangeEvent* _event)
     }
 
     for (auto button : {
+             d->tryProButton,
              d->upgradeToProButton,
              d->renewProSubscriptionButton,
              d->upgradeToProLifetimeButton,
