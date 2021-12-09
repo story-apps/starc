@@ -106,6 +106,10 @@ bool SpellCheckTextEdit::useSpellChecker() const
 
 void SpellCheckTextEdit::setSpellCheckLanguage(const QString& _languageCode)
 {
+    if (d->spellChecker.spellingLanguage() == _languageCode) {
+        return;
+    }
+
     //
     // Установим язык проверяющего
     //
