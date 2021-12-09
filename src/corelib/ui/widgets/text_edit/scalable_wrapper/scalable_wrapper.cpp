@@ -376,7 +376,9 @@ bool ScalableWrapper::eventFilter(QObject* _object, QEvent* _event)
         //
         auto menu = d->editor->createContextMenu(
             d->editor->viewport()->mapFromGlobal(cursorGlobalPos), this);
-        menu->showContextMenu(QCursor::pos());
+        if (menu) {
+            menu->showContextMenu(QCursor::pos());
+        }
 
         //
         // Событие перехвачено

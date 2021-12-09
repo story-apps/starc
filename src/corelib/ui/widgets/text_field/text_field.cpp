@@ -346,10 +346,14 @@ TextField::TextField(QWidget* _parent)
     policy.setHeightForWidth(true);
     setSizePolicy(policy);
 
-    reconfigure();
+    TextField::reconfigure();
 
     connect(this, &TextField::customContextMenuRequested, this, [this](const QPoint& _position) {
         auto menu = createContextMenu(_position);
+        if (!menu) {
+            return;
+        }
+
         auto actions = menu->actions().toVector();
         //
         // Убираем возможности форматирования (пока)

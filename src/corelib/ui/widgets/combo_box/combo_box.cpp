@@ -134,6 +134,14 @@ ComboBox::ComboBox(QWidget* _parent)
 
 ComboBox::~ComboBox() = default;
 
+ContextMenu* ComboBox::createContextMenu(const QPoint& _position, QWidget* _parent)
+{
+    Q_UNUSED(_position)
+    Q_UNUSED(_parent)
+
+    return nullptr;
+}
+
 QAbstractItemModel* ComboBox::model() const
 {
     return d->popupContent->model();

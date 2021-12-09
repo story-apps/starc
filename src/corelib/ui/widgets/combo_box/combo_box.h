@@ -17,6 +17,11 @@ public:
     ~ComboBox() override;
 
     /**
+     * @brief Отключаем контекстное меню для комбобокса
+     */
+    ContextMenu* createContextMenu(const QPoint& _position, QWidget* _parent = nullptr) override;
+
+    /**
      * @brief Модель выпадающего списка
      */
     QAbstractItemModel* model() const;
