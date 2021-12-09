@@ -129,34 +129,43 @@ static void printPage(int _pageNumber, QPainter* _painter, const QTextDocument* 
                     QRectF dialogueNumberRect;
                     if (QLocale().textDirection() == Qt::LeftToRight) {
                         if (block.blockFormat().leftMargin() > numberDelta) {
-                            dialogueNumberRect
-                                = QRectF(PageMetrics::mmToPx(_template.pageMargins().left()),
-                                         blockRect.top() <= pageYPos ? pageYPos : blockRect.top(),
-                                         numberDelta, blockRect.height());
+                            dialogueNumberRect = QRectF(
+                                PageMetrics::mmToPx(_template.pageMargins().left()),
+                                blockRect.top() <= pageYPos ? (
+                                    pageYPos + PageMetrics::mmToPx(_template.pageMargins().top()))
+                                                            : blockRect.top(),
+                                numberDelta, blockRect.height());
                         } else {
                             const int distanceBetweenSceneNumberAndText = 10;
                             dialogueNumberRect = QRectF(
-                                0, blockRect.top() <= pageYPos ? pageYPos : blockRect.top(),
+                                0,
+                                blockRect.top() <= pageYPos ? (
+                                    pageYPos + PageMetrics::mmToPx(_template.pageMargins().top()))
+                                                            : blockRect.top(),
                                 PageMetrics::mmToPx(_template.pageMargins().left())
                                     - distanceBetweenSceneNumberAndText,
                                 blockRect.height());
                         }
                     } else {
                         if (block.blockFormat().rightMargin() > numberDelta) {
-                            dialogueNumberRect
-                                = QRectF(PageMetrics::mmToPx(_template.pageMargins().left())
-                                             + _body.width() - numberDelta,
-                                         blockRect.top() <= pageYPos ? pageYPos : blockRect.top(),
-                                         numberDelta, blockRect.height());
+                            dialogueNumberRect = QRectF(
+                                PageMetrics::mmToPx(_template.pageMargins().left()) + _body.width()
+                                    - numberDelta,
+                                blockRect.top() <= pageYPos ? (
+                                    pageYPos + PageMetrics::mmToPx(_template.pageMargins().top()))
+                                                            : blockRect.top(),
+                                numberDelta, blockRect.height());
                         } else {
                             const int distanceBetweenSceneNumberAndText = 10;
-                            dialogueNumberRect
-                                = QRectF(PageMetrics::mmToPx(_template.pageMargins().left())
-                                             + _body.width() + distanceBetweenSceneNumberAndText,
-                                         blockRect.top() <= pageYPos ? pageYPos : blockRect.top(),
-                                         PageMetrics::mmToPx(_template.pageMargins().right())
-                                             - distanceBetweenSceneNumberAndText,
-                                         blockRect.height());
+                            dialogueNumberRect = QRectF(
+                                PageMetrics::mmToPx(_template.pageMargins().left()) + _body.width()
+                                    + distanceBetweenSceneNumberAndText,
+                                blockRect.top() <= pageYPos ? (
+                                    pageYPos + PageMetrics::mmToPx(_template.pageMargins().top()))
+                                                            : blockRect.top(),
+                                PageMetrics::mmToPx(_template.pageMargins().right())
+                                    - distanceBetweenSceneNumberAndText,
+                                blockRect.height());
                         }
                     }
                     _painter->drawText(dialogueNumberRect, Qt::AlignRight | Qt::AlignTop,
