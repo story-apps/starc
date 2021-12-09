@@ -642,14 +642,14 @@ void SettingsManager::setScreenplayEditorDefaultTemplate(const QString& _templat
 void SettingsManager::setScreenplayEditorShowSceneNumber(bool _show, bool _atLeft, bool _atRight)
 {
     d->setSettingsValue(DataStorageLayer::kComponentsScreenplayEditorShowSceneNumbersKey, _show);
-    d->setSettingsValue(DataStorageLayer::kComponentsScreenplayEditorShowSceneNumbersOnRightKey,
-                        _atLeft);
     d->setSettingsValue(DataStorageLayer::kComponentsScreenplayEditorShowSceneNumbersOnLeftKey,
+                        _atLeft);
+    d->setSettingsValue(DataStorageLayer::kComponentsScreenplayEditorShowSceneNumbersOnRightKey,
                         _atRight);
     emit screenplayEditorChanged(
         { DataStorageLayer::kComponentsScreenplayEditorShowSceneNumbersKey,
-          DataStorageLayer::kComponentsScreenplayEditorShowSceneNumbersOnRightKey,
-          DataStorageLayer::kComponentsScreenplayEditorShowSceneNumbersOnLeftKey });
+          DataStorageLayer::kComponentsScreenplayEditorShowSceneNumbersOnLeftKey,
+          DataStorageLayer::kComponentsScreenplayEditorShowSceneNumbersOnRightKey });
 }
 
 void SettingsManager::setScreenplayEditorShowDialogueNumber(bool _show)

@@ -123,6 +123,11 @@ SpellChecker& SpellChecker::instance()
 
 SpellChecker::~SpellChecker() = default;
 
+QString SpellChecker::spellingLanguage() const
+{
+    return d->languageCode;
+}
+
 void SpellChecker::setSpellingLanguage(const QString& _languageCode)
 {
     if (d->languageCode == _languageCode && d->checker && d->checkerTextCodec) {

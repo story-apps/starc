@@ -30,8 +30,9 @@ public:
     ~SpellChecker();
 
     /**
-     * @brief Установить язык для проверки орфографии
+     * @brief Язык для проверки орфографии
      */
+    QString spellingLanguage() const;
     void setSpellingLanguage(const QString& _languageCode);
 
     /**
