@@ -92,6 +92,11 @@ signals:
     //
 
     /**
+     * @brief Запросить информацию об аккаунте
+     */
+    void askAccountInfoRequested();
+
+    /**
      * @brief Пользователь хочет получить информацию об аккаунте
      */
     void updateAccountInfoRequested(const QString& _name, const QString& _description,

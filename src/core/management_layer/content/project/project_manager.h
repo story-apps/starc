@@ -46,6 +46,11 @@ public:
     void reconfigureComicBookNavigator();
 
     /**
+     * @brief Обновить информацию о том, может ли пользователь использовать платные редакторы
+     */
+    void checkAvailabilityToEdit();
+
+    /**
      * @brief Загрузить данные текущего проекта
      */
     void loadCurrentProject(const QString& _name, const QString& _path);

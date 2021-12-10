@@ -328,7 +328,7 @@ void ProjectPluginsBuilder::toggleFullScreen(bool _isFullScreen, const QString& 
 
 void ProjectPluginsBuilder::reconfigureAll()
 {
-    for (auto& plugin : d->plugins) {
+    for (auto plugin : d->plugins) {
         plugin->reconfigure({});
     }
 }
@@ -378,9 +378,16 @@ void ProjectPluginsBuilder::reconfigureComicBookNavigator()
     reconfigurePlugin(kComicBookTextNavigatorMime, {});
 }
 
+void ProjectPluginsBuilder::checkAvailabilityToEdit()
+{
+    for (auto plugin : d->plugins) {
+        plugin->checkAvailabilityToEdit();
+    }
+}
+
 void ProjectPluginsBuilder::resetModels()
 {
-    for (auto& plugin : d->plugins) {
+    for (auto plugin : d->plugins) {
         plugin->saveSettings();
         plugin->setModel(nullptr);
     }

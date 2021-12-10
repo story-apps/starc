@@ -1644,7 +1644,10 @@ void ApplicationManager::initConnections()
         d->menuView->setAvatar(d->accountManager->avatar());
         d->menuView->setAccountName(d->accountManager->name());
         d->menuView->setAccountEmail(d->accountManager->email());
+        d->projectManager->checkAvailabilityToEdit();
     });
+    connect(d->accountManager.data(), &AccountManager::askAccountInfoRequested,
+            d->cloudServiceManager.data(), &CloudServiceManager::askAccountInfo);
     connect(d->accountManager.data(), &AccountManager::updateAccountInfoRequested,
             d->cloudServiceManager.data(), &CloudServiceManager::setAccountInfo);
     connect(d->accountManager.data(), &AccountManager::activatePaymentOptionRequested,

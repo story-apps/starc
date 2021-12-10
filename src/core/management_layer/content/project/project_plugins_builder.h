@@ -83,6 +83,11 @@ public:
     void reconfigureComicBookNavigator();
 
     /**
+     * @brief Обновить информацию о том, может ли пользователь использовать платные редакторы
+     */
+    void checkAvailabilityToEdit();
+
+    /**
      * @brief Сбросить модели для всех плагинов
      */
     void resetModels();

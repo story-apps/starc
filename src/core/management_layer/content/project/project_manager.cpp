@@ -716,6 +716,11 @@ void ProjectManager::reconfigureComicBookNavigator()
     d->pluginsBuilder.reconfigureComicBookNavigator();
 }
 
+void ProjectManager::checkAvailabilityToEdit()
+{
+    d->pluginsBuilder.checkAvailabilityToEdit();
+}
+
 void ProjectManager::loadCurrentProject(const QString& _name, const QString& _path)
 {
     //
