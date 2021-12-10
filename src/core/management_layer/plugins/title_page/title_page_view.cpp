@@ -155,6 +155,11 @@ QWidget* TitlePageView::asQWidget()
     return this;
 }
 
+void TitlePageView::toggleFullScreen(bool _isFullScreen)
+{
+    d->toolbar->setVisible(!_isFullScreen);
+}
+
 void TitlePageView::reconfigure(const QStringList& _changedSettingsKeys)
 {
     using namespace BusinessLayer;

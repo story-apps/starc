@@ -463,6 +463,11 @@ QWidget* ComicBookTextView::asQWidget()
     return this;
 }
 
+void ComicBookTextView::toggleFullScreen(bool _isFullScreen)
+{
+    d->toolbar->setVisible(!_isFullScreen);
+}
+
 void ComicBookTextView::reconfigure(const QStringList& _changedSettingsKeys)
 {
     d->paragraphTypesModel->clear();

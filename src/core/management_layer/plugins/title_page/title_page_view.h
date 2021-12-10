@@ -24,6 +24,7 @@ public:
      * @brief Реализация интерфейса IDocumentView
      */
     QWidget* asQWidget() override;
+    void toggleFullScreen(bool _isFullScreen) override;
 
     /**
      * @brief Настроить редактор в соответствии с параметрами заданными в настройках
