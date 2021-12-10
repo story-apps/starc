@@ -1646,6 +1646,8 @@ void ApplicationManager::initConnections()
         d->menuView->setAccountEmail(d->accountManager->email());
         d->projectManager->checkAvailabilityToEdit();
     });
+    connect(d->cloudServiceManager.data(), &CloudServiceManager::logoutRequired,
+            d->accountManager.data(), &AccountManager::logoutRequested);
     connect(d->accountManager.data(), &AccountManager::askAccountInfoRequested,
             d->cloudServiceManager.data(), &CloudServiceManager::askAccountInfo);
     connect(d->accountManager.data(), &AccountManager::updateAccountInfoRequested,
@@ -1655,6 +1657,7 @@ void ApplicationManager::initConnections()
     connect(d->accountManager.data(), &AccountManager::terminateSessionRequested,
             d->cloudServiceManager.data(), &CloudServiceManager::terminateSession);
     connect(d->accountManager.data(), &AccountManager::logoutRequested, this, [this] {
+        d->showLastContent();
         d->menuView->setSignInVisible(true);
         d->menuView->setAccountVisible(false);
         d->cloudServiceManager->logout();

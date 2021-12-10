@@ -135,7 +135,6 @@ void AccountManager::Implementation::initNavigatorConnections()
     connect(navigator, &Ui::AccountNavigator::logoutPressed, q, [this] {
         account = {};
         emit q->logoutRequested();
-        emit q->closeAccountRequested();
     });
 }
 
