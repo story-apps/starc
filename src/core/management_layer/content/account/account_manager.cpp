@@ -13,6 +13,7 @@
 #include <utils/helpers/image_helper.h>
 
 #include <QFileDialog>
+#include <QTimer>
 #include <QWidget>
 
 
@@ -72,6 +73,11 @@ public:
     } account;
 
     /**
+     * @brief Таймер проверки окончания подписки (срабатывает в момент завершения подписки)
+     */
+    QTimer subscriptionEndsTimer;
+
+    /**
      * @brief Доступные опции для покупки
      */
     QVector<Domain::PaymentOption> paymentOptions;
@@ -91,6 +97,9 @@ AccountManager::Implementation::Implementation(AccountManager* _q, QWidget* _par
     initToolBarConnections();
     initNavigatorConnections();
     initViewConnections();
+
+    subscriptionEndsTimer.setSingleShot(true);
+    connect(&subscriptionEndsTimer, &QTimer::timeout, q, &AccountManager::askAccountInfoRequested);
 }
 
 void AccountManager::Implementation::initToolBarConnections()
@@ -278,6 +287,17 @@ void AccountManager::setAccountInfo(const QString& _email, const QString& _name,
     d->view->setSubscriptionInfo(_subscriptionType, _subscriptionEnds, _paymentOptions);
 
     d->view->setSessions(_sessions);
+
+    //
+    // Взводим таймер проверки окончания сессии
+    //
+    if (d->subscriptionEndsTimer.isActive()) {
+        d->subscriptionEndsTimer.stop();
+    }
+    const auto secsToSubscriptionEnd = QDateTime::currentDateTimeUtc().secsTo(_subscriptionEnds);
+    if (secsToSubscriptionEnd > 0) {
+        d->subscriptionEndsTimer.start(std::chrono::seconds{ secsToSubscriptionEnd });
+    }
 }
 
 QString AccountManager::email() const
@@ -328,9 +348,9 @@ void AccountManager::upgradeAccount()
             auto dialog = new Dialog(d->view->topLevelWidget());
             dialog->setContentMaximumWidth(Ui::DesignSystem::dialog().maximumWidth());
             dialog->showDialog(tr("Try PRO version for free"),
-                               tr("Since we are in the beta test, you can activate the PRO version "
-                                  "for free. When the beta test ends, you'll have the ability to "
-                                  "activate the PRO version for 30 days for free."),
+                               tr("While Starc is in the beta we'd like to thank our users by "
+                                  "providing them with free PRO features. After beta ends you'll "
+                                  "still be able to use PRO version for 30 days for free."),
                                { { 0, tr("Continue with free version"), Dialog::RejectButton },
                                  { 1, tr("Activate PRO"), Dialog::AcceptButton } });
             QObject::connect(dialog, &Dialog::finished, this,
