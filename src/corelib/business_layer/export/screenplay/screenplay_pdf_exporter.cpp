@@ -3,6 +3,7 @@
 #include "screenplay_export_options.h"
 
 #include <business_layer/document/screenplay/text/screenplay_text_block_data.h>
+#include <business_layer/document/screenplay/text/screenplay_text_corrector.h>
 #include <business_layer/document/screenplay/text/screenplay_text_cursor.h>
 #include <business_layer/document/screenplay/text/screenplay_text_document.h>
 #include <business_layer/model/screenplay/screenplay_information_model.h>
@@ -113,63 +114,111 @@ static void printPage(int _pageNumber, QPainter* _painter, const QTextDocument* 
                 }
             }
             //
-            // Покажем номер диалога, если необходимо
+            // Печатаем номер диалога, если необходимо, а также автоматические (ПРОД)
             //
-            else if (paragraphType == ScreenplayParagraphType::Character && !block.text().isEmpty()
-                     && _exportOptions.showDialoguesNumbers) {
-                const auto blockData = dynamic_cast<ScreenplayTextBlockData*>(block.userData());
-                if (blockData != nullptr) {
-                    _painter->setFont(block.charFormat().font());
-                    //
-                    const auto textItem
-                        = static_cast<ScreenplayTextModelTextItem*>(blockData->item());
-                    const QString dialogueNumber = textItem->number()->value;
-                    const int numberDelta
-                        = _painter->fontMetrics().horizontalAdvance(dialogueNumber);
-                    QRectF dialogueNumberRect;
-                    if (QLocale().textDirection() == Qt::LeftToRight) {
-                        if (block.blockFormat().leftMargin() > numberDelta) {
-                            dialogueNumberRect = QRectF(
-                                PageMetrics::mmToPx(_template.pageMargins().left()),
-                                blockRect.top() <= pageYPos ? (
-                                    pageYPos + PageMetrics::mmToPx(_template.pageMargins().top()))
-                                                            : blockRect.top(),
-                                numberDelta, blockRect.height());
+            else if (paragraphType == ScreenplayParagraphType::Character
+                     && !block.text().isEmpty()) {
+                //
+                // Номера реплик
+                //
+                if (_exportOptions.showDialoguesNumbers) {
+                    const auto blockData = dynamic_cast<ScreenplayTextBlockData*>(block.userData());
+                    if (blockData != nullptr) {
+                        _painter->setFont(block.charFormat().font());
+                        //
+                        const auto textItem
+                            = static_cast<ScreenplayTextModelTextItem*>(blockData->item());
+                        const QString dialogueNumber = textItem->number()->value;
+                        const int numberDelta
+                            = _painter->fontMetrics().horizontalAdvance(dialogueNumber);
+                        QRectF dialogueNumberRect;
+                        if (QLocale().textDirection() == Qt::LeftToRight) {
+                            if (block.blockFormat().leftMargin() > numberDelta) {
+                                dialogueNumberRect = QRectF(
+                                    PageMetrics::mmToPx(_template.pageMargins().left()),
+                                    blockRect.top() <= pageYPos
+                                        ? (pageYPos
+                                           + PageMetrics::mmToPx(_template.pageMargins().top()))
+                                        : blockRect.top(),
+                                    numberDelta, blockRect.height());
+                            } else {
+                                const int distanceBetweenSceneNumberAndText = 10;
+                                dialogueNumberRect = QRectF(
+                                    0,
+                                    blockRect.top() <= pageYPos
+                                        ? (pageYPos
+                                           + PageMetrics::mmToPx(_template.pageMargins().top()))
+                                        : blockRect.top(),
+                                    PageMetrics::mmToPx(_template.pageMargins().left())
+                                        - distanceBetweenSceneNumberAndText,
+                                    blockRect.height());
+                            }
                         } else {
-                            const int distanceBetweenSceneNumberAndText = 10;
-                            dialogueNumberRect = QRectF(
-                                0,
-                                blockRect.top() <= pageYPos ? (
-                                    pageYPos + PageMetrics::mmToPx(_template.pageMargins().top()))
-                                                            : blockRect.top(),
-                                PageMetrics::mmToPx(_template.pageMargins().left())
-                                    - distanceBetweenSceneNumberAndText,
-                                blockRect.height());
+                            if (block.blockFormat().rightMargin() > numberDelta) {
+                                dialogueNumberRect = QRectF(
+                                    PageMetrics::mmToPx(_template.pageMargins().left())
+                                        + _body.width() - numberDelta,
+                                    blockRect.top() <= pageYPos
+                                        ? (pageYPos
+                                           + PageMetrics::mmToPx(_template.pageMargins().top()))
+                                        : blockRect.top(),
+                                    numberDelta, blockRect.height());
+                            } else {
+                                const int distanceBetweenSceneNumberAndText = 10;
+                                dialogueNumberRect = QRectF(
+                                    PageMetrics::mmToPx(_template.pageMargins().left())
+                                        + _body.width() + distanceBetweenSceneNumberAndText,
+                                    blockRect.top() <= pageYPos
+                                        ? (pageYPos
+                                           + PageMetrics::mmToPx(_template.pageMargins().top()))
+                                        : blockRect.top(),
+                                    PageMetrics::mmToPx(_template.pageMargins().right())
+                                        - distanceBetweenSceneNumberAndText,
+                                    blockRect.height());
+                            }
                         }
-                    } else {
-                        if (block.blockFormat().rightMargin() > numberDelta) {
-                            dialogueNumberRect = QRectF(
-                                PageMetrics::mmToPx(_template.pageMargins().left()) + _body.width()
-                                    - numberDelta,
-                                blockRect.top() <= pageYPos ? (
-                                    pageYPos + PageMetrics::mmToPx(_template.pageMargins().top()))
-                                                            : blockRect.top(),
-                                numberDelta, blockRect.height());
-                        } else {
-                            const int distanceBetweenSceneNumberAndText = 10;
-                            dialogueNumberRect = QRectF(
-                                PageMetrics::mmToPx(_template.pageMargins().left()) + _body.width()
-                                    + distanceBetweenSceneNumberAndText,
-                                blockRect.top() <= pageYPos ? (
-                                    pageYPos + PageMetrics::mmToPx(_template.pageMargins().top()))
-                                                            : blockRect.top(),
-                                PageMetrics::mmToPx(_template.pageMargins().right())
-                                    - distanceBetweenSceneNumberAndText,
-                                blockRect.height());
-                        }
+                        _painter->drawText(dialogueNumberRect, Qt::AlignRight | Qt::AlignTop,
+                                           dialogueNumber);
                     }
-                    _painter->drawText(dialogueNumberRect, Qt::AlignRight | Qt::AlignTop,
-                                       dialogueNumber);
+                }
+
+                //
+                // Автоматические (ПРОД)
+                //
+                if (block.blockFormat().boolProperty(
+                        ScreenplayBlockStyle::PropertyIsCharacterContinued)
+                    && !block.blockFormat().boolProperty(
+                        ScreenplayBlockStyle::PropertyIsCorrection)) {
+                    _painter->setFont(block.charFormat().font());
+
+                    const auto continuedTerm
+                        = BusinessLayer::ScreenplayTextCorrector::continuedTerm();
+
+                    //
+                    // Почему-то если взять просто ширину последней строки текста, то получается
+                    // слишком широко в некоторых случаях, так, что постфикс рисуется очень далеко
+                    // от текста. Поэтому решил брать текст последней строки, добавлять к нему
+                    // постфикс, считать их совместную ширину и брать её, как конечную точку
+                    //
+                    const auto lastLineText = TextHelper::lastLineText(
+                                                  block.text(), _painter->font(), blockRect.width())
+                        + continuedTerm;
+                    const auto correctedBlockRect
+                        = QRectF({ block.blockFormat().leftMargin()
+                                       + PageMetrics::mmToPx(_template.pageMargins().left()),
+                                   blockRect.top() },
+                                 blockRect.size());
+                    const QPoint bottomRight
+                        = QPoint(blockRect.left() + block.blockFormat().leftMargin()
+                                     + TextHelper::fineTextWidthF(lastLineText, _painter->font()),
+                                 correctedBlockRect.bottom());
+                    const QPoint topLeft = QPoint(
+                        bottomRight.x()
+                            - TextHelper::fineTextWidthF(continuedTerm, _painter->font()),
+                        correctedBlockRect.bottom()
+                            - _painter->fontMetrics().boundingRect(continuedTerm).height());
+                    const QRect postfixRect(topLeft, bottomRight);
+                    _painter->drawText(postfixRect, Qt::AlignLeft | Qt::AlignBottom, continuedTerm);
                 }
             }
 
