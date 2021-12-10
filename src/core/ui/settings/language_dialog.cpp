@@ -281,7 +281,7 @@ void LanguageDialog::designSystemChangeEvent(DesignSystemChangeEvent* _event)
     contentsLayout()->setSpacing(static_cast<int>(Ui::DesignSystem::layout().px8()));
     d->buttonsLayout->setContentsMargins(
         QMarginsF(Ui::DesignSystem::layout().px12(), Ui::DesignSystem::layout().px12(),
-                  Ui::DesignSystem::layout().px16(), Ui::DesignSystem::layout().px8())
+                  Ui::DesignSystem::layout().px16(), Ui::DesignSystem::layout().px16())
             .toMargins());
 }
 

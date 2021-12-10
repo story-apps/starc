@@ -245,7 +245,7 @@ void CreateDocumentDialog::designSystemChangeEvent(DesignSystemChangeEvent* _eve
 
     d->buttonsLayout->setContentsMargins(
         QMarginsF(Ui::DesignSystem::layout().px12(), Ui::DesignSystem::layout().px12(),
-                  Ui::DesignSystem::layout().px16(), Ui::DesignSystem::layout().px8())
+                  Ui::DesignSystem::layout().px16(), Ui::DesignSystem::layout().px16())
             .toMargins());
 }
 

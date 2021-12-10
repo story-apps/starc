@@ -68,8 +68,8 @@ CreateProjectDialog::Implementation::Implementation(QWidget* _parent)
     buttonsLayout->setSpacing(0);
     buttonsLayout->addWidget(advancedSettingsButton, Qt::AlignVCenter);
     buttonsLayout->addStretch();
-    buttonsLayout->addWidget(cancelButton);
-    buttonsLayout->addWidget(createButton);
+    buttonsLayout->addWidget(cancelButton, 0, Qt::AlignVCenter);
+    buttonsLayout->addWidget(createButton, 0, Qt::AlignVCenter);
 
     RadioButtonGroup* projectLocationGroup = new RadioButtonGroup(_parent);
     projectLocationGroup->add(localProject);
@@ -313,7 +313,7 @@ void CreateProjectDialog::designSystemChangeEvent(DesignSystemChangeEvent* _even
     contentsLayout()->setVerticalSpacing(static_cast<int>(Ui::DesignSystem::layout().px8()));
     d->buttonsLayout->setContentsMargins(
         QMarginsF(Ui::DesignSystem::layout().px12(), Ui::DesignSystem::layout().px12(),
-                  Ui::DesignSystem::layout().px16(), Ui::DesignSystem::layout().px8())
+                  Ui::DesignSystem::layout().px16(), Ui::DesignSystem::layout().px12())
             .toMargins());
 }
 

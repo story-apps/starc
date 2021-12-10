@@ -81,8 +81,8 @@ ScreenplayExportDialog::Implementation::Implementation(QWidget* _parent)
     buttonsLayout->setSpacing(0);
     buttonsLayout->addWidget(openDocumentAfterExport, 0, Qt::AlignVCenter);
     buttonsLayout->addStretch();
-    buttonsLayout->addWidget(cancelButton);
-    buttonsLayout->addWidget(exportButton);
+    buttonsLayout->addWidget(cancelButton, 0, Qt::AlignVCenter);
+    buttonsLayout->addWidget(exportButton, 0, Qt::AlignVCenter);
 }
 
 QVector<QString> ScreenplayExportDialog::Implementation::scenesToPrint() const
@@ -303,7 +303,7 @@ void ScreenplayExportDialog::designSystemChangeEvent(DesignSystemChangeEvent* _e
     contentsLayout()->setSpacing(static_cast<int>(Ui::DesignSystem::layout().px8()));
     d->buttonsLayout->setContentsMargins(QMarginsF(0.0, Ui::DesignSystem::layout().px24(),
                                                    Ui::DesignSystem::layout().px16(),
-                                                   Ui::DesignSystem::layout().px8())
+                                                   Ui::DesignSystem::layout().px12())
                                              .toMargins());
 }
 

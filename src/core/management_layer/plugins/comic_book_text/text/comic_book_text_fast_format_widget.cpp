@@ -229,9 +229,10 @@ void ComicBookTextFastFormatWidget::designSystemChangeEvent(DesignSystemChangeEv
 
     setBackgroundColor(DesignSystem::color().primary());
 
-    layout()->setContentsMargins(DesignSystem::layout().px8(), DesignSystem::layout().px8(),
-                                 DesignSystem::layout().px8(), DesignSystem::layout().px8());
-    for (auto button : d->buttons) {
+    layout()->setSpacing(Ui::DesignSystem::layout().px12());
+    layout()->setContentsMargins(DesignSystem::layout().px16(), DesignSystem::layout().px16(),
+                                 DesignSystem::layout().px16(), DesignSystem::layout().px16());
+    for (auto button : std::as_const(d->buttons)) {
         button->setBackgroundColor(ColorHelper::nearby(DesignSystem::color().primary()));
         button->setTextColor(button->property(kIsButtonCurrentTypeKey).toBool()
                                  ? DesignSystem::color().secondary()

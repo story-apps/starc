@@ -229,8 +229,9 @@ void ScreenplayTextFastFormatWidget::designSystemChangeEvent(DesignSystemChangeE
 
     setBackgroundColor(DesignSystem::color().primary());
 
-    layout()->setContentsMargins(DesignSystem::layout().px8(), DesignSystem::layout().px8(),
-                                 DesignSystem::layout().px8(), DesignSystem::layout().px8());
+    layout()->setSpacing(Ui::DesignSystem::layout().px8());
+    layout()->setContentsMargins(DesignSystem::layout().px16(), DesignSystem::layout().px16(),
+                                 DesignSystem::layout().px16(), DesignSystem::layout().px16());
     for (auto button : d->buttons) {
         button->setBackgroundColor(ColorHelper::nearby(DesignSystem::color().primary()));
         button->setTextColor(button->property(kIsButtonCurrentTypeKey).toBool()

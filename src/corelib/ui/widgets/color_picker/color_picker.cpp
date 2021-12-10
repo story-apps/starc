@@ -21,6 +21,7 @@ public:
     ColorHueSlider* colorHueSlider = nullptr;
     Button* cancelButton = nullptr;
     Button* addButton = nullptr;
+    QHBoxLayout* buttonsLayout = nullptr;
 };
 
 ColorPicker::Implementation::Implementation(QWidget* _parent)
@@ -30,10 +31,17 @@ ColorPicker::Implementation::Implementation(QWidget* _parent)
     , colorHueSlider(new ColorHueSlider(_parent))
     , cancelButton(new Button(_parent))
     , addButton(new Button(_parent))
+    , buttonsLayout(new QHBoxLayout)
 {
     customColorPanel->hide();
     cancelButton->setFocusPolicy(Qt::NoFocus);
     addButton->setFocusPolicy(Qt::NoFocus);
+
+    buttonsLayout->setContentsMargins({});
+    buttonsLayout->setSpacing(0);
+    buttonsLayout->addStretch();
+    buttonsLayout->addWidget(cancelButton);
+    buttonsLayout->addWidget(addButton);
 }
 
 
@@ -44,19 +52,13 @@ ColorPicker::ColorPicker(QWidget* _parent)
     : StackWidget(_parent)
     , d(new Implementation(this))
 {
-    QHBoxLayout* buttonsLayout = new QHBoxLayout;
-    buttonsLayout->setContentsMargins({});
-    buttonsLayout->setSpacing(0);
-    buttonsLayout->addStretch();
-    buttonsLayout->addWidget(d->cancelButton);
-    buttonsLayout->addWidget(d->addButton);
 
     QVBoxLayout* customColorPanelLayout = new QVBoxLayout(d->customColorPanel);
     customColorPanelLayout->setContentsMargins({});
     customColorPanelLayout->setSpacing(0);
     customColorPanelLayout->addWidget(d->colorSlider, 1);
     customColorPanelLayout->addWidget(d->colorHueSlider);
-    customColorPanelLayout->addLayout(buttonsLayout);
+    customColorPanelLayout->addLayout(d->buttonsLayout);
 
     setCurrentWidget(d->colorPallete);
     addWidget(d->customColorPanel);
@@ -118,4 +120,8 @@ void ColorPicker::designSystemChangeEvent(DesignSystemChangeEvent* _event)
     d->addButton->setTextColor(Ui::DesignSystem::color().secondary());
     d->cancelButton->setBackgroundColor(Ui::DesignSystem::color().secondary());
     d->cancelButton->setTextColor(Ui::DesignSystem::color().secondary());
+    //
+    d->buttonsLayout->setContentsMargins(
+        Ui::DesignSystem::layout().px8(), Ui::DesignSystem::layout().px2(),
+        Ui::DesignSystem::layout().px8(), Ui::DesignSystem::layout().px8());
 }

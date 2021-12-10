@@ -430,13 +430,10 @@ void ScreenplayTextSearchToolbar::designSystemChangeEvent(DesignSystemChangeEven
     setActionCustomWidth(d->replaceAction, replaceActionWidth);
     d->replace->move(d->replaceText->geometry().right()
                          + Ui::DesignSystem::floatingToolBar().spacing(),
-                     Ui::DesignSystem::floatingToolBar().shadowMargins().top());
+                     Ui::DesignSystem::floatingToolBar().shadowMargins().top()
+                         + Ui::DesignSystem::layout().px8());
     setActionCustomWidth(d->replaceAllAction, replaceAllActionWidth);
-    d->replaceAll->move(
-        d->replace->geometry().right()
-        /*+ Ui::DesignSystem::floatingToolBar().spacing() / 2*/, // тут ручками подобрал, чтобы
-                                                                 // красиво было
-        Ui::DesignSystem::floatingToolBar().shadowMargins().top());
+    d->replaceAll->move(d->replace->geometry().right(), d->replace->geometry().top());
 
     resize(sizeHint());
 }
