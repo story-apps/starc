@@ -36,11 +36,6 @@ public:
      */
     QString confirmationCode() const;
 
-    /**
-     * @brief Задать ошибку ввода проверочного кода
-     */
-    void showConfirmationCodeError();
-
 signals:
     /**
      * @brief Пользователь нажал кнопку входа в аккаунт

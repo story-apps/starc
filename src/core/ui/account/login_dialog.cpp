@@ -17,13 +17,18 @@ class LoginDialog::Implementation
 public:
     explicit Implementation(QWidget* _parent);
 
-    void checkEmail();
+    /**
+     * @brief Установить текст лейбла с информацией о коде подтверждения
+     *        в зависимости от того истёк ли срок годности кода
+     */
+    void updateConfirmationCodeInfo(bool _expired = false);
 
 
     Body1Label* description = nullptr;
     TextField* email = nullptr;
     Body1Label* confirmationCodeSendedInfo = nullptr;
     TextField* confirmationCode = nullptr;
+    QTimer confirmationCodeExpirationTimer;
 
     QHBoxLayout* buttonsLayout = nullptr;
     Button* signInButton = nullptr;
@@ -58,6 +63,19 @@ LoginDialog::Implementation::Implementation(QWidget* _parent)
     confirmationCode->hide();
     signInButton->hide();
     resendCodeButton->hide();
+
+    confirmationCodeExpirationTimer.setSingleShot(true);
+    confirmationCodeExpirationTimer.setInterval(std::chrono::minutes{ 10 });
+}
+
+void LoginDialog::Implementation::updateConfirmationCodeInfo(bool _expired)
+{
+    if (_expired) {
+        confirmationCodeSendedInfo->setText(tr("The confirmation code we've sent expired."));
+    } else {
+        confirmationCodeSendedInfo->setText(tr(
+            "We've sent a confirmation code to the e-mail above, please enter it here to verify"));
+    }
 }
 
 
@@ -92,6 +110,13 @@ LoginDialog::LoginDialog(QWidget* _parent)
 
         emit confirmationCodeChanged(code);
     });
+    connect(&d->confirmationCodeExpirationTimer, &QTimer::timeout, this, [this] {
+        const bool expired = true;
+        d->updateConfirmationCodeInfo(expired);
+        d->resendCodeButton->show();
+        d->resendCodeButton->setFocus();
+        d->confirmationCode->hide();
+    });
     connect(d->signInButton, &Button::clicked, this, [this] {
         d->confirmationCodeSendedInfo->hide();
         d->confirmationCode->hide();
@@ -105,10 +130,17 @@ LoginDialog::LoginDialog(QWidget* _parent)
 
         emit signInPressed();
     });
+    connect(d->resendCodeButton, &Button::clicked, this, [this] {
+        d->updateConfirmationCodeInfo();
+
+        showConfirmationCodeStep();
+
+        emit signInPressed();
+    });
     connect(d->cancelButton, &Button::clicked, this, &LoginDialog::cancelPressed);
 
-    updateTranslations();
-    designSystemChangeEvent(nullptr);
+    LoginDialog::updateTranslations();
+    LoginDialog::designSystemChangeEvent(nullptr);
 }
 
 LoginDialog::~LoginDialog() = default;
@@ -118,6 +150,7 @@ void LoginDialog::showEmailStep()
     d->confirmationCode->clear();
     d->confirmationCodeSendedInfo->hide();
     d->confirmationCode->hide();
+    d->resendCodeButton->hide();
 
     d->email->setFocus();
 }
@@ -134,19 +167,16 @@ void LoginDialog::showConfirmationCodeStep()
     d->confirmationCode->setError({});
     d->confirmationCode->show();
     d->signInButton->hide();
+    d->resendCodeButton->hide();
 
     d->confirmationCode->setFocus();
+
+    d->confirmationCodeExpirationTimer.start();
 }
 
 QString LoginDialog::confirmationCode() const
 {
     return d->confirmationCode->text();
-}
-
-void LoginDialog::showConfirmationCodeError()
-{
-    d->confirmationCode->setError(tr("Incorrect confirmation code"));
-    d->confirmationCode->setFocus();
 }
 
 QWidget* LoginDialog::focusedWidgetAfterShow() const
@@ -165,8 +195,7 @@ void LoginDialog::updateTranslations()
 
     d->description->setText(tr("Sign in to get access to the extended free and pro features"));
     d->email->setLabel(tr("Email"));
-    d->confirmationCodeSendedInfo->setText(
-        tr("We've sent a confirmation code to the e-mail above, please enter it here to verify"));
+    d->updateConfirmationCodeInfo();
     d->confirmationCode->setLabel(tr("Confirmation code"));
     d->signInButton->setText(tr("Sign in"));
     d->resendCodeButton->setText(tr("Send code again"));
