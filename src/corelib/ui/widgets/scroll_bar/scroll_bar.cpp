@@ -120,25 +120,37 @@ void ScrollBar::paintEvent(QPaintEvent* _event)
     painter.fillRect(contentRect, backgroundColor);
 
     //
+    // Используем локальные значения интервала прокрутки, чтобы избежать отрицательных значений
+    //
+    auto minimum = this->minimum();
+    auto maximum = this->maximum();
+    auto sliderPosition = this->sliderPosition();
+    if (minimum < 0) {
+        maximum -= minimum;
+        sliderPosition -= minimum;
+        minimum = 0;
+    }
+
+    //
     // Рисуем хэндл
     //
     qreal handleDelta
         = (Qt::Horizontal == orientation() ? contentRect.width() : contentRect.height())
-        / static_cast<qreal>(maximum() - minimum() + pageStep() - 1);
+        / static_cast<qreal>(maximum - minimum + pageStep() - 1);
     qreal additionalHandleMovement
         = orientation() == Qt::Horizontal ? contentRect.left() : contentRect.top();
     if (pageStep() * handleDelta < Ui::DesignSystem::scrollBar().minimumHandleLength()) {
         handleDelta = (Qt::Horizontal == orientation() ? contentRect.width() : contentRect.height())
-            / static_cast<qreal>(maximum() - minimum());
+            / static_cast<qreal>(maximum - minimum);
         additionalHandleMovement -= Ui::DesignSystem::scrollBar().minimumHandleLength() * value()
-            / static_cast<qreal>(maximum() - minimum());
+            / static_cast<qreal>(maximum - minimum);
     }
     const QRectF handle = orientation() == Qt::Horizontal
         ? QRectF(
-            sliderPosition() * handleDelta + additionalHandleMovement, contentRect.top(),
+            sliderPosition * handleDelta + additionalHandleMovement, contentRect.top(),
             std::max(pageStep() * handleDelta, Ui::DesignSystem::scrollBar().minimumHandleLength()),
             contentRect.height())
-        : QRectF(contentRect.left(), sliderPosition() * handleDelta + additionalHandleMovement,
+        : QRectF(contentRect.left(), sliderPosition * handleDelta + additionalHandleMovement,
                  contentRect.width(),
                  std::max(pageStep() * handleDelta,
                           Ui::DesignSystem::scrollBar().minimumHandleLength()));
