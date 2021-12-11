@@ -90,7 +90,6 @@ void SessionWidget::setSessionInfo(const Domain::SessionInfo& _sessionInfo)
     d->sessionInfo = _sessionInfo;
 
     d->deviceName->setText(d->sessionInfo.deviceName);
-    d->location->setText(d->sessionInfo.location);
     d->lastUsedIcon->setVisible(d->sessionInfo.isCurrentDevice);
 
     const auto ipToLocationUrl
