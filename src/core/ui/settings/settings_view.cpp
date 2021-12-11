@@ -1555,7 +1555,7 @@ void SettingsView::updateTranslations()
     d->highlightCurrentLine->setText(tr("Highlight current line"));
     d->focusCurrentParagraph->setText(tr("Focus current paragraph"));
     d->useTypewriterScrolling->setText(
-        tr("Use typewriter scrolling (keeps line with the curson on the screen center)"));
+        tr("Use typewriter scrolling (keeps line with the cursor on the screen center)"));
 
     d->componentsTitle->setText(tr("Components"));
     //
