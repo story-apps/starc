@@ -15,7 +15,6 @@
 #include <QPointer>
 #include <QResizeEvent>
 #include <QStyleOption>
-#include <QTimer>
 #include <QVariantAnimation>
 #include <QtMath>
 
@@ -366,15 +365,7 @@ void ProjectCard::mouseReleaseEvent(QGraphicsSceneMouseEvent* _event)
 
     auto scene = projectsScene();
 
-    //
-    // Возвращаем карточку на место
-    //
-    // Делаем отложенный вызов, чтобы mouseGrabber сцены освободился
-    //
-    QMetaObject::invokeMethod(
-        scene, [this, scene] { emit scene->reorderProjectCardRequested(this); },
-        Qt::QueuedConnection);
-
+    bool needToReorder = true;
     if (m_decorationOpacityAnimation.state() == QVariantAnimation::Running) {
         m_decorationOpacityAnimation.pause();
         m_decorationOpacityAnimation.setEndValue(0.0);
@@ -385,6 +376,7 @@ void ProjectCard::mouseReleaseEvent(QGraphicsSceneMouseEvent* _event)
             if (iconsRects[0].contains(_event->pos())) {
                 emit scene->moveProjectToCloudRequested(m_project);
             } else if (iconsRects[1].contains(_event->pos())) {
+                needToReorder = false;
                 emit scene->hideProjectRequested(m_project);
             } else {
                 //
@@ -400,6 +392,7 @@ void ProjectCard::mouseReleaseEvent(QGraphicsSceneMouseEvent* _event)
             if (iconsRects[0].contains(_event->pos())) {
                 emit scene->changeProjectNameRequested(m_project);
             } else if (iconsRects[1].contains(_event->pos())) {
+                needToReorder = false;
                 emit scene->removeProjectRequested(m_project);
             } else {
                 QMetaObject::invokeMethod(scene,
@@ -410,6 +403,17 @@ void ProjectCard::mouseReleaseEvent(QGraphicsSceneMouseEvent* _event)
         m_decorationOpacityAnimation.setStartValue(0.15);
         m_decorationOpacityAnimation.setEndValue(0.0);
         m_decorationOpacityAnimation.start();
+    }
+
+    //
+    // Возвращаем карточку на место
+    //
+    // Делаем отложенный вызов, чтобы mouseGrabber сцены освободился
+    //
+    if (needToReorder) {
+        QMetaObject::invokeMethod(
+            scene, [this, scene] { emit scene->reorderProjectCardRequested(this); },
+            Qt::QueuedConnection);
     }
 }
 
