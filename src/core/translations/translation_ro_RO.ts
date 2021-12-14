@@ -252,7 +252,7 @@
     <message>
         <location filename="../../corelib/business_layer/model/screenplay/screenplay_dictionaries_model.cpp" line="161"/>
         <source>EXT./INT.</source>
-        <translation type="unfinished"></translation>
+        <translation>EXT./INT.</translation>
     </message>
     <message>
         <location filename="../../corelib/business_layer/model/screenplay/screenplay_dictionaries_model.cpp" line="166"/>
@@ -891,22 +891,22 @@
     <message>
         <location filename="../management_layer/content/account/account_manager.cpp" line="349"/>
         <source>Try PRO version for free</source>
-        <translation type="unfinished"></translation>
+        <translation>Încearcă versiunea PRO, gratis</translation>
     </message>
     <message>
         <location filename="../management_layer/content/account/account_manager.cpp" line="350"/>
         <source>While Starc is in the beta we&apos;d like to thank our users by providing them with free PRO features. After beta ends you&apos;ll still be able to use PRO version for 30 days for free.</source>
-        <translation type="unfinished"></translation>
+        <translation>Cât timp STARC este în versiune beta, dorim să mulțumim utilizatorilor oferindu-le gratuit funcțiile versiunii PRO. După ce versiunea beta nu va mai fi disponibilă, veți putea folosi versiunea PRO gratis timp de 30 de zile.</translation>
     </message>
     <message>
         <location filename="../management_layer/content/account/account_manager.cpp" line="353"/>
         <source>Continue with free version</source>
-        <translation type="unfinished"></translation>
+        <translation>Continuă cu versiunea gratuită</translation>
     </message>
     <message>
         <location filename="../management_layer/content/account/account_manager.cpp" line="354"/>
         <source>Activate PRO</source>
-        <translation type="unfinished"></translation>
+        <translation>Activează PRO</translation>
     </message>
 </context>
 <context>
@@ -1013,12 +1013,12 @@ Doriți schimbarea?</translation>
     <message>
         <location filename="../management_layer/plugins/characters_relations/characters_relations_manager.cpp" line="63"/>
         <source>To edit the character relations graph, you need to upgrade to the PRO version.</source>
-        <translation type="unfinished"></translation>
+        <translation>Pentru a edita graficul cu relațiile personajelor, trebuie să faceți upgrade la versiunea PRO</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/characters_relations/characters_relations_manager.cpp" line="65"/>
         <source>Maybe later</source>
-        <translation type="unfinished"></translation>
+        <translation>Poate, mai târziu</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/characters_relations/characters_relations_manager.cpp" line="66"/>
@@ -1446,42 +1446,42 @@ Doriți schimbarea?</translation>
     <message>
         <location filename="../ui/account/account_navigator.cpp" line="88"/>
         <source>Active until %1</source>
-        <translation type="unfinished"></translation>
+        <translation>Activ până la %1</translation>
     </message>
     <message>
         <location filename="../ui/account/account_navigator.cpp" line="233"/>
         <source>Account</source>
-        <translation type="unfinished"></translation>
+        <translation>Cont</translation>
     </message>
     <message>
         <location filename="../ui/account/account_navigator.cpp" line="234"/>
         <source>Subscription</source>
-        <translation type="unfinished"></translation>
+        <translation>Abonament</translation>
     </message>
     <message>
         <location filename="../ui/account/account_navigator.cpp" line="235"/>
         <source>Sessions</source>
-        <translation type="unfinished"></translation>
+        <translation>Sesiuni</translation>
     </message>
     <message>
         <location filename="../ui/account/account_navigator.cpp" line="236"/>
         <source>FREE version</source>
-        <translation type="unfinished"></translation>
+        <translation>Versiunea gratuită</translation>
     </message>
     <message>
         <location filename="../ui/account/account_navigator.cpp" line="237"/>
         <source>Try PRO for free</source>
-        <translation type="unfinished"></translation>
+        <translation>Încearcă versiunea PRO, gratis</translation>
     </message>
     <message>
         <location filename="../ui/account/account_navigator.cpp" line="238"/>
         <source>Upgrade to PRO</source>
-        <translation type="unfinished"></translation>
+        <translation>Upgrade la versiunea PRO</translation>
     </message>
     <message>
         <location filename="../ui/account/account_navigator.cpp" line="239"/>
         <source>PRO version</source>
-        <translation type="unfinished"></translation>
+        <translation>Versiunea PRO</translation>
     </message>
     <message>
         <location filename="../ui/account/account_navigator.cpp" line="241"/>
@@ -1491,22 +1491,22 @@ Doriți schimbarea?</translation>
     <message>
         <location filename="../ui/account/account_navigator.cpp" line="242"/>
         <source>Buy lifetime</source>
-        <translation type="unfinished"></translation>
+        <translation>Cumpără pe viață</translation>
     </message>
     <message>
         <location filename="../ui/account/account_navigator.cpp" line="243"/>
         <source>Upgrade to TEAM</source>
-        <translation type="unfinished"></translation>
+        <translation>Upgrade la versiunea TEAM</translation>
     </message>
     <message>
         <location filename="../ui/account/account_navigator.cpp" line="244"/>
         <source>TEAM version</source>
-        <translation type="unfinished"></translation>
+        <translation>Versiunea TEAM</translation>
     </message>
     <message>
         <location filename="../ui/account/account_navigator.cpp" line="245"/>
         <source>Logout</source>
-        <translation type="unfinished"></translation>
+        <translation>Deconectare</translation>
     </message>
 </context>
 <context>
@@ -1519,72 +1519,72 @@ Doriți schimbarea?</translation>
     <message>
         <location filename="../ui/account/account_view.cpp" line="269"/>
         <source>FREE version</source>
-        <translation type="unfinished"></translation>
+        <translation>Versiunea gratuită</translation>
     </message>
     <message>
         <location filename="../ui/account/account_view.cpp" line="270"/>
         <source>Upgrade to PRO</source>
-        <translation type="unfinished"></translation>
+        <translation>Upgrade la versiunea PRO</translation>
     </message>
     <message>
         <location filename="../ui/account/account_view.cpp" line="277"/>
         <source>Try PRO for free</source>
-        <translation type="unfinished"></translation>
+        <translation>Încearcă versiunea PRO, gratis</translation>
     </message>
     <message>
         <location filename="../ui/account/account_view.cpp" line="285"/>
         <source>PRO version</source>
-        <translation type="unfinished"></translation>
+        <translation>Versiunea PRO</translation>
     </message>
     <message>
         <location filename="../ui/account/account_view.cpp" line="292"/>
         <source>TEAM version</source>
-        <translation type="unfinished"></translation>
+        <translation>Versiunea TEAM</translation>
     </message>
     <message>
         <location filename="../ui/account/account_view.cpp" line="345"/>
         <source>Your name</source>
-        <translation type="unfinished"></translation>
+        <translation>Numele</translation>
     </message>
     <message>
         <location filename="../ui/account/account_view.cpp" line="346"/>
         <source>Your bio</source>
-        <translation type="unfinished"></translation>
+        <translation>Biografia</translation>
     </message>
     <message>
         <location filename="../ui/account/account_view.cpp" line="347"/>
         <source>Add avatar +</source>
-        <translation type="unfinished"></translation>
+        <translation>Adaugă avatar +</translation>
     </message>
     <message>
         <location filename="../ui/account/account_view.cpp" line="347"/>
         <source>Change avatar...</source>
-        <translation type="unfinished"></translation>
+        <translation>Schimbă avatar</translation>
     </message>
     <message>
         <location filename="../ui/account/account_view.cpp" line="348"/>
         <source>Do you want to delete your avatar?</source>
-        <translation type="unfinished"></translation>
+        <translation>Vrei să ștergi avatarul tău?</translation>
     </message>
     <message>
         <location filename="../ui/account/account_view.cpp" line="349"/>
         <source>Select an area for the avatar</source>
-        <translation type="unfinished"></translation>
+        <translation>Selectează o zonă pentru avatar</translation>
     </message>
     <message>
         <location filename="../ui/account/account_view.cpp" line="350"/>
         <source>Subscription type</source>
-        <translation type="unfinished"></translation>
+        <translation>Tipul abonamentului</translation>
     </message>
     <message>
         <location filename="../ui/account/account_view.cpp" line="351"/>
         <source>What&apos;s included?</source>
-        <translation type="unfinished"></translation>
+        <translation>Ce este inclus?</translation>
     </message>
     <message>
         <location filename="../ui/account/account_view.cpp" line="352"/>
         <source>Active sessions</source>
-        <translation type="unfinished"></translation>
+        <translation>Sesiuni active</translation>
     </message>
 </context>
 <context>
@@ -1592,7 +1592,7 @@ Doriți schimbarea?</translation>
     <message>
         <location filename="../ui/application_view.cpp" line="154"/>
         <source>Turn off full screen</source>
-        <translation type="unfinished"></translation>
+        <translation>Dezactivează funcția full screen</translation>
     </message>
 </context>
 <context>
@@ -1787,17 +1787,17 @@ Doriți schimbarea?</translation>
     <message>
         <location filename="../management_layer/plugins/characters_relations/ui/characters_relations_view.cpp" line="136"/>
         <source>Unlock ability to edit characters relations</source>
-        <translation type="unfinished"></translation>
+        <translation>Activează posibilitatea de editare a relațiilor personajului</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/characters_relations/ui/characters_relations_view.cpp" line="137"/>
         <source>Add character</source>
-        <translation type="unfinished"></translation>
+        <translation>Adaugă personaj</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/characters_relations/ui/characters_relations_view.cpp" line="138"/>
         <source>Remove selected item</source>
-        <translation type="unfinished"></translation>
+        <translation>Șterge articolul selectat</translation>
     </message>
 </context>
 <context>
@@ -2581,12 +2581,12 @@ Doriți schimbarea?</translation>
     <message>
         <location filename="../ui/account/login_dialog.cpp" line="74"/>
         <source>The confirmation code we&apos;ve sent expired.</source>
-        <translation type="unfinished"></translation>
+        <translation>Codul de confirmare a expirat</translation>
     </message>
     <message>
         <location filename="../ui/account/login_dialog.cpp" line="76"/>
         <source>We&apos;ve sent a confirmation code to the e-mail above, please enter it here to verify</source>
-        <translation type="unfinished"></translation>
+        <translation>Un cod de confirmare a fost trimis la adresa de e-mail de mai sus. Vă rugăm să-l introduceți aici pentru verificare</translation>
     </message>
     <message>
         <location filename="../ui/account/login_dialog.cpp" line="194"/>
@@ -2596,7 +2596,7 @@ Doriți schimbarea?</translation>
     <message>
         <location filename="../ui/account/login_dialog.cpp" line="196"/>
         <source>Sign in to get access to the extended free and pro features</source>
-        <translation type="unfinished"></translation>
+        <translation>Autentifică-te pentru a avea acces la funcțiile versiunii PRO</translation>
     </message>
     <message>
         <location filename="../ui/account/login_dialog.cpp" line="197"/>
@@ -2616,7 +2616,7 @@ Doriți schimbarea?</translation>
     <message>
         <location filename="../ui/account/login_dialog.cpp" line="201"/>
         <source>Send code again</source>
-        <translation type="unfinished"></translation>
+        <translation>Retrimite codul de verificare</translation>
     </message>
     <message>
         <location filename="../ui/account/login_dialog.cpp" line="202"/>
@@ -2676,7 +2676,7 @@ Doriți schimbarea?</translation>
     <message>
         <location filename="../ui/menu_view.cpp" line="232"/>
         <source>Toggle full screen</source>
-        <translation type="unfinished"></translation>
+        <translation>intră sau ieși din modul full screen</translation>
     </message>
     <message>
         <location filename="../ui/menu_view.cpp" line="235"/>
@@ -3689,28 +3689,28 @@ Doriți schimbarea?</translation>
     <message>
         <location filename="../ui/account/session_widget.cpp" line="124"/>
         <source>Current device</source>
-        <translation type="unfinished"></translation>
+        <translation>Dispozitivul curent</translation>
     </message>
     <message>
         <location filename="../ui/account/session_widget.cpp" line="132"/>
         <source>Online</source>
-        <translation type="unfinished"></translation>
+        <translation>Online</translation>
     </message>
     <message>
         <location filename="../ui/account/session_widget.cpp" line="136"/>
         <source>was active %1 at %2</source>
         <extracomment>Last active date (%1) and time (%2) of the user&apos;s device</extracomment>
-        <translation type="unfinished"></translation>
+        <translation>a fost activ %1 la %2</translation>
     </message>
     <message>
         <location filename="../ui/account/session_widget.cpp" line="140"/>
         <source>Terminate others</source>
-        <translation type="unfinished"></translation>
+        <translation>Oprește-i pe ceilalți</translation>
     </message>
     <message>
         <location filename="../ui/account/session_widget.cpp" line="141"/>
         <source>Terminate</source>
-        <translation type="unfinished"></translation>
+        <translation>Termină</translation>
     </message>
 </context>
 <context>
@@ -4483,12 +4483,12 @@ Dacă lucrați fără întrerupere, salvează proiectul la fiecare 3 minute.</tr
     <message>
         <location filename="../ui/settings/settings_view.cpp" line="1556"/>
         <source>Focus current paragraph</source>
-        <translation type="unfinished"></translation>
+        <translation>Focus pe paragraful curent</translation>
     </message>
     <message>
         <location filename="../ui/settings/settings_view.cpp" line="1558"/>
         <source>Use typewriter scrolling (keeps line with the cursor on the screen center)</source>
-        <translation type="unfinished"></translation>
+        <translation>Folosește derularea tip mașină de scris (menține rândul cu cursor pe centrul ecranului)</translation>
     </message>
     <message>
         <location filename="../ui/settings/settings_view.cpp" line="1560"/>

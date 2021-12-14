@@ -252,7 +252,7 @@
     <message>
         <location filename="../../corelib/business_layer/model/screenplay/screenplay_dictionaries_model.cpp" line="161"/>
         <source>EXT./INT.</source>
-        <translation type="unfinished"></translation>
+        <translation>EXT./INT.</translation>
     </message>
     <message>
         <location filename="../../corelib/business_layer/model/screenplay/screenplay_dictionaries_model.cpp" line="166"/>
@@ -891,22 +891,22 @@
     <message>
         <location filename="../management_layer/content/account/account_manager.cpp" line="349"/>
         <source>Try PRO version for free</source>
-        <translation type="unfinished"></translation>
+        <translation>PRO-Version kostenfrei ausprobieren</translation>
     </message>
     <message>
         <location filename="../management_layer/content/account/account_manager.cpp" line="350"/>
         <source>While Starc is in the beta we&apos;d like to thank our users by providing them with free PRO features. After beta ends you&apos;ll still be able to use PRO version for 30 days for free.</source>
-        <translation type="unfinished"></translation>
+        <translation>Während StArc in der Beta ist, würden wir unseren Nutzern gerne danken, indem wir Ihnen kostenfrei PRO-Features anbieten. Nachdem die Beta endet können sie die PRO-Version weiterhin für 30 Tage kostenfrei verwenden.</translation>
     </message>
     <message>
         <location filename="../management_layer/content/account/account_manager.cpp" line="353"/>
         <source>Continue with free version</source>
-        <translation type="unfinished"></translation>
+        <translation>Mit kostenfreier Version fortfahren</translation>
     </message>
     <message>
         <location filename="../management_layer/content/account/account_manager.cpp" line="354"/>
         <source>Activate PRO</source>
-        <translation type="unfinished"></translation>
+        <translation>PRO aktivieren</translation>
     </message>
 </context>
 <context>
@@ -1012,12 +1012,12 @@
     <message>
         <location filename="../management_layer/plugins/characters_relations/characters_relations_manager.cpp" line="63"/>
         <source>To edit the character relations graph, you need to upgrade to the PRO version.</source>
-        <translation type="unfinished"></translation>
+        <translation>Um die Charakterbeziehungsgraphik zu bearbeiten, müssen Sie auf die PRO-Version upgraden.</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/characters_relations/characters_relations_manager.cpp" line="65"/>
         <source>Maybe later</source>
-        <translation type="unfinished"></translation>
+        <translation>Vielleicht später</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/characters_relations/characters_relations_manager.cpp" line="66"/>
@@ -1444,42 +1444,42 @@
     <message>
         <location filename="../ui/account/account_navigator.cpp" line="88"/>
         <source>Active until %1</source>
-        <translation type="unfinished"></translation>
+        <translation>Aktiv bis %1</translation>
     </message>
     <message>
         <location filename="../ui/account/account_navigator.cpp" line="233"/>
         <source>Account</source>
-        <translation type="unfinished"></translation>
+        <translation>Benutzerkonto</translation>
     </message>
     <message>
         <location filename="../ui/account/account_navigator.cpp" line="234"/>
         <source>Subscription</source>
-        <translation type="unfinished"></translation>
+        <translation>Abbonement</translation>
     </message>
     <message>
         <location filename="../ui/account/account_navigator.cpp" line="235"/>
         <source>Sessions</source>
-        <translation type="unfinished"></translation>
+        <translation>Sessionen</translation>
     </message>
     <message>
         <location filename="../ui/account/account_navigator.cpp" line="236"/>
         <source>FREE version</source>
-        <translation type="unfinished"></translation>
+        <translation>Kostenfreie Version</translation>
     </message>
     <message>
         <location filename="../ui/account/account_navigator.cpp" line="237"/>
         <source>Try PRO for free</source>
-        <translation type="unfinished"></translation>
+        <translation>PRO kostenfrei ausprobieren</translation>
     </message>
     <message>
         <location filename="../ui/account/account_navigator.cpp" line="238"/>
         <source>Upgrade to PRO</source>
-        <translation type="unfinished"></translation>
+        <translation>Auf PRO upgraden</translation>
     </message>
     <message>
         <location filename="../ui/account/account_navigator.cpp" line="239"/>
         <source>PRO version</source>
-        <translation type="unfinished"></translation>
+        <translation>PRO-Version</translation>
     </message>
     <message>
         <location filename="../ui/account/account_navigator.cpp" line="241"/>
@@ -1489,22 +1489,22 @@
     <message>
         <location filename="../ui/account/account_navigator.cpp" line="242"/>
         <source>Buy lifetime</source>
-        <translation type="unfinished"></translation>
+        <translation>Lebenslang erwerben</translation>
     </message>
     <message>
         <location filename="../ui/account/account_navigator.cpp" line="243"/>
         <source>Upgrade to TEAM</source>
-        <translation type="unfinished"></translation>
+        <translation>Auf TEAM upgraden</translation>
     </message>
     <message>
         <location filename="../ui/account/account_navigator.cpp" line="244"/>
         <source>TEAM version</source>
-        <translation type="unfinished"></translation>
+        <translation>TEAM-Version</translation>
     </message>
     <message>
         <location filename="../ui/account/account_navigator.cpp" line="245"/>
         <source>Logout</source>
-        <translation type="unfinished"></translation>
+        <translation>Ausloggen</translation>
     </message>
 </context>
 <context>
@@ -1517,72 +1517,72 @@
     <message>
         <location filename="../ui/account/account_view.cpp" line="269"/>
         <source>FREE version</source>
-        <translation type="unfinished"></translation>
+        <translation>Kostenfreie Version</translation>
     </message>
     <message>
         <location filename="../ui/account/account_view.cpp" line="270"/>
         <source>Upgrade to PRO</source>
-        <translation type="unfinished"></translation>
+        <translation>Auf PRO upgraden</translation>
     </message>
     <message>
         <location filename="../ui/account/account_view.cpp" line="277"/>
         <source>Try PRO for free</source>
-        <translation type="unfinished"></translation>
+        <translation>PRO kostenfrei ausprobieren</translation>
     </message>
     <message>
         <location filename="../ui/account/account_view.cpp" line="285"/>
         <source>PRO version</source>
-        <translation type="unfinished"></translation>
+        <translation>PRO-Version</translation>
     </message>
     <message>
         <location filename="../ui/account/account_view.cpp" line="292"/>
         <source>TEAM version</source>
-        <translation type="unfinished"></translation>
+        <translation>TEAM-Version</translation>
     </message>
     <message>
         <location filename="../ui/account/account_view.cpp" line="345"/>
         <source>Your name</source>
-        <translation type="unfinished"></translation>
+        <translation>Dein Name</translation>
     </message>
     <message>
         <location filename="../ui/account/account_view.cpp" line="346"/>
         <source>Your bio</source>
-        <translation type="unfinished"></translation>
+        <translation>Deine Kurzbiographie</translation>
     </message>
     <message>
         <location filename="../ui/account/account_view.cpp" line="347"/>
         <source>Add avatar +</source>
-        <translation type="unfinished"></translation>
+        <translation>Avatar hinzufügen +</translation>
     </message>
     <message>
         <location filename="../ui/account/account_view.cpp" line="347"/>
         <source>Change avatar...</source>
-        <translation type="unfinished"></translation>
+        <translation>Avatar ändern...</translation>
     </message>
     <message>
         <location filename="../ui/account/account_view.cpp" line="348"/>
         <source>Do you want to delete your avatar?</source>
-        <translation type="unfinished"></translation>
+        <translation>Wollen Sie den Avatar löschen?</translation>
     </message>
     <message>
         <location filename="../ui/account/account_view.cpp" line="349"/>
         <source>Select an area for the avatar</source>
-        <translation type="unfinished"></translation>
+        <translation>Wählen Sie einen Bereich für den Avatar aus</translation>
     </message>
     <message>
         <location filename="../ui/account/account_view.cpp" line="350"/>
         <source>Subscription type</source>
-        <translation type="unfinished"></translation>
+        <translation>Abbonementtyp</translation>
     </message>
     <message>
         <location filename="../ui/account/account_view.cpp" line="351"/>
         <source>What&apos;s included?</source>
-        <translation type="unfinished"></translation>
+        <translation>Was ist mit einbegriffen?</translation>
     </message>
     <message>
         <location filename="../ui/account/account_view.cpp" line="352"/>
         <source>Active sessions</source>
-        <translation type="unfinished"></translation>
+        <translation>Aktive Sessionen</translation>
     </message>
 </context>
 <context>
@@ -1590,7 +1590,7 @@
     <message>
         <location filename="../ui/application_view.cpp" line="154"/>
         <source>Turn off full screen</source>
-        <translation type="unfinished"></translation>
+        <translation>Vollbildschirm ausschalten</translation>
     </message>
 </context>
 <context>
@@ -1785,17 +1785,17 @@
     <message>
         <location filename="../management_layer/plugins/characters_relations/ui/characters_relations_view.cpp" line="136"/>
         <source>Unlock ability to edit characters relations</source>
-        <translation type="unfinished"></translation>
+        <translation>Möglichkeit, Charakterbeziehungen zu bearbeiten, freischalten</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/characters_relations/ui/characters_relations_view.cpp" line="137"/>
         <source>Add character</source>
-        <translation type="unfinished"></translation>
+        <translation>Charakter hinzufügen</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/characters_relations/ui/characters_relations_view.cpp" line="138"/>
         <source>Remove selected item</source>
-        <translation type="unfinished"></translation>
+        <translation>Ausgewähltes Element entfernen</translation>
     </message>
 </context>
 <context>
@@ -2576,12 +2576,12 @@
     <message>
         <location filename="../ui/account/login_dialog.cpp" line="74"/>
         <source>The confirmation code we&apos;ve sent expired.</source>
-        <translation type="unfinished"></translation>
+        <translation>Der Bestätigungskode, den wir gesendet haben, ist abgelaufen.</translation>
     </message>
     <message>
         <location filename="../ui/account/login_dialog.cpp" line="76"/>
         <source>We&apos;ve sent a confirmation code to the e-mail above, please enter it here to verify</source>
-        <translation type="unfinished"></translation>
+        <translation>Wir haben ihnen einen Bestätigungskode zur oben genannten E-Mail geschickt, bitte hier eingeben, um ihn zu verifizieren</translation>
     </message>
     <message>
         <location filename="../ui/account/login_dialog.cpp" line="194"/>
@@ -2591,7 +2591,7 @@
     <message>
         <location filename="../ui/account/login_dialog.cpp" line="196"/>
         <source>Sign in to get access to the extended free and pro features</source>
-        <translation type="unfinished"></translation>
+        <translation>Einloggen und Zugang zu den erweiterten kostenfreien und den PRO-Features zu bekommen.</translation>
     </message>
     <message>
         <location filename="../ui/account/login_dialog.cpp" line="197"/>
@@ -2611,7 +2611,7 @@
     <message>
         <location filename="../ui/account/login_dialog.cpp" line="201"/>
         <source>Send code again</source>
-        <translation type="unfinished"></translation>
+        <translation>Kode nocheinmal senden</translation>
     </message>
     <message>
         <location filename="../ui/account/login_dialog.cpp" line="202"/>
@@ -2671,7 +2671,7 @@
     <message>
         <location filename="../ui/menu_view.cpp" line="232"/>
         <source>Toggle full screen</source>
-        <translation type="unfinished"></translation>
+        <translation>Vollbildschirm ein-/ausschalten</translation>
     </message>
     <message>
         <location filename="../ui/menu_view.cpp" line="235"/>
@@ -3683,28 +3683,28 @@
     <message>
         <location filename="../ui/account/session_widget.cpp" line="124"/>
         <source>Current device</source>
-        <translation type="unfinished"></translation>
+        <translation>Gegenwärtiges Gerät</translation>
     </message>
     <message>
         <location filename="../ui/account/session_widget.cpp" line="132"/>
         <source>Online</source>
-        <translation type="unfinished"></translation>
+        <translation>Online</translation>
     </message>
     <message>
         <location filename="../ui/account/session_widget.cpp" line="136"/>
         <source>was active %1 at %2</source>
         <extracomment>Last active date (%1) and time (%2) of the user&apos;s device</extracomment>
-        <translation type="unfinished"></translation>
+        <translation>war aktiv %1 am %2</translation>
     </message>
     <message>
         <location filename="../ui/account/session_widget.cpp" line="140"/>
         <source>Terminate others</source>
-        <translation type="unfinished"></translation>
+        <translation>Andere beenden</translation>
     </message>
     <message>
         <location filename="../ui/account/session_widget.cpp" line="141"/>
         <source>Terminate</source>
-        <translation type="unfinished"></translation>
+        <translation>Beenden</translation>
     </message>
 </context>
 <context>
@@ -4476,12 +4476,12 @@ Es speichert das Projekt alle drei Sekunden, wenn Sie weder Ihre Maus noch Ihre 
     <message>
         <location filename="../ui/settings/settings_view.cpp" line="1556"/>
         <source>Focus current paragraph</source>
-        <translation type="unfinished"></translation>
+        <translation>Gegenwärtigen Absatz fokussieren</translation>
     </message>
     <message>
         <location filename="../ui/settings/settings_view.cpp" line="1558"/>
         <source>Use typewriter scrolling (keeps line with the cursor on the screen center)</source>
-        <translation type="unfinished"></translation>
+        <translation>Schreibmaschinenscrolling verwenden (Hält die Zeile mit dem Cursor im Bildschirmzentrum)</translation>
     </message>
     <message>
         <location filename="../ui/settings/settings_view.cpp" line="1560"/>

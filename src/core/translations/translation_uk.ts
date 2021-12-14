@@ -901,7 +901,7 @@
     <message>
         <location filename="../management_layer/content/account/account_manager.cpp" line="353"/>
         <source>Continue with free version</source>
-        <translation>Залишитися на FREE версії</translation>
+        <translation>Залишитися на безкоштовній версії</translation>
     </message>
     <message>
         <location filename="../management_layer/content/account/account_manager.cpp" line="354"/>
@@ -1017,7 +1017,7 @@
     <message>
         <location filename="../management_layer/plugins/characters_relations/characters_relations_manager.cpp" line="65"/>
         <source>Maybe later</source>
-        <translation type="unfinished"></translation>
+        <translation>Можливо пізніше</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/characters_relations/characters_relations_manager.cpp" line="66"/>
@@ -1444,42 +1444,42 @@
     <message>
         <location filename="../ui/account/account_navigator.cpp" line="88"/>
         <source>Active until %1</source>
-        <translation type="unfinished"></translation>
+        <translation>Активна до %1</translation>
     </message>
     <message>
         <location filename="../ui/account/account_navigator.cpp" line="233"/>
         <source>Account</source>
-        <translation type="unfinished"></translation>
+        <translation>Акаунт</translation>
     </message>
     <message>
         <location filename="../ui/account/account_navigator.cpp" line="234"/>
         <source>Subscription</source>
-        <translation type="unfinished"></translation>
+        <translation>Підписка</translation>
     </message>
     <message>
         <location filename="../ui/account/account_navigator.cpp" line="235"/>
         <source>Sessions</source>
-        <translation type="unfinished"></translation>
+        <translation>Сесії</translation>
     </message>
     <message>
         <location filename="../ui/account/account_navigator.cpp" line="236"/>
         <source>FREE version</source>
-        <translation type="unfinished"></translation>
+        <translation>Безкоштовна весія</translation>
     </message>
     <message>
         <location filename="../ui/account/account_navigator.cpp" line="237"/>
         <source>Try PRO for free</source>
-        <translation type="unfinished"></translation>
+        <translation>Спробувати PRO версію безкоштовно</translation>
     </message>
     <message>
         <location filename="../ui/account/account_navigator.cpp" line="238"/>
         <source>Upgrade to PRO</source>
-        <translation type="unfinished"></translation>
+        <translation>Прокачати до PRO версії</translation>
     </message>
     <message>
         <location filename="../ui/account/account_navigator.cpp" line="239"/>
         <source>PRO version</source>
-        <translation type="unfinished"></translation>
+        <translation>PRO версія</translation>
     </message>
     <message>
         <location filename="../ui/account/account_navigator.cpp" line="241"/>
@@ -1489,22 +1489,22 @@
     <message>
         <location filename="../ui/account/account_navigator.cpp" line="242"/>
         <source>Buy lifetime</source>
-        <translation type="unfinished"></translation>
+        <translation>Придбати назавжди</translation>
     </message>
     <message>
         <location filename="../ui/account/account_navigator.cpp" line="243"/>
         <source>Upgrade to TEAM</source>
-        <translation type="unfinished"></translation>
+        <translation>Прокачати до TEAM версії</translation>
     </message>
     <message>
         <location filename="../ui/account/account_navigator.cpp" line="244"/>
         <source>TEAM version</source>
-        <translation type="unfinished"></translation>
+        <translation>TEAM версія</translation>
     </message>
     <message>
         <location filename="../ui/account/account_navigator.cpp" line="245"/>
         <source>Logout</source>
-        <translation type="unfinished"></translation>
+        <translation>Вийти</translation>
     </message>
 </context>
 <context>
@@ -1517,67 +1517,67 @@
     <message>
         <location filename="../ui/account/account_view.cpp" line="269"/>
         <source>FREE version</source>
-        <translation type="unfinished"></translation>
+        <translation>Безкоштовна весія</translation>
     </message>
     <message>
         <location filename="../ui/account/account_view.cpp" line="270"/>
         <source>Upgrade to PRO</source>
-        <translation type="unfinished"></translation>
+        <translation>Прокачати до PRO версії</translation>
     </message>
     <message>
         <location filename="../ui/account/account_view.cpp" line="277"/>
         <source>Try PRO for free</source>
-        <translation type="unfinished"></translation>
+        <translation>Спробувати PRO версію безкоштовно</translation>
     </message>
     <message>
         <location filename="../ui/account/account_view.cpp" line="285"/>
         <source>PRO version</source>
-        <translation type="unfinished"></translation>
+        <translation>PRO версія</translation>
     </message>
     <message>
         <location filename="../ui/account/account_view.cpp" line="292"/>
         <source>TEAM version</source>
-        <translation type="unfinished"></translation>
+        <translation>TEAM версія</translation>
     </message>
     <message>
         <location filename="../ui/account/account_view.cpp" line="345"/>
         <source>Your name</source>
-        <translation type="unfinished"></translation>
+        <translation>Ваше ім&apos;я</translation>
     </message>
     <message>
         <location filename="../ui/account/account_view.cpp" line="346"/>
         <source>Your bio</source>
-        <translation type="unfinished"></translation>
+        <translation>Про себе</translation>
     </message>
     <message>
         <location filename="../ui/account/account_view.cpp" line="347"/>
         <source>Add avatar +</source>
-        <translation type="unfinished"></translation>
+        <translation>Додати аватар +</translation>
     </message>
     <message>
         <location filename="../ui/account/account_view.cpp" line="347"/>
         <source>Change avatar...</source>
-        <translation type="unfinished"></translation>
+        <translation>Змінити аватар...</translation>
     </message>
     <message>
         <location filename="../ui/account/account_view.cpp" line="348"/>
         <source>Do you want to delete your avatar?</source>
-        <translation type="unfinished"></translation>
+        <translation>Видалити аватар?</translation>
     </message>
     <message>
         <location filename="../ui/account/account_view.cpp" line="349"/>
         <source>Select an area for the avatar</source>
-        <translation type="unfinished"></translation>
+        <translation>Виберіть область для аватара</translation>
     </message>
     <message>
         <location filename="../ui/account/account_view.cpp" line="350"/>
         <source>Subscription type</source>
-        <translation type="unfinished"></translation>
+        <translation>Тип підписки</translation>
     </message>
     <message>
         <location filename="../ui/account/account_view.cpp" line="351"/>
         <source>What&apos;s included?</source>
-        <translation type="unfinished"></translation>
+        <translation>Що сюди входить?</translation>
     </message>
     <message>
         <location filename="../ui/account/account_view.cpp" line="352"/>
@@ -2579,12 +2579,12 @@
     <message>
         <location filename="../ui/account/login_dialog.cpp" line="74"/>
         <source>The confirmation code we&apos;ve sent expired.</source>
-        <translation type="unfinished"></translation>
+        <translation>Термін дії коду підтвердження закінчився.</translation>
     </message>
     <message>
         <location filename="../ui/account/login_dialog.cpp" line="76"/>
         <source>We&apos;ve sent a confirmation code to the e-mail above, please enter it here to verify</source>
-        <translation type="unfinished"></translation>
+        <translation>Код підтвердження надіслано на вказану електронну пошту. Будь ласка, введіть його для підтвердження</translation>
     </message>
     <message>
         <location filename="../ui/account/login_dialog.cpp" line="194"/>
@@ -2614,7 +2614,7 @@
     <message>
         <location filename="../ui/account/login_dialog.cpp" line="201"/>
         <source>Send code again</source>
-        <translation type="unfinished"></translation>
+        <translation>Відправити код знову</translation>
     </message>
     <message>
         <location filename="../ui/account/login_dialog.cpp" line="202"/>
@@ -2674,7 +2674,7 @@
     <message>
         <location filename="../ui/menu_view.cpp" line="232"/>
         <source>Toggle full screen</source>
-        <translation type="unfinished"></translation>
+        <translation>Повноекранний режим</translation>
     </message>
     <message>
         <location filename="../ui/menu_view.cpp" line="235"/>
@@ -3689,28 +3689,28 @@
     <message>
         <location filename="../ui/account/session_widget.cpp" line="124"/>
         <source>Current device</source>
-        <translation type="unfinished"></translation>
+        <translation>Поточний пристрій</translation>
     </message>
     <message>
         <location filename="../ui/account/session_widget.cpp" line="132"/>
         <source>Online</source>
-        <translation type="unfinished"></translation>
+        <translation>у мережі</translation>
     </message>
     <message>
         <location filename="../ui/account/session_widget.cpp" line="136"/>
         <source>was active %1 at %2</source>
         <extracomment>Last active date (%1) and time (%2) of the user&apos;s device</extracomment>
-        <translation type="unfinished"></translation>
+        <translation>відвідував %1 о %2&#xa0;</translation>
     </message>
     <message>
         <location filename="../ui/account/session_widget.cpp" line="140"/>
         <source>Terminate others</source>
-        <translation type="unfinished"></translation>
+        <translation>Відкликати решту</translation>
     </message>
     <message>
         <location filename="../ui/account/session_widget.cpp" line="141"/>
         <source>Terminate</source>
-        <translation type="unfinished"></translation>
+        <translation>Відкликати</translation>
     </message>
 </context>
 <context>
@@ -4482,12 +4482,12 @@ If you work with no interruptions it saves the project every 3 minutes.</source>
     <message>
         <location filename="../ui/settings/settings_view.cpp" line="1556"/>
         <source>Focus current paragraph</source>
-        <translation type="unfinished"></translation>
+        <translation>Сфокусувати поточний абзац</translation>
     </message>
     <message>
         <location filename="../ui/settings/settings_view.cpp" line="1558"/>
         <source>Use typewriter scrolling (keeps line with the cursor on the screen center)</source>
-        <translation type="unfinished"></translation>
+        <translation>Режим друкарської машинки (рядок з курсором буде завжди у центрі екрана)</translation>
     </message>
     <message>
         <location filename="../ui/settings/settings_view.cpp" line="1560"/>

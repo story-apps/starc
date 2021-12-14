@@ -252,7 +252,7 @@
     <message>
         <location filename="../../corelib/business_layer/model/screenplay/screenplay_dictionaries_model.cpp" line="161"/>
         <source>EXT./INT.</source>
-        <translation type="unfinished"></translation>
+        <translation>חוץ./פנים.</translation>
     </message>
     <message>
         <location filename="../../corelib/business_layer/model/screenplay/screenplay_dictionaries_model.cpp" line="166"/>
@@ -891,22 +891,22 @@
     <message>
         <location filename="../management_layer/content/account/account_manager.cpp" line="349"/>
         <source>Try PRO version for free</source>
-        <translation type="unfinished"></translation>
+        <translation>נסה גרסה PRO בחינם</translation>
     </message>
     <message>
         <location filename="../management_layer/content/account/account_manager.cpp" line="350"/>
         <source>While Starc is in the beta we&apos;d like to thank our users by providing them with free PRO features. After beta ends you&apos;ll still be able to use PRO version for 30 days for free.</source>
-        <translation type="unfinished"></translation>
+        <translation>בזמן ש-Starc נמצאת בגרסת הבטא, אנו רוצים להודות למשתמשים שלנו ונותנים להם את תכונות גרסת ה-PRO בחינם. לאחר סיום הבטא עדיין תוכלו להשתמש בגרסת ה-PRO למשך 30 יום בחינם.</translation>
     </message>
     <message>
         <location filename="../management_layer/content/account/account_manager.cpp" line="353"/>
         <source>Continue with free version</source>
-        <translation type="unfinished"></translation>
+        <translation>המשך עם גרסה FREE</translation>
     </message>
     <message>
         <location filename="../management_layer/content/account/account_manager.cpp" line="354"/>
         <source>Activate PRO</source>
-        <translation type="unfinished"></translation>
+        <translation>הפעל גרסה PRO</translation>
     </message>
 </context>
 <context>
@@ -1012,12 +1012,12 @@
     <message>
         <location filename="../management_layer/plugins/characters_relations/characters_relations_manager.cpp" line="63"/>
         <source>To edit the character relations graph, you need to upgrade to the PRO version.</source>
-        <translation type="unfinished"></translation>
+        <translation>כדי לערוך את גרף קשרי הדמויות, עליך לשדרג לגרסה PRO.</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/characters_relations/characters_relations_manager.cpp" line="65"/>
         <source>Maybe later</source>
-        <translation type="unfinished"></translation>
+        <translation>אולי מאוחר יותר</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/characters_relations/characters_relations_manager.cpp" line="66"/>
@@ -1444,42 +1444,42 @@
     <message>
         <location filename="../ui/account/account_navigator.cpp" line="88"/>
         <source>Active until %1</source>
-        <translation type="unfinished"></translation>
+        <translation>פעיל עד %1</translation>
     </message>
     <message>
         <location filename="../ui/account/account_navigator.cpp" line="233"/>
         <source>Account</source>
-        <translation type="unfinished"></translation>
+        <translation>חשבון</translation>
     </message>
     <message>
         <location filename="../ui/account/account_navigator.cpp" line="234"/>
         <source>Subscription</source>
-        <translation type="unfinished"></translation>
+        <translation>מנוי</translation>
     </message>
     <message>
         <location filename="../ui/account/account_navigator.cpp" line="235"/>
         <source>Sessions</source>
-        <translation type="unfinished"></translation>
+        <translation>מפגשים</translation>
     </message>
     <message>
         <location filename="../ui/account/account_navigator.cpp" line="236"/>
         <source>FREE version</source>
-        <translation type="unfinished"></translation>
+        <translation>גרסה FREE</translation>
     </message>
     <message>
         <location filename="../ui/account/account_navigator.cpp" line="237"/>
         <source>Try PRO for free</source>
-        <translation type="unfinished"></translation>
+        <translation>נסה גרסה PRO בחינם</translation>
     </message>
     <message>
         <location filename="../ui/account/account_navigator.cpp" line="238"/>
         <source>Upgrade to PRO</source>
-        <translation type="unfinished"></translation>
+        <translation>שדרג לגרסה PRO</translation>
     </message>
     <message>
         <location filename="../ui/account/account_navigator.cpp" line="239"/>
         <source>PRO version</source>
-        <translation type="unfinished"></translation>
+        <translation>גרסה PRO</translation>
     </message>
     <message>
         <location filename="../ui/account/account_navigator.cpp" line="241"/>
@@ -1489,22 +1489,22 @@
     <message>
         <location filename="../ui/account/account_navigator.cpp" line="242"/>
         <source>Buy lifetime</source>
-        <translation type="unfinished"></translation>
+        <translation>קנה לכל החיים</translation>
     </message>
     <message>
         <location filename="../ui/account/account_navigator.cpp" line="243"/>
         <source>Upgrade to TEAM</source>
-        <translation type="unfinished"></translation>
+        <translation>שדרג לגרסה TEAM</translation>
     </message>
     <message>
         <location filename="../ui/account/account_navigator.cpp" line="244"/>
         <source>TEAM version</source>
-        <translation type="unfinished"></translation>
+        <translation>גרסה TEAM</translation>
     </message>
     <message>
         <location filename="../ui/account/account_navigator.cpp" line="245"/>
         <source>Logout</source>
-        <translation type="unfinished"></translation>
+        <translation>התנתק</translation>
     </message>
 </context>
 <context>
@@ -1517,72 +1517,72 @@
     <message>
         <location filename="../ui/account/account_view.cpp" line="269"/>
         <source>FREE version</source>
-        <translation type="unfinished"></translation>
+        <translation>גרסה FREE</translation>
     </message>
     <message>
         <location filename="../ui/account/account_view.cpp" line="270"/>
         <source>Upgrade to PRO</source>
-        <translation type="unfinished"></translation>
+        <translation>שדרג לגרסה PRO</translation>
     </message>
     <message>
         <location filename="../ui/account/account_view.cpp" line="277"/>
         <source>Try PRO for free</source>
-        <translation type="unfinished"></translation>
+        <translation>נסה גרסה PRO בחינם</translation>
     </message>
     <message>
         <location filename="../ui/account/account_view.cpp" line="285"/>
         <source>PRO version</source>
-        <translation type="unfinished"></translation>
+        <translation>גרסה PRO</translation>
     </message>
     <message>
         <location filename="../ui/account/account_view.cpp" line="292"/>
         <source>TEAM version</source>
-        <translation type="unfinished"></translation>
+        <translation>גרסה TEAM</translation>
     </message>
     <message>
         <location filename="../ui/account/account_view.cpp" line="345"/>
         <source>Your name</source>
-        <translation type="unfinished"></translation>
+        <translation>שמך</translation>
     </message>
     <message>
         <location filename="../ui/account/account_view.cpp" line="346"/>
         <source>Your bio</source>
-        <translation type="unfinished"></translation>
+        <translation>הביוגרפיה שלך</translation>
     </message>
     <message>
         <location filename="../ui/account/account_view.cpp" line="347"/>
         <source>Add avatar +</source>
-        <translation type="unfinished"></translation>
+        <translation>הוסף אווטאר +</translation>
     </message>
     <message>
         <location filename="../ui/account/account_view.cpp" line="347"/>
         <source>Change avatar...</source>
-        <translation type="unfinished"></translation>
+        <translation>שנה אווטאר...</translation>
     </message>
     <message>
         <location filename="../ui/account/account_view.cpp" line="348"/>
         <source>Do you want to delete your avatar?</source>
-        <translation type="unfinished"></translation>
+        <translation>רוצה למחוק את אווטאר שלך?</translation>
     </message>
     <message>
         <location filename="../ui/account/account_view.cpp" line="349"/>
         <source>Select an area for the avatar</source>
-        <translation type="unfinished"></translation>
+        <translation>בחר אזור עבור האווטאר</translation>
     </message>
     <message>
         <location filename="../ui/account/account_view.cpp" line="350"/>
         <source>Subscription type</source>
-        <translation type="unfinished"></translation>
+        <translation>סוג מנוי</translation>
     </message>
     <message>
         <location filename="../ui/account/account_view.cpp" line="351"/>
         <source>What&apos;s included?</source>
-        <translation type="unfinished"></translation>
+        <translation>מה כלול?</translation>
     </message>
     <message>
         <location filename="../ui/account/account_view.cpp" line="352"/>
         <source>Active sessions</source>
-        <translation type="unfinished"></translation>
+        <translation>מפגשים פעילים</translation>
     </message>
 </context>
 <context>
@@ -1590,7 +1590,7 @@
     <message>
         <location filename="../ui/application_view.cpp" line="154"/>
         <source>Turn off full screen</source>
-        <translation type="unfinished"></translation>
+        <translation>כבה מסך מלא</translation>
     </message>
 </context>
 <context>
@@ -1699,35 +1699,35 @@
         <location filename="../management_layer/plugins/characters_relations/ui/characters_relations_sidebar.cpp" line="236"/>
         <location filename="../management_layer/plugins/characters_relations/ui/characters_relations_sidebar.cpp" line="338"/>
         <source>To create a new relation, hold the Option button and move one character to another.</source>
-        <translation type="unfinished"></translation>
+        <translation>כדי ליצור קשר חדש, החזק את כפתור ה-Option והזז דמות אחת לאחרת.</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/characters_relations/ui/characters_relations_sidebar.cpp" line="239"/>
         <location filename="../management_layer/plugins/characters_relations/ui/characters_relations_sidebar.cpp" line="341"/>
         <source>To create a new relation, hold the Alt button and move one character to another.</source>
-        <translation type="unfinished"></translation>
+        <translation>כדי ליצור קשר חדש, החזק את כפתור ה-Alt והזז דמות אחת לאחרת.</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/characters_relations/ui/characters_relations_sidebar.cpp" line="244"/>
         <source>%1 has no relations with other characters</source>
-        <translation type="unfinished"></translation>
+        <translation>ל %1 אין קשרים עם דמויות אחרות</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/characters_relations/ui/characters_relations_sidebar.cpp" line="247"/>
         <source>What %1 feels to</source>
-        <translation type="unfinished"></translation>
+        <translation>מה %1 מרגיש כלפי</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/characters_relations/ui/characters_relations_sidebar.cpp" line="253"/>
         <location filename="../management_layer/plugins/characters_relations/ui/characters_relations_sidebar.cpp" line="347"/>
         <source>Open relation details</source>
-        <translation type="unfinished"></translation>
+        <translation>פתח את פרטי הקשר</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/characters_relations/ui/characters_relations_sidebar.cpp" line="302"/>
         <location filename="../management_layer/plugins/characters_relations/ui/characters_relations_sidebar.cpp" line="308"/>
         <source>%1 point of view</source>
-        <translation type="unfinished"></translation>
+        <translation>%1 נקודת מבט</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/characters_relations/ui/characters_relations_sidebar.cpp" line="303"/>
@@ -1735,17 +1735,17 @@
         <location filename="../management_layer/plugins/characters_relations/ui/characters_relations_sidebar.cpp" line="309"/>
         <location filename="../management_layer/plugins/characters_relations/ui/characters_relations_sidebar.cpp" line="310"/>
         <source>Show all %1&apos;s relations</source>
-        <translation type="unfinished"></translation>
+        <translation>הצג את כל הקשרים של %1</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/characters_relations/ui/characters_relations_sidebar.cpp" line="334"/>
         <source>To see all relations of the character, select concrete character.</source>
-        <translation type="unfinished"></translation>
+        <translation>כדי לראות את כל הקשרים של הדמות, בחר דמות ספציפית.</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/characters_relations/ui/characters_relations_sidebar.cpp" line="335"/>
         <source>To see relation details, select concrete relation.</source>
-        <translation type="unfinished"></translation>
+        <translation>כדי לראות פרטי קשר, בחר קשר ספציפי.</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/characters_relations/ui/characters_relations_sidebar.cpp" line="350"/>
@@ -1777,7 +1777,7 @@
         <location filename="../management_layer/plugins/characters_relations/ui/characters_relations_sidebar.cpp" line="353"/>
         <location filename="../management_layer/plugins/characters_relations/ui/characters_relations_sidebar.cpp" line="355"/>
         <source>Details</source>
-        <translation type="unfinished"></translation>
+        <translation>פרטים</translation>
     </message>
 </context>
 <context>
@@ -1785,17 +1785,17 @@
     <message>
         <location filename="../management_layer/plugins/characters_relations/ui/characters_relations_view.cpp" line="136"/>
         <source>Unlock ability to edit characters relations</source>
-        <translation type="unfinished"></translation>
+        <translation>פתח את היכולת לערוך קשרי דמויות</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/characters_relations/ui/characters_relations_view.cpp" line="137"/>
         <source>Add character</source>
-        <translation type="unfinished"></translation>
+        <translation>הוסף דמות</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/characters_relations/ui/characters_relations_view.cpp" line="138"/>
         <source>Remove selected item</source>
-        <translation type="unfinished"></translation>
+        <translation>הסר פריט שנבחר</translation>
     </message>
 </context>
 <context>
@@ -2576,12 +2576,12 @@
     <message>
         <location filename="../ui/account/login_dialog.cpp" line="74"/>
         <source>The confirmation code we&apos;ve sent expired.</source>
-        <translation type="unfinished"></translation>
+        <translation>תוקף קוד האישור ששלחנו פג.</translation>
     </message>
     <message>
         <location filename="../ui/account/login_dialog.cpp" line="76"/>
         <source>We&apos;ve sent a confirmation code to the e-mail above, please enter it here to verify</source>
-        <translation type="unfinished"></translation>
+        <translation>שלחנו קוד אישור לדוא&quot;ל למעלה, אנא הזן אותו כאן כדי לאמת</translation>
     </message>
     <message>
         <location filename="../ui/account/login_dialog.cpp" line="194"/>
@@ -2591,7 +2591,7 @@
     <message>
         <location filename="../ui/account/login_dialog.cpp" line="196"/>
         <source>Sign in to get access to the extended free and pro features</source>
-        <translation type="unfinished"></translation>
+        <translation>היכנס כדי לקבל גישה לתכונות המורחבות של גרסאות ה FREE ו- PRO בחינם.</translation>
     </message>
     <message>
         <location filename="../ui/account/login_dialog.cpp" line="197"/>
@@ -2611,7 +2611,7 @@
     <message>
         <location filename="../ui/account/login_dialog.cpp" line="201"/>
         <source>Send code again</source>
-        <translation type="unfinished"></translation>
+        <translation>שלח קוד שוב</translation>
     </message>
     <message>
         <location filename="../ui/account/login_dialog.cpp" line="202"/>
@@ -2671,7 +2671,7 @@
     <message>
         <location filename="../ui/menu_view.cpp" line="232"/>
         <source>Toggle full screen</source>
-        <translation type="unfinished"></translation>
+        <translation>החלף מסך מלא</translation>
     </message>
     <message>
         <location filename="../ui/menu_view.cpp" line="235"/>
@@ -3427,7 +3427,7 @@
     <message>
         <location filename="../management_layer/plugins/screenplay_text/comments/screenplay_text_comment_delegate.cpp" line="146"/>
         <source>edited</source>
-        <translation type="unfinished"></translation>
+        <translation>בוצעו שינויים</translation>
     </message>
     <message numerus="yes">
         <location filename="../management_layer/plugins/screenplay_text/comments/screenplay_text_comment_delegate.cpp" line="242"/>
@@ -3683,28 +3683,28 @@
     <message>
         <location filename="../ui/account/session_widget.cpp" line="124"/>
         <source>Current device</source>
-        <translation type="unfinished"></translation>
+        <translation>מכשיר נוכחי</translation>
     </message>
     <message>
         <location filename="../ui/account/session_widget.cpp" line="132"/>
         <source>Online</source>
-        <translation type="unfinished"></translation>
+        <translation>מחובר</translation>
     </message>
     <message>
         <location filename="../ui/account/session_widget.cpp" line="136"/>
         <source>was active %1 at %2</source>
         <extracomment>Last active date (%1) and time (%2) of the user&apos;s device</extracomment>
-        <translation type="unfinished"></translation>
+        <translation>היה פעיל %1 ב-%2</translation>
     </message>
     <message>
         <location filename="../ui/account/session_widget.cpp" line="140"/>
         <source>Terminate others</source>
-        <translation type="unfinished"></translation>
+        <translation>נתק אחרים</translation>
     </message>
     <message>
         <location filename="../ui/account/session_widget.cpp" line="141"/>
         <source>Terminate</source>
-        <translation type="unfinished"></translation>
+        <translation>התנתק</translation>
     </message>
 </context>
 <context>
@@ -4477,12 +4477,12 @@ If you work with no interruptions it saves the project every 3 minutes.</source>
     <message>
         <location filename="../ui/settings/settings_view.cpp" line="1556"/>
         <source>Focus current paragraph</source>
-        <translation type="unfinished"></translation>
+        <translation>התמקד בפסקה הנוכחית</translation>
     </message>
     <message>
         <location filename="../ui/settings/settings_view.cpp" line="1558"/>
         <source>Use typewriter scrolling (keeps line with the cursor on the screen center)</source>
-        <translation type="unfinished"></translation>
+        <translation>השתמש בגלילת מכונת כתיבה (שומר על קו הסמן במרכז המסך)</translation>
     </message>
     <message>
         <location filename="../ui/settings/settings_view.cpp" line="1560"/>
@@ -4741,7 +4741,7 @@ If you work with no interruptions it saves the project every 3 minutes.</source>
         <location filename="../management_layer/plugins/simple_text_structure/ui/simple_text_structure_view.cpp" line="118"/>
         <location filename="../management_layer/plugins/simple_text_structure/ui/simple_text_structure_view.cpp" line="119"/>
         <source>Back to navigator</source>
-        <translation type="unfinished"></translation>
+        <translation>חזרה לנווט</translation>
     </message>
 </context>
 <context>
