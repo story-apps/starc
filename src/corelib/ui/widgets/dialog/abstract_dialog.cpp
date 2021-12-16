@@ -20,6 +20,11 @@ public:
     explicit Implementation(QWidget* _parent);
 
     /**
+     * @brief Настроить таймер мониторинга активности приложения, если ещё не настроен
+     */
+    void initApplicationActivityChangingTimer();
+
+    /**
      * @brief Анимировать отображение
      */
     void animateShow(const QPoint& _pos);
@@ -29,6 +34,8 @@ public:
      */
     void animateHide(const QPoint& _pos);
 
+
+    static QTimer sApplicationActivityChangingTimer;
 
     QVBoxLayout* layout = nullptr;
     DialogContent* content = nullptr;
@@ -59,6 +66,26 @@ AbstractDialog::Implementation::Implementation(QWidget* _parent)
     opacityAnimation.setEasingCurve(QEasingCurve::OutQuad);
     contentPosAnimation.setDuration(220);
     contentPosAnimation.setEasingCurve(QEasingCurve::OutQuad);
+
+    initApplicationActivityChangingTimer();
+}
+
+void AbstractDialog::Implementation::initApplicationActivityChangingTimer()
+{
+    const int applicationActivityChangingTimerInterval = 1000;
+    if (sApplicationActivityChangingTimer.interval() == applicationActivityChangingTimerInterval
+        && sApplicationActivityChangingTimer.isSingleShot()) {
+        return;
+    }
+
+    sApplicationActivityChangingTimer.setInterval(applicationActivityChangingTimerInterval);
+    sApplicationActivityChangingTimer.setSingleShot(true);
+    connect(qApp, &QApplication::applicationStateChanged, &sApplicationActivityChangingTimer,
+            [](Qt::ApplicationState _state) {
+                if (_state == Qt::ApplicationActive) {
+                    sApplicationActivityChangingTimer.start();
+                }
+            });
 }
 
 void AbstractDialog::Implementation::animateShow(const QPoint& _pos)
@@ -88,10 +115,12 @@ void AbstractDialog::Implementation::animateHide(const QPoint& _pos)
     opacityAnimation.start();
 }
 
+QTimer AbstractDialog::Implementation::sApplicationActivityChangingTimer;
+
 
 // ****
 
-
+#include <QDebug>
 AbstractDialog::AbstractDialog(QWidget* _parent)
     : Widget(_parent)
     , d(new Implementation(this))
@@ -260,13 +289,15 @@ void AbstractDialog::paintEvent(QPaintEvent* _event)
 void AbstractDialog::mousePressEvent(QMouseEvent* _event)
 {
     //
-    // Если пользователь кликнул вне области контента диалога и есть кнопка отмены, то используем её
+    // Если пользователь кликнул вне области контента диалога,
+    // и при этом окно не было активировано посредством клика в этой области,
+    // и есть кнопка отмены, то используем её
     //
     if (!d->title->rect().contains(d->title->mapFromGlobal(_event->globalPos()))
-        && !d->content->rect().contains(d->content->mapFromGlobal(_event->globalPos()))) {
-        if (d->rejectButton != nullptr && d->rejectButton->isEnabled()) {
-            d->rejectButton->click();
-        }
+        && !d->content->rect().contains(d->content->mapFromGlobal(_event->globalPos()))
+        && !d->sApplicationActivityChangingTimer.isActive() && d->rejectButton != nullptr
+        && d->rejectButton->isEnabled()) {
+        d->rejectButton->click();
     }
 }
 
