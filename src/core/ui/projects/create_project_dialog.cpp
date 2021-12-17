@@ -1,7 +1,9 @@
 #include "create_project_dialog.h"
 
+#include <domain/document_object.h>
 #include <ui/design_system/design_system.h>
 #include <ui/widgets/button/button.h>
+#include <ui/widgets/combo_box/combo_box.h>
 #include <ui/widgets/dialog/standard_dialog.h>
 #include <ui/widgets/icon_button/icon_button.h>
 #include <ui/widgets/label/label.h>
@@ -13,6 +15,7 @@
 
 #include <QFileDialog>
 #include <QGridLayout>
+#include <QStringListModel>
 #include <QTimer>
 
 
@@ -23,6 +26,8 @@ class CreateProjectDialog::Implementation
 public:
     explicit Implementation(QWidget* _parent);
 
+    ComboBox* projectType = nullptr;
+    QStringListModel* projectTypeModel = nullptr;
     TextField* projectName = nullptr;
     RadioButton* localProject = nullptr;
     RadioButton* cloudProject = nullptr;
@@ -40,7 +45,9 @@ public:
 };
 
 CreateProjectDialog::Implementation::Implementation(QWidget* _parent)
-    : projectName(new TextField(_parent))
+    : projectType(new ComboBox(_parent))
+    , projectTypeModel(new QStringListModel(projectType))
+    , projectName(new TextField(_parent))
     , localProject(new RadioButton(_parent))
     , cloudProject(new RadioButton(_parent))
     , cloudProjectCreationNote(new Body1Label(_parent))
@@ -56,6 +63,8 @@ CreateProjectDialog::Implementation::Implementation(QWidget* _parent)
 
     localProject->setChecked(true);
 
+    projectType->setSpellCheckPolicy(SpellCheckPolicy::Manual);
+    projectType->setModel(projectTypeModel);
     projectFolder->setSpellCheckPolicy(SpellCheckPolicy::Manual);
     projectFolder->setTrailingIcon(u8"\U000f0256");
     importFilePath->setSpellCheckPolicy(SpellCheckPolicy::Manual);
@@ -92,17 +101,19 @@ CreateProjectDialog::CreateProjectDialog(QWidget* _parent)
 
     contentsLayout()->setContentsMargins({});
     contentsLayout()->setSpacing(0);
-    contentsLayout()->addWidget(d->projectName, 0, 0, 1, 2);
-    contentsLayout()->addWidget(d->localProject, 1, 0, 1, 2);
-    contentsLayout()->addWidget(d->cloudProject, 2, 0, 1, 2);
-    contentsLayout()->addWidget(d->cloudProjectCreationNote, 3, 0, 1, 2);
-    contentsLayout()->addWidget(d->cloudProjectCreationActionNote, 4, 1);
-    contentsLayout()->addWidget(d->cloudProjectCreationAction, 4, 0);
+    int row = 0;
+    contentsLayout()->addWidget(d->projectType, row++, 0, 1, 2);
+    contentsLayout()->addWidget(d->projectName, row++, 0, 1, 2);
+    contentsLayout()->addWidget(d->localProject, row++, 0, 1, 2);
+    contentsLayout()->addWidget(d->cloudProject, row++, 0, 1, 2);
+    contentsLayout()->addWidget(d->cloudProjectCreationNote, row++, 0, 1, 2);
+    contentsLayout()->addWidget(d->cloudProjectCreationActionNote, row, 1);
+    contentsLayout()->addWidget(d->cloudProjectCreationAction, row++, 0);
     contentsLayout()->setColumnStretch(1, 1);
-    contentsLayout()->addWidget(d->projectFolder, 5, 0, 1, 2);
-    contentsLayout()->addWidget(d->importFilePath, 6, 0, 1, 2);
-    contentsLayout()->setRowStretch(7, 1);
-    contentsLayout()->addLayout(d->buttonsLayout, 8, 0, 1, 2);
+    contentsLayout()->addWidget(d->projectFolder, row++, 0, 1, 2);
+    contentsLayout()->addWidget(d->importFilePath, row++, 0, 1, 2);
+    contentsLayout()->setRowStretch(row++, 1);
+    contentsLayout()->addLayout(d->buttonsLayout, row++, 0, 1, 2);
 
     connect(d->projectName, &TextField::textChanged, this,
             [this] { d->projectName->setError({}); });
@@ -160,6 +171,75 @@ CreateProjectDialog::CreateProjectDialog(QWidget* _parent)
     designSystemChangeEvent(nullptr);
 }
 
+CreateProjectDialog::~CreateProjectDialog() = default;
+
+int CreateProjectDialog::projectType() const
+{
+    Domain::DocumentObjectType type = Domain::DocumentObjectType::Undefined;
+    switch (d->projectType->currentIndex().row()) {
+    case 1: {
+        type = Domain::DocumentObjectType::Screenplay;
+        break;
+    }
+
+    case 2: {
+        type = Domain::DocumentObjectType::ComicBook;
+        break;
+    }
+    }
+    return static_cast<int>(type);
+}
+
+void CreateProjectDialog::setProjectType(int _type)
+{
+    int row = 0;
+    switch (static_cast<Domain::DocumentObjectType>(_type)) {
+    case Domain::DocumentObjectType::Screenplay: {
+        row = 1;
+        break;
+    }
+
+    case Domain::DocumentObjectType::ComicBook: {
+        row = 2;
+        break;
+    }
+
+    default: {
+        break;
+    }
+    }
+    d->projectType->setCurrentIndex(d->projectTypeModel->index(row, 0));
+}
+
+QString CreateProjectDialog::projectName() const
+{
+    return d->projectName->text();
+}
+
+QString CreateProjectDialog::projectFolder() const
+{
+    return d->projectFolder->text();
+}
+
+void CreateProjectDialog::setProjectFolder(const QString& _path)
+{
+    if (_path.isEmpty()) {
+        return;
+    }
+
+    d->projectFolder->setText(_path);
+}
+
+QString CreateProjectDialog::importFilePath() const
+{
+    return d->importFilePath->text();
+}
+
+void CreateProjectDialog::setImportFolder(const QString& _path)
+{
+    d->importFolder = _path;
+}
+
 void CreateProjectDialog::configureCloudProjectCreationAbility(bool _isLogged,
                                                                bool _isSubscriptionActive)
 {
@@ -212,41 +292,10 @@ void CreateProjectDialog::configureCloudProjectCreationAbility(bool _isLogged,
     return;
 }
 
-void CreateProjectDialog::setProjectFolder(const QString& _path)
-{
-    if (_path.isEmpty()) {
-        return;
-    }
-
-    d->projectFolder->setText(_path);
-}
-
-void CreateProjectDialog::setImportFolder(const QString& _path)
-{
-    d->importFolder = _path;
-}
-
-QString CreateProjectDialog::projectName() const
-{
-    return d->projectName->text();
-}
-
 bool CreateProjectDialog::isLocal() const
 {
     return d->localProject->isChecked();
 }
-
-QString CreateProjectDialog::projectFolder() const
-{
-    return d->projectFolder->text();
-}
-
-QString CreateProjectDialog::importFilePath() const
-{
-    return d->importFilePath->text();
-}
-
-CreateProjectDialog::~CreateProjectDialog() = default;
 
 QWidget* CreateProjectDialog::focusedWidgetAfterShow() const
 {
@@ -262,7 +311,9 @@ void CreateProjectDialog::updateTranslations()
 {
     setTitle(tr("Create new story"));
 
-    d->projectName->setLabel(tr("Enter name of the new story"));
+    d->projectType->setLabel(tr("Type of the story"));
+    d->projectTypeModel->setStringList({ tr("Not set"), tr("Screenplay"), tr("Comic book") });
+    d->projectName->setLabel(tr("Name of the story"));
     d->localProject->setText(tr("Save story in the local computer"));
     d->cloudProject->setText(tr("Save story in the cloud"));
     d->projectFolder->setLabel(tr("Location of the new story file"));
@@ -279,15 +330,24 @@ void CreateProjectDialog::designSystemChangeEvent(DesignSystemChangeEvent* _even
 {
     AbstractDialog::designSystemChangeEvent(_event);
 
-    for (auto widget :
-         QVector<Widget*>{ d->localProject, d->cloudProjectCreationNote, d->cloudProject,
-                           d->cloudProjectCreationAction, d->cloudProjectCreationActionNote,
-                           d->advancedSettingsButton }) {
+    for (auto widget : std::vector<Widget*>{
+             d->localProject,
+             d->cloudProjectCreationNote,
+             d->cloudProject,
+             d->cloudProjectCreationAction,
+             d->cloudProjectCreationActionNote,
+             d->advancedSettingsButton,
+         }) {
         widget->setTextColor(Ui::DesignSystem::color().onBackground());
         widget->setBackgroundColor(Ui::DesignSystem::color().background());
     }
 
-    for (auto textField : { d->projectName, d->projectFolder, d->importFilePath }) {
+    for (auto textField : std::vector<TextField*>{
+             d->projectType,
+             d->projectName,
+             d->projectFolder,
+             d->importFilePath,
+         }) {
         textField->setTextColor(Ui::DesignSystem::color().onBackground());
         textField->setBackgroundColor(Ui::DesignSystem::color().onBackground());
     }

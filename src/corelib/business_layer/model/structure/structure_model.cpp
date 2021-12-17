@@ -2,6 +2,8 @@
 
 #include "structure_model_item.h"
 
+#include <data_layer/storage/settings_storage.h>
+#include <data_layer/storage/storage_facade.h>
 #include <domain/document_object.h>
 #include <utils/helpers/color_helper.h>
 #include <utils/helpers/text_helper.h>
@@ -41,6 +43,11 @@ public:
      */
     QByteArray toXml(Domain::DocumentObject* _structure) const;
 
+
+    /**
+     * @brief Является ли проект вновь созданным
+     */
+    bool isNewProject = false;
 
     /**
      * @brief Название текущего проекта
@@ -153,6 +160,11 @@ StructureModel::StructureModel(QObject* _parent)
 }
 
 StructureModel::~StructureModel() = default;
+
+bool StructureModel::isNewProject() const
+{
+    return d->isNewProject;
+}
 
 void StructureModel::setProjectName(const QString& _name)
 {
@@ -907,9 +919,21 @@ void StructureModel::initDocument()
     // Если документ пустой, создаём первоначальную структуру
     //
     if (document()->content().isEmpty()) {
+        d->isNewProject = true;
+
         addDocument(Domain::DocumentObjectType::Project);
         addDocument(Domain::DocumentObjectType::Characters);
         addDocument(Domain::DocumentObjectType::Locations);
+
+        //
+        // При необходимости добавим дополнительные элементы в первоначальную структуру
+        //
+        const auto projectType = static_cast<Domain::DocumentObjectType>(
+            settingsValue(DataStorageLayer::kProjectTypeKey).toInt());
+        if (projectType != Domain::DocumentObjectType::Undefined) {
+            addDocument(projectType);
+        }
+
         addDocument(Domain::DocumentObjectType::RecycleBin);
     }
     //

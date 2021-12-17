@@ -5,6 +5,7 @@
 #include <data_layer/database.h>
 #include <data_layer/storage/settings_storage.h>
 #include <data_layer/storage/storage_facade.h>
+#include <domain/document_object.h>
 #include <ui/projects/create_project_dialog.h>
 #include <ui/projects/projects_navigator.h>
 #include <ui/projects/projects_tool_bar.h>
@@ -179,14 +180,18 @@ void ProjectsManager::createProject()
     // Создаём и настраиваем диалог
     //
     auto dialog = new Ui::CreateProjectDialog(d->topLevelWidget);
-    dialog->configureCloudProjectCreationAbility(d->isUserAuthorized, d->canCreateCloudProject);
+    dialog->setProjectType(settingsValue(DataStorageLayer::kProjectTypeKey).toInt());
     dialog->setProjectFolder(settingsValue(DataStorageLayer::kProjectSaveFolderKey).toString());
     dialog->setImportFolder(settingsValue(DataStorageLayer::kProjectImportFolderKey).toString());
+    dialog->configureCloudProjectCreationAbility(d->isUserAuthorized, d->canCreateCloudProject);
 
     //
     // Настраиваем соединения диалога
     //
     connect(dialog, &Ui::CreateProjectDialog::createProjectPressed, this, [this, dialog] {
+        DataStorageLayer::StorageFacade::settingsStorage()->setValue(
+            DataStorageLayer::kProjectTypeKey, dialog->projectType(),
+            DataStorageLayer::SettingsStorage::SettingsPlace::Application);
         DataStorageLayer::StorageFacade::settingsStorage()->setValue(
             DataStorageLayer::kProjectSaveFolderKey, dialog->projectFolder(),
             DataStorageLayer::SettingsStorage::SettingsPlace::Application);

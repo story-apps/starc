@@ -166,8 +166,12 @@ QVariant ProjectNavigator::saveState() const
     return d->tree->saveState();
 }
 
-void ProjectNavigator::restoreState(const QVariant& _state)
+void ProjectNavigator::restoreState(bool _isNewProject, const QVariant& _state)
 {
+    if (_isNewProject) {
+        d->tree->expandAll();
+    }
+
     if (!_state.isValid()) {
         d->tree->setCurrentIndex(d->tree->model()->index(0, 0));
         return;

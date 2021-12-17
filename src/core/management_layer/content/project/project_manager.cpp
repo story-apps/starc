@@ -757,7 +757,8 @@ void ProjectManager::loadCurrentProject(const QString& _name, const QString& _pa
     //
     // Загрузить состояние дерева
     //
-    d->navigator->restoreState(settingsValue(DataStorageLayer::projectStructureKey(_path)));
+    d->navigator->restoreState(d->projectStructureModel->isNewProject(),
+                               settingsValue(DataStorageLayer::projectStructureKey(_path)));
 
     //
     // При необходимости открыть навигатор по документу

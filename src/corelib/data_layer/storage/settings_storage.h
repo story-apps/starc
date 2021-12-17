@@ -79,6 +79,8 @@ const QString kApplicationProjectsKey = kApplicationGroupKey + "/projects";
 //
 const QString kProjectKey = "project";
 //
+// тип нового проекта
+const QString kProjectTypeKey = kProjectKey + "/type";
 // папка сохранения проектов
 const QString kProjectSaveFolderKey = kProjectKey + "/save-folder";
 // папка открытия проектов

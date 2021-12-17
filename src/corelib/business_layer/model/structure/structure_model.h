@@ -30,6 +30,11 @@ public:
     ~StructureModel() override;
 
     /**
+     * @brief Является ли проект только что созданным
+     */
+    bool isNewProject() const;
+
+    /**
      * @brief Задать название проекта
      */
     void setProjectName(const QString& _name);

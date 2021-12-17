@@ -36,7 +36,7 @@ public:
     /**
      * @brief Восстановить состояние
      */
-    void restoreState(const QVariant& _state);
+    void restoreState(bool _isNewProject, const QVariant& _state);
 
     /**
      * @brief Выделить элемент с заданным индексом в дереве
