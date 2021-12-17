@@ -252,7 +252,7 @@
     <message>
         <location filename="../../corelib/business_layer/model/screenplay/screenplay_dictionaries_model.cpp" line="161"/>
         <source>EXT./INT.</source>
-        <translation type="unfinished"></translation>
+        <translation>EXT./INT.</translation>
     </message>
     <message>
         <location filename="../../corelib/business_layer/model/screenplay/screenplay_dictionaries_model.cpp" line="166"/>
@@ -546,56 +546,56 @@
 <context>
     <name>BusinessLayer::StructureModel</name>
     <message>
-        <location filename="../../corelib/business_layer/model/structure/structure_model.cpp" line="187"/>
+        <location filename="../../corelib/business_layer/model/structure/structure_model.cpp" line="199"/>
         <source>Recycle bin</source>
         <translation>Koš</translation>
     </message>
     <message>
-        <location filename="../../corelib/business_layer/model/structure/structure_model.cpp" line="193"/>
-        <location filename="../../corelib/business_layer/model/structure/structure_model.cpp" line="201"/>
+        <location filename="../../corelib/business_layer/model/structure/structure_model.cpp" line="205"/>
+        <location filename="../../corelib/business_layer/model/structure/structure_model.cpp" line="213"/>
         <source>Screenplay</source>
         <translation>Scenarij</translation>
     </message>
     <message>
-        <location filename="../../corelib/business_layer/model/structure/structure_model.cpp" line="195"/>
-        <location filename="../../corelib/business_layer/model/structure/structure_model.cpp" line="212"/>
+        <location filename="../../corelib/business_layer/model/structure/structure_model.cpp" line="207"/>
+        <location filename="../../corelib/business_layer/model/structure/structure_model.cpp" line="224"/>
         <source>Title page</source>
         <translation>Naslovnica</translation>
     </message>
     <message>
-        <location filename="../../corelib/business_layer/model/structure/structure_model.cpp" line="197"/>
-        <location filename="../../corelib/business_layer/model/structure/structure_model.cpp" line="214"/>
+        <location filename="../../corelib/business_layer/model/structure/structure_model.cpp" line="209"/>
+        <location filename="../../corelib/business_layer/model/structure/structure_model.cpp" line="226"/>
         <source>Synopsis</source>
         <translation>Sinopsis</translation>
     </message>
     <message>
-        <location filename="../../corelib/business_layer/model/structure/structure_model.cpp" line="199"/>
+        <location filename="../../corelib/business_layer/model/structure/structure_model.cpp" line="211"/>
         <source>Treatment</source>
         <translation>Treatment</translation>
     </message>
     <message>
-        <location filename="../../corelib/business_layer/model/structure/structure_model.cpp" line="203"/>
-        <location filename="../../corelib/business_layer/model/structure/structure_model.cpp" line="217"/>
+        <location filename="../../corelib/business_layer/model/structure/structure_model.cpp" line="215"/>
+        <location filename="../../corelib/business_layer/model/structure/structure_model.cpp" line="229"/>
         <source>Statistics</source>
         <translation>Statistika</translation>
     </message>
     <message>
-        <location filename="../../corelib/business_layer/model/structure/structure_model.cpp" line="210"/>
+        <location filename="../../corelib/business_layer/model/structure/structure_model.cpp" line="222"/>
         <source>Comic book</source>
         <translation>Strip</translation>
     </message>
     <message>
-        <location filename="../../corelib/business_layer/model/structure/structure_model.cpp" line="216"/>
+        <location filename="../../corelib/business_layer/model/structure/structure_model.cpp" line="228"/>
         <source>Script</source>
         <translation>Scenarij</translation>
     </message>
     <message>
-        <location filename="../../corelib/business_layer/model/structure/structure_model.cpp" line="223"/>
+        <location filename="../../corelib/business_layer/model/structure/structure_model.cpp" line="235"/>
         <source>Characters</source>
         <translation>Liki</translation>
     </message>
     <message>
-        <location filename="../../corelib/business_layer/model/structure/structure_model.cpp" line="234"/>
+        <location filename="../../corelib/business_layer/model/structure/structure_model.cpp" line="246"/>
         <source>Locations</source>
         <translation>Prizorišča</translation>
     </message>
@@ -891,22 +891,22 @@
     <message>
         <location filename="../management_layer/content/account/account_manager.cpp" line="349"/>
         <source>Try PRO version for free</source>
-        <translation type="unfinished"></translation>
+        <translation>Preizkusite različico PRO brezplačno</translation>
     </message>
     <message>
         <location filename="../management_layer/content/account/account_manager.cpp" line="350"/>
         <source>While Starc is in the beta we&apos;d like to thank our users by providing them with free PRO features. After beta ends you&apos;ll still be able to use PRO version for 30 days for free.</source>
-        <translation type="unfinished"></translation>
+        <translation>Dokler je Starc v različici beta, bi se radi oddolžili našim uporabnikom, tako da jim brezplačno zagotovimo funkcionalnosti PRO. Po zaključku beta-obdobja boste lahko še nadaljnjih 30 dni brezplačno uporabljali različico PRO.</translation>
     </message>
     <message>
         <location filename="../management_layer/content/account/account_manager.cpp" line="353"/>
         <source>Continue with free version</source>
-        <translation type="unfinished"></translation>
+        <translation>Nadaljuj z brezplačno različico</translation>
     </message>
     <message>
         <location filename="../management_layer/content/account/account_manager.cpp" line="354"/>
         <source>Activate PRO</source>
-        <translation type="unfinished"></translation>
+        <translation>Aktiviraj PRO</translation>
     </message>
 </context>
 <context>
@@ -1012,12 +1012,12 @@
     <message>
         <location filename="../management_layer/plugins/characters_relations/characters_relations_manager.cpp" line="63"/>
         <source>To edit the character relations graph, you need to upgrade to the PRO version.</source>
-        <translation type="unfinished"></translation>
+        <translation>Za urejanje grafikona odnosov med liki morate program nadgraditi na različico PRO.</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/characters_relations/characters_relations_manager.cpp" line="65"/>
         <source>Maybe later</source>
-        <translation type="unfinished"></translation>
+        <translation>Morda kasneje</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/characters_relations/characters_relations_manager.cpp" line="66"/>
@@ -1149,27 +1149,27 @@
         <translation>Ali želite trajno odstraniti vse dokumente iz koša?</translation>
     </message>
     <message>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="887"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="888"/>
         <source>Title page</source>
         <translation>Naslovnica</translation>
     </message>
     <message>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="890"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="891"/>
         <source>Synopsis</source>
         <translation>Sinopsis</translation>
     </message>
     <message>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="893"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="894"/>
         <source>Treatment</source>
         <translation>Treatment</translation>
     </message>
     <message>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="896"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="897"/>
         <source>Screenplay</source>
         <translation>Scenarij</translation>
     </message>
     <message>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="899"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="900"/>
         <source>Statistics</source>
         <translation>Statistika</translation>
     </message>
@@ -1177,7 +1177,7 @@
 <context>
     <name>ManagementLayer::ProjectsManager</name>
     <message>
-        <location filename="../management_layer/content/projects/projects_manager.cpp" line="238"/>
+        <location filename="../management_layer/content/projects/projects_manager.cpp" line="243"/>
         <source>Choose the file to open</source>
         <translation>Izberite datoteko, ki jo želite odpreti</translation>
     </message>
@@ -1444,42 +1444,42 @@
     <message>
         <location filename="../ui/account/account_navigator.cpp" line="88"/>
         <source>Active until %1</source>
-        <translation type="unfinished"></translation>
+        <translation>Dejaven/a do %1</translation>
     </message>
     <message>
         <location filename="../ui/account/account_navigator.cpp" line="233"/>
         <source>Account</source>
-        <translation type="unfinished"></translation>
+        <translation>Račun</translation>
     </message>
     <message>
         <location filename="../ui/account/account_navigator.cpp" line="234"/>
         <source>Subscription</source>
-        <translation type="unfinished"></translation>
+        <translation>Naročnina</translation>
     </message>
     <message>
         <location filename="../ui/account/account_navigator.cpp" line="235"/>
         <source>Sessions</source>
-        <translation type="unfinished"></translation>
+        <translation>Seje</translation>
     </message>
     <message>
         <location filename="../ui/account/account_navigator.cpp" line="236"/>
         <source>FREE version</source>
-        <translation type="unfinished"></translation>
+        <translation>Brezplačna (FREE) različica</translation>
     </message>
     <message>
         <location filename="../ui/account/account_navigator.cpp" line="237"/>
         <source>Try PRO for free</source>
-        <translation type="unfinished"></translation>
+        <translation>Preizkusi PRO brezplačno</translation>
     </message>
     <message>
         <location filename="../ui/account/account_navigator.cpp" line="238"/>
         <source>Upgrade to PRO</source>
-        <translation type="unfinished"></translation>
+        <translation>Nadgradi na PRO</translation>
     </message>
     <message>
         <location filename="../ui/account/account_navigator.cpp" line="239"/>
         <source>PRO version</source>
-        <translation type="unfinished"></translation>
+        <translation>Različica PRO</translation>
     </message>
     <message>
         <location filename="../ui/account/account_navigator.cpp" line="241"/>
@@ -1489,22 +1489,22 @@
     <message>
         <location filename="../ui/account/account_navigator.cpp" line="242"/>
         <source>Buy lifetime</source>
-        <translation type="unfinished"></translation>
+        <translation>Kupi doživljensko</translation>
     </message>
     <message>
         <location filename="../ui/account/account_navigator.cpp" line="243"/>
         <source>Upgrade to TEAM</source>
-        <translation type="unfinished"></translation>
+        <translation>Nadgradi na TEAM</translation>
     </message>
     <message>
         <location filename="../ui/account/account_navigator.cpp" line="244"/>
         <source>TEAM version</source>
-        <translation type="unfinished"></translation>
+        <translation>Različica TEAM</translation>
     </message>
     <message>
         <location filename="../ui/account/account_navigator.cpp" line="245"/>
         <source>Logout</source>
-        <translation type="unfinished"></translation>
+        <translation>Odjava</translation>
     </message>
 </context>
 <context>
@@ -1517,72 +1517,72 @@
     <message>
         <location filename="../ui/account/account_view.cpp" line="269"/>
         <source>FREE version</source>
-        <translation type="unfinished"></translation>
+        <translation>Brezplačna (FREE) različica</translation>
     </message>
     <message>
         <location filename="../ui/account/account_view.cpp" line="270"/>
         <source>Upgrade to PRO</source>
-        <translation type="unfinished"></translation>
+        <translation>Nadgradi na PRO</translation>
     </message>
     <message>
         <location filename="../ui/account/account_view.cpp" line="277"/>
         <source>Try PRO for free</source>
-        <translation type="unfinished"></translation>
+        <translation>Preizkusi PRO brezplačno</translation>
     </message>
     <message>
         <location filename="../ui/account/account_view.cpp" line="285"/>
         <source>PRO version</source>
-        <translation type="unfinished"></translation>
+        <translation>Različica PRO</translation>
     </message>
     <message>
         <location filename="../ui/account/account_view.cpp" line="292"/>
         <source>TEAM version</source>
-        <translation type="unfinished"></translation>
+        <translation>Različica TEAM</translation>
     </message>
     <message>
         <location filename="../ui/account/account_view.cpp" line="345"/>
         <source>Your name</source>
-        <translation type="unfinished"></translation>
+        <translation>Vaše ime</translation>
     </message>
     <message>
         <location filename="../ui/account/account_view.cpp" line="346"/>
         <source>Your bio</source>
-        <translation type="unfinished"></translation>
+        <translation>Vaša biografija</translation>
     </message>
     <message>
         <location filename="../ui/account/account_view.cpp" line="347"/>
         <source>Add avatar +</source>
-        <translation type="unfinished"></translation>
+        <translation>Dodaj avatar +</translation>
     </message>
     <message>
         <location filename="../ui/account/account_view.cpp" line="347"/>
         <source>Change avatar...</source>
-        <translation type="unfinished"></translation>
+        <translation>Spremeni avatar ...</translation>
     </message>
     <message>
         <location filename="../ui/account/account_view.cpp" line="348"/>
         <source>Do you want to delete your avatar?</source>
-        <translation type="unfinished"></translation>
+        <translation>Ali želite izbrisati svoj avatar?</translation>
     </message>
     <message>
         <location filename="../ui/account/account_view.cpp" line="349"/>
         <source>Select an area for the avatar</source>
-        <translation type="unfinished"></translation>
+        <translation>Izberite področje za avatar</translation>
     </message>
     <message>
         <location filename="../ui/account/account_view.cpp" line="350"/>
         <source>Subscription type</source>
-        <translation type="unfinished"></translation>
+        <translation>Vrsta naročnine</translation>
     </message>
     <message>
         <location filename="../ui/account/account_view.cpp" line="351"/>
         <source>What&apos;s included?</source>
-        <translation type="unfinished"></translation>
+        <translation>Kaj je vključeno?</translation>
     </message>
     <message>
         <location filename="../ui/account/account_view.cpp" line="352"/>
         <source>Active sessions</source>
-        <translation type="unfinished"></translation>
+        <translation>Dejavne seje</translation>
     </message>
 </context>
 <context>
@@ -1590,7 +1590,7 @@
     <message>
         <location filename="../ui/application_view.cpp" line="154"/>
         <source>Turn off full screen</source>
-        <translation type="unfinished"></translation>
+        <translation>Izklopi celozaslonski način</translation>
     </message>
 </context>
 <context>
@@ -1785,17 +1785,17 @@
     <message>
         <location filename="../management_layer/plugins/characters_relations/ui/characters_relations_view.cpp" line="136"/>
         <source>Unlock ability to edit characters relations</source>
-        <translation type="unfinished"></translation>
+        <translation>Odklenite možnost urejanja odnosov med liki</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/characters_relations/ui/characters_relations_view.cpp" line="137"/>
         <source>Add character</source>
-        <translation type="unfinished"></translation>
+        <translation>Dodaj lik</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/characters_relations/ui/characters_relations_view.cpp" line="138"/>
         <source>Remove selected item</source>
-        <translation type="unfinished"></translation>
+        <translation>Odstrani izbrani element</translation>
     </message>
 </context>
 <context>
@@ -2343,102 +2343,126 @@
 <context>
     <name>Ui::CreateProjectDialog</name>
     <message>
-        <location filename="../ui/projects/create_project_dialog.cpp" line="118"/>
+        <location filename="../ui/projects/create_project_dialog.cpp" line="129"/>
         <source>Choose the folder where new story will be saved</source>
         <translation>Izberite mapo, kjer bo shranjen projekt</translation>
     </message>
     <message>
-        <location filename="../ui/projects/create_project_dialog.cpp" line="125"/>
+        <location filename="../ui/projects/create_project_dialog.cpp" line="136"/>
         <source>Choose the file to import</source>
         <translation>Izberite datoteko za uvoz</translation>
     </message>
     <message>
-        <location filename="../ui/projects/create_project_dialog.cpp" line="134"/>
+        <location filename="../ui/projects/create_project_dialog.cpp" line="145"/>
         <source>File format not supported</source>
         <translation>Vrsta datoteke ni podprta</translation>
     </message>
     <message>
-        <location filename="../ui/projects/create_project_dialog.cpp" line="135"/>
+        <location filename="../ui/projects/create_project_dialog.cpp" line="146"/>
         <source>Importing from DOC files is not supported. You need to save the file in DOCX format and repeat the import.</source>
         <translation>Uvoz iz datotek DOC ni podprt. Datoteko shranite v zapisu DOCX in ponovite postopek uvoza.</translation>
     </message>
     <message>
-        <location filename="../ui/projects/create_project_dialog.cpp" line="151"/>
+        <location filename="../ui/projects/create_project_dialog.cpp" line="162"/>
         <source>The story&apos;s name can&apos;t be empty. Fill it, please.</source>
         <translation>Zgodba mora biti poimenovana. Izpolnite polje.</translation>
     </message>
     <message>
-        <location filename="../ui/projects/create_project_dialog.cpp" line="194"/>
+        <location filename="../ui/projects/create_project_dialog.cpp" line="274"/>
         <source>The story will be created on the local computer.</source>
         <translation>Zgodba bo ustvarjena na računalniku.</translation>
     </message>
     <message>
-        <location filename="../ui/projects/create_project_dialog.cpp" line="195"/>
+        <location filename="../ui/projects/create_project_dialog.cpp" line="275"/>
         <source>to create stories on the cloud.</source>
         <translation>Zgodba bo ustvarjena v oblaku.</translation>
     </message>
     <message>
-        <location filename="../ui/projects/create_project_dialog.cpp" line="197"/>
+        <location filename="../ui/projects/create_project_dialog.cpp" line="277"/>
         <source>Renew subscription</source>
         <translation>Obnovi naročnino</translation>
     </message>
     <message>
-        <location filename="../ui/projects/create_project_dialog.cpp" line="201"/>
+        <location filename="../ui/projects/create_project_dialog.cpp" line="281"/>
         <source>Sign in</source>
         <translation>Prijavi</translation>
     </message>
     <message>
-        <location filename="../ui/projects/create_project_dialog.cpp" line="263"/>
+        <location filename="../ui/projects/create_project_dialog.cpp" line="312"/>
         <source>Create new story</source>
         <translation>Ustvari novo zgodbo</translation>
     </message>
     <message>
-        <location filename="../ui/projects/create_project_dialog.cpp" line="265"/>
-        <source>Enter name of the new story</source>
-        <translation>Vnesite naslov nove zgodbe</translation>
+        <location filename="../ui/projects/create_project_dialog.cpp" line="314"/>
+        <source>Type of the story</source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/projects/create_project_dialog.cpp" line="266"/>
+        <location filename="../ui/projects/create_project_dialog.cpp" line="315"/>
+        <source>Not set</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ui/projects/create_project_dialog.cpp" line="315"/>
+        <source>Screenplay</source>
+        <translation type="unfinished">Scenarij</translation>
+    </message>
+    <message>
+        <location filename="../ui/projects/create_project_dialog.cpp" line="315"/>
+        <source>Comic book</source>
+        <translation type="unfinished">Strip</translation>
+    </message>
+    <message>
+        <location filename="../ui/projects/create_project_dialog.cpp" line="316"/>
+        <source>Name of the story</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Enter name of the new story</source>
+        <translation type="vanished">Vnesite naslov nove zgodbe</translation>
+    </message>
+    <message>
+        <location filename="../ui/projects/create_project_dialog.cpp" line="317"/>
         <source>Save story in the local computer</source>
         <translation>Shrani zgodbo na računalnik</translation>
     </message>
     <message>
-        <location filename="../ui/projects/create_project_dialog.cpp" line="267"/>
+        <location filename="../ui/projects/create_project_dialog.cpp" line="318"/>
         <source>Save story in the cloud</source>
         <translation>Shrani zgodbo v oblaku</translation>
     </message>
     <message>
-        <location filename="../ui/projects/create_project_dialog.cpp" line="268"/>
+        <location filename="../ui/projects/create_project_dialog.cpp" line="319"/>
         <source>Location of the new story file</source>
         <translation>Mesto datoteke nove zgodbe</translation>
     </message>
     <message>
-        <location filename="../ui/projects/create_project_dialog.cpp" line="270"/>
+        <location filename="../ui/projects/create_project_dialog.cpp" line="321"/>
         <source>Choose the folder where the new story will be placed</source>
         <translation>Izberite mapo, v katero bo postavljena nova zgodba</translation>
     </message>
     <message>
-        <location filename="../ui/projects/create_project_dialog.cpp" line="271"/>
+        <location filename="../ui/projects/create_project_dialog.cpp" line="322"/>
         <source>Choose file with story to import</source>
         <translation>Izberite datoteko z zgodbo za uvoz</translation>
     </message>
     <message>
-        <location filename="../ui/projects/create_project_dialog.cpp" line="272"/>
+        <location filename="../ui/projects/create_project_dialog.cpp" line="323"/>
         <source>Choose file for importing</source>
         <translation>Izberite datoteko za uvoz</translation>
     </message>
     <message>
-        <location filename="../ui/projects/create_project_dialog.cpp" line="273"/>
+        <location filename="../ui/projects/create_project_dialog.cpp" line="324"/>
         <source>Advanced options</source>
         <translation>Napredne možnosti</translation>
     </message>
     <message>
-        <location filename="../ui/projects/create_project_dialog.cpp" line="274"/>
+        <location filename="../ui/projects/create_project_dialog.cpp" line="325"/>
         <source>Cancel</source>
         <translation>Prekliči</translation>
     </message>
     <message>
-        <location filename="../ui/projects/create_project_dialog.cpp" line="275"/>
+        <location filename="../ui/projects/create_project_dialog.cpp" line="326"/>
         <source>Create</source>
         <translation>Ustvari</translation>
     </message>
@@ -2582,12 +2606,12 @@
     <message>
         <location filename="../ui/account/login_dialog.cpp" line="74"/>
         <source>The confirmation code we&apos;ve sent expired.</source>
-        <translation type="unfinished"></translation>
+        <translation>Potrditvena koda, ki smo jo poslali, je potekla.</translation>
     </message>
     <message>
         <location filename="../ui/account/login_dialog.cpp" line="76"/>
         <source>We&apos;ve sent a confirmation code to the e-mail above, please enter it here to verify</source>
-        <translation type="unfinished"></translation>
+        <translation>Na zgornji e-naslov smo poslali potrditveno kodo, tukaj jo vnesite, da potrdite prijavo</translation>
     </message>
     <message>
         <location filename="../ui/account/login_dialog.cpp" line="194"/>
@@ -2597,7 +2621,7 @@
     <message>
         <location filename="../ui/account/login_dialog.cpp" line="196"/>
         <source>Sign in to get access to the extended free and pro features</source>
-        <translation type="unfinished"></translation>
+        <translation>Prijavite se, da dobite dostop do razširjenih brezplačnih in profesionalnih funkcionalnosti</translation>
     </message>
     <message>
         <location filename="../ui/account/login_dialog.cpp" line="197"/>
@@ -2617,7 +2641,7 @@
     <message>
         <location filename="../ui/account/login_dialog.cpp" line="201"/>
         <source>Send code again</source>
-        <translation type="unfinished"></translation>
+        <translation>Ponovno pošlji kodo</translation>
     </message>
     <message>
         <location filename="../ui/account/login_dialog.cpp" line="202"/>
@@ -2677,7 +2701,7 @@
     <message>
         <location filename="../ui/menu_view.cpp" line="232"/>
         <source>Toggle full screen</source>
-        <translation type="unfinished"></translation>
+        <translation>Preklopi celozaslonsko</translation>
     </message>
     <message>
         <location filename="../ui/menu_view.cpp" line="235"/>
@@ -2797,12 +2821,12 @@
 <context>
     <name>Ui::ProjectNavigator</name>
     <message>
-        <location filename="../ui/project/project_navigator.cpp" line="204"/>
+        <location filename="../ui/project/project_navigator.cpp" line="208"/>
         <source>Show document navigator</source>
         <translation>Pokaži krmarja po dokumentu</translation>
     </message>
     <message>
-        <location filename="../ui/project/project_navigator.cpp" line="212"/>
+        <location filename="../ui/project/project_navigator.cpp" line="216"/>
         <source>Add document</source>
         <translation>Dodaj dokument</translation>
     </message>
@@ -3691,28 +3715,28 @@
     <message>
         <location filename="../ui/account/session_widget.cpp" line="124"/>
         <source>Current device</source>
-        <translation type="unfinished"></translation>
+        <translation>Trenutna naprava</translation>
     </message>
     <message>
         <location filename="../ui/account/session_widget.cpp" line="132"/>
         <source>Online</source>
-        <translation type="unfinished"></translation>
+        <translation>Prijavljeni</translation>
     </message>
     <message>
         <location filename="../ui/account/session_widget.cpp" line="136"/>
         <source>was active %1 at %2</source>
         <extracomment>Last active date (%1) and time (%2) of the user&apos;s device</extracomment>
-        <translation type="unfinished"></translation>
+        <translation>je aktiven/a %1 ob %2</translation>
     </message>
     <message>
         <location filename="../ui/account/session_widget.cpp" line="140"/>
         <source>Terminate others</source>
-        <translation type="unfinished"></translation>
+        <translation>Zaključi druge</translation>
     </message>
     <message>
         <location filename="../ui/account/session_widget.cpp" line="141"/>
         <source>Terminate</source>
-        <translation type="unfinished"></translation>
+        <translation>Zaključi</translation>
     </message>
 </context>
 <context>
@@ -4485,12 +4509,12 @@ Projekt shrani vsake tri sekunde, ko ne uporabljate miške ali tipkovnice.
     <message>
         <location filename="../ui/settings/settings_view.cpp" line="1556"/>
         <source>Focus current paragraph</source>
-        <translation type="unfinished"></translation>
+        <translation>Pozornost na trenutni odstavek</translation>
     </message>
     <message>
         <location filename="../ui/settings/settings_view.cpp" line="1558"/>
         <source>Use typewriter scrolling (keeps line with the cursor on the screen center)</source>
-        <translation type="unfinished"></translation>
+        <translation>Uporabi drsenje pisalnega stroja (ohranja vrstico, v kateri je kazalka, sredi zaslona)</translation>
     </message>
     <message>
         <location filename="../ui/settings/settings_view.cpp" line="1560"/>

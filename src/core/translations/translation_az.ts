@@ -546,56 +546,56 @@
 <context>
     <name>BusinessLayer::StructureModel</name>
     <message>
-        <location filename="../../corelib/business_layer/model/structure/structure_model.cpp" line="187"/>
+        <location filename="../../corelib/business_layer/model/structure/structure_model.cpp" line="199"/>
         <source>Recycle bin</source>
         <translation>Tullantı qutusu</translation>
     </message>
     <message>
-        <location filename="../../corelib/business_layer/model/structure/structure_model.cpp" line="193"/>
-        <location filename="../../corelib/business_layer/model/structure/structure_model.cpp" line="201"/>
+        <location filename="../../corelib/business_layer/model/structure/structure_model.cpp" line="205"/>
+        <location filename="../../corelib/business_layer/model/structure/structure_model.cpp" line="213"/>
         <source>Screenplay</source>
         <translation>Ssenari</translation>
     </message>
     <message>
-        <location filename="../../corelib/business_layer/model/structure/structure_model.cpp" line="195"/>
-        <location filename="../../corelib/business_layer/model/structure/structure_model.cpp" line="212"/>
+        <location filename="../../corelib/business_layer/model/structure/structure_model.cpp" line="207"/>
+        <location filename="../../corelib/business_layer/model/structure/structure_model.cpp" line="224"/>
         <source>Title page</source>
         <translation>Titul vərəqi</translation>
     </message>
     <message>
-        <location filename="../../corelib/business_layer/model/structure/structure_model.cpp" line="197"/>
-        <location filename="../../corelib/business_layer/model/structure/structure_model.cpp" line="214"/>
+        <location filename="../../corelib/business_layer/model/structure/structure_model.cpp" line="209"/>
+        <location filename="../../corelib/business_layer/model/structure/structure_model.cpp" line="226"/>
         <source>Synopsis</source>
         <translation>Sinopsis</translation>
     </message>
     <message>
-        <location filename="../../corelib/business_layer/model/structure/structure_model.cpp" line="199"/>
+        <location filename="../../corelib/business_layer/model/structure/structure_model.cpp" line="211"/>
         <source>Treatment</source>
         <translation>Tritment</translation>
     </message>
     <message>
-        <location filename="../../corelib/business_layer/model/structure/structure_model.cpp" line="203"/>
-        <location filename="../../corelib/business_layer/model/structure/structure_model.cpp" line="217"/>
+        <location filename="../../corelib/business_layer/model/structure/structure_model.cpp" line="215"/>
+        <location filename="../../corelib/business_layer/model/structure/structure_model.cpp" line="229"/>
         <source>Statistics</source>
         <translation>Statistika</translation>
     </message>
     <message>
-        <location filename="../../corelib/business_layer/model/structure/structure_model.cpp" line="210"/>
+        <location filename="../../corelib/business_layer/model/structure/structure_model.cpp" line="222"/>
         <source>Comic book</source>
         <translation>Komiks</translation>
     </message>
     <message>
-        <location filename="../../corelib/business_layer/model/structure/structure_model.cpp" line="216"/>
+        <location filename="../../corelib/business_layer/model/structure/structure_model.cpp" line="228"/>
         <source>Script</source>
         <translation>Ssenari</translation>
     </message>
     <message>
-        <location filename="../../corelib/business_layer/model/structure/structure_model.cpp" line="223"/>
+        <location filename="../../corelib/business_layer/model/structure/structure_model.cpp" line="235"/>
         <source>Characters</source>
         <translation>Personajlar</translation>
     </message>
     <message>
-        <location filename="../../corelib/business_layer/model/structure/structure_model.cpp" line="234"/>
+        <location filename="../../corelib/business_layer/model/structure/structure_model.cpp" line="246"/>
         <source>Locations</source>
         <translation>Məkanlar</translation>
     </message>
@@ -1149,27 +1149,27 @@
         <translation>Siz həqiqətən tullantı qutusunda olan bütün sənədləri birdəfəlik pozmaq istəyirsiniz? </translation>
     </message>
     <message>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="887"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="888"/>
         <source>Title page</source>
         <translation>Titul vərəqi</translation>
     </message>
     <message>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="890"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="891"/>
         <source>Synopsis</source>
         <translation>Sinopsis</translation>
     </message>
     <message>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="893"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="894"/>
         <source>Treatment</source>
         <translation>Tritment</translation>
     </message>
     <message>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="896"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="897"/>
         <source>Screenplay</source>
         <translation>Ssenari</translation>
     </message>
     <message>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="899"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="900"/>
         <source>Statistics</source>
         <translation>Statistika</translation>
     </message>
@@ -1177,7 +1177,7 @@
 <context>
     <name>ManagementLayer::ProjectsManager</name>
     <message>
-        <location filename="../management_layer/content/projects/projects_manager.cpp" line="238"/>
+        <location filename="../management_layer/content/projects/projects_manager.cpp" line="243"/>
         <source>Choose the file to open</source>
         <translation>Faylı seçin</translation>
     </message>
@@ -2337,102 +2337,126 @@
 <context>
     <name>Ui::CreateProjectDialog</name>
     <message>
-        <location filename="../ui/projects/create_project_dialog.cpp" line="118"/>
+        <location filename="../ui/projects/create_project_dialog.cpp" line="129"/>
         <source>Choose the folder where new story will be saved</source>
         <translation>Yeni əhvalatın saxlanılacağı qovluğu seç</translation>
     </message>
     <message>
-        <location filename="../ui/projects/create_project_dialog.cpp" line="125"/>
+        <location filename="../ui/projects/create_project_dialog.cpp" line="136"/>
         <source>Choose the file to import</source>
         <translation>İmport üçün fayl seç</translation>
     </message>
     <message>
-        <location filename="../ui/projects/create_project_dialog.cpp" line="134"/>
+        <location filename="../ui/projects/create_project_dialog.cpp" line="145"/>
         <source>File format not supported</source>
         <translation>Faylın formatı dəstəklənmir</translation>
     </message>
     <message>
-        <location filename="../ui/projects/create_project_dialog.cpp" line="135"/>
+        <location filename="../ui/projects/create_project_dialog.cpp" line="146"/>
         <source>Importing from DOC files is not supported. You need to save the file in DOCX format and repeat the import.</source>
         <translation>DOC faylların importu dəstəklənmir. Sizə faylı DOCX formatında saxlamaq və sonra import etmək lazımdır.</translation>
     </message>
     <message>
-        <location filename="../ui/projects/create_project_dialog.cpp" line="151"/>
+        <location filename="../ui/projects/create_project_dialog.cpp" line="162"/>
         <source>The story&apos;s name can&apos;t be empty. Fill it, please.</source>
         <translation>Əhvalatın adının yeri boş qala bilməz. Zəhmət olmasa, oranı doldurun.</translation>
     </message>
     <message>
-        <location filename="../ui/projects/create_project_dialog.cpp" line="194"/>
+        <location filename="../ui/projects/create_project_dialog.cpp" line="274"/>
         <source>The story will be created on the local computer.</source>
         <translation>Əhvalat sizin kompüterdə yaradılacaq. </translation>
     </message>
     <message>
-        <location filename="../ui/projects/create_project_dialog.cpp" line="195"/>
+        <location filename="../ui/projects/create_project_dialog.cpp" line="275"/>
         <source>to create stories on the cloud.</source>
         <translation>buludda əhvalatları yaratmaq.</translation>
     </message>
     <message>
-        <location filename="../ui/projects/create_project_dialog.cpp" line="197"/>
+        <location filename="../ui/projects/create_project_dialog.cpp" line="277"/>
         <source>Renew subscription</source>
         <translation>Abunəni yeniləmək</translation>
     </message>
     <message>
-        <location filename="../ui/projects/create_project_dialog.cpp" line="201"/>
+        <location filename="../ui/projects/create_project_dialog.cpp" line="281"/>
         <source>Sign in</source>
         <translation>Daxil ol</translation>
     </message>
     <message>
-        <location filename="../ui/projects/create_project_dialog.cpp" line="263"/>
+        <location filename="../ui/projects/create_project_dialog.cpp" line="312"/>
         <source>Create new story</source>
         <translation>Yeni əhvalat yarat</translation>
     </message>
     <message>
-        <location filename="../ui/projects/create_project_dialog.cpp" line="265"/>
-        <source>Enter name of the new story</source>
-        <translation>Yeni əhvalatın adını daxil et</translation>
+        <location filename="../ui/projects/create_project_dialog.cpp" line="314"/>
+        <source>Type of the story</source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/projects/create_project_dialog.cpp" line="266"/>
+        <location filename="../ui/projects/create_project_dialog.cpp" line="315"/>
+        <source>Not set</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ui/projects/create_project_dialog.cpp" line="315"/>
+        <source>Screenplay</source>
+        <translation type="unfinished">Ssenari</translation>
+    </message>
+    <message>
+        <location filename="../ui/projects/create_project_dialog.cpp" line="315"/>
+        <source>Comic book</source>
+        <translation type="unfinished">Komiks</translation>
+    </message>
+    <message>
+        <location filename="../ui/projects/create_project_dialog.cpp" line="316"/>
+        <source>Name of the story</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Enter name of the new story</source>
+        <translation type="vanished">Yeni əhvalatın adını daxil et</translation>
+    </message>
+    <message>
+        <location filename="../ui/projects/create_project_dialog.cpp" line="317"/>
         <source>Save story in the local computer</source>
         <translation>Əhvalatı kompüterin yaddaşında saxlamaq</translation>
     </message>
     <message>
-        <location filename="../ui/projects/create_project_dialog.cpp" line="267"/>
+        <location filename="../ui/projects/create_project_dialog.cpp" line="318"/>
         <source>Save story in the cloud</source>
         <translation>Əhvalatı buludda saxlamaq</translation>
     </message>
     <message>
-        <location filename="../ui/projects/create_project_dialog.cpp" line="268"/>
+        <location filename="../ui/projects/create_project_dialog.cpp" line="319"/>
         <source>Location of the new story file</source>
         <translation>Yeni əhvalatın faylının yeri</translation>
     </message>
     <message>
-        <location filename="../ui/projects/create_project_dialog.cpp" line="270"/>
+        <location filename="../ui/projects/create_project_dialog.cpp" line="321"/>
         <source>Choose the folder where the new story will be placed</source>
         <translation>Yeni əhvalatın yerləşdiriləcəyi qovluğu seç</translation>
     </message>
     <message>
-        <location filename="../ui/projects/create_project_dialog.cpp" line="271"/>
+        <location filename="../ui/projects/create_project_dialog.cpp" line="322"/>
         <source>Choose file with story to import</source>
         <translation>İmport üçün əhvalatı seç</translation>
     </message>
     <message>
-        <location filename="../ui/projects/create_project_dialog.cpp" line="272"/>
+        <location filename="../ui/projects/create_project_dialog.cpp" line="323"/>
         <source>Choose file for importing</source>
         <translation>İdxal üçün faylı seç</translation>
     </message>
     <message>
-        <location filename="../ui/projects/create_project_dialog.cpp" line="273"/>
+        <location filename="../ui/projects/create_project_dialog.cpp" line="324"/>
         <source>Advanced options</source>
         <translation>Geniş parametrlər</translation>
     </message>
     <message>
-        <location filename="../ui/projects/create_project_dialog.cpp" line="274"/>
+        <location filename="../ui/projects/create_project_dialog.cpp" line="325"/>
         <source>Cancel</source>
         <translation>İmtina</translation>
     </message>
     <message>
-        <location filename="../ui/projects/create_project_dialog.cpp" line="275"/>
+        <location filename="../ui/projects/create_project_dialog.cpp" line="326"/>
         <source>Create</source>
         <translation>Yarat</translation>
     </message>
@@ -2793,12 +2817,12 @@ Dili özünüz tərəfinizdən necə əlavə etmək barədə oxuyun. </translati
 <context>
     <name>Ui::ProjectNavigator</name>
     <message>
-        <location filename="../ui/project/project_navigator.cpp" line="204"/>
+        <location filename="../ui/project/project_navigator.cpp" line="208"/>
         <source>Show document navigator</source>
         <translation>Sənədin naviqatorunu göstər</translation>
     </message>
     <message>
-        <location filename="../ui/project/project_navigator.cpp" line="212"/>
+        <location filename="../ui/project/project_navigator.cpp" line="216"/>
         <source>Add document</source>
         <translation>Sənəd əlavə et</translation>
     </message>

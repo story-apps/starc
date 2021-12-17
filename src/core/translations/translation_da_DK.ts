@@ -546,56 +546,56 @@
 <context>
     <name>BusinessLayer::StructureModel</name>
     <message>
-        <location filename="../../corelib/business_layer/model/structure/structure_model.cpp" line="187"/>
+        <location filename="../../corelib/business_layer/model/structure/structure_model.cpp" line="199"/>
         <source>Recycle bin</source>
         <translation>Papirkurv</translation>
     </message>
     <message>
-        <location filename="../../corelib/business_layer/model/structure/structure_model.cpp" line="193"/>
-        <location filename="../../corelib/business_layer/model/structure/structure_model.cpp" line="201"/>
+        <location filename="../../corelib/business_layer/model/structure/structure_model.cpp" line="205"/>
+        <location filename="../../corelib/business_layer/model/structure/structure_model.cpp" line="213"/>
         <source>Screenplay</source>
         <translation>Manuskript</translation>
     </message>
     <message>
-        <location filename="../../corelib/business_layer/model/structure/structure_model.cpp" line="195"/>
-        <location filename="../../corelib/business_layer/model/structure/structure_model.cpp" line="212"/>
+        <location filename="../../corelib/business_layer/model/structure/structure_model.cpp" line="207"/>
+        <location filename="../../corelib/business_layer/model/structure/structure_model.cpp" line="224"/>
         <source>Title page</source>
         <translation>Titelside</translation>
     </message>
     <message>
-        <location filename="../../corelib/business_layer/model/structure/structure_model.cpp" line="197"/>
-        <location filename="../../corelib/business_layer/model/structure/structure_model.cpp" line="214"/>
+        <location filename="../../corelib/business_layer/model/structure/structure_model.cpp" line="209"/>
+        <location filename="../../corelib/business_layer/model/structure/structure_model.cpp" line="226"/>
         <source>Synopsis</source>
         <translation>Synopsis</translation>
     </message>
     <message>
-        <location filename="../../corelib/business_layer/model/structure/structure_model.cpp" line="199"/>
+        <location filename="../../corelib/business_layer/model/structure/structure_model.cpp" line="211"/>
         <source>Treatment</source>
         <translation>Treatment</translation>
     </message>
     <message>
-        <location filename="../../corelib/business_layer/model/structure/structure_model.cpp" line="203"/>
-        <location filename="../../corelib/business_layer/model/structure/structure_model.cpp" line="217"/>
+        <location filename="../../corelib/business_layer/model/structure/structure_model.cpp" line="215"/>
+        <location filename="../../corelib/business_layer/model/structure/structure_model.cpp" line="229"/>
         <source>Statistics</source>
         <translation>Statistik</translation>
     </message>
     <message>
-        <location filename="../../corelib/business_layer/model/structure/structure_model.cpp" line="210"/>
+        <location filename="../../corelib/business_layer/model/structure/structure_model.cpp" line="222"/>
         <source>Comic book</source>
         <translation>Tegneserie</translation>
     </message>
     <message>
-        <location filename="../../corelib/business_layer/model/structure/structure_model.cpp" line="216"/>
+        <location filename="../../corelib/business_layer/model/structure/structure_model.cpp" line="228"/>
         <source>Script</source>
         <translation>Manuskript</translation>
     </message>
     <message>
-        <location filename="../../corelib/business_layer/model/structure/structure_model.cpp" line="223"/>
+        <location filename="../../corelib/business_layer/model/structure/structure_model.cpp" line="235"/>
         <source>Characters</source>
         <translation>Karakterer</translation>
     </message>
     <message>
-        <location filename="../../corelib/business_layer/model/structure/structure_model.cpp" line="234"/>
+        <location filename="../../corelib/business_layer/model/structure/structure_model.cpp" line="246"/>
         <source>Locations</source>
         <translation>Locations</translation>
     </message>
@@ -1150,27 +1150,27 @@ fordi den allerede er åben i en anden kopi af programmet.</translation>
         <translation>Ønsker du virkelig at fjerne alle dokumenterne fra papirkurven?</translation>
     </message>
     <message>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="887"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="888"/>
         <source>Title page</source>
         <translation>Titelside</translation>
     </message>
     <message>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="890"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="891"/>
         <source>Synopsis</source>
         <translation>Synopsis</translation>
     </message>
     <message>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="893"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="894"/>
         <source>Treatment</source>
         <translation>Treatment</translation>
     </message>
     <message>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="896"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="897"/>
         <source>Screenplay</source>
         <translation>Manuskript</translation>
     </message>
     <message>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="899"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="900"/>
         <source>Statistics</source>
         <translation>Statistik</translation>
     </message>
@@ -1178,7 +1178,7 @@ fordi den allerede er åben i en anden kopi af programmet.</translation>
 <context>
     <name>ManagementLayer::ProjectsManager</name>
     <message>
-        <location filename="../management_layer/content/projects/projects_manager.cpp" line="238"/>
+        <location filename="../management_layer/content/projects/projects_manager.cpp" line="243"/>
         <source>Choose the file to open</source>
         <translation>Vælg fil der skal åbnes</translation>
     </message>
@@ -2338,102 +2338,122 @@ fordi den allerede er åben i en anden kopi af programmet.</translation>
 <context>
     <name>Ui::CreateProjectDialog</name>
     <message>
-        <location filename="../ui/projects/create_project_dialog.cpp" line="118"/>
+        <location filename="../ui/projects/create_project_dialog.cpp" line="129"/>
         <source>Choose the folder where new story will be saved</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/projects/create_project_dialog.cpp" line="125"/>
+        <location filename="../ui/projects/create_project_dialog.cpp" line="136"/>
         <source>Choose the file to import</source>
         <translation>Vælg fil at importere</translation>
     </message>
     <message>
-        <location filename="../ui/projects/create_project_dialog.cpp" line="134"/>
+        <location filename="../ui/projects/create_project_dialog.cpp" line="145"/>
         <source>File format not supported</source>
         <translation>Fil format ikke understøttet</translation>
     </message>
     <message>
-        <location filename="../ui/projects/create_project_dialog.cpp" line="135"/>
+        <location filename="../ui/projects/create_project_dialog.cpp" line="146"/>
         <source>Importing from DOC files is not supported. You need to save the file in DOCX format and repeat the import.</source>
         <translation>Import fra DOC filer er ikke understøttet. Gem filen som DOCX og importer igen.</translation>
     </message>
     <message>
-        <location filename="../ui/projects/create_project_dialog.cpp" line="151"/>
+        <location filename="../ui/projects/create_project_dialog.cpp" line="162"/>
         <source>The story&apos;s name can&apos;t be empty. Fill it, please.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/projects/create_project_dialog.cpp" line="194"/>
+        <location filename="../ui/projects/create_project_dialog.cpp" line="274"/>
         <source>The story will be created on the local computer.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/projects/create_project_dialog.cpp" line="195"/>
+        <location filename="../ui/projects/create_project_dialog.cpp" line="275"/>
         <source>to create stories on the cloud.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/projects/create_project_dialog.cpp" line="197"/>
+        <location filename="../ui/projects/create_project_dialog.cpp" line="277"/>
         <source>Renew subscription</source>
         <translation>Forny abonnement</translation>
     </message>
     <message>
-        <location filename="../ui/projects/create_project_dialog.cpp" line="201"/>
+        <location filename="../ui/projects/create_project_dialog.cpp" line="281"/>
         <source>Sign in</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/projects/create_project_dialog.cpp" line="263"/>
+        <location filename="../ui/projects/create_project_dialog.cpp" line="312"/>
         <source>Create new story</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/projects/create_project_dialog.cpp" line="265"/>
-        <source>Enter name of the new story</source>
+        <location filename="../ui/projects/create_project_dialog.cpp" line="314"/>
+        <source>Type of the story</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/projects/create_project_dialog.cpp" line="266"/>
+        <location filename="../ui/projects/create_project_dialog.cpp" line="315"/>
+        <source>Not set</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ui/projects/create_project_dialog.cpp" line="315"/>
+        <source>Screenplay</source>
+        <translation type="unfinished">Manuskript</translation>
+    </message>
+    <message>
+        <location filename="../ui/projects/create_project_dialog.cpp" line="315"/>
+        <source>Comic book</source>
+        <translation type="unfinished">Tegneserie</translation>
+    </message>
+    <message>
+        <location filename="../ui/projects/create_project_dialog.cpp" line="316"/>
+        <source>Name of the story</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ui/projects/create_project_dialog.cpp" line="317"/>
         <source>Save story in the local computer</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/projects/create_project_dialog.cpp" line="267"/>
+        <location filename="../ui/projects/create_project_dialog.cpp" line="318"/>
         <source>Save story in the cloud</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/projects/create_project_dialog.cpp" line="268"/>
+        <location filename="../ui/projects/create_project_dialog.cpp" line="319"/>
         <source>Location of the new story file</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/projects/create_project_dialog.cpp" line="270"/>
+        <location filename="../ui/projects/create_project_dialog.cpp" line="321"/>
         <source>Choose the folder where the new story will be placed</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/projects/create_project_dialog.cpp" line="271"/>
+        <location filename="../ui/projects/create_project_dialog.cpp" line="322"/>
         <source>Choose file with story to import</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/projects/create_project_dialog.cpp" line="272"/>
+        <location filename="../ui/projects/create_project_dialog.cpp" line="323"/>
         <source>Choose file for importing</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/projects/create_project_dialog.cpp" line="273"/>
+        <location filename="../ui/projects/create_project_dialog.cpp" line="324"/>
         <source>Advanced options</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/projects/create_project_dialog.cpp" line="274"/>
+        <location filename="../ui/projects/create_project_dialog.cpp" line="325"/>
         <source>Cancel</source>
         <translation>Annuler</translation>
     </message>
     <message>
-        <location filename="../ui/projects/create_project_dialog.cpp" line="275"/>
+        <location filename="../ui/projects/create_project_dialog.cpp" line="326"/>
         <source>Create</source>
         <translation>Opret</translation>
     </message>
@@ -2792,12 +2812,12 @@ fordi den allerede er åben i en anden kopi af programmet.</translation>
 <context>
     <name>Ui::ProjectNavigator</name>
     <message>
-        <location filename="../ui/project/project_navigator.cpp" line="204"/>
+        <location filename="../ui/project/project_navigator.cpp" line="208"/>
         <source>Show document navigator</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/project/project_navigator.cpp" line="212"/>
+        <location filename="../ui/project/project_navigator.cpp" line="216"/>
         <source>Add document</source>
         <translation>Tilføj dokument</translation>
     </message>
