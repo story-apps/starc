@@ -5,6 +5,7 @@
 
 #include <business_layer/model/characters/character_model.h>
 #include <business_layer/model/characters/characters_model.h>
+#include <business_layer/model/comic_book/text/comic_book_text_model.h>
 #include <business_layer/model/locations/location_model.h>
 #include <business_layer/model/locations/locations_model.h>
 #include <business_layer/model/project/project_information_model.h>
@@ -74,6 +75,16 @@ public:
     void removeDocument(BusinessLayer::StructureModelItem* _item);
 
     /**
+     * @brief Найти всех персонажей
+     */
+    void findAllCharacters();
+
+    /**
+     * @brief Найти все локации
+     */
+    void findAllLocations();
+
+    /**
      * @brief Очистить корзину
      */
     void emptyRecycleBin(const QModelIndex& _recycleBinIndex);
@@ -131,9 +142,19 @@ void ProjectManager::Implementation::updateNavigatorContextMenu(const QModelInde
     const auto currentItem = projectStructureModel->itemForIndex(currentItemIndex);
 
     //
-    // Формируем список действий контекстного меню для корзины
+    // Формируем список действий для конкретных элементов структуры проекта
     //
-    if (currentItem->type() == Domain::DocumentObjectType::RecycleBin) {
+    if (currentItem->type() == Domain::DocumentObjectType::Characters) {
+        auto findAllCharacters = new QAction(tr("Find all characters"));
+        findAllCharacters->setIconText(u8"\U000F0016");
+        connect(findAllCharacters, &QAction::triggered, [this] { this->findAllCharacters(); });
+        menuActions.append(findAllCharacters);
+    } else if (currentItem->type() == Domain::DocumentObjectType::Locations) {
+        auto findAllLocations = new QAction(tr("Find all locations"));
+        findAllLocations->setIconText(u8"\U000F13B0");
+        connect(findAllLocations, &QAction::triggered, [this] { this->findAllLocations(); });
+        menuActions.append(findAllLocations);
+    } else if (currentItem->type() == Domain::DocumentObjectType::RecycleBin) {
         if (currentItem->hasChildren()) {
             auto emptyRecycleBin = new QAction(tr("Empty recycle bin"));
             emptyRecycleBin->setIconText(u8"\U000f05e8");
@@ -330,6 +351,114 @@ void ProjectManager::Implementation::removeDocument(BusinessLayer::StructureMode
     QObject::connect(dialog, &Dialog::disappeared, dialog, &Dialog::deleteLater);
 }
 
+void ProjectManager::Implementation::findAllCharacters()
+{
+    //
+    // Найти все модели где могут встречаться персонажи и определить их
+    //
+    QSet<QString> charactersFromText;
+    const auto screenplayModels
+        = modelsFacade.modelsFor(Domain::DocumentObjectType::ScreenplayText);
+    for (auto model : screenplayModels) {
+        auto screenplay = qobject_cast<BusinessLayer::ScreenplayTextModel*>(model);
+        charactersFromText.unite(screenplay->findCharactersFromText());
+    }
+    //
+    const auto comicBookModels = modelsFacade.modelsFor(Domain::DocumentObjectType::ComicBookText);
+    for (auto model : comicBookModels) {
+        auto comicBook = qobject_cast<BusinessLayer::ComicBookTextModel*>(model);
+        charactersFromText.unite(comicBook->findCharactersFromText());
+    }
+    charactersFromText.remove({});
+
+    //
+    // Определить персонажи, которых нет в тексте
+    //
+    QSet<QString> charactersNotFromText;
+    const auto charactersModel = qobject_cast<BusinessLayer::CharactersModel*>(
+        modelsFacade.modelFor(Domain::DocumentObjectType::Characters));
+    for (int row = 0; row < charactersModel->rowCount(); ++row) {
+        const auto characterName = charactersModel->index(row, 0).data().toString();
+        if (!charactersFromText.contains(characterName)) {
+            charactersNotFromText.insert(characterName);
+        }
+    }
+
+    //
+    // Спросить пользователя, что он хочет сделать с ними
+    //
+    QString message;
+    if (!charactersFromText.isEmpty()) {
+        QStringList characters = charactersFromText.values();
+        std::sort(characters.begin(), characters.end());
+        message.append(
+            QString("%1:\n%2.").arg(tr("Characters from the text"), characters.join(", ")));
+    }
+    if (!charactersNotFromText.isEmpty()) {
+        if (!message.isEmpty()) {
+            message.append("\n\n");
+        }
+        QStringList characters = charactersNotFromText.values();
+        std::sort(characters.begin(), characters.end());
+        message.append(
+            QString("%1:\n%2.")
+                .arg(tr("Characters that are not found in the text"), characters.join(", ")));
+    }
+    const int kCancelButtonId = 0;
+    const int kKeepFromTextButtonId = 1;
+    const int kKeepAllButtonId = 2;
+    auto dialog = new Dialog(topLevelWidget);
+    const auto placeButtonSideBySide = false;
+    dialog->showDialog(
+        {}, message,
+        { { kKeepFromTextButtonId, tr("Save only characters from the text"), Dialog::NormalButton },
+          { kKeepAllButtonId, tr("Save all characters"), Dialog::NormalButton },
+          { kCancelButtonId, tr("Change nothing"), Dialog::RejectButton } },
+        placeButtonSideBySide);
+    QObject::connect(
+        dialog, &Dialog::finished, dialog,
+        [this, charactersFromText, charactersNotFromText, charactersModel,
+         dialog](const Dialog::ButtonInfo& _buttonInfo) {
+            dialog->hideDialog();
+
+            //
+            // Пользователь передумал что-либо менять
+            //
+            if (_buttonInfo.id == kCancelButtonId) {
+                return;
+            }
+
+            //
+            // Если надо, удалим персонажей, которые не встречаются в тексте
+            //
+            if (_buttonInfo.id == kKeepFromTextButtonId) {
+                for (const auto& characterName : charactersNotFromText) {
+                    const auto characterModel = charactersModel->character(characterName);
+                    auto item
+                        = projectStructureModel->itemForUuid(characterModel->document()->uuid());
+                    removeDocument(item);
+                }
+            }
+
+            //
+            // Сохраняем новых персонажей, которых ещё не было в базе
+            //
+            for (const auto& characterName : charactersFromText) {
+                if (charactersModel->character(characterName)) {
+                    continue;
+                }
+
+                addDocumentToContainer(Domain::DocumentObjectType::Characters,
+                                       Domain::DocumentObjectType::Character, characterName);
+            }
+        });
+    QObject::connect(dialog, &Dialog::disappeared, dialog, &Dialog::deleteLater);
+}
+
+void ProjectManager::Implementation::findAllLocations()
+{
+}
+
 void ProjectManager::Implementation::emptyRecycleBin(const QModelIndex& _recycleBinIndex)
 {
     auto recycleBin = projectStructureModel->itemForIndex(_recycleBinIndex);
@@ -488,10 +617,10 @@ ProjectManager::ProjectManager(QObject* _parent, QWidget* _parentWidget)
                     auto charactersDocument
                         = DataStorageLayer::StorageFacade::documentStorage()->document(
                             Domain::DocumentObjectType::Characters);
-                    auto charactersModel = static_cast<BusinessLayer::CharactersModel*>(
+                    auto charactersModel = qobject_cast<BusinessLayer::CharactersModel*>(
                         d->modelsFacade.modelFor(charactersDocument));
                     auto characterModel
-                        = static_cast<BusinessLayer::CharacterModel*>(documentModel);
+                        = qobject_cast<BusinessLayer::CharacterModel*>(documentModel);
                     charactersModel->addCharacterModel(characterModel);
 
                     break;
@@ -501,9 +630,9 @@ ProjectManager::ProjectManager(QObject* _parent, QWidget* _parentWidget)
                     auto locationsDocument
                         = DataStorageLayer::StorageFacade::documentStorage()->document(
                             Domain::DocumentObjectType::Locations);
-                    auto locationsModel = static_cast<BusinessLayer::LocationsModel*>(
+                    auto locationsModel = qobject_cast<BusinessLayer::LocationsModel*>(
                         d->modelsFacade.modelFor(locationsDocument));
-                    auto locationModel = static_cast<BusinessLayer::LocationModel*>(documentModel);
+                    auto locationModel = qobject_cast<BusinessLayer::LocationModel*>(documentModel);
                     locationsModel->addLocationModel(locationModel);
 
                     break;
@@ -562,11 +691,18 @@ ProjectManager::ProjectManager(QObject* _parent, QWidget* _parentWidget)
                 // Найти все модели где может встречаться персонаж и заменить в них его имя со
                 // старого на новое
                 //
-                const auto models
+                const auto screenplayModels
                     = d->modelsFacade.modelsFor(Domain::DocumentObjectType::ScreenplayText);
-                for (auto model : models) {
-                    auto screenplay = static_cast<BusinessLayer::ScreenplayTextModel*>(model);
+                for (auto model : screenplayModels) {
+                    auto screenplay = qobject_cast<BusinessLayer::ScreenplayTextModel*>(model);
                     screenplay->updateCharacterName(_oldName, _newName);
+                }
+                //
+                const auto comicBookModels
+                    = d->modelsFacade.modelsFor(Domain::DocumentObjectType::ComicBookText);
+                for (auto model : comicBookModels) {
+                    auto comicBook = qobject_cast<BusinessLayer::ComicBookTextModel*>(model);
+                    comicBook->updateCharacterName(_oldName, _newName);
                 }
             });
     connect(&d->modelsFacade, &ProjectModelsFacade::createLocationRequested, this,
@@ -583,7 +719,7 @@ ProjectManager::ProjectManager(QObject* _parent, QWidget* _parentWidget)
                 const auto models
                     = d->modelsFacade.modelsFor(Domain::DocumentObjectType::ScreenplayText);
                 for (auto model : models) {
-                    auto screenplay = static_cast<BusinessLayer::ScreenplayTextModel*>(model);
+                    auto screenplay = qobject_cast<BusinessLayer::ScreenplayTextModel*>(model);
                     screenplay->updateLocationName(_oldName, _newName);
                 }
             });
@@ -734,7 +870,7 @@ void ProjectManager::loadCurrentProject(const QString& _name, const QString& _pa
     //
     // Загружаем информацию о проекте
     //
-    auto projectInformationModel = static_cast<BusinessLayer::ProjectInformationModel*>(
+    auto projectInformationModel = qobject_cast<BusinessLayer::ProjectInformationModel*>(
         d->modelsFacade.modelFor(DataStorageLayer::StorageFacade::documentStorage()->document(
             Domain::DocumentObjectType::Project)));
     if (projectInformationModel->name().isEmpty()) {
@@ -856,12 +992,12 @@ void ProjectManager::addLocation(const QString& _name, const QString& _content)
     auto document = DataStorageLayer::StorageFacade::documentStorage()->document(
         Domain::DocumentObjectType::Locations);
     auto model = d->modelsFacade.modelFor(document);
-    auto charactersModel = qobject_cast<BusinessLayer::LocationsModel*>(model);
-    if (charactersModel == nullptr) {
+    auto locationsModel = qobject_cast<BusinessLayer::LocationsModel*>(model);
+    if (locationsModel == nullptr) {
         return;
     }
 
-    charactersModel->createLocation(_name, _content.toUtf8());
+    locationsModel->createLocation(_name, _content.toUtf8());
 }
 
 void ProjectManager::addScreenplay(const QString& _name, const QString& _titlePage,

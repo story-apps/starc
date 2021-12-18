@@ -30,7 +30,7 @@ public:
      * @brief Показать диалог с заданными заголовком, описанием и списком кнопок
      */
     void showDialog(const QString& _title, const QString& _supportingText,
-                    const QVector<ButtonInfo>& _buttons);
+                    const QVector<ButtonInfo>& _buttons, bool _placeButtonsSideBySide = true);
 
 signals:
     /**

@@ -123,6 +123,11 @@ public:
      */
     void updateCharacterName(const QString& _oldName, const QString& _newName);
 
+    /**
+     * @brief Найти всех персонажей сценария
+     */
+    QSet<QString> findCharactersFromText() const;
+
 protected:
     /**
      * @brief Реализация модели для работы с документами

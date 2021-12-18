@@ -1240,6 +1240,44 @@ void ScreenplayTextModel::updateCharacterName(const QString& _oldName, const QSt
     emit rowsChanged();
 }
 
+QSet<QString> ScreenplayTextModel::findCharactersFromText() const
+{
+    QSet<QString> characters;
+    std::function<void(const ScreenplayTextModelItem*)> findCharacters;
+    findCharacters = [&characters, &findCharacters](const ScreenplayTextModelItem* _item) {
+        for (int childIndex = 0; childIndex < _item->childCount(); ++childIndex) {
+            auto childItem = _item->childAt(childIndex);
+            switch (childItem->type()) {
+            case ScreenplayTextModelItemType::Folder:
+            case ScreenplayTextModelItemType::Scene: {
+                findCharacters(childItem);
+                break;
+            }
+
+            case ScreenplayTextModelItemType::Text: {
+                auto textItem = static_cast<ScreenplayTextModelTextItem*>(childItem);
+                if (textItem->paragraphType() == ScreenplayParagraphType::SceneCharacters) {
+                    const auto textCharacters
+                        = ScreenplaySceneCharactersParser::characters(textItem->text());
+                    for (const auto& character : textCharacters) {
+                        characters.insert(character);
+                    }
+                } else if (textItem->paragraphType() == ScreenplayParagraphType::Character) {
+                    characters.insert(ScreenplayCharacterParser::name(textItem->text()));
+                }
+                break;
+            }
+
+            default:
+                break;
+            }
+        }
+    };
+    findCharacters(d->rootItem);
+
+    return characters;
+}
+
 void ScreenplayTextModel::setLocationsModel(LocationsModel* _model)
 {
     d->locationModel = _model;
@@ -1248,6 +1286,38 @@ void ScreenplayTextModel::setLocationsModel(LocationsModel* _model)
 LocationsModel* ScreenplayTextModel::locationsModel() const
 {
     return d->locationModel;
+}
+
+QSet<QString> ScreenplayTextModel::findLocationsFromText() const
+{
+    QSet<QString> locations;
+    std::function<void(const ScreenplayTextModelItem*)> findLocations;
+    findLocations = [&locations, &findLocations](const ScreenplayTextModelItem* _item) {
+        for (int childIndex = 0; childIndex < _item->childCount(); ++childIndex) {
+            auto childItem = _item->childAt(childIndex);
+            switch (childItem->type()) {
+            case ScreenplayTextModelItemType::Folder:
+            case ScreenplayTextModelItemType::Scene: {
+                findLocations(childItem);
+                break;
+            }
+
+            case ScreenplayTextModelItemType::Text: {
+                auto textItem = static_cast<ScreenplayTextModelTextItem*>(childItem);
+                if (textItem->paragraphType() == ScreenplayParagraphType::SceneHeading) {
+                    locations.insert(ScreenplaySceneHeadingParser::location(textItem->text()));
+                }
+                break;
+            }
+
+            default:
+                break;
+            }
+        }
+    };
+    findLocations(d->rootItem);
+
+    return locations;
 }
 
 void ScreenplayTextModel::updateLocationName(const QString& _oldName, const QString& _newName)

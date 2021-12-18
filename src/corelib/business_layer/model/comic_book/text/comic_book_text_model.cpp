@@ -1230,6 +1230,38 @@ void ComicBookTextModel::updateCharacterName(const QString& _oldName, const QStr
     emit rowsChanged();
 }
 
+QSet<QString> ComicBookTextModel::findCharactersFromText() const
+{
+    QSet<QString> characters;
+    std::function<void(const ComicBookTextModelItem*)> findCharacters;
+    findCharacters = [&characters, &findCharacters](const ComicBookTextModelItem* _item) {
+        for (int childIndex = 0; childIndex < _item->childCount(); ++childIndex) {
+            auto childItem = _item->childAt(childIndex);
+            switch (childItem->type()) {
+            case ComicBookTextModelItemType::Page:
+            case ComicBookTextModelItemType::Panel: {
+                findCharacters(childItem);
+                break;
+            }
+
+            case ComicBookTextModelItemType::Text: {
+                auto textItem = static_cast<ComicBookTextModelTextItem*>(childItem);
+                if (textItem->paragraphType() == ComicBookParagraphType::Character) {
+                    characters.insert(ComicBookCharacterParser::name(textItem->text()));
+                }
+                break;
+            }
+
+            default:
+                break;
+            }
+        }
+    };
+    findCharacters(d->rootItem);
+
+    return characters;
+}
+
 void ComicBookTextModel::initDocument()
 {
     //

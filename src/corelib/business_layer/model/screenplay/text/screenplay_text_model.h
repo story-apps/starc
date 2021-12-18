@@ -133,10 +133,20 @@ public:
     void updateCharacterName(const QString& _oldName, const QString& _newName);
 
     /**
+     * @brief Найти всех персонажей сценария
+     */
+    QSet<QString> findCharactersFromText() const;
+
+    /**
      * @brief Задать модель локаций проекта
      */
     void setLocationsModel(LocationsModel* _model);
     LocationsModel* locationsModel() const;
+
+    /**
+     * @brief Найти все локации сценария
+     */
+    QSet<QString> findLocationsFromText() const;
 
     /**
      * @brief Обновить название локации

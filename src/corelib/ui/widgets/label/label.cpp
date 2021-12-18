@@ -70,8 +70,12 @@ void AbstractLabel::setClickable(bool _clickable)
 
 QSize AbstractLabel::sizeHint() const
 {
-    const int width = TextHelper::fineTextWidth(d->text, textFont());
-    const int height = QFontMetrics(textFont()).lineSpacing();
+    int width = 0;
+    const auto lines = d->text.split('\n');
+    for (const auto& line : lines) {
+        width = std::max(width, TextHelper::fineTextWidth(line, textFont()));
+    }
+    const int height = QFontMetrics(textFont()).lineSpacing() * lines.size();
     return QRect(QPoint(0, 0), QSize(width, height)).marginsAdded(contentsMargins()).size();
 }
 

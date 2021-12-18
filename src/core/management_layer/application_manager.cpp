@@ -996,9 +996,9 @@ bool ApplicationManager::Implementation::tryLockProject(const QString& _path)
     lockFile.reset(new QLockFile(
         QString("%1/.~lock.%2").arg(projectFileInfo.absolutePath(), projectFileInfo.fileName())));
     if (!lockFile->tryLock()) {
-        StandardDialog::information(applicationView, "",
-                                    tr("This file can't be open at this moment,\
-                                        because it is already open in another copy of the application."));
+        StandardDialog::information(applicationView, {},
+                                    tr("This file can't be open at this moment, because it is "
+                                       "already open in another copy of the application."));
         return false;
     }
 
