@@ -75,6 +75,9 @@ void Dialog::showDialog(const QString& _title, const QString& _supportingText,
         }
     }
 
+    //
+    // Настраиваем стили добавленных кнопок
+    //
     designSystemChangeEvent(nullptr);
 
     AbstractDialog::showDialog();

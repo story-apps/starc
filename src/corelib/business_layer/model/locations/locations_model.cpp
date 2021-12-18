@@ -2,6 +2,8 @@
 
 #include "location_model.h"
 
+#include <domain/document_object.h>
+
 #include <QDomDocument>
 
 
@@ -68,6 +70,39 @@ void LocationsModel::createLocation(const QString& _name, const QByteArray& _con
     }
 
     emit createLocationRequested(_name, _content);
+}
+
+bool LocationsModel::exists(const QString& _name) const
+{
+    for (const auto location : std::as_const(d->locationModels)) {
+        if (location->name() == _name) {
+            return true;
+        }
+    }
+
+    return false;
+}
+
+LocationModel* LocationsModel::location(const QUuid& _uuid) const
+{
+    for (const auto location : std::as_const(d->locationModels)) {
+        if (location->document()->uuid() == _uuid) {
+            return location;
+        }
+    }
+
+    return nullptr;
+}
+
+LocationModel* LocationsModel::location(const QString& _name) const
+{
+    for (const auto location : std::as_const(d->locationModels)) {
+        if (location->name() == _name) {
+            return location;
+        }
+    }
+
+    return nullptr;
 }
 
 QModelIndex LocationsModel::index(int _row, int _column, const QModelIndex& _parent) const

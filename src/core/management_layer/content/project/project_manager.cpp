@@ -408,6 +408,10 @@ void ProjectManager::Implementation::findAllCharacters()
     const int kKeepFromTextButtonId = 1;
     const int kKeepAllButtonId = 2;
     auto dialog = new Dialog(topLevelWidget);
+    //
+    // Т.к. персов может быть очень много, расширяем максимальное ограничение по ширине для диалога
+    //
+    dialog->setContentMaximumWidth(topLevelWidget->width() * 0.7);
     const auto placeButtonSideBySide = false;
     dialog->showDialog(
         {}, message,
@@ -444,7 +448,7 @@ void ProjectManager::Implementation::findAllCharacters()
             // Сохраняем новых персонажей, которых ещё не было в базе
             //
             for (const auto& characterName : charactersFromText) {
-                if (charactersModel->character(characterName)) {
+                if (charactersModel->exists(characterName)) {
                     continue;
                 }
 
@@ -457,6 +461,104 @@ void ProjectManager::Implementation::findAllCharacters()
 
 void ProjectManager::Implementation::findAllLocations()
 {
+    //
+    // Найти все модели где могут встречаться локации и определить их
+    //
+    QSet<QString> locationsFromText;
+    const auto screenplayModels
+        = modelsFacade.modelsFor(Domain::DocumentObjectType::ScreenplayText);
+    for (auto model : screenplayModels) {
+        auto screenplay = qobject_cast<BusinessLayer::ScreenplayTextModel*>(model);
+        locationsFromText.unite(screenplay->findLocationsFromText());
+    }
+    locationsFromText.remove({});
+
+    //
+    // Определить локации, которых нет в тексте
+    //
+    QSet<QString> locationsNotFromText;
+    const auto locationsModel = qobject_cast<BusinessLayer::LocationsModel*>(
+        modelsFacade.modelFor(Domain::DocumentObjectType::Locations));
+    for (int row = 0; row < locationsModel->rowCount(); ++row) {
+        const auto locationName = locationsModel->index(row, 0).data().toString();
+        if (!locationsFromText.contains(locationName)) {
+            locationsNotFromText.insert(locationName);
+        }
+    }
+
+    //
+    // Спросить пользователя, что он хочет сделать с ними
+    //
+    QString message;
+    if (!locationsFromText.isEmpty()) {
+        QStringList locations = locationsFromText.values();
+        std::sort(locations.begin(), locations.end());
+        message.append(
+            QString("%1:\n%2.").arg(tr("Locations from the text"), locations.join(", ")));
+    }
+    if (!locationsNotFromText.isEmpty()) {
+        if (!message.isEmpty()) {
+            message.append("\n\n");
+        }
+        QStringList locations = locationsNotFromText.values();
+        std::sort(locations.begin(), locations.end());
+        message.append(
+            QString("%1:\n%2.")
+                .arg(tr("Locations that are not found in the text"), locations.join(", ")));
+    }
+    const int kCancelButtonId = 0;
+    const int kKeepFromTextButtonId = 1;
+    const int kKeepAllButtonId = 2;
+    auto dialog = new Dialog(topLevelWidget);
+    //
+    // Т.к. локаций может быть очень много, расширяем максимальное ограничение по ширине для диалога
+    //
+    dialog->setContentMaximumWidth(topLevelWidget->width() * 0.7);
+    const auto placeButtonSideBySide = false;
+    dialog->showDialog(
+        {}, message,
+        { { kKeepFromTextButtonId, tr("Save only locations from the text"), Dialog::NormalButton },
+          { kKeepAllButtonId, tr("Save all locations"), Dialog::NormalButton },
+          { kCancelButtonId, tr("Change nothing"), Dialog::RejectButton } },
+        placeButtonSideBySide);
+    QObject::connect(
+        dialog, &Dialog::finished, dialog,
+        [this, locationsFromText, locationsNotFromText, locationsModel,
+         dialog](const Dialog::ButtonInfo& _buttonInfo) {
+            dialog->hideDialog();
+
+            //
+            // Пользователь передумал что-либо менять
+            //
+            if (_buttonInfo.id == kCancelButtonId) {
+                return;
+            }
+
+            //
+            // Если надо, удалим локации, которые не встречаются в тексте
+            //
+            if (_buttonInfo.id == kKeepFromTextButtonId) {
+                for (const auto& locationName : locationsNotFromText) {
+                    const auto locationModel = locationsModel->location(locationName);
+                    auto item
+                        = projectStructureModel->itemForUuid(locationModel->document()->uuid());
+                    removeDocument(item);
+                }
+            }
+
+            //
+            // Сохраняем новых локации, которых ещё не было в базе
+            //
+            for (const auto& locationName : locationsFromText) {
+                if (locationsModel->exists(locationName)) {
+                    continue;
+                }
+
+                addDocumentToContainer(Domain::DocumentObjectType::Locations,
+                                       Domain::DocumentObjectType::Location, locationName);
+            }
+        });
+    QObject::connect(dialog, &Dialog::disappeared, dialog, &Dialog::deleteLater);
 }
 
 void ProjectManager::Implementation::emptyRecycleBin(const QModelIndex& _recycleBinIndex)

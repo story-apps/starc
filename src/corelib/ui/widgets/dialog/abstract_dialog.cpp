@@ -305,8 +305,12 @@ void AbstractDialog::designSystemChangeEvent(DesignSystemChangeEvent* _event)
 {
     Q_UNUSED(_event)
 
-    d->content->setMinimumWidth(static_cast<int>(Ui::DesignSystem::dialog().minimumWidth()));
-    d->content->setMaximumWidth(static_cast<int>(Ui::DesignSystem::dialog().maximumWidth()));
+    if (d->content->minimumWidth() == 0) {
+        d->content->setMinimumWidth(static_cast<int>(Ui::DesignSystem::dialog().minimumWidth()));
+    }
+    if (d->content->maximumWidth() == QWIDGETSIZE_MAX) {
+        d->content->setMaximumWidth(static_cast<int>(Ui::DesignSystem::dialog().maximumWidth()));
+    }
     d->content->setBackgroundColor(Ui::DesignSystem::color().background());
     d->title->setBackgroundColor(Qt::transparent);
     d->title->setTextColor(Ui::DesignSystem::color().onBackground());

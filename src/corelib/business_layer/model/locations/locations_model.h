@@ -34,6 +34,21 @@ public:
     void createLocation(const QString& _name, const QByteArray& _content = {});
 
     /**
+     * @brief Существует ли локация с заданным именем
+     */
+    bool exists(const QString& _name) const;
+
+    /**
+     * @brief Получить модель локации по её идентификатору
+     */
+    LocationModel* location(const QUuid& _uuid) const;
+
+    /**
+     * @brief Получить модель локации по её имени
+     */
+    LocationModel* location(const QString& _name) const;
+
+    /**
      * @brief Реализация древовидной модели
      */
     /** @{ */
