@@ -57,6 +57,7 @@ ProjectInformationView::Implementation::Implementation(QWidget* _parent)
     projectInfo->setLayoutReimpl(projectInfoLayout);
 
     projectName->setSpellCheckPolicy(SpellCheckPolicy::Manual);
+    projectLogline->setEnterMakesNewLine(true);
     UiHelper::initSpellingFor(projectLogline);
 
     QWidget* contentWidget = new QWidget;
