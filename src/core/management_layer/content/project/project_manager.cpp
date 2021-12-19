@@ -421,8 +421,8 @@ void ProjectManager::Implementation::findAllCharacters()
         placeButtonSideBySide);
     QObject::connect(
         dialog, &Dialog::finished, dialog,
-        [this, charactersFromText, charactersNotFromText, charactersModel,
-         dialog](const Dialog::ButtonInfo& _buttonInfo) {
+        [this, charactersFromText, charactersNotFromText, charactersModel, dialog, kCancelButtonId,
+         kKeepFromTextButtonId](const Dialog::ButtonInfo& _buttonInfo) {
             dialog->hideDialog();
 
             //
@@ -523,8 +523,8 @@ void ProjectManager::Implementation::findAllLocations()
         placeButtonSideBySide);
     QObject::connect(
         dialog, &Dialog::finished, dialog,
-        [this, locationsFromText, locationsNotFromText, locationsModel,
-         dialog](const Dialog::ButtonInfo& _buttonInfo) {
+        [this, locationsFromText, locationsNotFromText, locationsModel, dialog, kCancelButtonId,
+         kKeepFromTextButtonId](const Dialog::ButtonInfo& _buttonInfo) {
             dialog->hideDialog();
 
             //

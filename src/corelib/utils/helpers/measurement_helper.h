@@ -18,6 +18,14 @@ public:
     static qreal pxToMm(qreal _px, bool _x = true);
 
     /**
+     * @brief Перевести дюймы в пиксели и обратно
+     * @param _x указывает направление (горизонтальное - true или вертикальное - false), в котором
+     * необходимо произвести рассчёт
+     */
+    static qreal inchToPx(qreal _inch, bool _x = true);
+    static qreal pxToInch(qreal _px, bool _x = true);
+
+    /**
      * @brief Перевести пункты в пикселы и обратно
      * @param _x указывает направление (горизонтальное - true или вертикальное - false), в котором
      * необходимо произвести рассчёт

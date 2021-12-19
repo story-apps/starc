@@ -28,6 +28,16 @@ qreal MeasurementHelper::pxToMm(qreal _px, bool _x)
     return _px / mmToPx(1, _x);
 }
 
+qreal MeasurementHelper::inchToPx(qreal _inch, bool _x)
+{
+    return mmToPx(inchToMm(_inch), _x);
+}
+
+qreal MeasurementHelper::pxToInch(qreal _px, bool _x)
+{
+    return mmToInch(pxToMm(_px, _x));
+}
+
 qreal MeasurementHelper::ptToPx(qreal _pt, bool _x)
 {
     static qreal xCoefficient = [] {

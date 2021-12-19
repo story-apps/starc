@@ -1722,7 +1722,7 @@ public:
 
     QMarginsF margins = { 24.0, 24.0, 24.0, 12.0 };
     qreal minimumWidth = 420.0;
-    qreal maximumWidth = 560.0;
+    qreal maximumWidth = 600.0;
 };
 
 DesignSystem::Dialog::Implementation::Implementation(qreal _scaleFactor)

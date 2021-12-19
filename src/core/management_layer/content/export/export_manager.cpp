@@ -5,6 +5,7 @@
 #include <business_layer/export/comic_book/comic_book_pdf_exporter.h>
 #include <business_layer/export/screenplay/screenplay_docx_exporter.h>
 #include <business_layer/export/screenplay/screenplay_export_options.h>
+#include <business_layer/export/screenplay/screenplay_fdx_exporter.h>
 #include <business_layer/export/screenplay/screenplay_pdf_exporter.h>
 #include <business_layer/model/comic_book/comic_book_information_model.h>
 #include <business_layer/model/comic_book/text/comic_book_text_model.h>
@@ -174,6 +175,7 @@ void ExportManager::Implementation::exportScreenplay(BusinessLayer::AbstractMode
                     break;
                 }
                 case ScreenplayExportFileFormat::Fdx: {
+                    exporter.reset(new BusinessLayer::ScreenplayFdxExporter);
                     break;
                 }
                 case ScreenplayExportFileFormat::Fountain: {
