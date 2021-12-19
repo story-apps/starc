@@ -9,7 +9,7 @@
 #include <domain/document_object.h>
 #include <utils/helpers/text_helper.h>
 
-#include <QApplication>
+#include <QCoreApplication>
 #include <QDateTime>
 #include <QFile>
 #include <QFileInfo>
@@ -26,13 +26,16 @@ namespace {
 /**
  * @brief С чего может начинаться название сцены
  */
-const QStringList kSceneHeadings
-    = { QApplication::translate("BusinessLayer::FountainImporter", "INT"),
-        QApplication::translate("BusinessLayer::FountainImporter", "EXT"),
-        QApplication::translate("BusinessLayer::FountainImporter", "EST"),
-        QApplication::translate("BusinessLayer::FountainImporter", "INT./EXT"),
-        QApplication::translate("BusinessLayer::FountainImporter", "INT/EXT"),
-        QApplication::translate("BusinessLayer::FountainImporter", "I/E") };
+const QStringList kSceneHeadings = {
+    QCoreApplication::translate("BusinessLayer::FountainImporter", "INT"),
+    QCoreApplication::translate("BusinessLayer::FountainImporter", "EXT"),
+    QCoreApplication::translate("BusinessLayer::FountainImporter", "EST"),
+    QCoreApplication::translate("BusinessLayer::FountainImporter", "INT./EXT"),
+    QCoreApplication::translate("BusinessLayer::FountainImporter", "INT/EXT"),
+    QCoreApplication::translate("BusinessLayer::FountainImporter", "EXT./INT"),
+    QCoreApplication::translate("BusinessLayer::FountainImporter", "EXT/INT"),
+    QCoreApplication::translate("BusinessLayer::FountainImporter", "I/E"),
+};
 
 /**
  * @brief Ключит титульной страницы

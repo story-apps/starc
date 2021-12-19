@@ -177,9 +177,6 @@ ScreenplayExportDialog::ScreenplayExportDialog(QWidget* _parent)
         // Fountain
         //
         case 3: {
-            isPrintFoldersVisible = false;
-            isPrintInlineNotesVisible = false;
-            isPrintReviewMarksVisible = false;
             isWatermarkVisible = false;
             break;
         }
