@@ -99,11 +99,24 @@ void Splitter::Implementation::animateShowHiddenPanelToolbar(const QPointF& _fin
             return;
         }
 
+        if (showHiddenPanelToolbar->isVisible()) {
+            if (showHiddenPanelToolbarPositionAnimation.state() == QVariantAnimation::Running) {
+                showHiddenPanelToolbarPositionAnimation.pause();
+                showHiddenPanelToolbarPositionAnimation.setEndValue(_finalPosition);
+                showHiddenPanelToolbarPositionAnimation.resume();
+            } else {
+                showHiddenPanelToolbar->move(_finalPosition.toPoint());
+            }
+            return;
+        }
+
         showHiddenPanelToolbarPositionAnimation.setDirection(QVariantAnimation::Forward);
-        const QPointF startPosition(_finalPosition.x() < 0 ? -1 * showHiddenPanelToolbar->width()
-                                                           : _finalPosition.x()
-                                            + (showHiddenPanelToolbar->width() / 2),
-                                    _finalPosition.y());
+        QPointF startPosition(0, _finalPosition.y());
+        if (_finalPosition.x() < 0) {
+            startPosition.setX(-1 * showHiddenPanelToolbar->width());
+        } else {
+            startPosition.setX(_finalPosition.x() + (showHiddenPanelToolbar->width() / 2));
+        }
         showHiddenPanelToolbarPositionAnimation.setStartValue(startPosition);
         showHiddenPanelToolbarPositionAnimation.setEndValue(_finalPosition);
 
@@ -269,9 +282,10 @@ void Splitter::setSizes(const QVector<int>& _sizes)
     //
     // ... и кнопку отображения скрытой панели
     //
-    if ((widgets.constFirst()->geometry().isEmpty() && widgets.constFirst()->isVisible())
-        || (widgets.constLast()->geometry().isEmpty() && widgets.constLast()->isVisible())) {
-        if (_sizes.constFirst() == 0) {
+    const auto minimumVisibleSize = 0.005;
+    if ((d->sizes.constFirst() <= minimumVisibleSize && widgets.constFirst()->isVisible())
+        || (d->sizes.constLast() <= minimumVisibleSize && widgets.constLast()->isVisible())) {
+        if (d->sizes.constFirst() <= minimumVisibleSize) {
             d->showHiddenPanelToolbar->setActionCustomWidth(d->showRightPanelAction,
                                                             Ui::DesignSystem::layout().px8());
             d->showHiddenPanelToolbar->clearActionCustomWidth(d->showLeftPanelAction);
