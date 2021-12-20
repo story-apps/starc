@@ -88,7 +88,7 @@ void CharacterHandler::handleEnter(QKeyEvent* _event)
         // Дописать необходимые символы
         //
         switch (currentSection) {
-        case ScreenplayCharacterParser::SectionState: {
+        case ScreenplayCharacterParser::SectionExtension: {
             cursor.insertText(")");
             break;
         }
@@ -356,7 +356,7 @@ void CharacterHandler::complete(const QString& _currentBlockText,
         break;
     }
 
-    case ScreenplayCharacterParser::SectionState: {
+    case ScreenplayCharacterParser::SectionExtension: {
         m_completerModel->setStringList(editor()->dictionaries()->characterExtensions().toList());
         sectionModel = m_completerModel;
         sectionText = ScreenplayCharacterParser::extension(_currentBlockText);

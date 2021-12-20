@@ -16,7 +16,7 @@ ScreenplayCharacterParser::Section ScreenplayCharacterParser::section(const QStr
     ScreenplayCharacterParser::Section section = SectionUndefined;
 
     if (_text.split("(").count() == 2) {
-        section = SectionState;
+        section = SectionExtension;
     } else {
         section = SectionName;
     }

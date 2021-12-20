@@ -22,7 +22,7 @@ public:
     enum Section {
         SectionUndefined, //!< Неопределённое
         SectionName, //!< ИМЯ
-        SectionState //!< СОСТОЯНИЕ
+        SectionExtension //!< СОСТОЯНИЕ
     };
 
 public:
