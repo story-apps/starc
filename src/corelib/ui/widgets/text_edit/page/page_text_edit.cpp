@@ -1994,7 +1994,7 @@ void PageTextEditPrivate::paintLineHighlighting(QPainter* _painter)
 
     Q_Q(PageTextEdit);
     const QRect cursorR = q->cursorRect();
-    const QSizeF pageSize(pageMetrics.pxPageSize());
+    const QSizeF pageSize(usePageMode ? pageMetrics.pxPageSize() : documentSize(control));
     const QMarginsF pageMargins = Ui::DesignSystem::card().shadowMargins();
     const qreal highlightLeft = pageMargins.left() - hbar->value();
     const qreal highlightWidth = pageSize.width() - pageMargins.left() - pageMargins.right();
