@@ -7,6 +7,7 @@
 #include <business_layer/templates/screenplay_template.h>
 #include <business_layer/templates/templates_facade.h>
 #include <ui/widgets/text_edit/page/page_text_edit.h>
+#include <utils/helpers/text_helper.h>
 #include <utils/tools/run_once.h>
 
 #include <QAbstractTextDocumentLayout>
@@ -353,16 +354,16 @@ void ScreenplayTextCorrector::Implementation::correctCharactersNames(int _positi
         //
         else if (blockType == ScreenplayParagraphType::Character) {
             const QString characterName = ScreenplayCharacterParser::name(block.text());
-            const bool isStartPositionInBlock = block.position() < startPosition
-                && block.position() + block.length() > startPosition;
             //
-            // Если имя текущего персонажа не пусто и курсор не находится в редактируемом блоке
+            // Если имя текущего персонажа не пусто
             //
-            if (!characterName.isEmpty() && !isStartPositionInBlock) {
+            if (!characterName.isEmpty()) {
                 //
-                // Не второе подряд появление, удаляем из него вспомогательный текст, если есть
+                // Если не пустое, не второе подряд появление или не точно равен имени персонажа
+                // (без лишних символов), удаляем из него вспомогательный текст, если есть
                 //
-                if (lastCharacterName.isEmpty() || characterName != lastCharacterName) {
+                if (lastCharacterName.isEmpty() || characterName != lastCharacterName
+                    || characterName != TextHelper::smartToUpper(block.text())) {
                     QTextBlockFormat characterFormat = block.blockFormat();
                     if (characterFormat.boolProperty(
                             ScreenplayBlockStyle::PropertyIsCharacterContinued)) {
