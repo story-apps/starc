@@ -107,10 +107,12 @@ void SimpleTextEdit::initWithModel(BusinessLayer::TextModel* _model)
 {
     d->model = _model;
 
-    const auto currentTemplate = TemplatesFacade::simpleTextTemplate();
-    setPageFormat(currentTemplate.pageSizeId());
-    setPageMarginsMm(currentTemplate.pageMargins());
-    setPageNumbersAlignment(currentTemplate.pageNumbersAlignment());
+    if (usePageMode()) {
+        const auto currentTemplate = TemplatesFacade::simpleTextTemplate();
+        setPageFormat(currentTemplate.pageSizeId());
+        setPageMarginsMm(currentTemplate.pageMargins());
+        setPageNumbersAlignment(currentTemplate.pageNumbersAlignment());
+    }
 
     //
     // Документ нужно формировать только после того, как редактор настроен, чтобы избежать лишний

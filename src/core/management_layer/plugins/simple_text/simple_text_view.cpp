@@ -52,6 +52,11 @@ public:
      */
     void updateToolBarCurrentParagraphTypeName();
 
+    /**
+     * @brief Обновить компоновку страницы
+     */
+    void updateTextEditPageMargins();
+
 
     SimpleTextEdit* textEdit = nullptr;
     SimpleTextEditShortcutsManager shortcutsManager;
@@ -125,6 +130,17 @@ void SimpleTextView::Implementation::updateToolBarCurrentParagraphTypeName()
     }
 }
 
+void SimpleTextView::Implementation::updateTextEditPageMargins()
+{
+    if (textEdit->usePageMode()) {
+        return;
+    }
+
+    const QMarginsF pageMargins
+        = QMarginsF{ 15, 20 / scalableWrapper->zoomRange(), 12 / scalableWrapper->zoomRange(), 5 };
+    textEdit->setPageMarginsMm(pageMargins);
+}
+
 
 // ****
 
@@ -172,6 +188,10 @@ SimpleTextView::SimpleTextView(QWidget* _parent)
     };
     connect(d->textEdit, &SimpleTextEdit::paragraphTypeChanged, this, handleCursorPositionChanged);
     connect(d->textEdit, &SimpleTextEdit::cursorPositionChanged, this, handleCursorPositionChanged);
+    //
+    connect(
+        d->scalableWrapper, &ScalableWrapper::zoomRangeChanged, this,
+        [this] { d->updateTextEditPageMargins(); }, Qt::QueuedConnection);
 
     updateTranslations();
     designSystemChangeEvent(nullptr);
@@ -222,6 +242,17 @@ void SimpleTextView::reconfigure(const QStringList& _changedSettingsKeys)
         d->textEdit->reinit();
     }
 
+    if (_changedSettingsKeys.isEmpty()
+        || _changedSettingsKeys.contains(DataStorageLayer::kApplicationShowDocumentsPagesKey)) {
+        const auto usePageMode
+            = settingsValue(DataStorageLayer::kApplicationShowDocumentsPagesKey).toBool();
+        d->textEdit->setUsePageMode(usePageMode);
+        if (usePageMode) {
+            d->textEdit->reinit();
+        } else {
+            d->updateTextEditPageMargins();
+        }
+    }
     if (_changedSettingsKeys.isEmpty()
         || _changedSettingsKeys.contains(DataStorageLayer::kApplicationHighlightCurrentLineKey)) {
         d->textEdit->setHighlightCurrentLine(

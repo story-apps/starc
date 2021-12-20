@@ -65,6 +65,11 @@ public:
     void updateToolBarCurrentParagraphTypeName();
 
     /**
+     * @brief Обновить компоновку страницы
+     */
+    void updateTextEditPageMargins();
+
+    /**
      * @brief Обновить видимость и положение панели инструментов рецензирования
      */
     void updateCommentsToolBar();
@@ -208,6 +213,17 @@ void ComicBookTextView::Implementation::updateToolBarCurrentParagraphTypeName()
             return;
         }
     }
+}
+
+void ComicBookTextView::Implementation::updateTextEditPageMargins()
+{
+    if (comicBookText->usePageMode()) {
+        return;
+    }
+
+    const QMarginsF pageMargins
+        = QMarginsF{ 15, 20 / scalableWrapper->zoomRange(), 12 / scalableWrapper->zoomRange(), 5 };
+    comicBookText->setPageMarginsMm(pageMargins);
 }
 
 void ComicBookTextView::Implementation::updateCommentsToolBar()
@@ -423,7 +439,11 @@ ComicBookTextView::ComicBookTextView(QWidget* _parent)
             [this] { d->updateCommentsToolBar(); });
     connect(
         d->scalableWrapper, &ScalableWrapper::zoomRangeChanged, this,
-        [this] { d->updateCommentsToolBar(); }, Qt::QueuedConnection);
+        [this] {
+            d->updateTextEditPageMargins();
+            d->updateCommentsToolBar();
+        },
+        Qt::QueuedConnection);
     //
     auto handleCursorPositionChanged = [this] {
         //
@@ -522,6 +542,17 @@ void ComicBookTextView::reconfigure(const QStringList& _changedSettingsKeys)
     //            settingsValue(DataStorageLayer::kComponentsComicBookEditorShowDialogueNumberKey)
     //                .toBool());
     //    }
+    if (_changedSettingsKeys.isEmpty()
+        || _changedSettingsKeys.contains(DataStorageLayer::kApplicationShowDocumentsPagesKey)) {
+        const auto usePageMode
+            = settingsValue(DataStorageLayer::kApplicationShowDocumentsPagesKey).toBool();
+        d->comicBookText->setUsePageMode(usePageMode);
+        if (usePageMode) {
+            d->comicBookText->reinit();
+        } else {
+            d->updateTextEditPageMargins();
+        }
+    }
     if (_changedSettingsKeys.isEmpty()
         || _changedSettingsKeys.contains(DataStorageLayer::kApplicationHighlightCurrentLineKey)) {
         d->comicBookText->setHighlightCurrentLine(

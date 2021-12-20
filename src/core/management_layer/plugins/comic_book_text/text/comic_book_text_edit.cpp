@@ -134,10 +134,12 @@ void ComicBookTextEdit::initWithModel(BusinessLayer::ComicBookTextModel* _model)
     //
     // Обновляем параметры страницы из шаблона
     //
-    const auto currentTemplate = TemplatesFacade::comicBookTemplate();
-    setPageFormat(currentTemplate.pageSizeId());
-    setPageMarginsMm(currentTemplate.pageMargins());
-    setPageNumbersAlignment(currentTemplate.pageNumbersAlignment());
+    if (usePageMode()) {
+        const auto currentTemplate = TemplatesFacade::comicBookTemplate();
+        setPageFormat(currentTemplate.pageSizeId());
+        setPageMarginsMm(currentTemplate.pageMargins());
+        setPageNumbersAlignment(currentTemplate.pageNumbersAlignment());
+    }
 
     //
     // Документ нужно формировать только после того, как редактор настроен, чтобы избежать лишний

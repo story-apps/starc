@@ -28,6 +28,7 @@
 #include <ui/widgets/text_edit/completer/completer.h>
 #include <ui/widgets/text_edit/scalable_wrapper/scalable_wrapper.h>
 #include <utils/helpers/color_helper.h>
+#include <utils/helpers/measurement_helper.h>
 #include <utils/helpers/ui_helper.h>
 
 #include <QAction>
@@ -74,6 +75,11 @@ public:
      * @brief Обновить текущий отображаемый тип абзаца в панели инструментов
      */
     void updateToolBarCurrentParagraphTypeName();
+
+    /**
+     * @brief Обновить компоновку страницы
+     */
+    void updateTextEditPageMargins();
 
     /**
      * @brief Обновить видимость и положение панели инструментов рецензирования
@@ -281,6 +287,20 @@ void ScreenplayTextView::Implementation::updateToolBarCurrentParagraphTypeName()
             return;
         }
     }
+}
+
+void ScreenplayTextView::Implementation::updateTextEditPageMargins()
+{
+    if (screenplayText->usePageMode()) {
+        return;
+    }
+
+    const QMarginsF pageMargins
+        = QMarginsF{ 15, 20 / scalableWrapper->zoomRange(),
+                     12 / scalableWrapper->zoomRange()
+                         + MeasurementHelper::pxToMm(scalableWrapper->verticalScrollBar()->width()),
+                     5 };
+    screenplayText->setPageMarginsMm(pageMargins);
 }
 
 void ScreenplayTextView::Implementation::updateCommentsToolBar()
@@ -501,7 +521,11 @@ ScreenplayTextView::ScreenplayTextView(QWidget* _parent)
             [this] { d->updateCommentsToolBar(); });
     connect(
         d->scalableWrapper, &ScalableWrapper::zoomRangeChanged, this,
-        [this] { d->updateCommentsToolBar(); }, Qt::QueuedConnection);
+        [this] {
+            d->updateTextEditPageMargins();
+            d->updateCommentsToolBar();
+        },
+        Qt::QueuedConnection);
     //
     auto handleCursorPositionChanged = [this] {
         //
@@ -566,6 +590,17 @@ void ScreenplayTextView::reconfigure(const QStringList& _changedSettingsKeys)
         || _changedSettingsKeys.contains(
             DataStorageLayer::kComponentsScreenplayEditorShowDialogueNumbersKey)) {
         d->reconfigureDialoguesNumbersVisibility();
+    }
+    if (_changedSettingsKeys.isEmpty()
+        || _changedSettingsKeys.contains(DataStorageLayer::kApplicationShowDocumentsPagesKey)) {
+        const auto usePageMode
+            = settingsValue(DataStorageLayer::kApplicationShowDocumentsPagesKey).toBool();
+        d->screenplayText->setUsePageMode(usePageMode);
+        if (usePageMode) {
+            d->screenplayText->reinit();
+        } else {
+            d->updateTextEditPageMargins();
+        }
     }
     if (_changedSettingsKeys.isEmpty()
         || _changedSettingsKeys.contains(DataStorageLayer::kApplicationHighlightCurrentLineKey)) {

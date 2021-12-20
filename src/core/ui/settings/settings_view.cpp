@@ -151,6 +151,7 @@ public:
     // ... Text editing
     //
     H6Label* applicationTextEditingTitle = nullptr;
+    CheckBox* showDocumentsPages = nullptr;
     CheckBox* useTypewriterSound = nullptr;
     CheckBox* useSpellChecker = nullptr;
     ComboBox* spellCheckerLanguage = nullptr;
@@ -284,6 +285,7 @@ SettingsView::Implementation::Implementation(QWidget* _parent)
     , saveBackups(new CheckBox(applicationCard))
     , backupsFolderPath(new TextField(applicationCard))
     , applicationTextEditingTitle(new H6Label(applicationCard))
+    , showDocumentsPages(new CheckBox(applicationCard))
     , useTypewriterSound(new CheckBox(applicationCard))
     , useSpellChecker(new CheckBox(applicationCard))
     , spellCheckerLanguage(new ComboBox(applicationCard))
@@ -464,6 +466,7 @@ void SettingsView::Implementation::initApplicationCard()
         layout->addWidget(spellCheckerUserDictionary);
         applicationCardLayout->addLayout(layout, itemIndex++, 0);
     }
+    applicationCardLayout->addWidget(showDocumentsPages, itemIndex++, 0);
     applicationCardLayout->addWidget(useTypewriterSound, itemIndex++, 0);
     applicationCardLayout->addWidget(useTypewriterScrolling, itemIndex++, 0);
     applicationCardLayout->addWidget(focusCurrentParagraph, itemIndex++, 0);
@@ -781,6 +784,8 @@ SettingsView::SettingsView(QWidget* _parent)
             &SettingsView::applicationSaveBackupsChanged);
     connect(d->backupsFolderPath, &TextField::textChanged, this,
             [this] { emit applicationBackupsFolderChanged(d->backupsFolderPath->text()); });
+    connect(d->showDocumentsPages, &CheckBox::checkedChanged, this,
+            &SettingsView::applicationShowDocumentsPagesChanged);
     connect(d->useTypewriterSound, &CheckBox::checkedChanged, this,
             &SettingsView::applicationUseTypewriterSoundChanged);
     connect(d->useSpellChecker, &CheckBox::checkedChanged, this, [this](bool _checked) {
@@ -1231,6 +1236,11 @@ void SettingsView::setApplicationBackupsFolder(const QString& _path)
     d->backupsFolderPath->setText(_path);
 }
 
+void SettingsView::setApplicationShowDocumentsPages(bool _show)
+{
+    d->showDocumentsPages->setChecked(_show);
+}
+
 void SettingsView::setApplicationUseTypewriterSound(bool _use)
 {
     d->useTypewriterSound->setChecked(_use);
@@ -1425,6 +1435,7 @@ void SettingsView::updateTranslations()
     d->saveBackups->setText(tr("Save backups"));
     d->backupsFolderPath->setLabel(tr("Backups folder path"));
     d->applicationTextEditingTitle->setText(tr("Text editing"));
+    d->showDocumentsPages->setText(tr("Show documents pages"));
     d->useTypewriterSound->setText(tr("Use typewriter sound for keys pressing"));
     d->useSpellChecker->setText(tr("Spell check"));
     d->spellCheckerLanguage->setLabel(tr("Spelling dictionary"));
@@ -1685,20 +1696,29 @@ void SettingsView::designSystemChangeEvent(DesignSystemChangeEvent* _event)
         iconLabel->setContentsMargins(iconLabelMargins);
     }
 
-    for (auto checkBox :
-         { d->autoSave, d->saveBackups,
-           //
-           d->useTypewriterSound, d->useSpellChecker, d->highlightCurrentLine,
-           d->focusCurrentParagraph, d->useTypewriterScrolling,
-           //
-           d->simpleTextNavigatorShowSceneText,
-           //
-           d->screenplayEditorShowSceneNumber, d->screenplayEditorShowSceneNumberOnLeft,
-           d->screenplayEditorShowSceneNumberOnRight, d->screenplayEditorShowDialogueNumber,
-           d->screenplayNavigatorShowSceneNumber, d->screenplayNavigatorShowSceneText,
-           d->screenplayDurationByCharactersIncludingSpaces,
-           //
-           d->comicBookNavigatorShowSceneText }) {
+    for (auto checkBox : {
+             d->autoSave,
+             d->saveBackups,
+             //
+             d->showDocumentsPages,
+             d->useTypewriterSound,
+             d->useSpellChecker,
+             d->highlightCurrentLine,
+             d->focusCurrentParagraph,
+             d->useTypewriterScrolling,
+             //
+             d->simpleTextNavigatorShowSceneText,
+             //
+             d->screenplayEditorShowSceneNumber,
+             d->screenplayEditorShowSceneNumberOnLeft,
+             d->screenplayEditorShowSceneNumberOnRight,
+             d->screenplayEditorShowDialogueNumber,
+             d->screenplayNavigatorShowSceneNumber,
+             d->screenplayNavigatorShowSceneText,
+             d->screenplayDurationByCharactersIncludingSpaces,
+             //
+             d->comicBookNavigatorShowSceneText,
+         }) {
         checkBox->setBackgroundColor(DesignSystem::color().background());
         checkBox->setTextColor(DesignSystem::color().onBackground());
     }

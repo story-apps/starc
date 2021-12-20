@@ -80,6 +80,7 @@ private:
     void setApplicationUseAutoSave(bool _use);
     void setApplicationSaveBackups(bool _save);
     void setApplicationBackupsFolder(const QString& _path);
+    void setApplicationShowDocumentsPages(bool _show);
     void setApplicationUseTypeWriterSound(bool _use);
     void setApplicationUseSpellChecker(bool _use);
     void setApplicationSpellCheckerLanguage(const QString& _languageCode);

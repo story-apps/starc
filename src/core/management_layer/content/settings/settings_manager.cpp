@@ -87,6 +87,8 @@ void SettingsManager::Implementation::loadApplicationSettings()
         settingsValue(DataStorageLayer::kApplicationSaveBackupsKey).toBool());
     view->setApplicationBackupsFolder(
         settingsValue(DataStorageLayer::kApplicationBackupsFolderKey).toString());
+    view->setApplicationShowDocumentsPages(
+        settingsValue(DataStorageLayer::kApplicationShowDocumentsPagesKey).toBool());
     view->setApplicationUseTypewriterSound(
         settingsValue(DataStorageLayer::kApplicationUseTypewriterSoundKey).toBool());
     view->setApplicationUseSpellChecker(
@@ -235,6 +237,8 @@ SettingsManager::SettingsManager(QObject* _parent, QWidget* _parentWidget)
             &SettingsManager::setApplicationSaveBackups);
     connect(d->view, &Ui::SettingsView::applicationBackupsFolderChanged, this,
             &SettingsManager::setApplicationBackupsFolder);
+    connect(d->view, &Ui::SettingsView::applicationShowDocumentsPagesChanged, this,
+            &SettingsManager::setApplicationShowDocumentsPages);
     connect(d->view, &Ui::SettingsView::applicationUseTypewriterSoundChanged, this,
             &SettingsManager::setApplicationUseTypeWriterSound);
     connect(d->view, &Ui::SettingsView::applicationUseSpellCheckerChanged, this,
@@ -402,6 +406,14 @@ void SettingsManager::setApplicationBackupsFolder(const QString& _path)
 {
     d->setSettingsValue(DataStorageLayer::kApplicationBackupsFolderKey, _path);
     emit applicationBackupsFolderChanged(_path);
+}
+
+void SettingsManager::setApplicationShowDocumentsPages(bool _show)
+{
+    d->setSettingsValue(DataStorageLayer::kApplicationShowDocumentsPagesKey, _show);
+    emit simpleTextEditorChanged({ DataStorageLayer::kApplicationShowDocumentsPagesKey });
+    emit screenplayEditorChanged({ DataStorageLayer::kApplicationShowDocumentsPagesKey });
+    emit comicBookEditorChanged({ DataStorageLayer::kApplicationShowDocumentsPagesKey });
 }
 
 void SettingsManager::setApplicationUseTypeWriterSound(bool _use)

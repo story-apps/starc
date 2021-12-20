@@ -96,6 +96,7 @@ SettingsStorage::Implementation::Implementation()
     defaultValues.insert(kApplicationBackupsFolderKey,
                          QStandardPaths::writableLocation(QStandardPaths::DocumentsLocation)
                              + "/starc/backups");
+    defaultValues.insert(kApplicationShowDocumentsPagesKey, true);
     defaultValues.insert(kApplicationUseTypewriterSoundKey, false);
     defaultValues.insert(kApplicationUseSpellCheckerKey, false);
     defaultValues.insert(kApplicationHighlightCurrentLineKey, false);
