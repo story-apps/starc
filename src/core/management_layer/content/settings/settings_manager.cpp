@@ -137,6 +137,8 @@ void SettingsManager::Implementation::loadScreenplaySettings()
     view->setScreenplayEditorShowDialogueNumber(
         settingsValue(DataStorageLayer::kComponentsScreenplayEditorShowDialogueNumbersKey)
             .toBool());
+    view->setScreenplayEditorContinueDialogue(
+        settingsValue(DataStorageLayer::kComponentsScreenplayEditorContinueDialogueKey).toBool());
     //
     view->setScreenplayNavigatorShowSceneNumber(
         settingsValue(DataStorageLayer::kComponentsScreenplayNavigatorShowSceneNumberKey).toBool());
@@ -266,6 +268,8 @@ SettingsManager::SettingsManager(QObject* _parent, QWidget* _parentWidget)
             &SettingsManager::setScreenplayEditorShowSceneNumber);
     connect(d->view, &Ui::SettingsView::screenplayEditorShowDialogueNumberChanged, this,
             &SettingsManager::setScreenplayEditorShowDialogueNumber);
+    connect(d->view, &Ui::SettingsView::screenplayEditorContinueDialogueChanged, this,
+            &SettingsManager::setScreenplayEditorContinueDialogue);
     //
     connect(d->view, &Ui::SettingsView::screenplayNavigatorShowSceneNumberChanged, this,
             &SettingsManager::setScreenplayNavigatorShowSceneNumber);
@@ -669,6 +673,14 @@ void SettingsManager::setScreenplayEditorShowDialogueNumber(bool _show)
     d->setSettingsValue(DataStorageLayer::kComponentsScreenplayEditorShowDialogueNumbersKey, _show);
     emit screenplayEditorChanged(
         { DataStorageLayer::kComponentsScreenplayEditorShowDialogueNumbersKey });
+}
+
+void SettingsManager::setScreenplayEditorContinueDialogue(bool _continue)
+{
+    d->setSettingsValue(DataStorageLayer::kComponentsScreenplayEditorContinueDialogueKey,
+                        _continue);
+    emit screenplayEditorChanged(
+        { DataStorageLayer::kComponentsScreenplayEditorContinueDialogueKey });
 }
 
 void SettingsManager::setScreenplayNavigatorShowSceneNumber(bool _show)

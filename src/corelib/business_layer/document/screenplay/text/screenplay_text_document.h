@@ -35,6 +35,11 @@ public:
     void setModel(BusinessLayer::ScreenplayTextModel* _model, bool _canChangeModel = true);
 
     /**
+     * @brief Настроить необходимость корректировок
+     */
+    void setCorrectionOptions(bool _needToCorrectCharactersNames, bool _needToCorrectPageBreaks);
+
+    /**
      * @brief Получить позицию элемента в заданном индексе
      * @param _fromStart - true начальная позиция, false конечная позиция
      * @return Позицию элемента, -1 если элемент не удалось найти
@@ -99,11 +104,6 @@ public:
      * @brief Соединить разделённый параграф
      */
     void mergeParagraph(const ScreenplayTextCursor& _cursor);
-
-    /**
-     * @brief Настроить необходимость корректировок
-     */
-    void setCorrectionOptions(bool _needToCorrectCharactersNames, bool _needToCorrectPageBreaks);
 
     /**
      * @brief Добавить редакторсую заметку в текущее выделение

@@ -37,6 +37,11 @@ public:
     void setShowDialogueNumber(bool _show);
 
     /**
+     * @brief Настроить необходимость корректировок
+     */
+    void setCorrectionOptions(bool _needToCorrectCharactersNames, bool _needToCorrectPageBreaks);
+
+    /**
      * @brief Задать модель текста сценария
      */
     void initWithModel(BusinessLayer::ScreenplayTextModel* _model);

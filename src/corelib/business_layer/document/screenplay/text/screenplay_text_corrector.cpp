@@ -89,6 +89,11 @@ public:
     void correctCharactersNames(int _position = -1, int _charsChanged = 0);
 
     /**
+     * @brief Очистить все корректировки персонажей
+     */
+    void clearCharacterNamesCorrections();
+
+    /**
      * @brief Скорректировать текст сценария
      */
     void correctPageBreaks(int _position = -1);
@@ -390,6 +395,33 @@ void ScreenplayTextCorrector::Implementation::correctCharactersNames(int _positi
 
         block = block.next();
     } while (block.isValid() && block.position() < endPosition);
+
+    cursor.endEditBlock();
+}
+
+void ScreenplayTextCorrector::Implementation::clearCharacterNamesCorrections()
+{
+    //
+    // Начинаем работу с документом
+    //
+    ScreenplayTextCursor cursor(document);
+    cursor.beginEditBlock();
+
+    auto block = document->begin();
+    do {
+        const auto blockType = ScreenplayBlockStyle::forBlock(block);
+        if (blockType == ScreenplayParagraphType::Character) {
+            auto characterFormat = block.blockFormat();
+            if (characterFormat.boolProperty(ScreenplayBlockStyle::PropertyIsCharacterContinued)) {
+                characterFormat.setProperty(ScreenplayBlockStyle::PropertyIsCharacterContinued,
+                                            false);
+                cursor.setPosition(block.position());
+                cursor.setBlockFormat(characterFormat);
+            }
+        }
+
+        block = block.next();
+    } while (block.isValid());
 
     cursor.endEditBlock();
 }
@@ -1856,7 +1888,11 @@ void ScreenplayTextCorrector::setNeedToCorrectCharactersNames(bool _need)
     }
 
     d->needToCorrectCharactersNames = _need;
-    correct();
+    if (d->needToCorrectCharactersNames) {
+        correct();
+    } else {
+        d->clearCharacterNamesCorrections();
+    }
 }
 
 void ScreenplayTextCorrector::setNeedToCorrectPageBreaks(bool _need)

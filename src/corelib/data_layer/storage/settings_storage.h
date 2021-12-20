@@ -148,6 +148,8 @@ const QString kComponentsScreenplayEditorShowSceneNumbersOnLeftKey
     = kComponentsScreenplayEditorKey + QStringLiteral("/show-scene-number-on-right");
 const QString kComponentsScreenplayEditorShowDialogueNumbersKey
     = kComponentsScreenplayEditorKey + QStringLiteral("/show-dialogue-number");
+const QString kComponentsScreenplayEditorContinueDialogueKey
+    = kComponentsScreenplayEditorKey + QStringLiteral("/continue-dialogue");
 // ... навигатор
 const QString kComponentsScreenplayNavigatorKey
     = kComponentsScreenplayKey + QStringLiteral("/navigator");

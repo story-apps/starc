@@ -592,6 +592,14 @@ void ScreenplayTextView::reconfigure(const QStringList& _changedSettingsKeys)
         d->reconfigureDialoguesNumbersVisibility();
     }
     if (_changedSettingsKeys.isEmpty()
+        || _changedSettingsKeys.contains(
+            DataStorageLayer::kComponentsScreenplayEditorContinueDialogueKey)) {
+        d->screenplayText->setCorrectionOptions(
+            settingsValue(DataStorageLayer::kComponentsScreenplayEditorContinueDialogueKey)
+                .toBool(),
+            true);
+    }
+    if (_changedSettingsKeys.isEmpty()
         || _changedSettingsKeys.contains(DataStorageLayer::kApplicationShowDocumentsPagesKey)) {
         const auto usePageMode
             = settingsValue(DataStorageLayer::kApplicationShowDocumentsPagesKey).toBool();

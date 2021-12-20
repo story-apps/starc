@@ -995,6 +995,13 @@ void ScreenplayTextDocument::setModel(BusinessLayer::ScreenplayTextModel* _model
     d->tryToCorrectDocument();
 }
 
+void ScreenplayTextDocument::setCorrectionOptions(bool _needToCorrectCharactersNames,
+                                                  bool _needToCorrectPageBreaks)
+{
+    d->corrector.setNeedToCorrectCharactersNames(_needToCorrectCharactersNames);
+    d->corrector.setNeedToCorrectPageBreaks(_needToCorrectPageBreaks);
+}
+
 int ScreenplayTextDocument::itemPosition(const QModelIndex& _index, bool _fromStart)
 {
     auto item = d->model->itemForIndex(_index);
@@ -1527,13 +1534,6 @@ void ScreenplayTextDocument::mergeParagraph(const ScreenplayTextCursor& _cursor)
         cursor.insertBlock({});
         insertFromMime(cursor.position(), firstColumnData);
     }
-}
-
-void ScreenplayTextDocument::setCorrectionOptions(bool _needToCorrectCharactersNames,
-                                                  bool _needToCorrectPageBreaks)
-{
-    d->corrector.setNeedToCorrectCharactersNames(_needToCorrectCharactersNames);
-    d->corrector.setNeedToCorrectPageBreaks(_needToCorrectPageBreaks);
 }
 
 void ScreenplayTextDocument::addReviewMark(const QColor& _textColor, const QColor& _backgroundColor,

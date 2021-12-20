@@ -131,6 +131,12 @@ void ScreenplayTextEdit::setShowDialogueNumber(bool _show)
     update();
 }
 
+void ScreenplayTextEdit::setCorrectionOptions(bool _needToCorrectCharactersNames,
+                                              bool _needToCorrectPageBreaks)
+{
+    d->document.setCorrectionOptions(_needToCorrectCharactersNames, _needToCorrectPageBreaks);
+}
+
 void ScreenplayTextEdit::initWithModel(BusinessLayer::ScreenplayTextModel* _model)
 {
     if (d->model && d->model->informationModel()) {
