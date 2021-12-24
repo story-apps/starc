@@ -83,23 +83,23 @@ CreateDocumentDialog::Implementation::Implementation(QWidget* _parent)
 
 void CreateDocumentDialog::Implementation::updateDocumentInfo()
 {
-    const QHash<Domain::DocumentObjectType, QString> documenTypeToInfo
-        = { { Domain::DocumentObjectType::Folder,
-              tr("Create a folder to group documents inside the story.") },
-            { Domain::DocumentObjectType::Text,
-              tr("Create a plain text document to write out ideas and notes.") },
-            { Domain::DocumentObjectType::Character,
-              tr("Create a document with full Character's description to track his relations "
-                 "and follow his journey within the story.") },
-            { Domain::DocumentObjectType::Location,
-              tr("Create a document to note down the Location's description "
-                 "and keep the details.") },
-            { Domain::DocumentObjectType::Screenplay,
-              tr("Create a document set to streamline your work on the feature film, "
-                 "series, or animation.") },
-            { Domain::DocumentObjectType::ComicBook,
-              tr("Create a document set to streamline your work on the comic book, "
-                 "graphic novel, or manga.") } };
+    const QHash<Domain::DocumentObjectType, QString> documenTypeToInfo = {
+        { Domain::DocumentObjectType::Folder,
+          tr("Create a folder to group documents inside the story.") },
+        { Domain::DocumentObjectType::Text,
+          tr("Create a plain text document to write out ideas and notes.") },
+        { Domain::DocumentObjectType::Character,
+          tr("Create a document with full character's description to track his relations and "
+             "follow his journey within the story.") },
+        { Domain::DocumentObjectType::Location,
+          tr("Create a document to note down the location's description and keep the details.") },
+        { Domain::DocumentObjectType::Screenplay,
+          tr("Create a document set to streamline your work on the feature film, series, or "
+             "animation.") },
+        { Domain::DocumentObjectType::ComicBook,
+          tr("Create a document set to streamline your work on the comic book, graphic novel, or "
+             "manga.") }
+    };
 
     const auto documentTypeData = static_cast<Domain::DocumentObjectType>(
         documentType->currentIndex().data(kMimeTypeRole).toInt());
@@ -169,6 +169,19 @@ CreateDocumentDialog::CreateDocumentDialog(QWidget* _parent)
 }
 
 CreateDocumentDialog::~CreateDocumentDialog() = default;
+
+void CreateDocumentDialog::setDocumentType(Domain::DocumentObjectType _type)
+{
+    const auto typesModel = d->documentType->model();
+    for (int row = 0; row < typesModel->rowCount(); ++row) {
+        const auto typeIndex = typesModel->index(row, 0);
+        if (typeIndex.data(kMimeTypeRole).isValid()
+            && typeIndex.data(kMimeTypeRole).toInt() == static_cast<int>(_type)) {
+            d->documentType->setCurrentIndex(typeIndex);
+            return;
+        }
+    }
+}
 
 void CreateDocumentDialog::setInsertionParent(const QString& _parentName)
 {

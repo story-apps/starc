@@ -21,6 +21,11 @@ public:
     ~CreateDocumentDialog() override;
 
     /**
+     * @brief Выбрать документ заданного типа
+     */
+    void setDocumentType(Domain::DocumentObjectType _type);
+
+    /**
      * @brief Установить возможность вставки элемента в родителя
      */
     void setInsertionParent(const QString& _parentName);

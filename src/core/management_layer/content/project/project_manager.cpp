@@ -149,11 +149,21 @@ void ProjectManager::Implementation::updateNavigatorContextMenu(const QModelInde
         findAllCharacters->setIconText(u8"\U000F0016");
         connect(findAllCharacters, &QAction::triggered, [this] { this->findAllCharacters(); });
         menuActions.append(findAllCharacters);
+
+        auto addCharacter = new QAction(tr("Add character"));
+        addCharacter->setIconText(u8"\U000F0014");
+        connect(addCharacter, &QAction::triggered, [this] { this->addDocument(); });
+        menuActions.append(addCharacter);
     } else if (currentItem->type() == Domain::DocumentObjectType::Locations) {
         auto findAllLocations = new QAction(tr("Find all locations"));
         findAllLocations->setIconText(u8"\U000F13B0");
         connect(findAllLocations, &QAction::triggered, [this] { this->findAllLocations(); });
         menuActions.append(findAllLocations);
+
+        auto addLocation = new QAction(tr("Add location"));
+        addLocation->setIconText(u8"\U000F0975");
+        connect(addLocation, &QAction::triggered, [this] { this->addDocument(); });
+        menuActions.append(addLocation);
     } else if (currentItem->type() == Domain::DocumentObjectType::RecycleBin) {
         if (currentItem->hasChildren()) {
             auto emptyRecycleBin = new QAction(tr("Empty recycle bin"));
@@ -207,6 +217,10 @@ void ProjectManager::Implementation::addDocument()
     auto dialog = new Ui::CreateDocumentDialog(topLevelWidget);
     if (currentItem->type() == Domain::DocumentObjectType::Folder) {
         dialog->setInsertionParent(currentItem->name());
+    } else if (currentItem->type() == Domain::DocumentObjectType::Characters) {
+        dialog->setDocumentType(Domain::DocumentObjectType::Character);
+    } else if (currentItem->type() == Domain::DocumentObjectType::Locations) {
+        dialog->setDocumentType(Domain::DocumentObjectType::Location);
     }
 
     connect(
