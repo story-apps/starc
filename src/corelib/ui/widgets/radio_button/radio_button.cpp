@@ -128,7 +128,7 @@ void RadioButton::paintEvent(QPaintEvent* _event)
                          Ui::DesignSystem::radioButton().iconSize().height());
 
         textRectX = iconRect.right() + Ui::DesignSystem::radioButton().spacing();
-        textWidth = width() - textRectX;
+        textWidth = width() - textRectX - Ui::DesignSystem::radioButton().margins().right();
         textRect.setRect(textRectX, 0, width() - textRectX, sizeHint().height());
     } else {
         textRectX = Ui::DesignSystem::radioButton().margins().left();
@@ -180,7 +180,8 @@ void RadioButton::paintEvent(QPaintEvent* _event)
     //
     painter.setFont(Ui::DesignSystem::font().subtitle1());
     painter.setPen(penColor);
-    painter.drawText(textRect, Qt::AlignLeft | Qt::AlignVCenter, d->text);
+    painter.drawText(textRect, Qt::AlignLeft | Qt::AlignVCenter,
+                     painter.fontMetrics().elidedText(d->text, Qt::ElideRight, textRect.width()));
 }
 
 void RadioButton::mousePressEvent(QMouseEvent* _event)

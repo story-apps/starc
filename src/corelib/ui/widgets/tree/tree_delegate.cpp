@@ -87,7 +87,7 @@ void TreeDelegate::paint(QPainter* _painter, const QStyleOptionViewItem& _option
     // ... текст
     //
     _painter->setPen(textColor);
-    _painter->setFont(Ui::DesignSystem::font().body1());
+    _painter->setFont(Ui::DesignSystem::font().subtitle1());
     const qreal textLeft = iconRect.isValid()
         ? iconRect.right() + Ui::DesignSystem::treeOneLineItem().spacing()
         : backgroundRect.left() + Ui::DesignSystem::treeOneLineItem().margins().left();

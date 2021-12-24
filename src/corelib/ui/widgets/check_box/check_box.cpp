@@ -132,7 +132,7 @@ void CheckBox::paintEvent(QPaintEvent* _event)
                          Ui::DesignSystem::checkBox().iconSize().height());
 
         textRectX = iconRect.right() + Ui::DesignSystem::checkBox().spacing();
-        textWidth = width() - textRectX;
+        textWidth = width() - textRectX - Ui::DesignSystem::checkBox().margins().right();
         textRect.setRect(textRectX, 0, textWidth, sizeHint().height());
     } else {
         textWidth = width() - Ui::DesignSystem::checkBox().margins().left()
@@ -187,7 +187,8 @@ void CheckBox::paintEvent(QPaintEvent* _event)
     //
     painter.setFont(Ui::DesignSystem::font().subtitle1());
     painter.setPen(penColor);
-    painter.drawText(textRect, Qt::AlignLeft | Qt::AlignVCenter, d->text);
+    painter.drawText(textRect, Qt::AlignLeft | Qt::AlignVCenter,
+                     painter.fontMetrics().elidedText(d->text, Qt::ElideRight, textRect.width()));
 }
 
 void CheckBox::mousePressEvent(QMouseEvent* _event)
