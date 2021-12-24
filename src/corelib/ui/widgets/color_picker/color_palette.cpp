@@ -134,9 +134,8 @@ ColorPallete::ColorPallete(QWidget* _parent)
 {
     setMouseTracking(true);
 
-    QSettings settings;
     const auto customColors
-        = settings.value(kColorsKey).toString().split(kColorsSeparator, Qt::SkipEmptyParts);
+        = QSettings().value(kColorsKey).toString().split(kColorsSeparator, Qt::SkipEmptyParts);
     for (const auto& color : customColors) {
         d->customColors.append(color);
     }
@@ -197,7 +196,6 @@ void ColorPallete::addCustomColor(const QColor& _color)
     //
     // Сохраним цвета
     //
-    QSettings settings;
     const QString colorsValue = [colors = d->customColors] {
         QString colorsText;
         for (const auto& color : colors) {
@@ -205,7 +203,7 @@ void ColorPallete::addCustomColor(const QColor& _color)
         }
         return colorsText;
     }();
-    settings.setValue(kColorsKey, colorsValue);
+    QSettings().setValue(kColorsKey, colorsValue);
 
     //
     // Обновим внешний вид

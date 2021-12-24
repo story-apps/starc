@@ -17,11 +17,16 @@
 #include <QMimeData>
 #include <QPainter>
 #include <QResizeEvent>
+#include <QSettings>
 #include <QToolTip>
 #include <QVariantAnimation>
 
 #include <NetworkRequestLoader.h>
 
+
+namespace {
+const QString kImagesPathKey = QLatin1String("widgets/image-card/files-path");
+}
 
 class ImageCard::Implementation
 {
@@ -132,12 +137,15 @@ void ImageCard::Implementation::prepareImageForDisplaing(const QSize& _size)
 
 void ImageCard::Implementation::chooseImageFromFile()
 {
+    QSettings settings;
+    const auto imagesFolder = settings.value(kImagesPathKey).toString();
     const QString imagePath = QFileDialog::getOpenFileName(
-        q->window(), tr("Choose image"), {},
+        q->window(), tr("Choose image"), imagesFolder,
         QString("%1 (*.png *.jpeg *.jpg *.bmp *.tiff *.tif *.gif)").arg(tr("Images")));
     if (imagePath.isEmpty()) {
         return;
     }
+    settings.setValue(kImagesPathKey, imagePath);
 
     QPixmap image(imagePath);
     if (image.isNull()) {
