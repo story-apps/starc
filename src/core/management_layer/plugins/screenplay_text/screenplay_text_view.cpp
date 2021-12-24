@@ -187,13 +187,14 @@ void ScreenplayTextView::Implementation::reconfigureTemplate()
     using namespace BusinessLayer;
     const auto& usedTemplate = BusinessLayer::TemplatesFacade::screenplayTemplate(
         model && model->informationModel() ? model->informationModel()->templateId() : "");
-    const QVector<ScreenplayParagraphType> types
-        = { ScreenplayParagraphType::SceneHeading,    ScreenplayParagraphType::SceneCharacters,
-            ScreenplayParagraphType::Action,          ScreenplayParagraphType::Character,
-            ScreenplayParagraphType::Parenthetical,   ScreenplayParagraphType::Dialogue,
-            ScreenplayParagraphType::Lyrics,          ScreenplayParagraphType::Shot,
-            ScreenplayParagraphType::Transition,      ScreenplayParagraphType::InlineNote,
-            ScreenplayParagraphType::UnformattedText, ScreenplayParagraphType::FolderHeader };
+    const QVector<ScreenplayParagraphType> types = {
+        ScreenplayParagraphType::SceneHeading,    ScreenplayParagraphType::SceneCharacters,
+        ScreenplayParagraphType::Action,          ScreenplayParagraphType::Character,
+        ScreenplayParagraphType::Parenthetical,   ScreenplayParagraphType::Dialogue,
+        ScreenplayParagraphType::Lyrics,          ScreenplayParagraphType::Shot,
+        ScreenplayParagraphType::Transition,      ScreenplayParagraphType::InlineNote,
+        ScreenplayParagraphType::UnformattedText, ScreenplayParagraphType::FolderHeader,
+    };
     for (const auto type : types) {
         if (!usedTemplate.paragraphStyle(type).isActive()) {
             continue;
@@ -599,6 +600,12 @@ void ScreenplayTextView::reconfigure(const QStringList& _changedSettingsKeys)
                 .toBool(),
             true);
     }
+    if (_changedSettingsKeys.isEmpty()
+        || _changedSettingsKeys.contains(
+            DataStorageLayer::kComponentsScreenplayEditorShortcutsKey)) {
+        d->shortcutsManager.reconfigure();
+    }
+
     if (_changedSettingsKeys.isEmpty()
         || _changedSettingsKeys.contains(DataStorageLayer::kApplicationShowDocumentsPagesKey)) {
         const auto usePageMode

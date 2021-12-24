@@ -3,6 +3,7 @@
 #include <ui/widgets/stack_widget/stack_widget.h>
 
 class QAbstractItemModel;
+class HierarchicalModel;
 
 
 namespace Ui {
@@ -84,6 +85,11 @@ public:
     //
     void setComicBookNavigatorShowSceneText(bool _show, int _lines);
 
+    //
+    // Задание параметров горячих клавиш
+    //
+    void setShortcutsForScreenplayModel(HierarchicalModel* _model);
+
 signals:
     /**
      * @brief Пользователь нажал кнопку выборя языка
@@ -147,6 +153,14 @@ signals:
     void editCurrentScreenplayEditorTemplateRequested(const QString& _templateId);
     void duplicateCurrentScreenplayEditorTemplateRequested(const QString& _templateId);
     void removeCurrentScreenplayEditorTemplateRequested(const QString& _templateId);
+
+    //
+    // Параметры горячих клавиш
+    //
+    void shortcutsForScreenplayEditorChanged(const QString& _blockType, const QString& _shortcut,
+                                             const QString& _jumpByTab, const QString& _jumpByEnter,
+                                             const QString& _changeByTab,
+                                             const QString& _changeByEnter);
 
 protected:
     /**

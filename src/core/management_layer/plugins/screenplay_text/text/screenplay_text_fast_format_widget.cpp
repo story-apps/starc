@@ -22,88 +22,6 @@ const char* kButtonTypeKey = "button-type";
 const char* kIsButtonCurrentTypeKey = "is-button-current-type";
 } // namespace
 
-/**
- * @brief Кнопка панели инструментов
- */
-class FormatButton : public Button
-{
-public:
-    explicit FormatButton(QWidget* _parent);
-
-    /**
-     * @brief Задать текст горячей кнопки
-     */
-    void setShortcut(const QString& _shortcut);
-
-    /**
-     * @brief Переопределяем минимальный размер, чтобы панель выглядела опрятно
-     */
-    QSize sizeHint() const override;
-
-protected:
-    /**
-     * @brief Переопределяем, чтобы нарисовать текст шортката
-     */
-    void paintEvent(QPaintEvent* _event) override;
-
-private:
-    /**
-     * @brief Текст шортката
-     */
-    QString m_shortcut;
-};
-
-FormatButton::FormatButton(QWidget* _parent)
-    : Button(_parent)
-{
-    setFocusPolicy(Qt::NoFocus);
-    setFlat(true);
-}
-
-void FormatButton::setShortcut(const QString& _shortcut)
-{
-    if (m_shortcut == _shortcut) {
-        return;
-    }
-
-    m_shortcut = _shortcut;
-    updateGeometry();
-    update();
-}
-
-QSize FormatButton::sizeHint() const
-{
-    const auto shortcutWidth
-        = TextHelper::fineTextWidthF(m_shortcut, Ui::DesignSystem::font().overline());
-    return Button::sizeHint() + QSize(shortcutWidth + DesignSystem::button().spacing(), 0);
-}
-
-void FormatButton::paintEvent(QPaintEvent* _event)
-{
-    Button::paintEvent(_event);
-
-    //
-    // Рисуем шорткат
-    //
-    QPainter painter(this);
-    //
-    // ... настроим цвет текста, как в самой кнопке
-    //
-    painter.setPen(
-        isEnabled() ? textColor()
-                    : ColorHelper::transparent(textColor(), DesignSystem::disabledTextOpacity()));
-    //
-    // ... собственно добавим текст шортката
-    //
-    const QRectF shortcutRect
-        = contentsRect().marginsRemoved(DesignSystem::button().margins().toMargins());
-    painter.setFont(DesignSystem::font().overline());
-    painter.drawText(shortcutRect, Qt::AlignVCenter | Qt::AlignRight, m_shortcut);
-}
-
-
-// ****
-
 
 class ScreenplayTextFastFormatWidget::Implementation
 {
@@ -124,7 +42,7 @@ public:
     /**
      * @brief Список кнопок
      */
-    QList<FormatButton*> buttons;
+    QList<Button*> buttons;
 };
 
 ScreenplayTextFastFormatWidget::Implementation::Implementation(QWidget* _parent)
@@ -133,7 +51,7 @@ ScreenplayTextFastFormatWidget::Implementation::Implementation(QWidget* _parent)
     // Создаём столько кнопок, сколько может быть стилей
     //
     for (int index = 0; index < 12; ++index) {
-        buttons.append(new FormatButton(_parent));
+        buttons.append(new Button(_parent));
     }
 }
 
@@ -152,8 +70,8 @@ void ScreenplayTextFastFormatWidget::Implementation::updateButtons()
         const auto itemModelIndex = model->index(itemIndex, 0);
         auto button = buttons.at(itemIndex);
         button->setVisible(true);
+        button->setFlat(true);
         button->setText(itemModelIndex.data(Qt::DisplayRole).toString());
-        button->setShortcut(itemModelIndex.data(Qt::WhatsThisRole).toString());
         button->setProperty(kButtonTypeKey, itemModelIndex);
     }
     //

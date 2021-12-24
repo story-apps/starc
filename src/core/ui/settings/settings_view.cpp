@@ -19,7 +19,6 @@
 #include <ui/widgets/tree/tree.h>
 #include <ui/widgets/tree/tree_delegate.h>
 #include <ui/widgets/tree/tree_header_view.h>
-#include <utils/helpers/shortcuts_helper.h>
 
 #include <QAction>
 #include <QFileDialog>
@@ -89,89 +88,8 @@ QStandardItemModel* buildSpellCheckerLanguagesModel(QObject* _parent)
 }
 
 /**
- * @brief Построить модель горячих клавиш для сценария
+ * @brief Построить модель типов абзацев сценария
  */
-HierarchicalModel* buildShortcutsForScreenplayModel(QObject* _parent)
-{
-    using namespace BusinessLayer;
-
-    //
-    // Сформировать строку таблицы переходов между блоками для заданного типа
-    //
-    auto blocksJumpsModelRow = [](ScreenplayParagraphType _type) {
-        const auto shortcut = ShortcutsHelper::screenplayShortcut(_type);
-        const auto jumpForTab = ShortcutsHelper::screenplayJumpByTab(_type);
-        const auto jumpForEnter = ShortcutsHelper::screenplayJumpByEnter(_type);
-        const auto changeForTab = ShortcutsHelper::screenplayChangeByTab(_type);
-        const auto changeForEnter = ShortcutsHelper::screenplayChangeByEnter(_type);
-
-        QList<QStandardItem*> result;
-        result
-            << new QStandardItem(toDisplayString(_type)) << new QStandardItem(shortcut)
-            << new QStandardItem(toDisplayString(screenplayParagraphTypeFromString(jumpForTab)))
-            << new QStandardItem(toDisplayString(screenplayParagraphTypeFromString(jumpForEnter)))
-            << new QStandardItem(toDisplayString(screenplayParagraphTypeFromString(changeForTab)))
-            << new QStandardItem(
-                   toDisplayString(screenplayParagraphTypeFromString(changeForEnter)));
-        result.first()->setFlags(Qt::ItemIsSelectable | Qt::ItemIsEnabled);
-        return result;
-    };
-    //
-    // ... таблика переходов между разными блоками
-    //
-    const int rows = 0;
-    const int columns = 6;
-    QStandardItemModel* blocksJumpsModel = new QStandardItemModel(rows, columns, _parent);
-    blocksJumpsModel->appendRow(blocksJumpsModelRow(ScreenplayParagraphType::SceneHeading));
-    blocksJumpsModel->appendRow(blocksJumpsModelRow(ScreenplayParagraphType::SceneCharacters));
-    blocksJumpsModel->appendRow(blocksJumpsModelRow(ScreenplayParagraphType::Action));
-    blocksJumpsModel->appendRow(blocksJumpsModelRow(ScreenplayParagraphType::Character));
-    blocksJumpsModel->appendRow(blocksJumpsModelRow(ScreenplayParagraphType::Parenthetical));
-    blocksJumpsModel->appendRow(blocksJumpsModelRow(ScreenplayParagraphType::Dialogue));
-    blocksJumpsModel->appendRow(blocksJumpsModelRow(ScreenplayParagraphType::Lyrics));
-    blocksJumpsModel->appendRow(blocksJumpsModelRow(ScreenplayParagraphType::Transition));
-    blocksJumpsModel->appendRow(blocksJumpsModelRow(ScreenplayParagraphType::Shot));
-    blocksJumpsModel->appendRow(blocksJumpsModelRow(ScreenplayParagraphType::InlineNote));
-    blocksJumpsModel->appendRow(blocksJumpsModelRow(ScreenplayParagraphType::FolderHeader));
-    blocksJumpsModel->appendRow(blocksJumpsModelRow(ScreenplayParagraphType::UnformattedText));
-    //
-    // ... модель переходов между блоками, её заголовок и делегат
-    //
-    QStandardItemModel* blockJumpsHeaderModel = new QStandardItemModel(_parent);
-    {
-        auto columnAfterText = new QStandardItem();
-        {
-            auto tab = new QStandardItem("Tab");
-            tab->setData(u8"\U000F0312", Qt::DecorationRole);
-            columnAfterText->appendColumn({ tab });
-
-            auto enter = new QStandardItem("Enter");
-            enter->setData(u8"\U000F0311", Qt::DecorationRole);
-            columnAfterText->appendColumn({ enter });
-        }
-        auto columnEmptyText = new QStandardItem();
-        {
-            auto tab = new QStandardItem("Tab");
-            tab->setData(u8"\U000F0312", Qt::DecorationRole);
-            columnEmptyText->appendColumn({ tab });
-
-            auto enter = new QStandardItem("Enter");
-            enter->setData(u8"\U000F0311", Qt::DecorationRole);
-            columnEmptyText->appendColumn({ enter });
-        }
-
-        blockJumpsHeaderModel->setItem(0, 0, new QStandardItem());
-        blockJumpsHeaderModel->setItem(0, 1, new QStandardItem());
-        blockJumpsHeaderModel->setItem(0, 2, columnAfterText);
-        blockJumpsHeaderModel->setItem(0, 3, columnEmptyText);
-    }
-
-    auto model = new HierarchicalModel(_parent);
-    model->setSourceModel(blocksJumpsModel);
-    model->setHeaderModel(blockJumpsHeaderModel);
-    return model;
-}
-
 QStringListModel* buildScreenplayParagraphTypesModel(QObject* _parent,
                                                      QStringListModel* _model = nullptr)
 {
@@ -198,6 +116,18 @@ QStringListModel* buildScreenplayParagraphTypesModel(QObject* _parent,
 
     return _model;
 }
+
+/**
+ * @brief Колонки таблицы горячих клавиш специализированного редактора текста
+ */
+enum TextEditorShortcuts {
+    Type = 0,
+    Shortcut,
+    JumpByTab,
+    JumpByEnter,
+    ChangeByTab,
+    ChangeByEnter,
+};
 
 } // namespace
 
@@ -487,7 +417,6 @@ SettingsView::Implementation::Implementation(QWidget* _parent)
     , shortcutsTitle(new H5Label(shortcutsCard))
     , shortcutsForScreenplayTitle(new H6Label(shortcutsCard))
     , shortcutsForScreenplay(new Tree(shortcutsCard))
-    , shortcutsForScreenplayModel(buildShortcutsForScreenplayModel(shortcutsForScreenplay))
     , screenplayParagraphTypesModel(buildScreenplayParagraphTypesModel(shortcutsForScreenplay))
     , screenplayParagraphAddTypeDelegate(
           new ComboBoxItemDelegate(shortcutsForScreenplay, screenplayParagraphTypesModel))
@@ -842,14 +771,6 @@ void SettingsView::Implementation::initComicBookCard()
 void SettingsView::Implementation::initShortcutsCard()
 {
     shortcutsForScreenplay->setHeader(new HierarchicalHeaderView(shortcutsForScreenplay));
-    shortcutsForScreenplay->setModel(shortcutsForScreenplayModel);
-    shortcutsForScreenplay->setItemDelegateForColumn(
-        1, new KeySequenceDelegate(shortcutsForScreenplay));
-    shortcutsForScreenplay->setItemDelegateForColumn(2, screenplayParagraphAddTypeDelegate);
-    shortcutsForScreenplay->setItemDelegateForColumn(3, screenplayParagraphAddTypeDelegate);
-    shortcutsForScreenplay->setItemDelegateForColumn(4, screenplayParagraphChangeTypeDelegate);
-    shortcutsForScreenplay->setItemDelegateForColumn(5, screenplayParagraphChangeTypeDelegate);
-    updateTablesGeometry();
 
     shortcutsCardLayout->setContentsMargins({});
     shortcutsCardLayout->setSpacing(0);
@@ -1226,6 +1147,10 @@ SettingsView::SettingsView(QWidget* _parent)
     connect(d->comicBookNavigatorSceneDescriptionLines5, &RadioButton::checkedChanged, this,
             notifycomicBookNavigatorShowSceneTextChanged);
 
+    //
+    // Соединения шорткатов настраиваются в момент установки моделей с данными о них в представление
+    //
+
 
     designSystemChangeEvent(nullptr);
 }
@@ -1587,6 +1512,48 @@ void SettingsView::setComicBookNavigatorShowSceneText(bool _show, int _lines)
                 { 5, d->comicBookNavigatorSceneDescriptionLines5 } };
         buttons[_lines]->setChecked(true);
     }
+}
+
+void SettingsView::setShortcutsForScreenplayModel(HierarchicalModel* _model)
+{
+    d->shortcutsForScreenplayModel = _model;
+
+    d->shortcutsForScreenplay->setModel(d->shortcutsForScreenplayModel);
+    d->shortcutsForScreenplay->setItemDelegateForColumn(
+        1, new KeySequenceDelegate(d->shortcutsForScreenplay));
+    d->shortcutsForScreenplay->setItemDelegateForColumn(2, d->screenplayParagraphAddTypeDelegate);
+    d->shortcutsForScreenplay->setItemDelegateForColumn(3, d->screenplayParagraphAddTypeDelegate);
+    d->shortcutsForScreenplay->setItemDelegateForColumn(4,
+                                                        d->screenplayParagraphChangeTypeDelegate);
+    d->shortcutsForScreenplay->setItemDelegateForColumn(5,
+                                                        d->screenplayParagraphChangeTypeDelegate);
+    d->updateTablesGeometry();
+
+    connect(
+        d->shortcutsForScreenplayModel, &HierarchicalModel::dataChanged, this,
+        [this](const QModelIndex& _index) {
+            if (!_index.isValid()) {
+                return;
+            }
+
+            const auto blockType
+                = _index.sibling(_index.row(), TextEditorShortcuts::Type).data().toString();
+            const auto shortcut
+                = _index.sibling(_index.row(), TextEditorShortcuts::Shortcut).data().toString();
+            const auto jumpByTab
+                = _index.sibling(_index.row(), TextEditorShortcuts::JumpByTab).data().toString();
+            const auto jumpByEnter
+                = _index.sibling(_index.row(), TextEditorShortcuts::JumpByEnter).data().toString();
+            const auto changeByTab
+                = _index.sibling(_index.row(), TextEditorShortcuts::ChangeByTab).data().toString();
+            const auto changeByEnter
+                = _index.sibling(_index.row(), TextEditorShortcuts::ChangeByEnter)
+                      .data()
+                      .toString();
+
+            emit shortcutsForScreenplayEditorChanged(blockType, shortcut, jumpByTab, jumpByEnter,
+                                                     changeByTab, changeByEnter);
+        });
 }
 
 void SettingsView::resizeEvent(QResizeEvent* _event)

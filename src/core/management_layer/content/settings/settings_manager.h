@@ -122,6 +122,13 @@ private:
     //
     void setComicBookNavigatorShowSceneText(bool _show, int _lines);
 
+    //
+    // Сохранение параметров горячих клавиш
+    //
+    void setShortcutsForScreenplayEdit(const QString& _blockType, const QString& _shortcut,
+                                       const QString& _jumpByTab, const QString& _jumpByEnter,
+                                       const QString& _changeByTab, const QString& _changeByEnter);
+
 private:
     class Implementation;
     QScopedPointer<Implementation> d;

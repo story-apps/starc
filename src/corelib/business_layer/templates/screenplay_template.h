@@ -56,6 +56,8 @@ CORE_LIBRARY_EXPORT QString toDisplayString(ScreenplayParagraphType _type);
  * @brief Получить тип блока из текстового представления
  */
 CORE_LIBRARY_EXPORT ScreenplayParagraphType screenplayParagraphTypeFromString(const QString& _text);
+CORE_LIBRARY_EXPORT ScreenplayParagraphType
+screenplayParagraphTypeFromDisplayString(const QString& _text);
 
 
 /**

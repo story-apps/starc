@@ -62,3 +62,9 @@ QVariantMap settingsValues(const QString& _key)
     return DataStorageLayer::StorageFacade::settingsStorage()->values(
         _key, DataStorageLayer::SettingsStorage::SettingsPlace::Application);
 }
+
+void setSettingsValue(const QString& _key, const QVariant& _value)
+{
+    DataStorageLayer::StorageFacade::settingsStorage()->setValue(
+        _key, _value, DataStorageLayer::SettingsStorage::SettingsPlace::Application);
+}

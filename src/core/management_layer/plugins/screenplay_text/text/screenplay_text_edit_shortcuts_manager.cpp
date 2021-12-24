@@ -3,8 +3,7 @@
 #include "screenplay_text_edit.h"
 
 #include <business_layer/templates/screenplay_template.h>
-#include <data_layer/storage/settings_storage.h>
-#include <data_layer/storage/storage_facade.h>
+#include <utils/helpers/shortcuts_helper.h>
 
 #include <QShortcut>
 #include <QSignalMapper>
@@ -56,11 +55,7 @@ void ScreenplayTextEditShortcutsManager::Implementation::createOrUpdateShortcut(
         return;
     }
 
-    const auto blockType = static_cast<ScreenplayParagraphType>(_forBlockType);
-    const QString typeShortName = BusinessLayer::toString(blockType);
-    const QString keySequenceText
-        = settingsValue(QString("screenplay-editor/shortcuts/%1").arg(typeShortName)).toString();
-    const QKeySequence keySequence(keySequenceText);
+    const QKeySequence keySequence(ShortcutsHelper::screenplayShortcut(_forBlockType));
 
     if (paragraphTypeToShortcut.contains(_forBlockType)) {
         paragraphTypeToShortcut.value(_forBlockType)->setKey(keySequence);
@@ -128,8 +123,9 @@ void ScreenplayTextEditShortcutsManager::reconfigure()
     //
     // Обновим сочетания клавиш для всех блоков
     //
-    for (const auto type : d->paragraphTypeToShortcut.keys()) {
-        d->createOrUpdateShortcut(type);
+    for (auto iter = d->paragraphTypeToShortcut.begin(); iter != d->paragraphTypeToShortcut.end();
+         ++iter) {
+        d->createOrUpdateShortcut(iter.key());
     }
 }
 

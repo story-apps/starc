@@ -99,6 +99,21 @@ ScreenplayParagraphType screenplayParagraphTypeFromString(const QString& _text)
     return kScreenplayParagraphTypeToString.key(_text, ScreenplayParagraphType::Undefined);
 }
 
+ScreenplayParagraphType screenplayParagraphTypeFromDisplayString(const QString& _text)
+{
+    //
+    // Ищем среди всех строк, т.к. карты нет, а перевод может измениться в любой момент выполнения
+    //
+    for (auto iter = kScreenplayParagraphTypeToString.begin();
+         iter != kScreenplayParagraphTypeToString.end(); ++iter) {
+        if (toDisplayString(iter.key()) == _text) {
+            return iter.key();
+        }
+    }
+
+    return ScreenplayParagraphType::Undefined;
+}
+
 
 // ****
 

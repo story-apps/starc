@@ -51,3 +51,4 @@ private:
 QVariant CORE_LIBRARY_EXPORT settingsValue(const QString& _key);
 QVariant CORE_LIBRARY_EXPORT settingsValue(const QString& _key, const QVariant& _defaultValue);
 QVariantMap CORE_LIBRARY_EXPORT settingsValues(const QString& _key);
+void CORE_LIBRARY_EXPORT setSettingsValue(const QString& _key, const QVariant& _value);
