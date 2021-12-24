@@ -150,6 +150,11 @@ signals:
 
 protected:
     /**
+     * @brief Переопределяем для обновления размеров таблиц
+     */
+    void resizeEvent(QResizeEvent* _event) override;
+
+    /**
      * @brief Обновить переводы
      */
     void updateTranslations() override;

@@ -184,6 +184,7 @@ SOURCES += \
     ui/widgets/image/image_card.cpp \
     ui/widgets/image/image_cropping_dialog.cpp \
     ui/widgets/image_cropper/image_cropper.cpp \
+    ui/widgets/key_sequence_edit/key_sequence_edit.cpp \
     ui/widgets/label/label.cpp \
     ui/widgets/label/link_label.cpp \
     ui/widgets/pie/pie.cpp \
@@ -234,6 +235,7 @@ SOURCES += \
     utils/helpers/image_helper.cpp \
     utils/helpers/measurement_helper.cpp \
     utils/helpers/scroller_helper.cpp \
+    utils/helpers/shortcuts_helper.cpp \
     utils/helpers/string_helper.cpp \
     utils/helpers/text_helper.cpp \
     utils/helpers/quotes_helper.cpp \
@@ -385,6 +387,7 @@ HEADERS += \
     ui/widgets/image/image_card.h \
     ui/widgets/image/image_cropping_dialog.h \
     ui/widgets/image_cropper/image_cropper.h \
+    ui/widgets/key_sequence_edit/key_sequence_edit.h \
     ui/widgets/label/label.h \
     ui/widgets/label/link_label.h \
     ui/widgets/pie/pie.h \
@@ -439,6 +442,7 @@ HEADERS += \
     utils/helpers/image_helper.h \
     utils/helpers/measurement_helper.h \
     utils/helpers/scroller_helper.h \
+    utils/helpers/shortcuts_helper.h \
     utils/helpers/string_helper.h \
     utils/helpers/text_helper.h \
     utils/helpers/quotes_helper.h \

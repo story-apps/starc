@@ -17,6 +17,11 @@ public:
     ~ComboBox() override;
 
     /**
+     * @brief Необходимо ли расширят размер попапа, чтобы содержимое полностью вмещалось
+     */
+    void setUseContentsWidth(bool _use);
+
+    /**
      * @brief Отключаем контекстное меню для комбобокса
      */
     ContextMenu* createContextMenu(const QPoint& _position, QWidget* _parent = nullptr) override;
@@ -32,6 +37,12 @@ public:
      */
     QModelIndex currentIndex() const;
     void setCurrentIndex(const QModelIndex& _index);
+
+    /**
+     * @brief Текст текущего выбранного элемента
+     */
+    QString currentText() const;
+    void setCurrentText(const QString& _text);
 
 signals:
     /**

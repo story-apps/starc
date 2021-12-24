@@ -17,7 +17,7 @@ public:
     explicit Implementation(QWidget* _parent);
 
     TreeView* tree = nullptr;
-    TreeHeaderView* header = nullptr;
+    QHeaderView* header = nullptr;
     TreeDelegate* delegate = nullptr;
     ScrollBar* treeScrollBar = nullptr;
 };
@@ -133,6 +133,11 @@ void Tree::setItemDelegate(QAbstractItemDelegate* _delegate)
     d->tree->setItemDelegate(_delegate);
 }
 
+void Tree::setItemDelegateForColumn(int _column, QAbstractItemDelegate* _delegate)
+{
+    d->tree->setItemDelegateForColumn(_column, _delegate);
+}
+
 void Tree::setCurrentIndex(const QModelIndex& _index)
 {
     if (d->tree->selectionModel()->selectedIndexes().contains(_index)) {
@@ -186,6 +191,22 @@ void Tree::setAutoAdjustSize(bool _auto)
 QRect Tree::visualRect(const QModelIndex& _index) const
 {
     return d->tree->visualRect(_index);
+}
+
+void Tree::setHeader(QHeaderView* _headerView)
+{
+    if (d->header) {
+        d->header->deleteLater();
+    }
+
+    d->header = _headerView;
+    d->header->setSectionResizeMode(QHeaderView::Stretch);
+    d->tree->setHeader(_headerView);
+}
+
+QHeaderView* Tree::headerView() const
+{
+    return d->tree->header();
 }
 
 void Tree::restoreState(const QVariant& _state)

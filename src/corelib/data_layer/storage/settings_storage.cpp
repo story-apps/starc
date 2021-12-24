@@ -233,15 +233,13 @@ SettingsStorage::Implementation::Implementation()
     // Параметры редактора сценария
     //
     {
-        const QString kScreenplayEditorKey = "screenplay-editor";
         auto addScreenplayEditorStylesAction
-            = [this, kScreenplayEditorKey](const QString& _actionType, const QString& _actionKey,
-                                           ScreenplayParagraphType _from,
-                                           ScreenplayParagraphType _to) {
-                  defaultValues.insert(
-                      QString("%1/styles-%2/from-%3-by-%4")
-                          .arg(kScreenplayEditorKey, _actionType, toString(_from), _actionKey),
-                      toString(_to));
+            = [this](const QString& _actionType, const QString& _actionKey,
+                     ScreenplayParagraphType _from, ScreenplayParagraphType _to) {
+                  defaultValues.insert(QString("%1/styles-%2/from-%3-by-%4")
+                                           .arg(kComponentsScreenplayEditorKey, _actionType,
+                                                toString(_from), _actionKey),
+                                       toString(_to));
               };
         auto addScreenplayEditorStylesActionByTab
             = [addScreenplayEditorStylesAction](const QString& _actionType,
@@ -374,13 +372,13 @@ SettingsStorage::Implementation::Implementation()
         addScreenplayEditorStylesChangeByEnter(ScreenplayParagraphType::FolderHeader,
                                                ScreenplayParagraphType::FolderHeader);
         //
-        auto addShortcut = [this,
-                            kScreenplayEditorKey](BusinessLayer::ScreenplayParagraphType _type,
-                                                  const QString& _shortcut) {
-            defaultValues.insert(QString("%1/shortcuts/%2")
-                                     .arg(kScreenplayEditorKey, BusinessLayer::toString(_type)),
-                                 QKeySequence(_shortcut).toString(QKeySequence::NativeText));
-        };
+        auto addShortcut
+            = [this](BusinessLayer::ScreenplayParagraphType _type, const QString& _shortcut) {
+                  defaultValues.insert(
+                      QString("%1/shortcuts/%2")
+                          .arg(kComponentsScreenplayEditorKey, BusinessLayer::toString(_type)),
+                      QKeySequence(_shortcut).toString(QKeySequence::NativeText));
+              };
         addShortcut(BusinessLayer::ScreenplayParagraphType::UnformattedText, "Ctrl+0");
         addShortcut(BusinessLayer::ScreenplayParagraphType::SceneHeading, "Ctrl+1");
         addShortcut(BusinessLayer::ScreenplayParagraphType::SceneCharacters, "Ctrl+2");

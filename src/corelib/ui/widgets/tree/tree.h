@@ -4,6 +4,8 @@
 
 #include <QAbstractItemView>
 
+class QHeaderView;
+
 
 /**
  * @brief Виджет дерева элементов
@@ -70,6 +72,7 @@ public:
      * @brief Задать делегат для отрисовки элементов
      */
     void setItemDelegate(QAbstractItemDelegate* _delegate);
+    void setItemDelegateForColumn(int _column, QAbstractItemDelegate* _delegate);
 
     /**
      * @brief Задать текущий индекс
@@ -120,6 +123,12 @@ public:
      * @brief Получить область занимаемую элементом с заданным индексом
      */
     QRect visualRect(const QModelIndex& _index) const;
+
+    /**
+     * @brief Представление заголовка дерева
+     */
+    void setHeader(QHeaderView* _headerView);
+    QHeaderView* headerView() const;
 
     /**
      * @brief Загрузить состояние дерева

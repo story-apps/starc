@@ -16,6 +16,10 @@
 #include <ui/widgets/scroll_bar/scroll_bar.h>
 #include <ui/widgets/slider/slider.h>
 #include <ui/widgets/text_field/text_field.h>
+#include <ui/widgets/tree/tree.h>
+#include <ui/widgets/tree/tree_delegate.h>
+#include <ui/widgets/tree/tree_header_view.h>
+#include <utils/helpers/shortcuts_helper.h>
 
 #include <QAction>
 #include <QFileDialog>
@@ -23,7 +27,9 @@
 #include <QLocale>
 #include <QScrollArea>
 #include <QStandardItemModel>
+#include <QStringListModel>
 #include <QVariantAnimation>
+#include <QtMath>
 
 
 namespace Ui {
@@ -82,6 +88,117 @@ QStandardItemModel* buildSpellCheckerLanguagesModel(QObject* _parent)
     return model;
 }
 
+/**
+ * @brief Построить модель горячих клавиш для сценария
+ */
+HierarchicalModel* buildShortcutsForScreenplayModel(QObject* _parent)
+{
+    using namespace BusinessLayer;
+
+    //
+    // Сформировать строку таблицы переходов между блоками для заданного типа
+    //
+    auto blocksJumpsModelRow = [](ScreenplayParagraphType _type) {
+        const auto shortcut = ShortcutsHelper::screenplayShortcut(_type);
+        const auto jumpForTab = ShortcutsHelper::screenplayJumpByTab(_type);
+        const auto jumpForEnter = ShortcutsHelper::screenplayJumpByEnter(_type);
+        const auto changeForTab = ShortcutsHelper::screenplayChangeByTab(_type);
+        const auto changeForEnter = ShortcutsHelper::screenplayChangeByEnter(_type);
+
+        QList<QStandardItem*> result;
+        result
+            << new QStandardItem(toDisplayString(_type)) << new QStandardItem(shortcut)
+            << new QStandardItem(toDisplayString(screenplayParagraphTypeFromString(jumpForTab)))
+            << new QStandardItem(toDisplayString(screenplayParagraphTypeFromString(jumpForEnter)))
+            << new QStandardItem(toDisplayString(screenplayParagraphTypeFromString(changeForTab)))
+            << new QStandardItem(
+                   toDisplayString(screenplayParagraphTypeFromString(changeForEnter)));
+        result.first()->setFlags(Qt::ItemIsSelectable | Qt::ItemIsEnabled);
+        return result;
+    };
+    //
+    // ... таблика переходов между разными блоками
+    //
+    const int rows = 0;
+    const int columns = 6;
+    QStandardItemModel* blocksJumpsModel = new QStandardItemModel(rows, columns, _parent);
+    blocksJumpsModel->appendRow(blocksJumpsModelRow(ScreenplayParagraphType::SceneHeading));
+    blocksJumpsModel->appendRow(blocksJumpsModelRow(ScreenplayParagraphType::SceneCharacters));
+    blocksJumpsModel->appendRow(blocksJumpsModelRow(ScreenplayParagraphType::Action));
+    blocksJumpsModel->appendRow(blocksJumpsModelRow(ScreenplayParagraphType::Character));
+    blocksJumpsModel->appendRow(blocksJumpsModelRow(ScreenplayParagraphType::Parenthetical));
+    blocksJumpsModel->appendRow(blocksJumpsModelRow(ScreenplayParagraphType::Dialogue));
+    blocksJumpsModel->appendRow(blocksJumpsModelRow(ScreenplayParagraphType::Lyrics));
+    blocksJumpsModel->appendRow(blocksJumpsModelRow(ScreenplayParagraphType::Transition));
+    blocksJumpsModel->appendRow(blocksJumpsModelRow(ScreenplayParagraphType::Shot));
+    blocksJumpsModel->appendRow(blocksJumpsModelRow(ScreenplayParagraphType::InlineNote));
+    blocksJumpsModel->appendRow(blocksJumpsModelRow(ScreenplayParagraphType::FolderHeader));
+    blocksJumpsModel->appendRow(blocksJumpsModelRow(ScreenplayParagraphType::UnformattedText));
+    //
+    // ... модель переходов между блоками, её заголовок и делегат
+    //
+    QStandardItemModel* blockJumpsHeaderModel = new QStandardItemModel(_parent);
+    {
+        auto columnAfterText = new QStandardItem();
+        {
+            auto tab = new QStandardItem("Tab");
+            tab->setData(u8"\U000F0312", Qt::DecorationRole);
+            columnAfterText->appendColumn({ tab });
+
+            auto enter = new QStandardItem("Enter");
+            enter->setData(u8"\U000F0311", Qt::DecorationRole);
+            columnAfterText->appendColumn({ enter });
+        }
+        auto columnEmptyText = new QStandardItem();
+        {
+            auto tab = new QStandardItem("Tab");
+            tab->setData(u8"\U000F0312", Qt::DecorationRole);
+            columnEmptyText->appendColumn({ tab });
+
+            auto enter = new QStandardItem("Enter");
+            enter->setData(u8"\U000F0311", Qt::DecorationRole);
+            columnEmptyText->appendColumn({ enter });
+        }
+
+        blockJumpsHeaderModel->setItem(0, 0, new QStandardItem());
+        blockJumpsHeaderModel->setItem(0, 1, new QStandardItem());
+        blockJumpsHeaderModel->setItem(0, 2, columnAfterText);
+        blockJumpsHeaderModel->setItem(0, 3, columnEmptyText);
+    }
+
+    auto model = new HierarchicalModel(_parent);
+    model->setSourceModel(blocksJumpsModel);
+    model->setHeaderModel(blockJumpsHeaderModel);
+    return model;
+}
+
+QStringListModel* buildScreenplayParagraphTypesModel(QObject* _parent,
+                                                     QStringListModel* _model = nullptr)
+{
+    using namespace BusinessLayer;
+    const QStringList paragraphTypes = {
+        toDisplayString(ScreenplayParagraphType::SceneHeading),
+        toDisplayString(ScreenplayParagraphType::SceneCharacters),
+        toDisplayString(ScreenplayParagraphType::Action),
+        toDisplayString(ScreenplayParagraphType::Character),
+        toDisplayString(ScreenplayParagraphType::Parenthetical),
+        toDisplayString(ScreenplayParagraphType::Dialogue),
+        toDisplayString(ScreenplayParagraphType::Lyrics),
+        toDisplayString(ScreenplayParagraphType::Transition),
+        toDisplayString(ScreenplayParagraphType::Shot),
+        toDisplayString(ScreenplayParagraphType::InlineNote),
+        toDisplayString(ScreenplayParagraphType::FolderHeader),
+        toDisplayString(ScreenplayParagraphType::UnformattedText),
+    };
+
+    if (!_model) {
+        _model = new QStringListModel(_parent);
+    }
+    _model->setStringList(paragraphTypes);
+
+    return _model;
+}
+
 } // namespace
 
 class SettingsView::Implementation
@@ -110,6 +227,11 @@ public:
      * @brief Проскролить представление до заданного виджета
      */
     void scrollToTitle(AbstractLabel* title);
+
+    /**
+     * @brief Обновить размеры колонок в таблицах
+     */
+    void updateTablesGeometry();
 
 
     QScrollArea* content = nullptr;
@@ -261,6 +383,12 @@ public:
     QGridLayout* shortcutsCardLayout = nullptr;
     //
     H5Label* shortcutsTitle = nullptr;
+    H6Label* shortcutsForScreenplayTitle = nullptr;
+    Tree* shortcutsForScreenplay = nullptr;
+    HierarchicalModel* shortcutsForScreenplayModel = nullptr;
+    QStringListModel* screenplayParagraphTypesModel = nullptr;
+    ComboBoxItemDelegate* screenplayParagraphAddTypeDelegate = nullptr;
+    ComboBoxItemDelegate* screenplayParagraphChangeTypeDelegate = nullptr;
     //
     int shortcutsCardBottomSpacerIndex = 0;
 };
@@ -357,6 +485,14 @@ SettingsView::Implementation::Implementation(QWidget* _parent)
     , shortcutsCard(new Card(content))
     , shortcutsCardLayout(new QGridLayout)
     , shortcutsTitle(new H5Label(shortcutsCard))
+    , shortcutsForScreenplayTitle(new H6Label(shortcutsCard))
+    , shortcutsForScreenplay(new Tree(shortcutsCard))
+    , shortcutsForScreenplayModel(buildShortcutsForScreenplayModel(shortcutsForScreenplay))
+    , screenplayParagraphTypesModel(buildScreenplayParagraphTypesModel(shortcutsForScreenplay))
+    , screenplayParagraphAddTypeDelegate(
+          new ComboBoxItemDelegate(shortcutsForScreenplay, screenplayParagraphTypesModel))
+    , screenplayParagraphChangeTypeDelegate(
+          new ComboBoxItemDelegate(shortcutsForScreenplay, screenplayParagraphTypesModel))
 {
     QPalette palette;
     palette.setColor(QPalette::Base, Qt::transparent);
@@ -705,10 +841,24 @@ void SettingsView::Implementation::initComicBookCard()
 
 void SettingsView::Implementation::initShortcutsCard()
 {
+    shortcutsForScreenplay->setHeader(new HierarchicalHeaderView(shortcutsForScreenplay));
+    shortcutsForScreenplay->setModel(shortcutsForScreenplayModel);
+    shortcutsForScreenplay->setItemDelegateForColumn(
+        1, new KeySequenceDelegate(shortcutsForScreenplay));
+    shortcutsForScreenplay->setItemDelegateForColumn(2, screenplayParagraphAddTypeDelegate);
+    shortcutsForScreenplay->setItemDelegateForColumn(3, screenplayParagraphAddTypeDelegate);
+    shortcutsForScreenplay->setItemDelegateForColumn(4, screenplayParagraphChangeTypeDelegate);
+    shortcutsForScreenplay->setItemDelegateForColumn(5, screenplayParagraphChangeTypeDelegate);
+    updateTablesGeometry();
+
     shortcutsCardLayout->setContentsMargins({});
     shortcutsCardLayout->setSpacing(0);
     int itemIndex = 0;
     shortcutsCardLayout->addWidget(shortcutsTitle, itemIndex++, 0);
+    //
+    shortcutsCardLayout->addWidget(shortcutsForScreenplayTitle, itemIndex++, 0);
+    shortcutsCardLayout->addWidget(shortcutsForScreenplay, itemIndex++, 0);
+    //
     shortcutsCardBottomSpacerIndex = itemIndex;
     shortcutsCard->setLayoutReimpl(shortcutsCardLayout);
 }
@@ -721,7 +871,6 @@ void SettingsView::Implementation::scrollToTitle(AbstractLabel* title)
     QRect focusRect = (microFocus != defaultMicroFocus)
         ? QRect(title->mapTo(content->widget(), microFocus.topLeft()), microFocus.size())
         : QRect(title->mapTo(content->widget(), QPoint(0, 0)), title->size());
-    const QRect visibleRect(-content->widget()->pos(), content->viewport()->size());
 
     focusRect.adjust(-50, -50, 50, 50);
 
@@ -737,6 +886,18 @@ void SettingsView::Implementation::scrollToTitle(AbstractLabel* title)
     colorAnimation.setEndValue(colorableTitle->textColor());
     colorableTitle->setTextColor(colorAnimation.startValue().value<QColor>());
     colorAnimation.start();
+}
+
+void SettingsView::Implementation::updateTablesGeometry()
+{
+    auto updateTableGeometry = [](Tree* _table, qreal _firstColumnWidthDelta) {
+        if (_table->model() != nullptr) {
+            _table->setColumnWidth(0, _table->width() * _firstColumnWidthDelta);
+            _table->setFixedHeight((_table->model()->rowCount() + 2)
+                                   * qCeil(Ui::DesignSystem::treeOneLineItem().height()));
+        }
+    };
+    updateTableGeometry(shortcutsForScreenplay, 0.25);
 }
 
 
@@ -1428,6 +1589,13 @@ void SettingsView::setComicBookNavigatorShowSceneText(bool _show, int _lines)
     }
 }
 
+void SettingsView::resizeEvent(QResizeEvent* _event)
+{
+    StackWidget::resizeEvent(_event);
+
+    d->updateTablesGeometry();
+}
+
 void SettingsView::updateTranslations()
 {
     d->applicationTitle->setText(tr("Application settings"));
@@ -1642,6 +1810,17 @@ void SettingsView::updateTranslations()
     d->comicBookNavigatorSceneDescriptionLines5->setText("5");
 
     d->shortcutsTitle->setText(tr("Shortcuts"));
+    d->shortcutsForScreenplayTitle->setText(tr("Screenplay editor"));
+    {
+        auto model = d->shortcutsForScreenplayModel->headerModel();
+        model->setData(model->index(0, 0), tr("Block name"), Qt::DisplayRole);
+        model->setData(model->index(0, 1), tr("Shortcut"), Qt::DisplayRole);
+        model->setData(model->index(0, 2), tr("If you press in paragraphs end"), Qt::DisplayRole);
+        model->setData(model->index(0, 3), tr("If you press in empty paragraphs"), Qt::DisplayRole);
+    }
+    buildScreenplayParagraphTypesModel(d->shortcutsForScreenplay, d->screenplayParagraphTypesModel);
+    d->screenplayParagraphAddTypeDelegate->setLabel(tr("Add paragraph"));
+    d->screenplayParagraphChangeTypeDelegate->setLabel(tr("Change to"));
 }
 
 SettingsView::~SettingsView() = default;
@@ -1670,12 +1849,23 @@ void SettingsView::designSystemChangeEvent(DesignSystemChangeEvent* _event)
     auto titleMargins = Ui::DesignSystem::label().margins().toMargins();
     titleMargins.setBottom(Ui::DesignSystem::layout().px12());
     for (auto cardTitle : std::vector<Widget*>{
-             d->applicationTitle, d->applicationUserInterfaceTitle,
-             d->applicationSaveAndBackupTitle, d->applicationTextEditingTitle, d->simpleTextTitle,
-             d->simpleTextEditorTitle, d->simpleTextNavigatorTitle, d->screenplayTitle,
-             d->screenplayEditorTitle, d->screenplayNavigatorTitle, d->screenplayDurationTitle,
-             d->comicBookTitle, d->comicBookEditorTitle, d->comicBookNavigatorTitle,
-             d->shortcutsTitle }) {
+             d->applicationTitle,
+             d->applicationUserInterfaceTitle,
+             d->applicationSaveAndBackupTitle,
+             d->applicationTextEditingTitle,
+             d->simpleTextTitle,
+             d->simpleTextEditorTitle,
+             d->simpleTextNavigatorTitle,
+             d->screenplayTitle,
+             d->screenplayEditorTitle,
+             d->screenplayNavigatorTitle,
+             d->screenplayDurationTitle,
+             d->comicBookTitle,
+             d->comicBookEditorTitle,
+             d->comicBookNavigatorTitle,
+             d->shortcutsTitle,
+             d->shortcutsForScreenplayTitle,
+         }) {
         cardTitle->setBackgroundColor(DesignSystem::color().background());
         cardTitle->setTextColor(titleColor);
         cardTitle->setContentsMargins(titleMargins);
@@ -1807,6 +1997,14 @@ void SettingsView::designSystemChangeEvent(DesignSystemChangeEvent* _event)
     //
     d->shortcutsCardLayout->setRowMinimumHeight(
         d->shortcutsCardBottomSpacerIndex, static_cast<int>(Ui::DesignSystem::layout().px24()));
+
+    for (auto table : {
+             d->shortcutsForScreenplay,
+         }) {
+        table->setBackgroundColor(Ui::DesignSystem::color().background());
+        table->setTextColor(Ui::DesignSystem::color().onBackground());
+    }
+    d->updateTablesGeometry();
 }
 
 } // namespace Ui

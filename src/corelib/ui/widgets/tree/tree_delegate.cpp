@@ -1,6 +1,8 @@
 #include "tree_delegate.h"
 
 #include <ui/design_system/design_system.h>
+#include <ui/widgets/combo_box/combo_box.h>
+#include <ui/widgets/key_sequence_edit/key_sequence_edit.h>
 #include <utils/helpers/text_helper.h>
 
 #include <QPainter>
@@ -14,6 +16,11 @@ TreeDelegate::TreeDelegate(QObject* _parent)
 void TreeDelegate::paint(QPainter* _painter, const QStyleOptionViewItem& _option,
                          const QModelIndex& _index) const
 {
+
+    if (m_editorActiveFor == _index) {
+        return;
+    }
+
     //
     // Получим настройки стиля
     //
@@ -80,7 +87,7 @@ void TreeDelegate::paint(QPainter* _painter, const QStyleOptionViewItem& _option
     // ... текст
     //
     _painter->setPen(textColor);
-    _painter->setFont(Ui::DesignSystem::font().subtitle2());
+    _painter->setFont(Ui::DesignSystem::font().body1());
     const qreal textLeft = iconRect.isValid()
         ? iconRect.right() + Ui::DesignSystem::treeOneLineItem().spacing()
         : backgroundRect.left() + Ui::DesignSystem::treeOneLineItem().margins().left();
@@ -99,7 +106,120 @@ QSize TreeDelegate::sizeHint(const QStyleOptionViewItem& _option, const QModelIn
     Q_UNUSED(_index)
 
     return QSizeF(TextHelper::fineTextWidthF(_index.data().toString(),
-                                             Ui::DesignSystem::font().subtitle2()),
+                                             Ui::DesignSystem::font().body1()),
                   Ui::DesignSystem::treeOneLineItem().height())
         .toSize();
+}
+
+void TreeDelegate::setEditorData(QWidget* _editor, const QModelIndex& _index) const
+{
+    m_editorActiveFor = _index;
+
+    QStyledItemDelegate::setEditorData(_editor, _index);
+}
+
+void TreeDelegate::updateEditorGeometry(QWidget* _editor, const QStyleOptionViewItem& _option,
+                                        const QModelIndex& _index) const
+{
+    Q_UNUSED(_index);
+
+    _editor->setGeometry(_option.rect);
+}
+
+void TreeDelegate::destroyEditor(QWidget* editor, const QModelIndex& index) const
+{
+    QStyledItemDelegate::destroyEditor(editor, index);
+
+    m_editorActiveFor = {};
+}
+
+
+// ****
+
+
+KeySequenceDelegate::KeySequenceDelegate(QObject* _parent)
+    : TreeDelegate(_parent)
+{
+}
+
+QWidget* KeySequenceDelegate::createEditor(QWidget* parent, const QStyleOptionViewItem& option,
+                                           const QModelIndex& _index) const
+{
+    Q_UNUSED(option);
+    Q_UNUSED(_index);
+
+    auto editor = new KeySequenceEdit(parent);
+    editor->setBackgroundColor(Ui::DesignSystem::color().background());
+    editor->setTextColor(Ui::DesignSystem::color().onBackground());
+    editor->setDefaultMarginsEnabled(false);
+    editor->setLabel(tr("Press shortcut"));
+
+    return editor;
+}
+
+void KeySequenceDelegate::setEditorData(QWidget* _editor, const QModelIndex& _index) const
+{
+    TreeDelegate::setEditorData(_editor, _index);
+
+    const QString value = _index.model()->data(_index, Qt::EditRole).toString();
+
+    auto keySequenceEdit = qobject_cast<KeySequenceEdit*>(_editor);
+    keySequenceEdit->setKeySequence(QKeySequence(value));
+}
+
+void KeySequenceDelegate::setModelData(QWidget* _editor, QAbstractItemModel* _model,
+                                       const QModelIndex& _index) const
+{
+    auto keySequenceEdit = qobject_cast<KeySequenceEdit*>(_editor);
+    const QString value = keySequenceEdit->keySequence().toString(QKeySequence::NativeText);
+    _model->setData(_index, value, Qt::EditRole);
+}
+
+
+// ****
+
+
+ComboBoxItemDelegate::ComboBoxItemDelegate(QObject* _parent, QAbstractItemModel* _model)
+    : TreeDelegate(_parent)
+    , m_model(_model)
+{
+}
+
+void ComboBoxItemDelegate::setLabel(const QString& _label)
+{
+    m_label = _label;
+}
+
+QWidget* ComboBoxItemDelegate::createEditor(QWidget* parent, const QStyleOptionViewItem& option,
+                                            const QModelIndex& _index) const
+{
+    Q_UNUSED(option);
+    Q_UNUSED(_index);
+
+    auto editor = new ComboBox(parent);
+    editor->setModel(m_model);
+    editor->setBackgroundColor(Ui::DesignSystem::color().background());
+    editor->setTextColor(Ui::DesignSystem::color().onBackground());
+    editor->setDefaultMarginsEnabled(false);
+    editor->setUseContentsWidth(true);
+    editor->setLabel(m_label);
+    return editor;
+}
+
+void ComboBoxItemDelegate::setEditorData(QWidget* _editor, const QModelIndex& _index) const
+{
+    TreeDelegate::setEditorData(_editor, _index);
+
+    const QString value = _index.model()->data(_index, Qt::EditRole).toString();
+
+    auto comboBox = qobject_cast<ComboBox*>(_editor);
+    comboBox->setCurrentText(value);
+}
+
+void ComboBoxItemDelegate::setModelData(QWidget* _editor, QAbstractItemModel* _model,
+                                        const QModelIndex& _index) const
+{
+    auto comboBox = qobject_cast<ComboBox*>(_editor);
+    const QString value = comboBox->currentText();
+    _model->setData(_index, value, Qt::EditRole);
 }

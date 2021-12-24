@@ -63,6 +63,11 @@ public:
     void setText(const QString& _text);
 
     /**
+     * @brief Выделенный текст
+     */
+    QString selectedText() const;
+
+    /**
      * @brief Задать иконку действия в редакторе
      */
     void setTrailingIcon(const QString& _icon);

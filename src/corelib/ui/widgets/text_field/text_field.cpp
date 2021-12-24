@@ -519,6 +519,11 @@ void TextField::setText(const QString& _text)
     }
 }
 
+QString TextField::selectedText() const
+{
+    return textCursor().selectedText();
+}
+
 void TextField::setTrailingIcon(const QString& _icon)
 {
     if (d->trailingIcon == _icon) {

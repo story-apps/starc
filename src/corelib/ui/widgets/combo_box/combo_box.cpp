@@ -4,6 +4,7 @@
 #include <ui/design_system/design_system.h>
 #include <ui/widgets/card/card.h>
 #include <ui/widgets/tree/tree.h>
+#include <utils/helpers/text_helper.h>
 
 #include <QAbstractItemModel>
 #include <QHBoxLayout>
@@ -28,6 +29,7 @@ public:
     void hidePopup();
 
 
+    bool useContentsWidth = false;
     bool isPopupShown = false;
     Card* popup = nullptr;
     Tree* popupContent = nullptr;
@@ -72,8 +74,22 @@ void ComboBox::Implementation::showPopup(ComboBox* _parent)
         leftMargin = _parent->customMargins().left();
         rightMargin = _parent->customMargins().right();
     }
-    auto width = _parent->width() + Ui::DesignSystem::card().shadowMargins().left()
-        + Ui::DesignSystem::card().shadowMargins().right() - leftMargin - rightMargin;
+    auto width = _parent->width() - leftMargin - rightMargin;
+    if (useContentsWidth) {
+        const auto model = popupContent->model();
+        for (int row = 0; row < model->rowCount(); ++row) {
+            const auto itemText = model->index(row, 0).data().toString();
+            const auto itemTextWidth = Ui::DesignSystem::treeOneLineItem().margins().left()
+                + TextHelper::fineTextWidthF(itemText, Ui::DesignSystem::font().body1())
+                + Ui::DesignSystem::treeOneLineItem().margins().right()
+                + Ui::DesignSystem::layout().px24();
+            if (itemTextWidth > width) {
+                width = itemTextWidth;
+            }
+        }
+    }
+    width += Ui::DesignSystem::card().shadowMargins().left()
+        + Ui::DesignSystem::card().shadowMargins().right();
     popup->resize(static_cast<int>(width), 0);
     auto pos = _parent->mapToGlobal(_parent->rect().bottomLeft())
         + QPointF(leftMargin - Ui::DesignSystem::card().shadowMargins().left(),
@@ -134,6 +150,11 @@ ComboBox::ComboBox(QWidget* _parent)
 
 ComboBox::~ComboBox() = default;
 
+void ComboBox::setUseContentsWidth(bool _use)
+{
+    d->useContentsWidth = _use;
+}
+
 ContextMenu* ComboBox::createContextMenu(const QPoint& _position, QWidget* _parent)
 {
     Q_UNUSED(_position)
@@ -178,6 +199,22 @@ void ComboBox::setCurrentIndex(const QModelIndex& _index)
 
     d->popupContent->setCurrentIndex(_index);
     setText(_index.data().toString());
+}
+
+QString ComboBox::currentText() const
+{
+    return currentIndex().data().toString();
+}
+
+void ComboBox::setCurrentText(const QString& _text)
+{
+    for (int row = 0; row < model()->rowCount(); ++row) {
+        const auto index = model()->index(row, 0);
+        if (index.data().toString() == _text) {
+            setCurrentIndex(index);
+            return;
+        }
+    }
 }
 
 void ComboBox::reconfigure()
