@@ -152,10 +152,8 @@ void ProjectsManager::saveProjects()
         projectJson["last_edit_time"] = project.lastEditTime().toString(Qt::ISODateWithMs);
         projectsJson.append(projectJson);
     }
-    DataStorageLayer::StorageFacade::settingsStorage()->setValue(
-        DataStorageLayer::kApplicationProjectsKey,
-        QJsonDocument(projectsJson).toBinaryData().toHex(),
-        DataStorageLayer::SettingsStorage::SettingsPlace::Application);
+    setSettingsValue(DataStorageLayer::kApplicationProjectsKey,
+                     QJsonDocument(projectsJson).toBinaryData().toHex());
 }
 
 void ProjectsManager::saveChanges()
@@ -189,15 +187,9 @@ void ProjectsManager::createProject()
     // Настраиваем соединения диалога
     //
     connect(dialog, &Ui::CreateProjectDialog::createProjectPressed, this, [this, dialog] {
-        DataStorageLayer::StorageFacade::settingsStorage()->setValue(
-            DataStorageLayer::kProjectTypeKey, dialog->projectType(),
-            DataStorageLayer::SettingsStorage::SettingsPlace::Application);
-        DataStorageLayer::StorageFacade::settingsStorage()->setValue(
-            DataStorageLayer::kProjectSaveFolderKey, dialog->projectFolder(),
-            DataStorageLayer::SettingsStorage::SettingsPlace::Application);
-        DataStorageLayer::StorageFacade::settingsStorage()->setValue(
-            DataStorageLayer::kProjectImportFolderKey, dialog->importFilePath(),
-            DataStorageLayer::SettingsStorage::SettingsPlace::Application);
+        setSettingsValue(DataStorageLayer::kProjectTypeKey, dialog->projectType());
+        setSettingsValue(DataStorageLayer::kProjectSaveFolderKey, dialog->projectFolder());
+        setSettingsValue(DataStorageLayer::kProjectImportFolderKey, dialog->importFilePath());
 
         if (dialog->isLocal()) {
             const auto projectPathPrefix = dialog->projectFolder() + "/"
@@ -251,9 +243,7 @@ void ProjectsManager::openProject()
     //
     // ... обновим папку, откуда в следующий раз он предположительно опять будет открывать проекты
     //
-    DataStorageLayer::StorageFacade::settingsStorage()->setValue(
-        DataStorageLayer::kProjectOpenFolderKey, projectPath,
-        DataStorageLayer::SettingsStorage::SettingsPlace::Application);
+    setSettingsValue(DataStorageLayer::kProjectOpenFolderKey, projectPath);
     //
     // ... и сигнализируем о том, что файл выбран для открытия
     //

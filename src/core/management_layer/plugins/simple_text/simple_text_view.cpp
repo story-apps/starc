@@ -280,10 +280,7 @@ void SimpleTextView::loadViewSettings()
 
 void SimpleTextView::saveViewSettings()
 {
-    using namespace DataStorageLayer;
-
-    StorageFacade::settingsStorage()->setValue(kScaleFactorKey, d->scalableWrapper->zoomRange(),
-                                               SettingsStorage::SettingsPlace::Application);
+    setSettingsValue(kScaleFactorKey, d->scalableWrapper->zoomRange());
 }
 
 void SimpleTextView::setModel(BusinessLayer::TextModel* _model)

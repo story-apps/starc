@@ -48,9 +48,10 @@ public:
     virtual Ui::IDocumentView* createView() = 0;
 
     /**
-     * @brief Перенастроить редактор, которым управляет менеджер
+     * @brief Перенастроить редактор, которым управляет менеджер,
+     *        в соответствии с заданным списком изменившихся параметров
      */
-    virtual void reconfigure(const QStringList& _changedSettingsKeys)
+    virtual void reconfigure(const QStringList&)
     {
     }
 

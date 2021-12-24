@@ -312,9 +312,7 @@ void ApplicationManager::Implementation::sendStartupStatistics()
     auto deviceUuidValue = settingsValue(DataStorageLayer::kDeviceUuidKey).toUuid();
     if (deviceUuidValue.isNull()) {
         deviceUuidValue = QUuid::createUuid();
-        DataStorageLayer::StorageFacade::settingsStorage()->setValue(
-            DataStorageLayer::kDeviceUuidKey, deviceUuidValue,
-            DataStorageLayer::SettingsStorage::SettingsPlace::Application);
+        setSettingsValue(DataStorageLayer::kDeviceUuidKey, deviceUuidValue);
     }
 
     //
@@ -1183,9 +1181,7 @@ void ApplicationManager::Implementation::exit()
     //
     // Сохраняем состояние приложения
     //
-    DataStorageLayer::StorageFacade::settingsStorage()->setValues(
-        DataStorageLayer::kApplicationViewStateKey, applicationView->saveState(),
-        DataStorageLayer::SettingsStorage::SettingsPlace::Application);
+    setSettingsValues(DataStorageLayer::kApplicationViewStateKey, applicationView->saveState());
 
     //
     // Сохраним расположение проектов
@@ -1465,10 +1461,6 @@ void ApplicationManager::initConnections()
                 d->settingsManager->updateScaleFactor();
             });
     connect(d->onboardingManager.data(), &OnboardingManager::finished, this, [this] {
-        auto setSettingsValue = [](const QString& _key, const QVariant& _value) {
-            DataStorageLayer::StorageFacade::settingsStorage()->setValue(
-                _key, _value, DataStorageLayer::SettingsStorage::SettingsPlace::Application);
-        };
         setSettingsValue(DataStorageLayer::kApplicationConfiguredKey, true);
         setSettingsValue(DataStorageLayer::kApplicationLanguagedKey, QLocale::system().language());
         setSettingsValue(DataStorageLayer::kApplicationThemeKey,

@@ -594,22 +594,13 @@ void ComicBookTextView::loadViewSettings()
 
 void ComicBookTextView::saveViewSettings()
 {
-    using namespace DataStorageLayer;
+    setSettingsValue(kScaleFactorKey, d->scalableWrapper->zoomRange());
 
-    StorageFacade::settingsStorage()->setValue(kScaleFactorKey, d->scalableWrapper->zoomRange(),
-                                               SettingsStorage::SettingsPlace::Application);
+    setSettingsValue(kIsFastFormatPanelVisibleKey, d->toolbar->isFastFormatPanelVisible());
+    setSettingsValue(kIsCommentsModeEnabledKey, d->toolbar->isCommentsModeEnabled());
+    setSettingsValue(kSidebarPanelIndexKey, d->sidebarTabs->currentTab());
 
-    StorageFacade::settingsStorage()->setValue(kIsFastFormatPanelVisibleKey,
-                                               d->toolbar->isFastFormatPanelVisible(),
-                                               SettingsStorage::SettingsPlace::Application);
-    StorageFacade::settingsStorage()->setValue(kIsCommentsModeEnabledKey,
-                                               d->toolbar->isCommentsModeEnabled(),
-                                               SettingsStorage::SettingsPlace::Application);
-    StorageFacade::settingsStorage()->setValue(kSidebarPanelIndexKey, d->sidebarTabs->currentTab(),
-                                               SettingsStorage::SettingsPlace::Application);
-
-    StorageFacade::settingsStorage()->setValue(kSidebarStateKey, d->splitter->saveState(),
-                                               SettingsStorage::SettingsPlace::Application);
+    setSettingsValue(kSidebarStateKey, d->splitter->saveState());
 }
 
 void ComicBookTextView::setModel(BusinessLayer::ComicBookTextModel* _model)

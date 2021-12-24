@@ -201,10 +201,7 @@ void TitlePageView::loadViewSettings()
 
 void TitlePageView::saveViewSettings()
 {
-    using namespace DataStorageLayer;
-
-    StorageFacade::settingsStorage()->setValue(kScaleFactorKey, d->scalableWrapper->zoomRange(),
-                                               SettingsStorage::SettingsPlace::Application);
+    setSettingsValue(kScaleFactorKey, d->scalableWrapper->zoomRange());
 }
 
 void TitlePageView::setModel(BusinessLayer::TextModel* _model)

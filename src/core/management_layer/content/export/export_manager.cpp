@@ -157,10 +157,8 @@ void ExportManager::Implementation::exportScreenplay(BusinessLayer::AbstractMode
                 // ... обновим папку, куда в следующий раз он предположительно опять будет
                 //     экспортировать
                 //
-                DataStorageLayer::StorageFacade::settingsStorage()->setValue(
-                    DataStorageLayer::kProjectExportFolderKey,
-                    QFileInfo(exportFilePath).dir().absolutePath(),
-                    DataStorageLayer::SettingsStorage::SettingsPlace::Application);
+                setSettingsValue(DataStorageLayer::kProjectExportFolderKey,
+                                 QFileInfo(exportFilePath).dir().absolutePath());
                 //
                 // ... и экспортируем документ
                 //
@@ -292,10 +290,8 @@ void ExportManager::Implementation::exportComicBook(BusinessLayer::AbstractModel
                 // ... обновим папку, куда в следующий раз он предположительно опять будет
                 //     экспортировать
                 //
-                DataStorageLayer::StorageFacade::settingsStorage()->setValue(
-                    DataStorageLayer::kProjectExportFolderKey,
-                    QFileInfo(exportFilePath).dir().absolutePath(),
-                    DataStorageLayer::SettingsStorage::SettingsPlace::Application);
+                setSettingsValue(DataStorageLayer::kProjectExportFolderKey,
+                                 QFileInfo(exportFilePath).dir().absolutePath());
                 //
                 // ... и экспортируем документ
                 //

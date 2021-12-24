@@ -68,3 +68,9 @@ void setSettingsValue(const QString& _key, const QVariant& _value)
     DataStorageLayer::StorageFacade::settingsStorage()->setValue(
         _key, _value, DataStorageLayer::SettingsStorage::SettingsPlace::Application);
 }
+
+void setSettingsValues(const QString& _key, const QVariantMap& _value)
+{
+    DataStorageLayer::StorageFacade::settingsStorage()->setValues(
+        _key, _value, DataStorageLayer::SettingsStorage::SettingsPlace::Application);
+}

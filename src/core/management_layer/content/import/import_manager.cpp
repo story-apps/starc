@@ -159,9 +159,7 @@ void ImportManager::import()
     // ... обновим папку, откуда в следующий раз он предположительно опять будет импортировать
     // проекты
     //
-    DataStorageLayer::StorageFacade::settingsStorage()->setValue(
-        DataStorageLayer::kProjectImportFolderKey, importFilePath,
-        DataStorageLayer::SettingsStorage::SettingsPlace::Application);
+    setSettingsValue(DataStorageLayer::kProjectImportFolderKey, importFilePath);
     //
     // ... и переходим к подготовке импорта
     //

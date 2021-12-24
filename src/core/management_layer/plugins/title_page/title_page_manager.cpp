@@ -92,10 +92,7 @@ void TitlePageManager::Implementation::loadModelSettings()
 
 void TitlePageManager::Implementation::saveModelSettings()
 {
-    using namespace DataStorageLayer;
-    StorageFacade::settingsStorage()->setValue(cursorPositionFor(model->document()),
-                                               view->cursorPosition(),
-                                               SettingsStorage::SettingsPlace::Application);
+    setSettingsValue(cursorPositionFor(model->document()), view->cursorPosition());
 }
 
 

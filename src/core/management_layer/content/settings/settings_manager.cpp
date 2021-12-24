@@ -37,11 +37,6 @@ public:
     explicit Implementation(QObject* _parent, QWidget* _parentWidget);
 
     /**
-     * @brief Сохранить в настройках значение параметр по ключу
-     */
-    void setSettingsValue(const QString& _key, const QVariant& _value);
-
-    /**
      * @brief Загрузить параметры приложения
      */
     void loadApplicationSettings();
@@ -72,12 +67,6 @@ SettingsManager::Implementation::Implementation(QObject* _parent, QWidget* _pare
     toolBar->hide();
     navigator->hide();
     view->hide();
-}
-
-void SettingsManager::Implementation::setSettingsValue(const QString& _key, const QVariant& _value)
-{
-    DataStorageLayer::StorageFacade::settingsStorage()->setValue(
-        _key, _value, DataStorageLayer::SettingsStorage::SettingsPlace::Application);
 }
 
 void SettingsManager::Implementation::loadApplicationSettings()
@@ -468,46 +457,46 @@ bool SettingsManager::eventFilter(QObject* _watched, QEvent* _event)
 
 void SettingsManager::setApplicationLanguage(int _language)
 {
-    d->setSettingsValue(DataStorageLayer::kApplicationLanguagedKey, _language);
+    setSettingsValue(DataStorageLayer::kApplicationLanguagedKey, _language);
 }
 
 void SettingsManager::setApplicationTheme(Ui::ApplicationTheme _theme)
 {
-    d->setSettingsValue(DataStorageLayer::kApplicationThemeKey, static_cast<int>(_theme));
+    setSettingsValue(DataStorageLayer::kApplicationThemeKey, static_cast<int>(_theme));
 }
 
 void SettingsManager::setApplicationCustomThemeColors(const Ui::DesignSystem::Color& _color)
 {
-    d->setSettingsValue(DataStorageLayer::kApplicationCustomThemeColorsKey, _color.toString());
+    setSettingsValue(DataStorageLayer::kApplicationCustomThemeColorsKey, _color.toString());
 }
 
 void SettingsManager::setApplicationScaleFactor(qreal _scaleFactor)
 {
-    d->setSettingsValue(DataStorageLayer::kApplicationScaleFactorKey, _scaleFactor);
+    setSettingsValue(DataStorageLayer::kApplicationScaleFactorKey, _scaleFactor);
     emit applicationScaleFactorChanged(_scaleFactor);
 }
 
 void SettingsManager::setApplicationUseAutoSave(bool _use)
 {
-    d->setSettingsValue(DataStorageLayer::kApplicationUseAutoSaveKey, _use);
+    setSettingsValue(DataStorageLayer::kApplicationUseAutoSaveKey, _use);
     emit applicationUseAutoSaveChanged(_use);
 }
 
 void SettingsManager::setApplicationSaveBackups(bool _save)
 {
-    d->setSettingsValue(DataStorageLayer::kApplicationSaveBackupsKey, _save);
+    setSettingsValue(DataStorageLayer::kApplicationSaveBackupsKey, _save);
     emit applicationSaveBackupsChanged(_save);
 }
 
 void SettingsManager::setApplicationBackupsFolder(const QString& _path)
 {
-    d->setSettingsValue(DataStorageLayer::kApplicationBackupsFolderKey, _path);
+    setSettingsValue(DataStorageLayer::kApplicationBackupsFolderKey, _path);
     emit applicationBackupsFolderChanged(_path);
 }
 
 void SettingsManager::setApplicationShowDocumentsPages(bool _show)
 {
-    d->setSettingsValue(DataStorageLayer::kApplicationShowDocumentsPagesKey, _show);
+    setSettingsValue(DataStorageLayer::kApplicationShowDocumentsPagesKey, _show);
     emit simpleTextEditorChanged({ DataStorageLayer::kApplicationShowDocumentsPagesKey });
     emit screenplayEditorChanged({ DataStorageLayer::kApplicationShowDocumentsPagesKey });
     emit comicBookEditorChanged({ DataStorageLayer::kApplicationShowDocumentsPagesKey });
@@ -515,12 +504,12 @@ void SettingsManager::setApplicationShowDocumentsPages(bool _show)
 
 void SettingsManager::setApplicationUseTypeWriterSound(bool _use)
 {
-    d->setSettingsValue(DataStorageLayer::kApplicationUseTypewriterSoundKey, _use);
+    setSettingsValue(DataStorageLayer::kApplicationUseTypewriterSoundKey, _use);
 }
 
 void SettingsManager::setApplicationUseSpellChecker(bool _use)
 {
-    d->setSettingsValue(DataStorageLayer::kApplicationUseSpellCheckerKey, _use);
+    setSettingsValue(DataStorageLayer::kApplicationUseSpellCheckerKey, _use);
     emit applicationUseSpellCheckerChanged(_use);
 }
 
@@ -529,7 +518,7 @@ void SettingsManager::setApplicationSpellCheckerLanguage(const QString& _languag
     //
     // Сохраняем значение выбранного языка
     //
-    d->setSettingsValue(DataStorageLayer::kApplicationSpellCheckerLanguageKey, _languageCode);
+    setSettingsValue(DataStorageLayer::kApplicationSpellCheckerLanguageKey, _languageCode);
 
     //
     // Проверяем установлен ли выбранный словарь
@@ -701,7 +690,7 @@ void SettingsManager::loadSpellingDictionaryDicFile(const QString& _languageCode
 
 void SettingsManager::setApplicationHighlightCurrentLine(bool _highlight)
 {
-    d->setSettingsValue(DataStorageLayer::kApplicationHighlightCurrentLineKey, _highlight);
+    setSettingsValue(DataStorageLayer::kApplicationHighlightCurrentLineKey, _highlight);
     emit simpleTextEditorChanged({ DataStorageLayer::kApplicationHighlightCurrentLineKey });
     emit screenplayEditorChanged({ DataStorageLayer::kApplicationHighlightCurrentLineKey });
     emit comicBookEditorChanged({ DataStorageLayer::kApplicationHighlightCurrentLineKey });
@@ -709,7 +698,7 @@ void SettingsManager::setApplicationHighlightCurrentLine(bool _highlight)
 
 void SettingsManager::setApplicationFocusCurrentParagraph(bool _focus)
 {
-    d->setSettingsValue(DataStorageLayer::kApplicationFocusCurrentParagraphKey, _focus);
+    setSettingsValue(DataStorageLayer::kApplicationFocusCurrentParagraphKey, _focus);
     emit simpleTextEditorChanged({ DataStorageLayer::kApplicationFocusCurrentParagraphKey });
     emit screenplayEditorChanged({ DataStorageLayer::kApplicationFocusCurrentParagraphKey });
     emit comicBookEditorChanged({ DataStorageLayer::kApplicationFocusCurrentParagraphKey });
@@ -717,7 +706,7 @@ void SettingsManager::setApplicationFocusCurrentParagraph(bool _focus)
 
 void SettingsManager::setApplicationUseTypewriterScrolling(bool _use)
 {
-    d->setSettingsValue(DataStorageLayer::kApplicationUseTypewriterScrollingKey, _use);
+    setSettingsValue(DataStorageLayer::kApplicationUseTypewriterScrollingKey, _use);
     emit simpleTextEditorChanged({ DataStorageLayer::kApplicationUseTypewriterScrollingKey });
     emit screenplayEditorChanged({ DataStorageLayer::kApplicationUseTypewriterScrollingKey });
     emit comicBookEditorChanged({ DataStorageLayer::kApplicationUseTypewriterScrollingKey });
@@ -725,8 +714,7 @@ void SettingsManager::setApplicationUseTypewriterScrolling(bool _use)
 
 void SettingsManager::setSimpleTextEditorDefaultTemplate(const QString& _templateId)
 {
-    d->setSettingsValue(DataStorageLayer::kComponentsSimpleTextEditorDefaultTemplateKey,
-                        _templateId);
+    setSettingsValue(DataStorageLayer::kComponentsSimpleTextEditorDefaultTemplateKey, _templateId);
     BusinessLayer::TemplatesFacade::setDefaultSimpleTextTemplate(_templateId);
     emit simpleTextEditorChanged(
         { DataStorageLayer::kComponentsSimpleTextEditorDefaultTemplateKey });
@@ -734,15 +722,14 @@ void SettingsManager::setSimpleTextEditorDefaultTemplate(const QString& _templat
 
 void SettingsManager::setSimpleTextNavigatorShowSceneText(bool _show, int _lines)
 {
-    d->setSettingsValue(DataStorageLayer::kComponentsSimpleTextNavigatorShowSceneTextKey, _show);
-    d->setSettingsValue(DataStorageLayer::kComponentsSimpleTextNavigatorSceneTextLinesKey, _lines);
+    setSettingsValue(DataStorageLayer::kComponentsSimpleTextNavigatorShowSceneTextKey, _show);
+    setSettingsValue(DataStorageLayer::kComponentsSimpleTextNavigatorSceneTextLinesKey, _lines);
     emit simpleTextNavigatorChanged();
 }
 
 void SettingsManager::setScreenplayEditorDefaultTemplate(const QString& _templateId)
 {
-    d->setSettingsValue(DataStorageLayer::kComponentsScreenplayEditorDefaultTemplateKey,
-                        _templateId);
+    setSettingsValue(DataStorageLayer::kComponentsScreenplayEditorDefaultTemplateKey, _templateId);
     BusinessLayer::TemplatesFacade::setDefaultScreenplayTemplate(_templateId);
     emit screenplayEditorChanged(
         { DataStorageLayer::kComponentsScreenplayEditorDefaultTemplateKey });
@@ -750,11 +737,11 @@ void SettingsManager::setScreenplayEditorDefaultTemplate(const QString& _templat
 
 void SettingsManager::setScreenplayEditorShowSceneNumber(bool _show, bool _atLeft, bool _atRight)
 {
-    d->setSettingsValue(DataStorageLayer::kComponentsScreenplayEditorShowSceneNumbersKey, _show);
-    d->setSettingsValue(DataStorageLayer::kComponentsScreenplayEditorShowSceneNumbersOnLeftKey,
-                        _atLeft);
-    d->setSettingsValue(DataStorageLayer::kComponentsScreenplayEditorShowSceneNumbersOnRightKey,
-                        _atRight);
+    setSettingsValue(DataStorageLayer::kComponentsScreenplayEditorShowSceneNumbersKey, _show);
+    setSettingsValue(DataStorageLayer::kComponentsScreenplayEditorShowSceneNumbersOnLeftKey,
+                     _atLeft);
+    setSettingsValue(DataStorageLayer::kComponentsScreenplayEditorShowSceneNumbersOnRightKey,
+                     _atRight);
     emit screenplayEditorChanged(
         { DataStorageLayer::kComponentsScreenplayEditorShowSceneNumbersKey,
           DataStorageLayer::kComponentsScreenplayEditorShowSceneNumbersOnLeftKey,
@@ -763,70 +750,67 @@ void SettingsManager::setScreenplayEditorShowSceneNumber(bool _show, bool _atLef
 
 void SettingsManager::setScreenplayEditorShowDialogueNumber(bool _show)
 {
-    d->setSettingsValue(DataStorageLayer::kComponentsScreenplayEditorShowDialogueNumbersKey, _show);
+    setSettingsValue(DataStorageLayer::kComponentsScreenplayEditorShowDialogueNumbersKey, _show);
     emit screenplayEditorChanged(
         { DataStorageLayer::kComponentsScreenplayEditorShowDialogueNumbersKey });
 }
 
 void SettingsManager::setScreenplayEditorContinueDialogue(bool _continue)
 {
-    d->setSettingsValue(DataStorageLayer::kComponentsScreenplayEditorContinueDialogueKey,
-                        _continue);
+    setSettingsValue(DataStorageLayer::kComponentsScreenplayEditorContinueDialogueKey, _continue);
     emit screenplayEditorChanged(
         { DataStorageLayer::kComponentsScreenplayEditorContinueDialogueKey });
 }
 
 void SettingsManager::setScreenplayNavigatorShowSceneNumber(bool _show)
 {
-    d->setSettingsValue(DataStorageLayer::kComponentsScreenplayNavigatorShowSceneNumberKey, _show);
+    setSettingsValue(DataStorageLayer::kComponentsScreenplayNavigatorShowSceneNumberKey, _show);
     emit screenplayNavigatorChanged();
 }
 
 void SettingsManager::setScreenplayNavigatorShowSceneText(bool _show, int _lines)
 {
-    d->setSettingsValue(DataStorageLayer::kComponentsScreenplayNavigatorShowSceneTextKey, _show);
-    d->setSettingsValue(DataStorageLayer::kComponentsScreenplayNavigatorSceneTextLinesKey, _lines);
+    setSettingsValue(DataStorageLayer::kComponentsScreenplayNavigatorShowSceneTextKey, _show);
+    setSettingsValue(DataStorageLayer::kComponentsScreenplayNavigatorSceneTextLinesKey, _lines);
     emit screenplayNavigatorChanged();
 }
 
 void SettingsManager::setScreenplayDurationType(int _type)
 {
-    d->setSettingsValue(DataStorageLayer::kComponentsScreenplayDurationTypeKey, _type);
+    setSettingsValue(DataStorageLayer::kComponentsScreenplayDurationTypeKey, _type);
     emit screenplayDurationChanged();
 }
 
 void SettingsManager::setScreenplayDurationByPageDuration(int _duration)
 {
-    d->setSettingsValue(DataStorageLayer::kComponentsScreenplayDurationByPageDurationKey,
-                        _duration);
+    setSettingsValue(DataStorageLayer::kComponentsScreenplayDurationByPageDurationKey, _duration);
     emit screenplayDurationChanged();
 }
 
 void SettingsManager::setScreenplayDurationByCharactersCharacters(int _characters)
 {
-    d->setSettingsValue(DataStorageLayer::kComponentsScreenplayDurationByCharactersCharactersKey,
-                        _characters);
+    setSettingsValue(DataStorageLayer::kComponentsScreenplayDurationByCharactersCharactersKey,
+                     _characters);
     emit screenplayDurationChanged();
 }
 
 void SettingsManager::setScreenplayDurationByCharactersIncludeSpaces(bool _include)
 {
-    d->setSettingsValue(DataStorageLayer::kComponentsScreenplayDurationByCharactersIncludeSpacesKey,
-                        _include);
+    setSettingsValue(DataStorageLayer::kComponentsScreenplayDurationByCharactersIncludeSpacesKey,
+                     _include);
     emit screenplayDurationChanged();
 }
 
 void SettingsManager::setScreenplayDurationByCharactersDuration(int _duration)
 {
-    d->setSettingsValue(DataStorageLayer::kComponentsScreenplayDurationByCharactersDurationKey,
-                        _duration);
+    setSettingsValue(DataStorageLayer::kComponentsScreenplayDurationByCharactersDurationKey,
+                     _duration);
     emit screenplayDurationChanged();
 }
 
 void SettingsManager::setComicBookEditorDefaultTemplate(const QString& _templateId)
 {
-    d->setSettingsValue(DataStorageLayer::kComponentsComicBookEditorDefaultTemplateKey,
-                        _templateId);
+    setSettingsValue(DataStorageLayer::kComponentsComicBookEditorDefaultTemplateKey, _templateId);
     BusinessLayer::TemplatesFacade::setDefaultComicBookTemplate(_templateId);
     emit screenplayEditorChanged(
         { DataStorageLayer::kComponentsComicBookEditorDefaultTemplateKey });
@@ -834,8 +818,8 @@ void SettingsManager::setComicBookEditorDefaultTemplate(const QString& _template
 
 void SettingsManager::setComicBookNavigatorShowSceneText(bool _show, int _lines)
 {
-    d->setSettingsValue(DataStorageLayer::kComponentsComicBookNavigatorShowSceneTextKey, _show);
-    d->setSettingsValue(DataStorageLayer::kComponentsComicBookNavigatorSceneTextLinesKey, _lines);
+    setSettingsValue(DataStorageLayer::kComponentsComicBookNavigatorShowSceneTextKey, _show);
+    setSettingsValue(DataStorageLayer::kComponentsComicBookNavigatorSceneTextLinesKey, _lines);
     emit comicBookNavigatorChanged();
 }
 

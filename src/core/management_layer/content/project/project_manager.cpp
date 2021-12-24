@@ -1021,13 +1021,9 @@ void ProjectManager::closeCurrentProject(const QString& _path)
     //
     // Сохранить состояние дерева
     //
-    DataStorageLayer::StorageFacade::settingsStorage()->setValue(
-        DataStorageLayer::projectStructureKey(_path), d->navigator->saveState(),
-        DataStorageLayer::SettingsStorage::SettingsPlace::Application);
-    DataStorageLayer::StorageFacade::settingsStorage()->setValue(
-        DataStorageLayer::projectStructureVisibleKey(_path),
-        d->navigator->isProjectNavigatorShown(),
-        DataStorageLayer::SettingsStorage::SettingsPlace::Application);
+    setSettingsValue(DataStorageLayer::projectStructureKey(_path), d->navigator->saveState());
+    setSettingsValue(DataStorageLayer::projectStructureVisibleKey(_path),
+                     d->navigator->isProjectNavigatorShown());
 
     //
     // Очищаем структуру
