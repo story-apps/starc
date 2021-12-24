@@ -85,7 +85,9 @@ AccountNavigator::Implementation::Implementation(QWidget* _parent)
 void AccountNavigator::Implementation::updateProSubscriptionEndsLabel()
 {
     proSubscriptionEndsLabel->setText(
-        tr("Active until %1").arg(proSubscriptionEnds.toString("dd.MM.yyyy")));
+        proSubscriptionEnds.isNull()
+            ? tr("Lifetime access")
+            : tr("Active until %1").arg(proSubscriptionEnds.toString("dd.MM.yyyy")));
 }
 
 
@@ -190,7 +192,8 @@ void AccountNavigator::setSubscriptionInfo(Domain::SubscriptionType _subscriptio
         d->tryProButton->hide();
         d->upgradeToProButton->hide();
         d->proTitle->show();
-        d->proSubscriptionEndsLabel->hide();
+        d->proSubscriptionEnds = {};
+        d->updateProSubscriptionEndsLabel();
         d->renewProSubscriptionButton->hide();
         d->upgradeToProLifetimeButton->hide();
         d->upgradeToTeamButton->hide(); // TODO:
