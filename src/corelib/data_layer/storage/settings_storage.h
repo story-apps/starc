@@ -188,6 +188,13 @@ const QString kComponentsComicBookNavigatorShowSceneTextKey
     = kComponentsComicBookNavigatorKey + QStringLiteral("/show-scene-text");
 const QString kComponentsComicBookNavigatorSceneTextLinesKey
     = kComponentsComicBookNavigatorKey + QStringLiteral("/scene-text-lines");
+//
+// редактор персонажей
+const QString kComponentsCharactersRelationsKey
+    = kComponentsGroupKey + QStringLiteral("/characters-relations");
+const QString kComponentsCharactersRelationsFocusCurrentCharacterKey
+    = kComponentsCharactersRelationsKey + QStringLiteral("/focus-current-character");
+
 } // namespace
 
 /**
