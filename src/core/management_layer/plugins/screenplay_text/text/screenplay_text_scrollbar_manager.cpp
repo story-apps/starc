@@ -57,6 +57,7 @@ void ScreenplayTextScrollBarManager::Implementation::updateTimelineGeometry()
 {
     timeline->move(timeline->parentWidget()->size().width() - timeline->width(), 0);
     timeline->resize(timeline->sizeHint().width(), timeline->parentWidget()->size().height());
+    scrollbar->setFixedWidth(timeline->width());
 }
 
 void ScreenplayTextScrollBarManager::Implementation::showTimelineAnimated()
