@@ -340,7 +340,11 @@ void TabBar::setCurrentTab(int _index)
     //
     // Запустим анимацию декорации
     //
-    d->activeTabIndicatorAnimation.start();
+    if (isVisible()) {
+        d->activeTabIndicatorAnimation.start();
+    } else {
+        d->activeTabIndicatorAnimation.setCurrentTime(d->activeTabIndicatorAnimation.duration());
+    }
 
     //
     // Надо бы перерисоваться

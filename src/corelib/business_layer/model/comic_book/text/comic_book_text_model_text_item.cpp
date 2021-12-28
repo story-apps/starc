@@ -205,6 +205,8 @@ ComicBookTextModelTextItem::Implementation::Implementation(QXmlStreamReader& _co
                 format.isBold = formatAttributes.hasAttribute(xml::kBoldAttribute);
                 format.isItalic = formatAttributes.hasAttribute(xml::kItalicAttribute);
                 format.isUnderline = formatAttributes.hasAttribute(xml::kUnderlineAttribute);
+                format.isStrikethrough
+                    = formatAttributes.hasAttribute(xml::kStrikethroughAttribute);
 
                 formats.append(format);
             }
@@ -360,7 +362,7 @@ QByteArray ComicBookTextModelTextItem::Implementation::buildXml(int _from, int _
     if (!formatsToSave.isEmpty()) {
         xml += QString("<%1>").arg(xml::kFormatsTag).toUtf8();
         for (const auto& format : std::as_const(formatsToSave)) {
-            xml += QString("<%1 %2=\"%3\" %4=\"%5\" %6%7%8/>")
+            xml += QString("<%1 %2=\"%3\" %4=\"%5\" %6%7%8%9/>")
                        .arg(xml::kFormatTag, xml::kFromAttribute, QString::number(format.from),
                             xml::kLengthAttribute, QString::number(format.length),
                             (format.isBold ? QString(" %1=\"true\"").arg(xml::kBoldAttribute) : ""),
@@ -368,6 +370,9 @@ QByteArray ComicBookTextModelTextItem::Implementation::buildXml(int _from, int _
                                              : ""),
                             (format.isUnderline
                                  ? QString(" %1=\"true\"").arg(xml::kUnderlineAttribute)
+                                 : ""),
+                            (format.isStrikethrough
+                                 ? QString(" %1=\"true\"").arg(xml::kStrikethroughAttribute)
                                  : ""))
                        .toUtf8();
         }
@@ -410,12 +415,13 @@ bool ComicBookTextModelTextItem::TextFormat::operator==(
     const ComicBookTextModelTextItem::TextFormat& _other) const
 {
     return from == _other.from && length == _other.length && isBold == _other.isBold
-        && isItalic == _other.isItalic && isUnderline == _other.isUnderline;
+        && isItalic == _other.isItalic && isUnderline == _other.isUnderline
+        && isStrikethrough == _other.isStrikethrough;
 }
 
 bool ComicBookTextModelTextItem::TextFormat::isValid() const
 {
-    return isBold != false || isItalic != false || isUnderline != false;
+    return isBold != false || isItalic != false || isUnderline != false || isStrikethrough != false;
 }
 
 QTextCharFormat ComicBookTextModelTextItem::TextFormat::charFormat() const
@@ -433,6 +439,9 @@ QTextCharFormat ComicBookTextModelTextItem::TextFormat::charFormat() const
     }
     if (isUnderline) {
         format.setFontUnderline(true);
+    }
+    if (isStrikethrough) {
+        format.setFontStrikeOut(true);
     }
     return format;
 }
@@ -753,6 +762,9 @@ void ComicBookTextModelTextItem::setFormats(const QVector<QTextLayout::FormatRan
         }
         if (format.format.hasProperty(QTextFormat::TextUnderlineStyle)) {
             newFormat.isUnderline = format.format.font().underline();
+        }
+        if (format.format.hasProperty(QTextFormat::FontStrikeOut)) {
+            newFormat.isStrikethrough = format.format.font().strikeOut();
         }
 
         newFormats.append(newFormat);

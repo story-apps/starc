@@ -28,10 +28,12 @@ public:
     void setTextBold(bool _bold);
     void setTextItalic(bool _italic);
     void setTextUnderline(bool _underline);
+    void setTextStrikethrough(bool _strikethrough);
     //
     void invertTextBold();
     void invertTextItalic();
     void invertTextUnderline();
+    void invertTextStrikethrough();
     /** @} */
 
     /**

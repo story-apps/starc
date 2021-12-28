@@ -176,6 +176,16 @@ void BaseTextEdit::setTextUnderline(bool _underline)
     TextHelper::updateSelectionFormatting(textCursor(), buildFormat);
 }
 
+void BaseTextEdit::setTextStrikethrough(bool _strikethrough)
+{
+    auto buildFormat = [_strikethrough](const QTextCharFormat& _format) {
+        auto format = _format;
+        format.setFontStrikeOut(_strikethrough);
+        return format;
+    };
+    TextHelper::updateSelectionFormatting(textCursor(), buildFormat);
+}
+
 void BaseTextEdit::invertTextBold()
 {
     setTextBold(!cursorForFormatInversion(textCursor()).charFormat().font().bold());
@@ -189,6 +199,11 @@ void BaseTextEdit::invertTextItalic()
 void BaseTextEdit::invertTextUnderline()
 {
     setTextUnderline(!cursorForFormatInversion(textCursor()).charFormat().font().underline());
+}
+
+void BaseTextEdit::invertTextStrikethrough()
+{
+    setTextStrikethrough(!cursorForFormatInversion(textCursor()).charFormat().font().strikeOut());
 }
 
 void BaseTextEdit::setTextFont(const QFont& _font)
@@ -250,6 +265,14 @@ ContextMenu* BaseTextEdit::createContextMenu(const QPoint& _position, QWidget* _
             QKeySequence(QKeySequence::Underline).toString(QKeySequence::NativeText));
         underlineAction->setEnabled(textCursor().hasSelection());
         connect(underlineAction, &QAction::triggered, this, &BaseTextEdit::invertTextUnderline);
+
+        auto strikethroughAction = new QAction(formattingAction);
+        strikethroughAction->setText(tr("Strikethrough"));
+        strikethroughAction->setWhatsThis(
+            QKeySequence("Shift+Ctrl+X").toString(QKeySequence::NativeText));
+        strikethroughAction->setEnabled(textCursor().hasSelection());
+        connect(strikethroughAction, &QAction::triggered, this,
+                &BaseTextEdit::invertTextStrikethrough);
 
         auto alignLeftAction = new QAction(formattingAction);
         alignLeftAction->setSeparator(true);
@@ -330,6 +353,13 @@ bool BaseTextEdit::keyPressEventReimpl(QKeyEvent* _event)
     //
     else if (_event == QKeySequence::Underline) {
         invertTextUnderline();
+    }
+    //
+    // ... сделать текст перечёркнутым
+    //
+    else if (_event->key() == Qt::Key_X && _event->modifiers().testFlag(Qt::ShiftModifier)
+             && _event->modifiers().testFlag(Qt::ControlModifier)) {
+        invertTextStrikethrough();
     }
     //
     // Выравнивание

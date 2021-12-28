@@ -50,6 +50,7 @@ const QString kDateAttribute = QLatin1String("date");
 const QString kBoldAttribute = QLatin1String("bold");
 const QString kItalicAttribute = QLatin1String("italic");
 const QString kUnderlineAttribute = QLatin1String("underline");
+const QString kStrikethroughAttribute = QLatin1String("strikethrough");
 const QString kAlignAttribute = QLatin1String("align");
 const QString kInFirstColumn = QLatin1String("ifc");
 

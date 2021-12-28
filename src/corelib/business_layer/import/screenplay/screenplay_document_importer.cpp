@@ -595,6 +595,9 @@ QVector<ScreenplayAbstractImporter::Screenplay> ScreenplayDocumentImporter::impo
                             if (range.format.boolProperty(QTextFormat::TextUnderlineStyle)) {
                                 writer.writeAttribute(xml::kUnderlineAttribute, "true");
                             }
+                            if (range.format.boolProperty(QTextFormat::FontStrikeOut)) {
+                                writer.writeAttribute(xml::kStrikethroughAttribute, "true");
+                            }
                         }
                     }
                     writer.writeEndElement();

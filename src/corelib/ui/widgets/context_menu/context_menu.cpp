@@ -112,16 +112,16 @@ QSize ContextMenu::Implementation::sizeHint() const
                 height += Ui::DesignSystem::drawer().separatorSpacing() * 2;
             }
 
-            //
-            // TODO: учитывать ширину шортката
-            //
             const auto iconWidth = action->iconText() == action->text()
                 ? 0.0
-                : Ui::DesignSystem::treeOneLineItem().iconSize().width();
+                : Ui::DesignSystem::treeOneLineItem().iconSize().width()
+                    + Ui::DesignSystem::treeOneLineItem().spacing();
             const auto actionWidth = Ui::DesignSystem::treeOneLineItem().margins().left()
                 + iconWidth + Ui::DesignSystem::treeOneLineItem().spacing()
                 + TextHelper::fineTextWidthF(action->text(), Ui::DesignSystem::font().subtitle2())
-                + Ui::DesignSystem::layout().px62()
+                + Ui::DesignSystem::layout().px12()
+                + TextHelper::fineTextWidthF(action->whatsThis(),
+                                             Ui::DesignSystem::font().subtitle2())
                 + Ui::DesignSystem::treeOneLineItem().margins().right();
             width = std::max(width, actionWidth);
             height += Ui::DesignSystem::treeOneLineItem().height();

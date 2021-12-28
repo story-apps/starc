@@ -29,6 +29,7 @@ public:
         bool isBold = false;
         bool isItalic = false;
         bool isUnderline = false;
+        bool isStrikethrough = false;
 
         bool operator==(const TextFormat& _other) const;
 

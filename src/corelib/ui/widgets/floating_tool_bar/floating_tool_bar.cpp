@@ -279,6 +279,7 @@ void FloatingToolBar::paintEvent(QPaintEvent* _event)
 
     QPainter painter(this);
     painter.setRenderHint(QPainter::Antialiasing);
+    painter.setOpacity(opacity());
 
     const QRect backgroundRect
         = rect().marginsRemoved(Ui::DesignSystem::floatingToolBar().shadowMargins().toMargins());

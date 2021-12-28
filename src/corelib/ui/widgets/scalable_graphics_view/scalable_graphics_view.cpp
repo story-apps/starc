@@ -26,12 +26,12 @@ ScalableGraphicsView::ScalableGraphicsView(QWidget* _parent)
 
 void ScalableGraphicsView::zoomIn()
 {
-    scaleView(qreal(0.1));
+    scaleView(qreal(0.02));
 }
 
 void ScalableGraphicsView::zoomOut()
 {
-    scaleView(qreal(-0.1));
+    scaleView(qreal(-0.02));
 }
 
 bool ScalableGraphicsView::event(QEvent* _event)

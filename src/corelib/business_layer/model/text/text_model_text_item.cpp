@@ -162,6 +162,8 @@ TextModelTextItem::Implementation::Implementation(QXmlStreamReader& _contentRead
                 format.isBold = formatAttributes.hasAttribute(xml::kBoldAttribute);
                 format.isItalic = formatAttributes.hasAttribute(xml::kItalicAttribute);
                 format.isUnderline = formatAttributes.hasAttribute(xml::kUnderlineAttribute);
+                format.isStrikethrough
+                    = formatAttributes.hasAttribute(xml::kStrikethroughAttribute);
 
                 formats.append(format);
             }
@@ -291,7 +293,7 @@ QByteArray TextModelTextItem::Implementation::buildXml(int _from, int _length)
     if (!formatsToSave.isEmpty()) {
         xml += QString("<%1>").arg(xml::kFormatsTag).toUtf8();
         for (const auto& format : std::as_const(formatsToSave)) {
-            xml += QString("<%1 %2=\"%3\" %4=\"%5\" %6%7%8%9/>")
+            xml += QString("<%1 %2=\"%3\" %4=\"%5\" %6%7%8%9%10/>")
                        .arg(xml::kFormatTag, xml::kFromAttribute, QString::number(format.from),
                             xml::kLengthAttribute, QString::number(format.length),
                             (format.font.has_value()
@@ -306,6 +308,9 @@ QByteArray TextModelTextItem::Implementation::buildXml(int _from, int _length)
                                              : ""),
                             (format.isUnderline
                                  ? QString(" %1=\"true\"").arg(xml::kUnderlineAttribute)
+                                 : ""),
+                            (format.isStrikethrough
+                                 ? QString(" %1=\"true\"").arg(xml::kStrikethroughAttribute)
                                  : ""))
                        .toUtf8();
         }
@@ -333,12 +338,13 @@ bool TextModelTextItem::TextFormat::operator==(const TextModelTextItem::TextForm
 {
     return from == _other.from && length == _other.length && font == _other.font
         && isBold == _other.isBold && isItalic == _other.isItalic
-        && isUnderline == _other.isUnderline;
+        && isUnderline == _other.isUnderline && isStrikethrough == _other.isStrikethrough;
 }
 
 bool TextModelTextItem::TextFormat::isValid() const
 {
-    return font.has_value() || isBold != false || isItalic != false || isUnderline != false;
+    return font.has_value() || isBold != false || isItalic != false || isUnderline != false
+        || isStrikethrough != false;
 }
 
 QTextCharFormat TextModelTextItem::TextFormat::charFormat() const
@@ -359,6 +365,9 @@ QTextCharFormat TextModelTextItem::TextFormat::charFormat() const
     }
     if (isUnderline) {
         format.setFontUnderline(true);
+    }
+    if (isStrikethrough) {
+        format.setFontStrikeOut(true);
     }
     return format;
 }
@@ -554,6 +563,9 @@ void TextModelTextItem::setFormats(const QVector<QTextLayout::FormatRange>& _for
         }
         if (format.format.hasProperty(QTextFormat::TextUnderlineStyle)) {
             newFormat.isUnderline = format.format.font().underline();
+        }
+        if (format.format.hasProperty(QTextFormat::FontStrikeOut)) {
+            newFormat.isStrikethrough = format.format.font().strikeOut();
         }
 
         newFormats.append(newFormat);

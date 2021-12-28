@@ -85,6 +85,9 @@ protected:
      */
     void mouseMoveEvent(QMouseEvent* _event) override;
 
+    /**
+     * @brief Запускаем анимацию клика на табе
+     */
     void mousePressEvent(QMouseEvent* _event) override;
 
     /**

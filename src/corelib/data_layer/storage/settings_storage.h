@@ -194,6 +194,8 @@ const QString kComponentsCharactersRelationsKey
     = kComponentsGroupKey + QStringLiteral("/characters-relations");
 const QString kComponentsCharactersRelationsFocusCurrentCharacterKey
     = kComponentsCharactersRelationsKey + QStringLiteral("/focus-current-character");
+const QString kComponentsCharactersRelationsSplitterStateKey
+    = kComponentsCharactersRelationsKey + QStringLiteral("/splitter-state");
 
 } // namespace
 

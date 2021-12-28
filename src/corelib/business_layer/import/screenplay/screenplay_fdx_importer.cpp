@@ -210,6 +210,7 @@ QVector<ScreenplayAbstractImporter::Screenplay> ScreenplayFdxImporter::importScr
                     format.isBold = style.contains("Bold");
                     format.isItalic = style.contains("Italic");
                     format.isUnderline = style.contains("Underline");
+                    format.isStrikethrough = style.contains("Strikeout");
                     if (format.isValid()) {
                         formats.append(format);
                     }
@@ -319,6 +320,8 @@ QVector<ScreenplayAbstractImporter::Screenplay> ScreenplayFdxImporter::importScr
                 writer.writeAttribute(xml::kItalicAttribute, format.isItalic ? "true" : "false");
                 writer.writeAttribute(xml::kUnderlineAttribute,
                                       format.isUnderline ? "true" : "false");
+                writer.writeAttribute(xml::kStrikethroughAttribute,
+                                      format.isStrikethrough ? "true" : "false");
                 //
                 writer.writeEndElement(); // format
             }

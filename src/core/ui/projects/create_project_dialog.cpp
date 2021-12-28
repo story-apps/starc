@@ -55,6 +55,7 @@ CreateProjectDialog::Implementation::Implementation(QWidget* _parent)
     , cloudProjectCreationActionNote(new Body1Label(_parent))
     , projectFolder(new TextField(_parent))
     , importFilePath(new TextField(_parent))
+    , buttonsLayout(new QHBoxLayout)
     , advancedSettingsButton(new IconButton(_parent))
     , cancelButton(new Button(_parent))
     , createButton(new Button(_parent))
@@ -72,7 +73,6 @@ CreateProjectDialog::Implementation::Implementation(QWidget* _parent)
     advancedSettingsButton->setCheckable(true);
     advancedSettingsButton->setIcon(u8"\U000f0493");
 
-    buttonsLayout = new QHBoxLayout;
     buttonsLayout->setContentsMargins({});
     buttonsLayout->setSpacing(0);
     buttonsLayout->addWidget(advancedSettingsButton, Qt::AlignVCenter);
