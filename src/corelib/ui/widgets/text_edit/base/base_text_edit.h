@@ -5,6 +5,8 @@
 
 class CORE_LIBRARY_EXPORT BaseTextEdit : public CompleterTextEdit
 {
+    Q_OBJECT
+
 public:
     explicit BaseTextEdit(QWidget* _parent = nullptr);
     ~BaseTextEdit() override;
