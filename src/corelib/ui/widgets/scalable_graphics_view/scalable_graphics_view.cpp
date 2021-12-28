@@ -3,9 +3,11 @@
 #include <QApplication>
 #include <QEvent>
 #include <QGestureEvent>
+#include <QGraphicsItem>
 #include <QKeyEvent>
 #include <QMouseEvent>
 #include <QScrollBar>
+#include <QVariantAnimation>
 #include <QWheelEvent>
 
 
@@ -32,6 +34,38 @@ void ScalableGraphicsView::zoomIn()
 void ScalableGraphicsView::zoomOut()
 {
     scaleView(qreal(-0.02));
+}
+
+void ScalableGraphicsView::animateCenterOn(QGraphicsItem* _item)
+{
+    const qreal width = viewport()->width();
+    const qreal height = viewport()->height();
+    const QPointF viewPoint = transform().map(_item->scenePos());
+    QPoint targetPosition;
+    if (isRightToLeft()) {
+        qint64 horizontal = 0;
+        horizontal += horizontalScrollBar()->minimum();
+        horizontal += horizontalScrollBar()->maximum();
+        horizontal -= int(viewPoint.x() - width / 2.0);
+        targetPosition.setX(horizontal);
+    } else {
+        targetPosition.setX(int(viewPoint.x() - width / 2.0));
+    }
+    targetPosition.setY(int(viewPoint.y() - height / 2.0));
+
+    auto scrollingAnimation = new QVariantAnimation(this);
+    scrollingAnimation->setEasingCurve(QEasingCurve::OutQuad);
+    scrollingAnimation->setDuration(240);
+    scrollingAnimation->setStartValue(
+        QPoint(horizontalScrollBar()->value(), verticalScrollBar()->value()));
+    scrollingAnimation->setEndValue(targetPosition);
+    connect(scrollingAnimation, &QVariantAnimation::valueChanged, this,
+            [this](const QVariant& _value) {
+                const auto position = _value.toPoint();
+                horizontalScrollBar()->setValue(position.x());
+                verticalScrollBar()->setValue(position.y());
+            });
+    scrollingAnimation->start(QVariantAnimation::DeleteWhenStopped);
 }
 
 bool ScalableGraphicsView::event(QEvent* _event)

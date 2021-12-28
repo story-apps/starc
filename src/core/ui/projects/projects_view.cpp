@@ -61,6 +61,8 @@ ProjectsView::Implementation::Implementation(ProjectsView* _parent)
     : q(_parent)
     , toolBar(new FloatingToolBar(_parent))
     , emptyPage(new Widget(_parent))
+    , emptyPageTitleLabel(new H6Label(emptyPage))
+    , emptyPageCreateProjectButton(new Button(emptyPage))
     , projectsPage(new ProjectsCards(_parent))
 {
     initEmptyPage();
@@ -69,10 +71,6 @@ ProjectsView::Implementation::Implementation(ProjectsView* _parent)
 
 void ProjectsView::Implementation::initEmptyPage()
 {
-    emptyPageTitleLabel = new H6Label(emptyPage);
-    emptyPageCreateProjectButton = new Button(emptyPage);
-
-
     QVBoxLayout* layout = new QVBoxLayout(emptyPage);
     layout->setContentsMargins(QMargins());
     layout->setSpacing(0);
@@ -187,10 +185,10 @@ void ProjectsView::resizeEvent(QResizeEvent* _event)
 
 void ProjectsView::updateTranslations()
 {
-    d->emptyPageTitleLabel->setText(tr("Here will be a list of your stories."));
-    d->emptyPageCreateProjectButton->setText(tr("It's time to create the first story!"));
     d->toolBar->actions().at(0)->setToolTip(tr("Create story"));
     d->toolBar->actions().at(1)->setToolTip(tr("Open story"));
+    d->emptyPageTitleLabel->setText(tr("Here will be a list of your stories."));
+    d->emptyPageCreateProjectButton->setText(tr("It's time to create the first story!"));
 }
 
 void ProjectsView::designSystemChangeEvent(DesignSystemChangeEvent* _event)

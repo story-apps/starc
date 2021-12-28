@@ -25,6 +25,11 @@ public:
     void zoomOut();
     /** @} */
 
+    /**
+     * @brief Центрировать вьюпорт на заданном элементе
+     */
+    void animateCenterOn(QGraphicsItem* _item);
+
 signals:
     /**
      * @brief Изменился масштаб
