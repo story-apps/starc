@@ -469,7 +469,7 @@ void TabBar::paintEvent(QPaintEvent* _event)
         //
         // Декорация
         //
-        if (isTabCurrent
+        if (tabBoundingRect.contains(d->decorationCenterPosition)
             && (d->decorationRadiusAnimation.state() == QVariantAnimation::Running
                 || d->decorationOpacityAnimation.state() == QVariantAnimation::Running)) {
             painter.setClipRect(tabBoundingRect);
