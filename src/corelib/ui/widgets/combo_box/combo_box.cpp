@@ -228,7 +228,13 @@ void ComboBox::reconfigure()
 
 void ComboBox::focusOutEvent(QFocusEvent* _event)
 {
-    TextField::focusOutEvent(_event);
+    //
+    // Запустим анимацию потери фокуса, если попап не показан или пользователь кликнул
+    // за пределами виджета и выпадающего списка
+    //
+    if (!d->isPopupShown || (!underMouse() && !d->popupContent->underMouse())) {
+        TextField::focusOutEvent(_event);
+    }
 
     //
     // Не скрываем попап, если фокус перешёл на его полосу прокрутки
@@ -270,9 +276,4 @@ void ComboBox::mousePressEvent(QMouseEvent* _event)
         setTrailingIconColor({});
         d->hidePopup();
     }
-}
-
-void ComboBox::mouseMoveEvent(QMouseEvent* _event)
-{
-    TextField::mouseMoveEvent(_event);
 }

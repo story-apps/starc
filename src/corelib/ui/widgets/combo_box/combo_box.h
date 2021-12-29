@@ -71,11 +71,6 @@ protected:
      */
     void mousePressEvent(QMouseEvent* _event) override;
 
-    /**
-     * @brief Переопределяем, чтобы пропустить обработку связанную с курсором редактора TextField'а
-     */
-    void mouseMoveEvent(QMouseEvent* _event) override;
-
 private:
     class Implementation;
     QScopedPointer<Implementation> d;

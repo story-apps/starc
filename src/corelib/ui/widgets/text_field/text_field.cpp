@@ -8,6 +8,7 @@
 #include <utils/helpers/text_helper.h>
 
 #include <QAction>
+#include <QApplication>
 #include <QEvent>
 #include <QKeyEvent>
 #include <QMimeData>
@@ -765,8 +766,10 @@ void TextField::paintEvent(QPaintEvent* _event)
                                   - Ui::DesignSystem::textField().helperHeight());
     }
     painter.setPen(Qt::NoPen);
-    painter.setBrush(hasFocus() || underMouse() ? d->backgroundActiveColor
-                                                : d->backgroundInactiveColor);
+    painter.setBrush(underMouse() || hasFocus()
+                             || findChildren<QWidget*>().contains(QApplication::focusWidget())
+                         ? d->backgroundActiveColor
+                         : d->backgroundInactiveColor);
     QPainterPath backgroundPath;
     backgroundPath.setFillRule(Qt::WindingFill);
     backgroundPath.addRoundedRect(backgroundRect, Ui::DesignSystem::textField().borderRadius(),
@@ -913,9 +916,18 @@ void TextField::focusInEvent(QFocusEvent* _event)
 {
     BaseTextEdit::focusInEvent(_event);
 
-    d->labelColorAnimation.setStartValue(d->textDisabledColor);
-    d->labelColorAnimation.setEndValue(Ui::DesignSystem::color().secondary());
-    d->labelColorAnimation.start();
+    //
+    // Некоторые наследники (например комбобокс) пропускают событие выхода фокуса, и форсят
+    // сохранение фокуса внутри, пока пользователь взаимодействует с дочерними виджетами,
+    // поэтому, когда по факту фокус возвращается в виджет проверяем действительно ли нужно
+    // анимировать отображение декораций
+    //
+
+    if (d->labelColorAnimation.endValue() != Ui::DesignSystem::color().secondary()) {
+        d->labelColorAnimation.setStartValue(d->textDisabledColor);
+        d->labelColorAnimation.setEndValue(Ui::DesignSystem::color().secondary());
+        d->labelColorAnimation.start();
+    }
 
     if (text().isEmpty() && d->placeholder.isEmpty()) {
         d->animateLabelToTop();
@@ -924,10 +936,12 @@ void TextField::focusInEvent(QFocusEvent* _event)
     const QRectF decorationRect = d->decorationRectInFocus();
     const qreal contentsWidth
         = (width() - d->contentMargins().left() - d->contentMargins().right()) / 2;
-    d->decorationAnimation.setStartValue(
-        decorationRect.adjusted(contentsWidth, 0, -1 * contentsWidth, 0));
-    d->decorationAnimation.setEndValue(decorationRect);
-    d->decorationAnimation.start();
+    if (d->decorationAnimation.endValue() != decorationRect) {
+        d->decorationAnimation.setStartValue(
+            decorationRect.adjusted(contentsWidth, 0, -1 * contentsWidth, 0));
+        d->decorationAnimation.setEndValue(decorationRect);
+        d->decorationAnimation.start();
+    }
 }
 
 void TextField::focusOutEvent(QFocusEvent* _event)
