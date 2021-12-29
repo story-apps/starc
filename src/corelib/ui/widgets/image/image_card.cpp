@@ -217,6 +217,8 @@ ImageCard::ImageCard(QWidget* _parent)
         //
         d->decorationColorAnimation.setDirection(QVariantAnimation::Backward);
         d->decorationColorAnimation.start();
+        d->overlayOpacityAnimation.setDirection(QVariantAnimation::Backward);
+        d->overlayOpacityAnimation.start();
     });
     connect(d->changeImageAction, &QAction::triggered, this, [this] { d->chooseImageFromFile(); });
     connect(d->clearImageAction, &QAction::triggered, this, [this] {
