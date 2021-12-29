@@ -6,9 +6,12 @@
 #include <utils/helpers/text_helper.h>
 
 #include <QAction>
+#include <QApplication>
+#include <QDateTime>
 #include <QKeyEvent>
 #include <QLocale>
 #include <QRegularExpression>
+#include <QStyleHints>
 #include <QTextBlock>
 
 namespace {
@@ -99,18 +102,69 @@ QString localCloseQuote()
 class BaseTextEdit::Implementation
 {
 public:
+    /**
+     * @brief Перенастроить редактор в соответствии с актуальной дизайн системой
+     */
     void reconfigure(BaseTextEdit* _textEdit);
+
+    /**
+     * @brief Выделить блок при тройном клике
+     */
+    bool selectBlockOnTripleClick(QMouseEvent* _event, BaseTextEdit* _textEdit);
+
 
     bool capitalizeWords = true;
     bool correctDoubleCapitals = true;
     bool replaceThreeDots = false;
     bool smartQuotes = false;
     bool compressSpaces = false;
+
+    /**
+     * @brief Количеств
+     */
+    int mouseClicks = 0;
+
+    /**
+     * @brief Время последнего клика мышки, мс
+     */
+    qint64 lastMouseClickTime = 0;
 };
 
 void BaseTextEdit::Implementation::reconfigure(BaseTextEdit* _textEdit)
 {
     _textEdit->setCursorWidth(Ui::DesignSystem::layout().px2());
+}
+
+bool BaseTextEdit::Implementation::selectBlockOnTripleClick(QMouseEvent* _event,
+                                                            BaseTextEdit* _textEdit)
+{
+    if (_event->button() == Qt::RightButton) {
+        return false;
+    }
+
+    const qint64 curentMouseClickTime = QDateTime::currentMSecsSinceEpoch();
+    const qint64 timeDelta = curentMouseClickTime - lastMouseClickTime;
+    if (timeDelta <= (QApplication::styleHints()->mouseDoubleClickInterval())) {
+        mouseClicks += 1;
+    } else {
+        mouseClicks = 1;
+    }
+    lastMouseClickTime = curentMouseClickTime;
+
+    //
+    // Тройной клик обрабатываем самостоятельно
+    //
+    if (mouseClicks > 2) {
+        mouseClicks = 1;
+        QTextCursor cursor = _textEdit->textCursor();
+        cursor.movePosition(QTextCursor::StartOfBlock);
+        cursor.movePosition(QTextCursor::EndOfBlock, QTextCursor::KeepAnchor);
+        _textEdit->setTextCursor(cursor);
+        _event->accept();
+        return true;
+    }
+
+    return false;
 }
 
 
@@ -323,6 +377,26 @@ bool BaseTextEdit::event(QEvent* _event)
         return CompleterTextEdit::event(_event);
     }
     }
+}
+
+void BaseTextEdit::mousePressEvent(QMouseEvent* _event)
+{
+    const auto isHandled = d->selectBlockOnTripleClick(_event, this);
+    if (isHandled) {
+        return;
+    }
+
+    CompleterTextEdit::mousePressEvent(_event);
+}
+
+void BaseTextEdit::mouseDoubleClickEvent(QMouseEvent* _event)
+{
+    const auto isHandled = d->selectBlockOnTripleClick(_event, this);
+    if (isHandled) {
+        return;
+    }
+
+    CompleterTextEdit::mouseDoubleClickEvent(_event);
 }
 
 bool BaseTextEdit::keyPressEventReimpl(QKeyEvent* _event)

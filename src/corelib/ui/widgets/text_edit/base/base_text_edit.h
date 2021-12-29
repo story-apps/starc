@@ -60,6 +60,14 @@ protected:
     bool event(QEvent* _event) override;
 
     /**
+     * @brief Переопределяется для обработки тройного клика
+     */
+    /** @{ */
+    void mousePressEvent(QMouseEvent* _event) override;
+    void mouseDoubleClickEvent(QMouseEvent* _event) override;
+    /** @} */
+
+    /**
      * @brief Дополнительная функция для обработки нажатий самим редактором
      * @return Обработано ли событие
      * @note В наследниках необходимо вызывать вручную при необходимости
