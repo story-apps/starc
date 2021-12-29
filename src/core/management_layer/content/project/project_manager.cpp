@@ -856,6 +856,10 @@ ProjectManager::ProjectManager(QObject* _parent, QWidget* _parentWidget)
             });
     connect(&d->modelsFacade, &ProjectModelsFacade::characterNameChanged, this,
             [this](const QString& _newName, const QString& _oldName) {
+                if (_oldName.isEmpty()) {
+                    return;
+                }
+
                 //
                 // Найти все модели где может встречаться персонаж и заменить в них его имя со
                 // старого на новое
@@ -881,6 +885,10 @@ ProjectManager::ProjectManager(QObject* _parent, QWidget* _parentWidget)
             });
     connect(&d->modelsFacade, &ProjectModelsFacade::locationNameChanged, this,
             [this](const QString& _newName, const QString& _oldName) {
+                if (_oldName.isEmpty()) {
+                    return;
+                }
+
                 //
                 // Найти все модели где может встречаться персонаж и заменить в них его имя со
                 // старого на новое

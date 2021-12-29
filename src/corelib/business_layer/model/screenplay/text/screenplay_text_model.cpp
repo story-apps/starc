@@ -20,6 +20,7 @@
 
 #include <QDateTime>
 #include <QMimeData>
+#include <QRegularExpression>
 #include <QXmlStreamReader>
 
 #ifdef QT_DEBUG
@@ -1223,6 +1224,25 @@ void ScreenplayTextModel::updateCharacterName(const QString& _oldName, const QSt
                     auto text = textItem->text();
                     text.remove(0, oldName.length());
                     text.prepend(_newName);
+                    textItem->setText(text);
+                    updateItem(textItem);
+                } else if (textItem->text().contains(oldName, Qt::CaseInsensitive)) {
+                    auto text = textItem->text();
+                    const QRegularExpression nameMatcher(QString("\\b(%1)\\b").arg(oldName),
+                                                         QRegularExpression::CaseInsensitiveOption);
+                    auto match = nameMatcher.match(text);
+                    while (match.hasMatch()) {
+                        text.remove(match.capturedStart(), match.capturedLength());
+                        const auto capturedName = match.captured();
+                        const auto capitalizeEveryWord = true;
+                        const auto newName = capturedName == oldName
+                            ? TextHelper::smartToUpper(_newName)
+                            : TextHelper::toSentenceCase(_newName, capitalizeEveryWord);
+                        text.insert(match.capturedStart(), newName);
+
+                        match = nameMatcher.match(text, match.capturedStart() + _newName.length());
+                    }
+
                     textItem->setText(text);
                     updateItem(textItem);
                 }

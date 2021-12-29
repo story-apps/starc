@@ -76,6 +76,11 @@ public:
     static QChar smartToLower(const QChar& _char);
 
     /**
+     * @brief Оформить текст как предложение (первая заглавная, остальные строчные)
+     */
+    static QString toSentenceCase(const QString& _text, bool _capitalizeEveryWord = false);
+
+    /**
      * @brief Определить количество слов в тексте
      */
     static int wordsCount(const QString& _text);

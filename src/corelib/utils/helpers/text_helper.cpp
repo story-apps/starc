@@ -271,6 +271,20 @@ QChar TextHelper::smartToLower(const QChar& _char)
     return _char.toLower();
 }
 
+QString TextHelper::toSentenceCase(const QString& _text, bool _capitalizeEveryWord)
+{
+    if (_text.isEmpty()) {
+        return {};
+    }
+
+    //
+    // TODO: реализовать возможность поднимать регистр каждого слова,
+    //       либо только после знаков препинания
+    //
+
+    return smartToUpper(_text[0]) + smartToLower(_text.mid(1));
+}
+
 int TextHelper::wordsCount(const QString& _text)
 {
     //

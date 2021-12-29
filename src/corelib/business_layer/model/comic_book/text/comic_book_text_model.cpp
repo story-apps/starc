@@ -20,6 +20,7 @@
 #include <utils/tools/model_index_path.h>
 
 #include <QMimeData>
+#include <QRegularExpression>
 #include <QXmlStreamReader>
 
 #ifdef QT_DEBUG
@@ -1194,36 +1195,55 @@ void ComicBookTextModel::updateCharacterName(const QString& _oldName, const QStr
 {
     const auto oldName = TextHelper::smartToUpper(_oldName);
     std::function<void(const ComicBookTextModelItem*)> updateCharacterBlock;
-    updateCharacterBlock
-        = [this, oldName, _newName, &updateCharacterBlock](const ComicBookTextModelItem* _item) {
-              for (int childIndex = 0; childIndex < _item->childCount(); ++childIndex) {
-                  auto childItem = _item->childAt(childIndex);
-                  switch (childItem->type()) {
-                  case ComicBookTextModelItemType::Folder:
-                  case ComicBookTextModelItemType::Page:
-                  case ComicBookTextModelItemType::Panel: {
-                      updateCharacterBlock(childItem);
-                      break;
-                  }
+    updateCharacterBlock = [this, oldName, _newName,
+                            &updateCharacterBlock](const ComicBookTextModelItem* _item) {
+        for (int childIndex = 0; childIndex < _item->childCount(); ++childIndex) {
+            auto childItem = _item->childAt(childIndex);
+            switch (childItem->type()) {
+            case ComicBookTextModelItemType::Folder:
+            case ComicBookTextModelItemType::Page:
+            case ComicBookTextModelItemType::Panel: {
+                updateCharacterBlock(childItem);
+                break;
+            }
 
-                  case ComicBookTextModelItemType::Text: {
-                      auto textItem = static_cast<ComicBookTextModelTextItem*>(childItem);
-                      if (textItem->paragraphType() == ComicBookParagraphType::Character
-                          && ComicBookCharacterParser::name(textItem->text()) == oldName) {
-                          auto text = textItem->text();
-                          text.remove(0, oldName.length());
-                          text.prepend(_newName);
-                          textItem->setText(text);
-                          updateItem(textItem);
-                      }
-                      break;
-                  }
+            case ComicBookTextModelItemType::Text: {
+                auto textItem = static_cast<ComicBookTextModelTextItem*>(childItem);
+                if (textItem->paragraphType() == ComicBookParagraphType::Character
+                    && ComicBookCharacterParser::name(textItem->text()) == oldName) {
+                    auto text = textItem->text();
+                    text.remove(0, oldName.length());
+                    text.prepend(_newName);
+                    textItem->setText(text);
+                    updateItem(textItem);
+                } else if (textItem->text().contains(oldName, Qt::CaseInsensitive)) {
+                    auto text = textItem->text();
+                    const QRegularExpression nameMatcher(QString("\\b(%1)\\b").arg(oldName),
+                                                         QRegularExpression::CaseInsensitiveOption);
+                    auto match = nameMatcher.match(text);
+                    while (match.hasMatch()) {
+                        text.remove(match.capturedStart(), match.capturedLength());
+                        const auto capturedName = match.captured();
+                        const auto capitalizeEveryWord = true;
+                        const auto newName = capturedName == oldName
+                            ? TextHelper::smartToUpper(_newName)
+                            : TextHelper::toSentenceCase(_newName, capitalizeEveryWord);
+                        text.insert(match.capturedStart(), newName);
 
-                  default:
-                      break;
-                  }
-              }
-          };
+                        match = nameMatcher.match(text, match.capturedStart() + _newName.length());
+                    }
+
+                    textItem->setText(text);
+                    updateItem(textItem);
+                }
+                break;
+            }
+
+            default:
+                break;
+            }
+        }
+    };
 
     emit rowsAboutToBeChanged();
     updateCharacterBlock(d->rootItem);
