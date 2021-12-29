@@ -205,16 +205,15 @@ ScreenplayTextSearchManager::ScreenplayTextSearchManager(QWidget* _parent,
         int firstCursorPosition = cursor.selectionStart();
         while (cursor.hasSelection()) {
             cursor.insertText(replaceText);
-            d->findText();
-            cursor = d->textEdit->textCursor();
 
             //
             // Корректируем начальную позицию поиска, для корректного завершения при втором проходе
             // по документу
             //
-            if (cursor.selectionStart() < firstCursorPosition) {
-                firstCursorPosition += diffSize;
-            }
+            firstCursorPosition += diffSize;
+
+            d->findText();
+            cursor = d->textEdit->textCursor();
 
             //
             // Прерываем случай, когда пользователь пытается заменить слово без учёта регистра
