@@ -549,6 +549,10 @@ bool StructureModel::canDropMimeData(const QMimeData* _data, Qt::DropAction _act
         return false;
     }
 
+    if (d->lastMimeItems.isEmpty()) {
+        return false;
+    }
+
     //
     // Проверяем, что перемещаются данные из модели
     //
@@ -609,6 +613,7 @@ bool StructureModel::canDropMimeData(const QMimeData* _data, Qt::DropAction _act
     //
     // ... внутрь сценария ничего нельзя вложить
     //
+    case Domain::DocumentObjectType::ComicBook:
     case Domain::DocumentObjectType::Screenplay: {
         return false;
     }
@@ -634,26 +639,7 @@ bool StructureModel::dropMimeData(const QMimeData* _data, Qt::DropAction _action
     }
 
     //
-    // Проверяем, что перемещаются данные из модели
-    //
-    QByteArray encodedData = _data->data(kMimeType);
-    QDataStream stream(&encodedData, QIODevice::ReadOnly);
-    int row = 0;
-    while (!stream.atEnd()) {
-        QUuid itemUuid;
-        stream >> itemUuid;
-        if (itemUuid != d->lastMimeItems[row]->uuid()) {
-            //
-            // ... если это какие-то внешние данные, то ничего не делаем
-            //
-            return false;
-        }
-
-        ++row;
-    }
-
-    //
-    // Если с данными всё окей, то перемещаем все элементы по очереди
+    // Перемещаем все элементы по очереди
     //
 
     auto parentItem = itemForIndex(_parent);
@@ -676,11 +662,11 @@ bool StructureModel::dropMimeData(const QMimeData* _data, Qt::DropAction _action
                 continue;
             }
 
-            emit beginMoveRows(itemIndex.parent(), itemIndex.row(), itemIndex.row(), _parent,
-                               parentItem->childCount() + recycleBinIndexDelta);
+            beginMoveRows(itemIndex.parent(), itemIndex.row(), itemIndex.row(), _parent,
+                          parentItem->childCount() + recycleBinIndexDelta);
             item->parent()->takeItem(item);
             parentItem->insertItem(parentItem->childCount() + recycleBinIndexDelta, item);
-            emit endMoveRows();
+            endMoveRows();
         }
     }
     //
@@ -707,11 +693,11 @@ bool StructureModel::dropMimeData(const QMimeData* _data, Qt::DropAction _action
                 continue;
             }
 
-            emit beginMoveRows(itemIndex.parent(), itemIndex.row(), itemIndex.row(),
-                               insertBeforeItemIndex.parent(), _row);
+            beginMoveRows(itemIndex.parent(), itemIndex.row(), itemIndex.row(),
+                          insertBeforeItemIndex.parent(), _row);
             item->parent()->takeItem(item);
             parentItem->insertItem(parentItem->rowOfChild(insertBeforeItem), item);
-            emit endMoveRows();
+            endMoveRows();
         }
     }
 

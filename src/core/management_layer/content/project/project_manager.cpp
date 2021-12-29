@@ -292,40 +292,6 @@ void ProjectManager::Implementation::removeDocument(BusinessLayer::StructureMode
     //
     if (itemTopLevelParent->type() != Domain::DocumentObjectType::RecycleBin) {
         projectStructureModel->moveItemToRecycleBin(_item);
-
-        //
-        // Персонажи и локации убираем из родительского списка
-        //
-        switch (_item->type()) {
-        case Domain::DocumentObjectType::Character: {
-            const auto charactersDocuments
-                = DataStorageLayer::StorageFacade::documentStorage()->documents(
-                    Domain::DocumentObjectType::Characters);
-            Q_ASSERT(charactersDocuments.size() == 1);
-            auto charactersModel = modelsFacade.modelFor(charactersDocuments.first());
-            auto characters = qobject_cast<BusinessLayer::CharactersModel*>(charactersModel);
-            characters->removeCharacterModel(
-                qobject_cast<BusinessLayer::CharacterModel*>(modelsFacade.modelFor(_item->uuid())));
-            break;
-        }
-
-        case Domain::DocumentObjectType::Location: {
-            const auto locationsDocuments
-                = DataStorageLayer::StorageFacade::documentStorage()->documents(
-                    Domain::DocumentObjectType::Locations);
-            Q_ASSERT(locationsDocuments.size() == 1);
-            auto locationsModel = modelsFacade.modelFor(locationsDocuments.first());
-            auto locations = qobject_cast<BusinessLayer::LocationsModel*>(locationsModel);
-            locations->removeLocationModel(
-                qobject_cast<BusinessLayer::LocationModel*>(modelsFacade.modelFor(_item->uuid())));
-            break;
-        }
-
-        default: {
-            break;
-        }
-        }
-
         return;
     }
 
@@ -762,6 +728,93 @@ ProjectManager::ProjectManager(QObject* _parent, QWidget* _parentWidget)
             [this](const QByteArray& _undo, const QByteArray& _redo) {
                 handleModelChange(d->projectStructureModel, _undo, _redo);
             });
+    connect(
+        d->projectStructureModel, &BusinessLayer::StructureModel::rowsAboutToBeMoved, this,
+        [this](const QModelIndex& _sourceParent, int _sourceStart, int _sourceEnd,
+               const QModelIndex& _destination) {
+            const auto sourceParentItem = d->projectStructureModel->itemForIndex(_sourceParent);
+            const auto destinationItem = d->projectStructureModel->itemForIndex(_destination);
+            if (sourceParentItem == nullptr || destinationItem == nullptr) {
+                return;
+            }
+
+            //
+            // Удаляем персонажа
+            //
+            if (sourceParentItem->type() == Domain::DocumentObjectType::Characters
+                && destinationItem->type() == Domain::DocumentObjectType::RecycleBin) {
+                const auto charactersDocument
+                    = DataStorageLayer::StorageFacade::documentStorage()->document(
+                        Domain::DocumentObjectType::Characters);
+                auto charactersModel = d->modelsFacade.modelFor(charactersDocument);
+                auto characters = qobject_cast<BusinessLayer::CharactersModel*>(charactersModel);
+                for (int row = _sourceStart; row <= _sourceEnd; ++row) {
+                    const auto removedItemIndex
+                        = d->projectStructureModel->index(row, 0, _sourceParent);
+                    const auto removedItem
+                        = d->projectStructureModel->itemForIndex(removedItemIndex);
+                    characters->removeCharacterModel(qobject_cast<BusinessLayer::CharacterModel*>(
+                        d->modelsFacade.modelFor(removedItem->uuid())));
+                }
+            }
+            //
+            // Удаляем локации
+            //
+            else if (sourceParentItem->type() == Domain::DocumentObjectType::Locations
+                     && destinationItem->type() == Domain::DocumentObjectType::RecycleBin) {
+                const auto locationsDocument
+                    = DataStorageLayer::StorageFacade::documentStorage()->document(
+                        Domain::DocumentObjectType::Locations);
+                auto locationsModel = d->modelsFacade.modelFor(locationsDocument);
+                auto locations = qobject_cast<BusinessLayer::LocationsModel*>(locationsModel);
+                for (int row = _sourceStart; row <= _sourceEnd; ++row) {
+                    const auto removedItemIndex
+                        = d->projectStructureModel->index(row, 0, _sourceParent);
+                    const auto removedItem
+                        = d->projectStructureModel->itemForIndex(removedItemIndex);
+                    locations->removeLocationModel(qobject_cast<BusinessLayer::LocationModel*>(
+                        d->modelsFacade.modelFor(removedItem->uuid())));
+                }
+            }
+            //
+            // Восстанавливаем персонажей
+            //
+            else if (sourceParentItem->type() == Domain::DocumentObjectType::RecycleBin
+                     && destinationItem->type() == Domain::DocumentObjectType::Characters) {
+                const auto charactersDocument
+                    = DataStorageLayer::StorageFacade::documentStorage()->document(
+                        Domain::DocumentObjectType::Characters);
+                auto charactersModel = d->modelsFacade.modelFor(charactersDocument);
+                auto characters = qobject_cast<BusinessLayer::CharactersModel*>(charactersModel);
+                for (int row = _sourceStart; row <= _sourceEnd; ++row) {
+                    const auto removedItemIndex
+                        = d->projectStructureModel->index(row, 0, _sourceParent);
+                    const auto removedItem
+                        = d->projectStructureModel->itemForIndex(removedItemIndex);
+                    characters->addCharacterModel(qobject_cast<BusinessLayer::CharacterModel*>(
+                        d->modelsFacade.modelFor(removedItem->uuid())));
+                }
+            }
+            //
+            // Восстанавливаем локации
+            //
+            else if (sourceParentItem->type() == Domain::DocumentObjectType::RecycleBin
+                     && destinationItem->type() == Domain::DocumentObjectType::Locations) {
+                const auto locationsDocument
+                    = DataStorageLayer::StorageFacade::documentStorage()->document(
+                        Domain::DocumentObjectType::Locations);
+                auto locationsModel = d->modelsFacade.modelFor(locationsDocument);
+                auto locations = qobject_cast<BusinessLayer::LocationsModel*>(locationsModel);
+                for (int row = _sourceStart; row <= _sourceEnd; ++row) {
+                    const auto removedItemIndex
+                        = d->projectStructureModel->index(row, 0, _sourceParent);
+                    const auto removedItem
+                        = d->projectStructureModel->itemForIndex(removedItemIndex);
+                    locations->addLocationModel(qobject_cast<BusinessLayer::LocationModel*>(
+                        d->modelsFacade.modelFor(removedItem->uuid())));
+                }
+            }
+        });
 
     //
     // Соединения представления
