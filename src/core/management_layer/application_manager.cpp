@@ -1653,6 +1653,7 @@ void ApplicationManager::initConnections()
         d->menuView->setSignInVisible(true);
         d->menuView->setAccountVisible(false);
         d->cloudServiceManager->logout();
+        d->projectManager->checkAvailabilityToEdit();
     });
 #endif
 }
