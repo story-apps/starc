@@ -75,6 +75,7 @@ MenuView::Implementation::Implementation(QWidget* _parent)
     exportCurrentDocument = new QAction;
     exportCurrentDocument->setIconText(u8"\U000f0207");
     exportCurrentDocument->setCheckable(false);
+    exportCurrentDocument->setEnabled(false);
     exportCurrentDocument->setVisible(false);
     //
     fullScreen = new QAction;
