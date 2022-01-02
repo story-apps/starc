@@ -1650,9 +1650,10 @@ void ApplicationManager::initConnections()
             d->cloudServiceManager.data(), &CloudServiceManager::terminateSession);
     connect(d->accountManager.data(), &AccountManager::logoutRequested, this, [this] {
         d->showLastContent();
+        d->cloudServiceManager->logout();
+        d->accountManager->clearAccountInfo();
         d->menuView->setSignInVisible(true);
         d->menuView->setAccountVisible(false);
-        d->cloudServiceManager->logout();
         d->projectManager->checkAvailabilityToEdit();
     });
 #endif

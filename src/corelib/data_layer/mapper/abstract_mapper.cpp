@@ -20,14 +20,20 @@ namespace DataMappingLayer {
 void AbstractMapper::clear()
 {
     m_isLastIdentifierLoaded = false;
-    qDeleteAll(m_loadedObjectsMap);
+    for (auto& [key, value] : m_loadedObjectsMap) {
+        delete value;
+        value = nullptr;
+    }
     m_loadedObjectsMap.clear();
 }
 
 DomainObject* AbstractMapper::abstractFind(const Identifier& _id)
 {
-    DomainObject* result = m_loadedObjectsMap.value(_id, nullptr);
-    if (result == nullptr) {
+    const auto objectIter = m_loadedObjectsMap.find(_id);
+    DomainObject* result = nullptr;
+    if (objectIter != m_loadedObjectsMap.cend()) {
+        result = objectIter->second;
+    } else {
         result = loadObjectFromDatabase(_id);
     }
     return result;
@@ -57,7 +63,7 @@ void AbstractMapper::abstractInsert(DomainObject* _object)
     //
     // Добавим вновь созданный объект в список загруженных объектов
     //
-    m_loadedObjectsMap.insert(_object->id(), _object);
+    m_loadedObjectsMap.emplace(_object->id(), _object);
 
     //
     // Получим данные для формирования запроса на их добавление
@@ -144,7 +150,7 @@ void AbstractMapper::abstractDelete(DomainObject* _object)
         //
         // Удалим объекст из списка загруженных
         //
-        m_loadedObjectsMap.remove(_object->id());
+        m_loadedObjectsMap.erase(_object->id());
         delete _object;
         _object = nullptr;
     }
@@ -197,10 +203,10 @@ Identifier AbstractMapper::findNextIdentifier()
     }
 
     Identifier maxId(0);
-    if (!m_loadedObjectsMap.isEmpty()) {
-        QMap<Identifier, DomainObject*>::const_iterator iter = m_loadedObjectsMap.cend();
+    if (!m_loadedObjectsMap.empty()) {
+        auto iter = m_loadedObjectsMap.cend();
         --iter;
-        maxId = iter.key();
+        maxId = iter->first;
     }
     return maxId.next();
 }
@@ -217,13 +223,14 @@ DomainObject* AbstractMapper::load(const QSqlRecord& _record)
     //
     // Если объект загружен, используем указатель на него
     //
-    if (m_loadedObjectsMap.contains(id)) {
-        result = m_loadedObjectsMap.value(id);
+    const auto iter = m_loadedObjectsMap.find(id);
+    if (iter != m_loadedObjectsMap.cend()) {
+        result = iter->second;
         //
         // ... если данные не были изменены, обновляем объект
         //
         if (result->isChangesStored()) {
-            doLoad(m_loadedObjectsMap.value(id), _record);
+            doLoad(result, _record);
         }
     }
     //
@@ -231,7 +238,7 @@ DomainObject* AbstractMapper::load(const QSqlRecord& _record)
     //
     else {
         result = doLoad(id, _record);
-        m_loadedObjectsMap.insert(id, result);
+        m_loadedObjectsMap.emplace(id, result);
     }
     return result;
 }

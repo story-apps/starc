@@ -133,7 +133,7 @@ void AccountManager::Implementation::initNavigatorConnections()
     //    });
 
     connect(navigator, &Ui::AccountNavigator::logoutPressed, q, [this] {
-        account = {};
+        q->clearAccountInfo();
         emit q->logoutRequested();
     });
 }
@@ -297,6 +297,11 @@ void AccountManager::setAccountInfo(const QString& _email, const QString& _name,
     if (secsToSubscriptionEnd > 0) {
         d->subscriptionEndsTimer.start(std::chrono::seconds{ secsToSubscriptionEnd });
     }
+}
+
+void AccountManager::clearAccountInfo()
+{
+    d->account = {};
 }
 
 QString AccountManager::email() const

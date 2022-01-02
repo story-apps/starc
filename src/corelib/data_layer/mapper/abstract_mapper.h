@@ -90,7 +90,7 @@ private:
     /**
      * @brief Загруженные объекты из базы данных
      */
-    QMap<Domain::Identifier, Domain::DomainObject*> m_loadedObjectsMap;
+    std::map<Domain::Identifier, Domain::DomainObject*> m_loadedObjectsMap;
 };
 
 } // namespace DataMappingLayer

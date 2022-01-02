@@ -49,6 +49,7 @@ public:
                         const QDateTime& _subscriptionEnds,
                         const QVector<Domain::PaymentOption>& _paymentOptions,
                         const QVector<Domain::SessionInfo>& _sessions);
+    void clearAccountInfo();
     QString email() const;
     QString name() const;
     QPixmap avatar() const;
