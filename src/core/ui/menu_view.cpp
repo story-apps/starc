@@ -1,12 +1,18 @@
 #include "menu_view.h"
 
 #include <ui/design_system/design_system.h>
+#include <ui/widgets/drawer/drawer.h>
+#include <ui/widgets/label/link_label.h>
+#include <ui/widgets/scroll_bar/scroll_bar.h>
 #include <utils/3rd_party/WAF/Animation/Animation.h>
+#include <utils/helpers/color_helper.h>
 
 #include <QAction>
 #include <QActionGroup>
 #include <QApplication>
+#include <QBoxLayout>
 #include <QKeyEvent>
+#include <QScrollArea>
 
 
 namespace Ui {
@@ -17,6 +23,9 @@ public:
     explicit Implementation(QWidget* _parent);
 
 
+    QScrollArea* menuPage = nullptr;
+
+    Drawer* drawer = nullptr;
     QAction* signIn = nullptr;
     QAction* projects = nullptr;
     QAction* createProject = nullptr;
@@ -28,63 +37,95 @@ public:
     QAction* importProject = nullptr;
     QAction* fullScreen = nullptr;
     QAction* settings = nullptr;
+
+    Subtitle2LinkLabel* appName = nullptr;
+    Body2LinkLabel* appVersion = nullptr;
+    QGridLayout* appInfoLayout = nullptr;
 };
 
 MenuView::Implementation::Implementation(QWidget* _parent)
+    : menuPage(new QScrollArea(_parent))
+    , drawer(new Drawer(_parent))
+    , signIn(new QAction)
+    , projects(new QAction)
+    , createProject(new QAction)
+    , openProject(new QAction)
+    , project(new QAction)
+    , saveProject(new QAction)
+    , saveProjectAs(new QAction)
+    , exportCurrentDocument(new QAction)
+    , importProject(new QAction)
+    , fullScreen(new QAction)
+    , settings(new QAction)
+    , appName(new Subtitle2LinkLabel(_parent))
+    , appVersion(new Body2LinkLabel(_parent))
+    , appInfoLayout(new QGridLayout)
 {
-    signIn = new QAction;
+    //
+    // Настроим страницу меню
+    //
+    QPalette palette;
+    palette.setColor(QPalette::Base, Qt::transparent);
+    palette.setColor(QPalette::Window, Qt::transparent);
+    menuPage->setPalette(palette);
+    menuPage->setFrameShape(QFrame::NoFrame);
+    menuPage->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
+    menuPage->setVerticalScrollBar(new ScrollBar);
+
+    drawer->addAction(signIn);
+    drawer->addAction(projects);
+    drawer->addAction(createProject);
+    drawer->addAction(openProject);
+    drawer->addAction(project);
+    drawer->addAction(saveProject);
+    drawer->addAction(saveProjectAs);
+    drawer->addAction(importProject);
+    drawer->addAction(exportCurrentDocument);
+    drawer->addAction(fullScreen);
+    drawer->addAction(settings);
+
     signIn->setIconText(u8"\U000F0004");
     signIn->setCheckable(false);
     signIn->setVisible(false);
     //
-    projects = new QAction;
     projects->setIconText(u8"\U000f024b");
     projects->setCheckable(true);
     projects->setChecked(true);
     //
-    createProject = new QAction;
     createProject->setIconText(u8"\U000f0415");
     createProject->setCheckable(false);
     //
-    openProject = new QAction;
     openProject->setIconText(u8"\U000f0770");
     openProject->setCheckable(false);
     //
-    project = new QAction;
     project->setIconText(u8"\U000f00be");
     project->setCheckable(true);
     project->setVisible(false);
     project->setSeparator(true);
     //
-    saveProject = new QAction;
     saveProject->setIconText(u8"\U000f0193");
     saveProject->setCheckable(false);
     saveProject->setEnabled(false);
     saveProject->setVisible(false);
     //
-    saveProjectAs = new QAction;
     saveProjectAs->setIconText(" ");
     saveProjectAs->setCheckable(false);
     saveProjectAs->setVisible(false);
     //
-    importProject = new QAction;
-    importProject->setIconText(u8"\U000f02fa");
-    importProject->setCheckable(false);
-    importProject->setVisible(false);
-    //
-    exportCurrentDocument = new QAction;
     exportCurrentDocument->setIconText(u8"\U000f0207");
     exportCurrentDocument->setCheckable(false);
     exportCurrentDocument->setEnabled(false);
     exportCurrentDocument->setVisible(false);
     //
-    fullScreen = new QAction;
+    importProject->setIconText(u8"\U000f02fa");
+    importProject->setCheckable(false);
+    importProject->setVisible(false);
+    //
     fullScreen->setIconText(u8"\U000F0293");
     fullScreen->setCheckable(false);
     fullScreen->setVisible(false);
     fullScreen->setSeparator(true);
     //
-    settings = new QAction;
     settings->setIconText(u8"\U000f0493");
     settings->setCheckable(false);
     settings->setVisible(true);
@@ -94,35 +135,43 @@ MenuView::Implementation::Implementation(QWidget* _parent)
     actions->addAction(projects);
     actions->addAction(project);
     actions->addAction(settings);
+
+    appName->setText("Story Architect");
+    appName->setLink(QUrl("https://starc.app"));
+    appVersion->setLink(QUrl("https://starc.app/blog/"));
+
+    appInfoLayout->setContentsMargins({});
+    appInfoLayout->setSpacing(0);
+    appInfoLayout->addWidget(appName, 0, 0, 1, 3);
+    appInfoLayout->addWidget(appVersion, 1, 0);
+
+    auto menuPageContentWidget = new QWidget;
+    menuPage->setWidget(menuPageContentWidget);
+    menuPage->setWidgetResizable(true);
+    auto layout = new QVBoxLayout;
+    layout->setContentsMargins({});
+    layout->setSpacing(0);
+    layout->addWidget(drawer);
+    layout->addStretch();
+    layout->addLayout(appInfoLayout);
+    menuPageContentWidget->setLayout(layout);
 }
 
 // ****
 
 
 MenuView::MenuView(QWidget* _parent)
-    : Drawer(_parent)
+    : StackWidget(_parent)
     , d(new Implementation(this))
 {
-
 #ifdef CLOUD_SERVICE_MANAGER
     d->signIn->setVisible(true);
     d->projects->setSeparator(true);
 #endif
+    setCurrentWidget(d->menuPage);
 
-    setProVersion(false);
 
-    addAction(d->signIn);
-    addAction(d->projects);
-    addAction(d->createProject);
-    addAction(d->openProject);
-    addAction(d->project);
-    addAction(d->saveProject);
-    addAction(d->saveProjectAs);
-    addAction(d->importProject);
-    addAction(d->exportCurrentDocument);
-    addAction(d->fullScreen);
-    addAction(d->settings);
-
+    connect(d->drawer, &Drawer::accountPressed, this, &MenuView::accountPressed);
     connect(d->signIn, &QAction::triggered, this, &MenuView::signInPressed);
     connect(d->projects, &QAction::triggered, this, &MenuView::projectsPressed);
     connect(d->createProject, &QAction::triggered, this, &MenuView::createProjectPressed);
@@ -148,15 +197,40 @@ MenuView::MenuView(QWidget* _parent)
     connect(this, &MenuView::settingsPressed, this, &MenuView::closeMenu);
     connect(this, &MenuView::helpPressed, this, &MenuView::closeMenu);
 
+
     setVisible(false);
+
+
+    updateTranslations();
+    designSystemChangeEvent(nullptr);
+}
+
+MenuView::~MenuView() = default;
+
+void MenuView::setAccountVisible(bool _visible)
+{
+    d->drawer->setAccountVisible(_visible);
+}
+
+void MenuView::setAvatar(const QPixmap& _avatar)
+{
+    d->drawer->setAvatar(_avatar);
+}
+
+void MenuView::setAccountName(const QString& _name)
+{
+    d->drawer->setAccountName(_name);
+}
+
+void MenuView::setAccountEmail(const QString& _email)
+{
+    d->drawer->setAccountEmail(_email);
 }
 
 void MenuView::setSignInVisible(bool _visible)
 {
     d->signIn->setVisible(_visible);
 }
-
-MenuView::~MenuView() = default;
 
 void MenuView::checkProjects()
 {
@@ -172,6 +246,7 @@ void MenuView::setProjectActionsVisible(bool _visible)
     d->exportCurrentDocument->setVisible(_visible);
     d->importProject->setVisible(_visible);
     d->fullScreen->setVisible(_visible);
+    d->drawer->updateGeometry();
 }
 
 void MenuView::checkProject()
@@ -196,12 +271,6 @@ void MenuView::markChangesSaved(bool _saved)
     d->saveProject->setEnabled(!_saved);
     d->saveProject->setText(_saved ? tr("All changes saved") : tr("Save changes"));
     update();
-}
-
-void MenuView::setProVersion(bool _isPro)
-{
-    //    setSubtitle(QString("Story Architect v.%1 %2")
-    //                    .arg(QApplication::applicationVersion(), (_isPro ? "PRO" : "free")));
 }
 
 void MenuView::setCurrentDocumentExportAvailable(bool _available)
@@ -234,6 +303,29 @@ void MenuView::updateTranslations()
     d->fullScreen->setWhatsThis(
         QKeySequence(QKeySequence::FullScreen).toString(QKeySequence::NativeText));
     d->settings->setText(tr("Application settings"));
+
+    d->appVersion->setText(
+        QString("%1 %2").arg(tr("Version"), QCoreApplication::applicationVersion()));
+}
+
+void MenuView::designSystemChangeEvent(DesignSystemChangeEvent* _event)
+{
+    StackWidget::designSystemChangeEvent(_event);
+
+    setBackgroundColor(Ui::DesignSystem::color().primary());
+
+    for (auto label : std::vector<Widget*>{
+             d->appName,
+             d->appVersion,
+         }) {
+        label->setBackgroundColor(Ui::DesignSystem::color().primary());
+        label->setTextColor(ColorHelper::transparent(Ui::DesignSystem::color().onPrimary(),
+                                                     Ui::DesignSystem::disabledTextOpacity()));
+    }
+    d->appInfoLayout->setContentsMargins(
+        Ui::DesignSystem::layout().px16(), Ui::DesignSystem::layout().px24(),
+        Ui::DesignSystem::layout().px16(), Ui::DesignSystem::layout().px16());
+    d->appInfoLayout->setVerticalSpacing(Ui::DesignSystem::layout().px8());
 }
 
 void MenuView::keyPressEvent(QKeyEvent* _event)
@@ -242,7 +334,7 @@ void MenuView::keyPressEvent(QKeyEvent* _event)
         closeMenu();
     }
 
-    Drawer::keyPressEvent(_event);
+    StackWidget::keyPressEvent(_event);
 }
 
 } // namespace Ui

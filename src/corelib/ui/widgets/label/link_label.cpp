@@ -51,3 +51,31 @@ const QFont& Body1LinkLabel::textFont() const
 {
     return Ui::DesignSystem::font().body1();
 }
+
+
+// ****
+
+
+Body2LinkLabel::Body2LinkLabel(QWidget* _parent)
+    : AbstractLinkLabel(_parent)
+{
+}
+
+const QFont& Body2LinkLabel::textFont() const
+{
+    return Ui::DesignSystem::font().body2();
+}
+
+
+// ****
+
+
+Subtitle2LinkLabel::Subtitle2LinkLabel(QWidget* _parent)
+    : AbstractLinkLabel(_parent)
+{
+}
+
+const QFont& Subtitle2LinkLabel::textFont() const
+{
+    return Ui::DesignSystem::font().subtitle2();
+}

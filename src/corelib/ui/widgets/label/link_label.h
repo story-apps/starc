@@ -36,3 +36,33 @@ public:
 protected:
     const QFont& textFont() const override;
 };
+
+
+/**
+ * @brief Класс текстовой метки со ссылкой
+ */
+class CORE_LIBRARY_EXPORT Body2LinkLabel : public AbstractLinkLabel
+{
+    Q_OBJECT
+
+public:
+    explicit Body2LinkLabel(QWidget* _parent = nullptr);
+
+protected:
+    const QFont& textFont() const override;
+};
+
+
+/**
+ * @brief Класс текстовой метки со ссылкой
+ */
+class CORE_LIBRARY_EXPORT Subtitle2LinkLabel : public AbstractLinkLabel
+{
+    Q_OBJECT
+
+public:
+    explicit Subtitle2LinkLabel(QWidget* _parent = nullptr);
+
+protected:
+    const QFont& textFont() const override;
+};

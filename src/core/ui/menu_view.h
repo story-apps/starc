@@ -1,6 +1,6 @@
 #pragma once
 
-#include <ui/widgets/drawer/drawer.h>
+#include <ui/widgets/stack_widget/stack_widget.h>
 
 
 namespace Ui {
@@ -8,13 +8,25 @@ namespace Ui {
 /**
  * @brief Меню приложения
  */
-class MenuView : public Drawer
+class MenuView : public StackWidget
 {
     Q_OBJECT
 
 public:
     explicit MenuView(QWidget* _parent = nullptr);
     ~MenuView() override;
+
+    /**
+     * @brief Установить необходимость использования панели аккаунта
+     */
+    void setAccountVisible(bool _use);
+
+    /**
+     * @brief Параметры панели аккаунта
+     */
+    void setAvatar(const QPixmap& _avatar);
+    void setAccountName(const QString& _name);
+    void setAccountEmail(const QString& _email);
 
     /**
      * @brief Задать видимость пункта меню "Авторизоваться"
@@ -52,11 +64,6 @@ public:
     void markChangesSaved(bool _saved);
 
     /**
-     * @brief Установить индикацию отображения куплена ли про версия
-     */
-    void setProVersion(bool _isPro);
-
-    /**
      * @brief Установить возможность экспортирования текущего документа
      */
     void setCurrentDocumentExportAvailable(bool _available);
@@ -67,6 +74,11 @@ public:
     void closeMenu();
 
 signals:
+    /**
+     * @brief Пользователь кликнул на аккаунте
+     */
+    void accountPressed();
+
     /**
      * @brief Нажат пункт меню "Авторизоваться"
      */
@@ -133,6 +145,11 @@ protected:
      * @brief Обновить переводы
      */
     void updateTranslations() override;
+
+    /**
+     * @brief Настроить внешний вид
+     */
+    void designSystemChangeEvent(DesignSystemChangeEvent* _event) override;
 
     /**
      * @brief Обработка нажатия клавиатуры (Закрытие при нажатии esc)

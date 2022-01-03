@@ -175,6 +175,7 @@ void Drawer::setAccountVisible(bool _use)
     }
 
     d->isAccountVisible = _use;
+    updateGeometry();
     update();
 }
 
