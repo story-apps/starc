@@ -138,7 +138,7 @@ jobs:
           folder: 'build/windows'
 
       - name: Make archive with portable version
-        uses: papeloto/action-zip@v1
+        uses: vimtor/action-zip@v1
         with:
           files: build/windows/files_64
           dest: build/windows/starc-64.zip
@@ -227,7 +227,7 @@ jobs:
           folder: 'build/windows'
 
       - name: Make archive with portable version
-        uses: papeloto/action-zip@v1
+        uses: vimtor/action-zip@v1
         with:
           files: build/windows/files_32
           dest: build/windows/starc-32.zip
