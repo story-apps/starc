@@ -928,7 +928,7 @@ void ComicBookTextModel::insertFromMime(const QModelIndex& _index, int _position
             // Если вставка идёт в самое начало блока, то просто переносим блок после вставляемого
             // фрагмента
             //
-            if (_positionInBlock == 0) {
+            if (textItem->text().isEmpty()) {
                 lastItemsFromSourceScene.append(textItem);
             }
             //
@@ -1000,19 +1000,29 @@ void ComicBookTextModel::insertFromMime(const QModelIndex& _index, int _position
             //
             // Если вставляется текстовый элемент внутрь уже существующего элемента
             //
-            if (!isFirstTextItemHandled && item->type() == ComicBookTextModelItemType::Text) {
+            if (!isFirstTextItemHandled) {
+                isFirstTextItemHandled = true;
+
                 //
                 // ... то просто объединим их
                 //
-                isFirstTextItemHandled = true;
-                auto textItem = static_cast<ComicBookTextModelTextItem*>(item);
-                textItem->mergeWith(newTextItem);
-                updateItem(textItem);
-                delete newTextItem;
+                if (item->type() == ComicBookTextModelItemType::Text
+                    && !lastItemsFromSourceScene.contains(item)) {
+                    auto textItem = static_cast<ComicBookTextModelTextItem*>(item);
+                    textItem->mergeWith(newTextItem);
+                    updateItem(textItem);
+                    delete newTextItem;
+                    //
+                    // ... и исключаем исходный блок из переноса, если он был туда помещён
+                    //
+                    lastItemsFromSourceScene.removeAll(textItem);
+                }
                 //
-                // ... и исключаем исходный блок из переноса, если он был туда помещён
+                // ... иначе вставляем текстовый элемент в модель
                 //
-                lastItemsFromSourceScene.removeAll(textItem);
+                else {
+                    newItem = newTextItem;
+                }
             }
             //
             // В противном случае вставляем текстовый элемент в модель
