@@ -395,6 +395,7 @@ void ScreenplayTextCursor::removeCharacters(bool _backward, BaseTextEdit* _edito
         //
         if (!inblockChange) {
             cursor.setBlockFormat(targetStyle.blockFormat());
+            cursor.setBlockCharFormat(targetStyle.charFormat());
             cursor.block().setUserData(targetBlockData);
         }
 
