@@ -452,6 +452,11 @@ void ApplicationManager::Implementation::setTranslation(QLocale::Language _langu
         break;
     }
 
+    case QLocale::Croatian: {
+        translation = "hr";
+        break;
+    }
+
     case QLocale::Danish: {
         translation = "da_DK";
         break;
@@ -512,6 +517,11 @@ void ApplicationManager::Implementation::setTranslation(QLocale::Language _langu
         break;
     }
 
+    case QLocale::LastLanguage + 1: {
+        translation = "pt_PT";
+        break;
+    }
+
     case QLocale::Portuguese: {
         translation = "pt_BR";
         break;
@@ -534,6 +544,11 @@ void ApplicationManager::Implementation::setTranslation(QLocale::Language _langu
 
     case QLocale::Spanish: {
         translation = "es";
+        break;
+    }
+
+    case QLocale::Tagalog: {
+        translation = "tl_PH";
         break;
     }
 
