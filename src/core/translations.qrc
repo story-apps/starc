@@ -23,5 +23,9 @@
         <file>translations/translation_da_DK.qm</file>
         <file>translations/translation_ca.qm</file>
         <file>translations/translation_eo.qm</file>
+        <file>translations/translation_hr.qm</file>
+        <file>translations/translation_nl.qm</file>
+        <file>translations/translation_pt_PT.qm</file>
+        <file>translations/translation_tl_PH.qm</file>
     </qresource>
 </RCC>

@@ -31,14 +31,18 @@ TRANSLATIONS += \
     core/translations/translation_gl_ES.ts \
     core/translations/translation_he.ts \
     core/translations/translation_hi.ts \
+    core/translations/translation_hr.ts \
     core/translations/translation_hu.ts \
     core/translations/translation_id.ts \
     core/translations/translation_it.ts \
+    core/translations/translation_nl.ts \
     core/translations/translation_pl.ts \
     core/translations/translation_pt_BR.ts \
+    core/translations/translation_pt_PT.ts \
     core/translations/translation_ro_RO.ts \
     core/translations/translation_ru.ts \
     core/translations/translation_sl.ts \
+    core/translations/translation_tl_PH.ts \
     core/translations/translation_tr.ts \
     core/translations/translation_uk.ts
 

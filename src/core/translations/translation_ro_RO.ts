@@ -4,37 +4,42 @@
 <context>
     <name>BaseTextEdit</name>
     <message>
-        <location filename="../../corelib/ui/widgets/text_edit/base/base_text_edit.cpp" line="230"/>
+        <location filename="../../corelib/ui/widgets/text_edit/base/base_text_edit.cpp" line="299"/>
         <source>Formatting</source>
         <translation>Formatare</translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/widgets/text_edit/base/base_text_edit.cpp" line="234"/>
+        <location filename="../../corelib/ui/widgets/text_edit/base/base_text_edit.cpp" line="303"/>
         <source>Bold</source>
         <translation>Bold</translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/widgets/text_edit/base/base_text_edit.cpp" line="241"/>
+        <location filename="../../corelib/ui/widgets/text_edit/base/base_text_edit.cpp" line="310"/>
         <source>Italic</source>
         <translation>Italic</translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/widgets/text_edit/base/base_text_edit.cpp" line="248"/>
+        <location filename="../../corelib/ui/widgets/text_edit/base/base_text_edit.cpp" line="317"/>
         <source>Underline</source>
         <translation>Subliniat</translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/widgets/text_edit/base/base_text_edit.cpp" line="256"/>
+        <location filename="../../corelib/ui/widgets/text_edit/base/base_text_edit.cpp" line="324"/>
+        <source>Strikethrough</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../corelib/ui/widgets/text_edit/base/base_text_edit.cpp" line="333"/>
         <source>Align left</source>
         <translation>Aliniat la stânga</translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/widgets/text_edit/base/base_text_edit.cpp" line="262"/>
+        <location filename="../../corelib/ui/widgets/text_edit/base/base_text_edit.cpp" line="339"/>
         <source>Align center</source>
         <translation>Centrat</translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/widgets/text_edit/base/base_text_edit.cpp" line="268"/>
+        <location filename="../../corelib/ui/widgets/text_edit/base/base_text_edit.cpp" line="345"/>
         <source>Align right</source>
         <translation>Aliniat la dreapta</translation>
     </message>
@@ -191,6 +196,49 @@
     </message>
 </context>
 <context>
+    <name>BusinessLayer::FountainExporter</name>
+    <message>
+        <location filename="../../corelib/business_layer/export/screenplay/screenplay_fountain_exporter.cpp" line="26"/>
+        <source>INT</source>
+        <translation>INT.</translation>
+    </message>
+    <message>
+        <location filename="../../corelib/business_layer/export/screenplay/screenplay_fountain_exporter.cpp" line="27"/>
+        <source>EXT</source>
+        <translation>EXT.</translation>
+    </message>
+    <message>
+        <location filename="../../corelib/business_layer/export/screenplay/screenplay_fountain_exporter.cpp" line="28"/>
+        <source>EST</source>
+        <translation>EST</translation>
+    </message>
+    <message>
+        <location filename="../../corelib/business_layer/export/screenplay/screenplay_fountain_exporter.cpp" line="29"/>
+        <source>INT./EXT</source>
+        <translation>INT./EXT.</translation>
+    </message>
+    <message>
+        <location filename="../../corelib/business_layer/export/screenplay/screenplay_fountain_exporter.cpp" line="30"/>
+        <source>INT/EXT</source>
+        <translation>INT./EXT.</translation>
+    </message>
+    <message>
+        <location filename="../../corelib/business_layer/export/screenplay/screenplay_fountain_exporter.cpp" line="31"/>
+        <source>EXT./INT</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../corelib/business_layer/export/screenplay/screenplay_fountain_exporter.cpp" line="32"/>
+        <source>EXT/INT</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../corelib/business_layer/export/screenplay/screenplay_fountain_exporter.cpp" line="33"/>
+        <source>I/E</source>
+        <translation>I/E</translation>
+    </message>
+</context>
+<context>
     <name>BusinessLayer::FountainImporter</name>
     <message>
         <location filename="../../corelib/business_layer/import/screenplay/screenplay_fountain_importer.cpp" line="30"/>
@@ -219,6 +267,16 @@
     </message>
     <message>
         <location filename="../../corelib/business_layer/import/screenplay/screenplay_fountain_importer.cpp" line="35"/>
+        <source>EXT./INT</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../corelib/business_layer/import/screenplay/screenplay_fountain_importer.cpp" line="36"/>
+        <source>EXT/INT</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../corelib/business_layer/import/screenplay/screenplay_fountain_importer.cpp" line="37"/>
         <source>I/E</source>
         <translation>I/E</translation>
     </message>
@@ -495,42 +553,42 @@
         <translation>Nedefinit</translation>
     </message>
     <message>
-        <location filename="../../corelib/business_layer/templates/screenplay_template.cpp" line="609"/>
+        <location filename="../../corelib/business_layer/templates/screenplay_template.cpp" line="624"/>
         <source>Copy of </source>
         <translation>Copie</translation>
     </message>
     <message>
-        <location filename="../../corelib/business_layer/templates/screenplay_template.cpp" line="683"/>
+        <location filename="../../corelib/business_layer/templates/screenplay_template.cpp" line="698"/>
         <source>International template (page: A4; font: Courier Prime)</source>
         <translation>Șablon format internațional (pagină A4, font Courier Prime)</translation>
     </message>
     <message>
-        <location filename="../../corelib/business_layer/templates/screenplay_template.cpp" line="687"/>
+        <location filename="../../corelib/business_layer/templates/screenplay_template.cpp" line="702"/>
         <source>International template (page: A4; font: Courier New)</source>
         <translation>Șablon format internațional (pagina A4, font Courier New)</translation>
     </message>
     <message>
-        <location filename="../../corelib/business_layer/templates/screenplay_template.cpp" line="690"/>
+        <location filename="../../corelib/business_layer/templates/screenplay_template.cpp" line="705"/>
         <source>Arabic template (page: A4; font: Courier New)</source>
         <translation>Șablon format arabic (pagina A4, font Courier New)</translation>
     </message>
     <message>
-        <location filename="../../corelib/business_layer/templates/screenplay_template.cpp" line="693"/>
+        <location filename="../../corelib/business_layer/templates/screenplay_template.cpp" line="708"/>
         <source>Hebrew template (page: A4; font: Arial)</source>
         <translation>Șablon format ebraic (pagina A4, font Arial)</translation>
     </message>
     <message>
-        <location filename="../../corelib/business_layer/templates/screenplay_template.cpp" line="696"/>
+        <location filename="../../corelib/business_layer/templates/screenplay_template.cpp" line="711"/>
         <source>Russian template (page: A4; font: Courier New)</source>
         <translation>Șablon format rusesc (pagina A4, font Courier New)</translation>
     </message>
     <message>
-        <location filename="../../corelib/business_layer/templates/screenplay_template.cpp" line="699"/>
+        <location filename="../../corelib/business_layer/templates/screenplay_template.cpp" line="714"/>
         <source>Tamil template (page: A4; font: Mukta Malar)</source>
         <translation>Șablon format tamil (pagina A4, font Mukta Malar)</translation>
     </message>
     <message>
-        <location filename="../../corelib/business_layer/templates/screenplay_template.cpp" line="702"/>
+        <location filename="../../corelib/business_layer/templates/screenplay_template.cpp" line="717"/>
         <source>US template (page: Letter; font: Courier Prime)</source>
         <translation>Șablon format american (pagină Letter, font Courier Prime)</translation>
     </message>
@@ -656,14 +714,14 @@
     <name>BusinessLogic::ScriptTextCorrector</name>
     <message>
         <location filename="../../corelib/business_layer/document/comic_book/text/comic_book_text_corrector.cpp" line="43"/>
-        <location filename="../../corelib/business_layer/document/screenplay/text/screenplay_text_corrector.cpp" line="39"/>
+        <location filename="../../corelib/business_layer/document/screenplay/text/screenplay_text_corrector.cpp" line="40"/>
         <source>CONT&apos;D</source>
         <extracomment>Continued</extracomment>
         <translation>CONT&apos;D</translation>
     </message>
     <message>
         <location filename="../../corelib/business_layer/document/comic_book/text/comic_book_text_corrector.cpp" line="48"/>
-        <location filename="../../corelib/business_layer/document/screenplay/text/screenplay_text_corrector.cpp" line="44"/>
+        <location filename="../../corelib/business_layer/document/screenplay/text/screenplay_text_corrector.cpp" line="45"/>
         <source>MORE</source>
         <translation>MAI MULT</translation>
     </message>
@@ -671,7 +729,7 @@
 <context>
     <name>ColorPallete</name>
     <message>
-        <location filename="../../corelib/ui/widgets/color_picker/color_palette.cpp" line="288"/>
+        <location filename="../../corelib/ui/widgets/color_picker/color_palette.cpp" line="286"/>
         <source>User colors</source>
         <translation>Culori utilizator</translation>
     </message>
@@ -812,47 +870,47 @@
 <context>
     <name>ImageCard</name>
     <message>
-        <location filename="../../corelib/ui/widgets/image/image_card.cpp" line="136"/>
+        <location filename="../../corelib/ui/widgets/image/image_card.cpp" line="143"/>
         <source>Choose image</source>
         <translation>Alege imaginea</translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/widgets/image/image_card.cpp" line="137"/>
+        <location filename="../../corelib/ui/widgets/image/image_card.cpp" line="144"/>
         <source>Images</source>
         <translation>Imagini</translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/widgets/image/image_card.cpp" line="219"/>
+        <location filename="../../corelib/ui/widgets/image/image_card.cpp" line="229"/>
         <source>No</source>
         <translation>Nu</translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/widgets/image/image_card.cpp" line="220"/>
+        <location filename="../../corelib/ui/widgets/image/image_card.cpp" line="230"/>
         <source>Yes, delete</source>
         <translation>Da, șterge</translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/widgets/image/image_card.cpp" line="317"/>
+        <location filename="../../corelib/ui/widgets/image/image_card.cpp" line="327"/>
         <source>Delete image</source>
         <translation>Șterge imaginea</translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/widgets/image/image_card.cpp" line="531"/>
+        <location filename="../../corelib/ui/widgets/image/image_card.cpp" line="541"/>
         <source>Delete</source>
         <translation>Șterge</translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/widgets/image/image_card.cpp" line="532"/>
+        <location filename="../../corelib/ui/widgets/image/image_card.cpp" line="542"/>
         <source>Paste</source>
         <translation>Adaugă conținutul copiat</translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/widgets/image/image_card.cpp" line="533"/>
+        <location filename="../../corelib/ui/widgets/image/image_card.cpp" line="543"/>
         <source>Copy</source>
         <translation>Copiază</translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/widgets/image/image_card.cpp" line="534"/>
+        <location filename="../../corelib/ui/widgets/image/image_card.cpp" line="544"/>
         <source>Change</source>
         <translation>Schimbă</translation>
     </message>
@@ -880,31 +938,39 @@
     <message>
         <location filename="../../corelib/business_layer/export/comic_book/comic_book_abstract_exporter.cpp" line="183"/>
         <location filename="../../corelib/business_layer/export/screenplay/screenplay_abstract_exporter.cpp" line="196"/>
-        <location filename="../management_layer/plugins/comic_book_text/text/comic_book_text_edit.cpp" line="863"/>
-        <location filename="../management_layer/plugins/screenplay_text/text/screenplay_text_edit.cpp" line="849"/>
+        <location filename="../management_layer/plugins/comic_book_text/text/comic_book_text_edit.cpp" line="865"/>
+        <location filename="../management_layer/plugins/screenplay_text/text/screenplay_text_edit.cpp" line="857"/>
         <source>END OF</source>
         <translation>SFÂRȘIT</translation>
     </message>
 </context>
 <context>
+    <name>KeySequenceDelegate</name>
+    <message>
+        <location filename="../../corelib/ui/widgets/tree/tree_delegate.cpp" line="155"/>
+        <source>Press shortcut</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
     <name>ManagementLayer::AccountManager</name>
     <message>
-        <location filename="../management_layer/content/account/account_manager.cpp" line="349"/>
+        <location filename="../management_layer/content/account/account_manager.cpp" line="354"/>
         <source>Try PRO version for free</source>
         <translation>Încearcă versiunea PRO, gratis</translation>
     </message>
     <message>
-        <location filename="../management_layer/content/account/account_manager.cpp" line="350"/>
+        <location filename="../management_layer/content/account/account_manager.cpp" line="355"/>
         <source>While Starc is in the beta we&apos;d like to thank our users by providing them with free PRO features. After beta ends you&apos;ll still be able to use PRO version for 30 days for free.</source>
         <translation>Cât timp STARC este în versiune beta, dorim să mulțumim utilizatorilor oferindu-le gratuit funcțiile versiunii PRO. După ce versiunea beta nu va mai fi disponibilă, veți putea folosi versiunea PRO gratis timp de 30 de zile.</translation>
     </message>
     <message>
-        <location filename="../management_layer/content/account/account_manager.cpp" line="353"/>
+        <location filename="../management_layer/content/account/account_manager.cpp" line="358"/>
         <source>Continue with free version</source>
         <translation>Continuă cu versiunea gratuită</translation>
     </message>
     <message>
-        <location filename="../management_layer/content/account/account_manager.cpp" line="354"/>
+        <location filename="../management_layer/content/account/account_manager.cpp" line="359"/>
         <source>Activate PRO</source>
         <translation>Activează PRO</translation>
     </message>
@@ -912,98 +978,98 @@
 <context>
     <name>ManagementLayer::ApplicationManager</name>
     <message>
-        <location filename="../management_layer/application_manager.cpp" line="638"/>
+        <location filename="../management_layer/application_manager.cpp" line="636"/>
         <source> - changed</source>
         <translation>- schimbat</translation>
     </message>
     <message>
-        <location filename="../management_layer/application_manager.cpp" line="694"/>
-        <location filename="../management_layer/application_manager.cpp" line="713"/>
-        <location filename="../management_layer/application_manager.cpp" line="856"/>
+        <location filename="../management_layer/application_manager.cpp" line="692"/>
+        <location filename="../management_layer/application_manager.cpp" line="711"/>
+        <location filename="../management_layer/application_manager.cpp" line="854"/>
         <source>Saving error</source>
         <translation>Eroare la salvare</translation>
     </message>
     <message>
-        <location filename="../management_layer/application_manager.cpp" line="695"/>
+        <location filename="../management_layer/application_manager.cpp" line="693"/>
         <source>Changes can&apos;t be written. There is an internal database error: &quot;%1&quot; Please check, if your file exists and if you have permission to write.</source>
         <translation>Schimbările nu pot fi scrise în baza de date. Eroare: &quot;%1&quot; Vă rugăm, verificați dacă fișierul există și dacă aveți permisiune de scriere.</translation>
     </message>
     <message>
-        <location filename="../management_layer/application_manager.cpp" line="714"/>
+        <location filename="../management_layer/application_manager.cpp" line="712"/>
         <source>Changes can&apos;t be written because the story located at &quot;%1&quot; doesn&apos;t exist. Please move the file back and retry saving.</source>
         <translation>Schimbările nu pot fi scrise pentru că povestirea de la &quot;%1&quot; nu există. Vă rugăm să mutați fișierul înapoi, apoi reîncercați salvarea.</translation>
     </message>
     <message>
-        <location filename="../management_layer/application_manager.cpp" line="757"/>
+        <location filename="../management_layer/application_manager.cpp" line="755"/>
         <source>Project was modified. Save changes?</source>
         <translation>Proiectul a fost modificat. Salvați schimbările?</translation>
     </message>
     <message>
-        <location filename="../management_layer/application_manager.cpp" line="758"/>
+        <location filename="../management_layer/application_manager.cpp" line="756"/>
         <source>Cancel</source>
         <translation>Anulare</translation>
     </message>
     <message>
-        <location filename="../management_layer/application_manager.cpp" line="759"/>
+        <location filename="../management_layer/application_manager.cpp" line="757"/>
         <source>Don&apos;t save</source>
         <translation>Nu salva</translation>
     </message>
     <message>
-        <location filename="../management_layer/application_manager.cpp" line="760"/>
+        <location filename="../management_layer/application_manager.cpp" line="758"/>
         <source>Save</source>
         <translation>Salvează</translation>
     </message>
     <message>
-        <location filename="../management_layer/application_manager.cpp" line="818"/>
+        <location filename="../management_layer/application_manager.cpp" line="816"/>
         <source>Choose file to save story</source>
         <translation>Alege fișierul în care vrei să salvezi povestirea</translation>
     </message>
     <message>
-        <location filename="../management_layer/application_manager.cpp" line="857"/>
+        <location filename="../management_layer/application_manager.cpp" line="855"/>
         <source>Can&apos;t save the story to the file %1. Please check permissions and retry.</source>
         <translation>Nu se poate salva povestirea în fișierul %1. Verificați permisiunea și încercați din nou.</translation>
     </message>
     <message>
-        <location filename="../management_layer/application_manager.cpp" line="907"/>
+        <location filename="../management_layer/application_manager.cpp" line="905"/>
         <source>You tried to create a project in nonexistent folder %1. Please, choose another location for the new project.</source>
         <translation>Ați încercat să creați un proiect într-un folder care nu există %1. Vă rugăm să selectați o altă locație pentru noul proiect.</translation>
     </message>
     <message>
-        <location filename="../management_layer/application_manager.cpp" line="912"/>
+        <location filename="../management_layer/application_manager.cpp" line="910"/>
         <source>The file can&apos;t be written. Looks like it is opened by another application. Please close it and retry to create a new project.</source>
         <translation>Fișierul nu este editabil. Se pare că este deschis de o altă aplicație. Vă rugăm să-l închideți și încercați să creați un proiect nou.</translation>
     </message>
     <message>
-        <location filename="../management_layer/application_manager.cpp" line="916"/>
+        <location filename="../management_layer/application_manager.cpp" line="914"/>
         <source>The file can&apos;t be written. Please, check and give permissions to the app to write into the selected folder, or choose another folder for saving a new project.</source>
         <translation>Fișierul nu poate fi scris. Vă rugăm să verificați și să acordați aplicației permisiunile necesare pentru a scrie în folderul selectat sau selectați un alt folder pentru a salva noul proiect.</translation>
     </message>
     <message>
-        <location filename="../management_layer/application_manager.cpp" line="920"/>
+        <location filename="../management_layer/application_manager.cpp" line="918"/>
         <source>Create project error</source>
         <translation>Eroare de creare proiect</translation>
     </message>
     <message>
-        <location filename="../management_layer/application_manager.cpp" line="1000"/>
-        <source>This file can&apos;t be open at this moment,                                        because it is already open in another copy of the application.</source>
-        <translation>Fișierul nu poate fi deschis în acest moment, deoarece este deja deschis în altă instanță a aplicației</translation>
+        <location filename="../management_layer/application_manager.cpp" line="998"/>
+        <source>This file can&apos;t be open at this moment, because it is already open in another copy of the application.</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
     <name>ManagementLayer::CharacterInformationManager</name>
     <message>
-        <location filename="../management_layer/plugins/character_information/character_information_manager.cpp" line="147"/>
+        <location filename="../management_layer/plugins/character_information/character_information_manager.cpp" line="153"/>
         <source>Character name was changed from &quot;%1&quot; to &quot;%2&quot;. Apply changes?</source>
         <translation>Numele personajului a fost schimbat din &quot;%1&quot; în &quot;%2&quot;.
 Doriți schimbarea?</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/character_information/character_information_manager.cpp" line="149"/>
+        <location filename="../management_layer/plugins/character_information/character_information_manager.cpp" line="155"/>
         <source>No</source>
         <translation>Nu</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/character_information/character_information_manager.cpp" line="150"/>
+        <location filename="../management_layer/plugins/character_information/character_information_manager.cpp" line="156"/>
         <source>Yes</source>
         <translation>Da</translation>
     </message>
@@ -1011,19 +1077,40 @@ Doriți schimbarea?</translation>
 <context>
     <name>ManagementLayer::CharactersRelationsManager</name>
     <message>
-        <location filename="../management_layer/plugins/characters_relations/characters_relations_manager.cpp" line="63"/>
+        <location filename="../management_layer/plugins/characters_relations/characters_relations_manager.cpp" line="184"/>
+        <source>Character name was changed from &quot;%1&quot; to &quot;%2&quot;. Apply changes?</source>
+        <translation>Numele personajului a fost schimbat din &quot;%1&quot; în &quot;%2&quot;.
+Doriți schimbarea?</translation>
+    </message>
+    <message>
+        <location filename="../management_layer/plugins/characters_relations/characters_relations_manager.cpp" line="186"/>
+        <source>No</source>
+        <translation>Nu</translation>
+    </message>
+    <message>
+        <location filename="../management_layer/plugins/characters_relations/characters_relations_manager.cpp" line="187"/>
+        <source>Yes</source>
+        <translation>Da</translation>
+    </message>
+    <message>
+        <location filename="../management_layer/plugins/characters_relations/characters_relations_manager.cpp" line="256"/>
         <source>To edit the character relations graph, you need to upgrade to the PRO version.</source>
         <translation>Pentru a edita graficul cu relațiile personajelor, trebuie să faceți upgrade la versiunea PRO</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/characters_relations/characters_relations_manager.cpp" line="65"/>
+        <location filename="../management_layer/plugins/characters_relations/characters_relations_manager.cpp" line="258"/>
         <source>Maybe later</source>
         <translation>Poate, mai târziu</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/characters_relations/characters_relations_manager.cpp" line="66"/>
+        <location filename="../management_layer/plugins/characters_relations/characters_relations_manager.cpp" line="259"/>
         <source>Upgrade</source>
         <translation>Upgrade</translation>
+    </message>
+    <message>
+        <location filename="../management_layer/plugins/characters_relations/characters_relations_manager.cpp" line="276"/>
+        <source>Character with this name already exists</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -1037,26 +1124,26 @@ Doriți schimbarea?</translation>
 <context>
     <name>ManagementLayer::ExportManager</name>
     <message>
-        <location filename="../management_layer/content/export/export_manager.cpp" line="104"/>
-        <location filename="../management_layer/content/export/export_manager.cpp" line="250"/>
+        <location filename="../management_layer/content/export/export_manager.cpp" line="106"/>
+        <location filename="../management_layer/content/export/export_manager.cpp" line="252"/>
         <source>Choose the file to export</source>
         <translation>Alege fișierul pentru export</translation>
     </message>
     <message>
-        <location filename="../management_layer/content/export/export_manager.cpp" line="127"/>
-        <location filename="../management_layer/content/export/export_manager.cpp" line="273"/>
+        <location filename="../management_layer/content/export/export_manager.cpp" line="129"/>
+        <location filename="../management_layer/content/export/export_manager.cpp" line="275"/>
         <source>Can&apos;t write to file. Looks like it&apos;s opened by another application. Please close it and retry the export.</source>
         <translation>Nu se poate scrie fișierul. Se pare că este deschis într-o altă aplicație. Vă rugăm închideți respectiva aplicație și încercați din nou exportul.</translation>
     </message>
     <message>
-        <location filename="../management_layer/content/export/export_manager.cpp" line="130"/>
-        <location filename="../management_layer/content/export/export_manager.cpp" line="276"/>
+        <location filename="../management_layer/content/export/export_manager.cpp" line="132"/>
+        <location filename="../management_layer/content/export/export_manager.cpp" line="278"/>
         <source>Can&apos;t write to file. Check permissions to write in the chosen folder or choose another folder.</source>
         <translation>Nu se poate scrie în fișier. Verificați dacă aveți permisiunea de a scrie în folderul ales sau alegeți alt folder.</translation>
     </message>
     <message>
-        <location filename="../management_layer/content/export/export_manager.cpp" line="133"/>
-        <location filename="../management_layer/content/export/export_manager.cpp" line="279"/>
+        <location filename="../management_layer/content/export/export_manager.cpp" line="135"/>
+        <location filename="../management_layer/content/export/export_manager.cpp" line="281"/>
         <source>Export error</source>
         <translation>Eroare la export</translation>
     </message>
@@ -1082,18 +1169,18 @@ Doriți schimbarea?</translation>
 <context>
     <name>ManagementLayer::LocationInformationManager</name>
     <message>
-        <location filename="../management_layer/plugins/location_information/location_information_manager.cpp" line="137"/>
+        <location filename="../management_layer/plugins/location_information/location_information_manager.cpp" line="143"/>
         <source>Location name was changed from &quot;%1&quot; to &quot;%2&quot;. Apply changes?</source>
         <translation>Numele locației a fost schimbat din &quot;%1&quot; în &quot;%2&quot;.
 Doriți schimbarea?</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/location_information/location_information_manager.cpp" line="139"/>
+        <location filename="../management_layer/plugins/location_information/location_information_manager.cpp" line="145"/>
         <source>No</source>
         <translation>Nu</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/location_information/location_information_manager.cpp" line="140"/>
+        <location filename="../management_layer/plugins/location_information/location_information_manager.cpp" line="146"/>
         <source>Yes</source>
         <translation>Da</translation>
     </message>
@@ -1114,64 +1201,130 @@ Doriți schimbarea?</translation>
 <context>
     <name>ManagementLayer::ProjectManager</name>
     <message>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="138"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="148"/>
+        <source>Find all characters</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="153"/>
+        <source>Add character</source>
+        <translation>Adaugă personaj</translation>
+    </message>
+    <message>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="158"/>
+        <source>Find all locations</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="163"/>
+        <source>Add location</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="169"/>
         <source>Empty recycle bin</source>
         <translation>Golire coș de gunoi</translation>
     </message>
     <message>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="149"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="180"/>
         <source>Add document</source>
         <translation>Adaugă un document</translation>
     </message>
     <message>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="169"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="200"/>
         <source>Remove document</source>
         <translation>Ștergere document</translation>
     </message>
     <message>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="305"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="306"/>
         <source>Do you really want to permanently remove document?</source>
         <translation>Sigur doriți ștergerea definitivă a documentului?</translation>
     </message>
     <message>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="306"/>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="348"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="307"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="559"/>
         <source>No</source>
         <translation>Nu</translation>
     </message>
     <message>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="307"/>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="349"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="308"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="560"/>
         <source>Yes, remove</source>
         <translation>Da, șterge</translation>
     </message>
     <message>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="347"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="375"/>
+        <source>Characters from the text</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="385"/>
+        <source>Characters that are not found in the text</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="398"/>
+        <source>Save only characters from the text</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="399"/>
+        <source>Save all characters</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="400"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="502"/>
+        <source>Change nothing</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="477"/>
+        <source>Locations from the text</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="487"/>
+        <source>Locations that are not found in the text</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="500"/>
+        <source>Save only locations from the text</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="501"/>
+        <source>Save all locations</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="558"/>
         <source>Do you really want to permanently remove all documents from the recycle bin?</source>
         <translation>Sigur doriți stergerea definitivă a tuturor documentelor din coșul de gunoi?</translation>
     </message>
     <message>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="888"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="1197"/>
         <source>Title page</source>
         <translation>Pagina de titlu</translation>
     </message>
     <message>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="891"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="1200"/>
         <source>Synopsis</source>
         <translation>Sinopsis</translation>
     </message>
     <message>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="894"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="1203"/>
         <source>Treatment</source>
         <translation>Tratament</translation>
     </message>
     <message>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="897"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="1206"/>
         <source>Screenplay</source>
         <translation>Scenariu</translation>
     </message>
     <message>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="900"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="1209"/>
         <source>Statistics</source>
         <translation>Statistici</translation>
     </message>
@@ -1179,7 +1332,7 @@ Doriți schimbarea?</translation>
 <context>
     <name>ManagementLayer::ProjectsManager</name>
     <message>
-        <location filename="../management_layer/content/projects/projects_manager.cpp" line="243"/>
+        <location filename="../management_layer/content/projects/projects_manager.cpp" line="235"/>
         <source>Choose the file to open</source>
         <translation>Alege fișierul pe care vrei să-l deschizi</translation>
     </message>
@@ -1195,7 +1348,7 @@ Doriți schimbarea?</translation>
 <context>
     <name>ManagementLayer::SettingsManager</name>
     <message>
-        <location filename="../management_layer/content/settings/settings_manager.cpp" line="459"/>
+        <location filename="../management_layer/content/settings/settings_manager.cpp" line="557"/>
         <source>Spelling dictionary loading</source>
         <translation>Dicționarul de corecturi gramaticale se încarcă</translation>
     </message>
@@ -1372,8 +1525,8 @@ Doriți schimbarea?</translation>
 <context>
     <name>Splitter</name>
     <message>
-        <location filename="../../corelib/ui/widgets/splitter/splitter.cpp" line="452"/>
-        <location filename="../../corelib/ui/widgets/splitter/splitter.cpp" line="453"/>
+        <location filename="../../corelib/ui/widgets/splitter/splitter.cpp" line="466"/>
+        <location filename="../../corelib/ui/widgets/splitter/splitter.cpp" line="467"/>
         <source>Show hidden panel</source>
         <translation>Arată fereastra ascunsă</translation>
     </message>
@@ -1444,67 +1597,72 @@ Doriți schimbarea?</translation>
 <context>
     <name>Ui::AccountNavigator</name>
     <message>
-        <location filename="../ui/account/account_navigator.cpp" line="88"/>
+        <location filename="../ui/account/account_navigator.cpp" line="89"/>
+        <source>Lifetime access</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ui/account/account_navigator.cpp" line="90"/>
         <source>Active until %1</source>
         <translation>Activ până la %1</translation>
     </message>
     <message>
-        <location filename="../ui/account/account_navigator.cpp" line="233"/>
+        <location filename="../ui/account/account_navigator.cpp" line="236"/>
         <source>Account</source>
         <translation>Cont</translation>
     </message>
     <message>
-        <location filename="../ui/account/account_navigator.cpp" line="234"/>
+        <location filename="../ui/account/account_navigator.cpp" line="237"/>
         <source>Subscription</source>
         <translation>Abonament</translation>
     </message>
     <message>
-        <location filename="../ui/account/account_navigator.cpp" line="235"/>
+        <location filename="../ui/account/account_navigator.cpp" line="238"/>
         <source>Sessions</source>
         <translation>Sesiuni</translation>
     </message>
     <message>
-        <location filename="../ui/account/account_navigator.cpp" line="236"/>
+        <location filename="../ui/account/account_navigator.cpp" line="239"/>
         <source>FREE version</source>
         <translation>Versiunea gratuită</translation>
     </message>
     <message>
-        <location filename="../ui/account/account_navigator.cpp" line="237"/>
+        <location filename="../ui/account/account_navigator.cpp" line="240"/>
         <source>Try PRO for free</source>
         <translation>Încearcă versiunea PRO, gratis</translation>
     </message>
     <message>
-        <location filename="../ui/account/account_navigator.cpp" line="238"/>
+        <location filename="../ui/account/account_navigator.cpp" line="241"/>
         <source>Upgrade to PRO</source>
         <translation>Upgrade la versiunea PRO</translation>
     </message>
     <message>
-        <location filename="../ui/account/account_navigator.cpp" line="239"/>
+        <location filename="../ui/account/account_navigator.cpp" line="242"/>
         <source>PRO version</source>
         <translation>Versiunea PRO</translation>
     </message>
     <message>
-        <location filename="../ui/account/account_navigator.cpp" line="241"/>
+        <location filename="../ui/account/account_navigator.cpp" line="244"/>
         <source>Renew</source>
         <translation>Reînnoire</translation>
     </message>
     <message>
-        <location filename="../ui/account/account_navigator.cpp" line="242"/>
+        <location filename="../ui/account/account_navigator.cpp" line="245"/>
         <source>Buy lifetime</source>
         <translation>Cumpără pe viață</translation>
     </message>
     <message>
-        <location filename="../ui/account/account_navigator.cpp" line="243"/>
+        <location filename="../ui/account/account_navigator.cpp" line="246"/>
         <source>Upgrade to TEAM</source>
         <translation>Upgrade la versiunea TEAM</translation>
     </message>
     <message>
-        <location filename="../ui/account/account_navigator.cpp" line="244"/>
+        <location filename="../ui/account/account_navigator.cpp" line="247"/>
         <source>TEAM version</source>
         <translation>Versiunea TEAM</translation>
     </message>
     <message>
-        <location filename="../ui/account/account_navigator.cpp" line="245"/>
+        <location filename="../ui/account/account_navigator.cpp" line="248"/>
         <source>Logout</source>
         <translation>Deconectare</translation>
     </message>
@@ -1698,86 +1856,193 @@ Doriți schimbarea?</translation>
 <context>
     <name>Ui::CharactersRelationsSidebar</name>
     <message>
-        <location filename="../management_layer/plugins/characters_relations/ui/characters_relations_sidebar.cpp" line="236"/>
-        <location filename="../management_layer/plugins/characters_relations/ui/characters_relations_sidebar.cpp" line="338"/>
+        <location filename="../management_layer/plugins/characters_relations/ui/characters_relations_sidebar.cpp" line="301"/>
+        <source>Apply new character name</source>
+        <translation>Schimbă numele personajului</translation>
+    </message>
+    <message>
+        <location filename="../management_layer/plugins/characters_relations/ui/characters_relations_sidebar.cpp" line="307"/>
+        <location filename="../management_layer/plugins/characters_relations/ui/characters_relations_sidebar.cpp" line="678"/>
+        <source>Select character color</source>
+        <translation>Alege culoarea personajului</translation>
+    </message>
+    <message>
+        <location filename="../management_layer/plugins/characters_relations/ui/characters_relations_sidebar.cpp" line="527"/>
+        <location filename="../management_layer/plugins/characters_relations/ui/characters_relations_sidebar.cpp" line="662"/>
         <source>To create a new relation, hold the Option button and move one character to another.</source>
         <translation>Ca să creezi o nouă relație, ține apăsată tasta Option și trage un personaj peste altul.</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/characters_relations/ui/characters_relations_sidebar.cpp" line="239"/>
-        <location filename="../management_layer/plugins/characters_relations/ui/characters_relations_sidebar.cpp" line="341"/>
+        <location filename="../management_layer/plugins/characters_relations/ui/characters_relations_sidebar.cpp" line="530"/>
+        <location filename="../management_layer/plugins/characters_relations/ui/characters_relations_sidebar.cpp" line="665"/>
         <source>To create a new relation, hold the Alt button and move one character to another.</source>
         <translation>Ca să creezi o nouă relație, ține apăsată tasta Alt și trage un personaj peste altul.</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/characters_relations/ui/characters_relations_sidebar.cpp" line="244"/>
+        <location filename="../management_layer/plugins/characters_relations/ui/characters_relations_sidebar.cpp" line="535"/>
         <source>%1 has no relations with other characters</source>
         <translation>%1 nu are relații cu alte personaje</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/characters_relations/ui/characters_relations_sidebar.cpp" line="247"/>
+        <location filename="../management_layer/plugins/characters_relations/ui/characters_relations_sidebar.cpp" line="538"/>
         <source>What %1 feels to</source>
         <translation>Ce simte %1</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/characters_relations/ui/characters_relations_sidebar.cpp" line="253"/>
-        <location filename="../management_layer/plugins/characters_relations/ui/characters_relations_sidebar.cpp" line="347"/>
+        <location filename="../management_layer/plugins/characters_relations/ui/characters_relations_sidebar.cpp" line="544"/>
+        <location filename="../management_layer/plugins/characters_relations/ui/characters_relations_sidebar.cpp" line="694"/>
         <source>Open relation details</source>
         <translation>Deschide detaliile relației</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/characters_relations/ui/characters_relations_sidebar.cpp" line="302"/>
-        <location filename="../management_layer/plugins/characters_relations/ui/characters_relations_sidebar.cpp" line="308"/>
+        <location filename="../management_layer/plugins/characters_relations/ui/characters_relations_sidebar.cpp" line="600"/>
+        <location filename="../management_layer/plugins/characters_relations/ui/characters_relations_sidebar.cpp" line="605"/>
         <source>%1 point of view</source>
         <translation>Punctul de vedere al personajului %1</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/characters_relations/ui/characters_relations_sidebar.cpp" line="303"/>
-        <location filename="../management_layer/plugins/characters_relations/ui/characters_relations_sidebar.cpp" line="305"/>
-        <location filename="../management_layer/plugins/characters_relations/ui/characters_relations_sidebar.cpp" line="309"/>
-        <location filename="../management_layer/plugins/characters_relations/ui/characters_relations_sidebar.cpp" line="310"/>
+        <location filename="../management_layer/plugins/characters_relations/ui/characters_relations_sidebar.cpp" line="601"/>
+        <location filename="../management_layer/plugins/characters_relations/ui/characters_relations_sidebar.cpp" line="602"/>
+        <location filename="../management_layer/plugins/characters_relations/ui/characters_relations_sidebar.cpp" line="606"/>
+        <location filename="../management_layer/plugins/characters_relations/ui/characters_relations_sidebar.cpp" line="607"/>
         <source>Show all %1&apos;s relations</source>
         <translation>Arată toate relațiile personajului %1</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/characters_relations/ui/characters_relations_sidebar.cpp" line="334"/>
+        <location filename="../management_layer/plugins/characters_relations/ui/characters_relations_sidebar.cpp" line="658"/>
         <source>To see all relations of the character, select concrete character.</source>
         <translation>Selectează un personaj pentru a-i vedea relațiile.</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/characters_relations/ui/characters_relations_sidebar.cpp" line="335"/>
+        <location filename="../management_layer/plugins/characters_relations/ui/characters_relations_sidebar.cpp" line="659"/>
         <source>To see relation details, select concrete relation.</source>
         <translation>Selectează o relație pentru a-i vedea detaliile.</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/characters_relations/ui/characters_relations_sidebar.cpp" line="350"/>
+        <location filename="../management_layer/plugins/characters_relations/ui/characters_relations_sidebar.cpp" line="670"/>
+        <source>Profile</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../management_layer/plugins/characters_relations/ui/characters_relations_sidebar.cpp" line="671"/>
+        <source>Relations</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../management_layer/plugins/characters_relations/ui/characters_relations_sidebar.cpp" line="674"/>
+        <source>Add photo +</source>
+        <translation>Adaugă o fotografie</translation>
+    </message>
+    <message>
+        <location filename="../management_layer/plugins/characters_relations/ui/characters_relations_sidebar.cpp" line="674"/>
+        <source>Change photo...</source>
+        <translation>Schimbă fotografia</translation>
+    </message>
+    <message>
+        <location filename="../management_layer/plugins/characters_relations/ui/characters_relations_sidebar.cpp" line="675"/>
+        <source>Do you want to delete the character&apos;s main photo?</source>
+        <translation>Vrei să ștergi principala poză a personajului?</translation>
+    </message>
+    <message>
+        <location filename="../management_layer/plugins/characters_relations/ui/characters_relations_sidebar.cpp" line="676"/>
+        <source>Select an area for the character main photo</source>
+        <translation>Selectează o zonă pentru principala poză a personajului</translation>
+    </message>
+    <message>
+        <location filename="../management_layer/plugins/characters_relations/ui/characters_relations_sidebar.cpp" line="677"/>
+        <source>Name</source>
+        <translation>Nume</translation>
+    </message>
+    <message>
+        <location filename="../management_layer/plugins/characters_relations/ui/characters_relations_sidebar.cpp" line="679"/>
+        <source>Story role</source>
+        <translation>Rolul</translation>
+    </message>
+    <message>
+        <location filename="../management_layer/plugins/characters_relations/ui/characters_relations_sidebar.cpp" line="682"/>
+        <source>Primary</source>
+        <translation>Principal</translation>
+    </message>
+    <message>
+        <location filename="../management_layer/plugins/characters_relations/ui/characters_relations_sidebar.cpp" line="682"/>
+        <source>Secondary</source>
+        <translation>Secundar</translation>
+    </message>
+    <message>
+        <location filename="../management_layer/plugins/characters_relations/ui/characters_relations_sidebar.cpp" line="682"/>
+        <source>Tertiary</source>
+        <translation>Terțiar</translation>
+    </message>
+    <message>
+        <location filename="../management_layer/plugins/characters_relations/ui/characters_relations_sidebar.cpp" line="682"/>
+        <location filename="../management_layer/plugins/characters_relations/ui/characters_relations_sidebar.cpp" line="688"/>
+        <source>Undefined</source>
+        <translation>Nedefinit</translation>
+    </message>
+    <message>
+        <location filename="../management_layer/plugins/characters_relations/ui/characters_relations_sidebar.cpp" line="684"/>
+        <source>Age</source>
+        <translation>Vârsta</translation>
+    </message>
+    <message>
+        <location filename="../management_layer/plugins/characters_relations/ui/characters_relations_sidebar.cpp" line="685"/>
+        <source>Gender</source>
+        <translation>Sex</translation>
+    </message>
+    <message>
+        <location filename="../management_layer/plugins/characters_relations/ui/characters_relations_sidebar.cpp" line="688"/>
+        <source>Male</source>
+        <translation>Masculin</translation>
+    </message>
+    <message>
+        <location filename="../management_layer/plugins/characters_relations/ui/characters_relations_sidebar.cpp" line="688"/>
+        <source>Female</source>
+        <translation>Feminin</translation>
+    </message>
+    <message>
+        <location filename="../management_layer/plugins/characters_relations/ui/characters_relations_sidebar.cpp" line="688"/>
+        <source>Other</source>
+        <translation>Altceva</translation>
+    </message>
+    <message>
+        <location filename="../management_layer/plugins/characters_relations/ui/characters_relations_sidebar.cpp" line="690"/>
+        <source>One sentence description</source>
+        <translation>Descriere într-o propoziție</translation>
+    </message>
+    <message>
+        <location filename="../management_layer/plugins/characters_relations/ui/characters_relations_sidebar.cpp" line="691"/>
+        <source>Long description</source>
+        <translation>Descriere pe larg</translation>
+    </message>
+    <message>
+        <location filename="../management_layer/plugins/characters_relations/ui/characters_relations_sidebar.cpp" line="697"/>
         <source>Line type</source>
         <translation>Tipul liniei</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/characters_relations/ui/characters_relations_sidebar.cpp" line="351"/>
+        <location filename="../management_layer/plugins/characters_relations/ui/characters_relations_sidebar.cpp" line="698"/>
         <source>Solid line</source>
         <translation>Linie continuă</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/characters_relations/ui/characters_relations_sidebar.cpp" line="351"/>
+        <location filename="../management_layer/plugins/characters_relations/ui/characters_relations_sidebar.cpp" line="698"/>
         <source>Dash line</source>
         <translation>Linie întreruptă</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/characters_relations/ui/characters_relations_sidebar.cpp" line="351"/>
+        <location filename="../management_layer/plugins/characters_relations/ui/characters_relations_sidebar.cpp" line="698"/>
         <source>Dot line</source>
         <translation>Linie punctată</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/characters_relations/ui/characters_relations_sidebar.cpp" line="352"/>
-        <location filename="../management_layer/plugins/characters_relations/ui/characters_relations_sidebar.cpp" line="354"/>
+        <location filename="../management_layer/plugins/characters_relations/ui/characters_relations_sidebar.cpp" line="699"/>
+        <location filename="../management_layer/plugins/characters_relations/ui/characters_relations_sidebar.cpp" line="701"/>
         <source>Feeling</source>
         <translation>Sentiment</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/characters_relations/ui/characters_relations_sidebar.cpp" line="353"/>
-        <location filename="../management_layer/plugins/characters_relations/ui/characters_relations_sidebar.cpp" line="355"/>
+        <location filename="../management_layer/plugins/characters_relations/ui/characters_relations_sidebar.cpp" line="700"/>
+        <location filename="../management_layer/plugins/characters_relations/ui/characters_relations_sidebar.cpp" line="702"/>
         <source>Details</source>
         <translation>Detalii</translation>
     </message>
@@ -1785,19 +2050,34 @@ Doriți schimbarea?</translation>
 <context>
     <name>Ui::CharactersRelationsView</name>
     <message>
-        <location filename="../management_layer/plugins/characters_relations/ui/characters_relations_view.cpp" line="136"/>
+        <location filename="../management_layer/plugins/characters_relations/ui/characters_relations_view.cpp" line="236"/>
         <source>Unlock ability to edit characters relations</source>
         <translation>Activează posibilitatea de editare a relațiilor personajului</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/characters_relations/ui/characters_relations_view.cpp" line="137"/>
+        <location filename="../management_layer/plugins/characters_relations/ui/characters_relations_view.cpp" line="237"/>
         <source>Add character</source>
         <translation>Adaugă personaj</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/characters_relations/ui/characters_relations_view.cpp" line="138"/>
+        <location filename="../management_layer/plugins/characters_relations/ui/characters_relations_view.cpp" line="238"/>
         <source>Remove selected item</source>
         <translation>Șterge articolul selectat</translation>
+    </message>
+    <message>
+        <location filename="../management_layer/plugins/characters_relations/ui/characters_relations_view.cpp" line="241"/>
+        <source>Show relations titles only for the selected characters</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../management_layer/plugins/characters_relations/ui/characters_relations_view.cpp" line="243"/>
+        <source>Here will be a characters relations scheme.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../management_layer/plugins/characters_relations/ui/characters_relations_view.cpp" line="244"/>
+        <source>It&apos;s time to create the first character!</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -2055,7 +2335,7 @@ Doriți schimbarea?</translation>
 <context>
     <name>Ui::ComicBookTextEdit</name>
     <message numerus="yes">
-        <location filename="../management_layer/plugins/comic_book_text/text/comic_book_text_edit.cpp" line="945"/>
+        <location filename="../management_layer/plugins/comic_book_text/text/comic_book_text_edit.cpp" line="947"/>
         <source>%n panels</source>
         <translation>
             <numerusform>%n fereastra</numerusform>
@@ -2064,12 +2344,12 @@ Doriți schimbarea?</translation>
         </translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/comic_book_text/text/comic_book_text_edit.cpp" line="1137"/>
+        <location filename="../management_layer/plugins/comic_book_text/text/comic_book_text_edit.cpp" line="1139"/>
         <source>Merge paragraph</source>
         <translation>Unește paragraful</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/comic_book_text/text/comic_book_text_edit.cpp" line="1140"/>
+        <location filename="../management_layer/plugins/comic_book_text/text/comic_book_text_edit.cpp" line="1142"/>
         <source>Split paragraph</source>
         <translation>Desparte paragraful</translation>
     </message>
@@ -2223,12 +2503,12 @@ Doriți schimbarea?</translation>
 <context>
     <name>Ui::ComicBookTextView</name>
     <message>
-        <location filename="../management_layer/plugins/comic_book_text/comic_book_text_view.cpp" line="644"/>
+        <location filename="../management_layer/plugins/comic_book_text/comic_book_text_view.cpp" line="666"/>
         <source>Formatting</source>
         <translation>Formatare</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/comic_book_text/comic_book_text_view.cpp" line="645"/>
+        <location filename="../management_layer/plugins/comic_book_text/comic_book_text_view.cpp" line="667"/>
         <source>Comments</source>
         <translation>Comentarii</translation>
     </message>
@@ -2239,6 +2519,34 @@ Doriți schimbarea?</translation>
         <location filename="../management_layer/plugins/project_information/cover.cpp" line="133"/>
         <source>Select...</source>
         <translation>Selectează...</translation>
+    </message>
+</context>
+<context>
+    <name>Ui::CreateCharacterDialog</name>
+    <message>
+        <location filename="../management_layer/plugins/characters_relations/ui/create_character_dialog.cpp" line="66"/>
+        <source>The character should have a name</source>
+        <translation>Personajul trebuie să aibe un nume</translation>
+    </message>
+    <message>
+        <location filename="../management_layer/plugins/characters_relations/ui/create_character_dialog.cpp" line="103"/>
+        <source>Create new character</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../management_layer/plugins/characters_relations/ui/create_character_dialog.cpp" line="104"/>
+        <source>Character name</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../management_layer/plugins/characters_relations/ui/create_character_dialog.cpp" line="105"/>
+        <source>Cancel</source>
+        <translation>Anulare</translation>
+    </message>
+    <message>
+        <location filename="../management_layer/plugins/characters_relations/ui/create_character_dialog.cpp" line="106"/>
+        <source>Create</source>
+        <translation>Creare</translation>
     </message>
 </context>
 <context>
@@ -2255,21 +2563,21 @@ Doriți schimbarea?</translation>
     </message>
     <message>
         <location filename="../ui/project/create_document_dialog.cpp" line="92"/>
-        <source>Create a document with full Character&apos;s description to track his relations and follow his journey within the story.</source>
-        <translation>Creează un personaj și un document cu descrierea personajului, pentru a-i urmări relațiile și parcursul de-a lungul povestirii.</translation>
+        <source>Create a document with full character&apos;s description to track his relations and follow his journey within the story.</source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../ui/project/create_document_dialog.cpp" line="95"/>
-        <source>Create a document to note down the Location&apos;s description and keep the details.</source>
-        <translation>Creează o locație și un document cu descrierea detaliată a locației.</translation>
+        <source>Create a document to note down the location&apos;s description and keep the details.</source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/project/create_document_dialog.cpp" line="98"/>
+        <location filename="../ui/project/create_document_dialog.cpp" line="97"/>
         <source>Create a document set to streamline your work on the feature film, series, or animation.</source>
         <translation>Creează un scenariu și un set de documente pentru a simplifica munca la filme de ficțiune, seriale sau animații.</translation>
     </message>
     <message>
-        <location filename="../ui/project/create_document_dialog.cpp" line="101"/>
+        <location filename="../ui/project/create_document_dialog.cpp" line="100"/>
         <source>Create a document set to streamline your work on the comic book, graphic novel, or manga.</source>
         <translation>Creează o bandă desenată și un set de documente pentru a simplifica munca la benzi desenate, nuvele grafice sau manga.</translation>
     </message>
@@ -2284,57 +2592,57 @@ Doriți schimbarea?</translation>
         <translation>Locația trebuie să aibe un nume</translation>
     </message>
     <message>
-        <location filename="../ui/project/create_document_dialog.cpp" line="182"/>
+        <location filename="../ui/project/create_document_dialog.cpp" line="195"/>
         <source>Insert into</source>
         <translation>Inserează în</translation>
     </message>
     <message>
-        <location filename="../ui/project/create_document_dialog.cpp" line="203"/>
+        <location filename="../ui/project/create_document_dialog.cpp" line="216"/>
         <source>Add document to the story</source>
         <translation>Adaugă un document la povestire</translation>
     </message>
     <message>
-        <location filename="../ui/project/create_document_dialog.cpp" line="205"/>
+        <location filename="../ui/project/create_document_dialog.cpp" line="218"/>
         <source>Folder</source>
         <translation>Dosar </translation>
     </message>
     <message>
-        <location filename="../ui/project/create_document_dialog.cpp" line="206"/>
+        <location filename="../ui/project/create_document_dialog.cpp" line="219"/>
         <source>Text</source>
         <translation>Text</translation>
     </message>
     <message>
-        <location filename="../ui/project/create_document_dialog.cpp" line="207"/>
+        <location filename="../ui/project/create_document_dialog.cpp" line="220"/>
         <source>Character</source>
         <translation>Personaj</translation>
     </message>
     <message>
-        <location filename="../ui/project/create_document_dialog.cpp" line="208"/>
+        <location filename="../ui/project/create_document_dialog.cpp" line="221"/>
         <source>Location</source>
         <translation>Locație</translation>
     </message>
     <message>
-        <location filename="../ui/project/create_document_dialog.cpp" line="209"/>
+        <location filename="../ui/project/create_document_dialog.cpp" line="222"/>
         <source>Screenplay</source>
         <translation>Scenariu</translation>
     </message>
     <message>
-        <location filename="../ui/project/create_document_dialog.cpp" line="210"/>
+        <location filename="../ui/project/create_document_dialog.cpp" line="223"/>
         <source>Comic book</source>
         <translation>Bandă desenată</translation>
     </message>
     <message>
-        <location filename="../ui/project/create_document_dialog.cpp" line="212"/>
+        <location filename="../ui/project/create_document_dialog.cpp" line="225"/>
         <source>Name</source>
         <translation>Nume</translation>
     </message>
     <message>
-        <location filename="../ui/project/create_document_dialog.cpp" line="214"/>
+        <location filename="../ui/project/create_document_dialog.cpp" line="227"/>
         <source>Cancel</source>
         <translation>Anulare</translation>
     </message>
     <message>
-        <location filename="../ui/project/create_document_dialog.cpp" line="215"/>
+        <location filename="../ui/project/create_document_dialog.cpp" line="228"/>
         <source>Create</source>
         <translation>Creare</translation>
     </message>
@@ -2404,21 +2712,17 @@ Doriți schimbarea?</translation>
     <message>
         <location filename="../ui/projects/create_project_dialog.cpp" line="315"/>
         <source>Screenplay</source>
-        <translation type="unfinished">Scenariu</translation>
+        <translation>Scenariu</translation>
     </message>
     <message>
         <location filename="../ui/projects/create_project_dialog.cpp" line="315"/>
         <source>Comic book</source>
-        <translation type="unfinished">Bandă desenată</translation>
+        <translation>Bandă desenată</translation>
     </message>
     <message>
         <location filename="../ui/projects/create_project_dialog.cpp" line="316"/>
         <source>Name of the story</source>
         <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Enter name of the new story</source>
-        <translation type="vanished">Introdu numele noii povestiri</translation>
     </message>
     <message>
         <location filename="../ui/projects/create_project_dialog.cpp" line="317"/>
@@ -2651,61 +2955,66 @@ Doriți schimbarea?</translation>
 <context>
     <name>Ui::MenuView</name>
     <message>
-        <location filename="../ui/menu_view.cpp" line="196"/>
-        <location filename="../ui/menu_view.cpp" line="223"/>
+        <location filename="../ui/menu_view.cpp" line="272"/>
+        <location filename="../ui/menu_view.cpp" line="293"/>
         <source>All changes saved</source>
         <translation>Toate modificările au fost salvate</translation>
     </message>
     <message>
-        <location filename="../ui/menu_view.cpp" line="196"/>
-        <location filename="../ui/menu_view.cpp" line="222"/>
+        <location filename="../ui/menu_view.cpp" line="272"/>
+        <location filename="../ui/menu_view.cpp" line="292"/>
         <source>Save changes</source>
         <translation>Salvare modificări</translation>
     </message>
     <message>
-        <location filename="../ui/menu_view.cpp" line="218"/>
+        <location filename="../ui/menu_view.cpp" line="288"/>
         <source>Sign in</source>
         <translation>Autentificare</translation>
     </message>
     <message>
-        <location filename="../ui/menu_view.cpp" line="219"/>
+        <location filename="../ui/menu_view.cpp" line="289"/>
         <source>Stories</source>
         <translation>Povestiri</translation>
     </message>
     <message>
-        <location filename="../ui/menu_view.cpp" line="220"/>
+        <location filename="../ui/menu_view.cpp" line="290"/>
         <source>Create story</source>
         <translation>Creează o povestire</translation>
     </message>
     <message>
-        <location filename="../ui/menu_view.cpp" line="221"/>
+        <location filename="../ui/menu_view.cpp" line="291"/>
         <source>Open story</source>
         <translation>Deschide o povestire</translation>
     </message>
     <message>
-        <location filename="../ui/menu_view.cpp" line="226"/>
+        <location filename="../ui/menu_view.cpp" line="296"/>
         <source>Save current story as...</source>
         <translation>Salvați povestirea curentă ca...</translation>
     </message>
     <message>
-        <location filename="../ui/menu_view.cpp" line="227"/>
+        <location filename="../ui/menu_view.cpp" line="297"/>
         <source>Import...</source>
         <translation>Import...</translation>
     </message>
     <message>
-        <location filename="../ui/menu_view.cpp" line="229"/>
+        <location filename="../ui/menu_view.cpp" line="299"/>
         <source>Export current document...</source>
         <translation>Exportă documentul</translation>
     </message>
     <message>
-        <location filename="../ui/menu_view.cpp" line="232"/>
+        <location filename="../ui/menu_view.cpp" line="302"/>
         <source>Toggle full screen</source>
         <translation>intră sau ieși din modul full screen</translation>
     </message>
     <message>
-        <location filename="../ui/menu_view.cpp" line="235"/>
+        <location filename="../ui/menu_view.cpp" line="305"/>
         <source>Application settings</source>
         <translation>Setările aplicației</translation>
+    </message>
+    <message>
+        <location filename="../ui/menu_view.cpp" line="308"/>
+        <source>Version</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -2802,17 +3111,17 @@ Doriți schimbarea?</translation>
 <context>
     <name>Ui::ProjectInformationView</name>
     <message>
-        <location filename="../management_layer/plugins/project_information/project_information_view.cpp" line="129"/>
+        <location filename="../management_layer/plugins/project_information/project_information_view.cpp" line="130"/>
         <source>Project name</source>
         <translation>Nume proiect</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/project_information/project_information_view.cpp" line="130"/>
+        <location filename="../management_layer/plugins/project_information/project_information_view.cpp" line="131"/>
         <source>Short description</source>
         <translation>Scurtă descriere</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/project_information/project_information_view.cpp" line="131"/>
+        <location filename="../management_layer/plugins/project_information/project_information_view.cpp" line="132"/>
         <source>Tagline, logline or something similar</source>
         <translation>Descriere într-o frază</translation>
     </message>
@@ -2905,12 +3214,12 @@ Doriți schimbarea?</translation>
         <translation>E timpul să creați prima dumneavoastră povestire!</translation>
     </message>
     <message>
-        <location filename="../ui/projects/projects_view.cpp" line="192"/>
+        <location filename="../ui/projects/projects_view.cpp" line="188"/>
         <source>Create story</source>
         <translation>Creează o povestire</translation>
     </message>
     <message>
-        <location filename="../ui/projects/projects_view.cpp" line="193"/>
+        <location filename="../ui/projects/projects_view.cpp" line="189"/>
         <source>Open story</source>
         <translation>Deschide o povestire</translation>
     </message>
@@ -2951,62 +3260,62 @@ Doriți schimbarea?</translation>
 <context>
     <name>Ui::ScreenplayExportDialog</name>
     <message>
-        <location filename="../ui/export/screenplay_export_dialog.cpp" line="254"/>
+        <location filename="../ui/export/screenplay_export_dialog.cpp" line="251"/>
         <source>Export screenplay</source>
         <translation>Exportă scenariul</translation>
     </message>
     <message>
-        <location filename="../ui/export/screenplay_export_dialog.cpp" line="256"/>
+        <location filename="../ui/export/screenplay_export_dialog.cpp" line="253"/>
         <source>Format</source>
         <translation>Format</translation>
     </message>
     <message>
-        <location filename="../ui/export/screenplay_export_dialog.cpp" line="257"/>
+        <location filename="../ui/export/screenplay_export_dialog.cpp" line="254"/>
         <source>Include title page</source>
         <translation>Include pagina de titlu</translation>
     </message>
     <message>
-        <location filename="../ui/export/screenplay_export_dialog.cpp" line="258"/>
+        <location filename="../ui/export/screenplay_export_dialog.cpp" line="255"/>
         <source>Include sequences headers and footers</source>
         <translation>Include antetul și finalul secvențelor</translation>
     </message>
     <message>
-        <location filename="../ui/export/screenplay_export_dialog.cpp" line="259"/>
+        <location filename="../ui/export/screenplay_export_dialog.cpp" line="256"/>
         <source>Include inline notes</source>
         <translation>Include notele interioare</translation>
     </message>
     <message>
-        <location filename="../ui/export/screenplay_export_dialog.cpp" line="260"/>
+        <location filename="../ui/export/screenplay_export_dialog.cpp" line="257"/>
         <source>Include review marks</source>
         <translation>Include semnele de revizuire</translation>
     </message>
     <message>
-        <location filename="../ui/export/screenplay_export_dialog.cpp" line="261"/>
+        <location filename="../ui/export/screenplay_export_dialog.cpp" line="258"/>
         <source>Export concrete scenes</source>
         <translation>Exportă doar anumite scene</translation>
     </message>
     <message>
-        <location filename="../ui/export/screenplay_export_dialog.cpp" line="262"/>
+        <location filename="../ui/export/screenplay_export_dialog.cpp" line="259"/>
         <source>Keep empty, if you want to print all scenes</source>
         <translation>Nu completa, dacă vrei să printezi toate scenele</translation>
     </message>
     <message>
-        <location filename="../ui/export/screenplay_export_dialog.cpp" line="263"/>
+        <location filename="../ui/export/screenplay_export_dialog.cpp" line="260"/>
         <source>Watermark</source>
         <translation>Filigran</translation>
     </message>
     <message>
-        <location filename="../ui/export/screenplay_export_dialog.cpp" line="265"/>
+        <location filename="../ui/export/screenplay_export_dialog.cpp" line="262"/>
         <source>Open document after export</source>
         <translation>Deschide documentul după export</translation>
     </message>
     <message>
-        <location filename="../ui/export/screenplay_export_dialog.cpp" line="266"/>
+        <location filename="../ui/export/screenplay_export_dialog.cpp" line="263"/>
         <source>Export</source>
         <translation>Export</translation>
     </message>
     <message>
-        <location filename="../ui/export/screenplay_export_dialog.cpp" line="267"/>
+        <location filename="../ui/export/screenplay_export_dialog.cpp" line="264"/>
         <source>Cancel</source>
         <translation>Anulare</translation>
     </message>
@@ -3551,12 +3860,12 @@ Doriți schimbarea?</translation>
 <context>
     <name>Ui::ScreenplayTextEdit</name>
     <message>
-        <location filename="../management_layer/plugins/screenplay_text/text/screenplay_text_edit.cpp" line="1186"/>
+        <location filename="../management_layer/plugins/screenplay_text/text/screenplay_text_edit.cpp" line="1194"/>
         <source>Merge paragraph</source>
         <translation>Unește paragraful</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_text/text/screenplay_text_edit.cpp" line="1189"/>
+        <location filename="../management_layer/plugins/screenplay_text/text/screenplay_text_edit.cpp" line="1197"/>
         <source>Split paragraph</source>
         <translation>Desparte paragraful</translation>
     </message>
@@ -3698,12 +4007,12 @@ Doriți schimbarea?</translation>
 <context>
     <name>Ui::ScreenplayTextView</name>
     <message>
-        <location filename="../management_layer/plugins/screenplay_text/screenplay_text_view.cpp" line="721"/>
+        <location filename="../management_layer/plugins/screenplay_text/screenplay_text_view.cpp" line="762"/>
         <source>Formatting</source>
         <translation>Formatare</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_text/screenplay_text_view.cpp" line="722"/>
+        <location filename="../management_layer/plugins/screenplay_text/screenplay_text_view.cpp" line="763"/>
         <source>Comments</source>
         <translation>Comentarii</translation>
     </message>
@@ -3796,697 +4105,737 @@ Doriți schimbarea?</translation>
 <context>
     <name>Ui::SettingsView</name>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="766"/>
+        <location filename="../ui/settings/settings_view.cpp" line="854"/>
         <source>Choose the folder where backups will be saved</source>
         <translation>Alege directorul în care vor fi salvate backup-urile.</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="867"/>
+        <location filename="../ui/settings/settings_view.cpp" line="957"/>
         <source>Edit</source>
         <translation>Editează</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="874"/>
+        <location filename="../ui/settings/settings_view.cpp" line="964"/>
         <source>Duplicate</source>
         <translation>Duplichează</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="881"/>
+        <location filename="../ui/settings/settings_view.cpp" line="971"/>
         <source>Remove</source>
         <translation>Șterge</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="1198"/>
+        <location filename="../ui/settings/settings_view.cpp" line="1294"/>
         <source>Dark</source>
         <comment>Theme, will be used in case &quot;Theme: Dark&quot;</comment>
         <translation>Întunecat</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="1201"/>
+        <location filename="../ui/settings/settings_view.cpp" line="1297"/>
         <source>Light</source>
         <comment>Theme, will be used in case &quot;Theme: Light&quot;</comment>
         <translation>Luminos</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="1204"/>
+        <location filename="../ui/settings/settings_view.cpp" line="1300"/>
         <source>Dark and light</source>
         <comment>Theme, will be used in case &quot;Theme: Dark and light&quot;</comment>
         <translation>Întunecat și luminos</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="1207"/>
+        <location filename="../ui/settings/settings_view.cpp" line="1303"/>
         <source>Custom</source>
         <comment>Theme, will be used in case &quot;Theme: Custom&quot;</comment>
         <translation>Personalizat</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="1413"/>
+        <location filename="../ui/settings/settings_view.cpp" line="1568"/>
         <source>Application settings</source>
         <translation>Setările aplicației</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="1414"/>
+        <location filename="../ui/settings/settings_view.cpp" line="1569"/>
         <source>Language</source>
         <translation>Limba</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="1427"/>
+        <location filename="../ui/settings/settings_view.cpp" line="1582"/>
         <source>Text editing</source>
         <translation>Editare text</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="1428"/>
+        <location filename="../ui/settings/settings_view.cpp" line="1583"/>
+        <source>Show documents pages</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ui/settings/settings_view.cpp" line="1584"/>
         <source>Use typewriter sound for keys pressing</source>
         <translation>Folosește sunetele mașinii de scris la apăsarea tastelor</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="1429"/>
+        <location filename="../ui/settings/settings_view.cpp" line="1585"/>
         <source>Spell check</source>
         <translation>Corectură gramaticală</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="1430"/>
+        <location filename="../ui/settings/settings_view.cpp" line="1586"/>
         <source>Spelling dictionary</source>
         <translation>Dicționar de corecturi gramaticale</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="1433"/>
+        <location filename="../ui/settings/settings_view.cpp" line="1589"/>
         <source>Afrikaans</source>
         <translation>Africană</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="1434"/>
+        <location filename="../ui/settings/settings_view.cpp" line="1590"/>
         <source>Aragonese</source>
         <translation>Aragoneză</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="1435"/>
+        <location filename="../ui/settings/settings_view.cpp" line="1591"/>
         <source>Arabic</source>
         <translation>Arabă</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="1436"/>
+        <location filename="../ui/settings/settings_view.cpp" line="1592"/>
         <source>Azerbaijani</source>
         <translation>Azerbaidjană</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="1437"/>
+        <location filename="../ui/settings/settings_view.cpp" line="1593"/>
         <source>Belarusian</source>
         <translation>Belarusă</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="1438"/>
+        <location filename="../ui/settings/settings_view.cpp" line="1594"/>
         <source>Bulgarian</source>
         <translation>Bulgară</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="1439"/>
+        <location filename="../ui/settings/settings_view.cpp" line="1595"/>
         <source>Bengali</source>
         <translation>Bengaleză</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="1440"/>
+        <location filename="../ui/settings/settings_view.cpp" line="1596"/>
         <source>Tibetan</source>
         <translation>Tibetană</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="1441"/>
+        <location filename="../ui/settings/settings_view.cpp" line="1597"/>
         <source>Breton</source>
         <translation>Bretonă</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="1442"/>
+        <location filename="../ui/settings/settings_view.cpp" line="1598"/>
         <source>Bosnian</source>
         <translation>Bosniacă</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="1443"/>
+        <location filename="../ui/settings/settings_view.cpp" line="1599"/>
         <source>Catalan (Valencian)</source>
         <translation>Catalană (Valenciană)</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="1444"/>
+        <location filename="../ui/settings/settings_view.cpp" line="1600"/>
         <source>Catalan</source>
         <translation>Catalană</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="1445"/>
+        <location filename="../ui/settings/settings_view.cpp" line="1601"/>
         <source>Czech</source>
         <translation>Cehă</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="1446"/>
+        <location filename="../ui/settings/settings_view.cpp" line="1602"/>
         <source>Welsh</source>
         <translation>Welsh</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="1447"/>
+        <location filename="../ui/settings/settings_view.cpp" line="1603"/>
         <source>Danish</source>
         <translation>Daneză</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="1448"/>
+        <location filename="../ui/settings/settings_view.cpp" line="1604"/>
         <source>German (Austria)</source>
         <translation>Germană (Austria)</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="1449"/>
+        <location filename="../ui/settings/settings_view.cpp" line="1605"/>
         <source>German (Switzerland)</source>
         <translation>Germană (Elveția)</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="1450"/>
+        <location filename="../ui/settings/settings_view.cpp" line="1606"/>
         <source>German</source>
         <translation>Germană</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="1451"/>
+        <location filename="../ui/settings/settings_view.cpp" line="1607"/>
         <source>Greek (Polytonic)</source>
         <translation>Greacă (Politonică)</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="1452"/>
+        <location filename="../ui/settings/settings_view.cpp" line="1608"/>
         <source>Greek</source>
         <translation>Greacă</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="1453"/>
+        <location filename="../ui/settings/settings_view.cpp" line="1609"/>
         <source>English (Australia)</source>
         <translation>Engleză (Australia)</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="1454"/>
+        <location filename="../ui/settings/settings_view.cpp" line="1610"/>
         <source>English (Canada)</source>
         <translation>Engleză (Canada)</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="1455"/>
+        <location filename="../ui/settings/settings_view.cpp" line="1611"/>
         <source>English (United Kingdom)</source>
         <translation>Engleză (United Kingdom)</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="1456"/>
+        <location filename="../ui/settings/settings_view.cpp" line="1612"/>
         <source>English (New Zealand)</source>
         <translation>Engleză (New Zealand)</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="1457"/>
+        <location filename="../ui/settings/settings_view.cpp" line="1613"/>
         <source>English (South Africa)</source>
         <translation>Engleză (South Africa)</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="1458"/>
+        <location filename="../ui/settings/settings_view.cpp" line="1614"/>
         <source>English (United States)</source>
         <translation>Engleză (United States)</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="1459"/>
+        <location filename="../ui/settings/settings_view.cpp" line="1615"/>
         <source>Esperanto</source>
         <translation>Esperanto</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="1460"/>
+        <location filename="../ui/settings/settings_view.cpp" line="1616"/>
         <source>Spanish (Argentina)</source>
         <translation>Spaniolă (Argentina)</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="1461"/>
+        <location filename="../ui/settings/settings_view.cpp" line="1617"/>
         <source>Spanish (Bolivia)</source>
         <translation>Spaniolă (Bolivia)</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="1462"/>
+        <location filename="../ui/settings/settings_view.cpp" line="1618"/>
         <source>Spanish (Chile)</source>
         <translation>Spaniolă (Chile)</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="1463"/>
+        <location filename="../ui/settings/settings_view.cpp" line="1619"/>
         <source>Spanish (Colombia)</source>
         <translation>Spaniolă (Colombia)</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="1464"/>
+        <location filename="../ui/settings/settings_view.cpp" line="1620"/>
         <source>Spanish (Costa Rica)</source>
         <translation>Spaniolă  (Costa Rica)</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="1465"/>
+        <location filename="../ui/settings/settings_view.cpp" line="1621"/>
         <source>Spanish (Cuba)</source>
         <translation>Spaniolă (Cuba)</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="1466"/>
+        <location filename="../ui/settings/settings_view.cpp" line="1622"/>
         <source>Spanish (Dominican Republic)</source>
         <translation>Spaniolă (Dominican Republic)</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="1467"/>
+        <location filename="../ui/settings/settings_view.cpp" line="1623"/>
         <source>Spanish (Ecuador)</source>
         <translation>Spaniolă (Ecuador)</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="1468"/>
+        <location filename="../ui/settings/settings_view.cpp" line="1624"/>
         <source>Spanish (Guatemala)</source>
         <translation>Spaniolă (Guatemala)</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="1469"/>
+        <location filename="../ui/settings/settings_view.cpp" line="1625"/>
         <source>Spanish (Honduras)</source>
         <translation>Spaniolă (Honduras)</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="1470"/>
+        <location filename="../ui/settings/settings_view.cpp" line="1626"/>
         <source>Spanish (Mexico)</source>
         <translation>Spaniolă (Mexico)</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="1471"/>
+        <location filename="../ui/settings/settings_view.cpp" line="1627"/>
         <source>Spanish (Nicaragua)</source>
         <translation>Spaniolă (Nicaragua)</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="1472"/>
+        <location filename="../ui/settings/settings_view.cpp" line="1628"/>
         <source>Spanish (Panama)</source>
         <translation>Spaniolă (Panama)</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="1473"/>
+        <location filename="../ui/settings/settings_view.cpp" line="1629"/>
         <source>Spanish (Peru)</source>
         <translation>Spaniolă (Peru)</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="1474"/>
+        <location filename="../ui/settings/settings_view.cpp" line="1630"/>
         <source>Spanish (Philippines)</source>
         <translation>Spaniolă (Philippines)</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="1475"/>
+        <location filename="../ui/settings/settings_view.cpp" line="1631"/>
         <source>Spanish (Puerto Rico)</source>
         <translation>Spaniolă  (Puerto Rico)</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="1476"/>
+        <location filename="../ui/settings/settings_view.cpp" line="1632"/>
         <source>Spanish (Paraguay)</source>
         <translation>Spaniolă (Paraguay)</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="1477"/>
+        <location filename="../ui/settings/settings_view.cpp" line="1633"/>
         <source>Spanish (El Salvador)</source>
         <translation>Spaniolă (El Salvador)</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="1478"/>
+        <location filename="../ui/settings/settings_view.cpp" line="1634"/>
         <source>Spanish (United States)</source>
         <translation>Spaniolă (United States)</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="1479"/>
+        <location filename="../ui/settings/settings_view.cpp" line="1635"/>
         <source>Spanish (Uruguay)</source>
         <translation>Spaniolă (Uruguay)</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="1480"/>
+        <location filename="../ui/settings/settings_view.cpp" line="1636"/>
         <source>Spanish (Venezuela)</source>
         <translation>Spaniolă (Venezuela)</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="1481"/>
+        <location filename="../ui/settings/settings_view.cpp" line="1637"/>
         <source>Spanish</source>
         <translation>Spaniolă</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="1482"/>
+        <location filename="../ui/settings/settings_view.cpp" line="1638"/>
         <source>Estonian</source>
         <translation>Estonă</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="1483"/>
+        <location filename="../ui/settings/settings_view.cpp" line="1639"/>
         <source>Basque</source>
         <translation>Bască</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="1484"/>
+        <location filename="../ui/settings/settings_view.cpp" line="1640"/>
         <source>Persian</source>
         <translation>Persană</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="1485"/>
+        <location filename="../ui/settings/settings_view.cpp" line="1641"/>
         <source>Faroese</source>
         <translation>Feroeză</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="1486"/>
+        <location filename="../ui/settings/settings_view.cpp" line="1642"/>
         <source>French</source>
         <translation>Franceză</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="1487"/>
+        <location filename="../ui/settings/settings_view.cpp" line="1643"/>
         <source>Friulian</source>
         <translation>Friuliană</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="1488"/>
+        <location filename="../ui/settings/settings_view.cpp" line="1644"/>
         <source>Western Frisian</source>
         <translation>Frisiană de vest</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="1489"/>
+        <location filename="../ui/settings/settings_view.cpp" line="1645"/>
         <source>Irish</source>
         <translation>Irlandeză</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="1490"/>
+        <location filename="../ui/settings/settings_view.cpp" line="1646"/>
         <source>Gaelic</source>
         <translation>Galică</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="1491"/>
+        <location filename="../ui/settings/settings_view.cpp" line="1647"/>
         <source>Galician</source>
         <translation>Galiciană</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="1492"/>
+        <location filename="../ui/settings/settings_view.cpp" line="1648"/>
         <source>Gujarati</source>
         <translation>Gujarati</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="1493"/>
+        <location filename="../ui/settings/settings_view.cpp" line="1649"/>
         <source>Guarani</source>
         <translation>Guarani</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="1494"/>
+        <location filename="../ui/settings/settings_view.cpp" line="1650"/>
         <source>Hebrew</source>
         <translation>Ebraică</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="1495"/>
+        <location filename="../ui/settings/settings_view.cpp" line="1651"/>
         <source>Hindi</source>
         <translation>Indiană</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="1496"/>
+        <location filename="../ui/settings/settings_view.cpp" line="1652"/>
         <source>Croatian</source>
         <translation>Croată</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="1497"/>
+        <location filename="../ui/settings/settings_view.cpp" line="1653"/>
         <source>Hungarian</source>
         <translation>Maghiară</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="1498"/>
+        <location filename="../ui/settings/settings_view.cpp" line="1654"/>
         <source>Armenian</source>
         <translation>Armeană</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="1499"/>
+        <location filename="../ui/settings/settings_view.cpp" line="1655"/>
         <source>Armenian (Western)</source>
         <translation>Armeană (Vest)</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="1500"/>
+        <location filename="../ui/settings/settings_view.cpp" line="1656"/>
         <source>Interlingua</source>
         <translation>Interlingua</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="1501"/>
+        <location filename="../ui/settings/settings_view.cpp" line="1657"/>
         <source>Indonesian</source>
         <translation>Indoneziană</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="1502"/>
+        <location filename="../ui/settings/settings_view.cpp" line="1658"/>
         <source>Icelandic</source>
         <translation>Islandeză</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="1503"/>
+        <location filename="../ui/settings/settings_view.cpp" line="1659"/>
         <source>Italian</source>
         <translation>Italiană</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="1504"/>
+        <location filename="../ui/settings/settings_view.cpp" line="1660"/>
         <source>Georgian</source>
         <translation>Georgiană</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="1505"/>
+        <location filename="../ui/settings/settings_view.cpp" line="1661"/>
         <source>Kazakh</source>
         <translation>Kazakă</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="1506"/>
+        <location filename="../ui/settings/settings_view.cpp" line="1662"/>
         <source>Kurdish</source>
         <translation>Kurdă</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="1507"/>
+        <location filename="../ui/settings/settings_view.cpp" line="1663"/>
         <source>Korean</source>
         <translation>Coreană</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="1508"/>
+        <location filename="../ui/settings/settings_view.cpp" line="1664"/>
         <source>Latin</source>
         <translation>Latină</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="1509"/>
+        <location filename="../ui/settings/settings_view.cpp" line="1665"/>
         <source>Luxembourgish</source>
         <translation>Luxemburgheză</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="1510"/>
+        <location filename="../ui/settings/settings_view.cpp" line="1666"/>
         <source>Lao</source>
         <translation>Lao</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="1511"/>
+        <location filename="../ui/settings/settings_view.cpp" line="1667"/>
         <source>Lithuanian</source>
         <translation>Lituaniană</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="1512"/>
+        <location filename="../ui/settings/settings_view.cpp" line="1668"/>
         <source>Latgalian</source>
         <translation>Latgaliană</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="1513"/>
+        <location filename="../ui/settings/settings_view.cpp" line="1669"/>
         <source>Latvian</source>
         <translation>Letonă</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="1514"/>
+        <location filename="../ui/settings/settings_view.cpp" line="1670"/>
         <source>Macedonian</source>
         <translation>Macedoneană</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="1515"/>
+        <location filename="../ui/settings/settings_view.cpp" line="1671"/>
         <source>Mongolian</source>
         <translation>Mongolă</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="1516"/>
+        <location filename="../ui/settings/settings_view.cpp" line="1672"/>
         <source>Maltese</source>
         <translation>Malteză</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="1517"/>
-        <location filename="../ui/settings/settings_view.cpp" line="1521"/>
+        <location filename="../ui/settings/settings_view.cpp" line="1673"/>
+        <location filename="../ui/settings/settings_view.cpp" line="1677"/>
         <source>Norwegian</source>
         <translation>Norvegiană</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="1518"/>
+        <location filename="../ui/settings/settings_view.cpp" line="1674"/>
         <source>Low German</source>
         <translation>Germană de Jos</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="1519"/>
+        <location filename="../ui/settings/settings_view.cpp" line="1675"/>
         <source>Nepali</source>
         <translation>Nepaleză</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="1520"/>
+        <location filename="../ui/settings/settings_view.cpp" line="1676"/>
         <source>Dutch</source>
         <translation>Olandeză</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="1522"/>
+        <location filename="../ui/settings/settings_view.cpp" line="1678"/>
         <source>Occitan</source>
         <translation>Occitană</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="1523"/>
+        <location filename="../ui/settings/settings_view.cpp" line="1679"/>
         <source>Polish</source>
         <translation>Poloneză</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="1524"/>
+        <location filename="../ui/settings/settings_view.cpp" line="1680"/>
         <source>Portuguese (Brazilian)</source>
         <translation>Portugheză (Brazilia)</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="1525"/>
+        <location filename="../ui/settings/settings_view.cpp" line="1681"/>
         <source>Portuguese</source>
         <translation>Portugheză</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="1526"/>
+        <location filename="../ui/settings/settings_view.cpp" line="1682"/>
         <source>Quechua</source>
         <translation>Quechua</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="1527"/>
+        <location filename="../ui/settings/settings_view.cpp" line="1683"/>
         <source>Romanian</source>
         <translation>Română</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="1528"/>
+        <location filename="../ui/settings/settings_view.cpp" line="1684"/>
         <source>Russian (with Yo)</source>
         <translation>Rusă (cu Yo)</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="1529"/>
+        <location filename="../ui/settings/settings_view.cpp" line="1685"/>
         <source>Russian</source>
         <translation>Rusă</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="1530"/>
+        <location filename="../ui/settings/settings_view.cpp" line="1686"/>
         <source>Kinyarwanda</source>
         <translation>Kinyarwanda</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="1531"/>
+        <location filename="../ui/settings/settings_view.cpp" line="1687"/>
         <source>Sinhala</source>
         <translation>Sinhala</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="1532"/>
+        <location filename="../ui/settings/settings_view.cpp" line="1688"/>
         <source>Slovak</source>
         <translation>Slovacă</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="1533"/>
+        <location filename="../ui/settings/settings_view.cpp" line="1689"/>
         <source>Slovenian</source>
         <translation>Slovenă</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="1534"/>
+        <location filename="../ui/settings/settings_view.cpp" line="1690"/>
         <source>Albanian</source>
         <translation>Albaneză</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="1535"/>
+        <location filename="../ui/settings/settings_view.cpp" line="1691"/>
         <source>Serbian (Latin)</source>
         <translation>Sârbă (Latină)</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="1536"/>
+        <location filename="../ui/settings/settings_view.cpp" line="1692"/>
         <source>Serbian</source>
         <translation>Sârbă</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="1537"/>
+        <location filename="../ui/settings/settings_view.cpp" line="1693"/>
         <source>Swedish (Finland)</source>
         <translation>Suedeză (Finlanda)</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="1538"/>
+        <location filename="../ui/settings/settings_view.cpp" line="1694"/>
         <source>Swedish</source>
         <translation>Suedeză</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="1539"/>
+        <location filename="../ui/settings/settings_view.cpp" line="1695"/>
         <source>Swahili</source>
         <translation>Swahili</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="1540"/>
+        <location filename="../ui/settings/settings_view.cpp" line="1696"/>
         <source>Tamil</source>
         <translation>Tamil</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="1541"/>
+        <location filename="../ui/settings/settings_view.cpp" line="1697"/>
         <source>Telugu</source>
         <translation>Telugu</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="1542"/>
+        <location filename="../ui/settings/settings_view.cpp" line="1698"/>
         <source>Thai</source>
         <translation>Thailandeză</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="1543"/>
+        <location filename="../ui/settings/settings_view.cpp" line="1699"/>
         <source>Turkmen</source>
         <translation>Turkmenă</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="1544"/>
+        <location filename="../ui/settings/settings_view.cpp" line="1700"/>
         <source>Klingon (Latin)</source>
         <translation>Klingoniană (Latină)</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="1545"/>
+        <location filename="../ui/settings/settings_view.cpp" line="1701"/>
         <source>Klingon</source>
         <translation>Klingoniană</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="1546"/>
+        <location filename="../ui/settings/settings_view.cpp" line="1702"/>
         <source>Turkish</source>
         <translation>Turcă</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="1547"/>
+        <location filename="../ui/settings/settings_view.cpp" line="1703"/>
         <source>Ukrainian</source>
         <translation>Ucraineană</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="1548"/>
+        <location filename="../ui/settings/settings_view.cpp" line="1704"/>
         <source>Vietnamese</source>
         <translation>Vietnameză</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="1553"/>
+        <location filename="../ui/settings/settings_view.cpp" line="1709"/>
         <source>User interface</source>
         <translation>Interfața utilizatorului</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="1554"/>
+        <location filename="../ui/settings/settings_view.cpp" line="1710"/>
         <source>Manage user dictionary</source>
         <translation>Gestionează dicționarul utilizatorului</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="1415"/>
+        <location filename="../ui/settings/settings_view.cpp" line="1780"/>
+        <source>Screenplay editor</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ui/settings/settings_view.cpp" line="1783"/>
+        <source>Block name</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ui/settings/settings_view.cpp" line="1784"/>
+        <source>Shortcut</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ui/settings/settings_view.cpp" line="1785"/>
+        <source>If you press in paragraphs end</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ui/settings/settings_view.cpp" line="1786"/>
+        <source>If you press in empty paragraphs</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ui/settings/settings_view.cpp" line="1789"/>
+        <source>Add paragraph</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ui/settings/settings_view.cpp" line="1790"/>
+        <source>Change to</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ui/settings/settings_view.cpp" line="1570"/>
         <source>Theme</source>
         <translation>Tema</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="1416"/>
+        <location filename="../ui/settings/settings_view.cpp" line="1571"/>
         <source>Size of the user interface elements:</source>
         <translation>Mărimea elementelor interfeței de utilizator</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="1417"/>
+        <location filename="../ui/settings/settings_view.cpp" line="1572"/>
         <source>small</source>
         <translation>mic</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="1418"/>
+        <location filename="../ui/settings/settings_view.cpp" line="1573"/>
         <source>big</source>
         <translation>mare</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="1419"/>
+        <location filename="../ui/settings/settings_view.cpp" line="1574"/>
         <source>Save changes &amp; backups</source>
         <translation>Salvare modificări și backup-uri</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="1420"/>
+        <location filename="../ui/settings/settings_view.cpp" line="1575"/>
         <source>Automatically save changes as soon as possible</source>
         <translation>Salvare modificări automat cât se poate de repede</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="1422"/>
+        <location filename="../ui/settings/settings_view.cpp" line="1577"/>
         <source>Autosave works very accurately.
 It saves the project every 3 seconds if you do not use your mouse or keyboard.
 If you work with no interruptions it saves the project every 3 minutes.</source>
@@ -4495,164 +4844,169 @@ Salvează proiectul la fiecare 3 secunde dacă nu folosiți tastatura sau mouse-
 Dacă lucrați fără întrerupere, salvează proiectul la fiecare 3 minute.</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="1425"/>
+        <location filename="../ui/settings/settings_view.cpp" line="1580"/>
         <source>Save backups</source>
         <translation>Salvare backup-uri</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="1426"/>
+        <location filename="../ui/settings/settings_view.cpp" line="1581"/>
         <source>Backups folder path</source>
         <translation>Calea către directorul backup-urilor</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="1556"/>
+        <location filename="../ui/settings/settings_view.cpp" line="1712"/>
         <source>Focus current paragraph</source>
         <translation>Focus pe paragraful curent</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="1558"/>
+        <location filename="../ui/settings/settings_view.cpp" line="1714"/>
         <source>Use typewriter scrolling (keeps line with the cursor on the screen center)</source>
         <translation>Folosește derularea tip mașină de scris (menține rândul cu cursor pe centrul ecranului)</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="1560"/>
+        <location filename="../ui/settings/settings_view.cpp" line="1716"/>
         <source>Components</source>
         <translation>Componente</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="1564"/>
+        <location filename="../ui/settings/settings_view.cpp" line="1720"/>
         <source>Simple text module</source>
         <translation>Text simplu</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="1565"/>
-        <location filename="../ui/settings/settings_view.cpp" line="1578"/>
-        <location filename="../ui/settings/settings_view.cpp" line="1609"/>
+        <location filename="../ui/settings/settings_view.cpp" line="1721"/>
+        <location filename="../ui/settings/settings_view.cpp" line="1734"/>
+        <location filename="../ui/settings/settings_view.cpp" line="1767"/>
         <source>Text editor</source>
         <translation>Editor de text</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="1566"/>
-        <location filename="../ui/settings/settings_view.cpp" line="1579"/>
-        <location filename="../ui/settings/settings_view.cpp" line="1610"/>
+        <location filename="../ui/settings/settings_view.cpp" line="1722"/>
+        <location filename="../ui/settings/settings_view.cpp" line="1735"/>
+        <location filename="../ui/settings/settings_view.cpp" line="1768"/>
         <source>Default template</source>
         <translation>Șablon implicit</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="1568"/>
-        <location filename="../ui/settings/settings_view.cpp" line="1581"/>
-        <location filename="../ui/settings/settings_view.cpp" line="1612"/>
+        <location filename="../ui/settings/settings_view.cpp" line="1724"/>
+        <location filename="../ui/settings/settings_view.cpp" line="1737"/>
+        <location filename="../ui/settings/settings_view.cpp" line="1770"/>
         <source>Available actions for the selected template</source>
         <translation>Acțiuni disponibile pentru șablonul selectat</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="1582"/>
-        <location filename="../ui/settings/settings_view.cpp" line="1587"/>
+        <location filename="../ui/settings/settings_view.cpp" line="1738"/>
+        <location filename="../ui/settings/settings_view.cpp" line="1745"/>
         <source>Show scene number</source>
         <translation>Afișare număr scenă</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="1583"/>
+        <location filename="../ui/settings/settings_view.cpp" line="1739"/>
         <source>on the left</source>
         <translation>în stânga</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="1584"/>
+        <location filename="../ui/settings/settings_view.cpp" line="1740"/>
         <source>on the right</source>
         <translation>în dreapta</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="1585"/>
+        <location filename="../ui/settings/settings_view.cpp" line="1741"/>
         <source>Show dialogue number</source>
         <translation>Afișare număr dialog</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="1555"/>
+        <location filename="../ui/settings/settings_view.cpp" line="1711"/>
         <source>Highlight current line</source>
         <translation>Evidențiere linie curentă</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="1569"/>
-        <location filename="../ui/settings/settings_view.cpp" line="1586"/>
-        <location filename="../ui/settings/settings_view.cpp" line="1613"/>
+        <location filename="../ui/settings/settings_view.cpp" line="1725"/>
+        <location filename="../ui/settings/settings_view.cpp" line="1744"/>
+        <location filename="../ui/settings/settings_view.cpp" line="1771"/>
         <source>Navigator</source>
         <translation>Navigator</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="1570"/>
+        <location filename="../ui/settings/settings_view.cpp" line="1726"/>
         <source>Show chapter text, lines</source>
         <translation>Arată textul și dialogurile capitolului</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="1577"/>
+        <location filename="../ui/settings/settings_view.cpp" line="1733"/>
         <source>Screenplay module</source>
         <translation>Scenariu</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="1588"/>
+        <location filename="../ui/settings/settings_view.cpp" line="1743"/>
+        <source>Automatically continue same speaker&apos;s dialogue</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ui/settings/settings_view.cpp" line="1746"/>
         <source>Show scene text, lines</source>
         <translation>Afișare text și dialoguri scenă</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="1594"/>
+        <location filename="../ui/settings/settings_view.cpp" line="1752"/>
         <source>Duration</source>
         <translation>Durată</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="1595"/>
+        <location filename="../ui/settings/settings_view.cpp" line="1753"/>
         <source>Calculate duration based on the count of pages</source>
         <translation>Calcul durată pe baza numărului de pagini</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="1596"/>
-        <location filename="../ui/settings/settings_view.cpp" line="1602"/>
+        <location filename="../ui/settings/settings_view.cpp" line="1754"/>
+        <location filename="../ui/settings/settings_view.cpp" line="1760"/>
         <source>at the rate of</source>
         <translation>la o rată de</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="1597"/>
+        <location filename="../ui/settings/settings_view.cpp" line="1755"/>
         <source>pages</source>
         <translation>pagini</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="1598"/>
-        <location filename="../ui/settings/settings_view.cpp" line="1605"/>
+        <location filename="../ui/settings/settings_view.cpp" line="1756"/>
+        <location filename="../ui/settings/settings_view.cpp" line="1763"/>
         <source>has duration</source>
         <translation>are durata</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="1599"/>
-        <location filename="../ui/settings/settings_view.cpp" line="1606"/>
+        <location filename="../ui/settings/settings_view.cpp" line="1757"/>
+        <location filename="../ui/settings/settings_view.cpp" line="1764"/>
         <source>seconds</source>
         <translation>secunde</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="1601"/>
+        <location filename="../ui/settings/settings_view.cpp" line="1759"/>
         <source>Calculate duration based on the count of letters</source>
         <translation>Calcul durată pe baza numărului de litere</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="1603"/>
+        <location filename="../ui/settings/settings_view.cpp" line="1761"/>
         <source>letters</source>
         <translation>litere</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="1604"/>
+        <location filename="../ui/settings/settings_view.cpp" line="1762"/>
         <source>including spaces</source>
         <translation>inclusiv spații</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="1608"/>
+        <location filename="../ui/settings/settings_view.cpp" line="1766"/>
         <source>Comic book module</source>
         <translation>Bandă desenată</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="1614"/>
+        <location filename="../ui/settings/settings_view.cpp" line="1772"/>
         <source>Show panel text, lines</source>
         <translation>Arată textul și dialogurile</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="1621"/>
+        <location filename="../ui/settings/settings_view.cpp" line="1779"/>
         <source>Shortcuts</source>
         <translation>Scurtături</translation>
     </message>
@@ -4777,42 +5131,42 @@ Dacă lucrați fără întrerupere, salvează proiectul la fiecare 3 minute.</tr
 <context>
     <name>Ui::SimpleTextView</name>
     <message>
-        <location filename="../management_layer/plugins/simple_text/simple_text_view.cpp" line="315"/>
+        <location filename="../management_layer/plugins/simple_text/simple_text_view.cpp" line="343"/>
         <source>Heading 1</source>
         <translation>Titlu 1</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/simple_text/simple_text_view.cpp" line="316"/>
+        <location filename="../management_layer/plugins/simple_text/simple_text_view.cpp" line="344"/>
         <source>Heading 2</source>
         <translation>Titlu 2</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/simple_text/simple_text_view.cpp" line="317"/>
+        <location filename="../management_layer/plugins/simple_text/simple_text_view.cpp" line="345"/>
         <source>Heading 3</source>
         <translation>Titlu 3</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/simple_text/simple_text_view.cpp" line="318"/>
+        <location filename="../management_layer/plugins/simple_text/simple_text_view.cpp" line="346"/>
         <source>Heading 4</source>
         <translation>Titlu 4</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/simple_text/simple_text_view.cpp" line="319"/>
+        <location filename="../management_layer/plugins/simple_text/simple_text_view.cpp" line="347"/>
         <source>Heading 5</source>
         <translation>Titlu 5</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/simple_text/simple_text_view.cpp" line="320"/>
+        <location filename="../management_layer/plugins/simple_text/simple_text_view.cpp" line="348"/>
         <source>Heading 6</source>
         <translation>Titlu 6</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/simple_text/simple_text_view.cpp" line="321"/>
+        <location filename="../management_layer/plugins/simple_text/simple_text_view.cpp" line="349"/>
         <source>Text</source>
         <translation>Text</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/simple_text/simple_text_view.cpp" line="322"/>
+        <location filename="../management_layer/plugins/simple_text/simple_text_view.cpp" line="350"/>
         <source>Inline note</source>
         <translation>Notă interioară</translation>
     </message>
