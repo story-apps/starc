@@ -131,6 +131,8 @@ AccountView::Implementation::Implementation(QWidget* _parent)
     layout->addWidget(sessionsTitle, row++, 0, 1, 2);
     ++row; // оставляем строку для сессий
     layout->setRowStretch(row, 1);
+    layout->setColumnStretch(0, 1);
+    layout->setColumnStretch(1, 1);
     contentWidget->setLayout(layout);
 }
 
