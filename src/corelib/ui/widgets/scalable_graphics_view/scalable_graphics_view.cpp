@@ -213,7 +213,12 @@ void ScalableGraphicsView::keyReleaseEvent(QKeyEvent* _event)
 
 void ScalableGraphicsView::mousePressEvent(QMouseEvent* _event)
 {
-    if (m_inScrolling && _event->buttons() & Qt::LeftButton) {
+    if (_event->buttons() & Qt::MiddleButton) {
+        m_inScrolling = true;
+    }
+
+    if (m_inScrolling
+        && (_event->buttons() & Qt::LeftButton || _event->buttons() & Qt::MiddleButton)) {
         m_scrollingLastPos = _event->globalPos();
         QApplication::setOverrideCursor(QCursor(Qt::ClosedHandCursor));
         return;
@@ -224,19 +229,19 @@ void ScalableGraphicsView::mousePressEvent(QMouseEvent* _event)
 
 void ScalableGraphicsView::mouseMoveEvent(QMouseEvent* _event)
 {
-    //
-    // Если в данный момент происходит прокрутка полотна
-    //
     if (m_inScrolling) {
-        if (_event->buttons() & Qt::LeftButton) {
+        //
+        // Если в данный момент происходит прокрутка полотна
+        //
+        if (_event->buttons() & Qt::LeftButton || _event->buttons() & Qt::MiddleButton) {
             const QPoint prevPos = m_scrollingLastPos;
             m_scrollingLastPos = _event->globalPos();
             horizontalScrollBar()->setValue(horizontalScrollBar()->value()
                                             + (prevPos.x() - m_scrollingLastPos.x()));
             verticalScrollBar()->setValue(verticalScrollBar()->value()
                                           + (prevPos.y() - m_scrollingLastPos.y()));
+            return;
         }
-        return;
     }
 
     QGraphicsView::mouseMoveEvent(_event);
@@ -244,8 +249,17 @@ void ScalableGraphicsView::mouseMoveEvent(QMouseEvent* _event)
 
 void ScalableGraphicsView::mouseReleaseEvent(QMouseEvent* _event)
 {
-    if (m_inScrolling) {
+    //
+    // Восстанавливаем курсор
+    // NOTE: если пробел был отпущен раньше чем кнопка мыши, то мы попадём сюда уже с m_inScrolling
+    // равным false, поэтому в любом случае восстанавливаем исходный курсор виджета
+    //
+    while (QApplication::overrideCursor()) {
         QApplication::restoreOverrideCursor();
+    }
+
+    if (m_inScrolling && _event->buttons() & Qt::MiddleButton) {
+        m_inScrolling = false;
     }
 
     QGraphicsView::mouseReleaseEvent(_event);
