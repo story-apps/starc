@@ -10,6 +10,18 @@
 #include <QVariantAnimation>
 #include <QWheelEvent>
 
+namespace {
+
+/**
+ * @brief Было ли инициировано событие нажатием заданной кнопки мыши
+ */
+bool eventTriggeredBy(QMouseEvent* _event, Qt::MouseButton _button)
+{
+    return _event->buttons() & _button || _event->button() == _button;
+}
+
+} // namespace
+
 
 ScalableGraphicsView::ScalableGraphicsView(QWidget* _parent)
     : QGraphicsView(_parent)
@@ -213,12 +225,13 @@ void ScalableGraphicsView::keyReleaseEvent(QKeyEvent* _event)
 
 void ScalableGraphicsView::mousePressEvent(QMouseEvent* _event)
 {
-    if (_event->buttons() & Qt::MiddleButton) {
+    if (eventTriggeredBy(_event, Qt::MiddleButton)) {
         m_inScrolling = true;
     }
 
     if (m_inScrolling
-        && (_event->buttons() & Qt::LeftButton || _event->buttons() & Qt::MiddleButton)) {
+        && (eventTriggeredBy(_event, Qt::LeftButton)
+            || eventTriggeredBy(_event, Qt::MiddleButton))) {
         m_scrollingLastPos = _event->globalPos();
         QApplication::setOverrideCursor(QCursor(Qt::ClosedHandCursor));
         return;
@@ -233,7 +246,8 @@ void ScalableGraphicsView::mouseMoveEvent(QMouseEvent* _event)
         //
         // Если в данный момент происходит прокрутка полотна
         //
-        if (_event->buttons() & Qt::LeftButton || _event->buttons() & Qt::MiddleButton) {
+        if (eventTriggeredBy(_event, Qt::LeftButton)
+            || eventTriggeredBy(_event, Qt::MiddleButton)) {
             const QPoint prevPos = m_scrollingLastPos;
             m_scrollingLastPos = _event->globalPos();
             horizontalScrollBar()->setValue(horizontalScrollBar()->value()
@@ -258,7 +272,7 @@ void ScalableGraphicsView::mouseReleaseEvent(QMouseEvent* _event)
         QApplication::restoreOverrideCursor();
     }
 
-    if (m_inScrolling && _event->buttons() & Qt::MiddleButton) {
+    if (m_inScrolling && eventTriggeredBy(_event, Qt::MiddleButton)) {
         m_inScrolling = false;
     }
 
