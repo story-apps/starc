@@ -448,6 +448,7 @@ bool SettingsManager::eventFilter(QObject* _watched, QEvent* _event)
         d->view->setApplicationLanguage(
             settingsValue(DataStorageLayer::kApplicationLanguagedKey).toInt());
         d->view->setApplicationTheme(settingsValue(DataStorageLayer::kApplicationThemeKey).toInt());
+        d->loadShortcutsSettings();
     } else if (static_cast<EventType>(_event->type()) == EventType::DesignSystemChangeEvent) {
         d->view->setApplicationTheme(settingsValue(DataStorageLayer::kApplicationThemeKey).toInt());
     }

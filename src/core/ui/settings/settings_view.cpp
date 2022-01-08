@@ -1516,6 +1516,11 @@ void SettingsView::setComicBookNavigatorShowSceneText(bool _show, int _lines)
 
 void SettingsView::setShortcutsForScreenplayModel(HierarchicalModel* _model)
 {
+    if (d->shortcutsForScreenplayModel) {
+        d->shortcutsForScreenplayModel->disconnect(this);
+        d->shortcutsForScreenplayModel->deleteLater();
+    }
+
     d->shortcutsForScreenplayModel = _model;
 
     d->shortcutsForScreenplay->setModel(d->shortcutsForScreenplayModel);
