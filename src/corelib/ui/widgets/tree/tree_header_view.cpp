@@ -28,13 +28,14 @@ void TreeHeaderView::paintSection(QPainter* _painter, const QRect& _rect, int _s
         = _rect.adjusted(_section == 0 ? Ui::DesignSystem::tree().indicatorWidth()
                                        : Ui::DesignSystem::treeOneLineItem().margins().left(),
                          0, 0, 0);
-    if (model() && model()->index(0, _section).data(Qt::DecorationRole).isValid()) {
+    if (model() && model()->headerData(_section, orientation(), Qt::DecorationRole).isValid()) {
         _painter->setFont(Ui::DesignSystem::font().iconsMid());
         QRectF iconRect(
             textRect.topLeft(),
             QSizeF(Ui::DesignSystem::treeOneLineItem().iconSize().width(), textRect.height()));
-        _painter->drawText(iconRect, Qt::AlignCenter,
-                           model()->index(0, _section).data(Qt::DecorationRole).toString());
+        _painter->drawText(
+            iconRect, Qt::AlignCenter,
+            model()->headerData(_section, orientation(), Qt::DecorationRole).toString());
 
         textRect.adjust(Ui::DesignSystem::treeOneLineItem().iconSize().width()
                             + Ui::DesignSystem::treeOneLineItem().spacing(),
