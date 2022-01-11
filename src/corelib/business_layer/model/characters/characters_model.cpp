@@ -3,6 +3,7 @@
 #include "character_model.h"
 
 #include <domain/document_object.h>
+#include <utils/helpers/text_helper.h>
 
 #include <QDomDocument>
 #include <QPointF>
@@ -200,7 +201,7 @@ void CharactersModel::initDocument()
     const auto documentNode = domDocument.firstChildElement(kDocumentKey);
     auto characterNode = documentNode.firstChildElement(kCharacterKey);
     while (!characterNode.isNull()) {
-        const auto characterName = characterNode.attribute(kNameKey);
+        const auto characterName = TextHelper::fromHtmlEscaped(characterNode.attribute(kNameKey));
         const auto positionText = characterNode.attribute(kPositionKey).split(";");
         Q_ASSERT(positionText.size() == 2);
         const QPointF position(positionText.constFirst().toDouble(),
@@ -230,8 +231,8 @@ QByteArray CharactersModel::toXml() const
     for (auto character : std::as_const(d->characterModels)) {
         const auto characterPosition = this->characterPosition(character->name());
         xml += QString("<%1 %2=\"%3\" %4=\"%5;%6\"/>\n")
-                   .arg(kCharacterKey, kNameKey, character->name(), kPositionKey,
-                        QString::number(characterPosition.x()),
+                   .arg(kCharacterKey, kNameKey, TextHelper::toHtmlEscaped(character->name()),
+                        kPositionKey, QString::number(characterPosition.x()),
                         QString::number(characterPosition.y()))
                    .toUtf8();
     }
