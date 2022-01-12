@@ -2,6 +2,8 @@ TARGET = corelib
 TEMPLATE = lib
 
 CONFIG += c++1z
+CONFIG += force_debug_info
+CONFIG += separate_debug_info
 QT += widgets widgets-private sql xml network
 
 DEFINES += CORE_LIBRARY

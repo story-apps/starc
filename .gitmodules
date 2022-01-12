@@ -16,3 +16,6 @@
 [submodule "src/core/management_layer/plugins/characters_relations"]
 	path = src/core/management_layer/plugins/characters_relations
 	url = git@github.com:story-apps/starc-characters-relations-plugin.git
+[submodule "src/3rd_party/qbreakpad"]
+	path = src/3rd_party/qbreakpad
+	url = git@github.com:buzzySmile/qBreakpad.git

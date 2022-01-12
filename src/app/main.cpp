@@ -2,6 +2,7 @@
 
 #include <interfaces/management_layer/i_application_manager.h>
 
+#include <QBreakpadHandler.h>
 #include <QDebug>
 #include <QDir>
 #include <QPluginLoader>
@@ -100,13 +101,29 @@ QObject* loadApplicationManager()
  */
 int main(int argc, char* argv[])
 {
+    //
+    // Инициилизируем приложение
+    //
     Application application(argc, argv);
 
+    //
+    // Загружаем менеджера приложения
+    //
     auto applicationManager = loadApplicationManager();
     if (applicationManager == nullptr) {
         return 1;
     }
 
+    //
+    // Настраиваем сборщик крашдампов
+    //
+    const auto crashReportsFolderPath = QString("%1/%2").arg(
+        QStandardPaths::writableLocation(QStandardPaths::DataLocation), "crashreports");
+    QBreakpadInstance.init(crashReportsFolderPath);
+
+    //
+    // Устанавливаем менеджера в приложение и запускаемся
+    //
     application.setApplicationManager(applicationManager);
     application.startUp();
     return application.exec();
