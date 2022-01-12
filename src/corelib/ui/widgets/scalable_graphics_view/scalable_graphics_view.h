@@ -30,6 +30,16 @@ public:
      */
     void animateCenterOn(QGraphicsItem* _item);
 
+    /**
+     * @brief Сохранить текущее состояние
+     */
+    QByteArray saveState() const;
+
+    /**
+     * @brief Загрузить состояние
+     */
+    void restoreState(const QByteArray& _state);
+
 signals:
     /**
      * @brief Изменился масштаб

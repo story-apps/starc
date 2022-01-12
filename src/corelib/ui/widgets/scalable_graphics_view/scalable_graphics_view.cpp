@@ -81,6 +81,34 @@ void ScalableGraphicsView::animateCenterOn(QGraphicsItem* _item)
     scrollingAnimation->start(QVariantAnimation::DeleteWhenStopped);
 }
 
+QByteArray ScalableGraphicsView::saveState() const
+{
+    QByteArray state;
+    QDataStream stream(&state, QIODevice::WriteOnly);
+    stream << transform();
+    stream << horizontalScrollBar()->value();
+    stream << verticalScrollBar()->value();
+    return state;
+}
+
+void ScalableGraphicsView::restoreState(const QByteArray& _state)
+{
+    if (_state.isEmpty()) {
+        return;
+    }
+
+    auto state = _state;
+    QDataStream stream(&state, QIODevice::ReadOnly);
+    QTransform transform;
+    stream >> transform;
+    setTransform(transform);
+    int scrollValue = 0;
+    stream >> scrollValue;
+    horizontalScrollBar()->setValue(scrollValue);
+    stream >> scrollValue;
+    verticalScrollBar()->setValue(scrollValue);
+}
+
 bool ScalableGraphicsView::event(QEvent* _event)
 {
     //
