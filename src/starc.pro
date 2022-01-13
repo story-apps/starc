@@ -1,8 +1,8 @@
 TEMPLATE = subdirs ordered
 
 SUBDIRS += \
-    app \
     3rd_party \
+    app \
     corelib \
     core/management_layer/plugins \
     core \
