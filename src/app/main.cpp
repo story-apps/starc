@@ -72,6 +72,10 @@ QObject* loadApplicationManager()
     const QString extensionFilter =
 #ifdef Q_OS_WIN
         ".dll";
+#elif defined(Q_OS_LINUX)
+        ".so";
+#elif defined(Q_OS_MAC)
+        ".dylib";
 #else
         "";
 #endif
