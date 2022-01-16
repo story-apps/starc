@@ -26,7 +26,7 @@
     <message>
         <location filename="../../corelib/ui/widgets/text_edit/base/base_text_edit.cpp" line="324"/>
         <source>Strikethrough</source>
-        <translation type="unfinished"></translation>
+        <translation>Barat</translation>
     </message>
     <message>
         <location filename="../../corelib/ui/widgets/text_edit/base/base_text_edit.cpp" line="333"/>
@@ -225,12 +225,12 @@
     <message>
         <location filename="../../corelib/business_layer/export/screenplay/screenplay_fountain_exporter.cpp" line="31"/>
         <source>EXT./INT</source>
-        <translation type="unfinished"></translation>
+        <translation>EXT./INT.</translation>
     </message>
     <message>
         <location filename="../../corelib/business_layer/export/screenplay/screenplay_fountain_exporter.cpp" line="32"/>
         <source>EXT/INT</source>
-        <translation type="unfinished"></translation>
+        <translation>EXT./INT.</translation>
     </message>
     <message>
         <location filename="../../corelib/business_layer/export/screenplay/screenplay_fountain_exporter.cpp" line="33"/>
@@ -268,12 +268,12 @@
     <message>
         <location filename="../../corelib/business_layer/import/screenplay/screenplay_fountain_importer.cpp" line="35"/>
         <source>EXT./INT</source>
-        <translation type="unfinished"></translation>
+        <translation>EXT./INT.</translation>
     </message>
     <message>
         <location filename="../../corelib/business_layer/import/screenplay/screenplay_fountain_importer.cpp" line="36"/>
         <source>EXT/INT</source>
-        <translation type="unfinished"></translation>
+        <translation>EXT./INT.</translation>
     </message>
     <message>
         <location filename="../../corelib/business_layer/import/screenplay/screenplay_fountain_importer.cpp" line="37"/>
@@ -949,7 +949,7 @@
     <message>
         <location filename="../../corelib/ui/widgets/tree/tree_delegate.cpp" line="155"/>
         <source>Press shortcut</source>
-        <translation type="unfinished"></translation>
+        <translation>Apasă tasta pentru scurtătură</translation>
     </message>
 </context>
 <context>
@@ -1052,7 +1052,7 @@
     <message>
         <location filename="../management_layer/application_manager.cpp" line="1013"/>
         <source>This file can&apos;t be open at this moment, because it is already open in another copy of the application.</source>
-        <translation type="unfinished"></translation>
+        <translation>Fișierul nu poate fi deschis momentan deoarece este deja deschis în altă instanță a aplicației.</translation>
     </message>
 </context>
 <context>
@@ -1077,40 +1077,40 @@ Doriți schimbarea?</translation>
 <context>
     <name>ManagementLayer::CharactersRelationsManager</name>
     <message>
-        <location filename="../management_layer/plugins/characters_relations/characters_relations_manager.cpp" line="184"/>
+        <location filename="../management_layer/plugins/characters_relations/characters_relations_manager.cpp" line="205"/>
         <source>Character name was changed from &quot;%1&quot; to &quot;%2&quot;. Apply changes?</source>
         <translation>Numele personajului a fost schimbat din &quot;%1&quot; în &quot;%2&quot;.
 Doriți schimbarea?</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/characters_relations/characters_relations_manager.cpp" line="186"/>
+        <location filename="../management_layer/plugins/characters_relations/characters_relations_manager.cpp" line="207"/>
         <source>No</source>
         <translation>Nu</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/characters_relations/characters_relations_manager.cpp" line="187"/>
+        <location filename="../management_layer/plugins/characters_relations/characters_relations_manager.cpp" line="208"/>
         <source>Yes</source>
         <translation>Da</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/characters_relations/characters_relations_manager.cpp" line="256"/>
+        <location filename="../management_layer/plugins/characters_relations/characters_relations_manager.cpp" line="299"/>
         <source>To edit the character relations graph, you need to upgrade to the PRO version.</source>
         <translation>Pentru a edita graficul cu relațiile personajelor, trebuie să faceți upgrade la versiunea PRO</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/characters_relations/characters_relations_manager.cpp" line="258"/>
+        <location filename="../management_layer/plugins/characters_relations/characters_relations_manager.cpp" line="301"/>
         <source>Maybe later</source>
         <translation>Poate, mai târziu</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/characters_relations/characters_relations_manager.cpp" line="259"/>
+        <location filename="../management_layer/plugins/characters_relations/characters_relations_manager.cpp" line="302"/>
         <source>Upgrade</source>
         <translation>Upgrade</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/characters_relations/characters_relations_manager.cpp" line="276"/>
+        <location filename="../management_layer/plugins/characters_relations/characters_relations_manager.cpp" line="319"/>
         <source>Character with this name already exists</source>
-        <translation type="unfinished"></translation>
+        <translation>Există deja un personaj cu acest nume</translation>
     </message>
 </context>
 <context>
@@ -1203,7 +1203,7 @@ Doriți schimbarea?</translation>
     <message>
         <location filename="../management_layer/content/project/project_manager.cpp" line="148"/>
         <source>Find all characters</source>
-        <translation type="unfinished"></translation>
+        <translation>Găsește toate personajele</translation>
     </message>
     <message>
         <location filename="../management_layer/content/project/project_manager.cpp" line="153"/>
@@ -1213,12 +1213,12 @@ Doriți schimbarea?</translation>
     <message>
         <location filename="../management_layer/content/project/project_manager.cpp" line="158"/>
         <source>Find all locations</source>
-        <translation type="unfinished"></translation>
+        <translation>Găsește toate locațiile</translation>
     </message>
     <message>
         <location filename="../management_layer/content/project/project_manager.cpp" line="163"/>
         <source>Add location</source>
-        <translation type="unfinished"></translation>
+        <translation>Adaugă o locație</translation>
     </message>
     <message>
         <location filename="../management_layer/content/project/project_manager.cpp" line="169"/>
@@ -1255,48 +1255,48 @@ Doriți schimbarea?</translation>
     <message>
         <location filename="../management_layer/content/project/project_manager.cpp" line="375"/>
         <source>Characters from the text</source>
-        <translation type="unfinished"></translation>
+        <translation>Personajele din text</translation>
     </message>
     <message>
         <location filename="../management_layer/content/project/project_manager.cpp" line="385"/>
         <source>Characters that are not found in the text</source>
-        <translation type="unfinished"></translation>
+        <translation>Personaje care nu se regăsesc în text</translation>
     </message>
     <message>
         <location filename="../management_layer/content/project/project_manager.cpp" line="398"/>
         <source>Save only characters from the text</source>
-        <translation type="unfinished"></translation>
+        <translation>Salvează doar personajele din text</translation>
     </message>
     <message>
         <location filename="../management_layer/content/project/project_manager.cpp" line="399"/>
         <source>Save all characters</source>
-        <translation type="unfinished"></translation>
+        <translation>Salvează toate personajele</translation>
     </message>
     <message>
         <location filename="../management_layer/content/project/project_manager.cpp" line="400"/>
         <location filename="../management_layer/content/project/project_manager.cpp" line="502"/>
         <source>Change nothing</source>
-        <translation type="unfinished"></translation>
+        <translation>Nu schimba nimic</translation>
     </message>
     <message>
         <location filename="../management_layer/content/project/project_manager.cpp" line="477"/>
         <source>Locations from the text</source>
-        <translation type="unfinished"></translation>
+        <translation>Locațiile din text</translation>
     </message>
     <message>
         <location filename="../management_layer/content/project/project_manager.cpp" line="487"/>
         <source>Locations that are not found in the text</source>
-        <translation type="unfinished"></translation>
+        <translation>Locații care nu se regăsesc în text</translation>
     </message>
     <message>
         <location filename="../management_layer/content/project/project_manager.cpp" line="500"/>
         <source>Save only locations from the text</source>
-        <translation type="unfinished"></translation>
+        <translation>Salvează doar locațiile din text</translation>
     </message>
     <message>
         <location filename="../management_layer/content/project/project_manager.cpp" line="501"/>
         <source>Save all locations</source>
-        <translation type="unfinished"></translation>
+        <translation>Salvează toate locațiile</translation>
     </message>
     <message>
         <location filename="../management_layer/content/project/project_manager.cpp" line="558"/>
@@ -1599,7 +1599,7 @@ Doriți schimbarea?</translation>
     <message>
         <location filename="../ui/account/account_navigator.cpp" line="89"/>
         <source>Lifetime access</source>
-        <translation type="unfinished"></translation>
+        <translation>Acces pe viață</translation>
     </message>
     <message>
         <location filename="../ui/account/account_navigator.cpp" line="90"/>
@@ -1750,7 +1750,7 @@ Doriți schimbarea?</translation>
     <message>
         <location filename="../ui/application_view.cpp" line="154"/>
         <source>Turn off full screen</source>
-        <translation>Dezactivează funcția full screen</translation>
+        <translation>Dezactivează full screen</translation>
     </message>
 </context>
 <context>
@@ -1862,19 +1862,19 @@ Doriți schimbarea?</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/characters_relations/ui/characters_relations_sidebar.cpp" line="307"/>
-        <location filename="../management_layer/plugins/characters_relations/ui/characters_relations_sidebar.cpp" line="678"/>
+        <location filename="../management_layer/plugins/characters_relations/ui/characters_relations_sidebar.cpp" line="679"/>
         <source>Select character color</source>
         <translation>Alege culoarea personajului</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/characters_relations/ui/characters_relations_sidebar.cpp" line="527"/>
-        <location filename="../management_layer/plugins/characters_relations/ui/characters_relations_sidebar.cpp" line="662"/>
+        <location filename="../management_layer/plugins/characters_relations/ui/characters_relations_sidebar.cpp" line="663"/>
         <source>To create a new relation, hold the Option button and move one character to another.</source>
         <translation>Ca să creezi o nouă relație, ține apăsată tasta Option și trage un personaj peste altul.</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/characters_relations/ui/characters_relations_sidebar.cpp" line="530"/>
-        <location filename="../management_layer/plugins/characters_relations/ui/characters_relations_sidebar.cpp" line="665"/>
+        <location filename="../management_layer/plugins/characters_relations/ui/characters_relations_sidebar.cpp" line="666"/>
         <source>To create a new relation, hold the Alt button and move one character to another.</source>
         <translation>Ca să creezi o nouă relație, ține apăsată tasta Alt și trage un personaj peste altul.</translation>
     </message>
@@ -1890,159 +1890,159 @@ Doriți schimbarea?</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/characters_relations/ui/characters_relations_sidebar.cpp" line="544"/>
-        <location filename="../management_layer/plugins/characters_relations/ui/characters_relations_sidebar.cpp" line="694"/>
+        <location filename="../management_layer/plugins/characters_relations/ui/characters_relations_sidebar.cpp" line="695"/>
         <source>Open relation details</source>
         <translation>Deschide detaliile relației</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/characters_relations/ui/characters_relations_sidebar.cpp" line="600"/>
-        <location filename="../management_layer/plugins/characters_relations/ui/characters_relations_sidebar.cpp" line="605"/>
+        <location filename="../management_layer/plugins/characters_relations/ui/characters_relations_sidebar.cpp" line="601"/>
+        <location filename="../management_layer/plugins/characters_relations/ui/characters_relations_sidebar.cpp" line="606"/>
         <source>%1 point of view</source>
         <translation>Punctul de vedere al personajului %1</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/characters_relations/ui/characters_relations_sidebar.cpp" line="601"/>
         <location filename="../management_layer/plugins/characters_relations/ui/characters_relations_sidebar.cpp" line="602"/>
-        <location filename="../management_layer/plugins/characters_relations/ui/characters_relations_sidebar.cpp" line="606"/>
+        <location filename="../management_layer/plugins/characters_relations/ui/characters_relations_sidebar.cpp" line="603"/>
         <location filename="../management_layer/plugins/characters_relations/ui/characters_relations_sidebar.cpp" line="607"/>
+        <location filename="../management_layer/plugins/characters_relations/ui/characters_relations_sidebar.cpp" line="608"/>
         <source>Show all %1&apos;s relations</source>
         <translation>Arată toate relațiile personajului %1</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/characters_relations/ui/characters_relations_sidebar.cpp" line="658"/>
+        <location filename="../management_layer/plugins/characters_relations/ui/characters_relations_sidebar.cpp" line="659"/>
         <source>To see all relations of the character, select concrete character.</source>
         <translation>Selectează un personaj pentru a-i vedea relațiile.</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/characters_relations/ui/characters_relations_sidebar.cpp" line="659"/>
+        <location filename="../management_layer/plugins/characters_relations/ui/characters_relations_sidebar.cpp" line="660"/>
         <source>To see relation details, select concrete relation.</source>
         <translation>Selectează o relație pentru a-i vedea detaliile.</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/characters_relations/ui/characters_relations_sidebar.cpp" line="670"/>
-        <source>Profile</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <location filename="../management_layer/plugins/characters_relations/ui/characters_relations_sidebar.cpp" line="671"/>
-        <source>Relations</source>
-        <translation type="unfinished"></translation>
+        <source>Profile</source>
+        <translation>Profil</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/characters_relations/ui/characters_relations_sidebar.cpp" line="674"/>
+        <location filename="../management_layer/plugins/characters_relations/ui/characters_relations_sidebar.cpp" line="672"/>
+        <source>Relations</source>
+        <translation>Relații</translation>
+    </message>
+    <message>
+        <location filename="../management_layer/plugins/characters_relations/ui/characters_relations_sidebar.cpp" line="675"/>
         <source>Add photo +</source>
         <translation>Adaugă o fotografie</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/characters_relations/ui/characters_relations_sidebar.cpp" line="674"/>
+        <location filename="../management_layer/plugins/characters_relations/ui/characters_relations_sidebar.cpp" line="675"/>
         <source>Change photo...</source>
         <translation>Schimbă fotografia</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/characters_relations/ui/characters_relations_sidebar.cpp" line="675"/>
+        <location filename="../management_layer/plugins/characters_relations/ui/characters_relations_sidebar.cpp" line="676"/>
         <source>Do you want to delete the character&apos;s main photo?</source>
         <translation>Vrei să ștergi principala poză a personajului?</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/characters_relations/ui/characters_relations_sidebar.cpp" line="676"/>
+        <location filename="../management_layer/plugins/characters_relations/ui/characters_relations_sidebar.cpp" line="677"/>
         <source>Select an area for the character main photo</source>
         <translation>Selectează o zonă pentru principala poză a personajului</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/characters_relations/ui/characters_relations_sidebar.cpp" line="677"/>
+        <location filename="../management_layer/plugins/characters_relations/ui/characters_relations_sidebar.cpp" line="678"/>
         <source>Name</source>
         <translation>Nume</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/characters_relations/ui/characters_relations_sidebar.cpp" line="679"/>
+        <location filename="../management_layer/plugins/characters_relations/ui/characters_relations_sidebar.cpp" line="680"/>
         <source>Story role</source>
         <translation>Rolul</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/characters_relations/ui/characters_relations_sidebar.cpp" line="682"/>
+        <location filename="../management_layer/plugins/characters_relations/ui/characters_relations_sidebar.cpp" line="683"/>
         <source>Primary</source>
         <translation>Principal</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/characters_relations/ui/characters_relations_sidebar.cpp" line="682"/>
+        <location filename="../management_layer/plugins/characters_relations/ui/characters_relations_sidebar.cpp" line="683"/>
         <source>Secondary</source>
         <translation>Secundar</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/characters_relations/ui/characters_relations_sidebar.cpp" line="682"/>
+        <location filename="../management_layer/plugins/characters_relations/ui/characters_relations_sidebar.cpp" line="683"/>
         <source>Tertiary</source>
         <translation>Terțiar</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/characters_relations/ui/characters_relations_sidebar.cpp" line="682"/>
-        <location filename="../management_layer/plugins/characters_relations/ui/characters_relations_sidebar.cpp" line="688"/>
+        <location filename="../management_layer/plugins/characters_relations/ui/characters_relations_sidebar.cpp" line="683"/>
+        <location filename="../management_layer/plugins/characters_relations/ui/characters_relations_sidebar.cpp" line="689"/>
         <source>Undefined</source>
         <translation>Nedefinit</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/characters_relations/ui/characters_relations_sidebar.cpp" line="684"/>
+        <location filename="../management_layer/plugins/characters_relations/ui/characters_relations_sidebar.cpp" line="685"/>
         <source>Age</source>
         <translation>Vârsta</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/characters_relations/ui/characters_relations_sidebar.cpp" line="685"/>
+        <location filename="../management_layer/plugins/characters_relations/ui/characters_relations_sidebar.cpp" line="686"/>
         <source>Gender</source>
         <translation>Sex</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/characters_relations/ui/characters_relations_sidebar.cpp" line="688"/>
+        <location filename="../management_layer/plugins/characters_relations/ui/characters_relations_sidebar.cpp" line="689"/>
         <source>Male</source>
         <translation>Masculin</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/characters_relations/ui/characters_relations_sidebar.cpp" line="688"/>
+        <location filename="../management_layer/plugins/characters_relations/ui/characters_relations_sidebar.cpp" line="689"/>
         <source>Female</source>
         <translation>Feminin</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/characters_relations/ui/characters_relations_sidebar.cpp" line="688"/>
+        <location filename="../management_layer/plugins/characters_relations/ui/characters_relations_sidebar.cpp" line="689"/>
         <source>Other</source>
         <translation>Altceva</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/characters_relations/ui/characters_relations_sidebar.cpp" line="690"/>
+        <location filename="../management_layer/plugins/characters_relations/ui/characters_relations_sidebar.cpp" line="691"/>
         <source>One sentence description</source>
         <translation>Descriere într-o propoziție</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/characters_relations/ui/characters_relations_sidebar.cpp" line="691"/>
+        <location filename="../management_layer/plugins/characters_relations/ui/characters_relations_sidebar.cpp" line="692"/>
         <source>Long description</source>
         <translation>Descriere pe larg</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/characters_relations/ui/characters_relations_sidebar.cpp" line="697"/>
+        <location filename="../management_layer/plugins/characters_relations/ui/characters_relations_sidebar.cpp" line="698"/>
         <source>Line type</source>
         <translation>Tipul liniei</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/characters_relations/ui/characters_relations_sidebar.cpp" line="698"/>
+        <location filename="../management_layer/plugins/characters_relations/ui/characters_relations_sidebar.cpp" line="699"/>
         <source>Solid line</source>
         <translation>Linie continuă</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/characters_relations/ui/characters_relations_sidebar.cpp" line="698"/>
+        <location filename="../management_layer/plugins/characters_relations/ui/characters_relations_sidebar.cpp" line="699"/>
         <source>Dash line</source>
         <translation>Linie întreruptă</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/characters_relations/ui/characters_relations_sidebar.cpp" line="698"/>
+        <location filename="../management_layer/plugins/characters_relations/ui/characters_relations_sidebar.cpp" line="699"/>
         <source>Dot line</source>
         <translation>Linie punctată</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/characters_relations/ui/characters_relations_sidebar.cpp" line="699"/>
-        <location filename="../management_layer/plugins/characters_relations/ui/characters_relations_sidebar.cpp" line="701"/>
+        <location filename="../management_layer/plugins/characters_relations/ui/characters_relations_sidebar.cpp" line="700"/>
+        <location filename="../management_layer/plugins/characters_relations/ui/characters_relations_sidebar.cpp" line="702"/>
         <source>Feeling</source>
         <translation>Sentiment</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/characters_relations/ui/characters_relations_sidebar.cpp" line="700"/>
-        <location filename="../management_layer/plugins/characters_relations/ui/characters_relations_sidebar.cpp" line="702"/>
+        <location filename="../management_layer/plugins/characters_relations/ui/characters_relations_sidebar.cpp" line="701"/>
+        <location filename="../management_layer/plugins/characters_relations/ui/characters_relations_sidebar.cpp" line="703"/>
         <source>Details</source>
         <translation>Detalii</translation>
     </message>
@@ -2050,34 +2050,34 @@ Doriți schimbarea?</translation>
 <context>
     <name>Ui::CharactersRelationsView</name>
     <message>
-        <location filename="../management_layer/plugins/characters_relations/ui/characters_relations_view.cpp" line="236"/>
+        <location filename="../management_layer/plugins/characters_relations/ui/characters_relations_view.cpp" line="246"/>
         <source>Unlock ability to edit characters relations</source>
         <translation>Activează posibilitatea de editare a relațiilor personajului</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/characters_relations/ui/characters_relations_view.cpp" line="237"/>
+        <location filename="../management_layer/plugins/characters_relations/ui/characters_relations_view.cpp" line="247"/>
         <source>Add character</source>
         <translation>Adaugă personaj</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/characters_relations/ui/characters_relations_view.cpp" line="238"/>
+        <location filename="../management_layer/plugins/characters_relations/ui/characters_relations_view.cpp" line="248"/>
         <source>Remove selected item</source>
         <translation>Șterge articolul selectat</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/characters_relations/ui/characters_relations_view.cpp" line="241"/>
+        <location filename="../management_layer/plugins/characters_relations/ui/characters_relations_view.cpp" line="251"/>
         <source>Show relations titles only for the selected characters</source>
-        <translation type="unfinished"></translation>
+        <translation>Arată titlurile relațiilor doar pentru personajele selectate</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/characters_relations/ui/characters_relations_view.cpp" line="243"/>
+        <location filename="../management_layer/plugins/characters_relations/ui/characters_relations_view.cpp" line="253"/>
         <source>Here will be a characters relations scheme.</source>
-        <translation type="unfinished"></translation>
+        <translation>Aici va fi schema relațiilor personajului</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/characters_relations/ui/characters_relations_view.cpp" line="244"/>
+        <location filename="../management_layer/plugins/characters_relations/ui/characters_relations_view.cpp" line="254"/>
         <source>It&apos;s time to create the first character!</source>
-        <translation type="unfinished"></translation>
+        <translation>E timpul să creeezi primul personaj!</translation>
     </message>
 </context>
 <context>
@@ -2531,12 +2531,12 @@ Doriți schimbarea?</translation>
     <message>
         <location filename="../management_layer/plugins/characters_relations/ui/create_character_dialog.cpp" line="103"/>
         <source>Create new character</source>
-        <translation type="unfinished"></translation>
+        <translation>Creează un personaj nou</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/characters_relations/ui/create_character_dialog.cpp" line="104"/>
         <source>Character name</source>
-        <translation type="unfinished"></translation>
+        <translation>Numele personajului</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/characters_relations/ui/create_character_dialog.cpp" line="105"/>
@@ -2564,12 +2564,12 @@ Doriți schimbarea?</translation>
     <message>
         <location filename="../ui/project/create_document_dialog.cpp" line="92"/>
         <source>Create a document with full character&apos;s description to track his relations and follow his journey within the story.</source>
-        <translation type="unfinished"></translation>
+        <translation>Creează un document cu descrierea completă a personajului, pentru a-i urmării relațiile și evoluția de-a lungul poveștii.</translation>
     </message>
     <message>
         <location filename="../ui/project/create_document_dialog.cpp" line="95"/>
         <source>Create a document to note down the location&apos;s description and keep the details.</source>
-        <translation type="unfinished"></translation>
+        <translation>Creează un document pentru a nota  în detaliu descrierea locației.</translation>
     </message>
     <message>
         <location filename="../ui/project/create_document_dialog.cpp" line="97"/>
@@ -2702,12 +2702,12 @@ Doriți schimbarea?</translation>
     <message>
         <location filename="../ui/projects/create_project_dialog.cpp" line="314"/>
         <source>Type of the story</source>
-        <translation type="unfinished"></translation>
+        <translation>Tipul povestirii</translation>
     </message>
     <message>
         <location filename="../ui/projects/create_project_dialog.cpp" line="315"/>
         <source>Not set</source>
-        <translation type="unfinished"></translation>
+        <translation>Nu este stabilit</translation>
     </message>
     <message>
         <location filename="../ui/projects/create_project_dialog.cpp" line="315"/>
@@ -2722,7 +2722,7 @@ Doriți schimbarea?</translation>
     <message>
         <location filename="../ui/projects/create_project_dialog.cpp" line="316"/>
         <source>Name of the story</source>
-        <translation type="unfinished"></translation>
+        <translation>Numele povestirii</translation>
     </message>
     <message>
         <location filename="../ui/projects/create_project_dialog.cpp" line="317"/>
@@ -3004,7 +3004,7 @@ Doriți schimbarea?</translation>
     <message>
         <location filename="../ui/menu_view.cpp" line="302"/>
         <source>Toggle full screen</source>
-        <translation>intră sau ieși din modul full screen</translation>
+        <translation>Full screen</translation>
     </message>
     <message>
         <location filename="../ui/menu_view.cpp" line="305"/>
@@ -4166,7 +4166,7 @@ Doriți schimbarea?</translation>
     <message>
         <location filename="../ui/settings/settings_view.cpp" line="1588"/>
         <source>Show documents pages</source>
-        <translation type="unfinished"></translation>
+        <translation>Arată paginile documentului</translation>
     </message>
     <message>
         <location filename="../ui/settings/settings_view.cpp" line="1589"/>
@@ -4772,37 +4772,37 @@ Doriți schimbarea?</translation>
     <message>
         <location filename="../ui/settings/settings_view.cpp" line="1785"/>
         <source>Screenplay editor</source>
-        <translation type="unfinished"></translation>
+        <translation>Editare scenariu</translation>
     </message>
     <message>
         <location filename="../ui/settings/settings_view.cpp" line="1788"/>
         <source>Block name</source>
-        <translation type="unfinished"></translation>
+        <translation>Formatarea</translation>
     </message>
     <message>
         <location filename="../ui/settings/settings_view.cpp" line="1789"/>
         <source>Shortcut</source>
-        <translation type="unfinished"></translation>
+        <translation>Scurtătură</translation>
     </message>
     <message>
         <location filename="../ui/settings/settings_view.cpp" line="1790"/>
         <source>If you press in paragraphs end</source>
-        <translation type="unfinished"></translation>
+        <translation>Dacă apeși la sfârșitul paragrafului</translation>
     </message>
     <message>
         <location filename="../ui/settings/settings_view.cpp" line="1791"/>
         <source>If you press in empty paragraphs</source>
-        <translation type="unfinished"></translation>
+        <translation>Dacă apeși în paragraf gol</translation>
     </message>
     <message>
         <location filename="../ui/settings/settings_view.cpp" line="1794"/>
         <source>Add paragraph</source>
-        <translation type="unfinished"></translation>
+        <translation>Adaugă paragraf</translation>
     </message>
     <message>
         <location filename="../ui/settings/settings_view.cpp" line="1795"/>
         <source>Change to</source>
-        <translation type="unfinished"></translation>
+        <translation>Schimbă în</translation>
     </message>
     <message>
         <location filename="../ui/settings/settings_view.cpp" line="1575"/>
@@ -4878,7 +4878,7 @@ Dacă lucrați fără întrerupere, salvează proiectul la fiecare 3 minute.</tr
         <location filename="../ui/settings/settings_view.cpp" line="1739"/>
         <location filename="../ui/settings/settings_view.cpp" line="1772"/>
         <source>Text editor</source>
-        <translation>Editor de text</translation>
+        <translation>Editare text</translation>
     </message>
     <message>
         <location filename="../ui/settings/settings_view.cpp" line="1727"/>
@@ -4940,7 +4940,7 @@ Dacă lucrați fără întrerupere, salvează proiectul la fiecare 3 minute.</tr
     <message>
         <location filename="../ui/settings/settings_view.cpp" line="1748"/>
         <source>Automatically continue same speaker&apos;s dialogue</source>
-        <translation type="unfinished"></translation>
+        <translation>Adaugă automat CONT&apos;D la continuarea dialogul aceluiași personaj</translation>
     </message>
     <message>
         <location filename="../ui/settings/settings_view.cpp" line="1751"/>
