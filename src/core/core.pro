@@ -63,6 +63,7 @@ SOURCES += \
     ui/account/account_navigator.cpp \
     ui/account/account_tool_bar.cpp \
     ui/account/account_view.cpp \
+    ui/account/connection_status_tool_bar.cpp \
     ui/account/login_dialog.cpp \
     ui/account/renew_subscription_dialog.cpp \
     ui/account/session_widget.cpp \
@@ -115,6 +116,7 @@ HEADERS += \
     ui/account/account_navigator.h \
     ui/account/account_tool_bar.h \
     ui/account/account_view.h \
+    ui/account/connection_status_tool_bar.h \
     ui/account/login_dialog.h \
     ui/account/renew_subscription_dialog.h \
     ui/account/session_widget.h \

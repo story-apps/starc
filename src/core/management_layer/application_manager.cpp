@@ -9,8 +9,6 @@
 #include "content/projects/projects_manager.h"
 #include "content/settings/settings_manager.h"
 
-#include <ui/widgets/text_edit/scalable_wrapper/scalable_wrapper.h>
-
 #ifdef CLOUD_SERVICE_MANAGER
 #include <cloud/cloud_service_manager.h>
 #endif
@@ -20,12 +18,14 @@
 #include <data_layer/storage/settings_storage.h>
 #include <data_layer/storage/storage_facade.h>
 #include <include/custom_events.h>
+#include <ui/account/connection_status_tool_bar.h>
 #include <ui/application_style.h>
 #include <ui/application_view.h>
 #include <ui/design_system/design_system.h>
 #include <ui/menu_view.h>
 #include <ui/widgets/dialog/dialog.h>
 #include <ui/widgets/dialog/standard_dialog.h>
+#include <ui/widgets/text_edit/scalable_wrapper/scalable_wrapper.h>
 #include <ui/widgets/text_edit/spell_check/spell_check_text_edit.h>
 #include <utils/3rd_party/WAF/Animation/Animation.h>
 #include <utils/helpers/dialog_helper.h>
@@ -241,6 +241,7 @@ public:
         QWidget* navigator = nullptr;
         QWidget* view = nullptr;
     } lastContent;
+    Ui::ConnectionStatusToolBar* connectionStatus = nullptr;
 
     /**
      * @brief Менеджеры управляющие конкретными частями приложения
@@ -278,6 +279,7 @@ ApplicationManager::Implementation::Implementation(ApplicationManager* _q)
     : q(_q)
     , applicationView(new Ui::ApplicationView)
     , menuView(new Ui::MenuView(applicationView))
+    , connectionStatus(new Ui::ConnectionStatusToolBar(applicationView))
     , accountManager(new AccountManager(nullptr, applicationView))
     , onboardingManager(new OnboardingManager(nullptr, applicationView))
     , projectsManager(new ProjectsManager(nullptr, applicationView))
@@ -1621,6 +1623,11 @@ void ApplicationManager::initConnections()
     //
     // Менеджер облака
     //
+
+    connect(d->cloudServiceManager.data(), &CloudServiceManager::connected, d->connectionStatus,
+            [this] { d->connectionStatus->setConnectionAvailable(true); });
+    connect(d->cloudServiceManager.data(), &CloudServiceManager::disconnected, d->connectionStatus,
+            [this] { d->connectionStatus->setConnectionAvailable(false); });
 
     //
     // Проверка регистрация или вход

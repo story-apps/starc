@@ -1,0 +1,218 @@
+#include "connection_status_tool_bar.h"
+
+#include <ui/design_system/design_system.h>
+
+#include <QAction>
+#include <QEvent>
+#include <QPainter>
+#include <QParallelAnimationGroup>
+#include <QSequentialAnimationGroup>
+#include <QTimer>
+#include <QVariantAnimation>
+
+namespace Ui {
+
+class ConnectionStatusToolBar::Implementation
+{
+public:
+    explicit Implementation(ConnectionStatusToolBar* _q);
+
+    void show();
+    void hide();
+
+
+    ConnectionStatusToolBar* q = nullptr;
+
+    QParallelAnimationGroup statusAnimation;
+    QVariantAnimation startAngleAnimation;
+    QVariantAnimation spanAngleAnimation;
+
+    QVariantAnimation positionAnimation;
+};
+
+ConnectionStatusToolBar::Implementation::Implementation(ConnectionStatusToolBar* _q)
+    : q(_q)
+{
+    const int startAngle = 90;
+    const int endAngle = -270;
+    const int startSpanAngle = 0;
+    const int endSpanAngle = -270;
+    const int duration = 2000;
+    const int firstPhaseDuration = duration / 4 * 3;
+    const int secondPhaseDuration = duration / 4;
+    auto initFirstPhase = [=] {
+        startAngleAnimation.setStartValue(startAngle);
+        startAngleAnimation.setEndValue(endAngle);
+        startAngleAnimation.setDuration(firstPhaseDuration);
+
+        spanAngleAnimation.setStartValue(startSpanAngle);
+        spanAngleAnimation.setEndValue(endSpanAngle);
+        spanAngleAnimation.setDuration(firstPhaseDuration);
+    };
+    auto initSecondPhase = [=] {
+        startAngleAnimation.setStartValue(startAngle);
+        startAngleAnimation.setEndValue(endAngle);
+        startAngleAnimation.setDuration(secondPhaseDuration);
+
+        spanAngleAnimation.setStartValue(endSpanAngle);
+        spanAngleAnimation.setEndValue(startSpanAngle);
+        spanAngleAnimation.setDuration(secondPhaseDuration);
+    };
+
+    initFirstPhase();
+
+    connect(&statusAnimation, &QVariantAnimation::finished, &startAngleAnimation,
+            [this, initFirstPhase, initSecondPhase] {
+                // first phase
+                if (spanAngleAnimation.startValue() == endSpanAngle) {
+                    initFirstPhase();
+                }
+                // second phase
+                else {
+                    initSecondPhase();
+                }
+
+                if (q->isVisible()) {
+                    statusAnimation.start();
+                }
+            });
+
+    statusAnimation.addAnimation(&startAngleAnimation);
+    statusAnimation.addAnimation(&spanAngleAnimation);
+
+    positionAnimation.setEasingCurve(QEasingCurve::OutQuad);
+    positionAnimation.setDuration(240);
+}
+
+void ConnectionStatusToolBar::Implementation::show()
+{
+    if (q->isVisible()) {
+        return;
+    }
+
+    positionAnimation.setStartValue(q->parentWidget()->height());
+    positionAnimation.setEndValue(q->parentWidget()->height() - q->height()
+                                  - static_cast<int>(Ui::DesignSystem::layout().px24()));
+    positionAnimation.start();
+    q->show();
+}
+
+void ConnectionStatusToolBar::Implementation::hide()
+{
+    if (q->isHidden()) {
+        return;
+    }
+
+    positionAnimation.setStartValue(q->parentWidget()->height() - q->height()
+                                    - static_cast<int>(Ui::DesignSystem::layout().px24()));
+    positionAnimation.setEndValue(q->parentWidget()->height());
+    positionAnimation.start();
+}
+
+
+// ****
+
+
+ConnectionStatusToolBar::ConnectionStatusToolBar(QWidget* _parent)
+    : FloatingToolBar(_parent)
+    , d(new Implementation(this))
+{
+    Q_ASSERT(_parent);
+    _parent->installEventFilter(this);
+
+    setFocusPolicy(Qt::NoFocus);
+
+    auto progressAction = new QAction(this);
+    addAction(progressAction);
+
+    connect(&d->startAngleAnimation, &QVariantAnimation::valueChanged, this,
+            qOverload<>(&ConnectionStatusToolBar::update));
+    connect(&d->spanAngleAnimation, &QVariantAnimation::valueChanged, this,
+            qOverload<>(&ConnectionStatusToolBar::update));
+    connect(&d->positionAnimation, &QVariantAnimation::valueChanged, this,
+            [this](const QVariant& _value) {
+                move(parentWidget()->width() - width() - Ui::DesignSystem::layout().px24(),
+                     _value.toInt());
+            });
+    connect(&d->positionAnimation, &QVariantAnimation::finished, this, [this] {
+        //
+        // Если скрываем панель с экрана, то по завершении остановим анимацию прогресса и скроем
+        // виджет полностью
+        //
+        if (d->positionAnimation.startValue().toInt() < d->positionAnimation.endValue().toInt()) {
+            d->statusAnimation.stop();
+            hide();
+        }
+    });
+
+    designSystemChangeEvent(nullptr);
+
+    hide();
+}
+
+ConnectionStatusToolBar::~ConnectionStatusToolBar() = default;
+
+void ConnectionStatusToolBar::setConnectionAvailable(bool _available)
+{
+    if (_available) {
+        d->hide();
+        return;
+    }
+
+    d->statusAnimation.start();
+    d->show();
+}
+
+bool ConnectionStatusToolBar::eventFilter(QObject* _watched, QEvent* _event)
+{
+    if (_watched == parentWidget()) {
+        if (_event->type() == QEvent::Resize) {
+            move(parentWidget()->width() - width() - Ui::DesignSystem::layout().px24(),
+                 parentWidget()->height() - height() - Ui::DesignSystem::layout().px24());
+        } else if (_event->type() == QEvent::ChildAdded) {
+            raise();
+        }
+    }
+
+    return FloatingToolBar::eventFilter(_watched, _event);
+}
+
+void ConnectionStatusToolBar::paintEvent(QPaintEvent* _event)
+{
+    FloatingToolBar::paintEvent(_event);
+
+    if (d->startAngleAnimation.state() != QVariantAnimation::Running
+        || d->spanAngleAnimation.state() != QVariantAnimation::Running) {
+        return;
+    }
+
+    QPainter paiter(this);
+    paiter.setRenderHints(QPainter::Antialiasing);
+
+    QPen pen;
+    pen.setWidthF(Ui::DesignSystem::layout().px4());
+    pen.setCapStyle(Qt::SquareCap);
+    pen.setCosmetic(true);
+    pen.setColor(Ui::DesignSystem::color().error());
+    paiter.setPen(pen);
+
+    const auto circleRect
+        = QRectF(rect()).marginsRemoved(Ui::DesignSystem::floatingToolBar().shadowMargins()
+                                        + Ui::DesignSystem::floatingToolBar().margins());
+    paiter.drawArc(circleRect, d->startAngleAnimation.currentValue().toInt() * 16,
+                   d->spanAngleAnimation.currentValue().toInt() * 16);
+}
+
+void ConnectionStatusToolBar::designSystemChangeEvent(DesignSystemChangeEvent* _event)
+{
+    FloatingToolBar::designSystemChangeEvent(_event);
+
+    setBackgroundColor(Ui::DesignSystem::color().primary());
+
+    raise();
+    resize(sizeHint());
+    move(parentWidget()->width() - width() - Ui::DesignSystem::layout().px24(),
+         parentWidget()->height() - height() - Ui::DesignSystem::layout().px24());
+}
+
+} // namespace Ui
