@@ -8,7 +8,7 @@ namespace Ui {
 /**
  * @brief Панель с информацией о соединении с сервером
  */
-class CORE_LIBRARY_EXPORT ConnectionStatusToolBar : public FloatingToolBar
+class ConnectionStatusToolBar : public FloatingToolBar
 {
     Q_OBJECT
 
