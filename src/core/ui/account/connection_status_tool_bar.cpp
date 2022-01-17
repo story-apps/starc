@@ -20,6 +20,11 @@ public:
     void show();
     void hide();
 
+    /**
+     * @brief Скрывается ли тулбар в данный момент
+     */
+    bool isHiding() const;
+
 
     ConnectionStatusToolBar* q = nullptr;
 
@@ -109,6 +114,11 @@ void ConnectionStatusToolBar::Implementation::hide()
     positionAnimation.start();
 }
 
+bool ConnectionStatusToolBar::Implementation::isHiding() const
+{
+    return positionAnimation.startValue().toInt() < positionAnimation.endValue().toInt();
+}
+
 
 // ****
 
@@ -124,6 +134,8 @@ ConnectionStatusToolBar::ConnectionStatusToolBar(QWidget* _parent)
 
     auto progressAction = new QAction(this);
     addAction(progressAction);
+    connect(progressAction, &QAction::triggered, this,
+            &ConnectionStatusToolBar::checkConnectionPressed);
 
     connect(&d->startAngleAnimation, &QVariantAnimation::valueChanged, this,
             qOverload<>(&ConnectionStatusToolBar::update));
@@ -139,7 +151,7 @@ ConnectionStatusToolBar::ConnectionStatusToolBar(QWidget* _parent)
         // Если скрываем панель с экрана, то по завершении остановим анимацию прогресса и скроем
         // виджет полностью
         //
-        if (d->positionAnimation.startValue().toInt() < d->positionAnimation.endValue().toInt()) {
+        if (d->isHiding()) {
             d->statusAnimation.stop();
             hide();
         }
@@ -167,8 +179,19 @@ bool ConnectionStatusToolBar::eventFilter(QObject* _watched, QEvent* _event)
 {
     if (_watched == parentWidget()) {
         if (_event->type() == QEvent::Resize) {
-            move(parentWidget()->width() - width() - Ui::DesignSystem::layout().px24(),
-                 parentWidget()->height() - height() - Ui::DesignSystem::layout().px24());
+            if (d->positionAnimation.state() == QVariantAnimation::Running) {
+                d->positionAnimation.pause();
+                if (d->isHiding()) {
+                    d->positionAnimation.setEndValue(parentWidget()->height());
+                } else {
+                    d->positionAnimation.setEndValue(parentWidget()->height() - height()
+                                                     - Ui::DesignSystem::layout().px24());
+                }
+                d->positionAnimation.resume();
+            } else {
+                move(parentWidget()->width() - width() - Ui::DesignSystem::layout().px24(),
+                     parentWidget()->height() - height() - Ui::DesignSystem::layout().px24());
+            }
         } else if (_event->type() == QEvent::ChildAdded) {
             raise();
         }
@@ -201,6 +224,12 @@ void ConnectionStatusToolBar::paintEvent(QPaintEvent* _event)
                                         + Ui::DesignSystem::floatingToolBar().margins());
     paiter.drawArc(circleRect, d->startAngleAnimation.currentValue().toInt() * 16,
                    d->spanAngleAnimation.currentValue().toInt() * 16);
+}
+
+void ConnectionStatusToolBar::updateTranslations()
+{
+    actions().constFirst()->setToolTip(tr("Connection with server lost. Automatic reconnection "
+                                          "enabled. Press, to try to reconnect right now."));
 }
 
 void ConnectionStatusToolBar::designSystemChangeEvent(DesignSystemChangeEvent* _event)

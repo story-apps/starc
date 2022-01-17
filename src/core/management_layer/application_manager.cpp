@@ -1628,6 +1628,8 @@ void ApplicationManager::initConnections()
             [this] { d->connectionStatus->setConnectionAvailable(true); });
     connect(d->cloudServiceManager.data(), &CloudServiceManager::disconnected, d->connectionStatus,
             [this] { d->connectionStatus->setConnectionAvailable(false); });
+    connect(d->connectionStatus, &Ui::ConnectionStatusToolBar::checkConnectionPressed,
+            d->cloudServiceManager.data(), &CloudServiceManager::start);
 
     //
     // Проверка регистрация или вход

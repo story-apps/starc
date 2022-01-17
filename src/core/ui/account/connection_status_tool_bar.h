@@ -21,6 +21,12 @@ public:
      */
     void setConnectionAvailable(bool _available);
 
+signals:
+    /**
+     * @brief Пользователь хочет проверить соединение прямо сейчас
+     */
+    void checkConnectionPressed();
+
 protected:
     /**
      * @brief Переопределяем для корректировки позиции и положения при изменениях родителя
@@ -31,6 +37,11 @@ protected:
      * @brief Рисуем крутящийся лоадер
      */
     void paintEvent(QPaintEvent* _event) override;
+
+    /**
+     * @brief Обновить переводы
+     */
+    void updateTranslations() override;
 
     /**
      * @brief Обновляем UI при изменении дизайн системы
