@@ -67,7 +67,7 @@ ConnectionStatusToolBar::Implementation::Implementation(ConnectionStatusToolBar*
     initFirstPhase();
 
     connect(&statusAnimation, &QVariantAnimation::finished, &startAngleAnimation,
-            [this, initFirstPhase, initSecondPhase] {
+            [this, endSpanAngle, initFirstPhase, initSecondPhase] {
                 // first phase
                 if (spanAngleAnimation.startValue() == endSpanAngle) {
                     initFirstPhase();
