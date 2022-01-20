@@ -32,12 +32,12 @@ Starc has its own *.starc* file format, but also allows you to import files usin
 
 **Starc** currently supports following languages:
 
- - Azerbaijani
- - Croatian
- - Galician
- - German (de)
- - Portuguese (Brazil)
- - Romanian (Romania)
+- Azerbaijani
+- Croatian
+- Galician
+- German (de)
+- Portuguese (Brazil)
+- Romanian (Romania)
 - Russian (ru) 
 - Spanish (es) 
 - Ukrainian (uk) 
@@ -77,6 +77,8 @@ Alongside these, **Starc** uses modules for research and for writing. You can ad
 Starc can also help you track your characters, locations, etc. with its statistics module, as well as edit them and add additional information about them (for example, characters real name) which can be useful in pre-production.
 
 ![Modules](./img/modules.png)
+
+You can also add things like title page for your script, movie poster and other information that might be useful to other crew members.
 
 ## Cloud sync
 
