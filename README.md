@@ -94,4 +94,7 @@ You can also add things like title page for your script, movie poster and other 
 
 
 # Support the project
-If you wish to support this project, you can do that by visiting our [website and checking out our premium offer](https://starc.app/pricing).
+If you wish to support this project, you can do that by visiting our [website and checking out our premium offer](https://starc.app/pricing). Make sure to follow our [blog](https://starc.app/blog/) for important news and updates.
+
+**Thank you for using Story Architecht**
+**Have fun being creative!**
