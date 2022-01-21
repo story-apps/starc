@@ -7,6 +7,9 @@ DEFINES += FILEFORMATS_LIBRARY
 # Build configuration
 #
 CONFIG += qt thread warn_on staticlib
+greaterThan(QT_MAJOR_VERSION, 5) {
+    QT += core5compat
+}
 
 #
 # Конфигурируем расположение файлов сборки

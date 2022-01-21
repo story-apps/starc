@@ -26,7 +26,6 @@ class FormatReader;
 #include <QString>
 
 class QIODevice;
-class QStringList;
 
 
 class FormatManager

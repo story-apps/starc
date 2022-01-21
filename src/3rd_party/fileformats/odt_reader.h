@@ -1,6 +1,6 @@
 /***********************************************************************
  *
- * Copyright (C) 2011, 2012, 2013, 2014 Graeme Gott <graeme@gottcode.org>
+ * Copyright (C) 2011, 2012, 2013, 2014, 2015 Graeme Gott <graeme@gottcode.org>
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -28,50 +28,52 @@
 
 class OdtReader : public FormatReader
 {
-	Q_DECLARE_TR_FUNCTIONS(OdtReader)
+    Q_DECLARE_TR_FUNCTIONS(OdtReader)
 
 public:
-	OdtReader();
+    OdtReader();
 
-	enum { Type = 3 };
-	int type() const
-	{
-		return Type;
-	}
+    enum { Type = 3 };
+    int type() const
+    {
+        return Type;
+    }
 
-	static bool canRead(QIODevice* device);
-
-private:
-	void readData(QIODevice* device);
-	void readDocument();
-	void readStylesGroup();
-	void readStyle();
-	void readStyleParagraphProperties(QTextBlockFormat& format);
-	void readStyleTextProperties(QTextCharFormat& format);
-	void readBody();
-	void readBodyText();
-	void readParagraph(int level = 0);
-	void readSpan();
-	void readText();
+    static bool canRead(QIODevice* device);
 
 private:
-	QXmlStreamReader m_xml;
+    void readData(QIODevice* device);
+    void readDataCompressed(QIODevice* device);
+    void readDataUncompressed(QIODevice* device);
+    void readDocument();
+    void readStylesGroup();
+    void readStyle();
+    void readStyleParagraphProperties(QTextBlockFormat& format);
+    void readStyleTextProperties(QTextCharFormat& format);
+    void readBody();
+    void readBodyText();
+    void readParagraph(int level = 0);
+    void readSpan();
+    void readText();
 
-	struct Style
-	{
-		Style(const QTextBlockFormat& block_format_ = QTextBlockFormat(), const QTextCharFormat& char_format_ = QTextCharFormat())
-			: block_format(block_format_), char_format(char_format_)
-		{
-		}
+private:
+    QXmlStreamReader m_xml;
 
-		QTextBlockFormat block_format;
-		QTextCharFormat char_format;
-		QStringList children;
-	};
-	QHash<QString, Style> m_styles[2];
-	QTextBlockFormat m_block_format;
+    struct Style
+    {
+        Style(const QTextBlockFormat& block_format_ = QTextBlockFormat(), const QTextCharFormat& char_format_ = QTextCharFormat())
+            : block_format(block_format_), char_format(char_format_)
+        {
+        }
 
-	bool m_in_block;
+        QTextBlockFormat block_format;
+        QTextCharFormat char_format;
+        QStringList children;
+    };
+    QHash<QString, Style> m_styles[2];
+    QTextBlockFormat m_block_format;
+
+    bool m_in_block;
 };
 
 #endif
