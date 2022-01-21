@@ -36,7 +36,11 @@ protected:
     /**
      * @brief Реализуем эффекст отображения оверлея при наведении мыши
      */
+#if (QT_VERSION > QT_VERSION_CHECK(6, 0, 0))
+    void enterEvent(QEnterEvent* _event) override;
+#else
     void enterEvent(QEvent* _event) override;
+#endif
     void leaveEvent(QEvent* _event) override;
 
     /**

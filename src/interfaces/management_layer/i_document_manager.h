@@ -1,5 +1,6 @@
 #pragma once
 
+#include <QtContainerFwd>
 #include <QtPlugin>
 
 namespace BusinessLayer {
@@ -11,7 +12,6 @@ class IDocumentView;
 }
 
 class QObject;
-class QStringList;
 class QWidget;
 
 namespace ManagementLayer {

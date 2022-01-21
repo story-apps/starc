@@ -525,7 +525,7 @@ void SettingsManager::setApplicationSpellCheckerLanguage(const QString& _languag
     // Проверяем установлен ли выбранный словарь
     //
     const QString appDataFolderPath
-        = QStandardPaths::writableLocation(QStandardPaths::DataLocation);
+        = QStandardPaths::writableLocation(QStandardPaths::AppDataLocation);
     const QString hunspellDictionariesFolderPath = appDataFolderPath + "/hunspell/";
     const QString affFileName = _languageCode + ".aff";
     const QString dicFileName = _languageCode + ".dic";
@@ -562,7 +562,7 @@ void SettingsManager::loadSpellingDictionary(const QString& _languageCode)
     // Создаём папку для пользовательских файлов
     //
     const QString appDataFolderPath
-        = QStandardPaths::writableLocation(QStandardPaths::DataLocation);
+        = QStandardPaths::writableLocation(QStandardPaths::AppDataLocation);
     const QString hunspellDictionariesFolderPath = appDataFolderPath + "/hunspell/";
     QDir::root().mkpath(hunspellDictionariesFolderPath);
 
@@ -603,7 +603,7 @@ void SettingsManager::loadSpellingDictionaryAffFile(const QString& _languageCode
                 //
                 QFile affFile(
                     QString("%1/hunspell/%2")
-                        .arg(QStandardPaths::writableLocation(QStandardPaths::DataLocation),
+                        .arg(QStandardPaths::writableLocation(QStandardPaths::AppDataLocation),
                              affFileName));
                 affFile.open(QIODevice::WriteOnly);
                 affFile.write(_data);
@@ -659,7 +659,7 @@ void SettingsManager::loadSpellingDictionaryDicFile(const QString& _languageCode
                 //
                 QFile affFile(
                     QString("%1/hunspell/%2")
-                        .arg(QStandardPaths::writableLocation(QStandardPaths::DataLocation),
+                        .arg(QStandardPaths::writableLocation(QStandardPaths::AppDataLocation),
                              dicFileName));
                 affFile.open(QIODevice::WriteOnly);
                 affFile.write(_data);

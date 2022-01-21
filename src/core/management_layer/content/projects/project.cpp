@@ -217,9 +217,9 @@ QVariant Project::data(int _role) const
 bool operator==(const Project& _lhs, const Project& _rhs)
 {
     return _lhs.type() == _rhs.type() && _lhs.path() == _rhs.path()
-        && _lhs.posterPath() == _rhs.posterPath() && _lhs.poster() == _rhs.poster()
-        && _lhs.name() == _rhs.name() && _lhs.logline() == _rhs.logline()
-        && _lhs.lastEditTime() == _rhs.lastEditTime();
+        && _lhs.posterPath() == _rhs.posterPath()
+        && _lhs.poster().cacheKey() == _rhs.poster().cacheKey() && _lhs.name() == _rhs.name()
+        && _lhs.logline() == _rhs.logline() && _lhs.lastEditTime() == _rhs.lastEditTime();
 }
 
 

@@ -345,7 +345,11 @@ void Button::paintEvent(QPaintEvent* _event)
     }
 }
 
+#if (QT_VERSION > QT_VERSION_CHECK(6, 0, 0))
 void Button::enterEvent(QEnterEvent* _event)
+#else
+void Button::enterEvent(QEvent* _event)
+#endif
 {
     Q_UNUSED(_event)
     d->animateHoverIn();

@@ -4,9 +4,6 @@
 
 class QString;
 
-template<typename T>
-class QVector;
-
 namespace BusinessLayer {
 enum class ScreenplayParagraphType;
 }

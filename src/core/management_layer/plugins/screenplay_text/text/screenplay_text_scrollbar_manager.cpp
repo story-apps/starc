@@ -458,8 +458,10 @@ void ScreenplayTextTimeline::wheelEvent(QWheelEvent* _event)
         return;
     }
 
-    auto cloneEvent = new QWheelEvent(_event->pos(), _event->delta(), _event->buttons(),
-                                      _event->modifiers(), _event->orientation());
+    auto cloneEvent
+        = new QWheelEvent(_event->position(), _event->globalPosition(), _event->pixelDelta(),
+                          _event->angleDelta(), _event->buttons(), _event->modifiers(),
+                          _event->phase(), _event->inverted(), _event->source());
     QApplication::postEvent(scrollArea->verticalScrollBar(), cloneEvent);
 }
 

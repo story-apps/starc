@@ -138,7 +138,7 @@ LanguageDialog::Implementation::Implementation(QWidget* _parent)
     spanish->setText("Español");
     spanish->setProperty(kLanguageKey, QLocale::Spanish);
     tagalog->setText("Tagalog");
-    tagalog->setProperty(kLanguageKey, QLocale::Tagalog);
+    tagalog->setProperty(kLanguageKey, QLocale::Filipino);
     turkish->setText("Türkçe");
     turkish->setProperty(kLanguageKey, QLocale::Turkish);
     ukrainian->setText("Українська");

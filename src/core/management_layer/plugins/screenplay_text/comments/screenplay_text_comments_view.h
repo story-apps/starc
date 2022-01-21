@@ -2,10 +2,8 @@
 
 #include <ui/widgets/stack_widget/stack_widget.h>
 
-class QAbstractItemModel;
-template<typename T>
-class QList;
-typedef QList<QModelIndex> QModelIndexList;
+#include <QModelIndex>
+#include <QtContainerFwd>
 
 
 namespace Ui {

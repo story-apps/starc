@@ -70,7 +70,7 @@ Cover::~Cover() = default;
 void Cover::setCover(const QPixmap& _cover)
 {
     if ((d->cover.isNull() && _cover.isNull())
-        || (!d->cover.isNull() && !_cover.isNull() && d->cover == _cover)) {
+        || (!d->cover.isNull() && !_cover.isNull() && d->cover.cacheKey() == _cover.cacheKey())) {
         return;
     }
 
@@ -103,7 +103,11 @@ void Cover::paintEvent(QPaintEvent* _event)
     }
 }
 
+#if (QT_VERSION > QT_VERSION_CHECK(6, 0, 0))
+void Cover::enterEvent(QEnterEvent* _event)
+#else
 void Cover::enterEvent(QEvent* _event)
+#endif
 {
     Widget::enterEvent(_event);
 

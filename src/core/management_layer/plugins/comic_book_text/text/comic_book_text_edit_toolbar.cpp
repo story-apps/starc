@@ -60,7 +60,7 @@ ComicBookTextEditToolbar::Implementation::Implementation(QWidget* _parent)
     popupContent->setRootIsDecorated(false);
 
     auto popupLayout = new QHBoxLayout;
-    popupLayout->setMargin({});
+    popupLayout->setContentsMargins({});
     popupLayout->setSpacing(0);
     popupLayout->addWidget(popupContent);
     popup->setLayoutReimpl(popupLayout);

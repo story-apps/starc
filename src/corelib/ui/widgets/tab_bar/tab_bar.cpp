@@ -533,7 +533,11 @@ void TabBar::paintEvent(QPaintEvent* _event)
     painter.drawLine(rect().bottomLeft(), rect().bottomRight());
 }
 
+#if (QT_VERSION > QT_VERSION_CHECK(6, 0, 0))
 void TabBar::enterEvent(QEnterEvent* _event)
+#else
+void TabBar::enterEvent(QEvent* _event)
+#endif
 {
     Q_UNUSED(_event);
     update();

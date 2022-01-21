@@ -159,7 +159,11 @@ void ScrollBar::paintEvent(QPaintEvent* _event)
     painter.fillRect(handle, handleColor);
 }
 
+#if (QT_VERSION > QT_VERSION_CHECK(6, 0, 0))
 void ScrollBar::enterEvent(QEnterEvent* _event)
+#else
+void ScrollBar::enterEvent(QEvent* _event)
+#endif
 {
     Q_UNUSED(_event)
     d->maximizeScrollbar();

@@ -428,7 +428,11 @@ void FloatingToolBar::showEvent(QShowEvent* _event)
     }
 }
 
+#if (QT_VERSION > QT_VERSION_CHECK(6, 0, 0))
 void FloatingToolBar::enterEvent(QEnterEvent* _event)
+#else
+void FloatingToolBar::enterEvent(QEvent* _event)
+#endif
 {
     Q_UNUSED(_event)
     d->animateHoverIn();

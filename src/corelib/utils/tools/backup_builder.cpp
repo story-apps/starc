@@ -7,11 +7,6 @@
 #include <set>
 
 
-void BackupBuilder::save(const QString& _filePath, const QString& _backupDir)
-{
-    return save(_filePath, _backupDir, {});
-}
-
 void BackupBuilder::save(const QString& _filePath, const QString& _backupDir,
                          const QString& _newName)
 {

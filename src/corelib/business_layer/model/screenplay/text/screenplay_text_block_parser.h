@@ -1,8 +1,12 @@
 #pragma once
 
-#include <QtContainerFwd>
-
 #include <corelib_global.h>
+
+#if (QT_VERSION > QT_VERSION_CHECK(6, 0, 0))
+#include <QtContainerFwd>
+#else
+class QStringList;
+#endif
 
 class QString;
 

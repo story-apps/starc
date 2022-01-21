@@ -373,7 +373,11 @@ void SpellCheckTextEdit::rehighlighWithNewCursor()
     // Если редактирование документа не закончено, но позиция курсора сменилась,
     // откладываем проверку орфографии
     //
+#if (QT_VERSION > QT_VERSION_CHECK(6, 0, 0))
     if (QTextDocumentPrivate::get(document())->isInEditBlock()) {
+#else
+    if (document()->docHandle()->isInEditBlock()) {
+#endif
         QMetaObject::invokeMethod(this, &SpellCheckTextEdit::rehighlighWithNewCursor,
                                   Qt::QueuedConnection);
         return;

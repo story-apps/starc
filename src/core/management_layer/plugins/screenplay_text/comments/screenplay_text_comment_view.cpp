@@ -4,6 +4,7 @@
 
 #include <ui/design_system/design_system.h>
 
+#include <QModelIndex>
 #include <QPainter>
 
 

@@ -2,7 +2,7 @@ TARGET = starcapi
 
 CONFIG += c++1z console
 CONFIG -= app_bundle
-QT += core gui widgets
+QT += core gui widgets widgets-private
 
 DESTDIR = ../_build/
 

@@ -549,7 +549,7 @@ void ApplicationManager::Implementation::setTranslation(QLocale::Language _langu
         break;
     }
 
-    case QLocale::Tagalog: {
+    case QLocale::Filipino: {
         translation = "tl_PH";
         break;
     }
@@ -752,9 +752,10 @@ void ApplicationManager::Implementation::saveChanges()
             //
             baseBackupName = QString("%1 [%2]").arg(currentProject.name()).arg(currentProject.id());
         }
-        QtConcurrent::run(&BackupBuilder::save, projectsManager->currentProject().path(),
-                          settingsValue(DataStorageLayer::kApplicationBackupsFolderKey).toString(),
-                          baseBackupName);
+        QFuture<void> future = QtConcurrent::run(
+            BackupBuilder::save, projectsManager->currentProject().path(),
+            settingsValue(DataStorageLayer::kApplicationBackupsFolderKey).toString(),
+            baseBackupName);
     }
 }
 
@@ -1357,6 +1358,12 @@ bool ApplicationManager::event(QEvent* _event)
         //
         if (d->autosaveTimer.isActive()) {
             d->saveChanges();
+        }
+        //
+        // Уведомляем заинтересованные менеджеры о том, что перешли в состояние простоя
+        //
+        for (auto manager : { d->projectManager.data() }) {
+            QApplication::sendEvent(manager, _event);
         }
 
         _event->accept();

@@ -676,7 +676,7 @@ QJsonObject printScene(const QString& _starcFileName, const QString& _screenplay
     QJsonObject result;
     QString scenePdfFilePath;
     for (auto screenplayDocument : screenplayDocuments) {
-        if (screenplayDocument->uuid() != _screenplayUuid) {
+        if (screenplayDocument->uuid() != QUuid::fromString(_screenplayUuid)) {
             continue;
         }
 
@@ -700,7 +700,7 @@ QJsonObject printScene(const QString& _starcFileName, const QString& _screenplay
 
                 case ScreenplayTextModelItemType::Scene: {
                     auto sceneItem = static_cast<ScreenplayTextModelSceneItem*>(childItem);
-                    if (sceneItem->uuid() == _sceneUuid) {
+                    if (sceneItem->uuid() == QUuid::fromString(_sceneUuid)) {
                         return QString::number(sceneItem->number().value);
                     }
                     break;

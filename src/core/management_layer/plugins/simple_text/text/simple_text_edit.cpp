@@ -596,7 +596,7 @@ QMimeData* SimpleTextEdit::createMimeDataFromSelection() const
     // TODO: экспорт в фонтан
     //
     {
-        QByteArray text;
+        QString text;
         auto cursor = textCursor();
         cursor.setPosition(selection.from);
         do {
@@ -613,7 +613,7 @@ QMimeData* SimpleTextEdit::createMimeDataFromSelection() const
         } while (cursor.position() < textCursor().selectionEnd() && !cursor.atEnd()
                  && cursor.movePosition(QTextCursor::NextBlock));
 
-        mimeData->setData("text/plain", text);
+        mimeData->setData("text/plain", text.toUtf8());
     }
 
     //

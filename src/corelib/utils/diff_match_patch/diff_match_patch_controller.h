@@ -3,6 +3,11 @@
 #include <QScopedPointer>
 #include <QString>
 
+#if (QT_VERSION < QT_VERSION_CHECK(6, 0, 0))
+template<typename, typename>
+class QPair;
+#endif
+
 
 /**
  * @brief Управляющий классом сравнения данных документов

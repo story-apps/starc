@@ -118,7 +118,7 @@ void OnboardingView::Implementation::initLanguagePage()
     RadioButton* russianLanguage = initLanguageButton("Русский", QLocale::Russian);
     RadioButton* slovenianLanguage = initLanguageButton("Slovenski", QLocale::Slovenian);
     RadioButton* spanishLanguage = initLanguageButton("Español", QLocale::Spanish);
-    RadioButton* tagalogLanguage = initLanguageButton("Tagalog", QLocale::Tagalog);
+    RadioButton* tagalogLanguage = initLanguageButton("Tagalog", QLocale::Filipino);
     RadioButton* turkishLanguage = initLanguageButton("Türkçe", QLocale::Turkish);
     RadioButton* ukrainianLanguage = initLanguageButton("Українська", QLocale::Ukrainian);
     //

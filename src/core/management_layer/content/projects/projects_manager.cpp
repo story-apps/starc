@@ -111,8 +111,17 @@ QWidget* ProjectsManager::view() const
 void ProjectsManager::loadProjects()
 {
     const auto projectsData = settingsValue(DataStorageLayer::kApplicationProjectsKey);
-    const auto projectsJson
+    //
+    // TODO: Оставить только голый json
+    //
+    auto projectsJson
+#if (QT_VERSION < QT_VERSION_CHECK(6, 0, 0))
         = QJsonDocument::fromBinaryData(QByteArray::fromHex(projectsData.toByteArray()));
+    if (projectsJson.isEmpty())
+        projectsJson
+#endif
+            = QJsonDocument::fromJson(QByteArray::fromHex(projectsData.toByteArray()));
+
     QVector<Project> projects;
     for (const auto projectJsonValue : projectsJson.array()) {
         const auto projectJson = projectJsonValue.toObject();
@@ -153,7 +162,7 @@ void ProjectsManager::saveProjects()
         projectsJson.append(projectJson);
     }
     setSettingsValue(DataStorageLayer::kApplicationProjectsKey,
-                     QJsonDocument(projectsJson).toBinaryData().toHex());
+                     QJsonDocument(projectsJson).toJson(QJsonDocument::Compact).toHex());
 }
 
 void ProjectsManager::saveChanges()
@@ -319,8 +328,8 @@ void ProjectsManager::setCurrentProjectLogline(const QString& _logline)
 
 void ProjectsManager::setCurrentProjectCover(const QPixmap& _cover)
 {
-    const QString posterDir
-        = QStandardPaths::writableLocation(QStandardPaths::DataLocation) + "/thumbnails/projects/";
+    const QString posterDir = QStandardPaths::writableLocation(QStandardPaths::AppDataLocation)
+        + "/thumbnails/projects/";
     QDir::root().mkpath(posterDir);
 
     const QString posterName

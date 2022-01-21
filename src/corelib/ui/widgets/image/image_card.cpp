@@ -436,7 +436,11 @@ void ImageCard::resizeEvent(QResizeEvent* _event)
     d->prepareImageForDisplaing(_event->size());
 }
 
+#if (QT_VERSION > QT_VERSION_CHECK(6, 0, 0))
 void ImageCard::enterEvent(QEnterEvent* _event)
+#else
+void ImageCard::enterEvent(QEvent* _event)
+#endif
 {
     Card::enterEvent(_event);
 
