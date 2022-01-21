@@ -6,11 +6,12 @@
 #include "gumbo-parser/src/gumbo.h"
 #include "HtmlTag.h"
 
+#include <QtContainerFwd>
+
 class QString;
 class QGumboNode;
 class QGumboAttribute;
 class QGumboDocument;
-class QStringList;
 
 typedef std::vector<QGumboNode> 		QGumboNodes;
 typedef std::vector<QGumboAttribute> 	QGumboAttributes;
