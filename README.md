@@ -1,4 +1,8 @@
-![Starc Logo](./img/starc.png)
+# Story Architect is writer's best friend
+
+<p align="center">
+  <img width="460" height="460" src="./img/starc.png">
+</p>
 
   
 
@@ -7,7 +11,6 @@
   
 
 Hello and welcome to **Starc's** GitHub page. Story Architect is a project created by the authors of an open source screenwriting tool [**Kit Scenarist**](https://github.com/dimkanovikov/KITScenarist) and is currently under development with its current release being alpha. It's an advanced text editor for script writers working professionally in film, theatre, radio or writing for comic books.
-
   
 
 ## Installation
@@ -22,7 +25,7 @@ Hello and welcome to **Starc's** GitHub page. Story Architect is a project creat
 
   
 
-Starc has its own *.starc* file format, but also allows you to import files using Final Draft's *.fdx* format as well as *.docx*, Fountain and importing projects from **Kit Scenarist**.
+Starc has its own *.starc* file format, but also allows you to import files using Final Draft's *.fdx* format as well as *.docx*, *.odt*, *.trelby*, *.celtx* & *Fountain*, as well as the ability to import projects from **Kit Scenarist**.
 
   
 
@@ -68,6 +71,8 @@ If you wish to add another language, please consult our [Wiki page on how to do 
 
 ## Features
 
+> **NOTE:** Some features like playwriting module, mind maps and inserting custom images are not yet implemented. 
+
 **Starc** supports writing for film, television, comic books, stage and radio. With the addition of supporting multiple formats, there are also templates for you to use, such as **Final Draft Screenplay Template**. 
 
 ### Modules
@@ -88,10 +93,9 @@ You can also add things like title page for your script, movie poster and other 
 
 ### Linux
 
-    git clone https://github.com/story-apps/starc
-    cd starc/build
-    ./make-starc-app-image.sh
-
+    git clone --recurse-submodules https://github.com/story-apps/starc
+    cd starc
+    qmake && make
 
 # Support the project
 If you wish to support this project, you can do that by visiting our [website and checking out our premium offer](https://starc.app/pricing). Make sure to follow our [blog](https://starc.app/blog/) for important news and updates.
