@@ -60,7 +60,7 @@ class HttpMultiPart
 {
 public:
 	HttpMultiPart();
-    void setBoundary(const QString& _boundary);
+    void setBoundary(const QByteArray& _boundary);
     void addPart(const HttpPart& _part);
 
 	QByteArray data();
@@ -72,12 +72,12 @@ private:
 	QByteArray makeEndData();
 
 private:
-	QString boundary() const;
-	QString crlf() const;
+    QByteArray boundary() const;
+	QByteArray crlf() const;
 	QList<HttpPart> parts() const;
 
 private:
-	QString m_boundary;
+    QByteArray m_boundary;
 	QList<HttpPart> m_parts;
 };
 

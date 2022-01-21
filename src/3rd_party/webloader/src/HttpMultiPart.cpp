@@ -100,7 +100,7 @@ HttpMultiPart::HttpMultiPart()
 {
 }
 
-void HttpMultiPart::setBoundary(const QString& _boundary)
+void HttpMultiPart::setBoundary(const QByteArray& _boundary)
 {
     if (m_boundary != _boundary) {
         m_boundary = _boundary;
@@ -153,7 +153,7 @@ QByteArray HttpMultiPart::makeDataFromTextPart(const HttpPart& _part)
 
 	partData.append(
                 QString("Content-Disposition: form-data; name=\"%1\"%3%3%2")
-                .arg(_part.name(), _part.value(), crlf())
+                .arg(_part.name(), _part.value(), crlf()).toUtf8()
 				);
 
     partData.append(crlf());
@@ -181,7 +181,7 @@ QByteArray HttpMultiPart::makeDataFromFilePart(const HttpPart& _part)
                     .arg(_part.name(),
                           _part.fileName(),
 						  contentType,
-                          crlf())
+                          crlf()).toUtf8()
 					);
 
         QFile uploadFile(_part.filePath());
@@ -209,17 +209,14 @@ QByteArray HttpMultiPart::makeEndData()
 	return partData;
 }
 
-QString HttpMultiPart::boundary() const
+QByteArray HttpMultiPart::boundary() const
 {
 	return m_boundary;
 }
 
-QString HttpMultiPart::crlf() const
+QByteArray HttpMultiPart::crlf() const
 {
-	QString crlf;
-	crlf = 0x0d;
-	crlf += 0x0a;
-	return crlf;
+    return "\r\n";
 }
 
 QList<HttpPart> HttpMultiPart::parts() const

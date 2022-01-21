@@ -174,8 +174,7 @@ void WebLoader::run()
                 this, static_cast<void (WebLoader::*)(qint64, qint64)>(&WebLoader::uploadProgress));
         connect(reply.data(), &QNetworkReply::downloadProgress,
                 this, static_cast<void (WebLoader::*)(qint64, qint64)>(&WebLoader::downloadProgress));
-        connect(reply.data(), static_cast<void (QNetworkReply::*)(QNetworkReply::NetworkError)>(&QNetworkReply::error),
-                this, &WebLoader::downloadError);
+        connect(reply.data(), &QNetworkReply::errorOccurred, this, &WebLoader::downloadError);
 #if QT_CONFIG(ssl)
         connect(reply.data(), &QNetworkReply::sslErrors, this, &WebLoader::downloadSslErrors);
         connect(reply.data(), &QNetworkReply::sslErrors,
