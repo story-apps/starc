@@ -79,7 +79,7 @@ If you wish to add another language, please consult our [Wiki page on how to do 
 
 Alongside these, **Starc** uses modules for research and for writing. You can add text documents, mind maps and images in addition to your script. If you're writing in episodic format, you can add multiple scripts to one project and use existing assets.
 
-Starc can also help you track your characters, locations, etc. with its statistics module, as well as edit them and add additional information about them (for example, characters real name) which can be useful in pre-production.
+Starc can also help you track your characters, locations, etc. with its statistics module, as well as edit them and add additional information about them (for example, cthe real name of the character) which can be useful in pre-production.
 
 ![Modules](./img/modules.png)
 
