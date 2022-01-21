@@ -77,7 +77,7 @@ protected:
     /**
      * @brief Обновляем виджет для корректного отображения ховер элемента
      */
-    void enterEvent(QEvent* _event) override;
+    void enterEvent(QEnterEvent* _event) override;
     void leaveEvent(QEvent* _event) override;
 
     /**

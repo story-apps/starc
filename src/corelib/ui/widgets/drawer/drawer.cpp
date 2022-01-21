@@ -181,7 +181,7 @@ void Drawer::setAccountVisible(bool _use)
 
 void Drawer::setAvatar(const QPixmap& _avatar)
 {
-    if (d->avatar == _avatar) {
+    if (d->avatar.cacheKey() == _avatar.cacheKey()) {
         return;
     }
 

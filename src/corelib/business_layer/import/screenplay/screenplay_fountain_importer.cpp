@@ -329,7 +329,8 @@ void ScreenplayFountainImporter::Implementation::processBlock(const QString& _pa
         if (prevSymbol == '_') {
             if (!processFormat(false, false, true, curSymbol == '*', isCanStartEmphasis,
                                isCanEndEmphasis)) {
-                blockText.insert(std::max(0, blockText.size() - 1), prevSymbol);
+                blockText.insert(std::max(static_cast<qsizetype>(0), blockText.size() - 1),
+                                 prevSymbol);
             }
         }
 
@@ -368,7 +369,8 @@ void ScreenplayFountainImporter::Implementation::processBlock(const QString& _pa
             }
             if (!success) {
                 for (int i = 0; i != asteriskLen; ++i) {
-                    blockText.insert(std::max(0, blockText.size() - 1), '*');
+                    blockText.insert(std::max(static_cast<qsizetype>(0), blockText.size() - 1),
+                                     '*');
                 }
             }
             asteriskLen = 0;

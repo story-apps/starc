@@ -313,14 +313,15 @@ void CharacterModel::initDocument()
     }
     d->oneSentenceDescription = load(kOneSentenceDescriptionKey);
     d->longDescription = load(kLongDescriptionKey);
-    d->mainPhoto.uuid = load(kMainPhotoKey);
+    d->mainPhoto.uuid = QUuid::fromString(load(kMainPhotoKey));
     d->mainPhoto.image = imageWrapper()->load(d->mainPhoto.uuid);
     auto relationsNode = documentNode.firstChildElement(kRelationsKey);
     if (!relationsNode.isNull()) {
         auto relationNode = relationsNode.firstChildElement(kRelationKey);
         while (!relationNode.isNull()) {
             CharacterRelation relation;
-            relation.character = relationNode.firstChildElement(kRelationWithCharacterKey).text();
+            relation.character = QUuid::fromString(
+                relationNode.firstChildElement(kRelationWithCharacterKey).text());
             relation.lineType = relationNode.firstChildElement(kLineTypeKey).text().toInt();
             relation.color
                 = ColorHelper::fromString(relationNode.firstChildElement(kColorKey).text());

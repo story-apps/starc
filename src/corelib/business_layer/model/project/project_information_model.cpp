@@ -102,7 +102,7 @@ void ProjectInformationModel::initDocument()
     const auto documentNode = domDocument.firstChildElement(kDocumentKey);
     d->name = documentNode.firstChildElement(kNameKey).text();
     d->logline = documentNode.firstChildElement(kLoglineKey).text();
-    d->cover.uuid = documentNode.firstChildElement(kCoverKey).text();
+    d->cover.uuid = QUuid::fromString(documentNode.firstChildElement(kCoverKey).text());
     d->cover.image = imageWrapper()->load(d->cover.uuid);
 }
 

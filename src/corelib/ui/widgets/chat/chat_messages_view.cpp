@@ -75,10 +75,10 @@ int ChatMessagesView::heightForWidth(int _width) const
             lastY += Ui::DesignSystem::layout().px16() + textFontMetrics.lineSpacing();
         }
 
-        const qreal messageTextWidth
-            = std::max(std::min(maximumTextWidth, textFontMetrics.width(message.text())),
-                       TextHelper::fineTextWidthF(isCurrentAuthor ? "" : message.author().name(),
-                                                  titleFontMetrics));
+        const qreal messageTextWidth = std::max(
+            std::min(maximumTextWidth, textFontMetrics.horizontalAdvance(message.text())),
+            TextHelper::fineTextWidthF(isCurrentAuthor ? "" : message.author().name(),
+                                       titleFontMetrics));
         const qreal messageTextHeight = TextHelper::heightForWidth(
             message.text(), Ui::DesignSystem::font().body2(), messageTextWidth);
         const qreal messageTopDelta = isDateChanged ? Ui::DesignSystem::layout().px16()
@@ -184,10 +184,10 @@ void ChatMessagesView::paintEvent(QPaintEvent* _event)
         //
         // Определим область текста
         //
-        const qreal messageTextWidth
-            = std::max(std::min(maximumTextWidth, textFontMetrics.width(message.text())),
-                       TextHelper::fineTextWidthF(isCurrentAuthor ? "" : message.author().name(),
-                                                  titleFontMetrics));
+        const qreal messageTextWidth = std::max(
+            std::min(maximumTextWidth, textFontMetrics.horizontalAdvance(message.text())),
+            TextHelper::fineTextWidthF(isCurrentAuthor ? "" : message.author().name(),
+                                       titleFontMetrics));
         const qreal messageTextHeight = TextHelper::heightForWidth(
             message.text(), Ui::DesignSystem::font().body2(), messageTextWidth);
         //

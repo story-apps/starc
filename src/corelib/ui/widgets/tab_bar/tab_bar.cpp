@@ -533,7 +533,7 @@ void TabBar::paintEvent(QPaintEvent* _event)
     painter.drawLine(rect().bottomLeft(), rect().bottomRight());
 }
 
-void TabBar::enterEvent(QEvent* _event)
+void TabBar::enterEvent(QEnterEvent* _event)
 {
     Q_UNUSED(_event);
     update();

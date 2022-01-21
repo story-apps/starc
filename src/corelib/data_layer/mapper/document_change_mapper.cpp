@@ -162,8 +162,8 @@ QString DocumentChangeMapper::deleteStatement(Domain::DomainObject* _object,
 Domain::DomainObject* DocumentChangeMapper::doLoad(const Domain::Identifier& _id,
                                                    const QSqlRecord& _record)
 {
-    const QUuid documentUuid = _record.value("fk_document_uuid").toString();
-    const QUuid uuid = _record.value("uuid").toString();
+    const auto documentUuid = QUuid::fromString(_record.value("fk_document_uuid").toString());
+    const auto uuid = QUuid::fromString(_record.value("uuid").toString());
     const auto undoPatch = qUncompress(_record.value("undo_patch").toByteArray());
     const auto redoPatch = qUncompress(_record.value("redo_patch").toByteArray());
     const auto dateTime
@@ -182,10 +182,10 @@ void DocumentChangeMapper::doLoad(Domain::DomainObject* _object, const QSqlRecor
         return;
     }
 
-    const QUuid documentUuid = _record.value("fk_document_uuid").toString();
+    const auto documentUuid = QUuid::fromString(_record.value("fk_document_uuid").toString());
     documentChangeObject->setDocumentUuid(documentUuid);
 
-    const QUuid uuid = _record.value("uuid").toString();
+    const auto uuid = QUuid::fromString(_record.value("uuid").toString());
     documentChangeObject->setUuid(uuid);
 
     const auto undoPatch = qUncompress(_record.value("undo_patch").toByteArray());

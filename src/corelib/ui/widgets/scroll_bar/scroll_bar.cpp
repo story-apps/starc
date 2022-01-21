@@ -159,7 +159,7 @@ void ScrollBar::paintEvent(QPaintEvent* _event)
     painter.fillRect(handle, handleColor);
 }
 
-void ScrollBar::enterEvent(QEvent* _event)
+void ScrollBar::enterEvent(QEnterEvent* _event)
 {
     Q_UNUSED(_event)
     d->maximizeScrollbar();

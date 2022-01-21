@@ -107,7 +107,7 @@ ComicBookTextModelPanelItem::ComicBookTextModelPanelItem(QXmlStreamReader& _cont
 
     const auto attributes = _contentReader.attributes();
     if (attributes.hasAttribute(xml::kUuidAttribute)) {
-        d->uuid = attributes.value(xml::kUuidAttribute).toString();
+        d->uuid = QUuid::fromString(attributes.value(xml::kUuidAttribute).toString());
     }
 
     //
@@ -340,7 +340,7 @@ QByteArray ComicBookTextModelPanelItem::xmlHeader(bool _clearUuid) const
     xml += QString("<%1 %2=\"%3\" %4=\"%5\">\n")
                .arg(xml::kPanelTag, xml::kUuidAttribute,
                     _clearUuid ? QUuid::createUuid().toString() : d->uuid.toString(),
-                    xml::kPlotsAttribute, {})
+                    xml::kPlotsAttribute, QString())
                .toUtf8();
     if (d->color.isValid()) {
         xml += QString("<%1><![CDATA[%2]]></%1>\n").arg(xml::kColorTag, d->color.name()).toUtf8();

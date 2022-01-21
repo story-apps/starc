@@ -49,7 +49,7 @@ ComicBookTextCursor::~ComicBookTextCursor() = default;
 
 bool ComicBookTextCursor::isInEditBlock() const
 {
-    return document()->docHandle()->isInEditBlock();
+    return QTextDocumentPrivate::get(document())->isInEditBlock();
 }
 
 bool ComicBookTextCursor::inTable() const

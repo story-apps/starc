@@ -11,6 +11,7 @@
 #include <QColor>
 #include <QDataStream>
 #include <QDomDocument>
+#include <QIODevice>
 #include <QMimeData>
 #include <QSet>
 
@@ -84,7 +85,7 @@ void StructureModel::Implementation::buildModel(Domain::DocumentObject* _structu
     std::function<void(const QDomElement&, StructureModelItem*)> buildItem;
     buildItem = [&buildItem](const QDomElement& _node, StructureModelItem* _parent) {
         auto item
-            = new StructureModelItem(_node.attribute(kUuidAttribute),
+            = new StructureModelItem(QUuid::fromString(_node.attribute(kUuidAttribute)),
                                      Domain::typeFor(_node.attribute(kTypeAttribute).toUtf8()),
                                      TextHelper::fromHtmlEscaped(_node.attribute(kNameAttribute)),
                                      ColorHelper::fromString(_node.attribute(kColorAttribute)),

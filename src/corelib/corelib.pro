@@ -5,6 +5,9 @@ CONFIG += c++1z
 CONFIG += force_debug_info
 CONFIG += separate_debug_info
 QT += widgets widgets-private sql xml network
+greaterThan(QT_MAJOR_VERSION, 5) {
+    QT += core5compat
+}
 
 DEFINES += CORE_LIBRARY
 DEFINES += QT_DEPRECATED_WARNINGS

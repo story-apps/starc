@@ -7,6 +7,7 @@
 #include <utils/helpers/text_helper.h>
 
 #include <QApplication>
+#include <QFile>
 #include <QFontMetricsF>
 #include <QTextBlock>
 #include <QTextBlockFormat>
@@ -624,7 +625,7 @@ void ComicBookTemplate::load(const QString& _fromFile)
     //
     // Считываем данные в соответствии с заданным форматом
     //
-    if (!reader.readNextStartElement() || reader.name() != "style") {
+    if (!reader.readNextStartElement() || reader.name() != QLatin1String("style")) {
         return;
     }
 
@@ -648,7 +649,7 @@ void ComicBookTemplate::load(const QString& _fromFile)
     //
     // Считываем настройки оформления блоков текста
     //
-    while (reader.readNextStartElement() && reader.name() == "block") {
+    while (reader.readNextStartElement() && reader.name() == QLatin1String("block")) {
         ComicBookBlockStyle blockStyle(reader.attributes());
         blockStyle.setPageSplitterWidth(pageSplitterWidth());
         m_paragrapsStyles.insert(blockStyle.type(), blockStyle);

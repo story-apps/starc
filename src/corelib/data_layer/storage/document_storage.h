@@ -1,14 +1,12 @@
 #pragma once
 
 #include <QScopedPointer>
+#include <QtContainerFwd>
 
 #include <corelib_global.h>
 
 class QByteArray;
 class QUuid;
-
-template<typename T>
-class QVector;
 
 namespace Domain {
 class DocumentObject;

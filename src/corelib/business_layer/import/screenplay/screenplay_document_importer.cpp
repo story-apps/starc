@@ -237,10 +237,10 @@ static QString clearBlockText(ScreenplayParagraphType _blockType, const QString&
     //
     else if (_blockType == ScreenplayParagraphType::Parenthetical) {
         QString clearParenthetical = _blockText.simplified();
-        if (!clearParenthetical.isEmpty() && clearParenthetical.front() == "(") {
+        if (!clearParenthetical.isEmpty() && clearParenthetical.front() == '(') {
             clearParenthetical.remove(0, 1);
         }
-        if (!clearParenthetical.isEmpty() && clearParenthetical.back() == ")") {
+        if (!clearParenthetical.isEmpty() && clearParenthetical.back() == ')') {
             clearParenthetical.chop(1);
         }
         result = clearParenthetical;

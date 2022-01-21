@@ -3,9 +3,6 @@
 #include <QScopedPointer>
 #include <QString>
 
-template<typename, typename>
-class QPair;
-
 
 /**
  * @brief Управляющий классом сравнения данных документов

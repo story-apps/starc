@@ -6,6 +6,7 @@
 #include <utils/helpers/text_helper.h>
 
 #include <QApplication>
+#include <QFile>
 #include <QFontMetricsF>
 #include <QTextBlock>
 #include <QTextBlockFormat>
@@ -524,7 +525,7 @@ void SimpleTextTemplate::load(const QString& _fromFile)
     //
     // Считываем данные в соответствии с заданным форматом
     //
-    if (!reader.readNextStartElement() || reader.name() != "style") {
+    if (!reader.readNextStartElement() || reader.name() != QLatin1String("style")) {
         return;
     }
 
@@ -547,7 +548,7 @@ void SimpleTextTemplate::load(const QString& _fromFile)
     //
     // Считываем настройки оформления блоков текста
     //
-    while (reader.readNextStartElement() && reader.name() == "block") {
+    while (reader.readNextStartElement() && reader.name() == QLatin1String("block")) {
         const SimpleTextBlockStyle blockStyle(reader.attributes());
         m_blockStyles.insert(blockStyle.type(), blockStyle);
 

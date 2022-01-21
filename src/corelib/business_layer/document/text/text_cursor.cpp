@@ -24,7 +24,7 @@ TextCursor::~TextCursor() = default;
 
 bool TextCursor::isInEditBlock() const
 {
-    return document()->docHandle()->isInEditBlock();
+    return QTextDocumentPrivate::get(document())->isInEditBlock();
 }
 
 TextCursor::Selection TextCursor::selectionInterval() const

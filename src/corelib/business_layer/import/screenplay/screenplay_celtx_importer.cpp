@@ -196,10 +196,10 @@ QVector<ScreenplayAbstractImporter::Screenplay> ScreenplayCeltxImporter::importS
         // Корректируем при необходимости
         //
         if (blockType == ScreenplayParagraphType::Parenthetical) {
-            if (!paragraphText.isEmpty() && paragraphText.front() == "(") {
+            if (!paragraphText.isEmpty() && paragraphText.front() == '(') {
                 paragraphText.remove(0, 1);
             }
-            if (!paragraphText.isEmpty() && paragraphText.back() == ")") {
+            if (!paragraphText.isEmpty() && paragraphText.back() == ')') {
                 paragraphText.chop(1);
             }
         }

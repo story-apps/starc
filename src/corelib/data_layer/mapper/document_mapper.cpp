@@ -149,7 +149,7 @@ QString DocumentMapper::deleteStatement(DomainObject* _object, QVariantList& _de
 
 DomainObject* DocumentMapper::doLoad(const Identifier& _id, const QSqlRecord& _record)
 {
-    const QUuid uuid = _record.value("uuid").toString();
+    const auto uuid = QUuid::fromString(_record.value("uuid").toString());
     const auto type = static_cast<DocumentObjectType>(_record.value("type").toInt());
     const auto content = _record.value("content").toByteArray();
 
@@ -163,7 +163,7 @@ void DocumentMapper::doLoad(DomainObject* _object, const QSqlRecord& _record)
         return;
     }
 
-    const QUuid uuid = _record.value("uuid").toString();
+    const auto uuid = QUuid::fromString(_record.value("uuid").toString());
     documentObject->setUuid(uuid);
 
     const DocumentObjectType type = static_cast<DocumentObjectType>(_record.value("type").toInt());

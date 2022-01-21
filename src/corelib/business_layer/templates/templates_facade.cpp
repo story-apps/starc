@@ -150,7 +150,7 @@ void TemplatesFacade::Implementation::loadTemplates(const QString& _templatesDir
     // Настроим путь к папке с шаблонами
     //
     const QString appDataFolderPath
-        = QStandardPaths::writableLocation(QStandardPaths::DataLocation);
+        = QStandardPaths::writableLocation(QStandardPaths::AppDataLocation);
     const QString templatesFolderPath = QString("%1/%2").arg(appDataFolderPath, _templatesDir);
     //
     // ... создаём папку для пользовательских файлов
@@ -229,7 +229,7 @@ void TemplatesFacade::Implementation::saveTemplate(const QString& _templatesDir,
     // Сохраним шаблон в файл
     //
     const QString appDataFolderPath
-        = QStandardPaths::writableLocation(QStandardPaths::DataLocation);
+        = QStandardPaths::writableLocation(QStandardPaths::AppDataLocation);
     const QString templatesFolderPath = QString("%1/%2").arg(appDataFolderPath, _templatesDir);
     _template.saveToFile(QString("%1/%2").arg(templatesFolderPath, _template.id()));
 
@@ -294,7 +294,7 @@ void TemplatesFacade::Implementation::removeTemplate(const QString& _templatesDi
     // Удаляем файл шаблона
     //
     const QString appDataFolderPath
-        = QStandardPaths::writableLocation(QStandardPaths::DataLocation);
+        = QStandardPaths::writableLocation(QStandardPaths::AppDataLocation);
     const QString templatesFolderPath = QString("%1/%2").arg(appDataFolderPath, _templatesDir);
     QFile::remove(QString("%1/%2").arg(templatesFolderPath, _templateId));
 

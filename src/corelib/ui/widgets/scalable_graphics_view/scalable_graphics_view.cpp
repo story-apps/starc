@@ -192,7 +192,7 @@ void ScalableGraphicsView::wheelEvent(QWheelEvent* _event)
     // Собственно масштабирование
     //
     if (_event->modifiers() & Qt::ControlModifier) {
-        if (_event->orientation() == Qt::Vertical) {
+        if (_event->angleDelta().y() != 0) {
             //
             // zoomRange > 0 - масштаб увеличивается
             // zoomRange < 0 - масштаб уменьшается

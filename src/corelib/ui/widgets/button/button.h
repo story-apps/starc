@@ -60,7 +60,7 @@ protected:
     /**
      * @brief Переопределяем для реализации эффекта поднятия виджета при ховере
      */
-    void enterEvent(QEvent* _event) override;
+    void enterEvent(QEnterEvent* _event) override;
     void leaveEvent(QEvent* _event) override;
 
     /**

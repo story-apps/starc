@@ -58,7 +58,8 @@ ComicBookTextModelFolderItem::ComicBookTextModelFolderItem(QXmlStreamReader& _co
     Q_ASSERT(_contentReader.name() == xml::kFolderTag);
 
     if (_contentReader.attributes().hasAttribute(xml::kUuidAttribute)) {
-        d->uuid = _contentReader.attributes().value(xml::kUuidAttribute).toString();
+        d->uuid
+            = QUuid::fromString(_contentReader.attributes().value(xml::kUuidAttribute).toString());
     }
     auto currentTag = xml::readNextElement(_contentReader); // next
 

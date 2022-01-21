@@ -117,7 +117,7 @@ ScreenplayTextModelSceneItem::ScreenplayTextModelSceneItem(const ScreenplayTextM
 
     const auto attributes = _contentReader.attributes();
     if (attributes.hasAttribute(xml::kUuidAttribute)) {
-        d->uuid = attributes.value(xml::kUuidAttribute).toString();
+        d->uuid = QUuid::fromString(attributes.value(xml::kUuidAttribute).toString());
     }
 
     //
@@ -371,7 +371,7 @@ QByteArray ScreenplayTextModelSceneItem::xmlHeader(bool _clearUuid) const
     xml += QString("<%1 %2=\"%3\" %4=\"%5\" %6>\n")
                .arg(xml::kSceneTag, xml::kUuidAttribute,
                     _clearUuid ? QUuid::createUuid().toString() : d->uuid.toString(),
-                    xml::kPlotsAttribute, {},
+                    xml::kPlotsAttribute, QString(),
                     (d->isOmited ? QString("%1=\"true\"").arg(xml::kOmitedAttribute) : ""))
                .toUtf8();
     //

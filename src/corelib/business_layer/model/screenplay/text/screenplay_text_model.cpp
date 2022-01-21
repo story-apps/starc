@@ -1211,10 +1211,10 @@ void ScreenplayTextModel::updateCharacterName(const QString& _oldName, const QSt
                         // Убедимся, что выделено именно имя, а не часть другого имени
                         //
                         const auto nameEndIndex = nameIndex + oldName.length();
-                        const bool atLeftAllOk = nameIndex == 0 || text.at(nameIndex - 1) == ","
-                            || (nameIndex > 2 && text.midRef(nameIndex - 2, 2) == ", ");
+                        const bool atLeftAllOk = nameIndex == 0 || text.at(nameIndex - 1) == ','
+                            || (nameIndex > 2 && text.mid(nameIndex - 2, 2) == ", ");
                         const bool atRightAllOk = nameEndIndex == text.length()
-                            || text.at(nameEndIndex) == ","
+                            || text.at(nameEndIndex) == ','
                             || (text.length() > nameEndIndex + 1
                                 && text.mid(nameEndIndex, 2) == " ,");
                         if (!atLeftAllOk || !atRightAllOk) {
@@ -1454,6 +1454,10 @@ void ScreenplayTextModel::recalculateDuration()
     emit rowsAboutToBeChanged();
     updateChildDuration(d->rootItem);
     emit rowsChanged();
+}
+
+void ScreenplayTextModel::updateScreenplayDictionaries()
+{
 }
 
 void ScreenplayTextModel::initDocument()

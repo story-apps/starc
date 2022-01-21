@@ -63,7 +63,8 @@ ScreenplayTextModelFolderItem::ScreenplayTextModelFolderItem(const ScreenplayTex
     Q_ASSERT(_contentReader.name() == xml::kFolderTag);
 
     if (_contentReader.attributes().hasAttribute(xml::kUuidAttribute)) {
-        d->uuid = _contentReader.attributes().value(xml::kUuidAttribute).toString();
+        d->uuid
+            = QUuid::fromString(_contentReader.attributes().value(xml::kUuidAttribute).toString());
     }
     auto currentTag = xml::readNextElement(_contentReader); // next
 
@@ -243,7 +244,8 @@ QByteArray ScreenplayTextModelFolderItem::toXml(ScreenplayTextModelItem* _from, 
         }
         //
         else if (textItem == _from) {
-            xml += { textItem, _fromPosition, textItem->text().length() - _fromPosition };
+            xml += { textItem, _fromPosition,
+                     static_cast<int>(textItem->text().length()) - _fromPosition };
         } else {
             xml += textItem;
         }

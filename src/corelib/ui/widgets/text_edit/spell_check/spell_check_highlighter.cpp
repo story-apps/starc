@@ -2,6 +2,7 @@
 
 #include "spell_checker.h"
 
+#include <QRegularExpression>
 #include <QTextDocument>
 #include <QTimer>
 
@@ -119,8 +120,7 @@ void SpellCheckHighlighter::highlightBlock(const QString& _text)
     //
     // Убираем пустоты из проверяемого текста
     //
-    QRegExp notWord("[^\\w'’-·]+");
-    notWord.indexIn(_text);
+    QRegularExpression notWord("[^\\w'’-·]+");
     //
     // Проверяем каждое слово
     //
@@ -130,9 +130,10 @@ void SpellCheckHighlighter::highlightBlock(const QString& _text)
         //
         // Получим окончание слова
         //
-        notWord.indexIn(_text, wordPos);
-        notWordPos = notWord.pos(0);
-        if (notWordPos == -1) {
+        const auto match = notWord.match(_text, wordPos);
+        if (match.hasMatch()) {
+            notWordPos = match.capturedStart();
+        } else {
             notWordPos = _text.length();
         }
 

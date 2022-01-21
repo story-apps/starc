@@ -83,13 +83,21 @@ QByteArray prepareXml(const QString& _xml)
     return preparedXml.toUtf8();
 }
 
+#if (QT_VERSION > QT_VERSION_CHECK(6, 0, 0))
+QStringView readContent(QXmlStreamReader& _reader)
+#else
 QStringRef readContent(QXmlStreamReader& _reader)
+#endif
 {
     _reader.readNext();
     return _reader.text();
 }
 
+#if (QT_VERSION > QT_VERSION_CHECK(6, 0, 0))
+QStringView readNextElement(QXmlStreamReader& _reader)
+#else
 QStringRef readNextElement(QXmlStreamReader& _reader)
+#endif
 {
     do {
         _reader.readNext();

@@ -1,5 +1,7 @@
 #include "email_validator.h"
 
+#include <QRegularExpressionValidator>
+
 
 bool EmailValidator::isValid(const QString& _email)
 {
@@ -8,9 +10,8 @@ bool EmailValidator::isValid(const QString& _email)
     // поэтому копируем
     //
     QString toCheck = _email;
-
-    QRegExpValidator validator(QRegExp("[^\\s]+@[^\\s]{2,}\\.[^\\s]{2,}"));
     int pos = 0;
+    QRegularExpressionValidator validator(QRegularExpression("[^\\s]+@[^\\s]{2,}\\.[^\\s]{2,}"));
     if (validator.validate(toCheck, pos) != QValidator::Acceptable) {
         return false;
     } else {

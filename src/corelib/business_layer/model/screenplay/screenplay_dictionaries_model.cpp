@@ -201,21 +201,23 @@ QByteArray ScreenplayDictionariesModel::toXml() const
 
     QByteArray xml = "<?xml version=\"1.0\"?>\n";
     xml += QString("<%1 mime-type=\"%2\" version=\"1.0\">\n")
-               .arg(kDocumentKey, Domain::mimeTypeFor(document()->type()));
+               .arg(kDocumentKey, Domain::mimeTypeFor(document()->type()))
+               .toUtf8();
     auto writeDictionary = [&xml](const QString& _key, const QVector<QString>& _values) {
-        xml += QString("<%1>\n").arg(_key);
+        xml += QString("<%1>\n").arg(_key).toUtf8();
         for (const auto& value : _values) {
             xml += QString("<%1><![CDATA[%2]]></%1>\n")
-                       .arg(kItemKey, TextHelper::toHtmlEscaped(value));
+                       .arg(kItemKey, TextHelper::toHtmlEscaped(value))
+                       .toUtf8();
         }
-        xml += QString("</%1>\n").arg(_key);
+        xml += QString("</%1>\n").arg(_key).toUtf8();
     };
     writeDictionary(kPageIntrosKey, d->sceneIntros);
     writeDictionary(kSceneTimesKey, d->sceneTimes);
     writeDictionary(kStoryDaysKey, d->storyDays);
     writeDictionary(kCharacterExtensionsKey, d->characterExtensions);
     writeDictionary(kPanelIntrosKey, d->transitions);
-    xml += QString("</%1>").arg(kDocumentKey);
+    xml += QString("</%1>").arg(kDocumentKey).toUtf8();
     return xml;
 }
 

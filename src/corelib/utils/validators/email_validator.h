@@ -1,9 +1,8 @@
 #pragma once
 
-#include <QRegExpValidator>
-#include <QString>
-
 #include <corelib_global.h>
+
+class QString;
 
 
 /**

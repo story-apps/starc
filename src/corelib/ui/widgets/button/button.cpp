@@ -345,7 +345,7 @@ void Button::paintEvent(QPaintEvent* _event)
     }
 }
 
-void Button::enterEvent(QEvent* _event)
+void Button::enterEvent(QEnterEvent* _event)
 {
     Q_UNUSED(_event)
     d->animateHoverIn();

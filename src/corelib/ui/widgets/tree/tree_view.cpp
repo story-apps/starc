@@ -122,13 +122,13 @@ QVariant TreeView::saveState() const
         const auto attributes = " row=\"" + QString::number(_row) + "\""
             + (index == currentIndex() ? " current=\"true\"" : "");
         if (isExpanded(index)) {
-            state += "<item" + attributes + ">";
+            state += "<item" + attributes.toUtf8() + ">";
             for (int row = 0; row < model()->rowCount(index); ++row) {
                 writeRow(row, index);
             }
             state += "</item>";
         } else {
-            state += "<item" + attributes + "/>";
+            state += "<item" + attributes.toUtf8() + "/>";
         }
     };
     for (int row = 0; row < model()->rowCount(); ++row) {

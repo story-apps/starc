@@ -168,6 +168,8 @@ public:
      */
     void recalculateDuration();
 
+    void updateScreenplayDictionaries();
+
 protected:
     /**
      * @brief Реализация модели для работы с документами

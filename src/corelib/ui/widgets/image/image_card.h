@@ -60,7 +60,7 @@ protected:
     /**
      * @brief Реализуем эффекст отображения оверлея при наведении мыши
      */
-    void enterEvent(QEvent* _event) override;
+    void enterEvent(QEnterEvent* _event) override;
     void leaveEvent(QEvent* _event) override;
 
     /**

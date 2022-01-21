@@ -93,7 +93,7 @@ TextModelChapterItem::TextModelChapterItem(QXmlStreamReader& _contentReader)
 
     const auto attributes = _contentReader.attributes();
     if (attributes.hasAttribute(xml::kUuidAttribute)) {
-        d->uuid = attributes.value(xml::kUuidAttribute).toString();
+        d->uuid = QUuid::fromString(attributes.value(xml::kUuidAttribute).toString());
     }
 
     xml::readNextElement(_contentReader);

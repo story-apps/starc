@@ -428,7 +428,7 @@ void FloatingToolBar::showEvent(QShowEvent* _event)
     }
 }
 
-void FloatingToolBar::enterEvent(QEvent* _event)
+void FloatingToolBar::enterEvent(QEnterEvent* _event)
 {
     Q_UNUSED(_event)
     d->animateHoverIn();

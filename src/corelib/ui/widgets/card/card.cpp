@@ -4,8 +4,8 @@
 #include <utils/helpers/image_helper.h>
 
 #include <QApplication>
-#include <QDesktopWidget>
 #include <QPainter>
+#include <QScreen>
 #include <QVBoxLayout>
 #include <QVariantAnimation>
 
@@ -79,7 +79,7 @@ void Card::paintEvent(QPaintEvent* _event)
     // Скорректируем геометрию фона, т.к. карточка может занимать несколько экранов
     // в высоту и нет смысла рисовать такой огромный фон
     //
-    const auto screenGeometry = QApplication::desktop()->screenGeometry(this);
+    const auto screenGeometry = QApplication::screenAt(mapToGlobal(pos()))->geometry();
     const auto backgroundGlobalTopLeft = mapToGlobal(backgroundRect.topLeft().toPoint());
     const auto backgroundGlobalTopRight = mapToGlobal(backgroundRect.topLeft().toPoint());
     const auto backgroundGlobalBottomLeft = mapToGlobal(backgroundRect.bottomLeft().toPoint());
@@ -147,7 +147,7 @@ void Card::paintEvent(QPaintEvent* _event)
     painter.drawRoundedRect(backgroundRect, borderRadius, borderRadius);
 }
 
-void Card::enterEvent(QEvent* _event)
+void Card::enterEvent(QEnterEvent* _event)
 {
     Widget::enterEvent(_event);
 

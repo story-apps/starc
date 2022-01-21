@@ -65,7 +65,7 @@ public:
 SpellChecker::Implementation::Implementation()
 {
     const QString appDataFolderPath
-        = QStandardPaths::writableLocation(QStandardPaths::DataLocation);
+        = QStandardPaths::writableLocation(QStandardPaths::AppDataLocation);
     const QString hunspellDictionariesFolderPath
         = appDataFolderPath + QDir::separator() + "hunspell";
     userDictionaryPath
@@ -90,7 +90,7 @@ QString SpellChecker::Implementation::hunspellFilePath(SpellCheckerFileType _fil
     // ... определяемся с именем файла
     //
     const QString appDataFolderPath
-        = QStandardPaths::writableLocation(QStandardPaths::DataLocation);
+        = QStandardPaths::writableLocation(QStandardPaths::AppDataLocation);
     const QString hunspellDictionariesFolderPath
         = appDataFolderPath + QDir::separator() + "hunspell";
     const QString dictionaryFilePath

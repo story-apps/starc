@@ -9,6 +9,7 @@
 #include <utils/helpers/text_helper.h>
 
 #include <QApplication>
+#include <QFile>
 #include <QFontMetricsF>
 #include <QTextBlock>
 #include <QTextBlockFormat>
@@ -836,7 +837,7 @@ void ScreenplayTemplate::load(const QString& _fromFile)
     //
     // Считываем данные в соответствии с заданным форматом
     //
-    if (!reader.readNextStartElement() || reader.name() != "style") {
+    if (!reader.readNextStartElement() || reader.name() != QLatin1String("style")) {
         return;
     }
 
@@ -861,7 +862,7 @@ void ScreenplayTemplate::load(const QString& _fromFile)
     // Считываем титульную страницу
     //
     reader.readNextStartElement();
-    Q_ASSERT(reader.name() == "titlepage");
+    Q_ASSERT(reader.name() == QLatin1String("titlepage"));
     const auto titlePageXmlFrom = reader.characterOffset();
     reader.readNextStartElement();
     reader.skipCurrentElement();
@@ -875,8 +876,8 @@ void ScreenplayTemplate::load(const QString& _fromFile)
     // Считываем настройки оформления блоков текста
     //
     reader.readNextStartElement();
-    Q_ASSERT(reader.name() == "blocks");
-    while (reader.readNextStartElement() && reader.name() == "block") {
+    Q_ASSERT(reader.name() == QLatin1String("blocks"));
+    while (reader.readNextStartElement() && reader.name() == QLatin1String("block")) {
         ScreenplayBlockStyle blockStyle(reader.attributes());
         blockStyle.setPageSplitterWidth(pageSplitterWidth());
         d->paragrapsStyles.insert(blockStyle.type(), blockStyle);

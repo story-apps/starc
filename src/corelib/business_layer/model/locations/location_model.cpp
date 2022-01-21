@@ -147,7 +147,7 @@ void LocationModel::initDocument()
     }
     d->oneSentenceDescription = load(kOneSentenceDescriptionKey);
     d->longDescription = load(kLongDescriptionKey);
-    d->mainPhoto.uuid = load(kMainPhotoKey);
+    d->mainPhoto.uuid = QUuid::fromString(load(kMainPhotoKey));
     d->mainPhoto.image = imageWrapper()->load(d->mainPhoto.uuid);
 }
 

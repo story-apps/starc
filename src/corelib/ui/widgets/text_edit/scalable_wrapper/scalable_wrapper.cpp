@@ -254,7 +254,7 @@ void ScalableWrapper::wheelEvent(QWheelEvent* _event)
     // Собственно масштабирование
     //
     if (_event->modifiers() & Qt::ControlModifier) {
-        if (_event->orientation() == Qt::Vertical) {
+        if (_event->angleDelta().y() != 0) {
 #ifdef Q_OS_MAC
             const qreal angleDivider = 2.;
 #else

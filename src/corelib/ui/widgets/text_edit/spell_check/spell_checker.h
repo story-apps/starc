@@ -2,11 +2,11 @@
 
 #include <QHash>
 #include <QScopedPointer>
+#include <QtContainerFwd>
 
 #include <corelib_global.h>
 
 class Hunspell;
-class QStringList;
 class QTextCodec;
 
 //

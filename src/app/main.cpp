@@ -122,7 +122,7 @@ int main(int argc, char* argv[])
     // Настраиваем сборщик крашдампов
     //
     const auto crashReportsFolderPath = QString("%1/%2").arg(
-        QStandardPaths::writableLocation(QStandardPaths::DataLocation), "crashreports");
+        QStandardPaths::writableLocation(QStandardPaths::AppDataLocation), "crashreports");
     QBreakpadInstance.init(crashReportsFolderPath);
 
     //

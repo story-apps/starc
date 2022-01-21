@@ -302,7 +302,8 @@ void ImageCard::setImageCroppingText(const QString& _text)
 void ImageCard::setImage(const QPixmap& _image)
 {
     if ((d->image.source.isNull() && _image.isNull())
-        || (!d->image.source.isNull() && !_image.isNull() && d->image.source == _image)) {
+        || (!d->image.source.isNull() && !_image.isNull()
+            && d->image.source.cacheKey() == _image.cacheKey())) {
         return;
     }
 
@@ -435,7 +436,7 @@ void ImageCard::resizeEvent(QResizeEvent* _event)
     d->prepareImageForDisplaing(_event->size());
 }
 
-void ImageCard::enterEvent(QEvent* _event)
+void ImageCard::enterEvent(QEnterEvent* _event)
 {
     Card::enterEvent(_event);
 

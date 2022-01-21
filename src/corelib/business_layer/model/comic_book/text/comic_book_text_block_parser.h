@@ -1,9 +1,10 @@
 #pragma once
 
+#include <QtContainerFwd>
+
 #include <corelib_global.h>
 
 class QString;
-class QStringList;
 
 
 namespace BusinessLayer {

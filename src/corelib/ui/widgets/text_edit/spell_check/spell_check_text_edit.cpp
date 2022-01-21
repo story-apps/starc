@@ -10,6 +10,7 @@
 #include <QContextMenuEvent>
 #include <QDir>
 #include <QMenu>
+#include <QRegularExpression>
 #include <QStandardPaths>
 #include <QTimer>
 #include <QtGui/private/qtextdocument_p.h>
@@ -192,7 +193,7 @@ ContextMenu* SpellCheckTextEdit::createContextMenu(const QPoint& _position, QWid
         spellingAction->setIconText(u8"\U000F04C6");
 
         const auto suggestions = d->spellChecker.suggestionsForWord(wordUnderCursor);
-        const auto maxSuggestions = std::min(5, suggestions.size());
+        const auto maxSuggestions = std::min(5, static_cast<int>(suggestions.size()));
         for (int index = 0; index < maxSuggestions; ++index) {
             auto suggestionAction = new QAction(spellingAction);
             suggestionAction->setText(suggestions.at(index));
@@ -340,11 +341,12 @@ QTextCursor SpellCheckTextEdit::moveCursorToStartWord(QTextCursor cursor) const
     // его подсветку
     //
     while (cursor.positionInBlock() > 0 && text.length() > cursor.positionInBlock()
-           && (text[cursor.positionInBlock()] == '\'' || text[cursor.positionInBlock()] == "’"
+           && (text[cursor.positionInBlock()] == '\''
+               || text[cursor.positionInBlock()] == QLatin1String("’")
                || text[cursor.positionInBlock()] == '-'
                || text[cursor.positionInBlock() - 1] == '\''
                || text[cursor.positionInBlock() - 1] == '-'
-               || text[cursor.positionInBlock() - 1] == "·")) {
+               || text[cursor.positionInBlock() - 1] == QLatin1String("·"))) {
         cursor.movePosition(QTextCursor::PreviousCharacter);
         cursor.movePosition(QTextCursor::StartOfWord);
     }
@@ -353,12 +355,9 @@ QTextCursor SpellCheckTextEdit::moveCursorToStartWord(QTextCursor cursor) const
 
 QTextCursor SpellCheckTextEdit::moveCursorToEndWord(QTextCursor cursor) const
 {
-    QRegExp splitWord("[^\\w'’-·]");
-    splitWord.indexIn(cursor.block().text(), cursor.positionInBlock());
-    int pos = splitWord.pos();
-    if (pos == -1) {
-        pos = cursor.block().text().length();
-    }
+    QRegularExpression splitWord("[^\\w'’-·]");
+    const auto match = splitWord.match(cursor.block().text(), cursor.positionInBlock());
+    const int pos = match.hasMatch() ? match.capturedStart() : cursor.block().text().length();
     cursor.movePosition(QTextCursor::NextCharacter, QTextCursor::MoveAnchor,
                         pos - cursor.positionInBlock());
     return cursor;
@@ -374,7 +373,7 @@ void SpellCheckTextEdit::rehighlighWithNewCursor()
     // Если редактирование документа не закончено, но позиция курсора сменилась,
     // откладываем проверку орфографии
     //
-    if (document()->docHandle()->isInEditBlock()) {
+    if (QTextDocumentPrivate::get(document())->isInEditBlock()) {
         QMetaObject::invokeMethod(this, &SpellCheckTextEdit::rehighlighWithNewCursor,
                                   Qt::QueuedConnection);
         return;
