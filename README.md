@@ -33,7 +33,9 @@ Starc has its own *.starc* file format, but also allows you to import files usin
 
 ## Language support
 
-**Starc** currently supports following languages:
+**Starc** supports writing in any language.
+
+The user interface has been translated into the following languages:
 
 - Azerbaijani
 - Croatian
@@ -66,7 +68,7 @@ Starc has its own *.starc* file format, but also allows you to import files usin
 - Tamil (ta)
 - Telugu (te) 
 
-If you wish to add another language, please consult our [Wiki page on how to do it yourself](https://github.com/story-apps/starc/wiki/How-to-add-the-translation-of-Story-Architect-to-your-native-language-or-improve-the-existing-version?).
+If you wish to add another translation for the application interface, please consult our [Wiki page on how to do it yourself](https://github.com/story-apps/starc/wiki/How-to-add-the-translation-of-Story-Architect-to-your-native-language-or-improve-the-existing-version?).
 
 
 ## Features
@@ -91,7 +93,6 @@ You can also add things like title page for your script, movie poster and other 
 
 ## Build instructions
 
-### Linux
 
     git clone --recurse-submodules https://github.com/story-apps/starc
     cd starc
