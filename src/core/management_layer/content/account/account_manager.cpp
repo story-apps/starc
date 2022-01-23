@@ -293,9 +293,15 @@ void AccountManager::setAccountInfo(const QString& _email, const QString& _name,
     if (d->subscriptionEndsTimer.isActive()) {
         d->subscriptionEndsTimer.stop();
     }
-    const auto secsToSubscriptionEnd = QDateTime::currentDateTimeUtc().secsTo(_subscriptionEnds);
-    if (secsToSubscriptionEnd > 0) {
-        d->subscriptionEndsTimer.start(std::chrono::seconds{ secsToSubscriptionEnd });
+    const auto currentDateTime = QDateTime::currentDateTimeUtc();
+    if (currentDateTime < _subscriptionEnds) {
+        //
+        // Т.к. таймер запускается на int миллисекунд, нельзя в него передавать слишком большое
+        // значение (количество миллисекунд до самого конца подписки), выходящее за пределы INT_MAX
+        //
+        const qint64 maxInterval = INT_MAX;
+        const auto interval = std::min(currentDateTime.msecsTo(_subscriptionEnds), maxInterval);
+        d->subscriptionEndsTimer.start(interval);
     }
 }
 
