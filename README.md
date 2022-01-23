@@ -35,40 +35,7 @@ Starc has its own *.starc* file format, but also allows you to import files usin
 
 **Starc** supports writing in any language.
 
-The user interface has been translated into the following languages:
-
-- Azerbaijani
-- Croatian
-- Galician
-- German (de)
-- Portuguese (Brazil)
-- Romanian (Romania)
-- Russian (ru) 
-- Spanish (es) 
-- Ukrainian (uk) 
-- French (fr) 
-- Hebrew (he) 
-- Slovenian (sl) 
-- Belarusian (be) 
-- Hungarian (hu) 
-- Turkish (tr) 
-- Catalan (ca) 
-- Hindi (hi) 
-- Polish (pl) 
-- Italian (it) 
-- Danish (Denmark) 
-- Tagalog (Philippines) 
-- Portuguese (Portugal) 
-- Persian (fa) 
-- Indonesian (id) 
-- Esperanto (eo) 
-- Arabic (ar) 
-- Dutch (nl) 
-- Filipino (Philippines) 
-- Tamil (ta)
-- Telugu (te) 
-
-If you wish to add another translation for the application interface, please consult our [Wiki page on how to do it yourself](https://github.com/story-apps/starc/wiki/How-to-add-the-translation-of-Story-Architect-to-your-native-language-or-improve-the-existing-version?).
+The user interface has been translated into bunch of languages. You can find complete list of translations [here](https://www.transifex.com/story-apps/starc/). If you wish to improve existing one or add another translation for the application interface, please consult our [Wiki page on how to do it yourself](https://github.com/story-apps/starc/wiki/How-to-add-the-translation-of-Story-Architect-to-your-native-language-or-improve-the-existing-version%3F).
 
 
 ## Features

@@ -2,8 +2,10 @@
 
 #include <QFile>
 
+#include <corelib_global.h>
 
-class Log
+
+class CORE_LIBRARY_EXPORT Log
 {
     Q_GADGET
 
