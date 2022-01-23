@@ -124,7 +124,9 @@ int main(int argc, char* argv[])
     const auto crashReportsFolderPath
         = QString("%1/crashreports")
               .arg(QStandardPaths::writableLocation(QStandardPaths::AppDataLocation));
-    QBreakpadInstance.init(crashReportsFolderPath);
+    QBreakpadInstance.init(
+        crashReportsFolderPath,
+        qobject_cast<ManagementLayer::IApplicationManager*>(applicationManager)->logFilePath());
 
     //
     // Устанавливаем менеджера в приложение и запускаемся

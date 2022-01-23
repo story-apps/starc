@@ -15,6 +15,11 @@ public:
     virtual ~IApplicationManager() = default;
 
     /**
+     * @brief Получить путь к файлу с логами
+     */
+    virtual QString logFilePath() const = 0;
+
+    /**
      * @brief Запустить приложение
      */
     virtual void exec(const QString& _fileToOpenPath) = 0;

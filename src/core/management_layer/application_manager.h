@@ -23,6 +23,11 @@ public:
     ~ApplicationManager() override;
 
     /**
+     * @brief Получить путь к файлу с логами
+     */
+    QString logFilePath() const override;
+
+    /**
      * @brief Запуск приложения
      */
     void exec(const QString& _fileToOpenPath) override final;

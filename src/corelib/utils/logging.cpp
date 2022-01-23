@@ -7,14 +7,14 @@
 #include <iostream>
 
 
-Log::Level Log::m_logLevel = Log::Level::Warning;
-QFile Log::m_logFile;
+Log::Level Log::s_logLevel = Log::Level::Warning;
+QFile Log::s_logFile;
 
 void Log::init(Log::Level _level, const QString& _filePath)
 {
     qInstallMessageHandler(qtOutputHandler);
 
-    m_logLevel = _level;
+    s_logLevel = _level;
 
     if (!_filePath.isEmpty()) {
         const QFileInfo logFileInfo(_filePath);
@@ -28,11 +28,11 @@ void Log::init(Log::Level _level, const QString& _filePath)
             return;
         }
 
-        m_logFile.setFileName(_filePath);
-        const auto isFileOpened = m_logFile.open(QIODevice::WriteOnly | QIODevice::Truncate);
+        s_logFile.setFileName(_filePath);
+        const auto isFileOpened = s_logFile.open(QIODevice::WriteOnly | QIODevice::Truncate);
         if (!isFileOpened) {
             warning("Can't open file \"%1\" to writing log. Error is \"%2\"", _filePath,
-                    m_logFile.errorString());
+                    s_logFile.errorString());
             return;
         }
     }
@@ -41,9 +41,14 @@ void Log::init(Log::Level _level, const QString& _filePath)
          QVariant::fromValue(_level).toString(), _filePath);
 }
 
+QString Log::logFilePath()
+{
+    return s_logFile.fileName();
+}
+
 void Log::message(const QString& _message, Level _logLevel)
 {
-    if (_logLevel < m_logLevel) {
+    if (_logLevel < s_logLevel) {
         return;
     }
 
@@ -57,9 +62,9 @@ void Log::message(const QString& _message, Level _logLevel)
 
     std::cout << logEntry.toStdString() << std::endl;
 
-    if (m_logFile.isOpen()) {
-        m_logFile.write(logEntry.toUtf8());
-        m_logFile.write("\r\n");
+    if (s_logFile.isOpen()) {
+        s_logFile.write(logEntry.toUtf8());
+        s_logFile.write("\r\n");
     }
 }
 

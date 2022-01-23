@@ -1289,7 +1289,31 @@ ApplicationManager::ApplicationManager(QObject* _parent)
     initConnections();
 }
 
-ApplicationManager::~ApplicationManager() = default;
+ApplicationManager::~ApplicationManager()
+{
+    //
+    // Удаляем старые логи
+    //
+    const auto logsDirPath
+        = QString("%1/logs").arg(QStandardPaths::writableLocation(QStandardPaths::AppDataLocation));
+    const auto logsFiles = QDir(logsDirPath).entryInfoList();
+    //
+    // ... храним логи недельной давности
+    //
+    const auto dateBorder = QDateTime::currentDateTime().addDays(-7);
+    for (const auto& logFile : logsFiles) {
+        if (logFile.lastModified() >= dateBorder) {
+            continue;
+        }
+
+        QFile::remove(logFile.absoluteFilePath());
+    }
+}
+
+QString ApplicationManager::logFilePath() const
+{
+    return Log::logFilePath();
+}
 
 void ApplicationManager::exec(const QString& _fileToOpenPath)
 {

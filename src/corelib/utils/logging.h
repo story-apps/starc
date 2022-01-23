@@ -25,6 +25,11 @@ public:
     static void init(Level _logLevel, const QString& _filePath);
 
     /**
+     * @brief Путь к текущему файлу логов
+     */
+    static QString logFilePath();
+
+    /**
      * @brief Directly outputs message
      */
     static void message(const QString& _message, Level _logLevel);
@@ -36,7 +41,7 @@ public:
     template<typename... Args>
     static void debug(const QString& _message, Args... _args)
     {
-        if (m_logLevel > Level::Debug) {
+        if (s_logLevel > Level::Debug) {
             return;
         }
 
@@ -46,7 +51,7 @@ public:
     template<typename... Args>
     static void info(const QString& _message, Args... _args)
     {
-        if (m_logLevel > Level::Info) {
+        if (s_logLevel > Level::Info) {
             return;
         }
 
@@ -56,7 +61,7 @@ public:
     template<typename... Args>
     static void warning(const QString& _message, Args... _args)
     {
-        if (m_logLevel > Level::Warning) {
+        if (s_logLevel > Level::Warning) {
             return;
         }
 
@@ -66,7 +71,7 @@ public:
     template<typename... Args>
     static void critical(const QString& _message, Args... _args)
     {
-        if (m_logLevel > Level::Critical) {
+        if (s_logLevel > Level::Critical) {
             return;
         }
 
@@ -76,7 +81,7 @@ public:
     template<typename... Args>
     static void fatal(const QString& _message, Args... _args)
     {
-        if (m_logLevel > Level::Fatal) {
+        if (s_logLevel > Level::Fatal) {
             return;
         }
 
@@ -111,10 +116,10 @@ private:
     /**
      * @brief Loging level
      */
-    static Level m_logLevel;
+    static Level s_logLevel;
 
     /**
      * @brief File with log
      */
-    static QFile m_logFile;
+    static QFile s_logFile;
 };
