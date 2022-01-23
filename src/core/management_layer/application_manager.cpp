@@ -9,6 +9,10 @@
 #include "content/projects/projects_manager.h"
 #include "content/settings/settings_manager.h"
 
+#include <utils/logging.h>
+
+#include <QStandardPaths>
+
 #ifdef CLOUD_SERVICE_MANAGER
 #include <cloud/cloud_service_manager.h>
 #endif
@@ -1236,6 +1240,15 @@ ApplicationManager::ApplicationManager(QObject* _parent)
     QApplication::setApplicationVersion("0.1.0");
 
     QApplication::setStyle(new ApplicationStyle(QStyleFactory::create("Fusion")));
+
+    //
+    // Настраиваем сбор логов
+    //
+    const auto logFilePath
+        = QString("%1/logs/%2.log")
+              .arg(QStandardPaths::writableLocation(QStandardPaths::AppDataLocation),
+                   QDateTime::currentDateTime().toString(Qt::ISODateWithMs));
+    Log::init(Log::Level::Debug, logFilePath);
 
     //
     // Загрузим шрифты в базу шрифтов программы, если их там ещё нет
