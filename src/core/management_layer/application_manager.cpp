@@ -1237,18 +1237,19 @@ ApplicationManager::ApplicationManager(QObject* _parent)
     : QObject(_parent)
     , IApplicationManager()
 {
-    QApplication::setApplicationVersion("0.1.0");
-
-    QApplication::setStyle(new ApplicationStyle(QStyleFactory::create("Fusion")));
-
     //
-    // Настраиваем сбор логов
+    // Первым делом настраиваем сбор логов
     //
     const auto logFilePath
         = QString("%1/logs/%2.log")
               .arg(QStandardPaths::writableLocation(QStandardPaths::AppDataLocation),
                    QDateTime::currentDateTime().toString(Qt::ISODateWithMs));
     Log::init(Log::Level::Debug, logFilePath);
+
+
+    QApplication::setApplicationVersion("0.1.0");
+    QApplication::setStyle(new ApplicationStyle(QStyleFactory::create("Fusion")));
+
 
     //
     // Загрузим шрифты в базу шрифтов программы, если их там ещё нет

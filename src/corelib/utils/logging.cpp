@@ -12,6 +12,8 @@ QFile Log::m_logFile;
 
 void Log::init(Log::Level _level, const QString& _filePath)
 {
+    qInstallMessageHandler(qtOutputHandler);
+
     m_logLevel = _level;
 
     if (!_filePath.isEmpty()) {
@@ -46,12 +48,11 @@ void Log::message(const QString& _message, Level _logLevel)
     }
 
     const QString time = QDateTime::currentDateTime().toString("yyyy.MM.dd HH:mm:ss.zzz");
-    const std::map<Log::Level, QString> level2String = {
-        { Log::Level::Debug, "D" },
-        { Log::Level::Info, "I" },
-        { Log::Level::Warning, "W" },
-        { Log::Level::Critical, "C" },
-    };
+    const std::map<Log::Level, QString> level2String = { { Log::Level::Debug, "D" },
+                                                         { Log::Level::Info, "I" },
+                                                         { Log::Level::Warning, "W" },
+                                                         { Log::Level::Critical, "C" },
+                                                         { Log::Level::Fatal, "F" } };
     const auto logEntry = QString("%1 [%2] %3").arg(time, level2String.at(_logLevel), _message);
 
     std::cout << logEntry.toStdString() << std::endl;
@@ -59,5 +60,31 @@ void Log::message(const QString& _message, Level _logLevel)
     if (m_logFile.isOpen()) {
         m_logFile.write(logEntry.toUtf8());
         m_logFile.write("\r\n");
+    }
+}
+
+void Log::qtOutputHandler(QtMsgType _type, const QMessageLogContext& _context,
+                          const QString& _message)
+{
+    const auto message = (qstrlen(_context.file) > 0 && qstrlen(_context.function) > 0)
+        ? QString("%1 (%2:%3, %4)")
+              .arg(_message, _context.file, QString::number(_context.line), _context.function)
+        : _message;
+    switch (_type) {
+    case QtDebugMsg:
+        debug(message);
+        break;
+    case QtInfoMsg:
+        info(message);
+        break;
+    case QtWarningMsg:
+        warning(message);
+        break;
+    case QtCriticalMsg:
+        critical(message);
+        break;
+    case QtFatalMsg:
+        fatal(message);
+        abort();
     }
 }

@@ -13,6 +13,7 @@ public:
         Info,
         Warning,
         Critical,
+        Fatal,
     };
     Q_ENUM(Level);
 
@@ -70,7 +71,18 @@ public:
         message(constructMessage(_message, _args...), Level::Critical);
     }
 
-    Level levelFromString(const QString& _level);
+    template<typename... Args>
+    static void fatal(const QString& _message, Args... _args)
+    {
+        if (m_logLevel > Level::Fatal) {
+            return;
+        }
+
+        message(constructMessage(_message, _args...), Level::Fatal);
+    }
+
+    static void qtOutputHandler(QtMsgType _type, const QMessageLogContext& _context,
+                                const QString& _message);
 
 private:
     /**
