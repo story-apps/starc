@@ -11,6 +11,7 @@ class CORE_LIBRARY_EXPORT Log
 
 public:
     enum class Level {
+        Trace,
         Debug,
         Info,
         Warning,
@@ -37,6 +38,16 @@ public:
     /**
      * @brief All public methods below are used for create log message with corresponding level
      */
+
+    template<typename... Args>
+    static void trace(const QString& _message, Args... _args)
+    {
+        if (s_logLevel > Level::Trace) {
+            return;
+        }
+
+        message(constructMessage(_message, _args...), Level::Trace);
+    }
 
     template<typename... Args>
     static void debug(const QString& _message, Args... _args)

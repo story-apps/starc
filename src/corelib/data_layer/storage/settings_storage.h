@@ -27,7 +27,7 @@ namespace DataStorageLayer {
 
 namespace {
 //
-// Приложение
+// Устройтво
 //
 const QString kDeviceGroupKey = "device";
 //
@@ -77,24 +77,32 @@ const QString kApplicationUseTypewriterScrollingKey
 const QString kApplicationProjectsKey = kApplicationGroupKey + "/projects";
 
 //
+// Аккаунт
+//
+const QString kAccountGroupKey = "account";
+//
+// имейл
+const QString kAccountEmailKey = kAccountGroupKey + "/email";
+
+//
 // Проект
 //
-const QString kProjectKey = "project";
+const QString kProjectGroupKey = "project";
 //
 // тип нового проекта
-const QString kProjectTypeKey = kProjectKey + "/type";
+const QString kProjectTypeKey = kProjectGroupKey + "/type";
 // папка сохранения проектов
-const QString kProjectSaveFolderKey = kProjectKey + "/save-folder";
+const QString kProjectSaveFolderKey = kProjectGroupKey + "/save-folder";
 // папка открытия проектов
-const QString kProjectOpenFolderKey = kProjectKey + "/open-folder";
+const QString kProjectOpenFolderKey = kProjectGroupKey + "/open-folder";
 // папка импорта проектов
-const QString kProjectImportFolderKey = kProjectKey + "/import-folder";
+const QString kProjectImportFolderKey = kProjectGroupKey + "/import-folder";
 // папка экспорта проектов
-const QString kProjectExportFolderKey = kProjectKey + "/export-folder";
+const QString kProjectExportFolderKey = kProjectGroupKey + "/export-folder";
 // путь до свойств конкретного проекта
 QString projectKey(const QString& _path)
 {
-    return kProjectKey + "/concrete/" + _path;
+    return kProjectGroupKey + "/concrete/" + _path;
 }
 // путь до структуры проекта
 QString projectStructureKey(const QString& _path)

@@ -60,6 +60,13 @@ Application::Application(int& _argc, char** _argv)
     d->idleTimer.start();
 }
 
+Application::~Application()
+{
+    if (d->applicationManager) {
+        delete d->applicationManager;
+    }
+}
+
 void Application::setApplicationManager(QObject* _manager)
 {
     d->applicationManager = _manager;
@@ -90,8 +97,6 @@ void Application::startUp()
 
     manager->exec(d->fileToOpen);
 }
-
-Application::~Application() = default;
 
 bool Application::notify(QObject* _object, QEvent* _event)
 {

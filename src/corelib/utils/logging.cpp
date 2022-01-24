@@ -37,8 +37,8 @@ void Log::init(Log::Level _level, const QString& _filePath)
         }
     }
 
-    info("Logger initialized with \"%1\" level and \"%2\" log file path",
-         QVariant::fromValue(_level).toString(), _filePath);
+    trace("Logger initialized with \"%1\" level and \"%2\" log file path",
+          QVariant::fromValue(_level).toString(), _filePath);
 }
 
 QString Log::logFilePath()
@@ -65,6 +65,7 @@ void Log::message(const QString& _message, Level _logLevel)
     if (s_logFile.isOpen()) {
         s_logFile.write(logEntry.toUtf8());
         s_logFile.write("\r\n");
+        s_logFile.flush();
     }
 }
 

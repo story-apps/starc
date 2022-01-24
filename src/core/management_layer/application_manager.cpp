@@ -25,6 +25,7 @@
 #include <ui/account/connection_status_tool_bar.h>
 #include <ui/application_style.h>
 #include <ui/application_view.h>
+#include <ui/crash_report_dialog.h>
 #include <ui/design_system/design_system.h>
 #include <ui/menu_view.h>
 #include <ui/widgets/dialog/dialog.h>
@@ -35,6 +36,7 @@
 #include <utils/helpers/dialog_helper.h>
 #include <utils/tools/backup_builder.h>
 #include <utils/tools/run_once.h>
+#include <utils/validators/email_validator.h>
 
 #include <QApplication>
 #include <QDir>
@@ -73,9 +75,14 @@ public:
     ~Implementation();
 
     /**
-     * @brief Проверить новую версию
+     * @brief Отправить инфу о запуске приложения в статистику
      */
     void sendStartupStatistics();
+
+    /**
+     * @brief sendCrashInfo
+     */
+    void sendCrashInfo();
 
     /**
      * @brief Настроить параметры автосохранения
@@ -350,6 +357,94 @@ void ApplicationManager::Implementation::sendStartupStatistics()
     data["action_content"] = QString();
     loader->setRawRequestData(QJsonDocument(data).toJson(), "application/json");
     loader->loadAsync("https://demo.storyapps.dev/telemetry/");
+}
+
+void ApplicationManager::Implementation::sendCrashInfo()
+{
+    const auto crashReportsFolderPath
+        = QString("%1/crashreports")
+              .arg(QStandardPaths::writableLocation(QStandardPaths::AppDataLocation));
+    const auto crashDumps = QDir(crashReportsFolderPath).entryInfoList(QDir::Files);
+    if (crashDumps.isEmpty()) {
+        return;
+    }
+
+    //
+    // Если есть дампы для отправки, то предложим пользователю отправить отчёт об ошибке
+    //
+
+    auto dialog = new Ui::CrashReportDialog(applicationView);
+    dialog->setContactEmail(settingsValue(DataStorageLayer::kAccountEmailKey).toString());
+
+    //
+    // Настраиваем соединения диалога
+    //
+    connect(dialog, &Ui::CrashReportDialog::sendReportPressed, q, [crashDumps, dialog] {
+        //
+        // Сформируем пары <дамп, лог>
+        //
+        const auto logs = QFileInfo(Log::logFilePath()).dir().entryInfoList(QDir::Files);
+        QVector<QPair<QString, QString>> dumpsAndLogs;
+        for (const auto& dump : crashDumps) {
+            for (const auto& log : logs) {
+                if (!log.completeBaseName().startsWith(dump.completeBaseName())) {
+                    continue;
+                }
+
+                dumpsAndLogs.append({ dump.absoluteFilePath(), log.absoluteFilePath() });
+                break;
+            }
+        }
+
+        //
+        // Отправляем дампы с логами
+        //
+        auto appInfo = [](const QString& logPath) {
+            QFile log(logPath);
+            if (log.open(QIODevice::ReadOnly)) {
+                QString info = log.readLine();
+                info = info.remove("[I] ");
+                return info;
+            }
+            return QString();
+        };
+        for (const auto& dumpAndLog : dumpsAndLogs) {
+            auto loader = new NetworkRequest;
+            QObject::connect(loader, &NetworkRequest::finished, loader, [loader, dumpAndLog] {
+                loader->deleteLater();
+                QFile::remove(dumpAndLog.first);
+                QFile::remove(dumpAndLog.second);
+            });
+            loader->setRequestMethod(NetworkRequestMethod::Post);
+            loader->addRequestAttribute("app_info", appInfo(dumpAndLog.second));
+            loader->addRequestAttribute("email", dialog->contactEmail());
+            loader->addRequestAttribute("frequency", dialog->frequency());
+            loader->addRequestAttribute("crashSource", dialog->crashSource());
+            loader->addRequestAttribute("message", dialog->crashDetails());
+            loader->addRequestAttributeFile("dump", dumpAndLog.first);
+            loader->addRequestAttributeFile("log", dumpAndLog.second);
+            loader->loadAsync("https://starc.app/api/app/feedback/");
+        }
+
+        //
+        // Сохраняем email, если он был введён
+        //
+        if (!dialog->contactEmail().isEmpty() && EmailValidator::isValid(dialog->contactEmail())) {
+            setSettingsValue(DataStorageLayer::kAccountEmailKey, dialog->contactEmail());
+        }
+
+        //
+        // Закрываем диалог
+        //
+        dialog->hideDialog();
+    });
+    connect(dialog, &Ui::CrashReportDialog::disappeared, dialog,
+            &Ui::CrashReportDialog::deleteLater);
+
+    //
+    // Отображаем диалог
+    //
+    dialog->showDialog();
 }
 
 void ApplicationManager::Implementation::configureAutoSave()
@@ -1308,6 +1403,17 @@ ApplicationManager::~ApplicationManager()
 
         QFile::remove(logFile.absoluteFilePath());
     }
+
+    //
+    // Удаляем крашдампы, которые по какой-либо причине не были удалены ранее
+    //
+    const auto crashReportsFolderPath
+        = QString("%1/crashreports")
+              .arg(QStandardPaths::writableLocation(QStandardPaths::AppDataLocation));
+    const auto crashDumps = QDir(crashReportsFolderPath).entryInfoList(QDir::Files);
+    for (const auto& crashDump : crashDumps) {
+        QFile::remove(crashDump.absoluteFilePath());
+    }
 }
 
 QString ApplicationManager::logFilePath() const
@@ -1317,6 +1423,10 @@ QString ApplicationManager::logFilePath() const
 
 void ApplicationManager::exec(const QString& _fileToOpenPath)
 {
+    Log::info("%1 version %2, %3, %4", QApplication::applicationName(),
+              QApplication::applicationVersion(), QSysInfo().prettyProductName(),
+              QSysInfo().currentCpuArchitecture());
+
     //
     // Самое главное - настроить заголовок!
     //
@@ -1347,39 +1457,47 @@ void ApplicationManager::exec(const QString& _fileToOpenPath)
     // Осуществляем остальную настройку и показываем содержимое, после того, как на экране
     // отобразится приложение, чтобы у пользователя возник эффект моментального запуска
     //
-    QTimer::singleShot(0, this, [this, _fileToOpenPath] {
-        //
-        // Настройка
-        //
-        d->configureAutoSave();
+    QMetaObject::invokeMethod(
+        this,
+        [this, _fileToOpenPath] {
+            //
+            // Настройка
+            //
+            d->configureAutoSave();
 
-        //
-        // Отображение
-        //
-        d->showContent();
+            //
+            // Отображение
+            //
+            d->showContent();
 
 #ifdef CLOUD_SERVICE_MANAGER
-        //
-        // Запуск облачного сервиса
-        //
-        d->cloudServiceManager->start();
+            //
+            // Запуск облачного сервиса
+            //
+            d->cloudServiceManager->start();
 #endif
 
-        //
-        // Открыть заданный проект
-        //
-        openProject(_fileToOpenPath);
+            //
+            // Открыть заданный проект
+            //
+            openProject(_fileToOpenPath);
 
-        //
-        // Отправим запрос в статистику
-        //
-        d->sendStartupStatistics();
+            //
+            // Отправим запрос в статистику
+            //
+            d->sendStartupStatistics();
 
-        //
-        // Переводим состояние приложение в рабочий режим
-        //
-        d->state = ApplicationState::Working;
-    });
+            //
+            // Покажем диалог отправки сообщения об ошибке
+            //
+            d->sendCrashInfo();
+
+            //
+            // Переводим состояние приложение в рабочий режим
+            //
+            d->state = ApplicationState::Working;
+        },
+        Qt::QueuedConnection);
 }
 
 void ApplicationManager::openProject(const QString& _path)
