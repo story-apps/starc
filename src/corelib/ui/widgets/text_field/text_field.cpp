@@ -188,6 +188,13 @@ void TextField::Implementation::reconfigure()
 
 void TextField::Implementation::animateLabelToTop()
 {
+    if (labelFontSizeAnimation.startValue().toInt() == Ui::DesignSystem::font().body1().pixelSize()
+        && labelFontSizeAnimation.endValue().toInt()
+            == Ui::DesignSystem::font().caption().pixelSize()
+        && labelTopLeftAnimation.direction() == QVariantAnimation::Forward) {
+        return;
+    }
+
     labelFontSizeAnimation.setStartValue(Ui::DesignSystem::font().body1().pixelSize());
     labelFontSizeAnimation.setEndValue(Ui::DesignSystem::font().caption().pixelSize());
     labelFontSizeAnimation.start();
@@ -200,6 +207,13 @@ void TextField::Implementation::animateLabelToTop()
 
 void TextField::Implementation::animateLabelToBottom()
 {
+    if (labelFontSizeAnimation.startValue().toInt()
+            == Ui::DesignSystem::font().caption().pixelSize()
+        && labelFontSizeAnimation.endValue().toInt() == Ui::DesignSystem::font().body1().pixelSize()
+        && labelTopLeftAnimation.direction() == QVariantAnimation::Backward) {
+        return;
+    }
+
     labelFontSizeAnimation.setStartValue(Ui::DesignSystem::font().caption().pixelSize());
     labelFontSizeAnimation.setEndValue(Ui::DesignSystem::font().body1().pixelSize());
     labelFontSizeAnimation.start();
