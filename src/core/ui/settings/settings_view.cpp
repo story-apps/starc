@@ -1,5 +1,7 @@
 #include "settings_view.h"
 
+#include "widgets/theme_preview.h"
+
 #include <business_layer/chronometry/chronometer.h>
 #include <business_layer/templates/screenplay_template.h>
 #include <business_layer/templates/templates_facade.h>
@@ -186,8 +188,11 @@ public:
     // ... User interface
     //
     H6Label* applicationUserInterfaceTitle = nullptr;
-    Body1Label* theme = nullptr;
-    Button* changeTheme = nullptr;
+    QHBoxLayout* applicationThemesLayout = nullptr;
+    ThemePreview* lightTheme = nullptr;
+    ThemePreview* darkAndLightTheme = nullptr;
+    ThemePreview* darkTheme = nullptr;
+    ThemePreview* customTheme = nullptr;
     Body1Label* scaleFactorTitle = nullptr;
     Slider* scaleFactor = nullptr;
     Body2Label* scaleFactorSmallInfo = nullptr;
@@ -333,8 +338,11 @@ SettingsView::Implementation::Implementation(QWidget* _parent)
     , language(new Body1Label(applicationCard))
     , changeLanuage(new Button(applicationCard))
     , applicationUserInterfaceTitle(new H6Label(applicationCard))
-    , theme(new Body1Label(applicationCard))
-    , changeTheme(new Button(applicationCard))
+    , applicationThemesLayout(new QHBoxLayout)
+    , lightTheme(new ThemePreview(applicationCard))
+    , darkAndLightTheme(new ThemePreview(applicationCard))
+    , darkTheme(new ThemePreview(applicationCard))
+    , customTheme(new ThemePreview(applicationCard))
     , scaleFactorTitle(new Body1Label(applicationCard))
     , scaleFactor(new Slider(applicationCard))
     , scaleFactorSmallInfo(new Body2Label(applicationCard))
@@ -458,6 +466,10 @@ SettingsView::Implementation::Implementation(QWidget* _parent)
 
 void SettingsView::Implementation::initApplicationCard()
 {
+    lightTheme->setTheme(ApplicationTheme::Light);
+    darkAndLightTheme->setTheme(ApplicationTheme::DarkAndLight);
+    darkTheme->setTheme(ApplicationTheme::Dark);
+    customTheme->setTheme(ApplicationTheme::Custom);
     // 0 - 0.5, 500 - 1, 3500 - 4
     scaleFactor->setMaximumValue(3500);
     scaleFactor->setValue(500);
@@ -490,11 +502,14 @@ void SettingsView::Implementation::initApplicationCard()
     //
     applicationCardLayout->addWidget(applicationUserInterfaceTitle, itemIndex++, 0);
     {
-        auto layout = makeLayout();
-        layout->addWidget(theme, 0, Qt::AlignCenter);
-        layout->addWidget(changeTheme);
-        layout->addStretch();
-        applicationCardLayout->addLayout(layout, itemIndex++, 0);
+        applicationThemesLayout->setContentsMargins({});
+        applicationThemesLayout->setSpacing(0);
+        applicationThemesLayout->addWidget(lightTheme);
+        applicationThemesLayout->addWidget(darkAndLightTheme);
+        applicationThemesLayout->addWidget(darkTheme);
+        applicationThemesLayout->addWidget(customTheme);
+        applicationThemesLayout->addStretch();
+        applicationCardLayout->addLayout(applicationThemesLayout, itemIndex++, 0);
     }
     applicationCardLayout->addWidget(scaleFactorTitle, itemIndex++, 0);
     applicationCardLayout->addWidget(scaleFactor, itemIndex++, 0);
@@ -859,7 +874,10 @@ SettingsView::SettingsView(QWidget* _parent)
     });
     //
     connect(d->changeLanuage, &Button::clicked, this, &SettingsView::applicationLanguagePressed);
-    connect(d->changeTheme, &Button::clicked, this, &SettingsView::applicationThemePressed);
+    //    connect(d->changeTheme, &Button::clicked, this, &SettingsView::applicationThemePressed);
+    for (auto theme : { d->lightTheme, d->darkAndLightTheme, d->darkTheme, d->customTheme }) {
+        connect(theme, &ThemePreview::themePressed, this, &SettingsView::applicationThemePressed);
+    }
     connect(d->scaleFactor, &Slider::valueChanged, this, [this](int _value) {
         emit applicationScaleFactorChanged(0.5 + static_cast<qreal>(_value) / 1000.0);
     });
@@ -1286,27 +1304,6 @@ void SettingsView::setApplicationLanguage(int _language)
     d->changeLanuage->setText(languageString());
 }
 
-void SettingsView::setApplicationTheme(int _theme)
-{
-    auto themeString = [_theme] {
-        switch (static_cast<Ui::ApplicationTheme>(_theme)) {
-        case Ui::ApplicationTheme::Dark: {
-            return tr("Dark", "Theme, will be used in case \"Theme: Dark\"");
-        }
-        case Ui::ApplicationTheme::Light: {
-            return tr("Light", "Theme, will be used in case \"Theme: Light\"");
-        }
-        case Ui::ApplicationTheme::DarkAndLight: {
-            return tr("Dark and light", "Theme, will be used in case \"Theme: Dark and light\"");
-        }
-        default: {
-            return tr("Custom", "Theme, will be used in case \"Theme: Custom\"");
-        }
-        }
-    };
-    d->changeTheme->setText(themeString());
-}
-
 void SettingsView::setApplicationScaleFactor(qreal _scaleFactor)
 {
     d->scaleFactor->setValue((_scaleFactor - 0.5) * 1000.0);
@@ -1572,7 +1569,6 @@ void SettingsView::updateTranslations()
 {
     d->applicationTitle->setText(tr("Application settings"));
     d->language->setText(tr("Language"));
-    d->theme->setText(tr("Theme"));
     d->scaleFactorTitle->setText(tr("Size of the user interface elements:"));
     d->scaleFactorSmallInfo->setText(tr("small"));
     d->scaleFactorBigInfo->setText(tr("big"));
@@ -1852,8 +1848,12 @@ void SettingsView::designSystemChangeEvent(DesignSystemChangeEvent* _event)
     auto labelMargins = Ui::DesignSystem::label().margins().toMargins();
     labelMargins.setTop(static_cast<int>(Ui::DesignSystem::button().shadowMargins().top()));
     labelMargins.setBottom(static_cast<int>(Ui::DesignSystem::button().shadowMargins().bottom()));
-    for (auto label : QVector<Widget*>{ d->language, d->theme, d->scaleFactorTitle,
-                                        d->scaleFactorSmallInfo, d->scaleFactorBigInfo }) {
+    for (auto label : std::vector<Widget*>{
+             d->language,
+             d->scaleFactorTitle,
+             d->scaleFactorSmallInfo,
+             d->scaleFactorBigInfo,
+         }) {
         label->setBackgroundColor(DesignSystem::color().background());
         label->setTextColor(DesignSystem::color().onBackground());
         label->setContentsMargins(labelMargins);
@@ -1942,9 +1942,19 @@ void SettingsView::designSystemChangeEvent(DesignSystemChangeEvent* _event)
                                  isLeftToRight() ? Ui::DesignSystem::layout().px16() : 0, 0);
     }
 
-    for (auto button : { d->changeLanuage, d->changeTheme }) {
+    for (auto button : { d->changeLanuage }) {
         button->setBackgroundColor(DesignSystem::color().secondary());
         button->setTextColor(DesignSystem::color().secondary());
+    }
+
+    for (auto theme : {
+             d->lightTheme,
+             d->darkAndLightTheme,
+             d->darkTheme,
+             d->customTheme,
+         }) {
+        theme->setBackgroundColor(Ui::DesignSystem::color().background());
+        theme->setTextColor(Ui::DesignSystem::color().onBackground());
     }
 
     d->scaleFactor->setBackgroundColor(DesignSystem::color().background());
@@ -1953,6 +1963,10 @@ void SettingsView::designSystemChangeEvent(DesignSystemChangeEvent* _event)
 
     d->applicationCardLayout->setRowMinimumHeight(
         d->applicationCardBottomSpacerIndex, static_cast<int>(Ui::DesignSystem::layout().px24()));
+    d->applicationThemesLayout->setSpacing(Ui::DesignSystem::layout().px24());
+    d->applicationThemesLayout->setContentsMargins(
+        QMargins(Ui::DesignSystem::layout().px24(), Ui::DesignSystem::layout().px12(),
+                 Ui::DesignSystem::layout().px24(), Ui::DesignSystem::layout().px16()));
     //
     d->simpleTextCardLayout->setRowMinimumHeight(
         d->simpleTextCardBottomSpacerIndex, static_cast<int>(Ui::DesignSystem::layout().px24()));

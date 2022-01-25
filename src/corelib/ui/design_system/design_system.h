@@ -17,7 +17,12 @@ namespace Ui {
 /**
  * @brief Тема приложения
  */
-enum class ApplicationTheme { Dark, Light, DarkAndLight, Custom };
+enum class ApplicationTheme {
+    Dark,
+    Light,
+    DarkAndLight,
+    Custom,
+};
 
 /**
  * @brief Дизайн система приложения
@@ -35,7 +40,7 @@ public:
     class CORE_LIBRARY_EXPORT Color
     {
     public:
-        explicit Color(const Color& _rhs);
+        Color(const Color& _rhs);
         explicit Color(const QString& _color);
         ~Color();
         Color& operator=(const Color& _rhs);
@@ -123,7 +128,7 @@ public:
         /**
          * @brief Расстояние с заданным кол-вом пикселей
          */
-        qreal px(qreal _value) const;
+        qreal px(qreal _value = 1.0) const;
 
         /**
          * @brief Отступ в 2 пикселя
@@ -1194,6 +1199,7 @@ public:
      * @brief Параметры цвета приложения
      */
     static const Color& color();
+    static Color color(ApplicationTheme _forTheme);
     static void setColor(const Color& _color);
 
     /**

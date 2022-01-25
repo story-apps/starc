@@ -7,7 +7,6 @@
 #include <business_layer/templates/templates_facade.h>
 #include <data_layer/storage/settings_storage.h>
 #include <data_layer/storage/storage_facade.h>
-#include <include/custom_events.h>
 #include <ui/settings/language_dialog.h>
 #include <ui/settings/settings_navigator.h>
 #include <ui/settings/settings_tool_bar.h>
@@ -72,7 +71,6 @@ SettingsManager::Implementation::Implementation(QObject* _parent, QWidget* _pare
 void SettingsManager::Implementation::loadApplicationSettings()
 {
     view->setApplicationLanguage(settingsValue(DataStorageLayer::kApplicationLanguagedKey).toInt());
-    view->setApplicationTheme(settingsValue(DataStorageLayer::kApplicationThemeKey).toInt());
     view->setApplicationScaleFactor(
         settingsValue(DataStorageLayer::kApplicationScaleFactorKey).toReal());
     view->setApplicationUseAutoSave(
@@ -293,20 +291,20 @@ SettingsManager::SettingsManager(QObject* _parent, QWidget* _parentWidget)
                 &SettingsManager::setApplicationLanguage);
         connect(dialog, &Ui::LanguageDialog::disappeared, dialog, &Ui::LanguageDialog::deleteLater);
     });
-    connect(d->view, &Ui::SettingsView::applicationThemePressed, this, [this, _parentWidget] {
-        auto dialog = new Ui::ThemeDialog(_parentWidget);
-        dialog->setCurrentTheme(Ui::DesignSystem::theme());
-        dialog->showDialog();
-        connect(dialog, &Ui::ThemeDialog::themeChanged, this,
-                &SettingsManager::applicationThemeChanged);
-        connect(dialog, &Ui::ThemeDialog::themeChanged, this,
-                &SettingsManager::setApplicationTheme);
-        connect(dialog, &Ui::ThemeDialog::customThemeColorsChanged, this,
-                &SettingsManager::applicationCustomThemeColorsChanged);
-        connect(dialog, &Ui::ThemeDialog::customThemeColorsChanged, this,
-                &SettingsManager::setApplicationCustomThemeColors);
-        connect(dialog, &Ui::ThemeDialog::disappeared, dialog, &Ui::ThemeDialog::deleteLater);
-    });
+    connect(d->view, &Ui::SettingsView::applicationThemePressed, this,
+            &SettingsManager::applicationThemeChanged);
+    connect(d->view, &Ui::SettingsView::applicationThemePressed, this,
+            &SettingsManager::setApplicationTheme);
+    //    connect(d->view, &Ui::SettingsView::applicationThemePressed, this, [this, _parentWidget] {
+    //        auto dialog = new Ui::ThemeDialog(_parentWidget);
+    //        dialog->setCurrentTheme(Ui::DesignSystem::theme());
+    //        dialog->showDialog();
+    //        connect(dialog, &Ui::ThemeDialog::customThemeColorsChanged, this,
+    //                &SettingsManager::applicationCustomThemeColorsChanged);
+    //        connect(dialog, &Ui::ThemeDialog::customThemeColorsChanged, this,
+    //                &SettingsManager::setApplicationCustomThemeColors);
+    //        connect(dialog, &Ui::ThemeDialog::disappeared, dialog, &Ui::ThemeDialog::deleteLater);
+    //    });
     connect(d->view, &Ui::SettingsView::applicationScaleFactorChanged, this,
             &SettingsManager::setApplicationScaleFactor);
     connect(d->view, &Ui::SettingsView::applicationUseAutoSaveChanged, this,
@@ -447,10 +445,7 @@ bool SettingsManager::eventFilter(QObject* _watched, QEvent* _event)
     if (_event->type() == QEvent::LanguageChange && _watched == d->view) {
         d->view->setApplicationLanguage(
             settingsValue(DataStorageLayer::kApplicationLanguagedKey).toInt());
-        d->view->setApplicationTheme(settingsValue(DataStorageLayer::kApplicationThemeKey).toInt());
         d->loadShortcutsSettings();
-    } else if (static_cast<EventType>(_event->type()) == EventType::DesignSystemChangeEvent) {
-        d->view->setApplicationTheme(settingsValue(DataStorageLayer::kApplicationThemeKey).toInt());
     }
 
     return QObject::eventFilter(_watched, _event);

@@ -8,6 +8,8 @@ class HierarchicalModel;
 
 namespace Ui {
 
+enum class ApplicationTheme;
+
 /**
  * @brief Представление настроек
  */
@@ -41,7 +43,6 @@ public:
     // Задание параметров приложения
     //
     void setApplicationLanguage(int _language);
-    void setApplicationTheme(int _theme);
     void setApplicationScaleFactor(qreal _scaleFactor);
     void setApplicationUseAutoSave(bool _use);
     void setApplicationSaveBackups(bool _save);
@@ -96,14 +97,10 @@ signals:
      */
     void applicationLanguagePressed();
 
-    /**
-     * @brief Пользователь нажал кнопку выбора темы
-     */
-    void applicationThemePressed();
-
     //
     // Уведомление об изменении параметров приложения
     //
+    void applicationThemePressed(Ui::ApplicationTheme _theme);
     void applicationScaleFactorChanged(qreal _scaleFactor);
     void applicationUseAutoSaveChanged(bool _use);
     void applicationSaveBackupsChanged(bool _save);

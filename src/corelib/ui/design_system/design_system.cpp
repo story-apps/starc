@@ -2032,102 +2032,7 @@ void DesignSystem::setTheme(ApplicationTheme _theme)
 
     instance()->d->theme = _theme;
 
-    QColor primary;
-    QColor onShadow;
-    QColor secondary;
-    QColor background;
-    QColor surface;
-    QColor error;
-    QColor shadow;
-    QColor onPrimary;
-    QColor onSecondary;
-    QColor onBackground;
-    QColor onSurface;
-    QColor onError;
-
-    switch (_theme) {
-    case Ui::ApplicationTheme::DarkAndLight: {
-        primary = "#323740";
-        secondary = "#448aff";
-        background = "#ffffff";
-        surface = "#f3f3f3";
-        error = "#b00020";
-        shadow = [] {
-            QColor color = "#000000";
-            color.setAlphaF(0.36);
-            return color;
-        }();
-        onPrimary = "#ffffff";
-        onSecondary = "#ffffff";
-        onBackground = "#000000";
-        onSurface = "#000000";
-        onError = "#ffffff";
-        onShadow = "#FFFFFF";
-        break;
-    }
-
-    case Ui::ApplicationTheme::Dark: {
-        primary = "#323740";
-        secondary = "#5796ff";
-        background = "#272b34";
-        surface = "#22262e";
-        error = "#ec3740";
-        shadow = [] {
-            QColor color = "#000000";
-            color.setAlphaF(0.68);
-            return color;
-        }();
-        onPrimary = "#ffffff";
-        onSecondary = "#f8f8f2";
-        onBackground = "#f8f8f2";
-        onSurface = "#f8f8f2";
-        onError = "#f8f8f2";
-        onShadow = "#f8f8f2";
-        break;
-    }
-
-    case Ui::ApplicationTheme::Light: {
-        primary = "#e4e4e4";
-        secondary = "#448aff";
-        background = "#ffffff";
-        surface = "#f3f3f3";
-        error = "#b00020";
-        shadow = [] {
-            QColor color = "#000000";
-            color.setAlphaF(0.36);
-            return color;
-        }();
-        onPrimary = "#38393a";
-        onSecondary = "#ffffff";
-        onBackground = "#000000";
-        onSurface = "#000000";
-        onError = "#ffffff";
-        onShadow = "#FFFFFF";
-        break;
-    }
-
-    case Ui::ApplicationTheme::Custom: {
-        //
-        // Кастомная палитра должна следом загрузиться из параметров приложения
-        //
-        return;
-    }
-    }
-
-    auto newColor(instance()->d->color);
-    newColor.setPrimary(primary);
-    newColor.setSecondary(secondary);
-    newColor.setBackground(background);
-    newColor.setSurface(surface);
-    newColor.setError(error);
-    newColor.setShadow(shadow);
-    newColor.setOnPrimary(onPrimary);
-    newColor.setOnSecondary(onSecondary);
-    newColor.setOnBackground(onBackground);
-    newColor.setOnSurface(onSurface);
-    newColor.setOnError(onError);
-    newColor.setOnShadow(onShadow);
-    setColor(newColor);
+    setColor(color(_theme));
 }
 
 qreal DesignSystem::scaleFactor()
@@ -2192,6 +2097,106 @@ qreal DesignSystem::elevationEndOpacity()
 const DesignSystem::Color& DesignSystem::color()
 {
     return instance()->d->color;
+}
+
+DesignSystem::Color DesignSystem::color(ApplicationTheme _forTheme)
+{
+    QColor primary;
+    QColor onShadow;
+    QColor secondary;
+    QColor background;
+    QColor surface;
+    QColor error;
+    QColor shadow;
+    QColor onPrimary;
+    QColor onSecondary;
+    QColor onBackground;
+    QColor onSurface;
+    QColor onError;
+
+    switch (_forTheme) {
+    case Ui::ApplicationTheme::DarkAndLight: {
+        primary = "#323740";
+        secondary = "#448aff";
+        background = "#ffffff";
+        surface = "#f3f3f3";
+        error = "#b00020";
+        shadow = [] {
+            QColor color = "#000000";
+            color.setAlphaF(0.36);
+            return color;
+        }();
+        onPrimary = "#ffffff";
+        onSecondary = "#ffffff";
+        onBackground = "#000000";
+        onSurface = "#000000";
+        onError = "#ffffff";
+        onShadow = "#FFFFFF";
+        break;
+    }
+
+    case Ui::ApplicationTheme::Dark: {
+        primary = "#323740";
+        secondary = "#5796ff";
+        background = "#272b34";
+        surface = "#22262e";
+        error = "#ec3740";
+        shadow = [] {
+            QColor color = "#000000";
+            color.setAlphaF(0.68);
+            return color;
+        }();
+        onPrimary = "#ffffff";
+        onSecondary = "#f8f8f2";
+        onBackground = "#f8f8f2";
+        onSurface = "#f8f8f2";
+        onError = "#f8f8f2";
+        onShadow = "#f8f8f2";
+        break;
+    }
+
+    case Ui::ApplicationTheme::Light: {
+        primary = "#e4e4e4";
+        secondary = "#448aff";
+        background = "#ffffff";
+        surface = "#f3f3f3";
+        error = "#b00020";
+        shadow = [] {
+            QColor color = "#000000";
+            color.setAlphaF(0.36);
+            return color;
+        }();
+        onPrimary = "#38393a";
+        onSecondary = "#ffffff";
+        onBackground = "#000000";
+        onSurface = "#000000";
+        onError = "#ffffff";
+        onShadow = "#FFFFFF";
+        break;
+    }
+
+    case Ui::ApplicationTheme::Custom: {
+        //
+        // Кастомная палитра берётся из параметров приложения
+        //
+        break;
+    }
+    }
+
+    auto newColor(instance()->d->color);
+    newColor.setPrimary(primary);
+    newColor.setSecondary(secondary);
+    newColor.setBackground(background);
+    newColor.setSurface(surface);
+    newColor.setError(error);
+    newColor.setShadow(shadow);
+    newColor.setOnPrimary(onPrimary);
+    newColor.setOnSecondary(onSecondary);
+    newColor.setOnBackground(onBackground);
+    newColor.setOnSurface(onSurface);
+    newColor.setOnError(onError);
+    newColor.setOnShadow(onShadow);
+    return newColor;
 }
 
 void DesignSystem::setColor(const DesignSystem::Color& _color)
