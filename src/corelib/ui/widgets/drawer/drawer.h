@@ -54,6 +54,11 @@ protected:
      */
     void mouseMoveEvent(QMouseEvent* _event) override;
 
+    /**
+     * @brief Переопределяем, чтобы скорректировать собственный размер
+     */
+    void designSystemChangeEvent(DesignSystemChangeEvent* _event) override;
+
 private:
     class Implementation;
     QScopedPointer<Implementation> d;

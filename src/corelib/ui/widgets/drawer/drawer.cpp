@@ -158,12 +158,13 @@ Drawer::Drawer(QWidget* _parent)
     setAttribute(Qt::WA_Hover);
     setFocusPolicy(Qt::StrongFocus);
     setMouseTracking(true);
-    setFixedWidth(static_cast<int>(Ui::DesignSystem::drawer().width()));
 
     connect(&d->decorationRadiusAnimation, &QVariantAnimation::valueChanged, this,
             [this] { update(); });
     connect(&d->decorationOpacityAnimation, &QVariantAnimation::valueChanged, this,
             [this] { update(); });
+
+    designSystemChangeEvent(nullptr);
 }
 
 Drawer::~Drawer() = default;
@@ -494,4 +495,11 @@ void Drawer::mouseMoveEvent(QMouseEvent* _event)
 {
     Q_UNUSED(_event)
     update();
+}
+
+void Drawer::designSystemChangeEvent(DesignSystemChangeEvent* _event)
+{
+    Widget::designSystemChangeEvent(_event);
+
+    setFixedWidth(static_cast<int>(Ui::DesignSystem::drawer().width()));
 }
