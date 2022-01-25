@@ -1,6 +1,7 @@
 #include "onboarding_view.h"
 
 #include <ui/design_system/design_system.h>
+#include <ui/settings/widgets/theme_preview.h>
 #include <ui/widgets/button/button.h>
 #include <ui/widgets/label/label.h>
 #include <ui/widgets/label/link_label.h>
@@ -53,12 +54,10 @@ public:
 
     Widget* themePage = nullptr;
     H5Label* themeTitleLabel = nullptr;
-    RadioButton* lightThemeButton = nullptr;
-    Body2Label* lightThemeInfoLabel = nullptr;
-    RadioButton* darkAndLightThemeButton = nullptr;
-    Body2Label* darkAndLightThemeInfoLabel = nullptr;
-    RadioButton* darkThemeButton = nullptr;
-    Body2Label* darkThemeInfoLabel = nullptr;
+    ThemePreview* lightTheme = nullptr;
+    ThemePreview* darkAndLightTheme = nullptr;
+    ThemePreview* darkTheme = nullptr;
+    QHBoxLayout* themesLayout = nullptr;
     H6Label* scaleFactorTitleLabel = nullptr;
     Slider* scaleFactorSlider = nullptr;
     Body2Label* scaleFactorSmallInfoLabel = nullptr;
@@ -255,29 +254,16 @@ void OnboardingView::Implementation::initThemePage()
 {
     themeTitleLabel = new H5Label(themePage);
 
-    auto initThemeButton = [this](ApplicationTheme _theme) {
-        RadioButton* radioButton = new RadioButton(themePage);
-        QObject::connect(radioButton, &RadioButton::checkedChanged, q,
-                         [this, _theme](bool _checked) {
-                             if (_checked) {
-                                 emit q->themeChanged(_theme);
-                             }
-                         });
-        return radioButton;
+    auto initThemePreview = [this](ApplicationTheme _theme) {
+        auto themePreview = new ThemePreview(themePage);
+        themePreview->setTheme(_theme);
+        QObject::connect(themePreview, &ThemePreview::themePressed, q,
+                         &OnboardingView::themeChanged);
+        return themePreview;
     };
-    lightThemeButton = initThemeButton(ApplicationTheme::Light);
-    lightThemeButton->setChecked(true);
-    darkAndLightThemeButton = initThemeButton(ApplicationTheme::DarkAndLight);
-    darkThemeButton = initThemeButton(ApplicationTheme::Dark);
-
-    RadioButtonGroup* themesGroup = new RadioButtonGroup(languagePage);
-    themesGroup->add(lightThemeButton);
-    themesGroup->add(darkAndLightThemeButton);
-    themesGroup->add(darkThemeButton);
-
-    lightThemeInfoLabel = new Body2Label(themePage);
-    darkAndLightThemeInfoLabel = new Body2Label(themePage);
-    darkThemeInfoLabel = new Body2Label(themePage);
+    lightTheme = initThemePreview(ApplicationTheme::Light);
+    darkAndLightTheme = initThemePreview(ApplicationTheme::DarkAndLight);
+    darkTheme = initThemePreview(ApplicationTheme::Dark);
 
     scaleFactorTitleLabel = new H6Label(themePage);
     scaleFactorSlider = new Slider(themePage);
@@ -302,20 +288,25 @@ void OnboardingView::Implementation::initThemePage()
     QGridLayout* themePageLayout = new QGridLayout(themePage);
     themePageLayout->setSpacing(0);
     themePageLayout->setContentsMargins({});
-    themePageLayout->addWidget(themeTitleLabel, 0, 0, 1, 3);
-    themePageLayout->addWidget(lightThemeButton, 1, 0, 1, 3);
-    themePageLayout->addWidget(lightThemeInfoLabel, 2, 0, 1, 3);
-    themePageLayout->addWidget(darkAndLightThemeButton, 3, 0, 1, 3);
-    themePageLayout->addWidget(darkAndLightThemeInfoLabel, 4, 0, 1, 3);
-    themePageLayout->addWidget(darkThemeButton, 5, 0, 1, 3);
-    themePageLayout->addWidget(darkThemeInfoLabel, 6, 0, 1, 3);
-    themePageLayout->addWidget(scaleFactorTitleLabel, 7, 0, 1, 3);
-    themePageLayout->addWidget(scaleFactorSlider, 8, 0, 1, 3);
-    themePageLayout->addWidget(scaleFactorSmallInfoLabel, 9, 0, 1, 1);
+    int row = 0;
+    themePageLayout->addWidget(themeTitleLabel, row++, 0, 1, 3);
+    {
+        themesLayout = new QHBoxLayout;
+        themesLayout->setContentsMargins({});
+        themesLayout->setSpacing(0);
+        themesLayout->addWidget(lightTheme);
+        themesLayout->addWidget(darkAndLightTheme);
+        themesLayout->addWidget(darkTheme);
+        themesLayout->addStretch();
+        themePageLayout->addLayout(themesLayout, row++, 0, 1, 3);
+    }
+    themePageLayout->addWidget(scaleFactorTitleLabel, row++, 0, 1, 3);
+    themePageLayout->addWidget(scaleFactorSlider, row++, 0, 1, 3);
+    themePageLayout->addWidget(scaleFactorSmallInfoLabel, row, 0, 1, 1);
     themePageLayout->setColumnStretch(1, 1);
-    themePageLayout->addWidget(scaleFactorBigInfoLabel, 9, 2, 1, 1);
-    themePageLayout->setRowStretch(10, 1);
-    themePageLayout->addLayout(themePageButtonsLayout, 11, 0, 1, 3);
+    themePageLayout->addWidget(scaleFactorBigInfoLabel, row++, 2, 1, 1);
+    themePageLayout->setRowStretch(row++, 1);
+    themePageLayout->addLayout(themePageButtonsLayout, row++, 0, 1, 3);
 
     themePage->hide();
 }
@@ -326,20 +317,18 @@ void OnboardingView::Implementation::updateThemePageUi()
     themeTitleLabel->setContentsMargins(Ui::DesignSystem::label().margins().toMargins());
     themeTitleLabel->setBackgroundColor(DesignSystem::color().surface());
     themeTitleLabel->setTextColor(DesignSystem::color().onSurface());
-    for (auto themeButton : { darkAndLightThemeButton, darkThemeButton, lightThemeButton }) {
-        themeButton->setBackgroundColor(DesignSystem::color().surface());
-        themeButton->setTextColor(DesignSystem::color().onSurface());
+    for (auto themePreview : { lightTheme, darkAndLightTheme, darkTheme }) {
+        themePreview->setBackgroundColor(DesignSystem::color().surface());
+        themePreview->setTextColor(DesignSystem::color().onSurface());
     }
+    themesLayout->setContentsMargins(
+        QMargins(Ui::DesignSystem::layout().px24(), 0, Ui::DesignSystem::layout().px24(), 0));
+    themesLayout->setSpacing(Ui::DesignSystem::layout().px24());
     QMarginsF themeInfoLabelMargins = Ui::DesignSystem::label().margins();
     themeInfoLabelMargins.setLeft(Ui::DesignSystem::layout().px62());
     themeInfoLabelMargins.setTop(0);
     QColor themeInfoLabelTextColor = DesignSystem::color().onSurface();
     themeInfoLabelTextColor.setAlphaF(Ui::DesignSystem::disabledTextOpacity());
-    for (auto label : { darkAndLightThemeInfoLabel, darkThemeInfoLabel, lightThemeInfoLabel }) {
-        label->setContentsMargins(themeInfoLabelMargins.toMargins());
-        label->setBackgroundColor(DesignSystem::color().surface());
-        label->setTextColor(themeInfoLabelTextColor);
-    }
     scaleFactorTitleLabel->setContentsMargins(Ui::DesignSystem::label().margins().toMargins());
     scaleFactorTitleLabel->setBackgroundColor(DesignSystem::color().surface());
     scaleFactorTitleLabel->setTextColor(DesignSystem::color().onSurface());
@@ -399,15 +388,6 @@ void OnboardingView::updateTranslations()
     d->skipOnboardingButton->setText(tr("Skip initial setup"));
 
     d->themeTitleLabel->setText(tr("Choose application theme"));
-    d->darkAndLightThemeButton->setText(tr("Dark & light theme"));
-    d->darkAndLightThemeInfoLabel->setText(
-        tr("Modern theme which combines dark and light colors for better concentration on the "
-           "documents you work."));
-    d->darkThemeButton->setText(tr("Dark theme"));
-    d->darkThemeInfoLabel->setText(tr(
-        "Theme is more suitable for work in dimly lit rooms, and also in the evening or night."));
-    d->lightThemeButton->setText(tr("Light theme"));
-    d->lightThemeInfoLabel->setText(tr("Theme is convenient for work with sufficient light."));
     d->scaleFactorTitleLabel->setText(tr("Setup size of the user interface elements"));
     d->scaleFactorSmallInfoLabel->setText(tr("small"));
     d->scaleFactorBigInfoLabel->setText(tr("big"));
