@@ -11,7 +11,7 @@
 #include <ui/settings/settings_navigator.h>
 #include <ui/settings/settings_tool_bar.h>
 #include <ui/settings/settings_view.h>
-#include <ui/settings/theme_dialog.h>
+#include <ui/settings/theme_setup_view.h>
 #include <ui/widgets/task_bar/task_bar.h>
 #include <ui/widgets/tree/tree_header_view.h>
 #include <utils/helpers/shortcuts_helper.h>
@@ -22,6 +22,7 @@
 #include <QFileInfo>
 #include <QStandardItemModel>
 #include <QStandardPaths>
+#include <QTimer>
 
 
 namespace ManagementLayer {
@@ -53,6 +54,7 @@ public:
     Ui::SettingsToolBar* toolBar = nullptr;
     Ui::SettingsNavigator* navigator = nullptr;
     Ui::SettingsView* view = nullptr;
+    Ui::ThemeSetupView* themeSetupView = nullptr;
 
     ScreenplayTemplateManager* screenplayTemplateManager = nullptr;
 };
@@ -291,20 +293,38 @@ SettingsManager::SettingsManager(QObject* _parent, QWidget* _parentWidget)
                 &SettingsManager::setApplicationLanguage);
         connect(dialog, &Ui::LanguageDialog::disappeared, dialog, &Ui::LanguageDialog::deleteLater);
     });
-    connect(d->view, &Ui::SettingsView::applicationThemePressed, this,
-            &SettingsManager::applicationThemeChanged);
-    connect(d->view, &Ui::SettingsView::applicationThemePressed, this,
-            &SettingsManager::setApplicationTheme);
-    //    connect(d->view, &Ui::SettingsView::applicationThemePressed, this, [this, _parentWidget] {
-    //        auto dialog = new Ui::ThemeDialog(_parentWidget);
-    //        dialog->setCurrentTheme(Ui::DesignSystem::theme());
-    //        dialog->showDialog();
-    //        connect(dialog, &Ui::ThemeDialog::customThemeColorsChanged, this,
-    //                &SettingsManager::applicationCustomThemeColorsChanged);
-    //        connect(dialog, &Ui::ThemeDialog::customThemeColorsChanged, this,
-    //                &SettingsManager::setApplicationCustomThemeColors);
-    //        connect(dialog, &Ui::ThemeDialog::disappeared, dialog, &Ui::ThemeDialog::deleteLater);
-    //    });
+    connect(
+        d->view, &Ui::SettingsView::applicationThemePressed, this,
+        [this](Ui::ApplicationTheme _theme) {
+            //
+            // Настроим видимость панели настройки темы приложения
+            //
+            if (_theme == Ui::ApplicationTheme::Custom) {
+                //
+                // Для кастомной темы сохраним текущее состояние, чтобы пользователь
+                // мог отменить свои изменения в ней
+                //
+                d->themeSetupView->setSourceThemeHash(
+                    settingsValue(DataStorageLayer::kApplicationCustomThemeColorsKey).toString());
+                //
+                // Показываем панель параметров темы отложенно, чтобы гармонично сочеталось с
+                // анимацией смены темы, в случае если она будет активирована
+                //
+                QTimer::singleShot(200, this, [this] { d->themeSetupView->showView(); });
+            } else {
+                d->themeSetupView->hideView();
+            }
+
+            if (_theme == Ui::DesignSystem::theme()) {
+                return;
+            }
+
+            //
+            // Уведомляем об изменении темы
+            //
+            setApplicationTheme(_theme);
+            emit applicationThemeChanged(_theme);
+        });
     connect(d->view, &Ui::SettingsView::applicationScaleFactorChanged, this,
             &SettingsManager::setApplicationScaleFactor);
     connect(d->view, &Ui::SettingsView::applicationUseAutoSaveChanged, this,
@@ -432,6 +452,15 @@ QWidget* SettingsManager::navigator() const
 QWidget* SettingsManager::view() const
 {
     return d->view;
+}
+
+void SettingsManager::setThemeSetupView(Ui::ThemeSetupView* _view)
+{
+    d->themeSetupView = _view;
+    connect(d->themeSetupView, &Ui::ThemeSetupView::customThemeColorsChanged, this,
+            &SettingsManager::applicationCustomThemeColorsChanged);
+    connect(d->themeSetupView, &Ui::ThemeSetupView::customThemeColorsChanged, this,
+            &SettingsManager::setApplicationCustomThemeColors);
 }
 
 void SettingsManager::updateScaleFactor()

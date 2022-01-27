@@ -19,6 +19,11 @@ public:
      */
     void setEdge(Qt::Edge _edge);
 
+    /**
+     * @brief Заякорить видимость тени на заданный виджет
+     */
+    void setVisibilityAnchor(Widget* _widget);
+
 protected:
     /**
      * @brief Ловим события родительского виджета, чтобы корректировать свой размер и положение
@@ -39,7 +44,7 @@ private:
     /**
      * @brief Обновить геометрию
      */
-    void refreshGeometry();
+    void updateGeometryReimpl();
 
 private:
     /**

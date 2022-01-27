@@ -97,7 +97,7 @@ SOURCES += \
     ui/settings/settings_navigator.cpp \
     ui/settings/settings_tool_bar.cpp \
     ui/settings/settings_view.cpp \
-    ui/settings/theme_dialog.cpp \
+    ui/settings/theme_setup_view.cpp \
     ui/settings/widgets/page_layout.cpp \
     ui/settings/widgets/theme_preview.cpp
 
@@ -152,7 +152,7 @@ HEADERS += \
     ui/settings/settings_navigator.h \
     ui/settings/settings_tool_bar.h \
     ui/settings/settings_view.h \
-    ui/settings/theme_dialog.h \
+    ui/settings/theme_setup_view.h \
     ui/settings/widgets/page_layout.h \
     ui/settings/widgets/theme_preview.h
 

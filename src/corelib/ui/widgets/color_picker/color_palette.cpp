@@ -22,6 +22,11 @@ public:
      */
     void buildPalette();
 
+    /**
+     * @brief Проверить, есть ли такой цвет в палитре
+     */
+    bool hasColor(const QColor& _color) const;
+
 
     struct ColorItem {
         bool operator==(const ColorItem& _other) const
@@ -124,6 +129,17 @@ void ColorPallete::Implementation::buildPalette()
     addCustomColorRect.setSize(colorRectSize);
 }
 
+bool ColorPallete::Implementation::hasColor(const QColor& _color) const
+{
+    for (const auto& color : std::as_const(colorsPalette)) {
+        if (color.color == _color) {
+            return true;
+        }
+    }
+
+    return false;
+}
+
 
 // ****
 
@@ -159,6 +175,10 @@ void ColorPallete::setSelectedColor(const QColor& _color)
     if (!_color.isValid()) {
         d->selectedColor = {};
     } else {
+        if (!d->hasColor(_color)) {
+            addCustomColor(_color);
+        }
+
         for (const auto& color : std::as_const(d->colorsPalette)) {
             if (color.color != _color) {
                 continue;

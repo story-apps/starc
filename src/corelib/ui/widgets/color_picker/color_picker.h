@@ -32,11 +32,6 @@ signals:
      */
     void selectedColorChanged(const QColor& _color);
 
-    /**
-     * @brief Пользователь передумал добавлять цвет
-     */
-    void cancelPressed();
-
 protected:
     /**
      * @brief Обновить переводы

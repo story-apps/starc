@@ -302,6 +302,7 @@ ApplicationManager::Implementation::Implementation(ApplicationManager* _q)
     , cloudServiceManager(new CloudServiceManager)
 #endif
 {
+    settingsManager->setThemeSetupView(applicationView->themeSetupView());
 }
 
 ApplicationManager::Implementation::~Implementation()

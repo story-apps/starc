@@ -5,6 +5,8 @@
 
 namespace Ui {
 
+class ThemeSetupView;
+
 /**
  * @brief Представление приложения
  */
@@ -15,6 +17,11 @@ class ApplicationView : public Widget
 public:
     explicit ApplicationView(QWidget* _parent = nullptr);
     ~ApplicationView() override;
+
+    /**
+     * @brief Получить виджет настройки темы
+     */
+    ThemeSetupView* themeSetupView() const;
 
     /**
      * @brief Сохранить состояние

@@ -1,6 +1,7 @@
 #include "application_view.h"
 
 #include <ui/design_system/design_system.h>
+#include <ui/settings/theme_setup_view.h>
 #include <ui/widgets/label/label.h>
 #include <ui/widgets/shadow/shadow.h>
 #include <ui/widgets/splitter/splitter.h>
@@ -35,6 +36,8 @@ public:
     QByteArray lastSplitterState;
     Splitter* splitter = nullptr;
 
+    ThemeSetupView* themeSetupView = nullptr;
+
     IconsBigLabel* turnOffFullScreenIcon = nullptr;
 };
 
@@ -44,9 +47,12 @@ ApplicationView::Implementation::Implementation(QWidget* _parent)
     , navigator(new StackWidget(_parent))
     , view(new StackWidget(_parent))
     , splitter(new Splitter(_parent))
+    , themeSetupView(new ThemeSetupView(_parent))
     , turnOffFullScreenIcon(new IconsBigLabel(_parent))
 {
     new Shadow(view);
+    auto splitterTopShadow = new Shadow(Qt::TopEdge, splitter);
+    splitterTopShadow->setVisibilityAnchor(themeSetupView);
 
     turnOffFullScreenIcon->setIcon(u8"\U000F0294");
     turnOffFullScreenIcon->hide();
@@ -71,10 +77,13 @@ ApplicationView::ApplicationView(QWidget* _parent)
     d->splitter->setWidgets(d->navigationWidget, d->view);
     d->splitter->setSizes(kDefaultSizes);
 
+    d->themeSetupView->hide();
+
     QVBoxLayout* layout = new QVBoxLayout(this);
     layout->setContentsMargins({});
     layout->setSpacing(0);
-    layout->addWidget(d->splitter);
+    layout->addWidget(d->themeSetupView);
+    layout->addWidget(d->splitter, 1);
 
 
     connect(d->turnOffFullScreenIcon, &IconsBigLabel::clicked, this,
@@ -86,6 +95,11 @@ ApplicationView::ApplicationView(QWidget* _parent)
 }
 
 ApplicationView::~ApplicationView() = default;
+
+ThemeSetupView* ApplicationView::themeSetupView() const
+{
+    return d->themeSetupView;
+}
 
 QVariantMap ApplicationView::saveState() const
 {
@@ -157,6 +171,8 @@ void ApplicationView::updateTranslations()
 void ApplicationView::designSystemChangeEvent(DesignSystemChangeEvent* _event)
 {
     Q_UNUSED(_event)
+
+    setBackgroundColor(Ui::DesignSystem::color().primary());
 
     QPalette toolTipPalette;
     toolTipPalette.setColor(QPalette::ToolTipBase, Ui::DesignSystem::color().onSurface());

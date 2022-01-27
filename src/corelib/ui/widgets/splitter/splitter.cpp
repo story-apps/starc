@@ -240,7 +240,7 @@ void Splitter::setSizes(const QVector<int>& _sizes)
         std::reverse(widgets.begin(), widgets.end());
         std::reverse(widgetsSizes.begin(), widgetsSizes.end());
     }
-    QRect widgetGeometry = geometry();
+    QRect widgetGeometry = rect();
     for (int index = 0; index < d->widgets.size(); ++index) {
         auto widget = widgets[index];
         const auto widgetSize = widgetsSizes[index];
@@ -350,6 +350,9 @@ bool Splitter::event(QEvent* _event)
         break;
     }
 
+    //
+    // TODO: Что это планировалось?
+    //
     case QEvent::WindowStateChange: {
         const auto event = static_cast<QWindowStateChangeEvent*>(_event);
         //            event->

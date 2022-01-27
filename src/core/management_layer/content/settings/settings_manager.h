@@ -7,7 +7,8 @@
 
 namespace Ui {
 enum class ApplicationTheme;
-}
+class ThemeSetupView;
+} // namespace Ui
 
 
 namespace ManagementLayer {
@@ -26,6 +27,11 @@ public:
     QWidget* toolBar() const;
     QWidget* navigator() const;
     QWidget* view() const;
+
+    /**
+     * @brief Задать виджет настройки темы
+     */
+    void setThemeSetupView(Ui::ThemeSetupView* _view);
 
     /**
      * @brief Обновить используемый коэффициент масштабирования в представлении

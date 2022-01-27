@@ -374,7 +374,7 @@ void ScreenplayTextTimeline::paintEvent(QPaintEvent* _event)
     // Рисуем метки на таймлайне
     //
     const auto tickRight = scrollbarRect.right() + (handleTextLeft - scrollbarRect.right()) / 2;
-    const auto markColor = ColorHelper::transparent(Ui::DesignSystem::color().onBackground(),
+    const auto markColor = ColorHelper::transparent(Ui::DesignSystem::color().onSurface(),
                                                     Ui::DesignSystem::disabledTextOpacity());
     const auto markWidth = contentRect.width() - handleTextLeft;
     const qreal marksSpacing = painter.fontMetrics().lineSpacing() * 4;
@@ -407,7 +407,7 @@ void ScreenplayTextTimeline::paintEvent(QPaintEvent* _event)
     // Рисуем метку хэндла
     //
     if (d->scrollable) {
-        painter.setPen(Ui::DesignSystem::color().onBackground());
+        painter.setPen(Ui::DesignSystem::color().onSurface());
         painter.drawText(
             handleTextRect, Qt::AlignLeft | Qt::AlignVCenter,
             TimeHelper::toString(std::chrono::duration_cast<std::chrono::seconds>(d->current)));

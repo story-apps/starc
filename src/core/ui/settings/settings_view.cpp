@@ -875,7 +875,12 @@ SettingsView::SettingsView(QWidget* _parent)
     //
     connect(d->changeLanuage, &Button::clicked, this, &SettingsView::applicationLanguagePressed);
     //    connect(d->changeTheme, &Button::clicked, this, &SettingsView::applicationThemePressed);
-    for (auto theme : { d->lightTheme, d->darkAndLightTheme, d->darkTheme, d->customTheme }) {
+    for (auto theme : {
+             d->lightTheme,
+             d->darkAndLightTheme,
+             d->darkTheme,
+             d->customTheme,
+         }) {
         connect(theme, &ThemePreview::themePressed, this, &SettingsView::applicationThemePressed);
     }
     connect(d->scaleFactor, &Slider::valueChanged, this, [this](int _value) {

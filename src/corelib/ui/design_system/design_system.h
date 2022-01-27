@@ -60,6 +60,9 @@ public:
         const QColor& onError() const;
         const QColor& onShadow() const;
 
+        const QColor& textEditor() const;
+        const QColor& onTextEditor() const;
+
         void setPrimary(const QColor& _color);
         void setSecondary(const QColor& _color);
         void setBackground(const QColor& _color);
@@ -72,6 +75,9 @@ public:
         void setOnSurface(const QColor& _color);
         void setOnError(const QColor& _color);
         void setOnShadow(const QColor& _color);
+
+        void setTextEditor(const QColor& _color);
+        void setOnTextEditor(const QColor& _color);
 
     private:
         Color();

@@ -1804,7 +1804,7 @@ void PageTextEditPrivate::paintPagesView(QPainter* _painter)
             backgroundImage.fill(Qt::transparent);
             QPainter backgroundImagePainter(&backgroundImage);
             backgroundImagePainter.setPen(Qt::NoPen);
-            backgroundImagePainter.setBrush(Ui::DesignSystem::color().background());
+            backgroundImagePainter.setBrush(Ui::DesignSystem::color().textEditor());
             backgroundImagePainter.drawRoundedRect(QRect({ 0, 0 }, backgroundImage.size()),
                                                    borderRadius, borderRadius);
         }

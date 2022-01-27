@@ -3,8 +3,12 @@
 #include <data_layer/storage/settings_storage.h>
 #include <data_layer/storage/storage_facade.h>
 #include <ui/design_system/design_system.h>
+#include <ui/widgets/context_menu/context_menu.h>
 #include <utils/helpers/color_helper.h>
 
+#include <QAction>
+#include <QClipboard>
+#include <QGuiApplication>
 #include <QPaintEvent>
 #include <QPainter>
 #include <QPainterPath>
@@ -241,7 +245,23 @@ void ThemePreview::mousePressEvent(QMouseEvent* _event)
 {
     Widget::mousePressEvent(_event);
 
-    emit themePressed(d->theme);
+    if (_event->button() == Qt::LeftButton) {
+        emit themePressed(d->theme);
+    } else if (_event->button() == Qt::RightButton) {
+        auto copyAction = new QAction;
+        copyAction->setText(tr("Cory HASH"));
+        connect(copyAction, &QAction::triggered, this, [this] {
+            QGuiApplication::clipboard()->setText(Ui::DesignSystem::color(d->theme).toString());
+        });
+
+        auto menu = new ContextMenu(this);
+        menu->setActions({ copyAction });
+        menu->setBackgroundColor(Ui::DesignSystem::color().background());
+        menu->setTextColor(Ui::DesignSystem::color().onBackground());
+        connect(menu, &ContextMenu::disappeared, menu, &ContextMenu::deleteLater);
+
+        menu->showContextMenu(_event->globalPos());
+    }
 }
 
 void ThemePreview::designSystemChangeEvent(DesignSystemChangeEvent* _event)

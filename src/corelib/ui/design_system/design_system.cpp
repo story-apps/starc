@@ -42,6 +42,9 @@ public:
     QColor onSurface;
     QColor onError;
     QColor onShadow;
+
+    QColor textEditor;
+    QColor onTextEditor;
 };
 
 DesignSystem::Color::Implementation::Implementation()
@@ -59,6 +62,9 @@ DesignSystem::Color::Implementation::Implementation()
     onSurface = QColor("#000000");
     onError = QColor("#FFFFFF");
     onShadow = QColor("#FFFFFF");
+
+    textEditor = background;
+    onTextEditor = onBackground;
 }
 
 
@@ -73,11 +79,14 @@ DesignSystem::Color::Color(const DesignSystem::Color& _rhs)
 DesignSystem::Color::Color(const QString& _color)
     : d(new Implementation)
 {
-    const auto colorJson = _color;
     int startIndex = 0;
     auto nextColor = [_color, &startIndex] {
         const int length = 6;
         const auto color = _color.mid(startIndex, length);
+        if (color.isEmpty()) {
+            return QString();
+        }
+
         startIndex += length;
         return "#" + color;
     };
@@ -93,6 +102,18 @@ DesignSystem::Color::Color(const QString& _color)
     setOnError(nextColor());
     setShadow(nextColor());
     setOnShadow(nextColor());
+
+    //
+    // TODO: Выпилить со временем
+    //
+    const auto colorName = nextColor();
+    if (colorName.isEmpty()) {
+        setTextEditor(background());
+        setOnTextEditor(onBackground());
+    } else {
+        setTextEditor(colorName);
+        setOnTextEditor(nextColor());
+    }
 }
 
 DesignSystem::Color& DesignSystem::Color::operator=(const DesignSystem::Color& _rhs)
@@ -120,6 +141,8 @@ QString DesignSystem::Color::toString() const
     colorsString += d->onError.name();
     colorsString += d->shadow.name();
     colorsString += d->onShadow.name();
+    colorsString += d->textEditor.name();
+    colorsString += d->onTextEditor.name();
     return colorsString.remove('#');
 }
 
@@ -183,6 +206,16 @@ const QColor& DesignSystem::Color::onError() const
 const QColor& DesignSystem::Color::onShadow() const
 {
     return d->onShadow;
+}
+
+const QColor& DesignSystem::Color::textEditor() const
+{
+    return d->textEditor;
+}
+
+const QColor& DesignSystem::Color::onTextEditor() const
+{
+    return d->onTextEditor;
 }
 
 void DesignSystem::Color::setPrimary(const QColor& _color)
@@ -252,6 +285,16 @@ void DesignSystem::Color::setOnError(const QColor& _color)
 void DesignSystem::Color::setOnShadow(const QColor& _color)
 {
     d->onShadow = _color;
+}
+
+void DesignSystem::Color::setTextEditor(const QColor& _color)
+{
+    d->textEditor = _color;
+}
+
+void DesignSystem::Color::setOnTextEditor(const QColor& _color)
+{
+    d->onTextEditor = _color;
 }
 
 DesignSystem::Color::Color()
@@ -2196,6 +2239,8 @@ DesignSystem::Color DesignSystem::color(ApplicationTheme _forTheme)
     newColor.setOnSurface(onSurface);
     newColor.setOnError(onError);
     newColor.setOnShadow(onShadow);
+    newColor.setTextEditor(background);
+    newColor.setOnTextEditor(onBackground);
     return newColor;
 }
 

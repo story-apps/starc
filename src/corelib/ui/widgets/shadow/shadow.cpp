@@ -15,7 +15,7 @@ Shadow::Shadow(QWidget* _parent)
     : Widget(_parent)
 {
     _parent->installEventFilter(this);
-    refreshGeometry();
+    updateGeometryReimpl();
 }
 
 Shadow::Shadow(Qt::Edge _edge, QWidget* _parent)
@@ -23,7 +23,7 @@ Shadow::Shadow(Qt::Edge _edge, QWidget* _parent)
     , m_edge(_edge)
 {
     _parent->installEventFilter(this);
-    refreshGeometry();
+    updateGeometryReimpl();
 }
 
 void Shadow::setEdge(Qt::Edge _edge)
@@ -33,8 +33,20 @@ void Shadow::setEdge(Qt::Edge _edge)
     }
 
     m_edge = _edge;
-    refreshGeometry();
+    updateGeometryReimpl();
     update();
+}
+
+void Shadow::setVisibilityAnchor(Widget* _widget)
+{
+    if (_widget == nullptr) {
+        return;
+    }
+
+    setVisible(_widget->isVisible());
+
+    connect(_widget, &Widget::appeared, this, &Shadow::show);
+    connect(_widget, &Widget::disappeared, this, &Shadow::hide);
 }
 
 bool Shadow::eventFilter(QObject* _watched, QEvent* _event)
@@ -42,7 +54,7 @@ bool Shadow::eventFilter(QObject* _watched, QEvent* _event)
     if (_watched == parentWidget()) {
         switch (_event->type()) {
         case QEvent::Resize: {
-            refreshGeometry();
+            updateGeometryReimpl();
             break;
         }
 
@@ -90,7 +102,7 @@ void Shadow::paintEvent(QPaintEvent* _event)
     }
 
     QPainter painter(this);
-    const auto lineWidth = Ui::DesignSystem::scaleFactor();
+    const auto lineWidth = Ui::DesignSystem::layout().px();
     painter.setPen(QPen(Ui::DesignSystem::color().shadow(), lineWidth));
 
     switch (m_edge) {
@@ -155,10 +167,10 @@ void Shadow::designSystemChangeEvent(DesignSystemChangeEvent* _event)
 {
     Widget::designSystemChangeEvent(_event);
 
-    refreshGeometry();
+    updateGeometryReimpl();
 }
 
-void Shadow::refreshGeometry()
+void Shadow::updateGeometryReimpl()
 {
     if (parentWidget() == nullptr) {
         return;
@@ -168,7 +180,7 @@ void Shadow::refreshGeometry()
     int y = 0;
     int width = 0;
     int height = 0;
-    const int shadowWidth = qCeil(Ui::DesignSystem::scaleFactor() * 3);
+    const int shadowWidth = qCeil(Ui::DesignSystem::layout().px(3));
     switch (m_edge) {
     default:
     case Qt::LeftEdge:

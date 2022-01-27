@@ -773,13 +773,15 @@ void ScreenplayTextView::designSystemChangeEvent(DesignSystemChangeEvent* _event
 
     d->screenplayText->setPageSpacing(Ui::DesignSystem::layout().px24());
     QPalette palette;
-    palette.setColor(QPalette::Base, Ui::DesignSystem::color().background());
     palette.setColor(QPalette::Window, Ui::DesignSystem::color().surface());
-    palette.setColor(QPalette::Text, Ui::DesignSystem::color().onBackground());
+    palette.setColor(QPalette::Base, Ui::DesignSystem::color().textEditor());
+    palette.setColor(QPalette::Text, Ui::DesignSystem::color().onTextEditor());
     palette.setColor(QPalette::Highlight, Ui::DesignSystem::color().secondary());
     palette.setColor(QPalette::HighlightedText, Ui::DesignSystem::color().onSecondary());
     d->scalableWrapper->setPalette(palette);
     d->screenplayText->setPalette(palette);
+    palette.setColor(QPalette::Base, Qt::transparent);
+    d->screenplayText->viewport()->setPalette(palette);
     d->screenplayText->completer()->setTextColor(Ui::DesignSystem::color().onBackground());
     d->screenplayText->completer()->setBackgroundColor(Ui::DesignSystem::color().background());
 
