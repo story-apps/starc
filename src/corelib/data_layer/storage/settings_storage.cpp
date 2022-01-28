@@ -89,7 +89,7 @@ SettingsStorage::Implementation::Implementation()
     defaultValues.insert(kApplicationThemeKey, static_cast<int>(Ui::ApplicationTheme::Light));
     defaultValues.insert(
         kApplicationCustomThemeColorsKey,
-        "323740ffffff2ab177f8f8f2272b34f8f8f222262ef8f8f2ec3740f8f8f2000000f8f8f2");
+        "323740ffffff2ab177f8f8f2272b34f8f8f222262ef8f8f2ec3740f8f8f2000000f8f8f2272b34f8f8f2");
     defaultValues.insert(kApplicationScaleFactorKey, 1.0);
     defaultValues.insert(kApplicationUseAutoSaveKey, true);
     defaultValues.insert(kApplicationSaveBackupsKey, true);

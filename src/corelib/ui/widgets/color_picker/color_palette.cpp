@@ -34,13 +34,15 @@ public:
             return color == _other.color && rect == _other.rect;
         }
 
-        QColor color;
+        QColor color = QColor::Invalid;
         QRectF rect;
     };
     QVector<ColorItem> colorsPalette;
     ColorItem selectedColor;
     QVector<QColor> customColors;
     QRectF addCustomColorRect;
+
+    bool isColorCanBeDeslected = false;
 };
 
 
@@ -161,6 +163,11 @@ ColorPallete::ColorPallete(QWidget* _parent)
 
 ColorPallete::~ColorPallete() = default;
 
+void ColorPallete::setColorCanBeDeselected(bool _can)
+{
+    d->isColorCanBeDeslected = _can;
+}
+
 QColor ColorPallete::selectedColor() const
 {
     return d->selectedColor.color;
@@ -267,7 +274,10 @@ void ColorPallete::paintEvent(QPaintEvent* _event)
         if (color == d->selectedColor) {
             painter.setPen(ColorHelper::contrasted(color.color));
             painter.setFont(Ui::DesignSystem::font().iconsSmall());
-            painter.drawText(color.rect, Qt::AlignCenter, u8"\U000F0E1E");
+            painter.drawText(color.rect, Qt::AlignCenter,
+                             d->isColorCanBeDeslected && color.rect.contains(mousePos)
+                                 ? u8"\U000F0156"
+                                 : u8"\U000F012C");
         }
 
         //
@@ -332,8 +342,12 @@ void ColorPallete::mousePressEvent(QMouseEvent* _event)
             continue;
         }
 
-        d->selectedColor = color;
-        emit selectedColorChanged(color.color);
+        if (d->isColorCanBeDeslected && d->selectedColor == color) {
+            d->selectedColor = {};
+        } else {
+            d->selectedColor = color;
+        }
+        emit selectedColorChanged(d->selectedColor.color);
 
         update();
 

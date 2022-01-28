@@ -249,7 +249,7 @@ void ThemePreview::mousePressEvent(QMouseEvent* _event)
         emit themePressed(d->theme);
     } else if (_event->button() == Qt::RightButton) {
         auto copyAction = new QAction;
-        copyAction->setText(tr("Cory HASH"));
+        copyAction->setText(tr("Copy theme HASH"));
         connect(copyAction, &QAction::triggered, this, [this] {
             QGuiApplication::clipboard()->setText(Ui::DesignSystem::color(d->theme).toString());
         });

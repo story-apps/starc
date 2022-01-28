@@ -125,27 +125,23 @@ void ComicBookTextStructureManager::Implementation::updateContextMenu(
             auto colorAction = new QWidgetAction(colorMenu);
             auto colorPicker = new ColorPicker;
             colorAction->setDefaultWidget(colorPicker);
+            colorPicker->setColorCanBeDeselected(true);
             colorPicker->setSelectedColor(itemColor.value());
             connect(
                 colorPicker, &ColorPicker::selectedColorChanged, view,
                 [this, itemColor, item](const QColor& _color) {
-                    auto newColor = _color;
-                    if (itemColor.value() == newColor) {
-                        newColor = QColor(QColor::Invalid);
-                    }
-
                     if (item->type() == BusinessLayer::ComicBookTextModelItemType::Folder) {
                         const auto folderItem
                             = static_cast<BusinessLayer::ComicBookTextModelFolderItem*>(item);
-                        folderItem->setColor(newColor);
+                        folderItem->setColor(_color);
                     } else if (item->type() == BusinessLayer::ComicBookTextModelItemType::Page) {
                         const auto pageItem
                             = static_cast<BusinessLayer::ComicBookTextModelPageItem*>(item);
-                        pageItem->setColor(newColor);
+                        pageItem->setColor(_color);
                     } else if (item->type() == BusinessLayer::ComicBookTextModelItemType::Panel) {
                         const auto panelItem
                             = static_cast<BusinessLayer::ComicBookTextModelPanelItem*>(item);
-                        panelItem->setColor(newColor);
+                        panelItem->setColor(_color);
                     }
 
                     model->updateItem(item);

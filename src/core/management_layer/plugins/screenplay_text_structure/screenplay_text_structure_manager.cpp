@@ -122,23 +122,19 @@ void ScreenplayTextStructureManager::Implementation::updateContextMenu(
             auto colorAction = new QWidgetAction(colorMenu);
             auto colorPicker = new ColorPicker;
             colorAction->setDefaultWidget(colorPicker);
+            colorPicker->setColorCanBeDeselected(true);
             colorPicker->setSelectedColor(itemColor.value());
             connect(colorPicker, &ColorPicker::selectedColorChanged, view,
                     [this, itemColor, item](const QColor& _color) {
-                        auto newColor = _color;
-                        if (itemColor.value() == newColor) {
-                            newColor = QColor(QColor::Invalid);
-                        }
-
                         if (item->type() == BusinessLayer::ScreenplayTextModelItemType::Folder) {
                             const auto folderItem
                                 = static_cast<BusinessLayer::ScreenplayTextModelFolderItem*>(item);
-                            folderItem->setColor(newColor);
+                            folderItem->setColor(_color);
                         } else if (item->type()
                                    == BusinessLayer::ScreenplayTextModelItemType::Scene) {
                             const auto sceneItem
                                 = static_cast<BusinessLayer::ScreenplayTextModelSceneItem*>(item);
-                            sceneItem->setColor(newColor);
+                            sceneItem->setColor(_color);
                         }
 
                         model->updateItem(item);

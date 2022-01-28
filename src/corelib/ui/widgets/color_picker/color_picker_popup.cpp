@@ -71,6 +71,11 @@ ColorPickerPopup::ColorPickerPopup(QWidget* _parent)
 
 ColorPickerPopup::~ColorPickerPopup() = default;
 
+void ColorPickerPopup::setColorCanBeDeselected(bool _can)
+{
+    d->colorPicker->setColorCanBeDeselected(_can);
+}
+
 QColor ColorPickerPopup::selectedColor() const
 {
     return d->colorPicker->selectedColor();

@@ -15,6 +15,11 @@ public:
     ~ColorPickerPopup() override;
 
     /**
+     * @brief Задать возможность удаления выбранного цвета, если выбрать его ещё раз
+     */
+    void setColorCanBeDeselected(bool _can);
+
+    /**
      * @brief Выбранный пользователем цвет
      */
     QColor selectedColor() const;

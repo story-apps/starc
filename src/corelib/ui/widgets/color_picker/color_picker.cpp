@@ -83,6 +83,11 @@ ColorPicker::ColorPicker(QWidget* _parent)
 
 ColorPicker::~ColorPicker() = default;
 
+void ColorPicker::setColorCanBeDeselected(bool _can)
+{
+    d->colorPallete->setColorCanBeDeselected(_can);
+}
+
 QColor ColorPicker::selectedColor() const
 {
     return d->colorPallete->selectedColor();
