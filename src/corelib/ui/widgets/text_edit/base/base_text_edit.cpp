@@ -674,7 +674,11 @@ bool BaseTextEdit::updateEnteredText(const QString& _eventText)
     // Исправляем проблему ДВойных ЗАглавных
     //
     if (d->correctDoubleCapitals) {
-        QString right3Characters = cursorBackwardText.right(3).simplified();
+        const auto isPreviousCharacterUpper = cursorBackwardText.length() > 3
+            && cursorBackwardText[cursorBackwardText.length() - 4].isLetter()
+            && cursorBackwardText[cursorBackwardText.length() - 4]
+                == TextHelper::smartToUpper(cursorBackwardText[cursorBackwardText.length() - 4]);
+        const auto right3Characters = cursorBackwardText.right(3).simplified();
 
         //
         // Если две из трёх последних букв находятся в верхнем регистре, то это наш случай
@@ -682,9 +686,8 @@ bool BaseTextEdit::updateEnteredText(const QString& _eventText)
         if (!right3Characters.contains(" ") && right3Characters.length() == 3
             && right3Characters != TextHelper::smartToUpper(right3Characters)
             && right3Characters.left(2) == TextHelper::smartToUpper(right3Characters.left(2))
-            && right3Characters.left(2).at(0).isLetter()
-            && right3Characters.left(2).at(1).isLetter()
-            && _eventText != TextHelper::smartToUpper(_eventText)) {
+            && right3Characters[0].isLetter() && right3Characters[1].isLetter()
+            && _eventText != TextHelper::smartToUpper(_eventText) && !isPreviousCharacterUpper) {
             //
             // Сделаем предпоследнюю букву строчной
             //
