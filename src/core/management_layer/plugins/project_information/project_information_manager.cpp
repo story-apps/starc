@@ -57,29 +57,6 @@ ProjectInformationManager::ProjectInformationManager(QObject* _parent)
     : QObject(_parent)
     , d(new Implementation)
 {
-    connect(d->view, &Ui::ProjectInformationView::selectCoverPressed, this, [this] {
-        const QString coverPath = QFileDialog::getOpenFileName(
-            d->view, tr("Choose cover"), {},
-            QString("%1 (*.png *.jpeg *.jpg *.bmp *.tiff *.tif *.gif)").arg(tr("Images")));
-        if (coverPath.isEmpty()) {
-            return;
-        }
-
-        QPixmap cover(coverPath);
-        if (cover.isNull()) {
-            return;
-        }
-
-        auto dlg = new ImageCroppingDialog(d->view->window());
-        dlg->setImage(cover);
-        dlg->setImageProportion({ 3.0, 4.0 });
-        dlg->setImageProportionFixed(true);
-        dlg->showDialog();
-
-        connect(dlg, &ImageCroppingDialog::disappeared, dlg, &ImageCroppingDialog::deleteLater);
-        connect(dlg, &ImageCroppingDialog::imageSelected, d->model,
-                &BusinessLayer::ProjectInformationModel::setCover);
-    });
 }
 
 ProjectInformationManager::~ProjectInformationManager() = default;
@@ -117,6 +94,8 @@ void ProjectInformationManager::setModel(BusinessLayer::AbstractModel* _model)
                 &BusinessLayer::ProjectInformationModel::setName);
         connect(d->view, &Ui::ProjectInformationView::loglineChanged, d->model,
                 &BusinessLayer::ProjectInformationModel::setLogline);
+        connect(d->view, &Ui::ProjectInformationView::coverChanged, d->model,
+                &BusinessLayer::ProjectInformationModel::setCover);
     }
 }
 

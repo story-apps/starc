@@ -31,12 +31,10 @@ DEPENDPATH += $$PWD/../../../../corelib
 #
 
 HEADERS += \
-    cover.h \
     project_information_manager.h \
     project_information_view.h
 
 SOURCES += \
-    cover.cpp \
     project_information_manager.cpp \
     project_information_view.cpp
 

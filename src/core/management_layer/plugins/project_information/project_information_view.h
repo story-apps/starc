@@ -26,12 +26,7 @@ public:
     Q_SIGNAL void loglineChanged(const QString& _logline);
 
     void setCover(const QPixmap& _cover);
-
-signals:
-    /**
-     * @brief Пользователь хочет выбрать обложку проекта
-     */
-    void selectCoverPressed();
+    Q_SIGNAL void coverChanged(const QPixmap& _cover);
 
 protected:
     /**
