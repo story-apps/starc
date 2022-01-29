@@ -64,7 +64,7 @@ const QHash<QString, QVector<ProjectPluginsBuilder::EditorInfo>> kDocumentToEdit
         { "application/x-starc/document/comicbook/title-page",  { { kComicBookTitlePageEditorMime, u8"\U000f09ed" } } },
         { "application/x-starc/document/comicbook/synopsis",    { { kSimpleTextEditorMime, u8"\U000f09ed" } } },
         { "application/x-starc/document/comicbook/text",        { { kComicBookTextEditorMime, u8"\U000f09ed" } } },
-        { "application/x-starc/document/comicbook/statistics",  { { kComicBookStatisticsViewMime, u8"\U000f09ed" } } },
+        { "application/x-starc/document/comicbook/statistics",  { { kComicBookStatisticsViewMime, u8"\U000f0127" } } },
         { "application/x-starc/document/characters",  { { "application/x-starc/editor/characters/relations", u8"\U000F0D3D" } } },
         { "application/x-starc/document/character",  { { "application/x-starc/editor/character/information", u8"\U000f02fd" } } },
         { "application/x-starc/document/location",   { { "application/x-starc/editor/location/information", u8"\U000f02fd" } } },
