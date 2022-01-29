@@ -233,10 +233,11 @@ QSize Drawer::sizeHint() const
         const qreal actionWidth = Ui::DesignSystem::drawer().actionMargins().left()
             + Ui::DesignSystem::drawer().iconSize().width() + Ui::DesignSystem::drawer().spacing()
             + TextHelper::fineTextWidthF(action->text(), Ui::DesignSystem::font().subtitle2())
-            + (action->whatsThis().isEmpty() ? 0.0
-                                             : Ui::DesignSystem::drawer().spacing()
-                       + TextHelper::fineTextWidthF(action->whatsThis(),
-                                                    Ui::DesignSystem::font().subtitle2()))
+            + (action->whatsThis().isEmpty()
+                   ? 0.0
+                   : (Ui::DesignSystem::drawer().spacing()
+                      + TextHelper::fineTextWidthF(action->whatsThis(),
+                                                   Ui::DesignSystem::font().subtitle2())))
             + Ui::DesignSystem::drawer().actionMargins().right();
         width = std::max(width, actionWidth);
 
@@ -495,11 +496,4 @@ void Drawer::mouseMoveEvent(QMouseEvent* _event)
 {
     Q_UNUSED(_event)
     update();
-}
-
-void Drawer::designSystemChangeEvent(DesignSystemChangeEvent* _event)
-{
-    Widget::designSystemChangeEvent(_event);
-
-    setFixedWidth(static_cast<int>(Ui::DesignSystem::drawer().width()));
 }

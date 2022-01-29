@@ -283,6 +283,11 @@ void MenuView::closeMenu()
     WAF::Animation::sideSlideOut(this);
 }
 
+QSize MenuView::sizeHint() const
+{
+    return d->drawer->sizeHint();
+}
+
 void MenuView::updateTranslations()
 {
     d->signIn->setText(tr("Sign in"));

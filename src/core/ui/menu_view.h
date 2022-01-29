@@ -73,6 +73,11 @@ public:
      */
     void closeMenu();
 
+    /**
+     * @brief В качестве идеального размера используем размер самого меню
+     */
+    QSize sizeHint() const override;
+
 signals:
     /**
      * @brief Пользователь кликнул на аккаунте
