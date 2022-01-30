@@ -40,10 +40,11 @@ ComboBox::Implementation::Implementation(QWidget* _parent)
     : popup(new Card(_parent))
     , popupContent(new Tree(popup))
 {
-    popup->setWindowFlags(Qt::Tool | Qt::FramelessWindowHint | Qt::NoDropShadowWindowHint);
+    popup->setWindowFlags(Qt::Popup | Qt::FramelessWindowHint | Qt::NoDropShadowWindowHint);
     popup->setAttribute(Qt::WA_Hover, false);
     popup->setAttribute(Qt::WA_TranslucentBackground);
     popup->setAttribute(Qt::WA_ShowWithoutActivating);
+    popup->setFocusPolicy(Qt::NoFocus);
     popup->hide();
 
     popupContent->setRootIsDecorated(false);
@@ -111,8 +112,6 @@ void ComboBox::Implementation::showPopup(ComboBox* _parent)
 
 void ComboBox::Implementation::hidePopup()
 {
-    isPopupShown = false;
-
     popupHeightAnimation.setDirection(QVariantAnimation::Backward);
     popupHeightAnimation.start();
 }
@@ -136,7 +135,7 @@ ComboBox::ComboBox(QWidget* _parent)
                 d->popup->resize(d->popup->width(), height);
             });
     connect(&d->popupHeightAnimation, &QVariantAnimation::finished, this, [this] {
-        if (!d->isPopupShown) {
+        if (d->popupHeightAnimation.currentValue().toInt() == 0) {
             d->popup->hide();
         }
     });
@@ -145,6 +144,11 @@ ComboBox::ComboBox(QWidget* _parent)
         setText(_index.data().toString());
         d->hidePopup();
         emit currentIndexChanged(_index);
+    });
+    connect(d->popup, &Card::disappeared, this, [this] {
+        d->isPopupShown = false;
+        setTrailingIcon(u8"\U000f035d");
+        setTrailingIconColor({});
     });
 }
 
@@ -235,17 +239,6 @@ void ComboBox::focusOutEvent(QFocusEvent* _event)
     if (!d->isPopupShown || (!underMouse() && !d->popupContent->underMouse())) {
         TextField::focusOutEvent(_event);
     }
-
-    //
-    // Не скрываем попап, если фокус перешёл на его полосу прокрутки
-    //
-    if (d->popupContent->verticalScrollBar()->underMouse()) {
-        return;
-    }
-
-    setTrailingIcon(u8"\U000f035d");
-    setTrailingIconColor({});
-    d->hidePopup();
 }
 
 void ComboBox::keyPressEvent(QKeyEvent* _event)
