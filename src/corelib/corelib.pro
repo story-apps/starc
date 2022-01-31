@@ -166,6 +166,7 @@ SOURCES += \
     ui/widgets/app_bar/app_bar.cpp \
     ui/widgets/button/button.cpp \
     ui/widgets/card/card.cpp \
+    ui/widgets/card/card_popup.cpp \
     ui/widgets/chat/chat_message.cpp \
     ui/widgets/chat/chat_messages_view.cpp \
     ui/widgets/chat/user.cpp \
@@ -370,6 +371,7 @@ HEADERS += \
     ui/widgets/app_bar/app_bar.h \
     ui/widgets/button/button.h \
     ui/widgets/card/card.h \
+    ui/widgets/card/card_popup.h \
     ui/widgets/chat/chat_message.h \
     ui/widgets/chat/chat_messages_view.h \
     ui/widgets/chat/user.h \

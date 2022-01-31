@@ -2,7 +2,7 @@
 
 #include <include/custom_events.h>
 #include <ui/design_system/design_system.h>
-#include <ui/widgets/card/card.h>
+#include <ui/widgets/card/card_popup.h>
 #include <ui/widgets/tree/tree.h>
 #include <utils/helpers/text_helper.h>
 
@@ -30,45 +30,16 @@ public:
 
 
     bool useContentsWidth = false;
-    bool isPopupShown = false;
-    Card* popup = nullptr;
-    Tree* popupContent = nullptr;
-    QVariantAnimation popupHeightAnimation;
+    CardPopup* popup = nullptr;
 };
 
 ComboBox::Implementation::Implementation(QWidget* _parent)
-    : popup(new Card(_parent))
-    , popupContent(new Tree(popup))
+    : popup(new CardPopup(_parent))
 {
-    popup->setWindowFlags(Qt::Popup | Qt::FramelessWindowHint | Qt::NoDropShadowWindowHint);
-    popup->setAttribute(Qt::WA_Hover, false);
-    popup->setAttribute(Qt::WA_TranslucentBackground);
-    popup->setAttribute(Qt::WA_ShowWithoutActivating);
-    popup->setFocusPolicy(Qt::NoFocus);
-    popup->hide();
-
-    popupContent->setRootIsDecorated(false);
-
-    QHBoxLayout* popupLayout = new QHBoxLayout;
-    popupLayout->setContentsMargins({});
-    popupLayout->setSpacing(0);
-    popupLayout->addWidget(popupContent);
-    popup->setLayoutReimpl(popupLayout);
-
-    popupHeightAnimation.setEasingCurve(QEasingCurve::OutQuint);
-    popupHeightAnimation.setDuration(240);
-    popupHeightAnimation.setStartValue(0);
-    popupHeightAnimation.setEndValue(0);
 }
 
 void ComboBox::Implementation::showPopup(ComboBox* _parent)
 {
-    if (popupContent->model() == nullptr) {
-        return;
-    }
-
-    isPopupShown = true;
-
     auto leftMargin = Ui::DesignSystem::textField().contentsMargins().left();
     auto rightMargin = Ui::DesignSystem::textField().contentsMargins().right();
     if (!_parent->isDefaultMarginsEnabled()) {
@@ -77,7 +48,7 @@ void ComboBox::Implementation::showPopup(ComboBox* _parent)
     }
     auto width = _parent->width() - leftMargin - rightMargin;
     if (useContentsWidth) {
-        const auto model = popupContent->model();
+        const auto model = popup->contentModel();
         for (int row = 0; row < model->rowCount(); ++row) {
             const auto itemText = model->index(row, 0).data().toString();
             const auto itemTextWidth = Ui::DesignSystem::treeOneLineItem().margins().left()
@@ -91,29 +62,16 @@ void ComboBox::Implementation::showPopup(ComboBox* _parent)
     }
     width += Ui::DesignSystem::card().shadowMargins().left()
         + Ui::DesignSystem::card().shadowMargins().right();
-    popup->resize(static_cast<int>(width), 0);
+
     auto pos = _parent->mapToGlobal(_parent->rect().bottomLeft())
         + QPointF(leftMargin - Ui::DesignSystem::card().shadowMargins().left(),
                   -Ui::DesignSystem::textField().margins().bottom());
-    popup->move(pos.toPoint());
-    popup->show();
-
-    const int maxPopupItems = 5;
-    popupContent->setScrollBarVisible(popupContent->model()->rowCount() > maxPopupItems);
-
-    popupHeightAnimation.setDirection(QVariantAnimation::Forward);
-    const auto itemsCount = std::min(popupContent->model()->rowCount(), maxPopupItems);
-    const auto height = Ui::DesignSystem::treeOneLineItem().height() * itemsCount
-        + Ui::DesignSystem::card().shadowMargins().top()
-        + Ui::DesignSystem::card().shadowMargins().bottom();
-    popupHeightAnimation.setEndValue(static_cast<int>(height));
-    popupHeightAnimation.start();
+    popup->showPopup(pos.toPoint(), width);
 }
 
 void ComboBox::Implementation::hidePopup()
 {
-    popupHeightAnimation.setDirection(QVariantAnimation::Backward);
-    popupHeightAnimation.start();
+    popup->hidePopup();
 }
 
 
@@ -129,24 +87,11 @@ ComboBox::ComboBox(QWidget* _parent)
     viewport()->setCursor(Qt::ArrowCursor);
     viewport()->setMouseTracking(false);
 
-    connect(&d->popupHeightAnimation, &QVariantAnimation::valueChanged, this,
-            [this](const QVariant& _value) {
-                const auto height = _value.toInt();
-                d->popup->resize(d->popup->width(), height);
-            });
-    connect(&d->popupHeightAnimation, &QVariantAnimation::finished, this, [this] {
-        if (d->popupHeightAnimation.currentValue().toInt() == 0) {
-            d->popup->hide();
-        }
-    });
-
-    connect(d->popupContent, &Tree::currentIndexChanged, this, [this](const QModelIndex& _index) {
+    connect(d->popup, &CardPopup::currentIndexChanged, this, [this](const QModelIndex& _index) {
         setText(_index.data().toString());
-        d->hidePopup();
         emit currentIndexChanged(_index);
     });
     connect(d->popup, &Card::disappeared, this, [this] {
-        d->isPopupShown = false;
         setTrailingIcon(u8"\U000f035d");
         setTrailingIconColor({});
     });
@@ -169,21 +114,21 @@ ContextMenu* ComboBox::createContextMenu(const QPoint& _position, QWidget* _pare
 
 QAbstractItemModel* ComboBox::model() const
 {
-    return d->popupContent->model();
+    return d->popup->contentModel();
 }
 
 void ComboBox::setModel(QAbstractItemModel* _model)
 {
-    if (d->popupContent->model() != nullptr) {
-        disconnect(d->popupContent->model());
+    if (d->popup->contentModel() != nullptr) {
+        disconnect(d->popup->contentModel());
     }
 
-    d->popupContent->setModel(_model);
+    d->popup->setContentModel(_model);
 
     if (_model != nullptr && _model->rowCount() > 0) {
-        d->popupContent->setCurrentIndex(_model->index(0, 0));
+        d->popup->setCurrentIndex(_model->index(0, 0));
         connect(_model, &QAbstractItemModel::dataChanged, this, [this](const QModelIndex& _index) {
-            if (d->popupContent->currentIndex() == _index) {
+            if (d->popup->currentIndex() == _index) {
                 setText(_index.data().toString());
             }
         });
@@ -192,16 +137,16 @@ void ComboBox::setModel(QAbstractItemModel* _model)
 
 QModelIndex ComboBox::currentIndex() const
 {
-    return d->popupContent->currentIndex();
+    return d->popup->currentIndex();
 }
 
 void ComboBox::setCurrentIndex(const QModelIndex& _index)
 {
-    if (d->popupContent->currentIndex() == _index) {
+    if (d->popup->currentIndex() == _index) {
         return;
     }
 
-    d->popupContent->setCurrentIndex(_index);
+    d->popup->setCurrentIndex(_index);
     setText(_index.data().toString());
 }
 
@@ -226,8 +171,6 @@ void ComboBox::reconfigure()
     TextField::reconfigure();
 
     d->popup->setBackgroundColor(Ui::DesignSystem::color().background());
-    d->popupContent->setBackgroundColor(Ui::DesignSystem::color().background());
-    d->popupContent->setTextColor(Ui::DesignSystem::color().onBackground());
 }
 
 void ComboBox::focusOutEvent(QFocusEvent* _event)
@@ -236,7 +179,7 @@ void ComboBox::focusOutEvent(QFocusEvent* _event)
     // Запустим анимацию потери фокуса, если попап не показан или пользователь кликнул
     // за пределами виджета и выпадающего списка
     //
-    if (!d->isPopupShown || (!underMouse() && !d->popupContent->underMouse())) {
+    if (!d->popup->isVisible() || (!underMouse() && !d->popup->underMouse())) {
         TextField::focusOutEvent(_event);
     }
 }
@@ -260,7 +203,7 @@ void ComboBox::mousePressEvent(QMouseEvent* _event)
 {
     TextField::mousePressEvent(_event);
 
-    if (!d->isPopupShown) {
+    if (!d->popup->isVisible()) {
         setTrailingIcon(u8"\U000f0360");
         setTrailingIconColor(Ui::DesignSystem::color().secondary());
         d->showPopup(this);
