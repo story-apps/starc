@@ -29,9 +29,14 @@ public:
     void setCurrentIndex(const QModelIndex& _index);
 
     /**
+     * @brief Получить ширину заданной колонки
+     */
+    int sizeHintForColumn(int _column) const;
+
+    /**
      * @brief Показать попап в заданном положении с заданной шириной
      */
-    void showPopup(const QPoint& _position, int _width);
+    void showPopup(const QPoint& _position, int _width, int _showMaxItems = 5);
 
     /**
      * @brief Скрыть попап

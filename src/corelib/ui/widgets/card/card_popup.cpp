@@ -62,6 +62,9 @@ CardPopup::CardPopup(QWidget* _parent)
         hidePopup();
         emit currentIndexChanged(_index);
     });
+
+
+    designSystemChangeEvent(nullptr);
 }
 
 CardPopup::~CardPopup() = default;
@@ -86,7 +89,12 @@ void CardPopup::setCurrentIndex(const QModelIndex& _index)
     d->content->setCurrentIndex(_index);
 }
 
-void CardPopup::showPopup(const QPoint& _position, int _width)
+int CardPopup::sizeHintForColumn(int _column) const
+{
+    return d->content->sizeHintForColumn(_column);
+}
+
+void CardPopup::showPopup(const QPoint& _position, int _width, int _showMaxItems)
 {
     if (d->content->model() == nullptr) {
         return;
@@ -96,11 +104,10 @@ void CardPopup::showPopup(const QPoint& _position, int _width)
     move(_position);
     show();
 
-    const int maxPopupItems = 5;
-    d->content->setScrollBarVisible(d->content->model()->rowCount() > maxPopupItems);
+    d->content->setScrollBarVisible(d->content->model()->rowCount() > _showMaxItems);
 
     d->heightAnimation.setDirection(QVariantAnimation::Forward);
-    const auto itemsCount = std::min(d->content->model()->rowCount(), maxPopupItems);
+    const auto itemsCount = std::min(d->content->model()->rowCount(), _showMaxItems);
     const auto height = Ui::DesignSystem::treeOneLineItem().height() * itemsCount
         + Ui::DesignSystem::card().shadowMargins().top()
         + Ui::DesignSystem::card().shadowMargins().bottom();

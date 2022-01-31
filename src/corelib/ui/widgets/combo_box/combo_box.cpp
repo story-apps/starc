@@ -3,7 +3,6 @@
 #include <include/custom_events.h>
 #include <ui/design_system/design_system.h>
 #include <ui/widgets/card/card_popup.h>
-#include <ui/widgets/tree/tree.h>
 #include <utils/helpers/text_helper.h>
 
 #include <QAbstractItemModel>
