@@ -8,7 +8,7 @@ class QAbstractItemModel;
 /**
  * @brief Попап для реализации выпадающих списков
  */
-class CardPopup : public Card
+class CORE_LIBRARY_EXPORT CardPopup : public Card
 {
     Q_OBJECT
 

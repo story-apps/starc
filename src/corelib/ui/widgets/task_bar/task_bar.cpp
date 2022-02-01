@@ -1,6 +1,7 @@
 #include "task_bar.h"
 
 #include <ui/design_system/design_system.h>
+#include <utils/logging.h>
 
 #include <QEvent>
 #include <QPainter>
@@ -129,8 +130,13 @@ void TaskBar::finishTask(const QString& _taskId)
     Q_ASSERT(Implementation::instance);
 
     auto& tasks = Implementation::instance->d->tasks;
-    tasks.erase(std::remove_if(tasks.begin(), tasks.end(),
-                               [_taskId](const auto& _task) { return _task.id == _taskId; }));
+    const auto taskIter = std::find_if(
+        tasks.begin(), tasks.end(), [_taskId](const auto& _task) { return _task.id == _taskId; });
+    if (taskIter == tasks.end()) {
+        Log::warning("Task with id %1 not found. Skip task finishing.", _taskId);
+    } else {
+        tasks.erase(taskIter);
+    }
 
     Implementation::instance->d->correctGeometry(Implementation::instance);
 
