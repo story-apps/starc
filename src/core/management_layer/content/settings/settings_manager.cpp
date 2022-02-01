@@ -28,8 +28,16 @@
 namespace ManagementLayer {
 
 namespace {
-const QString kSpellCheckerLoadingTaskId = "spell_checker_loading_task_id";
+
+/**
+ * @brief Сформировать идентификатор задачи для загрузки языка проверки орфографии
+ */
+QString spellCheckerLoadingTaskId(const QString& _languageId)
+{
+    return QLatin1String("spell_checker_loading_task_id_") + _languageId;
 }
+
+} // namespace
 
 class SettingsManager::Implementation
 {
@@ -578,9 +586,11 @@ void SettingsManager::loadSpellingDictionary(const QString& _languageCode)
     //
     // Добавляем идентификацию процесса загрузки словарей
     //
-    TaskBar::addTask(kSpellCheckerLoadingTaskId);
-    TaskBar::setTaskTitle(kSpellCheckerLoadingTaskId, tr("Spelling dictionary loading"));
-    TaskBar::setTaskProgress(kSpellCheckerLoadingTaskId, 0.0);
+    const auto taskId = spellCheckerLoadingTaskId(_languageCode);
+    TaskBar::addTask(taskId);
+    TaskBar::setTaskTitle(taskId,
+                          tr("Spelling dictionary loading") + QString(" (%1)").arg(_languageCode));
+    TaskBar::setTaskProgress(taskId, 0.0);
 
     //
     // Создаём папку для пользовательских файлов
@@ -606,12 +616,12 @@ void SettingsManager::loadSpellingDictionaryAffFile(const QString& _languageCode
     // Настраиваем загрузчик
     //
     auto dictionaryLoader = new NetworkRequest;
-    connect(dictionaryLoader, &NetworkRequest::downloadProgress, this, [](int _value) {
+    connect(dictionaryLoader, &NetworkRequest::downloadProgress, this, [_languageCode](int _value) {
         //
         // Aff-файлы считаем за 10 процентов всего словаря
         //
         const qreal progress = _value * 0.1;
-        TaskBar::setTaskProgress(kSpellCheckerLoadingTaskId, progress);
+        TaskBar::setTaskProgress(spellCheckerLoadingTaskId(_languageCode), progress);
     });
     connect(dictionaryLoader, &NetworkRequest::downloadComplete, this,
             [this, _languageCode, affFileName](const QByteArray& _data) {
@@ -662,12 +672,12 @@ void SettingsManager::loadSpellingDictionaryDicFile(const QString& _languageCode
     // Настраиваем загрузчик
     //
     auto dictionaryLoader = new NetworkRequest;
-    connect(dictionaryLoader, &NetworkRequest::downloadProgress, this, [](int _value) {
+    connect(dictionaryLoader, &NetworkRequest::downloadProgress, this, [_languageCode](int _value) {
         //
         // Dic-файлы считаем за 90 процентов всего словаря
         //
         const qreal progress = 10 + _value * 0.9;
-        TaskBar::setTaskProgress(kSpellCheckerLoadingTaskId, progress);
+        TaskBar::setTaskProgress(spellCheckerLoadingTaskId(_languageCode), progress);
     });
     connect(dictionaryLoader, &NetworkRequest::downloadComplete, this,
             [this, _languageCode, dicFileName](const QByteArray& _data) {
@@ -692,7 +702,7 @@ void SettingsManager::loadSpellingDictionaryDicFile(const QString& _languageCode
                 //
                 // Cкрываем прогресс
                 //
-                TaskBar::finishTask(kSpellCheckerLoadingTaskId);
+                TaskBar::finishTask(spellCheckerLoadingTaskId(_languageCode));
 
                 //
                 // Уведимим клиентов, что теперь можно использовать данный словарь
