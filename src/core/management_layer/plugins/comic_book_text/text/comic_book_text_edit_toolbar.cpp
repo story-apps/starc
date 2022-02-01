@@ -1,13 +1,11 @@
 #include "comic_book_text_edit_toolbar.h"
 
 #include <ui/design_system/design_system.h>
-#include <ui/widgets/card/card.h>
-#include <ui/widgets/tree/tree.h>
+#include <ui/widgets/card/card_popup.h>
 
 #include <QAbstractItemModel>
 #include <QAction>
 #include <QHBoxLayout>
-#include <QVariantAnimation>
 
 
 namespace Ui {
@@ -22,11 +20,6 @@ public:
      */
     void showPopup(ComicBookTextEditToolbar* _parent);
 
-    /**
-     * @brief Скрыть попап
-     */
-    void hidePopup();
-
 
     QAction* undoAction = nullptr;
     QAction* redoAction = nullptr;
@@ -35,10 +28,7 @@ public:
     QAction* searchAction = nullptr;
     QAction* commentsAction = nullptr;
 
-    bool isPopupShown = false;
-    Card* popup = nullptr;
-    Tree* popupContent = nullptr;
-    QVariantAnimation popupHeightAnimation;
+    CardPopup* popup = nullptr;
 };
 
 ComicBookTextEditToolbar::Implementation::Implementation(QWidget* _parent)
@@ -48,40 +38,14 @@ ComicBookTextEditToolbar::Implementation::Implementation(QWidget* _parent)
     , fastFormatAction(new QAction)
     , searchAction(new QAction)
     , commentsAction(new QAction)
-    , popup(new Card(_parent))
-    , popupContent(new Tree(popup))
+    , popup(new CardPopup(_parent))
 {
-    popup->setWindowFlags(Qt::SplashScreen | Qt::FramelessWindowHint | Qt::NoDropShadowWindowHint);
-    popup->setAttribute(Qt::WA_Hover, false);
-    popup->setAttribute(Qt::WA_TranslucentBackground);
-    popup->setAttribute(Qt::WA_ShowWithoutActivating);
-    popup->hide();
-
-    popupContent->setRootIsDecorated(false);
-
-    auto popupLayout = new QHBoxLayout;
-    popupLayout->setContentsMargins({});
-    popupLayout->setSpacing(0);
-    popupLayout->addWidget(popupContent);
-    popup->setLayoutReimpl(popupLayout);
-
-    popupHeightAnimation.setEasingCurve(QEasingCurve::OutQuint);
-    popupHeightAnimation.setDuration(240);
-    popupHeightAnimation.setStartValue(0);
-    popupHeightAnimation.setEndValue(0);
 }
 
 void ComicBookTextEditToolbar::Implementation::showPopup(ComicBookTextEditToolbar* _parent)
 {
-    if (popupContent->model() == nullptr) {
-        return;
-    }
-
-    isPopupShown = true;
-
-    const auto popupWidth = Ui::DesignSystem::floatingToolBar().spacing() * 2
+    const auto width = Ui::DesignSystem::floatingToolBar().spacing() * 2
         + _parent->actionCustomWidth(paragraphTypeAction);
-    popup->resize(static_cast<int>(popupWidth), 0);
 
     const auto left = QPoint(Ui::DesignSystem::floatingToolBar().shadowMargins().left()
                                  + Ui::DesignSystem::floatingToolBar().margins().left()
@@ -90,29 +54,11 @@ void ComicBookTextEditToolbar::Implementation::showPopup(ComicBookTextEditToolba
                                  - Ui::DesignSystem::card().shadowMargins().left(),
                              _parent->rect().bottom()
                                  - Ui::DesignSystem::floatingToolBar().shadowMargins().bottom());
-    const auto pos = _parent->mapToGlobal(left)
+    const auto position = _parent->mapToGlobal(left)
         + QPointF(Ui::DesignSystem::textField().margins().left(),
                   -Ui::DesignSystem::textField().margins().bottom());
-    popup->move(pos.toPoint());
-    popup->show();
 
-    popupContent->setScrollBarVisible(false);
-
-    popupHeightAnimation.setDirection(QVariantAnimation::Forward);
-    const auto itemsCount = popupContent->model()->rowCount();
-    const auto height = Ui::DesignSystem::treeOneLineItem().height() * itemsCount
-        + Ui::DesignSystem::card().shadowMargins().top()
-        + Ui::DesignSystem::card().shadowMargins().bottom();
-    popupHeightAnimation.setEndValue(static_cast<int>(height));
-    popupHeightAnimation.start();
-}
-
-void ComicBookTextEditToolbar::Implementation::hidePopup()
-{
-    isPopupShown = false;
-
-    popupHeightAnimation.setDirection(QVariantAnimation::Backward);
-    popupHeightAnimation.start();
+    popup->showPopup(position.toPoint(), width, popup->contentModel()->rowCount());
 }
 
 
@@ -135,13 +81,8 @@ ComicBookTextEditToolbar::ComicBookTextEditToolbar(QWidget* _parent)
     d->paragraphTypeAction->setIconText(u8"\U000f035d");
     addAction(d->paragraphTypeAction);
     connect(d->paragraphTypeAction, &QAction::triggered, this, [this] {
-        if (!d->isPopupShown) {
-            d->paragraphTypeAction->setIconText(u8"\U000f0360");
-            d->showPopup(this);
-        } else {
-            d->paragraphTypeAction->setIconText(u8"\U000f035d");
-            d->hidePopup();
-        }
+        d->paragraphTypeAction->setIconText(u8"\U000f0360");
+        d->showPopup(this);
     });
 
     d->fastFormatAction->setIconText(u8"\U000f0328");
@@ -169,24 +110,14 @@ ComicBookTextEditToolbar::ComicBookTextEditToolbar(QWidget* _parent)
     connect(d->commentsAction, &QAction::toggled, this,
             &ComicBookTextEditToolbar::commentsModeEnabledChanged);
 
-    connect(&d->popupHeightAnimation, &QVariantAnimation::valueChanged, this,
-            [this](const QVariant& _value) {
-                const auto height = _value.toInt();
-                d->popup->resize(d->popup->width(), height);
-            });
-    connect(&d->popupHeightAnimation, &QVariantAnimation::finished, this, [this] {
-        if (!d->isPopupShown) {
-            d->popup->hide();
-        }
-    });
-
-    connect(d->popupContent, &Tree::currentIndexChanged, this, [this](const QModelIndex& _index) {
+    connect(d->popup, &CardPopup::currentIndexChanged, this, [this](const QModelIndex& _index) {
         d->paragraphTypeAction->setText(_index.data().toString());
-        d->hidePopup();
         update();
 
         emit paragraphTypeChanged(_index);
     });
+    connect(d->popup, &Card::disappeared, this,
+            [this] { d->paragraphTypeAction->setIconText(u8"\U000f035d"); });
 
     updateTranslations();
     designSystemChangeEvent(nullptr);
@@ -196,17 +127,17 @@ ComicBookTextEditToolbar::~ComicBookTextEditToolbar() = default;
 
 void ComicBookTextEditToolbar::setParagraphTypesModel(QAbstractItemModel* _model)
 {
-    if (d->popupContent->model() != nullptr) {
-        d->popupContent->model()->disconnect(this);
+    if (d->popup->contentModel() != nullptr) {
+        d->popup->contentModel()->disconnect(this);
     }
 
-    d->popupContent->setModel(_model);
+    d->popup->setContentModel(_model);
 
     if (_model != nullptr) {
         connect(_model, &QAbstractItemModel::rowsInserted, this,
                 [this] { designSystemChangeEvent(nullptr); });
         if (_model->rowCount() > 0) {
-            d->popupContent->setCurrentIndex(_model->index(0, 0));
+            d->popup->setCurrentIndex(_model->index(0, 0));
         }
     }
 
@@ -224,7 +155,7 @@ void ComicBookTextEditToolbar::setCurrentParagraphType(const QModelIndex& _index
     QSignalBlocker blocker(this);
 
     d->paragraphTypeAction->setText(_index.data().toString());
-    d->popupContent->setCurrentIndex(_index);
+    d->popup->setCurrentIndex(_index);
 }
 
 void ComicBookTextEditToolbar::setParagraphTypesEnabled(bool _enabled)
@@ -259,7 +190,7 @@ QPointF ComicBookTextEditToolbar::searchIconPosition() const
         + (Ui::DesignSystem::floatingToolBar().iconSize().width()
            + Ui::DesignSystem::floatingToolBar().spacing())
             * visibleActionsSize;
-    for (const auto action : actions()) {
+    for (const auto action : allActions) {
         if (!action->isVisible() || action->isSeparator()) {
             continue;
         }
@@ -283,14 +214,6 @@ bool ComicBookTextEditToolbar::isCommentsModeEnabled() const
 void ComicBookTextEditToolbar::setCommentsModeEnabled(bool _enabled)
 {
     d->commentsAction->setChecked(_enabled);
-}
-
-void ComicBookTextEditToolbar::focusOutEvent(QFocusEvent* _event)
-{
-    FloatingToolBar::focusOutEvent(_event);
-
-    d->paragraphTypeAction->setIconText(u8"\U000f035d");
-    d->hidePopup();
 }
 
 void ComicBookTextEditToolbar::updateTranslations()
@@ -322,12 +245,10 @@ void ComicBookTextEditToolbar::designSystemChangeEvent(DesignSystemChangeEvent* 
     setActionCustomWidth(
         d->paragraphTypeAction,
         static_cast<int>(Ui::DesignSystem::treeOneLineItem().margins().left())
-            + d->popupContent->sizeHintForColumn(0)
+            + d->popup->sizeHintForColumn(0)
             + static_cast<int>(Ui::DesignSystem::treeOneLineItem().margins().right()));
 
     d->popup->setBackgroundColor(Ui::DesignSystem::color().primary());
-    d->popupContent->setBackgroundColor(Ui::DesignSystem::color().primary());
-    d->popupContent->setTextColor(Ui::DesignSystem::color().onPrimary());
 
     resize(sizeHint());
 }

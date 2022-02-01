@@ -2,9 +2,8 @@
 
 #include <ui/design_system/design_system.h>
 #include <ui/widgets/button/button.h>
-#include <ui/widgets/card/card.h>
+#include <ui/widgets/card/card_popup.h>
 #include <ui/widgets/text_field/text_field.h>
-#include <ui/widgets/tree/tree.h>
 
 #include <QAction>
 #include <QApplication>
@@ -12,7 +11,6 @@
 #include <QHBoxLayout>
 #include <QKeyEvent>
 #include <QStringListModel>
-#include <QVariantAnimation>
 
 
 namespace Ui {
@@ -27,11 +25,6 @@ public:
      */
     void showPopup(ComicBookTextSearchToolbar* _parent);
 
-    /**
-     * @brief Скрыть попап
-     */
-    void hidePopup();
-
 
     QAction* closeAction = nullptr;
 
@@ -43,10 +36,7 @@ public:
     QAction* matchCaseAction = nullptr;
     QAction* searchInAction = nullptr;
 
-    bool isPopupShown = false;
-    Card* popup = nullptr;
-    Tree* popupContent = nullptr;
-    QVariantAnimation popupHeightAnimation;
+    CardPopup* popup = nullptr;
 
     QAction* replaceTextAction = nullptr;
     TextField* replaceText = nullptr;
@@ -64,8 +54,7 @@ ComicBookTextSearchToolbar::Implementation::Implementation(QWidget* _parent)
     , goToPreviousAction(new QAction)
     , matchCaseAction(new QAction)
     , searchInAction(new QAction)
-    , popup(new Card(_parent))
-    , popupContent(new Tree(popup))
+    , popup(new CardPopup(_parent))
     , replaceTextAction(new QAction)
     , replaceText(new TextField(_parent))
     , replaceAction(new QAction)
@@ -76,25 +65,6 @@ ComicBookTextSearchToolbar::Implementation::Implementation(QWidget* _parent)
     searchText->setSpellCheckPolicy(SpellCheckPolicy::Manual);
     searchText->setUnderlineDecorationVisible(false);
 
-    popup->setWindowFlags(Qt::SplashScreen | Qt::FramelessWindowHint | Qt::NoDropShadowWindowHint);
-    popup->setAttribute(Qt::WA_Hover, false);
-    popup->setAttribute(Qt::WA_TranslucentBackground);
-    popup->setAttribute(Qt::WA_ShowWithoutActivating);
-    popup->hide();
-
-    popupContent->setRootIsDecorated(false);
-
-    auto popupLayout = new QHBoxLayout;
-    popupLayout->setContentsMargins({});
-    popupLayout->setSpacing(0);
-    popupLayout->addWidget(popupContent);
-    popup->setLayoutReimpl(popupLayout);
-
-    popupHeightAnimation.setEasingCurve(QEasingCurve::OutQuint);
-    popupHeightAnimation.setDuration(240);
-    popupHeightAnimation.setStartValue(0);
-    popupHeightAnimation.setEndValue(0);
-
     replaceText->setSpellCheckPolicy(SpellCheckPolicy::Manual);
     replaceText->setUnderlineDecorationVisible(false);
 
@@ -104,15 +74,8 @@ ComicBookTextSearchToolbar::Implementation::Implementation(QWidget* _parent)
 
 void ComicBookTextSearchToolbar::Implementation::showPopup(ComicBookTextSearchToolbar* _parent)
 {
-    if (popupContent->model() == nullptr) {
-        return;
-    }
-
-    isPopupShown = true;
-
-    const auto popupWidth = Ui::DesignSystem::floatingToolBar().spacing() * 2
+    const auto width = Ui::DesignSystem::floatingToolBar().spacing() * 2
         + _parent->actionCustomWidth(searchInAction);
-    popup->resize(static_cast<int>(popupWidth), 0);
 
     const auto left = QPoint(
         Ui::DesignSystem::floatingToolBar().shadowMargins().left()
@@ -124,29 +87,11 @@ void ComicBookTextSearchToolbar::Implementation::showPopup(ComicBookTextSearchTo
             - Ui::DesignSystem::floatingToolBar().spacing()
             - Ui::DesignSystem::card().shadowMargins().left(),
         _parent->rect().bottom() - Ui::DesignSystem::floatingToolBar().shadowMargins().bottom());
-    const auto pos = _parent->mapToGlobal(left)
+    const auto position = _parent->mapToGlobal(left)
         + QPointF(Ui::DesignSystem::textField().margins().left(),
                   -Ui::DesignSystem::textField().margins().bottom());
-    popup->move(pos.toPoint());
-    popup->show();
 
-    popupContent->setScrollBarVisible(false);
-
-    popupHeightAnimation.setDirection(QVariantAnimation::Forward);
-    const auto itemsCount = popupContent->model()->rowCount();
-    const auto height = Ui::DesignSystem::treeOneLineItem().height() * itemsCount
-        + Ui::DesignSystem::card().shadowMargins().top()
-        + Ui::DesignSystem::card().shadowMargins().bottom();
-    popupHeightAnimation.setEndValue(static_cast<int>(height));
-    popupHeightAnimation.start();
-}
-
-void ComicBookTextSearchToolbar::Implementation::hidePopup()
-{
-    isPopupShown = false;
-
-    popupHeightAnimation.setDirection(QVariantAnimation::Backward);
-    popupHeightAnimation.start();
+    popup->showPopup(position.toPoint(), width, popup->contentModel()->rowCount());
 }
 
 
@@ -207,37 +152,25 @@ ComicBookTextSearchToolbar::ComicBookTextSearchToolbar(QWidget* _parent)
     //
     d->searchInAction->setText(tr("In the whole text"));
     d->searchInAction->setIconText(u8"\U000f035d");
-    auto _model = new QStringListModel(d->popupContent);
-    d->popupContent->setModel(_model);
+    auto _model = new QStringListModel(d->popup);
+    d->popup->setContentModel(_model);
     connect(_model, &QAbstractItemModel::rowsInserted, this,
             [this] { designSystemChangeEvent(nullptr); });
-    connect(&d->popupHeightAnimation, &QVariantAnimation::valueChanged, this,
-            [this](const QVariant& _value) {
-                const auto height = _value.toInt();
-                d->popup->resize(d->popup->width(), height);
-            });
-    connect(&d->popupHeightAnimation, &QVariantAnimation::finished, this, [this] {
-        if (!d->isPopupShown) {
-            d->popup->hide();
-        }
-    });
-    connect(d->popupContent, &Tree::currentIndexChanged, this, [this](const QModelIndex& _index) {
+    connect(d->popup, &CardPopup::currentIndexChanged, this, [this](const QModelIndex& _index) {
         d->searchInAction->setText(_index.data().toString());
-        d->hidePopup();
         update();
 
         emit findTextRequested();
     });
+    connect(d->popup, &Card::disappeared, this, [this] {
+        d->searchInAction->setIconText(u8"\U000f035d");
+        update();
+    });
     //
     addAction(d->searchInAction);
     connect(d->searchInAction, &QAction::triggered, this, [this] {
-        if (!d->isPopupShown) {
-            d->searchInAction->setIconText(u8"\U000f0360");
-            d->showPopup(this);
-        } else {
-            d->searchInAction->setIconText(u8"\U000f035d");
-            d->hidePopup();
-        }
+        d->searchInAction->setIconText(u8"\U000f0360");
+        d->showPopup(this);
     });
 
     addAction(d->replaceTextAction);
@@ -269,7 +202,7 @@ bool ComicBookTextSearchToolbar::isCaseSensitive() const
 
 int ComicBookTextSearchToolbar::searchInType() const
 {
-    return d->popupContent->currentIndex().row();
+    return d->popup->currentIndex().row();
 }
 
 QString ComicBookTextSearchToolbar::replaceText() const
@@ -283,15 +216,6 @@ bool ComicBookTextSearchToolbar::eventFilter(QObject* _watched, QEvent* _event)
     case QEvent::Resize: {
         if (_watched == parent()) {
             designSystemChangeEvent(nullptr);
-        }
-        break;
-    }
-
-    case QEvent::FocusOut: {
-        if ((QApplication::focusWidget() == nullptr
-             || QApplication::focusWidget()->parent() != this)
-            && d->popup->isVisible()) {
-            d->searchInAction->trigger();
         }
         break;
     }
@@ -348,10 +272,10 @@ void ComicBookTextSearchToolbar::updateTranslations()
             QKeySequence(QKeySequence::Find).toString(QKeySequence::NativeText)));
     d->searchText->setLabel(tr("Search"));
     d->searchText->setPlaceholderText(tr("Enter search phrase here"));
-    if (auto model = qobject_cast<QStringListModel*>(d->popupContent->model())) {
+    if (auto model = qobject_cast<QStringListModel*>(d->popup->contentModel())) {
         model->setStringList({ tr("In the whole text"), tr("In scene heading"), tr("In action"),
                                tr("In character"), tr("In dialogue") });
-        d->popupContent->setCurrentIndex(model->index(0, 0));
+        d->popup->setCurrentIndex(model->index(0, 0));
     }
     d->goToNextAction->setToolTip(
         tr("Go to the next search result")
@@ -379,8 +303,7 @@ void ComicBookTextSearchToolbar::designSystemChangeEvent(DesignSystemChangeEvent
     // Рассчитываем размер полей поиска и замены
     //
     const auto searchInActionWidth = Ui::DesignSystem::treeOneLineItem().margins().left()
-        + d->popupContent->sizeHintForColumn(0)
-        + Ui::DesignSystem::treeOneLineItem().margins().right();
+        + d->popup->sizeHintForColumn(0) + Ui::DesignSystem::treeOneLineItem().margins().right();
     d->replace->resize(d->replace->sizeHint());
     const auto replaceActionWidth
         = d->replace->sizeHint().width() - Ui::DesignSystem::floatingToolBar().spacing();
@@ -412,8 +335,6 @@ void ComicBookTextSearchToolbar::designSystemChangeEvent(DesignSystemChangeEvent
     setActionCustomWidth(d->searchInAction, static_cast<int>(searchInActionWidth));
     //
     d->popup->setBackgroundColor(Ui::DesignSystem::color().primary());
-    d->popupContent->setBackgroundColor(Ui::DesignSystem::color().primary());
-    d->popupContent->setTextColor(Ui::DesignSystem::color().onPrimary());
 
 
     const auto replaceLeft = searchLeft + d->searchText->width()

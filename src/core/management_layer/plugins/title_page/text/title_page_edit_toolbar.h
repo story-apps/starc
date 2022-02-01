@@ -31,11 +31,6 @@ signals:
 
 protected:
     /**
-     * @brief Скрываем попап, когда фокус ушёл из виджета
-     */
-    void focusOutEvent(QFocusEvent* _event) override;
-
-    /**
      * @brief Обновить переводы
      */
     void updateTranslations() override;
