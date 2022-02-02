@@ -303,7 +303,7 @@ void ScreenplayTextTimeline::paintEvent(QPaintEvent* _event)
     //
     const QRectF scrollbarRect(Ui::DesignSystem::layout().px4(), 0,
                                Ui::DesignSystem::layout().px8(), contentRect.height());
-    const auto scrollbarColor = ColorHelper::nearby(Ui::DesignSystem::color().surface());
+    const auto scrollbarColor = ColorHelper::nearby(Ui::DesignSystem::color().textEditor());
     painter.fillRect(scrollbarRect, scrollbarColor);
     //
     // Рисуем дополнительные цвета скролбара
@@ -344,7 +344,7 @@ void ScreenplayTextTimeline::paintEvent(QPaintEvent* _event)
     }
     const QRectF scrollbarBackgroundRect(scrollbarRect.right(), scrollbarRect.top(),
                                          Ui::DesignSystem::layout().px62(), scrollbarRect.height());
-    painter.fillRect(scrollbarBackgroundRect, Ui::DesignSystem::color().surface());
+    painter.fillRect(scrollbarBackgroundRect, scrollbarColor);
 
     //
     // Рисуем хэндл
@@ -374,7 +374,7 @@ void ScreenplayTextTimeline::paintEvent(QPaintEvent* _event)
     // Рисуем метки на таймлайне
     //
     const auto tickRight = scrollbarRect.right() + (handleTextLeft - scrollbarRect.right()) / 2;
-    const auto markColor = ColorHelper::transparent(Ui::DesignSystem::color().onSurface(),
+    const auto markColor = ColorHelper::transparent(Ui::DesignSystem::color().onTextEditor(),
                                                     Ui::DesignSystem::disabledTextOpacity());
     const auto markWidth = contentRect.width() - handleTextLeft;
     const qreal marksSpacing = painter.fontMetrics().lineSpacing() * 4;
@@ -407,7 +407,7 @@ void ScreenplayTextTimeline::paintEvent(QPaintEvent* _event)
     // Рисуем метку хэндла
     //
     if (d->scrollable) {
-        painter.setPen(Ui::DesignSystem::color().onSurface());
+        painter.setPen(Ui::DesignSystem::color().onTextEditor());
         painter.drawText(
             handleTextRect, Qt::AlignLeft | Qt::AlignVCenter,
             TimeHelper::toString(std::chrono::duration_cast<std::chrono::seconds>(d->current)));

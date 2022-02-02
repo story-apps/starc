@@ -1750,14 +1750,19 @@ void PageTextEditPrivate::relayoutDocument()
 
 void PageTextEditPrivate::paintPagesView(QPainter* _painter)
 {
+    Q_Q(PageTextEdit);
+
     //
     // Оформление рисуется только тогда, когда редактор находится в постраничном режиме
     //
     if (!usePageMode) {
+        //
+        // В обычном же режиме, мы лишь используем правильный цвет фона для редактора
+        //
+        _painter->fillRect(q->rect(), q->palette().base());
+
         return;
     }
-
-    Q_Q(PageTextEdit);
 
     _painter->save();
 
