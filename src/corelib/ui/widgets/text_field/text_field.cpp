@@ -181,7 +181,9 @@ void TextField::Implementation::reconfigure()
         = q->sizeHint().height() - contentMargins().top() - contentMargins().bottom();
     const QPointF labelCurrentTopLeft(
         labelNewTopLeft.x(),
-        (backgroundHeight - QFontMetricsF(Ui::DesignSystem::font().body1()).lineSpacing()) / 2);
+        contentMargins().top()
+            + (backgroundHeight - QFontMetricsF(Ui::DesignSystem::font().body1()).lineSpacing())
+                / 2);
     labelTopLeftAnimation.setStartValue(labelCurrentTopLeft);
     labelTopLeftAnimation.setEndValue(labelNewTopLeft);
 }
@@ -257,8 +259,8 @@ QMarginsF TextField::Implementation::margins() const
 
 QRectF TextField::Implementation::decorationRect() const
 {
-    qreal top = q->height() - Ui::DesignSystem::textField().underlineHeight()
-        - contentMargins().top() - contentMargins().bottom();
+    qreal top
+        = q->height() - Ui::DesignSystem::textField().underlineHeight() - contentMargins().bottom();
     if (!helper.isEmpty() || !error.isEmpty()) {
         top -= Ui::DesignSystem::textField().helperHeight();
     }
@@ -270,7 +272,7 @@ QRectF TextField::Implementation::decorationRect() const
 QRectF TextField::Implementation::decorationRectInFocus() const
 {
     qreal top = q->height() - Ui::DesignSystem::textField().underlineHeightInFocus()
-        - contentMargins().top() - contentMargins().bottom();
+        - contentMargins().bottom();
     if (!helper.isEmpty() || !error.isEmpty()) {
         top -= Ui::DesignSystem::textField().helperHeight();
     }
