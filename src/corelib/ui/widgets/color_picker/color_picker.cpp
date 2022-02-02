@@ -6,6 +6,7 @@
 
 #include <ui/design_system/design_system.h>
 #include <ui/widgets/button/button.h>
+#include <ui/widgets/text_field/text_field.h>
 
 #include <QVBoxLayout>
 
@@ -17,6 +18,7 @@ public:
 
     ColorPallete* colorPallete = nullptr;
     Widget* customColorPanel = nullptr;
+    TextField* colorCode = nullptr;
     color_widgets::Color2DSlider* colorSlider = nullptr;
     ColorHueSlider* colorHueSlider = nullptr;
     Button* cancelButton = nullptr;
@@ -27,6 +29,7 @@ public:
 ColorPicker::Implementation::Implementation(QWidget* _parent)
     : colorPallete(new ColorPallete(_parent))
     , customColorPanel(new Widget(_parent))
+    , colorCode(new TextField(_parent))
     , colorSlider(new color_widgets::Color2DSlider(_parent))
     , colorHueSlider(new ColorHueSlider(_parent))
     , cancelButton(new Button(_parent))
@@ -56,6 +59,7 @@ ColorPicker::ColorPicker(QWidget* _parent)
     QVBoxLayout* customColorPanelLayout = new QVBoxLayout(d->customColorPanel);
     customColorPanelLayout->setContentsMargins({});
     customColorPanelLayout->setSpacing(0);
+    customColorPanelLayout->addWidget(d->colorCode);
     customColorPanelLayout->addWidget(d->colorSlider, 1);
     customColorPanelLayout->addWidget(d->colorHueSlider);
     customColorPanelLayout->addLayout(d->buttonsLayout);
@@ -67,8 +71,35 @@ ColorPicker::ColorPicker(QWidget* _parent)
 
     connect(d->colorPallete, &ColorPallete::selectedColorChanged, this,
             &ColorPicker::selectedColorChanged);
-    connect(d->colorPallete, &ColorPallete::addCustomColorPressed, this,
-            [this] { setCurrentWidget(d->customColorPanel); });
+    connect(d->colorPallete, &ColorPallete::addCustomColorPressed, this, [this] {
+        const QColor colorToSelect = d->colorPallete->selectedColor().isValid()
+            ? d->colorPallete->selectedColor()
+            : Qt::red;
+        d->colorCode->setText(colorToSelect.name());
+        setCurrentWidget(d->customColorPanel);
+    });
+    connect(d->colorCode, &TextField::textChanged, this, [this] {
+        const auto colorName = d->colorCode->text();
+        if (colorName.length() != 7) {
+            return;
+        }
+
+        const QColor color(colorName);
+        if (!color.isValid()) {
+            return;
+        }
+
+        QSignalBlocker hueBlocker(d->colorHueSlider);
+        d->colorHueSlider->setHue(color.hueF());
+
+        QSignalBlocker colorBlocker(d->colorSlider);
+        d->colorSlider->setColor(color);
+    });
+    connect(d->colorSlider, &color_widgets::Color2DSlider::colorChanged, this,
+            [this](const QColor& _color) {
+                QSignalBlocker blocker(d->colorCode);
+                d->colorCode->setText(_color.name());
+            });
     connect(d->colorHueSlider, &ColorHueSlider::hueChanged, this,
             [this](qreal _hue) { d->colorSlider->setHue(_hue); });
     connect(d->cancelButton, &Button::clicked, this, [this] { setCurrentWidget(d->colorPallete); });
@@ -100,6 +131,7 @@ void ColorPicker::setSelectedColor(const QColor& _color)
 
 void ColorPicker::updateTranslations()
 {
+    d->colorCode->setLabel(tr("Color hex code"));
     d->cancelButton->setText(tr("Cancel"));
     d->addButton->setText(tr("Add"));
 }
@@ -112,15 +144,23 @@ void ColorPicker::designSystemChangeEvent(DesignSystemChangeEvent* _event)
 
     d->colorPallete->setBackgroundColor(Ui::DesignSystem::color().background());
     d->colorPallete->setTextColor(Ui::DesignSystem::color().onBackground());
-
+    //
     d->customColorPanel->setBackgroundColor(Ui::DesignSystem::color().background());
+
+
+    d->colorCode->setCustomMargins(
+        { Ui::DesignSystem::layout().px8(), Ui::DesignSystem::layout().px8(),
+          Ui::DesignSystem::layout().px8(), Ui::DesignSystem::layout().px8() });
+    d->colorCode->setBackgroundColor(Ui::DesignSystem::color().onBackground());
+    d->colorCode->setTextColor(Ui::DesignSystem::color().onBackground());
     //
     d->colorSlider->setBackgroundColor(Ui::DesignSystem::color().background());
     d->colorSlider->setTextColor(Ui::DesignSystem::color().onBackground());
     d->colorHueSlider->setBackgroundColor(Ui::DesignSystem::color().background());
     d->colorHueSlider->setTextColor(Ui::DesignSystem::color().onBackground());
     d->colorHueSlider->setFixedHeight(Ui::DesignSystem::layout().px24());
-    //
+
+
     d->addButton->setBackgroundColor(Ui::DesignSystem::color().secondary());
     d->addButton->setTextColor(Ui::DesignSystem::color().secondary());
     d->cancelButton->setBackgroundColor(Ui::DesignSystem::color().secondary());
