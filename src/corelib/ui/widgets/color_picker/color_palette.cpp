@@ -58,7 +58,7 @@ void ColorPallete::Implementation::buildPalette()
     //
     // Формируем первый ряд
     //
-    int topMargin = Ui::DesignSystem::layout().px12();
+    int topMargin = Ui::DesignSystem::layout().px24();
     int leftMargin = Ui::DesignSystem::layout().px12();
     QList<QColor> colors;
     colors << QColor("#000000") << QColor("#434343") << QColor("#666666") << QColor("#999999")
@@ -74,7 +74,7 @@ void ColorPallete::Implementation::buildPalette()
 
         leftMargin += colorRectSize.width() + colorRectSpace;
     }
-    topMargin += colorRectSize.height() + Ui::DesignSystem::layout().px24();
+    topMargin += colorRectSize.height() + Ui::DesignSystem::layout().px48();
 
 
     //
@@ -112,10 +112,9 @@ void ColorPallete::Implementation::buildPalette()
         topMargin += colorRectSize.height() + colorRectSpace;
     }
 
-    topMargin += -colorRectSpace + Ui::DesignSystem::layout().px12()
-        + Ui::DesignSystem::layout().px16() + Ui::DesignSystem::layout().px12();
+    topMargin += -colorRectSpace + Ui::DesignSystem::layout().px62();
     leftMargin = Ui::DesignSystem::layout().px12();
-    for (const auto& color : customColors) {
+    for (const auto& color : std::as_const(customColors)) {
         QRectF colorRect;
         colorRect.setLeft(leftMargin);
         colorRect.setTop(topMargin);
@@ -296,7 +295,7 @@ void ColorPallete::paintEvent(QPaintEvent* _event)
     //
     // Разделитель между верхней и центральной
     //
-    const QRectF dividerRect(0, Ui::DesignSystem::layout().px48(), width(),
+    const QRectF dividerRect(0, Ui::DesignSystem::layout().px(72), width(),
                              Ui::DesignSystem::scaleFactor());
     painter.fillRect(dividerRect, smoothTextColor);
 
@@ -309,7 +308,7 @@ void ColorPallete::paintEvent(QPaintEvent* _event)
     painter.setBrush(Qt::NoBrush);
     painter.setFont(Ui::DesignSystem::font().button());
     const qreal otherColorsLabelTop
-        = (12 + 24 + 12 + 12 + 24 * 5 + 4 * 4 + 12) * Ui::DesignSystem::scaleFactor();
+        = (24 + 24 + 24 + 24 + 24 * 5 + 4 * 4 + 24) * Ui::DesignSystem::scaleFactor();
     const QRectF otherColorsLabelRect(Ui::DesignSystem::layout().px12(), otherColorsLabelTop,
                                       width() - Ui::DesignSystem::layout().px24(),
                                       Ui::DesignSystem::layout().px16());
