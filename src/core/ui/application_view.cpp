@@ -7,6 +7,7 @@
 #include <ui/widgets/splitter/splitter.h>
 #include <ui/widgets/stack_widget/stack_widget.h>
 #include <ui/widgets/task_bar/task_bar.h>
+#include <utils/logging.h>
 
 #include <QAction>
 #include <QCloseEvent>
@@ -129,6 +130,9 @@ void ApplicationView::restoreState(const QVariantMap& _state)
 
 void ApplicationView::showContent(QWidget* _toolbar, QWidget* _navigator, QWidget* _view)
 {
+    Log::debug("Show content: %1, %2, %3", _toolbar->metaObject()->className(),
+               _navigator->metaObject()->className(), _view->metaObject()->className());
+
     d->toolBar->setCurrentWidget(_toolbar);
     d->navigator->setCurrentWidget(_navigator);
     d->view->setCurrentWidget(_view);

@@ -105,6 +105,11 @@ public:
     void showAccount();
 
     /**
+     * @brief Показать онбординг
+     */
+    void showOnboarding();
+
+    /**
      * @brief Показать страницу проектов
      */
     void showProjects();
@@ -465,7 +470,7 @@ void ApplicationManager::Implementation::showContent()
     // Если это первый запуск приложения, то покажем онбординг
     //
     if (settingsValue(DataStorageLayer::kApplicationConfiguredKey).toBool() == false) {
-        showContent(onboardingManager.data());
+        showOnboarding();
     }
     //
     // В противном случае показываем недавние проекты
@@ -484,6 +489,7 @@ void ApplicationManager::Implementation::showContent()
 
 void ApplicationManager::Implementation::showMenu()
 {
+    Log::info("Show menu");
     menuView->setFocus();
     menuView->setFixedWidth(std::max(menuView->sizeHint().width(),
                                      static_cast<int>(Ui::DesignSystem::drawer().width())));
@@ -492,11 +498,19 @@ void ApplicationManager::Implementation::showMenu()
 
 void ApplicationManager::Implementation::showAccount()
 {
+    Log::info("Show account screen");
     showContent(accountManager.data());
+}
+
+void ApplicationManager::Implementation::showOnboarding()
+{
+    Log::info("Show onboarding screen");
+    showContent(onboardingManager.data());
 }
 
 void ApplicationManager::Implementation::showProjects()
 {
+    Log::info("Show projects screen");
     menuView->checkProjects();
     showContent(projectsManager.data());
     saveLastContent(projectsManager.data());
@@ -504,6 +518,7 @@ void ApplicationManager::Implementation::showProjects()
 
 void ApplicationManager::Implementation::showProject()
 {
+    Log::info("Show project screen");
     menuView->checkProject();
     showContent(projectManager.data());
     saveLastContent(projectManager.data());
@@ -511,6 +526,7 @@ void ApplicationManager::Implementation::showProject()
 
 void ApplicationManager::Implementation::showSettings()
 {
+    Log::info("Show settings screen");
     showContent(settingsManager.data());
 }
 
@@ -521,6 +537,7 @@ void ApplicationManager::Implementation::showLastContent()
         return;
     }
 
+    Log::info("Show last content");
     applicationView->showContent(lastContent.toolBar, lastContent.navigator, lastContent.view);
 }
 
