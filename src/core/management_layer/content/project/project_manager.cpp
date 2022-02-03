@@ -20,6 +20,7 @@
 #include <data_layer/storage/storage_facade.h>
 #include <domain/document_change_object.h>
 #include <domain/document_object.h>
+#include <include/custom_events.h>
 #include <interfaces/management_layer/i_document_manager.h>
 #include <interfaces/ui/i_document_view.h>
 #include <ui/abstract_navigator.h>
@@ -30,6 +31,7 @@
 #include <ui/project/project_view.h>
 #include <ui/widgets/context_menu/context_menu.h>
 #include <ui/widgets/dialog/dialog.h>
+#include <utils/logging.h>
 
 #include <QAction>
 #include <QDateTime>
@@ -1214,6 +1216,30 @@ BusinessLayer::AbstractModel* ProjectManager::currentModel() const
     return d->currentDocument.model;
 }
 
+bool ProjectManager::event(QEvent* _event)
+{
+    switch (static_cast<int>(_event->type())) {
+    case static_cast<QEvent::Type>(EventType::IdleEvent): {
+        //
+        // Выполняем отложенную работу для всех моделей, где она имеет место быть
+        //
+        // ... для сценариев корректируем список подсказок имён персонажей
+        //
+        const auto models = d->modelsFacade.modelsFor(Domain::DocumentObjectType::ScreenplayText);
+        for (auto model : models) {
+            auto screenplay = qobject_cast<BusinessLayer::ScreenplayTextModel*>(model);
+            screenplay->updateRuntimeDictionaries();
+        }
+        break;
+    }
+
+    default:
+        break;
+    }
+
+    return QObject::event(_event);
+}
+
 void ProjectManager::handleModelChange(BusinessLayer::AbstractModel* _model,
                                        const QByteArray& _undo, const QByteArray& _redo)
 {
@@ -1239,6 +1265,8 @@ void ProjectManager::undoModelChange(BusinessLayer::AbstractModel* _model, int _
 
 void ProjectManager::showView(const QModelIndex& _itemIndex, const QString& _viewMimeType)
 {
+    Log::info("Activate plugin \"%1\"", _viewMimeType);
+
     if (!_itemIndex.isValid()) {
         updateCurrentDocument(nullptr, {});
         d->view->showDefaultPage();

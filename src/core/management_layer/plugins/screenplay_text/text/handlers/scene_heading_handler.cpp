@@ -417,7 +417,7 @@ void SceneHeadingHandler::storeSceneParameters() const
     // Сохраняем локацию
     //
     const QString location = ScreenplaySceneHeadingParser::location(cursorBackwardText);
-    editor()->locations()->createLocation(location);
+    editor()->createLocation(location);
 
     //
     // Сохраняем место

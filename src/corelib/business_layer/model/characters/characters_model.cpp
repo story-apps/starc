@@ -75,10 +75,8 @@ void CharactersModel::createCharacter(const QString& _name, const QByteArray& _c
         return;
     }
 
-    for (const auto character : std::as_const(d->characterModels)) {
-        if (character->name() == _name) {
-            return;
-        }
+    if (exists(_name)) {
+        return;
     }
 
     emit createCharacterRequested(_name, _content);
@@ -112,6 +110,15 @@ CharacterModel* CharactersModel::character(const QString& _name) const
         if (character->name() == _name) {
             return character;
         }
+    }
+
+    return nullptr;
+}
+
+CharacterModel* CharactersModel::character(int _row) const
+{
+    if (0 <= _row && _row < d->characterModels.size()) {
+        return d->characterModels.at(_row);
     }
 
     return nullptr;

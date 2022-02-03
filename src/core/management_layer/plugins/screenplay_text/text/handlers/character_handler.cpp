@@ -379,9 +379,12 @@ void CharacterHandler::complete(const QString& _currentBlockText,
     // ... дополняем, когда цикл обработки событий выполнится, чтобы позиция курсора
     //     корректно определилась после изменения текста
     //
-    QTimer::singleShot(0, [this, sectionModel, sectionText, cursorMovement] {
-        editor()->complete(sectionModel, sectionText, cursorMovement);
-    });
+    QMetaObject::invokeMethod(
+        editor(),
+        [this, sectionModel, sectionText, cursorMovement] {
+            editor()->complete(sectionModel, sectionText, cursorMovement);
+        },
+        Qt::QueuedConnection);
 }
 
 void CharacterHandler::storeCharacter() const
@@ -405,7 +408,7 @@ void CharacterHandler::storeCharacter() const
     //
     // Сохраняем персонажа
     //
-    editor()->characters()->createCharacter(characterName);
+    editor()->createCharacter(characterName);
     editor()->dictionaries()->addCharacterExtension(characterExtension);
 }
 

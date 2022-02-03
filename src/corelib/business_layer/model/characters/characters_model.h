@@ -49,6 +49,11 @@ public:
     CharacterModel* character(const QString& _name) const;
 
     /**
+     * @brief Получить модель персонажа по его индексу
+     */
+    CharacterModel* character(int _row) const;
+
+    /**
      * @brief Позиция карточки персонажа на схеме отношений
      */
     QPointF characterPosition(const QString& _name) const;

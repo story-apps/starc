@@ -8,9 +8,14 @@
 #include "screenplay_text_model_xml.h"
 #include "screenplay_text_model_xml_writer.h"
 
+#include <business_layer/model/characters/character_model.h>
+#include <business_layer/model/characters/characters_model.h>
+#include <business_layer/model/locations/locations_model.h>
 #include <business_layer/model/screenplay/screenplay_information_model.h>
 #include <business_layer/model/screenplay/text/screenplay_text_model_item.h>
 #include <business_layer/templates/screenplay_template.h>
+#include <data_layer/storage/settings_storage.h>
+#include <data_layer/storage/storage_facade.h>
 #include <domain/document_object.h>
 #include <utils/diff_match_patch/diff_match_patch_controller.h>
 #include <utils/helpers/text_helper.h>
@@ -21,6 +26,7 @@
 #include <QDateTime>
 #include <QMimeData>
 #include <QRegularExpression>
+#include <QStringListModel>
 #include <QXmlStreamReader>
 
 #ifdef QT_DEBUG
@@ -87,7 +93,7 @@ public:
     /**
      * @brief Модель локаций
      */
-    LocationsModel* locationModel = nullptr;
+    LocationsModel* locationsModel = nullptr;
 
     /**
      * @brief Последние скопированные данные модели
@@ -97,6 +103,16 @@ public:
         QModelIndex to;
         QMimeData* data = nullptr;
     } lastMime;
+
+    /**
+     * @brief Нужно ли обновить справочники, которые строятся в рантайме
+     */
+    bool needUpdateRuntimeDictionaries = true;
+
+    /**
+     * @brief Справочники, которые строятся в рантайме
+     */
+    QStringListModel* charactersModelFromText = nullptr;
 };
 
 ScreenplayTextModel::Implementation::Implementation(ScreenplayTextModel* _q)
@@ -218,6 +234,8 @@ ScreenplayTextModel::ScreenplayTextModel(QObject* _parent)
         _parent)
     , d(new Implementation(this))
 {
+    connect(this, &ScreenplayTextModel::contentsChanged, this,
+            [this] { d->needUpdateRuntimeDictionaries = true; });
 }
 
 ScreenplayTextModel::~ScreenplayTextModel() = default;
@@ -1176,12 +1194,33 @@ ScreenplayDictionariesModel* ScreenplayTextModel::dictionariesModel() const
 
 void ScreenplayTextModel::setCharactersModel(CharactersModel* _model)
 {
+    if (d->charactersModel) {
+        d->charactersModel->disconnect(this);
+    }
+
     d->charactersModel = _model;
+
+    connect(d->charactersModel, &CharactersModel::contentsChanged, this,
+            [this] { d->needUpdateRuntimeDictionaries = true; });
 }
 
-CharactersModel* ScreenplayTextModel::charactersModel() const
+QAbstractItemModel* ScreenplayTextModel::charactersModel() const
 {
+    if (d->charactersModelFromText != nullptr) {
+        return d->charactersModelFromText;
+    }
+
     return d->charactersModel;
+}
+
+BusinessLayer::CharacterModel* ScreenplayTextModel::character(const QString& _name) const
+{
+    return d->charactersModel->character(_name);
+}
+
+void ScreenplayTextModel::createCharacter(const QString& _name)
+{
+    d->charactersModel->createCharacter(_name);
 }
 
 void ScreenplayTextModel::updateCharacterName(const QString& _oldName, const QString& _newName)
@@ -1309,12 +1348,22 @@ QSet<QString> ScreenplayTextModel::findCharactersFromText() const
 
 void ScreenplayTextModel::setLocationsModel(LocationsModel* _model)
 {
-    d->locationModel = _model;
+    d->locationsModel = _model;
 }
 
-LocationsModel* ScreenplayTextModel::locationsModel() const
+QAbstractItemModel* ScreenplayTextModel::locationsModel() const
 {
-    return d->locationModel;
+    return d->locationsModel;
+}
+
+LocationModel* ScreenplayTextModel::location(const QString& _name) const
+{
+    return d->locationsModel->location(_name);
+}
+
+void ScreenplayTextModel::createLocation(const QString& _name)
+{
+    d->locationsModel->createLocation(_name);
 }
 
 QSet<QString> ScreenplayTextModel::findLocationsFromText() const
@@ -1456,8 +1505,102 @@ void ScreenplayTextModel::recalculateDuration()
     emit rowsChanged();
 }
 
-void ScreenplayTextModel::updateScreenplayDictionaries()
+void ScreenplayTextModel::updateRuntimeDictionaries()
 {
+    if (!d->needUpdateRuntimeDictionaries) {
+        return;
+    }
+
+    const bool useCharactersFromText
+        = settingsValue(DataStorageLayer::kComponentsScreenplayEditorUseCharactersFromTextKey)
+              .toBool();
+
+    //
+    // Если нет необходимости собирать персонажей из текста
+    //
+    if (!useCharactersFromText) {
+        //
+        // ... удалим старый список, если он был создан
+        //
+        if (d->charactersModelFromText != nullptr) {
+            d->charactersModelFromText->deleteLater();
+            d->charactersModelFromText = nullptr;
+        }
+        //
+        // ... и далее ничего не делаем
+        //
+        return;
+    }
+
+    //
+    // В противном случае, собираем персонажей из текста
+    //
+    QSet<QString> characters;
+    std::function<void(const ScreenplayTextModelItem*)> findCharactersInText;
+    findCharactersInText
+        = [this, &findCharactersInText, &characters](const ScreenplayTextModelItem* _item) {
+              for (int childIndex = 0; childIndex < _item->childCount(); ++childIndex) {
+                  auto childItem = _item->childAt(childIndex);
+                  switch (childItem->type()) {
+                  case ScreenplayTextModelItemType::Folder:
+                  case ScreenplayTextModelItemType::Scene: {
+                      findCharactersInText(childItem);
+                      break;
+                  }
+
+                  case ScreenplayTextModelItemType::Text: {
+                      auto textItem = static_cast<ScreenplayTextModelTextItem*>(childItem);
+
+                      switch (textItem->paragraphType()) {
+                      case ScreenplayParagraphType::SceneCharacters: {
+                          const auto sceneCharacters
+                              = ScreenplaySceneCharactersParser::characters(textItem->text());
+                          for (const auto& character : sceneCharacters) {
+                              if (d->charactersModel->exists(character)) {
+                                  characters.insert(character);
+                              }
+                          }
+                          break;
+                      }
+
+                      case ScreenplayParagraphType::Character: {
+                          const auto character = ScreenplayCharacterParser::name(textItem->text());
+                          if (d->charactersModel->exists(character)) {
+                              characters.insert(character);
+                          }
+                          break;
+                      }
+
+                      default: {
+                          break;
+                      }
+                      }
+
+                      break;
+                  }
+
+                  default:
+                      break;
+                  }
+              }
+          };
+    findCharactersInText(d->rootItem);
+    //
+    // ... не забываем приаттачить всех персонажей, у кого определена роль в истории
+    //
+    for (int row = 0; row < d->charactersModel->rowCount(); ++row) {
+        const auto character = d->charactersModel->character(row);
+        if (character->storyRole() != CharacterStoryRole::Undefined) {
+            characters.insert(character->name());
+        }
+    }
+    //
+    // ... создаём (при необходимости) и наполняем модель
+    //
+    if (d->charactersModelFromText == nullptr) {
+        d->charactersModelFromText = new QStringListModel(this);
+    }
+    d->charactersModelFromText->setStringList(characters.values());
 }
 
 void ScreenplayTextModel::initDocument()
@@ -1481,9 +1624,17 @@ void ScreenplayTextModel::initDocument()
         endResetModel();
     }
 
+    //
+    // Настроим нумерацию сцен
+    //
     emit rowsAboutToBeChanged();
     d->updateNumbering();
     emit rowsChanged();
+
+    //
+    // И сформируем необходимые справочники
+    //
+    updateRuntimeDictionaries();
 }
 
 void ScreenplayTextModel::clearDocument()

@@ -397,6 +397,7 @@ SettingsStorage::Implementation::Implementation()
         defaultValues.insert(kComponentsScreenplayEditorShowSceneNumbersOnLeftKey, true);
         defaultValues.insert(kComponentsScreenplayEditorShowSceneNumbersOnRightKey, true);
         defaultValues.insert(kComponentsScreenplayEditorContinueDialogueKey, true);
+        defaultValues.insert(kComponentsScreenplayEditorUseCharactersFromTextKey, false);
         //
         // Параметры навигатора сценария
         //

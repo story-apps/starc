@@ -122,6 +122,12 @@ signals:
      */
     void currentModelChanged(BusinessLayer::AbstractModel* _model);
 
+protected:
+    /**
+     * @brief Переопределяем для обработки события простоя пользователя
+     */
+    bool event(QEvent* _event) override;
+
 private:
     /**
      * @brief Обработать изменение модели

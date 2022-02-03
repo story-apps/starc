@@ -3,8 +3,6 @@
 #include <ui/widgets/text_edit/base/base_text_edit.h>
 
 namespace BusinessLayer {
-class CharactersModel;
-class LocationsModel;
 class ScreenplayDictionariesModel;
 class ScreenplayTextCursor;
 class ScreenplayTextModel;
@@ -65,12 +63,22 @@ public:
     /**
      * @brief Получить модель персонажей
      */
-    BusinessLayer::CharactersModel* characters() const;
+    QAbstractItemModel* characters() const;
+
+    /**
+     * @brief Создать персонажа с заданным именем
+     */
+    void createCharacter(const QString& _name);
 
     /**
      * @brief Получить модель локаций
      */
-    BusinessLayer::LocationsModel* locations() const;
+    QAbstractItemModel* locations() const;
+
+    /**
+     * @brief Создать локацию с заданным именем
+     */
+    void createLocation(const QString& _name);
 
     /**
      * @brief Отменить последнее изменение

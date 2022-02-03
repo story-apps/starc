@@ -189,10 +189,11 @@ void ScreenplayTextEdit::reinit()
     initWithModel(d->model);
 
     //
-    // Пересчитаем хронометраж
+    // Пересчитаем всё, что считается во время выполнения
     //
     if (d->model != nullptr) {
         d->model->recalculateDuration();
+        d->model->updateRuntimeDictionaries();
     }
 }
 
@@ -210,7 +211,7 @@ BusinessLayer::ScreenplayDictionariesModel* ScreenplayTextEdit::dictionaries() c
     return d->model->dictionariesModel();
 }
 
-BusinessLayer::CharactersModel* ScreenplayTextEdit::characters() const
+QAbstractItemModel* ScreenplayTextEdit::characters() const
 {
     if (d->model == nullptr) {
         return nullptr;
@@ -219,13 +220,31 @@ BusinessLayer::CharactersModel* ScreenplayTextEdit::characters() const
     return d->model->charactersModel();
 }
 
-BusinessLayer::LocationsModel* ScreenplayTextEdit::locations() const
+void ScreenplayTextEdit::createCharacter(const QString& _name)
+{
+    if (d->model == nullptr) {
+        return;
+    }
+
+    d->model->createCharacter(_name);
+}
+
+QAbstractItemModel* ScreenplayTextEdit::locations() const
 {
     if (d->model == nullptr) {
         return nullptr;
     }
 
     return d->model->locationsModel();
+}
+
+void ScreenplayTextEdit::createLocation(const QString& _name)
+{
+    if (d->model == nullptr) {
+        return;
+    }
+
+    d->model->createLocation(_name);
 }
 
 void ScreenplayTextEdit::undo()
@@ -715,13 +734,13 @@ void ScreenplayTextEdit::paintEvent(QPaintEvent* _event)
                 //
                 // Определим цвет персонажа
                 //
-                if (blockType == ScreenplayParagraphType::Character
+                if (blockType == ScreenplayParagraphType::Character && d->model
                     && d->model->charactersModel() != nullptr) {
                     lastCharacterBlockBottom = cursorR.top();
                     lastCharacterColor = QColor();
                     const QString characterName
                         = BusinessLayer::ScreenplayCharacterParser::name(block.text());
-                    if (auto character = d->model->charactersModel()->character(characterName)) {
+                    if (auto character = d->model->character(characterName)) {
                         if (character->color().isValid()) {
                             lastCharacterColor = character->color();
                         }

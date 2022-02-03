@@ -5,7 +5,9 @@
 
 namespace BusinessLayer {
 
+class CharacterModel;
 class CharactersModel;
+class LocationModel;
 class LocationsModel;
 class ScreenplayDictionariesModel;
 class ScreenplayInformationModel;
@@ -125,7 +127,17 @@ public:
      * @brief Задать модель персонажей проекта
      */
     void setCharactersModel(CharactersModel* _model);
-    CharactersModel* charactersModel() const;
+    QAbstractItemModel* charactersModel() const;
+
+    /**
+     * @brief Получить модель персонажа по заданному имени
+     */
+    BusinessLayer::CharacterModel* character(const QString& _name) const;
+
+    /**
+     * @brief Создать персонажа с заданным именем
+     */
+    void createCharacter(const QString& _name);
 
     /**
      * @brief Обновить имя персонажа
@@ -141,7 +153,17 @@ public:
      * @brief Задать модель локаций проекта
      */
     void setLocationsModel(LocationsModel* _model);
-    LocationsModel* locationsModel() const;
+    QAbstractItemModel* locationsModel() const;
+
+    /**
+     * @brief Получить модель локации по заданному имени
+     */
+    BusinessLayer::LocationModel* location(const QString& _name) const;
+
+    /**
+     * @brief Создать локациюс заданным именем
+     */
+    void createLocation(const QString& _name);
 
     /**
      * @brief Найти все локации сценария
@@ -168,7 +190,10 @@ public:
      */
     void recalculateDuration();
 
-    void updateScreenplayDictionaries();
+    /**
+     * @brief Настроить справочники сценария, которые собираются во время работы приложения
+     */
+    void updateRuntimeDictionaries();
 
 protected:
     /**

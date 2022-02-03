@@ -158,6 +158,8 @@ const QString kComponentsScreenplayEditorShowDialogueNumbersKey
     = kComponentsScreenplayEditorKey + QStringLiteral("/show-dialogue-number");
 const QString kComponentsScreenplayEditorContinueDialogueKey
     = kComponentsScreenplayEditorKey + QStringLiteral("/continue-dialogue");
+const QString kComponentsScreenplayEditorUseCharactersFromTextKey
+    = kComponentsScreenplayEditorKey + QStringLiteral("/use-characters-from-text");
 const QString kComponentsScreenplayEditorShortcutsKey
     = kComponentsScreenplayEditorKey + QStringLiteral("/shortcuts");
 // ... навигатор
