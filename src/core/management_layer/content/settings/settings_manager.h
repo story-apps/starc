@@ -111,6 +111,7 @@ private:
     void setScreenplayEditorShowSceneNumber(bool _show, bool _atLeft, bool _atRight);
     void setScreenplayEditorShowDialogueNumber(bool _show);
     void setScreenplayEditorContinueDialogue(bool _continue);
+    void setScreenplayEditorUseCharactersFromText(bool _use);
     //
     void setScreenplayNavigatorShowSceneNumber(bool _show);
     void setScreenplayNavigatorShowSceneText(bool _show, int _lines);

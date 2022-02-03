@@ -265,6 +265,7 @@ public:
     CheckBox* screenplayEditorShowSceneNumberOnRight = nullptr;
     CheckBox* screenplayEditorShowDialogueNumber = nullptr;
     CheckBox* screenplayEditorContinueDialogue = nullptr;
+    CheckBox* screenplayEditorUseCharactersFromText = nullptr;
     //
     // ... Screenplay navigator
     //
@@ -389,6 +390,7 @@ SettingsView::Implementation::Implementation(QWidget* _parent)
     , screenplayEditorShowSceneNumberOnRight(new CheckBox(screenplayCard))
     , screenplayEditorShowDialogueNumber(new CheckBox(screenplayCard))
     , screenplayEditorContinueDialogue(new CheckBox(screenplayCard))
+    , screenplayEditorUseCharactersFromText(new CheckBox(screenplayCard))
     , screenplayNavigatorTitle(new H6Label(screenplayCard))
     , screenplayNavigatorShowSceneNumber(new CheckBox(screenplayCard))
     , screenplayNavigatorShowSceneText(new CheckBox(screenplayCard))
@@ -682,6 +684,7 @@ void SettingsView::Implementation::initScreenplayCard()
     }
     screenplayCardLayout->addWidget(screenplayEditorShowDialogueNumber, itemIndex++, 0);
     screenplayCardLayout->addWidget(screenplayEditorContinueDialogue, itemIndex++, 0);
+    screenplayCardLayout->addWidget(screenplayEditorUseCharactersFromText, itemIndex++, 0);
     //
     // ... навигатор сценария
     //
@@ -1039,6 +1042,8 @@ SettingsView::SettingsView(QWidget* _parent)
             &SettingsView::screenplayEditorShowDialogueNumberChanged);
     connect(d->screenplayEditorContinueDialogue, &CheckBox::checkedChanged, this,
             &SettingsView::screenplayEditorContinueDialogueChanged);
+    connect(d->screenplayEditorUseCharactersFromText, &CheckBox::checkedChanged, this,
+            &SettingsView::screenplayEditorUseCharactersFromTextChanged);
     //
     // ... навигатор сценария
     //
@@ -1433,6 +1438,11 @@ void SettingsView::setScreenplayEditorContinueDialogue(bool _continue)
     d->screenplayEditorContinueDialogue->setChecked(_continue);
 }
 
+void SettingsView::setScreenplayEditorUseCharactersFromText(bool _use)
+{
+    d->screenplayEditorUseCharactersFromText->setChecked(_use);
+}
+
 void SettingsView::setScreenplayNavigatorShowSceneNumber(bool _show)
 {
     d->screenplayNavigatorShowSceneNumber->setChecked(_show);
@@ -1747,6 +1757,8 @@ void SettingsView::updateTranslations()
     d->screenplayEditorShowDialogueNumber->setText(tr("Show dialogue number"));
     d->screenplayEditorContinueDialogue->setText(
         tr("Automatically continue same speaker's dialogue"));
+    d->screenplayEditorUseCharactersFromText->setText(
+        tr("Include to the hints only valuable characters and characters from current screenplay"));
     d->screenplayNavigatorTitle->setText(tr("Navigator"));
     d->screenplayNavigatorShowSceneNumber->setText(tr("Show scene number"));
     d->screenplayNavigatorShowSceneText->setText(tr("Show scene text, lines"));
@@ -1893,6 +1905,7 @@ void SettingsView::designSystemChangeEvent(DesignSystemChangeEvent* _event)
              d->screenplayEditorShowSceneNumberOnRight,
              d->screenplayEditorShowDialogueNumber,
              d->screenplayEditorContinueDialogue,
+             d->screenplayEditorUseCharactersFromText,
              d->screenplayNavigatorShowSceneNumber,
              d->screenplayNavigatorShowSceneText,
              d->screenplayDurationByCharactersIncludingSpaces,

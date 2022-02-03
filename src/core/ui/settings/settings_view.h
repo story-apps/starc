@@ -69,6 +69,7 @@ public:
     void setScreenplayEditorShowSceneNumber(bool _show, bool _atLeft, bool _atRight);
     void setScreenplayEditorShowDialogueNumber(bool _show);
     void setScreenplayEditorContinueDialogue(bool _continue);
+    void setScreenplayEditorUseCharactersFromText(bool _use);
     //
     void setScreenplayNavigatorShowSceneNumber(bool _show);
     void setScreenplayNavigatorShowSceneText(bool _show, int _lines);
@@ -127,6 +128,7 @@ signals:
     void screenplayEditorShowSceneNumberChanged(bool _show, bool _atLeft, bool _atRight);
     void screenplayEditorShowDialogueNumberChanged(bool _show);
     void screenplayEditorContinueDialogueChanged(bool _continue);
+    void screenplayEditorUseCharactersFromTextChanged(bool _use);
     //
     void screenplayNavigatorShowSceneNumberChanged(bool _show);
     void screenplayNavigatorShowSceneTextChanged(bool _show, int _lines);
