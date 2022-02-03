@@ -1805,10 +1805,14 @@ void ApplicationManager::initConnections()
     // Менеджер облака
     //
 
+    auto configureConnectionStatus = [this](bool _connected) {
+        d->accountManager->setConnected(_connected);
+        d->connectionStatus->setConnectionAvailable(_connected);
+    };
     connect(d->cloudServiceManager.data(), &CloudServiceManager::connected, d->connectionStatus,
-            [this] { d->connectionStatus->setConnectionAvailable(true); });
+            [configureConnectionStatus] { configureConnectionStatus(true); });
     connect(d->cloudServiceManager.data(), &CloudServiceManager::disconnected, d->connectionStatus,
-            [this] { d->connectionStatus->setConnectionAvailable(false); });
+            [configureConnectionStatus] { configureConnectionStatus(false); });
     connect(d->connectionStatus, &Ui::ConnectionStatusToolBar::checkConnectionPressed,
             d->cloudServiceManager.data(), &CloudServiceManager::start);
 

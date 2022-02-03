@@ -231,6 +231,14 @@ void AccountView::showSessions()
     d->scrollToTitle(d->sessionsTitle);
 }
 
+void AccountView::setConnected(bool _connected)
+{
+    d->name->setEnabled(_connected);
+    d->description->setEnabled(_connected);
+    d->avatar->setEnabled(_connected);
+    d->subscriptionUpgradeToPro->setEnabled(_connected);
+}
+
 void AccountView::setEmail(const QString& _email)
 {
     d->accountTitle->setText(_email);

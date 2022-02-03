@@ -1758,7 +1758,7 @@ void SettingsView::updateTranslations()
     d->screenplayEditorContinueDialogue->setText(
         tr("Automatically continue same speaker's dialogue"));
     d->screenplayEditorUseCharactersFromText->setText(
-        tr("Include to the hints only valuable characters and characters from current screenplay"));
+        tr("Show hints for major & related to a current story characters only"));
     d->screenplayNavigatorTitle->setText(tr("Navigator"));
     d->screenplayNavigatorShowSceneNumber->setText(tr("Show scene number"));
     d->screenplayNavigatorShowSceneText->setText(tr("Show scene text, lines"));

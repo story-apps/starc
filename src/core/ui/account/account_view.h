@@ -30,6 +30,11 @@ public:
     void showSessions();
 
     /**
+     * @brief Скорректировать интерфейс в зависимости от того есть ли подключение к серверу
+     */
+    void setConnected(bool _connected);
+
+    /**
      * @brief Установить имейл пользователя
      */
     void setEmail(const QString& _email);

@@ -144,6 +144,15 @@ AccountNavigator::AccountNavigator(QWidget* _parent)
 
 AccountNavigator::~AccountNavigator() = default;
 
+void AccountNavigator::setConnected(bool _connected)
+{
+    d->tryProButton->setEnabled(_connected);
+    d->upgradeToProButton->setEnabled(_connected);
+    d->renewProSubscriptionButton->setEnabled(_connected);
+    d->upgradeToProLifetimeButton->setEnabled(_connected);
+    d->upgradeToTeamButton->setEnabled(_connected);
+}
+
 void AccountNavigator::setSubscriptionInfo(Domain::SubscriptionType _subscriptionType,
                                            const QDateTime& _subscriptionEnds,
                                            const QVector<Domain::PaymentOption>& _paymentOptions)

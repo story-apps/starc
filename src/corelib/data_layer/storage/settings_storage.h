@@ -83,6 +83,12 @@ const QString kAccountGroupKey = "account";
 //
 // имейл
 const QString kAccountEmailKey = kAccountGroupKey + "/email";
+// имя пользователя
+const QString kAccountUserNameKey = kAccountGroupKey + "/user-name";
+// имя пользователя
+const QString kAccountDescriptionKey = kAccountGroupKey + "/description";
+// аватарка
+const QString kAccountAvatarKey = kAccountGroupKey + "/avatar";
 
 //
 // Проект

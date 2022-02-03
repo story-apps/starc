@@ -22,6 +22,11 @@ public:
     ~AccountNavigator() override;
 
     /**
+     * @brief Скорректировать интерфейс в зависимости от того есть ли подключение к серверу
+     */
+    void setConnected(bool _connected);
+
+    /**
      * @brief Задать информацию о подписке
      */
     void setSubscriptionInfo(Domain::SubscriptionType _subscriptionType,

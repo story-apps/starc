@@ -243,6 +243,12 @@ QWidget* AccountManager::view() const
     return d->view;
 }
 
+void AccountManager::setConnected(bool _connected)
+{
+    d->navigator->setConnected(_connected);
+    d->view->setConnected(_connected);
+}
+
 void AccountManager::signIn()
 {
     d->initLoginDialog();

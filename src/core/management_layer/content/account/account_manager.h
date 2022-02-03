@@ -27,6 +27,11 @@ public:
     QWidget* view() const;
 
     /**
+     * @brief Скорректировать интерфейс в зависимости от того есть ли подключение к серверу
+     */
+    void setConnected(bool _connected);
+
+    /**
      * @brief Войти в личный кабинет
      */
     void signIn();
