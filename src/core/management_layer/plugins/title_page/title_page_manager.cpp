@@ -18,6 +18,10 @@ namespace {
 const QString kSettingsKey = "simple-text";
 QString cursorPositionFor(Domain::DocumentObject* _item)
 {
+    if (_item == nullptr) {
+        return {};
+    }
+
     return QString("%1/%2/last-cursor").arg(kSettingsKey, _item->uuid().toString());
 }
 } // namespace

@@ -1,7 +1,14 @@
 #include "screenplay_template_manager.h"
 
+#include <business_layer/model/screenplay/screenplay_information_model.h>
+#include <business_layer/model/screenplay/screenplay_title_page_model.h>
 #include <business_layer/templates/screenplay_template.h>
 #include <business_layer/templates/templates_facade.h>
+#include <domain/document_object.h>
+#include <domain/objects_builder.h>
+#include <interfaces/ui/i_document_view.h>
+#include <management_layer/plugins_builder.h>
+#include <ui/design_system/design_system.h>
 #include <ui/settings/screenplay_template/screenplay_template_navigator.h>
 #include <ui/settings/screenplay_template/screenplay_template_page_view.h>
 #include <ui/settings/screenplay_template/screenplay_template_paragraphs_view.h>
@@ -10,12 +17,13 @@
 #include <ui/widgets/floating_tool_bar/floating_tool_bar.h>
 #include <utils/helpers/measurement_helper.h>
 
+
 namespace ManagementLayer {
 
 class ScreenplayTemplateManager::Implementation
 {
 public:
-    explicit Implementation(QWidget* _parent);
+    explicit Implementation(QWidget* _parent, const PluginsBuilder& _pluginsBuilder);
 
     /**
      * @brief Получить заданное значение в текущей метрике
@@ -38,6 +46,16 @@ public:
      * @brief Сохранить параметры страницы шаблона
      */
     void savePageParameters();
+
+    /**
+     * @brief Обновить параметры титульной страницы
+     */
+    void updateTitlePageParameters();
+
+    /**
+     * @brief Сохранить титульную страницу
+     */
+    void saveTitlePage();
 
     /**
      * @brief Обновить параметры параграфа в представлении
@@ -63,23 +81,32 @@ public:
     Ui::ScreenplayTemplateToolBar* toolBar = nullptr;
     Ui::ScreenplayTemplateNavigator* navigator = nullptr;
     Ui::ScreenplayTemplatePageView* pageView = nullptr;
-    Widget* titlePageView = nullptr;
     Ui::ScreenplayTemplateParagraphsView* paragraphsView = nullptr;
     Ui::ScreenplayTemplateViewToolBar* viewToolBar = nullptr;
+
+    const PluginsBuilder& pluginsBuilder;
+    BusinessLayer::ScreenplayInformationModel informationModel;
+    BusinessLayer::ScreenplayTitlePageModel titlePageModel;
+    QScopedPointer<Domain::DocumentObject> titlePageDocument;
+    QWidget* titlePageView = nullptr;
 };
 
-ScreenplayTemplateManager::Implementation::Implementation(QWidget* _parent)
+ScreenplayTemplateManager::Implementation::Implementation(QWidget* _parent,
+                                                          const PluginsBuilder& _pluginsBuilder)
     : toolBar(new Ui::ScreenplayTemplateToolBar(_parent))
     , navigator(new Ui::ScreenplayTemplateNavigator(_parent))
     , pageView(new Ui::ScreenplayTemplatePageView(_parent))
-    , titlePageView(new Widget(_parent))
     , paragraphsView(new Ui::ScreenplayTemplateParagraphsView(_parent))
     , viewToolBar(new Ui::ScreenplayTemplateViewToolBar(_parent))
+    , pluginsBuilder(_pluginsBuilder)
+    , titlePageDocument(Domain::ObjectsBuilder::createDocument(
+          {}, {}, Domain::DocumentObjectType::ScreenplayTitlePage, {}))
 {
     toolBar->hide();
     navigator->hide();
     pageView->hide();
-    titlePageView->hide();
+    titlePageModel.setDocument(titlePageDocument.data());
+    titlePageModel.setInformationModel(&informationModel);
     paragraphsView->hide();
     viewToolBar->hide();
 }
@@ -124,6 +151,22 @@ void ScreenplayTemplateManager::Implementation::savePageParameters()
     currentTemplate.setPageMargins(mmMarginsFromCurrentMetrics(pageView->pageMargins()));
     currentTemplate.setPageNumbersAlignment(pageView->pageNumbersAlignment());
     currentTemplate.setLeftHalfOfPageWidthPercents(pageView->leftHalfOfPageWidthPercents());
+}
+
+void ScreenplayTemplateManager::Implementation::updateTitlePageParameters()
+{
+    titlePageModel.setDocument(nullptr);
+    informationModel.setOverrideCommonSettings(true);
+    informationModel.setTemplateId(currentTemplate.id());
+    titlePageDocument->setContent(currentTemplate.titlePage().toUtf8());
+    titlePageModel.setDocument(titlePageDocument.data());
+}
+
+void ScreenplayTemplateManager::Implementation::saveTitlePage()
+{
+    QString titlePageXml = titlePageDocument->content();
+    titlePageXml.remove(QLatin1String("<?xml version=\"1.0\"?>"));
+    currentTemplate.setTitlePage(titlePageXml);
 }
 
 void ScreenplayTemplateManager::Implementation::updateParagraphParameters(
@@ -201,16 +244,56 @@ void ScreenplayTemplateManager::Implementation::saveParagraphParameters(
 // ****
 
 
-ScreenplayTemplateManager::ScreenplayTemplateManager(QObject* _parent, QWidget* _parentWidget)
+ScreenplayTemplateManager::ScreenplayTemplateManager(QObject* _parent, QWidget* _parentWidget,
+                                                     const PluginsBuilder& _pluginsBuilder)
     : QObject(_parent)
-    , d(new Implementation(_parentWidget))
+    , d(new Implementation(_parentWidget, _pluginsBuilder))
 {
     connect(d->toolBar, &Ui::ScreenplayTemplateToolBar::backPressed, this,
             &ScreenplayTemplateManager::closeRequested);
     connect(d->toolBar, &Ui::ScreenplayTemplateToolBar::pageSettingsPressed, this,
             [this] { emit showViewRequested(d->pageView); });
-    connect(d->toolBar, &Ui::ScreenplayTemplateToolBar::titlePageSettingsPressed, this,
-            [this] { emit showViewRequested(d->titlePageView); });
+    connect(d->toolBar, &Ui::ScreenplayTemplateToolBar::titlePageSettingsPressed, this, [this] {
+        //
+        // Получим редактор титульной страницы
+        //
+        d->titlePageView = d->pluginsBuilder
+                               .activateView("application/x-starc/editor/screenplay/title-page",
+                                             &d->titlePageModel)
+                               ->asQWidget();
+
+        //
+        // Смещаем тулбар, чтобы он не наезжал на тулбар редактора шаблона
+        //
+        FloatingToolBar* titlePageToolbar = nullptr;
+        const auto titlePageToolbars = d->titlePageView->findChildren<FloatingToolBar*>();
+        for (auto toolbar : titlePageToolbars) {
+            if (toolbar->actions().size() > 0) {
+                titlePageToolbar = toolbar;
+                break;
+            }
+        }
+        Q_ASSERT(titlePageToolbar);
+        //
+        // ... сначала скрываем, а потом, после того, как размер виджета скорректируется,
+        //     смещаем тулбар редактора титульной страницы
+        //
+        titlePageToolbar->hide();
+        QMetaObject::invokeMethod(
+            this,
+            [this, titlePageToolbar] {
+                titlePageToolbar->move(d->viewToolBar->geometry().right()
+                                           + Ui::DesignSystem::layout().px12(),
+                                       titlePageToolbar->y());
+                titlePageToolbar->show();
+            },
+            Qt::QueuedConnection);
+
+        //
+        // Собственно запросим отображение редактора титульной страницы
+        //
+        emit showViewRequested(d->titlePageView);
+    });
     connect(d->toolBar, &Ui::ScreenplayTemplateToolBar::paragraphSettingsPressed, this,
             [this] { emit showViewRequested(d->paragraphsView); });
     connect(d->navigator, &Ui::ScreenplayTemplateNavigator::mmCheckedChanged, this,
@@ -227,6 +310,7 @@ ScreenplayTemplateManager::ScreenplayTemplateManager(QObject* _parent, QWidget* 
             });
     connect(d->viewToolBar, &Ui::ScreenplayTemplateViewToolBar::savePressed, this, [this] {
         d->savePageParameters();
+        d->saveTitlePage();
         d->saveParagraphParameters(d->paragraphsView->currentParagraphType());
         BusinessLayer::TemplatesFacade::saveScreenplayTemplate(d->currentTemplate);
     });
@@ -271,6 +355,7 @@ void ScreenplayTemplateManager::editTemplate(const QString& _templateId)
     d->currentTemplate = BusinessLayer::TemplatesFacade::screenplayTemplate(_templateId);
 
     d->updatePageParameters();
+    d->updateTitlePageParameters();
     d->updateParagraphParameters(d->paragraphsView->currentParagraphType());
 }
 
@@ -285,6 +370,7 @@ void ScreenplayTemplateManager::duplicateTemplate(const QString& _templateId)
     d->currentTemplate.setIsNew();
 
     d->updatePageParameters();
+    d->updateTitlePageParameters();
     d->updateParagraphParameters(d->paragraphsView->currentParagraphType());
 }
 

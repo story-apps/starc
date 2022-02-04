@@ -386,6 +386,7 @@ public:
      * @brief Стандартный текст титульной страницы
      */
     const QString& titlePage() const;
+    void setTitlePage(const QString& _titlePage);
 
     /**
      * @brief Получить стиль блока

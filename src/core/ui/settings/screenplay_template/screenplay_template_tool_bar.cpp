@@ -60,7 +60,7 @@ ScreenplayTemplateToolBar::ScreenplayTemplateToolBar(QWidget* _parent)
     connect(d->pageSettingsAction, &QAction::toggled, this,
             &ScreenplayTemplateToolBar::pageSettingsPressed);
 
-    //    addAction(d->titlePageAction);
+    addAction(d->titlePageAction);
     connect(d->titlePageAction, &QAction::toggled, this,
             &ScreenplayTemplateToolBar::titlePageSettingsPressed);
 

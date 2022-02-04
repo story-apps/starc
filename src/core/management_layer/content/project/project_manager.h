@@ -13,6 +13,8 @@ enum class DocumentObjectType;
 
 namespace ManagementLayer {
 
+class PluginsBuilder;
+
 /**
  * @brief Управляющий открытым проектом
  */
@@ -21,7 +23,7 @@ class ProjectManager : public QObject
     Q_OBJECT
 
 public:
-    ProjectManager(QObject* _parent, QWidget* _parentWidget);
+    ProjectManager(QObject* _parent, QWidget* _parentWidget, const PluginsBuilder& _pluginsBuilder);
     ~ProjectManager() override;
 
     QWidget* toolBar() const;

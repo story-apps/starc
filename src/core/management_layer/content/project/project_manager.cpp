@@ -1,7 +1,6 @@
 #include "project_manager.h"
 
 #include "project_models_facade.h"
-#include "project_plugins_builder.h"
 
 #include <business_layer/model/characters/character_model.h>
 #include <business_layer/model/characters/characters_model.h>
@@ -23,6 +22,7 @@
 #include <include/custom_events.h>
 #include <interfaces/management_layer/i_document_manager.h>
 #include <interfaces/ui/i_document_view.h>
+#include <management_layer/plugins_builder.h>
 #include <ui/abstract_navigator.h>
 #include <ui/design_system/design_system.h>
 #include <ui/project/create_document_dialog.h>
@@ -46,7 +46,7 @@ namespace ManagementLayer {
 class ProjectManager::Implementation
 {
 public:
-    explicit Implementation(QWidget* _parent);
+    explicit Implementation(QWidget* _parent, const PluginsBuilder& _pluginsBuilder);
 
     /**
      * @brief Действия контекстного меню
@@ -109,7 +109,7 @@ public:
     DataStorageLayer::DocumentImageStorage documentDataStorage;
 
     ProjectModelsFacade modelsFacade;
-    ProjectPluginsBuilder pluginsBuilder;
+    const PluginsBuilder& pluginsBuilder;
 
     /**
      * @brief Информация о текущем документе
@@ -120,7 +120,8 @@ public:
     } currentDocument;
 };
 
-ProjectManager::Implementation::Implementation(QWidget* _parent)
+ProjectManager::Implementation::Implementation(QWidget* _parent,
+                                               const PluginsBuilder& _pluginsBuilder)
     : topLevelWidget(_parent)
     , toolBar(new Ui::ProjectToolBar(_parent))
     , navigator(new Ui::ProjectNavigator(_parent))
@@ -128,6 +129,7 @@ ProjectManager::Implementation::Implementation(QWidget* _parent)
     , projectStructureModel(new BusinessLayer::StructureModel(navigator))
     , projectStructureProxyModel(new BusinessLayer::StructureProxyModel(projectStructureModel))
     , modelsFacade(projectStructureModel, &documentDataStorage)
+    , pluginsBuilder(_pluginsBuilder)
 {
     toolBar->hide();
     navigator->hide();
@@ -609,9 +611,10 @@ void ProjectManager::Implementation::emptyRecycleBin(const QModelIndex& _recycle
 // ****
 
 
-ProjectManager::ProjectManager(QObject* _parent, QWidget* _parentWidget)
+ProjectManager::ProjectManager(QObject* _parent, QWidget* _parentWidget,
+                               const PluginsBuilder& _pluginsBuilder)
     : QObject(_parent)
-    , d(new Implementation(_parentWidget))
+    , d(new Implementation(_parentWidget, _pluginsBuilder))
 {
     connect(d->toolBar, &Ui::ProjectToolBar::menuPressed, this, &ProjectManager::menuRequested);
     connect(d->toolBar, &Ui::ProjectToolBar::viewPressed, this, [this](const QString& _mimeType) {

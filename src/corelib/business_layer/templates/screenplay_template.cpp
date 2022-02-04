@@ -646,7 +646,8 @@ void ScreenplayTemplate::saveToFile(const QString& _filePath) const
     writer.writeAttribute("page_numbers_alignment", ::toString(d->pageNumbersAlignment));
     writer.writeAttribute("left_half_of_page_width", ::toString(d->leftHalfOfPageWidthPercents));
     writer.writeStartElement("titlepage");
-
+    writer.writeCharacters(""); // это нужно, чтобы корректно записался открывающий тэг титула
+    writer.device()->write(d->titlePage.toUtf8());
     writer.writeEndElement(); // titlepage
     writer.writeStartElement("blocks");
     for (const auto& blockStyle : std::as_const(d->paragrapsStyles)) {
@@ -794,6 +795,11 @@ const SimpleTextTemplate& ScreenplayTemplate::titlePageTemplate() const
 const QString& ScreenplayTemplate::titlePage() const
 {
     return d->titlePage;
+}
+
+void ScreenplayTemplate::setTitlePage(const QString& _titlePage)
+{
+    d->titlePage = _titlePage;
 }
 
 ScreenplayBlockStyle ScreenplayTemplate::paragraphStyle(ScreenplayParagraphType _forType) const

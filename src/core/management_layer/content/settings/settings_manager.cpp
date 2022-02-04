@@ -42,7 +42,8 @@ QString spellCheckerLoadingTaskId(const QString& _languageId)
 class SettingsManager::Implementation
 {
 public:
-    explicit Implementation(QObject* _parent, QWidget* _parentWidget);
+    explicit Implementation(QObject* _parent, QWidget* _parentWidget,
+                            const PluginsBuilder& _pluginsBuilder);
 
     /**
      * @brief Загрузить параметры приложения
@@ -67,11 +68,13 @@ public:
     ScreenplayTemplateManager* screenplayTemplateManager = nullptr;
 };
 
-SettingsManager::Implementation::Implementation(QObject* _parent, QWidget* _parentWidget)
+SettingsManager::Implementation::Implementation(QObject* _parent, QWidget* _parentWidget,
+                                                const PluginsBuilder& _pluginsBuilder)
     : toolBar(new Ui::SettingsToolBar(_parentWidget))
     , navigator(new Ui::SettingsNavigator(_parentWidget))
     , view(new Ui::SettingsView(_parentWidget))
-    , screenplayTemplateManager(new ScreenplayTemplateManager(_parent, _parentWidget))
+    , screenplayTemplateManager(
+          new ScreenplayTemplateManager(_parent, _parentWidget, _pluginsBuilder))
 {
     toolBar->hide();
     navigator->hide();
@@ -263,9 +266,10 @@ void SettingsManager::Implementation::loadShortcutsSettings()
 // ****
 
 
-SettingsManager::SettingsManager(QObject* _parent, QWidget* _parentWidget)
+SettingsManager::SettingsManager(QObject* _parent, QWidget* _parentWidget,
+                                 const PluginsBuilder& _pluginsBuilder)
     : QObject(_parent)
-    , d(new Implementation(this, _parentWidget))
+    , d(new Implementation(this, _parentWidget, _pluginsBuilder))
 {
     d->loadApplicationSettings();
     d->loadComponentsSettings();

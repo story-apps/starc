@@ -55,11 +55,11 @@ SOURCES += \
     management_layer/content/onboarding/onboarding_manager.cpp \
     management_layer/content/project/project_manager.cpp \
     management_layer/content/project/project_models_facade.cpp \
-    management_layer/content/project/project_plugins_builder.cpp \
     management_layer/content/projects/project.cpp \
     management_layer/content/projects/projects_manager.cpp \
     management_layer/content/settings/screenplay_template_manager.cpp \
     management_layer/content/settings/settings_manager.cpp \
+    management_layer/plugins_builder.cpp \
     ui/account/account_navigator.cpp \
     ui/account/account_tool_bar.cpp \
     ui/account/account_view.cpp \
@@ -110,11 +110,11 @@ HEADERS += \
     management_layer/content/onboarding/onboarding_manager.h \
     management_layer/content/project/project_manager.h \
     management_layer/content/project/project_models_facade.h \
-    management_layer/content/project/project_plugins_builder.h \
     management_layer/content/projects/project.h \
     management_layer/content/projects/projects_manager.h \
     management_layer/content/settings/screenplay_template_manager.h \
     management_layer/content/settings/settings_manager.h \
+    management_layer/plugins_builder.h \
     ui/account/account_navigator.h \
     ui/account/account_tool_bar.h \
     ui/account/account_view.h \

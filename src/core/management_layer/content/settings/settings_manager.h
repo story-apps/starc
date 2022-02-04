@@ -13,6 +13,8 @@ class ThemeSetupView;
 
 namespace ManagementLayer {
 
+class PluginsBuilder;
+
 /**
  * @brief Менеджер экрана настроек
  */
@@ -21,7 +23,8 @@ class SettingsManager : public QObject
     Q_OBJECT
 
 public:
-    SettingsManager(QObject* _parent, QWidget* _parentWidget);
+    SettingsManager(QObject* _parent, QWidget* _parentWidget,
+                    const PluginsBuilder& _pluginsBuilder);
     ~SettingsManager() override;
 
     QWidget* toolBar() const;

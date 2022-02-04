@@ -5,6 +5,9 @@
 
 namespace ManagementLayer {
 
+class PluginsBuilder;
+
+
 /**
  * @brief Менеджер экрана параметров шаблона сценария
  */
@@ -13,7 +16,8 @@ class ScreenplayTemplateManager : public QObject
     Q_OBJECT
 
 public:
-    explicit ScreenplayTemplateManager(QObject* _parent, QWidget* _parentWidget);
+    explicit ScreenplayTemplateManager(QObject* _parent, QWidget* _parentWidget,
+                                       const PluginsBuilder& _pluginsBuilder);
     ~ScreenplayTemplateManager() override;
 
     QWidget* toolBar() const;

@@ -8,10 +8,7 @@
 #include "content/projects/project.h"
 #include "content/projects/projects_manager.h"
 #include "content/settings/settings_manager.h"
-
-#include <utils/logging.h>
-
-#include <QStandardPaths>
+#include "plugins_builder.h"
 
 #ifdef CLOUD_SERVICE_MANAGER
 #include <cloud/cloud_service_manager.h>
@@ -34,6 +31,7 @@
 #include <ui/widgets/text_edit/spell_check/spell_check_text_edit.h>
 #include <utils/3rd_party/WAF/Animation/Animation.h>
 #include <utils/helpers/dialog_helper.h>
+#include <utils/logging.h>
 #include <utils/tools/backup_builder.h>
 #include <utils/tools/run_once.h>
 #include <utils/validators/email_validator.h>
@@ -49,6 +47,7 @@
 #include <QScopedPointer>
 #include <QShortcut>
 #include <QSoundEffect>
+#include <QStandardPaths>
 #include <QStyleFactory>
 #include <QTimer>
 #include <QTranslator>
@@ -260,6 +259,11 @@ public:
     Ui::ConnectionStatusToolBar* connectionStatus = nullptr;
 
     /**
+     * @brief Построитель плагинов редакторов
+     */
+    PluginsBuilder pluginsBuilder;
+
+    /**
      * @brief Менеджеры управляющие конкретными частями приложения
      */
     QScopedPointer<AccountManager> accountManager;
@@ -299,10 +303,10 @@ ApplicationManager::Implementation::Implementation(ApplicationManager* _q)
     , accountManager(new AccountManager(nullptr, applicationView))
     , onboardingManager(new OnboardingManager(nullptr, applicationView))
     , projectsManager(new ProjectsManager(nullptr, applicationView))
-    , projectManager(new ProjectManager(nullptr, applicationView))
+    , projectManager(new ProjectManager(nullptr, applicationView, pluginsBuilder))
     , importManager(new ImportManager(nullptr, applicationView))
     , exportManager(new ExportManager(nullptr, applicationView))
-    , settingsManager(new SettingsManager(nullptr, applicationView))
+    , settingsManager(new SettingsManager(nullptr, applicationView, pluginsBuilder))
 #ifdef CLOUD_SERVICE_MANAGER
     , cloudServiceManager(new CloudServiceManager)
 #endif
