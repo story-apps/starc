@@ -78,7 +78,7 @@ void ThemeColor::setTitle(const QString& _title)
 
 QSize ThemeColor::sizeHint() const
 {
-    return QSize(Ui::DesignSystem::layout().px(98), Ui::DesignSystem::layout().px62());
+    return QSize(Ui::DesignSystem::layout().px(112), Ui::DesignSystem::layout().px62());
 }
 
 QSize ThemeColor::minimumSizeHint() const
@@ -152,8 +152,8 @@ void ThemeColor::designSystemChangeEvent(DesignSystemChangeEvent* _event)
 {
     Widget::designSystemChangeEvent(_event);
 
-    setContentsMargins(QMargins(Ui::DesignSystem::layout().px16(), Ui::DesignSystem::layout().px(),
-                                Ui::DesignSystem::layout().px16(), 0));
+    setContentsMargins(QMargins(Ui::DesignSystem::layout().px(22), Ui::DesignSystem::layout().px(),
+                                Ui::DesignSystem::layout().px(22), 0));
 }
 
 
