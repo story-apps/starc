@@ -315,7 +315,7 @@ ThemeSetupView::ThemeSetupView(QWidget* _parent)
         }
         for (const auto& color : std::as_const(colors)) {
             if (colors.count(color) > 6) {
-                showToolTip(tr("Pasted HASH has too much equal colors"));
+                showToolTip(tr("Pasted HASH has too many equal colors"));
                 return;
             }
         }
