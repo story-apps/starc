@@ -14,8 +14,11 @@
 #include <ui/settings/screenplay_template/screenplay_template_paragraphs_view.h>
 #include <ui/settings/screenplay_template/screenplay_template_tool_bar.h>
 #include <ui/settings/screenplay_template/screenplay_template_view_tool_bar.h>
+#include <ui/widgets/dialog/dialog.h>
 #include <ui/widgets/floating_tool_bar/floating_tool_bar.h>
 #include <utils/helpers/measurement_helper.h>
+
+#include <QTimer>
 
 
 namespace ManagementLayer {
@@ -67,11 +70,21 @@ public:
      */
     void saveParagraphParameters(BusinessLayer::ScreenplayParagraphType _paragraphType);
 
+    /**
+     * @brief Сохранить шаблон
+     */
+    void saveTemplate();
+
 
     /**
      * @brief Редактируемый шаблон
      */
     BusinessLayer::ScreenplayTemplate currentTemplate;
+
+    /**
+     * @brief Изменён ли текущий шаблон
+     */
+    bool currentTemplateChanged = false;
 
     /**
      * @brief Используются ли миллиметры (true) или дюймы (false)
@@ -240,6 +253,16 @@ void ScreenplayTemplateManager::Implementation::saveParagraphParameters(
     currentTemplate.setParagraphStyle(paragraphStyle);
 }
 
+void ScreenplayTemplateManager::Implementation::saveTemplate()
+{
+    savePageParameters();
+    saveTitlePage();
+    saveParagraphParameters(paragraphsView->currentParagraphType());
+    BusinessLayer::TemplatesFacade::saveScreenplayTemplate(currentTemplate);
+
+    currentTemplateChanged = false;
+}
+
 
 // ****
 
@@ -249,8 +272,50 @@ ScreenplayTemplateManager::ScreenplayTemplateManager(QObject* _parent, QWidget* 
     : QObject(_parent)
     , d(new Implementation(_parentWidget, _pluginsBuilder))
 {
-    connect(d->toolBar, &Ui::ScreenplayTemplateToolBar::backPressed, this,
-            &ScreenplayTemplateManager::closeRequested);
+    //
+    // При закрытии редактора, спросим пользователя, нужно ли сохранить изменения
+    //
+    connect(d->toolBar, &Ui::ScreenplayTemplateToolBar::backPressed, this, [this] {
+        if (!d->currentTemplateChanged) {
+            emit closeRequested();
+            return;
+        }
+
+        const int kCancelButtonId = 0;
+        const int kNoButtonId = 1;
+        const int kYesButtonId = 2;
+        auto dialog = new Dialog(d->toolBar->topLevelWidget());
+        dialog->showDialog({}, tr("Template was modified. Save changes?"),
+                           { { kCancelButtonId, tr("Cancel"), Dialog::RejectButton },
+                             { kNoButtonId, tr("Don't save"), Dialog::NormalButton },
+                             { kYesButtonId, tr("Save"), Dialog::AcceptButton } });
+        QObject::connect(
+            dialog, &Dialog::finished,
+            [this, kCancelButtonId, kYesButtonId, dialog](const Dialog::ButtonInfo& _buttonInfo) {
+                dialog->hideDialog();
+
+                //
+                // Пользователь передумал сохранять
+                //
+                if (_buttonInfo.id == kCancelButtonId) {
+                    return;
+                }
+
+                //
+                // Пользователь хочет сохранить изменения
+                //
+                if (_buttonInfo.id == kYesButtonId) {
+                    d->saveTemplate();
+                }
+
+                emit closeRequested();
+            });
+        QObject::connect(dialog, &Dialog::disappeared, dialog, &Dialog::deleteLater);
+    });
+
+    //
+    // Переходы по страницам редактора шаблона
+    //
     connect(d->toolBar, &Ui::ScreenplayTemplateToolBar::pageSettingsPressed, this,
             [this] { emit showViewRequested(d->pageView); });
     connect(d->toolBar, &Ui::ScreenplayTemplateToolBar::titlePageSettingsPressed, this, [this] {
@@ -296,6 +361,10 @@ ScreenplayTemplateManager::ScreenplayTemplateManager(QObject* _parent, QWidget* 
     });
     connect(d->toolBar, &Ui::ScreenplayTemplateToolBar::paragraphSettingsPressed, this,
             [this] { emit showViewRequested(d->paragraphsView); });
+
+    //
+    // Пользователь изменил единицы измерения - отразим изменение в интерфейсе
+    //
     connect(d->navigator, &Ui::ScreenplayTemplateNavigator::mmCheckedChanged, this,
             [this](bool _mm) {
                 if (d->useMm == _mm) {
@@ -308,12 +377,9 @@ ScreenplayTemplateManager::ScreenplayTemplateManager(QObject* _parent, QWidget* 
                 d->updatePageParameters();
                 d->updateParagraphParameters(d->paragraphsView->currentParagraphType());
             });
-    connect(d->viewToolBar, &Ui::ScreenplayTemplateViewToolBar::savePressed, this, [this] {
-        d->savePageParameters();
-        d->saveTitlePage();
-        d->saveParagraphParameters(d->paragraphsView->currentParagraphType());
-        BusinessLayer::TemplatesFacade::saveScreenplayTemplate(d->currentTemplate);
-    });
+
+    connect(d->viewToolBar, &Ui::ScreenplayTemplateViewToolBar::savePressed, this,
+            [this] { d->saveTemplate(); });
     connect(d->paragraphsView, &Ui::ScreenplayTemplateParagraphsView::currentParagraphTypeChanged,
             this,
             [this](BusinessLayer::ScreenplayParagraphType _currentType,
@@ -321,6 +387,16 @@ ScreenplayTemplateManager::ScreenplayTemplateManager(QObject* _parent, QWidget* 
                 d->saveParagraphParameters(_previousType);
                 d->updateParagraphParameters(_currentType);
             });
+
+    //
+    // Пометим текущий шаблон изменённым, если произошли какие-либо изменения в его параметрах
+    //
+    auto markChanged = [this] { d->currentTemplateChanged = true; };
+    connect(d->pageView, &Ui::ScreenplayTemplatePageView::pageChanged, this, markChanged);
+    connect(&d->titlePageModel, &BusinessLayer::ScreenplayTitlePageModel::contentsChanged, this,
+            markChanged);
+    connect(d->paragraphsView, &Ui::ScreenplayTemplateParagraphsView::currentParagraphChanged, this,
+            markChanged);
 }
 
 ScreenplayTemplateManager::~ScreenplayTemplateManager() = default;
@@ -357,6 +433,12 @@ void ScreenplayTemplateManager::editTemplate(const QString& _templateId)
     d->updatePageParameters();
     d->updateTitlePageParameters();
     d->updateParagraphParameters(d->paragraphsView->currentParagraphType());
+
+    //
+    // Пометим что шаблон не был изменён отложенно, т.к. в редакторе текста стоит дебаунсинг на
+    // изменение и событие очистки прийдёт только через некоторое время
+    //
+    QTimer::singleShot(300, this, [this] { d->currentTemplateChanged = false; });
 }
 
 void ScreenplayTemplateManager::duplicateTemplate(const QString& _templateId)
@@ -372,6 +454,8 @@ void ScreenplayTemplateManager::duplicateTemplate(const QString& _templateId)
     d->updatePageParameters();
     d->updateTitlePageParameters();
     d->updateParagraphParameters(d->paragraphsView->currentParagraphType());
+
+    d->currentTemplateChanged = true;
 }
 
 } // namespace ManagementLayer

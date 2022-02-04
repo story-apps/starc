@@ -247,30 +247,32 @@ ScreenplayTemplateParagraphsView::ScreenplayTemplateParagraphsView(QWidget* _par
                                                  kParagraphTypes.at(_previousIndex));
             });
     connect(d->paragraphEnabled, &CheckBox::checkedChanged, this, [this](bool _enabled) {
-        for (auto widget : std::vector<QWidget*>{ d->fontFamily,
-                                                  d->fontSize,
-                                                  d->startsFromNewPage,
-                                                  d->uppercase,
-                                                  d->bold,
-                                                  d->italic,
-                                                  d->underline,
-                                                  d->textAlignmentTitle,
-                                                  d->alignLeft,
-                                                  d->alignCenter,
-                                                  d->alignRight,
-                                                  d->verticalIndentationTitle,
-                                                  d->topIndent,
-                                                  d->bottomIndent,
-                                                  d->verticalIndentationInLines,
-                                                  d->verticalIndentationInMm,
-                                                  d->horizontalIndentationTitle,
-                                                  d->leftIndent,
-                                                  d->rightIndent,
-                                                  d->horizontalIndentationInTableTitle,
-                                                  d->leftIndentInTable,
-                                                  d->rightIndentInTable,
-                                                  d->lineSpacingTitle,
-                                                  d->lineSpacing }) {
+        for (auto widget : std::vector<QWidget*>{
+                 d->fontFamily,
+                 d->fontSize,
+                 d->startsFromNewPage,
+                 d->uppercase,
+                 d->bold,
+                 d->italic,
+                 d->underline,
+                 d->textAlignmentTitle,
+                 d->alignLeft,
+                 d->alignCenter,
+                 d->alignRight,
+                 d->verticalIndentationTitle,
+                 d->topIndent,
+                 d->bottomIndent,
+                 d->verticalIndentationInLines,
+                 d->verticalIndentationInMm,
+                 d->horizontalIndentationTitle,
+                 d->leftIndent,
+                 d->rightIndent,
+                 d->horizontalIndentationInTableTitle,
+                 d->leftIndentInTable,
+                 d->rightIndentInTable,
+                 d->lineSpacingTitle,
+                 d->lineSpacing,
+             }) {
             widget->setEnabled(_enabled);
         }
         d->lineSpacingValue->setEnabled(
@@ -283,6 +285,44 @@ ScreenplayTemplateParagraphsView::ScreenplayTemplateParagraphsView(QWidget* _par
                     d->paragraphEnabled->isChecked()
                     && (_index.row() == (d->lineSpacingModel->rowCount() - 1)));
             });
+
+    for (auto checkBox : std::vector<CheckBox*>{
+             d->paragraphEnabled,
+             d->startsFromNewPage,
+             d->uppercase,
+             d->bold,
+             d->italic,
+             d->underline,
+         }) {
+        connect(checkBox, &CheckBox::checkedChanged, this,
+                &ScreenplayTemplateParagraphsView::currentParagraphChanged);
+    }
+    for (auto radioButton : std::vector<RadioButton*>{
+             d->alignLeft,
+             d->alignCenter,
+             d->alignRight,
+             d->verticalIndentationInLines,
+             d->verticalIndentationInMm,
+         }) {
+        connect(radioButton, &RadioButton::checkedChanged, this,
+                &ScreenplayTemplateParagraphsView::currentParagraphChanged);
+    }
+    for (auto textField : std::vector<TextField*>{
+             d->fontFamily,
+             d->fontSize,
+             d->topIndent,
+             d->bottomIndent,
+             d->leftIndent,
+             d->rightIndent,
+             d->leftIndentInTable,
+             d->rightIndentInTable,
+             d->lineSpacing,
+             d->lineSpacingValue,
+         }) {
+        connect(textField, &TextField::textChanged, this,
+                &ScreenplayTemplateParagraphsView::currentParagraphChanged);
+    }
+
 
     updateTranslations();
     designSystemChangeEvent(nullptr);

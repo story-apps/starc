@@ -82,6 +82,11 @@ signals:
     void currentParagraphTypeChanged(BusinessLayer::ScreenplayParagraphType _currentType,
                                      BusinessLayer::ScreenplayParagraphType _previousType);
 
+    /**
+     * @brief Изменились параметры текущего параграфа
+     */
+    void currentParagraphChanged();
+
 protected:
     /**
      * @brief Обновить переводы

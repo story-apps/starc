@@ -37,6 +37,12 @@ public:
     int leftHalfOfPageWidthPercents() const;
     void setLeftHalfOfPage(int _value);
 
+signals:
+    /**
+     * @brief Изменились параметры страницы
+     */
+    void pageChanged();
+
 protected:
     /**
      * @brief Наблюдаем за событиями фокусировки дочерних виджетов

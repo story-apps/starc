@@ -178,6 +178,7 @@ ScreenplayTemplatePageView::ScreenplayTemplatePageView(QWidget* _parent)
 
     connect(d->pageFormatA4, &RadioButton::checkedChanged, this, [this](bool _checked) {
         d->pageLayoutPreview->setPageSize(_checked ? QPageSize::A4 : QPageSize::Letter);
+        emit pageChanged();
     });
     auto updateMargins = [this] {
         d->pageLayoutPreview->setMargins(
@@ -185,6 +186,7 @@ ScreenplayTemplatePageView::ScreenplayTemplatePageView(QWidget* _parent)
                       d->valueInCurrentMetrics(d->topMargin->text().toDouble()),
                       d->valueInCurrentMetrics(d->rightMargin->text().toDouble()),
                       d->valueInCurrentMetrics(d->bottomMargin->text().toDouble())));
+        emit pageChanged();
     };
     connect(d->leftMargin, &TextField::textChanged, this, updateMargins);
     connect(d->topMargin, &TextField::textChanged, this, updateMargins);
@@ -196,6 +198,7 @@ ScreenplayTemplatePageView::ScreenplayTemplatePageView(QWidget* _parent)
             | (d->pageNumbersAlignLeft->isChecked()
                    ? Qt::AlignLeft
                    : (d->pageNumbersAlignCenter->isChecked() ? Qt::AlignHCenter : Qt::AlignRight)));
+        emit pageChanged();
     };
     connect(d->pageNumbersAlignTop, &RadioButton::checkedChanged, this, updatePageNumberAlignment);
     connect(d->pageNumbersAlignLeft, &RadioButton::checkedChanged, this, updatePageNumberAlignment);
@@ -206,6 +209,7 @@ ScreenplayTemplatePageView::ScreenplayTemplatePageView(QWidget* _parent)
         d->pageSplitterRight->setText(QString("%1%").arg(d->pageSplitter->maximumValue() - _value));
         d->pageLayoutPreview->setPageSplitter(
             _value / static_cast<qreal>(d->pageSplitter->maximumValue()));
+        emit pageChanged();
     });
 
     updateTranslations();
