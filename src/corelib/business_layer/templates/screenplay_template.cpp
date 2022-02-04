@@ -658,7 +658,7 @@ void ScreenplayTemplate::saveToFile(const QString& _filePath) const
         writer.writeStartElement("block");
         writer.writeAttribute("id", toString(blockStyle.type()));
         writer.writeAttribute("active", ::toString(blockStyle.isActive()));
-        writer.writeAttribute("starts_frod->new_page", ::toString(blockStyle.isStartFromNewPage()));
+        writer.writeAttribute("starts_from_new_page", ::toString(blockStyle.isStartFromNewPage()));
         writer.writeAttribute("font_family", blockStyle.font().family());
         writer.writeAttribute("font_size",
                               ::toString(MeasurementHelper::pxToPt(blockStyle.font().pixelSize())));
