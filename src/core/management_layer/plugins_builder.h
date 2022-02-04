@@ -17,11 +17,11 @@ class IDocumentManager;
 /**
  * @brief Билдер управляющая созданием плагинов редакторов
  */
-class ProjectPluginsBuilder final
+class PluginsBuilder final
 {
 public:
-    ProjectPluginsBuilder();
-    ~ProjectPluginsBuilder();
+    PluginsBuilder();
+    ~PluginsBuilder();
 
     /**
      * @brief Получить менеджер документа заданного типа
@@ -57,40 +57,40 @@ public:
      * @brief Активировать представление заданного типа заданной моделью
      */
     Ui::IDocumentView* activateView(const QString& _viewMimeType,
-                                    BusinessLayer::AbstractModel* _model);
+                                    BusinessLayer::AbstractModel* _model) const;
 
     /**
      * @brief Связать два менеджера
      * @note Обычно используется для связки навигатора и редактора
      */
-    void bind(const QString& _viewMimeType, const QString& _navigatorMimeType);
+    void bind(const QString& _viewMimeType, const QString& _navigatorMimeType) const;
 
     /**
      * @brief Активировать полноэкранный режим
      */
-    void toggleFullScreen(bool _isFullScreen, const QString& _viewMimeType);
+    void toggleFullScreen(bool _isFullScreen, const QString& _viewMimeType) const;
 
     /**
      * @brief Перенастроить плагины
      */
-    void reconfigureAll();
-    void reconfigurePlugin(const QString& _mimeType, const QStringList& _changedSettingsKeys);
-    void reconfigureSimpleTextEditor(const QStringList& _changedSettingsKeys);
-    void reconfigureSimpleTextNavigator();
-    void reconfigureScreenplayEditor(const QStringList& _changedSettingsKeys);
-    void reconfigureScreenplayNavigator();
-    void reconfigureComicBookEditor(const QStringList& _changedSettingsKeys);
-    void reconfigureComicBookNavigator();
+    void reconfigureAll() const;
+    void reconfigurePlugin(const QString& _mimeType, const QStringList& _changedSettingsKeys) const;
+    void reconfigureSimpleTextEditor(const QStringList& _changedSettingsKeys) const;
+    void reconfigureSimpleTextNavigator() const;
+    void reconfigureScreenplayEditor(const QStringList& _changedSettingsKeys) const;
+    void reconfigureScreenplayNavigator() const;
+    void reconfigureComicBookEditor(const QStringList& _changedSettingsKeys) const;
+    void reconfigureComicBookNavigator() const;
 
     /**
      * @brief Обновить информацию о том, может ли пользователь использовать платные редакторы
      */
-    void checkAvailabilityToEdit();
+    void checkAvailabilityToEdit() const;
 
     /**
      * @brief Сбросить модели для всех плагинов
      */
-    void resetModels();
+    void resetModels() const;
 
 private:
     class Implementation;

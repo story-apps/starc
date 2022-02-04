@@ -96,7 +96,11 @@ void AbstractModel::setDocument(Domain::DocumentObject* _document)
 
     d->document = _document;
 
-    initDocument();
+    if (d->document) {
+        initDocument();
+    } else {
+        clearDocument();
+    }
 }
 
 QString AbstractModel::documentName() const

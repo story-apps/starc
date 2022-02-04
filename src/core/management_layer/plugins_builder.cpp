@@ -1,4 +1,4 @@
-#include "project_plugins_builder.h"
+#include "plugins_builder.h"
 
 #include <interfaces/management_layer/i_document_manager.h>
 #include <interfaces/ui/i_document_view.h>
@@ -46,7 +46,7 @@ const QHash<QString, QString> kEditorToNavigator
 /**
  * @brief Карта соответствия майм-типов документа к редакторам
  */
-const QHash<QString, QVector<ProjectPluginsBuilder::EditorInfo>> kDocumentToEditors
+const QHash<QString, QVector<PluginsBuilder::EditorInfo>> kDocumentToEditors
     = { { "application/x-starc/document/project",    { { "application/x-starc/editor/project/information", u8"\U000f02fd" },
                                                        { "application/x-starc/editor/project/collaborators", u8"\U000f0b58" } } },
         { "application/x-starc/document/screenplay", { { "application/x-starc/editor/screenplay/information", u8"\U000f02fd" },
@@ -105,7 +105,7 @@ const QHash<QString, QString> kMimeToPlugin
 
 } // namespace
 
-class ProjectPluginsBuilder::Implementation
+class PluginsBuilder::Implementation
 {
 public:
     /**
@@ -120,7 +120,7 @@ public:
     mutable QHash<QString, ManagementLayer::IDocumentManager*> plugins;
 };
 
-Ui::IDocumentView* ProjectPluginsBuilder::Implementation::activatePlugin(
+Ui::IDocumentView* PluginsBuilder::Implementation::activatePlugin(
     const QString& _mimeType, BusinessLayer::AbstractModel* _model)
 {
     if (!plugins.contains(_mimeType)) {
@@ -200,14 +200,14 @@ Ui::IDocumentView* ProjectPluginsBuilder::Implementation::activatePlugin(
 // ****
 
 
-ProjectPluginsBuilder::ProjectPluginsBuilder()
+PluginsBuilder::PluginsBuilder()
     : d(new Implementation)
 {
 }
 
-ProjectPluginsBuilder::~ProjectPluginsBuilder() = default;
+PluginsBuilder::~PluginsBuilder() = default;
 
-IDocumentManager* ProjectPluginsBuilder::plugin(const QString& _mimeType) const
+IDocumentManager* PluginsBuilder::plugin(const QString& _mimeType) const
 {
     auto plugin = d->plugins.find(_mimeType);
     if (plugin == d->plugins.end()) {
@@ -217,14 +217,14 @@ IDocumentManager* ProjectPluginsBuilder::plugin(const QString& _mimeType) const
     return plugin.value();
 }
 
-QVector<ProjectPluginsBuilder::EditorInfo> ProjectPluginsBuilder::editorsInfoFor(
+QVector<PluginsBuilder::EditorInfo> PluginsBuilder::editorsInfoFor(
     const QString& _documentMimeType) const
 {
     return kDocumentToEditors.value(_documentMimeType);
 }
 
-QString ProjectPluginsBuilder::editorDescription(const QString& _documentMimeType,
-                                                 const QString& _editorMimeType) const
+QString PluginsBuilder::editorDescription(const QString& _documentMimeType,
+                                          const QString& _editorMimeType) const
 {
     // clang-format off
     const QHash<QString, QHash<QString, QString>> descriptions
@@ -239,7 +239,7 @@ QString ProjectPluginsBuilder::editorDescription(const QString& _documentMimeTyp
                 { "application/x-starc/editor/screenplay/parameters",
                   QApplication::translate("ProjectPluginsBuilder", "Screenplay parameters") } } },
             { "application/x-starc/document/screenplay/title-page",
-              { { "application/x-starc/editor/screenplay/title-page",
+              { { kScreenplayTitlePageEditorMime,
                   QApplication::translate("ProjectPluginsBuilder", "Title page text") } } },
             { "application/x-starc/document/screenplay/synopsis",
               { { kSimpleTextEditorMime,
@@ -298,18 +298,18 @@ QString ProjectPluginsBuilder::editorDescription(const QString& _documentMimeTyp
     return descriptions.value(_documentMimeType).value(_editorMimeType);
 }
 
-QString ProjectPluginsBuilder::navigatorMimeTypeFor(const QString& _editorMimeType) const
+QString PluginsBuilder::navigatorMimeTypeFor(const QString& _editorMimeType) const
 {
     return kEditorToNavigator.value(_editorMimeType);
 }
 
-Ui::IDocumentView* ProjectPluginsBuilder::activateView(const QString& _viewMimeType,
-                                                       BusinessLayer::AbstractModel* _model)
+Ui::IDocumentView* PluginsBuilder::activateView(const QString& _viewMimeType,
+                                                BusinessLayer::AbstractModel* _model) const
 {
     return d->activatePlugin(_viewMimeType, _model);
 }
 
-void ProjectPluginsBuilder::bind(const QString& _viewMimeType, const QString& _navigatorMimeType)
+void PluginsBuilder::bind(const QString& _viewMimeType, const QString& _navigatorMimeType) const
 {
     auto viewPlugin = d->plugins.value(_viewMimeType);
     Q_ASSERT(viewPlugin);
@@ -321,7 +321,7 @@ void ProjectPluginsBuilder::bind(const QString& _viewMimeType, const QString& _n
     navigatorPlugin->bind(viewPlugin);
 }
 
-void ProjectPluginsBuilder::toggleFullScreen(bool _isFullScreen, const QString& _viewMimeType)
+void PluginsBuilder::toggleFullScreen(bool _isFullScreen, const QString& _viewMimeType) const
 {
     if (!d->plugins.contains(_viewMimeType)) {
         return;
@@ -330,15 +330,15 @@ void ProjectPluginsBuilder::toggleFullScreen(bool _isFullScreen, const QString& 
     d->plugins.value(_viewMimeType)->view()->toggleFullScreen(_isFullScreen);
 }
 
-void ProjectPluginsBuilder::reconfigureAll()
+void PluginsBuilder::reconfigureAll() const
 {
-    for (auto plugin : d->plugins) {
+    for (auto plugin : std::as_const(d->plugins)) {
         plugin->reconfigure({});
     }
 }
 
-void ProjectPluginsBuilder::reconfigurePlugin(const QString& _mimeType,
-                                              const QStringList& _changedSettingsKeys)
+void PluginsBuilder::reconfigurePlugin(const QString& _mimeType,
+                                       const QStringList& _changedSettingsKeys) const
 {
     auto plugin = this->plugin(_mimeType);
     if (!plugin) {
@@ -348,50 +348,50 @@ void ProjectPluginsBuilder::reconfigurePlugin(const QString& _mimeType,
     plugin->reconfigure(_changedSettingsKeys);
 }
 
-void ProjectPluginsBuilder::reconfigureSimpleTextEditor(const QStringList& _changedSettingsKeys)
+void PluginsBuilder::reconfigureSimpleTextEditor(const QStringList& _changedSettingsKeys) const
 {
     reconfigurePlugin(kSimpleTextEditorMime, _changedSettingsKeys);
     reconfigurePlugin(kScreenplayTitlePageEditorMime, _changedSettingsKeys);
     reconfigurePlugin(kComicBookTitlePageEditorMime, _changedSettingsKeys);
 }
 
-void ProjectPluginsBuilder::reconfigureSimpleTextNavigator()
+void PluginsBuilder::reconfigureSimpleTextNavigator() const
 {
     reconfigurePlugin(kSimpleTextNavigatorMime, {});
 }
 
-void ProjectPluginsBuilder::reconfigureScreenplayEditor(const QStringList& _changedSettingsKeys)
+void PluginsBuilder::reconfigureScreenplayEditor(const QStringList& _changedSettingsKeys) const
 {
     reconfigurePlugin(kScreenplayTitlePageEditorMime, _changedSettingsKeys);
     reconfigurePlugin(kScreenplayTextEditorMime, _changedSettingsKeys);
 }
 
-void ProjectPluginsBuilder::reconfigureScreenplayNavigator()
+void PluginsBuilder::reconfigureScreenplayNavigator() const
 {
     reconfigurePlugin(kScreenplayTextNavigatorMime, {});
 }
 
-void ProjectPluginsBuilder::reconfigureComicBookEditor(const QStringList& _changedSettingsKeys)
+void PluginsBuilder::reconfigureComicBookEditor(const QStringList& _changedSettingsKeys) const
 {
     reconfigurePlugin(kComicBookTitlePageEditorMime, _changedSettingsKeys);
     reconfigurePlugin(kComicBookTextEditorMime, _changedSettingsKeys);
 }
 
-void ProjectPluginsBuilder::reconfigureComicBookNavigator()
+void PluginsBuilder::reconfigureComicBookNavigator() const
 {
     reconfigurePlugin(kComicBookTextNavigatorMime, {});
 }
 
-void ProjectPluginsBuilder::checkAvailabilityToEdit()
+void PluginsBuilder::checkAvailabilityToEdit() const
 {
-    for (auto plugin : d->plugins) {
+    for (auto plugin : std::as_const(d->plugins)) {
         plugin->checkAvailabilityToEdit();
     }
 }
 
-void ProjectPluginsBuilder::resetModels()
+void PluginsBuilder::resetModels() const
 {
-    for (auto plugin : d->plugins) {
+    for (auto plugin : std::as_const(d->plugins)) {
         plugin->saveSettings();
         plugin->setModel(nullptr);
     }
