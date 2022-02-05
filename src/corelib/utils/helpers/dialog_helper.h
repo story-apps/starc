@@ -15,6 +15,7 @@ public:
      * @brief Получить фильтр конкретного типа
      */
     static QString starcProjectFilter();
+    static QString starcTemplateFilter();
     static QString kitScenaristFilter();
     static QString finalDraftFilter();
     static QString finalDraftTemplateFilter();

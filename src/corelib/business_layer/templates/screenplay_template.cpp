@@ -603,6 +603,12 @@ ScreenplayTemplate::ScreenplayTemplate()
 {
 }
 
+ScreenplayTemplate::ScreenplayTemplate(const QString& _fromFile)
+    : d(new Implementation)
+{
+    load(_fromFile);
+}
+
 ScreenplayTemplate::ScreenplayTemplate(const ScreenplayTemplate& _other)
     : d(new Implementation)
 {
@@ -618,6 +624,87 @@ ScreenplayTemplate& ScreenplayTemplate::operator=(const ScreenplayTemplate& _oth
 }
 
 ScreenplayTemplate::~ScreenplayTemplate() = default;
+
+void ScreenplayTemplate::load(const QString& _fromFile)
+{
+    QFile templateFile(_fromFile);
+    if (!templateFile.open(QIODevice::ReadOnly)) {
+        return;
+    }
+    const QString templateXml = templateFile.readAll();
+    QXmlStreamReader reader(templateXml);
+
+    //
+    // Считываем данные в соответствии с заданным форматом
+    //
+    if (!reader.readNextStartElement() || reader.name() != QLatin1String("style")) {
+        return;
+    }
+
+    //
+    // Считываем атрибуты шаблона
+    //
+    QXmlStreamAttributes templateAttributes = reader.attributes();
+    if (templateAttributes.hasAttribute("id")) {
+        d->id = templateAttributes.value("id").toString();
+    }
+    d->isDefault = templateAttributes.value("default").toString() == "true";
+    d->name = templateAttributes.value("name").toString();
+    d->description = templateAttributes.value("description").toString();
+    d->pageSizeId
+        = PageMetrics::pageSizeIdFromString(templateAttributes.value("page_format").toString());
+    d->pageMargins = marginsFromString(templateAttributes.value("page_margins").toString());
+    d->pageNumbersAlignment
+        = alignmentFromString(templateAttributes.value("page_numbers_alignment").toString());
+    d->leftHalfOfPageWidthPercents = templateAttributes.value("left_half_of_page_width").toInt();
+
+    //
+    // Считываем титульную страницу
+    //
+    reader.readNextStartElement();
+    Q_ASSERT(reader.name() == QLatin1String("titlepage"));
+    const auto titlePageXmlFrom = reader.characterOffset();
+    reader.readNextStartElement();
+    reader.skipCurrentElement();
+    const auto titlePageXmlEnd = reader.characterOffset();
+    d->titlePage
+        = templateXml.mid(titlePageXmlFrom, titlePageXmlEnd - titlePageXmlFrom).simplified();
+    reader.readNext();
+    reader.readNext();
+
+    //
+    // Считываем настройки оформления блоков текста
+    //
+    reader.readNextStartElement();
+    Q_ASSERT(reader.name() == QLatin1String("blocks"));
+    while (reader.readNextStartElement() && reader.name() == QLatin1String("block")) {
+        ScreenplayBlockStyle blockStyle(reader.attributes());
+        blockStyle.setPageSplitterWidth(pageSplitterWidth());
+        d->paragrapsStyles.insert(blockStyle.type(), blockStyle);
+
+        //
+        // Если ещё не находимся в конце элемента, то остальное пропускаем
+        //
+        if (!reader.isEndElement()) {
+            reader.skipCurrentElement();
+        }
+    }
+
+    //
+    // Копируем стиль для теневых заголовков из стиля обычных заголовков
+    //
+    {
+        ScreenplayBlockStyle sceneHeadingShadowStyle
+            = d->paragrapsStyles.value(ScreenplayParagraphType::SceneHeading);
+        sceneHeadingShadowStyle.setType(ScreenplayParagraphType::SceneHeadingShadow);
+        setParagraphStyle(sceneHeadingShadowStyle);
+    }
+
+    //
+    // Сформиуем стиль компаньон для титульной страницы
+    //
+    d->buildTitlePageTemplate();
+}
 
 void ScreenplayTemplate::setIsNew()
 {
@@ -823,93 +910,6 @@ void ScreenplayTemplate::setParagraphStyle(const ScreenplayBlockStyle& _style)
     if (_style.type() == ScreenplayParagraphType::Action) {
         d->buildTitlePageTemplate();
     }
-}
-
-ScreenplayTemplate::ScreenplayTemplate(const QString& _fromFile)
-    : d(new Implementation)
-{
-    load(_fromFile);
-}
-
-void ScreenplayTemplate::load(const QString& _fromFile)
-{
-    QFile templateFile(_fromFile);
-    if (!templateFile.open(QIODevice::ReadOnly)) {
-        return;
-    }
-    const QString templateXml = templateFile.readAll();
-    QXmlStreamReader reader(templateXml);
-
-    //
-    // Считываем данные в соответствии с заданным форматом
-    //
-    if (!reader.readNextStartElement() || reader.name() != QLatin1String("style")) {
-        return;
-    }
-
-    //
-    // Считываем атрибуты шаблона
-    //
-    QXmlStreamAttributes templateAttributes = reader.attributes();
-    if (templateAttributes.hasAttribute("id")) {
-        d->id = templateAttributes.value("id").toString();
-    }
-    d->isDefault = templateAttributes.value("default").toString() == "true";
-    d->name = templateAttributes.value("name").toString();
-    d->description = templateAttributes.value("description").toString();
-    d->pageSizeId
-        = PageMetrics::pageSizeIdFromString(templateAttributes.value("page_format").toString());
-    d->pageMargins = marginsFromString(templateAttributes.value("page_margins").toString());
-    d->pageNumbersAlignment
-        = alignmentFromString(templateAttributes.value("page_numbers_alignment").toString());
-    d->leftHalfOfPageWidthPercents = templateAttributes.value("left_half_of_page_width").toInt();
-
-    //
-    // Считываем титульную страницу
-    //
-    reader.readNextStartElement();
-    Q_ASSERT(reader.name() == QLatin1String("titlepage"));
-    const auto titlePageXmlFrom = reader.characterOffset();
-    reader.readNextStartElement();
-    reader.skipCurrentElement();
-    const auto titlePageXmlEnd = reader.characterOffset();
-    d->titlePage
-        = templateXml.mid(titlePageXmlFrom, titlePageXmlEnd - titlePageXmlFrom).simplified();
-    reader.readNext();
-    reader.readNext();
-
-    //
-    // Считываем настройки оформления блоков текста
-    //
-    reader.readNextStartElement();
-    Q_ASSERT(reader.name() == QLatin1String("blocks"));
-    while (reader.readNextStartElement() && reader.name() == QLatin1String("block")) {
-        ScreenplayBlockStyle blockStyle(reader.attributes());
-        blockStyle.setPageSplitterWidth(pageSplitterWidth());
-        d->paragrapsStyles.insert(blockStyle.type(), blockStyle);
-
-        //
-        // Если ещё не находимся в конце элемента, то остальное пропускаем
-        //
-        if (!reader.isEndElement()) {
-            reader.skipCurrentElement();
-        }
-    }
-
-    //
-    // Копируем стиль для теневых заголовков из стиля обычных заголовков
-    //
-    {
-        ScreenplayBlockStyle sceneHeadingShadowStyle
-            = d->paragrapsStyles.value(ScreenplayParagraphType::SceneHeading);
-        sceneHeadingShadowStyle.setType(ScreenplayParagraphType::SceneHeadingShadow);
-        setParagraphStyle(sceneHeadingShadowStyle);
-    }
-
-    //
-    // Сформиуем стиль компаньон для титульной страницы
-    //
-    d->buildTitlePageTemplate();
 }
 
 } // namespace BusinessLayer

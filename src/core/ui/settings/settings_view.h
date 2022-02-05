@@ -151,7 +151,9 @@ signals:
     //
     void editCurrentScreenplayEditorTemplateRequested(const QString& _templateId);
     void duplicateCurrentScreenplayEditorTemplateRequested(const QString& _templateId);
+    void saveToFileCurrentScreenplayEditorTemplateRequested(const QString& _templateId);
     void removeCurrentScreenplayEditorTemplateRequested(const QString& _templateId);
+    void loadFromFileScreenplayEditorTemplateRequested();
 
     //
     // Параметры горячих клавиш

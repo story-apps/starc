@@ -361,7 +361,6 @@ public:
 
 private:
     explicit ComicBookTemplate(const QString& _fromFile);
-    friend class ComicBookTemplateFacade;
     friend class TemplatesFacade;
 
     /**

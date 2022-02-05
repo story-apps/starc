@@ -979,6 +979,7 @@ SettingsView::SettingsView(QWidget* _parent)
             = templateIndex.data(BusinessLayer::TemplatesFacade::kTemplateIdRole).toString();
         const auto isDefaultTemplate
             = BusinessLayer::TemplatesFacade::screenplayTemplate(templateId).isDefault();
+        //
         if (!isDefaultTemplate) {
             auto editAction = new QAction(tr("Edit"), d->contextMenu);
             connect(editAction, &QAction::triggered, this, [this, templateId] {
@@ -994,15 +995,25 @@ SettingsView::SettingsView(QWidget* _parent)
         actions.append(duplicateAction);
         //
         if (!isDefaultTemplate) {
+            auto saveToFileAction = new QAction(tr("Save to file"), d->contextMenu);
+            connect(saveToFileAction, &QAction::triggered, this, [this, templateId] {
+                emit saveToFileCurrentScreenplayEditorTemplateRequested(templateId);
+            });
+            actions.append(saveToFileAction);
+            //
             auto removeAction = new QAction(tr("Remove"), d->contextMenu);
             connect(removeAction, &QAction::triggered, this, [this, templateId] {
                 emit removeCurrentScreenplayEditorTemplateRequested(templateId);
             });
             actions.append(removeAction);
         }
-        //        auto exportAction = new QAction(tr("Export"), d->contextMenu);
-        //        auto importAction = new QAction(tr("Import"), d->contextMenu);
-        //        importAction->setSeparator(true);
+        //
+        auto loadFromFileAction = new QAction(tr("Load template from file"), d->contextMenu);
+        loadFromFileAction->setSeparator(true);
+        connect(loadFromFileAction, &QAction::triggered, this,
+                &SettingsView::loadFromFileScreenplayEditorTemplateRequested);
+        actions.append(loadFromFileAction);
+        //
         d->contextMenu->setActions(actions);
         d->contextMenu->showContextMenu(QCursor::pos());
     });

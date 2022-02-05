@@ -14,11 +14,14 @@
 #include <ui/settings/theme_setup_view.h>
 #include <ui/widgets/task_bar/task_bar.h>
 #include <ui/widgets/tree/tree_header_view.h>
+#include <utils/helpers/dialog_helper.h>
+#include <utils/helpers/extension_helper.h>
 #include <utils/helpers/shortcuts_helper.h>
 
 #include <QApplication>
 #include <QDir>
 #include <QEvent>
+#include <QFileDialog>
 #include <QFileInfo>
 #include <QStandardItemModel>
 #include <QStandardPaths>
@@ -425,9 +428,39 @@ SettingsManager::SettingsManager(QObject* _parent, QWidget* _parentWidget,
                 d->screenplayTemplateManager->duplicateTemplate(_templateId);
                 showScreenplayTemplateEditor();
             });
+    connect(d->view, &Ui::SettingsView::saveToFileCurrentScreenplayEditorTemplateRequested, this,
+            [this](const QString& _templateId) {
+                auto saveToFilePath = QFileDialog::getSaveFileName(
+                    d->view->topLevelWidget(), tr("Choose the file to save template"),
+                    QStandardPaths::writableLocation(QStandardPaths::DownloadLocation),
+                    DialogHelper::starcTemplateFilter());
+                if (saveToFilePath.isEmpty()) {
+                    return;
+                }
+
+                if (!saveToFilePath.endsWith(ExtensionHelper::starct())) {
+                    saveToFilePath.append(QString(".%1").arg(ExtensionHelper::starct()));
+                }
+                const auto screenplayTemplate
+                    = BusinessLayer::TemplatesFacade::screenplayTemplate(_templateId);
+                screenplayTemplate.saveToFile(saveToFilePath);
+            });
     connect(d->view, &Ui::SettingsView::removeCurrentScreenplayEditorTemplateRequested, this,
             [](const QString& _templateId) {
                 BusinessLayer::TemplatesFacade::removeScreenplayTemplate(_templateId);
+            });
+    connect(d->view, &Ui::SettingsView::loadFromFileScreenplayEditorTemplateRequested, this,
+            [this] {
+                const auto templateFilePath = QFileDialog::getOpenFileName(
+                    d->view->topLevelWidget(), tr("Choose the file with template to load"),
+                    QStandardPaths::writableLocation(QStandardPaths::DownloadLocation),
+                    DialogHelper::starcTemplateFilter());
+                if (templateFilePath.isEmpty()) {
+                    return;
+                }
+
+                const BusinessLayer::ScreenplayTemplate screenplayTemplate(templateFilePath);
+                BusinessLayer::TemplatesFacade::saveScreenplayTemplate(screenplayTemplate);
             });
     connect(d->screenplayTemplateManager, &ScreenplayTemplateManager::closeRequested, this, [this] {
         d->toolBar->showDefaultPage();

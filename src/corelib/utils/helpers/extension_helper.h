@@ -12,6 +12,7 @@ class CORE_LIBRARY_EXPORT ExtensionHelper
 {
 public:
     static QString starc();
+    static QString starct();
     static QString kitScenarist();
     static QString finalDraft();
     static QString finalDraftTemplate();

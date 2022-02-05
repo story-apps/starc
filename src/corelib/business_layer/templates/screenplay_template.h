@@ -312,9 +312,15 @@ class CORE_LIBRARY_EXPORT ScreenplayTemplate
 {
 public:
     ScreenplayTemplate();
+    explicit ScreenplayTemplate(const QString& _fromFile);
     ScreenplayTemplate(const ScreenplayTemplate& _other);
     ScreenplayTemplate& operator=(const ScreenplayTemplate& _other);
     ~ScreenplayTemplate();
+
+    /**
+     * @brief Загрузить шаблон из файла
+     */
+    void load(const QString& _fromFile);
 
     /**
      * @brief Назначить шаблон новым
@@ -394,16 +400,6 @@ public:
     ScreenplayBlockStyle paragraphStyle(ScreenplayParagraphType _forType) const;
     ScreenplayBlockStyle paragraphStyle(const QTextBlock& _forBlock) const;
     void setParagraphStyle(const ScreenplayBlockStyle& _style);
-
-private:
-    explicit ScreenplayTemplate(const QString& _fromFile);
-    friend class ScreenplayTemplateFacade;
-    friend class TemplatesFacade;
-
-    /**
-     * @brief Загрузить шаблон из файла
-     */
-    void load(const QString& _fromFile);
 
 private:
     class Implementation;

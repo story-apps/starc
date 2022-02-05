@@ -34,6 +34,12 @@ QString DialogHelper::starcProjectFilter()
                       ExtensionHelper::starc());
 }
 
+QString DialogHelper::starcTemplateFilter()
+{
+    return makeFilter(QApplication::translate("DialogHelper", "Story Architect template"),
+                      ExtensionHelper::starct());
+}
+
 QString DialogHelper::kitScenaristFilter()
 {
     return makeFilter(QApplication::translate("DialogHelper", "KIT Scenarist project"),

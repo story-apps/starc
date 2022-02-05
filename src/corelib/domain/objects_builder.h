@@ -1,5 +1,7 @@
 #pragma once
 
+#include <corelib_global.h>
+
 class QByteArray;
 class QDateTime;
 class QString;
@@ -16,7 +18,7 @@ class Identifier;
 /**
  * @brief Фабрика для создания элементов данных
  */
-class ObjectsBuilder
+class CORE_LIBRARY_EXPORT ObjectsBuilder
 {
 public:
     /**

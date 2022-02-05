@@ -8,6 +8,11 @@ QString ExtensionHelper::starc()
     return QLatin1String("starc");
 }
 
+QString ExtensionHelper::starct()
+{
+    return QLatin1String("starct");
+}
+
 QString ExtensionHelper::kitScenarist()
 {
     return QLatin1String("kitsp");
