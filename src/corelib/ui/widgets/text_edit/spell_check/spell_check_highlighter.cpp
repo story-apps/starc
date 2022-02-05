@@ -120,7 +120,7 @@ void SpellCheckHighlighter::highlightBlock(const QString& _text)
     //
     // Убираем пустоты из проверяемого текста
     //
-    QRegularExpression notWord("[^\\w'’-·]+");
+    QRegularExpression notWord("([^\\w'’-]|·)+", QRegularExpression::UseUnicodePropertiesOption);
     //
     // Проверяем каждое слово
     //

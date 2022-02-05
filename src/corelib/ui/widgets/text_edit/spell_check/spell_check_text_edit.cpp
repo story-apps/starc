@@ -355,7 +355,7 @@ QTextCursor SpellCheckTextEdit::moveCursorToStartWord(QTextCursor cursor) const
 
 QTextCursor SpellCheckTextEdit::moveCursorToEndWord(QTextCursor cursor) const
 {
-    QRegularExpression splitWord("[^\\w'’-·]");
+    QRegularExpression splitWord("([^\\w'’-]|·)", QRegularExpression::UseUnicodePropertiesOption);
     const auto match = splitWord.match(cursor.block().text(), cursor.positionInBlock());
     const int pos = match.hasMatch() ? match.capturedStart() : cursor.block().text().length();
     cursor.movePosition(QTextCursor::NextCharacter, QTextCursor::MoveAnchor,
