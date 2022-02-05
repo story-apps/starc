@@ -398,7 +398,7 @@ void ComicBookTextCursor::removeCharacters(bool _backward, BaseTextEdit* _editor
         // Положим корректные данные в блок
         //
         if (!inblockChange) {
-            cursor.setBlockFormat(targetStyle.blockFormat());
+            cursor.setBlockFormat(targetStyle.blockFormat(cursor.inTable()));
             cursor.block().setUserData(targetBlockData);
         }
 
