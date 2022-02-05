@@ -963,6 +963,7 @@ void ScreenplayTextModel::insertFromMime(const QModelIndex& _index, int _positio
         if ((currentTag == xml::kFolderTag || currentTag == xml::kSceneTag)
             && (lastItem->type() == ScreenplayTextModelItemType::Text
                 || lastItem->type() == ScreenplayTextModelItemType::Splitter)
+            && lastItem->parent() != nullptr
             && lastItem->parent()->type() == ScreenplayTextModelItemType::Scene) {
             //
             // ... вставим в модель, всё, что было собрано
