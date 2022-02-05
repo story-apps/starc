@@ -107,11 +107,13 @@ bool CompleterTextEdit::complete(QAbstractItemModel* _model, const QString& _com
     cursor.movePosition(QTextCursor::PreviousCharacter, QTextCursor::KeepAnchor, _cursorMovement);
     QRect rect = cursorRect(cursor);
     rect.moveLeft(rect.left() + verticalScrollBar()->width() + viewportMargins().left());
-    rect.moveTop(rect.top() + cursor.block().layout()->boundingRect().height()
-                 + Ui::DesignSystem::layout().px16());
+    const int heightDelta
+        = cursor.block().layout()->boundingRect().height() + Ui::DesignSystem::layout().px16();
+    rect.moveTop(rect.top() + heightDelta);
     rect.setWidth(Ui::DesignSystem::treeOneLineItem().margins().left()
                   + d->completer->popup()->sizeHintForColumn(0)
                   + Ui::DesignSystem::treeOneLineItem().margins().right());
+    rect.setHeight(heightDelta);
     d->completer->showCompleter(rect);
     emit popupShowed();
     return true;

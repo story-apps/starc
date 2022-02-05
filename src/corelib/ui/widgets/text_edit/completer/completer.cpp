@@ -6,6 +6,7 @@
 
 #include <QElapsedTimer>
 #include <QEvent>
+#include <QScreen>
 #include <QTimer>
 #include <QVariantAnimation>
 
@@ -49,6 +50,7 @@ public:
     /**
      * @brief Анимация отображения попапа
      */
+    QVariantAnimation popupPositionAnimation;
     QVariantAnimation popupHeightAnimation;
 };
 
@@ -63,16 +65,16 @@ Completer::Implementation::Implementation(QWidget* _parent)
     popup->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
     popup->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
 
+    popupPositionAnimation.setEasingCurve(QEasingCurve::OutQuint);
+    popupPositionAnimation.setDuration(240);
     popupHeightAnimation.setEasingCurve(QEasingCurve::OutQuint);
     popupHeightAnimation.setDuration(240);
-    popupHeightAnimation.setStartValue(0);
-    popupHeightAnimation.setEndValue(0);
+    popupHeightAnimation.setStartValue(1);
 
+    connect(&popupPositionAnimation, &QVariantAnimation::valueChanged, popup,
+            [this](const QVariant& _value) { popup->move(popup->x(), _value.toInt()); });
     connect(&popupHeightAnimation, &QVariantAnimation::valueChanged, popup,
-            [this](const QVariant& _value) {
-                const auto height = _value.toInt();
-                popup->resize(popup->width(), height);
-            });
+            [this](const QVariant& _value) { popup->resize(popup->width(), _value.toInt()); });
     connect(&popupHeightAnimation, &QVariantAnimation::finished, &popupHeightAnimation,
             [this] { popupHeightAnimation.setStartValue(popupHeightAnimation.endValue()); });
 }
@@ -143,30 +145,56 @@ void Completer::showCompleter(const QRect& _rect)
     // Отобразим
     //
     complete(_rect);
-    popup()->move(_rect.topLeft());
 
     //
-    // Анимируем размер попапа
-    // FIXME: разобраться с проблемами backing store в маке
-    // FIXME: в винде тоже не работает как хотелось бы, какие-то моргания
+    // Определим высоту попапа
     //
-#ifdef Q_OS_LINUX
     const int finalHeight = static_cast<int>(std::min(maxVisibleItems(), completionCount())
                                              * Ui::DesignSystem::treeOneLineItem().height());
-    if (d->popupHeightAnimation.state() == QVariantAnimation::Stopped) {
-        d->popup->resize(d->popup->width(), d->popupHeightAnimation.startValue().toInt());
-        d->popupHeightAnimation.setEndValue(finalHeight);
-        d->popupHeightAnimation.start();
+    popup()->resize(_rect.width(), finalHeight);
+
+    //
+    // Прикидываем размещение попапа на экране
+    //
+    const auto screen = popup()->screen();
+    Q_ASSERT(screen);
+    const auto screenGeometry = screen->geometry();
+    auto position = _rect.topLeft();
+    //
+    // ... если попап не вмещается в нижнюю часть экрана
+    //
+    const auto parentWidget = popup()->parentWidget();
+    Q_ASSERT(parentWidget);
+    if (parentWidget->mapToGlobal(position).y() + finalHeight > screenGeometry.bottom()) {
+        popup()->move(parentWidget->mapFromGlobal(parentWidget->mapToGlobal(position)
+                                                  - QPoint(0, finalHeight))
+                      - QPoint(0, _rect.height()));
     } else {
-        d->popup->resize(d->popup->width(), d->popupHeightAnimation.currentValue().toInt());
-        if (d->popupHeightAnimation.endValue().toInt() != finalHeight) {
-            d->popupHeightAnimation.stop();
-            d->popupHeightAnimation.setStartValue(d->popupHeightAnimation.currentValue());
-            d->popupHeightAnimation.setEndValue(finalHeight);
-            d->popupHeightAnimation.start();
-        }
+        popup()->move(_rect.topLeft());
     }
-#endif
+
+    //        //
+    //        // Анимируем размер попапа
+    //        // FIXME: разобраться с проблемами backing store в маке
+    //        // FIXME: в винде тоже не работает как хотелось бы, какие-то моргания
+    //        //
+    //    #ifdef Q_OS_LINUX
+    //        if (d->popupHeightAnimation.state() == QVariantAnimation::Stopped) {
+    //            d->popupHeightAnimation.setEndValue(static_cast<int>(finalHeight));
+    //            d->popup->resize(d->popup->width(), d->popupHeightAnimation.startValue().toInt());
+    //            d->popupHeightAnimation.setEndValue(finalHeight);
+    //            d->popupHeightAnimation.start();
+    //        } else {
+    //            d->popup->resize(d->popup->width(),
+    //            d->popupHeightAnimation.currentValue().toInt()); if
+    //            (d->popupHeightAnimation.endValue().toInt() != finalHeight) {
+    //                d->popupHeightAnimation.stop();
+    //                d->popupHeightAnimation.setStartValue(d->popupHeightAnimation.currentValue());
+    //                d->popupHeightAnimation.setEndValue(finalHeight);
+    //                d->popupHeightAnimation.start();
+    //            }
+    //        }
+    //    #endif
 }
 
 void Completer::closeCompleter()
