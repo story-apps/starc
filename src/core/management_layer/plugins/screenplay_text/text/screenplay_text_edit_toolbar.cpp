@@ -58,7 +58,8 @@ void ScreenplayTextEditToolbar::Implementation::showPopup(ScreenplayTextEditTool
         + QPointF(Ui::DesignSystem::textField().margins().left(),
                   -Ui::DesignSystem::textField().margins().bottom());
 
-    popup->showPopup(position.toPoint(), width, popup->contentModel()->rowCount());
+    popup->showPopup(position.toPoint(), _parent->height(), width,
+                     popup->contentModel()->rowCount());
 }
 
 

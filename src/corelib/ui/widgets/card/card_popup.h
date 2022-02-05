@@ -36,7 +36,7 @@ public:
     /**
      * @brief Показать попап в заданном положении с заданной шириной
      */
-    void showPopup(const QPoint& _position, int _width, int _showMaxItems = 5);
+    void showPopup(const QPoint& _position, int _parentHeight, int _width, int _showMaxItems = 5);
 
     /**
      * @brief Скрыть попап

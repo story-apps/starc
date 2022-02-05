@@ -65,7 +65,8 @@ void ComboBox::Implementation::showPopup(ComboBox* _parent)
     auto pos = _parent->mapToGlobal(_parent->rect().bottomLeft())
         + QPointF(leftMargin - Ui::DesignSystem::card().shadowMargins().left(),
                   -Ui::DesignSystem::textField().margins().bottom());
-    popup->showPopup(pos.toPoint(), width);
+    popup->showPopup(pos.toPoint(),
+                     _parent->height() - Ui::DesignSystem::textField().margins().top(), width);
 }
 
 void ComboBox::Implementation::hidePopup()

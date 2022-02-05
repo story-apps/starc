@@ -80,7 +80,7 @@ void TitlePageEditToolbar::Implementation::showPopup(TitlePageEditToolbar* _pare
         + QPointF(Ui::DesignSystem::textField().margins().left(),
                   -Ui::DesignSystem::textField().margins().bottom());
 
-    popup->showPopup(position.toPoint(), width, 9);
+    popup->showPopup(position.toPoint(), _parent->height(), width, 9);
 }
 
 
