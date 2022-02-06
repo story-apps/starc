@@ -8,6 +8,9 @@ on:
     branches: [ master ]
   pull_request:
     branches: [ master ]
+  create:
+    tags:
+      - v*
 
 jobs:
   build_linux:
@@ -15,8 +18,8 @@ jobs:
     runs-on: ubuntu-18.04
     timeout-minutes: 60
     steps:
-      - name: Checkout Sources for push event
-        if: ${{ github.event_name == 'push' }}
+      - name: Checkout Sources for push or create tag event
+        if: ${{ github.event_name != 'pull_request' }}
         uses: actions/checkout@master
         with:
           token: ${{ secrets.ACTION_RUNNER }}
@@ -73,8 +76,8 @@ jobs:
     runs-on: windows-latest
     timeout-minutes: 60
     steps:
-      - name: Checkout Sources for push event
-        if: ${{ github.event_name == 'push' }}
+      - name: Checkout Sources for push or create tag event
+        if: ${{ github.event_name != 'pull_request' }}
         uses: actions/checkout@master
         with:
           token: ${{ secrets.ACTION_RUNNER }}
@@ -170,8 +173,8 @@ jobs:
     runs-on: windows-latest
     timeout-minutes: 60
     steps:
-      - name: Checkout Sources for push event
-        if: ${{ github.event_name == 'push' }}
+      - name: Checkout Sources for push or create tag event
+        if: ${{ github.event_name != 'pull_request' }}
         uses: actions/checkout@master
         with:
           token: ${{ secrets.ACTION_RUNNER }}
@@ -267,8 +270,8 @@ jobs:
     runs-on: macos-11
     timeout-minutes: 60
     steps:
-      - name: Checkout Sources for push event
-        if: ${{ github.event_name == 'push' }}
+      - name: Checkout Sources for push or create tag event
+        if: ${{ github.event_name != 'pull_request' }}
         uses: actions/checkout@master
         with:
           token: ${{ secrets.ACTION_RUNNER }}
