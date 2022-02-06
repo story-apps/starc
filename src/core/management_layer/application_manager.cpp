@@ -1364,7 +1364,7 @@ ApplicationManager::ApplicationManager(QObject* _parent)
     Log::init(Log::Level::Debug, logFilePath);
 
 
-    QApplication::setApplicationVersion("0.1.0");
+    QApplication::setApplicationVersion("0.1.1");
     QApplication::setStyle(new ApplicationStyle(QStyleFactory::create("Fusion")));
 
 
