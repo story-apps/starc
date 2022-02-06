@@ -27,4 +27,4 @@ cp $APP_BIN_DIR/plugins/*.so $APP_IMAGE_DIR/plugins/
 wget -c -nv "https://github.com/probonopd/linuxdeployqt/releases/download/continuous/linuxdeployqt-continuous-x86_64.AppImage" -O linuxdeployqt
 chmod a+x linuxdeployqt
 ./linuxdeployqt appdir/starc -no-copy-copyright-files -no-translations -always-overwrite -executable=appdir/plugins/libcoreplugin.so -appimage
-mv *.AppImage starc-$1.AppImage
+mv *.AppImage starc-setup.AppImage

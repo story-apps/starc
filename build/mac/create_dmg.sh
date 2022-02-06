@@ -42,4 +42,4 @@ xcrun stapler staple starcapp.app
 # Создаём dmg-файл
 #
 ./make_dmg.sh -i starc.app/Contents/Resources/icon.icns -b cover.png -c "462:252:176:258" -s "640:400"  starcapp.app
-mv -f starcapp.dmg starc-setup-$1.dmg
+mv -f starcapp.dmg starc-setup.dmg

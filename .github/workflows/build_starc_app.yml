@@ -60,7 +60,13 @@ jobs:
         uses: actions/upload-artifact@v2
         with:
           name: linux packages
-          path: build/linux/starc-${{env.APP_VERSION}}.AppImage
+          path: build/linux/starc-setup.AppImage
+
+      - name: Publish artifacts
+        uses: softprops/action-gh-release@v1
+        if: startsWith(github.ref, 'refs/tags/')
+        with:
+          files: build/mac/starc-setup.AppImage
 
   build_windows_64:
     name: Build Windows 64 version
@@ -148,6 +154,14 @@ jobs:
         with:
           name: windows_64 packages
           path: |
+            build/windows/starc-setup-64.exe
+            build/windows/starc-64.zip
+
+      - name: Publish artifacts
+        uses: softprops/action-gh-release@v1
+        if: startsWith(github.ref, 'refs/tags/')
+        with:
+          files: |
             build/windows/starc-setup-64.exe
             build/windows/starc-64.zip
 
@@ -240,6 +254,14 @@ jobs:
             build/windows/starc-setup-32.exe
             build/windows/starc-32.zip
 
+      - name: Publish artifacts
+        uses: softprops/action-gh-release@v1
+        if: startsWith(github.ref, 'refs/tags/')
+        with:
+          files: |
+            build/windows/starc-setup-32.exe
+            build/windows/starc-32.zip
+
   build_mac:
     name: Build Mac OS X version
     runs-on: macos-11
@@ -292,4 +314,10 @@ jobs:
         uses: actions/upload-artifact@v2
         with:
           name: mac packages
-          path: build/mac/starc-setup-${{env.APP_VERSION}}.dmg
+          path: build/mac/starc-setup.dmg
+
+      - name: Publish artifacts
+        uses: softprops/action-gh-release@v1
+        if: startsWith(github.ref, 'refs/tags/')
+        with:
+          files: build/mac/starc-setup.dmg
