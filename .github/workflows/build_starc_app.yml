@@ -171,7 +171,7 @@ jobs:
         if: ${{ github.event_name == 'pull_request' }}
         uses: actions/checkout@master
       - run: |
-        git submodule update --init -- src/3rd_party/qbreakpad
+          git submodule update --init -- src/3rd_party/qbreakpad
 
       - name: Install Qt
         uses: jurplel/install-qt-action@v2

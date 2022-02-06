@@ -64,8 +64,8 @@ cp $Qt5_Dir/plugins/sqldrivers/qsqlite.dll $EXE_APP_DIR/sqldrivers/
 cp /c/Program\ Files\ \(x86\)/OpenSSL-Win32/*.dll $EXE_APP_DIR
 #
 # Copy msvc lib
-#                                               
-cp /c/Windows/System32/msvcp140.dll $EXE_APP_DIR    
-cp /c/Windows/System32/msvcp140_1.dll $EXE_APP_DIR
-cp /c/Windows/System32/vcruntime140.dll $EXE_APP_DIR   
-cp /c/Windows/System32/vcruntime140_1.dll $EXE_APP_DIR
+#      
+ls $VCToolsRedistDir/x86/
+cp $VCToolsRedistDir/x86/Microsoft.VC141.CRT/msvcp140.dll $EXE_APP_DIR    
+cp $VCToolsRedistDir/x86/Microsoft.VC141.CRT/msvcp140_1.dll $EXE_APP_DIR
+cp $VCToolsRedistDir/x86/Microsoft.VC141.CRT/vcruntime140.dll $EXE_APP_DIR   
