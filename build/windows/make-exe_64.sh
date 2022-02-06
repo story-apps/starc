@@ -65,7 +65,6 @@ cp /c/Program\ Files/OpenSSL-Win64/*.dll $EXE_APP_DIR
 #
 # Copy msvc lib
 #
-cp /c/Windows/System32/msvcp140.dll $EXE_APP_DIR
-cp /c/Windows/System32/msvcp140_1.dll $EXE_APP_DIR
-cp /c/Windows/System32/vcruntime140.dll $EXE_APP_DIR
-cp /c/Windows/System32/vcruntime140_1.dll $EXE_APP_DIR
+cp "$VCToolsRedistDir/x64/Microsoft.VC142.CRT/msvcp140.dll" $EXE_APP_DIR
+cp "$VCToolsRedistDir/x64/Microsoft.VC142.CRT/msvcp140_1.dll" $EXE_APP_DIR
+cp "$VCToolsRedistDir/x64/Microsoft.VC142.CRT/vcruntime140.dll" $EXE_APP_DIR

@@ -111,7 +111,7 @@ jobs:
         run: |
           cd build/windows
           ./make-exe_64.sh ${{env.APP_VERSION}}
-          
+
       - name: Sign app executables
         uses: skymatic/code-sign-action@v1
         with:
@@ -127,7 +127,7 @@ jobs:
         with:
           arguments: "/V3"
           script-file: "build/windows/starc_64.nsi"
-          
+
       - name: Sign installer
         uses: skymatic/code-sign-action@v1
         with:
@@ -200,7 +200,7 @@ jobs:
         run: |
           cd build/windows
           ./make-exe_32.sh ${{env.APP_VERSION}}
-          
+
       - name: Sign app executables
         uses: skymatic/code-sign-action@v1
         with:
@@ -216,7 +216,7 @@ jobs:
         with:
           arguments: "/V3"
           script-file: "build/windows/starc_32.nsi"
-          
+
       - name: Sign installer
         uses: skymatic/code-sign-action@v1
         with:
@@ -239,7 +239,7 @@ jobs:
           path: |
             build/windows/starc-setup-32.exe
             build/windows/starc-32.zip
-            
+
   build_mac:
     name: Build Mac OS X version
     runs-on: macos-11
