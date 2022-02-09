@@ -4,15 +4,20 @@
 
 
 /**
- * @brief Виджет содержимого диалога, который анимирует свой размер при изменении контента
+ * @brief Виджет, который анимирует свой размер и положение при изменении контента
  */
-class CORE_LIBRARY_EXPORT DialogContent : public Widget
+class CORE_LIBRARY_EXPORT ResizableWidget : public Widget
 {
     Q_OBJECT
 
 public:
-    explicit DialogContent(QWidget* _parent = nullptr);
-    ~DialogContent() override;
+    explicit ResizableWidget(QWidget* _parent = nullptr);
+    ~ResizableWidget() override;
+
+    /**
+     * @brief Установить активность анимирования контента
+     */
+    void setResizingActive(bool _active);
 
 protected:
     /**

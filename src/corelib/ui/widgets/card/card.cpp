@@ -38,14 +38,16 @@ Card::Implementation::Implementation()
 
 
 Card::Card(QWidget* _parent)
-    : Widget(_parent)
+    : ResizableWidget(_parent)
     , d(new Implementation)
 {
     setAttribute(Qt::WA_Hover);
+    setResizingActive(false);
 
-    Widget::setLayout(d->layout);
+    ResizableWidget::setLayout(d->layout);
 
-    connect(&d->shadowHeightAnimation, &QVariantAnimation::valueChanged, [this] { update(); });
+    connect(&d->shadowHeightAnimation, &QVariantAnimation::valueChanged, this,
+            qOverload<>(&Card::update));
 
     designSystemChangeEvent(nullptr);
 }
@@ -55,7 +57,7 @@ Card::~Card() = default;
 void Card::setLayout(QLayout* _layout)
 {
     Q_ASSERT_X(false, Q_FUNC_INFO, "You should use setLayoutReimpl method");
-    Widget::setLayout(_layout);
+    ResizableWidget::setLayout(_layout);
 }
 
 void Card::setLayoutReimpl(QLayout* _layout) const
@@ -153,7 +155,7 @@ void Card::enterEvent(QEnterEvent* _event)
 void Card::enterEvent(QEvent* _event)
 #endif
 {
-    Widget::enterEvent(_event);
+    ResizableWidget::enterEvent(_event);
 
     //
     // Если карточка и так уже выла поднята, нет необходимости делать это повторно
@@ -171,7 +173,7 @@ void Card::enterEvent(QEvent* _event)
 
 void Card::leaveEvent(QEvent* _event)
 {
-    Widget::leaveEvent(_event);
+    ResizableWidget::leaveEvent(_event);
 
     if (rect().contains(mapFromGlobal(QCursor::pos()))) {
         return;

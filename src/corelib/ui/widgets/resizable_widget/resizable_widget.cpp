@@ -1,4 +1,4 @@
-#include "dialog_content.h"
+#include "resizable_widget.h"
 
 #include <ui/design_system/design_system.h>
 
@@ -9,26 +9,28 @@
 #include <QVariantAnimation>
 
 
-class DialogContent::Implementation
+class ResizableWidget::Implementation
 {
 public:
     Implementation();
 
+
+    bool isResizeActive = true;
     QTimer sizeAnimationStartTimer;
     QTimer moveAnimationStartTimer;
     QVariantAnimation sizeAnimation;
     QVariantAnimation moveAnimation;
 };
 
-DialogContent::Implementation::Implementation()
+ResizableWidget::Implementation::Implementation()
 {
     sizeAnimationStartTimer.setSingleShot(true);
     sizeAnimationStartTimer.setInterval(0);
     moveAnimationStartTimer.setSingleShot(true);
     moveAnimationStartTimer.setInterval(0);
-    sizeAnimation.setDuration(160);
+    sizeAnimation.setDuration(3600);
     sizeAnimation.setEasingCurve(QEasingCurve::OutQuad);
-    moveAnimation.setDuration(160);
+    moveAnimation.setDuration(3600);
     moveAnimation.setEasingCurve(QEasingCurve::OutQuad);
 }
 
@@ -36,7 +38,7 @@ DialogContent::Implementation::Implementation()
 // ****
 
 
-DialogContent::DialogContent(QWidget* _parent)
+ResizableWidget::ResizableWidget(QWidget* _parent)
     : Widget(_parent)
     , d(new Implementation)
 {
@@ -50,10 +52,20 @@ DialogContent::DialogContent(QWidget* _parent)
             [this](const QVariant& _value) { move(_value.toPoint()); });
 }
 
-DialogContent::~DialogContent() = default;
+ResizableWidget::~ResizableWidget() = default;
 
-void DialogContent::resizeEvent(QResizeEvent* _event)
+void ResizableWidget::setResizingActive(bool _active)
 {
+    d->isResizeActive = _active;
+}
+
+void ResizableWidget::resizeEvent(QResizeEvent* _event)
+{
+    if (!d->isResizeActive) {
+        Widget::resizeEvent(_event);
+        return;
+    }
+
     if (!isVisible() || !_event->oldSize().isValid()
         || d->sizeAnimation.state() == QVariantAnimation::Running) {
         return;
@@ -107,8 +119,13 @@ void DialogContent::resizeEvent(QResizeEvent* _event)
     }
 }
 
-void DialogContent::moveEvent(QMoveEvent* _event)
+void ResizableWidget::moveEvent(QMoveEvent* _event)
 {
+    if (!d->isResizeActive) {
+        Widget::moveEvent(_event);
+        return;
+    }
+
     if (!isVisible() || _event->oldPos().isNull()
         || d->moveAnimation.state() == QVariantAnimation::Running) {
         return;
@@ -162,7 +179,7 @@ void DialogContent::moveEvent(QMoveEvent* _event)
     }
 }
 
-void DialogContent::paintEvent(QPaintEvent* _event)
+void ResizableWidget::paintEvent(QPaintEvent* _event)
 {
     Q_UNUSED(_event)
 

@@ -25,6 +25,7 @@ public:
     /**
      * @brief Переопределяем для корректного подсчёта размера в компоновщиках
      */
+    QSize minimumSizeHint() const override;
     QSize sizeHint() const override;
 
 signals:

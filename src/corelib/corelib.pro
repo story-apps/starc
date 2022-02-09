@@ -181,7 +181,6 @@ SOURCES += \
     ui/widgets/context_menu/context_menu.cpp \
     ui/widgets/dialog/abstract_dialog.cpp \
     ui/widgets/dialog/dialog.cpp \
-    ui/widgets/dialog/dialog_content.cpp \
     ui/widgets/dialog/standard_dialog.cpp \
     ui/widgets/drawer/drawer.cpp \
     ui/widgets/floating_tool_bar/floating_tool_bar.cpp \
@@ -196,6 +195,7 @@ SOURCES += \
     ui/widgets/pie/pie.cpp \
     ui/widgets/radio_button/radio_button.cpp \
     ui/widgets/radio_button/radio_button_group.cpp \
+    ui/widgets/resizable_widget/resizable_widget.cpp \
     ui/widgets/scalable_graphics_view/scalable_graphics_view.cpp \
     ui/widgets/scroll_bar/scroll_bar.cpp \
     ui/widgets/shadow/shadow.cpp \
@@ -386,7 +386,6 @@ HEADERS += \
     ui/widgets/context_menu/context_menu.h \
     ui/widgets/dialog/abstract_dialog.h \
     ui/widgets/dialog/dialog.h \
-    ui/widgets/dialog/dialog_content.h \
     ui/widgets/dialog/standard_dialog.h \
     ui/widgets/drawer/drawer.h \
     ui/widgets/floating_tool_bar/floating_tool_bar.h \
@@ -401,6 +400,7 @@ HEADERS += \
     ui/widgets/pie/pie.h \
     ui/widgets/radio_button/radio_button.h \
     ui/widgets/radio_button/radio_button_group.h \
+    ui/widgets/resizable_widget/resizable_widget.h \
     ui/widgets/scalable_graphics_view/scalable_graphics_view.h \
     ui/widgets/scroll_bar/scroll_bar.h \
     ui/widgets/shadow/shadow.h \

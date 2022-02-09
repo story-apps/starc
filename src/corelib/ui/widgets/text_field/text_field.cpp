@@ -673,7 +673,7 @@ void TextField::clear()
 
 QSize TextField::minimumSizeHint() const
 {
-    return QSize();
+    return {};
 }
 
 QSize TextField::sizeHint() const

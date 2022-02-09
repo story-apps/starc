@@ -96,6 +96,11 @@ void CheckBox::setText(const QString& _text)
     update();
 }
 
+QSize CheckBox::minimumSizeHint() const
+{
+    return {};
+}
+
 QSize CheckBox::sizeHint() const
 {
     return QSize(

@@ -1,10 +1,9 @@
 #include "abstract_dialog.h"
 
-#include "dialog_content.h"
-
 #include <ui/design_system/design_system.h>
 #include <ui/widgets/button/button.h>
 #include <ui/widgets/label/label.h>
+#include <ui/widgets/resizable_widget/resizable_widget.h>
 
 #include <QApplication>
 #include <QGridLayout>
@@ -38,7 +37,7 @@ public:
     static QTimer sApplicationActivityChangingTimer;
 
     QVBoxLayout* layout = nullptr;
-    DialogContent* content = nullptr;
+    ResizableWidget* content = nullptr;
     H6Label* title = nullptr;
     QGridLayout* contentsLayout = nullptr;
     Button* acceptButton = nullptr;
@@ -50,7 +49,7 @@ public:
 };
 
 AbstractDialog::Implementation::Implementation(QWidget* _parent)
-    : content(new DialogContent(_parent))
+    : content(new ResizableWidget(_parent))
     , title(new H6Label(_parent))
     , contentsLayout(new QGridLayout)
 {
@@ -61,6 +60,8 @@ AbstractDialog::Implementation::Implementation(QWidget* _parent)
     layout->setSpacing(0);
     layout->addWidget(title);
     layout->addLayout(contentsLayout);
+
+    content->setResizingActive(true);
 
     opacityAnimation.setDuration(220);
     opacityAnimation.setEasingCurve(QEasingCurve::OutQuad);
@@ -120,7 +121,7 @@ QTimer AbstractDialog::Implementation::sApplicationActivityChangingTimer;
 
 // ****
 
-#include <QDebug>
+
 AbstractDialog::AbstractDialog(QWidget* _parent)
     : Widget(_parent)
     , d(new Implementation(this))

@@ -1,9 +1,9 @@
 #pragma once
 
-#include <ui/widgets/widget/widget.h>
+#include <ui/widgets/resizable_widget/resizable_widget.h>
 
 
-class CORE_LIBRARY_EXPORT Card : public Widget
+class CORE_LIBRARY_EXPORT Card : public ResizableWidget
 {
     Q_OBJECT
 

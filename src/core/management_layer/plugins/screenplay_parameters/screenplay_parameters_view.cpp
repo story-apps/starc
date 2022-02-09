@@ -25,7 +25,7 @@ public:
     QScrollArea* content = nullptr;
 
     Card* screenplayInfo = nullptr;
-    QGridLayout* infoLayout = nullptr;
+    QVBoxLayout* infoLayout = nullptr;
     TextField* header = nullptr;
     CheckBox* printHeaderOnTitlePage = nullptr;
     TextField* footer = nullptr;
@@ -43,7 +43,7 @@ public:
 ScreenplayParametersView::Implementation::Implementation(QWidget* _parent)
     : content(new QScrollArea(_parent))
     , screenplayInfo(new Card(_parent))
-    , infoLayout(new QGridLayout)
+    , infoLayout(new QVBoxLayout)
     , header(new TextField(screenplayInfo))
     , printHeaderOnTitlePage(new CheckBox(screenplayInfo))
     , footer(new TextField(screenplayInfo))
@@ -81,18 +81,17 @@ ScreenplayParametersView::Implementation::Implementation(QWidget* _parent)
     showSceneNumbersOnRight->hide();
     showDialoguesNumbers->hide();
 
+    infoLayout->setDirection(QBoxLayout::TopToBottom);
     infoLayout->setContentsMargins({});
     infoLayout->setSpacing(0);
-    int row = 0;
-    infoLayout->setRowMinimumHeight(row++, 1); // добавляем пустую строку сверху
-    infoLayout->addWidget(header, row++, 0);
-    infoLayout->addWidget(printHeaderOnTitlePage, row++, 0);
-    infoLayout->addWidget(footer, row++, 0);
-    infoLayout->addWidget(printFooterOnTitlePage, row++, 0);
-    infoLayout->addWidget(scenesNumbersPrefix, row++, 0);
-    infoLayout->addWidget(scenesNumberingStartAt, row++, 0);
-    infoLayout->addWidget(overrideCommonSettings, row++, 0);
-    infoLayout->addWidget(screenplayTemplate, row++, 0);
+    infoLayout->addWidget(header);
+    infoLayout->addWidget(printHeaderOnTitlePage);
+    infoLayout->addWidget(footer);
+    infoLayout->addWidget(printFooterOnTitlePage);
+    infoLayout->addWidget(scenesNumbersPrefix);
+    infoLayout->addWidget(scenesNumberingStartAt);
+    infoLayout->addWidget(overrideCommonSettings, 1, Qt::AlignTop);
+    infoLayout->addWidget(screenplayTemplate);
     {
         auto layout = new QHBoxLayout;
         layout->setContentsMargins({});
@@ -101,12 +100,21 @@ ScreenplayParametersView::Implementation::Implementation(QWidget* _parent)
         layout->addWidget(showSceneNumbersOnLeft);
         layout->addWidget(showSceneNumbersOnRight);
         layout->addStretch();
-        infoLayout->addLayout(layout, row++, 0);
+        infoLayout->addLayout(layout);
     }
-    infoLayout->addWidget(showDialoguesNumbers, row++, 0);
-    infoLayout->setRowMinimumHeight(row++, 1); // добавляем пустую строку внизу
-    infoLayout->setColumnStretch(0, 1);
+    infoLayout->addWidget(showDialoguesNumbers);
     screenplayInfo->setLayoutReimpl(infoLayout);
+
+    //
+    // TODO: С лёту не завелось, т.к. при отображении скрытых виджетов, виджеты, которые были видны,
+    // сжимаются лейаутом, что даёт некрасивый эффект дёргания (собственно это актуально и для
+    // диалогов, просто там это не так сильно заметно как на больших карточках).
+    //
+    // Во время экспериментов не помогли ни фиксация размера виджета, ни установка минимального
+    // размера строки лейаута, ни разные полтики лейута, надо смотреть код лейаута и искать лазейку,
+    // как заставить его не сжимать некоторые из виджетов
+    //
+    screenplayInfo->setResizingActive(true);
 
     QWidget* contentWidget = new QWidget;
     content->setWidget(contentWidget);
@@ -323,10 +331,9 @@ void ScreenplayParametersView::designSystemChangeEvent(DesignSystemChangeEvent* 
         checkBox->setBackgroundColor(Ui::DesignSystem::color().background());
         checkBox->setTextColor(Ui::DesignSystem::color().onBackground());
     }
-    d->infoLayout->setVerticalSpacing(static_cast<int>(Ui::DesignSystem::layout().px16()));
-    d->infoLayout->setRowMinimumHeight(0, static_cast<int>(Ui::DesignSystem::layout().px24()));
-    d->infoLayout->setRowMinimumHeight(d->infoLayout->rowCount() - 1,
-                                       static_cast<int>(Ui::DesignSystem::layout().px12()));
+    d->infoLayout->setSpacing(static_cast<int>(Ui::DesignSystem::layout().px16()));
+    d->infoLayout->setContentsMargins(0, static_cast<int>(Ui::DesignSystem::layout().px24()), 0,
+                                      static_cast<int>(Ui::DesignSystem::layout().px12()));
 }
 
 } // namespace Ui
