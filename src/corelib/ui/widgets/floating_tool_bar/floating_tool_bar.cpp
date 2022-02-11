@@ -109,7 +109,7 @@ QAction* FloatingToolBar::Implementation::actionAt(const QPoint& _coordinate,
         + Ui::DesignSystem::floatingToolBar().margins().left()
         - (Ui::DesignSystem::floatingToolBar().spacing() / 2.0);
     for (QAction* action : _actions) {
-        if (!action->isVisible()) {
+        if (!action->isVisible() || action->isSeparator()) {
             continue;
         }
 
@@ -212,11 +212,14 @@ QSize FloatingToolBar::sizeHint() const
     const qreal additionalWidth = [this] {
         qreal width = 0.0;
         for (const auto action : actions()) {
-            if (!action->isVisible() || action->isSeparator()) {
+            if (!action->isVisible()) {
                 continue;
             }
 
-            if (!action->property(kActionWidthKey).isNull()) {
+            if (action->isSeparator()) {
+                width -= Ui::DesignSystem::floatingToolBar().iconSize().width()
+                    + Ui::DesignSystem::floatingToolBar().spacing();
+            } else if (!action->property(kActionWidthKey).isNull()) {
                 width += action->property(kActionWidthKey).toReal();
                 width -= Ui::DesignSystem::floatingToolBar().iconSize().width();
             }
