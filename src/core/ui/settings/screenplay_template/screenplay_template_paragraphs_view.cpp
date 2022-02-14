@@ -64,6 +64,7 @@ public:
     RadioButton* alignLeft = nullptr;
     RadioButton* alignCenter = nullptr;
     RadioButton* alignRight = nullptr;
+    RadioButton* alignJustify = nullptr;
     CaptionLabel* verticalIndentationTitle = nullptr;
     TextField* topIndent = nullptr;
     TextField* bottomIndent = nullptr;
@@ -101,6 +102,7 @@ ScreenplayTemplateParagraphsView::Implementation::Implementation(QWidget* _paren
     , alignLeft(new RadioButton(card))
     , alignCenter(new RadioButton(card))
     , alignRight(new RadioButton(card))
+    , alignJustify(new RadioButton(card))
     , verticalIndentationTitle(new CaptionLabel(card))
     , topIndent(new TextField(card))
     , bottomIndent(new TextField(card))
@@ -132,6 +134,7 @@ ScreenplayTemplateParagraphsView::Implementation::Implementation(QWidget* _paren
     alignmentGroup->add(alignLeft);
     alignmentGroup->add(alignCenter);
     alignmentGroup->add(alignRight);
+    alignmentGroup->add(alignJustify);
 
     auto verticalIndentTypeGroup = new RadioButtonGroup(card);
     verticalIndentTypeGroup->add(verticalIndentationInLines);
@@ -178,6 +181,7 @@ ScreenplayTemplateParagraphsView::Implementation::Implementation(QWidget* _paren
         layout->addWidget(alignLeft);
         layout->addWidget(alignCenter);
         layout->addWidget(alignRight);
+        layout->addWidget(alignJustify);
         layout->addStretch();
         cardLayout->addLayout(layout);
     }
@@ -259,6 +263,7 @@ ScreenplayTemplateParagraphsView::ScreenplayTemplateParagraphsView(QWidget* _par
                  d->alignLeft,
                  d->alignCenter,
                  d->alignRight,
+                 d->alignJustify,
                  d->verticalIndentationTitle,
                  d->topIndent,
                  d->bottomIndent,
@@ -301,6 +306,7 @@ ScreenplayTemplateParagraphsView::ScreenplayTemplateParagraphsView(QWidget* _par
              d->alignLeft,
              d->alignCenter,
              d->alignRight,
+             d->alignJustify,
              d->verticalIndentationInLines,
              d->verticalIndentationInMm,
          }) {
@@ -440,8 +446,10 @@ Qt::Alignment ScreenplayTemplateParagraphsView::alignment() const
         return Qt::AlignLeft;
     } else if (d->alignCenter->isChecked()) {
         return Qt::AlignHCenter;
-    } else {
+    } else if (d->alignRight->isChecked()) {
         return Qt::AlignRight;
+    } else {
+        return Qt::AlignJustify;
     }
 }
 
@@ -451,8 +459,10 @@ void ScreenplayTemplateParagraphsView::setAlignment(Qt::Alignment _alignment)
         d->alignLeft->setChecked(true);
     } else if (_alignment.testFlag(Qt::AlignHCenter)) {
         d->alignCenter->setChecked(true);
-    } else {
+    } else if (_alignment.testFlag(Qt::AlignRight)) {
         d->alignRight->setChecked(true);
+    } else {
+        d->alignJustify->setChecked(true);
     }
 }
 
@@ -568,6 +578,7 @@ void ScreenplayTemplateParagraphsView::updateTranslations()
     d->alignLeft->setText(tr("Left"));
     d->alignCenter->setText(tr("Center"));
     d->alignRight->setText(tr("Right"));
+    d->alignJustify->setText(tr("Justify"));
     d->verticalIndentationTitle->setText(tr("Vertical indentation"));
     d->topIndent->setLabel(tr("Top"));
     d->bottomIndent->setLabel(tr("Bottom"));
@@ -612,9 +623,10 @@ void ScreenplayTemplateParagraphsView::designSystemChangeEvent(DesignSystemChang
     for (auto widget : std::vector<Widget*>{
              d->paragraphs, d->paragraphEnabled, d->startsFromNewPage, d->uppercase, d->bold,
              d->italic, d->underline, d->textAlignmentTitle, d->alignLeft, d->alignCenter,
-             d->alignRight, d->verticalIndentationTitle, d->verticalIndentationInLines,
-             d->verticalIndentationInMm, d->horizontalIndentationTitle,
-             d->horizontalIndentationInTableTitle, d->lineSpacingTitle }) {
+             d->alignRight, d->alignJustify, d->verticalIndentationTitle,
+             d->verticalIndentationInLines, d->verticalIndentationInMm,
+             d->horizontalIndentationTitle, d->horizontalIndentationInTableTitle,
+             d->lineSpacingTitle }) {
         widget->setBackgroundColor(Ui::DesignSystem::color().background());
         widget->setTextColor(Ui::DesignSystem::color().onBackground());
     }

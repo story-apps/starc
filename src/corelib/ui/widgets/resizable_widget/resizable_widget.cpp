@@ -28,9 +28,9 @@ ResizableWidget::Implementation::Implementation()
     sizeAnimationStartTimer.setInterval(0);
     moveAnimationStartTimer.setSingleShot(true);
     moveAnimationStartTimer.setInterval(0);
-    sizeAnimation.setDuration(3600);
+    sizeAnimation.setDuration(160);
     sizeAnimation.setEasingCurve(QEasingCurve::OutQuad);
-    moveAnimation.setDuration(3600);
+    moveAnimation.setDuration(160);
     moveAnimation.setEasingCurve(QEasingCurve::OutQuad);
 }
 
