@@ -346,6 +346,12 @@ ContextMenu* BaseTextEdit::createContextMenu(const QPoint& _position, QWidget* _
         alignRightAction->setWhatsThis(QKeySequence("Ctrl+R").toString(QKeySequence::NativeText));
         connect(alignRightAction, &QAction::triggered, this,
                 [this] { setTextAlignment(Qt::AlignRight); });
+        //
+        auto alignJustifyAction = new QAction(formattingAction);
+        alignJustifyAction->setText(tr("Align justify"));
+        alignJustifyAction->setWhatsThis(QKeySequence("Ctrl+J").toString(QKeySequence::NativeText));
+        connect(alignJustifyAction, &QAction::triggered, this,
+                [this] { setTextAlignment(Qt::AlignJustify); });
     }
 
     //
@@ -444,6 +450,8 @@ bool BaseTextEdit::keyPressEventReimpl(QKeyEvent* _event)
         setTextAlignment(Qt::AlignHCenter);
     } else if (_event->modifiers().testFlag(Qt::ControlModifier) && _event->key() == Qt::Key_R) {
         setTextAlignment(Qt::AlignRight);
+    } else if (_event->modifiers().testFlag(Qt::ControlModifier) && _event->key() == Qt::Key_J) {
+        setTextAlignment(Qt::AlignJustify);
     }
     //
     // Поднятие/опускание регистра букв
