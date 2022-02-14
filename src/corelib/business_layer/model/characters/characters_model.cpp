@@ -3,6 +3,7 @@
 #include "character_model.h"
 
 #include <domain/document_object.h>
+#include <utils/helpers/string_helper.h>
 #include <utils/helpers/text_helper.h>
 
 #include <QDomDocument>
@@ -13,14 +14,22 @@ namespace BusinessLayer {
 
 namespace {
 const QLatin1String kDocumentKey("document");
+const QLatin1String kCharactersGroupKey("group");
 const QLatin1String kCharacterKey("character");
+const QLatin1String kIdKey("id");
 const QLatin1String kNameKey("name");
+const QLatin1String kDescriptionKey("description");
+const QLatin1String kRectKey("rect");
 const QLatin1String kPositionKey("position");
+const QLatin1String kLineTypeKey("line");
+const QLatin1String kColorKey("color");
 } // namespace
+
 
 class CharactersModel::Implementation
 {
 public:
+    QVector<CharactersGroup> charactersGroups;
     QVector<CharacterModel*> characterModels;
     QHash<QString, QPointF> charactersPositions;
 };
@@ -29,10 +38,34 @@ public:
 // ****
 
 
+bool CharactersGroup::isValid() const
+{
+    return !id.isNull();
+}
+
+bool CharactersGroup::operator==(const CharactersGroup& _other) const
+{
+    return id == _other.id && rect == _other.rect && name == _other.name
+        && description == _other.description && lineType == _other.lineType
+        && color == _other.color;
+}
+
+bool CharactersGroup::operator!=(const CharactersGroup& _other) const
+{
+    return !(*this == _other);
+}
+
+
 CharactersModel::CharactersModel(QObject* _parent)
     : AbstractModel({}, _parent)
     , d(new Implementation)
 {
+    connect(this, &CharactersModel::charactersGroupAdded, this,
+            &CharactersModel::updateDocumentContent);
+    connect(this, &CharactersModel::charactersGroupChanged, this,
+            &CharactersModel::updateDocumentContent);
+    connect(this, &CharactersModel::charactersGroupRemoved, this,
+            &CharactersModel::updateDocumentContent);
     connect(this, &CharactersModel::characterPositionChanged, this,
             &CharactersModel::updateDocumentContent);
 }
@@ -124,6 +157,47 @@ CharacterModel* CharactersModel::character(int _row) const
     return nullptr;
 }
 
+void CharactersModel::createCharactersGroup(const QUuid& _groupId)
+{
+    CharactersGroup group{ _groupId };
+    group.name = tr("New group");
+    d->charactersGroups.append(group);
+    emit charactersGroupAdded(group);
+}
+
+void CharactersModel::updateCharactersGroup(const CharactersGroup& _group)
+{
+    for (auto& group : d->charactersGroups) {
+        if (group.id != _group.id) {
+            continue;
+        }
+
+        if (group != _group) {
+            group = _group;
+            emit charactersGroupChanged(group);
+        }
+        return;
+    }
+}
+
+void CharactersModel::removeCharactersGroup(const QUuid& _groupId)
+{
+    for (int index = 0; index < d->charactersGroups.size(); ++index) {
+        if (d->charactersGroups[index].id != _groupId) {
+            continue;
+        }
+
+        auto group = d->charactersGroups.takeAt(index);
+        emit charactersGroupRemoved(group);
+        return;
+    }
+}
+
+QVector<CharactersGroup> CharactersModel::charactersGroups() const
+{
+    return d->charactersGroups;
+}
+
 QPointF CharactersModel::characterPosition(const QString& _name) const
 {
     return d->charactersPositions.value(_name);
@@ -206,8 +280,26 @@ void CharactersModel::initDocument()
     QDomDocument domDocument;
     domDocument.setContent(document()->content());
     const auto documentNode = domDocument.firstChildElement(kDocumentKey);
+    //
+    auto charactersGroupNode = documentNode.firstChildElement(kCharactersGroupKey);
+    while (!charactersGroupNode.isNull() && charactersGroupNode.nodeName() == kCharactersGroupKey) {
+        CharactersGroup group;
+        group.id = charactersGroupNode.attribute(kIdKey);
+        group.name = TextHelper::fromHtmlEscaped(charactersGroupNode.attribute(kNameKey));
+        group.description
+            = TextHelper::fromHtmlEscaped(charactersGroupNode.attribute(kDescriptionKey));
+        group.rect = rectFromString(charactersGroupNode.attribute(kRectKey));
+        group.lineType = charactersGroupNode.attribute(kLineTypeKey).toInt();
+        if (charactersGroupNode.hasAttribute(kColorKey)) {
+            group.color = charactersGroupNode.attribute(kColorKey);
+        }
+        d->charactersGroups.append(group);
+
+        charactersGroupNode = charactersGroupNode.nextSiblingElement();
+    }
+    //
     auto characterNode = documentNode.firstChildElement(kCharacterKey);
-    while (!characterNode.isNull()) {
+    while (!characterNode.isNull() && characterNode.nodeName() == kCharacterKey) {
         const auto characterName = TextHelper::fromHtmlEscaped(characterNode.attribute(kNameKey));
         const auto positionText = characterNode.attribute(kPositionKey).split(";");
         Q_ASSERT(positionText.size() == 2);
@@ -235,7 +327,18 @@ QByteArray CharactersModel::toXml() const
     xml += QString("<%1 mime-type=\"%2\" version=\"1.0\">\n")
                .arg(kDocumentKey, Domain::mimeTypeFor(document()->type()))
                .toUtf8();
-    for (auto character : std::as_const(d->characterModels)) {
+    for (const auto& group : std::as_const(d->charactersGroups)) {
+        xml += QString("<%1 %2=\"%3\" %4=\"%5\" %6=\"%7\" %8=\"%9\" %10=\"%11\" %12/>\n")
+                   .arg(kCharactersGroupKey, kIdKey, group.id.toString(), kNameKey,
+                        TextHelper::toHtmlEscaped(group.name), kDescriptionKey,
+                        TextHelper::toHtmlEscaped(group.description), kRectKey,
+                        toString(group.rect), kLineTypeKey, QString::number(group.lineType),
+                        (group.color.isValid()
+                             ? QString("%1=\"%2\"").arg(kColorKey, group.color.name())
+                             : QString()))
+                   .toUtf8();
+    }
+    for (const auto& character : std::as_const(d->characterModels)) {
         const auto characterPosition = this->characterPosition(character->name());
         xml += QString("<%1 %2=\"%3\" %4=\"%5;%6\"/>\n")
                    .arg(kCharacterKey, kNameKey, TextHelper::toHtmlEscaped(character->name()),

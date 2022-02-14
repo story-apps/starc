@@ -209,9 +209,9 @@ QSize FloatingToolBar::sizeHint() const
         + Ui::DesignSystem::floatingToolBar().spacing() * (visibleActionsSize - 1)
         + Ui::DesignSystem::floatingToolBar().margins().right()
         + Ui::DesignSystem::floatingToolBar().shadowMargins().right();
-    const qreal additionalWidth = [this] {
+    const qreal additionalWidth = [allActions] {
         qreal width = 0.0;
-        for (const auto action : actions()) {
+        for (const auto action : allActions) {
             if (!action->isVisible()) {
                 continue;
             }

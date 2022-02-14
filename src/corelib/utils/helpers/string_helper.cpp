@@ -2,6 +2,7 @@
 
 #include <QHash>
 #include <QMarginsF>
+#include <QRectF>
 #include <QString>
 
 namespace {
@@ -29,6 +30,14 @@ QMarginsF marginsFromString(const QString& _margins)
     return QMarginsF(
         margins.value(0, 0).simplified().toDouble(), margins.value(1, 0).simplified().toDouble(),
         margins.value(2, 0).simplified().toDouble(), margins.value(3, 0).simplified().toDouble());
+}
+
+QRectF rectFromString(const QString& _rect)
+{
+    QStringList rect = _rect.split(",");
+    return QRectF(
+        rect.value(0, 0).simplified().toDouble(), rect.value(1, 0).simplified().toDouble(),
+        rect.value(2, 0).simplified().toDouble(), rect.value(3, 0).simplified().toDouble());
 }
 
 QString toString(bool _value)
@@ -66,4 +75,13 @@ QString toString(const QMarginsF& _margins)
         .arg(_margins.top())
         .arg(_margins.right())
         .arg(_margins.bottom());
+}
+
+QString toString(const QRectF& _rect)
+{
+    return QString("%1,%2,%3,%4")
+        .arg(_rect.left())
+        .arg(_rect.top())
+        .arg(_rect.width())
+        .arg(_rect.height());
 }

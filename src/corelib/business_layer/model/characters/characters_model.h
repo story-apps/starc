@@ -2,10 +2,33 @@
 
 #include "../abstract_model.h"
 
+#include <QColor>
+#include <QRectF>
+#include <QUuid>
+
 
 namespace BusinessLayer {
 
 class CharacterModel;
+
+/**
+ * @brief Группа персонажей
+ */
+class CORE_LIBRARY_EXPORT CharactersGroup
+{
+public:
+    bool isValid() const;
+
+    bool operator==(const CharactersGroup& _other) const;
+    bool operator!=(const CharactersGroup& _other) const;
+
+    QUuid id;
+    QString name = {};
+    QString description = {};
+    QRectF rect = {};
+    int lineType = Qt::SolidLine;
+    QColor color = {};
+};
 
 /**
  * @brief Модель списка персонажей
@@ -52,6 +75,17 @@ public:
      * @brief Получить модель персонажа по его индексу
      */
     CharacterModel* character(int _row) const;
+
+    /**
+     * @brief Группы персонажей
+     */
+    void createCharactersGroup(const QUuid& _groupId);
+    void updateCharactersGroup(const CharactersGroup& _group);
+    void removeCharactersGroup(const QUuid& _groupId);
+    QVector<CharactersGroup> charactersGroups() const;
+    Q_SIGNAL void charactersGroupAdded(const CharactersGroup& _group);
+    Q_SIGNAL void charactersGroupChanged(const CharactersGroup& _group);
+    Q_SIGNAL void charactersGroupRemoved(const CharactersGroup& _group);
 
     /**
      * @brief Позиция карточки персонажа на схеме отношений
