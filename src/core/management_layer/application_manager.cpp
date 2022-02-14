@@ -31,6 +31,7 @@
 #include <ui/widgets/text_edit/spell_check/spell_check_text_edit.h>
 #include <utils/3rd_party/WAF/Animation/Animation.h>
 #include <utils/helpers/dialog_helper.h>
+#include <utils/helpers/file_helper.h>
 #include <utils/logging.h>
 #include <utils/tools/backup_builder.h>
 #include <utils/tools/run_once.h>
@@ -1361,7 +1362,7 @@ ApplicationManager::ApplicationManager(QObject* _parent)
         = QString("%1/logs/%2.log")
               .arg(QStandardPaths::writableLocation(QStandardPaths::AppDataLocation),
                    QDateTime::currentDateTime().toString(Qt::ISODateWithMs));
-    Log::init(Log::Level::Debug, logFilePath);
+    Log::init(Log::Level::Debug, FileHelper::systemSavebleFileName(logFilePath));
 
 
     QApplication::setApplicationVersion("0.1.1");
