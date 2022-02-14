@@ -1096,13 +1096,18 @@ void ScreenplayTextEdit::paintEvent(QPaintEvent* _event)
                         // ... префикс
                         //
                         if (block.charFormat().hasProperty(ScreenplayBlockStyle::PropertyPrefix)) {
-
                             const auto prefix = block.charFormat().stringProperty(
                                 ScreenplayBlockStyle::PropertyPrefix);
-                            const QPoint topLeft = QPoint(
-                                cursorR.left() - painter.fontMetrics().horizontalAdvance(prefix),
-                                cursorR.top());
-                            const QPoint bottomRight = QPoint(cursorR.left(), cursorR.bottom());
+                            const QPoint topLeft = block.text().isRightToLeft()
+                                ? QPoint(cursorREnd.left()
+                                             - painter.fontMetrics().horizontalAdvance(prefix),
+                                         cursorREnd.top())
+                                : QPoint(cursorR.left()
+                                             - painter.fontMetrics().horizontalAdvance(prefix),
+                                         cursorR.top());
+                            const QPoint bottomRight = block.text().isRightToLeft()
+                                ? QPoint(cursorREnd.left(), cursorREnd.bottom())
+                                : QPoint(cursorR.left(), cursorR.bottom());
                             const QRect rect(topLeft, bottomRight);
                             painter.drawText(rect, Qt::AlignLeft | Qt::AlignVCenter, prefix);
                         }
@@ -1112,9 +1117,14 @@ void ScreenplayTextEdit::paintEvent(QPaintEvent* _event)
                         if (block.charFormat().hasProperty(ScreenplayBlockStyle::PropertyPostfix)) {
                             const auto postfix = block.charFormat().stringProperty(
                                 ScreenplayBlockStyle::PropertyPostfix);
-                            const QPoint topLeft = QPoint(cursorREnd.left(), cursorREnd.top());
-                            const QPoint bottomRight
-                                = QPoint(cursorREnd.left()
+                            const QPoint topLeft = block.text().isRightToLeft()
+                                ? QPoint(cursorR.left(), cursorR.top())
+                                : QPoint(cursorREnd.left(), cursorREnd.top());
+                            const QPoint bottomRight = block.text().isRightToLeft()
+                                ? QPoint(cursorR.left()
+                                             + painter.fontMetrics().horizontalAdvance(postfix),
+                                         cursorR.bottom())
+                                : QPoint(cursorREnd.left()
                                              + painter.fontMetrics().horizontalAdvance(postfix),
                                          cursorREnd.bottom());
                             const QRect rect(topLeft, bottomRight);
