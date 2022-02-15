@@ -284,7 +284,7 @@ void CharactersModel::initDocument()
     auto charactersGroupNode = documentNode.firstChildElement(kCharactersGroupKey);
     while (!charactersGroupNode.isNull() && charactersGroupNode.nodeName() == kCharactersGroupKey) {
         CharactersGroup group;
-        group.id = charactersGroupNode.attribute(kIdKey);
+        group.id = QUuid::fromString(charactersGroupNode.attribute(kIdKey));
         group.name = TextHelper::fromHtmlEscaped(charactersGroupNode.attribute(kNameKey));
         group.description
             = TextHelper::fromHtmlEscaped(charactersGroupNode.attribute(kDescriptionKey));

@@ -1,7 +1,7 @@
 <RCC>
     <qresource prefix="/images">
         <file alias="movie-poster">resources/images/movie-poster.jpg</file>
-        <file alias="default-avatar">resources/images/default-avatar.png</file>
+        <file alias="logo">resources/images/logo.png</file>
     </qresource>
     <qresource prefix="/audio">
         <file alias="backspace">resources/audio/backspace.wav</file>

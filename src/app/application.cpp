@@ -4,6 +4,7 @@
 #include <interfaces/management_layer/i_application_manager.h>
 
 #include <QFileOpenEvent>
+#include <QIcon>
 #include <QTimer>
 
 
@@ -52,7 +53,7 @@ Application::Application(int& _argc, char** _argv)
     // Настроим таймер определения простоя приложения
     //
     d->idleTimer.setInterval(std::chrono::seconds{ 3 });
-    connect(&d->idleTimer, &QTimer::timeout, [this] {
+    connect(&d->idleTimer, &QTimer::timeout, this, [this] {
         if (d->applicationManager != nullptr) {
             postEvent(d->applicationManager, new IdleEvent);
         }
@@ -74,6 +75,8 @@ void Application::setApplicationManager(QObject* _manager)
 
 void Application::startUp()
 {
+    setWindowIcon(QIcon(":/images/logo"));
+
     auto manager = qobject_cast<ManagementLayer::IApplicationManager*>(d->applicationManager);
     if (manager == nullptr) {
         qCritical() << "Can't start application without application manager";
