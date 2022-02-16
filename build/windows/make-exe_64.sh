@@ -41,7 +41,6 @@ cp $Qt5_Dir/bin/Qt5Sql.dll $EXE_APP_DIR/
 cp $Qt5_Dir/bin/Qt5Svg.dll $EXE_APP_DIR/
 cp $Qt5_Dir/bin/Qt5WebSockets.dll $EXE_APP_DIR/
 cp $Qt5_Dir/bin/Qt5Widgets.dll $EXE_APP_DIR/
-cp $Qt5_Dir/bin/Qt5XcbQpa.dll $EXE_APP_DIR/
 cp $Qt5_Dir/bin/Qt5Xml.dll $EXE_APP_DIR/
 #
 # Copy Qt plugins
@@ -65,6 +64,6 @@ cp /c/Program\ Files/OpenSSL-Win64/*.dll $EXE_APP_DIR
 #
 # Copy msvc lib
 #
-cp "$VCToolsRedistDir/x64/Microsoft.VC142.CRT/msvcp140.dll" $EXE_APP_DIR
-cp "$VCToolsRedistDir/x64/Microsoft.VC142.CRT/msvcp140_1.dll" $EXE_APP_DIR
-cp "$VCToolsRedistDir/x64/Microsoft.VC142.CRT/vcruntime140.dll" $EXE_APP_DIR
+cp "$VCToolsRedistDir/x64/Microsoft.VC143.CRT/msvcp140.dll" $EXE_APP_DIR
+cp "$VCToolsRedistDir/x64/Microsoft.VC143.CRT/msvcp140_1.dll" $EXE_APP_DIR
+cp "$VCToolsRedistDir/x64/Microsoft.VC143.CRT/vcruntime140.dll" $EXE_APP_DIR
