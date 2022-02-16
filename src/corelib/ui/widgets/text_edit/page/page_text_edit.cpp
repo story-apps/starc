@@ -2229,15 +2229,18 @@ QPoint PageTextEditPrivate::correctMousePosition(const QPoint& _eventPos)
     Q_Q(PageTextEdit);
 
     //
-    // Улучшаем позиционирование курсора, для исправления проблем его обнаружения внутри таблиц
+    // Улучшаем позиционирование курсора, для исправления проблем его обнаружения
+    // на разрывах страниц и внутри таблиц
     //
 
     //
-    // Если курсор не в таблице, и там не запрещено отображение курсора, оставляем как есть
+    // Если курсор не в таблице, там не запрещено отображение курсора и не на разрыве строки
+    // оставляем как есть
     //
     auto cursor = q->cursorForPosition(_eventPos);
     if (cursor.currentTable() == nullptr
-        && !cursor.blockFormat().boolProperty(PageTextEdit::PropertyDontShowCursor)) {
+        && !cursor.blockFormat().boolProperty(PageTextEdit::PropertyDontShowCursor)
+        && cursor.blockFormat().pageBreakPolicy() != QTextFormat::PageBreak_AlwaysBefore) {
         return _eventPos;
     }
 
@@ -2246,6 +2249,29 @@ QPoint PageTextEditPrivate::correctMousePosition(const QPoint& _eventPos)
     //
     QPoint localPos = viewport->mapFromParent(_eventPos);
     const QPoint posDelta(q->viewportMargins().left(), q->viewportMargins().top());
+
+    //
+    // Позиционируем курсор на разрывах
+    //
+    if (cursor.currentTable() == nullptr
+        && !cursor.blockFormat().boolProperty(PageTextEdit::PropertyDontShowCursor)
+        && cursor.blockFormat().pageBreakPolicy() == QTextFormat::PageBreak_AlwaysBefore) {
+        const auto bottomCursorRect = q->cursorRect(cursor);
+        cursor.movePosition(QTextCursor::PreviousBlock);
+        cursor.movePosition(QTextCursor::EndOfBlock);
+        const auto topCursorRect = q->cursorRect(cursor);
+
+        if (std::abs(localPos.y() - topCursorRect.y())
+            < std::abs(localPos.y() - bottomCursorRect.y())) {
+            localPos = topCursorRect.center() + posDelta;
+        }
+
+        return viewport->mapToParent(localPos);
+    }
+
+    //
+    // Ищем позицию для таблицы
+    //
     int bestTopDelta = std::numeric_limits<int>::max();
     int bestLeftDelta = std::numeric_limits<int>::max();
     QPoint bestCursorPos;
