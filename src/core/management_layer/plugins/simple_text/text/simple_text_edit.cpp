@@ -213,6 +213,7 @@ void SimpleTextEdit::addReviewMark(const QColor& _textColor, const QColor& _back
 void SimpleTextEdit::keyPressEvent(QKeyEvent* _event)
 {
     if (isReadOnly()) {
+        BaseTextEdit::keyPressEvent(_event);
         return;
     }
 

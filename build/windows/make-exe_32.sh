@@ -7,8 +7,6 @@
 # Rename result file to choosing version and architecture
 #
 
-ls "$VCToolsRedistDir/x86/"
-2
 #
 # $1 - application version
 #
@@ -67,6 +65,7 @@ cp /c/Program\ Files\ \(x86\)/OpenSSL-Win32/*.dll $EXE_APP_DIR
 #
 # Copy msvc lib
 #
+ls "$VCToolsRedistDir/x86/"
 cp "$VCToolsRedistDir/x86/Microsoft.VC142.CRT/msvcp140.dll" $EXE_APP_DIR
 cp "$VCToolsRedistDir/x86/Microsoft.VC142.CRT/msvcp140_1.dll" $EXE_APP_DIR
 cp "$VCToolsRedistDir/x86/Microsoft.VC142.CRT/vcruntime140.dll" $EXE_APP_DIR

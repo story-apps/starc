@@ -275,6 +275,7 @@ void TitlePageEdit::addReviewMark(const QColor& _textColor, const QColor& _backg
 void TitlePageEdit::keyPressEvent(QKeyEvent* _event)
 {
     if (isReadOnly()) {
+        BaseTextEdit::keyPressEvent(_event);
         return;
     }
 

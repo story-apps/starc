@@ -335,6 +335,7 @@ void ComicBookTextEdit::addReviewMark(const QColor& _textColor, const QColor& _b
 void ComicBookTextEdit::keyPressEvent(QKeyEvent* _event)
 {
     if (isReadOnly()) {
+        BaseTextEdit::keyPressEvent(_event);
         return;
     }
 

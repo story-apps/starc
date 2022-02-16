@@ -1182,7 +1182,10 @@ void ApplicationManager::Implementation::goToEditCurrentProject(const QString& _
 
 void ApplicationManager::Implementation::closeCurrentProject()
 {
+    Log::info("Closing current project");
+
     if (!projectsManager->currentProject().isValid()) {
+        Log::warning("Current project is not valid. Skip closing.");
         return;
     }
 

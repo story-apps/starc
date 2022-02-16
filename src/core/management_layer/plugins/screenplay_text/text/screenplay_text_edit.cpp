@@ -338,6 +338,7 @@ void ScreenplayTextEdit::addReviewMark(const QColor& _textColor, const QColor& _
 void ScreenplayTextEdit::keyPressEvent(QKeyEvent* _event)
 {
     if (isReadOnly()) {
+        BaseTextEdit::keyPressEvent(_event);
         return;
     }
 
