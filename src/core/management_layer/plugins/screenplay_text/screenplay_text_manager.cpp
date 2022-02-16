@@ -9,7 +9,6 @@
 
 #include <QApplication>
 #include <QFileDialog>
-#include <QTimer>
 
 
 namespace ManagementLayer {
@@ -189,8 +188,9 @@ void ScreenplayTextManager::bind(IDocumentManager* _manager)
     // чтобы навигатор отобразил её при первом открытии
     //
     if (isConnectedFirstTime) {
-        QTimer::singleShot(0, this,
-                           [this] { emit currentModelIndexChanged(d->view->currentModelIndex()); });
+        QMetaObject::invokeMethod(
+            this, [this] { emit currentModelIndexChanged(d->view->currentModelIndex()); },
+            Qt::QueuedConnection);
     }
 }
 

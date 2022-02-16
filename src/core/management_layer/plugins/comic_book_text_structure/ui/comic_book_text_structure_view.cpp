@@ -67,7 +67,9 @@ ComicBookTextStructureView::ComicBookTextStructureView(QWidget* _parent)
 
     connect(d->backIcon, &AbstractLabel::clicked, this, &ComicBookTextStructureView::backPressed);
     connect(d->backText, &AbstractLabel::clicked, this, &ComicBookTextStructureView::backPressed);
-    connect(d->content, &Tree::currentIndexChanged, this,
+    connect(d->content, &Tree::clicked, this,
+            &ComicBookTextStructureView::currentModelIndexChanged);
+    connect(d->content, &Tree::doubleClicked, this,
             &ComicBookTextStructureView::currentModelIndexChanged);
     connect(d->content, &Tree::customContextMenuRequested, this, [this](const QPoint& _pos) {
         emit customContextMenuRequested(d->content->mapToParent(_pos));

@@ -67,7 +67,9 @@ ScreenplayTextStructureView::ScreenplayTextStructureView(QWidget* _parent)
 
     connect(d->backIcon, &AbstractLabel::clicked, this, &ScreenplayTextStructureView::backPressed);
     connect(d->backText, &AbstractLabel::clicked, this, &ScreenplayTextStructureView::backPressed);
-    connect(d->content, &Tree::currentIndexChanged, this,
+    connect(d->content, &Tree::clicked, this,
+            &ScreenplayTextStructureView::currentModelIndexChanged);
+    connect(d->content, &Tree::doubleClicked, this,
             &ScreenplayTextStructureView::currentModelIndexChanged);
     connect(d->content, &Tree::customContextMenuRequested, this, [this](const QPoint& _pos) {
         emit customContextMenuRequested(d->content->mapToParent(_pos));

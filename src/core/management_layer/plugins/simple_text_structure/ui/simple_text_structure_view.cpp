@@ -65,7 +65,8 @@ SimpleTextStructureView::SimpleTextStructureView(QWidget* _parent)
 
     connect(d->backIcon, &AbstractLabel::clicked, this, &SimpleTextStructureView::backPressed);
     connect(d->backText, &AbstractLabel::clicked, this, &SimpleTextStructureView::backPressed);
-    connect(d->content, &Tree::currentIndexChanged, this,
+    connect(d->content, &Tree::clicked, this, &SimpleTextStructureView::currentModelIndexChanged);
+    connect(d->content, &Tree::doubleClicked, this,
             &SimpleTextStructureView::currentModelIndexChanged);
 
     updateTranslations();
