@@ -158,6 +158,7 @@ void ProjectInformationView::designSystemChangeEvent(DesignSystemChangeEvent* _e
                                               static_cast<int>(Ui::DesignSystem::layout().px16()));
 
     d->projectCover->setBackgroundColor(Ui::DesignSystem::color().background());
+    d->projectCover->setTextColor(Ui::DesignSystem::color().onBackground());
     d->projectCover->setFixedSize((QSizeF(336, 510) * Ui::DesignSystem::scaleFactor()).toSize());
 }
 

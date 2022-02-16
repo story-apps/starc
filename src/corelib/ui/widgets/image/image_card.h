@@ -83,6 +83,11 @@ protected:
     /** @} */
 
     /**
+     * @brief При изменении цвета текста перенастраиваем анимацию иконки
+     */
+    void processTextColorChange() override;
+
+    /**
      * @brief Определяем переводы
      */
     void updateTranslations() override;

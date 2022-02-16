@@ -541,6 +541,12 @@ void ImageCard::dropEvent(QDropEvent* _event)
     d->dragIndicationOpacityAnimation.start();
 }
 
+void ImageCard::processTextColorChange()
+{
+    d->decorationColorAnimation.setStartValue(
+        ColorHelper::transparent(textColor(), Ui::DesignSystem::disabledTextOpacity()));
+}
+
 void ImageCard::updateTranslations()
 {
     d->clearImageAction->setText(tr("Delete"));
@@ -553,8 +559,8 @@ void ImageCard::designSystemChangeEvent(DesignSystemChangeEvent* _event)
 {
     Card::designSystemChangeEvent(_event);
 
-    d->decorationColorAnimation.setStartValue(ColorHelper::transparent(
-        Ui::DesignSystem::color().onBackground(), Ui::DesignSystem::disabledTextOpacity()));
+    d->decorationColorAnimation.setStartValue(
+        ColorHelper::transparent(textColor(), Ui::DesignSystem::disabledTextOpacity()));
     d->decorationColorAnimation.setEndValue(Ui::DesignSystem::color().secondary());
 
     d->contextMenu->setBackgroundColor(Ui::DesignSystem::color().background());
