@@ -29,6 +29,7 @@
 #include <QRegularExpression>
 #include <QScrollBar>
 #include <QTextTable>
+#include <QTimer>
 
 using BusinessLayer::ScreenplayBlockStyle;
 using BusinessLayer::ScreenplayParagraphType;
@@ -1220,28 +1221,40 @@ ContextMenu* ScreenplayTextEdit::createContextMenu(const QPoint& _position, QWid
     auto menu = BaseTextEdit::createContextMenu(_position, _parent);
 
     auto splitAction = new QAction;
-    if (BusinessLayer::ScreenplayTextCursor cursor = textCursor(); cursor.inTable()) {
+    const BusinessLayer::ScreenplayTextCursor cursor = textCursor();
+    if (cursor.inTable()) {
         splitAction->setText(tr("Merge paragraph"));
         splitAction->setIconText(u8"\U000f10e7");
     } else {
         splitAction->setText(tr("Split paragraph"));
         splitAction->setIconText(u8"\U000f10e7");
+
+        //
+        // Запрещаем разделять некоторые блоки
+        //
+        const auto blockType = ScreenplayBlockStyle::forBlock(cursor.block());
+        splitAction->setEnabled(blockType != ScreenplayParagraphType::SceneHeading
+                                && blockType != ScreenplayParagraphType::SceneHeadingShadow
+                                && blockType != ScreenplayParagraphType::FolderHeader
+                                && blockType != ScreenplayParagraphType::FolderFooter);
     }
     connect(splitAction, &QAction::triggered, this, [this] {
-        BusinessLayer::ScreenplayTextCursor cursor = textCursor();
-        if (cursor.inTable()) {
-            d->document.mergeParagraph(cursor);
-        } else {
-            d->document.splitParagraph(cursor);
+        QTimer::singleShot(500, this, [this] {
+            BusinessLayer::ScreenplayTextCursor cursor = textCursor();
+            if (cursor.inTable()) {
+                d->document.mergeParagraph(cursor);
+            } else {
+                d->document.splitParagraph(cursor);
 
-            //
-            // После разделения, возвращаемся в первую ячейку таблицы
-            //
-            moveCursor(QTextCursor::PreviousBlock);
-            moveCursor(QTextCursor::PreviousBlock);
-            moveCursor(QTextCursor::PreviousBlock);
-            moveCursor(QTextCursor::EndOfBlock);
-        }
+                //
+                // После разделения, возвращаемся в первую ячейку таблицы
+                //
+                moveCursor(QTextCursor::PreviousBlock);
+                moveCursor(QTextCursor::PreviousBlock);
+                moveCursor(QTextCursor::PreviousBlock);
+                moveCursor(QTextCursor::EndOfBlock);
+            }
+        });
     });
 
     auto actions = menu->actions().toVector();

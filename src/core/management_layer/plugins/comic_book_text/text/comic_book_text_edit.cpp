@@ -1136,12 +1136,23 @@ ContextMenu* ComicBookTextEdit::createContextMenu(const QPoint& _position, QWidg
     auto menu = BaseTextEdit::createContextMenu(_position, _parent);
 
     auto splitAction = new QAction;
-    if (BusinessLayer::ComicBookTextCursor cursor = textCursor(); cursor.inTable()) {
+    const BusinessLayer::ComicBookTextCursor cursor = textCursor();
+    if (cursor.inTable()) {
         splitAction->setText(tr("Merge paragraph"));
         splitAction->setIconText(u8"\U000f10e7");
     } else {
         splitAction->setText(tr("Split paragraph"));
         splitAction->setIconText(u8"\U000f10e7");
+
+        //
+        // Запрещаем разделять некоторые блоки
+        //
+        const auto blockType = ComicBookBlockStyle::forBlock(cursor.block());
+        splitAction->setEnabled(blockType != ComicBookParagraphType::Page
+                                && blockType != ComicBookParagraphType::Panel
+                                && blockType != ComicBookParagraphType::PanelShadow
+                                && blockType != ComicBookParagraphType::FolderHeader
+                                && blockType != ComicBookParagraphType::FolderFooter);
     }
     connect(splitAction, &QAction::triggered, this, [this] {
         BusinessLayer::ComicBookTextCursor cursor = textCursor();
