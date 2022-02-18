@@ -2141,7 +2141,6 @@ void ScreenplayTextModel::applyPatch(const QByteArray& _patch)
             auto textItem = static_cast<ScreenplayTextModelTextItem*>(modelItem);
             if (textItem->isBreakCorrectionStart()) {
                 auto nextItem = findNextItemWithChildren(textItem, false);
-                ;
                 while (nextItem != nullptr
                        && nextItem->type() == ScreenplayTextModelItemType::Text) {
                     auto nextTextItem = static_cast<ScreenplayTextModelTextItem*>(nextItem);

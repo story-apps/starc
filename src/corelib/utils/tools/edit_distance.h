@@ -1,5 +1,7 @@
 #pragma once
 
+#include <utils/shugar.h>
+
 #include <QVector>
 
 namespace edit_distance {
@@ -64,16 +66,49 @@ bool isItemsEqual(T* _lhs, T* _rhs)
 }
 
 template<typename T>
-int replaceOperationWeight(T* _lhs, T* _rhs)
+Operation<T> skipOperation(T* _item)
 {
+    return { OperationType::Skip, _item, 0 };
+}
+
+template<typename T>
+Operation<T> insertOperation(T* _item)
+{
+    return { OperationType::Insert, _item, 1 };
+}
+
+template<typename T>
+Operation<T> removeOperation(const QVector<Operation<T>>& _operations, T* _item)
+{
+    int weight = 1;
+
     //
-    // Исключаем замену элементов разных типов
+    // FIXME: придумать, как это более изящно обыграть (перенести в элемент модели)
     //
-    if (_lhs->type() != _rhs->type()) {
-        return std::numeric_limits<int>::max();
+    if (_item->toXml() == "<splitter type=\"end\"/>\n") {
+        weight = 100;
+        for (const auto& operation : reversed(_operations)) {
+            if (operation.type == OperationType::Remove
+                && operation.value->toXml() == "<splitter type=\"start\"/>\n") {
+                weight = 1;
+                break;
+            }
+        }
     }
 
-    return 1;
+    return { OperationType::Remove, _item, weight };
+}
+
+template<typename T>
+Operation<T> replaceOperation(T* _lhs, T* _rhs)
+{
+    int weight = 1;
+
+    if (_lhs->type() != _rhs->type()) {
+        weight = std::numeric_limits<int>::max();
+    }
+
+    return { OperationType::Replace, _rhs, weight };
 }
 
 } // namespace
@@ -82,75 +117,88 @@ int replaceOperationWeight(T* _lhs, T* _rhs)
 template<typename T>
 QVector<Operation<T>> editDistance(const QVector<T*>& _source, const QVector<T*>& _target)
 {
-    // Create a DP array to memoize result
-    // of previous computations
-    QVector<QVector<QVector<Operation<T>>>> DP;
-    DP.resize(2);
-    DP[0].resize(_source.size() + 1);
-    DP[1].resize(_source.size() + 1);
+    //
+    // Определим хранилище для кеша просчитанных путей
+    //
+    QVector<QVector<QVector<Operation<T>>>> opertionsCache;
+    opertionsCache.resize(2);
+    opertionsCache[0].resize(_source.size() + 1);
+    opertionsCache[1].resize(_source.size() + 1);
 
-    // Base condition when second string
-    // is empty then we remove all characters
+    //
+    // Базовое состояние, когда вторая строка пуста - значит нужно просто удалить все символы
+    //
     for (int i = 1; i <= _source.size(); i++) {
-        auto operations = DP[0][i - 1];
-        operations.append({ OperationType::Remove, nullptr, 1 });
-        DP[0][i] = operations;
+        auto operations = opertionsCache[0][i - 1];
+        operations.append(removeOperation(operations, _source[i - 1]));
+        opertionsCache[0][i] = operations;
     }
 
-    // Start filling the DP
-    // This loop run for every
-    // character in second string
+    //
+    // Начинаем обсчитывать пути и заполнять кэш
+    //
     for (int i = 1; i <= _target.size(); i++) {
-        // This loop compares the char from
-        // second string with first string
-        // characters
+        //
+        // Сравниваем посимвольно вторую строку с первой
+        //
         for (int j = 0; j <= _source.size(); j++) {
-            // if first string is empty then
-            // we have to perform add character
-            // operation to get second string
+            //
+            // Если первая строка пуста, значит нужно просто добавлять символы второй
+            //
             if (j == 0) {
-                auto operations = DP[(i - 1) % 2][j];
-                operations.append({ OperationType::Insert, _target[i - 1], 1 });
-                DP[i % 2][j] = operations;
+                auto operations = opertionsCache[(i - 1) % 2][j];
+                operations.append(insertOperation(_target[i - 1]));
+                opertionsCache[i % 2][j] = operations;
             }
-
-            // if character from both string
-            // is same then we do not perform any
-            // operation . here i % 2 is for bound
-            // the row number.
+            //
+            // Если символы обеих строк равны, то берём минимальную из трёх операций
+            // 1. Вставка символа второй строки
+            // 2. Удаление символа первой строки
+            // 3. Пропуск текущего символа
+            //
+            // NOTE: В базовой реализации, в этом кейсе просто используется операция пропуска
+            //       текущего символа, но нам она не подходит, из-за того, что у нас разные операции
+            //       имеют разные веса
+            //
             else if (isItemsEqual(_source[j - 1], _target[i - 1])) {
-                auto operations = DP[(i - 1) % 2][j - 1];
-                operations.append({ OperationType::Skip, _target[i - 1], 0 });
-                DP[i % 2][j] = operations;
+                auto operationsWithInsert = opertionsCache[(i - 1) % 2][j];
+                operationsWithInsert.append(insertOperation(_target[i - 1]));
+                //
+                auto operationsWithRemove = opertionsCache[i % 2][j - 1];
+                operationsWithRemove.append(removeOperation(operationsWithRemove, _source[j - 1]));
+                //
+                auto operationsWithSkip = opertionsCache[(i - 1) % 2][j - 1];
+                operationsWithSkip.append(skipOperation(_target[i - 1]));
+                //
+                opertionsCache[i % 2][j] = minimumDistance(
+                    operationsWithInsert, operationsWithRemove, operationsWithSkip);
             }
-
-            // if character from both string is
-            // not same then we take the minimum
-            // from three specified operation
+            //
+            // Если символы разные, то берём минимальную из трёх операций
+            // 1. Вставка символа второй строки
+            // 2. Удаление символа первой строки
+            // 3. Замена символа первой строки на символ второй
+            //
             else {
-                auto operationsWithInsert = DP[(i - 1) % 2][j];
-                operationsWithInsert.append({ OperationType::Insert, _target[i - 1], 1 });
+                auto operationsWithInsert = opertionsCache[(i - 1) % 2][j];
+                operationsWithInsert.append(insertOperation(_target[i - 1]));
                 //
-                auto operationsWithRemove = DP[i % 2][j - 1];
-                operationsWithRemove.append({ OperationType::Remove, nullptr, 1 });
+                auto operationsWithRemove = opertionsCache[i % 2][j - 1];
+                operationsWithRemove.append(removeOperation(operationsWithRemove, _source[j - 1]));
                 //
-                auto operationsWithReplace = DP[(i - 1) % 2][j - 1];
-                operationsWithReplace.append(
-                    { OperationType::Replace, _target[i - 1],
-                      replaceOperationWeight(_source[j - 1], _target[i - 1]) });
+                auto operationsWithReplace = opertionsCache[(i - 1) % 2][j - 1];
+                operationsWithReplace.append(replaceOperation(_source[j - 1], _target[i - 1]));
                 //
-                DP[i % 2][j] = minimumDistance(operationsWithInsert, operationsWithRemove,
-                                               operationsWithReplace);
+                opertionsCache[i % 2][j] = minimumDistance(
+                    operationsWithInsert, operationsWithRemove, operationsWithReplace);
             }
         }
     }
 
-    // after complete fill the DP array
-    // if the len2 is even then we end
-    // up in the 0th row else we end up
-    // in the 1th row so we take len2 % 2
-    // to get row
-    return DP[_target.size() % 2][_source.size()];
+    //
+    // В итоге получим кратчайший и самый оптимальный набор операций для замены строк
+    //
+    return opertionsCache[_target.size() % 2][_source.size()];
 }
 
 } // namespace edit_distance
