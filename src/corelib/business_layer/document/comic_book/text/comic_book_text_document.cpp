@@ -947,23 +947,41 @@ void ComicBookTextDocument::setModel(BusinessLayer::ComicBookTextModel* _model,
                     cursor.deleteChar();
                 }
                 //
-                // Если это не самый первый блок, то нужно взять на один символ назад, чтобы удалить
-                // сам блок
+                // Если это не самый первый блок
                 //
                 else if (fromPosition > 0) {
                     //
-                    // ... и при этом нужно сохранить данные блока и его формат
+                    // ... если это верхний блок в какой-либо из колонок таблицы,
+                    //     то берём на один символ вперёд
                     //
-                    ComicBookTextBlockData* blockData = nullptr;
-                    auto block = cursor.block().previous();
-                    if (block.userData() != nullptr) {
-                        blockData = new ComicBookTextBlockData(
-                            static_cast<ComicBookTextBlockData*>(block.userData()));
+                    const bool isFirstBlockOfFirstColumn = cursor.inFirstColumn()
+                        && ComicBookBlockStyle::forBlock(cursor.block().previous())
+                            == ComicBookParagraphType::PageSplitter;
+                    auto previousBlockCursor = cursor;
+                    previousBlockCursor.movePosition(QTextCursor::PreviousBlock);
+                    const bool isFirstBlockOfSecondColumn
+                        = !cursor.inFirstColumn() && previousBlockCursor.inFirstColumn();
+                    if (isFirstBlockOfFirstColumn || isFirstBlockOfSecondColumn) {
+                        cursor.deleteChar();
                     }
-                    const auto blockFormat = cursor.block().previous().blockFormat();
-                    cursor.deletePreviousChar();
-                    cursor.block().setUserData(blockData);
-                    cursor.setBlockFormat(blockFormat);
+                    //
+                    // ... в остальных случаях берём на один символ назад, чтобы удалить сам блок
+                    //
+                    else {
+                        //
+                        // ... и при этом нужно сохранить данные блока и его формат
+                        //
+                        ComicBookTextBlockData* blockData = nullptr;
+                        auto block = cursor.block().previous();
+                        if (block.userData() != nullptr) {
+                            blockData = new ComicBookTextBlockData(
+                                static_cast<ComicBookTextBlockData*>(block.userData()));
+                        }
+                        const auto blockFormat = cursor.block().previous().blockFormat();
+                        cursor.deletePreviousChar();
+                        cursor.block().setUserData(blockData);
+                        cursor.setBlockFormat(blockFormat);
+                    }
                 }
                 cursor.endEditBlock();
             });
