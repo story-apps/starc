@@ -706,6 +706,26 @@ void ComicBookTextDocument::setModel(BusinessLayer::ComicBookTextModel* _model,
                 QModelIndex cursorItemIndex;
                 if (_from > 0) {
                     cursorItemIndex = d->model->index(_from - 1, 0, _parent);
+
+                    //
+                    // В кейсе, когда вставляется новая страница/панель перед уже существующей и
+                    // существующую нужно перенести после неё, добавляем дополнительное условие на
+                    // определение позиции, т.к. у новой страницы/панели ещё нет элементов и мы не
+                    // знаем о её позиции, поэтому берём предыдущую, либо смотрим в конец общего
+                    // родителя
+                    //
+                    const auto cursorItem = d->model->itemForIndex(cursorItemIndex);
+                    if ((cursorItem->type() == ComicBookTextModelItemType::Folder
+                         || cursorItem->type() == ComicBookTextModelItemType::Page
+                         || cursorItem->type() == ComicBookTextModelItemType::Panel)
+                        && !cursorItem->hasChildren()) {
+                        if (_from > 1) {
+                            cursorItemIndex = d->model->index(_from - 2, 0, _parent);
+                        } else {
+                            cursorItemIndex
+                                = d->model->index(_parent.row() - 1, 0, _parent.parent());
+                        }
+                    }
                 } else {
                     cursorItemIndex = d->model->index(_parent.row() - 1, 0, _parent.parent());
                 }
@@ -1637,8 +1657,34 @@ void ComicBookTextDocument::updateModelOnContentChange(int _position, int _chars
             while (itemsToDeleteIter != d->positionsToItems.end()
                    && itemsToDeleteIter->first <= _position + _charsRemoved) {
                 itemsToDelete.emplace(itemsToDeleteIter->second, itemsToDeleteIter->first);
-                ++itemsToDeleteIter;
+                itemsToDeleteIter = d->positionsToItems.erase(itemsToDeleteIter);
             }
+
+            //
+            // Корректируем позиции элементов идущих за удаляемым блоком
+            //
+
+            auto itemToUpdateIter = itemsToDeleteIter;
+
+            //
+            // Формируем мапу элементов со скорректированными позициями
+            //
+            std::map<int, ComicBookTextModelItem*> correctedItems;
+            for (auto itemIter = itemToUpdateIter; itemIter != d->positionsToItems.end();
+                 ++itemIter) {
+                correctedItems.emplace(itemIter->first - _charsRemoved + _charsAdded,
+                                       itemIter->second);
+            }
+
+            //
+            // Удаляем элементы со старыми позициями
+            //
+            d->positionsToItems.erase(itemToUpdateIter, d->positionsToItems.end());
+
+            //
+            // И записываем на их место новые элементы
+            //
+            d->positionsToItems.merge(correctedItems);
         }
 
         //
@@ -1722,17 +1768,12 @@ void ComicBookTextDocument::updateModelOnContentChange(int _position, int _chars
         // Удаляем все верхнеуровневые элементы, а так же группы сцен и папок любого уровня
         //
         QVector<ComicBookTextModelItem*> itemsToDeleteGroup;
-        int itemsToDeleteGroupFirstPosition = 0;
-        int itemsToDeleteGroupLastPosition = 0;
-        auto removeGroup = [this, &itemsToDeleteGroup, &itemsToDeleteGroupFirstPosition,
-                            &itemsToDeleteGroupLastPosition] {
+        auto removeGroup = [this, &itemsToDeleteGroup] {
             if (itemsToDeleteGroup.isEmpty()) {
                 return;
             }
 
             d->model->removeItems(itemsToDeleteGroup.constFirst(), itemsToDeleteGroup.constLast());
-            d->positionsToItems.erase(d->positionsToItems.find(itemsToDeleteGroupFirstPosition),
-                                      d->positionsToItems.find(itemsToDeleteGroupLastPosition));
 
             itemsToDeleteGroup.clear();
         };
@@ -1756,11 +1797,6 @@ void ComicBookTextDocument::updateModelOnContentChange(int _position, int _chars
                 removeGroup();
             }
 
-            const auto itemPosition = removeIter->first;
-            if (itemsToDeleteGroup.isEmpty()) {
-                itemsToDeleteGroupFirstPosition = itemPosition;
-            }
-            itemsToDeleteGroupLastPosition = itemPosition;
             itemsToDeleteGroup.append(item);
 
             removeIter = itemsToDeleteCompressed.erase(removeIter);
@@ -1770,179 +1806,136 @@ void ComicBookTextDocument::updateModelOnContentChange(int _position, int _chars
         //
         // Затем удаляем то, что осталось поэлементно
         //
-        itemsToDelete.clear();
-        for (const auto& [position, item] : itemsToDeleteCompressed) {
-            itemsToDelete.emplace(item, position);
-        }
-        auto removeIter = d->positionsToItems.lower_bound(_position);
-        while (removeIter != d->positionsToItems.end()
-               && removeIter->first <= _position + _charsRemoved) {
-            //
-            // Если элемент действительно удалён - удаляем его из модели
-            //
-            if (itemsToDelete.find(removeIter->second) != itemsToDelete.end()) {
-                auto item = removeIter->second;
+        for (auto removeIter = itemsToDeleteCompressed.rbegin();
+             removeIter != itemsToDeleteCompressed.rend(); ++removeIter) {
 
+            auto item = removeIter->second;
+
+            //
+            // Если удаляется сцена или папка, нужно удалить соответствующий элемент
+            // и перенести элементы к предыдущему группирующему элементу
+            //
+            bool needToDeleteParent = false;
+            if (item->type() == ComicBookTextModelItemType::Text) {
+                const auto textItem = static_cast<ComicBookTextModelTextItem*>(item);
                 //
-                // Если удаляется сцена или папка, нужно удалить соответствующий элемент
-                // и перенести элементы к предыдущему группирующему элементу
+                // ... т.к. при удалении папки удаляются и заголовок и конец, но удаляются они
+                //     последовательно сверху вниз, то удалять непосредственно папку будем,
+                //     когда дойдём до обработки именно конца папки
                 //
-                bool needToDeleteParent = false;
-                if (item->type() == ComicBookTextModelItemType::Text) {
-                    const auto textItem = static_cast<ComicBookTextModelTextItem*>(item);
-                    //
-                    // ... т.к. при удалении папки удаляются и заголовок и конец, но удаляются они
-                    //     последовательно сверху вниз, то удалять непосредственно папку будем,
-                    //     когда дойдём до обработки именно конца папки
-                    //
-                    needToDeleteParent
-                        = textItem->paragraphType() == ComicBookParagraphType::FolderFooter
-                        || textItem->paragraphType() == ComicBookParagraphType::Page
-                        || textItem->paragraphType() == ComicBookParagraphType::Panel;
+                needToDeleteParent
+                    = textItem->paragraphType() == ComicBookParagraphType::FolderFooter
+                    || textItem->paragraphType() == ComicBookParagraphType::Page
+                    || textItem->paragraphType() == ComicBookParagraphType::Panel;
+            }
+
+            //
+            // Запомним родителя и удаляем сам элемент
+            //
+            auto itemParent = item->parent();
+            d->model->removeItem(item);
+
+            //
+            // Если необходимо удаляем родительский элемент
+            //
+            if (needToDeleteParent && itemParent != nullptr) {
+                //
+                // Определим предыдущий
+                //
+                ComicBookTextModelItem* previousItem = nullptr;
+                const int itemRow
+                    = itemParent->hasParent() ? itemParent->parent()->rowOfChild(itemParent) : 0;
+                if (itemRow > 0) {
+                    const int previousItemRow = itemRow - 1;
+                    previousItem = itemParent->parent()->childAt(previousItemRow);
                 }
 
                 //
-                // Запомним родителя и удаляем сам элемент
+                // Переносим дочерние элементы на уровень родительского элемента
                 //
-                auto itemParent = item->parent();
-                d->model->removeItem(item);
+                ComicBookTextModelItem* lastMovedItem = nullptr;
+                while (itemParent->childCount() > 0) {
+                    auto childItem = itemParent->childAt(0);
+                    d->model->takeItem(childItem, itemParent);
 
-                //
-                // Если необходимо удаляем родительский элемент
-                //
-                if (needToDeleteParent && itemParent != nullptr) {
                     //
-                    // Определим предыдущий
+                    // Папки и сцены переносим на один уровень с текущим элементом
                     //
-                    ComicBookTextModelItem* previousItem = nullptr;
-                    const int itemRow = itemParent->hasParent()
-                        ? itemParent->parent()->rowOfChild(itemParent)
-                        : 0;
-                    if (itemRow > 0) {
-                        const int previousItemRow = itemRow - 1;
-                        previousItem = itemParent->parent()->childAt(previousItemRow);
+                    if (childItem->type() == ComicBookTextModelItemType::Folder
+                        || childItem->type() == ComicBookTextModelItemType::Page
+                        || childItem->type() == ComicBookTextModelItemType::Panel) {
+                        if (lastMovedItem == nullptr
+                            || lastMovedItem->parent() != itemParent->parent()) {
+                            d->model->insertItem(childItem, itemParent);
+                        } else {
+                            d->model->insertItem(childItem, lastMovedItem);
+                        }
+                        previousItem = childItem;
+                    }
+                    //
+                    // Все остальные элементы
+                    //
+                    else {
+                        if (lastMovedItem == nullptr) {
+                            //
+                            // Если перед удаляемым была сцена или папка, то в её конец
+                            //
+                            if (previousItem != nullptr
+                                && (previousItem->type() == ComicBookTextModelItemType::Folder
+                                    || previousItem->type() == ComicBookTextModelItemType::Page
+                                    || previousItem->type() == ComicBookTextModelItemType::Panel)) {
+                                d->model->appendItem(childItem, previousItem);
+                            }
+                            //
+                            // Если перед удаляемым внутри родителя нет ни одного элемента, то
+                            // вставляем в начало к деду
+                            //
+                            else if (previousItem == nullptr && itemParent->parent() != nullptr) {
+                                d->model->prependItem(childItem, itemParent->parent());
+                            }
+                            //
+                            // Во всех остальных случаях просто кладём на один уровень с
+                            // предыдущим элементом
+                            //
+                            else {
+                                d->model->insertItem(childItem, previousItem);
+                            }
+                        } else {
+                            d->model->insertItem(childItem, lastMovedItem);
+                        }
                     }
 
-                    //
-                    // Переносим дочерние элементы на уровень родительского элемента
-                    //
-                    ComicBookTextModelItem* lastMovedItem = nullptr;
-                    while (itemParent->childCount() > 0) {
-                        auto childItem = itemParent->childAt(0);
-                        d->model->takeItem(childItem, itemParent);
+                    lastMovedItem = childItem;
+                }
 
-                        //
-                        // Папки и сцены переносим на один уровень с текущим элементом
-                        //
-                        if (childItem->type() == ComicBookTextModelItemType::Folder
-                            || childItem->type() == ComicBookTextModelItemType::Page
-                            || childItem->type() == ComicBookTextModelItemType::Panel) {
-                            if (lastMovedItem == nullptr
-                                || lastMovedItem->parent() != itemParent->parent()) {
-                                d->model->insertItem(childItem, itemParent);
-                            } else {
-                                d->model->insertItem(childItem, lastMovedItem);
-                            }
-                            previousItem = childItem;
-                        }
-                        //
-                        // Все остальные элементы
-                        //
-                        else {
-                            if (lastMovedItem == nullptr) {
-                                //
-                                // Если перед удаляемым была сцена или папка, то в её конец
-                                //
-                                if (previousItem != nullptr
-                                    && (previousItem->type() == ComicBookTextModelItemType::Folder
-                                        || previousItem->type() == ComicBookTextModelItemType::Page
-                                        || previousItem->type()
-                                            == ComicBookTextModelItemType::Panel)) {
-                                    d->model->appendItem(childItem, previousItem);
-                                }
-                                //
-                                // Если перед удаляемым внутри родителя нет ни одного элемента, то
-                                // вставляем в начало к деду
-                                //
-                                else if (previousItem == nullptr
-                                         && itemParent->parent() != nullptr) {
-                                    d->model->prependItem(childItem, itemParent->parent());
-                                }
-                                //
-                                // Во всех остальных случаях просто кладём на один уровень с
-                                // предыдущим элементом
-                                //
-                                else {
-                                    d->model->insertItem(childItem, previousItem);
-                                }
-                            } else {
-                                d->model->insertItem(childItem, lastMovedItem);
-                            }
-                        }
+                //
+                // Удаляем родителя удалённого элемента
+                //
+                d->model->removeItem(itemParent);
 
-                        lastMovedItem = childItem;
-                    }
-
-                    //
-                    // Удаляем родителя удалённого элемента
-                    //
-                    d->model->removeItem(itemParent);
-
-                    //
-                    // Если после удаляемого элемента есть текстовые элементы, пробуем их встроить в
-                    // предыдущую сцену
-                    //
-                    if (previousItem != nullptr
-                        && (previousItem->type() == ComicBookTextModelItemType::Page
-                            || previousItem->type() == ComicBookTextModelItemType::Panel)) {
-                        const auto previousItemRow
-                            = previousItem->parent()->rowOfChild(previousItem);
-                        if (previousItemRow >= 0
-                            && previousItemRow < previousItem->parent()->childCount() - 1) {
-                            const int nextItemRow = previousItemRow + 1;
-                            auto nextItem = previousItem->parent()->childAt(nextItemRow);
-                            while (
-                                nextItem != nullptr
-                                && (nextItem->type() == ComicBookTextModelItemType::Text
-                                    || nextItem->type() == ComicBookTextModelItemType::Splitter)) {
-                                d->model->takeItem(nextItem, nextItem->parent());
-                                d->model->appendItem(nextItem, previousItem);
-                                nextItem = previousItem->parent()->childAt(nextItemRow);
-                            }
+                //
+                // Если после удаляемого элемента есть текстовые элементы, пробуем их встроить в
+                // предыдущую сцену
+                //
+                if (previousItem != nullptr
+                    && (previousItem->type() == ComicBookTextModelItemType::Page
+                        || previousItem->type() == ComicBookTextModelItemType::Panel)) {
+                    const auto previousItemRow = previousItem->parent()->rowOfChild(previousItem);
+                    if (previousItemRow >= 0
+                        && previousItemRow < previousItem->parent()->childCount() - 1) {
+                        const int nextItemRow = previousItemRow + 1;
+                        auto nextItem = previousItem->parent()->childAt(nextItemRow);
+                        while (nextItem != nullptr
+                               && (nextItem->type() == ComicBookTextModelItemType::Text
+                                   || nextItem->type() == ComicBookTextModelItemType::Splitter)) {
+                            d->model->takeItem(nextItem, nextItem->parent());
+                            d->model->appendItem(nextItem, previousItem);
+                            nextItem = previousItem->parent()->childAt(nextItemRow);
                         }
                     }
                 }
             }
-
-            //
-            // Убираем информацию о позиции блока, т.к. она могла измениться и будет обновлена далее
-            //
-            removeIter = d->positionsToItems.erase(removeIter);
         }
-
-        //
-        // Корректируем позиции элементов идущих за удаляемым блоком
-        //
-
-        auto itemToUpdateIter = removeIter;
-
-        //
-        // Формируем мапу элементов со скорректированными позициями
-        //
-        std::map<int, ComicBookTextModelItem*> correctedItems;
-        for (auto itemIter = itemToUpdateIter; itemIter != d->positionsToItems.end(); ++itemIter) {
-            correctedItems.emplace(itemIter->first - _charsRemoved + _charsAdded, itemIter->second);
-        }
-
-        //
-        // Удаляем элементы со старыми позициями
-        //
-        d->positionsToItems.erase(itemToUpdateIter, d->positionsToItems.end());
-
-        //
-        // И записываем на их место новые элементы
-        //
-        d->positionsToItems.merge(correctedItems);
     }
 
     //

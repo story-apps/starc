@@ -707,6 +707,24 @@ void ScreenplayTextDocument::setModel(BusinessLayer::ScreenplayTextModel* _model
                 QModelIndex cursorItemIndex;
                 if (_from > 0) {
                     cursorItemIndex = d->model->index(_from - 1, 0, _parent);
+
+                    //
+                    // В кейсе, когда вставляется новая сцена/папка перед уже существующей и
+                    // существующую нужно перенести после неё, добавляем дополнительное условие на
+                    // определение позиции, т.к. у новой сцены/папки ещё нет элементов и мы не знаем
+                    // о её позиции, поэтому берём предыдущую, либо смотрим в конец общего родителя
+                    //
+                    const auto cursorItem = d->model->itemForIndex(cursorItemIndex);
+                    if ((cursorItem->type() == ScreenplayTextModelItemType::Folder
+                         || cursorItem->type() == ScreenplayTextModelItemType::Scene)
+                        && !cursorItem->hasChildren()) {
+                        if (_from > 1) {
+                            cursorItemIndex = d->model->index(_from - 2, 0, _parent);
+                        } else {
+                            cursorItemIndex
+                                = d->model->index(_parent.row() - 1, 0, _parent.parent());
+                        }
+                    }
                 } else {
                     cursorItemIndex = d->model->index(_parent.row() - 1, 0, _parent.parent());
                 }
@@ -1617,8 +1635,34 @@ void ScreenplayTextDocument::updateModelOnContentChange(int _position, int _char
             while (itemsToDeleteIter != d->positionsToItems.end()
                    && itemsToDeleteIter->first <= _position + _charsRemoved) {
                 itemsToDelete.emplace(itemsToDeleteIter->second, itemsToDeleteIter->first);
-                ++itemsToDeleteIter;
+                itemsToDeleteIter = d->positionsToItems.erase(itemsToDeleteIter);
             }
+
+            //
+            // Корректируем позиции элементов идущих за удаляемым блоком
+            //
+
+            auto itemToUpdateIter = itemsToDeleteIter;
+
+            //
+            // Формируем мапу элементов со скорректированными позициями
+            //
+            std::map<int, ScreenplayTextModelItem*> correctedItems;
+            for (auto itemIter = itemToUpdateIter; itemIter != d->positionsToItems.end();
+                 ++itemIter) {
+                correctedItems.emplace(itemIter->first - _charsRemoved + _charsAdded,
+                                       itemIter->second);
+            }
+
+            //
+            // Удаляем элементы со старыми позициями
+            //
+            d->positionsToItems.erase(itemToUpdateIter, d->positionsToItems.end());
+
+            //
+            // И записываем на их место новые элементы
+            //
+            d->positionsToItems.merge(correctedItems);
         }
 
         //
@@ -1702,17 +1746,12 @@ void ScreenplayTextDocument::updateModelOnContentChange(int _position, int _char
         // Удаляем все верхнеуровневые элементы, а так же группы сцен и папок любого уровня
         //
         QVector<ScreenplayTextModelItem*> itemsToDeleteGroup;
-        int itemsToDeleteGroupFirstPosition = 0;
-        int itemsToDeleteGroupLastPosition = 0;
-        auto removeGroup = [this, &itemsToDeleteGroup, &itemsToDeleteGroupFirstPosition,
-                            &itemsToDeleteGroupLastPosition] {
+        auto removeGroup = [this, &itemsToDeleteGroup] {
             if (itemsToDeleteGroup.isEmpty()) {
                 return;
             }
 
             d->model->removeItems(itemsToDeleteGroup.constFirst(), itemsToDeleteGroup.constLast());
-            d->positionsToItems.erase(d->positionsToItems.find(itemsToDeleteGroupFirstPosition),
-                                      d->positionsToItems.find(itemsToDeleteGroupLastPosition));
 
             itemsToDeleteGroup.clear();
         };
@@ -1735,11 +1774,6 @@ void ScreenplayTextDocument::updateModelOnContentChange(int _position, int _char
                 removeGroup();
             }
 
-            const auto itemPosition = removeIter->first;
-            if (itemsToDeleteGroup.isEmpty()) {
-                itemsToDeleteGroupFirstPosition = itemPosition;
-            }
-            itemsToDeleteGroupLastPosition = itemPosition;
             itemsToDeleteGroup.append(item);
 
             removeIter = itemsToDeleteCompressed.erase(removeIter);
@@ -1749,210 +1783,165 @@ void ScreenplayTextDocument::updateModelOnContentChange(int _position, int _char
         //
         // Затем удаляем то, что осталось поэлементно
         //
-        itemsToDelete.clear();
-        for (const auto& [position, item] : itemsToDeleteCompressed) {
-            itemsToDelete.emplace(item, position);
-        }
-        auto removeIter = d->positionsToItems.lower_bound(_position);
-        while (removeIter != d->positionsToItems.end()
-               && removeIter->first <= _position + _charsRemoved) {
-            //
-            // Если элемент действительно удалён - удаляем его из модели
-            //
-            if (itemsToDelete.find(removeIter->second) != itemsToDelete.end()) {
-                auto item = removeIter->second;
+        for (auto removeIter = itemsToDeleteCompressed.rbegin();
+             removeIter != itemsToDeleteCompressed.rend(); ++removeIter) {
+            auto item = removeIter->second;
 
+            //
+            // Если удаляется сцена или папка, нужно удалить соответствующий элемент
+            // и перенести элементы к предыдущему группирующему элементу
+            //
+            bool needToDeleteParent = false;
+            if (item->type() == ScreenplayTextModelItemType::Text) {
+                const auto textItem = static_cast<ScreenplayTextModelTextItem*>(item);
                 //
-                // Если удаляется сцена или папка, нужно удалить соответствующий элемент
-                // и перенести элементы к предыдущему группирующему элементу
+                // ... т.к. при удалении папки удаляются и заголовок и конец, но удаляются они
+                //     последовательно сверху вниз, то удалять непосредственно папку будем,
+                //     когда дойдём до обработки именно конца папки
                 //
-                bool needToDeleteParent = false;
-                if (item->type() == ScreenplayTextModelItemType::Text) {
-                    const auto textItem = static_cast<ScreenplayTextModelTextItem*>(item);
-                    //
-                    // ... т.к. при удалении папки удаляются и заголовок и конец, но удаляются они
-                    //     последовательно сверху вниз, то удалять непосредственно папку будем,
-                    //     когда дойдём до обработки именно конца папки
-                    //
-                    needToDeleteParent
-                        = textItem->paragraphType() == ScreenplayParagraphType::FolderFooter
-                        || textItem->paragraphType() == ScreenplayParagraphType::SceneHeading;
+                needToDeleteParent
+                    = textItem->paragraphType() == ScreenplayParagraphType::FolderFooter
+                    || textItem->paragraphType() == ScreenplayParagraphType::SceneHeading;
+            }
+
+            //
+            // Запомним родителя и удаляем сам элемент
+            //
+            auto itemParent = item->parent();
+            d->model->removeItem(item);
+
+            //
+            // Если необходимо удаляем родительский элемент
+            //
+            if (needToDeleteParent && itemParent != nullptr) {
+                //
+                // Определим предыдущий
+                //
+                ScreenplayTextModelItem* previousItem = nullptr;
+                const int itemRow
+                    = itemParent->hasParent() ? itemParent->parent()->rowOfChild(itemParent) : 0;
+                if (itemRow > 0) {
+                    const int previousItemRow = itemRow - 1;
+                    previousItem = itemParent->parent()->childAt(previousItemRow);
+                }
+                //
+                // Обработаем кейс, когда блоки находящиеся в папке в самом верху документа
+                // нужно вынести из папки -> пробуем вставить их в папку идущую после удаляемой
+                // папки
+                //
+                const bool needInsertInNextFolder
+                    = itemParent->type() == ScreenplayTextModelItemType::Folder
+                    && itemParent->hasParent() && itemParent->parent()->childCount() > 1
+                    && itemParent->parent()->childAt(itemRow + 1)->type()
+                        == ScreenplayTextModelItemType::Folder;
+                if (needInsertInNextFolder) {
+                    previousItem = itemParent->parent()->childAt(itemRow + 1);
                 }
 
                 //
-                // Запомним родителя и удаляем сам элемент
+                // Переносим дочерние элементы на уровень родительского элемента
                 //
-                auto itemParent = item->parent();
-                d->model->removeItem(item);
-
-                //
-                // Если необходимо удаляем родительский элемент
-                //
-                if (needToDeleteParent && itemParent != nullptr) {
-                    //
-                    // Определим предыдущий
-                    //
-                    ScreenplayTextModelItem* previousItem = nullptr;
-                    const int itemRow = itemParent->hasParent()
-                        ? itemParent->parent()->rowOfChild(itemParent)
-                        : 0;
-                    if (itemRow > 0) {
-                        const int previousItemRow = itemRow - 1;
-                        previousItem = itemParent->parent()->childAt(previousItemRow);
-                    }
-                    //
-                    // Обработаем кейс, когда блоки находящиеся в папке в самом верху документа
-                    // нужно вынести из папки -> пробуем вставить их в папку идущую после удаляемой
-                    // папки
-                    //
-                    const bool needInsertInNextFolder = itemRow == 0
-                        && itemParent->type() == ScreenplayTextModelItemType::Folder
-                        && itemParent->hasParent() && itemParent->parent()->childCount() > 1
-                        && itemParent->parent()->childAt(1)->type()
-                            == ScreenplayTextModelItemType::Folder;
-                    if (needInsertInNextFolder) {
-                        previousItem = itemParent->parent()->childAt(1);
-                    }
+                ScreenplayTextModelItem* lastMovedItem = nullptr;
+                while (itemParent->childCount() > 0) {
+                    auto childItem = itemParent->childAt(0);
+                    d->model->takeItem(childItem, itemParent);
 
                     //
-                    // Переносим дочерние элементы на уровень родительского элемента
+                    // Папки и сцены переносим на один уровень с текущим элементом
                     //
-                    ScreenplayTextModelItem* lastMovedItem = nullptr;
-                    while (itemParent->childCount() > 0) {
-                        auto childItem = itemParent->childAt(0);
-                        d->model->takeItem(childItem, itemParent);
-
-                        //
-                        // Папки и сцены переносим на один уровень с текущим элементом
-                        //
-                        if (childItem->type() == ScreenplayTextModelItemType::Folder
-                            || childItem->type() == ScreenplayTextModelItemType::Scene) {
-                            if (lastMovedItem == nullptr
-                                || lastMovedItem->parent() != itemParent->parent()) {
-                                d->model->insertItem(childItem, itemParent);
-                            } else {
-                                d->model->insertItem(childItem, lastMovedItem);
-                            }
-                            previousItem = childItem;
+                    if (childItem->type() == ScreenplayTextModelItemType::Folder
+                        || childItem->type() == ScreenplayTextModelItemType::Scene) {
+                        if (lastMovedItem == nullptr
+                            || lastMovedItem->parent() != itemParent->parent()) {
+                            d->model->insertItem(childItem, itemParent);
+                        } else {
+                            d->model->insertItem(childItem, lastMovedItem);
                         }
-                        //
-                        // Все остальные элементы
-                        //
-                        else {
-                            if (lastMovedItem == nullptr) {
-                                //
-                                // Если удаляемый был в папке, которая была в самом начале
-                                // документа, то в начало последующей папки
-                                //
-                                if (needInsertInNextFolder) {
-                                    d->model->prependItem(childItem, previousItem);
-                                }
-                                //
-                                // Если перед удаляемым была сцена или папка, то в её конец
-                                //
-                                else if (previousItem != nullptr
-                                         && (previousItem->type()
-                                                 == ScreenplayTextModelItemType::Folder
-                                             || previousItem->type()
-                                                 == ScreenplayTextModelItemType::Scene)) {
-                                    d->model->appendItem(childItem, previousItem);
-                                }
-                                //
-                                // Если перед удаляемым внутри родителя нет ни одного элемента, то
-                                // вставляем в начало к деду
-                                //
-                                else if (previousItem == nullptr
-                                         && itemParent->parent() != nullptr) {
-                                    d->model->prependItem(childItem, itemParent->parent());
-                                }
-                                //
-                                // Во всех остальных случаях просто кладём на один уровень с
-                                // предыдущим элементом
-                                //
-                                else {
-                                    d->model->insertItem(childItem, previousItem);
-                                }
-                            } else {
-                                d->model->insertItem(childItem, lastMovedItem);
+                        previousItem = childItem;
+                    }
+                    //
+                    // Все остальные элементы
+                    //
+                    else {
+                        if (lastMovedItem == nullptr) {
+                            //
+                            // Если удаляемый был в папке, которая была в самом начале
+                            // документа, то в начало последующей папки
+                            //
+                            if (needInsertInNextFolder) {
+                                d->model->prependItem(childItem, previousItem);
                             }
+                            //
+                            // Если перед удаляемым была сцена или папка, то в её конец
+                            //
+                            else if (previousItem != nullptr
+                                     && (previousItem->type() == ScreenplayTextModelItemType::Folder
+                                         || previousItem->type()
+                                             == ScreenplayTextModelItemType::Scene)) {
+                                d->model->appendItem(childItem, previousItem);
+                            }
+                            //
+                            // Если перед удаляемым внутри родителя нет ни одного элемента, то
+                            // вставляем в начало к деду
+                            //
+                            else if (previousItem == nullptr && itemParent->parent() != nullptr) {
+                                d->model->prependItem(childItem, itemParent->parent());
+                            }
+                            //
+                            // Во всех остальных случаях просто кладём на один уровень с
+                            // предыдущим элементом
+                            //
+                            else {
+                                d->model->insertItem(childItem, previousItem);
+                            }
+                        } else {
+                            d->model->insertItem(childItem, lastMovedItem);
                         }
-
-                        lastMovedItem = childItem;
                     }
 
-                    //
-                    // Удаляем родителя удалённого элемента
-                    //
-                    d->model->removeItem(itemParent);
+                    lastMovedItem = childItem;
+                }
 
-                    //
-                    // Если после удаляемого элемента есть текстовые элементы, пробуем их встроить в
-                    // предыдущую сцену
-                    //
-                    if (previousItem != nullptr
-                        && previousItem->type() == ScreenplayTextModelItemType::Scene) {
-                        const auto previousItemRow
-                            = previousItem->parent()->rowOfChild(previousItem);
-                        if (previousItemRow >= 0
-                            && previousItemRow < previousItem->parent()->childCount() - 1) {
-                            const int nextItemRow = previousItemRow + 1;
-                            auto nextItem = previousItem->parent()->childAt(nextItemRow);
-                            //
-                            // Подготовим элементы для переноса
-                            //
-                            QVector<ScreenplayTextModelItem*> itemsToMove;
-                            for (int itemRow = nextItemRow;
-                                 itemRow < previousItem->parent()->childCount(); ++itemRow) {
-                                if (nextItem == nullptr
-                                    || (nextItem->type() != ScreenplayTextModelItemType::Text
-                                        && nextItem->type()
-                                            != ScreenplayTextModelItemType::Splitter)) {
-                                    break;
-                                }
+                //
+                // Удаляем родителя удалённого элемента
+                //
+                d->model->removeItem(itemParent);
 
-                                itemsToMove.append(previousItem->parent()->childAt(itemRow));
-                                nextItem = previousItem->parent()->childAt(itemRow);
+                //
+                // Если после удаляемого элемента есть текстовые элементы, пробуем их встроить в
+                // предыдущую сцену
+                //
+                if (previousItem != nullptr
+                    && previousItem->type() == ScreenplayTextModelItemType::Scene) {
+                    const auto previousItemRow = previousItem->parent()->rowOfChild(previousItem);
+                    if (previousItemRow >= 0
+                        && previousItemRow < previousItem->parent()->childCount() - 1) {
+                        const int nextItemRow = previousItemRow + 1;
+                        auto nextItem = previousItem->parent()->childAt(nextItemRow);
+                        //
+                        // Подготовим элементы для переноса
+                        //
+                        QVector<ScreenplayTextModelItem*> itemsToMove;
+                        for (int itemRow = nextItemRow;
+                             itemRow < previousItem->parent()->childCount(); ++itemRow) {
+                            if (nextItem == nullptr
+                                || (nextItem->type() != ScreenplayTextModelItemType::Text
+                                    && nextItem->type() != ScreenplayTextModelItemType::Splitter)) {
+                                break;
                             }
-                            if (!itemsToMove.isEmpty()) {
-                                d->model->takeItems(itemsToMove.constFirst(),
-                                                    itemsToMove.constLast(),
-                                                    previousItem->parent());
-                                d->model->appendItems(itemsToMove, previousItem);
-                            }
+
+                            itemsToMove.append(previousItem->parent()->childAt(itemRow));
+                            nextItem = previousItem->parent()->childAt(itemRow);
+                        }
+                        if (!itemsToMove.isEmpty()) {
+                            d->model->takeItems(itemsToMove.constFirst(), itemsToMove.constLast(),
+                                                previousItem->parent());
+                            d->model->appendItems(itemsToMove, previousItem);
                         }
                     }
                 }
             }
-
-            //
-            // Убираем информацию о позиции блока, т.к. она могла измениться и будет обновлена далее
-            //
-            removeIter = d->positionsToItems.erase(removeIter);
         }
-
-        //
-        // Корректируем позиции элементов идущих за удаляемым блоком
-        //
-
-        auto itemToUpdateIter = removeIter;
-
-        //
-        // Формируем мапу элементов со скорректированными позициями
-        //
-        std::map<int, ScreenplayTextModelItem*> correctedItems;
-        for (auto itemIter = itemToUpdateIter; itemIter != d->positionsToItems.end(); ++itemIter) {
-            correctedItems.emplace(itemIter->first - _charsRemoved + _charsAdded, itemIter->second);
-        }
-
-        //
-        // Удаляем элементы со старыми позициями
-        //
-        d->positionsToItems.erase(itemToUpdateIter, d->positionsToItems.end());
-
-        //
-        // И записываем на их место новые элементы
-        //
-        d->positionsToItems.merge(correctedItems);
     }
 
     //
