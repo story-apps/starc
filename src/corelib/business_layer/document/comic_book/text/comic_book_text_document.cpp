@@ -1657,6 +1657,123 @@ void ComicBookTextDocument::updateModelOnContentChange(int _position, int _chars
         //
         // Удаляем блоки, которые действительно были удалены из текста
         //
+
+        //
+        // Сначала группируем и "сжимаем" блоки
+        //
+        std::map<int, ComicBookTextModelItem*> itemsToDeleteSorted;
+        for (auto [item, position] : itemsToDelete) {
+            itemsToDeleteSorted.emplace(position, item);
+        }
+        //
+        std::map<int, ComicBookTextModelItem*> itemsToDeleteCompressed;
+        int compressionCycle = 0;
+        while (!itemsToDeleteSorted.empty()) {
+            //
+            // Формируем список идущих подряд элементов
+            //
+            struct ItemToPosition {
+                ComicBookTextModelItem* item;
+                int position;
+            };
+            QVector<ItemToPosition> itemsGroup;
+            do {
+                const auto beginIter = itemsToDeleteSorted.cbegin();
+                const auto firstItem = beginIter->second;
+                if (!itemsGroup.isEmpty()
+                    && itemsGroup.constLast().item->parent() != firstItem->parent()) {
+                    break;
+                }
+
+                const auto firstItemPosition = beginIter->first;
+                itemsGroup.append({ firstItem, firstItemPosition });
+                itemsToDeleteSorted.erase(beginIter);
+            } while (!itemsToDeleteSorted.empty());
+
+            //
+            // Если элемент удаляется целиком, то его и запишем на удаление,
+            // за исключением случая, если это самый верхнеуровневый элемент
+            //
+            if (itemsGroup.constFirst().item->parent()->childCount() == itemsGroup.size()
+                && itemsGroup.constFirst().item->parent()->hasParent()) {
+                itemsToDeleteCompressed.emplace(itemsGroup.constFirst().position,
+                                                itemsGroup.constFirst().item->parent());
+            }
+            //
+            // В противном случае будем удалять поэлементно
+            //
+            else {
+                for (const auto& item : itemsGroup) {
+                    itemsToDeleteCompressed.emplace(item.position, item.item);
+                }
+            }
+
+            //
+            // Выполняем несколько циклов укорачивания очереди на удаление
+            //
+            const int maxCompressionCycles = 2;
+            if (itemsToDeleteSorted.empty() && compressionCycle < maxCompressionCycles) {
+                itemsToDeleteSorted.swap(itemsToDeleteCompressed);
+                ++compressionCycle;
+            }
+        }
+
+        //
+        // Удаляем все верхнеуровневые элементы, а так же группы сцен и папок любого уровня
+        //
+        QVector<ComicBookTextModelItem*> itemsToDeleteGroup;
+        int itemsToDeleteGroupFirstPosition = 0;
+        int itemsToDeleteGroupLastPosition = 0;
+        auto removeGroup = [this, &itemsToDeleteGroup, &itemsToDeleteGroupFirstPosition,
+                            &itemsToDeleteGroupLastPosition] {
+            if (itemsToDeleteGroup.isEmpty()) {
+                return;
+            }
+
+            d->model->removeItems(itemsToDeleteGroup.constFirst(), itemsToDeleteGroup.constLast());
+            d->positionsToItems.erase(d->positionsToItems.find(itemsToDeleteGroupFirstPosition),
+                                      d->positionsToItems.find(itemsToDeleteGroupLastPosition));
+
+            itemsToDeleteGroup.clear();
+        };
+        for (auto removeIter = itemsToDeleteCompressed.begin();
+             removeIter != itemsToDeleteCompressed.end();) {
+            //
+            // Будем удалять только если элемент лежит в руте, или является папкой, или сценой
+            //
+            if (removeIter->second->parent()->hasParent()
+                && removeIter->second->type() != ComicBookTextModelItemType::Folder
+                && removeIter->second->type() != ComicBookTextModelItemType::Page
+                && removeIter->second->type() != ComicBookTextModelItemType::Panel) {
+                removeGroup();
+                ++removeIter;
+                continue;
+            }
+
+            const auto item = removeIter->second;
+            if (!itemsToDeleteGroup.isEmpty()
+                && itemsToDeleteGroup.constLast()->parent() != item->parent()) {
+                removeGroup();
+            }
+
+            const auto itemPosition = removeIter->first;
+            if (itemsToDeleteGroup.isEmpty()) {
+                itemsToDeleteGroupFirstPosition = itemPosition;
+            }
+            itemsToDeleteGroupLastPosition = itemPosition;
+            itemsToDeleteGroup.append(item);
+
+            removeIter = itemsToDeleteCompressed.erase(removeIter);
+        }
+        removeGroup();
+
+        //
+        // Затем удаляем то, что осталось поэлементно
+        //
+        itemsToDelete.clear();
+        for (const auto& [position, item] : itemsToDeleteCompressed) {
+            itemsToDelete.emplace(item, position);
+        }
         auto removeIter = d->positionsToItems.lower_bound(_position);
         while (removeIter != d->positionsToItems.end()
                && removeIter->first <= _position + _charsRemoved) {

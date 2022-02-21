@@ -321,15 +321,24 @@ void ComicBookTextModel::takeItem(ComicBookTextModelItem* _item,
 
 void ComicBookTextModel::removeItem(ComicBookTextModelItem* _item)
 {
-    if (_item == nullptr || _item->parent() == nullptr) {
+    removeItems(_item, _item);
+}
+
+void ComicBookTextModel::removeItems(ComicBookTextModelItem* _fromItem,
+                                     ComicBookTextModelItem* _toItem)
+{
+    if (_fromItem == nullptr || _fromItem->parent() == nullptr || _toItem == nullptr
+        || _toItem->parent() == nullptr || _fromItem->parent() != _toItem->parent()) {
         return;
     }
 
-    auto parentItem = _item->parent();
-    const QModelIndex itemParentIndex = indexForItem(_item).parent();
-    const int itemRowIndex = parentItem->rowOfChild(_item);
-    beginRemoveRows(itemParentIndex, itemRowIndex, itemRowIndex);
-    parentItem->removeItem(_item);
+    auto parentItem = _fromItem->parent();
+    const QModelIndex itemParentIndex = indexForItem(_fromItem).parent();
+    const int fromItemRow = parentItem->rowOfChild(_fromItem);
+    const int toItemRow = parentItem->rowOfChild(_toItem);
+    Q_ASSERT(fromItemRow <= toItemRow);
+    beginRemoveRows(itemParentIndex, fromItemRow, toItemRow);
+    parentItem->removeItems(fromItemRow, toItemRow);
     d->updateNumbering();
     endRemoveRows();
 

@@ -55,6 +55,7 @@ public:
      * @brief Удалить заданный элемент
      */
     void removeItem(TextModelItem* _item);
+    void removeItems(TextModelItem* _fromItem, TextModelItem* _toItem);
 
     /**
      * @brief Обновить заданный элемент

@@ -46,6 +46,7 @@ public:
      * @brief Удалить заданный элемент
      */
     void removeItem(ComicBookTextModelItem* _item);
+    void removeItems(ComicBookTextModelItem* _fromItem, ComicBookTextModelItem* _toItem);
 
     /**
      * @brief Обновить заданный элемент
