@@ -22,6 +22,7 @@ protected:
     /** @{ */
     void handleEnter(QKeyEvent* _event = 0) override;
     void handleTab(QKeyEvent* _event = 0) override;
+    void handleBackspace(QKeyEvent* _event = 0) override;
     void handleOther(QKeyEvent* _event = 0) override;
     void handleInput(QInputMethodEvent* _event) override;
     /** @} */
@@ -41,6 +42,11 @@ private:
      * @brief Отфильтрованная модель персонажей
      */
     QStringListModel* m_filteredCharactersModel = nullptr;
+
+    /**
+     * @brief Можно ли показать подсказку
+     */
+    bool m_completionAllowed = true;
 };
 
 } // namespace KeyProcessingLayer

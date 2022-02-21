@@ -1239,22 +1239,20 @@ ContextMenu* ScreenplayTextEdit::createContextMenu(const QPoint& _position, QWid
                                 && blockType != ScreenplayParagraphType::FolderFooter);
     }
     connect(splitAction, &QAction::triggered, this, [this] {
-        QTimer::singleShot(500, this, [this] {
-            BusinessLayer::ScreenplayTextCursor cursor = textCursor();
-            if (cursor.inTable()) {
-                d->document.mergeParagraph(cursor);
-            } else {
-                d->document.splitParagraph(cursor);
+        BusinessLayer::ScreenplayTextCursor cursor = textCursor();
+        if (cursor.inTable()) {
+            d->document.mergeParagraph(cursor);
+        } else {
+            d->document.splitParagraph(cursor);
 
-                //
-                // После разделения, возвращаемся в первую ячейку таблицы
-                //
-                moveCursor(QTextCursor::PreviousBlock);
-                moveCursor(QTextCursor::PreviousBlock);
-                moveCursor(QTextCursor::PreviousBlock);
-                moveCursor(QTextCursor::EndOfBlock);
-            }
-        });
+            //
+            // После разделения, возвращаемся в первую ячейку таблицы
+            //
+            moveCursor(QTextCursor::PreviousBlock);
+            moveCursor(QTextCursor::PreviousBlock);
+            moveCursor(QTextCursor::PreviousBlock);
+            moveCursor(QTextCursor::EndOfBlock);
+        }
     });
 
     auto actions = menu->actions().toVector();

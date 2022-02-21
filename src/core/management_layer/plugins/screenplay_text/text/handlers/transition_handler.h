@@ -22,6 +22,7 @@ protected:
     /** @{ */
     void handleEnter(QKeyEvent* _event = nullptr) override;
     void handleTab(QKeyEvent* _event = nullptr) override;
+    void handleBackspace(QKeyEvent* _event = 0) override;
     void handleOther(QKeyEvent* _event = nullptr) override;
     void handleInput(QInputMethodEvent* _event) override;
     /** @} */
@@ -42,6 +43,11 @@ private:
      * @brief Модель переходов
      */
     QStringListModel* m_completerModel = nullptr;
+
+    /**
+     * @brief Можно ли показать подсказку
+     */
+    bool m_completionAllowed = true;
 };
 
 } // namespace KeyProcessingLayer

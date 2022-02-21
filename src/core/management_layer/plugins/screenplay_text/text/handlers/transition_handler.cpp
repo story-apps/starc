@@ -195,6 +195,20 @@ void TransitionHandler::handleTab(QKeyEvent*)
     }
 }
 
+void TransitionHandler::handleBackspace(QKeyEvent* _event)
+{
+    //
+    // Блокируем отображение подсказки при удалении текущего блока
+    //
+    if (editor()->textCursor().positionInBlock() == 0 && !editor()->textCursor().hasSelection()) {
+        m_completionAllowed = false;
+    }
+
+    StandardKeyHandler::handleBackspace(_event);
+
+    m_completionAllowed = true;
+}
+
 void TransitionHandler::handleOther(QKeyEvent*)
 {
     //
@@ -242,6 +256,10 @@ void TransitionHandler::complete(const QString& _currentBlockText,
                                  const QString& _cursorBackwardText)
 {
     Q_UNUSED(_cursorBackwardText)
+
+    if (!m_completionAllowed) {
+        return;
+    }
 
     //
     // Дополним текст

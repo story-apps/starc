@@ -132,6 +132,20 @@ void SceneCharactersHandler::handleTab(QKeyEvent* _event)
     handleEnter(_event);
 }
 
+void SceneCharactersHandler::handleBackspace(QKeyEvent* _event)
+{
+    //
+    // Блокируем отображение подсказки при удалении текущего блока
+    //
+    if (editor()->textCursor().positionInBlock() == 0 && !editor()->textCursor().hasSelection()) {
+        m_completionAllowed = false;
+    }
+
+    StandardKeyHandler::handleBackspace(_event);
+
+    m_completionAllowed = true;
+}
+
 void SceneCharactersHandler::handleOther(QKeyEvent*)
 {
     //
@@ -177,6 +191,10 @@ void SceneCharactersHandler::handleInput(QInputMethodEvent* _event)
 void SceneCharactersHandler::complete(const QString& _currentBlockText,
                                       const QString& _cursorBackwardText)
 {
+    if (!m_completionAllowed) {
+        return;
+    }
+
     QString cursorBackwardTextToComma = _cursorBackwardText;
     if (!cursorBackwardTextToComma.split(", ").isEmpty()) {
         cursorBackwardTextToComma = cursorBackwardTextToComma.split(", ").last();

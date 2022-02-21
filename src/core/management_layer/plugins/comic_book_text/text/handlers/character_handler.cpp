@@ -256,6 +256,20 @@ void CharacterHandler::handleTab(QKeyEvent*)
     }
 }
 
+void CharacterHandler::handleBackspace(QKeyEvent* _event)
+{
+    //
+    // Блокируем отображение подсказки при удалении текущего блока
+    //
+    if (editor()->textCursor().positionInBlock() == 0 && !editor()->textCursor().hasSelection()) {
+        m_completionAllowed = false;
+    }
+
+    StandardKeyHandler::handleBackspace(_event);
+
+    m_completionAllowed = true;
+}
+
 void CharacterHandler::handleOther(QKeyEvent* _event)
 {
     //
@@ -308,6 +322,10 @@ void CharacterHandler::handleInput(QInputMethodEvent*)
 void CharacterHandler::complete(const QString& _currentBlockText,
                                 const QString& _cursorBackwardText)
 {
+    if (!m_completionAllowed) {
+        return;
+    }
+
     //
     // Получим модель подсказок для текущей секции и выведем пользователю
     //
