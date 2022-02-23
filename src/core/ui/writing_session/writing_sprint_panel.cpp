@@ -254,7 +254,7 @@ WritingSprintPanel::WritingSprintPanel(QWidget* _parent)
             // После того, как скроются параметры спринта
             //
             QTimer::singleShot(420, this, [this] {
-                d->sprintDuration.setDuration(d->sprintTime->text().toInt() * 60 * 100);
+                d->sprintDuration.setDuration(d->sprintTime->text().toInt() * 60 * 1000);
                 d->sprintDuration.stop();
                 d->sprintDuration.start();
                 emit sprintStarted();
@@ -265,7 +265,7 @@ WritingSprintPanel::WritingSprintPanel(QWidget* _parent)
     });
     connect(d->shareResults, &IconButton::clicked, this, [this] {
         const auto message = QString("%1 %2").arg(
-            tr("Done! I wrote %n word(s)", 0, d->sprintResultWords->text().toInt()),
+            tr("Done! I've just written %n word(s)", 0, d->sprintResultWords->text().toInt()),
             tr("in %n minute(s)", 0, d->sprintTime->text().toInt()));
         QDesktopServices::openUrl(QUrl(
             QString("https://twitter.com/intent/tweet?text=%1&hashtags=writesprint&via=starcapp_")

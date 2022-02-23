@@ -17,6 +17,7 @@ enum class CharacterStoryRole {
     Tertiary,
     Undefined,
 };
+
 /**
  * @brief Отношения с другим персонажем
  */
@@ -57,7 +58,7 @@ public:
 
     CharacterStoryRole storyRole() const;
     void setStoryRole(CharacterStoryRole _role);
-    Q_SIGNAL void storyRoleChanged(CharacterStoryRole _role);
+    Q_SIGNAL void storyRoleChanged(BusinessLayer::CharacterStoryRole _role);
 
     const QString& age() const;
     void setAge(const QString& _age);
@@ -85,9 +86,9 @@ public:
     CharacterRelation relation(const QUuid& _withCharacter);
     CharacterRelation relation(CharacterModel* _withCharacter);
     QVector<CharacterRelation> relations() const;
-    Q_SIGNAL void relationAdded(const CharacterRelation& _relation);
-    Q_SIGNAL void relationChanged(const CharacterRelation& _relation);
-    Q_SIGNAL void relationRemoved(const CharacterRelation& _relation);
+    Q_SIGNAL void relationAdded(const BusinessLayer::CharacterRelation& _relation);
+    Q_SIGNAL void relationChanged(const BusinessLayer::CharacterRelation& _relation);
+    Q_SIGNAL void relationRemoved(const BusinessLayer::CharacterRelation& _relation);
 
 protected:
     /**

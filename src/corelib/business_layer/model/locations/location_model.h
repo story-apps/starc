@@ -2,8 +2,39 @@
 
 #include "../abstract_model.h"
 
+#include <QColor>
+#include <QUuid>
+
 
 namespace BusinessLayer {
+
+/**
+ * @brief Роль локации в истории
+ */
+enum class LocationStoryRole {
+    Primary,
+    Secondary,
+    Tertiary,
+    Undefined,
+};
+
+/**
+ * @brief Маршрут к другим локациям
+ */
+class CORE_LIBRARY_EXPORT LocationRoute
+{
+public:
+    bool isValid() const;
+
+    bool operator==(const LocationRoute& _other) const;
+    bool operator!=(const LocationRoute& _other) const;
+
+    QUuid location;
+    int lineType = Qt::SolidLine;
+    QColor color = {};
+    QString name = {};
+    QString details = {};
+};
 
 /**
  * @brief Модель данных локации
@@ -21,9 +52,9 @@ public:
     Q_SIGNAL void nameChanged(const QString& _newName, const QString& _oldName);
     void setDocumentName(const QString& _name) override;
 
-    int storyRole() const;
-    void setStoryRole(int _role);
-    Q_SIGNAL void storyRoleChanged(int _role);
+    LocationStoryRole storyRole() const;
+    void setStoryRole(LocationStoryRole _role);
+    Q_SIGNAL void storyRoleChanged(BusinessLayer::LocationStoryRole _role);
 
     QString oneSentenceDescription() const;
     void setOneSentenceDescription(const QString& _text);
@@ -36,6 +67,16 @@ public:
     const QPixmap& mainPhoto() const;
     void setMainPhoto(const QPixmap& _photo);
     Q_SIGNAL void mainPhotoChanged(const QPixmap& _photo);
+
+    void createRoute(const QUuid& _toLocation);
+    void updateRoute(const LocationRoute& _way);
+    void removeRoute(QUuid _toLocation);
+    LocationRoute route(const QUuid& _toLocation);
+    LocationRoute route(LocationModel* _toLocation);
+    QVector<LocationRoute> routes() const;
+    Q_SIGNAL void routeAdded(const BusinessLayer::LocationRoute& _route);
+    Q_SIGNAL void routeChanged(const BusinessLayer::LocationRoute& _route);
+    Q_SIGNAL void routeRemoved(const BusinessLayer::LocationRoute& _route);
 
 protected:
     /**

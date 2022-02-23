@@ -83,9 +83,9 @@ public:
     void updateCharactersGroup(const CharactersGroup& _group);
     void removeCharactersGroup(const QUuid& _groupId);
     QVector<CharactersGroup> charactersGroups() const;
-    Q_SIGNAL void charactersGroupAdded(const CharactersGroup& _group);
-    Q_SIGNAL void charactersGroupChanged(const CharactersGroup& _group);
-    Q_SIGNAL void charactersGroupRemoved(const CharactersGroup& _group);
+    Q_SIGNAL void charactersGroupAdded(const BusinessLayer::CharactersGroup& _group);
+    Q_SIGNAL void charactersGroupChanged(const BusinessLayer::CharactersGroup& _group);
+    Q_SIGNAL void charactersGroupRemoved(const BusinessLayer::CharactersGroup& _group);
 
     /**
      * @brief Позиция карточки персонажа на схеме отношений

@@ -2,10 +2,33 @@
 
 #include "../abstract_model.h"
 
+#include <QColor>
+#include <QRectF>
+#include <QUuid>
+
 
 namespace BusinessLayer {
 
 class LocationModel;
+
+/**
+ * @brief Группа локаций
+ */
+class CORE_LIBRARY_EXPORT LocationsGroup
+{
+public:
+    bool isValid() const;
+
+    bool operator==(const LocationsGroup& _other) const;
+    bool operator!=(const LocationsGroup& _other) const;
+
+    QUuid id;
+    QString name = {};
+    QString description = {};
+    QRectF rect = {};
+    int lineType = Qt::SolidLine;
+    QColor color = {};
+};
 
 /**
  * @brief Модель списка локаций
@@ -47,6 +70,24 @@ public:
      * @brief Получить модель локации по её имени
      */
     LocationModel* location(const QString& _name) const;
+
+    /**
+     * @brief Группы локаций
+     */
+    void createLocationsGroup(const QUuid& _groupId);
+    void updateLocationsGroup(const LocationsGroup& _group);
+    void removeLocationsGroup(const QUuid& _groupId);
+    QVector<LocationsGroup> locationsGroups() const;
+    Q_SIGNAL void locationsGroupAdded(const BusinessLayer::LocationsGroup& _group);
+    Q_SIGNAL void locationsGroupChanged(const BusinessLayer::LocationsGroup& _group);
+    Q_SIGNAL void locationsGroupRemoved(const BusinessLayer::LocationsGroup& _group);
+
+    /**
+     * @brief Позиция карточки локации на карте
+     */
+    QPointF locationPosition(const QString& _name) const;
+    void setLocationPosition(const QString& _name, const QPointF& _position);
+    Q_SIGNAL void locationPositionChanged(const QString& _name, const QPointF& _position);
 
     /**
      * @brief Реализация древовидной модели

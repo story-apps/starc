@@ -11,17 +11,17 @@
 namespace BusinessLayer {
 
 namespace {
-const QString kDocumentKey = QStringLiteral("document");
-const QString kNameKey = QStringLiteral("name");
-const QString kColorKey = QStringLiteral("color");
-const QString kStoryRoleKey = QStringLiteral("story_role");
-const QString kAgeKey = QStringLiteral("age");
-const QString kGenderKey = QStringLiteral("gender");
-const QString kOneSentenceDescriptionKey = QStringLiteral("one_sentence_description");
-const QString kLongDescriptionKey = QStringLiteral("long_description");
-const QString kMainPhotoKey = QStringLiteral("main_photo");
-const QString kRelationsKey = QStringLiteral("relations");
-const QString kRelationKey = QStringLiteral("relation");
+const QLatin1String kDocumentKey("document");
+const QLatin1String kNameKey("name");
+const QLatin1String kColorKey("color");
+const QLatin1String kStoryRoleKey("story_role");
+const QLatin1String kAgeKey("age");
+const QLatin1String kGenderKey("gender");
+const QLatin1String kOneSentenceDescriptionKey("one_sentence_description");
+const QLatin1String kLongDescriptionKey("long_description");
+const QLatin1String kMainPhotoKey("main_photo");
+const QLatin1String kRoutesKey("relations");
+const QLatin1String kRouteKey("relation");
 const QLatin1String kRelationWithCharacterKey("with");
 const QLatin1String kLineTypeKey("line_type");
 const QLatin1String kFeelingKey("feeling");
@@ -75,8 +75,8 @@ CharacterModel::CharacterModel(QObject* _parent)
             kOneSentenceDescriptionKey,
             kLongDescriptionKey,
             kMainPhotoKey,
-            kRelationsKey,
-            kRelationKey,
+            kRoutesKey,
+            kRouteKey,
         },
         _parent)
     , d(new Implementation)
@@ -315,9 +315,9 @@ void CharacterModel::initDocument()
     d->longDescription = load(kLongDescriptionKey);
     d->mainPhoto.uuid = QUuid::fromString(load(kMainPhotoKey));
     d->mainPhoto.image = imageWrapper()->load(d->mainPhoto.uuid);
-    auto relationsNode = documentNode.firstChildElement(kRelationsKey);
+    auto relationsNode = documentNode.firstChildElement(kRoutesKey);
     if (!relationsNode.isNull()) {
-        auto relationNode = relationsNode.firstChildElement(kRelationKey);
+        auto relationNode = relationsNode.firstChildElement(kRouteKey);
         while (!relationNode.isNull()) {
             CharacterRelation relation;
             relation.character = QUuid::fromString(
@@ -367,9 +367,9 @@ QByteArray CharacterModel::toXml() const
     save(kLongDescriptionKey, d->longDescription);
     save(kMainPhotoKey, d->mainPhoto.uuid.toString());
     if (!d->relations.isEmpty()) {
-        xml += QString("<%1>\n").arg(kRelationsKey).toUtf8();
+        xml += QString("<%1>\n").arg(kRoutesKey).toUtf8();
         for (const auto& relation : std::as_const(d->relations)) {
-            xml += QString("<%1>\n").arg(kRelationKey).toUtf8();
+            xml += QString("<%1>\n").arg(kRouteKey).toUtf8();
             save(kRelationWithCharacterKey, relation.character.toString());
             save(kLineTypeKey, QString::number(relation.lineType));
             if (relation.color.isValid()) {
@@ -377,9 +377,9 @@ QByteArray CharacterModel::toXml() const
             }
             save(kFeelingKey, relation.feeling);
             save(kDetailsKey, relation.details);
-            xml += QString("</%1>\n").arg(kRelationKey).toUtf8();
+            xml += QString("</%1>\n").arg(kRouteKey).toUtf8();
         }
-        xml += QString("</%1>\n").arg(kRelationsKey).toUtf8();
+        xml += QString("</%1>\n").arg(kRoutesKey).toUtf8();
     }
     xml += QString("</%1>").arg(kDocumentKey).toUtf8();
     return xml;

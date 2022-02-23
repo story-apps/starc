@@ -56,8 +56,24 @@ bool CharactersGroup::operator!=(const CharactersGroup& _other) const
 }
 
 
+// ****
+
+
 CharactersModel::CharactersModel(QObject* _parent)
-    : AbstractModel({}, _parent)
+    : AbstractModel(
+        {
+            kDocumentKey,
+            kCharactersGroupKey,
+            kCharacterKey,
+            kIdKey,
+            kNameKey,
+            kDescriptionKey,
+            kRectKey,
+            kPositionKey,
+            kLineTypeKey,
+            kColorKey,
+        },
+        _parent)
     , d(new Implementation)
 {
     connect(this, &CharactersModel::charactersGroupAdded, this,
@@ -313,8 +329,7 @@ void CharactersModel::initDocument()
 
 void CharactersModel::clearDocument()
 {
-    d->characterModels.clear();
-    d->charactersPositions.clear();
+    d.reset(new Implementation);
 }
 
 QByteArray CharactersModel::toXml() const
