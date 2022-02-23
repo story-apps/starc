@@ -168,10 +168,16 @@ QSize Button::sizeHint() const
             + Ui::DesignSystem::button().shadowMargins().right()
         : 0.0;
     const qreal width
-        = std::max(Ui::DesignSystem::button().minimumWidth(),
-                   Ui::DesignSystem::button().margins().left()
-                       + TextHelper::fineTextWidth(d->text, Ui::DesignSystem::font().button())
-                       + Ui::DesignSystem::button().margins().right())
+        = std::max(
+              Ui::DesignSystem::button().minimumWidth(),
+              Ui::DesignSystem::button().margins().left()
+                  + (!d->icon.isEmpty() ? Ui::DesignSystem::button().iconSize().width() : 0)
+                  + (!d->icon.isEmpty() && !d->text.isEmpty() ? Ui::DesignSystem::button().spacing()
+                                                              : 0)
+                  + (!d->text.isEmpty()
+                         ? TextHelper::fineTextWidth(d->text, Ui::DesignSystem::font().button())
+                         : 0)
+                  + Ui::DesignSystem::button().margins().right())
         + shadowMarginsWidth;
     const auto shadowMarginsHeight = d->isContained
         ? Ui::DesignSystem::button().shadowMargins().top()
