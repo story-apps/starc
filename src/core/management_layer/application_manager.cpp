@@ -8,6 +8,7 @@
 #include "content/projects/project.h"
 #include "content/projects/projects_manager.h"
 #include "content/settings/settings_manager.h"
+#include "content/writing_session/writing_session_manager.h"
 #include "plugins_builder.h"
 
 #ifdef CLOUD_SERVICE_MANAGER
@@ -274,6 +275,7 @@ public:
     QScopedPointer<ImportManager> importManager;
     QScopedPointer<ExportManager> exportManager;
     QScopedPointer<SettingsManager> settingsManager;
+    QScopedPointer<WritingSessionManager> writingSessionManager;
 #ifdef CLOUD_SERVICE_MANAGER
     QScopedPointer<CloudServiceManager> cloudServiceManager;
 #endif
@@ -308,6 +310,7 @@ ApplicationManager::Implementation::Implementation(ApplicationManager* _q)
     , importManager(new ImportManager(nullptr, applicationView))
     , exportManager(new ExportManager(nullptr, applicationView))
     , settingsManager(new SettingsManager(nullptr, applicationView, pluginsBuilder))
+    , writingSessionManager(new WritingSessionManager(nullptr, applicationView->view()))
 #ifdef CLOUD_SERVICE_MANAGER
     , cloudServiceManager(new CloudServiceManager)
 #endif
@@ -317,15 +320,23 @@ ApplicationManager::Implementation::Implementation(ApplicationManager* _q)
 
 ApplicationManager::Implementation::~Implementation()
 {
-    applicationView->disconnect();
-    menuView->disconnect();
-    accountManager->disconnect();
-    onboardingManager->disconnect();
-    projectsManager->disconnect();
-    projectManager->disconnect();
+    for (auto object : std::vector<QObject*>{
+             applicationView,
+             menuView,
+             connectionStatus,
+             accountManager.data(),
+             onboardingManager.data(),
+             projectsManager.data(),
+             projectManager.data(),
+             importManager.data(),
+             exportManager.data(),
+             writingSessionManager.data(),
 #ifdef CLOUD_SERVICE_MANAGER
-    cloudServiceManager->disconnect();
+             cloudServiceManager.data(),
 #endif
+         }) {
+        object->disconnect();
+    }
 }
 
 void ApplicationManager::Implementation::sendStartupStatistics()
@@ -1592,6 +1603,11 @@ bool ApplicationManager::event(QEvent* _event)
         //
         d->imitateTypewriterSound(keyEvent);
 
+        //
+        // Сохраняем стату
+        //
+        d->writingSessionManager->addKeyPressEvent(keyEvent);
+
         return false;
     }
 
@@ -1653,6 +1669,9 @@ void ApplicationManager::initConnections()
             [this] { d->exportCurrentDocument(); });
     connect(d->menuView, &Ui::MenuView::fullscreenPressed, this, [this] { d->toggleFullScreen(); });
     connect(d->menuView, &Ui::MenuView::settingsPressed, this, [this] { d->showSettings(); });
+    //
+    connect(d->menuView, &Ui::MenuView::writingSprintPressed, this,
+            [this] { d->writingSessionManager->showSprintPanel(); });
 
     //
     // Менеджер посадки

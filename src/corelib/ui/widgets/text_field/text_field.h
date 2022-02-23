@@ -128,6 +128,12 @@ public:
 
 signals:
     /**
+     * @brief Был нажат энтер
+     * @note Сигнал срабатывает только в случае, когда @b setEnterMakesNewLine задан в @b true
+     */
+    void enterPressed();
+
+    /**
      * @brief Была нажата иконка вспомогательного действия
      */
     void trailingIconPressed();

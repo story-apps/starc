@@ -6,7 +6,7 @@ class QAbstractItemModel;
 
 
 /**
- * @brief Попап для реализации выпадающих списков
+ * @brief Базовая реализация карточки попапа
  */
 class CORE_LIBRARY_EXPORT CardPopup : public Card
 {
@@ -17,40 +17,15 @@ public:
     ~CardPopup() override;
 
     /**
-     * @brief Модель элементов для отображения в попапе
+     * @brief Показать попап в заданном положении с заданным размером
      */
-    QAbstractItemModel* contentModel() const;
-    void setContentModel(QAbstractItemModel* _model);
-
-    /**
-     * @brief Текущий индекс модели
-     */
-    QModelIndex currentIndex() const;
-    void setCurrentIndex(const QModelIndex& _index);
-
-    /**
-     * @brief Получить ширину заданной колонки
-     */
-    int sizeHintForColumn(int _column) const;
-
-    /**
-     * @brief Показать попап в заданном положении с заданной шириной
-     */
-    void showPopup(const QPoint& _position, int _parentHeight, int _width, int _showMaxItems = 5);
+    void showPopup(const QPoint& _position, int _parentHeight);
+    void showPopup(const QPoint& _position, int _parentHeight, const QSize& _size);
 
     /**
      * @brief Скрыть попап
      */
     void hidePopup();
-
-signals:
-    /**
-     * @brief Изменился текущий индекс
-     */
-    void currentIndexChanged(const QModelIndex& _index);
-
-protected:
-    void designSystemChangeEvent(DesignSystemChangeEvent* _event) override;
 
 private:
     class Implementation;

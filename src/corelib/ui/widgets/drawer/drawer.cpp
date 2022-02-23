@@ -4,6 +4,7 @@
 #include <utils/helpers/color_helper.h>
 #include <utils/helpers/image_helper.h>
 #include <utils/helpers/text_helper.h>
+#include <utils/shugar.h>
 
 #include <QAction>
 #include <QMouseEvent>
@@ -25,6 +26,14 @@ public:
      * @brief Был ли осуществлён клик на панели аккаунта
      */
     bool isAccountPanelClicked(const QPoint& _coordinate) const;
+
+    /**
+     * @brief Получить информацию о дополнительном действии аккаунта в заданной координате
+     */
+    bool isAccountActionClicked(const QPoint& _coordinate, int _width) const;
+    QPair<QAction*, QRectF> pressedAccountActionInfo(const QPoint& _coordinate, int _width) const;
+    QAction* pressedAccountAction(const QPoint& _coordinate, int _width) const;
+    QRectF pressedAccountActionRect(const QPoint& _coordinate, int _width) const;
 
     /**
      * @brief Получить пункт меню по координате
@@ -49,6 +58,11 @@ public:
     QPixmap avatar;
     QString accountName;
     QString accountEmail;
+
+    /**
+     * @brief Дополнительные действия панели информации о пользователе
+     */
+    QVector<QAction*> accountActions;
 
     /**
      * @brief  Декорации кнопки при клике
@@ -90,6 +104,48 @@ bool Drawer::Implementation::isAccountPanelClicked(const QPoint& _coordinate) co
     }
 
     return _coordinate.y() < accountPanelHeight();
+}
+
+bool Drawer::Implementation::isAccountActionClicked(const QPoint& _coordinate, int _width) const
+{
+    return pressedAccountActionInfo(_coordinate, _width).first != nullptr;
+}
+
+QPair<QAction*, QRectF> Drawer::Implementation::pressedAccountActionInfo(const QPoint& _coordinate,
+                                                                         int _width) const
+{
+    if (!isAccountVisible || accountActions.isEmpty()) {
+        return {};
+    }
+
+    const auto top = Ui::DesignSystem::drawer().margins().top() + Ui::DesignSystem::layout().px2();
+    QRectF actionRect(QPointF(_width - Ui::DesignSystem::layout().px48(), top),
+                      QPointF(_width - Ui::DesignSystem::layout().px4(),
+                              top + Ui::DesignSystem::layout().px24()));
+
+    for (auto action : reversed(accountActions)) {
+        if (!action->isVisible()) {
+            continue;
+        }
+
+        if (actionRect.contains(_coordinate)) {
+            return { action, actionRect };
+        }
+
+        actionRect.moveRight(actionRect.right() - Ui::DesignSystem::layout().px(52));
+    }
+
+    return {};
+}
+
+QAction* Drawer::Implementation::pressedAccountAction(const QPoint& _coordinate, int _width) const
+{
+    return pressedAccountActionInfo(_coordinate, _width).first;
+}
+
+QRectF Drawer::Implementation::pressedAccountActionRect(const QPoint& _coordinate, int _width) const
+{
+    return pressedAccountActionInfo(_coordinate, _width).second;
 }
 
 QAction* Drawer::Implementation::pressedAction(const QPoint& _coordinate,
@@ -216,6 +272,18 @@ void Drawer::setAccountEmail(const QString& _email)
     }
 }
 
+void Drawer::setAccountActions(const QVector<QAction*>& _actions)
+{
+    if (d->accountActions == _actions) {
+        return;
+    }
+
+    qDeleteAll(d->accountActions);
+    d->accountActions = _actions;
+
+    update();
+}
+
 QSize Drawer::sizeHint() const
 {
     qreal width = 0.0;
@@ -307,36 +375,23 @@ void Drawer::paintEvent(QPaintEvent* _event)
         //
         painter.setFont(Ui::DesignSystem::font().iconsMid());
         //
-        // TODO: вынести в отдельный метод, установку действий
+        // ... дополнительные действия
         //
-        //        //
-        //        // ... дополнительные действия
-        //        //
-        //        {
+        {
+            QRectF actionRect(
+                QPointF(width() - Ui::DesignSystem::layout().px48(), avatarRect.top()),
+                QPointF(width() - Ui::DesignSystem::layout().px4(),
+                        avatarRect.top() + Ui::DesignSystem::layout().px24()));
 
-        //            QRectF iconRect(QPointF(width() - Ui::DesignSystem::layout().px48(),
-        //            avatarRect.top()),
-        //                            QPointF(width() - Ui::DesignSystem::layout().px4(),
-        //                                    avatarRect.top() +
-        //                                    Ui::DesignSystem::layout().px24()));
+            for (auto action : reversed(d->accountActions)) {
+                if (!action->isVisible()) {
+                    continue;
+                }
 
-        //            //
-        //            // Стата
-        //            //
-        //            painter.drawText(iconRect, Qt::AlignCenter, u8"\U000F0127");
-
-        //            //
-        //            // Таймер
-        //            //
-        //            iconRect.moveRight(iconRect.right() - Ui::DesignSystem::layout().px(52));
-        //            painter.drawText(iconRect, Qt::AlignCenter, u8"\U000F13AB");
-
-        //            //
-        //            // Чаты
-        //            //
-        //            iconRect.moveRight(iconRect.right() - Ui::DesignSystem::layout().px(52));
-        //            painter.drawText(iconRect, Qt::AlignCenter, u8"\U000F0368");
-        //        }
+                painter.drawText(actionRect, Qt::AlignCenter, action->iconText());
+                actionRect.moveRight(actionRect.right() - Ui::DesignSystem::layout().px(52));
+            }
+        }
         //
         // ... иконка перехода в личный кабинет
         //
@@ -452,6 +507,16 @@ void Drawer::paintEvent(QPaintEvent* _event)
 
 void Drawer::mousePressEvent(QMouseEvent* _event)
 {
+    if (d->isAccountActionClicked(_event->pos(), width())) {
+        d->decorationRect = d->pressedAccountActionRect(_event->pos(), width())
+                                .adjusted(0, -Ui::DesignSystem::layout().px12(), 0,
+                                          Ui::DesignSystem::layout().px12());
+        d->decorationCenterPosition = d->decorationRect.center();
+        d->decorationRadiusAnimation.setEndValue(d->decorationRect.width() / 2.0);
+        d->animateClick();
+        return;
+    }
+
     if (d->isAccountPanelClicked(_event->pos())) {
         d->decorationCenterPosition = _event->pos();
         d->decorationRect
@@ -478,12 +543,19 @@ void Drawer::mouseReleaseEvent(QMouseEvent* _event)
         return;
     }
 
+    if (d->isAccountActionClicked(_event->pos(), width())) {
+        auto pressedAction = d->pressedAccountAction(_event->pos(), width());
+        pressedAction->trigger();
+        update();
+        return;
+    }
+
     if (d->isAccountPanelClicked(_event->pos())) {
         emit accountPressed();
         return;
     }
 
-    QAction* pressedAction = d->pressedAction(_event->pos(), actions());
+    auto pressedAction = d->pressedAction(_event->pos(), actions());
     if (pressedAction == nullptr || pressedAction->isChecked() || !pressedAction->isEnabled()) {
         return;
     }

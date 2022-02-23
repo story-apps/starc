@@ -145,6 +145,11 @@ signals:
      */
     void helpPressed();
 
+    /**
+     * @brief Нажата кнопка отображения таймера писательского спринта
+     */
+    void writingSprintPressed();
+
 protected:
     /**
      * @brief Обновить переводы

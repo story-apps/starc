@@ -2,7 +2,7 @@
 
 #include <ui/design_system/design_system.h>
 #include <ui/widgets/button/button.h>
-#include <ui/widgets/card/card_popup.h>
+#include <ui/widgets/card/card_popup_with_tree.h>
 #include <ui/widgets/text_field/text_field.h>
 
 #include <QAction>
@@ -36,7 +36,7 @@ public:
     QAction* matchCaseAction = nullptr;
     QAction* searchInAction = nullptr;
 
-    CardPopup* popup = nullptr;
+    CardPopupWithTree* popup = nullptr;
 
     QAction* replaceTextAction = nullptr;
     TextField* replaceText = nullptr;
@@ -54,7 +54,7 @@ ComicBookTextSearchToolbar::Implementation::Implementation(QWidget* _parent)
     , goToPreviousAction(new QAction)
     , matchCaseAction(new QAction)
     , searchInAction(new QAction)
-    , popup(new CardPopup(_parent))
+    , popup(new CardPopupWithTree(_parent))
     , replaceTextAction(new QAction)
     , replaceText(new TextField(_parent))
     , replaceAction(new QAction)
@@ -157,12 +157,13 @@ ComicBookTextSearchToolbar::ComicBookTextSearchToolbar(QWidget* _parent)
     d->popup->setContentModel(_model);
     connect(_model, &QAbstractItemModel::rowsInserted, this,
             [this] { designSystemChangeEvent(nullptr); });
-    connect(d->popup, &CardPopup::currentIndexChanged, this, [this](const QModelIndex& _index) {
-        d->searchInAction->setText(_index.data().toString());
-        update();
+    connect(d->popup, &CardPopupWithTree::currentIndexChanged, this,
+            [this](const QModelIndex& _index) {
+                d->searchInAction->setText(_index.data().toString());
+                update();
 
-        emit findTextRequested();
-    });
+                emit findTextRequested();
+            });
     connect(d->popup, &Card::disappeared, this, [this] {
         d->searchInAction->setIconText(u8"\U000f035d");
         update();

@@ -1020,6 +1020,7 @@ void TextField::keyPressEvent(QKeyEvent* _event)
     if ((_event->key() == Qt::Key_Enter || _event->key() == Qt::Key_Return)
         && !d->isEnterMakesNewLine) {
         _event->ignore();
+        emit enterPressed();
         return;
     }
 

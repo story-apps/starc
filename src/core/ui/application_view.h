@@ -24,6 +24,11 @@ public:
     ThemeSetupView* themeSetupView() const;
 
     /**
+     * @brief Получить виджет основного представления
+     */
+    QWidget* view() const;
+
+    /**
      * @brief Сохранить состояние
      */
     QVariantMap saveState() const;

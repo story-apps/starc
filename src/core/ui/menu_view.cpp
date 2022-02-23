@@ -38,6 +38,11 @@ public:
     QAction* fullScreen = nullptr;
     QAction* settings = nullptr;
 
+    QAction* writingStatistics = nullptr;
+    QAction* writingSprint = nullptr;
+    QAction* chat = nullptr;
+    QAction* notifications = nullptr;
+
     Subtitle2LinkLabel* appName = nullptr;
     Body2LinkLabel* appVersion = nullptr;
     QGridLayout* appInfoLayout = nullptr;
@@ -57,6 +62,10 @@ MenuView::Implementation::Implementation(QWidget* _parent)
     , importProject(new QAction)
     , fullScreen(new QAction)
     , settings(new QAction)
+    , writingStatistics(new QAction)
+    , writingSprint(new QAction)
+    , chat(new QAction)
+    , notifications(new QAction)
     , appName(new Subtitle2LinkLabel(_parent))
     , appVersion(new Body2LinkLabel(_parent))
     , appInfoLayout(new QGridLayout)
@@ -83,6 +92,13 @@ MenuView::Implementation::Implementation(QWidget* _parent)
     drawer->addAction(exportCurrentDocument);
     drawer->addAction(fullScreen);
     drawer->addAction(settings);
+
+    drawer->setAccountActions({
+        writingStatistics,
+        writingSprint,
+        chat,
+        notifications,
+    });
 
     signIn->setIconText(u8"\U000F0004");
     signIn->setCheckable(false);
@@ -136,6 +152,17 @@ MenuView::Implementation::Implementation(QWidget* _parent)
     actions->addAction(project);
     actions->addAction(settings);
 
+    writingStatistics->setIconText(u8"\U000F0127");
+    writingStatistics->setVisible(false);
+    //
+    writingSprint->setIconText(u8"\U000F13AB");
+    //
+    chat->setIconText(u8"\U000F0368");
+    chat->setVisible(false);
+    //
+    notifications->setIconText(u8"\U000F009A");
+    notifications->setVisible(false);
+
     appName->setText("Story Architect");
     appName->setLink(QUrl("https://starc.app"));
     appVersion->setLink(QUrl("https://starc.app/blog/"));
@@ -184,6 +211,8 @@ MenuView::MenuView(QWidget* _parent)
             &MenuView::exportCurrentDocumentPressed);
     connect(d->fullScreen, &QAction::triggered, this, &MenuView::fullscreenPressed);
     connect(d->settings, &QAction::triggered, this, &MenuView::settingsPressed);
+    //
+    connect(d->writingSprint, &QAction::triggered, this, &MenuView::writingSprintPressed);
 
     connect(this, &MenuView::accountPressed, this, &MenuView::closeMenu);
     connect(this, &MenuView::projectsPressed, this, &MenuView::closeMenu);
@@ -196,6 +225,8 @@ MenuView::MenuView(QWidget* _parent)
     connect(this, &MenuView::fullscreenPressed, this, &MenuView::closeMenu);
     connect(this, &MenuView::settingsPressed, this, &MenuView::closeMenu);
     connect(this, &MenuView::helpPressed, this, &MenuView::closeMenu);
+    //
+    connect(this, &MenuView::writingSprintPressed, this, &MenuView::closeMenu);
 
 
     setVisible(false);
@@ -308,6 +339,8 @@ void MenuView::updateTranslations()
     d->fullScreen->setWhatsThis(
         QKeySequence(QKeySequence::FullScreen).toString(QKeySequence::NativeText));
     d->settings->setText(tr("Application settings"));
+
+    d->writingSprint->setToolTip(tr("Show writing sprint timer"));
 
     d->appVersion->setText(
         QString("%1 %2").arg(tr("Version"), QCoreApplication::applicationVersion()));

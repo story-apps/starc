@@ -2,7 +2,7 @@
 
 #include <include/custom_events.h>
 #include <ui/design_system/design_system.h>
-#include <ui/widgets/card/card_popup.h>
+#include <ui/widgets/card/card_popup_with_tree.h>
 #include <utils/helpers/text_helper.h>
 
 #include <QAbstractItemModel>
@@ -29,11 +29,11 @@ public:
 
 
     bool useContentsWidth = false;
-    CardPopup* popup = nullptr;
+    CardPopupWithTree* popup = nullptr;
 };
 
 ComboBox::Implementation::Implementation(QWidget* _parent)
-    : popup(new CardPopup(_parent))
+    : popup(new CardPopupWithTree(_parent))
 {
 }
 
@@ -87,10 +87,11 @@ ComboBox::ComboBox(QWidget* _parent)
     viewport()->setCursor(Qt::ArrowCursor);
     viewport()->setMouseTracking(false);
 
-    connect(d->popup, &CardPopup::currentIndexChanged, this, [this](const QModelIndex& _index) {
-        setText(_index.data().toString());
-        emit currentIndexChanged(_index);
-    });
+    connect(d->popup, &CardPopupWithTree::currentIndexChanged, this,
+            [this](const QModelIndex& _index) {
+                setText(_index.data().toString());
+                emit currentIndexChanged(_index);
+            });
     connect(d->popup, &Card::disappeared, this, [this] {
         setTrailingIcon(u8"\U000f035d");
         setTrailingIconColor({});

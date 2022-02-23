@@ -73,9 +73,9 @@ void Log::qtOutputHandler(QtMsgType _type, const QMessageLogContext& _context,
                           const QString& _message)
 {
     const auto message = (qstrlen(_context.file) > 0 && qstrlen(_context.function) > 0)
-        ? QString("%1 (%2:%3, %4)")
-              .arg(_message, _context.file, QString::number(_context.line),
-                   QString(_context.function).right(100))
+        ? QString("%1 (...%2:%3, %4)")
+              .arg(_message, QString(_context.file).right(30), QString::number(_context.line),
+                   _context.function)
         : _message;
     switch (_type) {
     case QtDebugMsg:

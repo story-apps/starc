@@ -12,18 +12,14 @@
 class CardPopup::Implementation
 {
 public:
-    explicit Implementation(QWidget* _parent);
+    explicit Implementation();
 
-    Tree* content = nullptr;
     QVariantAnimation positionAnimation;
     QVariantAnimation heightAnimation;
 };
 
-CardPopup::Implementation::Implementation(QWidget* _parent)
-    : content(new Tree(_parent))
+CardPopup::Implementation::Implementation()
 {
-    content->setRootIsDecorated(false);
-
     positionAnimation.setEasingCurve(QEasingCurve::OutQuint);
     positionAnimation.setDuration(240);
     heightAnimation.setEasingCurve(QEasingCurve::OutQuint);
@@ -37,7 +33,7 @@ CardPopup::Implementation::Implementation(QWidget* _parent)
 
 CardPopup::CardPopup(QWidget* _parent)
     : Card(_parent)
-    , d(new Implementation(this))
+    , d(new Implementation)
 {
     setWindowFlags(Qt::Popup | Qt::FramelessWindowHint | Qt::NoDropShadowWindowHint);
     setAttribute(Qt::WA_Hover, false);
@@ -45,12 +41,6 @@ CardPopup::CardPopup(QWidget* _parent)
     setAttribute(Qt::WA_ShowWithoutActivating);
     setFocusPolicy(Qt::NoFocus);
     hide();
-
-    auto popupLayout = new QHBoxLayout;
-    popupLayout->setContentsMargins({});
-    popupLayout->setSpacing(0);
-    popupLayout->addWidget(d->content);
-    setLayoutReimpl(popupLayout);
 
 
     connect(&d->positionAnimation, &QVariantAnimation::valueChanged, this,
@@ -63,55 +53,25 @@ CardPopup::CardPopup(QWidget* _parent)
             hide();
         }
     });
-
-    connect(d->content, &Tree::currentIndexChanged, this, [this](const QModelIndex& _index) {
-        hidePopup();
-        emit currentIndexChanged(_index);
-    });
-
-
-    designSystemChangeEvent(nullptr);
 }
 
 CardPopup::~CardPopup() = default;
 
-QAbstractItemModel* CardPopup::contentModel() const
+void CardPopup::showPopup(const QPoint& _position, int _parentHeight)
 {
-    return d->content->model();
+    showPopup(_position, _parentHeight,
+              sizeHint()
+                  - QSize(0,
+                          Ui::DesignSystem::card().shadowMargins().top()
+                              + Ui::DesignSystem::card().shadowMargins().bottom()));
 }
 
-void CardPopup::setContentModel(QAbstractItemModel* _model)
+void CardPopup::showPopup(const QPoint& _position, int _parentHeight, const QSize& _size)
 {
-    d->content->setModel(_model);
-}
-
-QModelIndex CardPopup::currentIndex() const
-{
-    return d->content->currentIndex();
-}
-
-void CardPopup::setCurrentIndex(const QModelIndex& _index)
-{
-    d->content->setCurrentIndex(_index);
-}
-
-int CardPopup::sizeHintForColumn(int _column) const
-{
-    return d->content->sizeHintForColumn(_column);
-}
-
-void CardPopup::showPopup(const QPoint& _position, int _parentHeight, int _width, int _showMaxItems)
-{
-    if (d->content->model() == nullptr) {
-        return;
-    }
-
     //
     // Определим высоту попапа
     //
-    const auto itemsCount = std::min(d->content->model()->rowCount(), _showMaxItems);
-    const auto finalHeight = Ui::DesignSystem::treeOneLineItem().height() * itemsCount
-        + Ui::DesignSystem::card().shadowMargins().top()
+    const auto finalHeight = _size.height() + Ui::DesignSystem::card().shadowMargins().top()
         + Ui::DesignSystem::card().shadowMargins().bottom();
     d->heightAnimation.setEndValue(static_cast<int>(finalHeight));
 
@@ -134,11 +94,9 @@ void CardPopup::showPopup(const QPoint& _position, int _parentHeight, int _width
         d->positionAnimation.setEndValue(position.y());
     }
 
-    resize(_width, 1);
+    resize(_size.width(), 1);
     move(position);
     show();
-
-    d->content->setScrollBarVisible(d->content->model()->rowCount() > _showMaxItems);
 
     d->positionAnimation.setDirection(QVariantAnimation::Forward);
     d->positionAnimation.start();
@@ -148,16 +106,12 @@ void CardPopup::showPopup(const QPoint& _position, int _parentHeight, int _width
 
 void CardPopup::hidePopup()
 {
+    if (d->heightAnimation.endValue().toInt() != sizeHint().height()) {
+        d->heightAnimation.setEndValue(sizeHint().height());
+    }
+
     d->positionAnimation.setDirection(QVariantAnimation::Backward);
     d->positionAnimation.start();
     d->heightAnimation.setDirection(QVariantAnimation::Backward);
     d->heightAnimation.start();
-}
-
-void CardPopup::designSystemChangeEvent(DesignSystemChangeEvent* _event)
-{
-    Card::designSystemChangeEvent(_event);
-
-    d->content->setBackgroundColor(Ui::DesignSystem::color().background());
-    d->content->setTextColor(Ui::DesignSystem::color().onBackground());
 }

@@ -102,6 +102,11 @@ ThemeSetupView* ApplicationView::themeSetupView() const
     return d->themeSetupView;
 }
 
+QWidget* ApplicationView::view() const
+{
+    return d->view;
+}
+
 QVariantMap ApplicationView::saveState() const
 {
     QVariantMap state;

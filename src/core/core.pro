@@ -59,6 +59,7 @@ SOURCES += \
     management_layer/content/projects/projects_manager.cpp \
     management_layer/content/settings/screenplay_template_manager.cpp \
     management_layer/content/settings/settings_manager.cpp \
+    management_layer/content/writing_session/writing_session_manager.cpp \
     management_layer/plugins_builder.cpp \
     ui/account/account_navigator.cpp \
     ui/account/account_tool_bar.cpp \
@@ -99,7 +100,8 @@ SOURCES += \
     ui/settings/settings_view.cpp \
     ui/settings/theme_setup_view.cpp \
     ui/settings/widgets/page_layout.cpp \
-    ui/settings/widgets/theme_preview.cpp
+    ui/settings/widgets/theme_preview.cpp \
+    ui/writing_session/writing_sprint_panel.cpp
 
 HEADERS += \
     core_global.h \
@@ -114,6 +116,7 @@ HEADERS += \
     management_layer/content/projects/projects_manager.h \
     management_layer/content/settings/screenplay_template_manager.h \
     management_layer/content/settings/settings_manager.h \
+    management_layer/content/writing_session/writing_session_manager.h \
     management_layer/plugins_builder.h \
     ui/account/account_navigator.h \
     ui/account/account_tool_bar.h \
@@ -154,7 +157,8 @@ HEADERS += \
     ui/settings/settings_view.h \
     ui/settings/theme_setup_view.h \
     ui/settings/widgets/page_layout.h \
-    ui/settings/widgets/theme_preview.h
+    ui/settings/widgets/theme_preview.h \
+    ui/writing_session/writing_sprint_panel.h
 
 RESOURCES += \
     resources.qrc \

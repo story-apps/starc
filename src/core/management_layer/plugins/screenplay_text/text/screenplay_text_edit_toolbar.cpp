@@ -1,7 +1,7 @@
 #include "screenplay_text_edit_toolbar.h"
 
 #include <ui/design_system/design_system.h>
-#include <ui/widgets/card/card_popup.h>
+#include <ui/widgets/card/card_popup_with_tree.h>
 
 #include <QAbstractItemModel>
 #include <QAction>
@@ -28,7 +28,7 @@ public:
     QAction* searchAction = nullptr;
     QAction* commentsAction = nullptr;
 
-    CardPopup* popup = nullptr;
+    CardPopupWithTree* popup = nullptr;
 };
 
 ScreenplayTextEditToolbar::Implementation::Implementation(QWidget* _parent)
@@ -38,7 +38,7 @@ ScreenplayTextEditToolbar::Implementation::Implementation(QWidget* _parent)
     , fastFormatAction(new QAction)
     , searchAction(new QAction)
     , commentsAction(new QAction)
-    , popup(new CardPopup(_parent))
+    , popup(new CardPopupWithTree(_parent))
 {
 }
 
@@ -111,12 +111,13 @@ ScreenplayTextEditToolbar::ScreenplayTextEditToolbar(QWidget* _parent)
     connect(d->commentsAction, &QAction::toggled, this,
             &ScreenplayTextEditToolbar::commentsModeEnabledChanged);
 
-    connect(d->popup, &CardPopup::currentIndexChanged, this, [this](const QModelIndex& _index) {
-        d->paragraphTypeAction->setText(_index.data().toString());
-        update();
+    connect(d->popup, &CardPopupWithTree::currentIndexChanged, this,
+            [this](const QModelIndex& _index) {
+                d->paragraphTypeAction->setText(_index.data().toString());
+                update();
 
-        emit paragraphTypeChanged(_index);
-    });
+                emit paragraphTypeChanged(_index);
+            });
     connect(d->popup, &Card::disappeared, this,
             [this] { d->paragraphTypeAction->setIconText(u8"\U000f035d"); });
 

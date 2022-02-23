@@ -1,7 +1,7 @@
 #include "title_page_edit_toolbar.h"
 
 #include <ui/design_system/design_system.h>
-#include <ui/widgets/card/card_popup.h>
+#include <ui/widgets/card/card_popup_with_tree.h>
 #include <utils/helpers/measurement_helper.h>
 #include <utils/helpers/text_helper.h>
 
@@ -33,7 +33,7 @@ public:
     QStringListModel fontsModel;
     QStringListModel fontSizesModel;
 
-    CardPopup* popup = nullptr;
+    CardPopupWithTree* popup = nullptr;
 };
 
 TitlePageEditToolbar::Implementation::Implementation(QWidget* _parent)
@@ -42,7 +42,7 @@ TitlePageEditToolbar::Implementation::Implementation(QWidget* _parent)
     , textFontAction(new QAction)
     , textFontSizeAction(new QAction)
     , restoreTitlePageAction(new QAction)
-    , popup(new CardPopup(_parent))
+    , popup(new CardPopupWithTree(_parent))
 {
     undoAction->setIconText(u8"\U000f054c");
     redoAction->setIconText(u8"\U000f044e");
@@ -123,19 +123,20 @@ TitlePageEditToolbar::TitlePageEditToolbar(QWidget* _parent)
     connect(d->textFontSizeAction, &QAction::triggered, this,
             [this, activatePopup] { activatePopup(d->textFontSizeAction, &d->fontSizesModel); });
 
-    connect(d->popup, &CardPopup::currentIndexChanged, this, [this](const QModelIndex& _index) {
-        if (d->popup->contentModel() == &d->fontsModel) {
-            d->textFontAction->setText(_index.data().toString());
-        } else {
-            d->textFontSizeAction->setText(_index.data().toString());
-        }
-        update();
+    connect(
+        d->popup, &CardPopupWithTree::currentIndexChanged, this, [this](const QModelIndex& _index) {
+            if (d->popup->contentModel() == &d->fontsModel) {
+                d->textFontAction->setText(_index.data().toString());
+            } else {
+                d->textFontSizeAction->setText(_index.data().toString());
+            }
+            update();
 
-        QFont newFont(d->textFontAction->text());
-        newFont.setPixelSize(MeasurementHelper::ptToPx(d->textFontSizeAction->text().toInt()));
-        emit fontChanged(newFont);
-    });
-    connect(d->popup, &CardPopup::disappeared, this, [this] {
+            QFont newFont(d->textFontAction->text());
+            newFont.setPixelSize(MeasurementHelper::ptToPx(d->textFontSizeAction->text().toInt()));
+            emit fontChanged(newFont);
+        });
+    connect(d->popup, &CardPopupWithTree::disappeared, this, [this] {
         d->textFontAction->setIconText(u8"\U000f035d");
         d->textFontSizeAction->setIconText(u8"\U000f035d");
     });

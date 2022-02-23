@@ -27,6 +27,11 @@ public:
     void setAccountEmail(const QString& _email);
 
     /**
+     * @brief Задать дополнительные действия аккаунта
+     */
+    void setAccountActions(const QVector<QAction*>& _actions);
+
+    /**
      * @brief Определяем идеальный размер
      */
     QSize sizeHint() const override;

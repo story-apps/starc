@@ -169,10 +169,11 @@ void CircleFillAnimator::hideDecorator()
     hideEffect->setOpacity(1.);
 
     QPropertyAnimation* hideAnimation = new QPropertyAnimation(hideEffect, "opacity", m_decorator);
-    hideAnimation->setDuration(200);
+    hideAnimation->setDuration(240);
+    hideAnimation->setEasingCurve(QEasingCurve::OutQuad);
     hideAnimation->setStartValue(1.);
     hideAnimation->setEndValue(0.);
-    connect(hideAnimation, &QPropertyAnimation::finished, [this, &hideEffect] {
+    connect(hideAnimation, &QPropertyAnimation::finished, [this, hideEffect] {
         m_decorator->hide();
         hideEffect->setOpacity(1.);
     });
