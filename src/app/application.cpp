@@ -34,7 +34,8 @@ public:
 
     QString fileToOpen;
     QTimer idleTimer;
-    bool waitKeyWithTextRelease = false;
+
+    QSet<int> pressedKeys;
 };
 
 
@@ -128,12 +129,19 @@ bool Application::notify(QObject* _object, QEvent* _event)
         //
         switch (_event->type()) {
         case QEvent::KeyPress: {
-            if (d->waitKeyWithTextRelease || _object == d->applicationManager) {
+            if (_object == d->applicationManager) {
                 break;
             }
 
+            //
+            // Пропускаем зажатые клавиши
+            //
             const auto keyEvent = static_cast<QKeyEvent*>(_event);
-            d->waitKeyWithTextRelease = !keyEvent->text().isEmpty();
+            if (d->pressedKeys.contains(keyEvent->key())) {
+                break;
+            }
+
+            d->pressedKeys.insert(keyEvent->key());
 
             postEvent(d->applicationManager,
                       new QKeyEvent(QEvent::KeyPress, keyEvent->key(), keyEvent->modifiers(),
@@ -142,7 +150,8 @@ bool Application::notify(QObject* _object, QEvent* _event)
         }
 
         case QEvent::KeyRelease: {
-            d->waitKeyWithTextRelease = false;
+            const auto keyEvent = static_cast<QKeyEvent*>(_event);
+            d->pressedKeys.remove(keyEvent->key());
             break;
         }
 
