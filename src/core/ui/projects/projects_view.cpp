@@ -107,8 +107,8 @@ void ProjectsView::Implementation::updateToolBarsUi()
 {
     toolBar->resize(toolBar->sizeHint());
     updateToolBarsPositon();
-    toolBar->setBackgroundColor(Ui::DesignSystem::color().primary());
-    toolBar->setTextColor(Ui::DesignSystem::color().onPrimary());
+    toolBar->setBackgroundColor(Ui::DesignSystem::color().background());
+    toolBar->setTextColor(Ui::DesignSystem::color().onBackground());
     toolBar->raise();
 }
 

@@ -61,6 +61,7 @@ public:
     /**
      * @brief  Декорации тени при наведении
      */
+    QVariantAnimation opacityAnimation;
     QVariantAnimation shadowBlurRadiusAnimation;
 };
 
@@ -73,6 +74,12 @@ FloatingToolBar::Implementation::Implementation()
     decorationOpacityAnimation.setStartValue(0.5);
     decorationOpacityAnimation.setEndValue(0.0);
     decorationOpacityAnimation.setDuration(160);
+
+    opacityAnimation.setEasingCurve(QEasingCurve::OutQuad);
+    opacityAnimation.setDuration(160);
+    opacityAnimation.setStartValue(0.6);
+    opacityAnimation.setEndValue(1.0);
+    opacityAnimation.setCurrentTime(0);
 
     shadowBlurRadiusAnimation.setEasingCurve(QEasingCurve::OutQuad);
     shadowBlurRadiusAnimation.setDuration(160);
@@ -92,12 +99,16 @@ void FloatingToolBar::Implementation::animateHoverIn()
         return;
     }
 
+    opacityAnimation.setDirection(QVariantAnimation::Forward);
+    opacityAnimation.start();
     shadowBlurRadiusAnimation.setDirection(QVariantAnimation::Forward);
     shadowBlurRadiusAnimation.start();
 }
 
 void FloatingToolBar::Implementation::animateHoverOut()
 {
+    opacityAnimation.setDirection(QVariantAnimation::Backward);
+    opacityAnimation.start();
     shadowBlurRadiusAnimation.setDirection(QVariantAnimation::Backward);
     shadowBlurRadiusAnimation.start();
 }
@@ -144,11 +155,14 @@ FloatingToolBar::FloatingToolBar(QWidget* _parent)
     , d(new Implementation)
 {
     setFocusPolicy(Qt::StrongFocus);
+    setOpacity(d->opacityAnimation.startValue().toDouble());
 
     connect(&d->decorationRadiusAnimation, &QVariantAnimation::valueChanged, this,
             [this] { update(); });
     connect(&d->decorationOpacityAnimation, &QVariantAnimation::valueChanged, this,
             [this] { update(); });
+    connect(&d->opacityAnimation, &QVariantAnimation::valueChanged, this,
+            [this](const QVariant& _value) { setOpacity(_value.toDouble()); });
     connect(&d->shadowBlurRadiusAnimation, &QVariantAnimation::valueChanged, this,
             [this] { update(); });
 

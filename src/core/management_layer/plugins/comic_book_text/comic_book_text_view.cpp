@@ -166,21 +166,21 @@ void ComicBookTextView::Implementation::updateToolBarUi()
 {
     toolbar->move(
         QPointF(Ui::DesignSystem::layout().px24(), Ui::DesignSystem::layout().px24()).toPoint());
-    toolbar->setBackgroundColor(Ui::DesignSystem::color().primary());
-    toolbar->setTextColor(Ui::DesignSystem::color().onPrimary());
+    toolbar->setBackgroundColor(Ui::DesignSystem::color().background());
+    toolbar->setTextColor(Ui::DesignSystem::color().onBackground());
     toolbar->raise();
 
     searchManager->toolbar()->move(
         QPointF(Ui::DesignSystem::layout().px24(), Ui::DesignSystem::layout().px24()).toPoint());
-    searchManager->toolbar()->setBackgroundColor(Ui::DesignSystem::color().primary());
-    searchManager->toolbar()->setTextColor(Ui::DesignSystem::color().onPrimary());
+    searchManager->toolbar()->setBackgroundColor(Ui::DesignSystem::color().background());
+    searchManager->toolbar()->setTextColor(Ui::DesignSystem::color().onBackground());
     searchManager->toolbar()->raise();
 
-    toolbarAnimation->setBackgroundColor(Ui::DesignSystem::color().primary());
-    toolbarAnimation->setTextColor(Ui::DesignSystem::color().onPrimary());
+    toolbarAnimation->setBackgroundColor(Ui::DesignSystem::color().background());
+    toolbarAnimation->setTextColor(Ui::DesignSystem::color().onBackground());
 
-    commentsToolbar->setBackgroundColor(Ui::DesignSystem::color().primary());
-    commentsToolbar->setTextColor(Ui::DesignSystem::color().onPrimary());
+    commentsToolbar->setBackgroundColor(Ui::DesignSystem::color().background());
+    commentsToolbar->setTextColor(Ui::DesignSystem::color().onBackground());
     commentsToolbar->raise();
     updateCommentsToolBar();
 }

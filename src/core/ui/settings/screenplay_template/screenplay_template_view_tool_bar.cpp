@@ -54,8 +54,8 @@ void ScreenplayTemplateViewToolBar::designSystemChangeEvent(DesignSystemChangeEv
     FloatingToolBar::designSystemChangeEvent(_event);
 
     resize(sizeHint());
-    setBackgroundColor(DesignSystem::color().primary());
-    setTextColor(DesignSystem::color().onPrimary());
+    setBackgroundColor(DesignSystem::color().background());
+    setTextColor(DesignSystem::color().onBackground());
     raise();
 
     move(QPointF(isLeftToRight()

@@ -13,7 +13,6 @@
 #include <data_layer/storage/storage_facade.h>
 #include <domain/document_object.h>
 #include <ui/design_system/design_system.h>
-#include <ui/widgets/floating_tool_bar/floating_toolbar_animator.h>
 #include <ui/widgets/scroll_bar/scroll_bar.h>
 #include <ui/widgets/text_edit/scalable_wrapper/scalable_wrapper.h>
 #include <utils/helpers/text_helper.h>
@@ -54,7 +53,6 @@ public:
     ScalableWrapper* scalableWrapper = nullptr;
 
     TitlePageEditToolbar* toolbar = nullptr;
-    FloatingToolbarAnimator* toolbarAnimation = nullptr;
     BusinessLayer::TextParagraphType currentParagraphType
         = BusinessLayer::TextParagraphType::Undefined;
 
@@ -65,7 +63,6 @@ TitlePageView::Implementation::Implementation(QWidget* _parent)
     : textEdit(new TitlePageEdit(_parent))
     , scalableWrapper(new ScalableWrapper(textEdit, _parent))
     , toolbar(new TitlePageEditToolbar(scalableWrapper))
-    , toolbarAnimation(new FloatingToolbarAnimator(_parent))
 {
     textEdit->setVerticalScrollBar(new ScrollBar);
     textEdit->setHorizontalScrollBar(new ScrollBar);
@@ -80,12 +77,9 @@ void TitlePageView::Implementation::updateToolBarUi()
 {
     toolbar->move(
         QPointF(Ui::DesignSystem::layout().px24(), Ui::DesignSystem::layout().px24()).toPoint());
-    toolbar->setBackgroundColor(Ui::DesignSystem::color().primary());
-    toolbar->setTextColor(Ui::DesignSystem::color().onPrimary());
+    toolbar->setBackgroundColor(Ui::DesignSystem::color().background());
+    toolbar->setTextColor(Ui::DesignSystem::color().onBackground());
     toolbar->raise();
-
-    toolbarAnimation->setBackgroundColor(Ui::DesignSystem::color().primary());
-    toolbarAnimation->setTextColor(Ui::DesignSystem::color().onPrimary());
 }
 
 void TitlePageView::Implementation::updateToolBarCurrentParagraphTypeName()

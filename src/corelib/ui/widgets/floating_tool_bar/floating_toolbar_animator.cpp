@@ -11,9 +11,9 @@ class FloatingToolbarAnimator::Implementation
 public:
     QString targetIcon;
     QPointF targetIconStartPosition;
-    QWidget* sourceWidget = nullptr;
+    Widget* sourceWidget = nullptr;
     QPixmap sourceWidgetImage;
-    QWidget* targetWidget = nullptr;
+    Widget* targetWidget = nullptr;
     QPixmap targetWidgetImage;
 
     QVariantAnimation geometryAnimation;
@@ -40,8 +40,10 @@ FloatingToolbarAnimator::FloatingToolbarAnimator(QWidget* _parent)
         if (d->geometryAnimation.direction() == QVariantAnimation::Forward) {
             d->targetWidget->show();
             d->targetWidget->setFocus();
+            d->targetWidget->setOpacity(opacity());
         } else {
             d->sourceWidget->show();
+            d->sourceWidget->setOpacity(opacity());
         }
     });
 
@@ -61,7 +63,7 @@ FloatingToolbarAnimator::~FloatingToolbarAnimator() = default;
 
 void FloatingToolbarAnimator::switchToolbars(const QString& _targetIcon,
                                              const QPointF _targetIconStartPosition,
-                                             QWidget* _sourceWidget, QWidget* _targetWidget)
+                                             Widget* _sourceWidget, Widget* _targetWidget)
 {
     if (_sourceWidget == nullptr || _targetWidget == nullptr) {
         return;
@@ -71,6 +73,7 @@ void FloatingToolbarAnimator::switchToolbars(const QString& _targetIcon,
     d->targetIconStartPosition = _targetIconStartPosition;
     d->sourceWidget = _sourceWidget;
     d->targetWidget = _targetWidget;
+    d->targetWidget->setOpacity(d->sourceWidget->opacity());
 
     d->sourceWidgetImage = d->sourceWidget->grab();
     d->targetWidget->show();
@@ -86,6 +89,7 @@ void FloatingToolbarAnimator::switchToolbars(const QString& _targetIcon,
                 Ui::DesignSystem::floatingToolBar().shadowMargins().top()
                     + Ui::DesignSystem::floatingToolBar().margins().top()));
 
+    setOpacity(d->sourceWidget->opacity());
     setGeometry(d->sourceWidget->geometry());
     show();
     raise();
@@ -106,6 +110,7 @@ void FloatingToolbarAnimator::switchToolbarsBack()
     }
 
     d->sourceWidget->show();
+    d->sourceWidget->setOpacity(d->targetWidget->opacity());
     d->sourceWidgetImage = d->sourceWidget->grab();
     d->sourceWidget->hide();
     d->targetWidgetImage = d->targetWidget->grab();
@@ -113,6 +118,7 @@ void FloatingToolbarAnimator::switchToolbarsBack()
     d->geometryAnimation.setStartValue(d->sourceWidget->geometry());
     d->geometryAnimation.setEndValue(d->targetWidget->geometry());
 
+    setOpacity(d->targetWidget->opacity());
     setGeometry(d->targetWidget->geometry());
     show();
     raise();
