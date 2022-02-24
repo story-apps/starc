@@ -62,6 +62,7 @@ public:
      * @brief Сделать аватар из заданной картинки
      */
     static QPixmap makeAvatar(const QPixmap& _pixmap, const QSize& _size);
+    static QPixmap makeAvatar(const QPixmap& _pixmap, const QSize& _size, int _radius);
 
     /**
      * @brief Поместить заданное изображение в круг заданного размера и цвета

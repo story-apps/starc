@@ -582,7 +582,8 @@ void TabBar::mousePressEvent(QMouseEvent* _event)
 {
     d->decorationCenterPosition = _event->pos();
     d->decorationRadiusAnimation.setEndValue(
-        static_cast<qreal>(d->tabSizeHint(d->tabs[d->currentTabIndex]).width()));
+        static_cast<qreal>(d->isFixed ? width() / d->tabs.size()
+                                      : d->tabSizeHint(d->tabs[d->currentTabIndex]).width()));
     d->animateClick();
 }
 

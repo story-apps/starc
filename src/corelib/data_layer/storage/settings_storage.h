@@ -205,13 +205,21 @@ const QString kComponentsComicBookNavigatorShowSceneTextKey
 const QString kComponentsComicBookNavigatorSceneTextLinesKey
     = kComponentsComicBookNavigatorKey + QStringLiteral("/scene-text-lines");
 //
-// редактор персонажей
+// редактор отношений персонажей
 const QString kComponentsCharactersRelationsKey
     = kComponentsGroupKey + QStringLiteral("/characters-relations");
 const QString kComponentsCharactersRelationsFocusCurrentCharacterKey
     = kComponentsCharactersRelationsKey + QStringLiteral("/focus-current-character");
 const QString kComponentsCharactersRelationsSplitterStateKey
     = kComponentsCharactersRelationsKey + QStringLiteral("/splitter-state");
+//
+// редактор карты локаций
+const QString kComponentsLocationsMapKey
+    = kComponentsGroupKey + QStringLiteral("/locations-map");
+const QString kComponentsLocationsMapFocusCurrentLocationKey
+    = kComponentsLocationsMapKey + QStringLiteral("/focus-current-location");
+const QString kComponentsLocationsMapSplitterStateKey
+    = kComponentsLocationsMapKey + QStringLiteral("/splitter-state");
 
 } // namespace
 

@@ -14,12 +14,16 @@ SUBDIRS = \
     simple_text_structure \
     title_page
 
+exists (characters_relations/characters_relations.pro) {
+    SUBDIRS += characters_relations
+}
+
 exists (character_information/character_information.pro) {
     SUBDIRS += character_information
 }
 
-exists (characters_relations/characters_relations.pro) {
-    SUBDIRS += characters_relations
+exists (locations_map/locations_map.pro) {
+    SUBDIRS += locations_map
 }
 
 exists (location_information/location_information.pro) {

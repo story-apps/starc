@@ -1970,6 +1970,67 @@ DesignSystem::CharacterCard::CharacterCard(qreal _scaleFactor)
 // ****
 
 
+class DesignSystem::LocationCard::Implementation
+{
+public:
+    explicit Implementation(qreal _scaleFactor);
+
+    QSizeF primarySize = { 174, 242 };
+    QSizeF secondarySize = { 154, 162 };
+    QSizeF tertiarySize = { 154, 128 };
+    QSizeF undefinedSize = { 154, 46 };
+    qreal spacing = 12.0;
+};
+
+DesignSystem::LocationCard::Implementation::Implementation(qreal _scaleFactor)
+{
+    primarySize *= _scaleFactor;
+    secondarySize *= _scaleFactor;
+    tertiarySize *= _scaleFactor;
+    undefinedSize *= _scaleFactor;
+    spacing *= _scaleFactor;
+}
+
+
+// **
+
+
+DesignSystem::LocationCard::~LocationCard() = default;
+
+const QSizeF& DesignSystem::LocationCard::primarySize() const
+{
+    return d->primarySize;
+}
+
+const QSizeF& DesignSystem::LocationCard::secondarySize() const
+{
+    return d->secondarySize;
+}
+
+const QSizeF& DesignSystem::LocationCard::tertiarySize() const
+{
+    return d->tertiarySize;
+}
+
+const QSizeF& DesignSystem::LocationCard::undefinedSize() const
+{
+    return d->undefinedSize;
+}
+
+qreal DesignSystem::LocationCard::spacing() const
+{
+    return d->spacing;
+}
+
+DesignSystem::LocationCard::LocationCard(qreal _scaleFactor)
+    : d(new Implementation(_scaleFactor))
+{
+}
+
+
+// ****
+
+
 class DesignSystemPrivate
 {
 public:
@@ -2015,6 +2076,7 @@ public:
     DesignSystem::TaskBar taskBar;
     DesignSystem::ProjectCard projectCard;
     DesignSystem::CharacterCard characterCard;
+    DesignSystem::LocationCard locationCard;
 };
 
 DesignSystemPrivate::DesignSystemPrivate(ApplicationTheme _theme, qreal _scaleFactor,
@@ -2047,6 +2109,7 @@ DesignSystemPrivate::DesignSystemPrivate(ApplicationTheme _theme, qreal _scaleFa
     , taskBar(_scaleFactor)
     , projectCard(_scaleFactor)
     , characterCard(_scaleFactor)
+    , locationCard(_scaleFactor)
 {
     pageMargins *= _scaleFactor;
     pageSpacing *= _scaleFactor;
@@ -2372,6 +2435,11 @@ const DesignSystem::ProjectCard& DesignSystem::projectCard()
 const DesignSystem::CharacterCard& DesignSystem::characterCard()
 {
     return instance()->d->characterCard;
+}
+
+const DesignSystem::LocationCard& DesignSystem::locationCard()
+{
+    return instance()->d->locationCard;
 }
 
 DesignSystem::~DesignSystem() = default;

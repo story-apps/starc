@@ -201,16 +201,21 @@ QPixmap ImageHelper::makeAvatar(const QString& _text, const QFont& _font, const 
 
 QPixmap ImageHelper::makeAvatar(const QPixmap& _pixmap, const QSize& _size)
 {
+    return makeAvatar(_pixmap, _size, std::max(_size.width(), _size.height()) / 2);
+}
+
+QPixmap ImageHelper::makeAvatar(const QPixmap& _pixmap, const QSize& _size, int _radius)
+{
     //
     // Кэш аватарок
     //
-    using CacheKey = QPair<qint64, int>;
+    using CacheKey = QPair<qint64, QPair<int, int>>;
     static QCache<CacheKey, QPixmap> s_avatarsCache;
 
     //
     // Ищем аватарку в кэше
     //
-    const CacheKey avatarKey{ _pixmap.cacheKey(), _size.width() };
+    const CacheKey avatarKey{ _pixmap.cacheKey(), { _size.width(), _radius } };
     if (s_avatarsCache.contains(avatarKey)) {
         return *s_avatarsCache[avatarKey];
     }
@@ -223,8 +228,12 @@ QPixmap ImageHelper::makeAvatar(const QPixmap& _pixmap, const QSize& _size)
     QPainter painter(&avatar);
     painter.setRenderHint(QPainter::Antialiasing, true);
     QPainterPath circleClipPath;
-    circleClipPath.addEllipse(avatar.rect().adjusted(1, 1, 0, 0).center(), avatar.width() / 2,
-                              avatar.height() / 2);
+    if (_radius == std::max(_size.width(), _size.height()) / 2) {
+        circleClipPath.addEllipse(avatar.rect().adjusted(1, 1, 0, 0).center(), avatar.width() / 2,
+                                  avatar.height() / 2);
+    } else {
+        circleClipPath.addRoundedRect(avatar.rect(), _radius, _radius);
+    }
     painter.setClipPath(circleClipPath);
     painter.drawPixmap(
         0, 0, _pixmap.scaled(_size, Qt::KeepAspectRatioByExpanding, Qt::SmoothTransformation));

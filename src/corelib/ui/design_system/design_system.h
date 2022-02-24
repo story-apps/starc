@@ -1131,6 +1131,35 @@ public:
         QScopedPointer<Implementation> d;
     };
 
+    /**
+     * @brief Параметры карточки локации
+     */
+    class CORE_LIBRARY_EXPORT LocationCard
+    {
+    public:
+        ~LocationCard();
+
+        /**
+         * @brief Получить размер карточки
+         */
+        const QSizeF& primarySize() const;
+        const QSizeF& secondarySize() const;
+        const QSizeF& tertiarySize() const;
+        const QSizeF& undefinedSize() const;
+
+        /**
+         * @brief Расстояние между аватаром и текстом
+         */
+        qreal spacing() const;
+
+    private:
+        explicit LocationCard(qreal _scaleFactor);
+        friend class DesignSystemPrivate;
+        //
+        class Implementation;
+        QScopedPointer<Implementation> d;
+    };
+
 public:
     /**
      * @brief Текущая тема
@@ -1332,6 +1361,11 @@ public:
      * @brief Параметры карточки персонажа
      */
     static const CharacterCard& characterCard();
+
+    /**
+     * @brief Параметры карточки локации
+     */
+    static const LocationCard& locationCard();
 
 public:
     ~DesignSystem();
