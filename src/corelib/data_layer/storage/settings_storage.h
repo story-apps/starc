@@ -214,8 +214,7 @@ const QString kComponentsCharactersRelationsSplitterStateKey
     = kComponentsCharactersRelationsKey + QStringLiteral("/splitter-state");
 //
 // редактор карты локаций
-const QString kComponentsLocationsMapKey
-    = kComponentsGroupKey + QStringLiteral("/locations-map");
+const QString kComponentsLocationsMapKey = kComponentsGroupKey + QStringLiteral("/locations-map");
 const QString kComponentsLocationsMapFocusCurrentLocationKey
     = kComponentsLocationsMapKey + QStringLiteral("/focus-current-location");
 const QString kComponentsLocationsMapSplitterStateKey
