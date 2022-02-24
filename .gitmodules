@@ -21,4 +21,4 @@
 	url = git@github.com:buzzySmile/qBreakpad.git          
 [submodule "src/core/management_layer/plugins/locations_map"]
 	path = src/core/management_layer/plugins/locations_map
-	url = git@github.com:story-apps/starc-locations-map-plugin.git
+    url = git@github.com:story-apps/starc-locations-map-plugin.git
