@@ -28,7 +28,7 @@ public:
     /**
      * @brief Получить тип элемента
      */
-    ScreenplayTextModelItemType type() const;
+    const ScreenplayTextModelItemType& type() const;
 
     /**
      * @brief Получить модель сценария, в которой находится данный элемент

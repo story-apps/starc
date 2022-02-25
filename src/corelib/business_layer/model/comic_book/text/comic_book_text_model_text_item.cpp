@@ -603,7 +603,7 @@ void ComicBookTextModelTextItem::setInFirstColumn(const std::optional<bool>& _in
     markChanged();
 }
 
-ComicBookParagraphType ComicBookTextModelTextItem::paragraphType() const
+const ComicBookParagraphType& ComicBookTextModelTextItem::paragraphType() const
 {
     return d->paragraphType;
 }

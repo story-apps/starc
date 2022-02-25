@@ -1104,7 +1104,7 @@ QString ScreenplayTextDocument::dialogueNumber(const QTextBlock& _forBlock) cons
     }
 
     const auto sceneItem = static_cast<const ScreenplayTextModelTextItem*>(item);
-    return sceneItem->number().value_or(ScreenplayTextModelTextItem::Number()).value;
+    return sceneItem->number().value_or(ScreenplayTextModelTextItem::Number()).displayValue;
 }
 
 QColor ScreenplayTextDocument::itemColor(const QTextBlock& _forBlock) const

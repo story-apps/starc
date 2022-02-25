@@ -26,7 +26,7 @@ public:
     /**
      * @brief Получить тип элемента
      */
-    TextModelItemType type() const;
+    const TextModelItemType& type() const;
 
     /**
      * @brief Переопределяем интерфейс для возврата элемента собственного класса

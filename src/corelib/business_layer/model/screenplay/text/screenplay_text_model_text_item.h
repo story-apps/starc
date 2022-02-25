@@ -57,7 +57,8 @@ public:
         QTextCharFormat charFormat() const;
     };
     struct CORE_LIBRARY_EXPORT Number {
-        QString value;
+        int value = 0;
+        QString displayValue = {};
     };
     struct CORE_LIBRARY_EXPORT Bookmark {
         QColor color;
@@ -119,7 +120,7 @@ public:
     /**
      * @brief Тип параграфа
      */
-    ScreenplayParagraphType paragraphType() const;
+    const ScreenplayParagraphType& paragraphType() const;
     void setParagraphType(ScreenplayParagraphType _type);
 
     /**

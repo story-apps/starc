@@ -111,7 +111,7 @@ public:
     /**
      * @brief Тип параграфа
      */
-    ComicBookParagraphType paragraphType() const;
+    const ComicBookParagraphType& paragraphType() const;
     void setParagraphType(ComicBookParagraphType _type);
 
     /**

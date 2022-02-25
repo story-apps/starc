@@ -34,7 +34,7 @@ ScreenplayTextModelItem::ScreenplayTextModelItem(ScreenplayTextModelItemType _ty
 
 ScreenplayTextModelItem::~ScreenplayTextModelItem() = default;
 
-ScreenplayTextModelItemType ScreenplayTextModelItem::type() const
+const ScreenplayTextModelItemType& ScreenplayTextModelItem::type() const
 {
     return d->type;
 }

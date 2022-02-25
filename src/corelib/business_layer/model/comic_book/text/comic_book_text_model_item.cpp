@@ -29,7 +29,7 @@ ComicBookTextModelItem::ComicBookTextModelItem(ComicBookTextModelItemType _type)
 
 ComicBookTextModelItem::~ComicBookTextModelItem() = default;
 
-ComicBookTextModelItemType ComicBookTextModelItem::type() const
+const ComicBookTextModelItemType& ComicBookTextModelItem::type() const
 {
     return d->type;
 }

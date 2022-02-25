@@ -129,7 +129,7 @@ static void printPage(int _pageNumber, QPainter* _painter, const QTextDocument* 
                         const auto textItem
                             = static_cast<ScreenplayTextModelTextItem*>(blockData->item());
                         if (textItem && textItem->number().has_value()) {
-                            const QString dialogueNumber = textItem->number()->value;
+                            const QString dialogueNumber = textItem->number()->displayValue;
                             const int numberDelta
                                 = _painter->fontMetrics().horizontalAdvance(dialogueNumber);
                             QRectF dialogueNumberRect;

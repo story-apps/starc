@@ -29,7 +29,7 @@ TextModelItem::TextModelItem(TextModelItemType _type)
 
 TextModelItem::~TextModelItem() = default;
 
-TextModelItemType TextModelItem::type() const
+const TextModelItemType& TextModelItem::type() const
 {
     return d->type;
 }

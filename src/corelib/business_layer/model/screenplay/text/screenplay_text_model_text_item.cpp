@@ -178,7 +178,6 @@ ScreenplayTextModelTextItem::Implementation::Implementation(QXmlStreamReader& _c
                     }
 
                     const auto commentAttributes = _contentReader.attributes();
-                    const auto is = commentAttributes.hasAttribute(xml::kIsCommentEditedAttribute);
                     reviewMark.comments.append(
                         { TextHelper::fromHtmlEscaped(
                               commentAttributes.value(xml::kAuthorAttribute).toString()),
@@ -535,13 +534,13 @@ std::optional<ScreenplayTextModelTextItem::Number> ScreenplayTextModelTextItem::
 
 void ScreenplayTextModelTextItem::setNumber(int _number)
 {
-    const auto newNumber
-        = QString(QLocale().textDirection() == Qt::LeftToRight ? "%1:" : ":%1").arg(_number);
-    if (d->number.has_value() && d->number->value == newNumber) {
+    if (d->number.has_value() && d->number->value == _number) {
         return;
     }
 
-    d->number = { newNumber };
+    const auto newNumber
+        = QString(QLocale().textDirection() == Qt::LeftToRight ? "%1:" : ":%1").arg(_number);
+    d->number = { _number, newNumber };
     markChanged();
 }
 
@@ -643,7 +642,7 @@ void ScreenplayTextModelTextItem::setInFirstColumn(const std::optional<bool>& _i
     markChanged();
 }
 
-ScreenplayParagraphType ScreenplayTextModelTextItem::paragraphType() const
+const ScreenplayParagraphType& ScreenplayTextModelTextItem::paragraphType() const
 {
     return d->paragraphType;
 }

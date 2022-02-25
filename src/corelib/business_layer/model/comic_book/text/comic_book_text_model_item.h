@@ -26,7 +26,7 @@ public:
     /**
      * @brief Получить тип элемента
      */
-    ComicBookTextModelItemType type() const;
+    const ComicBookTextModelItemType& type() const;
 
     /**
      * @brief Переопределяем интерфейс для возврата элемента собственного класса

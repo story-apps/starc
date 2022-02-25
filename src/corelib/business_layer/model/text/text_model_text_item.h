@@ -63,7 +63,7 @@ public:
     /**
      * @brief Тип параграфа
      */
-    TextParagraphType paragraphType() const;
+    const TextParagraphType& paragraphType() const;
     void setParagraphType(TextParagraphType _type);
 
     /**

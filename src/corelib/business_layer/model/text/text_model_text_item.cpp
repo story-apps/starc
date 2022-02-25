@@ -424,7 +424,7 @@ TextModelTextItem::TextModelTextItem(QXmlStreamReader& _contentReaded)
 
 TextModelTextItem::~TextModelTextItem() = default;
 
-TextParagraphType TextModelTextItem::paragraphType() const
+const TextParagraphType& TextModelTextItem::paragraphType() const
 {
     return d->paragraphType;
 }
