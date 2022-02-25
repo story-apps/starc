@@ -62,7 +62,7 @@ public:
     /**
      * @brief Переконфигурировать представление
      */
-    void reconfigureTemplate();
+    void reconfigureTemplate(bool _withModelReinitialization = true);
     void reconfigureSceneNumbersVisibility();
     void reconfigureDialoguesNumbersVisibility();
 
@@ -180,7 +180,7 @@ ScreenplayTextView::Implementation::Implementation(QWidget* _parent)
     commentsView->hide();
 }
 
-void ScreenplayTextView::Implementation::reconfigureTemplate()
+void ScreenplayTextView::Implementation::reconfigureTemplate(bool _withModelReinitialization)
 {
     paragraphTypesModel->clear();
 
@@ -208,7 +208,9 @@ void ScreenplayTextView::Implementation::reconfigureTemplate()
 
     shortcutsManager.reconfigure();
 
-    screenplayText->reinit();
+    if (_withModelReinitialization) {
+        screenplayText->reinit();
+    }
 }
 
 void ScreenplayTextView::Implementation::reconfigureSceneNumbersVisibility()
@@ -679,7 +681,8 @@ void ScreenplayTextView::setModel(BusinessLayer::ScreenplayTextModel* _model)
     // Отслеживаем изменения некоторых параметров
     //
     if (d->model && d->model->informationModel()) {
-        d->reconfigureTemplate();
+        const bool reinitModel = true;
+        d->reconfigureTemplate(!reinitModel);
         d->reconfigureSceneNumbersVisibility();
         d->reconfigureDialoguesNumbersVisibility();
 
