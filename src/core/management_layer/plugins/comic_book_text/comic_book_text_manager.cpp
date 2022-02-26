@@ -115,6 +115,10 @@ QObject* ComicBookTextManager::asQObject()
 
 void ComicBookTextManager::setModel(BusinessLayer::AbstractModel* _model)
 {
+    if (d->model == _model) {
+        return;
+    }
+
     //
     // Если модель была задана
     //

@@ -175,7 +175,7 @@ bool AbstractModelItem::hasChild(AbstractModelItem* _child, bool _recursively) c
         return true;
     }
 
-    for (auto child : d->children) {
+    for (auto child : std::as_const(d->children)) {
         if (child->hasChild(_child, _recursively)) {
             return true;
         }
@@ -203,11 +203,13 @@ void AbstractModelItem::setChanged(bool _changed)
 {
     d->changed = _changed;
 
-    if (_changed && d->parent != nullptr) {
-        d->parent->setChanged(_changed);
-    }
+    if (_changed) {
+        if (d->parent != nullptr) {
+            d->parent->setChanged(_changed);
+        }
 
-    handleChange();
+        handleChange();
+    }
 }
 
 } // namespace BusinessLayer

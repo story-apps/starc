@@ -88,7 +88,7 @@ DiffMatchPatchController::Implementation::Implementation(const QVector<QString>&
         tagsMap.insert("<" + _tag + ">", nextCharacter());
         tagsMap.insert("</" + _tag + ">", nextCharacter());
     };
-    for (auto tag : _tags) {
+    for (const auto& tag : _tags) {
         addTag(tag);
     }
 }

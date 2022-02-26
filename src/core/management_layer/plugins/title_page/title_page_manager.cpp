@@ -113,6 +113,10 @@ TitlePageManager::~TitlePageManager() = default;
 
 void TitlePageManager::setModel(BusinessLayer::AbstractModel* _model)
 {
+    if (d->model == _model) {
+        return;
+    }
+
     //
     // Если модель была задана
     //

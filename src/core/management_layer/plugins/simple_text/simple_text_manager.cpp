@@ -116,6 +116,10 @@ QObject* SimpleTextManager::asQObject()
 
 void SimpleTextManager::setModel(BusinessLayer::AbstractModel* _model)
 {
+    if (d->model == _model) {
+        return;
+    }
+
     //
     // Если модель была задана
     //

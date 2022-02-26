@@ -4,6 +4,7 @@
 #include <ui/design_system/design_system.h>
 #include <utils/helpers/color_helper.h>
 #include <utils/helpers/time_helper.h>
+#include <utils/tools/debouncer.h>
 
 #include <QApplication>
 #include <QPainter>
@@ -39,11 +40,14 @@ public:
     bool needAnimateTimelineOpacity = false;
     QTimer timelineHideTimer;
     QVariantAnimation timelineOpacityAnimation;
+
+    Debouncer itemsColorsUpdateDebouncer;
 };
 
 ScreenplayTextScrollBarManager::Implementation::Implementation(QWidget* _parent)
     : scrollbar(new QScrollBar(_parent))
     , timeline(new ScreenplayTextTimeline(_parent))
+    , itemsColorsUpdateDebouncer(300)
 {
     timelineHideTimer.setSingleShot(true);
     timelineHideTimer.setInterval(2000);
@@ -100,6 +104,14 @@ ScreenplayTextScrollBarManager::ScreenplayTextScrollBarManager(QAbstractScrollAr
     });
     connect(&d->timelineOpacityAnimation, &QVariantAnimation::valueChanged, this,
             [this](const QVariant& _value) { d->timeline->setOpacity(_value.toReal()); });
+    connect(&d->itemsColorsUpdateDebouncer, &Debouncer::gotWork, this, [this] {
+        if (d->model == nullptr) {
+            return;
+        }
+
+        d->timeline->setMaximum(d->model->duration());
+        d->timeline->setColors(d->model->itemsColors());
+    });
 }
 
 ScreenplayTextScrollBarManager::~ScreenplayTextScrollBarManager() = default;
@@ -142,22 +154,19 @@ void ScreenplayTextScrollBarManager::setModel(BusinessLayer::ScreenplayTextModel
 
     if (d->model) {
         d->model->disconnect(this);
+        d->model->disconnect(&d->itemsColorsUpdateDebouncer);
     }
 
     d->model = _model;
 
     if (d->model) {
-        auto updateTimeline = [this] {
-            d->timeline->setMaximum(d->model->duration());
-            d->timeline->setColors(d->model->itemsColors());
-        };
-        connect(d->model, &QAbstractItemModel::rowsInserted, this, updateTimeline,
-                Qt::QueuedConnection);
-        connect(d->model, &QAbstractItemModel::rowsRemoved, this, updateTimeline,
-                Qt::QueuedConnection);
-        connect(d->model, &QAbstractItemModel::dataChanged, this, updateTimeline,
-                Qt::QueuedConnection);
-        updateTimeline();
+        connect(d->model, &QAbstractItemModel::rowsInserted, &d->itemsColorsUpdateDebouncer,
+                &Debouncer::orderWork);
+        connect(d->model, &QAbstractItemModel::rowsRemoved, &d->itemsColorsUpdateDebouncer,
+                &Debouncer::orderWork);
+        connect(d->model, &QAbstractItemModel::dataChanged, &d->itemsColorsUpdateDebouncer,
+                &Debouncer::orderWork);
+        d->itemsColorsUpdateDebouncer.orderWork();
     } else {
         d->timeline->update();
     }

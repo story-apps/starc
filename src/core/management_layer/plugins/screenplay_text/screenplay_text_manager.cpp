@@ -114,6 +114,10 @@ QObject* ScreenplayTextManager::asQObject()
 
 void ScreenplayTextManager::setModel(BusinessLayer::AbstractModel* _model)
 {
+    if (d->model == _model) {
+        return;
+    }
+
     //
     // Если модель была задана
     //
