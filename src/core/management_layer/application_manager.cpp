@@ -1327,6 +1327,8 @@ void ApplicationManager::Implementation::imitateTypewriterSound(QKeyEvent* _even
 
 void ApplicationManager::Implementation::exit()
 {
+    Log::info("Closing application");
+
     //
     // Закрываем текущий открытый проект
     //

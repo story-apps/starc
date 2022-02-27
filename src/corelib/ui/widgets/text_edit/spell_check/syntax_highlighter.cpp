@@ -77,49 +77,20 @@ void SyntaxHighlighterPrivate::applyFormatChanges()
 void SyntaxHighlighterPrivate::_q_reformatBlocks(int from, int charsRemoved, int charsAdded)
 {
     if (!inReformatBlocks) {
-        //
-        // FIXME: Это конечно плохо, но другого не придумал...
-        //
-        // Если изменилась папка/группа не нужно пересчитывать весь текст,
-        // нужно обновить одну лишь папку/группу
-        //
-        isDocumentChangedFormLastEdit = true;
-        if (charsAdded > 300 && charsRemoved > 300) {
-            //
-            // Сперва проверим начало группирующего элемента
-            //
-            QTextCursor cursor(doc);
-            cursor.setPosition(from);
-            cursor.movePosition(QTextCursor::StartOfBlock);
-            cursor.movePosition(QTextCursor::EndOfBlock, QTextCursor::KeepAnchor);
-            int localFrom = cursor.selectionStart();
-            int localAdded = cursor.selectedText().length();
-            reformatBlocks(localFrom, 0, localAdded);
-
-            //
-            // Затем конец
-            //
-            if (from + charsAdded >= doc->characterCount()) {
-                charsAdded = doc->characterCount() - from - 1;
-            }
-            cursor.setPosition(from + charsAdded);
-            cursor.movePosition(QTextCursor::StartOfBlock);
-            cursor.movePosition(QTextCursor::EndOfBlock, QTextCursor::KeepAnchor);
-            localFrom = cursor.selectionStart();
-            localAdded = cursor.selectedText().length();
-            reformatBlocks(localFrom, 0, localAdded);
-        }
-        //
-        // В противном случае делаем всё по правильному
-        //
-        else {
-            reformatBlocks(from, charsRemoved, charsAdded);
-        }
+        reformatBlocks(from, charsRemoved, charsAdded);
     }
 }
 
 void SyntaxHighlighterPrivate::reformatBlocks(int from, int charsRemoved, int charsAdded)
 {
+    //
+    // Если добавлено столько же, сколько и удалено, это изменение формата блока, нет смысла его
+    // перепроверять
+    //
+    if (charsRemoved == charsAdded) {
+        return;
+    }
+
     rehighlightPending = false;
 
     QTextBlock block = doc->findBlock(from);

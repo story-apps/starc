@@ -213,8 +213,8 @@ bool SpellChecker::spellCheckWord(const QString& _word) const
     //
     // Преобразуем слово в кодировку словаря и осуществим проверку
     //
-    QByteArray encodedWordData = d->checkerTextCodec->fromUnicode(correctedWord);
-    const char* encodedWord = encodedWordData.constData();
+    const auto encodedWordData = d->checkerTextCodec->fromUnicode(correctedWord);
+    const auto encodedWord = encodedWordData.constData();
     return d->checker->spell(encodedWord);
 }
 
@@ -235,8 +235,8 @@ QStringList SpellChecker::suggestionsForWord(const QString& _word) const
     // Получим массив вариантов
     //
     char** suggestionsArray;
-    const QByteArray encodedWordData = d->checkerTextCodec->fromUnicode(_word);
-    const char* encodedWord = encodedWordData.constData();
+    const auto encodedWordData = d->checkerTextCodec->fromUnicode(_word);
+    const auto encodedWord = encodedWordData.constData();
     int suggestionsCount = d->checker->suggest(&suggestionsArray, encodedWord);
     if (suggestionsCount == 0) {
         return {};
