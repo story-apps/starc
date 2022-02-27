@@ -107,10 +107,6 @@ bool SpellCheckTextEdit::useSpellChecker() const
 
 void SpellCheckTextEdit::setSpellCheckLanguage(const QString& _languageCode)
 {
-    if (d->spellChecker.spellingLanguage() == _languageCode) {
-        return;
-    }
-
     //
     // Установим язык проверяющего
     //
@@ -231,8 +227,25 @@ bool SpellCheckTextEdit::event(QEvent* _event)
     case static_cast<int>(EventType::SpellingChangeEvent): {
         if (d->policy == SpellCheckPolicy::Auto) {
             const auto event = static_cast<SpellingChangeEvent*>(_event);
-            setUseSpellChecker(event->enabled);
-            setSpellCheckLanguage(event->languageCode);
+            //
+            // Включение проверки орфографии
+            //
+            if (event->enabled && !useSpellChecker()) {
+                setSpellCheckLanguage(event->languageCode);
+                setUseSpellChecker(true);
+            }
+            //
+            // Смена языка проверки орфографии
+            //
+            else if (event->enabled && useSpellChecker()) {
+                setSpellCheckLanguage(event->languageCode);
+            }
+            //
+            // Отключение
+            //
+            else if (!event->enabled) {
+                setUseSpellChecker(false);
+            }
         }
         return false;
     }
