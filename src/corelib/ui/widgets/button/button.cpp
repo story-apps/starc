@@ -393,6 +393,8 @@ void Button::keyPressEvent(QKeyEvent* _event)
         emit clicked();
         return;
     }
+
+    _event->ignore();
 }
 
 void Button::designSystemChangeEvent(DesignSystemChangeEvent* _event)

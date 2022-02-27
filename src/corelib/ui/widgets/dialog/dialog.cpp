@@ -85,7 +85,7 @@ void Dialog::showDialog(const QString& _title, const QString& _supportingText,
 
 QWidget* Dialog::focusedWidgetAfterShow() const
 {
-    return d->supportingText;
+    return d->buttons.first();
 }
 
 QWidget* Dialog::lastFocusableWidget() const

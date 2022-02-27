@@ -299,7 +299,7 @@ bool CreateProjectDialog::isLocal() const
 
 QWidget* CreateProjectDialog::focusedWidgetAfterShow() const
 {
-    return d->projectName;
+    return d->projectType;
 }
 
 QWidget* CreateProjectDialog::lastFocusableWidget() const

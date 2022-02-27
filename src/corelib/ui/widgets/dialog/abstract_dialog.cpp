@@ -160,6 +160,7 @@ void AbstractDialog::showDialog()
     //
     // Установим обрабочик событий, чтобы перехватывать потерю фокуса и возвращать его в диалог
     //
+    focusedWidgetAfterShow()->installEventFilter(this);
     lastFocusableWidget()->installEventFilter(this);
 
     //
@@ -184,9 +185,13 @@ void AbstractDialog::showDialog()
 
 void AbstractDialog::hideDialog()
 {
+    focusedWidgetAfterShow()->removeEventFilter(this);
+    lastFocusableWidget()->removeEventFilter(this);
+
     d->contentPixmap = d->content->grab();
     d->content->hide();
     d->animateHide(d->content->pos());
+
     QTimer::singleShot(d->opacityAnimation.duration(), this, &AbstractDialog::hide);
 }
 
@@ -242,10 +247,14 @@ bool AbstractDialog::eventFilter(QObject* _watched, QEvent* _event)
     if (_event->type() == QEvent::Resize && _watched == parentWidget()) {
         auto resizeEvent = static_cast<QResizeEvent*>(_event);
         resize(resizeEvent->size());
-    } else if (_event->type() == QEvent::FocusOut && _watched == lastFocusableWidget()
+    } else if (_event->type() == QEvent::FocusOut
                && (QApplication::focusWidget() == nullptr
                    || !findChildren<QWidget*>().contains(QApplication::focusWidget()))) {
-        focusedWidgetAfterShow()->setFocus();
+        if (_watched == lastFocusableWidget()) {
+            focusedWidgetAfterShow()->setFocus();
+        } else if (_watched == focusedWidgetAfterShow()) {
+            lastFocusableWidget()->setFocus();
+        }
     }
 
     return QWidget::eventFilter(_watched, _event);

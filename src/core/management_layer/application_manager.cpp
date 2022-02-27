@@ -259,6 +259,7 @@ public:
         QWidget* view = nullptr;
     } lastContent;
     Ui::ConnectionStatusToolBar* connectionStatus = nullptr;
+    QPointer<Dialog> saveChangesDialog;
 
     /**
      * @brief Построитель плагинов редакторов
@@ -894,6 +895,13 @@ void ApplicationManager::Implementation::saveChanges()
 
 void ApplicationManager::Implementation::saveIfNeeded(std::function<void()> _callback)
 {
+    //
+    // Избегаем зацикливания, проверяя, что диалог уже показан
+    //
+    if (saveChangesDialog) {
+        return;
+    }
+
     if (!applicationView->isWindowModified()) {
         _callback();
         return;
@@ -902,39 +910,40 @@ void ApplicationManager::Implementation::saveIfNeeded(std::function<void()> _cal
     const int kCancelButtonId = 0;
     const int kNoButtonId = 1;
     const int kYesButtonId = 2;
-    auto dialog = new Dialog(applicationView);
-    dialog->showDialog({}, tr("Project was modified. Save changes?"),
-                       { { kCancelButtonId, tr("Cancel"), Dialog::RejectButton },
-                         { kNoButtonId, tr("Don't save"), Dialog::NormalButton },
-                         { kYesButtonId, tr("Save"), Dialog::AcceptButton } });
-    QObject::connect(dialog, &Dialog::finished,
-                     [this, _callback, kCancelButtonId, kNoButtonId,
-                      dialog](const Dialog::ButtonInfo& _buttonInfo) {
-                         dialog->hideDialog();
+    saveChangesDialog = new Dialog(applicationView);
+    saveChangesDialog->showDialog({}, tr("Project was modified. Save changes?"),
+                                  { { kCancelButtonId, tr("Cancel"), Dialog::RejectButton },
+                                    { kNoButtonId, tr("Don't save"), Dialog::NormalButton },
+                                    { kYesButtonId, tr("Save"), Dialog::AcceptButton } });
+    QObject::connect(
+        saveChangesDialog, &Dialog::finished, saveChangesDialog,
+        [this, _callback, kCancelButtonId, kNoButtonId](const Dialog::ButtonInfo& _buttonInfo) {
+            saveChangesDialog->hideDialog();
 
-                         //
-                         // Пользователь передумал сохранять
-                         //
-                         if (_buttonInfo.id == kCancelButtonId) {
-                             return;
-                         }
+            //
+            // Пользователь передумал сохранять
+            //
+            if (_buttonInfo.id == kCancelButtonId) {
+                return;
+            }
 
-                         //
-                         // Пользователь не хочет сохранять изменения
-                         //
-                         if (_buttonInfo.id == kNoButtonId) {
-                             markChangesSaved(true);
-                         }
-                         //
-                         // ... пользователь хочет сохранить изменения перед следующим действием
-                         //
-                         else {
-                             saveChanges();
-                         }
+            //
+            // Пользователь не хочет сохранять изменения
+            //
+            if (_buttonInfo.id == kNoButtonId) {
+                markChangesSaved(true);
+            }
+            //
+            // ... пользователь хочет сохранить изменения перед следующим действием
+            //
+            else {
+                saveChanges();
+            }
 
-                         _callback();
-                     });
-    QObject::connect(dialog, &Dialog::disappeared, dialog, &Dialog::deleteLater);
+            _callback();
+        });
+    QObject::connect(saveChangesDialog, &Dialog::disappeared, saveChangesDialog,
+                     &Dialog::deleteLater);
 
     QApplication::alert(applicationView);
 }
