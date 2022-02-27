@@ -24,7 +24,7 @@ public:
     /**
      * @brief Получить список всех кнопок языков
      */
-    QVector<RadioButton*> languages() const;
+    std::vector<RadioButton*> languages() const;
 
 
     RadioButton* azerbaijani = nullptr;
@@ -144,9 +144,7 @@ LanguageDialog::Implementation::Implementation(QWidget* _parent)
     ukrainian->setText("Українська");
     ukrainian->setProperty(kLanguageKey, QLocale::Ukrainian);
 
-    languageHowToAddLink->setLink(QUrl("https://github.com/story-apps/starc/wiki/How-to-"
-                                       "add-the-translation-of-Story-Architect-to-your-native-"
-                                       "language-or-improve-the-existing-version%3F"));
+    languageHowToAddLink->setLink(QUrl("https://starc.app/translate"));
 
     buttonsLayout = new QHBoxLayout;
     buttonsLayout->setContentsMargins({});
@@ -154,13 +152,13 @@ LanguageDialog::Implementation::Implementation(QWidget* _parent)
     buttonsLayout->addStretch();
     buttonsLayout->addWidget(okButton);
 
-    RadioButtonGroup* projectLocationGroup = new RadioButtonGroup(_parent);
+    auto projectLocationGroup = new RadioButtonGroup(_parent);
     for (auto language : languages()) {
         projectLocationGroup->add(language);
     }
 }
 
-QVector<RadioButton*> LanguageDialog::Implementation::languages() const
+std::vector<RadioButton*> LanguageDialog::Implementation::languages() const
 {
     return {
         azerbaijani,      belarusian, catalan,  croatian,  danish,  english,

@@ -167,9 +167,7 @@ void OnboardingView::Implementation::initLanguagePage()
     });
 
     languageHowToAddLink = new Body1LinkLabel(languagePage);
-    languageHowToAddLink->setLink(QUrl("https://github.com/story-apps/starc/wiki/How-to-"
-                                       "add-the-translation-of-Story-Architect-to-your-native-"
-                                       "language-or-improve-the-existing-version%3F"));
+    languageHowToAddLink->setLink(QUrl("https://starc.app/translate"));
 
     goToThemeButton = new Button(languagePage);
     goToThemeButton->setContained(true);
