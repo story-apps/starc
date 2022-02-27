@@ -1733,6 +1733,21 @@ void ScreenplayTextModel::applyPatch(const QByteArray& _patch)
     auto newItemsPlain = makeItemsPlain(newItems);
 
     //
+    // Если элеметов очень много, то обсчитывать все изменения будет очень дорого,
+    // поэтому применяем грубую силу - просто накатываем патч и обновляем модель целиком
+    //
+    const auto operationsLimit = 1000;
+    if (oldItemsPlain.size() * newItemsPlain.size() / 2 > operationsLimit) {
+        const auto newContent = dmpController().applyPatch(toXml(), _patch);
+        clearDocument();
+        document()->setContent(newContent);
+        initDocument();
+        //        beginResetModel();
+        //        endResetModel();
+        return;
+    }
+
+    //
     // Идём по структуре документа до момента достижения начала изменения
     //
     auto length = [this] {
