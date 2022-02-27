@@ -50,18 +50,18 @@ public:
 DesignSystem::Color::Implementation::Implementation()
 {
     primary = QColor("#323740");
-    secondary = QColor("#448AFF");
-    background = QColor("#FFFFFF");
-    surface = QColor("#FFFFFF");
-    error = QColor("#B00020");
+    secondary = QColor("#448aff");
+    background = QColor("#ffffff");
+    surface = QColor("#f3f3f3");
+    error = QColor("#b00020");
     shadow = QColor("#000000");
-    shadow.setAlphaF(0.6);
-    onPrimary = QColor("#FFFFFF");
-    onSecondary = QColor("#FFFFFF");
+    shadow.setAlphaF(0.36);
+    onPrimary = QColor("#ffffff");
+    onSecondary = QColor("#ffffff");
     onBackground = QColor("#000000");
     onSurface = QColor("#000000");
-    onError = QColor("#FFFFFF");
-    onShadow = QColor("#FFFFFF");
+    onError = QColor("#ffffff");
+    onShadow = QColor("#ffffff");
 
     textEditor = background;
     onTextEditor = onBackground;
@@ -2237,7 +2237,7 @@ DesignSystem::Color DesignSystem::color(ApplicationTheme _forTheme)
         onBackground = "#000000";
         onSurface = "#000000";
         onError = "#ffffff";
-        onShadow = "#FFFFFF";
+        onShadow = "#ffffff";
         break;
     }
 
