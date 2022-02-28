@@ -1652,7 +1652,7 @@ void ComicBookTextDocument::updateModelOnContentChange(int _position, int _chars
         // Собираем элементы которые потенциально могут быть удалены
         //
         std::map<ComicBookTextModelItem*, int> itemsToDelete;
-        if (_charsRemoved > 0) {
+        {
             auto itemsToDeleteIter = d->positionsToItems.lower_bound(_position);
             while (itemsToDeleteIter != d->positionsToItems.end()
                    && itemsToDeleteIter->first <= _position + _charsRemoved) {
@@ -1661,7 +1661,7 @@ void ComicBookTextDocument::updateModelOnContentChange(int _position, int _chars
             }
 
             //
-            // Корректируем позиции элементов идущих за удаляемым блоком
+            // Корректируем позиции элементов идущих за изменёнными блоками
             //
 
             auto itemToUpdateIter = itemsToDeleteIter;
@@ -1691,11 +1691,18 @@ void ComicBookTextDocument::updateModelOnContentChange(int _position, int _chars
         // Проходим по изменённым блокам и фильтруем элементы, которые не были удалены
         //
         auto block = findBlock(_position);
-        while (block.isValid()
+        while (!itemsToDelete.empty() && block.isValid()
                && block.position() <= _position + std::max(_charsRemoved, _charsAdded)) {
             if (block.userData() != nullptr) {
                 const auto blockData = static_cast<ComicBookTextBlockData*>(block.userData());
-                itemsToDelete.erase(blockData->item());
+                const auto notRemovedItemIter = itemsToDelete.find(blockData->item());
+                if (notRemovedItemIter != itemsToDelete.end()) {
+                    //
+                    // Восстанавливаем позицию блока с учётом смещения
+                    //
+                    d->positionsToItems.emplace(block.position(), notRemovedItemIter->first);
+                    itemsToDelete.erase(notRemovedItemIter);
+                }
             }
             block = block.next();
         }
