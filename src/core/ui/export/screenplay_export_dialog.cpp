@@ -280,6 +280,11 @@ void ScreenplayExportDialog::designSystemChangeEvent(DesignSystemChangeEvent* _e
         textField->setBackgroundColor(Ui::DesignSystem::color().onBackground());
         textField->setTextColor(Ui::DesignSystem::color().onBackground());
     }
+    for (auto combobox : {
+             d->fileFormat,
+         }) {
+        combobox->setPopupBackgroundColor(Ui::DesignSystem::color().background());
+    }
 
     for (auto checkBox : {
              d->includeTitlePage,

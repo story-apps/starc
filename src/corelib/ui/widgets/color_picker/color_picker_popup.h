@@ -52,6 +52,12 @@ signals:
 
 protected:
     /**
+     * @brief Прокидываем изменение цвета в дочерние виджеты
+     */
+    void processBackgroundColorChange() override;
+    void processTextColorChange() override;
+
+    /**
      * @brief Следим за событиям потери фокуса в виджете, к которому привязан попап
      */
     bool eventFilter(QObject* _watched, QEvent* _event) override;

@@ -319,6 +319,11 @@ void ScreenplayParametersView::designSystemChangeEvent(DesignSystemChangeEvent* 
         textField->setBackgroundColor(Ui::DesignSystem::color().onBackground());
         textField->setTextColor(Ui::DesignSystem::color().onBackground());
     }
+    for (auto combobox : {
+             d->screenplayTemplate,
+         }) {
+        combobox->setPopupBackgroundColor(Ui::DesignSystem::color().background());
+    }
     for (auto checkBox : {
              d->printHeaderOnTitlePage,
              d->printFooterOnTitlePage,

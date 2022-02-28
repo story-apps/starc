@@ -39,6 +39,12 @@ signals:
 
 protected:
     /**
+     * @brief Реализуем реакцию на задание кастомного цвета
+     */
+    void processBackgroundColorChange() override;
+    void processTextColorChange() override;
+
+    /**
      * @brief Обновить переводы
      */
     void updateTranslations() override;

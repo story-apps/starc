@@ -1964,6 +1964,14 @@ void SettingsView::designSystemChangeEvent(DesignSystemChangeEvent* _event)
         textField->setCustomMargins({ isLeftToRight() ? Ui::DesignSystem::layout().px24() : 0, 0,
                                       isLeftToRight() ? 0 : Ui::DesignSystem::layout().px24(), 0 });
     }
+    for (auto combobox : {
+             d->spellCheckerLanguage,
+             d->simpleTextEditorDefaultTemplate,
+             d->screenplayEditorDefaultTemplate,
+             d->comicBookEditorDefaultTemplate,
+         }) {
+        combobox->setPopupBackgroundColor(Ui::DesignSystem::color().background());
+    }
     for (auto icon :
          { d->simpleTextEditorDefaultTemplateOptions, d->screenplayEditorDefaultTemplateOptions,
            d->comicBookEditorDefaultTemplateOptions }) {

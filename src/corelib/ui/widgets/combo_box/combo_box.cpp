@@ -100,6 +100,11 @@ ComboBox::ComboBox(QWidget* _parent)
 
 ComboBox::~ComboBox() = default;
 
+void ComboBox::setPopupBackgroundColor(const QColor& _color)
+{
+    d->popup->setBackgroundColor(_color);
+}
+
 void ComboBox::setUseContentsWidth(bool _use)
 {
     d->useContentsWidth = _use;
@@ -171,7 +176,7 @@ void ComboBox::reconfigure()
 {
     TextField::reconfigure();
 
-    d->popup->setBackgroundColor(Ui::DesignSystem::color().background());
+    d->popup->setTextColor(textColor());
 }
 
 void ComboBox::focusOutEvent(QFocusEvent* _event)

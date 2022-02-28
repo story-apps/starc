@@ -25,6 +25,7 @@ public:
      * @brief Цвет текста виджета
      */
     void setTextColor(const QColor& _color);
+    QColor textColor() const;
 
     /**
      * @brief Установить тект поясняющей метки

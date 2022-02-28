@@ -8,6 +8,12 @@ class DesignSystemChangeEvent;
 
 
 /**
+ * @brief Дефолтный цвет (имеется в виду цвет, который не был задан)
+ */
+extern const QColor kDefaultWidgetColor;
+
+
+/**
  * @brief Базовый виджет
  */
 class CORE_LIBRARY_EXPORT Widget : public QWidget

@@ -86,10 +86,10 @@ public:
 
     TextField* q = nullptr;
 
-    QColor backgroundInactiveColor = Qt::red;
-    QColor backgroundActiveColor = Qt::red;
-    QColor textColor = Qt::red;
-    QColor textDisabledColor = Qt::red;
+    QColor backgroundInactiveColor = kDefaultWidgetColor;
+    QColor backgroundActiveColor = kDefaultWidgetColor;
+    QColor textColor = kDefaultWidgetColor;
+    QColor textDisabledColor = kDefaultWidgetColor;
 
     QString label;
     QString helper;
@@ -435,6 +435,11 @@ void TextField::setTextColor(const QColor& _color)
     d->textDisabledColor = d->textColor;
     d->textDisabledColor.setAlphaF(Ui::DesignSystem::disabledTextOpacity());
     reconfigure();
+}
+
+QColor TextField::textColor() const
+{
+    return d->textColor;
 }
 
 void TextField::setLabel(const QString& _text)

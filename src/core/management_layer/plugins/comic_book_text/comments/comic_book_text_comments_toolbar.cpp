@@ -249,6 +249,7 @@ void ComicBookTextCommentsToolbar::designSystemChangeEvent(DesignSystemChangeEve
     resize(sizeHint());
 
     d->colorPickerPopup->setBackgroundColor(Ui::DesignSystem::color().background());
+    d->colorPickerPopup->setTextColor(Ui::DesignSystem::color().onBackground());
 }
 
 } // namespace Ui

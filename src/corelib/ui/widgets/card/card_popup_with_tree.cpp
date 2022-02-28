@@ -84,19 +84,19 @@ void CardPopupWithTree::showPopup(const QPoint& _position, int _parentHeight, in
     // Определим высоту попапа
     //
     const auto itemsCount = std::min(d->content->model()->rowCount(), _showMaxItems);
-    const auto height = Ui::DesignSystem::treeOneLineItem().height() * itemsCount
-        + Ui::DesignSystem::card().shadowMargins().top()
-        + Ui::DesignSystem::card().shadowMargins().bottom();
+    const auto height = Ui::DesignSystem::treeOneLineItem().height() * itemsCount;
 
     d->content->setScrollBarVisible(d->content->model()->rowCount() > _showMaxItems);
 
     CardPopup::showPopup(_position, _parentHeight, QSize(_width, height));
 }
 
-void CardPopupWithTree::designSystemChangeEvent(DesignSystemChangeEvent* _event)
+void CardPopupWithTree::processBackgroundColorChange()
 {
-    CardPopup::designSystemChangeEvent(_event);
+    d->content->setBackgroundColor(backgroundColor());
+}
 
-    d->content->setBackgroundColor(Ui::DesignSystem::color().background());
-    d->content->setTextColor(Ui::DesignSystem::color().onBackground());
+void CardPopupWithTree::processTextColorChange()
+{
+    d->content->setTextColor(textColor());
 }

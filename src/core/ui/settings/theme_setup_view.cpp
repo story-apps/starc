@@ -440,6 +440,9 @@ void ThemeSetupView::designSystemChangeEvent(DesignSystemChangeEvent* _event)
     d->textEditor->setColor(theme.textEditor());
     d->textEditor->setOnColor(theme.onTextEditor());
 
+    d->colorPickerPopup->setBackgroundColor(Ui::DesignSystem::color().background());
+    d->colorPickerPopup->setTextColor(Ui::DesignSystem::color().onBackground());
+
     for (auto button : { d->cancelButton, d->saveButton }) {
         button->setBackgroundColor(theme.secondary());
         button->setTextColor(theme.secondary());

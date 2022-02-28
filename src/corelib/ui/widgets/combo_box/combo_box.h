@@ -17,6 +17,11 @@ public:
     ~ComboBox() override;
 
     /**
+     * @brief Настроить кастомный цвет фона попапа
+     */
+    void setPopupBackgroundColor(const QColor& _color);
+
+    /**
      * @brief Необходимо ли расширят размер попапа, чтобы содержимое полностью вмещалось
      */
     void setUseContentsWidth(bool _use);

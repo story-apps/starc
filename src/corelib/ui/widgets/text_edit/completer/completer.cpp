@@ -3,6 +3,7 @@
 #include <ui/design_system/design_system.h>
 #include <ui/widgets/tree/tree_delegate.h>
 #include <ui/widgets/tree/tree_view.h>
+#include <ui/widgets/widget/widget.h>
 
 #include <QElapsedTimer>
 #include <QEvent>
@@ -26,8 +27,8 @@ public:
      * @brief Цвета элеметов списка подстановки
      */
     /** @{ */
-    QColor backgroundColor = Qt::red;
-    QColor textColor = Qt::red;
+    QColor backgroundColor = kDefaultWidgetColor;
+    QColor textColor = kDefaultWidgetColor;
     /** @} */
 
     /**

@@ -198,8 +198,9 @@ QWidget* ComboBoxItemDelegate::createEditor(QWidget* parent, const QStyleOptionV
 
     auto editor = new ComboBox(parent);
     editor->setModel(m_model);
-    editor->setBackgroundColor(Ui::DesignSystem::color().background());
+    editor->setBackgroundColor(Ui::DesignSystem::color().onBackground());
     editor->setTextColor(Ui::DesignSystem::color().onBackground());
+    editor->setPopupBackgroundColor(Ui::DesignSystem::color().background());
     editor->setDefaultMarginsEnabled(false);
     editor->setUseContentsWidth(true);
     editor->setLabel(m_label);

@@ -74,7 +74,7 @@ ColorPicker::ColorPicker(QWidget* _parent)
     connect(d->colorPallete, &ColorPallete::addCustomColorPressed, this, [this] {
         const QColor colorToSelect = d->colorPallete->selectedColor().isValid()
             ? d->colorPallete->selectedColor()
-            : Qt::red;
+            : kDefaultWidgetColor;
         d->colorCode->setText(colorToSelect.name());
         setCurrentWidget(d->customColorPanel);
     });
@@ -129,6 +129,23 @@ void ColorPicker::setSelectedColor(const QColor& _color)
     d->colorPallete->setSelectedColor(_color);
 }
 
+void ColorPicker::processBackgroundColorChange()
+{
+    d->colorPallete->setBackgroundColor(backgroundColor());
+    d->customColorPanel->setBackgroundColor(backgroundColor());
+    d->colorSlider->setBackgroundColor(backgroundColor());
+    d->colorHueSlider->setBackgroundColor(backgroundColor());
+}
+
+void ColorPicker::processTextColorChange()
+{
+    d->colorPallete->setTextColor(textColor());
+    d->colorCode->setBackgroundColor(textColor());
+    d->colorCode->setTextColor(textColor());
+    d->colorSlider->setTextColor(textColor());
+    d->colorHueSlider->setTextColor(textColor());
+}
+
 void ColorPicker::updateTranslations()
 {
     d->colorCode->setLabel(tr("Color hex code"));
@@ -140,26 +157,11 @@ void ColorPicker::designSystemChangeEvent(DesignSystemChangeEvent* _event)
 {
     Widget::designSystemChangeEvent(_event);
 
-    setBackgroundColor(Ui::DesignSystem::color().background());
-
-    d->colorPallete->setBackgroundColor(Ui::DesignSystem::color().background());
-    d->colorPallete->setTextColor(Ui::DesignSystem::color().onBackground());
-    //
-    d->customColorPanel->setBackgroundColor(Ui::DesignSystem::color().background());
-
-
     d->colorCode->setCustomMargins(
         { Ui::DesignSystem::layout().px8(), Ui::DesignSystem::layout().px8(),
           Ui::DesignSystem::layout().px8(), Ui::DesignSystem::layout().px8() });
-    d->colorCode->setBackgroundColor(Ui::DesignSystem::color().onBackground());
-    d->colorCode->setTextColor(Ui::DesignSystem::color().onBackground());
-    //
-    d->colorSlider->setBackgroundColor(Ui::DesignSystem::color().background());
-    d->colorSlider->setTextColor(Ui::DesignSystem::color().onBackground());
-    d->colorHueSlider->setBackgroundColor(Ui::DesignSystem::color().background());
-    d->colorHueSlider->setTextColor(Ui::DesignSystem::color().onBackground());
-    d->colorHueSlider->setFixedHeight(Ui::DesignSystem::layout().px24());
 
+    d->colorHueSlider->setFixedHeight(Ui::DesignSystem::layout().px24());
 
     d->addButton->setBackgroundColor(Ui::DesignSystem::color().secondary());
     d->addButton->setTextColor(Ui::DesignSystem::color().secondary());

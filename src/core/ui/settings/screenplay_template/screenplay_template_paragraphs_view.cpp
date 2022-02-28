@@ -666,6 +666,13 @@ void ScreenplayTemplateParagraphsView::designSystemChangeEvent(DesignSystemChang
             { isLeftToRight() ? Ui::DesignSystem::layout().px24() : 0.0, 0.0,
               isLeftToRight() ? 0.0 : Ui::DesignSystem::layout().px24(), 0.0 });
     }
+    for (auto combobox : {
+             d->fontFamily,
+             d->fontSize,
+             d->lineSpacing,
+         }) {
+        combobox->setPopupBackgroundColor(Ui::DesignSystem::color().background());
+    }
 }
 
 } // namespace Ui

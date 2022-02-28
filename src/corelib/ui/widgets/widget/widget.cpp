@@ -7,11 +7,14 @@
 #include <QPainter>
 
 
+const QColor kDefaultWidgetColor = Qt::red;
+
+
 class Widget::Implementation
 {
 public:
-    QColor backgroundColor = Qt::red;
-    QColor textColor = Qt::red;
+    QColor backgroundColor = kDefaultWidgetColor;
+    QColor textColor = kDefaultWidgetColor;
     qreal opacity = 1.0;
 };
 

@@ -134,6 +134,16 @@ void ColorPickerPopup::hidePopup()
     }
 }
 
+void ColorPickerPopup::processBackgroundColorChange()
+{
+    d->colorPicker->setBackgroundColor(backgroundColor());
+}
+
+void ColorPickerPopup::processTextColorChange()
+{
+    d->colorPicker->setTextColor(textColor());
+}
+
 bool ColorPickerPopup::eventFilter(QObject* _watched, QEvent* _event)
 {
     if (_watched == d->watchedWidget) {

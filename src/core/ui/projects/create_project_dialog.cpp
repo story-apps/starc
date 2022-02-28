@@ -351,6 +351,11 @@ void CreateProjectDialog::designSystemChangeEvent(DesignSystemChangeEvent* _even
         textField->setTextColor(Ui::DesignSystem::color().onBackground());
         textField->setBackgroundColor(Ui::DesignSystem::color().onBackground());
     }
+    for (auto combobox : {
+             d->projectType,
+         }) {
+        combobox->setPopupBackgroundColor(Ui::DesignSystem::color().background());
+    }
 
     d->cloudProjectCreationNote->setContentsMargins(QMarginsF(Ui::DesignSystem::layout().px24(),
                                                               Ui::DesignSystem::layout().px12(),

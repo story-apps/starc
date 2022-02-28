@@ -46,9 +46,10 @@ signals:
 
 protected:
     /**
-     * @brief Настраиваем внешний вид дерева элементов самого попапа
+     * @brief Прокидываем изменение цветов в дерево
      */
-    void designSystemChangeEvent(DesignSystemChangeEvent* _event) override;
+    void processBackgroundColorChange() override;
+    void processTextColorChange() override;
 
 private:
     class Implementation;

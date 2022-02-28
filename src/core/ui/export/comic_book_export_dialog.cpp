@@ -212,6 +212,12 @@ void ComicBookExportDialog::designSystemChangeEvent(DesignSystemChangeEvent* _ev
         textField->setBackgroundColor(Ui::DesignSystem::color().onBackground());
         textField->setTextColor(Ui::DesignSystem::color().onBackground());
     }
+    for (auto combobox : {
+             d->fileFormat,
+             d->comicBookTemplate,
+         }) {
+        combobox->setPopupBackgroundColor(Ui::DesignSystem::color().background());
+    }
 
     for (auto checkBox : { d->printTitlePage, d->useWordsInPageHeadings, d->printInlineNotes,
                            d->printReviewMarks, d->openDocumentAfterExport }) {

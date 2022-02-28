@@ -10,7 +10,7 @@
 class Stepper::Implementation
 {
 public:
-    QColor inactiveStepNumberBackgroundColor = Qt::red;
+    QColor inactiveStepNumberBackgroundColor = kDefaultWidgetColor;
 
     QVector<QString> steps;
     int currentStepIndex = 0;
