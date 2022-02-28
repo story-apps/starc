@@ -36,17 +36,6 @@ void SimpleTextStructureModel::setSourceModel(QAbstractItemModel* _sourceModel)
 
     d->textModel = qobject_cast<TextModel*>(_sourceModel);
     QSortFilterProxyModel::setSourceModel(_sourceModel);
-
-    if (d->textModel != nullptr) {
-        //
-        // FIXME: Это сделано из-за того, что при перемещении элементов внутри модели сценария
-        //        в позицию 0, на вторую попытку происходит падение внутри QSortFilterModel,
-        //        видимо не успевает происходить какая-то внутренняя магия при синхронном удалении
-        //        и последующей вставки элементов в модели
-        //
-        connect(d->textModel, &TextModel::rowsRemoved, this,
-                [] { QApplication::processEvents(QEventLoop::ExcludeUserInputEvents); });
-    }
 }
 
 bool SimpleTextStructureModel::filterAcceptsRow(int _sourceRow,

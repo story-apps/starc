@@ -36,17 +36,6 @@ void ComicBookTextStructureModel::setSourceModel(QAbstractItemModel* _sourceMode
 
     d->comicBookModel = qobject_cast<ComicBookTextModel*>(_sourceModel);
     QSortFilterProxyModel::setSourceModel(_sourceModel);
-
-    if (d->comicBookModel != nullptr) {
-        //
-        // FIXME: Это сделано из-за того, что при перемещении элементов внутри модели
-        //        в позицию 0, на вторую попытку происходит падение внутри QSortFilterModel,
-        //        видимо не успевает происходить какая-то внутренняя магия при синхронном удалении
-        //        и последующей вставки элементов в модели
-        //
-        connect(d->comicBookModel, &ComicBookTextModel::rowsRemoved, this,
-                [] { QApplication::processEvents(QEventLoop::ExcludeUserInputEvents); });
-    }
 }
 
 bool ComicBookTextStructureModel::filterAcceptsRow(int _sourceRow,
