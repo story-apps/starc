@@ -19,6 +19,7 @@
 #include <domain/document_object.h>
 #include <utils/diff_match_patch/diff_match_patch_controller.h>
 #include <utils/helpers/text_helper.h>
+#include <utils/logging.h>
 #include <utils/shugar.h>
 #include <utils/tools/edit_distance.h>
 #include <utils/tools/model_index_path.h>
@@ -924,7 +925,9 @@ void ScreenplayTextModel::insertFromMime(const QModelIndex& _index, int _positio
             }
         }
     } else {
-        qDebug("here");
+        Log::warning(
+            "Trying to insert from mime to position with no text item. Aborting insertion.");
+        return;
     }
 
     //
@@ -937,8 +940,9 @@ void ScreenplayTextModel::insertFromMime(const QModelIndex& _index, int _positio
     ScreenplayTextModelItem* lastItem = item;
     ScreenplayTextModelItem* insertAfterItem = lastItem;
     QVector<ScreenplayTextModelItem*> itemsToInsert;
-    auto insertCollectedItems = [this, &insertAfterItem, &itemsToInsert] {
+    auto insertCollectedItems = [this, &lastItem, &insertAfterItem, &itemsToInsert] {
         insertItems(itemsToInsert, insertAfterItem);
+        lastItem = itemsToInsert.constLast();
         itemsToInsert.clear();
     };
     while (!contentReader.atEnd()) {
@@ -962,27 +966,32 @@ void ScreenplayTextModel::insertFromMime(const QModelIndex& _index, int _positio
         //
         if ((currentTag == xml::kFolderTag || currentTag == xml::kSceneTag)
             && (lastItem->type() == ScreenplayTextModelItemType::Text
-                || lastItem->type() == ScreenplayTextModelItemType::Splitter)
-            && lastItem->parent() != nullptr
-            && lastItem->parent()->type() == ScreenplayTextModelItemType::Scene) {
+                || lastItem->type() == ScreenplayTextModelItemType::Splitter)) {
             //
-            // ... вставим в модель, всё, что было собрано
+            // ... вставим в модель, всё, что было собрано до этого момента
             //
             insertCollectedItems();
+
             //
-            // ... и при этом вырезаем из него все текстовые блоки, идущие до конца сцены/папки
+            // ... родитель предыдущего элемента должен существовать и это должна быть сцена
             //
-            auto lastItemParent = lastItem->parent();
-            int movedItemIndex = lastItemParent->rowOfChild(lastItem) + 1;
-            while (lastItemParent->childCount() > movedItemIndex) {
-                lastItemsFromSourceScene.append(lastItemParent->childAt(movedItemIndex));
-                ++movedItemIndex;
+            if (lastItem && lastItem->parent() != nullptr
+                && lastItem->parent()->type() == ScreenplayTextModelItemType::Scene) {
+                //
+                // ... и при этом вырезаем из него все текстовые блоки, идущие до конца сцены/папки
+                //
+                auto lastItemParent = lastItem->parent();
+                int movedItemIndex = lastItemParent->rowOfChild(lastItem) + 1;
+                while (lastItemParent->childCount() > movedItemIndex) {
+                    lastItemsFromSourceScene.append(lastItemParent->childAt(movedItemIndex));
+                    ++movedItemIndex;
+                }
+                //
+                // Собственно берём родителя вместо самого элемента
+                //
+                lastItem = lastItemParent;
+                insertAfterItem = lastItemParent;
             }
-            //
-            // Собственно берём родителя вместо самого элемента
-            //
-            lastItem = lastItemParent;
-            insertAfterItem = lastItemParent;
         }
 
 

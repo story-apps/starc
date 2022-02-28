@@ -15,6 +15,7 @@
 #include <domain/document_object.h>
 #include <utils/diff_match_patch/diff_match_patch_controller.h>
 #include <utils/helpers/text_helper.h>
+#include <utils/logging.h>
 #include <utils/shugar.h>
 #include <utils/tools/edit_distance.h>
 #include <utils/tools/model_index_path.h>
@@ -274,20 +275,26 @@ void ComicBookTextModel::prependItem(ComicBookTextModelItem* _item,
 void ComicBookTextModel::insertItem(ComicBookTextModelItem* _item,
                                     ComicBookTextModelItem* _afterSiblingItem)
 {
-    if (_item == nullptr || _afterSiblingItem == nullptr
-        || _afterSiblingItem->parent() == nullptr) {
+    insertItems({ _item }, _afterSiblingItem);
+}
+
+void ComicBookTextModel::insertItems(const QVector<ComicBookTextModelItem*>& _items,
+                                     ComicBookTextModelItem* _afterSiblingItem)
+{
+    if (_items.isEmpty()) {
+        return;
+    }
+
+    if (_afterSiblingItem == nullptr || _afterSiblingItem->parent() == nullptr) {
         return;
     }
 
     auto parentItem = _afterSiblingItem->parent();
-    if (parentItem->hasChild(_item)) {
-        return;
-    }
-
     const QModelIndex parentIndex = indexForItem(parentItem);
-    const int itemRowIndex = parentItem->rowOfChild(_afterSiblingItem) + 1;
-    beginInsertRows(parentIndex, itemRowIndex, itemRowIndex);
-    parentItem->insertItem(itemRowIndex, _item);
+    const int fromItemRow = parentItem->rowOfChild(_afterSiblingItem) + 1;
+    const int toItemRow = fromItemRow + _items.size() - 1;
+    beginInsertRows(parentIndex, fromItemRow, toItemRow);
+    parentItem->insertItems(fromItemRow, { _items.begin(), _items.end() });
     d->updateNumbering();
     endInsertRows();
 
@@ -952,7 +959,9 @@ void ComicBookTextModel::insertFromMime(const QModelIndex& _index, int _position
             }
         }
     } else {
-        qDebug("here");
+        Log::warning(
+            "Trying to insert from mime to position with no text item. Aborting insertion.");
+        return;
     }
 
     //
@@ -963,9 +972,24 @@ void ComicBookTextModel::insertFromMime(const QModelIndex& _index, int _position
     contentReader.readNextStartElement();
     bool isFirstTextItemHandled = false;
     ComicBookTextModelItem* lastItem = item;
+    ComicBookTextModelItem* insertAfterItem = lastItem;
+    QVector<ComicBookTextModelItem*> itemsToInsert;
+    auto insertCollectedItems = [this, &lastItem, &insertAfterItem, &itemsToInsert] {
+        insertItems(itemsToInsert, insertAfterItem);
+        lastItem = itemsToInsert.constLast();
+        itemsToInsert.clear();
+    };
     while (!contentReader.atEnd()) {
         const auto currentTag = contentReader.name();
+
+        //
+        // Если дошли до конца
+        //
         if (currentTag == xml::kDocumentTag) {
+            //
+            // ... поместим в модель, все собранные элементы
+            //
+            insertCollectedItems();
             break;
         }
 
@@ -977,22 +1001,33 @@ void ComicBookTextModel::insertFromMime(const QModelIndex& _index, int _position
         if ((currentTag == xml::kFolderTag || currentTag == xml::kPageTag
              || currentTag == xml::kPanelTag)
             && (lastItem->type() == ComicBookTextModelItemType::Text
-                || lastItem->type() == ComicBookTextModelItemType::Splitter)
-            && (lastItem->parent()->type() == ComicBookTextModelItemType::Page
-                || lastItem->parent()->type() == ComicBookTextModelItemType::Panel)) {
+                || lastItem->type() == ComicBookTextModelItemType::Splitter)) {
             //
-            // ... и при этом вырезаем из него все текстовые блоки, идущие до конца сцены/папки
+            // ... вставим в модель, всё, что было собрано до этого момента
             //
-            auto lastItemParent = lastItem->parent();
-            int movedItemIndex = lastItemParent->rowOfChild(lastItem) + 1;
-            while (lastItemParent->childCount() > movedItemIndex) {
-                lastItemsFromSourceScene.append(lastItemParent->childAt(movedItemIndex));
-                ++movedItemIndex;
+            insertCollectedItems();
+
+            //
+            // ... родитель предыдущего элемента должен существовать и это должна быть сцена
+            //
+            if (lastItem && lastItem->parent() != nullptr
+                && (lastItem->parent()->type() == ComicBookTextModelItemType::Page
+                    || lastItem->parent()->type() == ComicBookTextModelItemType::Panel)) {
+                //
+                // ... и при этом вырезаем из него все текстовые блоки, идущие до конца сцены/папки
+                //
+                auto lastItemParent = lastItem->parent();
+                int movedItemIndex = lastItemParent->rowOfChild(lastItem) + 1;
+                while (lastItemParent->childCount() > movedItemIndex) {
+                    lastItemsFromSourceScene.append(lastItemParent->childAt(movedItemIndex));
+                    ++movedItemIndex;
+                }
+                //
+                // Собственно берём родителя вместо самого элемента
+                //
+                lastItem = lastItemParent;
+                insertAfterItem = lastItemParent;
             }
-            //
-            // Собственно берём родителя вместо самого элемента
-            //
-            lastItem = lastItemParent;
         }
 
 

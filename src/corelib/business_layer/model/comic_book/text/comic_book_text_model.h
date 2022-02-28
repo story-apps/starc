@@ -36,6 +36,8 @@ public:
      * @brief Вставить элемент после заданного
      */
     void insertItem(ComicBookTextModelItem* _item, ComicBookTextModelItem* _afterSiblingItem);
+    void insertItems(const QVector<ComicBookTextModelItem*>& _items,
+                     ComicBookTextModelItem* _afterSiblingItem);
 
     /**
      * @brief Извлечь заданный элемент без удаления
