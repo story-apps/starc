@@ -773,6 +773,14 @@ void ComicBookTextCorrector::Implementation::correctPageBreaks(int _position)
         }
 
         //
+        // Для блока, который всегда находится в начале страницы очищаем информацию
+        // о высоте предыдущего блока, какой бы она ни была
+        //
+        if (block.blockFormat().pageBreakPolicy() == QTextFormat::PageBreak_AlwaysBefore) {
+            lastBlockHeight = 0;
+        }
+
+        //
         // Определить высоту текущего блока
         //
         const QTextBlockFormat blockFormat = block.blockFormat();
