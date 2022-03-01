@@ -588,6 +588,11 @@ void ApplicationManager::Implementation::setTranslation(QLocale::Language _langu
         break;
     }
 
+    case QLocale::Chinese: {
+        translation = "zh_CN";
+        break;
+    }
+
     case QLocale::Croatian: {
         translation = "hr";
         break;

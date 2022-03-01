@@ -770,17 +770,17 @@
 <context>
     <name>ColorPicker</name>
     <message>
-        <location filename="../../corelib/ui/widgets/color_picker/color_picker.cpp" line="134"/>
+        <location filename="../../corelib/ui/widgets/color_picker/color_picker.cpp" line="151"/>
         <source>Color hex code</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/widgets/color_picker/color_picker.cpp" line="135"/>
+        <location filename="../../corelib/ui/widgets/color_picker/color_picker.cpp" line="152"/>
         <source>Cancel</source>
         <translation>Cancel</translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/widgets/color_picker/color_picker.cpp" line="136"/>
+        <location filename="../../corelib/ui/widgets/color_picker/color_picker.cpp" line="153"/>
         <source>Add</source>
         <translation>Add</translation>
     </message>
@@ -1025,79 +1025,79 @@
 <context>
     <name>ManagementLayer::ApplicationManager</name>
     <message>
-        <location filename="../management_layer/application_manager.cpp" line="786"/>
+        <location filename="../management_layer/application_manager.cpp" line="792"/>
         <source> - changed</source>
         <translation> - changed</translation>
     </message>
     <message>
-        <location filename="../management_layer/application_manager.cpp" line="842"/>
-        <location filename="../management_layer/application_manager.cpp" line="861"/>
-        <location filename="../management_layer/application_manager.cpp" line="1005"/>
+        <location filename="../management_layer/application_manager.cpp" line="848"/>
+        <location filename="../management_layer/application_manager.cpp" line="867"/>
+        <location filename="../management_layer/application_manager.cpp" line="1019"/>
         <source>Saving error</source>
         <translation>Saving error</translation>
     </message>
     <message>
-        <location filename="../management_layer/application_manager.cpp" line="843"/>
+        <location filename="../management_layer/application_manager.cpp" line="849"/>
         <source>Changes can&apos;t be written. There is an internal database error: &quot;%1&quot; Please check, if your file exists and if you have permission to write.</source>
         <translation>Changes can&apos;t be written. There is an internal database error: &quot;%1&quot; Please check, if your file exists and if you have permission to write.</translation>
     </message>
     <message>
-        <location filename="../management_layer/application_manager.cpp" line="862"/>
+        <location filename="../management_layer/application_manager.cpp" line="868"/>
         <source>Changes can&apos;t be written because the story located at &quot;%1&quot; doesn&apos;t exist. Please move the file back and retry saving.</source>
         <translation>Changes can&apos;t be written because the story located at &quot;%1&quot; doesn&apos;t exist. Please move the file back and retry saving.</translation>
     </message>
     <message>
-        <location filename="../management_layer/application_manager.cpp" line="906"/>
+        <location filename="../management_layer/application_manager.cpp" line="919"/>
         <source>Project was modified. Save changes?</source>
         <translation>Project was modified. Save changes?</translation>
     </message>
     <message>
-        <location filename="../management_layer/application_manager.cpp" line="907"/>
+        <location filename="../management_layer/application_manager.cpp" line="920"/>
         <source>Cancel</source>
         <translation>Cancel</translation>
     </message>
     <message>
-        <location filename="../management_layer/application_manager.cpp" line="908"/>
+        <location filename="../management_layer/application_manager.cpp" line="921"/>
         <source>Don&apos;t save</source>
         <translation>Don&apos;t save</translation>
     </message>
     <message>
-        <location filename="../management_layer/application_manager.cpp" line="909"/>
+        <location filename="../management_layer/application_manager.cpp" line="922"/>
         <source>Save</source>
         <translation>Save</translation>
     </message>
     <message>
-        <location filename="../management_layer/application_manager.cpp" line="967"/>
+        <location filename="../management_layer/application_manager.cpp" line="981"/>
         <source>Choose file to save story</source>
         <translation>Choose file to save story</translation>
     </message>
     <message>
-        <location filename="../management_layer/application_manager.cpp" line="1006"/>
+        <location filename="../management_layer/application_manager.cpp" line="1020"/>
         <source>Can&apos;t save the story to the file %1. Please check permissions and retry.</source>
         <translation>Can&apos;t save the story to the file %1. Please check permissions and retry.</translation>
     </message>
     <message>
-        <location filename="../management_layer/application_manager.cpp" line="1056"/>
+        <location filename="../management_layer/application_manager.cpp" line="1070"/>
         <source>You tried to create a project in nonexistent folder %1. Please, choose another location for the new project.</source>
         <translation>You tried to create a project in nonexistent folder %1. Please, choose another location for the new project.</translation>
     </message>
     <message>
-        <location filename="../management_layer/application_manager.cpp" line="1061"/>
+        <location filename="../management_layer/application_manager.cpp" line="1075"/>
         <source>The file can&apos;t be written. Looks like it is opened by another application. Please close it and retry to create a new project.</source>
         <translation>The file can&apos;t be written. Looks like it is opened by another application. Please close it and retry to create a new project.</translation>
     </message>
     <message>
-        <location filename="../management_layer/application_manager.cpp" line="1065"/>
+        <location filename="../management_layer/application_manager.cpp" line="1079"/>
         <source>The file can&apos;t be written. Please, check and give permissions to the app to write into the selected folder, or choose another folder for saving a new project.</source>
         <translation>The file can&apos;t be written. Please, check and give permissions to the app to write into the selected folder, or choose another folder for saving a new project.</translation>
     </message>
     <message>
-        <location filename="../management_layer/application_manager.cpp" line="1069"/>
+        <location filename="../management_layer/application_manager.cpp" line="1083"/>
         <source>Create project error</source>
         <translation>Create project error</translation>
     </message>
     <message>
-        <location filename="../management_layer/application_manager.cpp" line="1149"/>
+        <location filename="../management_layer/application_manager.cpp" line="1163"/>
         <source>This file can&apos;t be open at this moment, because it is already open in another copy of the application.</source>
         <translation></translation>
     </message>
@@ -1644,17 +1644,17 @@
 <context>
     <name>SpellCheckTextEdit</name>
     <message>
-        <location filename="../../corelib/ui/widgets/text_edit/spell_check/spell_check_text_edit.cpp" line="192"/>
+        <location filename="../../corelib/ui/widgets/text_edit/spell_check/spell_check_text_edit.cpp" line="188"/>
         <source>Spelling</source>
         <translation>Spelling</translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/widgets/text_edit/spell_check/spell_check_text_edit.cpp" line="206"/>
+        <location filename="../../corelib/ui/widgets/text_edit/spell_check/spell_check_text_edit.cpp" line="202"/>
         <source>Add to dictionary</source>
         <translation>Add to dictionary</translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/widgets/text_edit/spell_check/spell_check_text_edit.cpp" line="210"/>
+        <location filename="../../corelib/ui/widgets/text_edit/spell_check/spell_check_text_edit.cpp" line="206"/>
         <source>Ignore word</source>
         <translation>Ignore word</translation>
     </message>
@@ -3301,17 +3301,17 @@ from 2 Gb</translation>
 <context>
     <name>Ui::LanguageDialog</name>
     <message>
-        <location filename="../ui/settings/language_dialog.cpp" line="279"/>
+        <location filename="../ui/settings/language_dialog.cpp" line="282"/>
         <source>Change application language</source>
         <translation>Change application language</translation>
     </message>
     <message>
-        <location filename="../ui/settings/language_dialog.cpp" line="282"/>
+        <location filename="../ui/settings/language_dialog.cpp" line="285"/>
         <source>Did not find your preffered language? Read how you can add it yourself.</source>
         <translation>Did not find your preffered language? Read how you can add it yourself.</translation>
     </message>
     <message>
-        <location filename="../ui/settings/language_dialog.cpp" line="284"/>
+        <location filename="../ui/settings/language_dialog.cpp" line="287"/>
         <source>Close</source>
         <translation>Close</translation>
     </message>
@@ -3745,27 +3745,27 @@ from 2 Gb</translation>
 <context>
     <name>Ui::OnboardingView</name>
     <message>
-        <location filename="../ui/onboarding/onboarding_view.cpp" line="384"/>
+        <location filename="../ui/onboarding/onboarding_view.cpp" line="382"/>
         <source>Choose preferred language</source>
         <translation>Choose preferred language</translation>
     </message>
     <message>
-        <location filename="../ui/onboarding/onboarding_view.cpp" line="386"/>
+        <location filename="../ui/onboarding/onboarding_view.cpp" line="384"/>
         <source>Did not find your preffered language? Read how you can add it yourself.</source>
         <translation>Did not find your preffered language? Read how you can add it yourself.</translation>
     </message>
     <message>
-        <location filename="../ui/onboarding/onboarding_view.cpp" line="387"/>
+        <location filename="../ui/onboarding/onboarding_view.cpp" line="385"/>
         <source>Continue</source>
         <translation>Continue</translation>
     </message>
     <message>
-        <location filename="../ui/onboarding/onboarding_view.cpp" line="388"/>
+        <location filename="../ui/onboarding/onboarding_view.cpp" line="386"/>
         <source>Skip initial setup</source>
         <translation>Skip initial setup</translation>
     </message>
     <message>
-        <location filename="../ui/onboarding/onboarding_view.cpp" line="390"/>
+        <location filename="../ui/onboarding/onboarding_view.cpp" line="388"/>
         <source>Choose application theme</source>
         <translation>Choose application theme</translation>
     </message>
@@ -3794,22 +3794,22 @@ from 2 Gb</translation>
         <translation type="vanished">Theme is convenient for work with sufficient light.</translation>
     </message>
     <message>
-        <location filename="../ui/onboarding/onboarding_view.cpp" line="391"/>
+        <location filename="../ui/onboarding/onboarding_view.cpp" line="389"/>
         <source>Setup size of the user interface elements</source>
         <translation>Setup size of the user interface elements</translation>
     </message>
     <message>
-        <location filename="../ui/onboarding/onboarding_view.cpp" line="392"/>
+        <location filename="../ui/onboarding/onboarding_view.cpp" line="390"/>
         <source>small</source>
         <translation>small</translation>
     </message>
     <message>
-        <location filename="../ui/onboarding/onboarding_view.cpp" line="393"/>
+        <location filename="../ui/onboarding/onboarding_view.cpp" line="391"/>
         <source>big</source>
         <translation>big</translation>
     </message>
     <message>
-        <location filename="../ui/onboarding/onboarding_view.cpp" line="394"/>
+        <location filename="../ui/onboarding/onboarding_view.cpp" line="392"/>
         <source>Start writing</source>
         <translation>Start writing</translation>
     </message>
@@ -4821,12 +4821,12 @@ from 2 Gb</translation>
         <translation type="vanished">Folder</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_text/screenplay_text_view.cpp" line="762"/>
+        <location filename="../management_layer/plugins/screenplay_text/screenplay_text_view.cpp" line="765"/>
         <source>Formatting</source>
         <translation>Formatting</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_text/screenplay_text_view.cpp" line="763"/>
+        <location filename="../management_layer/plugins/screenplay_text/screenplay_text_view.cpp" line="766"/>
         <source>Comments</source>
         <translation>Comments</translation>
     </message>

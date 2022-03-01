@@ -30,6 +30,7 @@ public:
     RadioButton* azerbaijani = nullptr;
     RadioButton* belarusian = nullptr;
     RadioButton* catalan = nullptr;
+    RadioButton* chinese = nullptr;
     RadioButton* croatian = nullptr;
     RadioButton* danish = nullptr;
     RadioButton* english = nullptr;
@@ -64,6 +65,7 @@ LanguageDialog::Implementation::Implementation(QWidget* _parent)
     : azerbaijani(new RadioButton(_parent))
     , belarusian(new RadioButton(_parent))
     , catalan(new RadioButton(_parent))
+    , chinese(new RadioButton(_parent))
     , croatian(new RadioButton(_parent))
     , danish(new RadioButton(_parent))
     , english(new RadioButton(_parent))
@@ -96,6 +98,8 @@ LanguageDialog::Implementation::Implementation(QWidget* _parent)
     belarusian->setProperty(kLanguageKey, QLocale::Belarusian);
     catalan->setText("Català");
     catalan->setProperty(kLanguageKey, QLocale::Catalan);
+    chinese->setText("汉语");
+    chinese->setProperty(kLanguageKey, QLocale::Chinese);
     croatian->setText("Hrvatski");
     croatian->setProperty(kLanguageKey, QLocale::Croatian);
     danish->setText("Dansk");
@@ -161,11 +165,11 @@ LanguageDialog::Implementation::Implementation(QWidget* _parent)
 std::vector<RadioButton*> LanguageDialog::Implementation::languages() const
 {
     return {
-        azerbaijani,      belarusian, catalan,  croatian,  danish,  english,
-        esperanto,        french,     galician, german,    hebrew,  hindi,
-        hungarian,        indonesian, italian,  persian,   polish,  portuguese,
-        portugueseBrazil, romanian,   russian,  slovenian, spanish, tagalog,
-        turkish,          ukrainian,
+        azerbaijani, belarusian,       catalan,    chinese,  croatian,  danish,
+        english,     esperanto,        french,     galician, german,    hebrew,
+        hindi,       hungarian,        indonesian, italian,  persian,   polish,
+        portuguese,  portugueseBrazil, romanian,   russian,  slovenian, spanish,
+        tagalog,     turkish,          ukrainian,
     };
 }
 
@@ -194,7 +198,7 @@ LanguageDialog::LanguageDialog(QWidget* _parent)
         d->croatian,    d->indonesian,       d->italian,   d->hungarian, d->polish,
         d->portuguese,  d->portugueseBrazil, d->romanian,  d->russian,   d->slovenian,
         d->tagalog,     d->turkish,          d->ukrainian, d->hebrew,    d->hindi,
-        d->persian,
+        d->persian,     d->chinese,
     });
 
     int row = 0;
@@ -229,6 +233,7 @@ LanguageDialog::LanguageDialog(QWidget* _parent)
     contentsLayout()->addWidget(d->hebrew, rowForFifthColumn++, 3);
     contentsLayout()->addWidget(d->hindi, rowForFifthColumn++, 3);
     contentsLayout()->addWidget(d->persian, rowForFifthColumn++, 3);
+    contentsLayout()->addWidget(d->chinese, rowForFifthColumn++, 3);
     //
     contentsLayout()->setRowStretch(row++, 1);
     contentsLayout()->setColumnStretch(4, 1);

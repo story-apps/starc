@@ -1,52 +1,52 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!DOCTYPE TS>
-<TS version="2.1" language="en_US">
+<TS version="2.1" language="zh_CN">
 <context>
     <name>BaseTextEdit</name>
     <message>
         <location filename="../../corelib/ui/widgets/text_edit/base/base_text_edit.cpp" line="299"/>
         <source>Formatting</source>
-        <translation type="unfinished"></translation>
+        <translation>格式</translation>
     </message>
     <message>
         <location filename="../../corelib/ui/widgets/text_edit/base/base_text_edit.cpp" line="303"/>
         <source>Bold</source>
-        <translation type="unfinished"></translation>
+        <translation>粗体</translation>
     </message>
     <message>
         <location filename="../../corelib/ui/widgets/text_edit/base/base_text_edit.cpp" line="310"/>
         <source>Italic</source>
-        <translation type="unfinished"></translation>
+        <translation>斜体</translation>
     </message>
     <message>
         <location filename="../../corelib/ui/widgets/text_edit/base/base_text_edit.cpp" line="317"/>
         <source>Underline</source>
-        <translation type="unfinished"></translation>
+        <translation>下划线</translation>
     </message>
     <message>
         <location filename="../../corelib/ui/widgets/text_edit/base/base_text_edit.cpp" line="324"/>
         <source>Strikethrough</source>
-        <translation type="unfinished"></translation>
+        <translation>删除线</translation>
     </message>
     <message>
         <location filename="../../corelib/ui/widgets/text_edit/base/base_text_edit.cpp" line="333"/>
         <source>Align left</source>
-        <translation type="unfinished"></translation>
+        <translation>左对齐</translation>
     </message>
     <message>
         <location filename="../../corelib/ui/widgets/text_edit/base/base_text_edit.cpp" line="339"/>
         <source>Align center</source>
-        <translation type="unfinished"></translation>
+        <translation>居中</translation>
     </message>
     <message>
         <location filename="../../corelib/ui/widgets/text_edit/base/base_text_edit.cpp" line="345"/>
         <source>Align right</source>
-        <translation type="unfinished"></translation>
+        <translation>右对齐</translation>
     </message>
     <message>
         <location filename="../../corelib/ui/widgets/text_edit/base/base_text_edit.cpp" line="351"/>
         <source>Align justify</source>
-        <translation type="unfinished"></translation>
+        <translation>两端对齐</translation>
     </message>
 </context>
 <context>
@@ -62,19 +62,19 @@
     <message>
         <location filename="../../corelib/business_layer/model/comic_book/comic_book_dictionaries_model.cpp" line="107"/>
         <source>page</source>
-        <translation type="unfinished"></translation>
+        <translation>页</translation>
     </message>
     <message>
         <location filename="../../corelib/business_layer/model/comic_book/comic_book_dictionaries_model.cpp" line="111"/>
         <source>pages</source>
         <extracomment>Comic book title pages</extracomment>
-        <translation type="unfinished"></translation>
+        <translation>页</translation>
     </message>
     <message>
         <location filename="../../corelib/business_layer/model/comic_book/comic_book_dictionaries_model.cpp" line="116"/>
         <source>panel</source>
         <extracomment>Comic book panel intro</extracomment>
-        <translation type="unfinished"></translation>
+        <translation>面板</translation>
     </message>
     <message>
         <location filename="../../corelib/business_layer/model/comic_book/comic_book_dictionaries_model.cpp" line="119"/>
@@ -122,12 +122,12 @@
     <message>
         <location filename="../../corelib/business_layer/reports/comic_book/comic_book_summary_report.cpp" line="212"/>
         <source>Paragraph</source>
-        <translation type="unfinished"></translation>
+        <translation>段落</translation>
     </message>
     <message>
         <location filename="../../corelib/business_layer/reports/comic_book/comic_book_summary_report.cpp" line="216"/>
         <source>Words</source>
-        <translation type="unfinished"></translation>
+        <translation>字</translation>
     </message>
     <message>
         <location filename="../../corelib/business_layer/reports/comic_book/comic_book_summary_report.cpp" line="220"/>
@@ -155,17 +155,17 @@
     <message>
         <location filename="../../corelib/business_layer/templates/comic_book_template.cpp" line="66"/>
         <source>Description</source>
-        <translation type="unfinished"></translation>
+        <translation>描述</translation>
     </message>
     <message>
         <location filename="../../corelib/business_layer/templates/comic_book_template.cpp" line="68"/>
         <source>Character</source>
-        <translation type="unfinished"></translation>
+        <translation>字</translation>
     </message>
     <message>
         <location filename="../../corelib/business_layer/templates/comic_book_template.cpp" line="70"/>
         <source>Dialogue</source>
-        <translation type="unfinished"></translation>
+        <translation>对话</translation>
     </message>
     <message>
         <location filename="../../corelib/business_layer/templates/comic_book_template.cpp" line="72"/>
@@ -454,12 +454,12 @@
     <message>
         <location filename="../../corelib/business_layer/reports/screenplay/screenplay_summary_report.cpp" line="257"/>
         <source>Paragraph</source>
-        <translation type="unfinished"></translation>
+        <translation>段落</translation>
     </message>
     <message>
         <location filename="../../corelib/business_layer/reports/screenplay/screenplay_summary_report.cpp" line="261"/>
         <source>Words</source>
-        <translation type="unfinished"></translation>
+        <translation>字</translation>
     </message>
     <message>
         <location filename="../../corelib/business_layer/reports/screenplay/screenplay_summary_report.cpp" line="265"/>
@@ -521,7 +521,7 @@
     <message>
         <location filename="../../corelib/business_layer/templates/screenplay_template.cpp" line="74"/>
         <source>Character</source>
-        <translation type="unfinished"></translation>
+        <translation>字</translation>
     </message>
     <message>
         <location filename="../../corelib/business_layer/templates/screenplay_template.cpp" line="76"/>
@@ -531,7 +531,7 @@
     <message>
         <location filename="../../corelib/business_layer/templates/screenplay_template.cpp" line="78"/>
         <source>Dialogue</source>
-        <translation type="unfinished"></translation>
+        <translation>对话</translation>
     </message>
     <message>
         <location filename="../../corelib/business_layer/templates/screenplay_template.cpp" line="80"/>
@@ -744,7 +744,7 @@
         <location filename="../../corelib/business_layer/document/comic_book/text/comic_book_text_corrector.cpp" line="48"/>
         <location filename="../../corelib/business_layer/document/screenplay/text/screenplay_text_corrector.cpp" line="45"/>
         <source>MORE</source>
-        <translation type="unfinished"></translation>
+        <translation>更多</translation>
     </message>
 </context>
 <context>
@@ -752,7 +752,7 @@
     <message>
         <location filename="../../corelib/ui/widgets/color_picker/color_palette.cpp" line="315"/>
         <source>User colors</source>
-        <translation type="unfinished"></translation>
+        <translation>用户颜色</translation>
     </message>
 </context>
 <context>
@@ -765,12 +765,12 @@
     <message>
         <location filename="../../corelib/ui/widgets/color_picker/color_picker.cpp" line="152"/>
         <source>Cancel</source>
-        <translation type="unfinished"></translation>
+        <translation>取消</translation>
     </message>
     <message>
         <location filename="../../corelib/ui/widgets/color_picker/color_picker.cpp" line="153"/>
         <source>Add</source>
-        <translation type="unfinished"></translation>
+        <translation>添加</translation>
     </message>
 </context>
 <context>
@@ -778,7 +778,7 @@
     <message>
         <location filename="../../corelib/data_layer/database.cpp" line="73"/>
         <source>Project was modified in a newer version. Update to the latest version to open it.</source>
-        <translation type="unfinished"></translation>
+        <translation>项目修改为更新的版本，请更新到最新版本以打开。</translation>
     </message>
 </context>
 <context>
@@ -786,12 +786,12 @@
     <message>
         <location filename="../../corelib/utils/helpers/dialog_helper.cpp" line="33"/>
         <source>Story Architect project</source>
-        <translation type="unfinished"></translation>
+        <translation>Story Architect 项目</translation>
     </message>
     <message>
         <location filename="../../corelib/utils/helpers/dialog_helper.cpp" line="39"/>
         <source>Story Architect template</source>
-        <translation type="unfinished"></translation>
+        <translation>Story Architect 模版</translation>
     </message>
     <message>
         <location filename="../../corelib/utils/helpers/dialog_helper.cpp" line="45"/>
@@ -836,17 +836,17 @@
     <message>
         <location filename="../../corelib/utils/helpers/dialog_helper.cpp" line="93"/>
         <source>Plain text</source>
-        <translation type="unfinished"></translation>
+        <translation>明文</translation>
     </message>
     <message>
         <location filename="../../corelib/utils/helpers/dialog_helper.cpp" line="99"/>
         <source>Portable document format</source>
-        <translation type="unfinished"></translation>
+        <translation>PDF</translation>
     </message>
     <message>
         <location filename="../../corelib/utils/helpers/dialog_helper.cpp" line="107"/>
         <source>All supported files</source>
-        <translation type="unfinished"></translation>
+        <translation>所有支持的文件</translation>
     </message>
 </context>
 <context>
@@ -854,7 +854,7 @@
     <message>
         <location filename="../../3rd_party/fileformats/docx_reader.cpp" line="147"/>
         <source>Unable to open archive.</source>
-        <translation type="unfinished"></translation>
+        <translation>无法打开归档。</translation>
     </message>
 </context>
 <context>
@@ -885,17 +885,17 @@
     <message>
         <location filename="../../3rd_party/fileformats/format_manager.cpp" line="73"/>
         <source>Rich Text Format</source>
-        <translation type="unfinished"></translation>
+        <translation>RTF</translation>
     </message>
     <message>
         <location filename="../../3rd_party/fileformats/format_manager.cpp" line="75"/>
         <source>Plain Text</source>
-        <translation type="unfinished"></translation>
+        <translation>明文</translation>
     </message>
     <message>
         <location filename="../../3rd_party/fileformats/format_manager.cpp" line="105"/>
         <source>All Supported Files</source>
-        <translation type="unfinished"></translation>
+        <translation>所有支持的文件</translation>
     </message>
 </context>
 <context>
@@ -903,47 +903,47 @@
     <message>
         <location filename="../../corelib/ui/widgets/image/image_card.cpp" line="143"/>
         <source>Choose image</source>
-        <translation type="unfinished"></translation>
+        <translation>选择图片</translation>
     </message>
     <message>
         <location filename="../../corelib/ui/widgets/image/image_card.cpp" line="144"/>
         <source>Images</source>
-        <translation type="unfinished"></translation>
+        <translation>图片</translation>
     </message>
     <message>
         <location filename="../../corelib/ui/widgets/image/image_card.cpp" line="229"/>
         <source>No</source>
-        <translation type="unfinished"></translation>
+        <translation>否</translation>
     </message>
     <message>
         <location filename="../../corelib/ui/widgets/image/image_card.cpp" line="230"/>
         <source>Yes, delete</source>
-        <translation type="unfinished"></translation>
+        <translation>是，请删除</translation>
     </message>
     <message>
         <location filename="../../corelib/ui/widgets/image/image_card.cpp" line="328"/>
         <source>Delete image</source>
-        <translation type="unfinished"></translation>
+        <translation>删除图片</translation>
     </message>
     <message>
         <location filename="../../corelib/ui/widgets/image/image_card.cpp" line="552"/>
         <source>Delete</source>
-        <translation type="unfinished"></translation>
+        <translation>删除</translation>
     </message>
     <message>
         <location filename="../../corelib/ui/widgets/image/image_card.cpp" line="553"/>
         <source>Paste</source>
-        <translation type="unfinished"></translation>
+        <translation>粘贴</translation>
     </message>
     <message>
         <location filename="../../corelib/ui/widgets/image/image_card.cpp" line="554"/>
         <source>Copy</source>
-        <translation type="unfinished"></translation>
+        <translation>复制</translation>
     </message>
     <message>
         <location filename="../../corelib/ui/widgets/image/image_card.cpp" line="555"/>
         <source>Change</source>
-        <translation type="unfinished"></translation>
+        <translation>修改</translation>
     </message>
 </context>
 <context>
@@ -951,12 +951,12 @@
     <message>
         <location filename="../../corelib/ui/widgets/image/image_cropping_dialog.cpp" line="99"/>
         <source>Cancel</source>
-        <translation type="unfinished"></translation>
+        <translation>取消</translation>
     </message>
     <message>
         <location filename="../../corelib/ui/widgets/image/image_cropping_dialog.cpp" line="100"/>
         <source>Select</source>
-        <translation type="unfinished"></translation>
+        <translation>选择</translation>
     </message>
     <message>
         <location filename="../../corelib/ui/widgets/image/image_cropping_dialog.cpp" line="101"/>
@@ -988,22 +988,22 @@
     <message>
         <location filename="../management_layer/content/account/account_manager.cpp" line="366"/>
         <source>Try PRO version for free</source>
-        <translation type="unfinished"></translation>
+        <translation>免费试用 PRO 版本</translation>
     </message>
     <message>
         <location filename="../management_layer/content/account/account_manager.cpp" line="367"/>
         <source>While Starc is in the beta we&apos;d like to thank our users by providing them with free PRO features. After beta ends you&apos;ll still be able to use PRO version for 30 days for free.</source>
-        <translation type="unfinished"></translation>
+        <translation>由于 Star 版本仍在 beta 测试中，我们希望为用户提供免费 PRO 版本的功能作为感谢。Beta 测试结束后，您仍能免费使用 PRO 版本 30 天。</translation>
     </message>
     <message>
         <location filename="../management_layer/content/account/account_manager.cpp" line="370"/>
         <source>Continue with free version</source>
-        <translation type="unfinished"></translation>
+        <translation>继续使用免费版本</translation>
     </message>
     <message>
         <location filename="../management_layer/content/account/account_manager.cpp" line="371"/>
         <source>Activate PRO</source>
-        <translation type="unfinished"></translation>
+        <translation>激活 PRO 版本</translation>
     </message>
 </context>
 <context>
@@ -1018,7 +1018,7 @@
         <location filename="../management_layer/application_manager.cpp" line="867"/>
         <location filename="../management_layer/application_manager.cpp" line="1019"/>
         <source>Saving error</source>
-        <translation type="unfinished"></translation>
+        <translation>保存错误</translation>
     </message>
     <message>
         <location filename="../management_layer/application_manager.cpp" line="849"/>
@@ -1038,7 +1038,7 @@
     <message>
         <location filename="../management_layer/application_manager.cpp" line="920"/>
         <source>Cancel</source>
-        <translation type="unfinished"></translation>
+        <translation>取消</translation>
     </message>
     <message>
         <location filename="../management_layer/application_manager.cpp" line="921"/>
@@ -1096,7 +1096,7 @@
     <message>
         <location filename="../management_layer/plugins/character_information/character_information_manager.cpp" line="155"/>
         <source>No</source>
-        <translation type="unfinished"></translation>
+        <translation>否</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/character_information/character_information_manager.cpp" line="156"/>
@@ -1114,7 +1114,7 @@
     <message>
         <location filename="../management_layer/plugins/characters_relations/characters_relations_manager.cpp" line="221"/>
         <source>No</source>
-        <translation type="unfinished"></translation>
+        <translation>否</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/characters_relations/characters_relations_manager.cpp" line="222"/>
@@ -1205,7 +1205,7 @@
     <message>
         <location filename="../management_layer/plugins/location_information/location_information_manager.cpp" line="145"/>
         <source>No</source>
-        <translation type="unfinished"></translation>
+        <translation>否</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/location_information/location_information_manager.cpp" line="146"/>
@@ -1223,7 +1223,7 @@
     <message>
         <location filename="../management_layer/plugins/locations_map/locations_map_manager.cpp" line="215"/>
         <source>No</source>
-        <translation type="unfinished"></translation>
+        <translation>否</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/locations_map/locations_map_manager.cpp" line="216"/>
@@ -1297,7 +1297,7 @@
         <location filename="../management_layer/content/project/project_manager.cpp" line="311"/>
         <location filename="../management_layer/content/project/project_manager.cpp" line="563"/>
         <source>No</source>
-        <translation type="unfinished"></translation>
+        <translation>否</translation>
     </message>
     <message>
         <location filename="../management_layer/content/project/project_manager.cpp" line="312"/>
@@ -1400,7 +1400,7 @@
     <message>
         <location filename="../management_layer/content/settings/screenplay_template_manager.cpp" line="289"/>
         <source>Cancel</source>
-        <translation type="unfinished"></translation>
+        <translation>取消</translation>
     </message>
     <message>
         <location filename="../management_layer/content/settings/screenplay_template_manager.cpp" line="290"/>
@@ -1444,7 +1444,7 @@
     <message>
         <location filename="../../3rd_party/fileformats/odt_reader.cpp" line="107"/>
         <source>Unable to open archive.</source>
-        <translation type="unfinished"></translation>
+        <translation>无法打开归档。</translation>
     </message>
 </context>
 <context>
@@ -1457,12 +1457,12 @@
     <message>
         <location filename="../../corelib/ui/widgets/text_edit/page/page_text_edit.cpp" line="3882"/>
         <source>Copy</source>
-        <translation type="unfinished"></translation>
+        <translation>复制</translation>
     </message>
     <message>
         <location filename="../../corelib/ui/widgets/text_edit/page/page_text_edit.cpp" line="3888"/>
         <source>Paste</source>
-        <translation type="unfinished"></translation>
+        <translation>粘贴</translation>
     </message>
     <message>
         <location filename="../../corelib/ui/widgets/text_edit/page/page_text_edit.cpp" line="3895"/>
@@ -2278,7 +2278,7 @@
     <message>
         <location filename="../ui/export/comic_book_export_dialog.cpp" line="199"/>
         <source>Cancel</source>
-        <translation type="unfinished"></translation>
+        <translation>取消</translation>
     </message>
 </context>
 <context>
@@ -2357,7 +2357,7 @@
     <message>
         <location filename="../management_layer/plugins/comic_book_statistics/comic_book_statistics_view.cpp" line="184"/>
         <source>Words</source>
-        <translation type="unfinished"></translation>
+        <translation>字</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/comic_book_statistics/comic_book_statistics_view.cpp" line="185"/>
@@ -2380,7 +2380,7 @@
     <message>
         <location filename="../management_layer/plugins/comic_book_text/comments/comic_book_text_add_comment_view.cpp" line="127"/>
         <source>Cancel</source>
-        <translation type="unfinished"></translation>
+        <translation>取消</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/comic_book_text/comments/comic_book_text_add_comment_view.cpp" line="128"/>
@@ -2394,7 +2394,6 @@
         <location filename="../management_layer/plugins/comic_book_text/comments/comic_book_text_comment_delegate.cpp" line="239"/>
         <source>%n reply(s)</source>
         <translation type="unfinished">
-            <numerusform></numerusform>
             <numerusform></numerusform>
         </translation>
     </message>
@@ -2480,7 +2479,6 @@
         <location filename="../management_layer/plugins/comic_book_text/text/comic_book_text_edit.cpp" line="948"/>
         <source>%n panels</source>
         <translation type="unfinished">
-            <numerusform></numerusform>
             <numerusform></numerusform>
         </translation>
     </message>
@@ -2636,7 +2634,6 @@
         <source>%n PANELS</source>
         <translation type="unfinished">
             <numerusform></numerusform>
-            <numerusform></numerusform>
         </translation>
     </message>
 </context>
@@ -2645,7 +2642,7 @@
     <message>
         <location filename="../management_layer/plugins/comic_book_text/comic_book_text_view.cpp" line="666"/>
         <source>Formatting</source>
-        <translation type="unfinished"></translation>
+        <translation>格式</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/comic_book_text/comic_book_text_view.cpp" line="667"/>
@@ -2759,7 +2756,7 @@
     <message>
         <location filename="../management_layer/plugins/characters_relations/ui/create_character_dialog.cpp" line="105"/>
         <source>Cancel</source>
-        <translation type="unfinished"></translation>
+        <translation>取消</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/characters_relations/ui/create_character_dialog.cpp" line="106"/>
@@ -2832,7 +2829,7 @@
     <message>
         <location filename="../ui/project/create_document_dialog.cpp" line="220"/>
         <source>Character</source>
-        <translation type="unfinished"></translation>
+        <translation>字</translation>
     </message>
     <message>
         <location filename="../ui/project/create_document_dialog.cpp" line="221"/>
@@ -2857,7 +2854,7 @@
     <message>
         <location filename="../ui/project/create_document_dialog.cpp" line="227"/>
         <source>Cancel</source>
-        <translation type="unfinished"></translation>
+        <translation>取消</translation>
     </message>
     <message>
         <location filename="../ui/project/create_document_dialog.cpp" line="228"/>
@@ -2885,7 +2882,7 @@
     <message>
         <location filename="../management_layer/plugins/locations_map/ui/create_location_dialog.cpp" line="105"/>
         <source>Cancel</source>
-        <translation type="unfinished"></translation>
+        <translation>取消</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/locations_map/ui/create_location_dialog.cpp" line="106"/>
@@ -3008,7 +3005,7 @@
     <message>
         <location filename="../ui/projects/create_project_dialog.cpp" line="325"/>
         <source>Cancel</source>
-        <translation type="unfinished"></translation>
+        <translation>取消</translation>
     </message>
     <message>
         <location filename="../ui/projects/create_project_dialog.cpp" line="326"/>
@@ -3061,7 +3058,7 @@
     <message>
         <location filename="../ui/import/import_dialog.cpp" line="137"/>
         <source>Cancel</source>
-        <translation type="unfinished"></translation>
+        <translation>取消</translation>
     </message>
 </context>
 <context>
@@ -3398,7 +3395,7 @@
     <message>
         <location filename="../ui/account/login_dialog.cpp" line="202"/>
         <source>Cancel</source>
-        <translation type="unfinished"></translation>
+        <translation>取消</translation>
     </message>
 </context>
 <context>
@@ -3698,7 +3695,7 @@
     <message>
         <location filename="../ui/account/renew_subscription_dialog.cpp" line="150"/>
         <source>Cancel</source>
-        <translation type="unfinished"></translation>
+        <translation>取消</translation>
     </message>
 </context>
 <context>
@@ -3761,7 +3758,7 @@
     <message>
         <location filename="../ui/export/screenplay_export_dialog.cpp" line="264"/>
         <source>Cancel</source>
-        <translation type="unfinished"></translation>
+        <translation>取消</translation>
     </message>
 </context>
 <context>
@@ -3885,7 +3882,7 @@
     <message>
         <location filename="../management_layer/plugins/screenplay_statistics/screenplay_statistics_view.cpp" line="248"/>
         <source>Words</source>
-        <translation type="unfinished"></translation>
+        <translation>字</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/screenplay_statistics/screenplay_statistics_view.cpp" line="249"/>
@@ -4048,17 +4045,17 @@
     <message>
         <location filename="../ui/settings/screenplay_template/screenplay_template_paragraphs_view.cpp" line="574"/>
         <source>Bold</source>
-        <translation type="unfinished"></translation>
+        <translation>粗体</translation>
     </message>
     <message>
         <location filename="../ui/settings/screenplay_template/screenplay_template_paragraphs_view.cpp" line="575"/>
         <source>Italic</source>
-        <translation type="unfinished"></translation>
+        <translation>斜体</translation>
     </message>
     <message>
         <location filename="../ui/settings/screenplay_template/screenplay_template_paragraphs_view.cpp" line="576"/>
         <source>Underline</source>
-        <translation type="unfinished"></translation>
+        <translation>下划线</translation>
     </message>
     <message>
         <location filename="../ui/settings/screenplay_template/screenplay_template_paragraphs_view.cpp" line="577"/>
@@ -4201,7 +4198,7 @@
     <message>
         <location filename="../management_layer/plugins/screenplay_text/comments/screenplay_text_add_comment_view.cpp" line="127"/>
         <source>Cancel</source>
-        <translation type="unfinished"></translation>
+        <translation>取消</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/screenplay_text/comments/screenplay_text_add_comment_view.cpp" line="128"/>
@@ -4220,7 +4217,6 @@
         <location filename="../management_layer/plugins/screenplay_text/comments/screenplay_text_comment_delegate.cpp" line="242"/>
         <source>%n reply(s)</source>
         <translation type="unfinished">
-            <numerusform></numerusform>
             <numerusform></numerusform>
         </translation>
     </message>
@@ -4457,7 +4453,7 @@
     <message>
         <location filename="../management_layer/plugins/screenplay_text/screenplay_text_view.cpp" line="765"/>
         <source>Formatting</source>
-        <translation type="unfinished"></translation>
+        <translation>格式</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/screenplay_text/screenplay_text_view.cpp" line="766"/>
@@ -5398,7 +5394,7 @@ If you work with no interruptions it saves the project every 3 minutes.</source>
     <message>
         <location filename="../ui/settings/settings_view.cpp" line="1784"/>
         <source>pages</source>
-        <translation type="unfinished"></translation>
+        <translation>页</translation>
     </message>
     <message>
         <location filename="../ui/settings/settings_view.cpp" line="1785"/>
@@ -5673,7 +5669,7 @@ If you work with no interruptions it saves the project every 3 minutes.</source>
     <message>
         <location filename="../ui/settings/theme_setup_view.cpp" line="399"/>
         <source>Cancel</source>
-        <translation type="unfinished"></translation>
+        <translation>取消</translation>
     </message>
     <message>
         <location filename="../ui/settings/theme_setup_view.cpp" line="400"/>
@@ -5734,7 +5730,7 @@ If you work with no interruptions it saves the project every 3 minutes.</source>
     <message>
         <location filename="../ui/account/upgrade_to_pro_dialog.cpp" line="94"/>
         <source>Cancel</source>
-        <translation type="unfinished"></translation>
+        <translation>取消</translation>
     </message>
 </context>
 <context>
@@ -5754,14 +5750,12 @@ If you work with no interruptions it saves the project every 3 minutes.</source>
         <source>Done! I&apos;ve just written %n word(s)</source>
         <translation type="unfinished">
             <numerusform></numerusform>
-            <numerusform></numerusform>
         </translation>
     </message>
     <message numerus="yes">
         <location filename="../ui/writing_session/writing_sprint_panel.cpp" line="269"/>
         <source>in %n minute(s)</source>
         <translation type="unfinished">
-            <numerusform></numerusform>
             <numerusform></numerusform>
         </translation>
     </message>

@@ -334,8 +334,12 @@ public:
 DesignSystem::Font::Implementation::Implementation(qreal _scaleFactor)
 {
     QString fontFamily = QLatin1String("Roboto");
-    const QSet<QLocale::Language> notoLanguages
-        = { QLocale::Hebrew, QLocale::Hindi, QLocale::Persian };
+    const QSet<QLocale::Language> notoLanguages = {
+        QLocale::Chinese,
+        QLocale::Hebrew,
+        QLocale::Hindi,
+        QLocale::Persian,
+    };
     if (notoLanguages.contains(QLocale().language())) {
         fontFamily = QLatin1String("Noto Sans");
     }

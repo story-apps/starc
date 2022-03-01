@@ -95,6 +95,7 @@ void OnboardingView::Implementation::initLanguagePage()
     RadioButton* azerbaijaniLanguage = initLanguageButton("Azərbaycan", QLocale::Azerbaijani);
     RadioButton* belarusianLanguage = initLanguageButton("Беларуский", QLocale::Belarusian);
     RadioButton* catalanLanguage = initLanguageButton("Català", QLocale::Catalan);
+    RadioButton* chineseLanguage = initLanguageButton("汉语", QLocale::Chinese);
     RadioButton* croatianLanguage = initLanguageButton("Hrvatski", QLocale::Croatian);
     RadioButton* danishLanguage = initLanguageButton("Dansk", QLocale::Danish);
     RadioButton* englishLanguage = initLanguageButton("English", QLocale::English);
@@ -163,7 +164,7 @@ void OnboardingView::Implementation::initLanguagePage()
         portugueseLanguage,  portugueseBrazilLanguage, romanianLanguage,
         russianLanguage,     slovenianLanguage,        tagalogLanguage,
         turkishLanguage,     ukrainianLanguage,        hebrewLanguage,
-        hindiLanguage,       persianLanguage,
+        hindiLanguage,       persianLanguage,          chineseLanguage,
     });
 
     languageHowToAddLink = new Body1LinkLabel(languagePage);
@@ -215,6 +216,7 @@ void OnboardingView::Implementation::initLanguagePage()
     languagePageLayout->addWidget(hebrewLanguage, rowForFifthColumn++, 3);
     languagePageLayout->addWidget(hindiLanguage, rowForFifthColumn++, 3);
     languagePageLayout->addWidget(persianLanguage, rowForFifthColumn++, 3);
+    languagePageLayout->addWidget(chineseLanguage, rowForFifthColumn++, 3);
     languagePageLayout->setRowStretch(row++, 1);
     languagePageLayout->setColumnStretch(4, 1);
     languagePageLayout->addWidget(languageHowToAddLink, row++, 0, 1, 5);

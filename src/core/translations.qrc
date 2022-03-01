@@ -27,5 +27,6 @@
         <file>translations/translation_nl.qm</file>
         <file>translations/translation_pt_PT.qm</file>
         <file>translations/translation_tl_PH.qm</file>
+        <file>translations/translation_zh_CN.qm</file>
     </qresource>
 </RCC>

@@ -44,7 +44,8 @@ TRANSLATIONS += \
     core/translations/translation_sl.ts \
     core/translations/translation_tl_PH.ts \
     core/translations/translation_tr.ts \
-    core/translations/translation_uk.ts
+    core/translations/translation_uk.ts \
+    core/translations/translation_zh_CN.ts
 
 #
 # Настраиваем вывод в консоль в Windows в нормальной кодировке
