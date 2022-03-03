@@ -124,6 +124,8 @@ void ScreenplayTextStructureManager::Implementation::updateContextMenu(
             colorAction->setDefaultWidget(colorPicker);
             colorPicker->setColorCanBeDeselected(true);
             colorPicker->setSelectedColor(itemColor.value());
+            colorPicker->setBackgroundColor(Ui::DesignSystem::color().background());
+            colorPicker->setTextColor(Ui::DesignSystem::color().onBackground());
             connect(colorPicker, &ColorPicker::selectedColorChanged, view,
                     [this, itemColor, item](const QColor& _color) {
                         if (item->type() == BusinessLayer::ScreenplayTextModelItemType::Folder) {

@@ -336,7 +336,8 @@ void ScreenplayTextSearchToolbar::designSystemChangeEvent(DesignSystemChangeEven
     //
     setActionCustomWidth(d->searchInAction, static_cast<int>(searchInActionWidth));
     //
-    d->popup->setBackgroundColor(Ui::DesignSystem::color().primary());
+    d->popup->setBackgroundColor(Ui::DesignSystem::color().background());
+    d->popup->setTextColor(Ui::DesignSystem::color().onBackground());
 
 
     const auto replaceLeft = searchLeft + d->searchText->width()

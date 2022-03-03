@@ -246,7 +246,8 @@ void SimpleTextEditToolbar::designSystemChangeEvent(DesignSystemChangeEvent* _ev
             + d->popup->sizeHintForColumn(0)
             + static_cast<int>(Ui::DesignSystem::treeOneLineItem().margins().right()));
 
-    d->popup->setBackgroundColor(Ui::DesignSystem::color().primary());
+    d->popup->setBackgroundColor(Ui::DesignSystem::color().background());
+    d->popup->setTextColor(Ui::DesignSystem::color().onBackground());
 
     resize(sizeHint());
 }
