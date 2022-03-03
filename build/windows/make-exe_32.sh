@@ -67,4 +67,3 @@ cp /c/Program\ Files\ \(x86\)/OpenSSL-Win32/*.dll $EXE_APP_DIR
 cp "$VCToolsRedistDir/x86/Microsoft.VC143.CRT/msvcp140.dll" $EXE_APP_DIR
 cp "$VCToolsRedistDir/x86/Microsoft.VC143.CRT/msvcp140_1.dll" $EXE_APP_DIR
 cp "$VCToolsRedistDir/x86/Microsoft.VC143.CRT/vcruntime140.dll" $EXE_APP_DIR
-cp "$VCToolsRedistDir/x86/Microsoft.VC143.CRT/vcruntime140_1.dll" $EXE_APP_DIR
