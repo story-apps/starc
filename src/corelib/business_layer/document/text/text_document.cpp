@@ -125,11 +125,11 @@ void SimpleTextDocument::Implementation::readModelItemContent(int _itemRow,
     const auto itemIndex = model->index(_itemRow, 0, _parent);
     const auto item = model->itemForIndex(itemIndex);
     switch (item->type()) {
-    case TextModelItemType::Chapter: {
+    case SimpleTextModelItemType::Chapter: {
         break;
     }
 
-    case TextModelItemType::Text: {
+    case SimpleTextModelItemType::Text: {
         const auto textItem = static_cast<SimpleTextModelTextItem*>(item);
 
         //
@@ -343,7 +343,7 @@ void SimpleTextDocument::setModel(BusinessLayer::SimpleTextModel* _model, bool _
                 }
 
                 const auto item = d->model->itemForIndex(_topLeft);
-                if (item->type() != TextModelItemType::Text) {
+                if (item->type() != SimpleTextModelItemType::Text) {
                     return;
                 }
 
@@ -479,7 +479,7 @@ void SimpleTextDocument::setModel(BusinessLayer::SimpleTextModel* _model, bool _
                 // Игнорируем добавление пустых глав
                 //
                 const auto item = d->model->itemForIndex(d->model->index(_from, 0, _parent));
-                if (item->type() == TextModelItemType::Chapter && !item->hasChildren()) {
+                if (item->type() == SimpleTextModelItemType::Chapter && !item->hasChildren()) {
                     return;
                 }
 
@@ -497,7 +497,7 @@ void SimpleTextDocument::setModel(BusinessLayer::SimpleTextModel* _model, bool _
                     // поэтому берём предыдущую, либо смотрим в конец общего родителя
                     //
                     const auto cursorItem = d->model->itemForIndex(cursorItemIndex);
-                    if (cursorItem->type() == TextModelItemType::Chapter
+                    if (cursorItem->type() == SimpleTextModelItemType::Chapter
                         && !cursorItem->hasChildren()) {
                         if (_from > 1) {
                             cursorItemIndex = d->model->index(_from - 2, 0, _parent);
@@ -707,7 +707,7 @@ QString SimpleTextDocument::chapterNumber(const QTextBlock& _forBlock) const
     }
 
     auto itemParent = blockData->item()->parent();
-    if (itemParent == nullptr || itemParent->type() != TextModelItemType::Chapter) {
+    if (itemParent == nullptr || itemParent->type() != SimpleTextModelItemType::Chapter) {
         return {};
     }
 
@@ -1086,7 +1086,7 @@ void SimpleTextDocument::updateModelOnContentChange(int _position, int _charsRem
             // Будем удалять только если элемент лежит в руте, или является папкой, или сценой
             //
             if (removeIter->second->parent()->hasParent()
-                && removeIter->second->type() != TextModelItemType::Chapter) {
+                && removeIter->second->type() != SimpleTextModelItemType::Chapter) {
                 removeGroup();
                 ++removeIter;
                 continue;
@@ -1116,7 +1116,7 @@ void SimpleTextDocument::updateModelOnContentChange(int _position, int _charsRem
             // и перенести элементы к предыдущему группирующему элементу
             //
             bool needToDeleteParent = false;
-            if (item->type() == TextModelItemType::Text) {
+            if (item->type() == SimpleTextModelItemType::Text) {
                 const auto textItem = static_cast<SimpleTextModelTextItem*>(item);
                 needToDeleteParent = textItem->paragraphType() == TextParagraphType::Heading1
                     || textItem->paragraphType() == TextParagraphType::Heading2
@@ -1158,7 +1158,7 @@ void SimpleTextDocument::updateModelOnContentChange(int _position, int _charsRem
                     //
                     // Главы переносим на один уровень с текущим элементом
                     //
-                    if (childItem->type() == TextModelItemType::Chapter) {
+                    if (childItem->type() == SimpleTextModelItemType::Chapter) {
                         if (lastMovedItem == nullptr
                             || lastMovedItem->parent() != itemParent->parent()) {
                             d->model->insertItem(childItem, itemParent);
@@ -1176,7 +1176,7 @@ void SimpleTextDocument::updateModelOnContentChange(int _position, int _charsRem
                             // Если перед удаляемым была глава, то в её конец
                             //
                             if (previousItem != nullptr
-                                && previousItem->type() == TextModelItemType::Chapter) {
+                                && previousItem->type() == SimpleTextModelItemType::Chapter) {
                                 d->model->appendItem(childItem, previousItem);
                             }
                             //
@@ -1210,13 +1210,13 @@ void SimpleTextDocument::updateModelOnContentChange(int _position, int _charsRem
                 // Если после удаляемого элемента есть текстовые элементы, пробуем их встроить в
                 // предыдущую главу
                 //
-                if (previousItem != nullptr && previousItem->type() == TextModelItemType::Chapter) {
+                if (previousItem != nullptr && previousItem->type() == SimpleTextModelItemType::Chapter) {
                     const auto previousItemRow = previousItem->parent()->rowOfChild(previousItem);
                     if (previousItemRow >= 0
                         && previousItemRow < previousItem->parent()->childCount() - 1) {
                         const int nextItemRow = previousItemRow + 1;
                         auto nextItem = previousItem->parent()->childAt(nextItemRow);
-                        while (nextItem != nullptr && nextItem->type() == TextModelItemType::Text) {
+                        while (nextItem != nullptr && nextItem->type() == SimpleTextModelItemType::Text) {
                             d->model->takeItem(nextItem, nextItem->parent());
                             d->model->appendItem(nextItem, previousItem);
                             nextItem = previousItem->parent()->childAt(nextItemRow);
@@ -1302,7 +1302,7 @@ void SimpleTextDocument::updateModelOnContentChange(int _position, int _charsRem
                 if (previousItem != nullptr) {
                     auto previousTextItemParent = previousItem->parent();
                     Q_ASSERT(previousTextItemParent);
-                    Q_ASSERT(previousTextItemParent->type() == TextModelItemType::Chapter);
+                    Q_ASSERT(previousTextItemParent->type() == SimpleTextModelItemType::Chapter);
 
                     //
                     // Если элемент вставляется после главы с таким же уровнем,
@@ -1326,7 +1326,7 @@ void SimpleTextDocument::updateModelOnContentChange(int _position, int _charsRem
                         auto previousChapterItemParent = previousChapterItem->parent();
                         while (previousChapterItemParent != nullptr) {
                             Q_ASSERT(previousChapterItemParent->type()
-                                     == TextModelItemType::Chapter);
+                                     == SimpleTextModelItemType::Chapter);
                             const auto grandPreviousChapterItem
                                 = static_cast<SimpleTextModelChapterItem*>(previousChapterItemParent);
 
@@ -1411,7 +1411,7 @@ void SimpleTextDocument::updateModelOnContentChange(int _position, int _charsRem
                         }
 
                         if (previousItem != nullptr) {
-                            if (grandParentItem->type() == TextModelItemType::Chapter) {
+                            if (grandParentItem->type() == SimpleTextModelItemType::Chapter) {
                                 return grandParentItem->rowOfChild(previousItem) + indexDelta;
                             }
                         }
@@ -1424,7 +1424,7 @@ void SimpleTextDocument::updateModelOnContentChange(int _position, int _charsRem
                     //
                     while (grandParentItem->childCount() > itemIndex) {
                         auto grandParentChildItem = grandParentItem->childAt(itemIndex);
-                        if (grandParentChildItem->type() == TextModelItemType::Chapter) {
+                        if (grandParentChildItem->type() == SimpleTextModelItemType::Chapter) {
                             auto grandParentChildChapter
                                 = static_cast<SimpleTextModelChapterItem*>(grandParentChildItem);
                             if (grandParentChildChapter->level() <= parentItemLevel) {
@@ -1470,7 +1470,7 @@ void SimpleTextDocument::updateModelOnContentChange(int _position, int _charsRem
             auto blockData = static_cast<TextBlockData*>(block.userData());
             auto item = blockData->item();
 
-            if (item->type() == TextModelItemType::Text) {
+            if (item->type() == SimpleTextModelItemType::Text) {
                 auto textItem = static_cast<SimpleTextModelTextItem*>(item);
                 textItem->setParagraphType(paragraphType);
                 if (d->documentTemplate().paragraphStyle(paragraphType).align()

@@ -51,7 +51,7 @@ bool SimpleTextStructureModel::filterAcceptsRow(int _sourceRow,
     //
     // Показываем главы
     //
-    if (item->type() == TextModelItemType::Chapter) {
+    if (item->type() == SimpleTextModelItemType::Chapter) {
         return true;
     }
     //

@@ -1,11 +1,11 @@
-#include "abstract_text_model.h"
+#include "text_model.h"
 
-#include "abstract_text_model_folder_item.h"
-#include "abstract_text_model_group_item.h"
-#include "abstract_text_model_splitter_item.h"
-#include "abstract_text_model_text_item.h"
-#include "abstract_text_model_xml.h"
-#include "abstract_text_model_xml_writer.h"
+#include "text_model_folder_item.h"
+#include "text_model_group_item.h"
+#include "text_model_splitter_item.h"
+#include "text_model_text_item.h"
+#include "text_model_xml.h"
+#include "text_model_xml_writer.h"
 
 #include <business_layer/templates/text_template.h>
 #include <data_layer/storage/settings_storage.h>
@@ -34,10 +34,10 @@ namespace {
 const char* kMimeType = "application/x-starc/screenplay/text/item";
 }
 
-class AbstractTextModel::Implementation
+class TextModel::Implementation
 {
 public:
-    explicit Implementation(AbstractTextModel* _q);
+    explicit Implementation(TextModel* _q);
 
     /**
      * @brief Построить модель структуры из xml хранящегося в документе
@@ -53,12 +53,12 @@ public:
     /**
      * @brief Родительский элемент
      */
-    AbstractTextModel* q = nullptr;
+    TextModel* q = nullptr;
 
     /**
      * @brief Корневой элемент дерева
      */
-    AbstractTextModelFolderItem* rootItem = nullptr;
+    TextModelFolderItem* rootItem = nullptr;
 
     /**
      * @brief Модель титульной страницы
@@ -75,13 +75,13 @@ public:
     } lastMime;
 };
 
-AbstractTextModel::Implementation::Implementation(AbstractTextModel* _q)
+TextModel::Implementation::Implementation(TextModel* _q)
     : q(_q)
-    , rootItem(new AbstractTextModelFolderItem(q))
+    , rootItem(new TextModelFolderItem(q))
 {
 }
 
-void AbstractTextModel::Implementation::buildModel(Domain::DocumentObject* _screenplay)
+void TextModel::Implementation::buildModel(Domain::DocumentObject* _screenplay)
 {
     if (_screenplay == nullptr) {
         return;
@@ -97,25 +97,25 @@ void AbstractTextModel::Implementation::buildModel(Domain::DocumentObject* _scre
         }
 
         if (textFolderTypeFromString(currentTag) != TextFolderType::Undefined) {
-            rootItem->appendItem(new AbstractTextModelFolderItem(q, contentReader));
+            rootItem->appendItem(new TextModelFolderItem(q, contentReader));
         } else if (textGroupTypeFromString(currentTag) != TextGroupType::Undefined) {
-            rootItem->appendItem(new AbstractTextModelGroupItem(q, contentReader));
+            rootItem->appendItem(new TextModelGroupItem(q, contentReader));
         } else if (currentTag == xml::kSplitterTag) {
-            rootItem->appendItem(new AbstractTextModelSplitterItem(q, contentReader));
+            rootItem->appendItem(new TextModelSplitterItem(q, contentReader));
         } else {
-            rootItem->appendItem(new AbstractTextModelTextItem(q, contentReader));
+            rootItem->appendItem(new TextModelTextItem(q, contentReader));
         }
     }
 }
 
-QByteArray AbstractTextModel::Implementation::toXml(Domain::DocumentObject* _screenplay) const
+QByteArray TextModel::Implementation::toXml(Domain::DocumentObject* _screenplay) const
 {
     if (_screenplay == nullptr) {
         return {};
     }
 
     const bool addXMlHeader = true;
-    xml::AbstractTextModelXmlWriter xml(addXMlHeader);
+    xml::TextModelXmlWriter xml(addXMlHeader);
     xml += "<document mime-type=\"" + Domain::mimeTypeFor(_screenplay->type())
         + "\" version=\"1.0\">\n";
     for (int childIndex = 0; childIndex < rootItem->childCount(); ++childIndex) {
@@ -129,7 +129,7 @@ QByteArray AbstractTextModel::Implementation::toXml(Domain::DocumentObject* _scr
 // ****
 
 
-AbstractTextModel::AbstractTextModel(QObject* _parent)
+TextModel::TextModel(QObject* _parent)
     : AbstractModel(
         {
             xml::kDocumentTag,
@@ -159,15 +159,14 @@ AbstractTextModel::AbstractTextModel(QObject* _parent)
 {
 }
 
-AbstractTextModel::~AbstractTextModel() = default;
+TextModel::~TextModel() = default;
 
-void AbstractTextModel::appendItem(AbstractTextModelItem* _item, AbstractTextModelItem* _parentItem)
+void TextModel::appendItem(TextModelItem* _item, TextModelItem* _parentItem)
 {
     appendItems({ _item }, _parentItem);
 }
 
-void AbstractTextModel::appendItems(const QVector<AbstractTextModelItem*>& _items,
-                                    AbstractTextModelItem* _parentItem)
+void TextModel::appendItems(const QVector<TextModelItem*>& _items, TextModelItem* _parentItem)
 {
     if (_items.isEmpty()) {
         return;
@@ -187,8 +186,7 @@ void AbstractTextModel::appendItems(const QVector<AbstractTextModelItem*>& _item
     updateItem(_parentItem);
 }
 
-void AbstractTextModel::prependItem(AbstractTextModelItem* _item,
-                                    AbstractTextModelItem* _parentItem)
+void TextModel::prependItem(TextModelItem* _item, TextModelItem* _parentItem)
 {
     if (_item == nullptr) {
         return;
@@ -210,14 +208,12 @@ void AbstractTextModel::prependItem(AbstractTextModelItem* _item,
     updateItem(_parentItem);
 }
 
-void AbstractTextModel::insertItem(AbstractTextModelItem* _item,
-                                   AbstractTextModelItem* _afterSiblingItem)
+void TextModel::insertItem(TextModelItem* _item, TextModelItem* _afterSiblingItem)
 {
     insertItems({ _item }, _afterSiblingItem);
 }
 
-void AbstractTextModel::insertItems(const QVector<AbstractTextModelItem*>& _items,
-                                    AbstractTextModelItem* _afterSiblingItem)
+void TextModel::insertItems(const QVector<TextModelItem*>& _items, TextModelItem* _afterSiblingItem)
 {
     if (_items.isEmpty()) {
         return;
@@ -238,13 +234,13 @@ void AbstractTextModel::insertItems(const QVector<AbstractTextModelItem*>& _item
     updateItem(parentItem);
 }
 
-void AbstractTextModel::takeItem(AbstractTextModelItem* _item, AbstractTextModelItem* _parentItem)
+void TextModel::takeItem(TextModelItem* _item, TextModelItem* _parentItem)
 {
     takeItems(_item, _item, _parentItem);
 }
 
-void AbstractTextModel::takeItems(AbstractTextModelItem* _fromItem, AbstractTextModelItem* _toItem,
-                                  AbstractTextModelItem* _parentItem)
+void TextModel::takeItems(TextModelItem* _fromItem, TextModelItem* _toItem,
+                          TextModelItem* _parentItem)
 {
     if (_fromItem == nullptr || _toItem == nullptr || _fromItem->parent() != _toItem->parent()) {
         return;
@@ -269,13 +265,12 @@ void AbstractTextModel::takeItems(AbstractTextModelItem* _fromItem, AbstractText
     updateItem(_parentItem);
 }
 
-void AbstractTextModel::removeItem(AbstractTextModelItem* _item)
+void TextModel::removeItem(TextModelItem* _item)
 {
     removeItems(_item, _item);
 }
 
-void AbstractTextModel::removeItems(AbstractTextModelItem* _fromItem,
-                                    AbstractTextModelItem* _toItem)
+void TextModel::removeItems(TextModelItem* _fromItem, TextModelItem* _toItem)
 {
     if (_fromItem == nullptr || _fromItem->parent() == nullptr || _toItem == nullptr
         || _toItem->parent() == nullptr || _fromItem->parent() != _toItem->parent()) {
@@ -294,7 +289,7 @@ void AbstractTextModel::removeItems(AbstractTextModelItem* _fromItem,
     updateItem(parentItem);
 }
 
-void AbstractTextModel::updateItem(AbstractTextModelItem* _item)
+void TextModel::updateItem(TextModelItem* _item)
 {
     if (_item == nullptr || !_item->isChanged()) {
         return;
@@ -309,7 +304,7 @@ void AbstractTextModel::updateItem(AbstractTextModelItem* _item)
     }
 }
 
-QModelIndex AbstractTextModel::index(int _row, int _column, const QModelIndex& _parent) const
+QModelIndex TextModel::index(int _row, int _column, const QModelIndex& _parent) const
 {
     if (_row < 0 || _row > rowCount(_parent) || _column < 0 || _column > columnCount(_parent)
         || (_parent.isValid() && (_parent.column() != 0))) {
@@ -327,7 +322,7 @@ QModelIndex AbstractTextModel::index(int _row, int _column, const QModelIndex& _
     return createIndex(_row, _column, indexItem);
 }
 
-QModelIndex AbstractTextModel::parent(const QModelIndex& _child) const
+QModelIndex TextModel::parent(const QModelIndex& _child) const
 {
     if (!_child.isValid()) {
         return {};
@@ -348,13 +343,13 @@ QModelIndex AbstractTextModel::parent(const QModelIndex& _child) const
     return createIndex(row, 0, parentItem);
 }
 
-int AbstractTextModel::columnCount(const QModelIndex& _parent) const
+int TextModel::columnCount(const QModelIndex& _parent) const
 {
     Q_UNUSED(_parent)
     return 1;
 }
 
-int AbstractTextModel::rowCount(const QModelIndex& _parent) const
+int TextModel::rowCount(const QModelIndex& _parent) const
 {
     if (_parent.isValid() && _parent.column() != 0) {
         return 0;
@@ -368,18 +363,18 @@ int AbstractTextModel::rowCount(const QModelIndex& _parent) const
     return item->childCount();
 }
 
-Qt::ItemFlags AbstractTextModel::flags(const QModelIndex& _index) const
+Qt::ItemFlags TextModel::flags(const QModelIndex& _index) const
 {
     Qt::ItemFlags flags = Qt::ItemIsEnabled | Qt::ItemIsSelectable;
 
     const auto item = itemForIndex(_index);
     switch (item->type()) {
-    case AbstractTextModelItemType::Folder: {
+    case TextModelItemType::Folder: {
         flags |= Qt::ItemIsDragEnabled | Qt::ItemIsDropEnabled;
         break;
     }
 
-    case AbstractTextModelItemType::Group: {
+    case TextModelItemType::Group: {
         flags |= Qt::ItemIsDragEnabled;
         break;
     }
@@ -391,7 +386,7 @@ Qt::ItemFlags AbstractTextModel::flags(const QModelIndex& _index) const
     return flags;
 }
 
-QVariant AbstractTextModel::data(const QModelIndex& _index, int _role) const
+QVariant TextModel::data(const QModelIndex& _index, int _role) const
 {
     if (!_index.isValid()) {
         return {};
@@ -405,8 +400,8 @@ QVariant AbstractTextModel::data(const QModelIndex& _index, int _role) const
     return item->data(_role);
 }
 
-bool AbstractTextModel::canDropMimeData(const QMimeData* _data, Qt::DropAction _action, int _row,
-                                        int _column, const QModelIndex& _parent) const
+bool TextModel::canDropMimeData(const QMimeData* _data, Qt::DropAction _action, int _row,
+                                int _column, const QModelIndex& _parent) const
 {
     Q_UNUSED(_action);
     Q_UNUSED(_row);
@@ -416,8 +411,8 @@ bool AbstractTextModel::canDropMimeData(const QMimeData* _data, Qt::DropAction _
     return _data->formats().contains(mimeTypes().constFirst());
 }
 
-bool AbstractTextModel::dropMimeData(const QMimeData* _data, Qt::DropAction _action, int _row,
-                                     int _column, const QModelIndex& _parent)
+bool TextModel::dropMimeData(const QMimeData* _data, Qt::DropAction _action, int _row, int _column,
+                             const QModelIndex& _parent)
 {
     Q_UNUSED(_column);
 
@@ -474,7 +469,7 @@ bool AbstractTextModel::dropMimeData(const QMimeData* _data, Qt::DropAction _act
         if (d->lastMime.from == insertAnchorIndex || d->lastMime.to == insertAnchorIndex) {
             return false;
         }
-        AbstractTextModelItem* insertAnchorItem = itemForIndex(insertAnchorIndex);
+        TextModelItem* insertAnchorItem = itemForIndex(insertAnchorIndex);
 
         //
         // Начинаем операцию изменения модели
@@ -502,22 +497,22 @@ bool AbstractTextModel::dropMimeData(const QMimeData* _data, Qt::DropAction _act
         contentReader.readNextStartElement(); // document
         contentReader.readNextStartElement();
         bool isFirstItemHandled = false;
-        AbstractTextModelItem* lastItem = insertAnchorItem;
+        TextModelItem* lastItem = insertAnchorItem;
         while (!contentReader.atEnd()) {
             const auto currentTag = contentReader.name().toString();
             if (currentTag == xml::kDocumentTag) {
                 break;
             }
 
-            AbstractTextModelItem* newItem = nullptr;
+            TextModelItem* newItem = nullptr;
             if (textFolderTypeFromString(currentTag) != TextFolderType::Undefined) {
-                newItem = new AbstractTextModelFolderItem(this, contentReader);
+                newItem = new TextModelFolderItem(this, contentReader);
             } else if (textGroupTypeFromString(currentTag) != TextGroupType::Undefined) {
-                newItem = new AbstractTextModelGroupItem(this, contentReader);
+                newItem = new TextModelGroupItem(this, contentReader);
             } else if (currentTag == xml::kSplitterTag) {
-                newItem = new AbstractTextModelSplitterItem(this, contentReader);
+                newItem = new TextModelSplitterItem(this, contentReader);
             } else {
-                newItem = new AbstractTextModelTextItem(this, contentReader);
+                newItem = new TextModelTextItem(this, contentReader);
             }
 
             if (!isFirstItemHandled) {
@@ -529,8 +524,7 @@ bool AbstractTextModel::dropMimeData(const QMimeData* _data, Qt::DropAction _act
                     //
                     // При вставке в папку, нужно не забыть про открывающий папку блок
                     //
-                    if (lastItem->type() == AbstractTextModelItemType::Folder
-                        && _parent.isValid()) {
+                    if (lastItem->type() == TextModelItemType::Folder && _parent.isValid()) {
                         insertItem(newItem, lastItem->childAt(0));
                     }
                     //
@@ -547,8 +541,7 @@ bool AbstractTextModel::dropMimeData(const QMimeData* _data, Qt::DropAction _act
                     //
                     // При вставке в папку, нужно не забыть про завершающий папку блок
                     //
-                    if (lastItem->type() == AbstractTextModelItemType::Folder
-                        && _parent.isValid()) {
+                    if (lastItem->type() == TextModelItemType::Folder && _parent.isValid()) {
                         insertItem(newItem, lastItem->childAt(lastItem->childCount() - 2));
                     }
                     //
@@ -585,7 +578,7 @@ bool AbstractTextModel::dropMimeData(const QMimeData* _data, Qt::DropAction _act
     }
 }
 
-QMimeData* AbstractTextModel::mimeData(const QModelIndexList& _indexes) const
+QMimeData* TextModel::mimeData(const QModelIndexList& _indexes) const
 {
     if (_indexes.isEmpty()) {
         return nullptr;
@@ -640,24 +633,23 @@ QMimeData* AbstractTextModel::mimeData(const QModelIndexList& _indexes) const
     return mimeData;
 }
 
-QStringList AbstractTextModel::mimeTypes() const
+QStringList TextModel::mimeTypes() const
 {
     return { kMimeType };
 }
 
-Qt::DropActions AbstractTextModel::supportedDragActions() const
+Qt::DropActions TextModel::supportedDragActions() const
 {
     return Qt::MoveAction;
 }
 
-Qt::DropActions AbstractTextModel::supportedDropActions() const
+Qt::DropActions TextModel::supportedDropActions() const
 {
     return Qt::MoveAction;
 }
 
-QString AbstractTextModel::mimeFromSelection(const QModelIndex& _from, int _fromPosition,
-                                             const QModelIndex& _to, int _toPosition,
-                                             bool _clearUuid) const
+QString TextModel::mimeFromSelection(const QModelIndex& _from, int _fromPosition,
+                                     const QModelIndex& _to, int _toPosition, bool _clearUuid) const
 {
     if (document() == nullptr) {
         return {};
@@ -680,31 +672,31 @@ QString AbstractTextModel::mimeFromSelection(const QModelIndex& _from, int _from
 
 
     const bool addXMlHeader = true;
-    xml::AbstractTextModelXmlWriter xml(addXMlHeader);
+    xml::TextModelXmlWriter xml(addXMlHeader);
     xml += "<document mime-type=\"" + Domain::mimeTypeFor(document()->type())
         + "\" version=\"1.0\">\n";
 
     auto buildXmlFor = [&xml, fromItem, _fromPosition, toItem, _toPosition,
-                        _clearUuid](AbstractTextModelItem* _fromItemParent, int _fromItemRow) {
+                        _clearUuid](TextModelItem* _fromItemParent, int _fromItemRow) {
         for (int childIndex = _fromItemRow; childIndex < _fromItemParent->childCount();
              ++childIndex) {
             const auto childItem = _fromItemParent->childAt(childIndex);
 
             switch (childItem->type()) {
-            case AbstractTextModelItemType::Folder: {
-                const auto folderItem = static_cast<AbstractTextModelFolderItem*>(childItem);
+            case TextModelItemType::Folder: {
+                const auto folderItem = static_cast<TextModelFolderItem*>(childItem);
                 xml += folderItem->toXml(fromItem, _fromPosition, toItem, _toPosition, _clearUuid);
                 break;
             }
 
-            case AbstractTextModelItemType::Group: {
-                const auto sceneItem = static_cast<AbstractTextModelGroupItem*>(childItem);
+            case TextModelItemType::Group: {
+                const auto sceneItem = static_cast<TextModelGroupItem*>(childItem);
                 xml += sceneItem->toXml(fromItem, _fromPosition, toItem, _toPosition, _clearUuid);
                 break;
             }
 
-            case AbstractTextModelItemType::Text: {
-                const auto textItem = static_cast<AbstractTextModelTextItem*>(childItem);
+            case TextModelItemType::Text: {
+                const auto textItem = static_cast<TextModelTextItem*>(childItem);
 
                 //
                 // Не сохраняем закрывающие блоки неоткрытых папок, всё это делается внутри самих
@@ -746,8 +738,8 @@ QString AbstractTextModel::mimeFromSelection(const QModelIndex& _from, int _from
     // Если построить нужно начиная с заголовка сцены или папки, то нужно захватить и саму
     // сцену/папку
     //
-    if (fromItem->type() == AbstractTextModelItemType::Text) {
-        const auto textItem = static_cast<AbstractTextModelTextItem*>(fromItem);
+    if (fromItem->type() == TextModelItemType::Text) {
+        const auto textItem = static_cast<TextModelTextItem*>(fromItem);
         if (textItem->paragraphType() == TextParagraphType::SceneHeading
             || textItem->paragraphType() == TextParagraphType::FolderHeader) {
             auto newFromItem = fromItemParent;
@@ -769,8 +761,8 @@ QString AbstractTextModel::mimeFromSelection(const QModelIndex& _from, int _from
     return xml.data();
 }
 
-void AbstractTextModel::insertFromMime(const QModelIndex& _index, int _positionInBlock,
-                                       const QString& _mimeData)
+void TextModel::insertFromMime(const QModelIndex& _index, int _positionInBlock,
+                               const QString& _mimeData)
 {
     if (!_index.isValid()) {
         return;
@@ -794,9 +786,9 @@ void AbstractTextModel::insertFromMime(const QModelIndex& _index, int _positionI
     // Извлекаем остающийся в блоке текст, если нужно
     //
     QString sourceBlockEndContent;
-    QVector<AbstractTextModelItem*> lastItemsFromSourceScene;
-    if (item->type() == AbstractTextModelItemType::Text) {
-        auto textItem = static_cast<AbstractTextModelTextItem*>(item);
+    QVector<TextModelItem*> lastItemsFromSourceScene;
+    if (item->type() == TextModelItemType::Text) {
+        auto textItem = static_cast<TextModelTextItem*>(item);
         //
         // Если в заголовок папки
         //
@@ -849,9 +841,9 @@ void AbstractTextModel::insertFromMime(const QModelIndex& _index, int _positionI
     contentReader.readNextStartElement(); // document
     contentReader.readNextStartElement();
     bool isFirstTextItemHandled = false;
-    AbstractTextModelItem* lastItem = item;
-    AbstractTextModelItem* insertAfterItem = lastItem;
-    QVector<AbstractTextModelItem*> itemsToInsert;
+    TextModelItem* lastItem = item;
+    TextModelItem* insertAfterItem = lastItem;
+    QVector<TextModelItem*> itemsToInsert;
     auto insertCollectedItems = [this, &lastItem, &insertAfterItem, &itemsToInsert] {
         insertItems(itemsToInsert, insertAfterItem);
         lastItem = itemsToInsert.constLast();
@@ -871,15 +863,15 @@ void AbstractTextModel::insertFromMime(const QModelIndex& _index, int _positionI
             break;
         }
 
-        AbstractTextModelItem* newItem = nullptr;
+        TextModelItem* newItem = nullptr;
         //
         // При входе в папку или сцену, если предыдущий текстовый элемент был в сцене,
         // то вставлять их будем не после текстового элемента, а после сцены
         //
         if ((textFolderTypeFromString(currentTag) != TextFolderType::Undefined
              || textGroupTypeFromString(currentTag) != TextGroupType::Undefined)
-            && (lastItem->type() == AbstractTextModelItemType::Text
-                || lastItem->type() == AbstractTextModelItemType::Splitter)) {
+            && (lastItem->type() == TextModelItemType::Text
+                || lastItem->type() == TextModelItemType::Splitter)) {
             //
             // ... вставим в модель, всё, что было собрано до этого момента
             //
@@ -889,7 +881,7 @@ void AbstractTextModel::insertFromMime(const QModelIndex& _index, int _positionI
             // ... родитель предыдущего элемента должен существовать и это должна быть сцена
             //
             if (lastItem && lastItem->parent() != nullptr
-                && lastItem->parent()->type() == AbstractTextModelItemType::Group) {
+                && lastItem->parent()->type() == TextModelItemType::Group) {
                 //
                 // ... и при этом вырезаем из него все текстовые блоки, идущие до конца сцены/папки
                 //
@@ -909,13 +901,13 @@ void AbstractTextModel::insertFromMime(const QModelIndex& _index, int _positionI
 
 
         if (textFolderTypeFromString(currentTag) != TextFolderType::Undefined) {
-            newItem = new AbstractTextModelFolderItem(this, contentReader);
+            newItem = new TextModelFolderItem(this, contentReader);
         } else if (textGroupTypeFromString(currentTag) != TextGroupType::Undefined) {
-            newItem = new AbstractTextModelGroupItem(this, contentReader);
+            newItem = new TextModelGroupItem(this, contentReader);
         } else if (currentTag == xml::kSplitterTag) {
-            newItem = new AbstractTextModelSplitterItem(this, contentReader);
+            newItem = new TextModelSplitterItem(this, contentReader);
         } else {
-            auto newTextItem = new AbstractTextModelTextItem(this, contentReader);
+            auto newTextItem = new TextModelTextItem(this, contentReader);
             //
             // Если вставляется текстовый элемент внутрь уже существующего элемента
             //
@@ -924,9 +916,9 @@ void AbstractTextModel::insertFromMime(const QModelIndex& _index, int _positionI
                 //
                 // ... то просто объединим их
                 //
-                if (item->type() == AbstractTextModelItemType::Text
+                if (item->type() == TextModelItemType::Text
                     && !lastItemsFromSourceScene.contains(item)) {
-                    auto textItem = static_cast<AbstractTextModelTextItem*>(item);
+                    auto textItem = static_cast<TextModelTextItem*>(item);
                     textItem->mergeWith(newTextItem);
                     updateItem(textItem);
                     delete newTextItem;
@@ -964,12 +956,12 @@ void AbstractTextModel::insertFromMime(const QModelIndex& _index, int _positionI
         contentReader.addData(sourceBlockEndContent);
         contentReader.readNextStartElement(); // document
         contentReader.readNextStartElement(); // text node
-        auto item = new AbstractTextModelTextItem(this, contentReader);
+        auto item = new TextModelTextItem(this, contentReader);
         //
         // ... и последний вставленный элемент был текстовым
         //
-        if (lastItem->type() == AbstractTextModelItemType::Text) {
-            auto lastTextItem = static_cast<AbstractTextModelTextItem*>(lastItem);
+        if (lastItem->type() == TextModelItemType::Text) {
+            auto lastTextItem = static_cast<TextModelTextItem*>(lastItem);
 
             //
             // Объединим элементы
@@ -1013,7 +1005,7 @@ void AbstractTextModel::insertFromMime(const QModelIndex& _index, int _positionI
         // Просто вставляем их внутрь или после последнего элемента
         //
         for (auto item : lastItemsFromSourceScene) {
-            auto textItem = static_cast<AbstractTextModelTextItem*>(item);
+            auto textItem = static_cast<TextModelTextItem*>(item);
             //
             // Удаляем пустые элементы модели
             //
@@ -1023,7 +1015,7 @@ void AbstractTextModel::insertFromMime(const QModelIndex& _index, int _positionI
                 continue;
             }
 
-            if (lastItem->type() == AbstractTextModelItemType::Group) {
+            if (lastItem->type() == TextModelItemType::Group) {
                 appendItem(item, lastItem);
             } else {
                 insertItem(item, lastItem);
@@ -1038,13 +1030,13 @@ void AbstractTextModel::insertFromMime(const QModelIndex& _index, int _positionI
     emit rowsChanged();
 }
 
-AbstractTextModelItem* AbstractTextModel::itemForIndex(const QModelIndex& _index) const
+TextModelItem* TextModel::itemForIndex(const QModelIndex& _index) const
 {
     if (!_index.isValid()) {
         return d->rootItem;
     }
 
-    auto item = static_cast<AbstractTextModelItem*>(_index.internalPointer());
+    auto item = static_cast<TextModelItem*>(_index.internalPointer());
     if (item == nullptr) {
         return d->rootItem;
     }
@@ -1052,7 +1044,7 @@ AbstractTextModelItem* AbstractTextModel::itemForIndex(const QModelIndex& _index
     return item;
 }
 
-QModelIndex AbstractTextModel::indexForItem(AbstractTextModelItem* _item) const
+QModelIndex TextModel::indexForItem(TextModelItem* _item) const
 {
     if (_item == nullptr) {
         return {};
@@ -1070,25 +1062,25 @@ QModelIndex AbstractTextModel::indexForItem(AbstractTextModelItem* _item) const
     return index(row, 0, parent);
 }
 
-void AbstractTextModel::setTitlePageModel(SimpleTextModel* _model)
+void TextModel::setTitlePageModel(SimpleTextModel* _model)
 {
     d->titlePageModel = _model;
 }
 
-SimpleTextModel* AbstractTextModel::titlePageModel() const
+SimpleTextModel* TextModel::titlePageModel() const
 {
     return d->titlePageModel;
 }
 
-void AbstractTextModel::initDocument()
+void TextModel::initDocument()
 {
     //
     // Если документ пустой, создаём первоначальную структуру
     //
     if (document()->content().isEmpty()) {
-        auto sceneHeading = new AbstractTextModelTextItem(this);
+        auto sceneHeading = new TextModelTextItem(this);
         sceneHeading->setParagraphType(TextParagraphType::SceneHeading);
-        auto scene = new AbstractTextModelGroupItem(this);
+        auto scene = new TextModelGroupItem(this);
         scene->appendItem(sceneHeading);
         appendItem(scene);
     }
@@ -1102,7 +1094,7 @@ void AbstractTextModel::initDocument()
     }
 }
 
-void AbstractTextModel::clearDocument()
+void TextModel::clearDocument()
 {
     if (!d->rootItem->hasChildren()) {
         return;
@@ -1115,12 +1107,12 @@ void AbstractTextModel::clearDocument()
     endResetModel();
 }
 
-QByteArray AbstractTextModel::toXml() const
+QByteArray TextModel::toXml() const
 {
     return d->toXml(document());
 }
 
-void AbstractTextModel::applyPatch(const QByteArray& _patch)
+void TextModel::applyPatch(const QByteArray& _patch)
 {
     Q_ASSERT(document());
 
@@ -1150,18 +1142,18 @@ void AbstractTextModel::applyPatch(const QByteArray& _patch)
         xml::readNextElement(_reader); // document
         xml::readNextElement(_reader);
 
-        QVector<AbstractTextModelItem*> items;
+        QVector<TextModelItem*> items;
         while (!_reader.atEnd()) {
             const auto currentTag = _reader.name().toString();
-            AbstractTextModelItem* item = nullptr;
+            TextModelItem* item = nullptr;
             if (textFolderTypeFromString(currentTag) != TextFolderType::Undefined) {
-                item = new AbstractTextModelFolderItem(this, _reader);
+                item = new TextModelFolderItem(this, _reader);
             } else if (textGroupTypeFromString(currentTag) != TextGroupType::Undefined) {
-                item = new AbstractTextModelGroupItem(this, _reader);
+                item = new TextModelGroupItem(this, _reader);
             } else if (currentTag == xml::kSplitterTag) {
-                item = new AbstractTextModelSplitterItem(this, _reader);
+                item = new TextModelSplitterItem(this, _reader);
             } else {
-                item = new AbstractTextModelTextItem(this, _reader);
+                item = new TextModelTextItem(this, _reader);
             }
             items.append(item);
 
@@ -1181,10 +1173,9 @@ void AbstractTextModel::applyPatch(const QByteArray& _patch)
     //
     // Раскладываем элементы в плоские списки для сравнения
     //
-    std::function<QVector<AbstractTextModelItem*>(const QVector<AbstractTextModelItem*>&)>
-        makeItemsPlain;
-    makeItemsPlain = [&makeItemsPlain](const QVector<AbstractTextModelItem*>& _items) {
-        QVector<AbstractTextModelItem*> itemsPlain;
+    std::function<QVector<TextModelItem*>(const QVector<TextModelItem*>&)> makeItemsPlain;
+    makeItemsPlain = [&makeItemsPlain](const QVector<TextModelItem*>& _items) {
+        QVector<TextModelItem*> itemsPlain;
         for (auto item : _items) {
             itemsPlain.append(item);
             for (int row = 0; row < item->childCount(); ++row) {
@@ -1220,28 +1211,28 @@ void AbstractTextModel::applyPatch(const QByteArray& _patch)
             + "\" version=\"1.0\">\n";
         return xml.length();
     }();
-    std::function<AbstractTextModelItem*(AbstractTextModelItem*)> findStartItem;
-    findStartItem = [this, changes, &length,
-                     &findStartItem](AbstractTextModelItem* _item) -> AbstractTextModelItem* {
+    std::function<TextModelItem*(TextModelItem*)> findStartItem;
+    findStartItem
+        = [this, changes, &length, &findStartItem](TextModelItem* _item) -> TextModelItem* {
         if (changes.first.from == 0) {
             return _item->childAt(0);
         }
 
-        AbstractTextModelItem* lastBrokenItem = nullptr;
-        QScopedPointer<AbstractTextModelTextItem> lastBrokenItemCopy;
+        TextModelItem* lastBrokenItem = nullptr;
+        QScopedPointer<TextModelTextItem> lastBrokenItemCopy;
         for (int childIndex = 0; childIndex < _item->childCount(); ++childIndex) {
             //
             // Определим дочерний элемент
             //
             auto child = _item->childAt(childIndex);
-            if (child->type() == AbstractTextModelItemType::Text) {
-                auto textItem = static_cast<AbstractTextModelTextItem*>(child);
+            if (child->type() == TextModelItemType::Text) {
+                auto textItem = static_cast<TextModelTextItem*>(child);
                 if (textItem->isCorrection()) {
                     continue;
                 }
                 if (textItem->isBreakCorrectionStart()) {
                     lastBrokenItem = textItem;
-                    lastBrokenItemCopy.reset(new AbstractTextModelTextItem(this));
+                    lastBrokenItemCopy.reset(new TextModelTextItem(this));
                     lastBrokenItemCopy->copyFrom(lastBrokenItem);
                     continue;
                 }
@@ -1265,11 +1256,11 @@ void AbstractTextModel::applyPatch(const QByteArray& _patch)
                 // Если есть дети, то уточняем поиск
                 //
                 int headerLength = 0;
-                if (child->type() == AbstractTextModelItemType::Folder) {
-                    auto folder = static_cast<AbstractTextModelFolderItem*>(child);
+                if (child->type() == TextModelItemType::Folder) {
+                    auto folder = static_cast<TextModelFolderItem*>(child);
                     headerLength = QString(folder->xmlHeader()).length();
-                } else if (child->type() == AbstractTextModelItemType::Group) {
-                    auto scene = static_cast<AbstractTextModelGroupItem*>(child);
+                } else if (child->type() == TextModelItemType::Group) {
+                    auto scene = static_cast<TextModelGroupItem*>(child);
                     headerLength = QString(scene->xmlHeader()).length();
                 }
 
@@ -1339,10 +1330,9 @@ void AbstractTextModel::applyPatch(const QByteArray& _patch)
     //
     const auto operations = edit_distance::editDistance(oldItemsPlain, newItemsPlain);
     //
-    std::function<AbstractTextModelItem*(AbstractTextModelItem*, bool)> findNextItemWithChildren;
-    findNextItemWithChildren
-        = [&findNextItemWithChildren](AbstractTextModelItem* _item,
-                                      bool _searchInChildren) -> AbstractTextModelItem* {
+    std::function<TextModelItem*(TextModelItem*, bool)> findNextItemWithChildren;
+    findNextItemWithChildren = [&findNextItemWithChildren](
+                                   TextModelItem* _item, bool _searchInChildren) -> TextModelItem* {
         if (_item == nullptr) {
             return nullptr;
         }
@@ -1383,13 +1373,13 @@ void AbstractTextModel::applyPatch(const QByteArray& _patch)
             return findNextItemWithChildren(parent, false);
         }
     };
-    auto findNextItem = [&findNextItemWithChildren](AbstractTextModelItem* _item) {
+    auto findNextItem = [&findNextItemWithChildren](TextModelItem* _item) {
         auto nextItem = findNextItemWithChildren(_item, true);
         //
         // Пропускаем текстовые декорации, т.к. они не сохраняются в модель
         //
-        while (nextItem != nullptr && nextItem->type() == AbstractTextModelItemType::Text
-               && static_cast<AbstractTextModelTextItem*>(nextItem)->isCorrection()) {
+        while (nextItem != nullptr && nextItem->type() == TextModelItemType::Text
+               && static_cast<TextModelTextItem*>(nextItem)->isCorrection()) {
             nextItem = findNextItemWithChildren(nextItem, true);
         }
         return nextItem;
@@ -1398,22 +1388,21 @@ void AbstractTextModel::applyPatch(const QByteArray& _patch)
     // И применяем их
     //
     emit rowsAboutToBeChanged();
-    AbstractTextModelItem* previousModelItem = nullptr;
+    TextModelItem* previousModelItem = nullptr;
     //
     // В некоторых ситуациях мы не знаем сразу, куда будут извлечены элементы из удаляемого
     // элемента, или когда элемент вставляется посреди и отрезает часть вложенных элементов, поэтому
     // упаковываем их в список для размещения в правильном месте в следующем проходе
     //
-    QVector<AbstractTextModelItem*> movedSiblingItems;
+    QVector<TextModelItem*> movedSiblingItems;
     auto updateItemPlacement = [this, &modelItem, &previousModelItem, newItemsPlain,
-                                &movedSiblingItems](AbstractTextModelItem* _newItem,
-                                                    AbstractTextModelItem* _item) {
+                                &movedSiblingItems](TextModelItem* _newItem, TextModelItem* _item) {
         //
         // Определим предыдущий элемент из списка новых, в дальнейшем будем опираться
         // на его расположение относительно текущего нового
         //
         const auto newItemIndex = newItemsPlain.indexOf(_newItem);
-        AbstractTextModelItem* previousNewItem
+        TextModelItem* previousNewItem
             = newItemIndex > 0 ? newItemsPlain.at(newItemIndex - 1) : nullptr;
         //
         // У элемента нет родителя, то это вставка нового элемента
@@ -1615,12 +1604,12 @@ void AbstractTextModel::applyPatch(const QByteArray& _patch)
         //
         // Если текущий элемент модели разбит на несколько абзацев, нужно его склеить
         //
-        if (modelItem != nullptr && modelItem->type() == AbstractTextModelItemType::Text) {
-            auto textItem = static_cast<AbstractTextModelTextItem*>(modelItem);
+        if (modelItem != nullptr && modelItem->type() == TextModelItemType::Text) {
+            auto textItem = static_cast<TextModelTextItem*>(modelItem);
             if (textItem->isBreakCorrectionStart()) {
                 auto nextItem = findNextItemWithChildren(textItem, false);
-                while (nextItem != nullptr && nextItem->type() == AbstractTextModelItemType::Text) {
-                    auto nextTextItem = static_cast<AbstractTextModelTextItem*>(nextItem);
+                while (nextItem != nullptr && nextItem->type() == TextModelItemType::Text) {
+                    auto nextTextItem = static_cast<TextModelTextItem*>(nextItem);
                     if (nextTextItem->isCorrection()) {
                         auto itemToRemove = nextItem;
                         nextItem = findNextItemWithChildren(nextItem, false);
@@ -1679,26 +1668,26 @@ void AbstractTextModel::applyPatch(const QByteArray& _patch)
             //
             // Создаём новый элемент
             //
-            AbstractTextModelItem* itemToInsert = nullptr;
+            TextModelItem* itemToInsert = nullptr;
             switch (newItem->type()) {
-            case AbstractTextModelItemType::Folder: {
-                itemToInsert = new AbstractTextModelFolderItem(this);
+            case TextModelItemType::Folder: {
+                itemToInsert = new TextModelFolderItem(this);
                 break;
             }
 
-            case AbstractTextModelItemType::Group: {
-                itemToInsert = new AbstractTextModelGroupItem(this);
+            case TextModelItemType::Group: {
+                itemToInsert = new TextModelGroupItem(this);
                 break;
             }
 
-            case AbstractTextModelItemType::Text: {
-                itemToInsert = new AbstractTextModelTextItem(this);
+            case TextModelItemType::Text: {
+                itemToInsert = new TextModelTextItem(this);
                 break;
             }
 
-            case AbstractTextModelItemType::Splitter: {
-                itemToInsert = new AbstractTextModelSplitterItem(
-                    this, static_cast<AbstractTextModelSplitterItem*>(newItem)->splitterType());
+            case TextModelItemType::Splitter: {
+                itemToInsert = new TextModelSplitterItem(
+                    this, static_cast<TextModelSplitterItem*>(newItem)->splitterType());
                 break;
             }
             }

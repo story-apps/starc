@@ -1,6 +1,6 @@
 #pragma once
 
-#include "abstract_text_model_item.h"
+#include "text_model_item.h"
 
 #include <QColor>
 #include <QString>
@@ -18,7 +18,7 @@ enum class TextParagraphType;
 /**
  * @brief Класс элемента текста модели текста
  */
-class CORE_LIBRARY_EXPORT AbstractTextModelTextItem : public AbstractTextModelItem
+class CORE_LIBRARY_EXPORT TextModelTextItem : public TextModelItem
 {
 public:
     struct CORE_LIBRARY_EXPORT TextPart {
@@ -73,9 +73,9 @@ public:
     };
 
 public:
-    explicit AbstractTextModelTextItem(const AbstractTextModel* _model);
-    AbstractTextModelTextItem(const AbstractTextModel* _model, QXmlStreamReader& _contentReaded);
-    ~AbstractTextModelTextItem() override;
+    explicit TextModelTextItem(const TextModel* _model);
+    TextModelTextItem(const TextModel* _model, QXmlStreamReader& _contentReaded);
+    ~TextModelTextItem() override;
 
     /**
      * @brief Тип параграфа
@@ -162,7 +162,7 @@ public:
     /**
      * @brief Объединить с заданным элементом
      */
-    void mergeWith(const AbstractTextModelTextItem* _other);
+    void mergeWith(const TextModelTextItem* _other);
 
     /**
      * @brief Определяем интерфейс получения данных блока
@@ -178,12 +178,12 @@ public:
     /**
      * @brief Скопировать контент с заданного элемента
      */
-    void copyFrom(AbstractTextModelItem* _item) override;
+    void copyFrom(TextModelItem* _item) override;
 
     /**
      * @brief Проверить равен ли текущий элемент заданному
      */
-    bool isEqual(AbstractTextModelItem* _item) const override;
+    bool isEqual(TextModelItem* _item) const override;
 
 private:
     /**
@@ -199,5 +199,5 @@ private:
 
 } // namespace BusinessLayer
 
-Q_DECLARE_METATYPE(BusinessLayer::AbstractTextModelTextItem::ReviewComment)
-Q_DECLARE_METATYPE(QVector<BusinessLayer::AbstractTextModelTextItem::ReviewComment>)
+Q_DECLARE_METATYPE(BusinessLayer::TextModelTextItem::ReviewComment)
+Q_DECLARE_METATYPE(QVector<BusinessLayer::TextModelTextItem::ReviewComment>)

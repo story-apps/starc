@@ -338,7 +338,7 @@ QStandardItemModel* TemplatesFacade::comicBookTemplates()
     return instance().d->templatesModel<ComicBookTemplate>();
 }
 
-const TextTemplate& TemplatesFacade::abstractTextTemplate(const AbstractTextModel* _model)
+const TextTemplate& TemplatesFacade::abstractTextTemplate(const TextModel* _model)
 {
     //
     // Получить шаблон в зависимости от заданной модели

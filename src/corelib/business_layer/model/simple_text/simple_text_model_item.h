@@ -11,7 +11,7 @@ namespace BusinessLayer {
 /**
  * @brief Перечисление типов элементов модели текста
  */
-enum class TextModelItemType { Chapter, Text };
+enum class SimpleTextModelItemType { Chapter, Text };
 
 
 /**
@@ -20,13 +20,13 @@ enum class TextModelItemType { Chapter, Text };
 class CORE_LIBRARY_EXPORT SimpleTextModelItem : public AbstractModelItem
 {
 public:
-    explicit SimpleTextModelItem(TextModelItemType _type);
+    explicit SimpleTextModelItem(SimpleTextModelItemType _type);
     ~SimpleTextModelItem() override;
 
     /**
      * @brief Получить тип элемента
      */
-    const TextModelItemType& type() const;
+    const SimpleTextModelItemType& type() const;
 
     /**
      * @brief Переопределяем интерфейс для возврата элемента собственного класса

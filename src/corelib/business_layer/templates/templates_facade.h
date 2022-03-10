@@ -10,7 +10,7 @@ class QStandardItemModel;
 
 namespace BusinessLayer {
 
-class AbstractTextModel;
+class TextModel;
 class TextTemplate;
 class ComicBookTemplate;
 class ScreenplayTemplate;
@@ -37,7 +37,7 @@ public:
     /**
      * @brief Получить шаблон используемый для заданной модели
      */
-    static const TextTemplate& abstractTextTemplate(const AbstractTextModel* _model);
+    static const TextTemplate& abstractTextTemplate(const TextModel* _model);
 
     /**
      * @brief Получить шаблон в соответствии с заданным идентификатором

@@ -1,9 +1,9 @@
-#include "abstract_text_model_group_item.h"
+#include "text_model_group_item.h"
 
-#include "abstract_text_model_splitter_item.h"
-#include "abstract_text_model_text_item.h"
-#include "abstract_text_model_xml.h"
-#include "abstract_text_model_xml_writer.h"
+#include "text_model_splitter_item.h"
+#include "text_model_text_item.h"
+#include "text_model_xml.h"
+#include "text_model_xml_writer.h"
 
 #include <business_layer/templates/screenplay_template.h>
 #include <utils/helpers/text_helper.h>
@@ -18,7 +18,7 @@
 
 namespace BusinessLayer {
 
-class AbstractTextModelGroupItem::Implementation
+class TextModelGroupItem::Implementation
 {
 public:
     /**
@@ -95,22 +95,20 @@ public:
 // ****
 
 
-bool AbstractTextModelGroupItem::Number::operator==(
-    const AbstractTextModelGroupItem::Number& _other) const
+bool TextModelGroupItem::Number::operator==(const TextModelGroupItem::Number& _other) const
 {
     return text == _other.text;
 }
 
-AbstractTextModelGroupItem::AbstractTextModelGroupItem(const AbstractTextModel* _model)
-    : AbstractTextModelItem(AbstractTextModelItemType::Group, _model)
+TextModelGroupItem::TextModelGroupItem(const TextModel* _model)
+    : TextModelItem(TextModelItemType::Group, _model)
     , d(new Implementation)
 {
     d->uuid = QUuid::createUuid();
 }
 
-AbstractTextModelGroupItem::AbstractTextModelGroupItem(const AbstractTextModel* _model,
-                                                       QXmlStreamReader& _contentReader)
-    : AbstractTextModelItem(AbstractTextModelItemType::Group, _model)
+TextModelGroupItem::TextModelGroupItem(const TextModel* _model, QXmlStreamReader& _contentReader)
+    : TextModelItem(TextModelItemType::Group, _model)
     , d(new Implementation)
 {
     d->groupType = textGroupTypeFromString(_contentReader.name().toString());
@@ -162,8 +160,7 @@ AbstractTextModelGroupItem::AbstractTextModelGroupItem(const AbstractTextModel* 
             //
             // Если дошли до конца группы, выходим из обработки
             //
-            else if (textGroupTypeFromString(currentTag.toString())
-                         != TextGroupType::Undefined
+            else if (textGroupTypeFromString(currentTag.toString()) != TextGroupType::Undefined
                      && _contentReader.isEndElement()) {
                 xml::readNextElement(_contentReader);
                 break;
@@ -171,13 +168,12 @@ AbstractTextModelGroupItem::AbstractTextModelGroupItem(const AbstractTextModel* 
             //
             // Считываем вложенный контент
             //
-            else if (textGroupTypeFromString(currentTag.toString())
-                     != TextGroupType::Undefined) {
-                appendItem(new AbstractTextModelGroupItem(model(), _contentReader));
+            else if (textGroupTypeFromString(currentTag.toString()) != TextGroupType::Undefined) {
+                appendItem(new TextModelGroupItem(model(), _contentReader));
             } else if (currentTag == xml::kSplitterTag) {
-                appendItem(new AbstractTextModelSplitterItem(model(), _contentReader));
+                appendItem(new TextModelSplitterItem(model(), _contentReader));
             } else {
-                appendItem(new AbstractTextModelTextItem(model(), _contentReader));
+                appendItem(new TextModelTextItem(model(), _contentReader));
             }
         } while (!_contentReader.atEnd());
     }
@@ -188,14 +184,14 @@ AbstractTextModelGroupItem::AbstractTextModelGroupItem(const AbstractTextModel* 
     handleChange();
 }
 
-AbstractTextModelGroupItem::~AbstractTextModelGroupItem() = default;
+TextModelGroupItem::~TextModelGroupItem() = default;
 
-const TextGroupType& AbstractTextModelGroupItem::groupType() const
+const TextGroupType& TextModelGroupItem::groupType() const
 {
     return d->groupType;
 }
 
-void AbstractTextModelGroupItem::setGroupType(TextGroupType _type)
+void TextModelGroupItem::setGroupType(TextGroupType _type)
 {
     if (d->groupType == _type) {
         return;
@@ -205,17 +201,17 @@ void AbstractTextModelGroupItem::setGroupType(TextGroupType _type)
     setChanged(true);
 }
 
-QUuid AbstractTextModelGroupItem::uuid() const
+QUuid TextModelGroupItem::uuid() const
 {
     return d->uuid;
 }
 
-int AbstractTextModelGroupItem::level() const
+int TextModelGroupItem::level() const
 {
     return d->level;
 }
 
-void AbstractTextModelGroupItem::setLevel(int _level)
+void TextModelGroupItem::setLevel(int _level)
 {
     if (d->level == _level) {
         return;
@@ -225,7 +221,7 @@ void AbstractTextModelGroupItem::setLevel(int _level)
     setChanged(true);
 }
 
-AbstractTextModelGroupItem::Number AbstractTextModelGroupItem::number() const
+TextModelGroupItem::Number TextModelGroupItem::number() const
 {
     if (!d->number.has_value()) {
         return {};
@@ -234,7 +230,7 @@ AbstractTextModelGroupItem::Number AbstractTextModelGroupItem::number() const
     return *d->number;
 }
 
-bool AbstractTextModelGroupItem::setNumber(int _number, const QString& _prefix)
+bool TextModelGroupItem::setNumber(int _number, const QString& _prefix)
 {
     if (childCount() == 0) {
         return false;
@@ -243,11 +239,11 @@ bool AbstractTextModelGroupItem::setNumber(int _number, const QString& _prefix)
     bool hasContent = false;
     for (int childIndex = 0; childIndex < childCount(); ++childIndex) {
         const auto child = childAt(childIndex);
-        if (child->type() != AbstractTextModelItemType::Text) {
+        if (child->type() != TextModelItemType::Text) {
             continue;
         }
 
-        const auto textItemChild = static_cast<const AbstractTextModelTextItem*>(child);
+        const auto textItemChild = static_cast<const TextModelTextItem*>(child);
         if (!textItemChild->isCorrection()) {
             hasContent = true;
             break;
@@ -273,12 +269,12 @@ bool AbstractTextModelGroupItem::setNumber(int _number, const QString& _prefix)
     return true;
 }
 
-QColor AbstractTextModelGroupItem::color() const
+QColor TextModelGroupItem::color() const
 {
     return d->color;
 }
 
-void AbstractTextModelGroupItem::setColor(const QColor& _color)
+void TextModelGroupItem::setColor(const QColor& _color)
 {
     if (d->color == _color) {
         return;
@@ -288,12 +284,12 @@ void AbstractTextModelGroupItem::setColor(const QColor& _color)
     setChanged(true);
 }
 
-QString AbstractTextModelGroupItem::heading() const
+QString TextModelGroupItem::heading() const
 {
     return d->heading;
 }
 
-QVariant AbstractTextModelGroupItem::data(int _role) const
+QVariant TextModelGroupItem::data(int _role) const
 {
     switch (_role) {
     case Qt::DecorationRole: {
@@ -328,21 +324,21 @@ QVariant AbstractTextModelGroupItem::data(int _role) const
     }
 
     default: {
-        return AbstractTextModelItem::data(_role);
+        return TextModelItem::data(_role);
     }
     }
 }
 
-QByteArray AbstractTextModelGroupItem::toXml() const
+QByteArray TextModelGroupItem::toXml() const
 {
     return toXml(nullptr, 0, nullptr, 0, false);
 }
 
-QByteArray AbstractTextModelGroupItem::toXml(AbstractTextModelItem* _from, int _fromPosition,
-                                             AbstractTextModelItem* _to, int _toPosition,
-                                             bool _clearUuid) const
+QByteArray TextModelGroupItem::toXml(TextModelItem* _from, int _fromPosition,
+                                     TextModelItem* _to, int _toPosition,
+                                     bool _clearUuid) const
 {
-    xml::AbstractTextModelXmlWriter xml;
+    xml::TextModelXmlWriter xml;
     xml += xmlHeader(_clearUuid);
     for (int childIndex = 0; childIndex < childCount(); ++childIndex) {
         auto child = childAt(childIndex);
@@ -350,7 +346,7 @@ QByteArray AbstractTextModelGroupItem::toXml(AbstractTextModelItem* _from, int _
         //
         // Нетекстовые блоки, просто добавляем к общему xml
         //
-        if (child->type() != AbstractTextModelItemType::Text) {
+        if (child->type() != TextModelItemType::Text) {
             xml += child;
             continue;
         }
@@ -358,7 +354,7 @@ QByteArray AbstractTextModelGroupItem::toXml(AbstractTextModelItem* _from, int _
         //
         // Текстовые блоки, в зависимости от необходимости вставить блок целиком, или его часть
         //
-        auto textItem = static_cast<AbstractTextModelTextItem*>(child);
+        auto textItem = static_cast<TextModelTextItem*>(child);
         if (textItem == _to) {
             if (textItem == _from) {
                 xml += { textItem, _fromPosition, _toPosition - _fromPosition };
@@ -380,7 +376,7 @@ QByteArray AbstractTextModelGroupItem::toXml(AbstractTextModelItem* _from, int _
     return xml.data();
 }
 
-QByteArray AbstractTextModelGroupItem::xmlHeader(bool _clearUuid) const
+QByteArray TextModelGroupItem::xmlHeader(bool _clearUuid) const
 {
     QByteArray xml;
     //
@@ -412,14 +408,14 @@ QByteArray AbstractTextModelGroupItem::xmlHeader(bool _clearUuid) const
     return xml;
 }
 
-void AbstractTextModelGroupItem::copyFrom(AbstractTextModelItem* _item)
+void TextModelGroupItem::copyFrom(TextModelItem* _item)
 {
-    if (_item->type() != AbstractTextModelItemType::Group) {
+    if (_item->type() != TextModelItemType::Group) {
         Q_ASSERT(false);
         return;
     }
 
-    auto sceneItem = static_cast<AbstractTextModelGroupItem*>(_item);
+    auto sceneItem = static_cast<TextModelGroupItem*>(_item);
     d->uuid = sceneItem->d->uuid;
     d->isOmited = sceneItem->d->isOmited;
     d->number = sceneItem->d->number;
@@ -427,13 +423,13 @@ void AbstractTextModelGroupItem::copyFrom(AbstractTextModelItem* _item)
     d->stamp = sceneItem->d->stamp;
 }
 
-bool AbstractTextModelGroupItem::isEqual(AbstractTextModelItem* _item) const
+bool TextModelGroupItem::isEqual(TextModelItem* _item) const
 {
     if (_item == nullptr || type() != _item->type()) {
         return false;
     }
 
-    const auto sceneItem = static_cast<AbstractTextModelGroupItem*>(_item);
+    const auto sceneItem = static_cast<TextModelGroupItem*>(_item);
     return d->uuid == sceneItem->d->uuid
         && d->isOmited == sceneItem->d->isOmited
         //
@@ -443,7 +439,7 @@ bool AbstractTextModelGroupItem::isEqual(AbstractTextModelItem* _item) const
         && d->color == sceneItem->d->color && d->stamp == sceneItem->d->stamp;
 }
 
-void AbstractTextModelGroupItem::handleChange()
+void TextModelGroupItem::handleChange()
 {
     //
     // TODO: Возможно это нужно переопределить для дочерних элементов
@@ -455,11 +451,11 @@ void AbstractTextModelGroupItem::handleChange()
 
     for (int childIndex = 0; childIndex < childCount(); ++childIndex) {
         auto child = childAt(childIndex);
-        if (child->type() != AbstractTextModelItemType::Text) {
+        if (child->type() != TextModelItemType::Text) {
             continue;
         }
 
-        auto childTextItem = static_cast<AbstractTextModelTextItem*>(child);
+        auto childTextItem = static_cast<TextModelTextItem*>(child);
 
         //
         // Собираем текст
@@ -488,7 +484,7 @@ void AbstractTextModelGroupItem::handleChange()
             d->text.append(childTextItem->text() + " ");
             d->reviewMarksSize += std::count_if(
                 childTextItem->reviewMarks().begin(), childTextItem->reviewMarks().end(),
-                [](const AbstractTextModelTextItem::ReviewMark& _reviewMark) {
+                [](const TextModelTextItem::ReviewMark& _reviewMark) {
                     return !_reviewMark.isDone;
                 });
             break;

@@ -4,8 +4,8 @@
 
 namespace BusinessLayer {
 
-class AbstractTextModelItem;
-class AbstractTextModelTextItem;
+class TextModelItem;
+class TextModelTextItem;
 
 namespace xml {
 
@@ -13,18 +13,18 @@ namespace xml {
  * @brief Класс для формирования xml данных текстового документа
  * @note Основное предназначение - склеивать разорванные текстовые блоки перед записью
  */
-class AbstractTextModelXmlWriter
+class TextModelXmlWriter
 {
 public:
-    explicit AbstractTextModelXmlWriter(bool _addHeader = false);
-    ~AbstractTextModelXmlWriter();
+    explicit TextModelXmlWriter(bool _addHeader = false);
+    ~TextModelXmlWriter();
 
     void operator+=(const char* _data);
     void operator+=(const QByteArray& _data);
     void operator+=(const QString& _data);
-    void operator+=(AbstractTextModelItem* _item);
+    void operator+=(TextModelItem* _item);
     struct TextItemData {
-        AbstractTextModelTextItem* item = nullptr;
+        TextModelTextItem* item = nullptr;
         int fromPosition = 0;
         int toPosition = 0;
     };

@@ -29,10 +29,10 @@ const char* kMimeType = "application/x-starc/text/item";
  */
 SimpleTextModelItem* firstTextItem(SimpleTextModelItem* _item)
 {
-    Q_ASSERT(_item->type() != TextModelItemType::Text);
+    Q_ASSERT(_item->type() != SimpleTextModelItemType::Text);
     for (auto childIndex = 0; childIndex < _item->childCount(); ++childIndex) {
         auto childItem = _item->childAt(childIndex);
-        if (childItem->type() == TextModelItemType::Chapter) {
+        if (childItem->type() == SimpleTextModelItemType::Chapter) {
             return firstTextItem(childItem);
         } else {
             return childItem;
@@ -140,7 +140,7 @@ void SimpleTextModel::Implementation::updateNumbering()
         for (int childIndex = 0; childIndex < _item->childCount(); ++childIndex) {
             auto childItem = _item->childAt(childIndex);
             switch (childItem->type()) {
-            case TextModelItemType::Chapter: {
+            case SimpleTextModelItemType::Chapter: {
                 updateChildNumbering(childItem);
                 auto chapterItem = static_cast<SimpleTextModelChapterItem*>(childItem);
                 chapterItem->setNumber(sceneNumber++);
@@ -184,7 +184,7 @@ void SimpleTextModel::setName(const QString& _name)
     }
 
     const auto item = firstTextItem(d->rootItem);
-    if (item != nullptr && item->type() == TextModelItemType::Text) {
+    if (item != nullptr && item->type() == SimpleTextModelItemType::Text) {
         auto textItem = static_cast<SimpleTextModelTextItem*>(item);
         textItem->setText(_name);
     }
@@ -343,7 +343,7 @@ void SimpleTextModel::updateItem(SimpleTextModelItem* _item)
     //
     if (_item == d->rootItem) {
         const auto item = firstTextItem(d->rootItem);
-        if (item == nullptr || item->type() != TextModelItemType::Text) {
+        if (item == nullptr || item->type() != SimpleTextModelItemType::Text) {
             setDocumentName({});
         } else {
             const auto textItem = static_cast<SimpleTextModelTextItem*>(item);
@@ -417,7 +417,7 @@ Qt::ItemFlags SimpleTextModel::flags(const QModelIndex& _index) const
 
     const auto item = itemForIndex(_index);
     switch (item->type()) {
-    case TextModelItemType::Chapter: {
+    case SimpleTextModelItemType::Chapter: {
         flags |= Qt::ItemIsDragEnabled | Qt::ItemIsDropEnabled;
         break;
     }
@@ -589,7 +589,7 @@ bool SimpleTextModel::dropMimeData(const QMimeData* _data, Qt::DropAction _actio
                         //
                         // Если вставка идёт после главы
                         //
-                        if (lastItem->type() == TextModelItemType::Chapter) {
+                        if (lastItem->type() == SimpleTextModelItemType::Chapter) {
                             auto lastChapterItem
                                 = static_cast<SimpleTextModelChapterItem*>(lastItem);
                             //
@@ -610,7 +610,7 @@ bool SimpleTextModel::dropMimeData(const QMimeData* _data, Qt::DropAction _actio
                                 //
                                 lastItem
                                     = lastChapterItem->childAt(lastChapterItem->childCount() - 1);
-                                while (lastItem->type() == TextModelItemType::Chapter) {
+                                while (lastItem->type() == SimpleTextModelItemType::Chapter) {
                                     lastChapterItem
                                         = static_cast<SimpleTextModelChapterItem*>(lastItem);
                                     if (lastChapterItem->level() >= newChapterItem->level()) {
@@ -621,7 +621,7 @@ bool SimpleTextModel::dropMimeData(const QMimeData* _data, Qt::DropAction _actio
                                     lastItem = lastChapterItem->childAt(
                                         lastChapterItem->childCount() - 1);
                                 }
-                                if (lastItem->type() != TextModelItemType::Chapter) {
+                                if (lastItem->type() != SimpleTextModelItemType::Chapter) {
                                     insertItem(newChapterItem, lastItem);
                                 }
                             }
@@ -792,13 +792,13 @@ QString SimpleTextModel::mimeFromSelection(const QModelIndex& _from, int _fromPo
             const auto childItem = _fromItemParent->childAt(childIndex);
 
             switch (childItem->type()) {
-            case TextModelItemType::Chapter: {
+            case SimpleTextModelItemType::Chapter: {
                 const auto folderItem = static_cast<SimpleTextModelChapterItem*>(childItem);
                 xml += folderItem->toXml(fromItem, _fromPosition, toItem, _toPosition, _clearUuid);
                 break;
             }
 
-            case TextModelItemType::Text: {
+            case SimpleTextModelItemType::Text: {
                 const auto textItem = static_cast<SimpleTextModelTextItem*>(childItem);
                 if (textItem == fromItem && textItem == toItem) {
                     xml += textItem->toXml(_fromPosition, _toPosition - _fromPosition);
@@ -833,7 +833,7 @@ QString SimpleTextModel::mimeFromSelection(const QModelIndex& _from, int _fromPo
     // Если построить нужно начиная с заголовка сцены или папки, то нужно захватить и саму
     // сцену/папку
     //
-    if (fromItem->type() == TextModelItemType::Text) {
+    if (fromItem->type() == SimpleTextModelItemType::Text) {
         const auto textItem = static_cast<SimpleTextModelTextItem*>(fromItem);
         if (textItem->paragraphType() == TextParagraphType::Heading1
             || textItem->paragraphType() == TextParagraphType::Heading2
@@ -886,7 +886,7 @@ void SimpleTextModel::insertFromMime(const QModelIndex& _index, int _positionInB
     //
     QString sourceBlockEndContent;
     QVector<SimpleTextModelItem*> lastItemsFromSourceScene;
-    if (item->type() == TextModelItemType::Text) {
+    if (item->type() == SimpleTextModelItemType::Text) {
         auto textItem = static_cast<SimpleTextModelTextItem*>(item);
         //
         // Если в заголовок папки
@@ -953,7 +953,7 @@ void SimpleTextModel::insertFromMime(const QModelIndex& _index, int _positionInB
                 //
                 // ... то просто объединим их
                 //
-                if (item->type() == TextModelItemType::Text
+                if (item->type() == SimpleTextModelItemType::Text
                     && !lastItemsFromSourceScene.contains(item)) {
                     auto textItem = static_cast<SimpleTextModelTextItem*>(item);
                     if (!textItem->text().isEmpty()) {
@@ -1001,7 +1001,7 @@ void SimpleTextModel::insertFromMime(const QModelIndex& _index, int _positionInB
         //
         // ... и последний вставленный элемент был текстовым
         //
-        if (lastItem->type() == TextModelItemType::Text) {
+        if (lastItem->type() == SimpleTextModelItemType::Text) {
             auto lastTextItem = static_cast<SimpleTextModelTextItem*>(lastItem);
 
             //
@@ -1240,7 +1240,7 @@ void SimpleTextModel::applyPatch(const QByteArray& _patch)
                 // Если есть дети, то уточняем поиск
                 //
                 int headerLength = 0;
-                if (child->type() == TextModelItemType::Chapter) {
+                if (child->type() == SimpleTextModelItemType::Chapter) {
                     auto folder = static_cast<SimpleTextModelChapterItem*>(child);
                     headerLength = QString(folder->xmlHeader()).length();
                 }
@@ -1607,12 +1607,12 @@ void SimpleTextModel::applyPatch(const QByteArray& _patch)
             //
             SimpleTextModelItem* itemToInsert = nullptr;
             switch (newItem->type()) {
-            case TextModelItemType::Chapter: {
+            case SimpleTextModelItemType::Chapter: {
                 itemToInsert = new SimpleTextModelChapterItem;
                 break;
             }
 
-            case TextModelItemType::Text: {
+            case SimpleTextModelItemType::Text: {
                 itemToInsert = new SimpleTextModelTextItem;
                 break;
             }

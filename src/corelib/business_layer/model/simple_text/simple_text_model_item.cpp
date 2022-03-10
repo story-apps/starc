@@ -8,12 +8,12 @@ namespace BusinessLayer {
 class SimpleTextModelItem::Implementation
 {
 public:
-    explicit Implementation(TextModelItemType _type);
+    explicit Implementation(SimpleTextModelItemType _type);
 
-    const TextModelItemType type;
+    const SimpleTextModelItemType type;
 };
 
-SimpleTextModelItem::Implementation::Implementation(TextModelItemType _type)
+SimpleTextModelItem::Implementation::Implementation(SimpleTextModelItemType _type)
     : type(_type)
 {
 }
@@ -22,14 +22,14 @@ SimpleTextModelItem::Implementation::Implementation(TextModelItemType _type)
 // ****
 
 
-SimpleTextModelItem::SimpleTextModelItem(TextModelItemType _type)
+SimpleTextModelItem::SimpleTextModelItem(SimpleTextModelItemType _type)
     : d(new Implementation(_type))
 {
 }
 
 SimpleTextModelItem::~SimpleTextModelItem() = default;
 
-const TextModelItemType& SimpleTextModelItem::type() const
+const SimpleTextModelItemType& SimpleTextModelItem::type() const
 {
     return d->type;
 }

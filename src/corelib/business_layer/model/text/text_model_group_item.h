@@ -1,6 +1,6 @@
 #pragma once
 
-#include "abstract_text_model_item.h"
+#include "text_model_item.h"
 
 #include <QString>
 
@@ -18,7 +18,7 @@ enum class TextGroupType;
 /**
  * @brief Класс элементов групп модели текста
  */
-class CORE_LIBRARY_EXPORT AbstractTextModelGroupItem : public AbstractTextModelItem
+class CORE_LIBRARY_EXPORT TextModelGroupItem : public TextModelItem
 {
 public:
     /**
@@ -44,9 +44,9 @@ public:
     };
 
 public:
-    explicit AbstractTextModelGroupItem(const AbstractTextModel* _model);
-    AbstractTextModelGroupItem(const AbstractTextModel* _model, QXmlStreamReader& _contentReader);
-    ~AbstractTextModelGroupItem() override;
+    explicit TextModelGroupItem(const TextModel* _model);
+    TextModelGroupItem(const TextModel* _model, QXmlStreamReader& _contentReader);
+    ~TextModelGroupItem() override;
 
     /**
      * @brief Тип группы
@@ -91,19 +91,19 @@ public:
      * @brief Определяем интерфейс для получения XML блока
      */
     QByteArray toXml() const override;
-    QByteArray toXml(AbstractTextModelItem* _from, int _fromPosition, AbstractTextModelItem* _to,
+    QByteArray toXml(TextModelItem* _from, int _fromPosition, TextModelItem* _to,
                      int _toPosition, bool _clearUuid) const;
     QByteArray xmlHeader(bool _clearUuid = false) const;
 
     /**
      * @brief Скопировать контент с заданного элемента
      */
-    void copyFrom(AbstractTextModelItem* _item) override;
+    void copyFrom(TextModelItem* _item) override;
 
     /**
      * @brief Проверить равен ли текущий элемент заданному
      */
-    bool isEqual(AbstractTextModelItem* _item) const override;
+    bool isEqual(TextModelItem* _item) const override;
 
 protected:
     /**

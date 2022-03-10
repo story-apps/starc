@@ -411,14 +411,14 @@ QTextCharFormat SimpleTextModelTextItem::ReviewMark::charFormat() const
 }
 
 SimpleTextModelTextItem::SimpleTextModelTextItem()
-    : SimpleTextModelItem(TextModelItemType::Text)
+    : SimpleTextModelItem(SimpleTextModelItemType::Text)
     , d(new Implementation)
 {
     d->updateXml();
 }
 
 SimpleTextModelTextItem::SimpleTextModelTextItem(QXmlStreamReader& _contentReaded)
-    : SimpleTextModelItem(TextModelItemType::Text)
+    : SimpleTextModelItem(SimpleTextModelItemType::Text)
     , d(new Implementation(_contentReaded))
 {
     d->updateXml();
@@ -691,7 +691,7 @@ QByteArray SimpleTextModelTextItem::toXml(int _from, int _length)
 
 void SimpleTextModelTextItem::copyFrom(SimpleTextModelItem* _item)
 {
-    if (_item->type() != TextModelItemType::Text) {
+    if (_item->type() != SimpleTextModelItemType::Text) {
         Q_ASSERT(false);
         return;
     }

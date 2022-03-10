@@ -1,10 +1,10 @@
-#include "abstract_text_model_text_item.h"
+#include "text_model_text_item.h"
 
-#include "abstract_text_model.h"
-#include "abstract_text_model_xml.h"
+#include "text_model.h"
+#include "text_model_xml.h"
 
-#include <business_layer/templates/text_template.h>
 #include <business_layer/templates/templates_facade.h>
+#include <business_layer/templates/text_template.h>
 #include <utils/helpers/string_helper.h>
 #include <utils/helpers/text_helper.h>
 
@@ -18,7 +18,7 @@
 
 namespace BusinessLayer {
 
-class AbstractTextModelTextItem::Implementation
+class TextModelTextItem::Implementation
 {
 public:
     Implementation() = default;
@@ -102,7 +102,7 @@ public:
     QByteArray xml;
 };
 
-AbstractTextModelTextItem::Implementation::Implementation(QXmlStreamReader& _contentReader)
+TextModelTextItem::Implementation::Implementation(QXmlStreamReader& _contentReader)
 {
     paragraphType = textParagraphTypeFromString(_contentReader.name().toString());
     Q_ASSERT(paragraphType != TextParagraphType::Undefined);
@@ -232,12 +232,12 @@ AbstractTextModelTextItem::Implementation::Implementation(QXmlStreamReader& _con
     xml::readNextElement(_contentReader); // next
 }
 
-void AbstractTextModelTextItem::Implementation::updateXml()
+void TextModelTextItem::Implementation::updateXml()
 {
     xml = buildXml(0, text.length());
 }
 
-QByteArray AbstractTextModelTextItem::Implementation::buildXml(int _from, int _length)
+QByteArray TextModelTextItem::Implementation::buildXml(int _from, int _length)
 {
     if (isCorrection) {
         return {};
@@ -412,25 +412,24 @@ QByteArray AbstractTextModelTextItem::Implementation::buildXml(int _from, int _l
 // ****
 
 
-int AbstractTextModelTextItem::TextPart::end() const
+int TextModelTextItem::TextPart::end() const
 {
     return from + length;
 }
 
-bool AbstractTextModelTextItem::TextFormat::operator==(
-    const AbstractTextModelTextItem::TextFormat& _other) const
+bool TextModelTextItem::TextFormat::operator==(const TextModelTextItem::TextFormat& _other) const
 {
     return from == _other.from && length == _other.length && isBold == _other.isBold
         && isItalic == _other.isItalic && isUnderline == _other.isUnderline
         && isStrikethrough == _other.isStrikethrough;
 }
 
-bool AbstractTextModelTextItem::TextFormat::isValid() const
+bool TextModelTextItem::TextFormat::isValid() const
 {
     return isBold != false || isItalic != false || isUnderline != false || isStrikethrough != false;
 }
 
-QTextCharFormat AbstractTextModelTextItem::TextFormat::charFormat() const
+QTextCharFormat TextModelTextItem::TextFormat::charFormat() const
 {
     if (!isValid()) {
         return {};
@@ -452,22 +451,21 @@ QTextCharFormat AbstractTextModelTextItem::TextFormat::charFormat() const
     return format;
 }
 
-bool AbstractTextModelTextItem::ReviewComment::operator==(
-    const AbstractTextModelTextItem::ReviewComment& _other) const
+bool TextModelTextItem::ReviewComment::operator==(
+    const TextModelTextItem::ReviewComment& _other) const
 {
     return author == _other.author && date == _other.date && text == _other.text
         && isEdited == _other.isEdited;
 }
 
-bool AbstractTextModelTextItem::ReviewMark::operator==(
-    const AbstractTextModelTextItem::ReviewMark& _other) const
+bool TextModelTextItem::ReviewMark::operator==(const TextModelTextItem::ReviewMark& _other) const
 {
     return from == _other.from && length == _other.length && textColor == _other.textColor
         && backgroundColor == _other.backgroundColor && isDone == _other.isDone
         && comments == _other.comments;
 }
 
-QTextCharFormat AbstractTextModelTextItem::ReviewMark::charFormat() const
+QTextCharFormat TextModelTextItem::ReviewMark::charFormat() const
 {
     QTextCharFormat format;
     format.setProperty(TextBlockStyle::PropertyIsReviewMark, true);
@@ -492,40 +490,38 @@ QTextCharFormat AbstractTextModelTextItem::ReviewMark::charFormat() const
     return format;
 }
 
-bool AbstractTextModelTextItem::Bookmark::operator==(
-    const AbstractTextModelTextItem::Bookmark& _other) const
+bool TextModelTextItem::Bookmark::operator==(const TextModelTextItem::Bookmark& _other) const
 {
     return color == _other.color && text == _other.text;
 }
 
-bool AbstractTextModelTextItem::Revision::operator==(const Revision& _other) const
+bool TextModelTextItem::Revision::operator==(const Revision& _other) const
 {
     return from == _other.from && length == _other.length && color == _other.color;
 }
 
-AbstractTextModelTextItem::AbstractTextModelTextItem(const AbstractTextModel* _model)
-    : AbstractTextModelItem(AbstractTextModelItemType::Text, _model)
+TextModelTextItem::TextModelTextItem(const TextModel* _model)
+    : TextModelItem(TextModelItemType::Text, _model)
     , d(new Implementation)
 {
     d->updateXml();
 }
 
-AbstractTextModelTextItem::AbstractTextModelTextItem(const AbstractTextModel* _model,
-                                                     QXmlStreamReader& _contentReaded)
-    : AbstractTextModelItem(AbstractTextModelItemType::Text, _model)
+TextModelTextItem::TextModelTextItem(const TextModel* _model, QXmlStreamReader& _contentReaded)
+    : TextModelItem(TextModelItemType::Text, _model)
     , d(new Implementation(_contentReaded))
 {
     d->updateXml();
 }
 
-AbstractTextModelTextItem::~AbstractTextModelTextItem() = default;
+TextModelTextItem::~TextModelTextItem() = default;
 
-const TextParagraphType& AbstractTextModelTextItem::paragraphType() const
+const TextParagraphType& TextModelTextItem::paragraphType() const
 {
     return d->paragraphType;
 }
 
-void AbstractTextModelTextItem::setParagraphType(TextParagraphType _type)
+void TextModelTextItem::setParagraphType(TextParagraphType _type)
 {
     if (d->paragraphType == _type) {
         return;
@@ -536,12 +532,12 @@ void AbstractTextModelTextItem::setParagraphType(TextParagraphType _type)
     markChanged();
 }
 
-std::optional<AbstractTextModelTextItem::Number> AbstractTextModelTextItem::number() const
+std::optional<TextModelTextItem::Number> TextModelTextItem::number() const
 {
     return d->number;
 }
 
-void AbstractTextModelTextItem::setNumber(int _number)
+void TextModelTextItem::setNumber(int _number)
 {
     if (d->number.has_value() && d->number->value == _number) {
         return;
@@ -553,12 +549,12 @@ void AbstractTextModelTextItem::setNumber(int _number)
     markChanged();
 }
 
-bool AbstractTextModelTextItem::isCorrection() const
+bool TextModelTextItem::isCorrection() const
 {
     return d->isCorrection;
 }
 
-void AbstractTextModelTextItem::setCorrection(bool _correction)
+void TextModelTextItem::setCorrection(bool _correction)
 {
     if (d->isCorrection == _correction) {
         return;
@@ -572,12 +568,12 @@ void AbstractTextModelTextItem::setCorrection(bool _correction)
     }
 }
 
-bool AbstractTextModelTextItem::isCorrectionContinued() const
+bool TextModelTextItem::isCorrectionContinued() const
 {
     return d->isCorrectionContinued;
 }
 
-void AbstractTextModelTextItem::setCorrectionContinued(bool _continued)
+void TextModelTextItem::setCorrectionContinued(bool _continued)
 {
     if (d->isCorrectionContinued == _continued) {
         return;
@@ -586,12 +582,12 @@ void AbstractTextModelTextItem::setCorrectionContinued(bool _continued)
     d->isCorrectionContinued = _continued;
 }
 
-bool AbstractTextModelTextItem::isBreakCorrectionStart() const
+bool TextModelTextItem::isBreakCorrectionStart() const
 {
     return d->isBreakCorrectionStart;
 }
 
-void AbstractTextModelTextItem::setBreakCorrectionStart(bool _broken)
+void TextModelTextItem::setBreakCorrectionStart(bool _broken)
 {
     if (d->isBreakCorrectionStart == _broken) {
         return;
@@ -600,12 +596,12 @@ void AbstractTextModelTextItem::setBreakCorrectionStart(bool _broken)
     d->isBreakCorrectionStart = _broken;
 }
 
-bool AbstractTextModelTextItem::isBreakCorrectionEnd() const
+bool TextModelTextItem::isBreakCorrectionEnd() const
 {
     return d->isBreakCorrectionEnd;
 }
 
-void AbstractTextModelTextItem::setBreakCorrectionEnd(bool _broken)
+void TextModelTextItem::setBreakCorrectionEnd(bool _broken)
 {
     if (d->isBreakCorrectionEnd == _broken) {
         return;
@@ -614,12 +610,12 @@ void AbstractTextModelTextItem::setBreakCorrectionEnd(bool _broken)
     d->isBreakCorrectionEnd = _broken;
 }
 
-std::optional<bool> AbstractTextModelTextItem::isInFirstColumn() const
+std::optional<bool> TextModelTextItem::isInFirstColumn() const
 {
     return d->isInFirstColumn;
 }
 
-void AbstractTextModelTextItem::setInFirstColumn(const std::optional<bool>& _in)
+void TextModelTextItem::setInFirstColumn(const std::optional<bool>& _in)
 {
     if (d->isInFirstColumn == _in) {
         return;
@@ -630,12 +626,12 @@ void AbstractTextModelTextItem::setInFirstColumn(const std::optional<bool>& _in)
     markChanged();
 }
 
-std::optional<Qt::Alignment> AbstractTextModelTextItem::alignment() const
+std::optional<Qt::Alignment> TextModelTextItem::alignment() const
 {
     return d->alignment;
 }
 
-void AbstractTextModelTextItem::setAlignment(Qt::Alignment _align)
+void TextModelTextItem::setAlignment(Qt::Alignment _align)
 {
     if (d->alignment.has_value() && d->alignment == _align) {
         return;
@@ -646,7 +642,7 @@ void AbstractTextModelTextItem::setAlignment(Qt::Alignment _align)
     markChanged();
 }
 
-void AbstractTextModelTextItem::clearAlignment()
+void TextModelTextItem::clearAlignment()
 {
     if (!d->alignment.has_value()) {
         return;
@@ -657,12 +653,12 @@ void AbstractTextModelTextItem::clearAlignment()
     markChanged();
 }
 
-std::optional<AbstractTextModelTextItem::Bookmark> AbstractTextModelTextItem::bookmark() const
+std::optional<TextModelTextItem::Bookmark> TextModelTextItem::bookmark() const
 {
     return d->bookmark;
 }
 
-void AbstractTextModelTextItem::setBookmark(const AbstractTextModelTextItem::Bookmark& _bookmark)
+void TextModelTextItem::setBookmark(const TextModelTextItem::Bookmark& _bookmark)
 {
     if (d->bookmark.has_value() && d->bookmark->color == _bookmark.color
         && d->bookmark->text == _bookmark.text) {
@@ -674,12 +670,12 @@ void AbstractTextModelTextItem::setBookmark(const AbstractTextModelTextItem::Boo
     markChanged();
 }
 
-const QString& AbstractTextModelTextItem::text() const
+const QString& TextModelTextItem::text() const
 {
     return d->text;
 }
 
-void AbstractTextModelTextItem::setText(const QString& _text)
+void TextModelTextItem::setText(const QString& _text)
 {
     if (d->text == _text) {
         return;
@@ -695,7 +691,7 @@ void AbstractTextModelTextItem::setText(const QString& _text)
     markChanged();
 }
 
-void AbstractTextModelTextItem::removeText(int _from)
+void TextModelTextItem::removeText(int _from)
 {
     if (_from >= d->text.length()) {
         return;
@@ -746,12 +742,12 @@ void AbstractTextModelTextItem::removeText(int _from)
     markChanged();
 }
 
-const QVector<AbstractTextModelTextItem::TextFormat>& AbstractTextModelTextItem::formats() const
+const QVector<TextModelTextItem::TextFormat>& TextModelTextItem::formats() const
 {
     return d->formats;
 }
 
-void AbstractTextModelTextItem::setFormats(const QVector<QTextLayout::FormatRange>& _formats)
+void TextModelTextItem::setFormats(const QVector<QTextLayout::FormatRange>& _formats)
 {
     QVector<TextFormat> newFormats;
     const auto& currentTemplate = TemplatesFacade::abstractTextTemplate(model());
@@ -790,13 +786,12 @@ void AbstractTextModelTextItem::setFormats(const QVector<QTextLayout::FormatRang
     markChanged();
 }
 
-const QVector<AbstractTextModelTextItem::ReviewMark>& AbstractTextModelTextItem::reviewMarks() const
+const QVector<TextModelTextItem::ReviewMark>& TextModelTextItem::reviewMarks() const
 {
     return d->reviewMarks;
 }
 
-void AbstractTextModelTextItem::setReviewMarks(
-    const QVector<AbstractTextModelTextItem::ReviewMark>& _reviewMarks)
+void TextModelTextItem::setReviewMarks(const QVector<TextModelTextItem::ReviewMark>& _reviewMarks)
 {
     if (d->reviewMarks == _reviewMarks) {
         return;
@@ -807,8 +802,7 @@ void AbstractTextModelTextItem::setReviewMarks(
     markChanged();
 }
 
-void AbstractTextModelTextItem::setReviewMarks(
-    const QVector<QTextLayout::FormatRange>& _reviewMarks)
+void TextModelTextItem::setReviewMarks(const QVector<QTextLayout::FormatRange>& _reviewMarks)
 {
     QVector<ReviewMark> newReviewMarks;
     for (const auto& reviewMark : _reviewMarks) {
@@ -825,19 +819,15 @@ void AbstractTextModelTextItem::setReviewMarks(
         if (reviewMark.format.hasProperty(QTextFormat::BackgroundBrush)) {
             newReviewMark.backgroundColor = reviewMark.format.background().color();
         }
-        newReviewMark.isDone
-            = reviewMark.format.boolProperty(TextBlockStyle::PropertyIsDone);
+        newReviewMark.isDone = reviewMark.format.boolProperty(TextBlockStyle::PropertyIsDone);
         const QStringList comments
             = reviewMark.format.property(TextBlockStyle::PropertyComments).toStringList();
         const QStringList dates
-            = reviewMark.format.property(TextBlockStyle::PropertyCommentsDates)
-                  .toStringList();
+            = reviewMark.format.property(TextBlockStyle::PropertyCommentsDates).toStringList();
         const QStringList authors
-            = reviewMark.format.property(TextBlockStyle::PropertyCommentsAuthors)
-                  .toStringList();
+            = reviewMark.format.property(TextBlockStyle::PropertyCommentsAuthors).toStringList();
         const QStringList isEdited
-            = reviewMark.format.property(TextBlockStyle::PropertyCommentsIsEdited)
-                  .toStringList();
+            = reviewMark.format.property(TextBlockStyle::PropertyCommentsIsEdited).toStringList();
         for (int commentIndex = 0; commentIndex < comments.size(); ++commentIndex) {
             newReviewMark.comments.append({ authors.at(commentIndex), dates.at(commentIndex),
                                             comments.at(commentIndex),
@@ -850,12 +840,12 @@ void AbstractTextModelTextItem::setReviewMarks(
     setReviewMarks(newReviewMarks);
 }
 
-const QVector<AbstractTextModelTextItem::Revision>& AbstractTextModelTextItem::revisions() const
+const QVector<TextModelTextItem::Revision>& TextModelTextItem::revisions() const
 {
     return d->revisions;
 }
 
-void AbstractTextModelTextItem::mergeWith(const AbstractTextModelTextItem* _other)
+void TextModelTextItem::mergeWith(const TextModelTextItem* _other)
 {
     if (_other == nullptr || _other->text().isEmpty()) {
         return;
@@ -876,7 +866,7 @@ void AbstractTextModelTextItem::mergeWith(const AbstractTextModelTextItem* _othe
     markChanged();
 }
 
-QVariant AbstractTextModelTextItem::data(int _role) const
+QVariant TextModelTextItem::data(int _role) const
 {
     switch (_role) {
     case Qt::DecorationRole: {
@@ -888,17 +878,17 @@ QVariant AbstractTextModelTextItem::data(int _role) const
     }
 
     default: {
-        return AbstractTextModelItem::data(_role);
+        return TextModelItem::data(_role);
     }
     }
 }
 
-QByteArray AbstractTextModelTextItem::toXml() const
+QByteArray TextModelTextItem::toXml() const
 {
     return d->xml;
 }
 
-QByteArray AbstractTextModelTextItem::toXml(int _from, int _length)
+QByteArray TextModelTextItem::toXml(int _from, int _length)
 {
     //
     // Для блока целиком, используем закешированные данные
@@ -910,14 +900,14 @@ QByteArray AbstractTextModelTextItem::toXml(int _from, int _length)
     return d->buildXml(_from, _length);
 }
 
-void AbstractTextModelTextItem::copyFrom(AbstractTextModelItem* _item)
+void TextModelTextItem::copyFrom(TextModelItem* _item)
 {
-    if (_item->type() != AbstractTextModelItemType::Text) {
+    if (_item->type() != TextModelItemType::Text) {
         Q_ASSERT(false);
         return;
     }
 
-    auto textItem = static_cast<AbstractTextModelTextItem*>(_item);
+    auto textItem = static_cast<TextModelTextItem*>(_item);
     d->isInFirstColumn = textItem->d->isInFirstColumn;
     d->paragraphType = textItem->d->paragraphType;
     d->alignment = textItem->d->alignment;
@@ -931,13 +921,13 @@ void AbstractTextModelTextItem::copyFrom(AbstractTextModelItem* _item)
     markChanged();
 }
 
-bool AbstractTextModelTextItem::isEqual(AbstractTextModelItem* _item) const
+bool TextModelTextItem::isEqual(TextModelItem* _item) const
 {
     if (_item == nullptr || type() != _item->type()) {
         return false;
     }
 
-    const auto textItem = static_cast<AbstractTextModelTextItem*>(_item);
+    const auto textItem = static_cast<TextModelTextItem*>(_item);
     return d->isInFirstColumn == textItem->d->isInFirstColumn
         && d->paragraphType == textItem->d->paragraphType && d->alignment == textItem->d->alignment
         && d->bookmark == textItem->d->bookmark && d->text == textItem->d->text
@@ -945,7 +935,7 @@ bool AbstractTextModelTextItem::isEqual(AbstractTextModelItem* _item) const
         && d->revisions == textItem->d->revisions;
 }
 
-void AbstractTextModelTextItem::markChanged()
+void TextModelTextItem::markChanged()
 {
     if (isCorrection()) {
         return;

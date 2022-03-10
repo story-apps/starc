@@ -1,6 +1,6 @@
 #pragma once
 
-#include "abstract_text_model_item.h"
+#include "text_model_item.h"
 
 #include <QHash>
 
@@ -12,7 +12,7 @@ namespace BusinessLayer {
 /**
  * @brief Тип разделителя
  */
-enum class AbstractTextModelSplitterItemType {
+enum class TextModelSplitterItemType {
     Undefined,
     Start,
     End,
@@ -21,7 +21,7 @@ enum class AbstractTextModelSplitterItemType {
 /**
  * @brief Определим метод для возможности использовать типы в виде ключей в словарях
  */
-CORE_LIBRARY_EXPORT inline uint qHash(AbstractTextModelSplitterItemType _type)
+CORE_LIBRARY_EXPORT inline uint qHash(TextModelSplitterItemType _type)
 {
     return ::qHash(static_cast<int>(_type));
 }
@@ -30,19 +30,19 @@ CORE_LIBRARY_EXPORT inline uint qHash(AbstractTextModelSplitterItemType _type)
 /**
  * @brief Класс элемента разделителя модели текста
  */
-class CORE_LIBRARY_EXPORT AbstractTextModelSplitterItem : public AbstractTextModelItem
+class CORE_LIBRARY_EXPORT TextModelSplitterItem : public TextModelItem
 {
 public:
-    AbstractTextModelSplitterItem(const AbstractTextModel* _model,
-                                  AbstractTextModelSplitterItemType _type);
-    AbstractTextModelSplitterItem(const AbstractTextModel* _model,
+    TextModelSplitterItem(const TextModel* _model,
+                                  TextModelSplitterItemType _type);
+    TextModelSplitterItem(const TextModel* _model,
                                   QXmlStreamReader& _contentReader);
-    ~AbstractTextModelSplitterItem() override;
+    ~TextModelSplitterItem() override;
 
     /**
      * @brief Тип разделителя
      */
-    AbstractTextModelSplitterItemType splitterType() const;
+    TextModelSplitterItemType splitterType() const;
 
     /**
      * @brief Определяем интерфейс для получения XML блока
@@ -52,12 +52,12 @@ public:
     /**
      * @brief Скопировать контент с заданного элемента
      */
-    void copyFrom(AbstractTextModelItem* _item) override;
+    void copyFrom(TextModelItem* _item) override;
 
     /**
      * @brief Проверить равен ли текущий элемент заданному
      */
-    bool isEqual(AbstractTextModelItem* _item) const override;
+    bool isEqual(TextModelItem* _item) const override;
 
 private:
     class Implementation;

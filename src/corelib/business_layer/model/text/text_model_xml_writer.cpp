@@ -1,13 +1,13 @@
-#include "abstract_text_model_xml_writer.h"
+#include "text_model_xml_writer.h"
 
-#include "abstract_text_model_text_item.h"
+#include "text_model_text_item.h"
 
 #include <QString>
 
 namespace BusinessLayer {
 namespace xml {
 
-class AbstractTextModelXmlWriter::Implementation
+class TextModelXmlWriter::Implementation
 {
 public:
     /**
@@ -28,7 +28,7 @@ public:
     TextItemData lastTextItemData;
 };
 
-void AbstractTextModelXmlWriter::Implementation::writeTextItemData(const TextItemData& _data)
+void TextModelXmlWriter::Implementation::writeTextItemData(const TextItemData& _data)
 {
     auto writeLastTextItemDataAndDestroy = [this] {
         data += lastTextItemData.item->toXml(lastTextItemData.fromPosition,
@@ -62,7 +62,7 @@ void AbstractTextModelXmlWriter::Implementation::writeTextItemData(const TextIte
 // ****
 
 
-AbstractTextModelXmlWriter::AbstractTextModelXmlWriter(bool _addHeader)
+TextModelXmlWriter::TextModelXmlWriter(bool _addHeader)
     : d(new Implementation)
 {
     if (_addHeader) {
@@ -70,7 +70,9 @@ AbstractTextModelXmlWriter::AbstractTextModelXmlWriter(bool _addHeader)
     }
 }
 
-void AbstractTextModelXmlWriter::operator+=(const char* _data)
+TextModelXmlWriter::~TextModelXmlWriter() = default;
+
+void TextModelXmlWriter::operator+=(const char* _data)
 {
     //
     // Если был незаписанный элемент, записываем его
@@ -80,7 +82,7 @@ void AbstractTextModelXmlWriter::operator+=(const char* _data)
     d->data += _data;
 }
 
-void AbstractTextModelXmlWriter::operator+=(const QByteArray& _data)
+void TextModelXmlWriter::operator+=(const QByteArray& _data)
 {
     //
     // Если был незаписанный элемент, записываем его
@@ -90,7 +92,7 @@ void AbstractTextModelXmlWriter::operator+=(const QByteArray& _data)
     d->data += _data;
 }
 
-void AbstractTextModelXmlWriter::operator+=(const QString& _data)
+void TextModelXmlWriter::operator+=(const QString& _data)
 {
     //
     // Если был незаписанный элемент, записываем его
@@ -100,13 +102,13 @@ void AbstractTextModelXmlWriter::operator+=(const QString& _data)
     d->data += _data.toUtf8();
 }
 
-void AbstractTextModelXmlWriter::operator+=(AbstractTextModelItem* _item)
+void TextModelXmlWriter::operator+=(TextModelItem* _item)
 {
     //
     // Текстовые элементы пишем в специальном методе, т.к. возможно понадобится отложенная запись
     //
-    if (_item->type() == AbstractTextModelItemType::Text) {
-        auto textItem = static_cast<AbstractTextModelTextItem*>(_item);
+    if (_item->type() == TextModelItemType::Text) {
+        auto textItem = static_cast<TextModelTextItem*>(_item);
         operator+=({ textItem, 0, textItem->text().length() });
     }
     //
@@ -117,7 +119,7 @@ void AbstractTextModelXmlWriter::operator+=(AbstractTextModelItem* _item)
     }
 }
 
-void AbstractTextModelXmlWriter::operator+=(const TextItemData& _data)
+void TextModelXmlWriter::operator+=(const TextItemData& _data)
 {
     if (_data.item->isCorrection()) {
         return;
@@ -127,7 +129,7 @@ void AbstractTextModelXmlWriter::operator+=(const TextItemData& _data)
     // Если элемент разорван, то сохраняем его и пока не записываем
     //
     if (_data.item->isBreakCorrectionStart()) {
-        auto textItem = new AbstractTextModelTextItem(_data.item->model());
+        auto textItem = new TextModelTextItem(_data.item->model());
         textItem->copyFrom(_data.item);
         d->lastTextItemData = { textItem, _data.fromPosition, _data.toPosition };
     }
@@ -139,7 +141,7 @@ void AbstractTextModelXmlWriter::operator+=(const TextItemData& _data)
     }
 }
 
-QByteArray AbstractTextModelXmlWriter::data() const
+QByteArray TextModelXmlWriter::data() const
 {
     //
     // Если был незаписанный элемент, записываем его
@@ -148,8 +150,6 @@ QByteArray AbstractTextModelXmlWriter::data() const
 
     return d->data;
 }
-
-AbstractTextModelXmlWriter::~AbstractTextModelXmlWriter() = default;
 
 
 } // namespace xml

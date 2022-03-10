@@ -4,56 +4,56 @@
 
 namespace BusinessLayer {
 
-class AbstractTextModelItem;
+class TextModelItem;
 class SimpleTextModel;
 
 /**
  * @brief Модель текста сценария
  */
-class CORE_LIBRARY_EXPORT AbstractTextModel : public AbstractModel
+class CORE_LIBRARY_EXPORT TextModel : public AbstractModel
 {
     Q_OBJECT
 
 public:
-    explicit AbstractTextModel(QObject* _parent = nullptr);
-    ~AbstractTextModel() override;
+    explicit TextModel(QObject* _parent = nullptr);
+    ~TextModel() override;
 
     /**
      * @brief Добавить элемент в конец
      */
-    void appendItem(AbstractTextModelItem* _item, AbstractTextModelItem* _parentItem = nullptr);
-    void appendItems(const QVector<AbstractTextModelItem*>& _items,
-                     AbstractTextModelItem* _parentItem = nullptr);
+    void appendItem(TextModelItem* _item, TextModelItem* _parentItem = nullptr);
+    void appendItems(const QVector<TextModelItem*>& _items,
+                     TextModelItem* _parentItem = nullptr);
 
     /**
      * @brief Добавить элемент в начало
      */
-    void prependItem(AbstractTextModelItem* _item, AbstractTextModelItem* _parentItem = nullptr);
+    void prependItem(TextModelItem* _item, TextModelItem* _parentItem = nullptr);
 
     /**
      * @brief Вставить элемент после заданного
      */
-    void insertItem(AbstractTextModelItem* _item, AbstractTextModelItem* _afterSiblingItem);
-    void insertItems(const QVector<AbstractTextModelItem*>& _items,
-                     AbstractTextModelItem* _afterSiblingItem);
+    void insertItem(TextModelItem* _item, TextModelItem* _afterSiblingItem);
+    void insertItems(const QVector<TextModelItem*>& _items,
+                     TextModelItem* _afterSiblingItem);
 
     /**
      * @brief Извлечь заданный элемент без удаления
      */
-    void takeItem(AbstractTextModelItem* _item, AbstractTextModelItem* _parentItem = nullptr);
-    void takeItems(AbstractTextModelItem* _fromItem, AbstractTextModelItem* _toItem,
-                   AbstractTextModelItem* _parentItem = nullptr);
+    void takeItem(TextModelItem* _item, TextModelItem* _parentItem = nullptr);
+    void takeItems(TextModelItem* _fromItem, TextModelItem* _toItem,
+                   TextModelItem* _parentItem = nullptr);
 
     /**
      * @brief Удалить заданный элемент
      */
-    void removeItem(AbstractTextModelItem* _item);
-    void removeItems(AbstractTextModelItem* _fromItem, AbstractTextModelItem* _toItem);
+    void removeItem(TextModelItem* _item);
+    void removeItems(TextModelItem* _fromItem, TextModelItem* _toItem);
 
     /**
      * @brief Обновить заданный элемент
      */
-    void updateItem(AbstractTextModelItem* _item);
+    void updateItem(TextModelItem* _item);
 
     /**
      * @brief Реализация древовидной модели
@@ -90,12 +90,12 @@ public:
     /**
      * @brief Получить элемент находящийся в заданном индексе
      */
-    AbstractTextModelItem* itemForIndex(const QModelIndex& _index) const;
+    TextModelItem* itemForIndex(const QModelIndex& _index) const;
 
     /**
      * @brief Получить индекс заданного элемента
      */
-    QModelIndex indexForItem(AbstractTextModelItem* _item) const;
+    QModelIndex indexForItem(TextModelItem* _item) const;
 
     /**
      * @brief Задать модель титульной страницы

@@ -1,10 +1,10 @@
-#include "abstract_text_model_folder_item.h"
+#include "text_model_folder_item.h"
 
-#include "abstract_text_model_group_item.h"
-#include "abstract_text_model_splitter_item.h"
-#include "abstract_text_model_text_item.h"
-#include "abstract_text_model_xml.h"
-#include "abstract_text_model_xml_writer.h"
+#include "text_model_group_item.h"
+#include "text_model_splitter_item.h"
+#include "text_model_text_item.h"
+#include "text_model_xml.h"
+#include "text_model_xml_writer.h"
 
 #include <business_layer/templates/text_template.h>
 #include <utils/helpers/text_helper.h>
@@ -16,7 +16,7 @@
 
 namespace BusinessLayer {
 
-class AbstractTextModelFolderItem::Implementation
+class TextModelFolderItem::Implementation
 {
 public:
     /**
@@ -48,16 +48,15 @@ public:
 // ****
 
 
-AbstractTextModelFolderItem::AbstractTextModelFolderItem(const AbstractTextModel* _model)
-    : AbstractTextModelItem(AbstractTextModelItemType::Folder, _model)
+TextModelFolderItem::TextModelFolderItem(const TextModel* _model)
+    : TextModelItem(TextModelItemType::Folder, _model)
     , d(new Implementation)
 {
     d->uuid = QUuid::createUuid();
 }
 
-AbstractTextModelFolderItem::AbstractTextModelFolderItem(const AbstractTextModel* _model,
-                                                         QXmlStreamReader& _contentReader)
-    : AbstractTextModelItem(AbstractTextModelItemType::Folder, _model)
+TextModelFolderItem::TextModelFolderItem(const TextModel* _model, QXmlStreamReader& _contentReader)
+    : TextModelItem(TextModelItemType::Folder, _model)
     , d(new Implementation)
 {
     d->groupType = textFolderTypeFromString(_contentReader.name().toString());
@@ -90,8 +89,7 @@ AbstractTextModelFolderItem::AbstractTextModelFolderItem(const AbstractTextModel
             //
             // Если дошли до конца папки, выходим из обработки
             //
-            else if (textFolderTypeFromString(currentTag.toString())
-                         != TextFolderType::Undefined
+            else if (textFolderTypeFromString(currentTag.toString()) != TextFolderType::Undefined
                      && _contentReader.isEndElement()) {
                 xml::readNextElement(_contentReader);
                 break;
@@ -99,16 +97,14 @@ AbstractTextModelFolderItem::AbstractTextModelFolderItem(const AbstractTextModel
             //
             // Считываем вложенный контент
             //
-            else if (textFolderTypeFromString(currentTag.toString())
-                     != TextFolderType::Undefined) {
-                appendItem(new AbstractTextModelFolderItem(model(), _contentReader));
-            } else if (textGroupTypeFromString(currentTag.toString())
-                       != TextGroupType::Undefined) {
-                appendItem(new AbstractTextModelGroupItem(model(), _contentReader));
+            else if (textFolderTypeFromString(currentTag.toString()) != TextFolderType::Undefined) {
+                appendItem(new TextModelFolderItem(model(), _contentReader));
+            } else if (textGroupTypeFromString(currentTag.toString()) != TextGroupType::Undefined) {
+                appendItem(new TextModelGroupItem(model(), _contentReader));
             } else if (currentTag == xml::kSplitterTag) {
-                appendItem(new AbstractTextModelSplitterItem(model(), _contentReader));
+                appendItem(new TextModelSplitterItem(model(), _contentReader));
             } else {
-                appendItem(new AbstractTextModelTextItem(model(), _contentReader));
+                appendItem(new TextModelTextItem(model(), _contentReader));
             }
         } while (!_contentReader.atEnd());
     }
@@ -119,14 +115,14 @@ AbstractTextModelFolderItem::AbstractTextModelFolderItem(const AbstractTextModel
     handleChange();
 }
 
-AbstractTextModelFolderItem::~AbstractTextModelFolderItem() = default;
+TextModelFolderItem::~TextModelFolderItem() = default;
 
-QColor AbstractTextModelFolderItem::color() const
+QColor TextModelFolderItem::color() const
 {
     return d->color;
 }
 
-void AbstractTextModelFolderItem::setColor(const QColor& _color)
+void TextModelFolderItem::setColor(const QColor& _color)
 {
     if (d->color == _color) {
         return;
@@ -136,7 +132,7 @@ void AbstractTextModelFolderItem::setColor(const QColor& _color)
     setChanged(true);
 }
 
-QVariant AbstractTextModelFolderItem::data(int _role) const
+QVariant TextModelFolderItem::data(int _role) const
 {
     switch (_role) {
     case Qt::DecorationRole: {
@@ -152,29 +148,29 @@ QVariant AbstractTextModelFolderItem::data(int _role) const
     }
 
     default: {
-        return AbstractTextModelItem::data(_role);
+        return TextModelItem::data(_role);
     }
     }
 }
 
-QByteArray AbstractTextModelFolderItem::toXml() const
+QByteArray TextModelFolderItem::toXml() const
 {
     return toXml(nullptr, 0, nullptr, 0, false);
 }
 
-QByteArray AbstractTextModelFolderItem::toXml(AbstractTextModelItem* _from, int _fromPosition,
-                                              AbstractTextModelItem* _to, int _toPosition,
-                                              bool _clearUuid) const
+QByteArray TextModelFolderItem::toXml(TextModelItem* _from, int _fromPosition,
+                                      TextModelItem* _to, int _toPosition,
+                                      bool _clearUuid) const
 {
     auto folderFooterXml = [this] {
-        AbstractTextModelTextItem item(model());
+        TextModelTextItem item(model());
         item.setParagraphType(d->groupType == TextFolderType::Act
                                   ? TextParagraphType::ActFooter
                                   : TextParagraphType::FolderFooter);
         return item.toXml();
     };
 
-    xml::AbstractTextModelXmlWriter xml;
+    xml::TextModelXmlWriter xml;
     xml += xmlHeader(_clearUuid);
     for (int childIndex = 0; childIndex < childCount(); ++childIndex) {
         auto child = childAt(childIndex);
@@ -182,24 +178,24 @@ QByteArray AbstractTextModelFolderItem::toXml(AbstractTextModelItem* _from, int 
         //
         // Нетекстовые блоки, просто добавляем к общему xml
         //
-        if (child->type() == AbstractTextModelItemType::Splitter) {
+        if (child->type() == TextModelItemType::Splitter) {
             xml += child;
             continue;
         }
         //
         // Папки и сцены проверяем на наличие в них завершающего элемента
         //
-        else if (child->type() != AbstractTextModelItemType::Text) {
+        else if (child->type() != TextModelItemType::Text) {
             //
             // Если конечный элемент содержится в дите, то сохраняем его и завершаем формирование
             //
             const bool recursively = true;
             if (child->hasChild(_to, recursively)) {
-                if (child->type() == AbstractTextModelItemType::Folder) {
-                    auto folder = static_cast<AbstractTextModelFolderItem*>(child);
+                if (child->type() == TextModelItemType::Folder) {
+                    auto folder = static_cast<TextModelFolderItem*>(child);
                     xml += folder->toXml(_from, _fromPosition, _to, _toPosition, _clearUuid);
-                } else if (child->type() == AbstractTextModelItemType::Group) {
-                    auto scene = static_cast<AbstractTextModelGroupItem*>(child);
+                } else if (child->type() == TextModelItemType::Group) {
+                    auto scene = static_cast<TextModelGroupItem*>(child);
                     xml += scene->toXml(_from, _fromPosition, _to, _toPosition, _clearUuid);
                 } else {
                     Q_ASSERT(false);
@@ -223,7 +219,7 @@ QByteArray AbstractTextModelFolderItem::toXml(AbstractTextModelItem* _from, int 
         //
         // Текстовые блоки, в зависимости от необходимости вставить блок целиком, или его часть
         //
-        auto textItem = static_cast<AbstractTextModelTextItem*>(child);
+        auto textItem = static_cast<TextModelTextItem*>(child);
         if (textItem == _to) {
             if (textItem == _from) {
                 xml += { textItem, _fromPosition, _toPosition - _fromPosition };
@@ -253,7 +249,7 @@ QByteArray AbstractTextModelFolderItem::toXml(AbstractTextModelItem* _from, int 
     return xml.data();
 }
 
-QByteArray AbstractTextModelFolderItem::xmlHeader(bool _clearUuid) const
+QByteArray TextModelFolderItem::xmlHeader(bool _clearUuid) const
 {
     QByteArray xml;
     xml += QString("<%1 %2=\"%3\">\n")
@@ -268,37 +264,37 @@ QByteArray AbstractTextModelFolderItem::xmlHeader(bool _clearUuid) const
     return xml;
 }
 
-void AbstractTextModelFolderItem::copyFrom(AbstractTextModelItem* _item)
+void TextModelFolderItem::copyFrom(TextModelItem* _item)
 {
-    if (_item->type() != AbstractTextModelItemType::Folder) {
+    if (_item->type() != TextModelItemType::Folder) {
         Q_ASSERT(false);
         return;
     }
 
-    auto folderItem = static_cast<AbstractTextModelFolderItem*>(_item);
+    auto folderItem = static_cast<TextModelFolderItem*>(_item);
     d->uuid = folderItem->d->uuid;
     d->color = folderItem->d->color;
 }
 
-bool AbstractTextModelFolderItem::isEqual(AbstractTextModelItem* _item) const
+bool TextModelFolderItem::isEqual(TextModelItem* _item) const
 {
     if (_item == nullptr || type() != _item->type()) {
         return false;
     }
 
-    const auto folderItem = static_cast<AbstractTextModelFolderItem*>(_item);
+    const auto folderItem = static_cast<TextModelFolderItem*>(_item);
     return d->uuid == folderItem->d->uuid && d->color == folderItem->d->color;
 }
 
-void AbstractTextModelFolderItem::handleChange()
+void TextModelFolderItem::handleChange()
 {
     d->name.clear();
 
     for (int childIndex = 0; childIndex < childCount(); ++childIndex) {
         auto child = childAt(childIndex);
         switch (child->type()) {
-        case AbstractTextModelItemType::Text: {
-            auto childItem = static_cast<AbstractTextModelTextItem*>(child);
+        case TextModelItemType::Text: {
+            auto childItem = static_cast<TextModelTextItem*>(child);
             if (childItem->paragraphType() == TextParagraphType::FolderHeader) {
                 d->name = TextHelper::smartToUpper(childItem->text());
             }

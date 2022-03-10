@@ -80,14 +80,14 @@ bool SimpleTextModelChapterItem::Number::operator==(
 }
 
 SimpleTextModelChapterItem::SimpleTextModelChapterItem()
-    : SimpleTextModelItem(TextModelItemType::Chapter)
+    : SimpleTextModelItem(SimpleTextModelItemType::Chapter)
     , d(new Implementation)
 {
     d->uuid = QUuid::createUuid();
 }
 
 SimpleTextModelChapterItem::SimpleTextModelChapterItem(QXmlStreamReader& _contentReader)
-    : SimpleTextModelItem(TextModelItemType::Chapter)
+    : SimpleTextModelItem(SimpleTextModelItemType::Chapter)
     , d(new Implementation)
 {
     Q_ASSERT(_contentReader.name() == xml::kChapterTag);
@@ -247,7 +247,7 @@ QByteArray SimpleTextModelChapterItem::toXml(SimpleTextModelItem* _from, int _fr
         //
         // Нетекстовые блоки, просто добавляем к общему xml
         //
-        if (child->type() != TextModelItemType::Text) {
+        if (child->type() != SimpleTextModelItemType::Text) {
             xml += child->toXml();
             continue;
         }
@@ -299,7 +299,7 @@ QByteArray SimpleTextModelChapterItem::xmlHeader(bool _clearUuid) const
 
 void SimpleTextModelChapterItem::copyFrom(SimpleTextModelItem* _item)
 {
-    if (_item->type() != TextModelItemType::Chapter) {
+    if (_item->type() != SimpleTextModelItemType::Chapter) {
         Q_ASSERT(false);
         return;
     }
@@ -331,7 +331,7 @@ void SimpleTextModelChapterItem::handleChange()
     for (int childIndex = 0; childIndex < childCount(); ++childIndex) {
         auto child = childAt(childIndex);
         switch (child->type()) {
-        case TextModelItemType::Chapter: {
+        case SimpleTextModelItemType::Chapter: {
             auto childChapterItem = static_cast<SimpleTextModelChapterItem*>(child);
             const int maxTextLength = 1000;
             if (d->text.length() < maxTextLength) {
@@ -343,7 +343,7 @@ void SimpleTextModelChapterItem::handleChange()
             break;
         }
 
-        case TextModelItemType::Text: {
+        case SimpleTextModelItemType::Text: {
             auto childTextItem = static_cast<SimpleTextModelTextItem*>(child);
             switch (childTextItem->paragraphType()) {
             case TextParagraphType::Heading1:
